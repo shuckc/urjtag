@@ -1,0 +1,497 @@
+#
+# $Id$
+#
+# JTAG declarations for Hitachi HD64465BP/HD64465BQ
+# Copyright (C) 2003 Elcom s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2003.
+#
+# Documentation:
+# [1] Hitachi Ltd., "Windows CE Intelligent Peripheral Controller
+#     HD64465 User's Manual", 03/08/01, Rev. 3.0, ADE-602-168B
+#
+
+# Test Mode (see Table 4.3 in [1])
+signal	TST
+signal	TDI
+signal	TDO
+signal	TMS
+signal	TCK
+signal	TRST
+
+# CPU interface (see Table 4.4 in [1])
+signal	CKIO
+signal	A0
+signal	A1
+signal	A2
+signal	A3
+signal	A4
+signal	A5
+signal	A6
+signal	A7
+signal	A8
+signal	A9
+signal	A10
+signal	A11
+signal	A12
+signal	A13
+signal	A14
+signal	A15
+signal	A16
+signal	A17
+signal	A18
+signal	A19
+signal	A20
+signal	A21
+signal	A22
+signal	A23
+signal	A24
+signal	A25
+signal	D0
+signal	D1
+signal	D2
+signal	D3
+signal	D4
+signal	D5
+signal	D6
+signal	D7
+signal	D8
+signal	D9
+signal	D10
+signal	D11
+signal	D12
+signal	D13
+signal	D14
+signal	D15
+signal	D16
+signal	D17
+signal	D18
+signal	D19
+signal	D20
+signal	D21
+signal	D22
+signal	D23
+signal	D24
+signal	D25
+signal	D26
+signal	D27
+signal	D28
+signal	D29
+signal	D30
+signal	D31
+signal	nCS4
+signal	nWE0
+signal	nWE1
+signal	nWE2
+signal	nWE3
+signal	nRDWR
+signal	nRD
+signal	nRDY
+signal	nBS
+signal	nDREQ0
+signal	nDREQ1
+signal	DRAK0
+signal	DRAK1
+signal	nIRQ0
+signal	SH_MODE
+signal	nCE1B
+signal	nCE2B
+signal	nCE1A
+signal	nCE2A
+signal	nIOIS16
+
+# PCMCIA 0 (see Table 4.5 in [1])
+signal	PCC0A0
+signal	PCC0A1
+signal	PCC0A2
+signal	PCC0A3
+signal	PCC0A4
+signal	PCC0A5
+signal	PCC0A6
+signal	PCC0A7
+signal	PCC0A8
+signal	PCC0A9
+signal	PCC0A10
+signal	PCC0A11
+signal	PCC0A12
+signal	PCC0A13
+signal	PCC0A14
+signal	PCC0A15
+signal	PCC0A16
+signal	PCC0A17
+signal	PCC0A18
+signal	PCC0A19
+signal	PCC0A20
+signal	PCC0A21
+signal	PCC0A22
+signal	PCC0A23
+signal	PCC0A24
+signal	PCC0A25
+signal	PCC0D0
+signal	PCC0D1
+signal	PCC0D2
+signal	PCC0D3
+signal	PCC0D4
+signal	PCC0D5
+signal	PCC0D6
+signal	PCC0D7
+signal	PCC0D8
+signal	PCC0D9
+signal	PCC0D10
+signal	PCC0D11
+signal	PCC0D12
+signal	PCC0D13
+signal	PCC0D14
+signal	PCC0D15
+signal	nPCC0CE1B
+signal	nPCC0CE2B
+signal	nRDB
+signal	nWEB
+signal	nPCC0ICIORDB
+signal	nPCC0ICIOWRB
+signal	PCC0RESET
+signal	nPCC0WAIT
+signal	nPCC0WP
+signal	PCC0RDY
+signal	PCC0BVD1
+signal	PCC0BVD2
+signal	nPCC0CD1
+signal	nPCC0CD2
+signal	nPCC0VS1
+signal	nPCC0VS2
+signal	nPCC0REG
+signal	VCC0SEL1
+signal	VCC0SEL0
+signal	VCC0VPP1
+signal	VCC0VPP0
+
+# PCMCIA 1 (see Table 4.6 in [1])
+signal	PCC1A0
+signal	PCC1A1
+signal	PCC1A2
+signal	PCC1A3
+signal	PCC1A4
+signal	PCC1A5
+signal	PCC1A6
+signal	PCC1A7
+signal	PCC1A8
+signal	PCC1A9
+signal	PCC1A10
+signal	PCC1A11
+signal	PCC1A12
+signal	PCC1A13
+signal	PCC1A14
+signal	PCC1A15
+signal	PCC1A16
+signal	PCC1A17
+signal	PCC1A18
+signal	PCC1A19
+signal	PCC1A20
+signal	PCC1A21
+signal	PCC1A22
+signal	PCC1A23
+signal	PCC1A24
+signal	PCC1A25
+signal	PCC1D0
+signal	PCC1D1
+signal	PCC1D2
+signal	PCC1D3
+signal	PCC1D4
+signal	PCC1D5
+signal	PCC1D6
+signal	PCC1D7
+signal	PCC1D8
+signal	PCC1D9
+signal	PCC1D10
+signal	PCC1D11
+signal	PCC1D12
+signal	PCC1D13
+signal	PCC1D14
+signal	PCC1D15
+signal	nPCC1CE1A
+signal	nPCC1CE2A
+signal	nRDA
+signal	nWEA
+signal	nPCC1ICIORDA
+signal	nPCC1ICIOWRA
+signal	PCC1RESET
+signal	nPCC1WAIT
+signal	nPCC1WP
+signal	PCC1RDY
+signal	PCC1BVD1
+signal	PCC1BVD2
+signal	nPCC1CD1
+signal	nPCC1CD2
+signal	nPCC1VS1
+signal	nPCC1VS2
+signal	nPCC1REG
+signal	VCC1SEL1
+signal	VCC1SEL0
+signal	VCC1VPP1
+signal	VCC1VPP0
+
+# UART 0 (see Table 4.7 in [1])
+signal	TXD0
+signal	RXD0
+signal	nRTS0
+signal	nCTS0
+signal	nDTR0
+signal	nDSR0
+signal	nDCD0
+signal	nRI0
+
+# IrDA (see Table 4.8 in [1])
+signal	MODSEL
+signal	TXD
+signal	nRX
+
+# Printer Interface (see Table 4.9 in [1])
+signal	nSTB
+signal	nAFD
+signal	nERR
+signal	nINIT
+signal	nSLIN
+signal	nACK
+signal	BUSY
+signal	PE
+signal	SLCT
+signal	PPD0
+signal	PPD1
+signal	PPD2
+signal	PPD3
+signal	PPD4
+signal	PPD5
+signal	PPD6
+signal	PPD7
+
+# AFE Interface (see Table 4.10 in [1])
+signal	DOUT
+signal	DIN
+signal	SCLK
+signal	HC1
+signal	FS
+signal	nAFERST
+signal	nAFEPDN
+signal	MCLKO
+signal	OFFHOOK
+signal	RING
+
+# CODEC Interface (see Table 4.11 in [1])
+signal	ACCLK
+signal	nACRST
+signal	nACPD
+signal	SIBDIN
+signal	SIBCLK
+signal	SIBDOUT
+signal	SIBSYNC
+
+# USB Interface (see Table 4.12 in [1])
+signal	nUSBPEN
+signal	nUSBOVR
+signal	USBD1P
+signal	USBD1M
+signal	USBD2P
+signal	USBD2M
+
+# Keyboard Interface (see Table 4.13 in [1])
+signal	nKBCS
+signal	nXIOW
+signal	nXIOR
+signal	KBIRQ0
+signal	KBIRQ1
+
+# IO Port A (see Table 4.14 in [1])
+signal	PA0
+signal	PA1
+signal	PA2
+signal	PA3
+signal	PA4
+signal	PA5
+signal	PA6
+signal	PA7
+
+# IO Port B (see Table 4.15 in [1])
+signal	PB0
+signal	PB1
+signal	PB2
+signal	PB3
+signal	PB4
+signal	PB5
+signal	PB6
+signal	PB7
+
+# IO Port C (see Table 4.16 in [1])
+signal	PC0
+signal	PC1
+signal	PC2
+signal	PC3
+signal	PC4
+signal	PC5
+signal	PC6
+signal	PC7
+
+# IO Port D (see Table 4.17 in [1])
+signal	PD0
+signal	PD1
+signal	PD2
+signal	PD3
+signal	PD4
+signal	PD5
+signal	PD6
+signal	PD7
+
+# IO Port E (see Table 4.18 in [1])
+signal	PE0
+signal	PE1
+signal	PE2
+signal	PE3
+signal	PE4
+signal	PE5
+signal	PE6
+signal	PE7
+
+# 10-bit ADC Interface (see Table 4.19 in [1])
+signal	TSMX
+signal	TSMY
+signal	TSPX
+signal	TSPY
+
+# PS/2 Interface (see Table 4.20 in [1])
+signal	KBCK
+signal	KBDATA
+signal	MSCK
+signal	MSDATA
+
+# System Reset Interface (see Table 4.21 in [1])
+signal	nRESETPI
+signal	nRESETMI
+signal	nRESETPO
+signal	nRESETMO
+
+# Crystal Interface (see Table 4.22 in [1])
+signal	AFECK
+signal	AFECKE
+signal	UCK
+signal	UCKE
+
+# Miscellaneous Interface (see Table 4.23 in [1])
+signal	PWM0
+signal	PWM1
+signal	P80LE
+
+# Power/Ground (see Tabe 4.25 in [1])
+signal	VSS
+signal	VCC
+signal	VCC5
+signal	VCCA
+signal	VCCB
+signal	AVCC1
+signal	AVSS1
+signal	AVCC2
+signal	AVSS2
+signal	AVCC3
+signal	AVSS3
+signal	AVCC4
+signal	AVSS4
+signal	AVCC5
+signal	AVCC6
+signal	AVSS6
+
+# mandatory data registers
+register	BSR	550
+register	BR	1
+
+# instructions
+instruction length 3
+# mandatory instructions
+instruction BYPASS		111	BR
+instruction EXTEST		000	BSR
+instruction SAMPLE/PRELOAD	001	BSR
+
+# boundary scan register
+
+bit 389 O ? nPCC0WP
+
+bit 378 O ? PCC0D0 375 0 Z
+
+bit 375 C 0 .
+bit 374 O ? PCC0D8 372 0 Z
+
+bit 372 C 0 .
+bit 371 O ? PCC0D1 375 0 Z
+
+bit 369 O ? PCC0D9 372 0 Z
+
+bit 367 O ? PCC0D2 375 0 Z
+
+bit 365 O ? PCC0D10 372 0 Z
+
+bit 363 O ? PCC0D3 375 0 Z
+
+bit 361 O ? PCC0D11 372 0 Z
+
+bit 359 O ? PCC0A25 358 0 Z
+bit 358 C 0 .
+bit 357 O ? PCC0A24 358 0 Z
+bit 356 O ? PCC0A23 358 0 Z
+bit 355 O ? PCC0A22 358 0 Z
+bit 354 O ? PCC0A21 358 0 Z
+bit 353 O ? PCC0A20 358 0 Z
+bit 352 O ? PCC0A19 358 0 Z
+bit 351 O ? PCC0A18 358 0 Z
+bit 350 O ? PCC0A17 358 0 Z
+bit 349 O ? PCC0A16 358 0 Z
+bit 348 O ? PCC0A15 358 0 Z
+
+bit 346 O ? PCC0A13 358 0 Z
+bit 345 O ? PCC0RESET 358 0 Z
+bit 344 O ? nPCC0ICIORDB 358 0 Z
+bit 343 O ? nPCC0ICIOWRB 358 0 Z
+bit 342 O ? nWEB 358 0 Z
+bit 341 O ? nRDB 358 0 Z
+bit 340 O ? nPCC0CE1B 358 0 Z
+
+bit 337 O ? PCC0A12 358 0 Z
+
+bit 334 O ? PCC0A9 358 0 Z
+
+bit 332 O ? PCC0A7 358 0 Z
+bit 331 O ? PCC0A6 358 0 Z
+bit 330 O ? PCC0A5 358 0 Z
+bit 329 O ? PCC0A4 358 0 Z
+bit 328 O ? PCC0A3 358 0 Z
+bit 327 O ? PCC0A2 358 0 Z
+bit 326 O ? PCC0A1 358 0 Z
+bit 325 O ? PCC0A0 358 0 Z
+bit 324 O ? PCC0D12 372 0 Z
+
+bit 320 O ? PCC0D13 372 0 Z
+
+bit 318 O ? PCC0D5 375 0 Z
+
+bit 316 O ? PCC0D14 372 0 Z
+
+bit 314 O ? PCC0D6 375 0 Z
+
+bit 312 O ? PCC0D15 372 0 Z
+
+bit 310 O ? PCC0D7 375 0 Z
+
+bit 120 I ? PD3
+
+bit 117 I ? PD2

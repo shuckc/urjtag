@@ -2,6 +2,8 @@ $Id$
 
 See libbrux/NEWS for more news.
 
+	* Added JTAG declarations for Hitachi HD64465.
+
 jtag-0.5.1 (2003-10-11):
 
 	* Added new JTAG declarations for

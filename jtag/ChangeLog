@@ -1,8 +1,13 @@
-2003-10-13  Marcel Telka <marcel@telka>
+2003-10-17  Marcel Telka  <marcel@telka.sk>
+
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added hitachi/hd64465/hd64465.
+	* data/hitachi/hd64465/hd64465: New file.
+
+2003-10-13  Marcel Telka  <marcel@telka>
 
 	* data/intel/ixp425/STEPPINGS: Added B0 stepping.
 
-2003-10-11  Marcel Telka <marcel@telka>
+2003-10-11  Marcel Telka  <marcel@telka>
 
 	Version 0.5.1 released.
 
