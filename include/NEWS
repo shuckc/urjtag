@@ -1,6 +1,6 @@
 $Id$
 
-include-0.3.1:
+include-0.3.1 (2003-08-20):
 
 	* Removed win32/stdint.h installation in POSIX environments.
 	* Fixed recursive stdint.h include in owce-stdint.h.
