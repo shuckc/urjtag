@@ -56,12 +56,12 @@ typedef volatile struct PWM_registers {
 #define	PWM_PWDUTY	PWM_pointer->pwm_pwduty
 #define	PWM_PERVAL	PWM_pointer->pwm_perval
 
-#define	PWM_CTRL0	PWM_pointer0->pwm_ctrl
-#define	PWM_PWDUTY0	PWM_pointer0->pwm_pwduty
-#define	PWM_PERVAL0	PWM_pointer0->pwm_perval
+#define	PWM_CTRL0	PWM0_pointer->pwm_ctrl
+#define	PWM_PWDUTY0	PWM0_pointer->pwm_pwduty
+#define	PWM_PERVAL0	PWM0_pointer->pwm_perval
 
-#define	PWM_CTRL1	PWM_pointer1->pwm_ctrl
-#define	PWM_PWDUTY1	PWM_pointer1->pwm_pwduty
-#define	PWM_PERVAL1	PWM_pointer1->pwm_perval
+#define	PWM_CTRL1	PWM1_pointer->pwm_ctrl
+#define	PWM_PWDUTY1	PWM1_pointer->pwm_pwduty
+#define	PWM_PERVAL1	PWM1_pointer->pwm_perval
 
 #endif	/* PXA2X0_PWM_H */
