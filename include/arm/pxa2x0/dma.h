@@ -80,13 +80,13 @@ typedef volatile struct DMA_registers {
 #define	DCMD(i)			DMA_pointer->dar[i].dcmd
 #endif /* LANGUAGE == C */
 
-#define	DCSR_OFFSET(i)		(i << 2)
+#define	DCSR_OFFSET(i)		((i) << 2)
 #define	DINT_OFFSET		0xF0
-#define	DRCMR_OFFSET(i)		(0x100 + (i << 2))
-#define	DDADR_OFFSET(i)		(0x200 + (i << 4))
-#define	DSADR_OFFSET(i)		(0x204 + (i << 4))
-#define	DTADR_OFFSET(i)		(0x208 + (i << 4))
-#define	DCMD_OFFSET(i)		(0x20C + (i << 4))
+#define	DRCMR_OFFSET(i)		(0x100 + ((i) << 2))
+#define	DDADR_OFFSET(i)		(0x200 + ((i) << 4))
+#define	DSADR_OFFSET(i)		(0x204 + ((i) << 4))
+#define	DTADR_OFFSET(i)		(0x208 + ((i) << 4))
+#define	DCMD_OFFSET(i)		(0x20C + ((i) << 4))
 
 /* DCSRx bits - see Table 5-7 in [1] */
 
@@ -102,8 +102,8 @@ typedef volatile struct DMA_registers {
 /* DRCMRx bits - see Table 5-8 in [1] */
 
 #define	DRCMR_MAPVLD		bit(7)
-#define	DRCMR_CHLNUM_MASK	0x0000000F
-#define	DRCMR_CHLNUM(x)		(x & DRCMR_CHLNUM_MASK)
+#define	DRCMR_CHLNUM_MASK	bits(3,0)
+#define	DRCMR_CHLNUM(x)		bits_val(3,0,x)
 
 /* DDADRx bits - see Table 5-9 in [1] */
 
@@ -118,11 +118,11 @@ typedef volatile struct DMA_registers {
 #define	DCMD_STARTIRQEN		bit(22)
 #define	DCMD_ENDIRQEN		bit(21)
 #define	DCMD_ENDIAN		bit(18)
-#define	DCMD_SIZE_MASK		0x00030000
-#define	DCMD_SIZE(x)		((x << 16) & DCMD_SIZE_MASK)
-#define	DCMD_WIDTH_MASK		0x0000C000
-#define	DCMD_WIDTH(x)		((x << 14) & DCMD_WIDTH_MASK)
-#define	DCMD_LENGTH_MASK	0x00001FFF
-#define	DCMD_LENGTH(x)		(x & DCMD_LENGTH_MASK)
+#define	DCMD_SIZE_MASK		bits(17,16)
+#define	DCMD_SIZE(x)		bits_val(17,16,x)
+#define	DCMD_WIDTH_MASK		bits(15,14)
+#define	DCMD_WIDTH(x)		bits_val(15,14,x)
+#define	DCMD_LENGTH_MASK	bits(12,0)
+#define	DCMD_LENGTH(x)		bits_val(12,0,x)
 
 #endif /* PXA2X0_DMA_H */
