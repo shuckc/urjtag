@@ -39,14 +39,17 @@
 #ifndef	PXA2X0_RTC_H
 #define	PXA2X0_RTC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* RTC Registers */
 
 #define	RTC_BASE	0x40900000
 
+#if LANGUAGE == C
 typedef volatile struct RTC_registers {
 	uint32_t rcnr;
 	uint32_t rtar;
@@ -54,13 +57,34 @@ typedef volatile struct RTC_registers {
 	uint32_t rttr;
 } RTC_registers;
 
-#ifndef RTC_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	RTC_pointer	((RTC_registers*) RTC_BASE)
 #endif
 
-#define	RCNR		RTC_pointer->rcnr
-#define	RTAR		RTC_pointer->rtar
-#define	RTSR		RTC_pointer->rtsr
-#define	RTTR		RTC_pointer->rttr
+#define	RCNR			RTC_pointer->rcnr
+#define	RTAR			RTC_pointer->rtar
+#define	RTSR			RTC_pointer->rtsr
+#define	RTTR			RTC_pointer->rttr
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_RTC_H */
+#define	RCNR_OFFSET		0x00
+#define	RTAR_OFFSET		0x04
+#define	RTSR_OFFSET		0x08
+#define	RTTR_OFFSET		0x0C
+
+/* RCNR bits - see Table 4-39 in [1] */
+
+#define	RCNR_LCK		bit(31)
+#define	RCNR_DEL_MASK		0x03FF0000
+#define	RCNR_DEL(x)		((x << 16) & RCNR_DEL_MASK)
+#define	RCNR_CK_DIV_MASK	0x0000FFFF
+#define	RCNR_CK_DIV(x)		(x & RCNR_CK_DIV_MASK)
+
+/* RTSR bits - see Table 4-42 in [1] */
+
+#define	RTSR_HZE		bit(3)
+#define	RTSR_ALE		bit(2)
+#define	RTSR_HZ			bit(1)
+#define	RTSR_AL			bit(0)
+
+#endif /* PXA2X0_RTC_H */
