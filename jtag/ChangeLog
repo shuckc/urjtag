@@ -1,3 +1,10 @@
+2003-06-10  Marcel Telka  <marcel@telka.sk>
+
+	* src/bus/ixp425.c (ixp425_bus_width): Changed return value type (int -> unsigned int).
+	* src/bus/pxa2x0.c (pxa250_bus_width): Ditto.
+	* src/bus/sa1110.c (sa1110_bus_width): Ditto.
+	* src/bus/sh7727.c (sh7727_bus_width): Ditto.
+
 2003-06-06  Marcel Telka  <marcel@telka.sk>
 
 	* src/bus/sh7727.c (bus_params_t): Fixed cs array length.

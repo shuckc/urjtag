@@ -200,7 +200,7 @@ sa1110_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	chain_shift_data_registers( chain, 0 );
 }
 
-static int
+static unsigned int
 sa1110_bus_width( bus_t *bus, uint32_t adr )
 {
 	if (part_get_signal( PART, part_find_signal( PART, "ROM_SEL" ) )) {
