@@ -1,5 +1,7 @@
 $Id$
 
+jtag-0.3:
+
 	* Enhanced 'dr' command functionality.
 	* Added new 'set signal' and 'get signal' commands.
 	* Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
