@@ -6,7 +6,7 @@ JTAG Tools
 JTAG Tools is a software package which enables working with JTAG-aware
 (IEEE 1149.1) hardware devices (parts) and boards through JTAG adapter.
 
-This package has open and modular architecture with ability to writing
+This package has open and modular architecture with ability to write
 miscellanous extensions (like board testers, flash memory programmers,
 and so on).
 
@@ -86,13 +86,13 @@ Build & installation instructions
 5. Run `make install`.
 
 
-Running JTAG tools
+Running JTAG Tools
 ------------------
 
 Connect your JTAG adapter between your PC and target device and turn
 on your device.
 
-To run JTAG tools type "jtag" and press <Enter>. jtag should start and
+To run JTAG Tools type "jtag" and press <Enter>. jtag should start and
 display some initial informations. Output should end with line like this:
 
 jtag>
