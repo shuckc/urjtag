@@ -160,7 +160,7 @@ typedef volatile struct LCD_registers {
 #define	LCCR3_ACB_MASK	0x0000FF00
 #define	LCCR3_ACB(x)	((x << 8) & LCCR3_ACB_MASK)
 #define	LCCR3_PCD_MASK	0x000000FF
-#define	LCCR3_PCD(x)	(x & LCCR3_PD_MASK)
+#define	LCCR3_PCD(x)	(x & LCCR3_PCD_MASK)
 
 /* FBR0 bits - see Table 7-12 in [1] */
 
