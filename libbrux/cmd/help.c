@@ -39,14 +39,14 @@ cmd_help_run( char *params[] )
 		printf( _("Command list:\n\n") );
 		for (i = 0; cmds[i]; i++)
 			printf( _("%-13s %s\n"), cmds[i]->name, cmds[i]->desc ? _(cmds[i]->desc) : _("(no description available)") );
-		printf( _("\nType \"help COMMAND\" for details about particular command.\n") );
+		printf( _("\nType \"help COMMAND\" for details about a particular command.\n") );
 		return 1;
 	}
 
 	if (params[2])
 		return -1;
 
-	/* search and print help for particular command */
+	/* search and print help for a particular command */
 	for (i = 0; cmds[i]; i++)
 		if (strcmp( cmds[i]->name, params[1] ) == 0) {
 			if (cmds[i]->help)

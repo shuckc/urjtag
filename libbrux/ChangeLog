@@ -1,3 +1,8 @@
+2003-09-15  Marcel Telka  <marcel@telka.sk>
+
+	* cmd/help.c (cmd_help_run): Fixed spelling (patch 805108, Andreas Mohr).
+	* flash/detectflash.c (detectflash): Ditto.
+
 2003-08-28  Marcel Telka  <marcel@telka.sk>
 
 	* flash/cfi.c (cfi_detect): Replaced bus_width macro with new bus_area.

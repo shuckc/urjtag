@@ -1,5 +1,6 @@
 $Id$
 
+2003-09-15: Fixed spelling (patch 805108, Andreas Mohr).
 2003-08-13: Added support for Intel SCS command set (patch 787978, Jani Monoses).
 2003-08-11: Added support for 1 x 8 bit AMD Flash (patch 772499, Matan Ziv-Av).
 2003-06-18: Added support for 1 x 8 bit Intel Flash (patch 753295, Matan Ziv-Av).

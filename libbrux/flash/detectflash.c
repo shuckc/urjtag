@@ -75,7 +75,7 @@ detectflash( bus_t *bus )
 			s = N_("Intel/Sharp Extended Command Set");
 			break;
 		case CFI_VENDOR_AMD_SCS:
-			s = N_("AMD/Fujitsu Standard Commanf Set");
+			s = N_("AMD/Fujitsu Standard Command Set");
 			break;
 		case CFI_VENDOR_INTEL_SCS:
 			s = N_("Intel Standard Command Set");
@@ -105,7 +105,7 @@ detectflash( bus_t *bus )
 			s = N_("Intel/Sharp Extended Command Set");
 			break;
 		case CFI_VENDOR_AMD_SCS:
-			s = N_("AMD/Fujitsu Standard Commanf Set");
+			s = N_("AMD/Fujitsu Standard Command Set");
 			break;
 		case CFI_VENDOR_INTEL_SCS:
 			s = N_("Intel Standard Command Set");
