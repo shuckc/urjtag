@@ -303,7 +303,7 @@ bit 365 I ? USB_N
 bit 364 I ? SDA
 bit 363 I ? SCL
 bit 362 I ? nACRESET		# see Table 2-7. in [5]
-bit 361 I ? RD_nWR		# see Table 2-7. in [5]
+bit 361 I ? RDnWR		# see Table 2-7. in [5]
 bit 360 I ? nSDCS[3]		# see Table 2-7. in [5]
 bit 359 I ? nSDCS[2]		# see Table 2-7. in [5]
 bit 358 I ? GPIO[85]
@@ -481,7 +481,7 @@ bit 187 O ? USB_N 90 0 Z
 bit 186 O ? SDA 237 0 Z
 bit 185 O ? SCL 236 0 Z
 bit 184 O ? nACRESET 89 0 Z	# see Table 2-7. in [5]
-bit 183 O ? RD_nWR 88 0 Z	# see Table 2-7. in [5]
+bit 183 O ? RDnWR 88 0 Z	# see Table 2-7. in [5]
 bit 182 O ? nSDCS[3] 87 0 Z	# see Table 2-7. in [5]
 bit 181 O ? nSDCS[2] 86 0 Z	# see Table 2-7. in [5]
 bit 180 O ? GPIO[85] 85 0 Z
