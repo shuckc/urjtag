@@ -75,10 +75,10 @@ typedef volatile struct RTC_registers {
 /* RCNR bits - see Table 4-39 in [1] */
 
 #define	RCNR_LCK		bit(31)
-#define	RCNR_DEL_MASK		0x03FF0000
-#define	RCNR_DEL(x)		((x << 16) & RCNR_DEL_MASK)
-#define	RCNR_CK_DIV_MASK	0x0000FFFF
-#define	RCNR_CK_DIV(x)		(x & RCNR_CK_DIV_MASK)
+#define	RCNR_DEL_MASK		bits(25,16)
+#define	RCNR_DEL(x)		bits_val(25,16,x)
+#define	RCNR_CK_DIV_MASK	bits(15,0)
+#define	RCNR_CK_DIV(x)		bits_val(15,0,x)
 
 /* RTSR bits - see Table 4-42 in [1] */
 

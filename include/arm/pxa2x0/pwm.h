@@ -82,18 +82,18 @@ typedef volatile struct PWM_registers {
 /* PWM_CTRL bits - see Table 4-49 in [1] */
 
 #define	PWM_CTRL_PWM_SD		bit(6)
-#define	PWM_CTRL_PRESCALE_MASK	0x3F
-#define	PWM_CTRL_PRESCALE(x)	(x & PWM_CTRL_PRESCALE_MASK)
+#define	PWM_CTRL_PRESCALE_MASK	bits(5,0)
+#define	PWM_CTRL_PRESCALE(x)	bits_val(5,0,x)
 
 /* PWM_PWDUTY bits - see Table 4-50 in [1] */
 
 #define	PWM_PWDUTY_FDCYCLE	bit(10)
-#define	PWM_PWDUTY_DCYCLE_MASK	0x3FF
-#define	PWM_PWDUTY_DCYCLE(x)	(x & PWM_PWDUTY_DCYCLE_MASK)
+#define	PWM_PWDUTY_DCYCLE_MASK	bits(9,0)
+#define	PWM_PWDUTY_DCYCLE(x)	bits_val(9,0,x)
 
 /* PWM_PERVAL bits - see Table 4-51 in [1] */
 
-#define	PWM_PERVAL_PV_MASK	0x3FF
-#define	PWM_PERVAL_PV(x)	(x & PWM_PERVAL_PV_MASK)
+#define	PWM_PERVAL_PV_MASK	bits(9,0)
+#define	PWM_PERVAL_PV(x)	bits_val(9,0,x)
 
 #endif /* PXA2X0_PWM_H */

@@ -77,20 +77,20 @@ typedef volatile struct SSP_registers {
 /* SSCR0 bits - see Table 8-2 in [1] */
 
 #define	SSCR0_SCR_MASK	bits(15,8)
-#define	SSCR0_SCR(x)	((x << 8) & SSCR0_SCR_MASK)
+#define	SSCR0_SCR(x)	bits_val(15,8,x)
 #define	SSCR0_SSE	bit(7)
 #define	SSCR0_ECS	bit(6)
 #define	SSCR0_FRF_MASK	bits(5,4)
-#define	SSCR0_FRF(x)	((x << 4) & SSCR0_FRF_MASK)
+#define	SSCR0_FRF(x)	bits_val(5,4,x)
 #define	SSCR0_DSS_MASK	bits(3,0)
-#define	SSCR0_DSS(x)	(x & SSCR0_DSS_MASK)
+#define	SSCR0_DSS(x)	bits_val(3,0,x)
 
 /* SSCR1 bits - see Table 8-3 in [1] */
 
 #define	SSCR1_RFT_MASK	bits(13,10)
-#define	SSCR1_RFT(x)	((x << 10) & SSCR1_RFT_MASK)
+#define	SSCR1_RFT(x)	bits_val(13,10,x)
 #define	SSCR1_TFT_MASK	bits(9,6)
-#define	SSCR1_TFT(x)	((x << 6) & SSCR1_TFT_MASK)
+#define	SSCR1_TFT(x)	bits_val(9,6,x)
 #define	SSCR1_MWDS	bit(5)
 #define	SSCR1_SPH	bit(4)
 #define	SSCR1_SPO	bit(3)
@@ -101,9 +101,9 @@ typedef volatile struct SSP_registers {
 /* SSSR bits - see Table 8-6 in [1] */
 
 #define	SSSR_RFL_MASK	bits(15,12)
-#define	SSSR_RFL(x)	((x << 12) & SSSR_RFL_MASK)
+#define	SSSR_RFL(x)	bits_val(15,12,x)
 #define	SSSR_TFL_MASK	bits(11,8)
-#define	SSSR_TFL(x)	((x << 8) & SSSR_TFL_MASK)
+#define	SSSR_TFL(x)	bits_val(11,8,x)
 #define	SSSR_ROR	bit(7)
 #define	SSSR_RFS	bit(6)
 #define	SSSR_TFS	bit(5)
