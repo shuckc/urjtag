@@ -21,7 +21,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
 #
 
-AC_INIT(JTAG Tools,0.5.2,,jtag)
+AC_INIT(JTAG Tools,0.6,,jtag)
 
 AC_PREREQ(2.54)
 AC_COPYRIGHT([Copyright (C) 2002, 2003 ETC s.r.o.])
@@ -52,7 +52,7 @@ AM_CONFIG_HEADER(config.h)
 AC_GNU_SOURCE
 
 AM_GNU_GETTEXT(external)
-AM_GNU_GETTEXT_VERSION(0.12.1)
+AM_GNU_GETTEXT_VERSION(0.14.1)
 
 AC_PROG_CC
 AC_PROG_RANLIB
