@@ -49,6 +49,9 @@ nobase_dist_pkgdata_DATA = \
 	hitachi/sh7727/sh7727 \
 	hitachi/sh7729/STEPPINGS \
 	hitachi/sh7729/sh7729 \
+	ibm/PARTS \
+	ibm/ppc440gx/STEPPINGS \
+	ibm/ppc440gx/ppc440gx \
 	intel/PARTS \
 	intel/pxa250/STEPPINGS \
 	intel/pxa250/pxa250 \
@@ -57,6 +60,13 @@ nobase_dist_pkgdata_DATA = \
 	intel/sa1110/sa1110 \
 	intel/ixp425/STEPPINGS \
 	intel/ixp425/ixp425 \
+	lattice/PARTS \
+	lattice/lc4032v-tqfp48/STEPPINGS \
+	lattice/lc4032v-tqfp48/lc4032v-tqfp48 \
+	lattice/m4a3-256.192-fpbga256/STEPPINGS \
+	lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256 \
+	lattice/m4a3-64.32-tqfp48/STEPPINGS \
+	lattice/m4a3-64.32-tqfp48/m4a3-64.32-tqfp48 \
 	motorola/mpc8245/1.2 \
 	philips/PARTS \
 	philips/xcr3128xl-cs144/STEPPINGS \

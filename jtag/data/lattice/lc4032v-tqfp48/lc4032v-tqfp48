@@ -1,0 +1,179 @@
+#
+# $Id$
+#
+# JTAG declarations for Lattice LC4032V (48-pin TQFP)
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
+#
+
+signal IOA0  44
+signal IOA1  45
+signal IOA2  46
+signal IOA3  47
+signal IOA4  48
+signal IOA5   2
+signal IOA6   3
+signal IOA7   4
+signal IOA8   7
+signal IOA9   8
+signal IOA10  9
+signal IOA11 10
+signal IOA12 14
+signal IOA13 15
+signal IOA14 16
+signal IOA15 17
+signal IOB0  20
+signal IOB1  21
+signal IOB2  22
+signal IOB3  23
+signal IOB4  24
+signal IOB5  26
+signal IOB6  27
+signal IOB7  28
+signal IOB8  31
+signal IOB9  32
+signal IOB10 33
+signal IOB11 34
+signal IOB12 38
+signal IOB13 39
+signal IOB14 40
+signal IOB15 41
+signal CLK0  43
+signal CLK1  18
+signal CLK2  19
+signal CLK3  42
+signal TDI    1
+signal TCK   11
+signal TMS   25
+signal TDO   35
+signal GND0   5
+signal GND1  29
+signal GND   13 37
+signal VCCO0  6
+signal VCCO1 30
+signal VCC   12 36
+
+
+# mandatory data registers
+register    BSR  68 # Boundary Scan Register
+register    BR    1 # Bypass Register
+
+# optional data registers
+register    DIR	 32 # Device Identification Register
+
+instruction length 8
+
+# mandatory instructions
+instruction EXTEST         00000000	BSR
+instruction SAMPLE/PRELOAD 00011100	BSR
+instruction BYPASS         11111111 BR
+
+# optional instructions
+instruction IDCODE   00010110 DIR
+instruction USERCODE 00010111 DIR
+instruction HIGHZ    00011000 BR
+instruction CLAMP    00100000 BR
+
+# ISC instructions
+#instruction ISC_ENABLE           00010101
+#instruction ISC_DISABLE          00011110
+#instruction ISC_NOOP             00110000
+#instruction ISC_ADDRESS_SHIFT    00000001
+#instruction ISC_DATA_SHIFT       00000010
+#instruction ISC_ERASE            00000011
+#instruction ISC_DISCHARGE        00010100
+#instruction ISC_PROGRAM_INCR     00100111
+#instruction ISC_READ_INCR        00101010
+#instruction ISC_PROGRAM_SECURITY 00001001
+#instruction ISC_PROGRAM_DONE     00101111
+#instruction ISC_ERASE_DONE       00100100
+#instruction ISC_PROGRAM_USERCODE 00011010
+#instruction LSC_ADDRESS_INIT     00100001
+
+
+# Boundary Scan Register bit definition
+
+bit 67 I ? CLK0
+bit 66 B ? IOA0 65 0 Z
+bit 65 C 0 IOA0
+bit 64 B ? IOA1 63 0 Z
+bit 63 C 0 IOA1
+bit 62 B ? IOA2 61 0 Z
+bit 61 C 0 IOA2
+bit 60 B ? IOA3 59 0 Z
+bit 59 C 0 IOA3
+bit 58 B ? IOA4 57 0 Z
+bit 57 C 0 IOA4
+bit 56 B ? IOA5 55 0 Z
+bit 55 C 0 IOA5
+bit 54 B ? IOA6 53 0 Z
+bit 53 C 0 IOA6
+bit 52 B ? IOA7 51 0 Z
+bit 51 C 0 IOA7
+bit 50 B ? IOA8 49 0 Z
+bit 49 C 0 IOA8
+bit 48 B ? IOA9 47 0 Z
+bit 47 C 0 IOA9
+bit 46 B ? IOA10 45 0 Z
+bit 45 C 0 IOA10
+bit 44 B ? IOA11 43 0 Z
+bit 43 C 0 IOA11
+bit 42 B ? IOA12 41 0 Z
+bit 41 C 0 IOA12
+bit 40 B ? IOA13 39 0 Z
+bit 39 C 0 IOA13
+bit 38 B ? IOA14 37 0 Z
+bit 37 C 0 IOA14
+bit 36 B ? IOA15 35 0 Z
+bit 35 C 0 IOA15
+bit 34 I ? CLK1
+bit 33 I ? CLK2
+bit 32 B ? IOB0 31 0 Z
+bit 31 C 0 IOB0
+bit 30 B ? IOB1 29 0 Z
+bit 29 C 0 IOB1
+bit 28 B ? IOB2 27 0 Z
+bit 27 C 0 IOB2
+bit 26 B ? IOB3 25 0 Z
+bit 25 C 0 IOB3
+bit 24 B ? IOB4 23 0 Z
+bit 23 C 0 IOB4
+bit 22 B ? IOB5 21 0 Z
+bit 21 C 0 IOB5
+bit 20 B ? IOB6 19 0 Z
+bit 19 C 0 IOB6
+bit 18 B ? IOB7 17 0 Z
+bit 17 C 0 IOB7
+bit 16 B ? IOB8 15 0 Z
+bit 15 C 0 IOB8
+bit 14 B ? IOB9 13 0 Z
+bit 13 C 0 IOB9
+bit 12 B ? IOB10 11 0 Z
+bit 11 C 0 IOB10
+bit 10 B ? IOB11 9 0 Z
+bit  9 C 0 IOB11
+bit  8 B ? IOB12 7 0 Z
+bit  7 C 0 IOB12
+bit  6 B ? IOB13 5 0 Z
+bit  5 C 0 IOB13
+bit  4 B ? IOB14 3 0 Z
+bit  3 C 0 IOB14
+bit  2 B ? IOB15 1 0 Z
+bit  1 C 0 IOB15
+bit  0 I ? CLK3

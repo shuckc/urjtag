@@ -11,6 +11,10 @@ See libbrux/NEWS for more news.
 		- Xilinx XCR3032XL-VQ44 (patch 972621, Andrew Dyer)
 		- Toshiba TX4925/TX4926 (patch 972621, Andrew Dyer)
 		- Sharp LH7A400 (patch 886068, Marko Rößler)
+		- IBM 440GX (patch 1012120, Jerome Debard)
+		- Lattice LC4032V (patch 1012120, Jerome Debard)
+		- Lattice M4A3-64/32 (patch 1012120, Jerome Debard)
+		- Lattice M4A3-256/192 (patch 1012120, Jerome Debard)
 	* Added new bus drivers:
 		- Motorola MPC824x
 		- AMD Alchemy Solutions Au1500 (patch 853883, Zhang Wei)

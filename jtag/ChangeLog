@@ -1,3 +1,18 @@
+2004-11-16  Marcel Telka  <marcel@telka.sk>
+
+	* data/MANUFACTURERS: Added Lattice Semiconductors and IBM Semiconductors (patch 1012120, Jerome Debard).
+	* data/ibm/PARTS: New file (patch 1012120, Jerome Debard).
+	* data/ibm/ppc440gx/STEPPINGS: Ditto.
+	* data/ibm/ppc440gx/ppc440gx: Ditto.
+	* data/lattice/PARTS: Ditto.
+	* data/lattice/lc4032v-tqfp48/STEPPINGS: Ditto.
+	* data/lattice/lc4032v-tqfp48/lc4032v-tqfp48: Ditto.
+	* data/lattice/m4a3-256.192-fpbga256/STEPPINGS: Ditto.
+	* data/lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256: Ditto.
+	* data/lattice/m4a3-64.32-tqfp48/STEPPINGS: Ditto.
+	* data/lattice/m4a3-64.32-tqfp48/m4a3-64.32-tqfp48: Ditto.
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
+
 2004-10-22  Marcel Telka  <marcel@telka.sk>
 
 	* data/MANUFACTURERS: Added Sharp manufacturer (patch 886068, Marko Rößler).
