@@ -33,6 +33,7 @@
  */
 
 #include <stdint.h>
+#include <string.h>
 #include <flash/intel.h>
 
 #include "part.h"

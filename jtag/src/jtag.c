@@ -43,6 +43,9 @@ get_token( char *buf )
 	return strtok( buf, " \f\n\r\t\v" );
 }
 
+void readmem( parts *ps );
+void flashmem( parts *ps, FILE *f );
+
 int
 main( void )
 {

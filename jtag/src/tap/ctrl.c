@@ -22,6 +22,7 @@
  *
  */
 
+#include <stdio.h>
 #include <sys/io.h>
 
 #include "ctrl.h"
