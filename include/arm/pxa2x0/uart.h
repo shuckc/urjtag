@@ -32,8 +32,11 @@
 #ifndef	PXA2X0_UART_H
 #define	PXA2X0_UART_H
 
-#include <stdint.h>
 #include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
+#endif
 
 /* Common UART (FFUART/BTUART/STUART) Declarations */
 
@@ -64,13 +67,9 @@ typedef volatile struct UART_registers {
 	uint32_t isr;
 } UART_registers;
 
-#ifndef FFUART_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	FFUART_pointer	((UART_registers *) FFUART_BASE)
-#endif
-#ifndef BTUART_pointer
 #define	BTUART_pointer	((UART_registers *) BTUART_BASE)
-#endif
-#ifndef STUART_pointer
 #define	STUART_pointer	((UART_registers *) STUART_BASE)
 #endif
 
