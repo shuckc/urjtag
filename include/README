@@ -1,0 +1,23 @@
+$Id$
+
+include
+=======
+
+include package is a collection of the useful independent include files for
+C/Assembler developers.
+
+include package is released under BSD-style license. Please read COPYING
+file for more info.
+
+Feedback and contributions are welcome.
+
+Homepage: http://openwince.sourceforge.net/include/
+
+
+Installation instructions
+-------------------------
+
+1. Download and unpack include sources.
+2. Run ./configure script.
+3. Run `make`.
+4. Run `make install`.
