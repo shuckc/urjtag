@@ -10,6 +10,6 @@ COPYING
 INSTALL
 ABOUT-NLS
 m4
-acconfig.h
-acconfig.h.in
+pkgcfg.h
+pkgcfg.h.in
 stamp-h1

@@ -23,7 +23,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <acconfig.h>
+#include <pkgcfg.h>
 #endif
 
 #include "gettext.h"

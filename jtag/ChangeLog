@@ -1,5 +1,10 @@
 2003-05-22  Marcel Telka  <marcel@telka.sk>
 
+	* configure.ac (AM_CONFIG_HEADER): Renamed acconfig.h configuration header to pkgcfg.h.
+	* config.h: Ditto.
+
+2003-05-22  Marcel Telka  <marcel@telka.sk>
+
 	* config.h: New file.
 	Changed all relevant source files to include this file unconditionaly.
 	* Makefile.am (noinst_HEADERS): Added config.h.
