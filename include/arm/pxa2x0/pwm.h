@@ -24,16 +24,16 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
- * [2] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
- *     Specification Update", May 2002, Order Number: 278534-005
  *
  */
 
 #ifndef	PXA2X0_PWM_H
 #define	PXA2X0_PWM_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* PWM0 and PWM1 Registers */
@@ -41,16 +41,15 @@ typedef	unsigned int	uint32_t;
 #define	PWM0_BASE	0x40B00000
 #define	PWM1_BASE	0x40C00000
 
+#if LANGUAGE == C
 typedef volatile struct PWM_registers {
 	uint32_t pwm_ctrl;
 	uint32_t pwm_pwduty;
 	uint32_t pwm_perval;
 } PWM_registers;
 
-#ifndef PWM0_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	PWM0_pointer	((PWM_registers*) PWM0_BASE)
-#endif
-#ifndef PWM1_pointer
 #define	PWM1_pointer	((PWM_registers*) PWM1_BASE)
 #endif
 
@@ -65,5 +64,27 @@ typedef volatile struct PWM_registers {
 #define	PWM_CTRL1	PWM1_pointer->pwm_ctrl
 #define	PWM_PWDUTY1	PWM1_pointer->pwm_pwduty
 #define	PWM_PERVAL1	PWM1_pointer->pwm_perval
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_PWM_H */
+#define	PWM_CTRL_OFFSET		0x00
+#define	PWM_PWDUTY_OFFSET	0x04
+#define	PWM_PERVAL_OFFSET	0x08
+
+/* PWM_CTRL bits - see Table 4-49 in [1] */
+
+#define	PWM_CTRL_PWM_SD		bit(6)
+#define	PWM_CTRL_PRESCALE_MASK	0x3F
+#define	PWM_CTRL_PRESCALE(x)	(x & PWM_CTRL_PRESCALE_MASK)
+
+/* PWM_PWDUTY bits - see Table 4-50 in [1] */
+
+#define	PWM_PWDUTY_FDCYCLE	bit(10)
+#define	PWM_PWDUTY_DCYCLE_MASK	0x3FF
+#define	PWM_PWDUTY_DCYCLE(x)	(x & PWM_PWDUTY_DCYCLE_MASK)
+
+/* PWM_PERVAL bits - see Table 4-51 in [1] */
+
+#define	PWM_PERVAL_PV_MASK	0x3FF
+#define	PWM_PERVAL_PV(x)	(x & PWM_PERVAL_PV_MASK)
+
+#endif /* PXA2X0_PWM_H */
