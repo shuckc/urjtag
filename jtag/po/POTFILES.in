@@ -55,6 +55,7 @@ src/tap/cable/ea253.c
 src/tap/cable/ei012.c
 src/tap/cable/keithkoep.c
 src/tap/cable/mpcbdm.c
+src/tap/cable/triton.c
 src/tap/cable/wiggler.c
 src/tap/chain.c
 src/tap/parport/direct.c
