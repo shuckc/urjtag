@@ -2,6 +2,8 @@ $Id$
 
 	* Fixed compile error (bug 665923, thanks to Chris Ellec).
 	* Added support for Macraigor Wiggler JTAG Cable (Stas Khirman).
+	* Added support for Altera ByteBlaster/ByteBlaster II/ByteBlasterMV
+		Parallel Port Download Cable.
 	* Minor fixes.
 
 jtag-0.2 (2003-01-08):

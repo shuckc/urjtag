@@ -35,6 +35,7 @@ Supported hardware
 ------------------
 
 JTAG adapters/cables (see 'help cable' command for more info):
+- Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable
 - Xilinx DLC5 JTAG Parallel Cable III
 - ETC EA253 JTAG Cable
 - ETC EI012 JTAG Cable

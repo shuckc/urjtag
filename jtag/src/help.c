@@ -75,11 +75,11 @@ help( const char *cmd )
 			"CABLE      cable type\n"
 			"\n"
 			"List of supported cables:\n"
-			"none       No cable connected\n"
+			"none          No cable connected\n"
 		);
 
 		for (i = 0; cable_drivers[i]; i++)
-			printf( "%-11s%s\n", cable_drivers[i]->name, cable_drivers[i]->description );
+			printf( "%-14s%s\n", cable_drivers[i]->name, cable_drivers[i]->description );
 	} else if (strcmp( cmd, "detect" ) == 0)
 		printf(
 			"Usage: detect\n"

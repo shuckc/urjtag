@@ -1,5 +1,12 @@
 2003-01-11  Marcel Telka  <marcel@telka.sk>
 
+	* src/tap/cable/bytebaster.c: Added support for Altera ByteBlaster family cables.
+	* src/tap/cable.c: Ditto.
+	* src/tap/Makefile.am: Ditto.
+	* src/help.c (help): Increased space for cable short name.
+
+2003-01-11  Marcel Telka  <marcel@telka.sk>
+
 	* src/tap/cable/wiggler.c: Added support for Macraigor Wiggler JTAG Cable (Stas Khirman).
 	* src/tap/cable.c: Ditto.
 	* src/tap/Makefile.am: Ditto.
