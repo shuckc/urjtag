@@ -37,13 +37,20 @@
 
 #include <stdint.h>
 
+typedef struct {
+	const char *description;
+	uint32_t start;
+	uint64_t length;
+	unsigned int width;
+} bus_area_t;
+
 typedef struct bus bus_t;
 
 struct bus {
 	void *params;
 	void (*printinfo)( void );
 	void (*prepare)( bus_t *bus );
-	unsigned int (*width)( bus_t *bus, uint32_t adr );
+	int (*area)( bus_t *bus, uint32_t adr, bus_area_t *area );
 	void (*read_start)( bus_t *bus, uint32_t adr );
 	uint32_t (*read_next)( bus_t *bus, uint32_t adr );
 	uint32_t (*read_end)( bus_t *bus );
@@ -56,7 +63,7 @@ extern bus_t *bus;
 
 #define	bus_printinfo(bus)	bus->printinfo()
 #define	bus_prepare(bus)	bus->prepare(bus)
-#define	bus_width(bus,adr)	bus->width(bus,adr)
+#define	bus_area(bus,adr,a)	bus->area(bus,adr,a)
 #define	bus_read_start(bus,adr)	bus->read_start(bus,adr)
 #define	bus_read_next(bus,adr)	bus->read_next(bus,adr)
 #define	bus_read_end(bus)	bus->read_end(bus)

@@ -1,3 +1,8 @@
+2003-08-28  Marcel Telka  <marcel@telka.sk>
+
+	* brux/bus.h (bus_area_t): New structure.
+	(bus_t): Removed width member, added area member.
+
 2003-08-27  Marcel Telka  <marcel@telka.sk>
 
 	* brux/flash.h: Added FLASH_ERROR_* macros.
