@@ -47,7 +47,8 @@ get_token( char *buf )
 }
 
 void readmem( parts *ps );
-void flashmem( parts *ps, FILE *f );
+void flashmem( parts *ps, FILE *f, uint32_t addr );
+void flashmsbin( parts *ps, FILE *f );
 
 int
 main( void )
@@ -114,6 +115,23 @@ main( void )
 
 		if (strcmp( t, "flashmem" ) == 0) {
 			FILE *f;
+			int msbin = 0;
+			uint32_t addr = 0;
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "flashmem: Missing argument(s)\n" );
+				continue;
+			}
+			if (strcmp( t, "msbin" ) != 0) {
+				if ((sscanf( t, "0x%x", &addr ) != 1) && (sscanf( t, "%d", &addr ) != 1)) {
+					printf( "error\n" );
+					continue;
+				}
+				printf( "0x%08X\n", addr );
+			} else
+				msbin = 1;
+			/* filename */
 			t = get_token( NULL );
 			if (!t) {
 				printf( "flashmem: missing filename\n" );
@@ -121,7 +139,7 @@ main( void )
 			}
 			f = fopen( t, "r" );
 			if (!f) {
-				printf( "Unable to open file `%s!'\n", t );
+				printf( "Unable to open file `%s'!\n", t );
 				continue;
 			}
 			t = get_token( NULL );
@@ -130,7 +148,10 @@ main( void )
 				fclose( f );
 				continue;
 			}
-			flashmem( ps, f );
+			if (msbin) 
+				flashmsbin( ps, f );
+			else
+				flashmem( ps, f, addr );
 			fclose( f );
 			continue;
 		}

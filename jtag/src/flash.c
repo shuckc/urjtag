@@ -33,7 +33,9 @@
  */
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
+#include <flash/cfi.h>
 #include <flash/intel.h>
 
 #include "part.h"
@@ -46,12 +48,15 @@ int flash_erase_block32( parts *ps, uint32_t adr );
 int flash_unlock_block32( parts *ps, uint32_t adr );
 int flash_program32( parts *ps, uint32_t adr, uint32_t data );
 
+cfi_query_structure_t *detect_cfi( parts *ps );
+
 void
-flashmem( parts *ps, FILE *f )
+flashmsbin( parts *ps, FILE *f )
 {
 	part *p = ps->parts[0];
 	int o = 0;
 	uint32_t adr;
+	cfi_query_structure_t *cfi;
 
 	printf( "Note: Supported configuration is 2 x 16 bit only\n" );
 
@@ -71,15 +76,165 @@ flashmem( parts *ps, FILE *f )
 	part_set_instruction( p, "EXTEST" );
 	parts_shift_instructions( ps );
 
-	flash_unlock_block32( ps, 0 );
-	printf( "block unlocked\n" );
-	printf( "erasing block 0: %d\n", flash_erase_block32( ps, 0 ) );
+	cfi = detect_cfi( ps );
+
+	/* test sync bytes */
+	{
+		char sync[8];
+		fread( &sync, sizeof (char), 7, f );
+		sync[7] = '\0';
+		if (strcmp( "B000FF\n", sync ) != 0) {
+			printf( "Invalid sync sequence!\n" );
+			return;
+		}
+	}
+
+	/* erase memory blocks */
+	{
+		uint32_t start;
+		uint32_t len;
+		int first, last;
+
+		fread( &start, sizeof start, 1, f );
+		fread( &len, sizeof len, 1, f );
+		first = start / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
+		last = (start + len - 1) / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
+		for (; first <= last; first++) {
+			adr = first * cfi->device_geometry.erase_block_regions[0].erase_block_size * 2;
+			flash_unlock_block32( ps, adr );
+			printf( "block %d unlocked\n", first );
+			printf( "erasing block %d: %d\n", first, flash_erase_block32( ps, adr ) );
+		}
+	}
 
 	printf( "program:\n" );
-	adr = 0;
+	for (;;) {
+		uint32_t a, l, c;
+
+		fread( &a, sizeof a, 1, f );
+		fread( &l, sizeof l, 1, f );
+		fread( &c, sizeof c, 1, f );
+		if (feof( f )) {
+			printf( "Error: premature end of file\n" );
+			return;
+		}
+		printf( "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n", a, l, c );
+		if ((a == 0) && (c == 0))
+			break;
+		if (l & 3) {
+			printf( "Error: Invalid record length!\n" );
+			return;
+		}
+
+		while (l) {
+			uint32_t data;
+
+			printf( "addr: 0x%08X\r", a );
+			fread( &data, sizeof data, 1, f );
+			if (flash_program32( ps, a, data )) {
+				printf( "\nflash error\n" );
+				return;
+			}
+			a += 4;
+			l -= 4;
+		}
+	}
+	printf( "\n" );
+
+	/* Read Array */
+	bus_write( ps, 0 << o, 0x00FF00FF );
+
+	fseek( f, 15, SEEK_SET );
+	printf( "verify:\n" );
+
+	for (;;) {
+		uint32_t a, l, c;
+
+		fread( &a, sizeof a, 1, f );
+		fread( &l, sizeof l, 1, f );
+		fread( &c, sizeof c, 1, f );
+		if (feof( f )) {
+			printf( "Error: premature end of file\n" );
+			return;
+		}
+		printf( "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n", a, l, c );
+		if ((a == 0) && (c == 0))
+			break;
+		if (l & 3) {
+			printf( "Error: Invalid record length!\n" );
+			return;
+		}
+
+		while (l) {
+			uint32_t data, readed;
+
+			printf( "addr: 0x%08X\r", a );
+			fread( &data, sizeof data, 1, f );
+			readed = bus_read( ps, a );
+			if (data != readed) {
+				printf( "\nverify error: 0x%08X vs. 0x%08X\n", readed, data );
+				return;
+			}
+			a += 4;
+			l -= 4;
+		}
+	}
+	printf( "\n" );
+
+	printf( "Done.\n" );
+}
+
+void
+flashmem( parts *ps, FILE *f, uint32_t addr )
+{
+	part *p = ps->parts[0];
+	int o = 0;
+	uint32_t adr;
+	cfi_query_structure_t *cfi;
+	int *erased;
+	int i;
+
+	printf( "Note: Supported configuration is 2 x 16 bit only\n" );
+
+	switch (bus_width( ps )) {
+		case 16:
+			o = 1;
+			break;
+		case 32:
+			o = 2;
+			break;
+		default:
+			printf( "Error: Unknown bus width!\n" );
+			return;
+	}
+
+	/* EXTEST */
+	part_set_instruction( p, "EXTEST" );
+	parts_shift_instructions( ps );
+
+	cfi = detect_cfi( ps );
+	erased = malloc( cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks * sizeof *erased );
+	if (!erased) {
+		printf( "Out of memory!\n" );
+		return;
+	}
+	for (i = 0; i < cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks; i++)
+		erased[i] = 0;
+
+	printf( "program:\n" );
+	adr = addr;
 	while (!feof( f )) {
 		uint32_t data;
+		int block_no = adr / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
 		printf( "addr: 0x%08X\r", adr );
+
+		if (!erased[block_no]) {
+			flash_unlock_block32( ps, adr );
+			printf( "block %d unlocked\n", block_no );
+			printf( "erasing block %d: %d\n", block_no, flash_erase_block32( ps, adr ) );
+			erased[block_no] = 1;
+		}
+
 		fread( &data, sizeof data, 1, f );
 		if (flash_program32( ps, adr, data )) {
 			printf( "\nflash error\n" );
@@ -94,7 +249,7 @@ flashmem( parts *ps, FILE *f )
 
 	fseek( f, 0, SEEK_SET );
 	printf( "verify:\n" );
-	adr = 0;
+	adr = addr;
 	while (!feof( f )) {
 		uint32_t data;
 		uint32_t readed;
@@ -108,6 +263,8 @@ flashmem( parts *ps, FILE *f )
 		adr += 4;
 	}
 	printf( "\nDone.\n" );
+
+	free( erased );
 }
 
 #define	CFI_INTEL_ERROR_UNKNOWN				1
