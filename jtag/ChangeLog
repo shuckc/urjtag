@@ -1,5 +1,10 @@
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
+	* src/flash-intel.c (intel_flash_autodetect): Fixed Intel flash algorithm Id.
+	(intel_flash_autodetect32): Ditto.
+
+2003-02-17  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac (AC_CHECK_FUNCS): Added getdelim and getline.
 	(AC_CONFIG_FILES): Added src/lib/Makefile.
 	* src/Makefile.am (SUBDIRS): Added lib.

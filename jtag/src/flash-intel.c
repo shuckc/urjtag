@@ -53,13 +53,13 @@ static int intel_flash_program32( parts *ps, uint32_t adr, uint32_t data );
 static int 
 intel_flash_autodetect32( parts *ps, cfi_query_structure_t *cfi )
 {
-	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_SCS) && (bus_width( ps ) == 32);
+	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( ps ) == 32);
 }
 
 static int 
 intel_flash_autodetect( parts *ps, cfi_query_structure_t *cfi )
 {
-	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_SCS) && (bus_width( ps ) == 16);
+	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( ps ) == 16);
 }
 
 static
