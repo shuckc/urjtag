@@ -27,6 +27,7 @@
 #include <stdio.h>
 
 #include <jtag/part.h>
+#include <jtag/register.h>
 
 static char *
 get_token( char *buf )
@@ -38,7 +39,7 @@ get_token( char *buf )
 }
 
 part *
-read_part( FILE *f, tap_register *idr )
+read_part( FILE *f, const tap_register *idr )
 {
 	int line = 0;
 	part *part;
@@ -88,6 +89,55 @@ read_part( FILE *f, tap_register *idr )
 			continue;
 		}
 
+		/* register */
+		if (strcmp( t, "register" ) == 0) {
+			char *n = get_token( NULL );	/* register name */
+			int l;
+			data_register *dr;
+
+			t = get_token( NULL );		/* register length */
+			if (!n || !t) {
+				printf( "(%d) parse error\n", line );
+				continue;
+			}
+
+			l = strtol( t, &t, 10 );
+			if ((t && *t) || (l < 1)) {
+				printf( "(%d) invalid register length\n", line );
+				continue;
+			}
+
+			dr = data_register_alloc( n, l );
+			if (!dr) {
+				printf( "(%d) out of memory\n", line );
+				continue;
+			}
+
+			t = get_token( NULL );
+			if (t) {
+				printf( "(%d) parse error\n", line );
+				continue;
+			}
+
+			dr->next = part->data_registers;
+			part->data_registers = dr;
+
+			if (strcmp( dr->name, "BSR" ) == 0) {
+				int i;
+
+				part->boundary_length = l;
+				part->bsbits = malloc( part->boundary_length * sizeof *part->bsbits );
+				if (!part->bsbits) {
+					printf( "(%d) out of memory\n", line );
+					continue;
+				}
+				for (i = 0; i < part->boundary_length; i++)
+					part->bsbits[i] = NULL;
+			}
+
+			continue;
+		}
+
 		/* instruction */
 		if (strcmp( t, "instruction" ) == 0) {
 			t = get_token( NULL );		/* 'length' or instruction name */
@@ -116,7 +166,7 @@ read_part( FILE *f, tap_register *idr )
 				char *n = t;		/* save instruction name */
 				instruction *i;
 
-				t = get_token( NULL );
+				t = get_token( NULL );	/* instruction bits */
 				if (!t || (strlen( t ) != part->instruction_length)) {
 					printf( "(%d) parse error\n", line );
 					continue;
@@ -130,6 +180,17 @@ read_part( FILE *f, tap_register *idr )
 
 				i->next = part->instructions;
 				part->instructions = i;
+
+				t = get_token( NULL );	/* data register */
+				if (!t) {
+					printf( "(%d) parse error\n", line );
+					continue;
+				}
+				i->data_register = part_find_data_register( part, t );
+				if (!i->data_register) {
+					printf( "(%d) unknown data register\n", line );
+					continue;
+				}
 			}
 
 			t = get_token( NULL );
@@ -137,47 +198,6 @@ read_part( FILE *f, tap_register *idr )
 				printf( "(%d) parse error\n", line );
 				continue;
 			}
-
-			continue;
-		}
-
-		/* boundary */
-		if (strcmp( t, "boundary" ) == 0) {
-			int i;
-
-			char *l = get_token( NULL );	/* 1st token */
-			t = get_token( NULL );		/* 2nd token */
-			if (!t || !l || (strcmp( l, "length" ) != 0)) {
-				printf( "(%d) parse error\n", line );
-				continue;
-			}
-			
-			part->boundary_length = strtol( t, &t, 10 );
-			if ((t && *t) || (part->boundary_length < 1)) {
-				printf( "(%d) invalid boundary length\n", line );
-				continue;
-			}
-			part->bsbits = malloc( part->boundary_length * sizeof *part->bsbits );
-			if (!part->bsbits) {
-				printf( "(%d) out of memory\n", line );
-				continue;
-			}
-			for (i = 0; i < part->boundary_length; i++)
-				part->bsbits[i] = NULL;
-
-			part->bsr = register_alloc( part->boundary_length );
-			part->prev_bsr = register_alloc( part->boundary_length );
-			if (!part->bsr || !part->prev_bsr) {
-				printf( "(%d) out of memory\n", line );
-				continue;
-			}
-
-			t = get_token( NULL );
-			if (t) {
-				printf( "(%d) parse error\n", line );
-				continue;
-			}
-
 
 			continue;
 		}
@@ -187,11 +207,17 @@ read_part( FILE *f, tap_register *idr )
 			int bit;
 			int type;
 			int safe;
+			data_register *bsr = part_find_data_register( part, "BSR" );
+
+			if (!bsr) {
+				printf( "(%d) missing Boundary Scan Register (BSR)\n", line );
+				continue;
+			}
 
 			/* get bit number */
 			t = get_token( NULL );
 			bit = strtol( t, &t, 10 );
-			if ((t && *t) || (bit < 0)) {
+			if ((t && *t) || (bit < 0) || (bit >= bsr->value->len)) {
 				printf( "(%d) invalid boundary bit number\n", line );
 				continue;
 			}
@@ -231,7 +257,7 @@ read_part( FILE *f, tap_register *idr )
 				continue;
 			}
 			safe = (*t == '1') ? 1 : 0;
-			part->bsr->data[bit] = safe;
+			bsr->value->data[bit] = safe;
 
 			/* get bit name */
 			t = get_token( NULL );
