@@ -27,7 +27,7 @@ SUBDIRS = \
 
 bin_PROGRAMS = jtag
 
-jtag_SOURCES = jtag.c detect.c readmem.c
+jtag_SOURCES = jtag.c detect.c readmem.c detect.h
 
 jtag_DEPENDENCIES = tap/libtap.a part/libpart.a
 
