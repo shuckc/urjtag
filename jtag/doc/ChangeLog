@@ -1,3 +1,7 @@
+2003-03-19  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am: New file.
+
 2003-03-06  Marcel Telka  <marcel@telka.sk>
 
 	* internals.xml: Internals documentation started.
