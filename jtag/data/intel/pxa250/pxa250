@@ -249,3 +249,107 @@ instruction DBGTX		10000
 # see [3]
 boundary length 385
 
+
+bit 375 I ? MD[31]
+bit 374 I ? MD[30]
+bit 373 I ? MD[29]
+bit 372 I ? MD[28]
+bit 371 I ? MD[27]
+bit 370 I ? MD[26]
+bit 369 I ? MD[25]
+bit 368 I ? MD[24]
+bit 367 I ? MD[23]
+bit 366 I ? MD[22]
+bit 365 I ? MD[21]
+bit 364 I ? MD[20]
+bit 363 I ? MD[19]
+bit 362 I ? MD[18]
+bit 361 I ? MD[17]
+bit 360 I ? MD[16]
+bit 359 I ? MD[15]
+bit 358 I ? MD[14]
+bit 357 I ? MD[13]
+bit 356 I ? MD[12]
+bit 355 I ? MD[11]
+bit 354 I ? MD[10]
+bit 353 I ? MD[9]
+bit 352 I ? MD[8]
+bit 351 I ? MD[7]
+bit 350 I ? MD[6]
+bit 349 I ? MD[5]
+bit 348 I ? MD[4]
+bit 347 I ? MD[3]
+bit 346 I ? MD[2]
+bit 345 I ? MD[1]
+bit 344 I ? MD[0]
+
+bit 256 O ? MA[25] 208 0 Z
+bit 255 O ? MA[24] 208 0 Z
+bit 254 O ? MA[23] 208 0 Z
+bit 253 O ? MA[22] 208 0 Z
+bit 252 O ? MA[21] 208 0 Z
+bit 251 O ? MA[20] 208 0 Z
+bit 250 O ? MA[19] 208 0 Z
+bit 249 O ? MA[18] 208 0 Z
+bit 248 O ? MA[17] 208 0 Z
+bit 247 O ? MA[16] 208 0 Z
+bit 246 O ? MA[15] 208 0 Z
+bit 245 O ? MA[14] 208 0 Z
+bit 244 O ? MA[13] 208 0 Z
+bit 243 O ? MA[12] 208 0 Z
+bit 242 O ? MA[11] 208 0 Z
+bit 241 O ? MA[10] 208 0 Z
+bit 240 O ? MA[9] 208 0 Z
+bit 239 O ? MA[8] 208 0 Z
+bit 238 O ? MA[7] 208 0 Z
+bit 237 O ? MA[6] 208 0 Z
+bit 236 O ? MA[5] 208 0 Z
+bit 235 O ? MA[4] 208 0 Z
+bit 234 O ? MA[3] 208 0 Z
+bit 233 O ? MA[2] 208 0 Z
+bit 232 O ? MA[1] 208 0 Z
+bit 231 O ? MA[0] 208 0 Z
+bit 230 O ? nCS[0] 206 0 Z
+bit 229 O ? nOE 207 0 Z
+bit 228 O ? nWE 207 0 Z
+
+
+bit 208 C ? .
+bit 207 C ? .
+bit 206 C ? .
+bit 205 C ? .
+bit 204 O ? MD[31] 84 0 Z
+bit 203 O ? MD[30] 84 0 Z
+bit 202 O ? MD[29] 84 0 Z
+bit 201 O ? MD[28] 84 0 Z
+bit 200 O ? MD[27] 84 0 Z
+bit 199 O ? MD[26] 84 0 Z
+bit 198 O ? MD[25] 84 0 Z
+bit 197 O ? MD[24] 84 0 Z
+bit 196 O ? MD[23] 84 0 Z
+bit 195 O ? MD[22] 84 0 Z
+bit 194 O ? MD[21] 84 0 Z
+bit 193 O ? MD[20] 84 0 Z
+bit 192 O ? MD[19] 84 0 Z
+bit 191 O ? MD[18] 84 0 Z
+bit 190 O ? MD[17] 84 0 Z
+bit 189 O ? MD[16] 84 0 Z
+bit 188 O ? MD[15] 85 0 Z
+bit 187 O ? MD[14] 85 0 Z
+bit 186 O ? MD[13] 85 0 Z
+bit 185 O ? MD[12] 85 0 Z
+bit 184 O ? MD[11] 85 0 Z
+bit 183 O ? MD[10] 85 0 Z
+bit 182 O ? MD[9] 85 0 Z
+bit 181 O ? MD[8] 85 0 Z
+bit 180 O ? MD[7] 85 0 Z
+bit 179 O ? MD[6] 85 0 Z
+bit 178 O ? MD[5] 85 0 Z
+bit 177 O ? MD[4] 85 0 Z
+bit 176 O ? MD[3] 85 0 Z
+bit 175 O ? MD[2] 85 0 Z
+bit 174 O ? MD[1] 85 0 Z
+bit 173 O ? MD[0] 85 0 Z
+
+bit 85 C ? .
+bit 84 C ? .
