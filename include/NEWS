@@ -1,5 +1,7 @@
 $Id$
 
+include-0.2.1 (2003-02-12):
+
 	* Changes in PXA2x0 support:
 		- added DINT register bits
 		- added MMC commands (Juraj Fabo)
