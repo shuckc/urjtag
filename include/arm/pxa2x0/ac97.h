@@ -108,6 +108,8 @@ typedef volatile struct AC97_registers {
 #define	MOCR_OFFSET		0x100
 #define	MICR_OFFSET		0x108
 #define	MOSR_OFFSET		0x110
+#define	MISR_OFFSET		0x118
+#define	MODR_OFFSET		0x140
 
 /* POCR bits - see Table 13-50 in [1] */
 
@@ -192,5 +194,14 @@ typedef volatile struct AC97_registers {
 /* MOSR bits - see Table 13-61 in [1] */
 
 #define	MOSR_FIFOE		bit(4)
+
+/* MISR bits - see Table 16-62 in [1] */
+
+#define	MISR_FIFOE		bit(4)
+
+/* MODR bits - see Table 16-63 in [1] */
+
+#define	MODR_MODEM_DAT_MASK	0x0000FFFF
+#define	MODR_MODEM_DAT(x)	(x & MODR_MODEM_DAT_MASK)
 
 #endif /* PXA2X0_AC97_H */
