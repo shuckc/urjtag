@@ -32,14 +32,17 @@
 #ifndef	PXA2X0_GPIO_H
 #define	PXA2X0_GPIO_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* GPIO Registers */
 
 #define	GPIO_BASE	0x40E00000
 
+#if LANGUAGE == C
 typedef volatile struct GPIO_registers {
 	uint32_t gplr0;
 	uint32_t gplr1;
@@ -70,7 +73,7 @@ typedef volatile struct GPIO_registers {
 	uint32_t gafr2_u;
 } GPIO_registers;
 
-#ifndef GPIO_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	GPIO_pointer	((GPIO_registers*) GPIO_BASE)
 #endif
 
@@ -101,5 +104,34 @@ typedef volatile struct GPIO_registers {
 #define	GAFR1_U		GPIO_pointer->gafr1_u
 #define	GAFR2_L		GPIO_pointer->gafr2_l
 #define	GAFR2_U		GPIO_pointer->gafr2_u
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_GPIO_H */
+#define	GPLR0_OFFSET	0x00
+#define	GPLR1_OFFSET	0x04
+#define	GPLR2_OFFSET	0x08
+#define	GPDR0_OFFSET	0x0C
+#define	GPDR1_OFFSET	0x10
+#define	GPDR2_OFFSET	0x14
+#define	GPSR0_OFFSET	0x18
+#define	GPSR1_OFFSET	0x1C
+#define	GPSR2_OFFSET	0x20
+#define	GPCR0_OFFSET	0x24
+#define	GPCR1_OFFSET	0x28
+#define	GPCR2_OFFSET	0x2C
+#define	GRER0_OFFSET	0x30
+#define	GRER1_OFFSET	0x34
+#define	GRER2_OFFSET	0x38
+#define	GFER0_OFFSET	0x3C
+#define	GFER1_OFFSET	0x40
+#define	GFER2_OFFSET	0x44
+#define	GEDR0_OFFSET	0x48
+#define	GEDR1_OFFSET	0x4C
+#define	GEDR2_OFFSET	0x50
+#define	GAFR0_L_OFFSET	0x54
+#define	GAFR0_U_OFFSET	0x58
+#define	GAFR1_L_OFFSET	0x5C
+#define	GAFR1_U_OFFSET	0x60
+#define	GAFR2_L_OFFSET	0x64
+#define	GAFR2_U_OFFSET	0x68
+
+#endif /* PXA2X0_GPIO_H */
