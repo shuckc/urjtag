@@ -60,8 +60,10 @@ tap_shift_register( const tap_register *in, tap_register *out, int exit )
 		tap_clock( (exit && ((i + 1) == in->len)) ? 1 : 0, in->data[i] );	/* Shift (& Exit1) */
 	}
 	/* Shift-DR, Shift-IR, Exit1-DR or Exit1-IR state */
-	if (exit)
+	if (exit) {
 		tap_clock( 1, 0 );		/* Update-DR or Update-IR */
+		tap_clock( 0, 0 );		/* Run-Test/Idle */
+	}
 }
 
 void

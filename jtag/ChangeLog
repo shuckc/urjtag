@@ -1,5 +1,12 @@
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
+	* src/help.c (help): Added missing short help description for 'set' command.
+	* src/jtag.c (main): Added test for uninitialized ps for 'set' command.
+	* src/tap/tap.c (tap_shift_register): Changed final state to Run-Test/Idle
+		for immediately propagation of the new BSR values.
+
+2003-02-04  Marcel Telka  <marcel@telka.sk>
+
 	* src/jtag.c (main): Added more checks for syntax errors. Added support for
 		printing input data registers - command 'dr'. Added 'set signal'
 		command.

@@ -51,7 +51,7 @@ help( const char *cmd )
 			"detectflash   detect parameters of flash chip attached to a part\n"
 			"readmem       read content of the memory and write it to file\n"
 			"flashmem      burn flash memory with data from a file\n"
-			"set           TODO\n"
+			"set           set external signal value\n"
 			"\n"
 			"Type \"help COMMAND\" for details about particular command.\n", PACKAGE
 		);

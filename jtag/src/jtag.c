@@ -522,6 +522,11 @@ main( void )
 				continue;
 			}
 
+			if (!ps) {
+				printf( "Run \"detect\" first.\n" );
+				continue;
+			}
+
 			t = get_token( NULL );
 			if (!t || strcmp( t, "signal" ) != 0) {
 				printf( "set: syntax error\n" );
