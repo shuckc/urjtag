@@ -22,24 +22,6 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-echo "Running autopoint ..."
-autopoint
+autoreconf -i -s -v -f
 
-echo "Running aclocal ..."
-aclocal -I m4
-
-echo "Running autoheader ..."
-autoheader -W all
-
-echo "Running automake ..."
-automake --add-missing
-
-echo "Running autoconf ..."
-autoconf
-
-echo
-echo "Now running ./configure script..."
 ./configure --enable-maintainer-mode --with-include=/usr/local/include/openwince
-
-echo
-echo "Type \`make\` to build jtag..."

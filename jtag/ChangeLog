@@ -1,3 +1,10 @@
+2003-02-20  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am (SUBDIRS): Removed intl.
+	* autogen.sh: Replaced subsequent call of auto* tools with autoreconf one.
+	* configure.ac (AC_CONFIG_FILES): Removed intl/Makefile.
+	(AM_GNU_GETTTEXT): Added 'external' parameter.
+
 2003-02-19  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AC_CONFIG_HEADERS): Added new macro with config.h.

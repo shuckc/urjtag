@@ -22,7 +22,6 @@
 #
 
 SUBDIRS = \
-	intl \
 	include \
 	data \
 	src \

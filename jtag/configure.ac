@@ -42,7 +42,6 @@ AC_CONFIG_FILES(
 	src/tap/Makefile
 	src/part/Makefile
 	src/bus/Makefile
-	intl/Makefile
 	po/Makefile.in
 )
 
@@ -50,7 +49,7 @@ AM_MAINTAINER_MODE
 
 AC_GNU_SOURCE
 
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT(external)
 AM_GNU_GETTEXT_VERSION(0.11.5)
 
 AC_PROG_CC
