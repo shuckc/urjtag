@@ -28,6 +28,9 @@ See libbrux/NEWS for more news.
 	* Fixed minor bugs (including bug 857039).
 	* Fixed compiler error on Debian Woody (patch 986414, Martin Buck).
 	* Added support for different Intel IXP425 frequency variants (patch 1030647, Trevor Man).
+	* Rewritten and improved startup sequence to distinguish between interactive invocation
+		and stdin input (fixed bug 858535, thanks to Andrew Dyer for an idea).
+	* Removed support for parameter '-' (stdin).
 	* New translations:
 		- French (Michel Robitaille)
 

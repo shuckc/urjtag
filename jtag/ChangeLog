@@ -1,3 +1,11 @@
+2004-11-21  Marcel Telka  <marcel@telka.sk>
+
+	* src/jtag.c (jtag_parse_stream, cleanup): New function.
+	(jtag_parse_file): Replaced stream parsing algorithm with jtag_parse_stream() call. Removed support
+		for special filename '-'.
+	(main): Rewritten and improved startup sequence to distinguish between interactive invocation
+		and stdin input (fixed bug 858535, thanks to Andrew Dyer for an idea).
+
 2004-11-17  Marcel Telka  <marcel@telka.sk>
 
 	* acinclude.m4: New file with VL_LIB_READLINE macro (removed dependency on ac-archive package).

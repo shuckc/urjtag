@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <readline/readline.h>
@@ -195,28 +196,35 @@ jtag_readline_loop( const char *prompt )
 	free( line );
 }
 
-int
-jtag_parse_file( const char *filename )
+static int
+jtag_parse_stream( FILE *f )
 {
-	FILE *f;
 	int go = 1;
 	char *line = NULL;
 	int n = 0;
-
-	if (strcmp( filename, "-" ) != 0)
-		f = fopen( filename, "r" );
-	else		
-		f = stdin;
-	if (!f)
-		return -1;
 
 	while (go && (getline( &line, &n, f ) != -1))
 		if ((strlen(line) > 0) && (line[0] != '#'))
 			go = jtag_parse_line(line);
 
 	free(line);
-	if (strcmp( filename, "-" ) != 0)
-		fclose(f);
+
+	return go;
+}
+
+int
+jtag_parse_file( const char *filename )
+{
+	FILE *f;
+	int go;
+
+	f = fopen( filename, "r" );
+	if (!f)
+		return -1;
+
+	go = jtag_parse_stream( f );
+
+	fclose(f);
 
 	return go;
 }
@@ -248,10 +256,24 @@ jtag_parse_rc( void )
 	return go;
 }
 
+static void
+cleanup( void )
+{
+	cfi_array_free( cfi_array );
+	cfi_array = NULL;
+
+	if (bus) {
+		bus_free( bus );
+		bus = NULL;
+	}
+	chain_free( chain );
+	chain = NULL;
+}
+
 int
 main( int argc, const char **argv )
 {
-	int go = 1;
+	int go;
 	int i;
 
 #ifdef ENABLE_NLS
@@ -261,6 +283,41 @@ main( int argc, const char **argv )
 	textdomain( PACKAGE );
 #endif /* ENABLE_NLS */
 
+	/* input from files */
+	if (argc > 1) {
+		for (i = 1; i < argc; i++) {
+			chain = chain_alloc();
+			if (!chain) {
+				printf( _("Out of memory\n") );
+				return -1;
+			}
+
+			go = jtag_parse_file( argv[i] );
+			cleanup();
+			if (go < 0) {
+				printf( _("Unable to open file `%s'!\n"), argv[i] );
+				break;
+			}
+		}
+		return 0;
+	}
+
+	/* input from stdin */
+	if (!isatty(0)) {
+		chain = chain_alloc();
+		if (!chain) {
+			printf( _("Out of memory\n") );
+			return -1;
+		}
+
+		jtag_parse_stream( stdin );
+
+		cleanup();
+
+		return 0;
+	}
+
+	/* interactive */
 	printf(
 			_("%s\n"
 			"Copyright (C) 2002, 2003 ETC s.r.o.\n"
@@ -278,41 +335,24 @@ main( int argc, const char **argv )
 	printf( _("Warning: %s may damage your hardware! Type \"quit\" to exit!\n\n"), PACKAGE_NAME );
 	printf( _("Type \"help\" for help.\n\n") );
 
-	for (i = 1; i < argc; i++) {
-		go = jtag_parse_file( argv[i] );
-		if (go < 0)
-			printf( _("Unable to open file `%s'!\n"), argv[i] );
-		if (!go)
-			break;
-	}
+	/* Create ~/.jtag */
+	jtag_create_jtagdir();
+
+	/* Parse and execute the RC file */
+	go = jtag_parse_rc();
 
 	if (go) {
-		/* Create ~/.jtag */
-		jtag_create_jtagdir();
+		/* Load history */
+		jtag_load_history();
 
-		/* Parse and execute the RC file */
-		go = jtag_parse_rc();
+		/* main loop */
+		jtag_readline_loop( "jtag> " );
 
-		if (go) {
-			/* Load history */
-			jtag_load_history();
-
-			/* main loop */
-			jtag_readline_loop( "jtag> " );
-
-			/* Save history */
-			jtag_save_history();
-		}
+		/* Save history */
+		jtag_save_history();
 	}
 
-	cfi_array_free( cfi_array );
-	cfi_array = NULL;
-
-	if (bus) {
-		bus_free( bus );
-		bus = NULL;
-	}
-	chain_free( chain );
+	cleanup();
 
 	return 0;
 }
