@@ -38,6 +38,7 @@
 #define	EP202	2
 
 #define	PPCR_CCF_CLOCK	PPCR_CCF_206_4
+#define	DEBUG_PORT_BASE	UART3_BASE
 
 #define	WID_GPIO_BCR_MASK	bit(17)
 
