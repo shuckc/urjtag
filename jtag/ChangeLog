@@ -1,5 +1,11 @@
 2004-08-20  Marcel Telka  <marcel@telka.sk>
 
+	* src/bus/pxa2x0.c (pxa2x0_bus_init): New function.
+	(pxa250_bus_prepare): Replaced bus initialization sequence with pxa2x0_bus_init() call.
+	(pxa2x0_bus_area): Added pxa2x0_bus_init() call.
+
+2004-08-20  Marcel Telka  <marcel@telka.sk>
+
 	* src/tap/Makefile.am (libtap_a_SOURCES): Added cable/lattice.c.
 	* src/tap/cable.c (cable_drivers): Added lattice_cable_driver (patch 1012138, Jerome Debard).
 	* src/tap/cable/lattice.c: New file (patch 1012138, Jerome Debard).

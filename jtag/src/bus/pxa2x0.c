@@ -123,19 +123,32 @@ pxa2x0_bus_printinfo( bus_t *bus )
 }
 
 static void
+pxa2x0_bus_init( bus_t *bus )
+{
+	chain_t *chain = CHAIN;
+	part_t *p = PART;
+
+	if (INITED == 1)
+		return;
+
+	part_set_instruction( p, "SAMPLE/PRELOAD" );
+	chain_shift_instructions( chain );
+	chain_shift_data_registers( chain, 1 );
+
+	BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( p, part_find_signal( p, "BOOT_SEL[2]" ) ) << 2
+							| part_get_signal( p, part_find_signal( p, "BOOT_SEL[1]" ) ) << 1
+							| part_get_signal( p, part_find_signal( p, "BOOT_SEL[0]" ) ));
+
+	part_set_instruction( p, "BYPASS" );
+	chain_shift_instructions( chain );
+
+	INITED = 1;
+}
+
+static void
 pxa250_bus_prepare( bus_t *bus )
 {
-	if (INITED == 0) {
-		part_set_instruction( PART, "SAMPLE/PRELOAD" );
-		chain_shift_instructions( chain );
-		chain_shift_data_registers( chain, 1 );
-
-		BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[2]" ) ) << 2
-								| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[1]" ) ) << 1
-								| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[0]" ) ));
-
-		INITED = 1;
-	}
+	pxa2x0_bus_init( bus );
 
 	part_set_instruction( PART, "EXTEST" );
 	chain_shift_instructions( CHAIN );
@@ -288,6 +301,8 @@ pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 static int
 pxa2x0_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
+	pxa2x0_bus_init( bus );
+
 	/* Static Chip Select 0 (64 MB) */
 	if (adr < UINT32_C(0x04000000)) {
 		area->description = N_("Static Chip Select 0");
