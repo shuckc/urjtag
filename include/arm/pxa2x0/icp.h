@@ -24,22 +24,23 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
- * [2] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
- *     Specification Update", May 2002, Order Number: 278534-005
  *
  */
 
 #ifndef	PXA2X0_ICP_H
 #define	PXA2X0_ICP_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* ICP Registers */
 
 #define	ICP_BASE	0x40800000
 
+#if LANGUAGE == C
 typedef volatile struct ICP_registers {
 	uint32_t iccr0;
 	uint32_t iccr1;
@@ -50,7 +51,7 @@ typedef volatile struct ICP_registers {
 	uint32_t icsr1;
 } ICP_registers;
 
-#ifndef ICP_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	ICP_pointer	((ICP_registers*) ICP_BASE)
 #endif
 
@@ -60,5 +61,60 @@ typedef volatile struct ICP_registers {
 #define	ICDR		ICP_pointer->icdr
 #define	ICSR0		ICP_pointer->icsr0
 #define	ICSR1		ICP_pointer->icsr1
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_ICP_H */
+#define	ICCR0_OFFSET	0x00
+#define	ICCR1_OFFSET	0x04
+#define	ICCR2_OFFSET	0x08
+#define	ICDR_OFFSET	0x0C
+#define	ICSR0_OFFSET	0x14
+#define	ICSR1_OFFSET	0x18
+
+/* ICCR0 bits - see Table 11-2 in [1] */
+
+#define	ICCR0_AME	bit(7)
+#define	ICCR0_TIE	bit(6)
+#define	ICCR0_RIE	bit(5)
+#define	ICCR0_RXE	bit(4)
+#define	ICCR0_TXE	bit(3)
+#define	ICCR0_TUS	bit(2)
+#define	ICCR0_LBM	bit(1)
+#define	ICCR0_ITR	bit(0)
+
+/* ICCR1 bits - see Table 11-3 in [1] */
+
+#define	ICCR1_AMV_MASK	0x000000FF
+#define	ICCR1_AMV(x)	(x & ICCR1_AMV_MASK)
+
+/* ICCR2 bits - see Table 11-4 in [1] */
+
+#define	ICCR2_RXP	bit(3)
+#define	ICCR2_TXP	bit(2)
+#define	ICCR2_TRIG_MASK	0x00000003
+#define	ICCR2_TRIG(x)	(x & ICCR2_TRIG_MASK)
+
+/* ICDR bits - see Table 11-5 in [1] */
+
+#define	ICDR_DATA_MASK	0x000000FF
+#define	ICDR_DATA(x)	(x & ICDR_DATA_MASK)
+
+/* ICSR0 bits - see Table 11-6 in [1] */
+
+#define	ICSR0_FRE	bit(5)
+#define	ICSR0_RFS	bit(4)
+#define	ICSR0_TFS	bit(3)
+#define	ICSR0_RAB	bit(2)
+#define	ICSR0_TUR	bit(1)
+#define	ICSR0_EIF	bit(0)
+
+/* ICSR1 bits - see Table 11-7 in [1] */
+
+#define	ICSR1_ROR	bit(6)
+#define	ICSR1_CRE	bit(5)
+#define	ICSR1_EOF	bit(4)
+#define	ICSR1_TNF	bit(3)
+#define	ICSR1_RNE	bit(2)
+#define	ICSR1_TBY	bit(1)
+#define	ICSR1_RSY	bit(0)
+
+#endif /* PXA2X0_ICP_H */
