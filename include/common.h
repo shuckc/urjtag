@@ -51,12 +51,12 @@
 #define	C	1
 #endif
 
-#define	ABS(a)			(((a) < 0) ? (-(a)) : (a))
-#define	MIN(a,b)		(((a) < (b)) ? (a) : (b))
-#define	MAX(a,b)		(((a) < (b)) ? (b) : (a))
+#define	MAX_BITS_ABS_VAL	1024
+#define	BITS_ABS(a)		(((((a) + MAX_BITS_ABS_VAL) / MAX_BITS_ABS_VAL) * 2 - 1) * (a))
+#define	BITS_MIN(a,b)		(((a) + (b) - BITS_ABS((a) - (b))) / 2)
 
 #define	bit(b)			(1 << (b))
-#define	bits(b1,b2)		(((2 << ABS((b1) - (b2))) - 1) << MIN(b1,b2))
-#define	bits_val(b1,b2,v)	(((v) << MIN(b1,b2)) & bits(b1,b2))
+#define	bits(b1,b2)		(((2 << BITS_ABS((b1) - (b2))) - 1) << BITS_MIN(b1,b2))
+#define	bits_val(b1,b2,v)	(((v) << BITS_MIN(b1,b2)) & bits(b1,b2))
 
 #endif /* COMMON_H */
