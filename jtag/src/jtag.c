@@ -151,7 +151,7 @@ jtag_parse_line( char *line )
 		if (n + 2 > l) {
 			char **newa;
 			l = (l < 16) ? 16 : (l * 2);
-			newa = realloc( a, l );
+			newa = realloc( a, l * sizeof (char *) );
 			if (!newa) {
 				free( a );
 				printf( _("Out of memory\n") );

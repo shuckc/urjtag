@@ -12,6 +12,7 @@ See libbrux/NEWS for more news.
 		- removed explicit JTAG chain length detection (patch 753298, Matan Ziv-Av)
 		- simplified output messages
 		- removed support for report results to file
+	* Fixed invalid memory allocation size (core dump) in jtag_parse_line() function.
 	* Minor bugs fixed.
 
 jtag-0.4 (2003-05-29):
