@@ -2,21 +2,26 @@ $Id$
 
 jtag-0.3:
 
-	* Enhanced 'dr' command functionality.
-	* Added new 'set signal' and 'get signal' commands.
-	* Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
-	* Added support for Arcom JTAG Cable (patch 682310, Ian Campbell).
+	* Changes in interactive commands:
+		- enhanced 'dr' command functionality
+		- new 'set signal' command
+		- new 'get signal' command
+		- new 'script' command (Alessandro Zummo)
+	* Added support for JTAG cables:
+		- Mpcbdm JTAG Cable (Christian Pellegrin)
+		- Arcom JTAG Cable (patch 682310, Ian Campbell)
+	* Added JTAG declarations for
+		- Intel IXP425 (Christian Pellegrin)
+		- Xilinx XC2C256-TQ144 (Alessandro Zummo)
+		- Broadcom BCM1250 (Matan Ziv-Av)
+	* Added bus driver for Intel IXP425 (Christian Pellegrin).
 	* Added support for all 6 static memory banks for Intel SA1110 (bug 682660).
 	* Added support for bidirectional 'B' boundary scan bits (Christian Pellegrin).
-	* Added JTAG declarations for Intel IXP425 (Christian Pellegrin).
-	* Added bus driver for Intel IXP425 (Christian Pellegrin).
-	* Added JTAG declarations for Xilinx XC2C256-TQ144 (Alessandro Zummo).
 	* Added support for 1 x 16 bit memory configuration (Christian Pellegrin).
 	* Added buffered file reads/writes (Christian Pellegrin).
 	* Added support for flash drivers (August Hörandl).
 	* Added flash driver for AMD chips (August Hörandl).
 	* Added support for rc and history files (Alessandro Zummo).
-	* Added new 'script' command (Alessandro Zummo).
 	* Added support for localization.
 	* Some bugs fixed.
 

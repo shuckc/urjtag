@@ -32,3 +32,4 @@
 00000011111	atmel		Atmel
 00000110100	cypress		Cypress
 00001001001	xilinx		Xilinx
+00101010000     broadcom        Broadcom
