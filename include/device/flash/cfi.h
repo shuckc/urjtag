@@ -103,13 +103,13 @@ typedef struct cfi_query_system_interface_information_t {
 	uint16_t vcc_max_wev;				/* in mV */
 	uint16_t vpp_min_wev;				/* in mV, 0 - no Vpp pin is present */
 	uint16_t vpp_max_wev;				/* in mV, 0 - no Vpp pin is present */
-	uint32_t typ_single_write_timeout;		/* in us */
+	uint32_t typ_single_write_timeout;		/* in us, 0 - not supported */
 	uint32_t typ_buffer_write_timeout;		/* in us, 0 - not supported */
-	uint32_t typ_block_erase_timeout;		/* in ms */
+	uint32_t typ_block_erase_timeout;		/* in ms, 0 - not supported */
 	uint32_t typ_chip_erase_timeout;		/* in ms, 0 - not supported */
-	uint32_t max_single_write_timeout;		/* in us */
+	uint32_t max_single_write_timeout;		/* in us, 0 - not supported */
 	uint32_t max_buffer_write_timeout;		/* in us, 0 - not supported */
-	uint32_t max_block_erase_timeout;		/* in ms */
+	uint32_t max_block_erase_timeout;		/* in ms, 0 - not supported */
 	uint32_t max_chip_erase_timeout;		/* in ms, 0 - not supported */
 } cfi_query_system_interface_information_t;
 #endif /* LANGUAGE == C */
