@@ -23,6 +23,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <jtag/part.h>
 #include <jtag/tap.h>
@@ -123,7 +124,7 @@ part_find_data_register( part *p, const char *drname )
 	while (dr) {
 		if (strcmp( drname, dr->name ) == 0)
 			break;
-		dr = dr->next
+		dr = dr->next;
 	}
 
 	return dr;
