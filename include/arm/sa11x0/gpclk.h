@@ -30,14 +30,13 @@
 #ifndef	SA11X0_GPCLK_H
 #define	SA11X0_GPCLK_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
-#endif
+#include <common.h>
 
 /* GPCLK Registers (Serial Port 1) */
 
 #define	GPCLK_BASE	0x80020060
 
+#if LANGUAGE == C
 typedef volatile struct GPCLK_registers {
 	uint32_t gpclkr0;
 	uint32_t gpclkr1;
@@ -54,5 +53,21 @@ typedef volatile struct GPCLK_registers {
 #define	GPCLKR1		GPCLK_pointer->gpclkr1
 #define	GPCLKR2		GPCLK_pointer->gpclkr2
 #define	GPCLKR3		GPCLK_pointer->gpclkr3
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_GPCLK_H */
+#define	GPCLKR0_OFFSET	0x00
+#define	GPCLKR1_OFFSET	0x04
+#define	GPCLKR2_OFFSET	0x0C
+#define	GPCLKR3_OFFSET	0x10
+
+/* GPCLKR0 bits */
+
+#define	GPCLKR0_SCD	bit(5)
+#define	GPCLKR0_SCE	bit(4)
+#define	GPCLKR0_SUS	bit(0)
+
+/* GPCLKR1 bits */
+
+#define	GPCLKR1_TXE	bit(1)
+
+#endif /* SA11X0_GPCLK_H */
