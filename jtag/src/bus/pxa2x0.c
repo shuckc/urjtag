@@ -1,6 +1,7 @@
 /*
  * $Id$
  *
+ * Intel PXA2x0 compatibile bus driver via BSR
  * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
@@ -142,30 +143,41 @@ pxa250_bus_read_start( bus_t *bus, uint32_t adr )
 	chain_shift_data_registers( chain, 0 );
 }
 
-static uint32_t pxa250_bus_read_end( bus_t *bus );
-
 static uint32_t
 pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
+	uint32_t d;
+	uint32_t old_last_adr = LAST_ADR;
 
-	if (LAST_ADR >= 0x04000000)
-		pxa250_bus_read_start( bus, adr );
-	if (adr >= 0x04000000)
-		return pxa250_bus_read_end( bus );
 	LAST_ADR = adr;
 
-	/* see Figure 6-13 in [1] */
-	setup_address( bus, adr );
-	chain_shift_data_registers( chain, 1 );
+	if (adr < UINT32_C(0x04000000)) {
+		int i;
 
-	for (i = 0; i < 32; i++)
-		d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
+		/* see Figure 6-13 in [1] */
+		setup_address( bus, adr );
+		chain_shift_data_registers( chain, 1 );
 
-	return d;
+		d = 0;
+		for (i = 0; i < 32; i++)
+			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
+
+		return d;
+	}
+
+	if (adr < UINT32_C(0x48000000))
+		return 0;
+
+	if (adr < UINT32_C(0x4C000000)) {
+		if (old_last_adr == (MC_BASE + BOOT_DEF_OFFSET))
+			return BOOT_DEF;
+
+		return 0;
+	}
+
+	return 0;
 }
 
 static uint32_t
@@ -173,23 +185,35 @@ pxa250_bus_read_end( bus_t *bus )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
 
-	if (LAST_ADR >= 0x04000000)
+	if (LAST_ADR < UINT32_C(0x04000000)) {
+		int i;
+		uint32_t d = 0;
+
+		/* see Figure 6-13 in [1] */
+		part_set_signal( p, nCS[0], 1, 1 );
+		part_set_signal( p, nOE, 1, 1 );
+		part_set_signal( p, nSDCAS, 1, 1 );
+
+		chain_shift_data_registers( chain, 1 );
+
+		for (i = 0; i < 32; i++)
+			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
+
+		return d;
+	}
+
+	if (LAST_ADR < UINT32_C(0x48000000))
 		return 0;
 
-	/* see Figure 6-13 in [1] */
-	part_set_signal( p, nCS[0], 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	part_set_signal( p, nSDCAS, 1, 1 );
+	if (LAST_ADR < UINT32_C(0x4C000000)) {
+		if (LAST_ADR == (MC_BASE + BOOT_DEF_OFFSET))
+			return BOOT_DEF;
 
-	chain_shift_data_registers( chain, 1 );
+		return 0;
+	}
 
-	for (i = 0; i < 32; i++)
-		d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
-
-	return d;
+	return 0;
 }
 
 static uint32_t
@@ -264,9 +288,27 @@ pxa2x0_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		return 0;
 	}
 
+	if (adr < UINT32_C(0x48000000)) {
+		area->description = NULL;
+		area->start = UINT32_C(0x04000000);
+		area->length = UINT64_C(0x44000000);
+		area->width = 0;
+
+		return 0;
+	}
+
+	if (adr < UINT32_C(0x4C000000)) {
+		area->description = N_("Memory Mapped registers (Memory Ctl)");
+		area->start = UINT32_C(0x48000000);
+		area->length = UINT64_C(0x04000000);
+		area->width = 32;
+
+		return 0;
+	}
+
 	area->description = NULL;
-	area->start = UINT32_C(0x04000000);
-	area->length = UINT64_C(0xFC000000);
+	area->start = UINT32_C(0x4C000000);
+	area->length = UINT64_C(0xB4000000);
 	area->width = 0;
 
 	return 0;

@@ -1,5 +1,11 @@
 2003-08-28  Marcel Telka  <marcel@telka.sk>
 
+	* src/bus/pxa2x0.c (pxa250_bus_read_next, pxa250_bus_read_end): Added support for BOOT_DEF register
+		emulation.
+	(pxa2x0_bus_area): Added Memory Mapped registers (Memory Ctl) area.
+
+2003-08-28  Marcel Telka  <marcel@telka.sk>
+
 	* src/readmem.c (readmem): Replaced bus_width macro with new bus_area.
 	* src/bus/bcm1250.c (bcm1250_bus_width): Function removed.
 	(bcm1250_bus_area): New function.
