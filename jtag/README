@@ -103,7 +103,7 @@ about available commands. To exit JTAG Tools type "quit" and press <Enter>.
 ===> First task: Select JTAG cable and parallel port address.
 
 Type "help cable" for list of supported JTAG cables.
-Type "cable" command with arguments. Exmaple:
+Type "cable" command with arguments. Example:
 
 jtag> cable parallel 0x378 EA253
 Initializing ETC EA253 JTAG Cable on parallel port at 0x378
