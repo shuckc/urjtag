@@ -99,7 +99,7 @@ main( void )
 			t = get_token( NULL );
 			if (ps)
 				parts_free( ps );
-			ps = detect_parts( "../data" );
+			ps = detect_parts( JTAG_DATA_DIR );
 			if (!ps->len)
 				continue;
 			parts_set_instruction( ps, "SAMPLE/PRELOAD" );

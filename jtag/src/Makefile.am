@@ -33,4 +33,4 @@ jtag_DEPENDENCIES = tap/libtap.a part/libpart.a
 
 jtag_LDADD = -lreadline -lncurses -Ltap -ltap -Lpart -lpart
 
-INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC)
+INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC) -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
