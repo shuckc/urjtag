@@ -21,7 +21,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-AC_INIT(jtag,0.0.0CVS)
+AC_INIT(jtag,0.1)
 
 AC_PREREQ(2.53)
 AC_COPYRIGHT([Copyright (C) 2002 ETC s.r.o.])
