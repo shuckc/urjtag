@@ -1,5 +1,10 @@
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
+	* src/tap/parport/direct.c (direct_connect): Marked two indirect strings for translation.
+	* src/tap/parport/ppdev.c (ppdev_connect): Ditto.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
 	* sysdep.h: Renamed pkgcfg.h to config.h.
 	* configure.ac (AM_CONFIG_HEADER): Ditto.
 

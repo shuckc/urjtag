@@ -173,7 +173,7 @@ direct_connect( const char **par, int parnum )
 
 			aport = ((direct_params_t*) pn->port->params)->port;
 			if (abs( aport - port ) < 3) {
-				printf( _("Disconnecting %s from parallel port at 0x%x\n"), pn->port->cable->driver->description, aport );
+				printf( _("Disconnecting %s from parallel port at 0x%x\n"), _(pn->port->cable->driver->description), aport );
 				pn->port->cable->driver->disconnect( pn->port->cable );
 				break;
 			}
@@ -193,7 +193,7 @@ direct_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	printf( _("Initializing %s on parallel port at 0x%x\n"), cable_drivers[i]->description, port );
+	printf( _("Initializing %s on parallel port at 0x%x\n"), _(cable_drivers[i]->description), port );
 
 	parport = direct_parport_alloc( port );
 	if (!parport) {

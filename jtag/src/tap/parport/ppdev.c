@@ -121,7 +121,7 @@ ppdev_connect( const char **par, int parnum )
 
 	for (pn = ports; pn; pn = pn->next)
 		if (strcmp( pn->port->params, par[0] ) == 0) {
-			printf( _("Disconnecting %s from ppdev port %s\n"), pn->port->cable->driver->description, par[0] );
+			printf( _("Disconnecting %s from ppdev port %s\n"), _(pn->port->cable->driver->description), par[0] );
 			pn->port->cable->driver->disconnect( pn->port->cable );
 			break;
 		}
@@ -140,7 +140,7 @@ ppdev_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	printf( _("Initializing %s on ppdev port %s\n"), cable_drivers[i]->description, par[0] );
+	printf( _("Initializing %s on ppdev port %s\n"), _(cable_drivers[i]->description), par[0] );
 
 	parport = ppdev_parport_alloc( par[0] );
 	if (!parport) {
