@@ -33,6 +33,7 @@
 #define	SA11X0_PM_H
 
 #include <common.h>
+#include <stdint.h>
 
 /* Power Manager Registers */
 
