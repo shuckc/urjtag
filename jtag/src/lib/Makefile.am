@@ -1,7 +1,7 @@
 #
 # $Id$
 #
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2003 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,34 +18,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Marcel Telka <marcel@telka.sk>, 2003.
 #
 
-SUBDIRS = \
-	lib \
-	tap \
-	part
+noinst_LIBRARIES = libjtaglib.a
 
-bin_PROGRAMS = jtag
-
-jtag_SOURCES = \
-	jtag.c \
-	detect.c \
-	discovery.c \
-	readmem.c \
-	detect.h \
-	bus.h \
-	pxa250.c \
-	sa1110.c \
-	ixp425.c \
-	cfi.c \
-	flash.c \
-	flash-intel.c \
-	flash-amd.c \
-	help.c
-
-jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a
-
-jtag_LDADD = -lreadline -lncurses -Ltap -ltap -Lpart -lpart -Llib -ljtaglib
-
-INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC) -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
+libjtaglib_a_SOURCES = \
+	getdelim.c \
+	getline.c

@@ -36,6 +36,7 @@ AC_CONFIG_FILES(
 	data/Makefile
 	include/Makefile
 	src/Makefile
+	src/lib/Makefile
 	src/tap/Makefile
 	src/part/Makefile
 )
@@ -55,6 +56,7 @@ AC_ARG_WITH(include,
 OPENWINCE_INC="-I$openwince_inc -I$openwince_inc/device"
 
 AC_SEARCH_LIBS([ioperm], [ioperm])
+AC_CHECK_FUNCS(getline getdelim)
 
 CFLAGS="$CFLAGS -Wall"
 

@@ -40,6 +40,10 @@
 #include "detect.h"
 #include "bus.h"
 
+#ifndef HAVE_GETLINE
+ssize_t getline( char **lineptr, size_t *n, FILE *stream );
+#endif
+
 cable_driver_t *cable = NULL;
 parts *ps = NULL;
 bus_driver_t *bus_driver = NULL;
@@ -697,7 +701,7 @@ jtag_parse_file( const char *filename )
 	FILE *f;
 	int go = 1;
 	char *line = NULL;
-	int n;
+	int n = 0;
 
 	f = fopen( filename, "r" );
 	if (!f) {

@@ -1,3 +1,15 @@
+2003-02-17  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (AC_CHECK_FUNCS): Added getdelim and getline.
+	(AC_CONFIG_FILES): Added src/lib/Makefile.
+	* src/Makefile.am (SUBDIRS): Added lib.
+	(jtag_DEPENDENCIES): Added libjtaglib.a.
+	(jtag_LDADD): Ditto.
+	* src/jtag.c: Added portable getline() declaration.
+	* src/lib/Makefile.am: New file.
+	* src/lib/getdelim.c: Ditto.
+	* src/lib/getline.c: Ditto.
+
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
 	* src/jtag.c (jtag_creae_jtagdir): New function (Alessandro Zummo).
