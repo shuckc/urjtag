@@ -66,6 +66,7 @@ cfi_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	unsigned int d;			/* data offset */
 	int ba;				/* bus width address multiplier */
 	int ma;				/* flash mode address multiplier */
+	bus_area_t area;
 
 	if (!cfi_array || !bus)
 		return -1;		/* invalid parameters */
@@ -76,7 +77,9 @@ cfi_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 
 	(*cfi_array)->bus = bus;
 	(*cfi_array)->address = adr;
-	bw = bus_width( bus, adr );
+	if (bus_area( bus, adr, &area ) != 0)
+		return -8;		/* bus width detection failed */
+	bw = area.width;
 	if (bw != 8 && bw != 16 && bw != 32)
 		return -3;		/* invalid bus width */
 	(*cfi_array)->bus_width = ba = bw / 8;

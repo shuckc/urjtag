@@ -1,3 +1,8 @@
+2003-08-28  Marcel Telka  <marcel@telka.sk>
+
+	* flash/cfi.c (cfi_detect): Replaced bus_width macro with new bus_area.
+	* flash/intel.c (intel_flash_autodetect32, intel_flash_autodetect, intel_flash_autodetect8): Ditto.
+
 2003-08-27  Marcel Telka  <marcel@telka.sk>
 
 	* flash/amd.c: Changed included headers.
