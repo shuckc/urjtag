@@ -1,6 +1,6 @@
 $Id$
 
-	* Added new manufacturer: Cypress. (Chris Ellec)
+	* Added new manufacturer: Cypress. (patch 669157, Chris Ellec)
 
 jtag-0.2.1 (2003-01-13):
 
