@@ -27,10 +27,10 @@ SUBDIRS = \
 
 bin_PROGRAMS = jtag
 
-jtag_SOURCES = jtag.c detect.c readmem.c detect.h
+jtag_SOURCES = jtag.c detect.c readmem.c detect.h pxa250.c pxa250.h
 
 jtag_DEPENDENCIES = tap/libtap.a part/libpart.a
 
 jtag_LDADD = -lreadline -lncurses -Ltap -ltap -Lpart -lpart
 
-INCLUDES = -I$(top_srcdir)/include
+INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC)

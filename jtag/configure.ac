@@ -44,6 +44,13 @@ AM_MAINTAINER_MODE
 AC_PROG_CC
 AC_PROG_RANLIB
 
+AC_SUBST(OPENWINCE_INC)
+AC_ARG_WITH(include,
+	AC_HELP_STRING([--with-include=PATH], [Path to the openwince includes]),
+	openwince_inc="$withval",
+	openwince_inc="/usr/include/openwince")
+OPENWINCE_INC="-I$openwince_inc -I$openwince_inc/device"
+
 AC_SEARCH_LIBS([ioperm], [ioperm])
 
 CFLAGS="$CFLAGS -Wall"

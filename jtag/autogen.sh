@@ -33,7 +33,7 @@ autoconf
 
 echo
 echo "Now running ./configure script..."
-./configure --enable-maintainer-mode
+./configure --enable-maintainer-mode --with-include=/usr/local/include/openwince
 
 echo
 echo "Type \`make\` to build jtag..."
