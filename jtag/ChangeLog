@@ -1,3 +1,8 @@
+2004-11-17  Marcel Telka  <marcel@telka.sk>
+
+	* acinclude.m4: New file with VL_LIB_READLINE macro (removed dependency on ac-archive package).
+	* autogen.sh: Removed acinclude call (removed dependency on ac-archive package).
+
 2004-11-16  Marcel Telka  <marcel@telka.sk>
 
 	* data/MANUFACTURERS: Added Lattice Semiconductors and IBM Semiconductors (patch 1012120, Jerome Debard).

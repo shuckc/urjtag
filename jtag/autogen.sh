@@ -22,8 +22,6 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
 #
 
-acinclude
-
 if autoreconf -i -s -v -f ; then
 	echo
 	echo "autoreconf done."
