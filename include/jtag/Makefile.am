@@ -34,4 +34,9 @@ noinst_HEADERS = \
 	ctrl.h \
 	register.h \
 	state.h \
-	tap.h
+	tap.h \
+	bsbit.h \
+	data_register.h \
+	instruction.h \
+	part.h \
+	signal.h
