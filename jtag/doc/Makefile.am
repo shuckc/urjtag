@@ -21,5 +21,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2003.
 #
 
+include $(top_srcdir)/Makefile.rules
+
 EXTRA_DIST = \
 	internals.xml

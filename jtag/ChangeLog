@@ -1,5 +1,22 @@
 2003-05-21  Marcel Telka  <marcel@telka.sk>
 
+	* Makefile.rules: New file.
+	* Makefile.am: Added Makefile.rules include.
+	(EXTRA_DIST): Added Makefile.rules.
+	* data/Makefile.am: Added Makefile.rules include.
+	* doc/Makefile.am: Ditto.
+	* include/Makefile.am: Ditto.
+	* po/Makevars: Ditto.
+	* src/Makefile.am: Ditto.
+	* src/bus/Makefile.am: Ditto.
+	* src/cmd/Makefile.am: Ditto.
+	* src/flash/Makefile.am: Ditto.
+	* src/lib/Makefile.am: Ditto.
+	* src/part/Makefile.am: Ditto.
+	* src/tap/Makefile.am: Ditto.
+
+2003-05-21  Marcel Telka  <marcel@telka.sk>
+
 	* include/signal.h: Renamed this file ...
 	* include/bssignal.h: ... to this one.
 	All includes changed.

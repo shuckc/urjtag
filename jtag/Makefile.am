@@ -21,11 +21,16 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
+include $(top_srcdir)/Makefile.rules
+
 SUBDIRS = \
 	doc \
 	include \
 	data \
 	src \
 	po
+
+EXTRA_DIST = \
+	Makefile.rules
 
 ACLOCAL_AMFLAGS = -I m4

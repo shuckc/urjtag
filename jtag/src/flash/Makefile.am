@@ -21,6 +21,8 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2003.
 #
 
+include $(top_srcdir)/Makefile.rules
+
 noinst_LIBRARIES = libflash.a
 
 libflash_a_SOURCES = \

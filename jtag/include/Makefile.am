@@ -21,6 +21,8 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
+include $(top_srcdir)/Makefile.rules
+
 noinst_HEADERS = \
 	bsbit.h \
 	bus.h \
