@@ -1,5 +1,9 @@
 2002-11-09  Marcel Telka  <marcel@telka.sk>
 
+	* arm/pxa2x0/dma.h: Added DINT register bits.
+
+2002-11-09  Marcel Telka  <marcel@telka.sk>
+
 	* COPYING: Added BSD license file.
 
 2002-11-08  Marcel Telka  <marcel@telka.sk>
