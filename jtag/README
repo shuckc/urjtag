@@ -71,7 +71,8 @@ Required software
 -----------------
 
 Required only for MS Windows:
-- Current Cygwin net installation from <http://cygwin.com/>
+- current Cygwin net installation from <http://cygwin.com/>
+- ioperm package (a part of the standard Cygwin net installation)
 
 Required for all systems:
 - include package from <http://openwince.sourceforge.net/include/>

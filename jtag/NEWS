@@ -9,7 +9,7 @@ See libbrux/NEWS for more news.
 	* Added Motorola MPC824x bus driver.
 	* Added new command 'salias'.
 	* Explicit 'detectflash' command call is required before 'flashmem' command.
-	* Fixed minor bugs.
+	* Fixed minor bugs (including bug 857039).
 
 jtag-0.5.1 (2003-10-11):
 
