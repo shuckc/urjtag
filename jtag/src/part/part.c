@@ -121,6 +121,12 @@ part_find_data_register( part *p, const char *drname )
 	return dr;
 }
 
+void part_set_instruction( part *p, const char *iname )
+{
+	if (p)
+		p->active_instruction = part_find_instruction( p, iname );
+}
+
 void
 part_shift_instruction( part *p, int exit )
 {
@@ -266,17 +272,47 @@ parts_add_part( parts *ps, part *p )
 void
 parts_set_instruction( parts *ps, const char *iname )
 {
-	int j;
+	int i;
+
+	for (i = 0; i < ps->len; i++)
+		ps->parts[i]->active_instruction = part_find_instruction( ps->parts[i], iname );
+}
+
+void
+parts_shift_instructions( parts *ps )
+{
+	int i;
+
+	if (!ps)
+		return;
 
 	tap_capture_ir();
 
-	for (j = 0; j < ps->len; j++) {
-		instruction *i = part_find_instruction( ps->parts[j], iname );
-		if (!i) {
-			printf( "Instruction '%s' not found\n", iname );
-			return;
+	for (i = 0; i < ps->len; i++) {
+		if (!ps->parts[i]->active_instruction) {
+			printf( "%s(%s:%d) Part without active instruction\n", __FUNCTION__, __FILE__, __LINE__ );
+			continue;
 		}
-		ps->parts[j]->active_instruction = i;
-		tap_shift_register( i->value, NULL, (j + 1) == ps->len );
+		tap_shift_register( ps->parts[i]->active_instruction->value, NULL, (i + 1) == ps->len );
+	}
+}
+
+void
+parts_shift_data_registers( parts *ps )
+{
+	int i;
+
+	if (!ps)
+		return;
+
+	tap_capture_dr();
+
+	for (i = 0; i < ps->len; i++) {
+		if (!ps->parts[i]->active_instruction) {
+			printf( "%s(%s:%d) Part without active instruction\n", __FUNCTION__, __FILE__, __LINE__ );
+			continue;
+		}
+		tap_shift_register( ps->parts[i]->active_instruction->data_register->in,
+				ps->parts[i]->active_instruction->data_register->out, (i + 1) == ps->len );
 	}
 }

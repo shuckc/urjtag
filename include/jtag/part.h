@@ -49,6 +49,7 @@ void part_free( part *p );
 part *read_part( FILE *f, tap_register *idr );
 instruction *part_find_instruction( part *p, const char *iname );
 data_register *part_find_data_register( part *p, const char *drname );
+void part_set_instruction( part *p, const char *iname );
 void part_shift_instruction( part *p, int exit );
 void part_shift_data_register( part *p, int exit );
 void part_set_signal( part *p, const char *pname, int out, int val );
@@ -65,5 +66,7 @@ parts *parts_alloc( void );
 void parts_free( parts *ps );
 int parts_add_part( parts *ps, part *p );
 void parts_set_instruction( parts *ps, const char *iname );
+void parts_shift_instructions( parts *ps );
+void parts_shift_data_registers( parts *ps );
 
 #endif /* JTAG_PART_H */
