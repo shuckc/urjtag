@@ -1,3 +1,9 @@
+2003-10-20  Marcel Telka  <marcel@telka.sk>
+
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added hitachi/sh7729/STEPPINGS and hitachi/sh7729/sh7729.
+	* data/hitachi/sh7729/STEPPINGS: New file (Beregnyei Balazs).
+	* data/hitachi/sh7729/sh7729: Ditto.
+
 2003-10-17  Marcel Telka  <marcel@telka.sk>
 
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added hitachi/hd64465/hd64465.

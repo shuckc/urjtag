@@ -47,6 +47,8 @@ nobase_dist_pkgdata_DATA = \
 	hitachi/hd64465/hd64465 \
 	hitachi/sh7727/STEPPINGS \
 	hitachi/sh7727/sh7727 \
+	hitachi/sh7729/STEPPINGS \
+	hitachi/sh7729/sh7729 \
 	intel/PARTS \
 	intel/pxa250/STEPPINGS \
 	intel/pxa250/pxa250 \

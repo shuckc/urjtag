@@ -1,0 +1,587 @@
+#
+# $Id: sh7729,v 1.0 2003/18/10 21:09:11
+#
+# JTAG declarations for SH7729
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Balazs Beregnyei <bereg@impulzus.sch.bme.hu>, 2003.
+#
+# Documentation:
+# [1] Hitachi, Ltd., "Hitachi SuperH RISC Engine SH7729 Hardware Manual"
+#
+
+signal MD1
+signal MD2
+signal VCC0
+signal XTAL2
+signal EXTAL2
+signal VSS0
+signal NMI
+signal IRQ0
+signal IRQ1
+signal IRQ2
+signal IRQ3
+signal IRQ4
+signal D31
+signal D30
+signal D29
+signal D28
+signal D27
+signal D26
+signal VSS1
+signal D25
+signal VCC1
+signal D24
+signal D23
+signal D22
+signal D21
+signal D20
+signal VSS2
+signal D19
+signal VCC2
+signal D18
+signal D17
+signal D16
+signal VSS3
+signal D15
+signal VCC3
+signal D14
+signal D13
+signal D12
+signal D11
+signal D10
+signal D9
+signal D8
+signal D7
+signal D6
+signal VSS4
+signal D5
+signal VCC4
+signal D4
+signal D3
+signal D2
+signal D1
+signal D0
+signal A0
+signal A1
+signal A2
+signal A3
+signal VSS5
+signal A4
+signal VCC5
+signal A5
+signal A6
+signal A7
+signal A8
+signal A9
+signal A10
+signal A11
+signal A12
+signal A13
+signal VSS6
+signal A14
+signal VCC6
+signal A15
+signal A16
+signal A17
+signal A18
+signal A19
+signal A20
+signal A21
+signal VSS7
+signal A22
+signal VCC7
+signal A23
+signal VSS8
+signal A24
+signal VCC8
+signal A25
+signal BS
+signal RD
+signal WE0
+signal WE1
+signal WE2
+signal WE3
+signal RDWR
+signal AUDSYNC
+signal VSS9
+signal CS0
+signal VCC9
+signal CS2
+signal CS3
+signal CS4
+signal CS5
+signal CS6
+signal CE2A
+signal CE2B
+signal CKE
+signal RAS3L
+signal PTJ1
+signal CASL
+signal VSS10
+signal CASU
+signal VCC10
+signal PTJ4
+signal PTJ5
+signal DACK0
+signal DACK1
+signal PTE6
+signal PTE3
+signal RAS3U
+signal PTE1
+signal TDO
+signal BACK
+signal BREQ
+signal WAIT
+signal RESETM
+signal ADTRG
+signal IOIS16
+signal ASEMD0
+signal ASEBRKAK
+signal CKIO2
+signal AUDATA3
+signal AUDATA2
+signal VSS11
+signal AUDATA1
+signal VCC11
+signal AUDATA0
+signal TRST
+signal TMS
+signal TDI
+signal TCK
+signal IRLS3
+signal IRLS2
+signal IRLS1
+signal IRLS0
+signal MD0
+signal VCC12
+signal CAP1
+signal VSS12
+signal VSS13
+signal CAP2
+signal VCC13
+signal AUDCK
+signal VSS14
+signal VSS15
+signal VCC15
+signal XTAL
+signal EXTAL
+signal STATUS0
+signal STATUS1
+signal TCLK
+signal IRQOUT
+signal VSS16
+signal CKIO
+signal VCC16
+signal TXD0
+signal SCK0
+signal TXD1
+signal SCK1
+signal TXD2
+signal SCK2
+signal RTS2
+signal RXD0
+signal RXD1
+signal VSS17
+signal RXD2
+signal VCC17
+signal CTS2
+signal MCS7
+signal MCS6
+signal MCS5
+signal MCS4
+signal VSS18
+signal WAKEUP
+signal VCC18
+signal RESETOUT
+signal MCS3
+signal MCS2
+signal MCS1
+signal MCS0
+signal DRAK0
+signal DRAK1
+signal DREQ0
+signal DREQ1
+signal RESETP
+signal CA
+signal MD3
+signal MD4
+signal MD5
+signal VSS19
+signal AN0
+signal AN1
+signal AN2
+signal AN3
+signal AN4
+signal AN5
+signal VCC19
+signal AN6
+signal AN7
+signal VSS20
+
+register	BSR	339
+register	BR	1
+register	DIR	32
+
+instruction length 16
+
+instruction	EXTEST		0000111111111111	BSR
+instruction	SAMPLE/PRELOAD	0100111111111111	BSR
+instruction	IDCODE		1110111111111111	DIR
+instruction	BYPASS		1111111111111111	BR
+
+bit 338 I 1 D31
+bit 337 I 1 D30
+bit 336 I 1 D29
+bit 335 I 1 D28
+bit 334 I 1 D27
+bit 333 I 1 D26
+bit 332 I 1 D25
+bit 331 I 1 D24
+bit 330 I 1 D23
+bit 329 I 1 D22
+bit 328 I 1 D21
+bit 327 I 1 D20
+bit 326 I 1 D19
+bit 325 I 1 D18
+bit 324 I 1 D17
+bit 323 I 1 D16
+bit 322 I 1 D15
+bit 321 I 1 D14
+bit 320 I 1 D13
+bit 319 I 1 D12
+bit 318 I 1 D11
+bit 317 I 1 D10
+bit 316 I 1 D9
+bit 315 I 1 D8
+bit 314 I 1 D7
+bit 313 I 1 D6
+bit 312 I 1 D5
+bit 311 I 1 D4
+bit 310 I 1 D3
+bit 309 I 1 D2
+bit 308 I 1 D1
+bit 307 I 1 D0
+bit 306 I 1 MD1
+bit 305 I 1 MD2
+bit 304 I 1 NMI
+bit 303 I 1 IRQ0
+bit 302 I 1 IRQ1
+bit 301 I 1 IRQ2
+bit 300 I 1 IRQ3
+bit 299 I 1 IRQ4
+bit 298 O 1 D31 266 1 Z
+bit 297 O 1 D30 265 1 Z
+bit 296 O 1 D29 264 1 Z
+bit 295 O 1 D28 263 1 Z
+bit 294 O 1 D27 262 1 Z
+bit 293 O 1 D26 261 1 Z
+bit 292 O 1 D25 260 1 Z
+bit 291 O 1 D24 259 1 Z
+bit 290 O 1 D23 258 1 Z
+bit 289 O 1 D22 257 1 Z
+bit 288 O 1 D21 256 1 Z
+bit 287 O 1 D20 255 1 Z
+bit 286 O 1 D19 254 1 Z
+bit 285 O 1 D18 253 1 Z
+bit 284 O 1 D17 252 1 Z
+bit 283 O 1 D16 251 1 Z
+bit 282 O 1 D15 250 1 Z
+bit 281 O 1 D14 249 1 Z
+bit 280 O 1 D13 248 1 Z
+bit 279 O 1 D12 247 1 Z
+bit 278 O 1 D11 246 1 Z
+bit 277 O 1 D10 245 1 Z
+bit 276 O 1 D9 244 1 Z
+bit 275 O 1 D8 243 1 Z
+bit 274 O 1 D7 242 1 Z
+bit 273 O 1 D6 241 1 Z
+bit 272 O 1 D5 240 1 Z
+bit 271 O 1 D4 239 1 Z
+bit 270 O 1 D3 238 1 Z
+bit 269 O 1 D2 237 1 Z
+bit 268 O 1 D1 236 1 Z
+bit 267 O 1 D0 235 1 Z
+bit 266 C 1 *
+bit 265 C 1 *
+bit 264 C 1 *
+bit 263 C 1 *
+bit 262 C 1 *
+bit 261 C 1 *
+bit 260 C 1 *
+bit 259 C 1 *
+bit 258 C 1 *
+bit 257 C 1 *
+bit 256 C 1 *
+bit 255 C 1 *
+bit 254 C 1 *
+bit 253 C 1 *
+bit 252 C 1 *
+bit 251 C 1 *
+bit 250 C 1 *
+bit 249 C 1 *
+bit 248 C 1 *
+bit 247 C 1 *
+bit 246 C 1 *
+bit 245 C 1 *
+bit 244 C 1 *
+bit 243 C 1 *
+bit 242 C 1 *
+bit 241 C 1 *
+bit 240 C 1 *
+bit 239 C 1 *
+bit 238 C 1 *
+bit 237 C 1 *
+bit 236 C 1 *
+bit 235 C 1 *
+bit 234 I 1 BS
+bit 233 I 1 WE2
+bit 232 I 1 WE3
+bit 231 I 1 AUDSYNC
+bit 230 I 1 CS2
+bit 229 I 1 CS3
+bit 228 I 1 CS4
+bit 227 I 1 CS5
+bit 226 I 1 CE2A
+bit 225 I 1 CE2B
+bit 224 O 1 A0 182 1 Z
+bit 223 O 1 A1 181 1 Z
+bit 222 O 1 A2 180 1 Z
+bit 221 O 1 A3 179 1 Z
+bit 220 O 1 A4 178 1 Z
+bit 219 O 1 A5 177 1 Z
+bit 218 O 1 A6 176 1 Z
+bit 217 O 1 A7 175 1 Z
+bit 216 O 1 A8 174 1 Z
+bit 215 O 1 A9 173 1 Z
+bit 214 O 1 A10 172 1 Z
+bit 213 O 1 A11 171 1 Z
+bit 212 O 1 A12 170 1 Z
+bit 211 O 1 A13 169 1 Z
+bit 210 O 1 A14 168 1 Z
+bit 209 O 1 A15 167 1 Z
+bit 208 O 1 A16 166 1 Z
+bit 207 O 1 A17 165 1 Z
+bit 206 O 1 A18 164 1 Z
+bit 205 O 1 A19 163 1 Z
+bit 204 O 1 A20 162 1 Z
+bit 203 O 1 A21 161 1 Z
+bit 202 O 1 A22 160 1 Z
+bit 201 O 1 A23 159 1 Z
+bit 200 O 1 A24 158 1 Z
+bit 199 O 1 A25 157 1 Z
+bit 198 O 1 BS 156 1 Z
+bit 197 O 1 RD 155 1 Z
+bit 196 O 1 WE0 154 1 Z
+bit 195 O 1 WE1 153 1 Z
+bit 194 O 1 WE2 152 1 Z
+bit 193 O 1 WE3 151 1 Z
+bit 192 O 1 RDWR 150 1 Z
+bit 191 O 1 AUDSYNC 149 1 Z
+bit 190 O 1 CS0 148 1 Z
+bit 189 O 1 CS2 147 1 Z
+bit 188 O 1 CS3 146 1 Z
+bit 187 O 1 CS4 145 1 Z
+bit 186 O 1 CS5 144 1 Z
+bit 185 O 1 CS6 143 1 Z
+bit 184 O 1 CE2A 142 1 Z
+bit 183 O 1 CE2B 141 1 Z
+bit 182 C 1 *
+bit 181 C 1 *
+bit 180 C 1 *
+bit 179 C 1 *
+bit 178 C 1 *
+bit 177 C 1 *
+bit 176 C 1 *
+bit 175 C 1 *
+bit 174 C 1 *
+bit 173 C 1 *
+bit 172 C 1 *
+bit 171 C 1 *
+bit 170 C 1 *
+bit 169 C 1 *
+bit 168 C 1 *
+bit 167 C 1 *
+bit 166 C 1 *
+bit 165 C 1 *
+bit 164 C 1 *
+bit 163 C 1 *
+bit 162 C 1 *
+bit 161 C 1 *
+bit 160 C 1 *
+bit 159 C 1 *
+bit 158 C 1 *
+bit 157 C 1 *
+bit 156 C 1 *
+bit 155 C 1 *
+bit 154 C 1 *
+bit 153 C 1 *
+bit 152 C 1 *
+bit 151 C 1 *
+bit 150 C 1 *
+bit 149 C 1 *
+bit 148 C 1 *
+bit 147 C 1 *
+bit 146 C 1 *
+bit 145 C 1 *
+bit 144 C 1 *
+bit 143 C 1 *
+bit 142 C 1 *
+bit 141 C 1 *
+bit 140 I 1 CKE
+bit 139 I 1 RAS3L
+bit 138 I 1 RAS2L
+bit 137 I 1 CASLL
+bit 136 I 1 CASLH
+bit 135 I 1 CASHL
+bit 134 I 1 CASHH
+bit 133 I 1 DACK0
+bit 132 I 1 DACK1
+bit 131 I 1 CAS2L
+bit 130 I 1 CAS2H
+bit 129 I 1 RAS3U
+bit 128 I 1 RAS2U
+bit 127 I 1 BREQ
+bit 126 I 1 WAIT
+bit 125 I 1 AUDCK
+bit 124 I 1 IOIS16
+bit 123 I 1 ASEBRKAK
+bit 122 I 1 PTG4
+bit 121 I 1 AUDATA3
+bit 120 I 1 AUDATA2
+bit 119 I 1 AUDATA1
+bit 118 I 1 AUDATA0
+bit 117 I 1 ADTRG
+bit 116 I 1 IRLS3
+bit 115 I 1 IRLS2
+bit 114 I 1 IRLS1
+bit 113 I 1 IRLS0
+bit 112 I 1 MD0
+bit 111 O 1 CKE 92 1 Z
+bit 110 O 1 RAS3L 91 1 Z
+bit 109 O 1 RAS2L 90 1 Z
+bit 108 O 1 CASLL 89 1 Z
+bit 107 O 1 CASLH 88 1 Z
+bit 106 O 1 CASHL 87 1 Z
+bit 105 O 1 CASHH 86 1 Z
+bit 104 O 1 DACK0 85 1 Z
+bit 103 O 1 DACK1 84 1 Z
+bit 102 O 1 CAS2L 83 1 Z
+bit 101 O 1 CAS2H 82 1 Z
+bit 100 O 1 RAS3U 81 1 Z
+bit 99 O 1 RAS2U 80 1 Z
+bit 98 O 1 BACK 79 1 Z
+bit 97 O 1 ASEBRKAK 78 1 Z
+bit 96 O 1 AUDATA3 77 1 Z
+bit 95 O 1 AUDATA2 76 1 Z
+bit 94 O 1 AUDATA1 75 1 Z
+bit 93 O 1 AUDATA0 74 1 Z
+bit 92 C 1 *
+bit 91 C 1 *
+bit 90 C 1 *
+bit 89 C 1 *
+bit 88 C 1 *
+bit 87 C 1 *
+bit 86 C 1 *
+bit 85 C 1 *
+bit 84 C 1 *
+bit 83 C 1 *
+bit 82 C 1 *
+bit 81 C 1 *
+bit 80 C 1 *
+bit 79 C 1 *
+bit 78 C 1 *
+bit 77 C 1 *
+bit 76 C 1 *
+bit 75 C 1 *
+bit 74 C 1 *
+bit 73 I 1 STATUS0
+bit 72 I 1 STATUS1
+bit 71 I 1 TCLK
+bit 70 I 1 SCK0
+bit 69 I 1 SCK1
+bit 68 I 1 SCK2
+bit 67 I 1 RTS2
+bit 66 I 1 RXD0
+bit 65 I 1 RXD2
+bit 64 I 1 WAKEUP
+bit 63 I 1 RESETOUT
+bit 62 I 1 DRAK0
+bit 61 I 1 DRAK1
+bit 60 I 1 DREQ0
+bit 59 I 1 DREQ1
+bit 58 I 1 RXD1
+bit 57 I 1 CTS2
+bit 56 I 1 MCS7
+bit 55 I 1 MCS6
+bit 54 I 1 MCS5
+bit 53 I 1 MCS4
+bit 52 I 1 MCS3
+bit 51 I 1 MCS2
+bit 50 I 1 MCS1
+bit 49 I 1 MCS0
+bit 48 I 1 MD3
+bit 47 I 1 MD4
+bit 46 I 1 MD5
+bit 45 O 1 STATUS0 22 1 Z
+bit 44 O 1 STATUS1 21 1 Z
+bit 43 O 1 TCLK 20 1 Z
+bit 42 O 1 IRQOUT 19 1 Z
+bit 41 O 1 TXD0 18 1 Z
+bit 40 O 1 SCK0 17 1 Z
+bit 39 O 1 TXD1 16 1 Z
+bit 38 O 1 SCK1 15 1 Z
+bit 37 O 1 TXD2 14 1 Z
+bit 36 O 1 SCK2 13 1 Z
+bit 35 O 1 RTS2 12 1 Z
+bit 34 O 1 MCS7 11 1 Z
+bit 33 O 1 MCS6 10 1 Z
+bit 32 O 1 MCS5 9 1 Z
+bit 31 O 1 MCS4 8 1 Z
+bit 30 O 1 WAKEUP 7 1 Z
+bit 29 O 1 RESETOUT 6 1 Z
+bit 28 O 1 MCS3 5 1 Z
+bit 27 O 1 MCS2 4 1 Z
+bit 26 O 1 MCS1 3 1 Z
+bit 25 O 1 MCS0 2 1 Z
+bit 24 O 1 DRAK0 1 1 Z
+bit 23 O 1 DRAK1 0 1 Z
+bit 22 C 1 *
+bit 21 C 1 *
+bit 20 C 1 *
+bit 19 C 1 *
+bit 18 C 1 *
+bit 17 C 1 *
+bit 16 C 1 *
+bit 15 C 1 *
+bit 14 C 1 *
+bit 13 C 1 *
+bit 12 C 1 *
+bit 11 C 1 *
+bit 10 C 1 *
+bit 9 C 1 *
+bit 8 C 1 *
+bit 7 C 1 *
+bit 6 C 1 *
+bit 5 C 1 *
+bit 4 C 1 *
+bit 3 C 1 *
+bit 2 C 1 *
+bit 1 C 1 *
+bit 0 C 1 *
+
+initbus sh7727
