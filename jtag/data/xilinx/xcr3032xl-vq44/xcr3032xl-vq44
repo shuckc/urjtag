@@ -1,0 +1,218 @@
+#
+# $Id$
+#
+# JTAG declarations for XCR3032XL-VQ44
+# Copyright (C) 2004 RightHand Technologies, Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Andrew Dyer <adyer@righthandtech.com>, 2004
+#
+# Documentation:
+# [1] Xilinx Inc., "CoolRunner XPLA3 Preliminary Product Specification"
+#     DS012 (v1.7) June 23, 2003
+# [2] Xilinx Inc., "BSDL file for device XCR3032, package VQ44
+#     Revision: 1.2", 2002-01-03
+# [3] Xilinx Inc., "XCR3032XL 32 Macrocell CPLD Preliminary Product Specification"
+#     DS023 (v1.8) August 15, 2003 
+#
+signal tck
+signal tdi
+signal tdo
+signal tms
+signal CLK0_IN0
+signal CLK1_IN1
+signal CLK2_IN2
+signal CLK3_IN3
+signal A0
+signal A1
+signal A2
+signal A4
+signal A5
+signal A6
+signal A7
+signal A9
+signal A10
+signal A11
+signal A12
+signal A13
+signal A14
+signal A15
+signal B0
+signal B1
+signal B2
+signal B4
+signal B5
+signal B6
+signal B7
+signal B9
+signal B10
+signal B11
+signal B12
+signal B13
+signal B14
+signal B15
+signal VDDE1
+signal VDDE2
+signal VDDI1
+signal VDDI2
+signal GND1
+signal GND2
+signal GND3
+
+register	BSR	132
+register	BR	1
+register	DIR	32
+
+instruction length 5
+
+instruction BYPASS 11111 BR
+instruction SAMPLE/PRELOAD 00010 BSR
+instruction EXTEST 00000 BSR
+instruction IDCODE 00001 DIR
+
+bit 131 O 1 *
+bit 130 I 1 A0
+bit 129 O 1 A0 128 0 Z
+bit 128 C 1 *
+bit 127 O 1 *
+bit 126 I 1 A1
+bit 125 O 1 A1 124 0 Z
+bit 124 C 1 *
+bit 123 O 1 *
+bit 122 I 1 A2
+bit 121 O 1 A2 120 0 Z
+bit 120 C 1 *
+bit 119 O 1 *
+bit 118 O 1 *
+bit 117 O 1 *
+bit 116 O 1 *
+bit 115 O 1 *
+bit 114 I 1 A4
+bit 113 O 1 A4 112 0 Z
+bit 112 C 1 *
+bit 111 O 1 *
+bit 110 I 1 A5
+bit 109 O 1 A5 108 0 Z
+bit 108 C 1 *
+bit 107 O 1 *
+bit 106 I 1 A6
+bit 105 O 1 A6 104 0 Z
+bit 104 C 1 *
+bit 103 O 1 *
+bit 102 I 1 A7
+bit 101 O 1 A7 100 0 Z
+bit 100 C 1 *
+bit 99 O 1 *
+bit 98 O 1 *
+bit 97 O 1 *
+bit 96 O 1 *
+bit 95 O 1 *
+bit 94 I 1 A9
+bit 93 O 1 A9 92 0 Z
+bit 92 C 1 *
+bit 91 O 1 *
+bit 90 I 1 A10
+bit 89 O 1 A10 88 0 Z
+bit 88 C 1 *
+bit 87 O 1 *
+bit 86 I 1 A11
+bit 85 O 1 A11 84 0 Z
+bit 84 C 1 *
+bit 83 O 1 *
+bit 82 I 1 A12
+bit 81 O 1 A12 80 0 Z
+bit 80 C 1 *
+bit 79 O 1 *
+bit 78 I 1 A13
+bit 77 O 1 A13 76 0 Z
+bit 76 C 1 *
+bit 75 O 1 *
+bit 74 I 1 A14
+bit 73 O 1 A14 72 0 Z
+bit 72 C 1 *
+bit 71 O 1 *
+bit 70 I 1 A15
+bit 69 O 1 A15 68 0 Z
+bit 68 C 1 *
+bit 67 O 1 *
+bit 66 I 1 B0
+bit 65 O 1 B0 64 0 Z
+bit 64 C 1 *
+bit 63 O 1 *
+bit 62 I 1 B1
+bit 61 O 1 B1 60 0 Z
+bit 60 C 1 *
+bit 59 O 1 *
+bit 58 I 1 B2
+bit 57 O 1 B2 56 0 Z
+bit 56 C 1 *
+bit 55 O 1 *
+bit 54 O 1 *
+bit 53 O 1 *
+bit 52 O 1 *
+bit 51 O 1 *
+bit 50 I 1 B4
+bit 49 O 1 B4 48 0 Z
+bit 48 C 1 *
+bit 47 O 1 *
+bit 46 I 1 B5
+bit 45 O 1 B5 44 0 Z
+bit 44 C 1 *
+bit 43 O 1 *
+bit 42 I 1 B6
+bit 41 O 1 B6 40 0 Z
+bit 40 C 1 *
+bit 39 O 1 *
+bit 38 I 1 B7
+bit 37 O 1 B7 36 0 Z
+bit 36 C 1 *
+bit 35 O 1 *
+bit 34 O 1 *
+bit 33 O 1 *
+bit 32 O 1 *
+bit 31 O 1 *
+bit 30 I 1 B9
+bit 29 O 1 B9 28 0 Z
+bit 28 C 1 *
+bit 27 O 1 *
+bit 26 I 1 B10
+bit 25 O 1 B10 24 0 Z
+bit 24 C 1 *
+bit 23 O 1 *
+bit 22 I 1 B11
+bit 21 O 1 B11 20 0 Z
+bit 20 C 1 *
+bit 19 O 1 *
+bit 18 I 1 B12
+bit 17 O 1 B12 16 0 Z
+bit 16 C 1 *
+bit 15 O 1 *
+bit 14 I 1 B13
+bit 13 O 1 B13 12 0 Z
+bit 12 C 1 *
+bit 11 O 1 *
+bit 10 I 1 B14
+bit 9 O 1 B14 8 0 Z
+bit 8 C 1 *
+bit 7 O 1 *
+bit 6 I 1 B15
+bit 5 O 1 B15 4 0 Z
+bit 4 C 1 *
+bit 3 I 1 CLK0_IN0
+bit 2 I 1 CLK1_IN1
+bit 1 I 1 CLK2_IN2
+bit 0 I 1 CLK3_IN3

@@ -1,5 +1,18 @@
 2004-08-17  Marcel Telka  <marcel@telka.sk>
 
+	* data/MANUFACTURERS: Added Toshiba manufacturer (patch 972621, Andrew Dyer).
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files (patch 972621, Andrew Dyer).
+	* data/xilinx/PARTS: Added XCR3032XL-VQ44 entry (patch 972621, Andrew Dyer).
+	* data/xilinx/xcr3032xl-vq44/STEPPINGS: New file (patch 972621, Andrew Dyer).
+	* data/xilinx/xcr3032xl-vq44/xcr3032xl-vq44: Ditto.
+	* data/toshiba/PARTS: Ditto.
+	* data/toshiba/tx4925/STEPPINGS: Ditto.
+	* data/toshiba/tx4925/tx4925: Ditto.
+	* data/toshiba/tx4926/STEPPINGS: Ditto.
+	* data/toshiba/tx4926/tx4926: Ditto.
+
+2004-08-17  Marcel Telka  <marcel@telka.sk>
+
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
 	* data/philips/PARTS: Added XCR3128XL-VQ100 entry (patch 1010714, Michael Lauer).
 	* data/xilinx/PARTS: Added directory for XCR3128XL-VQ100 entry (patch 1010714, Michael Lauer).

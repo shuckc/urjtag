@@ -1,0 +1,662 @@
+#
+# $Id$
+#
+# JTAG declarations for Toshiba TX4926
+# Copyright (C) 2004 RightHand Technologies, Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Andrew Dyer <adyer@righthandtech.com>, 2004.
+#
+# Documentation:
+# [1] Toshiba Corporation, 
+#     "64-Bit TX System RISC TX49 Family TMPR4926 Rev. 2.0"
+# [2] Toshiba Corporation, "BSDL file for TMPR4925"
+#
+signal VDDC0
+signal VDDC1
+signal VDDC2
+signal VDDC3
+signal VDDC4
+signal VDDC5
+signal VDDC6
+signal VDDC7
+signal VDDC8
+signal VDDC9
+signal VDDC10
+signal VDDC11
+signal VDDC12
+signal VDDC13
+signal VDDC14
+signal VDDC15
+signal VDDC16
+signal VDDC17
+signal VDDS0
+signal VDDS1
+signal VDDS2
+signal VDDS3
+signal VDDS4
+signal VDDS5
+signal VDDS6
+signal VDDS7
+signal VDDS8
+signal VDDS9
+signal VDDS10
+signal VDDS11
+signal VDDS12
+signal VDDS13
+signal VDDS14
+signal VDDS15
+signal VDDS16
+signal VDDS17
+signal VDDS18
+signal VDDS19
+signal VDDS20
+signal VSS0
+signal VSS1
+signal VSS2
+signal VSS3
+signal VSS4
+signal VSS5
+signal VSS6
+signal VSS7
+signal VSS8
+signal VSS9
+signal VSS10
+signal VSS11
+signal VSS12
+signal VSS13
+signal VSS14
+signal VSS15
+signal VSS16
+signal VSS17
+signal VSS18
+signal VSS19
+signal VSS20
+signal VSS21
+signal VSS22
+signal VSS23
+signal VSS24
+signal VSS25
+signal VSS26
+signal VSS27
+signal VSS28
+signal VSS29
+signal COLDRESET
+signal PON
+signal MSTRCLK
+signal TEST
+signal PLLVDD
+signal PLLVSS
+signal NMI
+signal SCANENB
+signal C32KIN
+signal SYSCLK
+signal BWE_3
+signal BWE_2
+signal BWE_1
+signal BWE_0
+signal SDCLK_1
+signal SDCLK_0
+signal SDCLKIN
+signal GNT_3
+signal GNT_2
+signal GNT_1
+signal GNT_0
+signal REQ_3
+signal REQ_2
+signal REQ_1
+signal REQ_0
+signal PERR
+signal SERR
+signal PCIAD_31
+signal PCIAD_30
+signal PCIAD_29
+signal PCIAD_28
+signal PCIAD_27
+signal PCIAD_26
+signal PCIAD_25
+signal PCIAD_24
+signal PCIAD_23
+signal PCIAD_22
+signal PCIAD_21
+signal PCIAD_20
+signal PCIAD_19
+signal PCIAD_18
+signal PCIAD_17
+signal PCIAD_16
+signal PCIAD_15
+signal PCIAD_14
+signal PCIAD_13
+signal PCIAD_12
+signal PCIAD_11
+signal PCIAD_10
+signal PCIAD_9
+signal PCIAD_8
+signal PCIAD_7
+signal PCIAD_6
+signal PCIAD_5
+signal PCIAD_4
+signal PCIAD_3
+signal PCIAD_2
+signal PCIAD_1
+signal PCIAD_0
+signal C_BE_3
+signal C_BE_2
+signal C_BE_1
+signal C_BE_0
+signal PAR
+signal FRAME
+signal TRDY
+signal IRDY
+signal IDSEL
+signal STOP
+signal DEVSEL
+signal PCICLK_2
+signal PCICLK_1
+signal PCICLKIO
+signal TDI
+signal TMS
+signal TCK
+signal TRST
+signal BC32K
+signal DATA_31
+signal DATA_30
+signal DATA_29
+signal DATA_28
+signal DATA_27
+signal DATA_26
+signal DATA_25
+signal DATA_24
+signal DATA_23
+signal DATA_22
+signal DATA_21
+signal DATA_20
+signal DATA_19
+signal DATA_18
+signal DATA_17
+signal DATA_16
+signal DATA_15
+signal DATA_14
+signal DATA_13
+signal DATA_12
+signal DATA_11
+signal DATA_10
+signal DATA_9
+signal DATA_8
+signal DATA_7
+signal DATA_6
+signal DATA_5
+signal DATA_4
+signal DATA_3
+signal DATA_2
+signal DATA_1
+signal DATA_0
+signal ADDR_19
+signal ADDR_18
+signal ADDR_17
+signal ADDR_16
+signal ADDR_15
+signal ADDR_14
+signal ADDR_13
+signal ADDR_12
+signal ADDR_11
+signal ADDR_10
+signal ADDR_9
+signal ADDR_8
+signal ADDR_7
+signal ADDR_6
+signal ADDR_5
+signal ADDR_4
+signal ADDR_3
+signal ADDR_2
+signal ADDR_1
+signal ADDR_0
+signal ACK
+signal ROMCE_3
+signal ROMCE_2
+signal ROMCE_1
+signal ROMCE_0
+signal PIO_31
+signal PIO_30
+signal PIO_29
+signal PIO_28
+signal PIO_27
+signal PIO_26
+signal PIO_25
+signal PIO_24
+signal PIO_23
+signal PIO_22
+signal PIO_21
+signal PIO_20
+signal PIO_19
+signal PIO_18
+signal PIO_17
+signal PIO_16
+signal PIO_15
+signal PIO_14
+signal PIO_13
+signal PIO_12
+signal PIO_11
+signal PIO_10
+signal PIO_9
+signal PIO_8
+signal PIO_7
+signal PIO_6
+signal PIO_5
+signal PIO_4
+signal PIO_3
+signal PIO_2
+signal PIO_1
+signal PIO_0
+signal BUSSPRT
+signal UAE
+signal SWE
+signal OE
+signal SDCS_3
+signal SDCS_2
+signal SDCS_1
+signal SDCS_0
+signal RAS
+signal CAS
+signal DQM_3
+signal DQM_2
+signal DQM_1
+signal DQM_0
+signal WE
+signal CKE
+signal DA10
+signal RP
+signal C32KOUT
+
+register	BSR	356
+register	BR	1
+register	DIR	32
+register    EJIMPCODE 32
+register    EJADDRESS 36
+register    EJDATA    64
+register    EJCONTROL 32
+register    EJALL     132
+
+instruction length 8
+
+instruction BYPASS         11111111 BR
+instruction SAMPLE/PRELOAD 00000001 BSR
+instruction EXTEST         00000000 BSR
+instruction IDCODE         00000011 DIR
+instruction EJTAG_IMPCODE  10000011 EJIMPCODE
+instruction EJTAG_ADDRESS  10001000 EJADDRESS
+instruction EJTAG_DATA     10001001 EJDATA
+instruction EJTAG_CONTROL  10001010 EJCONTROL
+instruction EJATG_ALL      10001011 EJALL
+# instruction PCTRACE       10010000         # docs are unclear about what this does
+
+bit 355 O 1 GNT_0 354 1 Z
+bit 354 C 1 *
+bit 353 O 0 PCICLKIO 352 1 Z
+bit 352 C 1 *
+bit 351 O 0 PCICLK_1 350 1 Z
+bit 350 C 1 *
+bit 349 O 0 PCICLK_2 348 1 Z
+bit 348 C 1 *
+bit 347 O 1 REQ_0 346 1 Z
+bit 346 C 1 *
+bit 345 O 1 GNT_1 344 1 Z
+bit 344 C 1 *
+bit 343 O 1 REQ_1 342 1 Z
+bit 342 C 1 *
+bit 341 O 1 GNT_2 340 1 Z
+bit 340 C 1 *
+bit 339 O 1 REQ_2 338 1 Z
+bit 338 C 1 *
+bit 337 O 1 GNT_3 336 1 Z
+bit 336 C 1 *
+bit 335 O 1 REQ_3 334 1 Z
+bit 334 C 1 *
+bit 333 O 1 PCIAD_31 332 1 Z
+bit 332 C 1 *
+bit 331 O 1 PCIAD_30 330 1 Z
+bit 330 C 1 *
+bit 329 O 1 PCIAD_29 328 1 Z
+bit 328 C 1 *
+bit 327 O 1 PCIAD_28 326 1 Z
+bit 326 C 1 *
+bit 325 O 1 PCIAD_27 324 1 Z
+bit 324 C 1 *
+bit 323 O 1 PCIAD_26 322 1 Z
+bit 322 C 1 *
+bit 321 O 1 PCIAD_25 320 1 Z
+bit 320 C 1 *
+bit 319 O 1 PCIAD_24 318 1 Z
+bit 318 C 1 *
+bit 317 O 1 C_BE_3 316 1 Z
+bit 316 C 1 *
+bit 315 O 1 IDSEL 314 1 Z
+bit 314 C 1 *
+bit 313 O 1 PCIAD_23 312 1 Z
+bit 312 C 1 *
+bit 311 O 1 PCIAD_22 310 1 Z
+bit 310 C 1 *
+bit 309 O 1 PCIAD_21 308 1 Z
+bit 308 C 1 *
+bit 307 O 1 PCIAD_20 306 1 Z
+bit 306 C 1 *
+bit 305 O 1 PCIAD_19 304 1 Z
+bit 304 C 1 *
+bit 303 O 1 PCIAD_17 302 1 Z
+bit 302 C 1 *
+bit 301 O 1 PCIAD_18 300 1 Z
+bit 300 C 1 *
+bit 299 O 1 FRAME 298 1 Z
+bit 298 C 1 *
+bit 297 O 1 C_BE_2 296 1 Z
+bit 296 C 1 *
+bit 295 O 1 PCIAD_16 294 1 Z
+bit 294 C 1 *
+bit 293 O 1 STOP 292 1 Z
+bit 292 C 1 *
+bit 291 O 1 DEVSEL 290 1 Z
+bit 290 C 1 *
+bit 289 O 1 TRDY 288 1 Z
+bit 288 C 1 *
+bit 287 O 1 IRDY 286 1 Z
+bit 286 C 1 *
+bit 285 O 1 SERR 284 1 Z
+bit 284 C 1 *
+bit 283 O 1 PERR 282 1 Z
+bit 282 C 1 *
+bit 281 O 1 PCIAD_15 280 1 Z
+bit 280 C 1 *
+bit 279 O 1 C_BE_1 278 1 Z
+bit 278 C 1 *
+bit 277 O 1 PAR 276 1 Z
+bit 276 C 1 *
+bit 275 O 1 PCIAD_12 274 1 Z
+bit 274 C 1 *
+bit 273 O 1 PCIAD_13 272 1 Z
+bit 272 C 1 *
+bit 271 O 1 PCIAD_14 270 1 Z
+bit 270 C 1 *
+bit 269 O 1 PCIAD_9 268 1 Z
+bit 268 C 1 *
+bit 267 O 1 PCIAD_10 266 1 Z
+bit 266 C 1 *
+bit 265 O 1 PCIAD_11 264 1 Z
+bit 264 C 1 *
+bit 263 O 1 C_BE_0 262 1 Z
+bit 262 C 1 *
+bit 261 O 1 PCIAD_8 260 1 Z
+bit 260 C 1 *
+bit 259 O 1 PCIAD_4 258 1 Z
+bit 258 C 1 *
+bit 257 O 1 PCIAD_0 256 1 Z
+bit 256 C 1 *
+bit 255 O 1 PCIAD_5 254 1 Z
+bit 254 C 1 *
+bit 253 O 1 PCIAD_1 252 1 Z
+bit 252 C 1 *
+bit 251 O 1 PCIAD_6 250 1 Z
+bit 250 C 1 *
+bit 249 O 1 PCIAD_2 248 1 Z
+bit 248 C 1 *
+bit 247 O 1 PCIAD_7 246 1 Z
+bit 246 C 1 *
+bit 245 O 1 PCIAD_3 244 1 Z
+bit 244 C 1 *
+bit 243 O 1 BWE_0 242 1 Z
+bit 242 C 1 *
+bit 241 O 1 BWE_1 240 1 Z
+bit 240 C 1 *
+bit 239 O 1 SYSCLK 238 1 Z
+bit 238 C 1 *
+bit 237 O 1 BWE_2 236 1 Z
+bit 236 C 1 *
+bit 235 O 1 BWE_3 234 1 Z
+bit 234 C 1 *
+bit 233 O 1 UAE 232 1 Z
+bit 232 C 1 *
+bit 231 O 1 SWE 230 1 Z
+bit 230 C 1 *
+bit 229 O 1 ADDR_0 228 1 Z
+bit 228 C 1 *
+bit 227 O 1 ADDR_1 226 1 Z
+bit 226 C 1 *
+bit 225 O 1 ADDR_2 224 1 Z
+bit 224 C 1 *
+bit 223 O 1 ADDR_3 222 1 Z
+bit 222 C 1 *
+bit 221 O 1 ADDR_4 220 1 Z
+bit 220 C 1 *
+bit 219 O 1 ROMCE_3 218 1 Z
+bit 218 C 1 *
+bit 217 O 1 ROMCE_2 216 1 Z
+bit 216 C 1 *
+bit 215 O 1 ADDR_15 214 1 Z
+bit 214 C 1 *
+bit 213 O 1 OE 212 1 Z
+bit 212 C 1 *
+bit 211 O 1 PIO_0 210 1 Z
+bit 210 C 1 *
+bit 209 O 1 PIO_2 208 1 Z
+bit 208 C 1 *
+bit 207 O 1 ROMCE_1 206 1 Z
+bit 206 C 1 *
+bit 205 O 1 ROMCE_0 204 1 Z
+bit 204 C 1 *
+bit 203 O 1 BUSSPRT 202 1 Z
+bit 202 C 1 *
+bit 201 O 1 PIO_4 200 1 Z
+bit 200 C 1 *
+bit 199 O 1 ACK 198 1 Z
+bit 198 C 1 *
+bit 197 O 1 PIO_3 196 1 Z
+bit 196 C 1 *
+bit 195 O 1 PIO_1 194 1 Z
+bit 194 C 1 *
+bit 193 O 1 PIO_11 192 1 Z
+bit 192 C 1 *
+bit 191 O 1 PIO_10 190 1 Z
+bit 190 C 1 *
+bit 189 O 1 PIO_5 188 1 Z
+bit 188 C 1 *
+bit 187 O 1 PIO_6 186 1 Z
+bit 186 C 1 *
+bit 185 O 1 PIO_8 184 1 Z
+bit 184 C 1 *
+bit 183 O 1 PIO_9 182 1 Z
+bit 182 C 1 *
+bit 181 O 1 PIO_12 180 1 Z
+bit 180 C 1 *
+bit 179 O 1 PIO_17 178 1 Z
+bit 178 C 1 *
+bit 177 O 1 PIO_13 176 1 Z
+bit 176 C 1 *
+bit 175 O 1 PIO_7 174 1 Z
+bit 174 C 1 *
+bit 173 O 1 PIO_14 172 1 Z
+bit 172 C 1 *
+bit 171 O 1 PIO_15 170 1 Z
+bit 170 C 1 *
+bit 169 O 1 PIO_16 168 1 Z
+bit 168 C 1 *
+bit 167 O 1 BC32K 166 1 Z
+bit 166 C 1 *
+bit 165 O 1 *
+bit 164 O 1 *
+bit 163 O 1 *
+bit 162 O 1 *
+bit 161 O 1 *
+bit 160 O 1 *
+bit 159 B 1 DATA_0 158 1 Z
+bit 158 C 1 *
+bit 157 B 1 DATA_16 156 1 Z
+bit 156 C 1 *
+bit 155 B 1 DATA_1 154 1 Z
+bit 154 C 1 *
+bit 153 B 1 DATA_17 152 1 Z
+bit 152 C 1 *
+bit 151 B 1 DATA_2 150 1 Z
+bit 150 C 1 *
+bit 149 B 1 DATA_18 148 1 Z
+bit 148 C 1 *
+bit 147 B 1 DATA_3 146 1 Z
+bit 146 C 1 *
+bit 145 B 1 DATA_19 144 1 Z
+bit 144 C 1 *
+bit 143 B 1 DATA_4 142 1 Z
+bit 142 C 1 *
+bit 141 B 1 DATA_20 140 1 Z
+bit 140 C 1 *
+bit 139 B 1 DATA_5 138 1 Z
+bit 138 C 1 *
+bit 137 B 1 DATA_21 136 1 Z
+bit 136 C 1 *
+bit 135 B 1 DATA_6 134 1 Z
+bit 134 C 1 *
+bit 133 B 1 DATA_22 132 1 Z
+bit 132 C 1 *
+bit 131 B 1 DATA_23 130 1 Z
+bit 130 C 1 *
+bit 129 B 1 DATA_8 128 1 Z
+bit 128 C 1 *
+bit 127 B 1 DATA_7 126 1 Z
+bit 126 C 1 *
+bit 125 B 1 DATA_24 124 1 Z
+bit 124 C 1 *
+bit 123 B 1 DATA_9 122 1 Z
+bit 122 C 1 *
+bit 121 B 1 DATA_25 120 1 Z
+bit 120 C 1 *
+bit 119 B 1 DATA_26 118 1 Z
+bit 118 C 1 *
+bit 117 B 1 DATA_10 116 1 Z
+bit 116 C 1 *
+bit 115 B 1 DATA_27 114 1 Z
+bit 114 C 1 *
+bit 113 B 1 DATA_11 112 1 Z
+bit 112 C 1 *
+bit 111 B 1 DATA_28 110 1 Z
+bit 110 C 1 *
+bit 109 B 1 DATA_12 108 1 Z
+bit 108 C 1 *
+bit 107 B 1 DATA_29 106 1 Z
+bit 106 C 1 *
+bit 105 B 1 DATA_13 104 1 Z
+bit 104 C 1 *
+bit 103 B 1 DATA_15 102 1 Z
+bit 102 C 1 *
+bit 101 B 1 DATA_30 100 1 Z
+bit 100 C 1 *
+bit  99 B 1 DATA_14 98 1 Z
+bit  98 C 1 *
+bit  97 O 1 RP 96 1 Z
+bit  96 C 1 *
+bit  95 B 1 DATA_31 94 1 Z
+bit  94 C 1 *
+bit  93 O 1 DQM_0 92 1 Z
+bit  92 C 1 *
+bit  91 O 1 CAS 90 1 Z
+bit  90 C 1 *
+bit  89 O 1 WE 88 1 Z
+bit  88 C 1 *
+bit  87 O 1 DQM_1 86 1 Z
+bit  86 C 1 *
+bit  85 O 1 SDCS_0 84 1 Z
+bit  84 C 1 *
+bit  83 O 1 DQM_2 82 1 Z
+bit  82 C 1 *
+bit  81 O 1 DQM_3 80 1 Z
+bit  80 C 1 *
+bit  79 O 1 ADDR_5 78 1 Z
+bit  78 C 1 *
+bit  77 O 1 RAS 76 1 Z
+bit  76 C 1 *
+bit  75 O 1 SDCS_1 74 1 Z
+bit  74 C 1 *
+bit  73 O 1 ADDR_6 72 1 Z
+bit  72 C 1 *
+bit  71 O 1 ADDR_7 70 1 Z
+bit  70 C 1 *
+bit  69 O 1 ADDR_8 68 1 Z
+bit  68 C 1 *
+bit  67 O 1 ADDR_9 66 1 Z
+bit  66 C 1 *
+bit  65 O 1 ADDR_10 64 1 Z
+bit  64 C 1 *
+bit  63 O 1 ADDR_11 62 1 Z
+bit  62 C 1 *
+bit  61 O 1 ADDR_12 60 1 Z
+bit  60 C 1 *
+bit  59 O 1 ADDR_13 58 1 Z
+bit  58 C 1 *
+bit  57 O 1 ADDR_14 56 1 Z
+bit  56 C 1 *
+bit  55 O 1 DA10 54 1 Z
+bit  54 C 1 *
+bit  53 O 1 ADDR_16 52 1 Z
+bit  52 C 1 *
+bit  51 O 1 ADDR_19 50 1 Z
+bit  50 C 1 *
+bit  49 O 1 ADDR_18 48 1 Z
+bit  48 C 1 *
+bit  47 O 1 ADDR_17 46 1 Z
+bit  46 C 1 *
+bit  45 O 1 CKE 44 1 Z
+bit  44 C 1 *
+bit  43 O 1 SDCS_2 42 1 Z
+bit  42 C 1 *
+bit  41 O 1 *
+bit  40 O 1 *
+bit  39 O 1 SDCS_3 38 1 Z
+bit  38 C 1 *
+bit  37 O 1 SDCLK_0 36 1 Z
+bit  36 C 1 *
+bit  35 O 1 SDCLK_1 34 1 Z
+bit  34 C 1 *
+bit  33 O 1 *
+bit  32 O 1 *
+bit  31 O 1 SDCLKIN 30 1 Z
+bit  30 C 1 *
+bit  29 O 1 PIO_20 28 1 Z
+bit  28 C 1 *
+bit  27 O 1 *
+bit  26 O 1 *
+bit  25 O 1 PIO_19 24 1 Z
+bit  24 C 1 *
+bit  23 O 1 PIO_18 22 1 Z
+bit  22 C 1 *
+bit  21 O 1 PIO_23 20 1 Z
+bit  20 C 1 *
+bit  19 O 1 PIO_22 18 1 Z
+bit  18 C 1 *
+bit  17 O 1 PIO_21 16 1 Z
+bit  16 C 1 *
+bit  15 O 1 PIO_27 14 1 Z
+bit  14 C 1 *
+bit  13 O 1 PIO_29 12 1 Z
+bit  12 C 1 *
+bit  11 O 1 PIO_28 10 1 Z
+bit  10 C 1 *
+bit   9 O 1 PIO_30 8 1 Z
+bit   8 C 1 *
+bit   7 O 1 PIO_24 6 1 Z
+bit   6 C 1 *
+bit   5 O 1 PIO_31 4 1 Z
+bit   4 C 1 *
+bit   3 O 1 PIO_25 2 1 Z
+bit   2 C 1 *
+bit   1 O 1 PIO_26 0 1 Z
+bit   0 C 1 *

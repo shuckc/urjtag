@@ -1,8 +1,7 @@
 #
 # $Id$
 #
-# Manufacturer ID database
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2003 Jachym Holecek <freza@psi.cz>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,22 +18,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
-#
-# Documentation:
-# [1] JEDEC Solid State Technology Association, "Standard Manufacturer's
-#     Identification Code", September 2001, Order Number: JEP106-K
-#
 
-# bits 11-1 of the Device Identification Register
-00000000111	hitachi		Hitachi
-00000001001	intel		Intel
-00000010101	philips		Philips Semi. (Signetics)
-00000011000	toshiba		Toshiba
-00000011111	atmel		Atmel
-00000110100	cypress		Cypress
-00000110101	dec		DEC
-00001001001	xilinx		Xilinx
-00001101110	altera		Altera
-00010111111	broadcom	Broadcom
-00101010000	broadcom	Broadcom	# or "Sibyte, Incorporated" ?
+# bits 31-28 of the Device Identification Register
+0000	xcr3032xl-vq44		0

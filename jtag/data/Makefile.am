@@ -64,7 +64,14 @@ nobase_dist_pkgdata_DATA = \
 	philips/xcr3128xl-vq100/STEPPINGS \
 	philips/xcr3128xl-vq100/xcr3128xl-vq100 \
 	samsung/s3c4510b/s3c4510b \
+	toshiba/PARTS \
+	toshiba/tx4925/STEPPINGS \
+	toshiba/tx4925/tx4925 \
+	toshiba/tx4926/STEPPINGS \
+	toshiba/tx4926/tx4926 \
 	xilinx/PARTS \
+	xilinx/xcr3032xl-vq44/STEPPINGS \
+	xilinx/xcr3032xl-vq44/xcr3032xl-vq44 \
 	xilinx/xcr3128xl-cs144/STEPPINGS \
 	xilinx/xcr3128xl-cs144/xcr3128xl-cs144 \
 	xilinx/xcr3128xl-vq100/xcr3128xl-vq100 \
