@@ -38,6 +38,8 @@
 #include "part.h"
 #include "bus.h"
 #include "bssignal.h"
+#include "jtag.h"
+#include "buses.h"
 
 typedef struct {
 	chain_t *chain;
@@ -107,7 +109,7 @@ setup_data( bus_t *bus, uint32_t adr, uint32_t d )
 }
 
 static void
-pxa2x0_bus_printinfo( void )
+pxa2x0_bus_printinfo( bus_t *bus )
 {
 	int i;
 
@@ -335,8 +337,13 @@ pxa250_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static const bus_t pxa250_bus = {
-	NULL,
+static bus_t *pxa2x0_bus_new( void );
+
+const bus_driver_t pxa2x0_bus = {
+	"pxa2x0",
+	N_("Intel PXA2x0 compatibile bus driver via BSR"),
+	pxa2x0_bus_new,
+	pxa250_bus_free,
 	pxa2x0_bus_printinfo,
 	pxa250_bus_prepare,
 	pxa2x0_bus_area,
@@ -344,27 +351,25 @@ static const bus_t pxa250_bus = {
 	pxa250_bus_read_next,
 	pxa250_bus_read_end,
 	pxa250_bus_read,
-	pxa250_bus_write,
-	pxa250_bus_free
+	pxa250_bus_write
 };
 
-bus_t *
-new_pxa250_bus( chain_t *chain, int pn )
+static bus_t *
+pxa2x0_bus_new( void )
 {
 	bus_t *bus;
 	char buff[10];
 	int i;
 	int failed = 0;
 
-	if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
-	
+
 	bus = malloc( sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
-	memcpy( bus, &pxa250_bus, sizeof (bus_t) );
-
+	bus->driver = &pxa2x0_bus;
 	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
@@ -372,7 +377,7 @@ new_pxa250_bus( chain_t *chain, int pn )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[pn];
+	PART = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 26; i++) {
 		sprintf( buff, "MA[%d]", i );

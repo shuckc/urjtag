@@ -2338,3 +2338,5 @@ bit 3 I 1 P_AD29
 bit 2 O 1 P_AD31 1 0 Z
 bit 1 C 0 *
 bit 0 I 1 P_AD31
+
+initbus bcm1250

@@ -512,3 +512,5 @@ bit   3 I ? TXD_3
 bit   2 I ? nRESET
 bit   1 O 1 nRESET_OUT
 bit   0 I ? ROM_SEL
+
+initbus sa1110

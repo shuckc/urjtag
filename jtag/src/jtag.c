@@ -302,7 +302,7 @@ main( int argc, const char **argv )
 	}
 
 	if (bus) {
-		bus->free( bus );
+		bus_free( bus );
 		bus = NULL;
 	}
 	chain_free( chain );

@@ -20,7 +20,7 @@
  * 02111-1307, USA.
  *
  * Written by Matan Ziv-Av.
- * MOdified by Marcel Telka <marcel@telka.sk>, 2003.
+ * Modified by Marcel Telka <marcel@telka.sk>, 2003.
  *
  */
 
@@ -34,6 +34,8 @@
 #include "bus.h"
 #include "chain.h"
 #include "bssignal.h"
+#include "jtag.h"
+#include "buses.h"
 
 #ifdef USE_BCM_EJTAG
 int bcm1250_ejtag_do(bus_t *, uint64_t, uint64_t, int, int, unsigned char *, int);
@@ -92,7 +94,7 @@ setup_data( bus_t *bus, uint32_t d )
 
 #ifndef USE_BCM_EJTAG
 static void
-bcm1250_bus_printinfo( void )
+bcm1250_bus_printinfo( bus_t *bus )
 {
 	int i;
 
@@ -266,8 +268,13 @@ bcm1250_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static const bus_t bcm1250_bus = {
-	NULL,
+static bus_t *bcm1250_bus_new( void );
+
+const bus_driver_t bcm1250_bus = {
+	"bcm1250",
+	N_("Broadcom BCM1250 compatibile bus driver via BSR"),
+	bcm1250_bus_new,
+	bcm1250_bus_free,
 	bcm1250_bus_printinfo,
 	bcm1250_bus_prepare,
 	bcm1250_bus_area,
@@ -275,27 +282,25 @@ static const bus_t bcm1250_bus = {
 	bcm1250_bus_read_next,
 	bcm1250_bus_read_end,
 	bcm1250_bus_read,
-	bcm1250_bus_write,
-	bcm1250_bus_free
+	bcm1250_bus_write
 };
 
-bus_t *
-new_bcm1250_bus( chain_t *chain, int pn )
+static bus_t *
+bcm1250_bus_new( void )
 {
     bus_t *bus;
     char buff[10];
     int i;
     int failed = 0;
 
-    if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
-        return NULL;
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
 
     bus = malloc( sizeof (bus_t) );
     if (!bus)
         return NULL;
 
-    memcpy( bus, &bcm1250_bus, sizeof (bus_t) );
-
+	bus->driver = & bcm1250_bus;
     bus->params = calloc( 1, sizeof (bus_params_t) );
     if (!bus->params) {
         free( bus );
@@ -303,7 +308,7 @@ new_bcm1250_bus( chain_t *chain, int pn )
     }
 
     CHAIN = chain;
-    PART = chain->parts->parts[pn];
+	PART = chain->parts->parts[chain->active_part];
 
     for (i = 0; i < 32; i++) {
         sprintf( buff, "IO_AD%d", i );

@@ -33,6 +33,7 @@ libcmd_a_SOURCES = \
 	signal.c \
 	bit.c \
 	register.c \
+	initbus.c \
 	print.c \
 	part.c \
 	bus.c \

@@ -9,6 +9,7 @@ See libbrux/NEWS for more news.
 		of the cable (patch 793313, Rojhalat Ibrahim).
 	* Used real data bus width for data reading in PXA2x0, SA1110, and SH7727 bus drivers
 		(based on patch 792591, thanks to Guennadi Liakhovetski).
+	* Added 'initbus' command to allow dynamic bus driver loading.
 	* Added BOOT_DEF register emulation for PXA2x0 bus driver.
 	* Fixed minor bugs.
 

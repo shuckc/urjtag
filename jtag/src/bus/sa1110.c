@@ -36,6 +36,8 @@
 #include "bus.h"
 #include "chain.h"
 #include "bssignal.h"
+#include "jtag.h"
+#include "buses.h"
 
 typedef struct {
 	chain_t *chain;
@@ -96,7 +98,7 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
-sa1110_bus_printinfo( void )
+sa1110_bus_printinfo( bus_t *bus )
 {
 	int i;
 
@@ -243,8 +245,13 @@ sa1110_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static const bus_t sa1110_bus = {
-	NULL,
+static bus_t *sa1110_bus_new( void );
+
+const bus_driver_t sa1110_bus = {
+	"sa1110",
+	N_("Intel SA-1110 compatibile bus driver via BSR"),
+	sa1110_bus_new,
+	sa1110_bus_free,
 	sa1110_bus_printinfo,
 	sa1110_bus_prepare,
 	sa1110_bus_area,
@@ -252,27 +259,25 @@ static const bus_t sa1110_bus = {
 	sa1110_bus_read_next,
 	sa1110_bus_read_end,
 	sa1110_bus_read,
-	sa1110_bus_write,
-	sa1110_bus_free
+	sa1110_bus_write
 };
 
-bus_t *
-new_sa1110_bus( chain_t *chain, int pn )
+static bus_t *
+sa1110_bus_new( void )
 {
 	bus_t *bus;
 	char buff[10];
 	int i;
 	int failed = 0;
 
-	if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
 	bus = malloc( sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
-	memcpy( bus, &sa1110_bus, sizeof (bus_t) );
-
+	bus->driver = &sa1110_bus;
 	bus->params = malloc( sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
@@ -280,7 +285,7 @@ new_sa1110_bus( chain_t *chain, int pn )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[pn];
+	PART = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 26; i++) {
 		sprintf( buff, "A%d", i );

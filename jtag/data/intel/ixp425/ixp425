@@ -630,3 +630,5 @@ bit 3 C ? .
 bit 2 C ? .
 bit 1 C ? .
 bit 0 C ? .
+
+initbus ixp425

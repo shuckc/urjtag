@@ -55,6 +55,8 @@
 #include "bus.h"
 #include "chain.h"
 #include "bssignal.h"
+#include "jtag.h"
+#include "buses.h"
 
 
 /** @brief  Bus driver for Samsung S3C4510X */
@@ -116,7 +118,7 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
-s3c4510_bus_printinfo( void )
+s3c4510_bus_printinfo( bus_t *bus )
 {
         int i;
 
@@ -288,8 +290,13 @@ s3c4510_bus_free( bus_t *bus )
         free( bus );
 }
 
-static const bus_t s3c4510_bus = {
-        NULL,
+static bus_t *s3c4510_bus_new( void );
+
+const bus_driver_t s3c4510_bus = {
+	"s3c4510x",
+	N_("Samsung S3C4510B compatibile bus driver via BSR"),
+	s3c4510_bus_new,
+	s3c4510_bus_free,
         s3c4510_bus_printinfo,
         s3c4510_bus_prepare,
         s3c4510_bus_area,
@@ -297,35 +304,33 @@ static const bus_t s3c4510_bus = {
         s3c4510_bus_read_next,
         s3c4510_bus_read_end,
         s3c4510_bus_read,
-        s3c4510_bus_write,
-        s3c4510_bus_free
+	s3c4510_bus_write
 };
 
-bus_t *
-new_s3c4510_bus( chain_t *chain, int pn )
+static bus_t *
+s3c4510_bus_new( void )
 {
         bus_t *bus;
         char buff[10];
         int i;
         int failed = 0;
 
-        if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
                 return NULL;
 
         bus = malloc( sizeof (bus_t) );
         if (!bus)
                 return NULL;
 
-        memcpy( bus, &s3c4510_bus, sizeof (bus_t) );
-
-        bus->params = malloc( sizeof (bus_params_t) );
+	bus->driver = &s3c4510_bus;
+	bus->params = malloc( sizeof (bus_params_t) );
         if (!bus->params) {
                 free( bus );
                 return NULL;
         }
 
         CHAIN = chain;
-        PART = chain->parts->parts[pn];
+	PART = chain->parts->parts[chain->active_part];
 
         for (i = 0; i < 22; i++) {
                 sprintf( buff, "ADDR%d", i );
@@ -383,6 +388,66 @@ new_s3c4510_bus( chain_t *chain, int pn )
 **
 **  CVS Log
 **  $Log$
+**  Revision 1.4  2003/09/05 21:09:14  telka
+**  2003-09-05  Marcel Telka  <marcel@telka.sk>
+**
+**  	* include/bus.h (bus_drivers): Added constant declaration.
+**  	(new_sa1110_bus, new_pxa250_bus, new_ixp425_bus, new_sh7727_bus, new_sh7750r_bus, new_sh7751r_bus)
+**  	(new_bcm1250_bus): Function declarations removed.
+**  	* src/bus/buses.c (bus_drivers): New constant definition.
+**  	* src/bus/buses.h: New file.
+**  	* src/bus/Makefile.am (libbus_a_SOURCES): Added buses.h.
+**
+**  	* src/bus/bcm1250.c (bcm1250_bus_printinfo): Added new function parameter 'bus'.
+**  	(bcm1250_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(new_bcm1250_bus): Function renamed ...
+**  	(bcm1250_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+**  	* src/bus/ixp425.c (ixp425_bus_printinfo): Added new function parameter 'bus'.
+**  	(ixp425_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(new_ixp425_bus): Function renamed ...
+**  	(ixp425_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+**  	* src/bus/pxa2x0.c (pxa2x0_bus_printinfo): Added new function parameter 'bus'.
+**  	(pxa250_bus): Structure transformed ...
+**  	(pxa2x0_bus): ... to this constant (changed type to bus_driver_t, changed members).
+**  	(new_pxa250_bus): Function renamed ...
+**  	(pxa2x0_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+**  	* src/bus/s3c4510x.c (s3c4510_bus_printinfo): Added new function parameter 'bus'.
+**  	(s3c4510_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(new_s3c4510_bus): Function renamed ...
+**  	(s3c4510_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+**  	* src/bus/sa1110.c (sa1110_bus_printinfo): Added new function parameter 'bus'.
+**  	(sa1110_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(new_sa1110_bus): Function renamed ...
+**  	(sa1110_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+**  	* src/bus/sh7727.c (sh7727_bus_printinfo): Added new function parameter 'bus'.
+**  	(sh7727_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(new_sh7727_bus): Function renamed ...
+**  	(sh7727_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+**  	* src/bus/sh7750r.c (sh7750r_bus_printinfo): Added new function parameter 'bus'.
+**  	(sh7750r_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(new_sh7750r_bus): Function renamed ...
+**  	(sh7750r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+**  	* src/bus/sh7751r.c (sh7751r_bus_printinfo): Added new function parameter 'bus'.
+**  	(sh7751r_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(new_sh7751r_bus): Function renamed ...
+**  	(sh7751r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+**
+**  	* src/cmd/cable.c (cmd_cable_run): Replaced bus->free() call with bus_free().
+**  	* src/jtag.c (main): Ditto.
+**
+**  	* src/cmd/cmd.c (cmds): Added cmd_initbus.
+**  	* src/cmd/detect.c (cmd_detect_run): Removed explicit bus driver detection.
+**  	* src/cmd/initbus.c: New file.
+**  	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added initbus.c.
+**
+**  	* data/broadcom/bcm1250/bcm1250: Added 'initbus' command call.
+**  	* data/hitachi/sh7727/sh7727: Ditto.
+**  	* data/intel/ixp425/ixp425: Ditto.
+**  	* data/intel/pxa250/pxa250: Ditto.
+**  	* data/intel/pxa250/pxa250c0: Ditto.
+**  	* data/intel/sa1110/sa1110: Ditto.
+**  	* data/samsung/s3c4510b/s3c4510b: Ditto.
+**
 **  Revision 1.3  2003/08/28 07:26:02  telka
 **  2003-08-28  Marcel Telka  <marcel@telka.sk>
 **

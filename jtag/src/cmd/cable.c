@@ -55,7 +55,7 @@ cmd_cable_run( char *params[] )
 	}
 
 	if (bus) {
-		bus->free( bus );
+		bus_free( bus );
 		bus = NULL;
 	}
 	chain_disconnect( chain );

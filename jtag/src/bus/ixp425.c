@@ -33,6 +33,8 @@
 #include "bus.h"
 #include "chain.h"
 #include "bssignal.h"
+#include "jtag.h"
+#include "buses.h"
 
 typedef struct {
 	chain_t *chain;
@@ -113,7 +115,7 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
-ixp425_bus_printinfo( void )
+ixp425_bus_printinfo( bus_t *bus )
 {
 	int i;
 
@@ -229,9 +231,13 @@ ixp425_bus_free( bus_t *bus )
 	free( bus );
 }
 
+static bus_t *ixp425_bus_new( void );
 
-static const bus_t ixp425_bus = {
-	NULL,
+const bus_driver_t ixp425_bus = {
+	"ixp425",
+	N_("Intel IXP425 compatibile bus driver via BSR"),
+	ixp425_bus_new,
+	ixp425_bus_free,
 	ixp425_bus_printinfo,
 	ixp425_bus_prepare,
 	ixp425_bus_area,
@@ -239,27 +245,25 @@ static const bus_t ixp425_bus = {
 	ixp425_bus_read_next,
 	ixp425_bus_read_end,
 	ixp425_bus_read,
-	ixp425_bus_write,
-	ixp425_bus_free
+	ixp425_bus_write
 };
 
-bus_t *
-new_ixp425_bus( chain_t *chain, int pn )
+static bus_t *
+ixp425_bus_new( void )
 {
 	bus_t *bus;
 	char buff[15];
 	int i;
 	int failed = 0;
 
-	if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
 	bus = malloc( sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
-	memcpy( bus, &ixp425_bus, sizeof (bus_t) );
-
+	bus->driver = &ixp425_bus;
 	bus->params = malloc( sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
@@ -267,7 +271,7 @@ new_ixp425_bus( chain_t *chain, int pn )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[pn];
+	PART = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 8; i++) {
 		sprintf( buff, "EX_CS[%d]", i );

@@ -40,6 +40,7 @@ extern cmd_t cmd_detect;
 extern cmd_t cmd_signal;
 extern cmd_t cmd_bit;
 extern cmd_t cmd_register;
+extern const cmd_t cmd_initbus;
 extern cmd_t cmd_print;
 extern cmd_t cmd_part;
 extern cmd_t cmd_bus;
@@ -68,6 +69,7 @@ const cmd_t *cmds[] = {
 	&cmd_signal,
 	&cmd_bit,
 	&cmd_register,
+	&cmd_initbus,
 	&cmd_print,
 	&cmd_part,
 	&cmd_bus,

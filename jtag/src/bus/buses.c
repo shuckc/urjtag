@@ -27,6 +27,19 @@
 #include <stdlib.h>
 
 #include "bus.h"
+#include "buses.h"
+
+const bus_driver_t *bus_drivers[] = {
+	&bcm1250_bus,
+	&ixp425_bus,
+	&pxa2x0_bus,
+	&s3c4510_bus,
+	&sa1110_bus,
+	&sh7727_bus,
+	&sh7750r_bus,
+	&sh7751r_bus,
+	NULL			/* last must be NULL */
+};
 
 bus_t *bus = NULL;
 buses_t buses = {0, NULL};

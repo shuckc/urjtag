@@ -453,3 +453,5 @@ bit   3 I ? nUADTR0
 bit   2 O ? UATXD0
 bit   1 O ? nUADSR0
 bit   0 I ? UARXD1
+
+initbus s3c4510x

@@ -1,8 +1,7 @@
 /*
  * $Id$
  *
- * Bus driver interface
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,28 +18,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2003.
  *
  */
 
-#ifndef BUS_H
-#define	BUS_H
+#ifndef BUSES_H
+#define	BUSES_H
 
-#include <stdint.h>
-#include "chain.h"
+extern const bus_driver_t bcm1250_bus;
+extern const bus_driver_t ixp425_bus;
+extern const bus_driver_t pxa2x0_bus;
+extern const bus_driver_t s3c4510_bus;
+extern const bus_driver_t sa1110_bus;
+extern const bus_driver_t sh7727_bus;
+extern const bus_driver_t sh7750r_bus;
+extern const bus_driver_t sh7751r_bus;
 
-#include <brux/bus.h>
-
-typedef struct {
-	int len;
-	bus_t **buses;
-} buses_t;
-
-extern buses_t buses;
-extern const bus_driver_t *bus_drivers[];
-
-void buses_free( void );
-void buses_add( bus_t *abus );
-void buses_delete( bus_t *abus );
-
-#endif /* BUS_H */
+#endif /* BUSES_H */

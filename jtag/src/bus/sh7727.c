@@ -33,6 +33,8 @@
 #include "bus.h"
 #include "chain.h"
 #include "bssignal.h"
+#include "jtag.h"
+#include "buses.h"
 
 typedef struct {
 	chain_t *chain;
@@ -97,7 +99,7 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
-sh7727_bus_printinfo( void )
+sh7727_bus_printinfo( bus_t *bus )
 {
 	int i;
 
@@ -275,8 +277,13 @@ sh7727_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static const bus_t sh7727_bus = {
-	NULL,
+static bus_t *sh7727_bus_new( void );
+
+const bus_driver_t sh7727_bus = {
+	"sh7727",
+	N_("Hitachi SH7727 compatibile bus driver via BSR"),
+	sh7727_bus_new,
+	sh7727_bus_free,
 	sh7727_bus_printinfo,
 	sh7727_bus_prepare,
 	sh7727_bus_area,
@@ -284,27 +291,25 @@ static const bus_t sh7727_bus = {
 	sh7727_bus_read_next,
 	sh7727_bus_read_end,
 	sh7727_bus_read,
-	sh7727_bus_write,
-	sh7727_bus_free
+	sh7727_bus_write
 };
 
-bus_t *
-new_sh7727_bus( chain_t *chain, int pn )
+static bus_t *
+sh7727_bus_new( void )
 {
 	bus_t *bus;
 	char buff[10];
 	int i;
 	int failed = 0;
 
-	if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
 	bus = malloc( sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
-	memcpy( bus, &sh7727_bus, sizeof (bus_t) );
-
+	bus->driver = &sh7727_bus;
 	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
@@ -312,7 +317,7 @@ new_sh7727_bus( chain_t *chain, int pn )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[pn];
+	PART = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 26; i++) {
 		sprintf( buff, "A%d", i );
