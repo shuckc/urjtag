@@ -25,6 +25,9 @@
 #include <stdlib.h>
 
 #include <jtag/part.h>
+#include <jtag/tap.h>
+
+/* part */
 
 part *
 part_alloc( void )
@@ -36,8 +39,11 @@ part_alloc( void )
 	p->signals = NULL;
 	p->instruction_length = 0;
 	p->instructions = NULL;
+	p->active_instruction = NULL;
 	p->boundary_length = 0;
 	p->bsbits = NULL;
+	p->bsr = NULL;
+	p->prev_bsr = NULL;
 
 	return p;
 }
@@ -69,8 +75,94 @@ part_free( part *p )
 		bsbit_free( p->bsbits[i] );
 	free( p->bsbits );
 
+	/* bsr */
+	register_free( p->bsr );
+	register_free( p->prev_bsr );
+
 	free( p );
 }
+
+instruction *
+part_find_instruction( part *p, const char *iname )
+{
+	instruction *i;
+
+	if (!p || !iname)
+		return NULL;
+
+	i = p->instructions;
+	while (i) {
+		if (strcmp( iname, i->name ) == 0)
+			break;
+		i = i->next;
+	}
+
+	return i;
+}
+
+void
+part_set_signal( part *p, const char *pname, int out, int val )
+{
+	/* search signal */
+	signal *s = p->signals;
+	while (s) {
+		if (strcmp( pname, s->name ) == 0)
+			break;
+		s = s->next;
+	}
+
+	if (!s) {
+		printf( "signal %s not found\n", pname );
+		return;
+	}
+
+	/*setup signal */
+	if (out) {
+		int control;
+		if (!s->output) {
+			printf( "signal %s cannot be set as output\n", pname );
+			return;
+		}
+		p->bsr->data[s->output->bit] = val & 1;
+
+		control = p->bsbits[s->output->bit]->control;
+		if (control >= 0)
+			p->bsr->data[control] = p->bsbits[s->output->bit]->control_value ^ 1;
+	} else {
+		if (!s->input) {
+			printf( "signal %s cannot be set as input\n", pname );
+			return;
+		}
+		if (s->output)
+			p->bsr->data[s->output->control] = p->bsbits[s->output->control]->control_value;
+	}
+}
+
+int
+part_get_signal( part *p, const char *pname )
+{
+	/* search signal */
+	signal *s = p->signals;
+	while (s) {
+		if (strcmp( pname, s->name ) == 0)
+			break;
+		s = s->next;
+	}
+
+	if (!s) {
+		printf( "signal %s not found\n", pname );
+		return;
+	}
+
+	if (!s->input) {
+		printf( "signal %s is not input signal\n", pname );
+		return;
+	}
+
+	return p->prev_bsr->data[s->input->bit];
+}
+
+/* parts */
 
 parts *
 parts_alloc( void )
@@ -112,4 +204,22 @@ parts_add_part( parts *ps, part *p )
 	ps->parts[ps->len++] = p;
 
 	return 1;
+}
+
+void
+parts_set_instruction( parts *ps, const char *iname )
+{
+	int j;
+
+	tap_capture_ir();
+
+	for (j = 0; j < ps->len; j++) {
+		instruction *i = part_find_instruction( ps->parts[j], iname );
+		if (!i) {
+			printf( "Instruction '%s' not found\n", iname );
+			return;
+		}
+		ps->parts[j]->active_instruction = i;
+		tap_shift_register( i->value, NULL, (j + 1) == ps->len );
+	}
 }

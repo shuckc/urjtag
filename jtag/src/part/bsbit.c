@@ -51,6 +51,13 @@ bsbit_alloc( int bit, const char *name, int type, signal* signals, int safe )
 	while (s) {
 		if (strcmp( s->name, name ) == 0) {
 			b->signal = s;
+			switch (type) {
+				case BSBIT_INPUT:
+					s->input = b;
+					break;
+				case BSBIT_OUTPUT:
+					s->output = b;
+			}
 			break;
 		}
 		s = s->next;

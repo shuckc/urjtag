@@ -37,13 +37,19 @@ struct part {
 	signal *signals;
 	int instruction_length;
 	instruction *instructions;
+	instruction *active_instruction;
 	int boundary_length;
 	bsbit **bsbits;
+	tap_register *bsr;
+	tap_register *prev_bsr;
 };
 
 part *part_alloc( void );
 void part_free( part *p );
 part *read_part( FILE *f );
+instruction *part_find_instruction( part *p, const char *iname );
+void part_set_signal( part *p, const char *pname, int out, int val );
+int part_get_signal( part *p, const char *pname );
 
 typedef struct parts parts;
 
@@ -55,5 +61,6 @@ struct parts {
 parts *parts_alloc( void );
 void parts_free( parts *ps );
 int parts_add_part( parts *ps, part *p );
+void parts_set_instruction( parts *ps, const char *iname );
 
 #endif /* JTAG_PART_H */

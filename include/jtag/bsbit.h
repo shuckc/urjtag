@@ -25,6 +25,8 @@
 #ifndef JTAG_BSBIT_H
 #define	JTAG_BSBIT_H
 
+typedef struct bsbit bsbit;
+
 #include <jtag/signal.h>
 
 #define	BSBIT_INPUT	1
@@ -33,8 +35,6 @@
 #define	BSBIT_INTERNAL	4
 
 #define	BSBIT_STATE_Z	(-1)
-
-typedef struct bsbit bsbit;
 
 struct bsbit {
 	int bit;

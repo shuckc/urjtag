@@ -159,6 +159,20 @@ read_part( FILE *f )
 			for (i = 0; i < part->boundary_length; i++)
 				part->bsbits[i] = NULL;
 
+			part->bsr = register_alloc( part->boundary_length );
+			part->prev_bsr = register_alloc( part->boundary_length );
+			if (!part->bsr || !part->prev_bsr) {
+				printf( "(%d) out of memory\n", line );
+				continue;
+			}
+
+			t = get_token( NULL );
+			if (t) {
+				printf( "(%d) parse error\n", line );
+				continue;
+			}
+
+
 			continue;
 		}
 
@@ -182,7 +196,7 @@ read_part( FILE *f )
 
 			/* get bit type */
 			t = get_token( NULL );
-			if (!t || (sizeof( *t ) != 1)) {
+			if (!t || (strlen( t ) != 1)) {
 				printf( "(%d) parse error\n", line );
 				continue;
 			}
@@ -206,11 +220,12 @@ read_part( FILE *f )
 
 			/* get safe value */
 			t = get_token( NULL );
-			if (!t || (sizeof( *t ) != 1)) {
+			if (!t || (strlen( t ) != 1)) {
 				printf( "(%d) parse error\n", line );
 				continue;
 			}
 			safe = (*t == '1') ? 1 : 0;
+			part->bsr->data[bit] = safe;
 
 			/* get bit name */
 			t = get_token( NULL );
@@ -224,6 +239,46 @@ read_part( FILE *f )
 			if (!part->bsbits[bit]) {
 				printf( "(%d) out of memory\n", line );
 				continue;
+			}
+
+			/* we have control bit? */
+			t = get_token( NULL );
+			if (t) {
+				int control;
+
+				control = strtol( t, &t, 10 );
+				if ((t && *t) || (control < 0)) {
+					printf( "(%d) invalid control bit number\n", line );
+					continue;
+				}
+				part->bsbits[bit]->control = control;
+
+				/* control value */
+				t = get_token( NULL );
+				if (!t || (strlen( t ) != 1)) {
+					printf( "(%d) parse error\n", line );
+					continue;
+				}
+				part->bsbits[bit]->control_value = (*t == '1') ? 1 : 0;
+
+				/* control state */
+				t = get_token( NULL );
+				if (!t || (strlen( t ) != 1)) {
+					printf( "(%d) parse error\n", line );
+					continue;
+				}
+				if (*t != 'Z') {
+					printf( "(%d) parse error\n", line );
+					continue;
+				}
+				part->bsbits[bit]->control_state = BSBIT_STATE_Z;
+
+				t = get_token( NULL );
+				if (t) {
+					printf( "(%d) parse error\n", line );
+					continue;
+				}
+
 			}
 
 			continue;

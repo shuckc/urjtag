@@ -40,6 +40,8 @@ signal_alloc( const char *name )
 		return NULL;
 	}
 	s->next = NULL;
+	s->input = NULL;
+	s->output = NULL;
 
 	return s;
 }

@@ -27,9 +27,13 @@
 
 typedef struct signal signal;
 
+#include <jtag/bsbit.h>
+
 struct signal {
 	char *name;
 	signal *next;
+	bsbit *input;
+	bsbit *output;
 };
 
 signal *signal_alloc( const char *name );
