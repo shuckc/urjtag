@@ -1,3 +1,7 @@
+2003-09-04  Marcel Telka  <marcel@telka.sk>
+
+	* sk.po: Updated Slovak translation for 0.5 release reformatted by TP-Robot.
+
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
 	* Makevars (MSGID_BUGS_ADDRESS): Added e-mail address.

@@ -1,22 +1,19 @@
 # Slovak translations for jtag package
-# Slovenské preklady pre balík jtag.
 # Copyright (C) 2003 ETC s.r.o.
 # This file is distributed under the same license as the jtag package.
 # Marcel Telka <marcel@telka.sk>, 2003.
 #
-# $Id$
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5\n"
-"Report-Msgid-Bugs-To: marcel@telka.sk\n"
 "POT-Creation-Date: 2003-08-19 15:30+0200\n"
-"PO-Revision-Date: 2003-08-19 11:48+0200\n"
+"PO-Revision-Date: 2003-09-04 12:49+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: marcel@telka.sk\n"
 
 #: libbrux/cmd/cmd.c:44
 #, c-format
@@ -206,20 +203,13 @@ msgstr "neznáma!!!"
 
 #: libbrux/flash/detectflash.c:99
 #, c-format
-msgid ""
-"\tPrimary Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"
-msgstr ""
-"\tID kód sady príkazov a riadiaceho rozhrania primárneho algoritmu: 0x%04X (%"
-"s)\n"
+msgid "\tPrimary Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"
+msgstr "\tID kód sady príkazov a riadiaceho rozhrania primárneho algoritmu: 0x%04X (%s)\n"
 
 #: libbrux/flash/detectflash.c:129
 #, c-format
-msgid ""
-"\tAlternate Algorithm Command Set and Control Interface ID Code: 0x%04X (%"
-"s)\n"
-msgstr ""
-"\tID kód sady príkazov a riadiaceho rozhrania alternatívneho algoritmu: 0x%"
-"04X (%s)\n"
+msgid "\tAlternate Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"
+msgstr "\tID kód sady príkazov a riadiaceho rozhrania alternatívneho algoritmu: 0x%04X (%s)\n"
 
 #: libbrux/flash/detectflash.c:132
 msgid "Query system interface information:\n"
@@ -228,29 +218,22 @@ msgstr "Informácie systémového rozhrania:\n"
 #: libbrux/flash/detectflash.c:133
 #, c-format
 msgid "\tVcc Logic Supply Minimum Write/Erase or Write voltage: %d mV\n"
-msgstr ""
-"\tVcc minimálne napäte zdroja logiky pre zápis/vymazávanie alebo zápis: %d "
-"mV\n"
+msgstr "\tVcc minimálne napäte zdroja logiky pre zápis/vymazávanie alebo zápis: %d mV\n"
 
 #: libbrux/flash/detectflash.c:134
 #, c-format
 msgid "\tVcc Logic Supply Maximum Write/Erase or Write voltage: %d mV\n"
-msgstr ""
-"\tVcc maximálne napätie zdroja logiky pre zápis/vymazávanie alebo zápis: %d "
-"mV\n"
+msgstr "\tVcc maximálne napätie zdroja logiky pre zápis/vymazávanie alebo zápis: %d mV\n"
 
 #: libbrux/flash/detectflash.c:135
 #, c-format
 msgid "\tVpp [Programming] Supply Minimum Write/Erase voltage: %d mV\n"
-msgstr ""
-"\tVpp [programovanie] minimálne napátie zdroja pre zápis/vymazanie: %d mV\n"
+msgstr "\tVpp [programovanie] minimálne napátie zdroja pre zápis/vymazanie: %d mV\n"
 
 #: libbrux/flash/detectflash.c:136
 #, c-format
 msgid "\tVpp [Programming] Supply Maximum Write/Erase voltage: %d mV\n"
-msgstr ""
-"\tVpp [programovanie] maximálne napätie zdroja pre zápis/programovanie: %d "
-"mV\n"
+msgstr "\tVpp [programovanie] maximálne napätie zdroja pre zápis/programovanie: %d mV\n"
 
 #: libbrux/flash/detectflash.c:137
 #, c-format
@@ -260,9 +243,7 @@ msgstr "\tTypický časový limit pre programovanie jedného bajtu/slova: %d µs
 #: libbrux/flash/detectflash.c:138
 #, c-format
 msgid "\tTypical timeout for maximum-size multi-byte program: %d us\n"
-msgstr ""
-"\tTypický časový limit pre programovanie maximálnej viacbajtovej sekvencie: %"
-"d µs\n"
+msgstr "\tTypický časový limit pre programovanie maximálnej viacbajtovej sekvencie: %d µs\n"
 
 #: libbrux/flash/detectflash.c:139
 #, c-format
@@ -282,8 +263,7 @@ msgstr "\tMaximálny časový limit pre programovanie bajtu/slova: %d µs\n"
 #: libbrux/flash/detectflash.c:142
 #, c-format
 msgid "\tMaximum timeout for multi-byte program: %d us\n"
-msgstr ""
-"\tMaximálny časový limit pre programovanie viacbajtovej sekvencie: %d µs\n"
+msgstr "\tMaximálny časový limit pre programovanie viacbajtovej sekvencie: %d µs\n"
 
 #: libbrux/flash/detectflash.c:143
 #, c-format
@@ -412,9 +392,7 @@ msgstr "podporované: 28Fxxxx, 1 x 8 bitov"
 #: src/bus/bcm1250.c:102
 #, c-format
 msgid "Broadcom BCM1250 compatibile bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
-"d)\n"
+msgstr "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
 #: src/bus/bcm1250.c:307 src/bus/bcm1250.c:316 src/bus/bcm1250.c:323
 #: src/bus/bcm1250.c:328 src/bus/bcm1250.c:333 src/bus/ixp425.c:271
@@ -446,33 +424,27 @@ msgstr "Nedostatok pamäte\n"
 #: src/bus/ixp425.c:123
 #, c-format
 msgid "Intel IXP425 compatibile bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Intel IXP425 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
+msgstr "Intel IXP425 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
 #: src/bus/pxa2x0.c:108
 #, c-format
 msgid "Intel PXA2x0 compatibile bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
+msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
 #: src/bus/s3c4510x.c:126
 #, c-format
 msgid "Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Samsung S3C4510B kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
-"d)\n"
+msgstr "Samsung S3C4510B kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
 #: src/bus/sa1110.c:98
 #, c-format
 msgid "Intel SA-1110 compatibile bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
+msgstr "Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
 #: src/bus/sh7727.c:99
 #, c-format
 msgid "Hitachi SH7727 compatibile bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Hitachi SH7727 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
+msgstr "Hitachi SH7727 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
 #: src/bus/sh7727.c:244
 msgid "Error: Invalid bus width (MD3 = MD4 = 0)!\n"
@@ -481,16 +453,12 @@ msgstr "Chyba: Neplatná šírka zbernice (MD3 = MD4 = 0)!\n"
 #: src/bus/sh7750r.c:99
 #, c-format
 msgid "Hitachi SH7750R compatibile bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Hitachi SH7750R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
-"d)\n"
+msgstr "Hitachi SH7750R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
 #: src/bus/sh7751r.c:97
 #, c-format
 msgid "Hitachi SH7751R compatibile bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Hitachi SH7751R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
-"d)\n"
+msgstr "Hitachi SH7751R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
 #: src/cmd/bit.c:52 src/cmd/bus.c:46 src/cmd/dr.c:48 src/cmd/get.c:52
 #: src/cmd/instruction.c:44 src/cmd/part.c:46 src/cmd/print.c:50
@@ -624,8 +592,7 @@ msgstr "nastaviť JTAG kábel"
 #: src/cmd/cmd.c:97
 #, c-format
 msgid "Error: Cable not configured. Please use '%s' command first!\n"
-msgstr ""
-"Chyba: Kábel nie je nakonfigurovaný. Prosím najskôr použie príkaz '%s'!\n"
+msgstr "Chyba: Kábel nie je nakonfigurovaný. Prosím najskôr použie príkaz '%s'!\n"
 
 #: src/cmd/detect.c:85
 #, c-format
@@ -922,8 +889,7 @@ msgstr ""
 
 #: src/cmd/instruction.c:132
 msgid "change active instruction for a part or declare new instruction"
-msgstr ""
-"zmeniť aktívnu inštrukciu pre súčiastku alebo deklarovať novú inštrukciu"
+msgstr "zmeniť aktívnu inštrukciu pre súčiastku alebo deklarovať novú inštrukciu"
 
 #: src/cmd/part.c:54
 #, c-format
@@ -1082,8 +1048,7 @@ msgstr ""
 "DĹŽKA      dĺžka kopírovanej pamäte\n"
 "SÚBOR      názov výstupného súboru\n"
 "\n"
-"ADRESA a DĹŽKA môžu byť v desiatkovom alebo šestnástkovom (začína s 0x) "
-"tvare.\n"
+"ADRESA a DĹŽKA môžu byť v desiatkovom alebo šestnástkovom (začína s 0x) tvare.\n"
 
 #: src/cmd/readmem.c:80
 msgid "read content of the memory and write it to file"
@@ -1146,8 +1111,7 @@ msgstr ""
 "\n"
 "SIGNÁL        názov signálua (zo súboru JTAG deklarácií)\n"
 "SMER          požadovaný smer signálu; možné hodnoty sú: 'in' alebo 'out'\n"
-"DÁTA          želaná hodnota výstupného signálu ('0' alebo '1'); použité "
-"len\n"
+"DÁTA          želaná hodnota výstupného signálu ('0' alebo '1'); použité len\n"
 "                ak SMER je 'out'\n"
 
 #: src/cmd/set.c:101
@@ -1294,8 +1258,7 @@ msgstr "neznáma flash pamäť - id dodávateľa: %d (0x%04x)\n"
 
 #: src/flash.c:93
 msgid "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n"
-msgstr ""
-"Poznámka: Podporovaná konfigurácia je len 2 x 16 bitov alebo 1 x 16 bitov\n"
+msgstr "Poznámka: Podporovaná konfigurácia je len 2 x 16 bitov alebo 1 x 16 bitov\n"
 
 #: src/flash.c:104
 msgid "Flash not supported!\n"
@@ -1412,8 +1375,7 @@ msgid ""
 "%s\n"
 "Copyright (C) 2002, 2003 ETC s.r.o.\n"
 "%s is free software, covered by the GNU General Public License, and you are\n"
-"welcome to change it and/or distribute copies of it under certain "
-"conditions.\n"
+"welcome to change it and/or distribute copies of it under certain conditions.\n"
 "There is absolutely no warranty for %s.\n"
 "\n"
 msgstr ""
@@ -1505,10 +1467,8 @@ msgid "Arcom JTAG Cable"
 msgstr "JTAG kábel Arcom"
 
 #: src/tap/cable/byteblaster.c:97
-msgid ""
-"Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable"
-msgstr ""
-"JTAG kábel Altera ByteBlaster/ByteBlaster II/ByteBlasterMV pre paralelný port"
+msgid "Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable"
+msgstr "JTAG kábel Altera ByteBlaster/ByteBlaster II/ByteBlasterMV pre paralelný port"
 
 #: src/tap/cable/dlc5.c:97
 msgid "Xilinx DLC5 JTAG Parallel Cable III"
