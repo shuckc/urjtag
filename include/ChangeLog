@@ -1,5 +1,9 @@
 2003-10-11  Marcel Telka  <marcel@telka.sk>
 
+	Version 0.3.2 released.
+
+2003-10-11  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac (AC_INIT): Changed version number to 0.3.2.
 
 2003-09-05  Marcel Telka  <marcel@telka.sk>
