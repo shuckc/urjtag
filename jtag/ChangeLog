@@ -1,3 +1,7 @@
+2002-12-16  Marcel Telka  <marcel@telka.sk>
+
+	* data/Makefile.am: Renamed intel/pxa250/pxa260 to intel/pxa250/pxa250c0.
+
 2002-12-11  Marcel Telka  <marcel@telka.sk>
 
 	* data/intel/pxa250/STEPPINGS: Renamed file pxa260 to pxa250c0.
