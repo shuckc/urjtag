@@ -1,3 +1,7 @@
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
+	Version 0.3 released.
+
 2003-08-12  Marcel Telka  <marcel@telka.sk>
 
 	* win32/stdint.h: New file.

@@ -1,6 +1,6 @@
 $Id$
 
-include-0.3:
+include-0.3 (2003-08-19):
 
 	* Changes in PXA2x0 support:
 		- added support for Intel PXA255 processor
