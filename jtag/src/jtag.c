@@ -65,6 +65,8 @@ main( void )
 			"There is absolutely no warranty for %s.\n\n", PACKAGE_STRING, PACKAGE, PACKAGE
 	);
 
+	printf( "Type \"help\" for help or \"quit\" for exit.\n\n" );
+
 	if (!tap_init()) {
 		printf( "TAP initialization failed! Exiting.\n" );
 		return 1;
@@ -91,7 +93,25 @@ main( void )
 			break;
 
 		if (strcmp( t, "help" ) == 0) {
-			printf( "help: Please read sources.\n" );
+			t = get_token( NULL );
+			if (!t) {
+				printf( "Command list:\n\n" );
+				printf( "quit\t\texit from jtag\n" );
+				printf( "help\t\tdisplay this help\n" );
+				printf( "detect\t\tdetect parts on the JTAG chain\n" );
+				printf( "print\t\tdisplay JTAG chain list/status\n" );
+				printf( "instruction\tchange active instruction for a part\n" );
+				printf( "shift\t\tshift data/instruction register through JTAG chain\n" );
+				printf( "dr\t\tdisplay active data register for a part\n" );
+				printf( "detectflash\tdetect parameters of flash chip attached to a part\n" );
+				printf( "readmem\t\tread content of the memory and write it to file\n" );
+				printf( "flashmem\tburn flash memory with data from a file\n" );
+				printf( "set\t\tTODO\n" );
+				printf( "\nType \"help <command>\" for details about particular command.\n" );
+				continue;
+			} else {
+				printf( "Not implemented. Sorry.\n" );
+			}
 			continue;
 		}
 
@@ -118,6 +138,11 @@ main( void )
 			FILE *f;
 			int msbin = 0;
 			uint32_t addr = 0;
+
+			if (!ps) {
+				printf( "Run \"detect\" first.\n" );
+				continue;
+			}
 
 			t = get_token( NULL );
 			if (!t) {
@@ -161,6 +186,11 @@ main( void )
 			FILE *f;
 			uint32_t addr = 0;
 			uint32_t len = 0;
+
+			if (!ps) {
+				printf( "Run \"detect\" first.\n" );
+				continue;
+			}
 
 			t = get_token( NULL );
 			if (!t) {
@@ -207,6 +237,11 @@ main( void )
 		}
 
 		if (strcmp( t, "detectflash" ) == 0) {
+			if (!ps) {
+				printf( "Run \"detect\" first.\n" );
+				continue;
+			}
+
 			detectflash( ps );
 			continue;
 		}
@@ -218,6 +253,11 @@ main( void )
 
 		if (strcmp( t, "instruction" ) == 0) {
 			int n;
+
+			if (!ps) {
+				printf( "Run \"detect\" first.\n" );
+				continue;
+			}
 
 			t = get_token( NULL );
 			if (!t) {
@@ -266,6 +306,11 @@ main( void )
 
 		if (strcmp( t, "dr" ) == 0) {
 			int n;
+
+			if (!ps) {
+				printf( "Run \"detect\" first.\n" );
+				continue;
+			}
 
 			t = get_token( NULL );
 			if (!t) {
