@@ -23,6 +23,7 @@ src/cmd/detect.c
 src/cmd/discovery.c
 src/cmd/dr.c
 src/cmd/endian.c
+src/cmd/eraseflash.c
 src/cmd/flashmem.c
 src/cmd/frequency.c
 src/cmd/get.c

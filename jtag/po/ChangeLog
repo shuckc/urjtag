@@ -1,3 +1,9 @@
+2003-08-18  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/cmd/eraseflash.c.
+	* sk.po: Added Slovak translations.
+	* LINGUAS: Added sk.
+
 2003-08-14  Marcel Telka  <marcel@telka.sk>
 
 	* POTFILES.in: Added new source files.
