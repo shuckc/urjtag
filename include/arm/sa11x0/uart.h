@@ -137,12 +137,6 @@ typedef volatile struct UART_registers {
 #define	UTCR4_LPM	bit(1)
 #define	UTCR4_HSE	bit(0)
 
-/* UTDR bits */
-
-#define	UTDR_ROR	bit(10)
-#define	UTDR_FRE	bit(9)
-#define	UTDR_PRE	bit(8)
-
 /* UTSR0 bits */
 
 #define	UTSR0_EIF	bit(5)
