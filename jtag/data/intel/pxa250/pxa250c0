@@ -1,7 +1,7 @@
 #
 # $Id$
 #
-# JTAG declarations for PXA250C0 (aka PXA260B0)
+# JTAG declarations for PXA250C0
 # Copyright (C) 2002 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 # [3] Intel Corporation, "BSDL Description for Top-Level Entity pxa26x_jtag_B0 Revision: C0 v1_6",
 #     http://developer.intel.com/design/pca/applicationsprocessors/bsdl/PXA26x_bsdl_B0_v1_6.bsdl
 # [4] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
-#     Specification Update", June 2002, Order Number: 278534-007
+#     Specification Update", January 2003, Order Number: 278534-011
 # [5] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
 #     October 2002, Order Number: 278638-001
 #

@@ -30,7 +30,7 @@
 # [3] Intel Corporation, "BSDL description for top level entity pxa250_jtag", 2002-03-06,
 #     http://developer.intel.com/design/pca/applicationsprocessors/bsdl/PXA250_bsdl_bga.txt
 # [4] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
-#     Specification Update", June 2002, Order Number: 278534-007
+#     Specification Update", January 2003, Order Number: 278534-011
 #
 
 # see Table 1-4 in [1] and D29. in [4]
