@@ -1,3 +1,7 @@
+2003-06-10  Marcel Telka  <marcel@telka.sk>
+
+	* brux/bus.h (bus_t): Changed return type from int to unsigned int for width().
+
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
 	* brux/cmd.h (cmds): Added external variable declaration.

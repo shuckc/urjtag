@@ -42,7 +42,7 @@ typedef struct bus bus_t;
 struct bus {
 	void *params;
 	void (*prepare)( bus_t *bus );
-	int (*width)( bus_t *bus, uint32_t adr );
+	unsigned int (*width)( bus_t *bus, uint32_t adr );
 	void (*read_start)( bus_t *bus, uint32_t adr );
 	uint32_t (*read_next)( bus_t *bus, uint32_t adr );
 	uint32_t (*read_end)( bus_t *bus );
