@@ -191,7 +191,7 @@ part_set_signal( part *p, const char *pname, int out, int val )
 			return;
 		}
 		if (s->output)
-			bsr->in->data[s->output->control] = p->bsbits[s->output->control]->control_value;
+			bsr->in->data[s->output->control] = p->bsbits[s->output->bit]->control_value;
 	}
 }
 
