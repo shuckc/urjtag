@@ -361,30 +361,28 @@ void
 program_flash( part *p, unsigned int a, unsigned int d )
 {
 	
-	access_rom( p, AB_SETUP, a, 0x00400040 );
-	access_rom( p, AB_WRITE, a, 0x00400040 );
-	access_rom( p, AB_HOLD, a, 0x00400040 );
+	access_bus( p, AB_SETUP, a, 0x00400040 );
+	access_bus( p, AB_WRITE, a, 0x00400040 );
+	access_bus( p, AB_HOLD, a, 0x00400040 );
 
-	access_rom( p, AB_SETUP, a, d );
-	access_rom( p, AB_WRITE, a, d );
-	access_rom( p, AB_HOLD, a, d );
+	access_bus( p, AB_SETUP, a, d );
+	access_bus( p, AB_WRITE, a, d );
+	access_bus( p, AB_HOLD, a, d );
 
-	access_rom( p, AB_READ, 0, 0 );
-	printf( "pf: %08X\n", access_rom( p, AB_READ, 0, 0 ) );
-
-	sleep( 1 );
+	access_bus( p, AB_READ, 0, 0 );
+	printf( "pf: %08X\n", access_bus( p, AB_READ, 0, 0 ) );
 }
 
 void
 unlock( part *p, unsigned int a )
 {
-	access_rom( p, AB_SETUP, a, 0x00600060 );
-	access_rom( p, AB_WRITE, a, 0x00600060 );
-	access_rom( p, AB_HOLD, a, 0x00600060 );
+	access_bus( p, AB_SETUP, a, 0x00600060 );
+	access_bus( p, AB_WRITE, a, 0x00600060 );
+	access_bus( p, AB_HOLD, a, 0x00600060 );
 
-	access_rom( p, AB_SETUP, a, 0x00D000D0 );
-	access_rom( p, AB_WRITE, a, 0x00D000D0 );
-	access_rom( p, AB_HOLD, a, 0x00D000D0 );
+	access_bus( p, AB_SETUP, a, 0x00D000D0 );
+	access_bus( p, AB_WRITE, a, 0x00D000D0 );
+	access_bus( p, AB_HOLD, a, 0x00D000D0 );
 }
 
 void
@@ -392,20 +390,20 @@ erase( part *p, unsigned int a )
 {
 	printf( "erase\n" );
 
-	access_rom( p, AB_SETUP, a, 0x00200020 );
-	access_rom( p, AB_WRITE, a, 0x00200020 );
-	access_rom( p, AB_HOLD, a, 0x00200020 );
+	access_bus( p, AB_SETUP, a, 0x00200020 );
+	access_bus( p, AB_WRITE, a, 0x00200020 );
+	access_bus( p, AB_HOLD, a, 0x00200020 );
 
-	access_rom( p, AB_SETUP, a, 0x00D000D0 );
-	access_rom( p, AB_WRITE, a, 0x00D000D0 );
-	access_rom( p, AB_HOLD, a, 0x00D000D0 );
+	access_bus( p, AB_SETUP, a, 0x00D000D0 );
+	access_bus( p, AB_WRITE, a, 0x00D000D0 );
+	access_bus( p, AB_HOLD, a, 0x00D000D0 );
 
-	access_rom( p, AB_READ, 0, 0 );
-	printf( "pf: %08X\n", access_rom( p, AB_READ, 0, 0 ) );
+	access_bus( p, AB_READ, 0, 0 );
+	printf( "pf: %08X\n", access_bus( p, AB_READ, 0, 0 ) );
 	sleep( 4 );
-	access_rom( p, AB_READ, 0, 0 );
-	printf( "pf: %08X\n", access_rom( p, AB_READ, 0, 0 ) );
-	printf( "pf: %08X\n", access_rom( p, AB_READ, 0, 0 ) );
+	access_bus( p, AB_READ, 0, 0 );
+	printf( "pf: %08X\n", access_bus( p, AB_READ, 0, 0 ) );
+	printf( "pf: %08X\n", access_bus( p, AB_READ, 0, 0 ) );
 }
 
 int
@@ -416,6 +414,7 @@ main( void )
 
 	unsigned int max_erase_time;
 	unsigned int dsize;
+	unsigned int ebri;
 
 	tap_init();
 
@@ -441,13 +440,13 @@ printf( "%s\n", register_get_string( p->prev_bsr ) );
 
 	parts_set_instruction( ps, "EXTEST" );
 
-	access_rom( p, AB_SETUP, 0x00000000, 0x00500050 );
-	access_rom( p, AB_WRITE, 0x00000000, 0x00500050 );
-	access_rom( p, AB_HOLD, 0x00000000, 0x00500050 );
+	access_bus( p, AB_SETUP, 0x00000000, 0x00500050 );
+	access_bus( p, AB_WRITE, 0x00000000, 0x00500050 );
+	access_bus( p, AB_HOLD, 0x00000000, 0x00500050 );
 
-	access_rom( p, AB_SETUP, 0x00000000, 0x00980098 );
-	access_rom( p, AB_WRITE, 0x00000000, 0x00980098 );
-	access_rom( p, AB_HOLD, 0x00000000, 0x00980098 );
+	access_bus( p, AB_SETUP, 0x00000000, 0x00980098 );
+	access_bus( p, AB_WRITE, 0x00000000, 0x00980098 );
+	access_bus( p, AB_HOLD, 0x00000000, 0x00980098 );
 
 	access_rom( p, AB_READ, 0x10, 0 );
 	printf( "read 0x10: %08X\n", access_rom( p, AB_READ, 0x11, 0 ) );
@@ -456,13 +455,15 @@ printf( "%s\n", register_get_string( p->prev_bsr ) );
 
 
 	printf( "read max_erase_time: %08X\n", max_erase_time = access_rom( p, AB_READ, 0x27, 0 ) );
-	dsize = 1 << (access_rom( p, AB_READ, 0x27, 0 ) & 0xFFFF);
+	dsize = 1 << (access_rom( p, AB_READ, 0x2D, 0 ) & 0xFFFF);
 	printf( "device size: %08X\n", dsize );
+	ebri = access_rom( p, AB_READ, 0x2D, 0 );
+	printf( "ebri: %08X\n", ebri );
 
+#if 0
 	unlock( p, 0 );
 	erase( p, 0 );
 
-#if 0
 	{
 		FILE *f = fopen( "brux.b", "r" );
 		unsigned int d;
@@ -477,28 +478,112 @@ printf( "%s\n", register_get_string( p->prev_bsr ) );
 #endif
 
 
+	unlock( p, 0 );
+	erase( p, 0 );
+
+	{
+		unsigned int i;
+		for (i = 0; i < 256 * 1024; i += 4) {
+			printf( "program: %08X\n", i );
+			program_flash( p, i, i );
+		}
+	}
+
+	access_bus( p, AB_SETUP, 0, 0x00FF00FF );
+	access_bus( p, AB_WRITE, 0, 0x00FF00FF );
+	access_bus( p, AB_HOLD, 0, 0x00FF00FF );
+
+	{
+		unsigned int i;
+		unsigned int j;
+		for (i = 0; i < 256 * 1024; i += 4) {
+			printf( "read: %08X\n", i );
+			access_bus( p, AB_READ, i, 0 );
+			j = access_bus( p, AB_READ, i, 0 );
+			if (i != j)
+				printf( "error: a = %08X, d = %08X\n", i, j );
+		}
+	}
+
+
+	{
+		unsigned int b;
+		for (b = 1; b < 128; b++) {
+			unsigned int x;
+			unsigned int d;
+
+			access_bus( p, AB_SETUP, 0x00000000, 0x00500050 );
+			access_bus( p, AB_WRITE, 0x00000000, 0x00500050 );
+			access_bus( p, AB_HOLD, 0x00000000, 0x00500050 );
+
+			access_bus( p, AB_SETUP, 0x00000000, 0x00980098 );
+			access_bus( p, AB_WRITE, 0x00000000, 0x00980098 );
+			access_bus( p, AB_HOLD, 0x00000000, 0x00980098 );
+
+			unlock( p, b * 256 * 1024 );
+			erase( p, b * 256 * 1024 );
+
+			program_flash( p, b * 256 * 1024, 0x55AA55AA );
+
+			access_bus( p, AB_SETUP, 0, 0x00FF00FF );
+			access_bus( p, AB_WRITE, 0, 0x00FF00FF );
+			access_bus( p, AB_HOLD, 0, 0x00FF00FF );
+
+			printf( "Test: %08X\n", b * 256 * 1024 );
+
+			for (x = 1; x < 128; x++) {
+				access_bus( p, AB_READ, x * 256 * 1024, 0 );
+				d = access_bus( p, AB_READ, x * 256 * 1024, 0 );
+				if (d == 0x55AA55AA)
+					printf( "  at %08X\n", x * 256 * 1024 );
+			}
+			
+		}
+	}
+
+	{
+		unsigned int i;
+		unsigned int j;
+		for (i = 0; i < 256 * 1024; i += 4) {
+			printf( "read: %08X\n", i );
+			access_bus( p, AB_READ, i, 0 );
+			j = access_bus( p, AB_READ, i, 0 );
+			if (i != j)
+				printf( "error: a = %08X, d = %08X\n", i, j );
+		}
+	}
+
+
+
+#if 0
 	program_flash( p, 0x0, 0xE1A00000 );
 	program_flash( p, 0x4, 0xE1A00000 );
 	program_flash( p, 0x8, 0xE1A00000 );
 	program_flash( p, 0xC, 0xE1A00000 );
 	program_flash( p, 0x10, 0xE1A00000 );
 	program_flash( p, 0x14, 0xEAFFFFF9 );
-
+#endif
 
 	//erase( p, 0 );
 
-	access_rom( p, AB_SETUP, 0, 0x00FF00FF );
-	access_rom( p, AB_WRITE, 0, 0x00FF00FF );
-	access_rom( p, AB_HOLD, 0, 0x00FF00FF );
+	access_bus( p, AB_SETUP, 0, 0x00FF00FF );
+	access_bus( p, AB_WRITE, 0, 0x00FF00FF );
+	access_bus( p, AB_HOLD, 0, 0x00FF00FF );
 
-	access_rom( p, AB_READ, 0, 0 );
-	printf( "read data from 0x00: %08X\n", access_rom( p, AB_READ, 0x04, 0 ) );
-	printf( "read data from 0x04: %08X\n", access_rom( p, AB_READ, 0x08, 0 ) );
-	printf( "read data from 0x08: %08X\n", access_rom( p, AB_READ, 0x0C, 0 ) );
-	printf( "read data from 0x0C: %08X\n", access_rom( p, AB_READ, 0x10, 0 ) );
-	printf( "read data from 0x10: %08X\n", access_rom( p, AB_READ, 0x14, 0 ) );
-	printf( "read data from 0x14: %08X\n", access_rom( p, AB_READ, 0x18, 0 ) );
-	printf( "read data from 0x18: %08X\n", access_rom( p, AB_READ, 0x1C, 0 ) );
+	access_bus( p, AB_READ, 0, 0 );
+	printf( "read data from 0x00: %08X\n", access_bus( p, AB_READ, 0x04, 0 ) );
+	printf( "read data from 0x04: %08X\n", access_bus( p, AB_READ, 0x08, 0 ) );
+	printf( "read data from 0x08: %08X\n", access_bus( p, AB_READ, 0x0C, 0 ) );
+	printf( "read data from 0x0C: %08X\n", access_bus( p, AB_READ, 0x10, 0 ) );
+	printf( "read data from 0x10: %08X\n", access_bus( p, AB_READ, 0x14, 0 ) );
+	printf( "read data from 0x14: %08X\n", access_bus( p, AB_READ, 0x18, 0 ) );
+	printf( "read data from 0x18: %08X\n", access_bus( p, AB_READ, 0x1C, 0 ) );
+	printf( "read data from 0x1C: %08X\n", access_bus( p, AB_READ, 0x20, 0 ) );
+	printf( "read data from 0x20: %08X\n", access_bus( p, AB_READ, 0x24, 0 ) );
+	printf( "read data from 0x24: %08X\n", access_bus( p, AB_READ, 0x28, 0 ) );
+	printf( "read data from 0x28: %08X\n", access_bus( p, AB_READ, 0x2C, 0 ) );
+	printf( "read data from 0x2C: %08X\n", access_bus( p, AB_READ, 0x30, 0 ) );
+	printf( "read data from 0x30: %08X\n", access_bus( p, AB_READ, 0x34, 0 ) );
 
 #if 0
 	tap_capture_dr();
