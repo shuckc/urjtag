@@ -1,5 +1,9 @@
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
+	* src/flash.c (flash_drivers): Added amd_8_flash_driver.
+
+2003-08-11  Marcel Telka  <marcel@telka.sk>
+
 	* include/bus.h (buses_t): Added new structure.
 	* src/jtag.c (bus): Removed global variable.
 	* src/bus/Makefile.am (libbus_a_SOURCES): Added buses.c.
