@@ -2,7 +2,7 @@ $Id$
 
 See libbrux/NEWS for more news.
 
-jtag-0.5:
+jtag-0.5 (2003-08-19):
 
 	* Fixed bug with SELECT, AUTOFD, and STROBE signals handling (bug 745824).
 	* Added new commands 'peek' and 'poke' (patch 747447, Matan Ziv-Av).
