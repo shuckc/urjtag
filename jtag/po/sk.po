@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5\n"
-"POT-Creation-Date: 2003-08-18 10:42+0200\n"
-"PO-Revision-Date: 2003-08-19 10:56+0200\n"
+"POT-Creation-Date: 2003-08-19 11:49+0200\n"
+"PO-Revision-Date: 2003-08-19 11:48+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -416,29 +416,31 @@ msgstr "podporované: 28Fxxxx, 1 x 16 bitov"
 msgid "supported: 28Fxxxx, 1 x 8 bit"
 msgstr "podporované: 28Fxxxx, 1 x 8 bitov"
 
-#: src/bus/bcm1250.c:101
+#: src/bus/bcm1250.c:102
 #, c-format
 msgid "Broadcom BCM1250 compatibile bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bcm1250.c:306 src/bus/bcm1250.c:315 src/bus/bcm1250.c:322
-#: src/bus/bcm1250.c:327 src/bus/bcm1250.c:332 src/bus/ixp425.c:271
+#: src/bus/bcm1250.c:307 src/bus/bcm1250.c:316 src/bus/bcm1250.c:323
+#: src/bus/bcm1250.c:328 src/bus/bcm1250.c:333 src/bus/ixp425.c:271
 #: src/bus/ixp425.c:280 src/bus/ixp425.c:289 src/bus/ixp425.c:296
 #: src/bus/ixp425.c:301 src/bus/pxa2x0.c:309 src/bus/pxa2x0.c:318
 #: src/bus/pxa2x0.c:327 src/bus/pxa2x0.c:336 src/bus/pxa2x0.c:343
 #: src/bus/pxa2x0.c:348 src/bus/pxa2x0.c:353 src/bus/pxa2x0.c:358
-#: src/bus/sa1110.c:270 src/bus/sa1110.c:279 src/bus/sa1110.c:288
-#: src/bus/sa1110.c:295 src/bus/sa1110.c:300 src/bus/sa1110.c:305
-#: src/bus/sh7727.c:299 src/bus/sh7727.c:308 src/bus/sh7727.c:319
-#: src/bus/sh7727.c:328 src/bus/sh7727.c:335 src/bus/sh7727.c:340
-#: src/bus/sh7727.c:345 src/bus/sh7727.c:350 src/bus/sh7750r.c:298
-#: src/bus/sh7750r.c:307 src/bus/sh7750r.c:316 src/bus/sh7750r.c:325
-#: src/bus/sh7750r.c:332 src/bus/sh7750r.c:337 src/bus/sh7750r.c:342
-#: src/bus/sh7750r.c:347 src/bus/sh7751r.c:291 src/bus/sh7751r.c:300
-#: src/bus/sh7751r.c:309 src/bus/sh7751r.c:318 src/bus/sh7751r.c:325
-#: src/bus/sh7751r.c:330 src/cmd/get.c:63 src/cmd/set.c:77
+#: src/bus/s3c4510x.c:332 src/bus/s3c4510x.c:341 src/bus/s3c4510x.c:350
+#: src/bus/s3c4510x.c:359 src/bus/s3c4510x.c:366 src/bus/sa1110.c:270
+#: src/bus/sa1110.c:279 src/bus/sa1110.c:288 src/bus/sa1110.c:295
+#: src/bus/sa1110.c:300 src/bus/sa1110.c:305 src/bus/sh7727.c:299
+#: src/bus/sh7727.c:308 src/bus/sh7727.c:319 src/bus/sh7727.c:328
+#: src/bus/sh7727.c:335 src/bus/sh7727.c:340 src/bus/sh7727.c:345
+#: src/bus/sh7727.c:350 src/bus/sh7750r.c:298 src/bus/sh7750r.c:307
+#: src/bus/sh7750r.c:316 src/bus/sh7750r.c:325 src/bus/sh7750r.c:332
+#: src/bus/sh7750r.c:337 src/bus/sh7750r.c:342 src/bus/sh7750r.c:347
+#: src/bus/sh7751r.c:291 src/bus/sh7751r.c:300 src/bus/sh7751r.c:309
+#: src/bus/sh7751r.c:318 src/bus/sh7751r.c:325 src/bus/sh7751r.c:330
+#: src/cmd/get.c:63 src/cmd/set.c:77
 #, c-format
 msgid "signal '%s' not found\n"
 msgstr "signál '%s' nenájdený\n"
@@ -459,6 +461,13 @@ msgstr ""
 msgid "Intel PXA2x0 compatibile bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
+
+#: src/bus/s3c4510x.c:126
+#, c-format
+msgid "Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d)\n"
+msgstr ""
+"Samsung S3C4510B kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
+"d)\n"
 
 #: src/bus/sa1110.c:98
 #, c-format

@@ -1,5 +1,10 @@
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
+	* POTFILES.in: Added src/bus/s3c4510x.c.
+	* sk.po: Updated Slovak translation.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
 	* sk.po: Updated Slovak translation.
 
 2003-08-18  Marcel Telka  <marcel@telka.sk>
