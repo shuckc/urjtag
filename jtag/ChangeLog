@@ -1,5 +1,16 @@
 2003-05-21  Marcel Telka  <marcel@telka.sk>
 
+	* include/signal.h: Renamed this file ...
+	* include/bssignal.h: ... to this one.
+	All includes changed.
+	* include/Makefile.am (noinst_HEADERS): Renamed signal.h to bssignal.h.
+
+	* include/data_register.h: Marked local include files with double quotes.
+	* include/instruction.h: Ditto.
+	* include/part.h: Ditto.
+
+2003-05-21  Marcel Telka  <marcel@telka.sk>
+
 	* include/bsbit.h (bsbit, bsbit_t): Renamed typedef bsbit to bsbit_t.
 	All occurences of the bsbit type changed to bsbit_t.
 

@@ -35,7 +35,7 @@
 #include <string.h>
 
 #include "part.h"
-#include "signal.h"
+#include "bssignal.h"
 #include "jtag.h"
 
 #include "cmd.h"

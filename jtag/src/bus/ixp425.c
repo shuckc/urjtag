@@ -39,7 +39,7 @@
 #include "part.h"
 #include "bus.h"
 #include "chain.h"
-#include "signal.h"
+#include "bssignal.h"
 
 typedef struct {
 	chain_t *chain;

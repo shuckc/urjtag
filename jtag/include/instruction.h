@@ -25,8 +25,8 @@
 #ifndef INSTRUCTION_H
 #define	INSTRUCTION_H
 
-#include <register.h>
-#include <data_register.h>
+#include "register.h"
+#include "data_register.h"
 
 #define	MAXLEN_INSTRUCTION	20
 

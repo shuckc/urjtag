@@ -27,7 +27,7 @@
 
 typedef struct signal signal_t;
 
-#include <bsbit.h>
+#include "bsbit.h"
 
 struct signal {
 	char *name;

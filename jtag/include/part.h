@@ -27,10 +27,10 @@
 
 #include <stdio.h>
 
-#include <signal.h>
-#include <instruction.h>
-#include <data_register.h>
-#include <bsbit.h>
+#include "bssignal.h"
+#include "instruction.h"
+#include "data_register.h"
+#include "bsbit.h"
 
 #define	MAXLEN_MANUFACTURER	20
 #define	MAXLEN_PART		20

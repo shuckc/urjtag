@@ -25,7 +25,7 @@
 #ifndef DATA_REGISTER_H
 #define	DATA_REGISTER_H
 
-#include <register.h>
+#include "register.h"
 
 #define	MAXLEN_DATA_REGISTER	10
 

@@ -27,7 +27,7 @@
 
 typedef struct bsbit bsbit_t;
 
-#include <signal.h>
+#include "bssignal.h"
 
 #define	BSBIT_INPUT	1
 #define	BSBIT_OUTPUT	2

@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "signal.h"
+#include "bssignal.h"
 
 signal_t *
 signal_alloc( const char *name )
