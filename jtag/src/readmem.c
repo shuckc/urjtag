@@ -38,6 +38,10 @@
 #include <flash/intel.h>
 #include <std/mic.h>
 
+#include <arpa/inet.h>
+/* for ntohs */
+
+
 #include "part.h"
 #include "bus.h"
 
@@ -55,7 +59,7 @@ detectflash( parts *ps )
 		return;
 	}
 
-	printf( "Note: Supported configuration is 2 x 16 bit only\n" );
+	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
 
 	switch (bus_width( ps )) {
 		case 16:
@@ -262,6 +266,7 @@ readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len )
 	part *p = ps->parts[0];
 	int step = 0;
 	uint32_t a;
+	int bc = 0;
 
 	if (!bus_driver) {
 		printf( "Error: Missing bus_driver!\n" );
@@ -293,15 +298,33 @@ readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len )
 	printf( "reading:\n" );
 	bus_read_start( ps, addr );
 	for (a = addr + step; a <= addr + len; a += step) {
-		uint32_t d;
+		uint32_t d = 0;
+		uint16_t d16 = 0;
+#define BSIZE 4096
+		char b[BSIZE];
 
-		printf( "addr: 0x%08X\r", a );
-
-		if (a < addr + len)
-			d = bus_read_next( ps, a );
-		else
-			d = bus_read_end( ps );
-		fwrite( &d, step, 1, f );
+		if (a < addr + len) {
+			if (step == 2)
+				d16 = bus_read_next( ps, a );
+			else
+				d = bus_read_next( ps, a );
+		}
+		else {
+			if (step == 2)
+				d16 = bus_read_end( ps );
+			else
+				d = bus_read_end( ps );
+		}
+		if (step == 2)
+			*((uint16_t *) &b[bc]) = ntohs(d16);
+		else 
+			*((uint32_t *) &b[bc]) = d;
+		bc += step;
+		if ((bc >= BSIZE) || (a >= (addr + len)) ) {
+			printf( "addr: 0x%08X\r", a );
+			fwrite( b, bc, 1, f );
+			bc = 0;
+		}
 	}
 
 	printf( "\nDone.\n" );

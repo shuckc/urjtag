@@ -38,6 +38,9 @@
 #include <flash/cfi.h>
 #include <flash/intel.h>
 
+#include <arpa/inet.h>
+/* for ntohs */
+
 #include "part.h"
 #include "bus.h"
 
@@ -202,7 +205,7 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 	int *erased;
 	int i;
 
-	printf( "Note: Supported configuration is 2 x 16 bit only\n" );
+	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
 
 	switch (bus_width( ps )) {
 		case 16:
@@ -238,28 +241,44 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 	adr = addr;
 	while (!feof( f )) {
 		uint32_t data;
+#define BSIZE 4096
+		char b[BSIZE];
+		int bc = 0, bn = 0;
+		/* FIXME: block_no is probably invalid for 1 x 16 bit memory configuration */
 		int block_no = adr / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
 		printf( "addr: 0x%08X\r", adr );
 
 		if (!erased[block_no]) {
-			flash_unlock_block32( ps, adr );
+			if (o == 1)
+				flash_unlock_block( ps, adr );
+			else
+				flash_unlock_block32( ps, adr );
 			printf( "block %d unlocked\n", block_no );
-			printf( "erasing block %d: %d\n", block_no, flash_erase_block32( ps, adr ) );
+			printf( "erasing block %d: %d\n", block_no,
+					(o == 1) ? flash_erase_block( ps, adr ) : flash_erase_block32( ps, adr ) );
 			erased[block_no] = 1;
 		}
 
-		fread( &data, sizeof data, 1, f );
-		if (flash_program32( ps, adr, data )) {
-			printf( "\nflash error\n" );
-			return;
+		bn = fread( b, 1, BSIZE, f );
+		printf("addr 0x%08X (n is %d)\n", adr, bn);
+		for (bc = 0; bc < bn; bc += (o == 1) ? 2 : 4) {
+			if (o == 1)
+				data = htons( *((uint16_t *) &b[bc]) );
+			else
+				data = * ((uint32_t *) &b[bc]);
+			if ((o == 1) ? flash_program( ps, adr, data ) : flash_program32( ps, adr, data )) {
+				printf( "\nflash error\n" );
+				return;
+			}
+			adr += (o == 1) ? 2 : 4;
 		}
-		adr += 4;
 	}
 	printf( "\n" );
 
 	/* Read Array */
 	bus_write( ps, 0 << o, 0x00FF00FF );
 
+	if (o != 1) {		/* TODO: not available in 1 x 16 bit mode */
 	fseek( f, 0, SEEK_SET );
 	printf( "verify:\n" );
 	adr = addr;
@@ -276,6 +295,8 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 		adr += 4;
 	}
 	printf( "\nDone.\n" );
+	} else
+		printf( "TODO: Verify is not available in 1 x 16 bit mode.\n" );
 
 	/* BYPASS */
 	parts_set_instruction( ps, "BYPASS" );
@@ -305,10 +326,13 @@ flash_erase_block( parts *ps, uint32_t adr )
 		case 0:
 			return 0;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_PROGRAM_ERROR:
+			printf("flash: invalid command seq\n");
 			return CFI_INTEL_ERROR_INVALID_COMMAND_SEQUENCE;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_VPEN_ERROR:
+			printf("flash: low vpen\n");
 			return CFI_INTEL_ERROR_LOW_VPEN;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_BLOCK_LOCKED:
+			printf("flash: block locked\n");
 			return CFI_INTEL_ERROR_BLOCK_LOCKED;
 		default:
 			break;
@@ -328,9 +352,10 @@ flash_unlock_block( parts *ps, uint32_t adr )
 
 	while (!((sr = bus_read( ps, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
-	if (sr != CFI_INTEL_SR_READY)
+	if (sr != CFI_INTEL_SR_READY) {
+		printf("flash: unknown error while unblocking\n");
 		return CFI_INTEL_ERROR_UNKNOWN;
-	else
+	} else
 		return 0;
 }
 
@@ -345,9 +370,10 @@ flash_program( parts *ps, uint32_t adr, uint32_t data )
 
 	while (!((sr = bus_read( ps, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
-	if (sr != CFI_INTEL_SR_READY)
+	if (sr != CFI_INTEL_SR_READY) {
+		printf("flash: unknown error while programming\n");
 		return CFI_INTEL_ERROR_UNKNOWN;
-	else
+	} else
 		return 0;
 }
 int

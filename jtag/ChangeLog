@@ -1,5 +1,15 @@
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
+	* src/readmem.c (readmem): Added support for 1 x 16 bit memory configuration and
+		buffered file writes (Christian Pellegrin).
+	* src/flash.c (flashmem): Added support for 1 x 16 bit flash configuration and
+		buffered file reads (Christian Pellegrin).
+	(flash_erase_block): Added debug messages (Christian Pellegrin).
+	(flash_unlock_block): Added debug message (Christian Pellegrin).
+	(flash_program): Ditto.
+
+2003-02-14  Marcel Telka  <marcel@telka.sk>
+
 	* src/cfi.c (detect_cfi): Added support for 1 x 16 bit flash configuration (Christian
 		Pellegrin).
 	* src/detect.c (find_record): Added error message if file cannot be opened (Christian
