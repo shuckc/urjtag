@@ -1,3 +1,7 @@
+2003-06-10  Marcel Telka  <marcel@telka.sk>
+
+	* flash/cfi.c (cfi_detect): Changed types for some local variables.
+
 2003-06-09  Marcel Telka  <marcel@telka.sk>
 
 	* cmd/cmd.c (cmd_get_number): Added variable initialization for %n conversion in sscanf() call.

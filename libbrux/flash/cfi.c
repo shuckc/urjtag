@@ -60,8 +60,8 @@ cfi_array_free( cfi_array_t *cfi_array )
 int
 cfi_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 {
-	int bw;				/* bus width */
-	int d;				/* data offset */
+	unsigned int bw;		/* bus width */
+	unsigned int d;			/* data offset */
 	int ba;				/* bus width address multiplier */
 	int ma;				/* flash mode address multiplier */
 
