@@ -46,6 +46,9 @@ tap_shift_register( const tap_register *in, tap_register *out, int exit )
 {
 	int i;
 
+	if (!(tap_state() & TAPSTAT_SHIFT))
+		printf( "tap_shift_register: Invalid state: %2X\n", tap_state() );
+
 	/* Capture-DR, Capture-IR, Shift-DR, Shift-IR, Exit2-DR or Exit2-IR state */
 	if (tap_state() & TAPSTAT_CAPTURE)
 		tap_clock( 0, 0 );		/* save last TDO bit :-) */
@@ -62,6 +65,9 @@ tap_shift_register( const tap_register *in, tap_register *out, int exit )
 void
 tap_capture_dr( void )
 {
+	if ((tap_state() & (TAPSTAT_RESET | TAPSTAT_IDLE)) != TAPSTAT_IDLE)
+		printf( "tap_capture_dr: Invalid state: %2X\n", tap_state() );
+
 	/* Run-Test/Idle or Update-DR or Update-IR state */
 	tap_clock( 1, 0 );			/* Select-DR-Scan */
 	tap_clock( 0, 0 );			/* Capture-DR */
@@ -70,6 +76,9 @@ tap_capture_dr( void )
 void
 tap_capture_ir( void )
 {
+	if ((tap_state() & (TAPSTAT_RESET | TAPSTAT_IDLE)) != TAPSTAT_IDLE)
+		printf( "tap_capture_ir: Invalid state: %2X\n", tap_state() );
+
 	/* Run-Test/Idle or Update-DR or Update-IR state */
 	tap_clock( 1, 0 );			/* Select-DR-Scan */
 	tap_clock( 1, 0 );			/* Select-IR-Scan */
