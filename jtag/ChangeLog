@@ -1,5 +1,10 @@
 2003-03-06  Marcel Telka  <marcel@telka.sk>
 
+	* configure.ac: Added test for readline library.
+	* src/Makefile.am (jtag_LDADD): Removed readline and ncurses.
+
+2003-03-06  Marcel Telka  <marcel@telka.sk>
+
 	* autogen.sh: Added test for autoreconf fail.
 
 2003-02-25  Marcel Telka  <marcel@telka.sk>

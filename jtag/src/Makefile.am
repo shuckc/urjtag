@@ -44,7 +44,7 @@ jtag_SOURCES = \
 
 jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a bus/libbus.a
 
-jtag_LDADD = -lreadline -lncurses -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus
+jtag_LDADD = -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus
 
 localedir = $(datadir)/locale
 DEFS += -DLOCALEDIR=\"$(localedir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
