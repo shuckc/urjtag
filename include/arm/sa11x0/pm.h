@@ -68,8 +68,6 @@ typedef volatile struct PM_registers {
 #define	POSR		PM_pointer->posr
 #endif /* LANGUAGE == C */
 
-/* Register offset from PM_BASE */
-
 #define	PMCR_OFFSET	0x00
 #define	PSSR_OFFSET	0x04
 #define	PSPR_OFFSET	0x08
@@ -79,21 +77,45 @@ typedef volatile struct PM_registers {
 #define	PGSR_OFFSET	0x18
 #define	POSR_OFFSET	0x1C
 
-/* PPCR */
+/* PMCR bits */
+
+#define	PMCR_SF		bit(0)
+
+/* PCFR bits */
+
+#define	PCFR_FO		bit(3)
+#define	PCFR_FS		bit(2)
+#define	PCFR_FP		bit(1)
+#define	PCFR_OPDE	bit(0)
+
+/* PPCR bits */
 
 #define	PPCR_CCF_MASK	0x1F
+#define	PPCR_CCF(x)	(x & PPCR_CCF_MASK)
 
-#define	PPCR_CCF_59_0	0x00
-#define	PPCR_CCF_73_7	0x01
-#define	PPCR_CCF_88_5	0x02
-#define	PPCR_CCF_103_2	0x03
-#define	PPCR_CCF_118_0	0x04
-#define	PPCR_CCF_132_7	0x05
-#define	PPCR_CCF_147_5	0x06
-#define	PPCR_CCF_162_2	0x07
-#define	PPCR_CCF_176_9	0x08
-#define	PPCR_CCF_191_7	0x09
-#define	PPCR_CCF_206_4	0x0A
-#define	PPCR_CCF_221_2	0x0B
+#define	PPCR_CCF_59_0	PPCR_CCF(0x00)
+#define	PPCR_CCF_73_7	PPCR_CCF(0x01)
+#define	PPCR_CCF_88_5	PPCR_CCF(0x02)
+#define	PPCR_CCF_103_2	PPCR_CCF(0x03)
+#define	PPCR_CCF_118_0	PPCR_CCF(0x04)
+#define	PPCR_CCF_132_7	PPCR_CCF(0x05)
+#define	PPCR_CCF_147_5	PPCR_CCF(0x06)
+#define	PPCR_CCF_162_2	PPCR_CCF(0x07)
+#define	PPCR_CCF_176_9	PPCR_CCF(0x08)
+#define	PPCR_CCF_191_7	PPCR_CCF(0x09)
+#define	PPCR_CCF_206_4	PPCR_CCF(0x0A)
+#define	PPCR_CCF_221_2	PPCR_CCF(0x0B)
+
+/* PSSR bits */
+
+#define	PSSR_PH		bit(4)
+#define	PSSR_DH		bit(3)
+#define	PSSR_VFS	bit(2)
+#define	PSSR_BFS	bit(1)
+#define	PSSR_SSS	bit(0)
+
+/* POSR bits */
+
+#define	POSR_OOK	bit(0)
 
 #endif /* SA11X0_PM_H */
