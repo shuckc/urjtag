@@ -1,0 +1,5 @@
+$Id$
+
+* Add 'get signal' command.
+* Add support for non-IDCODE-capable parts.
+* Remove direct relation between JTAG instruction and data register (e.g. ARM7TDMI).
