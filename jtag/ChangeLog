@@ -1,3 +1,9 @@
+2003-04-01  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable/keithkoep.c: New file.
+	* src/tap/Makefile.am (libtap_a_SOURCES): Added cable/keithkoep.c.
+	* src/tap/cable.c (cable_drivers): Added keithkoep_cable_driver.
+
 2003-03-19  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.3.1 released.
