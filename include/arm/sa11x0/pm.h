@@ -32,14 +32,13 @@
 #ifndef	SA11X0_PM_H
 #define	SA11X0_PM_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
-#endif
+#include <common.h>
 
 /* Power Manager Registers */
 
 #define	PM_BASE		0x90020000
 
+#if LANGUAGE == C
 typedef volatile struct PM_registers {
 	uint32_t pmcr;
 	uint32_t pssr;
@@ -63,5 +62,34 @@ typedef volatile struct PM_registers {
 #define	PPCR		PM_pointer->ppcr
 #define	PGSR		PM_pointer->pgsr
 #define	POSR		PM_pointer->posr
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_PM_H */
+/* Register offset from PM_BASE */
+
+#define	PMCR_OFFSET	0x00
+#define	PSSR_OFFSET	0x04
+#define	PSPR_OFFSET	0x08
+#define	PWER_OFFSET	0x0C
+#define	PCFR_OFFSET	0x10
+#define	PPCR_OFFSET	0x14
+#define	PGSR_OFFSET	0x18
+#define	POSR_OFFSET	0x1C
+
+/* PPCR */
+
+#define	PPCR_CCF_MASK	0x1F
+
+#define	PPCR_CCF_59_0	0x00
+#define	PPCR_CCF_73_7	0x01
+#define	PPCR_CCF_88_5	0x02
+#define	PPCR_CCF_103_2	0x03
+#define	PPCR_CCF_118_0	0x04
+#define	PPCR_CCF_132_7	0x05
+#define	PPCR_CCF_147_5	0x06
+#define	PPCR_CCF_162_2	0x07
+#define	PPCR_CCF_176_9	0x08
+#define	PPCR_CCF_191_7	0x09
+#define	PPCR_CCF_206_4	0x0A
+#define	PPCR_CCF_221_2	0x0B
+
+#endif /* SA11X0_PM_H */
