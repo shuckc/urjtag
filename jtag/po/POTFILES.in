@@ -7,9 +7,11 @@ libbrux/cmd/quit.c
 libbrux/flash/amd.c
 libbrux/flash/detectflash.c
 libbrux/flash/intel.c
+src/bus/au1500.c
 src/bus/bcm1250.c
 src/bus/buses.c
 src/bus/ixp425.c
+src/bus/mpc824x.c
 src/bus/pxa2x0.c
 src/bus/s3c4510x.c
 src/bus/sa1110.c
@@ -36,6 +38,7 @@ src/cmd/peekpoke.c
 src/cmd/print.c
 src/cmd/readmem.c
 src/cmd/register.c
+src/cmd/salias.c
 src/cmd/script.c
 src/cmd/set.c
 src/cmd/shift.c
