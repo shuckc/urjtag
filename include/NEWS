@@ -1,7 +1,10 @@
 Changes in include since version 0.1:
 
-	* Added support for Intel PXA26x family processors.
 	* Changes in PXA2x0 support:
+		- added support for Intel PXA26x family processors
+		- added PXA2X0_NOPXA250 and PXA2X0_NOPXA26X conditional directives
+		  to remove support for PXA250 and above (PXA2X0_NOPXA250)
+		  or PXA26x and above (PXA2X0_NOPXA26X) processor features
 		- removed access to STMRS register
 		- fixed SPR_SP declaration
 		- fixed BOOT_DEF_OFFSET declaration
