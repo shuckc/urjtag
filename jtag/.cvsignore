@@ -11,3 +11,5 @@ INSTALL
 ABOUT-NLS
 intl
 m4
+config.h
+config.h.in

@@ -1,3 +1,8 @@
+2003-02-19  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (AC_CONFIG_HEADERS): Added new macro with config.h.
+	* autogen.sh: Added autoheader invocation.
+
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
 	* include/Makefile.am (noinst_HEADERS): Added gettext.h.

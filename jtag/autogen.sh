@@ -28,6 +28,9 @@ autopoint
 echo "Running aclocal ..."
 aclocal -I m4
 
+echo "Running autoheader ..."
+autoheader -W all
+
 echo "Running automake ..."
 automake --add-missing
 
