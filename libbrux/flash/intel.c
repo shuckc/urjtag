@@ -121,6 +121,9 @@ _intel_flash_print_info( cfi_array_t *cfi_array, int o )
 		case 0x0018:
 			printf( "28F128J3A\n" );
 			break;
+		case 0x001D:
+			printf( "28F256J3A\n" );
+			break;
 		case 0x8801:
 			printf( "28F640K3\n" );
 			break;
