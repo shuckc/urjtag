@@ -42,6 +42,7 @@ part_alloc( void )
 	p->active_instruction = NULL;
 	p->boundary_length = 0;
 	p->bsbits = NULL;
+	p->idr = NULL;
 	p->bsr = NULL;
 	p->prev_bsr = NULL;
 
@@ -74,6 +75,9 @@ part_free( part *p )
 	for (i = 0; i < p->boundary_length; i++)
 		bsbit_free( p->bsbits[i] );
 	free( p->bsbits );
+
+	/* idr */
+	register_free( p->idr );
 
 	/* bsr */
 	register_free( p->bsr );

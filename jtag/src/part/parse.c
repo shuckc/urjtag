@@ -38,7 +38,7 @@ get_token( char *buf )
 }
 
 part *
-read_part( FILE *f )
+read_part( FILE *f, tap_register *idr )
 {
 	int line = 0;
 	part *part;
@@ -51,6 +51,8 @@ read_part( FILE *f )
 		printf( "out of memory\n" );
 		return NULL;
 	}
+
+	part->idr = register_duplicate( idr );
 
 	for (;;) {
 		char *t;

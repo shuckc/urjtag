@@ -40,6 +40,7 @@ struct part {
 	instruction *active_instruction;
 	int boundary_length;
 	bsbit **bsbits;
+	tap_register *idr;
 	tap_register *bsr;
 	tap_register *prev_bsr;
 };
