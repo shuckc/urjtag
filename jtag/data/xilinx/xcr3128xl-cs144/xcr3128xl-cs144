@@ -1,0 +1,48 @@
+#
+# $Id$
+#
+# JTAG declarations for XCR3128XL-CS144
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
+#
+# Documentation:
+# [1] Xilinx Inc., "CoolRunner XPLA3 CPLD Advance Product Specification",
+#     DS012 (v1.5) January 7, 2002
+# [2] Xilinx Inc., "BSDL file for device xcr3128xl, package cs144
+#     Revision 1.3", 2002-01-03
+#
+
+# mandatory data registers
+register	BSR	444	# see [2]
+register	BR	1
+# optional data registers
+register	DIR	32
+# user-defined registers (TODO)
+
+# instructions - see [2]
+instruction length 5
+# mandatory instructions - see Table 3 in [1]
+instruction EXTEST		00000	BSR
+instruction SAMPLE/PRELOAD	00010	BSR
+instruction BYPASS		11111	BR
+# optional instructions - see Table 3 in [1]
+instruction IDCODE		00001	DIR
+instruction HIGHZ		00101	BR
+instruction INTEST		00011	BSR
+# user-defined instructions - see Table 5 in [1] (TODO)
