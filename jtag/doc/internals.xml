@@ -16,12 +16,12 @@ This chapter is primarily intented for JTAG Tools hackers.
 
 <para>
 JTAG declarations files are located in directory <filename>data</filename>. The files contains
-common part specific JTAG informaions in parseble form, e.g. list of the JTAG commands, boundary
+common part specific JTAG information in parseable form, e.g. list of the JTAG commands, boundary
 scan register, list of JTAG registers, etc.
 </para>
 
 <para>
-Syntax of the JTAG declaration file is defined in following subsections.
+Syntax of the JTAG declaration file is defined in the following subsections.
 </para>
 
 <sect2>
@@ -30,7 +30,7 @@ Syntax of the JTAG declaration file is defined in following subsections.
 </sect2info>
 
 <para>
-JTAG declaration file is text file which consist of lines. Empty lines are ignored. Text after
+JTAG declaration file is text file which consists of lines. Empty lines are ignored. Text after
 first <constant>#</constant> on the line to the end of line is ignored. This is useful for comments.
 All other lines are significant.
 </para>
@@ -47,9 +47,9 @@ Each significant line consists of tokens separated by whitespace. Whitespace cou
 </sect2info>
 
 <para>
-Signal definition line consist of word <constant>signal</constant> followed by whitespace and signal name
+Signal definition line consists of word <constant>signal</constant> followed by whitespace and signal name
 (without spaces in the name). Rest of the line should contain whitespace separated list of pins
-of the part. This list is is currently not used for any purpose in JTAG Tools. It is intended for future use.
+of the part. This list is currently not used for any purpose in JTAG Tools. It is intended for future use.
 </para>
 
 </sect2>
