@@ -49,6 +49,9 @@ nobase_dist_pkgdata_DATA = \
 	intel/sa1110/sa1110 \
 	intel/ixp425/STEPPINGS \
 	intel/ixp425/ixp425 \
+	philips/PARTS \
+	philips/xcr3128xl-cs144/STEPPINGS \
+	philips/xcr3128xl-cs144/xcr3128xl-cs144 \
 	xilinx/PARTS \
 	xilinx/xcr3128xl-cs144/STEPPINGS \
 	xilinx/xcr3128xl-cs144/xcr3128xl-cs144 \

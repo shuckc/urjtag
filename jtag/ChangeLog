@@ -1,3 +1,13 @@
+2003-08-14  Marcel Telka  <marcel@telka.sk>
+
+	* data/MANUFACTURERS: Changed directory name for Philips.
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added philips/PARTS, philips/xcr3128xl-cs144/STEPPINGS, and
+		philips/xcr3128xl-cs144/xcr3128xl-cs144.
+	* data/philips/PARTS: New file.
+	* data/philips/xcr3128xl-cs144/STEPPINGS: Ditto.
+	* data/philips/xcr3128xl-cs144/xcr3128xl-cs144: Ditto.
+	* include/part.h (MAXLEN_MANUFACTURER): Increased size to 25.
+
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
 	* include/jtag.h (detect_register_size): Added function declaration.

@@ -32,7 +32,7 @@
 #include "data_register.h"
 #include "bsbit.h"
 
-#define	MAXLEN_MANUFACTURER	20
+#define	MAXLEN_MANUFACTURER	25
 #define	MAXLEN_PART		20
 #define	MAXLEN_STEPPING		8
 
