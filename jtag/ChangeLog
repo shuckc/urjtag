@@ -1,3 +1,12 @@
+2003-08-18  Marcel Telka  <marcel@telka.sk>
+
+	* src/detect.c (detect_parts): Marked one forgotten string for translation.
+	* src/cmd/bit.c (cmd_bit_run): Fixed control bit setup.
+	* src/cmd/eraseflash.c (cmd_eraseflash_run): Changed formatting.
+	(cmd_eraseflash_help): Updated help text.
+	* src/cmd/flashmem.c (cmd_flashmem_help): Ditto.
+	* src/cmd/readmem.c (cmd_readmem_help): Ditto.
+
 2003-08-14  Marcel Telka  <marcel@telka.sk>
 
 	* include/jtag.h (flasherase): New function prototype (patch 772267, Thomas Fröhlich).

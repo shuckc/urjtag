@@ -297,7 +297,7 @@ detect_parts( chain_t *chain, char *db_path )
 		}
 		register_free( key );
 
-		printf( "  Part:         %s\n", idr.fullname );
+		printf( _("  Part:         %s\n"), idr.fullname );
 		if (strlen( idr.fullname ) > MAXLEN_PART)
 			printf( _("Warning: Part too long\n") );
 		strncpy( partname, idr.fullname, MAXLEN_PART );

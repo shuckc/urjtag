@@ -82,10 +82,8 @@ cmd_flashmem_help( void )
 		"\n"
 		"ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
 		"\n"
-		"`%s' command works only with part 0. Part 0 must support bus operations.\n"
-		"\n"
 		"Supported Flash Memories:\n"
-	), "flashmem", "flashmem msbin", "msbin", "flashmem" );
+	), "flashmem", "flashmem msbin", "msbin" );
 
 	for (i = 0; flash_drivers[i]; i++)
 		printf( _("%s\n     %s\n"), _(flash_drivers[i]->name), _(flash_drivers[i]->description) );

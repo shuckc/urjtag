@@ -72,9 +72,7 @@ cmd_readmem_help( void )
 		"FILENAME   name of the output file\n"
 		"\n"
 		"ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-		"\n"
-		"`%s' command works only with part 0. Part 0 must support bus operations.\n"
-	), "readmem", "readmem" );
+	), "readmem" );
 }
 
 cmd_t cmd_readmem = {

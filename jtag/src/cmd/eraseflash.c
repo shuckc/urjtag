@@ -52,7 +52,8 @@ cmd_eraseflash_run( char *params[] )
 	if (cmd_get_number( params[2], &number ))
 		return -1;
 	flasherase( bus, adr, number );
-		return 1;
+
+	return 1;
 }
 
 static void
@@ -62,16 +63,15 @@ cmd_eraseflash_help( void )
 
 	printf( _(
 		"Usage: %s ADDR BLOCKS\n"
+		"Erase flash memory from ADDR.\n"
 		"\n"
 		"ADDR       target addres for erasing block\n"
 		"BLOCKS     number of blocks to erase\n"
 		"\n"
-		"ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-		"BLOCKS musst be in decimal form; count from 1\n"
+		"ADDR and BLOCKS could be in decimal or hexadecimal (prefixed with 0x) form.\n"
 		"\n"
-		"'%s' works only with part 0. Part 0 must support bus operations.\n"
-		"Supported Flash Memories\n"
-	), "eraseflash", "eraseflash");
+		"Supported Flash Memories:\n"
+	), "eraseflash" );
 
 	for (i = 0; flash_drivers[i]; i++)
 		printf( _("%s\n     %s\n"), _(flash_drivers[i]->name), _(flash_drivers[i]->description) );

@@ -126,6 +126,7 @@ cmd_bit_run( char *params[] )
 		printf( _("invalid control bit number\n") );
 		return 1;
 	}
+	part->bsbits[bit]->control = control;
 
 	/* control value */
 	if (strlen( params[6] ) != 1)
