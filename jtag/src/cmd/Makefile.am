@@ -45,6 +45,7 @@ libcmd_a_SOURCES = \
 	peekpoke.c \
 	readmem.c \
 	flashmem.c \
+	eraseflash.c \
 	script.c \
 	include.c \
 	cmd.c

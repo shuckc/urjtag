@@ -25,6 +25,7 @@ jtag-0.5:
 	* Added new 'include' command.
 	* Added new commands 'signal', 'register', 'bit', and enhanced 'instruction' command
 		to allow create JTAG declarations from command line (or script).
+	* Added new 'eraseflash' command (patch 772267, Thomas Fröhlich).
 	* JTAG declarations are now executed as scripts.
 	* Added support for parts without IDCODE instruction.
 	* Added support for "downto" in bit vectors and "observe_only" into bsdl2jtag

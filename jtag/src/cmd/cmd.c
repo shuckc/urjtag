@@ -54,6 +54,7 @@ extern cmd_t cmd_poke;
 extern cmd_t cmd_readmem;
 extern cmd_t cmd_detectflash;
 extern cmd_t cmd_flashmem;
+extern cmd_t cmd_eraseflash;
 extern cmd_t cmd_script;
 extern cmd_t cmd_include;
 
@@ -81,6 +82,7 @@ const cmd_t *cmds[] = {
 	&cmd_readmem,
 	&cmd_detectflash,
 	&cmd_flashmem,
+	&cmd_eraseflash,
 	&cmd_script,
 	&cmd_include,
 	NULL			/* last must be NULL */

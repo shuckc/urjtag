@@ -46,4 +46,6 @@ void discovery( chain_t *chain );
 
 void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
 
+void flasherase( bus_t *bus, uint32_t addr, int number );
+
 #endif /* JTAG_H */

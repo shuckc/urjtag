@@ -337,3 +337,40 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 
 	cfi_array_free( cfi_array );
 }
+
+void
+flasherase( bus_t *bus, uint32_t addr, int number )
+{
+	cfi_query_structure_t *cfi;
+	cfi_array_t *cfi_array;
+	int i;
+
+	printf( _("addr: 0x%08X\n"), addr);
+
+	flashcheck( bus, &cfi_array );
+	if (!cfi_array || !flash_driver) {
+		printf( _("no flash driver found\n") );
+		return;
+	}
+	cfi = &cfi_array->cfi_chips[0]->cfi;
+
+	printf( _("program:\n") );
+	for (i = 1; i <= number; i++) {
+		int addr_block = (cfi->device_geometry.erase_block_regions[0].erase_block_size * flash_driver->bus_width / 2);
+		int block_no = addr / addr_block;
+		printf( _("addr: 0x%08X\n"), addr);
+		fflush(stdout);
+		flash_driver->unlock_block( cfi_array, addr );
+		printf( _("block %d unlocked\n"), block_no );
+		printf( _("erasing block %d: %d\n"), block_no, flash_driver->erase_block( cfi_array, addr ) );
+
+		addr |= (addr_block - 1);
+		addr += 1;
+	}
+	printf( _("\nDone.\n") );
+
+	cfi_array_free( cfi_array );
+	/* BYPASS */
+	//       parts_set_instruction( ps, "BYPASS" );
+	//       chain_shift_instructions( chain );
+}
