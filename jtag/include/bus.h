@@ -35,5 +35,7 @@ bus_t *new_sa1110_bus( chain_t *chain, int pn );
 bus_t *new_pxa250_bus( chain_t *chain, int pn );
 bus_t *new_ixp425_bus( chain_t *chain, int pn );
 bus_t *new_sh7727_bus( chain_t *chain, int pn );
+bus_t *new_sh7750r_bus( chain_t *chain, int pn );
+bus_t *new_bcm1250_bus( chain_t *chain, int pn );
 
 #endif /* BUS_H */

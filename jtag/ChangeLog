@@ -1,3 +1,11 @@
+2003-07-01  Marcel Telka  <marcel@telka.sk>
+
+	* include/bus.h (new_sh7750r_bus, new_bcm1250_bus): New function declarations (patch 753300, Matan Ziv-Av).
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added bcm1250.c and sh7750r.c (patch 753300, Matan Ziv-Av).
+	* src/bus/bcm1250.c: New file (patch 753300, Matan Ziv-Av).
+	* src/bus/sh7750r.c: Ditto.
+	* src/cmd/detect.c (cmd_detect_run): Added bus driver for SH7750R and BCM1250 (patch 753300, Matan Ziv-Av).
+
 2003-06-19  Marcel Telka  <marcel@telka.sk>
 
 	* include/jtag.h (discovery): Removed 'filename' parameter.
