@@ -22,7 +22,9 @@
 #
 
 DIST_SUBDIRS = \
-	arm
+	arm \
+	jtag
 
 noinst_HEADERS = \
-	common.h
+	common.h \
+	stdint.h
