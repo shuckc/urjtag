@@ -23,7 +23,9 @@ See libbrux/NEWS for more news.
 		- Sharp LH7A400 (patch 886068, Marko Rößler)
 	* Added support for Lattice Parallel Port JTAG Cable (patch 1012138, Jerome Debard).
 	* Fixed pin assignment for Macraigor Wiggler JTAG Cable (patch 1040199, Andrew Dyer).
-	* Added new command 'salias'.
+	* Added new commands:
+		- 'salias' to define alias for a signal
+		- 'reset' to reset JTAG chain
 	* Explicit 'detectflash' command call is required before 'flashmem' command.
 	* Fixed minor bugs (including bug 857039).
 	* Fixed compiler error on Debian Woody (patch 986414, Martin Buck).

@@ -28,6 +28,7 @@ noinst_LIBRARIES = libcmd.a
 libcmd_a_SOURCES = \
 	frequency.c \
 	cable.c \
+	reset.c \
 	discovery.c \
 	detect.c \
 	signal.c \

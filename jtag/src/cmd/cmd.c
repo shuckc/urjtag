@@ -35,6 +35,7 @@ extern cmd_t cmd_quit;
 extern cmd_t cmd_help;
 extern cmd_t cmd_frequency;
 extern cmd_t cmd_cable;
+extern cmd_t cmd_reset;
 extern cmd_t cmd_discovery;
 extern cmd_t cmd_detect;
 extern cmd_t cmd_signal;
@@ -65,6 +66,7 @@ const cmd_t *cmds[] = {
 	&cmd_help,
 	&cmd_frequency,
 	&cmd_cable,
+	&cmd_reset,
 	&cmd_discovery,
 	&cmd_detect,
 	&cmd_signal,

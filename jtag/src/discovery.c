@@ -91,7 +91,7 @@ detect_register_size( chain_t *chain )
 	return -1;
 }
 
-static void
+void
 jtag_reset( chain_t *chain )
 {
 	chain_set_trst( chain, 0 );

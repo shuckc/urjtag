@@ -1,3 +1,10 @@
+2004-11-24  Marcel Telka  <marcel@telka.sk>
+
+	* src/cmd/reset.c: New file.
+	* src/discovery.c (jtag_reset): Function changed to non-static.
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added reset.c.
+	* src/cmd/cmd.c (cmds): Added cmd_reset.
+
 2004-11-21  Marcel Telka  <marcel@telka.sk>
 
 	* src/jtag.c (jtag_parse_stream, cleanup): New function.
