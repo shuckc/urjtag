@@ -2,6 +2,7 @@
 
 src/help.c
 src/jtag.c
+src/readmem.c
 src/part/part.c
 src/tap/chain.c
 src/tap/parport/direct.c

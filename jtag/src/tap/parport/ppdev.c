@@ -228,7 +228,7 @@ ppdev_get_status( parport_t *parport )
 	if (ioctl( p->fd, PPRSTATUS, &d ) == -1)
 		return -1;
 
-	return d;
+	return d ^ 0x80;			/* BUSY is inverted */
 }
 
 static int

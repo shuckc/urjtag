@@ -58,7 +58,7 @@ flash_driver_t *flash_drivers[] = {
 
 flash_driver_t *flash_driver = NULL;
 
-void
+static void
 set_flash_driver( bus_t *bus, cfi_query_structure_t *cfi )
 {
 	int i;
@@ -77,33 +77,22 @@ set_flash_driver( bus_t *bus, cfi_query_structure_t *cfi )
 
 /* check for flashmem - set driver */
 static void
-flashcheck( bus_t *bus, cfi_query_structure_t **cfi )
+flashcheck( bus_t *bus, cfi_array_t **cfi_array )
 {
-	int o = 0;
 	flash_driver = NULL;
 
 	bus_prepare( bus );
 
 	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
 
-	switch (bus_width( bus, 0 )) {
-		case 16:
-			o = 1;
-			break;
-		case 32:
-			o = 2;
-			break;
-		default:
-			printf( "Error: Unknown bus width!\n" );
-			return;
-	}
-
-	*cfi = detect_cfi( bus, 0 );
-	if (!*cfi) {
+	*cfi_array = NULL;
+	if (detect_cfi( bus, 0, cfi_array )) {
+		cfi_array_free( *cfi_array );
 		printf( "Flash not found!\n" );
 		return;
 	}
-	set_flash_driver( bus, *cfi );
+
+	set_flash_driver( bus, &(*cfi_array)->cfi_chips[0]->cfi );
 	if (!flash_driver) {
 		printf( "Flash not supported!\n" );
 		return;
@@ -115,13 +104,15 @@ void
 flashmsbin( bus_t *bus, FILE *f )
 {
 	uint32_t adr;
-	cfi_query_structure_t *cfi = NULL;
+	cfi_query_structure_t *cfi;
+	cfi_array_t *cfi_array;
 
-	flashcheck( bus, &cfi );
-	if (!cfi || !flash_driver) {
+	flashcheck( bus, &cfi_array );
+	if (!cfi_array || !flash_driver) {
 		printf( "no flash driver found\n" );
 		return;
 	}
+	cfi = &cfi_array->cfi_chips[0]->cfi;
 
 	/* test sync bytes */
 	{
@@ -229,21 +220,25 @@ flashmsbin( bus_t *bus, FILE *f )
 	printf( "\n" );
 
 	printf( "Done.\n" );
+
+	cfi_array_free( cfi_array );
 }
 
 void
 flashmem( bus_t *bus, FILE *f, uint32_t addr )
 {
 	uint32_t adr;
-	cfi_query_structure_t *cfi = NULL;
+	cfi_query_structure_t *cfi;
+	cfi_array_t *cfi_array;
 	int *erased;
 	int i;
 
-	flashcheck( bus, &cfi );
-	if (!cfi || !flash_driver) {
+	flashcheck( bus, &cfi_array );
+	if (!cfi_array || !flash_driver) {
 		printf( "no flash driver found\n" );
 		return;
 	}
+	cfi = &cfi_array->cfi_chips[0]->cfi;
 
 	erased = malloc( cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks * sizeof *erased );
 	if (!erased) {
@@ -318,4 +313,6 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		printf( "TODO: Verify is not available in 1 x 16 bit mode.\n" );
 
 	free( erased );
+
+	cfi_array_free( cfi_array );
 }

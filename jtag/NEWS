@@ -3,6 +3,8 @@ $Id$
 	* Added new manufacturer: DEC.
 	* Added support for executing scripts directly from stdin (parameter '-').
 	* Disabled external bus cycles for PXA250 for addresses above 0x04000000.
+	* Fixed bug in BUSY signal handling in Linux ppdev driver.
+	* Minor bugs fixed.
 
 jtag-0.3.2 (2003-04-04):
 

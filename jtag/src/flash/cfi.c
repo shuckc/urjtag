@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] JEDEC Solid State Technology Association, "Common Flash Interface (CFI)",
@@ -35,133 +35,219 @@
 #include "cfi.h"
 #include "bus.h"
 
-/* function to cover 2x16 and 1x16 modes */
-#define BW16(x) ( (bus_width(bus, 0) == 16) ? x : ( (x<<16) | x ) )
-
-static uint16_t
-read2( bus_t *bus, uint32_t adr, int o )
+void
+cfi_array_free( cfi_array_t *cfi_array )
 {
-	uint16_t r;
+	if (!cfi_array)
+		return;
 
-	bus_read_start( bus, adr << o );
-	r = bus_read_next( bus, (adr + 1) << o );
-	return ((bus_read_end( bus ) & 0xFF) << 8) | (r & 0xFF);
-}
-
-cfi_query_structure_t *
-detect_cfi( bus_t *bus, uint32_t adr )
-{
-	cfi_query_structure_t *cfi;
-	int o = 2;
-	uint32_t tmp;
-
-	if (bus_width( bus, 0 ) == 16)
-		o = 1;
-
-	/* detect CFI capable devices - see Table 1 in [1] */
-	bus_write( bus, CFI_CMD_QUERY_OFFSET << o, BW16(CFI_CMD_QUERY) );
-	if (bus_read( bus, CFI_QUERY_ID_OFFSET << o ) != BW16('Q')) {
-		printf( "No CFI device detected (Q)!\n" );
-		return NULL;
-	}
-	if (bus_read( bus, (CFI_QUERY_ID_OFFSET + 1) << o ) != BW16('R')) {
-		printf( "No CFI device detected (R)!\n" );
-		return NULL;
-	}
-	if (bus_read( bus, (CFI_QUERY_ID_OFFSET + 2) << o ) != BW16('Y')) {
-		printf( "No CFI device detected (Y)!\n" );
-		return NULL;
-	}
-
-	printf( "\n%d x 16 bit CFI devices detected (QRY ok)!\n\n", o);
-
-	cfi = malloc( sizeof *cfi );
-	if (!cfi)
-		return NULL;
-
-	/* TODO: Low chip only (bits 15:0) */
-
-	/* Identification string - see Table 6 in [1] */
-	cfi->identification_string.pri_id_code = read2( bus, PRI_VENDOR_ID_OFFSET, o );
-	cfi->identification_string.pri_vendor_tbl = NULL;
-	cfi->identification_string.alt_id_code = read2( bus, ALT_VENDOR_ID_OFFSET, o );
-	cfi->identification_string.alt_vendor_tbl = NULL;
-
-	/* System interface information - see Table 7 in [1] */
-	tmp = bus_read( bus, VCC_MIN_WEV_OFFSET << o );
-	cfi->system_interface_info.vcc_min_wev = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
-	tmp = bus_read( bus, VCC_MAX_WEV_OFFSET << o );
-	cfi->system_interface_info.vcc_max_wev = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
-	tmp = bus_read( bus, VPP_MIN_WEV_OFFSET << o );
-	cfi->system_interface_info.vpp_min_wev = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
-	tmp = bus_read( bus, VPP_MAX_WEV_OFFSET << o );
-	cfi->system_interface_info.vpp_max_wev = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
-
-	/* TODO: Add out of range checks for timeouts */
-	tmp = bus_read( bus, TYP_SINGLE_WRITE_TIMEOUT_OFFSET << o ) & 0xFF;
-	cfi->system_interface_info.typ_single_write_timeout = tmp ? (1 << tmp) : 0;
-
-	tmp = bus_read( bus, TYP_BUFFER_WRITE_TIMEOUT_OFFSET << o ) & 0xFF;
-	cfi->system_interface_info.typ_buffer_write_timeout = tmp ? (1 << tmp) : 0;
-
-	tmp = bus_read( bus, TYP_BLOCK_ERASE_TIMEOUT_OFFSET << o ) & 0xFF;
-	cfi->system_interface_info.typ_block_erase_timeout = tmp ? (1 << tmp) : 0;
-
-	tmp = bus_read( bus, TYP_CHIP_ERASE_TIMEOUT_OFFSET << o ) & 0xFF;
-	cfi->system_interface_info.typ_chip_erase_timeout = tmp ? (1 << tmp) : 0;
-
-	tmp = bus_read( bus, MAX_SINGLE_WRITE_TIMEOUT_OFFSET << o ) & 0xFF;
-	cfi->system_interface_info.max_single_write_timeout =
-			(tmp ? (1 << tmp) : 0) * cfi->system_interface_info.typ_single_write_timeout;
-
-	tmp = bus_read( bus, MAX_BUFFER_WRITE_TIMEOUT_OFFSET << o ) & 0xFF;
-	cfi->system_interface_info.max_buffer_write_timeout =
-			(tmp ? (1 << tmp) : 0) * cfi->system_interface_info.typ_buffer_write_timeout;
-
-	tmp = bus_read( bus, MAX_BLOCK_ERASE_TIMEOUT_OFFSET << o ) & 0xFF;
-	cfi->system_interface_info.max_block_erase_timeout =
-			(tmp ? (1 << tmp) : 0) * cfi->system_interface_info.typ_block_erase_timeout;
-
-	tmp = bus_read( bus, MAX_CHIP_ERASE_TIMEOUT_OFFSET << o ) & 0xFF;
-	cfi->system_interface_info.max_chip_erase_timeout =
-			(tmp ? (1 << tmp) : 0) * cfi->system_interface_info.typ_chip_erase_timeout;
-
-	/* Device geometry - see Table 8 in [1] */
-	/* TODO: Add out of range check */
-	cfi->device_geometry.device_size = 1 << (bus_read( bus, DEVICE_SIZE_OFFSET << o ) & 0xFF);
-
-	cfi->device_geometry.device_interface = read2( bus, FLASH_DEVICE_INTERFACE_OFFSET, o );
-
-	/* TODO: Add out of range check */
-	cfi->device_geometry.max_bytes_write = 1 << read2( bus, MAX_BYTES_WRITE_OFFSET, o );
-
-	tmp = bus_read( bus, NUMBER_OF_ERASE_REGIONS_OFFSET << o ) & 0xFF;
-	cfi->device_geometry.number_of_erase_regions = tmp;
-
-	cfi->device_geometry.erase_block_regions = malloc( tmp * sizeof (cfi_erase_block_region_t) );
-	if (!cfi->device_geometry.erase_block_regions) {
-		free( cfi );
-		return NULL;
-	}
-	
-	{
-		int a = ERASE_BLOCK_REGION_OFFSET;
+	if (cfi_array->cfi_chips) {
 		int i;
 
-		for (i = 0, a = ERASE_BLOCK_REGION_OFFSET; i < tmp; i++, a += 4) {
-			uint32_t y = read2( bus, a, o );
-			uint32_t z = read2( bus, a + 2, o ) << 8;
-			if (z == 0)
-				z = 128;
-			cfi->device_geometry.erase_block_regions[i].erase_block_size = z;
-			cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks = y + 1;
+		for (i = 0; i < cfi_array->bus_width; i++) {
+			if (!cfi_array->cfi_chips[i])
+				continue;
+
+			free( cfi_array->cfi_chips[i]->cfi.device_geometry.erase_block_regions );
+			free( cfi_array->cfi_chips[i] );
+		}
+		free( cfi_array->cfi_chips );
+	}
+
+	free( cfi_array );
+}
+
+int
+detect_cfi( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
+{
+	int bw;				/* bus width */
+	int d;				/* data offset */
+	int ba;				/* bus width address multiplier */
+	int ma;				/* flash mode address multiplier */
+
+	if (!cfi_array || !bus)
+		return -1;		/* invalid parameters */
+
+	*cfi_array = calloc( 1, sizeof (cfi_array_t) );
+	if (!*cfi_array)
+		return -2;		/* out of memory */
+
+	(*cfi_array)->bus = bus;
+	(*cfi_array)->address = adr;
+	bw = bus_width( bus, adr );
+	if (bw != 8 && bw != 16 && bw != 32)
+		return -3;		/* invalid bus width */
+	(*cfi_array)->bus_width = ba = bw / 8;
+	(*cfi_array)->cfi_chips = calloc( ba, sizeof (cfi_chip_t *) );
+	if (!(*cfi_array)->cfi_chips)
+		return -2;		/* out of memory */
+
+	for (d = 0; d < bw; d += 8) {
+#define	A(off)			(adr + (off) * ba * ma)
+#define	D(data)			((data) << d)
+#define	gD(data)		(((data) >> d) & 0xFF)
+#define	read1(off)		gD(bus_read( bus, A(off) ))
+#define	read2(off)		(bus_read_start( bus, A(off) ), gD(bus_read_next( bus, A(off + 1) )) | gD(bus_read_end( bus )) << 8)
+#define	write1(off,data)	bus_write( bus, A(off), D(data) )
+
+		cfi_query_structure_t *cfi;
+		uint32_t tmp;
+		ma = 1;
+
+		/* detect CFI capable devices - see Table 1 in [1] */
+		write1( CFI_CMD_QUERY_OFFSET, CFI_CMD_QUERY );
+
+		if (read1(CFI_QUERY_ID_OFFSET) != 'Q') {
+			write1( 0, CFI_CMD_READ_ARRAY1 );
+			return -4;	/* CFI not detected (Q) */
+		}
+
+		for (; ma <= 4; ma *= 2)
+			if (read1(CFI_QUERY_ID_OFFSET + 1) == 'R')
+				break;
+		if (ma > 4) {
+			write1( 0, CFI_CMD_READ_ARRAY1 );
+			return -5;	/* CFI not detected (R) */
+		}
+
+		if (read1(CFI_QUERY_ID_OFFSET + 2) != 'Y') {
+			write1( 0, CFI_CMD_READ_ARRAY1 );
+			return -6;	/* CFI not detected (Y) */
+		}
+
+		(*cfi_array)->cfi_chips[d / 8] = calloc( 1, sizeof (cfi_chip_t) );
+		if (!(*cfi_array)->cfi_chips[d / 8]) {
+			write1( 0, CFI_CMD_READ_ARRAY1 );
+			return -2;	/* out of memory */
+		}
+		cfi = &(*cfi_array)->cfi_chips[d / 8]->cfi;
+
+		/* Identification string - see Table 6 in [1] */
+		cfi->identification_string.pri_id_code = read2(PRI_VENDOR_ID_OFFSET);
+		cfi->identification_string.pri_vendor_tbl = NULL;
+		cfi->identification_string.alt_id_code = read2(ALT_VENDOR_ID_OFFSET);
+		cfi->identification_string.alt_vendor_tbl = NULL;
+
+		/* System interface information - see Table 7 in [1] */
+		tmp = read1(VCC_MIN_WEV_OFFSET);
+		cfi->system_interface_info.vcc_min_wev = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
+		tmp = read1(VCC_MAX_WEV_OFFSET);
+		cfi->system_interface_info.vcc_max_wev = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
+		tmp = read1(VPP_MIN_WEV_OFFSET);
+		cfi->system_interface_info.vpp_min_wev = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
+		tmp = read1(VPP_MAX_WEV_OFFSET);
+		cfi->system_interface_info.vpp_max_wev = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
+
+		/* TODO: Add out of range checks for timeouts */
+		tmp = read1(TYP_SINGLE_WRITE_TIMEOUT_OFFSET);
+		cfi->system_interface_info.typ_single_write_timeout = tmp ? (1 << tmp) : 0;
+
+		tmp = read1(TYP_BUFFER_WRITE_TIMEOUT_OFFSET);
+		cfi->system_interface_info.typ_buffer_write_timeout = tmp ? (1 << tmp) : 0;
+
+		tmp = read1(TYP_BLOCK_ERASE_TIMEOUT_OFFSET);
+		cfi->system_interface_info.typ_block_erase_timeout = tmp ? (1 << tmp) : 0;
+
+		tmp = read1(TYP_CHIP_ERASE_TIMEOUT_OFFSET);
+		cfi->system_interface_info.typ_chip_erase_timeout = tmp ? (1 << tmp) : 0;
+
+		tmp = read1(MAX_SINGLE_WRITE_TIMEOUT_OFFSET);
+		cfi->system_interface_info.max_single_write_timeout =
+				(tmp ? (1 << tmp) : 0) * cfi->system_interface_info.typ_single_write_timeout;
+
+		tmp = read1(MAX_BUFFER_WRITE_TIMEOUT_OFFSET);
+		cfi->system_interface_info.max_buffer_write_timeout =
+				(tmp ? (1 << tmp) : 0) * cfi->system_interface_info.typ_buffer_write_timeout;
+
+		tmp = read1(MAX_BLOCK_ERASE_TIMEOUT_OFFSET);
+		cfi->system_interface_info.max_block_erase_timeout =
+				(tmp ? (1 << tmp) : 0) * cfi->system_interface_info.typ_block_erase_timeout;
+
+		tmp = read1(MAX_CHIP_ERASE_TIMEOUT_OFFSET);
+		cfi->system_interface_info.max_chip_erase_timeout =
+				(tmp ? (1 << tmp) : 0) * cfi->system_interface_info.typ_chip_erase_timeout;
+
+		/* Device geometry - see Table 8 in [1] */
+		/* TODO: Add out of range check */
+		cfi->device_geometry.device_size = 1 << read1(DEVICE_SIZE_OFFSET);
+
+		cfi->device_geometry.device_interface = read2(FLASH_DEVICE_INTERFACE_OFFSET);
+
+		/* TODO: Add out of range check */
+		cfi->device_geometry.max_bytes_write = 1 << read2(MAX_BYTES_WRITE_OFFSET);
+
+		tmp = cfi->device_geometry.number_of_erase_regions = read1(NUMBER_OF_ERASE_REGIONS_OFFSET);
+
+		cfi->device_geometry.erase_block_regions = malloc( tmp * sizeof (cfi_erase_block_region_t) );
+		if (!cfi->device_geometry.erase_block_regions) {
+			write1( 0, CFI_CMD_READ_ARRAY1 );
+			return -2;	/* out of memory */
+		}
+		
+		{
+			int a;
+			int i;
+
+			for (i = 0, a = ERASE_BLOCK_REGION_OFFSET; i < tmp; i++, a += 4) {
+				uint32_t y = read2(a);
+				uint32_t z = read2(a + 2) << 8;
+				if (z == 0)
+					z = 128;
+				cfi->device_geometry.erase_block_regions[i].erase_block_size = z;
+				cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks = y + 1;
+			}
+		}
+
+		/* TODO: Intel Primary Algorithm Extended Query Table - see Table 5. in [2] */
+
+		/* Read Array */
+		write1( 0, CFI_CMD_READ_ARRAY1 );
+
+#undef A
+#undef D
+#undef gD
+#undef read1
+#undef read2
+#undef write1
+
+		switch (cfi->device_geometry.device_interface) {
+			case CFI_INTERFACE_X8:
+				if (ma != 1)
+					return -7;		/* error in device detection */
+				(*cfi_array)->cfi_chips[d / 8]->width = 1;
+				break;
+			case CFI_INTERFACE_X16:
+				if (ma != 1)
+					return -7;		/* error in device detection */
+				(*cfi_array)->cfi_chips[d / 8]->width = 2;
+				d += 8;
+				break;
+			case CFI_INTERFACE_X8_X16:
+				if (ma != 1 && ma != 2)
+					return -7;		/* error in device detection */
+				(*cfi_array)->cfi_chips[d / 8]->width = 2 / ma;
+				if (ma == 1)
+					d += 8;
+				break;
+			case CFI_INTERFACE_X32:
+				if (ma != 1)
+					return -7;		/* error in device detection */
+				(*cfi_array)->cfi_chips[d / 8]->width = 4;
+				d += 24;
+				break;
+			case CFI_INTERFACE_X16_X32:
+				if (ma != 1 && ma != 2)
+					return -7;		/* error in device detection */
+				(*cfi_array)->cfi_chips[d / 8]->width = 4 / ma;
+				if (ma == 1)
+					d += 24;
+				else
+					d += 8;
+				break;
+			default:
+				return -7;		/* error in device detection */
 		}
 	}
 
-	/* TODO: Intel Primary Algorithm Extended Query Table - see Table 5. in [2] */
-
-	/* Read Array */
-	bus_write( bus, 0, (CFI_CMD_READ_ARRAY1 << 16) | CFI_CMD_READ_ARRAY1 );
-
-	return cfi;
+	return 0;
 }

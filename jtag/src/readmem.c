@@ -21,16 +21,21 @@
  * Written by Marcel Telka <marcel@telka.sk>, 2002.
  *
  * Documentation:
- * [1] Advanced Micro Devices, "Common Flash Memory Interface Specification Release 2.0",
- *     December 1, 2001
- * [2] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
- *     Developer's Manual", February 2002, Order Number: 278522-001
- * [3] Intel Corporation, "Common Flash Interface (CFI) and Command Sets
- *     Application Note 646", April 2000, Order Number: 292204-004
- * [4] Advanced Micro Devices, "Common Flash Memory Interface Publication 100 Vendor & Device
- *     ID Code Assignments", December 1, 2001, Volume Number: 96.1
+ * [1] JEDEC Solid State Technology Association, "Common Flash Interface (CFI)",
+ *     September 1999, Order Number: JESD68
+ * [2] JEDEC Solid State Technology Association, "Common Flash Interface (CFI) ID Codes",
+ *     September 2001, Order Number: JEP137-A
  *
  */
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
 
 #include <stdint.h>
 #include <string.h>
@@ -48,165 +53,150 @@
 void
 detectflash( bus_t *bus )
 {
-	int o = 0;
+	cfi_array_t *cfi_array = NULL;
 	cfi_query_structure_t *cfi;
+	char *s;
 
 	if (!bus) {
-		printf( "Error: Missing bus driver!\n" );
+		printf( _("Error: Missing bus driver!\n") );
 		return;
 	}
 
 	bus_prepare( bus );
 
-	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
-
-	switch (bus_width( bus, 0 )) {
-		case 16:
-			o = 1;
-			break;
-		case 32:
-			o = 2;
-			break;
-		default:
-			printf( "Error: Unknown bus width!\n" );
-			return;
-	}
-
-	cfi = detect_cfi( bus, 0 );
-	if (!cfi) {
-		printf( "Flash not found!\n" );
+	if (detect_cfi( bus, 0, &cfi_array )) {
+		cfi_array_free( cfi_array );
+		printf( _("Flash not found!\n") );
 		return;
 	}
 
+	cfi = &cfi_array->cfi_chips[0]->cfi;
+
 	/* detect CFI capable devices */
 	/* TODO: Low chip only */
-	/* see 3.3.2 in [1] */
-	printf( "CFI Query Identification String:\n" );
-	printf( "\tPrimary Vendor Command Set and Control Interface ID Code: 0x%04X ", cfi->identification_string.pri_id_code );
-	/* see Section 1. in [4] */
+	/* see 4.3.2 in [1] */
+	printf( _("Query identification string:\n") );
+	/* see section 2 in [2] */
 	switch (cfi->identification_string.pri_id_code) {
 		case CFI_VENDOR_NULL:
-			printf( "(null)\n" );
+			s = _("null");
 			break;
 		case CFI_VENDOR_INTEL_ECS:
-			printf( "(Intel/Sharp Extended Command Set)\n" );
+			s = _("Intel/Sharp Extended Command Set");
 			break;
 		case CFI_VENDOR_AMD_SCS:
-			printf( "(AMD/Fujitsu Standard Commanf Set)\n" );
+			s = _("AMD/Fujitsu Standard Commanf Set");
 			break;
 		case CFI_VENDOR_INTEL_SCS:
-			printf( "(Intel Standard Command Set)\n" );
+			s = _("Intel Standard Command Set");
 			break;
 		case CFI_VENDOR_AMD_ECS:
-			printf( "(AMD/Fujitsu Extended Command Set)\n" );
+			s = _("AMD/Fujitsu Extended Command Set");
 			break;
 		case CFI_VENDOR_MITSUBISHI_SCS:
-			printf( "(Mitsubishi Standard Command Set)\n" );
+			s = _("Mitsubishi Standard Command Set");
 			break;
 		case CFI_VENDOR_MITSUBISHI_ECS:
-			printf( "(Mitsubishi Extended Command Set)\n" );
+			s = _("Mitsubishi Extended Command Set");
 			break;
 		case CFI_VENDOR_SST_PWCS:
-			printf( "(Page Write Command Set)\n" );
+			s = _("Page Write Command Set");
 			break;
 		default:
-			printf( "(unknown!!!)\n" );
+			s = _("unknown!!!");
 			break;
 	}
-	printf( "\tAddress of Primary Algorithm extended Query table: P = 0x????\n" );
-	printf( "\tAlternate Vendor Command Set and Control Interface ID Code: 0x%04X ", cfi->identification_string.alt_id_code );
+	printf( _("\tPrimary Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"), cfi->identification_string.pri_id_code, s );
 	switch (cfi->identification_string.alt_id_code) {
 		case CFI_VENDOR_NULL:
-			printf( "(null)\n" );
+			s = _("null");
 			break;
 		case CFI_VENDOR_INTEL_ECS:
-			printf( "(Intel/Sharp Extended Command Set)\n" );
+			s = _("Intel/Sharp Extended Command Set");
 			break;
 		case CFI_VENDOR_AMD_SCS:
-			printf( "(AMD/Fujitsu Standard Commanf Set)\n" );
+			s = _("AMD/Fujitsu Standard Commanf Set");
 			break;
 		case CFI_VENDOR_INTEL_SCS:
-			printf( "(Intel Standard Command Set)\n" );
+			s = _("Intel Standard Command Set");
 			break;
 		case CFI_VENDOR_AMD_ECS:
-			printf( "(AMD/Fujitsu Extended Command Set)\n" );
+			s = _("AMD/Fujitsu Extended Command Set");
 			break;
 		case CFI_VENDOR_MITSUBISHI_SCS:
-			printf( "(Mitsubishi Standard Command Set)\n" );
+			s = _("Mitsubishi Standard Command Set");
 			break;
 		case CFI_VENDOR_MITSUBISHI_ECS:
-			printf( "(Mitsubishi Extended Command Set)\n" );
+			s = _("Mitsubishi Extended Command Set");
 			break;
 		case CFI_VENDOR_SST_PWCS:
-			printf( "(Page Write Command Set)\n" );
+			s = _("Page Write Command Set");
 			break;
 		default:
-			printf( "(unknown!!!)\n" );
+			s = _("unknown!!!");
 			break;
 	}
-	printf( "\tAddress of Alternate Algorithm extended Query table: A = 0x????\n" );
+	printf( _("\tAlternate Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"), cfi->identification_string.alt_id_code, s );
 
-	/* see 3.3.3 in [1] */
-	printf( "CFI Query System Interface Information:\n" );
-	printf( "\tVcc Logic Supply Minimum Write/Erase voltage: %d mV\n", cfi->system_interface_info.vcc_min_wev );
-	printf( "\tVcc Logic Supply Maximum Write/Erase voltage: %d mV\n", cfi->system_interface_info.vcc_max_wev );
-	printf( "\tVpp [Programming] Logic Supply Minimum Write/Erase voltage: %d mV\n", cfi->system_interface_info.vpp_min_wev );
-	printf( "\tVpp [Programming] Logic Supply Maximum Write/Erase voltage: %d mV\n", cfi->system_interface_info.vpp_max_wev );
-	printf( "\tTypical timeout per single byte/word write: %d us\n", cfi->system_interface_info.typ_single_write_timeout );
-	printf( "\tTypical timeout for minimum-size buffer write: %d us\n", cfi->system_interface_info.typ_buffer_write_timeout );
-	printf( "\tTypical timeout per individual block erase: %d ms\n", cfi->system_interface_info.typ_block_erase_timeout );
-	printf( "\tTypical timeout for full chip erase: %d ms\n", cfi->system_interface_info.typ_chip_erase_timeout );
-	printf( "\tMaximum timeout for byte/word write: %d us\n", cfi->system_interface_info.max_single_write_timeout );
-	printf( "\tMaximum timeout for buffer write: %d us\n", cfi->system_interface_info.max_buffer_write_timeout );
-	printf( "\tMaximum timeout per individual block erase: %d ms\n", cfi->system_interface_info.max_block_erase_timeout );
-	printf( "\tMaximum timeout for chip erase: %d ms\n", cfi->system_interface_info.max_chip_erase_timeout );
+	/* see 4.3.3 in [1] */
+	printf( _("Query system interface information:\n") );
+	printf( _("\tVcc Logic Supply Minimum Write/Erase or Write voltage: %d mV\n"), cfi->system_interface_info.vcc_min_wev );
+	printf( _("\tVcc Logic Supply Maximum Write/Erase or Write voltage: %d mV\n"), cfi->system_interface_info.vcc_max_wev );
+	printf( _("\tVpp [Programming] Supply Minimum Write/Erase voltage: %d mV\n"), cfi->system_interface_info.vpp_min_wev );
+	printf( _("\tVpp [Programming] Supply Maximum Write/Erase voltage: %d mV\n"), cfi->system_interface_info.vpp_max_wev );
+	printf( _("\tTypical timeout per single byte/word program: %d us\n"), cfi->system_interface_info.typ_single_write_timeout );
+	printf( _("\tTypical timeout for maximum-size multi-byte program: %d us\n"), cfi->system_interface_info.typ_buffer_write_timeout );
+	printf( _("\tTypical timeout per individual block erase: %d ms\n"), cfi->system_interface_info.typ_block_erase_timeout );
+	printf( _("\tTypical timeout for full chip erase: %d ms\n"), cfi->system_interface_info.typ_chip_erase_timeout );
+	printf( _("\tMaximum timeout for byte/word program: %d us\n"), cfi->system_interface_info.max_single_write_timeout );
+	printf( _("\tMaximum timeout for multi-byte program: %d us\n"), cfi->system_interface_info.max_buffer_write_timeout );
+	printf( _("\tMaximum timeout per individual block erase: %d ms\n"), cfi->system_interface_info.max_block_erase_timeout );
+	printf( _("\tMaximum timeout for chip erase: %d ms\n"), cfi->system_interface_info.max_chip_erase_timeout );
 
-	/* see 3.3.4 in [1] */
-	printf( "Device Geometry Definition:\n" );
-	printf( "\tDevice Size: %d B (%d KiB, %d MiB)\n", 
+	/* see 4.3.4 in [1] */
+	printf( _("Device geometry definition:\n") );
+	printf( _("\tDevice Size: %d B (%d KiB, %d MiB)\n"), 
 		cfi->device_geometry.device_size,
 		cfi->device_geometry.device_size / 1024,
 		cfi->device_geometry.device_size / (1024 * 1024) );
-	printf( "\tFlash Device Interface description: 0x%04X ", cfi->device_geometry.device_interface );
-	/* see Section 2. in [4] */
+	/* see section 4 in [2] */
 	switch (cfi->device_geometry.device_interface) {
 		case CFI_INTERFACE_X8:
-			printf( "(x8)\n" );
+			s = _("x8");
 			break;
 		case CFI_INTERFACE_X16:
-			printf( "(x16)\n" );
+			s = _("x16");
 			break;
 		case CFI_INTERFACE_X8_X16:
-			printf( "(x8/x16)\n" );
+			s = _("x8/x16");
 			break;
 		case CFI_INTERFACE_X32:
-			printf( "(x32)\n" );
+			s = _("x32");
 			break;
 		case CFI_INTERFACE_X16_X32:
-			printf( "(x16/x32)\n" );
+			s = _("x16/x32");
 			break;
 		default:
-			printf( "(unknown!!!)\n" );
+			s = _("unknown!!!");
 			break;
 	}
-	printf( "\tMaximum number of bytes in multi-byte write: %d\n", cfi->device_geometry.max_bytes_write );
-	printf( "\tNumber of Erase Block Regions within device: %d\n", cfi->device_geometry.number_of_erase_regions );
-	printf( "\tErase Block Region Information:\n" );
+	printf( _("\tFlash Device Interface Code description: 0x%04X (%s)\n"), cfi->device_geometry.device_interface, s );
+	printf( _("\tMaximum number of bytes in multi-byte program: %d\n"), cfi->device_geometry.max_bytes_write );
+	printf( _("\tNumber of Erase Block Regions within device: %d\n"), cfi->device_geometry.number_of_erase_regions );
+	printf( _("\tErase Block Region Information:\n") );
 	{
 		int i;
 
 		for (i = 0; i < cfi->device_geometry.number_of_erase_regions; i++) {
-			printf( "\t\tRegion %d:\n", i );
-			printf( "\t\t\tErase Block Size: %d B (%d KiB)\n",
+			printf( _("\t\tRegion %d:\n"), i );
+			printf( _("\t\t\tErase Block Size: %d B (%d KiB)\n"),
 				cfi->device_geometry.erase_block_regions[i].erase_block_size,
 				cfi->device_geometry.erase_block_regions[i].erase_block_size / 1024 );
-			printf( "\t\t\tNumber of Erase Blocks: %d\n", cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks );
+			printf( _("\t\t\tNumber of Erase Blocks: %d\n"), cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks );
 		}
 	}
 
-	set_flash_driver( bus, cfi );
-	if (flash_driver)
-		flash_driver->flash_print_info( bus );
+	cfi_array_free( cfi_array );
 }
 
 void

@@ -1,3 +1,22 @@
+2003-05-19  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/parport/ppdev.c (ppdev_get_status): Inverted BUSY signal value.
+
+	* include/cfi.h (cfi_chip_t, cfi_array_t): New typedefs.
+	(cfi_array_free): New function prototype.
+	(detect_cfi): Changed function prototype.
+	* include/flash.h (set_flash_driver): Removed function prototype.
+	* src/flash/cfi.c (BW16): Macro removed.
+	(read2): Function removed.
+	(cfi_array_free): New function.
+	(detect_cfi): Added code to detect all CFI chips on the data bus.
+	* src/flash.c (flashcheck): Removed bus width checking. Updated due changes in src/flash/cfi.c.
+	(flashmsbin): Updated due changes in src/flash/cfi.c. Removed memory leak.
+	* src/readmem.c: Added l10n support. Marked messages for translation.
+	(detectflash): Updated due changes in src/flash/cfi.c. Removed memory leak.
+		Removed flash driver setup.
+	* po/POTFILES.in: Added src/readmem.c.
+
 2003-05-16  Marcel Telka  <marcel@telka.sk>
 
 	* include/part.h (part_print): New function declaration.
@@ -22,7 +41,7 @@
 	* src/bus/pxa2x0.c (bus_params_t): Added last_adr and MC_registers structure members.
 	(LAST_ADR, MC_pointer): New macros.
 	(pxa250_bus_read_start, pxa250_bus_read_next, pxa250_bus_read_end, pxa250_bus_write): Disabled
-		external bus cycles for addresses above 0x0400000.
+		external bus cycles for addresses above 0x04000000.
 	(pxa250_bus_width): Removed some output messages. Implemented BOOT_DEF emulation.
 	(new_pxa250_bus): Implemented BOOT_DEF emulation.
 

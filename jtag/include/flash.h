@@ -53,8 +53,6 @@ extern flash_driver_t *flash_drivers[];
 #define flash_program         flash_driver->flash_program
 #define flash_readarray       flash_driver->flash_readarray
 
-extern void set_flash_driver( bus_t *bus, cfi_query_structure_t *cfi );
-
 #define	CFI_INTEL_ERROR_UNKNOWN				1
 #define	CFI_INTEL_ERROR_UNSUPPORTED			2
 #define	CFI_INTEL_ERROR_LOW_VPEN			3
