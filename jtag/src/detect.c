@@ -166,7 +166,7 @@ detect_parts( char *db_path )
 	parts *ps = parts_alloc();
 
 	if (!zeros || !ones || !id || !ps) {
-		printf( __FUNCTION__ ": out of memory\n" );
+		printf( "%s: out of memory\n", __FUNCTION__ );
 
 		register_free( zeros );
 		register_free( ones );
@@ -190,7 +190,7 @@ detect_parts( char *db_path )
 			break;				/* end of chain */
 
 		if (!register_compare( ones, id )) {
-			printf( __FUNCTION__ ": bad JTAG connection (TDO is 1)\n" );
+			printf( "%s: bad JTAG connection (TDO is 1)\n", __FUNCTION__ );
 			break;
 		}
 
