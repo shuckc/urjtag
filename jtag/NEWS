@@ -14,6 +14,7 @@ jtag-0.3:
 		- Intel IXP425 (Christian Pellegrin)
 		- Xilinx XC2C256-TQ144 (Alessandro Zummo)
 		- Broadcom BCM1250 (Matan Ziv-Av)
+		- Hitachi SH7727 (Matan Ziv-Av)
 	* Added bus driver for Intel IXP425 (Christian Pellegrin).
 	* Added support for all 6 static memory banks for Intel SA1110 (bug 682660).
 	* Added support for bidirectional 'B' boundary scan bits (Christian Pellegrin).

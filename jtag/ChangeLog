@@ -1,5 +1,14 @@
 2003-02-25  Marcel Telka  <marcel@telka.sk>
 
+	* data/MANUFACTURERS: Added Hitachi (Matan Ziv-Av).
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added Hitachi SH7727
+		files (Matan Ziv-Av).
+	* data/hitachi/PARTS: New file (Matan Ziv-Av).
+	* data/hitachi/sh7727/STEPPINGS: Ditto.
+	* data/hitachi/sh7727/sh7727: Ditto.
+
+2003-02-25  Marcel Telka  <marcel@telka.sk>
+
 	* data/MANUFACTURERS: Added Broadcom (Matan Ziv-Av).
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added Broadcom BCM1250
 		files (Matan Ziv-Av).

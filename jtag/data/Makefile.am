@@ -29,6 +29,9 @@ nobase_dist_pkgdata_DATA = \
 	broadcom/PARTS \
 	broadcom/bcm1250/STEPPINGS \
 	broadcom/bcm1250/bcm1250 \
+	hitachi/PARTS \
+	hitachi/sh7727/STEPPINGS \
+	hitachi/sh7727/sh7727 \
 	intel/PARTS \
 	intel/pxa250/STEPPINGS \
 	intel/pxa250/pxa250 \
