@@ -1,5 +1,14 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* include/Makefile.am (noinst_HEADERS): Added cmd.h.
+	* include/cmd.h: New file.
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Removed cmd.h.
+	* src/cmd/cmd.h: File removed. Partially moved to include module (file brux/cmd.h).
+
+	* src/cmd/detectflash.c (cmd_detectflash_help): Changed help text.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* src/readmem.c (detectflash): Function extracted to module libbrux, file flash/detectflash.c.
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>

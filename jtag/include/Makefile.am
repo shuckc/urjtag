@@ -30,6 +30,7 @@ noinst_HEADERS = \
 	cfi.h \
 	chain.h \
 	data_register.h \
+	cmd.h \
 	flash.h \
 	gettext.h \
 	instruction.h \

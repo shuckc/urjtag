@@ -26,7 +26,6 @@ include $(top_srcdir)/Makefile.rules
 noinst_LIBRARIES = libcmd.a
 
 libcmd_a_SOURCES = \
-	cmd.h \
 	quit.c \
 	help.c \
 	frequency.c \

@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 
-#include "jtag.h"
+#include <brux/flash.h>
 
 #include "cmd.h"
 
@@ -51,10 +51,7 @@ cmd_detectflash_help( void )
 {
 	printf( _(
 		"Usage: %s\n"
-		"Detect flash memory type connected to part.\n"
-		"\n"
-		"Only detects flash connected to part 0. Part 0 must support\n"
-		"bus operations.\n"
+		"Detect flash memory type connected to a part.\n"
 	), "detectflash" );
 }
 
