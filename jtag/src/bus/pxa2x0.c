@@ -78,23 +78,31 @@ setup_address( bus_t *bus, uint32_t a )
 		part_set_signal( p, MA[i], 1, (a >> i) & 1 );
 }
 
+static int pxa2x0_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
+
 static void
-set_data_in( bus_t *bus )
+set_data_in( bus_t *bus, uint32_t adr )
 {
 	int i;
 	part_t *p = PART;
+	bus_area_t area;
 
-	for (i = 0; i < 32; i++)
+	pxa2x0_bus_area( bus, adr, &area );
+
+	for (i = 0; i < area.width; i++)
 		part_set_signal( p, MD[i], 0, 0 );
 }
 
 static void
-setup_data( bus_t *bus, uint32_t d )
+setup_data( bus_t *bus, uint32_t adr, uint32_t d )
 {
 	int i;
 	part_t *p = PART;
+	bus_area_t area;
 
-	for (i = 0; i < 32; i++)
+	pxa2x0_bus_area( bus, adr, &area );
+
+	for (i = 0; i < area.width; i++)
 		part_set_signal( p, MD[i], 1, (d >> i) & 1 );
 }
 
@@ -138,7 +146,7 @@ pxa250_bus_read_start( bus_t *bus, uint32_t adr )
 	part_set_signal( p, nSDCAS, 1, 0 );
 
 	setup_address( bus, adr );
-	set_data_in( bus );
+	set_data_in( bus, adr );
 
 	chain_shift_data_registers( chain, 0 );
 }
@@ -155,13 +163,16 @@ pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 
 	if (adr < UINT32_C(0x04000000)) {
 		int i;
+		bus_area_t area;
+
+		pxa2x0_bus_area( bus, adr, &area );
 
 		/* see Figure 6-13 in [1] */
 		setup_address( bus, adr );
 		chain_shift_data_registers( chain, 1 );
 
 		d = 0;
-		for (i = 0; i < 32; i++)
+		for (i = 0; i < area.width; i++)
 			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
 
 		return d;
@@ -189,6 +200,9 @@ pxa250_bus_read_end( bus_t *bus )
 	if (LAST_ADR < UINT32_C(0x04000000)) {
 		int i;
 		uint32_t d = 0;
+		bus_area_t area;
+
+		pxa2x0_bus_area( bus, LAST_ADR, &area );
 
 		/* see Figure 6-13 in [1] */
 		part_set_signal( p, nCS[0], 1, 1 );
@@ -197,7 +211,7 @@ pxa250_bus_read_end( bus_t *bus )
 
 		chain_shift_data_registers( chain, 1 );
 
-		for (i = 0; i < 32; i++)
+		for (i = 0; i < area.width; i++)
 			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
 
 		return d;
@@ -244,7 +258,7 @@ pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	part_set_signal( p, nSDCAS, 1, 0 );
 
 	setup_address( bus, adr );
-	setup_data( bus, data );
+	setup_data( bus, adr, data );
 
 	chain_shift_data_registers( chain, 0 );
 

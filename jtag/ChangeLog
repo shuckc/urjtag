@@ -1,3 +1,13 @@
+2003-09-03  Marcel Telka  <marcel@telka.sk>
+
+	* src/bus/pxa2x0.c (set_data_in, setup_data): Added new 'adr' parameter. Used real data bus width
+		for data reading (based on patch 792591, thanks to Guennadi Liakhovetski).
+	All function callers updated.
+	(pxa250_bus_read_next, pxa250_bus_read_end): Used real data bus width for data reading (based on
+		patch 792591, thanks to Guennadi Liakhovetski).
+	* src/bus/sa1110.c (set_data_in, setup_data, sa1110_bus_read_next, sa1110_bus_read_end): Ditto.
+	* src/bus/sh7727.c (set_data_in, setup_data, sh7727_bus_read_next, sh7727_bus_read_end): Ditto.
+
 2003-08-28  Marcel Telka  <marcel@telka.sk>
 
 	* src/bus/pxa2x0.c (pxa250_bus_read_next, pxa250_bus_read_end): Added support for BOOT_DEF register

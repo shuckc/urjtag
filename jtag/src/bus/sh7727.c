@@ -58,6 +58,8 @@ typedef struct {
 #define	MD3	((bus_params_t *) bus->params)->md3
 #define	MD4	((bus_params_t *) bus->params)->md4
 
+static int sh7727_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
+
 static void
 setup_address( bus_t *bus, uint32_t a )
 {
@@ -73,8 +75,11 @@ set_data_in( bus_t *bus )
 {
 	int i;
 	part_t *p = PART;
+	bus_area_t area;
 
-	for (i = 0; i < 32; i++)
+	sh7727_bus_area( bus, 0, &area );
+
+	for (i = 0; i < area.width; i++)
 		part_set_signal( p, D[i], 0, 0 );
 }
 
@@ -83,8 +88,11 @@ setup_data( bus_t *bus, uint32_t d )
 {
 	int i;
 	part_t *p = PART;
+	bus_area_t area;
 
-	for (i = 0; i < 32; i++)
+	sh7727_bus_area( bus, 0, &area );
+
+	for (i = 0; i < area.width; i++)
 		part_set_signal( p, D[i], 1, (d >> i) & 1 );
 }
 
@@ -142,11 +150,14 @@ sh7727_bus_read_next( bus_t *bus, uint32_t adr )
 	part_t *p = PART;
 	int i;
 	uint32_t d = 0;
+	bus_area_t area;
+	
+	sh7727_bus_area( bus, 0, &area );
 
 	setup_address( bus, adr );
 	chain_shift_data_registers( CHAIN, 1 );
 
-	for (i = 0; i < 32; i++)
+	for (i = 0; i < area.width; i++)
 		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
 
 	return d;
@@ -158,6 +169,9 @@ sh7727_bus_read_end( bus_t *bus )
 	part_t *p = PART;
 	int i;
 	uint32_t d = 0;
+	bus_area_t area;
+
+	sh7727_bus_area( bus, 0, &area );
 
 	part_set_signal( p, CS[0], 1, 1 );
 	part_set_signal( p, CS[2], 1, 1 );
@@ -169,7 +183,7 @@ sh7727_bus_read_end( bus_t *bus )
 	part_set_signal( p, RD, 1, 1 );
 	chain_shift_data_registers( CHAIN, 1 );
 
-	for (i = 0; i < 32; i++)
+	for (i = 0; i < area.width; i++)
 		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
 
 	return d;

@@ -7,6 +7,8 @@ See libbrux/NEWS for more news.
 		- Altera EPM7128AETC100 (Rojhalat Ibrahim)
 	* Added additional checks for valid ByteBlaster cable connection and enabled all variants
 		of the cable (patch 793313, Rojhalat Ibrahim).
+	* Used real data bus width for data reading in PXA2x0, SA1110, and SH7727 bus drivers
+		(based on patch 792591, thanks to Guennadi Liakhovetski).
 	* Added BOOT_DEF register emulation for PXA2x0 bus driver.
 	* Fixed minor bugs.
 
