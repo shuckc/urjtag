@@ -27,5 +27,6 @@ noinst_LIBRARIES = libbrux.a
 
 libbrux_a_SOURCES = \
 	flash/cfi.c \
+	flash/detectflash.c \
 	flash/amd.c \
 	flash/intel.c

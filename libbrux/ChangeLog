@@ -1,3 +1,8 @@
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am (libbrux_a_SOURCES): Added flash/detectflash.c.
+	* flash/detectflash.c: New file, extracted from module jtag, file src/readmem.c.
+
 2003-06-02  Marcel Telka  <marcel@telka.sk>
 
 	* flash/cfi.c: New file. Moved from jtag module (src/flash/cfi.c).
