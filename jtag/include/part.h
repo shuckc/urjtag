@@ -59,6 +59,7 @@ data_register *part_find_data_register( part_t *p, const char *drname );
 void part_set_instruction( part_t *p, const char *iname );
 void part_set_signal( part_t *p, const char *pname, int out, int val );
 int part_get_signal( part_t *p, const char *pname );
+void part_print( part_t *p );
 
 typedef struct parts parts_t;
 

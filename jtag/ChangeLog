@@ -1,3 +1,13 @@
+2003-05-16  Marcel Telka  <marcel@telka.sk>
+
+	* include/part.h (part_print): New function declaration.
+	* src/part/part.c: Marked all user visible messages for translation.
+	(part_print): New function.
+	(parts_print): Simplified. Added part_print() call.
+	* po/POTFILES.in: Added src/part/part.c.
+
+	* src/Makefile.am (jtag_DEPENDENCIES): Added flash/libflash.a.
+
 2003-05-15  Marcel Telka  <marcel@telka.sk>
 
 	* include/cfi.h (detect_cfi): Added new parameter `adr'.

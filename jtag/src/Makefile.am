@@ -44,7 +44,7 @@ jtag_SOURCES = \
 bsdl2jtag_SOURCES = \
 	bsdl2jtag.c
 
-jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a bus/libbus.a
+jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a bus/libbus.a flash/libflash.a
 
 jtag_LDADD = -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus -Lflash -lflash @LIBINTL@
 

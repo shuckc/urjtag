@@ -22,6 +22,15 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -137,7 +146,7 @@ part_set_signal( part_t *p, const char *pname, int out, int val )
 	/* search for Boundary Scan Register */
 	data_register *bsr = part_find_data_register( p, "BSR" );
 	if (!bsr) {
-		printf( "%s(%s:%d) Boundary Scan Register (BSR) not found\n", __FUNCTION__, __FILE__, __LINE__ );
+		printf( _("%s(%s:%d) Boundary Scan Register (BSR) not found\n"), __FUNCTION__, __FILE__, __LINE__ );
 		return;
 	}
 
@@ -150,7 +159,7 @@ part_set_signal( part_t *p, const char *pname, int out, int val )
 	}
 
 	if (!s) {
-		printf( "signal %s not found\n", pname );
+		printf( _("signal %s not found\n"), pname );
 		return;
 	}
 
@@ -158,7 +167,7 @@ part_set_signal( part_t *p, const char *pname, int out, int val )
 	if (out) {
 		int control;
 		if (!s->output) {
-			printf( "signal %s cannot be set as output\n", pname );
+			printf( _("signal %s cannot be set as output\n"), pname );
 			return;
 		}
 		bsr->in->data[s->output->bit] = val & 1;
@@ -168,7 +177,7 @@ part_set_signal( part_t *p, const char *pname, int out, int val )
 			bsr->in->data[control] = p->bsbits[s->output->bit]->control_value ^ 1;
 	} else {
 		if (!s->input) {
-			printf( "signal %s cannot be set as input\n", pname );
+			printf( _("signal %s cannot be set as input\n"), pname );
 			return;
 		}
 		if (s->output)
@@ -184,7 +193,7 @@ part_get_signal( part_t *p, const char *pname )
 	/* search for Boundary Scan Register */
 	data_register *bsr = part_find_data_register( p, "BSR" );
 	if (!bsr) {
-		printf( "%s(%s:%d) Boundary Scan Register (BSR) not found\n", __FUNCTION__, __FILE__, __LINE__ );
+		printf( _("%s(%s:%d) Boundary Scan Register (BSR) not found\n"), __FUNCTION__, __FILE__, __LINE__ );
 		return -1;
 	}
 
@@ -197,16 +206,39 @@ part_get_signal( part_t *p, const char *pname )
 	}
 
 	if (!s) {
-		printf( "signal %s not found\n", pname );
+		printf( _("signal %s not found\n"), pname );
 		return -1;
 	}
 
 	if (!s->input) {
-		printf( "signal %s is not input signal\n", pname );
+		printf( _("signal %s is not input signal\n"), pname );
 		return -1;
 	}
 
 	return bsr->out->data[s->input->bit];
+}
+
+void
+part_print( part_t *p )
+{
+	char *instruction;
+	char *dr;
+	char format[100];
+
+	if (!p)
+		return;
+
+	snprintf( format, 100, _("%%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
+			MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
+
+	if (p->active_instruction) {
+		instruction = p->active_instruction->name;
+		dr = p->active_instruction->data_register->name;
+	} else {
+		instruction = _("(none)");
+		dr = _("(none)");
+	}
+	printf( format, p->manufacturer, p->part, p->stepping, instruction, dr );
 }
 
 /* parts */
@@ -268,13 +300,12 @@ parts_print( parts_t *ps, int header )
 	int i;
 
 	char format[100];
-	snprintf( format, 100, " %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds \n", MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
+	snprintf( format, 100, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
 			MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
 
 	if (header) {
-		printf( " No." );
-		printf( format, "Manufacturer", "Part", "Stepping", "Instruction", "Register" );
-		for (i = 0; i < 10 + MAXLEN_MANUFACTURER + MAXLEN_PART + MAXLEN_STEPPING + MAXLEN_INSTRUCTION + MAXLEN_DATA_REGISTER; i++ )
+		printf( format, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
+		for (i = 0; i < strlen( format ) + 1; i++ )
 			putchar( '-' );
 		putchar( '\n' );
 	}
@@ -283,15 +314,12 @@ parts_print( parts_t *ps, int header )
 		return;
 
 	for (i = 0; i < ps->len; i++) {
-		char *instruction = "(none)";
-		char *dr = "(none)";
 		part_t *p = ps->parts[i];
 
-		if (p->active_instruction) {
-			instruction = p->active_instruction->name;
-			dr = p->active_instruction->data_register->name;
-		}
-		printf( " %3d", i );
-		printf( format, p->manufacturer, p->part, p->stepping, instruction, dr );
+		if (!p)
+			continue;
+
+		printf( _(" %3d "), i );
+		part_print( p );
 	}
 }
