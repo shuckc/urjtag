@@ -1,5 +1,10 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* brux/cmd.h (cmds): Added external variable declaration.
+	* brux/bus.h (bus): Ditto.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* brux/cmd.h: New file extracted from jtag module, file src/cmd/cmd.h.
 	* Makefile.am (nobase_openwinceinc_HEADERS): Added brux/flash.h and brux/cmd.h.
 

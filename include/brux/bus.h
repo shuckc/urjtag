@@ -51,6 +51,8 @@ struct bus {
 	void (*free)( bus_t *bus );
 };
 
+extern bus_t *bus;
+
 #define	bus_prepare(bus)	bus->prepare(bus)
 #define	bus_width(bus,adr)	bus->width(bus,adr)
 #define	bus_read_start(bus,adr)	bus->read_start(bus,adr)
