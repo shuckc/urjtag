@@ -135,7 +135,7 @@ typedef struct cfi_device_geometry_t {
 
 struct cfi_erase_block_region_t {
 	uint32_t erase_block_size;			/* in B */
-	uint32_t erase_blocks_number;
+	uint32_t number_of_erase_blocks;
 };
 #endif /* LANGUAGE == C */
 
