@@ -33,6 +33,7 @@
 #define	SA11X0_UART_H
 
 #include <common.h>
+#include <stdint.h>
 
 /* UART Registers (Serial Port 1, 2 and 3) */
 
