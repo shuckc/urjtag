@@ -51,7 +51,11 @@
 #define	C	1
 #endif
 
+#define	ABS(a)		(((a) < 0) ? (-(a)) : (a))
+#define	MIN(a,b)	(((a) < (b)) ? (a) : (b))
+#define	MAX(a,b)	(((a) < (b)) ? (b) : (a))
+
 #define	bit(x)		(1 << x)
-#define	bits(h,l)	(((1 << (h + 1)) - 1) & ~((1 << l) - 1))
+#define	bits(b1,b2)	(((2 << ABS((b1) - (b2))) - 1) << MIN(b1,b2))
 
 #endif /* COMMON_H */
