@@ -32,6 +32,7 @@ libtap_a_SOURCES = \
 	cable/dlc5.c \
 	cable/ea253.c \
 	cable/ei012.c \
+	cable/mpcbdm.c \
 	cable/wiggler.c
 
 INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC)

@@ -1,3 +1,9 @@
+2003-02-07  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable/mpcbmd.c: Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
+	* src/tap/cable.c: Ditto.
+	* src/tap/Makefile.am: Ditto.
+
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
 	* src/help.c (help): Added missing short help description for 'set' command.
