@@ -47,6 +47,7 @@
 #include "jtag.h"
 
 extern flash_driver_t amd_32_flash_driver;
+extern flash_driver_t amd_16_flash_driver;
 extern flash_driver_t amd_8_flash_driver;
 extern flash_driver_t intel_32_flash_driver;
 extern flash_driver_t intel_16_flash_driver;
@@ -54,6 +55,7 @@ extern flash_driver_t intel_8_flash_driver;
 
 flash_driver_t *flash_drivers[] = {
 	&amd_32_flash_driver,
+	&amd_16_flash_driver,
 	&amd_8_flash_driver,
 	&intel_32_flash_driver,
 	&intel_16_flash_driver,
@@ -232,6 +234,26 @@ flashmsbin( bus_t *bus, FILE *f )
 	cfi_array_free( cfi_array );
 }
 
+static int
+find_block( cfi_query_structure_t *cfi, int adr )
+{
+	int i;
+	int b = 0;
+	int bb = 0;
+
+	for (i = 0; i < cfi->device_geometry.number_of_erase_regions; i++) {
+		const int region_blocks = cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
+		const int region_block_size = cfi->device_geometry.erase_block_regions[i].erase_block_size;
+		const int region_size = region_blocks * region_block_size;
+
+		if (adr < (bb + region_size))
+			return b + ((adr - bb) / region_block_size);
+		b += region_blocks;
+		bb += region_size;
+	}
+	return -1;
+}
+
 void
 flashmem( bus_t *bus, FILE *f, uint32_t addr )
 {
@@ -240,6 +262,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	cfi_array_t *cfi_array;
 	int *erased;
 	int i;
+	int neb;
 
 	flashcheck( bus, &cfi_array );
 	if (!cfi_array || !flash_driver) {
@@ -248,12 +271,15 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	}
 	cfi = &cfi_array->cfi_chips[0]->cfi;
 
-	erased = malloc( cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks * sizeof *erased );
+	for (i = 0, neb = 0; i < cfi->device_geometry.number_of_erase_regions; i++)
+		neb += cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
+
+	erased = malloc( neb * sizeof *erased );
 	if (!erased) {
 		printf( _("Out of memory!\n") );
 		return;
 	}
-	for (i = 0; i < cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks; i++)
+	for (i = 0; i < neb; i++)
 		erased[i] = 0;
 
 	printf( _("program:\n") );
@@ -263,7 +289,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 #define BSIZE 4096
 		uint8_t b[BSIZE];
 		int bc = 0, bn = 0;
-		int block_no = adr / (cfi->device_geometry.erase_block_regions[0].erase_block_size * flash_driver->bus_width / 2);
+		int block_no = find_block( cfi, adr );
 
 		if (!erased[block_no]) {
 			flash_driver->unlock_block( cfi_array, adr );

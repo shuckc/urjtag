@@ -68,8 +68,6 @@
 static int
 triton_init( cable_t *cable )
 {
-	int data;
-
 	if (parport_open( cable->port ))
 		return -1;
 

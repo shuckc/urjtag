@@ -1,3 +1,11 @@
+2003-09-23  Marcel Telka  <marcel@telka.sk>
+
+	* src/flash.c (flash_drivers): Added amd_16_flash_driver (Bradley D. LaRonde).
+	(find_block): New function (Bradley D. LaRonde).
+	(flashmem): Added block calculations using exact CFI data (Bradley D. LaRonde).
+
+	* src/tap/cable/triton.c (triton_init): Removed unused variable 'data'.
+
 2003-09-15  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac: Fixed spelling (patch 805108, Andreas Mohr).
