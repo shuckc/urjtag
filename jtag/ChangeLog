@@ -1,5 +1,17 @@
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
+	* src/jtag.c (jtag_creae_jtagdir): New function (Alessandro Zummo).
+	(jtag_load_history): Ditto.
+	(jtag_save_history): Ditto.
+	(jtag_readline_loop): Ditto.
+	(jtag_parse_file): Ditto.
+	(jtag_parse_rc): Ditto.
+	(jtag_parse_line): New funcion, content extracted from main function, added new
+		'script' command (Alessandro Zummo).
+	(main): Moved parsing capability to jtag_parse_line function (Alessandro Zummo).
+
+2003-02-16  Marcel Telka  <marcel@telka.sk>
+
 	* src/flash.c (flash_drivers): Added missing 1 x 16 Intel flash driver.
 
 2003-02-16  Marcel Telka  <marcel@telka.sk>
