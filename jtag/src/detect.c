@@ -22,6 +22,8 @@
  *
  */
 
+#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -49,7 +51,7 @@ find_record( char *filename, tap_register *key, struct id_record *idr )
 
 	file = fopen( filename, "r" );
 	if (!file) {
-		printf( "Cannot open %s\n", filename );
+		printf( _("Cannot open %s\n"), filename );
 		return 0;
 	}
 
@@ -170,7 +172,7 @@ detect_parts( chain_t *chain, char *db_path )
 	parts_t *ps = parts_alloc();
 
 	if (!zeros || !ones || !id || !ps) {
-		printf( "%s: out of memory\n", __FUNCTION__ );
+		printf( _("%s: out of memory\n"), __FUNCTION__ );
 
 		register_free( zeros );
 		register_free( ones );
@@ -194,11 +196,11 @@ detect_parts( chain_t *chain, char *db_path )
 			break;				/* end of chain */
 
 		if (!register_compare( ones, id )) {
-			printf( "%s: bad JTAG connection (TDO is 1)\n", __FUNCTION__ );
+			printf( _("%s: bad JTAG connection (TDO is 1)\n"), __FUNCTION__ );
 			break;
 		}
 
-		printf( "Device Id: %s\n", register_get_string( id ) );
+		printf( _("Device Id: %s\n"), register_get_string( id ) );
 
 		strcpy( data_path, db_path );		/* FIXME: Buffer overrun */
 
@@ -208,15 +210,15 @@ detect_parts( chain_t *chain, char *db_path )
 		key = register_alloc( 11 );
 		memcpy( key->data, &id->data[1], key->len );
 		if (!find_record( data_path, key, &idr )) {
-			printf( "  Unknown manufacturer!\n" );
+			printf( _("  Unknown manufacturer!\n") );
 			register_free( key );
 			continue;
 		}
 		register_free( key );
 
-		printf( "  Manufacturer: %s\n", idr.fullname );
+		printf( _("  Manufacturer: %s\n"), idr.fullname );
 		if (strlen( idr.fullname ) > MAXLEN_MANUFACTURER)
-			printf( "Warning: Manufacturer too long\n" );
+			printf( _("Warning: Manufacturer too long\n") );
 		strncpy( manufacturer, idr.fullname, MAXLEN_MANUFACTURER );
 		manufacturer[MAXLEN_MANUFACTURER] = '\0';
 
@@ -232,7 +234,7 @@ detect_parts( chain_t *chain, char *db_path )
 		key = register_alloc( 16 );
 		memcpy( key->data, &id->data[12], key->len );
 		if (!find_record( data_path, key, &idr )) {
-			printf( "  Unknown part!\n" );
+			printf( _("  Unknown part!\n") );
 			register_free( key );
 			continue;
 		}
@@ -240,7 +242,7 @@ detect_parts( chain_t *chain, char *db_path )
 
 		printf( "  Part:         %s\n", idr.fullname );
 		if (strlen( idr.fullname ) > MAXLEN_PART)
-			printf( "Warning: Part too long\n" );
+			printf( _("Warning: Part too long\n") );
 		strncpy( partname, idr.fullname, MAXLEN_PART );
 		partname[MAXLEN_PART] = '\0';
 
@@ -256,15 +258,15 @@ detect_parts( chain_t *chain, char *db_path )
 		key = register_alloc( 4 );
 		memcpy( key->data, &id->data[28], key->len );
 		if (!find_record( data_path, key, &idr )) {
-			printf( "  Unknown stepping!\n" );
+			printf( _("  Unknown stepping!\n") );
 			register_free( key );
 			continue;
 		}
 		register_free( key );
 
-		printf( "  Stepping:     %s\n", idr.fullname );
+		printf( _("  Stepping:     %s\n"), idr.fullname );
 		if (strlen( idr.fullname ) > MAXLEN_STEPPING)
-			printf( "Warning: Stepping too long\n" );
+			printf( _("Warning: Stepping too long\n") );
 		strncpy( stepping, idr.fullname, MAXLEN_STEPPING );
 		stepping[MAXLEN_STEPPING] = '\0';
 
@@ -276,7 +278,7 @@ detect_parts( chain_t *chain, char *db_path )
 			data_path[0] = '\0';
 		strcat( data_path, idr.name );
 
-		printf( "  Filename:     %s\n", data_path );
+		printf( _("  Filename:     %s\n"), data_path );
 		f = fopen( data_path, "r" );
 		part = read_part( f, id );
 		if (part) {
@@ -286,7 +288,7 @@ detect_parts( chain_t *chain, char *db_path )
 			part->active_instruction = part_find_instruction( part, "IDCODE" );
 			parts_add_part( ps, part );
 		} else {
-			printf( "%s(%s:%d) Error: part read failed\n", __FUNCTION__, __FILE__, __LINE__ );
+			printf( _("%s(%s:%d) Error: part read failed\n"), __FUNCTION__, __FILE__, __LINE__ );
 			exit( 1 );
 		}
 		if (f)

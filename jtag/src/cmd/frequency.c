@@ -35,6 +35,11 @@ cmd_frequency_run( char *params[] )
 {
 	unsigned int freq;
 
+	if (cmd_params( params ) == 1) {
+		printf( _("Current TCK frequency is %u Hz\n"), frequency );
+		return 1;
+	}
+
 	if (cmd_params( params ) != 2)
 		return -1;
 
@@ -51,8 +56,8 @@ static void
 cmd_frequency_help( void )
 {
 	printf( _(
-		"Usage: %s FREQ\n"
-		"Change TCK frequency to FREQ.\n"
+		"Usage: %s [FREQ]\n"
+		"Change TCK frequency to FREQ or print current TCK frequency.\n"
 		"\n"
 		"FREQ is in hertz. It's a maximum TCK frequency for JTAG interface.\n"
 		"In some cases the TCK frequency is less than FREQ, but the frequency\n"

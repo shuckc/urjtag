@@ -27,6 +27,8 @@
  *
  */
 
+#include <config.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -97,7 +99,7 @@ mpcbdm_set_trst( cable_t *cable, int trst )
 
 cable_driver_t mpcbdm_cable_driver = {
 	"MPCBDM",
-	"Mpcbdm JTAG cable",
+	N_("Mpcbdm JTAG cable"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,

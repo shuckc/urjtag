@@ -51,7 +51,7 @@ detect_register_size( chain_t *chain, FILE *f )
 		int p;
 		int ok = 0;
 
-		fprintf( f, "\tTesting register length: %d\n", len );
+		fprintf( f, _("\tTesting register length: %d\n"), len );
 
 		rz = register_fill( register_alloc( len ), 0 );
 		rout = register_alloc( DETECT_PATTERN_SIZE + len );
@@ -65,7 +65,7 @@ detect_register_size( chain_t *chain, FILE *f )
 			s = register_get_string( rpat );
 			while (*s)
 				s++;
-			fprintf( f, "\t\tPattern: %s, ", s - DETECT_PATTERN_SIZE );
+			fprintf( f, _("\t\tPattern: %s, "), s - DETECT_PATTERN_SIZE );
 
 			for (i = 0; i < TEST_COUNT; i++) {
 				tap_shift_register( chain, rz, NULL, 0 );
@@ -76,7 +76,7 @@ detect_register_size( chain_t *chain, FILE *f )
 				if (register_compare( rpat, rout ) == 0)
 					ok++;
 			}
-			fprintf( f, "%d %%\n", 100 * ok / TEST_COUNT );
+			fprintf( f, _("%d %%\n"), 100 * ok / TEST_COUNT );
 			if (100 * ok / TEST_COUNT < TEST_THRESHOLD) {
 				ok = 0;
 				break;
@@ -125,9 +125,9 @@ discovery( chain_t *chain, const char *filename )
 	if (id && zeros && ones) {
 		f = fopen( filename, "w" );
 		if (!f)
-			printf( "Error: Unable to create file '%s'.\n", filename );
+			printf( _("Error: Unable to create file '%s'.\n"), filename );
 	} else
-		printf( "Error: Out of memory!\n" );
+		printf( _("Error: Out of memory!\n") );
 
 	if (!id || !zeros || !ones || !f) {
 		register_free( id );
@@ -136,8 +136,8 @@ discovery( chain_t *chain, const char *filename )
 		return;
 	}
 
-	printf( "Detecting JTAG chain length:\n" );
-	fprintf( f, "Detecting JTAG chain length:\n" );
+	printf( _("Detecting JTAG chain length:\n") );
+	fprintf( f, _("Detecting JTAG chain length:\n") );
 
 	jtag_reset( chain );
 
@@ -148,13 +148,13 @@ discovery( chain_t *chain, const char *filename )
 			break;				/* end of chain */
 
 		if (!register_compare( ones, id )) {
-			printf( "bad JTAG connection (TDO is 1)\n" );
-			fprintf( f, "bad JTAG connection (TDO is 1)\n" );
+			printf( _("bad JTAG connection (TDO is 1)\n") );
+			fprintf( f, _("bad JTAG connection (TDO is 1)\n") );
 			break;
 		}
 
-		printf( "ID[%d]: %s\n", i, register_get_string( id ) );
-		fprintf( f, "ID[%d]: %s\n", i, register_get_string( id ) );
+		printf( _("ID[%d]: %s\n"), i, register_get_string( id ) );
+		fprintf( f, _("ID[%d]: %s\n"), i, register_get_string( id ) );
 	}
 
 	register_free( id );
@@ -162,27 +162,27 @@ discovery( chain_t *chain, const char *filename )
 	register_free( ones );
 
 	if (i == MAX_CHAIN_LENGTH) {
-		printf( "Warning: Maximum internal JTAG chain length exceeded!\n" );
-		fprintf( f, "Warning: Maximum internal JTAG chain length exceeded!\n" );
+		printf( _("Warning: Maximum internal JTAG chain length exceeded!\n") );
+		fprintf( f, _("Warning: Maximum internal JTAG chain length exceeded!\n") );
 	} else {
-		printf( "JTAG chain length is %d\n", i );
-		fprintf( f, "JTAG chain length is %d\n", i );
+		printf( _("JTAG chain length is %d\n"), i );
+		fprintf( f, _("JTAG chain length is %d\n"), i );
 	}
 
 	/* detecting IR size */
 	jtag_reset( chain );
 
-	printf( "Detecting IR size...\n" );
-	fprintf( f, "Detecting IR size:\n" );
+	printf( _("Detecting IR size...\n") );
+	fprintf( f, _("Detecting IR size:\n") );
 
 	tap_capture_ir( chain );
 	irlen = detect_register_size( chain, f );
 
-	printf( "IR length is %d\n\n", irlen );
-	fprintf( f, "IR length is %d\n\n", irlen );
+	printf( _("IR length is %d\n\n"), irlen );
+	fprintf( f, _("IR length is %d\n\n"), irlen );
 
 	if (irlen < 1) {
-		printf( "Error: Invalid IR length!\n" );
+		printf( _("Error: Invalid IR length!\n") );
 		fclose( f );
 		return;
 	}
@@ -194,7 +194,7 @@ discovery( chain_t *chain, const char *filename )
 		register_free( ir );
 		register_free( irz );
 		fclose( f );
-		printf( "Error: Out of memory!\n" );
+		printf( _("Error: Out of memory!\n") );
 		return;
 	}
 
@@ -206,14 +206,14 @@ discovery( chain_t *chain, const char *filename )
 		tap_capture_ir( chain );
 		tap_shift_register( chain, ir, NULL, 1 );
 
-		printf( "Detecting DR size for IR %s ...\n", register_get_string( ir ) );
-		fprintf( f, "Detecting DR size for IR %s:\n", register_get_string( ir ) );
+		printf( _("Detecting DR size for IR %s ...\n"), register_get_string( ir ) );
+		fprintf( f, _("Detecting DR size for IR %s:\n"), register_get_string( ir ) );
 
 		tap_capture_dr( chain );
 		rs = detect_register_size( chain, f );
 
-		printf( "DR length for IR %s is %d\n\n", register_get_string( ir ), rs );
-		fprintf( f, "DR length for IR %s is %d\n\n", register_get_string( ir ), rs );
+		printf( _("DR length for IR %s is %d\n\n"), register_get_string( ir ), rs );
+		fprintf( f, _("DR length for IR %s is %d\n\n"), register_get_string( ir ), rs );
 
 		register_inc( ir );
 		if (register_compare( ir, irz ) == 0)

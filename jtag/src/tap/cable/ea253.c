@@ -23,6 +23,8 @@
  *
  */
 
+#include <config.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -95,7 +97,7 @@ ea253_set_trst( cable_t *cable, int trst )
 
 cable_driver_t ea253_cable_driver = {
 	"EA253",
-	"ETC EA253 JTAG Cable",
+	N_("ETC EA253 JTAG Cable"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,

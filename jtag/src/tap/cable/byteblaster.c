@@ -31,6 +31,8 @@
  *
  */
 
+#include <config.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -92,7 +94,7 @@ byteblaster_set_trst( cable_t *cable, int trst )
 
 cable_driver_t byteblaster_cable_driver = {
 	"ByteBlaster",
-	"Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable",
+	N_("Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,

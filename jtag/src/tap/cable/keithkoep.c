@@ -26,6 +26,8 @@
  *
  */
 
+#include <config.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -100,7 +102,7 @@ keithkoep_set_trst( cable_t *cable, int trst )
 
 cable_driver_t keithkoep_cable_driver = {
 	"KeithKoep",
-	"Keith & Koep JTAG cable",
+	N_("Keith & Koep JTAG cable"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,

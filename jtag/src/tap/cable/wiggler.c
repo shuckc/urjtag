@@ -27,6 +27,8 @@
  *
  */
 
+#include <config.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -99,7 +101,7 @@ wiggler_set_trst( cable_t *cable, int trst )
 
 cable_driver_t wiggler_cable_driver = {
 	"WIGGLER",
-	"Macraigor Wiggler JTAG Cable",
+	N_("Macraigor Wiggler JTAG Cable"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,

@@ -1,3 +1,27 @@
+2003-05-28  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (AC_INIT): Changed version number to 0.4.
+
+	* src/cmd/frequency.c (cmd_frequency_run): Added support for printing current TCK frequency.
+	(cmd_frequency_help): Updated help text.
+
+	* po/POTFILES.in: Updated.
+	* src/detect.c (find_record, detect_parts): Marked messages for translation.
+	* src/discovery.c (detect_register_size, discovery): Ditto.
+	* src/flash.c (set_flash_driver, flashcheck, flashmsbin, flashmem): Ditto.
+	* src/readmem.c (readmem): Ditto.
+	* src/flash/amd.c (amd_flash_print_info, amd_32_flash_driver): Ditto.
+	* src/flash/intel.c (_intel_flash_print_info, intel_flash_erase_block, intel_flash_unlock_block)
+	(intel_flash_program, intel_32_flash_driver, intel_16_flash_driver): Ditto.
+	* src/tap/cable/arcom.c (arcom_cable_driver): Ditto.
+	* src/tap/cable/byteblaster.c (byteblaster_cable_driver): Ditto.
+	* src/tap/cable/dlc5.c (dlc5_cable_driver): Ditto.
+	* src/tap/cable/ea253.c (ea253_cable_driver): Ditto.
+	* src/tap/cable/ei012.c (ei012_cable_driver): Ditto.
+	* src/tap/cable/keithkoep.c (keithkoep_cable_driver): Ditto.
+	* src/tap/cable/mpcbdm.c (mpcbdm_cable_driver): Ditto.
+	* src/tap/cable/wiggler.c (wiggler_cable_driver): Ditto.
+
 2003-05-27  Marcel Telka  <marcel@telka.sk>
 
 	* src/part/part.c (part_set_signal, part_get_signal): Moved variable declarations to beginning

@@ -23,6 +23,8 @@
  *
  */
 
+#include <config.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -95,7 +97,7 @@ ei012_set_trst( cable_t *cable, int trst )
 
 cable_driver_t ei012_cable_driver = {
 	"EI012",
-	"ETC EI012 JTAG Cable",
+	N_("ETC EI012 JTAG Cable"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,

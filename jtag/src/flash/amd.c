@@ -29,6 +29,8 @@
  *
  */
 
+#include <config.h>
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -155,25 +157,25 @@ amd_flash_print_info( bus_t *bus )
 	cid = bus_read( bus, 0x01 << o ) & 0xFFFF;
 	prot = bus_read( bus, 0x02 << o ) & 0xFF;
 	amd_flash_read_array( bus );			/* AMD reset */
-	printf( "Chip: AMD Flash\n\tManufacturer: " );
+	printf( _("Chip: AMD Flash\n\tManufacturer: ") );
 	switch (mid) {
 		case 0x0001:
-			printf( "AMD" );
+			printf( _("AMD") );
 			break;
 		default:
-			printf( "Unknown manufacturer (ID 0x%04x)", mid );
+			printf( _("Unknown manufacturer (ID 0x%04x)"), mid );
 			break;
 	}
-	printf( "\n\tChip: " );
+	printf( _("\n\tChip: ") );
 	switch (cid) {
 		case 0x22D7:
-			printf( "Am29LV640D/Am29LV641D/Am29LV642D" );
+			printf( _("Am29LV640D/Am29LV641D/Am29LV642D") );
 			break;
 		default:
-			printf ( "Unknown (ID 0x%04x)", cid );
+			printf ( _("Unknown (ID 0x%04x)"), cid );
 			break;
 	}
-	printf( "\n\tProtected: %04x\n", prot );
+	printf( _("\n\tProtected: %04x\n"), prot );
 }
 
 static int
@@ -240,8 +242,8 @@ amd_flash_read_array( bus_t *bus )
 
 flash_driver_t amd_32_flash_driver = {
 	4, /* buswidth */
-	"AMD/Fujitsu Standard Command Set",
-	"supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit",
+	N_("AMD/Fujitsu Standard Command Set"),
+	N_("supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"),
 	amd_flash_autodetect,
 	amd_flash_print_info,
 	amd_flash_erase_block,

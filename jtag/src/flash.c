@@ -32,6 +32,8 @@
  *
  */
 
+#include <config.h>
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -68,7 +70,7 @@ set_flash_driver( bus_t *bus, cfi_query_structure_t *cfi )
 			return;
 		}
 
-	printf( "unknown flash - vendor id: %d (0x%04x)\n",
+	printf( _("unknown flash - vendor id: %d (0x%04x)\n"),
 		cfi->identification_string.pri_id_code,
 		cfi->identification_string.pri_id_code );
 }
@@ -81,18 +83,18 @@ flashcheck( bus_t *bus, cfi_array_t **cfi_array )
 
 	bus_prepare( bus );
 
-	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
+	printf( _("Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n") );
 
 	*cfi_array = NULL;
 	if (detect_cfi( bus, 0, cfi_array )) {
 		cfi_array_free( *cfi_array );
-		printf( "Flash not found!\n" );
+		printf( _("Flash not found!\n") );
 		return;
 	}
 
 	set_flash_driver( bus, &(*cfi_array)->cfi_chips[0]->cfi );
 	if (!flash_driver) {
-		printf( "Flash not supported!\n" );
+		printf( _("Flash not supported!\n") );
 		return;
 	}
 	flash_driver->flash_print_info( bus );
@@ -107,7 +109,7 @@ flashmsbin( bus_t *bus, FILE *f )
 
 	flashcheck( bus, &cfi_array );
 	if (!cfi_array || !flash_driver) {
-		printf( "no flash driver found\n" );
+		printf( _("no flash driver found\n") );
 		return;
 	}
 	cfi = &cfi_array->cfi_chips[0]->cfi;
@@ -118,7 +120,7 @@ flashmsbin( bus_t *bus, FILE *f )
 		fread( &sync, sizeof (char), 7, f );
 		sync[7] = '\0';
 		if (strcmp( "B000FF\n", sync ) != 0) {
-			printf( "Invalid sync sequence!\n" );
+			printf( _("Invalid sync sequence!\n") );
 			return;
 		}
 	}
@@ -136,12 +138,12 @@ flashmsbin( bus_t *bus, FILE *f )
 		for (; first <= last; first++) {
 			adr = first * cfi->device_geometry.erase_block_regions[0].erase_block_size * 2;
 			flash_unlock_block( bus, adr );
-			printf( "block %d unlocked\n", first );
-			printf( "erasing block %d: %d\n", first, flash_erase_block( bus, adr ) );
+			printf( _("block %d unlocked\n"), first );
+			printf( _("erasing block %d: %d\n"), first, flash_erase_block( bus, adr ) );
 		}
 	}
 
-	printf( "program:\n" );
+	printf( _("program:\n") );
 	for (;;) {
 		uint32_t a, l, c;
 
@@ -149,25 +151,25 @@ flashmsbin( bus_t *bus, FILE *f )
 		fread( &l, sizeof l, 1, f );
 		fread( &c, sizeof c, 1, f );
 		if (feof( f )) {
-			printf( "Error: premature end of file\n" );
+			printf( _("Error: premature end of file\n") );
 			return;
 		}
-		printf( "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n", a, l, c );
+		printf( _("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"), a, l, c );
 		if ((a == 0) && (c == 0))
 			break;
 		if (l & 3) {
-			printf( "Error: Invalid record length!\n" );
+			printf( _("Error: Invalid record length!\n") );
 			return;
 		}
 
 		while (l) {
 			uint32_t data;
 
-			printf( "addr: 0x%08X\r", a );
+			printf( _("addr: 0x%08X\r"), a );
 			fflush(stdout);
 			fread( &data, sizeof data, 1, f );
 			if (flash_program( bus, a, data )) {
-				printf( "\nflash error\n" );
+				printf( _("\nflash error\n") );
 				return;
 			}
 			a += 4;
@@ -179,7 +181,7 @@ flashmsbin( bus_t *bus, FILE *f )
 	flash_readarray( bus );
 
 	fseek( f, 15, SEEK_SET );
-	printf( "verify:\n" );
+	printf( _("verify:\n") );
 
 	for (;;) {
 		uint32_t a, l, c;
@@ -188,26 +190,26 @@ flashmsbin( bus_t *bus, FILE *f )
 		fread( &l, sizeof l, 1, f );
 		fread( &c, sizeof c, 1, f );
 		if (feof( f )) {
-			printf( "Error: premature end of file\n" );
+			printf( _("Error: premature end of file\n") );
 			return;
 		}
-		printf( "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n", a, l, c );
+		printf( _("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"), a, l, c );
 		if ((a == 0) && (c == 0))
 			break;
 		if (l & 3) {
-			printf( "Error: Invalid record length!\n" );
+			printf( _("Error: Invalid record length!\n") );
 			return;
 		}
 
 		while (l) {
 			uint32_t data, readed;
 
-			printf( "addr: 0x%08X\r", a );
+			printf( _("addr: 0x%08X\r"), a );
 			fflush( stdout );
 			fread( &data, sizeof data, 1, f );
 			readed = bus_read( bus, a );
 			if (data != readed) {
-				printf( "\nverify error: 0x%08X vs. 0x%08X at addr %08X\n", 
+				printf( _("\nverify error: 0x%08X vs. 0x%08X at addr %08X\n"),
 					readed, data, a );
 				return;
 			}
@@ -215,9 +217,8 @@ flashmsbin( bus_t *bus, FILE *f )
 			l -= 4;
 		}
 	}
-	printf( "\n" );
 
-	printf( "Done.\n" );
+	printf( _("\nDone.\n") );
 
 	cfi_array_free( cfi_array );
 }
@@ -233,20 +234,20 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 
 	flashcheck( bus, &cfi_array );
 	if (!cfi_array || !flash_driver) {
-		printf( "no flash driver found\n" );
+		printf( _("no flash driver found\n") );
 		return;
 	}
 	cfi = &cfi_array->cfi_chips[0]->cfi;
 
 	erased = malloc( cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks * sizeof *erased );
 	if (!erased) {
-		printf( "Out of memory!\n" );
+		printf( _("Out of memory!\n") );
 		return;
 	}
 	for (i = 0; i < cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks; i++)
 		erased[i] = 0;
 
-	printf( "program:\n" );
+	printf( _("program:\n") );
 	adr = addr;
 	while (!feof( f )) {
 		uint32_t data;
@@ -257,15 +258,15 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 
 		if (!erased[block_no]) {
 			flash_unlock_block( bus, adr );
-			printf( "\nblock %d unlocked\n", block_no );
-			printf( "erasing block %d: %d\n", block_no, flash_erase_block( bus, adr ) );
+			printf( _("\nblock %d unlocked\n"), block_no );
+			printf( _("erasing block %d: %d\n"), block_no, flash_erase_block( bus, adr ) );
 			erased[block_no] = 1;
 		}
 
 		bn = fread( b, 1, BSIZE, f );
 		for (bc = 0; bc < bn; bc += flash_driver->buswidth) {
 			int j;
-			printf( "addr: 0x%08X\r", adr );
+			printf( _("addr: 0x%08X\r"), adr );
 			fflush( stdout );
 
 			data = 0;
@@ -276,7 +277,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 					data |= b[bc + j] << (j * 8);
 
 			if (flash_program( bus, adr, data )) {
-				printf( "\nflash error\n" );
+				printf( _("\nflash error\n") );
 				return;
 			}
 			adr += flash_driver->buswidth;
@@ -287,7 +288,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	flash_readarray( bus );
 
 	fseek( f, 0, SEEK_SET );
-	printf( "verify:\n" );
+	printf( _("verify:\n") );
 	fflush( stdout );
 	adr = addr;
 	while (!feof( f )) {
@@ -299,7 +300,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		if (fread( buf, flash_driver->buswidth, 1, f ) != 1) {
 			if (feof(f))
 				break;
-			printf( "Error during file read.\n" );
+			printf( _("Error during file read.\n") );
 			return;
 		}
 
@@ -310,16 +311,16 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 			else
 				data |= buf[j] << (j * 8);
 
-		printf( "addr: 0x%08X\r", adr );
+		printf( _("addr: 0x%08X\r"), adr );
 		fflush( stdout );
 		readed = bus_read( bus, adr );
 		if (data != readed) {
-			printf( "\nverify error:\nreaded: 0x%08X\nexpected: 0x%08X\n", readed, data );
+			printf( _("\nverify error:\nreaded: 0x%08X\nexpected: 0x%08X\n"), readed, data );
 			return;
 		}
 		adr += flash_driver->buswidth;
 	}
-	printf( "\nDone.\n" );
+	printf( _("\nDone.\n") );
 
 	free( erased );
 

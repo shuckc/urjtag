@@ -33,6 +33,8 @@
  *
  */
 
+#include <config.h>
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,14 +73,14 @@ _intel_flash_print_info( bus_t *bus, int o )
 	mid = (bus_read( bus, 0x00 << o ) & 0xFF);
 	switch (mid) {
 		case STD_MIC_INTEL:
-			printf( "Manufacturer: %s\n", STD_MICN_INTEL );
+			printf( _("Manufacturer: %s\n"), STD_MICN_INTEL );
 			break;
 		default:
-			printf( "Unknown manufacturer (0x%04X)!\n", mid);
+			printf( _("Unknown manufacturer (0x%04X)!\n"), mid);
 			break;
 	}
 
-	printf( "Chip: " );
+	printf( _("Chip: ") );
 	cid = (bus_read( bus, 0x01 << o ) & 0xFFFF);
 	switch (cid) {
 		case 0x0016:
@@ -109,7 +111,7 @@ _intel_flash_print_info( bus_t *bus, int o )
 			printf( "28F256K18\n" );
 			break;
 		default:
-			printf( "Unknown (0x%02X)!\n", cid );
+			printf( _("Unknown (0x%02X)!\n"), cid );
 			break;
 	}
 
@@ -164,13 +166,13 @@ intel_flash_erase_block( bus_t *bus, uint32_t adr )
 		case 0:
 			return 0;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_PROGRAM_ERROR:
-			printf("flash: invalid command seq\n");
+			printf( _("flash: invalid command seq\n") );
 			return CFI_INTEL_ERROR_INVALID_COMMAND_SEQUENCE;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_VPEN_ERROR:
-			printf("flash: low vpen\n");
+			printf( _("flash: low vpen\n") );
 			return CFI_INTEL_ERROR_LOW_VPEN;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_BLOCK_LOCKED:
-			printf("flash: block locked\n");
+			printf( _("flash: block locked\n") );
 			return CFI_INTEL_ERROR_BLOCK_LOCKED;
 		default:
 			break;
@@ -191,7 +193,7 @@ intel_flash_unlock_block( bus_t *bus, uint32_t adr )
 	while (!((sr = bus_read( bus, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
 	if (sr != CFI_INTEL_SR_READY) {
-		printf("flash: unknown error while unblocking\n");
+		printf( _("flash: unknown error while unblocking\n") );
 		return CFI_INTEL_ERROR_UNKNOWN;
 	} else
 		return 0;
@@ -209,7 +211,7 @@ intel_flash_program( bus_t *bus, uint32_t adr, uint32_t data )
 	while (!((sr = bus_read( bus, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
 	if (sr != CFI_INTEL_SR_READY) {
-		printf("flash: unknown error while programming\n");
+		printf( _("flash: unknown error while programming\n") );
 		return CFI_INTEL_ERROR_UNKNOWN;
 	} else
 		return 0;
@@ -285,8 +287,8 @@ intel_flash_readarray( bus_t *bus )
 
 flash_driver_t intel_32_flash_driver = {
 	4, /* buswidth */
-	"Intel Standard Command Set",
-	"supported: 28Fxxxx, 2 x 16 bit",
+	N_("Intel Standard Command Set"),
+	N_("supported: 28Fxxxx, 2 x 16 bit"),
 	intel_flash_autodetect32,
 	intel_flash_print_info32,
 	intel_flash_erase_block32,
@@ -297,8 +299,8 @@ flash_driver_t intel_32_flash_driver = {
 
 flash_driver_t intel_16_flash_driver = {
 	2, /* buswidth */
-	"Intel Standard Command Set",
-	"supported: 28Fxxxx, 1 x 16 bit",
+	N_("Intel Standard Command Set"),
+	N_("supported: 28Fxxxx, 1 x 16 bit"),
 	intel_flash_autodetect,
 	intel_flash_print_info,
 	intel_flash_erase_block,

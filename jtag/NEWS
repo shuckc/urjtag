@@ -8,6 +8,7 @@ $Id$
 	* Added new command 'endian' to configure access mode to external files.
 	* Added JTAG declarations for Broadcom BCM5421S (patch 743129, Matan Ziv-Av).
 	* Added bus driver for Hitachi SH7727 (based on patch 743140, Matan Ziv-Av).
+	* Added support for printing current JTAG frequency.
 	* Minor bugs fixed.
 
 jtag-0.3.2 (2003-04-04):

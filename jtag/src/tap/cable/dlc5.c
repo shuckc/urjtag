@@ -27,6 +27,8 @@
  *
  */
 
+#include <config.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -92,7 +94,7 @@ dlc5_set_trst( cable_t *cable, int trst )
 
 cable_driver_t dlc5_cable_driver = {
 	"DLC5",
-	"Xilinx DLC5 JTAG Parallel Cable III",
+	N_("Xilinx DLC5 JTAG Parallel Cable III"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,

@@ -23,6 +23,8 @@
  *
  */
 
+#include <config.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -95,7 +97,7 @@ arcom_set_trst( cable_t *cable, int trst )
 
 cable_driver_t arcom_cable_driver = {
 	"ARCOM",
-	"Arcom JTAG Cable",
+	N_("Arcom JTAG Cable"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,
