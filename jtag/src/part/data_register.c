@@ -39,11 +39,10 @@ data_register_alloc( const char *name, int len )
 	if (!dr)
 		return NULL;
 
-	dr->name = strdup( name );
-	if (!dr->name) {
-		free( dr );
-		return NULL;
-	}
+	if (strlen( name ) > MAXLEN_DATA_REGISTER)
+		printf( "Warning: Data register too long\n" );
+	strncpy( dr->name, name, MAXLEN_DATA_REGISTER );
+	dr->name[MAXLEN_DATA_REGISTER] = '\0';
 
 	dr->in = register_alloc( len );
 	dr->out = register_alloc( len );
@@ -66,7 +65,6 @@ data_register_free( data_register *dr )
 	if (!dr)
 		return;
 
-	free( dr->name );
 	register_free( dr->in );
 	register_free( dr->out );
 	free( dr );

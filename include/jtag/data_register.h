@@ -27,12 +27,14 @@
 
 #include <jtag/register.h>
 
+#define	MAXLEN_DATA_REGISTER	10
+
 typedef struct data_register data_register;
 
 struct data_register {
-	char *name;		/* (public) register name */
-	tap_register *in;	/* (public) register value clocked in */
-	tap_register *out;	/* (public) register value clocked out */
+	char name[MAXLEN_DATA_REGISTER + 1];	/* (public) register name */
+	tap_register *in;			/* (public) register value clocked in */
+	tap_register *out;			/* (public) register value clocked out */
 	data_register *next;
 };
 
