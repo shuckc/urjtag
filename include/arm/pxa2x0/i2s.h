@@ -87,10 +87,10 @@ typedef volatile struct I2S_registers {
 
 /* SACR0 bits - see Table 14-3 in [1] */
 
-#define	SACR0_RFTH_MASK		0xF000
-#define	SACR0_RFTH(x)		((x << 12) & SACR0_RFTH_MASK)
-#define	SACR0_TFTH_MASK		0x0F00
-#define	SACR0_TFTH(x)		((x << 8) & SACR0_TFTH_MASK)
+#define	SACR0_RFTH_MASK		bits(15,12)
+#define	SACR0_RFTH(x)		bits_val(15,12,x)
+#define	SACR0_TFTH_MASK		bits(11,8)
+#define	SACR0_TFTH(x)		bits_val(11,8,x)
 #define	SACR0_STRF		bit(5)
 #define	SACR0_EFWR		bit(4)
 #define	SACR0_RST		bit(3)
@@ -106,10 +106,10 @@ typedef volatile struct I2S_registers {
 
 /* SASR0 bits - see Table 14-7 in [1] */
 
-#define	SASR0_RFL_MASK		0xF000
-#define	SASR0_RFL(x)		((x << 12) & SASR0_RFL_MASK)
-#define	SASR0_TFL_MASK		0x0F00
-#define	SASR0_TFL(x)		((x << 8) & SASR0_TFL_MASK)
+#define	SASR0_RFL_MASK		bits(15,12)
+#define	SASR0_RFL(x)		bits_val(15,12,x)
+#define	SASR0_TFL_MASK		bits(11,8)
+#define	SASR0_TFL(x)		bits_val(11,8,x)
 #define	SASR0_ROR		bit(6)
 #define	SASR0_TUR		bit(5)
 #define	SASR0_RFS		bit(4)
@@ -132,14 +132,14 @@ typedef volatile struct I2S_registers {
 
 /* SADIV bits - see Table 14-8 in [1] */
 
-#define	SADIV_SADIV_MASK	0x7F
-#define	SADIV_SADIV(x)		(x & SADIV_SADIV_MASK)
+#define	SADIV_SADIV_MASK	bits(6,0)
+#define	SADIV_SADIV(x)		bits_val(6,0,x)
 
 /* SADR bits - see Table 14-11 in [1] */
 
-#define	SADR_DTH_MASK		0xFFFF0000
-#define	SADR_DTH(x)		((x << 16) & SADR_DTH_MASK)
-#define	SADR_DTL_MASK		0x0000FFFF
-#define	SADR_DTL(x)		(x & SADR_DTL_MASK)
+#define	SADR_DTH_MASK		bits(31,16)
+#define	SADR_DTH(x)		bits_val(31,16,x)
+#define	SADR_DTL_MASK		bits(15,0)
+#define	SADR_DTL(x)		bits_val(15,0,x)
 
 #endif /* PXA2X0_I2S_H */

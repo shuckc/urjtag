@@ -92,20 +92,20 @@ typedef volatile struct ICP_registers {
 
 /* ICCR1 bits - see Table 11-3 in [1] */
 
-#define	ICCR1_AMV_MASK	0x000000FF
-#define	ICCR1_AMV(x)	(x & ICCR1_AMV_MASK)
+#define	ICCR1_AMV_MASK	bits(7,0)
+#define	ICCR1_AMV(x)	bits_val(7,0,x)
 
 /* ICCR2 bits - see Table 11-4 in [1] */
 
 #define	ICCR2_RXP	bit(3)
 #define	ICCR2_TXP	bit(2)
-#define	ICCR2_TRIG_MASK	0x00000003
-#define	ICCR2_TRIG(x)	(x & ICCR2_TRIG_MASK)
+#define	ICCR2_TRIG_MASK	bits(1,0)
+#define	ICCR2_TRIG(x)	bits_val(1,0,x)
 
 /* ICDR bits - see Table 11-5 in [1] */
 
-#define	ICDR_DATA_MASK	0x000000FF
-#define	ICDR_DATA(x)	(x & ICDR_DATA_MASK)
+#define	ICDR_DATA_MASK	bits(7,0)
+#define	ICDR_DATA(x)	bits_val(7,0,x)
 
 /* ICSR0 bits - see Table 11-6 in [1] */
 

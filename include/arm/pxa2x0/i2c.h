@@ -87,8 +87,8 @@ typedef volatile struct I2C_registers {
 
 /* IDBR bits - see Table 9-10 in [1] */
 
-#define	IDBR_IDB_MASK	0xFF
-#define	IDBR_IDB(x)	(x & IDBR_IDB_MASK)
+#define	IDBR_IDB_MASK	bits(7,0)
+#define	IDBR_IDB(x)	bits_val(7,0,x)
 
 /* ICR bits - see Table 9-11 in [1] */
 
@@ -125,7 +125,7 @@ typedef volatile struct I2C_registers {
 
 /* ISAR bits - see Table 9-13 in [1] */
 
-#define	ISAR_ISA_MASK	0x7F
-#define	ISAR_ISA(x)	(x & ISAR_ISA_MASK)
+#define	ISAR_ISA_MASK	bits(6,0)
+#define	ISAR_ISA(x)	bits_val(6,0,x)
 
 #endif /* PXA2X0_I2C_H */
