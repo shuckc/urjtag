@@ -1,3 +1,13 @@
+2004-12-20  Marcel Telka  <marcel@telka.sk>
+
+	* device/other/hd64461/gpio.h: New file.
+	* device/other/hd64461/intc.h: Ditto.
+	* device/other/hd64461/lcdc.h: Ditto.
+	* device/other/hd64461/pcc.h: Ditto.
+	* device/other/hd64461/stbsys.h: Ditto.
+	* device/other/hd64461/timer.h: Ditto.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added new files.
+
 2004-08-06  Marcel Telka  <marcel@telka.sk>
 
 	* win32/stdint.h (uintptr_t): Changed type definition from DWORD_PTR to UINT_PTR.

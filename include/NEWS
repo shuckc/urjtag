@@ -3,6 +3,7 @@ $Id$
 include-0.3.3:
 
 	* Added Renesas SH7750 CCN registers.
+	* Added Hitiachi HD64461 registers.
 	* Added more manufacturer entries into Manufacturer's Identification Code database.
 	* Ported uintptr_t type in win32/stdint.h to old Windows SDK.
 	* Changes in brux common headers:
