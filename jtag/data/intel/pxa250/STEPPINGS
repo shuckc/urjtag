@@ -22,7 +22,7 @@
 #
 # Documentation:
 # [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
-#     Specification Update", May 2002, Order Number: 278534-005
+#     Specification Update", June 2002, Order Number: 278534-007
 #
 
 # see D55. in [1]
@@ -30,7 +30,5 @@
 0001	pxa250		A1
 0010	pxa250		B0
 0011	pxa250		B1
-0101	pxa250		C0
-
-# undocumented (thanks to Holger Schurig <h.schurig@mn-logistik.de>)
 0100	pxa250		B2
+0101	pxa250		C0
