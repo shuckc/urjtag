@@ -181,7 +181,7 @@ flashmsbin( parts *ps, FILE *f )
 			fflush(stdout);
 			fread( &data, sizeof data, 1, f );
 			if (flash_program( ps, a, data )) {
-				printf( "\nflash error 1\n" );
+				printf( "\nflash error\n" );
 				return;
 			}
 			a += 4;
@@ -268,25 +268,24 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 		char b[BSIZE];
 		int bc = 0, bn = 0;
 		int block_no = adr / (cfi->device_geometry.erase_block_regions[0].erase_block_size * flash_driver->buswidth / 2);
-		printf( "addr: 0x%08X\r", adr );
-		fflush( stdout );
 
 		if (!erased[block_no]) {
 			flash_unlock_block( ps, adr );
-			printf( "block %d unlocked\n", block_no );
+			printf( "\nblock %d unlocked\n", block_no );
 			printf( "erasing block %d: %d\n", block_no, flash_erase_block( ps, adr ) );
 			erased[block_no] = 1;
 		}
 
 		bn = fread( b, 1, BSIZE, f );
-		printf("addr 0x%08X (n is %d)\n", adr, bn);
 		for (bc = 0; bc < bn; bc += flash_driver->buswidth) {
+			printf( "addr: 0x%08X\r", adr );
+			fflush( stdout );
 			if (flash_driver->buswidth == 2)
 				data = htons( *((uint16_t *) &b[bc]) );
 			else
 				data = * ((uint32_t *) &b[bc]);
 			if (flash_program( ps, adr, data )) {
-				printf( "\nflash error 2\n" );
+				printf( "\nflash error\n" );
 				return;
 			}
 			adr += flash_driver->buswidth;
@@ -296,19 +295,27 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 
 	flash_readarray( ps );
 
-	if (flash_driver->buswidth == 2) {			/* TODO: not available in 1 x 16 bit mode */
+	if (flash_driver->buswidth == 4) {			/* TODO: not available in 1 x 16 bit mode */
 	fseek( f, 0, SEEK_SET );
 	printf( "verify:\n" );
+	fflush( stdout );
 	adr = addr;
 	while (!feof( f )) {
 		uint32_t data;
 		uint32_t readed;
+
+		if (fread( &data, flash_driver->buswidth, 1, f ) != 1) {
+			if (feof(f))
+				break;
+			printf( "Error during file read.\n" );
+			return;
+		}
+
 		printf( "addr: 0x%08X\r", adr );
 		fflush( stdout );
-		fread( &data, flash_driver->buswidth, 1, f );
 		readed = bus_read( ps, adr );
 		if (data != readed) {
-			printf( "\nverify error: 0x%08X vs. 0x%08X at addr %08X\n", readed, data, adr );
+			printf( "\nverify error:\nreaded: 0x%08X\nexpected: 0x%08X\n", readed, data );
 			return;
 		}
 		adr += flash_driver->buswidth;
