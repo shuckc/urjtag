@@ -33,6 +33,7 @@ AM_INIT_AUTOMAKE([check-news dist-bzip2])
 
 AC_CONFIG_FILES(
 	Makefile
+	doc/Makefile
 	data/Makefile
 	include/Makefile
 	src/Makefile

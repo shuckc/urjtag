@@ -22,6 +22,7 @@
 #
 
 SUBDIRS = \
+	doc \
 	include \
 	data \
 	src \
