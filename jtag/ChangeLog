@@ -1,5 +1,9 @@
 2003-02-25  Marcel Telka  <marcel@telka.sk>
 
+	Version 0.3 released.
+
+2003-02-25  Marcel Telka  <marcel@telka.sk>
+
 	* src/tap/cable.c: Added config.h include.
 
 2003-02-25  Marcel Telka  <marcel@telka.sk>

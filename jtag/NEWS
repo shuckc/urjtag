@@ -1,6 +1,6 @@
 $Id$
 
-jtag-0.3:
+jtag-0.3 (2003-02-25):
 
 	* Changes in interactive commands:
 		- enhanced 'dr' command functionality
