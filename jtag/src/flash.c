@@ -344,9 +344,10 @@ flash_erase_block32( parts *ps, uint32_t adr )
 
 	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
-	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
+	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
+		printf( "\nsr = 0x%08X\n", sr );
 		return CFI_INTEL_ERROR_UNKNOWN;
-	else
+	} else
 		return 0;
 }
 
@@ -361,9 +362,10 @@ flash_unlock_block32( parts *ps, uint32_t adr )
 
 	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
-	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
+	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
+		printf( "\nsr = 0x%08X\n", sr );
 		return CFI_INTEL_ERROR_UNKNOWN;
-	else
+	} else
 		return 0;
 }
 
@@ -378,8 +380,9 @@ flash_program32( parts *ps, uint32_t adr, uint32_t data )
 
 	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
-	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
+	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
+		printf( "\nsr = 0x%08X\n", sr );
 		return CFI_INTEL_ERROR_UNKNOWN;
-	else
+	} else
 		return 0;
 }
