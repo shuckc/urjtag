@@ -27,25 +27,115 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 
 void
 help( const char *cmd )
 {
-	if (!cmd) {
-		printf( "Command list:\n\n" );
-		printf( "quit\t\texit from jtag\n" );
-		printf( "help\t\tdisplay this help\n" );
-		printf( "detect\t\tdetect parts on the JTAG chain\n" );
-		printf( "print\t\tdisplay JTAG chain list/status\n" );
-		printf( "instruction\tchange active instruction for a part\n" );
-		printf( "shift\t\tshift data/instruction register through JTAG chain\n" );
-		printf( "dr\t\tdisplay active data register for a part\n" );
-		printf( "detectflash\tdetect parameters of flash chip attached to a part\n" );
-		printf( "readmem\t\tread content of the memory and write it to file\n" );
-		printf( "flashmem\tburn flash memory with data from a file\n" );
-		printf( "set\t\tTODO\n" );
-		printf( "\nType \"help <command>\" for details about particular command.\n" );
-	} else {
-		printf( "Not implemented. Sorry.\n" );
-	}
+	if (!cmd)
+		printf(
+			"Command list:\n"
+			"\n"
+			"quit          exit from %s\n"
+			"help          display this help\n"
+			"detect        detect parts on the JTAG chain\n"
+			"print         display JTAG chain list/status\n"
+			"instruction   change active instruction for a part\n"
+			"shift         shift data/instruction register through JTAG chain\n"
+			"dr            display active data register for a part\n"
+			"detectflash   detect parameters of flash chip attached to a part\n"
+			"readmem       read content of the memory and write it to file\n"
+			"flashmem      burn flash memory with data from a file\n"
+			"set           TODO\n"
+			"\n"
+			"Type \"help COMMAND\" for details about particular command.\n", PACKAGE
+		);
+	else if (strcmp( cmd, "quit" ) == 0)
+		printf(
+			"Usage: quit\n"
+			"Exit from %s.\n", PACKAGE
+		);
+	else if (strcmp( cmd, "help" ) == 0)
+		printf(
+			"Usage: help [COMMAND]\n"
+			"Print short help for COMMAND, or list of available commands.\n"
+		);
+	else if (strcmp( cmd, "detect" ) == 0)
+		printf(
+			"Usage: detect\n"
+			"Detect parts on the JTAG chain.\n"
+			"\n"
+			"Output from this command is a list of the detected parts.\n"
+			"If no parts are detected other commands may not work properly.\n"
+		);
+	else if (strcmp( cmd, "print" ) == 0)
+		printf(
+			"Usage: print\n"
+			"Display JTAG chain status.\n"
+			"\n"
+			"Display list of the parts connected to the JTAG chain including\n"
+			"part number and current (active) instruction and data register.\n"
+		);
+	else if (strcmp( cmd, "instruction" ) == 0)
+		printf(
+			"Usage: instruction PART INSTRUCTION\n"
+			"Change active INSTRUCTION for a PART.\n"
+			"\n"
+			"PART          part number (see print command)\n"
+			"INSTRUCTION   instruction name (e.g. BYPASS)\n"
+		);
+	else if (strcmp( cmd, "shift" ) == 0)
+		printf(
+			"Usage: shift ir\n"
+			"Usage: shift dr\n"
+			"Shift instruction or data register through JTAG chain.\n"
+		);
+	else if (strcmp( cmd, "dr" ) == 0)
+		printf(
+			"Usage: dr PART\n"
+			"Display data register content.\n"
+			"\n"
+			"PART          part number (see print command)\n"
+		);
+	else if (strcmp( cmd, "detectflash" ) == 0)
+		printf(
+			"Usage: detectflash\n"
+			"Detect flash memory type connected to part.\n"
+			"\n"
+			"Only detects flash connected to part 0. Part 0 must support\n"
+			"bus operations.\n"
+		);
+	else if (strcmp( cmd, "readmem" ) == 0)
+		printf(
+			"Usage: readmem ADDR LEN FILENAME\n"
+			"Copy device memory content starting with ADDR to FILENAME file.\n"
+			"\n"
+			"ADDR       start address of the copied memory area\n"
+			"LEN        copied memory length\n"
+			"FILENAME   name of the output file\n"
+			"\n"
+			"ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+			"\n"
+			"readmem works only with part 0. Part 0 must support bus operations.\n"
+		);
+	else if (strcmp( cmd, "flashmem" ) == 0)
+		printf(
+			"Usage: flashmem ADDR FILENAME\n"
+			"Usage: flashmem msbin FILENAME\n"
+			"Program FILENAME content to flash memory.\n"
+			"\n"
+			"ADDR       target addres for raw binary image\n"
+			"FILENAME   name of the input file\n"
+			"msbin      FILENAME is in MS .bin format (for WinCE)\n"
+			"\n"
+			"ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+			"\n"
+			"flashmem works only with part 0. Part 0 must support bus operations.\n"
+		);
+	else if (strcmp( cmd, "set" ) == 0)
+		printf(
+			"TODO\n"
+		);
+	else
+		printf( "Invalid command.\n" );
 }
