@@ -1,5 +1,15 @@
 2003-03-13  Marcel Telka  <marcel@telka.sk>
 
+	* configure.ac (AC_CONFIG_HEADERS): Replaced this `new' macro ...
+	(AM_CONFIG_HEADER): ... with this `old' one to make build compatible with automake-1.6.
+	(AM_GNU_GETTEXT_VERSION): Relaxed version number from 0.11.5 to 0.11.4.
+	* src/Makefile.am (jtag_LDADD): Added LIBINTL.
+	(LIBS): Removed LIBINTL.
+	(DEFS): Removed whole content ...
+	(INCLUDE): ... and added it here.
+
+2003-03-13  Marcel Telka  <marcel@telka.sk>
+
 	* include/chain.h: New file.
 	* src/tap/chain.c: Ditto.
 	* src/tap/Makefile.am (libtap_a_SOURCES): Added chain.c.

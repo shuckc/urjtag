@@ -44,9 +44,7 @@ jtag_SOURCES = \
 
 jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a bus/libbus.a
 
-jtag_LDADD = -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus
+jtag_LDADD = -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus @LIBINTL@
 
 localedir = $(datadir)/locale
-DEFS += -DLOCALEDIR=\"$(localedir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
-LIBS += @LIBINTL@
-INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC)
+INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC) -DLOCALEDIR=\"$(localedir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
