@@ -1,3 +1,16 @@
+2003-05-15  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (CPPFLAGS): Added path to the openwince include arm directory.
+	* include/bus.h (bus_width): Added new `adr' parameter for this macro.
+	All relevant functions and callers updated.
+
+	* src/bus/pxa2x0.c (bus_params_t): Added last_adr and MC_registers structure members.
+	(LAST_ADR, MC_pointer): New macros.
+	(pxa250_bus_read_start, pxa250_bus_read_next, pxa250_bus_read_end, pxa250_bus_write): Disabled
+		external bus cycles for addresses above 0x0400000.
+	(pxa250_bus_width): Removed some output messages. Implemented BOOT_DEF emulation.
+	(new_pxa250_bus): Implemented BOOT_DEF emulation.
+
 2003-05-14  Marcel Telka  <marcel@telka.sk>
 
 	* include/Makefile.am (noinst_HEADERS): Added cfi.h.

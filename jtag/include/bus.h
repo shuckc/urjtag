@@ -34,7 +34,7 @@ typedef struct bus bus_t;
 struct bus {
 	void *params;
 	void (*prepare)( bus_t *bus );
-	int (*width)( bus_t *bus );
+	int (*width)( bus_t *bus, uint32_t adr );
 	void (*read_start)( bus_t *bus, uint32_t adr );
 	uint32_t (*read_next)( bus_t *bus, uint32_t adr );
 	uint32_t (*read_end)( bus_t *bus );
@@ -44,7 +44,7 @@ struct bus {
 };
 
 #define	bus_prepare(bus)	bus->prepare(bus)
-#define	bus_width(bus)		bus->width(bus)
+#define	bus_width(bus,adr)	bus->width(bus,adr)
 #define	bus_read_start(bus,adr)	bus->read_start(bus,adr)
 #define	bus_read_next(bus,adr)	bus->read_next(bus,adr)
 #define	bus_read_end(bus)	bus->read_end(bus)

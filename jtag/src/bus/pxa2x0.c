@@ -30,16 +30,23 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <pxa2x0/mc.h>
+
 #include "part.h"
 #include "bus.h"
 
 typedef struct {
 	chain_t *chain;
 	part_t *part;
+	uint32_t last_adr;
+	MC_registers_t MC_registers;
 } bus_params_t;
 
 #define	CHAIN	((bus_params_t *) bus->params)->chain
 #define	PART	((bus_params_t *) bus->params)->part
+#define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
+
+#define	MC_pointer	(&((bus_params_t *) bus->params)->MC_registers)
 
 static void
 setup_address( part_t *p, uint32_t a )
@@ -90,6 +97,10 @@ pxa250_bus_read_start( bus_t *bus, uint32_t adr )
 	chain_t *chain = CHAIN;
 	part_t *p = PART;
 
+	LAST_ADR = adr;
+	if (adr >= 0x04000000)
+		return;
+
 	/* see Figure 6-13 in [1] */
 	part_set_signal( p, "nCS[0]", 1, 0 );
 	part_set_signal( p, "DQM[0]", 1, 0 );
@@ -107,11 +118,19 @@ pxa250_bus_read_start( bus_t *bus, uint32_t adr )
 	chain_shift_data_registers( chain );
 }
 
+static uint32_t pxa250_bus_read_end( bus_t *bus );
+
 static uint32_t
 pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
+
+	if (LAST_ADR >= 0x04000000)
+		pxa250_bus_read_start( bus, adr );
+	if (adr >= 0x04000000)
+		return pxa250_bus_read_end( bus );
+	LAST_ADR = adr;
 
 	/* see Figure 6-13 in [1] */
 	setup_address( p, adr );
@@ -136,6 +155,9 @@ pxa250_bus_read_end( bus_t *bus )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
+
+	if (LAST_ADR >= 0x04000000)
+		return 0;
 
 	/* see Figure 6-13 in [1] */
 	part_set_signal( p, "nCS[0]", 1, 1 );
@@ -172,6 +194,9 @@ pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
 
+	if (adr >= 0x04000000)
+		return;
+
 	part_set_signal( p, "nCS[0]", 1, 0 );
 	part_set_signal( p, "DQM[0]", 1, 0 );
 	part_set_signal( p, "DQM[1]", 1, 0 );
@@ -194,20 +219,16 @@ pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 }
 
 static int
-pxa250_bus_width( bus_t *bus )
+pxa250_bus_width( bus_t *bus, uint32_t adr )
 {
-	part_t *p = PART;
-	uint8_t boot_sel = (part_get_signal( p, "BOOT_SEL[2]" ) << 2)
-			| (part_get_signal( p, "BOOT_SEL[1]" ) << 1)
-			| part_get_signal( p, "BOOT_SEL[0]" );
+	if (adr >= 0x04000000)
+		return 32;
 
 	/* see Table 6-36. in [1] */
-	switch (boot_sel) {
+	switch (get_BOOT_DEF_BOOT_SEL(BOOT_DEF)) {
 		case 0:
-			printf( "BOOT_SEL: Asynchronous 32-bit ROM\n" );
 			return 32;
 		case 1:
-			printf( "BOOT_SEL: Asynchronous 16-bit ROM\n" );
 			return 16;
 		case 2:
 		case 3:
@@ -215,7 +236,7 @@ pxa250_bus_width( bus_t *bus )
 		case 5:
 		case 6:
 		case 7:
-			printf( "TODO - BOOT_SEL: %d\n", boot_sel );
+			printf( "TODO - BOOT_SEL: %d\n", get_BOOT_DEF_BOOT_SEL(BOOT_DEF) );
 			return 0;
 		default:
 			printf( "BUG in code, file %s, line %d.\n", __FILE__, __LINE__ );
@@ -256,7 +277,7 @@ new_pxa250_bus( chain_t *chain, int pn )
 
 	memcpy( bus, &pxa250_bus, sizeof (bus_t) );
 
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -264,6 +285,10 @@ new_pxa250_bus( chain_t *chain, int pn )
 
 	CHAIN = chain;
 	PART = chain->parts->parts[pn];
+
+	BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( PART, "BOOT_SEL[2]" ) << 2
+							| part_get_signal( PART, "BOOT_SEL[1]" ) << 1
+							| part_get_signal( PART, "BOOT_SEL[0]" ));
 
 	return bus;
 }

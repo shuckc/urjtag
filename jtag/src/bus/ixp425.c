@@ -201,7 +201,7 @@ ixp425_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 }
 
 static int
-ixp425_bus_width( bus_t *bus )
+ixp425_bus_width( bus_t *bus, uint32_t adr )
 {
 	return 16;
 }

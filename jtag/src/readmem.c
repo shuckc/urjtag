@@ -60,7 +60,7 @@ detectflash( bus_t *bus )
 
 	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
 
-	switch (bus_width( bus )) {
+	switch (bus_width( bus, 0 )) {
 		case 16:
 			o = 1;
 			break;
@@ -223,7 +223,7 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 
 	bus_prepare( bus );
 
-	step = bus_width( bus ) / 8;
+	step = bus_width( bus, 0 ) / 8;
 
 	if (step == 0) {
 		printf( "Unknown bus width!\n" );

@@ -86,7 +86,7 @@ flashcheck( bus_t *bus, cfi_query_structure_t **cfi )
 
 	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
 
-	switch (bus_width( bus )) {
+	switch (bus_width( bus, 0 )) {
 		case 16:
 			o = 1;
 			break;

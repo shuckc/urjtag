@@ -204,7 +204,7 @@ sa1110_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 }
 
 static int
-sa1110_bus_width( bus_t *bus )
+sa1110_bus_width( bus_t *bus, uint32_t adr )
 {
 	if (part_get_signal( PART, "ROM_SEL" )) {
 		printf( "ROM_SEL: 32 bits\n" );

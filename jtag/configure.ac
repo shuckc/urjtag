@@ -73,7 +73,7 @@ AC_CACHE_CHECK([for the openwince includes], openwince_includes_path, [
 if test "$openwince_includes_path" = "no"; then
 	AC_MSG_ERROR([The openwince include package not found.])
 fi
-CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device"
+CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device -I$openwince_includes_path/arm"
 
 AC_SEARCH_LIBS([ioperm], [ioperm])
 if test "$ac_cv_search_ioperm" != "no"; then

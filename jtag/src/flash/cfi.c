@@ -36,7 +36,7 @@
 #include "bus.h"
 
 /* function to cover 2x16 and 1x16 modes */
-#define BW16(x) ( (bus_width(bus) == 16) ? x : ( (x<<16) | x ) )
+#define BW16(x) ( (bus_width(bus, 0) == 16) ? x : ( (x<<16) | x ) )
 
 static uint16_t
 read2( bus_t *bus, uint32_t adr, int o )
@@ -55,7 +55,7 @@ detect_cfi( bus_t *bus )
 	int o = 2;
 	uint32_t tmp;
 
-	if (bus_width( bus ) == 16)
+	if (bus_width( bus, 0 ) == 16)
 		o = 1;
 
 	/* detect CFI capable devices - see Table 1 in [1] */
