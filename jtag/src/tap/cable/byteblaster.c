@@ -45,6 +45,7 @@
 #define	TDI	6
 #define	TCK	0
 #define	TMS	1
+#define	BB_CHECK	5
 
 /*
  * 7 - BUSY (pin 11)
@@ -54,14 +55,42 @@
  * 3 - ERROR (pin 15)
  */
 #define	TDO	7
+#define	BB_PRESENT	6
+#define	VCC_OK_N	3
+
+/*
+ * 0 - STROBE (pin 1)
+ * 1 - AUTOFD (pin 14)
+ * 2 - INIT (pin 16)
+ * 3 - SELECT (pin 17)
+*/
+#define	BB_ENABLE	0xC
 
 static int
 byteblaster_init( cable_t *cable )
 {
+	int BB_II = 0;
+
 	if (parport_open( cable->port ))
 		return -1;
 
 	PARAM_TRST(cable) = 1;
+	
+	/* check if a ByteBlaster or ByteBlasterMV is connected */
+	parport_set_data( cable->port, 1 << BB_CHECK);
+	if ( !( ( parport_get_status( cable->port ) >> BB_PRESENT ) & 1 ) )
+		BB_II = 1;
+	parport_set_data( cable->port, 0);
+	if ( ( parport_get_status( cable->port ) >> BB_PRESENT ) & 1 )
+		BB_II = 1;
+	
+	/* check if the power supply is ok (only for ByteBlaster II) */
+	/* if no ByteBlaster at all is connected this check will fail, too */
+	if ( ( BB_II ) && ( ( parport_get_status( cable->port ) >> VCC_OK_N ) & 1 ) )
+		return -1;
+	
+	/* Enable ByteBlaster */
+	parport_set_control( cable->port, BB_ENABLE );
 
 	return 0;
 }
