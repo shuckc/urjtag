@@ -1,5 +1,7 @@
 $Id$
 
+jtag-0.3.2:
+
 	* Added driver for Keith & Koep JTAG Cable.
 	* Ported to NetBSD/i386 (Jachym Holecek).
 
