@@ -52,6 +52,12 @@ typedef struct {
 	void (*readarray)( cfi_array_t *cfi_array );
 } flash_driver_t;
 
+#define	FLASH_ERROR_NOERROR			0
+#define	FLASH_ERROR_INVALID_COMMAND_SEQUENCE	1
+#define	FLASH_ERROR_LOW_VPEN			2
+#define	FLASH_ERROR_BLOCK_LOCKED		3
+#define	FLASH_ERROR_UNKNOWN			99
+
 void detectflash( bus_t *bus );
 
 void flashmem( bus_t *bus, FILE *f, uint32_t addr );
