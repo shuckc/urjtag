@@ -47,7 +47,7 @@ data_register_alloc( const char *name, int len )
 
 	dr->value = register_alloc( len );
 	dr->oldval = register_alloc( len );
-	if (!dr->value || dr->oldval) {
+	if (!dr->value || !dr->oldval) {
 		free( dr->value );
 		free( dr->oldval );
 		free( dr->name );
