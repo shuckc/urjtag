@@ -1,3 +1,9 @@
+2003-03-17  Marcel Telka  <marcel@telka.sk>
+
+	* src/Makefile.am (bin_PROGRAMS, bsdl2jtag_SOURCES): Added new bsdl2jtag conversion
+		tool (Matan Ziv-Av).
+	* src/bsdl2jtag.c: New file (Matan Ziv-Av).
+
 2003-03-14  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (CPPFLAGS): Added common include paths.

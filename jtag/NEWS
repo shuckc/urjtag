@@ -1,5 +1,7 @@
 $Id$
 
+	* Added new `bsdl2jtag' conversion tool (Matan Ziv-Av).
+
 jtag-0.3 (2003-02-25):
 
 	* Changes in interactive commands:

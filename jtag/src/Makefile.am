@@ -27,7 +27,9 @@ SUBDIRS = \
 	part \
 	bus
 
-bin_PROGRAMS = jtag
+bin_PROGRAMS = \
+	jtag \
+	bsdl2jtag
 
 jtag_SOURCES = \
 	jtag.c \
@@ -41,6 +43,9 @@ jtag_SOURCES = \
 	flash-intel.c \
 	flash-amd.c \
 	help.c
+
+bsdl2jtag_SOURCES = \
+	bsdl2jtag.c
 
 jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a bus/libbus.a
 
