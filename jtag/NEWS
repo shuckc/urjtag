@@ -3,6 +3,8 @@ $Id$
 	* Fixed bug with SELECT, AUTOFD, and STROBE signals handling (bug 745824).
 	* Added new commands 'peek' and 'poke' (patch 747447, Matan Ziv-Av).
 	* Fixed bugs in SH7727 bus driver (thanks to Rainer Dörken).
+	* Added bus width detection using MD3 and MD4 signals in SH7727 bus driver
+		(thanks to Rainer Dörken).
 	* Minor bugs fixed.
 
 jtag-0.4 (2003-05-29):

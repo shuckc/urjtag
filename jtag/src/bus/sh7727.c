@@ -43,6 +43,8 @@ typedef struct {
 	signal_t *we[4];
 	signal_t *rdwr;
 	signal_t *rd;
+	signal_t *md3;
+	signal_t *md4;
 } bus_params_t;
 
 #define	CHAIN	((bus_params_t *) bus->params)->chain
@@ -53,6 +55,8 @@ typedef struct {
 #define	WE	((bus_params_t *) bus->params)->we
 #define	RDWR	((bus_params_t *) bus->params)->rdwr
 #define	RD	((bus_params_t *) bus->params)->rd
+#define	MD3	((bus_params_t *) bus->params)->md3
+#define	MD4	((bus_params_t *) bus->params)->md4
 
 static void
 setup_address( bus_t *bus, uint32_t a )
@@ -216,7 +220,19 @@ sh7727_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 static unsigned int
 sh7727_bus_width( bus_t *bus, uint32_t adr )
 {
-	return 16;
+	part_t *p = PART;
+
+	switch (part_get_signal( p, MD4 ) << 1 | part_get_signal( p, MD3 )) {
+		case 1:
+			return 8;
+		case 2:
+			return 16;
+		case 3:
+			return 32;
+		default:
+			printf( _("Error: Invalid bus width (MD3 = MD4 = 0)!\n") );
+			return 0;
+	}
 }
 
 static void
@@ -310,6 +326,16 @@ new_sh7727_bus( chain_t *chain, int pn )
 	RD = part_find_signal( PART, "RD" );
 	if (!RD) {
 		printf( _("signal '%s' not found\n"), "RD" );
+		failed = 1;
+	}
+	MD3 = part_find_signal( PART, "MD3" );
+	if (!MD3) {
+		printf( _("signal '%s' not found\n"), "MD3" );
+		failed = 1;
+	}
+	MD4 = part_find_signal( PART, "MD4" );
+	if (!MD4) {
+		printf( _("signal '%s' not found\n"), "MD4" );
 		failed = 1;
 	}
 
