@@ -34,6 +34,7 @@ openwinceincdir = $(includedir)/openwince
 
 nobase_openwinceinc_HEADERS = \
 	common.h \
+	cexcept.h \
 	stdint.h \
 	ac97.h \
 	ucb1400.h \
