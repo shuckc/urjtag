@@ -163,22 +163,62 @@ find_record( char *filename, tap_register *key, struct id_record *idr )
 parts_t *
 detect_parts( chain_t *chain, char *db_path )
 {
+	int irlen;
+	tap_register *ir;
+	int chlen;
+	tap_register *one;
+	tap_register *ones;
+	tap_register *br;
+	tap_register *id;
+	parts_t *ps;
+	int i;
+
 	char data_path[1024];
 	char *cmd[3] = {"script", data_path, NULL};
 	char manufacturer[MAXLEN_MANUFACTURER + 1];
 	char partname[MAXLEN_PART + 1];
 	char stepping[MAXLEN_STEPPING + 1];
 
-	tap_register *zeros = register_fill( register_alloc( 32 ), 0 );
-	tap_register *ones = register_fill( register_alloc( 32 ), 1 );
-	tap_register *id = register_alloc( 32 );
-	parts_t *ps = parts_alloc();
+	/* Detect IR length */
+	tap_reset( chain );
+	tap_capture_ir( chain );
+	irlen = detect_register_size( chain );
+	if (irlen < 1)
+		return NULL;
 
-	if (!zeros || !ones || !id || !ps) {
-		printf( _("%s: out of memory\n"), __FUNCTION__ );
+	printf( _("IR length: %d\n"), irlen );
 
-		register_free( zeros );
+	/* Allocate IR */
+	ir = register_fill( register_alloc( irlen ), 1 );
+	if (ir == NULL) {
+		printf( _("out of memory\n") );
+		return NULL;
+	}
+
+	tap_shift_register( chain, ir, NULL, 1 );
+	register_free( ir );
+
+	/* Detect chain length */
+	tap_capture_dr( chain );
+	chlen = detect_register_size( chain );
+	if (chlen < 1) {
+		printf( _("Unable to detect JTAG chain length\n") );
+		return NULL;
+	}
+	printf( _("Chain length: %d\n"), chlen );
+
+	/* Allocate registers and parts */
+	one = register_fill( register_alloc( 1 ), 1 );
+	ones = register_fill( register_alloc( 31 ), 1 );
+	br = register_alloc( 1 );
+	id = register_alloc( 32 );
+	ps = parts_alloc();
+	if (!one || !ones || !br || !id || !ps) {
+		printf( _("out of memory\n") );
+
+		register_free( one );
 		register_free( ones );
+		register_free( br );
 		register_free( id );
 		parts_free( ps );
 		return NULL;
@@ -186,25 +226,38 @@ detect_parts( chain_t *chain, char *db_path )
 	chain->parts = ps;
 	chain->active_part = 0;
 
+	/* Detect parts */
 	tap_reset( chain );
-
 	tap_capture_dr( chain );
-	for (;;) {
+
+	for (i = 0; i < chlen; i++) {
+		part_t *part;
+		tap_register *did = br;		/* detected id (length is 1 or 32) */
 		tap_register *key;
 		struct id_record idr;
 		char *p;
-		part_t *part;
 
-		tap_shift_register( chain, zeros, id, 0 );
-		if (!register_compare( id, zeros ))
-			break;				/* end of chain */
-
-		if (!register_compare( ones, id )) {
-			printf( _("%s: bad JTAG connection (TDO is 1)\n"), __FUNCTION__ );
-			break;
+		tap_shift_register( chain, one, br, 0 );
+		if (register_compare( one, br ) == 0) {
+			/* part with id */
+			tap_shift_register( chain, ones, id, 0 );
+			register_shift_left( id, 1 );
+			id->data[0] = 1;
+			did = id;
 		}
 
-		printf( _("Device Id: %s\n"), register_get_string( id ) );
+		printf( _("Device Id: %s\n"), register_get_string( did ) );
+		part = part_alloc( did );
+		if (part == NULL) {
+			printf( _("Out of memory\n") );
+			break;
+		}
+		parts_add_part( ps, part );
+
+		if (did == br)
+			continue;
+
+		/* find JTAG declarations for a part with id */
 
 		strcpy( data_path, db_path );		/* FIXME: Buffer overrun */
 
@@ -283,26 +336,29 @@ detect_parts( chain_t *chain, char *db_path )
 		strcat( data_path, idr.name );
 
 		printf( _("  Filename:     %s\n"), data_path );
-		part = part_alloc( id );
-		if (part) {
-			parts_add_part( ps, part );
-			chain->active_part = ps->len - 1;
-			strcpy( part->manufacturer, manufacturer );
-			strcpy( part->part, partname );
-			strcpy( part->stepping, stepping );
-			cmd_run( cmd );
+
+		/* run JTAG declarations */
+		chain->active_part = ps->len - 1;
+		strcpy( part->manufacturer, manufacturer );
+		strcpy( part->part, partname );
+		strcpy( part->stepping, stepping );
+		cmd_run( cmd );
+		if (part->active_instruction == NULL)
 			part->active_instruction = part_find_instruction( part, "IDCODE" );
-		} else {
-			printf( _("Out of memory\n") );
-			exit( 1 );
-		}
 	}
 
-	chain_clock( chain, 1, 0 );		/* Exit1-DR */
-	chain_clock( chain, 1, 0 );		/* Update-DR */
+	for (i = 0; i < 32; i++) {
+		tap_shift_register( chain, one, br, 0 );
+		if (register_compare( one, br ) != 0) {
+			printf( _("Error: Unable to detect JTAG chain end!\n") );
+			break;
+		}
+	}
+	tap_shift_register( chain, one, NULL, 1 );
 
-	register_free( zeros );
+	register_free( one );
 	register_free( ones );
+	register_free( br );
 	register_free( id );
 
 	return ps;

@@ -38,7 +38,7 @@
 #define	TEST_COUNT		1
 #define	TEST_THRESHOLD		100		/* in % */
 
-static int
+int
 detect_register_size( chain_t *chain )
 {
 	int len;

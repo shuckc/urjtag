@@ -1,5 +1,11 @@
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
+	* include/jtag.h (detect_register_size): Added function declaration.
+	* src/discovery.c (detect_register_size): Changed to non-static.
+	* src/detect.c (detect_parts): Added support for parts without IDCODE.
+
+2003-08-13  Marcel Telka  <marcel@telka.sk>
+
 	* src/bus/sa1110.c (sa1110_bus_width): Removed bus width printing.
 	* src/bus/sh7751r.c (sh7751r_bus_printinfo): New function.
 

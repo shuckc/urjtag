@@ -18,7 +18,6 @@ jtag-0.5:
 	* Added new command 'part', syntax changes for 'set', 'get', 'dr', 'instruction', and
 		'print' commands.
 	* Added support for multiple buses, added new 'bus' command to change active bus.
-	* Added 1 x 8 bit AMD Flash driver (patch 772499, Matan Ziv-Av).
 	* Added initial JTAG declarations for Broadcom BCM3310 (see support request 770145 for
 		more info, thanks to Ramses VI).
 	* Fixed invalid memory allocation size (core dump) in jtag_parse_line() function.
@@ -26,6 +25,7 @@ jtag-0.5:
 	* Added new commands 'signal', 'register', 'bit', and enhanced 'instruction' command
 		to allow create JTAG declarations from command line (or script).
 	* JTAG declarations are now executed as scripts.
+	* Added support for parts without IDCODE instruction.
 	* Added support for "downto" in bit vectors and "observe_only" into bsdl2jtag
 		(patch 787346, Brad Parker).
 	* Minor bugs fixed.
