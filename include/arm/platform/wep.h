@@ -22,10 +22,10 @@
  * Written by Marcel Telka <marcel@telka.sk>, 2002.
  *
  * Documentation:
- * [1] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
- *     Developer's Manual", October 2001, Order Number: 278240-004
- * [2] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
- *     Specification Update", December 2001, Order Number: 278259-023
+ * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
+ *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
+ *     Specification Update", May 2002, Order Number: 278534-005
  *
  */
 
@@ -35,4 +35,6 @@
 /* WEP board variations */
 #define	EP250	0
 
-#endif /* PLATFORM_WID_H */
+#define	DEBUG_PORT_BASE	STUART_BASE
+
+#endif /* PLATFORM_WEP_H */
