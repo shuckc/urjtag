@@ -1,3 +1,7 @@
+2004-11-18  Marcel Telka  <marcel@telka.sk>
+
+	* flash/jedec.c (jedec_detect): Added cfi_array allocation (patch 970946, Ian Campbell).
+
 2004-11-15  Marcel Telka  <marcel@telka.sk>
 
 	* flash/intel.c (_intel_flash_print_info): Added support for Intel 28F256J3A (patch 1012140, Jerome Debard).

@@ -35,9 +35,31 @@
 int
 jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 {
+	unsigned int bw;		/* bus width */
+	int ba;				/* bus width address multiplier */
+	bus_area_t area;
 	int mid;
 	int did;
 	cfi_query_structure_t *cfi;
+
+	if (!cfi_array || !bus)
+		return -1;		/* invalid parameters */
+
+	*cfi_array = calloc( 1, sizeof (cfi_array_t) );
+	if (!*cfi_array)
+		return -2;		/* out of memory */
+
+	(*cfi_array)->bus = bus;
+	(*cfi_array)->address = adr;
+	if (bus_area( bus, adr, &area ) != 0)
+		return -8;		/* bus width detection failed */
+	bw = area.width;
+	if (bw != 8 && bw != 16 && bw != 32)
+		return -3;		/* invalid bus width */
+	(*cfi_array)->bus_width = ba = bw / 8;
+	(*cfi_array)->cfi_chips = calloc( ba, sizeof (cfi_chip_t *) );
+	if (!(*cfi_array)->cfi_chips)
+		return -2;		/* out of memory */
 
 	/* Query flash. */
 	bus_write( bus, 0x0, 0xf0 );
