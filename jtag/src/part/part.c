@@ -122,6 +122,24 @@ part_find_data_register( part *p, const char *drname )
 }
 
 void
+part_shift_instruction( part *p, int exit )
+{
+	if (!p || !p->active_instruction)
+		return;
+
+	tap_shift_register( p->active_instruction->value, NULL, exit );
+}
+
+void
+part_shift_data_register( part *p, int exit )
+{
+	if (!p || !p->active_instruction || !p->active_instruction->data_register)
+		return;
+	
+	tap_shift_register( p->active_instruction->data_register->in, p->active_instruction->data_register->out, exit );
+}
+
+void
 part_set_signal( part *p, const char *pname, int out, int val )
 {
 	signal *s;
@@ -153,18 +171,18 @@ part_set_signal( part *p, const char *pname, int out, int val )
 			printf( "signal %s cannot be set as output\n", pname );
 			return;
 		}
-		bsr->value->data[s->output->bit] = val & 1;
+		bsr->in->data[s->output->bit] = val & 1;
 
 		control = p->bsbits[s->output->bit]->control;
 		if (control >= 0)
-			bsr->value->data[control] = p->bsbits[s->output->bit]->control_value ^ 1;
+			bsr->in->data[control] = p->bsbits[s->output->bit]->control_value ^ 1;
 	} else {
 		if (!s->input) {
 			printf( "signal %s cannot be set as input\n", pname );
 			return;
 		}
 		if (s->output)
-			bsr->value->data[s->output->control] = p->bsbits[s->output->control]->control_value;
+			bsr->in->data[s->output->control] = p->bsbits[s->output->control]->control_value;
 	}
 }
 
@@ -198,7 +216,7 @@ part_get_signal( part *p, const char *pname )
 		return -1;
 	}
 
-	return bsr->value->data[s->input->bit];
+	return bsr->out->data[s->input->bit];
 }
 
 /* parts */

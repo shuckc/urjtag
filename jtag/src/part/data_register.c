@@ -45,11 +45,11 @@ data_register_alloc( const char *name, int len )
 		return NULL;
 	}
 
-	dr->value = register_alloc( len );
-	dr->oldval = register_alloc( len );
-	if (!dr->value || !dr->oldval) {
-		free( dr->value );
-		free( dr->oldval );
+	dr->in = register_alloc( len );
+	dr->out = register_alloc( len );
+	if (!dr->in || !dr->out) {
+		free( dr->in );
+		free( dr->out );
 		free( dr->name );
 		free( dr );
 		return NULL;
@@ -67,7 +67,7 @@ data_register_free( data_register *dr )
 		return;
 
 	free( dr->name );
-	register_free( dr->value );
-	register_free( dr->oldval );
+	register_free( dr->in );
+	register_free( dr->out );
 	free( dr );
 }

@@ -136,7 +136,7 @@ read_part( FILE *f, tap_register *idr )
 
 			/* Device Identification Register */
 			if (strcmp( dr->name, "DIR" ) == 0)
-				register_init( dr->value, register_get_string( idr ) );
+				register_init( dr->out, register_get_string( idr ) );
 
 			continue;
 		}
@@ -220,7 +220,7 @@ read_part( FILE *f, tap_register *idr )
 			/* get bit number */
 			t = get_token( NULL );
 			bit = strtol( t, &t, 10 );
-			if ((t && *t) || (bit < 0) || (bit >= bsr->value->len)) {
+			if ((t && *t) || (bit < 0) || (bit >= bsr->in->len)) {
 				printf( "(%d) invalid boundary bit number\n", line );
 				continue;
 			}
@@ -260,7 +260,7 @@ read_part( FILE *f, tap_register *idr )
 				continue;
 			}
 			safe = (*t == '1') ? 1 : 0;
-			bsr->value->data[bit] = safe;
+			bsr->in->data[bit] = safe;
 
 			/* get bit name */
 			t = get_token( NULL );

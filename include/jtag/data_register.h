@@ -31,8 +31,8 @@ typedef struct data_register data_register;
 
 struct data_register {
 	char *name;		/* (public) register name */
-	tap_register *value;	/* (public) register value */
-	tap_register *oldval;	/* (private) temporary (old) register value */
+	tap_register *in;	/* (public) register value clocked in */
+	tap_register *out;	/* (public) register value clocked out */
 	data_register *next;
 };
 
