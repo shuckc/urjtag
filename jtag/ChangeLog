@@ -1,3 +1,8 @@
+2004-01-20  Marcel Telka  <marcel@telka.sk>
+
+	* acinclude.m4: File removed.
+	* autogen.sh: Added acinclude call.
+
 2003-12-20  Marcel Telka  <marcel@telka.sk>
 
 	* src/bus/Makefile.am (libbus_a_SOURCES): Added au1500.c.
