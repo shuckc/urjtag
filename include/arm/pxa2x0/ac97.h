@@ -92,6 +92,10 @@ typedef volatile struct AC97_registers {
 #define	MOSR			AC97_pointer->mosr
 #define	MISR			AC97_pointer->misr
 #define	MODR			AC97_pointer->modr
+#define	__PACR(r)		AC97_pointer->__pacr[r >> 1]
+#define	__SACR(r)		AC97_pointer->__sacr[r >> 1]
+#define	__PMCR(r)		AC97_pointer->__pmcr[r >> 1]
+#define	__SMCR(r)		AC97_pointer->__smcr[r >> 1]
 #endif /* LANGUAGE == C */
 
 #define	POCR_OFFSET		0x000
