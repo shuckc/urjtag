@@ -11,6 +11,7 @@ src/bus/au1500.c
 src/bus/bcm1250.c
 src/bus/buses.c
 src/bus/ixp425.c
+src/bus/lh7a400.c
 src/bus/mpc824x.c
 src/bus/pxa2x0.c
 src/bus/s3c4510x.c
