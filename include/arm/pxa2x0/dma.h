@@ -203,7 +203,7 @@ typedef volatile struct DMA_registers {
 #define	DCSR_STOPSTATE		bit(3)
 #define	DCSR_ENDINTR		bit(2)
 #define	DCSR_STARTINTR		bit(1)
-#define	DSCR_BUSERRINTR		bit(0)
+#define	DCSR_BUSERRINTR		bit(0)
 
 /* DINT bits - see Table 5-6 in [1], Table 5-6 in [2] */
 

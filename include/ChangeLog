@@ -1,6 +1,11 @@
+2003-01-31  Marcel Telka  <marcel@telka.sk>
+
+	* arm/pxa2x0/dma.h (DCSR_BUSERRINTR): Fixed typo in macro name (patch 678112).
+		Thanks to Daniel Samek.
+
 2003-01-27  Marcel Telka  <marcel@telka.sk>
 
-	* arm/pxa2x0/dma.c (get_DRCMR_CHLNUM): Fixed a typo.
+	* arm/pxa2x0/dma.h (get_DRCMR_CHLNUM): Fixed a typo.
 
 2003-01-27  Marcel Telka  <marcel@telka.sk>
 

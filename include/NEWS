@@ -11,6 +11,7 @@ $Id$
 		- added get_* macros for DMA register bits
 		- added symbolic names and offsets for DRCMR registers (suggested by Daniel
 			Samek, patch 675417)
+		- fixed typo in DCSR_BUSERRINTR macro name (patch 678112, Daniel Samek)
 	* Added UCB1400_ADCC_AI_* declarations for UCB1400 (suggested by Juraj Fabo)
 	* Moved ac97.h and ucb1400.h files to device/codec directory
 	* Minor fixes.
