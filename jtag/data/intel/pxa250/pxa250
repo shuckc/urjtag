@@ -1,0 +1,251 @@
+#
+# $Id$
+#
+# JTAG declarations for PXA250
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
+#
+# Documentation:
+# [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
+#     Design Guide", February 2002, Order Number: 278523-001
+# [2] Intel Corporation, "Intel XScale Microarchitecture for the PXA250
+#     and PXA210 Application Processors User's Manual", February 2002,
+#     Order Number: 278525-001
+# [3] Intel Corporation, "BSDL description for top level entity pxa250_jtag", 2002-03-06,
+#     http://developer.intel.com/design/pca/applicationsprocessors/bsdl/PXA250_bsdl_bga.txt
+#
+
+# see Table 1-4 in [1]
+pin	nACRESET	D10
+pin	nBATT_FAULT	K12
+pin	BATT_VCC	M11
+pin	BOOT_SEL[0]	G16
+pin	BOOT_SEL[1]	G13
+pin	BOOT_SEL[2]	F13
+pin	nCS[0]		N8
+pin	DQM[0]		M8
+pin	DQM[1]		B1
+pin	DQM[2]		B2
+pin	DQM[3]		L7
+pin	GPIO[0]		L10
+pin	GPIO[1]		L12
+pin	GPIO[2]		L13
+pin	GPIO[3]		K14
+pin	GPIO[4]		J12
+pin	GPIO[5]		J11
+pin	GPIO[6]		H14
+pin	GPIO[7]		G15
+pin	GPIO[8]		F14
+pin	GPIO[9]		F12
+pin	GPIO[10]	F7
+pin	GPIO[11]	A7
+pin	GPIO[12]	B6
+pin	GPIO[13]	B5
+pin	GPIO[14]	B4
+pin	GPIO[15]	T8
+pin	GPIO[16]	E12
+pin	GPIO[17]	D12
+pin	GPIO[18]	C1
+pin	GPIO[19]	N14
+pin	GPIO[20]	N12
+pin	GPIO[21]	N15
+pin	GPIO[22]	M12
+pin	GPIO[23]	F9
+pin	GPIO[24]	E9
+pin	GPIO[25]	D9
+pin	GPIO[26]	A9
+pin	GPIO[27]	B9
+pin	GPIO[28]	C9
+pin	GPIO[29]	E10
+pin	GPIO[30]	A10
+pin	GPIO[31]	E11
+pin	GPIO[32]	A16
+pin	GPIO[33]	T13
+pin	GPIO[34]	A13
+pin	GPIO[35]	A14
+pin	GPIO[36]	A12
+pin	GPIO[37]	B11
+pin	GPIO[38]	B10
+pin	GPIO[39]	E13
+pin	GPIO[40]	F10
+pin	GPIO[41]	F8
+pin	GPIO[42]	B13
+pin	GPIO[43]	D13
+pin	GPIO[44]	A15
+pin	GPIO[45]	B14
+pin	GPIO[46]	B15
+pin	GPIO[47]	C15
+pin	GPIO[48]	P13
+pin	GPIO[49]	T14
+pin	GPIO[50]	T15
+pin	GPIO[51]	R15
+pin	GPIO[52]	P14
+pin	GPIO[53]	R16
+pin	GPIO[54]	P16
+pin	GPIO[55]	M13
+pin	GPIO[56]	N16
+pin	GPIO[57]	M16
+pin	GPIO[58]	E7
+pin	GPIO[59]	D7
+pin	GPIO[60]	C7
+pin	GPIO[61]	B7
+pin	GPIO[62]	E6
+pin	GPIO[63]	D6
+pin	GPIO[64]	E5
+pin	GPIO[65]	A6
+pin	GPIO[66]	C5
+pin	GPIO[67]	A5
+pin	GPIO[68]	D5
+pin	GPIO[69]	A4
+pin	GPIO[70]	A3
+pin	GPIO[71]	A2
+pin	GPIO[72]	C3
+pin	GPIO[73]	B3
+pin	GPIO[74]	E8
+pin	GPIO[75]	D8
+pin	GPIO[76]	B8
+pin	GPIO[77]	A8
+pin	GPIO[78]	P9
+pin	GPIO[79]	T9
+pin	GPIO[80]	R13
+pin	MA[0]		G1
+pin	MA[1]		H2
+pin	MA[2]		H1
+pin	MA[3]		H6
+pin	MA[4]		J6
+pin	MA[5]		J5
+pin	MA[6]		J3
+pin	MA[7]		J1
+pin	MA[8]		K1
+pin	MA[9]		K2
+pin	MA[10]		K5
+pin	MA[11]		K6
+pin	MA[12]		L1
+pin	MA[13]		L3
+pin	MA[14]		M1
+pin	MA[15]		M3
+pin	MA[16]		N3
+pin	MA[17]		P1
+pin	MA[18]		R1
+pin	MA[19]		P2
+pin	MA[20]		R3
+pin	MA[21]		T4
+pin	MA[22]		R5
+pin	MA[23]		P5
+pin	MA[24]		T5
+pin	MA[25]		P4
+pin	MD[0]		N4
+pin	MD[1]		M5
+pin	MD[2]		L5
+pin	MD[3]		T6
+pin	MD[4]		N6
+pin	MD[5]		T7
+pin	MD[6]		M6
+pin	MD[7]		M7
+pin	MD[8]		M9
+pin	MD[9]		T10
+pin	MD[10]		R9
+pin	MD[11]		T11
+pin	MD[12]		P11
+pin	MD[13]		N10
+pin	MD[14]		T12
+pin	MD[15]		M10
+pin	MD[16]		H3
+pin	MD[17]		H5
+pin	MD[18]		J4
+pin	MD[19]		K3
+pin	MD[20]		L4
+pin	MD[21]		M2
+pin	MD[22]		N1
+pin	MD[23]		T3
+pin	MD[24]		P6
+pin	MD[25]		R7
+pin	MD[26]		P7
+pin	MD[27]		P8
+pin	MD[28]		L8
+pin	MD[29]		P10
+pin	MD[30]		R11
+pin	MD[31]		P12
+pin	MMCMD		D14
+pin	MMDAT		B16
+pin	nOE		G5
+pin	PEXTAL		K16
+pin	PLL_VCC		J15
+pin	PLL_VSS		J16
+pin	PWR_EN		L11
+pin	PXTAL		K15
+pin	RDnWR		D3
+pin	nRESET		J13
+pin	nRESET_OUT	K11
+pin	SCL		D11
+pin	SDA		A11
+pin	nSDCAS		F3
+pin	SDCKE[0]	E4
+pin	SDCKE[1]	E3
+pin	SDCLK[0]	D2
+pin	SDCLK[1]	F5
+pin	SDCLK[2]	D1
+pin	nSDCS[0]	F1
+pin	nSDCS[1]	G6
+pin	nSDCS[2]	G3
+pin	nSDCS[3]	F2
+pin	nSDRAS		E1
+pin	TCK		H12
+pin	TDI		H15
+pin	TDO		H16
+pin	TEST		G12
+pin	TESTCLK		G11
+pin	TEXTAL		L15
+pin	TXTAL		L16
+pin	TMS		H13
+pin	nTRST		H11
+pin	USB_N		B12
+pin	USB_P		C12
+pin	VCC		F11 G7 G9 H10 J7 K8 K10 L6 L9
+pin	VCCN		A1 D4 F4 H4 K4 M4 M14 N5 N7 N9 N11 N13 P3 T2 T16
+pin	VCCQ		C6 C10 C13 D15 E14 G14
+pin	nVDD_FAULT	K13
+pin	VSS		C16 H8 H9 J8 J9 T1
+pin	VSSN		C2 E2 G2 J2 L2 M15 N2 P15 R2 R4 R6 R8 R10 R12 R14
+pin	VSSQ		C4 C8 C11 C14 D16 E15 E16 F6 F15 F16 G8 G10 H7 J10 J14 K7 K9 L14
+pin	nWE		G4
+
+
+# see 9.3.1 in [2]
+instruction length 5
+
+# mandatory instructions
+instruction EXTEST		00000
+instruction SAMPLE/PRELOAD	00001
+instruction BYPASS		11111
+
+# optional instructions
+instruction CLAMP		00100
+instruction HIGHZ		01000
+instruction IDCODE		11110
+
+# user-defined instructions
+instruction DBGRX		00010
+instruction LDIC		00111
+instruction DCSR		01001
+instruction DBGTX		10000
+
+# see [3]
+boundary length 385
+
