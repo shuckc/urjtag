@@ -32,14 +32,13 @@
 #ifndef	SA11X0_GPIO_H
 #define	SA11X0_GPIO_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
-#endif
+#include <common.h>
 
 /* GPIO Registers */
 
 #define	GPIO_BASE	0x90040000
 
+#if LANGUAGE == C
 typedef volatile struct GPIO_registers {
 	uint32_t gplr;
 	uint32_t gpdr;
@@ -63,5 +62,15 @@ typedef volatile struct GPIO_registers {
 #define	GFER		GPIO_pointer->gfer
 #define	GEDR		GPIO_pointer->gedr
 #define	GAFR		GPIO_pointer->gafr
+#endif /* LANGUAGE == C */
+
+#define	GPLR_OFFSET	0x00
+#define	GPDR_OFFSET	0x04
+#define	GPSR_OFFSET	0x08
+#define	GPCR_OFFSET	0x0C
+#define	GRER_OFFSET	0x10
+#define	GFER_OFFSET	0x14
+#define	GEDR_OFFSET	0x18
+#define	GAFR_OFFSET	0x1C
 
 #endif	/* SA11X0_GPIO_H */
