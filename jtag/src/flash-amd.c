@@ -60,6 +60,7 @@ amd_flash_autodetect( parts *ps, cfi_query_structure_t *cfi )
 /*
  * first implementation: see [1], page 29
  */
+#if 0
 static int
 amdstatus29( parts *ps, uint32_t adr, uint32_t data )
 {
@@ -89,6 +90,7 @@ amdstatus29( parts *ps, uint32_t adr, uint32_t data )
 
 	return 0;
 }
+#endif /* 0 */
 
 /*
  * second implementation: see [1], page 30
@@ -120,6 +122,7 @@ amdstatus( parts *ps, uint32_t adr, int data )
 	return 0;
 }
 
+#if 0
 static int
 amdisprotected( parts *ps, uint32_t adr )
 {
@@ -136,6 +139,7 @@ amdisprotected( parts *ps, uint32_t adr )
 
 	return ((data & 0x00ff00ff) != 0);
 }
+#endif /* 0 */
 
 static void
 amd_flash_print_info( parts *ps )

@@ -1,3 +1,9 @@
+2003-02-18  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable.c: Added <sys/types.h> include for useconds_t on some systems.
+	* src/flash-amd.c (amdstatus29): Disabled unused function.
+	(amdisprotected): Ditto.
+
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
 	* src/jtag.c (jtag_parse_line): Fixed segfault for 'set' command.
