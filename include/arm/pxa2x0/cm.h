@@ -83,6 +83,22 @@ typedef volatile struct CM_registers {
 #define	CCCR_L_40	CCCR_L(0x04)
 #define	CCCR_L_45	CCCR_L(0x05)
 
+/* CKEN bits - see Table 3-21 in [1] */
+
+#define	CKEN_CKEN16	bit(16)
+#define	CKEN_CKEN14	bit(14)
+#define	CKEN_CKEN13	bit(13)
+#define	CKEN_CKEN12	bit(12)
+#define	CKEN_CKEN11	bit(11)
+#define	CKEN_CKEN8	bit(8)
+#define	CKEN_CKEN7	bit(7)
+#define	CKEN_CKEN6	bit(6)
+#define	CKEN_CKEN5	bit(5)
+#define	CKEN_CKEN3	bit(3)
+#define	CKEN_CKEN2	bit(2)
+#define	CKEN_CKEN1	bit(1)
+#define	CKEN_CKEN0	bit(0)
+
 /* OSCC bits - see Table 3-22 in [1] */
 
 #define	OSCC_OON	bit(1)
