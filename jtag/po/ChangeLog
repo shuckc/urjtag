@@ -1,3 +1,7 @@
+2003-10-08  Marcel Telka  <marcel@telka.sk>
+
+	* sk.po: Updated Slovak translation.
+
 2003-09-23  Marcel Telka  <marcel@telka.sk>
 
 	* POTFILES.in: Added src/tap/cable/triton.c.
