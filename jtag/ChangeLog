@@ -1,5 +1,17 @@
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
+	* include/cable.h: Unified and simplified cable driver handling, added driver name
+		and driver description into driver interface structure.
+	* src/help.c (help): Ditto.
+	* src/jtag.c (main): Ditto.
+	* src/tap/Makefile.am: Ditto.
+	* src/tap/cable.c: Ditto.
+	* src/tap/cable/dlc5.c: Ditto.
+	* src/tap/cable/ea253.c: Ditto.
+	* src/tap/cable/ei012.c: Ditto.
+
+2003-01-08  Marcel Telka  <marcel@telka.sk>
+
 	* include/cable.h: Added cable driver for ETC EI012 JTAG Cable.
 	* src/help.c (help): Ditto.
 	* src/jtag.c (main): Ditto.

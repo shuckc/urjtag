@@ -29,6 +29,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "cable.h"
+
 void
 help( const char *cmd )
 {
@@ -62,7 +64,9 @@ help( const char *cmd )
 			"Usage: help [COMMAND]\n"
 			"Print short help for COMMAND, or list of available commands.\n"
 		);
-	else if (strcmp( cmd, "cable" ) == 0)
+	else if (strcmp( cmd, "cable" ) == 0) {
+		int i;
+
 		printf(
 			"Usage: cable parallel PORTADDR CABLE\n"
 			"Select JTAG cable connected to parallel port.\n"
@@ -72,11 +76,11 @@ help( const char *cmd )
 			"\n"
 			"List of supported cables:\n"
 			"none       No cable connected\n"
-			"DLC5       Xilinx DLC5 JTAG Parallel Cable III\n"
-			"EA253      ETC EA253 JTAG Cable\n"
-			"EI012      ETC EI012 JTAG Cable\n"
 		);
-	else if (strcmp( cmd, "detect" ) == 0)
+
+		for (i = 0; cable_drivers[i]; i++)
+			printf( "%-11s%s\n", cable_drivers[i]->name, cable_drivers[i]->description );
+	} else if (strcmp( cmd, "detect" ) == 0)
 		printf(
 			"Usage: detect\n"
 			"Detect parts on the JTAG chain.\n"

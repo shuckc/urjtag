@@ -27,7 +27,6 @@
  *
  */
 
-#include <stdio.h>
 #include <sys/io.h>
 
 #include "cable.h"
@@ -60,13 +59,7 @@ dlc5_init( unsigned int aport )
 {
 	tap_state_init();
 	port = aport;
-	printf( "Initilizing Xilinx DLC5 JTAG Parallel Cable III on parallel port at 0x%x\n", port );
-	if (ioperm( port, 2, 1 )) {
-		printf( "Error: Initialization failed!\n" );
-		return 0;
-	}
-
-	return 1;
+	return !ioperm( port, 2, 1 );
 }
 
 static void
@@ -102,6 +95,8 @@ dlc5_set_trst( int new_trst )
 }
 
 cable_driver_t dlc5_cable_driver = {
+	"DLC5",
+	"Xilinx DLC5 JTAG Parallel Cable III",
 	dlc5_init,
 	dlc5_done,
 	dlc5_clock,

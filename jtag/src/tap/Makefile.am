@@ -27,6 +27,7 @@ libtap_a_SOURCES = \
 	tap.c \
 	register.c \
 	state.c \
+	cable.c \
 	cable/dlc5.c \
 	cable/ea253.c \
 	cable/ei012.c

@@ -101,6 +101,7 @@ main( void )
 		}
 
 		if (strcmp( t, "cable" ) == 0) {
+			int i;
 			unsigned int port;
 
 			t = get_token( NULL );
@@ -137,32 +138,29 @@ main( void )
 			if (strcmp( t, "none" ) == 0) {
 				printf( "Changed cable to 'none'\n" );
 				cable = NULL;
-			} else if (strcmp( t, "DLC5" ) == 0) {
-				cable = &dlc5_cable_driver;
+				continue;
+			}
+			
+			for (i = 0; cable_drivers[i]; i++)
+				if (strcmp( t, cable_drivers[i]->name ) == 0)
+					break;
 
-				if (!cable->init( port ))
-					cable = NULL;
-			} else if (strcmp( t, "EA253" ) == 0) {
-				cable = &ea253_cable_driver;
-
-				if (!cable->init( port ))
-					cable = NULL;
-			} else if (strcmp( t, "EI012" ) == 0) {
-				cable = &ei012_cable_driver;
-
-				if (!cable->init( port ))
-					cable = NULL;
-			} else {
+			if (!cable_drivers[i]) {
 				printf( "Unknown cable: %s\n", t );
 				continue;
 			}
 
-			if (cable) {
-				cable->set_trst( 0 );
-				cable->set_trst( 1 );
-
-				tap_reset();
+			cable = cable_drivers[i];
+			printf( "Initilizing %s on parallel port at 0x%x\n", cable->description, port );
+			if (!cable->init( port )) {
+				printf( "Error: Cable driver initialization failed!\n" );
+				cable = NULL;
+				continue;
 			}
+
+			cable->set_trst( 0 );
+			cable->set_trst( 1 );
+			tap_reset();
 
 			continue;
 		}

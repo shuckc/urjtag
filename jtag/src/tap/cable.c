@@ -1,7 +1,6 @@
 /*
  * $Id$
  *
- * Cable driver interface
  * Copyright (C) 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
@@ -23,26 +22,15 @@
  *
  */
 
-#ifndef CABLE_H
-#define	CABLE_H
+#include "cable.h"
 
-#include <stdint.h>
+extern cable_driver_t dlc5_cable_driver;
+extern cable_driver_t ea253_cable_driver;
+extern cable_driver_t ei012_cable_driver;
 
-typedef struct {
-	const char *name;
-	const char *description;
-	int (*init)( unsigned int );
-	void (*done)( void );
-	void (*clock)( int, int );
-	int (*get_tdo)( void );
-	void (*set_trst)( int );
-} cable_driver_t;
-
-extern cable_driver_t *cable;
-#define	tap_clock	cable->clock
-#define	tap_get_tdo	cable->get_tdo
-#define	tap_set_trst	cable->set_trst
-
-extern cable_driver_t *cable_drivers[];
-
-#endif /* CABLE_H */
+cable_driver_t *cable_drivers[] = {
+	&dlc5_cable_driver,
+	&ea253_cable_driver,
+	&ei012_cable_driver,
+	NULL				/* last must be NULL */
+};

@@ -53,11 +53,8 @@ ei012_init( unsigned int aport )
 {
 	tap_state_init();
 	port = aport;
-	printf( "Initilizing ETC EI012 JTAG Cable on parallel port at 0x%x\n", port );
-	if (ioperm( port, 2, 1 )) {
-		printf( "Error: Initialization failed!\n" );
+	if (ioperm( port, 2, 1 ))
 		return 0;
-	}
 	tap_state_set_trst( (inb( port ) >> TRST) & 1 );
 
 	return 1;
@@ -100,6 +97,8 @@ ei012_set_trst( int new_trst )
 }
 
 cable_driver_t ei012_cable_driver = {
+	"EI012",
+	"ETC EI012 JTAG Cable",
 	ei012_init,
 	ei012_done,
 	ei012_clock,
