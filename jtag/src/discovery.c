@@ -149,12 +149,16 @@ discovery( const char *filename )
 		if (!register_compare( ones, id )) {
 			printf( "bad JTAG connection (TDO is 1)\n" );
 			fprintf( f, "bad JTAG connection (TDO is 1)\n" );
-			return;				/* FIXME: memory leak */
+			break;
 		}
 
 		printf( "ID[%d]: %s\n", i, register_get_string( id ) );
 		fprintf( f, "ID[%d]: %s\n", i, register_get_string( id ) );
 	}
+
+	register_free( id );
+	register_free( zeros );
+	register_free( ones );
 
 	if (i == MAX_CHAIN_LENGTH) {
 		printf( "Warning: Maximum internal JTAG chain length exceeded!\n" );
@@ -176,9 +180,23 @@ discovery( const char *filename )
 	printf( "IR length is %d\n\n", irlen );
 	fprintf( f, "IR length is %d\n\n", irlen );
 
+	if (irlen < 1) {
+		printf( "Error: Invalid IR length!\n" );
+		fclose( f );
+		return;
+	}
+
 	ir = register_fill( register_alloc( irlen ), 0 );
 	irz = register_duplicate( ir );
-	/* TODO: test for out of memory */
+
+	if (!ir || !irz) {
+		register_free( ir );
+		register_free( irz );
+		fclose( f );
+		printf( "Error: Out of memory!\n" );
+		return;
+	}
+
 	for (;;) {
 		int rs;
 

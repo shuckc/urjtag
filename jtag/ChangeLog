@@ -1,3 +1,8 @@
+2003-01-06  Marcel Telka  <marcel@telka.sk>
+
+	* src/discovery.c (discovery): Fixed memory leaks, added out of memory test,
+		added test for invalid IR length.
+
 2003-01-05  Marcel Telka  <marcel@telka.sk>
 
 	* include/register.h (register_inc, register_dec, register_shift_right,
