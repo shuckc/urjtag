@@ -2,7 +2,7 @@
 
 	* src/flash.c (flashmsbin): Changed flash error message.
 	(flashmem): Changed output messages. Enabled verify for 2 x 16, not
-		for 1 x 16. Added betted and of file test for verify.
+		for 1 x 16. Added better end of file test for verify.
 
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
