@@ -116,6 +116,38 @@ typedef volatile struct IC_registers {
 #define	IC_IRQ7		bit(7)
 #endif /* PXA26x only */
 
+/* symbolic names for IRQs - see Table 4-36 in [1], Table 4-36 in [2] */
+
+#define	IC_IRQ_RTC_ALARM	IC_IRQ31
+#define	IC_IRQ_RTC_HZ		IC_IRQ30
+#define	IC_IRQ_OST3		IC_IRQ29
+#define	IC_IRQ_OST2		IC_IRQ28
+#define	IC_IRQ_OST1		IC_IRQ27
+#define	IC_IRQ_OST0		IC_IRQ26
+#define	IC_IRQ_DMA		IC_IRQ25
+#define	IC_IRQ_SSP		IC_IRQ24
+#define	IC_IRQ_MMC		IC_IRQ23
+#define	IC_IRQ_FFUART		IC_IRQ22
+#define	IC_IRQ_BTUART		IC_IRQ21
+#define	IC_IRQ_STUART		IC_IRQ20
+#define	IC_IRQ_ICP		IC_IRQ19
+#define	IC_IRQ_I2C		IC_IRQ18
+#define	IC_IRQ_LCD		IC_IRQ17
+#if !defined(PXA2X0_NOPXA26X)
+#define	IC_IRQ_NSSP		IC_IRQ16
+#define	IC_IRQ_ASSP		IC_IRQ15
+#endif /* PXA26x only */
+#define	IC_IRQ_AC97		IC_IRQ14
+#define	IC_IRQ_I2S		IC_IRQ13
+#define	IC_IRQ_PMU		IC_IRQ12
+#define	IC_IRQ_USB		IC_IRQ11
+#define	IC_IRQ_GPIO		IC_IRQ10
+#define	IC_IRQ_GPIO1		IC_IRQ9
+#define	IC_IRQ_GPIO0		IC_IRQ8
+#if !defined(PXA2X0_NOPXA26X)
+#define	IC_IRQ_HWUART		IC_IRQ7
+#endif /* PXA26x only */
+
 /* ICCR bits - see Table 4-33 in [1], Table in [2] */
 
 #define	ICCR_DIM	bit(0)

@@ -9,6 +9,8 @@ Changes in include since version 0.1:
 		- added ALT_FN_0_IN and ALT_FN_0_OUT declarations
 		- added missing PWER_WEx (where x = 0 through 15) declarations
 		- fixed RTTR bit declarations
+		- added new get_* macros for UART register bits
+		- added symbolic names for IRQ masks (IC_IRQ_*)
 	* Changes in SA11x0 support:
 		- added _t suffix for register type names
 	* Removed _t suffix from structure names in CFI declarations.

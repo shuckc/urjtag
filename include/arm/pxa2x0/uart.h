@@ -214,18 +214,21 @@ typedef volatile struct UART_registers {
 
 #define	IIR_FIFOES_MASK	bits(7,6)
 #define	IIR_FIFOES(x)	bits_val(7,6,x)
+#define	get_IIR_FIFOES(x)	bits_get(7,6,x)
 #if !defined(PXA2X0_NOPXA26X)
 #define	IIR_ABL		bit(4)		/* only for HWUART */
 #endif /* PXA26x only */
 #define	IIR_TOD		bit(3)
 #define	IIR_IID_MASK	bits(2,1)
 #define	IIR_IID(x)	bits_val(2,1,x)
+#define	get_IIR_IID(x)	bits_get(2,1,x)
 #define	IIR_IP		bit(0)
 
 /* FCR bits - see Table 10-11 in [1], Table 10-11 in [2], Table 17-10 in [2] */
 
 #define	FCR_ITL_MASK	bits(7,6)
 #define	FCR_ITL(x)	bits_val(7,6,x)
+#define	get_FCR_ITL(x)	bits_get(7,6,x)
 #if !defined(PXA2X0_NOPXA26X)
 #define	FCR_TIL		bit(3)		/* only for HWUART */
 #endif /* PXA26x only */
@@ -243,6 +246,7 @@ typedef volatile struct UART_registers {
 #define	LCR_STB		bit(2)
 #define	LCR_WLS_MASK	bits(1,0)
 #define	LCR_WLS(x)	bits_val(1,0,x)
+#define	get_LCR_WLS(x)	bits_get(1,0,x)
 
 /* LSR bits - see Table 10-13 in [1], Table 10-13 in [2], Table 17-15 in [2] */
 
@@ -281,6 +285,7 @@ typedef volatile struct UART_registers {
 
 #define	SPR_SP_MASK	bits(7,0)
 #define	SPR_SP(x)	bits_val(7,0,x)
+#define	get_SPR_SP(x)	bits_get(7,0,x)
 
 /* ISR bits - see Table 10-17 in [1], Table 10-17 in [2], Table 17-19 in [2] */
 
@@ -295,6 +300,7 @@ typedef volatile struct UART_registers {
 
 #define	HWFOR_BC_MASK	bits(6,0)
 #define	HWFOR_BC(x)	bits_val(6,0,x)
+#define	get_HWFOR_BC(x)	bits_get(6,0,x)
 
 /* HWABR bits - see Table 17-12 in [2] */
 
@@ -307,6 +313,7 @@ typedef volatile struct UART_registers {
 
 #define	HWACR_ACR_MASK	bits(15,0)
 #define	HWACR_ACR(x)	bits_val(15,0,x)
+#define	get_HWACR_ACR(x)	bits_get(15,0,x)
 #endif /* PXA26x only */
 
 #endif /* PXA2X0_UART_H */

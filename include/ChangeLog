@@ -1,6 +1,8 @@
 2002-11-06  Marcel Telka  <marcel@telka.sk>
 
-	* arm/pxa2x0/uart.h: Fixed formatting.
+	* common.h: Added bits_get() macro.
+	* arm/pxa2x0/uart.h: Added get_* macros for register bits.
+	* arm/pxa2x0/ic.h: Added symbolic names for IRQs.
 
 2002-11-04  Marcel Telka  <marcel@telka.sk>
 
@@ -10,7 +12,6 @@
 	* arm/pxa2x0/gpio.h: Added ALT_FN_0_IN and ALT_FN_0_OUT declarations.
 	* arm/pxa2x0/pmrc.h: Added missing PWER_WEx (where x = 0 through 15) declarations.
 	* arm/pxa2x0/rtc.h: Fixed RTTR bit declarations.
-	* NEWS: Added new file.
 
 2002-11-02  Marcel Telka  <marcel@telka.sk>
 

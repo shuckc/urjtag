@@ -58,5 +58,6 @@
 #define	bit(b)			(1 << (b))
 #define	bits(b1,b2)		(((2 << BITS_ABS((b1) - (b2))) - 1) << BITS_MIN(b1,b2))
 #define	bits_val(b1,b2,v)	(((v) << BITS_MIN(b1,b2)) & bits(b1,b2))
+#define	bits_get(b1,b2,v)	(((v) & bits(b1,b2)) >> BITS_MIN(b1,b2))
 
 #endif /* COMMON_H */
