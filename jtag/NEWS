@@ -1,5 +1,7 @@
 $Id$
 
+	* Added support for Linux ppdev parallel port driver. Non-root users can
+		use JTAG Tools now.
 	* Added new `bsdl2jtag' conversion tool (Matan Ziv-Av).
 
 jtag-0.3 (2003-02-25):

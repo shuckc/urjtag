@@ -29,9 +29,15 @@
 #include "parport.h"
 
 extern parport_driver_t direct_parport_driver;
+#ifdef HAVE_LINUX_PPDEV_H
+extern parport_driver_t ppdev_parport_driver;
+#endif /* HAVE_LINUX_PPDEV_H */
 
 parport_driver_t *parport_drivers[] = {
 	&direct_parport_driver,
+#ifdef HAVE_LINUX_PPDEV_H
+	&ppdev_parport_driver,
+#endif /* HAVE_LINUX_PPDEV_H */
 	NULL				/* last must be NULL */
 };
 

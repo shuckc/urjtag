@@ -76,6 +76,8 @@ CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device
 AC_SEARCH_LIBS([ioperm], [ioperm])
 AC_CHECK_FUNCS(getline getdelim)
 
+AC_CHECK_HEADERS(linux/ppdev.h)
+
 #
 # Searches for a readline compatible library.
 # http://www.gnu.org/software/ac-archive/htmldoc/vl_lib_readline.html
