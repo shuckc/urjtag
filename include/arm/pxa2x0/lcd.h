@@ -119,8 +119,8 @@ typedef volatile struct LCD_registers {
 
 #define	LCCR0_OUM	bit(21)
 #define	LCCR0_BM	bit(20)
-#define	LCCR0_PDD_MASK	0x000FF000
-#define	LCCR0_PDD(x)	((x << 12) & LCCR0_PDD_MASK)
+#define	LCCR0_PDD_MASK	bits(19,12)
+#define	LCCR0_PDD(x)	bits_val(19,12,x)
 #define	LCCR0_QDM	bit(11)
 #define	LCCR0_DIS	bit(10)
 #define	LCCR0_DPD	bit(9)
@@ -135,41 +135,41 @@ typedef volatile struct LCD_registers {
 
 /* LCCR1 bits - see Table 7-5 in [1] */
 
-#define	LCCR1_BLW_MASK	0xFF000000
-#define	LCCR1_BLW(x)	((x << 24) & LCCR1_BLW_MASK)
-#define	LCCR1_ELW_MASK	0x00FF0000
-#define	LCCR1_ELW(x)	((x << 16) & LCCR1_ELW_MASK)
-#define	LCCR1_HSW_MASK	0x0000FC00
-#define	LCCR1_HSW(x)	((x << 10) & LCCR1_HSW_MASK)
-#define	LCCR1_PPL_MASK	0x000003FF
-#define	LCCR1_PPL(x)	(x & LCCR1_PPL_MASK)
+#define	LCCR1_BLW_MASK	bits(31,24)
+#define	LCCR1_BLW(x)	bits_val(31,24,x)
+#define	LCCR1_ELW_MASK	bits(23,16)
+#define	LCCR1_ELW(x)	bits_val(23,16,x)
+#define	LCCR1_HSW_MASK	bits(15,10)
+#define	LCCR1_HSW(x)	bits_val(15,10,x)
+#define	LCCR1_PPL_MASK	bits(9,0)
+#define	LCCR1_PPL(x)	bits_val(9,0,x)
 
 /* LCCR2 bits - see Table 7-6 in [1] */
 
-#define	LCCR2_BFW_MASK	0xFF000000
-#define	LCCR2_BFW(x)	((x << 24) & LCCR2_BFW_MASK)
-#define	LCCR2_EFW_MASK	0x00FF0000
-#define	LCCR2_EFW(x)	((x << 16) & LCCR2_EFW_MASK)
-#define	LCCR2_VSW_MASK	0x0000FC00
-#define	LCCR2_VSW(x)	((x << 10) & LCCR2_VSW_MASK)
-#define	LCCR2_LPP_MASK	0x000003FF
-#define	LCCR2_LPP(x)	(x & LCCR2_LPP_MASK)
+#define	LCCR2_BFW_MASK	bits(31,24)
+#define	LCCR2_BFW(x)	bits_val(31,24,x)
+#define	LCCR2_EFW_MASK	bits(23,16)
+#define	LCCR2_EFW(x)	bits_val(23,16,x)
+#define	LCCR2_VSW_MASK	bits(15,10)
+#define	LCCR2_VSW(x)	bits_val(15,10,x)
+#define	LCCR2_LPP_MASK	bits(9,0)
+#define	LCCR2_LPP(x)	bits_val(9,0,x)
 
 /* LCCR3 bits - see Table 7-7 in [1] */
 
 #define	LCCR3_DPC	bit(27)
-#define	LCCR3_BPP_MASK	0x07000000
-#define	LCCR3_BPP(x)	((x << 24) & LCCR3_BPP_MASK)
+#define	LCCR3_BPP_MASK	bits(26,24)
+#define	LCCR3_BPP(x)	bits_val(26,24,x)
 #define	LCCR3_OEP	bit(23)
 #define	LCCR3_PCP	bit(22)
 #define	LCCR3_HSP	bit(21)
 #define	LCCR3_VSP	bit(20)
-#define	LCCR3_API_MASK	0x000F0000
-#define	LCCR3_API(x)	((x << 16) & LCCR3_API_MASK)
-#define	LCCR3_ACB_MASK	0x0000FF00
-#define	LCCR3_ACB(x)	((x << 8) & LCCR3_ACB_MASK)
-#define	LCCR3_PCD_MASK	0x000000FF
-#define	LCCR3_PCD(x)	(x & LCCR3_PCD_MASK)
+#define	LCCR3_API_MASK	bits(19,16)
+#define	LCCR3_API(x)	bits_val(19,16,x)
+#define	LCCR3_ACB_MASK	bits(15,8)
+#define	LCCR3_ACB(x)	bits_val(15,8,x)
+#define	LCCR3_PCD_MASK	bits(7,0)
+#define	LCCR3_PCD(x)	bits_val(7,0,x)
 
 /* FBR0 bits - see Table 7-12 in [1] */
 
@@ -197,25 +197,25 @@ typedef volatile struct LCD_registers {
 
 /* LIIDR bits - see Table 7-14 in [1] */
 
-#define	LIIDR_IFRAMEID_MASK	0xFFFFFF80
-#define	LIIDR_IFRAMEID(x)	((x << 3) & LIIDR_IFRAMEID_MASK)
+#define	LIIDR_IFRAMEID_MASK	bits(31,3)
+#define	LIIDR_IFRAMEID(x)	bits_val(31,3,x)
 
 /* TRGBR bits - see Table 7-15 in [1] */
 
-#define	TRGBR_TBS_MASK	0x00FF0000
-#define	TRGBR_TBS(x)	((x << 16) & TRGBR_TBS_MASK)
-#define	TRGBR_TGS_MASK	0x0000FF00
-#define	TRGBR_TGS(x)	((x << 8) & TRGBR_TGS_MASK)
-#define	TRGBR_TRS_MASK	0x000000FF
-#define	TRGBR_TRS(x)	(x & TRGBR_TRS_MASK)
+#define	TRGBR_TBS_MASK	bits(23,16)
+#define	TRGBR_TBS(x)	bits_val(23,16,x)
+#define	TRGBR_TGS_MASK	bits(15,8)
+#define	TRGBR_TGS(x)	bits_val(15,8,x)
+#define	TRGBR_TRS_MASK	bits(7,0)
+#define	TRGBR_TRS(x)	bits_val(7,0,x)
 
 /* TCR bits - see Table 7-16 in [1] */
 
 #define	TCR_TED		bit(14)
-#define	TCR_THBS_MASK	0x00000F00
-#define	TCR_THBS(x)	((x << 8) & TCR_THBS_MASK)
-#define	TCR_TVBS_MASK	0x000000F0
-#define	TCR_TVBS(x)	((x << 4) & TCR_TVBS_MASK)
+#define	TCR_THBS_MASK	bits(11,8)
+#define	TCR_THBS(x)	bits_val(11,8,x)
+#define	TCR_TVBS_MASK	bits(7,4)
+#define	TCR_TVBS(x)	bits(7,4,x)
 #define	TCR_FNAME	bit(3)
 #define	TCR_COAE	bit(2)
 #define	TCR_FNAM	bit(1)
@@ -226,15 +226,15 @@ typedef volatile struct LCD_registers {
 #define	LDCMD0_PAL	bit(26)
 #define	LDCMD0_SOFINT	bit(22)
 #define	LDCMD0_EOFINT	bit(21)
-#define	LDCMD0_LEN_MASK	0x008FFFFF
-#define	LDCMD0_LEN(x)	(x & LDCMD0_LEN_MASK)
+#define	LDCMD0_LEN_MASK	bits(20,0)
+#define	LDCMD0_LEN(x)	bits_val(20,0,x)
 
 /* LDCMD1 bits - see Table 7-11 in [1] */
 
 #define	LDCMD1_PAL	bit(26)
 #define	LDCMD1_SOFINT	bit(22)
 #define	LDCMD1_EOFINT	bit(21)
-#define	LDCMD1_LEN_MASK	0x008FFFFF
-#define	LDCMD1_LEN(x)	(x & LDCMD1_LEN_MASK)
+#define	LDCMD1_LEN_MASK	bits(20,0)
+#define	LDCMD1_LEN(x)	bits_val(20,0,x)
 
 #endif /* PXA2X0_LCD_H */
