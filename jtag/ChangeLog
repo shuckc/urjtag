@@ -1,5 +1,9 @@
 2003-02-25  Marcel Telka  <marcel@telka.sk>
 
+	* src/tap/cable.c: Added config.h include.
+
+2003-02-25  Marcel Telka  <marcel@telka.sk>
+
 	* data/MANUFACTURERS: Added Hitachi (Matan Ziv-Av).
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added Hitachi SH7727
 		files (Matan Ziv-Av).
