@@ -25,7 +25,7 @@
 #     Developer's Manual", October 2001, Order Number: 278240-004
 #
 
-# bits 27-12 of the Device Identification Register
+# bits 31-28 of the Device Identification Register
 # see 16.6.2 in [1]
 0000	sa1110		A0
 0100	sa1110		B0
