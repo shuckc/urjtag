@@ -2,7 +2,7 @@ $Id$
 
 See libbrux/NEWS for more news.
 
-jtag-0.5.1:
+jtag-0.5.1 (2003-10-11):
 
 	* Added new JTAG declarations for
 		- Altera EP1C20F400 (Rojhalat Ibrahim)
@@ -19,6 +19,8 @@ jtag-0.5.1:
 	* Added Ka-Ro TRITON (PXA255/250) JTAG Cable driver (patch 805103, Andreas Mohr).
 	* Spelling and documentation fixes (patch 805108, Andreas Mohr).
 	* Fixed minor bugs.
+	* Updated translations:
+		- Slovak
 
 jtag-0.5 (2003-08-19):
 
