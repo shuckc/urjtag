@@ -250,6 +250,7 @@ detect_parts( char *db_path )
 		{
 			FILE *f = fopen( data_path, "r" );
 			part *p = read_part( f );
+			p->active_instruction = part_find_instruction( p, "IDCODE" );
 			parts_add_part( ps, p );
 		}
 		printf( "done\n" );
@@ -261,10 +262,160 @@ detect_parts( char *db_path )
 	return ps;
 }
 
+void
+setup_address( part *p, unsigned int a )
+{
+	int i;
+	char buff[10];
+
+	for (i = 0; i < 26; i++) {
+		sprintf( buff, "MA[%d]", i );
+		part_set_signal( p, buff, 1, (a >> i) & 1 );
+	}
+}
+
+void
+setup_data( part *p, unsigned int d )
+{
+	int i;
+	char buff[10];
+
+	for (i = 0; i < 32; i++) {
+		sprintf( buff, "MD[%d]", i );
+		part_set_signal( p, buff, 1, (d >> i) & 1 );
+	}
+}
+
+unsigned int
+get_data( part *p )
+{
+	int i;
+	char buff[10];
+	unsigned int d = 0;
+
+	for (i = 0; i < 32; i++) {
+		sprintf( buff, "MD[%d]", i );
+		d |= (unsigned int) (part_get_signal( p, buff ) << i);
+	}
+
+	return d;
+}
+
+void set_data_in( part *p )
+{
+	int i;
+	char buff[10];
+
+	for (i = 0; i < 32; i++) {
+		sprintf( buff, "MD[%d]", i );
+		part_set_signal( p, buff, 0, 0 );
+	}
+}
+
+#define	AB_READ		0
+#define	AB_WRITE	1
+#define	AB_SETUP	2
+#define	AB_HOLD		3
+
+unsigned int
+access_bus( part *p, int type, unsigned int a, unsigned int d )
+{
+	part_set_signal( p, "nCS[0]", 1, 0 );
+	setup_address( p, a );
+	
+	switch (type) {
+		case AB_READ:
+			part_set_signal( p, "nOE", 1, 0 );
+			part_set_signal( p, "nWE", 1, 1 );
+			set_data_in( p );
+			break;
+		case AB_WRITE:
+			part_set_signal( p, "nOE", 1, 1 );
+			part_set_signal( p, "nWE", 1, 0 );
+			setup_data( p, d );
+			break;
+		case AB_SETUP:
+		case AB_HOLD:
+			part_set_signal( p, "nOE", 1, 1 );
+			part_set_signal( p, "nWE", 1, 1 );
+			setup_data( p, d );
+			break;
+		default:
+			printf( "access_bus: invalid typ\n" );
+			return 0;
+	}
+
+	tap_capture_dr();
+	tap_shift_register( p->bsr, p->prev_bsr, 1 );
+
+	return get_data( p );
+}
+
+unsigned int
+access_rom( part *p, int type, unsigned int a, unsigned int d )
+{
+	return access_bus( p, type, a << 2, d );
+}
+
+void
+program_flash( part *p, unsigned int a, unsigned int d )
+{
+	
+	access_rom( p, AB_SETUP, a, 0x00400040 );
+	access_rom( p, AB_WRITE, a, 0x00400040 );
+	access_rom( p, AB_HOLD, a, 0x00400040 );
+
+	access_rom( p, AB_SETUP, a, d );
+	access_rom( p, AB_WRITE, a, d );
+	access_rom( p, AB_HOLD, a, d );
+
+	access_rom( p, AB_READ, 0, 0 );
+	printf( "pf: %08X\n", access_rom( p, AB_READ, 0, 0 ) );
+
+	sleep( 1 );
+}
+
+void
+unlock( part *p, unsigned int a )
+{
+	access_rom( p, AB_SETUP, a, 0x00600060 );
+	access_rom( p, AB_WRITE, a, 0x00600060 );
+	access_rom( p, AB_HOLD, a, 0x00600060 );
+
+	access_rom( p, AB_SETUP, a, 0x00D000D0 );
+	access_rom( p, AB_WRITE, a, 0x00D000D0 );
+	access_rom( p, AB_HOLD, a, 0x00D000D0 );
+}
+
+void
+erase( part *p, unsigned int a )
+{
+	printf( "erase\n" );
+
+	access_rom( p, AB_SETUP, a, 0x00200020 );
+	access_rom( p, AB_WRITE, a, 0x00200020 );
+	access_rom( p, AB_HOLD, a, 0x00200020 );
+
+	access_rom( p, AB_SETUP, a, 0x00D000D0 );
+	access_rom( p, AB_WRITE, a, 0x00D000D0 );
+	access_rom( p, AB_HOLD, a, 0x00D000D0 );
+
+	access_rom( p, AB_READ, 0, 0 );
+	printf( "pf: %08X\n", access_rom( p, AB_READ, 0, 0 ) );
+	sleep( 4 );
+	access_rom( p, AB_READ, 0, 0 );
+	printf( "pf: %08X\n", access_rom( p, AB_READ, 0, 0 ) );
+	printf( "pf: %08X\n", access_rom( p, AB_READ, 0, 0 ) );
+}
+
 int
 main( void )
 {
 	parts *ps;
+	part *p;
+
+	unsigned int max_erase_time;
+	unsigned int dsize;
 
 	tap_init();
 
@@ -273,7 +424,110 @@ main( void )
 
 	ps = detect_parts( "../data" );
 
+	if (ps->len == 0) {
+		printf( "Not detected!!!\n" );
+		return 0;
+	}
+
+	p = ps->parts[0];
+
+	printf( "Setting up safe default values\n" );
+	parts_set_instruction( ps, "SAMPLE/PRELOAD" );
+	tap_capture_dr();
+	tap_shift_register( p->bsr, p->prev_bsr, 1 );
+
+printf( "%s\n", register_get_string( p->bsr ) );
+printf( "%s\n", register_get_string( p->prev_bsr ) );
+
+	parts_set_instruction( ps, "EXTEST" );
+
+	access_rom( p, AB_SETUP, 0x00000000, 0x00500050 );
+	access_rom( p, AB_WRITE, 0x00000000, 0x00500050 );
+	access_rom( p, AB_HOLD, 0x00000000, 0x00500050 );
+
+	access_rom( p, AB_SETUP, 0x00000000, 0x00980098 );
+	access_rom( p, AB_WRITE, 0x00000000, 0x00980098 );
+	access_rom( p, AB_HOLD, 0x00000000, 0x00980098 );
+
+	access_rom( p, AB_READ, 0x10, 0 );
+	printf( "read 0x10: %08X\n", access_rom( p, AB_READ, 0x11, 0 ) );
+	printf( "read 0x11: %08X\n", access_rom( p, AB_READ, 0x12, 0 ) );
+	printf( "read 0x12: %08X\n", access_rom( p, AB_READ, 0x25, 0 ) );
+
+
+	printf( "read max_erase_time: %08X\n", max_erase_time = access_rom( p, AB_READ, 0x27, 0 ) );
+	dsize = 1 << (access_rom( p, AB_READ, 0x27, 0 ) & 0xFFFF);
+	printf( "device size: %08X\n", dsize );
+
+	unlock( p, 0 );
+	erase( p, 0 );
+
+#if 0
+	{
+		FILE *f = fopen( "brux.b", "r" );
+		unsigned int d;
+		unsigned int a = 0;
+		
+
+		while (fread( &d, sizeof d, 1, f ) == 1) {
+			program_flash( p, a, d );
+			a += 4;
+		}
+	}
+#endif
+
+
+	program_flash( p, 0x0, 0xE1A00000 );
+	program_flash( p, 0x4, 0xE1A00000 );
+	program_flash( p, 0x8, 0xE1A00000 );
+	program_flash( p, 0xC, 0xE1A00000 );
+	program_flash( p, 0x10, 0xE1A00000 );
+	program_flash( p, 0x14, 0xEAFFFFF9 );
+
+
+	//erase( p, 0 );
+
+	access_rom( p, AB_SETUP, 0, 0x00FF00FF );
+	access_rom( p, AB_WRITE, 0, 0x00FF00FF );
+	access_rom( p, AB_HOLD, 0, 0x00FF00FF );
+
+	access_rom( p, AB_READ, 0, 0 );
+	printf( "read data from 0x00: %08X\n", access_rom( p, AB_READ, 0x04, 0 ) );
+	printf( "read data from 0x04: %08X\n", access_rom( p, AB_READ, 0x08, 0 ) );
+	printf( "read data from 0x08: %08X\n", access_rom( p, AB_READ, 0x0C, 0 ) );
+	printf( "read data from 0x0C: %08X\n", access_rom( p, AB_READ, 0x10, 0 ) );
+	printf( "read data from 0x10: %08X\n", access_rom( p, AB_READ, 0x14, 0 ) );
+	printf( "read data from 0x14: %08X\n", access_rom( p, AB_READ, 0x18, 0 ) );
+	printf( "read data from 0x18: %08X\n", access_rom( p, AB_READ, 0x1C, 0 ) );
+
+#if 0
+	tap_capture_dr();
+a:
+	printf( "Jedna\n" );
+	part_set_signal( sa1110, "MA[24]", 1, 1 );
+	tap_shift_register( sa1110->bsr, sa1110->prev_bsr, 1 );
+
+	tap_capture_dr();
+	sleep(5);
+	printf( "Nula\n" );
+	part_set_signal( sa1110, "MA[24]", 1, 0 );
+	tap_shift_register( sa1110->bsr, sa1110->prev_bsr, 1 );
+
+	tap_capture_dr();
+	sleep(5);
+	goto a;
+
+
+	printf( "%s\n", register_get_string( sa1110->bsr ) );
+	printf( "%s\n", register_get_string( sa1110->prev_bsr ) );
+//	for (i = 0; i < s1110->boundary_length; i++) {
+//		
+//	}
+#endif
+
 	parts_free( ps );
+
+	tap_reset();
 
 	tap_done();
 
