@@ -1,0 +1,10 @@
+2003-06-02  Marcel Telka  <marcel@telka.sk>
+
+	* flash/cfi.c: New file. Moved from jtag module (src/flash/cfi.c).
+	* flash/amd.c: New file. Moved from jtag module (src/flash/amd.c).
+	* flash/intel.c: New file. Moved from jtag module (src/flash/intel.c).
+
+	* autogen.sh: New file.
+	* configure.ac: Ditto.
+	* Makefile.am: Ditto.
+
