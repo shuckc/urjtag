@@ -20,6 +20,7 @@
  * 02111-1307, USA.
  *
  * Written by August Hörandl <august.hoerandl@gmx.at>
+ * Modified by Marcel Telka <marcel@telka.sk>, 2003.
  *
  * Documentation:
  * [1] Advanced Micro Devices, "Am29LV640D/Am29LV641D",
@@ -40,21 +41,22 @@
 #include <unistd.h>
 
 #include <brux/bus.h>
+#include <brux/cfi.h>
 
 #include "flash.h"
 
 static int dbg = 0;
 
-static int amd_flash_erase_block( bus_t *bus, uint32_t adr );
-static int amd_flash_unlock_block( bus_t *bus, uint32_t adr );
-static int amd_flash_program( bus_t *bus, uint32_t adr, uint32_t data );
-static void amd_flash_read_array( bus_t *bus ); 
+static int amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr );
+static int amd_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr );
+static int amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static void amd_flash_read_array( cfi_array_t *cfi_array ); 
 
 /* autodetect, we can handle this chip */
 static int 
-amd_flash_autodetect( bus_t *bus, cfi_query_structure_t *cfi )
+amd_flash_autodetect( cfi_array_t *cfi_array )
 {
-	return (cfi->identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
+	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
 }
 
 /*
@@ -147,10 +149,11 @@ amdisprotected( parts *ps, uint32_t adr )
 #endif /* 0 */
 
 static void
-amd_flash_print_info( bus_t *bus )
+amd_flash_print_info( cfi_array_t *cfi_array )
 {
 	int o = 2;
 	int mid, cid, prot;
+	bus_t *bus = cfi_array->bus;
 
 	bus_write( bus, 0x0555 << o, 0x00aa00aa );	/* autoselect p29 */
 	bus_write( bus, 0x02aa << o, 0x00550055 );
@@ -158,7 +161,7 @@ amd_flash_print_info( bus_t *bus )
 	mid = bus_read( bus, 0x00 << o ) & 0xFFFF;
 	cid = bus_read( bus, 0x01 << o ) & 0xFFFF;
 	prot = bus_read( bus, 0x02 << o ) & 0xFF;
-	amd_flash_read_array( bus );			/* AMD reset */
+	amd_flash_read_array( cfi_array );		/* AMD reset */
 	printf( _("Chip: AMD Flash\n\tManufacturer: ") );
 	switch (mid) {
 		case 0x0001:
@@ -181,9 +184,10 @@ amd_flash_print_info( bus_t *bus )
 }
 
 static int
-amd_flash_erase_block( bus_t *bus, uint32_t adr )
+amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 {
 	int o = 2;
+	bus_t *bus = cfi_array->bus;
 
 	printf("flash_erase_block 0x%08X\n", adr);
 
@@ -198,28 +202,29 @@ amd_flash_erase_block( bus_t *bus, uint32_t adr )
 
 	if (amdstatus( bus, adr, 0xffff )) {
 		printf( "flash_erase_block 0x%08X DONE\n", adr );
-		amd_flash_read_array( bus ); /* AMD reset */
+		amd_flash_read_array( cfi_array );	/* AMD reset */
 		return 0;
 	}
 	printf( "flash_erase_block 0x%08X FAILED\n", adr );
 	/* Read Array */
-	amd_flash_read_array( bus ); /* AMD reset */
+	amd_flash_read_array( cfi_array );		/* AMD reset */
 
 	return CFI_INTEL_ERROR_UNKNOWN;
 }
 
 static int
-amd_flash_unlock_block( bus_t *bus, uint32_t adr )
+amd_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr )
 {
 	printf( "flash_unlock_block 0x%08X IGNORE\n", adr );
 	return 0;
 }
 
 static int
-amd_flash_program( bus_t *bus, uint32_t adr, uint32_t data )
+amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
 	int o = 2;
 	int status;
+	bus_t *bus = cfi_array->bus;
 
 	if (dbg)
 		printf("\nflash_program 0x%08X = 0x%08X\n", adr, data);
@@ -236,10 +241,10 @@ amd_flash_program( bus_t *bus, uint32_t adr, uint32_t data )
 }
 
 static void
-amd_flash_read_array( bus_t *bus )
+amd_flash_read_array( cfi_array_t *cfi_array )
 {
 	/* Read Array */
-	bus_write( bus, 0x0, 0x00F000F0 ); /* AMD reset */
+	bus_write( cfi_array->bus, 0x0, 0x00F000F0 ); /* AMD reset */
 }
 
 flash_driver_t amd_32_flash_driver = {

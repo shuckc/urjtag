@@ -43,27 +43,28 @@
 #include <std/mic.h>
 
 #include <brux/bus.h>
+#include <brux/cfi.h>
 
 #include "flash.h"
 
-static int intel_flash_erase_block( bus_t *bus, uint32_t adr );
-static int intel_flash_unlock_block( bus_t *bus, uint32_t adr );
-static int intel_flash_program( bus_t *bus, uint32_t adr, uint32_t data );
-static int intel_flash_erase_block32( bus_t *bus, uint32_t adr );
-static int intel_flash_unlock_block32( bus_t *bus, uint32_t adr );
-static int intel_flash_program32( bus_t *bus, uint32_t adr, uint32_t data );
+static int intel_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr );
+static int intel_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr );
+static int intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int intel_flash_erase_block32( cfi_array_t *cfi_array, uint32_t adr );
+static int intel_flash_unlock_block32( cfi_array_t *cfi_array, uint32_t adr );
+static int intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
 
 /* autodetect, we can handle this chip */
 static int 
-intel_flash_autodetect32( bus_t *bus, cfi_query_structure_t *cfi )
+intel_flash_autodetect32( cfi_array_t *cfi_array )
 {
-	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( bus, 0 ) == 32);
+	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( cfi_array->bus, 0 ) == 32);
 }
 
 static int 
-intel_flash_autodetect( bus_t *bus, cfi_query_structure_t *cfi )
+intel_flash_autodetect( cfi_array_t *cfi_array )
 {
-	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( bus, 0 ) == 16);
+	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( cfi_array->bus, 0 ) == 16);
 }
 
 static void
@@ -121,9 +122,11 @@ _intel_flash_print_info( bus_t *bus, int o )
 }
 
 static void
-intel_flash_print_info( bus_t *bus )
+intel_flash_print_info( cfi_array_t *cfi_array )
 {
 	int o = 1;
+	bus_t *bus = cfi_array->bus;
+
 	/* Intel Primary Algorithm Extended Query Table - see Table 5. in [3] */
 	/* TODO */
 
@@ -137,9 +140,10 @@ intel_flash_print_info( bus_t *bus )
 }
 
 static void
-intel_flash_print_info32( bus_t *bus )
+intel_flash_print_info32( cfi_array_t *cfi_array )
 {
 	int o = 2;
+	bus_t *bus = cfi_array->bus;
 	/* Intel Primary Algorithm Extended Query Table - see Table 5. in [3] */
 	/* TODO */
 
@@ -153,9 +157,10 @@ intel_flash_print_info32( bus_t *bus )
 }
 
 static int
-intel_flash_erase_block( bus_t *bus, uint32_t adr )
+intel_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 {
 	uint16_t sr;
+	bus_t *bus = cfi_array->bus;
 
 	bus_write( bus, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
 	bus_write( bus, adr, CFI_INTEL_CMD_BLOCK_ERASE );
@@ -183,9 +188,10 @@ intel_flash_erase_block( bus_t *bus, uint32_t adr )
 }
 
 static int
-intel_flash_unlock_block( bus_t *bus, uint32_t adr )
+intel_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr )
 {
 	uint16_t sr;
+	bus_t *bus = cfi_array->bus;
 
 	bus_write( bus, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
 	bus_write( bus, adr, CFI_INTEL_CMD_LOCK_SETUP );
@@ -201,9 +207,10 @@ intel_flash_unlock_block( bus_t *bus, uint32_t adr )
 }
 
 static int
-intel_flash_program( bus_t *bus, uint32_t adr, uint32_t data )
+intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
 	uint16_t sr;
+	bus_t *bus = cfi_array->bus;
 
 	bus_write( bus, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
 	bus_write( bus, adr, CFI_INTEL_CMD_PROGRAM1 );
@@ -219,9 +226,10 @@ intel_flash_program( bus_t *bus, uint32_t adr, uint32_t data )
 }
 
 static int
-intel_flash_erase_block32( bus_t *bus, uint32_t adr )
+intel_flash_erase_block32( cfi_array_t *cfi_array, uint32_t adr )
 {
 	uint32_t sr;
+	bus_t *bus = cfi_array->bus;
 
 	bus_write( bus, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
 	bus_write( bus, adr, (CFI_INTEL_CMD_BLOCK_ERASE << 16) | CFI_INTEL_CMD_BLOCK_ERASE );
@@ -237,9 +245,10 @@ intel_flash_erase_block32( bus_t *bus, uint32_t adr )
 }
 
 static int
-intel_flash_unlock_block32( bus_t *bus, uint32_t adr )
+intel_flash_unlock_block32( cfi_array_t *cfi_array, uint32_t adr )
 {
 	uint32_t sr;
+	bus_t *bus = cfi_array->bus;
 
 	bus_write( bus, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
 	bus_write( bus, adr, (CFI_INTEL_CMD_LOCK_SETUP << 16) | CFI_INTEL_CMD_LOCK_SETUP );
@@ -255,9 +264,10 @@ intel_flash_unlock_block32( bus_t *bus, uint32_t adr )
 }
 
 static int
-intel_flash_program32( bus_t *bus, uint32_t adr, uint32_t data )
+intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
 	uint32_t sr;
+	bus_t *bus = cfi_array->bus;
 
 	bus_write( bus, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
 	bus_write( bus, adr, (CFI_INTEL_CMD_PROGRAM1 << 16) | CFI_INTEL_CMD_PROGRAM1 );
@@ -273,17 +283,17 @@ intel_flash_program32( bus_t *bus, uint32_t adr, uint32_t data )
 }
 
 static void
-intel_flash_readarray32( bus_t *bus )
+intel_flash_readarray32( cfi_array_t *cfi_array )
 {
 	/* Read Array */
-	bus_write( bus, 0, 0x00FF00FF );
+	bus_write( cfi_array->bus, 0, 0x00FF00FF );
 }
 
 static void
-intel_flash_readarray( bus_t *bus )
+intel_flash_readarray( cfi_array_t *cfi_array )
 {
 	/* Read Array */
-	bus_write( bus, 0, 0x00FF00FF );
+	bus_write( cfi_array->bus, 0, 0x00FF00FF );
 }
 
 flash_driver_t intel_32_flash_driver = {

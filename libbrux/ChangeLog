@@ -1,3 +1,13 @@
+2003-06-12  Marcel Telka  <marcel@telka.sk>
+
+	* flash/amd.c (amd_flash_autodetect, amd_flash_print_info, amd_flash_erase_block)
+	(amd_flash_unlock_block, amd_flash_program, amd_flash_read_array): Modified for new flash_driver_t
+		declared in brux/flash.h in include module.
+	* flash/intel.c (intel_flash_autodetect32, intel_flash_autodetect, intel_flash_print_info)
+	(intel_flash_print_info32, intel_flash_erase_block, intel_flash_unlock_block, intel_flash_program)
+	(intel_flash_erase_block32, intel_flash_unlock_block32, intel_flash_program32, intel_flash_readarray32)
+	(intel_flash_readarray): Ditto.
+
 2003-06-10  Marcel Telka  <marcel@telka.sk>
 
 	* flash/amd.c: Changed include header files.
