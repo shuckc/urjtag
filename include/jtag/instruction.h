@@ -28,10 +28,12 @@
 #include <jtag/register.h>
 #include <jtag/data_register.h>
 
+#define	MAXLEN_INSTRUCTION	20
+
 typedef struct instruction instruction;
 
 struct instruction {
-	char *name;
+	char name[MAXLEN_INSTRUCTION + 1];
 	tap_register *value;
 	data_register *data_register;
 	instruction *next;

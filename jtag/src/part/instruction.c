@@ -23,6 +23,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include <jtag/instruction.h>
@@ -39,11 +40,10 @@ instruction_alloc( const char *name, int len, const char *val )
 	if (!i)
 		return NULL;
 
-	i->name = strdup( name );
-	if (!i->name) {
-		free( i );
-		return NULL;
-	}
+	if (strlen( name ) > MAXLEN_INSTRUCTION)
+		printf( "Warning: Instruction too long\n" );
+	strncpy( i->name, name, MAXLEN_INSTRUCTION );
+	i->name[MAXLEN_INSTRUCTION] = '\0';
 
 	i->value = register_alloc( len );
 	if (!i->value) {
@@ -65,7 +65,6 @@ instruction_free( instruction *i )
 	if (!i)
 		return;
 
-	free( i->name );
 	register_free( i->value );
 	free( i );
 }
