@@ -249,7 +249,15 @@ instruction DBGTX		10000
 # see [3]
 boundary length 385
 
-
+bit 384 I ? nRESET
+bit 383 I ? BOOT_SEL[2]
+bit 382 I ? BOOT_SEL[1]
+bit 381 I ? BOOT_SEL[0]
+bit 380 I ? nBATT_FAULT
+bit 379 I ? nVDD_FAULT
+bit 378 I ? TESTCLK
+bit 377 I ? TEST
+bit 376 X ? .
 bit 375 I ? MD[31]
 bit 374 I ? MD[30]
 bit 373 I ? MD[29]
@@ -282,7 +290,93 @@ bit 347 I ? MD[3]
 bit 346 I ? MD[2]
 bit 345 I ? MD[1]
 bit 344 I ? MD[0]
-
+bit 343 I ? MMCMD
+bit 342 I ? MMDAT
+bit 341 I ? USB_P
+bit 340 I ? USB_N
+bit 339 I ? SDA
+bit 338 I ? SCL
+bit 337 I ? GPIO[80]
+bit 336 I ? GPIO[79]
+bit 335 I ? GPIO[78]
+bit 334 I ? GPIO[77]
+bit 333 I ? GPIO[76]
+bit 332 I ? GPIO[75]
+bit 331 I ? GPIO[74]
+bit 330 I ? GPIO[73]
+bit 329 I ? GPIO[72]
+bit 328 I ? GPIO[71]
+bit 327 I ? GPIO[70]
+bit 326 I ? GPIO[69]
+bit 325 I ? GPIO[68]
+bit 324 I ? GPIO[67]
+bit 323 I ? GPIO[66]
+bit 322 I ? GPIO[65]
+bit 321 I ? GPIO[64]
+bit 320 I ? GPIO[63]
+bit 319 I ? GPIO[62]
+bit 318 I ? GPIO[61]
+bit 317 I ? GPIO[60]
+bit 316 I ? GPIO[59]
+bit 315 I ? GPIO[58]
+bit 314 I ? GPIO[57]
+bit 313 I ? GPIO[56]
+bit 312 I ? GPIO[55]
+bit 311 I ? GPIO[54]
+bit 310 I ? GPIO[53]
+bit 309 I ? GPIO[52]
+bit 308 I ? GPIO[51]
+bit 307 I ? GPIO[50]
+bit 306 I ? GPIO[49]
+bit 305 I ? GPIO[48]
+bit 304 I ? GPIO[47]
+bit 303 I ? GPIO[46]
+bit 302 I ? GPIO[45]
+bit 301 I ? GPIO[44]
+bit 300 I ? GPIO[43]
+bit 299 I ? GPIO[42]
+bit 298 I ? GPIO[41]
+bit 297 I ? GPIO[40]
+bit 296 I ? GPIO[39]
+bit 295 I ? GPIO[38]
+bit 294 I ? GPIO[37]
+bit 293 I ? GPIO[36]
+bit 292 I ? GPIO[35]
+bit 291 I ? GPIO[34]
+bit 290 I ? GPIO[33]
+bit 289 I ? GPIO[32]
+bit 288 I ? GPIO[31]
+bit 287 I ? GPIO[30]
+bit 286 I ? GPIO[29]
+bit 285 I ? GPIO[28]
+bit 284 I ? GPIO[27]
+bit 283 I ? GPIO[26]
+bit 282 I ? GPIO[25]
+bit 281 I ? GPIO[24]
+bit 280 I ? GPIO[23]
+bit 279 I ? GPIO[22]
+bit 278 I ? GPIO[21]
+bit 277 I ? GPIO[20]
+bit 276 I ? GPIO[19]
+bit 275 I ? GPIO[18]
+bit 274 I ? GPIO[17]
+bit 273 I ? GPIO[16]
+bit 272 I ? GPIO[15]
+bit 271 I ? GPIO[14]
+bit 270 I ? GPIO[13]
+bit 269 I ? GPIO[12]
+bit 268 I ? GPIO[11]
+bit 267 I ? GPIO[10]
+bit 266 I ? GPIO[9]
+bit 265 I ? GPIO[8]
+bit 264 I ? GPIO[7]
+bit 263 I ? GPIO[6]
+bit 262 I ? GPIO[5]
+bit 261 I ? GPIO[4]
+bit 260 I ? GPIO[3]
+bit 259 I ? GPIO[2]
+bit 258 I ? GPIO[1]
+bit 257 I ? GPIO[0]
 bit 256 O ? MA[25] 208 0 Z
 bit 255 O ? MA[24] 208 0 Z
 bit 254 O ? MA[23] 208 0 Z
@@ -312,8 +406,25 @@ bit 231 O ? MA[0] 208 0 Z
 bit 230 O ? nCS[0] 206 0 Z
 bit 229 O ? nOE 207 0 Z
 bit 228 O ? nWE 207 0 Z
-
-
+bit 227 O ? nSDRAS 208 0 Z
+bit 226 O ? nSDCAS 208 0 Z
+bit 225 O ? DQM[3] 205 0 Z
+bit 224 O ? DQM[2] 205 0 Z
+bit 223 O ? DQM[1] 208 0 Z
+bit 222 O ? DQM[0] 208 0 Z
+bit 221 O ? nSDCS[3]
+bit 220 O ? nSDCS[2]
+bit 219 O ? nSDCS[1]
+bit 218 O ? nSDCS[0] 208 0 Z
+bit 217 O ? SDCKE[1]
+bit 216 O ? SDCKE[0]
+bit 215 O ? SDCLK[2]
+bit 214 O ? SDCLK[1] 208 0 Z
+bit 213 O ? SDCLK[0]
+bit 212 O ? RDnWR 205 0 Z
+bit 211 O ? nACRESET
+bit 210 O ? nRESET_OUT
+bit 209 O ? PWR_EN
 bit 208 C ? .
 bit 207 C ? .
 bit 206 C ? .
@@ -350,6 +461,176 @@ bit 176 O ? MD[3] 85 0 Z
 bit 175 O ? MD[2] 85 0 Z
 bit 174 O ? MD[1] 85 0 Z
 bit 173 O ? MD[0] 85 0 Z
-
+bit 172 O ? MMCMD 83 0 Z
+bit 171 O ? MMDAT 82 0 Z
+bit 170 O ? USB_P 81 0 Z
+bit 169 O ? USB_N 81 0 Z
+bit 168 O ? SDA			# FIXME: see WEAK1 in [3]
+bit 167 O ? SCL			# FIXME: see WEAK1 in [3]
+bit 166 O ? GPIO[80] 80 0 Z
+bit 165 O ? GPIO[79] 79 0 Z
+bit 164 O ? GPIO[78] 78 0 Z
+bit 163 O ? GPIO[77] 77 0 Z
+bit 162 O ? GPIO[76] 76 0 Z
+bit 161 O ? GPIO[75] 75 0 Z
+bit 160 O ? GPIO[74] 74 0 Z
+bit 159 O ? GPIO[73] 73 0 Z
+bit 158 O ? GPIO[72] 72 0 Z
+bit 157 O ? GPIO[71] 71 0 Z
+bit 156 O ? GPIO[70] 70 0 Z
+bit 155 O ? GPIO[69] 69 0 Z
+bit 154 O ? GPIO[68] 68 0 Z
+bit 153 O ? GPIO[67] 67 0 Z
+bit 152 O ? GPIO[66] 66 0 Z
+bit 151 O ? GPIO[65] 65 0 Z
+bit 150 O ? GPIO[64] 64 0 Z
+bit 149 O ? GPIO[63] 63 0 Z
+bit 148 O ? GPIO[62] 62 0 Z
+bit 147 O ? GPIO[61] 61 0 Z
+bit 146 O ? GPIO[60] 60 0 Z
+bit 145 O ? GPIO[59] 59 0 Z
+bit 144 O ? GPIO[58] 58 0 Z
+bit 143 O ? GPIO[57] 57 0 Z
+bit 142 O ? GPIO[56] 56 0 Z
+bit 141 O ? GPIO[55] 55 0 Z
+bit 140 O ? GPIO[54] 54 0 Z
+bit 139 O ? GPIO[53] 53 0 Z
+bit 138 O ? GPIO[52] 52 0 Z
+bit 137 O ? GPIO[51] 51 0 Z
+bit 136 O ? GPIO[50] 50 0 Z
+bit 135 O ? GPIO[49] 49 0 Z
+bit 134 O ? GPIO[48] 48 0 Z
+bit 133 O ? GPIO[47] 47 0 Z
+bit 132 O ? GPIO[46] 46 0 Z
+bit 131 O ? GPIO[45] 45 0 Z
+bit 130 O ? GPIO[44] 44 0 Z
+bit 129 O ? GPIO[43] 43 0 Z
+bit 128 O ? GPIO[42] 42 0 Z
+bit 127 O ? GPIO[41] 41 0 Z
+bit 126 O ? GPIO[40] 40 0 Z
+bit 125 O ? GPIO[39] 39 0 Z
+bit 124 O ? GPIO[38] 38 0 Z
+bit 123 O ? GPIO[37] 37 0 Z
+bit 122 O ? GPIO[36] 36 0 Z
+bit 121 O ? GPIO[35] 35 0 Z
+bit 120 O ? GPIO[34] 34 0 Z
+bit 119 O ? GPIO[33] 33 0 Z
+bit 118 O ? GPIO[32] 32 0 Z
+bit 117 O ? GPIO[31] 31 0 Z
+bit 116 O ? GPIO[30] 30 0 Z
+bit 115 O ? GPIO[29] 29 0 Z
+bit 114 O ? GPIO[28] 28 0 Z
+bit 113 O ? GPIO[27] 27 0 Z
+bit 112 O ? GPIO[26] 26 0 Z
+bit 111 O ? GPIO[25] 25 0 Z
+bit 110 O ? GPIO[24] 24 0 Z
+bit 109 O ? GPIO[23] 23 0 Z
+bit 108 O ? GPIO[22] 22 0 Z
+bit 107 O ? GPIO[21] 21 0 Z
+bit 106 O ? GPIO[20] 20 0 Z
+bit 105 O ? GPIO[19] 19 0 Z
+bit 104 O ? GPIO[18] 18 0 Z
+bit 103 O ? GPIO[17] 17 0 Z
+bit 102 O ? GPIO[16] 16 0 Z
+bit 101 O ? GPIO[15] 15 0 Z
+bit 100 O ? GPIO[14] 14 0 Z
+bit 99 O ? GPIO[13] 13 0 Z
+bit 98 O ? GPIO[12] 12 0 Z
+bit 97 O ? GPIO[11] 11 0 Z
+bit 96 O ? GPIO[10] 10 0 Z
+bit 95 O ? GPIO[9] 9 0 Z
+bit 94 O ? GPIO[8] 8 0 Z
+bit 93 O ? GPIO[7] 7 0 Z
+bit 92 O ? GPIO[6] 6 0 Z
+bit 91 O ? GPIO[5] 5 0 Z
+bit 90 O ? GPIO[4] 4 0 Z
+bit 89 O ? GPIO[3] 3 0 Z
+bit 88 O ? GPIO[2] 2 0 Z
+bit 87 O ? GPIO[1] 1 0 Z
+bit 86 O ? GPIO[0] 0 0 Z
 bit 85 C ? .
 bit 84 C ? .
+bit 83 C ? .
+bit 82 C ? .
+bit 81 C ? .
+bit 80 C ? .
+bit 79 C ? .
+bit 78 C ? .
+bit 77 C ? .
+bit 76 C ? .
+bit 75 C ? .
+bit 74 C ? .
+bit 73 C ? .
+bit 72 C ? .
+bit 71 C ? .
+bit 70 C ? .
+bit 69 C ? .
+bit 68 C ? .
+bit 67 C ? .
+bit 66 C ? .
+bit 65 C ? .
+bit 64 C ? .
+bit 63 C ? .
+bit 62 C ? .
+bit 61 C ? .
+bit 60 C ? .
+bit 59 C ? .
+bit 58 C ? .
+bit 57 C ? .
+bit 56 C ? .
+bit 55 C ? .
+bit 54 C ? .
+bit 53 C ? .
+bit 52 C ? .
+bit 51 C ? .
+bit 50 C ? .
+bit 49 C ? .
+bit 48 C ? .
+bit 47 C ? .
+bit 46 C ? .
+bit 45 C ? .
+bit 44 C ? .
+bit 43 C ? .
+bit 42 C ? .
+bit 41 C ? .
+bit 40 C ? .
+bit 39 C ? .
+bit 38 C ? .
+bit 37 C ? .
+bit 36 C ? .
+bit 35 C ? .
+bit 34 C ? .
+bit 33 C ? .
+bit 32 C ? .
+bit 31 C ? .
+bit 30 C ? .
+bit 29 C ? .
+bit 28 C ? .
+bit 27 C ? .
+bit 26 C ? .
+bit 25 C ? .
+bit 24 C ? .
+bit 23 C ? .
+bit 22 C ? .
+bit 21 C ? .
+bit 20 C ? .
+bit 19 C ? .
+bit 18 C ? .
+bit 17 C ? .
+bit 16 C ? .
+bit 15 C ? .
+bit 14 C ? .
+bit 13 C ? .
+bit 12 C ? .
+bit 11 C ? .
+bit 10 C ? .
+bit 9 C ? .
+bit 8 C ? .
+bit 7 C ? .
+bit 6 C ? .
+bit 5 C ? .
+bit 4 C ? .
+bit 3 C ? .
+bit 2 C ? .
+bit 1 C ? .
+bit 0 C ? .
