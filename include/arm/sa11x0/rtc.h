@@ -56,7 +56,7 @@ typedef volatile struct RTC_registers {
 #endif
 
 #define	RTAR		RTC_pointer->rtar
-#define	RCNT		RTC_pointer->rcnr
+#define	RCNR		RTC_pointer->rcnr
 #define	RTTR		RTC_pointer->rttr
 #define	RTSR		RTC_pointer->rtsr
 #endif /* LANGUAGE == C */
