@@ -1,3 +1,9 @@
+2003-04-14  Marcel Telka  <marcel@telka.sk>
+
+	* arm/arm.h: Added System Control Coprocessor Control Register bits.
+	(PSR_MODE): Fixed bug in macro declaration.
+	(PSR_MODE_MASK): Rewritten using bits() macro.
+
 2003-04-04  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.2.3 released.
