@@ -1,5 +1,9 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* src/readmem.c (detectflash): Function extracted to module libbrux, file flash/detectflash.c.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* include/jtag.h (detectflash, flashmem, flashmsbin): Declarations moved to include module,
 		file brux/flash.h.
 
