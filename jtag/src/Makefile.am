@@ -25,7 +25,8 @@ SUBDIRS = \
 	lib \
 	tap \
 	part \
-	bus
+	bus \
+	flash
 
 bin_PROGRAMS = \
 	jtag \
@@ -38,10 +39,7 @@ jtag_SOURCES = \
 	discovery.c \
 	readmem.c \
 	cfi.c \
-	flash.h \
 	flash.c \
-	flash-intel.c \
-	flash-amd.c \
 	help.c
 
 bsdl2jtag_SOURCES = \
@@ -49,7 +47,7 @@ bsdl2jtag_SOURCES = \
 
 jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a bus/libbus.a
 
-jtag_LDADD = -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus @LIBINTL@
+jtag_LDADD = -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus -Lflash -lflash @LIBINTL@
 
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

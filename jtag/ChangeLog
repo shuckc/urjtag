@@ -1,3 +1,18 @@
+2003-05-14  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (AC_CONFIG_FILES): Added src/flash/Makefile.
+	* include/Makefile.am (noinst_HEADERS): Added flash.h.
+	* src/Makefile.am (SUBDIRS): Added flash.
+	(jtag_SOURCES): Removed flash.h, flash-intel.c, and flash-amd.c.
+	(jtag_LDADD): Added libflash.
+	* src/flash-amd.c: Moved this file ...
+	* src/flash/amd.c: ... here.
+	* src/flash-intel.c: Moved this file ...
+	* src/flash/intel.c: ... here.
+	* src/flash.h: Moved this file ...
+	* include/flash.h: ...here.
+	* src/flash/Makefile.am: New file.
+
 2003-05-13  Marcel Telka  <marcel@telka.sk>
 
 	* src/jtag.c (jtag_parse_file): Added support for command scripts from stdin.

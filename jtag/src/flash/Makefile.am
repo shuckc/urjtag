@@ -1,7 +1,7 @@
 #
 # $Id$
 #
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2003 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,21 +18,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Marcel Telka <marcel@telka.sk>, 2003.
 #
 
-noinst_HEADERS = \
-	bsbit.h \
-	bus.h \
-	cable.h \
-	chain.h \
-	data_register.h \
-	flash.h \
-	gettext.h \
-	instruction.h \
-	parport.h \
-	part.h \
-	register.h \
-	signal.h \
-	state.h \
-	tap.h
+noinst_LIBRARIES = libflash.a
+
+libflash_a_SOURCES = \
+	amd.c \
+	intel.c

@@ -41,6 +41,7 @@ AC_CONFIG_FILES(
 	src/tap/Makefile
 	src/part/Makefile
 	src/bus/Makefile
+	src/flash/Makefile
 	po/Makefile.in
 )
 
