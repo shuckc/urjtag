@@ -1,3 +1,8 @@
+2003-05-27  Marcel Telka  <marcel@telka.sk>
+
+	* src/part/part.c (part_set_signal, part_get_signal): Moved variable declarations to beginning
+		of a block (Matan Ziv-Av).
+
 2003-05-26  Marcel Telka  <marcel@telka.sk>
 
 	* include/bus.h (new_sh7727_bus): Added function declaration.

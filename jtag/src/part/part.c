@@ -153,11 +153,13 @@ part_set_instruction( part_t *p, const char *iname )
 void
 part_set_signal( part_t *p, signal_t *s, int out, int val )
 {
+	data_register *bsr;
+
 	if (!p || !s)
 		return;
 
 	/* search for Boundary Scan Register */
-	data_register *bsr = part_find_data_register( p, "BSR" );
+	bsr = part_find_data_register( p, "BSR" );
 	if (!bsr) {
 		printf( _("%s(%s:%d) Boundary Scan Register (BSR) not found\n"), __FUNCTION__, __FILE__, __LINE__ );
 		return;
@@ -188,11 +190,13 @@ part_set_signal( part_t *p, signal_t *s, int out, int val )
 int
 part_get_signal( part_t *p, signal_t *s )
 {
+	data_register *bsr;
+
 	if (!p || !s)
 		return -1;
 
 	/* search for Boundary Scan Register */
-	data_register *bsr = part_find_data_register( p, "BSR" );
+	bsr = part_find_data_register( p, "BSR" );
 	if (!bsr) {
 		printf( _("%s(%s:%d) Boundary Scan Register (BSR) not found\n"), __FUNCTION__, __FILE__, __LINE__ );
 		return -1;
