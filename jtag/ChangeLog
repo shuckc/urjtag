@@ -1,5 +1,12 @@
 2003-08-14  Marcel Telka  <marcel@telka.sk>
 
+	* src/tap/chain.c (chain_shift_instructions): Moved test for parts without active instruction before
+		shifting process.
+	(chain_shift_data_registers): Moved test for parts without active instruction or data register before
+		shifting process.
+
+2003-08-14  Marcel Telka  <marcel@telka.sk>
+
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added samsung/s3c4510b/s3c4510b.
 	* data/samsung/s3c4510b/s3c4510b: New file (Jiun-Shian Ho).
 

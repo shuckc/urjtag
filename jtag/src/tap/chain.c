@@ -105,15 +105,16 @@ chain_shift_instructions( chain_t *chain )
 
 	ps = chain->parts;
 
-	tap_capture_ir( chain );
-
 	for (i = 0; i < ps->len; i++) {
-		if (!ps->parts[i]->active_instruction) {
-			printf( _("%s(%d) Part without active instruction\n"), __FILE__, __LINE__ );
-			continue;
+		if (ps->parts[i]->active_instruction == NULL) {
+			printf( _("%s(%d) Part %d without active instruction\n"), __FILE__, __LINE__, i );
+			return;
 		}
-		tap_shift_register( chain, ps->parts[i]->active_instruction->value, NULL, (i + 1) == ps->len );
 	}
+
+	tap_capture_ir( chain );
+	for (i = 0; i < ps->len; i++)
+		tap_shift_register( chain, ps->parts[i]->active_instruction->value, NULL, (i + 1) == ps->len );
 }
 
 void
@@ -127,19 +128,20 @@ chain_shift_data_registers( chain_t *chain, int capture_output )
 
 	ps = chain->parts;
 
-	tap_capture_dr( chain );
-
 	for (i = 0; i < ps->len; i++) {
-		if (!ps->parts[i]->active_instruction) {
-			printf( _("%s(%d) Part without active instruction\n"), __FILE__, __LINE__ );
-			continue;
+		if (ps->parts[i]->active_instruction == NULL) {
+			printf( _("%s(%d) Part %d without active instruction\n"), __FILE__, __LINE__, i );
+			return;
 		}
-		if (!ps->parts[i]->active_instruction->data_register) {
-			printf( _("%s(%d) Part without data register\n"), __FILE__, __LINE__ );
-			continue;
+		if (ps->parts[i]->active_instruction->data_register == NULL) {
+			printf( _("%s(%d) Part %d without data register\n"), __FILE__, __LINE__, i );
+			return;
 		}
+	}
+
+	tap_capture_dr( chain );
+	for (i = 0; i < ps->len; i++)
 		tap_shift_register( chain, ps->parts[i]->active_instruction->data_register->in,
 				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
 				(i + 1) == ps->len );
-	}
 }
