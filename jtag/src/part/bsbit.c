@@ -27,12 +27,12 @@
 
 #include "bsbit.h"
 
-bsbit *
-bsbit_alloc( int bit, const char *name, int type, signal_t* signals, int safe )
+bsbit_t *
+bsbit_alloc( int bit, const char *name, int type, signal_t *signals, int safe )
 {
 	signal_t *s = signals;
 
-	bsbit *b = malloc( sizeof *b );
+	bsbit_t *b = malloc( sizeof *b );
 	if (!b)
 		return NULL;
 
@@ -72,7 +72,7 @@ bsbit_alloc( int bit, const char *name, int type, signal_t* signals, int safe )
 }
 
 void
-bsbit_free( bsbit *b )
+bsbit_free( bsbit_t *b )
 {
 	if (!b)
 		return;

@@ -1,5 +1,10 @@
 2003-05-21  Marcel Telka  <marcel@telka.sk>
 
+	* include/bsbit.h (bsbit, bsbit_t): Renamed typedef bsbit to bsbit_t.
+	All occurences of the bsbit type changed to bsbit_t.
+
+2003-05-21  Marcel Telka  <marcel@telka.sk>
+
 	* include/part.h (part_find_signal): New function declaration.
 	(part_set_signal, part_get_signal): Changed parameter signal name to signal pointer.
 	* src/part/part.c (part_find_signal): New function.

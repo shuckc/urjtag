@@ -25,7 +25,7 @@
 #ifndef BSBIT_H
 #define	BSBIT_H
 
-typedef struct bsbit bsbit;
+typedef struct bsbit bsbit_t;
 
 #include <signal.h>
 
@@ -48,7 +48,7 @@ struct bsbit {
 	int control_state;
 };
 
-bsbit *bsbit_alloc( int bit, const char *name, int type, signal_t* signals, int safe );
-void bsbit_free( bsbit *b );
+bsbit_t *bsbit_alloc( int bit, const char *name, int type, signal_t *signals, int safe );
+void bsbit_free( bsbit_t *b );
 
 #endif /* BSBIT_H */

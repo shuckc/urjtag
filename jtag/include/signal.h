@@ -32,8 +32,8 @@ typedef struct signal signal_t;
 struct signal {
 	char *name;
 	signal_t *next;
-	bsbit *input;
-	bsbit *output;
+	bsbit_t *input;
+	bsbit_t *output;
 };
 
 signal_t *signal_alloc( const char *name );

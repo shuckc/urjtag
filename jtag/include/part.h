@@ -48,7 +48,7 @@ struct part {
 	instruction *active_instruction;
 	data_register *data_registers;
 	int boundary_length;
-	bsbit **bsbits;
+	bsbit_t **bsbits;
 };
 
 part_t *part_alloc( void );
