@@ -160,7 +160,7 @@ pin	RD_nWR		J13
 pin	RDY		H13
 pin	nRESET		B7
 pin	nRESET_OUT	C7
-pin	ROMSEL		D6
+pin	ROM_SEL		D6		# typo in Table 14-2 in [1] ('ROMSEL' is bad pin name)
 pin	RXD_1		B11
 pin	RXD_2		B10
 pin	RXD_3		C10
