@@ -41,8 +41,12 @@ part *
 read_part( FILE *f )
 {
 	int line = 0;
+	part *part;
 
-	part *part = part_alloc();
+	if (!f)
+		return NULL;
+
+	part = part_alloc();
 	if (!part) {
 		printf( "out of memory\n" );
 		return NULL;
