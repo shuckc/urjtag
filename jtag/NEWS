@@ -1,5 +1,7 @@
 $Id$
 
+	* Added new manufacturer: DEC.
+
 jtag-0.3.2 (2003-04-04):
 
 	* Added driver for Keith & Koep JTAG Cable.

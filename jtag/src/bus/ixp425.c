@@ -22,16 +22,24 @@
  *
  */
 
+#include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "part.h"
 #include "bus.h"
 #include "chain.h"
 
-/* IXP425 must be at position 0 in JTAG chain */
+typedef struct {
+	chain_t *chain;
+	part_t *part;
+} bus_params_t;
+
+#define	CHAIN	((bus_params_t *) bus->params)->chain
+#define	PART	((bus_params_t *) bus->params)->part
 
 static void 
-select_flash( part *p) 
+select_flash( part_t *p) 
 {
 	part_set_signal( p, "EX_CS[0]", 1, 0 );
 	part_set_signal( p, "EX_CS[1]", 1, 1 );
@@ -44,7 +52,7 @@ select_flash( part *p)
 }
 
 static void 
-unselect_flash( part *p) 
+unselect_flash( part_t *p) 
 {
 	part_set_signal( p, "EX_CS[0]", 1, 1 );
 	part_set_signal( p, "EX_CS[1]", 1, 1 );
@@ -57,7 +65,7 @@ unselect_flash( part *p)
 }
 
 static void
-setup_address( part *p, uint32_t a )
+setup_address( part_t *p, uint32_t a )
 {
 	int i;
 	char buff[15];
@@ -69,7 +77,7 @@ setup_address( part *p, uint32_t a )
 }
 
 static void
-set_data_in( part *p )
+set_data_in( part_t *p )
 {
 	int i;
 	char buff[15];
@@ -81,7 +89,7 @@ set_data_in( part *p )
 }
 
 static void
-setup_data( part *p, uint32_t d )
+setup_data( part_t *p, uint32_t d )
 {
 	int i;
 	char buff[15];
@@ -92,10 +100,18 @@ setup_data( part *p, uint32_t d )
 	}
 }
 
-void
-ixp425_bus_read_start( chain_t *chain, uint32_t adr )
+static void
+ixp425_bus_prepare( bus_t *bus )
 {
-	part_t *p = chain->parts->parts[0];
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+static void
+ixp425_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	select_flash( p );
 	part_set_signal( p, "EX_RD", 1, 0 );
@@ -107,10 +123,11 @@ ixp425_bus_read_start( chain_t *chain, uint32_t adr )
 	chain_shift_data_registers( chain );
 }
 
-uint32_t
-ixp425_bus_read_next( chain_t *chain, uint32_t adr )
+static uint32_t
+ixp425_bus_read_next( bus_t *bus, uint32_t adr )
 {
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	setup_address( p, adr );
 	chain_shift_data_registers( chain );
@@ -129,10 +146,11 @@ ixp425_bus_read_next( chain_t *chain, uint32_t adr )
 	}
 }
 
-uint32_t
-ixp425_bus_read_end( chain_t *chain )
+static uint32_t
+ixp425_bus_read_end( bus_t *bus )
 {
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	unselect_flash( p );
 	part_set_signal( p, "EX_RD", 1, 1 );
@@ -154,17 +172,18 @@ ixp425_bus_read_end( chain_t *chain )
 	}
 }
 
-uint32_t
-ixp425_bus_read( chain_t *chain, uint32_t adr )
+static uint32_t
+ixp425_bus_read( bus_t *bus, uint32_t adr )
 {
-	ixp425_bus_read_start( chain, adr );
-	return ixp425_bus_read_end( chain );
+	ixp425_bus_read_start( bus, adr );
+	return ixp425_bus_read_end( bus );
 }
 
-void
-ixp425_bus_write( chain_t *chain, uint32_t adr, uint32_t data )
+static void
+ixp425_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 {
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	select_flash( p );
 	part_set_signal( p, "EX_RD", 1, 1 );
@@ -181,17 +200,54 @@ ixp425_bus_write( chain_t *chain, uint32_t adr, uint32_t data )
 	chain_shift_data_registers( chain );
 }
 
-int
-ixp425_bus_width( chain_t *chain )
+static int
+ixp425_bus_width( bus_t *bus )
 {
 	return 16;
 }
 
-bus_driver_t ixp425_bus_driver = {
+static void
+ixp425_bus_free( bus_t *bus )
+{
+	free( bus->params );
+	free( bus );
+}
+
+
+static const bus_t ixp425_bus = {
+	NULL,
+	ixp425_bus_prepare,
 	ixp425_bus_width,
 	ixp425_bus_read_start,
 	ixp425_bus_read_next,
 	ixp425_bus_read_end,
 	ixp425_bus_read,
-	ixp425_bus_write
+	ixp425_bus_write,
+	ixp425_bus_free
 };
+
+bus_t *
+new_ixp425_bus( chain_t *chain, int pn )
+{
+	bus_t *bus;
+
+	if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
+		return NULL;
+
+	bus = malloc( sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	memcpy( bus, &ixp425_bus, sizeof (bus_t) );
+
+	bus->params = malloc( sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[pn];
+
+	return bus;
+}

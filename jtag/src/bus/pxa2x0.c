@@ -26,15 +26,23 @@
  *
  */
 
+#include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "part.h"
 #include "bus.h"
 
-/* PXA250 must be at position 0 in JTAG chain */
+typedef struct {
+	chain_t *chain;
+	part_t *part;
+} bus_params_t;
+
+#define	CHAIN	((bus_params_t *) bus->params)->chain
+#define	PART	((bus_params_t *) bus->params)->part
 
 static void
-setup_address( part *p, uint32_t a )
+setup_address( part_t *p, uint32_t a )
 {
 	int i;
 	char buff[10];
@@ -46,7 +54,7 @@ setup_address( part *p, uint32_t a )
 }
 
 static void
-set_data_in( part *p )
+set_data_in( part_t *p )
 {
 	int i;
 	char buff[10];
@@ -58,7 +66,7 @@ set_data_in( part *p )
 }
 
 static void
-setup_data( part *p, uint32_t d )
+setup_data( part_t *p, uint32_t d )
 {
 	int i;
 	char buff[10];
@@ -69,10 +77,18 @@ setup_data( part *p, uint32_t d )
 	}
 }
 
-void
-pxa250_bus_read_start( chain_t *chain, uint32_t adr )
+static void
+pxa250_bus_prepare( bus_t *bus )
+{       
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+static void
+pxa250_bus_read_start( bus_t *bus, uint32_t adr )
 {
-	part_t *p = chain->parts->parts[0];
+	chain_t *chain = CHAIN;
+	part_t *p = PART;
 
 	/* see Figure 6-13 in [1] */
 	part_set_signal( p, "nCS[0]", 1, 0 );
@@ -91,10 +107,11 @@ pxa250_bus_read_start( chain_t *chain, uint32_t adr )
 	chain_shift_data_registers( chain );
 }
 
-uint32_t
-pxa250_bus_read_next( chain_t *chain, uint32_t adr )
+static uint32_t
+pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 {
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	/* see Figure 6-13 in [1] */
 	setup_address( p, adr );
@@ -114,10 +131,11 @@ pxa250_bus_read_next( chain_t *chain, uint32_t adr )
 	}
 }
 
-uint32_t
-pxa250_bus_read_end( chain_t *chain )
+static uint32_t
+pxa250_bus_read_end( bus_t *bus )
 {
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	/* see Figure 6-13 in [1] */
 	part_set_signal( p, "nCS[0]", 1, 1 );
@@ -140,18 +158,19 @@ pxa250_bus_read_end( chain_t *chain )
 	}
 }
 
-uint32_t
-pxa250_bus_read( chain_t *chain, uint32_t adr )
+static uint32_t
+pxa250_bus_read( bus_t *bus, uint32_t adr )
 {
-	pxa250_bus_read_start( chain, adr );
-	return pxa250_bus_read_end( chain );
+	pxa250_bus_read_start( bus, adr );
+	return pxa250_bus_read_end( bus );
 }
 
-void
-pxa250_bus_write( chain_t *chain, uint32_t adr, uint32_t data )
+static void
+pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 {
 	/* see Figure 6-17 in [1] */
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	part_set_signal( p, "nCS[0]", 1, 0 );
 	part_set_signal( p, "DQM[0]", 1, 0 );
@@ -174,10 +193,10 @@ pxa250_bus_write( chain_t *chain, uint32_t adr, uint32_t data )
 	chain_shift_data_registers( chain );
 }
 
-int
-pxa250_bus_width( chain_t *chain )
+static int
+pxa250_bus_width( bus_t *bus )
 {
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
 	uint8_t boot_sel = (part_get_signal( p, "BOOT_SEL[2]" ) << 2)
 			| (part_get_signal( p, "BOOT_SEL[1]" ) << 1)
 			| part_get_signal( p, "BOOT_SEL[0]" );
@@ -204,11 +223,47 @@ pxa250_bus_width( chain_t *chain )
 	}
 }
 
-bus_driver_t pxa250_bus_driver = {
+static void
+pxa250_bus_free( bus_t *bus )
+{
+	free( bus->params );
+	free( bus );
+}
+
+static const bus_t pxa250_bus = {
+	NULL,
+	pxa250_bus_prepare,
 	pxa250_bus_width,
 	pxa250_bus_read_start,
 	pxa250_bus_read_next,
 	pxa250_bus_read_end,
 	pxa250_bus_read,
-	pxa250_bus_write
+	pxa250_bus_write,
+	pxa250_bus_free
 };
+
+bus_t *
+new_pxa250_bus( chain_t *chain, int pn )
+{
+	bus_t *bus;
+
+	if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
+		return NULL;
+	
+	bus = malloc( sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	memcpy( bus, &pxa250_bus, sizeof (bus_t) );
+
+	bus->params = malloc( sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[pn];
+
+	return bus;
+}

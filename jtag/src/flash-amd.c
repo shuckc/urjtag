@@ -37,18 +37,18 @@
 #include <unistd.h>
 
 #include "flash.h"
-#include "chain.h"
+#include "bus.h"
 
 static int dbg = 0;
 
-static int amd_flash_erase_block( chain_t *chain, uint32_t adr );
-static int amd_flash_unlock_block( chain_t *chain, uint32_t adr );
-static int amd_flash_program( chain_t *chain, uint32_t adr, uint32_t data );
-static void amd_flash_read_array( chain_t *chain ); 
+static int amd_flash_erase_block( bus_t *bus, uint32_t adr );
+static int amd_flash_unlock_block( bus_t *bus, uint32_t adr );
+static int amd_flash_program( bus_t *bus, uint32_t adr, uint32_t data );
+static void amd_flash_read_array( bus_t *bus ); 
 
 /* autodetect, we can handle this chip */
 static int 
-amd_flash_autodetect( chain_t *chain, cfi_query_structure_t *cfi )
+amd_flash_autodetect( bus_t *bus, cfi_query_structure_t *cfi )
 {
 	return (cfi->identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
 }
@@ -97,15 +97,15 @@ amdstatus29( parts *ps, uint32_t adr, uint32_t data )
  * second implementation: see [1], page 30
  */
 static int
-amdstatus( chain_t *chain, uint32_t adr, int data )
+amdstatus( bus_t *bus, uint32_t adr, int data )
 {
 	int timeout;
 	uint32_t togglemask = ((1 << 6) << 16) + (1 << 6); /* DQ 6 */
 	/*  int dq5mask = ((1 << 5) << 16) + (1 << 5); DQ5 */
 
 	for (timeout = 0; timeout < 100; timeout++) {
-		uint32_t data1 = bus_read( chain, adr );
-		uint32_t data2 = bus_read( chain, adr );
+		uint32_t data1 = bus_read( bus, adr );
+		uint32_t data2 = bus_read( bus, adr );
 
 		/*printf("amdstatus %d: %04X/%04X   %04X/%04X \n", */
 		/*	   timeout, data1, data2, (data1 & togglemask), (data2 & togglemask)); */
@@ -143,17 +143,18 @@ amdisprotected( parts *ps, uint32_t adr )
 #endif /* 0 */
 
 static void
-amd_flash_print_info( chain_t *chain )
+amd_flash_print_info( bus_t *bus )
 {
 	int o = 2;
 	int mid, cid, prot;
-	bus_write( chain, 0x0555 << o, 0x00aa00aa );	/* autoselect p29 */
-	bus_write( chain, 0x02aa << o, 0x00550055 );
-	bus_write( chain, 0x0555 << o, 0x00900090 );
-	mid = bus_read( chain, 0x00 << o ) & 0xFFFF;
-	cid = bus_read( chain, 0x01 << o ) & 0xFFFF;
-	prot = bus_read( chain, 0x02 << o ) & 0xFF;
-	amd_flash_read_array( chain );			/* AMD reset */
+
+	bus_write( bus, 0x0555 << o, 0x00aa00aa );	/* autoselect p29 */
+	bus_write( bus, 0x02aa << o, 0x00550055 );
+	bus_write( bus, 0x0555 << o, 0x00900090 );
+	mid = bus_read( bus, 0x00 << o ) & 0xFFFF;
+	cid = bus_read( bus, 0x01 << o ) & 0xFFFF;
+	prot = bus_read( bus, 0x02 << o ) & 0xFF;
+	amd_flash_read_array( bus );			/* AMD reset */
 	printf( "Chip: AMD Flash\n\tManufacturer: " );
 	switch (mid) {
 		case 0x0001:
@@ -176,7 +177,7 @@ amd_flash_print_info( chain_t *chain )
 }
 
 static int
-amd_flash_erase_block( chain_t *chain, uint32_t adr )
+amd_flash_erase_block( bus_t *bus, uint32_t adr )
 {
 	int o = 2;
 
@@ -184,34 +185,34 @@ amd_flash_erase_block( chain_t *chain, uint32_t adr )
 
 	/*	printf("protected: %d\n", amdisprotected(ps, adr)); */
 
-	bus_write( chain, 0x0555 << o, 0x00aa00aa ); /* autoselect p29, sector erase */
-	bus_write( chain, 0x02aa << o, 0x00550055 );
-	bus_write( chain, 0x0555 << o, 0x00800080 );
-	bus_write( chain, 0x0555 << o, 0x00aa00aa );
-	bus_write( chain, 0x02aa << o, 0x00550055 );
-	bus_write( chain, adr, 0x00300030 );
+	bus_write( bus, 0x0555 << o, 0x00aa00aa ); /* autoselect p29, sector erase */
+	bus_write( bus, 0x02aa << o, 0x00550055 );
+	bus_write( bus, 0x0555 << o, 0x00800080 );
+	bus_write( bus, 0x0555 << o, 0x00aa00aa );
+	bus_write( bus, 0x02aa << o, 0x00550055 );
+	bus_write( bus, adr, 0x00300030 );
 
-	if (amdstatus( chain, adr, 0xffff )) {
+	if (amdstatus( bus, adr, 0xffff )) {
 		printf( "flash_erase_block 0x%08X DONE\n", adr );
-		amd_flash_read_array( chain ); /* AMD reset */
+		amd_flash_read_array( bus ); /* AMD reset */
 		return 0;
 	}
 	printf( "flash_erase_block 0x%08X FAILED\n", adr );
 	/* Read Array */
-	amd_flash_read_array( chain ); /* AMD reset */
+	amd_flash_read_array( bus ); /* AMD reset */
 
 	return CFI_INTEL_ERROR_UNKNOWN;
 }
 
 static int
-amd_flash_unlock_block( chain_t *chain, uint32_t adr )
+amd_flash_unlock_block( bus_t *bus, uint32_t adr )
 {
 	printf( "flash_unlock_block 0x%08X IGNORE\n", adr );
 	return 0;
 }
 
 static int
-amd_flash_program( chain_t *chain, uint32_t adr, uint32_t data )
+amd_flash_program( bus_t *bus, uint32_t adr, uint32_t data )
 {
 	int o = 2;
 	int status;
@@ -219,22 +220,22 @@ amd_flash_program( chain_t *chain, uint32_t adr, uint32_t data )
 	if (dbg)
 		printf("\nflash_program 0x%08X = 0x%08X\n", adr, data);
 
-	bus_write( chain, 0x0555 << o, 0x00aa00aa ); /* autoselect p29, program */
-	bus_write( chain, 0x02aa << o, 0x00550055 );
-	bus_write( chain, 0x0555 << o, 0x00A000A0 );
+	bus_write( bus, 0x0555 << o, 0x00aa00aa ); /* autoselect p29, program */
+	bus_write( bus, 0x02aa << o, 0x00550055 );
+	bus_write( bus, 0x0555 << o, 0x00A000A0 );
 
-	bus_write( chain, adr, data );
-	status = amdstatus( chain, adr, data );
+	bus_write( bus, adr, data );
+	status = amdstatus( bus, adr, data );
 	/*	amd_flash_read_array(ps); */
 
 	return !status;
 }
 
 static void
-amd_flash_read_array( chain_t *chain )
+amd_flash_read_array( bus_t *bus )
 {
 	/* Read Array */
-	bus_write( chain, 0x0, 0x00F000F0 ); /* AMD reset */
+	bus_write( bus, 0x0, 0x00F000F0 ); /* AMD reset */
 }
 
 flash_driver_t amd_32_flash_driver = {

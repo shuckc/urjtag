@@ -32,5 +32,6 @@
 00000010101	xilinx		Xilinx	# Philips Semi. (Signetics)
 00000011111	atmel		Atmel
 00000110100	cypress		Cypress
+00000110101	dec		DEC
 00001001001	xilinx		Xilinx
 00101010000	broadcom	Broadcom

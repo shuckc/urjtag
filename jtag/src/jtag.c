@@ -52,7 +52,7 @@ ssize_t getline( char **lineptr, size_t *n, FILE *stream );
 #endif
 
 chain_t *chain = NULL;
-bus_driver_t *bus_driver = NULL;
+bus_t *bus = NULL;
 
 static char *
 get_token( char *buf )
@@ -84,7 +84,7 @@ jtag_create_jtagdir( void )
 	strcat( jdir, JTAGDIR );
 
 	/* Create the directory if it doesn't exists. */
-	mkdir( jdir, 0755 );
+	mkdir( jdir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
 
 	free( jdir );
 }
@@ -269,6 +269,10 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
+			if (bus) {
+				bus->free( bus );
+				bus = NULL;
+			}
 			parts_free( chain->parts );
 			chain->parts = detect_parts( chain, JTAG_DATA_DIR );
 			if (!chain->parts->len) {
@@ -282,11 +286,11 @@ jtag_parse_line( char *line )
 			parts_set_instruction( chain->parts, "BYPASS" );
 			chain_shift_instructions( chain );
 			if (strcmp( chain->parts->parts[0]->part, "SA1110" ) == 0)
-				bus_driver = &sa1110_bus_driver;
+				bus = new_sa1110_bus( chain, 0 );
 			if (strcmp( chain->parts->parts[0]->part, "PXA250" ) == 0)
-				bus_driver = &pxa250_bus_driver;
+				bus = new_pxa250_bus( chain, 0 );
 			if (strcmp( chain->parts->parts[0]->part, "IXP425" ) == 0)
-				bus_driver = &ixp425_bus_driver;
+				bus = new_ixp425_bus( chain, 0 );
 			return 1;
 		}
 
@@ -334,9 +338,9 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 			if (msbin) 
-				flashmsbin( chain, f );
+				flashmsbin( bus, f );
 			else
-				flashmem( chain, f, addr );
+				flashmem( bus, f, addr );
 			fclose( f );
 			return 1;
 		}
@@ -392,7 +396,7 @@ jtag_parse_line( char *line )
 				printf( _("Unable to create file `%s'!\n"), t );
 				return 1;
 			}
-			readmem( chain, f, addr, len );
+			readmem( bus, f, addr, len );
 
 			fclose( f );
 			return 1;
@@ -414,7 +418,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			detectflash( chain );
+			detectflash( bus );
 			return 1;
 		}
 
@@ -841,6 +845,10 @@ main( int argc, const char **argv )
 		}
 	}
 
+	if (bus) {
+		bus->free( bus );
+		bus = NULL;
+	}
 	chain_free( chain );
 
 	return 0;

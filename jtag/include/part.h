@@ -52,9 +52,9 @@ struct part {
 	bsbit **bsbits;
 };
 
-part *part_alloc( void );
+part_t *part_alloc( void );
 void part_free( part_t *p );
-part *read_part( FILE *f, tap_register_t *idr );
+part_t *read_part( FILE *f, tap_register_t *idr );
 instruction *part_find_instruction( part_t *p, const char *iname );
 data_register *part_find_data_register( part_t *p, const char *drname );
 void part_set_instruction( part_t *p, const char *iname );
@@ -66,10 +66,10 @@ typedef struct parts parts_t;
 
 struct parts {
 	int len;
-	part **parts;
+	part_t **parts;
 };
 
-parts *parts_alloc( void );
+parts_t *parts_alloc( void );
 void parts_free( parts_t *ps );
 int parts_add_part( parts_t *ps, part_t *p );
 void parts_set_instruction( parts_t *ps, const char *iname );

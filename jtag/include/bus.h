@@ -27,28 +27,33 @@
 #define	BUS_H
 
 #include <stdint.h>
-#include "part.h"
 #include "chain.h"
 
-typedef struct {
-	int (*bus_width)( chain_t * );
-	void (*bus_read_start)( chain_t *, uint32_t );
-	uint32_t (*bus_read_next)( chain_t *, uint32_t );
-	uint32_t (*bus_read_end)( chain_t * );
-	uint32_t (*bus_read)( chain_t *, uint32_t );
-	void (*bus_write)( chain_t *, uint32_t, uint32_t );
-} bus_driver_t;
+typedef struct bus bus_t;
 
-extern bus_driver_t *bus_driver;
-#define	bus_width	bus_driver->bus_width
-#define	bus_read_start	bus_driver->bus_read_start
-#define	bus_read_next	bus_driver->bus_read_next
-#define	bus_read_end	bus_driver->bus_read_end
-#define	bus_read	bus_driver->bus_read
-#define	bus_write	bus_driver->bus_write
+struct bus {
+	void *params;
+	void (*prepare)( bus_t *bus );
+	int (*width)( bus_t *bus );
+	void (*read_start)( bus_t *bus, uint32_t adr );
+	uint32_t (*read_next)( bus_t *bus, uint32_t adr );
+	uint32_t (*read_end)( bus_t *bus );
+	uint32_t (*read)( bus_t *bus, uint32_t adr );
+	void (*write)( bus_t *bus, uint32_t adr, uint32_t data );
+	void (*free)( bus_t *bus );
+};
 
-extern bus_driver_t sa1110_bus_driver;
-extern bus_driver_t pxa250_bus_driver;
-extern bus_driver_t ixp425_bus_driver;
+#define	bus_prepare(bus)	bus->prepare(bus)
+#define	bus_width(bus)		bus->width(bus)
+#define	bus_read_start(bus,adr)	bus->read_start(bus,adr)
+#define	bus_read_next(bus,adr)	bus->read_next(bus,adr)
+#define	bus_read_end(bus)	bus->read_end(bus)
+#define	bus_read(bus,adr)	bus->read(bus,adr)
+#define	bus_write(bus,adr,data)	bus->write(bus,adr,data)
+#define	bus_free(bus)		bus->free(bus)
+
+bus_t *new_sa1110_bus( chain_t *chain, int pn );
+bus_t *new_pxa250_bus( chain_t *chain, int pn );
+bus_t *new_ixp425_bus( chain_t *chain, int pn );
 
 #endif /* BUS_H */

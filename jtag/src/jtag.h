@@ -32,17 +32,18 @@
 
 #include "part.h"
 #include "chain.h"
+#include "bus.h"
 
 parts_t *detect_parts( chain_t* chain, char *db_path );
-void detectflash( chain_t *chain );
-void readmem( chain_t *chain, FILE *f, uint32_t addr, uint32_t len );
-void flashmem( chain_t *chain, FILE *f, uint32_t addr );
-void flashmsbin( chain_t *chain, FILE *f );
+void detectflash( bus_t *bus );
+void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
+void flashmem( bus_t *bus, FILE *f, uint32_t addr );
+void flashmsbin( bus_t *bus, FILE *f );
 
 void help( const char *cmd );
 
 void discovery( chain_t *chain, const char *filename );
 
-cfi_query_structure_t *detect_cfi( chain_t *chain );
+cfi_query_structure_t *detect_cfi( bus_t *bus );
 
 #endif /* JTAG_H */

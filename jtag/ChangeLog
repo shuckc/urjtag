@@ -1,3 +1,44 @@
+2003-04-29  Marcel Telka  <marcel@telka.sk>
+
+	* data/MANUFACTURERS: Added new manufacturer: DEC.
+
+	* src/jtag.c (jtag_create_jtagdir): Changed permissions for jtag directory.
+
+	* include/part.h (part_alloc, read_part): Changed return type from `part *' to `part_t *'.
+	(struct parts): Changed parts member type from `part **' to `part_t **'.
+	(parts_alloc): Changed return type from `parts *' to `parts_t *'.
+	* src/bus/ixp425.c (select_flash, unselect_flash, setup_address, set_data_in, setup_data):
+		Changed first parameter type from `part *' to `part_t *'.
+	* src/bus/pxa250.c (setup_address, set_data_in, setup_data): Ditto.
+	* src/bus/sa1110.c (setup_address, set_data_in, setup_data): Ditto.
+
+	* include/bus.h: Replaced static bus_driver_t architecture with dynamic bus_t.
+		Removed direct chain_t dependency. Added `params' and `prepare' members.
+	All related functions' parameter types changed.
+	* src/bus/ixp425.c (bus_params_t): New structure typedef.
+	(CHAIN, PART): New macros.
+	(ixp425_bus_prepare, ixp425_bus_free, new_ixp425_bus): New functions.
+	(ixp425_bus_driver, ixp425_bus): Renamed `ixp425_bus_driver' to `ixp425_bus' and updated
+		for new bus driver architecture.
+	* src/bus/pxa250.c (bus_params_t): New structure typedef.
+	(CHAIN, PART): New macros.
+	(pxa250_bus_prepare, pxa250_bus_free, new_pxa250_bus): New functions.
+	(pxa250_bus_driver, pxa250_bus): Renamed `pxa250_bus_driver' to `pxa250_bus' and updated
+		for new bus driver architecture.
+	* src/bus/sa1110.c (bus_params_t): New structure typedef.
+	(CHAIN, PART): New macros.
+	(sa1110_bus_prepare, sa1110_bus_free, new_sa1110_bus): New functions.
+	(sa1110_bus_driver, sa1110_bus): Renamed `sa1110_bus_driver' to `sa1110_bus' and updated
+		for new bus driver architecture.
+	* src/readmem.c (detectflash, readmem): Moved JTAG chain initialization to bus->prepare().
+	* src/flash.c (flashcheck): Ditto.
+	(flashmsbin, flashmem): Removed BYPASS instruction setup.
+	* src/jtag.c (bus_driver, bus): Replaced `bus_driver' with `bus' global variable.
+	(jtag_parse_line, main): Added `bus' deallocation.
+	* src/flash.h (flash_driver_t): Changed parameter type for all function members from
+		`chain_t*' to `bus_t *'.
+	All function callers changed.
+
 2003-04-04  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.3.2 released.

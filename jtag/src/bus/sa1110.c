@@ -26,16 +26,24 @@
  *
  */
 
+#include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "part.h"
 #include "bus.h"
 #include "chain.h"
 
-/* SA1110 must be at position 0 in JTAG chain */
+typedef struct {
+	chain_t *chain;
+	part_t *part;
+} bus_params_t;
+
+#define	CHAIN	((bus_params_t *) bus->params)->chain
+#define	PART	((bus_params_t *) bus->params)->part
 
 static void
-setup_address( part *p, uint32_t a )
+setup_address( part_t *p, uint32_t a )
 {
 	int i;
 	char buff[10];
@@ -47,7 +55,7 @@ setup_address( part *p, uint32_t a )
 }
 
 static void
-set_data_in( part *p )
+set_data_in( part_t *p )
 {
 	int i;
 	char buff[10];
@@ -59,7 +67,7 @@ set_data_in( part *p )
 }
 
 static void
-setup_data( part *p, uint32_t d )
+setup_data( part_t *p, uint32_t d )
 {
 	int i;
 	char buff[10];
@@ -71,10 +79,18 @@ setup_data( part *p, uint32_t d )
 }
 
 static void
-sa1110_bus_read_start( chain_t *chain, uint32_t adr )
+sa1110_bus_prepare( bus_t *bus )
+{       
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+static void
+sa1110_bus_read_start( bus_t *bus, uint32_t adr )
 {
 	/* see Figure 10-12 in [1] */
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	part_set_signal( p, "nCS0", 1, (adr >> 27) != 0 );
 	part_set_signal( p, "nCS1", 1, (adr >> 27) != 1 );
@@ -93,10 +109,11 @@ sa1110_bus_read_start( chain_t *chain, uint32_t adr )
 }
 
 static uint32_t
-sa1110_bus_read_next( chain_t *chain, uint32_t adr )
+sa1110_bus_read_next( bus_t *bus, uint32_t adr )
 {
 	/* see Figure 10-12 in [1] */
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	setup_address( p, adr );
 	chain_shift_data_registers( chain );
@@ -116,10 +133,11 @@ sa1110_bus_read_next( chain_t *chain, uint32_t adr )
 }
 
 static uint32_t
-sa1110_bus_read_end( chain_t *chain )
+sa1110_bus_read_end( bus_t *bus )
 {
 	/* see Figure 10-12 in [1] */
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	part_set_signal( p, "nCS0", 1, 1 );
 	part_set_signal( p, "nCS1", 1, 1 );
@@ -145,17 +163,18 @@ sa1110_bus_read_end( chain_t *chain )
 }
 
 static uint32_t
-sa1110_bus_read( chain_t *chain, uint32_t adr )
+sa1110_bus_read( bus_t *bus, uint32_t adr )
 {
-	sa1110_bus_read_start( chain, adr );
-	return sa1110_bus_read_end( chain );
+	sa1110_bus_read_start( bus, adr );
+	return sa1110_bus_read_end( bus );
 }
 
 static void
-sa1110_bus_write( chain_t *chain, uint32_t adr, uint32_t data )
+sa1110_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 {
 	/* see Figure 10-16 in [1] */
-	part_t *p = chain->parts->parts[0];
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
 
 	part_set_signal( p, "nCS0", 1, (adr >> 27) != 0 );
 	part_set_signal( p, "nCS1", 1, (adr >> 27) != 1 );
@@ -185,9 +204,9 @@ sa1110_bus_write( chain_t *chain, uint32_t adr, uint32_t data )
 }
 
 static int
-sa1110_bus_width( chain_t *chain )
+sa1110_bus_width( bus_t *bus )
 {
-	if (part_get_signal( chain->parts->parts[0], "ROM_SEL" )) {
+	if (part_get_signal( PART, "ROM_SEL" )) {
 		printf( "ROM_SEL: 32 bits\n" );
 		return 32;
 	} else {
@@ -196,11 +215,48 @@ sa1110_bus_width( chain_t *chain )
 	}
 }
 
-bus_driver_t sa1110_bus_driver = {
+static void
+sa1110_bus_free( bus_t *bus )
+{
+	free( bus->params );
+	free( bus );
+}
+
+static const bus_t sa1110_bus = {
+	NULL,
+	sa1110_bus_prepare,
 	sa1110_bus_width,
 	sa1110_bus_read_start,
 	sa1110_bus_read_next,
 	sa1110_bus_read_end,
 	sa1110_bus_read,
-	sa1110_bus_write
+	sa1110_bus_write,
+	sa1110_bus_free
 };
+
+bus_t *
+new_sa1110_bus( chain_t *chain, int pn )
+{
+	bus_t *bus;
+
+	if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
+		return NULL;
+
+	bus = malloc( sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	memcpy( bus, &sa1110_bus, sizeof (bus_t) );
+
+	bus->params = malloc( sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[pn];
+
+	return bus;
+}
+
