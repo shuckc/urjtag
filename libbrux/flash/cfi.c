@@ -28,6 +28,8 @@
  *
  */
 
+#include "sysdep.h"
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <flash/cfi.h>

@@ -1,3 +1,21 @@
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am (SUBDIRS): Added po.
+	* configure.ac (AC_CONFIG_FILES): Added po/Makefile.in.
+	(AM_CONFIG_HEADER): Added macro with config.h parameter.
+	(AM_GNU_GETTEXT, AM_GNU_GETTEXT_VERSION): Added new macro.
+	(CPPFLAGS): Removed .. directory from include list.
+	* gettext.h: New file.
+	* sysdep.h: Ditto.
+	* cmd/cmd.c: Replaced config.h include with sysdep.h.
+	* cmd/cmd_detectflash.c: Ditto.
+	* cmd/help.c: Ditto.
+	* cmd/quit.c: Ditto.
+	* flash/amd.c: Ditto.
+	* flash/detectflash.c: Ditto.
+	* flash/intel.c: Ditto.
+	* flash/cfi.c: Added sysdep.h include.
+
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
 	* flash/intel.c (intel_flash_autodetect32, intel_flash_autodetect, intel_flash_autodetect8): Added

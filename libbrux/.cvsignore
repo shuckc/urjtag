@@ -6,3 +6,8 @@ autom4te.cache
 config.log
 config.status
 configure
+ABOUT-NLS
+m4
+config.h
+config.h.in
+stamp-h1

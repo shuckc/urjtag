@@ -22,41 +22,25 @@
  *
  */
 
-#include "sysdep.h"
+#ifndef SYSDEP_H
+#define	SYSDEP_H
 
-#include <stdio.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <brux/flash.h>
-#include <brux/cmd.h>
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
 
-static int
-cmd_detectflash_run( char *params[] )
-{
-	if (cmd_params( params ) != 1)
-		return -1;
+#ifdef S_SPLINT_S
+#undef gettext
+#define	gettext(s)	s
+#undef gettext_noop
+#define	gettext_noop(s)	s
+#undef ngettext
+#define	ngettext(s,p,n)	s
+#endif
 
-	if (!bus) {
-		printf( _("Error: Bus driver missing.\n") );
-		return 1;
-	}
-
-	detectflash( bus );
-
-	return 1;
-}
-
-static void
-cmd_detectflash_help( void )
-{
-	printf( _(
-		"Usage: %s\n"
-		"Detect flash memory type connected to a part.\n"
-	), "detectflash" );
-}
-
-cmd_t cmd_detectflash = {
-	"detectflash",
-	N_("detect parameters of flash chips attached to a part"),
-	cmd_detectflash_help,
-	cmd_detectflash_run
-};
+#endif /* SYSDEP_H */

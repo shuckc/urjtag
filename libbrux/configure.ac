@@ -31,11 +31,17 @@ AM_INIT_AUTOMAKE
 
 AC_CONFIG_FILES(
 	Makefile
+	po/Makefile.in
 )
 
 AM_MAINTAINER_MODE
 
+AM_CONFIG_HEADER(config.h)
+
 AC_GNU_SOURCE
+
+AM_GNU_GETTEXT(external)
+AM_GNU_GETTEXT_VERSION(0.11.4)
 
 AC_PROG_CC
 AC_PROG_RANLIB
@@ -59,6 +65,6 @@ fi
 CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device -I$openwince_includes_path/arm"
 
 CFLAGS="$CFLAGS -Wall"
-CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/.. -I\$(top_srcdir)/../include"
+CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/../include"
 
 AC_OUTPUT

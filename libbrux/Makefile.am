@@ -23,6 +23,8 @@
 
 include $(top_srcdir)/../Makefile.rules
 
+SUBDIRS = po
+
 noinst_LIBRARIES = libbrux.a
 
 libbrux_a_SOURCES = \
