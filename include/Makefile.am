@@ -30,6 +30,8 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
+SUBDIRS =
+
 DIST_SUBDIRS = \
 	arm \
 	jtag
