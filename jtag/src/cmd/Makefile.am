@@ -43,6 +43,7 @@ libcmd_a_SOURCES = \
 	readmem.c \
 	flashmem.c \
 	script.c \
+	include.c \
 	cmd.c
 
 INCLUDES = -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

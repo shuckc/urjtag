@@ -21,6 +21,7 @@ jtag-0.5:
 	* Added initial JTAG declarations for Broadcom BCM3310 (see support request 770145 for
 		more info, thanks to Ramses VI).
 	* Fixed invalid memory allocation size (core dump) in jtag_parse_line() function.
+	* Added new 'include' command.
 	* Minor bugs fixed.
 
 jtag-0.4 (2003-05-29):

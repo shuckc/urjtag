@@ -1,5 +1,11 @@
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added include.c.
+	* src/cmd/include.c: New file.
+	* src/cmd/cmd.c (cmds): Added cmd_include.
+
+2003-08-11  Marcel Telka  <marcel@telka.sk>
+
 	* src/flash.c (flash_drivers): Added amd_8_flash_driver.
 
 2003-08-11  Marcel Telka  <marcel@telka.sk>

@@ -52,6 +52,7 @@ extern cmd_t cmd_readmem;
 extern cmd_t cmd_detectflash;
 extern cmd_t cmd_flashmem;
 extern cmd_t cmd_script;
+extern cmd_t cmd_include;
 
 const cmd_t *cmds[] = {
 	&cmd_quit,
@@ -75,6 +76,7 @@ const cmd_t *cmds[] = {
 	&cmd_detectflash,
 	&cmd_flashmem,
 	&cmd_script,
+	&cmd_include,
 	NULL			/* last must be NULL */
 };
 
