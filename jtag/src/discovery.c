@@ -32,6 +32,9 @@
 
 #include "cable.h"
 #include "tap.h"
+#include "chain.h"
+
+#include "jtag.h"
 
 #define	DETECT_PATTERN_SIZE	8
 #define	MAX_REGISTER_LENGTH	1024
@@ -39,7 +42,7 @@
 #define	TEST_THRESHOLD		100		/* in % */
 
 static int
-detect_register_size( FILE *f )
+detect_register_size( chain_t *chain, FILE *f )
 {
 	int len;
 	tap_register *rz;
@@ -67,8 +70,8 @@ detect_register_size( FILE *f )
 			fprintf( f, "\t\tPattern: %s, ", s - DETECT_PATTERN_SIZE );
 
 			for (i = 0; i < TEST_COUNT; i++) {
-				tap_shift_register( rz, NULL, 0 );
-				tap_shift_register( rpat, rout, 0 );
+				tap_shift_register( chain, rz, NULL, 0 );
+				tap_shift_register( chain, rpat, rout, 0 );
 
 				register_shift_right( rout, len );
 
@@ -96,20 +99,20 @@ detect_register_size( FILE *f )
 }
 
 static void
-jtag_reset( void )
+jtag_reset( chain_t *chain )
 {
-	tap_set_trst( 0 );
+	chain_set_trst( chain, 0 );
 	sleep( 1 );
-	tap_set_trst( 1 );
+	chain_set_trst( chain, 1 );
 	sleep( 1 );
 
-	tap_reset();
+	tap_reset( chain );
 }
 
 #define	MAX_CHAIN_LENGTH	128
 
 void
-discovery( const char *filename )
+discovery( chain_t *chain, const char *filename )
 {
 	int i;
 	int irlen;
@@ -138,11 +141,11 @@ discovery( const char *filename )
 	printf( "Detecting JTAG chain length:\n" );
 	fprintf( f, "Detecting JTAG chain length:\n" );
 
-	jtag_reset();
+	jtag_reset( chain );
 
-	tap_capture_dr();
+	tap_capture_dr( chain );
 	for (i = 0; i < MAX_CHAIN_LENGTH; i++) {
-		tap_shift_register( zeros, id, 0 );
+		tap_shift_register( chain, zeros, id, 0 );
 		if (!register_compare( id, zeros ))
 			break;				/* end of chain */
 
@@ -169,13 +172,13 @@ discovery( const char *filename )
 	}
 
 	/* detecting IR size */
-	jtag_reset();
+	jtag_reset( chain );
 
 	printf( "Detecting IR size...\n" );
 	fprintf( f, "Detecting IR size:\n" );
 
-	tap_capture_ir();
-	irlen = detect_register_size( f );
+	tap_capture_ir( chain );
+	irlen = detect_register_size( chain, f );
 
 	printf( "IR length is %d\n\n", irlen );
 	fprintf( f, "IR length is %d\n\n", irlen );
@@ -200,16 +203,16 @@ discovery( const char *filename )
 	for (;;) {
 		int rs;
 
-		jtag_reset();
+		jtag_reset( chain );
 
-		tap_capture_ir();
-		tap_shift_register( ir, NULL, 1 );
+		tap_capture_ir( chain );
+		tap_shift_register( chain, ir, NULL, 1 );
 
 		printf( "Detecting DR size for IR %s ...\n", register_get_string( ir ) );
 		fprintf( f, "Detecting DR size for IR %s:\n", register_get_string( ir ) );
 
-		tap_capture_dr();
-		rs = detect_register_size( f );
+		tap_capture_dr( chain );
+		rs = detect_register_size( chain, f );
 
 		printf( "DR length for IR %s is %d\n\n", register_get_string( ir ), rs );
 		fprintf( f, "DR length for IR %s is %d\n\n", register_get_string( ir ), rs );

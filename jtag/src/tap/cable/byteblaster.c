@@ -34,7 +34,6 @@
 #include <sys/io.h>
 
 #include "cable.h"
-#include "state.h"
 
 /*
  * data D[7:0] (pins 9:2)
@@ -57,7 +56,6 @@ static unsigned int port;
 static int
 byteblaster_init( unsigned int aport )
 {
-	tap_state_init();
 	port = aport;
 	return !(((port + 2 <= 0x400) && ioperm( port, 2, 1 )) || ((port + 2 > 0x400) && iopl( 3 )));
 }
@@ -69,22 +67,18 @@ byteblaster_done( void )
 		ioperm( port, 2, 0 );
 	else
 		iopl( 0 );
-
-	tap_state_done();
 }
 
 static void
 byteblaster_clock( int tms, int tdi )
 {
-	tms &= 1;
-	tdi &= 1;
+	tms = tms ? 1 : 0;
+	tdi = tdi ? 1 : 0;
 
 	outb( (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
 	cable_wait();
 	outb( (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
 	cable_wait();
-
-	tap_state_clock( tms );
 }
 
 static int
@@ -95,9 +89,16 @@ byteblaster_get_tdo( void )
 	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
 }
 
-static void
+static int
 byteblaster_set_trst( int new_trst )
 {
+	return 1;
+}
+
+static int
+byteblaster_get_trst( void )
+{
+	return 1;
 }
 
 cable_driver_t byteblaster_cable_driver = {
@@ -107,5 +108,6 @@ cable_driver_t byteblaster_cable_driver = {
 	byteblaster_done,
 	byteblaster_clock,
 	byteblaster_get_tdo,
-	byteblaster_set_trst
+	byteblaster_set_trst,
+	byteblaster_get_trst
 };

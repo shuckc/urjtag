@@ -30,7 +30,6 @@
 #include <sys/io.h>
 
 #include "cable.h"
-#include "state.h"
 
 /* see Figure B-1 in [1] */
 
@@ -57,7 +56,6 @@ static unsigned int port;
 static int
 dlc5_init( unsigned int aport )
 {
-	tap_state_init();
 	port = aport;
 	return !(((port + 2 <= 0x400) && ioperm( port, 2, 1 )) || ((port + 2 > 0x400) && iopl( 3 )));
 }
@@ -69,22 +67,18 @@ dlc5_done( void )
 		ioperm( port, 2, 0 );
 	else
 		iopl( 0 );
-
-	tap_state_done();
 }
 
 static void
 dlc5_clock( int tms, int tdi )
 {
-	tms &= 1;
-	tdi &= 1;
+	tms = tms ? 1 : 0;
+	tdi = tdi ? 1 : 0;
 
 	outb( (1 << PROG) | (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
 	cable_wait();
 	outb( (1 << PROG) | (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
 	cable_wait();
-
-	tap_state_clock( tms );
 }
 
 static int
@@ -95,9 +89,16 @@ dlc5_get_tdo( void )
 	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
 }
 
-static void
+static int
 dlc5_set_trst( int new_trst )
 {
+	return 1;
+}
+
+static int
+dlc5_get_trst( void )
+{
+	return 1;
 }
 
 cable_driver_t dlc5_cable_driver = {
@@ -107,5 +108,6 @@ cable_driver_t dlc5_cable_driver = {
 	dlc5_done,
 	dlc5_clock,
 	dlc5_get_tdo,
-	dlc5_set_trst
+	dlc5_set_trst,
+	dlc5_get_trst
 };

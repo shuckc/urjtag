@@ -24,136 +24,129 @@
  */
 
 #include "state.h"
-
-static int state = Unknown_State;
-static int trst = 1;
+#include "chain.h"
 
 int
-tap_state( void )
+tap_state( chain_t *chain )
 {
-	return state;
+	return chain->state;
 }
 
 int
-tap_state_init( void )
+tap_state_init( chain_t *chain )
 {
-	return state = Unknown_State;
+	return chain->state = Unknown_State;
 }
 
 int
-tap_state_done( void )
+tap_state_done( chain_t *chain )
 {
-	return state = Unknown_State;
+	return chain->state = Unknown_State;
 }
 
 int
-tap_state_reset( void )
+tap_state_reset( chain_t *chain )
 {
-	return state = Test_Logic_Reset;
+	return chain->state = Test_Logic_Reset;
 }
 
 int
-tap_state_set_trst( int new_trst )
+tap_state_set_trst( chain_t *chain, int old_trst, int new_trst )
 {
-	if (trst != (new_trst & 1)) {
-		if (trst)
-			state = Unknown_State;
+	old_trst = old_trst ? 1 : 0;
+	new_trst = new_trst ? 1 : 0;
+
+	if (old_trst != new_trst) {
+		if (new_trst)
+			chain->state = Test_Logic_Reset;
 		else
-			state = Test_Logic_Reset;
-
-		trst = new_trst & 1;
+			chain->state = Unknown_State;
 	}
 
-	return state;
+	return chain->state;
 }
 
 int
-tap_state_get_trst( void )
+tap_state_clock( chain_t *chain, int tms )
 {
-	return trst;
-}
-
-int
-tap_state_clock( int tms )
-{
-	if (tms & 1) {
-		switch (state) {
+	if (tms) {
+		switch (chain->state) {
 			case Test_Logic_Reset:
 				break;
 			case Run_Test_Idle:
 			case Update_DR:
 			case Update_IR:
-				state = Select_DR_Scan;
+				chain->state = Select_DR_Scan;
 				break;
 			case Select_DR_Scan:
-				state = Select_IR_Scan;
+				chain->state = Select_IR_Scan;
 				break;
 			case Capture_DR:
 			case Shift_DR:
-				state = Exit1_DR;
+				chain->state = Exit1_DR;
 				break;
 			case Exit1_DR:
 			case Exit2_DR:
-				state = Update_DR;
+				chain->state = Update_DR;
 				break;
 			case Pause_DR:
-				state = Exit2_DR;
+				chain->state = Exit2_DR;
 				break;
 			case Select_IR_Scan:
-				state = Test_Logic_Reset;
+				chain->state = Test_Logic_Reset;
 				break;
 			case Capture_IR:
 			case Shift_IR:
-				state = Exit1_IR;
+				chain->state = Exit1_IR;
 				break;
 			case Exit1_IR:
 			case Exit2_IR:
-				state = Update_IR;
+				chain->state = Update_IR;
 				break;
 			case Pause_IR:
-				state = Exit2_IR;
+				chain->state = Exit2_IR;
 				break;
 			default:
-				state = Unknown_State;
+				chain->state = Unknown_State;
 				break;
 		}
 	} else {
-		switch (state) {
+		switch (chain->state) {
 			case Test_Logic_Reset:
 			case Run_Test_Idle:
 			case Update_DR:
 			case Update_IR:
-				state = Run_Test_Idle;
+				chain->state = Run_Test_Idle;
 				break;
 			case Select_DR_Scan:
-				state = Capture_DR;
+				chain->state = Capture_DR;
 				break;
 			case Capture_DR:
 			case Shift_DR:
 			case Exit2_DR:
-				state = Shift_DR;
+				chain->state = Shift_DR;
 				break;
 			case Exit1_DR:
 			case Pause_DR:
-				state = Pause_DR;
+				chain->state = Pause_DR;
 				break;
 			case Select_IR_Scan:
-				state = Capture_IR;
+				chain->state = Capture_IR;
 				break;
 			case Capture_IR:
 			case Shift_IR:
 			case Exit2_IR:
-				state = Shift_IR;
+				chain->state = Shift_IR;
 				break;
 			case Exit1_IR:
 			case Pause_IR:
-				state = Pause_IR;
+				chain->state = Pause_IR;
 				break;
 			default:
-				state = Unknown_State;
+				chain->state = Unknown_State;
 				break;
 		}
 	}
 
-	return state;
+	return chain->state;
 }

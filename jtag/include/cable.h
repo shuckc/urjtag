@@ -28,6 +28,8 @@
 
 #include <stdint.h>
 
+#define	cable_t	cable_driver_t
+
 typedef struct {
 	const char *name;
 	const char *description;
@@ -35,16 +37,12 @@ typedef struct {
 	void (*done)( void );
 	void (*clock)( int, int );
 	int (*get_tdo)( void );
-	void (*set_trst)( int );
+	int (*set_trst)( int );
+	int (*get_trst)( void );
 } cable_driver_t;
 
 extern uint32_t frequency;
 void cable_wait( void );
-
-extern cable_driver_t *cable;
-#define	tap_clock	cable->clock
-#define	tap_get_tdo	cable->get_tdo
-#define	tap_set_trst	cable->set_trst
 
 extern cable_driver_t *cable_drivers[];
 

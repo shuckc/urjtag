@@ -31,8 +31,9 @@
 #include "tap.h"
 #include "cable.h"
 #include "part.h"
+#include "chain.h"
 
-#include "detect.h"
+#include "jtag.h"
 
 struct id_record {
 	char name[20];
@@ -156,7 +157,7 @@ find_record( char *filename, tap_register *key, struct id_record *idr )
 }
 
 parts *
-detect_parts( char *db_path )
+detect_parts( chain_t *chain, char *db_path )
 {
 	char data_path[1024];
 	char manufacturer[MAXLEN_MANUFACTURER + 1];
@@ -178,9 +179,9 @@ detect_parts( char *db_path )
 		return NULL;
 	}
 
-	tap_reset();
+	tap_reset( chain );
 
-	tap_capture_dr();
+	tap_capture_dr( chain );
 	for (;;) {
 		tap_register *key;
 		struct id_record idr;
@@ -188,7 +189,7 @@ detect_parts( char *db_path )
 		FILE *f;
 		part *part;
 
-		tap_shift_register( zeros, id, 0 );
+		tap_shift_register( chain, zeros, id, 0 );
 		if (!register_compare( id, zeros ))
 			break;				/* end of chain */
 
@@ -292,8 +293,8 @@ detect_parts( char *db_path )
 			fclose( f );
 	}
 
-	tap_clock( 1, 0 );			/* Exit1-DR */
-	tap_clock( 1, 0 );			/* Update-DR */
+	chain_clock( chain, 1, 0 );		/* Exit1-DR */
+	chain_clock( chain, 1, 0 );		/* Update-DR */
 
 	register_free( zeros );
 	register_free( ones );

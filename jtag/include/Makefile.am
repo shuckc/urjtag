@@ -25,6 +25,7 @@ noinst_HEADERS = \
 	bsbit.h \
 	bus.h \
 	cable.h \
+	chain.h \
 	data_register.h \
 	gettext.h \
 	instruction.h \

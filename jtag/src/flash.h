@@ -27,23 +27,22 @@
 #define	FLASH_H
 
 #include <stdint.h>
-#include "part.h"
-#include "bus.h"
 #include <flash/cfi.h>
 
-/* from cfi.c */
-cfi_query_structure_t *detect_cfi( parts *ps );
+#include "part.h"
+#include "bus.h"
+#include "chain.h"
 
 typedef struct {
 	int buswidth;		/* supported bus width, 1/2/4 bytes */
 	const char *name;
 	const char *description;
-	int (*flash_autodetect)( parts *ps, cfi_query_structure_t * );
-	void (*flash_print_info)( parts *ps );
-	int (*flash_erase_block)( parts *ps, uint32_t adr );
-	int (*flash_unlock_block)( parts *ps, uint32_t adr );
-	int (*flash_program)( parts *ps, uint32_t adr, uint32_t data );
-	void (*flash_readarray)( parts *ps );
+	int (*flash_autodetect)( chain_t *, cfi_query_structure_t * );
+	void (*flash_print_info)( chain_t * );
+	int (*flash_erase_block)( chain_t *, uint32_t );
+	int (*flash_unlock_block)( chain_t *, uint32_t );
+	int (*flash_program)( chain_t *, uint32_t, uint32_t );
+	void (*flash_readarray)( chain_t *chain );
 } flash_driver_t;
 
 extern flash_driver_t *flash_driver;
@@ -55,7 +54,7 @@ extern flash_driver_t *flash_drivers[];
 #define flash_program         flash_driver->flash_program
 #define flash_readarray       flash_driver->flash_readarray
 
-extern void set_flash_driver( parts *ps, cfi_query_structure_t *cfi );
+extern void set_flash_driver( chain_t *chain, cfi_query_structure_t *cfi );
 
 #define	CFI_INTEL_ERROR_UNKNOWN				1
 #define	CFI_INTEL_ERROR_UNSUPPORTED			2

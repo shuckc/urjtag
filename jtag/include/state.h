@@ -25,7 +25,9 @@
 #ifndef	STATE_H
 #define	STATE_H
 
-#define	bit(b)		(1 << (b))
+#include <common.h>
+
+#include "chain.h"
 
 #define	TAPSTAT_DR	bit(0)
 #define	TAPSTAT_IR	bit(1)
@@ -36,17 +38,17 @@
 #define	TAPSTAT_PAUSE	bit(6)		/* to Pause with TMS = 0 */
 #define	TAPSTAT_RESET	bit(7)		/* Test-Logic-Reset or unknown state */
 
-#define	Unknown_State		(TAPSTAT_RESET)
+#define	Unknown_State		TAPSTAT_RESET
 #define	Test_Logic_Reset	(TAPSTAT_RESET | TAPSTAT_IDLE)
-#define	Run_Test_Idle		(TAPSTAT_IDLE)
-#define	Select_DR_Scan		(TAPSTAT_DR)
+#define	Run_Test_Idle		TAPSTAT_IDLE
+#define	Select_DR_Scan		TAPSTAT_DR
 #define	Capture_DR		(TAPSTAT_DR | TAPSTAT_SHIFT | TAPSTAT_CAPTURE)
 #define	Shift_DR		(TAPSTAT_DR | TAPSTAT_SHIFT)
 #define	Exit1_DR		(TAPSTAT_DR | TAPSTAT_UPDATE | TAPSTAT_PAUSE)
 #define	Pause_DR		(TAPSTAT_DR | TAPSTAT_PAUSE)
 #define	Exit2_DR		(TAPSTAT_DR | TAPSTAT_SHIFT | TAPSTAT_UPDATE)
 #define	Update_DR		(TAPSTAT_DR | TAPSTAT_IDLE)
-#define	Select_IR_Scan		(TAPSTAT_IR)
+#define	Select_IR_Scan		TAPSTAT_IR
 #define	Capture_IR		(TAPSTAT_IR | TAPSTAT_SHIFT | TAPSTAT_CAPTURE)
 #define	Shift_IR		(TAPSTAT_IR | TAPSTAT_SHIFT)
 #define	Exit1_IR		(TAPSTAT_IR | TAPSTAT_UPDATE | TAPSTAT_PAUSE)
@@ -54,12 +56,11 @@
 #define	Exit2_IR		(TAPSTAT_IR | TAPSTAT_SHIFT | TAPSTAT_UPDATE)
 #define	Update_IR		(TAPSTAT_IR | TAPSTAT_IDLE)
 
-int tap_state( void );
-int tap_state_init( void );
-int tap_state_done( void );
-int tap_state_reset( void );
-int tap_state_set_trst( int trst );
-int tap_state_get_trst( void );
-int tap_state_clock( int tms );
+int tap_state( chain_t *chain );
+int tap_state_init( chain_t *chain );
+int tap_state_done( chain_t *chain );
+int tap_state_reset( chain_t *chain );
+int tap_state_set_trst( chain_t *chain, int old_trst, int new_trst );
+int tap_state_clock( chain_t *chain, int tms );
 
 #endif /* STATE_H */

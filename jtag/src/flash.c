@@ -45,6 +45,8 @@
 #include "bus.h"
 #include "flash.h"
 
+#include "jtag.h"
+
 extern flash_driver_t amd_32_flash_driver;
 extern flash_driver_t intel_32_flash_driver;
 extern flash_driver_t intel_16_flash_driver;
@@ -59,13 +61,13 @@ flash_driver_t *flash_drivers[] = {
 flash_driver_t *flash_driver = NULL;
 
 void
-set_flash_driver( parts *ps, cfi_query_structure_t *cfi )
+set_flash_driver( chain_t *chain, cfi_query_structure_t *cfi )
 {
 	int i;
 	flash_driver = NULL;
 
 	for (i = 0; flash_drivers[i] != NULL; i++)
-		if (flash_drivers[i]->flash_autodetect( ps, cfi )) {
+		if (flash_drivers[i]->flash_autodetect( chain, cfi )) {
 			flash_driver = flash_drivers[i];
 			return;
 		}
@@ -76,16 +78,17 @@ set_flash_driver( parts *ps, cfi_query_structure_t *cfi )
 }
 
 /* check for flashmem - set driver */
-void
-flashcheck( parts *ps, cfi_query_structure_t **cfi )
+static void
+flashcheck( chain_t *chain, cfi_query_structure_t **cfi )
 {
+	parts_t *ps = chain->parts;
 	part *p = ps->parts[0];
 	int o = 0;
 	flash_driver = NULL;
 
 	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
 
-	switch (bus_width( ps )) {
+	switch (bus_width( chain )) {
 		case 16:
 			o = 1;
 			break;
@@ -99,28 +102,29 @@ flashcheck( parts *ps, cfi_query_structure_t **cfi )
 
 	/* EXTEST */
 	part_set_instruction( p, "EXTEST" );
-	parts_shift_instructions( ps );
+	chain_shift_instructions( chain );
 
-	*cfi = detect_cfi( ps );
+	*cfi = detect_cfi( chain );
 	if (!*cfi) {
 		printf( "Flash not found!\n" );
 		return;
 	}
-	set_flash_driver( ps, *cfi );
+	set_flash_driver( chain, *cfi );
 	if (!flash_driver) {
 		printf( "Flash not supported!\n" );
 		return;
 	}
-	flash_driver->flash_print_info( ps );
+	flash_driver->flash_print_info( chain );
 }
 
 void
-flashmsbin( parts *ps, FILE *f )
+flashmsbin( chain_t *chain, FILE *f )
 {
+	parts_t *ps = chain->parts;
 	uint32_t adr;
 	cfi_query_structure_t *cfi = 0;
 
-	flashcheck( ps, &cfi );
+	flashcheck( chain, &cfi );
 	if (!cfi || !flash_driver) {
 		printf( "no flash driver found\n" );
 		return;
@@ -149,9 +153,9 @@ flashmsbin( parts *ps, FILE *f )
 		last = (start + len - 1) / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
 		for (; first <= last; first++) {
 			adr = first * cfi->device_geometry.erase_block_regions[0].erase_block_size * 2;
-			flash_unlock_block( ps, adr );
+			flash_unlock_block( chain, adr );
 			printf( "block %d unlocked\n", first );
-			printf( "erasing block %d: %d\n", first, flash_erase_block( ps, adr ) );
+			printf( "erasing block %d: %d\n", first, flash_erase_block( chain, adr ) );
 		}
 	}
 
@@ -180,7 +184,7 @@ flashmsbin( parts *ps, FILE *f )
 			printf( "addr: 0x%08X\r", a );
 			fflush(stdout);
 			fread( &data, sizeof data, 1, f );
-			if (flash_program( ps, a, data )) {
+			if (flash_program( chain, a, data )) {
 				printf( "\nflash error\n" );
 				return;
 			}
@@ -190,7 +194,7 @@ flashmsbin( parts *ps, FILE *f )
 	}
 	printf( "\n" );
 
-	flash_readarray(ps);
+	flash_readarray( chain );
 
 	fseek( f, 15, SEEK_SET );
 	printf( "verify:\n" );
@@ -219,7 +223,7 @@ flashmsbin( parts *ps, FILE *f )
 			printf( "addr: 0x%08X\r", a );
 			fflush( stdout );
 			fread( &data, sizeof data, 1, f );
-			readed = bus_read( ps, a );
+			readed = bus_read( chain, a );
 			if (data != readed) {
 				printf( "\nverify error: 0x%08X vs. 0x%08X at addr %08X\n", 
 					readed, data, a );
@@ -233,20 +237,21 @@ flashmsbin( parts *ps, FILE *f )
 
 	/* BYPASS */
 	parts_set_instruction( ps, "BYPASS" );
-	parts_shift_instructions( ps );
+	chain_shift_instructions( chain );
 
 	printf( "Done.\n" );
 }
 
 void
-flashmem( parts *ps, FILE *f, uint32_t addr )
+flashmem( chain_t *chain, FILE *f, uint32_t addr )
 {
+	parts_t *ps = chain->parts;
 	uint32_t adr;
 	cfi_query_structure_t *cfi = NULL;
 	int *erased;
 	int i;
 
-	flashcheck( ps, &cfi );
+	flashcheck( chain, &cfi );
 	if (!cfi || !flash_driver) {
 		printf( "no flash driver found\n" );
 		return;
@@ -270,9 +275,9 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 		int block_no = adr / (cfi->device_geometry.erase_block_regions[0].erase_block_size * flash_driver->buswidth / 2);
 
 		if (!erased[block_no]) {
-			flash_unlock_block( ps, adr );
+			flash_unlock_block( chain, adr );
 			printf( "\nblock %d unlocked\n", block_no );
-			printf( "erasing block %d: %d\n", block_no, flash_erase_block( ps, adr ) );
+			printf( "erasing block %d: %d\n", block_no, flash_erase_block( chain, adr ) );
 			erased[block_no] = 1;
 		}
 
@@ -284,7 +289,7 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 				data = htons( *((uint16_t *) &b[bc]) );
 			else
 				data = * ((uint32_t *) &b[bc]);
-			if (flash_program( ps, adr, data )) {
+			if (flash_program( chain, adr, data )) {
 				printf( "\nflash error\n" );
 				return;
 			}
@@ -293,7 +298,7 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 	}
 	printf( "\n" );
 
-	flash_readarray( ps );
+	flash_readarray( chain );
 
 	if (flash_driver->buswidth == 4) {			/* TODO: not available in 1 x 16 bit mode */
 	fseek( f, 0, SEEK_SET );
@@ -313,7 +318,7 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 
 		printf( "addr: 0x%08X\r", adr );
 		fflush( stdout );
-		readed = bus_read( ps, adr );
+		readed = bus_read( chain, adr );
 		if (data != readed) {
 			printf( "\nverify error:\nreaded: 0x%08X\nexpected: 0x%08X\n", readed, data );
 			return;
@@ -326,7 +331,7 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 
 	/* BYPASS */
 	parts_set_instruction( ps, "BYPASS" );
-	parts_shift_instructions( ps );
+	chain_shift_instructions( chain );
 
 	free( erased );
 }

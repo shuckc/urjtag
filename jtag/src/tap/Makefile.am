@@ -27,6 +27,7 @@ libtap_a_SOURCES = \
 	tap.c \
 	register.c \
 	state.c \
+	chain.c \
 	cable.c \
 	cable/arcom.c \
 	cable/byteblaster.c \

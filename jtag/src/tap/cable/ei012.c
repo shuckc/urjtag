@@ -27,7 +27,6 @@
 #include <sys/io.h>
 
 #include "cable.h"
-#include "state.h"
 
 /*
  * data D[7:0] (pins 9:2)
@@ -46,16 +45,16 @@
  */
 #define	TDO	7
 
+static int trst;
 static unsigned int port;
 
 static int
 ei012_init( unsigned int aport )
 {
-	tap_state_init();
 	port = aport;
 	if (((port + 2 <= 0x400) && ioperm( port, 2, 1 )) || ((port + 2 > 0x400) && iopl( 3 )))
 		return 0;
-	tap_state_set_trst( (inb( port ) >> TRST) & 1 );
+	trst = (inb( port ) >> TRST) & 1;
 
 	return 1;
 }
@@ -67,39 +66,41 @@ ei012_done( void )
 		ioperm( port, 2, 0 );
 	else
 		iopl( 0 );
-
-	tap_state_done();
 }
 
 static void
 ei012_clock( int tms, int tdi )
 {
-	int trst = tap_state_get_trst();
-
-	tms &= 1;
-	tdi &= 1;
+	tms = tms ? 1 : 0;
+	tdi = tdi ? 1 : 0;
 
 	outb( (trst << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
 	cable_wait();
 	outb( (trst << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
 	cable_wait();
-
-	tap_state_clock( tms );
 }
 
 static int
 ei012_get_tdo( void )
 {
-	outb( (tap_state_get_trst() << TRST) | (0 << TCK), port );
+	outb( (trst << TRST) | (0 << TCK), port );
 	cable_wait();
 	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
 }
 
-static void
+static int
 ei012_set_trst( int new_trst )
 {
-	tap_state_set_trst( new_trst );
-	outb( (new_trst & 1) << TRST, port );
+	trst = new_trst ? 1 : 0;
+
+	outb( trst << TRST, port );
+	return trst;
+}
+
+static int
+ei012_get_trst( void )
+{
+	return trst;
 }
 
 cable_driver_t ei012_cable_driver = {
@@ -109,5 +110,6 @@ cable_driver_t ei012_cable_driver = {
 	ei012_done,
 	ei012_clock,
 	ei012_get_tdo,
-	ei012_set_trst
+	ei012_set_trst,
+	ei012_get_trst
 };

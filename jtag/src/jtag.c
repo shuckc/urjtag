@@ -40,18 +40,17 @@
 #include <readline/history.h>
 
 #include "part.h"
-#include "cable.h"
 #include "tap.h"
 
-#include "detect.h"
 #include "bus.h"
+
+#include "jtag.h"
 
 #ifndef HAVE_GETLINE
 ssize_t getline( char **lineptr, size_t *n, FILE *stream );
 #endif
 
-cable_driver_t *cable = NULL;
-parts *ps = NULL;
+chain_t *chain = NULL;
 bus_driver_t *bus_driver = NULL;
 
 static char *
@@ -60,22 +59,13 @@ get_token( char *buf )
 	return strtok( buf, " \f\n\r\t\v" );
 }
 
-void detectflash( parts *ps );
-void readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len );
-void flashmem( parts *ps, FILE *f, uint32_t addr );
-void flashmsbin( parts *ps, FILE *f );
-
-void help( const char *cmd );
-
-void discovery( const char *filename );
-
-int jtag_parse_file( const char *filename );
+static int jtag_parse_file( const char *filename );
 
 #define	JTAGDIR		".jtag"
 #define	HISTORYFILE	"history"
 #define	RCFILE		"rc"
 
-void
+static void
 jtag_create_jtagdir( void )
 {
 	char *home = getenv( "HOME" );
@@ -98,7 +88,7 @@ jtag_create_jtagdir( void )
 	free( jdir );
 }
 						 
-void
+static void
 jtag_load_history( void )
 {
 	char *home = getenv( "HOME" );
@@ -124,7 +114,7 @@ jtag_load_history( void )
 	free( file );
 }
 
-void
+static void
 jtag_save_history( void )
 {
 	char *home = getenv( "HOME" );
@@ -148,7 +138,7 @@ jtag_save_history( void )
 	free( file );
 }
 
-int
+static int
 jtag_parse_line( char *line )
 {
 		char *t;
@@ -237,8 +227,8 @@ jtag_parse_line( char *line )
 			}
 
 			if (strcmp( t, "none" ) == 0) {
-				printf( _("Changed cable to 'none'\n") );
-				cable = NULL;
+				chain_connect( chain, NULL, 0 );
+				printf( _("Cable disconnected\n") );
 				return 1;
 			}
 			
@@ -251,23 +241,21 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			cable = cable_drivers[i];
-			printf( _("Initializing %s on parallel port at 0x%x\n"), cable->description, port );
-			if (!cable->init( port )) {
+			printf( _("Initializing %s on parallel port at 0x%x\n"), cable_drivers[i]->description, port );
+			if (chain_connect( chain, cable_drivers[i], port )) {
 				printf( _("Error: Cable driver initialization failed!\n") );
-				cable = NULL;
 				return 1;
 			}
 
-			cable->set_trst( 0 );
-			cable->set_trst( 1 );
-			tap_reset();
+			chain_set_trst( chain, 0 );
+			chain_set_trst( chain, 1 );
+			tap_reset( chain );
 
 			return 1;
 		}
 
 		if (strcmp( t, "discovery" ) == 0) {
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
@@ -281,12 +269,12 @@ jtag_parse_line( char *line )
 				printf( _("syntax error!\n") );
 				return 1;
 			}
-			discovery( t );
+			discovery( chain, t );
 			return 1;
 		}
 
 		if (strcmp( t, "detect" ) == 0) {
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
@@ -296,23 +284,23 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			parts_free( ps );
-			ps = detect_parts( JTAG_DATA_DIR );
-			if (!ps->len) {
-				parts_free( ps );
-				ps = NULL;
+			parts_free( chain->parts );
+			chain->parts = detect_parts( chain, JTAG_DATA_DIR );
+			if (!chain->parts->len) {
+				parts_free( chain->parts );
+				chain->parts = NULL;
 				return 1;
 			}
-			parts_set_instruction( ps, "SAMPLE/PRELOAD" );
-			parts_shift_instructions( ps );
-			parts_shift_data_registers( ps );
-			parts_set_instruction( ps, "BYPASS" );
-			parts_shift_instructions( ps );
-			if (strcmp( ps->parts[0]->part, "SA1110" ) == 0)
+			parts_set_instruction( chain->parts, "SAMPLE/PRELOAD" );
+			chain_shift_instructions( chain );
+			chain_shift_data_registers( chain );
+			parts_set_instruction( chain->parts, "BYPASS" );
+			chain_shift_instructions( chain );
+			if (strcmp( chain->parts->parts[0]->part, "SA1110" ) == 0)
 				bus_driver = &sa1110_bus_driver;
-			if (strcmp( ps->parts[0]->part, "PXA250" ) == 0)
+			if (strcmp( chain->parts->parts[0]->part, "PXA250" ) == 0)
 				bus_driver = &pxa250_bus_driver;
-			if (strcmp( ps->parts[0]->part, "IXP425" ) == 0)
+			if (strcmp( chain->parts->parts[0]->part, "IXP425" ) == 0)
 				bus_driver = &ixp425_bus_driver;
 			return 1;
 		}
@@ -322,12 +310,12 @@ jtag_parse_line( char *line )
 			int msbin = 0;
 			uint32_t addr = 0;
 
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
-			if (!ps) {
+			if (!chain->parts) {
 				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
@@ -361,9 +349,9 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 			if (msbin) 
-				flashmsbin( ps, f );
+				flashmsbin( chain, f );
 			else
-				flashmem( ps, f, addr );
+				flashmem( chain, f, addr );
 			fclose( f );
 			return 1;
 		}
@@ -373,12 +361,12 @@ jtag_parse_line( char *line )
 			uint32_t addr = 0;
 			uint32_t len = 0;
 
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
-			if (!ps) {
+			if (!chain->parts) {
 				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
@@ -419,7 +407,7 @@ jtag_parse_line( char *line )
 				printf( _("Unable to create file `%s'!\n"), t );
 				return 1;
 			}
-			readmem( ps, f, addr, len );
+			readmem( chain, f, addr, len );
 
 			fclose( f );
 			return 1;
@@ -431,17 +419,17 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
-			if (!ps) {
+			if (!chain->parts) {
 				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
 
-			detectflash( ps );
+			detectflash( chain );
 			return 1;
 		}
 
@@ -451,24 +439,24 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
-			parts_print( ps, 1 );
+			parts_print( chain->parts, 1 );
 			return 1;
 		}
 
 		if (strcmp( t, "instruction" ) == 0) {
 			int n;
 
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
-			if (!ps) {
+			if (!chain->parts) {
 				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
@@ -485,7 +473,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			if ((n < 0) || (n >= ps->len)) {
+			if ((n < 0) || (n >= chain->parts->len)) {
 				printf( _("instruction: invalid part number\n") );
 				return 1;
 			}
@@ -501,15 +489,15 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			part_set_instruction( ps->parts[n], t );
-			if (ps->parts[n]->active_instruction == NULL)
+			part_set_instruction( chain->parts->parts[n], t );
+			if (chain->parts->parts[n]->active_instruction == NULL)
 				printf( _("instruction: unknown instruction %s\n"), t );
 
 			return 1;
 		}
 
 		if (strcmp( t, "shift" ) == 0) {
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
@@ -517,12 +505,12 @@ jtag_parse_line( char *line )
 			t = get_token( NULL );
 
 			if (t && (strcmp( t, "ir" ) == 0)) {
-				parts_shift_instructions( ps );
+				chain_shift_instructions( chain );
 				return 1;
 			}
 
 			if (t && (strcmp( t, "dr" ) == 0)) {
-				parts_shift_data_registers( ps );
+				chain_shift_data_registers( chain );
 				return 1;
 			}
 
@@ -535,12 +523,12 @@ jtag_parse_line( char *line )
 			int dir;
 			tap_register *r;
 
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
-			if (!ps) {
+			if (!chain->parts) {
 				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
@@ -557,7 +545,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 			
-			if ((n < 0) || (n >= ps->len)) {
+			if ((n < 0) || (n >= chain->parts->len)) {
 				printf( _("dr: invalid part number\n") );
 				return 1;
 			}
@@ -582,9 +570,9 @@ jtag_parse_line( char *line )
 			}
 
 			if (dir)
-				r = ps->parts[n]->active_instruction->data_register->out;
+				r = chain->parts->parts[n]->active_instruction->data_register->out;
 			else
-				r = ps->parts[n]->active_instruction->data_register->in;
+				r = chain->parts->parts[n]->active_instruction->data_register->in;
 			printf( "%s\n", register_get_string( r ) );
 
 			return 1;
@@ -596,12 +584,12 @@ jtag_parse_line( char *line )
 			int dir;
 			char *s;
 
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
-			if (!ps) {
+			if (!chain->parts) {
 				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
@@ -623,7 +611,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			if ((n < 0) || (n >= ps->len)) {
+			if ((n < 0) || (n >= chain->parts->len)) {
 				printf( _("set: invalid part number\n") );
 				return 1;
 			}
@@ -665,7 +653,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			part_set_signal( ps->parts[n], s, dir, data );
+			part_set_signal( chain->parts->parts[n], s, dir, data );
 
 			return 1;
 		}
@@ -674,12 +662,12 @@ jtag_parse_line( char *line )
 			int n;
 			int data;
 
-			if (!cable) {
+			if (!chain->cable) {
 				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
-			if (!ps) {
+			if (!chain->parts) {
 				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
@@ -701,7 +689,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			if ((n < 0) || (n >= ps->len)) {
+			if ((n < 0) || (n >= chain->parts->len)) {
 				printf( _("get: invalid part number\n") );
 				return 1;
 			}
@@ -712,7 +700,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			data = part_get_signal( ps->parts[n], t );
+			data = part_get_signal( chain->parts->parts[n], t );
 			if (data != -1)
 				printf( _("%s = %d\n"), t, data );
 
@@ -740,7 +728,7 @@ jtag_parse_line( char *line )
 	return 1;
 }
 
-void
+static void
 jtag_readline_loop( const char *prompt )
 {
 	char *line = NULL;
@@ -759,7 +747,7 @@ jtag_readline_loop( const char *prompt )
 	free( line );
 }
 
-int
+static int
 jtag_parse_file( const char *filename )
 {
 	FILE *f;
@@ -783,7 +771,7 @@ jtag_parse_file( const char *filename )
 	return go;
 }
 
-void
+static void
 jtag_parse_rc( void )
 {
 	char *home = getenv( "HOME" );
@@ -825,6 +813,12 @@ main( void )
 			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, PACKAGE, PACKAGE
 	);
 
+	chain = chain_alloc();
+	if (!chain) {
+		printf( _("Out of memory\n") );
+		return -1;
+	}
+
 	printf( _("Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n"), PACKAGE );
 	printf( _("Type \"help\" for help.\n\n") );
 
@@ -843,16 +837,7 @@ main( void )
 	/* Save history */
 	jtag_save_history();
 
-	parts_free( ps );
-	
-	if (cable) {
-		cable->set_trst( 0 );
-		cable->set_trst( 1 );
-		tap_reset();
-		cable->done();
-
-		cable = NULL;
-	}
+	chain_free( chain );
 
 	return 0;
 }

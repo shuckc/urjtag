@@ -28,14 +28,15 @@
 
 #include <stdint.h>
 #include "part.h"
+#include "chain.h"
 
 typedef struct {
-	int (*bus_width)( parts *ps );
-	void (*bus_read_start)( parts *, uint32_t );
-	uint32_t (*bus_read_next)( parts *, uint32_t );
-	uint32_t (*bus_read_end)( parts * );
-	uint32_t (*bus_read)( parts *, uint32_t );
-	void (*bus_write)( parts *, uint32_t, uint32_t );
+	int (*bus_width)( chain_t * );
+	void (*bus_read_start)( chain_t *, uint32_t );
+	uint32_t (*bus_read_next)( chain_t *, uint32_t );
+	uint32_t (*bus_read_end)( chain_t * );
+	uint32_t (*bus_read)( chain_t *, uint32_t );
+	void (*bus_write)( chain_t *, uint32_t, uint32_t );
 } bus_driver_t;
 
 extern bus_driver_t *bus_driver;

@@ -38,19 +38,20 @@
 #include <flash/intel.h>
 #include <std/mic.h>
 
+#include "jtag.h"
+
 #include <arpa/inet.h>
 /* for ntohs */
-
 
 #include "part.h"
 #include "bus.h"
 #include "flash.h"
-
-cfi_query_structure_t *detect_cfi( parts * );
+#include "chain.h"
 
 void
-detectflash( parts *ps )
+detectflash( chain_t *chain )
 {
+	parts_t *ps = chain->parts;
 	part *p = ps->parts[0];
 	int o = 0;
 	cfi_query_structure_t *cfi;
@@ -62,7 +63,7 @@ detectflash( parts *ps )
 
 	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
 
-	switch (bus_width( ps )) {
+	switch (bus_width( chain )) {
 		case 16:
 			o = 1;
 			break;
@@ -76,9 +77,9 @@ detectflash( parts *ps )
 
 	/* EXTEST */
 	part_set_instruction( p, "EXTEST" );
-	parts_shift_instructions( ps );
+	chain_shift_instructions( chain );
 
-	cfi = detect_cfi( ps );
+	cfi = detect_cfi( chain );
 	if (!cfi) {
 		printf( "Flash not found!\n" );
 		return;
@@ -210,14 +211,15 @@ detectflash( parts *ps )
 		}
 	}
 
-	set_flash_driver( ps, cfi );
+	set_flash_driver( chain, cfi );
 	if (flash_driver)
-		flash_driver->flash_print_info( ps );
+		flash_driver->flash_print_info( chain );
 }
 
 void
-readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len )
+readmem( chain_t *chain, FILE *f, uint32_t addr, uint32_t len )
 {
+	parts_t *ps = chain->parts;
 	part *p = ps->parts[0];
 	int step = 0;
 	uint32_t a;
@@ -228,7 +230,7 @@ readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len )
 		return;
 	}
 
-	step = bus_width( ps ) / 8;
+	step = bus_width( chain ) / 8;
 
 	if (step == 0) {
 		printf( "Unknown bus width!\n" );
@@ -237,7 +239,7 @@ readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len )
 
 	/* EXTEST */
 	part_set_instruction( p, "EXTEST" );
-	parts_shift_instructions( ps );
+	chain_shift_instructions( chain );
 
 	addr = addr & (~(step - 1));
 	len = (len + step - 1) & (~(step - 1));
@@ -251,7 +253,7 @@ readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len )
 	}
 
 	printf( "reading:\n" );
-	bus_read_start( ps, addr );
+	bus_read_start( chain, addr );
 	for (a = addr + step; a <= addr + len; a += step) {
 		uint32_t d = 0;
 		uint16_t d16 = 0;
@@ -260,15 +262,15 @@ readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len )
 
 		if (a < addr + len) {
 			if (step == 2)
-				d16 = bus_read_next( ps, a );
+				d16 = bus_read_next( chain, a );
 			else
-				d = bus_read_next( ps, a );
+				d = bus_read_next( chain, a );
 		}
 		else {
 			if (step == 2)
-				d16 = bus_read_end( ps );
+				d16 = bus_read_end( chain );
 			else
-				d = bus_read_end( ps );
+				d = bus_read_end( chain );
 		}
 		if (step == 2)
 			*((uint16_t *) &b[bc]) = ntohs(d16);

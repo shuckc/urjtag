@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,19 +18,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2003.
  *
  */
 
-#ifndef TAP_H
-#define	TAP_H
+#ifndef JTAG_H
+#define JTAG_H
 
-#include "register.h"
+#include <stdint.h>
+#include <stdio.h>
+
+#include <flash/cfi.h>
+
+#include "part.h"
 #include "chain.h"
 
-void tap_reset( chain_t *chain );
-void tap_capture_dr( chain_t *chain );
-void tap_capture_ir( chain_t *chain );
-void tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int exit );
+parts_t *detect_parts( chain_t* chain, char *db_path );
+void detectflash( chain_t *chain );
+void readmem( chain_t *chain, FILE *f, uint32_t addr, uint32_t len );
+void flashmem( chain_t *chain, FILE *f, uint32_t addr );
+void flashmsbin( chain_t *chain, FILE *f );
 
-#endif /* TAP_H */
+void help( const char *cmd );
+
+void discovery( chain_t *chain, const char *filename );
+
+cfi_query_structure_t *detect_cfi( chain_t *chain );
+
+#endif /* JTAG_H */

@@ -1,5 +1,52 @@
 2003-03-13  Marcel Telka  <marcel@telka.sk>
 
+	* include/chain.h: New file.
+	* src/tap/chain.c: Ditto.
+	* src/tap/Makefile.am (libtap_a_SOURCES): Added chain.c.
+	* include/Makefile.am (noinst_HEADERS): Added chain.h.
+	* src/jtag.c: Encapsulated parts, cable and TAP state into one object - chain.
+		All relevant function parameters changed to `chain'.
+	* src/tap/state.c: `trst' state moved to cable drivers.
+		All cable drivers changed.
+	* include/cable.h (cable_driver_t) <set_trst>: Changed return value from void to int.
+		All cable drivers changed.
+	(cable_driver_t) <get_trst>: New function.
+		Implemented this function to all cable drivers.
+	* include/part.h (part_shift_instruction, part_shift_data_register)
+	(parts_shift_instructions, parts_shift_data_registers): Funcions removed.
+	* src/part/part.c (part_shift_instruction, part_shift_data_register)
+	(parts_shift_instructions, parts_shift_data_registers): Ditto.
+	* src/tap/cable/arcom.c: Removed dependency on state.h.
+	* src/tap/cable/byteblaster.c: Ditto.
+	* src/tap/cable/dlc5.c: Ditto.
+	* src/tap/cable/ea253.c: Ditto.
+	* src/tap/cable/ei012.c: Ditto.
+	* src/tap/cable/mpcbdm.c: Ditto.
+	* src/tap/cable/wiggler.c: Ditto.
+
+	* include/state.h (bit): Replaced with common.h include.
+	(Unknown_State, Run_Test_Idle, Select_DR_Scan, Select_IR_Scan): Removed parentheses.
+	* include/tap.h (write_command): Removed unused declaration.
+
+	* src/detect.h: Removed file.
+	* src/jtag.h: New file with common jtag function declarations.
+	* src/Makefile.am (jtag_SOURCES): Removed detect.h, added jtag.h.
+	* src/cfi.c: Added jtag.h include. Moved common function declarations to jtag.h file.
+	* src/detect.c: Ditto.
+	* src/discovery.c: Ditto.
+	* src/flash.c: Ditto.
+	* src/help.c: Ditto.
+	* src/jtag.c: Ditto.
+	* src/readmem.c: Ditto.
+
+	* src/jtag.c (jtag_create_jtagdir, jtag_load_history, jtag_save_history, jtag_parse_line)
+	(jtag_readline_loop, jtag_parse_file, jtag_parse_rc): Changed functions to `static'.
+
+	* src/tap/tap.c: Added l10n support.
+	* po/POTFILES.in: Added src/tap/chain.c and src/tap/tap.c.
+
+2003-03-13  Marcel Telka  <marcel@telka.sk>
+
 	* include/part.h: Renamed types part to part_t, parts to parts_t,
 		tap_register to tap_register_t.
 	* include/register.h: Renamed tap_register type to tap_register_t.

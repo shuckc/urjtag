@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,15 +18,34 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2003.
  *
  */
 
-#ifndef DETECT_H
-#define DETECT_H
+#ifndef CHAIN_H
+#define	CHAIN_H
 
+#include "cable.h"
 #include "part.h"
 
-parts *detect_parts( char *db_path );
+typedef struct {
+	int state;
+	parts_t *parts;
+	cable_t *cable;
+} chain_t;
 
-#endif /* DETECT_H */
+chain_t *chain_alloc( void );
+void chain_free( chain_t *chain );
+int chain_connect( chain_t *chain, cable_t *cable, unsigned int port );
+void chain_clock( chain_t *chain, int tms, int tdi );
+int chain_set_trst( chain_t *chain, int trst );
+int chain_get_trst( chain_t *chain );
+void chain_shift_instructions( chain_t *chain );
+void chain_shift_data_registers( chain_t *chain );
+
+typedef struct {
+	chain_t **chains;
+	int size;			/* allocated chains array size */
+} chains_t;
+
+#endif /* CHAIN_H */

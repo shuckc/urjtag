@@ -41,33 +41,34 @@
 #include <std/mic.h>
 
 #include "flash.h"
+#include "chain.h"
 
-static int intel_flash_erase_block( parts *ps, uint32_t adr );
-static int intel_flash_unlock_block( parts *ps, uint32_t adr );
-static int intel_flash_program( parts *ps, uint32_t adr, uint32_t data );
-static int intel_flash_erase_block32( parts *ps, uint32_t adr );
-static int intel_flash_unlock_block32( parts *ps, uint32_t adr );
-static int intel_flash_program32( parts *ps, uint32_t adr, uint32_t data );
+static int intel_flash_erase_block( chain_t *chain, uint32_t adr );
+static int intel_flash_unlock_block( chain_t *chain, uint32_t adr );
+static int intel_flash_program( chain_t *chain, uint32_t adr, uint32_t data );
+static int intel_flash_erase_block32( chain_t *chain, uint32_t adr );
+static int intel_flash_unlock_block32( chain_t *chain, uint32_t adr );
+static int intel_flash_program32( chain_t *chain, uint32_t adr, uint32_t data );
 
 /* autodetect, we can handle this chip */
 static int 
-intel_flash_autodetect32( parts *ps, cfi_query_structure_t *cfi )
+intel_flash_autodetect32( chain_t *chain, cfi_query_structure_t *cfi )
 {
-	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( ps ) == 32);
+	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( chain ) == 32);
 }
 
 static int 
-intel_flash_autodetect( parts *ps, cfi_query_structure_t *cfi )
+intel_flash_autodetect( chain_t *chain, cfi_query_structure_t *cfi )
 {
-	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( ps ) == 16);
+	return (cfi->identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( chain ) == 16);
 }
 
 static
-void _intel_flash_print_info( parts *ps, int o )
+void _intel_flash_print_info( chain_t *chain, int o )
 {
 	uint32_t mid, cid;
 
-	mid = (bus_read( ps, 0x00 << o ) & 0xFF);
+	mid = (bus_read( chain, 0x00 << o ) & 0xFF);
 	switch (mid) {
 		case STD_MIC_INTEL:
 			printf( "Manufacturer: %s\n", STD_MICN_INTEL );
@@ -78,7 +79,7 @@ void _intel_flash_print_info( parts *ps, int o )
 	}
 
 	printf( "Chip: " );
-	cid = (bus_read( ps, 0x01 << o ) & 0xFFFF);
+	cid = (bus_read( chain, 0x01 << o ) & 0xFFFF);
 	switch (cid) {
 		case 0x0016:
 			printf( "28F320J3A\n" );
@@ -113,51 +114,51 @@ void _intel_flash_print_info( parts *ps, int o )
 	}
 
 	/* Read Array */
-	bus_write( ps, 0 << o, 0x00FF00FF );
+	bus_write( chain, 0 << o, 0x00FF00FF );
 }
 
 static 
-void intel_flash_print_info( parts *ps )
+void intel_flash_print_info( chain_t *chain )
 {
 	int o = 1;
 	/* Intel Primary Algorithm Extended Query Table - see Table 5. in [3] */
 	/* TODO */
 
 	/* Clear Status Register */
-	bus_write( ps, 0 << o, 0x0050 );
+	bus_write( chain, 0 << o, 0x0050 );
 
 	/* Read Identifier Command */
-	bus_write( ps, 0 << 0, 0x0090 );
+	bus_write( chain, 0 << 0, 0x0090 );
 
-	_intel_flash_print_info( ps, o );
+	_intel_flash_print_info( chain, o );
 }
 
 static 
-void intel_flash_print_info32( parts *ps )
+void intel_flash_print_info32( chain_t *chain )
 {
 	int o = 2;
 	/* Intel Primary Algorithm Extended Query Table - see Table 5. in [3] */
 	/* TODO */
 
 	/* Clear Status Register */
-	bus_write( ps, 0 << o, 0x00500050 );
+	bus_write( chain, 0 << o, 0x00500050 );
 
 	/* Read Identifier Command */
-	bus_write( ps, 0 << 0, 0x00900090 );
+	bus_write( chain, 0 << 0, 0x00900090 );
 
-	_intel_flash_print_info( ps, o );
+	_intel_flash_print_info( chain, o );
 }
 
 static int
-intel_flash_erase_block( parts *ps, uint32_t adr )
+intel_flash_erase_block( chain_t *chain, uint32_t adr )
 {
 	uint16_t sr;
 
-	bus_write( ps, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, CFI_INTEL_CMD_BLOCK_ERASE );
-	bus_write( ps, adr, CFI_INTEL_CMD_CONFIRM );
+	bus_write( chain, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
+	bus_write( chain, adr, CFI_INTEL_CMD_BLOCK_ERASE );
+	bus_write( chain, adr, CFI_INTEL_CMD_CONFIRM );
 
-	while (!((sr = bus_read( ps, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+	while (!((sr = bus_read( chain, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
 	switch (sr & ~CFI_INTEL_SR_READY) {
 		case 0:
@@ -179,15 +180,15 @@ intel_flash_erase_block( parts *ps, uint32_t adr )
 }
 
 static int
-intel_flash_unlock_block( parts *ps, uint32_t adr )
+intel_flash_unlock_block( chain_t *chain, uint32_t adr )
 {
 	uint16_t sr;
 
-	bus_write( ps, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, CFI_INTEL_CMD_LOCK_SETUP );
-	bus_write( ps, adr, CFI_INTEL_CMD_UNLOCK_BLOCK );
+	bus_write( chain, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
+	bus_write( chain, adr, CFI_INTEL_CMD_LOCK_SETUP );
+	bus_write( chain, adr, CFI_INTEL_CMD_UNLOCK_BLOCK );
 
-	while (!((sr = bus_read( ps, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+	while (!((sr = bus_read( chain, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
 	if (sr != CFI_INTEL_SR_READY) {
 		printf("flash: unknown error while unblocking\n");
@@ -197,15 +198,15 @@ intel_flash_unlock_block( parts *ps, uint32_t adr )
 }
 
 static int
-intel_flash_program( parts *ps, uint32_t adr, uint32_t data )
+intel_flash_program( chain_t *chain, uint32_t adr, uint32_t data )
 {
 	uint16_t sr;
 
-	bus_write( ps, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, CFI_INTEL_CMD_PROGRAM1 );
-	bus_write( ps, adr, data );
+	bus_write( chain, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
+	bus_write( chain, adr, CFI_INTEL_CMD_PROGRAM1 );
+	bus_write( chain, adr, data );
 
-	while (!((sr = bus_read( ps, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+	while (!((sr = bus_read( chain, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
 	if (sr != CFI_INTEL_SR_READY) {
 		printf("flash: unknown error while programming\n");
@@ -215,15 +216,15 @@ intel_flash_program( parts *ps, uint32_t adr, uint32_t data )
 }
 
 static int
-intel_flash_erase_block32( parts *ps, uint32_t adr )
+intel_flash_erase_block32( chain_t *chain, uint32_t adr )
 {
 	uint32_t sr;
 
-	bus_write( ps, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, (CFI_INTEL_CMD_BLOCK_ERASE << 16) | CFI_INTEL_CMD_BLOCK_ERASE );
-	bus_write( ps, adr, (CFI_INTEL_CMD_CONFIRM << 16) | CFI_INTEL_CMD_CONFIRM );
+	bus_write( chain, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
+	bus_write( chain, adr, (CFI_INTEL_CMD_BLOCK_ERASE << 16) | CFI_INTEL_CMD_BLOCK_ERASE );
+	bus_write( chain, adr, (CFI_INTEL_CMD_CONFIRM << 16) | CFI_INTEL_CMD_CONFIRM );
 
-	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+	while (((sr = bus_read( chain, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
 	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
 		printf( "\nsr = 0x%08X\n", sr );
@@ -233,15 +234,15 @@ intel_flash_erase_block32( parts *ps, uint32_t adr )
 }
 
 static int
-intel_flash_unlock_block32( parts *ps, uint32_t adr )
+intel_flash_unlock_block32( chain_t *chain, uint32_t adr )
 {
 	uint32_t sr;
 
-	bus_write( ps, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, (CFI_INTEL_CMD_LOCK_SETUP << 16) | CFI_INTEL_CMD_LOCK_SETUP );
-	bus_write( ps, adr, (CFI_INTEL_CMD_UNLOCK_BLOCK << 16) | CFI_INTEL_CMD_UNLOCK_BLOCK );
+	bus_write( chain, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
+	bus_write( chain, adr, (CFI_INTEL_CMD_LOCK_SETUP << 16) | CFI_INTEL_CMD_LOCK_SETUP );
+	bus_write( chain, adr, (CFI_INTEL_CMD_UNLOCK_BLOCK << 16) | CFI_INTEL_CMD_UNLOCK_BLOCK );
 
-	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+	while (((sr = bus_read( chain, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
 	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
 		printf( "\nsr = 0x%08X\n", sr );
@@ -251,15 +252,15 @@ intel_flash_unlock_block32( parts *ps, uint32_t adr )
 }
 
 static int
-intel_flash_program32( parts *ps, uint32_t adr, uint32_t data )
+intel_flash_program32( chain_t *chain, uint32_t adr, uint32_t data )
 {
 	uint32_t sr;
 
-	bus_write( ps, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, (CFI_INTEL_CMD_PROGRAM1 << 16) | CFI_INTEL_CMD_PROGRAM1 );
-	bus_write( ps, adr, data );
+	bus_write( chain, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
+	bus_write( chain, adr, (CFI_INTEL_CMD_PROGRAM1 << 16) | CFI_INTEL_CMD_PROGRAM1 );
+	bus_write( chain, adr, data );
 
-	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+	while (((sr = bus_read( chain, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 
 	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
 		printf( "\nsr = 0x%08X\n", sr );
@@ -269,17 +270,17 @@ intel_flash_program32( parts *ps, uint32_t adr, uint32_t data )
 }
 
 static void
-intel_flash_readarray32( parts *ps )
+intel_flash_readarray32( chain_t *chain )
 {
 	/* Read Array */
-	bus_write( ps, 0, 0x00FF00FF );
+	bus_write( chain, 0, 0x00FF00FF );
 }
 
 static void
-intel_flash_readarray( parts *ps )
+intel_flash_readarray( chain_t *chain )
 {
 	/* Read Array */
-	bus_write( ps, 0, 0x00FF00FF );
+	bus_write( chain, 0, 0x00FF00FF );
 }
 
 flash_driver_t intel_32_flash_driver = {

@@ -2,3 +2,5 @@
 
 src/help.c
 src/jtag.c
+src/tap/chain.c
+src/tap/tap.c

@@ -37,6 +37,8 @@
 #include "cable.h"
 #include "flash.h"
 
+#include "jtag.h"
+
 void
 help( const char *cmd )
 {

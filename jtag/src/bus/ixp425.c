@@ -26,6 +26,7 @@
 
 #include "part.h"
 #include "bus.h"
+#include "chain.h"
 
 /* IXP425 must be at position 0 in JTAG chain */
 
@@ -92,9 +93,9 @@ setup_data( part *p, uint32_t d )
 }
 
 void
-ixp425_bus_read_start( parts *ps, uint32_t adr )
+ixp425_bus_read_start( chain_t *chain, uint32_t adr )
 {
-	part *p = ps->parts[0];
+	part_t *p = chain->parts->parts[0];
 
 	select_flash( p );
 	part_set_signal( p, "EX_RD", 1, 0 );
@@ -103,16 +104,16 @@ ixp425_bus_read_start( parts *ps, uint32_t adr )
 	setup_address( p, adr );
 	set_data_in( p );
 
-	parts_shift_data_registers( ps );
+	chain_shift_data_registers( chain );
 }
 
 uint32_t
-ixp425_bus_read_next( parts *ps, uint32_t adr )
+ixp425_bus_read_next( chain_t *chain, uint32_t adr )
 {
-	part *p = ps->parts[0];
+	part_t *p = chain->parts->parts[0];
 
 	setup_address( p, adr );
-	parts_shift_data_registers( ps );
+	chain_shift_data_registers( chain );
 
 	{
 		int i;
@@ -129,15 +130,15 @@ ixp425_bus_read_next( parts *ps, uint32_t adr )
 }
 
 uint32_t
-ixp425_bus_read_end( parts *ps )
+ixp425_bus_read_end( chain_t *chain )
 {
-	part *p = ps->parts[0];
+	part_t *p = chain->parts->parts[0];
 
 	unselect_flash( p );
 	part_set_signal( p, "EX_RD", 1, 1 );
 	part_set_signal( p, "EX_WR", 1, 1 );
 
-	parts_shift_data_registers( ps );
+	chain_shift_data_registers( chain );
 
 	{
 		int i;
@@ -154,16 +155,16 @@ ixp425_bus_read_end( parts *ps )
 }
 
 uint32_t
-ixp425_bus_read( parts *ps, uint32_t adr )
+ixp425_bus_read( chain_t *chain, uint32_t adr )
 {
-	ixp425_bus_read_start( ps, adr );
-	return ixp425_bus_read_end( ps );
+	ixp425_bus_read_start( chain, adr );
+	return ixp425_bus_read_end( chain );
 }
 
 void
-ixp425_bus_write( parts *ps, uint32_t adr, uint32_t data )
+ixp425_bus_write( chain_t *chain, uint32_t adr, uint32_t data )
 {
-	part *p = ps->parts[0];
+	part_t *p = chain->parts->parts[0];
 
 	select_flash( p );
 	part_set_signal( p, "EX_RD", 1, 1 );
@@ -171,17 +172,17 @@ ixp425_bus_write( parts *ps, uint32_t adr, uint32_t data )
 	setup_address( p, adr );
 	setup_data( p, data );
 
-	parts_shift_data_registers( ps );
+	chain_shift_data_registers( chain );
 
 	part_set_signal( p, "EX_WR", 1, 0 );
-	parts_shift_data_registers( ps );
+	chain_shift_data_registers( chain );
 	part_set_signal( p, "EX_WR", 1, 1 );
 	unselect_flash( p );
-	parts_shift_data_registers( ps );
+	chain_shift_data_registers( chain );
 }
 
 int
-ixp425_bus_width( parts *ps )
+ixp425_bus_width( chain_t *chain )
 {
 	return 16;
 }

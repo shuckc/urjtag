@@ -31,10 +31,10 @@ bin_PROGRAMS = jtag
 
 jtag_SOURCES = \
 	jtag.c \
+	jtag.h \
 	detect.c \
 	discovery.c \
 	readmem.c \
-	detect.h \
 	cfi.c \
 	flash.h \
 	flash.c \

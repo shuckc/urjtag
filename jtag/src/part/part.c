@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include "part.h"
-#include "tap.h"
 
 /* part */
 
@@ -128,24 +127,6 @@ void part_set_instruction( part *p, const char *iname )
 {
 	if (p)
 		p->active_instruction = part_find_instruction( p, iname );
-}
-
-void
-part_shift_instruction( part *p, int exit )
-{
-	if (!p || !p->active_instruction)
-		return;
-
-	tap_shift_register( p->active_instruction->value, NULL, exit );
-}
-
-void
-part_shift_data_register( part *p, int exit )
-{
-	if (!p || !p->active_instruction || !p->active_instruction->data_register)
-		return;
-	
-	tap_shift_register( p->active_instruction->data_register->in, p->active_instruction->data_register->out, exit );
 }
 
 void
@@ -279,45 +260,6 @@ parts_set_instruction( parts *ps, const char *iname )
 
 	for (i = 0; i < ps->len; i++)
 		ps->parts[i]->active_instruction = part_find_instruction( ps->parts[i], iname );
-}
-
-void
-parts_shift_instructions( parts *ps )
-{
-	int i;
-
-	if (!ps)
-		return;
-
-	tap_capture_ir();
-
-	for (i = 0; i < ps->len; i++) {
-		if (!ps->parts[i]->active_instruction) {
-			printf( "%s(%s:%d) Part without active instruction\n", __FUNCTION__, __FILE__, __LINE__ );
-			continue;
-		}
-		tap_shift_register( ps->parts[i]->active_instruction->value, NULL, (i + 1) == ps->len );
-	}
-}
-
-void
-parts_shift_data_registers( parts *ps )
-{
-	int i;
-
-	if (!ps)
-		return;
-
-	tap_capture_dr();
-
-	for (i = 0; i < ps->len; i++) {
-		if (!ps->parts[i]->active_instruction) {
-			printf( "%s(%s:%d) Part without active instruction\n", __FUNCTION__, __FILE__, __LINE__ );
-			continue;
-		}
-		tap_shift_register( ps->parts[i]->active_instruction->data_register->in,
-				ps->parts[i]->active_instruction->data_register->out, (i + 1) == ps->len );
-	}
 }
 
 void

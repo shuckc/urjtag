@@ -30,7 +30,6 @@
 #include <sys/io.h>
 
 #include "cable.h"
-#include "state.h"
 
 /*
  * data
@@ -50,18 +49,19 @@
  */
 #define	TDO 	5	
 
+static int trst;
 static unsigned int port;
 
 static int
 mpcbdm_init( unsigned int aport )
 {
-	tap_state_init();
 	port = aport;
 	if (((port + 3 <= 0x400) && ioperm( port, 3, 1 )) || ((port + 3 > 0x400) && iopl( 3 )))
 		return 0;
 
 	outb( (1 << TRST) | (1 << TRST1), port + 2 );
-	tap_state_set_trst( 1 );
+	trst = 1;
+
 	return 1;
 }
 
@@ -72,17 +72,13 @@ mpcbdm_done( void )
 		ioperm( port, 3, 0 );
 	else
 		iopl( 0 );
-
-	tap_state_done();
 }
 
 static void
 mpcbdm_clock( int tms, int tdi )
 {
-	int trst = tap_state_get_trst();
-
-	tms &= 1;
-	tdi &= 1;
+	tms = tms ? 1 : 0;
+	tdi = tdi ? 1 : 0;
 
 	outb( (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
 	outb( (trst << TRST) | (trst << TRST1), port + 2 );
@@ -90,24 +86,30 @@ mpcbdm_clock( int tms, int tdi )
 	outb( (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
 	outb( (trst << TRST) | (trst << TRST1), port + 2 );
 	cable_wait();
-
-	tap_state_clock( tms );
 }
 
 static int
 mpcbdm_get_tdo( void )
 {
 	outb( (0 << TCK), port );
-	outb( (tap_state_get_trst() << TRST) | (tap_state_get_trst() << TRST1), port + 2 );
+	outb( (trst << TRST) | (trst << TRST1), port + 2 );
 	cable_wait();
 	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
 }
 
-static void
+static int
 mpcbdm_set_trst( int new_trst )
 {
-	tap_state_set_trst( new_trst );
-	outb( (new_trst & 1) << TRST | (new_trst & 1) << TRST1, port + 2 );
+	trst = new_trst ? 1 : 0;
+
+	outb( (trst << TRST) | (trst << TRST1), port + 2 );
+	return trst;
+}
+
+static int
+mpcdbm_get_trst( void )
+{
+	return trst;
 }
 
 cable_driver_t mpcbdm_cable_driver = {
@@ -117,5 +119,6 @@ cable_driver_t mpcbdm_cable_driver = {
 	mpcbdm_done,
 	mpcbdm_clock,
 	mpcbdm_get_tdo,
-	mpcbdm_set_trst
+	mpcbdm_set_trst,
+	mpcdbm_get_trst
 };
