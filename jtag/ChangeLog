@@ -1,3 +1,9 @@
+2002-12-11  Marcel Telka  <marcel@telka.sk>
+
+	* data/intel/pxa250/STEPPINGS: Renamed file pxa260 to pxa250c0.
+	* data/intel/pxa260: Ditto.
+	* data/intel/pxa250c0: Ditto.
+
 2002-11-29  Marcel Telka  <marcel@telka.sk>
 
 	* src/flash.c (flashmsbin, flashmem): Fixed crash if flash memory is not detected.
