@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5\n"
 "POT-Creation-Date: 2003-08-18 10:42+0200\n"
-"PO-Revision-Date: 2003-08-18 10:52+0200\n"
+"PO-Revision-Date: 2003-08-19 10:56+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -1420,6 +1420,7 @@ msgstr ""
 "%s je voľný softvér, pokrytý Všeobecnou verejnou licenciou GNU a môžete ho\n"
 "meniť a/alebo distribuovať jeho kópie za určitých podmienok.\n"
 "Neposkytuje sa žiadna záruka pre %s.\n"
+"\n"
 
 #: src/jtag.c:274
 #, c-format
