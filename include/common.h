@@ -52,5 +52,6 @@
 #endif
 
 #define	bit(x)		(1 << x)
+#define	bits(h,l)	(((1 << (h + 1)) - 1) & ~((1 << l) - 1))
 
 #endif /* COMMON_H */
