@@ -43,6 +43,8 @@
 #define	TMS	2
 
 /*
+ * status
+ * 
  * 7 - BUSY (pin 11)
  * 6 - ACK (pin 10)
  * 5 - PE (pin 12)
@@ -52,6 +54,8 @@
 #define	TDO	5
 
 /* 
+ * control
+ *
  * 0 - STROBE (pin 1)
  * 1 - AUTOFD (pin 14)
  * 2 - INIT (pin 16)

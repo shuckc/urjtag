@@ -49,21 +49,21 @@ cmd_discovery_help( void )
 {
 	printf( _(
 		"Usage: %s\n"
-		"Discovery unknown parts in the JTAG chain.\n"
+		"Discovery of unknown parts in the JTAG chain.\n"
 		"\n"
 		"'%s' attempts to detect these parameters of an unknown JTAG\n"
 		"chain:\n"
 		" 1. IR (instruction register) length\n"
 		" 2. DR (data register) length for all possible instructions\n"
 		"\n"
-		"Warning: This may be dangerous for some parts (especially, if the\n"
+		"Warning: This may be dangerous for some parts (especially if the\n"
 		"part doesn't have TRST signal).\n"
 	), "discovery", "discovery" );
 }
 
 cmd_t cmd_discovery = {
 	"discovery",
-	N_("discovery unknown parts in the JTAG chain"),
+	N_("discovery of unknown parts in the JTAG chain"),
 	cmd_discovery_help,
 	cmd_discovery_run
 };

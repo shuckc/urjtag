@@ -271,7 +271,7 @@ main( int argc, const char **argv )
 		return -1;
 	}
 
-	printf( _("Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n"), PACKAGE_NAME );
+	printf( _("Warning: %s may damage your hardware! Type \"quit\" to exit!\n\n"), PACKAGE_NAME );
 	printf( _("Type \"help\" for help.\n\n") );
 
 	for (i = 1; i < argc; i++) {

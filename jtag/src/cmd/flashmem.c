@@ -76,7 +76,7 @@ cmd_flashmem_help( void )
 		"Usage: %s FILENAME\n"
 		"Program FILENAME content to flash memory.\n"
 		"\n"
-		"ADDR       target addres for raw binary image\n"
+		"ADDR       target address for raw binary image\n"
 		"FILENAME   name of the input file\n"
 		"%-10s FILENAME is in MS .bin format (for WinCE)\n"
 		"\n"

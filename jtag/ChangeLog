@@ -1,3 +1,14 @@
+2003-09-15  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac: Fixed spelling (patch 805108, Andreas Mohr).
+	* src/jtag.c (main): Ditto.
+	* src/cmd/discovery.c (cmd_discovery_help, cmd_discovery): Ditto.
+	* src/cmd/flashmem.c (cmd_flashmem_help): Ditto.
+
+	* src/tap/cable/ei012.c: Changed comment (patch 805108, Andreas Mohr).
+	* src/tap/cable/keithkoep.c: Ditto.
+	* src/tap/cable/mpcbdm.c: Ditto.
+
 2003-09-14  Marcel Telka  <marcel@telka.sk>
 
 	* src/tap/cable/triton.c: New file (patch 805103, Andreas Mohr).

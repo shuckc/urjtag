@@ -36,7 +36,7 @@
 #include "generic.h"
 
 /*
- * data
+ * data D[7:0] (pins 9:2)
  */
 #define	TDI	1
 #define	TCK	0
@@ -51,6 +51,12 @@
 
 /* 
  * status
+ *
+ * 7 - BUSY (pin 11)
+ * 6 - ACK (pin 10)
+ * 5 - PE (pin 12)
+ * 4 - SEL (pin 13)
+ * 3 - ERROR (pin 15)
  */
 #define	TDO 	5	
 

@@ -40,6 +40,8 @@
 #define	TRST	4
 
 /*
+ * status
+ *
  * 7 - BUSY (pin 11)
  * 6 - ACK (pin 10)
  * 5 - PE (pin 12)
