@@ -16,6 +16,7 @@ src/cmd/frequency.c
 src/cmd/get.c
 src/cmd/help.c
 src/cmd/instruction.c
+src/cmd/peekpoke.c
 src/cmd/print.c
 src/cmd/quit.c
 src/cmd/readmem.c
@@ -24,9 +25,7 @@ src/cmd/set.c
 src/cmd/shift.c
 src/detect.c
 src/discovery.c
-src/flash/amd.c
 src/flash.c
-src/flash/intel.c
 src/jtag.c
 src/part/data_register.c
 src/part/instruction.c

@@ -44,6 +44,8 @@ extern cmd_t cmd_dr;
 extern cmd_t cmd_get;
 extern cmd_t cmd_set;
 extern cmd_t cmd_endian;
+extern cmd_t cmd_peek;
+extern cmd_t cmd_poke;
 extern cmd_t cmd_readmem;
 extern cmd_t cmd_detectflash;
 extern cmd_t cmd_flashmem;
@@ -63,6 +65,8 @@ const cmd_t *cmds[] = {
 	&cmd_get,
 	&cmd_set,
 	&cmd_endian,
+	&cmd_peek,
+	&cmd_poke,
 	&cmd_readmem,
 	&cmd_detectflash,
 	&cmd_flashmem,

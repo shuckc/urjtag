@@ -29,28 +29,7 @@
 #include <stdint.h>
 #include "chain.h"
 
-typedef struct bus bus_t;
-
-struct bus {
-	void *params;
-	void (*prepare)( bus_t *bus );
-	int (*width)( bus_t *bus, uint32_t adr );
-	void (*read_start)( bus_t *bus, uint32_t adr );
-	uint32_t (*read_next)( bus_t *bus, uint32_t adr );
-	uint32_t (*read_end)( bus_t *bus );
-	uint32_t (*read)( bus_t *bus, uint32_t adr );
-	void (*write)( bus_t *bus, uint32_t adr, uint32_t data );
-	void (*free)( bus_t *bus );
-};
-
-#define	bus_prepare(bus)	bus->prepare(bus)
-#define	bus_width(bus,adr)	bus->width(bus,adr)
-#define	bus_read_start(bus,adr)	bus->read_start(bus,adr)
-#define	bus_read_next(bus,adr)	bus->read_next(bus,adr)
-#define	bus_read_end(bus)	bus->read_end(bus)
-#define	bus_read(bus,adr)	bus->read(bus,adr)
-#define	bus_write(bus,adr,data)	bus->write(bus,adr,data)
-#define	bus_free(bus)		bus->free(bus)
+#include <brux/bus.h>
 
 bus_t *new_sa1110_bus( chain_t *chain, int pn );
 bus_t *new_pxa250_bus( chain_t *chain, int pn );

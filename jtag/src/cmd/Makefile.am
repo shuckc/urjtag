@@ -40,6 +40,7 @@ libcmd_a_SOURCES = \
 	get.c \
 	set.c \
 	endian.c \
+	peekpoke.c \
 	readmem.c \
 	detectflash.c \
 	flashmem.c \

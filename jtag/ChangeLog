@@ -1,3 +1,14 @@
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added peekpoke.c (patch 747447, Matan Ziv-Av).
+	* src/cmd/cmd.c (cmds): Added peek and poke commands (patch 747447, Matan Ziv-Av).
+	* src/cmd/peekpoke.c: New file (patch 747447, Matan Ziv-Av).
+	* po/POTFILES.in: Updated.
+
+	* include/bus.h (bus_t): Declaration moved to include module (brux/bus.h).
+	* include/cfi.h (cfi_chip_t, cfi_array_t, cfi_array_free, detect_cfi): Declarations moved
+		to include module (brux/cfi.h).
+
 2003-06-02  Marcel Telka  <marcel@telka.sk>
 
 	* Makefile.am (SUBDIRS): Added libbrux.
