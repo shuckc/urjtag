@@ -33,6 +33,7 @@ typedef struct bsbit bsbit;
 #define	BSBIT_OUTPUT	2
 #define	BSBIT_CONTROL	3
 #define	BSBIT_INTERNAL	4
+#define	BSBIT_BIDIR	5
 
 #define	BSBIT_STATE_Z	(-1)
 

@@ -1,3 +1,10 @@
+2003-02-13  Marcel Telka  <marcel@telka.sk>
+
+	* include/bsbit.h (BSBIT_BIDIR): Added new macro (Christian Pellegrin).
+	* src/part/bsbit.c (bsbit_alloc): Added support for bidirectional pins (Christian
+		Pellegrin).
+	* src/part/parse.ci (read_part): Ditto.
+
 2003-02-10  Marcel Telka  <marcel@telka.sk>
 
 	* src/sa1110.c (sa1110_bus_read_start): Added support for all six static memory banks.

@@ -57,6 +57,11 @@ bsbit_alloc( int bit, const char *name, int type, signal* signals, int safe )
 					break;
 				case BSBIT_OUTPUT:
 					s->output = b;
+					break;
+				case BSBIT_BIDIR:
+					s->input = b;
+					s->output = b;
+					break;
 			}
 			break;
 		}

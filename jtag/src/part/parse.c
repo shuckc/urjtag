@@ -242,6 +242,9 @@ read_part( FILE *f, tap_register *idr )
 				case 'O':
 					type = BSBIT_OUTPUT;
 					break;
+				case 'B':
+					type = BSBIT_BIDIR;
+					break;
 				case 'C':
 					type = BSBIT_CONTROL;
 					break;
