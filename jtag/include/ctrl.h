@@ -28,7 +28,7 @@
 /*
  * low level tap functions, hardware dependent
  */
-void tap_init( void );
+int tap_init( void );
 void tap_done( void );
 
 void tap_clock( int tms, int tdi );

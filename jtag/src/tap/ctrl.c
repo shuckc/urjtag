@@ -36,16 +36,18 @@
 
 static unsigned short int port = 0x378;
 
-void
+int
 tap_init( void )
 {
 	tap_state_init();
 	printf( "Initilizing parallel TAP on port 0x%x\n", port );
 	if (ioperm( port, 2, 1 )) {
 		printf( "Error: Initialization failed!\n" );
-		return;
+		return 0;
 	}
 	tap_state_set_trst( (inb( port ) >> TRST) & 1 );
+
+	return 1;
 }
 
 void

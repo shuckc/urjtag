@@ -57,7 +57,10 @@ main( void )
 			"There is absolutely no warranty for " PACKAGE ".\n\n"
 	);
 
-	tap_init();
+	if (!tap_init()) {
+		printf( "TAP initialization failed! Exiting.\n" );
+		return 1;
+	}
 
 	tap_set_trst( 0 );
 	tap_set_trst( 1 );
