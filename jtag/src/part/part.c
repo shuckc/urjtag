@@ -43,6 +43,7 @@ part_alloc( const tap_register *id )
 	p->part[0] = '\0';
 	p->stepping[0] = '\0';
 	p->signals = NULL;
+	p->saliases = NULL;
 	p->instruction_length = 0;
 	p->instructions = NULL;
 	p->active_instruction = NULL;
@@ -69,6 +70,13 @@ part_free( part_t *p )
 		signal_t *s = p->signals;
 		p->signals = s->next;
 		signal_free( s );
+	}
+
+	/* saliases */
+	while (p->saliases) {
+		salias_t *sa = p->saliases;
+		p->saliases = sa->next;
+		salias_free( sa );
 	}
 
 	/* instructions */
@@ -133,6 +141,7 @@ signal_t *
 part_find_signal( part_t *p, const char *signalname )
 {
 	signal_t *s;
+	salias_t *sa;
 
 	if (!p || !signalname)
 		return NULL;
@@ -140,11 +149,18 @@ part_find_signal( part_t *p, const char *signalname )
 	s = p->signals;
 	while (s) {
 		if (strcmp( signalname, s->name ) == 0)
-			break;
+			return s;
 		s = s->next;
 	}
 
-	return s;
+	sa = p->saliases;
+	while (sa) {
+		if (strcmp( signalname, sa->name ) == 0)
+			return sa->signal;
+		sa = sa->next;
+	}
+
+	return NULL;
 }
 
 void

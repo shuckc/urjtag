@@ -1,3 +1,16 @@
+2003-10-23  Marcel Telka  <marcel@telka.sk>
+
+	* include/bssignal.h (salias_t): Added new type.
+	(salias_alloc, salias_free): Adde new function prototypes.
+	* include/part.h (struct part): Added new structure member 'saliases'.
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added salias.c.
+	* src/cmd/cmd.c (cmds): Added cmd_salias.
+	* src/cmd/salias.c: New file.
+	* src/part/part.c (part_alloc): Added saliases initialization.
+	(part_free): Added saliases deallocation.
+	(part_find_signal): Added signal aliases searching.
+	* src/part/signal.c (salias_alloc, salias_free): New functions.
+
 2003-10-20  Marcel Telka  <marcel@telka.sk>
 
 	* data/hitachi/hd64465/hd64465: Completed BSR bits declaration.

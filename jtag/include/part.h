@@ -44,6 +44,7 @@ struct part {
 	char part[MAXLEN_PART + 1];
 	char stepping[MAXLEN_STEPPING + 1];
 	signal_t *signals;
+	salias_t *saliases;
 	int instruction_length;
 	instruction *instructions;
 	instruction *active_instruction;

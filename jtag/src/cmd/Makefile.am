@@ -31,6 +31,7 @@ libcmd_a_SOURCES = \
 	discovery.c \
 	detect.c \
 	signal.c \
+	salias.c \
 	bit.c \
 	register.c \
 	initbus.c \

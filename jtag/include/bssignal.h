@@ -2,6 +2,7 @@
  * $Id$
  *
  * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2003 Marcel Telka
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  */
 
@@ -36,7 +37,18 @@ struct signal {
 	bsbit_t *output;
 };
 
+typedef struct salias salias_t;
+
+struct salias {
+	char *name;
+	salias_t *next;
+	signal_t *signal;
+};
+
 signal_t *signal_alloc( const char *name );
 void signal_free( signal_t *s );
+
+salias_t *salias_alloc( const char *name, const signal_t *signal );
+void salias_free( salias_t *salias );
 
 #endif /* SIGNAL_H */

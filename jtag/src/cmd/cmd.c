@@ -38,6 +38,7 @@ extern cmd_t cmd_cable;
 extern cmd_t cmd_discovery;
 extern cmd_t cmd_detect;
 extern cmd_t cmd_signal;
+extern const cmd_t cmd_salias;
 extern cmd_t cmd_bit;
 extern cmd_t cmd_register;
 extern const cmd_t cmd_initbus;
@@ -67,6 +68,7 @@ const cmd_t *cmds[] = {
 	&cmd_discovery,
 	&cmd_detect,
 	&cmd_signal,
+	&cmd_salias,
 	&cmd_bit,
 	&cmd_register,
 	&cmd_initbus,

@@ -54,3 +54,29 @@ signal_free( signal_t *s )
 	free( s->name );
 	free( s );
 }
+
+salias_t *
+salias_alloc( const char *name, const signal_t *signal )
+{
+	salias_t *sa = malloc( sizeof *sa );
+	if (sa == NULL)
+		return NULL;
+
+	sa->name = strdup( name );
+	if (sa->name == NULL) {
+		free( sa );
+		return NULL;
+	}
+	sa->next = NULL;
+	sa->signal = signal;
+
+	return sa;
+}
+
+void salias_free( salias_t *salias )
+{
+	if (salias == NULL)
+		return;
+	free( salias->name );
+	free( salias );
+}
