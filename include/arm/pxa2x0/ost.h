@@ -39,14 +39,17 @@
 #ifndef	PXA2X0_OST_H
 #define	PXA2X0_OST_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* OS Timer Registers */
 
 #define	OST_BASE	0x40A00000
 
+#if LANGUAGE == C
 typedef volatile struct OST_registers {
 	uint32_t osmr[4];
 	uint32_t oscr;
@@ -55,7 +58,7 @@ typedef volatile struct OST_registers {
 	uint32_t oier;
 } OST_registers;
 
-#ifndef OST_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	OST_pointer	((OST_registers*) OST_BASE)
 #endif
 
@@ -64,5 +67,33 @@ typedef volatile struct OST_registers {
 #define	OSSR		OST_pointer->ossr
 #define	OWER		OST_pointer->ower
 #define	OIER		OST_pointer->oier
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_OST_H */
+#define	OSMR0_OFFSET	0x00
+#define	OSMR1_OFFSET	0x04
+#define	OSMR2_OFFSET	0x08
+#define	OSMR3_OFFSET	0x0C
+#define	OSCR_OFFSET	0x10
+#define	OSSR_OFFSET	0x14
+#define	OWER_OFFSET	0x18
+#define	OIER_OFFSET	0x1C
+
+/* OSSR bits - see 4.4.2.5 in [1] */
+
+#define	OSSR_M3		bit(3)
+#define	OSSR_M2		bit(2)
+#define	OSSR_M1		bit(1)
+#define	OSSR_M0		bit(0)
+
+/* OWER bits - see Table 4-46 in [1] */
+
+#define	OWER_WME	bit(0)
+
+/* OIER bits - see Table 4-45 in [1] */
+
+#define	OIER_E3		bit(3)
+#define	OIER_E2		bit(2)
+#define	OIER_E1		bit(1)
+#define	OIER_E0		bit(0)
+
+#endif /* PXA2X0_OST_H */
