@@ -1,5 +1,9 @@
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
+	* src/bus/s3c4510x.c: Changed comment.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
 	* src/bus/Makefile.am (libbus_a_SOURCES): Added s3c4510x.c.
 	* src/bus/s3c4510x.c: New file (Jiun-Shian Ho).
 

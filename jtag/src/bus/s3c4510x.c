@@ -1,5 +1,5 @@
 /**
-**  @file s3c4510.c
+**  @file s3c4510x.c
 **
 **  $Id$
 **
@@ -381,6 +381,11 @@ new_s3c4510_bus( chain_t *chain, int pn )
 **
 **  CVS Log
 **  $Log$
+**  Revision 1.2  2003/08/19 09:59:26  telka
+**  2003-08-19  Marcel Telka  <marcel@telka.sk>
+**
+**  	* src/bus/s3c4510x.c: Changed comment.
+**
 **  Revision 1.1  2003/08/19 09:53:25  telka
 **  2003-08-19  Marcel Telka  <marcel@telka.sk>
 **
