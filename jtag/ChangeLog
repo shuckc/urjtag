@@ -1,5 +1,10 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* src/Makefile.am (jtag_LDADD): Added libbrux twice to resolve dependencies.
+	* src/jtag.c: Fixed cmd.h include path.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* src/cmd/Makefile.am (libcmd_a_SOURCES): Removed quit.c, help.c, and detectflash.c.
 	* src/cmd/cmd.c (cmd_run, cmd_params, cmd_get_number): Functions moved to module libbrux,
 		file cmd/cmd.c.

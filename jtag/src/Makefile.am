@@ -56,6 +56,7 @@ jtag_LDADD = \
 	-Ltap -ltap \
 	-Lpart -lpart \
 	-Llib -ljtaglib \
+	-L../libbrux -lbrux \
 	-Lcmd -lcmd \
 	-L../libbrux -lbrux \
 	-Lbus -lbus \

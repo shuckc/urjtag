@@ -34,9 +34,7 @@
 
 #include "chain.h"
 #include "bus.h"
-
-#include "cmd/cmd.h"
-
+#include "cmd.h"
 #include "jtag.h"
 
 #ifndef HAVE_GETLINE
