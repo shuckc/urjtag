@@ -32,12 +32,13 @@
 /* part */
 
 part_t *
-part_alloc( void )
+part_alloc( const tap_register *id )
 {
 	part_t *p = malloc( sizeof *p );
 	if (!p)
 		return NULL;
 
+	p->id = register_duplicate( id );
 	p->manufacturer[0] = '\0';
 	p->part[0] = '\0';
 	p->stepping[0] = '\0';
@@ -60,7 +61,10 @@ part_free( part_t *p )
 	if (!p)
 		return;
 
-	/* sirnals */
+	/* id */
+	free( p->id );
+
+	/* signals */
 	while (p->signals) {
 		signal_t *s = p->signals;
 		p->signals = s->next;
@@ -213,8 +217,8 @@ part_get_signal( part_t *p, signal_t *s )
 void
 part_print( part_t *p )
 {
-	char *instruction;
-	char *dr;
+	char *instruction = NULL;
+	char *dr = NULL;
 	char format[100];
 
 	if (!p)
@@ -225,11 +229,13 @@ part_print( part_t *p )
 
 	if (p->active_instruction) {
 		instruction = p->active_instruction->name;
-		dr = p->active_instruction->data_register->name;
-	} else {
-		instruction = _("(none)");
-		dr = _("(none)");
+		if (p->active_instruction->data_register != NULL)
+			dr = p->active_instruction->data_register->name;
 	}
+	if (instruction == NULL)
+		instruction = _("(none)");
+	if (dr == NULL)
+		dr = _("(none)");
 	printf( format, p->manufacturer, p->part, p->stepping, instruction, dr );
 }
 

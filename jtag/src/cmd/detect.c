@@ -47,6 +47,8 @@ cmd_detect_run( char *params[] )
 	buses_free();
 	parts_free( chain->parts );
 	chain->parts = detect_parts( chain, JTAG_DATA_DIR );
+	if (!chain->parts)
+		return 1;
 	if (!chain->parts->len) {
 		parts_free( chain->parts );
 		chain->parts = NULL;

@@ -47,7 +47,10 @@ int big_endian = 0;
 static char *
 get_token( char *buf )
 {
-	return strtok( buf, " \f\n\r\t\v" );
+	char *t = strtok( buf, " \f\n\r\t\v" );
+	if (t && (*t == '#'))
+		return NULL;
+	return t;
 }
 
 #define	JTAGDIR		".jtag"

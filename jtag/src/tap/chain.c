@@ -134,6 +134,10 @@ chain_shift_data_registers( chain_t *chain, int capture_output )
 			printf( _("%s(%d) Part without active instruction\n"), __FILE__, __LINE__ );
 			continue;
 		}
+		if (!ps->parts[i]->active_instruction->data_register) {
+			printf( _("%s(%d) Part without data register\n"), __FILE__, __LINE__ );
+			continue;
+		}
 		tap_shift_register( chain, ps->parts[i]->active_instruction->data_register->in,
 				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
 				(i + 1) == ps->len );

@@ -30,5 +30,4 @@ libpart_a_SOURCES = \
 	instruction.c \
 	data_register.c \
 	bsbit.c \
-	part.c \
-	parse.c
+	part.c

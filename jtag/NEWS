@@ -22,7 +22,11 @@ jtag-0.5:
 		more info, thanks to Ramses VI).
 	* Fixed invalid memory allocation size (core dump) in jtag_parse_line() function.
 	* Added new 'include' command.
-	* Added support for "downto" in bit vectors and "observe_only" (patch 787346, Brad Parker).
+	* Added new commands 'signal', 'register', 'bit', and enhanced 'instruction' command
+		to allow create JTAG declarations from command line (or script).
+	* JTAG declarations are now executed as scripts.
+	* Added support for "downto" in bit vectors and "observe_only" into bsdl2jtag
+		(patch 787346, Brad Parker).
 	* Minor bugs fixed.
 
 jtag-0.4 (2003-05-29):

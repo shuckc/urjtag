@@ -39,6 +39,7 @@
 typedef struct part part_t;
 
 struct part {
+	tap_register *id;
 	char manufacturer[MAXLEN_MANUFACTURER + 1];
 	char part[MAXLEN_PART + 1];
 	char stepping[MAXLEN_STEPPING + 1];
@@ -51,7 +52,7 @@ struct part {
 	bsbit_t **bsbits;
 };
 
-part_t *part_alloc( void );
+part_t *part_alloc( const tap_register *id );
 void part_free( part_t *p );
 part_t *read_part( FILE *f, tap_register_t *idr );
 instruction *part_find_instruction( part_t *p, const char *iname );

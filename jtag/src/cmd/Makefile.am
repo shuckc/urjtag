@@ -30,6 +30,9 @@ libcmd_a_SOURCES = \
 	cable.c \
 	discovery.c \
 	detect.c \
+	signal.c \
+	bit.c \
+	register.c \
 	print.c \
 	part.c \
 	bus.c \

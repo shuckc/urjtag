@@ -29,6 +29,8 @@
 #include <ctype.h>
 #include <string.h>
 
+#include <brux/cmd.h>
+
 #include "register.h"
 #include "tap.h"
 #include "cable.h"
@@ -162,6 +164,7 @@ parts_t *
 detect_parts( chain_t *chain, char *db_path )
 {
 	char data_path[1024];
+	char *cmd[3] = {"script", data_path, NULL};
 	char manufacturer[MAXLEN_MANUFACTURER + 1];
 	char partname[MAXLEN_PART + 1];
 	char stepping[MAXLEN_STEPPING + 1];
@@ -180,6 +183,8 @@ detect_parts( chain_t *chain, char *db_path )
 		parts_free( ps );
 		return NULL;
 	}
+	chain->parts = ps;
+	chain->active_part = 0;
 
 	tap_reset( chain );
 
@@ -188,7 +193,6 @@ detect_parts( chain_t *chain, char *db_path )
 		tap_register *key;
 		struct id_record idr;
 		char *p;
-		FILE *f;
 		part_t *part;
 
 		tap_shift_register( chain, zeros, id, 0 );
@@ -279,20 +283,19 @@ detect_parts( chain_t *chain, char *db_path )
 		strcat( data_path, idr.name );
 
 		printf( _("  Filename:     %s\n"), data_path );
-		f = fopen( data_path, "r" );
-		part = read_part( f, id );
+		part = part_alloc( id );
 		if (part) {
+			parts_add_part( ps, part );
+			chain->active_part = ps->len - 1;
 			strcpy( part->manufacturer, manufacturer );
 			strcpy( part->part, partname );
 			strcpy( part->stepping, stepping );
+			cmd_run( cmd );
 			part->active_instruction = part_find_instruction( part, "IDCODE" );
-			parts_add_part( ps, part );
 		} else {
-			printf( _("%s(%s:%d) Error: part read failed\n"), __FUNCTION__, __FILE__, __LINE__ );
+			printf( _("Out of memory\n") );
 			exit( 1 );
 		}
-		if (f)
-			fclose( f );
 	}
 
 	chain_clock( chain, 1, 0 );		/* Exit1-DR */

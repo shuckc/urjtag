@@ -1,5 +1,26 @@
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
+	* include/part.h (struct part): Added new member 'id'.
+	(part_alloc): Added new parameter 'id'.
+	* src/detect.c (detect_parts): Added execution JTAG declarations as script.
+	* src/jtag.c (get_token): Added support for in-line comments.
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added signal.c, bit.c, and register.c.
+	* src/cmd/bit.c: New file.
+	* src/cmd/register.c: Ditto.
+	* src/cmd/signal.c: Ditto.
+	* src/cmd/cmd.c (cmds): Added cmd_signal, cmd_bit, and cmd_register.
+	* src/cmd/instruction.c (cmd_instruction_run, cmd_instruction_help, cmd_instruction): Added support
+		for new instruction declaration.
+	* src/part/parse.c: File removed.
+	* src/part/Makefile.am (libpart_a_SOURCES): Removed parse.c.
+	* src/cmd/detect.c (cmd_detect_run): Fixed possible NULL pointer dereference.
+	* src/part/part.c (part_alloc): Added new parameter 'id'.
+	(part_free): Addedd id deallocation.
+	(part_print): Added support for instructions without data register.
+	* src/tap/chain.c (chain_shift_data_registers): Ditto.
+
+2003-08-13  Marcel Telka  <marcel@telka.sk>
+
 	* data/broadcom/bcm5421s/bcm5421s: Fixed bad pin -> signal changes.
 
 2003-08-13  Marcel Telka  <marcel@telka.sk>
