@@ -48,7 +48,7 @@ instruction BYPASS		1111	BR	# see page 251 in [1]
 instruction IDCODE		0001	DIR	# see page 250 in [1]
 # user-defined instructions
 instruction AVR_RESET		1100	RR	# see page 251 and page 303 in [1]
-# unknown data registers fo PRIVATE? instructions
+# unknown data registers for PRIVATE? instructions
 #instruction PRIVATE0		1000	# see page 246 in [1]
 #instruction PRIVATE1		1001	# see page 246 in [1]
 #instruction PRIVATE2		1010	# see page 246 in [1]
