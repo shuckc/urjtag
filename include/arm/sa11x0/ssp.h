@@ -32,14 +32,17 @@
 #ifndef	SA11X0_SSP_H
 #define	SA11X0_SSP_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* SSP Registers (Serial Port 4) */
 
 #define	SSP_BASE	0x80070060
 
+#if LANGUAGE == C
 typedef volatile struct SSP_registers {
 	uint32_t sscr0;
 	uint32_t sscr1;
@@ -49,7 +52,7 @@ typedef volatile struct SSP_registers {
 	uint32_t sssr;
 } SSP_registers;
 
-#ifndef SSP_pointer
+#ifdef SA11X0_UNMAPPED
 #define	SSP_pointer	((SSP_registers*) SSP_BASE)
 #endif
 
@@ -57,5 +60,39 @@ typedef volatile struct SSP_registers {
 #define	SSCR1		SSP_pointer->sscr1
 #define	SSDR		SSP_pointer->ssdr
 #define	SSSR		SSP_pointer->sssr
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_SSP_H */
+#define	SSCR0_OFFSET	0x00
+#define	SSCR1_OFFSET	0x04
+#define	SSDR_OFFSET	0x0C
+#define	SSSR_OFFSET	0x14
+
+/* SSCR0 bits */
+
+#define	SSCR0_SCR_MASK	0xFF00
+#define	SSCR0_SCR(x)	((x << 8) & SSCR0_SCR_MASK)
+#define	SSCR0_SSE	bit(7)
+#define	SSCR0_FRF_MASK	0x0030
+#define	SSCR0_FRF(x)	((x << 4) & SSCR0_FRF_MASK)
+#define	SSCR0_DSS_MASK	0x000F
+#define	SSCR0_DSS(x)	(x & SSCR0_DSS_MASK)
+
+/* SSCR1 bits */
+
+#define	SSCR1_ECS	bit(5)
+#define	SSCR1_SPH	bit(4)
+#define	SSCR1_SPO	bit(3)
+#define	SSCR1_LBM	bit(2)
+#define	SSCR1_TIE	bit(1)
+#define	SSCR1_RIE	bit(0)
+
+/* SSSR bits */
+
+#define	SSSR_ROR	bit(6)
+#define	SSSR_RFS	bit(5)
+#define	SSSR_TFS	bit(4)
+#define	SSSR_BSY	bit(3)
+#define	SSSR_RNE	bit(2)
+#define	SSSR_TNF	bit(1)
+
+#endif /* SA11X0_SSP_H */

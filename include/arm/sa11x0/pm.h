@@ -33,7 +33,10 @@
 #define	SA11X0_PM_H
 
 #include <common.h>
+
+#if LANGUAGE == C
 #include <stdint.h>
+#endif
 
 /* Power Manager Registers */
 
@@ -51,7 +54,7 @@ typedef volatile struct PM_registers {
 	uint32_t posr;
 } PM_registers;
 
-#ifndef PM_pointer
+#ifdef SA11X0_UNMAPPED
 #define	PM_pointer	((PM_registers*) PM_BASE)
 #endif
 

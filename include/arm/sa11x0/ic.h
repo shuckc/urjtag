@@ -34,6 +34,10 @@
 
 #include <common.h>
 
+#if LANGUAGE == C
+#include <stdint.h>
+#endif
+
 /* Interrupt Controller Registers */
 
 #define	IC_BASE		0x90050000
@@ -49,7 +53,7 @@ typedef volatile struct IC_registers {
 	uint32_t icpr;
 } IC_registers;
 
-#ifndef IC_pointer
+#ifdef SA11X0_UNMAPPED
 #define	IC_pointer	((IC_registers*) IC_BASE)
 #endif
 

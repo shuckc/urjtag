@@ -32,26 +32,34 @@
 #ifndef	SA11X0_RC_H
 #define	SA11X0_RC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* Reset Controller Registers */
 
 #define	RC_BASE		0x90030000
 
+#if LANGUAGE == C
 typedef volatile struct RC_registers {
 	uint32_t rsrr;
 	uint32_t rcsr;
 	uint32_t tucr;
 } RC_registers;
 
-#ifndef RC_pointer
+#ifdef SA11X0_UNMAPPED
 #define	RC_pointer	((RC_registers*) RC_BASE)
 #endif
 
 #define	RSRR		RC_pointer->rsrr
 #define	RCSR		RC_pointer->rcsr
 #define	TUCR		RC_pointer->tucr
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_RC_H */
+#define	RSRR_OFFSET	0x00
+#define	RCSR_OFFSET	0x04
+#define	TUCR_OFFSET	0x08
+
+#endif /* SA11X0_RC_H */

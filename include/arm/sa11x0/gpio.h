@@ -54,7 +54,7 @@ typedef volatile struct GPIO_registers {
 	uint32_t gafr;
 } GPIO_registers;
 
-#ifndef GPIO_pointer
+#ifdef SA11X0_UNMAPPED
 #define	GPIO_pointer	((GPIO_registers*) GPIO_BASE)
 #endif
 
@@ -77,4 +77,4 @@ typedef volatile struct GPIO_registers {
 #define	GEDR_OFFSET	0x18
 #define	GAFR_OFFSET	0x1C
 
-#endif	/* SA11X0_GPIO_H */
+#endif /* SA11X0_GPIO_H */

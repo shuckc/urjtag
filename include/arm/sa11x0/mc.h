@@ -34,6 +34,10 @@
 
 #include <common.h>
 
+#if LANGUAGE == C
+#include <stdint.h>
+#endif
+
 /* Memory Controller Registers */
 
 #define	MC_BASE		0xA0000000
@@ -55,7 +59,7 @@ typedef volatile struct MC_registers {
 	uint32_t smcnfg;
 } MC_registers;
 
-#ifndef MC_pointer
+#ifdef SA11X0_UNMAPPED
 #define	MC_pointer	((MC_registers*) MC_BASE)
 #endif
 

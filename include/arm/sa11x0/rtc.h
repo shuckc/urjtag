@@ -32,14 +32,17 @@
 #ifndef	SA11X0_RTC_H
 #define	SA11X0_RTC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* Real-Time Clock Registers */
 
 #define	RTC_BASE	0x90010000
 
+#if LANGUAGE == C
 typedef volatile struct RTC_registers {
 	uint32_t rtar;
 	uint32_t rcnr;
@@ -48,7 +51,7 @@ typedef volatile struct RTC_registers {
 	uint32_t rtsr;
 } RTC_registers;
 
-#ifndef RTC_pointer
+#ifdef SA11X0_UNMAPPED
 #define	RTC_pointer	((RTC_registers*) RTC_BASE)
 #endif
 
@@ -56,5 +59,18 @@ typedef volatile struct RTC_registers {
 #define	RCNT		RTC_pointer->rcnr
 #define	RTTR		RTC_pointer->rttr
 #define	RTSR		RTC_pointer->rtsr
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_RTC_H */
+#define	RTAR_OFFSET	0x00
+#define	RCNR_OFFSET	0x04
+#define	RTTR_OFFSET	0x08
+#define	RTSR_OFFSET	0x10
+
+/* RTSR bits */
+
+#define	RTSR_HZE	bit(3)
+#define	RTSR_ALE	bit(2)
+#define	RTSR_HZ		bit(1)
+#define	RTSR_AL		bit(0)
+
+#endif /* SA11X0_RTC_H */

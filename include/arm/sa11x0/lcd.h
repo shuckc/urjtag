@@ -32,14 +32,17 @@
 #ifndef	SA11X0_LCD_H
 #define	SA11X0_LCD_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* LCD Controller Registers */
 
 #define	LCD_BASE	0xB0100000
 
+#if LANGUAGE == C
 typedef volatile struct LCD_registers {
 	uint32_t lccr0;
 	uint32_t lcsr;
@@ -53,7 +56,7 @@ typedef volatile struct LCD_registers {
 	uint32_t lccr3;
 } LCD_registers;
 
-#ifndef LCD_pointer
+#ifdef SA11X0_UNMAPPED
 #define	LCD_pointer	((LCD_registers*) LCD_BASE)
 #endif
 
@@ -66,5 +69,16 @@ typedef volatile struct LCD_registers {
 #define	LCCR1		LCD_pointer->lccr1
 #define	LCCR2		LCD_pointer->lccr2
 #define	LCCR3		LCD_pointer->lccr3
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_LCD_H */
+#define	LCCR0_OFFSET	0x00
+#define	LCSR_OFFSET	0x04
+#define	DBAR1_OFFSET	0x10
+#define	DCAR1_OFFSET	0x14
+#define	DBAR2_OFFSET	0x18
+#define	DCAR2_OFFSET	0x1C
+#define	LCCR1_OFFSET	0x20
+#define	LCCR2_OFFSET	0x24
+#define	LCCR3_OFFSET	0x28
+
+#endif /* SA11X0_LCD_H */

@@ -32,14 +32,17 @@
 #ifndef	SA11X0_MCP_H
 #define	SA11X0_MCP_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* MCP Registers (Serial Port 4) */
 
 #define	MCP_BASE	0x80060000
 
+#if LANGUAGE == C
 typedef volatile struct MCP_registers {
 	uint32_t mccr0;
 	uint32_t __reserved1;
@@ -50,7 +53,7 @@ typedef volatile struct MCP_registers {
 	uint32_t mcsr;
 } MCP_registers;
 
-#ifndef MCP_pointer
+#ifdef SA11X0_UNMAPPED
 #define	MCP_pointer	((MCP_registers*) MCP_BASE)
 #endif
 
@@ -59,5 +62,12 @@ typedef volatile struct MCP_registers {
 #define	MCDR1		MCP_pointer->mcdr1
 #define	MCDR2		MCP_pointer->mcdr2
 #define	MCSR		MCP_pointer->mcsr
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_MCP_H */
+#define	MCCR0_OFFSET	0x00
+#define	MCDR0_OFFSET	0x08
+#define	MCDR1_OFFSET	0x0C
+#define	MCDR2_OFFSET	0x10
+#define	MCSR_OFFSET	0x18
+
+#endif /* SA11X0_MCP_H */

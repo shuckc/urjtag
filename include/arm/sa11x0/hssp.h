@@ -34,6 +34,10 @@
 
 #include <common.h>
 
+#if LANGUAGE == C
+#include <stdint.h>
+#endif
+
 /* ICP - HSSP Registers (Serial Port 2) */
 
 #define	HSSP_BASE	0x80040060
@@ -49,7 +53,7 @@ typedef volatile struct HSSP_registers {
 	uint32_t hssr1;
 } HSSP_registers;
 
-#ifndef HSSP_pointer
+#ifdef SA11X0_UNMAPPED
 #define	HSSP_pointer	((HSSP_registers*) HSSP_BASE)
 #endif
 

@@ -32,14 +32,17 @@
 #ifndef	SA11X0_UDC_H
 #define	SA11X0_UDC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* UDC Registers (Serial Port 0) */
 
 #define	UDC_BASE	0x80000000
 
+#if LANGUAGE == C
 typedef volatile struct UDC_registers {
 	uint32_t udccr;
 	uint32_t udcar;
@@ -56,7 +59,7 @@ typedef volatile struct UDC_registers {
 	uint32_t udcsr;
 } UDC_registers;
 
-#ifndef UDC_pointer
+#ifdef SA11X0_UNMAPPED
 #define	UDC_pointer	((UDC_registers*) UDC_BASE)
 #endif
 
@@ -71,53 +74,66 @@ typedef volatile struct UDC_registers {
 #define	UDCWC		UDC_pointer->udcwc
 #define	UDCDR		UDC_pointer->udcdr
 #define	UDCSR		UDC_pointer->udcsr
+#endif /* LANGUAGE == C */
+
+#define	UDCCR_OFFSET	0x00
+#define	UDCAR_OFFSET	0x04
+#define	UDCOMP_OFFSET	0x08
+#define	UDCIMP_OFFSET	0x0C
+#define	UDCCS0_OFFSET	0x10
+#define	UDCCS1_OFFSET	0x14
+#define	UDCCS2_OFFSET	0x18
+#define	UDCD0_OFFSET	0x1C
+#define	UDCWC_OFFSET	0x20
+#define	UDCDR_OFFSET	0x28
+#define	UDCSR_OFFSET	0x30
 
 /* UDCCR bits */
 
-#define	UDCCR_SUSIM	0x40
-#define	UDCCR_TIM	0x20
-#define	UDCCR_RIM	0x10
-#define	UDCCR_EIM	0x08
-#define	UDCCR_RESIM	0x04
-#define	UDCCR_UDA	0x02
-#define	UDCCR_UDD	0x01
+#define	UDCCR_SUSIM	bit(6)
+#define	UDCCR_TIM	bit(5)
+#define	UDCCR_RIM	bit(4)
+#define	UDCCR_EIM	bit(3)
+#define	UDCCR_RESIM	bit(2)
+#define	UDCCR_UDA	bit(1)
+#define	UDCCR_UDD	bit(0)
 
 /* UDCCS0 bits */
 
-#define	UDCCS0_SSE	0x80
-#define	UDCCS0_SO	0x40
-#define	UDCCS0_SE	0x20
-#define	UDCCS0_DE	0x10
-#define	UDCCS0_FST	0x08
-#define	UDCCS0_SST	0x04
-#define	UDCCS0_IPR	0x02
-#define	UDCCS0_OPR	0x01
+#define	UDCCS0_SSE	bit(7)
+#define	UDCCS0_SO	bit(6)
+#define	UDCCS0_SE	bit(5)
+#define	UDCCS0_DE	bit(4)
+#define	UDCCS0_FST	bit(3)
+#define	UDCCS0_SST	bit(2)
+#define	UDCCS0_IPR	bit(1)
+#define	UDCCS0_OPR	bit(0)
 
 /* UDCCS1 bits */
 
-#define	UDCCS1_RNE	0x20
-#define	UDCCS1_FST	0x10
-#define	UDCCS1_SST	0x08
-#define	UDCCS1_RPE	0x04
-#define	UDCCS1_RPC	0x02
-#define	UDCCS1_RFS	0x01
+#define	UDCCS1_RNE	bit(5)
+#define	UDCCS1_FST	bit(4)
+#define	UDCCS1_SST	bit(3)
+#define	UDCCS1_RPE	bit(2)
+#define	UDCCS1_RPC	bit(1)
+#define	UDCCS1_RFS	bit(0)
 
 /* UDCCS2 bits */
 
-#define	UDCCS2_FST	0x20
-#define	UDCCS2_SST	0x10
-#define	UDCCS2_TUR	0x08
-#define	UDCCS2_TPE	0x04
-#define	UDCCS2_TPC	0x02
-#define	UDCCS2_TFS	0x01
+#define	UDCCS2_FST	bit(5)
+#define	UDCCS2_SST	bit(4)
+#define	UDCCS2_TUR	bit(3)
+#define	UDCCS2_TPE	bit(2)
+#define	UDCCS2_TPC	bit(1)
+#define	UDCCS2_TFS	bit(0)
 
 /* UDCSR bits */
 
-#define	UDCSR_RSTIR	0x20
-#define	UDCSR_RESIR	0x10
-#define	UDCSR_SUSIR	0x08
-#define	UDCSR_TIR	0x04
-#define	UDCSR_RIR	0x02
-#define	UDCSR_EIR	0x01
+#define	UDCSR_RSTIR	bit(5)
+#define	UDCSR_RESIR	bit(4)
+#define	UDCSR_SUSIR	bit(3)
+#define	UDCSR_TIR	bit(2)
+#define	UDCSR_RIR	bit(1)
+#define	UDCSR_EIR	bit(0)
 
-#endif	/* SA11X0_UDC_H */
+#endif /* SA11X0_UDC_H */

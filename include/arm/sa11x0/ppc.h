@@ -32,14 +32,17 @@
 #ifndef	SA11X0_PPC_H
 #define	SA11X0_PPC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* PPC Registers */
 
 #define	PPC_BASE	0x90060000
 
+#if LANGUAGE == C
 typedef volatile struct PPC_registers {
 	uint32_t ppdr;
 	uint32_t ppsr;
@@ -52,7 +55,7 @@ typedef volatile struct PPC_registers {
 	uint32_t mccr1;
 } PPC_registers;
 
-#ifndef PPC_pointer
+#ifdef SA11X0_UNMAPPED
 #define	PPC_pointer	((PPC_registers*) PPC_BASE)
 #endif
 
@@ -63,5 +66,14 @@ typedef volatile struct PPC_registers {
 #define	PPFR		PPC_pointer->ppfr
 #define	HSCR2		PPC_pointer->hscr2
 #define	MCCR1		PPC_pointer->mccr1
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_PPC_H */
+#define	PPDR_OFFSET	0x00
+#define	PPSR_OFFSET	0x04
+#define	PPAR_OFFSET	0x08
+#define	PSDR_OFFSET	0x0C
+#define	PPFR_OFFSET	0x10
+#define	HSCR2_OFFSET	0x28
+#define	MCCR1_OFFSET	0x30
+
+#endif /* SA11X0_PPC_H */

@@ -32,14 +32,17 @@
 #ifndef	SA11X0_OST_H
 #define	SA11X0_OST_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* OS Timer Registers */
 
 #define	OST_BASE	0x90000000
 
+#if LANGUAGE == C
 typedef volatile struct OST_registers {
 	uint32_t osmr[4];
 	uint32_t oscr;
@@ -48,7 +51,7 @@ typedef volatile struct OST_registers {
 	uint32_t oier;
 } OST_registers;
 
-#ifndef OST_pointer
+#ifdef SA11X0_UNMAPPED
 #define	OST_pointer	((OST_registers*) OST_BASE)
 #endif
 
@@ -57,5 +60,15 @@ typedef volatile struct OST_registers {
 #define	OSSR		OST_pointer->ossr
 #define	OWER		OST_pointer->ower
 #define	OIER		OST_pointer->oier
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_OST_H */
+#define	OSMR0_OFFSET	0x00
+#define	OSMR1_OFFSET	0x04
+#define	OSMR2_OFFSET	0x08
+#define	OSMR3_OFFSET	0x0C
+#define	OSCR_OFFSET	0x10
+#define	OSSR_OFFSET	0x14
+#define	OWER_OFFSET	0x18
+#define	OIER_OFFSET	0x1C
+
+#endif /* SA11X0_OST_H */
