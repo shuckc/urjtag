@@ -47,9 +47,9 @@ Each significant line consists of tokens separated by whitespace. Whitespace cou
 </sect2info>
 
 <para>
-Signal definition line consist of word <constant>pin</constant> followed by whitespace and signal name
+Signal definition line consist of word <constant>signal</constant> followed by whitespace and signal name
 (without spaces in the name). Rest of the line should contain whitespace separated list of pins
-of the part. This list is is currently not used for any purpose in JTAG Tools.
+of the part. This list is is currently not used for any purpose in JTAG Tools. It is intended for future use.
 </para>
 
 </sect2>
