@@ -40,6 +40,8 @@
 #ifndef	UCB1400_H
 #define	UCB1400_H
 
+#include <common.h>
+
 #define	UCB1400_IO_Data				0x5A		/* see 12.11 in [1] */
 #define	UCB1400_IO_Direction			0x5C		/* see 12.12 in [1] */
 #define	UCB1400_Positive_INT_Enable		0x5E		/* see 12.13 in [1] */
