@@ -42,7 +42,7 @@
 /* WEP board variations */
 #define	EP250	0
 
-#define	DEBUG_PORT_BASE	STUART_BASE
+#define	DEBUG_PORT_BASE	BTUART_BASE
 
 #define	RAM_AREA_START		0xA0000000
 #define	RAM_AREA_LENGTH		0x10000000
