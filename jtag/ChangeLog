@@ -1,5 +1,9 @@
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
+	* src/bsdl2jtag.c (endline): Removed compile warning.
+
+2003-03-18  Marcel Telka  <marcel@telka.sk>
+
 	* include/parport.h: New file. Added parport driver support.
 		All cable drivers modified.
 	* src/tap/parport.c: Ditto.

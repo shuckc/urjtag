@@ -269,6 +269,7 @@ int endline(void) {
 			case 0:
 			default:
 				/* ignore */
+				break;
 		}
 	}
 	
