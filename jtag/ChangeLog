@@ -1,5 +1,10 @@
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
+	* src/jtag.c (main): Corrected error message for 'instruction' command and added
+		a notice when an instruction is unknown (Alessandro Zummo).
+
+2003-02-16  Marcel Telka  <marcel@telka.sk>
+
 	* src/jtag.c (main): Fixed segfault in 'detectflash'. Thanks to August Hörandl
 		for reporting this issue.
 

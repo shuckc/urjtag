@@ -423,7 +423,7 @@ main( void )
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "Missing instruction name\n" );
+				printf( "instruction: missing instruction name\n" );
 				continue;
 			}
 
@@ -433,6 +433,8 @@ main( void )
 			}
 
 			part_set_instruction( ps->parts[n], t );
+			if (ps->parts[n]->active_instruction == NULL)
+				printf( "instruction: unknown instruction %s\n", t );
 
 			continue;
 		}
