@@ -32,6 +32,8 @@
 void
 tap_reset( void )
 {
+	tap_state_reset();
+
 	tap_clock( 1, 0 );
 	tap_clock( 1, 0 );
 	tap_clock( 1, 0 );

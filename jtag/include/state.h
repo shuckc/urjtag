@@ -57,6 +57,7 @@
 int tap_state( void );
 int tap_state_init( void );
 int tap_state_done( void );
+int tap_state_reset( void );
 int tap_state_set_trst( int trst );
 int tap_state_get_trst( void );
 int tap_state_clock( int tms );

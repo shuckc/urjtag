@@ -47,6 +47,12 @@ tap_state_done( void )
 }
 
 int
+tap_state_reset( void )
+{
+	return state = Test_Logic_Reset;
+}
+
+int
 tap_state_set_trst( int new_trst )
 {
 	if (trst != (new_trst & 1)) {

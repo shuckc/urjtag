@@ -1,5 +1,11 @@
 2003-01-13  Marcel Telka  <marcel@telka.sk>
 
+	* include/state.h: Added new function tap_state_reset().
+	* src/tap/state.c (tap_state_reset): Ditto.
+	* src/tap/tap.c (tap_reset): Added explicit TAP state reset.
+
+2003-01-13  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac: Changed version number to 0.2.1.
 
 2003-01-11  Marcel Telka  <marcel@telka.sk>
