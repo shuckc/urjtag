@@ -40,7 +40,7 @@ extern int big_endian;
 
 int jtag_parse_file( const char *filename );
 
-parts_t *detect_parts( chain_t *chain, char *db_path );
+int detect_parts( chain_t *chain, char *db_path );
 int detect_register_size( chain_t *chain );
 void discovery( chain_t *chain );
 

@@ -160,7 +160,7 @@ find_record( char *filename, tap_register *key, struct id_record *idr )
 	return r;
 }
 
-parts_t *
+int
 detect_parts( chain_t *chain, char *db_path )
 {
 	int irlen;
@@ -184,7 +184,7 @@ detect_parts( chain_t *chain, char *db_path )
 	tap_capture_ir( chain );
 	irlen = detect_register_size( chain );
 	if (irlen < 1)
-		return NULL;
+		return 0;
 
 	printf( _("IR length: %d\n"), irlen );
 
@@ -192,7 +192,7 @@ detect_parts( chain_t *chain, char *db_path )
 	ir = register_fill( register_alloc( irlen ), 1 );
 	if (ir == NULL) {
 		printf( _("out of memory\n") );
-		return NULL;
+		return 0;
 	}
 
 	tap_shift_register( chain, ir, NULL, 1 );
@@ -203,7 +203,7 @@ detect_parts( chain_t *chain, char *db_path )
 	chlen = detect_register_size( chain );
 	if (chlen < 1) {
 		printf( _("Unable to detect JTAG chain length\n") );
-		return NULL;
+		return 0;
 	}
 	printf( _("Chain length: %d\n"), chlen );
 
@@ -221,7 +221,7 @@ detect_parts( chain_t *chain, char *db_path )
 		register_free( br );
 		register_free( id );
 		parts_free( ps );
-		return NULL;
+		return 0;
 	}
 	chain->parts = ps;
 	chain->active_part = 0;
@@ -361,5 +361,5 @@ detect_parts( chain_t *chain, char *db_path )
 	register_free( br );
 	register_free( id );
 
-	return ps;
+	return ps->len;
 }
