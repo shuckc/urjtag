@@ -218,17 +218,17 @@ boundary length 292
 
 bit 291 I ? BATT_FAULT
 bit 290 I ? VDD_FAULT
-bit 289 O ? PWR_EN
-bit 288 C ? SFRM_C
+bit 289 O 1 PWR_EN
+bit 288 C 0 SFRM_C
 bit 287 O ? SFRM_C 288 0 Z
 bit 286 I ? SFRM_C
-bit 285 C ? SCLK_C
+bit 285 C 0 SCLK_C
 bit 284 O ? SCLK_C 285 0 Z
 bit 283 I ? SCLK_C
-bit 282 C ? RXD_C
+bit 282 C 0 RXD_C
 bit 281 O ? RXD_C 282 0 Z
 bit 280 I ? RXD_C
-bit 279 C ? TXD_C
+bit 279 C 0 TXD_C
 bit 278 O ? TXD_C 279 0 Z
 bit 277 I ? TXD_C
 bit 276 O ? D0 212 1 Z
@@ -295,216 +295,216 @@ bit 216 O ? D23 212 1 Z
 bit 215 I ? D23
 bit 214 O ? D31 212 1 Z
 bit 213 I ? D31
-bit 212 C ? D[31:0]
-bit 211 O ? SDCLK2
-bit 210 O ? SDCKE1
-bit 209 C ? SDCLK1
+bit 212 C 1 D[31:0]
+bit 211 O 0 SDCLK2
+bit 210 O 1 SDCKE1
+bit 209 C 1 SDCLK1
 bit 208 O ? SDCLK1 209 1 Z	# error (bad name) in Table 16-2 in [1]
-bit 207 O ? SDCLK0
-bit 206 O ? SDCKE0
+bit 207 O 0 SDCLK0
+bit 206 O 0 SDCKE0
 bit 205 I ? SMROM_EN
-bit 204 C ? GP27
+bit 204 C 0 GP27
 bit 203 O ? GP27 204 0 Z
 bit 202 I ? GP27
-bit 201 C ? GP26
+bit 201 C 0 GP26
 bit 200 O ? GP26 201 0 Z
 bit 199 I ? GP26
-bit 198 C ? GP25
+bit 198 C 0 GP25
 bit 197 O ? GP25 198 0 Z
 bit 196 I ? GP25
-bit 195 C ? GP24
+bit 195 C 0 GP24
 bit 194 O ? GP24 195 0 Z
 bit 193 I ? GP24
-bit 192 C ? GP23
+bit 192 C 0 GP23
 bit 191 O ? GP23 192 0 Z
 bit 190 I ? GP23
-bit 189 C ? GP22
+bit 189 C 0 GP22
 bit 188 O ? GP22 189 0 Z
 bit 187 I ? GP22
-bit 186 C ? GP21
+bit 186 C 0 GP21
 bit 185 O ? GP21 186 0 Z
 bit 184 I ? GP21
-bit 183 C ? GP20
+bit 183 C 0 GP20
 bit 182 O ? GP20 183 0 Z
 bit 181 I ? GP20
-bit 180 C ? GP19
+bit 180 C 0 GP19
 bit 179 O ? GP19 180 0 Z
 bit 178 I ? GP19
-bit 177 C ? GP18
+bit 177 C 0 GP18
 bit 176 O ? GP18 177 0 Z
 bit 175 I ? GP18
-bit 174 C ? GP17
+bit 174 C 0 GP17
 bit 173 O ? GP17 174 0 Z
 bit 172 I ? GP17
-bit 171 C ? GP16
+bit 171 C 0 GP16
 bit 170 O ? GP16 171 0 Z
 bit 169 I ? GP16
-bit 168 C ? GP15
+bit 168 C 0 GP15
 bit 167 O ? GP15 168 0 Z
 bit 166 I ? GP15
-bit 165 C ? GP14
+bit 165 C 0 GP14
 bit 164 O ? GP14 165 0 Z
 bit 163 I ? GP14
-bit 162 C ? GP13
+bit 162 C 0 GP13
 bit 161 O ? GP13 162 0 Z
 bit 160 I ? GP13
-bit 159 C ? GP12
+bit 159 C 0 GP12
 bit 158 O ? GP12 159 0 Z
 bit 157 I ? GP12
-bit 156 C ? GP11
+bit 156 C 0 GP11
 bit 155 O ? GP11 156 0 Z
 bit 154 I ? GP11
-bit 153 C ? GP10
+bit 153 C 0 GP10
 bit 152 O ? GP10 153 0 Z
 bit 151 I ? GP10
-bit 150 C ? GP9
+bit 150 C 0 GP9
 bit 149 O ? GP9 150 0 Z
 bit 148 I ? GP9
-bit 147 C ? GP8
+bit 147 C 0 GP8
 bit 146 O ? GP8 147 0 Z
 bit 145 I ? GP8
-bit 144 C ? GP7
+bit 144 C 0 GP7
 bit 143 O ? GP7 144 0 Z
 bit 142 I ? GP7
-bit 141 C ? GP6
+bit 141 C 0 GP6
 bit 140 O ? GP6 141 0 Z
 bit 139 I ? GP6
-bit 138 C ? GP5
+bit 138 C 0 GP5
 bit 137 O ? GP5 138 0 Z
 bit 136 I ? GP5
-bit 135 C ? GP4
+bit 135 C 0 GP4
 bit 134 O ? GP4 135 0 Z
 bit 133 I ? GP4
-bit 132 C ? GP3
+bit 132 C 0 GP3
 bit 131 O ? GP3 132 0 Z
 bit 130 I ? GP3
-bit 129 C ? GP2
+bit 129 C 0 GP2
 bit 128 O ? GP2 129 0 Z
 bit 127 I ? GP2
-bit 126 C ? GP1
+bit 126 C 0 GP1
 bit 125 O ? GP1 126 0 Z
 bit 124 I ? GP1
-bit 123 C ? GP0
+bit 123 C 0 GP0
 bit 122 O ? GP0 123 0 Z
 bit 121 I ? GP0
-bit 120 C ? L_BIAS
+bit 120 C 0 L_BIAS
 bit 119 O ? L_BIAS 120 0 Z
 bit 118 I ? L_BIAS
-bit 117 C ? L_PCLK
+bit 117 C 0 L_PCLK
 bit 116 O ? L_PCLK 117 0 Z
 bit 115 I ? L_PCLK
-bit 114 C ? LDD0
+bit 114 C 0 LDD0
 bit 113 O ? LDD0 114 0 Z
 bit 112 I ? LDD0
-bit 111 C ? LDD1
+bit 111 C 0 LDD1
 bit 110 O ? LDD1 111 0 Z
 bit 109 I ? LDD1
-bit 108 C ? LDD2
+bit 108 C 0 LDD2
 bit 107 O ? LDD2 108 0 Z
 bit 106 I ? LDD2
-bit 105 C ? LDD3
+bit 105 C 0 LDD3
 bit 104 O ? LDD3 105 0 Z
 bit 103 I ? LDD3
-bit 102 C ? LDD4
+bit 102 C 0 LDD4
 bit 101 O ? LDD4 102 0 Z
 bit 100 I ? LDD4
-bit  99 C ? LDD5
+bit  99 C 0 LDD5
 bit  98 O ? LDD5 99 0 Z
 bit  97 I ? LDD5
-bit  96 C ? LDD6
+bit  96 C 0 LDD6
 bit  95 O ? LDD6 96 0 Z
 bit  94 I ? LDD6
-bit  93 C ? LDD7
+bit  93 C 0 LDD7
 bit  92 O ? LDD7 93 0 Z
 bit  91 I ? LDD7
-bit  90 C ? L_LCLK
+bit  90 C 0 L_LCLK
 bit  89 O ? L_LCLK 90 0 Z
 bit  88 I ? L_LCLK
-bit  87 C ? L_FCLK
+bit  87 C 0 L_FCLK
 bit  86 O ? L_FCLK 87 0 Z
 bit  85 I ? L_FCLK
-bit  84 O ? nPOE
-bit  83 O ? nPWE
-bit  82 O ? nPIOR
-bit  81 O ? nPIOW
-bit  80 O ? PSKTSEL
+bit  84 O 0 nPOE
+bit  83 O 0 nPWE
+bit  82 O 0 nPIOR
+bit  81 O 0 nPIOW
+bit  80 O 0 PSKTSEL
 bit  79 I ? nIOIS16
 bit  78 I ? nPWAIT
-bit  77 O ? nPREG
-bit  76 O ? nPCE2
-bit  75 O ? nPCE1
-bit  74 O ? .
-bit  73 O ? nWE 74 1 Z
-bit  72 O ? nOE 74 1 Z
-bit  71 O ? nSDRAS 74 1 Z
-bit  70 O ? nSDCAS 74 1 Z
-bit  69 O ? nRAS3
-bit  68 O ? nRAS2
-bit  67 O ? nRAS1
-bit  66 O ? nRAS0 74 1 Z
-bit  65 O ? nCAS3 74 1 Z
-bit  64 O ? nCAS2 74 1 Z
-bit  63 O ? nCAS1 74 1 Z
-bit  62 O ? nCAS0 74 1 Z
-bit  61 O ? RD_nWR
+bit  77 O 0 nPREG
+bit  76 O 1 nPCE2
+bit  75 O 1 nPCE1
+bit  74 O 1 .
+bit  73 O 1 nWE 74 1 Z
+bit  72 O 0 nOE 74 1 Z
+bit  71 O 0 nSDRAS 74 1 Z
+bit  70 O 0 nSDCAS 74 1 Z
+bit  69 O 0 nRAS3
+bit  68 O 0 nRAS2
+bit  67 O 0 nRAS1
+bit  66 O 1 nRAS0 74 1 Z
+bit  65 O 1 nCAS3 74 1 Z
+bit  64 O 1 nCAS2 74 1 Z
+bit  63 O 1 nCAS1 74 1 Z
+bit  62 O 1 nCAS0 74 1 Z
+bit  61 O 0 RD_nWR
 bit  60 I ? RDY
-bit  59 O ? nCS5
-bit  58 O ? nCS4
-bit  57 O ? nCS3
-bit  56 O ? nCS2
-bit  55 O ? nCS1
-bit  54 O ? nCS0
-bit  53 O ? A25 74 1 Z
-bit  52 O ? A24 74 1 Z
-bit  51 O ? A23 74 1 Z
-bit  50 O ? A22 74 1 Z
-bit  49 O ? A21 74 1 Z
-bit  48 O ? A20 74 1 Z
-bit  47 O ? A19 74 1 Z
-bit  46 O ? A18 74 1 Z
-bit  45 O ? A17 74 1 Z
-bit  44 O ? A16 74 1 Z
-bit  43 O ? A15 74 1 Z
-bit  42 O ? A14 74 1 Z
-bit  41 O ? A13 74 1 Z
-bit  40 O ? A12 74 1 Z
-bit  39 O ? A11 74 1 Z
-bit  38 O ? A10 74 1 Z
-bit  37 O ? A9 74 1 Z
-bit  36 O ? A8 74 1 Z
-bit  35 O ? A7 74 1 Z
-bit  34 O ? A6 74 1 Z
-bit  33 O ? A5 74 1 Z
-bit  32 O ? A4 74 1 Z
-bit  31 O ? A3 74 1 Z
-bit  30 O ? A2 74 1 Z
-bit  29 O ? A1 74 1 Z
-bit  28 O ? A0 74 1 Z
-bit  27 C ? UDC-
+bit  59 O 1 nCS5
+bit  58 O 1 nCS4
+bit  57 O 1 nCS3
+bit  56 O 1 nCS2
+bit  55 O 1 nCS1
+bit  54 O 1 nCS0
+bit  53 O 0 A25 74 1 Z
+bit  52 O 0 A24 74 1 Z
+bit  51 O 0 A23 74 1 Z
+bit  50 O 0 A22 74 1 Z
+bit  49 O 0 A21 74 1 Z
+bit  48 O 0 A20 74 1 Z
+bit  47 O 0 A19 74 1 Z
+bit  46 O 0 A18 74 1 Z
+bit  45 O 0 A17 74 1 Z
+bit  44 O 0 A16 74 1 Z
+bit  43 O 0 A15 74 1 Z
+bit  42 O 0 A14 74 1 Z
+bit  41 O 0 A13 74 1 Z
+bit  40 O 0 A12 74 1 Z
+bit  39 O 0 A11 74 1 Z
+bit  38 O 0 A10 74 1 Z
+bit  37 O 0 A9 74 1 Z
+bit  36 O 0 A8 74 1 Z
+bit  35 O 0 A7 74 1 Z
+bit  34 O 0 A6 74 1 Z
+bit  33 O 0 A5 74 1 Z
+bit  32 O 0 A4 74 1 Z
+bit  31 O 0 A3 74 1 Z
+bit  30 O 0 A2 74 1 Z
+bit  29 O 0 A1 74 1 Z
+bit  28 O 0 A0 74 1 Z
+bit  27 C 1 UDC-
 bit  26 O ? UDC- 27 1 Z
 bit  25 I ? UDC-
 bit  24 X ? UDC-/UDC+
-bit  23 C ? UDC+
+bit  23 C 1 UDC+
 bit  22 O ? UDC+ 23 1 Z
 bit  21 I ? UDC+
-bit  20 C ? RXD_1
+bit  20 C 0 RXD_1
 bit  19 O ? RXD_1 20 0 Z
 bit  18 I ? RXD_1
-bit  17 C ? TXD_1
+bit  17 C 0 TXD_1
 bit  16 O ? TXD_1 17 0 Z
 bit  15 I ? TXD_1
-bit  14 C ? RXD_2
+bit  14 C 0 RXD_2
 bit  13 O ? RXD_2 14 0 Z
 bit  12 I ? RXD_2
-bit  11 C ? TXD_2
+bit  11 C 0 TXD_2
 bit  10 O ? TXD_2 11 0 Z
 bit   9 I ? TXD_2
-bit   8 C ? RXD_3
+bit   8 C 0 RXD_3
 bit   7 O ? RXD_3 8 0 Z
 bit   6 I ? RXD_3
-bit   5 C ? TXD_3
+bit   5 C 0 TXD_3
 bit   4 O ? TXD_3 5 0 Z
 bit   3 I ? TXD_3
 bit   2 I ? nRESET
-bit   1 O ? nRESET_OUT
+bit   1 O 1 nRESET_OUT
 bit   0 I ? ROM_SEL
