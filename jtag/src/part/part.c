@@ -151,12 +151,12 @@ part_get_signal( part *p, const char *pname )
 
 	if (!s) {
 		printf( "signal %s not found\n", pname );
-		return;
+		return -1;
 	}
 
 	if (!s->input) {
 		printf( "signal %s is not input signal\n", pname );
-		return;
+		return -1;
 	}
 
 	return p->prev_bsr->data[s->input->bit];
