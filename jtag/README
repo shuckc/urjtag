@@ -214,6 +214,14 @@ Done.
 jtag>
 
 
+Frequently Asked Questions
+--------------------------
+
+Q. When I type "cable parallel 0x378 DLC5" on Windows XP I get
+   "Error: Cable initialization failed!". Where is the problem?
+A. Please install ioperm.sys driver using `ioperm -i` command.
+
+
 Contacts
 --------
 
