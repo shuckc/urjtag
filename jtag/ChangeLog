@@ -1,5 +1,10 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* include/jtag.h (detectflash, flashmem, flashmsbin): Declarations moved to include module,
+		file brux/flash.h.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* src/cmd/cable.c (cmd_cable_run): Added bus deallocation.
 	* src/cmd/detectflash.c (cmd_detectflash_run): Removed cable connection test.
 	* src/cmd/flashmem.c (cmd_flashmem_run): Ditto.

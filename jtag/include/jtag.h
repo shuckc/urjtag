@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include <brux/flash.h>
+
 #include "chain.h"
 #include "bus.h"
 #include "part.h"
@@ -42,10 +44,5 @@ parts_t *detect_parts( chain_t *chain, char *db_path );
 void discovery( chain_t *chain, const char *filename );
 
 void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
-
-void detectflash( bus_t *bus );
-
-void flashmem( bus_t *bus, FILE *f, uint32_t addr );
-void flashmsbin( bus_t *bus, FILE *f );
 
 #endif /* JTAG_H */
