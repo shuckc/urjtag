@@ -20,7 +20,13 @@
 #
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
+# Documentation:
+# [1] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
+#     Developer's Manual", October 2001, Order Number: 278240-004
+#
 
+# bits 27-12 of the Device Identification Register
+# see 16.6.2 in [1]
 0000	sa1110		A0
 0100	sa1110		B0
 0101	sa1110		B1

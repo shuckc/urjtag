@@ -21,6 +21,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
+# bits 27-12 of the Device Identification Register
 0100100010001001	.			XCR3128XL-VQ100
 0100100010001011	.			XCR3128XL-TQ144
 0100100010001100	xcr3128xl-cs144		XCR3128XL-CS144
