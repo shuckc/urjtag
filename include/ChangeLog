@@ -1,3 +1,7 @@
+2002-11-20  Marcel Telka  <marcel@telka.sk>
+
+	* ucb1400.h: Added UCB1400_ADCC_AI_* declarations (suggested by Juraj Fabo).
+
 2002-11-09  Marcel Telka  <marcel@telka.sk>
 
 	* arm/pxa2x0/dma.h: Added DINT register bits.
