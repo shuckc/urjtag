@@ -30,6 +30,7 @@
 #include "part.h"
 
 typedef struct {
+	int (*bus_width)( parts *ps );
 	void (*bus_read_start)( parts *, uint32_t );
 	uint32_t (*bus_read_next)( parts *, uint32_t );
 	uint32_t (*bus_read_end)( parts * );
@@ -38,6 +39,7 @@ typedef struct {
 } bus_driver_t;
 
 extern bus_driver_t *bus_driver;
+#define	bus_width	bus_driver->bus_width
 #define	bus_read_start	bus_driver->bus_read_start
 #define	bus_read_next	bus_driver->bus_read_next
 #define	bus_read_end	bus_driver->bus_read_end

@@ -36,6 +36,9 @@
 #include "tap.h"
 
 #include "detect.h"
+#include "bus.h"
+
+bus_driver_t *bus_driver = NULL;
 
 static char *
 get_token( char *buf )
@@ -95,11 +98,17 @@ main( void )
 			if (ps)
 				parts_free( ps );
 			ps = detect_parts( "../data" );
+			if (!ps->len)
+				continue;
 			parts_set_instruction( ps, "SAMPLE/PRELOAD" );
 			parts_shift_instructions( ps );
 			parts_shift_data_registers( ps );
 			parts_set_instruction( ps, "BYPASS" );
 			parts_shift_instructions( ps );
+			if (strcmp( ps->parts[0]->part, "SA1110" ) == 0)
+				bus_driver = &sa1110_bus_driver;
+			if (strcmp( ps->parts[0]->part, "PXA250" ) == 0)
+				bus_driver = &pxa250_bus_driver;
 			continue;
 		}
 

@@ -41,76 +41,32 @@
 #include "part.h"
 #include "bus.h"
 
-bus_driver_t *bus_driver = NULL;
+cfi_query_structure_t *detect_cfi( parts * );
 
 void
 readmem( parts *ps )
 {
 	part *p = ps->parts[0];
-	uint8_t boot_sel;
 	int o = 0;
-	int d = 0;
 	cfi_query_structure_t *cfi;
-#define	D_SA1110	1
-#define	D_PXA250	2
 
-	if (strcmp( p->part, "SA1110" ) == 0) {
-		printf( "SA1110 detected\n" );
-		d = D_SA1110;
-		bus_driver = &sa1110_bus_driver;
-	}
-	if (strcmp( p->part, "PXA250" ) == 0) {
-		printf( "PXA250 detected\n" );
-		d = D_PXA250;
-		bus_driver = &pxa250_bus_driver;
-	}
-
-	if (!d) {
-		printf( "Error: Only PXA250/SA1110 devices supported!\n" );
+	if (!bus_driver) {
+		printf( "Error: Missing bus_driver!\n" );
 		return;
 	}
 
 	printf( "Note: Supported configuration is 2 x 16 bit only\n" );
 
-	switch (d) {
-		case D_SA1110:
-			if (part_get_signal( p, "ROM_SEL" )) {
-				printf( "ROM_SEL: 32 bits\n" );
-				o = 2;
-			} else {
-				printf( "ROM_SEL: 16 bits\n" );
-				o = 1;
-			}
+	switch (bus_width( ps )) {
+		case 16:
+			o = 1;
 			break;
-		case D_PXA250:
-			boot_sel = (part_get_signal( p, "BOOT_SEL[2]" ) << 2) | (part_get_signal( p, "BOOT_SEL[1]" ) << 1) | part_get_signal( p, "BOOT_SEL[0]" );
-
-			/* see Table 6-36. in [2] */
-			switch (boot_sel) {
-				case 0:
-					printf( "BOOT_SEL: Asynchronous 32-bit ROM\n" );
-					o = 2;
-					break;
-				case 1:
-					printf( "BOOT_SEL: Asynchronous 16-bit ROM\n" );
-					o = 1;
-					break;
-				case 2:
-				case 3:
-				case 4:
-				case 5:
-				case 6:
-				case 7:
-					printf( "TODO - BOOT_SEL\n" );
-					return;
-				default:
-					printf( "BUG in code, file %s, line %d.\n", __FILE__, __LINE__ );
-					return;
-			}
+		case 32:
+			o = 2;
 			break;
 		default:
-			printf( "Unknown device!!!\n" );
-			break;
+			printf( "Error: Unknown bus width!\n" );
+			return;
 	}
 
 	/* EXTEST */

@@ -168,7 +168,20 @@ sa1110_bus_write( parts *ps, uint32_t adr, uint32_t data )
 	parts_shift_data_registers( ps );
 }
 
+int
+sa1110_bus_width( parts *ps )
+{
+	if (part_get_signal( ps->parts[0], "ROM_SEL" )) {
+		printf( "ROM_SEL: 32 bits\n" );
+		return 32;
+	} else {
+		printf( "ROM_SEL: 16 bits\n" );
+		return 16;
+	}
+}
+
 bus_driver_t sa1110_bus_driver = {
+	sa1110_bus_width,
 	sa1110_bus_read_start,
 	sa1110_bus_read_next,
 	sa1110_bus_read_end,
