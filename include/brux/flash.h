@@ -58,7 +58,7 @@ typedef struct {
 #define	FLASH_ERROR_BLOCK_LOCKED		3
 #define	FLASH_ERROR_UNKNOWN			99
 
-void detectflash( bus_t *bus );
+void detectflash( bus_t *bus, uint32_t adr );
 
 void flashmem( bus_t *bus, FILE *f, uint32_t addr );
 void flashmsbin( bus_t *bus, FILE *f );

@@ -1,5 +1,8 @@
 $Id$
 
+	* Changes in brux common headers:
+		- Added new parameter (adr) for detectflash function
+
 include-0.3.2 (2003-10-11):
 
 	* Changes in brux common headers:
