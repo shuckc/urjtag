@@ -30,6 +30,7 @@ libbus_a_SOURCES = \
 	buses.h \
 	bcm1250.c \
 	ixp425.c \
+	mpc824x.c \
 	pxa2x0.c \
 	sa1110.c \
 	s3c4510x.c \

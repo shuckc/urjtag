@@ -5,7 +5,11 @@ See libbrux/NEWS for more news.
 	* Added new JTAG declarations for
 		- Hitachi HD64465
 		- Hitachi SH7729 (Beregnyei Balazs)
+		- Motorola MPC8245
+	* Added Motorola MPC824x bus driver.
 	* Added new command 'salias'.
+	* Explicit 'detectflash' command call is required before 'flashmem' command.
+	* Fixed minor bugs.
 
 jtag-0.5.1 (2003-10-11):
 

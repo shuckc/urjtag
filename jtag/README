@@ -54,6 +54,7 @@ JTAG-aware parts (chips):
 - Intel IXP425
 - Intel SA1110
 - Intel PXA250/PXA255/PXA260/PXA261/PXA262/PXA263
+- Motorola MPC8245
 - Samsung S3C4510B
 - Xilinx XC2C256-TQ144
 - Xilinx XCR3128XL-CS144

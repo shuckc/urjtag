@@ -43,12 +43,13 @@
 void
 readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 {
-	int step = 0;
-	uint32_t a;
+	uint32_t step;
+	uint64_t a;
 	int bc = 0;
 #define BSIZE 4096
 	uint8_t b[BSIZE];
 	bus_area_t area;
+	uint64_t end;
 
 	if (!bus) {
 		printf( _("Error: Missing bus driver!\n") );
@@ -57,7 +58,7 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 
 	bus_prepare( bus );
 
-	if (bus_area( bus, 0, &area ) != 0) {
+	if (bus_area( bus, addr, &area ) != 0) {
 		printf( _("Error: Bus width detection failed\n") );
 		return;
 	}
@@ -79,9 +80,11 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 		return;
 	}
 
+	a = addr;
+	end = a + len;
 	printf( _("reading:\n") );
 	bus_read_start( bus, addr );
-	for (a = addr + step; a <= addr + len; a += step) {
+	for (a += step; a <= end; a += step) {
 		uint32_t data;
 		int j;
 
@@ -98,9 +101,10 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 				data >>= 8;
 			}
 
-		if ((bc >= BSIZE) || (a >= (addr + len)) ) {
+		if ((bc >= BSIZE) || (a >= end) ) {
 			printf( _("addr: 0x%08X"), a );
 			printf( "\r" );
+			fflush( stdout );
 			fwrite( b, bc, 1, f );
 			bc = 0;
 		}

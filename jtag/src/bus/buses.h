@@ -27,6 +27,7 @@
 
 extern const bus_driver_t bcm1250_bus;
 extern const bus_driver_t ixp425_bus;
+extern const bus_driver_t mpc824x_bus;
 extern const bus_driver_t pxa2x0_bus;
 extern const bus_driver_t s3c4510_bus;
 extern const bus_driver_t sa1110_bus;

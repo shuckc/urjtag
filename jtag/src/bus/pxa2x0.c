@@ -442,6 +442,10 @@ pxa2x0_bus_new( void )
 		return NULL;
 	}
 
+	part_set_instruction( PART, "SAMPLE/PRELOAD" );
+	chain_shift_instructions( chain );
+	chain_shift_data_registers( chain, 1 );
+
 	BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[2]" ) ) << 2
 							| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[1]" ) ) << 1
 							| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[0]" ) ));

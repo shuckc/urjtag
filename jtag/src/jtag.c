@@ -43,6 +43,7 @@ ssize_t getline( char **lineptr, size_t *n, FILE *stream );
 
 chain_t *chain = NULL;
 int big_endian = 0;
+extern cfi_array_t *cfi_array;
 
 static char *
 get_token( char *buf )
@@ -300,6 +301,9 @@ main( int argc, const char **argv )
 			jtag_save_history();
 		}
 	}
+
+	cfi_array_free( cfi_array );
+	cfi_array = NULL;
 
 	if (bus) {
 		bus_free( bus );

@@ -1,3 +1,30 @@
+2003-11-02  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (AC_INIT): Changed version number to 0.5.2.
+
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added motorola/mpc8245/1.2.
+	* data/motorola/mpc8245/1.2: New file.
+	* src/bus/mpc824x.c: Ditto.
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added mpc824x.c.
+	* src/bus/buses.c (bus_drivers): Added mpc824x_bus.
+	* src/bus/buses.h (mpc824x_bus): Added bus declaration.
+
+	* include/bsbit.h (bsbit_alloc): Changed parameter name (signals -> signal).
+	* src/part/bsbit.c (bsbit_alloc): Changed parameter behaviour.
+	* src/cmd/bit.c (cmd_bit_run): Passed exact signal to bsbit_alloc() instead of list of signals.
+
+	* src/jtag.c (main): Added cfi_array deallocation.
+
+	* src/flash.c (set_flash_driver): Used global cfi_array variable to set flash driver.
+	(flashcheck): Function removed.
+	All function calls replaced by set_flash_driver().
+	(flashmsbin): Removed local cfi_array variable.
+	(flashmem): Removed local cfi_array variable. Fixed bug with one more block erase while programming
+		data at end of previous block.
+	(flasherase): Removed local cfi_array variable. Fixed block number calculation.
+	* src/readmem.c (readmem): Fixed bug while reading address near to end of 32 bit address range.
+	* src/bus/pxa2x0.c (pxa2x0_bus_new): Added BSR sampling before BOOT_DEF initialization (bugfix).
+
 2003-10-23  Marcel Telka  <marcel@telka.sk>
 
 	* include/bssignal.h (salias_t): Added new type.

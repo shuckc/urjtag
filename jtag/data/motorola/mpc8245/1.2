@@ -1,0 +1,830 @@
+#
+# $Id$
+#
+# JTAG declarations for Motorola MPC8245 rev. 1.2 (or higher)
+# Copyright (C) 2003 Marcel Telka
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Documentation:
+# [1] Motorola, Inc., "MPC8245 Integrated Processor Hardware Specifications",
+#     MPC8245EC/D, Rev. 3, 7/2003
+# [2] Motorola, Inc., "Motorola PowerPC MPC8245 (TM) 603/PCI Bridge/Memory
+#     Controller Boundary Scan Description Language - MPC8245 Revision
+#     1.2 (or higher)", Oct 29, 2002
+#
+
+# signal list (see Table 17 in [1])
+
+# PCI Interface Signals
+signal	nC/BE3		P25
+signal	nC/BE2		K23
+signal	nC/BE1		F23
+signal	nC/BE0		A25
+signal	nDEVSEL		H26
+signal	nFRAME		J24
+signal	nIRDY		K25
+signal	nLOCK		J26
+signal	AD31		V25
+signal	AD30		U25
+signal	AD29		U26
+signal	AD28		U24
+signal	AD27		U23
+signal	AD26		T25
+signal	AD25		T26
+signal	AD24		R25
+signal	AD23		R26
+signal	AD22		N26
+signal	AD21		N25
+signal	AD20		N23
+signal	AD19		M26
+signal	AD18		M25
+signal	AD17		L25
+signal	AD16		L26
+signal	AD15		F24
+signal	AD14		E26
+signal	AD13		E25
+signal	AD12		E23
+signal	AD11		D26
+signal	AD10		D25
+signal	AD9		C26
+signal	AD8		A26
+signal	AD7		B26
+signal	AD6		A24
+signal	AD5		B24
+signal	AD4		D19
+signal	AD3		B23
+signal	AD2		B22
+signal	AD1		D22
+signal	AD0		C22
+signal	PAR		G25
+signal	nGNT3		W25
+signal	nGNT2		W24
+signal	nGNT1		W23
+signal	nGNT0		V26
+signal	nGNT4		W26
+signal	nREQ3		Y25
+signal	nREQ2		AA26
+signal	nREQ1		AA25
+signal	nREQ0		AB26
+signal	nREQ4		Y26
+signal	nPERR		G26
+signal	nSERR		F26
+signal	nSTOP		H25
+signal	nTRDY		K26
+signal	nINTA		AC26
+signal	IDSEL		P26
+
+# Memory Interface Signals
+signal	MDL0		AD17
+signal	MDL1		AE17
+signal	MDL2		AE15
+signal	MDL3		AF15
+signal	MDL4		AC14
+signal	MDL5		AE13
+signal	MDL6		AF13
+signal	MDL7		AF12
+signal	MDL8		AF11
+signal	MDL9		AF10
+signal	MDL10		AF9
+signal	MDL11		AD8
+signal	MDL12		AF8
+signal	MDL13		AF7
+signal	MDL14		AF6
+signal	MDL15		AE5
+signal	MDL16		B1
+signal	MDL17		A1
+signal	MDL18		A3
+signal	MDL19		A4
+signal	MDL20		A5
+signal	MDL21		A6
+signal	MDL22		A7
+signal	MDL23		D7
+signal	MDL24		A8
+signal	MDL25		B8
+signal	MDL26		A10
+signal	MDL27		D10
+signal	MDL28		A12
+signal	MDL29		B11
+signal	MDL30		B12
+signal	MDL31		A14
+signal	MDH0		AC17
+signal	MDH1		AF16
+signal	MDH2		AE16
+signal	MDH3		AE14
+signal	MDH4		AF14
+signal	MDH5		AC13
+signal	MDH6		AE12
+signal	MDH7		AE11
+signal	MDH8		AE10
+signal	MDH9		AE9
+signal	MDH10		AE8
+signal	MDH11		AC7
+signal	MDH12		AE7
+signal	MDH13		AE6
+signal	MDH14		AF5
+signal	MDH15		AC5
+signal	MDH16		E4
+signal	MDH17		A2
+signal	MDH18		B3
+signal	MDH19		D4
+signal	MDH20		B4
+signal	MDH21		B5
+signal	MDH22		D6
+signal	MDH23		C6
+signal	MDH24		B7
+signal	MDH25		C9
+signal	MDH26		A9
+signal	MDH27		B10
+signal	MDH28		A11
+signal	MDH29		A13
+signal	MDH30		B13
+signal	MDH31		A15
+signal	DQM0		AB1
+signal	DQM1		AB2
+signal	DQM2		K3
+signal	DQM3		K2
+signal	DQM4		AC1
+signal	DQM5		AC2
+signal	DQM6		K1
+signal	DQM7		J1
+signal	nCS0		Y4
+signal	nCS1		AA3
+signal	nCS2		AA4
+signal	nCS3		AC4
+signal	nCS4		M2
+signal	nCS5		L2
+signal	nCS6		M1
+signal	nCS7		L1
+signal	nFOE		H1
+signal	nRCS0		N4
+signal	nRCS1		N2
+signal	nRCS2		AF20
+signal	nRCS3		AC18
+signal	SDMA1		W1
+signal	SDMA0		W2
+signal	SDMA11		N1
+signal	SDMA10		R1
+signal	SDMA9		R2
+signal	SDMA8		T1
+signal	SDMA7		T2
+signal	SDMA6		U4
+signal	SDMA5		U2
+signal	SDMA4		U1
+signal	SDMA3		V1
+signal	SDMA2		V3
+signal	nDRDY		B20
+signal	SDMA12		B16
+signal	SDMA13		B14
+signal	SDMA14		D14
+signal	SDBA1		P1
+signal	SDBA0		P2
+signal	PAR0		AF3
+signal	PAR1		AE3
+signal	PAR2		G4
+signal	PAR3		E2
+signal	PAR4		AE4
+signal	PAR5		AF4
+signal	PAR6		D2
+signal	PAR7		C2
+signal	nSDRAS		AD1
+signal	nSDCAS		AD2
+signal	CKE		H2
+signal	nWE		AA1
+signal	nAS		Y1
+
+# PIC Control Signals
+signal	IRQ0		C19
+signal	IRQ1		B21
+signal	IRQ2		AC22
+signal	IRQ3		AE24
+signal	IRQ4		A23
+
+# I2C Control Signals
+signal	SDA		AE20
+signal	SCL		AF21
+
+# DUART Control Signals
+signal	SOUT1		AC25
+signal	SIN1		AB25
+signal	SOUT2		AE26
+signal	SIN2		AF25
+
+# Clock-Out Signals
+salias	PCI_CLK0	SOUT1
+salias	PCI_CLK1	SIN1
+salias	PCI_CLK2	SOUT2
+salias	PCI_CLK3	SIN2
+signal	PCI_CLK4	AF26
+signal	PCI_SYNC_OUT	AD25
+signal	PCI_SYNC_IN	AB23
+signal	SDRAM_CLK0	D1
+signal	SDRAM_CLK1	G1
+signal	SDRAM_CLK2	G2
+signal	SDRAM_CLK3	E1
+signal	SDRAM_SYNC_OUT	C1
+signal	SDRAM_SYNC_IN	H3
+signal	CKO		B15
+signal	OSC_IN		AD21
+
+# Miscellaneous Signals
+signal	nHRST_CTRL	A20
+signal	nHRST_CPU	A19
+signal	nMCP		A17
+signal	NMI		D16
+signal	nSMI		A18
+salias	nSRESET		SDMA12
+salias	TBEN		SDMA13
+signal	nQACK		F2
+salias	nCHKSTOP_IN	SDMA14
+salias	TRIG_IN		nRCS2
+salias	TRIG_OUT	nRCS3
+signal	MAA0		AF2
+signal	MAA1		AF1
+signal	MAA2		AE1
+signal	nMIV		A16
+signal	PMAA0		AD18
+signal	PMAA1		AF18
+signal	PMAA2		AE19
+
+# Test/Configuration Signals
+signal	PLL_CFG0	A22
+signal	PLL_CFG1	B19
+signal	PLL_CFG2	A21
+signal	PLL_CFG3	B18
+signal	PLL_CFG4	B17
+signal	nTEST0		AD22
+# nDRDY
+signal	RTC		Y2
+signal	TCK		AF22
+signal	TDI		AF23
+signal	TDO		AC21
+signal	TMS		AE22
+signal	nTRST		AE23
+
+# Power and Ground Signals
+signal	GND		AA2 AA23 AC12 AC15 AC24 AC3 AC6 AC9 AD11 AD14 AD16 AD19 AD23 AD4 AE18 AE2 AE21 AE25 B2 B25 B6 B9 C11 C13 C16 C23 C4 C8 D12 D15 D18 D21 D24 D3 F25 F4 H24 J25 J4 L24 L3 M23 M4 N24 P3 R23 R4 T24 T3 V2 V23 W3
+signal	LVDD		AC20 AC23 D20 D23 G23 P23 Y23
+signal	GVDD		AB3 AB4 AC10 AC11 AC8 AD10 AD13 AD15 AD3 AD5 AD7 C10 C12 C3 C5 C7 D13 D5 D9 E3 G3 H4 K4 L4 N3 P4 R3 U3 V4 Y3
+signal	OVDD		AB24 AD20 AD24 C14 C20 C24 E24 G24 J23 K24 M24 P24 T23 Y24
+signal	VDD		AA24 AC16 AC19 AD12 AD6 AD9 C15 C18 C21 D11 D8 F3 H23 J3 L23 M3 R24 T4 V24 W4
+signal	NC		D17
+signal	AVDD		C17
+signal	AVDD2		AF24
+
+# Debug/Manufacturing Pins
+salias	DA0		nQACK
+salias	DA1		CKO
+signal	DA2		C25
+salias	DA3		PCI_CLK4
+salias	DA4		nREQ4
+salias	DA5		nGNT4
+salias	DA10		PLL_CFG0
+salias	DA9		PLL_CFG1
+salias	DA8		PLL_CFG2
+salias	DA7		PLL_CFG3
+salias	DA6		PLL_CFG4
+signal	DA11		AD26
+signal	DA12		AF17
+signal	DA13		AF19
+signal	DA14		F1
+signal	DA15		J2
+
+# see [2]
+# mandatory data registers
+register	BSR	507
+register	BR	1
+
+# see [2]
+instruction length 8
+# mandatory instructions
+instruction EXTEST		00000000	BSR
+instruction SAMPLE/PRELOAD	11000000	BSR
+instruction BYPASS		11111111	BR
+# optional instructions
+instruction HIGHZ		11110000	BR
+instruction CLAMP		11110001	BR
+
+# see [2]
+bit 506 B 0 nC/BE0 298 0 Z
+bit 505 B 0 nIRQ1 504 0 Z
+bit 504 C 0 .
+bit 503 I ? nIRQ0
+bit 502 B 0 nIRQ4 501 0 Z
+bit 501 C 0 .
+bit 500 I ? nDRDY
+bit 499 B 0 PLL_CFG0 132 0 Z
+bit 498 B 0 PLL_CFG1 132 0 Z
+bit 497 B 0 PLL_CFG2 132 0 Z
+bit 496 B 0 PLL_CFG3 132 0 Z
+bit 495 B 0 PLL_CFG4 132 0 Z
+bit 494 I ? nHRST_CTRL
+bit 493 I ? nHRST_CPU
+bit 492 O 0 SDRAM_SYNC_OUT 133 0 Z
+bit 491 I ? SDRAM_SYNC_IN
+bit 490 B 0 nMCP 251 0 Z
+bit 489 X ? .
+bit 488 I ? NMI
+bit 487 O 0 nMIV 222 0 Z
+bit 486 B 0 PAR0 188 0 Z
+bit 485 B 0 PAR1 188 0 Z
+bit 484 B 0 PAR2 188 0 Z
+bit 483 B 0 PAR3 188 0 Z
+bit 482 B 0 PAR4 189 0 Z
+bit 481 B 0 PAR5 189 0 Z
+bit 480 B 0 PAR6 189 0 Z
+bit 479 B 0 PAR7 189 0 Z
+bit 478 X ? .
+bit 477 X ? .
+bit 476 X ? .
+bit 475 X ? .
+bit 474 X ? .
+bit 473 X ? .
+bit 472 X ? .
+bit 471 X ? .
+bit 470 X ? .
+bit 469 X ? .
+bit 468 X ? .
+bit 467 X ? .
+bit 466 X ? .
+bit 465 X ? .
+bit 464 X ? .
+bit 463 X ? .
+bit 462 X ? .
+bit 461 X ? .
+bit 460 X ? .
+bit 459 X ? .
+bit 458 X ? .
+bit 457 X ? .
+bit 456 X ? .
+bit 455 X ? .
+bit 454 X ? .
+bit 453 X ? .
+bit 452 X ? .
+bit 451 X ? .
+bit 450 X ? .
+bit 449 X ? .
+bit 448 X ? .
+bit 447 X ? .
+bit 446 X ? .
+bit 445 X ? .
+bit 444 X ? .
+bit 443 X ? .
+bit 442 X ? .
+bit 441 X ? .
+bit 440 X ? .
+bit 439 X ? .
+bit 438 X ? .
+bit 437 X ? .
+bit 436 C 0 .
+bit 435 X ? .
+bit 434 B 0 MDH0 436 0 Z
+bit 433 B 0 MDH1 436 0 Z
+bit 432 B 0 MDH2 436 0 Z
+bit 431 B 0 MDH3 436 0 Z
+bit 430 B 0 MDH4 436 0 Z
+bit 429 B 0 MDH5 436 0 Z
+bit 428 B 0 MDH6 436 0 Z
+bit 427 B 0 MDH7 436 0 Z
+bit 426 B 0 MDH8 436 0 Z
+bit 425 B 0 MDH9 436 0 Z
+bit 424 B 0 MDH10 436 0 Z
+bit 423 B 0 MDH11 436 0 Z
+bit 422 B 0 MDH12 436 0 Z
+bit 421 B 0 MDH13 436 0 Z
+bit 420 B 0 MDH14 436 0 Z
+bit 419 B 0 MDH15 436 0 Z
+bit 418 B 0 MDH16 436 0 Z
+bit 417 B 0 MDH17 436 0 Z
+bit 416 B 0 MDH18 436 0 Z
+bit 415 B 0 MDH19 436 0 Z
+bit 414 B 0 MDH20 436 0 Z
+bit 413 B 0 MDH21 436 0 Z
+bit 412 B 0 MDH22 436 0 Z
+bit 411 B 0 MDH23 436 0 Z
+bit 410 B 0 MDH24 436 0 Z
+bit 409 B 0 MDH25 436 0 Z
+bit 408 B 0 MDH26 436 0 Z
+bit 407 B 0 MDH27 436 0 Z
+bit 406 B 0 MDH28 436 0 Z
+bit 405 B 0 MDH29 436 0 Z
+bit 404 B 0 MDH30 436 0 Z
+bit 403 B 0 MDH31 436 0 Z
+bit 402 B 0 nFOE 223 0 Z
+bit 401 C 0 .
+bit 400 O 0 nRCS1 224 0 Z
+bit 399 B 0 nRCS0 223 0 Z
+bit 398 O 0 SDRAM_CLK0 397 0 Z
+bit 397 C 0 .
+bit 396 O 0 SDRAM_CLK2 395 0 Z
+bit 395 C 0 .
+bit 394 O 0 SDRAM_CLK3 393 0 Z
+bit 393 C 0 .
+bit 392 B 0 CKE 401 0 Z
+bit 391 O 0 SDBA0 224 0 Z
+bit 390 X ? .
+bit 389 X ? .
+bit 388 X ? .
+bit 387 X ? .
+bit 386 X ? .
+bit 385 X ? .
+bit 384 X ? .
+bit 383 X ? .
+bit 382 X ? .
+bit 381 X ? .
+bit 380 X ? .
+bit 379 X ? .
+bit 378 X ? .
+bit 377 X ? .
+bit 376 X ? .
+bit 375 X ? .
+bit 374 X ? .
+bit 373 X ? .
+bit 372 X ? .
+bit 371 X ? .
+bit 370 X ? .
+bit 369 X ? .
+bit 368 X ? .
+bit 367 X ? .
+bit 366 X ? .
+bit 365 X ? .
+bit 364 X ? .
+bit 363 X ? .
+bit 362 X ? .
+bit 361 X ? .
+bit 360 X ? .
+bit 359 X ? .
+bit 358 C 0 .
+bit 357 B 0 MDL0 358 0 Z
+bit 356 B 0 MDL1 358 0 Z
+bit 355 B 0 MDL2 358 0 Z
+bit 354 B 0 MDL3 358 0 Z
+bit 353 B 0 MDL4 358 0 Z
+bit 352 B 0 MDL5 358 0 Z
+bit 351 B 0 MDL6 358 0 Z
+bit 350 B 0 MDL7 358 0 Z
+bit 349 B 0 MDL8 358 0 Z
+bit 348 B 0 MDL9 358 0 Z
+bit 347 B 0 MDL10 358 0 Z
+bit 346 B 0 MDL11 358 0 Z
+bit 345 B 0 MDL12 358 0 Z
+bit 344 B 0 MDL13 358 0 Z
+bit 343 B 0 MDL14 358 0 Z
+bit 342 B 0 MDL15 358 0 Z
+bit 341 B 0 MDL16 358 0 Z
+bit 340 B 0 MDL17 358 0 Z
+bit 339 B 0 MDL18 358 0 Z
+bit 338 B 0 MDL19 358 0 Z
+bit 337 B 0 MDL20 358 0 Z
+bit 336 B 0 MDL21 358 0 Z
+bit 335 B 0 MDL22 358 0 Z
+bit 334 B 0 MDL23 358 0 Z
+bit 333 B 0 MDL24 358 0 Z
+bit 332 B 0 MDL25 358 0 Z
+bit 331 B 0 MDL26 358 0 Z
+bit 330 B 0 MDL27 358 0 Z
+bit 329 B 0 MDL28 358 0 Z
+bit 328 B 0 MDL29 358 0 Z
+bit 327 B 0 MDL30 358 0 Z
+bit 326 B 0 MDL31 358 0 Z
+bit 325 B 0 SDMA0 223 0 Z
+bit 324 B 0 SDMA1 223 0 Z
+bit 323 O 0 SDMA2 224 0 Z
+bit 322 O 0 SDMA3 224 0 Z
+bit 321 O 0 SDMA4 224 0 Z
+bit 320 O 0 SDMA5 224 0 Z
+bit 319 O 0 SDMA6 224 0 Z
+bit 318 O 0 SDMA7 224 0 Z
+bit 317 O 0 SDMA8 224 0 Z
+bit 316 O 0 SDMA9 224 0 Z
+bit 315 O 0 SDMA10 224 0 Z
+bit 314 O 0 SDMA11 224 0 Z
+bit 313 X ? .
+bit 312 X ? .
+bit 311 X ? .
+bit 310 O 0 SDBA1 224 0 Z
+bit 309 B 0 PAR 299 0 Z
+bit 308 C 0 .
+bit 307 O 0 SDRAM_CLK1 308 0 Z
+bit 306 X ? .
+bit 305 X ? .
+bit 304 O 0 DQM2 224 0 Z
+bit 303 O 0 DQM5 224 0 Z
+bit 302 O 0 DQM4 224 0 Z
+bit 301 O 0 DQM3 224 0 Z
+bit 300 X ? .
+bit 299 C 0 .
+bit 298 C 0 .
+bit 297 C 0 .
+bit 296 C 0 .
+bit 295 X ? .
+bit 294 X ? .
+bit 293 X ? .
+bit 292 X ? .
+bit 291 B 0 nTRDY 296 0 Z
+bit 290 X ? .
+bit 289 B 0 nGNT4 223 0 Z
+bit 288 O 0 nGNT2 223 0 Z
+bit 287 X ? .
+bit 286 X ? .
+bit 285 X ? .
+bit 284 X ? .
+bit 283 X ? .
+bit 282 O 0 nCS2 224 0 Z
+bit 281 O 0 nCS0 224 0 Z
+bit 280 O 0 nCS1 224 0 Z
+bit 279 X ? .
+bit 278 X ? .
+bit 277 X ? .
+bit 276 C 0 .
+bit 275 B 0 nINTA 276 0 Z
+bit 274 X ? .
+bit 273 B 0 nSRESET 131 0 Z
+bit 272 B 0 nQACK 223 0 Z
+bit 271 X ? .
+bit 270 X ? .
+bit 269 X ? .
+bit 268 X ? .
+bit 267 X ? .
+bit 266 X ? .
+bit 265 X ? .
+bit 264 X ? .
+bit 263 X ? .
+bit 262 X ? .
+bit 261 X ? .
+bit 260 X ? .
+bit 259 X ? .
+bit 258 X ? .
+bit 257 X ? .
+bit 256 X ? .
+bit 255 X ? .
+bit 254 X ? .
+bit 253 X ? .
+bit 252 X ? .
+bit 251 C 0 .
+bit 250 X ? .
+bit 249 C 0 .
+bit 248 X ? .
+bit 247 X ? .
+bit 246 X ? .
+bit 245 X ? .
+bit 244 X ? .
+bit 243 X ? .
+bit 242 X ? .
+bit 241 X ? .
+bit 240 X ? .
+bit 239 X ? .
+bit 238 X ? .
+bit 237 X ? .
+bit 236 X ? .
+bit 235 O 0 nCS4 224 0 Z
+bit 234 O 0 nCS5 224 0 Z
+bit 233 O 0 DQM0 224 0 Z
+bit 232 O 0 DQM6 224 0 Z
+bit 231 O 0 DQM1 224 0 Z
+bit 230 O 0 DQM7 224 0 Z
+bit 229 X ? .
+bit 228 X ? .
+bit 227 X ? .
+bit 226 X ? .
+bit 225 X ? .
+bit 224 C 0 .
+bit 223 C 0 .
+bit 222 C 0 .
+bit 221 O 0 nGNT1 223 0 Z
+bit 220 X ? .
+bit 219 C 0 .
+bit 218 O 0 nCS6 224 0 Z
+bit 217 O 0 nCS7 224 0 Z
+bit 216 O 0 nSDRAS 224 0 Z
+bit 215 O 0 nCS3 224 0 Z
+bit 214 O 0 nAS 223 0 Z
+bit 213 X ? .
+bit 212 I ? RTC
+bit 211 O 0 TRIG_OUT 219 0 Z
+bit 210 B 0 TBEN 130 0 Z
+bit 209 X ? .
+bit 208 X ? .
+bit 207 O 0 nGNT3 223 0 Z
+bit 206 O 0 nGNT0 223 0 Z
+bit 205 O 0 CKO 249 0 Z
+bit 204 O 0 nWE 224 0 Z
+bit 203 C 0 .
+bit 202 C 0 .
+bit 201 C 0 .
+bit 200 C 0 .
+bit 199 C 0 .
+bit 198 C 0 .
+bit 197 O 0 PCI_CLK4 203 0 Z
+bit 196 O 0 PCI_SYNC_OUT 202 0 Z
+bit 195 B 0 PCI_CLK3 200 0 Z
+bit 194 O 0 PCI_CLK2 201 0 Z
+bit 193 B 0 PCI_CLK1 198 0 Z
+bit 192 O 0 PCI_CLK0 199 0 Z
+bit 191 C 0 .
+bit 190 X ? .
+bit 189 C 0 .
+bit 188 C 0 .
+bit 187 C 0 .
+bit 186 C 0 .
+bit 185 B 0 TRIG_IN 130 0 Z
+bit 184 B 0 nCHKSTOP_IN 131 0 Z
+bit 183 X ? .
+bit 182 X ? .
+bit 181 X ? .
+bit 180 X ? .
+bit 179 X ? .
+bit 178 X ? .
+bit 177 X ? .
+bit 176 X ? .
+bit 175 X ? .
+bit 174 X ? .
+bit 173 X ? .
+bit 172 X ? .
+bit 171 X ? .
+bit 170 X ? .
+bit 169 X ? .
+bit 168 O 0 nSDCAS 224 0 Z
+bit 167 X ? .
+bit 166 X ? .
+bit 165 X ? .
+bit 164 X ? .
+bit 163 X ? .
+bit 162 B 0 MAA2 223 0 Z
+bit 161 X ? .
+bit 160 X ? .
+bit 159 X ? .
+bit 158 X ? .
+bit 157 X ? .
+bit 156 X ? .
+bit 155 O 0 DA15 223 0 Z
+bit 154 X ? .
+bit 153 O 0 DA14 223 0 Z
+bit 152 O 0 DA11 223 0 Z
+bit 151 O 0 DA13 223 0 Z
+bit 150 O 0 DA2 223 0 Z
+bit 149 O 0 DA12 223 0 Z
+bit 148 X ? .
+bit 147 X ? .
+bit 146 X ? .
+bit 145 X ? .
+bit 144 X ? .
+bit 143 X ? .
+bit 142 X ? .
+bit 141 X ? .
+bit 140 X ? .
+bit 139 X ? .
+bit 138 X ? .
+bit 137 X ? .
+bit 136 X ? .
+bit 135 X ? .
+bit 134 X ? .
+bit 133 C 0 .
+bit 132 C 0 .
+bit 131 C 0 .
+bit 130 C 0 .
+bit 129 X ? .
+bit 128 X ? .
+bit 127 X ? .
+bit 126 X ? .
+bit 125 X ? .
+bit 124 X ? .
+bit 123 X ? .
+bit 122 X ? .
+bit 121 X ? .
+bit 120 X ? .
+bit 119 X ? .
+bit 118 X ? .
+bit 117 X ? .
+bit 116 X ? .
+bit 115 X ? .
+bit 114 X ? .
+bit 113 X ? .
+bit 112 X ? .
+bit 111 X ? .
+bit 110 B 0 AD11 21 0 Z
+bit 109 B 0 AD10 21 0 Z
+bit 108 B 0 AD9 21 0 Z
+bit 107 B 0 AD8 21 0 Z
+bit 106 B 0 AD7 21 0 Z
+bit 105 B 0 AD6 21 0 Z
+bit 104 B 0 AD5 21 0 Z
+bit 103 B 0 AD4 21 0 Z
+bit 102 B 0 AD3 21 0 Z
+bit 101 B 0 AD2 21 0 Z
+bit 100 B 0 AD1 21 0 Z
+bit 99 B 0 AD0 21 0 Z
+bit 98 X ? .
+bit 97 X ? .
+bit 96 X ? .
+bit 95 X ? .
+bit 94 X ? .
+bit 93 X ? .
+bit 92 X ? .
+bit 91 X ? .
+bit 90 X ? .
+bit 89 X ? .
+bit 88 X ? .
+bit 87 X ? .
+bit 86 X ? .
+bit 85 X ? .
+bit 84 X ? .
+bit 83 X ? .
+bit 82 X ? .
+bit 81 X ? .
+bit 80 X ? .
+bit 79 X ? .
+bit 78 X ? .
+bit 77 X ? .
+bit 76 X ? .
+bit 75 X ? .
+bit 74 X ? .
+bit 73 X ? .
+bit 72 X ? .
+bit 71 X ? .
+bit 70 X ? .
+bit 69 X ? .
+bit 68 X ? .
+bit 67 X ? .
+bit 66 X ? .
+bit 65 B 0 nFRAME 297 0 Z
+bit 64 B 0 nC/BE3 298 0 Z
+bit 63 B 0 nC/BE2 298 0 Z
+bit 62 B 0 nC/BE1 298 0 Z
+bit 61 B 0 nDEVSEL 186 0 Z
+bit 60 B 0 nPERR 187 0 Z
+bit 59 B 0 nSTOP 54 0 Z
+bit 58 I ? nLOCK
+bit 57 X ? .
+bit 56 C 0 .
+bit 55 B 0 nIRDY 56 0 Z
+bit 54 C 0 .
+bit 53 X ? .
+bit 52 X ? .
+bit 51 B 0 MAA1 223 0 Z
+bit 50 B 0 PMAA0 223 0 Z
+bit 49 B 0 PMAA1 223 0 Z
+bit 48 B 0 PMAA2 223 0 Z
+bit 47 B 0 MAA0 223 0 Z
+bit 46 X ? .
+bit 45 I ? OSC_IN
+bit 44 C 0 .
+bit 43 C 0 .
+bit 42 B 0 SCL 44 0 Z
+bit 41 B 0 SDA 43 0 Z
+bit 40 B 0 IRQ2 39 0 Z
+bit 39 C 0 .
+bit 38 C 0 .
+bit 37 B 0 IRQ3 38 0 Z
+bit 36 I ? PCI_SYNC_IN
+bit 35 X ? .
+bit 34 X ? .
+bit 33 X ? .
+bit 32 I ? nSMI
+bit 31 X ? .
+bit 30 X ? .
+bit 29 X ? .
+bit 28 I ? IDSEL
+bit 27 I ? nREQ0
+bit 26 I ? nREQ1
+bit 25 I ? nREQ2
+bit 24 I ? nREQ3
+bit 23 B 0 nREQ4 132 0 Z
+bit 22 B 0 nSERR 191 0 Z
+bit 21 C 0 .
+bit 20 X ? .
+bit 19 B 0 AD16 21 0 Z
+bit 18 B 0 AD17 21 0 Z
+bit 17 B 0 AD18 21 0 Z
+bit 16 B 0 AD19 21 0 Z
+bit 15 B 0 AD20 21 0 Z
+bit 14 B 0 AD21 21 0 Z
+bit 13 B 0 AD22 21 0 Z
+bit 12 B 0 AD23 21 0 Z
+bit 11 B 0 AD24 21 0 Z
+bit 10 B 0 AD25 21 0 Z
+bit 9 B 0 AD26 21 0 Z
+bit 8 B 0 AD27 21 0 Z
+bit 7 B 0 AD28 21 0 Z
+bit 6 B 0 AD29 21 0 Z
+bit 5 B 0 AD30 21 0 Z
+bit 4 B 0 AD31 21 0 Z
+bit 3 B 0 AD15 21 0 Z
+bit 2 B 0 AD14 21 0 Z
+bit 1 B 0 AD13 21 0 Z
+bit 0 B 0 AD12 21 0 Z
+
+initbus mpc824x
