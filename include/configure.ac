@@ -30,7 +30,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-AC_INIT(include,0.3.1)
+AC_INIT(include,0.3.2)
 
 AC_PREREQ(2.53)
 AC_REVISION($Revision$)

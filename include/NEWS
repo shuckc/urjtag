@@ -1,5 +1,7 @@
 $Id$
 
+include-0.3.2:
+
 	* Changes in brux common headers:
 		- Added FLASH_ERROR_* macros
 		- Modified bus_t structure
