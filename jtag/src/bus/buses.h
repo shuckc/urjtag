@@ -35,5 +35,6 @@ extern const bus_driver_t sa1110_bus;
 extern const bus_driver_t sh7727_bus;
 extern const bus_driver_t sh7750r_bus;
 extern const bus_driver_t sh7751r_bus;
+extern const bus_driver_t tx4925_bus;
 
 #endif /* BUSES_H */

@@ -1,3 +1,10 @@
+2004-08-19  Marcel Telka  <marcel@telka.sk>
+
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added tx4925.c (patch 972625, Andrew Dyer).
+	* src/bus/buses.c (bus_drivers): Added tx4925_bus (patch 972625, Andrew Dyer).
+	* src/bus/buses.h: Ditto.
+	* src/bus/tx4925.c: New file (patch 972625, Andrew Dyer).
+
 2004-08-17  Marcel Telka  <marcel@telka.sk>
 
 	* data/MANUFACTURERS: Added Toshiba manufacturer (patch 972621, Andrew Dyer).
