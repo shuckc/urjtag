@@ -1,3 +1,8 @@
+2003-06-09  Marcel Telka  <marcel@telka.sk>
+
+	* cmd/cmd.c (cmd_get_number): Added variable initialization for %n conversion in sscanf() call.
+	* cmd/help.c (cmd_help_run): Removed duplicate 'i' variable declaration.
+
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
 	* flash/detectflash.c (detectflash): Renamed detect_cfi to cfi_detect.

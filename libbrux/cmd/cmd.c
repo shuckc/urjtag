@@ -65,15 +65,19 @@ cmd_get_number( char *s, unsigned int *i )
 {
 	int n;
 	int r;
-	int l;
+	size_t l;
 
 	if (!s || !i)
 		return -1;
 
 	l = strlen( s );
+
+	n = -1;
 	r = sscanf( s, "0x%x%n", i, &n);
 	if (r == 1 && n == l)
 		return 0;
+
+	n = -1;
 	r = sscanf( s, "%u%n", i, &n );
 	if (r == 1 && n == l)
 		return 0;

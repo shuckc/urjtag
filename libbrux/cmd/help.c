@@ -36,7 +36,6 @@ cmd_help_run( char *params[] )
 
 	/* short description generation */
 	if (!params[1]) {
-		int i;
 		printf( _("Command list:\n\n") );
 		for (i = 0; cmds[i]; i++)
 			printf( _("%-13s %s\n"), cmds[i]->name, cmds[i]->desc ? _(cmds[i]->desc) : _("(no description available)") );
