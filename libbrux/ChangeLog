@@ -1,4 +1,4 @@
-2003-06-18  Marcel Telka  <marcel@telka.sk>
+2003-08-11  Marcel Telka  <marcel@telka.sk>
 
 	* flash/amd.c (amd_flash_autodetect): Function renamed ...
 	(amd_flash_autodetect32): ... to this one (patch 772499, Matan Ziv-Av).
