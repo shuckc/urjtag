@@ -1,3 +1,8 @@
+2002-11-26  Marcel Telka  <marcel@telka.sk>
+
+	* data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Added user-defined
+		instructions.
+
 2002-11-25  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.1 released.

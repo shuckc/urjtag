@@ -33,7 +33,8 @@ register	BSR	444	# see [2]
 register	BR	1
 # optional data registers
 register	DIR	32
-# user-defined registers (TODO)
+# user-defined registers
+register	ISPSR	274	# ISP (In-System Programming) Shift Register, see [2]
 
 # instructions - see [2]
 instruction length 5
@@ -45,4 +46,9 @@ instruction BYPASS		11111	BR
 instruction IDCODE		00001	DIR
 instruction HIGHZ		00101	BR
 instruction INTEST		00011	BSR
-# user-defined instructions - see Table 5 in [1] (TODO)
+# user-defined instructions - see Table 5 in [1]
+instruction ENABLE		01001	ISPSR
+instruction ERASE		01010	ISPSR
+instruction PROGRAM		01011	ISPSR
+instruction DISABLE		10000	ISPSR
+instruction VERIFY		01100	ISPSR
