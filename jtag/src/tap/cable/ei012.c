@@ -23,10 +23,11 @@
  *
  */
 
-#include <stdio.h>
-#include <sys/io.h>
-
 #include "cable.h"
+#include "parport.h"
+#include "chain.h"
+
+#include "generic.h"
 
 /*
  * data D[7:0] (pins 9:2)
@@ -45,71 +46,63 @@
  */
 #define	TDO	7
 
-static int trst;
-static unsigned int port;
-
 static int
-ei012_init( unsigned int aport )
+ei012_init( cable_t *cable )
 {
-	port = aport;
-	if (((port + 2 <= 0x400) && ioperm( port, 2, 1 )) || ((port + 2 > 0x400) && iopl( 3 )))
-		return 0;
-	trst = (inb( port ) >> TRST) & 1;
+	int data;
 
-	return 1;
+	if (parport_open( cable->port ))
+		return -1;
+
+	if ((data = parport_get_data( cable->port )) < 0) {
+		if (parport_set_data( cable->port, 1 << TRST ))
+			return -1;
+		PARAM_TRST(cable) = 1;
+	} else
+		PARAM_TRST(cable) = (data >> TRST) & 1;
+
+	return 0;
 }
 
 static void
-ei012_done( void )
-{
-	if (port + 2 <= 0x400)
-		ioperm( port, 2, 0 );
-	else
-		iopl( 0 );
-}
-
-static void
-ei012_clock( int tms, int tdi )
+ei012_clock( cable_t *cable, int tms, int tdi )
 {
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
 
-	outb( (trst << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
-	outb( (trst << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
 }
 
 static int
-ei012_get_tdo( void )
+ei012_get_tdo( cable_t *cable )
 {
-	outb( (trst << TRST) | (0 << TCK), port );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (0 << TCK) );
 	cable_wait();
-	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
+	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
 
 static int
-ei012_set_trst( int new_trst )
+ei012_set_trst( cable_t *cable, int trst )
 {
-	trst = new_trst ? 1 : 0;
+	PARAM_TRST(cable) = trst ? 1 : 0;
 
-	outb( trst << TRST, port );
-	return trst;
-}
-
-static int
-ei012_get_trst( void )
-{
-	return trst;
+	parport_set_data( cable->port, PARAM_TRST(cable) << TRST );
+	return PARAM_TRST(cable);
 }
 
 cable_driver_t ei012_cable_driver = {
 	"EI012",
 	"ETC EI012 JTAG Cable",
+	generic_connect,
+	generic_disconnect,
+	generic_cable_free,
 	ei012_init,
-	ei012_done,
+	generic_done,
 	ei012_clock,
 	ei012_get_tdo,
 	ei012_set_trst,
-	ei012_get_trst
+	generic_get_trst
 };

@@ -1,3 +1,27 @@
+2003-03-18  Marcel Telka  <marcel@telka.sk>
+
+	* include/parport.h: New file. Added parport driver support.
+		All cable drivers modified.
+	* src/tap/parport.c: Ditto.
+	* src/tap/parport/direct.c: Ditto.
+	* src/jtag.c (jtag_parse_line) <cable>: Added parport driver support.
+	* include/Makefile.am (noinst_HEADERS): Added parport.h.
+	* src/tap/cable/generic.c: New file withgGeneric functions for cable drivers.
+		All cable drivers modified.
+	* src/tap/cable/generic.h: Ditto.
+	* src/tap/Makefile.am (libtap_a_SOURCES): Added parport.c, parport/direct.c, cable/generic.h,
+		and cable/generic.c.
+
+	* include/cable.h: Added dynamic cable objects. Added cable interpose functions.
+		All callers changed.
+	* src/tap/cable.c: Ditto.
+
+	* include/chain.h (chain_connect): Function removed.
+	(chain_disconnect): New function.
+	* src/tap/chain.c (chain_free): Modified for chain_disconnect() call.
+	(chain_connect): Removed.
+	(chain_disconnect): New function.
+
 2003-03-17  Marcel Telka  <marcel@telka.sk>
 
 	* src/Makefile.am (bin_PROGRAMS, bsdl2jtag_SOURCES): Added new bsdl2jtag conversion

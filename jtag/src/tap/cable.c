@@ -55,6 +55,48 @@ cable_driver_t *cable_drivers[] = {
 };
 
 void
+cable_free( cable_t *cable )
+{
+	cable->driver->cable_free( cable );
+}
+
+int
+cable_init( cable_t *cable )
+{
+	return cable->driver->init( cable );
+}
+
+void
+cable_done( cable_t *cable )
+{
+	return cable->driver->done( cable );
+}
+
+void
+cable_clock( cable_t *cable, int tms, int tdi )
+{
+	cable->driver->clock( cable, tms, tdi );
+}
+
+int
+cable_get_tdo( cable_t *cable )
+{
+	return cable->driver->get_tdo( cable );
+}
+
+int
+cable_set_trst( cable_t *cable, int trst )
+{
+	return cable->driver->set_trst( cable, trst );
+}
+
+int
+cable_get_trst( cable_t *cable )
+{
+	return cable->driver->get_trst( cable );
+}
+
+void
 cable_wait( void )
 {
 	useconds_t s;

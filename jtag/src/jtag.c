@@ -41,6 +41,7 @@
 
 #include "part.h"
 #include "tap.h"
+#include "parport.h"
 
 #include "bus.h"
 
@@ -193,60 +194,43 @@ jtag_parse_line( char *line )
 
 		if (strcmp( t, "cable" ) == 0) {
 			int i;
-			unsigned int port;
+			const char *params[10];
+			int numpar;
 
 			t = get_token( NULL );
 			if (!t) {
 				printf( _("Missing argument(s)\n") );
 				return 1;
 			}
-			if (strcmp( t, "parallel" ) != 0) {
-				printf( _("syntax error!\n") );
+			for (i = 0; parport_drivers[i]; i++)
+				if (strcmp( t, parport_drivers[i]->type ) == 0)
+					break;
+			if (!parport_drivers[i]) {
+				printf( _("Unknown connection type: %s\n"), t );
 				return 1;
 			}
 
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("Missing argument(s)\n") );
-				return 1;
+			for (numpar = 0; numpar < 10; numpar++) {
+				params[numpar] = get_token( NULL );
+				if (!params[numpar])
+					break;
 			}
-			if ((sscanf( t, "0x%x", &port ) != 1) && (sscanf( t, "%d", &port ) != 1)) {
-				printf( _("syntax error\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("Missing argument(s)\n") );
-				return 1;
-			}
-
 			if (get_token( NULL )) {
 				printf( _("syntax error!\n") );
 				return 1;
 			}
 
-			if (strcmp( t, "none" ) == 0) {
-				chain_connect( chain, NULL, 0 );
-				printf( _("Cable disconnected\n") );
-				return 1;
-			}
-			
-			for (i = 0; cable_drivers[i]; i++)
-				if (strcmp( t, cable_drivers[i]->name ) == 0)
-					break;
-
-			if (!cable_drivers[i]) {
-				printf( _("Unknown cable: %s\n"), t );
+			chain->cable = parport_drivers[i]->connect( params, numpar );
+			if (!chain->cable) {
+				printf( _("Error: Cable connection failed!\n") );
 				return 1;
 			}
 
-			printf( _("Initializing %s on parallel port at 0x%x\n"), cable_drivers[i]->description, port );
-			if (chain_connect( chain, cable_drivers[i], port )) {
-				printf( _("Error: Cable driver initialization failed!\n") );
+			if (cable_init( chain->cable )) {
+				printf( _("Error: Cable initialization failed!\n") );
+				chain_disconnect( chain );
 				return 1;
 			}
-
 			chain_set_trst( chain, 0 );
 			chain_set_trst( chain, 1 );
 			tap_reset( chain );

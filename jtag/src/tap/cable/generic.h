@@ -22,33 +22,22 @@
  *
  */
 
-#ifndef CHAIN_H
-#define	CHAIN_H
-
-#include "part.h"
-
-typedef struct chain_t chain_t;
+#ifndef GENERIC_H
+#define	GENERIC_H
 
 #include "cable.h"
-
-struct chain_t {
-	int state;
-	parts_t *parts;
-	cable_t *cable;
-};
-
-chain_t *chain_alloc( void );
-void chain_free( chain_t *chain );
-void chain_disconnect( chain_t *chain );
-void chain_clock( chain_t *chain, int tms, int tdi );
-int chain_set_trst( chain_t *chain, int trst );
-int chain_get_trst( chain_t *chain );
-void chain_shift_instructions( chain_t *chain );
-void chain_shift_data_registers( chain_t *chain );
+#include "parport.h"
 
 typedef struct {
-	chain_t **chains;
-	int size;			/* allocated chains array size */
-} chains_t;
+	int trst;
+} generic_params_t;
 
-#endif /* CHAIN_H */
+#define	PARAM_TRST(cable)	((generic_params_t *) cable->params)->trst
+
+cable_t *generic_connect( cable_driver_t *cable_driver, parport_t *port );
+void generic_disconnect( cable_t *cable );
+void generic_cable_free( cable_t *cable );
+void generic_done( cable_t *cable );
+int generic_get_trst( cable_t *cable );
+
+#endif /* GENERIC_H */

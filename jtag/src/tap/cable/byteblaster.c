@@ -31,9 +31,11 @@
  *
  */
 
-#include <sys/io.h>
-
 #include "cable.h"
+#include "parport.h"
+#include "chain.h"
+
+#include "generic.h"
 
 /*
  * data D[7:0] (pins 9:2)
@@ -51,52 +53,39 @@
  */
 #define	TDO	7
 
-static unsigned int port;
-
 static int
-byteblaster_init( unsigned int aport )
+byteblaster_init( cable_t *cable )
 {
-	port = aport;
-	return !(((port + 2 <= 0x400) && ioperm( port, 2, 1 )) || ((port + 2 > 0x400) && iopl( 3 )));
+	if (parport_open( cable->port ))
+		return -1;
+
+	PARAM_TRST(cable) = 1;
+
+	return 0;
 }
 
 static void
-byteblaster_done( void )
-{
-	if (port + 2 <= 0x400)
-		ioperm( port, 2, 0 );
-	else
-		iopl( 0 );
-}
-
-static void
-byteblaster_clock( int tms, int tdi )
+byteblaster_clock( cable_t *cable, int tms, int tdi )
 {
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
 
-	outb( (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
+	parport_set_data( cable->port, (0 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
-	outb( (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
+	parport_set_data( cable->port, (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
 }
 
 static int
-byteblaster_get_tdo( void )
+byteblaster_get_tdo( cable_t *cable )
 {
-	outb( 0 << TCK, port );
+	parport_set_data( cable->port, 0 << TCK );
 	cable_wait();
-	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
+	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
 
 static int
-byteblaster_set_trst( int new_trst )
-{
-	return 1;
-}
-
-static int
-byteblaster_get_trst( void )
+byteblaster_set_trst( cable_t *cable, int trst )
 {
 	return 1;
 }
@@ -104,10 +93,13 @@ byteblaster_get_trst( void )
 cable_driver_t byteblaster_cable_driver = {
 	"ByteBlaster",
 	"Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable",
+	generic_connect,
+	generic_disconnect,
+	generic_cable_free,
 	byteblaster_init,
-	byteblaster_done,
+	generic_done,
 	byteblaster_clock,
 	byteblaster_get_tdo,
 	byteblaster_set_trst,
-	byteblaster_get_trst
+	generic_get_trst
 };

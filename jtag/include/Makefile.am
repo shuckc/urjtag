@@ -29,6 +29,7 @@ noinst_HEADERS = \
 	data_register.h \
 	gettext.h \
 	instruction.h \
+	parport.h \
 	part.h \
 	register.h \
 	signal.h \

@@ -27,9 +27,11 @@
  *
  */
 
-#include <sys/io.h>
-
 #include "cable.h"
+#include "parport.h"
+#include "chain.h"
+
+#include "generic.h"
 
 /*
  * data
@@ -49,76 +51,60 @@
  */
 #define	TDO 	5	
 
-static int trst;
-static unsigned int port;
-
 static int
-mpcbdm_init( unsigned int aport )
+mpcbdm_init( cable_t *cable )
 {
-	port = aport;
-	if (((port + 3 <= 0x400) && ioperm( port, 3, 1 )) || ((port + 3 > 0x400) && iopl( 3 )))
-		return 0;
+	if (parport_open( cable->port ))
+		return -1;
 
-	outb( (1 << TRST) | (1 << TRST1), port + 2 );
-	trst = 1;
+	parport_set_control( cable->port, (1 << TRST) | (1 << TRST1) );
+	PARAM_TRST(cable) = 1;
 
-	return 1;
+	return 0;
 }
 
 static void
-mpcbdm_done( void )
-{
-	if (port + 3 <= 0x400)
-		ioperm( port, 3, 0 );
-	else
-		iopl( 0 );
-}
-
-static void
-mpcbdm_clock( int tms, int tdi )
+mpcbdm_clock( cable_t *cable, int tms, int tdi )
 {
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
 
-	outb( (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
-	outb( (trst << TRST) | (trst << TRST1), port + 2 );
+	parport_set_data( cable->port, (0 << TCK) | (tms << TMS) | (tdi << TDI) );
+	parport_set_control( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_TRST(cable) << TRST1) );
 	cable_wait();
-	outb( (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
-	outb( (trst << TRST) | (trst << TRST1), port + 2 );
+	parport_set_data( cable->port, (1 << TCK) | (tms << TMS) | (tdi << TDI) );
+	parport_set_control( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_TRST(cable) << TRST1) );
 	cable_wait();
 }
 
 static int
-mpcbdm_get_tdo( void )
+mpcbdm_get_tdo( cable_t *cable )
 {
-	outb( (0 << TCK), port );
-	outb( (trst << TRST) | (trst << TRST1), port + 2 );
+	parport_set_data( cable->port, 0 << TCK );
+	parport_set_control( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_TRST(cable) << TRST1) );
 	cable_wait();
-	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
+	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
 
 static int
-mpcbdm_set_trst( int new_trst )
+mpcbdm_set_trst( cable_t *cable, int trst )
 {
-	trst = new_trst ? 1 : 0;
+	PARAM_TRST(cable) = trst ? 1 : 0;
 
-	outb( (trst << TRST) | (trst << TRST1), port + 2 );
-	return trst;
-}
-
-static int
-mpcdbm_get_trst( void )
-{
-	return trst;
+	parport_set_control( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_TRST(cable) << TRST1) );
+	return PARAM_TRST(cable);
 }
 
 cable_driver_t mpcbdm_cable_driver = {
 	"MPCBDM",
 	"Mpcbdm JTAG cable",
+	generic_connect,
+	generic_disconnect,
+	generic_cable_free,
 	mpcbdm_init,
-	mpcbdm_done,
+	generic_done,
 	mpcbdm_clock,
 	mpcbdm_get_tdo,
 	mpcbdm_set_trst,
-	mpcdbm_get_trst
+	generic_get_trst
 };

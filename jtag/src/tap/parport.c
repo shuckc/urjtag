@@ -22,33 +22,51 @@
  *
  */
 
-#ifndef CHAIN_H
-#define	CHAIN_H
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-#include "part.h"
+#include "parport.h"
 
-typedef struct chain_t chain_t;
+extern parport_driver_t direct_parport_driver;
 
-#include "cable.h"
-
-struct chain_t {
-	int state;
-	parts_t *parts;
-	cable_t *cable;
+parport_driver_t *parport_drivers[] = {
+	&direct_parport_driver,
+	NULL				/* last must be NULL */
 };
 
-chain_t *chain_alloc( void );
-void chain_free( chain_t *chain );
-void chain_disconnect( chain_t *chain );
-void chain_clock( chain_t *chain, int tms, int tdi );
-int chain_set_trst( chain_t *chain, int trst );
-int chain_get_trst( chain_t *chain );
-void chain_shift_instructions( chain_t *chain );
-void chain_shift_data_registers( chain_t *chain );
+int
+parport_open( parport_t *port )
+{
+	return port->driver->open( port );
+}
 
-typedef struct {
-	chain_t **chains;
-	int size;			/* allocated chains array size */
-} chains_t;
+int
+parport_close( parport_t *port )
+{
+	return port->driver->close( port );
+}
 
-#endif /* CHAIN_H */
+int
+parport_set_data( parport_t *port, uint8_t data )
+{
+	return port->driver->set_data( port, data );
+}
+
+int
+parport_get_data( parport_t *port )
+{
+	return port->driver->get_data( port );
+}
+
+int
+parport_get_status( parport_t *port )
+{
+	return port->driver->get_status( port );
+}
+
+int
+parport_set_control( parport_t *port, uint8_t data )
+{
+	return port->driver->set_control( port, data );
+}

@@ -28,7 +28,11 @@ libtap_a_SOURCES = \
 	register.c \
 	state.c \
 	chain.c \
+	parport.c \
+	parport/direct.c \
 	cable.c \
+	cable/generic.h \
+	cable/generic.c \
 	cable/arcom.c \
 	cable/byteblaster.c \
 	cable/dlc5.c \

@@ -28,18 +28,41 @@
 
 #include <stdint.h>
 
-#define	cable_t	cable_driver_t
+typedef struct cable_t cable_t;
 
-typedef struct {
+#include "parport.h"
+#include "chain.h"
+
+typedef struct cable_driver_t cable_driver_t;
+
+struct cable_driver_t {
 	const char *name;
 	const char *description;
-	int (*init)( unsigned int );
-	void (*done)( void );
-	void (*clock)( int, int );
-	int (*get_tdo)( void );
-	int (*set_trst)( int );
-	int (*get_trst)( void );
-} cable_driver_t;
+	cable_t *(*connect)( cable_driver_t *, parport_t * );
+	void (*disconnect)( cable_t *cable );
+	void (*cable_free)( cable_t *cable );
+	int (*init)( cable_t * );
+	void (*done)( cable_t * );
+	void (*clock)( cable_t *, int, int );
+	int (*get_tdo)( cable_t * );
+	int (*set_trst)( cable_t *, int );
+	int (*get_trst)( cable_t * );
+};
+
+struct cable_t {
+	cable_driver_t *driver;
+	parport_t *port;
+	void *params;
+	chain_t *chain;
+};
+
+void cable_free( cable_t *cable );
+int cable_init( cable_t *cable );
+void cable_done( cable_t *cable );
+void cable_clock( cable_t *cable, int tms, int tdi );
+int cable_get_tdo( cable_t *cable );
+int cable_set_trst( cable_t *cable, int trst );
+int cable_get_trst( cable_t *cable );
 
 extern uint32_t frequency;
 void cable_wait( void );

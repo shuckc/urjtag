@@ -23,9 +23,11 @@
  *
  */
 
-#include <sys/io.h>
-
 #include "cable.h"
+#include "parport.h"
+#include "chain.h"
+
+#include "generic.h"
 
 /*
  * data D[7:0] (pins 9:2)
@@ -42,73 +44,65 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO 	7	
-
-static int trst;
-static unsigned int port;
+#define	TDO 	7
 
 static int
-arcom_init( unsigned int aport )
+arcom_init( cable_t *cable )
 {
-	port = aport;
-	if (((port + 2 <= 0x400) && ioperm( port, 2, 1 )) || ((port + 2 > 0x400) && iopl( 3 )))
-		return 0;
-	trst = (inb( port ) >> TRST) & 1;
+	int data;
 
-	return 1;
+	if (parport_open( cable->port ))
+		return -1;
+
+	if ((data = parport_get_data( cable->port )) < 0) {
+		if (parport_set_data( cable->port, 1 << TRST ))
+			return -1;
+		PARAM_TRST(cable) = 1;
+	} else
+		PARAM_TRST(cable) = (data >> TRST) & 1;
+
+        return 0;
 }
 
 static void
-arcom_done( void )
-{
-	if (port + 2 <= 0x400)
-		ioperm( port, 2, 0 );
-	else
-		iopl( 0 );
-}
-
-static void
-arcom_clock( int tms, int tdi )
+arcom_clock( cable_t *cable, int tms, int tdi )
 {
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
 
-	outb( (trst << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
-	outb( (trst << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
 }
 
 static int
-arcom_get_tdo( void )
+arcom_get_tdo( cable_t *cable )
 {
-	outb( (trst << TRST) | (0 << TCK), port );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (0 << TCK) );
 	cable_wait();
-	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
+	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
 
 static int
-arcom_set_trst( int new_trst )
+arcom_set_trst( cable_t *cable, int trst )
 {
-	trst = new_trst ? 1 : 0;
+	PARAM_TRST(cable) = trst ? 1 : 0;
 
-	outb( trst << TRST, port );
-	return trst;
-}
-
-static int
-arcom_get_trst( void )
-{
-	return trst;
+	parport_set_data( cable->port, PARAM_TRST(cable) << TRST );
+	return PARAM_TRST(cable);
 }
 
 cable_driver_t arcom_cable_driver = {
 	"ARCOM",
 	"Arcom JTAG Cable",
+	generic_connect,
+	generic_disconnect,
+	generic_cable_free,
 	arcom_init,
-	arcom_done,
+	generic_done,
 	arcom_clock,
 	arcom_get_tdo,
 	arcom_set_trst,
-	arcom_get_trst
+	generic_get_trst
 };

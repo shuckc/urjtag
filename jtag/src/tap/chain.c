@@ -57,31 +57,22 @@ chain_free( chain_t *chain )
 	if (!chain)
 		return;
 
-	if (chain->cable) {
-		chain->cable->set_trst( 0 );
-		chain->cable->set_trst( 1 );
-		tap_reset( chain );
-		chain->cable->done();
-	}
-	tap_state_done( chain );
-	/* cable_free( chain->cable ); */
+	chain_disconnect( chain );
+
 	parts_free( chain->parts );
 	free( chain );
 }
 
-int
-chain_connect( chain_t *chain, cable_t *cable, unsigned int port )
+void
+chain_disconnect( chain_t *chain )
 {
-	if (chain->cable) {
-		tap_state_done( chain );
-		chain->cable->done();
-		chain->cable = NULL;
-	}
-	if (!cable || !cable->init( port ))
-		return -1;
+	if (!chain->cable)
+		return;
 
-	chain->cable = cable;
-	return 0;
+	tap_state_done( chain );
+	cable_done( chain->cable );
+	cable_free( chain->cable );
+	chain->cable = NULL;
 }
 
 void
@@ -90,15 +81,15 @@ chain_clock( chain_t *chain, int tms, int tdi )
 	if (!chain || !chain->cable)
 		return;
 
-	chain->cable->clock( tms, tdi );
+	cable_clock( chain->cable, tms, tdi );
 	tap_state_clock( chain, tms );
 }
 
 int
 chain_set_trst( chain_t *chain, int trst )
 {
-	int old_trst = chain->cable->get_trst();
-	trst = chain->cable->set_trst( trst );
+	int old_trst = cable_get_trst( chain->cable );
+	trst = cable_set_trst( chain->cable, trst );
 	tap_state_set_trst( chain, old_trst, trst );
 	return trst;
 }
@@ -106,7 +97,7 @@ chain_set_trst( chain_t *chain, int trst )
 int
 chain_get_trst( chain_t *chain )
 {
-	return chain->cable->get_trst();
+	return cable_get_trst( chain->cable );
 }
 
 void
