@@ -1,5 +1,9 @@
 2003-01-17  Marcel Telka  <marcel@telka.sk>
 
+	* arm/pxa2x0/lcd.h: Added get_* macros for register bits. Fixed TCR_TVBS macro.
+
+2003-01-17  Marcel Telka  <marcel@telka.sk>
+
 	* ac97.h: Moved this
 	* device/codec/ac97.h: here.
 	* ucb1400.h: Moved this
