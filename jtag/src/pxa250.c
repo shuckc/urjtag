@@ -196,7 +196,7 @@ pxa250_bus_width( parts *ps )
 		case 5:
 		case 6:
 		case 7:
-			printf( "TODO - BOOT_SEL\n" );
+			printf( "TODO - BOOT_SEL: %d\n", boot_sel );
 			return 0;
 		default:
 			printf( "BUG in code, file %s, line %d.\n", __FILE__, __LINE__ );
