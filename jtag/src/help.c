@@ -53,6 +53,7 @@ help( const char *cmd )
 			"readmem       read content of the memory and write it to file\n"
 			"flashmem      burn flash memory with data from a file\n"
 			"set           set external signal value\n"
+			"get           get external signal value\n"
 			"script        run command sequence from external file\n"
 			"\n"
 			"Type \"help COMMAND\" for details about particular command.\n", PACKAGE
@@ -189,7 +190,14 @@ help( const char *cmd )
 		);
 		for (i = 0; flash_drivers[i]; i++)
 			printf( "%s\n     %s\n", flash_drivers[i]->name, flash_drivers[i]->description );
-	}
+	} else if (strcmp( cmd, "get" ) == 0)
+		printf(
+			"Usage: get signal PART SIGNAL\n"
+			"Get signal state from output BSR (Boundary Scan Register).\n"
+			"\n"
+			"PART          part number (see print command)\n"
+			"SIGNAL        signal name (from JTAG declaration file)\n"
+		);
 	else if (strcmp( cmd, "set" ) == 0)
 		printf(
 			"Usage: set signal PART SIGNAL DIR [DATA]\n"

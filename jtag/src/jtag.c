@@ -650,7 +650,61 @@ jtag_parse_line( char *line )
 			} else
 				data = 0;
 
+			if (get_token( NULL )) {
+				printf( "set: syntax error\n" );
+				return 1;
+			}
+
 			part_set_signal( ps->parts[n], s, dir, data );
+
+			return 1;
+		}
+
+		if (strcmp( t, "get" ) == 0) {
+			int n;
+			int data;
+
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				return 1;
+			}
+
+			if (!ps) {
+				printf( "Run \"detect\" first.\n" );
+				return 1;
+			}
+
+			t = get_token( NULL );
+			if (!t || strcmp( t, "signal" ) != 0) {
+				printf( "get: syntax error\n" );
+				return 1;
+			}
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "get: syntax error\n" );
+				return 1;
+			}
+			n = strtol( t, &t, 10 );
+			if (t && *t) {
+				printf( "get: syntax error\n" );
+				return 1;
+			}
+
+			if ((n < 0) || (n >= ps->len)) {
+				printf( "get: invalid part number\n" );
+				return 1;
+			}
+
+			t = get_token( NULL );		/* signal name */
+			if (!t || get_token( NULL )) {
+				printf( "get: syntax error\n" );
+				return 1;
+			}
+
+			data = part_get_signal( ps->parts[n], t );
+			if (data != -1)
+				printf( "%s = %d\n", t, data );
 
 			return 1;
 		}

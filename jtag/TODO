@@ -1,6 +1,5 @@
 $Id$
 
-* Add 'get signal' command.
 * Add support for non-IDCODE-capable parts.
 * Support for display the result of a boundary scan formated according to the CPU definitions (e.g. MA[0-26] = 0x00001c00).
 * Remove direct relation between JTAG instruction and data register (e.g. ARM7TDMI).

@@ -1,7 +1,7 @@
 $Id$
 
 	* Enhanced 'dr' command functionality.
-	* Added new 'set signal' command.
+	* Added new 'set signal' and 'get signal' commands.
 	* Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
 	* Added support for Arcom JTAG Cable (patch 682310, Ian Campbell).
 	* Added support for all 6 static memory banks for Intel SA1110 (bug 682660).

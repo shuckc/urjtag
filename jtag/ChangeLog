@@ -1,5 +1,10 @@
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
+	* src/jtag.c (jtag_parse_line): Added new 'get signal' command.
+	* src/help.c (help): Added help for new 'get signal' command.
+
+2003-02-17  Marcel Telka  <marcel@telka.sk>
+
 	* data/intel/pxa250/pxa250: Changed comment.
 	* data/intel/pxa250/pxa250c0: Ditto.
 
