@@ -24,8 +24,10 @@
 
 #include "sysdep.h"
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "part.h"
 #include "jtag.h"
@@ -36,6 +38,8 @@ static int
 cmd_print_run( char *params[] )
 {
 	char format[100];
+	wchar_t wformat[100];
+	wchar_t wheader[100];
 	char header[100];
 	int i;
 	int noheader = 0;
@@ -61,10 +65,14 @@ cmd_print_run( char *params[] )
 	if (noheader == 0) {
 		snprintf( format, 100, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
 				MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
-		snprintf( header, 100, format, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
+		if (mbstowcs( wformat, format, 100 ) == -1)
+			printf( _("(%d) String conversion failed!\n"), __LINE__ );
+		swprintf( wheader, 100, wformat, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
+		if (wcstombs( header, wheader, 100 ) == -1)
+			printf( _("(%d) String conversion failed!\n"), __LINE__ );
 		printf( header );
 
-		for (i = 0; i < strlen( header ); i++ )
+		for (i = 0; i < wcslen( wheader ); i++ )
 			putchar( '-' );
 		putchar( '\n' );
 	}
