@@ -47,8 +47,10 @@ find_record( char *filename, tap_register *key, struct id_record *idr )
 	int r = 0;
 
 	file = fopen( filename, "r" );
-	if (!file)
+	if (!file) {
+		printf( "Cannot open %s\n", filename );
 		return 0;
+	}
 
 	tr = register_alloc( key->len );
 

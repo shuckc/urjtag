@@ -34,6 +34,9 @@
 
 #include "bus.h"
 
+/* function to cover 2x16 and 1x16 modes */
+#define BW16(x) ( (bus_width(ps) == 16) ? x : ( (x<<16) | x ) )
+
 static uint16_t
 read2( parts *ps, uint32_t adr, int o )
 {
@@ -51,24 +54,25 @@ detect_cfi( parts *ps )
 	int o = 2;
 	uint32_t tmp;
 
-	/* TODO: 2 x 16 bit only */
+	if (bus_width(ps) == 16)
+		o = 1;
 
 	/* detect CFI capable devices - see Table 1 in [1] */
-	bus_write( ps, CFI_CMD_QUERY_OFFSET << o, (CFI_CMD_QUERY << 16) | CFI_CMD_QUERY );
-	if (bus_read( ps, CFI_QUERY_ID_OFFSET << o ) != (('Q' << 16) | 'Q')) {
+	bus_write( ps, CFI_CMD_QUERY_OFFSET << o, BW16(CFI_CMD_QUERY) );
+	if (bus_read( ps, CFI_QUERY_ID_OFFSET << o ) != BW16('Q')) {
 		printf( "No CFI device detected (Q)!\n" );
 		return NULL;
 	}
-	if (bus_read( ps, (CFI_QUERY_ID_OFFSET + 1) << o ) != (('R' << 16) | 'R')) {
+	if (bus_read( ps, (CFI_QUERY_ID_OFFSET + 1) << o ) != BW16('R')) {
 		printf( "No CFI device detected (R)!\n" );
 		return NULL;
 	}
-	if (bus_read( ps, (CFI_QUERY_ID_OFFSET + 2) << o ) != (('Y' << 16) | 'Y')) {
+	if (bus_read( ps, (CFI_QUERY_ID_OFFSET + 2) << o ) != BW16('Y')) {
 		printf( "No CFI device detected (Y)!\n" );
 		return NULL;
 	}
 
-	printf( "\n2 x 16 bit CFI devices detected (QRY ok)!\n\n" );
+	printf( "\n%d x 16 bit CFI devices detected (QRY ok)!\n\n", o);
 
 	cfi = malloc( sizeof *cfi );
 	if (!cfi)

@@ -1,5 +1,12 @@
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
+	* src/cfi.c (detect_cfi): Added support for 1 x 16 bit flash configuration (Christian
+		Pellegrin).
+	* src/detect.c (find_record): Added error message if file cannot be opened (Christian
+		Pellegrin).
+
+2003-02-14  Marcel Telka  <marcel@telka.sk>
+
 	* data/xilinx/xc2c256-tq144/xc2c256-tq144: Added JTAG declarations for Xilinx
 		XC2C256-TQ144 (Alessandro Zummo).
 	* data/xilinx/xc2c256-tq144/STEPPINGS: Ditto.
