@@ -227,29 +227,32 @@ pin	VSSN		C2 E2 G2 J2 L2 M15 N2 P15 R2 R4 R6 R8 R10 R12 R14
 pin	VSSQ		C4 C8 C11 C14 D16 E15 E16 F6 F15 F16 G8 G10 H7 J10 J14 K7 K9 L14
 pin	nWE		G4
 
+# mandatory data registers
+register	BSR		385	# Boundary Scan Register (see [3])
+register	BR		1	# Bypass Register
+# optional data registers
+register	DIR		32	# Device Identification Register
+# user defined registers
+register	DBG_SR		36	# see 10.10 in [2]
+register	LDIC_SR1	33	# see 10.13.2 in [2]
 
 # see 9.3.1 in [2]
 instruction length 5
-
 # mandatory instructions
-instruction EXTEST		00000
-instruction SAMPLE/PRELOAD	00001
-instruction BYPASS		11111
-
+instruction EXTEST		00000	BSR
+instruction SAMPLE/PRELOAD	00001	BSR
+instruction BYPASS		11111	BR
 # optional instructions
-instruction CLAMP		00100
-instruction HIGHZ		01000
-instruction IDCODE		11110
-
+instruction CLAMP		00100	BR
+instruction HIGHZ		01000	BR
+instruction IDCODE		11110	DIR
 # user-defined instructions
-instruction DBGRX		00010
-instruction LDIC		00111
-instruction DCSR		01001
-instruction DBGTX		10000
+instruction DBGRX		00010	DBG_SR
+instruction LDIC		00111	LDIC_SR1
+instruction SELDCSR		01001	DBG_SR	# see 10.10.1 in [2]
+instruction DBGTX		10000	DBG_SR
 
 # see [3]
-boundary length 385
-
 bit 384 I ? nRESET
 bit 383 I ? BOOT_SEL[2]
 bit 382 I ? BOOT_SEL[1]
