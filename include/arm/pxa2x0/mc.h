@@ -155,14 +155,14 @@ typedef volatile struct MC_registers {
 #define	MDREFR_K0RUN		bit(13)
 #define	MDREFR_E0PIN		bit(12)
 #define	MDREFR_DRI_MASK		bits(11,0)
-#define	MDREFR_DRI(x)		bits(11,0,x)
+#define	MDREFR_DRI(x)		bits_val(11,0,x)
 
 /* MDMRS bits - see Table 6-4 in [1] */
 
 #define	MDMRS_MDMRS2_MASK	bits(30,23)
 #define	MDMRS_MDMRS2(x)		bits_val(30,23,x)
 #define	MDMRS_MDCL2_MASK	bits(22,20)
-#define	MDMRS_MDCL2(x)		bits_val(22,20)
+#define	MDMRS_MDCL2(x)		bits_val(22,20,x)
 #define	MDMRS_MDADD2		bit(19)
 #define	MDMRS_MDBL2_MASK	bits(18,16)
 #define	MDMRS_MDBL2(x)		bits_val(18,16,x)
