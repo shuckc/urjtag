@@ -36,13 +36,13 @@ typedef int  int32_t;
 typedef long long  int64_t;
 #endif /* !defined(UNDER_CE) */
 #endif /* __int8_t_defined */
-#endif /* defined(__CYGWIN__) */
 typedef unsigned char   uint8_t;
 typedef unsigned short  uint16_t;
 typedef unsigned   uint32_t;
 #if !defined(UNDER_CE)
 typedef unsigned long long   uint64_t;
 #endif /* !defined(UNDER_CE) */
+#endif /* defined(__CYGWIN__) */
 
 /* 7.18.1.2  Minimum-width integer types */
 typedef signed char int_least8_t;
@@ -76,7 +76,9 @@ typedef unsigned long long   uint_fast64_t;
 typedef int intptr_t;
 #define	__intptr_t_defined
 #endif /* __intptr_t_defined */
+#ifndef __uintptr_t_defined
 typedef unsigned uintptr_t;
+#endif /* __uintptr_t_defined */
 
 /* 7.18.1.5  Greatest-width integer types */
 #if !defined(UNDER_CE)
