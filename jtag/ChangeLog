@@ -1,5 +1,9 @@
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
+	* configure.ac (AM_GNU_GETTEXT_VERSION): Changed version number to 0.12.1.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
 	* src/bus/s3c4510x.c: Changed comment.
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
