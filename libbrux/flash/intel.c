@@ -42,8 +42,9 @@
 #include <flash/intel.h>
 #include <std/mic.h>
 
+#include <brux/bus.h>
+
 #include "flash.h"
-#include "bus.h"
 
 static int intel_flash_erase_block( bus_t *bus, uint32_t adr );
 static int intel_flash_unlock_block( bus_t *bus, uint32_t adr );

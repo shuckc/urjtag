@@ -32,8 +32,8 @@
 #include <stdlib.h>
 #include <flash/cfi.h>
 
-#include "cfi.h"
-#include "bus.h"
+#include <brux/cfi.h>
+#include <brux/bus.h>
 
 void
 cfi_array_free( cfi_array_t *cfi_array )

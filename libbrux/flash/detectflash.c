@@ -37,9 +37,8 @@
 #include <std/mic.h>
 
 #include <brux/flash.h>
-
-#include "cfi.h"
-#include "bus.h"
+#include <brux/cfi.h>
+#include <brux/bus.h>
 
 void
 detectflash( bus_t *bus )

@@ -34,12 +34,14 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <flash/cfi.h>
 #include <flash/intel.h>
 #include <unistd.h>
 
+#include <brux/bus.h>
+
 #include "flash.h"
-#include "bus.h"
 
 static int dbg = 0;
 

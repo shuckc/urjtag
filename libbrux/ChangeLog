@@ -1,5 +1,12 @@
 2003-06-10  Marcel Telka  <marcel@telka.sk>
 
+	* flash/amd.c: Changed include header files.
+	* flash/cfi.c: Ditto.
+	* flash/detectflash.c: Ditto.
+	* flash/intel.c: Ditto.
+
+2003-06-10  Marcel Telka  <marcel@telka.sk>
+
 	* flash/cfi.c (cfi_detect): Changed types for some local variables.
 
 2003-06-09  Marcel Telka  <marcel@telka.sk>
