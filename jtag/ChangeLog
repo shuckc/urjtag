@@ -1,3 +1,11 @@
+2003-03-14  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (CPPFLAGS): Added common include paths.
+	* src/Makefile.am (INCLUDES): Removed common include paths.
+	* src/bus/Makefile.am (INCLUDES): Ditto.
+	* src/part/Makefile.am (INCLUDES): Ditto.
+	* src/tap/Makefile.am (INCLUDES): Ditto.
+
 2003-03-13  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AC_CONFIG_HEADERS): Replaced this `new' macro ...

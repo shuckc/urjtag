@@ -30,5 +30,3 @@ libpart_a_SOURCES = \
 	bsbit.c \
 	part.c \
 	parse.c
-
-INCLUDES = -I$(top_srcdir)/include

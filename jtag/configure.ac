@@ -68,13 +68,10 @@ AC_CACHE_CHECK([for the openwince includes], openwince_includes_path, [
 		fi
 	done
 ])
-
 if test "$openwince_includes_path" = "no"; then
 	AC_MSG_ERROR([The openwince include package not found.])
 fi
-
-AC_SUBST(OPENWINCE_INC)
-OPENWINCE_INC="-I$openwince_includes_path -I$openwince_includes_path/device"
+CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device"
 
 AC_SEARCH_LIBS([ioperm], [ioperm])
 AC_CHECK_FUNCS(getline getdelim)
@@ -128,5 +125,6 @@ AC_CHECK_FUNCS(getline getdelim)
 #])dnl
 
 CFLAGS="$CFLAGS -Wall"
+CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/include"
 
 AC_OUTPUT

@@ -27,5 +27,3 @@ libbus_a_SOURCES = \
 	ixp425.c \
 	pxa2x0.c \
 	sa1110.c
-
-INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC)
