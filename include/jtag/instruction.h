@@ -26,12 +26,14 @@
 #define	JTAG_INSTRUCTION_H
 
 #include <jtag/register.h>
+#include <jtag/data_register.h>
 
 typedef struct instruction instruction;
 
 struct instruction {
 	char *name;
 	tap_register *value;
+	data_register *data_register;
 	instruction *next;
 };
 

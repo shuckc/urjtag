@@ -53,6 +53,7 @@ instruction_alloc( const char *name, int len, const char *val )
 	}
 
 	register_init( i->value, val );
+	i->data_register = NULL;
 	i->next = NULL;
 
 	return i;
