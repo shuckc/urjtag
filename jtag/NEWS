@@ -16,6 +16,7 @@ jtag-0.5:
 		- removed support for report results to file
 	* Added new command 'part', syntax changes for 'set', 'get', 'dr', 'instruction', and
 		'print' commands.
+	* Added support for multiple buses, added new 'bus' command to change active bus.
 	* Added initial JTAG declarations for Broadcom BCM3310 (see support request 770145 for
 		more info, thanks to Ramses VI).
 	* Fixed invalid memory allocation size (core dump) in jtag_parse_line() function.

@@ -98,6 +98,17 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
+pxa2x0_bus_printinfo( void )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Intel PXA2x0 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+static void
 pxa250_bus_prepare( bus_t *bus )
 {       
 	part_set_instruction( PART, "EXTEST" );
@@ -254,6 +265,7 @@ pxa250_bus_free( bus_t *bus )
 
 static const bus_t pxa250_bus = {
 	NULL,
+	pxa2x0_bus_printinfo,
 	pxa250_bus_prepare,
 	pxa250_bus_width,
 	pxa250_bus_read_start,

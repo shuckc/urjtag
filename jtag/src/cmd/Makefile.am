@@ -32,6 +32,7 @@ libcmd_a_SOURCES = \
 	detect.c \
 	print.c \
 	part.c \
+	bus.c \
 	instruction.c \
 	shift.c \
 	dr.c \

@@ -36,16 +36,15 @@
 static int
 cmd_detect_run( char *params[] )
 {
+	int i;
+
 	if (cmd_params( params ) != 1)
 		return -1;
 
 	if (!cmd_test_cable())
 		return 1;
 
-	if (bus) {
-		bus->free( bus );
-		bus = NULL;
-	}
+	buses_free();
 	parts_free( chain->parts );
 	chain->parts = detect_parts( chain, JTAG_DATA_DIR );
 	if (!chain->parts->len) {
@@ -58,18 +57,21 @@ cmd_detect_run( char *params[] )
 	chain_shift_data_registers( chain, 1 );
 	parts_set_instruction( chain->parts, "BYPASS" );
 	chain_shift_instructions( chain );
-	if (strcmp( chain->parts->parts[0]->part, "SA1110" ) == 0)
-		bus = new_sa1110_bus( chain, 0 );
-	if (strcmp( chain->parts->parts[0]->part, "PXA250" ) == 0)
-		bus = new_pxa250_bus( chain, 0 );
-	if (strcmp( chain->parts->parts[0]->part, "IXP425" ) == 0)
-		bus = new_ixp425_bus( chain, 0 );
-	if (strcmp( chain->parts->parts[0]->part, "SH7727" ) == 0)
-		bus = new_sh7727_bus( chain, 0 );
-	if (strcmp( chain->parts->parts[0]->part, "SH7750R" ) == 0)
-		bus = new_sh7750r_bus( chain, 0 );
-	if (strcmp( chain->parts->parts[0]->part, "BCM1250" ) == 0)
-		bus = new_bcm1250_bus( chain, 0 );
+
+	for (i = 0; i < chain->parts->len; i++) {
+		if (strcmp( chain->parts->parts[i]->part, "SA1110" ) == 0)
+			buses_add( new_sa1110_bus( chain, i ) );
+		if (strcmp( chain->parts->parts[i]->part, "PXA250" ) == 0)
+			buses_add( new_pxa250_bus( chain, i ) );
+		if (strcmp( chain->parts->parts[i]->part, "IXP425" ) == 0)
+			buses_add( new_ixp425_bus( chain, i ) );
+		if (strcmp( chain->parts->parts[i]->part, "SH7727" ) == 0)
+			buses_add( new_sh7727_bus( chain, i ) );
+		if (strcmp( chain->parts->parts[i]->part, "SH7750R" ) == 0)
+			buses_add( new_sh7750r_bus( chain, i ) );
+		if (strcmp( chain->parts->parts[i]->part, "BCM1250" ) == 0)
+			buses_add( new_bcm1250_bus( chain, i ) );
+	}
 
 	return 1;
 }

@@ -42,7 +42,6 @@ ssize_t getline( char **lineptr, size_t *n, FILE *stream );
 #endif
 
 chain_t *chain = NULL;
-bus_t *bus = NULL;
 int big_endian = 0;
 
 static char *

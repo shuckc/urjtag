@@ -1,5 +1,25 @@
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
+	* include/bus.h (buses_t): Added new structure.
+	* src/jtag.c (bus): Removed global variable.
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added buses.c.
+	* src/bus/buses.c: New file.
+	* src/bus/bcm1250.c (bcm1250_bus_printinfo): New function.
+	* src/bus/ixp425.c (ixp425_bus_printinfo): Ditto.
+	* src/bus/pxa2x0.c (pxa2x0_bus_printinfo): Ditto.
+	* src/bus/sa1110.c (sa1110_bus_printinfo): Ditto.
+	* src/bus/sh7727.c (sh7727_bus_printinfo): Ditto.
+	* src/bus/sh7750r.c (sh7750r_bus_printinfo): Ditto.
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added bus.c.
+	* src/cmd/bus.c: New file.
+	* src/cmd/cmd.c (cmds): Added cmd_bus.
+	* src/cmd/detect.c (cmd_detect_run): Added support for multiple buses detection.
+	* src/cmd/print.c (cmd_print_run): Fixed header printing while syntax error. Added support for printing
+		list of active buses.
+	(cmd_print_help): Added new parameter 'bus'.
+
+2003-08-11  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac (AC_INIT): Changed version number to 0.5.
 
 	* include/chain.h (chain_t): Added active_part.

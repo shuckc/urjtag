@@ -38,6 +38,7 @@ cmd_print_run( char *params[] )
 	char format[100];
 	char header[100];
 	int i;
+	int noheader = 0;
 
 	if (cmd_params( params ) > 2)
 		return -1;
@@ -50,14 +51,23 @@ cmd_print_run( char *params[] )
 		return 1;
 	}
 
-	snprintf( format, 100, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
-			MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
-	snprintf( header, 100, format, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
-	printf( header );
+	if (cmd_params( params ) == 2) {
+		if ((strcmp( params[1], "chain" ) != 0) && (strcmp( params[1], "bus") != 0))
+			return -1;
+		if (strcmp( params[1], "bus") == 0)
+			noheader = 1;
+	}
 
-	for (i = 0; i < strlen( header ); i++ )
-		putchar( '-' );
-	putchar( '\n' );
+	if (noheader == 0) {
+		snprintf( format, 100, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
+				MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
+		snprintf( header, 100, format, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
+		printf( header );
+
+		for (i = 0; i < strlen( header ); i++ )
+			putchar( '-' );
+		putchar( '\n' );
+	}
 
 	if (cmd_params( params ) == 1) {
 		if (chain->parts->len > chain->active_part) {
@@ -67,10 +77,17 @@ cmd_print_run( char *params[] )
 		return 1;
 	}
 
-	if (strcmp( params[1], "chain" ) != 0)
-		return -1;
+	if (strcmp( params[1], "chain" ) == 0) {
+		parts_print( chain->parts );
+		return 1;
+	}
 
-	parts_print( chain->parts );
+	for (i = 0; i < buses.len; i++) {
+		if (buses.buses[i] == bus)
+			printf( _("*") );
+		printf( _("%d: "), i );
+		bus_printinfo( buses.buses[i] );
+	}
 
 	return 1;
 }
@@ -79,7 +96,7 @@ static void
 cmd_print_help( void )
 {
 	printf( _(
-		"Usage: %s [chain]\n"
+		"Usage: %s [chain|bus]\n"
 		"Display JTAG chain status.\n"
 		"\n"
 		"Display list of the parts connected to the JTAG chain including\n"

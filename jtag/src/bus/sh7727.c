@@ -89,6 +89,17 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
+sh7727_bus_printinfo( void )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Hitachi SH7727 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+static void
 sh7727_bus_prepare( bus_t *bus )
 {
 	part_set_instruction( PART, "EXTEST" );
@@ -244,6 +255,7 @@ sh7727_bus_free( bus_t *bus )
 
 static const bus_t sh7727_bus = {
 	NULL,
+	sh7727_bus_printinfo,
 	sh7727_bus_prepare,
 	sh7727_bus_width,
 	sh7727_bus_read_start,

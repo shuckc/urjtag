@@ -113,6 +113,17 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
+ixp425_bus_printinfo( void )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Intel IXP425 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+static void
 ixp425_bus_prepare( bus_t *bus )
 {
 	part_set_instruction( PART, "EXTEST" );
@@ -216,6 +227,7 @@ ixp425_bus_free( bus_t *bus )
 
 static const bus_t ixp425_bus = {
 	NULL,
+	ixp425_bus_printinfo,
 	ixp425_bus_prepare,
 	ixp425_bus_width,
 	ixp425_bus_read_start,

@@ -31,6 +31,17 @@
 
 #include <brux/bus.h>
 
+typedef struct {
+	int len;
+	bus_t **buses;
+} buses_t;
+
+extern buses_t buses;
+
+void buses_free( void );
+void buses_add( bus_t *abus );
+void buses_delete( bus_t *abus );
+
 bus_t *new_sa1110_bus( chain_t *chain, int pn );
 bus_t *new_pxa250_bus( chain_t *chain, int pn );
 bus_t *new_ixp425_bus( chain_t *chain, int pn );

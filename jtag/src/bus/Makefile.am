@@ -26,6 +26,7 @@ include $(top_srcdir)/Makefile.rules
 noinst_LIBRARIES = libbus.a
 
 libbus_a_SOURCES = \
+	buses.c \
 	bcm1250.c \
 	ixp425.c \
 	pxa2x0.c \

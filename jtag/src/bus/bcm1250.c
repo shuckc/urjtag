@@ -2,6 +2,8 @@
 /*
  * $Id$
  *
+ * Copyright (C) 2003 ETC s.r.o.
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -18,6 +20,7 @@
  * 02111-1307, USA.
  *
  * Written by Matan Ziv-Av.
+ * MOdified by Marcel Telka <marcel@telka.sk>, 2003.
  *
  */
 
@@ -87,6 +90,17 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 #ifndef USE_BCM_EJTAG
+static void
+bcm1250_bus_printinfo( void )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Broadcom BCM1250 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
 void
 bcm1250_bus_read_start( bus_t *bus, uint32_t adr )
 {
@@ -248,6 +262,7 @@ bcm1250_bus_free( bus_t *bus )
 
 static const bus_t bcm1250_bus = {
 	NULL,
+	bcm1250_bus_printinfo,
 	bcm1250_bus_prepare,
 	bcm1250_bus_width,
 	bcm1250_bus_read_start,

@@ -89,6 +89,17 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
+sh7750r_bus_printinfo( void )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Hitachi SH7750R compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+static void
 sh7750r_bus_prepare( bus_t *bus )
 {
 	part_set_instruction( PART, "EXTEST" );
@@ -243,6 +254,7 @@ sh7750r_bus_free( bus_t *bus )
 
 static const bus_t sh7750r_bus = {
 	NULL,
+	sh7750r_bus_printinfo,
 	sh7750r_bus_prepare,
 	sh7750r_bus_width,
 	sh7750r_bus_read_start,

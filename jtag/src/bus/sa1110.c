@@ -88,6 +88,17 @@ setup_data( bus_t *bus, uint32_t d )
 }
 
 static void
+sa1110_bus_printinfo( void )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Intel SA-1110 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+static void
 sa1110_bus_prepare( bus_t *bus )
 {       
 	part_set_instruction( PART, "EXTEST" );
@@ -221,6 +232,7 @@ sa1110_bus_free( bus_t *bus )
 
 static const bus_t sa1110_bus = {
 	NULL,
+	sa1110_bus_printinfo,
 	sa1110_bus_prepare,
 	sa1110_bus_width,
 	sa1110_bus_read_start,
