@@ -30,6 +30,7 @@
 #include "buses.h"
 
 const bus_driver_t *bus_drivers[] = {
+	&au1500_bus,
 	&bcm1250_bus,
 	&ixp425_bus,
 	&mpc824x_bus,

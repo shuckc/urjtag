@@ -28,6 +28,7 @@ noinst_LIBRARIES = libbus.a
 libbus_a_SOURCES = \
 	buses.c \
 	buses.h \
+	au1500.c \
 	bcm1250.c \
 	ixp425.c \
 	mpc824x.c \

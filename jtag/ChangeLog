@@ -1,3 +1,10 @@
+2003-12-20  Marcel Telka  <marcel@telka.sk>
+
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added au1500.c.
+	* src/bus/au1500.c: New file (patch 853883, Zhang Wei).
+	* src/bus/buses.c (bus_drivers): Added au1500_bus (patch 853883, Zhang Wei).
+	* src/bus/buses.h: Added au1500_bus.
+
 2003-11-02  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AC_INIT): Changed version number to 0.5.2.
