@@ -1,3 +1,7 @@
+2003-01-19  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac: Added AC_GNU_SOURCE.
+
 2003-01-18  Marcel Telka  <marcel@telka.sk>
 
 	* src/jtag.c (main): Added new 'frequency' command.
