@@ -1,3 +1,7 @@
+2003-01-10  Marcel Telka  <marcel@telka.sk>
+
+	* stdint.h: Ported to glibc (removed compilation warning).
+
 2002-12-05  Marcel Telka  <marcel@telka.sk>
 
 	* arm/pxa2x0/ost.h: Added OSMRx (x = 0 through 3) macros.

@@ -1,4 +1,4 @@
-Changes in include since version 0.2:
+$Id$
 
 	* Changes in PXA2x0 support:
 		- added DINT register bits
@@ -6,6 +6,7 @@ Changes in include since version 0.2:
 		- added register bits for MECR, SXCNFG, SXMRS, MCMEMx, MCATTx, MCIOx, BOOT_DEF
 		- added OSMRx (x = 0 through 3) macros
 	* Added UCB1400_ADCC_AI_* declarations for UCB1400 (suggested by Juraj Fabo)
+	* Minor fixes.
 
 include-0.2 (2002-11-08):
 
