@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <jtag/instruction.h>
+#include "instruction.h"
 
 instruction *
 instruction_alloc( const char *name, int len, const char *val )

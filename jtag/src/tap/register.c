@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <jtag/register.h>
+#include "register.h"
 
 tap_register *
 register_alloc( int len )

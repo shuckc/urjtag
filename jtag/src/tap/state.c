@@ -23,7 +23,7 @@
  *
  */
 
-#include <jtag/state.h>
+#include "state.h"
 
 static int state = Unknown_State;
 static int trst = 0;

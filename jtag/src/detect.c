@@ -26,10 +26,10 @@
 #include <ctype.h>
 #include <string.h>
 
-#include <jtag/register.h>
-#include <jtag/tap.h>
-#include <jtag/ctrl.h>
-#include <jtag/part.h>
+#include "register.h"
+#include "tap.h"
+#include "ctrl.h"
+#include "part.h"
 
 #include "detect.h"
 

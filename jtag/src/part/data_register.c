@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <jtag/data_register.h>
+#include "data_register.h"
 
 data_register *
 data_register_alloc( const char *name, int len )

@@ -25,7 +25,7 @@
 #ifndef DETECT_H
 #define DETECT_H
 
-#include <jtag/part.h>
+#include "part.h"
 
 parts *detect_parts( char *db_path );
 

@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <jtag/signal.h>
+#include "signal.h"
 
 signal *
 signal_alloc( const char *name )

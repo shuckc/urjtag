@@ -24,10 +24,10 @@
 
 #include <stdio.h>
 
-#include <jtag/register.h>
-#include <jtag/tap.h>
-#include <jtag/ctrl.h>
-#include <jtag/state.h>
+#include "register.h"
+#include "tap.h"
+#include "ctrl.h"
+#include "state.h"
 
 void
 tap_reset( void )

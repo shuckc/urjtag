@@ -26,8 +26,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include <jtag/part.h>
-#include <jtag/register.h>
+#include "part.h"
+#include "register.h"
 
 static char *
 get_token( char *buf )

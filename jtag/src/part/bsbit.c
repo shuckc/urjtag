@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <jtag/bsbit.h>
+#include "bsbit.h"
 
 bsbit *
 bsbit_alloc( int bit, const char *name, int type, signal* signals, int safe )

@@ -31,9 +31,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include <jtag/part.h>
-#include <jtag/ctrl.h>
-#include <jtag/tap.h>
+#include "part.h"
+#include "ctrl.h"
+#include "tap.h"
 
 #include "detect.h"
 

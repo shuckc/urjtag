@@ -24,8 +24,8 @@
 
 #include <sys/io.h>
 
-#include <jtag/ctrl.h>
-#include <jtag/state.h>
+#include "ctrl.h"
+#include "state.h"
 
 #define	TCK	0
 #define	TDI	1

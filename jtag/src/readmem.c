@@ -22,7 +22,7 @@
  *
  */
 
-#include <jtag/part.h>
+#include "part.h"
 
 void
 readmem( parts *ps )

@@ -25,8 +25,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <jtag/part.h>
-#include <jtag/tap.h>
+#include "part.h"
+#include "tap.h"
 
 /* part */
 
