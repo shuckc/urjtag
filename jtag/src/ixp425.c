@@ -56,24 +56,10 @@ unselect_flash( part *p)
 }
 
 static void
-set_gpio( part *p, uint32_t a )
-{
-	int i;
-	char buff[10];
-
-	for (i = 1; i < 16; i++) {
-		sprintf( buff, "GPIO[%d]", i );
-		part_set_signal( p, buff, 1, ( (a >> i) & 1 ) ^ 1 );
-	}
-}
-
-static void
 setup_address( part *p, uint32_t a )
 {
 	int i;
 	char buff[15];
-
-	set_gpio( p, a );
 
 	for (i = 0; i < 24; i++) {
 		sprintf( buff, "EX_ADDR[%d]", i );

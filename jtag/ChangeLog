@@ -1,3 +1,8 @@
+2003-02-14  Marcel Telka  <marcel@telka.sk>
+
+	* src/ixp425.c (setup_address): Removed set_gpio() call.
+	(set_gpio): Removed unused function.
+
 2003-02-13  Marcel Telka  <marcel@telka.sk>
 
 	* src/ixp425.c: Added bus driver for Intel IXP425 (Christian Pellegrin).
