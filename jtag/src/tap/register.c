@@ -59,7 +59,7 @@ register_alloc( int len )
 }
 
 tap_register *
-register_duplicate( tap_register *tr )
+register_duplicate( const tap_register *tr )
 {
  	if (!tr)
 		return	NULL;
@@ -143,4 +143,22 @@ register_compare( const tap_register *tr, const tap_register *tr2 )
 			return 1;
 
 	return 0;
+}
+
+int
+register_match( const tap_register *tr, const char *expr )
+{
+	int i;
+	char *s;
+
+	if (!tr || !expr || (tr->len != strlen( expr )))
+		return 0;
+
+	s = register_get_string( tr );
+
+	for (i = 0; i < tr->len; i++)
+		if ((expr[i] != '?') && (expr[i] != s[i]))
+			return 0;
+
+	return 1;
 }
