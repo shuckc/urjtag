@@ -1,5 +1,10 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* brux/cmd.h: New file extracted from jtag module, file src/cmd/cmd.h.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added brux/flash.h and brux/cmd.h.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* brux/flash.h: New file extracted from jtag module, file include/jtag.h.
 
 2003-05-30  Marcel Telka  <marcel@telka.sk>
