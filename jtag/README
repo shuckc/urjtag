@@ -24,11 +24,7 @@ Supported host operating systems
 --------------------------------
 
 JTAG Tools should run on all Unix like operating systems including
-MS Windows 95/98/Me/NT/2000/XP with Cygwin installed.
-
-Full list of tested host operating systems is available at
-<http://openwince.sourceforge.net/jtag/>
-
+MS Windows with Cygwin installed.
 
 Supported hardware
 ------------------
@@ -53,6 +49,7 @@ JTAG-aware parts (chips):
 - Intel IXP425
 - Intel SA1110
 - Intel PXA250/PXA255/PXA260/PXA261/PXA262/PXA263
+- Samsung S3C4510B
 - Xilinx XC2C256-TQ144
 - Xilinx XCR3128XL-CS144
 - Xilinx XCR3256XL-FT256
@@ -64,21 +61,15 @@ Flash chips (2 x 16 bit configuration only):
 - AMD Am29LV64xD (Am29LV640D, Am29LV641D, Am29LV642D)
 
 
-Tested target hardware
-----------------------
-
-Full list of tested target hardware is available at
-<http://openwince.sourceforge.net/jtag/>
-
-
 Required software
 -----------------
 
 Required only for MS Windows:
-- Current Cygwin net installation from http://cygwin.com/
+- Current Cygwin net installation from <http://cygwin.com/>
 
 Required for all systems:
-- include package from http://openwince.sourceforge.net/include/
+- include package from <http://openwince.sourceforge.net/include/>
+- readline (it is probably a standard part of your distribution)
 
 
 Build & installation instructions
@@ -86,7 +77,7 @@ Build & installation instructions
 
 1. Download and install required software (see previous section).
 2. Download and unpack jtag sources.
-3. Run ./configure script. Use optional --with-include parameter.
+3. Run ./configure script. Use optional --with-include parameter if required.
    See `./configure --help` for more info.
 4. Run `make`.
 5. Run `make install`.
@@ -121,19 +112,16 @@ jtag> detect
 
 Your output should look like this:
 
+IR length: 5
+Chain length: 1
 Device Id: 01011001001001100100000000010011
   Manufacturer: Intel
   Part:         PXA250
   Stepping:     C0
   Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
 
-If you get empty output or this error message
-
-	detect_parts: bad JTAG connection (TDO is 1)
-
-your JTAG adapter is not connected properly, or your target board
-doesn't work, or your JTAG-aware chip doesn't support JTAG ID detection
-(IDCODE instruction).
+If you get empty output or an error message your JTAG adapter is not connected
+properly, or your target board doesn't work, or it is turned off.
 
 "detect" command is required before all other commands.
 
@@ -141,10 +129,10 @@ doesn't work, or your JTAG-aware chip doesn't support JTAG ID detection
 
 Type "print" at the jtag command prompt. Here is an output example:
 
-jtag> print
- No. Manufacturer         Part                 Stepping Instruction          Register
-----------------------------------------------------------------------------------------
-   0 Intel                PXA250               C0       BYPASS               BR
+jtag> print chain
+ No. Manufacturer              Part                 Stepping Instruction          Register
+---------------------------------------------------------------------------------------------
+   0 Intel                     PXA250               C0       BYPASS               BR
 jtag>
 
 ===> Fourth task: Sample device pin status.
@@ -159,10 +147,10 @@ jtag> dr
 00000000000000000000000000000001000000000000000000000000000000000000000000000000
 11110000000000000000000000000000000000000000001000000000000000000000000000000000
 0000000000
-jtag> print
- No. Manufacturer         Part                 Stepping Instruction          Register
-----------------------------------------------------------------------------------------
-   0 Intel                PXA250               C0       SAMPLE/PRELOAD       BSR
+jtag> print chain
+ No. Manufacturer              Part                 Stepping Instruction          Register
+---------------------------------------------------------------------------------------------
+   0 Intel                     PXA250               C0       SAMPLE/PRELOAD       BSR
 jtag> get signal BOOT_SEL[0]
 BOOT_SEL[0] = 0
 jtag>
@@ -222,24 +210,24 @@ jtag>
 Contacts
 --------
 
-Homepage: http://openwince.sourceforge.net/jtag/
+Homepage: <http://openwince.sourceforge.net/jtag/>
 
-CVS repository: http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/openwince/jtag/
+CVS repository: <http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/openwince/jtag/>
 
 Please report and track bugs at (please use Category 'jtag'):
-http://sourceforge.net/tracker/?group_id=52603&atid=469850
+<http://sourceforge.net/tracker/?group_id=52603&atid=469850>
 
 Mailing list (discussion, questions): openwince-list@lists.sourceforge.net
-Subscribe: http://lists.sourceforge.net/mailman/listinfo/openwince-list
+Subscribe: <http://lists.sourceforge.net/mailman/listinfo/openwince-list>
 
 Mailing list (announce): openwince-announce@lists.sourceforge.net
-Subscribe: http://lists.sourceforge.net/mailman/listinfo/openwince-announce
+Subscribe: <http://lists.sourceforge.net/mailman/listinfo/openwince-announce>
 
 Patches and improvements are welcome at (please use Category 'jtag'):
-http://sourceforge.net/tracker/?group_id=52603&atid=469852
+<http://sourceforge.net/tracker/?group_id=52603&atid=469852>
 
 Feature requests are welcome at (please use Category 'jtag'):
-http://sourceforge.net/tracker/?group_id=52603&atid=469853
+<http://sourceforge.net/tracker/?group_id=52603&atid=469853>
 
 Support requests are welcome at (please use Category 'jtag'):
-http://sourceforge.net/tracker/?group_id=52603&atid=469851
+<http://sourceforge.net/tracker/?group_id=52603&atid=469851>

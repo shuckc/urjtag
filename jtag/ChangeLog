@@ -1,5 +1,10 @@
 2003-08-14  Marcel Telka  <marcel@telka.sk>
 
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added samsung/s3c4510b/s3c4510b.
+	* data/samsung/s3c4510b/s3c4510b: New file (Jiun-Shian Ho).
+
+2003-08-14  Marcel Telka  <marcel@telka.sk>
+
 	* data/MANUFACTURERS: Changed directory name for Philips.
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added philips/PARTS, philips/xcr3128xl-cs144/STEPPINGS, and
 		philips/xcr3128xl-cs144/xcr3128xl-cs144.
