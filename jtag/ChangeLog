@@ -1,5 +1,9 @@
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
+	Version 0.2 released.
+
+2003-01-08  Marcel Telka  <marcel@telka.sk>
+
 	* include/cable.h: Unified and simplified cable driver handling, added driver name
 		and driver description into driver interface structure.
 	* src/help.c (help): Ditto.
