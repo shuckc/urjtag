@@ -4,6 +4,7 @@ jtag-0.3.2:
 
 	* Added driver for Keith & Koep JTAG Cable.
 	* Ported to NetBSD/i386 (Jachym Holecek).
+	* Added JTAG declarations for Xilinx XCR3256XL-FT256 (Jachym Holecek).
 
 jtag-0.3.1 (2003-03-19):
 

@@ -43,5 +43,7 @@ nobase_dist_pkgdata_DATA = \
 	xilinx/PARTS \
 	xilinx/xcr3128xl-cs144/STEPPINGS \
 	xilinx/xcr3128xl-cs144/xcr3128xl-cs144 \
+	xilinx/xcr3256xl-ft256/STEPPINGS \
+	xilinx/xcr3256xl-ft256/xcr3256xl-ft256 \
 	xilinx/xc2c256-tq144/STEPPINGS \
 	xilinx/xc2c256-tq144/xc2c256-tq144
