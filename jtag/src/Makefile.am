@@ -36,6 +36,7 @@ jtag_SOURCES = \
 	bus.h \
 	pxa250.c \
 	sa1110.c \
+	ixp425.c \
 	cfi.c \
 	flash.c \
 	help.c

@@ -5,8 +5,9 @@ $Id$
 	* Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
 	* Added support for Arcom JTAG Cable (patch 682310, Ian Campbell).
 	* Added support for all 6 static memory banks for Intel SA1110 (bug 682660).
-	* Added support for bidirectional 'B' boundary scan pins (Christian Pellegrin).
-	* Added JTAG declarations for Intel IXP425 (Cristian Pellegrin).
+	* Added support for bidirectional 'B' boundary scan bits (Christian Pellegrin).
+	* Added JTAG declarations for Intel IXP425 (Christian Pellegrin).
+	* Added bus driver for Intel IXP425 (Christian Pellegrin).
 
 jtag-0.2.2 (2003-02-04):
 

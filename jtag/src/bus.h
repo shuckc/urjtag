@@ -48,5 +48,6 @@ extern bus_driver_t *bus_driver;
 
 extern bus_driver_t sa1110_bus_driver;
 extern bus_driver_t pxa250_bus_driver;
+extern bus_driver_t ixp425_bus_driver;
 
 #endif /* BUS_H */

@@ -1,5 +1,12 @@
 2003-02-13  Marcel Telka  <marcel@telka.sk>
 
+	* src/ixp425.c: Added bus driver for Intel IXP425 (Christian Pellegrin).
+	* src/bus.h: Ditto.
+	* src/jtag.c (main): Ditto.
+	* src/Makefile.am (jtag_SOURCES): Added ixp425.c (Christian Pellegrin).
+
+2003-02-13  Marcel Telka  <marcel@telka.sk>
+
 	* data/intel/ixp425/ixp425: Added JTAG declarations for Intel IXP425 (Christian
 		Pellegrin).
 	* data/intel/ixp425/STEPPINGS: Ditto.

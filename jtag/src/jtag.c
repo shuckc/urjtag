@@ -237,6 +237,8 @@ main( void )
 				bus_driver = &sa1110_bus_driver;
 			if (strcmp( ps->parts[0]->part, "PXA250" ) == 0)
 				bus_driver = &pxa250_bus_driver;
+			if (strcmp( ps->parts[0]->part, "IXP425" ) == 0)
+				bus_driver = &ixp425_bus_driver;
 			continue;
 		}
 
