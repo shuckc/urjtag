@@ -48,6 +48,7 @@ JTAG adapters/cables (see 'help cable' command for more info):
 JTAG-aware parts (chips):
 - Atmel ATmega128 (partial support)
 - Broadcom BCM1250
+- Broadcom BCM5421S
 - Hitachi SH7727
 - Intel IXP425
 - Intel SA1110

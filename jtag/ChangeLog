@@ -1,3 +1,12 @@
+2003-05-26  Marcel Telka  <marcel@telka.sk>
+
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added broadcom/bcm5421s/STEPPINGS
+		and broadcom/bcm5421s/bcm5421s.
+	* data/MANUFACTURERS: Added new manufacturer ID code for Boradcom (patch 743129, Matan Ziv-Av).
+	* data/broadcom/PARTS: Added entry for BC5421S (patch 743129, Matan Ziv-Av).
+	* data/broadcom/bcm5421s/STEPPINGS: New file (patch 743129, Matan Ziv-Av).
+	* data/broadcom/bcm5421s/bcm5421s: Ditto.
+
 2003-05-22  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AM_CONFIG_HEADER): Renamed acconfig.h configuration header to pkgcfg.h.
