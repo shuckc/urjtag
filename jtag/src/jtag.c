@@ -214,6 +214,31 @@ main( void )
 			continue;
 		}
 
+		if (strcmp( t, "dr" ) == 0) {
+			int n;
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "dr: syntax error\n" );
+				continue;
+			}
+
+			n = strtol( t, &t, 10 );
+			if (t && *t) {
+				printf( "dr: syntax error\n" );
+				continue;
+			}
+			
+			if ((n < 0) || (n >= ps->len)) {
+				printf( "dr: invalid part number\n" );
+				continue;
+			}
+
+			printf( "%s\n", register_get_string( ps->parts[n]->active_instruction->data_register->out ) );
+
+			continue;
+		}
+
 		if (strcmp( t, "set" ) == 0) {
 			t = get_token( NULL );
 			if (!t) {
