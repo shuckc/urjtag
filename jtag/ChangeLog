@@ -1,3 +1,10 @@
+2004-08-16  Marcel Telka  <marcel@telka.sk>
+
+	* src/bus/pxa2x0.c (bus_params_t): Added new member: inited.
+	(INITED): New macro.
+	(pxa2x0_bus_new): Removed BOOT_DEF initialization.
+	(pxa250_bus_prepare): Added BOOT_DEF initialization.
+
 2004-08-15  Marcel Telka  <marcel@telka.sk>
 
 	* include/jtag.h (detect_parts): Changed return type.

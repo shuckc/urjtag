@@ -54,6 +54,7 @@ typedef struct {
 	signal_t *noe;
 	signal_t *nsdcas;
 	MC_registers_t MC_registers;
+	int inited;
 } bus_params_t;
 
 #define	CHAIN	((bus_params_t *) bus->params)->chain
@@ -69,6 +70,8 @@ typedef struct {
 #define	nSDCAS		((bus_params_t *) bus->params)->nsdcas
 
 #define	MC_pointer	(&((bus_params_t *) bus->params)->MC_registers)
+
+#define	INITED		((bus_params_t *) bus->params)->inited
 
 static void
 setup_address( bus_t *bus, uint32_t a )
@@ -121,7 +124,19 @@ pxa2x0_bus_printinfo( bus_t *bus )
 
 static void
 pxa250_bus_prepare( bus_t *bus )
-{       
+{
+	if (INITED == 0) {
+		part_set_instruction( PART, "SAMPLE/PRELOAD" );
+		chain_shift_instructions( chain );
+		chain_shift_data_registers( chain, 1 );
+
+		BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[2]" ) ) << 2
+								| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[1]" ) ) << 1
+								| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[0]" ) ));
+
+		INITED = 1;
+	}
+
 	part_set_instruction( PART, "EXTEST" );
 	chain_shift_instructions( CHAIN );
 }
@@ -442,13 +457,7 @@ pxa2x0_bus_new( void )
 		return NULL;
 	}
 
-	part_set_instruction( PART, "SAMPLE/PRELOAD" );
-	chain_shift_instructions( chain );
-	chain_shift_data_registers( chain, 1 );
-
-	BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[2]" ) ) << 2
-							| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[1]" ) ) << 1
-							| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[0]" ) ));
+	INITED = 0;
 
 	return bus;
 }
