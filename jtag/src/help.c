@@ -26,10 +26,10 @@
 #include <config.h>
 #endif
 
+#include "gettext.h"
+
 #include <stdio.h>
 #include <string.h>
-
-#include "gettext.h"
 
 #include "cable.h"
 #include "flash.h"

@@ -1,5 +1,12 @@
 2003-02-20  Marcel Telka  <marcel@telka.sk>
 
+	* src/Makefile.am (jtag_SOURCES): Added missing flash.h.
+	* src/jtag.c: Added missing string.h include. Moved gettext.h include
+		to the top level of the include list.
+	* src/help.c: Moved gettext.h include to the top level of the include list.
+
+2003-02-20  Marcel Telka  <marcel@telka.sk>
+
 	* Makefile.am (SUBDIRS): Removed intl.
 	* autogen.sh: Replaced subsequent call of auto* tools with autoreconf one.
 	* configure.ac (AC_CONFIG_FILES): Removed intl/Makefile.

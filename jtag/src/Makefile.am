@@ -36,6 +36,7 @@ jtag_SOURCES = \
 	readmem.c \
 	detect.h \
 	cfi.c \
+	flash.h \
 	flash.c \
 	flash-intel.c \
 	flash-amd.c \
