@@ -30,14 +30,49 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
+openwinceincdir = $(includedir)/openwince
+
 SUBDIRS =
 
-DIST_SUBDIRS = \
-	arm \
-	jtag
-
-noinst_HEADERS = \
+nobase_openwinceinc_HEADERS = \
 	common.h \
 	stdint.h \
 	ac97.h \
-	ucb1400.h
+	ucb1400.h \
+	arm/arm.h \
+	arm/platform.h \
+	arm/platform/wid.h \
+	arm/platform/wep.h \
+	arm/sa11x0/gpclk.h \
+	arm/sa11x0/gpio.h \
+	arm/sa11x0/hssp.h \
+	arm/sa11x0/ic.h \
+	arm/sa11x0/lcd.h \
+	arm/sa11x0/mc.h \
+	arm/sa11x0/mcp.h \
+	arm/sa11x0/ost.h \
+	arm/sa11x0/pm.h \
+	arm/sa11x0/ppc.h \
+	arm/sa11x0/rc.h \
+	arm/sa11x0/rtc.h \
+	arm/sa11x0/ssp.h \
+	arm/sa11x0/uart.h \
+	arm/sa11x0/udc.h \
+	arm/pxa2x0/ac97.h \
+	arm/pxa2x0/cm.h \
+	arm/pxa2x0/dma.h \
+	arm/pxa2x0/gpio.h \
+	arm/pxa2x0/i2c.h \
+	arm/pxa2x0/i2s.h \
+	arm/pxa2x0/ic.h \
+	arm/pxa2x0/icp.h \
+	arm/pxa2x0/lcd.h \
+	arm/pxa2x0/mc.h \
+	arm/pxa2x0/mmc.h \
+	arm/pxa2x0/ost.h \
+	arm/pxa2x0/pmrc.h \
+	arm/pxa2x0/pwm.h \
+	arm/pxa2x0/rtc.h \
+	arm/pxa2x0/ssp.h \
+	arm/pxa2x0/uart.h \
+	arm/pxa2x0/udc.h
