@@ -42,4 +42,7 @@
 
 #define	WID_GPIO_BCR_MASK	bit(17)
 
+#define	RAM_AREA_START		0xC0000000
+#define	RAM_AREA_LENGTH		0x20000000
+
 #endif /* PLATFORM_WID_H */
