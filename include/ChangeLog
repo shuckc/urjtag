@@ -1,5 +1,21 @@
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
+	* arm/pxa2x0/ac97.h: Added get_* macros for register bits.
+	* arm/pxa2x0/cm.h: Ditto.
+	* arm/pxa2x0/i2c.h: Ditto.
+	* arm/pxa2x0/i2s.h: Ditto.
+	* arm/pxa2x0/icp.h: Ditto.
+	* arm/pxa2x0/mc.h: Ditto.
+	* arm/pxa2x0/mmc.h: Ditto.
+	* arm/pxa2x0/pwm.h: Ditto.
+	* arm/pxa2x0/rtc.h: Ditto.
+	* arm/pxa2x0/ssp.h: Ditto.
+	* arm/pxa2x0/udc.h: Ditto.
+	* configure.ac (AC_INIT): Changed version number to 0.2.1.
+	(AM_INIT_AUTOMAKE): Added check-news and dist-bzip2 parameters.
+
+2003-02-04  Marcel Telka  <marcel@telka.sk>
+
 	* arm/platform.h: Removed unused file.
 	* arm/platform/wep.h: Ditto.
 	* arm/platform/wid.h: Ditto.

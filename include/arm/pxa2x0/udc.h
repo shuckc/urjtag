@@ -416,20 +416,24 @@ typedef volatile struct UDC_registers {
 #define	UFNHR_IPE4		bit(3)
 #define	UFNHR_FNMSB_MASK	bits(2,0)
 #define	UFNHR_FNMSB(x)		bits_val(2,0,x)
+#define	get_UFNHR_FNMSB(x)	bits_get(2,0,x)
 
 /* UFNLR bits - see Table 12-32 in [1], Table 12-24 in [2] */
 
 #define	UNFLR_FNLSB_MASK	bits(7,0)
 #define	UFNLR_FNLSB(x)		bits_val(7,0,x)
+#define	get_UFNLR_FNLSB(x)	bits_get(7,0,x)
 
 /* UBCRx bits - see Table 12-33 in [1], Table 12-25 in [2] */
 
 #define	UBCR_BC_MASK		bits(7,0)
 #define	UBCR_BC(x)		bits_val(7,0,x)
+#define	get_UBCR_BC(x)		bits_get(7,0,x)
 
 /* UDDRx bits - see 12.6.15 - 12.6.20 in [1], 12.6.15 - 12.6.20 in [2] */
 
 #define	UDDR_DATA_MASK		bits(7,0)
 #define	UDDR_DATA(x)		bits_val(7,0,x)
+#define	get_UDDR_DATA(x)	bits_get(7,0,x)
 
 #endif /* PXA2X0_UDC_H */

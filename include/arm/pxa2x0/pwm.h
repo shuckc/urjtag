@@ -83,19 +83,22 @@ typedef volatile struct PWM_registers {
 
 /* PWM_CTRL bits - see Table 4-49 in [1], Table 4-50 in [2] */
 
-#define	PWM_CTRL_PWM_SD		bit(6)
-#define	PWM_CTRL_PRESCALE_MASK	bits(5,0)
-#define	PWM_CTRL_PRESCALE(x)	bits_val(5,0,x)
+#define	PWM_CTRL_PWM_SD			bit(6)
+#define	PWM_CTRL_PRESCALE_MASK		bits(5,0)
+#define	PWM_CTRL_PRESCALE(x)		bits_val(5,0,x)
+#define	get_PWM_CTRL_PRESCALE(x)	bits_get(5,0,x)
 
 /* PWM_PWDUTY bits - see Table 4-50 in [1], Table 4-51 in [2] */
 
-#define	PWM_PWDUTY_FDCYCLE	bit(10)
-#define	PWM_PWDUTY_DCYCLE_MASK	bits(9,0)
-#define	PWM_PWDUTY_DCYCLE(x)	bits_val(9,0,x)
+#define	PWM_PWDUTY_FDCYCLE		bit(10)
+#define	PWM_PWDUTY_DCYCLE_MASK		bits(9,0)
+#define	PWM_PWDUTY_DCYCLE(x)		bits_val(9,0,x)
+#define	get_PWM_PWDUTY_DCYCLE(x)	bits_get(9,0,x)
 
 /* PWM_PERVAL bits - see Table 4-51 in [1], Table 4-52 in [2] */
 
-#define	PWM_PERVAL_PV_MASK	bits(9,0)
-#define	PWM_PERVAL_PV(x)	bits_val(9,0,x)
+#define	PWM_PERVAL_PV_MASK		bits(9,0)
+#define	PWM_PERVAL_PV(x)		bits_val(9,0,x)
+#define	get_PWM_PERVAL_PV(x)		bits_get(9,0,x)
 
 #endif /* PXA2X0_PWM_H */

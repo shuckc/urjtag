@@ -86,7 +86,9 @@ typedef volatile struct RTC_registers {
 #define	RTTR_LCK		bit(31)
 #define	RTTR_DEL_MASK		bits(25,16)
 #define	RTTR_DEL(x)		bits_val(25,16,x)
+#define	get_RTTR_DEL(x)		bits_get(25,16,x)
 #define	RTTR_CK_DIV_MASK	bits(15,0)
 #define	RTTR_CK_DIV(x)		bits_val(15,0,x)
+#define	get_RTTR_CK_DIV(x)	bits_get(15,0,x)
 
 #endif /* PXA2X0_RTC_H */

@@ -30,14 +30,14 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-AC_INIT(include,0.2)
+AC_INIT(include,0.2.1)
 
 AC_PREREQ(2.53)
 AC_REVISION($Revision$)
 
 AC_CONFIG_AUX_DIR(tools)
 
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME,AC_PACKAGE_VERSION)
+AM_INIT_AUTOMAKE([check-news dist-bzip2])
 
 AC_CONFIG_FILES(
 	Makefile

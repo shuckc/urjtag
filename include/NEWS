@@ -5,10 +5,9 @@ $Id$
 		- added MMC commands (Juraj Fabo)
 		- added register bits for MECR, SXCNFG, SXMRS, MCMEMx, MCATTx, MCIOx, BOOT_DEF
 		- added OSMRx (x = 0 through 3) macros
-		- added get_* macros for LCD register bits
+		- added (completed) get_* macros for all register bits
 		- fixed TCR_TVBS macro declaration
 		- fixed CKEN_CKEN4 declaration
-		- added get_* macros for DMA register bits
 		- added symbolic names and offsets for DRCMR registers (suggested by Daniel
 			Samek, patch 675417)
 		- fixed typo in DCSR_BUSERRINTR macro name (patch 678112, Daniel Samek)
