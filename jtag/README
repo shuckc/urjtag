@@ -4,7 +4,7 @@ JTAG Tools
 ~~~~~~~~~~
 
 JTAG Tools is a software package which enables working with JTAG-aware
-hardware devices (parts) and boards through JTAG adapter.
+(IEEE 1149.1) hardware devices (parts) and boards through JTAG adapter.
 
 This package has open and modular architecture with ability to writing
 miscellanous extensions (like board testers, flash memory programmers,
