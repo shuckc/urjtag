@@ -1,3 +1,17 @@
+2003-01-30  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable/byteblaster.c (byteblaster_init): Added support for
+		parallel ports with I/O addresses above 0x3FF.
+	(byteblaster_done): Ditto.
+	* src/tap/cable/dlc5.c (dlc5_init): Ditto.
+	(dlc5_done): Ditto.
+	* src/tap/cable/ea253.c (ea253_init): Ditto.
+	(ea253_done): Ditto.
+	* src/tap/cable/ei012.c (ei012_init): Ditto.
+	(ei012_done): Ditto.
+	* src/tap/cable/wiggler.c (wiggler_init): Ditto.
+	(wiggler_done): Ditto.
+
 2003-01-19  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac: Added AC_GNU_SOURCE.

@@ -59,13 +59,16 @@ byteblaster_init( unsigned int aport )
 {
 	tap_state_init();
 	port = aport;
-	return !ioperm( port, 2, 1 );
+	return !(((port + 2 <= 0x400) && ioperm( port, 2, 1 )) || ((port + 2 > 0x400) && iopl( 3 )));
 }
 
 static void
 byteblaster_done( void )
 {
-	ioperm( port, 2, 0 );
+	if (port + 2 <= 0x400)
+		ioperm( port, 2, 0 );
+	else
+		iopl( 0 );
 
 	tap_state_done();
 }

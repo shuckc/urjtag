@@ -52,7 +52,7 @@ ea253_init( unsigned int aport )
 {
 	tap_state_init();
 	port = aport;
-	if (ioperm( port, 2, 1 ))
+	if (((port + 2 <= 0x400) && ioperm( port, 2, 1 )) || ((port + 2 > 0x400) && iopl( 3 )))
 		return 0;
 	tap_state_set_trst( (inb( port ) >> TRST) & 1 );
 
@@ -62,7 +62,10 @@ ea253_init( unsigned int aport )
 static void
 ea253_done( void )
 {
-	ioperm( port, 2, 0 );
+	if (port + 2 <= 0x400)
+		ioperm( port, 2, 0 );
+	else
+		iopl( 0 );
 
 	tap_state_done();
 }
