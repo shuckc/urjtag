@@ -25,7 +25,7 @@
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
- *     Specification Update", May 2002, Order Number: 278534-005
+ *     Specification Update", June 2002, Order Number: 278534-007
  *
  */
 
@@ -103,11 +103,10 @@ typedef volatile struct MC_registers {
 #define	MDMRS_OFFSET	0x40
 #define	BOOT_DEF	0x44
 
-/* MDCNFG bits */
+/* MDCNFG bits - see Table 6-3 in [1] and D25. in [2] */
 
 #define	MDCNFG_DSA1111_2	bit(28)
 #define	MDCNFG_DLATCH2		bit(27)
-#define	MDCNFG_DADDR2		bit(26)
 #define	MDCNFG_DTC2_MASK	0x03000000
 #define	MDCNFG_DTC2(x)		((x << 24) & MDCNFG_DTC2_MASK)
 #define	MDCNFG_DNB2		bit(23)
@@ -120,7 +119,6 @@ typedef volatile struct MC_registers {
 #define	MDCNFG_DE2		bit(16)
 #define	MDCNFG_DSA1111_0	bit(12)
 #define	MDCNFG_DLATCH0		bit(11)
-#define	MDCNFG_DADDR0		bit(10)
 #define	MDCNFG_DTC0_MASK	0x00000300
 #define	MDCNFG_DTC0(x)		((x << 8) & MDCNFG_DTC0_MASK)
 #define	MDCNFG_DNB0		bit(7)
@@ -132,7 +130,7 @@ typedef volatile struct MC_registers {
 #define	MDCNFG_DE1		bit(1)
 #define	MDCNFG_DE0		bit(0)
 
-/* MDREFR bits */
+/* MDREFR bits - see Table 6-5 in [1] */
 
 #define	MDREFR_K2FREE		bit(25)
 #define	MDREFR_K1FREE		bit(24)
@@ -150,7 +148,7 @@ typedef volatile struct MC_registers {
 #define	MDREFR_DRI_MASK		0x00000FFF
 #define	MDREFR_DRI(x)		(x & MDREFR_DRI_MASK)
 
-/* MDMRS bits */
+/* MDMRS bits - see Table 6-4 in [1] */
 
 #define	MDMRS_MDMRS2_MASK	0x7F800000
 #define	MDMRS_MDMRS2(x)		((x << 23) & MDMRS_MDMRS2_MASK)
