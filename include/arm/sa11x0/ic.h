@@ -32,14 +32,13 @@
 #ifndef	SA11X0_IC_H
 #define	SA11X0_IC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
-#endif
+#include <common.h>
 
 /* Interrupt Controller Registers */
 
 #define	IC_BASE		0x90050000
 
+#if LANGUAGE == C
 typedef volatile struct IC_registers {
 	uint32_t icip;
 	uint32_t icmr;
@@ -60,5 +59,17 @@ typedef volatile struct IC_registers {
 #define	ICCR		IC_pointer->iccr
 #define	ICFP		IC_pointer->icfp
 #define	ICPR		IC_pointer->icpr
+#endif /* LANGUAGE == C */
 
-#endif	/* SA11X0_IC_H */
+#define	ICIP_OFFSET	0x00
+#define	ICMR_OFFSET	0x04
+#define	ICLR_OFFSET	0x08
+#define	ICCR_OFFSET	0x0C
+#define	ICFP_OFFSET	0x10
+#define	ICPR_OFFSET	0x20
+
+/* ICCR bits */
+
+#define	ICCR_DIM	bit(0)
+
+#endif /* SA11X0_IC_H */
