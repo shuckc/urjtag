@@ -1,3 +1,8 @@
+2003-08-12  Marcel Telka  <marcel@telka.sk>
+
+	* src/bsdl2jtag.c (endline): Added support for "downto" in bit vectors and "observe_only" (patch 787346,
+		Brad Parker).
+
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
 	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added include.c.

@@ -185,6 +185,9 @@ int endline(void) {
 					if(!strncasecmp(type, "input", 5)) {
 						bs_bits[bit].type=BSBIT_INPUT;
 					} else 
+					if(!strncasecmp(type, "observe_only", 12)) {
+						bs_bits[bit].type=BSBIT_INPUT;
+					} else 
 					if(!strncasecmp(type, "OUTPUT", 6)) {
 						bs_bits[bit].type=BSBIT_OUTPUT;
 					} else 
@@ -254,9 +257,14 @@ int endline(void) {
 				pins_num++;
 				sscanf(pline, "%s %s %n\n", pins[pins_num], tmp, &i);
 				if(!strncmp(pline+i, "bit_vector", 10)) {
-					int f,t;
+					int f,t,n;
 					strcpy(tmp, pins[pins_num]);
-					sscanf(pline+i, "bit_vector ( %i to %i )", &f, &t);
+					n = sscanf(pline+i, "bit_vector ( %i to %i )", &f, &t);
+					if (n < 2)
+						n = sscanf(pline+i, "bit_vector ( %i downto %i )", &f, &t);
+					if (n < 2) {
+						exit(1);
+					}
 					while (f<=t) {
 						sprintf(pins[pins_num], "%s%i",tmp,f);
 						f++;
