@@ -2,6 +2,7 @@
 # $Id$
 #
 # Copyright (C) 2003 ETC s.r.o.
+# Copyright (C) 2004 Marcel Telka
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,17 +19,13 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2003.
+# Written by Marcel Telka <marcel@telka.sk>, 2003, 2004.
 #
 
-RECURSIVE_TARGETS =
-RECURSIVE_TARGETS += lint-recursive
-
-lint: lint-recursive
+lint:
 	-test "$(SOURCES)" && splint $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(SOURCES)
-
-lint-recursive:
+	test -z "$(SUBDIRS)" || $(MAKE) RECURSIVE_TARGETS=lint-recursive $(AM_MAKEFLAGS) lint-recursive
 
 lint-am: Makefile @MAINTAINER_MODE_TRUE@ $(top_srcdir)/Makefile.rules
 
-.PHONY: lint lint-recursive lint-am
+.PHONY: lint lint-am

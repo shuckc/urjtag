@@ -1,3 +1,9 @@
+2004-08-11  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.rules (RECURSIVE_TARGETS, lint-recursive): Removed.
+	(lint): Added command to run recursive make.
+	(.PHONY): Removed lint-recursive.
+
 2004-06-13  Marcel Telka  <marcel@telka.sk>
 
 	* data/broadcom/PARTS: Added BCM4712 entry (Alan Wallace).
