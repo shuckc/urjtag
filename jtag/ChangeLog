@@ -1,5 +1,12 @@
 2003-06-10  Marcel Telka  <marcel@telka.sk>
 
+	* include/flash.h (flash_driver_t): Structure removed.
+	(flash_erase_block, flash_unlock_block, flash_program, flash_readarray): Macro removed.
+	* src/flash.c (set_flash_driver, flashcheck, flashmsbin, flashmem): Updated for new
+		flash_driver_t declared in brux/flash.h in include module.
+
+2003-06-10  Marcel Telka  <marcel@telka.sk>
+
 	* include/Makefile.am (noinst_HEADERS): Removed cfi.h.
 	* include/cfi.h: File removed.
 	* src/flash.c: Updated include header files.

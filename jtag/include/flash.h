@@ -26,32 +26,10 @@
 #ifndef FLASH_H
 #define	FLASH_H
 
-#include <stdint.h>
-#include <flash/cfi.h>
-
-#include "part.h"
-#include "bus.h"
-
-typedef struct {
-	int buswidth;		/* supported bus width, 1/2/4 bytes */
-	const char *name;
-	const char *description;
-	int (*flash_autodetect)( bus_t *bus, cfi_query_structure_t *cfi );
-	void (*flash_print_info)( bus_t *bus );
-	int (*flash_erase_block)( bus_t *bus, uint32_t adr );
-	int (*flash_unlock_block)( bus_t *bus, uint32_t adr );
-	int (*flash_program)( bus_t *bus, uint32_t adr, uint32_t data );
-	void (*flash_readarray)( bus_t *bus );
-} flash_driver_t;
+#include <brux/flash.h>
 
 extern flash_driver_t *flash_driver;
 extern flash_driver_t *flash_drivers[];
-
-/* #define flash_print_info      flash_driver->flash_print_info */
-#define flash_erase_block     flash_driver->flash_erase_block
-#define flash_unlock_block    flash_driver->flash_unlock_block
-#define flash_program         flash_driver->flash_program
-#define flash_readarray       flash_driver->flash_readarray
 
 #define	CFI_INTEL_ERROR_UNKNOWN				1
 #define	CFI_INTEL_ERROR_UNSUPPORTED			2
