@@ -637,6 +637,10 @@ jtag_parse_line( char *line )
 			dir = (strcmp( t, "in" ) == 0) ? 0 : 1;
 			if (dir) {
 				t = get_token( NULL );
+				if (!t) {
+					printf( "set: syntax error\n" );
+					return 1;
+				}
 				data = strtol( t, &t, 10 );
 				if (t && *t) {
 					printf( "set: syntax error\n" );
