@@ -35,7 +35,7 @@ tap_register *register_alloc( int len );
 tap_register *register_duplicate( const tap_register *tr );
 void register_free( tap_register *tr );
 tap_register *register_fill( tap_register *tr, int val );
-const char *register_get_string( tap_register *tr );
+const char *register_get_string( const tap_register *tr );
 tap_register *register_init( tap_register *tr, const char *value );
 int register_compare( const tap_register *tr, const tap_register *tr2 );
 int register_match( const tap_register *tr, const char *expr );

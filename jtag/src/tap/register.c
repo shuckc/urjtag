@@ -87,7 +87,7 @@ register_fill( tap_register *tr, int val )
 }
 
 const char *
-register_get_string( tap_register *tr )
+register_get_string( const tap_register *tr )
 {
 	int i;
 
@@ -149,7 +149,7 @@ int
 register_match( const tap_register *tr, const char *expr )
 {
 	int i;
-	char *s;
+	const char *s;
 
 	if (!tr || !expr || (tr->len != strlen( expr )))
 		return 0;
