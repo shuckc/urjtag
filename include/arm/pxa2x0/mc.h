@@ -32,14 +32,17 @@
 #ifndef	PXA2X0_MC_H
 #define	PXA2X0_MC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* Memory Controller Registers */
 
 #define	MC_BASE		0x48000000
 
+#if LANGUAGE == C
 typedef volatile struct MC_registers {
 	uint32_t mdcnfg;
 	uint32_t mdrefr;
@@ -61,7 +64,7 @@ typedef volatile struct MC_registers {
 	uint32_t boot_def;
 } MC_registers;
 
-#ifndef MC_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	MC_pointer	((MC_registers*) MC_BASE)
 #endif
 
@@ -81,5 +84,87 @@ typedef volatile struct MC_registers {
 #define	MCIO1		MC_pointer->mcio1
 #define	MDMRS		MC_pointer->mdmrs
 #define	BOOT_DEF	MC_pointer->boot_def
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_MC_H */
+#define	MDCNFG_OFFSET	0x00
+#define	MDREFR_OFFSET	0x04
+#define	MSC0_OFFSET	0x08
+#define	MSC1_OFFSET	0x0C
+#define	MSC2_OFFSET	0x10
+#define	MECR_OFFSET	0x14
+#define	SXCNFG_OFFSET	0x1C
+#define	SXMRS_OFFSET	0x24
+#define	MCMEM0_OFFSET	0x28
+#define	MCMEM1_OFFSET	0x2C
+#define	MCATT0_OFFSET	0x30
+#define	MCATT1_OFFSET	0x34
+#define	MCIO0_OFFSET	0x38
+#define	MCIO1_OFFSET	0x3C
+#define	MDMRS_OFFSET	0x40
+#define	BOOT_DEF	0x44
+
+/* MDCNFG bits */
+
+#define	MDCNFG_DSA1111_2	bit(28)
+#define	MDCNFG_DLATCH2		bit(27)
+#define	MDCNFG_DADDR2		bit(26)
+#define	MDCNFG_DTC2_MASK	0x03000000
+#define	MDCNFG_DTC2(x)		((x << 24) & MDCNFG_DTC2_MASK)
+#define	MDCNFG_DNB2		bit(23)
+#define	MDCNFG_DRAC2_MASK	0x00600000
+#define	MDCNFG_DRAC2(x)		((x << 21) & MDCNFG_DRAC2_MASK)
+#define	MDCNFG_DCAC2_MASK	0x00180000
+#define	MDCNFG_DCAC2(x)		((x << 19) & MDCNFG_DCAC2_MASK)
+#define	MDCNFG_DWID2		bit(18)
+#define	MDCNFG_DE3		bit(17)
+#define	MDCNFG_DE2		bit(16)
+#define	MDCNFG_DSA1111_0	bit(12)
+#define	MDCNFG_DLATCH0		bit(11)
+#define	MDCNFG_DADDR0		bit(10)
+#define	MDCNFG_DTC0_MASK	0x00000300
+#define	MDCNFG_DTC0(x)		((x << 8) & MDCNFG_DTC0_MASK)
+#define	MDCNFG_DNB0		bit(7)
+#define	MDCNFG_DRAC0_MASK	0x00000060
+#define	MDCNFG_DRAC0(x)		((x << 5) & MDCNFG_DRAC0_MASK)
+#define	MDCNFG_DCAC0_MASK	0x00000018
+#define	MDCNFG_DCAC0(x)		((x << 3) & MDCNFG_DCAC0_MASK)
+#define	MDCNFG_DWID0		bit(2)
+#define	MDCNFG_DE1		bit(1)
+#define	MDCNFG_DE0		bit(0)
+
+/* MDREFR bits */
+
+#define	MDREFR_K2FREE		bit(25)
+#define	MDREFR_K1FREE		bit(24)
+#define	MDREFR_K0FREE		bit(23)
+#define	MDREFR_SLFRSH		bit(22)
+#define	MDREFR_APD		bit(20)
+#define	MDREFR_K2DB2		bit(19)
+#define	MDREFR_K2RUN		bit(18)
+#define	MDREFR_K1DB2		bit(17)
+#define	MDREFR_K1RUN		bit(16)
+#define	MDREFR_E1PIN		bit(15)
+#define	MDREFR_K0DB2		bit(14)
+#define	MDREFR_K0RUN		bit(13)
+#define	MDREFR_E0PIN		bit(12)
+#define	MDREFR_DRI_MASK		0x00000FFF
+#define	MDREFR_DRI(x)		(x & MDREFR_DRI_MASK)
+
+/* MDMRS bits */
+
+#define	MDMRS_MDMRS2_MASK	0x7F800000
+#define	MDMRS_MDMRS2(x)		((x << 23) & MDMRS_MDMRS2_MASK)
+#define	MDMRS_MDCL2_MASK	0x00700000
+#define	MDMRS_MDCL2(x)		((x << 20) & MDMRS_MDCL2_MASK)
+#define	MDMRS_MDADD2		bit(19)
+#define	MDMRS_MDBL2_MASK	0x00070000
+#define	MDMRS_MDBL2(x)		((x << 16) & MDMRS_MDBL2_MASK)
+#define	MDMRS_MDMRS0_MASK	0x00007F80
+#define	MDMRS_MDMRS0(x)		((x << 7) & MDMRS_MDMRS0_MASK)
+#define	MDMRS_MDCL0_MASK	0x00000070
+#define	MDMRS_MDCL0(x)		((x << 4) & MDMRS_MDCL0_MASK)
+#define	MDMRS_MDADD0		bit(3)
+#define	MDMRS_MDBL0_MASK	0x00000007
+#define	MDMRS_MDBL0(x)		(x & MDMRS_MDBL0_MASK)
+
+#endif /* PXA2X0_MC_H */
