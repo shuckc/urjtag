@@ -341,7 +341,7 @@ access_bus( part *p, int type, unsigned int a, unsigned int d )
 			setup_data( p, d );
 			break;
 		default:
-			printf( "access_bus: invalid typ\n" );
+			printf( "access_bus: invalid type\n" );
 			return 0;
 	}
 
