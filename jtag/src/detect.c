@@ -29,13 +29,14 @@
 #include <jtag/register.h>
 #include <jtag/tap.h>
 #include <jtag/ctrl.h>
+#include <jtag/part.h>
 
 struct id_record {
 	char name[20];
 	char fullname[100];
 };
 
-int
+static int
 find_record( char *filename, tap_register *key, struct id_record *idr )
 {
 	FILE *file;
@@ -149,14 +150,22 @@ find_record( char *filename, tap_register *key, struct id_record *idr )
 	return r;
 }
 
-void
-detect_devices( char *db_path )
+parts *
+detect_parts( char *db_path )
 {
-	tap_register *zeros = register_fill( register_alloc( 32 ), 0 );
-	tap_register *id = register_alloc( 32 );
-
+	tap_register *zeros;
+	tap_register *id;
 	char data_path[1024];
-	
+
+	parts *ps = parts_alloc();
+	if (!ps) {
+		printf( __FUNCTION__ ": out of memory\n" );
+		return NULL;
+	}
+
+	zeros = register_fill( register_alloc( 32 ), 0 );
+	id = register_alloc( 32 );
+
 	tap_reset();
 
 	tap_capture_dr();
@@ -228,22 +237,43 @@ detect_devices( char *db_path )
 		register_free( key );
 
 		printf( "  Stepping:     %s\n", idr.fullname );
+
+		/* part definition file */
+		p = strrchr( data_path, '/' );
+		if (p)
+			p[1] = '\0';
+		else
+			data_path[0] = '\0';
+		strcat( data_path, idr.name );
+
+		printf( "Reading file: %s ... ", data_path );
+		{
+			FILE *f = fopen( data_path, "r" );
+			part *p = read_part( f );
+			parts_add_part( ps, p );
+		}
+		printf( "done\n" );
 	}
 
 	register_free( zeros );
 	register_free( id );
-	return;
+
+	return ps;
 }
 
 int
 main( void )
 {
+	parts *ps;
+
 	tap_init();
 
 	tap_set_trst( 0 );
 	tap_set_trst( 1 );
 
-	detect_devices( "../data" );
+	ps = detect_parts( "../data" );
+
+	parts_free( ps );
 
 	tap_done();
 

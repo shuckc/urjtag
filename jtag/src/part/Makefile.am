@@ -21,16 +21,13 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-SUBDIRS = \
-	tap \
-	part
+noinst_LIBRARIES = libpart.a
 
-bin_PROGRAMS = detect
-
-detect_SOURCES = detect.c
-
-detect_DEPENDENCIES = tap/libtap.a part/libpart.a
-
-detect_LDADD = -Ltap -ltap -Lpart -lpart -lioperm
+libpart_a_SOURCES = \
+	signal.c \
+	instruction.c \
+	bsbit.c \
+	part.c \
+	parse.c
 
 INCLUDES = -I$(top_srcdir)/include
