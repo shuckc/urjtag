@@ -39,14 +39,17 @@
 #ifndef	PXA2X0_MMC_H
 #define	PXA2X0_MMC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* MMC Controller Registers */
 
 #define	MMC_BASE	0x41100000
 
+#if LANGUAGE == C
 typedef volatile struct MMC_registers {
 	uint32_t mmc_strpcl;
 	uint32_t mmc_stat;
@@ -68,27 +71,164 @@ typedef volatile struct MMC_registers {
 	uint32_t mmc_txfifo;
 } MMC_registers;
 
-#ifndef MMC_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	MMC_pointer	((MMC_registers*) MMC_BASE)
 #endif
 
-#define	MMC_STRPCL	MMC_pointer->mmc_strpcl
-#define	MMC_STAT	MMC_pointer->mmc_stat
-#define	MMC_CLKRT	MMC_pointer->mmc_clkrt
-#define	MMC_SPI		MMC_pointer->mmc_spi
-#define	MMC_CMDAT	MMC_pointer->mmc_cmdat
-#define	MMC_RESTO	MMC_pointer->mmc_resto
-#define	MMC_RDTO	MMC_pointer->mmc_rdto
-#define	MMC_BLKLEN	MMC_pointer->mmc_blklen
-#define	MMC_NOB		MMC_pointer->mmc_nob
-#define	MMC_PRTBUF	MMC_pointer->mmc_prtbuf
-#define	MMC_I_MASK	MMC_pointer->mmc_i_mask
-#define	MMC_I_REG	MMC_pointer->mmc_i_reg
-#define	MMC_CMD		MMC_pointer->mmc_cmd
-#define	MMC_ARGH	MMC_pointer->mmc_argh
-#define	MMC_ARGL	MMC_pointer->mmc_argl
-#define	MMC_RES		MMC_pointer->mmc_res
-#define	MMC_RXFIFO	MMC_pointer->mmc_rxfifo
-#define	MMC_TXFIFO	MMC_pointer->mmc_txfifo
+#define	MMC_STRPCL			MMC_pointer->mmc_strpcl
+#define	MMC_STAT			MMC_pointer->mmc_stat
+#define	MMC_CLKRT			MMC_pointer->mmc_clkrt
+#define	MMC_SPI				MMC_pointer->mmc_spi
+#define	MMC_CMDAT			MMC_pointer->mmc_cmdat
+#define	MMC_RESTO			MMC_pointer->mmc_resto
+#define	MMC_RDTO			MMC_pointer->mmc_rdto
+#define	MMC_BLKLEN			MMC_pointer->mmc_blklen
+#define	MMC_NOB				MMC_pointer->mmc_nob
+#define	MMC_PRTBUF			MMC_pointer->mmc_prtbuf
+#define	MMC_I_MASK			MMC_pointer->mmc_i_mask
+#define	MMC_I_REG			MMC_pointer->mmc_i_reg
+#define	MMC_CMD				MMC_pointer->mmc_cmd
+#define	MMC_ARGH			MMC_pointer->mmc_argh
+#define	MMC_ARGL			MMC_pointer->mmc_argl
+#define	MMC_RES				MMC_pointer->mmc_res
+#define	MMC_RXFIFO			MMC_pointer->mmc_rxfifo
+#define	MMC_TXFIFO			MMC_pointer->mmc_txfifo
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_MMC_H */
+#define	MMC_STRPCL_OFFSET		0x00
+#define	MMC_STAT_OFFSET			0x04
+#define	MMC_CLKRT_OFFSET		0x08
+#define	MMC_SPI_OFFSET			0x0C
+#define	MMC_CMDAT_OFFSET		0x10
+#define	MMC_RESTO_OFFSET		0x14
+#define	MMC_RDTO_OFFSET			0x18
+#define	MMC_BLKLEN_OFFSET		0x1C
+#define	MMC_NOB_OFFSET			0x20
+#define	MMC_PRTBUF_OFFSET		0x24
+#define	MMC_I_MASK_OFFSET		0x28
+#define	MMC_I_REG_OFFSET		0x2C
+#define	MMC_CMD_OFFSET			0x30
+#define	MMC_ARGH_OFFSET			0x34
+#define	MMC_ARGL_OFFSET			0x38
+#define	MMC_RES_OFFSET			0x3C
+#define	MMC_RXFIFO_OFFSET		0x40
+#define	MMC_TXFIFO_OFFSET		0x44
+
+/* MMC_STRPCL bits - see Table 15-6 in [1] */
+
+#define	MMC_STRPCL_STRPCL_MASK		bits(1,0)
+#define	MMC_STRPCL_STRPCL(x)		bits_val(1,0,x)
+
+/* MMC_STAT bits - see Table 15-7 in [1] */
+
+#define	MMC_STAT_END_CMD_RES		bit(13)
+#define	MMC_STAT_PRG_DONE		bit(12)
+#define	MMC_STAT_DATA_TRAN_DONE		bit(11)
+#define	MMC_STAT_CLK_EN			bit(8)
+#define	MMC_STAT_RECV_FIFO_FULL		bit(7)
+#define	MMC_STAT_XMIT_FIFO_EMPTY	bit(6)
+#define	MMC_STAT_RES_CRC_ERR		bit(5)
+#define	MMC_STAT_SPI_READ_ERROR_TOKEN	bit(4)
+#define	MMC_STAT_CRC_READ_ERROR		bit(3)
+#define	MMC_STAT_CRC_WRITE_ERROR	bit(2)
+#define	MMC_STAT_TIME_OUT_RESPONSE	bit(1)
+#define	MMC_STAT_READ_TIME_OUT		bit(0)
+
+/* MMC_CLKRT bits - see Table 15-8 in [1] */
+
+#define	MMC_CLKRT_CLK_RATE_MASK		bits(2,0)
+#define	MMC_CLKRT_CLK_RATE(x)		bits_val(2,0,x)
+
+/* MMC_SPI bits - see Table 15-9 in [1] */
+
+#define	MMC_SPI_SPI_CS_ADDRESS		bit(3)
+#define	MMC_SPI_SPI_CS_EN		bit(2)
+#define	MMC_SPI_CRC_ON			bit(1)
+#define	MMC_SPI_SPI_EN			bit(0)
+
+/* MMC_CMDAT bits - see Table 15-10 in [1] */
+
+#define	MMC_CMDAT_MMC_DMA_EN		bit(7)
+#define	MMC_CMDAT_INIT			bit(6)
+#define	MMC_CMDAT_BUSY			bit(5)
+#define	MMC_CMDAT_STREAM_BLOCK		bit(4)
+#define	MMC_CMDAT_WRITE_READ		bit(3)
+#define	MMC_CMDAT_DATA_EN		bit(2)
+#define	MMC_CMDAT_RESPONSE_FORMAT_MASK	bits(1,0)
+#define	MMC_CMDAT_RESPONSE_FORMAT(x)	bits_val(1,0,x)
+
+/* MMC_RESTO bits - see Table 15-11 in [1] */
+
+#define	MMC_RESTO_RES_TO_MASK		bits(6,0)
+#define	MMC_RESTO_RES_TO(x)		bits_val(6,0,x)
+
+/* MMC_RDTO bits - see Table 15-12 in [1] */
+
+#define	MMC_RDTO_READ_TO_MASK		bits(15,0)
+#define	MMC_RDTO_READ_TO(x)		bits_val(15,0,x)
+
+/* MMC_BLKLEN bits - see Table 15-13 in [1] */
+
+#define	MMC_BLKLEN_BLK_LEN_MASK		bits(9,0)
+#define	MMC_BLKLEN_BLK_LEN(x)		bits_val(9,0,x)
+
+/* MMC_NOB bits - see Table 15-14 in [1] */
+
+#define	MMC_NOB_MMC_NOB_MASK		bits(15,0)
+#define	MMC_NOB_MMC_NOB(x)		bits_val(15,0,x)
+
+/* MMC_PRTBUF bits - see Table 15-15 in [1] */
+
+#define	MMC_PRTBUF_BUF_PART_FULL	bit(0)
+
+/* MMC_I_MASK bits - see Table 15-15 in [1] */
+
+#define	MMC_I_MASK_TXFIFO_WR_REQ	bit(6)
+#define	MMC_I_MASK_RXFIFO_RD_REQ	bit(5)
+#define	MMC_I_MASK_CLK_IS_OFF		bit(4)
+#define	MMC_I_MASK_STOP_CMD		bit(3)
+#define	MMC_I_MASK_END_CMD_RES		bit(2)
+#define	MMC_I_MASK_PRG_DONE		bit(1)
+#define	MMC_I_MASK_DATA_TRAN_DONE	bit(0)
+
+/* MMC_I_REG bits - see Table 15-17 in [1] */
+
+#define	MMC_I_REG_TXFIFO_WR_REQ		bit(6)
+#define	MMC_I_REG_RXFIFO_RD_REQ		bit(5)
+#define	MMC_I_REG_CLK_IS_OFF		bit(4)
+#define	MMC_I_REG_STOP_CMD		bit(3)
+#define	MMC_I_REG_END_CMD_RES		bit(2)
+#define	MMC_I_REG_PRG_DONE		bit(1)
+#define	MMC_I_REG_DATA_TRAN_DONE	bit(0)
+
+/* MMC_CMD bits - see Table 15-18 in [1] */
+
+#define	MMC_CMD_CMD_INDEX_MASK		bits(5,0)
+#define	MMC_CMD_CMD_INDEX(x)		bits_val(5,0,x)
+
+/* MMC_ARGH bits - see Table 15-20 in [1] */
+
+#define	MMC_ARGH_ARG_H_MASK		bits(15,0)
+#define	MMC_ARGH_ARG_H(x)		bits_val(15,0,x)
+
+/* MMC_ARGL bits - see Table 15-21 in [1] */
+
+#define	MMC_ARGL_ARG_L_MASK		bits(15,0)
+#define	MMC_ARGL_ARG_L(x)		bits_val(15,0,x)
+
+/* MMC_RES bits - see Table 15-22 in [1] */
+
+#define	MMC_RES_RESPONSE_DATA_MASK	bits(15,0)
+#define	MMC_RES_RESPONSE_DATA(x)	bits_val(15,0,x)
+
+/* MMC_RXFIFO bits - see Table 15-23 in [1] */
+
+#define	MMC_RXFIFO_READ_DATA_MASK	bits(7,0)
+#define	MMC_RXFIFO_READ_DATA(x)		bits_val(7,0,x)
+
+/* MMC_TXFIFO bits - see Table 15-24 in [1] */
+
+#define	MMC_TXFIFO_WRITE_DATA_MASK	bits(7,0)
+#define	MMC_TXFIFO_WRITE_DATA(x)	bits_val(7,0,x)
+
+#endif /* PXA2X0_MMC_H */
