@@ -71,7 +71,9 @@ help( const char *cmd )
 			"CABLE      cable type\n"
 			"\n"
 			"List of supported cables:\n"
-			"none, EA253\n"
+			"none       No cable connected\n"
+			"DLC5       Xilinx DLC5 JTAG Parallel Cable III\n"
+			"EA253      ETC EA253 JTAG Cable\n"
 		);
 	else if (strcmp( cmd, "detect" ) == 0)
 		printf(

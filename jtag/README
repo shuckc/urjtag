@@ -34,9 +34,9 @@ Tested operating systems:
 Supported hardware
 ------------------
 
-JTAG adapters:
-- various parallel port JTAG adapters/cables (for complete list see
-  'help cable' command)
+JTAG adapters/cables (see 'help cable' command for more info):
+- Xilinx DLC5 JTAG Parallel Cable III
+- ETC EA253 JTAG Cable
 
 JTAG-aware parts (chips):
 - Atmel ATmega128 (partial support)

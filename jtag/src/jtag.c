@@ -137,12 +137,16 @@ main( void )
 			if (strcmp( t, "none" ) == 0) {
 				printf( "Changed cable to 'none'\n" );
 				cable = NULL;
+			} else if (strcmp( t, "DLC5" ) == 0) {
+				cable = &dlc5_cable_driver;
+
+				if (!cable->init( port ))
+					cable = NULL;
 			} else if (strcmp( t, "EA253" ) == 0) {
 				cable = &ea253_cable_driver;
 
-				if (!cable->init( port )) {
+				if (!cable->init( port ))
 					cable = NULL;
-				}
 			} else {
 				printf( "Unknown cable: %s\n", t );
 				continue;
