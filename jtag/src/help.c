@@ -141,10 +141,12 @@ help( const char *cmd )
 		);
 	else if (strcmp( cmd, "dr" ) == 0)
 		printf(
-			"Usage: dr PART\n"
-			"Display data register content.\n"
+			"Usage: dr PART [DIR]\n"
+			"Display input or output data register content.\n"
 			"\n"
 			"PART          part number (see print command)\n"
+			"DIR           requested data register; possible values: 'in' for\n"
+			"                input and 'out' for output; default is 'out'\n"
 		);
 	else if (strcmp( cmd, "detectflash" ) == 0)
 		printf(
@@ -183,7 +185,14 @@ help( const char *cmd )
 		);
 	else if (strcmp( cmd, "set" ) == 0)
 		printf(
-			"TODO\n"
+			"Usage: set signal PART SIGNAL DIR [DATA]\n"
+			"Set signal state in input BSR (Boundary Scan Register).\n"
+			"\n"
+			"PART          part number (see print command)\n"
+			"SIGNAL        signal name (from JTAG declaration file)\n"
+			"DIR           requested signal direction; possible values: 'in' or 'out'\n"
+			"DATA          desired output signal value ('0' or '1');  used only if DIR\n"
+			"                is 'out'\n"
 		);
 	else
 		printf( "Invalid command.\n" );

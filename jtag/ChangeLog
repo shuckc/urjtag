@@ -1,5 +1,13 @@
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
+	* src/jtag.c (main): Added more checks for syntax errors. Added support for
+		printing input data registers - command 'dr'. Added 'set signal'
+		command.
+	* src/help.c (help): Updated help for 'dr' command, added help for 'set
+		signal.
+
+2003-02-04  Marcel Telka  <marcel@telka.sk>
+
 	Version 0.2.2 released.
 
 2003-02-04  Marcel Telka  <marcel@telka.sk>

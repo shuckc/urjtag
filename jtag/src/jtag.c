@@ -88,8 +88,13 @@ main( void )
 		if (!t)
 			continue;
 
-		if (strcmp( t, "quit" ) == 0)
+		if (strcmp( t, "quit" ) == 0) {
+			if (get_token( NULL )) {
+				printf( "quit: syntax error\n\nType \"help\" for help.\n\n" );
+				continue;
+			}
 			break;
+		}
 
 		if (strcmp( t, "help" ) == 0) {
 			t = get_token( NULL );
@@ -113,8 +118,12 @@ main( void )
 				continue;
 			}
 
-			printf( "Setting TCK frequency to %u Hz\n", freq );
+			if (get_token( NULL )) {
+				printf( "frequency: syntax error\n" );
+				continue;
+			}
 
+			printf( "Setting TCK frequency to %u Hz\n", freq );
 			frequency = freq;
 
 			continue;
@@ -210,7 +219,10 @@ main( void )
 				continue;
 			}
 
-			t = get_token( NULL );
+			if (get_token( NULL )) {
+				printf( "detect: syntax error\n" );
+				continue;
+			}
 
 			parts_free( ps );
 			ps = detect_parts( JTAG_DATA_DIR );
@@ -262,15 +274,13 @@ main( void )
 				printf( "flashmem: missing filename\n" );
 				continue;
 			}
+			if (get_token( NULL )) {
+				printf( "syntax error!\n" );
+				continue;
+			}
 			f = fopen( t, "r" );
 			if (!f) {
 				printf( "Unable to open file `%s'!\n", t );
-				continue;
-			}
-			t = get_token( NULL );
-			if (t) {
-				printf( "syntax error!\n" );
-				fclose( f );
 				continue;
 			}
 			if (msbin) 
@@ -322,18 +332,16 @@ main( void )
 				printf( "flashmem: missing filename\n" );
 				continue;
 			}
+			if (get_token( NULL )) {
+				printf( "syntax error!\n" );
+				continue;
+			}
+
 			f = fopen( t, "w" );
 			if (!f) {
 				printf( "Unable to create file `%s'!\n", t );
 				continue;
 			}
-			t = get_token( NULL );
-			if (t) {
-				printf( "syntax error!\n" );
-				fclose( f );
-				continue;
-			}
-
 			readmem( ps, f, addr, len );
 
 			fclose( f );
@@ -341,6 +349,11 @@ main( void )
 		}
 
 		if (strcmp( t, "detectflash" ) == 0) {
+			if (get_token( NULL )) {
+				printf( "detectflash: syntax error\n" );
+				continue;
+			}
+
 			if (!cable) {
 				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
 				continue;
@@ -356,6 +369,11 @@ main( void )
 		}
 
 		if (strcmp( t, "print" ) == 0) {
+			if (get_token( NULL )) {
+				printf( "print: syntax error\n" );
+				continue;
+			}
+
 			if (!cable) {
 				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
 				continue;
@@ -389,7 +407,7 @@ main( void )
 				printf( "instruction: syntax error\n" );
 				continue;
 			}
-			
+
 			if ((n < 0) || (n >= ps->len)) {
 				printf( "instruction: invalid part number\n" );
 				continue;
@@ -398,6 +416,11 @@ main( void )
 			t = get_token( NULL );
 			if (!t) {
 				printf( "Missing instruction name\n" );
+				continue;
+			}
+
+			if (get_token( NULL )) {
+				printf( "instruction: syntax error\n" );
 				continue;
 			}
 
@@ -430,6 +453,8 @@ main( void )
 
 		if (strcmp( t, "dr" ) == 0) {
 			int n;
+			int dir;
+			tap_register *r;
 
 			if (!cable) {
 				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
@@ -458,18 +483,97 @@ main( void )
 				continue;
 			}
 
-			printf( "%s\n", register_get_string( ps->parts[n]->active_instruction->data_register->out ) );
+			t = get_token( NULL );
+			if (!t)
+				dir = 1;
+			else {
+				if (strcmp( t, "in" ) == 0)
+					dir = 0;
+				else if (strcmp( t, "out" ) == 0)
+					dir = 1;
+				else {
+					printf( "dr: syntax error\n" );
+					continue;
+				}
+
+				if (get_token( NULL )) {
+					printf( "dr: syntax error\n" );
+					continue;
+				}
+			}
+
+			if (dir)
+				r = ps->parts[n]->active_instruction->data_register->out;
+			else
+				r = ps->parts[n]->active_instruction->data_register->in;
+			printf( "%s\n", register_get_string( r ) );
 
 			continue;
 		}
 
 		if (strcmp( t, "set" ) == 0) {
+			int n;
+			int data;
+			int dir;
+			char *s;
+
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
+
+			t = get_token( NULL );
+			if (!t || strcmp( t, "signal" ) != 0) {
+				printf( "set: syntax error\n" );
+				continue;
+			}
+
 			t = get_token( NULL );
 			if (!t) {
 				printf( "set: syntax error\n" );
 				continue;
 			}
-			
+			n = strtol( t, &t, 10 );
+			if (t && *t) {
+				printf( "set: syntax error\n" );
+				continue;
+			}
+
+			if ((n < 0) || (n >= ps->len)) {
+				printf( "set: invalid part number\n" );
+				continue;
+			}
+
+			s = get_token( NULL );		/* signal name */
+			if (!s) {
+				printf( "set: syntax error\n" );
+				continue;
+			}
+
+			t = get_token( NULL );		/* direction */
+			if (!t || (strcmp( t, "in" ) != 0 && strcmp( t, "out" ) != 0)) {
+				printf( "set: syntax error\n" );
+				continue;
+			}
+
+			dir = (strcmp( t, "in" ) == 0) ? 0 : 1;
+			if (dir) {
+				t = get_token( NULL );
+				data = strtol( t, &t, 10 );
+				if (t && *t) {
+					printf( "set: syntax error\n" );
+					continue;
+				}
+
+				if ((data < 0) || (data > 1)) {
+					printf( "set: invalid data value\n" );
+					continue;
+				}
+			} else
+				data = 0;
+
+			part_set_signal( ps->parts[n], s, dir, data );
+
 			continue;
 		}
 
