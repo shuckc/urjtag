@@ -1,5 +1,7 @@
 $Id$
 
+jtag-0.2.2 (2003-02-04):
+
 	* Added new manufacturer: Cypress. (patch 669157, Chris Ellec)
 	* Added new 'frequency' command to limit maximum TCK frequency
 	* Added support for parallel ports with I/O addresses above 0x3FF
