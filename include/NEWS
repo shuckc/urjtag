@@ -1,6 +1,9 @@
 $Id$
 
+include-0.3.3:
+
 	* Added Renesas SH7750 CCN registers.
+	* Added more manufacturer entries into Manufacturer's Identification Code database.
 	* Changes in brux common headers:
 		- Added new parameter (adr) for detectflash function
 
