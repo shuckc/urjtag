@@ -1,3 +1,9 @@
+2003-07-24  Marcel Telka  <marcel@telka.sk>
+
+	* po/POTFILES.in: Removed missing files.
+	* configure.ac: Removed VL_LIB_READLINE macro and moved it to ...
+	* acinclude.m4: ... this new file.
+
 2003-07-16  Marcel Telka  <marcel@telka.sk>
 
 	* src/jtag.c (jtag_parse_line): Fixed invalid memory allocation size (core dump).
