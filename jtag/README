@@ -1,0 +1,227 @@
+$Id$
+
+JTAG Tools
+~~~~~~~~~~
+
+JTAG Tools is a software package which enables working with JTAG-aware
+hardware devices (parts) and boards through JTAG adapter.
+
+This package has open and modular architecture with ability to writing
+miscellanous extensions (like board testers, flash memory programmers,
+and so on).
+
+JTAG Tools package is free software, covered by the GNU General Public
+License, and you are welcome to change it and/or distribute copies of it
+under certain conditions. There is absolutely no warranty for JTAG Tools.
+Please read COPYING file for more info.
+
+Warning: This software may damage your hardware!
+
+Feedback and contributions are welcome.
+
+
+Supported operating systems
+---------------------------
+
+JTAG Tools should run on all x86 Unix like operating systems including
+MS Windows 95/98/Me/NT/2000/XP with Cygwin installed.
+
+Tested operating systems:
+- RedHat Linux 8.0
+- MS Windows 2000/XP + Cygwin
+
+
+Supported hardware
+------------------
+
+JTAG adapters:
+- various parallel port JTAG adapters
+
+JTAG-aware parts (chips):
+- Atmel ATmega128 (partial support)
+- Intel SA1110
+- Intel PXA250 (including C0 stepping)
+- Intel PXA261/262
+- Xilinx XCR3128XL-CS144 (partial support)
+
+Flash chips (2 x 16 bit configuration only):
+- Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)
+- Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)
+- Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)
+
+
+Tested hardware
+---------------
+
+Intel SA1110 B2 + 2 x Intel 28F128J3A (Compaq iPaq H3630)
+Intel SA1110 B4 + 2 x Intel 28F128J3A
+Intel PXA250 B1 + 2 x Intel 28F128K3 (ETC WEP EP250)
+Intel PXA250 C0 + 2 x Intel 28F128K3 (ETC WEP EP250)
+Xilinx XCR3128XL-CS144 (ETC WEP EP250)
+
+
+Required software
+-----------------
+
+Required only for MS Windows:
+- Current Cygwin net installation from http://cygwin.com/
+- ioperm package from http://openwince.sourceforge.net/ioperm/
+
+Required for all systems:
+- include package from http://openwince.sourceforge.net/include/
+
+
+Build & installation instructions
+---------------------------------
+
+1. Download and install required software (see previous section).
+2. Download and unpack jtag sources.
+3. Setup your parallel cable configuration in src/tap/ctrl.c file.
+   Please set correct TCK, TDI, TMS, TRST, TDO and 'port' values in the file.
+4. Run ./configure script. Use optional --with-include parameter.
+   See `./configure --help` for more info.
+5. Run `make`.
+6. Run `make install`.
+
+
+Running JTAG tools
+------------------
+
+Connect your JTAG adapter between your PC and target device and turn
+on your device.
+
+To run JTAG tools type "jtag" and press <Enter>. jtag should start and
+display some initial informations. Output should end with line like this:
+
+jtag>
+
+This is "jtag command prompt". Type "help" and press <Enter> for initial help
+about available commands. To exit JTAG Tools type "quit" and press <Enter>.
+
+===> First task: Detect parts on the JTAG chain.
+
+Type "detect" at the jtag command prompt:
+jtag> detect
+
+Your output should looks like this:
+
+Device Id: 01011001001001100100000000010011
+  Manufacturer: Intel
+  Part:         PXA250
+  Stepping:     C0
+  Filename:     /usr/local/share/jtag/intel/pxa250/pxa260
+
+If you get empty output or this error message
+
+	detect_parts: bad JTAG connection (TDO is 1)
+
+your JTAG adapter is not connected properly, or your target board
+doesn't work, or your JTAG-aware chip doesn't support JTAG ID detection
+(IDCODE instruction).
+
+"detect" command is required before all other commands.
+
+===> Second task: Print current JTAG chain status.
+
+Type "print" at the jtag command prompt. Here is an output example:
+
+jtag> print
+ No. Manufacturer         Part                 Stepping Instruction          Register
+----------------------------------------------------------------------------------------
+   0 Intel                PXA250               C0       BYPASS               BR
+jtag>
+
+===> Third task: Sample device pin status.
+
+jtag> instruction 0 SAMPLE/PRELOAD
+jtag> shift ir
+jtag> shift dr
+jtag> dr 0
+10001100100000100001100101111111111111111110011011100000111011111111111111111111
+11111111111111111111111111111111111111111111101111111101100000100010101000000000
+00011111000000111010111111100000100001100100000000000000000111000011100000000000
+00000000000000000000000000000001000000000000000000000000000000000000000000000000
+11110000000000000000000000000000000000000000001000000000000000000000000000000000
+0000000000
+jtag> print
+ No. Manufacturer         Part                 Stepping Instruction          Register
+----------------------------------------------------------------------------------------
+   0 Intel                PXA250               C0       SAMPLE/PRELOAD       BSR
+jtag>
+
+Note: BSR is "Boundary Scan Register"
+
+===> Fourth task: Burn flash connected to the part.
+
+jtag> flashmem 0 brux.b
+0x00000000
+Note: Supported configuration is 2 x 16 bit only
+BOOT_SEL: Asynchronous 32-bit ROM
+
+2 x 16 bit CFI devices detected (QRY ok)!
+
+program:
+block 0 unlocked
+erasing block 0: 0
+addr: 0x00002854
+verify:
+addr: 0x00002854
+Done.
+jtag>
+
+or:
+
+jtag> flashmem msbin xboot.bin
+Note: Supported configuration is 2 x 16 bit only
+BOOT_SEL: Asynchronous 32-bit ROM
+
+2 x 16 bit CFI devices detected (QRY ok)!
+
+block 0 unlocked
+erasing block 0: 0
+program:
+record: start = 0x00000000, len = 0x00000004, checksum = 0x000001EB
+record: start = 0x00000040, len = 0x00000008, checksum = 0x000001B0
+record: start = 0x00001000, len = 0x00002B30, checksum = 0x00122CAB
+record: start = 0x00004000, len = 0x00000160, checksum = 0x0000684B
+record: start = 0x00005000, len = 0x00000054, checksum = 0x000008EE
+record: start = 0x00005054, len = 0x00000030, checksum = 0x00000DA9
+record: start = 0x00000000, len = 0x00001000, checksum = 0x00000000
+
+verify:
+record: start = 0x00000000, len = 0x00000004, checksum = 0x000001EB
+record: start = 0x00000040, len = 0x00000008, checksum = 0x000001B0
+record: start = 0x00001000, len = 0x00002B30, checksum = 0x00122CAB
+record: start = 0x00004000, len = 0x00000160, checksum = 0x0000684B
+record: start = 0x00005000, len = 0x00000054, checksum = 0x000008EE
+record: start = 0x00005054, len = 0x00000030, checksum = 0x00000DA9
+record: start = 0x00000000, len = 0x00001000, checksum = 0x00000000
+
+Done.
+jtag>
+
+
+Contacts
+--------
+
+Homepage: http://openwince.sourceforge.net/jtag/
+
+CVS repository: http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/openwince/jtag/
+
+Please report and track bugs at (please use Category 'jtag'):
+http://sourceforge.net/tracker/?group_id=52603&atid=469850
+
+Mailing list (discussion, questions): openwince-list@lists.sourceforge.net
+Subscribe: http://lists.sourceforge.net/mailman/listinfo/openwince-list
+
+Mailing list (announce): openwince-announce@lists.sourceforge.net
+Subscribe: http://lists.sourceforge.net/mailman/listinfo/openwince-announce
+
+Patches and improvements are welcome at (please use Category 'jtag'):
+http://sourceforge.net/tracker/?group_id=52603&atid=469852
+
+Feature requests are welcome at (please use Category 'jtag'):
+http://sourceforge.net/tracker/?group_id=52603&atid=469853
+
+Support requests are welcome at (please use Category 'jtag'):
+http://sourceforge.net/tracker/?group_id=52603&atid=469851
