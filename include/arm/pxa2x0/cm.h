@@ -71,12 +71,12 @@ typedef volatile struct CM_registers {
 
 /* CCCR bits - see Table 3-20 in [1] */
 
-#define	CCCR_N_MASK	0x380
-#define	CCCR_N(x)	((x << 7) & CCCR_N_MASK)
-#define	CCCR_M_MASK	0x060
-#define	CCCR_M(x)	((x << 5) & CCCR_M_MASK)
-#define	CCCR_L_MASK	0x01F
-#define	CCCR_L(x)	(x & CCCR_L_MASK)
+#define	CCCR_N_MASK	bits(9,7)
+#define	CCCR_N(x)	bits_val(9,7,x)
+#define	CCCR_M_MASK	bits(6,5)
+#define	CCCR_M(x)	bits_val(6,5,x)
+#define	CCCR_L_MASK	bits(4,0)
+#define	CCCR_L(x)	bits_val(4,0,x)
 
 #define	CCCR_N_1_0	CCCR_N(0x2)
 #define	CCCR_N_1_5	CCCR_N(0x3)
