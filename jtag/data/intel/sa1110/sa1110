@@ -200,22 +200,26 @@ pin	VSS		A8 D3 D8 D14 H2 K14 P2 P14 R9
 pin	VSSX		A1 B2 C3 D4 E5 F6 F7 F8 F9 F10 F11 G6 G7 G8 G9 G10 G11 H7 H8 H9 H10 H11 J7 J8 J9 J10 J11 K6 K7 K8 K9 L6 L7 L8 L9
 pin	nWE		M13
 
+# mandatory data registers
+register	BSR	292	# Boundary Scan Register (see Table 16-2 in [1])
+register	BR	1	# Bypass Register
+# optional data registers
+register	DIR	32	# Device Identification Register
+
 # see 16.5 in [1]
 instruction length 5
 
 # mandatory instructions
-instruction EXTEST		00000
-instruction SAMPLE/PRELOAD	00001
-instruction BYPASS		11111
+instruction EXTEST		00000	BSR
+instruction SAMPLE/PRELOAD	00001	BSR
+instruction BYPASS		11111	BR
 
 # optional instructions
-instruction CLAMP		00100
-instruction HIGHZ		00101
-instruction IDCODE		00110
+instruction CLAMP		00100	BR
+instruction HIGHZ		00101	BR
+instruction IDCODE		00110	DIR
 
 # see Table 16-2 in [1]
-boundary length 292
-
 bit 291 I ? BATT_FAULT
 bit 290 I ? VDD_FAULT
 bit 289 O 1 PWR_EN
