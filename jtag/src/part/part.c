@@ -37,6 +37,9 @@ part_alloc( void )
 	if (!p)
 		return NULL;
 
+	p->manufacturer[0] = '\0';
+	p->part[0] = '\0';
+	p->stepping[0] = '\0';
 	p->signals = NULL;
 	p->instruction_length = 0;
 	p->instructions = NULL;
@@ -314,5 +317,39 @@ parts_shift_data_registers( parts *ps )
 		}
 		tap_shift_register( ps->parts[i]->active_instruction->data_register->in,
 				ps->parts[i]->active_instruction->data_register->out, (i + 1) == ps->len );
+	}
+}
+
+void
+parts_print( parts *ps, int header )
+{
+	int i;
+
+	char format[100];
+	snprintf( format, 100, " %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds \n", MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
+			MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
+
+	if (header) {
+		printf( " No." );
+		printf( format, "Manufacturer", "Part", "Stepping", "Instruction", "Register" );
+		for (i = 0; i < 10 + MAXLEN_MANUFACTURER + MAXLEN_PART + MAXLEN_STEPPING + MAXLEN_INSTRUCTION + MAXLEN_DATA_REGISTER; i++ )
+			putchar( '-' );
+		putchar( '\n' );
+	}
+
+	if (!ps)
+		return;
+
+	for (i = 0; i < ps->len; i++) {
+		char *instruction = "(none)";
+		char *dr = "(none)";
+		part *p = ps->parts[i];
+
+		if (p->active_instruction) {
+			instruction = p->active_instruction->name;
+			dr = p->active_instruction->data_register->name;
+		}
+		printf( " %3d", i );
+		printf( format, p->manufacturer, p->part, p->stepping, instruction, dr );
 	}
 }

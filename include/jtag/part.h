@@ -32,9 +32,16 @@
 #include <jtag/data_register.h>
 #include <jtag/bsbit.h>
 
+#define	MAXLEN_MANUFACTURER	20
+#define	MAXLEN_PART		20
+#define	MAXLEN_STEPPING		8
+
 typedef struct part part;
 
 struct part {
+	char manufacturer[MAXLEN_MANUFACTURER + 1];
+	char part[MAXLEN_PART + 1];
+	char stepping[MAXLEN_STEPPING + 1];
 	signal *signals;
 	int instruction_length;
 	instruction *instructions;
@@ -68,5 +75,6 @@ int parts_add_part( parts *ps, part *p );
 void parts_set_instruction( parts *ps, const char *iname );
 void parts_shift_instructions( parts *ps );
 void parts_shift_data_registers( parts *ps );
+void parts_print( parts *ps, int header );
 
 #endif /* JTAG_PART_H */
