@@ -32,11 +32,13 @@
 #include <readline/history.h>
 
 #include "part.h"
-#include "ctrl.h"
+#include "cable.h"
 #include "tap.h"
 
 #include "detect.h"
 #include "bus.h"
+
+cable_driver_t *cable = NULL;
 
 bus_driver_t *bus_driver = NULL;
 
@@ -72,14 +74,6 @@ main( void )
 	printf( "Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n", PACKAGE );
 	printf( "Type \"help\" for help.\n\n" );
 
-	if (!tap_init()) {
-		printf( "TAP initialization failed! Exiting.\n" );
-		return 1;
-	}
-
-	tap_set_trst( 0 );
-	tap_set_trst( 1 );
-
 	for (;;) {
 		char *t;
 
@@ -106,7 +100,70 @@ main( void )
 			continue;
 		}
 
+		if (strcmp( t, "cable" ) == 0) {
+			unsigned int port;
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "Missing argument(s)\n" );
+				continue;
+			}
+			if (strcmp( t, "parallel" ) != 0) {
+				printf( "syntax error!\n" );
+				continue;
+			}
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "Missing argument(s)\n" );
+				continue;
+			}
+			if ((sscanf( t, "0x%x", &port ) != 1) && (sscanf( t, "%d", &port ) != 1)) {
+				printf( "syntax error\n" );
+				continue;
+			}
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "Missing argument(s)\n" );
+				continue;
+			}
+
+			if (get_token( NULL )) {
+				printf( "syntax error!\n" );
+				continue;
+			}
+
+			if (strcmp( t, "none" ) == 0) {
+				printf( "Changed cable to 'none'\n" );
+				cable = NULL;
+			} else if (strcmp( t, "EA253" ) == 0) {
+				cable = &ea253_cable_driver;
+
+				if (!cable->init( port )) {
+					cable = NULL;
+				}
+			} else {
+				printf( "Unknown cable: %s\n", t );
+				continue;
+			}
+
+			if (cable) {
+				cable->set_trst( 0 );
+				cable->set_trst( 1 );
+
+				tap_reset();
+			}
+
+			continue;
+		}
+
 		if (strcmp( t, "discovery" ) == 0) {
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
+
 			t = get_token( NULL );
 			if (!t) {
 				printf( "discovery: missing filename\n" );
@@ -121,9 +178,14 @@ main( void )
 		}
 
 		if (strcmp( t, "detect" ) == 0) {
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
+
 			t = get_token( NULL );
-			if (ps)
-				parts_free( ps );
+
+			parts_free( ps );
 			ps = detect_parts( JTAG_DATA_DIR );
 			if (!ps->len)
 				continue;
@@ -143,6 +205,11 @@ main( void )
 			FILE *f;
 			int msbin = 0;
 			uint32_t addr = 0;
+
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
 
 			if (!ps) {
 				printf( "Run \"detect\" first.\n" );
@@ -191,6 +258,11 @@ main( void )
 			FILE *f;
 			uint32_t addr = 0;
 			uint32_t len = 0;
+
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
 
 			if (!ps) {
 				printf( "Run \"detect\" first.\n" );
@@ -242,6 +314,11 @@ main( void )
 		}
 
 		if (strcmp( t, "detectflash" ) == 0) {
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
+
 			if (!ps) {
 				printf( "Run \"detect\" first.\n" );
 				continue;
@@ -252,12 +329,22 @@ main( void )
 		}
 
 		if (strcmp( t, "print" ) == 0) {
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
+
 			parts_print( ps, 1 );
 			continue;
 		}
 
 		if (strcmp( t, "instruction" ) == 0) {
 			int n;
+
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
 
 			if (!ps) {
 				printf( "Run \"detect\" first.\n" );
@@ -293,6 +380,11 @@ main( void )
 		}
 
 		if (strcmp( t, "shift" ) == 0) {
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
+
 			t = get_token( NULL );
 
 			if (t && (strcmp( t, "ir" ) == 0)) {
@@ -311,6 +403,11 @@ main( void )
 
 		if (strcmp( t, "dr" ) == 0) {
 			int n;
+
+			if (!cable) {
+				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				continue;
+			}
 
 			if (!ps) {
 				printf( "Run \"detect\" first.\n" );
@@ -355,8 +452,14 @@ main( void )
 	free( line );
 	parts_free( ps );
 
-	tap_reset();
-	tap_done();
+	if (cable) {
+		cable->set_trst( 0 );
+		cable->set_trst( 1 );
+		tap_reset();
+		cable->done();
+
+		cable = NULL;
+	}
 
 	return 0;
 }

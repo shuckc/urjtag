@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "ctrl.h"
+#include "cable.h"
 #include "tap.h"
 
 #define	DETECT_PATTERN_SIZE	8

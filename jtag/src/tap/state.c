@@ -26,7 +26,7 @@
 #include "state.h"
 
 static int state = Unknown_State;
-static int trst = 0;
+static int trst = 1;
 
 int
 tap_state( void )

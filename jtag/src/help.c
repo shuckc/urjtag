@@ -38,6 +38,7 @@ help( const char *cmd )
 			"\n"
 			"quit          exit from %s\n"
 			"help          display this help\n"
+			"cable         select JTAG cable\n"
 			"detect        detect parts on the JTAG chain\n"
 			"discovery     discovery unknown parts in the JTAG chain\n"
 			"print         display JTAG chain list/status\n"
@@ -60,6 +61,17 @@ help( const char *cmd )
 		printf(
 			"Usage: help [COMMAND]\n"
 			"Print short help for COMMAND, or list of available commands.\n"
+		);
+	else if (strcmp( cmd, "cable" ) == 0)
+		printf(
+			"Usage: cable parallel PORTADDR CABLE\n"
+			"Select JTAG cable connected to parallel port.\n"
+			"\n"
+			"PORTADDR   parallel port address (e.g. 0x378)\n"
+			"CABLE      cable type\n"
+			"\n"
+			"List of supported cables:\n"
+			"none, EA253\n"
 		);
 	else if (strcmp( cmd, "detect" ) == 0)
 		printf(

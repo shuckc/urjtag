@@ -1,3 +1,18 @@
+2003-01-08  Marcel Telka  <marcel@telka.sk>
+
+	* include/Makefile.am: Removed ctrl.h, added cable.h.
+	* include/ctrl.h: Removed obsolete file.
+	* include/cable.h: Added common declarations for JTAG cable drivers.
+	* src/detect.c: Replaced ctrl.h include with cable.h (JTAG cable driver support).
+	* src/discovery.c: Ditto.
+	* src/tap/tap.c: Ditto.
+	* src/help.c: Added help for new command 'cable'.
+	* src/jtag.c: Added support for JTAG cable drivers, added new command 'cable'.
+	* src/tap/Makefile.am: Removed ctrl.c, added cable/ea253.c, updated includes.
+	* src/tap/ctrl.c: Removed obsolete file.
+	* src/tap/state.c: Changed default TRST state to 1.
+	* src/tap/cable/ea253.c: Added driver for EA253 JTAG cable.
+
 2003-01-06  Marcel Telka  <marcel@telka.sk>
 
 	* src/discovery.c (discovery): Fixed memory leaks, added out of memory test,

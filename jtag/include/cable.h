@@ -1,7 +1,8 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Cable driver interface
+ * Copyright (C) 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,22 +19,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2003.
  *
  */
 
-#ifndef CTRL_H
-#define	CTRL_H
+#ifndef CABLE_H
+#define	CABLE_H
 
-/*
- * low level tap functions, hardware dependent
- */
-int tap_init( void );
-void tap_done( void );
+#include <stdint.h>
 
-void tap_clock( int tms, int tdi );
-int tap_get_tdo( void );
+typedef struct {
+	int (*init)( unsigned int );
+	void (*done)( void );
+	void (*clock)( int, int );
+	int (*get_tdo)( void );
+	void (*set_trst)( int );
+} cable_driver_t;
 
-void tap_set_trst( int new_trst );
+extern cable_driver_t *cable;
+#define	tap_clock	cable->clock
+#define	tap_get_tdo	cable->get_tdo
+#define	tap_set_trst	cable->set_trst
 
-#endif /* CTRL_H */
+extern cable_driver_t ea253_cable_driver;
+
+#endif /* CABLE_H */

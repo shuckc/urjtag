@@ -29,7 +29,7 @@
 
 #include "register.h"
 #include "tap.h"
-#include "ctrl.h"
+#include "cable.h"
 #include "part.h"
 
 #include "detect.h"

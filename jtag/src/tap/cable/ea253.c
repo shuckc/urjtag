@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,21 +18,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  */
 
 #include <stdio.h>
 #include <sys/io.h>
 
-#include "ctrl.h"
+#include "cable.h"
 #include "state.h"
 
 /*
  * data D[7:0] (pins 9:2)
  */
-#define	TCK	0
-#define	TDI	1
+#define	TDI	0
+#define	TCK	1
 #define	TMS	2
 #define	TRST	4
 
@@ -43,15 +43,16 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO	7
+#define	TDO	4
 
-static unsigned short int port = 0x378;
+static unsigned int port;
 
-int
-tap_init( void )
+static int
+ea253_init( unsigned int aport )
 {
 	tap_state_init();
-	printf( "Initilizing parallel TAP on port 0x%x\n", port );
+	port = aport;
+	printf( "Initilizing cable EA253 on parallel port at 0x%x\n", port );
 	if (ioperm( port, 2, 1 )) {
 		printf( "Error: Initialization failed!\n" );
 		return 0;
@@ -61,16 +62,16 @@ tap_init( void )
 	return 1;
 }
 
-void
-tap_done( void )
+static void
+ea253_done( void )
 {
 	ioperm( port, 2, 0 );
 
 	tap_state_done();
 }
 
-void
-tap_clock( int tms, int tdi )
+static void
+ea253_clock( int tms, int tdi )
 {
 	int trst = tap_state_get_trst();
 
@@ -83,16 +84,24 @@ tap_clock( int tms, int tdi )
 	tap_state_clock( tms );
 }
 
-int
-tap_get_tdo( void )
+static int
+ea253_get_tdo( void )
 {
 	outb( (tap_state_get_trst() << TRST) | (0 << TCK), port );
 	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
 }
 
-void
-tap_set_trst( int new_trst )
+static void
+ea253_set_trst( int new_trst )
 {
 	tap_state_set_trst( new_trst );
 	outb( (new_trst & 1) << TRST, port );
 }
+
+cable_driver_t ea253_cable_driver = {
+	ea253_init,
+	ea253_done,
+	ea253_clock,
+	ea253_get_tdo,
+	ea253_set_trst
+};

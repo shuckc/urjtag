@@ -23,7 +23,7 @@
 
 noinst_HEADERS = \
 	bsbit.h \
-	ctrl.h \
+	cable.h \
 	data_register.h \
 	instruction.h \
 	part.h \

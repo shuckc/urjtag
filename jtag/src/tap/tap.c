@@ -26,7 +26,7 @@
 
 #include "register.h"
 #include "tap.h"
-#include "ctrl.h"
+#include "cable.h"
 #include "state.h"
 
 void

@@ -24,9 +24,9 @@
 noinst_LIBRARIES = libtap.a
 
 libtap_a_SOURCES = \
-	ctrl.c \
 	tap.c \
 	register.c \
-	state.c
+	state.c \
+	cable/ea253.c
 
-INCLUDES = -I$(top_srcdir)/include
+INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC)
