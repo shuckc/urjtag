@@ -807,10 +807,12 @@ jtag_parse_rc( void )
 int
 main( void )
 {
+#ifdef ENABLE_NLS
 	/* l10n support */
 	setlocale( LC_MESSAGES, "" );
 	bindtextdomain( PACKAGE, LOCALEDIR );
 	textdomain( PACKAGE );
+#endif /* ENABLE_NLS */
 
 	printf(
 			"%s\n"

@@ -1,3 +1,7 @@
+2003-02-21  Marcel Telka  <marcel@telka.sk>
+
+	* src/jtag.c (main): Added conditional compilation for l10n.
+
 2003-02-20  Marcel Telka  <marcel@telka.sk>
 
 	* src/Makefile.am (jtag_SOURCES): Added missing flash.h.
