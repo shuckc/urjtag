@@ -1,5 +1,11 @@
 2003-06-10  Marcel Telka  <marcel@telka.sk>
 
+	* include/Makefile.am (noinst_HEADERS): Removed cfi.h.
+	* include/cfi.h: File removed.
+	* src/flash.c: Updated include header files.
+
+2003-06-10  Marcel Telka  <marcel@telka.sk>
+
 	* src/bus/sh7727.c (bus_params_t): Added md3 and md4.
 	(sh7727_bus_width): Moved to implementation using MD3 and MD4 (thanks to Rainer Dörken).
 	(new_sh7727_bus): Added MD3 and MD4 signal searching (thanks to Rainer Dörken).

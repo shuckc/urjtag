@@ -37,12 +37,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <flash/cfi.h>
 #include <flash/intel.h>
+#include <brux/cfi.h>
 
 #include "bus.h"
 #include "flash.h"
-#include "cfi.h"
 #include "jtag.h"
 
 extern flash_driver_t amd_32_flash_driver;
