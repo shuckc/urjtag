@@ -49,20 +49,6 @@
 #include <stdint.h>
 #endif
 
-/* CFI Query Structure - see Table 3.3.1 in [1] */
-
-#if LANGUAGE == C
-typedef struct cfi_query_system_interface_information cfi_query_system_interface_information;
-typedef struct cfi_device_geometry cfi_device_geometry;
-
-typedef struct cfi_query_structure {
-	cfi_query_system_interface_information system_interface_info;
-	cfi_device_geometry device_geometry;
-	void *pri_vendor_tbl;
-	void *alt_vendor_tbl;
-} cfi_query_structure;
-#endif /* LANGUAGE == C */
-
 /* CFI Query Identification String - see Table 3.3.2 in [1] */
 
 #define	CFI_QUERY_ID_OFFSET		0x10
@@ -125,13 +111,13 @@ typedef struct cfi_query_system_interface_information {
 #if LANGUAGE == C
 typedef struct cfi_erase_block_region cfi_erase_block_region;
 
-struct cfi_device_geometry {
+typedef struct cfi_device_geometry {
 	uint32_t device_size;				/* in B */
 	uint16_t device_interface;			/* see Section 2. in [2] */
 	uint32_t max_bytes_write;			/* in B */
 	uint8_t number_of_erase_regions;
 	cfi_erase_block_region *erase_block_regions;
-};
+} cfi_device_geometry;
 
 struct cfi_erase_block_region {
 	uint32_t erase_block_size;			/* in B */
@@ -146,5 +132,16 @@ struct cfi_erase_block_region {
 #define	CFI_INTERFACE_X8_X16		2
 #define	CFI_INTERFACE_X32		3
 #define	CFI_INTERFACE_X16_X32		5
+
+/* CFI Query Structure - see Table 3.3.1 in [1] */
+
+#if LANGUAGE == C
+typedef struct cfi_query_structure {
+	cfi_query_system_interface_information system_interface_info;
+	cfi_device_geometry device_geometry;
+	void *pri_vendor_tbl;
+	void *alt_vendor_tbl;
+} cfi_query_structure;
+#endif /* LANGUAGE == C */
 
 #endif /* FLASH_CFI_H */
