@@ -43,4 +43,5 @@ libtap_a_SOURCES = \
 	cable/ei012.c \
 	cable/keithkoep.c \
 	cable/mpcbdm.c \
+	cable/triton.c \
 	cable/wiggler.c

@@ -1,3 +1,13 @@
+2003-09-14  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable/triton.c: New file (patch 805103, Andreas Mohr).
+	* src/tap/Makefile.am (libtap_a_SOURCES): Added cable/triton.c (patch 805103, Andreas Mohr).
+	* src/tap/cable.c (cable_drivers): Added triton_cable_driver member (patch 805103, Andreas Mohr).
+	* src/tap/cable/generic.h (PARAM_SRESET): New macro (patch 805103, Andreas Mohr).
+	(generic_params_t): New structure member 'sreset' (patch 805103, Andreas Mohr).
+
+	* configure.ac: Changed description for --with-include parameter (thanks to Andreas Mohr).
+
 2003-09-12  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AC_CHECK_FUNCS): Added swprintf.

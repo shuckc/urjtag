@@ -60,7 +60,7 @@ AC_PROG_RANLIB
 AC_CONFIG_SUBDIRS(libbrux)
 
 AC_ARG_WITH(include,
-	AC_HELP_STRING([--with-include=PATH], [Path to the openwince includes]),
+	AC_HELP_STRING([--with-include=PATH], [Absolute path to the openwince includes]),
 	openwince_inc="$withval")
 
 AC_CACHE_CHECK([for the openwince includes], openwince_includes_path, [

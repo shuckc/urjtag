@@ -30,9 +30,11 @@
 
 typedef struct {
 	int trst;
+	int sreset;
 } generic_params_t;
 
 #define	PARAM_TRST(cable)	((generic_params_t *) cable->params)->trst
+#define	PARAM_SRESET(cable)	((generic_params_t *) cable->params)->sreset
 
 cable_t *generic_connect( cable_driver_t *cable_driver, parport_t *port );
 void generic_disconnect( cable_t *cable );
