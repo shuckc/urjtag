@@ -3,4 +3,6 @@
 src/help.c
 src/jtag.c
 src/tap/chain.c
+src/tap/parport/direct.c
+src/tap/parport/ppdev.c
 src/tap/tap.c

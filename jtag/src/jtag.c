@@ -220,6 +220,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
+			chain_disconnect( chain );
 			chain->cable = parport_drivers[i]->connect( params, numpar );
 			if (!chain->cable) {
 				printf( _("Error: Cable connection failed!\n") );

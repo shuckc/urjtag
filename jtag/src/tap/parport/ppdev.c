@@ -167,9 +167,7 @@ ppdev_open( parport_t *parport )
 {
 	ppdev_params_t *p = parport->params;
 
-	printf( "Opening port: %s\n", p->portname );
 	p->fd = open( p->portname, O_RDWR );
-	printf( "Result: %d\n", p->fd );
 	if (p->fd < 0)
 		return -1;
 

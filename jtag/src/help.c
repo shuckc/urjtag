@@ -93,17 +93,19 @@ help( const char *cmd )
 
 		printf(
 			_("Usage: %s PORTADDR CABLE\n"
+			"Usage: %s DEV CABLE\n"
 			"Select JTAG cable connected to parallel port.\n"
 			"\n"
 			"PORTADDR   parallel port address (e.g. 0x378)\n"
 			"CABLE      cable type\n"
+			"DEV        ppdev device (e.g. /dev/parport0)\n"
 			"\n"
 			"List of supported cables:\n"
-			"none          No cable connected\n"), "cable parallel"
+			"%-14sNo cable connected\n"), "cable parallel", "cable ppdev", "none"
 		);
 
 		for (i = 0; cable_drivers[i]; i++)
-			printf( "%-14s%s\n", cable_drivers[i]->name, cable_drivers[i]->description );
+			printf( "%-14s%s\n", cable_drivers[i]->name, _(cable_drivers[i]->description) );
 	} else if (strcmp( cmd, "detect" ) == 0)
 		printf(
 			_("Usage: %s\n"

@@ -1,5 +1,13 @@
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
+	* po/POTFILES.in: Added src/tap/parport/direct.c and src/tap/parport/ppdev.c.
+	* src/help.c (help) <cable>: Added help for `cable ppdev' command.
+	* src/tap/parport/ppdev.c (ppdev_open): Removed debug messages.
+	* src/jtag.c (jtag_parse_line) <cable>: Added chain_disconnect() call before
+		new cable connection.
+
+2003-03-18  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac (AC_CHECK_HEADERS): Added test for linux/ppdev.h.
 	* src/tap/Makefile.am (libtap_a_SOURCES): Added parport/ppdev.c.
 	* src/tap/parport.c (parport_drivers): Added ppdev parport driver.
