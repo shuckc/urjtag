@@ -26,6 +26,7 @@ noinst_HEADERS = \
 	bus.h \
 	cable.h \
 	data_register.h \
+	gettext.h \
 	instruction.h \
 	part.h \
 	register.h \

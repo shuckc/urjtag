@@ -1,5 +1,9 @@
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
+	* include/Makefile.am (noinst_HEADERS): Added gettext.h.
+
+2003-02-18  Marcel Telka  <marcel@telka.sk>
+
 	* autogen.sh: Added autopoint call. Added '-I m4' parameter for aclocal.
 	* Makefile.am (SUBDIRS): Added intl, include and po.
 	(DIST_SUBDIRS): Removed.
