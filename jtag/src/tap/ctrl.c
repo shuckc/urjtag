@@ -40,7 +40,11 @@ void
 tap_init( void )
 {
 	tap_state_init();
-	ioperm( port, 2, 1 );
+	printf( "Initilizing parallel TAP on port 0x%x\n", port );
+	if (ioperm( port, 2, 1 )) {
+		printf( "Error: Initialization failed!\n" );
+		return;
+	}
 	tap_state_set_trst( (inb( port ) >> TRST) & 1 );
 }
 
