@@ -66,8 +66,8 @@ setup_data( part *p, uint32_t d )
 	}
 }
 
-uint32_t
-sa1110_bus_read( parts *ps, uint32_t adr )
+void
+sa1110_bus_read_start( parts *ps, uint32_t adr )
 {
 	/* see Figure 10-12 in SA doc */
 	part *p = ps->parts[0];
@@ -86,6 +86,15 @@ sa1110_bus_read( parts *ps, uint32_t adr )
 	set_data_in( p );
 
 	parts_shift_data_registers( ps );
+}
+
+uint32_t
+sa1110_bus_read_next( parts *ps, uint32_t adr )
+{
+	/* see Figure 10-12 in SA doc */
+	part *p = ps->parts[0];
+
+	setup_address( p, adr );
 	parts_shift_data_registers( ps );
 
 	{
@@ -100,6 +109,37 @@ sa1110_bus_read( parts *ps, uint32_t adr )
 
 		return d;
 	}
+}
+
+uint32_t
+sa1110_bus_read_end( parts *ps )
+{
+	/* see Figure 10-12 in SA doc */
+	part *p = ps->parts[0];
+
+	part_set_signal( p, "nCS0", 1, 1 );
+	part_set_signal( p, "nOE", 1, 1 );
+	parts_shift_data_registers( ps );
+
+	{
+		int i;
+		char buff[10];
+		uint32_t d = 0;
+
+		for (i = 0; i < 32; i++) {
+			sprintf( buff, "D%d", i );
+			d |= (uint32_t) (part_get_signal( p, buff ) << i);
+		}
+
+		return d;
+	}
+}
+
+uint32_t
+sa1110_bus_read( parts *ps, uint32_t adr )
+{
+	sa1110_bus_read_start( ps, adr );
+	return sa1110_bus_read_end( ps );
 }
 
 void
