@@ -1,5 +1,10 @@
 2003-08-27  Marcel Telka  <marcel@telka.sk>
 
+	* flash/amd.c: Changed included headers.
+	* flash/intel.c: Ditto.
+
+2003-08-27  Marcel Telka  <marcel@telka.sk>
+
 	* flash/amd.c (amd_flash_erase_block): Renamed CFI_INTEL_ERROR_* macros to FLASH_ERROR_*.
 	* flash/intel.c (intel_flash_erase_block, intel_flash_unlock_block, intel_flash_program)
 	(intel_flash_erase_block32, intel_flash_unlock_block32, intel_flash_program32): Ditto.

@@ -42,10 +42,9 @@
 #include <flash/intel.h>
 #include <std/mic.h>
 
+#include <brux/flash.h>
 #include <brux/bus.h>
 #include <brux/cfi.h>
-
-#include "flash.h"
 
 static int intel_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr );
 static int intel_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr );

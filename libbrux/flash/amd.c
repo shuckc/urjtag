@@ -40,10 +40,9 @@
 #include <flash/intel.h>
 #include <unistd.h>
 
+#include <brux/flash.h>
 #include <brux/bus.h>
 #include <brux/cfi.h>
-
-#include "flash.h"
 
 static int dbg = 0;
 
