@@ -61,4 +61,4 @@ typedef volatile struct I2C_registers {
 #define	ISR		I2C_pointer->isr
 #define	ISAR		I2C_pointer->isar
 
-#endif	/* PCA2X0_I2C_H */
+#endif	/* PXA2X0_I2C_H */

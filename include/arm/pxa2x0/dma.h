@@ -67,4 +67,4 @@ typedef volatile struct DMA_registers {
 #define	DTADR(i)	DMA_pointer->dar[i].dtadr
 #define	DCMD(i)		DMA_pointer->dar[i].dcmd
 
-#endif	/* PCA2X0_DMA_H */
+#endif	/* PXA2X0_DMA_H */
