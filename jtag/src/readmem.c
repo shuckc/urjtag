@@ -74,6 +74,10 @@ detectflash( parts *ps )
 	parts_shift_instructions( ps );
 
 	cfi = detect_cfi( ps );
+	if (!cfi) {
+		printf( "Flash not found!\n" );
+		return;
+	}
 
 	/* detect CFI capable devices */
 	/* TODO: Low chip only */

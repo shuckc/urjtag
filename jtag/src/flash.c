@@ -77,6 +77,10 @@ flashmsbin( parts *ps, FILE *f )
 	parts_shift_instructions( ps );
 
 	cfi = detect_cfi( ps );
+	if (!cfi) {
+		printf( "Flash not found!\n" );
+		return;
+	}
 
 	/* test sync bytes */
 	{
@@ -213,6 +217,11 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 	parts_shift_instructions( ps );
 
 	cfi = detect_cfi( ps );
+	if (!cfi) {
+		printf( "Flash not found!\n" );
+		return;
+	}
+
 	erased = malloc( cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks * sizeof *erased );
 	if (!erased) {
 		printf( "Out of memory!\n" );

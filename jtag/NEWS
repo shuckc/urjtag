@@ -1,6 +1,7 @@
 Changes since 0.1:
 
 	* Completed JTAG declarations for Xilinx XCR3128XL-CS144.
+	* Fixed crash if flash memory is not detected.
 
 jtag-0.1 (2002-11-25):
 	

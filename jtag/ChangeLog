@@ -1,3 +1,8 @@
+2002-11-29  Marcel Telka  <marcel@telka.sk>
+
+	* src/flash.c (flashmsbin, flashmem): Fixed crash if flash memory is not detected.
+	* src/readmem.c (detectflash): Ditto.
+
 2002-11-27  Marcel Telka  <marcel@telka.sk>
 
 	* data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Added pins and BSR bits.
