@@ -59,7 +59,8 @@ Flash chips (2 x 16 bit configuration only):
 Tested hardware
 ---------------
 
-Intel SA1110 B2 + 2 x Intel 28F128J3A (Compaq iPaq H3630)
+Intel SA1110 B2 + 2 x Intel 28F128J3A (Compaq iPAQ H3630)
+Intel SA1110 B4 + 2 x Intel 28F640J3A (Compaq iPAQ H3600, see http://openwince.sourceforge.net/jtag/iPAQ-3600/)
 Intel SA1110 B4 + 2 x Intel 28F128J3A
 Intel PXA250 B1 + 2 x Intel 28F128K3 (ETC WEP EP250)
 Intel PXA250 C0 + 2 x Intel 28F128K3 (ETC WEP EP250)
