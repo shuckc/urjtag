@@ -42,12 +42,6 @@
 #define	C	1
 #endif
 
-#if LANGUAGE == C
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
-#endif
-#endif /* LANGUAGE == C */
-
 #define	bit(x)		(1 << x)
 
 #endif /* COMMON_H */
