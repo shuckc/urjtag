@@ -80,8 +80,8 @@
 #define	UCB1400_TSC_PX				bit(12)
 #define	UCB1400_TSC_BIAS			bit(11)
 #define	UCB1400_TSC_HYSD			bit(10)
-#define	UCB1400_TSC_TM_MASK			0x0300
-#define	UCB1400_TSC_TM(x)			((x << 8) & UCB1400_TSC_TM_MASK)
+#define	UCB1400_TSC_TM_MASK			bits(9,8)
+#define	UCB1400_TSC_TM(x)			bits_val(9,8,x)
 #define	UCB1400_TSC_PYG				bit(7)
 #define	UCB1400_TSC_MYG				bit(6)
 #define	UCB1400_TSC_PXG				bit(5)
@@ -96,25 +96,25 @@
 #define	UCB1400_ADCC_AE				bit(15)
 #define	UCB1400_ADCC_AS				bit(7)
 #define	UCB1400_ADCC_EXVEN			bit(5)
-#define	UCB1400_ADCC_AI_MASK			0x001C
-#define	UCB1400_ADCC_AI(x)			((x << 2) & UCB1400_ADCC_AI_MASK)
+#define	UCB1400_ADCC_AI_MASK			bits(4,2)
+#define	UCB1400_ADCC_AI(x)			bits_val(4,2,x)
 #define	UCB1400_ADCC_VREFB			bit(1)
 #define	UCB1400_ADCC_ASE			bit(0)
 
 /* UCB1400_ADC_Data bits - see 12.18 in [1] */
 
 #define	UCB1400_ADCD_ADV			bit(15)
-#define	UCB1400_ADCD_AD_MASK			0x03FF
-#define	UCB1400_ADCD_AD(x)			(x & UCB1400_ADCD_AD_MASK)
+#define	UCB1400_ADCD_AD_MASK			bits(9,0)
+#define	UCB1400_ADCD_AD(x)			bits_val(9,0,x)
 
 /* UCB1400_Feature_Control_Status_1 bits - see 12.19 in [1] */
 
-#define	UCB1400_FCS1_BB_MASK			0x7800
-#define	UCB1400_FCS1_BB(x)			((x << 11) & UCB1400_FCS1_BB_MASK)
-#define	UCB1400_FCS1_TR_MASK			0x0600
-#define	UCB1400_FCS1_TR(x)			((x << 9) & UCB1400_FCS1_TR_MASK)
-#define	UCB1400_FCS1_M_MASK			0x0180
-#define	UCB1400_FCS1_M(x)			((x << 7) & UCB1400_FCS1_M_MASK)
+#define	UCB1400_FCS1_BB_MASK			bits(14,11)
+#define	UCB1400_FCS1_BB(x)			bits_val(14,11,x)
+#define	UCB1400_FCS1_TR_MASK			bits(10,9)
+#define	UCB1400_FCS1_TR(x)			bits_val(10,9,x)
+#define	UCB1400_FCS1_M_MASK			bits(8,7)
+#define	UCB1400_FCS1_M(x)			bits_val(8,7,x)
 #define	UCB1400_FCS1_HPEN			bit(6)
 #define	UCB1400_FCS1_DE				bit(5)
 #define	UCB1400_FCS1_DC				bit(4)
@@ -125,20 +125,20 @@
 /* UCB1400_Feature_Control_Status_2 bits - see 12.20 in [1] */
 
 #define	UCB1400_FCS2_SMT			bit(15)
-#define	UCB1400_FCS2_SUEV_MASK			0x6000
-#define	UCB1400_FCS2_SUEV(x)			((x << 13) & UCB1400_FCS2_SUEV_MASK)
+#define	UCB1400_FCS2_SUEV_MASK			bits(14,13)
+#define	UCB1400_FCS2_SUEV(x)			bits_val(14,13,x)
 #define	UCB1400_FCS2_AVE			bit(12)
-#define	UCB1400_FCS2_AVEN_MASK			0x0C00
-#define	UCB1400_FCS2_AVEN(x)			((x << 10) & UCB1400_FCS2_AVEN_MASK)
-#define	UCB1400_FCS2_SLP_MASK			0x0030
-#define	UCB1400_FCS2_SLP(x)			((x << 4) & UCB1400_FCS2_SLP_MASK)
-#define	UCB1400_FCS2_EV_MASK			0x0007
-#define	UCB1400_FCS2_EV(x)			(x & UCB1400_FCS2_EV_MASK)
+#define	UCB1400_FCS2_AVEN_MASK			bits(11,10)
+#define	UCB1400_FCS2_AVEN(x)			bits_val(11,10,x)
+#define	UCB1400_FCS2_SLP_MASK			bits(5,4)
+#define	UCB1400_FCS2_SLP(x)			bits_val(5,4,x)
+#define	UCB1400_FCS2_EV_MASK			bits(2,0)
+#define	UCB1400_FCS2_EV(x)			bits_val(2,0,x)
 
 /* UCB1400_Test_Control bits - see 12.21 in [1] */
 
-#define	UCB1400_TC_TM_MASK			0x007F
-#define	UCB1400_TC_TM(x)			(x & UCB1400_TC_TM_MASK)
+#define	UCB1400_TC_TM_MASK			bits(6,0)
+#define	UCB1400_TC_TM(x)			bits_val(6,0,x)
 
 /* UCB1400_Extra_Interrupt bits - see 12.22 in [1] */
 
