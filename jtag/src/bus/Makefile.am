@@ -31,6 +31,7 @@ libbus_a_SOURCES = \
 	ixp425.c \
 	pxa2x0.c \
 	sa1110.c \
+	s3c4510x.c \
 	sh7727.c \
 	sh7750r.c \
 	sh7751r.c

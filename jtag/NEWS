@@ -21,6 +21,7 @@ jtag-0.5:
 	* Added initial JTAG declarations for Broadcom BCM3310 (see support request 770145 for
 		more info, thanks to Ramses VI).
 	* Added JTAG declarations for Samsung S3C4510B (Jiun-Shian Ho).
+	* Added bus driver for Samsung S3C4510X (Jiun-Shian Ho).
 	* Fixed invalid memory allocation size (core dump) in jtag_parse_line() function.
 	* Added new 'include' command.
 	* Added new commands 'signal', 'register', 'bit', and enhanced 'instruction' command
