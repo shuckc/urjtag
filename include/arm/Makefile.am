@@ -27,4 +27,5 @@ DIST_SUBDIRS = \
 	pxa2x0
 
 noinst_HEADERS = \
+	arm.h \
 	platform.h
