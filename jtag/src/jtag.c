@@ -80,9 +80,15 @@ main( void )
 			break;
 
 		if (strcmp( t, "detect" ) == 0) {
+			t = get_token( NULL );
 			if (ps)
 				parts_free( ps );
 			ps = detect_parts( "../data" );
+			parts_set_instruction( ps, "SAMPLE/PRELOAD" );
+			parts_shift_instructions( ps );
+			parts_shift_data_registers( ps );
+			parts_set_instruction( ps, "BYPASS" );
+			parts_shift_instructions( ps );
 			continue;
 		}
 
@@ -93,6 +99,54 @@ main( void )
 
 		if (strcmp( t, "print" ) == 0) {
 			parts_print( ps, 1 );
+			continue;
+		}
+
+		if (strcmp( t, "instruction" ) == 0) {
+			int n;
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "instruction: syntax error\n" );
+				continue;
+			}
+
+			n = strtol( t, &t, 10 );
+			if (t && *t) {
+				printf( "instruction: syntax error\n" );
+				continue;
+			}
+			
+			if ((n < 0) || (n >= ps->len)) {
+				printf( "instruction: invalid part number\n" );
+				continue;
+			}
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "Missing instruction name\n" );
+				continue;
+			}
+
+			part_set_instruction( ps->parts[n], t );
+
+			continue;
+		}
+
+		if (strcmp( t, "shift" ) == 0) {
+			t = get_token( NULL );
+
+			if (t && (strcmp( t, "ir" ) == 0)) {
+				parts_shift_instructions( ps );
+				continue;
+			}
+
+			if (t && (strcmp( t, "dr" ) == 0)) {
+				parts_shift_data_registers( ps );
+				continue;
+			}
+
+			printf( "shift: syntax error\n" );
 			continue;
 		}
 
