@@ -1,0 +1,557 @@
+# JTAG declarations for XCR3128XL-VQ100
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Michael Lauer <mickeyl@handhelds.org>, 2004.
+# Based on the definition for XCR3128XL-CS144
+#
+# Additional Documentation:
+# [1] Xilinx Inc., "CoolRunner XPLA3 CPLD Advance Product Specification",
+#     DS012 (v1.5) January 7, 2002
+# [2] Xilinx Inc., "BSDL file for device xcr3128xl, package vq100
+#     Revision 1.3", 2002-01-03
+# [3] Xilinx Inc., "XCR3128XL 128 Macrocell CPLD Preliminary Product
+#     Specification", DS016 (v1.8) January 8, 2002
+#
+
+# 8 function blocks (A to H) by 16 macrocells (0 to 15)
+# see Table 3 in [3] and Table 4 in [3]
+signal     A2              72    
+signal     A3              71    
+signal     A4              70    
+signal     A5              69    
+signal     A6              68    
+signal     A10             67    
+signal     A12             65    
+signal     A13             64    
+signal     A14             63    
+signal     B0              75    
+signal     B1              76    
+signal     B2              77    
+signal     B3              78    
+signal     B4              79    
+signal     B5              80    
+signal     B6              81    
+signal     B10             83    
+signal     B11             84    
+signal     B12             85    
+signal     C2              61    
+signal     C3              60    
+signal     C5              58    
+signal     C6              57    
+signal     C10             56    
+signal     C11             55    
+signal     C12             54    
+signal     C13             53    
+signal     C14             52    
+signal     D1              40    
+signal     D2              41    
+signal     D3              42    
+signal     D4              44    
+signal     D5              45    
+signal     D6              46    
+signal     D10             47    
+signal     D11             48    
+signal     D12             49    
+signal     D13             50    
+signal     E0              2    
+signal     E1              1    
+signal     E2              100    
+signal     E3              99    
+signal     E4              98    
+signal     E5              97    
+signal     E6              96    
+signal     TCK             62    
+signal     TDI             4    
+signal     TDO             73    
+signal     TMS             15    
+signal     IN0_CLK0        90    
+signal     IN1_CLK1        89    
+signal     IN2_CLK2        88    
+signal     IN3_CLK3        87    
+signal     PORT_EN         11
+signal     Vcc             3  18  34  39  51  66  82  91
+signal     GND             26  38  43  59  74  86  95
+
+# mandatory data registers
+register	BSR	444	# see [2]
+register	BR	1
+# optional data registers
+register	DIR	32
+# user-defined registers
+register	ISPSR	274	# ISP (In-System Programming) Shift Register, see [2]
+
+# instructions - see [2]
+instruction length 5
+# mandatory instructions - see Table 3 in [1]
+instruction EXTEST		00000	BSR
+instruction SAMPLE/PRELOAD	00010	BSR
+instruction BYPASS		11111	BR
+# optional instructions - see Table 3 in [1]
+instruction IDCODE		00001	DIR
+instruction HIGHZ		00101	BR
+instruction INTEST		00011	BSR
+# user-defined instructions - see Table 5 in [1]
+instruction ENABLE		01001	ISPSR
+instruction ERASE		01010	ISPSR
+instruction PROGRAM		01011	ISPSR
+instruction DISABLE		10000	ISPSR
+instruction VERIFY		01100	ISPSR
+
+bit 443 O 1 *
+bit 442 O 1 *
+bit 441 O 1 *
+bit 440 O 1 *
+bit 439 O 1 *
+bit 438 O 1 *
+bit 437 O 1 *
+bit 436 O 1 *
+bit 435 O 1 *
+bit 434 I 1 A2
+bit 433 O 1 A2 432 0 Z
+bit 432 C 1 *
+bit 431 O 1 *
+bit 430 I 1 A3
+bit 429 O 1 A3 428 0 Z
+bit 428 C 1 *
+bit 427 O 1 *
+bit 426 I 1 A4
+bit 425 O 1 A4 424 0 Z
+bit 424 C 1 *
+bit 423 O 1 *
+bit 422 I 1 A5
+bit 421 O 1 A5 420 0 Z
+bit 420 C 1 *
+bit 419 O 1 *
+bit 418 I 1 A6
+bit 417 O 1 A6 416 0 Z
+bit 416 C 1 *
+bit 415 O 1 *
+bit 414 O 1 *
+bit 413 O 1 *
+bit 412 O 1 *
+bit 411 I 1 A10
+bit 410 O 1 A10 409 0 Z
+bit 409 C 1 *
+bit 408 O 1 *
+bit 407 O 1 *
+bit 406 O 1 *
+bit 405 O 1 *
+bit 404 O 1 *
+bit 403 I 1 A12
+bit 402 O 1 A12 401 0 Z
+bit 401 C 1 *
+bit 400 O 1 *
+bit 399 I 1 A13
+bit 398 O 1 A13 397 0 Z
+bit 397 C 1 *
+bit 396 O 1 *
+bit 395 I 1 A14
+bit 394 O 1 A14 393 0 Z
+bit 393 C 1 *
+bit 392 O 1 *
+bit 391 O 1 *
+bit 390 O 1 *
+bit 389 O 1 *
+bit 388 O 1 *
+bit 387 O 1 *
+bit 386 O 1 *
+bit 385 O 1 *
+bit 384 O 1 *
+bit 383 O 1 *
+bit 382 O 1 *
+bit 381 O 1 *
+bit 380 O 1 *
+bit 379 I 1 C2
+bit 378 O 1 C2 377 0 Z
+bit 377 C 1 *
+bit 376 O 1 *
+bit 375 I 1 C3
+bit 374 O 1 C3 373 0 Z
+bit 373 C 1 *
+bit 372 O 1 *
+bit 371 O 1 *
+bit 370 O 1 *
+bit 369 O 1 *
+bit 368 O 1 *
+bit 367 I 1 C5
+bit 366 O 1 C5 365 0 Z
+bit 365 C 1 *
+bit 364 O 1 *
+bit 363 I 1 C6
+bit 362 O 1 C6 361 0 Z
+bit 361 C 1 *
+bit 360 O 1 *
+bit 359 O 1 *
+bit 358 O 1 *
+bit 357 O 1 *
+bit 356 I 1 C10
+bit 355 O 1 C10 354 0 Z
+bit 354 C 1 *
+bit 353 O 1 *
+bit 352 I 1 C11
+bit 351 O 1 C11 350 0 Z
+bit 350 C 1 *
+bit 349 O 1 *
+bit 348 I 1 C12
+bit 347 O 1 C12 346 0 Z
+bit 346 C 1 *
+bit 345 O 1 *
+bit 344 I 1 C13
+bit 343 O 1 C13 342 0 Z
+bit 342 C 1 *
+bit 341 O 1 *
+bit 340 I 1 C14
+bit 339 O 1 C14 338 0 Z
+bit 338 C 1 *
+bit 337 O 1 *
+bit 336 O 1 *
+bit 335 O 1 *
+bit 334 O 1 *
+bit 333 O 1 *
+bit 332 I 1 B0
+bit 331 O 1 B0 330 0 Z
+bit 330 C 1 *
+bit 329 O 1 *
+bit 328 I 1 B1
+bit 327 O 1 B1 326 0 Z
+bit 326 C 1 *
+bit 325 O 1 *
+bit 324 I 1 B2
+bit 323 O 1 B2 322 0 Z
+bit 322 C 1 *
+bit 321 O 1 *
+bit 320 I 1 B3
+bit 319 O 1 B3 318 0 Z
+bit 318 C 1 *
+bit 317 O 1 *
+bit 316 I 1 B4
+bit 315 O 1 B4 314 0 Z
+bit 314 C 1 *
+bit 313 O 1 *
+bit 312 I 1 B5
+bit 311 O 1 B5 310 0 Z
+bit 310 C 1 *
+bit 309 O 1 *
+bit 308 I 1 B6
+bit 307 O 1 B6 306 0 Z
+bit 306 C 1 *
+bit 305 O 1 *
+bit 304 O 1 *
+bit 303 O 1 *
+bit 302 O 1 *
+bit 301 I 1 B10
+bit 300 O 1 B10 299 0 Z
+bit 299 C 1 *
+bit 298 O 1 *
+bit 297 I 1 B11
+bit 296 O 1 B11 295 0 Z
+bit 295 C 1 *
+bit 294 O 1 *
+bit 293 I 1 B12
+bit 292 O 1 B12 291 0 Z
+bit 291 C 1 *
+bit 290 O 1 *
+bit 289 O 1 *
+bit 288 O 1 *
+bit 287 O 1 *
+bit 286 O 1 *
+bit 285 O 1 *
+bit 284 O 1 *
+bit 283 O 1 *
+bit 282 O 1 *
+bit 281 O 1 *
+bit 280 O 1 *
+bit 279 O 1 *
+bit 278 O 1 *
+bit 277 O 1 *
+bit 276 O 1 *
+bit 275 O 1 *
+bit 274 O 1 *
+bit 273 I 1 D1
+bit 272 O 1 D1 271 0 Z
+bit 271 C 1 *
+bit 270 O 1 *
+bit 269 I 1 D2
+bit 268 O 1 D2 267 0 Z
+bit 267 C 1 *
+bit 266 O 1 *
+bit 265 I 1 D3
+bit 264 O 1 D3 263 0 Z
+bit 263 C 1 *
+bit 262 O 1 *
+bit 261 I 1 D4
+bit 260 O 1 D4 259 0 Z
+bit 259 C 1 *
+bit 258 O 1 *
+bit 257 I 1 D5
+bit 256 O 1 D5 255 0 Z
+bit 255 C 1 *
+bit 254 O 1 *
+bit 253 I 1 D6
+bit 252 O 1 D6 251 0 Z
+bit 251 C 1 *
+bit 250 O 1 *
+bit 249 O 1 *
+bit 248 O 1 *
+bit 247 O 1 *
+bit 246 I 1 D10
+bit 245 O 1 D10 244 0 Z
+bit 244 C 1 *
+bit 243 O 1 *
+bit 242 I 1 D11
+bit 241 O 1 D11 240 0 Z
+bit 240 C 1 *
+bit 239 O 1 *
+bit 238 I 1 D12
+bit 237 O 1 D12 236 0 Z
+bit 236 C 1 *
+bit 235 O 1 *
+bit 234 I 1 D13
+bit 233 O 1 D13 232 0 Z
+bit 232 C 1 *
+bit 231 O 1 *
+bit 230 O 1 *
+bit 229 O 1 *
+bit 228 O 1 *
+bit 227 O 1 *
+bit 226 O 1 *
+bit 225 O 1 *
+bit 224 O 1 *
+bit 223 O 1 *
+bit 222 I 1 E0
+bit 221 O 1 E0 220 0 Z
+bit 220 C 1 *
+bit 219 O 1 *
+bit 218 I 1 E1
+bit 217 O 1 E1 216 0 Z
+bit 216 C 1 *
+bit 215 O 1 *
+bit 214 I 1 E2
+bit 213 O 1 E2 212 0 Z
+bit 212 C 1 *
+bit 211 O 1 *
+bit 210 I 1 E3
+bit 209 O 1 E3 208 0 Z
+bit 208 C 1 *
+bit 207 O 1 *
+bit 206 I 1 E4
+bit 205 O 1 E4 204 0 Z
+bit 204 C 1 *
+bit 203 O 1 *
+bit 202 I 1 E5
+bit 201 O 1 E5 200 0 Z
+bit 200 C 1 *
+bit 199 O 1 *
+bit 198 I 1 E6
+bit 197 O 1 E6 196 0 Z
+bit 196 C 1 *
+bit 195 O 1 *
+bit 194 O 1 *
+bit 193 O 1 *
+bit 192 O 1 *
+bit 191 O 1 *
+bit 190 O 1 *
+bit 189 O 1 *
+bit 188 O 1 *
+bit 187 O 1 *
+bit 186 O 1 *
+bit 185 O 1 *
+bit 184 O 1 *
+bit 183 I 1 E12
+bit 182 O 1 E12 181 0 Z
+bit 181 C 1 *
+bit 180 O 1 *
+bit 179 I 1 E13
+bit 178 O 1 E13 177 0 Z
+bit 177 C 1 *
+bit 176 O 1 *
+bit 175 I 1 E14
+bit 174 O 1 E14 173 0 Z
+bit 173 C 1 *
+bit 172 O 1 *
+bit 171 O 1 *
+bit 170 O 1 *
+bit 169 O 1 *
+bit 168 O 1 *
+bit 167 O 1 *
+bit 166 O 1 *
+bit 165 O 1 *
+bit 164 O 1 *
+bit 163 I 1 G1
+bit 162 O 1 G1 161 0 Z
+bit 161 C 1 *
+bit 160 O 1 *
+bit 159 I 1 G2
+bit 158 O 1 G2 157 0 Z
+bit 157 C 1 *
+bit 156 O 1 *
+bit 155 I 1 G3
+bit 154 O 1 G3 153 0 Z
+bit 153 C 1 *
+bit 152 O 1 *
+bit 151 I 1 G4
+bit 150 O 1 G4 149 0 Z
+bit 149 C 1 *
+bit 148 O 1 *
+bit 147 I 1 G5
+bit 146 O 1 G5 145 0 Z
+bit 145 C 1 *
+bit 144 O 1 *
+bit 143 I 1 G6
+bit 142 O 1 G6 141 0 Z
+bit 141 C 1 *
+bit 140 O 1 *
+bit 139 O 1 *
+bit 138 O 1 *
+bit 137 O 1 *
+bit 136 I 1 G10
+bit 135 O 1 G10 134 0 Z
+bit 134 C 1 *
+bit 133 O 1 *
+bit 132 I 1 G11
+bit 131 O 1 G11 130 0 Z
+bit 130 C 1 *
+bit 129 O 1 *
+bit 128 I 1 G12
+bit 127 O 1 G12 126 0 Z
+bit 126 C 1 *
+bit 125 O 1 *
+bit 124 I 1 G13
+bit 123 O 1 G13 122 0 Z
+bit 122 C 1 *
+bit 121 O 1 *
+bit 120 O 1 *
+bit 119 O 1 *
+bit 118 O 1 *
+bit 117 O 1 *
+bit 116 O 1 *
+bit 115 O 1 *
+bit 114 O 1 *
+bit 113 O 1 *
+bit 112 O 1 *
+bit 111 O 1 *
+bit 110 O 1 *
+bit 109 O 1 *
+bit 108 O 1 *
+bit 107 O 1 *
+bit 106 O 1 *
+bit 105 O 1 *
+bit 104 I 1 F2
+bit 103 O 1 F2 102 0 Z
+bit 102 C 1 *
+bit 101 O 1 *
+bit 100 I 1 F3
+bit 99 O 1 F3 98 0 Z
+bit 98 C 1 *
+bit 97 O 1 *
+bit 96 I 1 F4
+bit 95 O 1 F4 94 0 Z
+bit 94 C 1 *
+bit 93 O 1 *
+bit 92 I 1 F5
+bit 91 O 1 F5 90 0 Z
+bit 90 C 1 *
+bit 89 O 1 *
+bit 88 I 1 F6
+bit 87 O 1 F6 86 0 Z
+bit 86 C 1 *
+bit 85 O 1 *
+bit 84 O 1 *
+bit 83 O 1 *
+bit 82 O 1 *
+bit 81 I 1 F10
+bit 80 O 1 F10 79 0 Z
+bit 79 C 1 *
+bit 78 O 1 *
+bit 77 O 1 *
+bit 76 O 1 *
+bit 75 O 1 *
+bit 74 O 1 *
+bit 73 O 1 *
+bit 72 O 1 *
+bit 71 O 1 *
+bit 70 O 1 *
+bit 69 I 1 F13
+bit 68 O 1 F13 67 0 Z
+bit 67 C 1 *
+bit 66 O 1 *
+bit 65 I 1 F14
+bit 64 O 1 F14 63 0 Z
+bit 63 C 1 *
+bit 62 O 1 *
+bit 61 I 1 F15
+bit 60 O 1 F15 59 0 Z
+bit 59 C 1 *
+bit 58 O 1 *
+bit 57 O 1 *
+bit 56 O 1 *
+bit 55 O 1 *
+bit 54 O 1 *
+bit 53 O 1 *
+bit 52 O 1 *
+bit 51 O 1 *
+bit 50 O 1 *
+bit 49 I 1 H2
+bit 48 O 1 H2 47 0 Z
+bit 47 C 1 *
+bit 46 O 1 *
+bit 45 I 1 H3
+bit 44 O 1 H3 43 0 Z
+bit 43 C 1 *
+bit 42 O 1 *
+bit 41 O 1 *
+bit 40 O 1 *
+bit 39 O 1 *
+bit 38 O 1 *
+bit 37 I 1 H5
+bit 36 O 1 H5 35 0 Z
+bit 35 C 1 *
+bit 34 O 1 *
+bit 33 I 1 H6
+bit 32 O 1 H6 31 0 Z
+bit 31 C 1 *
+bit 30 O 1 *
+bit 29 O 1 *
+bit 28 O 1 *
+bit 27 O 1 *
+bit 26 I 1 H10
+bit 25 O 1 H10 24 0 Z
+bit 24 C 1 *
+bit 23 O 1 *
+bit 22 I 1 H11
+bit 21 O 1 H11 20 0 Z
+bit 20 C 1 *
+bit 19 O 1 *
+bit 18 I 1 H12
+bit 17 O 1 H12 16 0 Z
+bit 16 C 1 *
+bit 15 O 1 *
+bit 14 I 1 H13
+bit 13 O 1 H13 12 0 Z
+bit 12 C 1 *
+bit 11 O 1 *
+bit 10 I 1 H14
+bit 9 O 1 H14 8 0 Z
+bit 8 C 1 *
+bit 7 O 1 *
+bit 6 O 1 *
+bit 5 O 1 *
+bit 4 O 1 *
+bit 3 I 1 IN0_CLK0
+bit 2 I 1 IN1_CLK1
+bit 1 I 1 IN2_CLK2
+bit 0 I 1 IN3_CLK3

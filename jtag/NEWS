@@ -7,6 +7,7 @@ See libbrux/NEWS for more news.
 		- Hitachi SH7729 (Beregnyei Balazs)
 		- Motorola MPC8245
 		- Broadcom BCM4712 (partial, Alan Wallace)
+		- Xilinx XCR3128XL-VQ100 (patch 1010714, Michael Lauer)
 	* Added new bus drivers:
 		- Motorola MPC824x
 		- AMD Alchemy Solutions Au1500 (patch 853883, Zhang Wei)

@@ -22,4 +22,5 @@
 #
 
 # bits 27-12 of the Device Identification Register
+0100100010001001	xcr3128xl-vq100		XCR3128XL-VQ100
 0100100010001100	xcr3128xl-cs144		XCR3128XL-CS144

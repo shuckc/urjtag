@@ -59,6 +59,7 @@ JTAG-aware parts (chips):
 - Samsung S3C4510B
 - Xilinx XC2C256-TQ144
 - Xilinx XCR3128XL-CS144
+- Xilinx XCR3128XL-VQ100
 - Xilinx XCR3256XL-FT256
 
 Flash chips:

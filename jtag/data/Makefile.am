@@ -61,10 +61,13 @@ nobase_dist_pkgdata_DATA = \
 	philips/PARTS \
 	philips/xcr3128xl-cs144/STEPPINGS \
 	philips/xcr3128xl-cs144/xcr3128xl-cs144 \
+	philips/xcr3128xl-vq100/STEPPINGS \
+	philips/xcr3128xl-vq100/xcr3128xl-vq100 \
 	samsung/s3c4510b/s3c4510b \
 	xilinx/PARTS \
 	xilinx/xcr3128xl-cs144/STEPPINGS \
 	xilinx/xcr3128xl-cs144/xcr3128xl-cs144 \
+	xilinx/xcr3128xl-vq100/xcr3128xl-vq100 \
 	xilinx/xcr3256xl-ft256/STEPPINGS \
 	xilinx/xcr3256xl-ft256/xcr3256xl-ft256 \
 	xilinx/xc2c256-tq144/STEPPINGS \

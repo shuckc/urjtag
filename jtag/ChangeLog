@@ -1,3 +1,12 @@
+2004-08-17  Marcel Telka  <marcel@telka.sk>
+
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
+	* data/philips/PARTS: Added XCR3128XL-VQ100 entry (patch 1010714, Michael Lauer).
+	* data/xilinx/PARTS: Added directory for XCR3128XL-VQ100 entry (patch 1010714, Michael Lauer).
+	* data/philips/xcr3128xl-vq100/STEPPINGS: New file (patch 1010714, Michael Lauer).
+	* data/philips/xcr3128xl-vq100/xcr3128xl-vq100: Ditto.
+	* data/xilinx/xcr3128xl-vq100/xcr3128xl-vq100: Ditto.
+
 2004-08-16  Marcel Telka  <marcel@telka.sk>
 
 	* src/bus/pxa2x0.c (bus_params_t): Added new member: inited.
