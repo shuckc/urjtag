@@ -75,58 +75,6 @@ const cmd_t *cmds[] = {
 };
 
 int
-cmd_run( char *params[] )
-{
-	int i;
-
-	if (!params[0])
-		return 1;
-
-	for (i = 0; cmds[i]; i++)
-		if (strcmp( cmds[i]->name, params[0] ) == 0) {
-			int r = cmds[i]->run( params );
-			if (r < 0)
-				printf( _("%s: syntax error!\n"), params[0] );
-			return r;
-		}
-
-	printf( _("%s: unknown command\n"), params[0] );
-	return 1;
-}
-
-int
-cmd_params( char *params[] )
-{
-	int i = 0;
-
-	while (params[i])
-		i++;
-
-	return i;
-}
-
-int
-cmd_get_number( char *s, unsigned int *i )
-{
-	int n;
-	int r;
-	int l;
-
-	if (!s || !i)
-		return -1;
-
-	l = strlen( s );
-	r = sscanf( s, "0x%x%n", i, &n);
-	if (r == 1 && n == l)
-		return 0;
-	r = sscanf( s, "%u%n", i, &n );
-	if (r == 1 && n == l)
-		return 0;
-
-	return -1;
-}
-
-int
 cmd_test_cable( void )
 {
 	if (chain->cable)

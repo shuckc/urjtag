@@ -26,8 +26,6 @@ include $(top_srcdir)/Makefile.rules
 noinst_LIBRARIES = libcmd.a
 
 libcmd_a_SOURCES = \
-	quit.c \
-	help.c \
 	frequency.c \
 	cable.c \
 	discovery.c \
@@ -41,7 +39,6 @@ libcmd_a_SOURCES = \
 	endian.c \
 	peekpoke.c \
 	readmem.c \
-	detectflash.c \
 	flashmem.c \
 	script.c \
 	cmd.c

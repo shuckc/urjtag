@@ -1,5 +1,14 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Removed quit.c, help.c, and detectflash.c.
+	* src/cmd/cmd.c (cmd_run, cmd_params, cmd_get_number): Functions moved to module libbrux,
+		file cmd/cmd.c.
+	* src/cmd/detectflash.c: File moved to module libbrux, directory cmd.
+	* src/cmd/help.c: Ditto.
+	* src/cmd/quit.c: Ditto.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* include/Makefile.am (noinst_HEADERS): Added cmd.h.
 	* include/cmd.h: New file.
 	* src/cmd/Makefile.am (libcmd_a_SOURCES): Removed cmd.h.
