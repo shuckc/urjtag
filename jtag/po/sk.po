@@ -9,7 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5\n"
-"POT-Creation-Date: 2003-08-19 11:49+0200\n"
+"Report-Msgid-Bugs-To: marcel@telka.sk\n"
+"POT-Creation-Date: 2003-08-19 15:30+0200\n"
 "PO-Revision-Date: 2003-08-19 11:48+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -97,7 +98,6 @@ msgstr ""
 msgid "exit and terminate this session"
 msgstr "ukončiť toto sedenie"
 
-#. AMD reset
 #: libbrux/flash/amd.c:173
 msgid ""
 "Chip: AMD Flash\n"
@@ -141,7 +141,6 @@ msgstr ""
 "\n"
 "\tChránené: %04x\n"
 
-#. buswidth
 #: libbrux/flash/amd.c:258 libbrux/flash/amd.c:270
 msgid "AMD/Fujitsu Standard Command Set"
 msgstr "Štandardná množina príkazov AMD/Fujitsu"
@@ -162,9 +161,6 @@ msgstr "Chyba: Chýba ovládač zbernice!\n"
 msgid "Flash not found!\n"
 msgstr "Pamäť flash nebola nájdená!\n"
 
-#. detect CFI capable devices
-#. TODO: Low chip only
-#. see 4.3.2 in [1]
 #: libbrux/flash/detectflash.c:68
 msgid "Query identification string:\n"
 msgstr "Identifikačný reťazec:\n"
@@ -181,7 +177,6 @@ msgstr "Rozšírená sada príkazov Intel/Sharp"
 msgid "AMD/Fujitsu Standard Commanf Set"
 msgstr "Štandardná sada príkazov AMD/Fujitsu"
 
-#. buswidth
 #: libbrux/flash/detectflash.c:81 libbrux/flash/detectflash.c:111
 #: libbrux/flash/intel.c:313 libbrux/flash/intel.c:325
 #: libbrux/flash/intel.c:337
@@ -226,7 +221,6 @@ msgstr ""
 "\tID kód sady príkazov a riadiaceho rozhrania alternatívneho algoritmu: 0x%"
 "04X (%s)\n"
 
-#. see 4.3.3 in [1]
 #: libbrux/flash/detectflash.c:132
 msgid "Query system interface information:\n"
 msgstr "Informácie systémového rozhrania:\n"
@@ -301,7 +295,6 @@ msgstr "\tMaximálny časový limit pre vymazanie jedného bloku: %d ms\n"
 msgid "\tMaximum timeout for chip erase: %d ms\n"
 msgstr "\tMaximálny časový limit pre vymazanie čipu: %d ms\n"
 
-#. see 4.3.4 in [1]
 #: libbrux/flash/detectflash.c:147
 msgid "Device geometry definition:\n"
 msgstr "Definícia geometrie zariadenia:\n"

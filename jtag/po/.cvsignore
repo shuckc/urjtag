@@ -13,3 +13,5 @@ remove-potcdate.sed
 jtag.pot
 messages.mo
 *.gmo
+stamp-po
+Makevars.template
