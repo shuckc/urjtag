@@ -78,7 +78,7 @@ sa1110_bus_read_start( parts *ps, uint32_t adr )
 	part_set_signal( p, "nCS4", 1, 1 );
 	part_set_signal( p, "nCS5", 1, 1 );
 	part_set_signal( p, "RD_nWR", 1, 1 );
-	part_set_signal( p, "nWE", 1, 1 ); /* TODO: this is probably not required */
+	part_set_signal( p, "nWE", 1, 1 );
 	part_set_signal( p, "nOE", 1, 0 );
 
 	setup_address( p, adr );
