@@ -100,6 +100,29 @@ main( void )
 			continue;
 		}
 
+		if (strcmp( t, "flashmem" ) == 0) {
+			FILE *f;
+			t = get_token( NULL );
+			if (!t) {
+				printf( "flashmem: missing filename\n" );
+				continue;
+			}
+			f = fopen( t, "r" );
+			if (!f) {
+				printf( "Unable to open file `%s!'\n", t );
+				continue;
+			}
+			t = get_token( NULL );
+			if (t) {
+				printf( "syntax error!\n" );
+				fclose( f );
+				continue;
+			}
+			flashmem( ps, f );
+			fclose( f );
+			continue;
+		}
+
 		if (strcmp( t, "readmem" ) == 0) {
 			readmem( ps );
 			continue;
