@@ -28,11 +28,21 @@
 #include "ctrl.h"
 #include "state.h"
 
+/*
+ * data D[7:0] (pins 9:2)
+ */
 #define	TCK	0
 #define	TDI	1
 #define	TMS	2
 #define	TRST	4
 
+/*
+ * 7 - BUSY (pin 11)
+ * 6 - ACK (pin 10)
+ * 5 - PE (pin 12)
+ * 4 - SEL (pin 13)
+ * 3 - ERROR (pin 15)
+ */
 #define	TDO	7
 
 static unsigned short int port = 0x378;
@@ -77,7 +87,7 @@ int
 tap_get_tdo( void )
 {
 	outb( (tap_state_get_trst() << TRST) | (0 << TCK), port );
-	return ((inb( port + 1 ) >> TDO) & 1) ^ 1;
+	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
 }
 
 void
