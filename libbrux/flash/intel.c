@@ -58,19 +58,25 @@ static int intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t
 static int 
 intel_flash_autodetect32( cfi_array_t *cfi_array )
 {
-	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( cfi_array->bus, 0 ) == 32);
+	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_SCS))
+		 && (bus_width( cfi_array->bus, 0 ) == 32);
 }
 
 static int 
 intel_flash_autodetect( cfi_array_t *cfi_array )
 {
-	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( cfi_array->bus, 0 ) == 16);
+	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_SCS))
+		 && (bus_width( cfi_array->bus, 0 ) == 16);
 }
 
 static int 
 intel_flash_autodetect8( cfi_array_t *cfi_array )
 {
-	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( cfi_array->bus, 0 ) == 8);
+	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_SCS))
+		 && (bus_width( cfi_array->bus, 0 ) == 8);
 }
 
 static void

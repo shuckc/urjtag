@@ -1,3 +1,8 @@
+2003-08-13  Marcel Telka  <marcel@telka.sk>
+
+	* flash/intel.c (intel_flash_autodetect32, intel_flash_autodetect, intel_flash_autodetect8): Added
+		support for Intel SCS command set (patch 787978, Jani Monoses).
+
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
 	* flash/amd.c (amd_flash_autodetect): Function renamed ...
