@@ -72,7 +72,7 @@ detectflash( bus_t *bus )
 			return;
 	}
 
-	cfi = detect_cfi( bus );
+	cfi = detect_cfi( bus, 0 );
 	if (!cfi) {
 		printf( "Flash not found!\n" );
 		return;

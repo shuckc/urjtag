@@ -25,10 +25,11 @@
 #ifndef CFI_H
 #define CFI_H
 
+#include <stdint.h>
 #include <flash/cfi.h>
 
 #include "bus.h"
 
-cfi_query_structure_t *detect_cfi( bus_t *bus );
+cfi_query_structure_t *detect_cfi( bus_t *bus, uint32_t adr );
 
 #endif /* CFI_H */

@@ -49,7 +49,7 @@ read2( bus_t *bus, uint32_t adr, int o )
 }
 
 cfi_query_structure_t *
-detect_cfi( bus_t *bus )
+detect_cfi( bus_t *bus, uint32_t adr )
 {
 	cfi_query_structure_t *cfi;
 	int o = 2;

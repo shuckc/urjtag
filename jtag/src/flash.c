@@ -98,7 +98,7 @@ flashcheck( bus_t *bus, cfi_query_structure_t **cfi )
 			return;
 	}
 
-	*cfi = detect_cfi( bus );
+	*cfi = detect_cfi( bus, 0 );
 	if (!*cfi) {
 		printf( "Flash not found!\n" );
 		return;

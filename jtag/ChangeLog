@@ -1,5 +1,10 @@
 2003-05-15  Marcel Telka  <marcel@telka.sk>
 
+	* include/cfi.h (detect_cfi): Added new parameter `adr'.
+	All relevant functions and callers updated.
+
+2003-05-15  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac (CPPFLAGS): Added path to the openwince include arm directory.
 	* include/bus.h (bus_width): Added new `adr' parameter for this macro.
 	All relevant functions and callers updated.
