@@ -1,5 +1,9 @@
 2003-04-04  Marcel Telka  <marcel@telka.sk>
 
+	Version 0.3.2 released.
+
+2003-04-04  Marcel Telka  <marcel@telka.sk>
+
 	* data/xilinx/PARTS: Added XCR3256XL-FT256 (Jachym Holecek).
 	* data/xilinx/xcr3256xl-ft256/STEPPINGS: New file (Jachym Holecek).
 	* data/xilinx/xcr3256xl-ft256/xcr3256xl-ft256: Ditto.
