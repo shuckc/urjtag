@@ -24,8 +24,6 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
- * [2] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
- *     Specification Update", May 2002, Order Number: 278534-005
  *
  */
 
