@@ -35,7 +35,6 @@ openwinceincdir = $(includedir)/openwince
 nobase_openwinceinc_HEADERS = \
 	common.h \
 	cexcept.h \
-	stdint.h \
 	arm/arm.h \
 	arm/sa11x0/gpclk.h \
 	arm/sa11x0/gpio.h \
@@ -81,3 +80,15 @@ nobase_openwinceinc_HEADERS = \
 	device/flash/cfi.h \
 	device/flash/intel.h \
 	std/mic.h
+
+nodist_openwinceinc_HEADERS = \
+	owce-stdint.h
+
+if GENERATE_STDINT_H
+nodist_openwinceinc_HEADERS += stdint.h
+endif
+
+stdint.h:
+	echo "#include <owce-stdint.h>" > stdint.h
+
+CLEANFILES = stdint.h

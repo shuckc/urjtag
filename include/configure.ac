@@ -30,7 +30,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-AC_INIT(include,0.2.3)
+AC_INIT(include,0.3)
 
 AC_PREREQ(2.53)
 AC_REVISION($Revision$)
@@ -44,5 +44,9 @@ AC_CONFIG_FILES(
 )
 
 AM_MAINTAINER_MODE
+
+AX_CREATE_STDINT_H( owce-stdint.h )
+AC_CHECK_HEADERS( stdint.h )
+AM_CONDITIONAL( GENERATE_STDINT_H, test x$ac_cv_header_stdint_h = xno )
 
 AC_OUTPUT
