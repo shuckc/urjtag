@@ -34,12 +34,17 @@
 
 #include <stdint.h>
 #include <flash/cfi.h>
+#include <flash/intel.h>
+#include <std/mic.h>
 
 #include "part.h"
 
 #include "sa1110.h"
 #include "pxa250.h"
 
+void (*bus_read_start)( parts *, uint32_t );
+uint32_t (*bus_read_next)( parts *, uint32_t );
+uint32_t (*bus_read_end)( parts * );
 uint32_t (*bus_read)( parts *, uint32_t );
 void (*bus_write)( parts *, uint32_t, uint32_t );
 
@@ -53,16 +58,21 @@ readmem( parts *ps )
 #define	D_SA1110	1
 #define	D_PXA250	2
 
-
 	if (strcmp( p->part, "SA1110" ) == 0) {
 		printf( "SA1110 detected\n" );
 		d = D_SA1110;
+		bus_read_start = sa1110_bus_read_start;
+		bus_read_next = sa1110_bus_read_next;
+		bus_read_end = sa1110_bus_read_end;
 		bus_read = sa1110_bus_read;
 		bus_write = sa1110_bus_write;
 	}
 	if (strcmp( p->part, "PXA250" ) == 0) {
 		printf( "PXA250 detected\n" );
 		d = D_PXA250;
+		bus_read_start = pxa250_bus_read_start;
+		bus_read_next = pxa250_bus_read_next;
+		bus_read_end = pxa250_bus_read_end;
 		bus_read = pxa250_bus_read;
 		bus_write = pxa250_bus_write;
 	}
@@ -194,7 +204,7 @@ readmem( parts *ps )
 	printf( "\tMaximum timeout for chip erase: %d ms (0x%02X)\n", 1 << ((bus_read( ps, 0x26 << o ) + bus_read( ps, 0x22 << o )) & 0xFF), bus_read( ps, 0x26 << o ) & 0xFF );
 
 	/* see 3.3.4 in [1] */
-	printf( "Defice Geometry Definition:\n" );
+	printf( "Device Geometry Definition:\n" );
 	printf( "\tDevice Size: %d B (0x%02X)\n", 1 << (bus_read( ps, 0x27 << o ) & 0xFF), bus_read( ps, 0x27 << o ) & 0xFF );
 	printf( "\tFlash Device Interface description: 0x%02X%02X ", bus_read( ps, 0x29 << o ) & 0xFF, bus_read( ps, 0x28 << o ) & 0xFF );
 	{
@@ -250,12 +260,12 @@ readmem( parts *ps )
 	/* Clear Status Register */
 	bus_write( ps, 0 << o, 0x00500050 );
 
-	/* Read Identifier Comamnd */
+	/* Read Identifier Command */
 	bus_write( ps, 0 << 0, 0x00900090 );
 
 	switch (bus_read( ps, 0x00 << o ) & 0xFF) {
-		case 0x89:
-			printf( "Manufacturer: Intel\n" );
+		case STD_MIC_INTEL:
+			printf( "Manufacturer: %s\n", STD_MICN_INTEL );
 			break;
 		default:
 			printf( "Unknown manufacturer!\n" );
