@@ -116,25 +116,25 @@ typedef volatile struct MC_registers {
 
 #define	MDCNFG_DSA1111_2	bit(28)
 #define	MDCNFG_DLATCH2		bit(27)
-#define	MDCNFG_DTC2_MASK	0x03000000
-#define	MDCNFG_DTC2(x)		((x << 24) & MDCNFG_DTC2_MASK)
+#define	MDCNFG_DTC2_MASK	bits(25,24)
+#define	MDCNFG_DTC2(x)		bits_val(25,24,x)
 #define	MDCNFG_DNB2		bit(23)
-#define	MDCNFG_DRAC2_MASK	0x00600000
-#define	MDCNFG_DRAC2(x)		((x << 21) & MDCNFG_DRAC2_MASK)
-#define	MDCNFG_DCAC2_MASK	0x00180000
-#define	MDCNFG_DCAC2(x)		((x << 19) & MDCNFG_DCAC2_MASK)
+#define	MDCNFG_DRAC2_MASK	bits(22,21)
+#define	MDCNFG_DRAC2(x)		bits_val(22,21,x)
+#define	MDCNFG_DCAC2_MASK	bits(20,19)
+#define	MDCNFG_DCAC2(x)		bits_val(20,19,x)
 #define	MDCNFG_DWID2		bit(18)
 #define	MDCNFG_DE3		bit(17)
 #define	MDCNFG_DE2		bit(16)
 #define	MDCNFG_DSA1111_0	bit(12)
 #define	MDCNFG_DLATCH0		bit(11)
-#define	MDCNFG_DTC0_MASK	0x00000300
-#define	MDCNFG_DTC0(x)		((x << 8) & MDCNFG_DTC0_MASK)
+#define	MDCNFG_DTC0_MASK	bits(9,8)
+#define	MDCNFG_DTC0(x)		bits_val(9,8,x)
 #define	MDCNFG_DNB0		bit(7)
-#define	MDCNFG_DRAC0_MASK	0x00000060
-#define	MDCNFG_DRAC0(x)		((x << 5) & MDCNFG_DRAC0_MASK)
-#define	MDCNFG_DCAC0_MASK	0x00000018
-#define	MDCNFG_DCAC0(x)		((x << 3) & MDCNFG_DCAC0_MASK)
+#define	MDCNFG_DRAC0_MASK	bits(6,5)
+#define	MDCNFG_DRAC0(x)		bits_val(6,5,x)
+#define	MDCNFG_DCAC0_MASK	bits(4,3)
+#define	MDCNFG_DCAC0(x)		bits_val(4,3,x)
 #define	MDCNFG_DWID0		bit(2)
 #define	MDCNFG_DE1		bit(1)
 #define	MDCNFG_DE0		bit(0)
@@ -154,24 +154,24 @@ typedef volatile struct MC_registers {
 #define	MDREFR_K0DB2		bit(14)
 #define	MDREFR_K0RUN		bit(13)
 #define	MDREFR_E0PIN		bit(12)
-#define	MDREFR_DRI_MASK		0x00000FFF
-#define	MDREFR_DRI(x)		(x & MDREFR_DRI_MASK)
+#define	MDREFR_DRI_MASK		bits(11,0)
+#define	MDREFR_DRI(x)		bits(11,0,x)
 
 /* MDMRS bits - see Table 6-4 in [1] */
 
-#define	MDMRS_MDMRS2_MASK	0x7F800000
-#define	MDMRS_MDMRS2(x)		((x << 23) & MDMRS_MDMRS2_MASK)
-#define	MDMRS_MDCL2_MASK	0x00700000
-#define	MDMRS_MDCL2(x)		((x << 20) & MDMRS_MDCL2_MASK)
+#define	MDMRS_MDMRS2_MASK	bits(30,23)
+#define	MDMRS_MDMRS2(x)		bits_val(30,23,x)
+#define	MDMRS_MDCL2_MASK	bits(22,20)
+#define	MDMRS_MDCL2(x)		bits_val(22,20)
 #define	MDMRS_MDADD2		bit(19)
-#define	MDMRS_MDBL2_MASK	0x00070000
-#define	MDMRS_MDBL2(x)		((x << 16) & MDMRS_MDBL2_MASK)
-#define	MDMRS_MDMRS0_MASK	0x00007F80
-#define	MDMRS_MDMRS0(x)		((x << 7) & MDMRS_MDMRS0_MASK)
-#define	MDMRS_MDCL0_MASK	0x00000070
-#define	MDMRS_MDCL0(x)		((x << 4) & MDMRS_MDCL0_MASK)
+#define	MDMRS_MDBL2_MASK	bits(18,16)
+#define	MDMRS_MDBL2(x)		bits_val(18,16,x)
+#define	MDMRS_MDMRS0_MASK	bits(14,7)
+#define	MDMRS_MDMRS0(x)		bits_val(14,7,x)
+#define	MDMRS_MDCL0_MASK	bits(6,4)
+#define	MDMRS_MDCL0(x)		bits_val(6,4,x)
 #define	MDMRS_MDADD0		bit(3)
-#define	MDMRS_MDBL0_MASK	0x00000007
-#define	MDMRS_MDBL0(x)		(x & MDMRS_MDBL0_MASK)
+#define	MDMRS_MDBL0_MASK	bits(2,0)
+#define	MDMRS_MDBL0(x)		bits_val(2,0,x)
 
 #endif /* PXA2X0_MC_H */
