@@ -1,3 +1,10 @@
+2004-08-11  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.rules: New file.
+	* Makefile.am: Changed path to Makefile.rules include.
+	(EXTRA_DIST): Added Makefile.rules.
+	* po/Makevars: Changed path to Makefile.rules include.
+
 2003-11-03  Marcel Telka  <marcel@telka.sk>
 
 	* flash/jedec.c (jedec_detect): Fixed compile error - C++-style declaration (bug 828313, thanks to Márton Németh).

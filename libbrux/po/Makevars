@@ -1,6 +1,6 @@
 # $Id$
 
-include $(top_srcdir)/../Makefile.rules
+include $(top_srcdir)/Makefile.rules
 
 # Makefile variables for PO directory in any package using GNU gettext.
 
