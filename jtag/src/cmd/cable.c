@@ -32,6 +32,7 @@
 #include "cable.h"
 #include "chain.h"
 #include "jtag.h"
+#include "bus.h"
 
 #include "cmd.h"
 
@@ -53,6 +54,10 @@ cmd_cable_run( char *params[] )
 		return 1;
 	}
 
+	if (bus) {
+		bus->free( bus );
+		bus = NULL;
+	}
 	chain_disconnect( chain );
 	chain->cable = parport_drivers[i]->connect( (const char **) &params[2], cmd_params( params ) - 2 );
 	if (!chain->cable) {

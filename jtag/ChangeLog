@@ -1,5 +1,13 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* src/cmd/cable.c (cmd_cable_run): Added bus deallocation.
+	* src/cmd/detectflash.c (cmd_detectflash_run): Removed cable connection test.
+	* src/cmd/flashmem.c (cmd_flashmem_run): Ditto.
+	* src/cmd/peekpoke.c (cmd_peek_run, cmd_poke_run): Ditto.
+	* src/cmd/readmem.c (cmd_readmem_run): Ditto.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* src/flash.c (flashmsbin, flashmem): Removed '\r' from translatable messages.
 	* src/readmem.c (readmem): Ditto.
 

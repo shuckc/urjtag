@@ -41,9 +41,6 @@ cmd_readmem_run( char *params[] )
 	if (cmd_params( params ) != 4)
 		return -1;
 
-	if (!cmd_test_cable())
-		return 1;
-
 	if (!bus) {
 		printf( _("Error: Bus driver missing.\n") );
 		return 1;

@@ -39,9 +39,6 @@ cmd_peek_run( char *params[] )
 	if (cmd_params( params ) != 2)
 		return -1;
 
-	if (!cmd_test_cable())
-		return 1;
-
 	if (!bus) {
 		printf( _("Error: Bus driver missing.\n") );
 		return 1;
@@ -86,9 +83,6 @@ cmd_poke_run( char *params[] )
 
 	if (cmd_params( params ) != 3)
 		return -1;
-
-	if (!cmd_test_cable())
-		return 1;
 
 	if (!bus) {
 		printf( _("Error: Bus driver missing.\n") );
