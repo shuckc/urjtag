@@ -106,7 +106,7 @@ direct_connect( const char **par, int parnum )
 {
 	int i;
 	unsigned int port;
-	port_node_t *pn;
+	port_node_t *pn = ports;
 	parport_t *parport;
 	cable_t *cable;
 
@@ -120,15 +120,17 @@ direct_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	for (pn = ports; pn; pn = pn->next) {
-		unsigned int aport;
+	while (pn)
+		for (pn = ports; pn; pn = pn->next) {
+			unsigned int aport;
 
-		aport = ((direct_params_t*) pn->port->params)->port;
-		if (abs( aport - port ) < 3) {
-			printf( _("Disconnecting %s from parallel port at 0x%x\n"), pn->port->cable->driver->description, aport );
-			pn->port->cable->driver->disconnect( pn->port->cable );
+			aport = ((direct_params_t*) pn->port->params)->port;
+			if (abs( aport - port ) < 3) {
+				printf( _("Disconnecting %s from parallel port at 0x%x\n"), pn->port->cable->driver->description, aport );
+				pn->port->cable->driver->disconnect( pn->port->cable );
+				break;
+			}
 		}
-	}
 
 	if (strcmp( par[1], "none" ) == 0) {
 		printf( _("Changed cable to 'none'\n") );

@@ -1,5 +1,9 @@
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
+	* src/tap/parport/direct.c (direct_connect): Fixed cable disconnecting loop.
+
+2003-03-18  Marcel Telka  <marcel@telka.sk>
+
 	* src/jtag.c (jtag_parse_line) <script>: Added support for `quit' command in scripts.
 	(jtag_parse_rc): Ditto.
 	(jtag_parse_file): Added support for comments and `quit' command in scripts.
