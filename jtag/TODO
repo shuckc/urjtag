@@ -5,3 +5,4 @@ $Id$
 * Add support for script execution and .jtagrc.
 * Support for display the result of a boundary scan formated according to the CPU definitions (e.g. MA[0-26] = 0x00001c00).
 * Remove direct relation between JTAG instruction and data register (e.g. ARM7TDMI).
+* Configurable big endian vs. little endian access.
