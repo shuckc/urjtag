@@ -25,18 +25,18 @@
 #ifndef SIGNAL_H
 #define	SIGNAL_H
 
-typedef struct signal signal;
+typedef struct signal signal_t;
 
 #include <bsbit.h>
 
 struct signal {
 	char *name;
-	signal *next;
+	signal_t *next;
 	bsbit *input;
 	bsbit *output;
 };
 
-signal *signal_alloc( const char *name );
-void signal_free( signal *s );
+signal_t *signal_alloc( const char *name );
+void signal_free( signal_t *s );
 
 #endif /* SIGNAL_H */

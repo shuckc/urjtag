@@ -75,6 +75,16 @@ fi
 CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device"
 
 AC_SEARCH_LIBS([ioperm], [ioperm])
+if test "$ac_cv_search_ioperm" != "no"; then
+	AC_DEFINE(HAVE_IOPERM, 1, [Define to 1 if you have the ioperm() function])
+else
+	AC_SEARCH_LIBS([i386_set_ioperm], [i386])
+	if test "$ac_cv_search_i386_set_ioperm" != "no"; then
+		AC_DEFINE(HAVE_I386_SET_IOPERM, 1,
+			[Define to 1 if you have the i386_set_ioperm() function])
+	fi
+fi
+
 AC_CHECK_FUNCS(getline getdelim)
 
 AC_CHECK_HEADERS(linux/ppdev.h)

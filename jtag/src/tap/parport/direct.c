@@ -20,6 +20,7 @@
  * 02111-1307, USA.
  *
  * Written by Marcel Telka <marcel@telka.sk>, 2003.
+ * Ported to NetBSD/i386 by Jachym Holecek <freza@psi.cz>, 2003.
  *
  */
 
@@ -33,11 +34,64 @@
 #define	P_(s,p,n)	ngettext(s,p,n)
 
 #include <stdlib.h>
-#include <sys/io.h>
 #include <string.h>
 
 #include "parport.h"
 #include "cable.h"
+
+#if defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
+
+#if defined(HAVE_IOPERM)
+#include <sys/io.h>
+#elif defined(HAVE_I386_SET_IOPERM)
+#include <sys/types.h>
+#include <machine/sysarch.h>
+#include <err.h>
+#endif
+
+#ifdef HAVE_I386_SET_IOPERM
+static __inline int
+ioperm( unsigned long from, unsigned long num, int permit )
+{
+	u_long ports[32];
+	u_long i;
+
+	if (i386_get_ioperm( ports ) == -1)
+		return -1;
+
+	for (i = from; i < (from + num); i++)
+		if (permit)
+			ports[i / 32] &= ~(1 << (i % 32));
+		else
+			ports[i / 32] |= (1 << (i % 32));
+
+	if (i386_set_ioperm( ports ) == -1)
+		return -1;
+
+	return 0;
+}
+
+static __inline int
+iopl( int level )
+{
+	return i386_iopl( level );
+}
+
+static __inline unsigned char
+inb( unsigned short int port )
+{
+	unsigned char _v;
+
+	__asm__ __volatile__ ("inb %w1,%0":"=a" (_v):"Nd" (port));
+	return _v;
+}
+
+static __inline void
+outb( unsigned char value, unsigned short int port )
+{
+	__asm__ __volatile__ ("outb %b0,%w1": :"a" (value), "Nd" (port));
+}
+#endif /* HAVE_I386_SET_IOPERM */
 
 parport_driver_t direct_parport_driver;
 
@@ -216,3 +270,5 @@ parport_driver_t direct_parport_driver = {
 	direct_get_status,
 	direct_set_control
 };
+
+#endif /* defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM) */

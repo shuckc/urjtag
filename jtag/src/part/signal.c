@@ -27,10 +27,10 @@
 
 #include "signal.h"
 
-signal *
+signal_t *
 signal_alloc( const char *name )
 {
-	signal *s = malloc( sizeof *s );
+	signal_t *s = malloc( sizeof *s );
 	if (!s)
 		return NULL;
 
@@ -47,7 +47,7 @@ signal_alloc( const char *name )
 }
 
 void
-signal_free( signal *s )
+signal_free( signal_t *s )
 {
 	if (!s)
 		return;

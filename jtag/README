@@ -23,12 +23,13 @@ Feedback and contributions are welcome.
 Supported operating systems
 ---------------------------
 
-JTAG Tools should run on all x86 Unix like operating systems including
+JTAG Tools should run on all Unix like operating systems including
 MS Windows 95/98/Me/NT/2000/XP with Cygwin installed.
 
 Tested operating systems:
 - RedHat Linux 8.0
 - MS Windows 2000/XP + Cygwin
+- NetBSD/i386
 
 
 Supported hardware

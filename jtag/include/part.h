@@ -43,7 +43,7 @@ struct part {
 	char manufacturer[MAXLEN_MANUFACTURER + 1];
 	char part[MAXLEN_PART + 1];
 	char stepping[MAXLEN_STEPPING + 1];
-	signal *signals;
+	signal_t *signals;
 	int instruction_length;
 	instruction *instructions;
 	instruction *active_instruction;

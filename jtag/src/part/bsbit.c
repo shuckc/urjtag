@@ -28,9 +28,9 @@
 #include "bsbit.h"
 
 bsbit *
-bsbit_alloc( int bit, const char *name, int type, signal* signals, int safe )
+bsbit_alloc( int bit, const char *name, int type, signal_t* signals, int safe )
 {
-	signal *s = signals;
+	signal_t *s = signals;
 
 	bsbit *b = malloc( sizeof *b );
 	if (!b)

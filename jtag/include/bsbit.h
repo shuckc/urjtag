@@ -41,14 +41,14 @@ struct bsbit {
 	int bit;
 	char *name;
 	int type;
-	signal *signal;
+	signal_t *signal;
 	int safe;		/* safe value */
 	int control;		/* -1 for none */
 	int control_value;
 	int control_state;
 };
 
-bsbit *bsbit_alloc( int bit, const char *name, int type, signal* signals, int safe );
+bsbit *bsbit_alloc( int bit, const char *name, int type, signal_t* signals, int safe );
 void bsbit_free( bsbit *b );
 
 #endif /* BSBIT_H */

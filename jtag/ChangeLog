@@ -1,3 +1,12 @@
+2003-04-02  Marcel Telka  <marcel@telka.sk>
+
+	* include/signal.h: Changed signal typedef to signal_t (thanks to Jachym Holecek).
+		All `signal' instances renamed to `signal_t'.
+	* src/tap/parport.c: Ported to NetBSD/i386 (Jachym Holecek).
+	* src/tap/parport/direct.c (parport_drivers): Conditionally removed direct_parport_driver.
+	* configure.ac: Added test for i386_set_ioperm() function. Defined HAVE_IOPERM
+		and HAVE_I386_SET_IOPERM.
+
 2003-04-01  Marcel Telka  <marcel@telka.sk>
 
 	* src/tap/cable/keithkoep.c: New file.

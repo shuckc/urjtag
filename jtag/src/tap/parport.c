@@ -28,13 +28,17 @@
 
 #include "parport.h"
 
+#if defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
 extern parport_driver_t direct_parport_driver;
+#endif /* defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM) */
 #ifdef HAVE_LINUX_PPDEV_H
 extern parport_driver_t ppdev_parport_driver;
 #endif /* HAVE_LINUX_PPDEV_H */
 
 parport_driver_t *parport_drivers[] = {
+#if defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
 	&direct_parport_driver,
+#endif /* defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM) */
 #ifdef HAVE_LINUX_PPDEV_H
 	&ppdev_parport_driver,
 #endif /* HAVE_LINUX_PPDEV_H */

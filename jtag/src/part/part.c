@@ -60,7 +60,7 @@ part_free( part *p )
 
 	/* sirnals */
 	while (p->signals) {
-		signal *s = p->signals;
+		signal_t *s = p->signals;
 		p->signals = s->next;
 		signal_free( s );
 	}
@@ -132,7 +132,7 @@ void part_set_instruction( part *p, const char *iname )
 void
 part_set_signal( part *p, const char *pname, int out, int val )
 {
-	signal *s;
+	signal_t *s;
 
 	/* search for Boundary Scan Register */
 	data_register *bsr = part_find_data_register( p, "BSR" );
@@ -179,7 +179,7 @@ part_set_signal( part *p, const char *pname, int out, int val )
 int
 part_get_signal( part *p, const char *pname )
 {
-	signal *s;
+	signal_t *s;
 
 	/* search for Boundary Scan Register */
 	data_register *bsr = part_find_data_register( p, "BSR" );
