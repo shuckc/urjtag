@@ -39,14 +39,17 @@
 #ifndef	PXA2X0_IC_H
 #define	PXA2X0_IC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* Interrupt Control Registers */
 
 #define	IC_BASE		0x40D00000
 
+#if LANGUAGE == C
 typedef volatile struct IC_registers {
 	uint32_t icip;
 	uint32_t icmr;
@@ -56,7 +59,7 @@ typedef volatile struct IC_registers {
 	uint32_t iccr;
 } IC_registers;
 
-#ifndef IC_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	IC_pointer	((IC_registers*) IC_BASE)
 #endif
 
@@ -66,5 +69,42 @@ typedef volatile struct IC_registers {
 #define	ICFP		IC_pointer->icfp
 #define	ICPR		IC_pointer->icpr
 #define	ICCR		IC_pointer->iccr
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_IC_H */
+#define	ICIP_OFFSET	0x00
+#define	ICMR_OFFSET	0x04
+#define	ICLR_OFFSET	0x08
+#define	ICFP_OFFSET	0x0C
+#define	ICPR_OFFSET	0x10
+#define	ICCR_OFFSET	0x14
+
+/* IRQ bits */
+
+#define	IC_IRQ31	bit(31)
+#define	IC_IRQ30	bit(30)
+#define	IC_IRQ29	bit(29)
+#define	IC_IRQ28	bit(28)
+#define	IC_IRQ27	bit(27)
+#define	IC_IRQ26	bit(26)
+#define	IC_IRQ25	bit(25)
+#define	IC_IRQ24	bit(24)
+#define	IC_IRQ23	bit(23)
+#define	IC_IRQ22	bit(22)
+#define	IC_IRQ21	bit(21)
+#define	IC_IRQ20	bit(20)
+#define	IC_IRQ19	bit(19)
+#define	IC_IRQ18	bit(18)
+#define	IC_IRQ17	bit(17)
+#define	IC_IRQ14	bit(14)
+#define	IC_IRQ13	bit(13)
+#define	IC_IRQ12	bit(12)
+#define	IC_IRQ11	bit(11)
+#define	IC_IRQ10	bit(10)
+#define	IC_IRQ9		bit(9)
+#define	IC_IRQ8		bit(8)
+
+/* ICCR bits - see Table 4-33 in [1] */
+
+#define	ICCR_DIM	bit(0)
+
+#endif /* PXA2X0_IC_H */
