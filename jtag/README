@@ -49,7 +49,7 @@ JTAG-aware parts (chips):
 - Hitachi SH7727
 - Intel IXP425
 - Intel SA1110
-- Intel PXA250 (including C0 stepping)
+- Intel PXA250/PXA255
 - Intel PXA261/262
 - Xilinx XC2C256-TQ144
 - Xilinx XCR3128XL-CS144

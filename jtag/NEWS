@@ -1,5 +1,9 @@
 $Id$
 
+	* Added support for Intel PXA255 A0 (thanks to Mike Sprauve).
+	* Added support for running scripts specified as jtag command line parameters.
+	* Added support for comments in scripts. Lines started with `#' are treated as
+		comments.
 	* Added support for Linux ppdev parallel port driver. Non-root users can
 		use JTAG Tools now.
 	* Added new `bsdl2jtag' conversion tool (Matan Ziv-Av).

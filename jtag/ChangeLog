@@ -1,5 +1,14 @@
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
+	* src/jtag.c (jtag_parse_line) <script>: Added support for `quit' command in scripts.
+	(jtag_parse_rc): Ditto.
+	(jtag_parse_file): Added support for comments and `quit' command in scripts.
+	(main): Added command line parameter list execution as scripts.
+	* data/intel/pxa250/STEPPING: Added support for Intel PXA255 A0 (thanks to Mike Sprauve).
+	* configure.ac (AC_INIT): Changed version number to 0.3.1.
+
+2003-03-18  Marcel Telka  <marcel@telka.sk>
+
 	* po/POTFILES.in: Added src/tap/parport/direct.c and src/tap/parport/ppdev.c.
 	* src/help.c (help) <cable>: Added help for `cable ppdev' command.
 	* src/tap/parport/ppdev.c (ppdev_open): Removed debug messages.

@@ -693,6 +693,8 @@ jtag_parse_line( char *line )
 		}
 
 		if (strcmp( t, "script" ) == 0) {
+			int go;
+
 			t = get_token( NULL );          /* filename */
 			if (!t) {
 				printf( _("script: missing filename\n") );
@@ -703,9 +705,10 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			jtag_parse_file( t );
-
-			return 1;
+			go = jtag_parse_file( t );
+			if (go < 0)
+				printf( _("Unable to open file `%s'!\n"), t );
+			return go;
 		}
 
 		printf( _("%s: unknown command\n"), t );
@@ -741,13 +744,11 @@ jtag_parse_file( const char *filename )
 	int n = 0;
 
 	f = fopen( filename, "r" );
-	if (!f) {
-		printf( _("Unable to open file `%s'!\n"), filename);
-		return 1;
-	}
+	if (!f)
+		return -1;
 
-	while (getline( &line, &n, f ) != -1)
-		if (strlen(line) > 0)
+	while (go && (getline( &line, &n, f ) != -1))
+		if ((strlen(line) > 0) && (line[0] != '#'))
 			go = jtag_parse_line(line);
 
 	free(line);
@@ -756,18 +757,19 @@ jtag_parse_file( const char *filename )
 	return go;
 }
 
-static void
+static int
 jtag_parse_rc( void )
 {
 	char *home = getenv( "HOME" );
 	char *file;
+	int go;
 
 	if (!home)
-		return;
+		return 1;
 
 	file = malloc( strlen(home) + strlen(JTAGDIR) + strlen(RCFILE) + 3 );	/* 2 x "/" and trailing \0 */
 	if (!file)
-		return;
+		return 1;
 
 	strcpy( file, home );
 	strcat( file, "/" );
@@ -775,14 +777,19 @@ jtag_parse_rc( void )
 	strcat( file, "/" );
 	strcat( file, RCFILE );
 
-	jtag_parse_file( file );
+	go = jtag_parse_file( file );
 
 	free( file );
+
+	return go;
 }
 
 int
-main( void )
+main( int argc, const char **argv )
 {
+	int go = 1;
+	int i;
+
 #ifdef ENABLE_NLS
 	/* l10n support */
 	setlocale( LC_MESSAGES, "" );
@@ -807,20 +814,32 @@ main( void )
 	printf( _("Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n"), PACKAGE );
 	printf( _("Type \"help\" for help.\n\n") );
 
-	/* Create ~/.jtag */
-	jtag_create_jtagdir();
+	for (i = 1; i < argc; i++) {
+		go = jtag_parse_file( argv[i] );
+		if (go < 0)
+			printf( _("Unable to open file `%s'!\n"), argv[i] );
+		if (!go)
+			break;
+	}
 
-	/* Parse and execute the RC file */
-	jtag_parse_rc();
+	if (go) {
+		/* Create ~/.jtag */
+		jtag_create_jtagdir();
 
-	/* Load history */
-	jtag_load_history();
+		/* Parse and execute the RC file */
+		go = jtag_parse_rc();
 
-	/* main loop */
-	jtag_readline_loop( "jtag> " );
+		if (go) {
+			/* Load history */
+			jtag_load_history();
 
-	/* Save history */
-	jtag_save_history();
+			/* main loop */
+			jtag_readline_loop( "jtag> " );
+
+			/* Save history */
+			jtag_save_history();
+		}
+	}
 
 	chain_free( chain );
 
