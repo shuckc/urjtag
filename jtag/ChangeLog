@@ -1,3 +1,7 @@
+2004-09-21  Marcel Telka  <marcel@telka.sk>
+
+	* data/intel/PARTS: Added support for different IXP425 frequency variants (patch 1030647, Trevor Man).
+
 2004-08-24  Marcel Telka  <marcel@telka.sk>
 
 	* src/bus/Makefile.am (libbus_a_SOURCES): Added ppc440gx_ebc8.c.

@@ -32,4 +32,6 @@
 1001001001100001	sa1110		SA1110  # see 16.6.2 in [1]
 1001001001100100	pxa250		PXA250	# see 9.4.3 in [2]
 1001001001101100	pxa210		PXA210	# see 9.4.3 in [2]
-1001001001110100	ixp425		IXP425	# see IXP425 bdsl file from the devel CD
+1001001001110100	ixp425		IXP425-533MHz	# see IXP425 bdsl file from the devel CD
+1001001001110101	ixp425		IXP425-400MHz	# see IXP425 bdsl file from the devel CD
+1001001001110111	ixp425		IXP425-266MHz	# see IXP425 bdsl file from the devel CD
