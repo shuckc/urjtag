@@ -82,6 +82,11 @@ main( void )
 		if (strcmp( t, "quit" ) == 0)
 			break;
 
+		if (strcmp( t, "help" ) == 0) {
+			printf( "help: Please read sources.\n" );
+			continue;
+		}
+
 		if (strcmp( t, "detect" ) == 0) {
 			t = get_token( NULL );
 			if (ps)
@@ -162,6 +167,8 @@ main( void )
 			
 			continue;
 		}
+
+		printf( "%s: unknown command\n", t );
 	}
 
 	free( line );
