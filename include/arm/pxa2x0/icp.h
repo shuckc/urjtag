@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 ICP Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 ICP Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -45,6 +47,14 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* ICP Registers */
@@ -81,7 +91,7 @@ typedef volatile struct ICP_registers {
 #define	ICSR0_OFFSET	0x14
 #define	ICSR1_OFFSET	0x18
 
-/* ICCR0 bits - see Table 11-2 in [1], Table 11-2 in [2] */
+/* ICCR0 bits - see Table 11-2 in [1], Table 11-2 in [2], Table 11-2 in [3] */
 
 #define	ICCR0_AME	bit(7)
 #define	ICCR0_TIE	bit(6)
@@ -92,13 +102,13 @@ typedef volatile struct ICP_registers {
 #define	ICCR0_LBM	bit(1)
 #define	ICCR0_ITR	bit(0)
 
-/* ICCR1 bits - see Table 11-3 in [1], Table 11-3 in [2] */
+/* ICCR1 bits - see Table 11-3 in [1], Table 11-3 in [2], Table 11-3 in [3] */
 
 #define	ICCR1_AMV_MASK		bits(7,0)
 #define	ICCR1_AMV(x)		bits_val(7,0,x)
 #define	get_ICCR1_AMV(x)	bits_get(7,0,x)
 
-/* ICCR2 bits - see Table 11-4 in [1], Table 11-4 in [2] */
+/* ICCR2 bits - see Table 11-4 in [1], Table 11-4 in [2], Table 11-4 in [3] */
 
 #define	ICCR2_RXP		bit(3)
 #define	ICCR2_TXP		bit(2)
@@ -106,13 +116,13 @@ typedef volatile struct ICP_registers {
 #define	ICCR2_TRIG(x)		bits_val(1,0,x)
 #define	get_ICCR2_TRIG(x)	bits_get(1,0,x)
 
-/* ICDR bits - see Table 11-5 in [1], Table 11-5 in [2] */
+/* ICDR bits - see Table 11-5 in [1], Table 11-5 in [2], Table 11-5 in [3] */
 
 #define	ICDR_DATA_MASK		bits(7,0)
 #define	ICDR_DATA(x)		bits_val(7,0,x)
 #define	get_ICDR_DATA(x)	bits_get(7,0,x)
 
-/* ICSR0 bits - see Table 11-6 in [1], Table 11-6 in [2] */
+/* ICSR0 bits - see Table 11-6 in [1], Table 11-6 in [2], Table 11-6 in [3] */
 
 #define	ICSR0_FRE	bit(5)
 #define	ICSR0_RFS	bit(4)
@@ -121,7 +131,7 @@ typedef volatile struct ICP_registers {
 #define	ICSR0_TUR	bit(1)
 #define	ICSR0_EIF	bit(0)
 
-/* ICSR1 bits - see Table 11-7 in [1], Table 11-7 in [2] */
+/* ICSR1 bits - see Table 11-7 in [1], Table 11-7 in [2], Table 11-7 in [3] */
 
 #define	ICSR1_ROR	bit(6)
 #define	ICSR1_CRE	bit(5)

@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 AC97 Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 AC97 Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -45,6 +47,14 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* AC97 Registers */
@@ -126,19 +136,19 @@ typedef volatile struct AC97_registers {
 #define	MISR_OFFSET		0x118
 #define	MODR_OFFSET		0x140
 
-/* POCR bits - see Table 13-50 in [1], Table 13-10 in [2] */
+/* POCR bits - see Table 13-50 in [1], Table 13-10 in [2], Table 13-9 in [3] */
 
 #define	POCR_FEIE		bit(3)
 
-/* PICR bits - see Table 13-51 in [1], Table 13-11 in [2] */
+/* PICR bits - see Table 13-51 in [1], Table 13-11 in [2], Table 13-10 in [3] */
 
 #define	PICR_FEIE		bit(3)
 
-/* MCCR bits - see Table 13-56 in [1], Table 13-16 in [2] */
+/* MCCR bits - see Table 13-56 in [1], Table 13-16 in [2], Table 13-15 in [3] */
 
 #define	MCCR_FEIE		bit(3)
 
-/* GCR bits - see Table 13-48 in [1], Table 13-8 in [2] */
+/* GCR bits - see Table 13-48 in [1], Table 13-8 in [2], Table 13-7 in [3] */
 
 #define	GCR_CDONE_IE		bit(19)
 #define	GCR_SDONE_IE		bit(18)
@@ -151,19 +161,19 @@ typedef volatile struct AC97_registers {
 #define	GCR_COLD_RST		bit(1)
 #define	GCR_GIE			bit(0)
 
-/* POSR bits - see Table 13-52 in [1], Table 13-12 in [2] */
+/* POSR bits - see Table 13-52 in [1], Table 13-12 in [2], Table 13-11 in [3] */
 
 #define	POSR_FIFOE		bit(4)
 
-/* PISR bits - see Table 13-53 in [1], Table 13-13 in [2] */
+/* PISR bits - see Table 13-53 in [1], Table 13-13 in [2], Table 13-12 in [3] */
 
 #define	PISR_FIFOE		bit(4)
 
-/* MCSR bits - see Table 13-57 in [1], Table 13-17 in [2] */
+/* MCSR bits - see Table 13-57 in [1], Table 13-17 in [2], Table 13-16 in [3] */
 
 #define	MCSR_FIFOE		bit(4)
 
-/* GSR bits - see Table 13-49 in [1], Table 13-9 in [2] */
+/* GSR bits - see Table 13-49 in [1], Table 13-9 in [2], Table 13-8 in [3] */
 
 #define	GSR_CDONE		bit(19)
 #define	GSR_SDONE		bit(18)
@@ -182,11 +192,11 @@ typedef volatile struct AC97_registers {
 #define	GSR_MIINT		bit(1)
 #define	GSR_GSCI		bit(0)
 
-/* CAR bits - see Table 13-54 in [1], Table 13-14 in [2] */
+/* CAR bits - see Table 13-54 in [1], Table 13-14 in [2], Table 13-13 in [3] */
 
 #define	CAR_CAIP		bit(0)
 
-/* PCDR bits - see Table 13-55 in [1], Table 13-15 in [2] */
+/* PCDR bits - see Table 13-55 in [1], Table 13-15 in [2], Table 13-14 in [3] */
 
 #define	PCDR_PCM_RDATA_MASK	bits(31,16)
 #define	PCDR_PCM_RDATA(x)	bits_val(31,16,x)
@@ -195,29 +205,29 @@ typedef volatile struct AC97_registers {
 #define	PCDR_PCM_LDATA(x)	bits_val(15,0,x)
 #define	get_PCDR_PCM_LDATA(x)	bits_get(15,0,x)
 
-/* MCDR bits - see Table 13-58 in [1], Table 13-18 in [2] */
+/* MCDR bits - see Table 13-58 in [1], Table 13-18 in [2], Table 13-17 in [3] */
 
 #define	MCDR_MIC_IN_DAT_MASK	bits(15,0)
 #define	MCDR_MIC_IN_DAT(x)	bits_val(15,0,x)
 #define	get_MCDR_MIC_IN_DAT(x)	bits_get(15,0,x)
 
-/* MOCR bits - see Table 13-59 in [1], Table 13-19 in [2] */
+/* MOCR bits - see Table 13-59 in [1], Table 13-19 in [2], Table 13-18 in [3] */
 
 #define	MOCR_FEIE		bit(3)
 
-/* MICR bits - see Table 13-60 in [1], Table 13-20 in [2] */
+/* MICR bits - see Table 13-60 in [1], Table 13-20 in [2], Table 13-19 in [3] */
 
 #define	MICR_FEIE		bit(3)
 
-/* MOSR bits - see Table 13-61 in [1], Table 13-21 in [2] */
+/* MOSR bits - see Table 13-61 in [1], Table 13-21 in [2], Table 13-20 in [3] */
 
 #define	MOSR_FIFOE		bit(4)
 
-/* MISR bits - see Table 16-62 in [1], Table 13-22 in [2] */
+/* MISR bits - see Table 13-62 in [1], Table 13-22 in [2], Table 13-21 in [3] */
 
 #define	MISR_FIFOE		bit(4)
 
-/* MODR bits - see Table 16-63 in [1], Table 13-23 in [2] */
+/* MODR bits - see Table 13-63 in [1], Table 13-23 in [2], Table 13-22 in [3] */
 
 #define	MODR_MODEM_DAT_MASK	bits(15,0)
 #define	MODR_MODEM_DAT(x)	bits_val(15,0,x)

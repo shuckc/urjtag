@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 Interrupt Control Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 Interrupt Control Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -47,8 +49,12 @@
 #include <stdint.h>
 #endif
 
-#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA26X)
-#define	PXA2X0_NOPXA26X
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* Interrupt Control Registers */
@@ -101,10 +107,12 @@ typedef volatile struct IC_registers {
 #define	IC_IRQ19	bit(19)
 #define	IC_IRQ18	bit(18)
 #define	IC_IRQ17	bit(17)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	IC_IRQ16	bit(16)
+#endif /* PXA255 and above only */
+#if !defined(PXA2X0_NOPXA260)
 #define	IC_IRQ15	bit(15)
-#endif /* PXA26x only */
+#endif /* PXA260 and above only */
 #define	IC_IRQ14	bit(14)
 #define	IC_IRQ13	bit(13)
 #define	IC_IRQ12	bit(12)
@@ -112,11 +120,11 @@ typedef volatile struct IC_registers {
 #define	IC_IRQ10	bit(10)
 #define	IC_IRQ9		bit(9)
 #define	IC_IRQ8		bit(8)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	IC_IRQ7		bit(7)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 
-/* symbolic names for IRQs - see Table 4-36 in [1], Table 4-36 in [2] */
+/* symbolic names for IRQs - see Table 4-36 in [1], Table 4-36 in [2], Table 4-36 in [3] */
 
 #define	IC_IRQ_RTC_ALARM	IC_IRQ31
 #define	IC_IRQ_RTC_HZ		IC_IRQ30
@@ -133,10 +141,12 @@ typedef volatile struct IC_registers {
 #define	IC_IRQ_ICP		IC_IRQ19
 #define	IC_IRQ_I2C		IC_IRQ18
 #define	IC_IRQ_LCD		IC_IRQ17
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	IC_IRQ_NSSP		IC_IRQ16
+#endif /* PXA255 and above only */
+#if !defined(PXA2X0_NOPXA260)
 #define	IC_IRQ_ASSP		IC_IRQ15
-#endif /* PXA26x only */
+#endif /* PXA260 and above only */
 #define	IC_IRQ_AC97		IC_IRQ14
 #define	IC_IRQ_I2S		IC_IRQ13
 #define	IC_IRQ_PMU		IC_IRQ12
@@ -144,11 +154,11 @@ typedef volatile struct IC_registers {
 #define	IC_IRQ_GPIO		IC_IRQ10
 #define	IC_IRQ_GPIO1		IC_IRQ9
 #define	IC_IRQ_GPIO0		IC_IRQ8
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	IC_IRQ_HWUART		IC_IRQ7
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 
-/* ICCR bits - see Table 4-33 in [1], Table in [2] */
+/* ICCR bits - see Table 4-33 in [1], Table 4-33 in [2], Table 4-32 in [3] */
 
 #define	ICCR_DIM	bit(0)
 

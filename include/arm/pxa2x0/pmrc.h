@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 Power Manager and Reset Control Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 Power Manager and Reset Control Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -45,6 +47,14 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* Power Manager and Reset Control Registers */
@@ -99,11 +109,11 @@ typedef volatile struct PMRC_registers {
 #define	PGSR2_OFFSET	0x28
 #define	RCSR_OFFSET	0x30
 
-/* PMCR bits - see Table 3-7 in [1], Table 3-7 in [2] */
+/* PMCR bits - see Table 3-7 in [1], Table 3-7 in [2], Table 3-7 in [3] */
 
 #define	PMCR_IDAE	bit(0)
 
-/* PSSR bits - see Table 3-13 in [1], Table 3-13 in [2] */
+/* PSSR bits - see Table 3-13 in [1], Table 3-13 in [2], Table 3-13 in [3] */
 
 #define	PSSR_RDH	bit(5)
 #define	PSSR_PH		bit(4)
@@ -111,7 +121,7 @@ typedef volatile struct PMRC_registers {
 #define	PSSR_BFS	bit(1)
 #define	PSSR_SSS	bit(0)
 
-/* PWER bits - see Table 3-9 in [1], Table 3-9 in [2] */
+/* PWER bits - see Table 3-9 in [1], Table 3-9 in [2], Table 3-9 in [3] */
 
 #define	PWER_WERTC	bit(31)
 #define	PWER_WE15	bit(15)
@@ -131,13 +141,13 @@ typedef volatile struct PMRC_registers {
 #define	PWER_WE1	bit(1)
 #define	PWER_WE0	bit(0)
 
-/* PCFR bits - see Table 3-8 in [1], Table 3-8 in [2] */
+/* PCFR bits - see Table 3-8 in [1], Table 3-8 in [2], Table 3-8 in [3] */
 
 #define	PCFR_FS		bit(2)
 #define	PCFR_FP		bit(1)
 #define	PCFR_OPDE	bit(0)
 
-/* RCSR bits - see Table 3-18 in [1], Table 3-18 in [2] */
+/* RCSR bits - see Table 3-18 in [1], Table 3-18 in [2], Table 3-19 in [3] */
 
 #define	RCSR_GPR	bit(3)
 #define	RCSR_SMR	bit(2)

@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 I2S Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 I2S Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -45,6 +47,14 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* I2S Registers */
@@ -87,7 +97,7 @@ typedef volatile struct I2S_registers {
 #define	SADIV_OFFSET		0x60
 #define	SADR_OFFSET		0x80
 
-/* SACR0 bits - see Table 14-3 in [1], Table 14-3 in [2] */
+/* SACR0 bits - see Table 14-3 in [1], Table 14-3 in [2], Table 14-3 in [3] */
 
 #define	SACR0_RFTH_MASK		bits(15,12)
 #define	SACR0_RFTH(x)		bits_val(15,12,x)
@@ -101,14 +111,14 @@ typedef volatile struct I2S_registers {
 #define	SACR0_BCKD		bit(2)
 #define	SACR0_ENB		bit(0)
 
-/* SACR1 bits - see Table 14-6 in [1], Table 14-6 in [2] */
+/* SACR1 bits - see Table 14-6 in [1], Table 14-6 in [2], Table 14-6 in [3] */
 
 #define	SACR1_ENLBF		bit(5)
 #define	SACR1_DRPL		bit(4)
 #define	SACR1_DREC		bit(3)
 #define	SACR1_AMSL		bit(0)
 
-/* SASR0 bits - see Table 14-7 in [1], Table 14-7 in [2] */
+/* SASR0 bits - see Table 14-7 in [1], Table 14-7 in [2], Table 14-7 in [3] */
 
 #define	SASR0_RFL_MASK		bits(15,12)
 #define	SASR0_RFL(x)		bits_val(15,12,x)
@@ -124,25 +134,25 @@ typedef volatile struct I2S_registers {
 #define	SASR0_RNE		bit(1)
 #define	SASR0_TNF		bit(0)
 
-/* SAIMR bits - see Table 14-10 in [1], Table 14-10 in [2] */
+/* SAIMR bits - see Table 14-10 in [1], Table 14-10 in [2], Table 14-10 in [3] */
 
 #define	SAIMR_ROR		bit(6)
 #define	SAIMR_TUR		bit(5)
 #define	SAIMR_RFS		bit(4)
 #define	SAIMR_TFS		bit(3)
 
-/* SAICR bits - see Table 14-9 in [1], Table 14-9 in [2] */
+/* SAICR bits - see Table 14-9 in [1], Table 14-9 in [2], Table 14-9 in [3] */
 
 #define	SAICR_ROR		bit(6)
 #define	SAICR_TUR		bit(5)
 
-/* SADIV bits - see Table 14-8 in [1], Table 14-8 in [2] */
+/* SADIV bits - see Table 14-8 in [1], Table 14-8 in [2], Table 14-8 in [3] */
 
 #define	SADIV_SADIV_MASK	bits(6,0)
 #define	SADIV_SADIV(x)		bits_val(6,0,x)
 #define	get_SADIV_SADIV(x)	bits_get(6,0,x)
 
-/* SADR bits - see Table 14-11 in [1], Table 14-11 in [2] */
+/* SADR bits - see Table 14-11 in [1], Table 14-11 in [2], Table 14-11 in [3] */
 
 #define	SADR_DTH_MASK		bits(31,16)
 #define	SADR_DTH(x)		bits_val(31,16,x)

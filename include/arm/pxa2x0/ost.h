@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 OS Timer Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 OS Timer Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -45,6 +47,14 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* OS Timer Registers */
@@ -84,18 +94,18 @@ typedef volatile struct OST_registers {
 #define	OWER_OFFSET	0x18
 #define	OIER_OFFSET	0x1C
 
-/* OSSR bits - see 4.4.2.5 in [1], Table 4-48 in [2] */
+/* OSSR bits - see 4.4.2.5 in [1], Table 4-48 in [2], Table 4-45 in [3] */
 
 #define	OSSR_M3		bit(3)
 #define	OSSR_M2		bit(2)
 #define	OSSR_M1		bit(1)
 #define	OSSR_M0		bit(0)
 
-/* OWER bits - see Table 4-46 in [1], Table 4-46 in [2] */
+/* OWER bits - see Table 4-46 in [1], Table 4-46 in [2], Table 4-43 in [3] */
 
 #define	OWER_WME	bit(0)
 
-/* OIER bits - see Table 4-45 in [1], Table 4-45 in [2] */
+/* OIER bits - see Table 4-45 in [1], Table 4-45 in [2], Table 4-42 in [3] */
 
 #define	OIER_E3		bit(3)
 #define	OIER_E2		bit(2)

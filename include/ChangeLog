@@ -1,3 +1,27 @@
+2003-04-26  Marcel Telka  <marcel@telka.sk>
+
+	* arm/pxa2x0/ac97.h: Changed comments for PXA255. Replaced PXA2X0_NOPXA26X with
+		PXA2X0_NOPXA255 and PXA2X0_NOPXA260.
+	* arm/pxa2x0/cm.h: Ditto.
+	* arm/pxa2x0/dma.h: Ditto.
+	* arm/pxa2x0/gpio.h: Ditto.
+	* arm/pxa2x0/i2c.h: Ditto.
+	* arm/pxa2x0/i2s.h: Ditto.
+	* arm/pxa2x0/ic.h: Ditto.
+	* arm/pxa2x0/icp.h: Ditto.
+	* arm/pxa2x0/lcd.h: Ditto.
+	* arm/pxa2x0/mc.h: Ditto.
+	* arm/pxa2x0/mmc.h: Ditto.
+	* arm/pxa2x0/ost.h: Ditto.
+	* arm/pxa2x0/pmrc.h: Ditto.
+	* arm/pxa2x0/pwm.h: Ditto.
+	* arm/pxa2x0/rtc.h: Ditto.
+	* arm/pxa2x0/ssp.h: Ditto.
+	* arm/pxa2x0/uart.h: Ditto.
+	* arm/pxa2x0/udc.h: Ditto.
+	* arm/pxa2x0/cm.h (CCCR_M_4): New macro for PXA255 and above.
+	* arm/pxa2x0/udc.h (UDCCFR): New register for PXA255 and above.
+
 2003-04-14  Marcel Telka  <marcel@telka.sk>
 
 	* arm/arm.h: Added System Control Coprocessor Control Register bits.

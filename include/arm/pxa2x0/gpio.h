@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 GPIO Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 GPIO Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -47,8 +49,12 @@
 #include <stdint.h>
 #endif
 
-#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA26X)
-#define PXA2X0_NOPXA26X
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* GPIO Registers */
@@ -165,7 +171,7 @@ typedef volatile struct GPIO_registers {
 #define	GPIO0_GP12	bit(12)
 #define	GPIO0_GP13	bit(13)
 #define	GPIO0_GP14	bit(14)
-#endif /* PXA250 and PXA26x only */
+#endif /* PXA250 and above only */
 #define	GPIO0_GP15	bit(15)
 #define	GPIO0_GP16	bit(16)
 #define	GPIO0_GP17	bit(17)
@@ -175,7 +181,7 @@ typedef volatile struct GPIO_registers {
 #define	GPIO0_GP20	bit(20)
 #define	GPIO0_GP21	bit(21)
 #define	GPIO0_GP22	bit(22)
-#endif /* PXA250 and PXA26x only */
+#endif /* PXA250 and above only */
 #define	GPIO0_GP23	bit(23)
 #define	GPIO0_GP24	bit(24)
 #define	GPIO0_GP25	bit(25)
@@ -193,12 +199,12 @@ typedef volatile struct GPIO_registers {
 #define	GPIO1_GP36	bit(4)
 #define	GPIO1_GP37	bit(5)
 #define	GPIO1_GP38	bit(6)
-#endif /* PXA250 and PXA26x only */
+#endif /* PXA250 and above only */
 #define	GPIO1_GP39	bit(7)
 #if !defined(PXA2X0_NOPXA250)
 #define	GPIO1_GP40	bit(8)
 #define	GPIO1_GP41	bit(9)
-#endif /* PXA250 and PXA26x only */
+#endif /* PXA250 and above only */
 #define	GPIO1_GP42	bit(10)
 #define	GPIO1_GP43	bit(11)
 #define	GPIO1_GP44	bit(12)
@@ -238,19 +244,21 @@ typedef volatile struct GPIO_registers {
 #define	GPIO2_GP78	bit(14)
 #define	GPIO2_GP79	bit(15)
 #define	GPIO2_GP80	bit(16)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	GPIO2_GP81	bit(17)
 #define	GPIO2_GP82	bit(18)
 #define	GPIO2_GP83	bit(19)
 #define	GPIO2_GP84	bit(20)
+#endif /* PXA255 and above only */
+#if !defined(PXA2X0_NOPXA260)
 #define	GPIO2_GP85	bit(21)
 #define	GPIO2_GP86	bit(22)
 #define	GPIO2_GP87	bit(23)
 #define	GPIO2_GP88	bit(24)
 #define	GPIO2_GP89	bit(25)
-#endif /* PXA26x only */
+#endif /* PXA260 and above only */
 
-/* GAFR constants - see 4.1.3.6 in [1], 4.1.3.6 in [2] */
+/* GAFR constants - see 4.1.3.6 in [1], 4.1.3.6 in [2], 4.1.3.6 in [3] */
 
 #define	ALT_FN_MASK	3
 #define	ALT_FN_0_IN	0
@@ -262,7 +270,7 @@ typedef volatile struct GPIO_registers {
 #define	ALT_FN_2_OUT	2
 #define	ALT_FN_3_OUT	3
 
-/* GAFR0_L bits - see Table 4-24 in [1], Table 4-24 in [2] */
+/* GAFR0_L bits - see Table 4-24 in [1], Table 4-24 in [2], Table 4-24 in [3] */
 
 #define	GAFR0_L_AF0(x)	((x) & ALT_FN_MASK)
 #define	GAFR0_L_AF1(x)	(((x) & ALT_FN_MASK) << 2)
@@ -280,10 +288,10 @@ typedef volatile struct GPIO_registers {
 #define	GAFR0_L_AF12(x)	(((x) & ALT_FN_MASK) << 24)
 #define	GAFR0_L_AF13(x)	(((x) & ALT_FN_MASK) << 26)
 #define	GAFR0_L_AF14(x)	(((x) & ALT_FN_MASK) << 28)
-#endif /* PXA250 and PXA26x only */
+#endif /* PXA250 and above only */
 #define	GAFR0_L_AF15(x)	(((x) & ALT_FN_MASK) << 30)
 
-/* GAFR0_U bits - see Table 4-25 in [1], Table 4-25 in [2] */
+/* GAFR0_U bits - see Table 4-25 in [1], Table 4-25 in [2], Table 4-25 in [3] */
 
 #define	GAFR0_U_AF16(x)	((x) & ALT_FN_MASK)
 #define	GAFR0_U_AF17(x)	(((x) & ALT_FN_MASK) << 2)
@@ -293,7 +301,7 @@ typedef volatile struct GPIO_registers {
 #define	GAFR0_U_AF20(x)	(((x) & ALT_FN_MASK) << 8)
 #define	GAFR0_U_AF21(x)	(((x) & ALT_FN_MASK) << 10)
 #define	GAFR0_U_AF22(x)	(((x) & ALT_FN_MASK) << 12)
-#endif /* PXA250 and PXA26x only */
+#endif /* PXA250 and above only */
 #define	GAFR0_U_AF23(x)	(((x) & ALT_FN_MASK) << 14)
 #define	GAFR0_U_AF24(x)	(((x) & ALT_FN_MASK) << 16)
 #define	GAFR0_U_AF25(x)	(((x) & ALT_FN_MASK) << 18)
@@ -304,7 +312,7 @@ typedef volatile struct GPIO_registers {
 #define	GAFR0_U_AF30(x)	(((x) & ALT_FN_MASK) << 28)
 #define	GAFR0_U_AF31(x)	(((x) & ALT_FN_MASK) << 30)
 
-/* GAFR1_L bits - see Table 4-26 in [1], Table 4-26 in [2] */
+/* GAFR1_L bits - see Table 4-26 in [1], Table 4-26 in [2], Table 4-26 in [3] */
 
 #define	GAFR1_L_AF32(x)	((x) & ALT_FN_MASK)
 #define	GAFR1_L_AF33(x)	(((x) & ALT_FN_MASK) << 2)
@@ -314,12 +322,12 @@ typedef volatile struct GPIO_registers {
 #define	GAFR1_L_AF36(x)	(((x) & ALT_FN_MASK) << 8)
 #define	GAFR1_L_AF37(x)	(((x) & ALT_FN_MASK) << 10)
 #define	GAFR1_L_AF38(x)	(((x) & ALT_FN_MASK) << 12)
-#endif /* PXA250 and PXA26x only */
+#endif /* PXA250 and above only */
 #define	GAFR1_L_AF39(x)	(((x) & ALT_FN_MASK) << 14)
 #if !defined(PXA2X0_NOPXA250)
 #define	GAFR1_L_AF40(x)	(((x) & ALT_FN_MASK) << 16)
 #define	GAFR1_L_AF41(x)	(((x) & ALT_FN_MASK) << 18)
-#endif /* PXA250 and PXA26x only */
+#endif /* PXA250 and above only */
 #define	GAFR1_L_AF42(x)	(((x) & ALT_FN_MASK) << 20)
 #define	GAFR1_L_AF43(x)	(((x) & ALT_FN_MASK) << 22)
 #define	GAFR1_L_AF44(x)	(((x) & ALT_FN_MASK) << 24)
@@ -327,7 +335,7 @@ typedef volatile struct GPIO_registers {
 #define	GAFR1_L_AF46(x)	(((x) & ALT_FN_MASK) << 28)
 #define	GAFR1_L_AF47(x)	(((x) & ALT_FN_MASK) << 30)
 
-/* GAFR1_U bits - see Table 4-27 in [1], Table 4-27 in [2] */
+/* GAFR1_U bits - see Table 4-27 in [1], Table 4-27 in [2], Table 4-27 in [3] */
 
 #define	GAFR1_U_AF48(x)	((x) & ALT_FN_MASK)
 #define	GAFR1_U_AF49(x)	(((x) & ALT_FN_MASK) << 2)
@@ -346,7 +354,7 @@ typedef volatile struct GPIO_registers {
 #define	GAFR1_U_AF62(x)	(((x) & ALT_FN_MASK) << 28)
 #define	GAFR1_U_AF63(x)	(((x) & ALT_FN_MASK) << 30)
 
-/* GAFR2_L bits - see Table 4-28 in [1], Table 4-28 in [2] */
+/* GAFR2_L bits - see Table 4-28 in [1], Table 4-28 in [2], Table 4-28 in [3] */
 
 #define	GAFR2_L_AF64(x)	((x) & ALT_FN_MASK)
 #define	GAFR2_L_AF65(x)	(((x) & ALT_FN_MASK) << 2)
@@ -365,19 +373,21 @@ typedef volatile struct GPIO_registers {
 #define	GAFR2_L_AF78(x)	(((x) & ALT_FN_MASK) << 28)
 #define	GAFR2_L_AF79(x)	(((x) & ALT_FN_MASK) << 30)
 
-/* GAFR2_U bits - see Table 4-29 in [1], Table 4-29 in [2] */
+/* GAFR2_U bits - see Table 4-29 in [1], Table 4-29 in [2], Table 4-29 in [3] */
 
 #define	GAFR2_U_AF80(x)	((x) & ALT_FN_MASK)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	GAFR2_U_AF81(x)	(((x) & ALT_FN_MASK) << 2)
 #define	GAFR2_U_AF82(x)	(((x) & ALT_FN_MASK) << 4)
 #define	GAFR2_U_AF83(x)	(((x) & ALT_FN_MASK) << 6)
 #define	GAFR2_U_AF84(x)	(((x) & ALT_FN_MASK) << 8)
+#endif /* PXA255 and above only */
+#if !defined(PXA2X0_NOPXA260)
 #define	GAFR2_U_AF85(x)	(((x) & ALT_FN_MASK) << 10)
 #define	GAFR2_U_AF86(x)	(((x) & ALT_FN_MASK) << 12)
 #define	GAFR2_U_AF87(x)	(((x) & ALT_FN_MASK) << 14)
 #define	GAFR2_U_AF88(x)	(((x) & ALT_FN_MASK) << 16)
 #define	GAFR2_U_AF89(x)	(((x) & ALT_FN_MASK) << 18)
-#endif /* PXA26x only */
+#endif /* PXA260 and above only */
 
 #endif /* PXA2X0_GPIO_H */

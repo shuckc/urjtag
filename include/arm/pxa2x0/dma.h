@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 DMA Controller Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 DMA Controller Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -47,8 +49,12 @@
 #include <stdint.h>
 #endif
 
-#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA26X)
-#define PXA2X0_NOPXA26X
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* DMA Controller Registers */
@@ -85,7 +91,7 @@ typedef volatile struct DMA_registers {
 #define	DTADR(i)		DMA_pointer->dar[i].dtadr
 #define	DCMD(i)			DMA_pointer->dar[i].dcmd
 
-/* DRCMR symbolic names - see Table 5-13 in [1], Table 5-13 in [2] */
+/* DRCMR symbolic names - see Table 5-13 in [1], Table 5-13 in [2], Table 5-13 in [3] */
 
 #define	DRCMR_DREQ0		DRCMR(0)
 #define	DRCMR_DREQ1		DRCMR(1)
@@ -102,34 +108,34 @@ typedef volatile struct DMA_registers {
 #define	DRCMR_AC97_AUDIO_TX	DRCMR(12)
 #define	DRCMR_SSP_RX		DRCMR(13)
 #define	DRCMR_SSP_TX		DRCMR(14)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	DRCMR_NSSP_RX		DRCMR(15)
 #define	DRCMR_NSSP_TX		DRCMR(16)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 #define	DRCMR_FICP_RX		DRCMR(17)
 #define	DRCMR_FICP_TX		DRCMR(18)
 #define	DRCMR_STUART_RX		DRCMR(19)
 #define	DRCMR_STUART_TX		DRCMR(20)
 #define	DRCMR_MMC_RX		DRCMR(21)
 #define	DRCMR_MMC_TX		DRCMR(22)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA260)
 #define	DRCMR_ASSP_RX		DRCMR(23)
 #define	DRCMR_ASSP_TX		DRCMR(24)
-#endif /* PXA26x only */
+#endif /* PXA260 and above only */
 #define	DRCMR_USB_EP1		DRCMR(25)
 #define	DRCMR_USB_EP2		DRCMR(26)
 #define	DRCMR_USB_EP3		DRCMR(27)
 #define	DRCMR_USB_EP4		DRCMR(28)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	DRCMR_HWUART_RX		DRCMR(29)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 #define	DRCMR_USB_EP6		DRCMR(30)
 #define	DRCMR_USB_EP7		DRCMR(31)
 #define	DRCMR_USB_EP8		DRCMR(32)
 #define	DRCMR_USB_EP9		DRCMR(33)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	DRCMR_HWUART_TX		DRCMR(34)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 #define	DRCMR_USB_EP11		DRCMR(35)
 #define	DRCMR_USB_EP12		DRCMR(36)
 #define	DRCMR_USB_EP13		DRCMR(37)
@@ -144,7 +150,7 @@ typedef volatile struct DMA_registers {
 #define	DTADR_OFFSET(i)		(0x208 + ((i) << 4))
 #define	DCMD_OFFSET(i)		(0x20C + ((i) << 4))
 
-/* DRCMR symbolic names offsets - see Table 5-13 in [1], Table 5-13 in [2] */
+/* DRCMR symbolic names offsets - see Table 5-13 in [1], Table 5-13 in [2], Table 5-13 in [3] */
 
 #define	DRCMR_DREQ0_OFFSET		DRCMR_OFFSET(0)
 #define	DRCMR_DREQ1_OFFSET		DRCMR_OFFSET(1)
@@ -161,40 +167,40 @@ typedef volatile struct DMA_registers {
 #define	DRCMR_AC97_AUDIO_TX_OFFSET	DRCMR_OFFSET(12)
 #define	DRCMR_SSP_RX_OFFSET		DRCMR_OFFSET(13)
 #define	DRCMR_SSP_TX_OFFSET		DRCMR_OFFSET(14)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	DRCMR_NSSP_RX_OFFSET		DRCMR_OFFSET(15)
 #define	DRCMR_NSSP_TX_OFFSET		DRCMR_OFFSET(16)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 #define	DRCMR_FICP_RX_OFFSET		DRCMR_OFFSET(17)
 #define	DRCMR_FICP_TX_OFFSET		DRCMR_OFFSET(18)
 #define	DRCMR_STUART_RX_OFFSET		DRCMR_OFFSET(19)
 #define	DRCMR_STUART_TX_OFFSET		DRCMR_OFFSET(20)
 #define	DRCMR_MMC_RX_OFFSET		DRCMR_OFFSET(21)
 #define	DRCMR_MMC_TX_OFFSET		DRCMR_OFFSET(22)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA260)
 #define	DRCMR_ASSP_RX_OFFSET		DRCMR_OFFSET(23)
 #define	DRCMR_ASSP_TX_OFFSET		DRCMR_OFFSET(24)
-#endif /* PXA26x only */
+#endif /* PXA260 and above only */
 #define	DRCMR_USB_EP1_OFFSET		DRCMR_OFFSET(25)
 #define	DRCMR_USB_EP2_OFFSET		DRCMR_OFFSET(26)
 #define	DRCMR_USB_EP3_OFFSET		DRCMR_OFFSET(27)
 #define	DRCMR_USB_EP4_OFFSET		DRCMR_OFFSET(28)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	DRCMR_HWUART_RX_OFFSET		DRCMR_OFFSET(29)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 #define	DRCMR_USB_EP6_OFFSET		DRCMR_OFFSET(30)
 #define	DRCMR_USB_EP7_OFFSET		DRCMR_OFFSET(31)
 #define	DRCMR_USB_EP8_OFFSET		DRCMR_OFFSET(32)
 #define	DRCMR_USB_EP9_OFFSET		DRCMR_OFFSET(33)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	DRCMR_HWUART_TX_OFFSET		DRCMR_OFFSET(34)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 #define	DRCMR_USB_EP11_OFFSET		DRCMR_OFFSET(35)
 #define	DRCMR_USB_EP12_OFFSET		DRCMR_OFFSET(36)
 #define	DRCMR_USB_EP13_OFFSET		DRCMR_OFFSET(37)
 #define	DRCMR_USB_EP14_OFFSET		DRCMR_OFFSET(38)
 
-/* DCSRx bits - see Table 5-7 in [1], Table 5-7 in [2] */
+/* DCSRx bits - see Table 5-7 in [1], Table 5-7 in [2], Table 5-7 in [3] */
 
 #define	DCSR_RUN		bit(31)
 #define	DCSR_NODESCFETCH	bit(30)
@@ -205,7 +211,7 @@ typedef volatile struct DMA_registers {
 #define	DCSR_STARTINTR		bit(1)
 #define	DCSR_BUSERRINTR		bit(0)
 
-/* DINT bits - see Table 5-6 in [1], Table 5-6 in [2] */
+/* DINT bits - see Table 5-6 in [1], Table 5-6 in [2], Table 5-6 in [3] */
 
 #define	DINT_CHLINTR(x)		bit(x)
 #define	DINT_CHLINTR0		DINT_CHLINTR(0)
@@ -225,18 +231,18 @@ typedef volatile struct DMA_registers {
 #define	DINT_CHLINTR14		DINT_CHLINTR(14)
 #define	DINT_CHLINTR15		DINT_CHLINTR(15)
 
-/* DRCMRx bits - see Table 5-8 in [1], Table 5-8 in [2] */
+/* DRCMRx bits - see Table 5-8 in [1], Table 5-8 in [2], Table 5-8 in [3] */
 
 #define	DRCMR_MAPVLD		bit(7)
 #define	DRCMR_CHLNUM_MASK	bits(3,0)
 #define	DRCMR_CHLNUM(x)		bits_val(3,0,x)
 #define	get_DRCMR_CHLNUM(x)	bits_get(3,0,x)
 
-/* DDADRx bits - see Table 5-9 in [1], Table 5-9 in [2] */
+/* DDADRx bits - see Table 5-9 in [1], Table 5-9 in [2], Table 5-9 in [3] */
 
 #define	DDADR_STOP		bit(0)
 
-/* DCMDx bits - see Table 5-12 in [1], Table 5-12 in [2] */
+/* DCMDx bits - see Table 5-12 in [1], Table 5-12 in [2], Table 5-12 in [3] */
 
 #define	DCMD_INCSRCADDR		bit(31)
 #define	DCMD_INCTRGADDR		bit(30)

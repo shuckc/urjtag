@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 UDC Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 UDC Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -47,6 +49,14 @@
 #include <stdint.h>
 #endif
 
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
+#endif
+
 /* UDC Registers */
 
 #define	UDC_BASE	0x40600000
@@ -54,7 +64,13 @@
 #if LANGUAGE == C
 typedef volatile struct UDC_registers {
 	uint32_t udccr;
-	uint32_t __reserved1[3];
+	uint32_t __reserved1;
+#if !defined(PXA2X0_NOPXA255)
+	uint32_t udccfr;
+#else /* PXA255 and above only */
+	uint32_t __reserved2;
+#endif
+	uint32_t __reserved3;
 	uint32_t udccs[16];
 	uint32_t uicr0;
 	uint32_t uicr1;
@@ -69,35 +85,35 @@ typedef volatile struct UDC_registers {
 	uint32_t ubcr12;
 	uint32_t ubcr14;
 	uint32_t uddr0;
-	uint32_t __reserved2[7];
-	uint32_t uddr5;
-	uint32_t __reserved3[7];
-	uint32_t uddr10;
 	uint32_t __reserved4[7];
-	uint32_t uddr15;
+	uint32_t uddr5;
 	uint32_t __reserved5[7];
+	uint32_t uddr10;
+	uint32_t __reserved6[7];
+	uint32_t uddr15;
+	uint32_t __reserved7[7];
 	uint32_t uddr1;
-	uint32_t __reserved6[31];
+	uint32_t __reserved8[31];
 	uint32_t uddr2;
-	uint32_t __reserved7[31];
+	uint32_t __reserved9[31];
 	uint32_t uddr3;
-	uint32_t __reserved8[127];
+	uint32_t __reserved10[127];
 	uint32_t uddr4;
-	uint32_t __reserved9[127];
+	uint32_t __reserved11[127];
 	uint32_t uddr6;
-	uint32_t __reserved10[31];
+	uint32_t __reserved12[31];
 	uint32_t uddr7;
-	uint32_t __reserved11[31];
+	uint32_t __reserved13[31];
 	uint32_t uddr8;
-	uint32_t __reserved12[127];
+	uint32_t __reserved14[127];
 	uint32_t uddr9;
-	uint32_t __reserved13[127];
+	uint32_t __reserved15[127];
 	uint32_t uddr11;
-	uint32_t __reserved14[31];
+	uint32_t __reserved16[31];
 	uint32_t uddr12;
-	uint32_t __reserved15[31];
+	uint32_t __reserved17[31];
 	uint32_t uddr13;
-	uint32_t __reserved16[127];
+	uint32_t __reserved18[127];
 	uint32_t uddr14;
 } UDC_registers_t;
 
@@ -106,6 +122,9 @@ typedef volatile struct UDC_registers {
 #endif
 
 #define	UDCCR			UDC_pointer->udccr
+#if !defined(PXA2X0_NOPXA255)
+#define	UDCCFR			UDC_pointer->udccfr
+#endif /* PXA255 and above only */
 #define	UDCCS(i)		UDC_pointer->udccs[i]
 #define	UDCCS0			UDCCS(0)
 #define	UDCCS1			UDCCS(1)
@@ -154,6 +173,9 @@ typedef volatile struct UDC_registers {
 #endif /* LANGUAGE == C */
 
 #define	UDCCR_OFFSET		0x000
+#if !defined(PXA2X0_NOPXA255)
+#define	UDCCFR_OFFSET		0x008
+#endif /* PXA255 and above only */
 #define	UDCCS_OFFSET(i)		(0x010 + ((i) << 2))
 #define	UDCCS0_OFFSET		UDCCS_OFFSET(0)
 #define	UDCCS1_OFFSET		UDCCS_OFFSET(1)
@@ -200,7 +222,7 @@ typedef volatile struct UDC_registers {
 #define	USIR0_OFFSET		0x058
 #define	USIR1_OFFSET		0x05C
 
-/* UDCCR bits - see Table 12-20 in [1], Table 12-12 in [2] */
+/* UDCCR bits - see Table 12-20 in [1], Table 12-12 in [2], Table 12-12 in [3] */
 
 #define	UDCCR_REM		bit(7)
 #define	UDCCR_RSTIR		bit(6)
@@ -211,7 +233,13 @@ typedef volatile struct UDC_registers {
 #define	UDCCR_UDA		bit(1)
 #define	UDCCR_UDE		bit(0)
 
-/* UDCCS0 bits - see Table 12-21 in [1], Table 12-13 in [2] */
+#if !defined(PXA2X0_NOPXA255)
+/* UDCCFR bits - see Table 12-13 in [3] */
+#define	UDCCFR_AREN		bit(7)
+#define	UDCCFR_ACM		bit(2)
+#endif /* PXA255 and above only */
+
+/* UDCCS0 bits - see Table 12-21 in [1], Table 12-13 in [2], Table 12-14 in [3] */
 
 #define	UDCCS0_SA		bit(7)
 #define	UDCCS0_RNE		bit(6)
@@ -222,7 +250,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS0_IPR		bit(1)
 #define	UDCCS0_OPR		bit(0)
 
-/* UDCCS1 bits - see Table 12-22 in [1], Table 12-14 in [2] */
+/* UDCCS1 bits - see Table 12-22 in [1], Table 12-14 in [2], Table 12-15 in [3] */
 
 #define	UDCCS1_TSP		bit(7)
 #define	UDCCS1_FST		bit(5)
@@ -232,7 +260,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS1_TPC		bit(1)
 #define	UDCCS1_TFS		bit(0)
 
-/* UDCCS2 bits - see Table 12-23 in [1], Table 12-15 in [2] */
+/* UDCCS2 bits - see Table 12-23 in [1], Table 12-15 in [2], Table 12-16 in [3] */
 
 #define	UDCCS2_RSP		bit(7)
 #define	UDCCS2_RNE		bit(6)
@@ -242,7 +270,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS2_RPC		bit(1)
 #define	UDCCS2_RFS		bit(0)
 
-/* UDCCS3 bits - see Table 12-24 in [1], Table 12-16 in [2] */
+/* UDCCS3 bits - see Table 12-24 in [1], Table 12-16 in [2], Table 12-17 in [3] */
 
 #define	UDCCS3_TSP		bit(7)
 #define	UDCCS3_TUR		bit(3)
@@ -250,7 +278,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS3_TPC		bit(1)
 #define	UDCCS3_TFS		bit(0)
 
-/* UDCCS4 bits - see Table 12-25 in [1], Table 12-17 in [2] */
+/* UDCCS4 bits - see Table 12-25 in [1], Table 12-17 in [2], Table 12-18 in [3] */
 
 #define	UDCCS4_RSP		bit(7)
 #define	UDCCS4_RNE		bit(6)
@@ -259,7 +287,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS4_RPC		bit(1)
 #define	UDCCS4_RFS		bit(0)
 
-/* UDCCS5 bits - see Table 12-26 in [1], Table 12-18 in [2] */
+/* UDCCS5 bits - see Table 12-26 in [1], Table 12-18 in [2], Table 12-19 in [3] */
 
 #define	UDCCS5_TSP		bit(7)
 #define	UDCCS5_FST		bit(5)
@@ -269,7 +297,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS5_TPC		bit(1)
 #define	UDCCS5_TFS		bit(0)
 
-/* UDCCS6 bits - see Table 12-22 in [1], Table 12-14 in [2] */
+/* UDCCS6 bits - see Table 12-22 in [1], Table 12-14 in [2], Table 12-15 in [3] */
 
 #define	UDCCS6_TSP		bit(7)
 #define	UDCCS6_FST		bit(5)
@@ -279,7 +307,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS6_TPC		bit(1)
 #define	UDCCS6_TFS		bit(0)
 
-/* UDCCS7 bits - see Table 12-23 in [1], Table 12-15 in [2] */
+/* UDCCS7 bits - see Table 12-23 in [1], Table 12-15 in [2], Table 12-16 in [3] */
 
 #define	UDCCS7_RSP		bit(7)
 #define	UDCCS7_RNE		bit(6)
@@ -289,7 +317,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS7_RPC		bit(1)
 #define	UDCCS7_RFS		bit(0)
 
-/* UDCCS8 bits - see Table 12-24 in [1], Table 12-16 in [2] */
+/* UDCCS8 bits - see Table 12-24 in [1], Table 12-16 in [2], Table 12-17 in [3] */
 
 #define	UDCCS8_TSP		bit(7)
 #define	UDCCS8_TUR		bit(3)
@@ -297,7 +325,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS8_TPC		bit(1)
 #define	UDCCS8_TFS		bit(0)
 
-/* UDCCS9 bits - see Table 12-25 in [1], Table 12-17 in [2] */
+/* UDCCS9 bits - see Table 12-25 in [1], Table 12-17 in [2], Table 12-18 in [3] */
 
 #define	UDCCS9_RSP		bit(7)
 #define	UDCCS9_RNE		bit(6)
@@ -306,7 +334,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS9_RPC		bit(1)
 #define	UDCCS9_RFS		bit(0)
 
-/* UDCCS10 bits - see Table 12-26 in [1], Table 12-18 in [2] */
+/* UDCCS10 bits - see Table 12-26 in [1], Table 12-18 in [2], Table 12-19 in [3] */
 
 #define	UDCCS10_TSP		bit(7)
 #define	UDCCS10_FST		bit(5)
@@ -316,7 +344,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS10_TPC		bit(1)
 #define	UDCCS10_TFS		bit(0)
 
-/* UDCCS11 bits - see Table 12-22 in [1], Table 12-14 in [2] */
+/* UDCCS11 bits - see Table 12-22 in [1], Table 12-14 in [2], Table 12-15 in [3] */
 
 #define	UDCCS11_TSP		bit(7)
 #define	UDCCS11_FST		bit(5)
@@ -326,7 +354,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS11_TPC		bit(1)
 #define	UDCCS11_TFS		bit(0)
 
-/* UDCCS12 bits - see Table 12-23 in [1], Table 12-15 in [2] */
+/* UDCCS12 bits - see Table 12-23 in [1], Table 12-15 in [2], Table 12-16 in [3] */
 
 #define	UDCCS12_RSP		bit(7)
 #define	UDCCS12_RNE		bit(6)
@@ -336,7 +364,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS12_RPC		bit(1)
 #define	UDCCS12_RFS		bit(0)
 
-/* UDCCS13 bits - see Table 12-24 in [1], Table 12-16 in [2] */
+/* UDCCS13 bits - see Table 12-24 in [1], Table 12-16 in [2], Table 12-17 in [3] */
 
 #define	UDCCS13_TSP		bit(7)
 #define	UDCCS13_TUR		bit(3)
@@ -344,7 +372,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS13_TPC		bit(1)
 #define	UDCCS13_TFS		bit(0)
 
-/* UDCCS14 bits - see Table 12-25 in [1], Table 12-17 in [2] */
+/* UDCCS14 bits - see Table 12-25 in [1], Table 12-17 in [2], Table 12-18 in [3] */
 
 #define	UDCCS14_RSP		bit(7)
 #define	UDCCS14_RNE		bit(6)
@@ -353,7 +381,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS14_RPC		bit(1)
 #define	UDCCS14_RFS		bit(0)
 
-/* UDCCS15 bits - see Table 12-26 in [1], Table 12-18 in [2] */
+/* UDCCS15 bits - see Table 12-26 in [1], Table 12-18 in [2], Table 12-19 in [3] */
 
 #define	UDCCS15_TSP		bit(7)
 #define	UDCCS15_FST		bit(5)
@@ -363,7 +391,7 @@ typedef volatile struct UDC_registers {
 #define	UDCCS15_TPC		bit(1)
 #define	UDCCS15_TFS		bit(0)
 
-/* UICR0 bits - see Table 12-27 in [1], Table 12-19 in [2] */
+/* UICR0 bits - see Table 12-27 in [1], Table 12-19 in [2], Table 12-20 in [3] */
 
 #define	UICR0_IM7		bit(7)
 #define	UICR0_IM6		bit(6)
@@ -374,7 +402,7 @@ typedef volatile struct UDC_registers {
 #define	UICR0_IM1		bit(1)
 #define	UICR0_IM0		bit(0)
 
-/* UICR1 bits - see Table 12-28 in [1], Table 12-20 in [2] */
+/* UICR1 bits - see Table 12-28 in [1], Table 12-20 in [2], Table 12-21 in [3] */
 
 #define	UICR1_IM15		bit(7)
 #define	UICR1_IM14		bit(6)
@@ -385,7 +413,7 @@ typedef volatile struct UDC_registers {
 #define	UICR1_IM9		bit(1)
 #define	UICR1_IM8		bit(0)
 
-/* USIR0 bits - see Table 12-29 in [1], Table 12-21 in [2] */
+/* USIR0 bits - see Table 12-29 in [1], Table 12-21 in [2], Table 12-22 in [3] */
 
 #define	USIR0_IR7		bit(7)
 #define	USIR0_IR6		bit(6)
@@ -396,7 +424,7 @@ typedef volatile struct UDC_registers {
 #define	USIR0_IR1		bit(1)
 #define	USIR0_IR0		bit(0)
 
-/* USIR1 bits - see Table 12-30 in [1], Table 12-22 in [2] */
+/* USIR1 bits - see Table 12-30 in [1], Table 12-22 in [2], Table 12-23 in [3] */
 
 #define	USIR1_IR15		bit(7)
 #define	USIR1_IR14		bit(6)
@@ -407,7 +435,7 @@ typedef volatile struct UDC_registers {
 #define	USIR1_IR9		bit(1)
 #define	USIR1_IR8		bit(0)
 
-/* UFNHR bits - see Table 12-31 in [1], Table 12-23 in [2] */
+/* UFNHR bits - see Table 12-31 in [1], Table 12-23 in [2], Table 12-24 in [3] */
 
 #define	UFNHR_SIR		bit(7)
 #define	UFNHR_SIM		bit(6)
@@ -418,19 +446,19 @@ typedef volatile struct UDC_registers {
 #define	UFNHR_FNMSB(x)		bits_val(2,0,x)
 #define	get_UFNHR_FNMSB(x)	bits_get(2,0,x)
 
-/* UFNLR bits - see Table 12-32 in [1], Table 12-24 in [2] */
+/* UFNLR bits - see Table 12-32 in [1], Table 12-24 in [2], Table 12-25 in [3] */
 
 #define	UNFLR_FNLSB_MASK	bits(7,0)
 #define	UFNLR_FNLSB(x)		bits_val(7,0,x)
 #define	get_UFNLR_FNLSB(x)	bits_get(7,0,x)
 
-/* UBCRx bits - see Table 12-33 in [1], Table 12-25 in [2] */
+/* UBCRx bits - see Table 12-33 in [1], Table 12-25 in [2], Table 12-26 in [3] */
 
 #define	UBCR_BC_MASK		bits(7,0)
 #define	UBCR_BC(x)		bits_val(7,0,x)
 #define	get_UBCR_BC(x)		bits_get(7,0,x)
 
-/* UDDRx bits - see 12.6.15 - 12.6.20 in [1], 12.6.15 - 12.6.20 in [2] */
+/* UDDRx bits - see 12.6.15 - 12.6.20 in [1], 12.6.15 - 12.6.20 in [2], 12.6.16 - 12.6.21 in [3] */
 
 #define	UDDR_DATA_MASK		bits(7,0)
 #define	UDDR_DATA(x)		bits_val(7,0,x)

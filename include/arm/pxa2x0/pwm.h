@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 PWM0 and PWM1 Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 PWM0 and PWM1 Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -45,6 +47,14 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* PWM0 and PWM1 Registers */
@@ -81,21 +91,21 @@ typedef volatile struct PWM_registers {
 #define	PWM_PWDUTY_OFFSET	0x04
 #define	PWM_PERVAL_OFFSET	0x08
 
-/* PWM_CTRL bits - see Table 4-49 in [1], Table 4-50 in [2] */
+/* PWM_CTRL bits - see Table 4-49 in [1], Table 4-50 in [2], Table 4-46 in [3] */
 
 #define	PWM_CTRL_PWM_SD			bit(6)
 #define	PWM_CTRL_PRESCALE_MASK		bits(5,0)
 #define	PWM_CTRL_PRESCALE(x)		bits_val(5,0,x)
 #define	get_PWM_CTRL_PRESCALE(x)	bits_get(5,0,x)
 
-/* PWM_PWDUTY bits - see Table 4-50 in [1], Table 4-51 in [2] */
+/* PWM_PWDUTY bits - see Table 4-50 in [1], Table 4-51 in [2], Table 4-47 in [3] */
 
 #define	PWM_PWDUTY_FDCYCLE		bit(10)
 #define	PWM_PWDUTY_DCYCLE_MASK		bits(9,0)
 #define	PWM_PWDUTY_DCYCLE(x)		bits_val(9,0,x)
 #define	get_PWM_PWDUTY_DCYCLE(x)	bits_get(9,0,x)
 
-/* PWM_PERVAL bits - see Table 4-51 in [1], Table 4-52 in [2] */
+/* PWM_PERVAL bits - see Table 4-51 in [1], Table 4-52 in [2], Table 4-48 in [3] */
 
 #define	PWM_PERVAL_PV_MASK		bits(9,0)
 #define	PWM_PERVAL_PV(x)		bits_val(9,0,x)

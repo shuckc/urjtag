@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 Clocks Manager Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 Clocks Manager Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -47,8 +49,12 @@
 #include <stdint.h>
 #endif
 
-#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA26X)
-#define	PXA2X0_NOPXA26X
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define	PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define	PXA2X0_NOPXA260
 #endif
 
 /* Clocks Manager Registers */
@@ -75,7 +81,7 @@ typedef volatile struct CM_registers {
 #define	CKEN_OFFSET	0x04
 #define	OSCC_OFFSET	0x08
 
-/* CCCR bits - see Table 3-20 in [1], Table 3-20 in [2] */
+/* CCCR bits - see Table 3-20 in [1], Table 3-20 in [2], Table 3-20 in [3] */
 
 #define	CCCR_N_MASK	bits(9,7)
 #define	CCCR_N(x)	bits_val(9,7,x)
@@ -94,6 +100,9 @@ typedef volatile struct CM_registers {
 
 #define	CCCR_M_1	CCCR_M(0x1)
 #define	CCCR_M_2	CCCR_M(0x2)
+#if !defined(PXA2X0_NOPXA255)
+#define	CCCR_M_4	CCCR_M(0x3)
+#endif /* PXA255 and above only */
 
 #define	CCCR_L_27	CCCR_L(0x01)
 #define	CCCR_L_32	CCCR_L(0x02)
@@ -101,30 +110,32 @@ typedef volatile struct CM_registers {
 #define	CCCR_L_40	CCCR_L(0x04)
 #define	CCCR_L_45	CCCR_L(0x05)
 
-/* CKEN bits - see Table 3-21 in [1], Table 3-21 in [2] */
+/* CKEN bits - see Table 3-21 in [1], Table 3-21 in [2], Table 3-21 in [3] */
 
 #define	CKEN_CKEN16	bit(16)
 #define	CKEN_CKEN14	bit(14)
 #define	CKEN_CKEN13	bit(13)
 #define	CKEN_CKEN12	bit(12)
 #define	CKEN_CKEN11	bit(11)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA260)
 #define	CKEN_CKEN10	bit(10)
+#endif /* PXA260 and above only */
+#if !defined(PXA2X0_NOPXA255)
 #define	CKEN_CKEN9	bit(9)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 #define	CKEN_CKEN8	bit(8)
 #define	CKEN_CKEN7	bit(7)
 #define	CKEN_CKEN6	bit(6)
 #define	CKEN_CKEN5	bit(5)
-#if !defined(PXA2X0_NOPXA26X)
+#if !defined(PXA2X0_NOPXA255)
 #define	CKEN_CKEN4	bit(4)
-#endif /* PXA26x only */
+#endif /* PXA255 and above only */
 #define	CKEN_CKEN3	bit(3)
 #define	CKEN_CKEN2	bit(2)
 #define	CKEN_CKEN1	bit(1)
 #define	CKEN_CKEN0	bit(0)
 
-/* OSCC bits - see Table 3-22 in [1], Table 3-22 in [2] */
+/* OSCC bits - see Table 3-22 in [1], Table 3-22 in [2], Table 3-22 in [3] */
 
 #define	OSCC_OON	bit(1)
 #define	OSCC_OOK	bit(0)

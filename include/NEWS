@@ -1,6 +1,14 @@
 $Id$
 
-	* Added System Control Coprocessor Register 1 (Control Register) bits.
+	* Changes in PXA2x0 support:
+		- added support for Intel PXA255 processor
+		- replaced PXA2X0_NOPXA26X conditional directive with PXA2X0_NOPXA255
+			and PXA2X0_NOPXA260 directives to remove support for PXA255
+			and above (PXA2X0_NOPXA255) or PXA260 and above (PXA2X0_NOPXA260)
+			processor features
+		- added CCCR_M_4 multiplier for PXA255 and above
+		- added new register UDCCFR for PXA255 and above
+	* Added ARM System Control Coprocessor Register 1 (Control Register) bits.
 
 include-0.2.3 (2003-04-04):
 

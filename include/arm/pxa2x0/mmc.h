@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 MMC Controller Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 MMC Controller Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -45,6 +47,14 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* MMC Controller Registers */
@@ -116,13 +126,13 @@ typedef volatile struct MMC_registers {
 #define	MMC_RXFIFO_OFFSET		0x40
 #define	MMC_TXFIFO_OFFSET		0x44
 
-/* MMC_STRPCL bits - see Table 15-6 in [1], Table 15-6 in [2] */
+/* MMC_STRPCL bits - see Table 15-6 in [1], Table 15-6 in [2], Table 15-5 in [3] */
 
 #define	MMC_STRPCL_STRPCL_MASK		bits(1,0)
 #define	MMC_STRPCL_STRPCL(x)		bits_val(1,0,x)
 #define	get_MMC_STRPCL_STRPCL(x)	bits_get(1,0,x)
 
-/* MMC_STAT bits - see Table 15-7 in [1], Table 15-7 in [2] */
+/* MMC_STAT bits - see Table 15-7 in [1], Table 15-7 in [2], Table 15-6 in [3] */
 
 #define	MMC_STAT_END_CMD_RES		bit(13)
 #define	MMC_STAT_PRG_DONE		bit(12)
@@ -137,20 +147,20 @@ typedef volatile struct MMC_registers {
 #define	MMC_STAT_TIME_OUT_RESPONSE	bit(1)
 #define	MMC_STAT_READ_TIME_OUT		bit(0)
 
-/* MMC_CLKRT bits - see Table 15-8 in [1], Table 15-8 in [2] */
+/* MMC_CLKRT bits - see Table 15-8 in [1], Table 15-8 in [2], Table 15-7 in [3] */
 
 #define	MMC_CLKRT_CLK_RATE_MASK		bits(2,0)
 #define	MMC_CLKRT_CLK_RATE(x)		bits_val(2,0,x)
 #define	get_MMC_CLKRT_CLK_RATE(x)	bits_get(2,0,x)
 
-/* MMC_SPI bits - see Table 15-9 in [1], Table 15-9 in [2] */
+/* MMC_SPI bits - see Table 15-9 in [1], Table 15-9 in [2], Table 15-8 in [3] */
 
 #define	MMC_SPI_SPI_CS_ADDRESS		bit(3)
 #define	MMC_SPI_SPI_CS_EN		bit(2)
 #define	MMC_SPI_CRC_ON			bit(1)
 #define	MMC_SPI_SPI_EN			bit(0)
 
-/* MMC_CMDAT bits - see Table 15-10 in [1], Table 15-10 in [2] */
+/* MMC_CMDAT bits - see Table 15-10 in [1], Table 15-10 in [2], Table 15-9 in [3] */
 
 #define	MMC_CMDAT_MMC_DMA_EN		bit(7)
 #define	MMC_CMDAT_INIT			bit(6)
@@ -162,35 +172,35 @@ typedef volatile struct MMC_registers {
 #define	MMC_CMDAT_RESPONSE_FORMAT(x)	bits_val(1,0,x)
 #define	get_MMC_CMDAT_RESPONSE_FORMAT(x)	bits_get(1,0,x)
 
-/* MMC_RESTO bits - see Table 15-11 in [1], Table 15-11 in [2] */
+/* MMC_RESTO bits - see Table 15-11 in [1], Table 15-11 in [2], Table 15-10 in [3] */
 
 #define	MMC_RESTO_RES_TO_MASK		bits(6,0)
 #define	MMC_RESTO_RES_TO(x)		bits_val(6,0,x)
 #define	get_MMC_RESTO_RES_TO(x)		bits_get(6,0,x)
 
-/* MMC_RDTO bits - see Table 15-12 in [1], Table 15-12 in [2] */
+/* MMC_RDTO bits - see Table 15-12 in [1], Table 15-12 in [2], Table 15-11 in [3] */
 
 #define	MMC_RDTO_READ_TO_MASK		bits(15,0)
 #define	MMC_RDTO_READ_TO(x)		bits_val(15,0,x)
 #define	get_MMC_RDTO_READ_TO(x)		bits_get(15,0,x)
 
-/* MMC_BLKLEN bits - see Table 15-13 in [1], Table 15-13 in [2] */
+/* MMC_BLKLEN bits - see Table 15-13 in [1], Table 15-13 in [2], Table 15-12 in [3] */
 
 #define	MMC_BLKLEN_BLK_LEN_MASK		bits(9,0)
 #define	MMC_BLKLEN_BLK_LEN(x)		bits_val(9,0,x)
 #define	get_MMC_BLKLEN_BLK_LEN(x)	bits_get(9,0,x)
 
-/* MMC_NOB bits - see Table 15-14 in [1], Table 15-14 in [2] */
+/* MMC_NOB bits - see Table 15-14 in [1], Table 15-14 in [2], Table 15-13 in [3] */
 
 #define	MMC_NOB_MMC_NOB_MASK		bits(15,0)
 #define	MMC_NOB_MMC_NOB(x)		bits_val(15,0,x)
 #define	get_MMC_NOB_MMC_NOB(x)		bits_get(15,0,x)
 
-/* MMC_PRTBUF bits - see Table 15-15 in [1], Table 15-15 in [2] */
+/* MMC_PRTBUF bits - see Table 15-15 in [1], Table 15-15 in [2], Table 15-14 in [3] */
 
 #define	MMC_PRTBUF_BUF_PART_FULL	bit(0)
 
-/* MMC_I_MASK bits - see Table 15-16 in [1], Table 15-16 in [2] */
+/* MMC_I_MASK bits - see Table 15-16 in [1], Table 15-16 in [2], Table 15-15 in [3] */
 
 #define	MMC_I_MASK_TXFIFO_WR_REQ	bit(6)
 #define	MMC_I_MASK_RXFIFO_RD_REQ	bit(5)
@@ -200,7 +210,7 @@ typedef volatile struct MMC_registers {
 #define	MMC_I_MASK_PRG_DONE		bit(1)
 #define	MMC_I_MASK_DATA_TRAN_DONE	bit(0)
 
-/* MMC_I_REG bits - see Table 15-17 in [1], Table 15-17 in [2] */
+/* MMC_I_REG bits - see Table 15-17 in [1], Table 15-17 in [2], Table 15-16 in [3] */
 
 #define	MMC_I_REG_TXFIFO_WR_REQ		bit(6)
 #define	MMC_I_REG_RXFIFO_RD_REQ		bit(5)
@@ -210,13 +220,13 @@ typedef volatile struct MMC_registers {
 #define	MMC_I_REG_PRG_DONE		bit(1)
 #define	MMC_I_REG_DATA_TRAN_DONE	bit(0)
 
-/* MMC_CMD bits - see Table 15-18 in [1], Table 15-18 in [2] */
+/* MMC_CMD bits - see Table 15-18 in [1], Table 15-18 in [2], Table 15-17 in [3] */
 
 #define	MMC_CMD_CMD_INDEX_MASK		bits(5,0)
 #define	MMC_CMD_CMD_INDEX(x)		bits_val(5,0,x)
 #define	get_MMC_CMD_CMD_INDEX(x)	bits_get(5,0,x)
 
-/* MMC commands (for MMC_CMD) - see Table 15-19 in [1], Table 15-19 in [2] */
+/* MMC commands (for MMC_CMD) - see Table 15-19 in [1], Table 15-19 in [2], Table 15-18 in [3] */
 
 #define MMC_CMD_GO_IDLE_STATE		MMC_CMD_CMD_INDEX(0)
 #define MMC_CMD_SEND_OP_COND		MMC_CMD_CMD_INDEX(1)
@@ -256,31 +266,31 @@ typedef volatile struct MMC_registers {
 #define MMC_CMD_READ_OCR		MMC_CMD_CMD_INDEX(58)
 #define MMC_CMD_CRC_ON_OFF		MMC_CMD_CMD_INDEX(59)
 
-/* MMC_ARGH bits - see Table 15-20 in [1], Table 15-20 in [2] */
+/* MMC_ARGH bits - see Table 15-20 in [1], Table 15-20 in [2], Table 15-19 in [3] */
 
 #define	MMC_ARGH_ARG_H_MASK		bits(15,0)
 #define	MMC_ARGH_ARG_H(x)		bits_val(15,0,x)
 #define	get_MMC_ARGH_ARG_H(x)		bits_get(15,0,x)
 
-/* MMC_ARGL bits - see Table 15-21 in [1], Table 15-21 in [2] */
+/* MMC_ARGL bits - see Table 15-21 in [1], Table 15-21 in [2], Table 15-20 in [3] */
 
 #define	MMC_ARGL_ARG_L_MASK		bits(15,0)
 #define	MMC_ARGL_ARG_L(x)		bits_val(15,0,x)
 #define	get_MMC_ARGL_ARG_L(x)		bits_get(15,0,x)
 
-/* MMC_RES bits - see Table 15-22 in [1], Table 15-22 in [2] */
+/* MMC_RES bits - see Table 15-22 in [1], Table 15-22 in [2], Table 15-21 in [3] */
 
 #define	MMC_RES_RESPONSE_DATA_MASK	bits(15,0)
 #define	MMC_RES_RESPONSE_DATA(x)	bits_val(15,0,x)
 #define	get_MMC_RES_RESPONSE_DATA(x)	bits_get(15,0,x)
 
-/* MMC_RXFIFO bits - see Table 15-23 in [1], Table 15-23 in [2] */
+/* MMC_RXFIFO bits - see Table 15-23 in [1], Table 15-23 in [2], Table 15-22 in [3] */
 
 #define	MMC_RXFIFO_READ_DATA_MASK	bits(7,0)
 #define	MMC_RXFIFO_READ_DATA(x)		bits_val(7,0,x)
 #define	get_MMC_RXFIFO_READ_DATA(x)	bits_get(7,0,x)
 
-/* MMC_TXFIFO bits - see Table 15-24 in [1], Table 15-24 in [2] */
+/* MMC_TXFIFO bits - see Table 15-24 in [1], Table 15-24 in [2], Table 15-23 in [3] */
 
 #define	MMC_TXFIFO_WRITE_DATA_MASK	bits(7,0)
 #define	MMC_TXFIFO_WRITE_DATA(x)	bits_val(7,0,x)

@@ -1,8 +1,8 @@
 /*
  * $Id$
  *
- * XScale PXA26x/PXA250/PXA210 I2C Registers
- * Copyright (C) 2002 ETC s.r.o.
+ * XScale PXA26x/PXA255/PXA250/PXA210 I2C Registers
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
- *     October 2002, Order Number: 278638-001
+ *     March 2003, Order Number: 278638-002
+ * [3] Intel Corporation, "Intel PXA255 Processor Developer's Manual"
+ *     March 2003, Order Number: 278693-001
  *
  */
 
@@ -45,6 +47,14 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA255)
+#define PXA2X0_NOPXA255
+#endif
+
+#if defined(PXA2X0_NOPXA255) && !defined(PXA2X0_NOPXA260)
+#define PXA2X0_NOPXA260
 #endif
 
 /* I2C Registers */
@@ -82,18 +92,18 @@ typedef volatile struct I2C_registers {
 #define	ISR_OFFSET	0x1698
 #define	ISAR_OFFSET	0x16A0
 
-/* IBMR bits - see Table 9-9 in [1], Table 9-9 in [2] */
+/* IBMR bits - see Table 9-9 in [1], Table 9-9 in [2], Table 9-8 in [3] */
 
 #define	IBMR_SCLS	bit(1)
 #define	IBMR_SDAS	bit(0)
 
-/* IDBR bits - see Table 9-10 in [1], Table 9-10 in [2] */
+/* IDBR bits - see Table 9-10 in [1], Table 9-10 in [2], Table 9-9 in [3] */
 
 #define	IDBR_IDB_MASK	bits(7,0)
 #define	IDBR_IDB(x)	bits_val(7,0,x)
 #define	get_IDBR_IDB(x)	bits_get(7,0,x)
 
-/* ICR bits - see Table 9-11 in [1], Table 9-11 in [2] */
+/* ICR bits - see Table 9-11 in [1], Table 9-11 in [2], Table 9-10 in [3] */
 
 #define	ICR_FM		bit(15)
 #define	ICR_UR		bit(14)
@@ -112,7 +122,7 @@ typedef volatile struct I2C_registers {
 #define	ICR_STOP	bit(1)
 #define	ICR_START	bit(0)
 
-/* ISR bits - see Table 9-12 in [1], Table 9-12 in [2] */
+/* ISR bits - see Table 9-12 in [1], Table 9-12 in [2], Table 9-11 [3] */
 
 #define	ISR_BED		bit(10)
 #define	ISR_SAD		bit(9)
@@ -126,7 +136,7 @@ typedef volatile struct I2C_registers {
 #define	ISR_ACKNAK	bit(1)
 #define	ISR_RWM		bit(0)
 
-/* ISAR bits - see Table 9-13 in [1], Table 9-13 in [2] */
+/* ISAR bits - see Table 9-13 in [1], Table 9-13 in [2], Table 9-12 [3] */
 
 #define	ISAR_ISA_MASK	bits(6,0)
 #define	ISAR_ISA(x)	bits_val(6,0,x)
