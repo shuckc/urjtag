@@ -1,0 +1,1606 @@
+# Kinyarwanda translations for jtag package.
+# Copyright (C) 2005 Free Software Foundation, Inc.
+# This file is distributed under the same license as the jtag package.
+# Steve Murphy <murf@e-tools.com>, 2005.
+# Steve performed initial rough translation from compendium built from translations provided by the following translators:
+# Philibert Ndandali  <ndandali@yahoo.fr>, 2005.
+# Viateur MUGENZI <muvia1@yahoo.fr>, 2005.
+# Noëlla Mupole <s24211045@tuks.co.za>, 2005.
+# Carole Karema <karemacarole@hotmail.com>, 2005.
+# JEAN BAPTISTE NGENDAHAYO <ngenda_denis@yahoo.co.uk>, 2005.
+# Augustin KIBERWA  <akiberwa@yahoo.co.uk>, 2005.
+# Donatien NSENGIYUMVA <ndonatienuk@yahoo.co.uk>, 2005.
+# Antoine Bigirimana <antoine@e-tools.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: jtag 0.5.1\n"
+"Report-Msgid-Bugs-To: marcel@telka.sk\n"
+"POT-Creation-Date: 2003-09-24 07:07+0200\n"
+"PO-Revision-Date: 2005-04-04 10:55-0700\n"
+"Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
+"Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# sw/source\ui\utlui\initui.src:RID_SW_SHELLRES.STR_CALC_SYNTAX.text
+#: libbrux/cmd/cmd.c:44
+#, fuzzy, c-format
+msgid "%s: syntax error!\n"
+msgstr "%s:Ikosa ry'iyandikanteruro**"
+
+#: libbrux/cmd/cmd.c:48 libbrux/cmd/help.c:57
+#, fuzzy, c-format
+msgid "%s: unknown command\n"
+msgstr "%s:Kitazwi"
+
+#: libbrux/cmd/cmd_detectflash.c:39 src/cmd/eraseflash.c:47
+#: src/cmd/flashmem.c:47 src/cmd/peekpoke.c:43 src/cmd/peekpoke.c:88
+#: src/cmd/readmem.c:45
+#, fuzzy
+msgid "Error: Bus driver missing.\n"
+msgstr "Musomyi: Ibuze"
+
+#: libbrux/cmd/cmd_detectflash.c:52
+#, fuzzy, c-format
+msgid ""
+"Usage: %s\n"
+"Detect flash memory type connected to a part.\n"
+msgstr "Umurabyo Ububiko Ubwoko Kuri a"
+
+#: libbrux/cmd/cmd_detectflash.c:59
+#, fuzzy
+msgid "detect parameters of flash chips attached to a part"
+msgstr "Ibigenga Bya Umurabyo Kuri a"
+
+#: libbrux/cmd/help.c:39
+#, fuzzy
+msgid ""
+"Command list:\n"
+"\n"
+msgstr "Urutonde"
+
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+#: libbrux/cmd/help.c:41 src/cmd/cable.c:99
+#, fuzzy, c-format
+msgid "%-13s %s\n"
+msgstr "%-13s%s"
+
+#: libbrux/cmd/help.c:41
+#, fuzzy
+msgid "(no description available)"
+msgstr "(Oya Isobanuramiterere Bihari"
+
+#: libbrux/cmd/help.c:42
+#, fuzzy
+msgid ""
+"\n"
+"Type \"help COMMAND\" for details about a particular command.\n"
+msgstr "Ifashayobora kugirango Birambuye Ibyerekeye a Komandi:"
+
+#: libbrux/cmd/help.c:66
+#, fuzzy, c-format
+msgid ""
+"Usage: %s [COMMAND]\n"
+"Print short help for COMMAND, or list of available commands.\n"
+msgstr "Ifashayobora kugirango Cyangwa Urutonde Bya Bihari Amabwiriza"
+
+#: libbrux/cmd/help.c:73
+#, fuzzy
+msgid "display this help"
+msgstr "Kugaragaza iyi Ifashayobora"
+
+#: libbrux/cmd/quit.c:44
+#, fuzzy, c-format
+msgid ""
+"Usage: %s\n"
+"Exit from %s.\n"
+msgstr "Bivuye"
+
+#: libbrux/cmd/quit.c:51
+#, fuzzy
+msgid "exit and terminate this session"
+msgstr "Gusohoka Na iyi Umukoro"
+
+#: libbrux/flash/amd.c:180
+msgid ""
+"Chip: AMD Flash\n"
+"\tManufacturer: "
+msgstr ""
+
+#: libbrux/flash/amd.c:183
+msgid "AMD"
+msgstr ""
+
+#: libbrux/flash/amd.c:186
+#, fuzzy, c-format
+msgid "Unknown manufacturer (ID 0x%04x)"
+msgstr "Ukora mu nganda"
+
+#: libbrux/flash/amd.c:189
+msgid ""
+"\n"
+"\tChip: "
+msgstr ""
+
+#: libbrux/flash/amd.c:192
+msgid "Am29LV640D/Am29LV641D/Am29LV642D"
+msgstr ""
+
+#: libbrux/flash/amd.c:195
+msgid "Am29LV800B"
+msgstr ""
+
+#: libbrux/flash/amd.c:198
+#, c-format
+msgid "Unknown (ID 0x%04x)"
+msgstr ""
+
+# sc/source\ui\src\attrdlg.src:RID_SCPAGE_PROTECTION.BTN_PROTECTED.text
+#: libbrux/flash/amd.c:201
+#, fuzzy, c-format
+msgid ""
+"\n"
+"\tProtected: %04x\n"
+msgstr "Birinzwe"
+
+#: libbrux/flash/amd.c:268 libbrux/flash/amd.c:280 libbrux/flash/amd.c:292
+#: libbrux/flash/detectflash.c:84 libbrux/flash/detectflash.c:114
+msgid "AMD/Fujitsu Standard Command Set"
+msgstr ""
+
+#: libbrux/flash/amd.c:269
+msgid "supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
+msgstr ""
+
+#: libbrux/flash/amd.c:281
+msgid "supported: AMD 29LV800B; 1x16 Bit"
+msgstr ""
+
+#: libbrux/flash/amd.c:293
+msgid "supported: AMD 29LV160; 1x8 Bit"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:53 src/readmem.c:54
+#, fuzzy
+msgid "Error: Missing bus driver!\n"
+msgstr "Musomyi:"
+
+#: libbrux/flash/detectflash.c:64 src/flash.c:100
+#, fuzzy
+msgid "Flash not found!\n"
+msgstr "OYA Byabonetse"
+
+#: libbrux/flash/detectflash.c:74
+#, fuzzy
+msgid "Query identification string:\n"
+msgstr "irangamimerere Ikurikiranyanyuguti"
+
+#: libbrux/flash/detectflash.c:78 libbrux/flash/detectflash.c:108
+#, fuzzy
+msgid "null"
+msgstr "NTAGIHARI"
+
+#: libbrux/flash/detectflash.c:81 libbrux/flash/detectflash.c:111
+msgid "Intel/Sharp Extended Command Set"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:87 libbrux/flash/detectflash.c:117
+#: libbrux/flash/intel.c:327 libbrux/flash/intel.c:339
+#: libbrux/flash/intel.c:351
+msgid "Intel Standard Command Set"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:90 libbrux/flash/detectflash.c:120
+msgid "AMD/Fujitsu Extended Command Set"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:93 libbrux/flash/detectflash.c:123
+msgid "Mitsubishi Standard Command Set"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:96 libbrux/flash/detectflash.c:126
+msgid "Mitsubishi Extended Command Set"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:99 libbrux/flash/detectflash.c:129
+msgid "Page Write Command Set"
+msgstr ""
+
+# filter/source\xsltdialog\xmlfilterdialogstrings.src:STR_UNKNOWN_APPLICATION.text
+#: libbrux/flash/detectflash.c:102 libbrux/flash/detectflash.c:132
+#: libbrux/flash/detectflash.c:176
+#, fuzzy
+msgid "unknown!!!"
+msgstr "Kitazwi"
+
+#: libbrux/flash/detectflash.c:105
+#, fuzzy, c-format
+msgid "\tPrimary Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"
+msgstr "Na"
+
+#: libbrux/flash/detectflash.c:135
+#, fuzzy, c-format
+msgid "\tAlternate Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"
+msgstr "Na"
+
+#: libbrux/flash/detectflash.c:138
+#, fuzzy
+msgid "Query system interface information:\n"
+msgstr "Sisitemu Ibisobanuro"
+
+#: libbrux/flash/detectflash.c:139
+#, fuzzy, c-format
+msgid "\tVcc Logic Supply Minimum Write/Erase or Write voltage: %d mV\n"
+msgstr "Cyangwa"
+
+#: libbrux/flash/detectflash.c:140
+#, fuzzy, c-format
+msgid "\tVcc Logic Supply Maximum Write/Erase or Write voltage: %d mV\n"
+msgstr "Cyangwa"
+
+#: libbrux/flash/detectflash.c:141
+#, c-format
+msgid "\tVpp [Programming] Supply Minimum Write/Erase voltage: %d mV\n"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:142
+#, c-format
+msgid "\tVpp [Programming] Supply Maximum Write/Erase voltage: %d mV\n"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:143
+#, fuzzy, c-format
+msgid "\tTypical timeout per single byte/word program: %d us\n"
+msgstr "Igihe cyarenze: UMWE Bayite ijambo Porogaramu"
+
+#: libbrux/flash/detectflash.c:144
+#, fuzzy, c-format
+msgid "\tTypical timeout for maximum-size multi-byte program: %d us\n"
+msgstr "Igihe cyarenze: kugirango Kinini Ingano Bayite Porogaramu"
+
+#: libbrux/flash/detectflash.c:145
+#, fuzzy, c-format
+msgid "\tTypical timeout per individual block erase: %d ms\n"
+msgstr "Igihe cyarenze: Funga"
+
+#: libbrux/flash/detectflash.c:146
+#, fuzzy, c-format
+msgid "\tTypical timeout for full chip erase: %d ms\n"
+msgstr "Igihe cyarenze: kugirango"
+
+#: libbrux/flash/detectflash.c:147
+#, fuzzy, c-format
+msgid "\tMaximum timeout for byte/word program: %d us\n"
+msgstr "Igihe cyarenze: kugirango Bayite ijambo Porogaramu"
+
+#: libbrux/flash/detectflash.c:148
+#, fuzzy, c-format
+msgid "\tMaximum timeout for multi-byte program: %d us\n"
+msgstr "Igihe cyarenze: kugirango Bayite Porogaramu"
+
+#: libbrux/flash/detectflash.c:149
+#, fuzzy, c-format
+msgid "\tMaximum timeout per individual block erase: %d ms\n"
+msgstr "Igihe cyarenze: Funga"
+
+#: libbrux/flash/detectflash.c:150
+#, fuzzy, c-format
+msgid "\tMaximum timeout for chip erase: %d ms\n"
+msgstr "Igihe cyarenze: kugirango"
+
+#: libbrux/flash/detectflash.c:153
+#, fuzzy
+msgid "Device geometry definition:\n"
+msgstr "Iyigamashusho Insobanuro"
+
+#: libbrux/flash/detectflash.c:154
+#, c-format
+msgid "\tDevice Size: %d B (%d KiB, %d MiB)\n"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:161
+msgid "x8"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:164
+msgid "x16"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:167
+msgid "x8/x16"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:170
+msgid "x32"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:173
+msgid "x16/x32"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:179
+#, fuzzy, c-format
+msgid "\tFlash Device Interface Code description: 0x%04X (%s)\n"
+msgstr "Isobanuramiterere"
+
+#: libbrux/flash/detectflash.c:180
+#, fuzzy, c-format
+msgid "\tMaximum number of bytes in multi-byte program: %d\n"
+msgstr "Umubare Bya Bayite in Bayite Porogaramu"
+
+#: libbrux/flash/detectflash.c:181
+#, fuzzy, c-format
+msgid "\tNumber of Erase Block Regions within device: %d\n"
+msgstr "Bya muri APAREYE"
+
+#: libbrux/flash/detectflash.c:182
+msgid "\tErase Block Region Information:\n"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:187
+#, c-format
+msgid "\t\tRegion %d:\n"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:188
+#, c-format
+msgid "\t\t\tErase Block Size: %d B (%d KiB)\n"
+msgstr ""
+
+#: libbrux/flash/detectflash.c:191
+#, fuzzy, c-format
+msgid "\t\t\tNumber of Erase Blocks: %d\n"
+msgstr "Bya"
+
+#: libbrux/flash/intel.c:104
+#, fuzzy, c-format
+msgid "Manufacturer: %s\n"
+msgstr "Ukora mu nganda"
+
+#: libbrux/flash/intel.c:107
+#, fuzzy, c-format
+msgid "Unknown manufacturer (0x%04X)!\n"
+msgstr "Ukora mu nganda"
+
+#: libbrux/flash/intel.c:111
+msgid "Chip: "
+msgstr ""
+
+#: libbrux/flash/intel.c:142
+#, c-format
+msgid "Unknown (0x%02X)!\n"
+msgstr ""
+
+#: libbrux/flash/intel.c:201
+#, fuzzy
+msgid "flash: invalid command seq\n"
+msgstr "Umurabyo Sibyo Komandi:"
+
+#: libbrux/flash/intel.c:204
+#, fuzzy
+msgid "flash: low vpen\n"
+msgstr "Umurabyo Byo hasi"
+
+#: libbrux/flash/intel.c:207
+#, fuzzy
+msgid "flash: block locked\n"
+msgstr "Umurabyo Funga"
+
+#: libbrux/flash/intel.c:229
+#, fuzzy
+msgid "flash: unknown error while unblocking\n"
+msgstr "Umurabyo Kitazwi Ikosa"
+
+#: libbrux/flash/intel.c:248
+#, fuzzy
+msgid "flash: unknown error while programming\n"
+msgstr "Umurabyo Kitazwi Ikosa"
+
+#: libbrux/flash/intel.c:328
+#, fuzzy
+msgid "supported: 28Fxxxx, 2 x 16 bit"
+msgstr "2. X"
+
+#: libbrux/flash/intel.c:340
+#, fuzzy
+msgid "supported: 28Fxxxx, 1 x 16 bit"
+msgstr "1. X"
+
+#: libbrux/flash/intel.c:352
+#, fuzzy
+msgid "supported: 28Fxxxx, 1 x 8 bit"
+msgstr "1. X 8"
+
+#: src/bus/bcm1250.c:104
+#, fuzzy, c-format
+msgid "Broadcom BCM1250 compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/bcm1250.c:275
+#, fuzzy
+msgid "Broadcom BCM1250 compatible bus driver via BSR"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/bcm1250.c:317 src/bus/bcm1250.c:326 src/bus/bcm1250.c:333
+#: src/bus/bcm1250.c:338 src/bus/bcm1250.c:343 src/bus/ixp425.c:280
+#: src/bus/ixp425.c:289 src/bus/ixp425.c:298 src/bus/ixp425.c:305
+#: src/bus/ixp425.c:310 src/bus/pxa2x0.c:386 src/bus/pxa2x0.c:395
+#: src/bus/pxa2x0.c:404 src/bus/pxa2x0.c:413 src/bus/pxa2x0.c:420
+#: src/bus/pxa2x0.c:425 src/bus/pxa2x0.c:430 src/bus/pxa2x0.c:435
+#: src/bus/s3c4510x.c:339 src/bus/s3c4510x.c:348 src/bus/s3c4510x.c:357
+#: src/bus/s3c4510x.c:366 src/bus/s3c4510x.c:373 src/bus/sa1110.c:294
+#: src/bus/sa1110.c:303 src/bus/sa1110.c:312 src/bus/sa1110.c:319
+#: src/bus/sa1110.c:324 src/bus/sa1110.c:329 src/bus/sh7727.c:326
+#: src/bus/sh7727.c:335 src/bus/sh7727.c:346 src/bus/sh7727.c:355
+#: src/bus/sh7727.c:362 src/bus/sh7727.c:367 src/bus/sh7727.c:372
+#: src/bus/sh7727.c:377 src/bus/sh7750r.c:308 src/bus/sh7750r.c:317
+#: src/bus/sh7750r.c:326 src/bus/sh7750r.c:335 src/bus/sh7750r.c:342
+#: src/bus/sh7750r.c:347 src/bus/sh7750r.c:352 src/bus/sh7750r.c:357
+#: src/bus/sh7751r.c:301 src/bus/sh7751r.c:310 src/bus/sh7751r.c:319
+#: src/bus/sh7751r.c:328 src/bus/sh7751r.c:335 src/bus/sh7751r.c:340
+#: src/cmd/get.c:63 src/cmd/set.c:77
+#, fuzzy, c-format
+msgid "signal '%s' not found\n"
+msgstr "OYA"
+
+#: src/bus/buses.c:69 src/cmd/include.c:47 src/detect.c:252 src/jtag.c:159
+#: src/jtag.c:270
+#, fuzzy
+msgid "Out of memory\n"
+msgstr "Bya"
+
+#: src/bus/ixp425.c:125
+#, fuzzy, c-format
+msgid "Intel IXP425 compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/ixp425.c:238
+#, fuzzy
+msgid "Intel IXP425 compatible bus driver via BSR"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/pxa2x0.c:119
+#, fuzzy, c-format
+msgid "Intel PXA2x0 compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/pxa2x0.c:278
+#, fuzzy
+msgid "Static Chip Select 0"
+msgstr "0"
+
+#: src/bus/pxa2x0.c:317
+msgid "Memory Mapped registers (Memory Ctl)"
+msgstr ""
+
+#: src/bus/pxa2x0.c:344
+#, fuzzy
+msgid "Intel PXA2x0 compatible bus driver via BSR"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/s3c4510x.c:128
+#, fuzzy, c-format
+msgid "Samsung S3C4510B compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/s3c4510x.c:297
+#, fuzzy
+msgid "Samsung S3C4510B compatible bus driver via BSR"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/sa1110.c:108
+#, fuzzy, c-format
+msgid "Intel SA-1110 compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/sa1110.c:252
+#, fuzzy
+msgid "Intel SA-1110 compatible bus driver via BSR"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/sh7727.c:109
+#, fuzzy, c-format
+msgid "Hitachi SH7727 compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/sh7727.c:267
+#, fuzzy
+msgid "Error: Invalid bus width (MD3 = MD4 = 0)!\n"
+msgstr "Ubugari 0"
+
+#: src/bus/sh7727.c:284
+#, fuzzy
+msgid "Hitachi SH7727 compatible bus driver via BSR"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/sh7750r.c:101
+#, fuzzy, c-format
+msgid "Hitachi SH7750R compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/sh7750r.c:266
+#, fuzzy
+msgid "Hitachi SH7750R compatible bus driver via BSR"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/sh7751r.c:99
+#, fuzzy, c-format
+msgid "Hitachi SH7751R compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr "Musomyi: Biturutse"
+
+#: src/bus/sh7751r.c:259
+#, fuzzy
+msgid "Hitachi SH7751R compatible bus driver via BSR"
+msgstr "Musomyi: Biturutse"
+
+#: src/cmd/bit.c:52 src/cmd/bus.c:46 src/cmd/dr.c:48 src/cmd/get.c:52
+#: src/cmd/initbus.c:46 src/cmd/instruction.c:44 src/cmd/part.c:46
+#: src/cmd/print.c:56 src/cmd/register.c:50 src/cmd/set.c:53
+#: src/cmd/signal.c:49
+#, fuzzy
+msgid "Run \"detect\" first.\n"
+msgstr "Itangira"
+
+#: src/cmd/bit.c:57 src/cmd/dr.c:53 src/cmd/get.c:57 src/cmd/initbus.c:51
+#: src/cmd/instruction.c:49 src/cmd/register.c:55 src/cmd/set.c:58
+#: src/cmd/signal.c:54
+#, fuzzy, c-format
+msgid "%s: no active part\n"
+msgstr "%s:Oya Gikora"
+
+#: src/cmd/bit.c:64
+#, fuzzy
+msgid "missing Boundary Scan Register (BSR)\n"
+msgstr "Ibuze"
+
+#: src/cmd/bit.c:73
+#, fuzzy
+msgid "invalid boundary bit number\n"
+msgstr "Sibyo"
+
+#: src/cmd/bit.c:77
+#, fuzzy
+msgid "duplicate bit declaration\n"
+msgstr "Gusubiramo"
+
+#: src/cmd/bit.c:114 src/cmd/instruction.c:95 src/cmd/register.c:71
+#: src/cmd/register.c:85 src/cmd/signal.c:66 src/detect.c:194 src/detect.c:217
+#, fuzzy
+msgid "out of memory\n"
+msgstr "Inyuma Bya"
+
+#: src/cmd/bit.c:126
+#, fuzzy
+msgid "invalid control bit number\n"
+msgstr "Sibyo Igenzura"
+
+#: src/cmd/bit.c:148
+#, fuzzy, c-format
+msgid ""
+"Usage: %s NUMBER TYPE DEFAULT SIGNAL [CBIT CVAL CSTATE]\n"
+"Define new BSR (Boundary Scan Register) bit for SIGNAL, with\n"
+"DEFAULT value.\n"
+"\n"
+"NUMBER        Bit number in the BSR\n"
+"TYPE          Bit type, valid values are I, O, B, C, and X\n"
+"DEFAULT       Default (safe) bit value, valid values are 1, 0, ?\n"
+"SIGNAL        Associated signal name\n"
+"CBIT          Control bit number\n"
+"CVAL          Control value\n"
+"CSTATE        Control state, valid state is only Z\n"
+msgstr "Gishya kugirango Agaciro Umubare in i Ubwoko Byemewe Uduciro C Na Agaciro Byemewe Uduciro 1. 0 Leta Byemewe Leta ni"
+
+#: src/cmd/bit.c:164
+#, fuzzy
+msgid "define new BSR bit"
+msgstr "Kugaragaza... Gishya"
+
+#: src/cmd/bus.c:54
+#, fuzzy, c-format
+msgid "%s: invalid bus number\n"
+msgstr "%s:Sibyo"
+
+#: src/cmd/bus.c:67
+#, fuzzy, c-format
+msgid ""
+"Usage: %s BUS\n"
+"Change active bus.\n"
+"\n"
+"BUS           bus number\n"
+msgstr "Gikora"
+
+#: src/cmd/bus.c:76
+#, fuzzy
+msgid "change active bus"
+msgstr "Guhindura>> Gikora"
+
+#: src/cmd/cable.c:53
+#, fuzzy, c-format
+msgid "Unknown connection type: %s\n"
+msgstr "Ukwihuza Ubwoko"
+
+#: src/cmd/cable.c:64
+#, fuzzy
+msgid "Error: Cable connection failed!\n"
+msgstr "Ukwihuza Byanze"
+
+#: src/cmd/cable.c:69
+#, fuzzy
+msgid "Error: Cable initialization failed!\n"
+msgstr "Byanze"
+
+#: src/cmd/cable.c:86
+#, fuzzy, c-format
+msgid ""
+"Usage: %s PORTADDR CABLE\n"
+"Usage: %s DEV CABLE\n"
+"Select JTAG cable connected to parallel port.\n"
+"\n"
+"PORTADDR   parallel port address (e.g. 0x378)\n"
+"CABLE      cable type\n"
+"DEV        ppdev device (e.g. /dev/parport0)\n"
+"\n"
+"List of supported cables:\n"
+"%-13s No cable connected\n"
+msgstr "g. g."
+
+#: src/cmd/cable.c:104
+#, fuzzy
+msgid "select JTAG cable"
+msgstr "Guhitamo"
+
+#: src/cmd/cmd.c:99
+#, fuzzy, c-format
+msgid "Error: Cable not configured. Please use '%s' command first!\n"
+msgstr "OYA Gukoresha Komandi: Itangira"
+
+#: src/cmd/detect.c:68
+#, fuzzy, c-format
+msgid ""
+"Usage: %s\n"
+"Detect parts on the JTAG chain.\n"
+"\n"
+"Output from this command is a list of the detected parts.\n"
+"If no parts are detected other commands may not work properly.\n"
+msgstr "ku i Bivuye iyi Komandi: ni a Urutonde Bya i Oya Ikindi Amabwiriza Gicurasi OYA Akazi"
+
+#: src/cmd/detect.c:78
+#, fuzzy
+msgid "detect parts on the JTAG chain"
+msgstr "ku i"
+
+#: src/cmd/discovery.c:51
+#, fuzzy, c-format
+msgid ""
+"Usage: %s\n"
+"Discovery of unknown parts in the JTAG chain.\n"
+"\n"
+"'%s' attempts to detect these parameters of an unknown JTAG\n"
+"chain:\n"
+" 1. IR (instruction register) length\n"
+" 2. DR (data register) length for all possible instructions\n"
+"\n"
+"Warning: This may be dangerous for some parts (especially if the\n"
+"part doesn't have TRST signal).\n"
+msgstr "Bya Kitazwi in i Kuri Ibigenga Bya Kitazwi 1. Kwiyandikisha 2. Ibyatanzwe Kwiyandikisha Uburebure kugirango Byose Gicurasi kugirango NIBA"
+
+#: src/cmd/discovery.c:66
+#, fuzzy
+msgid "discovery of unknown parts in the JTAG chain"
+msgstr "Bya Kitazwi in i"
+
+#: src/cmd/dr.c:67
+#, fuzzy, c-format
+msgid "%s: part without active instruction\n"
+msgstr "%s:Gikora"
+
+#: src/cmd/dr.c:71
+#, fuzzy, c-format
+msgid "%s: part without active data register\n"
+msgstr "%s:Gikora Ibyatanzwe"
+
+# basctl/source\basicide\basidesh.src:RID_IMGBTN_REMOVEWATCH.text
+#: src/cmd/dr.c:79
+#, fuzzy, c-format
+msgid "%s\n"
+msgstr "%s"
+
+#: src/cmd/dr.c:88
+#, fuzzy, c-format
+msgid ""
+"Usage: %s [DIR]\n"
+"Display input or output data register content.\n"
+"\n"
+"DIR           requested data register; possible values: 'in' for\n"
+"                input and 'out' for output; default is 'out'\n"
+msgstr "Iyinjiza Cyangwa Ibisohoka Ibyatanzwe Kwiyandikisha Ibikubiyemo Ibyatanzwe Kwiyandikisha Uduciro Iyinjiza Na kugirango Ibisohoka Mburabuzi ni"
+
+#: src/cmd/dr.c:98
+#, fuzzy
+msgid "display active data register for a part"
+msgstr "Kugaragaza Gikora Ibyatanzwe Kwiyandikisha kugirango a"
+
+#: src/cmd/endian.c:42
+#, fuzzy
+msgid "Endianess for external files: big\n"
+msgstr "kugirango external Idosiye"
+
+#: src/cmd/endian.c:44
+#, fuzzy
+msgid "Endianess for external files: little\n"
+msgstr "kugirango external Idosiye"
+
+#: src/cmd/endian.c:65
+#, fuzzy, c-format
+msgid ""
+"Usage: %s\n"
+"Set or print endianess for external files.\n"
+msgstr "Cyangwa Gucapa kugirango external Idosiye"
+
+#: src/cmd/endian.c:72
+#, fuzzy
+msgid "set/print endianess"
+msgstr "Gushyiraho Gucapa"
+
+#: src/cmd/eraseflash.c:65
+#, fuzzy, c-format
+msgid ""
+"Usage: %s ADDR BLOCKS\n"
+"Erase flash memory from ADDR.\n"
+"\n"
+"ADDR       target addres for erasing block\n"
+"BLOCKS     number of blocks to erase\n"
+"\n"
+"ADDR and BLOCKS could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+"\n"
+"Supported Flash Memories:\n"
+msgstr "Umurabyo Ububiko Bivuye Intego kugirango Umubare Bya Kuri Na in NYACUMI Cyangwa Na: Ifishi"
+
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+#: src/cmd/eraseflash.c:77 src/cmd/flashmem.c:89
+#, fuzzy, c-format
+msgid ""
+"%s\n"
+"     %s\n"
+msgstr "%s%s"
+
+#: src/cmd/eraseflash.c:82
+#, fuzzy
+msgid "erase flash memory by number of blocks"
+msgstr "Umurabyo Ububiko ku Umubare Bya"
+
+#: src/cmd/flashmem.c:57 src/cmd/include.c:54 src/cmd/script.c:43
+#: src/jtag.c:280
+#, fuzzy, c-format
+msgid "Unable to open file `%s'!\n"
+msgstr "Kuri Gufungura IDOSIYE"
+
+#: src/cmd/flashmem.c:75
+#, fuzzy, c-format
+msgid ""
+"Usage: %s ADDR FILENAME\n"
+"Usage: %s FILENAME\n"
+"Program FILENAME content to flash memory.\n"
+"\n"
+"ADDR       target address for raw binary image\n"
+"FILENAME   name of the input file\n"
+"%-10s FILENAME is in MS .bin format (for WinCE)\n"
+"\n"
+"ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+"\n"
+"Supported Flash Memories:\n"
+msgstr "Ibikubiyemo Kuri Umurabyo Ububiko Intego Aderesi kugirango Nyabibiri Izina: Bya i Iyinjiza ni in Imiterere kugirango in NYACUMI Cyangwa Na: Ifishi"
+
+#: src/cmd/flashmem.c:94
+#, fuzzy
+msgid "burn flash memory with data from a file"
+msgstr "Umurabyo Ububiko Na: Ibyatanzwe Bivuye a IDOSIYE"
+
+#: src/cmd/frequency.c:39
+#, fuzzy, c-format
+msgid "Current TCK frequency is %u Hz\n"
+msgstr "Ubwisubire ni"
+
+#: src/cmd/frequency.c:49
+#, fuzzy, c-format
+msgid "Setting TCK frequency to %u Hz\n"
+msgstr "Ubwisubire Kuri"
+
+#: src/cmd/frequency.c:59
+#, fuzzy, c-format
+msgid ""
+"Usage: %s [FREQ]\n"
+"Change TCK frequency to FREQ or print current TCK frequency.\n"
+"\n"
+"FREQ is in hertz. It's a maximum TCK frequency for JTAG interface.\n"
+"In some cases the TCK frequency is less than FREQ, but the frequency\n"
+"is never more than FREQ. Maximum supported frequency depends on JTAG\n"
+"adapter.\n"
+"\n"
+"FREQ must be an unsigned integer. Minimum allowed frequency is 1 Hz.\n"
+"Use 0 for FREQ to disable frequency limit.\n"
+msgstr "Ubwisubire Kuri Cyangwa Gucapa KIGEZWEHO Ubwisubire ni in a Kinini Ubwisubire kugirango i Ubwisubire ni Birutwa i Nta narimwe Birenzeho Ubwisubire ku Bitashizweho umukono Umubare wuzuye Ubwisubire ni 1. 0 kugirango Kuri Ubwisubire"
+
+#: src/cmd/frequency.c:74
+#, fuzzy
+msgid "setup JTAG frequency"
+msgstr "Imikorere Ubwisubire"
+
+# desktop/source\app\ssodlg.src:DLG_SSOLOGIN.text
+#: src/cmd/get.c:68
+#, fuzzy, c-format
+msgid "%s = %d\n"
+msgstr "%s=%d"
+
+#: src/cmd/get.c:77
+#, fuzzy, c-format
+msgid ""
+"Usage: %s SIGNAL\n"
+"Get signal state from output BSR (Boundary Scan Register).\n"
+"\n"
+"SIGNAL        signal name (from JTAG declaration file)\n"
+msgstr "Leta Bivuye Ibisohoka Izina: Bivuye IDOSIYE"
+
+#: src/cmd/get.c:86
+#, fuzzy
+msgid "get external signal value"
+msgstr "Kubona external Agaciro"
+
+#: src/cmd/include.c:65
+#, fuzzy, c-format
+msgid ""
+"Usage: %s FILENAME\n"
+"Run command sequence from external FILENAME from the repository.\n"
+"\n"
+"FILENAME      Name of the file with commands\n"
+msgstr "Komandi: Bivuye external Bivuye i Bya i IDOSIYE Na:"
+
+#: src/cmd/include.c:74
+#, fuzzy
+msgid "include command sequence from external repository"
+msgstr "Gushyiramo Komandi: Bivuye external"
+
+#: src/cmd/initbus.c:59
+#, fuzzy
+msgid "bus initialization failed!\n"
+msgstr "Byanze"
+
+#: src/cmd/initbus.c:67
+#, c-format
+msgid "Unknown bus: %s\n"
+msgstr ""
+
+#: src/cmd/initbus.c:78
+#, fuzzy, c-format
+msgid ""
+"Usage: %s BUSNAME\n"
+"Initialize new bus driver for active part.\n"
+"\n"
+"BUSNAME       Name of the bus\n"
+"\n"
+"List of available buses:\n"
+msgstr "Gishya Musomyi: kugirango Gikora Bya i Bya Bihari"
+
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+#: src/cmd/initbus.c:87
+#, fuzzy, c-format
+msgid "%-10s %s\n"
+msgstr "%-10s%s"
+
+#: src/cmd/initbus.c:92
+#, fuzzy
+msgid "initialize bus driver for active part"
+msgstr "gutangiza Musomyi: kugirango Gikora"
+
+#: src/cmd/instruction.c:58
+#, fuzzy, c-format
+msgid "%s: unknown instruction '%s'\n"
+msgstr "%s:Kitazwi"
+
+#: src/cmd/instruction.c:69
+#, fuzzy
+msgid "instruction length is already set and used\n"
+msgstr "Uburebure ni Gushyiraho Na"
+
+#: src/cmd/instruction.c:84
+#, fuzzy
+msgid "invalid instruction length\n"
+msgstr "Sibyo"
+
+#: src/cmd/instruction.c:89
+#, c-format
+msgid "Instruction '%s' already defined\n"
+msgstr ""
+
+#: src/cmd/instruction.c:104
+#, fuzzy, c-format
+msgid "unknown data register '%s'\n"
+msgstr "Kitazwi Ibyatanzwe Kwiyandikisha"
+
+#: src/cmd/instruction.c:118
+#, fuzzy, c-format
+msgid ""
+"Usage: %s INSTRUCTION\n"
+"Usage: %s length LENGTH\n"
+"Usage: %s INSTRUCTION CODE REGISTER\n"
+"Change active INSTRUCTION for a part or declare new instruction.\n"
+"\n"
+"INSTRUCTION   instruction name (e.g. BYPASS)\n"
+"LENGTH        common instruction length\n"
+"CODE          instruction code (e.g. 11111)\n"
+"REGISTER      default data register for instruction (e.g. BR)\n"
+msgstr "g. g. g."
+
+#: src/cmd/instruction.c:132
+#, fuzzy
+msgid "change active instruction for a part or declare new instruction"
+msgstr "Guhindura>> Gikora kugirango a Cyangwa Gishya"
+
+#: src/cmd/part.c:54
+#, fuzzy, c-format
+msgid "%s: invalid part number\n"
+msgstr "%s:Sibyo"
+
+#: src/cmd/part.c:67
+#, fuzzy, c-format
+msgid ""
+"Usage: %s PART\n"
+"Change active part for current JTAG chain.\n"
+"\n"
+"PART          part number\n"
+msgstr "Gikora kugirango KIGEZWEHO"
+
+#: src/cmd/part.c:76
+#, fuzzy
+msgid "change active part for current JTAG chain"
+msgstr "Guhindura>> Gikora kugirango KIGEZWEHO"
+
+#: src/cmd/peekpoke.c:53
+#, c-format
+msgid "bus_read(0x%08x) = 0x%08X (%i)\n"
+msgstr ""
+
+#: src/cmd/peekpoke.c:62
+#, fuzzy, c-format
+msgid ""
+"Usage: %s ADDR\n"
+"Read a single word (bus width size).\n"
+"\n"
+"ADDR       address to read from\n"
+"\n"
+"ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+"\n"
+msgstr "a UMWE ijambo Ubugari Ingano Aderesi Kuri Gusoma in NYACUMI Cyangwa Na: Ifishi"
+
+#: src/cmd/peekpoke.c:74
+#, fuzzy
+msgid "read a single word"
+msgstr "Gusoma a UMWE ijambo"
+
+#: src/cmd/peekpoke.c:105
+#, fuzzy, c-format
+msgid ""
+"Usage: %s ADDR VAL\n"
+"Write a single word (bus width size).\n"
+"\n"
+"ADDR       address to write\n"
+"VAL        value to write\n"
+"\n"
+"ADDR and VAL could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+"\n"
+msgstr "a UMWE ijambo Ubugari Ingano Aderesi Kuri Agaciro Kuri Na in NYACUMI Cyangwa Na: Ifishi"
+
+#: src/cmd/peekpoke.c:118
+#, fuzzy
+msgid "write a single word"
+msgstr "Kwandika a UMWE ijambo"
+
+#: src/cmd/print.c:68
+#, fuzzy, c-format
+msgid " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
+msgstr "Oya"
+
+#: src/cmd/print.c:72 src/cmd/print.c:75 src/cmd/print.c:79
+#, fuzzy, c-format
+msgid "(%d) String conversion failed!\n"
+msgstr "(%d)Ihindurangero Byanze"
+
+#: src/cmd/print.c:73 src/cmd/print.c:77
+msgid "Manufacturer"
+msgstr "Ukora mu nganda"
+
+#: src/cmd/print.c:73 src/cmd/print.c:77
+msgid "Part"
+msgstr ""
+
+#: src/cmd/print.c:73 src/cmd/print.c:77
+msgid "Stepping"
+msgstr ""
+
+#: src/cmd/print.c:73 src/cmd/print.c:77
+msgid "Instruction"
+msgstr ""
+
+#: src/cmd/print.c:73 src/cmd/print.c:77
+msgid "Register"
+msgstr "Kwiyandikisha"
+
+# basctl/source\basicide\basidesh.src:RID_IMGBTN_REMOVEWATCH.text
+#: src/cmd/print.c:90 src/part/part.c:309
+#, fuzzy, c-format
+msgid " %3d "
+msgstr "%3d"
+
+#: src/cmd/print.c:101
+#, c-format
+msgid ""
+"\n"
+"Active bus:\n"
+"*%d: "
+msgstr ""
+
+#: src/cmd/print.c:106
+#, fuzzy, c-format
+msgid "Error in bus area discovery at 0x%08llX\n"
+msgstr "in Ubuso ku"
+
+#: src/cmd/print.c:111
+#, fuzzy, c-format
+msgid "\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"
+msgstr "Gutangira Uburebure Ibyatanzwe Ubugari"
+
+#: src/cmd/print.c:113
+#, fuzzy, c-format
+msgid "\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"
+msgstr "Gutangira Uburebure Ibyatanzwe Ubugari"
+
+# desktop/source\app\ssodlg.src:DLG_SSOLOGIN.text
+#: src/cmd/print.c:128
+#, fuzzy, c-format
+msgid "*%d: "
+msgstr "*%d:"
+
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+#: src/cmd/print.c:130
+#, fuzzy, c-format
+msgid "%d: "
+msgstr "%d:"
+
+#: src/cmd/print.c:141
+#, fuzzy, c-format
+msgid ""
+"Usage: %s [chain|bus]\n"
+"Display JTAG chain status.\n"
+"\n"
+"Display list of the parts connected to the JTAG chain including\n"
+"part number and current (active) instruction and data register.\n"
+msgstr "Imimerere Urutonde Bya i Kuri i Umubare Na KIGEZWEHO Gikora Na Ibyatanzwe Kwiyandikisha"
+
+#: src/cmd/print.c:151
+#, fuzzy
+msgid "display JTAG chain list/status"
+msgstr "Kugaragaza Urutonde Imimerere"
+
+#: src/cmd/readmem.c:54
+#, fuzzy, c-format
+msgid "Unable to create file `%s'!\n"
+msgstr "Kuri Kurema IDOSIYE"
+
+#: src/cmd/readmem.c:67
+#, fuzzy, c-format
+msgid ""
+"Usage: %s ADDR LEN FILENAME\n"
+"Copy device memory content starting with ADDR to FILENAME file.\n"
+"\n"
+"ADDR       start address of the copied memory area\n"
+"LEN        copied memory length\n"
+"FILENAME   name of the output file\n"
+"\n"
+"ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+msgstr "APAREYE Ububiko Ibikubiyemo Na: Kuri IDOSIYE Gutangira Aderesi Bya i Ububiko Ububiko Izina: Bya i Ibisohoka Na in NYACUMI Cyangwa Na: Ifishi"
+
+#: src/cmd/readmem.c:80
+#, fuzzy
+msgid "read content of the memory and write it to file"
+msgstr "Gusoma Ibikubiyemo Bya i Ububiko Na Kwandika Kuri IDOSIYE"
+
+#: src/cmd/register.c:65
+#, fuzzy, c-format
+msgid "Data register '%s' already defined\n"
+msgstr "Kwiyandikisha"
+
+#: src/cmd/register.c:103
+#, fuzzy, c-format
+msgid ""
+"Usage: %s NAME LENGTH\n"
+"Define new data register with specified NAME and LENGTH.\n"
+"\n"
+"NAME          Data register name\n"
+"LENGTH        Data register length\n"
+msgstr "Gishya Ibyatanzwe Kwiyandikisha Na: Na Kwiyandikisha Kwiyandikisha"
+
+#: src/cmd/register.c:113
+#, fuzzy
+msgid "define new data register for a part"
+msgstr "Kugaragaza... Gishya Ibyatanzwe Kwiyandikisha kugirango a"
+
+#: src/cmd/script.c:52
+#, fuzzy, c-format
+msgid ""
+"Usage: %s FILENAME\n"
+"Run command sequence from external FILENAME.\n"
+"\n"
+"FILENAME      Name of the file with commands\n"
+msgstr "Komandi: Bivuye external Bya i IDOSIYE Na:"
+
+#: src/cmd/script.c:61
+#, fuzzy
+msgid "run command sequence from external file"
+msgstr "Gukoresha Komandi: Bivuye external IDOSIYE"
+
+#: src/cmd/set.c:89
+#, fuzzy, c-format
+msgid ""
+"Usage: %s SIGNAL DIR [DATA]\n"
+"Set signal state in input BSR (Boundary Scan Register).\n"
+"\n"
+"SIGNAL        signal name (from JTAG declaration file)\n"
+"DIR           requested signal direction; possible values: 'in' or 'out'\n"
+"DATA          desired output signal value ('0' or '1'); used only if DIR\n"
+"                is 'out'\n"
+msgstr "Leta in Iyinjiza Izina: Bivuye IDOSIYE Icyerekezo Uduciro Cyangwa Ibisohoka Agaciro Cyangwa NIBA ni"
+
+#: src/cmd/set.c:101
+#, fuzzy
+msgid "set external signal value"
+msgstr "Gushyiraho external Agaciro"
+
+#: src/cmd/shift.c:60
+#, fuzzy, c-format
+msgid ""
+"Usage: %s\n"
+"Usage: %s\n"
+"Shift instruction or data register through JTAG chain.\n"
+msgstr "Cyangwa Ibyatanzwe Kwiyandikisha Gihinguranya"
+
+#: src/cmd/shift.c:68
+#, fuzzy
+msgid "shift data/instruction registers through JTAG chain"
+msgstr "Gusunika Ibyatanzwe Gihinguranya"
+
+#: src/cmd/signal.c:60
+#, c-format
+msgid "Signal '%s' already defined\n"
+msgstr ""
+
+#: src/cmd/signal.c:80
+#, fuzzy, c-format
+msgid ""
+"Usage: %s SIGNAL [PINLIST...]\n"
+"Define new signal with name SIGNAL for a part.\n"
+"\n"
+"SIGNAL        New signal name\n"
+"PINLIST       List of pins for a signal (not used)\n"
+msgstr "Gishya Na: Izina: kugirango a Bya kugirango a OYA"
+
+#: src/cmd/signal.c:90
+#, fuzzy
+msgid "define new signal for a part"
+msgstr "Kugaragaza... Gishya kugirango a"
+
+#: src/detect.c:56
+#, fuzzy, c-format
+msgid "Cannot open %s\n"
+msgstr "Gufungura"
+
+#: src/detect.c:189
+#, fuzzy, c-format
+msgid "IR length: %d\n"
+msgstr "Uburebure"
+
+#: src/detect.c:205
+#, fuzzy
+msgid "Unable to detect JTAG chain length\n"
+msgstr "Kuri"
+
+#: src/detect.c:208
+#, fuzzy, c-format
+msgid "Chain length: %d\n"
+msgstr "Uburebure"
+
+#: src/detect.c:249
+#, c-format
+msgid "Device Id: %s\n"
+msgstr ""
+
+#: src/detect.c:270
+#, fuzzy
+msgid "  Unknown manufacturer!\n"
+msgstr "Ukora mu nganda"
+
+#: src/detect.c:276
+#, fuzzy, c-format
+msgid "  Manufacturer: %s\n"
+msgstr "Ukora mu nganda"
+
+#: src/detect.c:278
+msgid "Warning: Manufacturer too long\n"
+msgstr ""
+
+#: src/detect.c:294
+msgid "  Unknown part!\n"
+msgstr ""
+
+#: src/detect.c:300
+#, c-format
+msgid "  Part:         %s\n"
+msgstr ""
+
+#: src/detect.c:302
+msgid "Warning: Part too long\n"
+msgstr ""
+
+#: src/detect.c:318
+msgid "  Unknown stepping!\n"
+msgstr ""
+
+#: src/detect.c:324
+#, c-format
+msgid "  Stepping:     %s\n"
+msgstr ""
+
+#: src/detect.c:326
+msgid "Warning: Stepping too long\n"
+msgstr ""
+
+#: src/detect.c:338
+#, fuzzy, c-format
+msgid "  Filename:     %s\n"
+msgstr "Izina ry'idosiye:"
+
+#: src/detect.c:353
+#, fuzzy
+msgid "Error: Unable to detect JTAG chain end!\n"
+msgstr "Kuri Impera"
+
+#: src/discovery.c:113
+#, fuzzy
+msgid "Detecting IR length ... "
+msgstr "Uburebure"
+
+# basctl/source\basicide\basidesh.src:RID_IMGBTN_REMOVEWATCH.text
+#: src/discovery.c:119 src/discovery.c:151
+#, fuzzy, c-format
+msgid "%d\n"
+msgstr "%d"
+
+#: src/discovery.c:122
+#, fuzzy
+msgid "Error: Invalid IR length!\n"
+msgstr "Uburebure"
+
+#: src/discovery.c:133
+#, fuzzy
+msgid "Error: Out of memory!\n"
+msgstr "Bya Ububiko"
+
+#: src/discovery.c:145
+#, fuzzy, c-format
+msgid "Detecting DR length for IR %s ... "
+msgstr "Uburebure kugirango"
+
+#: src/flash.c:82
+#, fuzzy, c-format
+msgid "unknown flash - vendor id: %d (0x%04x)\n"
+msgstr "Kitazwi Umurabyo Umucuruzi ID"
+
+#: src/flash.c:95
+#, fuzzy
+msgid "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n"
+msgstr "Iboneza ni 2. X Cyangwa 1. X"
+
+#: src/flash.c:106
+#, fuzzy
+msgid "Flash not supported!\n"
+msgstr "OYA"
+
+#: src/flash.c:121 src/flash.c:269 src/flash.c:378
+#, fuzzy
+msgid "no flash driver found\n"
+msgstr "Oya Umurabyo Musomyi:"
+
+#: src/flash.c:132
+msgid "Invalid sync sequence!\n"
+msgstr ""
+
+#: src/flash.c:150 src/flash.c:390
+#, fuzzy, c-format
+msgid "block %d unlocked\n"
+msgstr "Funga"
+
+#: src/flash.c:151 src/flash.c:297 src/flash.c:391
+#, fuzzy, c-format
+msgid "erasing block %d: %d\n"
+msgstr "Funga"
+
+# offmgr/source\offapp\dialog\optgdlg.src:OFA_TP_HELPERPROG.FT_PROGRAM.text
+#: src/flash.c:155 src/flash.c:285 src/flash.c:383
+#, fuzzy
+msgid "program:\n"
+msgstr "Porogaramu"
+
+#: src/flash.c:163 src/flash.c:203
+#, fuzzy
+msgid "Error: premature end of file\n"
+msgstr "Impera Bya"
+
+#: src/flash.c:166 src/flash.c:206
+#, fuzzy, c-format
+msgid "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"
+msgstr "Icyabitswe Gutangira LEN"
+
+#: src/flash.c:170 src/flash.c:210
+#, fuzzy
+msgid "Error: Invalid record length!\n"
+msgstr "Icyabitswe Uburebure"
+
+#: src/flash.c:177 src/flash.c:217 src/flash.c:304 src/flash.c:350
+#: src/readmem.c:102
+#, fuzzy, c-format
+msgid "addr: 0x%08X"
+msgstr "Aderesi"
+
+#: src/flash.c:182 src/flash.c:316
+#, fuzzy
+msgid ""
+"\n"
+"flash error\n"
+msgstr "Umurabyo"
+
+#: src/flash.c:194 src/flash.c:327
+msgid "verify:\n"
+msgstr ""
+
+#: src/flash.c:223
+#, fuzzy, c-format
+msgid ""
+"\n"
+"verify error: 0x%08X vs. 0x%08X at addr %08X\n"
+msgstr "Ikosa ku Aderesi"
+
+#: src/flash.c:232 src/flash.c:360 src/flash.c:396 src/readmem.c:109
+#, fuzzy
+msgid ""
+"\n"
+"Done.\n"
+msgstr "Byakozwe."
+
+#: src/flash.c:279
+#, fuzzy
+msgid "Out of memory!\n"
+msgstr "Ububiko bwarenzwe"
+
+#: src/flash.c:296
+#, fuzzy, c-format
+msgid ""
+"\n"
+"block %d unlocked\n"
+msgstr "Funga"
+
+#: src/flash.c:339
+#, fuzzy
+msgid "Error during file read.\n"
+msgstr "IDOSIYE Gusoma"
+
+#: src/flash.c:355
+#, fuzzy, c-format
+msgid ""
+"\n"
+"verify error:\n"
+"readed: 0x%08X\n"
+"expected: 0x%08X\n"
+msgstr "Ikosa Ikitezwe:"
+
+#: src/flash.c:374 src/flash.c:387
+#, fuzzy, c-format
+msgid "addr: 0x%08X\n"
+msgstr "Aderesi"
+
+#: src/jtag.c:261
+#, fuzzy, c-format
+msgid ""
+"%s\n"
+"Copyright (C) 2002, 2003 ETC s.r.o.\n"
+"%s is free software, covered by the GNU General Public License, and you are\n"
+"welcome to change it and/or distribute copies of it under certain conditions.\n"
+"There is absolutely no warranty for %s.\n"
+"\n"
+msgstr "%sR. o."
+
+#: src/jtag.c:274
+#, fuzzy, c-format
+msgid ""
+"Warning: %s may damage your hardware! Type \"quit\" to exit!\n"
+"\n"
+msgstr "Gicurasi Kuvamo Kuri Gusohoka"
+
+#: src/jtag.c:275
+#, fuzzy
+msgid ""
+"Type \"help\" for help.\n"
+"\n"
+msgstr "Ifashayobora kugirango Ifashayobora"
+
+#: src/part/data_register.c:46
+#, fuzzy
+msgid "Warning: Data register name too long\n"
+msgstr "Kwiyandikisha Izina:"
+
+#: src/part/instruction.c:46
+#, fuzzy
+msgid "Warning: Instruction name too long\n"
+msgstr "Izina:"
+
+#: src/part/part.c:168 src/part/part.c:205
+#, fuzzy, c-format
+msgid "%s(%s:%d) Boundary Scan Register (BSR) not found\n"
+msgstr "%s(%s:%d)OYA"
+
+#: src/part/part.c:176
+#, fuzzy, c-format
+msgid "signal '%s' cannot be set as output\n"
+msgstr "Gushyiraho Nka"
+
+#: src/part/part.c:186
+#, fuzzy, c-format
+msgid "signal '%s' cannot be set as input\n"
+msgstr "Gushyiraho Nka"
+
+#: src/part/part.c:210
+#, fuzzy, c-format
+msgid "signal '%s' is not input signal\n"
+msgstr "ni OYA Iyinjiza"
+
+#: src/part/part.c:227
+#, c-format
+msgid "%%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
+msgstr ""
+
+#: src/part/part.c:236 src/part/part.c:238
+msgid "(none)"
+msgstr "(ntacyo)"
+
+#: src/readmem.c:61
+#, fuzzy
+msgid "Error: Bus width detection failed\n"
+msgstr "Ubugari"
+
+#: src/readmem.c:67
+#, fuzzy
+msgid "Unknown bus width!\n"
+msgstr "Ubugari"
+
+#: src/readmem.c:74
+#, fuzzy, c-format
+msgid "address: 0x%08X\n"
+msgstr "Aderesi"
+
+#: src/readmem.c:75
+#, fuzzy, c-format
+msgid "length:  0x%08X\n"
+msgstr "Uburebure"
+
+#: src/readmem.c:78
+#, fuzzy
+msgid "length is 0.\n"
+msgstr "Uburebure ni 0"
+
+#: src/readmem.c:82
+msgid "reading:\n"
+msgstr ""
+
+#: src/tap/cable/arcom.c:100
+msgid "Arcom JTAG Cable"
+msgstr ""
+
+#: src/tap/cable/byteblaster.c:126
+msgid "Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable"
+msgstr ""
+
+#: src/tap/cable/dlc5.c:97
+msgid "Xilinx DLC5 JTAG Parallel Cable III"
+msgstr ""
+
+#: src/tap/cable/ea253.c:100
+msgid "ETC EA253 JTAG Cable"
+msgstr ""
+
+#: src/tap/cable/ei012.c:102
+msgid "ETC EI012 JTAG Cable"
+msgstr ""
+
+#: src/tap/cable/keithkoep.c:109
+msgid "Keith & Koep JTAG cable"
+msgstr ""
+
+#: src/tap/cable/mpcbdm.c:106
+msgid "Mpcbdm JTAG cable"
+msgstr ""
+
+#: src/tap/cable/triton.c:111
+msgid "Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"
+msgstr ""
+
+#: src/tap/cable/wiggler.c:104
+msgid "Macraigor Wiggler JTAG Cable"
+msgstr ""
+
+#: src/tap/chain.c:110 src/tap/chain.c:133
+#, fuzzy, c-format
+msgid "%s(%d) Part %d without active instruction\n"
+msgstr "%s(%d)Gikora"
+
+#: src/tap/chain.c:137
+#, fuzzy, c-format
+msgid "%s(%d) Part %d without data register\n"
+msgstr "%s(%d)Ibyatanzwe"
+
+#: src/tap/parport/direct.c:161 src/tap/parport/ppdev.c:118
+#, fuzzy
+msgid "Syntax error!\n"
+msgstr "Ikosa ry'imyandikire"
+
+#: src/tap/parport/direct.c:166
+#, fuzzy
+msgid "Invalid port address!\n"
+msgstr "Umuyoboro Aderesi"
+
+#: src/tap/parport/direct.c:176
+#, fuzzy, c-format
+msgid "Disconnecting %s from parallel port at 0x%x\n"
+msgstr "Bivuye Biteganye Umuyoboro ku"
+
+#: src/tap/parport/direct.c:183 src/tap/parport/ppdev.c:130
+#, fuzzy
+msgid "Changed cable to 'none'\n"
+msgstr "Kuri"
+
+#: src/tap/parport/direct.c:192 src/tap/parport/ppdev.c:139
+#, c-format
+msgid "Unknown cable: %s\n"
+msgstr ""
+
+#: src/tap/parport/direct.c:196
+#, fuzzy, c-format
+msgid "Initializing %s on parallel port at 0x%x\n"
+msgstr "ku Biteganye Umuyoboro ku"
+
+#: src/tap/parport/direct.c:200 src/tap/parport/ppdev.c:147
+#, fuzzy, c-format
+msgid "%s(%d) Out of memory.\n"
+msgstr "%s(%d)Bya Ububiko"
+
+#: src/tap/parport/ppdev.c:124
+#, fuzzy, c-format
+msgid "Disconnecting %s from ppdev port %s\n"
+msgstr "Bivuye Umuyoboro"
+
+#: src/tap/parport/ppdev.c:143
+#, fuzzy, c-format
+msgid "Initializing %s on ppdev port %s\n"
+msgstr "ku Umuyoboro"
+
+#: src/tap/tap.c:54 src/tap/tap.c:75 src/tap/tap.c:86
+#, fuzzy, c-format
+msgid "%s: Invalid state: %2X\n"
+msgstr "%s:Leta"

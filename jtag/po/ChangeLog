@@ -1,3 +1,8 @@
+2005-04-06  Marcel Telka  <marcel@telka.sk>
+
+	* rw.po: Added Kinyarwanda translation by Steven Michael Murphy.
+	* LINGUAS: Added rw.
+
 2004-11-24  Marcel Telka  <marcel@telka.sk>
 
 	* POTFILES.in: Added src/cmd/reset.c.
