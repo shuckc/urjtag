@@ -62,6 +62,12 @@ tap_state_set_trst( int new_trst )
 }
 
 int
+tap_state_get_trst( void )
+{
+	return trst;
+}
+
+int
 tap_state_clock( int tms )
 {
 	if (tms & 1) {
