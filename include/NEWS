@@ -1,5 +1,6 @@
 $Id$
 
+	* Added Renesas SH7750 CCN registers.
 	* Changes in brux common headers:
 		- Added new parameter (adr) for detectflash function
 

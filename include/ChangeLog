@@ -1,3 +1,8 @@
+2003-11-09  Marcel Telka  <marcel@telka.sk>
+
+	* sh/sh7750/ccn.h: New file.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added sh/sh7750/ccn.h.
+
 2003-11-02  Marcel Telka  <marcel@telka.sk>
 
 	* brux/flash.h (detectflash): Added new parameter adr.
