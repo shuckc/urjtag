@@ -1,5 +1,9 @@
 2003-08-26  Marcel Telka  <marcel@telka.sk>
 
+	* include/flash.h: Removed CFI_INTEL_ERROR_* macros.
+
+2003-08-26  Marcel Telka  <marcel@telka.sk>
+
 	* src/cmd/print.c (cmd_print_run): Fixed header print format.
 
 2003-08-25  Marcel Telka  <marcel@telka.sk>

@@ -31,10 +31,4 @@
 extern flash_driver_t *flash_driver;
 extern flash_driver_t *flash_drivers[];
 
-#define	CFI_INTEL_ERROR_UNKNOWN				1
-#define	CFI_INTEL_ERROR_UNSUPPORTED			2
-#define	CFI_INTEL_ERROR_LOW_VPEN			3
-#define	CFI_INTEL_ERROR_BLOCK_LOCKED			4
-#define	CFI_INTEL_ERROR_INVALID_COMMAND_SEQUENCE	5
-
 #endif /* FLASH_H */
