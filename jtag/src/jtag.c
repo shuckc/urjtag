@@ -31,6 +31,9 @@
 #include <sys/types.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif /* ENABLE_NLS */
 
 #include "chain.h"
 #include "bus.h"

@@ -1,3 +1,7 @@
+2004-08-13  Marcel Telka  <marcel@telka.sk>
+
+	* src/jtag.c: Added missing locale.h include (patch 986414, Martin Buck).
+
 2004-08-11  Marcel Telka  <marcel@telka.sk>
 
 	* Makefile.rules (RECURSIVE_TARGETS, lint-recursive): Removed.
