@@ -1,3 +1,8 @@
+2003-05-30  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added brux/bus.h.
+	* brux/bus.h: New file extracted from include/bus.h from jtag module.
+
 2003-04-26  Marcel Telka  <marcel@telka.sk>
 
 	* arm/pxa2x0/ac97.h: Changed comments for PXA255. Replaced PXA2X0_NOPXA26X with

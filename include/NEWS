@@ -9,6 +9,7 @@ $Id$
 		- added CCCR_M_4 multiplier for PXA255 and above
 		- added new register UDCCFR for PXA255 and above
 	* Added ARM System Control Coprocessor Register 1 (Control Register) bits.
+	* Added brux common headers.
 
 include-0.2.3 (2003-04-04):
 
