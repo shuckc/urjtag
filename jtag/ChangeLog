@@ -1,4 +1,4 @@
-2003-06-10  Marcel Telka  <marcel@telka.sk>
+2003-06-12  Marcel Telka  <marcel@telka.sk>
 
 	* include/flash.h (flash_driver_t): Structure removed.
 	(flash_erase_block, flash_unlock_block, flash_program, flash_readarray): Macro removed.
