@@ -202,7 +202,7 @@ bit 127 I 1 PAD_mdc
 bit 126 I 1 PAD_mdio
 bit 125 O 1 PAD_mdio 124 1 Z
 bit 124 C 1 *
-bit 123 I 1 PAD_tsignal8
+bit 123 I 1 PAD_tpin8
 bit 122 I 1 PAD_en10b
 bit 121 O 1 PAD_en10b 120 1 Z
 bit 120 C 1 *
@@ -252,16 +252,16 @@ bit 77 C 1 *
 bit 76 I 1 PAD_intr_n
 bit 75 O 1 PAD_intr_n 74 1 Z
 bit 74 C 1 *
-bit 73 I 1 PAD_tsignal0
-bit 72 I 1 PAD_tsignal1
-bit 71 I 1 PAD_tsignal2
-bit 70 I 1 PAD_tsignal3
-bit 69 I 1 PAD_tsignal4
-bit 68 I 1 PAD_tsignal5
-bit 67 O 1 PAD_tsignal5 66 1 Z
+bit 73 I 1 PAD_tpin0
+bit 72 I 1 PAD_tpin1
+bit 71 I 1 PAD_tpin2
+bit 70 I 1 PAD_tpin3
+bit 69 I 1 PAD_tpin4
+bit 68 I 1 PAD_tpin5
+bit 67 O 1 PAD_tpin5 66 1 Z
 bit 66 C 1 *
-bit 65 I 1 PAD_tsignal6
-bit 64 I 1 PAD_tsignal7
+bit 65 I 1 PAD_tpin6
+bit 64 I 1 PAD_tpin7
 bit 63 I 1 PAD_txc
 bit 62 O 1 PAD_txc 61 1 Z
 bit 61 C 1 *

@@ -1,5 +1,9 @@
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
+	* data/broadcom/bcm5421s/bcm5421s: Fixed bad pin -> signal changes.
+
+2003-08-13  Marcel Telka  <marcel@telka.sk>
+
 	* data/broadcom/bcm1250/bcm1250: Changed pin -> signal keyword.
 	* data/broadcom/bcm5421s/bcm5421s: Ditto.
 	* data/hitachi/sh7727/sh7727: Ditto.
