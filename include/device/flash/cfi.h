@@ -31,12 +31,10 @@
  * Written by Marcel Telka <marcel@telka.sk>, 2002.
  *
  * Documentation:
- * [1] Advanced Micro Devices, "Common Flash Memory Interface Specification Release 2.0",
- *     December 1, 2001
- * [2] Advanced Micro Devices, "Common Flash Memory Interface Publication 100 Vendor & Device
- *     ID Code Assignments", December 1, 2001, Volume Number: 96.1
- * [3] Intel Corporation, "Common Flash Interface (CFI) and Command Sets Application Note 646",
- *     April 2000, Order Number: 292204-004
+ * [1] JEDEC Solid State Technology Association, "Common Flash Interface (CFI)",
+ *     September 1999, Order Number: JESD68
+ * [2] JEDEC Solid State Technology Association, "Common Flash Interface (CFI) ID Codes",
+ *     September 2001, Order Number: JEP137-A
  *
  */
 
@@ -49,7 +47,7 @@
 #include <stdint.h>
 #endif
 
-/* CFI Query Identification String - see Table 3.3.2 in [1] */
+/* Query identification string - see 4.3.2 in [1] */
 
 #define	CFI_QUERY_ID_OFFSET		0x10
 #define	PRI_VENDOR_ID_OFFSET		0x13
@@ -57,18 +55,18 @@
 #define	ALT_VENDOR_ID_OFFSET		0x17
 #define	ALT_VENDOR_TABLE_ADR_OFFSET	0x19
 
-/* Vendor Command Set & Control Interface ID Codes - see Section 1. in [2] */
+/* Algorithm command set & control interface ID codes - see Table 1 in [2] */
 
 #define	CFI_VENDOR_NULL			0x0000
-#define	CFI_VENDOR_INTEL_SCS		0x0001		/* see 1.0 in [3] */
+#define	CFI_VENDOR_INTEL_ECS		0x0001
 #define	CFI_VENDOR_AMD_SCS		0x0002
-#define	CFI_VENDOR_INTEL_BCS		0x0003		/* see 1.0 in [3] */
+#define	CFI_VENDOR_INTEL_SCS		0x0003
 #define	CFI_VENDOR_AMD_ESC		0x0004
 #define	CFI_VENDOR_MITSUBISHI_SCS	0x0100
 #define	CFI_VENDOR_MITSUBISHI_ECS	0x0101
 #define	CFI_VENDOR_SST_PWCS		0x0102
 
-/* CFI Query System Interface Information - see Table 3.3.3 in [1] */
+/* Query system interface information - see 4.3.3 in [1] */
 
 #define	VCC_MIN_WEV_OFFSET		0x1B		/* Vcc Logic Supply Minimum Write/Erase voltage */
 #define	VCC_MAX_WEV_OFFSET		0x1C		/* Vcc Logic Supply Maximum Write/Erase voltage */
@@ -100,7 +98,7 @@ typedef struct cfi_query_system_interface_information {
 } cfi_query_system_interface_information;
 #endif /* LANGUAGE == C */
 
-/* Device Geometry Definition - see Table 3.3.4 in [1] */
+/* Device geometry definition - see 4.3.4 in [1] */
 
 #define	DEVICE_SIZE_OFFSET		0x27		/* Device Size */
 #define	FLASH_DEVICE_INTERFACE_OFFSET	0x28		/* Flash Device Interface description */
@@ -113,7 +111,7 @@ typedef struct cfi_erase_block_region cfi_erase_block_region;
 
 typedef struct cfi_device_geometry {
 	uint32_t device_size;				/* in B */
-	uint16_t device_interface;			/* see Section 2. in [2] */
+	uint16_t device_interface;			/* see Table 2 in [2] */
 	uint32_t max_bytes_write;			/* in B */
 	uint8_t number_of_erase_regions;
 	cfi_erase_block_region *erase_block_regions;
@@ -125,15 +123,15 @@ struct cfi_erase_block_region {
 };
 #endif /* LANGUAGE == C */
 
-/* Device Interface Code Assignments (for cfi_device_geometry.device_interface) - see Section 2. in [2] */
+/* Device interface code assignments (for cfi_device_geometry.device_interface) - see Table 2 in [2] */
 
 #define	CFI_INTERFACE_X8		0
 #define CFI_INTERFACE_X16		1
 #define	CFI_INTERFACE_X8_X16		2
 #define	CFI_INTERFACE_X32		3
-#define	CFI_INTERFACE_X16_X32		5
+#define	CFI_INTERFACE_X16_X32		4
 
-/* CFI Query Structure - see Table 3.3.1 in [1] */
+/* CFI Query structure - see 4.3.1 in [1] */
 
 #if LANGUAGE == C
 typedef struct cfi_query_structure {
