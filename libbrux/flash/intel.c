@@ -185,18 +185,18 @@ intel_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 			return 0;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_PROGRAM_ERROR:
 			printf( _("flash: invalid command seq\n") );
-			return CFI_INTEL_ERROR_INVALID_COMMAND_SEQUENCE;
+			return FLASH_ERROR_INVALID_COMMAND_SEQUENCE;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_VPEN_ERROR:
 			printf( _("flash: low vpen\n") );
-			return CFI_INTEL_ERROR_LOW_VPEN;
+			return FLASH_ERROR_LOW_VPEN;
 		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_BLOCK_LOCKED:
 			printf( _("flash: block locked\n") );
-			return CFI_INTEL_ERROR_BLOCK_LOCKED;
+			return FLASH_ERROR_BLOCK_LOCKED;
 		default:
 			break;
 	}
 
-	return CFI_INTEL_ERROR_UNKNOWN;
+	return FLASH_ERROR_UNKNOWN;
 }
 
 static int
@@ -213,7 +213,7 @@ intel_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr )
 
 	if (sr != CFI_INTEL_SR_READY) {
 		printf( _("flash: unknown error while unblocking\n") );
-		return CFI_INTEL_ERROR_UNKNOWN;
+		return FLASH_ERROR_UNKNOWN;
 	} else
 		return 0;
 }
@@ -232,7 +232,7 @@ intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 
 	if (sr != CFI_INTEL_SR_READY) {
 		printf( _("flash: unknown error while programming\n") );
-		return CFI_INTEL_ERROR_UNKNOWN;
+		return FLASH_ERROR_UNKNOWN;
 	} else
 		return 0;
 }
@@ -251,7 +251,7 @@ intel_flash_erase_block32( cfi_array_t *cfi_array, uint32_t adr )
 
 	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
 		printf( "\nsr = 0x%08X\n", sr );
-		return CFI_INTEL_ERROR_UNKNOWN;
+		return FLASH_ERROR_UNKNOWN;
 	} else
 		return 0;
 }
@@ -270,7 +270,7 @@ intel_flash_unlock_block32( cfi_array_t *cfi_array, uint32_t adr )
 
 	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
 		printf( "\nsr = 0x%08X\n", sr );
-		return CFI_INTEL_ERROR_UNKNOWN;
+		return FLASH_ERROR_UNKNOWN;
 	} else
 		return 0;
 }
@@ -289,7 +289,7 @@ intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 
 	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
 		printf( "\nsr = 0x%08X\n", sr );
-		return CFI_INTEL_ERROR_UNKNOWN;
+		return FLASH_ERROR_UNKNOWN;
 	} else
 		return 0;
 }

@@ -216,7 +216,7 @@ amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 	/* Read Array */
 	amd_flash_read_array( cfi_array );		/* AMD reset */
 
-	return CFI_INTEL_ERROR_UNKNOWN;
+	return FLASH_ERROR_UNKNOWN;
 }
 
 static int
