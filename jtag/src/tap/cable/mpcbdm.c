@@ -23,7 +23,7 @@
  * Modified for Mpcbdm by Christian Pellegrin <chri@ascensit.com>, 2003.
  *
  * Documentation:
- * [1] http://www.vas-gmbh.de/software/mpcbdm/
+ * [1] http://www.vas-gmbh.de/software/mpcbdm/VDB2.gif
  *
  */
 
@@ -88,7 +88,7 @@ mpcbdm_clock( int tms, int tdi )
 	outb( (trst << TRST) | (trst << TRST1), port + 2 );
 	cable_wait();
 	outb( (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
-	outb( (trst << TRST) | (trst << TRST1), port );
+	outb( (trst << TRST) | (trst << TRST1), port + 2 );
 	cable_wait();
 
 	tap_state_clock( tms );

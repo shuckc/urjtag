@@ -1,6 +1,10 @@
 2003-02-07  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/mpcbmd.c: Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
+	* src/tap/cable/mpcbdm.c (mpcbdm_clock): Fixed port address for TRST & TRST1.
+
+2003-02-07  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable/mpcbdm.c: Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
 	* src/tap/cable.c: Ditto.
 	* src/tap/Makefile.am: Ditto.
 
