@@ -25,12 +25,12 @@ SUBDIRS = \
 	tap \
 	part
 
-bin_PROGRAMS = detect
+bin_PROGRAMS = jtag
 
-detect_SOURCES = detect.c
+jtag_SOURCES = jtag.c detect.c readmem.c
 
-detect_DEPENDENCIES = tap/libtap.a part/libpart.a
+jtag_DEPENDENCIES = tap/libtap.a part/libpart.a
 
-detect_LDADD = -Ltap -ltap -Lpart -lpart
+jtag_LDADD = -lreadline -lncurses -Ltap -ltap -Lpart -lpart
 
 INCLUDES = -I$(top_srcdir)/include
