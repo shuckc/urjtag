@@ -9,3 +9,6 @@ en@quot.header
 insert-header.sin
 quot.sed
 remove-potcdate.sin
+remove-potcdate.sed
+jtag.pot
+messages.mo

@@ -27,6 +27,9 @@
 #endif
 
 #include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -159,7 +162,7 @@ jtag_parse_line( char *line )
 
 		if (strcmp( t, "quit" ) == 0) {
 			if (get_token( NULL )) {
-				printf( "quit: syntax error\n\nType \"help\" for help.\n\n" );
+				printf( _("quit: syntax error\n\nType \"help\" for help.\n\n") );
 				return 1;
 			}
 			return 0;
@@ -168,7 +171,7 @@ jtag_parse_line( char *line )
 		if (strcmp( t, "help" ) == 0) {
 			t = get_token( NULL );
 			if (get_token( NULL ))
-				printf( "help: Syntax error!\n" );
+				printf( _("help: Syntax error!\n") );
 			else
 				help( t );
 			return 1;
@@ -179,20 +182,20 @@ jtag_parse_line( char *line )
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "Missing argument(s)\n" );
+				printf( _("Missing argument(s)\n") );
 				return 1;
 			}
 			if ((sscanf( t, "0x%x", &freq ) != 1) && (sscanf( t, "%u", &freq ) != 1)) {
-				printf( "syntax error\n" );
+				printf( _("syntax error\n") );
 				return 1;
 			}
 
 			if (get_token( NULL )) {
-				printf( "frequency: syntax error\n" );
+				printf( _("frequency: syntax error\n") );
 				return 1;
 			}
 
-			printf( "Setting TCK frequency to %u Hz\n", freq );
+			printf( _("Setting TCK frequency to %u Hz\n"), freq );
 			frequency = freq;
 
 			return 1;
@@ -204,37 +207,37 @@ jtag_parse_line( char *line )
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "Missing argument(s)\n" );
+				printf( _("Missing argument(s)\n") );
 				return 1;
 			}
 			if (strcmp( t, "parallel" ) != 0) {
-				printf( "syntax error!\n" );
+				printf( _("syntax error!\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "Missing argument(s)\n" );
+				printf( _("Missing argument(s)\n") );
 				return 1;
 			}
 			if ((sscanf( t, "0x%x", &port ) != 1) && (sscanf( t, "%d", &port ) != 1)) {
-				printf( "syntax error\n" );
+				printf( _("syntax error\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "Missing argument(s)\n" );
+				printf( _("Missing argument(s)\n") );
 				return 1;
 			}
 
 			if (get_token( NULL )) {
-				printf( "syntax error!\n" );
+				printf( _("syntax error!\n") );
 				return 1;
 			}
 
 			if (strcmp( t, "none" ) == 0) {
-				printf( "Changed cable to 'none'\n" );
+				printf( _("Changed cable to 'none'\n") );
 				cable = NULL;
 				return 1;
 			}
@@ -244,14 +247,14 @@ jtag_parse_line( char *line )
 					break;
 
 			if (!cable_drivers[i]) {
-				printf( "Unknown cable: %s\n", t );
+				printf( _("Unknown cable: %s\n"), t );
 				return 1;
 			}
 
 			cable = cable_drivers[i];
-			printf( "Initializing %s on parallel port at 0x%x\n", cable->description, port );
+			printf( _("Initializing %s on parallel port at 0x%x\n"), cable->description, port );
 			if (!cable->init( port )) {
-				printf( "Error: Cable driver initialization failed!\n" );
+				printf( _("Error: Cable driver initialization failed!\n") );
 				cable = NULL;
 				return 1;
 			}
@@ -265,17 +268,17 @@ jtag_parse_line( char *line )
 
 		if (strcmp( t, "discovery" ) == 0) {
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "discovery: missing filename\n" );
+				printf( _("discovery: missing filename\n") );
 				return 1;
 			}
 			if (get_token( NULL )) {
-				printf( "syntax error!\n" );
+				printf( _("syntax error!\n") );
 				return 1;
 			}
 			discovery( t );
@@ -284,12 +287,12 @@ jtag_parse_line( char *line )
 
 		if (strcmp( t, "detect" ) == 0) {
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			if (get_token( NULL )) {
-				printf( "detect: syntax error\n" );
+				printf( _("detect: syntax error\n") );
 				return 1;
 			}
 
@@ -320,23 +323,23 @@ jtag_parse_line( char *line )
 			uint32_t addr = 0;
 
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			if (!ps) {
-				printf( "Run \"detect\" first.\n" );
+				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "flashmem: Missing argument(s)\n" );
+				printf( _("flashmem: Missing argument(s)\n") );
 				return 1;
 			}
 			if (strcmp( t, "msbin" ) != 0) {
 				if ((sscanf( t, "0x%x", &addr ) != 1) && (sscanf( t, "%d", &addr ) != 1)) {
-					printf( "error\n" );
+					printf( _("error\n") );
 					return 1;
 				}
 				printf( "0x%08X\n", addr );
@@ -345,16 +348,16 @@ jtag_parse_line( char *line )
 			/* filename */
 			t = get_token( NULL );
 			if (!t) {
-				printf( "flashmem: missing filename\n" );
+				printf( _("flashmem: missing filename\n") );
 				return 1;
 			}
 			if (get_token( NULL )) {
-				printf( "syntax error!\n" );
+				printf( _("syntax error!\n") );
 				return 1;
 			}
 			f = fopen( t, "r" );
 			if (!f) {
-				printf( "Unable to open file `%s'!\n", t );
+				printf( _("Unable to open file `%s'!\n"), t );
 				return 1;
 			}
 			if (msbin) 
@@ -371,49 +374,49 @@ jtag_parse_line( char *line )
 			uint32_t len = 0;
 
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			if (!ps) {
-				printf( "Run \"detect\" first.\n" );
+				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "flashmem: Missing argument(s)\n" );
+				printf( _("flashmem: Missing argument(s)\n") );
 				return 1;
 			}
 			if ((sscanf( t, "0x%x", &addr ) != 1) && (sscanf( t, "%d", &addr ) != 1)) {
-				printf( "syntax error\n" );
+				printf( _("syntax error\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "flashmem: Missing argument(s)\n" );
+				printf( _("flashmem: Missing argument(s)\n") );
 				return 1;
 			}
 			if ((sscanf( t, "0x%x", &len ) != 1) && (sscanf( t, "%d", &len ) != 1)) {
-				printf( "syntax error\n" );
+				printf( _("syntax error\n") );
 				return 1;
 			}
 
 			/* filename */
 			t = get_token( NULL );
 			if (!t) {
-				printf( "flashmem: missing filename\n" );
+				printf( _("flashmem: missing filename\n") );
 				return 1;
 			}
 			if (get_token( NULL )) {
-				printf( "syntax error!\n" );
+				printf( _("syntax error!\n") );
 				return 1;
 			}
 
 			f = fopen( t, "w" );
 			if (!f) {
-				printf( "Unable to create file `%s'!\n", t );
+				printf( _("Unable to create file `%s'!\n"), t );
 				return 1;
 			}
 			readmem( ps, f, addr, len );
@@ -424,17 +427,17 @@ jtag_parse_line( char *line )
 
 		if (strcmp( t, "detectflash" ) == 0) {
 			if (get_token( NULL )) {
-				printf( "detectflash: syntax error\n" );
+				printf( _("detectflash: syntax error\n") );
 				return 1;
 			}
 
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			if (!ps) {
-				printf( "Run \"detect\" first.\n" );
+				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
 
@@ -444,12 +447,12 @@ jtag_parse_line( char *line )
 
 		if (strcmp( t, "print" ) == 0) {
 			if (get_token( NULL )) {
-				printf( "print: syntax error\n" );
+				printf( _("print: syntax error\n") );
 				return 1;
 			}
 
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
@@ -461,53 +464,53 @@ jtag_parse_line( char *line )
 			int n;
 
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			if (!ps) {
-				printf( "Run \"detect\" first.\n" );
+				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "instruction: syntax error\n" );
+				printf( _("instruction: syntax error\n") );
 				return 1;
 			}
 
 			n = strtol( t, &t, 10 );
 			if (t && *t) {
-				printf( "instruction: syntax error\n" );
+				printf( _("instruction: syntax error\n") );
 				return 1;
 			}
 
 			if ((n < 0) || (n >= ps->len)) {
-				printf( "instruction: invalid part number\n" );
+				printf( _("instruction: invalid part number\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "instruction: missing instruction name\n" );
+				printf( _("instruction: missing instruction name\n") );
 				return 1;
 			}
 
 			if (get_token( NULL )) {
-				printf( "instruction: syntax error\n" );
+				printf( _("instruction: syntax error\n") );
 				return 1;
 			}
 
 			part_set_instruction( ps->parts[n], t );
 			if (ps->parts[n]->active_instruction == NULL)
-				printf( "instruction: unknown instruction %s\n", t );
+				printf( _("instruction: unknown instruction %s\n"), t );
 
 			return 1;
 		}
 
 		if (strcmp( t, "shift" ) == 0) {
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
@@ -523,7 +526,7 @@ jtag_parse_line( char *line )
 				return 1;
 			}
 
-			printf( "shift: syntax error\n" );
+			printf( _("shift: syntax error\n") );
 			return 1;
 		}
 
@@ -533,29 +536,29 @@ jtag_parse_line( char *line )
 			tap_register *r;
 
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			if (!ps) {
-				printf( "Run \"detect\" first.\n" );
+				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "dr: syntax error\n" );
+				printf( _("dr: syntax error\n") );
 				return 1;
 			}
 
 			n = strtol( t, &t, 10 );
 			if (t && *t) {
-				printf( "dr: syntax error\n" );
+				printf( _("dr: syntax error\n") );
 				return 1;
 			}
 			
 			if ((n < 0) || (n >= ps->len)) {
-				printf( "dr: invalid part number\n" );
+				printf( _("dr: invalid part number\n") );
 				return 1;
 			}
 
@@ -568,12 +571,12 @@ jtag_parse_line( char *line )
 				else if (strcmp( t, "out" ) == 0)
 					dir = 1;
 				else {
-					printf( "dr: syntax error\n" );
+					printf( _("dr: syntax error\n") );
 					return 1;
 				}
 
 				if (get_token( NULL )) {
-					printf( "dr: syntax error\n" );
+					printf( _("dr: syntax error\n") );
 					return 1;
 				}
 			}
@@ -594,46 +597,46 @@ jtag_parse_line( char *line )
 			char *s;
 
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			if (!ps) {
-				printf( "Run \"detect\" first.\n" );
+				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t || strcmp( t, "signal" ) != 0) {
-				printf( "set: syntax error\n" );
+				printf( _("set: syntax error\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "set: syntax error\n" );
+				printf( _("set: syntax error\n") );
 				return 1;
 			}
 			n = strtol( t, &t, 10 );
 			if (t && *t) {
-				printf( "set: syntax error\n" );
+				printf( _("set: syntax error\n") );
 				return 1;
 			}
 
 			if ((n < 0) || (n >= ps->len)) {
-				printf( "set: invalid part number\n" );
+				printf( _("set: invalid part number\n") );
 				return 1;
 			}
 
 			s = get_token( NULL );		/* signal name */
 			if (!s) {
-				printf( "set: syntax error\n" );
+				printf( _("set: syntax error\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );		/* direction */
 			if (!t || (strcmp( t, "in" ) != 0 && strcmp( t, "out" ) != 0)) {
-				printf( "set: syntax error\n" );
+				printf( _("set: syntax error\n") );
 				return 1;
 			}
 
@@ -641,24 +644,24 @@ jtag_parse_line( char *line )
 			if (dir) {
 				t = get_token( NULL );
 				if (!t) {
-					printf( "set: syntax error\n" );
+					printf( _("set: syntax error\n") );
 					return 1;
 				}
 				data = strtol( t, &t, 10 );
 				if (t && *t) {
-					printf( "set: syntax error\n" );
+					printf( _("set: syntax error\n") );
 					return 1;
 				}
 
 				if ((data < 0) || (data > 1)) {
-					printf( "set: invalid data value\n" );
+					printf( _("set: invalid data value\n") );
 					return 1;
 				}
 			} else
 				data = 0;
 
 			if (get_token( NULL )) {
-				printf( "set: syntax error\n" );
+				printf( _("set: syntax error\n") );
 				return 1;
 			}
 
@@ -672,46 +675,46 @@ jtag_parse_line( char *line )
 			int data;
 
 			if (!cable) {
-				printf( "Error: Cable not configured. Use 'cable' command first!\n" );
+				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
 				return 1;
 			}
 
 			if (!ps) {
-				printf( "Run \"detect\" first.\n" );
+				printf( _("Run \"detect\" first.\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t || strcmp( t, "signal" ) != 0) {
-				printf( "get: syntax error\n" );
+				printf( _("get: syntax error\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "get: syntax error\n" );
+				printf( _("get: syntax error\n") );
 				return 1;
 			}
 			n = strtol( t, &t, 10 );
 			if (t && *t) {
-				printf( "get: syntax error\n" );
+				printf( _("get: syntax error\n") );
 				return 1;
 			}
 
 			if ((n < 0) || (n >= ps->len)) {
-				printf( "get: invalid part number\n" );
+				printf( _("get: invalid part number\n") );
 				return 1;
 			}
 
 			t = get_token( NULL );		/* signal name */
 			if (!t || get_token( NULL )) {
-				printf( "get: syntax error\n" );
+				printf( _("get: syntax error\n") );
 				return 1;
 			}
 
 			data = part_get_signal( ps->parts[n], t );
 			if (data != -1)
-				printf( "%s = %d\n", t, data );
+				printf( _("%s = %d\n"), t, data );
 
 			return 1;
 		}
@@ -719,11 +722,11 @@ jtag_parse_line( char *line )
 		if (strcmp( t, "script" ) == 0) {
 			t = get_token( NULL );          /* filename */
 			if (!t) {
-				printf( "script: missing filename\n" );
+				printf( _("script: missing filename\n") );
 				return 1;
 			}
 			if (get_token( NULL )) {
-				printf( "script: syntax error\n" );
+				printf( _("script: syntax error\n") );
 				return 1;
 			}
 
@@ -732,7 +735,7 @@ jtag_parse_line( char *line )
 			return 1;
 		}
 
-		printf( "%s: unknown command\n", t );
+		printf( _("%s: unknown command\n"), t );
 
 	return 1;
 }
@@ -766,7 +769,7 @@ jtag_parse_file( const char *filename )
 
 	f = fopen( filename, "r" );
 	if (!f) {
-		printf( "Unable to open file `%s'!\n", filename);
+		printf( _("Unable to open file `%s'!\n"), filename);
 		return 1;
 	}
 
@@ -815,15 +818,15 @@ main( void )
 #endif /* ENABLE_NLS */
 
 	printf(
-			"%s\n"
+			_("%s\n"
 			"Copyright (C) 2002, 2003 ETC s.r.o.\n"
 			"%s is free software, covered by the GNU General Public License, and you are\n"
 			"welcome to change it and/or distribute copies of it under certain conditions.\n"
-			"There is absolutely no warranty for %s.\n\n", PACKAGE_STRING, PACKAGE, PACKAGE
+			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, PACKAGE, PACKAGE
 	);
 
-	printf( "Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n", PACKAGE );
-	printf( "Type \"help\" for help.\n\n" );
+	printf( _("Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n"), PACKAGE );
+	printf( _("Type \"help\" for help.\n\n") );
 
 	/* Create ~/.jtag */
 	jtag_create_jtagdir();

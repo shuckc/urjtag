@@ -1,5 +1,13 @@
 2003-02-21  Marcel Telka  <marcel@telka.sk>
 
+	* src/help.c (help): Marked translatable strings.
+	* src/jtag.c (jtag_parse_line): Ditto.
+	(jtag_parse_file): Ditto.
+	(main): Ditto.
+	* po/POTFILES.in: Added src/help.c and src/jtag.c.
+
+2003-02-21  Marcel Telka  <marcel@telka.sk>
+
 	* src/jtag.c (main): Added conditional compilation for l10n.
 
 2003-02-20  Marcel Telka  <marcel@telka.sk>

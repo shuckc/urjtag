@@ -1,1 +1,4 @@
 # $Id$
+
+src/help.c
+src/jtag.c
