@@ -31,6 +31,8 @@ jtag-0.5:
 	* Added support for "downto" in bit vectors and "observe_only" into bsdl2jtag
 		(patch 787346, Brad Parker).
 	* Minor bugs fixed.
+	* New translations:
+		- Slovak (sk)
 
 jtag-0.4 (2003-05-29):
 

@@ -24,7 +24,7 @@
  *
  */
 
-#include <config.h>
+#include "sysdep.h"
 
 #include <stdlib.h>
 #include <string.h>

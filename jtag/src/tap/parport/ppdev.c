@@ -23,7 +23,7 @@
  *
  */
 
-#include <config.h>
+#include "sysdep.h"
 
 #ifdef HAVE_LINUX_PPDEV_H
 

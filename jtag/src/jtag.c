@@ -22,7 +22,7 @@
  *
  */
 
-#include <config.h>
+#include "sysdep.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -252,7 +252,7 @@ main( int argc, const char **argv )
 
 #ifdef ENABLE_NLS
 	/* l10n support */
-	setlocale( LC_MESSAGES, "" );
+	setlocale( LC_ALL, "" );
 	bindtextdomain( PACKAGE, LOCALEDIR );
 	textdomain( PACKAGE );
 #endif /* ENABLE_NLS */

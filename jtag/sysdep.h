@@ -22,8 +22,11 @@
  *
  */
 
+#ifndef SYSDEP_H
+#define	SYSDEP_H
+
 #ifdef HAVE_CONFIG_H
-#include <pkgcfg.h>
+#include "pkgcfg.h"
 #endif
 
 #include "gettext.h"
@@ -39,3 +42,5 @@
 #undef ngettext
 #define	ngettext(s,p,n)	s
 #endif
+
+#endif /* SYSDEP_H */

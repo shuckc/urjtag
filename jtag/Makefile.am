@@ -32,7 +32,7 @@ SUBDIRS = \
 	po
 
 noinst_HEADERS = \
-	config.h
+	sysdep.h
 
 EXTRA_DIST = \
 	Makefile.rules

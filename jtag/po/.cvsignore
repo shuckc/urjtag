@@ -12,3 +12,4 @@ remove-potcdate.sin
 remove-potcdate.sed
 jtag.pot
 messages.mo
+*.gmo

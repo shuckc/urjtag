@@ -27,7 +27,7 @@
  *
  */
 
-#include <config.h>
+#include "sysdep.h"
 
 #include "cable.h"
 #include "parport.h"

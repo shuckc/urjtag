@@ -22,7 +22,7 @@
  *
  */
 
-#include <config.h>
+#include "sysdep.h"
 
 #include <stdio.h>
 #include <string.h>

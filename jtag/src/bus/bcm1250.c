@@ -24,11 +24,12 @@
  *
  */
 
+#include "sysdep.h"
+
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "config.h"
 #include "part.h"
 #include "bus.h"
 #include "chain.h"

@@ -23,7 +23,7 @@
  *
  */
 
-#include <config.h>
+#include "sysdep.h"
 
 #include <stdint.h>
 #include <stdlib.h>

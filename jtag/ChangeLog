@@ -1,3 +1,11 @@
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
+	* src/jtag.c (main): Fixed setlocale() call.
+	* Makefile.am (noinst_HEADERS): Renamed config.h -> sysdep.h.
+	* config.h: Renamed this file ...
+	* sysdep.h: ... to this one.
+	Changed config.h -> sysdep.h include in all source files.
+
 2003-08-18  Marcel Telka  <marcel@telka.sk>
 
 	* data/samsung/s3c4510b/s3c4510b: Fixed some errors in instruction declarations (Jiun-Shian Ho).
