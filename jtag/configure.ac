@@ -89,6 +89,7 @@ else
 fi
 
 AC_CHECK_FUNCS(getline getdelim)
+AC_CHECK_FUNCS(swprintf)
 
 AC_CHECK_HEADERS(linux/ppdev.h)
 

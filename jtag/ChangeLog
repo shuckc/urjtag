@@ -1,5 +1,11 @@
 2003-09-12  Marcel Telka  <marcel@telka.sk>
 
+	* configure.ac (AC_CHECK_FUNCS): Added swprintf.
+	* src/cmd/print.c (cmd_print_run): Added alternative implementation of the header printing using
+		snprintf() for platforms without swprintf() function available.
+
+2003-09-12  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac (AC_INIT): Changed version number to 0.5.1.
 
 2003-09-11  Marcel Telka  <marcel@telka.sk>
