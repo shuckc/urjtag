@@ -67,7 +67,8 @@ main( void )
 			"There is absolutely no warranty for %s.\n\n", PACKAGE_STRING, PACKAGE, PACKAGE
 	);
 
-	printf( "Type \"help\" for help or \"quit\" for exit.\n\n" );
+	printf( "Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n", PACKAGE );
+	printf( "Type \"help\" for help.\n\n" );
 
 	if (!tap_init()) {
 		printf( "TAP initialization failed! Exiting.\n" );
