@@ -1,3 +1,7 @@
+Changes since 0.1:
+
+	* Completed JTAG declarations for Xilinx XCR3128XL-CS144.
+
 jtag-0.1 (2002-11-25):
 	
 	* Initial public release.

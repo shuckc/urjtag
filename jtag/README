@@ -42,7 +42,7 @@ JTAG-aware parts (chips):
 - Intel SA1110
 - Intel PXA250 (including C0 stepping)
 - Intel PXA261/262
-- Xilinx XCR3128XL-CS144 (partial support)
+- Xilinx XCR3128XL-CS144
 
 Flash chips (2 x 16 bit configuration only):
 - Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)
