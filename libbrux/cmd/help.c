@@ -29,8 +29,6 @@
 
 #include <brux/cmd.h>
 
-extern cmd_t *cmds[];
-
 static int
 cmd_help_run( char *params[] )
 {

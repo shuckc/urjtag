@@ -29,7 +29,7 @@ libbrux_a_SOURCES = \
 	cmd/cmd.c \
 	cmd/help.c \
 	cmd/quit.c \
-	cmd/detectflash.c \
+	cmd/cmd_detectflash.c \
 	flash/cfi.c \
 	flash/detectflash.c \
 	flash/amd.c \

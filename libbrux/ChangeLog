@@ -1,5 +1,13 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* Makefile.am (libbrux_a_SOURCES): Renamed cmd/detectflash.c to cmd/cmd_detectflash.c.
+	* cmd/detectflash.c: Renamed this file ...
+	* cmd/cmd_detectflash.c: ... to this one.
+
+	* cmd/help.c (cmds): Removed external variable declaration.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* Makefile.am (libbrux_a_SOURCES): Added cmd/cmd.c, cmd/help.c, cmd/quit.c, and cmd/detectflash.c.
 	* cmd/cmd.c: New file moved from jtag module, direcory src/cmd.
 	* cmd/help.c: Ditto.
