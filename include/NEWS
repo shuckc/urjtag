@@ -1,6 +1,8 @@
 $Id$
 
-	* stdint.h ported to cygwin-1.3.21.
+include-0.2.2 (2003-03-19):
+
+	* stdint.h ported to cygwin-1.3.21 and later.
 
 include-0.2.1 (2003-02-12):
 
