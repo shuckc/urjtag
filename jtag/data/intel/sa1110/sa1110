@@ -21,6 +21,7 @@
 #
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
+# Documentation:
 # [1] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
 #     Developer's Manual", October 2001, Order Number: 278240-004
 # [2] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
@@ -202,10 +203,12 @@ pin	nWE		M13
 # see 16.5 in [1]
 instruction length 5
 
+# mandatory instructions
 instruction EXTEST		00000
 instruction SAMPLE/PRELOAD	00001
 instruction BYPASS		11111
 
+# optional instructions
 instruction CLAMP		00100
 instruction HIGHZ		00101
 instruction IDCODE		00110
