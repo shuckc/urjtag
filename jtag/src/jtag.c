@@ -100,6 +100,26 @@ main( void )
 			continue;
 		}
 
+		if (strcmp( t, "frequency" ) == 0) {
+			uint32_t freq;
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "Missing argument(s)\n" );
+				continue;
+			}
+			if ((sscanf( t, "0x%x", &freq ) != 1) && (sscanf( t, "%u", &freq ) != 1)) {
+				printf( "syntax error\n" );
+				continue;
+			}
+
+			printf( "Setting TCK frequency to %u Hz\n", freq );
+
+			frequency = freq;
+
+			continue;
+		}
+
 		if (strcmp( t, "cable" ) == 0) {
 			int i;
 			unsigned int port;

@@ -80,7 +80,9 @@ wiggler_clock( int tms, int tdi )
 	tdi &= 1;
 
 	outb( (trst << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI), port );
+	cable_wait();
 	outb( (trst << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI), port );
+	cable_wait();
 
 	tap_state_clock( tms );
 }
@@ -89,6 +91,7 @@ static int
 wiggler_get_tdo( void )
 {
 	outb( (tap_state_get_trst() << TRST) | (0 << TCK), port );
+	cable_wait();
 	return ((inb( port + 1 ) ^ 0x80) >> TDO) & 1;		/* BUSY is inverted */
 }
 

@@ -1,6 +1,7 @@
 $Id$
 
 	* Added new manufacturer: Cypress. (patch 669157, Chris Ellec)
+	* Added new 'frequency' command to limit maximum TCK frequency
 
 jtag-0.2.1 (2003-01-13):
 

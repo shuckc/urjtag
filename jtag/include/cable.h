@@ -38,6 +38,9 @@ typedef struct {
 	void (*set_trst)( int );
 } cable_driver_t;
 
+extern uint32_t frequency;
+void cable_wait( void );
+
 extern cable_driver_t *cable;
 #define	tap_clock	cable->clock
 #define	tap_get_tdo	cable->get_tdo

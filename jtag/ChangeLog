@@ -1,3 +1,21 @@
+2003-01-18  Marcel Telka  <marcel@telka.sk>
+
+	* src/jtag.c (main): Added new 'frequency' command.
+	* src/help.c (help): Added help for 'frequency' command.
+	* include/cable.h (cable_wait): Added new function prototype.
+	* src/tap/cable.c (cable_wait): Added new function.
+	* src/tap/cable/byteblaster.c (byteblaster_clock): Added support for TCK
+		frequency limit.
+	(byteblaster_get_tdo): Ditto.
+	* src/tap/cable/dlc5.c (dlc5_clock): Ditto.
+	(dlc5_get_tdo): Ditto.
+	* src/tap/cable/ea253.c (ea253_clock): Ditto.
+	(ea253_get_tdo): Ditto.
+	* src/tap/cable/ei012.c (ei012_clock): Ditto.
+	(ei012_get_tdo): Ditto.
+	* src/tap/cable/wiggler.c (wiggler_clock): Ditto.
+	(wiggler_get_tdo): Ditto.
+
 2003-01-16  Marcel Telka  <marcel@telka.sk>
 
 	* data/MANUFACTURERS: Added Cypress (patch 669157). Thanks to Chris Ellec.

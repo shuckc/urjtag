@@ -23,6 +23,8 @@
  */
 
 #include <stdlib.h>
+#include <unistd.h>
+#include <stdint.h>
 
 #include "cable.h"
 
@@ -32,6 +34,8 @@ extern cable_driver_t ea253_cable_driver;
 extern cable_driver_t ei012_cable_driver;
 extern cable_driver_t wiggler_cable_driver;
 
+uint32_t frequency = 0;
+
 cable_driver_t *cable_drivers[] = {
 	&byteblaster_cable_driver,
 	&dlc5_cable_driver,
@@ -40,3 +44,18 @@ cable_driver_t *cable_drivers[] = {
 	&wiggler_cable_driver,
 	NULL				/* last must be NULL */
 };
+
+void
+cable_wait( void )
+{
+	useconds_t s;
+
+	if (!frequency)
+		return;
+
+	s = 1000000 / frequency / 2;
+	if (s == 0)
+		s = 1;
+
+	usleep( s );
+}

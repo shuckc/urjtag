@@ -40,6 +40,7 @@ help( const char *cmd )
 			"\n"
 			"quit          exit from %s\n"
 			"help          display this help\n"
+			"frequency     setup JTAG frequency\n"
 			"cable         select JTAG cable\n"
 			"detect        detect parts on the JTAG chain\n"
 			"discovery     discovery unknown parts in the JTAG chain\n"
@@ -63,6 +64,19 @@ help( const char *cmd )
 		printf(
 			"Usage: help [COMMAND]\n"
 			"Print short help for COMMAND, or list of available commands.\n"
+		);
+	else if (strcmp( cmd, "frequency" ) == 0)
+		printf(
+			"Usage: frequency FREQ\n"
+			"Change TCK frequency to FREQ.\n"
+			"\n"
+			"FREQ is in hertz. It's a maximum TCK frequency for JTAG interface.\n"
+			"In some cases the TCK frequency is less than FREQ, but the frequency\n"
+			"is never more than FREQ. Maximum supported frequency depends on JTAG\n"
+			"adapter.\n"
+			"\n"
+			"FREQ must be an unsigned integer. Minimum allowed frequency is 1 Hz.\n"
+			"Use 0 for FREQ to disable frequency limit.\n"
 		);
 	else if (strcmp( cmd, "cable" ) == 0) {
 		int i;
