@@ -1,5 +1,10 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* include/cfi.h (detect_cfi): Macro removed.
+	* src/flash.c (flashcheck): Renamed detect_cfi to cfi_detect.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* src/Makefile.am (jtag_LDADD): Added libbrux twice to resolve dependencies.
 	* src/jtag.c: Fixed cmd.h include path.
 

@@ -86,7 +86,7 @@ flashcheck( bus_t *bus, cfi_array_t **cfi_array )
 	printf( _("Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n") );
 
 	*cfi_array = NULL;
-	if (detect_cfi( bus, 0, cfi_array )) {
+	if (cfi_detect( bus, 0, cfi_array )) {
 		cfi_array_free( *cfi_array );
 		printf( _("Flash not found!\n") );
 		return;

@@ -27,6 +27,4 @@
 
 #include <brux/cfi.h>
 
-#define	detect_cfi	cfi_detect
-
 #endif /* CFI_H */
