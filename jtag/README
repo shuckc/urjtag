@@ -45,9 +45,11 @@ JTAG adapters/cables (see 'help cable' command for more info):
 
 JTAG-aware parts (chips):
 - Atmel ATmega128 (partial support)
+- Intel IXP425
 - Intel SA1110
 - Intel PXA250 (including C0 stepping)
 - Intel PXA261/262
+- Xilinx XC2C256-TQ144
 - Xilinx XCR3128XL-CS144
 
 Flash chips (2 x 16 bit configuration only):

@@ -1,5 +1,13 @@
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
+	* data/xilinx/xc2c256-tq144/xc2c256-tq144: Added JTAG declarations for Xilinx
+		XC2C256-TQ144 (Alessandro Zummo).
+	* data/xilinx/xc2c256-tq144/STEPPINGS: Ditto.
+	* data/xilinx/PARTS: Ditto.
+	* data/Makefile.am: Ditto.
+
+2003-02-14  Marcel Telka  <marcel@telka.sk>
+
 	* src/ixp425.c (setup_address): Removed set_gpio() call.
 	(set_gpio): Removed unused function.
 
