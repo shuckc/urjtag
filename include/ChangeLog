@@ -1,3 +1,10 @@
+2003-08-20  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (AC_INIT): Changed version number to 0.3.1.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Removed win32/stdint.h.
+	(noinst_HEADERS): Added win32/stdint.h.
+	* acinclude.m4 (AX_CREATE_STDINT_H): Forced not to include other stdint.h.
+
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.3 released.

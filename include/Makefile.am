@@ -79,7 +79,9 @@ nobase_openwinceinc_HEADERS = \
 	device/flash/28fxxxk.h \
 	device/flash/cfi.h \
 	device/flash/intel.h \
-	std/mic.h \
+	std/mic.h
+
+noinst_HEADERS = \
 	win32/stdint.h
 
 nodist_openwinceinc_HEADERS = \

@@ -204,7 +204,7 @@ cat >>$ac_stdint <<STDINT_EOF
 
 /* ................... shortcircuit part ........................... */
 
-#if defined HAVE_STDINT_H || defined _STDINT_HAVE_STDINT_H
+#if 0
 #include <stdint.h>
 #else
 #include <stddef.h>

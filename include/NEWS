@@ -1,5 +1,10 @@
 $Id$
 
+include-0.3.1:
+
+	* Removed win32/stdint.h installation in POSIX environments.
+	* Fixed recursive stdint.h include in owce-stdint.h.
+
 include-0.3 (2003-08-19):
 
 	* Changes in PXA2x0 support:
