@@ -24,7 +24,8 @@
 SUBDIRS = \
 	lib \
 	tap \
-	part
+	part \
+	bus
 
 bin_PROGRAMS = jtag
 
@@ -34,18 +35,14 @@ jtag_SOURCES = \
 	discovery.c \
 	readmem.c \
 	detect.h \
-	bus.h \
-	pxa250.c \
-	sa1110.c \
-	ixp425.c \
 	cfi.c \
 	flash.c \
 	flash-intel.c \
 	flash-amd.c \
 	help.c
 
-jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a
+jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a bus/libbus.a
 
-jtag_LDADD = -lreadline -lncurses -Ltap -ltap -Lpart -lpart -Llib -ljtaglib
+jtag_LDADD = -lreadline -lncurses -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus
 
 INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC) -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

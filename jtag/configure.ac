@@ -39,6 +39,7 @@ AC_CONFIG_FILES(
 	src/lib/Makefile
 	src/tap/Makefile
 	src/part/Makefile
+	src/bus/Makefile
 )
 
 AM_MAINTAINER_MODE

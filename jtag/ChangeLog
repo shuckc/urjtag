@@ -1,5 +1,23 @@
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
+	* configure.ac (AC_CONFIG_FILES): Added src/bus/Makefile.
+	* src/bus.h: Moved this file...
+	* include/bus.h: ...here.
+	* include/Makefile.am (noinst_HEADERS): Added bus.h.
+	* src/ixp425.c: Moved this file...
+	* src/bus/ixp425.c: ...here.
+	* src/pxa250.c: Moved this file...
+	* src/bus/pxa2x0.c: ...here.
+	* src/sa1110.c: Moved this file...
+	* src/bus/sa1110.c: ...here.
+	* src/bus/Makefile.am: New file.
+	* src/Makefile.am (SUBDIRS): Added bus.
+	(jtag_SOURCES): Removed bus.h, ixp425.c, pxa250.c, sa1110.c.
+	(jtag_DEPENDENCIES): Added libbus.a.
+	(jtag_LDADD): Ditto.
+
+2003-02-18  Marcel Telka  <marcel@telka.sk>
+
 	* src/tap/cable.c: Added <sys/types.h> include for useconds_t on some systems.
 	* src/flash-amd.c (amdstatus29): Disabled unused function.
 	(amdisprotected): Ditto.
