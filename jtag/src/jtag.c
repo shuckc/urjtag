@@ -747,7 +747,10 @@ jtag_parse_file( const char *filename )
 	char *line = NULL;
 	int n = 0;
 
-	f = fopen( filename, "r" );
+	if (strcmp( filename, "-" ) != 0)
+		f = fopen( filename, "r" );
+	else		
+		f = stdin;
 	if (!f)
 		return -1;
 
@@ -756,7 +759,8 @@ jtag_parse_file( const char *filename )
 			go = jtag_parse_line(line);
 
 	free(line);
-	fclose(f);
+	if (strcmp( filename, "-" ) != 0)
+		fclose(f);
 
 	return go;
 }

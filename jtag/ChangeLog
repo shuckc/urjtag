@@ -1,3 +1,7 @@
+2003-05-13  Marcel Telka  <marcel@telka.sk>
+
+	* src/jtag.c (jtag_parse_file): Added support for command scripts from stdin.
+
 2003-04-29  Marcel Telka  <marcel@telka.sk>
 
 	* data/MANUFACTURERS: Added new manufacturer: DEC.

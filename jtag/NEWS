@@ -1,6 +1,7 @@
 $Id$
 
 	* Added new manufacturer: DEC.
+	* Added support for executing scripts directly from stdin (parameter '-').
 
 jtag-0.3.2 (2003-04-04):
 
