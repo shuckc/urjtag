@@ -29,12 +29,13 @@
 #     Order Number: 278525-001
 # [3] Intel Corporation, "BSDL description for top level entity pxa250_jtag", 2002-03-06,
 #     http://developer.intel.com/design/pca/applicationsprocessors/bsdl/PXA250_bsdl_bga.txt
+# [4] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
+#     Specification Update", June 2002, Order Number: 278534-007
 #
 
-# see Table 1-4 in [1]
+# see Table 1-4 in [1] and D29. in [4]
 pin	nACRESET	D10
 pin	nBATT_FAULT	K12
-pin	BATT_VCC	M11
 pin	BOOT_SEL[0]	G16
 pin	BOOT_SEL[1]	G13
 pin	BOOT_SEL[2]	F13
@@ -219,7 +220,7 @@ pin	USB_N		B12
 pin	USB_P		C12
 pin	VCC		F11 G7 G9 H10 J7 K8 K10 L6 L9
 pin	VCCN		A1 D4 F4 H4 K4 M4 M14 N5 N7 N9 N11 N13 P3 T2 T16
-pin	VCCQ		C6 C10 C13 D15 E14 G14
+pin	VCCQ		C6 C10 C13 D15 E14 G14 M11
 pin	nVDD_FAULT	K13
 pin	VSS		C16 H8 H9 J8 J9 T1
 pin	VSSN		C2 E2 G2 J2 L2 M15 N2 P15 R2 R4 R6 R8 R10 R12 R14
