@@ -65,6 +65,10 @@ typedef volatile struct OST_registers {
 #endif
 
 #define	OSMR(i)		OST_pointer->osmr[i]
+#define	OSMR0		OSMR(0)
+#define	OSMR1		OSMR(1)
+#define	OSMR2		OSMR(2)
+#define	OSMR3		OSMR(3)
 #define	OSCR		OST_pointer->oscr
 #define	OSSR		OST_pointer->ossr
 #define	OWER		OST_pointer->ower
