@@ -1,3 +1,8 @@
+2003-08-25  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (AC_INIT): Changed package name.
+	* src/jtag.c (main): Added full package name to banner.
+
 2003-08-22  Marcel Telka  <marcel@telka.sk>
 
 	* src/tap/cable/byteblaster.c (byteblaster_init): Added additional checks for valid ByteBlaster cable

@@ -262,7 +262,7 @@ main( int argc, const char **argv )
 			"Copyright (C) 2002, 2003 ETC s.r.o.\n"
 			"%s is free software, covered by the GNU General Public License, and you are\n"
 			"welcome to change it and/or distribute copies of it under certain conditions.\n"
-			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, PACKAGE, PACKAGE
+			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, PACKAGE_NAME, PACKAGE_NAME
 	);
 
 	chain = chain_alloc();
@@ -271,7 +271,7 @@ main( int argc, const char **argv )
 		return -1;
 	}
 
-	printf( _("Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n"), PACKAGE );
+	printf( _("Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n"), PACKAGE_NAME );
 	printf( _("Type \"help\" for help.\n\n") );
 
 	for (i = 1; i < argc; i++) {
