@@ -26,6 +26,7 @@ noinst_LIBRARIES = libpart.a
 libpart_a_SOURCES = \
 	signal.c \
 	instruction.c \
+	data_register.c \
 	bsbit.c \
 	part.c \
 	parse.c

@@ -1,0 +1,42 @@
+/*
+ * $Id$
+ *
+ * Copyright (C) 2002 ETC s.r.o.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.
+ *
+ * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ *
+ */
+
+#ifndef JTAG_DATA_REGISTER_H
+#define	JTAG_DATA_REGISTER_H
+
+#include <jtag/register.h>
+
+typedef struct data_register data_register;
+
+struct data_register {
+	char *name;		/* (public) register name */
+	tap_register *value;	/* (public) register value */
+	tap_register *oldval;	/* (private) temporary (old) register value */
+	data_register *next;
+};
+
+data_register *data_register_alloc( const char *name, int len );
+void data_register_free( data_register *dr );
+
+#endif /* JTAG_DATA_REGISTER_H */
