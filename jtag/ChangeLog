@@ -1,3 +1,10 @@
+2003-06-06  Marcel Telka  <marcel@telka.sk>
+
+	* src/bus/sh7727.c (bus_params_t): Fixed cs array length.
+	(setup_address): Removed address shift by BASE.
+	(sh7727_bus_read_end): Simplified CS handling.
+	(new_sh7727_bus): Fixed CS signal searching (thanks to Rainer Dörken).
+
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
 	* include/cfi.h (detect_cfi): Macro removed.

@@ -34,14 +34,12 @@
 #include "chain.h"
 #include "bssignal.h"
 
-#define BASE 0x1000000
-
 typedef struct {
 	chain_t *chain;
 	part_t *part;
 	signal_t *a[26];
 	signal_t *d[32];
-	signal_t *cs[6];
+	signal_t *cs[7];
 	signal_t *we[4];
 	signal_t *rdwr;
 	signal_t *rd;
@@ -61,8 +59,6 @@ setup_address( bus_t *bus, uint32_t a )
 {
 	int i;
 	part_t *p = PART;
-
-	a += BASE;
 
 	for (i = 0; i < 26; i++)
 		part_set_signal( p, A[i], 1, (a >> i) & 1 );
@@ -145,19 +141,15 @@ static uint32_t
 sh7727_bus_read_end( bus_t *bus )
 {
 	part_t *p = PART;
-	int cs[8];
 	int i;
 	uint32_t d = 0;
 
-	for (i = 0; i < 8; i++)
-		cs[i] = 1;
-
-	part_set_signal( p, CS[0], 1, cs[0] );
-	part_set_signal( p, CS[2], 1, cs[2] );
-	part_set_signal( p, CS[3], 1, cs[3] );
-	part_set_signal( p, CS[4], 1, cs[4] );
-	part_set_signal( p, CS[5], 1, cs[5] );
-	part_set_signal( p, CS[6], 1, cs[6] );
+	part_set_signal( p, CS[0], 1, 1 );
+	part_set_signal( p, CS[2], 1, 1 );
+	part_set_signal( p, CS[3], 1, 1 );
+	part_set_signal( p, CS[4], 1, 1 );
+	part_set_signal( p, CS[5], 1, 1 );
+	part_set_signal( p, CS[6], 1, 1 );
 
 	part_set_signal( p, RD, 1, 1 );
 	chain_shift_data_registers( CHAIN, 1 );
@@ -290,7 +282,9 @@ new_sh7727_bus( chain_t *chain, int pn )
 			break;
 		}
 	}
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 7; i++) {
+		if (i == 1)
+			continue;
 		sprintf( buff, "CS%d", i );
 		CS[i] = part_find_signal( PART, buff );
 		if (!CS[i]) {
