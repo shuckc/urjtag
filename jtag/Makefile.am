@@ -22,10 +22,10 @@
 #
 
 SUBDIRS = \
-	data \
-	src
-
-DIST_SUBDIRS = \
+	intl \
 	include \
 	data \
-	src
+	src \
+	po
+
+ACLOCAL_AMFLAGS = -I m4

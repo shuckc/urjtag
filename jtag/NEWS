@@ -15,6 +15,7 @@ $Id$
 	* Added flash driver for AMD chips (August Hörandl).
 	* Added support for rc and history files (Alessandro Zummo).
 	* Added new 'script' command (Alessandro Zummo).
+	* Added support for localization.
 	* Some bugs fixed.
 
 jtag-0.2.2 (2003-02-04):

@@ -21,7 +21,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-AC_INIT(jtag,0.2.2)
+AC_INIT(jtag,0.3)
 
 AC_PREREQ(2.54)
 AC_COPYRIGHT([Copyright (C) 2002, 2003 ETC s.r.o.])
@@ -40,11 +40,16 @@ AC_CONFIG_FILES(
 	src/tap/Makefile
 	src/part/Makefile
 	src/bus/Makefile
+	intl/Makefile
+	po/Makefile.in
 )
 
 AM_MAINTAINER_MODE
 
 AC_GNU_SOURCE
+
+AM_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION(0.11.5)
 
 AC_PROG_CC
 AC_PROG_RANLIB

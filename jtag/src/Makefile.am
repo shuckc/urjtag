@@ -45,4 +45,7 @@ jtag_DEPENDENCIES = lib/libjtaglib.a tap/libtap.a part/libpart.a bus/libbus.a
 
 jtag_LDADD = -lreadline -lncurses -Ltap -ltap -Lpart -lpart -Llib -ljtaglib -Lbus -lbus
 
-INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC) -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
+localedir = $(datadir)/locale
+DEFS += -DLOCALEDIR=\"$(localedir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
+LIBS += @LIBINTL@
+INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC)

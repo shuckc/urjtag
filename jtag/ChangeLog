@@ -1,5 +1,27 @@
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
+	* autogen.sh: Added autopoint call. Added '-I m4' parameter for aclocal.
+	* Makefile.am (SUBDIRS): Added intl, include and po.
+	(DIST_SUBDIRS): Removed.
+	(ACLOCAL_AMFLAGS): Added '-I m4'.
+	* configure.ac (AC_INIT): Changed version number to 0.3.
+	(AC_CONFIG_FILES): Added intl/Makefile and po/Makefile.in.
+	(AM_GNU_GETTEXT): Added.
+	(AM_GNU_GETTEXT_VERSION): Added with version 0.11.5.
+	* include/gettext.h: Copied new file from gettext share.
+	* po/LINGUAS: Added new empty file.
+	* po/Makevars: Added new file.
+	* po/POTFILES.in: Added new empty file.
+	* src/Makefile.am (INCLUDES): Removed JTAG_DATA_DIR.
+	(localedir): Added path to locale directory.
+	(DEFS): Added JTAG_DATA_DIR and LOCALEDIR.
+	(LIBS): Added LIBINTL.
+	* src/help.c: Included gettext.h.
+	* src/jtag.c: Included gettext.h.
+	(main): Added l10n support.
+
+2003-02-18  Marcel Telka  <marcel@telka.sk>
+
 	* src/flash.c (flashmsbin): Changed flash error message.
 	(flashmem): Changed output messages. Enabled verify for 2 x 16, not
 		for 1 x 16. Added better end of file test for verify.

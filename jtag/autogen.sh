@@ -22,8 +22,11 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
+echo "Running autopoint ..."
+autopoint
+
 echo "Running aclocal ..."
-aclocal
+aclocal -I m4
 
 echo "Running automake ..."
 automake --add-missing

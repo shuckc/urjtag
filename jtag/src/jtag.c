@@ -33,6 +33,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#include "gettext.h"
+
 #include "part.h"
 #include "cable.h"
 #include "tap.h"
@@ -804,6 +806,11 @@ jtag_parse_rc( void )
 int
 main( void )
 {
+	/* l10n support */
+	setlocale( LC_MESSAGES, "" );
+	bindtextdomain( PACKAGE, LOCALEDIR );
+	textdomain( PACKAGE );
+
 	printf(
 			"%s\n"
 			"Copyright (C) 2002, 2003 ETC s.r.o.\n"

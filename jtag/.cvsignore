@@ -6,6 +6,8 @@ configure
 configure.lineno
 Makefile.in
 Makefile
-.deps
 COPYING
 INSTALL
+ABOUT-NLS
+intl
+m4
