@@ -61,11 +61,11 @@ typedef volatile struct AC97_registers {
 	uint32_t micr;
 	uint32_t __reserved5;
 	uint32_t mosr;
-	uint32_t __reserved5;
+	uint32_t __reserved6;
 	uint32_t misr;
-	uint32_t __reserved6[9];
+	uint32_t __reserved7[9];
 	uint32_t modr;
-	uint32_t __reserved7[47];
+	uint32_t __reserved8[47];
 	uint32_t __pacr[64];		/* Primary Audio codec Registers */
 	uint32_t __sacr[64];		/* Secondary Audio codec Registers */
 	uint32_t __pmcr[64];		/* Primary Modem codec Registers */
