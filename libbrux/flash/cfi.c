@@ -87,28 +87,28 @@ cfi_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 #define	D(data)			((data) << d)
 #define	gD(data)		(((data) >> d) & 0xFF)
 #define	read1(off)		gD(bus_read( bus, A(off) ))
-#define	read2(off)		(bus_read_start( bus, A(off) ), gD(bus_read_next( bus, A(off + 1) )) | gD(bus_read_end( bus )) << 8)
+#define	read2(off)		(bus_read_start( bus, A(off) ), gD(bus_read_next( bus, A((off) + 1) )) | gD(bus_read_end( bus )) << 8)
 #define	write1(off,data)	bus_write( bus, A(off), D(data) )
 
 		cfi_query_structure_t *cfi;
 		uint32_t tmp;
-		ma = 1;
+		int ret = -4;		/* CFI not detected (Q) */
 
 		/* detect CFI capable devices - see Table 1 in [1] */
-		write1( CFI_CMD_QUERY_OFFSET, CFI_CMD_QUERY );
+		for (ma = 1; ma <= 4; ma *= 2) {
+			write1( CFI_CMD_QUERY_OFFSET, CFI_CMD_QUERY );
 
-		if (read1(CFI_QUERY_ID_OFFSET) != 'Q') {
+			if (read1(CFI_QUERY_ID_OFFSET) == 'Q') {
+				ret = -5;	/* CFI not detected (R) */
+				if (read1(CFI_QUERY_ID_OFFSET + 1) == 'R')
+					break;
+			}
+
 			write1( 0, CFI_CMD_READ_ARRAY1 );
-			return -4;	/* CFI not detected (Q) */
 		}
 
-		for (; ma <= 4; ma *= 2)
-			if (read1(CFI_QUERY_ID_OFFSET + 1) == 'R')
-				break;
-		if (ma > 4) {
-			write1( 0, CFI_CMD_READ_ARRAY1 );
-			return -5;	/* CFI not detected (R) */
-		}
+		if (ma > 4)
+			return ret;	/* CFI not detected (Q or R) */
 
 		if (read1(CFI_QUERY_ID_OFFSET + 2) != 'Y') {
 			write1( 0, CFI_CMD_READ_ARRAY1 );

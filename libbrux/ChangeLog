@@ -1,3 +1,10 @@
+2003-06-18  Marcel Telka  <marcel@telka.sk>
+
+	* flash/cfi.c (read2): Fixed operator precedence in macro.
+	(cfi_detect): Fixed CFI detection code (based on patch 753295, Matan Ziv-Av).
+	* flash/intel.c (intel_flash_autodetect8): New function (patch 753295, Matan Ziv-Av).
+	(intel_8_flash_driver): New driver (patch 753295, Matan Ziv-Av).
+
 2003-06-12  Marcel Telka  <marcel@telka.sk>
 
 	* flash/amd.c (amd_flash_autodetect, amd_flash_print_info, amd_flash_erase_block)

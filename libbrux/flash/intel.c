@@ -67,6 +67,12 @@ intel_flash_autodetect( cfi_array_t *cfi_array )
 	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( cfi_array->bus, 0 ) == 16);
 }
 
+static int 
+intel_flash_autodetect8( cfi_array_t *cfi_array )
+{
+	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS) && (bus_width( cfi_array->bus, 0 ) == 8);
+}
+
 static void
 _intel_flash_print_info( bus_t *bus, int o )
 {
@@ -313,6 +319,18 @@ flash_driver_t intel_16_flash_driver = {
 	N_("Intel Standard Command Set"),
 	N_("supported: 28Fxxxx, 1 x 16 bit"),
 	intel_flash_autodetect,
+	intel_flash_print_info,
+	intel_flash_erase_block,
+	intel_flash_unlock_block,
+	intel_flash_program,
+	intel_flash_readarray,
+};
+
+flash_driver_t intel_8_flash_driver = {
+	1, /* buswidth */
+	N_("Intel Standard Command Set"),
+	N_("supported: 28Fxxxx, 1 x 8 bit"),
+	intel_flash_autodetect8,
 	intel_flash_print_info,
 	intel_flash_erase_block,
 	intel_flash_unlock_block,
