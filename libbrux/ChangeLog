@@ -1,5 +1,9 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* flash/detectflash.c (detectflash): Renamed detect_cfi to cfi_detect.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* Makefile.am (libbrux_a_SOURCES): Renamed cmd/detectflash.c to cmd/cmd_detectflash.c.
 	* cmd/detectflash.c: Renamed this file ...
 	* cmd/cmd_detectflash.c: ... to this one.

@@ -55,7 +55,7 @@ detectflash( bus_t *bus )
 
 	bus_prepare( bus );
 
-	if (detect_cfi( bus, 0, &cfi_array )) {
+	if (cfi_detect( bus, 0, &cfi_array )) {
 		cfi_array_free( cfi_array );
 		printf( _("Flash not found!\n") );
 		return;
