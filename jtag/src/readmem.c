@@ -44,7 +44,7 @@
 cfi_query_structure_t *detect_cfi( parts * );
 
 void
-readmem( parts *ps )
+detectflash( parts *ps )
 {
 	part *p = ps->parts[0];
 	int o = 0;
@@ -250,4 +250,55 @@ readmem( parts *ps )
 
 	/* Read Array */
 	bus_write( ps, 0 << o, 0x00FF00FF );
+}
+
+void
+readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len )
+{
+	part *p = ps->parts[0];
+	int step = 0;
+	uint32_t a;
+
+	if (!bus_driver) {
+		printf( "Error: Missing bus_driver!\n" );
+		return;
+	}
+
+	step = bus_width( ps ) / 8;
+
+	if (step == 0) {
+		printf( "Unknown bus width!\n" );
+		return;
+	}
+
+	/* EXTEST */
+	part_set_instruction( p, "EXTEST" );
+	parts_shift_instructions( ps );
+
+	addr = addr & (~(step - 1));
+	len = (len + step - 1) & (~(step - 1));
+
+	printf( "address: 0x%08X\n", addr );
+	printf( "length:  0x%08X\n", len );
+
+	if (len == 0) {
+		printf( "length is 0.\n" );
+		return;
+	}
+
+	printf( "reading:\n" );
+	bus_read_start( ps, addr );
+	for (a = addr + step; a <= addr + len; a += step) {
+		uint32_t d;
+
+		printf( "addr: 0x%08X\r", a );
+
+		if (a < addr + len)
+			d = bus_read_next( ps, a );
+		else
+			d = bus_read_end( ps );
+		fwrite( &d, step, 1, f );
+	}
+
+	printf( "\nDone.\n" );
 }

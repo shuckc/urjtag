@@ -46,7 +46,8 @@ get_token( char *buf )
 	return strtok( buf, " \f\n\r\t\v" );
 }
 
-void readmem( parts *ps );
+void detectflash( parts *ps );
+void readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len );
 void flashmem( parts *ps, FILE *f, uint32_t addr );
 void flashmsbin( parts *ps, FILE *f );
 
@@ -157,7 +158,56 @@ main( void )
 		}
 
 		if (strcmp( t, "readmem" ) == 0) {
-			readmem( ps );
+			FILE *f;
+			uint32_t addr = 0;
+			uint32_t len = 0;
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "flashmem: Missing argument(s)\n" );
+				continue;
+			}
+			if ((sscanf( t, "0x%x", &addr ) != 1) && (sscanf( t, "%d", &addr ) != 1)) {
+				printf( "syntax error\n" );
+				continue;
+			}
+
+			t = get_token( NULL );
+			if (!t) {
+				printf( "flashmem: Missing argument(s)\n" );
+				continue;
+			}
+			if ((sscanf( t, "0x%x", &len ) != 1) && (sscanf( t, "%d", &len ) != 1)) {
+				printf( "syntax error\n" );
+				continue;
+			}
+
+			/* filename */
+			t = get_token( NULL );
+			if (!t) {
+				printf( "flashmem: missing filename\n" );
+				continue;
+			}
+			f = fopen( t, "w" );
+			if (!f) {
+				printf( "Unable to create file `%s'!\n", t );
+				continue;
+			}
+			t = get_token( NULL );
+			if (t) {
+				printf( "syntax error!\n" );
+				fclose( f );
+				continue;
+			}
+
+			readmem( ps, f, addr, len );
+
+			fclose( f );
+			continue;
+		}
+
+		if (strcmp( t, "detectflash" ) == 0) {
+			detectflash( ps );
 			continue;
 		}
 
