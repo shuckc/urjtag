@@ -64,6 +64,9 @@ nobase_dist_pkgdata_DATA = \
 	philips/xcr3128xl-vq100/STEPPINGS \
 	philips/xcr3128xl-vq100/xcr3128xl-vq100 \
 	samsung/s3c4510b/s3c4510b \
+	sharp/PARTS \
+	sharp/lh7a400/STEPPINGS \
+	sharp/lh7a400/lh7a400 \
 	toshiba/PARTS \
 	toshiba/tx4925/STEPPINGS \
 	toshiba/tx4925/tx4925 \

@@ -1,3 +1,15 @@
+2004-10-22  Marcel Telka  <marcel@telka.sk>
+
+	* data/MANUFACTURERS: Added Sharp manufacturer (patch 886068, Marko Rößler).
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files (patch 886068, Marko Rößler).
+	* data/sharp/PARTS: New file (patch 886068, Marko Rößler).
+	* data/sharp/lh7a400/STEPPINGS: Ditto.
+	* data/sharp/lh7a400/lh7a400: Ditto.
+	* src/bus/lh7a400.c: Ditto.
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added lh7a400.c (patch 886068, Marko Rößler).
+	* src/bus/buses.c (bus_drivers): Added lh7a400_bus (patch 886068, Marko Rößler).
+	* src/bus/buses.h: Ditto.
+
 2004-10-17  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AC_INIT): Changed version number to 0.6.

@@ -10,11 +10,13 @@ See libbrux/NEWS for more news.
 		- Xilinx XCR3128XL-VQ100 (patch 1010714, Michael Lauer)
 		- Xilinx XCR3032XL-VQ44 (patch 972621, Andrew Dyer)
 		- Toshiba TX4925/TX4926 (patch 972621, Andrew Dyer)
+		- Sharp LH7A400 (patch 886068, Marko Rößler)
 	* Added new bus drivers:
 		- Motorola MPC824x
 		- AMD Alchemy Solutions Au1500 (patch 853883, Zhang Wei)
 		- Toshiba TX4925 (patch 972625, Andrew Dyer)
 		- IBM PowerPC 440GX (patch 1012154, Jerome Debard)
+		- Sharp LH7A400 (patch 886068, Marko Rößler)
 	* Added support for Lattice Parallel Port JTAG Cable (patch 1012138, Jerome Debard).
 	* Fixed pin assignment for Macraigor Wiggler JTAG Cable (patch 1040199, Andrew Dyer).
 	* Added new command 'salias'.

@@ -31,6 +31,7 @@ libbus_a_SOURCES = \
 	au1500.c \
 	bcm1250.c \
 	ixp425.c \
+	lh7a400.c \
 	mpc824x.c \
 	ppc440gx_ebc8.c \
 	pxa2x0.c \
