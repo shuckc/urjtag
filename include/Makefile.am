@@ -36,8 +36,6 @@ nobase_openwinceinc_HEADERS = \
 	common.h \
 	cexcept.h \
 	stdint.h \
-	ac97.h \
-	ucb1400.h \
 	arm/arm.h \
 	arm/platform.h \
 	arm/platform/wid.h \
@@ -75,6 +73,8 @@ nobase_openwinceinc_HEADERS = \
 	arm/pxa2x0/ssp.h \
 	arm/pxa2x0/uart.h \
 	arm/pxa2x0/udc.h \
+	device/codec/ac97.h \
+	device/codec/ucb1400.h \
 	device/flash/28fxxxj.h \
 	device/flash/28fxxxk.h \
 	device/flash/cfi.h \
