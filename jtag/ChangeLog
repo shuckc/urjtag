@@ -1,5 +1,10 @@
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
+	* sysdep.h: Renamed pkgcfg.h to config.h.
+	* configure.ac (AM_CONFIG_HEADER): Ditto.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
 	* src/jtag.c (main): Fixed setlocale() call.
 	* Makefile.am (noinst_HEADERS): Renamed config.h -> sysdep.h.
 	* config.h: Renamed this file ...

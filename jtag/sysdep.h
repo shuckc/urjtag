@@ -26,7 +26,7 @@
 #define	SYSDEP_H
 
 #ifdef HAVE_CONFIG_H
-#include "pkgcfg.h"
+#include "config.h"
 #endif
 
 #include "gettext.h"
