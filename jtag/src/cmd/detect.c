@@ -64,6 +64,8 @@ cmd_detect_run( char *params[] )
 		bus = new_pxa250_bus( chain, 0 );
 	if (strcmp( chain->parts->parts[0]->part, "IXP425" ) == 0)
 		bus = new_ixp425_bus( chain, 0 );
+	if (strcmp( chain->parts->parts[0]->part, "SH7727" ) == 0)
+		bus = new_sh7727_bus( chain, 0 );
 
 	return 1;
 }

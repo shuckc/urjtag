@@ -28,4 +28,5 @@ noinst_LIBRARIES = libbus.a
 libbus_a_SOURCES = \
 	ixp425.c \
 	pxa2x0.c \
-	sa1110.c
+	sa1110.c \
+	sh7727.c

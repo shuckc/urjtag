@@ -1,5 +1,12 @@
 2003-05-26  Marcel Telka  <marcel@telka.sk>
 
+	* include/bus.h (new_sh7727_bus): Added function declaration.
+	* src/cmd/detect.c (cmd_detect_run): Added bus driver for Hitachi SH7727.
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added sh7727.c (patch 743140, Matan Ziv-Av).
+	* src/bus/sh7727.c: New file (based on patch 743140, Matan Ziv-Av).
+
+2003-05-26  Marcel Telka  <marcel@telka.sk>
+
 	* include/chain.h (chain_shift_data_registers): Added new parameter `capture_output' (idea from
 		patch 743146, Matan Ziv-Av).
 	* src/tap/chain.c (chain_shift_data_registers): Ditto.
