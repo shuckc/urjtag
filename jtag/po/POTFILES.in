@@ -1,8 +1,24 @@
 # $Id$
 
-src/help.c
 src/jtag.c
 src/readmem.c
+src/cmd/cmd.c
+src/cmd/frequency.c
+src/cmd/help.c
+src/cmd/quit.c
+src/cmd/cable.c
+src/cmd/detect.c
+src/cmd/discovery.c
+src/cmd/detectflash.c
+src/cmd/dr.c
+src/cmd/flashmem.c
+src/cmd/instruction.c
+src/cmd/print.c
+src/cmd/readmem.c
+src/cmd/shift.c
+src/cmd/get.c
+src/cmd/script.c
+src/cmd/set.c
 src/part/data_register.c
 src/part/instruction.c
 src/part/parse.c

@@ -1,7 +1,7 @@
 #
 # $Id$
 #
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2003 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,47 +18,29 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Marcel Telka <marcel@telka.sk>, 2003.
 #
 
-SUBDIRS = \
-	lib \
-	tap \
-	part \
-	bus \
-	flash \
-	cmd
+noinst_LIBRARIES = libcmd.a
 
-bin_PROGRAMS = \
-	jtag \
-	bsdl2jtag
-
-jtag_SOURCES = \
-	jtag.c \
-	detect.c \
+libcmd_a_SOURCES = \
+	cmd.h \
+	quit.c \
+	help.c \
+	frequency.c \
+	cable.c \
 	discovery.c \
+	detect.c \
+	print.c \
+	instruction.c \
+	shift.c \
+	dr.c \
+	get.c \
+	set.c \
 	readmem.c \
-	flash.c
+	detectflash.c \
+	flashmem.c \
+	script.c \
+	cmd.c
 
-bsdl2jtag_SOURCES = \
-	bsdl2jtag.c
-
-jtag_DEPENDENCIES = \
-	lib/libjtaglib.a \
-	tap/libtap.a \
-	part/libpart.a \
-	bus/libbus.a \
-	flash/libflash.a \
-	cmd/libcmd.a
-
-jtag_LDADD = \
-	-Ltap -ltap \
-	-Lpart -lpart \
-	-Llib -ljtaglib \
-	-Lflash -lflash \
-	-Lcmd -lcmd \
-	-Lbus -lbus \
-	@LIBINTL@
-
-localedir = $(datadir)/locale
-INCLUDES = -DLOCALEDIR=\"$(localedir)\"
+INCLUDES = -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

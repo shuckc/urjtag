@@ -39,11 +39,10 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include "part.h"
-#include "tap.h"
-#include "parport.h"
-
+#include "chain.h"
 #include "bus.h"
+
+#include "cmd/cmd.h"
 
 #include "jtag.h"
 
@@ -59,8 +58,6 @@ get_token( char *buf )
 {
 	return strtok( buf, " \f\n\r\t\v" );
 }
-
-static int jtag_parse_file( const char *filename );
 
 #define	JTAGDIR		".jtag"
 #define	HISTORYFILE	"history"
@@ -142,582 +139,43 @@ jtag_save_history( void )
 static int
 jtag_parse_line( char *line )
 {
-		char *t;
+	char *t;
+	int l;
+	int n;
+	char **a;
+	int r;
 
-		if (!line || !(strlen( line ) > 0))
-			return 1;
+	if (!line || !(strlen( line ) > 0))
+		return 1;
 
-		t = get_token( line );
-		if (!t)
-			return 1;
+	t = get_token( line );
+	if (!t)
+		return 1;
 
-		if (strcmp( t, "quit" ) == 0) {
-			if (get_token( NULL )) {
-				printf( _("quit: syntax error\n\nType \"help\" for help.\n\n") );
+	n = 0;
+	l = 0;
+	a = NULL;
+	while (t) {
+		if (n + 2 > l) {
+			char **newa;
+			l = (l < 16) ? 16 : (l * 2);
+			newa = realloc( a, l );
+			if (!newa) {
+				free( a );
+				printf( _("Out of memory\n") );
 				return 1;
 			}
-			return 0;
+			a = newa;
 		}
-
-		if (strcmp( t, "help" ) == 0) {
-			t = get_token( NULL );
-			if (get_token( NULL ))
-				printf( _("help: Syntax error!\n") );
-			else
-				help( t );
-			return 1;
-		}
-
-		if (strcmp( t, "frequency" ) == 0) {
-			uint32_t freq;
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("Missing argument(s)\n") );
-				return 1;
-			}
-			if ((sscanf( t, "0x%x", &freq ) != 1) && (sscanf( t, "%u", &freq ) != 1)) {
-				printf( _("syntax error\n") );
-				return 1;
-			}
-
-			if (get_token( NULL )) {
-				printf( _("frequency: syntax error\n") );
-				return 1;
-			}
-
-			printf( _("Setting TCK frequency to %u Hz\n"), freq );
-			frequency = freq;
-
-			return 1;
-		}
-
-		if (strcmp( t, "cable" ) == 0) {
-			int i;
-			const char *params[10];
-			int numpar;
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("Missing argument(s)\n") );
-				return 1;
-			}
-			for (i = 0; parport_drivers[i]; i++)
-				if (strcmp( t, parport_drivers[i]->type ) == 0)
-					break;
-			if (!parport_drivers[i]) {
-				printf( _("Unknown connection type: %s\n"), t );
-				return 1;
-			}
-
-			for (numpar = 0; numpar < 10; numpar++) {
-				params[numpar] = get_token( NULL );
-				if (!params[numpar])
-					break;
-			}
-			if (get_token( NULL )) {
-				printf( _("syntax error!\n") );
-				return 1;
-			}
-
-			chain_disconnect( chain );
-			chain->cable = parport_drivers[i]->connect( params, numpar );
-			if (!chain->cable) {
-				printf( _("Error: Cable connection failed!\n") );
-				return 1;
-			}
-
-			if (cable_init( chain->cable )) {
-				printf( _("Error: Cable initialization failed!\n") );
-				chain_disconnect( chain );
-				return 1;
-			}
-			chain_set_trst( chain, 0 );
-			chain_set_trst( chain, 1 );
-			tap_reset( chain );
-
-			return 1;
-		}
-
-		if (strcmp( t, "discovery" ) == 0) {
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("discovery: missing filename\n") );
-				return 1;
-			}
-			if (get_token( NULL )) {
-				printf( _("syntax error!\n") );
-				return 1;
-			}
-			discovery( chain, t );
-			return 1;
-		}
-
-		if (strcmp( t, "detect" ) == 0) {
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			if (get_token( NULL )) {
-				printf( _("detect: syntax error\n") );
-				return 1;
-			}
-
-			if (bus) {
-				bus->free( bus );
-				bus = NULL;
-			}
-			parts_free( chain->parts );
-			chain->parts = detect_parts( chain, JTAG_DATA_DIR );
-			if (!chain->parts->len) {
-				parts_free( chain->parts );
-				chain->parts = NULL;
-				return 1;
-			}
-			parts_set_instruction( chain->parts, "SAMPLE/PRELOAD" );
-			chain_shift_instructions( chain );
-			chain_shift_data_registers( chain );
-			parts_set_instruction( chain->parts, "BYPASS" );
-			chain_shift_instructions( chain );
-			if (strcmp( chain->parts->parts[0]->part, "SA1110" ) == 0)
-				bus = new_sa1110_bus( chain, 0 );
-			if (strcmp( chain->parts->parts[0]->part, "PXA250" ) == 0)
-				bus = new_pxa250_bus( chain, 0 );
-			if (strcmp( chain->parts->parts[0]->part, "IXP425" ) == 0)
-				bus = new_ixp425_bus( chain, 0 );
-			return 1;
-		}
-
-		if (strcmp( t, "flashmem" ) == 0) {
-			FILE *f;
-			int msbin = 0;
-			uint32_t addr = 0;
-
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			if (!chain->parts) {
-				printf( _("Run \"detect\" first.\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("flashmem: Missing argument(s)\n") );
-				return 1;
-			}
-			if (strcmp( t, "msbin" ) != 0) {
-				if ((sscanf( t, "0x%x", &addr ) != 1) && (sscanf( t, "%d", &addr ) != 1)) {
-					printf( _("error\n") );
-					return 1;
-				}
-				printf( "0x%08X\n", addr );
-			} else
-				msbin = 1;
-			/* filename */
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("flashmem: missing filename\n") );
-				return 1;
-			}
-			if (get_token( NULL )) {
-				printf( _("syntax error!\n") );
-				return 1;
-			}
-			f = fopen( t, "r" );
-			if (!f) {
-				printf( _("Unable to open file `%s'!\n"), t );
-				return 1;
-			}
-			if (msbin) 
-				flashmsbin( bus, f );
-			else
-				flashmem( bus, f, addr );
-			fclose( f );
-			return 1;
-		}
-
-		if (strcmp( t, "readmem" ) == 0) {
-			FILE *f;
-			uint32_t addr = 0;
-			uint32_t len = 0;
-
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			if (!chain->parts) {
-				printf( _("Run \"detect\" first.\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("flashmem: Missing argument(s)\n") );
-				return 1;
-			}
-			if ((sscanf( t, "0x%x", &addr ) != 1) && (sscanf( t, "%d", &addr ) != 1)) {
-				printf( _("syntax error\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("flashmem: Missing argument(s)\n") );
-				return 1;
-			}
-			if ((sscanf( t, "0x%x", &len ) != 1) && (sscanf( t, "%d", &len ) != 1)) {
-				printf( _("syntax error\n") );
-				return 1;
-			}
-
-			/* filename */
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("flashmem: missing filename\n") );
-				return 1;
-			}
-			if (get_token( NULL )) {
-				printf( _("syntax error!\n") );
-				return 1;
-			}
-
-			f = fopen( t, "w" );
-			if (!f) {
-				printf( _("Unable to create file `%s'!\n"), t );
-				return 1;
-			}
-			readmem( bus, f, addr, len );
-
-			fclose( f );
-			return 1;
-		}
-
-		if (strcmp( t, "detectflash" ) == 0) {
-			if (get_token( NULL )) {
-				printf( _("detectflash: syntax error\n") );
-				return 1;
-			}
-
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			if (!chain->parts) {
-				printf( _("Run \"detect\" first.\n") );
-				return 1;
-			}
-
-			detectflash( bus );
-			return 1;
-		}
-
-		if (strcmp( t, "print" ) == 0) {
-			if (get_token( NULL )) {
-				printf( _("print: syntax error\n") );
-				return 1;
-			}
-
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			parts_print( chain->parts, 1 );
-			return 1;
-		}
-
-		if (strcmp( t, "instruction" ) == 0) {
-			int n;
-
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			if (!chain->parts) {
-				printf( _("Run \"detect\" first.\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("instruction: syntax error\n") );
-				return 1;
-			}
-
-			n = strtol( t, &t, 10 );
-			if (t && *t) {
-				printf( _("instruction: syntax error\n") );
-				return 1;
-			}
-
-			if ((n < 0) || (n >= chain->parts->len)) {
-				printf( _("instruction: invalid part number\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("instruction: missing instruction name\n") );
-				return 1;
-			}
-
-			if (get_token( NULL )) {
-				printf( _("instruction: syntax error\n") );
-				return 1;
-			}
-
-			part_set_instruction( chain->parts->parts[n], t );
-			if (chain->parts->parts[n]->active_instruction == NULL)
-				printf( _("instruction: unknown instruction %s\n"), t );
-
-			return 1;
-		}
-
-		if (strcmp( t, "shift" ) == 0) {
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-
-			if (t && (strcmp( t, "ir" ) == 0)) {
-				chain_shift_instructions( chain );
-				return 1;
-			}
-
-			if (t && (strcmp( t, "dr" ) == 0)) {
-				chain_shift_data_registers( chain );
-				return 1;
-			}
-
-			printf( _("shift: syntax error\n") );
-			return 1;
-		}
-
-		if (strcmp( t, "dr" ) == 0) {
-			int n;
-			int dir;
-			tap_register *r;
-
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			if (!chain->parts) {
-				printf( _("Run \"detect\" first.\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("dr: syntax error\n") );
-				return 1;
-			}
-
-			n = strtol( t, &t, 10 );
-			if (t && *t) {
-				printf( _("dr: syntax error\n") );
-				return 1;
-			}
-			
-			if ((n < 0) || (n >= chain->parts->len)) {
-				printf( _("dr: invalid part number\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t)
-				dir = 1;
-			else {
-				if (strcmp( t, "in" ) == 0)
-					dir = 0;
-				else if (strcmp( t, "out" ) == 0)
-					dir = 1;
-				else {
-					printf( _("dr: syntax error\n") );
-					return 1;
-				}
-
-				if (get_token( NULL )) {
-					printf( _("dr: syntax error\n") );
-					return 1;
-				}
-			}
-
-			if (dir)
-				r = chain->parts->parts[n]->active_instruction->data_register->out;
-			else
-				r = chain->parts->parts[n]->active_instruction->data_register->in;
-			printf( "%s\n", register_get_string( r ) );
-
-			return 1;
-		}
-
-		if (strcmp( t, "set" ) == 0) {
-			int n;
-			int data;
-			int dir;
-			char *s;
-
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			if (!chain->parts) {
-				printf( _("Run \"detect\" first.\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t || strcmp( t, "signal" ) != 0) {
-				printf( _("set: syntax error\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("set: syntax error\n") );
-				return 1;
-			}
-			n = strtol( t, &t, 10 );
-			if (t && *t) {
-				printf( _("set: syntax error\n") );
-				return 1;
-			}
-
-			if ((n < 0) || (n >= chain->parts->len)) {
-				printf( _("set: invalid part number\n") );
-				return 1;
-			}
-
-			s = get_token( NULL );		/* signal name */
-			if (!s) {
-				printf( _("set: syntax error\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );		/* direction */
-			if (!t || (strcmp( t, "in" ) != 0 && strcmp( t, "out" ) != 0)) {
-				printf( _("set: syntax error\n") );
-				return 1;
-			}
-
-			dir = (strcmp( t, "in" ) == 0) ? 0 : 1;
-			if (dir) {
-				t = get_token( NULL );
-				if (!t) {
-					printf( _("set: syntax error\n") );
-					return 1;
-				}
-				data = strtol( t, &t, 10 );
-				if (t && *t) {
-					printf( _("set: syntax error\n") );
-					return 1;
-				}
-
-				if ((data < 0) || (data > 1)) {
-					printf( _("set: invalid data value\n") );
-					return 1;
-				}
-			} else
-				data = 0;
-
-			if (get_token( NULL )) {
-				printf( _("set: syntax error\n") );
-				return 1;
-			}
-
-			part_set_signal( chain->parts->parts[n], s, dir, data );
-
-			return 1;
-		}
-
-		if (strcmp( t, "get" ) == 0) {
-			int n;
-			int data;
-
-			if (!chain->cable) {
-				printf( _("Error: Cable not configured. Use 'cable' command first!\n") );
-				return 1;
-			}
-
-			if (!chain->parts) {
-				printf( _("Run \"detect\" first.\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t || strcmp( t, "signal" ) != 0) {
-				printf( _("get: syntax error\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );
-			if (!t) {
-				printf( _("get: syntax error\n") );
-				return 1;
-			}
-			n = strtol( t, &t, 10 );
-			if (t && *t) {
-				printf( _("get: syntax error\n") );
-				return 1;
-			}
-
-			if ((n < 0) || (n >= chain->parts->len)) {
-				printf( _("get: invalid part number\n") );
-				return 1;
-			}
-
-			t = get_token( NULL );		/* signal name */
-			if (!t || get_token( NULL )) {
-				printf( _("get: syntax error\n") );
-				return 1;
-			}
-
-			data = part_get_signal( chain->parts->parts[n], t );
-			if (data != -1)
-				printf( _("%s = %d\n"), t, data );
-
-			return 1;
-		}
-
-		if (strcmp( t, "script" ) == 0) {
-			int go;
-
-			t = get_token( NULL );          /* filename */
-			if (!t) {
-				printf( _("script: missing filename\n") );
-				return 1;
-			}
-			if (get_token( NULL )) {
-				printf( _("script: syntax error\n") );
-				return 1;
-			}
-
-			go = jtag_parse_file( t );
-			if (go < 0)
-				printf( _("Unable to open file `%s'!\n"), t );
-			return go;
-		}
-
-		printf( _("%s: unknown command\n"), t );
-
-	return 1;
+		a[n++] = t;
+		a[n] = NULL;
+		
+		t = get_token( NULL );
+	}
+
+	r = cmd_run( a );
+	free( a );
+	return r;
 }
 
 static void
@@ -739,7 +197,7 @@ jtag_readline_loop( const char *prompt )
 	free( line );
 }
 
-static int
+int
 jtag_parse_file( const char *filename )
 {
 	FILE *f;

@@ -22,26 +22,50 @@
  *
  */
 
-#ifndef JTAG_H
-#define JTAG_H
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-#include <stdint.h>
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
+
 #include <stdio.h>
 
-#include <flash/cfi.h>
+#include "jtag.h"
 
-#include "part.h"
-#include "chain.h"
-#include "bus.h"
+#include "cmd.h"
 
-parts_t *detect_parts( chain_t* chain, char *db_path );
-void detectflash( bus_t *bus );
-void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
-void flashmem( bus_t *bus, FILE *f, uint32_t addr );
-void flashmsbin( bus_t *bus, FILE *f );
+static int
+cmd_script_run( char *params[] )
+{
+	int go;
 
-void help( const char *cmd );
+	if (cmd_params( params ) != 2)
+		return -1;
 
-void discovery( chain_t *chain, const char *filename );
+	go = jtag_parse_file( params[1] );
+	if (go < 0)
+		printf( _("Unable to open file `%s'!\n"), params[1] );
 
-#endif /* JTAG_H */
+	return go ? 1 : 0;
+}
+
+static void
+cmd_script_help( void )
+{
+	printf( _(
+		"Usage: %s FILENAME\n"
+		"Run command sequence from external FILENAME.\n"
+		"\n"
+		"FILENAME      Name of the file with commands\n"
+	), "script" );
+}
+
+cmd_t cmd_script = {
+	"script",
+	N_("run command sequence from external file"),
+	cmd_script_help,
+	cmd_script_run
+};

@@ -1,5 +1,42 @@
 2003-05-20  Marcel Telka  <marcel@telka.sk>
 
+	* configure.ac (AC_CONFIG_FILES): Added src/cmd/Makefile.
+	* include/Makefile.am (noinst_HEADERS): Added jtag.h.
+	* include/jtag.h: New file.
+	* po/POTFILES.in: Updated.
+	* src/Makefile.am (SUBDIRS): Added cmd.
+	(jtag_SOURCES): Removed jtag.h and help.c.
+	(jtag_DEPENDENCIES): Added cmd/libcmd.a.
+	(jtag_LDADD): Added libcmd.
+	(INCLUDES): Removed JTAG_DATA_DIR.
+	* src/help.c: File removed.
+	* src/jtag.h: Ditto.
+	* src/jtag.c (jtag_parse_line): Removed command parsing and moved it to cmd directory.
+	(jtag_parse_file): Function is no longer static.
+	* src/cmd/Makefile.am: New file.
+	* src/cmd/cable.c: Ditto.
+	* src/cmd/cmd.c: Ditto.
+	* src/cmd/cmd.h: Ditto.
+	* src/cmd/detect.c: Ditto.
+	* src/cmd/detectflash.c: Ditto.
+	* src/cmd/discovery.c: Ditto.
+	* src/cmd/dr.c: Ditto.
+	* src/cmd/flashmem.c: Ditto.
+	* src/cmd/frequency.c: Ditto.
+	* src/cmd/get.c: Ditto.
+	* src/cmd/help.c: Ditto.
+	* src/cmd/instruction.c: Ditto.
+	* src/cmd/print.c: Ditto.
+	* src/cmd/quit.c: Ditto.
+	* src/cmd/readmem.c: Ditto.
+	* src/cmd/script.c: Ditto.
+	* src/cmd/set.c: Ditto.
+	* src/cmd/shift.c: Ditto.
+
+	* src/part/part.c (parts_print): Fixed header printing.
+
+2003-05-20  Marcel Telka  <marcel@telka.sk>
+
 	* src/part/data_register.c: Added l10n support. Marked messages for translation.
 	* src/part/instruction.c: Ditto.
 	* src/part/parse.c: Ditto.
