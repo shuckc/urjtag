@@ -185,6 +185,10 @@ flashmsbin( parts *ps, FILE *f )
 	}
 	printf( "\n" );
 
+	/* BYPASS */
+	parts_set_instruction( ps, "BYPASS" );
+	parts_shift_instructions( ps );
+
 	printf( "Done.\n" );
 }
 
@@ -272,6 +276,10 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 		adr += 4;
 	}
 	printf( "\nDone.\n" );
+
+	/* BYPASS */
+	parts_set_instruction( ps, "BYPASS" );
+	parts_shift_instructions( ps );
 
 	free( erased );
 }

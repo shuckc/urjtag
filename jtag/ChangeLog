@@ -1,3 +1,9 @@
+2003-02-04  Marcel Telka  <marcel@telka.sk>
+
+	* src/flash.c (flashmsbin): Changed instructions to BYPASS after successfull
+		flash.
+	(flashmem): Ditto.
+
 2003-01-30  Marcel Telka  <marcel@telka.sk>
 
 	* src/tap/cable/byteblaster.c (byteblaster_init): Added support for
