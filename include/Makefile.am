@@ -36,4 +36,6 @@ DIST_SUBDIRS = \
 
 noinst_HEADERS = \
 	common.h \
-	stdint.h
+	stdint.h \
+	ac97.h \
+	ucb1400.h
