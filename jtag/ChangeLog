@@ -1,3 +1,10 @@
+2004-10-17  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable/wiggler.c (nTRST): Changed pin value (patch 1040199, Andrew Dyer).
+	(nSRESET): New pin value (patch 1040199, Andrew Dyer).
+	(wiggler_init, wiggler_clock, wiggler_get_tdo, wiggler_set_trst): Changed nTRST to not inverted
+		signal (patch 1040199, Andrew Dyer).
+
 2004-09-21  Marcel Telka  <marcel@telka.sk>
 
 	* data/intel/PARTS: Added support for different IXP425 frequency variants (patch 1030647, Trevor Man).

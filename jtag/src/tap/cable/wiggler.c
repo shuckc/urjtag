@@ -38,10 +38,11 @@
 /*
  * data D[7:0] (pins 9:2)
  */
+#define	nTRST	4	/* nTRST is not inverted in the cable */
 #define	TDI	3
 #define	TCK	2
 #define	TMS	1
-#define	nTRST	0
+#define	nSRESET 0	/* sRESET is inverted in the cable */
 
 /*
  * 7 - BUSY (pin 11)
@@ -61,11 +62,11 @@ wiggler_init( cable_t *cable )
 		return -1;
 
 	if ((data = parport_get_data( cable->port )) < 0) {
-		if (parport_set_data( cable->port, 0 << nTRST ))
+		if (parport_set_data( cable->port, 1 << nTRST ))
 			return -1;
 		PARAM_TRST(cable) = 1;
 	} else
-		PARAM_TRST(cable) = ((data >> nTRST) ^ 1) & 1;
+		PARAM_TRST(cable) = (data >> nTRST) & 1;
 
 	return 0;
 }
@@ -76,16 +77,16 @@ wiggler_clock( cable_t *cable, int tms, int tdi )
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
 
-	parport_set_data( cable->port, ((PARAM_TRST(cable) ^ 1) << nTRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
-	parport_set_data( cable->port, ((PARAM_TRST(cable) ^ 1) << nTRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
 }
 
 static int
 wiggler_get_tdo( cable_t *cable )
 {
-	parport_set_data( cable->port, ((PARAM_TRST(cable) ^ 1) << nTRST) | (0 << TCK) );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | (0 << TCK) );
 	cable_wait();
 	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
@@ -95,7 +96,7 @@ wiggler_set_trst( cable_t *cable, int trst )
 {
 	PARAM_TRST(cable) = trst ? 1 : 0;
 
-	parport_set_data( cable->port, (PARAM_TRST(cable) ^ 1) << nTRST );
+	parport_set_data( cable->port, PARAM_TRST(cable) << nTRST );
 	return PARAM_TRST(cable);
 }
 
