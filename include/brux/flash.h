@@ -49,7 +49,7 @@ typedef struct {
 	int (*erase_block)( cfi_array_t *cfi_array, uint32_t adr );
 	int (*unlock_block)( cfi_array_t *cfi_array, uint32_t adr );
 	int (*program)( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
-	void (*flash_readarray)( cfi_array_t *cfi_array );
+	void (*readarray)( cfi_array_t *cfi_array );
 } flash_driver_t;
 
 void detectflash( bus_t *bus );

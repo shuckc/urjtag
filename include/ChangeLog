@@ -1,3 +1,7 @@
+2003-06-12  Marcel Telka  <marcel@telka.sk>
+
+	* brux/flash.h (flash_driver_t): Renamed 'flash_readarray' member to 'readarray'.
+
 2003-06-10  Marcel Telka  <marcel@telka.sk>
 
 	* brux/flash.h (flash_driver_t): Added new type.
