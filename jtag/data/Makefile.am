@@ -31,6 +31,8 @@ nobase_dist_pkgdata_DATA = \
 	broadcom/PARTS \
 	broadcom/bcm1250/STEPPINGS \
 	broadcom/bcm1250/bcm1250 \
+	broadcom/bcm3310/STEPPINGS \
+	broadcom/bcm3310/bcm3310 \
 	broadcom/bcm5421s/STEPPINGS \
 	broadcom/bcm5421s/bcm5421s \
 	dec/PARTS \

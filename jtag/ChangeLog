@@ -1,3 +1,11 @@
+2003-07-25  Marcel Telka  <marcel@telka.sk>
+
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added broadcom/bcm3310/STEPPINGS and
+		broadcom/bcm3310/bcm3310.
+	* data/broadcom/PARTS: Added BCM3310.
+	* data/broadcom/bcm3310/STEPPINGS: New file.
+	* data/broadcom/bcm3310/bcm3310: Ditto.
+
 2003-07-24  Marcel Telka  <marcel@telka.sk>
 
 	* po/POTFILES.in: Removed missing files.
