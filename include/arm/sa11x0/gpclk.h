@@ -34,6 +34,10 @@
 
 #include <common.h>
 
+#if LANGUAGE == C
+#include <stdint.h>
+#endif
+
 /* GPCLK Registers (Serial Port 1) */
 
 #define	GPCLK_BASE	0x80020060

@@ -34,6 +34,10 @@
 
 #include <common.h>
 
+#if LANGUAGE == C
+#include <stdint.h>
+#endif
+
 /* GPIO Registers */
 
 #define	GPIO_BASE	0x90040000
