@@ -168,24 +168,24 @@ typedef volatile struct UART_registers {
 #define	IER_TIE		bit(1)
 #define	IER_RAVIE	bit(0)
 
-/* IIR bits */
+/* IIR bits - see Table 10-9 in [1] */
 
-#define	IIR_FIFOES_MASK	0xC0
-#define	IIR_FIFOES(x)	((x << 6) & IIR_FIFOES_MASK)
+#define	IIR_FIFOES_MASK	bits(7,6)
+#define	IIR_FIFOES(x)	bits_val(7,6,x)
 #define	IIR_TOD		bit(3)
-#define	IIR_IID_MASK	0x06
-#define	IIR_IID(x)	((x << 1) & IIR_IID_MASK)
+#define	IIR_IID_MASK	bits(2,1)
+#define	IIR_IID(x)	bits_val(2,1,x)
 #define	IIR_IP		bit(0)
 
-/* FCR bits */
+/* FCR bits - see Table 10-11 in [1] */
 
-#define	FCR_ITL_MASK	0xC0
-#define	FCR_ITL(x)	((x << 6) & FCR_ITL_MASK)
+#define	FCR_ITL_MASK	bits(7,6)
+#define	FCR_ITL(x)	bits_val(7,6,x)
 #define	FCR_RESETTF	bit(2)
 #define	FCR_RESETRF	bit(1)
 #define	FCR_TRFIFOE	bit(0)
 
-/* LCR bits */
+/* LCR bits - see Table 10-12 in [1] */
 
 #define	LCR_DLAB	bit(7)
 #define	LCR_SB		bit(6)
@@ -193,8 +193,8 @@ typedef volatile struct UART_registers {
 #define	LCR_EPS		bit(4)
 #define	LCR_PEN		bit(3)
 #define	LCR_STB		bit(2)
-#define	LCR_WLS_MASK	0x03
-#define	LCR_WLS(x)	(x & LCR_WLS_MASK)
+#define	LCR_WLS_MASK	bits(1,0)
+#define	LCR_WLS(x)	bits_val(1,0,x)
 
 /* LSR bits */
 
@@ -226,10 +226,10 @@ typedef volatile struct UART_registers {
 #define	MSR_DDSR	bit(1)
 #define	MSR_DCTS	bit(0)
 
-/* SPR bits */
+/* SPR bits - see Table 10-16 in [1] */
 
-#define	SPR_SP_MASK	0xFF
-#define	SPR_SP(x)	(x & SPR_SP_MASK)
+#define	SPR_SP_MASK	bits(7,0)
+#define	SPR_SP(x)	bits(7,0,x)
 
 /* ISR bits */
 
