@@ -82,6 +82,31 @@ cmd_print_run( char *params[] )
 			printf( _(" %3d "), chain->active_part );
 			part_print( chain->parts->parts[chain->active_part] );
 		}
+		if (bus != NULL) {
+			int i;
+			uint64_t a;
+			bus_area_t area;
+
+			for (i = 0; i < buses.len; i++)
+				if (buses.buses[i] == bus)
+					break;
+			printf( _("\nActive bus:\n*%d: "), i );
+			bus_printinfo( bus );
+
+			for (a = 0; a < UINT64_C(0x100000000); a = area.start + area.length) {
+				if (bus_area( bus, a, &area ) != 0) {
+					printf( _("Error in bus area discovery at 0x%08llX\n"), a );
+					break;
+				}
+				if (area.width != 0) {
+					if (area.description != NULL)
+						printf( _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"), area.start, area.length, area.width, _(area.description) );
+					else
+						printf( _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"), area.start, area.length, area.width );
+				}
+			}
+		}
+
 		return 1;
 	}
 
@@ -92,8 +117,9 @@ cmd_print_run( char *params[] )
 
 	for (i = 0; i < buses.len; i++) {
 		if (buses.buses[i] == bus)
-			printf( _("*") );
-		printf( _("%d: "), i );
+			printf( _("*%d: "), i );
+		else
+			printf( _("%d: "), i );
 		bus_printinfo( buses.buses[i] );
 	}
 

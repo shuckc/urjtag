@@ -228,21 +228,29 @@ sh7727_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	chain_shift_data_registers( chain, 0 );
 }
 
-static unsigned int
-sh7727_bus_width( bus_t *bus, uint32_t adr )
+static int
+sh7727_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
 	part_t *p = PART;
 
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+
 	switch (part_get_signal( p, MD4 ) << 1 | part_get_signal( p, MD3 )) {
 		case 1:
-			return 8;
+			area->width = 8;
+			return 0;
 		case 2:
-			return 16;
+			area->width = 16;
+			return 0;
 		case 3:
-			return 32;
+			area->width = 32;
+			return 0;
 		default:
 			printf( _("Error: Invalid bus width (MD3 = MD4 = 0)!\n") );
-			return 0;
+			area->width = 0;
+			return -1;
 	}
 }
 
@@ -257,7 +265,7 @@ static const bus_t sh7727_bus = {
 	NULL,
 	sh7727_bus_printinfo,
 	sh7727_bus_prepare,
-	sh7727_bus_width,
+	sh7727_bus_area,
 	sh7727_bus_read_start,
 	sh7727_bus_read_next,
 	sh7727_bus_read_end,

@@ -241,10 +241,15 @@ bcm1250_bus_write( bus_t *bus, uint32_t adr, uint32_t data ) {
 
 #endif
 	
-static unsigned int
-bcm1250_bus_width( bus_t *bus, uint32_t addr)
+static int
+bcm1250_bus_area( bus_t *bus, uint32_t addr, bus_area_t *area )
 {
-	return 8;
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+	area->width = 8;
+
+	return 0;
 }
 
 static void
@@ -265,7 +270,7 @@ static const bus_t bcm1250_bus = {
 	NULL,
 	bcm1250_bus_printinfo,
 	bcm1250_bus_prepare,
-	bcm1250_bus_width,
+	bcm1250_bus_area,
 	bcm1250_bus_read_start,
 	bcm1250_bus_read_next,
 	bcm1250_bus_read_end,

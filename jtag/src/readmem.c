@@ -48,6 +48,7 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 	int bc = 0;
 #define BSIZE 4096
 	uint8_t b[BSIZE];
+	bus_area_t area;
 
 	if (!bus) {
 		printf( _("Error: Missing bus driver!\n") );
@@ -56,7 +57,11 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 
 	bus_prepare( bus );
 
-	step = bus_width( bus, 0 ) / 8;
+	if (bus_area( bus, 0, &area ) != 0) {
+		printf( _("Error: Bus width detection failed\n") );
+		return;
+	}
+	step = area.width / 8;
 
 	if (step == 0) {
 		printf( _("Unknown bus width!\n") );

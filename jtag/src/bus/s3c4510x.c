@@ -36,7 +36,7 @@
 **    - This bus driver is coded basing on S3C4510B.
 **      However, Samsung do NOT giving a special JTAG ID-Code for this chip.
 **    - Data Bus width is detected by B0SIZE[0:1];
-**      the bus parameter is defined as 32-bis, but actually controlled by
+**      the bus parameter is defined as 32-bit, but actually controlled by
 **      @ref dbus_width. Make sure that B0SIZE[0:1] is welded correct.
 **      Otherwise, you must modify @ref s3c4510_bus_width().
 **    - ROM/Flash is selected by nRCS[5:0], now suppose only nRCS0.
@@ -253,29 +253,31 @@ s3c4510_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 }
 
 static int
-s3c4510_bus_width( bus_t *bus, uint32_t adr )
+s3c4510_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
         int b0size0, b0size1;
+
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
 
         b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
         b0size1 = part_get_signal( PART, part_find_signal( PART, "B0SIZE1" ));
 
         switch ((b0size1 << 1) | b0size0) {
                 case 1:
-                        printf( "B0SIZE[1:0]: 01, 8 bits\n" );
-                        dbus_width = 8;
-                        return 8;
+			area->width = dbus_width = 8;
+			return 0;
                 case 2:
-                        printf( "B0SIZE[1:0]: 10, 16 bits\n" );
-                        dbus_width = 16;
-                        return 16;
+			area->width = dbus_width = 16;
+			return 0;
                 case 3:
-                        printf( "B0SIZE[1:0]: 11, 32 bits\n" );
-                        dbus_width = 32;
-                        return 32;
+			area->width = dbus_width = 32;
+			return 0;
                 default:
                         printf( "B0SIZE[1:0]: Unknown\n" );
-                        return 0;
+			area->width = 0;
+			return -1;
         }
 }
 
@@ -290,7 +292,7 @@ static const bus_t s3c4510_bus = {
         NULL,
         s3c4510_bus_printinfo,
         s3c4510_bus_prepare,
-        s3c4510_bus_width,
+        s3c4510_bus_area,
         s3c4510_bus_read_start,
         s3c4510_bus_read_next,
         s3c4510_bus_read_end,
@@ -381,6 +383,28 @@ new_s3c4510_bus( chain_t *chain, int pn )
 **
 **  CVS Log
 **  $Log$
+**  Revision 1.3  2003/08/28 07:26:02  telka
+**  2003-08-28  Marcel Telka  <marcel@telka.sk>
+**
+**  	* src/readmem.c (readmem): Replaced bus_width macro with new bus_area.
+**  	* src/bus/bcm1250.c (bcm1250_bus_width): Function removed.
+**  	(bcm1250_bus_area): New function.
+**  	* src/bus/ixp425.c (ixp425_bus_width): Function removed.
+**  	(ixp425_bus_area): New function.
+**  	* src/bus/pxa2x0.c (pxa250_bus_width): Function removed.
+**  	(pxa2x0_bus_area): New function.
+**  	* src/bus/s3c4510x.c (s3c4510_bus_width): Function removed.
+**  	(s3c4510_bus_area): New function.
+**  	* src/bus/sa1110.c (sa1110_bus_width: Function removed.
+**  	(sa1110_bus_area): New function.
+**  	* src/bus/sh7727.c (sh7727_bus_width): Function removed.
+**  	(sh7727_bus_area): New function.
+**  	* src/bus/sh7750r.c (sh7750r_bus_width): Function removed.
+**  	(sh7750r_bus_area): New function.
+**  	* src/bus/sh7751r.c (sh7751r_bus_width): Function removed.
+**  	(sh7751r_bus_area): New function.
+**  	* src/cmd/print.c (cmd_print_run): Added bus area printing.
+**
 **  Revision 1.2  2003/08/19 09:59:26  telka
 **  2003-08-19  Marcel Telka  <marcel@telka.sk>
 **

@@ -1,4 +1,25 @@
-2003-08-26  Marcel Telka  <marcel@telka.sk>
+2003-08-28  Marcel Telka  <marcel@telka.sk>
+
+	* src/readmem.c (readmem): Replaced bus_width macro with new bus_area.
+	* src/bus/bcm1250.c (bcm1250_bus_width): Function removed.
+	(bcm1250_bus_area): New function.
+	* src/bus/ixp425.c (ixp425_bus_width): Function removed.
+	(ixp425_bus_area): New function.
+	* src/bus/pxa2x0.c (pxa250_bus_width): Function removed.
+	(pxa2x0_bus_area): New function.
+	* src/bus/s3c4510x.c (s3c4510_bus_width): Function removed.
+	(s3c4510_bus_area): New function.
+	* src/bus/sa1110.c (sa1110_bus_width: Function removed.
+	(sa1110_bus_area): New function.
+	* src/bus/sh7727.c (sh7727_bus_width): Function removed.
+	(sh7727_bus_area): New function.
+	* src/bus/sh7750r.c (sh7750r_bus_width): Function removed.
+	(sh7750r_bus_area): New function.
+	* src/bus/sh7751r.c (sh7751r_bus_width): Function removed.
+	(sh7751r_bus_area): New function.
+	* src/cmd/print.c (cmd_print_run): Added bus area printing.
+
+2003-08-27  Marcel Telka  <marcel@telka.sk>
 
 	* include/flash.h: Removed CFI_INTEL_ERROR_* macros.
 

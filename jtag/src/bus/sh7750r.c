@@ -239,10 +239,15 @@ sh7750r_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	chain_shift_data_registers( chain, 0 );
 }
 
-static unsigned int
-sh7750r_bus_width( bus_t *bus, uint32_t adr )
+static int
+sh7750r_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
-	return 32;
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+	area->width = 32;
+
+	return 0;
 }
 
 static void
@@ -256,7 +261,7 @@ static const bus_t sh7750r_bus = {
 	NULL,
 	sh7750r_bus_printinfo,
 	sh7750r_bus_prepare,
-	sh7750r_bus_width,
+	sh7750r_bus_area,
 	sh7750r_bus_read_start,
 	sh7750r_bus_read_next,
 	sh7750r_bus_read_end,

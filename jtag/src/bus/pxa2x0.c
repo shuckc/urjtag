@@ -230,30 +230,46 @@ pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	chain_shift_data_registers( chain, 0 );
 }
 
-static unsigned int
-pxa250_bus_width( bus_t *bus, uint32_t adr )
+static int
+pxa2x0_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
-	if (adr >= 0x04000000)
-		return 32;
+	/* Static Chip Select 0 (64 MB) */
+	if (adr < UINT32_C(0x04000000)) {
+		area->description = N_("Static Chip Select 0");
+		area->start = UINT32_C(0x00000000);
+		area->length = UINT64_C(0x04000000);
 
-	/* see Table 6-36. in [1] */
-	switch (get_BOOT_DEF_BOOT_SEL(BOOT_DEF)) {
-		case 0:
-			return 32;
-		case 1:
-			return 16;
-		case 2:
-		case 3:
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			printf( "TODO - BOOT_SEL: %d\n", get_BOOT_DEF_BOOT_SEL(BOOT_DEF) );
-			return 0;
-		default:
-			printf( "BUG in code, file %s, line %d.\n", __FILE__, __LINE__ );
-			return 0;
+		/* see Table 6-36. in [1] */
+		switch (get_BOOT_DEF_BOOT_SEL(BOOT_DEF)) {
+			case 0:
+				area->width = 32;
+				break;
+			case 1:
+				area->width = 16;
+				break;
+			case 2:
+			case 3:
+				area->width = 0;
+				break;
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+				printf( "TODO - BOOT_SEL: %d\n", get_BOOT_DEF_BOOT_SEL(BOOT_DEF) );
+				return -1;
+			default:
+				printf( "BUG in the code, file %s, line %d.\n", __FILE__, __LINE__ );
+				return -1;
+		}
+		return 0;
 	}
+
+	area->description = NULL;
+	area->start = UINT32_C(0x04000000);
+	area->length = UINT64_C(0xFC000000);
+	area->width = 0;
+
+	return 0;
 }
 
 static void
@@ -267,7 +283,7 @@ static const bus_t pxa250_bus = {
 	NULL,
 	pxa2x0_bus_printinfo,
 	pxa250_bus_prepare,
-	pxa250_bus_width,
+	pxa2x0_bus_area,
 	pxa250_bus_read_start,
 	pxa250_bus_read_next,
 	pxa250_bus_read_end,
