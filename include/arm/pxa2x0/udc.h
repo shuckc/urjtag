@@ -152,7 +152,7 @@ typedef volatile struct UDC_registers {
 #endif /* LANGUAGE == C */
 
 #define	UDCCR_OFFSET		0x000
-#define	UDCCS_OFFSET(i)		(0x010 + i << 2)
+#define	UDCCS_OFFSET(i)		(0x010 + ((i) << 2))
 #define	UDCCS0_OFFSET		UDCCS_OFFSET(0)
 #define	UDCCS1_OFFSET		UDCCS_OFFSET(1)
 #define	UDCCS2_OFFSET		UDCCS_OFFSET(2)
@@ -412,22 +412,22 @@ typedef volatile struct UDC_registers {
 #define	UFNHR_IPE14		bit(5)
 #define	UFNHR_IPE9		bit(4)
 #define	UFNHR_IPE4		bit(3)
-#define	UFNHR_FNMSB_MASK	0x07
-#define	UFNHR_FNMSB(x)		(x & UFNHR_FNMSB_MASK)
+#define	UFNHR_FNMSB_MASK	bits(2,0)
+#define	UFNHR_FNMSB(x)		bits_val(2,0,x)
 
 /* UFNLR bits - see Table 12-32 in [1] */
 
-#define	UNFLR_FNLSB_MASK	0xFF
-#define	UFNLR_FNLSB(x)		(x & UFNLR_HNLSB_MASK)
+#define	UNFLR_FNLSB_MASK	bits(7,0)
+#define	UFNLR_FNLSB(x)		bits_val(7,0,x)
 
 /* UBCRx bits - see Table 12-33 in [1] */
 
-#define	UBCR_BC_MASK		0xFF
-#define	UBCR_BC(x)		(x & UBCR_BC_MASK)
+#define	UBCR_BC_MASK		bits(7,0)
+#define	UBCR_BC(x)		bits_val(7,0,x)
 
 /* UDDRx bits - see 12.6.15 - 12.6.20 in [1] */
 
-#define	UDDR_DATA_MASK		0xFF
-#define	UDDR_DATA(x)		(x & UDDR_DATA_MASK)
+#define	UDDR_DATA_MASK		bits(7,0)
+#define	UDDR_DATA(x)		bits_val(7,0,x)
 
 #endif /* PXA2X0_UDC_H */
