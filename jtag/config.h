@@ -22,54 +22,20 @@
  *
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include <acconfig.h>
+#endif
 
-#include <stdio.h>
-#include <string.h>
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
 
-#include "jtag.h"
-
-#include "cmd.h"
-
-static int
-cmd_endian_run( char *params[] )
-{
-	if (cmd_params( params ) > 2)
-		return -1;
-
-	if (!params[1]) {
-		if (big_endian)
-			printf( _("Endianess for external files: big\n") );
-		else
-			printf( _("Endianess for external files: little\n") );
-		return 1;
-	}
-
-
-	if (strcmp( params[1], "little" ) == 0) {
-		big_endian = 0;
-		return 1;
-	}
-	if (strcmp( params[1], "big" ) == 0) {
-		big_endian = 1;
-		return 1;
-	}
-
-	return -1;
-}
-
-static void
-cmd_endian_help( void )
-{
-	printf( _(
-		"Usage: %s\n"
-		"Set or print endianess for external files.\n"
-	), "endian [little|big]" );
-}
-
-cmd_t cmd_endian = {
-	"endian",
-	N_("set/print endianess"),
-	cmd_endian_help,
-	cmd_endian_run
-};
+#ifdef S_SPLINT_S
+#undef gettext
+#define	gettext(s)	s
+#undef gettext_noop
+#define	gettext_noop(s)	s
+#undef ngettext
+#define	ngettext(s,p,n)	s
+#endif

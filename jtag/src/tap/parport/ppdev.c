@@ -23,16 +23,9 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #ifdef HAVE_LINUX_PPDEV_H
-
-#include "gettext.h"
-#define	_(s)		gettext(s)
-#define	N_(s)		gettext_noop(s)
-#define	P_(s,p,n)	ngettext(s,p,n)
 
 #include <fcntl.h>
 #include <stropts.h>

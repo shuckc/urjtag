@@ -30,6 +30,9 @@ SUBDIRS = \
 	src \
 	po
 
+noinst_HEADERS = \
+	config.h
+
 EXTRA_DIST = \
 	Makefile.rules
 

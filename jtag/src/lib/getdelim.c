@@ -22,13 +22,11 @@
  *
  */
 
+#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #ifndef HAVE_GETDELIM
 

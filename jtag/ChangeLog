@@ -1,5 +1,13 @@
 2003-05-22  Marcel Telka  <marcel@telka.sk>
 
+	* config.h: New file.
+	Changed all relevant source files to include this file unconditionaly.
+	* Makefile.am (noinst_HEADERS): Added config.h.
+	* configure.ac (AM_CONFIG_HEADER): Renamed generated configuration file
+		from config.h to acconfig.h.
+
+2003-05-22  Marcel Telka  <marcel@telka.sk>
+
 	* src/jtag.c: Added new global variable 'big_endian'.
 	* include/jtag.h: Ditto.
 	* src/flash.c (flashmem): Added full support for little/big endian.

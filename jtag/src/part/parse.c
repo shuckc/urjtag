@@ -22,14 +22,7 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
-
-#include "gettext.h"
-#define	_(s)		gettext(s)
-#define	N_(s)		gettext_noop(s)
-#define	P_(s,p,n)	ngettext(s,p,n)
 
 #include <stdlib.h>
 #include <string.h>
