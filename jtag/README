@@ -60,7 +60,7 @@ JTAG-aware parts (chips):
 - Xilinx XCR3128XL-CS144
 - Xilinx XCR3256XL-FT256
 
-Flash chips (2 x 16 bit configuration only):
+Flash chips:
 - Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)
 - Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)
 - Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)
