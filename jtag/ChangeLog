@@ -1,3 +1,7 @@
+2003-03-11  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac: Improved openwince include package detection.
+
 2003-03-07  Marcel Telka  <marcel@telka.sk>
 
 	* src/lib/getdelim.c: Added unistd.h include for ssize_t.

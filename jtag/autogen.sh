@@ -33,4 +33,4 @@ else
 	exit 1
 fi
 
-./configure --enable-maintainer-mode --with-include=/usr/local/include/openwince
+./configure --enable-maintainer-mode
