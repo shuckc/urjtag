@@ -99,36 +99,36 @@ typedef volatile struct MC_registers {
 #define	MSC2_OFFSET	0x2C
 #define	SMCNFG_OFFSET	0x30
 
-/* MDCNFG bits */
+/* MDCNFG bits - see 10.3.1 in [1] */
 
-#define	MDCNFG_TWR2_MASK	0xC0000000
-#define	MDCNFG_TWR2(x)		((x << 30) & MDCNFG_TWR2_MASK)
-#define	MDCNFG_TDL2_MASK	0x30000000
-#define	MDCNFG_TDL2(x)		((x << 28) & MDCNFG_TDL2_MASK)
-#define	MDCNFG_TRP2_MASK	0x0F000000
-#define	MDCNFG_TRP2(x)		((x << 24) & MDCNFG_TRP2_MASK)
+#define	MDCNFG_TWR2_MASK	bits(31,30)
+#define	MDCNFG_TWR2(x)		bits_val(31,30,x)
+#define	MDCNFG_TDL2_MASK	bits(29,28)
+#define	MDCNFG_TDL2(x)		bits_val(29,28,x)
+#define	MDCNFG_TRP2_MASK	bits(27,24)
+#define	MDCNFG_TRP2(x)		bits_val(27,24,x)
 #define	MDCNFG_CDB22		bit(23)
-#define	MDCNFG_DRAC2_MASK	0x00700000
-#define	MDCNFG_DRAC2(x)		((x << 20) & MDCNFG_DRAC2_MASK)
+#define	MDCNFG_DRAC2_MASK	bits(22,20)
+#define	MDCNFG_DRAC2(x)		bits_val(22,20,x)
 #define	MDCNFG_DWID2		bit(19)
 #define	MDCNFG_DTIM2		bit(18)
 #define	MDCNFG_DE3		bit(17)
 #define	MDCNFG_DE2		bit(16)
-#define	MDCNFG_TWR0_MASK	0x0000C000
-#define	MDCNFG_TWR0(x)		((x << 14) & MDCNFG_TWR0_MASK)
-#define	MDCNFG_TDL0_MASK	0x00003000
-#define	MDCNFG_TDL0(x)		((x << 12) & MDCNFG_TDL0_MASK)
-#define	MDCNFG_TRP0_MASK	0x00000F00
-#define	MDCNFG_TRP0(x)		((x << 8) & MDCNFG_TRP0_MASK)
+#define	MDCNFG_TWR0_MASK	bits(15,14)
+#define	MDCNFG_TWR0(x)		bits_val(15,14,x)
+#define	MDCNFG_TDL0_MASK	bits(13,12)
+#define	MDCNFG_TDL0(x)		bits_val(13,12,x)
+#define	MDCNFG_TRP0_MASK	bits(11,8)
+#define	MDCNFG_TRP0(x)		bits_val(11,8,x)
 #define	MDCNFG_CDB20		bit(7)
-#define	MDCNFG_DRAC0_MASK	0x00000070
-#define	MDCNFG_DRAC0(x)		((x << 4) & MDCNFG_DRAC0_MASK)
+#define	MDCNFG_DRAC0_MASK	bits(6,4)
+#define	MDCNFG_DRAC0(x)		bits_val(6,4,x)
 #define	MDCNFG_DWID0		bit(3)
 #define	MDCNFG_DTIM0		bit(2)
 #define	MDCNFG_DE1		bit(1)
 #define	MDCNFG_DE0		bit(0)
 
-/* MDREFR bits */
+/* MDREFR bits - see 10.3.2 in [1] */
 
 #define	MDREFR_SLFRSH		bit(31)
 #define	MDREFR_KAPD		bit(29)
@@ -141,9 +141,9 @@ typedef volatile struct MC_registers {
 #define	MDREFR_K0DB2		bit(18)
 #define	MDREFR_K0RUN		bit(17)
 #define	MDREFR_E0PIN		bit(16)
-#define	MDREFR_DRI_MASK		0x0000FFF0
-#define	MDREFR_DRI(x)		((x << 4) & MDREFR_DRI_MASK)
-#define	MDREFR_TRASR_MASK	0x0000000F
-#define	MDREFR_TRASR(x)		(x & MDREFR_TRASR_MASK)
+#define	MDREFR_DRI_MASK		bits(15,4)
+#define	MDREFR_DRI(x)		bits_val(15,4,x)
+#define	MDREFR_TRASR_MASK	bits(3,0)
+#define	MDREFR_TRASR(x)		bits_val(3,0,x)
 
 #endif /* SA11X0_MC_H */
