@@ -22,148 +22,148 @@
 # Written by Matan Ziv-Av <matan@svgalib.org>, 2003.
 #
 
-pin PAD_gtx_clk
-pin PAD_txd10
-pin PAD_txd11
-pin PAD_txd12
-pin PAD_txd13
-pin PAD_txd14
-pin PAD_txd15
-pin PAD_txd16
-pin PAD_txd17
-pin PAD_tx_en
-pin PAD_tx_er
-pin PAD_clk125
-pin PAD_col
-pin PAD_crs
-pin PAD_rbc0
-pin PAD_rbc1
-pin PAD_rxc
-pin PAD_rxd10
-pin PAD_rxd11
-pin PAD_rxd12
-pin PAD_rxd13
-pin PAD_rxd14
-pin PAD_rxd15
-pin PAD_rxd16
-pin PAD_rxd17
-pin PAD_rx_dv
-pin PAD_rx_er
-pin PAD_txc
-pin PAD_bcm5421s_en
-pin PAD_edgerate
-pin PAD_mdc
-pin PAD_ovdd_2_5v_enPAD_reset_n
-pin PAD_reset_n
-pin PAD_tck
-pin PAD_tdi
-pin PAD_test0
-pin PAD_test1
-pin PAD_tms
-pin PAD_tpin0
-pin PAD_tpin1
-pin PAD_tpin2
-pin PAD_tpin3
-pin PAD_tpin4
-pin PAD_tpin5
-pin PAD_tpin6
-pin PAD_tpin7
-pin PAD_tpin8
-pin PAD_trstb
-pin PAD_en10b
-pin PAD_f1000
-pin PAD_fdxled_n
-pin PAD_intr_n
-pin PAD_link_n1
-pin PAD_link_n2
-pin PAD_mdio
-pin PAD_phya0
-pin PAD_phya1
-pin PAD_phya2
-pin PAD_phya3
-pin PAD_phya4
-pin PAD_rcvled_n
-pin PAD_slave_n
-pin PAD_spd0
-pin PAD_xmtled_n
-pin PAD_tdo
-pin PAD_srxdn
-pin PAD_srxdp
-pin PAD_stxdn
-pin PAD_stxdp
-pin PAD_stxcn
-pin PAD_stxcp
-pin PAD_sergnd
-pin PAD_serpllavdd
-pin PAD_serpllavss
-pin PAD_serplldvdd
-pin PAD_serplldvss
-pin PAD_servdd11
-pin PAD_servdd25
-pin PAD_reg_cntl0
-pin PAD_reg_cntl1
-pin PAD_reg_sense1
-pin PAD_reg_sense2
-pin PAD_reg_supply1
-pin PAD_reg_supply2
-pin PAD_trimdac10
-pin PAD_trimdac11
-pin PAD_trimdac12
-pin PAD_trimdac13
-pin PAD_trimhyb10
-pin PAD_trimhyb11
-pin PAD_trimhyb12
-pin PAD_trimhyb13
-pin PAD_trimhpf10
-pin PAD_trimhpf11
-pin PAD_xtali
-pin PAD_xtali2
-pin PAD_xtalo
-pin PAD_xtalo2
-pin PAD_xtalgnd1
-pin PAD_xtalgnd2
-pin PAD_xtalvdd1
-pin PAD_xtalvdd2
-pin PAD_xtalvdd3
-pin PAD_xtalvdd2
-pin PAD_plldgnd
-pin PAD_plldvdd
-pin PAD_pllgnd
-pin PAD_pllvdd
-pin PAD_tvcoi
-pin CORE_VDD
-pin CORE_VSS
-pin OVDD
-pin OGND
-pin PVDD
-pin PAD_rdac1
-pin PAD_extvref1
-pin PAD_bagnd_0
-pin PAD_bavdd_0
-pin PAD_bavdd_1
-pin PAD_rxavdd0_0
-pin PAD_rxavdd1_0
-pin PAD_rxavdd2_0
-pin PAD_rxavdd3_0
-pin PAD_txavdd0_0
-pin PAD_txavdd1_0
-pin PAD_txavdd2_0
-pin PAD_txavdd3_0
-pin PAD_rxagnd0_0
-pin PAD_rxagnd1_0
-pin PAD_rxagnd2_0
-pin PAD_rxagnd3_0
-pin PAD_txagnd0_0
-pin PAD_txagnd1_0
-pin PAD_txagnd2_0
-pin PAD_txagnd3_0
-pin PAD_tdp1_0
-pin PAD_tdn1_0
-pin PAD_tdn1_1
-pin PAD_tdp1_1
-pin PAD_tdp1_2
-pin PAD_tdn1_2
-pin PAD_tdn1_3
+signal PAD_gtx_clk
+signal PAD_txd10
+signal PAD_txd11
+signal PAD_txd12
+signal PAD_txd13
+signal PAD_txd14
+signal PAD_txd15
+signal PAD_txd16
+signal PAD_txd17
+signal PAD_tx_en
+signal PAD_tx_er
+signal PAD_clk125
+signal PAD_col
+signal PAD_crs
+signal PAD_rbc0
+signal PAD_rbc1
+signal PAD_rxc
+signal PAD_rxd10
+signal PAD_rxd11
+signal PAD_rxd12
+signal PAD_rxd13
+signal PAD_rxd14
+signal PAD_rxd15
+signal PAD_rxd16
+signal PAD_rxd17
+signal PAD_rx_dv
+signal PAD_rx_er
+signal PAD_txc
+signal PAD_bcm5421s_en
+signal PAD_edgerate
+signal PAD_mdc
+signal PAD_ovdd_2_5v_enPAD_reset_n
+signal PAD_reset_n
+signal PAD_tck
+signal PAD_tdi
+signal PAD_test0
+signal PAD_test1
+signal PAD_tms
+signal PAD_tpin0
+signal PAD_tpin1
+signal PAD_tpin2
+signal PAD_tpin3
+signal PAD_tpin4
+signal PAD_tpin5
+signal PAD_tpin6
+signal PAD_tpin7
+signal PAD_tpin8
+signal PAD_trstb
+signal PAD_en10b
+signal PAD_f1000
+signal PAD_fdxled_n
+signal PAD_intr_n
+signal PAD_link_n1
+signal PAD_link_n2
+signal PAD_mdio
+signal PAD_phya0
+signal PAD_phya1
+signal PAD_phya2
+signal PAD_phya3
+signal PAD_phya4
+signal PAD_rcvled_n
+signal PAD_slave_n
+signal PAD_spd0
+signal PAD_xmtled_n
+signal PAD_tdo
+signal PAD_srxdn
+signal PAD_srxdp
+signal PAD_stxdn
+signal PAD_stxdp
+signal PAD_stxcn
+signal PAD_stxcp
+signal PAD_sergnd
+signal PAD_serpllavdd
+signal PAD_serpllavss
+signal PAD_serplldvdd
+signal PAD_serplldvss
+signal PAD_servdd11
+signal PAD_servdd25
+signal PAD_reg_cntl0
+signal PAD_reg_cntl1
+signal PAD_reg_sense1
+signal PAD_reg_sense2
+signal PAD_reg_supply1
+signal PAD_reg_supply2
+signal PAD_trimdac10
+signal PAD_trimdac11
+signal PAD_trimdac12
+signal PAD_trimdac13
+signal PAD_trimhyb10
+signal PAD_trimhyb11
+signal PAD_trimhyb12
+signal PAD_trimhyb13
+signal PAD_trimhpf10
+signal PAD_trimhpf11
+signal PAD_xtali
+signal PAD_xtali2
+signal PAD_xtalo
+signal PAD_xtalo2
+signal PAD_xtalgnd1
+signal PAD_xtalgnd2
+signal PAD_xtalvdd1
+signal PAD_xtalvdd2
+signal PAD_xtalvdd3
+signal PAD_xtalvdd2
+signal PAD_plldgnd
+signal PAD_plldvdd
+signal PAD_pllgnd
+signal PAD_pllvdd
+signal PAD_tvcoi
+signal CORE_VDD
+signal CORE_VSS
+signal OVDD
+signal OGND
+signal PVDD
+signal PAD_rdac1
+signal PAD_extvref1
+signal PAD_bagnd_0
+signal PAD_bavdd_0
+signal PAD_bavdd_1
+signal PAD_rxavdd0_0
+signal PAD_rxavdd1_0
+signal PAD_rxavdd2_0
+signal PAD_rxavdd3_0
+signal PAD_txavdd0_0
+signal PAD_txavdd1_0
+signal PAD_txavdd2_0
+signal PAD_txavdd3_0
+signal PAD_rxagnd0_0
+signal PAD_rxagnd1_0
+signal PAD_rxagnd2_0
+signal PAD_rxagnd3_0
+signal PAD_txagnd0_0
+signal PAD_txagnd1_0
+signal PAD_txagnd2_0
+signal PAD_txagnd3_0
+signal PAD_tdp1_0
+signal PAD_tdn1_0
+signal PAD_tdn1_1
+signal PAD_tdp1_1
+signal PAD_tdp1_2
+signal PAD_tdn1_2
+signal PAD_tdn1_3
 
 register	BSR	150
 register	BR	1
@@ -202,7 +202,7 @@ bit 127 I 1 PAD_mdc
 bit 126 I 1 PAD_mdio
 bit 125 O 1 PAD_mdio 124 1 Z
 bit 124 C 1 *
-bit 123 I 1 PAD_tpin8
+bit 123 I 1 PAD_tsignal8
 bit 122 I 1 PAD_en10b
 bit 121 O 1 PAD_en10b 120 1 Z
 bit 120 C 1 *
@@ -252,16 +252,16 @@ bit 77 C 1 *
 bit 76 I 1 PAD_intr_n
 bit 75 O 1 PAD_intr_n 74 1 Z
 bit 74 C 1 *
-bit 73 I 1 PAD_tpin0
-bit 72 I 1 PAD_tpin1
-bit 71 I 1 PAD_tpin2
-bit 70 I 1 PAD_tpin3
-bit 69 I 1 PAD_tpin4
-bit 68 I 1 PAD_tpin5
-bit 67 O 1 PAD_tpin5 66 1 Z
+bit 73 I 1 PAD_tsignal0
+bit 72 I 1 PAD_tsignal1
+bit 71 I 1 PAD_tsignal2
+bit 70 I 1 PAD_tsignal3
+bit 69 I 1 PAD_tsignal4
+bit 68 I 1 PAD_tsignal5
+bit 67 O 1 PAD_tsignal5 66 1 Z
 bit 66 C 1 *
-bit 65 I 1 PAD_tpin6
-bit 64 I 1 PAD_tpin7
+bit 65 I 1 PAD_tsignal6
+bit 64 I 1 PAD_tsignal7
 bit 63 I 1 PAD_txc
 bit 62 O 1 PAD_txc 61 1 Z
 bit 61 C 1 *

@@ -1,3 +1,16 @@
+2003-08-13  Marcel Telka  <marcel@telka.sk>
+
+	* data/broadcom/bcm1250/bcm1250: Changed pin -> signal keyword.
+	* data/broadcom/bcm5421s/bcm5421s: Ditto.
+	* data/hitachi/sh7727/sh7727: Ditto.
+	* data/intel/ixp425/ixp425: Ditto.
+	* data/intel/pxa250/pxa250: Ditto.
+	* data/intel/pxa250/pxa250c0: Ditto.
+	* data/intel/sa1110/sa1110: Ditto.
+	* data/xilinx/xc2c256-tq144/xc2c256-tq144: Ditto.
+	* data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Ditto.
+	* data/xilinx/xcr3256xl-ft256/xcr3256xl-ft256: Ditto.
+
 2003-08-12  Marcel Telka  <marcel@telka.sk>
 
 	* src/bsdl2jtag.c (endline): Added support for "downto" in bit vectors and "observe_only" (patch 787346,
