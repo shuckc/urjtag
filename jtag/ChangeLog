@@ -1,3 +1,9 @@
+2004-08-20  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/Makefile.am (libtap_a_SOURCES): Added cable/lattice.c.
+	* src/tap/cable.c (cable_drivers): Added lattice_cable_driver (patch 1012138, Jerome Debard).
+	* src/tap/cable/lattice.c: New file (patch 1012138, Jerome Debard).
+
 2004-08-19  Marcel Telka  <marcel@telka.sk>
 
 	* src/bus/Makefile.am (libbus_a_SOURCES): Added tx4925.c (patch 972625, Andrew Dyer).

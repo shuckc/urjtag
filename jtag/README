@@ -36,6 +36,7 @@ JTAG adapters/cables (see 'help cable' command for more info):
 - ETC EA253 JTAG Cable
 - ETC EI012 JTAG Cable
 - Keith & Koep JTAG Cable
+- Lattice Parallel Port JTAG Cable
 - Mpcbdm JTAG Cable
 - Ka-Ro TRITON (PXA255/250) JTAG Cable
 - Macraigor Wiggler JTAG Cable

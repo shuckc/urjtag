@@ -14,6 +14,7 @@ See libbrux/NEWS for more news.
 		- Motorola MPC824x
 		- AMD Alchemy Solutions Au1500 (patch 853883, Zhang Wei)
 		- Toshiba TX4925 (patch 972625, Andrew Dyer)
+	* Added support for Lattice Parallel Port JTAG Cable (patch 1012138, Jerome Debard).
 	* Added new command 'salias'.
 	* Explicit 'detectflash' command call is required before 'flashmem' command.
 	* Fixed minor bugs (including bug 857039).

@@ -37,6 +37,7 @@ extern cable_driver_t dlc5_cable_driver;
 extern cable_driver_t ea253_cable_driver;
 extern cable_driver_t ei012_cable_driver;
 extern cable_driver_t keithkoep_cable_driver;
+extern cable_driver_t lattice_cable_driver;
 extern cable_driver_t mpcbdm_cable_driver;
 extern cable_driver_t triton_cable_driver;
 extern cable_driver_t wiggler_cable_driver;
@@ -50,6 +51,7 @@ cable_driver_t *cable_drivers[] = {
 	&ea253_cable_driver,
 	&ei012_cable_driver,
 	&keithkoep_cable_driver,
+	&lattice_cable_driver,
 	&mpcbdm_cable_driver,
 	&triton_cable_driver,
 	&wiggler_cable_driver,
