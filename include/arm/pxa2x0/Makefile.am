@@ -47,4 +47,5 @@ noinst_HEADERS = \
 	pwm.h \
 	rtc.h \
 	ssp.h \
+	uart.h \
 	udc.h
