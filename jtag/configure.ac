@@ -33,6 +33,7 @@ AM_INIT_AUTOMAKE(AC_PACKAGE_NAME,AC_PACKAGE_VERSION)
 
 AC_CONFIG_FILES(
 	Makefile
+	data/Makefile
 	include/Makefile
 	src/Makefile
 	src/tap/Makefile

@@ -21,11 +21,17 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-SUBDIRS = \
-	data \
-	src
-
-DIST_SUBDIRS = \
-	include \
-	data \
-	src
+nobase_dist_pkgdata_DATA = \
+	MANUFACTURERS \
+	atmel/PARTS \
+	atmel/atmega128/STEPPINGS \
+	atmel/atmega128/atmega128 \
+	intel/PARTS \
+	intel/pxa250/STEPPINGS \
+	intel/pxa250/pxa250 \
+	intel/pxa250/pxa260 \
+	intel/sa1110/STEPPINGS \
+	intel/sa1110/sa1110 \
+	xilinx/PARTS \
+	xilinx/xcr3128xl-cs144/STEPPINGS \
+	xilinx/xcr3128xl-cs144/xcr3128xl-cs144
