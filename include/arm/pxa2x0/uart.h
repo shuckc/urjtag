@@ -215,7 +215,7 @@ typedef volatile struct UART_registers {
 #define	IIR_FIFOES_MASK	bits(7,6)
 #define	IIR_FIFOES(x)	bits_val(7,6,x)
 #if !defined(PXA2X0_NOPXA26X)
-#define	IIR_ABL	bit(4)			/* only for HWUART */
+#define	IIR_ABL		bit(4)		/* only for HWUART */
 #endif /* PXA26x only */
 #define	IIR_TOD		bit(3)
 #define	IIR_IID_MASK	bits(2,1)
@@ -227,7 +227,7 @@ typedef volatile struct UART_registers {
 #define	FCR_ITL_MASK	bits(7,6)
 #define	FCR_ITL(x)	bits_val(7,6,x)
 #if !defined(PXA2X0_NOPXA26X)
-#define	FCR_TIL	bit(3)			/* only for HWUART */
+#define	FCR_TIL		bit(3)		/* only for HWUART */
 #endif /* PXA26x only */
 #define	FCR_RESETTF	bit(2)
 #define	FCR_RESETRF	bit(1)
@@ -258,7 +258,7 @@ typedef volatile struct UART_registers {
 /* MCR bits - see Table 10-14 in [1], Table 10-14 in [2], Table 17-16 in [2] */
 
 #if !defined(PXA2X0_NOPXA26X)
-#define	MCR_AFE	bit(5)			/* only for HWUART */
+#define	MCR_AFE		bit(5)		/* only for HWUART */
 #endif /* PXA26x only */
 #define	MCR_LOOP	bit(4)
 #define	MCR_OUT2	bit(3)

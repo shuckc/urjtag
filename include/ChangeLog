@@ -1,3 +1,7 @@
+2002-11-06  Marcel Telka  <marcel@telka.sk>
+
+	* arm/pxa2x0/uart.h: Fixed formatting.
+
 2002-11-04  Marcel Telka  <marcel@telka.sk>
 
 	* arm/pxa2x0/*: Added support for Intel PXA2x0 family processors.
