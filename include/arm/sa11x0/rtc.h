@@ -56,10 +56,10 @@ typedef volatile struct RTC_registers {
 	uint32_t rttr;
 	uint32_t __reserved;
 	uint32_t rtsr;
-} RTC_registers;
+} RTC_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	RTC_pointer	((RTC_registers*) RTC_BASE)
+#define	RTC_pointer	((RTC_registers_t*) RTC_BASE)
 #endif
 
 #define	RTAR		RTC_pointer->rtar

@@ -69,10 +69,10 @@ typedef volatile struct LCD_registers {
 	uint32_t fsadr1;
 	uint32_t fidr1;
 	uint32_t ldcmd1;
-} LCD_registers;
+} LCD_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	LCD_pointer	((LCD_registers*) LCD_BASE)
+#define	LCD_pointer	((LCD_registers_t*) LCD_BASE)
 #endif
 
 #define	LCCR(i)		LCD_pointer->lccr[i]

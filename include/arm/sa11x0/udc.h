@@ -64,10 +64,10 @@ typedef volatile struct UDC_registers {
 	uint32_t udcdr;
 	uint32_t __reserved2;
 	uint32_t udcsr;
-} UDC_registers;
+} UDC_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	UDC_pointer	((UDC_registers*) UDC_BASE)
+#define	UDC_pointer	((UDC_registers_t*) UDC_BASE)
 #endif
 
 #define	UDCCR		UDC_pointer->udccr

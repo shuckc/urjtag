@@ -58,10 +58,10 @@ typedef volatile struct ICP_registers {
 	uint32_t __reserved;
 	uint32_t icsr0;
 	uint32_t icsr1;
-} ICP_registers;
+} ICP_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	ICP_pointer	((ICP_registers*) ICP_BASE)
+#define	ICP_pointer	((ICP_registers_t*) ICP_BASE)
 #endif
 
 #define	ICCR0		ICP_pointer->iccr0

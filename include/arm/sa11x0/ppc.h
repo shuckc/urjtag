@@ -60,10 +60,10 @@ typedef volatile struct PPC_registers {
 	uint32_t hscr2;
 	uint32_t __reserved2;
 	uint32_t mccr1;
-} PPC_registers;
+} PPC_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	PPC_pointer	((PPC_registers*) PPC_BASE)
+#define	PPC_pointer	((PPC_registers_t*) PPC_BASE)
 #endif
 
 #define	PPDR		PPC_pointer->ppdr

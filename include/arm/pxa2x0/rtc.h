@@ -55,10 +55,10 @@ typedef volatile struct RTC_registers {
 	uint32_t rtar;
 	uint32_t rtsr;
 	uint32_t rttr;
-} RTC_registers;
+} RTC_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	RTC_pointer	((RTC_registers*) RTC_BASE)
+#define	RTC_pointer	((RTC_registers_t*) RTC_BASE)
 #endif
 
 #define	RCNR			RTC_pointer->rcnr

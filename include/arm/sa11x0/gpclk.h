@@ -56,10 +56,10 @@ typedef volatile struct GPCLK_registers {
 	uint32_t __reserved;
 	uint32_t gpclkr2;
 	uint32_t gpclkr3;
-} GPCLK_registers;
+} GPCLK_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	GPCLK_pointer	((GPCLK_registers*) GPCLK_BASE)
+#define	GPCLK_pointer	((GPCLK_registers_t*) GPCLK_BASE)
 #endif
 
 #define	GPCLKR0		GPCLK_pointer->gpclkr0

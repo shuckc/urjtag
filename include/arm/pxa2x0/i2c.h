@@ -61,10 +61,10 @@ typedef volatile struct I2C_registers {
 	uint32_t isr;
 	uint32_t __reserved5;
 	uint32_t isar;
-} I2C_registers;
+} I2C_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	I2C_pointer	((I2C_registers*) I2C_BASE)
+#define	I2C_pointer	((I2C_registers_t*) I2C_BASE)
 #endif
 
 #define	IBMR		I2C_pointer->ibmr

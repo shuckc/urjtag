@@ -61,10 +61,10 @@ typedef volatile struct LCD_registers {
 	uint32_t lccr1;
 	uint32_t lccr2;
 	uint32_t lccr3;
-} LCD_registers;
+} LCD_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	LCD_pointer	((LCD_registers*) LCD_BASE)
+#define	LCD_pointer	((LCD_registers_t*) LCD_BASE)
 #endif
 
 #define	LCCR0		LCD_pointer->lccr0

@@ -62,10 +62,10 @@ typedef volatile struct I2S_registers {
 	uint32_t sadiv;
 	uint32_t __reserved4[7];
 	uint32_t sadr;
-} I2S_registers;
+} I2S_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	I2S_pointer		((I2S_registers*) I2S_BASE)
+#define	I2S_pointer		((I2S_registers_t*) I2S_BASE)
 #endif
 
 #define	SACR0			I2S_pointer->sacr0

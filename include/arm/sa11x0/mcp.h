@@ -58,10 +58,10 @@ typedef volatile struct MCP_registers {
 	uint32_t mcdr2;
 	uint32_t __reserved2;
 	uint32_t mcsr;
-} MCP_registers;
+} MCP_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	MCP_pointer	((MCP_registers*) MCP_BASE)
+#define	MCP_pointer	((MCP_registers_t*) MCP_BASE)
 #endif
 
 #define	MCCR0		MCP_pointer->mccr0

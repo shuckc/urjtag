@@ -54,10 +54,10 @@ typedef volatile struct CM_registers {
 	uint32_t cccr;
 	uint32_t cken;
 	uint32_t oscc;
-} CM_registers;
+} CM_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	CM_pointer	((CM_registers*) CM_BASE)
+#define	CM_pointer	((CM_registers_t*) CM_BASE)
 #endif
 
 #define	CCCR		CM_pointer->cccr

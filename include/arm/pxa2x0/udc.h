@@ -97,10 +97,10 @@ typedef volatile struct UDC_registers {
 	uint32_t uddr13;
 	uint32_t __reserved16[127];
 	uint32_t uddr14;
-} UDC_registers;
+} UDC_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	UDC_pointer	((UDC_registers*) UDC_BASE)
+#define	UDC_pointer	((UDC_registers_t*) UDC_BASE)
 #endif
 
 #define	UDCCR			UDC_pointer->udccr

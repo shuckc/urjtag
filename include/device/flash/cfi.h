@@ -63,7 +63,7 @@
 #define	ALT_VENDOR_TABLE_ADR_OFFSET	0x19
 
 #if LANGUAGE == C
-typedef struct cfi_query_identification_string_t {
+typedef struct cfi_query_identification_string {
 	uint16_t pri_id_code;
 	void *pri_vendor_tbl;
 	uint16_t alt_id_code;
@@ -98,7 +98,7 @@ typedef struct cfi_query_identification_string_t {
 #define	MAX_CHIP_ERASE_TIMEOUT_OFFSET	0x26		/* Maximum timeout for chip erase */
 
 #if LANGUAGE == C
-typedef struct cfi_query_system_interface_information_t {
+typedef struct cfi_query_system_interface_information {
 	uint16_t vcc_min_wev;				/* in mV */
 	uint16_t vcc_max_wev;				/* in mV */
 	uint16_t vpp_min_wev;				/* in mV, 0 - no Vpp pin is present */
@@ -123,9 +123,9 @@ typedef struct cfi_query_system_interface_information_t {
 #define	ERASE_BLOCK_REGION_OFFSET	0x2D		/* Erase Block Region Information */
 
 #if LANGUAGE == C
-typedef struct cfi_erase_block_region_t cfi_erase_block_region_t;
+typedef struct cfi_erase_block_region cfi_erase_block_region_t;
 
-typedef struct cfi_device_geometry_t {
+typedef struct cfi_device_geometry {
 	uint32_t device_size;				/* in B */
 	uint16_t device_interface;			/* see Table 2 in [2] */
 	uint32_t max_bytes_write;			/* in B */
@@ -133,7 +133,7 @@ typedef struct cfi_device_geometry_t {
 	cfi_erase_block_region_t *erase_block_regions;
 } cfi_device_geometry_t;
 
-struct cfi_erase_block_region_t {
+struct cfi_erase_block_region {
 	uint32_t erase_block_size;			/* in B */
 	uint32_t number_of_erase_blocks;
 };
@@ -150,7 +150,7 @@ struct cfi_erase_block_region_t {
 /* CFI Query structure - see 4.3.1 in [1] */
 
 #if LANGUAGE == C
-typedef struct cfi_query_structure_t {
+typedef struct cfi_query_structure {
 	cfi_query_identification_string_t identification_string;
 	cfi_query_system_interface_information_t system_interface_info;
 	cfi_device_geometry_t device_geometry;

@@ -64,10 +64,10 @@ typedef volatile struct PMRC_registers {
 	uint32_t pgsr2;
 	uint32_t __reserved;
 	uint32_t rcsr;
-} PMRC_registers;
+} PMRC_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	PMRC_pointer	((PMRC_registers*) PMRC_BASE)
+#define	PMRC_pointer	((PMRC_registers_t*) PMRC_BASE)
 #endif
 
 #define	PMCR		PMRC_pointer->pmcr

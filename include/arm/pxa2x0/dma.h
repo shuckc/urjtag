@@ -55,7 +55,7 @@ typedef struct _DMA_dar {
 	uint32_t dsadr;
 	uint32_t dtadr;
 	uint32_t dcmd;
-} _DMA_dar;
+} _DMA_dar_t;
 
 typedef volatile struct DMA_registers {
 	uint32_t dcsr[16];
@@ -64,11 +64,11 @@ typedef volatile struct DMA_registers {
 	uint32_t __reserved2[3];
 	uint32_t drcmr[40];
 	uint32_t __reserved3[24];
-	_DMA_dar dar[16];
-} DMA_registers;
+	_DMA_dar_t dar[16];
+} DMA_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	DMA_pointer		((DMA_registers*) DMA_BASE)
+#define	DMA_pointer		((DMA_registers_t*) DMA_BASE)
 #endif
 
 #define	DCSR(i)			DMA_pointer->dcsr[i]

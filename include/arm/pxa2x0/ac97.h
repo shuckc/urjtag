@@ -79,10 +79,10 @@ typedef volatile struct AC97_registers {
 	uint32_t __sacr[64];		/* Secondary Audio codec Registers */
 	uint32_t __pmcr[64];		/* Primary Modem codec Registers */
 	uint32_t __smcr[64];		/* Secondary Modem codec Registers */
-} AC97_registers;
+} AC97_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	AC97_pointer		((AC97_registers*) AC97_BASE)
+#define	AC97_pointer		((AC97_registers_t*) AC97_BASE)
 #endif
 
 #define	POCR			AC97_pointer->pocr

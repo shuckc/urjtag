@@ -55,11 +55,11 @@ typedef volatile struct PWM_registers {
 	uint32_t pwm_ctrl;
 	uint32_t pwm_pwduty;
 	uint32_t pwm_perval;
-} PWM_registers;
+} PWM_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	PWM0_pointer	((PWM_registers*) PWM0_BASE)
-#define	PWM1_pointer	((PWM_registers*) PWM1_BASE)
+#define	PWM0_pointer	((PWM_registers_t*) PWM0_BASE)
+#define	PWM1_pointer	((PWM_registers_t*) PWM1_BASE)
 #endif
 
 #define	PWM_CTRL	PWM_pointer->pwm_ctrl

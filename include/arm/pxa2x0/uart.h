@@ -72,12 +72,12 @@ typedef volatile struct UART_registers {
 	uint32_t msr;
 	uint32_t spr;
 	uint32_t isr;
-} UART_registers;
+} UART_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	FFUART_pointer	((UART_registers *) FFUART_BASE)
-#define	BTUART_pointer	((UART_registers *) BTUART_BASE)
-#define	STUART_pointer	((UART_registers *) STUART_BASE)
+#define	FFUART_pointer	((UART_registers_t*) FFUART_BASE)
+#define	BTUART_pointer	((UART_registers_t*) BTUART_BASE)
+#define	STUART_pointer	((UART_registers_t*) STUART_BASE)
 #endif
 
 #define	RBR		UART_pointer->rbr

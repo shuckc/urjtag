@@ -58,10 +58,10 @@ typedef volatile struct HSSP_registers {
 	uint32_t __reserved2;
 	uint32_t hssr0;
 	uint32_t hssr1;
-} HSSP_registers;
+} HSSP_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	HSSP_pointer	((HSSP_registers*) HSSP_BASE)
+#define	HSSP_pointer	((HSSP_registers_t*) HSSP_BASE)
 #endif
 
 #define	HSCR0		HSSP_pointer->hscr0

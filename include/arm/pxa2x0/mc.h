@@ -71,10 +71,10 @@ typedef volatile struct MC_registers {
 	uint32_t mcio1;
 	uint32_t mdmrs;
 	uint32_t boot_def;
-} MC_registers;
+} MC_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	MC_pointer	((MC_registers*) MC_BASE)
+#define	MC_pointer	((MC_registers_t*) MC_BASE)
 #endif
 
 #define	MDCNFG		MC_pointer->mdcnfg

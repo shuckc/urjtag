@@ -64,10 +64,10 @@ typedef volatile struct MC_registers {
 	uint32_t mdcas22;
 	uint32_t msc2;
 	uint32_t smcnfg;
-} MC_registers;
+} MC_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	MC_pointer	((MC_registers*) MC_BASE)
+#define	MC_pointer	((MC_registers_t*) MC_BASE)
 #endif
 
 #define	MDCNFG		MC_pointer->mdcnfg

@@ -57,10 +57,10 @@ typedef volatile struct IC_registers {
 	uint32_t icfp;
 	uint32_t icpr;
 	uint32_t iccr;
-} IC_registers;
+} IC_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	IC_pointer	((IC_registers*) IC_BASE)
+#define	IC_pointer	((IC_registers_t*) IC_BASE)
 #endif
 
 #define	ICIP		IC_pointer->icip

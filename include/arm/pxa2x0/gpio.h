@@ -78,10 +78,10 @@ typedef volatile struct GPIO_registers {
 	uint32_t gafr1_u;
 	uint32_t gafr2_l;
 	uint32_t gafr2_u;
-} GPIO_registers;
+} GPIO_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	GPIO_pointer	((GPIO_registers*) GPIO_BASE)
+#define	GPIO_pointer	((GPIO_registers_t*) GPIO_BASE)
 #endif
 
 #define	GPLR0		GPIO_pointer->gplr0

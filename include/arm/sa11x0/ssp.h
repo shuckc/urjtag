@@ -57,10 +57,10 @@ typedef volatile struct SSP_registers {
 	uint32_t ssdr;
 	uint32_t __reserved2;
 	uint32_t sssr;
-} SSP_registers;
+} SSP_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	SSP_pointer	((SSP_registers*) SSP_BASE)
+#define	SSP_pointer	((SSP_registers_t*) SSP_BASE)
 #endif
 
 #define	SSCR0		SSP_pointer->sscr0

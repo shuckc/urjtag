@@ -56,10 +56,10 @@ typedef volatile struct OST_registers {
 	uint32_t ossr;
 	uint32_t ower;
 	uint32_t oier;
-} OST_registers;
+} OST_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	OST_pointer	((OST_registers*) OST_BASE)
+#define	OST_pointer	((OST_registers_t*) OST_BASE)
 #endif
 
 #define	OSMR(i)		OST_pointer->osmr[i]

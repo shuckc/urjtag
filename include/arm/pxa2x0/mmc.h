@@ -69,10 +69,10 @@ typedef volatile struct MMC_registers {
 	uint32_t mmc_res;
 	uint32_t mmc_rxfifo;
 	uint32_t mmc_txfifo;
-} MMC_registers;
+} MMC_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
-#define	MMC_pointer	((MMC_registers*) MMC_BASE)
+#define	MMC_pointer	((MMC_registers_t*) MMC_BASE)
 #endif
 
 #define	MMC_STRPCL			MMC_pointer->mmc_strpcl

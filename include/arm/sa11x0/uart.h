@@ -62,12 +62,12 @@ typedef volatile struct UART_registers {
 	uint32_t __reserved;
 	uint32_t utsr0;
 	uint32_t utsr1;
-} UART_registers;
+} UART_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	UART1_pointer	((UART_registers*) UART1_BASE)
-#define	UART2_pointer	((UART_registers*) UART2_BASE)
-#define	UART3_pointer	((UART_registers*) UART3_BASE)
+#define	UART1_pointer	((UART_registers_t*) UART1_BASE)
+#define	UART2_pointer	((UART_registers_t*) UART2_BASE)
+#define	UART3_pointer	((UART_registers_t*) UART3_BASE)
 #endif
 
 #define	UTCR0		UART_pointer->utcr0

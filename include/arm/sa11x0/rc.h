@@ -54,10 +54,10 @@ typedef volatile struct RC_registers {
 	uint32_t rsrr;
 	uint32_t rcsr;
 	uint32_t tucr;
-} RC_registers;
+} RC_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	RC_pointer	((RC_registers*) RC_BASE)
+#define	RC_pointer	((RC_registers_t*) RC_BASE)
 #endif
 
 #define	RSRR		RC_pointer->rsrr

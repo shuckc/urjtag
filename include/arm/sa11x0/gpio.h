@@ -59,10 +59,10 @@ typedef volatile struct GPIO_registers {
 	uint32_t gfer;
 	uint32_t gedr;
 	uint32_t gafr;
-} GPIO_registers;
+} GPIO_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	GPIO_pointer	((GPIO_registers*) GPIO_BASE)
+#define	GPIO_pointer	((GPIO_registers_t*) GPIO_BASE)
 #endif
 
 #define	GPLR		GPIO_pointer->gplr

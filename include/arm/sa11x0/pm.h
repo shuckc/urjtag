@@ -59,10 +59,10 @@ typedef volatile struct PM_registers {
 	uint32_t ppcr;
 	uint32_t pgsr;
 	uint32_t posr;
-} PM_registers;
+} PM_registers_t;
 
 #ifdef SA11X0_UNMAPPED
-#define	PM_pointer	((PM_registers*) PM_BASE)
+#define	PM_pointer	((PM_registers_t*) PM_BASE)
 #endif
 
 #define	PMCR		PM_pointer->pmcr

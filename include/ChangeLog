@@ -1,3 +1,9 @@
+2002-11-02  Marcel Telka  <marcel@telka.sk>
+
+	* arm/pxa2x0/*: Added _t suffix for register type names.
+	* arm/sa11x0/*: Ditto.
+	* device/flash/cfi.h: Removed _t suffix from structure names.
+
 2002-11-01  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.1 released.
