@@ -38,11 +38,11 @@ get_token( char *buf )
 	return t;
 }
 
-part *
+part_t *
 read_part( FILE *f, tap_register *idr )
 {
 	int line = 0;
-	part *part;
+	part_t *part;
 
 	if (!f)
 		return NULL;

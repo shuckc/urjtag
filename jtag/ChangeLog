@@ -1,5 +1,12 @@
 2003-05-14  Marcel Telka  <marcel@telka.sk>
 
+	* include/part.h (part_t, parts_t): Macros removed.
+	* src/detect.c: Replaced obsolete types `parts' with `parts_t' and `part' with `part_t'.
+	* src/part/parse.c: Ditto.
+	* src/part/part.c: Ditto.
+
+2003-05-14  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac (AC_CONFIG_FILES): Added src/flash/Makefile.
 	* include/Makefile.am (noinst_HEADERS): Added flash.h.
 	* src/Makefile.am (SUBDIRS): Added flash.

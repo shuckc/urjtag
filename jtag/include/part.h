@@ -36,7 +36,6 @@
 #define	MAXLEN_PART		20
 #define	MAXLEN_STEPPING		8
 
-#define	part_t	part
 typedef struct part part_t;
 
 struct part {
@@ -61,7 +60,6 @@ void part_set_instruction( part_t *p, const char *iname );
 void part_set_signal( part_t *p, const char *pname, int out, int val );
 int part_get_signal( part_t *p, const char *pname );
 
-#define	parts_t	parts
 typedef struct parts parts_t;
 
 struct parts {

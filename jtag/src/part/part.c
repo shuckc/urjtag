@@ -29,10 +29,10 @@
 
 /* part */
 
-part *
+part_t *
 part_alloc( void )
 {
-	part *p = malloc( sizeof *p );
+	part_t *p = malloc( sizeof *p );
 	if (!p)
 		return NULL;
 
@@ -51,7 +51,7 @@ part_alloc( void )
 }
 
 void
-part_free( part *p )
+part_free( part_t *p )
 {
 	int i;
 
@@ -88,7 +88,7 @@ part_free( part *p )
 }
 
 instruction *
-part_find_instruction( part *p, const char *iname )
+part_find_instruction( part_t *p, const char *iname )
 {
 	instruction *i;
 
@@ -106,7 +106,7 @@ part_find_instruction( part *p, const char *iname )
 }
 
 data_register *
-part_find_data_register( part *p, const char *drname )
+part_find_data_register( part_t *p, const char *drname )
 {
 	data_register *dr;
 
@@ -123,14 +123,14 @@ part_find_data_register( part *p, const char *drname )
 	return dr;
 }
 
-void part_set_instruction( part *p, const char *iname )
+void part_set_instruction( part_t *p, const char *iname )
 {
 	if (p)
 		p->active_instruction = part_find_instruction( p, iname );
 }
 
 void
-part_set_signal( part *p, const char *pname, int out, int val )
+part_set_signal( part_t *p, const char *pname, int out, int val )
 {
 	signal_t *s;
 
@@ -177,7 +177,7 @@ part_set_signal( part *p, const char *pname, int out, int val )
 }
 
 int
-part_get_signal( part *p, const char *pname )
+part_get_signal( part_t *p, const char *pname )
 {
 	signal_t *s;
 
@@ -211,10 +211,10 @@ part_get_signal( part *p, const char *pname )
 
 /* parts */
 
-parts *
+parts_t *
 parts_alloc( void )
 {
-	parts *ps = malloc( sizeof *ps );
+	parts_t *ps = malloc( sizeof *ps );
 	if (!ps)
 		return NULL;
 
@@ -225,7 +225,7 @@ parts_alloc( void )
 }
 
 void
-parts_free( parts *ps )
+parts_free( parts_t *ps )
 {
 	int i;
 
@@ -240,9 +240,9 @@ parts_free( parts *ps )
 }
 
 int
-parts_add_part( parts *ps, part *p )
+parts_add_part( parts_t *ps, part_t *p )
 {
-	part **np = realloc( ps->parts, (ps->len + 1) * sizeof *ps->parts );
+	part_t **np = realloc( ps->parts, (ps->len + 1) * sizeof *ps->parts );
 
 	if (!np)
 		return 0;
@@ -254,7 +254,7 @@ parts_add_part( parts *ps, part *p )
 }
 
 void
-parts_set_instruction( parts *ps, const char *iname )
+parts_set_instruction( parts_t *ps, const char *iname )
 {
 	int i;
 
@@ -263,7 +263,7 @@ parts_set_instruction( parts *ps, const char *iname )
 }
 
 void
-parts_print( parts *ps, int header )
+parts_print( parts_t *ps, int header )
 {
 	int i;
 
@@ -285,7 +285,7 @@ parts_print( parts *ps, int header )
 	for (i = 0; i < ps->len; i++) {
 		char *instruction = "(none)";
 		char *dr = "(none)";
-		part *p = ps->parts[i];
+		part_t *p = ps->parts[i];
 
 		if (p->active_instruction) {
 			instruction = p->active_instruction->name;

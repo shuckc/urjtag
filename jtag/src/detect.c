@@ -156,7 +156,7 @@ find_record( char *filename, tap_register *key, struct id_record *idr )
 	return r;
 }
 
-parts *
+parts_t *
 detect_parts( chain_t *chain, char *db_path )
 {
 	char data_path[1024];
@@ -167,7 +167,7 @@ detect_parts( chain_t *chain, char *db_path )
 	tap_register *zeros = register_fill( register_alloc( 32 ), 0 );
 	tap_register *ones = register_fill( register_alloc( 32 ), 1 );
 	tap_register *id = register_alloc( 32 );
-	parts *ps = parts_alloc();
+	parts_t *ps = parts_alloc();
 
 	if (!zeros || !ones || !id || !ps) {
 		printf( "%s: out of memory\n", __FUNCTION__ );
@@ -187,7 +187,7 @@ detect_parts( chain_t *chain, char *db_path )
 		struct id_record idr;
 		char *p;
 		FILE *f;
-		part *part;
+		part_t *part;
 
 		tap_shift_register( chain, zeros, id, 0 );
 		if (!register_compare( id, zeros ))
