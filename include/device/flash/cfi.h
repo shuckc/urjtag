@@ -82,7 +82,7 @@
 #define	MAX_CHIP_ERASE_TIMEOUT_OFFSET	0x26		/* Maximum timeout for chip erase */
 
 #if LANGUAGE == C
-typedef struct cfi_query_system_interface_information {
+typedef struct cfi_query_system_interface_information_t {
 	uint16_t vcc_min_wev;				/* in mV */
 	uint16_t vcc_max_wev;				/* in mV */
 	uint16_t vpp_min_wev;				/* in mV, 0 - no Vpp pin is present */
@@ -95,7 +95,7 @@ typedef struct cfi_query_system_interface_information {
 	uint32_t max_buffer_write_timeout;		/* in us, 0 - not supported */
 	uint32_t max_block_erase_timeout;		/* in ms */
 	uint32_t max_chip_erase_timeout;		/* in ms, 0 - not supported */
-} cfi_query_system_interface_information;
+} cfi_query_system_interface_information_t;
 #endif /* LANGUAGE == C */
 
 /* Device geometry definition - see 4.3.4 in [1] */
@@ -107,17 +107,17 @@ typedef struct cfi_query_system_interface_information {
 #define	ERASE_BLOCK_REGION_OFFSET	0x2D		/* Erase Block Region Information */
 
 #if LANGUAGE == C
-typedef struct cfi_erase_block_region cfi_erase_block_region;
+typedef struct cfi_erase_block_region_t cfi_erase_block_region_t;
 
-typedef struct cfi_device_geometry {
+typedef struct cfi_device_geometry_t {
 	uint32_t device_size;				/* in B */
 	uint16_t device_interface;			/* see Table 2 in [2] */
 	uint32_t max_bytes_write;			/* in B */
 	uint8_t number_of_erase_regions;
-	cfi_erase_block_region *erase_block_regions;
-} cfi_device_geometry;
+	cfi_erase_block_region_t *erase_block_regions;
+} cfi_device_geometry_t;
 
-struct cfi_erase_block_region {
+struct cfi_erase_block_region_t {
 	uint32_t erase_block_size;			/* in B */
 	uint32_t erase_blocks_number;
 };
@@ -134,12 +134,12 @@ struct cfi_erase_block_region {
 /* CFI Query structure - see 4.3.1 in [1] */
 
 #if LANGUAGE == C
-typedef struct cfi_query_structure {
-	cfi_query_system_interface_information system_interface_info;
-	cfi_device_geometry device_geometry;
+typedef struct cfi_query_structure_t {
+	cfi_query_system_interface_information_t system_interface_info;
+	cfi_device_geometry_t device_geometry;
 	void *pri_vendor_tbl;
 	void *alt_vendor_tbl;
-} cfi_query_structure;
+} cfi_query_structure_t;
 #endif /* LANGUAGE == C */
 
 #endif /* FLASH_CFI_H */
