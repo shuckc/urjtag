@@ -1,6 +1,6 @@
 $Id$
 
-include-0.2.3:
+include-0.2.3 (2003-04-04):
 
 	* Ported stdint.h to NetBSD (thanks to Jachym Holecek).
 
