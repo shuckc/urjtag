@@ -51,6 +51,8 @@ void readmem( parts *ps, FILE *f, uint32_t addr, uint32_t len );
 void flashmem( parts *ps, FILE *f, uint32_t addr );
 void flashmsbin( parts *ps, FILE *f );
 
+void help( const char *cmd );
+
 int
 main( void )
 {
@@ -94,24 +96,10 @@ main( void )
 
 		if (strcmp( t, "help" ) == 0) {
 			t = get_token( NULL );
-			if (!t) {
-				printf( "Command list:\n\n" );
-				printf( "quit\t\texit from jtag\n" );
-				printf( "help\t\tdisplay this help\n" );
-				printf( "detect\t\tdetect parts on the JTAG chain\n" );
-				printf( "print\t\tdisplay JTAG chain list/status\n" );
-				printf( "instruction\tchange active instruction for a part\n" );
-				printf( "shift\t\tshift data/instruction register through JTAG chain\n" );
-				printf( "dr\t\tdisplay active data register for a part\n" );
-				printf( "detectflash\tdetect parameters of flash chip attached to a part\n" );
-				printf( "readmem\t\tread content of the memory and write it to file\n" );
-				printf( "flashmem\tburn flash memory with data from a file\n" );
-				printf( "set\t\tTODO\n" );
-				printf( "\nType \"help <command>\" for details about particular command.\n" );
-				continue;
-			} else {
-				printf( "Not implemented. Sorry.\n" );
-			}
+			if (get_token( NULL ))
+				printf( "help: Syntax error!\n" );
+			else
+				help( t );
 			continue;
 		}
 
