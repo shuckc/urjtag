@@ -1,8 +1,8 @@
 2003-01-05  Marcel Telka  <marcel@telka.sk>
 
-	* include/register.h (register_inc, register_dec, register_shift_rigth,
+	* include/register.h (register_inc, register_dec, register_shift_right,
 		register_shift_left): Added new functions.
-	* src/tap/register.c (register_inc, register_dec, register_shift_rigth,
+	* src/tap/register.c (register_inc, register_dec, register_shift_right,
 		register_shift_left): Ditto.
 	* src/Makefile.am: Added discovery.c file.
 	* src/discovery.c: Added new file with discovery() implementation.
