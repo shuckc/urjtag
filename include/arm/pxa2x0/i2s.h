@@ -39,14 +39,17 @@
 #ifndef	PXA2X0_I2S_H
 #define	PXA2X0_I2S_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* I2S Registers */
 
 #define	I2S_BASE	0x40400000
 
+#if LANGUAGE == C
 typedef volatile struct I2S_registers {
 	uint32_t sacr0;
 	uint32_t sacr1;
@@ -61,16 +64,82 @@ typedef volatile struct I2S_registers {
 	uint32_t sadr;
 } I2S_registers;
 
-#ifndef I2S_pointer
-#define	I2S_pointer	((I2S_registers*) I2S_BASE)
+#ifdef PXA2X0_UNMAPPED
+#define	I2S_pointer		((I2S_registers*) I2S_BASE)
 #endif
 
-#define	SACR0		I2S_pointer->sacr0
-#define	SACR1		I2S_pointer->sacr1
-#define	SASR0		I2S_pointer->sasr0
-#define	SAIMR		I2S_pointer->saimr
-#define	SAICR		I2S_pointer->saicr
-#define	SADIV		I2S_pointer->sadiv
-#define	SADR		I2S_pointer->sadr
+#define	SACR0			I2S_pointer->sacr0
+#define	SACR1			I2S_pointer->sacr1
+#define	SASR0			I2S_pointer->sasr0
+#define	SAIMR			I2S_pointer->saimr
+#define	SAICR			I2S_pointer->saicr
+#define	SADIV			I2S_pointer->sadiv
+#define	SADR			I2S_pointer->sadr
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_I2S_H */
+#define	SACR0_OFFSET		0x00
+#define	SACR1_OFFSET		0x04
+#define	SASR0_OFFSET		0x0C
+#define	SAIMR_OFFSET		0x14
+#define	SAICR_OFFSET		0x18
+#define	SADIV_OFFSET		0x60
+#define	SADR_OFFSET		0x80
+
+/* SACR0 bits - see Table 14-3 in [1] */
+
+#define	SACR0_RFTH_MASK		0xF000
+#define	SACR0_RFTH(x)		((x << 12) & SACR0_RFTH_MASK)
+#define	SACR0_TFTH_MASK		0x0F00
+#define	SACR0_TFTH(x)		((x << 8) & SACR0_TFTH_MASK)
+#define	SACR0_STRF		bit(5)
+#define	SACR0_EFWR		bit(4)
+#define	SACR0_RST		bit(3)
+#define	SACR0_BCKD		bit(2)
+#define	SACR0_ENB		bit(0)
+
+/* SACR1 bits - see Table 14-6 in [1] */
+
+#define	SACR1_ENLBF		bit(5)
+#define	SACR1_DRPL		bit(4)
+#define	SACR1_DREC		bit(3)
+#define	SACR1_AMSL		bit(0)
+
+/* SASR0 bits - see Table 14-7 in [1] */
+
+#define	SASR0_RFL_MASK		0xF000
+#define	SASR0_RFL(x)		((x << 12) & SASR0_RFL_MASK)
+#define	SASR0_TFL_MASK		0x0F00
+#define	SASR0_TFL(x)		((x << 8) & SASR0_TFL_MASK)
+#define	SASR0_ROR		bit(6)
+#define	SASR0_TUR		bit(5)
+#define	SASR0_RFS		bit(4)
+#define	SASR0_TFS		bit(3)
+#define	SASR0_BSY		bit(2)
+#define	SASR0_RNE		bit(1)
+#define	SASR0_TNF		bit(0)
+
+/* SAIMR bits - see Table 14-10 in [1] */
+
+#define	SAIMR_ROR		bit(6)
+#define	SAIMR_TUR		bit(5)
+#define	SAIMR_RFS		bit(4)
+#define	SAIMR_TFS		bit(3)
+
+/* SAICR bits - see Table 14-9 in [1] */
+
+#define	SAICR_ROR		bit(6)
+#define	SAICR_TUR		bit(5)
+
+/* SADIV bits - see Table 14-8 in [1] */
+
+#define	SADIV_SADIV_MASK	0x7F
+#define	SADIV_SADIV(x)		(x & SADIV_SADIV_MASK)
+
+/* SADR bits - see Table 14-11 in [1] */
+
+#define	SADR_DTH_MASK		0xFFFF0000
+#define	SADR_DTH(x)		((x << 16) & SADR_DTH_MASK)
+#define	SADR_DTL_MASK		0x0000FFFF
+#define	SADR_DTL(x)		(x & SADR_DTL_MASK)
+
+#endif /* PXA2X0_I2S_H */
