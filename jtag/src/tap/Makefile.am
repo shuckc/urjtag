@@ -28,6 +28,7 @@ libtap_a_SOURCES = \
 	register.c \
 	state.c \
 	cable/dlc5.c \
-	cable/ea253.c
+	cable/ea253.c \
+	cable/ei012.c
 
 INCLUDES = -I$(top_srcdir)/include $(OPENWINCE_INC)

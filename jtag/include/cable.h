@@ -43,5 +43,6 @@ extern cable_driver_t *cable;
 
 extern cable_driver_t ea253_cable_driver;
 extern cable_driver_t dlc5_cable_driver;
+extern cable_driver_t ei012_cable_driver;
 
 #endif /* CABLE_H */

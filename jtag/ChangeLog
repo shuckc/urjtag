@@ -1,5 +1,13 @@
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
+	* include/cable.h: Added cable driver for ETC EI012 JTAG Cable.
+	* src/help.c (help): Ditto.
+	* src/jtag.c (main): Ditto.
+	* src/tap/Makefile.am: Ditto.
+	* src/tap/cable/ei012.c: Ditto.
+
+2003-01-08  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac: Bumped version number to 0.2, added check-new and dist-bzip2
 		parameters to AM_INIT_AUTOMAKE() invocation.
 	* src/jtag.c: Updated year in initial banner.

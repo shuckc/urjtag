@@ -147,6 +147,11 @@ main( void )
 
 				if (!cable->init( port ))
 					cable = NULL;
+			} else if (strcmp( t, "EI012" ) == 0) {
+				cable = &ei012_cable_driver;
+
+				if (!cable->init( port ))
+					cable = NULL;
 			} else {
 				printf( "Unknown cable: %s\n", t );
 				continue;

@@ -74,6 +74,7 @@ help( const char *cmd )
 			"none       No cable connected\n"
 			"DLC5       Xilinx DLC5 JTAG Parallel Cable III\n"
 			"EA253      ETC EA253 JTAG Cable\n"
+			"EI012      ETC EI012 JTAG Cable\n"
 		);
 	else if (strcmp( cmd, "detect" ) == 0)
 		printf(
