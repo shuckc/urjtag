@@ -244,7 +244,8 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 			}
 
 		if ((bc >= BSIZE) || (a >= (addr + len)) ) {
-			printf( _("addr: 0x%08X\r"), a );
+			printf( _("addr: 0x%08X"), a );
+			printf( "\r" );
 			fwrite( b, bc, 1, f );
 			bc = 0;
 		}

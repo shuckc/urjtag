@@ -1,5 +1,10 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* src/flash.c (flashmsbin, flashmem): Removed '\r' from translatable messages.
+	* src/readmem.c (readmem): Ditto.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added peekpoke.c (patch 747447, Matan Ziv-Av).
 	* src/cmd/cmd.c (cmds): Added peek and poke commands (patch 747447, Matan Ziv-Av).
 	* src/cmd/peekpoke.c: New file (patch 747447, Matan Ziv-Av).

@@ -165,7 +165,8 @@ flashmsbin( bus_t *bus, FILE *f )
 		while (l) {
 			uint32_t data;
 
-			printf( _("addr: 0x%08X\r"), a );
+			printf( _("addr: 0x%08X"), a );
+			printf( "\r" );
 			fflush(stdout);
 			fread( &data, sizeof data, 1, f );
 			if (flash_program( bus, a, data )) {
@@ -204,7 +205,8 @@ flashmsbin( bus_t *bus, FILE *f )
 		while (l) {
 			uint32_t data, readed;
 
-			printf( _("addr: 0x%08X\r"), a );
+			printf( _("addr: 0x%08X"), a );
+			printf( "\r" );
 			fflush( stdout );
 			fread( &data, sizeof data, 1, f );
 			readed = bus_read( bus, a );
@@ -266,7 +268,8 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		bn = fread( b, 1, BSIZE, f );
 		for (bc = 0; bc < bn; bc += flash_driver->buswidth) {
 			int j;
-			printf( _("addr: 0x%08X\r"), adr );
+			printf( _("addr: 0x%08X"), adr );
+			printf( "\r" );
 			fflush( stdout );
 
 			data = 0;
@@ -311,7 +314,8 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 			else
 				data |= buf[j] << (j * 8);
 
-		printf( _("addr: 0x%08X\r"), adr );
+		printf( _("addr: 0x%08X"), adr );
+		printf( "\r" );
 		fflush( stdout );
 		readed = bus_read( bus, adr );
 		if (data != readed) {
