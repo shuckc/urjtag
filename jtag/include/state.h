@@ -25,7 +25,7 @@
 #ifndef	STATE_H
 #define	STATE_H
 
-#include <common.h>
+#define	bit(b)		(1 << (b))
 
 #define	TAPSTAT_DR	bit(0)
 #define	TAPSTAT_IR	bit(1)
