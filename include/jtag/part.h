@@ -51,6 +51,7 @@ part *part_alloc( void );
 void part_free( part *p );
 part *read_part( FILE *f, const tap_register *idr );
 instruction *part_find_instruction( part *p, const char *iname );
+data_register *part_find_data_register( part *p, const char *drname );
 void part_set_signal( part *p, const char *pname, int out, int val );
 int part_get_signal( part *p, const char *pname );
 

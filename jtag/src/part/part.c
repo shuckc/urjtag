@@ -111,6 +111,24 @@ part_find_instruction( part *p, const char *iname )
 	return i;
 }
 
+data_register *
+part_find_data_register( part *p, const char *drname )
+{
+	data_register *dr;
+
+	if (!p || !drname)
+		return NULL;
+
+	dr = p->data_registers;
+	while (dr) {
+		if (strcmp( drname, dr->name ) == 0)
+			break;
+		dr = dr->next
+	}
+
+	return dr;
+}
+
 void
 part_set_signal( part *p, const char *pname, int out, int val )
 {
