@@ -3,6 +3,9 @@
 src/help.c
 src/jtag.c
 src/readmem.c
+src/part/data_register.c
+src/part/instruction.c
+src/part/parse.c
 src/part/part.c
 src/tap/chain.c
 src/tap/parport/direct.c

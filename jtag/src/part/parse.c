@@ -22,6 +22,15 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -49,7 +58,7 @@ read_part( FILE *f, tap_register *idr )
 
 	part = part_alloc();
 	if (!part) {
-		printf( "out of memory\n" );
+		printf( _("Out of memory\n") );
 		return NULL;
 	}
 
@@ -72,13 +81,13 @@ read_part( FILE *f, tap_register *idr )
 
 			t = get_token( NULL );
 			if (!t) {
-				printf( "(%d) parse error\n", line );
+				printf( _("(%d) parse error\n"), line );
 				continue;
 			}
 
 			s = signal_alloc( t );
 			if (!s) {
-				printf( "(%d) out of memory\n", line );
+				printf( _("(%d) out of memory\n"), line );
 				continue;
 			}
 			s->next = part->signals;
@@ -95,25 +104,25 @@ read_part( FILE *f, tap_register *idr )
 
 			t = get_token( NULL );		/* register length */
 			if (!n || !t) {
-				printf( "(%d) parse error\n", line );
+				printf( _("(%d) parse error\n"), line );
 				continue;
 			}
 
 			l = strtol( t, &t, 10 );
 			if ((t && *t) || (l < 1)) {
-				printf( "(%d) invalid register length\n", line );
+				printf( _("(%d) invalid register length\n"), line );
 				continue;
 			}
 
 			dr = data_register_alloc( n, l );
 			if (!dr) {
-				printf( "(%d) out of memory\n", line );
+				printf( _("(%d) out of memory\n"), line );
 				continue;
 			}
 
 			t = get_token( NULL );
 			if (t) {
-				printf( "(%d) parse error\n", line );
+				printf( _("(%d) parse error\n"), line );
 				continue;
 			}
 
@@ -127,7 +136,7 @@ read_part( FILE *f, tap_register *idr )
 				part->boundary_length = l;
 				part->bsbits = malloc( part->boundary_length * sizeof *part->bsbits );
 				if (!part->bsbits) {
-					printf( "(%d) out of memory\n", line );
+					printf( _("(%d) out of memory\n"), line );
 					continue;
 				}
 				for (i = 0; i < part->boundary_length; i++)
@@ -145,24 +154,24 @@ read_part( FILE *f, tap_register *idr )
 		if (strcmp( t, "instruction" ) == 0) {
 			t = get_token( NULL );		/* 'length' or instruction name */
 			if (!t) {
-				printf( "(%d) parse error\n", line );
+				printf( _("(%d) parse error\n"), line );
 				continue;
 			}
 			/* we need 'length' first */
 			if ((strcmp( t, "length" ) != 0) && (part->instruction_length == 0)) {
-				printf( "(%d) instruction length missing\n", line );
+				printf( _("(%d) instruction length missing\n"), line );
 				continue;
 			}
 
 			if (strcmp( t, "length" ) == 0) {
 				t = get_token( NULL );
 				if (!t) {
-					printf( "(%d) parse error\n", line );
+					printf( _("(%d) parse error\n"), line );
 					continue;
 				}
 				part->instruction_length = strtol( t, &t, 10 );
 				if ((t && *t) || (part->instruction_length < 1)) {
-					printf( "(%d) invalid instruction length\n", line );
+					printf( _("(%d) invalid instruction length\n"), line );
 					continue;
 				}
 			} else {
@@ -171,13 +180,13 @@ read_part( FILE *f, tap_register *idr )
 
 				t = get_token( NULL );	/* instruction bits */
 				if (!t || (strlen( t ) != part->instruction_length)) {
-					printf( "(%d) parse error\n", line );
+					printf( _("(%d) parse error\n"), line );
 					continue;
 				}
 
 				i = instruction_alloc( n, part->instruction_length, t );
 				if (!i) {
-					printf( "(%d) out of memory\n", line );
+					printf( _("(%d) out of memory\n"), line );
 					continue;
 				}
 
@@ -186,19 +195,19 @@ read_part( FILE *f, tap_register *idr )
 
 				t = get_token( NULL );	/* data register */
 				if (!t) {
-					printf( "(%d) parse error\n", line );
+					printf( _("(%d) parse error\n"), line );
 					continue;
 				}
 				i->data_register = part_find_data_register( part, t );
 				if (!i->data_register) {
-					printf( "(%d) unknown data register\n", line );
+					printf( _("(%d) unknown data register\n"), line );
 					continue;
 				}
 			}
 
 			t = get_token( NULL );
 			if (t) {
-				printf( "(%d) parse error\n", line );
+				printf( _("(%d) parse error\n"), line );
 				continue;
 			}
 
@@ -213,7 +222,7 @@ read_part( FILE *f, tap_register *idr )
 			data_register *bsr = part_find_data_register( part, "BSR" );
 
 			if (!bsr) {
-				printf( "(%d) missing Boundary Scan Register (BSR)\n", line );
+				printf( _("(%d) missing Boundary Scan Register (BSR)\n"), line );
 				continue;
 			}
 
@@ -221,18 +230,18 @@ read_part( FILE *f, tap_register *idr )
 			t = get_token( NULL );
 			bit = strtol( t, &t, 10 );
 			if ((t && *t) || (bit < 0) || (bit >= bsr->in->len)) {
-				printf( "(%d) invalid boundary bit number\n", line );
+				printf( _("(%d) invalid boundary bit number\n"), line );
 				continue;
 			}
 			if (part->bsbits[bit]) {
-				printf( "(%d) duplicate bit declaration\n", line );
+				printf( _("(%d) duplicate bit declaration\n"), line );
 				continue;
 			}
 
 			/* get bit type */
 			t = get_token( NULL );
 			if (!t || (strlen( t ) != 1)) {
-				printf( "(%d) parse error\n", line );
+				printf( _("(%d) parse error\n"), line );
 				continue;
 			}
 			switch (*t) {
@@ -252,14 +261,14 @@ read_part( FILE *f, tap_register *idr )
 					type = BSBIT_INTERNAL;
 					break;
 				default:
-					printf( "(%d) parse error\n", line );
+					printf( _("(%d) parse error\n"), line );
 					continue;
 			}
 
 			/* get safe value */
 			t = get_token( NULL );
 			if (!t || (strlen( t ) != 1)) {
-				printf( "(%d) parse error\n", line );
+				printf( _("(%d) parse error\n"), line );
 				continue;
 			}
 			safe = (*t == '1') ? 1 : 0;
@@ -268,14 +277,14 @@ read_part( FILE *f, tap_register *idr )
 			/* get bit name */
 			t = get_token( NULL );
 			if (!t) {
-				printf( "(%d) parse error\n", line );
+				printf( _("(%d) parse error\n"), line );
 				continue;
 			}
 
 			/* allocate bsbit */
 			part->bsbits[bit] = bsbit_alloc( bit, t, type, part->signals, safe );
 			if (!part->bsbits[bit]) {
-				printf( "(%d) out of memory\n", line );
+				printf( _("(%d) out of memory\n"), line );
 				continue;
 			}
 
@@ -286,7 +295,7 @@ read_part( FILE *f, tap_register *idr )
 
 				control = strtol( t, &t, 10 );
 				if ((t && *t) || (control < 0)) {
-					printf( "(%d) invalid control bit number\n", line );
+					printf( _("(%d) invalid control bit number\n"), line );
 					continue;
 				}
 				part->bsbits[bit]->control = control;
@@ -294,7 +303,7 @@ read_part( FILE *f, tap_register *idr )
 				/* control value */
 				t = get_token( NULL );
 				if (!t || (strlen( t ) != 1)) {
-					printf( "(%d) parse error\n", line );
+					printf( _("(%d) parse error\n"), line );
 					continue;
 				}
 				part->bsbits[bit]->control_value = (*t == '1') ? 1 : 0;
@@ -302,18 +311,18 @@ read_part( FILE *f, tap_register *idr )
 				/* control state */
 				t = get_token( NULL );
 				if (!t || (strlen( t ) != 1)) {
-					printf( "(%d) parse error\n", line );
+					printf( _("(%d) parse error\n"), line );
 					continue;
 				}
 				if (*t != 'Z') {
-					printf( "(%d) parse error\n", line );
+					printf( _("(%d) parse error\n"), line );
 					continue;
 				}
 				part->bsbits[bit]->control_state = BSBIT_STATE_Z;
 
 				t = get_token( NULL );
 				if (t) {
-					printf( "(%d) parse error\n", line );
+					printf( _("(%d) parse error\n"), line );
 					continue;
 				}
 
@@ -322,7 +331,7 @@ read_part( FILE *f, tap_register *idr )
 			continue;
 		}
 
-		printf( "(%d) parse error\n", line );
+		printf( _("(%d) parse error\n"), line );
 	}
 
 	return part;

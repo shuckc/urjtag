@@ -22,6 +22,15 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -41,7 +50,7 @@ data_register_alloc( const char *name, int len )
 		return NULL;
 
 	if (strlen( name ) > MAXLEN_DATA_REGISTER)
-		printf( "Warning: Data register too long\n" );
+		printf( _("Warning: Data register name too long\n") );
 	strncpy( dr->name, name, MAXLEN_DATA_REGISTER );
 	dr->name[MAXLEN_DATA_REGISTER] = '\0';
 

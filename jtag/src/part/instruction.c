@@ -22,6 +22,15 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -41,7 +50,7 @@ instruction_alloc( const char *name, int len, const char *val )
 		return NULL;
 
 	if (strlen( name ) > MAXLEN_INSTRUCTION)
-		printf( "Warning: Instruction too long\n" );
+		printf( _("Warning: Instruction name too long\n") );
 	strncpy( i->name, name, MAXLEN_INSTRUCTION );
 	i->name[MAXLEN_INSTRUCTION] = '\0';
 

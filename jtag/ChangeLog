@@ -1,3 +1,10 @@
+2003-05-20  Marcel Telka  <marcel@telka.sk>
+
+	* src/part/data_register.c: Added l10n support. Marked messages for translation.
+	* src/part/instruction.c: Ditto.
+	* src/part/parse.c: Ditto.
+	* po/POTFILES.in: Added above files.
+
 2003-05-19  Marcel Telka  <marcel@telka.sk>
 
 	* src/tap/parport/ppdev.c (ppdev_get_status): Inverted BUSY signal value.
