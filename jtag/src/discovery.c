@@ -26,7 +26,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 #include "cable.h"
 #include "tap.h"
@@ -36,11 +35,11 @@
 
 #define	DETECT_PATTERN_SIZE	8
 #define	MAX_REGISTER_LENGTH	1024
-#define	TEST_COUNT		5
+#define	TEST_COUNT		1
 #define	TEST_THRESHOLD		100		/* in % */
 
 static int
-detect_register_size( chain_t *chain, FILE *f )
+detect_register_size( chain_t *chain )
 {
 	int len;
 	tap_register *rz;
@@ -50,8 +49,6 @@ detect_register_size( chain_t *chain, FILE *f )
 	for (len = 1; len <= MAX_REGISTER_LENGTH; len++) {
 		int p;
 		int ok = 0;
-
-		fprintf( f, _("\tTesting register length: %d\n"), len );
 
 		rz = register_fill( register_alloc( len ), 0 );
 		rout = register_alloc( DETECT_PATTERN_SIZE + len );
@@ -65,7 +62,6 @@ detect_register_size( chain_t *chain, FILE *f )
 			s = register_get_string( rpat );
 			while (*s)
 				s++;
-			fprintf( f, _("\t\tPattern: %s, "), s - DETECT_PATTERN_SIZE );
 
 			for (i = 0; i < TEST_COUNT; i++) {
 				tap_shift_register( chain, rz, NULL, 0 );
@@ -76,7 +72,6 @@ detect_register_size( chain_t *chain, FILE *f )
 				if (register_compare( rpat, rout ) == 0)
 					ok++;
 			}
-			fprintf( f, _("%d %%\n"), 100 * ok / TEST_COUNT );
 			if (100 * ok / TEST_COUNT < TEST_THRESHOLD) {
 				ok = 0;
 				break;
@@ -100,36 +95,31 @@ static void
 jtag_reset( chain_t *chain )
 {
 	chain_set_trst( chain, 0 );
-	sleep( 1 );
 	chain_set_trst( chain, 1 );
-	sleep( 1 );
 
 	tap_reset( chain );
 }
 
 void
-discovery( chain_t *chain, const char *filename )
+discovery( chain_t *chain )
 {
 	int irlen;
 	tap_register *ir;
 	tap_register *irz;
-	FILE *f = NULL;
 
 	/* detecting IR size */
 	jtag_reset( chain );
 
-	printf( _("Detecting IR size...\n") );
-	fprintf( f, _("Detecting IR size:\n") );
+	printf( _("Detecting IR length ... ") );
+	fflush( stdout );
 
 	tap_capture_ir( chain );
-	irlen = detect_register_size( chain, f );
+	irlen = detect_register_size( chain );
 
-	printf( _("IR length is %d\n\n"), irlen );
-	fprintf( f, _("IR length is %d\n\n"), irlen );
+	printf( _("%d\n"), irlen );
 
 	if (irlen < 1) {
 		printf( _("Error: Invalid IR length!\n") );
-		fclose( f );
 		return;
 	}
 
@@ -140,7 +130,6 @@ discovery( chain_t *chain, const char *filename )
 	if (!ir || !irz) {
 		register_free( ir );
 		register_free( irz );
-		fclose( f );
 		printf( _("Error: Out of memory!\n") );
 		return;
 	}
@@ -153,14 +142,13 @@ discovery( chain_t *chain, const char *filename )
 		tap_capture_ir( chain );
 		tap_shift_register( chain, ir, NULL, 1 );
 
-		printf( _("Detecting DR size for IR %s ...\n"), register_get_string( ir ) );
-		fprintf( f, _("Detecting DR size for IR %s:\n"), register_get_string( ir ) );
+		printf( _("Detecting DR length for IR %s ... "), register_get_string( ir ) );
+		fflush( stdout );
 
 		tap_capture_dr( chain );
-		rs = detect_register_size( chain, f );
+		rs = detect_register_size( chain );
 
-		printf( _("DR length for IR %s is %d\n\n"), register_get_string( ir ), rs );
-		fprintf( f, _("DR length for IR %s is %d\n\n"), register_get_string( ir ), rs );
+		printf( _("%d\n"), rs );
 
 		register_inc( ir );
 		if (register_compare( ir, irz ) == 0)
@@ -168,6 +156,4 @@ discovery( chain_t *chain, const char *filename )
 	}
 	register_free( ir );
 	register_free( irz );
-
-	fclose( f );
 }

@@ -1,3 +1,14 @@
+2003-06-19  Marcel Telka  <marcel@telka.sk>
+
+	* include/jtag.h (discovery): Removed 'filename' parameter.
+	* src/discovery.c (TEST_COUNT): Changed test repeat count from 5 to 1.
+	(detect_register_size): Removed 'f' parameter. Removed output messages.
+	(jtag_reset): Removed sleep() calls.
+	(discovery): Removed 'filename' parameter. Removed support for output to file. Simplified output
+		messages.
+	* src/cmd/discovery.c (cmd_discovery_run): Removed FILENAME parameter.
+	(cmd_discovery_help): Updated help text.
+
 2003-06-18  Marcel Telka  <marcel@telka.sk>
 
 	* src/discovery.c (discovery): Removed explicit JTAG chain length detection. Changed starting of the DR

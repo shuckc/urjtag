@@ -33,13 +33,13 @@
 static int
 cmd_discovery_run( char *params[] )
 {
-	if (cmd_params( params ) != 2)
+	if (cmd_params( params ) != 1)
 		return -1;
 
 	if (!cmd_test_cable())
 		return 1;
 
-	discovery( chain, params[1] );
+	discovery( chain );
 
 	return 1;
 }
@@ -48,15 +48,13 @@ static void
 cmd_discovery_help( void )
 {
 	printf( _(
-		"Usage: %s FILENAME\n"
+		"Usage: %s\n"
 		"Discovery unknown parts in the JTAG chain.\n"
 		"\n"
-		"Detail output (report) is directed to the FILENAME.\n"
 		"'%s' attempts to detect these parameters of an unknown JTAG\n"
 		"chain:\n"
-		" 1. JTAG chain size (number of parts in the chain)\n"
-		" 2. IR (instruction register) length\n"
-		" 3. DR (data register) length for all possible instructions\n"
+		" 1. IR (instruction register) length\n"
+		" 2. DR (data register) length for all possible instructions\n"
 		"\n"
 		"Warning: This may be dangerous for some parts (especially, if the\n"
 		"part doesn't have TRST signal).\n"
