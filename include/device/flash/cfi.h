@@ -55,6 +55,15 @@
 #define	ALT_VENDOR_ID_OFFSET		0x17
 #define	ALT_VENDOR_TABLE_ADR_OFFSET	0x19
 
+#if LANGUAGE == C
+typedef struct cfi_query_identification_string_t {
+	uint16_t pri_id_code;
+	void *pri_vendor_tbl;
+	uint16_t alt_id_code;
+	void *alt_vendor_tbl;
+} cfi_query_identification_string_t;
+#endif /* LANGUAGE == C */
+
 /* Algorithm command set & control interface ID codes - see Table 1 in [2] */
 
 #define	CFI_VENDOR_NULL			0x0000
@@ -135,10 +144,9 @@ struct cfi_erase_block_region_t {
 
 #if LANGUAGE == C
 typedef struct cfi_query_structure_t {
+	cfi_query_identification_string_t identification_string;
 	cfi_query_system_interface_information_t system_interface_info;
 	cfi_device_geometry_t device_geometry;
-	void *pri_vendor_tbl;
-	void *alt_vendor_tbl;
 } cfi_query_structure_t;
 #endif /* LANGUAGE == C */
 
