@@ -38,6 +38,19 @@
 #include <stdint.h>
 
 #include <brux/bus.h>
+#include <brux/cfi.h>
+
+typedef struct {
+	unsigned int bus_width;		/* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
+	const char *name;
+	const char *description;
+	int (*autodetect)( cfi_array_t *cfi_array );
+	void (*print_info)( cfi_array_t *cfi_array );
+	int (*erase_block)( cfi_array_t *cfi_array, uint32_t adr );
+	int (*unlock_block)( cfi_array_t *cfi_array, uint32_t adr );
+	int (*program)( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+	void (*flash_readarray)( cfi_array_t *cfi_array );
+} flash_driver_t;
 
 void detectflash( bus_t *bus );
 
