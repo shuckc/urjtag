@@ -1,3 +1,14 @@
+2003-02-10  Marcel Telka  <marcel@telka.sk>
+
+	* src/sa1110.c (sa1110_bus_read_start): Added support for all six static memory banks.
+		The function is now 'static'.
+	(sa1110_bus_read_end): Ditto.
+	(sa1110_bus_read_next): The function is now 'static'.
+	(sa1110_bus_read): Ditto.
+	(sa1110_bus_width): Ditto.
+	(sa1110_bus_write): Added support for all six static memory banks (bug 682660).
+		The function is now 'static'.
+
 2003-02-07  Marcel Telka  <marcel@telka.sk>
 
 	* src/tap/cable/arcom.c: Added support for Arcom JTAG Cable (patch 682310,

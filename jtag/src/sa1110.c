@@ -20,6 +20,10 @@
  *
  * Written by Marcel Telka <marcel@telka.sk>, 2002.
  *
+ * Documentation:
+ * [1] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
+ *     Developer's Manual", October 2001, Order Number: 278240-004
+ *
  */
 
 #include <stdint.h>
@@ -65,18 +69,18 @@ setup_data( part *p, uint32_t d )
 	}
 }
 
-void
+static void
 sa1110_bus_read_start( parts *ps, uint32_t adr )
 {
-	/* see Figure 10-12 in SA doc */
+	/* see Figure 10-12 in [1] */
 	part *p = ps->parts[0];
 
-	part_set_signal( p, "nCS0", 1, 0 );
-	part_set_signal( p, "nCS1", 1, 1 );
-	part_set_signal( p, "nCS2", 1, 1 );
-	part_set_signal( p, "nCS3", 1, 1 );
-	part_set_signal( p, "nCS4", 1, 1 );
-	part_set_signal( p, "nCS5", 1, 1 );
+	part_set_signal( p, "nCS0", 1, (adr >> 27) != 0 );
+	part_set_signal( p, "nCS1", 1, (adr >> 27) != 1 );
+	part_set_signal( p, "nCS2", 1, (adr >> 27) != 2 );
+	part_set_signal( p, "nCS3", 1, (adr >> 27) != 3 );
+	part_set_signal( p, "nCS4", 1, (adr >> 27) != 8 );
+	part_set_signal( p, "nCS5", 1, (adr >> 27) != 9 );
 	part_set_signal( p, "RD_nWR", 1, 1 );
 	part_set_signal( p, "nWE", 1, 1 );
 	part_set_signal( p, "nOE", 1, 0 );
@@ -87,10 +91,10 @@ sa1110_bus_read_start( parts *ps, uint32_t adr )
 	parts_shift_data_registers( ps );
 }
 
-uint32_t
+static uint32_t
 sa1110_bus_read_next( parts *ps, uint32_t adr )
 {
-	/* see Figure 10-12 in SA doc */
+	/* see Figure 10-12 in [1] */
 	part *p = ps->parts[0];
 
 	setup_address( p, adr );
@@ -110,13 +114,18 @@ sa1110_bus_read_next( parts *ps, uint32_t adr )
 	}
 }
 
-uint32_t
+static uint32_t
 sa1110_bus_read_end( parts *ps )
 {
-	/* see Figure 10-12 in SA doc */
+	/* see Figure 10-12 in [1] */
 	part *p = ps->parts[0];
 
 	part_set_signal( p, "nCS0", 1, 1 );
+	part_set_signal( p, "nCS1", 1, 1 );
+	part_set_signal( p, "nCS2", 1, 1 );
+	part_set_signal( p, "nCS3", 1, 1 );
+	part_set_signal( p, "nCS4", 1, 1 );
+	part_set_signal( p, "nCS5", 1, 1 );
 	part_set_signal( p, "nOE", 1, 1 );
 	parts_shift_data_registers( ps );
 
@@ -134,25 +143,25 @@ sa1110_bus_read_end( parts *ps )
 	}
 }
 
-uint32_t
+static uint32_t
 sa1110_bus_read( parts *ps, uint32_t adr )
 {
 	sa1110_bus_read_start( ps, adr );
 	return sa1110_bus_read_end( ps );
 }
 
-void
+static void
 sa1110_bus_write( parts *ps, uint32_t adr, uint32_t data )
 {
-	/* see Figure 10-16 in SA doc */
+	/* see Figure 10-16 in [1] */
 	part *p = ps->parts[0];
 
-	part_set_signal( p, "nCS0", 1, 0 );
-	part_set_signal( p, "nCS1", 1, 1 );
-	part_set_signal( p, "nCS2", 1, 1 );
-	part_set_signal( p, "nCS3", 1, 1 );
-	part_set_signal( p, "nCS4", 1, 1 );
-	part_set_signal( p, "nCS5", 1, 1 );
+	part_set_signal( p, "nCS0", 1, (adr >> 27) != 0 );
+	part_set_signal( p, "nCS1", 1, (adr >> 27) != 1 );
+	part_set_signal( p, "nCS2", 1, (adr >> 27) != 2 );
+	part_set_signal( p, "nCS3", 1, (adr >> 27) != 3 );
+	part_set_signal( p, "nCS4", 1, (adr >> 27) != 8 );
+	part_set_signal( p, "nCS5", 1, (adr >> 27) != 9 );
 	part_set_signal( p, "RD_nWR", 1, 0 );
 	part_set_signal( p, "nWE", 1, 1 );
 	part_set_signal( p, "nOE", 1, 1 );
@@ -165,10 +174,16 @@ sa1110_bus_write( parts *ps, uint32_t adr, uint32_t data )
 	part_set_signal( p, "nWE", 1, 0 );
 	parts_shift_data_registers( ps );
 	part_set_signal( p, "nWE", 1, 1 );
+	part_set_signal( p, "nCS0", 1, 1 );
+	part_set_signal( p, "nCS1", 1, 1 );
+	part_set_signal( p, "nCS2", 1, 1 );
+	part_set_signal( p, "nCS3", 1, 1 );
+	part_set_signal( p, "nCS4", 1, 1 );
+	part_set_signal( p, "nCS5", 1, 1 );
 	parts_shift_data_registers( ps );
 }
 
-int
+static int
 sa1110_bus_width( parts *ps )
 {
 	if (part_get_signal( ps->parts[0], "ROM_SEL" )) {
