@@ -31,6 +31,7 @@ libcmd_a_SOURCES = \
 	discovery.c \
 	detect.c \
 	print.c \
+	part.c \
 	instruction.c \
 	shift.c \
 	dr.c \

@@ -2,6 +2,8 @@ $Id$
 
 See libbrux/NEWS for more news.
 
+jtag-0.5:
+
 	* Fixed bug with SELECT, AUTOFD, and STROBE signals handling (bug 745824).
 	* Added new commands 'peek' and 'poke' (patch 747447, Matan Ziv-Av).
 	* Fixed bugs in SH7727 bus driver (thanks to Rainer Dörken).
@@ -12,6 +14,8 @@ See libbrux/NEWS for more news.
 		- removed explicit JTAG chain length detection (patch 753298, Matan Ziv-Av)
 		- simplified output messages
 		- removed support for report results to file
+	* Added new command 'part', syntax changes for 'set', 'get', 'dr', 'instruction', and
+		'print' commands.
 	* Added initial JTAG declarations for Broadcom BCM3310 (see support request 770145 for
 		more info, thanks to Ramses VI).
 	* Fixed invalid memory allocation size (core dump) in jtag_parse_line() function.

@@ -35,11 +35,10 @@
 static int
 cmd_dr_run( char *params[] )
 {
-	unsigned int n;
 	int dir = 1;
 	tap_register *r;
 
-	if (cmd_params( params ) < 2 || cmd_params( params ) > 3)
+	if (cmd_params( params ) < 1 || cmd_params( params ) > 2)
 		return -1;
 
 	if (!cmd_test_cable())
@@ -50,27 +49,24 @@ cmd_dr_run( char *params[] )
 		return 1;
 	}
 
-	if (cmd_get_number( params[1], &n ))
-		return -1;
-
-	if (n >= chain->parts->len) {
-		printf( _("%s: invalid part number\n"), "dr" );
+	if (chain->active_part >= chain->parts->len) {
+		printf( _("%s: no active part\n"), "part" );
 		return 1;
 	}
 
-	if (params[2]) {
-		if (strcmp( params[2], "in" ) == 0)
+	if (params[1]) {
+		if (strcmp( params[1], "in" ) == 0)
 			dir = 0;
-		else if (strcmp( params[2], "out" ) == 0)
+		else if (strcmp( params[1], "out" ) == 0)
 			dir = 1;
 		else
 			return -1;
 	}
 
 	if (dir)
-		r = chain->parts->parts[n]->active_instruction->data_register->out;
+		r = chain->parts->parts[chain->active_part]->active_instruction->data_register->out;
 	else
-		r = chain->parts->parts[n]->active_instruction->data_register->in;
+		r = chain->parts->parts[chain->active_part]->active_instruction->data_register->in;
 	printf( _("%s\n"), register_get_string( r ) );
 
 	return 1;
@@ -80,10 +76,9 @@ static void
 cmd_dr_help( void )
 {
 	printf( _(
-		"Usage: %s PART [DIR]\n"
+		"Usage: %s [DIR]\n"
 		"Display input or output data register content.\n"
 		"\n"
-		"PART          part number (see print command)\n"
 		"DIR           requested data register; possible values: 'in' for\n"
 		"                input and 'out' for output; default is 'out'\n"
 	), "dr" );

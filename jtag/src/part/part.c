@@ -287,23 +287,9 @@ parts_set_instruction( parts_t *ps, const char *iname )
 }
 
 void
-parts_print( parts_t *ps, int header )
+parts_print( parts_t *ps )
 {
 	int i;
-
-	if (header) {
-		char format[100];
-		char header[100];
-
-		snprintf( format, 100, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
-				MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
-		snprintf( header, 100, format, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
-		printf( header );
-
-		for (i = 0; i < strlen( header ); i++ )
-			putchar( '-' );
-		putchar( '\n' );
-	}
 
 	if (!ps)
 		return;

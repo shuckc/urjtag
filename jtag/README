@@ -149,10 +149,10 @@ jtag>
 
 ===> Fourth task: Sample device pin status.
 
-jtag> instruction 0 SAMPLE/PRELOAD
+jtag> instruction SAMPLE/PRELOAD
 jtag> shift ir
 jtag> shift dr
-jtag> dr 0
+jtag> dr
 10001100100000100001100101111111111111111110011011100000111011111111111111111111
 11111111111111111111111111111111111111111111101111111101100000100010101000000000
 00011111000000111010111111100000100001100100000000000000000111000011100000000000
@@ -163,7 +163,7 @@ jtag> print
  No. Manufacturer         Part                 Stepping Instruction          Register
 ----------------------------------------------------------------------------------------
    0 Intel                PXA250               C0       SAMPLE/PRELOAD       BSR
-jtag> get signal 0 BOOT_SEL[0]
+jtag> get signal BOOT_SEL[0]
 BOOT_SEL[0] = 0
 jtag>
 

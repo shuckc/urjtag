@@ -1,3 +1,21 @@
+2003-08-11  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (AC_INIT): Changed version number to 0.5.
+
+	* include/chain.h (chain_t): Added active_part.
+	* src/tap/chain.c (chain_alloc): Added active_part initialization.
+	* include/part.h (parts_print): Removed 'header' parameter.
+	* src/part/part.c (parts_print): Removed header printing.
+	* src/cmd/print.c (cmd_print_run): Added header printg. Added new parameter 'chain' for print command.
+	(cmd_print_help): Added new parameter 'chain'.
+	* src/cmd/dr.c (cmd_dr_run, cmd_dr_help): Removed PART parameter.
+	* src/cmd/get.c (cmd_get_run, cmd_get_help): Ditto.
+	* src/cmd/instruction.c (cmd_instruction_run, cmd_instruction_help): Ditto.
+	* src/cmd/set.c (cmd_set_run, cmd_set_help): Ditto.
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Adde part.c.
+	* src/cmd/part.c: New file.
+	* src/cmd/cmd.c (cmds): Added cmd_part.
+
 2003-07-25  Marcel Telka  <marcel@telka.sk>
 
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added broadcom/bcm3310/STEPPINGS and

@@ -25,6 +25,7 @@
 #include <config.h>
 
 #include <stdio.h>
+#include <string.h>
 
 #include "part.h"
 #include "jtag.h"
@@ -34,13 +35,42 @@
 static int
 cmd_print_run( char *params[] )
 {
-	if (cmd_params( params ) != 1)
+	char format[100];
+	char header[100];
+	int i;
+
+	if (cmd_params( params ) > 2)
 		return -1;
 
 	if (!cmd_test_cable())
 		return 1;
 
-	parts_print( chain->parts, 1 );
+	if (!chain->parts) {
+		printf( _("Run \"detect\" first.\n") );
+		return 1;
+	}
+
+	snprintf( format, 100, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
+			MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
+	snprintf( header, 100, format, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
+	printf( header );
+
+	for (i = 0; i < strlen( header ); i++ )
+		putchar( '-' );
+	putchar( '\n' );
+
+	if (cmd_params( params ) == 1) {
+		if (chain->parts->len > chain->active_part) {
+			printf( _(" %3d "), chain->active_part );
+			part_print( chain->parts->parts[chain->active_part] );
+		}
+		return 1;
+	}
+
+	if (strcmp( params[1], "chain" ) != 0)
+		return -1;
+
+	parts_print( chain->parts );
 
 	return 1;
 }
@@ -49,7 +79,7 @@ static void
 cmd_print_help( void )
 {
 	printf( _(
-		"Usage: %s\n"
+		"Usage: %s [chain]\n"
 		"Display JTAG chain status.\n"
 		"\n"
 		"Display list of the parts connected to the JTAG chain including\n"

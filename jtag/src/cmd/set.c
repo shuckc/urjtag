@@ -36,18 +36,14 @@
 static int
 cmd_set_run( char *params[] )
 {
-	unsigned int n;
 	int dir;
 	unsigned int data = 0;
 	signal_t *s;
 
-	if (cmd_params( params ) < 5 || cmd_params( params ) > 6)
+	if (cmd_params( params ) < 4 || cmd_params( params ) > 5)
 		return -1;
 
 	if (strcmp( params[1], "signal" ) != 0)
-		return -1;
-
-	if (cmd_get_number( params[2], &n ))
 		return -1;
 
 	if (!cmd_test_cable())
@@ -58,30 +54,30 @@ cmd_set_run( char *params[] )
 		return 1;
 	}
 
-	if (n >= chain->parts->len) {
-		printf( _("%s: invalid part number\n"), "set" );
+	if (chain->active_part >= chain->parts->len) {
+		printf( _("%s: no active part\n"), "set" );
 		return 1;
 	}
 
 	/* direction */
-	if (strcmp( params[4], "in" ) != 0 && strcmp( params[4], "out" ) != 0)
+	if (strcmp( params[3], "in" ) != 0 && strcmp( params[3], "out" ) != 0)
 		return -1;
 
-	dir = (strcmp( params[4], "in" ) == 0) ? 0 : 1;
+	dir = (strcmp( params[3], "in" ) == 0) ? 0 : 1;
 
 	if (dir) {
-		if (cmd_get_number( params[5], &data ))
+		if (cmd_get_number( params[4], &data ))
 			return -1;
 		if (data > 1)
 			return -1;
 	}
 
-	s = part_find_signal( chain->parts->parts[n], params[3] );
+	s = part_find_signal( chain->parts->parts[chain->active_part], params[2] );
 	if (!s) {
-		printf( _("signal '%s' not found\n"), params[3] );
+		printf( _("signal '%s' not found\n"), params[2] );
 		return 1;
 	}
-	part_set_signal( chain->parts->parts[n], s, dir, data );
+	part_set_signal( chain->parts->parts[chain->active_part], s, dir, data );
 
 	return 1;
 }
@@ -90,10 +86,9 @@ static void
 cmd_set_help( void )
 {
 	printf( _(
-		"Usage: %s PART SIGNAL DIR [DATA]\n"
+		"Usage: %s SIGNAL DIR [DATA]\n"
 		"Set signal state in input BSR (Boundary Scan Register).\n"
 		"\n"
-		"PART          part number (see print command)\n"
 		"SIGNAL        signal name (from JTAG declaration file)\n"
 		"DIR           requested signal direction; possible values: 'in' or 'out'\n"
 		"DATA          desired output signal value ('0' or '1'); used only if DIR\n"

@@ -73,6 +73,6 @@ parts_t *parts_alloc( void );
 void parts_free( parts_t *ps );
 int parts_add_part( parts_t *ps, part_t *p );
 void parts_set_instruction( parts_t *ps, const char *iname );
-void parts_print( parts_t *ps, int header );
+void parts_print( parts_t *ps );
 
 #endif /* PART_H */

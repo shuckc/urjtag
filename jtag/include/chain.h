@@ -34,6 +34,7 @@ typedef struct chain_t chain_t;
 struct chain_t {
 	int state;
 	parts_t *parts;
+	int active_part;
 	cable_t *cable;
 };
 

@@ -38,6 +38,7 @@ extern cmd_t cmd_cable;
 extern cmd_t cmd_discovery;
 extern cmd_t cmd_detect;
 extern cmd_t cmd_print;
+extern cmd_t cmd_part;
 extern cmd_t cmd_instruction;
 extern cmd_t cmd_shift;
 extern cmd_t cmd_dr;
@@ -59,6 +60,7 @@ const cmd_t *cmds[] = {
 	&cmd_discovery,
 	&cmd_detect,
 	&cmd_print,
+	&cmd_part,
 	&cmd_instruction,
 	&cmd_shift,
 	&cmd_dr,

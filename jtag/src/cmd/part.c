@@ -27,22 +27,16 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "part.h"
-#include "bssignal.h"
 #include "jtag.h"
 
 #include "cmd.h"
 
 static int
-cmd_get_run( char *params[] )
+cmd_part_run( char *params[] )
 {
-	int data;
-	signal_t *s;
+	unsigned int n;
 
-	if (cmd_params( params ) != 3)
-		return -1;
-
-	if (strcmp( params[1], "signal") != 0)
+	if (cmd_params( params ) != 2)
 		return -1;
 
 	if (!cmd_test_cable())
@@ -53,37 +47,33 @@ cmd_get_run( char *params[] )
 		return 1;
 	}
 
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "get" );
+	if (cmd_get_number( params[1], &n ))
+		return -1;
+
+	if (n >= chain->parts->len) {
+		printf( _("%s: invalid part number\n"), "part" );
 		return 1;
 	}
 
-	s = part_find_signal( chain->parts->parts[chain->active_part], params[2] );
-	if (!s) {
-		printf( _("signal '%s' not found\n"), params[2] );
-		return 1;
-	}
-	data = part_get_signal( chain->parts->parts[chain->active_part], s );
-	if (data != -1)
-		printf( _("%s = %d\n"), params[2], data );
+	chain->active_part = n;
 
 	return 1;
 }
 
 static void
-cmd_get_help( void )
+cmd_part_help( void )
 {
 	printf( _(
-		"Usage: %s SIGNAL\n"
-		"Get signal state from output BSR (Boundary Scan Register).\n"
+		"Usage: %s PART\n"
+		"Change active part for current JTAG chain.\n"
 		"\n"
-		"SIGNAL        signal name (from JTAG declaration file)\n"
-	), "get signal" );
+		"PART          part number\n"
+	), "part" );
 }
 
-cmd_t cmd_get = {
-	"get",
-	N_("get external signal value"),
-	cmd_get_help,
-	cmd_get_run
+cmd_t cmd_part = {
+	"part",
+	N_("change active part for current JTAG chain"),
+	cmd_part_help,
+	cmd_part_run
 };

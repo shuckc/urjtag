@@ -39,6 +39,7 @@ chain_alloc( void )
 
 	chain->cable = NULL;
 	chain->parts = NULL;
+	chain->active_part = 0;
 	tap_state_init( chain );
 
 	return chain;

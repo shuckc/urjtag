@@ -34,9 +34,7 @@
 static int
 cmd_instruction_run( char *params[] )
 {
-	unsigned int n;
-
-	if (cmd_params( params ) != 3)
+	if (cmd_params( params ) != 2)
 		return -1;
 
 	if (!cmd_test_cable())
@@ -47,17 +45,14 @@ cmd_instruction_run( char *params[] )
 		return 1;
 	}
 
-	if (cmd_get_number( params[1], &n ))
-		return -1;
-
-	if (n >= chain->parts->len) {
-		printf( _("%s: invalid part number\n"), "instruction" );
+	if (chain->active_part >= chain->parts->len) {
+		printf( _("%s: no active part\n"), "instruction" );
 		return 1;
 	}
 
-	part_set_instruction( chain->parts->parts[n], params[2] );
-	if (chain->parts->parts[n]->active_instruction == NULL)
-		printf( _("%s: unknown instruction '%s'\n"), "instruction", params[2] );
+	part_set_instruction( chain->parts->parts[chain->active_part], params[1] );
+	if (chain->parts->parts[chain->active_part]->active_instruction == NULL)
+		printf( _("%s: unknown instruction '%s'\n"), "instruction", params[1] );
 
 	return 1;
 }
@@ -66,10 +61,9 @@ static void
 cmd_instruction_help( void )
 {
 	printf( _(
-		"Usage: %s PART INSTRUCTION\n"
+		"Usage: %s INSTRUCTION\n"
 		"Change active INSTRUCTION for a PART.\n"
 		"\n"
-		"PART          part number (see print command)\n"
 		"INSTRUCTION   instruction name (e.g. BYPASS)\n"
 	), "instruction" );
 }
