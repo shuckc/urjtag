@@ -43,25 +43,45 @@
 
 #include "part.h"
 #include "bus.h"
+#include "flash.h"
 
-int flash_erase_block( parts *ps, uint32_t adr );
-int flash_unlock_block( parts *ps, uint32_t adr );
-int flash_program( parts *ps, uint32_t adr, uint32_t data );
-int flash_erase_block32( parts *ps, uint32_t adr );
-int flash_unlock_block32( parts *ps, uint32_t adr );
-int flash_program32( parts *ps, uint32_t adr, uint32_t data );
+extern flash_driver_t amd_32_flash_driver;
+extern flash_driver_t intel_32_flash_driver;
 
-cfi_query_structure_t *detect_cfi( parts *ps );
+flash_driver_t *flash_drivers[] = {
+	&amd_32_flash_driver,
+	&intel_32_flash_driver,
+	NULL
+};
+
+flash_driver_t *flash_driver = NULL;
 
 void
-flashmsbin( parts *ps, FILE *f )
+set_flash_driver( parts *ps, cfi_query_structure_t *cfi )
+{
+	int i;
+	flash_driver = NULL;
+
+	for (i = 0; flash_drivers[i] != NULL; i++)
+		if (flash_drivers[i]->flash_autodetect( ps, cfi )) {
+			flash_driver = flash_drivers[i];
+			return;
+		}
+
+	printf( "unknown flash - vendor id: %d (0x%04x)\n",
+		cfi->identification_string.pri_id_code,
+		cfi->identification_string.pri_id_code );
+}
+
+/* check for flashmem - set driver */
+void
+flashcheck( parts *ps, cfi_query_structure_t **cfi )
 {
 	part *p = ps->parts[0];
 	int o = 0;
-	uint32_t adr;
-	cfi_query_structure_t *cfi;
+	flash_driver = NULL;
 
-	printf( "Note: Supported configuration is 2 x 16 bit only\n" );
+	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
 
 	switch (bus_width( ps )) {
 		case 16:
@@ -79,9 +99,28 @@ flashmsbin( parts *ps, FILE *f )
 	part_set_instruction( p, "EXTEST" );
 	parts_shift_instructions( ps );
 
-	cfi = detect_cfi( ps );
-	if (!cfi) {
+	*cfi = detect_cfi( ps );
+	if (!*cfi) {
 		printf( "Flash not found!\n" );
+		return;
+	}
+	set_flash_driver( ps, *cfi );
+	if (!flash_driver) {
+		printf( "Flash not supported!\n" );
+		return;
+	}
+	flash_driver->flash_print_info( ps );
+}
+
+void
+flashmsbin( parts *ps, FILE *f )
+{
+	uint32_t adr;
+	cfi_query_structure_t *cfi = 0;
+
+	flashcheck( ps, &cfi );
+	if (!cfi || !flash_driver) {
+		printf( "no flash driver found\n" );
 		return;
 	}
 
@@ -108,9 +147,9 @@ flashmsbin( parts *ps, FILE *f )
 		last = (start + len - 1) / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
 		for (; first <= last; first++) {
 			adr = first * cfi->device_geometry.erase_block_regions[0].erase_block_size * 2;
-			flash_unlock_block32( ps, adr );
+			flash_unlock_block( ps, adr );
 			printf( "block %d unlocked\n", first );
-			printf( "erasing block %d: %d\n", first, flash_erase_block32( ps, adr ) );
+			printf( "erasing block %d: %d\n", first, flash_erase_block( ps, adr ) );
 		}
 	}
 
@@ -137,9 +176,10 @@ flashmsbin( parts *ps, FILE *f )
 			uint32_t data;
 
 			printf( "addr: 0x%08X\r", a );
+			fflush(stdout);
 			fread( &data, sizeof data, 1, f );
-			if (flash_program32( ps, a, data )) {
-				printf( "\nflash error\n" );
+			if (flash_program( ps, a, data )) {
+				printf( "\nflash error 1\n" );
 				return;
 			}
 			a += 4;
@@ -148,8 +188,7 @@ flashmsbin( parts *ps, FILE *f )
 	}
 	printf( "\n" );
 
-	/* Read Array */
-	bus_write( ps, 0 << o, 0x00FF00FF );
+	flash_readarray(ps);
 
 	fseek( f, 15, SEEK_SET );
 	printf( "verify:\n" );
@@ -176,10 +215,12 @@ flashmsbin( parts *ps, FILE *f )
 			uint32_t data, readed;
 
 			printf( "addr: 0x%08X\r", a );
+			fflush( stdout );
 			fread( &data, sizeof data, 1, f );
 			readed = bus_read( ps, a );
 			if (data != readed) {
-				printf( "\nverify error: 0x%08X vs. 0x%08X\n", readed, data );
+				printf( "\nverify error: 0x%08X vs. 0x%08X at addr %08X\n", 
+					readed, data, a );
 				return;
 			}
 			a += 4;
@@ -198,34 +239,14 @@ flashmsbin( parts *ps, FILE *f )
 void
 flashmem( parts *ps, FILE *f, uint32_t addr )
 {
-	part *p = ps->parts[0];
-	int o = 0;
 	uint32_t adr;
-	cfi_query_structure_t *cfi;
+	cfi_query_structure_t *cfi = NULL;
 	int *erased;
 	int i;
 
-	printf( "Note: Supported configuration is 2 x 16 bit or 1 x 16 bit only\n" );
-
-	switch (bus_width( ps )) {
-		case 16:
-			o = 1;
-			break;
-		case 32:
-			o = 2;
-			break;
-		default:
-			printf( "Error: Unknown bus width!\n" );
-			return;
-	}
-
-	/* EXTEST */
-	part_set_instruction( p, "EXTEST" );
-	parts_shift_instructions( ps );
-
-	cfi = detect_cfi( ps );
-	if (!cfi) {
-		printf( "Flash not found!\n" );
+	flashcheck( ps, &cfi );
+	if (!cfi || !flash_driver) {
+		printf( "no flash driver found\n" );
 		return;
 	}
 
@@ -244,41 +265,36 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 #define BSIZE 4096
 		char b[BSIZE];
 		int bc = 0, bn = 0;
-		/* FIXME: block_no is probably invalid for 1 x 16 bit memory configuration */
-		int block_no = adr / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
+		int block_no = adr / (cfi->device_geometry.erase_block_regions[0].erase_block_size * flash_driver->buswidth / 2);
 		printf( "addr: 0x%08X\r", adr );
+		fflush( stdout );
 
 		if (!erased[block_no]) {
-			if (o == 1)
-				flash_unlock_block( ps, adr );
-			else
-				flash_unlock_block32( ps, adr );
+			flash_unlock_block( ps, adr );
 			printf( "block %d unlocked\n", block_no );
-			printf( "erasing block %d: %d\n", block_no,
-					(o == 1) ? flash_erase_block( ps, adr ) : flash_erase_block32( ps, adr ) );
+			printf( "erasing block %d: %d\n", block_no, flash_erase_block( ps, adr ) );
 			erased[block_no] = 1;
 		}
 
 		bn = fread( b, 1, BSIZE, f );
 		printf("addr 0x%08X (n is %d)\n", adr, bn);
-		for (bc = 0; bc < bn; bc += (o == 1) ? 2 : 4) {
-			if (o == 1)
+		for (bc = 0; bc < bn; bc += flash_driver->buswidth) {
+			if (flash_driver->buswidth == 2)
 				data = htons( *((uint16_t *) &b[bc]) );
 			else
 				data = * ((uint32_t *) &b[bc]);
-			if ((o == 1) ? flash_program( ps, adr, data ) : flash_program32( ps, adr, data )) {
-				printf( "\nflash error\n" );
+			if (flash_program( ps, adr, data )) {
+				printf( "\nflash error 2\n" );
 				return;
 			}
-			adr += (o == 1) ? 2 : 4;
+			adr += flash_driver->buswidth;
 		}
 	}
 	printf( "\n" );
 
-	/* Read Array */
-	bus_write( ps, 0 << o, 0x00FF00FF );
+	flash_readarray( ps );
 
-	if (o != 1) {		/* TODO: not available in 1 x 16 bit mode */
+	if (flash_driver->buswidth == 2) {			/* TODO: not available in 1 x 16 bit mode */
 	fseek( f, 0, SEEK_SET );
 	printf( "verify:\n" );
 	adr = addr;
@@ -286,13 +302,14 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 		uint32_t data;
 		uint32_t readed;
 		printf( "addr: 0x%08X\r", adr );
-		fread( &data, sizeof data, 1, f );
+		fflush( stdout );
+		fread( &data, flash_driver->buswidth, 1, f );
 		readed = bus_read( ps, adr );
 		if (data != readed) {
-			printf( "\nverify error: 0x%08X vs. 0x%08X\n", readed, data );
+			printf( "\nverify error: 0x%08X vs. 0x%08X at addr %08X\n", readed, data, adr );
 			return;
 		}
-		adr += 4;
+		adr += flash_driver->buswidth;
 	}
 	printf( "\nDone.\n" );
 	} else
@@ -305,127 +322,6 @@ flashmem( parts *ps, FILE *f, uint32_t addr )
 	free( erased );
 }
 
-#define	CFI_INTEL_ERROR_UNKNOWN				1
-#define	CFI_INTEL_ERROR_UNSUPPORTED			2
-#define	CFI_INTEL_ERROR_LOW_VPEN			3
-#define	CFI_INTEL_ERROR_BLOCK_LOCKED			4
-#define	CFI_INTEL_ERROR_INVALID_COMMAND_SEQUENCE	5
 
-int
-flash_erase_block( parts *ps, uint32_t adr )
-{
-	uint16_t sr;
 
-	bus_write( ps, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, CFI_INTEL_CMD_BLOCK_ERASE );
-	bus_write( ps, adr, CFI_INTEL_CMD_CONFIRM );
 
-	while (!((sr = bus_read( ps, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
-
-	switch (sr & ~CFI_INTEL_SR_READY) {
-		case 0:
-			return 0;
-		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_PROGRAM_ERROR:
-			printf("flash: invalid command seq\n");
-			return CFI_INTEL_ERROR_INVALID_COMMAND_SEQUENCE;
-		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_VPEN_ERROR:
-			printf("flash: low vpen\n");
-			return CFI_INTEL_ERROR_LOW_VPEN;
-		case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_BLOCK_LOCKED:
-			printf("flash: block locked\n");
-			return CFI_INTEL_ERROR_BLOCK_LOCKED;
-		default:
-			break;
-	}
-
-	return CFI_INTEL_ERROR_UNKNOWN;
-}
-
-int
-flash_unlock_block( parts *ps, uint32_t adr )
-{
-	uint16_t sr;
-
-	bus_write( ps, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, CFI_INTEL_CMD_LOCK_SETUP );
-	bus_write( ps, adr, CFI_INTEL_CMD_UNLOCK_BLOCK );
-
-	while (!((sr = bus_read( ps, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
-
-	if (sr != CFI_INTEL_SR_READY) {
-		printf("flash: unknown error while unblocking\n");
-		return CFI_INTEL_ERROR_UNKNOWN;
-	} else
-		return 0;
-}
-
-int
-flash_program( parts *ps, uint32_t adr, uint32_t data )
-{
-	uint16_t sr;
-
-	bus_write( ps, 0, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, CFI_INTEL_CMD_PROGRAM1 );
-	bus_write( ps, adr, data );
-
-	while (!((sr = bus_read( ps, 0 ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
-
-	if (sr != CFI_INTEL_SR_READY) {
-		printf("flash: unknown error while programming\n");
-		return CFI_INTEL_ERROR_UNKNOWN;
-	} else
-		return 0;
-}
-int
-flash_erase_block32( parts *ps, uint32_t adr )
-{
-	uint32_t sr;
-
-	bus_write( ps, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, (CFI_INTEL_CMD_BLOCK_ERASE << 16) | CFI_INTEL_CMD_BLOCK_ERASE );
-	bus_write( ps, adr, (CFI_INTEL_CMD_CONFIRM << 16) | CFI_INTEL_CMD_CONFIRM );
-
-	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
-
-	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
-		printf( "\nsr = 0x%08X\n", sr );
-		return CFI_INTEL_ERROR_UNKNOWN;
-	} else
-		return 0;
-}
-
-int
-flash_unlock_block32( parts *ps, uint32_t adr )
-{
-	uint32_t sr;
-
-	bus_write( ps, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, (CFI_INTEL_CMD_LOCK_SETUP << 16) | CFI_INTEL_CMD_LOCK_SETUP );
-	bus_write( ps, adr, (CFI_INTEL_CMD_UNLOCK_BLOCK << 16) | CFI_INTEL_CMD_UNLOCK_BLOCK );
-
-	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
-
-	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
-		printf( "\nsr = 0x%08X\n", sr );
-		return CFI_INTEL_ERROR_UNKNOWN;
-	} else
-		return 0;
-}
-
-int
-flash_program32( parts *ps, uint32_t adr, uint32_t data )
-{
-	uint32_t sr;
-
-	bus_write( ps, 0, (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) | CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( ps, adr, (CFI_INTEL_CMD_PROGRAM1 << 16) | CFI_INTEL_CMD_PROGRAM1 );
-	bus_write( ps, adr, data );
-
-	while (((sr = bus_read( ps, 0 ) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
-
-	if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) {
-		printf( "\nsr = 0x%08X\n", sr );
-		return CFI_INTEL_ERROR_UNKNOWN;
-	} else
-		return 0;
-}

@@ -1,3 +1,27 @@
+2003-02-16  Marcel Telka  <marcel@telka.sk>
+
+	* src/Makefile.am (jtag_SOURCES): Added new flash files with flash driver
+		framework (August Hörandl).
+	* src/flash-amd.c: New file with AMD flash support (August Hörandl).
+	* src/flash-intel.c: New file. Extracted Intel flash support from src/flash.c
+		file (August Hörandl, me).
+	* src/flash.c (set_flash_driver): New function. Added support for flash
+		drivers (August Hörandl).
+	(flashceck): Ditto.
+	(flashmsbin): Added support for flash driver (August Hörandl).
+	(flashmem): Ditto.
+	(flash_erase_block): Function moved to src/flash-intel.c (August Hörandl).
+	(flash_unlock_block): Ditto.
+	(flash_program): Ditto.
+	(flash_erase_block32): Ditto.
+	(flash_unlock_block32): Ditto.
+	(flash_program32): Ditto.
+	* src/flash.h: New file. Interface for flash drivers (August Hörandl).
+	* src/help.c (help): Added list of supported flash drivers for 'flashmem'
+		command (August Hörandl).
+	* src/readmem.c (detectflash): Removed Intel specific code. Enhanced output
+		messages (August Hörandl).
+
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
 	* src/jtag.c (jtag): Added command history load/save support (August Hörandl).

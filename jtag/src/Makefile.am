@@ -39,6 +39,8 @@ jtag_SOURCES = \
 	ixp425.c \
 	cfi.c \
 	flash.c \
+	flash-intel.c \
+	flash-amd.c \
 	help.c
 
 jtag_DEPENDENCIES = tap/libtap.a part/libpart.a

@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include "cable.h"
+#include "flash.h"
 
 void
 help( const char *cmd )
@@ -169,7 +170,8 @@ help( const char *cmd )
 			"\n"
 			"readmem works only with part 0. Part 0 must support bus operations.\n"
 		);
-	else if (strcmp( cmd, "flashmem" ) == 0)
+	else if (strcmp( cmd, "flashmem" ) == 0) {
+ 	        int i;
 		printf(
 			"Usage: flashmem ADDR FILENAME\n"
 			"Usage: flashmem msbin FILENAME\n"
@@ -182,7 +184,11 @@ help( const char *cmd )
 			"ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
 			"\n"
 			"flashmem works only with part 0. Part 0 must support bus operations.\n"
+			"Supported Flash Memories\n"
 		);
+		for (i = 0; flash_drivers[i]; i++)
+			printf( "%s\n     %s\n", flash_drivers[i]->name, flash_drivers[i]->description );
+	}
 	else if (strcmp( cmd, "set" ) == 0)
 		printf(
 			"Usage: set signal PART SIGNAL DIR [DATA]\n"

@@ -44,6 +44,7 @@
 
 #include "part.h"
 #include "bus.h"
+#include "flash.h"
 
 cfi_query_structure_t *detect_cfi( parts * );
 
@@ -168,7 +169,10 @@ detectflash( parts *ps )
 
 	/* see 3.3.4 in [1] */
 	printf( "Device Geometry Definition:\n" );
-	printf( "\tDevice Size: %d B\n", cfi->device_geometry.device_size );
+	printf( "\tDevice Size: %d B (%d KiB, %d MiB)\n", 
+		cfi->device_geometry.device_size,
+		cfi->device_geometry.device_size / 1024,
+		cfi->device_geometry.device_size / (1024 * 1024) );
 	printf( "\tFlash Device Interface description: 0x%04X ", cfi->device_geometry.device_interface );
 	/* see Section 2. in [4] */
 	switch (cfi->device_geometry.device_interface) {
@@ -199,65 +203,16 @@ detectflash( parts *ps )
 
 		for (i = 0; i < cfi->device_geometry.number_of_erase_regions; i++) {
 			printf( "\t\tRegion %d:\n", i );
-			printf( "\t\t\tErase Block Size: %d\n", cfi->device_geometry.erase_block_regions[i].erase_block_size );
+			printf( "\t\t\tErase Block Size: %d B (%d KiB)\n",
+				cfi->device_geometry.erase_block_regions[i].erase_block_size,
+				cfi->device_geometry.erase_block_regions[i].erase_block_size / 1024 );
 			printf( "\t\t\tNumber of Erase Blocks: %d\n", cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks );
 		}
 	}
 
-	/* Intel Primary Algorithm Extended Query Table - see Table 5. in [3] */
-	/* TODO */
-
-	/* Clear Status Register */
-	bus_write( ps, 0 << o, 0x00500050 );
-
-	/* Read Identifier Command */
-	bus_write( ps, 0 << 0, 0x00900090 );
-
-	switch (bus_read( ps, 0x00 << o ) & 0xFF) {
-		case STD_MIC_INTEL:
-			printf( "Manufacturer: %s\n", STD_MICN_INTEL );
-			break;
-		default:
-			printf( "Unknown manufacturer!\n" );
-			break;
-	}
-
-	printf( "Chip: " );
-	switch (bus_read( ps, 0x01 << o ) & 0xFFFF) {
-		case 0x0016:
-			printf( "28F320J3A\n" );
-			break;
-		case 0x0017:
-			printf( "28F640J3A\n" );
-			break;
-		case 0x0018:
-			printf( "28F128J3A\n" );
-			break;
-		case 0x8801:
-			printf( "28F640K3\n" );
-			break;
-		case 0x8802:
-			printf( "28F128K3\n" );
-			break;
-		case 0x8803:
-			printf( "28F256K3\n" );
-			break;
-		case 0x8805:
-			printf( "28F640K18\n" );
-			break;
-		case 0x8806:
-			printf( "28F128K18\n" );
-			break;
-		case 0x8807:
-			printf( "28F256K18\n" );
-			break;
-		default:
-			printf( "Unknown!\n" );
-			break;
-	}
-
-	/* Read Array */
-	bus_write( ps, 0 << o, 0x00FF00FF );
+	set_flash_driver( ps, cfi );
+	if (flash_driver)
+		flash_driver->flash_print_info( ps );
 }
 
 void
