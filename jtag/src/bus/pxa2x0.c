@@ -128,7 +128,7 @@ pxa250_bus_read_start( bus_t *bus, uint32_t adr )
 	setup_address( bus, adr );
 	set_data_in( bus );
 
-	chain_shift_data_registers( chain );
+	chain_shift_data_registers( chain, 0 );
 }
 
 static uint32_t pxa250_bus_read_end( bus_t *bus );
@@ -149,7 +149,7 @@ pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 
 	/* see Figure 6-13 in [1] */
 	setup_address( bus, adr );
-	chain_shift_data_registers( chain );
+	chain_shift_data_registers( chain, 1 );
 
 	for (i = 0; i < 32; i++)
 		d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
@@ -173,7 +173,7 @@ pxa250_bus_read_end( bus_t *bus )
 	part_set_signal( p, nOE, 1, 1 );
 	part_set_signal( p, nSDCAS, 1, 1 );
 
-	chain_shift_data_registers( chain );
+	chain_shift_data_registers( chain, 1 );
 
 	for (i = 0; i < 32; i++)
 		d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
@@ -211,12 +211,12 @@ pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	setup_address( bus, adr );
 	setup_data( bus, data );
 
-	chain_shift_data_registers( chain );
+	chain_shift_data_registers( chain, 0 );
 
 	part_set_signal( p, nWE, 1, 0 );
-	chain_shift_data_registers( chain );
+	chain_shift_data_registers( chain, 0 );
 	part_set_signal( p, nWE, 1, 1 );
-	chain_shift_data_registers( chain );
+	chain_shift_data_registers( chain, 0 );
 }
 
 static int

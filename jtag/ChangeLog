@@ -1,5 +1,12 @@
 2003-05-26  Marcel Telka  <marcel@telka.sk>
 
+	* include/chain.h (chain_shift_data_registers): Added new parameter `capture_output' (idea from
+		patch 743146, Matan Ziv-Av).
+	* src/tap/chain.c (chain_shift_data_registers): Ditto.
+	All chain_shift_data_registers() function callers updated.
+
+2003-05-26  Marcel Telka  <marcel@telka.sk>
+
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added broadcom/bcm5421s/STEPPINGS
 		and broadcom/bcm5421s/bcm5421s.
 	* data/MANUFACTURERS: Added new manufacturer ID code for Boradcom (patch 743129, Matan Ziv-Av).

@@ -44,7 +44,7 @@ void chain_clock( chain_t *chain, int tms, int tdi );
 int chain_set_trst( chain_t *chain, int trst );
 int chain_get_trst( chain_t *chain );
 void chain_shift_instructions( chain_t *chain );
-void chain_shift_data_registers( chain_t *chain );
+void chain_shift_data_registers( chain_t *chain, int capture_output );
 
 typedef struct {
 	chain_t **chains;

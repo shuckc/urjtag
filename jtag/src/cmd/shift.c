@@ -46,7 +46,7 @@ cmd_shift_run( char *params[] )
 		return 1;
 	}
 	if (strcmp( params[1], "dr" ) == 0) {
-		chain_shift_data_registers( chain );
+		chain_shift_data_registers( chain, 1 );
 		return 1;
 	}
 

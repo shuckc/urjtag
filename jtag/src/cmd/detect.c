@@ -55,7 +55,7 @@ cmd_detect_run( char *params[] )
 	}
 	parts_set_instruction( chain->parts, "SAMPLE/PRELOAD" );
 	chain_shift_instructions( chain );
-	chain_shift_data_registers( chain );
+	chain_shift_data_registers( chain, 1 );
 	parts_set_instruction( chain->parts, "BYPASS" );
 	chain_shift_instructions( chain );
 	if (strcmp( chain->parts->parts[0]->part, "SA1110" ) == 0)

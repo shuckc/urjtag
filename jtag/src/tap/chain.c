@@ -116,7 +116,7 @@ chain_shift_instructions( chain_t *chain )
 }
 
 void
-chain_shift_data_registers( chain_t *chain )
+chain_shift_data_registers( chain_t *chain, int capture_output )
 {
 	int i;
 	parts_t *ps;
@@ -134,6 +134,7 @@ chain_shift_data_registers( chain_t *chain )
 			continue;
 		}
 		tap_shift_register( chain, ps->parts[i]->active_instruction->data_register->in,
-				ps->parts[i]->active_instruction->data_register->out, (i + 1) == ps->len );
+				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
+				(i + 1) == ps->len );
 	}
 }
