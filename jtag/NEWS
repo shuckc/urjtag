@@ -2,6 +2,10 @@ $Id$
 
 See libbrux/NEWS for more news.
 
+	* Added new JTAG declarations for
+		- Altera EP1C20F400 (Rojhalat Ibrahim)
+		- Altera EPM7128AETC100 (Rojhalat Ibrahim)
+
 jtag-0.5 (2003-08-19):
 
 	* Fixed bug with SELECT, AUTOFD, and STROBE signals handling (bug 745824).

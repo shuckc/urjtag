@@ -1,3 +1,13 @@
+2003-08-22  Marcel Telka  <marcel@telka.sk>
+
+	* MANUFACTURERS: Added Altera manufacturer (Rojhalat Ibrahim).
+	* altera/PARTS: New file (Rojhalat Ibrahim).
+	* altera/ep1c20f400/STEPPINGS: Ditto.
+	* altera/ep1c20f400/ep1c20f400: Ditto.
+	* altera/epm7128aetc100/STEPPINGS: Ditto.
+	* altera/epm7128aetc100/epm7128aetc100: Ditto.
+	* Makefile.am (nobase_dist_pkgdata_DATA): Added new Altera JTAG files.
+
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.5 released.

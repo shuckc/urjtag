@@ -25,6 +25,11 @@ include $(top_srcdir)/Makefile.rules
 
 nobase_dist_pkgdata_DATA = \
 	MANUFACTURERS \
+	altera/PARTS \
+	altera/ep1c20f400/STEPPINGS \
+	altera/ep1c20f400/ep1c20f400 \
+	altera/epm7128aetc100/STEPPINGS \
+	altera/epm7128aetc100/epm7128aetc100 \
 	atmel/PARTS \
 	atmel/atmega128/STEPPINGS \
 	atmel/atmega128/atmega128 \

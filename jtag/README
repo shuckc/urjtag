@@ -40,6 +40,8 @@ JTAG adapters/cables (see 'help cable' command for more info):
 - Macraigor Wiggler JTAG Cable
 
 JTAG-aware parts (chips):
+- Altera EP1C20F400
+- Altera EPM7128AETC100
 - Atmel ATmega128 (partial support)
 - Broadcom BCM1250
 - Broadcom BCM3310 (partial support)
