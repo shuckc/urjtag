@@ -41,7 +41,6 @@ AC_CONFIG_FILES(
 	src/tap/Makefile
 	src/part/Makefile
 	src/bus/Makefile
-	src/flash/Makefile
 	src/cmd/Makefile
 	po/Makefile.in
 )
@@ -57,6 +56,8 @@ AM_GNU_GETTEXT_VERSION(0.11.4)
 
 AC_PROG_CC
 AC_PROG_RANLIB
+
+AC_CONFIG_SUBDIRS(libbrux)
 
 AC_ARG_WITH(include,
 	AC_HELP_STRING([--with-include=PATH], [Path to the openwince includes]),

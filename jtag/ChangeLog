@@ -1,3 +1,16 @@
+2003-06-02  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am (SUBDIRS): Added libbrux.
+	* configure.ac (AC_CONFIG_FILES): Removed src/flash/Makefile.
+	(AC_CONFIG_SUBDIRS): Added libbrux.
+	* src/Makefile.am (SUBDIRS): Removed flash.
+	(jtag_DEPENDENCIES): Removed flash/libflash.a, added ../libbrux/libbrux.a.
+	(jtag_LDADD): Removed libflash, added libbrux.
+	* src/flash/Makefile.am: File removed.
+	* src/flash/amd.c: File moved to module libbrux, directory flash.
+	* src/flash/cfi.c: Ditto.
+	* src/flash/intel.c: Ditto.
+
 2003-05-30  Marcel Telka  <marcel@telka.sk>
 
 	* src/tap/parport/direct.c (direct_set_control): Inverted SELECT, AUTOFD, and STROBE

@@ -28,7 +28,6 @@ SUBDIRS = \
 	tap \
 	part \
 	bus \
-	flash \
 	cmd
 
 bin_PROGRAMS = \
@@ -46,19 +45,19 @@ bsdl2jtag_SOURCES = \
 	bsdl2jtag.c
 
 jtag_DEPENDENCIES = \
+	../libbrux/libbrux.a \
 	lib/libjtaglib.a \
 	tap/libtap.a \
 	part/libpart.a \
 	bus/libbus.a \
-	flash/libflash.a \
 	cmd/libcmd.a
 
 jtag_LDADD = \
 	-Ltap -ltap \
 	-Lpart -lpart \
 	-Llib -ljtaglib \
-	-Lflash -lflash \
 	-Lcmd -lcmd \
+	-L../libbrux -lbrux \
 	-Lbus -lbus \
 	@LIBINTL@
 
