@@ -74,15 +74,15 @@ typedef volatile struct SSP_registers {
 #define	SSDR_OFFSET	0x0C
 #define	SSSR_OFFSET	0x14
 
-/* SSCR0 bits */
+/* SSCR0 bits - see 11.12.9 */
 
-#define	SSCR0_SCR_MASK	0xFF00
-#define	SSCR0_SCR(x)	((x << 8) & SSCR0_SCR_MASK)
+#define	SSCR0_SCR_MASK	bits(15,8)
+#define	SSCR0_SCR(x)	bits_val(15,8,x)
 #define	SSCR0_SSE	bit(7)
-#define	SSCR0_FRF_MASK	0x0030
-#define	SSCR0_FRF(x)	((x << 4) & SSCR0_FRF_MASK)
-#define	SSCR0_DSS_MASK	0x000F
-#define	SSCR0_DSS(x)	(x & SSCR0_DSS_MASK)
+#define	SSCR0_FRF_MASK	bits(5,4)
+#define	SSCR0_FRF(x)	bits_val(5,4,x)
+#define	SSCR0_DSS_MASK	bits(3,0)
+#define	SSCR0_DSS(x)	bits_val(3,0,x)
 
 /* SSCR1 bits */
 

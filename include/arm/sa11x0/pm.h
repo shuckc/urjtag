@@ -95,10 +95,10 @@ typedef volatile struct PM_registers {
 #define	PCFR_FP		bit(1)
 #define	PCFR_OPDE	bit(0)
 
-/* PPCR bits */
+/* PPCR bits - see 9.5.7.3 in [1] */
 
-#define	PPCR_CCF_MASK	0x1F
-#define	PPCR_CCF(x)	(x & PPCR_CCF_MASK)
+#define	PPCR_CCF_MASK	bits(4,0)
+#define	PPCR_CCF(x)	bits_val(4,0,x)
 
 #define	PPCR_CCF_59_0	PPCR_CCF(0x00)
 #define	PPCR_CCF_73_7	PPCR_CCF(0x01)
