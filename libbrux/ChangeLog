@@ -1,5 +1,13 @@
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
+	* Makefile.am (libbrux_a_SOURCES): Added cmd/cmd.c, cmd/help.c, cmd/quit.c, and cmd/detectflash.c.
+	* cmd/cmd.c: New file moved from jtag module, direcory src/cmd.
+	* cmd/help.c: Ditto.
+	* cmd/quit.c: Ditto.
+	* cmd/detectflash.c: Ditto.
+
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
 	* Makefile.am (libbrux_a_SOURCES): Added flash/detectflash.c.
 	* flash/detectflash.c: New file, extracted from module jtag, file src/readmem.c.
 

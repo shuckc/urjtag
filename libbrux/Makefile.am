@@ -26,6 +26,10 @@ include $(top_srcdir)/../Makefile.rules
 noinst_LIBRARIES = libbrux.a
 
 libbrux_a_SOURCES = \
+	cmd/cmd.c \
+	cmd/help.c \
+	cmd/quit.c \
+	cmd/detectflash.c \
 	flash/cfi.c \
 	flash/detectflash.c \
 	flash/amd.c \
