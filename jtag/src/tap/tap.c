@@ -84,10 +84,3 @@ tap_capture_ir( void )
 	tap_clock( 1, 0 );			/* Select-IR-Scan */
 	tap_clock( 0, 0 );			/* Capture-IR */
 }
-
-void
-write_command( const tap_register *c, tap_register *cout, int len )
-{
-	tap_capture_ir();
-	tap_shift_register( c, cout, 1 );
-}

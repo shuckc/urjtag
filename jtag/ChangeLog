@@ -1,3 +1,15 @@
+2003-01-05  Marcel Telka  <marcel@telka.sk>
+
+	* include/register.h (register_inc, register_dec, register_shift_rigth,
+		register_shift_left): Added new functions.
+	* src/tap/register.c (register_inc, register_dec, register_shift_rigth,
+		register_shift_left): Ditto.
+	* src/Makefile.am: Added discovery.c file.
+	* src/discovery.c: Added new file with discovery() implementation.
+	* src/help.c (help): Added help for 'discovery' command.
+	* src/jtag.c (main): Added 'discovery' command.
+	* src/tap/tap.c (write_command): Removed unused function.
+
 2002-12-16  Marcel Telka  <marcel@telka.sk>
 
 	* data/Makefile.am: Renamed intel/pxa250/pxa260 to intel/pxa250/pxa250c0.

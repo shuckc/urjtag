@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  */
 
@@ -39,5 +39,9 @@ const char *register_get_string( const tap_register *tr );
 tap_register *register_init( tap_register *tr, const char *value );
 int register_compare( const tap_register *tr, const tap_register *tr2 );
 int register_match( const tap_register *tr, const char *expr );
+tap_register *register_inc( tap_register *tr );
+tap_register *register_dec( tap_register *tr );
+tap_register *register_shift_right( tap_register *tr, int shift );
+tap_register *register_shift_left( tap_register *tr, int shift );
 
 #endif /* REGISTER_H */

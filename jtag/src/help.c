@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  */
 
@@ -39,6 +39,7 @@ help( const char *cmd )
 			"quit          exit from %s\n"
 			"help          display this help\n"
 			"detect        detect parts on the JTAG chain\n"
+			"discovery     discovery unknown parts in the JTAG chain\n"
 			"print         display JTAG chain list/status\n"
 			"instruction   change active instruction for a part\n"
 			"shift         shift data/instruction register through JTAG chain\n"
@@ -67,6 +68,21 @@ help( const char *cmd )
 			"\n"
 			"Output from this command is a list of the detected parts.\n"
 			"If no parts are detected other commands may not work properly.\n"
+		);
+	else if (strcmp( cmd, "discovery" ) == 0)
+		printf(
+			"Usage: discovery FILENAME\n"
+			"Discovery unknown parts in the JTAG chain.\n"
+			"\n"
+			"Detail output (report) is directed to the FILENAME.\n"
+			"'discovery' attempt to detect these parameters of an unknown JTAG\n"
+			"chain:\n"
+			" 1. JTAG chain size (number of parts in the chain)\n"
+			" 2. IR (instruction register) length\n"
+			" 3. DR (data register) length for all possible instructions\n"
+			"\n"
+			"Warning: This may be dangerous for some parts (especially, if the\n"
+			"part doesn't have TRST signal).\n"
 		);
 	else if (strcmp( cmd, "print" ) == 0)
 		printf(

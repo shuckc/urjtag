@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  */
 
@@ -161,4 +161,82 @@ register_match( const tap_register *tr, const char *expr )
 			return 0;
 
 	return 1;
+}
+
+tap_register *
+register_inc( tap_register *tr )
+{
+	int i;
+
+	if (!tr)
+		return NULL;
+
+	for (i = 0; i < tr->len; i++) {
+		tr->data[i] ^= 1;
+		
+		if (tr->data[i] == 1)
+			break;
+	}
+
+	return tr;
+}
+
+tap_register *
+register_dec( tap_register *tr )
+{
+	int i;
+
+	if (!tr)
+		return NULL;
+
+	for (i = 0; i < tr->len; i++) {
+		tr->data[i] ^= 1;
+		
+		if (tr->data[i] == 0)
+			break;
+	}
+
+	return tr;
+}
+
+tap_register *
+register_shift_right( tap_register *tr, int shift )
+{
+	int i;
+
+	if (!tr)
+		return NULL;
+
+	if (shift < 1)
+		return tr;
+
+	for (i = 0; i < tr->len; i++) {
+		if (i + shift < tr->len)
+			tr->data[i] = tr->data[i + shift];
+		else
+			tr->data[i] = 0;
+	}
+
+	return tr;
+}
+
+tap_register *
+register_shift_left( tap_register *tr, int shift )
+{
+	int i;
+
+	if (!tr)
+		return NULL;
+
+	if (shift < 1)
+		return tr;
+
+	for (i = tr->len - 1; i >= 0; i--) {
+		if (i - shift >= 0)
+			tr->data[i] = tr->data[i - shift];
+		else
+			tr->data[i] = 0;
+	}
+
+	return tr;
 }

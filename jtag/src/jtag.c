@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  */
 
@@ -52,6 +52,8 @@ void flashmem( parts *ps, FILE *f, uint32_t addr );
 void flashmsbin( parts *ps, FILE *f );
 
 void help( const char *cmd );
+
+void discovery( const char *filename );
 
 int
 main( void )
@@ -101,6 +103,20 @@ main( void )
 				printf( "help: Syntax error!\n" );
 			else
 				help( t );
+			continue;
+		}
+
+		if (strcmp( t, "discovery" ) == 0) {
+			t = get_token( NULL );
+			if (!t) {
+				printf( "discovery: missing filename\n" );
+				continue;
+			}
+			if (get_token( NULL )) {
+				printf( "syntax error!\n" );
+				continue;
+			}
+			discovery( t );
 			continue;
 		}
 
