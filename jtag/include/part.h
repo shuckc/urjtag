@@ -36,7 +36,8 @@
 #define	MAXLEN_PART		20
 #define	MAXLEN_STEPPING		8
 
-typedef struct part part;
+#define	part_t	part
+typedef struct part part_t;
 
 struct part {
 	char manufacturer[MAXLEN_MANUFACTURER + 1];
@@ -52,17 +53,18 @@ struct part {
 };
 
 part *part_alloc( void );
-void part_free( part *p );
-part *read_part( FILE *f, tap_register *idr );
-instruction *part_find_instruction( part *p, const char *iname );
-data_register *part_find_data_register( part *p, const char *drname );
-void part_set_instruction( part *p, const char *iname );
-void part_shift_instruction( part *p, int exit );
-void part_shift_data_register( part *p, int exit );
-void part_set_signal( part *p, const char *pname, int out, int val );
-int part_get_signal( part *p, const char *pname );
+void part_free( part_t *p );
+part *read_part( FILE *f, tap_register_t *idr );
+instruction *part_find_instruction( part_t *p, const char *iname );
+data_register *part_find_data_register( part_t *p, const char *drname );
+void part_set_instruction( part_t *p, const char *iname );
+void part_shift_instruction( part_t *p, int exit );
+void part_shift_data_register( part_t *p, int exit );
+void part_set_signal( part_t *p, const char *pname, int out, int val );
+int part_get_signal( part_t *p, const char *pname );
 
-typedef struct parts parts;
+#define	parts_t	parts
+typedef struct parts parts_t;
 
 struct parts {
 	int len;
@@ -70,11 +72,11 @@ struct parts {
 };
 
 parts *parts_alloc( void );
-void parts_free( parts *ps );
-int parts_add_part( parts *ps, part *p );
-void parts_set_instruction( parts *ps, const char *iname );
-void parts_shift_instructions( parts *ps );
-void parts_shift_data_registers( parts *ps );
-void parts_print( parts *ps, int header );
+void parts_free( parts_t *ps );
+int parts_add_part( parts_t *ps, part_t *p );
+void parts_set_instruction( parts_t *ps, const char *iname );
+void parts_shift_instructions( parts_t *ps );
+void parts_shift_data_registers( parts_t *ps );
+void parts_print( parts_t *ps, int header );
 
 #endif /* PART_H */

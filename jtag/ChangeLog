@@ -1,3 +1,9 @@
+2003-03-13  Marcel Telka  <marcel@telka.sk>
+
+	* include/part.h: Renamed types part to part_t, parts to parts_t,
+		tap_register to tap_register_t.
+	* include/register.h: Renamed tap_register type to tap_register_t.
+
 2003-03-11  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac: Improved openwince include package detection.
