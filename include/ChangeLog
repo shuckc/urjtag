@@ -1,3 +1,13 @@
+2002-11-04  Marcel Telka  <marcel@telka.sk>
+
+	* arm/pxa2x0/*: Added support for Intel PXA2x0 family processors.
+	* arm/pxa2x0/uart.h: Fixed SPR_SP declaration, removed access to STMRS register.
+	* arm/pxa2x0/mc.h: Fixed BOOT_DEF_OFFSET declaration.
+	* arm/pxa2x0/gpio.h: Added ALT_FN_0_IN and ALT_FN_0_OUT declarations.
+	* arm/pxa2x0/pmrc.h: Added missing PWER_WEx (where x = 0 through 15) declarations.
+	* arm/pxa2x0/rtc.h: Fixed RTTR bit declarations.
+	* NEWS: Added new file.
+
 2002-11-02  Marcel Telka  <marcel@telka.sk>
 
 	* arm/pxa2x0/*: Added _t suffix for register type names.

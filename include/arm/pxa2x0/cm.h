@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 Clocks Manager Registers
+ * XScale PXA26x/PXA250/PXA210 Clocks Manager Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -43,6 +45,10 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA26X)
+#define	PXA2X0_NOPXA26X
 #endif
 
 /* Clocks Manager Registers */
@@ -69,7 +75,7 @@ typedef volatile struct CM_registers {
 #define	CKEN_OFFSET	0x04
 #define	OSCC_OFFSET	0x08
 
-/* CCCR bits - see Table 3-20 in [1] */
+/* CCCR bits - see Table 3-20 in [1], Table 3-20 in [2] */
 
 #define	CCCR_N_MASK	bits(9,7)
 #define	CCCR_N(x)	bits_val(9,7,x)
@@ -92,23 +98,30 @@ typedef volatile struct CM_registers {
 #define	CCCR_L_40	CCCR_L(0x04)
 #define	CCCR_L_45	CCCR_L(0x05)
 
-/* CKEN bits - see Table 3-21 in [1] */
+/* CKEN bits - see Table 3-21 in [1], Table 3-21 in [2] */
 
 #define	CKEN_CKEN16	bit(16)
 #define	CKEN_CKEN14	bit(14)
 #define	CKEN_CKEN13	bit(13)
 #define	CKEN_CKEN12	bit(12)
 #define	CKEN_CKEN11	bit(11)
+#if !defined(PXA2X0_NOPXA26X)
+#define	CKEN_CKEN10	bit(10)
+#define	CKEN_CKEN9	bit(9)
+#endif /* PXA26x only */
 #define	CKEN_CKEN8	bit(8)
 #define	CKEN_CKEN7	bit(7)
 #define	CKEN_CKEN6	bit(6)
 #define	CKEN_CKEN5	bit(5)
+#if !defined(PXA2X0_NOPXA26X)
+#define	CKEN_CKEN10	bit(4)
+#endif /* PXA26x only */
 #define	CKEN_CKEN3	bit(3)
 #define	CKEN_CKEN2	bit(2)
 #define	CKEN_CKEN1	bit(1)
 #define	CKEN_CKEN0	bit(0)
 
-/* OSCC bits - see Table 3-22 in [1] */
+/* OSCC bits - see Table 3-22 in [1], Table 3-22 in [2] */
 
 #define	OSCC_OON	bit(1)
 #define	OSCC_OOK	bit(0)

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 OS Timer Registers
+ * XScale PXA26x/PXA250/PXA210 OS Timer Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -78,18 +80,18 @@ typedef volatile struct OST_registers {
 #define	OWER_OFFSET	0x18
 #define	OIER_OFFSET	0x1C
 
-/* OSSR bits - see 4.4.2.5 in [1] */
+/* OSSR bits - see 4.4.2.5 in [1], Table 4-48 in [2] */
 
 #define	OSSR_M3		bit(3)
 #define	OSSR_M2		bit(2)
 #define	OSSR_M1		bit(1)
 #define	OSSR_M0		bit(0)
 
-/* OWER bits - see Table 4-46 in [1] */
+/* OWER bits - see Table 4-46 in [1], Table 4-46 in [2] */
 
 #define	OWER_WME	bit(0)
 
-/* OIER bits - see Table 4-45 in [1] */
+/* OIER bits - see Table 4-45 in [1], Table 4-45 in [2] */
 
 #define	OIER_E3		bit(3)
 #define	OIER_E2		bit(2)

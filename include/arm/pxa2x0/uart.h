@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 UART (FFUART/BTUART/STUART) Declarations
+ * XScale PXA26x/PXA250/PXA210 UART (FFUART/BTUART/STUART/HWUART) Declarations
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -45,11 +47,18 @@
 #include <stdint.h>
 #endif
 
-/* Common UART (FFUART/BTUART/STUART) Declarations */
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA26X)
+#define	PXA2X0_NOPXA26X
+#endif
+
+/* Common UART (FFUART/BTUART/STUART/HWUART) Declarations */
 
 #define	FFUART_BASE	0x40100000
 #define	BTUART_BASE	0x40200000
 #define	STUART_BASE	0x40700000
+#if !defined(PXA2X0_NOPXA26X)
+#define	HWUART_BASE	0x41600000
+#endif /* PXA26x only */
 
 #if LANGUAGE == C
 typedef volatile struct UART_registers {
@@ -69,15 +78,23 @@ typedef volatile struct UART_registers {
 	uint32_t lcr;
 	uint32_t mcr;
 	uint32_t lsr;
-	uint32_t msr;
+	uint32_t msr;			/* only for FFUART, BTUART, HWUART */
 	uint32_t spr;
 	uint32_t isr;
+#if !defined(PXA2X0_NOPXA26X)
+	uint32_t hwfor;			/* only for HWUART */
+	uint32_t hwabr;			/* only for HWUART */
+	uint32_t hwacr;			/* only for HWUART */
+#endif /* PXA26x only */
 } UART_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
 #define	FFUART_pointer	((UART_registers_t*) FFUART_BASE)
 #define	BTUART_pointer	((UART_registers_t*) BTUART_BASE)
 #define	STUART_pointer	((UART_registers_t*) STUART_BASE)
+#if !defined(PXA2X0_NOPXA26X)
+#define	HWUART_pointer	((UART_registers_t*) HWUART_BASE)
+#endif /* PXA26x only */
 #endif
 
 #define	RBR		UART_pointer->rbr
@@ -136,11 +153,31 @@ typedef volatile struct UART_registers {
 #define	STLCR		STUART_pointer->lcr
 #define	STMCR		STUART_pointer->mcr
 #define	STLSR		STUART_pointer->lsr
-#define	STMSR		STUART_pointer->msr
 #define	STSPR		STUART_pointer->spr
 #define	STISR		STUART_pointer->isr
 #define	STDLL		STUART_pointer->dll
 #define	STDLH		STUART_pointer->dlh
+
+#if !defined(PXA2X0_NOPXA26X)
+/* HWUART */
+
+#define	HWRBR		HWUART_pointer->rbr
+#define	HWTHR		HWUART_pointer->thr
+#define	HWIER		HWUART_pointer->ier
+#define	HWIIR		HWUART_pointer->iir
+#define	HWFCR		HWUART_pointer->fcr
+#define	HWLCR		HWUART_pointer->lcr
+#define	HWMCR		HWUART_pointer->mcr
+#define	HWLSR		HWUART_pointer->lsr
+#define	HWMSR		HWUART_pointer->msr
+#define	HWSPR		HWUART_pointer->spr
+#define	HWISR		HWUART_pointer->isr
+#define	HWFOR		HWUART_pointer->hwfor
+#define	HWABR		HWUART_pointer->hwabr
+#define	HWACR		HWUART_pointer->hwacr
+#define	HWDLL		HWUART_pointer->dll
+#define	HWDLH		HWUART_pointer->dlh
+#endif /* PXA26x only */
 #endif /* LANGUAGE == C */
 
 #define	RBR_OFFSET	0x00
@@ -154,10 +191,15 @@ typedef volatile struct UART_registers {
 #define	MSR_OFFSET	0x18
 #define	SPR_OFFSET	0x1C
 #define	ISR_OFFSET	0x20
+#if !defined(PXA2X0_NOPXA26X)
+#define	HWFOR_OFFSET	0x24		/* only for HWUART */
+#define	HWABR_OFFSET	0x28		/* only for HWUART */
+#define	HWACR_OFFSET	0x2C		/* only for HWUART */
+#endif /* PXA26x only */
 #define	DLL_OFFSET	0x00
 #define	DLH_OFFSET	0x04
 
-/* IER bits */
+/* IER bits - see Table 10-7 in [1], Table 10-7 in [2], Table 17-6 in [2] */
 
 #define	IER_DMAE	bit(7)
 #define IER_UUE		bit(6)
@@ -168,24 +210,30 @@ typedef volatile struct UART_registers {
 #define	IER_TIE		bit(1)
 #define	IER_RAVIE	bit(0)
 
-/* IIR bits - see Table 10-9 in [1] */
+/* IIR bits - see Table 10-9 in [1], Table 10-9 in [2], Table 17-8 in [2] */
 
 #define	IIR_FIFOES_MASK	bits(7,6)
 #define	IIR_FIFOES(x)	bits_val(7,6,x)
+#if !defined(PXA2X0_NOPXA26X)
+#define	IIR_ABL	bit(4)			/* only for HWUART */
+#endif /* PXA26x only */
 #define	IIR_TOD		bit(3)
 #define	IIR_IID_MASK	bits(2,1)
 #define	IIR_IID(x)	bits_val(2,1,x)
 #define	IIR_IP		bit(0)
 
-/* FCR bits - see Table 10-11 in [1] */
+/* FCR bits - see Table 10-11 in [1], Table 10-11 in [2], Table 17-10 in [2] */
 
 #define	FCR_ITL_MASK	bits(7,6)
 #define	FCR_ITL(x)	bits_val(7,6,x)
+#if !defined(PXA2X0_NOPXA26X)
+#define	FCR_TIL	bit(3)			/* only for HWUART */
+#endif /* PXA26x only */
 #define	FCR_RESETTF	bit(2)
 #define	FCR_RESETRF	bit(1)
 #define	FCR_TRFIFOE	bit(0)
 
-/* LCR bits - see Table 10-12 in [1] */
+/* LCR bits - see Table 10-12 in [1], Table 10-12 in [2], Table 17-14 in [2] */
 
 #define	LCR_DLAB	bit(7)
 #define	LCR_SB		bit(6)
@@ -196,7 +244,7 @@ typedef volatile struct UART_registers {
 #define	LCR_WLS_MASK	bits(1,0)
 #define	LCR_WLS(x)	bits_val(1,0,x)
 
-/* LSR bits */
+/* LSR bits - see Table 10-13 in [1], Table 10-13 in [2], Table 17-15 in [2] */
 
 #define	LSR_FIFOE	bit(7)
 #define	LSR_TEMT	bit(6)
@@ -207,36 +255,58 @@ typedef volatile struct UART_registers {
 #define	LSR_OE		bit(1)
 #define	LSR_DR		bit(0)
 
-/* MCR bits */
+/* MCR bits - see Table 10-14 in [1], Table 10-14 in [2], Table 17-16 in [2] */
 
+#if !defined(PXA2X0_NOPXA26X)
+#define	MCR_AFE	bit(5)			/* only for HWUART */
+#endif /* PXA26x only */
 #define	MCR_LOOP	bit(4)
 #define	MCR_OUT2	bit(3)
-#define	MCR_OUT1	bit(2)
-#define	MCR_RTS		bit(1)
-#define	MCR_DTR		bit(0)
+#define	MCR_OUT1	bit(2)		/* only for FFUART - see Table 10-21 in [1], Table 10-21 in [2] */
+#define	MCR_RTS		bit(1)		/* only for FFUART, BTUART, HWUART - see Table 10-21 in [1], Table 10-21 in [2] */
+#define	MCR_DTR		bit(0)		/* only for FFUART - see Table 10-21 in [1], Table 10-21 in [2] */
 
-/* MSR bits */
+/* MSR bits - see Table 10-15 in [1], Table 10-15 in [2], Table 17-17 in [2] */
 
-#define	MSR_DCD		bit(7)
-#define	MSR_RI		bit(6)
-#define	MSR_DSR		bit(5)
-#define	MSR_CTS		bit(4)
-#define	MSR_DDCD	bit(3)
-#define	MSR_TERI	bit(2)
-#define	MSR_DDSR	bit(1)
-#define	MSR_DCTS	bit(0)
+#define	MSR_DCD		bit(7)		/* only for FFUART */
+#define	MSR_RI		bit(6)		/* only for FFUART */
+#define	MSR_DSR		bit(5)		/* only for FFUART */
+#define	MSR_CTS		bit(4)		/* only for FFUART, BTUART, HWUART - see Table 10-21 in [1], Table 10-21 in [2] */
+#define	MSR_DDCD	bit(3)		/* only for FFUART */
+#define	MSR_TERI	bit(2)		/* only for FFUART */
+#define	MSR_DDSR	bit(1)		/* only for FFUART */
+#define	MSR_DCTS	bit(0)		/* only for FFUART, BTUART, HWUART - see Table 10-21 in [1], Table 10-21 in [2] */
 
-/* SPR bits - see Table 10-16 in [1] */
+/* SPR bits - see Table 10-16 in [1], Table 10-16 in [2], Table 17-18 in [2] */
 
 #define	SPR_SP_MASK	bits(7,0)
-#define	SPR_SP(x)	bits(7,0,x)
+#define	SPR_SP(x)	bits_val(7,0,x)
 
-/* ISR bits */
+/* ISR bits - see Table 10-17 in [1], Table 10-17 in [2], Table 17-19 in [2] */
 
 #define	ISR_RXPL	bit(4)
 #define	ISR_TXPL	bit(3)
 #define	ISR_XMODE	bit(2)
 #define	ISR_RCVEIR	bit(1)
 #define	ISR_XMITIR	bit(0)
+
+#if !defined(PXA2X0_NOPXA26X)
+/* HWFOR bits - see Table 17-11 in [2] */
+
+#define	HWFOR_BC_MASK	bits(6,0)
+#define	HWFOR_BC(x)	bits_val(6,0,x)
+
+/* HWABR bits - see Table 17-12 in [2] */
+
+#define	HWABR_ABT	bit(3)
+#define	HWABR_ABUP	bit(2)
+#define	HWABR_ABLIE	bit(1)
+#define	HWABR_ABE	bit(0)
+
+/* HWACR bits - see Table 17-13 in [2] */
+
+#define	HWACR_ACR_MASK	bits(15,0)
+#define	HWACR_ACR(x)	bits_val(15,0,x)
+#endif /* PXA26x only */
 
 #endif /* PXA2X0_UART_H */

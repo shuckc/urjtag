@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 RTC Registers
+ * XScale PXA26x/PXA250/PXA210 RTC Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -72,19 +74,19 @@ typedef volatile struct RTC_registers {
 #define	RTSR_OFFSET		0x08
 #define	RTTR_OFFSET		0x0C
 
-/* RCNR bits - see Table 4-39 in [1] */
-
-#define	RCNR_LCK		bit(31)
-#define	RCNR_DEL_MASK		bits(25,16)
-#define	RCNR_DEL(x)		bits_val(25,16,x)
-#define	RCNR_CK_DIV_MASK	bits(15,0)
-#define	RCNR_CK_DIV(x)		bits_val(15,0,x)
-
-/* RTSR bits - see Table 4-42 in [1] */
+/* RTSR bits - see Table 4-42 in [1], Table 4-42 in [2] */
 
 #define	RTSR_HZE		bit(3)
 #define	RTSR_ALE		bit(2)
 #define	RTSR_HZ			bit(1)
 #define	RTSR_AL			bit(0)
+
+/* RTTR bits - see Table 4-39 in [1], Table 4-39 in [2] */
+
+#define	RTTR_LCK		bit(31)
+#define	RTTR_DEL_MASK		bits(25,16)
+#define	RTTR_DEL(x)		bits_val(25,16,x)
+#define	RTTR_CK_DIV_MASK	bits(15,0)
+#define	RTTR_CK_DIV(x)		bits_val(15,0,x)
 
 #endif /* PXA2X0_RTC_H */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 I2S Registers
+ * XScale PXA26x/PXA250/PXA210 I2S Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -85,7 +87,7 @@ typedef volatile struct I2S_registers {
 #define	SADIV_OFFSET		0x60
 #define	SADR_OFFSET		0x80
 
-/* SACR0 bits - see Table 14-3 in [1] */
+/* SACR0 bits - see Table 14-3 in [1], Table 14-3 in [2] */
 
 #define	SACR0_RFTH_MASK		bits(15,12)
 #define	SACR0_RFTH(x)		bits_val(15,12,x)
@@ -97,14 +99,14 @@ typedef volatile struct I2S_registers {
 #define	SACR0_BCKD		bit(2)
 #define	SACR0_ENB		bit(0)
 
-/* SACR1 bits - see Table 14-6 in [1] */
+/* SACR1 bits - see Table 14-6 in [1], Table 14-6 in [2] */
 
 #define	SACR1_ENLBF		bit(5)
 #define	SACR1_DRPL		bit(4)
 #define	SACR1_DREC		bit(3)
 #define	SACR1_AMSL		bit(0)
 
-/* SASR0 bits - see Table 14-7 in [1] */
+/* SASR0 bits - see Table 14-7 in [1], Table 14-7 in [2] */
 
 #define	SASR0_RFL_MASK		bits(15,12)
 #define	SASR0_RFL(x)		bits_val(15,12,x)
@@ -118,24 +120,24 @@ typedef volatile struct I2S_registers {
 #define	SASR0_RNE		bit(1)
 #define	SASR0_TNF		bit(0)
 
-/* SAIMR bits - see Table 14-10 in [1] */
+/* SAIMR bits - see Table 14-10 in [1], Table 14-10 in [2] */
 
 #define	SAIMR_ROR		bit(6)
 #define	SAIMR_TUR		bit(5)
 #define	SAIMR_RFS		bit(4)
 #define	SAIMR_TFS		bit(3)
 
-/* SAICR bits - see Table 14-9 in [1] */
+/* SAICR bits - see Table 14-9 in [1], Table 14-9 in [2] */
 
 #define	SAICR_ROR		bit(6)
 #define	SAICR_TUR		bit(5)
 
-/* SADIV bits - see Table 14-8 in [1] */
+/* SADIV bits - see Table 14-8 in [1], Table 14-8 in [2] */
 
 #define	SADIV_SADIV_MASK	bits(6,0)
 #define	SADIV_SADIV(x)		bits_val(6,0,x)
 
-/* SADR bits - see Table 14-11 in [1] */
+/* SADR bits - see Table 14-11 in [1], Table 14-11 in [2] */
 
 #define	SADR_DTH_MASK		bits(31,16)
 #define	SADR_DTH(x)		bits_val(31,16,x)

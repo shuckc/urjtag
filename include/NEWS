@@ -1,0 +1,21 @@
+Changes in include since version 0.1:
+
+	* Added support for Intel PXA26x family processors.
+	* Changes in PXA2x0 support:
+		- removed access to STMRS register
+		- fixed SPR_SP declaration
+		- fixed BOOT_DEF_OFFSET declaration
+		- added _t suffix for register type names
+		- added ALT_FN_0_IN and ALT_FN_0_OUT declarations
+		- added missing PWER_WEx (where x = 0 through 15) declarations
+		- fixed RTTR bit declarations
+	* Changes in SA11x0 support:
+		- added _t suffix for register type names
+	* Removed _t suffix from structure names in CFI declarations.
+
+include-0.1 (2002-11-01):
+
+	* Initial public release with intial support for Intel SA-11x0/PXA2x0
+	  processors, Common Flash Interface (CFI), Intel extensions to CFI,
+	  JEDEC Manufacturer's Identification Codes, base AC'97 declarations
+	  and Philips UCB1400 support.

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 Power Manager and Reset Control Registers
+ * XScale PXA26x/PXA250/PXA210 Power Manager and Reset Control Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -97,11 +99,11 @@ typedef volatile struct PMRC_registers {
 #define	PGSR2_OFFSET	0x28
 #define	RCSR_OFFSET	0x30
 
-/* PMCR bits - see Table 3-7 in [1] */
+/* PMCR bits - see Table 3-7 in [1], Table 3-7 in [2] */
 
 #define	PMCR_IDAE	bit(0)
 
-/* PSSR bits - see Table 3-13 in [1] */
+/* PSSR bits - see Table 3-13 in [1], Table 3-13 in [2] */
 
 #define	PSSR_RDH	bit(5)
 #define	PSSR_PH		bit(4)
@@ -109,17 +111,33 @@ typedef volatile struct PMRC_registers {
 #define	PSSR_BFS	bit(1)
 #define	PSSR_SSS	bit(0)
 
-/* PWER bits - see Table 3-9 in [1] */
+/* PWER bits - see Table 3-9 in [1], Table 3-9 in [2] */
 
 #define	PWER_WERTC	bit(31)
+#define	PWER_WE15	bit(15)
+#define	PWER_WE14	bit(14)
+#define	PWER_WE13	bit(13)
+#define	PWER_WE12	bit(12)
+#define	PWER_WE11	bit(11)
+#define	PWER_WE10	bit(10)
+#define	PWER_WE9	bit(9)
+#define	PWER_WE8	bit(8)
+#define	PWER_WE7	bit(7)
+#define	PWER_WE6	bit(6)
+#define	PWER_WE5	bit(5)
+#define	PWER_WE4	bit(4)
+#define	PWER_WE3	bit(3)
+#define	PWER_WE2	bit(2)
+#define	PWER_WE1	bit(1)
+#define	PWER_WE0	bit(0)
 
-/* PCFR bits - see Table 3-8 in [1] */
+/* PCFR bits - see Table 3-8 in [1], Table 3-8 in [2] */
 
 #define	PCFR_FS		bit(2)
 #define	PCFR_FP		bit(1)
 #define	PCFR_OPDE	bit(0)
 
-/* RCSR bits - see Table 3-18 in [1] */
+/* RCSR bits - see Table 3-18 in [1], Table 3-18 in [2] */
 
 #define	RCSR_GPR	bit(3)
 #define	RCSR_SMR	bit(2)

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 Memory Controller Registers
+ * XScale PXA26x/PXA250/PXA210 Memory Controller Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -34,7 +34,9 @@
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  * [2] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
- *     Specification Update", June 2002, Order Number: 278534-007
+ *     Specification Update", October 2002, Order Number: 278534-009
+ * [3] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -45,6 +47,10 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA26X)
+#define	PXA2X0_NOPXA26X
 #endif
 
 /* Memory Controller Registers */
@@ -71,6 +77,12 @@ typedef volatile struct MC_registers {
 	uint32_t mcio1;
 	uint32_t mdmrs;
 	uint32_t boot_def;
+#if !defined(PXA2X0_NOPXA26X)
+	uint32_t __reserved3[4];
+	uint32_t mdmrslp;
+	uint32_t __reserved4[2];
+	uint32_t sa1111cr;
+#endif /* PXA26x only */
 } MC_registers_t;
 
 #ifdef PXA2X0_UNMAPPED
@@ -93,6 +105,10 @@ typedef volatile struct MC_registers {
 #define	MCIO1		MC_pointer->mcio1
 #define	MDMRS		MC_pointer->mdmrs
 #define	BOOT_DEF	MC_pointer->boot_def
+#if !defined(PXA2X0_NOPXA26X)
+#define	MDMRSLP		MC_pointer->mdmrslp
+#define	SA1111CR	MC_pointer->sa1111cr
+#endif /* PXA26x only */
 #endif /* LANGUAGE == C */
 
 #define	MDCNFG_OFFSET	0x00
@@ -110,9 +126,13 @@ typedef volatile struct MC_registers {
 #define	MCIO0_OFFSET	0x38
 #define	MCIO1_OFFSET	0x3C
 #define	MDMRS_OFFSET	0x40
-#define	BOOT_DEF	0x44
+#define	BOOT_DEF_OFFSET	0x44
+#if !defined(PXA2X0_NOPXA26X)
+#define	MDMRSLP_OFFSET	0x58
+#define	SA1111CR_OFFSET	0x64
+#endif /* PXA26x only */
 
-/* MDCNFG bits - see Table 6-3 in [1] and D25. in [2] */
+/* MDCNFG bits - see Table 6-3 in [1] and D25 in [2], Table 6-3 in [3] */
 
 #define	MDCNFG_DSA1111_2	bit(28)
 #define	MDCNFG_DLATCH2		bit(27)
@@ -139,7 +159,7 @@ typedef volatile struct MC_registers {
 #define	MDCNFG_DE1		bit(1)
 #define	MDCNFG_DE0		bit(0)
 
-/* MDREFR bits - see Table 6-5 in [1] */
+/* MDREFR bits - see Table 6-5 in [1], Table 6-6 in [3] */
 
 #define	MDREFR_K2FREE		bit(25)
 #define	MDREFR_K1FREE		bit(24)
@@ -157,7 +177,7 @@ typedef volatile struct MC_registers {
 #define	MDREFR_DRI_MASK		bits(11,0)
 #define	MDREFR_DRI(x)		bits_val(11,0,x)
 
-/* MSC0 bits - see Table 6-21 in [1] */
+/* MSC0 bits - see Table 6-21 in [1], Table 6-25 in [3] */
 
 #define	MSC0_RBUFF1		bit(31)
 #define	MSC0_RRR1_MASK		bits(30,28)
@@ -180,7 +200,7 @@ typedef volatile struct MC_registers {
 #define	MSC0_RT0_MASK		bits(2,0)
 #define	MSC0_RT0(x)		bits_val(2,0,x)
 
-/* MSC1 bits - see Table 6-21 in [1] */
+/* MSC1 bits - see Table 6-21 in [1], Table 6-25 in [3] */
 
 #define	MSC1_RBUFF3		bit(31)
 #define	MSC1_RRR3_MASK		bits(30,28)
@@ -203,7 +223,7 @@ typedef volatile struct MC_registers {
 #define	MSC1_RT2_MASK		bits(2,0)
 #define	MSC1_RT2(x)		bits_val(2,0,x)
 
-/* MSC2 bits - see Table 6-21 in [1] */
+/* MSC2 bits - see Table 6-21 in [1], Table 6-25 in [3] */
 
 #define	MSC2_RBUFF5		bit(31)
 #define	MSC2_RRR5_MASK		bits(30,28)
@@ -226,7 +246,7 @@ typedef volatile struct MC_registers {
 #define	MSC2_RT4_MASK		bits(2,0)
 #define	MSC2_RT4(x)		bits_val(2,0,x)
 
-/* MDMRS bits - see Table 6-4 in [1] */
+/* MDMRS bits - see Table 6-4 in [1], Table 6-4 in [3] */
 
 #define	MDMRS_MDMRS2_MASK	bits(30,23)
 #define	MDMRS_MDMRS2(x)		bits_val(30,23,x)
@@ -242,5 +262,25 @@ typedef volatile struct MC_registers {
 #define	MDMRS_MDADD0		bit(3)
 #define	MDMRS_MDBL0_MASK	bits(2,0)
 #define	MDMRS_MDBL0(x)		bits_val(2,0,x)
+
+#if !defined(PXA2X0_NOPXA26X)
+/* MDMRSLP bits - see Table 6-5 in [3] */
+
+#define	MDMRSLP_MDLPEN2		bit(31)
+#define	MDMRSLP_MDMRSLP2_MASK	bits(30,16)
+#define	MDMRSLP_MDMRSLP2(x)	bits_val(30,16,x)
+#define	MDMRSLP_MDLPEN0		bit(15)
+#define	MDMRSLP_MDMRSLP0_MASK	bits(14,0)
+#define	MDMRSLP_MDMRSLP0(x)	bits_val(14,0,x)
+
+/* SA1111CR bits - see Table 6-24 in [3] */
+
+#define	SA1111CR_SA1111_5	bit(5)
+#define	SA1111CR_SA1111_4	bit(4)
+#define	SA1111CR_SA1111_3	bit(3)
+#define	SA1111CR_SA1111_2	bit(2)
+#define	SA1111CR_SA1111_1	bit(1)
+#define	SA1111CR_SA1111_0	bit(0)
+#endif /* PXA26x only */
 
 #endif /* PXA2X0_MC_H */

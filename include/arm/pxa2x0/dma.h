@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 DMA Controller Registers
+ * XScale PXA26x/PXA250/PXA210 DMA Controller Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -88,7 +90,7 @@ typedef volatile struct DMA_registers {
 #define	DTADR_OFFSET(i)		(0x208 + ((i) << 4))
 #define	DCMD_OFFSET(i)		(0x20C + ((i) << 4))
 
-/* DCSRx bits - see Table 5-7 in [1] */
+/* DCSRx bits - see Table 5-7 in [1], Table 5-7 in [2] */
 
 #define	DCSR_RUN		bit(31)
 #define	DCSR_NODESCFETCH	bit(30)
@@ -99,17 +101,17 @@ typedef volatile struct DMA_registers {
 #define	DCSR_STARTINTR		bit(1)
 #define	DSCR_BUSERRINTR		bit(0)
 
-/* DRCMRx bits - see Table 5-8 in [1] */
+/* DRCMRx bits - see Table 5-8 in [1], Table 5-8 in [2] */
 
 #define	DRCMR_MAPVLD		bit(7)
 #define	DRCMR_CHLNUM_MASK	bits(3,0)
 #define	DRCMR_CHLNUM(x)		bits_val(3,0,x)
 
-/* DDADRx bits - see Table 5-9 in [1] */
+/* DDADRx bits - see Table 5-9 in [1], Table 5-9 in [2] */
 
 #define	DDADR_STOP		bit(0)
 
-/* DCMDx bits - see Table 5-12 in [1] */
+/* DCMDx bits - see Table 5-12 in [1], Table 5-12 in [2] */
 
 #define	DCMD_INCSRCADDR		bit(31)
 #define	DCMD_INCTRGADDR		bit(30)

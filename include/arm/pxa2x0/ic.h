@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 Interrupt Control Registers
+ * XScale PXA26x/PXA250/PXA210 Interrupt Control Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -43,6 +45,10 @@
 
 #if LANGUAGE == C
 #include <stdint.h>
+#endif
+
+#if defined(PXA2X0_NOPXA250) && !defined(PXA2X0_NOPXA26X)
+#define	PXA2X0_NOPXA26X
 #endif
 
 /* Interrupt Control Registers */
@@ -95,6 +101,10 @@ typedef volatile struct IC_registers {
 #define	IC_IRQ19	bit(19)
 #define	IC_IRQ18	bit(18)
 #define	IC_IRQ17	bit(17)
+#if !defined(PXA2X0_NOPXA26X)
+#define	IC_IRQ16	bit(16)
+#define	IC_IRQ15	bit(15)
+#endif /* PXA26x only */
 #define	IC_IRQ14	bit(14)
 #define	IC_IRQ13	bit(13)
 #define	IC_IRQ12	bit(12)
@@ -102,8 +112,11 @@ typedef volatile struct IC_registers {
 #define	IC_IRQ10	bit(10)
 #define	IC_IRQ9		bit(9)
 #define	IC_IRQ8		bit(8)
+#if !defined(PXA2X0_NOPXA26X)
+#define	IC_IRQ7		bit(7)
+#endif /* PXA26x only */
 
-/* ICCR bits - see Table 4-33 in [1] */
+/* ICCR bits - see Table 4-33 in [1], Table in [2] */
 
 #define	ICCR_DIM	bit(0)
 

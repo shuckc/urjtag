@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 PWM0 and PWM1 Registers
+ * XScale PXA26x/PXA250/PXA210 PWM0 and PWM1 Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -79,19 +81,19 @@ typedef volatile struct PWM_registers {
 #define	PWM_PWDUTY_OFFSET	0x04
 #define	PWM_PERVAL_OFFSET	0x08
 
-/* PWM_CTRL bits - see Table 4-49 in [1] */
+/* PWM_CTRL bits - see Table 4-49 in [1], Table 4-50 in [2] */
 
 #define	PWM_CTRL_PWM_SD		bit(6)
 #define	PWM_CTRL_PRESCALE_MASK	bits(5,0)
 #define	PWM_CTRL_PRESCALE(x)	bits_val(5,0,x)
 
-/* PWM_PWDUTY bits - see Table 4-50 in [1] */
+/* PWM_PWDUTY bits - see Table 4-50 in [1], Table 4-51 in [2] */
 
 #define	PWM_PWDUTY_FDCYCLE	bit(10)
 #define	PWM_PWDUTY_DCYCLE_MASK	bits(9,0)
 #define	PWM_PWDUTY_DCYCLE(x)	bits_val(9,0,x)
 
-/* PWM_PERVAL bits - see Table 4-51 in [1] */
+/* PWM_PERVAL bits - see Table 4-51 in [1], Table 4-52 in [2] */
 
 #define	PWM_PERVAL_PV_MASK	bits(9,0)
 #define	PWM_PERVAL_PV(x)	bits_val(9,0,x)

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * XScale PXA250/PXA210 LCD Controller Registers
+ * XScale PXA26x/PXA250/PXA210 LCD Controller Registers
  * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
@@ -33,6 +33,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
+ * [2] Intel Corporation, "Intel PXA26x Processor Family Developer's Manual",
+ *     October 2002, Order Number: 278638-001
  *
  */
 
@@ -115,7 +117,7 @@ typedef volatile struct LCD_registers {
 #define	FIDR1_OFFSET	0x218
 #define	LDCMD1_OFFSET	0x21C
 
-/* LCCR0 bits - see Table 7-2 in [1] */
+/* LCCR0 bits - see Table 7-2 in [1], Table 7-2 in [2] */
 
 #define	LCCR0_OUM	bit(21)
 #define	LCCR0_BM	bit(20)
@@ -133,7 +135,7 @@ typedef volatile struct LCD_registers {
 #define	LCCR0_CMS	bit(1)
 #define	LCCR0_ENB	bit(0)
 
-/* LCCR1 bits - see Table 7-5 in [1] */
+/* LCCR1 bits - see Table 7-5 in [1], Table 7-4 in [2] */
 
 #define	LCCR1_BLW_MASK	bits(31,24)
 #define	LCCR1_BLW(x)	bits_val(31,24,x)
@@ -144,7 +146,7 @@ typedef volatile struct LCD_registers {
 #define	LCCR1_PPL_MASK	bits(9,0)
 #define	LCCR1_PPL(x)	bits_val(9,0,x)
 
-/* LCCR2 bits - see Table 7-6 in [1] */
+/* LCCR2 bits - see Table 7-6 in [1], Table 7-5 in [2] */
 
 #define	LCCR2_BFW_MASK	bits(31,24)
 #define	LCCR2_BFW(x)	bits_val(31,24,x)
@@ -155,7 +157,7 @@ typedef volatile struct LCD_registers {
 #define	LCCR2_LPP_MASK	bits(9,0)
 #define	LCCR2_LPP(x)	bits_val(9,0,x)
 
-/* LCCR3 bits - see Table 7-7 in [1] */
+/* LCCR3 bits - see Table 7-7 in [1], Table 7-6 in [2] */
 
 #define	LCCR3_DPC	bit(27)
 #define	LCCR3_BPP_MASK	bits(26,24)
@@ -171,17 +173,17 @@ typedef volatile struct LCD_registers {
 #define	LCCR3_PCD_MASK	bits(7,0)
 #define	LCCR3_PCD(x)	bits_val(7,0,x)
 
-/* FBR0 bits - see Table 7-12 in [1] */
+/* FBR0 bits - see Table 7-12 in [1], Table 7-11 in [2] */
 
 #define	FBR0_BINT	bit(1)
 #define	FBR0_BRA	bit(0)
 
-/* FBR1 bits - see Table 7-12 in [1] */
+/* FBR1 bits - see Table 7-12 in [1], Table 7-11 in [2] */
 
 #define	FBR1_BINT	bit(1)
 #define	FBR1_BRA	bit(0)
 
-/* LCSR bits - see Table 7-13 in [1] */
+/* LCSR bits - see Table 7-13 in [1], Table 7-12 in [2] */
 
 #define	LCSR_SINT	bit(10)
 #define	LCSR_BS		bit(9)
@@ -195,12 +197,12 @@ typedef volatile struct LCD_registers {
 #define	LCSR_SOF	bit(1)
 #define	LCSR_LDD	bit(0)
 
-/* LIIDR bits - see Table 7-14 in [1] */
+/* LIIDR bits - see Table 7-14 in [1], Table 7-13 in [2] */
 
 #define	LIIDR_IFRAMEID_MASK	bits(31,3)
 #define	LIIDR_IFRAMEID(x)	bits_val(31,3,x)
 
-/* TRGBR bits - see Table 7-15 in [1] */
+/* TRGBR bits - see Table 7-15 in [1], Table 7-14 in [2] */
 
 #define	TRGBR_TBS_MASK	bits(23,16)
 #define	TRGBR_TBS(x)	bits_val(23,16,x)
@@ -209,7 +211,7 @@ typedef volatile struct LCD_registers {
 #define	TRGBR_TRS_MASK	bits(7,0)
 #define	TRGBR_TRS(x)	bits_val(7,0,x)
 
-/* TCR bits - see Table 7-16 in [1] */
+/* TCR bits - see Table 7-16 in [1], Table 7-15 in [2] */
 
 #define	TCR_TED		bit(14)
 #define	TCR_THBS_MASK	bits(11,8)
@@ -221,7 +223,7 @@ typedef volatile struct LCD_registers {
 #define	TCR_FNAM	bit(1)
 #define	TCR_COAM	bit(0)
 
-/* LDCMD0 bits - see Table 7-11 in [1] */
+/* LDCMD0 bits - see Table 7-11 in [1], Table 7-10 in [2] */
 
 #define	LDCMD0_PAL	bit(26)
 #define	LDCMD0_SOFINT	bit(22)
@@ -229,7 +231,7 @@ typedef volatile struct LCD_registers {
 #define	LDCMD0_LEN_MASK	bits(20,0)
 #define	LDCMD0_LEN(x)	bits_val(20,0,x)
 
-/* LDCMD1 bits - see Table 7-11 in [1] */
+/* LDCMD1 bits - see Table 7-11 in [1], Table 7-10 in [2] */
 
 #define	LDCMD1_PAL	bit(26)
 #define	LDCMD1_SOFINT	bit(22)
