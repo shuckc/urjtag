@@ -31,6 +31,6 @@ detect_SOURCES = detect.c
 
 detect_DEPENDENCIES = tap/libtap.a part/libpart.a
 
-detect_LDADD = -Ltap -ltap -Lpart -lpart -lioperm
+detect_LDADD = -Ltap -ltap -Lpart -lpart
 
 INCLUDES = -I$(top_srcdir)/include
