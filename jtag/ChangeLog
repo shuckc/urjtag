@@ -1,5 +1,11 @@
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
+	* include/bus.h (new_sh7751r_bus): New function declaration (patch 773533, Matan Ziv-Av).
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added sh7751r.c (patch 773533, Matan Ziv-Av).
+	* src/bus/sh7751r.c: New file (patch 773533, Matan Ziv-Av).
+
+2003-08-13  Marcel Telka  <marcel@telka.sk>
+
 	* include/part.h (struct part): Added new member 'id'.
 	(part_alloc): Added new parameter 'id'.
 	* src/detect.c (detect_parts): Added execution JTAG declarations as script.

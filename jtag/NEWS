@@ -8,6 +8,7 @@ jtag-0.5:
 	* Added new commands 'peek' and 'poke' (patch 747447, Matan Ziv-Av).
 	* Fixed bugs in SH7727 bus driver (thanks to Rainer Dörken).
 	* Added bus drivers for Hitachi SH7750R and Broadcom BCM1250 (patch 753300, Matan Ziv-Av).
+	* Added bus driver for Hitachi SH7751R (patch 773533, Matan Ziv-Av).
 	* Added bus width detection using MD3 and MD4 signals in SH7727 bus driver
 		(thanks to Rainer Dörken).
 	* Changes in 'discovery' command:

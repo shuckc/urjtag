@@ -32,4 +32,5 @@ libbus_a_SOURCES = \
 	pxa2x0.c \
 	sa1110.c \
 	sh7727.c \
-	sh7750r.c
+	sh7750r.c \
+	sh7751r.c
