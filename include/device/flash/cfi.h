@@ -47,6 +47,11 @@
 #include <stdint.h>
 #endif
 
+#define	CFI_CMD_READ_ARRAY1		0xFF
+#define	CFI_CMD_READ_ARRAY2		0xF0
+#define	CFI_CMD_QUERY			0x98
+#define	CFI_CMD_QUERY_OFFSET		0x55
+
 /* Query identification string - see 4.3.2 in [1] */
 
 #define	CFI_QUERY_ID_OFFSET		0x10
