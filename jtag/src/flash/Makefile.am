@@ -24,5 +24,6 @@
 noinst_LIBRARIES = libflash.a
 
 libflash_a_SOURCES = \
+	cfi.c \
 	amd.c \
 	intel.c

@@ -1,5 +1,18 @@
 2003-05-14  Marcel Telka  <marcel@telka.sk>
 
+	* include/Makefile.am (noinst_HEADERS): Added cfi.h.
+	* include/cfi.h: New file.
+	* src/jtag.h (detect_cfi): Removed function declaration.
+	* src/flash.c: Replaced jtag.h include with cfi.h.
+	* src/readmem.c: Ditto.
+
+	* src/flash/Makefile.am (libflash_a_SOURCES): Added cfi.c.
+	* src/Makefie.am (jtag_SOURCES): Removed cfi.c.
+	* src/cfi.c: Moved this file ...
+	* src/flash/cfi.c: ... here and replaced jtag.h include with cfi.h one.
+
+2003-05-14  Marcel Telka  <marcel@telka.sk>
+
 	* include/part.h (part_t, parts_t): Macros removed.
 	* src/detect.c: Replaced obsolete types `parts' with `parts_t' and `part' with `part_t'.
 	* src/part/parse.c: Ditto.

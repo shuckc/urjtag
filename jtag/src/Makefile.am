@@ -38,7 +38,6 @@ jtag_SOURCES = \
 	detect.c \
 	discovery.c \
 	readmem.c \
-	cfi.c \
 	flash.c \
 	help.c
 

@@ -43,8 +43,7 @@
 
 #include "bus.h"
 #include "flash.h"
-
-#include "jtag.h"
+#include "cfi.h"
 
 extern flash_driver_t amd_32_flash_driver;
 extern flash_driver_t intel_32_flash_driver;

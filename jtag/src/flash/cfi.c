@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <flash/cfi.h>
 
-#include "jtag.h"
+#include "cfi.h"
 #include "bus.h"
 
 /* function to cover 2x16 and 1x16 modes */

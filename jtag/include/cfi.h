@@ -22,26 +22,13 @@
  *
  */
 
-#ifndef JTAG_H
-#define JTAG_H
-
-#include <stdint.h>
-#include <stdio.h>
+#ifndef CFI_H
+#define CFI_H
 
 #include <flash/cfi.h>
 
-#include "part.h"
-#include "chain.h"
 #include "bus.h"
 
-parts_t *detect_parts( chain_t* chain, char *db_path );
-void detectflash( bus_t *bus );
-void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
-void flashmem( bus_t *bus, FILE *f, uint32_t addr );
-void flashmsbin( bus_t *bus, FILE *f );
+cfi_query_structure_t *detect_cfi( bus_t *bus );
 
-void help( const char *cmd );
-
-void discovery( chain_t *chain, const char *filename );
-
-#endif /* JTAG_H */
+#endif /* CFI_H */

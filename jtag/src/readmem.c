@@ -38,11 +38,10 @@
 #include <flash/intel.h>
 #include <std/mic.h>
 
-#include "jtag.h"
-
 #include <arpa/inet.h>
 /* for ntohs */
 
+#include "cfi.h"
 #include "bus.h"
 #include "flash.h"
 
