@@ -29,6 +29,7 @@ src/cmd/flashmem.c
 src/cmd/frequency.c
 src/cmd/get.c
 src/cmd/include.c
+src/cmd/initbus.c
 src/cmd/instruction.c
 src/cmd/part.c
 src/cmd/peekpoke.c

@@ -1,3 +1,7 @@
+2003-09-05  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/cmd/initbus.c.
+
 2003-09-04  Marcel Telka  <marcel@telka.sk>
 
 	* sk.po: Updated Slovak translation for 0.5 release reformatted by TP-Robot.
