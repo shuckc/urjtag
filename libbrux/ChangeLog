@@ -1,5 +1,9 @@
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
+	* Makefile.am (noinst_HEADERS): Added sysdep.h and gettext.h.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
 	* Makefile.am (SUBDIRS): Added po.
 	* configure.ac (AC_CONFIG_FILES): Added po/Makefile.in.
 	(AM_CONFIG_HEADER): Added macro with config.h parameter.
