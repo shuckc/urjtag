@@ -27,12 +27,15 @@
 #if defined(__CYGWIN__)
 #include <sys/types.h>
 #else
+#ifndef __int8_t_defined
+#define __int8_t_defined
 typedef signed char int8_t;
 typedef short  int16_t;
 typedef int  int32_t;
 #if !defined(UNDER_CE)
 typedef long long  int64_t;
 #endif /* !defined(UNDER_CE) */
+#endif /* __int8_t_defined */
 #endif /* defined(__CYGWIN__) */
 typedef unsigned char   uint8_t;
 typedef unsigned short  uint16_t;
