@@ -1,3 +1,7 @@
+2003-06-18  Marcel Telka  <marcel@telka.sk>
+
+	* /src/flash.c (flash_drivers): Added 1 x 8 bit Intel Flash driver (patch 753295, Matan Ziv-Av).
+
 2003-06-12  Marcel Telka  <marcel@telka.sk>
 
 	* include/flash.h (flash_driver_t): Structure removed.

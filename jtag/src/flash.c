@@ -49,11 +49,13 @@
 extern flash_driver_t amd_32_flash_driver;
 extern flash_driver_t intel_32_flash_driver;
 extern flash_driver_t intel_16_flash_driver;
+extern flash_driver_t intel_8_flash_driver;
 
 flash_driver_t *flash_drivers[] = {
 	&amd_32_flash_driver,
 	&intel_32_flash_driver,
 	&intel_16_flash_driver,
+	&intel_8_flash_driver,
 	NULL
 };
 
