@@ -230,7 +230,7 @@ typedef volatile struct DMA_registers {
 #define	DRCMR_MAPVLD		bit(7)
 #define	DRCMR_CHLNUM_MASK	bits(3,0)
 #define	DRCMR_CHLNUM(x)		bits_val(3,0,x)
-#define	get_DCMR_CHLNUM(x)	bits_get(3,0,x)
+#define	get_DRCMR_CHLNUM(x)	bits_get(3,0,x)
 
 /* DDADRx bits - see Table 5-9 in [1], Table 5-9 in [2] */
 

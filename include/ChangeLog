@@ -1,5 +1,9 @@
 2003-01-27  Marcel Telka  <marcel@telka.sk>
 
+	* arm/pxa2x0/dma.c (get_DRCMR_CHLNUM): Fixed a typo.
+
+2003-01-27  Marcel Telka  <marcel@telka.sk>
+
 	* arm/pxa2x0/dma.h: Added DRCMR symbolic names and offsets (suggested by Daniel Samek,
 		patch 675417). Added get_* macros for register bits.
 
