@@ -41,6 +41,7 @@ typedef struct bus bus_t;
 
 struct bus {
 	void *params;
+	void (*printinfo)( void );
 	void (*prepare)( bus_t *bus );
 	unsigned int (*width)( bus_t *bus, uint32_t adr );
 	void (*read_start)( bus_t *bus, uint32_t adr );
@@ -53,6 +54,7 @@ struct bus {
 
 extern bus_t *bus;
 
+#define	bus_printinfo(bus)	bus->printinfo()
 #define	bus_prepare(bus)	bus->prepare(bus)
 #define	bus_width(bus,adr)	bus->width(bus,adr)
 #define	bus_read_start(bus,adr)	bus->read_start(bus,adr)
