@@ -29,6 +29,7 @@
 
 #include <jtag/signal.h>
 #include <jtag/instruction.h>
+#include <jtag/data_register.h>
 #include <jtag/bsbit.h>
 
 typedef struct part part;
@@ -38,6 +39,7 @@ struct part {
 	int instruction_length;
 	instruction *instructions;
 	instruction *active_instruction;
+	data_register *data_registers;
 	int boundary_length;
 	bsbit **bsbits;
 	tap_register *idr;

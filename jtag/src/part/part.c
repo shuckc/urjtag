@@ -40,6 +40,7 @@ part_alloc( void )
 	p->instruction_length = 0;
 	p->instructions = NULL;
 	p->active_instruction = NULL;
+	p->data_registers = NULL;
 	p->boundary_length = 0;
 	p->bsbits = NULL;
 	p->idr = NULL;
@@ -69,6 +70,12 @@ part_free( part *p )
 		instruction *i = p->instructions;
 		p->instructions = i->next;
 		instruction_free( i );
+	}
+
+	while (p->data_registers) {
+		data_register *dr = p->data_registers;
+		p->data_registers = dr->next;
+		data_register_free( dr );
 	}
 
 	/* bsbits */
