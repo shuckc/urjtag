@@ -27,7 +27,7 @@ SUBDIRS = \
 
 bin_PROGRAMS = jtag
 
-jtag_SOURCES = jtag.c detect.c readmem.c detect.h pxa250.c pxa250.h sa1110.c sa1110.h flash.c
+jtag_SOURCES = jtag.c detect.c readmem.c detect.h bus.h pxa250.c sa1110.c flash.c
 
 jtag_DEPENDENCIES = tap/libtap.a part/libpart.a
 

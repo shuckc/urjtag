@@ -38,15 +38,9 @@
 #include <std/mic.h>
 
 #include "part.h"
+#include "bus.h"
 
-#include "sa1110.h"
-#include "pxa250.h"
-
-void (*bus_read_start)( parts *, uint32_t );
-uint32_t (*bus_read_next)( parts *, uint32_t );
-uint32_t (*bus_read_end)( parts * );
-uint32_t (*bus_read)( parts *, uint32_t );
-void (*bus_write)( parts *, uint32_t, uint32_t );
+bus_driver_t *bus_driver = NULL;
 
 void
 readmem( parts *ps )
@@ -61,20 +55,12 @@ readmem( parts *ps )
 	if (strcmp( p->part, "SA1110" ) == 0) {
 		printf( "SA1110 detected\n" );
 		d = D_SA1110;
-		bus_read_start = sa1110_bus_read_start;
-		bus_read_next = sa1110_bus_read_next;
-		bus_read_end = sa1110_bus_read_end;
-		bus_read = sa1110_bus_read;
-		bus_write = sa1110_bus_write;
+		bus_driver = &sa1110_bus_driver;
 	}
 	if (strcmp( p->part, "PXA250" ) == 0) {
 		printf( "PXA250 detected\n" );
 		d = D_PXA250;
-		bus_read_start = pxa250_bus_read_start;
-		bus_read_next = pxa250_bus_read_next;
-		bus_read_end = pxa250_bus_read_end;
-		bus_read = pxa250_bus_read;
-		bus_write = pxa250_bus_write;
+		bus_driver = &pxa250_bus_driver;
 	}
 
 	if (!d) {

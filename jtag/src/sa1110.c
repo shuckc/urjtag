@@ -25,8 +25,7 @@
 #include <stdint.h>
 
 #include "part.h"
-
-#include "sa1110.h"
+#include "bus.h"
 
 /* SA1110 must be at position 0 in JTAG chain */
 
@@ -168,3 +167,11 @@ sa1110_bus_write( parts *ps, uint32_t adr, uint32_t data )
 	part_set_signal( p, "nWE", 1, 1 );
 	parts_shift_data_registers( ps );
 }
+
+bus_driver_t sa1110_bus_driver = {
+	sa1110_bus_read_start,
+	sa1110_bus_read_next,
+	sa1110_bus_read_end,
+	sa1110_bus_read,
+	sa1110_bus_write
+};

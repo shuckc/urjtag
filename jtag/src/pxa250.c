@@ -25,8 +25,7 @@
 #include <stdint.h>
 
 #include "part.h"
-
-#include "pxa250.h"
+#include "bus.h"
 
 /* PXA250 must be at position 0 in JTAG chain */
 
@@ -170,3 +169,11 @@ pxa250_bus_write( parts *ps, uint32_t adr, uint32_t data )
 	part_set_signal( p, "nWE", 1, 1 );
 	parts_shift_data_registers( ps );
 }
+
+bus_driver_t pxa250_bus_driver = {
+	pxa250_bus_read_start,
+	pxa250_bus_read_next,
+	pxa250_bus_read_end,
+	pxa250_bus_read,
+	pxa250_bus_write
+};

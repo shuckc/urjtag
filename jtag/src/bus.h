@@ -1,6 +1,7 @@
 /*
  * $Id$
  *
+ * Bus driver interface
  * Copyright (C) 2002 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,17 +23,28 @@
  *
  */
 
-#ifndef SA1110_H
-#define	SA1110_H
+#ifndef BUS_H
+#define	BUS_H
 
 #include <stdint.h>
-
 #include "part.h"
 
-void sa1110_bus_read_start( parts *ps, uint32_t adr );
-uint32_t sa1110_bus_read_next( parts *ps, uint32_t adr );
-uint32_t sa1110_bus_read_end( parts *ps );
-uint32_t sa1110_bus_read( parts *ps, uint32_t adr );
-void sa1110_bus_write( parts *ps, uint32_t adr, uint32_t data );
+typedef struct {
+	void (*bus_read_start)( parts *, uint32_t );
+	uint32_t (*bus_read_next)( parts *, uint32_t );
+	uint32_t (*bus_read_end)( parts * );
+	uint32_t (*bus_read)( parts *, uint32_t );
+	void (*bus_write)( parts *, uint32_t, uint32_t );
+} bus_driver_t;
 
-#endif /* SA1110_H */
+extern bus_driver_t *bus_driver;
+#define	bus_read_start	bus_driver->bus_read_start
+#define	bus_read_next	bus_driver->bus_read_next
+#define	bus_read_end	bus_driver->bus_read_end
+#define	bus_read	bus_driver->bus_read
+#define	bus_write	bus_driver->bus_write
+
+extern bus_driver_t sa1110_bus_driver;
+extern bus_driver_t pxa250_bus_driver;
+
+#endif /* BUS_H */
