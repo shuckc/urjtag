@@ -42,7 +42,7 @@
  * Integer Types
  */
 
-/* Exactly-width integer types */
+/* Exact-width integer types */
 
 typedef CHAR int8_t;
 typedef SHORT int16_t;
@@ -79,7 +79,7 @@ typedef UINT64 uint_fast64_t;
 /* Integer types capable of holding object pointers */
 
 typedef INT_PTR intptr_t;
-typedef DWORD_PTR uintptr_t;
+typedef UINT_PTR uintptr_t;
 
 /* Greatest-width integer types */
 

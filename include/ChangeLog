@@ -1,3 +1,7 @@
+2004-08-06  Marcel Telka  <marcel@telka.sk>
+
+	* win32/stdint.h (uintptr_t): Changed type definition from DWORD_PTR to UINT_PTR.
+
 2003-11-19  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AC_INIT): Changed version number to 0.3.3.
