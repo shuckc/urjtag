@@ -32,8 +32,6 @@
 
 openwinceincdir = $(includedir)/openwince
 
-SUBDIRS =
-
 nobase_openwinceinc_HEADERS = \
 	common.h \
 	stdint.h \
