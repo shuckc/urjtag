@@ -46,9 +46,12 @@ typedef struct {
 
 typedef struct bus bus_t;
 
-struct bus {
-	void *params;
-	void (*printinfo)( void );
+typedef struct bus_driver {
+	const char *name;
+	const char *description;
+	bus_t *(*new_bus)( void );
+	void (*free_bus)( bus_t *bus );
+	void (*printinfo)( bus_t *bus );
 	void (*prepare)( bus_t *bus );
 	int (*area)( bus_t *bus, uint32_t adr, bus_area_t *area );
 	void (*read_start)( bus_t *bus, uint32_t adr );
@@ -56,19 +59,23 @@ struct bus {
 	uint32_t (*read_end)( bus_t *bus );
 	uint32_t (*read)( bus_t *bus, uint32_t adr );
 	void (*write)( bus_t *bus, uint32_t adr, uint32_t data );
-	void (*free)( bus_t *bus );
+} bus_driver_t;
+
+struct bus {
+	void *params;
+	const bus_driver_t *driver;
 };
 
 extern bus_t *bus;
 
-#define	bus_printinfo(bus)	bus->printinfo()
-#define	bus_prepare(bus)	bus->prepare(bus)
-#define	bus_area(bus,adr,a)	bus->area(bus,adr,a)
-#define	bus_read_start(bus,adr)	bus->read_start(bus,adr)
-#define	bus_read_next(bus,adr)	bus->read_next(bus,adr)
-#define	bus_read_end(bus)	bus->read_end(bus)
-#define	bus_read(bus,adr)	bus->read(bus,adr)
-#define	bus_write(bus,adr,data)	bus->write(bus,adr,data)
-#define	bus_free(bus)		bus->free(bus)
+#define	bus_printinfo(bus)	bus->driver->printinfo(bus)
+#define	bus_prepare(bus)	bus->driver->prepare(bus)
+#define	bus_area(bus,adr,a)	bus->driver->area(bus,adr,a)
+#define	bus_read_start(bus,adr)	bus->driver->read_start(bus,adr)
+#define	bus_read_next(bus,adr)	bus->driver->read_next(bus,adr)
+#define	bus_read_end(bus)	bus->driver->read_end(bus)
+#define	bus_read(bus,adr)	bus->driver->read(bus,adr)
+#define	bus_write(bus,adr,data)	bus->driver->write(bus,adr,data)
+#define	bus_free(bus)		bus->driver->free_bus(bus)
 
 #endif /* BRUX_BUS_H */

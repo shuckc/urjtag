@@ -1,3 +1,7 @@
+2003-09-05  Marcel Telka  <marcel@telka.sk>
+
+	* brux/bus.h (bus_t, bus_driver_t): Separated bus_driver_t from bus_t.
+
 2003-08-28  Marcel Telka  <marcel@telka.sk>
 
 	* brux/bus.h (bus_area_t): New structure.

@@ -3,6 +3,7 @@ $Id$
 	* Changes in brux common headers:
 		- Added FLASH_ERROR_* macros
 		- Modified bus_t structure
+		- Added bus_area_t and bus_driver_t structures
 
 include-0.3.1 (2003-08-20):
 
