@@ -1,3 +1,8 @@
+2002-11-28  Marcel Telka  <marcel@telka.sk>
+
+	* arm/pxa2x0/mc.h: Added register bits for MECR, SXCNFG, SXMRS,	MCMEMx, MCATTx,
+		MCIOx, BOOT_DEF.
+
 2002-11-22  Marcel Telka  <marcel@telka.sk>
 
 	* arm/pxa2x0/mmc.h: Added MMC commands (from Juraj Fabo).

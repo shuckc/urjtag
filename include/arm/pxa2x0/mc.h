@@ -246,6 +246,74 @@ typedef volatile struct MC_registers {
 #define	MSC2_RT4_MASK		bits(2,0)
 #define	MSC2_RT4(x)		bits_val(2,0,x)
 
+/* MECR bits - see Table 6-27 in [1], Table 6-31 in [3] */
+
+#define	MECR_CIT		bit(1)
+#define	MECR_NOS		bit(0)
+
+/* SXCNFG bits - see Table 6-13 in [1], Table 6-14 in [3] */
+
+#define	SXCNFG_SXLATCH2		bit(30)
+#define	SXCNFG_SXTP2_MASK	bits(29,28)
+#define	SXCNFG_SXTP2(x)		bits_val(29,28,x)
+#define	SXCNFG_SXCA2_MASK	bits(27,26)
+#define	SXCNFG_SXCA2(x)		bits_val(27,26,x)
+#define	SXCNFG_SXRA2_MASK	bits(25,24)
+#define	SXCNFG_SXRA2(x)		bits_val(25,24,x)
+#define	SXCNFG_SXRL2_MASK	bits(23,21)
+#define	SXCNFG_SXRL2(x)		bits(23,21,x)
+#define	SXCNFG_SXCL2_MASK	bits(20,18)
+#define	SXCNFG_SXCL2(x)		bits_val(20,18,x)
+#define	SXCNFG_SXEN2_MASK	bits(17,16)
+#define	SXCNFG_SXEN2(x)		bits_val(17,16,x)
+#define	SXCNFG_SXLATCH0		bit(14)
+#define	SXCNFG_SXTP0_MASK	bits(13,12)
+#define	SXCNFG_SXTP0(x)		bits_val(13,12,x)
+#define	SXCNFG_SXCA0_MASK	bits(11,10)
+#define	SXCNFG_SXCA0(x)		bits_val(11,10,x)
+#define	SXCNFG_SXRA0_MASK	bits(9,8)
+#define	SXCNFG_SXRA0(x)		bits_val(9,8,x)
+#define	SXCNFG_SXRL0_MASK	bits(7,5)
+#define	SXCNFG_SXRL0(x)		bits(7,5,x)
+#define	SXCNFG_SXCL0_MASK	bits(4,2)
+#define	SXCNFG_SXCL0(x)		bits_val(4,2,x)
+#define	SXCNFG_SXEN0_MASK	bits(1,0)
+#define	SXCNFG_SXEN0(x)		bits_val(1,0,x)
+
+/* SXMRS bits - see Table 6-16 in [1], Table 6-17 in [3] */
+
+#define	SXMRS_SXMRS2_MASK	bits(30,16)
+#define	SXMRS_SXMRS2(x)		bits_val(30,16,x)
+#define	SXMRS_SXMRS0_MASK	bits(14,0)
+#define	SXMRS_SXMRS0(x)		bits_val(14,0,x)
+
+/* MCMEMx bits - see Table 6-23 in [1], Table 6-27 in [3] */
+
+#define	MCMEM_HOLD_MASK		bits(19,14)
+#define	MCMEM_HOLD(x)		bits_val(19,14,x)
+#define	MCMEM_ASST_MASK		bits(11,7)
+#define	MCMEM_ASST(x)		bits_val(11,7,x)
+#define	MCMEM_SET_MASK		bits(6,0)
+#define	MCMEM_SET(x)		bits_val(6,0,x)
+
+/* MCATTx bits - see Table 6-24 in [1], Table 6-28 in [3] */
+
+#define	MCATT_HOLD_MASK		bits(19,14)
+#define	MCATT_HOLD(x)		bits_val(19,14,x)
+#define	MCATT_ASST_MASK		bits(11,7)
+#define	MCATT_ASST(x)		bits_val(11,7,x)
+#define	MCATT_SET_MASK		bits(6,0)
+#define	MCATT_SET(x)		bits_val(6,0,x)
+
+/* MCIOx bits - see Table 6-25 in [1], Table 6-29 in [3] */
+
+#define	MCIO_HOLD_MASK		bits(19,14)
+#define	MCIO_HOLD(x)		bits_val(19,14,x)
+#define	MCIO_ASST_MASK		bits(11,7)
+#define	MCIO_ASST(x)		bits_val(11,7,x)
+#define	MCIO_SET_MASK		bits(6,0)
+#define	MCIO_SET(x)		bits_val(6,0,x)
+
 /* MDMRS bits - see Table 6-4 in [1], Table 6-4 in [3] */
 
 #define	MDMRS_MDMRS2_MASK	bits(30,23)
@@ -262,6 +330,12 @@ typedef volatile struct MC_registers {
 #define	MDMRS_MDADD0		bit(3)
 #define	MDMRS_MDBL0_MASK	bits(2,0)
 #define	MDMRS_MDBL0(x)		bits_val(2,0,x)
+
+/* BOOT_DEF bits - see Table 6-37 in [1], Table 6-40 in [3] */
+
+#define	BOOT_DEF_PKG_TYPE	bit(3)
+#define	BOOT_DEF_BOOT_SEL_MASK	bits(2,0)
+#define	BOOT_DEF_BOOT_SEL(x)	bits_val(2,0,x)
 
 #if !defined(PXA2X0_NOPXA26X)
 /* MDMRSLP bits - see Table 6-5 in [3] */
