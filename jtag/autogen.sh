@@ -2,7 +2,7 @@
 #
 # $Id$
 #
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2002, 2003 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,9 +19,18 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
 #
 
-autoreconf -i -s -v -f
+if autoreconf -i -s -v -f ; then
+	echo
+	echo "autoreconf done."
+	echo
+else
+	echo
+	echo "autoreconf failed."
+	echo
+	exit 1
+fi
 
 ./configure --enable-maintainer-mode --with-include=/usr/local/include/openwince
