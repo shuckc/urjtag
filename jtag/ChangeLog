@@ -1,5 +1,9 @@
 2003-05-29  Marcel Telka  <marcel@telka.sk>
 
+	Version 0.4 released.
+
+2003-05-29  Marcel Telka  <marcel@telka.sk>
+
 	* src/bsdl2jtag.c (main): Renamed 'pin' keyword to 'signal'.
 	* src/part/parse.c (read_part): Added support for 'signal' keyword.
 
