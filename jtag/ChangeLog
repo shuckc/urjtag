@@ -1,3 +1,8 @@
+2003-01-09  Marcel Telka  <marcel@telka.sk>
+
+	* src/discovery.c (detect_register_size): Changed register length test iteration.
+		Now the test iterates to MAX_REGISTER_LENGTH, not to MAX_REGISTER_LENGTH - 1.
+
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.2 released.

@@ -46,7 +46,7 @@ detect_register_size( FILE *f )
 	tap_register *rout;
 	tap_register *rpat;
 
-	for (len = 1; len < MAX_REGISTER_LENGTH; len++) {
+	for (len = 1; len <= MAX_REGISTER_LENGTH; len++) {
 		int p;
 		int ok = 0;
 
