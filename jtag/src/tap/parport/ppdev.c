@@ -229,6 +229,8 @@ ppdev_set_control( parport_t *parport, uint8_t data )
 {
 	ppdev_params_t *p = parport->params;
 
+	data ^= 0x0B;				/* SELECT, AUTOFD, and STROBE are inverted */
+
 	if (ioctl( p->fd, PPWCONTROL, &data ) == -1)
 		return -1;
 

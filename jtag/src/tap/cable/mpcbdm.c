@@ -45,8 +45,9 @@
 /* 
  * control 
  */
-#define	TRST	1
-#define	TRST1	3
+#define	HRESET	3	/* the signal is inverted by cable hardware */
+#define	SRESET	1	/* the signal is inverted by cable hardware */
+#define	TRST	0	/* the signal is inverted by cable hardware */
 
 /* 
  * status
@@ -59,7 +60,7 @@ mpcbdm_init( cable_t *cable )
 	if (parport_open( cable->port ))
 		return -1;
 
-	parport_set_control( cable->port, (1 << TRST) | (1 << TRST1) );
+	parport_set_control( cable->port, 0 << TRST );
 	PARAM_TRST(cable) = 1;
 
 	return 0;
@@ -72,10 +73,8 @@ mpcbdm_clock( cable_t *cable, int tms, int tdi )
 	tdi = tdi ? 1 : 0;
 
 	parport_set_data( cable->port, (0 << TCK) | (tms << TMS) | (tdi << TDI) );
-	parport_set_control( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_TRST(cable) << TRST1) );
 	cable_wait();
 	parport_set_data( cable->port, (1 << TCK) | (tms << TMS) | (tdi << TDI) );
-	parport_set_control( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_TRST(cable) << TRST1) );
 	cable_wait();
 }
 
@@ -83,7 +82,6 @@ static int
 mpcbdm_get_tdo( cable_t *cable )
 {
 	parport_set_data( cable->port, 0 << TCK );
-	parport_set_control( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_TRST(cable) << TRST1) );
 	cable_wait();
 	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
@@ -93,7 +91,7 @@ mpcbdm_set_trst( cable_t *cable, int trst )
 {
 	PARAM_TRST(cable) = trst ? 1 : 0;
 
-	parport_set_control( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_TRST(cable) << TRST1) );
+	parport_set_control( cable->port, (PARAM_TRST(cable) ^ 1) << TRST );
 	return PARAM_TRST(cable);
 }
 

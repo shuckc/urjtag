@@ -1,3 +1,11 @@
+2003-05-30  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/parport/direct.c (direct_set_control): Inverted SELECT, AUTOFD, and STROBE
+		signals (bug 745824).
+	* src/tap/parport/ppdev.c (ppdev_set_control): Ditto.
+	* src/tap/cable/mpcbdm.c (mpcbdm_init, mpcbdm_set_trst): Changed (inverted) TRST handling.
+	(mpcbdm_clock, mpcbdm_get_tdo): Removed TRST setting.
+
 2003-05-29  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.4 released.

@@ -248,7 +248,7 @@ static int
 direct_set_control( parport_t *parport, uint8_t data )
 {
 	unsigned int port = ((direct_params_t *) parport->params)->port;
-	outb( data, port + 2 );
+	outb( data ^ 0x0B, port + 2 );		/* SELECT, AUTOFD, and STROBE are inverted */
 	return 0;
 }
 

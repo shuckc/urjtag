@@ -1,5 +1,7 @@
 $Id$
 
+	* Fixed bug with SELECT, AUTOFD, and STROBE signals handling (bug 745824).
+
 jtag-0.4 (2003-05-29):
 
 	* Added support for executing scripts directly from stdin (parameter '-').
