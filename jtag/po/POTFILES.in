@@ -41,6 +41,7 @@ src/cmd/peekpoke.c
 src/cmd/print.c
 src/cmd/readmem.c
 src/cmd/register.c
+src/cmd/reset.c
 src/cmd/salias.c
 src/cmd/script.c
 src/cmd/set.c

@@ -1,3 +1,7 @@
+2004-11-24  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/cmd/reset.c.
+
 2004-11-18  Marcel Telka  <marcel@telka.sk>
 
 	* POTFILES.in: Added src/bus/ppc440gx_ebc8.c, src/bus/tx4925.c, and src/tap/cable/lattice.c.
