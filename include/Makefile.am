@@ -75,4 +75,5 @@ nobase_openwinceinc_HEADERS = \
 	arm/pxa2x0/uart.h \
 	arm/pxa2x0/udc.h \
 	device/flash/28fxxxj.h \
-	device/flash/28fxxxk.h
+	device/flash/28fxxxk.h \
+	device/flash/cfi.h
