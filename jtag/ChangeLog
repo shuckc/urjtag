@@ -1,3 +1,9 @@
+2003-01-11  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable/wiggler.c: Added support for Macraigor Wiggler JTAG Cable (Stas Khirman).
+	* src/tap/cable.c: Ditto.
+	* src/tap/Makefile.am: Ditto.
+
 2003-01-10  Marcel Telka  <marcel@telka.sk>
 
 	* src/tap/cable.c: Added missing stdlib.h include (bug 665923). Thanks to Chris Ellec.

@@ -38,6 +38,7 @@ JTAG adapters/cables (see 'help cable' command for more info):
 - Xilinx DLC5 JTAG Parallel Cable III
 - ETC EA253 JTAG Cable
 - ETC EI012 JTAG Cable
+- Macraigor Wiggler JTAG Cable
 
 JTAG-aware parts (chips):
 - Atmel ATmega128 (partial support)
