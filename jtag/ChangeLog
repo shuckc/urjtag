@@ -1,3 +1,9 @@
+2004-06-13  Marcel Telka  <marcel@telka.sk>
+
+	* data/broadcom/PARTS: Added BCM4712 entry (Alan Wallace).
+	* data/broadcom/bcm4712/STEPPINGS: New file (Alan Wallace).
+	* data/broadcom/bcm4712/bcm4712: Ditto.
+
 2004-01-20  Marcel Telka  <marcel@telka.sk>
 
 	* acinclude.m4: File removed.

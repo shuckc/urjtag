@@ -47,6 +47,7 @@ JTAG-aware parts (chips):
 - Broadcom BCM1250
 - Broadcom BCM3310 (partial support)
 - Broadcom BCM5421S
+- Broadcom BCM4712 (partial support)
 - DEC SA1100
 - Hitachi HD64465
 - Hitachi SH7727

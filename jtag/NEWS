@@ -6,6 +6,7 @@ See libbrux/NEWS for more news.
 		- Hitachi HD64465
 		- Hitachi SH7729 (Beregnyei Balazs)
 		- Motorola MPC8245
+		- Broadcom BCM4712 (partial, Alan Wallace)
 	* Added new bus drivers:
 		- Motorola MPC824x
 		- AMD Alchemy Solutions Au1500 (patch 853883, Zhang Wei)
