@@ -1,5 +1,9 @@
 2003-08-18  Marcel Telka  <marcel@telka.sk>
 
+	* data/samsung/s3c4510b/s3c4510b: Fixed some errors in instruction declarations (Jiun-Shian Ho).
+
+2003-08-18  Marcel Telka  <marcel@telka.sk>
+
 	* src/detect.c (detect_parts): Marked one forgotten string for translation.
 	* src/cmd/bit.c (cmd_bit_run): Fixed control bit setup.
 	* src/cmd/eraseflash.c (cmd_eraseflash_run): Changed formatting.

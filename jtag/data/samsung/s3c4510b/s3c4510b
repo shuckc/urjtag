@@ -198,6 +198,8 @@ register        BR      1       # Bypass Register
 # optional data registers
 register        DIR     32      # Device Identification Register
 
+register	SCAN	4	# Select scan channel for ARM
+
 # Appendix-A (Page A-16) in [1]
 instruction length 4
 
@@ -208,9 +210,14 @@ instruction SAMPLE/PRELOAD      0011    BSR
 instruction BYPASS              1111    BR
 
 # optional instructions
-instruction CLAMP               1001    BR
 instruction HIGHZ               0111    BR
 instruction IDCODE              1110    DIR
+instruction INTEST		1100	BSR
+instruction CLAMP		0101	BR
+
+instruction CLAMPZ		1001	BR
+instruction RESTART		0100	BR
+instruction SCAN_N		0010	SCAN
 
 # see Table A-2 or BSDL file (Page: A-16 ~ A-23) in [1]
 bit 232 I ? nUADTR1
