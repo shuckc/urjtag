@@ -37,6 +37,7 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 {
 	int mid;
 	int did;
+	cfi_query_structure_t *cfi;
 
 	/* Query flash. */
 	bus_write( bus, 0x0, 0xf0 );
@@ -55,7 +56,7 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	if (!(*cfi_array)->cfi_chips[0])
 		return -2;	/* out of memory */
 
-	cfi_query_structure_t *cfi = &(*cfi_array)->cfi_chips[0]->cfi;
+	cfi = &(*cfi_array)->cfi_chips[0]->cfi;
 
 	cfi->identification_string.pri_id_code = CFI_VENDOR_AMD_SCS;
 	cfi->identification_string.pri_vendor_tbl = NULL;

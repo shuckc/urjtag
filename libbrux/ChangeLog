@@ -1,3 +1,7 @@
+2003-11-03  Marcel Telka  <marcel@telka.sk>
+
+	* flash/jedec.c (jedec_detect): Fixed compile error - C++-style declaration (bug 828313, thanks to Márton Németh).
+
 2003-11-02  Marcel Telka  <marcel@telka.sk>
 
 	* cmd/cmd_detectflash.c (cmd_detectflash_run, cmd_detectflash_help): Added new address parameter for 'detectflash'
