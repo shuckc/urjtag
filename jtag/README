@@ -109,7 +109,7 @@ Device Id: 01011001001001100100000000010011
   Manufacturer: Intel
   Part:         PXA250
   Stepping:     C0
-  Filename:     /usr/local/share/jtag/intel/pxa250/pxa260
+  Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
 
 If you get empty output or this error message
 
