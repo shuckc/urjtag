@@ -24,6 +24,8 @@
  * Documentation:
  * [1] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
  *     Developer's Manual", October 2001, Order Number: 278240-004
+ * [2] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
+ *     Specification Update", December 2001, Order Number: 278259-023
  *
  */
 
