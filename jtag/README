@@ -111,7 +111,7 @@ Initializing ETC EA253 JTAG Cable on parallel port at 0x378
 Type "detect" at the jtag command prompt:
 jtag> detect
 
-Your output should looks like this:
+Your output should look like this:
 
 Device Id: 01011001001001100100000000010011
   Manufacturer: Intel
