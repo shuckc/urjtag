@@ -1,5 +1,12 @@
 2003-02-07  Marcel Telka  <marcel@telka.sk>
 
+	* src/tap/cable/arcom.c: Added support for Arcom JTAG Cable (patch 682310,
+		Ian Campbell).
+	* src/tap/cable.c: Ditto.
+	* src/tap/Makefile.am: Ditto.
+
+2003-02-07  Marcel Telka  <marcel@telka.sk>
+
 	* src/tap/cable/mpcbdm.c (mpcbdm_clock): Fixed port address for TRST & TRST1.
 
 2003-02-07  Marcel Telka  <marcel@telka.sk>

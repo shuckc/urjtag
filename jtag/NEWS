@@ -3,6 +3,7 @@ $Id$
 	* Enhanced 'dr' command functionality.
 	* Added new 'set signal' command.
 	* Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
+	* Added support for Arcom JTAG Cable (patch 682310, Ian Campbell).
 
 jtag-0.2.2 (2003-02-04):
 

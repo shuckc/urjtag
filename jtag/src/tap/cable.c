@@ -28,6 +28,7 @@
 
 #include "cable.h"
 
+extern cable_driver_t arcom_cable_driver;
 extern cable_driver_t byteblaster_cable_driver;
 extern cable_driver_t dlc5_cable_driver;
 extern cable_driver_t ea253_cable_driver;
@@ -38,6 +39,7 @@ extern cable_driver_t wiggler_cable_driver;
 uint32_t frequency = 0;
 
 cable_driver_t *cable_drivers[] = {
+	&arcom_cable_driver,
 	&byteblaster_cable_driver,
 	&dlc5_cable_driver,
 	&ea253_cable_driver,

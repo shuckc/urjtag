@@ -35,10 +35,12 @@ Supported hardware
 ------------------
 
 JTAG adapters/cables (see 'help cable' command for more info):
+- Arcom JTAG Cable
 - Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable
 - Xilinx DLC5 JTAG Parallel Cable III
 - ETC EA253 JTAG Cable
 - ETC EI012 JTAG Cable
+- Mpcbdm JTAG Cable
 - Macraigor Wiggler JTAG Cable
 
 JTAG-aware parts (chips):
