@@ -1,5 +1,10 @@
 2003-09-10  Marcel Telka  <marcel@telka.sk>
 
+	* src/cmd/dr.c (cmd_dr_run): Added test for missing active instruction and data register (thanks to
+		Mike Tesch for reporting).
+
+2003-09-10  Marcel Telka  <marcel@telka.sk>
+
 	* src/bus/bcm1250.c (bcm1250_bus_printinfo, bcm1250_bus): Fixed typo (compatibile->compatible) in
 		output message (thanks to Andreas Mohr).
 	* src/bus/ixp425.c (ixp425_bus_printinfo, ixp425_bus): Ditto.

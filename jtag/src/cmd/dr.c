@@ -50,7 +50,7 @@ cmd_dr_run( char *params[] )
 	}
 
 	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "part" );
+		printf( _("%s: no active part\n"), "dr" );
 		return 1;
 	}
 
@@ -61,6 +61,15 @@ cmd_dr_run( char *params[] )
 			dir = 1;
 		else
 			return -1;
+	}
+
+	if (chain->parts->parts[chain->active_part]->active_instruction == NULL) {
+		printf( _("%s: part without active instruction\n"), "dr" );
+		return 1;
+	}
+	if (chain->parts->parts[chain->active_part]->active_instruction->data_register == NULL) {
+		printf( _("%s: part without active data register\n"), "dr" );
+		return 1;
 	}
 
 	if (dir)
