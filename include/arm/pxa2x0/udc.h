@@ -24,22 +24,23 @@
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
- * [2] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
- *     Specification Update", May 2002, Order Number: 278534-005
  *
  */
 
 #ifndef	PXA2X0_UDC_H
 #define	PXA2X0_UDC_H
 
-#ifndef uint32_t
-typedef	unsigned int	uint32_t;
+#include <common.h>
+
+#if LANGUAGE == C
+#include <stdint.h>
 #endif
 
 /* UDC Registers */
 
 #define	UDC_BASE	0x40600000
 
+#if LANGUAGE == C
 typedef volatile struct UDC_registers {
 	uint32_t udccr;
 	uint32_t __reserved1[3];
@@ -48,8 +49,8 @@ typedef volatile struct UDC_registers {
 	uint32_t uicr1;
 	uint32_t usir0;
 	uint32_t usir1;
-	uint32_t ufnrh;
-	uint32_t ufnrl;
+	uint32_t ufnhr;				/* see 12.6.12 in [1] */
+	uint32_t ufnlr;				/* see 12.6.13 in [1] */
 	uint32_t ubcr2;
 	uint32_t ubcr4;
 	uint32_t ubcr7;
@@ -89,39 +90,335 @@ typedef volatile struct UDC_registers {
 	uint32_t uddr14;
 } UDC_registers;
 
-#ifndef UDC_pointer
+#ifdef PXA2X0_UNMAPPED
 #define	UDC_pointer	((UDC_registers*) UDC_BASE)
 #endif
 
-#define	UDCCR		UDC_pointer->udccr
-#define	UDCCS(i)	UDC_pointer->udccs[i]
-#define	UFNRH		UDC_pointer->ufnrh
-#define	UFNRL		UDC_pointer->ufnrl
-#define	UBCR2		UDC_pointer->ubcr2
-#define	UBCR4		UDC_pointer->ubcr4
-#define	UBCR7		UDC_pointer->ubcr7
-#define	UBCR9		UDC_pointer->ubcr9
-#define	UBCR12		UDC_pointer->ubcr12
-#define	UBCR14		UDC_pointer->ubcr14
-#define	UDDR0		UDC_pointer->uddr0
-#define	UDDR1		UDC_pointer->uddr1
-#define	UDDR2		UDC_pointer->uddr2
-#define	UDDR3		UDC_pointer->uddr3
-#define	UDDR4		UDC_pointer->uddr4
-#define	UDDR5		UDC_pointer->uddr5
-#define	UDDR6		UDC_pointer->uddr6
-#define	UDDR7		UDC_pointer->uddr7
-#define	UDDR8		UDC_pointer->uddr8
-#define	UDDR9		UDC_pointer->uddr9
-#define	UDDR10		UDC_pointer->uddr10
-#define	UDDR11		UDC_pointer->uddr11
-#define	UDDR12		UDC_pointer->uddr12
-#define	UDDR13		UDC_pointer->uddr13
-#define	UDDR14		UDC_pointer->uddr14
-#define	UDDR15		UDC_pointer->uddr15
-#define	UICR0		UDC_pointer->uicr0
-#define	UICR1		UDC_pointer->uicr1
-#define	USIR0		UDC_pointer->usir0
-#define	USIR1		UDC_pointer->usir1
+#define	UDCCR			UDC_pointer->udccr
+#define	UDCCS(i)		UDC_pointer->udccs[i]
+#define	UDCCS0			UDCCS(0)
+#define	UDCCS1			UDCCS(1)
+#define	UDCCS2			UDCCS(2)
+#define	UDCCS3			UDCCS(3)
+#define	UDCCS4			UDCCS(4)
+#define	UDCCS5			UDCCS(5)
+#define	UDCCS6			UDCCS(6)
+#define	UDCCS7			UDCCS(7)
+#define	UDCCS8			UDCCS(8)
+#define	UDCCS9			UDCCS(9)
+#define	UDCCS10			UDCCS(10)
+#define	UDCCS11			UDCCS(11)
+#define	UDCCS12			UDCCS(12)
+#define	UDCCS13			UDCCS(13)
+#define	UDCCS14			UDCCS(14)
+#define	UDCCS15			UDCCS(15)
+#define	UFNHR			UDC_pointer->ufnhr
+#define	UFNLR			UDC_pointer->ufnlr
+#define	UBCR2			UDC_pointer->ubcr2
+#define	UBCR4			UDC_pointer->ubcr4
+#define	UBCR7			UDC_pointer->ubcr7
+#define	UBCR9			UDC_pointer->ubcr9
+#define	UBCR12			UDC_pointer->ubcr12
+#define	UBCR14			UDC_pointer->ubcr14
+#define	UDDR0			UDC_pointer->uddr0
+#define	UDDR1			UDC_pointer->uddr1
+#define	UDDR2			UDC_pointer->uddr2
+#define	UDDR3			UDC_pointer->uddr3
+#define	UDDR4			UDC_pointer->uddr4
+#define	UDDR5			UDC_pointer->uddr5
+#define	UDDR6			UDC_pointer->uddr6
+#define	UDDR7			UDC_pointer->uddr7
+#define	UDDR8			UDC_pointer->uddr8
+#define	UDDR9			UDC_pointer->uddr9
+#define	UDDR10			UDC_pointer->uddr10
+#define	UDDR11			UDC_pointer->uddr11
+#define	UDDR12			UDC_pointer->uddr12
+#define	UDDR13			UDC_pointer->uddr13
+#define	UDDR14			UDC_pointer->uddr14
+#define	UDDR15			UDC_pointer->uddr15
+#define	UICR0			UDC_pointer->uicr0
+#define	UICR1			UDC_pointer->uicr1
+#define	USIR0			UDC_pointer->usir0
+#define	USIR1			UDC_pointer->usir1
+#endif /* LANGUAGE == C */
 
-#endif	/* PXA2X0_UDC_H */
+#define	UDCCR_OFFSET		0x000
+#define	UDCCS_OFFSET(i)		(0x010 + i << 2)
+#define	UDCCS0_OFFSET		UDCCS_OFFSET(0)
+#define	UDCCS1_OFFSET		UDCCS_OFFSET(1)
+#define	UDCCS2_OFFSET		UDCCS_OFFSET(2)
+#define	UDCCS3_OFFSET		UDCCS_OFFSET(3)
+#define	UDCCS4_OFFSET		UDCCS_OFFSET(4)
+#define	UDCCS5_OFFSET		UDCCS_OFFSET(5)
+#define	UDCCS6_OFFSET		UDCCS_OFFSET(6)
+#define	UDCCS7_OFFSET		UDCCS_OFFSET(7)
+#define	UDCCS8_OFFSET		UDCCS_OFFSET(8)
+#define	UDCCS9_OFFSET		UDCCS_OFFSET(9)
+#define	UDCCS10_OFFSET		UDCCS_OFFSET(10)
+#define	UDCCS11_OFFSET		UDCCS_OFFSET(11)
+#define	UDCCS12_OFFSET		UDCCS_OFFSET(12)
+#define	UDCCS13_OFFSET		UDCCS_OFFSET(13)
+#define	UDCCS14_OFFSET		UDCCS_OFFSET(14)
+#define	UDCCS15_OFFSET		UDCCS_OFFSET(15)
+#define	UFNHR_OFFSET		0x060
+#define	UFNLR_OFFSET		0x064
+#define	UBCR2_OFFSET		0x068
+#define	UBCR4_OFFSET		0x06C
+#define	UBCR7_OFFSET		0x070
+#define	UBCR9_OFFSET		0x074
+#define	UBCR12_OFFSET		0x078
+#define	UBCR14_OFFSET		0x07C
+#define	UDDR0_OFFSET		0x080
+#define	UDDR1_OFFSET		0x100
+#define	UDDR2_OFFSET		0x180
+#define	UDDR3_OFFSET		0x200
+#define	UDDR4_OFFSET		0x400
+#define	UDDR5_OFFSET		0x0A0
+#define	UDDR6_OFFSET		0x600
+#define	UDDR7_OFFSET		0x680
+#define	UDDR8_OFFSET		0x700
+#define	UDDR9_OFFSET		0x900
+#define	UDDR10_OFFSET		0x0C0
+#define	UDDR11_OFFSET		0xB00
+#define	UDDR12_OFFSET		0xB80
+#define	UDDR13_OFFSET		0xC00
+#define	UDDR14_OFFSET		0xE00
+#define	UDDR15_OFFSET		0x0E0
+#define	UICR0_OFFSET		0x050
+#define	UICR1_OFFSET		0x054
+#define	USIR0_OFFSET		0x058
+#define	USIR1_OFFSET		0x05C
+
+/* UDCCR bits - see Table 12-20 in [1] */
+
+#define	UDCCR_REM		bit(7)
+#define	UDCCR_RSTIR		bit(6)
+#define	UDCCR_SRM		bit(5)
+#define	UDCCR_SUSIR		bit(4)
+#define	UDCCR_RESIR		bit(3)
+#define	UDCCR_RSM		bit(2)
+#define	UDCCR_UDA		bit(1)
+#define	UDCCR_UDE		bit(0)
+
+/* UDCCS0 bits - see Table 12-21 in [1] */
+
+#define	UDCCS0_SA		bit(7)
+#define	UDCCS0_RNE		bit(6)
+#define	UDCCS0_FST		bit(5)
+#define	UDCCS0_SST		bit(4)
+#define	UDCCS0_DRWF		bit(3)
+#define	UDCCS0_FTF		bit(2)
+#define	UDCCS0_IPR		bit(1)
+#define	UDCCS0_OPR		bit(0)
+
+/* UDCCS1 bits - see Table 12-22 in [1] */
+
+#define	UDCCS1_TSP		bit(7)
+#define	UDCCS1_FST		bit(5)
+#define	UDCCS1_SST		bit(4)
+#define	UDCCS1_TUR		bit(3)
+#define	UDCCS1_FTF		bit(2)
+#define	UDCCS1_TPC		bit(1)
+#define	UDCCS1_TFS		bit(0)
+
+/* UDCCS2 bits - see Table 12-23 in [1] */
+
+#define	UDCCS2_RSP		bit(7)
+#define	UDCCS2_RNE		bit(6)
+#define	UDCCS2_FST		bit(5)
+#define	UDCCS2_SST		bit(4)
+#define	UDCCS2_DME		bit(3)
+#define	UDCCS2_RPC		bit(1)
+#define	UDCCS2_RFS		bit(0)
+
+/* UDCCS3 bits - see Table 12-24 in [1] */
+
+#define	UDCCS3_TSP		bit(7)
+#define	UDCCS3_TUR		bit(3)
+#define	UDCCS3_FTF		bit(2)
+#define	UDCCS3_TPC		bit(1)
+#define	UDCCS3_TFS		bit(0)
+
+/* UDCCS4 bits - see Table 12-25 in [1] */
+
+#define	UDCCS4_RSP		bit(7)
+#define	UDCCS4_RNE		bit(6)
+#define	UDCCS4_DME		bit(3)
+#define	UDCCS4_ROF		bit(2)
+#define	UDCCS4_RPC		bit(1)
+#define	UDCCS4_RFS		bit(0)
+
+/* UDCCS5 bits - see Table 12-26 in [1] */
+
+#define	UDCCS5_TSP		bit(7)
+#define	UDCCS5_FST		bit(5)
+#define	UDCCS5_SST		bit(4)
+#define	UDCCS5_TUR		bit(3)
+#define	UDCCS5_FTF		bit(2)
+#define	UDCCS5_TPC		bit(1)
+#define	UDCCS5_TFS		bit(0)
+
+/* UDCCS6 bits - see Table 12-22 in [1] */
+
+#define	UDCCS6_TSP		bit(7)
+#define	UDCCS6_FST		bit(5)
+#define	UDCCS6_SST		bit(4)
+#define	UDCCS6_TUR		bit(3)
+#define	UDCCS6_FTF		bit(2)
+#define	UDCCS6_TPC		bit(1)
+#define	UDCCS6_TFS		bit(0)
+
+/* UDCCS7 bits - see Table 12-23 in [1] */
+
+#define	UDCCS7_RSP		bit(7)
+#define	UDCCS7_RNE		bit(6)
+#define	UDCCS7_FST		bit(5)
+#define	UDCCS7_SST		bit(4)
+#define	UDCCS7_DME		bit(3)
+#define	UDCCS7_RPC		bit(1)
+#define	UDCCS7_RFS		bit(0)
+
+/* UDCCS8 bits - see Table 12-24 in [1] */
+
+#define	UDCCS8_TSP		bit(7)
+#define	UDCCS8_TUR		bit(3)
+#define	UDCCS8_FTF		bit(2)
+#define	UDCCS8_TPC		bit(1)
+#define	UDCCS8_TFS		bit(0)
+
+/* UDCCS9 bits - see Table 12-25 in [1] */
+
+#define	UDCCS9_RSP		bit(7)
+#define	UDCCS9_RNE		bit(6)
+#define	UDCCS9_DME		bit(3)
+#define	UDCCS9_ROF		bit(2)
+#define	UDCCS9_RPC		bit(1)
+#define	UDCCS9_RFS		bit(0)
+
+/* UDCCS10 bits - see Table 12-26 in [1] */
+
+#define	UDCCS10_TSP		bit(7)
+#define	UDCCS10_FST		bit(5)
+#define	UDCCS10_SST		bit(4)
+#define	UDCCS10_TUR		bit(3)
+#define	UDCCS10_FTF		bit(2)
+#define	UDCCS10_TPC		bit(1)
+#define	UDCCS10_TFS		bit(0)
+
+/* UDCCS11 bits - see Table 12-22 in [1] */
+
+#define	UDCCS11_TSP		bit(7)
+#define	UDCCS11_FST		bit(5)
+#define	UDCCS11_SST		bit(4)
+#define	UDCCS11_TUR		bit(3)
+#define	UDCCS11_FTF		bit(2)
+#define	UDCCS11_TPC		bit(1)
+#define	UDCCS11_TFS		bit(0)
+
+/* UDCCS12 bits - see Table 12-23 in [1] */
+
+#define	UDCCS12_RSP		bit(7)
+#define	UDCCS12_RNE		bit(6)
+#define	UDCCS12_FST		bit(5)
+#define	UDCCS12_SST		bit(4)
+#define	UDCCS12_DME		bit(3)
+#define	UDCCS12_RPC		bit(1)
+#define	UDCCS12_RFS		bit(0)
+
+/* UDCCS13 bits - see Table 12-24 in [1] */
+
+#define	UDCCS13_TSP		bit(7)
+#define	UDCCS13_TUR		bit(3)
+#define	UDCCS13_FTF		bit(2)
+#define	UDCCS13_TPC		bit(1)
+#define	UDCCS13_TFS		bit(0)
+
+/* UDCCS14 bits - see Table 12-25 in [1] */
+
+#define	UDCCS14_RSP		bit(7)
+#define	UDCCS14_RNE		bit(6)
+#define	UDCCS14_DME		bit(3)
+#define	UDCCS14_ROF		bit(2)
+#define	UDCCS14_RPC		bit(1)
+#define	UDCCS14_RFS		bit(0)
+
+/* UDCCS15 bits - see Table 12-26 in [1] */
+
+#define	UDCCS15_TSP		bit(7)
+#define	UDCCS15_FST		bit(5)
+#define	UDCCS15_SST		bit(4)
+#define	UDCCS15_TUR		bit(3)
+#define	UDCCS15_FTF		bit(2)
+#define	UDCCS15_TPC		bit(1)
+#define	UDCCS15_TFS		bit(0)
+
+/* UICR0 bits - see Table 12-27 in [1] */
+
+#define	UICR0_IM7		bit(7)
+#define	UICR0_IM6		bit(6)
+#define	UICR0_IM5		bit(5)
+#define	UICR0_IM4		bit(4)
+#define	UICR0_IM3		bit(3)
+#define	UICR0_IM2		bit(2)
+#define	UICR0_IM1		bit(1)
+#define	UICR0_IM0		bit(0)
+
+/* UICR1 bits - see Table 12-28 in [1] */
+
+#define	UICR1_IM15		bit(7)
+#define	UICR1_IM14		bit(6)
+#define	UICR1_IM13		bit(5)
+#define	UICR1_IM12		bit(4)
+#define	UICR1_IM11		bit(3)
+#define	UICR1_IM10		bit(2)
+#define	UICR1_IM9		bit(1)
+#define	UICR1_IM8		bit(0)
+
+/* USIR0 bits - see Table 12-29 in [1] */
+
+#define	USIR0_IR7		bit(7)
+#define	USIR0_IR6		bit(6)
+#define	USIR0_IR5		bit(5)
+#define	USIR0_IR4		bit(4)
+#define	USIR0_IR3		bit(3)
+#define	USIR0_IR2		bit(2)
+#define	USIR0_IR1		bit(1)
+#define	USIR0_IR0		bit(0)
+
+/* USIR1 bits - see Table 12-30 in [1] */
+
+#define	USIR1_IR15		bit(7)
+#define	USIR1_IR14		bit(6)
+#define	USIR1_IR13		bit(5)
+#define	USIR1_IR12		bit(4)
+#define	USIR1_IR11		bit(3)
+#define	USIR1_IR10		bit(2)
+#define	USIR1_IR9		bit(1)
+#define	USIR1_IR8		bit(0)
+
+/* UFNHR bits - see Table 12-31 in [1] */
+
+#define	UFNHR_SIR		bit(7)
+#define	UFNHR_SIM		bit(6)
+#define	UFNHR_IPE14		bit(5)
+#define	UFNHR_IPE9		bit(4)
+#define	UFNHR_IPE4		bit(3)
+#define	UFNHR_FNMSB_MASK	0x07
+#define	UFNHR_FNMSB(x)		(x & UFNHR_FNMSB_MASK)
+
+/* UFNLR bits - see Table 12-32 in [1] */
+
+#define	UNFLR_FNLSB_MASK	0xFF
+#define	UFNLR_FNLSB(x)		(x & UFNLR_HNLSB_MASK)
+
+/* UBCRx bits - see Table 12-33 in [1] */
+
+#define	UBCR_BC_MASK		0xFF
+#define	UBCR_BC(x)		(x & UBCR_BC_MASK)
+
+/* UDDRx bits - see 12.6.15 - 12.6.20 in [1] */
+
+#define	UDDR_DATA_MASK		0xFF
+#define	UDDR_DATA(x)		(x & UDDR_DATA_MASK)
+
+#endif /* PXA2X0_UDC_H */
