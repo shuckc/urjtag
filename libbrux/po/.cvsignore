@@ -12,3 +12,5 @@ remove-potcdate.sin
 remove-potcdate.sed
 messages.mo
 *.gmo
+stamp-po
+Makevars.template

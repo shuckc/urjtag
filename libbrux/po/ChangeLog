@@ -1,5 +1,9 @@
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
+	* Makevars (MSGID_BUGS_ADDRESS): Added e-mail address.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
 	* LINGUAS: New file.
 	* Makevars: Ditto.
 	* POTFILES.in: Ditto.
