@@ -114,7 +114,7 @@ typedef volatile struct CM_registers {
 #define	CKEN_CKEN6	bit(6)
 #define	CKEN_CKEN5	bit(5)
 #if !defined(PXA2X0_NOPXA26X)
-#define	CKEN_CKEN10	bit(4)
+#define	CKEN_CKEN4	bit(4)
 #endif /* PXA26x only */
 #define	CKEN_CKEN3	bit(3)
 #define	CKEN_CKEN2	bit(2)
