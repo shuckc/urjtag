@@ -104,7 +104,7 @@ Type "help cable" for list of supported JTAG cables.
 Type "cable" command with arguments. Exmaple:
 
 jtag> cable parallel 0x378 EA253
-Initilizing ETC EA253 JTAG Cable on parallel port at 0x378
+Initializing ETC EA253 JTAG Cable on parallel port at 0x378
 
 ===> Second task: Detect parts on the JTAG chain.
 

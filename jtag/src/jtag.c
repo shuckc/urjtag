@@ -151,7 +151,7 @@ main( void )
 			}
 
 			cable = cable_drivers[i];
-			printf( "Initilizing %s on parallel port at 0x%x\n", cable->description, port );
+			printf( "Initializing %s on parallel port at 0x%x\n", cable->description, port );
 			if (!cable->init( port )) {
 				printf( "Error: Cable driver initialization failed!\n" );
 				cable = NULL;

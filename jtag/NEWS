@@ -1,5 +1,7 @@
 $Id$
 
+	* Minor fixes.
+
 jtag-0.2 (2003-01-08):
 
 	* Completed JTAG declarations for Xilinx XCR3128XL-CS144.
