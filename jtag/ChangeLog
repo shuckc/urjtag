@@ -1,5 +1,9 @@
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
+	* src/help.c (help): Added help for new command 'script'.
+
+2003-02-17  Marcel Telka  <marcel@telka.sk>
+
 	* src/flash-intel.c (intel_flash_autodetect): Fixed Intel flash algorithm Id.
 	(intel_flash_autodetect32): Ditto.
 

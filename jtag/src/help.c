@@ -53,6 +53,7 @@ help( const char *cmd )
 			"readmem       read content of the memory and write it to file\n"
 			"flashmem      burn flash memory with data from a file\n"
 			"set           set external signal value\n"
+			"script        run command sequence from external file\n"
 			"\n"
 			"Type \"help COMMAND\" for details about particular command.\n", PACKAGE
 		);
@@ -199,6 +200,13 @@ help( const char *cmd )
 			"DIR           requested signal direction; possible values: 'in' or 'out'\n"
 			"DATA          desired output signal value ('0' or '1');  used only if DIR\n"
 			"                is 'out'\n"
+		);
+	else if (strcmp( cmd, "script" ) == 0)
+		printf(
+			"Usage: script FILENAME\n"
+			"Run command sequence from external FILENAME.\n"
+			"\n"
+			"FILENAME      Name of the file with commands\n"
 		);
 	else
 		printf( "Invalid command.\n" );
