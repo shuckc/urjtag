@@ -1,6 +1,6 @@
 Changes in include since version 0.2:
 
-	* Changes in PXA2X0 support:
+	* Changes in PXA2x0 support:
 		- added DINT register bits
 		- added MMC commands (Juraj Fabo)
 	* Added UCB1400_ADCC_AI_* declarations for UCB1400 (suggested by Juraj Fabo)
