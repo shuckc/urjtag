@@ -32,6 +32,7 @@ typedef struct tap_register {
 } tap_register;
 
 tap_register *register_alloc( int len );
+tap_register *register_duplicate( tap_register *tr );
 void register_free( tap_register *tr );
 tap_register *register_fill( tap_register *tr, int val );
 const char *register_get_string( tap_register *tr );

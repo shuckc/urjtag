@@ -58,6 +58,15 @@ register_alloc( int len )
 	return tr;
 }
 
+tap_register *
+register_duplicate( tap_register *tr )
+{
+ 	if (!tr)
+		return	NULL;
+
+	return register_init( register_alloc( tr->len ), register_get_string( tr ) );
+}
+
 void
 register_free( tap_register *tr )
 {
@@ -80,12 +89,13 @@ register_fill( tap_register *tr, int val )
 const char *
 register_get_string( tap_register *tr )
 {
-	if (tr) {
-		int i;
+	int i;
 
-		for (i = 0; i < tr->len; i++)
-			tr->string[tr->len - 1 - i] = (tr->data[i] & 1) ? '1' : '0';
-	}
+	if (!tr)
+		return NULL;
+
+	for (i = 0; i < tr->len; i++)
+		tr->string[tr->len - 1 - i] = (tr->data[i] & 1) ? '1' : '0';
 
 	return tr->string;
 }
