@@ -11,6 +11,7 @@ $Id$
 	* Added JTAG declarations for Xilinx XC2C256-TQ144 (Alessandro Zummo).
 	* Added support for 1 x 16 bit memory configuration (Christian Pellegrin).
 	* Added buffered file reads/writes (Christian Pellegrin).
+	* Added command history load/save support (August Hörandl).
 
 jtag-0.2.2 (2003-02-04):
 

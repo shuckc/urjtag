@@ -74,6 +74,9 @@ main( void )
 	printf( "Warning: %s may damage your hardware! Type \"quit\" for exit!\n\n", PACKAGE );
 	printf( "Type \"help\" for help.\n\n" );
 
+	using_history();
+	read_history(".jtag_history");
+
 	for (;;) {
 		char *t;
 
@@ -599,5 +602,6 @@ main( void )
 		cable = NULL;
 	}
 
+	write_history(".jtag_history");
 	return 0;
 }

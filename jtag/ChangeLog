@@ -1,5 +1,9 @@
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
+	* src/jtag.c (jtag): Added command history load/save support (August Hörandl).
+
+2003-02-14  Marcel Telka  <marcel@telka.sk>
+
 	* src/readmem.c (readmem): Added support for 1 x 16 bit memory configuration and
 		buffered file writes (Christian Pellegrin).
 	* src/flash.c (flashmem): Added support for 1 x 16 bit flash configuration and
