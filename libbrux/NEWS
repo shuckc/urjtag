@@ -1,5 +1,7 @@
 $Id$
 
+2003-11-02: Added support for detecting flashes (detectflash) in full address range.
+2003-11-02: Added support for Intel flash located at any address.
 2003-09-23: Added initial JEDEC detection for flash chips (Bradley D. LaRonde).
 2003-09-23: Added support for AMD Am29LV800B flash (Bradley D. LaRonde).
 2003-09-23: Added support for 1 x 16 AMD flash (Bradley D. LaRonde).

@@ -32,7 +32,9 @@
 static int
 cmd_detectflash_run( char *params[] )
 {
-	if (cmd_params( params ) != 1)
+	uint32_t adr;
+
+	if (cmd_params( params ) != 2)
 		return -1;
 
 	if (!bus) {
@@ -40,7 +42,10 @@ cmd_detectflash_run( char *params[] )
 		return 1;
 	}
 
-	detectflash( bus );
+	if (cmd_get_number( params[1], &adr ))
+		return -1;
+
+	detectflash( bus, adr );
 
 	return 1;
 }
@@ -49,8 +54,10 @@ static void
 cmd_detectflash_help( void )
 {
 	printf( _(
-		"Usage: %s\n"
+		"Usage: %s ADDRESS\n"
 		"Detect flash memory type connected to a part.\n"
+		"\n"
+		"ADDRESS    Base address for memory region\n"
 	), "detectflash" );
 }
 

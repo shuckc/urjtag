@@ -1,3 +1,19 @@
+2003-11-02  Marcel Telka  <marcel@telka.sk>
+
+	* cmd/cmd_detectflash.c (cmd_detectflash_run, cmd_detectflash_help): Added new address parameter for 'detectflash'
+		command.
+	* flash/detectflash.c (detectflash): Added support for detecting flashes in full address range.
+		Added new global parameter cfi_array.
+
+	* flash/intel.c (intel_flash_autodetect32, intel_flash_autodetect, intel_flash_autodetect8): Added
+		start address of cfi_array for bus_area() calls.
+	(_intel_flash_print_info): Added start address of cfi_array for bus related function calls.
+		Changed first function parameter.
+	All function callers updated.
+	(intel_flash_print_info, intel_flash_print_info32, intel_flash_erase_block, intel_flash_unlock_block)
+	(intel_flash_program, intel_flash_erase_block32, intel_flash_unlock_block32, intel_flash_program32)
+	(intel_flash_readarray32, intel_flash_readarray): Added start address of cfi_array for bus related function calls.
+
 2003-09-23  Marcel Telka  <marcel@telka.sk>
 
 	* flash/amd.c (amd_flash_autodetect16): New function (Bradley D. LaRonde).

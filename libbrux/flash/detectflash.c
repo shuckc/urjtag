@@ -40,12 +40,13 @@
 #include <brux/cfi.h>
 #include <brux/bus.h>
 
+cfi_array_t *cfi_array = NULL;
+
 int jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
 
 void
-detectflash( bus_t *bus )
+detectflash( bus_t *bus, uint32_t adr )
 {
-	cfi_array_t *cfi_array = NULL;
 	cfi_query_structure_t *cfi;
 	const char *s;
 
@@ -54,13 +55,17 @@ detectflash( bus_t *bus )
 		return;
 	}
 
+	cfi_array_free( cfi_array );
+	cfi_array = NULL;
+
 	bus_prepare( bus );
 
-	if (cfi_detect( bus, 0, &cfi_array )) {
+	if (cfi_detect( bus, adr, &cfi_array )) {
 		cfi_array_free( cfi_array );
 		cfi_array = NULL;
-		if (jedec_detect( bus, 0, &cfi_array ) != 0) {
+		if (jedec_detect( bus, adr, &cfi_array ) != 0) {
 			cfi_array_free( cfi_array );
+			cfi_array = NULL;
 			printf( _("Flash not found!\n") );
 			return;
 		}
@@ -191,6 +196,4 @@ detectflash( bus_t *bus )
 			printf( _("\t\t\tNumber of Erase Blocks: %d\n"), cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks );
 		}
 	}
-
-	cfi_array_free( cfi_array );
 }
