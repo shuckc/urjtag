@@ -1,3 +1,8 @@
+2003-03-07  Marcel Telka  <marcel@telka.sk>
+
+	* src/lib/getdelim.c: Added unistd.h include for ssize_t.
+	* src/lib/getline.c: Ditto.
+
 2003-03-06  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac: Added test for readline library.
