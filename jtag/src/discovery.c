@@ -107,67 +107,13 @@ jtag_reset( chain_t *chain )
 	tap_reset( chain );
 }
 
-#define	MAX_CHAIN_LENGTH	128
-
 void
 discovery( chain_t *chain, const char *filename )
 {
-	int i;
 	int irlen;
 	tap_register *ir;
 	tap_register *irz;
 	FILE *f = NULL;
-
-	tap_register *id = register_alloc( 32 );
-	tap_register *zeros = register_fill( register_alloc( 32 ), 0 );
-	tap_register *ones = register_fill( register_alloc( 32 ), 1 );
-
-	if (id && zeros && ones) {
-		f = fopen( filename, "w" );
-		if (!f)
-			printf( _("Error: Unable to create file '%s'.\n"), filename );
-	} else
-		printf( _("Error: Out of memory!\n") );
-
-	if (!id || !zeros || !ones || !f) {
-		register_free( id );
-		register_free( zeros );
-		register_free( ones );
-		return;
-	}
-
-	printf( _("Detecting JTAG chain length:\n") );
-	fprintf( f, _("Detecting JTAG chain length:\n") );
-
-	jtag_reset( chain );
-
-	tap_capture_dr( chain );
-	for (i = 0; i < MAX_CHAIN_LENGTH; i++) {
-		tap_shift_register( chain, zeros, id, 0 );
-		if (!register_compare( id, zeros ))
-			break;				/* end of chain */
-
-		if (!register_compare( ones, id )) {
-			printf( _("bad JTAG connection (TDO is 1)\n") );
-			fprintf( f, _("bad JTAG connection (TDO is 1)\n") );
-			break;
-		}
-
-		printf( _("ID[%d]: %s\n"), i, register_get_string( id ) );
-		fprintf( f, _("ID[%d]: %s\n"), i, register_get_string( id ) );
-	}
-
-	register_free( id );
-	register_free( zeros );
-	register_free( ones );
-
-	if (i == MAX_CHAIN_LENGTH) {
-		printf( _("Warning: Maximum internal JTAG chain length exceeded!\n") );
-		fprintf( f, _("Warning: Maximum internal JTAG chain length exceeded!\n") );
-	} else {
-		printf( _("JTAG chain length is %d\n"), i );
-		fprintf( f, _("JTAG chain length is %d\n"), i );
-	}
 
 	/* detecting IR size */
 	jtag_reset( chain );
@@ -187,7 +133,8 @@ discovery( chain_t *chain, const char *filename )
 		return;
 	}
 
-	ir = register_fill( register_alloc( irlen ), 0 );
+	/* all 1 is BYPASS in all parts, so DR length gives number of parts */
+	ir = register_fill( register_alloc( irlen ), 1 );
 	irz = register_duplicate( ir );
 
 	if (!ir || !irz) {
