@@ -460,7 +460,6 @@ printf( "%s\n", register_get_string( p->prev_bsr ) );
 	ebri = access_rom( p, AB_READ, 0x2D, 0 );
 	printf( "ebri: %08X\n", ebri );
 
-#if 0
 	unlock( p, 0 );
 	erase( p, 0 );
 
@@ -471,11 +470,37 @@ printf( "%s\n", register_get_string( p->prev_bsr ) );
 		
 
 		while (fread( &d, sizeof d, 1, f ) == 1) {
+			printf( "adr: %08X\n", a );
 			program_flash( p, a, d );
 			a += 4;
 		}
+		fclose( f );
 	}
-#endif
+
+	access_bus( p, AB_SETUP, 0, 0x00FF00FF );
+	access_bus( p, AB_WRITE, 0, 0x00FF00FF );
+	access_bus( p, AB_HOLD, 0, 0x00FF00FF );
+
+	{
+		FILE *f = fopen( "brux.b", "r" );
+		unsigned int d;
+		unsigned int a = 0;
+		
+
+		while (fread( &d, sizeof d, 1, f ) == 1) {
+			unsigned int x;
+			printf( "adr: %08X\n", a );
+			access_bus( p, AB_READ, a, 0 );
+			x = access_bus( p, AB_READ, a, 0 );
+			if (x != d) {
+				printf( "error read = %08X, expect = %08X\n", x, d );
+				exit( 0 );
+			}
+			a += 4;
+		}
+		fclose( f );
+	}
+	exit( 0 );
 
 
 	unlock( p, 0 );
