@@ -18,22 +18,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Christian Pellegrin <chri@ascensit.com>, 2003.
 #
 
-nobase_dist_pkgdata_DATA = \
-	MANUFACTURERS \
-	atmel/PARTS \
-	atmel/atmega128/STEPPINGS \
-	atmel/atmega128/atmega128 \
-	intel/PARTS \
-	intel/pxa250/STEPPINGS \
-	intel/pxa250/pxa250 \
-	intel/pxa250/pxa250c0 \
-	intel/sa1110/STEPPINGS \
-	intel/sa1110/sa1110 \
-	intel/ixp425/STEPPINGS \
-	intel/ixp425/ixp425 \
-	xilinx/PARTS \
-	xilinx/xcr3128xl-cs144/STEPPINGS \
-	xilinx/xcr3128xl-cs144/xcr3128xl-cs144
+# bits 31-28 of the Device Identification Register
+0000	ixp425		A0

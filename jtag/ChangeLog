@@ -1,5 +1,13 @@
 2003-02-13  Marcel Telka  <marcel@telka.sk>
 
+	* data/intel/ixp425/ixp425: Added JTAG declarations for Intel IXP425 (Christian
+		Pellegrin).
+	* data/intel/ixp425/STEPPINGS: Ditto.
+	* data/intel/PARTS: Ditto.
+	* data/Makefile.am: Ditto.
+
+2003-02-13  Marcel Telka  <marcel@telka.sk>
+
 	* include/bsbit.h (BSBIT_BIDIR): Added new macro (Christian Pellegrin).
 	* src/part/bsbit.c (bsbit_alloc): Added support for bidirectional pins (Christian
 		Pellegrin).
