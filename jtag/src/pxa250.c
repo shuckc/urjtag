@@ -28,7 +28,7 @@
 
 #include "pxa250.h"
 
-/* PXA250 must be in position 0 */
+/* PXA250 must be at position 0 in JTAG chain */
 
 static void
 setup_address( part *p, uint32_t a )

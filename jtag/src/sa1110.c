@@ -28,7 +28,7 @@
 
 #include "sa1110.h"
 
-/* SA1110 must be in position 0 */
+/* SA1110 must be at position 0 in JTAG chain */
 
 static void
 setup_address( part *p, uint32_t a )
