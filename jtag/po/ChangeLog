@@ -1,6 +1,6 @@
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
-        * Makevars (MSGID_BUGS_ADDRESS): Added e-mail address.
+	* Makevars (MSGID_BUGS_ADDRESS): Added e-mail address.
 	* sk.po: Added e-mail address for bugs. Removed some comments.
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
