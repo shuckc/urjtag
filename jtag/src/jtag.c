@@ -229,8 +229,11 @@ main( void )
 
 			parts_free( ps );
 			ps = detect_parts( JTAG_DATA_DIR );
-			if (!ps->len)
+			if (!ps->len) {
+				parts_free( ps );
+				ps = NULL;
 				continue;
+			}
 			parts_set_instruction( ps, "SAMPLE/PRELOAD" );
 			parts_shift_instructions( ps );
 			parts_shift_data_registers( ps );

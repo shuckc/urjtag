@@ -14,6 +14,7 @@ $Id$
 	* Added command history load/save support (August Hörandl).
 	* Added support for flash drivers (August Hörandl).
 	* Added flash driver for AMD chips (August Hörandl).
+	* Some bugs fixed.
 
 jtag-0.2.2 (2003-02-04):
 

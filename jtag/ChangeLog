@@ -1,5 +1,10 @@
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
+	* src/jtag.c (main): Fixed segfault in 'detectflash'. Thanks to August Hörandl
+		for reporting this issue.
+
+2003-02-16  Marcel Telka  <marcel@telka.sk>
+
 	* src/Makefile.am (jtag_SOURCES): Added new flash files with flash driver
 		framework (August Hörandl).
 	* src/flash-amd.c: New file with AMD flash support (August Hörandl).
