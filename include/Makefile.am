@@ -37,9 +37,6 @@ nobase_openwinceinc_HEADERS = \
 	cexcept.h \
 	stdint.h \
 	arm/arm.h \
-	arm/platform.h \
-	arm/platform/wid.h \
-	arm/platform/wep.h \
 	arm/sa11x0/gpclk.h \
 	arm/sa11x0/gpio.h \
 	arm/sa11x0/hssp.h \

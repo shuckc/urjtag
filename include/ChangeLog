@@ -1,3 +1,9 @@
+2003-02-04  Marcel Telka  <marcel@telka.sk>
+
+	* arm/platform.h: Removed unused file.
+	* arm/platform/wep.h: Ditto.
+	* arm/platform/wid.h: Ditto.
+
 2003-01-31  Marcel Telka  <marcel@telka.sk>
 
 	* arm/pxa2x0/dma.h (DCSR_BUSERRINTR): Fixed typo in macro name (patch 678112).
