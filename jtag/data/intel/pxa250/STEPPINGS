@@ -31,3 +31,6 @@
 0010	pxa250		B0
 0011	pxa250		B1
 0101	pxa250		C0
+
+# undocumented (thanks to Holger Schurig <h.schurig@mn-logistik.de>)
+0100	pxa250		B2
