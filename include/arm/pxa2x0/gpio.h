@@ -216,4 +216,113 @@ typedef volatile struct GPIO_registers {
 #define	GPIO2_GP79	bit(15)
 #define	GPIO2_GP80	bit(16)
 
+/* GAFR constants - see 4.1.3.6 in [1] */
+
+#define	ALT_FN_MASK	3
+#define	ALT_FN_1_IN	1
+#define	ALT_FN_2_IN	2
+#define	ALT_FN_3_IN	3
+#define	ALT_FN_1_OUT	1
+#define	ALT_FN_2_OUT	2
+#define	ALT_FN_3_OUT	3
+
+/* GAFR0_L bits - see Table 4-24 in [1] */
+
+#define	GAFR0_L_AF0(x)	(x & ALT_FN_MASK)
+#define	GAFR0_L_AF1(x)	((x & ALT_FN_MASK) << 2)
+#define	GAFR0_L_AF2(x)	((x & ALT_FN_MASK) << 4)
+#define	GAFR0_L_AF3(x)	((x & ALT_FN_MASK) << 6)
+#define	GAFR0_L_AF4(x)	((x & ALT_FN_MASK) << 8)
+#define	GAFR0_L_AF5(x)	((x & ALT_FN_MASK) << 10)
+#define	GAFR0_L_AF6(x)	((x & ALT_FN_MASK) << 12)
+#define	GAFR0_L_AF7(x)	((x & ALT_FN_MASK) << 14)
+#define	GAFR0_L_AF8(x)	((x & ALT_FN_MASK) << 16)
+#define	GAFR0_L_AF9(x)	((x & ALT_FN_MASK) << 18)
+#define	GAFR0_L_AF10(x)	((x & ALT_FN_MASK) << 20)
+#define	GAFR0_L_AF11(x)	((x & ALT_FN_MASK) << 22)
+#define	GAFR0_L_AF12(x)	((x & ALT_FN_MASK) << 24)
+#define	GAFR0_L_AF13(x)	((x & ALT_FN_MASK) << 26)
+#define	GAFR0_L_AF14(x)	((x & ALT_FN_MASK) << 28)
+#define	GAFR0_L_AF15(x)	((x & ALT_FN_MASK) << 30)
+
+/* GAFR0_U bits - see Table 4-25 in [1] */
+
+#define	GAFR0_U_AF16(x)	(x & ALT_FN_MASK)
+#define	GAFR0_U_AF17(x)	((x & ALT_FN_MASK) << 2)
+#define	GAFR0_U_AF18(x)	((x & ALT_FN_MASK) << 4)
+#define	GAFR0_U_AF19(x)	((x & ALT_FN_MASK) << 6)
+#define	GAFR0_U_AF20(x)	((x & ALT_FN_MASK) << 8)
+#define	GAFR0_U_AF21(x)	((x & ALT_FN_MASK) << 10)
+#define	GAFR0_U_AF22(x)	((x & ALT_FN_MASK) << 12)
+#define	GAFR0_U_AF23(x)	((x & ALT_FN_MASK) << 14)
+#define	GAFR0_U_AF24(x)	((x & ALT_FN_MASK) << 16)
+#define	GAFR0_U_AF25(x)	((x & ALT_FN_MASK) << 18)
+#define	GAFR0_U_AF26(x)	((x & ALT_FN_MASK) << 20)
+#define	GAFR0_U_AF27(x)	((x & ALT_FN_MASK) << 22)
+#define	GAFR0_U_AF28(x)	((x & ALT_FN_MASK) << 24)
+#define	GAFR0_U_AF29(x)	((x & ALT_FN_MASK) << 26)
+#define	GAFR0_U_AF30(x)	((x & ALT_FN_MASK) << 28)
+#define	GAFR0_U_AF31(x)	((x & ALT_FN_MASK) << 30)
+
+/* GAFR1_L bits - see Table 4-26 in [1] */
+
+#define	GAFR1_L_AF32(x)	(x & ALT_FN_MASK)
+#define	GAFR1_L_AF33(x)	((x & ALT_FN_MASK) << 2)
+#define	GAFR1_L_AF34(x)	((x & ALT_FN_MASK) << 4)
+#define	GAFR1_L_AF35(x)	((x & ALT_FN_MASK) << 6)
+#define	GAFR1_L_AF36(x)	((x & ALT_FN_MASK) << 8)
+#define	GAFR1_L_AF37(x)	((x & ALT_FN_MASK) << 10)
+#define	GAFR1_L_AF38(x)	((x & ALT_FN_MASK) << 12)
+#define	GAFR1_L_AF39(x)	((x & ALT_FN_MASK) << 14)
+#define	GAFR1_L_AF40(x)	((x & ALT_FN_MASK) << 16)
+#define	GAFR1_L_AF41(x)	((x & ALT_FN_MASK) << 18)
+#define	GAFR1_L_AF42(x)	((x & ALT_FN_MASK) << 20)
+#define	GAFR1_L_AF43(x)	((x & ALT_FN_MASK) << 22)
+#define	GAFR1_L_AF44(x)	((x & ALT_FN_MASK) << 24)
+#define	GAFR1_L_AF45(x)	((x & ALT_FN_MASK) << 26)
+#define	GAFR1_L_AF46(x)	((x & ALT_FN_MASK) << 28)
+#define	GAFR1_L_AF47(x)	((x & ALT_FN_MASK) << 30)
+
+/* GAFR1_U bits - see Table 4-27 in [1] */
+
+#define	GAFR1_U_AF48(x)	(x & ALT_FN_MASK)
+#define	GAFR1_U_AF49(x)	((x & ALT_FN_MASK) << 2)
+#define	GAFR1_U_AF50(x)	((x & ALT_FN_MASK) << 4)
+#define	GAFR1_U_AF51(x)	((x & ALT_FN_MASK) << 6)
+#define	GAFR1_U_AF52(x)	((x & ALT_FN_MASK) << 8)
+#define	GAFR1_U_AF53(x)	((x & ALT_FN_MASK) << 10)
+#define	GAFR1_U_AF54(x)	((x & ALT_FN_MASK) << 12)
+#define	GAFR1_U_AF55(x)	((x & ALT_FN_MASK) << 14)
+#define	GAFR1_U_AF56(x)	((x & ALT_FN_MASK) << 16)
+#define	GAFR1_U_AF57(x)	((x & ALT_FN_MASK) << 18)
+#define	GAFR1_U_AF58(x)	((x & ALT_FN_MASK) << 20)
+#define	GAFR1_U_AF59(x)	((x & ALT_FN_MASK) << 22)
+#define	GAFR1_U_AF60(x)	((x & ALT_FN_MASK) << 24)
+#define	GAFR1_U_AF61(x)	((x & ALT_FN_MASK) << 26)
+#define	GAFR1_U_AF62(x)	((x & ALT_FN_MASK) << 28)
+#define	GAFR1_U_AF63(x)	((x & ALT_FN_MASK) << 30)
+
+/* GAFR2_L bits - see Table 4-28 in [1] */
+
+#define	GAFR2_L_AF64(x)	(x & ALT_FN_MASK)
+#define	GAFR2_L_AF65(x)	((x & ALT_FN_MASK) << 2)
+#define	GAFR2_L_AF66(x)	((x & ALT_FN_MASK) << 4)
+#define	GAFR2_L_AF67(x)	((x & ALT_FN_MASK) << 6)
+#define	GAFR2_L_AF68(x)	((x & ALT_FN_MASK) << 8)
+#define	GAFR2_L_AF69(x)	((x & ALT_FN_MASK) << 10)
+#define	GAFR2_L_AF70(x)	((x & ALT_FN_MASK) << 12)
+#define	GAFR2_L_AF71(x)	((x & ALT_FN_MASK) << 14)
+#define	GAFR2_L_AF72(x)	((x & ALT_FN_MASK) << 16)
+#define	GAFR2_L_AF73(x)	((x & ALT_FN_MASK) << 18)
+#define	GAFR2_L_AF74(x)	((x & ALT_FN_MASK) << 20)
+#define	GAFR2_L_AF75(x)	((x & ALT_FN_MASK) << 22)
+#define	GAFR2_L_AF76(x)	((x & ALT_FN_MASK) << 24)
+#define	GAFR2_L_AF77(x)	((x & ALT_FN_MASK) << 26)
+#define	GAFR2_L_AF78(x)	((x & ALT_FN_MASK) << 28)
+#define	GAFR2_L_AF79(x)	((x & ALT_FN_MASK) << 30)
+
+/* GAFR2_U bits - see Table 4-29 in [1] */
+
+#define	GAFR2_U_AF80(x)	(x & ALT_FN_MASK)
+
 #endif /* PXA2X0_GPIO_H */
