@@ -106,7 +106,7 @@ sh7727_bus_printinfo( bus_t *bus )
 	for (i = 0; i < CHAIN->parts->len; i++)
 		if (PART == CHAIN->parts->parts[i])
 			break;
-	printf( _("Hitachi SH7727 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+	printf( _("Hitachi SH7727 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
 static void
@@ -281,7 +281,7 @@ static bus_t *sh7727_bus_new( void );
 
 const bus_driver_t sh7727_bus = {
 	"sh7727",
-	N_("Hitachi SH7727 compatibile bus driver via BSR"),
+	N_("Hitachi SH7727 compatible bus driver via BSR"),
 	sh7727_bus_new,
 	sh7727_bus_free,
 	sh7727_bus_printinfo,

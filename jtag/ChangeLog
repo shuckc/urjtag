@@ -1,3 +1,15 @@
+2003-09-10  Marcel Telka  <marcel@telka.sk>
+
+	* src/bus/bcm1250.c (bcm1250_bus_printinfo, bcm1250_bus): Fixed typo (compatibile->compatible) in
+		output message (thanks to Andreas Mohr).
+	* src/bus/ixp425.c (ixp425_bus_printinfo, ixp425_bus): Ditto.
+	* src/bus/pxa2x0.c (pxa2x0_bus_printinfo, pxa2x0_bus): Ditto.
+	* src/bus/s3c4510x.c (s3c4510_bus_printinfo, s3c4510_bus): Ditto.
+	* src/bus/sa1110.c (sa1110_bus_printinfo, sa1110_bus): Ditto.
+	* src/bus/sh7727.c (sh7727_bus_printinfo, sh7727_bus): Ditto.
+	* src/bus/sh7750r.c (sh7750r_bus_printinfo, sh7750r_bus): Ditto.
+	* src/bus/sh7751r.c (sh7751r_bus_printinfo, sh7751r_bus): Ditto.
+
 2003-09-05  Marcel Telka  <marcel@telka.sk>
 
 	* include/bus.h (bus_drivers): Added constant declaration.

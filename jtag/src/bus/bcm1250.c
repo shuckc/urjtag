@@ -101,7 +101,7 @@ bcm1250_bus_printinfo( bus_t *bus )
 	for (i = 0; i < CHAIN->parts->len; i++)
 		if (PART == CHAIN->parts->parts[i])
 			break;
-	printf( _("Broadcom BCM1250 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+	printf( _("Broadcom BCM1250 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
 void
@@ -272,7 +272,7 @@ static bus_t *bcm1250_bus_new( void );
 
 const bus_driver_t bcm1250_bus = {
 	"bcm1250",
-	N_("Broadcom BCM1250 compatibile bus driver via BSR"),
+	N_("Broadcom BCM1250 compatible bus driver via BSR"),
 	bcm1250_bus_new,
 	bcm1250_bus_free,
 	bcm1250_bus_printinfo,

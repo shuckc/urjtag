@@ -96,7 +96,7 @@ sh7751r_bus_printinfo( bus_t *bus )
 	for (i = 0; i < CHAIN->parts->len; i++)
 		if (PART == CHAIN->parts->parts[i])
 			break;
-	printf( _("Hitachi SH7751R compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+	printf( _("Hitachi SH7751R compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
 
@@ -256,7 +256,7 @@ static bus_t *sh7751r_bus_new( void );
 
 const bus_driver_t sh7751r_bus = {
 	"sh7751r",
-	N_("Hitachi SH7751R compatibile bus driver via BSR"),
+	N_("Hitachi SH7751R compatible bus driver via BSR"),
 	sh7751r_bus_new,
 	sh7751r_bus_free,
 	sh7751r_bus_printinfo,

@@ -125,7 +125,7 @@ s3c4510_bus_printinfo( bus_t *bus )
         for (i = 0; i < CHAIN->parts->len; i++)
                 if (PART == CHAIN->parts->parts[i])
                         break;
-        printf( _("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+        printf( _("Samsung S3C4510B compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
 static void
@@ -294,7 +294,7 @@ static bus_t *s3c4510_bus_new( void );
 
 const bus_driver_t s3c4510_bus = {
 	"s3c4510x",
-	N_("Samsung S3C4510B compatibile bus driver via BSR"),
+	N_("Samsung S3C4510B compatible bus driver via BSR"),
 	s3c4510_bus_new,
 	s3c4510_bus_free,
         s3c4510_bus_printinfo,
@@ -388,6 +388,19 @@ s3c4510_bus_new( void )
 **
 **  CVS Log
 **  $Log$
+**  Revision 1.5  2003/09/10 12:38:01  telka
+**  2003-09-10  Marcel Telka  <marcel@telka.sk>
+**
+**  	* src/bus/bcm1250.c (bcm1250_bus_printinfo, bcm1250_bus): Fixed typo (compatibile->compatible) in
+**  		output message (thanks to Andreas Mohr).
+**  	* src/bus/ixp425.c (ixp425_bus_printinfo, ixp425_bus): Ditto.
+**  	* src/bus/pxa2x0.c (pxa2x0_bus_printinfo, pxa2x0_bus): Ditto.
+**  	* src/bus/s3c4510x.c (s3c4510_bus_printinfo, s3c4510_bus): Ditto.
+**  	* src/bus/sa1110.c (sa1110_bus_printinfo, sa1110_bus): Ditto.
+**  	* src/bus/sh7727.c (sh7727_bus_printinfo, sh7727_bus): Ditto.
+**  	* src/bus/sh7750r.c (sh7750r_bus_printinfo, sh7750r_bus): Ditto.
+**  	* src/bus/sh7751r.c (sh7751r_bus_printinfo, sh7751r_bus): Ditto.
+**
 **  Revision 1.4  2003/09/05 21:09:14  telka
 **  2003-09-05  Marcel Telka  <marcel@telka.sk>
 **

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Intel PXA2x0 compatibile bus driver via BSR
+ * Intel PXA2x0 compatible bus driver via BSR
  * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
@@ -116,7 +116,7 @@ pxa2x0_bus_printinfo( bus_t *bus )
 	for (i = 0; i < CHAIN->parts->len; i++)
 		if (PART == CHAIN->parts->parts[i])
 			break;
-	printf( _("Intel PXA2x0 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+	printf( _("Intel PXA2x0 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
 static void
@@ -341,7 +341,7 @@ static bus_t *pxa2x0_bus_new( void );
 
 const bus_driver_t pxa2x0_bus = {
 	"pxa2x0",
-	N_("Intel PXA2x0 compatibile bus driver via BSR"),
+	N_("Intel PXA2x0 compatible bus driver via BSR"),
 	pxa2x0_bus_new,
 	pxa250_bus_free,
 	pxa2x0_bus_printinfo,

@@ -122,7 +122,7 @@ ixp425_bus_printinfo( bus_t *bus )
 	for (i = 0; i < CHAIN->parts->len; i++)
 		if (PART == CHAIN->parts->parts[i])
 			break;
-	printf( _("Intel IXP425 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+	printf( _("Intel IXP425 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
 static void
@@ -235,7 +235,7 @@ static bus_t *ixp425_bus_new( void );
 
 const bus_driver_t ixp425_bus = {
 	"ixp425",
-	N_("Intel IXP425 compatibile bus driver via BSR"),
+	N_("Intel IXP425 compatible bus driver via BSR"),
 	ixp425_bus_new,
 	ixp425_bus_free,
 	ixp425_bus_printinfo,

@@ -105,7 +105,7 @@ sa1110_bus_printinfo( bus_t *bus )
 	for (i = 0; i < CHAIN->parts->len; i++)
 		if (PART == CHAIN->parts->parts[i])
 			break;
-	printf( _("Intel SA-1110 compatibile bus driver via BSR (JTAG part No. %d)\n"), i );
+	printf( _("Intel SA-1110 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
 static void
@@ -249,7 +249,7 @@ static bus_t *sa1110_bus_new( void );
 
 const bus_driver_t sa1110_bus = {
 	"sa1110",
-	N_("Intel SA-1110 compatibile bus driver via BSR"),
+	N_("Intel SA-1110 compatible bus driver via BSR"),
 	sa1110_bus_new,
 	sa1110_bus_free,
 	sa1110_bus_printinfo,
