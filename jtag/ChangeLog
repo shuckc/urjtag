@@ -1,3 +1,7 @@
+2003-09-04  Marcel Telka  <marcel@telka.sk>
+
+	* configure.ac (CPPFLAGS): Added top_srcdir into include directory list.
+
 2003-09-03  Marcel Telka  <marcel@telka.sk>
 
 	* src/bus/pxa2x0.c (set_data_in, setup_data): Added new 'adr' parameter. Used real data bus width

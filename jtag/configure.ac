@@ -95,6 +95,6 @@ AC_CHECK_HEADERS(linux/ppdev.h)
 VL_LIB_READLINE
 
 CFLAGS="$CFLAGS -Wall"
-CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/include"
+CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 
 AC_OUTPUT
