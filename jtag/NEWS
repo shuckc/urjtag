@@ -1,14 +1,16 @@
 $Id$
 
-	* Added new manufacturer: DEC.
 	* Added support for executing scripts directly from stdin (parameter '-').
 	* Disabled external bus cycles for PXA250 for addresses above 0x04000000.
 	* Fixed bug in BUSY signal handling in Linux ppdev driver.
 	* Optimized bus drivers to increase bus access speed (readmem, flashmem, ...).
 	* Added new command 'endian' to configure access mode to external files.
-	* Added JTAG declarations for Broadcom BCM5421S (patch 743129, Matan Ziv-Av).
+	* Added JTAG declarations for
+		- Broadcom BCM5421S (patch 743129, Matan Ziv-Av)
+		- DEC SA1100 (thanks to Jachym Holecek)
 	* Added bus driver for Hitachi SH7727 (based on patch 743140, Matan Ziv-Av).
 	* Added support for printing current JTAG frequency.
+	* Added support for 'signal' keyword (as alias for 'pin') into JTAG declarations.
 	* Minor bugs fixed.
 
 jtag-0.3.2 (2003-04-04):

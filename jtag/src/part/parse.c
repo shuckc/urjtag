@@ -68,8 +68,8 @@ read_part( FILE *f, tap_register *idr )
 		if (!t)
 			continue;
 
-		/* pin */
-		if (strcmp( t, "pin" ) == 0) {
+		/* signal */
+		if (strcmp( t, "pin" ) == 0 || strcmp( t, "signal" ) == 0) {
 			signal_t *s;
 
 			t = get_token( NULL );

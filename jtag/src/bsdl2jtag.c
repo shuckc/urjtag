@@ -321,8 +321,8 @@ int main(int argc, char *argv[]) {
 						/* pin */
 						for(j=0;j<pins_num;j++) {
 							noparentheses(pins[j]);
-							printf("pin %s\n", pins[j]);
-//							printf("pin %s %s\n", pins[j], pinsp[j]);
+							printf("signal %s\n", pins[j]);
+//							printf("signal %s %s\n", pins[j], pinsp[j]);
 						}
 						printf("\n");
 					

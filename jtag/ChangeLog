@@ -1,3 +1,13 @@
+2003-05-29  Marcel Telka  <marcel@telka.sk>
+
+	* src/bsdl2jtag.c (main): Renamed 'pin' keyword to 'signal'.
+	* src/part/parse.c (read_part): Added support for 'signal' keyword.
+
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
+	* data/dec/PARTS: New file.
+	* data/dec/sa1100/STEPPINGS: New file (thanks to Jachym Holecek).
+	* data/dec/sa1100/sa1100: New file.
+
 2003-05-28  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AC_INIT): Changed version number to 0.4.

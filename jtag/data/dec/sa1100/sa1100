@@ -1,0 +1,462 @@
+#
+# $Id$
+#
+# JTAG declarations for SA-1100
+# Copyright (C) 2003 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2003.
+#
+
+signal	A(0)
+signal	A(1)
+signal	A(2)
+signal	A(3)
+signal	A(4)
+signal	A(5)
+signal	A(6)
+signal	A(7)
+signal	A(8)
+signal	A(9)
+signal	A(10)
+signal	A(11)
+signal	A(12)
+signal	A(13)
+signal	A(14)
+signal	A(15)
+signal	A(16)
+signal	A(17)
+signal	A(18)
+signal	A(19)
+signal	A(20)
+signal	A(21)
+signal	A(22)
+signal	A(23)
+signal	A(24)
+signal	A(25)
+signal	BATTF
+signal	CAS(0)
+signal	CAS(1)
+signal	CAS(2)
+signal	CAS(3)
+signal	CS(0)
+signal	CS(1)
+signal	CS(2)
+signal	CS(3)
+signal	D(0)
+signal	D(1)
+signal	D(2)
+signal	D(3)
+signal	D(4)
+signal	D(5)
+signal	D(6)
+signal	D(7)
+signal	D(8)
+signal	D(9)
+signal	D(10)
+signal	D(11)
+signal	D(12)
+signal	D(13)
+signal	D(14)
+signal	D(15)
+signal	D(16)
+signal	D(17)
+signal	D(18)
+signal	D(19)
+signal	D(20)
+signal	D(21)
+signal	D(22)
+signal	D(23)
+signal	D(24)
+signal	D(25)
+signal	D(26)
+signal	D(27)
+signal	D(28)
+signal	D(29)
+signal	D(30)
+signal	D(31)
+signal	GP(0)
+signal	GP(1)
+signal	GP(2)
+signal	GP(3)
+signal	GP(4)
+signal	GP(5)
+signal	GP(6)
+signal	GP(7)
+signal	GP(8)
+signal	GP(9)
+signal	GP(10)
+signal	GP(11)
+signal	GP(12)
+signal	GP(13)
+signal	GP(14)
+signal	GP(15)
+signal	GP(16)
+signal	GP(17)
+signal	GP(18)
+signal	GP(19)
+signal	GP(20)
+signal	GP(21)
+signal	GP(22)
+signal	GP(23)
+signal	GP(24)
+signal	GP(25)
+signal	GP(26)
+signal	GP(27)
+signal	IOIS16
+signal	LBIAS
+signal	LDD(0)
+signal	LDD(1)
+signal	LDD(2)
+signal	LDD(3)
+signal	LDD(4)
+signal	LDD(5)
+signal	LDD(6)
+signal	LDD(7)
+signal	LFCLK
+signal	LLCLK
+signal	LPCLK
+signal	OE
+signal	PCE1
+signal	PCE2
+signal	PIOR
+signal	PIOW
+signal	POE
+signal	PREG
+signal	PSKTSEL
+signal	PWAIT
+signal	PWE
+signal	RAS(0)
+signal	RAS(1)
+signal	RAS(2)
+signal	RAS(3)
+signal	RESET
+signal	RESETO
+signal	ROMSEL
+signal	RXD1
+signal	RXD2
+signal	RXD3
+signal	RXDC
+signal	SCLKC
+signal	SFRMC
+signal	TXD1
+signal	TXD2
+signal	TXD3
+signal	TXDC
+signal	UDCN
+signal	UDCP
+signal	VDDFA
+signal	WE
+
+# mandatory data registers
+register	BSR	279	# Boundary Scan Register
+register	BR	1	# Bypass Register
+# optional data registers
+register	DIR	32	# Device Identification Register
+
+instruction length 5
+
+# mandatory instructions
+instruction EXTEST		00000	BSR
+instruction SAMPLE/PRELOAD	00001	BSR
+instruction BYPASS		11111	BR
+
+# optional instructions
+instruction CLAMP		00100	BR
+instruction HIGHZ		00101	BR
+instruction IDCODE		00110	DIR
+
+# BSR bits
+bit 278 I ? BATTF
+bit 277 I ? VDDFA
+bit 276 X ? .
+bit 275 C 0 .
+bit 274 O ? SFRMC 275 0 Z
+bit 273 I ? SFRMC
+bit 272 C 0 .
+bit 271 O ? SCLKC 272 0 Z
+bit 270 I ? SCLKC
+bit 269 C 0 .
+bit 268 O ? RXDC 269 0 Z
+bit 267 I ? RXDC
+bit 266 C ? .
+bit 265 O ? TXDC 266 0 Z
+bit 264 I ? TXDC
+bit 263 O ? D(0) 199 1 Z
+bit 262 I ? D(0)
+bit 261 O ? D(8) 199 1 Z
+bit 260 I ? D(8)
+bit 259 O ? D(16) 199 1 Z
+bit 258 I ? D(16)
+bit 257 O ? D(24) 199 1 Z
+bit 256 I ? D(24)
+bit 255 O ? D(1) 199 1 Z
+bit 254 I ? D(1)
+bit 253 O ? D(9) 199 1 Z
+bit 252 I ? D(9)
+bit 251 O ? D(17) 199 1 Z
+bit 250 I ? D(17)
+bit 249 O ? D(25) 199 1 Z
+bit 248 I ? D(25)
+bit 247 O ? D(2) 199 1 Z
+bit 246 I ? D(2)
+bit 245 O ? D(10) 199 1 Z
+bit 244 I ? D(10)
+bit 243 O ? D(18) 199 1 Z
+bit 242 I ? D(18)
+bit 241 O ? D(26) 199 1 Z
+bit 240 I ? D(26)
+bit 239 O ? D(3) 199 1 Z
+bit 238 I ? D(3)
+bit 237 O ? D(11) 199 1 Z
+bit 236 I ? D(11)
+bit 235 O ? D(19) 199 1 Z
+bit 234 I ? D(19)
+bit 233 O ? D(27) 199 1 Z
+bit 232 I ? D(27)
+bit 231 O ? D(4) 199 1 Z
+bit 230 I ? D(4)
+bit 229 O ? D(12) 199 1 Z
+bit 228 I ? D(12)
+bit 227 O ? D(20) 199 1 Z
+bit 226 I ? D(20)
+bit 225 O ? D(28) 199 1 Z
+bit 224 I ? D(28)
+bit 223 O ? D(5) 199 1 Z
+bit 222 I ? D(5)
+bit 221 O ? D(13) 199 1 Z
+bit 220 I ? D(13)
+bit 219 O ? D(21) 199 1 Z
+bit 218 I ? D(21)
+bit 217 O ? D(29) 199 1 Z
+bit 216 I ? D(29)
+bit 215 O ? D(6) 199 1 Z
+bit 214 I ? D(6)
+bit 213 O ? D(14) 199 1 Z
+bit 212 I ? D(14)
+bit 211 O ? D(22) 199 1 Z
+bit 210 I ? D(22)
+bit 209 O ? D(30) 199 1 Z
+bit 208 I ? D(30)
+bit 207 O ? D(7) 199 1 Z
+bit 206 I ? D(7)
+bit 205 O ? D(15) 199 1 Z
+bit 204 I ? D(15)
+bit 203 O ? D(23) 199 1 Z
+bit 202 I ? D(23)
+bit 201 O ? D(31) 199 1 Z
+bit 200 I ? D(31)
+bit 199 C 1 .
+bit 198 C 0 .
+bit 197 O ? GP(27) 198 0 Z
+bit 196 I ? GP(27)
+bit 195 C 0 .
+bit 194 O ? GP(26) 195 0 Z
+bit 193 I ? GP(26)
+bit 192 C 0 .
+bit 191 O ? GP(25) 192 0 Z
+bit 190 I ? GP(25)
+bit 189 C 0 .
+bit 188 O ? GP(24) 189 0 Z
+bit 187 I ? GP(24)
+bit 186 C 0 .
+bit 185 O ? GP(23) 186 0 Z
+bit 184 I ? GP(23)
+bit 183 C 0 .
+bit 182 O ? GP(22) 183 0 Z
+bit 181 I ? GP(22)
+bit 180 C 0 .
+bit 179 O ? GP(21) 180 0 Z
+bit 178 I ? GP(21)
+bit 177 C 0 .
+bit 176 O ? GP(20) 177 0 Z
+bit 175 I ? GP(20)
+bit 174 C 0 .
+bit 173 O ? GP(19) 174 0 Z
+bit 172 I ? GP(19)
+bit 171 C 0 .
+bit 170 O ? GP(18) 171 0 Z
+bit 169 I ? GP(18)
+bit 168 C 0 .
+bit 167 O ? GP(17) 168 0 Z
+bit 166 I ? GP(17)
+bit 165 C 0 .
+bit 164 O ? GP(16) 165 0 Z
+bit 163 I ? GP(16)
+bit 162 C 0 .
+bit 161 O ? GP(15) 162 0 Z
+bit 160 I ? GP(15)
+bit 159 C 0 .
+bit 158 O ? GP(14) 159 0 Z
+bit 157 I ? GP(14)
+bit 156 C 0 .
+bit 155 O ? GP(13) 156 0 Z
+bit 154 I ? GP(13)
+bit 153 C 0 .
+bit 152 O ? GP(12) 153 0 Z
+bit 151 I ? GP(12)
+bit 150 C 0 .
+bit 149 O ? GP(11) 150 0 Z
+bit 148 I ? GP(11)
+bit 147 C 0 .
+bit 146 O ? GP(10) 147 0 Z
+bit 145 I ? GP(10)
+bit 144 C 0 .
+bit 143 O ? GP(9) 144 0 Z
+bit 142 I ? GP(9)
+bit 141 C 0 .
+bit 140 O ? GP(8) 141 0 Z
+bit 139 I ? GP(8)
+bit 138 C 0 .
+bit 137 O ? GP(7) 138 0 Z
+bit 136 I ? GP(7)
+bit 135 C 0 .
+bit 134 O ? GP(6) 135 0 Z
+bit 133 I ? GP(6)
+bit 132 C 0 .
+bit 131 O ? GP(5) 132 0 Z
+bit 130 I ? GP(5)
+bit 129 C 0 .
+bit 128 O ? GP(4) 129 0 Z
+bit 127 I ? GP(4)
+bit 126 C 0 .
+bit 125 O ? GP(3) 126 0 Z
+bit 124 I ? GP(3)
+bit 123 C 0 .
+bit 122 O ? GP(2) 123 0 Z
+bit 121 I ? GP(2)
+bit 120 C 0 .
+bit 119 O ? GP(1) 120 0 Z
+bit 118 I ? GP(1)
+bit 117 C 0 .
+bit 116 O ? GP(0) 117 0 Z
+bit 115 I ? GP(0)
+bit 114 C 0 .
+bit 113 O ? LBIAS 114 0 Z
+bit 112 I ? LBIAS
+bit 111 C 0 .
+bit 110 O ? LPCLK 111 0 Z
+bit 109 I ? LPCLK
+bit 108 C 0 .
+bit 107 O ? LDD(0) 108 0 Z
+bit 106 I ? LDD(0)
+bit 105 C 0 .
+bit 104 O ? LDD(1) 105 0 Z
+bit 103 I ? LDD(1)
+bit 102 C 0 .
+bit 101 O ? LDD(2) 102 0 Z
+bit 100 I ? LDD(2)
+bit 99 C 0 .
+bit 98 O ? LDD(3) 99 0 Z
+bit 97 I ? LDD(3)
+bit 96 C 0 .
+bit 95 O ? LDD(4) 96 0 Z
+bit 94 I ? LDD(4)
+bit 93 C 0 .
+bit 92 O ? LDD(5) 93 0 Z
+bit 91 I ? LDD(5)
+bit 90 C 0 .
+bit 89 O ? LDD(6) 90 0 Z
+bit 88 I ? LDD(6)
+bit 87 C 0 .
+bit 86 O ? LDD(7) 87 0 Z
+bit 85 I ? LDD(7)
+bit 84 C 0 .
+bit 83 O ? LLCLK 84 0 Z
+bit 82 I ? LLCLK
+bit 81 C 0 .
+bit 80 O ? LFCLK 81 0 Z
+bit 79 I ? LFCLK
+bit 78 O ? POE
+bit 77 O ? PWE
+bit 76 O ? PIOR
+bit 75 O ? PIOW
+bit 74 O ? PSKTSEL
+bit 73 I ? IOIS16
+bit 72 I ? PWAIT
+bit 71 O ? PREG
+bit 70 O ? PCE2
+bit 69 O ? PCE1
+bit 68 C 1 .
+bit 67 O ? WE 68 1 Z
+bit 66 O ? OE 68 1 Z
+bit 65 O ? RAS(3) 68 1 Z
+bit 64 O ? RAS(2) 68 1 Z
+bit 63 O ? RAS(1) 68 1 Z
+bit 62 O ? RAS(0) 68 1 Z
+bit 61 O ? CAS(3) 68 1 Z
+bit 60 O ? CAS(2) 68 1 Z
+bit 59 O ? CAS(1) 68 1 Z
+bit 58 O ? CAS(0) 68 1 Z
+bit 57 O ? CS(3) 68 1 Z
+bit 56 O ? CS(2) 68 1 Z
+bit 55 O ? CS(1) 68 1 Z
+bit 54 O ? CS(0) 68 1 Z
+bit 53 O ? A(25) 68 1 Z
+bit 52 O ? A(24) 68 1 Z
+bit 51 O ? A(23) 68 1 Z
+bit 50 O ? A(22) 68 1 Z
+bit 49 O ? A(21) 68 1 Z
+bit 48 O ? A(20) 68 1 Z
+bit 47 O ? A(19) 68 1 Z
+bit 46 O ? A(18) 68 1 Z
+bit 45 O ? A(17) 68 1 Z
+bit 44 O ? A(16) 68 1 Z
+bit 43 O ? A(15) 68 1 Z
+bit 42 O ? A(14) 68 1 Z
+bit 41 O ? A(13) 68 1 Z
+bit 40 O ? A(12) 68 1 Z
+bit 39 O ? A(11) 68 1 Z
+bit 38 O ? A(10) 68 1 Z
+bit 37 O ? A(9) 68 1 Z
+bit 36 O ? A(8) 68 1 Z
+bit 35 O ? A(7) 68 1 Z
+bit 34 O ? A(6) 68 1 Z
+bit 33 O ? A(5) 68 1 Z
+bit 32 O ? A(4) 68 1 Z
+bit 31 O ? A(3) 68 1 Z
+bit 30 O ? A(2) 68 1 Z
+bit 29 O ? A(1) 68 1 Z
+bit 28 O ? A(0) 68 1 Z
+bit 27 C 1 .
+bit 26 O ? UDCN 27 1 Z
+bit 25 I ? UDCN
+bit 24 X ? .
+bit 23 C 1 .
+bit 22 O ? UDCP 23 1 Z
+bit 21 I ? UDCP
+bit 20 C 0 .
+bit 19 O ? RXD1 20 0 Z
+bit 18 I ? RXD1
+bit 17 C 0 .
+bit 16 O ? TXD1 17 0 Z
+bit 15 I ? TXD1
+bit 14 C 0 .
+bit 13 O ? RXD2 14 0 Z
+bit 12 I ? RXD2
+bit 11 C 0 .
+bit 10 O ? TXD2 11 0 Z
+bit 9 I ? TXD2
+bit 8 C 0 .
+bit 7 O ? RXD3 8 0 Z
+bit 6 I ? RXD3
+bit 5 C 0 .
+bit 4 O ? TXD3 5 0 Z
+bit 3 I ? TXD3
+bit 2 I ? RESET
+bit 1 O ? RESETO
+bit 0 I ? ROMSEL
