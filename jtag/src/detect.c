@@ -537,9 +537,23 @@ printf( "%s\n", register_get_string( p->prev_bsr ) );
 				if (d == 0x55AA55AA)
 					printf( "  at %08X\n", x * 256 * 1024 );
 			}
-			
+
+			access_bus( p, AB_SETUP, 0x00000000, 0x00500050 );
+			access_bus( p, AB_WRITE, 0x00000000, 0x00500050 );
+			access_bus( p, AB_HOLD, 0x00000000, 0x00500050 );
+
+			access_bus( p, AB_SETUP, 0x00000000, 0x00980098 );
+			access_bus( p, AB_WRITE, 0x00000000, 0x00980098 );
+			access_bus( p, AB_HOLD, 0x00000000, 0x00980098 );
+
+			erase( p, b * 256 * 1024 );	
 		}
 	}
+
+
+	access_bus( p, AB_SETUP, 0, 0x00FF00FF );
+	access_bus( p, AB_WRITE, 0, 0x00FF00FF );
+	access_bus( p, AB_HOLD, 0, 0x00FF00FF );
 
 	{
 		unsigned int i;
