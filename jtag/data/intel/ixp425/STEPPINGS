@@ -23,3 +23,4 @@
 
 # bits 31-28 of the Device Identification Register
 0000	ixp425		A0
+0001	ixp425		B0
