@@ -1,9 +1,22 @@
 # $Id$
 
+libbrux/cmd/cmd.c
+libbrux/cmd/cmd_detectflash.c
+libbrux/cmd/help.c
+libbrux/cmd/quit.c
+libbrux/flash/amd.c
+libbrux/flash/detectflash.c
+libbrux/flash/intel.c
+src/bus/bcm1250.c
+src/bus/buses.c
 src/bus/ixp425.c
 src/bus/pxa2x0.c
 src/bus/sa1110.c
 src/bus/sh7727.c
+src/bus/sh7750r.c
+src/bus/sh7751r.c
+src/cmd/bit.c
+src/cmd/bus.c
 src/cmd/cable.c
 src/cmd/cmd.c
 src/cmd/detect.c
@@ -13,20 +26,23 @@ src/cmd/endian.c
 src/cmd/flashmem.c
 src/cmd/frequency.c
 src/cmd/get.c
+src/cmd/include.c
 src/cmd/instruction.c
+src/cmd/part.c
 src/cmd/peekpoke.c
 src/cmd/print.c
 src/cmd/readmem.c
+src/cmd/register.c
 src/cmd/script.c
 src/cmd/set.c
 src/cmd/shift.c
+src/cmd/signal.c
 src/detect.c
 src/discovery.c
 src/flash.c
 src/jtag.c
 src/part/data_register.c
 src/part/instruction.c
-src/part/parse.c
 src/part/part.c
 src/readmem.c
 src/tap/cable/arcom.c
