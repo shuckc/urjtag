@@ -1,5 +1,7 @@
 $Id$
 
+	* Added new manufacturer: Cypress. (Chris Ellec)
+
 jtag-0.2.1 (2003-01-13):
 
 	* Fixed compile error (bug 665923, thanks to Chris Ellec).

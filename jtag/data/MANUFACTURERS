@@ -30,4 +30,5 @@
 00000001001	intel		Intel
 00000010101	xilinx		Xilinx	# Philips Semi. (Signetics)
 00000011111	atmel		Atmel
+00000110100	cypress		Cypress
 00001001001	xilinx		Xilinx
