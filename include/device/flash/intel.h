@@ -54,6 +54,10 @@
 #define	CFI_CMD_INTEL_BLOCK_ERASE		0x20	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
 #define	CFI_CMD_INTEL_SUSPEND			0xB0	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
 #define	CFI_CMD_INTEL_RESUME			0xD0	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_CMD_INTEL_LOCK_SETUP		0x60	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_CMD_INTEL_LOCK_BLOCK		0x01	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_CMD_INTEL_UNLOCK_BLOCK		0xD0	/* 28FxxxJ3A - unlocks all blocks, 28FFxxxK3, 28FxxxK18 */
+#define	CFI_CMD_INTEL_LOCK_DOWN_BLOCK		0x2F	/* 28FxxxK3, 28FxxxK18 */
 
 /* Intel flash device ID codes for 28FxxxJ3A - see Table 5. in [1] */
 
