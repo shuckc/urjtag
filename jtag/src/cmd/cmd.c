@@ -50,6 +50,7 @@ extern cmd_t cmd_shift;
 extern cmd_t cmd_dr;
 extern cmd_t cmd_get;
 extern cmd_t cmd_set;
+extern cmd_t cmd_endian;
 extern cmd_t cmd_readmem;
 extern cmd_t cmd_detectflash;
 extern cmd_t cmd_flashmem;
@@ -68,6 +69,7 @@ const cmd_t *cmds[] = {
 	&cmd_dr,
 	&cmd_get,
 	&cmd_set,
+	&cmd_endian,
 	&cmd_readmem,
 	&cmd_detectflash,
 	&cmd_flashmem,

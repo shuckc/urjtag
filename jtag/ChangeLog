@@ -1,3 +1,13 @@
+2003-05-22  Marcel Telka  <marcel@telka.sk>
+
+	* src/jtag.c: Added new global variable 'big_endian'.
+	* include/jtag.h: Ditto.
+	* src/flash.c (flashmem): Added full support for little/big endian.
+	* src/readmem.c (readmem): Ditto.
+	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added endian.c.
+	* src/cmd/cmd.c (cmds): Added new command 'endian'.
+	* src/cmd/endian.c: New file.
+
 2003-05-21  Marcel Telka  <marcel@telka.sk>
 
 	* Makefile.rules: New file.

@@ -5,6 +5,7 @@ $Id$
 	* Disabled external bus cycles for PXA250 for addresses above 0x04000000.
 	* Fixed bug in BUSY signal handling in Linux ppdev driver.
 	* Optimized bus drivers to increase bus access speed (readmem, flashmem, ...).
+	* Added new command 'endian' to configure access mode to external files.
 	* Minor bugs fixed.
 
 jtag-0.3.2 (2003-04-04):

@@ -39,6 +39,7 @@ libcmd_a_SOURCES = \
 	dr.c \
 	get.c \
 	set.c \
+	endian.c \
 	readmem.c \
 	detectflash.c \
 	flashmem.c \

@@ -38,12 +38,10 @@
 #include <flash/cfi.h>
 #include <flash/intel.h>
 
-#include <arpa/inet.h>
-/* for ntohs */
-
 #include "bus.h"
 #include "flash.h"
 #include "cfi.h"
+#include "jtag.h"
 
 extern flash_driver_t amd_32_flash_driver;
 extern flash_driver_t intel_32_flash_driver;
@@ -253,7 +251,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	while (!feof( f )) {
 		uint32_t data;
 #define BSIZE 4096
-		char b[BSIZE];
+		uint8_t b[BSIZE];
 		int bc = 0, bn = 0;
 		int block_no = adr / (cfi->device_geometry.erase_block_regions[0].erase_block_size * flash_driver->buswidth / 2);
 
@@ -266,12 +264,17 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 
 		bn = fread( b, 1, BSIZE, f );
 		for (bc = 0; bc < bn; bc += flash_driver->buswidth) {
+			int j;
 			printf( "addr: 0x%08X\r", adr );
 			fflush( stdout );
-			if (flash_driver->buswidth == 2)
-				data = htons( *((uint16_t *) &b[bc]) );
-			else
-				data = * ((uint32_t *) &b[bc]);
+
+			data = 0;
+			for (j = 0; j < flash_driver->buswidth; j++)
+				if (big_endian)
+					data = (data << 8) | b[bc + j];
+				else
+					data |= b[bc + j] << (j * 8);
+
 			if (flash_program( bus, adr, data )) {
 				printf( "\nflash error\n" );
 				return;
@@ -283,21 +286,29 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 
 	flash_readarray( bus );
 
-	if (flash_driver->buswidth == 4) {			/* TODO: not available in 1 x 16 bit mode */
 	fseek( f, 0, SEEK_SET );
 	printf( "verify:\n" );
 	fflush( stdout );
 	adr = addr;
 	while (!feof( f )) {
+		uint8_t buf[16];
 		uint32_t data;
 		uint32_t readed;
+		int j;
 
-		if (fread( &data, flash_driver->buswidth, 1, f ) != 1) {
+		if (fread( buf, flash_driver->buswidth, 1, f ) != 1) {
 			if (feof(f))
 				break;
 			printf( "Error during file read.\n" );
 			return;
 		}
+
+		data = 0;
+		for (j = 0; j < flash_driver->buswidth; j++)
+			if (big_endian)
+				data = (data << 8) | buf[j];
+			else
+				data |= buf[j] << (j * 8);
 
 		printf( "addr: 0x%08X\r", adr );
 		fflush( stdout );
@@ -309,8 +320,6 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		adr += flash_driver->buswidth;
 	}
 	printf( "\nDone.\n" );
-	} else
-		printf( "TODO: Verify is not available in 1 x 16 bit mode.\n" );
 
 	free( erased );
 

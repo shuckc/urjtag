@@ -52,6 +52,7 @@ ssize_t getline( char **lineptr, size_t *n, FILE *stream );
 
 chain_t *chain = NULL;
 bus_t *bus = NULL;
+int big_endian = 0;
 
 static char *
 get_token( char *buf )

@@ -34,6 +34,7 @@
 
 extern chain_t *chain;
 extern bus_t *bus;
+extern int big_endian;
 
 int jtag_parse_file( const char *filename );
 

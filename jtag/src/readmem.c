@@ -43,12 +43,10 @@
 #include <flash/intel.h>
 #include <std/mic.h>
 
-#include <arpa/inet.h>
-/* for ntohs */
-
 #include "cfi.h"
 #include "bus.h"
 #include "flash.h"
+#include "jtag.h"
 
 void
 detectflash( bus_t *bus )
@@ -205,6 +203,8 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 	int step = 0;
 	uint32_t a;
 	int bc = 0;
+#define BSIZE 4096
+	uint8_t b[BSIZE];
 
 	if (!bus) {
 		printf( "Error: Missing bus driver!\n" );
@@ -234,28 +234,22 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 	printf( "reading:\n" );
 	bus_read_start( bus, addr );
 	for (a = addr + step; a <= addr + len; a += step) {
-		uint32_t d = 0;
-		uint16_t d16 = 0;
-#define BSIZE 4096
-		char b[BSIZE];
+		uint32_t data;
+		int j;
 
-		if (a < addr + len) {
-			if (step == 2)
-				d16 = bus_read_next( bus, a );
-			else
-				d = bus_read_next( bus, a );
-		}
-		else {
-			if (step == 2)
-				d16 = bus_read_end( bus );
-			else
-				d = bus_read_end( bus );
-		}
-		if (step == 2)
-			*((uint16_t *) &b[bc]) = ntohs(d16);
-		else 
-			*((uint32_t *) &b[bc]) = d;
-		bc += step;
+		if (a < addr + len)
+			data = bus_read_next( bus, a );
+		else
+			data = bus_read_end( bus );
+
+		for (j = step; j > 0; j--)
+			if (big_endian)
+				b[bc++] = (data >> ((j - 1) * 8)) & 0xFF;
+			else {
+				b[bc++] = data & 0xFF;
+				data >>= 8;
+			}
+
 		if ((bc >= BSIZE) || (a >= (addr + len)) ) {
 			printf( "addr: 0x%08X\r", a );
 			fwrite( b, bc, 1, f );
