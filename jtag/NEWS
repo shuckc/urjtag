@@ -11,6 +11,8 @@ See libbrux/NEWS for more news.
 		(based on patch 792591, thanks to Guennadi Liakhovetski).
 	* Added 'initbus' command to allow dynamic bus driver loading.
 	* Added BOOT_DEF register emulation for PXA2x0 bus driver.
+	* Fixed inverted TRST signal for Macraigor Wiggler JTAG Cable see patch 799377 for more info,
+		thanks to Mike Tesch for reporting).
 	* Fixed minor bugs.
 
 jtag-0.5 (2003-08-19):
