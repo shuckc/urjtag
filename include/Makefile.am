@@ -77,4 +77,5 @@ nobase_openwinceinc_HEADERS = \
 	device/flash/28fxxxj.h \
 	device/flash/28fxxxk.h \
 	device/flash/cfi.h \
-	device/flash/intel.h
+	device/flash/intel.h \
+	std/mic.h
