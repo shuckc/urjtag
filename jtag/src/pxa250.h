@@ -29,6 +29,9 @@
 
 #include "part.h"
 
+void pxa250_bus_read_start( parts *ps, uint32_t adr );
+uint32_t pxa250_bus_read_next( parts *ps, uint32_t adr );
+uint32_t pxa250_bus_read_end( parts *ps );
 uint32_t pxa250_bus_read( parts *ps, uint32_t adr );
 void pxa250_bus_write( parts *ps, uint32_t adr, uint32_t data );
 

@@ -66,11 +66,12 @@ setup_data( part *p, uint32_t d )
 	}
 }
 
-uint32_t
-pxa250_bus_read( parts *ps, uint32_t adr )
+void
+pxa250_bus_read_start( parts *ps, uint32_t adr )
 {
 	part *p = ps->parts[0];
 
+	/* see Figure 6-13 in PXA doc */
 	part_set_signal( p, "nCS[0]", 1, 0 );
 	part_set_signal( p, "DQM[0]", 1, 0 );
 	part_set_signal( p, "DQM[1]", 1, 0 );
@@ -85,6 +86,15 @@ pxa250_bus_read( parts *ps, uint32_t adr )
 	set_data_in( p );
 
 	parts_shift_data_registers( ps );
+}
+
+uint32_t
+pxa250_bus_read_next( parts *ps, uint32_t adr )
+{
+	part *p = ps->parts[0];
+
+	/* see Figure 6-13 in PXA doc */
+	setup_address( p, adr );
 	parts_shift_data_registers( ps );
 
 	{
@@ -99,6 +109,39 @@ pxa250_bus_read( parts *ps, uint32_t adr )
 
 		return d;
 	}
+}
+
+uint32_t
+pxa250_bus_read_end( parts *ps )
+{
+	part *p = ps->parts[0];
+
+	/* see Figure 6-13 in PXA doc */
+	part_set_signal( p, "nCS[0]", 1, 1 );
+	part_set_signal( p, "nOE", 1, 1 );
+	part_set_signal( p, "nSDCAS", 1, 1 );
+
+	parts_shift_data_registers( ps );
+
+	{
+		int i;
+		char buff[10];
+		uint32_t d = 0;
+
+		for (i = 0; i < 32; i++) {
+			sprintf( buff, "MD[%d]", i );
+			d |= (uint32_t) (part_get_signal( p, buff ) << i);
+		}
+
+		return d;
+	}
+}
+
+uint32_t
+pxa250_bus_read( parts *ps, uint32_t adr )
+{
+	pxa250_bus_read_start( ps, adr );
+	return pxa250_bus_read_end( ps );
 }
 
 void
