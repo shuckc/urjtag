@@ -21,15 +21,15 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-AC_INIT(jtag,0.1)
+AC_INIT(jtag,0.2)
 
 AC_PREREQ(2.53)
-AC_COPYRIGHT([Copyright (C) 2002 ETC s.r.o.])
+AC_COPYRIGHT([Copyright (C) 2002, 2003 ETC s.r.o.])
 AC_REVISION($Revision$)
 
 AC_CONFIG_AUX_DIR(tools)
 
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME,AC_PACKAGE_VERSION)
+AM_INIT_AUTOMAKE([check-news dist-bzip2])
 
 AC_CONFIG_FILES(
 	Makefile
