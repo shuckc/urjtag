@@ -21,8 +21,6 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-SUBDIRS =
-
 noinst_HEADERS = \
 	bsbit.h \
 	ctrl.h \
@@ -32,4 +30,4 @@ noinst_HEADERS = \
 	register.h \
 	signal.h \
 	state.h \
-	tap.h \
+	tap.h
