@@ -165,6 +165,8 @@ jtag> print
  No. Manufacturer         Part                 Stepping Instruction          Register
 ----------------------------------------------------------------------------------------
    0 Intel                PXA250               C0       SAMPLE/PRELOAD       BSR
+jtag> get signal 0 BOOT_SEL[0]
+BOOT_SEL[0] = 0
 jtag>
 
 Note: BSR is "Boundary Scan Register"

@@ -1,6 +1,6 @@
 $Id$
 
-jtag-0.3.1:
+jtag-0.3.1 (2003-03-19):
 
 	* Added support for Intel PXA255 A0 (thanks to Mike Sprauve).
 	* Added support for running scripts specified as jtag command line parameters.

@@ -1,5 +1,9 @@
 2003-03-19  Marcel Telka  <marcel@telka.sk>
 
+	Version 0.3.1 released.
+
+2003-03-19  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac (AC_CONFIG_FILES): Added doc/Makefile.
 	* Makefile.am (SUBDIRS): Added doc.
 
