@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2002 ETC s.r.o.
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,13 +18,22 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
  *
  */
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "gettext.h"
+#define	_(s)		gettext(s)
+#define	N_(s)		gettext_noop(s)
+#define	P_(s,p,n)	ngettext(s,p,n)
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -34,54 +43,65 @@
 
 #include "part.h"
 #include "bus.h"
+#include "signal.h"
 
 typedef struct {
 	chain_t *chain;
 	part_t *part;
 	uint32_t last_adr;
+	signal_t *ma[26];
+	signal_t *md[32];
+	signal_t *ncs[1];
+	signal_t *dqm[4];
+	signal_t *rdnwr;
+	signal_t *nwe;
+	signal_t *noe;
+	signal_t *nsdcas;
 	MC_registers_t MC_registers;
 } bus_params_t;
 
 #define	CHAIN	((bus_params_t *) bus->params)->chain
 #define	PART	((bus_params_t *) bus->params)->part
 #define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
+#define	MA		((bus_params_t *) bus->params)->ma
+#define	MD		((bus_params_t *) bus->params)->md
+#define	nCS		((bus_params_t *) bus->params)->ncs
+#define	DQM		((bus_params_t *) bus->params)->dqm
+#define	RDnWR		((bus_params_t *) bus->params)->rdnwr
+#define	nWE		((bus_params_t *) bus->params)->nwe
+#define	nOE		((bus_params_t *) bus->params)->noe
+#define	nSDCAS		((bus_params_t *) bus->params)->nsdcas
 
 #define	MC_pointer	(&((bus_params_t *) bus->params)->MC_registers)
 
 static void
-setup_address( part_t *p, uint32_t a )
+setup_address( bus_t *bus, uint32_t a )
 {
 	int i;
-	char buff[10];
+	part_t *p = PART;
 
-	for (i = 0; i < 26; i++) {
-		sprintf( buff, "MA[%d]", i );
-		part_set_signal( p, buff, 1, (a >> i) & 1 );
-	}
+	for (i = 0; i < 26; i++)
+		part_set_signal( p, MA[i], 1, (a >> i) & 1 );
 }
 
 static void
-set_data_in( part_t *p )
+set_data_in( bus_t *bus )
 {
 	int i;
-	char buff[10];
+	part_t *p = PART;
 
-	for (i = 0; i < 32; i++) {
-		sprintf( buff, "MD[%d]", i );
-		part_set_signal( p, buff, 0, 0 );
-	}
+	for (i = 0; i < 32; i++)
+		part_set_signal( p, MD[i], 0, 0 );
 }
 
 static void
-setup_data( part_t *p, uint32_t d )
+setup_data( bus_t *bus, uint32_t d )
 {
 	int i;
-	char buff[10];
+	part_t *p = PART;
 
-	for (i = 0; i < 32; i++) {
-		sprintf( buff, "MD[%d]", i );
-		part_set_signal( p, buff, 1, (d >> i) & 1 );
-	}
+	for (i = 0; i < 32; i++)
+		part_set_signal( p, MD[i], 1, (d >> i) & 1 );
 }
 
 static void
@@ -102,18 +122,18 @@ pxa250_bus_read_start( bus_t *bus, uint32_t adr )
 		return;
 
 	/* see Figure 6-13 in [1] */
-	part_set_signal( p, "nCS[0]", 1, 0 );
-	part_set_signal( p, "DQM[0]", 1, 0 );
-	part_set_signal( p, "DQM[1]", 1, 0 );
-	part_set_signal( p, "DQM[2]", 1, 0 );
-	part_set_signal( p, "DQM[3]", 1, 0 );
-	part_set_signal( p, "RDnWR", 1, 1 );
-	part_set_signal( p, "nWE", 1, 1 );
-	part_set_signal( p, "nOE", 1, 0 );
-	part_set_signal( p, "nSDCAS", 1, 0 );
+	part_set_signal( p, nCS[0], 1, 0 );
+	part_set_signal( p, DQM[0], 1, 0 );
+	part_set_signal( p, DQM[1], 1, 0 );
+	part_set_signal( p, DQM[2], 1, 0 );
+	part_set_signal( p, DQM[3], 1, 0 );
+	part_set_signal( p, RDnWR, 1, 1 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 0 );
+	part_set_signal( p, nSDCAS, 1, 0 );
 
-	setup_address( p, adr );
-	set_data_in( p );
+	setup_address( bus, adr );
+	set_data_in( bus );
 
 	chain_shift_data_registers( chain );
 }
@@ -125,6 +145,8 @@ pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
 
 	if (LAST_ADR >= 0x04000000)
 		pxa250_bus_read_start( bus, adr );
@@ -133,21 +155,13 @@ pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 	LAST_ADR = adr;
 
 	/* see Figure 6-13 in [1] */
-	setup_address( p, adr );
+	setup_address( bus, adr );
 	chain_shift_data_registers( chain );
 
-	{
-		int i;
-		char buff[10];
-		uint32_t d = 0;
+	for (i = 0; i < 32; i++)
+		d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
 
-		for (i = 0; i < 32; i++) {
-			sprintf( buff, "MD[%d]", i );
-			d |= (uint32_t) (part_get_signal( p, buff ) << i);
-		}
-
-		return d;
-	}
+	return d;
 }
 
 static uint32_t
@@ -155,29 +169,23 @@ pxa250_bus_read_end( bus_t *bus )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
 
 	if (LAST_ADR >= 0x04000000)
 		return 0;
 
 	/* see Figure 6-13 in [1] */
-	part_set_signal( p, "nCS[0]", 1, 1 );
-	part_set_signal( p, "nOE", 1, 1 );
-	part_set_signal( p, "nSDCAS", 1, 1 );
+	part_set_signal( p, nCS[0], 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	part_set_signal( p, nSDCAS, 1, 1 );
 
 	chain_shift_data_registers( chain );
 
-	{
-		int i;
-		char buff[10];
-		uint32_t d = 0;
+	for (i = 0; i < 32; i++)
+		d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
 
-		for (i = 0; i < 32; i++) {
-			sprintf( buff, "MD[%d]", i );
-			d |= (uint32_t) (part_get_signal( p, buff ) << i);
-		}
-
-		return d;
-	}
+	return d;
 }
 
 static uint32_t
@@ -197,24 +205,24 @@ pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	if (adr >= 0x04000000)
 		return;
 
-	part_set_signal( p, "nCS[0]", 1, 0 );
-	part_set_signal( p, "DQM[0]", 1, 0 );
-	part_set_signal( p, "DQM[1]", 1, 0 );
-	part_set_signal( p, "DQM[2]", 1, 0 );
-	part_set_signal( p, "DQM[3]", 1, 0 );
-	part_set_signal( p, "RDnWR", 1, 0 );
-	part_set_signal( p, "nWE", 1, 1 );
-	part_set_signal( p, "nOE", 1, 1 );
-	part_set_signal( p, "nSDCAS", 1, 0 );
+	part_set_signal( p, nCS[0], 1, 0 );
+	part_set_signal( p, DQM[0], 1, 0 );
+	part_set_signal( p, DQM[1], 1, 0 );
+	part_set_signal( p, DQM[2], 1, 0 );
+	part_set_signal( p, DQM[3], 1, 0 );
+	part_set_signal( p, RDnWR, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	part_set_signal( p, nSDCAS, 1, 0 );
 
-	setup_address( p, adr );
-	setup_data( p, data );
+	setup_address( bus, adr );
+	setup_data( bus, data );
 
 	chain_shift_data_registers( chain );
 
-	part_set_signal( p, "nWE", 1, 0 );
+	part_set_signal( p, nWE, 1, 0 );
 	chain_shift_data_registers( chain );
-	part_set_signal( p, "nWE", 1, 1 );
+	part_set_signal( p, nWE, 1, 1 );
 	chain_shift_data_registers( chain );
 }
 
@@ -267,6 +275,9 @@ bus_t *
 new_pxa250_bus( chain_t *chain, int pn )
 {
 	bus_t *bus;
+	char buff[10];
+	int i;
+	int failed = 0;
 
 	if (!chain || !chain->parts || chain->parts->len <= pn || pn < 0)
 		return NULL;
@@ -286,9 +297,72 @@ new_pxa250_bus( chain_t *chain, int pn )
 	CHAIN = chain;
 	PART = chain->parts->parts[pn];
 
-	BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( PART, "BOOT_SEL[2]" ) << 2
-							| part_get_signal( PART, "BOOT_SEL[1]" ) << 1
-							| part_get_signal( PART, "BOOT_SEL[0]" ));
+	for (i = 0; i < 26; i++) {
+		sprintf( buff, "MA[%d]", i );
+		MA[i] = part_find_signal( PART, buff );
+		if (!MA[i]) {
+			printf( _("signal '%s' not found\n"), buff );
+			failed = 1;
+			break;
+		}
+	}
+	for (i = 0; i < 32; i++) {
+		sprintf( buff, "MD[%d]", i );
+		MD[i] = part_find_signal( PART, buff );
+		if (!MD[i]) {
+			printf( _("signal '%s' not found\n"), buff );
+			failed = 1;
+			break;
+		}
+	}
+	for (i = 0; i < 1; i++) {
+		sprintf( buff, "nCS[%d]", i );
+		nCS[i] = part_find_signal( PART, buff );
+		if (!nCS[i]) {
+			printf( _("signal '%s' not found\n"), buff );
+			failed = 1;
+			break;
+		}
+	}
+	for (i = 0; i < 4; i++) {
+		sprintf( buff, "DQM[%d]", i );
+		DQM[i] = part_find_signal( PART, buff );
+		if (!DQM[i]) {
+			printf( _("signal '%s' not found\n"), buff );
+			failed = 1;
+			break;
+		}
+	}
+	RDnWR = part_find_signal( PART, "RDnWR" );
+	if (!RDnWR) {
+		printf( _("signal '%s' not found\n"), "RDnWR" );
+		failed = 1;
+	}
+	nWE = part_find_signal( PART, "nWE" );
+	if (!nWE) {
+		printf( _("signal '%s' not found\n"), "nWE" );
+		failed = 1;
+	}
+	nOE = part_find_signal( PART, "nOE" );
+	if (!nOE) {
+		printf( _("signal '%s' not found\n"), "nOE" );
+		failed = 1;
+	}
+	nSDCAS = part_find_signal( PART, "nSDCAS" );
+	if (!nSDCAS) {
+		printf( _("signal '%s' not found\n"), "nSDCAS" );
+		failed = 1;
+	}
+
+	if (failed) {
+		free( bus->params );
+		free( bus );
+		return NULL;
+	}
+
+	BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[2]" ) ) << 2
+							| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[1]" ) ) << 1
+							| part_get_signal( PART, part_find_signal( PART, "BOOT_SEL[0]" ) ));
 
 	return bus;
 }

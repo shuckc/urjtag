@@ -35,6 +35,7 @@
 #include <string.h>
 
 #include "part.h"
+#include "signal.h"
 #include "jtag.h"
 
 #include "cmd.h"
@@ -44,6 +45,7 @@ cmd_get_run( char *params[] )
 {
 	unsigned int n;
 	int data;
+	signal_t *s;
 
 	if (cmd_params( params ) != 4)
 		return -1;
@@ -67,7 +69,12 @@ cmd_get_run( char *params[] )
 		return 1;
 	}
 
-	data = part_get_signal( chain->parts->parts[n], params[3] );
+	s = part_find_signal( chain->parts->parts[n], params[3] );
+	if (!s) {
+		printf( _("signal '%s' not found\n"), params[3] );
+		return 1;
+	}
+	data = part_get_signal( chain->parts->parts[n], s );
 	if (data != -1)
 		printf( _("%s = %d\n"), params[3], data );
 

@@ -2,6 +2,9 @@
 
 src/jtag.c
 src/readmem.c
+src/bus/ixp425.c
+src/bus/pxa2x0.c
+src/bus/sa1110.c
 src/cmd/cmd.c
 src/cmd/frequency.c
 src/cmd/help.c

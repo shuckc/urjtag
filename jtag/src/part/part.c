@@ -132,16 +132,36 @@ part_find_data_register( part_t *p, const char *drname )
 	return dr;
 }
 
-void part_set_instruction( part_t *p, const char *iname )
+signal_t *
+part_find_signal( part_t *p, const char *signalname )
+{
+	signal_t *s;
+
+	if (!p || !signalname)
+		return NULL;
+
+	s = p->signals;
+	while (s) {
+		if (strcmp( signalname, s->name ) == 0)
+			break;
+		s = s->next;
+	}
+
+	return s;
+}
+
+void
+part_set_instruction( part_t *p, const char *iname )
 {
 	if (p)
 		p->active_instruction = part_find_instruction( p, iname );
 }
 
 void
-part_set_signal( part_t *p, const char *pname, int out, int val )
+part_set_signal( part_t *p, signal_t *s, int out, int val )
 {
-	signal_t *s;
+	if (!p || !s)
+		return;
 
 	/* search for Boundary Scan Register */
 	data_register *bsr = part_find_data_register( p, "BSR" );
@@ -150,24 +170,11 @@ part_set_signal( part_t *p, const char *pname, int out, int val )
 		return;
 	}
 
-	/* search signal */
-	s = p->signals;
-	while (s) {
-		if (strcmp( pname, s->name ) == 0)
-			break;
-		s = s->next;
-	}
-
-	if (!s) {
-		printf( _("signal %s not found\n"), pname );
-		return;
-	}
-
-	/*setup signal */
+	/* setup signal */
 	if (out) {
 		int control;
 		if (!s->output) {
-			printf( _("signal %s cannot be set as output\n"), pname );
+			printf( _("signal '%s' cannot be set as output\n"), s->name );
 			return;
 		}
 		bsr->in->data[s->output->bit] = val & 1;
@@ -177,7 +184,7 @@ part_set_signal( part_t *p, const char *pname, int out, int val )
 			bsr->in->data[control] = p->bsbits[s->output->bit]->control_value ^ 1;
 	} else {
 		if (!s->input) {
-			printf( _("signal %s cannot be set as input\n"), pname );
+			printf( _("signal '%s' cannot be set as input\n"), s->name );
 			return;
 		}
 		if (s->output)
@@ -186,9 +193,10 @@ part_set_signal( part_t *p, const char *pname, int out, int val )
 }
 
 int
-part_get_signal( part_t *p, const char *pname )
+part_get_signal( part_t *p, signal_t *s )
 {
-	signal_t *s;
+	if (!p || !s)
+		return -1;
 
 	/* search for Boundary Scan Register */
 	data_register *bsr = part_find_data_register( p, "BSR" );
@@ -197,21 +205,8 @@ part_get_signal( part_t *p, const char *pname )
 		return -1;
 	}
 
-	/* search signal */
-	s = p->signals;
-	while (s) {
-		if (strcmp( pname, s->name ) == 0)
-			break;
-		s = s->next;
-	}
-
-	if (!s) {
-		printf( _("signal %s not found\n"), pname );
-		return -1;
-	}
-
 	if (!s->input) {
-		printf( _("signal %s is not input signal\n"), pname );
+		printf( _("signal '%s' is not input signal\n"), s->name );
 		return -1;
 	}
 

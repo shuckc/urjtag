@@ -56,9 +56,10 @@ void part_free( part_t *p );
 part_t *read_part( FILE *f, tap_register_t *idr );
 instruction *part_find_instruction( part_t *p, const char *iname );
 data_register *part_find_data_register( part_t *p, const char *drname );
+signal_t *part_find_signal( part_t *p, const char *signalname );
 void part_set_instruction( part_t *p, const char *iname );
-void part_set_signal( part_t *p, const char *pname, int out, int val );
-int part_get_signal( part_t *p, const char *pname );
+void part_set_signal( part_t *p, signal_t *s, int out, int val );
+int part_get_signal( part_t *p, signal_t *s );
 void part_print( part_t *p );
 
 typedef struct parts parts_t;

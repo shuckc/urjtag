@@ -1,3 +1,21 @@
+2003-05-21  Marcel Telka  <marcel@telka.sk>
+
+	* include/part.h (part_find_signal): New function declaration.
+	(part_set_signal, part_get_signal): Changed parameter signal name to signal pointer.
+	* src/part/part.c (part_find_signal): New function.
+	(part_set_signal, part_get_signal): Removed signal searching, used supplied pointer to signal.
+	* po/POTFILES.in: Added src/bus/ixp425.c, src/bus/pxa2x0.c, and src/bus/sa1110.c.
+	* src/bus/ixp425.c (bus_params_t, select_flash, unselect_flash, setup_address, set_data_in)
+	(setup_data, ixp425_bus_read_start, ixp425_bus_read_next, ixp425_bus_read_end, ixp425_bus_write)
+	(new_ixp425_bus): Optimized signal searching to increase bus access speed.
+	* src/bus/pxa2x0.c (bus_params_t, setup_address, set_data_in, setup_data, pxa250_bus_read_start)
+	(pxa250_bus_read_next, pxa250_bus_read_end, pxa250_bus_write, new_pxa250_bus): Ditto.
+	* src/bus/sa1110.c (bus_params_t, setup_address, set_data_in, setup_data, sa1110_bus_read_start)
+	(sa1110_bus_read_next, sa1110_bus_read_end, sa1110_bus_write, new_sa1110_bus): Ditto.
+	(sa1110_bus_width): Updated part_get_signal() function call. Added explicit signal search.
+	* src/cmd/get.c (cmd_get_run): Ditto.
+	* src/cmd/set.c (cmd_set_run): Updated part_set_signal() function call. Added explicit signal search.
+
 2003-05-20  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac (AC_CONFIG_FILES): Added src/cmd/Makefile.
