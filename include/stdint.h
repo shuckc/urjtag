@@ -23,6 +23,10 @@
 #define __need_wchar_t
 #include <stddef.h>
 
+#if defined(__NetBSD__)
+#include <sys/stdint.h>
+#else
+
 /* 7.18.1.1  Exact-width integer types */
 #if defined(__CYGWIN__)
 #include <sys/types.h>
@@ -204,5 +208,7 @@ typedef unsigned long long   uintmax_t;
 #define UINTMAX_C(val) (UINTMAX_MAX-UINTMAX_MAX+(val))
 
 #endif  /* !defined ( __cplusplus) || defined __STDC_CONSTANT_MACROS */
+
+#endif /* defined(__NetBSD__) */
 
 #endif

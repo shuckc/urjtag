@@ -1,5 +1,7 @@
 $Id$
 
+	* Ported stdint.h to NetBSD (thanks to Jachym Holecek).
+
 include-0.2.2 (2003-03-19):
 
 	* stdint.h ported to cygwin-1.3.21 and later.
