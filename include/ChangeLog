@@ -1,5 +1,10 @@
 2004-12-20  Marcel Telka  <marcel@telka.sk>
 
+	* device/other/hd64461/afe.h: New file.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added device/other/hd64461/afe.h.
+
+2004-12-20  Marcel Telka  <marcel@telka.sk>
+
 	* device/other/hd64461/gpio.h: New file.
 	* device/other/hd64461/intc.h: Ditto.
 	* device/other/hd64461/lcdc.h: Ditto.

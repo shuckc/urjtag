@@ -79,6 +79,7 @@ nobase_openwinceinc_HEADERS = \
 	device/flash/28fxxxk.h \
 	device/flash/cfi.h \
 	device/flash/intel.h \
+	device/other/hd64461/afe.h \
 	device/other/hd64461/gpio.h \
 	device/other/hd64461/intc.h \
 	device/other/hd64461/lcdc.h \
