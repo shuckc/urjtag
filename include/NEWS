@@ -28,7 +28,7 @@ include-0.2 (2002-11-08):
 
 include-0.1 (2002-11-01):
 
-	* Initial public release with intial support for Intel SA-11x0/PXA2x0
+	* Initial public release with initial support for Intel SA-11x0/PXA2x0
 	  processors, Common Flash Interface (CFI), Intel extensions to CFI,
 	  JEDEC Manufacturer's Identification Codes, base AC'97 declarations
 	  and Philips UCB1400 support.
