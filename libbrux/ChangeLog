@@ -1,3 +1,12 @@
+2003-09-23  Marcel Telka  <marcel@telka.sk>
+
+	* flash/amd.c (amd_flash_autodetect16): New function (Bradley D. LaRonde).
+	(amd_flash_print_info): Added support for Am29LV800B (Bradley D. LaRonde).
+	(amd_16_flash_driver): New driver (Bradley D. LaRonde).
+	* flash/jedec.c: New file (Bradley D. LaRonde).
+	* flash/detectflash.c (detectflash): Added jedec_detect() call.
+	* Makefile.am (libbrux_a_SOURCES): Added flash/jedec.c.
+
 2003-09-15  Marcel Telka  <marcel@telka.sk>
 
 	* cmd/help.c (cmd_help_run): Fixed spelling (patch 805108, Andreas Mohr).

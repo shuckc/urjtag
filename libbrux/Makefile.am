@@ -37,6 +37,7 @@ libbrux_a_SOURCES = \
 	cmd/quit.c \
 	cmd/cmd_detectflash.c \
 	flash/cfi.c \
+	flash/jedec.c \
 	flash/detectflash.c \
 	flash/amd.c \
 	flash/intel.c

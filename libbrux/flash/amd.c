@@ -58,7 +58,15 @@ static int
 amd_flash_autodetect32( cfi_array_t *cfi_array )
 {
 	if(cfi_array->bus_width != 4) return 0;
-	o = 2; /* Heuristic */	
+	o = 2; /* Heuristic */
+	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
+}
+
+static int 
+amd_flash_autodetect16( cfi_array_t *cfi_array )
+{
+	if(cfi_array->bus_width != 2) return 0;
+	o = 1; /* Heuristic */
 	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
 }
 
@@ -183,6 +191,9 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		case 0x22D7:
 			printf( _("Am29LV640D/Am29LV641D/Am29LV642D") );
 			break;
+		case 0x225B:
+			printf( _("Am29LV800B") );
+			break;
 		default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
 			break;
@@ -257,6 +268,18 @@ flash_driver_t amd_32_flash_driver = {
 	N_("AMD/Fujitsu Standard Command Set"),
 	N_("supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"),
 	amd_flash_autodetect32,
+	amd_flash_print_info,
+	amd_flash_erase_block,
+	amd_flash_unlock_block,
+	amd_flash_program,
+	amd_flash_read_array,
+};
+
+flash_driver_t amd_16_flash_driver = {
+	2, /* buswidth */
+	N_("AMD/Fujitsu Standard Command Set"),
+	N_("supported: AMD 29LV800B; 1x16 Bit"),
+	amd_flash_autodetect16,
 	amd_flash_print_info,
 	amd_flash_erase_block,
 	amd_flash_unlock_block,

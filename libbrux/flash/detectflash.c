@@ -40,6 +40,8 @@
 #include <brux/cfi.h>
 #include <brux/bus.h>
 
+int jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
+
 void
 detectflash( bus_t *bus )
 {
@@ -56,8 +58,12 @@ detectflash( bus_t *bus )
 
 	if (cfi_detect( bus, 0, &cfi_array )) {
 		cfi_array_free( cfi_array );
-		printf( _("Flash not found!\n") );
-		return;
+		cfi_array = NULL;
+		if (jedec_detect( bus, 0, &cfi_array ) != 0) {
+			cfi_array_free( cfi_array );
+			printf( _("Flash not found!\n") );
+			return;
+		}
 	}
 
 	cfi = &cfi_array->cfi_chips[0]->cfi;
