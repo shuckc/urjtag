@@ -28,6 +28,6 @@
 
 # bits 11-1 of the Device Identification Register
 00000001001	intel		Intel
-00000010101	.		Philips Semi. (Signetics)
+00000010101	xilinx		Xilinx	# Philips Semi. (Signetics)
 00000011111	atmel		Atmel
 00001001001	xilinx		Xilinx
