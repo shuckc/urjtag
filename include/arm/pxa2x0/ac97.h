@@ -186,15 +186,15 @@ typedef volatile struct AC97_registers {
 
 /* PCDR bits - see Table 13-55 in [1] */
 
-#define	PCDR_PCM_RDATA_MASK	0xFFFF0000
-#define	PCDR_PCM_RDATA(x)	((x << 16) & PCDR_PCM_RDATA_MASK)
-#define	PCDR_PCM_LDATA_MASK	0x0000FFFF
-#define	PCDR_PCM_LDATA(x)	(x & PCDR_PCM_LDATA_MASK)
+#define	PCDR_PCM_RDATA_MASK	bits(31,16)
+#define	PCDR_PCM_RDATA(x)	bits_val(31,16,x)
+#define	PCDR_PCM_LDATA_MASK	bits(15,0)
+#define	PCDR_PCM_LDATA(x)	bits_val(15,0,x)
 
 /* MCDR bits - see Table 13-58 in [1] */
 
-#define	MCDR_MIC_IN_DAT_MASK	0x0000FFFF
-#define	MCDR_MIC_IN_DAT(x)	(x & MCDR_MIC_IN_DAT_MASK)
+#define	MCDR_MIC_IN_DAT_MASK	bits(15,0)
+#define	MCDR_MIC_IN_DAT(x)	bits_val(15,0,x)
 
 /* MOCR bits - see Table 13-59 in [1] */
 
@@ -214,7 +214,7 @@ typedef volatile struct AC97_registers {
 
 /* MODR bits - see Table 16-63 in [1] */
 
-#define	MODR_MODEM_DAT_MASK	0x0000FFFF
-#define	MODR_MODEM_DAT(x)	(x & MODR_MODEM_DAT_MASK)
+#define	MODR_MODEM_DAT_MASK	bits(15,0)
+#define	MODR_MODEM_DAT(x)	bits_val(15,0,x)
 
 #endif /* PXA2X0_AC97_H */
