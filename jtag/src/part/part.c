@@ -44,9 +44,6 @@ part_alloc( void )
 	p->data_registers = NULL;
 	p->boundary_length = 0;
 	p->bsbits = NULL;
-	p->idr = NULL;
-	p->bsr = NULL;
-	p->prev_bsr = NULL;
 
 	return p;
 }
@@ -73,6 +70,7 @@ part_free( part *p )
 		instruction_free( i );
 	}
 
+	/* data registers */
 	while (p->data_registers) {
 		data_register *dr = p->data_registers;
 		p->data_registers = dr->next;
@@ -83,13 +81,6 @@ part_free( part *p )
 	for (i = 0; i < p->boundary_length; i++)
 		bsbit_free( p->bsbits[i] );
 	free( p->bsbits );
-
-	/* idr */
-	register_free( p->idr );
-
-	/* bsr */
-	register_free( p->bsr );
-	register_free( p->prev_bsr );
 
 	free( p );
 }
@@ -133,8 +124,17 @@ part_find_data_register( part *p, const char *drname )
 void
 part_set_signal( part *p, const char *pname, int out, int val )
 {
+	signal *s;
+
+	/* search for Boundary Scan Register */
+	data_register *bsr = part_find_data_register( p, "BSR" );
+	if (!bsr) {
+		printf( "%s(%s:%d) Boundary Scan Register (BSR) not found\n", __FUNCTION__, __FILE__, __LINE__ );
+		return;
+	}
+
 	/* search signal */
-	signal *s = p->signals;
+	s = p->signals;
 	while (s) {
 		if (strcmp( pname, s->name ) == 0)
 			break;
@@ -153,26 +153,35 @@ part_set_signal( part *p, const char *pname, int out, int val )
 			printf( "signal %s cannot be set as output\n", pname );
 			return;
 		}
-		p->bsr->data[s->output->bit] = val & 1;
+		bsr->value->data[s->output->bit] = val & 1;
 
 		control = p->bsbits[s->output->bit]->control;
 		if (control >= 0)
-			p->bsr->data[control] = p->bsbits[s->output->bit]->control_value ^ 1;
+			bsr->value->data[control] = p->bsbits[s->output->bit]->control_value ^ 1;
 	} else {
 		if (!s->input) {
 			printf( "signal %s cannot be set as input\n", pname );
 			return;
 		}
 		if (s->output)
-			p->bsr->data[s->output->control] = p->bsbits[s->output->control]->control_value;
+			bsr->value->data[s->output->control] = p->bsbits[s->output->control]->control_value;
 	}
 }
 
 int
 part_get_signal( part *p, const char *pname )
 {
+	signal *s;
+
+	/* search for Boundary Scan Register */
+	data_register *bsr = part_find_data_register( p, "BSR" );
+	if (!bsr) {
+		printf( "%s(%s:%d) Boundary Scan Register (BSR) not found\n", __FUNCTION__, __FILE__, __LINE__ );
+		return -1;
+	}
+
 	/* search signal */
-	signal *s = p->signals;
+	s = p->signals;
 	while (s) {
 		if (strcmp( pname, s->name ) == 0)
 			break;
@@ -189,7 +198,7 @@ part_get_signal( part *p, const char *pname )
 		return -1;
 	}
 
-	return p->prev_bsr->data[s->input->bit];
+	return bsr->value->data[s->input->bit];
 }
 
 /* parts */

@@ -42,14 +42,11 @@ struct part {
 	data_register *data_registers;
 	int boundary_length;
 	bsbit **bsbits;
-	tap_register *idr;
-	tap_register *bsr;
-	tap_register *prev_bsr;
 };
 
 part *part_alloc( void );
 void part_free( part *p );
-part *read_part( FILE *f, const tap_register *idr );
+part *read_part( FILE *f, tap_register *idr );
 instruction *part_find_instruction( part *p, const char *iname );
 data_register *part_find_data_register( part *p, const char *drname );
 void part_set_signal( part *p, const char *pname, int out, int val );

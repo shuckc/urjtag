@@ -39,7 +39,7 @@ get_token( char *buf )
 }
 
 part *
-read_part( FILE *f, const tap_register *idr )
+read_part( FILE *f, tap_register *idr )
 {
 	int line = 0;
 	part *part;
@@ -52,8 +52,6 @@ read_part( FILE *f, const tap_register *idr )
 		printf( "out of memory\n" );
 		return NULL;
 	}
-
-	part->idr = register_duplicate( idr );
 
 	for (;;) {
 		char *t;
@@ -122,6 +120,7 @@ read_part( FILE *f, const tap_register *idr )
 			dr->next = part->data_registers;
 			part->data_registers = dr;
 
+			/* Boundary Scan Register */
 			if (strcmp( dr->name, "BSR" ) == 0) {
 				int i;
 
@@ -134,6 +133,10 @@ read_part( FILE *f, const tap_register *idr )
 				for (i = 0; i < part->boundary_length; i++)
 					part->bsbits[i] = NULL;
 			}
+
+			/* Device Identification Register */
+			if (strcmp( dr->name, "DIR" ) == 0)
+				register_init( dr->value, register_get_string( idr ) );
 
 			continue;
 		}
