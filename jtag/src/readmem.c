@@ -50,6 +50,7 @@ readmem( parts *ps )
 	uint8_t boot_sel;
 	int o = 0;
 	int d = 0;
+	cfi_query_structure_t *cfi;
 #define	D_SA1110	1
 #define	D_PXA250	2
 
@@ -116,128 +117,126 @@ readmem( parts *ps )
 	part_set_instruction( p, "EXTEST" );
 	parts_shift_instructions( ps );
 
+	cfi = detect_cfi( ps );
+
 	/* detect CFI capable devices */
-	bus_write( ps, 0x55 << o, 0x00980098 );		/* see 3.1 in [1] */
-	if (bus_read( ps, 0x10 << o ) != (('Q' << 16) | 'Q')) {
-		printf( "No CFI device detected (Q)!\n" );
-		return;
-	}
-	if (bus_read( ps, 0x11 << o ) != (('R' << 16) | 'R')) {
-		printf( "No CFI device detected (R)!\n" );
-		return;
-	}
-	if (bus_read( ps, 0x12 << o ) != (('Y' << 16) | 'Y')) {
-		printf( "No CFI device detected (Y)!\n" );
-		return;
-	}
-
-	printf( "\n2 x 16 bit CFI devices detected (QRY ok)!\n\n" );
-
 	/* TODO: Low chip only */
 	/* see 3.3.2 in [1] */
 	printf( "CFI Query Identification String:\n" );
-	printf( "\tPrimary Vendor Command Set and Control Interface ID Code: 0x%02X%02X ", (uint8_t) bus_read( ps, 0x14 << o ), (uint8_t) bus_read( ps, 0x13 << o ) );
-	{
-		/* see Section 1. in [4] */
-		uint16_t id = ((bus_read( ps, 0x14 << o ) & 0xFF) << 8) | (bus_read( ps, 0x13 << o ) & 0xFF);
-
-		switch (id) {
-			case CFI_VENDOR_NULL:
-				printf( "(null)\n" );
-				break;
-			case CFI_VENDOR_INTEL_ECS:
-				printf( "(Intel/Sharp Extended Command Set)\n" );
-				break;
-			case CFI_VENDOR_AMD_SCS:
-				printf( "(AMD/Fujitsu Standard Commanf Set)\n" );
-				break;
-			case CFI_VENDOR_INTEL_SCS:
-				printf( "(Intel Standard Command Set)\n" );
-				break;
-			case CFI_VENDOR_AMD_ECS:
-				printf( "(AMD/Fujitsu Extended Command Set)\n" );
-				break;
-			case CFI_VENDOR_MITSUBISHI_SCS:
-				printf( "(Mitsubishi Standard Command Set)\n" );
-				break;
-			case CFI_VENDOR_MITSUBISHI_ECS:
-				printf( "(Mitsubishi Extended Command Set)\n" );
-				break;
-			case CFI_VENDOR_SST_PWCS:
-				printf( "(Page Write Command Set)\n" );
-				break;
-			default:
-				printf( "(unknown!!!)\n" );
-				break;
-		}
+	printf( "\tPrimary Vendor Command Set and Control Interface ID Code: 0x%04X ", cfi->identification_string.pri_id_code );
+	/* see Section 1. in [4] */
+	switch (cfi->identification_string.pri_id_code) {
+		case CFI_VENDOR_NULL:
+			printf( "(null)\n" );
+			break;
+		case CFI_VENDOR_INTEL_ECS:
+			printf( "(Intel/Sharp Extended Command Set)\n" );
+			break;
+		case CFI_VENDOR_AMD_SCS:
+			printf( "(AMD/Fujitsu Standard Commanf Set)\n" );
+			break;
+		case CFI_VENDOR_INTEL_SCS:
+			printf( "(Intel Standard Command Set)\n" );
+			break;
+		case CFI_VENDOR_AMD_ECS:
+			printf( "(AMD/Fujitsu Extended Command Set)\n" );
+			break;
+		case CFI_VENDOR_MITSUBISHI_SCS:
+			printf( "(Mitsubishi Standard Command Set)\n" );
+			break;
+		case CFI_VENDOR_MITSUBISHI_ECS:
+			printf( "(Mitsubishi Extended Command Set)\n" );
+			break;
+		case CFI_VENDOR_SST_PWCS:
+			printf( "(Page Write Command Set)\n" );
+			break;
+		default:
+			printf( "(unknown!!!)\n" );
+			break;
 	}
-	printf( "\tAddress of Primary Algorithm extended Query table: P = 0x%02X%02X\n", (uint8_t) bus_read( ps, 0x16 << o ), (uint8_t) bus_read( ps, 0x15 << o ) );
-	printf( "\tAlternate Vendor Command Set and Control Interface ID Code: 0x%02X%02X (TODO)\n", (uint8_t) bus_read( ps, 0x18 << o ), (uint8_t) bus_read( ps, 0x17 << o ) );
-	printf( "\tAddress of Alternate Algorithm extended Query table: A = 0x%02X%02X\n", (uint8_t) bus_read( ps, 0x1A << o ), (uint8_t) bus_read( ps, 0x19 << o ) );
+	printf( "\tAddress of Primary Algorithm extended Query table: P = 0x????\n" );
+	printf( "\tAlternate Vendor Command Set and Control Interface ID Code: 0x%04X ", cfi->identification_string.alt_id_code );
+	switch (cfi->identification_string.alt_id_code) {
+		case CFI_VENDOR_NULL:
+			printf( "(null)\n" );
+			break;
+		case CFI_VENDOR_INTEL_ECS:
+			printf( "(Intel/Sharp Extended Command Set)\n" );
+			break;
+		case CFI_VENDOR_AMD_SCS:
+			printf( "(AMD/Fujitsu Standard Commanf Set)\n" );
+			break;
+		case CFI_VENDOR_INTEL_SCS:
+			printf( "(Intel Standard Command Set)\n" );
+			break;
+		case CFI_VENDOR_AMD_ECS:
+			printf( "(AMD/Fujitsu Extended Command Set)\n" );
+			break;
+		case CFI_VENDOR_MITSUBISHI_SCS:
+			printf( "(Mitsubishi Standard Command Set)\n" );
+			break;
+		case CFI_VENDOR_MITSUBISHI_ECS:
+			printf( "(Mitsubishi Extended Command Set)\n" );
+			break;
+		case CFI_VENDOR_SST_PWCS:
+			printf( "(Page Write Command Set)\n" );
+			break;
+		default:
+			printf( "(unknown!!!)\n" );
+			break;
+	}
+	printf( "\tAddress of Alternate Algorithm extended Query table: A = 0x????\n" );
 
 	/* see 3.3.3 in [1] */
 	printf( "CFI Query System Interface Information:\n" );
-	printf( "\tVcc Logic Supply Minimum Write/Erase voltage: %d.%d V\n", (bus_read( ps, 0x1B << o ) >> 4) & 0xF, bus_read( ps, 0x1B << o ) & 0xF );
-	printf( "\tVcc Logic Supply Maximum Write/Erase voltage: %d.%d V\n", (bus_read( ps, 0x1C << o ) >> 4) & 0xF, bus_read( ps, 0x1C << o ) & 0xF );
-	printf( "\tVpp [Programming] Logic Supply Minimum Write/Erase voltage: %d.%d V\n", (bus_read( ps, 0x1D << o ) >> 4) & 0xF, bus_read( ps, 0x1D << o ) & 0xF );
-	printf( "\tVpp [Programming] Logic Supply Maximum Write/Erase voltage: %d.%d V\n", (bus_read( ps, 0x1E << o ) >> 4) & 0xF, bus_read( ps, 0x1E << o ) & 0xF );
-	printf( "\tTypical timeout per single byte/word write: %d us (0x%02X)\n", 1 << (bus_read( ps, 0x1F << o ) & 0xFF), bus_read( ps, 0x1F << o ) & 0xFF );
-	printf( "\tTypical timeout for minimum-size buffer write: %d us (0x%02X)\n", 1 << (bus_read( ps, 0x20 << o ) & 0xFF), bus_read( ps, 0x20 << o ) & 0xFF );
-	printf( "\tTypical timeout per individual block erase: %d ms (0x%02X)\n", 1 << (bus_read( ps, 0x21 << o ) & 0xFF), bus_read( ps, 0x21 << o ) & 0xFF );
-	printf( "\tTypical timeout for full chip erase: %d ms (0x%02X)\n", 1 << (bus_read( ps, 0x22 << o ) & 0xFF), bus_read( ps, 0x22 << o ) & 0xFF );
-	printf( "\tMaximum timeout for byte/word write: %d us (0x%02X)\n", 1 << ((bus_read( ps, 0x23 << o ) + bus_read( ps, 0x1F << o )) & 0xFF), bus_read( ps, 0x23 << o ) & 0xFF );
-	printf( "\tMaximum timeout for buffer write: %d us (0x%02X)\n", 1 << ((bus_read( ps, 0x24 << o ) + bus_read( ps, 0x20 << o )) & 0xFF), bus_read( ps, 0x24 << o ) & 0xFF );
-	printf( "\tMaximum timeout per individual block erase: %d ms (0x%02X)\n", 1 << ((bus_read( ps, 0x25 << o ) + bus_read( ps, 0x21 << o )) & 0xFF), bus_read( ps, 0x25 << o ) & 0xFF );
-	printf( "\tMaximum timeout for chip erase: %d ms (0x%02X)\n", 1 << ((bus_read( ps, 0x26 << o ) + bus_read( ps, 0x22 << o )) & 0xFF), bus_read( ps, 0x26 << o ) & 0xFF );
+	printf( "\tVcc Logic Supply Minimum Write/Erase voltage: %d mV\n", cfi->system_interface_info.vcc_min_wev );
+	printf( "\tVcc Logic Supply Maximum Write/Erase voltage: %d mV\n", cfi->system_interface_info.vcc_max_wev );
+	printf( "\tVpp [Programming] Logic Supply Minimum Write/Erase voltage: %d mV\n", cfi->system_interface_info.vpp_min_wev );
+	printf( "\tVpp [Programming] Logic Supply Maximum Write/Erase voltage: %d mV\n", cfi->system_interface_info.vpp_max_wev );
+	printf( "\tTypical timeout per single byte/word write: %d us\n", cfi->system_interface_info.typ_single_write_timeout );
+	printf( "\tTypical timeout for minimum-size buffer write: %d us\n", cfi->system_interface_info.typ_buffer_write_timeout );
+	printf( "\tTypical timeout per individual block erase: %d ms\n", cfi->system_interface_info.typ_block_erase_timeout );
+	printf( "\tTypical timeout for full chip erase: %d ms\n", cfi->system_interface_info.typ_chip_erase_timeout );
+	printf( "\tMaximum timeout for byte/word write: %d us\n", cfi->system_interface_info.max_single_write_timeout );
+	printf( "\tMaximum timeout for buffer write: %d us\n", cfi->system_interface_info.max_buffer_write_timeout );
+	printf( "\tMaximum timeout per individual block erase: %d ms\n", cfi->system_interface_info.max_block_erase_timeout );
+	printf( "\tMaximum timeout for chip erase: %d ms\n", cfi->system_interface_info.max_chip_erase_timeout );
 
 	/* see 3.3.4 in [1] */
 	printf( "Device Geometry Definition:\n" );
-	printf( "\tDevice Size: %d B (0x%02X)\n", 1 << (bus_read( ps, 0x27 << o ) & 0xFF), bus_read( ps, 0x27 << o ) & 0xFF );
-	printf( "\tFlash Device Interface description: 0x%02X%02X ", bus_read( ps, 0x29 << o ) & 0xFF, bus_read( ps, 0x28 << o ) & 0xFF );
-	{
-		/* see Section 2. in [4] */
-		uint16_t id = ((bus_read( ps, 0x29 << o ) & 0xFF) << 8) | (bus_read( ps, 0x28 << o ) & 0xFF);
-
-		switch (id) {
-			case CFI_INTERFACE_X8:
-				printf( "(x8)\n" );
-				break;
-			case CFI_INTERFACE_X16:
-				printf( "(x16)\n" );
-				break;
-			case CFI_INTERFACE_X8_X16:
-				printf( "(x8/x16)\n" );
-				break;
-			case CFI_INTERFACE_X32:
-				printf( "(x32)\n" );
-				break;
-			case CFI_INTERFACE_X16_X32:
-				printf( "(x16/x32)\n" );
-				break;
-			default:
-				printf( "(unknown!!!)\n" );
-				break;
-		}
+	printf( "\tDevice Size: %d B\n", cfi->device_geometry.device_size );
+	printf( "\tFlash Device Interface description: 0x%04X ", cfi->device_geometry.device_interface );
+	/* see Section 2. in [4] */
+	switch (cfi->device_geometry.device_interface) {
+		case CFI_INTERFACE_X8:
+			printf( "(x8)\n" );
+			break;
+		case CFI_INTERFACE_X16:
+			printf( "(x16)\n" );
+			break;
+		case CFI_INTERFACE_X8_X16:
+			printf( "(x8/x16)\n" );
+			break;
+		case CFI_INTERFACE_X32:
+			printf( "(x32)\n" );
+			break;
+		case CFI_INTERFACE_X16_X32:
+			printf( "(x16/x32)\n" );
+			break;
+		default:
+			printf( "(unknown!!!)\n" );
+			break;
 	}
-	printf( "\tMaximum number of bytes in multi-byte write: %d\n", 1 << (((bus_read( ps, 0x2B << o ) & 0xFF) << 8) | (bus_read( ps, 0x2A << o ) & 0xFF)) );
-	printf( "\tNumber of Erase Block Regions within device: %d\n", bus_read( ps, 0x2C << o ) & 0xFF );
+	printf( "\tMaximum number of bytes in multi-byte write: %d\n", cfi->device_geometry.max_bytes_write );
+	printf( "\tNumber of Erase Block Regions within device: %d\n", cfi->device_geometry.number_of_erase_regions );
 	printf( "\tErase Block Region Information:\n" );
-	
 	{
-		int a = 0x2D;
-		int c = bus_read( ps, 0x2C << o ) & 0xFF;
 		int i;
 
-		for (i = 0; i < c; i++, a += 4) {
-			uint32_t z = ((bus_read( ps, (a + 3) << o ) & 0xFF) << 16) | ((bus_read( ps, (a + 2) << o ) & 0xFF) << 8);
-			uint32_t y = ((bus_read( ps, (a + 1) << o ) & 0xFF) << 8) | (bus_read( ps, a << o ) & 0xFF);
-
+		for (i = 0; i < cfi->device_geometry.number_of_erase_regions; i++) {
 			printf( "\t\tRegion %d:\n", i );
-
-			if (z == 0)
-				z = 128;
-			printf( "\t\t\tErase Block Size: %d\n", z );
-			printf( "\t\t\tNumber of Erase Blocks: %d\n", y + 1 );
+			printf( "\t\t\tErase Block Size: %d\n", cfi->device_geometry.erase_block_regions[i].erase_block_size );
+			printf( "\t\t\tNumber of Erase Blocks: %d\n", cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks );
 		}
 	}
 
