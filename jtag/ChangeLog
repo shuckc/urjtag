@@ -1,3 +1,10 @@
+2004-08-24  Marcel Telka  <marcel@telka.sk>
+
+	* src/bus/Makefile.am (libbus_a_SOURCES): Added ppc440gx_ebc8.c.
+	* src/bus/buses.c (bus_drivers): Added ppc440gx_ebc8_bus (patch 1012154, Jerome Debard).
+	* src/bus/buses.h: Ditto.
+	* src/bus/ppc440gx_ebc8.c: New file (patch 1012154, Jerome Debard).
+
 2004-08-20  Marcel Telka  <marcel@telka.sk>
 
 	* src/bus/pxa2x0.c (pxa2x0_bus_init): New function.

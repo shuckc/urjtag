@@ -53,6 +53,7 @@ JTAG-aware parts (chips):
 - Hitachi HD64465
 - Hitachi SH7727
 - Hitachi SH7729
+- IBM PowerPC 440GX
 - Intel IXP425
 - Intel SA1110
 - Intel PXA250/PXA255/PXA260/PXA261/PXA262/PXA263
