@@ -1,5 +1,14 @@
 2003-06-18  Marcel Telka  <marcel@telka.sk>
 
+	* flash/amd.c (amd_flash_autodetect): Function renamed ...
+	(amd_flash_autodetect32): ... to this one (patch 772499, Matan Ziv-Av).
+	(amd_flash_autodetect8): New function (patch 772499, Matan Ziv-Av).
+	(amdstatus29, amdisprotected, amd_flash_print_info, amd_flash_erase_block, amd_flash_program): Local
+		variable 'o' becomes global (patch 772499, Matan Ziv-Av).
+	(amd_8_flash_driver): Added new driver (patch 772499, Matan Ziv-Av).
+
+2003-06-18  Marcel Telka  <marcel@telka.sk>
+
 	* flash/cfi.c (read2): Fixed operator precedence in macro.
 	(cfi_detect): Fixed CFI detection code (based on patch 753295, Matan Ziv-Av).
 	* flash/intel.c (intel_flash_autodetect8): New function (patch 753295, Matan Ziv-Av).

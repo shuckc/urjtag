@@ -52,13 +52,24 @@ static int amd_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr );
 static int amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
 static void amd_flash_read_array( cfi_array_t *cfi_array ); 
 
+static int o;
+
 /* autodetect, we can handle this chip */
 static int 
-amd_flash_autodetect( cfi_array_t *cfi_array )
+amd_flash_autodetect32( cfi_array_t *cfi_array )
 {
+	if(cfi_array->bus_width != 4) return 0;
+	o = 2; /* Heuristic */	
 	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
 }
 
+static int 
+amd_flash_autodetect8( cfi_array_t *cfi_array )
+{
+	if(cfi_array->bus_width != 1) return 0;
+	o = 1; /* Heuristic */
+	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
+}
 /*
  * check device status
  *   1/true   PASS
@@ -71,7 +82,6 @@ amd_flash_autodetect( cfi_array_t *cfi_array )
 static int
 amdstatus29( parts *ps, uint32_t adr, uint32_t data )
 {
-	int o = 2;
 	int timeout;
 	uint32_t dq7mask = ((1 << 7) << 16) + (1 << 7);
 	uint32_t dq5mask = ((1 << 5) << 16) + (1 << 5);
@@ -134,7 +144,6 @@ static int
 amdisprotected( parts *ps, uint32_t adr )
 {
 	uint32_t data;
-	int o = 2;
 
 	bus_write( ps, 0x0555 << o, 0x00aa00aa );	/* autoselect p29, sector erase */
 	bus_write( ps, 0x02aa << o, 0x00550055 );
@@ -151,7 +160,6 @@ amdisprotected( parts *ps, uint32_t adr )
 static void
 amd_flash_print_info( cfi_array_t *cfi_array )
 {
-	int o = 2;
 	int mid, cid, prot;
 	bus_t *bus = cfi_array->bus;
 
@@ -186,7 +194,6 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 static int
 amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 {
-	int o = 2;
 	bus_t *bus = cfi_array->bus;
 
 	printf("flash_erase_block 0x%08X\n", adr);
@@ -222,7 +229,6 @@ amd_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr )
 static int
 amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
-	int o = 2;
 	int status;
 	bus_t *bus = cfi_array->bus;
 
@@ -251,7 +257,19 @@ flash_driver_t amd_32_flash_driver = {
 	4, /* buswidth */
 	N_("AMD/Fujitsu Standard Command Set"),
 	N_("supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"),
-	amd_flash_autodetect,
+	amd_flash_autodetect32,
+	amd_flash_print_info,
+	amd_flash_erase_block,
+	amd_flash_unlock_block,
+	amd_flash_program,
+	amd_flash_read_array,
+};
+
+flash_driver_t amd_8_flash_driver = {
+	1, /* buswidth */
+	N_("AMD/Fujitsu Standard Command Set"),
+	N_("supported: AMD 29LV160; 1x8 Bit"),
+	amd_flash_autodetect8,
 	amd_flash_print_info,
 	amd_flash_erase_block,
 	amd_flash_unlock_block,

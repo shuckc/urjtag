@@ -1,3 +1,4 @@
 $Id$
 
+2003-08-11: Added support for 1 x 8 bit AMD Flash (patch 772499, Matan Ziv-Av).
 2003-06-18: Added support for 1 x 8 bit Intel Flash (patch 753295, Matan Ziv-Av).
