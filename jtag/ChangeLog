@@ -1,3 +1,7 @@
+2003-01-10  Marcel Telka  <marcel@telka.sk>
+
+	* src/tap/cable.c: Added missing stdlib.h include (bug 665923). Thanks to Chris Ellec.
+
 2003-01-09  Marcel Telka  <marcel@telka.sk>
 
 	* src/jtag.c (main): Fixed minor typo in 'cable' output message.

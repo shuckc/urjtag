@@ -22,6 +22,8 @@
  *
  */
 
+#include <stdlib.h>
+
 #include "cable.h"
 
 extern cable_driver_t dlc5_cable_driver;
