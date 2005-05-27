@@ -1,3 +1,10 @@
+2005-05-27  Branislav Petrovsky  <brano111@szm.sk>
+
+	* h8/h8s2357/adc.h: New file.
+	* h8/h8s2357/sci.h: Ditto.
+	* h8/h8s2357/tpu.h: Ditto.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added new files.
+
 2004-12-20  Marcel Telka  <marcel@telka.sk>
 
 	* device/other/hd64461/afe.h: New file.
