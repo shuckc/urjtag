@@ -1,5 +1,10 @@
 2005-05-27  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h8s2357/ports.h: New file.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added new files.
+
+2005-05-27  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h8s2357/dac.h: New file.
 	* h8/h8s2357/flash.h: Ditto.
 	* h8/h8s2357/timer.h: Ditto.
