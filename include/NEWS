@@ -1,9 +1,8 @@
 $Id$
 
-	* Added Renesas H8S/2357 registers.
-
 include-0.3.3:
 
+	* Added Renesas H8S/2357 registers.
 	* Added Renesas SH7750 CCN registers.
 	* Added Hitiachi HD64461 registers.
 	* Added more manufacturer entries into Manufacturer's Identification Code database.
