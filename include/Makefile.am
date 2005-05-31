@@ -90,8 +90,10 @@ nobase_openwinceinc_HEADERS = \
 	h8/h8s2357/bus.h \
 	h8/h8s2357/dac.h \
 	h8/h8s2357/dmac.h \
+	h8/h8s2357/dtc.h \
 	h8/h8s2357/flash.h \
 	h8/h8s2357/ic.h \
+	h8/h8s2357/mcu.h \
 	h8/h8s2357/ports.h \
 	h8/h8s2357/ppg.h \
 	h8/h8s2357/sci.h \

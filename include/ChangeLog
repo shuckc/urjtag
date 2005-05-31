@@ -1,5 +1,11 @@
 2005-05-31  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h8s2357/dtc.h: New file.
+	* h8/h8s2357/mcu.h: Ditto.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added new files.
+
+2005-05-31  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h8s2357/bus.h: New file.
 	* h8/h8s2357/dmac.h: Ditto.
 	* h8/h8s2357/ic.h: Ditto.
