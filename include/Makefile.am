@@ -87,12 +87,17 @@ nobase_openwinceinc_HEADERS = \
 	device/other/hd64461/stbsys.h \
 	device/other/hd64461/timer.h \
 	h8/h8s2357/adc.h \
+	h8/h8s2357/bus.h \
 	h8/h8s2357/dac.h \
+	h8/h8s2357/dmac.h \
 	h8/h8s2357/flash.h \
+	h8/h8s2357/ic.h \
 	h8/h8s2357/ports.h \
+	h8/h8s2357/ppg.h \
 	h8/h8s2357/sci.h \
 	h8/h8s2357/timer.h \
 	h8/h8s2357/tpu.h \
+	h8/h8s2357/wdt.h \
 	sh/sh7750/ccn.h \
 	std/mic.h
 
