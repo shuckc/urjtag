@@ -67,7 +67,7 @@ typedef struct WDT_registers {
 			uint16_t rstcsr;
 		} _write;
 		struct {
-			uint8_r __reserved;
+			uint8_t __reserved;
 			uint8_t rstcsr;
 		} _read;
 	} _rstcsr;
