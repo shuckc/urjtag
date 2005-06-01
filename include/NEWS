@@ -2,6 +2,7 @@ $Id$
 
 include-0.3.3:
 
+	* Added Renesas H8/3048 registers.
 	* Added Renesas H8S/2357 registers.
 	* Added Renesas SH7750 CCN registers.
 	* Added Hitiachi HD64461 registers.

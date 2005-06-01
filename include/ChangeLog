@@ -1,5 +1,18 @@
 2005-06-01  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h83048/adc.h: New file.
+	* h8/h83048/dac.h: Ditto.
+	* h8/h83048/dmac.h: Ditto.
+	* h8/h83048/flash.h: Ditto.
+	* h8/h83048/ic.h: Ditto.
+	* h8/h83048/itu.h: Ditto.
+	* h8/h83048/other.h: Ditto.
+	* h8/h83048/ports.h: Ditto.
+	* h8/h83048/sci.h: Ditto.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added new files.
+
+2005-06-01  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h8s2357/wdt.h (__reserved): Fixed variable type.
 
 2005-06-01  Branislav Petrovsky  <brano111@szm.sk>
