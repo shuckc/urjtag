@@ -1,3 +1,8 @@
+2005-06-01  Branislav Petrovsky  <brano111@szm.sk>
+
+	* h8/h8s2357/dmac.h (DMABCR_FAE1, DMABCR_FAE0, DMABCR_DTIE1B, DMABCR_DTIE1A)
+	(DMABCR_DTIE0B, DMABCR_DTIE0A): Fixed constants multiple definition.
+
 2005-05-31  Branislav Petrovsky  <brano111@szm.sk>
 
 	* h8/h8s2357/dtc.h: New file.

@@ -168,17 +168,11 @@ typedef struct DMAC_registers {
 #define DMABCR_DTIE0A		bit(0)
 
 /* DMABCR bits - full address mode */
-#define DMABCR_FAE1		bit(15)
-#define DMABCR_FAE0		bit(14)
 #define DMABCR_DTA1		bit(11)
 #define DMABCR_DTA0		bit(9)
 #define DMABCR_DTME1		bit(7)
 #define DMABCR_DTE1		bit(6)
 #define DMABCR_DTME0		bit(5)
 #define DMABCR_DTE0		bit(4)
-#define DMABCR_DTIE1B		bit(3)
-#define DMABCR_DTIE1A		bit(2)
-#define DMABCR_DTIE0B		bit(1)
-#define DMABCR_DTIE0A		bit(0)
 
 #endif /* H8S2357_DMAC_H */
