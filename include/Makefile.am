@@ -94,7 +94,10 @@ nobase_openwinceinc_HEADERS = \
 	h8/h83048/itu.h \
 	h8/h83048/other.h \
 	h8/h83048/ports.h \
+	h8/h83048/rc.h \
 	h8/h83048/sci.h \
+	h8/h83048/tpc.h \
+	h8/h83048/wdt.h \
 	h8/h8s2357/adc.h \
 	h8/h8s2357/bus.h \
 	h8/h8s2357/dac.h \

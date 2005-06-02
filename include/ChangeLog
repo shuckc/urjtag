@@ -1,5 +1,12 @@
 2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h83048/rc.h: New file.
+	* h8/h83048/tpc.h: Ditto.
+	* h8/h83048/wdt.h: Ditto.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added new files.
+
+2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h8s2357/wdt.h (TCSR_OWF): Constant renamed to ...
 	(TCSR_OVF): ... this one.
 
