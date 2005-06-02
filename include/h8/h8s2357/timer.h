@@ -66,50 +66,50 @@ typedef struct TIMER_registers {
 
 #define TIMER_pointer	((TIMER_registers_t*) TIMER_BASE)
 
-#define TCR0		TIMER_pointer->tcr0
-#define TCR1		TIMER_pointer->tcr1
-#define TCSR0		TIMER_pointer->tcsr0
-#define TCSR1		TIMER_pointer->tcsr1
-#define TCORA0		TIMER_pointer->tcora0
-#define TCORA1		TIMER_pointer->tcora1
-#define TCORB0		TIMER_pointer->tcorb0
-#define TCORB1		TIMER_pointer->tcorb1
-#define TCNT0		TIMER_pointer->tcnt0
-#define TCNT1		TIMER_pointer->tcnt1
+#define TIMER_TCR0		TIMER_pointer->tcr0
+#define TIMER_TCR1		TIMER_pointer->tcr1
+#define TIMER_TCSR0		TIMER_pointer->tcsr0
+#define TIMER_TCSR1		TIMER_pointer->tcsr1
+#define TIMER_TCORA0		TIMER_pointer->tcora0
+#define TIMER_TCORA1		TIMER_pointer->tcora1
+#define TIMER_TCORB0		TIMER_pointer->tcorb0
+#define TIMER_TCORB1		TIMER_pointer->tcorb1
+#define TIMER_TCNT0		TIMER_pointer->tcnt0
+#define TIMER_TCNT1		TIMER_pointer->tcnt1
 #endif /* LANGUAGE == C */
 
-#define TCR0_OFFSET	0x00
-#define TCR1_OFFSET	0x01
-#define TCSR0_OFFSET	0x02
-#define TCSR1_OFFSET	0x03
-#define TCORA0_OFFSET	0x04
-#define TCORA1_OFFSET	0x05
-#define TCORB0_OFFSET	0x06
-#define TCORB1_OFFSET	0x07
-#define TCNT0_OFFSET	0x08
-#define TCNT1_OFFSET	0x09
+#define TIMER_TCR0_OFFSET	0x00
+#define TIMER_TCR1_OFFSET	0x01
+#define TIMER_TCSR0_OFFSET	0x02
+#define TIMER_TCSR1_OFFSET	0x03
+#define TIMER_TCORA0_OFFSET	0x04
+#define TIMER_TCORA1_OFFSET	0x05
+#define TIMER_TCORB0_OFFSET	0x06
+#define TIMER_TCORB1_OFFSET	0x07
+#define TIMER_TCNT0_OFFSET	0x08
+#define TIMER_TCNT1_OFFSET	0x09
 
 /* TCR bits */
-#define TCR_CMIEB	bit(7)
-#define TCR_CMIEA	bit(6)
-#define TCR_OVIE	bit(5)
-#define TCR_CCLR_MASK	bits(4,3)
-#define TCR_CCLR(x)	bits_val(4,3,x)
-#define get_TCR_CCLR(x)	bits_get(4,3,x)
-#define TCR_CKS_MASK	bits(2,0)
-#define TCR_CKS(x)	bits_val(2,0,x)
-#define get_TCR_CKS(x)	bits_get(2,0,x)
+#define TIMER_TCR_CMIEB		bit(7)
+#define TIMER_TCR_CMIEA		bit(6)
+#define TIMER_TCR_OVIE		bit(5)
+#define TIMER_TCR_CCLR_MASK	bits(4,3)
+#define TIMER_TCR_CCLR(x)	bits_val(4,3,x)
+#define get_TIMER_TCR_CCLR(x)	bits_get(4,3,x)
+#define TIMER_TCR_CKS_MASK	bits(2,0)
+#define TIMER_TCR_CKS(x)	bits_val(2,0,x)
+#define get_TIMER_TCR_CKS(x)	bits_get(2,0,x)
 
 /* TCSR bits */
-#define TCSR_CMFB	bit(7)
-#define TCSR_CMFA	bit(6)
-#define TCSR_OVF	bit(5)
-#define TCSR_ADTE	bit(4) /* only for TCSR0 */
-#define TCSR_OSB_MASK	bits(3,2)
-#define TCSR_OSB(x)	bits_val(3,2,x)
-#define get_TCSR_OSB(x)	bits_get(3,2,x)
-#define TCSR_OSA_MASK	bits(1,0)
-#define TCSR_OSA(x)	bits_val(1,0,x)
-#define get_TCSR_OSA(x)	bits_get(1,0,x)
+#define TIMER_TCSR_CMFB		bit(7)
+#define TIMER_TCSR_CMFA		bit(6)
+#define TIMER_TCSR_OVF		bit(5)
+#define TIMER_TCSR_ADTE		bit(4) /* only for TCSR0 */
+#define TIMER_TCSR_OSB_MASK	bits(3,2)
+#define TIMER_TCSR_OSB(x)	bits_val(3,2,x)
+#define get_TIMER_TCSR_OSB(x)	bits_get(3,2,x)
+#define TIMER_TCSR_OSA_MASK	bits(1,0)
+#define TIMER_TCSR_OSA(x)	bits_val(1,0,x)
+#define get_TIMER_TCSR_OSA(x)	bits_get(1,0,x)
 
 #endif /* H8S2357_TIMER_H */

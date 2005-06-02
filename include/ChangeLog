@@ -1,5 +1,10 @@
 2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h8s2357/timer.h: Added prefix TIMER to registers constants - fixed
+		collisions with constants in tpu.h and wdt.h.
+
+2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h83048/rc.h: New file.
 	* h8/h83048/tpc.h: Ditto.
 	* h8/h83048/wdt.h: Ditto.
