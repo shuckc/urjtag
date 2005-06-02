@@ -90,7 +90,7 @@ typedef struct WDT_registers {
 #define RSTCSR_OFFSET_r	0x03
 
 /* TCSR bits */
-#define TCSR_OWF	bit(7)
+#define TCSR_OVF	bit(7)
 #define TCSR_WTIT	bit(6)
 #define TCSR_TME	bit(5)
 #define TCSR_CKS_MASK	bits(2,0)

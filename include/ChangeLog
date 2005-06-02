@@ -1,5 +1,10 @@
 2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h8s2357/wdt.h (TCSR_OWF): Constant renamed to ...
+	(TCSR_OVF): ... this one.
+
+2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h83048/itu.h: Added registers bit names.
 
 2005-06-01  Branislav Petrovsky  <brano111@szm.sk>
