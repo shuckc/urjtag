@@ -189,5 +189,78 @@ typedef struct ITU_common2_registers {
 #define TOER_OFFSET	0x00
 #define TOCR_OFFSET	0x01
 
+/* TCR bits */
+#define TCR_CCLR_MASK		bits(6,5)
+#define TCR_CCLR(x)		bits_val(6,5,x)
+#define get_TCR_CCLR(x)		bits_get(6,5,x)
+#define TCR_CKEG_MASK		bits(4,3)
+#define TCR_CKEG(x)		bits_val(4,3,x)
+#define get_TCR_CKEG(x)		bits_get(4,3,x)
+#define TCR_TPSC_MASK		bits(2,0)
+#define TCR_TPSC(x)		bits_val(2,0,x)
+#define get_TCR_TPSC(x)		bits_get(2,0,x)
+
+/* TIOR bits */
+#define TIOR_IOB_MASK		bits(6,4)
+#define TIOR_IOB(x)		bits_val(6,4,x)
+#define get_TIOR_IOB(x)		bits_get(6,4,x)
+#define TIOR_IOA_MASK		bits(2,0)
+#define TIOR_IOA(x)		bits_val(2,0,x)
+#define get_TIOR_IOA(x)		bits_get(2,0,x)
+
+/* TIER bits */
+#define TIER_OVIE		bit(2)
+#define TIER_IMIEB		bit(1)
+#define TIER_IMIEA		bit(0)
+
+/* TSR bits */
+#define TSR_OVF			bit(2)
+#define TSR_IMFB		bit(1)
+#define TSR_IMFA		bit(0)
+
+/* TSTR bits */
+#define TSTR_STR4		bit(4)
+#define TSTR_STR3		bit(3)
+#define TSTR_STR2		bit(2)
+#define TSTR_STR1		bit(1)
+#define TSTR_STR0		bit(0)
+
+/* TSNC bits */
+#define TSNC_SYNC4		bit(4)
+#define TSNC_SYNC3		bit(3)
+#define TSNC_SYNC2		bit(2)
+#define TSNC_SYNC1		bit(1)
+#define TSNC_SYNC0		bit(0)
+
+/* TMDR bits */
+#define TMDR_MDF		bit(6)
+#define TMDR_FDIR		bit(5)
+#define TMDR_PWM4		bit(4)
+#define TMDR_PWM3		bit(3)
+#define TMDR_PWM2		bit(2)
+#define TMDR_PWM1		bit(1)
+#define TMDR_PWM0		bit(0)
+
+/* TFCR bits */
+#define TFCR_CMD_MASK		bits(5,4)
+#define TFCR_CMD(x)		bits_val(5,4,x)
+#define get_TFCR_CMD(x)		bits_get(5,4,x)
+#define TFCR_BFB4		bit(3)
+#define TFCR_BFA4		bit(2)
+#define TFCR_BFB3		bit(1)
+#define TFCR_BFA3		bit(0)
+
+/* TOER bits */
+#define TOER_EXB4		bit(5)
+#define TOER_EXA4		bit(4)
+#define TOER_EB3		bit(3)
+#define TOER_EB4		bit(2)
+#define TOER_EA4		bit(1)
+#define TOER_EA3		bit(0)
+
+/* TOCR bits */
+#define TOCR_XTGD		bit(4)
+#define TOCR_OLS4		bit(1)
+#define TOCR_OLS3		bit(0)
 
 #endif /* H83048_ITU_H */
