@@ -206,6 +206,15 @@ typedef struct TPU_common_registers {
 #define TIORL_IOC(x)		bits_val(3,0,x)
 #define get_TIORL_IOC(x)	bits_get(3,0,x)
 
+/* TIER bits */
+#define TIER_TTGE		bit(7)
+#define TIER_TCIEU		bit(5) /* only for TPU1, TPU2, TPU4, TPU5 */
+#define TIER_TCIEV		bit(4)
+#define TIER_TGIED		bit(3) /* only for TPU0 and TPU3 */
+#define TIER_TGIEC		bit(2) /* only for TPU0 and TPU3 */
+#define TIER_TGIEB		bit(1)
+#define TIER_TGIEA		bit(0)
+
 /* TSR bits */
 #define TSR_TCFD		bit(7) /* only for TPU1, TPU2, TPU4, TPU5 */
 #define TSR_TCFU		bit(5) /* only for TPU1, TPU2, TPU4, TPU5 */

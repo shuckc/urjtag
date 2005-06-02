@@ -1,5 +1,10 @@
 2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h8s2357/tpu.h: Added bit names for TIER registers.
+	* h8/h8s2357/ports.h: Fixed newline at end of file.
+
+2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h8s2357/timer.h: Added prefix TIMER to registers constants - fixed
 		collisions with constants in tpu.h and wdt.h.
 

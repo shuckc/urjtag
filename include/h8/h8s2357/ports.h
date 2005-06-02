@@ -617,4 +617,3 @@ typedef struct DDR_registers {
 #define PGDDR_PG0DDR	bit(0)
 
 #endif /* H8S2357_PORTS_H */
-                        
