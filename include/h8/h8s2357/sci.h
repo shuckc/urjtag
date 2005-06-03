@@ -53,7 +53,7 @@
 #define SCI2_BASE	0xffffff88
 
 #if LANGUAGE == C
-typedef struct SCI_registers {
+typedef volatile struct SCI_registers {
 	uint8_t smr;
 	uint8_t brr;
 	uint8_t scr;

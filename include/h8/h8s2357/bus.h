@@ -51,7 +51,7 @@
 #define BUS_BASE	0xfffffed0
 
 #if LANGUAGE == C
-typedef struct BUS_registers {
+typedef volatile struct BUS_registers {
 	uint8_t abwcr;
 	uint8_t astcr;
 	uint8_t wcrh;

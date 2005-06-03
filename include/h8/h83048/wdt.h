@@ -51,7 +51,7 @@
 #define WDT_BASE	0xffffa8
 
 #if LANGUAGE == C
-typedef struct WDT_registers {
+typedef volatile struct WDT_registers {
 	union {
 		union {
 			uint16_t tcsr;

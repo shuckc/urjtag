@@ -57,7 +57,7 @@
 #define TPU_COMMON_BASE		0xffffffc0
 
 #if LANGUAGE == C
-typedef struct TPU_registers {
+typedef volatile struct TPU_registers {
 	uint8_t tcr;
 	uint8_t tmdr;
 	uint8_t tiorh;	/* tior in TPU1, TPU2, TPU4, TPU5 */
@@ -71,7 +71,7 @@ typedef struct TPU_registers {
 	uint16_t tgrd;	/* only for TPU0 and TPU3 */
 } TPU_registers_t;
 
-typedef struct TPU_common_registers {
+typedef volatile struct TPU_common_registers {
 	uint8_t tstr;
 	uint8_t tsyr;
 } TPU_common_registers_t;

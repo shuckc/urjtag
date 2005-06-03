@@ -57,7 +57,7 @@
 #define ITU4_BASE		0xffff92
 
 #if LANGUAGE == C
-typedef struct ITU_registers {
+typedef volatile struct ITU_registers {
 	uint8_t tcr;
 	uint8_t tior;
 	uint8_t tier;
@@ -74,14 +74,14 @@ typedef struct ITU_registers {
 	uint8_t brbl;	/* only ITU channel 3 and 4 */
 } ITU_registers_t;
 
-typedef struct ITU_common1_registers {
+typedef volatile struct ITU_common1_registers {
 	uint8_t tstr;
 	uint8_t tsnc;
 	uint8_t tmdr;
 	uint8_t tfcr;
 } ITU_common1_registers_t;
 
-typedef struct ITU_common2_registers {
+typedef volatile struct ITU_common2_registers {
 	uint8_t toer;
 	uint8_t tocr;
 } ITU_common2_registers_t;

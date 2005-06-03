@@ -51,7 +51,7 @@
 #define MCU_BASE	0xffffff38
 
 #if LANGUAGE == C
-typedef struct MCU_registers {
+typedef volatile struct MCU_registers {
 	uint8_t sbycr;
 	uint8_t syscr;
 	uint8_t sckcr;

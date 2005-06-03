@@ -51,7 +51,7 @@
 #define DTCR_BASE	0xffffff30
 
 #if LANGUAGE == C
-typedef struct DTCR_registers {
+typedef volatile struct DTCR_registers {
 	uint8_t dtcera;
 	uint8_t dtcerb;
 	uint8_t dtcerc;

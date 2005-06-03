@@ -52,7 +52,7 @@
 #define IC_BASE		0xffffff2c
 
 #if LANGUAGE == C
-typedef struct IPR_registers {
+typedef volatile struct IPR_registers {
 	uint8_t ipra;
 	uint8_t iprb;
 	uint8_t iprc;
@@ -66,7 +66,7 @@ typedef struct IPR_registers {
 	uint8_t iprk;
 } IPR_registers_t;
 
-typedef struct IC_registers {
+typedef volatile struct IC_registers {
 	uint16_t iscr;
 	uint8_t ier;
 	uint8_t isr;

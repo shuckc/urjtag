@@ -51,7 +51,7 @@
 #define DMAC_BASE	0xffff20
 
 #if LANGUAGE == C
-typedef struct DMAC_registers {
+typedef volatile struct DMAC_registers {
 	uint32_t mar0a;
 	uint16_t etcr0a;
 	uint8_t ioar0a;

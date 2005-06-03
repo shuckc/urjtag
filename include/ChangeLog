@@ -1,5 +1,34 @@
 2005-06-03  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h83048/adc.h: Register structures defined as volatile.
+	* h8/h83048/dac.h: Ditto.
+	* h8/h83048/dmac.h: Ditto.
+	* h8/h83048/flash.h: Ditto.
+	* h8/h83048/ic.h: Ditto.
+	* h8/h83048/itu.h: Ditto.
+	* h8/h83048/other.h: Ditto.
+	* h8/h83048/ports.h: Ditto.
+	* h8/h83048/rc.h: Ditto.
+	* h8/h83048/sci.h: Ditto.
+	* h8/h83048/tpc.h: Ditto.
+	* h8/h83048/wdt.h: Ditto.
+	* h8/h8s2357/adc.h: Ditto.
+	* h8/h8s2357/bus.h: Ditto.
+	* h8/h8s2357/dac.h: Ditto.
+	* h8/h8s2357/dmac.h: Ditto.
+	* h8/h8s2357/dtc.h: Ditto.
+	* h8/h8s2357/flash.h: Ditto.
+	* h8/h8s2357/ic.h: Ditto.
+	* h8/h8s2357/mcu.h: Ditto.
+	* h8/h8s2357/ports.h: Ditto.
+	* h8/h8s2357/ppg.h: Ditto.
+	* h8/h8s2357/sci.h: Ditto.
+	* h8/h8s2357/timer.h: Ditto.
+	* h8/h8s2357/tpu.h: Ditto.
+	* h8/h8s2357/wdt.h: Ditto.
+
+2005-06-03  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h8s2357/mcu.h (MSTPCR): Register splitted into MSTPCRH and MSTPCRL.
 
 2005-06-02  Branislav Petrovsky  <brano111@szm.sk>

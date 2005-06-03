@@ -52,7 +52,7 @@
 #define DDR_BASE	0xfffffeb0
 
 #if LANGUAGE == C
-typedef struct PORT_registers {
+typedef volatile struct PORT_registers {
 	uint8_t port1;
 	uint8_t port2;
 	uint8_t port3;
@@ -91,7 +91,7 @@ typedef struct PORT_registers {
 	uint8_t paodr;
 } PORT_registers_t;
 
-typedef struct DDR_registers {
+typedef volatile struct DDR_registers {
 	uint8_t p1ddr;
 	uint8_t p2ddr;
 	uint8_t p3ddr;

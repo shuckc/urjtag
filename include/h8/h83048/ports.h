@@ -51,7 +51,7 @@
 #define PORT_BASE	0xffffc0
 
 #if LANGUAGE == C
-typedef struct PORT_registers {
+typedef volatile struct PORT_registers {
 	uint8_t p1ddr;
 	uint8_t p2ddr;
 	uint8_t p1dr;

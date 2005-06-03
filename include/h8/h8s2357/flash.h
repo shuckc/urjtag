@@ -51,7 +51,7 @@
 #define FLASH_BASE	0xffffffc8
 
 #if LANGUAGE == C
-typedef struct FLASH_registers {
+typedef volatile struct FLASH_registers {
 	uint8_t flmcr1;
 	uint8_t flmcr2;
 	uint8_t ebr1;

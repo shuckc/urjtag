@@ -51,7 +51,7 @@
 #define TIMER_BASE	0xffffffb0
 
 #if LANGUAGE == C
-typedef struct TIMER_registers {
+typedef volatile struct TIMER_registers {
 	uint8_t tcr0;
 	uint8_t tcr1;
 	uint8_t tcsr0;

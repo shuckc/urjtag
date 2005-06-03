@@ -51,7 +51,7 @@
 #define PPG_BASE	0xffffff46
 
 #if LANGUAGE == C
-typedef struct PPG_registers {
+typedef volatile struct PPG_registers {
 	uint8_t pcr;
 	uint8_t pmr;
 	uint8_t nderh;

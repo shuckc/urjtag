@@ -51,7 +51,7 @@
 #define RC_BASE		0xffffac
 
 #if LANGUAGE == C
-typedef struct RC_registers {
+typedef volatile struct RC_registers {
 	uint8_t rfshcr;
 	uint8_t rtmcsr;
 	uint8_t rtcnt;

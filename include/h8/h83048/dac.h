@@ -51,7 +51,7 @@
 #define DAC_BASE	0xffffdc
 
 #if LANGUAGE == C
-typedef struct DAC_registers {
+typedef volatile struct DAC_registers {
 	uint8_t dadr0;
 	uint8_t dadr1;
 	uint8_t dacr;

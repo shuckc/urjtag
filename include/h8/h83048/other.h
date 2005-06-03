@@ -52,14 +52,14 @@
 #define OTHER2_BASE	0xffffec
 
 #if LANGUAGE == C
-typedef struct OTHER1_registers {
+typedef volatile struct OTHER1_registers {
 	uint8_t dastcr;
 	uint8_t divcr;
 	uint8_t mstcr;
 	uint8_t cscr;
 } OTHER1_registers_t;
 
-typedef struct OTHER2_registers {
+typedef volatile struct OTHER2_registers {
 	uint8_t abwcr;
 	uint8_t astcr;
 	uint8_t wcr;

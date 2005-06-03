@@ -51,7 +51,7 @@
 #define ADC_BASE	0xffffe0
 
 #if LANGUAGE == C
-typedef struct ADC_registers {
+typedef volatile struct ADC_registers {
 	uint8_t addrah;
 	uint8_t addral;
 	uint8_t addrbh;

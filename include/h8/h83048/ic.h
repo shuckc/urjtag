@@ -51,7 +51,7 @@
 #define IC_BASE		0xfffff4
 
 #if LANGUAGE == C
-typedef struct IC_registers {
+typedef volatile struct IC_registers {
 	uint8_t iscr;
 	uint8_t ier;
 	uint8_t isr;

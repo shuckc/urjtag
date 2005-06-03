@@ -51,7 +51,7 @@
 #define TPC_BASE	0xffffa0
 
 #if LANGUAGE == C
-typedef struct TPC_registers {
+typedef volatile struct TPC_registers {
 	uint8_t tpmr;
 	uint8_t tpcr;
 	uint8_t nderb;
