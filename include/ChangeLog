@@ -1,3 +1,7 @@
+2005-06-03  Branislav Petrovsky  <brano111@szm.sk>
+
+	* h8/h8s2357/mcu.h (MSTPCR): Register splitted into MSTPCRH and MSTPCRL.
+
 2005-06-02  Branislav Petrovsky  <brano111@szm.sk>
 
 	* h8/h8s2357/tpu.h: Added bit names for TIER registers.

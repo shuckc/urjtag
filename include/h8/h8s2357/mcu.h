@@ -56,7 +56,8 @@ typedef struct MCU_registers {
 	uint8_t syscr;
 	uint8_t sckcr;
 	uint8_t mdcr;
-	uint16_t mstpcr;
+	uint8_t mstpcrh;
+	uint8_t mstpcrl;
 	uint8_t __reserved[4];
 	uint8_t syscr2;
 } MCU_registers_t;
@@ -67,7 +68,8 @@ typedef struct MCU_registers {
 #define SYSCR		MCU_pointer->syscr
 #define SCKCR		MCU_pointer->sckcr
 #define MDCR		MCU_pointer->mdcr
-#define MSTPCR		MCU_pointer->mstpcr
+#define MSTPCRH		MCU_pointer->mstpcrh
+#define MSTPCRL		MCU_pointer->mstpcrl
 #define SYSCR2		MCU_pointer->syscr2
 #endif /* LANGUAGE == C */
 
@@ -75,7 +77,8 @@ typedef struct MCU_registers {
 #define SYSCR_OFFSET	0x01
 #define SCKCR_OFFSET	0x02
 #define MDCR_OFFSET	0x03
-#define MSTPCR_OFFSET	0x04
+#define MSTPCRH_OFFSET	0x04
+#define MSTPCRL_OFFSET	0x05
 #define SYSCR2_OFFSET	0x0a
 
 /* SBYCR bits */
@@ -103,22 +106,24 @@ typedef struct MCU_registers {
 #define MDCR_MDS(x)		bits_val(2,0,x)
 #define get_MDCR_MDS(x)		bits_get(2,0,x)
 
-/* MSTPCR bits */
-#define MSTPCR_MSTP15		bit(15)
-#define MSTPCR_MSTP14		bit(14)
-#define MSTPCR_MSTP13		bit(13)
-#define MSTPCR_MSTP12		bit(12)
-#define MSTPCR_MSTP11		bit(11)
-#define MSTPCR_MSTP10		bit(10)
-#define MSTPCR_MSTP9		bit(9)
-#define MSTPCR_MSTP8		bit(8)
-#define MSTPCR_MSTP7		bit(7)
-#define MSTPCR_MSTP6		bit(6)
-#define MSTPCR_MSTP5		bit(5)
-#define MSTPCR_MSTP4		bit(4)
-#define MSTPCR_MSTP3		bit(3)
-#define MSTPCR_MSTP2		bit(2)
-#define MSTPCR_MSTP1		bit(1)
-#define MSTPCR_MSTP0		bit(0)
+/* MSTPCRH bits */
+#define MSTPCRH_MSTP15		bit(7)
+#define MSTPCRH_MSTP14		bit(6)
+#define MSTPCRH_MSTP13		bit(5)
+#define MSTPCRH_MSTP12		bit(4)
+#define MSTPCRH_MSTP11		bit(3)
+#define MSTPCRH_MSTP10		bit(2)
+#define MSTPCRH_MSTP9		bit(1)
+#define MSTPCRH_MSTP8		bit(0)
+
+/* MSTPCRL bits */
+#define MSTPCRL_MSTP7		bit(7)
+#define MSTPCRL_MSTP6		bit(6)
+#define MSTPCRL_MSTP5		bit(5)
+#define MSTPCRL_MSTP4		bit(4)
+#define MSTPCRL_MSTP3		bit(3)
+#define MSTPCRL_MSTP2		bit(2)
+#define MSTPCRL_MSTP1		bit(1)
+#define MSTPCRL_MSTP0		bit(0)
 
 #endif /* H8S2357_MCU_H */
