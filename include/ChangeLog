@@ -1,5 +1,11 @@
 2005-06-03  Branislav Petrovsky  <brano111@szm.sk>
 
+	* h8/h83048/sci.h (SSR_RDFR): Constant renamed to ...
+	(SSR_RDRF): ... this one.
+	* h8/h8s2357/sci.h: Ditto.
+
+2005-06-03  Branislav Petrovsky  <brano111@szm.sk>
+
 	* h8/h83048/adc.h: Register structures defined as volatile.
 	* h8/h83048/dac.h: Ditto.
 	* h8/h83048/dmac.h: Ditto.

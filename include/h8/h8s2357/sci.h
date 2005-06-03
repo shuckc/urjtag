@@ -125,7 +125,7 @@ typedef volatile struct SCI_registers {
 
 /* SSR bits */
 #define SSR_TDRE	bit(7)
-#define SSR_RDFR	bit(6)
+#define SSR_RDRF	bit(6)
 #define SSR_ORER	bit(5)
 #define SSR_FER		bit(4)
 #define SSR_ERS		bit(4)
