@@ -62,16 +62,11 @@ typedef volatile struct ITU_registers {
 	uint8_t tior;
 	uint8_t tier;
 	uint8_t tsr;
-	uint8_t tcnth;
-	uint8_t tcntl;
-	uint8_t grah;
-	uint8_t gral;
-	uint8_t grbh;
-	uint8_t grbl;
-	uint8_t brah;	/* only ITU channel 3 and 4 */
-	uint8_t bral;	/* only ITU channel 3 and 4 */
-	uint8_t brbh;	/* only ITU channel 3 and 4 */
-	uint8_t brbl;	/* only ITU channel 3 and 4 */
+	uint16_t tcnt;
+	uint16_t gra;
+	uint16_t grb;
+	uint16_t bra;	/* only ITU channel 3 and 4 */
+	uint16_t brb;	/* only ITU channel 3 and 4 */
 } ITU_registers_t;
 
 typedef volatile struct ITU_common1_registers {
@@ -98,64 +93,45 @@ typedef volatile struct ITU_common2_registers {
 #define TIOR0		ITU0_pointer->tior
 #define TIER0		ITU0_pointer->tier
 #define TSR0		ITU0_pointer->tsr
-#define TCNT0H		ITU0_pointer->tcnth
-#define TCNT0L		ITU0_pointer->tcntl
-#define GRA0H		ITU0_pointer->grah
-#define GRA0L		ITU0_pointer->gral
-#define GRB0H		ITU0_pointer->grbh
-#define GRB0L		ITU0_pointer->grbl
+#define TCNT0		ITU0_pointer->tcnt
+#define GRA0		ITU0_pointer->gra
+#define GRB0		ITU0_pointer->grb
 
 #define TCR1		ITU1_pointer->tcr
 #define TIOR1		ITU1_pointer->tior
 #define TIER1		ITU1_pointer->tier
 #define TSR1		ITU1_pointer->tsr
-#define TCNT1H		ITU1_pointer->tcnth
-#define TCNT1L		ITU1_pointer->tcntl
-#define GRA1H		ITU1_pointer->grah
-#define GRA1L		ITU1_pointer->gral
-#define GRB1H		ITU1_pointer->grbh
-#define GRB1L		ITU1_pointer->grbl
+#define TCNT1		ITU1_pointer->tcnt
+#define GRA1		ITU1_pointer->gra
+#define GRB1		ITU1_pointer->grb
 
 #define TCR2		ITU2_pointer->tcr
 #define TIOR2		ITU2_pointer->tior
 #define TIER2		ITU2_pointer->tier
 #define TSR2		ITU2_pointer->tsr
-#define TCNT2H		ITU2_pointer->tcnth
-#define TCNT2L		ITU2_pointer->tcntl
-#define GRA2H		ITU2_pointer->grah
-#define GRA2L		ITU2_pointer->gral
-#define GRB2H		ITU2_pointer->grbh
-#define GRB2L		ITU2_pointer->grbl
+#define TCNT2		ITU2_pointer->tcnt
+#define GRA2		ITU2_pointer->gra
+#define GRB2		ITU2_pointer->grb
 
 #define TCR3		ITU3_pointer->tcr
 #define TIOR3		ITU3_pointer->tior
 #define TIER3		ITU3_pointer->tier
 #define TSR3		ITU3_pointer->tsr
-#define TCNT3H		ITU3_pointer->tcnth
-#define TCNT3L		ITU3_pointer->tcntl
-#define GRA3H		ITU3_pointer->grah
-#define GRA3L		ITU3_pointer->gral
-#define GRB3H		ITU3_pointer->grbh
-#define GRB3L		ITU3_pointer->grbl
-#define BRA3H		ITU3_pointer->brah
-#define BRA3L		ITU3_pointer->bral
-#define BRB3H		ITU3_pointer->brbh
-#define BRB3L		ITU3_pointer->brbl
+#define TCNT3		ITU3_pointer->tcnt
+#define GRA3		ITU3_pointer->gra
+#define GRB3		ITU3_pointer->grb
+#define BRA3		ITU3_pointer->bra
+#define BRB3		ITU3_pointer->brb
 
 #define TCR4		ITU4_pointer->tcr
 #define TIOR4		ITU4_pointer->tior
 #define TIER4		ITU4_pointer->tier
 #define TSR4		ITU4_pointer->tsr
-#define TCNT4H		ITU4_pointer->tcnth
-#define TCNT4L		ITU4_pointer->tcntl
-#define GRA4H		ITU4_pointer->grah
-#define GRA4L		ITU4_pointer->gral
-#define GRB4H		ITU4_pointer->grbh
-#define GRB4L		ITU4_pointer->grbl
-#define BRA4H		ITU4_pointer->brah
-#define BRA4L		ITU4_pointer->bral
-#define BRB4H		ITU4_pointer->brbh
-#define BRB4L		ITU4_pointer->brbl
+#define TCNT4		ITU4_pointer->tcnt
+#define GRA4		ITU4_pointer->gra
+#define GRB4		ITU4_pointer->grb
+#define BRA4		ITU4_pointer->bra
+#define BRB4		ITU4_pointer->brb
 
 #define TSTR		ITU_COMMON1_pointer->tstr
 #define TSNC		ITU_COMMON1_pointer->tsnc
@@ -170,16 +146,11 @@ typedef volatile struct ITU_common2_registers {
 #define TIOR_OFFSET	0x01
 #define TIER_OFFSET	0x02
 #define TSR_OFFSET	0x03
-#define TCNTH_OFFSET	0x04
-#define TCNTL_OFFSET	0x05
-#define GRAH_OFFSET	0x06
-#define GRAL_OFFSET	0x07
-#define GRBH_OFFSET	0x08
-#define GRBL_OFFSET	0x09
-#define BRAH_OFFSET	0x0a
-#define BRAL_OFFSET	0x0b
-#define BRBH_OFFSET	0x0c
-#define BRBL_OFFSET	0x0d
+#define TCNT_OFFSET	0x04
+#define GRA_OFFSET	0x06
+#define GRB_OFFSET	0x08
+#define BRA_OFFSET	0x0a
+#define BRB_OFFSET	0x0c
 
 #define TSTR_OFFSET	0x00
 #define TSNC_OFFSET	0x01
