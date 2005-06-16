@@ -1,3 +1,8 @@
+2005-06-16  Branislav Petrovsky  <brano111@szm.sk>
+
+	* h8/h8s2357/mcu.h (SBYCR, SYSCR, SCKCR, MDCR, MSTPCRH, MSTPCRL)
+	(SYSCR2): Added assembly alternatives to C register names defines.
+
 2005-06-10  Branislav Petrovsky  <brano111@szm.sk>
 
 	* h8/h83048/itu.h: Replaced 8 bit register pairs with 16 bit registers

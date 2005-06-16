@@ -81,6 +81,16 @@ typedef volatile struct MCU_registers {
 #define MSTPCRL_OFFSET	0x05
 #define SYSCR2_OFFSET	0x0a
 
+#if LANGUAGE == ASM
+#define SBYCR		(MCU_BASE + SBYCR_OFFSET)
+#define SYSCR		(MCU_BASE + SYSCR_OFFSET)
+#define SCKCR		(MCU_BASE + SCKCR_OFFSET)
+#define MDCR		(MCU_BASE + MDCR_OFFSET)
+#define MSTPCRH		(MCU_BASE + MSTPCRH_OFFSET)
+#define MSTPCRL		(MCU_BASE + MSTPCRL_OFFSET)
+#define SYSCR2		(MCU_BASE + SYSCR2_OFFSET)
+#endif /* LANGUAGE == ASM */
+
 /* SBYCR bits */
 #define SBYCR_SSBY		bit(7)
 #define SBYCR_STS_MASK		bits(6,4)
