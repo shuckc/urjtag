@@ -1,5 +1,10 @@
 2005-06-27  Marcel Telka  <marcel@telka.sk>
 
+	* stdint/stdint-hwbench.h: New file.
+	* Makefile.am (noinst_HEADERS): Added stdint/stdint-hwbench.h.
+
+2005-06-27  Marcel Telka  <marcel@telka.sk>
+
 	* win32/stdint.h: File renamed and moved ...
 	* stdint/stdint-win32.h: ... here.
 	* Makefile.am (noinst_HEADERS): Changed filename of stdint.h for win32.
