@@ -28,21 +28,20 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Marcel Telka <marcel@telka.sk>, 2002, 2005.
 #
 
-echo "Running aclocal ..."
-aclocal
+export AUTOMAKE="/usr/bin/automake --foreign"
 
-echo "Running automake ..."
-automake --add-missing --foreign
+if autoreconf -i -s -v ; then
+	echo
+	echo "autoreconf done."
+	echo
+else
+	echo
+	echo "autoreconf failed."
+	echo
+	exit 1
+fi
 
-echo "Running autoconf ..."
-autoconf
-
-echo
-echo "Now running ./configure script..."
 ./configure --enable-maintainer-mode
-
-echo
-echo "Type \`make\` to build include..."

@@ -2,6 +2,7 @@
 # $Id$
 #
 # Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2005 Elcom s.r.o.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,7 +28,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Marcel Telka <marcel@telka.sk>, 2002, 2005.
 #
 
 AC_INIT(include,0.3.3)
@@ -45,8 +46,28 @@ AC_CONFIG_FILES(
 
 AM_MAINTAINER_MODE
 
-AX_CREATE_STDINT_H( owce-stdint.h )
-AC_CHECK_HEADERS( stdint.h )
-AM_CONDITIONAL( GENERATE_STDINT_H, test x$ac_cv_header_stdint_h = xno )
+AC_ARG_WITH(hwbench,
+	AC_HELP_STRING([--with-hwbench=PATH], [Absolute path to the hwbench installation]),
+	with_hwbench="$withval")
+
+AC_CACHE_CHECK([for hwbench installation], hwbench_path, [
+	hwbench_path="no"
+	for hwb_path in "$with_hwbench"; do
+		if test -f "$hwb_path/IAR/EXE/ICCH83.EXE"; then
+			hwbench_path="$hwb_path"
+			export CC="$hwb_path/IAR/EXE/ICCH83.EXE"
+			break
+		fi
+	done
+])
+
+generate_stdint_h="no"
+AC_CHECK_HEADERS( stdint.h, [], [
+		if test "$hwbench_path" = "no"; then
+			AX_CREATE_STDINT_H( owce-stdint.h )
+			generate_stdint_h="yes"
+		fi
+])
+AM_CONDITIONAL( GENERATE_STDINT_H, test "$generate_stdint_h" = "yes" )
 
 AC_OUTPUT

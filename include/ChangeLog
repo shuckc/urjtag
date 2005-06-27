@@ -1,3 +1,8 @@
+2005-06-27  Marcel Telka  <marcel@telka.sk>
+
+	* autogen.sh: Used autoreconf call for initial configuration.
+	* configure.ac: Added initial support for Hitachi Workbench.
+
 2005-06-16  Branislav Petrovsky  <brano111@szm.sk>
 
 	* h8/h8s2357/mcu.h (SBYCR, SYSCR, SCKCR, MDCR, MSTPCRH, MSTPCRL)
