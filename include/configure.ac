@@ -55,7 +55,8 @@ AC_CACHE_CHECK([for hwbench installation], hwbench_path, [
 	for hwb_path in "$with_hwbench"; do
 		if test -f "$hwb_path/IAR/EXE/ICCH83.EXE"; then
 			hwbench_path="$hwb_path"
-			export CC="$hwb_path/IAR/EXE/ICCH83.EXE"
+			export CC="$hwb_path/IAR/EXE/ICCH83.EXE -I`cygpath -w \"$hwb_path/IAR/INC/\"|sed -e 's/\\\\/\\\\\\\\/g'`"
+			export CPP=/usr/bin/cpp
 			break
 		fi
 	done

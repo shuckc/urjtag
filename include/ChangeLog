@@ -1,5 +1,9 @@
 2005-06-27  Marcel Telka  <marcel@telka.sk>
 
+	* configure.ac: Fixed Hitachi Workbench detection.
+
+2005-06-27  Marcel Telka  <marcel@telka.sk>
+
 	* autogen.sh: Used autoreconf call for initial configuration.
 	* configure.ac: Added initial support for Hitachi Workbench.
 
