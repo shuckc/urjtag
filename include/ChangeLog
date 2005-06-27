@@ -1,5 +1,11 @@
 2005-06-27  Marcel Telka  <marcel@telka.sk>
 
+	* win32/stdint.h: File renamed and moved ...
+	* stdint/stdint-win32.h: ... here.
+	* Makefile.am (noinst_HEADERS): Changed filename of stdint.h for win32.
+
+2005-06-27  Marcel Telka  <marcel@telka.sk>
+
 	* configure.ac: Fixed Hitachi Workbench detection.
 
 2005-06-27  Marcel Telka  <marcel@telka.sk>

@@ -116,7 +116,7 @@ nobase_openwinceinc_HEADERS = \
 	std/mic.h
 
 noinst_HEADERS = \
-	win32/stdint.h
+	stdint/stdint-win32.h
 
 nodist_openwinceinc_HEADERS = \
 	owce-stdint.h
