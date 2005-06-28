@@ -7,3 +7,5 @@ config.status
 configure
 owce-stdint.h
 stdint.h
+aconftest.s20
+econftest.s20

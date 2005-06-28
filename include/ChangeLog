@@ -1,3 +1,8 @@
+2005-06-28  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am: Enabled installation for Hitachi Workbench.
+	* configure.ac: Ditto.
+
 2005-06-27  Marcel Telka  <marcel@telka.sk>
 
 	* stdint/stdint-hwbench.h: New file.

@@ -30,7 +30,11 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
+if HAVE_HWBENCH
+openwinceincdir = @HWBENCH_PATH@/IAR/INC/openwince
+else
 openwinceincdir = $(includedir)/openwince
+endif
 
 nobase_openwinceinc_HEADERS = \
 	common.h \
@@ -119,14 +123,18 @@ noinst_HEADERS = \
 	stdint/stdint-hwbench.h \
 	stdint/stdint-win32.h
 
-nodist_openwinceinc_HEADERS = \
-	owce-stdint.h
-
 if GENERATE_STDINT_H
-nodist_openwinceinc_HEADERS += stdint.h
+nodist_openwinceinc_HEADERS = stdint.h
+
+stdint.h: owce-stdint.h
+	cp $< $@
 endif
 
-stdint.h:
-	echo "#include <owce-stdint.h>" > stdint.h
+if HAVE_HWBENCH
+nodist_openwinceinc_HEADERS = stdint.h
+
+stdint.h: stdint/stdint-hwbench.h
+	cp $< $@
+endif
 
 CLEANFILES = stdint.h

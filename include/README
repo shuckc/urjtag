@@ -21,3 +21,12 @@ Installation instructions
 2. Run ./configure script.
 3. Run `make`.
 4. Run `make install`.
+
+
+Notes for Hitachi Workbench users
+---------------------------------
+
+You should use following parameters for the ./configure script:
+	--with-hwbench=PATH_TO_HWBENCH --host=hwbench
+for example
+	--with-hwbench=/cygdrive/c/hwbench --host=hwbench

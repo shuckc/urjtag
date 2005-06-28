@@ -70,5 +70,8 @@ AC_CHECK_HEADERS( stdint.h, [], [
 		fi
 ])
 AM_CONDITIONAL( GENERATE_STDINT_H, test "$generate_stdint_h" = "yes" )
+AM_CONDITIONAL( HAVE_HWBENCH, test "$hwbench_path" != "no" )
+HWBENCH_PATH="$hwbench_path"
+AC_SUBST( HWBENCH_PATH )
 
 AC_OUTPUT
