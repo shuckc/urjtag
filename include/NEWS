@@ -9,10 +9,10 @@ include-0.4:
 	* Added more manufacturer entries into Manufacturer's Identification Code database.
 	* Changes in stdint.h support:
 		- Ported uintptr_t type to old Windows SDK (win32)
-		- Added stdint.h support for Hitachi Workbench (hwbench)
+		- Added stdint.h support for Hitachi Workbench/IAR Compiler (hwbench)
 	* Changes in brux common headers:
 		- Added new parameter (adr) for detectflash function
-	* Added support for Hitachi Workbench.
+	* Added support for Hitachi Workbench/IAR Compiler.
 
 include-0.3.2 (2003-10-11):
 

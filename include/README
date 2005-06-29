@@ -23,8 +23,8 @@ Installation instructions
 4. Run `make install`.
 
 
-Notes for Hitachi Workbench users
----------------------------------
+Notes for Hitachi Workbench/IAR Compiler users
+----------------------------------------------
 
 You should use following parameters for the ./configure script:
 	--with-hwbench=PATH_TO_HWBENCH --host=hwbench

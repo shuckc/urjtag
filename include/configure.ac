@@ -55,20 +55,22 @@ AC_CACHE_CHECK([for hwbench installation], hwbench_path, [
 	for hwb_path in "$with_hwbench"; do
 		if test -f "$hwb_path/IAR/EXE/ICCH83.EXE"; then
 			hwbench_path="$hwb_path"
-			export CC="$hwb_path/IAR/EXE/ICCH83.EXE -I`cygpath -w \"$hwb_path/IAR/INC/\"|sed -e 's/\\\\/\\\\\\\\/g'`"
-			export CPP=/usr/bin/cpp
+			CC="$hwb_path/IAR/EXE/ICCH83.EXE"
+			CPPFLAGS="-I`cygpath -w \"$hwb_path/IAR/INC/\"|sed -e 's/\\\\/\\\\\\\\/g'`"
 			break
 		fi
 	done
 ])
 
+AC_PROG_CC
+
 generate_stdint_h="no"
-AC_CHECK_HEADERS( stdint.h, [], [
-		if test "$hwbench_path" = "no"; then
+if test "$hwbench_path" = "no"; then
+	AC_CHECK_HEADERS( stdint.h, [], [
 			AX_CREATE_STDINT_H( owce-stdint.h )
 			generate_stdint_h="yes"
-		fi
-])
+	])
+fi
 AM_CONDITIONAL( GENERATE_STDINT_H, test "$generate_stdint_h" = "yes" )
 AM_CONDITIONAL( HAVE_HWBENCH, test "$hwbench_path" != "no" )
 HWBENCH_PATH="$hwbench_path"
