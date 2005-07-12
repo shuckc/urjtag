@@ -5,6 +5,7 @@ include-0.4:
 	* Added Renesas H8/3048 registers.
 	* Added Renesas H8S/2357 registers.
 	* Added Renesas SH7750 CCN registers.
+	* Added Renesas SH7709S INTC registers.
 	* Added Hitiachi HD64461 registers.
 	* Added more manufacturer entries into Manufacturer's Identification Code database.
 	* Changes in stdint.h support:

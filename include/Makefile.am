@@ -116,6 +116,7 @@ nobase_openwinceinc_HEADERS = \
 	h8/h8s2357/timer.h \
 	h8/h8s2357/tpu.h \
 	h8/h8s2357/wdt.h \
+	sh/sh7709s/intc.h \
 	sh/sh7750/ccn.h \
 	std/mic.h
 

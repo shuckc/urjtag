@@ -1,3 +1,8 @@
+2005-07-12  Marcel Telka  <marcel@telka.sk>
+
+	* sh/sh7709s/intc.h: New file.
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added sh/sh7709s/intc.h.
+
 2005-06-29  Marcel Telka  <marcel@telka.sk>
 
 	* configure.ac: Simplified support for Hitachi Workbench/IAR Compiler.
