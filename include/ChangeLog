@@ -1,5 +1,9 @@
 2005-07-12  Marcel Telka  <marcel@telka.sk>
 
+	Version 0.4 released.
+
+2005-07-12  Marcel Telka  <marcel@telka.sk>
+
 	* sh/sh7709s/intc.h: New file.
 	* Makefile.am (nobase_openwinceinc_HEADERS): Added sh/sh7709s/intc.h.
 

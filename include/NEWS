@@ -1,6 +1,6 @@
 $Id$
 
-include-0.4:
+include-0.4 (2005-07-12):
 
 	* Added Renesas H8/3048 registers.
 	* Added Renesas H8S/2357 registers.
