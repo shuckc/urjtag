@@ -1,5 +1,10 @@
 $Id$
 
+include-0.4.1:
+
+	* Updated stdint.h support from latest ac-archive package for better conformance
+		with SUSv3 standard.
+
 include-0.4 (2005-07-12):
 
 	* Added Renesas H8/3048 registers.

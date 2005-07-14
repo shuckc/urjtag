@@ -15,7 +15,7 @@ dnl the set of basic 'stdint's definitions/typedefs:
 dnl   int8_t,uint8_t,int16_t,uint16_t,int32_t,uint32_t,intptr_t,uintptr_t
 dnl   int_least32_t.. int_fast32_t.. intmax_t
 dnl which may or may not rely on the definitions of other files,
-dnl or using the AC_COMPILE_CHECK_SIZEOF macro to determine the actual
+dnl or using the AC_CHECK_SIZEOF macro to determine the actual
 dnl sizeof each type.
 dnl
 dnl if your header files require the stdint-types you will want to create an
@@ -30,8 +30,93 @@ dnl Remember, if the system already had a valid <stdint.h>, the generated
 dnl file will include it directly. No need for fuzzy HAVE_STDINT_H things...
 dnl
 dnl @, (status: used on new platforms) (see http://ac-archive.sf.net/gstdint/)
-dnl @version $Id: ax_create_stdint_h.m4,v 1.2 2003/02/10 01:06:52 guidod Exp $
+dnl @version $Id: ax_create_stdint_h.m4,v 1.5 2005/01/06 18:27:27 guidod Exp $
 dnl @author  Guido Draheim <guidod@gmx.de> 
+
+AC_DEFUN([AX_CHECK_DATA_MODEL],[
+   AC_CHECK_SIZEOF(char)
+   AC_CHECK_SIZEOF(short)
+   AC_CHECK_SIZEOF(int)
+   AC_CHECK_SIZEOF(long)
+   AC_CHECK_SIZEOF(void*)
+   ac_cv_char_data_model=""
+   ac_cv_char_data_model="$ac_cv_char_data_model$ac_cv_sizeof_char"
+   ac_cv_char_data_model="$ac_cv_char_data_model$ac_cv_sizeof_short"
+   ac_cv_char_data_model="$ac_cv_char_data_model$ac_cv_sizeof_int"
+   ac_cv_long_data_model=""
+   ac_cv_long_data_model="$ac_cv_long_data_model$ac_cv_sizeof_int"
+   ac_cv_long_data_model="$ac_cv_long_data_model$ac_cv_sizeof_long"
+   ac_cv_long_data_model="$ac_cv_long_data_model$ac_cv_sizeof_voidp"
+   AC_MSG_CHECKING([data model])
+   case "$ac_cv_char_data_model/$ac_cv_long_data_model" in
+    122/242)     ac_cv_data_model="IP16"  ; n="standard 16bit machine" ;;
+    122/244)     ac_cv_data_model="LP32"  ; n="standard 32bit machine" ;;
+    122/*)       ac_cv_data_model="i16"   ; n="unusual int16 model" ;;
+    124/444)     ac_cv_data_model="ILP32" ; n="standard 32bit unixish" ;;
+    124/488)     ac_cv_data_model="LP64"  ; n="standard 64bit unixish" ;;
+    124/448)     ac_cv_data_model="LLP64" ; n="unusual 64bit unixish" ;;
+    124/*)       ac_cv_data_model="i32"   ; n="unusual int32 model" ;;
+    128/888)     ac_cv_data_model="ILP64" ; n="unusual 64bit numeric" ;;
+    128/*)       ac_cv_data_model="i64"   ; n="unusual int64 model" ;;         
+    222/*2)      ac_cv_data_model="DSP16" ; n="strict 16bit dsptype" ;;
+    333/*3)      ac_cv_data_model="DSP24" ; n="strict 24bit dsptype" ;;
+    444/*4)      ac_cv_data_model="DSP32" ; n="strict 32bit dsptype" ;;
+    666/*6)      ac_cv_data_model="DSP48" ; n="strict 48bit dsptype" ;;
+    888/*8)      ac_cv_data_model="DSP64" ; n="strict 64bit dsptype" ;;
+    222/*|333/*|444/*|666/*|888/*) :
+                 ac_cv_data_model="iDSP"  ; n="unusual dsptype" ;;
+     *)          ac_cv_data_model="none"  ; n="very unusual model" ;;
+   esac
+   AC_MSG_RESULT([$ac_cv_data_model ($ac_cv_long_data_model, $n)])
+])
+
+dnl AX_CHECK_HEADER_STDINT_X([HEADERLIST][,ACTION-IF])
+AC_DEFUN([AX_CHECK_HEADER_STDINT_X],[
+AC_CACHE_CHECK([for stdint uintptr_t], [ac_cv_header_stdint_x],[
+ ac_cv_header_stdint_x="" # the 1997 typedefs (inttypes.h)
+  AC_MSG_RESULT([(..)])
+  for i in m4_ifval([$1],[$1],[stdint.h inttypes.h sys/inttypes.h]) ; do
+   unset ac_cv_type_uintptr_t 
+   unset ac_cv_type_uint64_t
+   AC_CHECK_TYPE(uintptr_t,[ac_cv_header_stdint_x=$i],continue,[#include <$i>])
+   AC_CHECK_TYPE(uint64_t,[and64="/uint64_t"],[and64=""],[#include<$i>])
+   m4_ifvaln([$1],[$1]) break
+  done
+  AC_MSG_CHECKING([for stdint uintptr_t])
+ ])
+])
+
+AC_DEFUN([AX_CHECK_HEADER_STDINT_O],[
+AC_CACHE_CHECK([for stdint uint32_t], [ac_cv_header_stdint_o],[
+ ac_cv_header_stdint_o="" # the 1995 typedefs (sys/inttypes.h)
+  AC_MSG_RESULT([(..)])
+  for i in m4_ifval([$1],[$1],[inttypes.h sys/inttypes.h stdint.h]) ; do
+   unset ac_cv_type_uint32_t
+   unset ac_cv_type_uint64_t
+   AC_CHECK_TYPE(uint32_t,[ac_cv_header_stdint_o=$i],continue,[#include <$i>])
+   AC_CHECK_TYPE(uint64_t,[and64="/uint64_t"],[and64=""],[#include<$i>])
+   m4_ifvaln([$1],[$1]) break
+   break;
+  done
+  AC_MSG_CHECKING([for stdint uint32_t])
+ ])
+])
+
+AC_DEFUN([AX_CHECK_HEADER_STDINT_U],[
+AC_CACHE_CHECK([for stdint u_int32_t], [ac_cv_header_stdint_u],[
+ ac_cv_header_stdint_u="" # the BSD typedefs (sys/types.h)
+  AC_MSG_RESULT([(..)])
+  for i in m4_ifval([$1],[$1],[sys/types.h inttypes.h sys/inttypes.h]) ; do
+   unset ac_cv_type_u_int32_t
+   unset ac_cv_type_u_int64_t
+   AC_CHECK_TYPE(u_int32_t,[ac_cv_header_stdint_u=$i],continue,[#include <$i>])
+   AC_CHECK_TYPE(u_int64_t,[and64="/u_int64_t"],[and64=""],[#include<$i>])
+   m4_ifvaln([$1],[$1]) break
+   break;
+  done
+  AC_MSG_CHECKING([for stdint u_int32_t])
+ ])
+])
 
 AC_DEFUN([AX_CREATE_STDINT_H],
 [# ------ AX CREATE STDINT H -------------------------------------
@@ -66,94 +151,35 @@ fi
 if test "_$ac_cv_header_stdint_t" = "_" ; then # can not shortcircuit..
 
 dnl .....intro message done, now do a few system checks.....
-dnl btw, all CHECK_TYPE macros do automatically "DEFINE" a type, therefore
-dnl we use the autoconf implementation detail _AC CHECK_TYPE_NEW instead
+dnl btw, all old CHECK_TYPE macros do automatically "DEFINE" a type, 
+dnl therefore we use the autoconf implementation detail CHECK_TYPE_NEW 
+dnl instead that is triggered with 3 or more arguments (see types.m4)
 
 inttype_headers=`echo $2 | sed -e 's/,/ /g'`
 
 ac_cv_stdint_result="(no helpful system typedefs seen)"
-AC_CACHE_CHECK([for stdint uintptr_t], [ac_cv_header_stdint_x],[
- ac_cv_header_stdint_x="" # the 1997 typedefs (inttypes.h)
-  AC_MSG_RESULT([(..)])
-  for i in stdint.h inttypes.h sys/inttypes.h $inttype_headers ; do
-   unset ac_cv_type_uintptr_t 
-   unset ac_cv_type_uint64_t
-   _AC_CHECK_TYPE_NEW(uintptr_t,[ac_cv_header_stdint_x=$i],dnl
-     continue,[#include <$i>])
-   AC_CHECK_TYPE(uint64_t,[and64="/uint64_t"],[and64=""],[#include<$i>])
-   ac_cv_stdint_result="(seen uintptr_t$and64 in $i)"
-   break;
-  done
-  AC_MSG_CHECKING([for stdint uintptr_t])
- ])
+AX_CHECK_HEADER_STDINT_X(dnl
+   stdint.h inttypes.h sys/inttypes.h $inttype_headers,
+   ac_cv_stdint_result="(seen uintptr_t$and64 in $i)")
 
 if test "_$ac_cv_header_stdint_x" = "_" ; then
-AC_CACHE_CHECK([for stdint uint32_t], [ac_cv_header_stdint_o],[
- ac_cv_header_stdint_o="" # the 1995 typedefs (sys/inttypes.h)
-  AC_MSG_RESULT([(..)])
-  for i in inttypes.h sys/inttypes.h stdint.h $inttype_headers ; do
-   unset ac_cv_type_uint32_t
-   unset ac_cv_type_uint64_t
-   AC_CHECK_TYPE(uint32_t,[ac_cv_header_stdint_o=$i],dnl
-     continue,[#include <$i>])
-   AC_CHECK_TYPE(uint64_t,[and64="/uint64_t"],[and64=""],[#include<$i>])
-   ac_cv_stdint_result="(seen uint32_t$and64 in $i)"
-   break;
-  done
-  AC_MSG_CHECKING([for stdint uint32_t])
- ])
+AX_CHECK_HEADER_STDINT_O(dnl,
+   inttypes.h sys/inttypes.h stdint.h $inttype_headers,
+   ac_cv_stdint_result="(seen uint32_t$and64 in $i)")
 fi
 
 if test "_$ac_cv_header_stdint_x" = "_" ; then
 if test "_$ac_cv_header_stdint_o" = "_" ; then
-AC_CACHE_CHECK([for stdint u_int32_t], [ac_cv_header_stdint_u],[
- ac_cv_header_stdint_u="" # the BSD typedefs (sys/types.h)
-  AC_MSG_RESULT([(..)])
-  for i in sys/types.h inttypes.h sys/inttypes.h $inttype_headers ; do
-   unset ac_cv_type_u_int32_t
-   unset ac_cv_type_u_int64_t
-   AC_CHECK_TYPE(u_int32_t,[ac_cv_header_stdint_u=$i],dnl
-     continue,[#include <$i>])
-   AC_CHECK_TYPE(u_int64_t,[and64="/u_int64_t"],[and64=""],[#include<$i>])
-   ac_cv_stdint_result="(seen u_int32_t$and64 in $i)"
-   break;
-  done
-  AC_MSG_CHECKING([for stdint u_int32_t])
- ])
+AX_CHECK_HEADER_STDINT_U(dnl,
+   sys/types.h inttypes.h sys/inttypes.h $inttype_headers,
+   ac_cv_stdint_result="(seen u_int32_t$and64 in $i)")
 fi fi
 
 dnl if there was no good C99 header file, do some typedef checks...
 if test "_$ac_cv_header_stdint_x" = "_" ; then
    AC_MSG_CHECKING([for stdint datatype model])
    AC_MSG_RESULT([(..)])
-   AC_COMPILE_CHECK_SIZEOF(char)
-   AC_COMPILE_CHECK_SIZEOF(short)
-   AC_COMPILE_CHECK_SIZEOF(int)
-   AC_COMPILE_CHECK_SIZEOF(long)
-   AC_COMPILE_CHECK_SIZEOF(void*)
-   ac_cv_stdint_char_model=""
-   ac_cv_stdint_char_model="$ac_cv_stdint_char_model$ac_cv_sizeof_char"
-   ac_cv_stdint_char_model="$ac_cv_stdint_char_model$ac_cv_sizeof_short"
-   ac_cv_stdint_char_model="$ac_cv_stdint_char_model$ac_cv_sizeof_int"
-   ac_cv_stdint_long_model=""
-   ac_cv_stdint_long_model="$ac_cv_stdint_long_model$ac_cv_sizeof_int"
-   ac_cv_stdint_long_model="$ac_cv_stdint_long_model$ac_cv_sizeof_long"
-   ac_cv_stdint_long_model="$ac_cv_stdint_long_model$ac_cv_sizeof_voidp"
-   name="$ac_cv_stdint_long_model"
-   case "$ac_cv_stdint_char_model/$ac_cv_stdint_long_model" in
-    122/242)     name="$name,  IP16 (standard 16bit machine)" ;;
-    122/244)     name="$name,  LP32 (standard 32bit mac/win)" ;;
-    122/*)       name="$name        (unusual int16 model)" ;; 
-    124/444)     name="$name, ILP32 (standard 32bit unixish)" ;;
-    124/488)     name="$name,  LP64 (standard 64bit unixish)" ;;
-    124/448)     name="$name, LLP64 (unusual  64bit unixish)" ;;
-    124/*)       name="$name        (unusual int32 model)" ;; 
-    128/888)     name="$name, ILP64 (unusual  64bit numeric)" ;;
-    128/*)       name="$name        (unusual int64 model)" ;; 
-    222/*|444/*) name="$name        (unusual dsptype)" ;;
-     *)          name="$name        (very unusal model)" ;;
-   esac
-   AC_MSG_RESULT([combined for stdint datatype model...  $name])
+   AX_CHECK_DATA_MODEL
 fi
 
 if test "_$ac_cv_header_stdint_x" != "_" ; then
@@ -186,6 +212,7 @@ fi
 AC_MSG_RESULT([make use of $ac_cv_header_stdint in $ac_stdint_h dnl
 $ac_cv_stdint_result])
 
+dnl -----------------------------------------------------------------
 # ----------------- DONE inttypes.h checks START header -------------
 AC_CONFIG_COMMANDS([$ac_stdint_h],[
 AC_MSG_NOTICE(creating $ac_stdint_h : $_ac_stdint_h)
@@ -198,7 +225,10 @@ echo "#define" _GENERATED_STDINT_H '"'$PACKAGE $VERSION'"' >>$ac_stdint
 echo "/* generated $ac_cv_stdint_message */" >>$ac_stdint
 if test "_$ac_cv_header_stdint_t" != "_" ; then 
 echo "#define _STDINT_HAVE_STDINT_H" "1" >>$ac_stdint
-fi
+echo "#include <stdint.h>" >>$ac_stdint
+echo "#endif" >>$ac_stdint
+echo "#endif" >>$ac_stdint
+else
 
 cat >>$ac_stdint <<STDINT_EOF
 
@@ -258,9 +288,9 @@ fi
 echo "" >>$ac_stdint
 
 echo "/* which type model has been detected */" >>$ac_stdint
-if test "_$ac_cv_stdint_char_model" != "_" ; then
-echo "#define   _STDINT_CHAR_MODEL" "$ac_cv_stdint_char_model" >>$ac_stdint
-echo "#define   _STDINT_LONG_MODEL" "$ac_cv_stdint_long_model" >>$ac_stdint
+if test "_$ac_cv_char_data_model" != "_" ; then
+echo "#define   _STDINT_CHAR_MODEL" "$ac_cv_char_data_model" >>$ac_stdint
+echo "#define   _STDINT_LONG_MODEL" "$ac_cv_long_data_model" >>$ac_stdint
 else
 echo "/* #undef _STDINT_CHAR_MODEL // skipped */" >>$ac_stdint
 echo "/* #undef _STDINT_LONG_MODEL // skipped */" >>$ac_stdint
@@ -345,6 +375,7 @@ typedef u_int64_t uint64_t;
 /* .. here are some common heuristics using compiler runtime specifics */
 #if defined __STDC_VERSION__ && defined __STDC_VERSION__ >= 199901L
 #define _HAVE_UINT64_T
+#define _HAVE_LONGLONG_UINT64_T
 typedef long long int64_t;
 typedef unsigned long long uint64_t;
 
@@ -358,6 +389,7 @@ typedef unsigned __int64 uint64_t;
 /* note: all ELF-systems seem to have loff-support which needs 64-bit */
 #if !defined _NO_LONGLONG
 #define _HAVE_UINT64_T
+#define _HAVE_LONGLONG_UINT64_T
 typedef long long int64_t;
 typedef unsigned long long uint64_t;
 #endif
@@ -449,6 +481,7 @@ typedef          int     int32_t;
 /* assuming the system has a "long long" */
 #ifndef _HAVE_UINT64_T
 #define _HAVE_UINT64_T
+#define _HAVE_LONGLONG_UINT64_T
 typedef unsigned long long uint64_t;
 typedef          long long  int64_t;
 #endif
@@ -534,12 +567,87 @@ typedef           long   intptr_t;
 #endif
 #endif
 
+/* The ISO C99 standard specifies that in C++ implementations these
+   should only be defined if explicitly requested.  */
+#if !defined __cplusplus || defined __STDC_CONSTANT_MACROS
+#ifndef UINT32_C
+
+/* Signed.  */
+# define INT8_C(c)      c
+# define INT16_C(c)     c
+# define INT32_C(c)     c
+# ifdef _HAVE_LONGLONG_UINT64_T
+#  define INT64_C(c)    c ## L
+# else
+#  define INT64_C(c)    c ## LL
+# endif
+
+/* Unsigned.  */
+# define UINT8_C(c)     c ## U
+# define UINT16_C(c)    c ## U
+# define UINT32_C(c)    c ## U
+# ifdef _HAVE_LONGLONG_UINT64_T
+#  define UINT64_C(c)   c ## UL
+# else
+#  define UINT64_C(c)   c ## ULL
+# endif
+
+/* Maximal type.  */
+# ifdef _HAVE_LONGLONG_UINT64_T
+#  define INTMAX_C(c)   c ## L
+#  define UINTMAX_C(c)  c ## UL
+# else
+#  define INTMAX_C(c)   c ## LL
+#  define UINTMAX_C(c)  c ## ULL
+# endif
+
+  /* literalnumbers */
+#endif
+#endif
+
+/* These limits are merily those of a two complement byte-oriented system */
+
+/* Minimum of signed integral types.  */
+# define INT8_MIN               (-128)
+# define INT16_MIN              (-32767-1)
+# define INT32_MIN              (-2147483647-1)
+# define INT64_MIN              (-__INT64_C(9223372036854775807)-1)
+/* Maximum of signed integral types.  */
+# define INT8_MAX               (127)
+# define INT16_MAX              (32767)
+# define INT32_MAX              (2147483647)
+# define INT64_MAX              (__INT64_C(9223372036854775807))
+
+/* Maximum of unsigned integral types.  */
+# define UINT8_MAX              (255)
+# define UINT16_MAX             (65535)
+# define UINT32_MAX             (4294967295U)
+# define UINT64_MAX             (__UINT64_C(18446744073709551615))
+
+/* Minimum of signed integral types having a minimum size.  */
+# define INT_LEAST8_MIN         INT8_MIN
+# define INT_LEAST16_MIN        INT16_MIN
+# define INT_LEAST32_MIN        INT32_MIN
+# define INT_LEAST64_MIN        INT64_MIN
+/* Maximum of signed integral types having a minimum size.  */
+# define INT_LEAST8_MAX         INT8_MAX
+# define INT_LEAST16_MAX        INT16_MAX
+# define INT_LEAST32_MAX        INT32_MAX
+# define INT_LEAST64_MAX        INT64_MAX
+
+/* Maximum of unsigned integral types having a minimum size.  */
+# define UINT_LEAST8_MAX        UINT8_MAX
+# define UINT_LEAST16_MAX       UINT16_MAX
+# define UINT_LEAST32_MAX       UINT32_MAX
+# define UINT_LEAST64_MAX       UINT64_MAX
+
   /* shortcircuit*/
 #endif
   /* once */
 #endif
 #endif
 STDINT_EOF
+fi
     if cmp -s $ac_stdint_h $ac_stdint 2>/dev/null; then
       AC_MSG_NOTICE([$ac_stdint_h is unchanged])
     else
@@ -560,86 +668,10 @@ ac_cv_header_stdint_o="$ac_cv_header_stdint_o"
 ac_cv_header_stdint_u="$ac_cv_header_stdint_u"
 ac_cv_type_uint64_t="$ac_cv_type_uint64_t"
 ac_cv_type_u_int64_t="$ac_cv_type_u_int64_t"
-ac_cv_stdint_char_model="$ac_cv_stdint_char_model"
-ac_cv_stdint_long_model="$ac_cv_stdint_long_model"
+ac_cv_char_data_model="$ac_cv_char_data_model"
+ac_cv_long_data_model="$ac_cv_long_data_model"
 ac_cv_type_int_least32_t="$ac_cv_type_int_least32_t"
 ac_cv_type_int_fast32_t="$ac_cv_type_int_fast32_t"
 ac_cv_type_intmax_t="$ac_cv_type_intmax_t"
 ])
-])
-dnl @synopsis AC_COMPILE_CHECK_SIZEOF(TYPE [, HEADERS [, EXTRA_SIZES...]])
-dnl
-dnl This macro checks for the size of TYPE using compile checks, not
-dnl run checks. You can supply extra HEADERS to look into. the check
-dnl will cycle through 1 2 4 8 16 and any EXTRA_SIZES the user
-dnl supplies. If a match is found, it will #define SIZEOF_`TYPE' to
-dnl that value. Otherwise it will emit a configure time error
-dnl indicating the size of the type could not be determined.
-dnl
-dnl The trick is that C will not allow duplicate case labels. While
-dnl this is valid C code:
-dnl
-dnl      switch (0) case 0: case 1:;
-dnl
-dnl The following is not:
-dnl
-dnl      switch (0) case 0: case 0:;
-dnl
-dnl Thus, the AC_TRY_COMPILE will fail if the currently tried size
-dnl does not match.
-dnl
-dnl Here is an example skeleton configure.in script, demonstrating the
-dnl macro's usage:
-dnl
-dnl      AC_PROG_CC
-dnl      AC_CHECK_HEADERS(stddef.h unistd.h)
-dnl      AC_TYPE_SIZE_T
-dnl      AC_CHECK_TYPE(ssize_t, int)
-dnl
-dnl      headers='#ifdef HAVE_STDDEF_H
-dnl      #include <stddef.h>
-dnl      #endif
-dnl      #ifdef HAVE_UNISTD_H
-dnl      #include <unistd.h>
-dnl      #endif
-dnl      '
-dnl
-dnl      AC_COMPILE_CHECK_SIZEOF(char)
-dnl      AC_COMPILE_CHECK_SIZEOF(short)
-dnl      AC_COMPILE_CHECK_SIZEOF(int)
-dnl      AC_COMPILE_CHECK_SIZEOF(long)
-dnl      AC_COMPILE_CHECK_SIZEOF(unsigned char *)
-dnl      AC_COMPILE_CHECK_SIZEOF(void *)
-dnl      AC_COMPILE_CHECK_SIZEOF(size_t, $headers)
-dnl      AC_COMPILE_CHECK_SIZEOF(ssize_t, $headers)
-dnl      AC_COMPILE_CHECK_SIZEOF(ptrdiff_t, $headers)
-dnl      AC_COMPILE_CHECK_SIZEOF(off_t, $headers)
-dnl
-dnl @author Kaveh Ghazi <ghazi@caip.rutgers.edu>
-dnl @version $Id: ac_compile_check_sizeof.m4,v 1.1.1.1 2001/07/26 00:46:24 guidod Exp $
-dnl
-AC_DEFUN([AC_COMPILE_CHECK_SIZEOF],
-[changequote(<<, >>)dnl
-dnl The name to #define.
-define(<<AC_TYPE_NAME>>, translit(sizeof_$1, [a-z *], [A-Z_P]))dnl
-dnl The cache variable name.
-define(<<AC_CV_NAME>>, translit(ac_cv_sizeof_$1, [ *], [_p]))dnl
-changequote([, ])dnl
-AC_MSG_CHECKING(size of $1)
-AC_CACHE_VAL(AC_CV_NAME,
-[for ac_size in 4 8 1 2 16 $2 ; do # List sizes in rough order of prevalence.
-  AC_TRY_COMPILE([#include "confdefs.h"
-#include <sys/types.h>
-$2
-], [switch (0) case 0: case (sizeof ($1) == $ac_size):;], AC_CV_NAME=$ac_size)
-  if test x$AC_CV_NAME != x ; then break; fi
-done
-])
-if test x$AC_CV_NAME = x ; then
-  AC_MSG_ERROR([cannot determine a size for $1])
-fi
-AC_MSG_RESULT($AC_CV_NAME)
-AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME, [The number of bytes in type $1])
-undefine([AC_TYPE_NAME])dnl
-undefine([AC_CV_NAME])dnl
 ])

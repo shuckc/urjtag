@@ -1,3 +1,9 @@
+2005-07-14  Marcel Telka  <marcel@telka.sk>
+
+	* acinclude.m4 (AX_CREATE_STDINT_H): Updated to version from ac-archive 0.5.63.
+	(AC_COMPILE_CHECK_SIZEOF): Macro removed.
+	* configure.ac (AC_INIT): Changed version number to 0.4.1.
+
 2005-07-12  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.4 released.
