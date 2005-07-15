@@ -1,3 +1,7 @@
+2005-07-15  Marcel Telka  <marcel@telka.sk>
+
+	* acinclude.m4 (AX_CREATE_STDINT_H): Fixed typo (unsinged -> unsigned).
+
 2005-07-14  Marcel Telka  <marcel@telka.sk>
 
 	* acinclude.m4 (AX_CREATE_STDINT_H): Updated to version from ac-archive 0.5.63.
