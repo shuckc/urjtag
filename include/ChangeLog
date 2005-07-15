@@ -1,5 +1,12 @@
 2005-07-15  Marcel Telka  <marcel@telka.sk>
 
+	* stdint/stdint-hwbench.h: Changed comments. Disabled macros for C++ via
+		__STDC_LIMIT_MACROS and __STDC_CONSTANT_MACROS.
+	* stdint/stdint-win32.h: Disabled macros for C++ via __STDC_LIMIT_MACROS
+		and __STDC_CONSTANT_MACROS.
+
+2005-07-15  Marcel Telka  <marcel@telka.sk>
+
 	* acinclude.m4 (AX_CREATE_STDINT_H): Fixed typo (unsinged -> unsigned).
 
 2005-07-14  Marcel Telka  <marcel@telka.sk>

@@ -5,6 +5,8 @@ include-0.4.1:
 	* Updated stdint.h support from latest ac-archive package for better conformance
 		with SUSv3 standard.
 	* Fixed typo (compiler error) in common stdint.h implementation.
+	* Increased conformance of Win32 and Hitachi Workbench/IAR Compiler stdint.h
+		implementations with ISO C99.
 
 include-0.4 (2005-07-12):
 

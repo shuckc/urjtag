@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * stdint.h - integer types for Hitachi Workbench
+ * stdint.h - integer types for Hitachi Workbench/IAR Compiler
  * Copyright (C) 2005 Elcom s.r.o.
  * All rights reserved.
  *
@@ -82,6 +82,8 @@ typedef unsigned long uintptr_t;
 typedef long intmax_t;
 typedef unsigned long uintmax_t;
 
+#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
+
 /*
  * Limits of Specified-Width Interger Types
  */
@@ -151,7 +153,7 @@ typedef unsigned long uintmax_t;
 
 /* Limits of sig_atomic_t */
 
-/* N/A for Hitachi Workbench */
+/* N/A for Hitachi Workbench/IAR Compiler */
 
 /* Limit of size_t */
 
@@ -164,7 +166,11 @@ typedef unsigned long uintmax_t;
 
 /* Limits of wint_t */
 
-/* wint_t not supported in Hitachi Workbench */
+/* wint_t not supported in Hitachi Workbench/IAR Compiler */
+
+#endif /* __STDC_LIMIT_MACROS */
+
+#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
 
 /*
  * Macros for Integer Constant Expressions
@@ -184,5 +190,7 @@ typedef unsigned long uintmax_t;
 
 #define INTMAX_C(value)         INT32_C(value)
 #define UINTMAX_C(value)        UINT32_C(value)
+
+#endif /* __STDC_CONSTANT_MACROS */
 
 #endif /* STDINT_H */

@@ -86,6 +86,8 @@ typedef UINT_PTR uintptr_t;
 typedef INT64 intmax_t;
 typedef UINT64 uintmax_t;
 
+#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
+
 /*
  * Limits of Specified-Width Integer Types
  */
@@ -180,6 +182,10 @@ typedef UINT64 uintmax_t;
 #define	WINT_MIN		WCHAR_MIN
 #define	WINT_MAX		WCHAR_MAX
 
+#endif /* __STDC_LIMIT_MACROS */
+
+#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
+
 /*
  * Macros for Integer Constant Expressions
  */
@@ -200,5 +206,7 @@ typedef UINT64 uintmax_t;
 
 #define	INTMAX_C(value)		INT64_C(value)
 #define	UINTMAX_C(value)	UINT64_C(value)
+
+#endif /* __STDC_CONSTANT_MACROS */
 
 #endif /* STDINT_H */
