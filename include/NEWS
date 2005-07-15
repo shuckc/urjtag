@@ -1,6 +1,6 @@
 $Id$
 
-include-0.4.1:
+include-0.4.1 (2005-07-15):
 
 	* Updated stdint.h support from latest ac-archive package for better conformance
 		with SUSv3 standard.
