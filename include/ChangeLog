@@ -1,5 +1,20 @@
 2005-09-29  Marcel Telka  <marcel@telka.sk>
 
+	* h8/h83048/adc.h: Simplified preprocessor directive syntax.
+	* h8/h83048/dac.h: Ditto.
+	* h8/h83048/dmac.h: Ditto.
+	* h8/h83048/flash.h: Ditto.
+	* h8/h83048/ic.h: Ditto.
+	* h8/h83048/itu.h: Ditto.
+	* h8/h83048/other.h: Ditto.
+	* h8/h83048/ports.h: Ditto.
+	* h8/h83048/rc.h: Ditto.
+	* h8/h83048/sci.h: Ditto.
+	* h8/h83048/tpc.h: Ditto.
+	* h8/h83048/wdt.h: Ditto.
+
+2005-09-29  Marcel Telka  <marcel@telka.sk>
+
 	* common.h: Replaced file content with openwince.h include.
 
 	* arm/arm.h: Replaced common.h include with openwince.h.

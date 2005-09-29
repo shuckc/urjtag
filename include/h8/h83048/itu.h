@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -56,7 +56,7 @@
 #define ITU3_BASE		0xffff82
 #define ITU4_BASE		0xffff92
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct ITU_registers {
 	uint8_t tcr;
 	uint8_t tior;
@@ -140,7 +140,7 @@ typedef volatile struct ITU_common2_registers {
 
 #define TOER		ITU_COMMON2_pointer->toer
 #define TOCR		ITU_COMMON2_pointer->tocr
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define TCR_OFFSET	0x00
 #define TIOR_OFFSET	0x01

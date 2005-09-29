@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define FLASH_BASE	0xffff40
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct FLASH_registers {
 	uint8_t flmcr;
 	uint8_t __reserved1;
@@ -66,7 +66,7 @@ typedef volatile struct FLASH_registers {
 #define EBR1		FLASH_pointer->ebr1
 #define EBR2		FLASH_pointer->ebr2
 #define RAMCR		FLASH_pointer->ramcr
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define FLMCR_OFFSET	0x00
 #define EBR1_OFFSET	0x02

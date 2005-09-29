@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define RC_BASE		0xffffac
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct RC_registers {
 	uint8_t rfshcr;
 	uint8_t rtmcsr;
@@ -64,7 +64,7 @@ typedef volatile struct RC_registers {
 #define RTMCSR		RC_pointer->rtmcsr
 #define RTCNT		RC_pointer->rtcnt
 #define RTCOR		RC_pointer->rtcor
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define RFSHCR_OFFSET	0x00
 #define RTMCSR_OFFSET	0x01

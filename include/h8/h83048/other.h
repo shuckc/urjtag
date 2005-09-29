@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -51,7 +51,7 @@
 #define OTHER1_BASE	0xffff5c
 #define OTHER2_BASE	0xffffec
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct OTHER1_registers {
 	uint8_t dastcr;
 	uint8_t divcr;
@@ -85,7 +85,7 @@ typedef volatile struct OTHER2_registers {
 #define MDCR		OTHER2_pointer->mdcr
 #define SYSCR		OTHER2_pointer->syscr
 #define BRCR		OTHER2_pointer->brcr
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define DASTCR_OFFSET	0x00
 #define DIVCR_OFFSET	0x01

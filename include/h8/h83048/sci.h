@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -51,7 +51,7 @@
 #define SCI0_BASE	0xffffb0
 #define SCI1_BASE	0xffffb8
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct SCI_registers {
 	uint8_t smr;
 	uint8_t brr;
@@ -80,7 +80,7 @@ typedef volatile struct SCI_registers {
 #define SSR1		SCI1_pointer->ssr
 #define RDR1		SCI1_pointer->rdr
 #define SCMR1		SCI1_pointer->scmr
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define SMR_OFFSET	0x00
 #define BRR_OFFSET	0x01

@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define TPC_BASE	0xffffa0
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct TPC_registers {
 	uint8_t tpmr;
 	uint8_t tpcr;
@@ -72,7 +72,7 @@ typedef volatile struct TPC_registers {
 #define NDRA		TPC_pointer->ndra
 #define NDRB_D		TPC_pointer->ndrb_d
 #define NDRA_D		TPC_pointer->ndra_d
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define TPMR_OFFSET	0x00
 #define TPCR_OFFSET	0x01

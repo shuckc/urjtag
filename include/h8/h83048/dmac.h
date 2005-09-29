@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define DMAC_BASE	0xffff20
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct DMAC_registers {
 	uint32_t mar0a;
 	uint16_t etcr0a;
@@ -88,7 +88,7 @@ typedef volatile struct DMAC_registers {
 #define ETCR1B		DMAC_pointer->etcr1b
 #define IOAR1B		DMAC_pointer->ioar1b
 #define DTCR1B		DMAC_pointer->dtcr1b
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define MAR0A_OFFSET	0x00
 #define ETCR0A_OFFSET	0x04

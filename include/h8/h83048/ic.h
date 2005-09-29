@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define IC_BASE		0xfffff4
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct IC_registers {
 	uint8_t iscr;
 	uint8_t ier;
@@ -67,7 +67,7 @@ typedef volatile struct IC_registers {
 #define ISR		IC_pointer->isr
 #define IPRA		IC_pointer->ipra
 #define IPRB		IC_pointer->iprb
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define ISCR_OFFSET	0x00
 #define IER_OFFSET	0x01

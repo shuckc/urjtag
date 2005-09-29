@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define DAC_BASE	0xffffdc
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct DAC_registers {
 	uint8_t dadr0;
 	uint8_t dadr1;
@@ -62,7 +62,7 @@ typedef volatile struct DAC_registers {
 #define DADR0		DAC_pointer->dadr0
 #define DADR1		DAC_pointer->dadr1
 #define DACR		DAC_pointer->dacr
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define DADR0_OFFSET	0x00
 #define DADR1_OFFSET	0x01

@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define WDT_BASE	0xffffa8
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct WDT_registers {
 	union {
 		union {
@@ -81,7 +81,7 @@ typedef volatile struct WDT_registers {
 #define TCSR_w		WDT_pointer->_timer._write.tcsr
 #define TCNT_w		WDT_pointer->_timer._write.tcnt
 #define RSTCSR_w	WDT_pointer->_rstcsr._write.rstcsr
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define TCSR_OFFSET	0x00
 #define TCNT_OFFSET_w	0x00

@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define PORT_BASE	0xffffc0
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct PORT_registers {
 	uint8_t p1ddr;
 	uint8_t p2ddr;
@@ -108,7 +108,7 @@ typedef volatile struct PORT_registers {
 #define P2PCR		PORT_pointer->p2pcr
 #define P4PCR		PORT_pointer->p4pcr
 #define P5PCR		PORT_pointer->p5pcr
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define P1DDR_OFFSET	0x00
 #define P2DDR_OFFSET	0x01

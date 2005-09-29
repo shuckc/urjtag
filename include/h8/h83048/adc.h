@@ -42,7 +42,7 @@
 
 #include <openwince.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -50,7 +50,7 @@
 
 #define ADC_BASE	0xffffe0
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct ADC_registers {
 	uint8_t addrah;
 	uint8_t addral;
@@ -76,7 +76,7 @@ typedef volatile struct ADC_registers {
 #define ADDRDL		ADC_pointer->addrdl
 #define ADCSR		ADC_pointer->adcsr
 #define ADCR		ADC_pointer->adcr
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define ADDRAH_OFFSET	0x00
 #define ADDRAL_OFFSET	0x01

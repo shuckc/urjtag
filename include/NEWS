@@ -3,6 +3,7 @@ $Id$
 include-0.4.2:
 
 	* Moved content of the obsolete common.h into new openwince.h file.
+	* Simplified preprocessor directive syntax for Renesas H8/3048 headers.
 
 include-0.4.1 (2005-07-15):
 
