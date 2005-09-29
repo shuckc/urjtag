@@ -40,7 +40,7 @@
 #ifndef	UCB1400_H
 #define	UCB1400_H
 
-#include <common.h>
+#include <openwince.h>
 
 #define	UCB1400_IO_Data				0x5A		/* see 12.11 in [1] */
 #define	UCB1400_IO_Direction			0x5C		/* see 12.12 in [1] */

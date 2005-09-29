@@ -38,7 +38,7 @@
 #ifndef	FLASH_28FXXXK_H
 #define	FLASH_28FXXXK_H
 
-#include <common.h>
+#include <openwince.h>
 
 /* RCR bits - see Table 4. in [1] */
 

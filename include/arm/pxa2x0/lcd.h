@@ -43,7 +43,7 @@
 #ifndef	PXA2X0_LCD_H
 #define	PXA2X0_LCD_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

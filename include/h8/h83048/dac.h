@@ -40,7 +40,7 @@
 #ifndef H83048_DAC_H
 #define H83048_DAC_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

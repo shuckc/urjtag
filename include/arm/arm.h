@@ -39,7 +39,7 @@
 #ifndef	ARM_H
 #define	ARM_H
 
-#include <common.h>
+#include <openwince.h>
 
 /* PSR bits - see A2.5 in [1] */
 

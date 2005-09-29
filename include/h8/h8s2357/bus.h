@@ -40,7 +40,7 @@
 #ifndef H8S2357_BUS_H
 #define H8S2357_BUS_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

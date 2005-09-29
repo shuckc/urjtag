@@ -40,7 +40,7 @@
 #ifndef H83048_ADC_H
 #define H83048_ADC_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

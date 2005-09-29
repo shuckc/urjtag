@@ -39,7 +39,7 @@
 #ifndef	SA11X0_UART_H
 #define	SA11X0_UART_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

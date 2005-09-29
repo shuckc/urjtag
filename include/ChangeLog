@@ -1,5 +1,84 @@
 2005-09-29  Marcel Telka  <marcel@telka.sk>
 
+	* common.h: Replaced file content with openwince.h include.
+
+	* arm/arm.h: Replaced common.h include with openwince.h.
+	* arm/pxa2x0/ac97.h: Ditto.
+	* arm/pxa2x0/cm.h: Ditto.
+	* arm/pxa2x0/dma.h: Ditto.
+	* arm/pxa2x0/gpio.h: Ditto.
+	* arm/pxa2x0/i2c.h: Ditto.
+	* arm/pxa2x0/i2s.h: Ditto.
+	* arm/pxa2x0/ic.h: Ditto.
+	* arm/pxa2x0/icp.h: Ditto.
+	* arm/pxa2x0/lcd.h: Ditto.
+	* arm/pxa2x0/mc.h: Ditto.
+	* arm/pxa2x0/mmc.h: Ditto.
+	* arm/pxa2x0/ost.h: Ditto.
+	* arm/pxa2x0/pmrc.h: Ditto.
+	* arm/pxa2x0/pwm.h: Ditto.
+	* arm/pxa2x0/rtc.h: Ditto.
+	* arm/pxa2x0/ssp.h: Ditto.
+	* arm/pxa2x0/uart.h: Ditto.
+	* arm/pxa2x0/udc.h: Ditto.
+	* arm/sa11x0/gpclk.h: Ditto.
+	* arm/sa11x0/gpio.h: Ditto.
+	* arm/sa11x0/hssp.h: Ditto.
+	* arm/sa11x0/ic.h: Ditto.
+	* arm/sa11x0/lcd.h: Ditto.
+	* arm/sa11x0/mc.h: Ditto.
+	* arm/sa11x0/mcp.h: Ditto.
+	* arm/sa11x0/ost.h: Ditto.
+	* arm/sa11x0/pm.h: Ditto.
+	* arm/sa11x0/ppc.h: Ditto.
+	* arm/sa11x0/rc.h: Ditto.
+	* arm/sa11x0/rtc.h: Ditto.
+	* arm/sa11x0/ssp.h: Ditto.
+	* arm/sa11x0/uart.h: Ditto.
+	* arm/sa11x0/udc.h: Ditto.
+	* device/codec/ucb1400.h: Ditto.
+	* device/flash/28fxxxj.h: Ditto.
+	* device/flash/28fxxxk.h: Ditto.
+	* device/flash/cfi.h: Ditto.
+	* device/flash/intel.h: Ditto.
+	* device/other/hd64461/afe.h: Ditto.
+	* device/other/hd64461/gpio.h: Ditto.
+	* device/other/hd64461/intc.h: Ditto.
+	* device/other/hd64461/lcdc.h: Ditto.
+	* device/other/hd64461/pcc.h: Ditto.
+	* device/other/hd64461/stbsys.h: Ditto.
+	* device/other/hd64461/timer.h: Ditto.
+	* h8/h83048/adc.h: Ditto.
+	* h8/h83048/dac.h: Ditto.
+	* h8/h83048/dmac.h: Ditto.
+	* h8/h83048/flash.h: Ditto.
+	* h8/h83048/ic.h: Ditto.
+	* h8/h83048/itu.h: Ditto.
+	* h8/h83048/other.h: Ditto.
+	* h8/h83048/ports.h: Ditto.
+	* h8/h83048/rc.h: Ditto.
+	* h8/h83048/sci.h: Ditto.
+	* h8/h83048/tpc.h: Ditto.
+	* h8/h83048/wdt.h: Ditto.
+	* h8/h8s2357/adc.h: Ditto.
+	* h8/h8s2357/bus.h: Ditto.
+	* h8/h8s2357/dac.h: Ditto.
+	* h8/h8s2357/dmac.h: Ditto.
+	* h8/h8s2357/dtc.h: Ditto.
+	* h8/h8s2357/flash.h: Ditto.
+	* h8/h8s2357/ic.h: Ditto.
+	* h8/h8s2357/mcu.h: Ditto.
+	* h8/h8s2357/ports.h: Ditto.
+	* h8/h8s2357/ppg.h: Ditto.
+	* h8/h8s2357/sci.h: Ditto.
+	* h8/h8s2357/timer.h: Ditto.
+	* h8/h8s2357/tpu.h: Ditto.
+	* h8/h8s2357/wdt.h: Ditto.
+	* sh/sh7709s/intc.h: Ditto.
+	* sh/sh7750/ccn.h: Ditto.
+
+2005-09-29  Marcel Telka  <marcel@telka.sk>
+
 	* Makefile.am (nobase_openwinceinc_HEADERS): Added openwince.h.
 	* openwince.h: New file. Copied from common.h.
 	* configure.ac (AC_INIT): Changed version number to 0.4.2.

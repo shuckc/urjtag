@@ -41,7 +41,7 @@
 #ifndef	FLASH_CFI_H
 #define	FLASH_CFI_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

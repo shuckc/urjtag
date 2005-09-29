@@ -45,7 +45,7 @@
 #ifndef	PXA2X0_MC_H
 #define	PXA2X0_MC_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

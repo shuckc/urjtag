@@ -39,7 +39,7 @@
 #ifndef	SA11X0_GPIO_H
 #define	SA11X0_GPIO_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

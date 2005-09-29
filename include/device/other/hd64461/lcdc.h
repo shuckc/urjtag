@@ -42,7 +42,7 @@
 #ifndef HD64461_LCDC_H
 #define	HD64461_LCDC_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

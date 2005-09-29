@@ -40,7 +40,7 @@
 #ifndef H8S2357_TIMER_H
 #define H8S2357_TIMER_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

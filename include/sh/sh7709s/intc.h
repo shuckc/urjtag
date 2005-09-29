@@ -42,7 +42,7 @@
 #ifndef SH7709S_INTC_H
 #define	SH7709S_INTC_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>

@@ -38,7 +38,7 @@
 #ifndef	FLASH_28FXXXJ_H
 #define	FLASH_28FXXXJ_H
 
-#include <common.h>
+#include <openwince.h>
 
 /* SR bits - see Table 6. in [1] */
 

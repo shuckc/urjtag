@@ -39,7 +39,7 @@
 #ifndef	SH7750_CCN_H
 #define	SH7750_CCN_H
 
-#include <common.h>
+#include <openwince.h>
 
 #if LANGUAGE == C
 #include <stdint.h>
