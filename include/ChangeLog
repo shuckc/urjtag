@@ -1,3 +1,9 @@
+2005-09-29  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am (nobase_openwinceinc_HEADERS): Added openwince.h.
+	* openwince.h: New file. Copied from common.h.
+	* configure.ac (AC_INIT): Changed version number to 0.4.2.
+
 2005-07-15  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.4.1 released.

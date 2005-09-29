@@ -38,6 +38,7 @@ endif
 
 nobase_openwinceinc_HEADERS = \
 	common.h \
+	openwince.h \
 	cexcept.h \
 	arm/arm.h \
 	arm/sa11x0/gpclk.h \

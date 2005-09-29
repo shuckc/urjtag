@@ -1,5 +1,9 @@
 $Id$
 
+include-0.4.2:
+
+	* Moved content of the obsolete common.h into new openwince.h file.
+
 include-0.4.1 (2005-07-15):
 
 	* Updated stdint.h support from latest ac-archive package for better conformance
