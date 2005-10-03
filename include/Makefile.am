@@ -30,11 +30,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
-if HAVE_HWBENCH
-openwinceincdir = @HWBENCH_PATH@/IAR/INC/openwince
-else
 openwinceincdir = $(includedir)/openwince
-endif
 
 nobase_openwinceinc_HEADERS = \
 	common.h \

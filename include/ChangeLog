@@ -1,3 +1,8 @@
+2005-10-03  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am (openwinceincdir): Removed different setting for hwbench.
+	* configure.ac (HWBENCH_PATH): Removed unused constant.
+
 2005-09-29  Marcel Telka  <marcel@telka.sk>
 
 	* h8/h83048/adc.h: Simplified preprocessor directive syntax.

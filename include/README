@@ -30,3 +30,7 @@ You should use following parameters for the ./configure script:
 	--with-hwbench=PATH_TO_HWBENCH --host=hwbench
 for example
 	--with-hwbench=/cygdrive/c/hwbench --host=hwbench
+
+You could also use --includedir parameter for the ./configure script to install
+the package under hwbench tree. For example:
+	--includedir=/cygdrive/c/hwbench/IAR/INC/
