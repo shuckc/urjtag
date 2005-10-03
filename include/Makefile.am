@@ -122,14 +122,14 @@ noinst_HEADERS = \
 	stdint/stdint-win32.h
 
 if GENERATE_STDINT_H
-nodist_openwinceinc_HEADERS = stdint.h
+nodist_HEADERS = stdint.h
 
 stdint.h: owce-stdint.h
 	cp $< $@
 endif
 
 if HAVE_HWBENCH
-nodist_openwinceinc_HEADERS = stdint.h
+nodist_HEADERS = stdint.h
 
 stdint.h: stdint/stdint-hwbench.h
 	cp $< $@

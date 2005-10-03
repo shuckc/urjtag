@@ -1,5 +1,9 @@
 2005-10-03  Marcel Telka  <marcel@telka.sk>
 
+	* Makefile.am: Moved stdint.h installation to common include installation path.
+
+2005-10-03  Marcel Telka  <marcel@telka.sk>
+
 	* Makefile.am (openwinceincdir): Removed different setting for hwbench.
 	* configure.ac (HWBENCH_PATH): Removed unused constant.
 
