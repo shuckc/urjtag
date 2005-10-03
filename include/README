@@ -18,7 +18,8 @@ Installation instructions
 -------------------------
 
 1. Download and unpack include sources.
-2. Run ./configure script.
+2. Run ./configure script. Please note that you are required to uninstall
+   previous version of this package before running the configure script.
 3. Run `make`.
 4. Run `make install`.
 
