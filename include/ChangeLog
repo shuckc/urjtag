@@ -1,5 +1,9 @@
 2005-10-03  Marcel Telka  <marcel@telka.sk>
 
+	Version 0.4.2 released.
+
+2005-10-03  Marcel Telka  <marcel@telka.sk>
+
 	* Makefile.am: Fixed syntax for stdint.h installation movement.
 
 2005-10-03  Marcel Telka  <marcel@telka.sk>
