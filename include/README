@@ -34,4 +34,4 @@ for example
 
 You could also use --includedir parameter for the ./configure script to install
 the package under hwbench tree. For example:
-	--includedir=/cygdrive/c/hwbench/IAR/INC/
+	--includedir=/cygdrive/c/hwbench/IAR/INC
