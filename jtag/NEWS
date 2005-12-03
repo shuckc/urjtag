@@ -35,6 +35,7 @@ See libbrux/NEWS for more news.
 	* Removed support for parameter '-' (stdin).
 	* New translations:
 		- French (Michel Robitaille)
+		- Kinyarwanda (Steven Michael Murphy)
 
 jtag-0.5.1 (2003-10-11):
 
