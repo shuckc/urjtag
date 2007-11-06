@@ -713,5 +713,6 @@ const bus_driver_t jopcyc_bus = {
 	jopcyc_bus_read_next,
 	jopcyc_bus_read_end,
 	jopcyc_bus_read,
-	jopcyc_bus_write
+	jopcyc_bus_write,
+	NULL
 };

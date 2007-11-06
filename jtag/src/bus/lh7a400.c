@@ -271,7 +271,8 @@ const bus_driver_t lh7a400_bus = {
 	lh7a400_bus_read_next,
 	lh7a400_bus_read_end,
 	lh7a400_bus_read,
-	lh7a400_bus_write
+	lh7a400_bus_write,
+    NULL
 };
 
 static bus_t *

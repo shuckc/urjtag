@@ -329,6 +329,7 @@ const bus_driver_t au1500_bus = {
 	au1500_bus_read_next,
 	au1500_bus_read_end,
 	au1500_bus_read,
-	au1500_bus_write
+	au1500_bus_write,
+	NULL
 };
 

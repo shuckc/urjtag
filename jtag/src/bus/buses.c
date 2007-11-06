@@ -39,6 +39,7 @@ const bus_driver_t *bus_drivers[] = {
 	&mpc824x_bus,
 	&mpc5200_bus,
 	&ppc440gx_ebc8_bus,
+    &ppc405ep_bus,
 	&pxa2x0_bus,
 	&pxa27x_bus,
 	&s3c4510_bus,

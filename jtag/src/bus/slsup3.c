@@ -484,9 +484,10 @@ const bus_driver_t slsup3_bus = {
 	slsup3_bus_printinfo,
 	slsup3_bus_prepare,
 	slsup3_bus_area,
-        slsup3_bus_read_start,
+	slsup3_bus_read_start,
 	slsup3_bus_read_next,
 	slsup3_bus_read_end,
 	slsup3_bus_read,
-	slsup3_bus_write
+	slsup3_bus_write,
+	NULL
 };

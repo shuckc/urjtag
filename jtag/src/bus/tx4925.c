@@ -263,7 +263,8 @@ const bus_driver_t tx4925_bus = {
 	tx4925_bus_read_next,
 	tx4925_bus_read_end,
 	tx4925_bus_read,
-	tx4925_bus_write
+	tx4925_bus_write,
+	NULL
 };
 
 

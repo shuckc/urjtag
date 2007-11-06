@@ -282,7 +282,8 @@ const bus_driver_t bcm1250_bus = {
 	bcm1250_bus_read_next,
 	bcm1250_bus_read_end,
 	bcm1250_bus_read,
-	bcm1250_bus_write
+	bcm1250_bus_write,
+	NULL
 };
 
 static bus_t *
