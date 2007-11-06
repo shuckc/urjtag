@@ -266,7 +266,8 @@ const bus_driver_t sh7751r_bus = {
 	sh7751r_bus_read_next,
 	sh7751r_bus_read_end,
 	sh7751r_bus_read,
-	sh7751r_bus_write
+	sh7751r_bus_write,
+	NULL
 };
 
 static bus_t *

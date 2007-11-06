@@ -396,5 +396,6 @@ const bus_driver_t mpc824x_bus = {
 	mpc824x_bus_read_next,
 	mpc824x_bus_read_end,
 	mpc824x_bus_read,
-	mpc824x_bus_write
+	mpc824x_bus_write,
+	NULL
 };

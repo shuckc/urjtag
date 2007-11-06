@@ -36,6 +36,9 @@
 static int
 cmd_detect_run( char *params[] )
 {
+	int i;
+	bus_t * abus;
+	
 	if (cmd_params( params ) != 1)
 		return -1;
 
@@ -58,6 +61,17 @@ cmd_detect_run( char *params[] )
 	chain_shift_data_registers( chain, 1 );
 	parts_set_instruction( chain->parts, "BYPASS" );
 	chain_shift_instructions( chain );
+	
+	// Initialize all the buses
+	for (i = 0; i < buses.len; i++)
+	{
+		abus = buses.buses[i];
+		if(abus->driver->init)
+		{
+			if(!abus->driver->init(abus))
+				return -1;
+		}
+	}
 
 	return 1;
 }

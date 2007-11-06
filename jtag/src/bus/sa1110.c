@@ -259,7 +259,8 @@ const bus_driver_t sa1110_bus = {
 	sa1110_bus_read_next,
 	sa1110_bus_read_end,
 	sa1110_bus_read,
-	sa1110_bus_write
+	sa1110_bus_write,
+	NULL
 };
 
 static bus_t *
@@ -338,4 +339,3 @@ sa1110_bus_new( void )
 
 	return bus;
 }
-

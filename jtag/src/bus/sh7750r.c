@@ -273,7 +273,8 @@ const bus_driver_t sh7750r_bus = {
 	sh7750r_bus_read_next,
 	sh7750r_bus_read_end,
 	sh7750r_bus_read,
-	sh7750r_bus_write
+	sh7750r_bus_write,
+	NULL
 };
 
 static bus_t *

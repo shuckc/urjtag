@@ -245,7 +245,8 @@ const bus_driver_t ixp425_bus = {
 	ixp425_bus_read_next,
 	ixp425_bus_read_end,
 	ixp425_bus_read,
-	ixp425_bus_write
+	ixp425_bus_write,
+	NULL
 };
 
 static bus_t *

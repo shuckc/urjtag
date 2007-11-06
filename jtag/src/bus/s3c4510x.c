@@ -322,7 +322,8 @@ const bus_driver_t s3c4510_bus = {
         s3c4510_bus_read_next,
         s3c4510_bus_read_end,
         s3c4510_bus_read,
-	s3c4510_bus_write
+	s3c4510_bus_write,
+	NULL
 };
 
 static bus_t *

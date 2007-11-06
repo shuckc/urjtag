@@ -41,6 +41,7 @@ extern cable_driver_t lattice_cable_driver;
 extern cable_driver_t mpcbdm_cable_driver;
 extern cable_driver_t triton_cable_driver;
 extern cable_driver_t wiggler_cable_driver;
+extern cable_driver_t wiggler2_cable_driver;
 
 uint32_t frequency = 0;
 
@@ -55,6 +56,7 @@ cable_driver_t *cable_drivers[] = {
 	&mpcbdm_cable_driver,
 	&triton_cable_driver,
 	&wiggler_cable_driver,
+	&wiggler2_cable_driver,	
 	NULL				/* last must be NULL */
 };
 

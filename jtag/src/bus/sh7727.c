@@ -291,7 +291,8 @@ const bus_driver_t sh7727_bus = {
 	sh7727_bus_read_next,
 	sh7727_bus_read_end,
 	sh7727_bus_read,
-	sh7727_bus_write
+	sh7727_bus_write,
+	NULL
 };
 
 static bus_t *

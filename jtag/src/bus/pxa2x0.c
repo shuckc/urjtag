@@ -381,7 +381,8 @@ const bus_driver_t pxa2x0_bus = {
 	pxa250_bus_read_next,
 	pxa250_bus_read_end,
 	pxa250_bus_read,
-	pxa250_bus_write
+	pxa250_bus_write,
+    NULL
 };
 
 static bus_t *

@@ -45,4 +45,5 @@ libtap_a_SOURCES = \
 	cable/lattice.c \
 	cable/mpcbdm.c \
 	cable/triton.c \
-	cable/wiggler.c
+	cable/wiggler.c \
+	cable/wiggler2.c
