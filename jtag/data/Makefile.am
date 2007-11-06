@@ -28,6 +28,7 @@ nobase_dist_pkgdata_DATA = \
 	altera/PARTS \
 	altera/ep1c20f400/STEPPINGS \
 	altera/ep1c20f400/ep1c20f400 \
+	altera/ep1c6q240/ep1c6q240 \
 	altera/epm7128aetc100/STEPPINGS \
 	altera/epm7128aetc100/epm7128aetc100 \
 	atmel/PARTS \
