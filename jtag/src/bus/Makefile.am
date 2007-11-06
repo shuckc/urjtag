@@ -30,6 +30,8 @@ libbus_a_SOURCES = \
 	buses.h \
 	au1500.c \
 	bcm1250.c \
+	bf533_stamp.c \
+	bf533_ezkit.c \
 	ixp425.c \
 	lh7a400.c \
 	mpc824x.c \

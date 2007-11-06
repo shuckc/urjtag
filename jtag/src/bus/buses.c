@@ -32,6 +32,8 @@
 const bus_driver_t *bus_drivers[] = {
 	&au1500_bus,
 	&bcm1250_bus,
+	&bf533_stamp_bus,
+	&bf533_ezkit_bus,
 	&ixp425_bus,
 	&lh7a400_bus,
 	&mpc824x_bus,
