@@ -28,6 +28,7 @@
 #define AM29LV160DB	0x2249
 #define AM29BDS323D     0x22D1
 #define AM29BDS643D	0x227E
+#define AM29LV040B	0x004F
 
 /* Atmel */
 #define AT49xV16x	0x00C0
@@ -54,6 +55,11 @@
 /* MX */
 #define MX29LV400T      0x22B9
 
+/* Autoselect methods */
+#define AUTOSELECT_M1 0
+#define AUTOSELECT_M2 1
+#define AUTOSELECT_NUM 2
+
 struct mtd_erase_region_info {
 	u_int32_t offset;           /* At which this region starts, from the beginning of the MTD */
 	u_int32_t erasesize;        /* For this region */
@@ -65,6 +71,7 @@ struct amd_flash_info {
 	const int dev_id;
 	const char *name;
 	const long size;
+	const int as_method;
 	const int numeraseregions;
 	const struct mtd_erase_region_info regions[4];
 };
@@ -75,6 +82,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV160DT,
 		.name = "AMD AM29LV160DT",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -87,6 +95,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV160DB,
 		.name = "AMD AM29LV160DB",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x04000, .numblocks =  1 },
@@ -99,6 +108,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = TC58FVT160,
 		.name = "Toshiba TC58FVT160",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -111,6 +121,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = MBM29LV160TE,
 		.name = "Fujitsu MBM29LV160TE",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -123,6 +134,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = TC58FVB160,
 		.name = "Toshiba TC58FVB160",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x04000, .numblocks =  1 },
@@ -135,6 +147,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = MBM29LV160BE,
 		.name = "Fujitsu MBM29LV160BE",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x04000, .numblocks =  1 },
@@ -147,6 +160,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV800BB,
 		.name = "AMD AM29LV800BB",
 		.size = 0x00100000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x04000, .numblocks =  1 },
@@ -159,6 +173,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29F800BB,
 		.name = "AMD AM29F800BB",
 		.size = 0x00100000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x04000, .numblocks =  1 },
@@ -171,6 +186,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV800BT,
 		.name = "AMD AM29LV800BT",
 		.size = 0x00100000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 15 },
@@ -183,6 +199,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29F800BT,
 		.name = "AMD AM29F800BT",
 		.size = 0x00100000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 15 },
@@ -195,6 +212,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV800BB,
 		.name = "AMD AM29LV800BB",
 		.size = 0x00100000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 15 },
@@ -207,6 +225,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = MBM29LV800BB,
 		.name = "Fujitsu MBM29LV800BB",
 		.size = 0x00100000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x04000, .numblocks =  1 },
@@ -219,6 +238,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = M29W800T,
 		.name = "ST M29W800T",
 		.size = 0x00100000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 15 },
@@ -231,6 +251,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = M29W160DT,
 		.name = "ST M29W160DT",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -243,6 +264,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = M29W160DB,
 		.name = "ST M29W160DB",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x04000, .numblocks =  1 },
@@ -255,6 +277,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29BDS323D,
 		.name = "AMD AM29BDS323D",
 		.size = 0x00400000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 3,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 48 },
@@ -266,6 +289,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29BDS643D,
 		.name = "AMD AM29BDS643D",
 		.size = 0x00800000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 3,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 96 },
@@ -277,6 +301,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AT49xV16x,
 		.name = "Atmel AT49xV16x",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 2,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x02000, .numblocks =  8 },
@@ -287,6 +312,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AT49xV16xT,
 		.name = "Atmel AT49xV16xT",
 		.size = 0x00200000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 2,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -297,6 +323,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = MX29LV400T,
 		.name = "MX 29LV400T",
 		.size = 0x0080000,
+		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
 			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 7 },
@@ -304,13 +331,26 @@ static const struct amd_flash_info table[] = {
 			{ .offset = 0x078000, .erasesize = 0x02000, .numblocks = 2 },
 			{ .offset = 0x07c000, .erasesize = 0x04000, .numblocks = 1 },
 		}
+	}, {
+		.mfr_id = MANUFACTURER_AMD,
+		.dev_id = AM29LV040B,
+		.name = "AMD AM29LV040B",
+		.size = 0x0080000,
+		.as_method = AUTOSELECT_M2,
+		.numeraseregions = 1,
+		.regions = {
+			{ .offset = 0x000000, .erasesize = 0x10000, .numblocks = 8 },
+		}
 	} 
 };
 
 int
 jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 {
-	int manid, devid;
+	/* Temporary containers for manufacturer and device id while
+	   probing with different Autoselect methods. */
+	int manid_as[AUTOSELECT_NUM], devid_as[AUTOSELECT_NUM];
+	int manid = 0, devid = 0;
 	int ba, bw;
 	int i, j;
     cfi_query_structure_t *cfi;
@@ -336,19 +376,34 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	(*cfi_array)->cfi_chips[0] = calloc( 1, sizeof (cfi_chip_t) );
 	if (!(*cfi_array)->cfi_chips[0])
 		return -2;              /* out of memory */
-	
+
+	/* probe device with Autoselect method 1 */
 	bus_write(bus, adr, 0xf0);
 	bus_write(bus, adr+0xaaa, 0xaa);
 	bus_write(bus, adr+0x555, 0x55);
 	bus_write(bus, adr+0xaaa, 0x90);
+        
+	manid_as[AUTOSELECT_M1] = bus_read(bus, adr+0);
+	devid_as[AUTOSELECT_M1] = bus_read(bus, adr+2);
+	bus_write(bus, adr, 0xf0);
+
+	/* probe device with Autoselect method 2 */
+	bus_write(bus, adr, 0xf0);
+	bus_write(bus, adr+0x555, 0xaa);
+	bus_write(bus, adr+0x2aa, 0x55);
+	bus_write(bus, adr+0x555, 0x90);
 	
-	manid=bus_read(bus, adr+0);
-	devid=bus_read(bus, adr+2);
+	manid_as[AUTOSELECT_M2] = bus_read(bus, adr+0);
+	devid_as[AUTOSELECT_M2] = bus_read(bus, adr+1);
 	bus_write(bus, adr, 0xf0);
 	
 	fprintf(stderr, "dev ID=%04x   man ID=%04x\n", devid, manid);
 
 	for(i=0 ; i<sizeof(table)/sizeof(struct amd_flash_info) ; i++) {
+		/* compare manufacturer and device id based on the result
+		   of the device's Autoselect method */
+		manid = manid_as[table[i].as_method];
+		devid = devid_as[table[i].as_method];
 		if(manid==table[i].mfr_id && devid==table[i].dev_id) break;
 	}
 

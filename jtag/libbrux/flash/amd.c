@@ -191,6 +191,9 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 	}
 	printf( _("\n\tChip: ") );
 	switch (cid) {
+		case 0x004F:
+			printf( _("Am29LV040B") );
+			break;
 		case 0x22D7:
 			printf( _("Am29LV640D/Am29LV641D/Am29LV642D") );
 			break;
@@ -213,7 +216,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 	printf( _("\n\tProtected: %04x\n"), prot );
 
 	/* Read Array */
-	bus_write( bus, 0, 0x00ff00ff );
+	bus_write( bus, cfi_array->address + (0x0000 << o), 0x00ff00ff );
 }
 
 static int
@@ -305,7 +308,7 @@ flash_driver_t amd_16_flash_driver = {
 flash_driver_t amd_8_flash_driver = {
 	1, /* buswidth */
 	N_("AMD/Fujitsu Standard Command Set"),
-	N_("supported: AMD 29LV160, AMD 29LV065D; 1x8 Bit"),
+	N_("supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B; 1x8 Bit"),
 	amd_flash_autodetect8,
 	amd_flash_print_info,
 	amd_flash_erase_block,
