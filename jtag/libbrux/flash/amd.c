@@ -148,13 +148,13 @@ amdstatus( bus_t *bus, uint32_t adr, int data )
 
 #if 0
 static int
-amdisprotected( parts *ps, uint32_t adr )
+amdisprotected( parts *ps, cfi_array_t *cfi_array, uint32_t adr )
 {
 	uint32_t data;
 
-	bus_write( ps, 0x0555 << o, 0x00aa00aa );	/* autoselect p29, sector erase */
-	bus_write( ps, 0x02aa << o, 0x00550055 );
-	bus_write( ps, 0x0555 << o, 0x00900090 );
+	bus_write( ps, cfi_array->address + (0x0555 << o), 0x00aa00aa );	/* autoselect p29, sector erase */
+	bus_write( ps, cfi_array->address + (0x02aa << o), 0x00550055 );
+	bus_write( ps, cfi_array->address + (0x0555 << o), 0x00900090 );
 
 	data = bus_read( ps, adr + (0x0002 << 2) );
 	/* Read Array */
@@ -170,12 +170,12 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 	int mid, cid, prot;
 	bus_t *bus = cfi_array->bus;
 
-	bus_write( bus, 0x0555 << o, 0x00aa00aa );	/* autoselect p29 */
-	bus_write( bus, 0x02aa << o, 0x00550055 );
-	bus_write( bus, 0x0555 << o, 0x00900090 );
-	mid = bus_read( bus, 0x00 << o ) & 0xFFFF;
-	cid = bus_read( bus, 0x01 << o ) & 0xFFFF;
-	prot = bus_read( bus, 0x02 << o ) & 0xFF;
+	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa );	/* autoselect p29 */
+	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
+	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00900090 );
+	mid = bus_read( bus, cfi_array->address + (0x00 << o) ) & 0xFFFF;
+	cid = bus_read( bus, cfi_array->address + (0x01 << o) ) & 0xFFFF;
+	prot = bus_read( bus, cfi_array->address + (0x02 << o) ) & 0xFF;
 	amd_flash_read_array( cfi_array );		/* AMD reset */
 	printf( _("Chip: AMD Flash\n\tManufacturer: ") );
 	switch (mid) {
@@ -223,13 +223,13 @@ amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 
 	printf("flash_erase_block 0x%08X\n", adr);
 
-	/*	printf("protected: %d\n", amdisprotected(ps, adr)); */
+	/*	printf("protected: %d\n", amdisprotected(ps, cfi_array, adr)); */
 
-	bus_write( bus, 0x0555 << o, 0x00aa00aa ); /* autoselect p29, sector erase */
-	bus_write( bus, 0x02aa << o, 0x00550055 );
-	bus_write( bus, 0x0555 << o, 0x00800080 );
-	bus_write( bus, 0x0555 << o, 0x00aa00aa );
-	bus_write( bus, 0x02aa << o, 0x00550055 );
+	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa ); /* autoselect p29, sector erase */
+	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
+	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00800080 );
+	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa );
+	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
 	bus_write( bus, adr, 0x00300030 );
 
 	if (amdstatus( bus, adr, 0xffff )) {
@@ -260,9 +260,9 @@ amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 	if (dbg)
 		printf("\nflash_program 0x%08X = 0x%08X\n", adr, data);
 
-	bus_write( bus, 0x0555 << o, 0x00aa00aa ); /* autoselect p29, program */
-	bus_write( bus, 0x02aa << o, 0x00550055 );
-	bus_write( bus, 0x0555 << o, 0x00A000A0 );
+	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa ); /* autoselect p29, program */
+	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
+	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00A000A0 );
 
 	bus_write( bus, adr, data );
 	status = amdstatus( bus, adr, data );
