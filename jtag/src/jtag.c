@@ -177,13 +177,40 @@ jtag_parse_line( char *line )
 	return r;
 }
 
+
+static int jtag_readline_multiple_commands_support(char * line) /* multiple commands should be separated with '::' */
+{
+  int 	r;
+  char	*nextcmd = line;
+
+  if (!line || !(strlen( line ) > 0))
+		return 1;
+  
+  do {
+  line = nextcmd;
+
+  nextcmd = strstr(nextcmd, "::"); /* :: to not confuse ms-dos users ;-) */
+  
+  if (nextcmd) {  
+    *nextcmd++ = 0;
+     ++nextcmd;
+     while (*line == ':') ++line;
+  } 
+  
+  r = jtag_parse_line( line );
+  
+  } while (nextcmd && r);
+
+  return r;
+}
+
 static void
 jtag_readline_loop( const char *prompt )
 {
 	char *line = NULL;
 
 	/* Iterate */
-	while (jtag_parse_line( line )) {
+	while (jtag_readline_multiple_commands_support( line )) {
 		free( line );
 
 		/* Read a line from the terminal */

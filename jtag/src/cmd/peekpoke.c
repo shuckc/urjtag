@@ -35,22 +35,40 @@ static int
 cmd_peek_run( char *params[] )
 {
 	uint32_t adr, val;
+	int	pars, j = 1, bw;
+	bus_area_t area;
+	
+	/* bus_t * bus = part_get_active_bus(chain); */
 
-	if (cmd_params( params ) != 2)
+	if ( (pars = cmd_params( params )) < 2)
 		return -1;
 
 	if (!bus) {
 		printf( _("Error: Bus driver missing.\n") );
 		return 1;
 	}
-
-	if (cmd_get_number( params[1], &adr ))
+	do {
+	if (cmd_get_number( params[j], &adr ))
 		return -1;
-
+	
 	bus_prepare( bus );
+	bus_area( bus, adr, &area );
 	val = bus_read( bus, adr );
 
-	printf( _("bus_read(0x%08x) = 0x%08X (%i)\n"), adr, val, val );
+	    switch ( area.width ) 
+	    {
+	    case 8:
+		    val &= 0xff;
+		    printf( _("bus_read(0x%08x) = 0x%02X (%i)\n"), adr, val, val );
+		    break;
+	    case 16:
+		    val &= 0xffff;
+		    printf( _("bus_read(0x%08x) = 0x%04X (%i)\n"), adr, val, val );
+		    break;
+	    default:
+	    	    printf( _("bus_read(0x%08x) = 0x%08X (%i)\n"), adr, val, val );
+	    }	     
+	} while (++j != pars);
 
 	return 1;
 }
@@ -80,8 +98,11 @@ static int
 cmd_poke_run( char *params[] )
 {
 	uint32_t adr, val;
+	bus_area_t area;
+	/*bus_t * bus = part_get_active_bus(chain);*/
+	int	k = 1, pars = cmd_params( params );
 
-	if (cmd_params( params ) != 3)
+	if ( pars < 3 || !(pars & 1))
 		return -1;
 
 	if (!bus) {
@@ -89,11 +110,16 @@ cmd_poke_run( char *params[] )
 		return 1;
 	}
 
-	if (cmd_get_number( params[1], &adr ) || cmd_get_number( params[2], &val ))
-		return -1;
-
-	bus_prepare( bus );
-	bus_write( bus, adr, val );
+	
+	bus_prepare( bus );	
+	
+	while ( k < pars) {
+	    if (cmd_get_number( params[k], &adr ) || cmd_get_number( params[k+1], &val ))
+			return -1;	
+	    bus_area( bus, adr, &area );
+	    bus_write( bus, adr, val );
+	    k += 2;
+	}
 
 	return 1;
 }
@@ -102,7 +128,7 @@ static void
 cmd_poke_help( void )
 {
 	printf( _(
-		"Usage: %s ADDR VAL\n"
+		"Usage: %s ADDR VAL [ADDR VAL] ... \n"
 		"Write a single word (bus width size).\n"
 		"\n"
 		"ADDR       address to write\n"
