@@ -45,6 +45,8 @@ register_alloc( int len )
 		return NULL;
 	}
 
+	memset(tr->data, 0, len);
+
 	tr->string = malloc( len + 1 );
 	if (!tr->string) {
 		free( tr->data );
