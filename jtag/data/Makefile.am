@@ -49,6 +49,9 @@ nobase_dist_pkgdata_DATA = \
 	hitachi/sh7727/sh7727 \
 	hitachi/sh7729/STEPPINGS \
 	hitachi/sh7729/sh7729 \
+	freescale/PARTS \
+	freescale/mpc5200/STEPPINGS \
+	freescale/mpc5200/mpc5200 \
 	ibm/PARTS \
 	ibm/ppc440gx/STEPPINGS \
 	ibm/ppc440gx/ppc440gx \

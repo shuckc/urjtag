@@ -42,6 +42,7 @@ AC_CONFIG_FILES(
 	src/part/Makefile
 	src/bus/Makefile
 	src/cmd/Makefile
+	src/svf/Makefile
 	po/Makefile.in
 )
 
@@ -56,6 +57,8 @@ AM_GNU_GETTEXT_VERSION(0.14.1)
 
 AC_PROG_CC
 AC_PROG_RANLIB
+AC_PROG_LEX
+AC_PROG_YACC
 
 AC_CONFIG_SUBDIRS(libbrux)
 
