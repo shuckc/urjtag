@@ -43,5 +43,6 @@ extern const bus_driver_t sh7750r_bus;
 extern const bus_driver_t sh7751r_bus;
 extern const bus_driver_t slsup3_bus;
 extern const bus_driver_t tx4925_bus;
+extern const bus_driver_t jopcyc_bus;
 
 #endif /* BUSES_H */

@@ -48,6 +48,7 @@ const bus_driver_t *bus_drivers[] = {
 	&sh7751r_bus,
 	&slsup3_bus,
 	&tx4925_bus,
+	&jopcyc_bus,
 	NULL			/* last must be NULL */
 };
 
