@@ -59,6 +59,7 @@ typedef struct bus_driver {
 	uint32_t (*read_end)( bus_t *bus );
 	uint32_t (*read)( bus_t *bus, uint32_t adr );
 	void (*write)( bus_t *bus, uint32_t adr, uint32_t data );
+	int (*init) (bus_t *bus);
 } bus_driver_t;
 
 struct bus {
@@ -77,5 +78,6 @@ extern bus_t *bus;
 #define	bus_read(bus,adr)	bus->driver->read(bus,adr)
 #define	bus_write(bus,adr,data)	bus->driver->write(bus,adr,data)
 #define	bus_free(bus)		bus->driver->free_bus(bus)
+#define	bus_init(bus)		bus->driver->init(bus)
 
 #endif /* BRUX_BUS_H */
