@@ -30,8 +30,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <sys/time.h>
 #include <math.h>
+#include <assert.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 #include "sysdep.h"
 
@@ -549,82 +552,6 @@ svf_all_care(char **string, double number)
 }
 
 
-/*
- * svf_add_time(start_time, add_secs, result_time)
- *
- * Adds the given number of seconds to start_time. The reslt is returned
- * in result_time.
- * start_time and result_time are of type timeval which makes it necessary
- * to have a dedicated function for adding a time period to start_time.
- * Fractions of add_sec are converted to microseconds and are added to
- * start_time accordingly.
- *
- * Parameter:
- *   start_time : base time
- *   add_secs   : time to be added to start_time
- *                floating point value with 1.0 = 1 sec
- */
-static void
-svf_add_time(struct timeval *start_time, double add_secs,
-             struct timeval *result_time)
-{
-  result_time->tv_sec  = start_time->tv_sec + (long)floor(add_secs);
-  result_time->tv_usec = start_time->tv_usec +
-                         (long)((add_secs - floor(add_secs)) * 1000000.0);
-
-  if (result_time->tv_usec > 1000000) {
-    result_time->tv_usec -= 1000000;
-    result_time->tv_sec  += 1;
-  }
-}
-
-
-/*
- * svf_is_later(check, ref)
- *
- * Compares time check against ref.
- *
- * Return value:
- *   1 : check is later in time than ref
- *   0 : otherwise
- */
-static int
-svf_is_later(struct timeval *check, struct timeval *ref)
-{
-  int later = 0;
-
-  if (check->tv_sec <= ref->tv_sec) {
-    if (check->tv_sec == ref->tv_sec)
-      if (check->tv_usec > ref->tv_usec)
-        later = 1;
-  } else
-    later = 1;
-
-  return(later);
-}
-
-
-/*
- * svf_is_later_than_now(check)
- *
- * Compares time check against the current time (aka now).
- *
- * Return value:
- *   1 : check is later than now
- *   0 : otherwise
- */
-static int
-svf_is_later_than_now(struct timeval *check)
-{
-  struct timeval  now;
-  struct timezone tz = {0, 0};
-
-  gettimeofday(&now, &tz);
-
-  return(svf_is_later(check, &now));
-}
-
-
 /* ***************************************************************************
  * svf_endxr(ir_dr, state)
  *
@@ -659,7 +586,7 @@ svf_endxr(enum generic_irdr_coding ir_dr, int state)
 void
 svf_frequency(double freq)
 {
-  frequency = (uint32_t)freq;
+  cable_set_frequency(chain->cable, freq);
 }
 
 
@@ -690,6 +617,13 @@ svf_hxr(enum generic_irdr_coding ir_dr, struct ths_params *params)
 }
 
 
+static int max_time_reached;
+static void sigalrm_handler(int signal)
+{
+  max_time_reached = 1;
+}
+
+
 /* ***************************************************************************
  * svf_runtest(params)
  *
@@ -705,9 +639,7 @@ svf_hxr(enum generic_irdr_coding ir_dr, struct ths_params *params)
 int
 svf_runtest(struct runtest *params)
 {
-  int run_count;
-  struct timeval  start_time, min_endtime, max_endtime;
-  struct timezone tz = {0, 0};
+  uint32_t run_count, frequency;
 
   /* check for restrictions */
   if (params->run_count > 0 && params->run_clk != TCK) {
@@ -719,7 +651,12 @@ svf_runtest(struct runtest *params)
             "svf");
     return(0);
   }
-
+  if (params->max_time > 0.0)
+    if (!issued_runtest_maxtime) {
+      printf( _("Warning %s: maximum time for RUNTEST not guaranteed.\n"), "svf");
+      printf( _(" This message is only displayed once.\n"));
+      issued_runtest_maxtime = 1;
+    }
 
   /* update default values for run_state and end_state */
   if (params->run_state != 0) {
@@ -731,31 +668,56 @@ svf_runtest(struct runtest *params)
   if (params->end_state != 0)
     runtest_end_state = svf_map_state(params->end_state);
 
-  run_count = (int)(params->run_count);
+  /* compute run_count */
+  run_count = params->run_count;
+  frequency = cable_get_frequency(chain->cable);
+  if (frequency > 0) {
+    uint32_t min_time_run_count = ceil(params->min_time / frequency);
+    if (min_time_run_count > run_count) {
+      run_count = min_time_run_count;
+    }
+  }
+  assert(run_count > 0);
 
   svf_goto_state(runtest_run_state);
 
-  /* init timing */
-  if (params->max_time > 0.0)
-    if (!issued_runtest_maxtime) {
-      printf( _("Warning %s: maximum time for RUNTEST not guaranteed.\n"), "svf");
-      printf( _(" This message is only displayed once.\n"));
-      issued_runtest_maxtime = 1;
+  /* set up the timer for max_time */
+  if (params->max_time > 0.0) {
+    struct sigaction sa;
+    unsigned max_time;
+
+    sa.sa_handler = sigalrm_handler;
+    sa.sa_flags = SA_ONESHOT;
+    sigemptyset(&sa.sa_mask);
+    if (sigaction(SIGALRM, &sa, NULL) != 0) {
+      perror("sigaction");
+      exit(EXIT_FAILURE);
     }
-  gettimeofday(&start_time, &tz);
-  svf_add_time(&start_time, params->min_time, &min_endtime);
-  svf_add_time(&start_time, params->max_time, &max_endtime);
 
-  while (run_count > 0 || svf_is_later_than_now(&min_endtime)) {
+    max_time = floor(params->max_time / 1000000);
+    if (max_time == 0) {
+      max_time = 1;
+    }
+    ualarm(max_time, 0);
+  }
+
+  while (run_count-- > 0 && !max_time_reached) {
     chain_clock(chain, 0, 0);
-    run_count--;
-
-    if (svf_is_later(&max_endtime, &start_time))
-      if (!svf_is_later_than_now(&max_endtime))
-        break;
   }
 
   svf_goto_state(runtest_end_state);
+
+  /* stop the timer */
+  if (params->max_time > 0.0) {
+    struct sigaction sa;
+    sa.sa_handler = SIG_IGN;
+    sa.sa_flags = 0;
+    sigemptyset(&sa.sa_mask);
+    if (sigaction(SIGALRM, &sa, NULL) != 0) {
+      perror("sigaction");
+      exit(EXIT_FAILURE);
+    }
+  }
 
   return(1);
 }
