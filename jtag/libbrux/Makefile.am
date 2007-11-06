@@ -44,3 +44,5 @@ libbrux_a_SOURCES = \
 	flash/detectflash.c \
 	flash/amd.c \
 	flash/intel.c
+
+ACLOCAL_AMFLAGS = -I m4
