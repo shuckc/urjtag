@@ -142,6 +142,24 @@ _intel_flash_print_info( cfi_array_t *cfi_array, int o )
 		case 0x8807:
 			printf( "28F256K18\n" );
 			break;
+		case 0x880B:
+			printf( "GE28F640L18T\n" );
+			break;
+		case 0x880C:
+			printf( "GE28F128L18T\n" );
+			break;
+		case 0x880D:
+			printf( "GE28F256L18T\n" );
+			break;
+		case 0x880E:
+			printf( "GE28F640L18B\n" );
+			break;
+		case 0x880F:
+			printf( "GE28F128L18B\n" );
+			break;
+		case 0x8810:
+			printf( "GE28F256L18B\n" );
+			break;
 		default:
 			printf( _("Unknown (0x%02X)!\n"), cid );
 			break;

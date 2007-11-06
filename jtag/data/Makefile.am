@@ -59,6 +59,8 @@ nobase_dist_pkgdata_DATA = \
 	intel/pxa250/STEPPINGS \
 	intel/pxa250/pxa250 \
 	intel/pxa250/pxa250c0 \
+	intel/pxa270/STEPPINGS \
+	intel/pxa270/pxa270 \
 	intel/sa1110/STEPPINGS \
 	intel/sa1110/sa1110 \
 	intel/ixp425/STEPPINGS \

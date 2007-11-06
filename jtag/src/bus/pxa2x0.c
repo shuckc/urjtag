@@ -21,6 +21,9 @@
  *
  * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
+ * 2005-01-29: Cliff Brake <cliff.brake@gmail.com> <http://bec-systems.com>
+ *   - added support for PXA270
+ *
  * Documentation:
  * [1] Intel Corporation, "Intel PXA250 and PXA210 Application Processors
  *     Developer's Manual", February 2002, Order Number: 278522-001
@@ -41,6 +44,15 @@
 #include "jtag.h"
 #include "buses.h"
 
+/*
+ * the following defines are used in proc field of the the 
+ * bus_params_t structure and are used in various functions
+ * below 
+ */
+
+#define PROC_PXA25x	1	// including px26x series
+#define PROC_PXA27x	2	
+
 typedef struct {
 	chain_t *chain;
 	part_t *part;
@@ -55,10 +67,12 @@ typedef struct {
 	signal_t *nsdcas;
 	MC_registers_t MC_registers;
 	int inited;
+	int proc;
 } bus_params_t;
 
 #define	CHAIN	((bus_params_t *) bus->params)->chain
 #define	PART	((bus_params_t *) bus->params)->part
+#define PROC	((bus_params_t *) bus->params)->proc
 #define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
 #define	MA		((bus_params_t *) bus->params)->ma
 #define	MD		((bus_params_t *) bus->params)->md
@@ -83,7 +97,7 @@ setup_address( bus_t *bus, uint32_t a )
 		part_set_signal( p, MA[i], 1, (a >> i) & 1 );
 }
 
-static int pxa2x0_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
+static int pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
 
 static void
 set_data_in( bus_t *bus, uint32_t adr )
@@ -92,7 +106,7 @@ set_data_in( bus_t *bus, uint32_t adr )
 	part_t *p = PART;
 	bus_area_t area;
 
-	pxa2x0_bus_area( bus, adr, &area );
+	pxa2xx_bus_area( bus, adr, &area );
 
 	for (i = 0; i < area.width; i++)
 		part_set_signal( p, MD[i], 0, 0 );
@@ -105,7 +119,7 @@ setup_data( bus_t *bus, uint32_t adr, uint32_t d )
 	part_t *p = PART;
 	bus_area_t area;
 
-	pxa2x0_bus_area( bus, adr, &area );
+	pxa2xx_bus_area( bus, adr, &area );
 
 	for (i = 0; i < area.width; i++)
 		part_set_signal( p, MD[i], 1, (d >> i) & 1 );
@@ -123,7 +137,18 @@ pxa2x0_bus_printinfo( bus_t *bus )
 }
 
 static void
-pxa2x0_bus_init( bus_t *bus )
+pxa27x_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Intel PXA27x compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+static void
+pxa2xx_bus_init( bus_t *bus )
 {
 	chain_t *chain = CHAIN;
 	part_t *p = PART;
@@ -135,9 +160,20 @@ pxa2x0_bus_init( bus_t *bus )
 	chain_shift_instructions( chain );
 	chain_shift_data_registers( chain, 1 );
 
-	BOOT_DEF = BOOT_DEF_PKG_TYPE | BOOT_DEF_BOOT_SEL(part_get_signal( p, part_find_signal( p, "BOOT_SEL[2]" ) ) << 2
-							| part_get_signal( p, part_find_signal( p, "BOOT_SEL[1]" ) ) << 1
-							| part_get_signal( p, part_find_signal( p, "BOOT_SEL[0]" ) ));
+	if (PROC == PROC_PXA25x)
+	{
+		BOOT_DEF = BOOT_DEF_PKG_TYPE | 
+			BOOT_DEF_BOOT_SEL(part_get_signal( p, part_find_signal( p, "BOOT_SEL[2]" ) ) << 2
+					| part_get_signal( p, part_find_signal( p, "BOOT_SEL[1]" ) ) << 1
+					| part_get_signal( p, part_find_signal( p, "BOOT_SEL[0]" ) ));
+	}
+	else if (PROC == PROC_PXA27x)
+	{
+		BOOT_DEF = BOOT_DEF_PKG_TYPE |
+			BOOT_DEF_BOOT_SEL(part_get_signal( p, part_find_signal( p, "BOOT_SEL" ) ));
+	}
+	else
+		printf( "BUG in the code, file %s, line %d.\n", __FILE__, __LINE__ );
 
 	part_set_instruction( p, "BYPASS" );
 	chain_shift_instructions( chain );
@@ -146,16 +182,16 @@ pxa2x0_bus_init( bus_t *bus )
 }
 
 static void
-pxa250_bus_prepare( bus_t *bus )
+pxa2xx_bus_prepare( bus_t *bus )
 {
-	pxa2x0_bus_init( bus );
+	pxa2xx_bus_init( bus );
 
 	part_set_instruction( PART, "EXTEST" );
 	chain_shift_instructions( CHAIN );
 }
 
 static void
-pxa250_bus_read_start( bus_t *bus, uint32_t adr )
+pxa2xx_bus_read_start( bus_t *bus, uint32_t adr )
 {
 	chain_t *chain = CHAIN;
 	part_t *p = PART;
@@ -182,7 +218,7 @@ pxa250_bus_read_start( bus_t *bus, uint32_t adr )
 }
 
 static uint32_t
-pxa250_bus_read_next( bus_t *bus, uint32_t adr )
+pxa2xx_bus_read_next( bus_t *bus, uint32_t adr )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
@@ -195,7 +231,7 @@ pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 		int i;
 		bus_area_t area;
 
-		pxa2x0_bus_area( bus, adr, &area );
+		pxa2xx_bus_area( bus, adr, &area );
 
 		/* see Figure 6-13 in [1] */
 		setup_address( bus, adr );
@@ -222,7 +258,7 @@ pxa250_bus_read_next( bus_t *bus, uint32_t adr )
 }
 
 static uint32_t
-pxa250_bus_read_end( bus_t *bus )
+pxa2xx_bus_read_end( bus_t *bus )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
@@ -232,7 +268,7 @@ pxa250_bus_read_end( bus_t *bus )
 		uint32_t d = 0;
 		bus_area_t area;
 
-		pxa2x0_bus_area( bus, LAST_ADR, &area );
+		pxa2xx_bus_area( bus, LAST_ADR, &area );
 
 		/* see Figure 6-13 in [1] */
 		part_set_signal( p, nCS[0], 1, 1 );
@@ -261,14 +297,14 @@ pxa250_bus_read_end( bus_t *bus )
 }
 
 static uint32_t
-pxa250_bus_read( bus_t *bus, uint32_t adr )
+pxa2xx_bus_read( bus_t *bus, uint32_t adr )
 {
-	pxa250_bus_read_start( bus, adr );
-	return pxa250_bus_read_end( bus );
+	pxa2xx_bus_read_start( bus, adr );
+	return pxa2xx_bus_read_end( bus );
 }
 
 static void
-pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+pxa2xx_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 {
 	/* see Figure 6-17 in [1] */
 	part_t *p = PART;
@@ -299,9 +335,9 @@ pxa250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 }
 
 static int
-pxa2x0_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
-	pxa2x0_bus_init( bus );
+	pxa2xx_bus_init( bus );
 
 	/* Static Chip Select 0 (64 MB) */
 	if (adr < UINT32_C(0x04000000)) {
@@ -361,37 +397,58 @@ pxa2x0_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 }
 
 static void
-pxa250_bus_free( bus_t *bus )
+//pxa250_bus_free( bus_t *bus )
+pxa2xx_bus_free( bus_t *bus )
 {
 	free( bus->params );
 	free( bus );
 }
 
 static bus_t *pxa2x0_bus_new( void );
+static bus_t *pxa27x_bus_new( void );
 
 const bus_driver_t pxa2x0_bus = {
 	"pxa2x0",
 	N_("Intel PXA2x0 compatible bus driver via BSR"),
 	pxa2x0_bus_new,
-	pxa250_bus_free,
+	pxa2xx_bus_free,
 	pxa2x0_bus_printinfo,
-	pxa250_bus_prepare,
-	pxa2x0_bus_area,
-	pxa250_bus_read_start,
-	pxa250_bus_read_next,
-	pxa250_bus_read_end,
-	pxa250_bus_read,
-	pxa250_bus_write,
-    NULL
+	pxa2xx_bus_prepare,
+	pxa2xx_bus_area,
+	pxa2xx_bus_read_start,
+	pxa2xx_bus_read_next,
+	pxa2xx_bus_read_end,
+	pxa2xx_bus_read,
+	pxa2xx_bus_write,
+	NULL /* patch 909598 call pxax0_bus_init, but the patch fails and doesnt look compatible */
 };
 
-static bus_t *
-pxa2x0_bus_new( void )
+const bus_driver_t pxa27x_bus = {
+	"pxa27x",
+	N_("Intel PXA27x compatible bus driver via BSR"),
+	pxa27x_bus_new,
+	pxa2xx_bus_free,
+	pxa27x_bus_printinfo,
+	pxa2xx_bus_prepare,
+	pxa2xx_bus_area,
+	pxa2xx_bus_read_start,
+	pxa2xx_bus_read_next,
+	pxa2xx_bus_read_end,
+	pxa2xx_bus_read,
+	pxa2xx_bus_write,
+	NULL
+};
+
+//static bus_t *
+//pxa2x0_bus_new( void )
+static int
+pxa2xx_bus_new_common(bus_t * bus)
 {
+        int failed = 0;
+#ifdef PREPATCHNEVER
 	bus_t *bus;
 	char buff[10];
 	int i;
-	int failed = 0;
 
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
@@ -409,6 +466,9 @@ pxa2x0_bus_new( void )
 
 	CHAIN = chain;
 	PART = chain->parts->parts[chain->active_part];
+#endif
+	int i;
+	char buff[10];
 
 	for (i = 0; i < 26; i++) {
 		sprintf( buff, "MA[%d]", i );
@@ -466,6 +526,72 @@ pxa2x0_bus_new( void )
 		printf( _("signal '%s' not found\n"), "nSDCAS" );
 		failed = 1;
 	}
+
+	return failed;
+}
+
+static bus_t *
+pxa2x0_bus_new( void )
+{
+	bus_t *bus;
+	int failed = 0;
+
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
+
+	bus = malloc( sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	bus->driver = &pxa2x0_bus;
+	bus->params = calloc( 1, sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[chain->active_part];
+	PROC = PROC_PXA25x;
+
+	failed = pxa2xx_bus_new_common(bus);
+
+	if (failed) {
+		free( bus->params );
+		free( bus );
+		return NULL;
+	}
+
+	INITED = 0;
+
+	return bus;
+}
+
+static bus_t *
+pxa27x_bus_new( void )
+{
+	bus_t *bus;
+	int failed = 0;
+
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
+
+	bus = malloc( sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	bus->driver = &pxa27x_bus;
+	bus->params = calloc( 1, sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[chain->active_part];
+	PROC = PROC_PXA27x;
+
+	failed = pxa2xx_bus_new_common(bus);
 
 	if (failed) {
 		free( bus->params );

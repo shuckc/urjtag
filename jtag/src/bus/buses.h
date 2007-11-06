@@ -33,6 +33,7 @@ extern const bus_driver_t mpc824x_bus;
 extern const bus_driver_t mpc5200_bus;
 extern const bus_driver_t ppc440gx_ebc8_bus;
 extern const bus_driver_t pxa2x0_bus;
+extern const bus_driver_t pxa27x_bus;
 extern const bus_driver_t s3c4510_bus;
 extern const bus_driver_t sa1110_bus;
 extern const bus_driver_t sh7727_bus;

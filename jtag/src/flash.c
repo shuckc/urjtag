@@ -235,7 +235,7 @@ flashmsbin( bus_t *bus, FILE *f )
 }
 
 static int
-find_block( cfi_query_structure_t *cfi, int adr )
+find_block( cfi_query_structure_t *cfi, int adr, int bus_width, int chip_width )
 {
 	int i;
 	int b = 0;
@@ -243,7 +243,8 @@ find_block( cfi_query_structure_t *cfi, int adr )
 
 	for (i = 0; i < cfi->device_geometry.number_of_erase_regions; i++) {
 		const int region_blocks = cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
-		const int region_block_size = cfi->device_geometry.erase_block_regions[i].erase_block_size;
+		const int flash_block_size = cfi->device_geometry.erase_block_regions[i].erase_block_size;
+		const int region_block_size = (bus_width / chip_width) * flash_block_size;
 		const int region_size = region_blocks * region_block_size;
 
 		if (adr < (bb + region_size))
@@ -263,6 +264,8 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	int *erased;
 	int i;
 	int neb;
+	int bus_width;
+	int chip_width;
 
 	flashcheck( bus, &cfi_array );
 	if (!cfi_array || !flash_driver) {
@@ -270,6 +273,9 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		return;
 	}
 	cfi = &cfi_array->cfi_chips[0]->cfi;
+
+	bus_width = cfi_array->bus_width;
+	chip_width = cfi_array->cfi_chips[0]->width;
 
 	for (i = 0, neb = 0; i < cfi->device_geometry.number_of_erase_regions; i++)
 		neb += cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
@@ -289,8 +295,8 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 #define BSIZE 4096
 		uint8_t b[BSIZE];
 		int bc = 0, bn = 0;
-		int block_no = find_block( cfi, adr );
-
+//		int block_no = find_block( cfi, adr );
+		int block_no = find_block( cfi, adr - cfi_array->address, bus_width, chip_width);
 		if (!erased[block_no]) {
 			flash_driver->unlock_block( cfi_array, adr );
 			printf( _("\nblock %d unlocked\n"), block_no );
