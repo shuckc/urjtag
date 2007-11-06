@@ -70,31 +70,31 @@ int endline(void) {
 		if(i!=1) return -1;
 		if(!strncmp(att, "INSTRUCTION_LENGTH", 18)) {
 			i=sscanf(pline, "attribute INSTRUCTION_LENGTH of %s : entity is %i ;", tmp, &j);
-			if(i!=2) return -1;
+			if(i!=2) return -2;
 			IR_l=j;
 		} else
 		if(!strncmp(att, "BOUNDARY_LENGTH", 15)){
 			i=sscanf(pline, "attribute BOUNDARY_LENGTH of %s : entity is %i ;", tmp, &j);
-			if(i!=2) return -1;
+			if(i!=2) return -3;
 			BR_l=j;
 			bs_bits=malloc(BR_l * sizeof(struct bsbit));
 			for(i=0;i<BR_l;i++)bs_bits[i].bit=-1;
 		} else
 		if(!strncmp(att, "IDCODE_REGISTER", 15)) {
 			i=sscanf(pline, "attribute IDCODE_REGISTER of %s : entity is %n", tmp, &j);
-			if(i!=1) return -1;
+			if(i!=1) return -4;
 			memmove(pline, pline+j, strlen(pline+j)+1);
 			mode=4;
 		} else 
 		if(!strncmp(att, "BOUNDARY_REGISTER", 17)) {
 			i=sscanf(pline, "attribute BOUNDARY_REGISTER of %s : entity is %n", tmp, &j);
-			if(i!=1) return -1;
+			if(i!=1) return -5;
 			memmove(pline, pline+j, strlen(pline+j)+1);
 			mode=5;
 		} else
 		if(!strncmp(att, "INSTRUCTION_OPCODE", 18)) {
 			i=sscanf(pline, "attribute INSTRUCTION_OPCODE of %s : entity is %n", tmp, &j);
-			if(i!=1) return -1;
+			if(i!=1) return -6;
 			memmove(pline, pline+j, strlen(pline+j)+1);
 			mode=6;
 		} else
@@ -135,12 +135,12 @@ int endline(void) {
 		switch(mode) {
 			case 1:
 				i=sscanf(pline, "\"%16c\" &", id+4);
-				if(i!=1)return -1;
+				if(i!=1)return -7;
 				mode=2;
 				break;
 			case 2:
 				i=sscanf(pline, "\"%11c\" &", id+20);
-				if(i!=1)return -1;
+				if(i!=1)return -8;
 				mode=3;
 				break;
 			case 3:
@@ -148,14 +148,14 @@ int endline(void) {
 				if(i!=1){
 					i=sscanf(pline, "\"%1c,\" ;", id+31);
 					mode=0;
-					return -1;
+					return -9;
 				} else mode=4;
 				idcode[id_num]=strtoul(id, NULL, 2);
 				id_num++;
 				break;
 			case 4:
 				i=sscanf(pline, "\"%4c\" &", id);
-				if(i!=1)return -1;
+				if(i!=1)return -10;
 				mode=1;
 				break;
 			case 5:
@@ -221,7 +221,7 @@ int endline(void) {
 				}
 				if(pline[strlen(pline)-1]==';')mode=0;
 				if(j && (i!=2)) {
-					return -1;
+					return -11;
 				}
 				if(j) {
 					strcpy(insts[inst_num][0], att);
@@ -240,7 +240,7 @@ int endline(void) {
 					i=-1;
 					sscanf(pline, " %s %n", pins[pins_num], &i);
 					pins[pins_num][strlen(pins[pins_num])-1]='\0';
-					if(i==-1)return -1;
+					if(i==-1)return -12;
 					strcpy(pinsp[pins_num], pline+i);
 					k=pinsp[pins_num][strlen(pinsp[pins_num])-1];
 					pinsp[pins_num][strlen(pinsp[pins_num])-1]='\0';
