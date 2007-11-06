@@ -182,6 +182,9 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		case 0x0001:
 			printf( _("AMD") );
 			break;
+		case 0x0020:
+			printf( _("ST/Samsung") );
+			break;
 		default:
 			printf( _("Unknown manufacturer (ID 0x%04x)"), mid );
 			break;
@@ -197,11 +200,20 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		case 0x0093:
 			printf( _("Am29LV065D") );
 			break;
+		case 0x00ca:
+			printf( _("M29W320DT") );
+			break;
+		case 0x00cb:
+			printf( _("M29W320DB") );
+			break;
 		default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
 			break;
 	}
 	printf( _("\n\tProtected: %04x\n"), prot );
+
+	/* Read Array */
+	bus_write( bus, 0, 0x00ff00ff );
 }
 
 static int
