@@ -33,6 +33,9 @@ nobase_dist_pkgdata_DATA = \
 	atmel/PARTS \
 	atmel/atmega128/STEPPINGS \
 	atmel/atmega128/atmega128 \
+	analog/PARTS \
+	analog/bf533/STEPPINGS \
+	analog/bf533/bf533 \
 	broadcom/PARTS \
 	broadcom/bcm1250/STEPPINGS \
 	broadcom/bcm1250/bcm1250 \
