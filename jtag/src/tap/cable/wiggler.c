@@ -44,6 +44,10 @@
 #define	TMS	1
 #define	nSRESET 0	/* sRESET is inverted in the cable */
 
+/* Certain Macraigor Wigglers appear to use one of the unused data lines as a
+   power line so set all unused bits high. */
+#define UNUSED_BITS (~((1 << nTRST) | (1 << TDI) | (1 << TCK) | (1 << TMS) | (1 << nSRESET)) & 0xff)
+
 /*
  * 7 - BUSY (pin 11)
  * 6 - ACK (pin 10)
@@ -62,7 +66,7 @@ wiggler_init( cable_t *cable )
 		return -1;
 
 	if ((data = parport_get_data( cable->port )) < 0) {
-		if (parport_set_data( cable->port, 1 << nTRST ))
+		if (parport_set_data( cable->port, (1 << nTRST) | UNUSED_BITS))
 			return -1;
 		PARAM_TRST(cable) = 1;
 	} else
@@ -76,17 +80,16 @@ wiggler_clock( cable_t *cable, int tms, int tdi )
 {
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
-
-	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) | UNUSED_BITS );
 	cable_wait();
-	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
+	parport_set_data( cable->port, 0xe0 | (PARAM_TRST(cable) << nTRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) | UNUSED_BITS );
 	cable_wait();
 }
 
 static int
 wiggler_get_tdo( cable_t *cable )
 {
-	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | (0 << TCK) );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | (0 << TCK) | UNUSED_BITS );
 	cable_wait();
 	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
@@ -96,7 +99,7 @@ wiggler_set_trst( cable_t *cable, int trst )
 {
 	PARAM_TRST(cable) = trst ? 1 : 0;
 
-	parport_set_data( cable->port, PARAM_TRST(cable) << nTRST );
+	parport_set_data( cable->port, (PARAM_TRST(cable) << nTRST) | UNUSED_BITS );
 	return PARAM_TRST(cable);
 }
 
