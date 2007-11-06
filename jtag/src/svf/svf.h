@@ -23,6 +23,9 @@
  */
 
 
+#include <stdint.h>
+
+
 #define MAX_PATH_STATES 64
 
 /* Coding for commands referring either to IR or DR */
@@ -55,19 +58,20 @@ struct path_states {
 
 struct runtest {
     int    run_state;
-    double run_count;
+    uint32_t run_count;
     int    run_clk;
     double min_time;
     double max_time;
     int    end_state;
 };
 
+struct YYLTYPE;
 
 void svf_endxr(enum generic_irdr_coding, int);
 void svf_frequency(double);
 int  svf_hxr(enum generic_irdr_coding, struct ths_params *);
 int  svf_runtest(struct runtest *);
 int  svf_state(struct path_states *, int);
-int  svf_sxr(enum generic_irdr_coding, struct ths_params *);
+int  svf_sxr(enum generic_irdr_coding, struct ths_params *, struct YYLTYPE *);
 int  svf_trst(int);
 int  svf_txr(enum generic_irdr_coding, struct ths_params *);

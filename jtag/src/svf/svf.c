@@ -29,6 +29,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <ctype.h>
 #include <math.h>
 #include <assert.h>
@@ -448,7 +449,7 @@ svf_copy_hex_to_register(char *hex_string, tap_register *reg)
  *   0 : tdo and reg do not match or error occured
  */
 static int
-svf_compare_tdo(char *tdo, char *mask, tap_register *reg)
+svf_compare_tdo(char *tdo, char *mask, tap_register *reg, YYLTYPE *loc)
 {
   char *tdo_bit, *mask_bit;
   int   pos, mismatch, result = 1;
@@ -469,10 +470,14 @@ svf_compare_tdo(char *tdo, char *mask, tap_register *reg)
       mismatch = pos;
 
   if (mismatch >= 0) {
-    printf( _("Error %s: mismatch for TDO\n"), "svf");
-    printf( " TDO:  %s\n", tdo_bit);
-    printf( " MASK: %s\n", mask_bit);
-    printf( " Read: %s\n", reg->string);
+    printf( _("Error %s: mismatch at position %d for TDO\n"), "svf", mismatch);
+    if (loc != NULL) {
+      printf( " in input file between line %d col %d and line %d col %d\n", 
+              loc->first_line+1, 
+              loc->first_column+1, 
+              loc->last_line+1, 
+              loc->last_column+1 );
+    }
     if (svf_stop_on_mismatch)
       result = 0;
   }
@@ -769,7 +774,7 @@ svf_state(struct path_states *path_states, int stable_state)
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params)
+svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params, YYLTYPE *loc)
 {
   struct sxr *sxr_params;
   int len, result = 1;
@@ -831,6 +836,13 @@ svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params)
       if (ir->value->len != len) {
         printf( _("Error %s: SIR command length inconsistent.\n"),
                 "svf");
+        if (loc != NULL) {
+          printf( " in input file between line %d col %d and line %d col %d\n", 
+          loc->first_line+1, 
+          loc->first_column+1, 
+          loc->last_line+1, 
+          loc->last_column+1 );
+        }
         return(0);
       }
       break;
@@ -885,7 +897,7 @@ svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params)
       svf_goto_state(enddr);
 
       if (sxr_params->params.tdo)
-        result = svf_compare_tdo(sxr_params->params.tdo, sxr_params->params.mask, dr->out);
+        result = svf_compare_tdo(sxr_params->params.tdo, sxr_params->params.mask, dr->out, loc);
       break;
   }
 

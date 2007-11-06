@@ -24,6 +24,8 @@
  *
  */
 
+%pure-parser
+%locations
 
 %{
 #include <stdio.h>
@@ -47,7 +49,6 @@ static struct svf_parser_params parser_params = {
 };
 
 void yyerror(const char *);
-int  yylex(void);
 
 static void svf_free_ths_params(struct ths_params *);
 %}
@@ -79,8 +80,8 @@ static void svf_free_ths_params(struct ths_params *);
 
 %type <dvalue> NUMBER
 %type <tdval>  runtest_clk_count
-%type <token>  runtest_run_state
-%type <token>  runtest_end_state
+%type <token>  runtest_run_state_opt
+%type <token>  runtest_end_state_opt
 
 %%
 
@@ -152,7 +153,7 @@ svf_statement
         YYERROR;
       }
 
-    | RUNTEST runtest_run_state runtest_clk_count runtest_min_time1 runtest_end_state ';'
+    | RUNTEST runtest_run_state_opt runtest_clk_count runtest_time_opt runtest_end_state_opt ';'
       {
         struct runtest *rt = &parser_params.runtest;
 
@@ -167,14 +168,14 @@ svf_statement
         }
       }
 
-    | RUNTEST runtest_run_state runtest_min_time2 runtest_max_time runtest_end_state ';'
+    | RUNTEST runtest_run_state_opt runtest_time runtest_end_state_opt ';'
       {
         struct runtest *rt = &parser_params.runtest;
 
         rt->run_state = $2;
         rt->run_count = 0;
         rt->run_clk   = 0;
-        rt->end_state = $5;
+        rt->end_state = $4;
 
         if (!svf_runtest(rt)) {
           yyerror("RUNTEST");
@@ -188,7 +189,7 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = svf_sxr(generic_dr, p);
+        result = svf_sxr(generic_dr, p, &@$);
         svf_free_ths_params(p);
 
         if (!result) {
@@ -203,7 +204,7 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = svf_sxr(generic_ir, p);
+        result = svf_sxr(generic_ir, p, &@$);
         svf_free_ths_params(p);
 
         if (!result) {
@@ -294,7 +295,7 @@ stable_state
             | IRPAUSE
 ;
 
-runtest_run_state
+runtest_run_state_opt
             : { $$ = 0; }       /* specify value for 'not existing' */
             | stable_state
               {
@@ -316,27 +317,24 @@ runtest_clk_count
               }
 ;
 
-runtest_min_time1
+runtest_time_opt
             :
               {
                 parser_params.runtest.min_time = 0.0;
                 parser_params.runtest.max_time = 0.0;
               }
 
-            | NUMBER SEC runtest_max_time
+            | runtest_time
+;
+
+runtest_time
+            : NUMBER SEC runtest_max_time_opt
               {
                 parser_params.runtest.min_time = $<dvalue>1;
               }
 ;
 
-runtest_min_time2
-            : NUMBER SEC
-              {
-                parser_params.runtest.min_time = $<dvalue>1;
-              }
-;
-
-runtest_max_time
+runtest_max_time_opt
             : 
             | MAXIMUM NUMBER SEC
               {
@@ -344,7 +342,7 @@ runtest_max_time
               }
 ;
 
-runtest_end_state
+runtest_end_state_opt
             : { $$ = 0; }           /* specify value for 'not existing' */
             | ENDSTATE stable_state
               {

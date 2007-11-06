@@ -24,6 +24,8 @@
  */
 
 
+%option bison-locations
+
 %{
 #include <strings.h>
 #include <ctype.h>
@@ -31,14 +33,18 @@
 #include "svf.h"
 #include "svf_bison.h"
 
-static int map_keyw_ident(void);
+static int map_keyw_ident(YYSTYPE *, char *);
 static void align_string(char *);
+static void fix_yylloc(YYLTYPE *, char *);
+static void fix_yylloc_nl(YYLTYPE *, char *);
 
 int yywrap(void)
 {
   return(1);
 }
 
+#define YY_USER_INIT do { yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 0; } while (0)
+ 
 %}
 
 %pointer
@@ -58,7 +64,8 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a keyword or identifier */
   int keyw;
 
-  keyw = map_keyw_ident();
+  fix_yylloc(yylloc, yytext);
+  keyw = map_keyw_ident(yylval, yytext);
 
   /* enable detection of VECTOR_STRING when this is a PIO command */
   if (keyw == PIO) {
@@ -72,7 +79,9 @@ COMMENT         (!.*)|("//".*)[^\n]
 {DIGIT}+(\.{DIGIT}+)?([eE][-+]?{DIGIT}+)? {
   /* token is a real number */
 
-  yylval.dvalue = strtod(yytext, (char **) NULL);
+  yylval->dvalue = strtod(yytext, (char **) NULL);
+  fix_yylloc(yylloc, yytext);
+
   return(NUMBER);
 } /* end of real number */
 
@@ -86,11 +95,12 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a vector string */
   char *cstring;
 
+  fix_yylloc_nl(yylloc, yytext);
   align_string(yytext);
 
   cstring = calloc(strlen(yytext) + 1, sizeof(char));
   strcpy(cstring, yytext);
-  yylval.cvalue = cstring;
+  yylval->cvalue = cstring;
   return(VECTOR_STRING);
 } /* end of vector string */
 
@@ -99,6 +109,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a hexadecimal value (2) */
   char *cstring;
 
+  fix_yylloc_nl(yylloc, yytext);
   align_string(yytext);
 
   cstring = calloc(strlen(yytext) + 1, sizeof(char));
@@ -110,26 +121,29 @@ COMMENT         (!.*)|("//".*)[^\n]
 
 {WSPACE}+ {
   /* token is a white space character */
-
+  fix_yylloc(yylloc, yytext);
 } /* end of white space */
 
 
 {COMMENT} {
   /* token is a comment */
-
+  fix_yylloc(yylloc, yytext);
 } /* end of comment */
 
 
 [()] {
   /* left or right parenthes */
-
+  fix_yylloc(yylloc, yytext);
   return(yytext[0]);
 } /* end of left or right parenthesis */
 
 
 \n {
   /* token is a new line character */
-
+  yylloc->first_line = yylloc->last_line;
+  yylloc->first_column = yylloc->last_column;
+  ++yylloc->last_line;
+  yylloc->last_column = 0;
 } /* end of new line */
 
 
@@ -139,6 +153,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* release expect_vector */
   BEGIN(INITIAL);
 
+  fix_yylloc(yylloc, yytext);
   return(yytext[0]);
 } /* end of statement character */
 
@@ -225,18 +240,18 @@ static struct rwtable
 #define END(v) (sizeof(v) / sizeof(v[0]) - 1)
 
 static int
-map_keyw_ident(void)
+map_keyw_ident(YYSTYPE * yylval, char *str)
 {
   int idx;
   int rw = IDENTIFIER;
 
-  yylval.cvalue = yytext;
+  yylval->cvalue = str;
 
   for (idx = 0; idx <= END(rwtable); idx++) {
-    if (strcasecmp(rwtable[idx].rw_name, yytext) == 0) {
+    if (strcasecmp(rwtable[idx].rw_name, str) == 0) {
       /* always return terminal value as semantic value */
       rw = rwtable[idx].rw_yylex;
-      yylval.token = rw;
+      yylval->token = rw;
     }
   }
 
@@ -257,4 +272,31 @@ align_string(char *str)
       str[dst++] = str[src];
   }
   str[dst] = '\0';
+}
+
+
+static void
+fix_yylloc(YYLTYPE * yylloc, char *str)
+{
+  yylloc->first_line = yylloc->last_line;
+  yylloc->first_column = yylloc->last_column;
+  yylloc->last_column += strlen(str);
+}
+
+
+static void
+fix_yylloc_nl(YYLTYPE * yylloc, char *str)
+{
+  char *p;
+
+  yylloc->first_line = yylloc->last_line;
+  yylloc->first_column = yylloc->last_column;
+  for (p = str; *p; ++p) {
+    if (*p == '\n') {
+      yylloc->last_column = 0;
+      ++yylloc->last_line;
+    } else {
+      ++yylloc->last_column;
+    }
+  }
 }
