@@ -171,7 +171,7 @@ cmd_bit_run( char *params[] )
 	/* control state */
 	if (strcasecmp(params[7], "Z"))
 		return -1;
-	}
+
 	part->bsbits[bit]->control_state = BSBIT_STATE_Z;
 
 	return 1;
