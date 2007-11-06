@@ -28,7 +28,6 @@
 
 #include <brux/flash.h>
 
-extern flash_driver_t *flash_driver;
 extern flash_driver_t *flash_drivers[];
 
 #endif /* FLASH_H */
