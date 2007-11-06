@@ -314,6 +314,7 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	int ba, bw;
 	int i, j;
     cfi_query_structure_t *cfi;
+	bus_area_t area;
 	
 	*cfi_array = calloc( 1, sizeof (cfi_array_t) );
 	if (!*cfi_array)
@@ -321,7 +322,9 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	
 	(*cfi_array)->bus = bus;
 	(*cfi_array)->address = adr;
-	bw = bus_width( bus, adr );
+	if (bus_area( bus, adr, &area ) != 0)
+		return -8;		/* bus width detection failed */
+	bw = area.width;
 	if (bw != 8 && bw != 16 && bw != 32)
 		return -3;              /* invalid bus width */
 	(*cfi_array)->bus_width = ba = bw / 8;
