@@ -34,6 +34,7 @@
 #include <linux/ioctl.h>
 
 #include <stdlib.h>
+#include <errno.h>
 #include <string.h>
 
 #include "parport.h"
@@ -161,10 +162,13 @@ ppdev_open( parport_t *parport )
 	ppdev_params_t *p = parport->params;
 
 	p->fd = open( p->portname, O_RDWR );
-	if (p->fd < 0)
+	if (p->fd < 0) {
+		printf( _("Could not open port %s: %s\n"), p->portname, strerror(errno) );
 		return -1;
+        }
 
 	if ((ioctl( p->fd, PPEXCL ) == -1) || (ioctl( p->fd, PPCLAIM ) == -1))  {
+		printf( _("Could not claim ppdev device: %s\n"), strerror(errno) );
 		close( p->fd );
 		p->fd = -1;
 		return -1;
