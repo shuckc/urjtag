@@ -59,10 +59,10 @@ tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, i
 	for (i = 0; i < in->len; i++) {
 		if (out && (i < out->len))
 			out->data[i] = cable_get_tdo( chain->cable );
-		chain_clock( chain, (exit && ((i + 1) == in->len)) ? 1 : 0, in->data[i] );	/* Shift (& Exit1) */
+		chain_clock( chain, (exit != EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i] );	/* Shift (& Exit1) */
 	}
 	/* Shift-DR, Shift-IR, Exit1-DR or Exit1-IR state */
-	if (exit) {
+	if (exit == EXITMODE_IDLE) {
 		chain_clock( chain, 1, 0 );	/* Update-DR or Update-IR */
 		chain_clock( chain, 0, 0 );	/* Run-Test/Idle */
 	}

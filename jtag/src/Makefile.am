@@ -28,7 +28,8 @@ SUBDIRS = \
 	tap \
 	part \
 	bus \
-	cmd
+	cmd \
+	svf
 
 bin_PROGRAMS = \
 	jtag \
@@ -50,7 +51,8 @@ jtag_DEPENDENCIES = \
 	tap/libtap.a \
 	part/libpart.a \
 	bus/libbus.a \
-	cmd/libcmd.a
+	cmd/libcmd.a \
+	svf/libsvf.a
 
 jtag_LDADD = \
 	-Ltap -ltap \
@@ -60,6 +62,7 @@ jtag_LDADD = \
 	-Lcmd -lcmd \
 	-L../libbrux -lbrux \
 	-Lbus -lbus \
+	-Lsvf -lsvf \
 	@LIBINTL@
 
 localedir = $(datadir)/locale

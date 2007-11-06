@@ -1,7 +1,7 @@
 #
-# $Id$
+# $Id: Makefile.am,v 1.16 2003/09/14 20:04:24 telka Exp $
 #
-# Copyright (C) 2003 ETC s.r.o.
+# Copyright (C) 2002 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,40 +18,21 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2003.
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libcmd.a
+noinst_LIBRARIES = libsvf.a
 
-libcmd_a_SOURCES = \
-	frequency.c \
-	cable.c \
-	reset.c \
-	discovery.c \
-	detect.c \
-	signal.c \
-	salias.c \
-	bit.c \
-	register.c \
-	initbus.c \
-	print.c \
-	part.c \
-	bus.c \
-	instruction.c \
-	shift.c \
-	dr.c \
-	get.c \
-	set.c \
-	endian.c \
-	peekpoke.c \
-	readmem.c \
-	flashmem.c \
-	eraseflash.c \
-	script.c \
-	include.c \
-	cmd.c \
+libsvf_a_SOURCES = \
+	svf_bison.y \
+	svf_flex.l \
 	svf.c
 
-INCLUDES = -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
+AM_YFLAGS = -d
+
+CLEANFILES = \
+	svf_bison.c \
+	svf_bison.h \
+	svf_flex.c

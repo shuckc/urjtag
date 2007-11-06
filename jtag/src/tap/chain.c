@@ -95,7 +95,7 @@ chain_get_trst( chain_t *chain )
 }
 
 void
-chain_shift_instructions( chain_t *chain )
+chain_shift_instructions_mode( chain_t *chain, int capture, int exit )
 {
 	int i;
 	parts_t *ps;
@@ -112,13 +112,21 @@ chain_shift_instructions( chain_t *chain )
 		}
 	}
 
-	tap_capture_ir( chain );
+	if (capture)
+		tap_capture_ir( chain );
 	for (i = 0; i < ps->len; i++)
-		tap_shift_register( chain, ps->parts[i]->active_instruction->value, NULL, (i + 1) == ps->len );
+		tap_shift_register( chain, ps->parts[i]->active_instruction->value, NULL,
+                                    (i + 1) == ps->len ? exit : EXITMODE_SHIFT );
 }
 
 void
-chain_shift_data_registers( chain_t *chain, int capture_output )
+chain_shift_instructions( chain_t *chain )
+{
+	chain_shift_instructions_mode( chain, 1, EXITMODE_IDLE );
+}
+
+void
+chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture, int exit )
 {
 	int i;
 	parts_t *ps;
@@ -139,9 +147,16 @@ chain_shift_data_registers( chain_t *chain, int capture_output )
 		}
 	}
 
-	tap_capture_dr( chain );
+	if (capture)
+		tap_capture_dr( chain );
 	for (i = 0; i < ps->len; i++)
 		tap_shift_register( chain, ps->parts[i]->active_instruction->data_register->in,
 				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
-				(i + 1) == ps->len );
+				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+}
+
+void
+chain_shift_data_registers( chain_t *chain, int capture_output )
+{
+	chain_shift_data_registers_mode( chain, capture_output, 1, EXITMODE_IDLE );
 }

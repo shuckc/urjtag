@@ -60,6 +60,7 @@ extern cmd_t cmd_flashmem;
 extern cmd_t cmd_eraseflash;
 extern cmd_t cmd_script;
 extern cmd_t cmd_include;
+extern cmd_t cmd_svf;
 
 const cmd_t *cmds[] = {
 	&cmd_quit,
@@ -91,6 +92,7 @@ const cmd_t *cmds[] = {
 	&cmd_eraseflash,
 	&cmd_script,
 	&cmd_include,
+	&cmd_svf,
 	NULL			/* last must be NULL */
 };
 
