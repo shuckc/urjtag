@@ -116,3 +116,18 @@ cable_driver_t wiggler_cable_driver = {
 	wiggler_set_trst,
 	generic_get_trst
 };
+
+cable_driver_t igloo_cable_driver = {
+	"IGLOO",
+	N_("Excelpoint IGLOO JTAG Cable"),
+	generic_connect,
+	generic_disconnect,
+	generic_cable_free,
+	wiggler_init,
+	generic_done,
+	wiggler_clock,
+	wiggler_get_tdo,
+	wiggler_set_trst,
+	generic_get_trst
+};
+
