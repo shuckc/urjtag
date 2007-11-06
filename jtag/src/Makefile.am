@@ -40,6 +40,7 @@ jtag_SOURCES = \
 	detect.c \
 	discovery.c \
 	readmem.c \
+	writemem.c \
 	flash.c
 
 bsdl2jtag_SOURCES = \

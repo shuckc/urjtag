@@ -47,6 +47,7 @@ libcmd_a_SOURCES = \
 	endian.c \
 	peekpoke.c \
 	readmem.c \
+	writemem.c \
 	flashmem.c \
 	eraseflash.c \
 	script.c \

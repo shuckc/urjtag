@@ -45,6 +45,7 @@ int detect_register_size( chain_t *chain );
 void discovery( chain_t *chain );
 
 void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
+void writemem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
 
 void flasherase( bus_t *bus, uint32_t addr, int number );
 
