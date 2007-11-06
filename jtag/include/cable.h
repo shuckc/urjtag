@@ -64,7 +64,8 @@ int cable_get_tdo( cable_t *cable );
 int cable_set_trst( cable_t *cable, int trst );
 int cable_get_trst( cable_t *cable );
 
-extern uint32_t frequency;
+void cable_set_frequency( cable_t *cable, uint32_t frequency );
+uint32_t cable_get_frequency( cable_t *cable );
 void cable_wait( void );
 
 extern cable_driver_t *cable_drivers[];

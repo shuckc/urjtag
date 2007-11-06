@@ -27,4 +27,5 @@ noinst_LIBRARIES = libjtaglib.a
 
 libjtaglib_a_SOURCES = \
 	getdelim.c \
-	getline.c
+	getline.c \
+	fclock.c

@@ -27,6 +27,7 @@
 #include <stdio.h>
 
 #include "cable.h"
+#include "jtag.h"
 
 #include "cmd.h"
 
@@ -36,7 +37,7 @@ cmd_frequency_run( char *params[] )
 	unsigned int freq;
 
 	if (cmd_params( params ) == 1) {
-		printf( _("Current TCK frequency is %u Hz\n"), frequency );
+		printf( _("Current TCK frequency is %u Hz\n"), cable_get_frequency(chain->cable) );
 		return 1;
 	}
 
@@ -47,7 +48,7 @@ cmd_frequency_run( char *params[] )
 		return -1;
 
 	printf( _("Setting TCK frequency to %u Hz\n"), freq );
-	frequency = freq;
+	cable_set_frequency(chain->cable, freq);
 
 	return 1;
 }

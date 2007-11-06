@@ -63,6 +63,7 @@ jtag_LDADD = \
 	-L../libbrux -lbrux \
 	-Lbus -lbus \
 	-Lsvf -lsvf \
+	-lrt \
 	-lm \
 	@LIBINTL@
 

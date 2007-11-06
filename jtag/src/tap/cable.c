@@ -28,7 +28,11 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdint.h>
+#include <assert.h>
+#include <math.h>
 
+#include "fclock.h"
+#include "jtag.h"
 #include "cable.h"
 
 extern cable_driver_t arcom_cable_driver;
@@ -42,8 +46,6 @@ extern cable_driver_t mpcbdm_cable_driver;
 extern cable_driver_t triton_cable_driver;
 extern cable_driver_t wiggler_cable_driver;
 extern cable_driver_t wiggler2_cable_driver;
-
-uint32_t frequency = 0;
 
 cable_driver_t *cable_drivers[] = {
 	&arcom_cable_driver,
@@ -102,17 +104,88 @@ cable_get_trst( cable_t *cable )
 	return cable->driver->get_trst( cable );
 }
 
+static uint32_t delay = 0;
+static uint32_t frequency = 0;
+
+void
+cable_set_frequency( cable_t *cable, uint32_t new_frequency )
+{
+	if (new_frequency == 0) {
+		delay = 0;
+		frequency = 0;
+	} else {
+		const double tolerance = 0.1;
+		uint32_t loops;
+
+		printf("requested frequency %u, now calibrating delay loop\n", new_frequency);
+
+		if (delay == 0) {
+			delay = 1000;
+			loops = 10000;
+		} else {
+			loops = 3 * frequency;
+		}
+
+		while (1) {
+			uint32_t i, new_delay;
+			long double start, end, real_frequency;
+
+			start = frealtime();	
+			for (i = 0; i < loops; ++i) {
+				chain_clock(chain, 0, 0);
+			}
+			end = frealtime();
+
+			assert(end > start);
+			real_frequency = (long double)loops / (end - start);
+			printf("new real frequency %Lg, delay %u\n", 
+			       real_frequency, delay);
+
+			loops = 3 * fmax(real_frequency, new_frequency);
+			new_delay = (long double)delay * real_frequency / new_frequency;
+
+			if (real_frequency >= (1.0 - tolerance)*new_frequency) {
+				if (real_frequency <= (1.0 + tolerance)*new_frequency) {
+					break;
+				}
+				if (new_delay > delay) {
+					delay = new_delay;
+				} else {
+					delay++;
+				}
+			} else {
+				if (new_delay < delay) {
+					delay = new_delay;
+				} else {
+					delay--;
+				}			
+				if (delay == 0) {
+					printf("operating without delay\n");
+					break;
+				}
+			}
+		}
+
+		frequency = new_frequency;
+	}
+}
+
+uint32_t
+cable_get_frequency( cable_t *cable )
+{
+	return frequency;
+}
+
 void
 cable_wait( void )
 {
-	useconds_t s;
+	int i;
+	volatile int j;
 
-	if (!frequency)
+	if (delay == 0)
 		return;
 
-	s = 1000000 / frequency / 2;
-	if (s == 0)
-		s = 1;
-
-	usleep( s );
+	for (i = 0; i < delay; ++i) {
+		j = i;
+	}
 }
