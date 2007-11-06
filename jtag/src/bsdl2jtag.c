@@ -30,6 +30,7 @@
 #define BSBIT_OUTPUT    2
 #define BSBIT_CONTROL   3
 #define BSBIT_INTERNAL  4
+#define BSBIT_BIDIR     5
 
 char dev_name[64]="";
 int IR_l=0;
@@ -191,13 +192,19 @@ int endline(void) {
 					if(!strncasecmp(type, "OUTPUT", 6)) {
 						bs_bits[bit].type=BSBIT_OUTPUT;
 					} else 
+					if(!strncasecmp(type, "bidir", 5)) {
+						bs_bits[bit].type=BSBIT_BIDIR;
+					} else 
 					if(!strncasecmp(type, "control", 7)) {
 						bs_bits[bit].type=BSBIT_CONTROL;
 					} else bs_bits[bit].type=-1;
 					bs_bits[bit].control = -1;
 					bs_bits[bit].control_value = -1;
 				} else {
-					bs_bits[bit].type = BSBIT_OUTPUT;
+					if(!strncasecmp(type, "bidir", 5))
+						bs_bits[bit].type = BSBIT_BIDIR;
+					else 
+						bs_bits[bit].type = BSBIT_OUTPUT;
 					bs_bits[bit].control = ctl;
 					bs_bits[bit].control_value = dis;
 				}
@@ -356,7 +363,7 @@ int main(int argc, char *argv[]) {
 						
 						/* bit */
 						for(j=BR_l-1;j>=0;j--) if(bs_bits[j].bit==j) {
-							char types[6]="OXIOCO"; /* why internal is O */
+							char types[7]="OXIOCOB"; /* why internal is O */
 
 							noparentheses(bs_bits[j].name);
 							printf("bit %i %c %i %s",j, types[bs_bits[j].type+1],
