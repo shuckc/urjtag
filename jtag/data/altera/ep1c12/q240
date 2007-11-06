@@ -1,0 +1,192 @@
+#
+# $Id$
+#
+# JTAG package script for EP1C12Q240
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Arnim Laeuger <arniml@users.sourceforge.net>
+#
+
+salias	IO240	BSC0
+salias	IO239	BSC1
+salias	IO238	BSC2
+salias	IO237	BSC3
+salias	IO236	BSC4
+salias	IO235	BSC5
+salias	IO234	BSC6
+salias	IO233	BSC7
+salias	IO228	BSC8
+salias	IO227	BSC9
+salias	IO226	BSC10
+salias	IO225	BSC11
+salias	IO224	BSC12
+salias	IO223	BSC13
+salias	IO222	BSC14
+salias	IO219	BSC16
+salias	IO218	BSC17
+salias	IO217	BSC18
+salias	IO216	BSC19
+salias	IO215	BSC20
+salias	IO214	BSC21
+salias	IO213	BSC22
+salias	IO208	BSC30
+salias	IO207	BSC33
+salias	IO206	BSC34
+salias	IO203	BSC36
+salias	IO202	BSC37
+salias	IO201	BSC38
+salias	IO200	BSC39
+salias	IO197	BSC48
+salias	IO196	BSC49
+salias	IO195	BSC50
+salias	IO194	BSC51
+salias	IO193	BSC52
+salias	IO188	BSC53
+salias	IO187	BSC54
+salias	IO186	BSC55
+salias	IO185	BSC56
+salias	IO184	BSC57
+salias	IO183	BSC58
+salias	IO182	BSC59
+salias	IO181	BSC60
+salias	IO180	BSC61
+salias	IO179	BSC62
+salias	IO178	BSC63
+salias	IO177	BSC64
+salias	IO176	BSC65
+salias	IO175	BSC66
+salias	IO174	BSC67
+salias	IO173	BSC68
+salias	IO170	BSC69
+salias	IO169	BSC70
+salias	IO168	BSC71
+salias	IO167	BSC72
+salias	IO166	BSC73
+salias	IO165	BSC74
+salias	IO164	BSC75
+salias	IO163	BSC76
+salias	IO162	BSC77
+salias	IO161	BSC78
+salias	IO160	BSC79
+salias	IO159	BSC80
+salias	IO158	BSC81
+salias	IO156	BSC91
+salias	IO144	BSC96
+salias	IO143	BSC97
+salias	IO141	BSC108
+salias	IO140	BSC109
+salias	IO139	BSC110
+salias	IO138	BSC111
+salias	IO137	BSC112
+salias	IO136	BSC113
+salias	IO135	BSC114
+salias	IO134	BSC115
+salias	IO133	BSC116
+salias	IO132	BSC117
+salias	IO131	BSC118
+salias	IO128	BSC119
+salias	IO127	BSC120
+salias	IO126	BSC121
+salias	IO125	BSC122
+salias	IO124	BSC123
+salias	IO123	BSC124
+salias	IO122	BSC125
+salias	IO121	BSC126
+salias	IO120	BSC127
+salias	IO119	BSC128
+salias	IO118	BSC129
+salias	IO117	BSC130
+salias	IO116	BSC131
+salias	IO115	BSC132
+salias	IO114	BSC133
+salias	IO113	BSC134
+salias	IO108	BSC135
+salias	IO107	BSC136
+salias	IO106	BSC137
+salias	IO105	BSC138
+salias	IO104	BSC139
+salias	IO101	BSC148
+salias	IO100	BSC149
+salias	IO99	BSC150
+salias	IO98	BSC151
+salias	IO95	BSC153
+salias	IO94	BSC154
+salias	IO93	BSC157
+salias	IO88	BSC165
+salias	IO87	BSC166
+salias	IO86	BSC167
+salias	IO85	BSC168
+salias	IO84	BSC169
+salias	IO83	BSC170
+salias	IO82	BSC171
+salias	IO79	BSC173
+salias	IO78	BSC174
+salias	IO77	BSC175
+salias	IO76	BSC176
+salias	IO75	BSC177
+salias	IO74	BSC178
+salias	IO73	BSC179
+salias	IO68	BSC180
+salias	IO67	BSC181
+salias	IO66	BSC182
+salias	IO65	BSC183
+salias	IO64	BSC184
+salias	IO63	BSC185
+salias	IO62	BSC186
+salias	IO61	BSC187
+salias	IO60	BSC188
+salias	IO59	BSC189
+salias	IO58	BSC190
+salias	IO57	BSC191
+salias	IO56	BSC192
+salias	IO55	BSC193
+salias	IO54	BSC194
+salias	IO53	BSC195
+salias	IO50	BSC196
+salias	IO49	BSC197
+salias	IO48	BSC198
+salias	IO47	BSC199
+salias	IO46	BSC200
+salias	IO45	BSC201
+salias	IO44	BSC202
+salias	IO43	BSC203
+salias	IO42	BSC204
+salias	IO41	BSC205
+salias	IO39	BSC216
+salias	IO38	BSC217
+salias	IO37	BSC218
+salias	IO24	BSC228
+salias	IO23	BSC229
+salias	IO21	BSC239
+salias	IO20	BSC240
+salias	IO19	BSC241
+salias	IO18	BSC242
+salias	IO17	BSC243
+salias	IO16	BSC244
+salias	IO15	BSC245
+salias	IO14	BSC246
+salias	IO13	BSC247
+salias	IO12	BSC248
+salias	IO11	BSC249
+salias	IO8	BSC250
+salias	IO7	BSC251
+salias	IO6	BSC252
+salias	IO5	BSC253
+salias	IO4	BSC254
+salias	IO3	BSC255
+salias	IO2	BSC256
+salias	IO1	BSC257

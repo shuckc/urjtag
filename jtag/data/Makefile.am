@@ -31,6 +31,16 @@ nobase_dist_pkgdata_DATA = \
 	altera/ep1c6q240/ep1c6q240 \
 	altera/epm7128aetc100/STEPPINGS \
 	altera/epm7128aetc100/epm7128aetc100 \
+	altera/ep1c12/STEPPINGS \
+	altera/ep1c12/ep1c12 \
+	altera/ep1c12/f256 \
+	altera/ep1c12/f324 \
+	altera/ep1c12/q240 \
+	altera/epm3064a/STEPPINGS \
+	altera/epm3064a/epm3064a \
+	altera/epm3064a/l44 \
+	altera/epm3064a/t100 \
+	altera/epm3064a/t44 \
 	atmel/PARTS \
 	atmel/atmega128/STEPPINGS \
 	atmel/atmega128/atmega128 \

@@ -1,0 +1,204 @@
+#
+# $Id$
+#
+# JTAG package script for EP1C12F256
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Arnim Laeuger <arniml@users.sourceforge.net>
+#
+
+salias	IOB2	BSC0
+salias	IOA2	BSC1
+salias	IOB3	BSC2
+salias	IOC4	BSC3
+salias	IOB4	BSC4
+salias	IOA4	BSC5
+salias	IOB5	BSC6
+salias	IOC5	BSC7
+salias	IOE5	BSC8
+salias	IOE6	BSC9
+salias	IOD5	BSC10
+salias	IOD6	BSC11
+salias	IOC6	BSC12
+salias	IOB6	BSC13
+salias	IOE7	BSC14
+salias	IOA6	BSC16
+salias	IOB7	BSC17
+salias	IOC7	BSC18
+salias	IOD7	BSC19
+salias	IOB8	BSC20
+salias	IOA8	BSC21
+salias	IOE8	BSC22
+salias	IOD8	BSC26
+salias	IOC8	BSC27
+salias	IOE10	BSC30
+salias	IOC9	BSC33
+salias	IOD9	BSC34
+salias	IOB9	BSC36
+salias	IOA9	BSC37
+salias	IOD10	BSC38
+salias	IOC10	BSC39
+salias	IOB10	BSC40
+salias	IOA11	BSC41
+salias	IOB11	BSC42
+salias	IOC11	BSC43
+salias	IOD11	BSC48
+salias	IOD12	BSC49
+salias	IOE9	BSC50
+salias	IOE11	BSC51
+salias	IOE12	BSC52
+salias	IOC12	BSC53
+salias	IOB12	BSC54
+salias	IOA13	BSC55
+salias	IOB13	BSC56
+salias	IOC13	BSC57
+salias	IOB14	BSC58
+salias	IOA15	BSC59
+salias	IOB15	BSC60
+salias	IOD13	BSC61
+salias	IOC14	BSC62
+salias	IOC15	BSC63
+salias	IOB16	BSC64
+salias	IOG12	BSC65
+salias	IOH13	BSC66
+salias	IOD14	BSC67
+salias	IOE13	BSC68
+salias	IOF12	BSC69
+salias	IOE14	BSC70
+salias	IOD15	BSC71
+salias	IOD16	BSC72
+salias	IOE15	BSC73
+salias	IOE16	BSC74
+salias	IOF15	BSC75
+salias	IOF13	BSC76
+salias	IOF14	BSC77
+salias	IOF16	BSC78
+salias	IOG15	BSC79
+salias	IOG13	BSC80
+salias	IOG14	BSC81
+salias	IOH12	BSC91
+salias	IOJ16	BSC96
+salias	IOK15	BSC97
+salias	IOK16	BSC108
+salias	IOL16	BSC109
+salias	IOL15	BSC110
+salias	IOL14	BSC111
+salias	IOM16	BSC112
+salias	IOM15	BSC113
+salias	IOL13	BSC114
+salias	IOM14	BSC115
+salias	IOM13	BSC116
+salias	ION14	BSC117
+salias	IOL12	BSC118
+salias	IOK14	BSC119
+salias	IOK12	BSC120
+salias	ION16	BSC121
+salias	ION15	BSC122
+salias	IOR16	BSC123
+salias	IOP15	BSC124
+salias	IOP14	BSC125
+salias	ION13	BSC126
+salias	IOR15	BSC127
+salias	IOT15	BSC128
+salias	IOP13	BSC129
+salias	IOR14	BSC130
+salias	IOR13	BSC131
+salias	IOT13	BSC132
+salias	IOR12	BSC133
+salias	IOP12	BSC134
+salias	IOM12	BSC135
+salias	IOM11	BSC136
+salias	IOM9	BSC137
+salias	ION12	BSC138
+salias	ION11	BSC139
+salias	IOP11	BSC144
+salias	IOR11	BSC145
+salias	IOP10	BSC146
+salias	ION10	BSC147
+salias	IOT11	BSC148
+salias	IOR10	BSC149
+salias	ION9	BSC150
+salias	IOP9	BSC151
+salias	IOT9	BSC153
+salias	IOR9	BSC154
+salias	IOM10	BSC157
+salias	IOP8	BSC160
+salias	ION8	BSC161
+salias	IOM8	BSC165
+salias	IOT8	BSC166
+salias	IOR8	BSC167
+salias	ION7	BSC168
+salias	IOP7	BSC169
+salias	IOR7	BSC170
+salias	IOT6	BSC171
+salias	IOM7	BSC173
+salias	IOR6	BSC174
+salias	IOP6	BSC175
+salias	ION6	BSC176
+salias	ION5	BSC177
+salias	IOM6	BSC178
+salias	IOM5	BSC179
+salias	IOP5	BSC180
+salias	IOR5	BSC181
+salias	IOT4	BSC182
+salias	IOR4	BSC183
+salias	IOP4	BSC184
+salias	IOR3	BSC185
+salias	IOT2	BSC186
+salias	IOR2	BSC187
+salias	ION4	BSC188
+salias	IOP3	BSC189
+salias	IOP2	BSC190
+salias	IOR1	BSC191
+salias	IOL4	BSC192
+salias	IOK5	BSC193
+salias	ION3	BSC194
+salias	IOM4	BSC195
+salias	IOL5	BSC196
+salias	IOM3	BSC197
+salias	ION2	BSC198
+salias	IOM2	BSC199
+salias	ION1	BSC200
+salias	IOM1	BSC201
+salias	IOL2	BSC202
+salias	IOL1	BSC203
+salias	IOK1	BSC204
+salias	IOL3	BSC205
+salias	IOK2	BSC216
+salias	IOJ1	BSC217
+salias	IOK3	BSC218
+salias	IOG4	BSC228
+salias	IOH5	BSC229
+salias	IOF1	BSC239
+salias	IOG2	BSC240
+salias	IOE1	BSC241
+salias	IOF2	BSC242
+salias	IOG3	BSC243
+salias	IOF3	BSC244
+salias	IOD1	BSC245
+salias	IOE2	BSC246
+salias	IOD2	BSC247
+salias	IOE3	BSC248
+salias	IOF5	BSC249
+salias	IOE4	BSC250
+salias	IOD3	BSC251
+salias	IOF4	BSC252
+salias	IOG5	BSC253
+salias	IOB1	BSC254
+salias	IOC2	BSC255
+salias	IOC3	BSC256
+salias	IOD4	BSC257
