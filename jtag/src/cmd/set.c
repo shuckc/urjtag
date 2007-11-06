@@ -43,7 +43,7 @@ cmd_set_run( char *params[] )
 	if (cmd_params( params ) < 4 || cmd_params( params ) > 5)
 		return -1;
 
-	if (strcmp( params[1], "signal" ) != 0)
+	if (strcasecmp( params[1], "signal" ) != 0)
 		return -1;
 
 	if (!cmd_test_cable())
@@ -60,10 +60,10 @@ cmd_set_run( char *params[] )
 	}
 
 	/* direction */
-	if (strcmp( params[3], "in" ) != 0 && strcmp( params[3], "out" ) != 0)
+	if (strcasecmp( params[3], "in" ) != 0 && strcasecmp( params[3], "out" ) != 0)
 		return -1;
 
-	dir = (strcmp( params[3], "in" ) == 0) ? 0 : 1;
+	dir = (strcasecmp( params[3], "in" ) == 0) ? 0 : 1;
 
 	if (dir) {
 		if (cmd_get_number( params[4], &data ))

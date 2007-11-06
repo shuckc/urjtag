@@ -126,7 +126,7 @@ ppdev_connect( const char **par, int parnum )
 			break;
 		}
 
-	if (strcmp( par[1], "none" ) == 0) {
+	if (strcasecmp( par[1], "none" ) == 0) {
 		printf( _("Changed cable to 'none'\n") );
 		return NULL;
 	}

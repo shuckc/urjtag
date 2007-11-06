@@ -46,11 +46,11 @@ cmd_endian_run( char *params[] )
 	}
 
 
-	if (strcmp( params[1], "little" ) == 0) {
+	if (strcasecmp( params[1], "little" ) == 0) {
 		big_endian = 0;
 		return 1;
 	}
-	if (strcmp( params[1], "big" ) == 0) {
+	if (strcasecmp( params[1], "big" ) == 0) {
 		big_endian = 1;
 		return 1;
 	}

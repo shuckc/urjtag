@@ -41,11 +41,11 @@ cmd_shift_run( char *params[] )
 	if (!cmd_test_cable())
 		return 1;
 
-	if (strcmp( params[1], "ir" ) == 0) {
+	if (strcasecmp( params[1], "ir" ) == 0) {
 		chain_shift_instructions( chain );
 		return 1;
 	}
-	if (strcmp( params[1], "dr" ) == 0) {
+	if (strcasecmp( params[1], "dr" ) == 0) {
 		chain_shift_data_registers( chain, 1 );
 		return 1;
 	}

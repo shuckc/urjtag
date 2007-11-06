@@ -111,7 +111,7 @@ part_find_instruction( part_t *p, const char *iname )
 
 	i = p->instructions;
 	while (i) {
-		if (strcmp( iname, i->name ) == 0)
+		if (strcasecmp( iname, i->name ) == 0)
 			break;
 		i = i->next;
 	}
@@ -129,7 +129,7 @@ part_find_data_register( part_t *p, const char *drname )
 
 	dr = p->data_registers;
 	while (dr) {
-		if (strcmp( drname, dr->name ) == 0)
+		if (strcasecmp( drname, dr->name ) == 0)
 			break;
 		dr = dr->next;
 	}

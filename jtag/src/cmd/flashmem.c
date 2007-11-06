@@ -48,11 +48,11 @@ cmd_flashmem_run( char *params[] )
 		return 1;
 	}
 
-	msbin = strcmp( "msbin", params[1] ) == 0;
+	msbin = strcasecmp( "msbin", params[1] ) == 0;
 	if (!msbin && cmd_get_number( params[1], &adr ))
 			return -1;
 
-	f = fopen( params[2], "r" );
+	f = fopen( params[2], "rb" );
 	if (!f) {
 		printf( _("Unable to open file `%s'!\n"), params[2] );
 		return 1;

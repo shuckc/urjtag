@@ -47,7 +47,7 @@ cmd_cable_run( char *params[] )
 
 	/* search connection type driver */
 	for (i = 0; parport_drivers[i]; i++)
-		if (strcmp( params[1], parport_drivers[i]->type ) == 0)
+		if (strcasecmp( params[1], parport_drivers[i]->type ) == 0)
 			break;
 	if (!parport_drivers[i]) {
 		printf( _("Unknown connection type: %s\n"), params[1] );

@@ -152,6 +152,7 @@ static cable_t *
 direct_connect( const char **par, int parnum )
 {
 	int i;
+	long int port_scan_val;
 	unsigned int port;
 	port_node_t *pn = ports;
 	parport_t *parport;
@@ -162,10 +163,15 @@ direct_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	if ((sscanf( par[0], "0x%x", &port ) != 1) && (sscanf( par[0], "%d", &port ) != 1)) {
+	port_scan_val = strtol(par[0], NULL, 0);
+	
+	// if ((sscanf( par[0], "0x%x", &port ) != 1) && (sscanf( par[0], "%d", &port ) != 1)) {
+	if (port_scan_val < 0 || (port_scan_val + 3) > 0xffff) {
 		printf( _("Invalid port address!\n") );
 		return NULL;
 	}
+
+	port = (unsigned int )port_scan_val;
 
 	while (pn)
 		for (pn = ports; pn; pn = pn->next) {
@@ -179,13 +185,13 @@ direct_connect( const char **par, int parnum )
 			}
 		}
 
-	if (strcmp( par[1], "none" ) == 0) {
+	if (strcasecmp( par[1], "none" ) == 0) {
 		printf( _("Changed cable to 'none'\n") );
 		return NULL;
 	}
 
 	for (i = 0; cable_drivers[i]; i++)
-		if (strcmp( par[1], cable_drivers[i]->name ) == 0)
+		if (strcasecmp( par[1], cable_drivers[i]->name ) == 0)
 			break;
 
 	if (!cable_drivers[i]) {

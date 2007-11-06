@@ -82,19 +82,24 @@ cmd_bit_run( char *params[] )
 	if (strlen( params[2] ) != 1)
 		return -1;
 	switch (params[2][0]) {
-		case 'I':
+	    case 'I':
+	    case 'i':
 			type = BSBIT_INPUT;
 			break;
 		case 'O':
+	    case 'o':
 			type = BSBIT_OUTPUT;
 			break;
 		case 'B':
+	    case 'b':
 			type = BSBIT_BIDIR;
 			break;
 		case 'C':
+	    case 'c':
 			type = BSBIT_CONTROL;
 			break;
 		case 'X':
+	    case 'x':
 			type = BSBIT_INTERNAL;
 			break;
 		default:
@@ -134,7 +139,7 @@ cmd_bit_run( char *params[] )
 	part->bsbits[bit]->control_value = (params[6][0] == '1') ? 1 : 0;
 
 	/* control state */
-	if ((strlen( params[7] ) != 1) || (params[7][0] != 'Z'))
+	if (strcasecmp(params[7], "Z"))
 		return -1;
 	part->bsbits[bit]->control_state = BSBIT_STATE_Z;
 

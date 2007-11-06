@@ -58,9 +58,9 @@ cmd_print_run( char *params[] )
 	}
 
 	if (cmd_params( params ) == 2) {
-		if ((strcmp( params[1], "chain" ) != 0) && (strcmp( params[1], "bus") != 0))
+		if ((strcasecmp( params[1], "chain" ) != 0) && (strcasecmp( params[1], "bus") != 0))
 			return -1;
-		if (strcmp( params[1], "bus") == 0)
+		if (strcasecmp( params[1], "bus") == 0)
 			noheader = 1;
 	}
 
@@ -118,7 +118,7 @@ cmd_print_run( char *params[] )
 		return 1;
 	}
 
-	if (strcmp( params[1], "chain" ) == 0) {
+	if (strcasecmp( params[1], "chain" ) == 0) {
 		parts_print( chain->parts );
 		return 1;
 	}

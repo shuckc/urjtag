@@ -76,7 +76,7 @@ cmd_register_run( char *params[] )
 	part->data_registers = dr;
 
 	/* Boundary Scan Register */
-	if (strcmp( dr->name, "BSR" ) == 0) {
+	if (strcasecmp( dr->name, "BSR" ) == 0) {
 		int i;
 
 		part->boundary_length = len;
@@ -90,7 +90,7 @@ cmd_register_run( char *params[] )
 	}
 
 	/* Device Identification Register */
-	if (strcmp( dr->name, "DIR" ) == 0)
+	if (strcasecmp( dr->name, "DIR" ) == 0)
 		register_init( dr->out, register_get_string( part->id ) );
 
 	return 1;
