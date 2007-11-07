@@ -114,7 +114,7 @@ COMMENT         (!.*)|("//".*)[^\n]
 
   cstring = calloc(strlen(yytext) + 1, sizeof(char));
   strcpy(cstring, yytext);
-  yylval.cvalue = cstring;
+  yylval->cvalue = cstring;
   return(HEXA_NUM);
 } /* end of hexadecimal value */
 
