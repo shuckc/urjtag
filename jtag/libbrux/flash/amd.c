@@ -200,6 +200,9 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		case 0x225B:
 			printf( _("Am29LV800B") );
 			break;
+		case 0x2249:
+			printf( _("Am29LV160DB") );
+			break;
 		case 0x0093:
 			printf( _("Am29LV065D") );
 			break;
