@@ -40,6 +40,7 @@ typedef struct part part_t;
 
 struct part {
 	tap_register *id;
+	char *alias; /* djf refdes */
 	char manufacturer[MAXLEN_MANUFACTURER + 1];
 	char part[MAXLEN_PART + 1];
 	char stepping[MAXLEN_STEPPING + 1];

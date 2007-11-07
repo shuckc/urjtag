@@ -32,6 +32,7 @@ typedef struct signal signal_t;
 
 struct signal {
 	char *name;
+	char *pin;	/* djf hack pin number from bsdl */
 	signal_t *next;
 	bsbit_t *input;
 	bsbit_t *output;

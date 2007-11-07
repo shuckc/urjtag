@@ -46,6 +46,7 @@ ssize_t getline( char **lineptr, size_t *n, FILE *stream );
 #endif
 
 chain_t *chain = NULL;
+int debug_mode = 0;
 int big_endian = 0;
 extern cfi_array_t *cfi_array;
 
@@ -173,6 +174,7 @@ jtag_parse_line( char *line )
 	}
 
 	r = cmd_run( a );
+	if(debug_mode & 1)printf("Return in jtag_parse_line r=%d\n",r);
 	free( a );
 	return r;
 }
@@ -252,7 +254,7 @@ jtag_parse_file( const char *filename )
 	go = jtag_parse_stream( f );
 
 	fclose(f);
-
+	if(debug_mode & 1)printf("File Closed gp=%d\n",go);
 	return go;
 }
 
