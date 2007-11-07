@@ -58,10 +58,24 @@ cmd_print_run( char *params[] )
 	}
 
 	if (cmd_params( params ) == 2) {
-		if ((strcasecmp( params[1], "chain" ) != 0) && (strcasecmp( params[1], "bus") != 0))
-			return -1;
 		if (strcasecmp( params[1], "bus") == 0)
 			noheader = 1;
+
+		if (strcasecmp( params[1], "signals") == 0) {
+
+			printf("Signals:\n");
+			part_t *part;
+			signal_t *s;
+			part = chain->parts->parts[chain->active_part];
+			for(s = part->signals;s != NULL;s = s->next) {
+				if(s->pin)printf("%s %s",s->name,s->pin);
+					else printf("%s",s->name);
+				if(s->input)printf("\tinput=%s",s->input->name);
+				if(s->output)printf("\toutput=%s",s->output->name);
+				printf("\n");
+			}
+			return(1);
+		}
 	}
 
 	if (noheader == 0) {
@@ -87,7 +101,11 @@ cmd_print_run( char *params[] )
 
 	if (cmd_params( params ) == 1) {
 		if (chain->parts->len > chain->active_part) {
-			printf( _(" %3d "), chain->active_part );
+			if(chain->parts->parts[chain->active_part]->alias)
+				printf( _(" %3d %s "), chain->active_part,chain->parts->parts[chain->active_part]->alias );
+			else
+				printf( _(" %3d "), chain->active_part);
+
 			part_print( chain->parts->parts[chain->active_part] );
 		}
 		if (bus != NULL) {
@@ -138,7 +156,7 @@ static void
 cmd_print_help( void )
 {
 	printf( _(
-		"Usage: %s [chain|bus]\n"
+		"Usage: %s [chain|bus|signals]\n"
 		"Display JTAG chain status.\n"
 		"\n"
 		"Display list of the parts connected to the JTAG chain including\n"

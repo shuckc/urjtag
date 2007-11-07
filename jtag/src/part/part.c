@@ -37,7 +37,7 @@ part_alloc( const tap_register *id )
 	part_t *p = malloc( sizeof *p );
 	if (!p)
 		return NULL;
-
+	p->alias = NULL; /* djf */
 	p->id = register_duplicate( id );
 	p->manufacturer[0] = '\0';
 	p->part[0] = '\0';
@@ -64,6 +64,8 @@ part_free( part_t *p )
 
 	/* id */
 	free( p->id );
+
+	if(p->alias)free(p->alias); /* djf */
 
 	/* signals */
 	while (p->signals) {

@@ -50,6 +50,8 @@ extern cmd_t cmd_instruction;
 extern cmd_t cmd_shift;
 extern cmd_t cmd_dr;
 extern cmd_t cmd_get;
+extern cmd_t cmd_test;
+extern cmd_t cmd_shell;
 extern cmd_t cmd_set;
 extern cmd_t cmd_endian;
 extern cmd_t cmd_peek;
@@ -62,6 +64,7 @@ extern cmd_t cmd_eraseflash;
 extern cmd_t cmd_script;
 extern cmd_t cmd_include;
 extern cmd_t cmd_svf;
+extern cmd_t cmd_debug;
 
 const cmd_t *cmds[] = {
 	&cmd_quit,
@@ -83,6 +86,8 @@ const cmd_t *cmds[] = {
 	&cmd_shift,
 	&cmd_dr,
 	&cmd_get,
+	&cmd_test,
+	&cmd_shell,
 	&cmd_set,
 	&cmd_endian,
 	&cmd_peek,
@@ -95,6 +100,7 @@ const cmd_t *cmds[] = {
 	&cmd_script,
 	&cmd_include,
 	&cmd_svf,
+	&cmd_debug,
 	NULL			/* last must be NULL */
 };
 

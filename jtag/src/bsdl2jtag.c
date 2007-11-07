@@ -32,11 +32,11 @@
 #define BSBIT_INTERNAL  4
 #define BSBIT_BIDIR     5
 
-char dev_name[64]="";
-int IR_l=0;
-int BR_l=0;
-int idcode[64];
-int id_num=0;
+static char dev_name[64]="";
+static int IR_l=0;
+static int BR_l=0;
+static int idcode[64];
+static int id_num=0;
 struct bsbit {
 	int bit;
 	char name[32];
@@ -47,13 +47,13 @@ struct bsbit {
 	int control_value;
 	int control_state;
 } *bs_bits;
-char insts[100][2][64];
-int inst_num=0;
-char pins[2048][16], pinsp[2048][1024];
-int pins_num=-1;
+static char insts[100][2][64];
+static int inst_num=0;
+static char pins[2048][16], pinsp[2048][1024];
+static int pins_num=-1;
 
-char line[1024], pline[1024];
-int mode;
+static char line[1024], pline[1024];
+static int mode;
 
 
 int endline(void) {
@@ -63,7 +63,7 @@ int endline(void) {
 //	if(pline[0])printf("%s\n", pline);
 	
 	if(!strncmp(pline, "entity ", 7)) {
-		if(dev_name[0]==0) sscanf(pline, "entity %s", dev_name);
+		if(dev_name[0]=='\0') (void)sscanf(pline, "entity %s", dev_name);
 		mode=0;
 	} else 
 	if(!strncmp(pline, "attribute ", 10)) {
@@ -79,6 +79,7 @@ int endline(void) {
 			if(i!=2) return -3;
 			BR_l=j;
 			bs_bits=malloc(BR_l * sizeof(struct bsbit));
+			if(bs_bits==NULL)return -80; /* djf */
 			for(i=0;i<BR_l;i++)bs_bits[i].bit=-1;
 		} else
 		if(!strncmp(att, "IDCODE_REGISTER", 15)) {

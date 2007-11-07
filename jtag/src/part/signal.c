@@ -39,6 +39,7 @@ signal_alloc( const char *name )
 		free( s );
 		return NULL;
 	}
+	s->pin = NULL; /* djf hack pin number */
 	s->next = NULL;
 	s->input = NULL;
 	s->output = NULL;

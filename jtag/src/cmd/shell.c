@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: shell.c,v 1.6 2003/08/19 08:42:20 telka Exp $
  *
  * Copyright (C) 2003 ETC s.r.o.
  *
@@ -19,56 +19,62 @@
  * 02111-1307, USA.
  *
  * Written by Marcel Telka <marcel@telka.sk>, 2003.
- *
+ * shell.c added by djf
  */
 
 #include "sysdep.h"
 
-#include <stdio.h>
-
+//#include <stdio.h>
+//#include <string.h>
+#include <stdlib.h>
+//#include "part.h"
+//#include "bssignal.h"
 #include "jtag.h"
 
 #include "cmd.h"
 
 static int
-cmd_script_run( char *params[] )
+cmd_shell_run( char *params[] )
 {
-int i,j;
+int n,l1,l2;
+char *t;
 
-	int go;
-	i = 0; j = 1;
-	if (cmd_params( params ) == 3) {
-		sscanf(params[2],"%d",&j);	/* loop n times option */
-	}
-	else if (cmd_params( params ) != 2)
+	if((n=cmd_params( params )) == 1)
 		return -1;
 
-	for(i=0;i<j;i++) {
-		go = jtag_parse_file( params[1] );
+	/* I must apologize to everyone who knows what they are doing for
+	* the following. If you can pass a shell argument past strtok the
+	* please fix this.
+	*/
 
-		if (go < 0) {
-			if(go != -99)printf( _("Unable to open file `%s go=%s'!\n"), params[1], go );
-			break;
-		}
+	l1 = strlen(params[1]);
+	l2 = strlen(params[2]);
+	t = malloc(l1+l2+2); 	/* space + term */
+	strcpy(t,params[1]);	/* main command */
+
+	if(n == 3) {
+		*(t+l1)= ' ';		/* add space */
+		strcpy((t+l1+1),params[2]);
 	}
-	if(debug_mode & 1)printf("Return at cmd_script_run\n");
-	return go ? 1 : 0;
+	system(t);
+
+	return 1;
 }
 
 static void
-cmd_script_help( void )
+cmd_shell_help( void )
 {
 	printf( _(
-		"Usage: %s FILENAME [n] \n"
-		"Run command sequence n times from external FILENAME.\n"
+		"Usage: %s cmmd\n"
+		"Shell out to os for a command.\n"
 		"\n"
-		"FILENAME      Name of the file with commands\n"
-	), "script" );
+		"CMMD OS Shell Command\n"
+	), "shell cmmd" );
 }
 
-cmd_t cmd_script = {
-	"script",
-	N_("run command sequence from external file"),
-	cmd_script_help,
-	cmd_script_run
+cmd_t cmd_shell = {
+	"shell",
+	N_("shell cmmd"),
+	cmd_shell_help,
+	cmd_shell_run
 };

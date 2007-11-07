@@ -43,6 +43,9 @@ libcmd_a_SOURCES = \
 	shift.c \
 	dr.c \
 	get.c \
+	test.c \
+	debug.c \
+	shell.c \
 	set.c \
 	endian.c \
 	peekpoke.c \

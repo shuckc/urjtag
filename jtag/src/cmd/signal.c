@@ -37,8 +37,9 @@ cmd_signal_run( char *params[] )
 {
 	part_t *part;
 	signal_t *s;
+	int i;
 
-	if (cmd_params( params ) < 2)
+	if ((i = cmd_params( params )) < 2)
 		return -1;
 
 
@@ -56,12 +57,33 @@ cmd_signal_run( char *params[] )
 	}
 
 	part = chain->parts->parts[chain->active_part];
-	if (part_find_signal( part, params[1] ) != NULL) {
-		printf( _("Signal '%s' already defined\n"), params[1] );
-		return 1;
+	if ((s = part_find_signal( part, params[1] )) != NULL) {
+		if(i == 3) {
+			printf("Defining pin for signal %s\m",s->name);
+
+			if(s->pin)free(s->pin); /* erase old */
+
+	                /* Allocate the space for the pin number & copy it */
+        	        s->pin = malloc(strlen(params[2])+1);
+                	strcpy(s->pin,params[2]);
+
+			return 1;
+		}
+		else {
+			printf( _("Signal '%s' already defined\n"), params[1] );
+			return 1;
+		}
 	}
 
-	s = signal_alloc( params[1] );
+	s = signal_alloc( params[1]);
+
+	if(i == 3) {	/* Add pin number */
+		/* Allocate the space for the pin number & copy it */
+		s->pin = malloc(strlen(params[2])+1);
+		strcpy(s->pin,params[2]);
+
+	}
+
 	if (!s) {
 		printf( _("out of memory\n") );
 		return 1;
@@ -77,11 +99,11 @@ static void
 cmd_signal_help( void )
 {
 	printf( _(
-		"Usage: %s SIGNAL [PINLIST...]\n"
+		"Usage: %s SIGNAL [PIN#]\n"
 		"Define new signal with name SIGNAL for a part.\n"
 		"\n"
-		"SIGNAL        New signal name\n"
-		"PINLIST       List of pins for a signal (not used)\n"
+		"SIGNAL		New signal name\n"
+		"PIN#   	List of pin # for a signal\n"
 	), "signal" );
 }
 

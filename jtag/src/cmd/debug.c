@@ -1,7 +1,7 @@
 /*
- * $Id$
+ * $Id: debug.c,v 1.0 2005/10/10 00:00:0 DJF $
  *
- * Copyright (C) 2003 ETC s.r.o.
+ * Copyright (C) 2005 Protoparts
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,57 +18,53 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2003.
+ * Written by David Farrell, 2005
+ * based on templates by and portions  Written by Marcel Telka <marcel@telka.sk>, 2003.i
  *
  */
 
 #include "sysdep.h"
 
 #include <stdio.h>
-
+#include <string.h>
+//#include <stdlib.h>
+//#include "part.h"
+//#include "bssignal.h"
 #include "jtag.h"
 
 #include "cmd.h"
 
 static int
-cmd_script_run( char *params[] )
+cmd_debug_run( char *params[] )
 {
-int i,j;
+	int data,i;
+	signal_t *s;
 
-	int go;
-	i = 0; j = 1;
-	if (cmd_params( params ) == 3) {
-		sscanf(params[2],"%d",&j);	/* loop n times option */
-	}
-	else if (cmd_params( params ) != 2)
+	if (cmd_params( params ) != 2)
 		return -1;
 
-	for(i=0;i<j;i++) {
-		go = jtag_parse_file( params[1] );
+	if (cmd_get_number( params[1], &i ))
+                return 1;
 
-		if (go < 0) {
-			if(go != -99)printf( _("Unable to open file `%s go=%s'!\n"), params[1], go );
-			break;
-		}
-	}
-	if(debug_mode & 1)printf("Return at cmd_script_run\n");
-	return go ? 1 : 0;
+	debug_mode = i;
+	return 1;
 }
 
 static void
-cmd_script_help( void )
+cmd_debug_help( void )
 {
 	printf( _(
-		"Usage: %s FILENAME [n] \n"
-		"Run command sequence n times from external FILENAME.\n"
+		"Usage: %s  n\n"
+		"Enabled debugging.\n"
 		"\n"
-		"FILENAME      Name of the file with commands\n"
-	), "script" );
+		"n =1 fileio, 2=tap commands, 4 =?\n"
+	), "debug n" );
 }
 
-cmd_t cmd_script = {
-	"script",
-	N_("run command sequence from external file"),
-	cmd_script_help,
-	cmd_script_run
+cmd_t cmd_debug = {
+	"debug",
+	N_("debug jtag program"),
+	cmd_debug_help,
+	cmd_debug_run
 };
+
