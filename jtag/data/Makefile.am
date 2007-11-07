@@ -107,12 +107,89 @@ nobase_dist_pkgdata_DATA = \
 	toshiba/tx4926/STEPPINGS \
 	toshiba/tx4926/tx4926 \
 	xilinx/PARTS \
+	xilinx/xc18v04pc44/xc18v04pc44 \
+	xilinx/xc18v04pc44/STEPPINGS \
+	xilinx/xc2c256-tq144/STEPPINGS \
+	xilinx/xc2c256-tq144/xc2c256-tq144 \
+	xilinx/xc2s200e-pq208/STEPPINGS \
+	xilinx/xc2s200e-pq208/xc2s200e-pq208 \
+	xilinx/xc3s1000/xc3s1000_fg676 \
+	xilinx/xc3s1000/xc3s1000 \
+	xilinx/xc3s1000/xc3s1000_fg320 \
+	xilinx/xc3s1000/xc3s1000l_ft256 \
+	xilinx/xc3s1000/xc3s1000_ft256 \
+	xilinx/xc3s1000/xc3s1000l_fg456 \
+	xilinx/xc3s1000/STEPPINGS \
+	xilinx/xc3s1000/xc3s1000_fg456 \
+	xilinx/xc3s1000/xc3s1000l_fg676 \
+	xilinx/xc3s1000/xc3s1000l \
+	xilinx/xc3s1000/xc3s1000l_fg320 \
+	xilinx/xc3s100e_die/xc3s100e_pq208 \
+	xilinx/xc3s100e_die/xc3s100e_tq144 \
+	xilinx/xc3s100e_die/xc3s100e_die \
+	xilinx/xc3s100e_die/STEPPINGS \
+	xilinx/xc3s100e_die/xc3s100e_vq100 \
+	xilinx/xc3s1500/xc3s1500_fg456 \
+	xilinx/xc3s1500/xc3s1500l_fg676 \
+	xilinx/xc3s1500/xc3s1500l \
+	xilinx/xc3s1500/xc3s1500l_fg320 \
+	xilinx/xc3s1500/xc3s1500_fg676 \
+	xilinx/xc3s1500/xc3s1500 \
+	xilinx/xc3s1500/xc3s1500_fg320 \
+	xilinx/xc3s1500/STEPPINGS \
+	xilinx/xc3s1500/xc3s1500l_fg456 \
+	xilinx/xc3s200/xc3s200_tq144 \
+	xilinx/xc3s200/xc3s200 \
+	xilinx/xc3s200/xc3s200_ft256 \
+	xilinx/xc3s200/xc3s200_vq100 \
+	xilinx/xc3s200/STEPPINGS \
+	xilinx/xc3s200/xc3s200_pq208 \
+	xilinx/xc3s2000/xc3s2000_fg676 \
+	xilinx/xc3s2000/xc3s2000 \
+	xilinx/xc3s2000/xc3s2000l_fg900 \
+	xilinx/xc3s2000/xc3s2000_fg900 \
+	xilinx/xc3s2000/STEPPINGS \
+	xilinx/xc3s2000/xc3s2000_fg456 \
+	xilinx/xc3s2000/xc3s2000l_fg676 \
+	xilinx/xc3s2000/xc3s2000l \
+	xilinx/xc3s400/xc3s400_fg456 \
+	xilinx/xc3s400/xc3s400_tq144 \
+	xilinx/xc3s400/xc3s400 \
+	xilinx/xc3s400/xc3s400_fg320 \
+	xilinx/xc3s400/xc3s400_ft256 \
+	xilinx/xc3s400/STEPPINGS \
+	xilinx/xc3s400/xc3s400_pq208 \
+	xilinx/xc3s4000/xc3s4000l \
+	xilinx/xc3s4000/xc3s4000_fg676 \
+	xilinx/xc3s4000/xc3s4000 \
+	xilinx/xc3s4000/xc3s4000l_fg900 \
+	xilinx/xc3s4000/xc3s4000_fg900 \
+	xilinx/xc3s4000/xc3s4000l_fg1156 \
+	xilinx/xc3s4000/STEPPINGS \
+	xilinx/xc3s4000/xc3s4000_fg1156 \
+	xilinx/xc3s50/xc3s50_pq208 \
+	xilinx/xc3s50/xc3s50_tq144 \
+	xilinx/xc3s50/xc3s50 \
+	xilinx/xc3s50/STEPPINGS \
+	xilinx/xc3s50/xc3s50_vq100 \
+	xilinx/xc3s50/xc3s50_cp132 \
+	xilinx/xc3s5000/xc3s5000 \
+	xilinx/xc3s5000/xc3s5000_fg900 \
+	xilinx/xc3s5000/STEPPINGS \
+	xilinx/xc3s5000/xc3s5000_fg1156 \
+	xilinx/xc3s500e_fg320/xc3s500e_ft256 \
+	xilinx/xc3s500e_fg320/xc3s500e_pq208 \
+	xilinx/xc3s500e_fg320/xc3s500e_fg320 \
+	xilinx/xc3s500e_fg320/STEPPINGS \
+	xilinx/xc9572xl_vq44/xc9572xl_vq44 \
+	xilinx/xc9572xl_vq44/STEPPINGS \
+	xilinx/xcf04s/xcf04s \
+	xilinx/xcf04s/STEPPINGS \
 	xilinx/xcr3032xl-vq44/STEPPINGS \
 	xilinx/xcr3032xl-vq44/xcr3032xl-vq44 \
 	xilinx/xcr3128xl-cs144/STEPPINGS \
 	xilinx/xcr3128xl-cs144/xcr3128xl-cs144 \
 	xilinx/xcr3128xl-vq100/xcr3128xl-vq100 \
 	xilinx/xcr3256xl-ft256/STEPPINGS \
-	xilinx/xcr3256xl-ft256/xcr3256xl-ft256 \
-	xilinx/xc2c256-tq144/STEPPINGS \
-	xilinx/xc2c256-tq144/xc2c256-tq144
+	xilinx/xcr3256xl-ft256/xcr3256xl-ft256
+
