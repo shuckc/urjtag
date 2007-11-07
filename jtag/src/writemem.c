@@ -88,8 +88,8 @@ writemem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 			printf( "\r" );
 			fflush( stdout );
 			if (bc != 0)
-			  printf( _("Data not on word boundary, NOT SUPPORTED!"), bc);
-			if feof(f) {
+			  printf( _("Data not on word boundary, NOT SUPPORTED!"));
+			if (feof(f)) {
 			  printf( _("Unexpected end of file!\n"));
 			  printf( _("Addr: 0x%08X\n"), a);
 			  break;
