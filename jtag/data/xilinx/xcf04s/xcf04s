@@ -1,0 +1,123 @@
+#
+# JTAG declarations for XCF04s
+# Copyright (C) 2005
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Jerome Debard <jdebard@vmetro.no>, 2005.
+#
+
+signal D0	 1
+signal NC1       2
+signal CLK	 3
+signal TDI	 4
+signal TMS	 5
+signal TCK	 6
+signal CF	 7
+signal OE_RESET	 8
+signal NC2       9
+signal CE	10
+signal GND	11
+signal NC3      12
+signal CEO	13
+signal NC4      14
+signal NC5      15
+signal NC6      16
+signal TDO	17
+signal VCC	18
+signal VCCO	19
+signal VCCAUX	20
+
+
+
+# mandatory data registers
+register	BSR	25
+register	BR	1
+
+# optional data registers
+register	UCR	32
+
+# user-defined registers
+
+
+# instructions
+instruction length 8
+
+# mandatory instructions
+instruction EXTEST		00000000	BSR
+instruction SAMPLE/PRELOAD	00000001	BSR
+instruction BYPASS		11111111	BR
+#instruction INTEST		????????	BSR
+instruction IDCODE		11111110	UCR
+instruction USERCODE		11111101	UCR
+instruction HIGHZ		11111100	BR
+instruction CLAMP		11111010	BR
+
+# user-defined instructions
+#instruction ISPEN		11101000
+#instruction ISPENC		11101001
+#instruction FPGM		11101010
+#instruction FADDR		11101011
+#instruction FVFY0		11101111
+#instruction FVFY1		11111000
+#instruction FVFY3		11100010
+#instruction FVFY6		11100110
+#instruction FERASE		11101100
+#instruction SERASE		00001010
+#instruction FDATA0		11101101
+#instruction FDATA3		11110011
+#instruction FBLANK0		11100101
+#instruction FBLANK3		11100001
+#instruction FBLANK6		11100100
+#instruction NORMRST		11110000
+#instruction CONFIG		11101110
+#instruction priv1		11110001
+#instruction ISCTESTSTATUS	11100011
+#instruction priv3		11100111
+#instruction priv4		11110110
+#instruction priv5		11100000
+#instruction priv6		11110111
+#instruction priv7		11110010
+#instruction ISCCLRSTATUS	11110100
+#instruction priv9		11110101
+
+
+# BSR description
+bit  0 I ? CLK
+bit  1 X ? .
+bit  2 X ? .
+bit  3 C ? .
+bit  4 O ? D0 3 0 Z
+bit  5 X ? .
+bit  6 X ? .
+bit  7 X ? .
+bit  8 X ? .
+bit  9 X ? .
+bit 10 X ? .
+bit 11 C ? .
+bit 12 O ? CEO 11 0 Z
+bit 13 X ? .
+bit 14 X ? .
+bit 15 I ? CE
+bit 16 X ? .
+bit 17 X ? .
+bit 18 C ? .
+bit 19 O ? OE_RESET 18 0 Z
+bit 20 I ? OE_RESET
+bit 21 C ? .
+bit 22 O ? CF 21 0 Z
+bit 23 X ? .
+bit 24 X ? .

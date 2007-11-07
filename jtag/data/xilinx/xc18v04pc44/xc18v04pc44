@@ -1,0 +1,65 @@
+signal TDI 9
+signal TMS 11
+signal Gnd_2 12
+signal TCK 13
+signal Vcco_1 14
+signal D4 15
+signal CF 16
+signal Reset_OE 19
+signal D6 31
+signal CE 21
+signal Vcco_2 22
+signal Vcc_1 23
+signal Gnd_3 24
+signal D7 25
+signal CEO 27
+signal D5 31
+signal Vcco_3 32
+signal D3 33
+signal Gnd_4 34
+signal D1 35
+signal TDO 37
+signal Vpp
+signal Vcco_4 42
+signal Vcc_2 41
+signal D0 2
+signal Gnd_1 3
+signal D2 4
+signal CLK 5
+
+register	BSR	25
+register	BR	1
+register	DIR	32
+
+instruction length 8
+
+instruction BYPASS 11111111 BR
+instruction SAMPLE/PRELOAD 00000001 BSR
+instruction EXTEST 00000000 BSR
+instruction IDCODE 11111110 DIR
+
+bit 24 O 1 D4 23 0 Z
+bit 23 C 0 *
+bit 22 O 1 CF 21 0 Z
+bit 21 C 0 *
+bit 20 I 1 Reset_OE
+bit 19 O 1 Reset_OE 18 0 Z
+bit 18 C 0 *
+bit 17 O 1 D6 16 0 Z
+bit 16 C 0 *
+bit 15 I 1 CE
+bit 14 O 1 D7 13 0 Z
+bit 13 C 0 *
+bit 12 O 1 CEO 11 0 Z
+bit 11 C 0 *
+bit 10 O 1 D5 9 0 Z
+bit 9 C 0 *
+bit 8 O 1 D3 7 0 Z
+bit 7 C 0 *
+bit 6 O 1 D1 5 0 Z
+bit 5 C 0 *
+bit 4 O 1 D0 3 0 Z
+bit 3 C 0 *
+bit 2 O 1 D2 1 0 Z
+bit 1 C 0 *
+bit 0 I 1 CLK

@@ -1,0 +1,526 @@
+signal CCLK_P14
+signal DONE_P13
+signal GND1
+signal GND2
+signal GND3
+signal GND4
+signal GND5
+signal GND6
+signal GND7
+signal GND8
+signal GND9
+signal GND10
+signal GND11
+signal GND12
+signal HSWAP_EN_B3
+signal M0_N1
+signal M1_M2
+signal M2_P1
+signal PROG_B
+signal TCK
+signal TDI
+signal TDO
+signal TMS
+signal VCCAUX1
+signal VCCAUX2
+signal VCCAUX3
+signal VCCAUX4
+signal VCCINT1
+signal VCCINT2
+signal VCCINT3
+signal VCCINT4
+signal VCCO011
+signal VCCO012
+signal VCCO013
+signal VCCO231
+signal VCCO232
+signal VCCO233
+signal VCCO451
+signal VCCO452
+signal VCCO453
+signal VCCO671
+signal VCCO672
+signal VCCO673
+signal IO_A3
+signal IO_A6
+signal IO_A7
+signal IO_A8
+signal IO_A9
+signal IO_A10
+signal IO_A11
+signal IO_A12
+signal IO_A13
+signal IO_B1
+signal IO_B2
+signal IO_B5
+signal IO_B6
+signal IO_B7
+signal IO_B11
+signal IO_B13
+signal IO_C1
+signal IO_C4
+signal IO_C5
+signal IO_C7
+signal IO_C8
+signal IO_C9
+signal IO_C11
+signal IO_C14
+signal IO_D1
+signal IO_D2
+signal IO_D3
+signal IO_D12
+signal IO_E1
+signal IO_E2
+signal IO_E3
+signal IO_E12
+signal IO_E13
+signal IO_E14
+signal IO_F2
+signal IO_F3
+signal IO_F12
+signal IO_F13
+signal IO_F14
+signal IO_G1
+signal IO_G3
+signal IO_G12
+signal IO_G13
+signal IO_G14
+signal IO_H1
+signal IO_H2
+signal IO_H3
+signal IO_H12
+signal IO_H14
+signal IO_J1
+signal IO_J2
+signal IO_J3
+signal IO_J12
+signal IO_J13
+signal IO_K1
+signal IO_K2
+signal IO_K3
+signal IO_K12
+signal IO_K13
+signal IO_K14
+signal IO_L3
+signal IO_L12
+signal IO_L13
+signal IO_L14
+signal IO_M1
+signal IO_M4
+signal IO_M6
+signal IO_M7
+signal IO_M8
+signal IO_M10
+signal IO_M11
+signal IO_M14
+signal IO_N2
+signal IO_N4
+signal IO_N8
+signal IO_N9
+signal IO_N10
+signal IO_N12
+signal IO_N13
+signal IO_N14
+signal IO_P2
+signal IO_P3
+signal IO_P4
+signal IO_P5
+signal IO_P6
+signal IO_P7
+signal IO_P8
+signal IO_P9
+
+register	BSR	383
+register	BR	1
+register	DIR	32
+
+instruction length 6
+
+instruction EXTEST 000000 BSR
+instruction SAMPLE/PRELOAD 000001 BSR
+instruction IDCODE 001001 DIR
+instruction BYPASS 111111 BR
+
+bit 382 I 1 IO_D12
+bit 381 O 1 IO_D12 380 1 Z
+bit 380 C 1 *
+bit 379 I 1 IO_C14
+bit 378 O 1 IO_C14 377 1 Z
+bit 377 C 1 *
+bit 376 O 1 *
+bit 375 O 1 *
+bit 374 O 1 *
+bit 373 O 1 *
+bit 372 O 1 *
+bit 371 O 1 *
+bit 370 I 1 IO_E12
+bit 369 O 1 IO_E12 368 1 Z
+bit 368 C 1 *
+bit 367 I 1 IO_E13
+bit 366 O 1 IO_E13 365 1 Z
+bit 365 C 1 *
+bit 364 I 1 IO_E14
+bit 363 O 1 IO_E14 362 1 Z
+bit 362 C 1 *
+bit 361 I 1 IO_F12
+bit 360 O 1 IO_F12 359 1 Z
+bit 359 C 1 *
+bit 358 O 1 *
+bit 357 O 1 *
+bit 356 O 1 *
+bit 355 O 1 *
+bit 354 O 1 *
+bit 353 O 1 *
+bit 352 I 1 IO_F13
+bit 351 O 1 IO_F13 350 1 Z
+bit 350 C 1 *
+bit 349 I 1 IO_F14
+bit 348 O 1 IO_F14 347 1 Z
+bit 347 C 1 *
+bit 346 I 1 IO_G12
+bit 345 O 1 IO_G12 344 1 Z
+bit 344 C 1 *
+bit 343 I 1 IO_G13
+bit 342 O 1 IO_G13 341 1 Z
+bit 341 C 1 *
+bit 340 I 1 IO_G14
+bit 339 O 1 IO_G14 338 1 Z
+bit 338 C 1 *
+bit 337 I 1 IO_H12
+bit 336 O 1 IO_H12 335 1 Z
+bit 335 C 1 *
+bit 334 I 1 IO_H14
+bit 333 O 1 IO_H14 332 1 Z
+bit 332 C 1 *
+bit 331 I 1 IO_J13
+bit 330 O 1 IO_J13 329 1 Z
+bit 329 C 1 *
+bit 328 I 1 IO_J12
+bit 327 O 1 IO_J12 326 1 Z
+bit 326 C 1 *
+bit 325 I 1 IO_K14
+bit 324 O 1 IO_K14 323 1 Z
+bit 323 C 1 *
+bit 322 I 1 IO_K13
+bit 321 O 1 IO_K13 320 1 Z
+bit 320 C 1 *
+bit 319 I 1 IO_K12
+bit 318 O 1 IO_K12 317 1 Z
+bit 317 C 1 *
+bit 316 I 1 IO_L14
+bit 315 O 1 IO_L14 314 1 Z
+bit 314 C 1 *
+bit 313 I 1 IO_L13
+bit 312 O 1 IO_L13 311 1 Z
+bit 311 C 1 *
+bit 310 O 1 *
+bit 309 O 1 *
+bit 308 O 1 *
+bit 307 O 1 *
+bit 306 O 1 *
+bit 305 O 1 *
+bit 304 I 1 IO_L12
+bit 303 O 1 IO_L12 302 1 Z
+bit 302 C 1 *
+bit 301 I 1 IO_M14
+bit 300 O 1 IO_M14 299 1 Z
+bit 299 C 1 *
+bit 298 O 1 *
+bit 297 O 1 *
+bit 296 O 1 *
+bit 295 O 1 *
+bit 294 O 1 *
+bit 293 O 1 *
+bit 292 I 1 IO_N13
+bit 291 O 1 IO_N13 290 1 Z
+bit 290 C 1 *
+bit 289 I 1 IO_N14
+bit 288 O 1 IO_N14 287 1 Z
+bit 287 C 1 *
+bit 286 I 1 CCLK_P14
+bit 285 O 1 CCLK_P14 284 1 Z
+bit 284 C 1 *
+bit 283 I 1 DONE_P13
+bit 282 O 1 DONE_P13 281 1 Z
+bit 281 C 1 *
+bit 280 I 1 IO_N12
+bit 279 O 1 IO_N12 278 1 Z
+bit 278 C 1 *
+bit 277 I 1 IO_P12
+bit 276 O 1 IO_P12 275 1 Z
+bit 275 C 1 *
+bit 274 I 1 IO_M11
+bit 273 O 1 IO_M11 272 1 Z
+bit 272 C 1 *
+bit 271 O 1 *
+bit 270 O 1 *
+bit 269 O 1 *
+bit 268 O 1 *
+bit 267 O 1 *
+bit 266 O 1 *
+bit 265 O 1 *
+bit 264 O 1 *
+bit 263 O 1 *
+bit 262 I 1 IO_M10
+bit 261 O 1 IO_M10 260 1 Z
+bit 260 C 1 *
+bit 259 I 1 IO_N10
+bit 258 O 1 IO_N10 257 1 Z
+bit 257 C 1 *
+bit 256 I 1 IO_N9
+bit 255 O 1 IO_N9 254 1 Z
+bit 254 C 1 *
+bit 253 I 1 IO_P9
+bit 252 O 1 IO_P9 251 1 Z
+bit 251 C 1 *
+bit 250 O 1 *
+bit 249 O 1 *
+bit 248 O 1 *
+bit 247 I 1 IO_M8
+bit 246 O 1 IO_M8 245 1 Z
+bit 245 C 1 *
+bit 244 I 1 IO_N8
+bit 243 O 1 IO_N8 242 1 Z
+bit 242 C 1 *
+bit 241 I 1 IO_P8
+bit 240 O 1 IO_P8 239 1 Z
+bit 239 C 1 *
+bit 238 I 1 IO_M7
+bit 237 O 1 IO_M7 236 1 Z
+bit 236 C 1 *
+bit 235 O 1 *
+bit 234 O 1 *
+bit 233 O 1 *
+bit 232 I 1 IO_P7
+bit 231 O 1 IO_P7 230 1 Z
+bit 230 C 1 *
+bit 229 I 1 IO_P6
+bit 228 O 1 IO_P6 227 1 Z
+bit 227 C 1 *
+bit 226 I 1 IO_M6
+bit 225 O 1 IO_M6 224 1 Z
+bit 224 C 1 *
+bit 223 I 1 IO_P5
+bit 222 O 1 IO_P5 221 1 Z
+bit 221 C 1 *
+bit 220 O 1 *
+bit 219 O 1 *
+bit 218 O 1 *
+bit 217 I 1 IO_P4
+bit 216 O 1 IO_P4 215 1 Z
+bit 215 C 1 *
+bit 214 I 1 IO_N4
+bit 213 O 1 IO_N4 212 1 Z
+bit 212 C 1 *
+bit 211 I 1 IO_M4
+bit 210 O 1 IO_M4 209 1 Z
+bit 209 C 1 *
+bit 208 I 1 IO_P3
+bit 207 O 1 IO_P3 206 1 Z
+bit 206 C 1 *
+bit 205 O 1 *
+bit 204 O 1 *
+bit 203 O 1 *
+bit 202 O 1 *
+bit 201 O 1 *
+bit 200 O 1 *
+bit 199 O 1 *
+bit 198 O 1 *
+bit 197 O 1 *
+bit 196 I 1 IO_P2
+bit 195 O 1 IO_P2 194 1 Z
+bit 194 C 1 *
+bit 193 I 1 IO_N2
+bit 192 O 1 IO_N2 191 1 Z
+bit 191 C 1 *
+bit 190 I 1 M2_P1
+bit 189 I 1 M0_N1
+bit 188 I 1 M1_M2
+bit 187 I 1 IO_L3
+bit 186 O 1 IO_L3 185 1 Z
+bit 185 C 1 *
+bit 184 I 1 IO_M1
+bit 183 O 1 IO_M1 182 1 Z
+bit 182 C 1 *
+bit 181 O 1 *
+bit 180 O 1 *
+bit 179 O 1 *
+bit 178 O 1 *
+bit 177 O 1 *
+bit 176 O 1 *
+bit 175 I 1 IO_K3
+bit 174 O 1 IO_K3 173 1 Z
+bit 173 C 1 *
+bit 172 I 1 IO_K2
+bit 171 O 1 IO_K2 170 1 Z
+bit 170 C 1 *
+bit 169 O 1 *
+bit 168 O 1 *
+bit 167 O 1 *
+bit 166 O 1 *
+bit 165 O 1 *
+bit 164 O 1 *
+bit 163 I 1 IO_K1
+bit 162 O 1 IO_K1 161 1 Z
+bit 161 C 1 *
+bit 160 I 1 IO_J3
+bit 159 O 1 IO_J3 158 1 Z
+bit 158 C 1 *
+bit 157 I 1 IO_J2
+bit 156 O 1 IO_J2 155 1 Z
+bit 155 C 1 *
+bit 154 I 1 IO_J1
+bit 153 O 1 IO_J1 152 1 Z
+bit 152 C 1 *
+bit 151 I 1 IO_H3
+bit 150 O 1 IO_H3 149 1 Z
+bit 149 C 1 *
+bit 148 I 1 IO_H2
+bit 147 O 1 IO_H2 146 1 Z
+bit 146 C 1 *
+bit 145 I 1 IO_H1
+bit 144 O 1 IO_H1 143 1 Z
+bit 143 C 1 *
+bit 142 I 1 IO_G3
+bit 141 O 1 IO_G3 140 1 Z
+bit 140 C 1 *
+bit 139 I 1 IO_G1
+bit 138 O 1 IO_G1 137 1 Z
+bit 137 C 1 *
+bit 136 I 1 IO_F2
+bit 135 O 1 IO_F2 134 1 Z
+bit 134 C 1 *
+bit 133 I 1 IO_F3
+bit 132 O 1 IO_F3 131 1 Z
+bit 131 C 1 *
+bit 130 I 1 IO_E1
+bit 129 O 1 IO_E1 128 1 Z
+bit 128 C 1 *
+bit 127 I 1 IO_E2
+bit 126 O 1 IO_E2 125 1 Z
+bit 125 C 1 *
+bit 124 I 1 IO_E3
+bit 123 O 1 IO_E3 122 1 Z
+bit 122 C 1 *
+bit 121 I 1 IO_D1
+bit 120 O 1 IO_D1 119 1 Z
+bit 119 C 1 *
+bit 118 I 1 IO_D2
+bit 117 O 1 IO_D2 116 1 Z
+bit 116 C 1 *
+bit 115 I 1 IO_C1
+bit 114 O 1 IO_C1 113 1 Z
+bit 113 C 1 *
+bit 112 I 1 IO_D3
+bit 111 O 1 IO_D3 110 1 Z
+bit 110 C 1 *
+bit 109 O 1 *
+bit 108 O 1 *
+bit 107 O 1 *
+bit 106 O 1 *
+bit 105 O 1 *
+bit 104 O 1 *
+bit 103 O 1 *
+bit 102 O 1 *
+bit 101 O 1 *
+bit 100 O 1 *
+bit 99 O 1 *
+bit 98 O 1 *
+bit 97 I 1 IO_B2
+bit 96 O 1 IO_B2 95 1 Z
+bit 95 C 1 *
+bit 94 I 1 IO_B1
+bit 93 O 1 IO_B1 92 1 Z
+bit 92 C 1 *
+bit 91 O 1 *
+bit 90 I 1 HSWAP_EN_B3
+bit 89 O 1 *
+bit 88 O 1 *
+bit 87 O 1 *
+bit 86 I 1 IO_A3
+bit 85 O 1 IO_A3 84 1 Z
+bit 84 C 1 *
+bit 83 I 1 IO_C4
+bit 82 O 1 IO_C4 81 1 Z
+bit 81 C 1 *
+bit 80 O 1 *
+bit 79 O 1 *
+bit 78 O 1 *
+bit 77 O 1 *
+bit 76 O 1 *
+bit 75 O 1 *
+bit 74 O 1 *
+bit 73 O 1 *
+bit 72 O 1 *
+bit 71 I 1 IO_C5
+bit 70 O 1 IO_C5 69 1 Z
+bit 69 C 1 *
+bit 68 I 1 IO_B5
+bit 67 O 1 IO_B5 66 1 Z
+bit 66 C 1 *
+bit 65 I 1 IO_B6
+bit 64 O 1 IO_B6 63 1 Z
+bit 63 C 1 *
+bit 62 I 1 IO_A6
+bit 61 O 1 IO_A6 60 1 Z
+bit 60 C 1 *
+bit 59 O 1 *
+bit 58 O 1 *
+bit 57 O 1 *
+bit 56 I 1 IO_C7
+bit 55 O 1 IO_C7 54 1 Z
+bit 54 C 1 *
+bit 53 I 1 IO_B7
+bit 52 O 1 IO_B7 51 1 Z
+bit 51 C 1 *
+bit 50 I 1 IO_A7
+bit 49 O 1 IO_A7 48 1 Z
+bit 48 C 1 *
+bit 47 I 1 IO_C8
+bit 46 O 1 IO_C8 45 1 Z
+bit 45 C 1 *
+bit 44 O 1 *
+bit 43 O 1 *
+bit 42 O 1 *
+bit 41 I 1 IO_A8
+bit 40 O 1 IO_A8 39 1 Z
+bit 39 C 1 *
+bit 38 I 1 IO_A9
+bit 37 O 1 IO_A9 36 1 Z
+bit 36 C 1 *
+bit 35 I 1 IO_C9
+bit 34 O 1 IO_C9 33 1 Z
+bit 33 C 1 *
+bit 32 I 1 IO_A10
+bit 31 O 1 IO_A10 30 1 Z
+bit 30 C 1 *
+bit 29 O 1 *
+bit 28 O 1 *
+bit 27 O 1 *
+bit 26 I 1 IO_A11
+bit 25 O 1 IO_A11 24 1 Z
+bit 24 C 1 *
+bit 23 I 1 IO_B11
+bit 22 O 1 IO_B11 21 1 Z
+bit 21 C 1 *
+bit 20 I 1 IO_C11
+bit 19 O 1 IO_C11 18 1 Z
+bit 18 C 1 *
+bit 17 I 1 IO_A12
+bit 16 O 1 IO_A12 15 1 Z
+bit 15 C 1 *
+bit 14 O 1 *
+bit 13 O 1 *
+bit 12 O 1 *
+bit 11 O 1 *
+bit 10 O 1 *
+bit 9 O 1 *
+bit 8 O 1 *
+bit 7 O 1 *
+bit 6 O 1 *
+bit 5 I 1 IO_A13
+bit 4 O 1 IO_A13 3 1 Z
+bit 3 C 1 *
+bit 2 I 1 IO_B13
+bit 1 O 1 IO_B13 0 1 Z
+bit 0 C 1 *
