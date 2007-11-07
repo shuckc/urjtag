@@ -113,6 +113,11 @@ nobase_dist_pkgdata_DATA = \
 	xilinx/xc2c256-tq144/xc2c256-tq144 \
 	xilinx/xc2s200e-pq208/STEPPINGS \
 	xilinx/xc2s200e-pq208/xc2s200e-pq208 \
+	xilinx/xc2s300e/STEPPINGS \
+	xilinx/xc2s300e/xc2s300e \
+	xilinx/xc2s300e/pq208 \
+	xilinx/xc2s300e/ft256 \
+	xilinx/xc2s300e/fg456 \
 	xilinx/xc3s1000/xc3s1000_fg676 \
 	xilinx/xc3s1000/xc3s1000 \
 	xilinx/xc3s1000/xc3s1000_fg320 \
