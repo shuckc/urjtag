@@ -44,6 +44,9 @@ nobase_dist_pkgdata_DATA = \
 	atmel/PARTS \
 	atmel/atmega128/STEPPINGS \
 	atmel/atmega128/atmega128 \
+	atmel/at91sam7s256/STEPPINGS \
+	atmel/at91sam7s256/at91sam7s_tq64v0 \
+	atmel/at91sam7s256/at91sam7s_tq48v0 \
 	analog/PARTS \
 	analog/bf533/STEPPINGS \
 	analog/bf533/bf533 \
