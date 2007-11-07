@@ -44,6 +44,7 @@ libbus_a_SOURCES = \
 	sh7727.c \
 	sh7750r.c \
 	sh7751r.c \
+	h7202.c \
 	slsup3.c \
 	tx4925.c \
 	jopcyc.c
