@@ -1,0 +1,68 @@
+[ 1460563 ] How to add Support more Flash chip???
+
+Date: 2006-06-04 15:48
+Sender: ameziti
+
+Hi 
+
+I will not give here the answers but just the we to do the 
+work.
+
+Theres three category of things you have to consider:
+
+1- the part wich contain the jtag port (processor, fpga..)
+2- the flash memory you want to flash (amd, intel, atmel..)
+3- the bus wich indicate how the part and the flash are 
+connected together on your card.
+
+Use the patches that are on the site as exemples to 
+inderstand how to do your job.
+
+Exemples:
+
+1- for the part (processor) with jtag:
+  -have a look at the patch 1173994 for the IBM PPC405EP
+    - you will need bsdl file of your processor and use
+    - bsdl2jtag to transform your file
+    - he add a directory jtag-0.5.1/data/ibm
+    - add and modify same files... look at the patch
+  - understand what that mean and do the same think
+
+2- you have to add your flash :
+  - have a look at the patch 1281666 for the Am29LV040B
+    - he modify the jtag-0.5.1/libbrux/flash/amd.c file
+    - he modify the jtag-0.5.1/libbrux/flash/jedec.c
+  - understand what that mean and do the same think
+
+3 - you have to add your bus (interconnexion card) betwin
+the processor and the flash
+ - look at the second party of the patch 1173994 where  
+begin at line 756 with jtag-0.5.1.orig/src/bus
+ - you have to modify this directory files buses.h buses.c
+ - writing and adding your own bus description ixp425.c 
+(look at the examples to understand what to do)
+
+
+generally:
+You have also to understand
+- the architecture of the jtag-0.5.1 project 
+- how to modify makefiles
+- to install the ioperm-0.4 for managing the parallel port
+- to install the include-0.4.2 wich contains the *.h files
+- to install cygwin (if you work under windows) with 
+developpement pack which contain debug module 
+- prefer a fast and quick PC for not to wast the time 
+during compilation
+- perhaps an logic analyser for debugging your hardware
+
+I  took about 1 month (during wasting time) to understand 
+all of this things and do it for flashing 
+an AT49BV322A atmel flash 
+with the spartan 3 xc3s1500 xilinx fpga
+on the DS-BD-3S1500MB-FG676 memec card
+
+good work
+
+Abdallah MEZITI
+			
+
