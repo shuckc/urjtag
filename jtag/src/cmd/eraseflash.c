@@ -37,7 +37,7 @@ static int
 cmd_eraseflash_run( char *params[] )
 {
 	uint32_t adr = 0;
-	int number = 0;
+	unsigned int number = 0;
 
 	if (cmd_params( params ) != 3)
 		return -1;

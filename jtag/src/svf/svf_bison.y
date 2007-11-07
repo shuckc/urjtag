@@ -33,6 +33,10 @@
 
 #include "svf.h"
 
+/* interface to flex */
+#include "svf_bison.h"
+int yylex (YYSTYPE *, YYLTYPE *);
+
 #define YYERROR_VERBOSE
 
 struct svf_parser_params {

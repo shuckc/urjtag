@@ -44,7 +44,7 @@ void
 readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 {
 	uint32_t step;
-	uint64_t a;
+	uint32_t a;
 	int bc = 0;
 #define BSIZE 4096
 	uint8_t b[BSIZE];

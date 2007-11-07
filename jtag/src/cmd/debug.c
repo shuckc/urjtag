@@ -37,8 +37,7 @@
 static int
 cmd_debug_run( char *params[] )
 {
-	int data,i;
-	signal_t *s;
+	unsigned int i;
 
 	if (cmd_params( params ) != 2)
 		return -1;

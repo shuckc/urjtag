@@ -230,7 +230,7 @@ jtag_parse_stream( FILE *f )
 {
 	int go = 1;
 	char *line = NULL;
-	int n = 0;
+	size_t n = 0;
 
 	while (go && (getline( &line, &n, f ) != -1))
 		if ((strlen(line) > 0) && (line[0] != '#'))

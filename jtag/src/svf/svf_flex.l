@@ -87,7 +87,7 @@ COMMENT         (!.*)|("//".*)[^\n]
 
 
 <expect_vector>"("{WSPACE}*[\n\rHhLlZzUuDdXx \t\r]+{WSPACE}*")" {
-  /* There is a overlap of VECTOR_STRING and HEXA_NUM when the string
+  /* There is an overlap of VECTOR_STRING and HEXA_NUM when the string
      contains only 'd' or 'D'. To prevent complicated parsing rules,
      the lexer is instructed to detect VECTOR_STRING only when a PIO
      command has been scanned previously.

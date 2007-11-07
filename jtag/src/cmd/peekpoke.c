@@ -35,7 +35,7 @@ static int
 cmd_peek_run( char *params[] )
 {
 	uint32_t adr, val;
-	int	pars, j = 1, bw;
+	int	pars, j = 1;
 	bus_area_t area;
 	
 	/* bus_t * bus = part_get_active_bus(chain); */

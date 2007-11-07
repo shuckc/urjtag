@@ -33,9 +33,8 @@
 static int
 cmd_script_run( char *params[] )
 {
-int i,j;
-
-	int go;
+	int i, j;
+	int go = 0;
 	i = 0; j = 1;
 	if (cmd_params( params ) == 3) {
 		sscanf(params[2],"%d",&j);	/* loop n times option */
@@ -43,11 +42,12 @@ int i,j;
 	else if (cmd_params( params ) != 2)
 		return -1;
 
-	for(i=0;i<j;i++) {
+	for(i = 0; i < j ;i++) {
 		go = jtag_parse_file( params[1] );
 
 		if (go < 0) {
-			if(go != -99)printf( _("Unable to open file `%s go=%s'!\n"), params[1], go );
+			if (go != -99)
+				printf( _("Unable to open file `%s go=%d'!\n"), params[1], go );
 			break;
 		}
 	}

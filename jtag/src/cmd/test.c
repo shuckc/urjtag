@@ -37,7 +37,8 @@
 static int
 cmd_test_run( char *params[] )
 {
-	int data,i;
+	int data;
+	unsigned int i;
 	signal_t *s;
 
 	if (cmd_params( params ) != 4)

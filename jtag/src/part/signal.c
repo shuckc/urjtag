@@ -69,7 +69,7 @@ salias_alloc( const char *name, const signal_t *signal )
 		return NULL;
 	}
 	sa->next = NULL;
-	sa->signal = signal;
+	sa->signal = (signal_t *)signal;
 
 	return sa;
 }

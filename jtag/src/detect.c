@@ -160,15 +160,15 @@ find_record( char *filename, tap_register *key, struct id_record *idr )
 	return r;
 }
 
-unsigned long bits_to_long(tap_register *t) {
-int i;
-unsigned long l,b;
+uint64_t bits_to_uint64(tap_register *t)
+{
+	int i;
+	uint64_t l,b;
 
 	l = 0; b=1;
 	for(i=0;i < t->len ;i++) {
 		if(t->data[i] & 1)l |= b;
 		b <<= 1;
-//		printf("%01d",t->data[i]);
 	}
 	return l;
 }
@@ -260,7 +260,7 @@ detect_parts( chain_t *chain, char *db_path )
 			did = id;
 		}
 
-		printf( _("Device Id: %s (0x%08X)\n"), register_get_string( did ), bits_to_long(did) );
+		printf( _("Device Id: %s (0x%016lX)\n"), register_get_string( did ), bits_to_uint64(did) );
 		part = part_alloc( did );
 		if (part == NULL) {
 			printf( _("Out of memory\n") );

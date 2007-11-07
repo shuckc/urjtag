@@ -59,7 +59,7 @@ cmd_signal_run( char *params[] )
 	part = chain->parts->parts[chain->active_part];
 	if ((s = part_find_signal( part, params[1] )) != NULL) {
 		if(i == 3) {
-			printf("Defining pin for signal %s\m",s->name);
+			printf("Defining pin for signal %s\n",s->name);
 
 			if(s->pin)free(s->pin); /* erase old */
 
