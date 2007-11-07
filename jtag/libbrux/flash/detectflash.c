@@ -64,6 +64,7 @@ detectflash( bus_t *bus, uint32_t adr )
 		cfi_array_free( cfi_array );
 		cfi_array = NULL;
 		if (jedec_detect( bus, adr, &cfi_array ) != 0) {
+			cfi_array->bus_width = 1;
 			cfi_array_free( cfi_array );
 			cfi_array = NULL;
 			printf( _("Flash not found!\n") );
