@@ -167,7 +167,7 @@ ppdev_open( parport_t *parport )
 		return -1;
         }
 
-	if ((ioctl( p->fd, PPEXCL ) == -1) || (ioctl( p->fd, PPCLAIM ) == -1))  {
+	if (/*(ioctl( p->fd, PPEXCL ) == -1) ||*/ (ioctl( p->fd, PPCLAIM ) == -1))  {
 		printf( _("Could not claim ppdev device: %s\n"), strerror(errno) );
 		close( p->fd );
 		p->fd = -1;

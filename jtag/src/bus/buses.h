@@ -27,6 +27,7 @@
 
 extern const bus_driver_t au1500_bus;
 extern const bus_driver_t bcm1250_bus;
+extern const bus_driver_t ejtag_bus;
 extern const bus_driver_t bf533_stamp_bus;
 extern const bus_driver_t bf533_ezkit_bus;
 extern const bus_driver_t ixp425_bus;
