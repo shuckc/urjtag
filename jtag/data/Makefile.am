@@ -25,6 +25,7 @@ include $(top_srcdir)/Makefile.rules
 
 nobase_dist_pkgdata_DATA = \
 	MANUFACTURERS \
+	admtek/adm5120/adm5120 \
 	altera/PARTS \
 	altera/ep1c20f400/STEPPINGS \
 	altera/ep1c20f400/ep1c20f400 \
@@ -41,6 +42,7 @@ nobase_dist_pkgdata_DATA = \
 	altera/epm3064a/l44 \
 	altera/epm3064a/t100 \
 	altera/epm3064a/t44 \
+	atheros/ar2312/ar2312 \
 	atmel/PARTS \
 	atmel/atmega128/STEPPINGS \
 	atmel/atmega128/atmega128 \
@@ -50,17 +52,24 @@ nobase_dist_pkgdata_DATA = \
 	analog/PARTS \
 	analog/bf533/STEPPINGS \
 	analog/bf533/bf533 \
+	brecis/PARTS \
+	brecis/msp2006/STEPPINGS \
+	brecis/msp2006/msp2006 \
 	broadcom/PARTS \
 	broadcom/bcm1250/STEPPINGS \
 	broadcom/bcm1250/bcm1250 \
 	broadcom/bcm3310/STEPPINGS \
 	broadcom/bcm3310/bcm3310 \
+	broadcom/bcm4712/STEPPINGS \
+	broadcom/bcm4712/bcm4712 \
 	broadcom/bcm5421s/STEPPINGS \
 	broadcom/bcm5421s/bcm5421s \
 	dec/PARTS \
 	dec/sa1100/STEPPINGS \
 	dec/sa1100/sa1100 \
 	hitachi/PARTS \
+	hitachi/ar7300/STEPPINGS \
+	hitachi/ar7300/ar7300 \
 	hitachi/hd64465/hd64465 \
 	hitachi/sh7727/STEPPINGS \
 	hitachi/sh7727/sh7727 \
@@ -91,6 +100,9 @@ nobase_dist_pkgdata_DATA = \
 	lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256 \
 	lattice/m4a3-64.32-tqfp48/STEPPINGS \
 	lattice/m4a3-64.32-tqfp48/m4a3-64.32-tqfp48 \
+	lexra/PARTS \
+	lexra/lx5280/STEPPINGS \
+	lexra/lx5280/lx5280 \
 	motorola/mpc8245/1.2 \
 	philips/PARTS \
 	philips/xcr3128xl-cs144/STEPPINGS \

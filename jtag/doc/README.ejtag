@@ -1,0 +1,57 @@
+This diff files add:
+1) EJTAG support. It supply ability to flash almost ALL EJTAG-capable boards (ARM, MIPS).
+It is not needed to search BSDL sescriptors. it uses STANDARD path to access flash.
+For new CPU it is needed just add data files wich can be authomatically
+generated, but jtag-tools originally used this files and auto generation for EJTAG-capable
+CPUs is not wroted. Anybody can wrote this code.
+
+EJTAG driver written by Marek Marek Michalkiewicz <marekm@amelek.gda.pl>, 2005
+under GPL http://www.amelek.gda.pl/rtl8181/jtag/
+
+2) data files for very different EJTAG capable MIPS CPUs in file data-add.diff
+Realtek RTL8181, RTL8186, Admtek ADM5120, Atheros AR2312, TI AR7, Brecis (PMC-Sierra) MSP2006.
+anybody can create files for nes CPUs using this files as template.
+Truly say, it is needed to change just
+"instruction length" and "endian" strings.
+Instruction length can be given by "detect" command:
+jtag> detect
+IR length: 5
+Chain length: 1
+Device Id: 0001-0000001000000010-00101110000-1
+           ^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+--->>>>    step-PARTS           -MANUFACTURER
+
+3) address-support.diff contains support for non-zero flash address.
+Different CPUs use different flash addresses.
+
+Example: TI AR7 (famouse ADSL modems) uses 0x30000000
+another MIPS CPUs uses 0x3fc00000 (standard for MIPS32 boards).
+0x1------- is for 8bit access to flash (example: 0x1fc00000)
+0x3------- is for 16-bit access to flash (example: 0x3fc00000)
+0x5------- is for 32-bit access to flash (example: 0x5fc00000)
+length depends on flash. It is possible to try any from this address regions.
+Many CPUs map flash to all of this addresses.
+
+So, for EJTAG non-zero flash address support IS NEEDED. Unfortunetly, ejtag-tools
+not maintained by owner and this patch is not implemented more than 2 years.
+But, i think, it is not needed to create new sourceforge project.
+
+For success flashing it is needed to take into attention:
+in file /libbrux/flash/amd.c there are strings:
+	o = 1; /* Heuristic */
+Flash can be connected to board using switch in address. In some cases it is needed
+to add 1 to this digit. For example, MSP2006 boards uses amd_flash_autodetect8 
+with o = 1. And AR7 uses o = 0.
+
+4) example of successful flashing using EJTAG: http://forum.openwrt.org/viewtopic.php?id=4191
+
+Patch do not conflicts with another patches.
+it 
+1)adds /src/bus/ejtag.c file
+2) register this file in /src/bus/buses.c buses.h makefile.am
+3) removes one check from /src/tap/parport/ppdev.c
+4) change in flash.c is not needed, but can speedup flashing. It just exclude "printf" from cycle.
+5) comment two strings in libbrux/flash/detectflash.c
+it is not needed
+6) add non-zero flash address support to  libbrux/flash/jedec.c and amd.c
+i wonder why this is not added to CVS tree. This patch was given by different peoples many times.

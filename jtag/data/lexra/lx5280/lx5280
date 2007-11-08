@@ -1,7 +1,8 @@
 #
 # $Id$
 #
-# Copyright (C) 2003 ETC s.r.o.
+# JTAG declarations for Lexra LX5280 (Realtek RTL8181, RTL8186)
+# Copyright (C) 2005 Marek Michalkiewicz
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,10 +19,26 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Matan Ziv-Av <matan@svgalib.org>, 2003.
+# Written by Marek Michalkiewicz <marekm@amelek.gda.pl>, 2005.
 #
 
-# bits 27-12 of the Device Identification Register
-0000000000000001	ar7300		AR7300
-0000000001000010	sh7727		SH7727
-0111010101101110	sh7727		SH7727
+register	BR		 1
+register	DIR		32
+register	EJIMPCODE	32
+register	EJADDRESS	32
+register	EJDATA		32
+register	EJCONTROL	32
+register	EJALL		96
+
+instruction length 5
+
+instruction	BYPASS		11111	BR
+instruction	IDCODE		00001	DIR
+instruction	EJTAG_IMPCODE	00011	EJIMPCODE
+instruction	EJTAG_ADDRESS	01000	EJADDRESS
+instruction	EJTAG_DATA	01001	EJDATA
+instruction	EJTAG_CONTROL	01010	EJCONTROL
+instruction	EJTAG_ALL	01011	EJALL
+
+initbus ejtag
+endian big
