@@ -105,6 +105,7 @@ cable_driver_t arcom_cable_driver = {
 	generic_done,
 	arcom_clock,
 	arcom_get_tdo,
+	generic_transfer,
 	arcom_set_trst,
 	generic_get_trst
 };

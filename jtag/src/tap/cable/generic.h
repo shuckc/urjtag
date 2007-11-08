@@ -40,6 +40,7 @@ cable_t *generic_connect( cable_driver_t *cable_driver, parport_t *port );
 void generic_disconnect( cable_t *cable );
 void generic_cable_free( cable_t *cable );
 void generic_done( cable_t *cable );
+int generic_transfer( cable_t *cable, int len, char *in, char *out );
 int generic_get_trst( cable_t *cable );
 
 #endif /* GENERIC_H */

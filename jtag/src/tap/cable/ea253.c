@@ -105,6 +105,7 @@ cable_driver_t ea253_cable_driver = {
 	generic_done,
 	ea253_clock,
 	ea253_get_tdo,
+	generic_transfer,
 	ea253_set_trst,
 	generic_get_trst
 };

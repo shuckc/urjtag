@@ -56,7 +56,17 @@ tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, i
 	/* Capture-DR, Capture-IR, Shift-DR, Shift-IR, Exit2-DR or Exit2-IR state */
 	if (tap_state( chain ) & TAPSTAT_CAPTURE)
 		chain_clock( chain, 0, 0 );	/* save last TDO bit :-) */
-	for (i = 0; i < in->len; i++) {
+
+	i = in->len;
+	if(exit) i--;
+	if(out && out->len < i) i = out->len;
+
+	if(out)
+		cable_transfer( chain->cable, i, in->data, out->data );
+	else
+		cable_transfer( chain->cable, i, in->data, NULL );
+
+	for (; i < in->len; i++) {
 		if (out && (i < out->len))
 			out->data[i] = cable_get_tdo( chain->cable );
 		chain_clock( chain, (exit != EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i] );	/* Shift (& Exit1) */

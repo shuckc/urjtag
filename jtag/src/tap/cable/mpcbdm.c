@@ -111,6 +111,7 @@ cable_driver_t mpcbdm_cable_driver = {
 	generic_done,
 	mpcbdm_clock,
 	mpcbdm_get_tdo,
+	generic_transfer,
 	mpcbdm_set_trst,
 	generic_get_trst
 };

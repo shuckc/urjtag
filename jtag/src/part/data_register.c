@@ -47,8 +47,16 @@ data_register_alloc( const char *name, int len )
 	strncpy( dr->name, name, MAXLEN_DATA_REGISTER );
 	dr->name[MAXLEN_DATA_REGISTER] = '\0';
 
-	dr->in = register_alloc( len );
-	dr->out = register_alloc( len );
+	if (len>0)
+	{
+		dr->in = register_alloc( len );
+		dr->out = register_alloc( len );
+	}
+	else
+	{
+		dr->in = register_alloc( 1 );
+		dr->out = register_alloc( 1 );
+	};
 	if (!dr->in || !dr->out) {
 		free( dr->in );
 		free( dr->out );

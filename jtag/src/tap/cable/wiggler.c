@@ -113,6 +113,7 @@ cable_driver_t wiggler_cable_driver = {
 	generic_done,
 	wiggler_clock,
 	wiggler_get_tdo,
+	generic_transfer,
 	wiggler_set_trst,
 	generic_get_trst
 };
@@ -127,6 +128,7 @@ cable_driver_t igloo_cable_driver = {
 	generic_done,
 	wiggler_clock,
 	wiggler_get_tdo,
+	generic_transfer,
 	wiggler_set_trst,
 	generic_get_trst
 };

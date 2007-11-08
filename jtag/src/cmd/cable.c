@@ -85,15 +85,20 @@ cmd_cable_help( void )
 	printf( _(
 		"Usage: %s PORTADDR CABLE\n"
 		"Usage: %s DEV CABLE\n"
+		"Usage: %s VID:PID:S/N CABLE\n"
+		"Usage: %s VID:PID:S/N CABLE\n"
 		"Select JTAG cable connected to parallel port.\n"
 		"\n"
 		"PORTADDR   parallel port address (e.g. 0x378)\n"
 		"CABLE      cable type\n"
 		"DEV        ppdev device (e.g. /dev/parport0)\n"
+		"VID        empty or USB vendor ID, hex (e.g. 09FB)\n"
+		"PID        empty or USB product ID, hex (e.g. 6001)\n"
+		"S/N        empty or USB product serial number, ASCII\n"
 		"\n"
 		"List of supported cables:\n"
 		"%-13s No cable connected\n"
-	), "cable parallel", "cable ppdev", "none" );
+	), "cable parallel", "cable ppdev", "cable ftdi", "cable xpcu", "none" );
 
 	for (i = 0; cable_drivers[i]; i++)
 		printf( _("%-13s %s\n"), cable_drivers[i]->name, _(cable_drivers[i]->description) );

@@ -131,6 +131,7 @@ cable_driver_t byteblaster_cable_driver = {
 	generic_done,
 	byteblaster_clock,
 	byteblaster_get_tdo,
+	generic_transfer,
 	byteblaster_set_trst,
 	generic_get_trst
 };

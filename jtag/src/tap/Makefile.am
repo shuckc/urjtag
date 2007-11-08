@@ -33,12 +33,17 @@ libtap_a_SOURCES = \
 	parport.c \
 	parport/direct.c \
 	parport/ppdev.c \
+    parport/xpcu_common.c \
+    parport/xpcu_pp.c \
+	parport/ftdi.c \
 	cable.c \
 	cable/generic.h \
 	cable/generic.c \
 	cable/arcom.c \
 	cable/byteblaster.c \
+	cable/usbblaster.c \
 	cable/dlc5.c \
+    cable/xpc.c \
 	cable/ea253.c \
 	cable/ei012.c \
 	cable/keithkoep.c \

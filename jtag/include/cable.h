@@ -45,6 +45,7 @@ struct cable_driver_t {
 	void (*done)( cable_t * );
 	void (*clock)( cable_t *, int, int );
 	int (*get_tdo)( cable_t * );
+	int (*transfer)( cable_t *, int, char *, char * );
 	int (*set_trst)( cable_t *, int );
 	int (*get_trst)( cable_t * );
 };
@@ -63,6 +64,7 @@ void cable_clock( cable_t *cable, int tms, int tdi );
 int cable_get_tdo( cable_t *cable );
 int cable_set_trst( cable_t *cable, int trst );
 int cable_get_trst( cable_t *cable );
+int cable_transfer( cable_t *cable, int len, char *in, char *out );
 
 void cable_set_frequency( cable_t *cable, uint32_t frequency );
 uint32_t cable_get_frequency( cable_t *cable );

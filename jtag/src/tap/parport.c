@@ -32,6 +32,12 @@ extern parport_driver_t direct_parport_driver;
 #ifdef HAVE_LINUX_PPDEV_H
 extern parport_driver_t ppdev_parport_driver;
 #endif /* HAVE_LINUX_PPDEV_H */
+#ifdef HAVE_LIBFTDI
+extern parport_driver_t ftdi_parport_driver;
+#endif /* HAVE_LIBFTDI */
+#ifdef HAVE_LIBUSB
+extern parport_driver_t xpcu_pp_driver;
+#endif /* HAVE_LIBUSB */
 
 parport_driver_t *parport_drivers[] = {
 #if defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
@@ -40,6 +46,12 @@ parport_driver_t *parport_drivers[] = {
 #ifdef HAVE_LINUX_PPDEV_H
 	&ppdev_parport_driver,
 #endif /* HAVE_LINUX_PPDEV_H */
+#ifdef HAVE_LIBFTDI
+	&ftdi_parport_driver,
+#endif /* HAVE_LIBFTDI */
+#ifdef HAVE_LIBUSB
+    &xpcu_pp_driver,
+#endif /* HAVE_LIBUSB */
 	NULL				/* last must be NULL */
 };
 
@@ -78,3 +90,4 @@ parport_set_control( parport_t *port, uint8_t data )
 {
 	return port->driver->set_control( port, data );
 }
+

@@ -97,6 +97,7 @@ cable_driver_t lattice_cable_driver = {
 	generic_done,
 	lattice_clock,
 	lattice_get_tdo,
+	generic_transfer,
 	lattice_set_trst,
 	generic_get_trst
 };

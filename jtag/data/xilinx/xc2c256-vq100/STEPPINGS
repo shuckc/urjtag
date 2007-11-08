@@ -1,7 +1,7 @@
 #
-# $Id$
+# $Id: STEPPINGS,v 1.1 2003/02/14 11:14:56 telka Exp $
 #
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2003 Tower Technologies s.r.l.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,28 +18,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Kolja Waschk, ixo.de, 2007
 #
 
-include $(top_srcdir)/Makefile.rules
-
-noinst_HEADERS = \
-	bsbit.h \
-	bus.h \
-	cable.h \
-	chain.h \
-	data_register.h \
-	cmd.h \
-	flash.h \
-	gettext.h \
-	instruction.h \
-	parport.h \
-	part.h \
-	register.h \
-	bssignal.h \
-	state.h \
-	jtag.h \
-	tap.h \
-	fclock.h \
-	setdevice.h \
-	xpcu.h
+# bits 31-28 of the Device Identification Register
+0000	xc2c256-vq100	0
+0001	xc2c256-vq100	1

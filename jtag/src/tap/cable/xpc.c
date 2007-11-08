@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: xpc.c,v 1.8 2003/08/19 08:42:20 telka Exp $
  *
  * Xilinx DLC5 JTAG Parallel Cable III Driver
  * Copyright (C) 2002, 2003 ETC s.r.o.
@@ -35,39 +35,37 @@
 
 #include "generic.h"
 
-/* see Figure B-1 in [1] */
-
-/*
- * data D[7:0] (pins 9:2)
- */
-#define	TDI	0
-#define	TCK	1
-#define	TMS	2
-#define	CTRL	3
-#define	PROG	4
-
-/*
- * 7 - BUSY (pin 11)
- * 6 - ACK (pin 10)
- * 5 - PE (pin 12)
- * 4 - SEL (pin 13)
- * 3 - ERROR (pin 15)
- */
-#define	TDO	4
-
 static int
-dlc5_init( cable_t *cable )
+xpc_int_init( cable_t *cable )
 {
-	if (parport_open( cable->port ))
-		return -1;
+	if (parport_open( cable->port )) return -1;
+	if (parport_set_control( cable->port, 1 ) < 0) return -1;
 
 	PARAM_TRST(cable) = 1;
 
 	return 0;
 }
 
+static int
+xpc_ext_init( cable_t *cable )
+{
+	if (parport_open( cable->port )) return -1;
+	if (parport_set_control( cable->port, 0 ) < 0) return -1;
+
+	PARAM_TRST(cable) = 1;
+
+	return 0;
+}
+
+
+#define	PROG 3
+#define	TCK	2
+#define TMS 1
+#define	TDI	0
+#define	TDO	0
+
 static void
-dlc5_clock( cable_t *cable, int tms, int tdi )
+xpc_clock( cable_t *cable, int tms, int tdi )
 {
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
@@ -76,33 +74,49 @@ dlc5_clock( cable_t *cable, int tms, int tdi )
 	cable_wait();
 	parport_set_data( cable->port, (1 << PROG) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
-}
-
-static int
-dlc5_get_tdo( cable_t *cable )
-{
-	parport_set_data( cable->port, (1 << PROG) | (0 << TCK) );
+	parport_set_data( cable->port, (1 << PROG) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
 	cable_wait();
-	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
 
 static int
-dlc5_set_trst( cable_t *cable, int trst )
+xpc_get_tdo( cable_t *cable )
+{
+	return (parport_get_data( cable->port ) >> TDO) & 1;
+}
+
+static int
+xpc_set_trst( cable_t *cable, int trst )
 {
 	return 1;
 }
 
-cable_driver_t dlc5_cable_driver = {
-	"DLC5",
-	N_("Xilinx DLC5 JTAG Parallel Cable III"),
+cable_driver_t xpc_int_cable_driver = {
+	"xpc_int",
+	N_("Xilinx Platform Cable USB internal chain"),
 	generic_connect,
 	generic_disconnect,
 	generic_cable_free,
-	dlc5_init,
+	xpc_int_init,
 	generic_done,
-	dlc5_clock,
-	dlc5_get_tdo,
+	xpc_clock,
+	xpc_get_tdo,
 	generic_transfer,
-	dlc5_set_trst,
+	xpc_set_trst,
 	generic_get_trst
 };
+
+cable_driver_t xpc_ext_cable_driver = {
+	"xpc_ext",
+	N_("Xilinx Platform Cable USB external chain"),
+	generic_connect,
+	generic_disconnect,
+	generic_cable_free,
+	xpc_ext_init,
+	generic_done,
+	xpc_clock,
+	xpc_get_tdo,
+	generic_transfer,
+	xpc_set_trst,
+	generic_get_trst
+};
+

@@ -107,6 +107,7 @@ cable_driver_t ei012_cable_driver = {
 	generic_done,
 	ei012_clock,
 	ei012_get_tdo,
+	generic_transfer,
 	ei012_set_trst,
 	generic_get_trst
 };

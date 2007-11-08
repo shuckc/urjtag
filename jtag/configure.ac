@@ -98,6 +98,30 @@ AC_CHECK_HEADERS(linux/ppdev.h)
 
 VL_LIB_READLINE
 
+dnl check for libftdi-config
+AC_PATH_PROG(HAVELIBFTDI, libftdi-config, $PATH)
+if test ! -z "$HAVELIBFTDI"; then
+dnl   LIBFTDI_CFLAGS=`$HAVELIBFTDI --cflags`
+   LIBFTDI_LIBS=`$HAVELIBFTDI --libs`
+   CFLAGS="$CFLAGS $LIBFTDI_CFLAGS"
+   LIBS="$LIBS $LIBFTDI_LIBS"
+   AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
+else
+   AC_MSG_ERROR([*** libftdi-config not found. You need a working libftdi installation.])
+fi
+
+dnl check for libusb-config
+AC_PATH_PROG(HAVELIBUSB, libusb-config, $PATH)
+if test ! -z "$HAVELIBUSB"; then
+dnl   LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
+   LIBUSB_LIBS=`$HAVELIBUSB --libs`
+   CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
+   LIBS="$LIBS $LIBUSB_LIBS"
+   AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
+else
+   AC_MSG_ERROR([*** libusb-config not found. You need a working libusb installation.])
+fi
+
 CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 

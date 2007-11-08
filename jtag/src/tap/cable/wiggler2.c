@@ -121,6 +121,7 @@ cable_driver_t wiggler2_cable_driver = {
 	generic_done,
 	wiggler2_clock,
 	wiggler2_get_tdo,
+	generic_transfer,
 	wiggler2_set_trst,
 	generic_get_trst
 };

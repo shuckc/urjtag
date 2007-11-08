@@ -37,6 +37,7 @@
 
 extern cable_driver_t arcom_cable_driver;
 extern cable_driver_t byteblaster_cable_driver;
+extern cable_driver_t usbblaster_cable_driver;
 extern cable_driver_t dlc5_cable_driver;
 extern cable_driver_t ea253_cable_driver;
 extern cable_driver_t ei012_cable_driver;
@@ -47,10 +48,16 @@ extern cable_driver_t mpcbdm_cable_driver;
 extern cable_driver_t triton_cable_driver;
 extern cable_driver_t wiggler_cable_driver;
 extern cable_driver_t wiggler2_cable_driver;
+extern cable_driver_t wiggler_cable_driver;
+#ifdef HAVE_LIBUSB
+extern cable_driver_t xpc_int_cable_driver;
+extern cable_driver_t xpc_ext_cable_driver;
+#endif
 
 cable_driver_t *cable_drivers[] = {
 	&arcom_cable_driver,
 	&byteblaster_cable_driver,
+	&usbblaster_cable_driver,
 	&dlc5_cable_driver,
 	&ea253_cable_driver,
 	&ei012_cable_driver,
@@ -61,6 +68,10 @@ cable_driver_t *cable_drivers[] = {
 	&triton_cable_driver,
 	&wiggler_cable_driver,
 	&wiggler2_cable_driver,	
+#ifdef HAVE_LIBUSB
+	&xpc_int_cable_driver,
+	&xpc_ext_cable_driver,
+#endif
 	NULL				/* last must be NULL */
 };
 
@@ -176,6 +187,14 @@ uint32_t
 cable_get_frequency( cable_t *cable )
 {
 	return frequency;
+}
+
+int
+cable_transfer( cable_t *cable, int len,  char *in, char *out )
+{
+	int r;
+	r=cable->driver->transfer( cable, len, in, out );
+	return r;
 }
 
 void

@@ -71,6 +71,24 @@ generic_done( cable_t *cable )
 }
 
 int
+generic_transfer( cable_t *cable, int len, char *in, char *out )
+{
+	int i;
+
+	if(out)
+		for(i=0; i<len; i++) {
+			out[i] = cable_get_tdo( cable );
+			cable_clock( cable, 0, in[i] );
+		}
+	else
+		for(i=0; i<len; i++) {
+			cable_clock( cable, 0, in[i] );
+		}
+
+	return i;
+}
+
+int
 generic_get_trst( cable_t *cable )
 {
 	return PARAM_TRST(cable);
