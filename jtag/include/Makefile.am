@@ -40,4 +40,5 @@ noinst_HEADERS = \
 	state.h \
 	jtag.h \
 	tap.h \
-	fclock.h
+	fclock.h \
+	setdevice.h
