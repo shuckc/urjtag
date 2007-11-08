@@ -125,14 +125,24 @@ amdstatus( bus_t *bus, uint32_t adr, int data )
 	int timeout;
 	uint32_t togglemask = ((1 << 6) << 16) + (1 << 6); /* DQ 6 */
 	/*  int dq5mask = ((1 << 5) << 16) + (1 << 5); DQ5 */
+	uint32_t data1, data2;
 
+	data1 = bus_read( bus, adr );
 	for (timeout = 0; timeout < 100; timeout++) {
-		uint32_t data1 = bus_read( bus, adr );
-		uint32_t data2 = bus_read( bus, adr );
+		data2 = bus_read( bus, adr );
 
 		/*printf("amdstatus %d: %04X/%04X   %04X/%04X \n", */
 		/*	   timeout, data1, data2, (data1 & togglemask), (data2 & togglemask)); */
-		if ( (data1 & togglemask) == (data2 & togglemask)) /* no toggle */
+		/* Work around an issue with RTL8181: toggle bits don't
+		   toggle when reading the same flash address repeatedly
+		   without any other memory access in between.  Other
+		   bits reflect the current status, and data after the
+		   operation is complete - only Q6/Q2 bits don't toggle
+		   when they should.  Looks like the CPU not deasserting
+		   CE or OE, so data is output to the bus continuously.
+		   So, check for the correct data read twice instead.  */
+		/*if ( (data1 & togglemask) == (data2 & togglemask)) */
+		if ( (data1 == data) && (data2 == data) )
 			return 1;
 
 		/*    if ( (data1 & dq5mask) != 0 )   TODO */
@@ -142,6 +152,7 @@ amdstatus( bus_t *bus, uint32_t adr, int data )
 		else
 			printf( "." );
 		usleep( 100 );
+		data1 = data2; 
 	}
 	return 0;
 }
@@ -185,6 +196,9 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		case 0x0020:
 			printf( _("ST/Samsung") );
 			break;
+		case 0x002C:
+			printf( _("Macronix" );
+			break;
 		default:
 			printf( _("Unknown manufacturer (ID 0x%04x)"), mid );
 			break;
@@ -201,7 +215,10 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			printf( _("Am29LV800B") );
 			break;
 		case 0x2249:
-			printf( _("Am29LV160DB") );
+			printf( _("MX29LV160B") );
+			break;
+		case 0x0049:
+			printf( _("AM29LV160DB") );
 			break;
 		case 0x0093:
 			printf( _("Am29LV065D") );
@@ -281,7 +298,7 @@ static void
 amd_flash_read_array( cfi_array_t *cfi_array )
 {
 	/* Read Array */
-	bus_write( cfi_array->bus, 0x0, 0x00F000F0 ); /* AMD reset */
+	bus_write( cfi_array->bus, cfi_array->address, 0x00F000F0 ); /* AMD reset */
 }
 
 flash_driver_t amd_32_flash_driver = {
