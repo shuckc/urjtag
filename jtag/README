@@ -44,6 +44,7 @@ JTAG adapters/cables (see 'help cable' command for more info):
 JTAG-aware parts (chips):
 - Altera EP1C20F400
 - Altera EPM7128AETC100
+- Analog Devices Sharc-21065L
 - Atmel ATmega128 (partial support)
 - Broadcom BCM1250
 - Broadcom BCM3310 (partial support)
@@ -75,6 +76,7 @@ Flash chips:
 - Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)
 - Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)
 - AMD Am29LV64xD (Am29LV640D, Am29LV641D, Am29LV642D)
+- AMD Am29xx040B (Am29F040B, Am29LV040B)
 
 
 Required software

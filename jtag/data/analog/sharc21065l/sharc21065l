@@ -1,0 +1,515 @@
+#
+# $Id: sharc21065l,v 1.0 20/09/2006 $
+#
+# JTAG declarations for ADSP SHARC 21065L
+# Copyright (C) 2006 Kila Medical Systems.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Lesly A.M <leslyam@kila.com>, 2006
+#
+# Documentation:
+#	[1] Analog Devices Inc.,"ADSP-21065L SHARC Technical Reference", September 1998
+#	[2] Analog Devices Inc.,"BSDL Description for ADSP-21065L: MBGA Package", BSDL rev 1.1
+#   http://www.analog.com/UploadedFiles/BSDL_Files/435954194035486111591903bsdl_21065l_bga.txt
+#
+#
+
+
+signal ADDR0
+signal ADDR1
+signal ADDR2
+signal ADDR3
+signal ADDR4
+signal ADDR5
+signal ADDR6
+signal ADDR7
+signal ADDR8
+signal ADDR9
+signal ADDR10
+signal ADDR11
+signal ADDR12
+signal ADDR13
+signal ADDR14
+signal ADDR15
+signal ADDR16
+signal ADDR17
+signal ADDR18
+signal ADDR19
+signal ADDR20
+signal ADDR21
+signal ADDR22
+signal ADDR23
+signal DATA0
+signal DATA1
+signal DATA2
+signal DATA3
+signal DATA4
+signal DATA5
+signal DATA6
+signal DATA7
+signal DATA8
+signal DATA9
+signal DATA10
+signal DATA11
+signal DATA12
+signal DATA13
+signal DATA14
+signal DATA15
+signal DATA16
+signal DATA17
+signal DATA18
+signal DATA19
+signal DATA20
+signal DATA21
+signal DATA22
+signal DATA23
+signal DATA24
+signal DATA25
+signal DATA26
+signal DATA27
+signal DATA28
+signal DATA29
+signal DATA30
+signal DATA31
+signal MS0
+signal MS1
+signal MS2
+signal MS3
+signal RD_B
+signal WR_B
+signal SW_B
+signal ACK
+signal TS_B
+signal IRQ0_B
+signal IRQ1_B
+signal IRQ2_B
+signal FLAG0
+signal FLAG1
+signal FLAG2
+signal FLAG3
+signal FLAG4
+signal FLAG5
+signal FLAG6
+signal FLAG7
+signal FLAG8
+signal FLAG9
+signal FLAG10
+signal FLAG11
+signal HBR_B
+signal HBG_B
+signal CS_B
+signal REDY
+signal DMAR1_B
+signal DMAR2_B
+signal DMAG1_B
+signal DMAG2_B
+signal BR1
+signal BR2
+signal ID0
+signal ID1
+signal CPA_B
+signal DT0A
+signal DT0B
+signal DR0A
+signal DR0B
+signal TCLK0
+signal RCLK0
+signal TFS0
+signal RFS0
+signal DT1A
+signal DT1B
+signal DR1A
+signal DR1B
+signal TCLK1
+signal RCLK1
+signal TFS1
+signal RFS1
+signal BSEL
+signal BMS_B
+signal CLKIN
+signal RESET_B
+signal TCK
+signal TMS
+signal TDI
+signal TDO
+signal TRST
+signal EMU
+signal BMSTR
+signal SDWE_B
+signal SDA10
+signal CAS_B
+signal RAS_B
+signal DQM
+signal SDCKE
+signal SDCLK0
+signal SDCLK1
+signal PWM_EVENT0
+signal PWM_EVENT1
+signal VDD0
+signal VDD1
+signal VDD2
+signal VDD3
+signal VDD4
+signal VDD5
+signal VDD6
+signal VDD7
+signal VDD8
+signal VDD9
+signal VDD10
+signal VDD11
+signal VDD12
+signal VDD13
+signal VDD14
+signal VDD15
+signal VDD16
+signal VDD17
+signal VDD18
+signal VDD19
+signal VDD20
+signal VDD21
+signal GND0
+signal GND1
+signal GND2
+signal GND3
+signal GND4
+signal GND5
+signal GND6
+signal GND7
+signal GND8
+signal GND9
+signal GND10
+signal GND11
+signal GND12
+signal GND13
+signal GND14
+signal GND15
+signal GND16
+signal GND17
+signal GND18
+signal GND19
+signal GND20
+signal GND21
+signal GND22
+signal GND23
+signal GND24
+signal GND25
+signal GND26
+signal GND27
+signal GND28
+signal GND29
+signal GND30
+signal GND31
+signal GND32
+signal GND33
+
+register	BSR	285
+register	BR	1
+register	DIR	32
+
+instruction length 5
+
+instruction BYPASS 11111 BR
+instruction EXTEST 00000 BSR
+instruction SAMPLE/PRELOAD 10000 BSR
+
+bit 284 O 1 EMU 278 0 Z
+bit 283 I 1 ID0
+bit 282 I 1 ID1
+bit 281 O 1 *
+bit 280 O 1 *
+bit 279 O 1 *
+bit 278 C 0 *
+bit 277 C 0 *
+bit 276 I 1 FLAG4
+bit 275 O 1 FLAG4 277 0 Z
+bit 274 I 1 FLAG5
+bit 273 O 1 FLAG5 270 0 Z
+bit 272 I 1 FLAG6
+bit 271 O 1 FLAG6 269 0 Z
+bit 270 C 0 *
+bit 269 C 0 *
+bit 268 C 0 *
+bit 267 I 1 FLAG7
+bit 266 O 1 FLAG7 268 0 Z
+bit 265 I 1 DATA31
+bit 264 O 1 DATA31 243 0 Z
+bit 263 I 1 DATA30
+bit 262 O 1 DATA30 243 0 Z
+bit 261 I 1 DATA29
+bit 260 O 1 DATA29 243 0 Z
+bit 259 I 1 DATA28
+bit 258 O 1 DATA28 243 0 Z
+bit 257 I 1 DATA27
+bit 256 O 1 DATA27 243 0 Z
+bit 255 I 1 DATA26
+bit 254 O 1 DATA26 243 0 Z
+bit 253 I 1 DATA25
+bit 252 O 1 DATA25 243 0 Z
+bit 251 I 1 DATA24
+bit 250 O 1 DATA24 243 0 Z
+bit 249 I 1 DATA23
+bit 248 O 1 DATA23 243 0 Z
+bit 247 I 1 DATA22
+bit 246 O 1 DATA22 243 0 Z
+bit 245 I 1 DATA21
+bit 244 O 1 DATA21 243 0 Z
+bit 243 C 0 *
+bit 242 O 1 *
+bit 241 O 1 *
+bit 240 O 1 *
+bit 239 I 1 DATA20
+bit 238 O 1 DATA20 243 0 Z
+bit 237 I 1 DATA19
+bit 236 O 1 DATA19 243 0 Z
+bit 235 I 1 DATA18
+bit 234 O 1 DATA18 243 0 Z
+bit 233 I 1 DATA17
+bit 232 O 1 DATA17 243 0 Z
+bit 231 I 1 DATA16
+bit 230 O 1 DATA16 243 0 Z
+bit 229 I 1 DATA15
+bit 228 O 1 DATA15 243 0 Z
+bit 227 I 1 DATA14
+bit 226 O 1 DATA14 243 0 Z
+bit 225 O 1 *
+bit 224 O 1 *
+bit 223 O 1 *
+bit 222 O 1 *
+bit 221 O 1 *
+bit 220 O 1 *
+bit 219 I 1 DATA13
+bit 218 O 1 DATA13 209 0 Z
+bit 217 I 1 DATA12
+bit 216 O 1 DATA12 209 0 Z
+bit 215 I 1 DATA11
+bit 214 O 1 DATA11 209 0 Z
+bit 213 I 1 DATA10
+bit 212 O 1 DATA10 209 0 Z
+bit 211 I 1 DATA9
+bit 210 O 1 DATA9 209 0 Z
+bit 209 C 0 *
+bit 208 I 1 DATA8
+bit 207 O 1 DATA8 209 0 Z
+bit 206 I 1 DATA7
+bit 205 O 1 DATA7 209 0 Z
+bit 204 I 1 DATA6
+bit 203 O 1 DATA6 209 0 Z
+bit 202 I 1 DATA5
+bit 201 O 1 DATA5 209 0 Z
+bit 200 I 1 DATA4
+bit 199 O 1 DATA4 209 0 Z
+bit 198 I 1 DATA3
+bit 197 O 1 DATA3 209 0 Z
+bit 196 I 1 DATA2
+bit 195 O 1 DATA2 209 0 Z
+bit 194 I 1 DATA1
+bit 193 O 1 DATA1 209 0 Z
+bit 192 I 1 DATA0
+bit 191 O 1 DATA0 209 0 Z
+bit 190 C 0 *
+bit 189 I 1 FLAG8
+bit 188 O 1 FLAG8 190 0 Z
+bit 187 I 1 FLAG9
+bit 186 O 1 FLAG9 183 0 Z
+bit 185 I 1 FLAG10
+bit 184 O 1 FLAG10 182 0 Z
+bit 183 C 0 *
+bit 182 C 0 *
+bit 181 C 0 *
+bit 180 I 1 FLAG11
+bit 179 O 1 FLAG11 181 0 Z
+bit 178 I 1 MS3
+bit 177 O 1 MS3 153 0 Z
+bit 176 I 1 MS2
+bit 175 O 1 MS2 153 0 Z
+bit 174 I 1 MS1
+bit 173 O 1 MS1 153 0 Z
+bit 172 I 1 MS0
+bit 171 O 1 MS0 153 0 Z
+bit 170 I 1 ACK
+bit 169 O 1 ACK 167 0 Z
+bit 168 O 1 *
+bit 167 C 0 *
+bit 166 I 1 CPA_B
+bit 165 O 1 CPA_B 165 1 Z
+bit 164 I 1 SW_B
+bit 163 O 1 SW_B 153 0 Z
+bit 162 O 1 REDY 161 0 Z
+bit 161 C 0 *
+bit 160 I 1 RD_B
+bit 159 O 1 RD_B 153 0 Z
+bit 158 I 1 WR_B
+bit 157 O 1 WR_B 153 0 Z
+bit 156 O 1 *
+bit 155 I 1 TS_B
+bit 154 I 1 CS_B
+bit 153 C 0 *
+bit 152 O 1 BMSTR
+bit 151 I 1 HBG_B
+bit 150 O 1 HBG_B 147 0 Z
+bit 149 O 1 DMAG2_B 153 0 Z
+bit 148 O 1 DMAG1_B 153 0 Z
+bit 147 C 0 *
+bit 146 O 1 SDA10 131 0 Z
+bit 145 I 1 SDCKE
+bit 144 O 1 SDCKE 131 0 Z
+bit 143 O 1 DQM 131 0 Z
+bit 142 I 1 SDWE_B
+bit 141 O 1 SDWE_B 131 0 Z
+bit 140 I 1 CAS_B
+bit 139 O 1 CAS_B 131 0 Z
+bit 138 I 1 RAS_B
+bit 137 O 1 RAS_B 131 0 Z
+bit 136 I 1 HBR_B
+bit 135 I 1 DMAR2_B
+bit 134 I 1 DMAR1_B
+bit 133 I 1 SDCLK0
+bit 132 O 1 SDCLK0 131 0 Z
+bit 131 C 0 *
+bit 130 I 1 SDCLK1
+bit 129 O 1 SDCLK1 128 0 Z
+bit 128 C 0 *
+bit 127 I 1 CLKIN
+bit 126 I 1 BR2
+bit 125 O 1 BR2 120 0 Z
+bit 124 I 1 BR1
+bit 123 O 1 BR1 119 0 Z
+bit 122 I 1 PWM_EVENT0
+bit 121 O 1 PWM_EVENT0 118 0 Z
+bit 120 C 0 *
+bit 119 C 0 *
+bit 118 C 0 *
+bit 117 C 0 *
+bit 116 I 1 PWM_EVENT1
+bit 115 O 1 PWM_EVENT1 117 0 Z
+bit 114 O 1 DT1B 112 0 Z
+bit 113 O 1 DT1A 111 0 Z
+bit 112 C 0 *
+bit 111 C 0 *
+bit 110 C 0 *
+bit 109 I 1 TCLK1
+bit 108 O 1 TCLK1 110 0 Z
+bit 107 I 1 TFS1
+bit 106 O 1 TFS1 101 0 Z
+bit 105 I 1 DR1B
+bit 104 I 1 DR1A
+bit 103 I 1 RCLK1
+bit 102 O 1 RCLK1 100 0 Z
+bit 101 C 0 *
+bit 100 C 0 *
+bit 99 C 0 *
+bit 98 I 1 RFS1
+bit 97 O 1 RFS1 99 0 Z
+bit 96 O 1 DT0B 94 0 Z
+bit 95 O 1 DT0A 93 0 Z
+bit 94 C 0 *
+bit 93 C 0 *
+bit 92 C 0 *
+bit 91 I 1 TCLK0
+bit 90 O 1 TCLK0 92 0 Z
+bit 89 I 1 TFS0
+bit 88 O 1 TFS0 83 0 Z
+bit 87 I 1 DR0B
+bit 86 I 1 DR0A
+bit 85 I 1 RCLK0
+bit 84 O 1 RCLK0 82 0 Z
+bit 83 C 0 *
+bit 82 C 0 *
+bit 81 C 0 *
+bit 80 I 1 RFS0
+bit 79 O 1 RFS0 81 0 Z
+bit 78 O 1 *
+bit 77 O 1 *
+bit 76 O 1 *
+bit 75 I 1 IRQ2_B
+bit 74 I 1 IRQ1_B
+bit 73 I 1 IRQ0_B
+bit 72 O 1 *
+bit 71 O 1 *
+bit 70 O 1 *
+bit 69 O 1 *
+bit 68 O 1 *
+bit 67 O 1 *
+bit 66 I 1 FLAG3
+bit 65 O 1 FLAG3 64 0 Z
+bit 64 C 0 *
+bit 63 C 0 *
+bit 62 I 1 FLAG2
+bit 61 O 1 FLAG2 63 0 Z
+bit 60 I 1 FLAG1
+bit 59 O 1 FLAG1 56 0 Z
+bit 58 I 1 FLAG0
+bit 57 O 1 FLAG0 55 0 Z
+bit 56 C 0 *
+bit 55 C 0 *
+bit 54 I 1 ADDR0
+bit 53 O 1 ADDR0 36 0 Z
+bit 52 I 1 ADDR1
+bit 51 O 1 ADDR1 36 0 Z
+bit 50 I 1 ADDR2
+bit 49 O 1 ADDR2 36 0 Z
+bit 48 I 1 ADDR3
+bit 47 O 1 ADDR3 36 0 Z
+bit 46 I 1 ADDR4
+bit 45 O 1 ADDR4 36 0 Z
+bit 44 I 1 ADDR5
+bit 43 O 1 ADDR5 36 0 Z
+bit 42 I 1 ADDR6
+bit 41 O 1 ADDR6 36 0 Z
+bit 40 I 1 ADDR7
+bit 39 O 1 ADDR7 36 0 Z
+bit 38 I 1 ADDR8
+bit 37 O 1 ADDR8 36 0 Z
+bit 36 C 0 *
+bit 35 I 1 ADDR9
+bit 34 O 1 ADDR9 36 0 Z
+bit 33 I 1 ADDR10
+bit 32 O 1 ADDR10 36 0 Z
+bit 31 I 1 ADDR11
+bit 30 O 1 ADDR11 36 0 Z
+bit 29 I 1 ADDR12
+bit 28 O 1 ADDR12 36 0 Z
+bit 27 I 1 ADDR13
+bit 26 O 1 ADDR13 36 0 Z
+bit 25 I 1 ADDR14
+bit 24 O 1 ADDR14 36 0 Z
+bit 23 I 1 ADDR15
+bit 22 O 1 ADDR15 36 0 Z
+bit 21 I 1 ADDR16
+bit 20 O 1 ADDR16 36 0 Z
+bit 19 I 1 ADDR17
+bit 18 O 1 ADDR17 36 0 Z
+bit 17 I 1 ADDR18
+bit 16 O 1 ADDR18 36 0 Z
+bit 15 I 1 ADDR19
+bit 14 O 1 ADDR19 36 0 Z
+bit 13 I 1 ADDR20
+bit 12 O 1 ADDR20 36 0 Z
+bit 11 I 1 ADDR21
+bit 10 O 1 ADDR21 36 0 Z
+bit 9 I 1 ADDR22
+bit 8 O 1 ADDR22 36 0 Z
+bit 7 I 1 ADDR23
+bit 6 O 1 ADDR23 36 0 Z
+bit 5 I 1 RESET_B
+bit 4 C 0 *
+bit 3 O 1 *
+bit 2 I 1 BMS_B
+bit 1 O 1 BMS_B 4 0 Z
+bit 0 I 1 BSEL
+
+initbus SHARC_21065L

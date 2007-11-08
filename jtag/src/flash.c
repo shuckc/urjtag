@@ -19,6 +19,7 @@
  * 02111-1307, USA.
  *
  * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Modified by Ajith Kumar P.C <ajithpc@kila.com>, 20/09/2006
  *
  * Documentation:
  * [1] Advanced Micro Devices, "Common Flash Memory Interface Specification Release 2.0",
@@ -52,6 +53,7 @@ extern flash_driver_t amd_8_flash_driver;
 extern flash_driver_t intel_32_flash_driver;
 extern flash_driver_t intel_16_flash_driver;
 extern flash_driver_t intel_8_flash_driver;
+extern flash_driver_t amd_29xx040_flash_driver;	//20/09/2006
 
 flash_driver_t *flash_drivers[] = {
 	&amd_32_flash_driver,
@@ -60,10 +62,13 @@ flash_driver_t *flash_drivers[] = {
 	&intel_32_flash_driver,
 	&intel_16_flash_driver,
 	&intel_8_flash_driver,
+	&amd_29xx040_flash_driver,	//20/09/2006
 	NULL
 };
 
 flash_driver_t *flash_driver = NULL;
+
+extern int amd_detect(bus_t *bus, cfi_array_t **cfi_array ); //Ajit
 
 static void
 set_flash_driver( cfi_array_t *cfi_array )
@@ -95,10 +100,15 @@ flashcheck( bus_t *bus, cfi_array_t **cfi_array )
 	printf( _("Note: Supported configuration is 2 x 16 bit or 1 x 8/16 bit only\n") );
 
 	*cfi_array = NULL;
+
 	if (cfi_detect( bus, 0, cfi_array )) {
 		cfi_array_free( *cfi_array );
-		printf( _("Flash not found!\n") );
-		return;
+		if(amd_detect(bus, cfi_array ) != 0)
+		{
+			cfi_array_free( *cfi_array );
+			printf( _("Flash not found!\n") );
+			return;
+		}
 	}
 
 	set_flash_driver( *cfi_array );

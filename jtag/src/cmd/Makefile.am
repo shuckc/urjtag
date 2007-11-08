@@ -56,6 +56,7 @@ libcmd_a_SOURCES = \
 	script.c \
 	include.c \
 	cmd.c \
+    setdevice.c \
 	svf.c
 
 INCLUDES = -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

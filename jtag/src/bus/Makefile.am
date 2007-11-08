@@ -48,5 +48,6 @@ libbus_a_SOURCES = \
 	h7202.c \
 	slsup3.c \
 	tx4925.c \
-	jopcyc.c
+	jopcyc.c \
+	sharc21065l.c
 

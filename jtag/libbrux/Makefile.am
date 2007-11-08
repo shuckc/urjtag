@@ -27,7 +27,8 @@ SUBDIRS = po
 
 noinst_HEADERS = \
 	sysdep.h \
-	gettext.h
+	gettext.h \
+	setdevice.h
 
 EXTRA_DIST = \
 	Makefile.rules
@@ -43,6 +44,7 @@ libbrux_a_SOURCES = \
 	flash/jedec.c \
 	flash/detectflash.c \
 	flash/amd.c \
-	flash/intel.c
+	flash/intel.c \
+	flash/amd_flash.c
 
 ACLOCAL_AMFLAGS = -I m4

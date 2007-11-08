@@ -19,6 +19,7 @@
  * 02111-1307, USA.
  *
  * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
+ * Modified by Ajith Kumar P.C <ajithpc@kila.com>, 20/09/2006.
  *
  */
 
@@ -371,6 +372,23 @@ main( int argc, const char **argv )
 	go = jtag_parse_rc();
 
 	if (go) {
+		/*  ajk: always run "setdevice auto" command */
+		char **s;
+		s = malloc(25*sizeof(char));
+		if (!s)
+		{
+			free( s );
+			printf( _("Out of memory\n") );
+		}
+		else
+		{
+			s[0] = "setdevice";
+			s[1] = "auto";
+			s[2] = NULL;
+			cmd_run(s);
+			free(s);
+		}
+
 		/* Load history */
 		jtag_load_history();
 

@@ -44,6 +44,8 @@ cfi_array_t *cfi_array = NULL;
 
 int jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
 
+extern int amd_detect(bus_t *bus, cfi_array_t **cfi_array ); //Ajith
+
 void
 detectflash( bus_t *bus, uint32_t adr )
 {
@@ -64,11 +66,15 @@ detectflash( bus_t *bus, uint32_t adr )
 		cfi_array_free( cfi_array );
 		cfi_array = NULL;
 		if (jedec_detect( bus, adr, &cfi_array ) != 0) {
-			cfi_array->bus_width = 1;
 			cfi_array_free( cfi_array );
-			cfi_array = NULL;
-			printf( _("Flash not found!\n") );
-			return;
+			if(amd_detect(bus, &cfi_array ) != 0)
+			{
+				cfi_array_free( cfi_array );
+				cfi_array->bus_width = 1;
+				cfi_array = NULL;
+				printf( _("Flash not found!\n") );
+				return;
+			}
 		}
 	}
 
@@ -157,7 +163,7 @@ detectflash( bus_t *bus, uint32_t adr )
 
 	/* see 4.3.4 in [1] */
 	printf( _("Device geometry definition:\n") );
-	printf( _("\tDevice Size: %d B (%d KiB, %d MiB)\n"), 
+	printf( _("\tDevice Size: %d B (%d KiB, %d MiB)\n"),
 		cfi->device_geometry.device_size,
 		cfi->device_geometry.device_size / 1024,
 		cfi->device_geometry.device_size / (1024 * 1024) );

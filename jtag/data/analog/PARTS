@@ -20,4 +20,5 @@
 #
 
 # bits 27-12 of the Device Identification Register
+0010011110100111	sharc21065l			SHARC
 0010011110100101	bf533			BF533

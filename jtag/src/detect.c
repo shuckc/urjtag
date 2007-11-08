@@ -19,6 +19,7 @@
  * 02111-1307, USA.
  *
  * Written by Marcel Telka <marcel@telka.sk>, 2002.
+ * Modified by Ajith Kumar P.C <ajithpc@kila.com>, 20/09/2006.
  *
  */
 
@@ -38,6 +39,9 @@
 #include "chain.h"
 
 #include "jtag.h"
+
+#include "setdevice.h"
+extern forced_detection_t var_forced_detection;
 
 struct id_record {
 	char name[20];
@@ -261,6 +265,29 @@ detect_parts( chain_t *chain, char *db_path )
 		}
 
 		printf( _("Device Id: %s (0x%016lX)\n"), register_get_string( did ), bits_to_uint64(did) );
+
+		if (var_forced_detection.deviceID != AUTO_DETECT)
+		{
+			const char *tmp_id_data;
+			did = id;
+
+			switch(var_forced_detection.deviceID)
+			{
+				case SHARC_21065L:
+					printf("\n\n\tAttention !!!!: This mode supports only SHARC 21065L\n\n");
+					break;
+				default:
+					break;
+			}
+			tmp_id_data = register_get_string( did );
+			for( i=0; i<32; i++)
+			{
+				did->data[i] = ((var_forced_detection.deviceID >> i) & 1) ? 1 : 0;
+			}
+			tmp_id_data = register_get_string( did );
+			printf("  Dummy device ID : %s\n ",tmp_id_data);
+		} 
+
 		part = part_alloc( did );
 		if (part == NULL) {
 			printf( _("Out of memory\n") );
