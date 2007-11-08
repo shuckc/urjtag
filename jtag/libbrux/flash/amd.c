@@ -197,7 +197,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			printf( _("ST/Samsung") );
 			break;
 		case 0x002C:
-			printf( _("Macronix" );
+			printf( _("Macronix") );
 			break;
 		default:
 			printf( _("Unknown manufacturer (ID 0x%04x)"), mid );
