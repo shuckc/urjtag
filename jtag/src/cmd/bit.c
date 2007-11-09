@@ -140,7 +140,7 @@ cmd_bit_run( char *params[] )
 	bsr->in->data[bit] = safe;
 
 	/* allocate bsbit */
-	part->bsbits[bit] = bsbit_alloc( bit, params[4], type, part->signals, safe );
+	part->bsbits[bit] = bsbit_alloc( bit, params[4], type, part_find_signal( part, params[4] ), safe );
 	if (part->bsbits[bit] == NULL) {
 		printf( _("%s: out of memory for command '%s'\n"), "bit", command );
 		return 1;
