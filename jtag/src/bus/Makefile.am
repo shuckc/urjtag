@@ -49,5 +49,5 @@ libbus_a_SOURCES = \
 	slsup3.c \
 	tx4925.c \
 	jopcyc.c \
-	sharc21065l.c
-
+	sharc21065l.c \
+	zefant-xs3.c

@@ -52,7 +52,8 @@ const bus_driver_t *bus_drivers[] = {
 	&slsup3_bus,
 	&tx4925_bus,
 	&jopcyc_bus,
-    &sharc_21065L_bus,
+	&sharc_21065L_bus,
+	&zefant_xs3_bus,
 	NULL			/* last must be NULL */
 };
 
