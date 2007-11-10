@@ -99,6 +99,8 @@ nobase_dist_pkgdata_DATA = \
 	lattice/PARTS \
 	lattice/lc4032v-tqfp48/STEPPINGS \
 	lattice/lc4032v-tqfp48/lc4032v-tqfp48 \
+	lattice/lc4128c-tqfp100/STEPPINGS \
+	lattice/lc4128c-tqfp100/lc4128c-tqfp100 \
 	lattice/m4a3-256.192-fpbga256/STEPPINGS \
 	lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256 \
 	lattice/m4a3-64.32-tqfp48/STEPPINGS \
