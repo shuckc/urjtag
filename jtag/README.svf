@@ -1,9 +1,7 @@
-$Id$
-
 SVF Player for JTAG Tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This README describes the SVF player of the JTAG Tools software package.
+This README describes the SVF player of the UrJTAG software package.
 
 The player has been developed according to the "Serial Vector Format
 Specification", Revision E, 8 March 1999 issued by ASSET InterTech, Inc. The
@@ -32,7 +30,7 @@ Usage
 -----
 
 The SVF player operates on a single part in the scan chain. Therefore, you
-have to bring up the JTAG Tools software, specify a cable and detect the scan
+have to bring up the jtag software, specify a cable and detect the scan
 chain beforehand.
 
 The player will establish a new instruction called "SIR" and a new register
@@ -127,13 +125,10 @@ The implementation of some SVF commands has deficiencies.
     Commands not supported.
     Their functionality should be covered by the part concept of JTAG Tools.
 
-Warning and error messages don't mention the line in the SVF file where the
-issue was detected.
-
-Operation is slowed down significantly when the FREQUENCY command has been
-specified.
+Operation can be slowed down significantly when the FREQUENCY command has
+been specified.
 This is not a problem of the SVF player itself but seem to happen when the
-frequency of JTAG Tools is set to a value larger than 0. Configuration takes
+frequency of UrJTAG is set to a value larger than 0. Configuration takes
 very long although the maximum allowed frequency is 10 MHz.
 Consider to comment out the FREQUENCY command at the beginning of the SVF
 file.
@@ -144,9 +139,9 @@ Contact
 
 Sharing your experience with this software is highly welcome.
 
-Please direct issues either to the openwince-list mailinglist at
+Please direct issues either to the urjtag-development mailinglist at
 
-  http://lists.sourceforge.net/mailman/listinfo/openwince-list
+  https://lists.sourceforge.net/lists/listinfo/urjtag-development
 
 or contact me directly
 
