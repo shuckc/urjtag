@@ -69,8 +69,6 @@ flash_driver_t *flash_drivers[] = {
 extern cfi_array_t *cfi_array;
 static flash_driver_t *flash_driver = NULL;
 
-extern int amd_detect(bus_t *bus, cfi_array_t **cfi_array ); //Ajit
-
 static void
 set_flash_driver( void )
 {
