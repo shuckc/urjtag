@@ -116,6 +116,44 @@ amdstatus29( parts *ps, uint32_t adr, uint32_t data )
 }
 #endif /* 0 */
 
+
+#if 1
+/*
+ * second implementation: see [1], page 30
+ */
+static int
+amdstatus( bus_t *bus, uint32_t adr, int data )
+{
+	int timeout;
+	uint32_t togglemask = ((1 << 6) << 16) + (1 << 6); /* DQ 6 */
+	/*  int dq5mask = ((1 << 5) << 16) + (1 << 5); DQ5 */
+
+	for (timeout = 0; timeout < 100; timeout++) {
+		uint32_t data1 = bus_read( bus, adr );
+		uint32_t data2 = bus_read( bus, adr );
+
+		/*printf("amdstatus %d: %04X/%04X   %04X/%04X \n", */
+		/*	   timeout, data1, data2, (data1 & togglemask), (data2 & togglemask)); */
+		if ( (data1 & togglemask) == (data2 & togglemask))
+			return 1;
+
+		/*    if ( (data1 & dq5mask) != 0 )   TODO */
+		/*      return 0; */
+		if (dbg) 
+			printf( "amdstatus %d: %04X/%04X\n", timeout, data1, data2 );
+		else
+			printf( "." );
+		usleep( 100 );
+	}
+	return 0;
+}
+
+#else /* 1 */
+
+/* Note: This implementation of amdstatus() has been added by patch
+         [ 1429825 ] EJTAG driver (some remaining patch lines for flash/amd.c)
+         It's a quirk workaround and seems to break status polling for other chips.
+         Therefore it's deactivated at the moment but kept for reference. */
 /*
  * second implementation: see [1], page 30
  */
@@ -130,6 +168,7 @@ amdstatus( bus_t *bus, uint32_t adr, int data )
 	data1 = bus_read( bus, adr );
 	for (timeout = 0; timeout < 100; timeout++) {
 		data2 = bus_read( bus, adr );
+
 
 		/*printf("amdstatus %d: %04X/%04X   %04X/%04X \n", */
 		/*	   timeout, data1, data2, (data1 & togglemask), (data2 & togglemask)); */
@@ -156,6 +195,8 @@ amdstatus( bus_t *bus, uint32_t adr, int data )
 	}
 	return 0;
 }
+
+#endif /* 0 */
 
 #if 0
 static int

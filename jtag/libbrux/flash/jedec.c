@@ -377,6 +377,9 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	if (!(*cfi_array)->cfi_chips[0])
 		return -2;              /* out of memory */
 
+	/* annotate chip width */
+	(*cfi_array)->cfi_chips[0]->width = (*cfi_array)->bus_width;
+
 	/* probe device with Autoselect method 1 */
 	bus_write(bus, adr, 0xf0);
 	bus_write(bus, adr+0xaaa, 0xaa);

@@ -66,57 +66,34 @@ flash_driver_t *flash_drivers[] = {
 	NULL
 };
 
-flash_driver_t *flash_driver = NULL;
+extern cfi_array_t *cfi_array;
+static flash_driver_t *flash_driver = NULL;
 
 extern int amd_detect(bus_t *bus, cfi_array_t **cfi_array ); //Ajit
 
 static void
-set_flash_driver( cfi_array_t *cfi_array )
+set_flash_driver( void )
 {
 	int i;
-	cfi_query_structure_t *cfi = &cfi_array->cfi_chips[0]->cfi;
+	cfi_query_structure_t *cfi;
 
 	flash_driver = NULL;
+	if (cfi_array == NULL)
+		return;
+	cfi = &cfi_array->cfi_chips[0]->cfi;
 
 	for (i = 0; flash_drivers[i] != NULL; i++)
 		if (flash_drivers[i]->autodetect( cfi_array )) {
 			flash_driver = flash_drivers[i];
+			flash_driver->print_info( cfi_array );
 			return;
 		}
 
 	printf( _("unknown flash - vendor id: %d (0x%04x)\n"),
 		cfi->identification_string.pri_id_code,
 		cfi->identification_string.pri_id_code );
-}
 
-/* check for flashmem - set driver */
-static void
-flashcheck( bus_t *bus, cfi_array_t **cfi_array )
-{
-	flash_driver = NULL;
-
-	bus_prepare( bus );
-
-	printf( _("Note: Supported configuration is 2 x 16 bit or 1 x 8/16 bit only\n") );
-
-	*cfi_array = NULL;
-
-	if (cfi_detect( bus, 0, cfi_array )) {
-		cfi_array_free( *cfi_array );
-		if(amd_detect(bus, cfi_array ) != 0)
-		{
-			cfi_array_free( *cfi_array );
-			printf( _("Flash not found!\n") );
-			return;
-		}
-	}
-
-	set_flash_driver( *cfi_array );
-	if (!flash_driver) {
-		printf( _("Flash not supported!\n") );
-		return;
-	}
-	flash_driver->print_info( *cfi_array );
+	printf( _("Flash not supported!\n") );
 }
 
 void
@@ -124,9 +101,8 @@ flashmsbin( bus_t *bus, FILE *f )
 {
 	uint32_t adr;
 	cfi_query_structure_t *cfi;
-	cfi_array_t *cfi_array;
 
-	flashcheck( bus, &cfi_array );
+	set_flash_driver();
 	if (!cfi_array || !flash_driver) {
 		printf( _("no flash driver found\n") );
 		return;
@@ -240,8 +216,6 @@ flashmsbin( bus_t *bus, FILE *f )
 	}
 
 	printf( _("\nDone.\n") );
-
-	cfi_array_free( cfi_array );
 }
 
 static int
@@ -270,14 +244,13 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 {
 	uint32_t adr;
 	cfi_query_structure_t *cfi;
-	cfi_array_t *cfi_array;
 	int *erased;
 	int i;
 	int neb;
 	int bus_width;
 	int chip_width;
 
-	flashcheck( bus, &cfi_array );
+	set_flash_driver();
 	if (!cfi_array || !flash_driver) {
 		printf( _("no flash driver found\n") );
 		return;
@@ -378,19 +351,16 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	printf( _("\nDone.\n") );
 
 	free( erased );
-
-	cfi_array_free( cfi_array );
 }
 
 void
 flasherase( bus_t *bus, uint32_t addr, int number )
 {
 	cfi_query_structure_t *cfi;
-	cfi_array_t *cfi_array;
 	int i;
 	int status = 0;
 
-	flashcheck( bus, &cfi_array );
+	set_flash_driver();
 	if (!cfi_array || !flash_driver) {
 		printf( _("no flash driver found\n") );
 		return;
@@ -425,7 +395,6 @@ flasherase( bus_t *bus, uint32_t addr, int number )
 	else
 		printf( _("\nErasing Failed.\n") );
 
-	cfi_array_free( cfi_array );
 	/* BYPASS */
 	//       parts_set_instruction( ps, "BYPASS" );
 	//       chain_shift_instructions( chain );
