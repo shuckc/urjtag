@@ -99,27 +99,31 @@ AC_CHECK_HEADERS(linux/ppdev.h)
 VL_LIB_READLINE
 
 dnl check for libftdi-config
-AC_PATH_PROG(HAVELIBFTDI, libftdi-config, $PATH)
-if test ! -z "$HAVELIBFTDI"; then
+AC_PATH_PROG(HAVELIBFTDI, libftdi-config, no)
+if test "$HAVELIBFTDI" != "no" ; then
 dnl   LIBFTDI_CFLAGS=`$HAVELIBFTDI --cflags`
+   AM_CONDITIONAL(HAVE_LIBFTDI, true)
    LIBFTDI_LIBS=`$HAVELIBFTDI --libs`
    CFLAGS="$CFLAGS $LIBFTDI_CFLAGS"
    LIBS="$LIBS $LIBFTDI_LIBS"
    AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
 else
-   AC_MSG_ERROR([*** libftdi-config not found. You need a working libftdi installation.])
+   AM_CONDITIONAL(HAVE_LIBFTDI, false)
+   AC_MSG_WARN([*** libftdi-config not found. No support for FTDI-based USB JTAG cables.])
 fi
 
 dnl check for libusb-config
-AC_PATH_PROG(HAVELIBUSB, libusb-config, $PATH)
-if test ! -z "$HAVELIBUSB"; then
+AC_PATH_PROG(HAVELIBUSB, libusb-config, no) 
+if test "$HAVELIBUSB" != "no" ; then
 dnl   LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
+   AM_CONDITIONAL(HAVE_LIBUSB, true)
    LIBUSB_LIBS=`$HAVELIBUSB --libs`
    CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
    LIBS="$LIBS $LIBUSB_LIBS"
    AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
 else
-   AC_MSG_ERROR([*** libusb-config not found. You need a working libusb installation.])
+   AM_CONDITIONAL(HAVE_LIBUSB, false)
+   AC_MSG_WARN([*** libusb-config not found. Omitting support for some USB JTAG cables.])
 fi
 
 CFLAGS="$CFLAGS -Wall"

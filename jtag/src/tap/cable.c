@@ -37,7 +37,9 @@
 
 extern cable_driver_t arcom_cable_driver;
 extern cable_driver_t byteblaster_cable_driver;
+#ifdef HAVE_LIBFTDI
 extern cable_driver_t usbblaster_cable_driver;
+#endif
 extern cable_driver_t dlc5_cable_driver;
 extern cable_driver_t ea253_cable_driver;
 extern cable_driver_t ei012_cable_driver;
@@ -57,7 +59,9 @@ extern cable_driver_t xpc_ext_cable_driver;
 cable_driver_t *cable_drivers[] = {
 	&arcom_cable_driver,
 	&byteblaster_cable_driver,
+#ifdef HAVE_LIBFTDI
 	&usbblaster_cable_driver,
+#endif
 	&dlc5_cable_driver,
 	&ea253_cable_driver,
 	&ei012_cable_driver,

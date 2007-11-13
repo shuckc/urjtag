@@ -33,17 +33,12 @@ libtap_a_SOURCES = \
 	parport.c \
 	parport/direct.c \
 	parport/ppdev.c \
-    parport/xpcu_common.c \
-    parport/xpcu_pp.c \
-	parport/ftdi.c \
 	cable.c \
 	cable/generic.h \
 	cable/generic.c \
 	cable/arcom.c \
 	cable/byteblaster.c \
-	cable/usbblaster.c \
 	cable/dlc5.c \
-    cable/xpc.c \
 	cable/ea253.c \
 	cable/ei012.c \
 	cable/keithkoep.c \
@@ -52,3 +47,17 @@ libtap_a_SOURCES = \
 	cable/triton.c \
 	cable/wiggler.c \
 	cable/wiggler2.c
+
+if HAVE_LIBUSB
+libtap_a_SOURCES += \
+	parport/xpcu_common.c \
+	parport/xpcu_pp.c \
+	cable/xpc.c
+endif
+
+if HAVE_LIBFTDI
+libtap_a_SOURCES += \
+	parport/ftdi.c \
+	cable/usbblaster.c
+endif
+
