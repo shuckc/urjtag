@@ -71,6 +71,7 @@ struct amd_flash_info {
 	const int dev_id;
 	const char *name;
 	const long size;
+	const u_int8_t interface_width;
 	const int as_method;
 	const int numeraseregions;
 	const struct mtd_erase_region_info regions[4];
@@ -82,6 +83,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV160DT,
 		.name = "AMD AM29LV160DT",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -95,6 +97,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV160DB,
 		.name = "AMD AM29LV160DB",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -108,6 +111,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = TC58FVT160,
 		.name = "Toshiba TC58FVT160",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -121,6 +125,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = MBM29LV160TE,
 		.name = "Fujitsu MBM29LV160TE",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -134,6 +139,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = TC58FVB160,
 		.name = "Toshiba TC58FVB160",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -147,6 +153,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = MBM29LV160BE,
 		.name = "Fujitsu MBM29LV160BE",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -160,6 +167,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV800BB,
 		.name = "AMD AM29LV800BB",
 		.size = 0x00100000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -173,6 +181,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29F800BB,
 		.name = "AMD AM29F800BB",
 		.size = 0x00100000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -186,6 +195,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV800BT,
 		.name = "AMD AM29LV800BT",
 		.size = 0x00100000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -199,6 +209,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29F800BT,
 		.name = "AMD AM29F800BT",
 		.size = 0x00100000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -212,6 +223,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV800BB,
 		.name = "AMD AM29LV800BB",
 		.size = 0x00100000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -225,6 +237,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = MBM29LV800BB,
 		.name = "Fujitsu MBM29LV800BB",
 		.size = 0x00100000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -238,6 +251,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = M29W800T,
 		.name = "ST M29W800T",
 		.size = 0x00100000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -251,6 +265,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = M29W160DT,
 		.name = "ST M29W160DT",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -264,6 +279,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = M29W160DB,
 		.name = "ST M29W160DB",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -277,6 +293,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29BDS323D,
 		.name = "AMD AM29BDS323D",
 		.size = 0x00400000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 3,
 		.regions = {
@@ -289,6 +306,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29BDS643D,
 		.name = "AMD AM29BDS643D",
 		.size = 0x00800000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 3,
 		.regions = {
@@ -301,6 +319,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AT49xV16x,
 		.name = "Atmel AT49xV16x",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 2,
 		.regions = {
@@ -312,6 +331,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AT49xV16xT,
 		.name = "Atmel AT49xV16xT",
 		.size = 0x00200000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 2,
 		.regions = {
@@ -323,6 +343,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = MX29LV400T,
 		.name = "MX 29LV400T",
 		.size = 0x0080000,
+		.interface_width = CFI_INTERFACE_X16, /* correct default? */
 		.as_method = AUTOSELECT_M1,
 		.numeraseregions = 4,
 		.regions = {
@@ -336,6 +357,7 @@ static const struct amd_flash_info table[] = {
 		.dev_id = AM29LV040B,
 		.name = "AMD AM29LV040B",
 		.size = 0x0080000,
+		.interface_width = CFI_INTERFACE_X8, /* checked, ok */
 		.as_method = AUTOSELECT_M2,
 		.numeraseregions = 1,
 		.regions = {
@@ -353,7 +375,7 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	int manid = 0, devid = 0;
 	int ba, bw;
 	int i, j;
-    cfi_query_structure_t *cfi;
+        cfi_query_structure_t *cfi;
 	bus_area_t area;
 	
 	*cfi_array = calloc( 1, sizeof (cfi_array_t) );
@@ -376,9 +398,6 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	(*cfi_array)->cfi_chips[0] = calloc( 1, sizeof (cfi_chip_t) );
 	if (!(*cfi_array)->cfi_chips[0])
 		return -2;              /* out of memory */
-
-	/* annotate chip width */
-	(*cfi_array)->cfi_chips[0]->width = (*cfi_array)->bus_width;
 
 	/* probe device with Autoselect method 1 */
 	bus_write(bus, adr, 0xf0);
@@ -413,7 +432,7 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	if(i==sizeof(table)/sizeof(struct amd_flash_info))
 		return -4;
 	
-  	cfi = &(*cfi_array)->cfi_chips[0]->cfi;
+	cfi = &(*cfi_array)->cfi_chips[0]->cfi;
 
 	cfi->identification_string.pri_id_code = CFI_VENDOR_AMD_SCS;
 	cfi->identification_string.pri_vendor_tbl = NULL;
@@ -421,7 +440,36 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	cfi->identification_string.alt_vendor_tbl = NULL;
 
 	cfi->device_geometry.device_size = table[i].size;
-	cfi->device_geometry.device_interface = 1; /* 16 bit for now */
+	/* annotate chip width */
+	cfi->device_geometry.device_interface = table[i].interface_width;
+	switch (table[i].interface_width) {
+		case CFI_INTERFACE_X8:
+			(*cfi_array)->cfi_chips[0]->width = 1;
+			break;
+		case CFI_INTERFACE_X16:
+			(*cfi_array)->cfi_chips[0]->width = 2;
+			break;
+		case CFI_INTERFACE_X8_X16:
+			fprintf(stderr, "Warning: Unsupported interface geometry %s, falling back to %s\n", "CFI_INTERFACE_X8_X16", "CFI_INTERFACE_X16");
+			(*cfi_array)->cfi_chips[0]->width = 2;
+			cfi->device_geometry.device_interface = CFI_INTERFACE_X16;
+			break;
+		case CFI_INTERFACE_X32:
+			(*cfi_array)->cfi_chips[0]->width = 4;
+			break;
+		case CFI_INTERFACE_X16_X32:
+			fprintf(stderr, "Warning: Unsupported interface geometry %s, falling back to %s\n", "CFI_INTERFACE_X16_X32", "CFI_INTERFACE_X32");
+			(*cfi_array)->cfi_chips[0]->width = 4;
+			cfi->device_geometry.device_interface = CFI_INTERFACE_X32;
+			break;
+		default:
+			/* unsupported interface geometry */
+			fprintf(stderr, "Error: Unsupported interface geometry %d, bailing out\n", table[i].interface_width);
+			(*cfi_array)->cfi_chips[0]->width = 1;
+			cfi->device_geometry.device_interface = CFI_INTERFACE_X8;
+			return -5;
+			break;
+	}
 	
 	cfi->device_geometry.number_of_erase_regions = table[i].numeraseregions;
 
