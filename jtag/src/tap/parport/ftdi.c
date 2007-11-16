@@ -42,6 +42,7 @@
 #include "cable.h"
 
 parport_driver_t ftdi_parport_driver;
+parport_driver_t ftdi_mpsse_parport_driver;
 
 typedef struct port_node_t port_node_t;
 
@@ -52,7 +53,8 @@ struct port_node_t {
 
 static port_node_t *ports = NULL;		/* devices */
 
-#define OUTBUF_LEN 64 
+#define OUTBUF_LEN_STD 64
+#define OUTBUF_LEN_MPSSE 4096
 
 typedef struct {
 	char *serial;
@@ -60,20 +62,21 @@ typedef struct {
 	unsigned int product_id;
 	char autoflush;
 	struct ftdi_context *fc;
-	unsigned char outcount;
+	int outcount;
 	unsigned char *outbuf;
+	int outbuf_len;
 } ftdi_params_t;
 
 static int ftdi_flush_output ( ftdi_params_t *p );
 
 static parport_t *
-ftdi_parport_alloc( const char *vidpid )
+ftdi_parport_alloc( const char *vidpid, parport_driver_t * parport_driver, size_t outbuf_len )
 {
 	ftdi_params_t *params = malloc( sizeof *params );
 	parport_t *parport = malloc( sizeof *parport );
 	port_node_t *node = malloc( sizeof *node );
 	struct ftdi_context *fc = malloc( sizeof(struct ftdi_context) );
-	unsigned char *outbuf = malloc( OUTBUF_LEN );
+	unsigned char *outbuf = malloc( outbuf_len );
 
 	if (!node || !parport || !params || !fc || !outbuf)  {
 		free( node );
@@ -85,6 +88,7 @@ ftdi_parport_alloc( const char *vidpid )
 
 	ftdi_init(fc);
 	params->outbuf = outbuf;
+	params->outbuf_len = outbuf_len;
 	params->outcount = 0;
 	params->autoflush = 0;
 	params->product_id = 0;
@@ -104,7 +108,7 @@ ftdi_parport_alloc( const char *vidpid )
 	};
 
 	parport->params = params;
-	parport->driver = &ftdi_parport_driver;
+	parport->driver = parport_driver;
 	parport->cable = NULL;
 
 	node->port = parport;
@@ -137,13 +141,12 @@ ftdi_parport_free( parport_t *port )
 	free( port );
 }
 
-static cable_t *
-ftdi_connect( const char **par, int parnum )
+
+static cable_driver_t *
+ftdi_pre_connect( const char **par, int parnum )
 {
 	int i;
 	port_node_t *pn;
-	parport_t *parport;
-	cable_t *cable;
 
 	if (parnum != 2) {
 		printf( _("Syntax error!\n") );
@@ -173,21 +176,62 @@ ftdi_connect( const char **par, int parnum )
 
 	printf( _("Initializing %s on FTDI device %s\n"), _(cable_drivers[i]->description), par[0] );
 
-	parport = ftdi_parport_alloc( par[0] );
+	return cable_drivers[i];
+}
+
+
+static cable_t *
+ftdi_std_connect( const char **par, int parnum )
+{
+	parport_t *parport;
+	cable_driver_t *cable_driver;
+	cable_t *cable;
+
+	cable_driver = ftdi_pre_connect(par, parnum);
+	if (!cable_driver)
+		return NULL;
+
+	parport = ftdi_parport_alloc( par[0], &ftdi_parport_driver, OUTBUF_LEN_STD );
 	if (!parport) {
 		printf( _("%s(%d) Out of memory.\n"), __FILE__, __LINE__ );
 		return NULL;
 	}
 
-	cable = cable_drivers[i]->connect( cable_drivers[i], parport );
+	cable = cable_driver->connect( cable_driver, parport );
 	if (!cable)
 		ftdi_parport_free( parport );
 
 	return cable;
 }
 
+
+static cable_t *
+ftdi_mpsse_connect( const char **par, int parnum )
+{
+	parport_t *parport;
+	cable_driver_t *cable_driver;
+	cable_t *cable;
+
+	cable_driver = ftdi_pre_connect(par, parnum);
+	if (!cable_driver)
+		return NULL;
+
+	parport = ftdi_parport_alloc( par[0], &ftdi_mpsse_parport_driver, OUTBUF_LEN_MPSSE );
+	if (!parport) {
+		printf( _("%s(%d) Out of memory.\n"), __FILE__, __LINE__ );
+		return NULL;
+	}
+
+	cable = cable_driver->connect( cable_driver, parport );
+	if (!cable)
+		ftdi_parport_free( parport );
+
+	return cable;
+}
+
+
 static int
-ftdi_open( parport_t *parport )
+ftdi_generic_open( parport_t *parport )
 {
 	int r;
 	ftdi_params_t *p = parport->params;
@@ -203,15 +247,31 @@ ftdi_open( parport_t *parport )
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x09FB, 0x6002, NULL, p->serial); /* Cubic Cyclonium */
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x09FB, 0x6003, NULL, p->serial); /* NIOS II Evaluation board */
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x16C0, 0x06AD, NULL, p->serial); /* http://www.ixo.de/info/usb_jtag/ */
+		if(r<0) r = ftdi_usb_open_desc(fc, 0x15BA, 0x0003, NULL, p->serial); /* Olimex ARM-USB-OCD */
 	};
 
 	if(r<0)
 	{
 		fprintf (stderr, "Can't open ftdi device: %s\n", 
-						ftdi_get_error_string (fc));
+			 ftdi_get_error_string (fc));
 		ftdi_deinit(fc);
 		return -1;
 	};
+
+	return 0;
+}
+
+
+static int
+ftdi_std_open( parport_t *parport )
+{
+	int r;
+	ftdi_params_t *p = parport->params;
+	struct ftdi_context *fc = p->fc;
+
+	r = ftdi_generic_open(parport);
+	if (r < 0)
+		return r;
 
 	(void)ftdi_disable_bitbang(fc);
 
@@ -248,6 +308,86 @@ ftdi_open( parport_t *parport )
 
 	return 0;
 }
+
+
+static int
+ftdi_mpsse_open( parport_t *parport )
+{
+	int r;
+	ftdi_params_t *p = parport->params;
+	struct ftdi_context *fc = p->fc;
+
+	r = ftdi_generic_open(parport);
+	if (r < 0)
+		return r;
+
+	/* This sequence might seem weird and containing superfluous stuff.
+	   However, it's built after the description of JTAG_InitDevice
+	     Ref. FTCJTAGPG10.pdf
+	   Intermittent problems will occur when certain steps are skipped. */
+	if (ftdi_usb_reset(fc) < 0)
+	{
+		fprintf (stderr, "Can't reset USB: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	}
+	if (ftdi_usb_purge_buffers(fc) < 0)
+	{
+		fprintf (stderr, "Can't purge USB buffers: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	}
+
+	if (ftdi_set_bitmode(fc, 0x0b, BITMODE_RESET) < 0)
+	{
+		fprintf (stderr, "Can't reset bitmode: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	};
+	if (ftdi_set_bitmode(fc, 0x0b, BITMODE_MPSSE) < 0)
+	{
+		fprintf (stderr, "Can't set mpsse mode: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	};
+
+	if (ftdi_usb_reset(fc) < 0)
+	{
+		fprintf (stderr, "Can't reset USB: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	}
+	if (ftdi_usb_purge_buffers(fc) < 0)
+	{
+		fprintf (stderr, "Can't purge USB buffers: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	}
+
+	if(ftdi_set_latency_timer(fc, 2) < 0)
+	{
+		fprintf (stderr, "Can't set minimum latency: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	};
+
+	return 0;
+}
+
 
 static int
 ftdi_flush_output ( ftdi_params_t *p )
@@ -289,6 +429,7 @@ ftdi_close( parport_t *parport )
 	if(p->outcount > 0) ftdi_flush_output( p );
 	p->outcount = 0;
 
+	ftdi_disable_bitbang(p->fc);
 	ftdi_usb_close(p->fc);
 	ftdi_deinit(p->fc);
 
@@ -308,7 +449,7 @@ ftdi_set_data( parport_t *parport, uint8_t data )
 	{
 		p->outbuf[p->outcount++] = data;
 
-		if(p->outcount >= OUTBUF_LEN)
+		if(p->outcount >= p->outbuf_len)
 			return ftdi_flush_output( p );
 	};
 	   
@@ -344,9 +485,21 @@ ftdi_set_control( parport_t *parport, uint8_t data )
 
 parport_driver_t ftdi_parport_driver = {
 	"ftdi",
-	ftdi_connect,
+	ftdi_std_connect,
 	ftdi_parport_free,
-	ftdi_open,
+	ftdi_std_open,
+	ftdi_close,
+	ftdi_set_data,
+	ftdi_get_data,
+	ftdi_get_status,
+	ftdi_set_control
+};
+
+parport_driver_t ftdi_mpsse_parport_driver = {
+	"ftdi-mpsse",
+	ftdi_mpsse_connect,
+	ftdi_parport_free,
+	ftdi_mpsse_open,
 	ftdi_close,
 	ftdi_set_data,
 	ftdi_get_data,

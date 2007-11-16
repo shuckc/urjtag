@@ -70,13 +70,17 @@ chain_disconnect( chain_t *chain )
 }
 
 void
-chain_clock( chain_t *chain, int tms, int tdi )
+chain_clock( chain_t *chain, int tms, int tdi, int n )
 {
+	int i;
+
 	if (!chain || !chain->cable)
 		return;
 
-	cable_clock( chain->cable, tms, tdi );
-	tap_state_clock( chain, tms );
+	cable_clock( chain->cable, tms, tdi, n );
+
+        for (i = 0; i < n; i++)
+		tap_state_clock( chain, tms );
 }
 
 int

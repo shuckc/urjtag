@@ -39,6 +39,8 @@ extern cable_driver_t arcom_cable_driver;
 extern cable_driver_t byteblaster_cable_driver;
 #ifdef HAVE_LIBFTDI
 extern cable_driver_t usbblaster_cable_driver;
+extern cable_driver_t ft2232_cable_driver;
+extern cable_driver_t ft2232_armusbocd_cable_driver;
 #endif
 extern cable_driver_t dlc5_cable_driver;
 extern cable_driver_t ea253_cable_driver;
@@ -61,6 +63,8 @@ cable_driver_t *cable_drivers[] = {
 	&byteblaster_cable_driver,
 #ifdef HAVE_LIBFTDI
 	&usbblaster_cable_driver,
+	&ft2232_cable_driver,
+	&ft2232_armusbocd_cable_driver,
 #endif
 	&dlc5_cable_driver,
 	&ea253_cable_driver,
@@ -98,9 +102,9 @@ cable_done( cable_t *cable )
 }
 
 void
-cable_clock( cable_t *cable, int tms, int tdi )
+cable_clock( cable_t *cable, int tms, int tdi, int n )
 {
-	cable->driver->clock( cable, tms, tdi );
+	cable->driver->clock( cable, tms, tdi, n );
 }
 
 int
@@ -149,7 +153,7 @@ cable_set_frequency( cable_t *cable, uint32_t new_frequency )
 
 			start = frealtime();	
 			for (i = 0; i < loops; ++i) {
-				chain_clock(chain, 0, 0);
+				chain_clock(chain, 0, 0, 1);
 			}
 			end = frealtime();
 

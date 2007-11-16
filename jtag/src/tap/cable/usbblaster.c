@@ -58,15 +58,19 @@ usbblaster_init( cable_t *cable )
 }
 
 static void
-usbblaster_clock( cable_t *cable, int tms, int tdi )
+usbblaster_clock( cable_t *cable, int tms, int tdi, int n )
 {
+	int i;
+
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
 
-	parport_set_data( cable->port, OTHERS | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
-	parport_set_data( cable->port, OTHERS | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
-	parport_set_control( cable->port, 1 ); // flush
-	parport_set_control( cable->port, 0 ); // noflush
+	for (i = 0; i < n; i++) {
+		parport_set_data( cable->port, OTHERS | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_data( cable->port, OTHERS | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_control( cable->port, 1 ); // flush
+		parport_set_control( cable->port, 0 ); // noflush
+	}
 }
 
 static int

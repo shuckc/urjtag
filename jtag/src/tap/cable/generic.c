@@ -78,11 +78,11 @@ generic_transfer( cable_t *cable, int len, char *in, char *out )
 	if(out)
 		for(i=0; i<len; i++) {
 			out[i] = cable_get_tdo( cable );
-			cable_clock( cable, 0, in[i] );
+			cable_clock( cable, 0, in[i], 1 );
 		}
 	else
 		for(i=0; i<len; i++) {
-			cable_clock( cable, 0, in[i] );
+			cable_clock( cable, 0, in[i], 1 );
 		}
 
 	return i;

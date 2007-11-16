@@ -34,6 +34,7 @@ extern parport_driver_t ppdev_parport_driver;
 #endif /* HAVE_LINUX_PPDEV_H */
 #ifdef HAVE_LIBFTDI
 extern parport_driver_t ftdi_parport_driver;
+extern parport_driver_t ftdi_mpsse_parport_driver;
 #endif /* HAVE_LIBFTDI */
 #ifdef HAVE_LIBUSB
 extern parport_driver_t xpcu_pp_driver;
@@ -48,6 +49,7 @@ parport_driver_t *parport_drivers[] = {
 #endif /* HAVE_LINUX_PPDEV_H */
 #ifdef HAVE_LIBFTDI
 	&ftdi_parport_driver,
+	&ftdi_mpsse_parport_driver,
 #endif /* HAVE_LIBFTDI */
 #ifdef HAVE_LIBUSB
     &xpcu_pp_driver,

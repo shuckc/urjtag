@@ -58,6 +58,7 @@ endif
 if HAVE_LIBFTDI
 libtap_a_SOURCES += \
 	parport/ftdi.c \
-	cable/usbblaster.c
+	cable/usbblaster.c \
+	cable/ft2232.c
 endif
 

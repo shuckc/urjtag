@@ -87,6 +87,7 @@ cmd_cable_help( void )
 		"Usage: %s DEV CABLE\n"
 		"Usage: %s VID:PID:S/N CABLE\n"
 		"Usage: %s VID:PID:S/N CABLE\n"
+		"Usage: %s VID:PID:S/N CABLE\n"
 		"Select JTAG cable connected to parallel port.\n"
 		"\n"
 		"PORTADDR   parallel port address (e.g. 0x378)\n"
@@ -98,7 +99,7 @@ cmd_cable_help( void )
 		"\n"
 		"List of supported cables:\n"
 		"%-13s No cable connected\n"
-	), "cable parallel", "cable ppdev", "cable ftdi", "cable xpcu", "none" );
+	), "cable parallel", "cable ppdev", "cable ftdi", "cable ftdi-mpsse", "cable xpcu", "none" );
 
 	for (i = 0; cable_drivers[i]; i++)
 		printf( _("%-13s %s\n"), cable_drivers[i]->name, _(cable_drivers[i]->description) );

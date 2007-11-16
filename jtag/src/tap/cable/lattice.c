@@ -62,15 +62,19 @@ lattice_init( cable_t *cable )
 }
 
 static void
-lattice_clock( cable_t *cable, int tms, int tdi )
+lattice_clock( cable_t *cable, int tms, int tdi, int n )
 {
+	int i;
+
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
 
-	parport_set_data( cable->port, (0 << TCK) | (tms << TMS) | (tdi << TDI) | (1 << TRST) );
-	cable_wait();
-	parport_set_data( cable->port, (1 << TCK) | (tms << TMS) | (tdi << TDI) | (1 << TRST) );
-	cable_wait();
+	for (i = 0; i < n; i++) {
+		parport_set_data( cable->port, (0 << TCK) | (tms << TMS) | (tdi << TDI) | (1 << TRST) );
+		cable_wait();
+		parport_set_data( cable->port, (1 << TCK) | (tms << TMS) | (tdi << TDI) | (1 << TRST) );
+		cable_wait();
+	}
 }
 
 static int

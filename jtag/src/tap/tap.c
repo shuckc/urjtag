@@ -36,13 +36,9 @@ tap_reset( chain_t *chain )
 {
 	tap_state_reset( chain );
 
-	chain_clock( chain, 1, 0 );
-	chain_clock( chain, 1, 0 );
-	chain_clock( chain, 1, 0 );
-	chain_clock( chain, 1, 0 );
-	chain_clock( chain, 1, 0 );				/* Test-Logic-Reset */
+	chain_clock( chain, 1, 0, 5 );				/* Test-Logic-Reset */
 
-	chain_clock( chain, 0, 0 );				/* Run-Test/Idle */
+	chain_clock( chain, 0, 0, 1 );				/* Run-Test/Idle */
 }
 
 void
@@ -55,7 +51,7 @@ tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, i
 
 	/* Capture-DR, Capture-IR, Shift-DR, Shift-IR, Exit2-DR or Exit2-IR state */
 	if (tap_state( chain ) & TAPSTAT_CAPTURE)
-		chain_clock( chain, 0, 0 );	/* save last TDO bit :-) */
+		chain_clock( chain, 0, 0, 1 );	/* save last TDO bit :-) */
 
 	i = in->len;
 	if(exit) i--;
@@ -69,12 +65,12 @@ tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, i
 	for (; i < in->len; i++) {
 		if (out && (i < out->len))
 			out->data[i] = cable_get_tdo( chain->cable );
-		chain_clock( chain, (exit != EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i] );	/* Shift (& Exit1) */
+		chain_clock( chain, (exit != EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i], 1 );	/* Shift (& Exit1) */
 	}
 	/* Shift-DR, Shift-IR, Exit1-DR or Exit1-IR state */
 	if (exit == EXITMODE_IDLE) {
-		chain_clock( chain, 1, 0 );	/* Update-DR or Update-IR */
-		chain_clock( chain, 0, 0 );	/* Run-Test/Idle */
+		chain_clock( chain, 1, 0, 1 );	/* Update-DR or Update-IR */
+		chain_clock( chain, 0, 0, 1 );	/* Run-Test/Idle */
 	}
 }
 
@@ -85,8 +81,8 @@ tap_capture_dr( chain_t *chain )
 		printf( _("%s: Invalid state: %2X\n"), "tap_capture_dr", tap_state( chain ) );
 
 	/* Run-Test/Idle or Update-DR or Update-IR state */
-	chain_clock( chain, 1, 0 );		/* Select-DR-Scan */
-	chain_clock( chain, 0, 0 );		/* Capture-DR */
+	chain_clock( chain, 1, 0, 1 );		/* Select-DR-Scan */
+	chain_clock( chain, 0, 0, 1 );		/* Capture-DR */
 }
 
 void
@@ -96,7 +92,6 @@ tap_capture_ir( chain_t *chain )
 		printf( _("%s: Invalid state: %2X\n"), "tap_capture_ir", tap_state( chain ) );
 
 	/* Run-Test/Idle or Update-DR or Update-IR state */
-	chain_clock( chain, 1, 0 );		/* Select-DR-Scan */
-	chain_clock( chain, 1, 0 );		/* Select-IR-Scan */
-	chain_clock( chain, 0, 0 );		/* Capture-IR */
+	chain_clock( chain, 1, 0, 2 );		/* Select-DR-Scan, then Select-IR-Scan */
+	chain_clock( chain, 0, 0, 1 );		/* Capture-IR */
 }

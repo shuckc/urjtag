@@ -92,9 +92,7 @@ static int issued_runtest_maxtime;
 static void
 svf_force_reset_state(void)
 {
-  int i;
-  for (i = 1; i <= 5; i++)
-    chain_clock(chain, 1, 0);
+  chain_clock(chain, 1, 0, 5);
   tap_state_reset(chain);
 }
 
@@ -128,11 +126,11 @@ svf_goto_state(int new_state)
 
   switch (current_state) {
     case Test_Logic_Reset:
-      chain_clock(chain, 0, 0);
+      chain_clock(chain, 0, 0, 1);
       break;
 
     case Run_Test_Idle:
-      chain_clock(chain, 1, 0);
+      chain_clock(chain, 1, 0, 1);
       break;
 
     case Select_DR_Scan:
@@ -142,86 +140,86 @@ svf_goto_state(int new_state)
           (current_state & TAPSTAT_DR && new_state & TAPSTAT_IR)  ||
           (current_state & TAPSTAT_IR && new_state & TAPSTAT_DR))
         /* progress in select-idle/reset loop */
-        chain_clock(chain, 1, 0);
+        chain_clock(chain, 1, 0, 1);
       else
         /* enter DR/IR branch */
-        chain_clock(chain, 0, 0);
+        chain_clock(chain, 0, 0, 1);
       break;
 
     case Capture_DR:
       if (new_state == Shift_DR)
         /* enter Shift_DR state */
-        chain_clock(chain, 0, 0);
+        chain_clock(chain, 0, 0, 1);
       else
         /* bypass Shift_DR */
-        chain_clock(chain, 1, 0);
+        chain_clock(chain, 1, 0, 1);
       break;
 
     case Capture_IR:
       if (new_state == Shift_IR)
         /* enter Shift_IR state */
-        chain_clock(chain, 0, 0);
+        chain_clock(chain, 0, 0, 1);
       else
         /* bypass Shift_IR */
-        chain_clock(chain, 1, 0);
+        chain_clock(chain, 1, 0, 1);
       break;
 
     case Shift_DR:
     case Shift_IR:
       /* progress to Exit1_DR/IR */
-      chain_clock(chain, 1, 0);
+      chain_clock(chain, 1, 0, 1);
       break;
 
     case Exit1_DR:
       if (new_state == Pause_DR)
         /* enter Pause_DR state */
-        chain_clock(chain, 0, 0);
+        chain_clock(chain, 0, 0, 1);
       else
         /* bypass Pause_DR */
-        chain_clock(chain, 1, 0);
+        chain_clock(chain, 1, 0, 1);
       break;
 
     case Exit1_IR:
       if (new_state == Pause_IR)
         /* enter Pause_IR state */
-        chain_clock(chain, 0, 0);
+        chain_clock(chain, 0, 0, 1);
       else
         /* bypass Pause_IR */
-        chain_clock(chain, 1, 0);
+        chain_clock(chain, 1, 0, 1);
       break;
 
     case Pause_DR:
     case Pause_IR:
       /* progress to Exit2_DR/IR */
-      chain_clock(chain, 1, 0);
+      chain_clock(chain, 1, 0, 1);
       break;
 
     case Exit2_DR:
       if (new_state == Shift_DR)
         /* enter Shift_DR state */
-        chain_clock(chain, 0, 0);
+        chain_clock(chain, 0, 0, 1);
       else
         /* progress to Update_DR */
-        chain_clock(chain, 1, 0);
+        chain_clock(chain, 1, 0, 1);
       break;
 
     case Exit2_IR:
       if (new_state == Shift_IR)
         /* enter Shift_IR state */
-        chain_clock(chain, 0, 0);
+        chain_clock(chain, 0, 0, 1);
       else
         /* progress to Update_IR */
-        chain_clock(chain, 1, 0);
+        chain_clock(chain, 1, 0, 1);
       break;
 
     case Update_DR:
     case Update_IR:
       if (new_state == Run_Test_Idle)
         /* enter Run_Test_Idle */
-        chain_clock(chain, 0, 0);
+        chain_clock(chain, 0, 0, 1);
       else
         /* progress to Select_DR/IR */
-        chain_clock(chain, 1, 0);
+        chain_clock(chain, 1, 0, 1);
       break;
 
     default:
@@ -706,9 +704,12 @@ svf_runtest(struct runtest *params)
     ualarm(max_time, 0);
   }
 
-  while (run_count-- > 0 && !max_time_reached) {
-    chain_clock(chain, 0, 0);
-  }
+  if (params->max_time > 0.0)
+    while (run_count-- > 0 && !max_time_reached) {
+      chain_clock(chain, 0, 0, 1);
+    }
+  else
+    chain_clock(chain, 0, 0, run_count);
 
   svf_goto_state(runtest_end_state);
 
