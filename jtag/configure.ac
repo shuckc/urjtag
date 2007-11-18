@@ -130,3 +130,24 @@ CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 
 AC_OUTPUT
+
+
+dnl
+dnl Configuration summary
+dnl
+if test ${HAVELIBFTDI:-no} != no ; then
+   FLAG_HAVELIBFTDI=yes
+else
+   FLAG_HAVELIBFTDI=no
+fi
+if test ${HAVELIBUSB:-no} != no ; then
+   FLAG_HAVELIBUSB=yes
+else
+   FLAG_HAVELIBUSB=no
+fi
+AC_MSG_RESULT([
+jtag is now configured for
+
+  USB cable support:  $FLAG_HAVELIBUSB
+  FTDI cable support: $FLAG_HAVELIBFTDI
+])
