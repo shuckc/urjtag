@@ -42,9 +42,9 @@
 
 cfi_array_t *cfi_array = NULL;
 
-int jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
+extern int jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
 
-extern int amd_detect(bus_t *bus, cfi_array_t **cfi_array ); //Ajith
+extern int amd_detect(bus_t *bus, uint32_t adr, cfi_array_t **cfi_array ); //Ajith
 
 void
 detectflash( bus_t *bus, uint32_t adr )
@@ -67,7 +67,7 @@ detectflash( bus_t *bus, uint32_t adr )
 		cfi_array = NULL;
 		if (jedec_detect( bus, adr, &cfi_array ) != 0) {
 			cfi_array_free( cfi_array );
-			if(amd_detect(bus, &cfi_array ) != 0)
+			if(amd_detect(bus, adr, &cfi_array ) != 0)
 			{
 				cfi_array_free( cfi_array );
 				cfi_array->bus_width = 1;
