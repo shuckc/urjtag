@@ -32,6 +32,10 @@ extern parport_driver_t direct_parport_driver;
 #ifdef HAVE_LINUX_PPDEV_H
 extern parport_driver_t ppdev_parport_driver;
 #endif /* HAVE_LINUX_PPDEV_H */
+#ifdef HAVE_LIBFTD2XX
+extern parport_driver_t ftd2xx_parport_driver;
+extern parport_driver_t ftd2xx_mpsse_parport_driver;
+#endif /* HAVE_LIBFTD2xx */
 #ifdef HAVE_LIBFTDI
 extern parport_driver_t ftdi_parport_driver;
 extern parport_driver_t ftdi_mpsse_parport_driver;
@@ -47,12 +51,16 @@ parport_driver_t *parport_drivers[] = {
 #ifdef HAVE_LINUX_PPDEV_H
 	&ppdev_parport_driver,
 #endif /* HAVE_LINUX_PPDEV_H */
+#ifdef HAVE_LIBFTD2XX
+	&ftd2xx_parport_driver,
+	&ftd2xx_mpsse_parport_driver,
+#endif /* HAVE_LIBFTD2XX */
 #ifdef HAVE_LIBFTDI
 	&ftdi_parport_driver,
 	&ftdi_mpsse_parport_driver,
 #endif /* HAVE_LIBFTDI */
 #ifdef HAVE_LIBUSB
-    &xpcu_pp_driver,
+	&xpcu_pp_driver,
 #endif /* HAVE_LIBUSB */
 	NULL				/* last must be NULL */
 };
@@ -92,4 +100,3 @@ parport_set_control( parport_t *port, uint8_t data )
 {
 	return port->driver->set_control( port, data );
 }
-

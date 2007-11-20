@@ -109,7 +109,7 @@ dnl   LIBFTDI_CFLAGS=`$HAVELIBFTDI --cflags`
    AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
 else
    AM_CONDITIONAL(HAVE_LIBFTDI, false)
-   AC_MSG_WARN([*** libftdi-config not found. No support for FTDI-based USB JTAG cables.])
+   AC_MSG_WARN([*** libftdi-config not found. No support for FTDI-based USB JTAG cables via libftdi.])
 fi
 
 dnl check for libusb-config
@@ -125,6 +125,16 @@ else
    AM_CONDITIONAL(HAVE_LIBUSB, false)
    AC_MSG_WARN([*** libusb-config not found. Omitting support for some USB JTAG cables.])
 fi
+
+dnl check for availability of libftd2xx
+AC_CHECK_LIB([ftd2xx], [FT_Open], [
+   AM_CONDITIONAL(HAVE_LIBFTD2XX, true)
+   AC_DEFINE(HAVE_LIBFTD2XX, 1, [define if you have libftd2xx])
+   LIBS="-lftd2xx $LIBS"
+],[
+   AM_CONDITIONAL(HAVE_LIBFTD2XX, false)
+   AC_MSG_WARN([*** libftd2xx not found. No support for FTDI-based USB JTAG cables via libftd2xx.])
+])
 
 CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
@@ -145,9 +155,16 @@ if test ${HAVELIBUSB:-no} != no ; then
 else
    FLAG_HAVELIBUSB=no
 fi
+if echo $LIBS | grep -q 'ftd2xx' ; then
+   FLAG_HAVELIBFTD2XX=yes
+else
+   FLAG_HAVELIBFTD2XX=no
+fi
 AC_MSG_RESULT([
 jtag is now configured for
 
-  USB cable support:  $FLAG_HAVELIBUSB
-  FTDI cable support: $FLAG_HAVELIBFTDI
+  USB cable support  : $FLAG_HAVELIBUSB
+  FTDI cable support
+    via libftdi      : $FLAG_HAVELIBFTDI
+    via libftd2xx    : $FLAG_HAVELIBFTD2XX
 ])

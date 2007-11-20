@@ -23,8 +23,6 @@
  *
  */
 
-#include <ftdi.h>
-
 #include "sysdep.h"
 
 #include "cable.h"
@@ -52,6 +50,34 @@
 #define FT2232_MAX_TCK_FREQ 6000000
 
 
+/* repeat the definitions for MPSSE command processor here
+	 since we cannot rely on the existence of ftdih. even though
+	 they're defined there */
+
+/* Shifting commands IN MPSSE Mode*/
+#define MPSSE_WRITE_NEG 0x01   /* Write TDI/DO on negative TCK/SK edge*/
+#define MPSSE_BITMODE   0x02   /* Write bits, not bytes */
+#define MPSSE_READ_NEG  0x04   /* Sample TDO/DI on negative TCK/SK edge */
+#define MPSSE_LSB       0x08   /* LSB first */
+#define MPSSE_DO_WRITE  0x10   /* Write TDI/DO */
+#define MPSSE_DO_READ   0x20   /* Read TDO/DI */
+#define MPSSE_WRITE_TMS 0x40   /* Write TMS/CS */
+
+/* FTDI MPSSE commands */
+#define SET_BITS_LOW   0x80
+/*BYTE DATA*/
+/*BYTE Direction*/
+#define SET_BITS_HIGH  0x82
+/*BYTE DATA*/
+/*BYTE Direction*/
+#define GET_BITS_LOW   0x81
+#define GET_BITS_HIGH  0x83
+#define LOOPBACK_START 0x84
+#define LOOPBACK_END   0x85
+#define TCK_DIVISOR    0x86
+
+
+/* bit and bitmask definitions for GPIO commands */
 #define BIT_TCK 0
 #define BIT_TDI 1
 #define BIT_TDO 2

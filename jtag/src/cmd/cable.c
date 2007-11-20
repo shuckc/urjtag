@@ -89,6 +89,10 @@ cmd_cable_help( void )
 		"Usage: %s VID:PID:S/N CABLE\n"
 		"Usage: %s VID:PID:S/N CABLE\n"
 #endif
+#ifdef HAVE_LIBFTD2XX
+		"Usage: %s VID:PID:S/N CABLE\n"
+		"Usage: %s VID:PID:S/N CABLE\n"
+#endif
 #ifdef HAVE_LIBUSB
 		"Usage: %s VID:PID:S/N CABLE\n"
 #endif
@@ -96,7 +100,7 @@ cmd_cable_help( void )
 		"\n"
 		"PORTADDR   parallel port address (e.g. 0x378)\n"
 		"CABLE      cable type\n"
-#if defined HAVE_LIBUSB || defined HAVE_LIBFTDI
+#if defined HAVE_LIBUSB || defined HAVE_LIBFTDI || defined HAVE_LIBFTD2XX
 		"DEV        ppdev device (e.g. /dev/parport0)\n"
 		"VID        empty or USB vendor ID, hex (e.g. 09FB)\n"
 		"PID        empty or USB product ID, hex (e.g. 6001)\n"
@@ -108,6 +112,9 @@ cmd_cable_help( void )
 	), "cable parallel", "cable ppdev",
 #ifdef HAVE_LIBFTDI
 	   "cable ftdi", "cable ftdi-mpsse",
+#endif
+#ifdef HAVE_LIBFTD2XX
+	   "cable ftd2xx", "cable ftd2xx-mpsse",
 #endif
 #ifdef HAVE_LIBUSB
 	   "cable xpcu",

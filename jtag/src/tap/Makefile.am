@@ -62,3 +62,7 @@ libtap_a_SOURCES += \
 	cable/ft2232.c
 endif
 
+if HAVE_LIBFTD2XX
+libtap_a_SOURCES += \
+	parport/ftd2xx.c
+endif

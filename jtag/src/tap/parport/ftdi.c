@@ -1,5 +1,5 @@
 /*
- * $Id: ftdi.c,v 1.7 2003/08/19 09:05:25 telka Exp $
+ * $Id$
  *
  * libftdi Driver
  * Copyright (C) 2006 K. Waschk
