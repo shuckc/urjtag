@@ -1,7 +1,5 @@
 #
-# $Id: Makefile.am,v 1.16 2003/09/14 20:04:24 telka Exp $
-#
-# Copyright (C) 2002 ETC s.r.o.
+# $Id$
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,10 +16,17 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by A. Laeuger <arniml@sourceforge.net>, 2007.
 #
 
 include $(top_srcdir)/Makefile.rules
+
+AM_YFLAGS = -d
+
+if BISON_LOCATIONS
+AM_LFLAGS  = --bison-locations
+AM_YFLAGS += --locations
+endif
 
 noinst_LIBRARIES = libsvf.a
 
@@ -29,8 +34,6 @@ libsvf_a_SOURCES = \
 	svf_bison.y \
 	svf_flex.l \
 	svf.c
-
-AM_YFLAGS = -d
 
 CLEANFILES = \
 	svf_bison.c \

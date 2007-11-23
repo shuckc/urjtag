@@ -24,26 +24,52 @@
  */
 
 
-%option bison-locations
+/*
+ * Note: This lexer supports bison_locations if HAVE_MODERN_FLEX is
+         defined. Apart from this, the option --bison-locations has
+         to be specified on the command line.
+         Both the define and the command line option are controlled
+         by the configure script that enables this feature based on
+         the available version of flex.
+ */
+
 
 %{
 #include <strings.h>
 #include <ctype.h>
 
+#include <sysdep.h>
 #include "svf.h"
 #include "svf_bison.h"
 
 static int map_keyw_ident(YYSTYPE *, char *);
 static void align_string(char *);
+
+/* autodetected by configure based on current flex version */
+#ifdef HAVE_MODERN_FLEX
 static void fix_yylloc(YYLTYPE *, char *);
 static void fix_yylloc_nl(YYLTYPE *, char *);
+#define FIX_YYLLOC(lloc, text) fix_yylloc(lloc, text);
+#define FIX_YYLLOC_NL(lloc, text) fix_yylloc_nl(lloc, text);
+
+#else
+
+#define MAP_KEYW_IDENT(LVAL, TEXT) map_keyw_ident(LVAL, TEXT)
+#define FIX_YYLLOC(lloc, text)
+#define FIX_YYLLOC_NL(lloc, text)
+
+#define YY_DECL int yylex (YYSTYPE *yylval)
+
+#endif /* HAVE_MODERN_FLEX */
 
 int yywrap(void)
 {
   return(1);
 }
 
+#ifdef HAVE_MODERN_FLEX
 #define YY_USER_INIT do { yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 0; } while (0)
+#endif /* HAVE_MODERN_FLEX */
  
 %}
 
@@ -64,7 +90,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a keyword or identifier */
   int keyw;
 
-  fix_yylloc(yylloc, yytext);
+  FIX_YYLLOC(yylloc, yytext);
   keyw = map_keyw_ident(yylval, yytext);
 
   /* enable detection of VECTOR_STRING when this is a PIO command */
@@ -80,7 +106,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a real number */
 
   yylval->dvalue = strtod(yytext, (char **) NULL);
-  fix_yylloc(yylloc, yytext);
+  FIX_YYLLOC(yylloc, yytext);
 
   return(NUMBER);
 } /* end of real number */
@@ -95,7 +121,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a vector string */
   char *cstring;
 
-  fix_yylloc_nl(yylloc, yytext);
+  FIX_YYLLOC_NL(yylloc, yytext);
   align_string(yytext);
 
   cstring = calloc(strlen(yytext) + 1, sizeof(char));
@@ -109,7 +135,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a hexadecimal value (2) */
   char *cstring;
 
-  fix_yylloc_nl(yylloc, yytext);
+  FIX_YYLLOC_NL(yylloc, yytext);
   align_string(yytext);
 
   cstring = calloc(strlen(yytext) + 1, sizeof(char));
@@ -121,29 +147,31 @@ COMMENT         (!.*)|("//".*)[^\n]
 
 {WSPACE}+ {
   /* token is a white space character */
-  fix_yylloc(yylloc, yytext);
+  FIX_YYLLOC(yylloc, yytext);
 } /* end of white space */
 
 
 {COMMENT} {
   /* token is a comment */
-  fix_yylloc(yylloc, yytext);
+  FIX_YYLLOC(yylloc, yytext);
 } /* end of comment */
 
 
 [()] {
   /* left or right parenthes */
-  fix_yylloc(yylloc, yytext);
+  FIX_YYLLOC(yylloc, yytext);
   return(yytext[0]);
 } /* end of left or right parenthesis */
 
 
 \n {
   /* token is a new line character */
+#ifdef HAVE_MODERN_FLEX
   yylloc->first_line = yylloc->last_line;
   yylloc->first_column = yylloc->last_column;
   ++yylloc->last_line;
   yylloc->last_column = 0;
+#endif /* HAVE_MODERN_FLEX */
 } /* end of new line */
 
 
@@ -153,7 +181,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* release expect_vector */
   BEGIN(INITIAL);
 
-  fix_yylloc(yylloc, yytext);
+  FIX_YYLLOC(yylloc, yytext);
   return(yytext[0]);
 } /* end of statement character */
 
@@ -275,6 +303,7 @@ align_string(char *str)
 }
 
 
+#ifdef HAVE_MODERN_FLEX
 static void
 fix_yylloc(YYLTYPE * yylloc, char *str)
 {
@@ -300,3 +329,4 @@ fix_yylloc_nl(YYLTYPE * yylloc, char *str)
     }
   }
 }
+#endif /* HAVE_MODERN_FLEX */

@@ -25,7 +25,6 @@
  */
 
 %pure-parser
-%locations
 
 %{
 #include <stdio.h>

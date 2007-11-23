@@ -57,8 +57,52 @@ AM_GNU_GETTEXT_VERSION(0.14.1)
 
 AC_PROG_CC
 AC_PROG_RANLIB
-AC_PROG_LEX
 AC_PROG_YACC
+
+# check for lex/flex
+AC_PROG_LEX
+# check for modern version of flex
+AC_PROG_AWK
+AC_PROG_SED
+if test "$LEX" == flex ; then
+   # compare >= 2.5.31
+   flex_ref_v1=2
+   flex_ref_v2=5
+   flex_ref_v3=31
+   flex_ref_version="$flex_ref_v1.$flex_ref_v2.$flex_ref_v3"
+   AC_MSG_CHECKING([for flex >= $flex_ref_version])
+
+   modern_flex=no
+   flex_version=`$LEX --version | $AWK '{print $2}'`
+   flex_v1=`echo $flex_version | $AWK -F . '{print $1}' | $SED -e 's/[a-zA-Z]//g'`
+   flex_v2=`echo $flex_version | $AWK -F . '{print $2}' | $SED -e 's/[a-zA-Z]//g'`
+   flex_v3=`echo $flex_version | $AWK -F . '{print $3}' | $SED -e 's/[a-zA-Z]//g'`
+
+   if test -n "$flex_v1" -a "$flex_v1" -gt "$flex_ref_v1" ; then
+      modern_flex=yes
+   fi
+   if test -n "$flex_v1" -a "$flex_v1" -eq "$flex_ref_v1" ; then
+      if test "$flex_v2" -gt "$flex_ref_v2" ; then
+	 modern_flex=yes
+      fi
+      if test "$flex_v2" -eq "$flex_ref_v2" ; then
+	 if test "$flex_v3" -ge "$flex_ref_v3" ; then
+	    modern_flex=yes
+	 fi
+      fi
+   fi
+
+   if test "$modern_flex" == yes ; then
+      AC_DEFINE([HAVE_MODERN_FLEX], 1, [Define if flex version is >= $flex_ref_version])
+      AC_MSG_RESULT([yes - flex $flex_version])
+      AM_CONDITIONAL([BISON_LOCATIONS], true)
+   else
+      AC_MSG_RESULT([no - flex $flex_version])
+      AM_CONDITIONAL([BISON_LOCATIONS], false)
+   fi
+fi
+
+
 
 AC_CONFIG_SUBDIRS(libbrux)
 
@@ -163,8 +207,9 @@ fi
 AC_MSG_RESULT([
 jtag is now configured for
 
-  USB cable support  : $FLAG_HAVELIBUSB
+  USB cable support      : $FLAG_HAVELIBUSB
   FTDI cable support
-    via libftdi      : $FLAG_HAVELIBFTDI
-    via libftd2xx    : $FLAG_HAVELIBFTD2XX
+    via libftdi          : $FLAG_HAVELIBFTDI
+    via libftd2xx        : $FLAG_HAVELIBFTD2XX
+  Parser error locations : $modern_flex ($LEX $flex_version)
 ])
