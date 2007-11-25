@@ -238,6 +238,8 @@ ftd2xx_generic_open( parport_t *parport )
 
 	if ((status = FT_Open(0, &(p->fc))) != FT_OK) {
 		fprintf( stderr, "Error: unable to open FTDI device: %li\n", status);
+		/* mark ftd2xx layer as not initialized */
+		p->fc = NULL;
 		return -1;
 	}
 
@@ -377,11 +379,13 @@ ftd2xx_close( parport_t *parport )
 {
 	ftd2xx_params_t *p = parport->params;
 
-	if(p->outcount > 0) ftd2xx_flush_output( p );
-	p->outcount = 0;
+	if (p->fc) {
+		if(p->outcount > 0) ftd2xx_flush_output( p );
+		p->outcount = 0;
 
-	FT_SetBitMode( p->fc, 0x00, 0x00 );
-	FT_Close(p->fc);
+		FT_SetBitMode( p->fc, 0x00, 0x00 );
+		FT_Close(p->fc);
+	}
 
 	return 0;
 }
@@ -390,23 +394,25 @@ static int
 ftd2xx_set_data( parport_t *parport, uint8_t data )
 {
 	ftd2xx_params_t *p = parport->params;
-        DWORD xferred;
-        FT_STATUS status;
+	DWORD xferred;
+	FT_STATUS status;
 
-	if(p->autoflush)
-	{
-		if ((status = FT_Write( p->fc, &data, 1 , &xferred)) != FT_OK)
-			fprintf( stderr, "Error: FT_Write() failed in %i\n", __LINE__ );
-		if (xferred != 1)
-			printf("w\n");
+	if (p->fc) {
+		if(p->autoflush)
+		{
+			if ((status = FT_Write( p->fc, &data, 1 , &xferred)) != FT_OK)
+				fprintf( stderr, "Error: FT_Write() failed in %i\n", __LINE__ );
+			if (xferred != 1)
+				printf("w\n");
+		}
+		else
+		{
+			p->outbuf[p->outcount++] = data;
+
+			if(p->outcount >= p->outbuf_len)
+				return ftd2xx_flush_output( p );
+		}
 	}
-	else
-	{
-		p->outbuf[p->outcount++] = data;
-
-		if(p->outcount >= p->outbuf_len)
-			return ftd2xx_flush_output( p );
-	};
 	   
 	return 0;
 }
@@ -419,11 +425,14 @@ ftd2xx_get_data( parport_t *parport )
 	unsigned char d;
 	ftd2xx_params_t *p = parport->params;
 
-	while (xferred == 0) {
-		if ((status = FT_Read( p->fc, &d, 1, &xferred )) != FT_OK)
-			printf( "Error: FT_Read() failed in %i\n", __LINE__ );
-	}
-	return d;
+	if (p->fc) {
+		while (xferred == 0) {
+			if ((status = FT_Read( p->fc, &d, 1, &xferred )) != FT_OK)
+				printf( "Error: FT_Read() failed in %i\n", __LINE__ );
+		}
+		return d;
+	} else
+		return 0;
 }
 
 static int
@@ -437,8 +446,10 @@ ftd2xx_set_control( parport_t *parport, uint8_t data )
 {
 	ftd2xx_params_t *p = parport->params;
 
-	p->autoflush = data;
-	if(p->autoflush) ftd2xx_flush_output( p );
+	if (p->fc) {
+		p->autoflush = data;
+		if(p->autoflush) ftd2xx_flush_output( p );
+	}
 	
 	return 0;
 }

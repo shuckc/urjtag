@@ -255,6 +255,8 @@ ftdi_generic_open( parport_t *parport )
 		fprintf (stderr, "Can't open ftdi device: %s\n", 
 			 ftdi_get_error_string (fc));
 		ftdi_deinit(fc);
+		/* mark ftdi layer as not initialized */
+		p->fc = NULL;
 		return -1;
 	};
 
@@ -426,12 +428,14 @@ ftdi_close( parport_t *parport )
 {
 	ftdi_params_t *p = parport->params;
 
-	if(p->outcount > 0) ftdi_flush_output( p );
-	p->outcount = 0;
+	if (p->fc) {
+		if(p->outcount > 0) ftdi_flush_output( p );
+		p->outcount = 0;
 
-	ftdi_disable_bitbang(p->fc);
-	ftdi_usb_close(p->fc);
-	ftdi_deinit(p->fc);
+		ftdi_disable_bitbang(p->fc);
+		ftdi_usb_close(p->fc);
+		ftdi_deinit(p->fc);
+	}
 
 	return 0;
 }
@@ -441,17 +445,19 @@ ftdi_set_data( parport_t *parport, uint8_t data )
 {
 	ftdi_params_t *p = parport->params;
 
-	if(p->autoflush)
-	{
-		if(ftdi_write_data(p->fc, &data, 1) != 1) printf("w\n");
-	}
-	else
-	{
-		p->outbuf[p->outcount++] = data;
+	if (p->fc) {
+		if(p->autoflush)
+		{
+			if(ftdi_write_data(p->fc, &data, 1) != 1) printf("w\n");
+		}
+		else
+		{
+			p->outbuf[p->outcount++] = data;
 
-		if(p->outcount >= p->outbuf_len)
-			return ftdi_flush_output( p );
-	};
+			if(p->outcount >= p->outbuf_len)
+				return ftdi_flush_output( p );
+		}
+	}
 	   
 	return 0;
 }
@@ -462,8 +468,11 @@ ftdi_get_data( parport_t *parport )
 	unsigned char d;
 	ftdi_params_t *p = parport->params;
 
-	while(ftdi_read_data( p->fc, &d, 1) == 0);
-	return d;
+	if (p->fc) {
+		while(ftdi_read_data( p->fc, &d, 1) == 0);
+		return d;
+	} else
+		return 0;
 }
 
 static int
@@ -477,9 +486,11 @@ ftdi_set_control( parport_t *parport, uint8_t data )
 {
 	ftdi_params_t *p = parport->params;
 
-	p->autoflush = data;
-	if(p->autoflush) ftdi_flush_output( p );
-	
+	if (p->fc) {
+		p->autoflush = data;
+		if(p->autoflush) ftdi_flush_output( p );
+	}
+
 	return 0;
 }
 
