@@ -1,0 +1,85 @@
+= UrJTAG =
+
+  = Copyright / Licensing
+  = Authors, contributors, ... thanks = 
+
+== General ==
+
+  = Name
+  = About JTAG in general
+  = Installation
+    = from binary tarball
+    = from source tarball
+    = from svn
+  = Cygwin/MinGW specifics
+  = Getting updates
+  = Further info / support
+
+== Usage ==
+
+  = Quick start: flash example
+  = Configuration, cable setup
+  = Chain setup
+  = Part setup
+  = Doing things with parts
+    = Pin I/O
+    = Memory I/O
+    = FPGA configuration
+    = Flash programming
+    = ...
+
+  = SVF Player
+   
+  = bsdl2jtag, data files
+
+  = target specific documentation  =
+    = EJTAG support
+    = Blackfin support (when available)
+
+== Internals ==
+
+  = How to
+      .. add a part
+      .. add a command
+      .. add a bus driver
+      .. add a cable driver
+      ,,
+      .. create a patch and upload to SF
+
+  = Directory structure
+    data/
+    ./include/
+    ../include/
+    libbrux/
+      cmd/ flash/
+    src/
+      bus/ cmd/ lib/ tap/ svf/
+
+  = Cable driver interface
+      parport
+      cable
+      chain
+ 
+  = Bus driver interface
+
+  ...
+
+  = target specific internals  =
+
+== Frequently asked questions ==
+
+  = Cygwin/MinGW
+  = Compilation problems
+
+== Future plans ==
+
+    = API and library package
+    = Bindings for Python, Perl, ...
+    = TCP/IP access
+    = New cable drivers
+    = ...
+
+= Revision information / Changelog =
+
+= License(s) texts =
+
