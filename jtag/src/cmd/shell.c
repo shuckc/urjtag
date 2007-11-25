@@ -24,7 +24,11 @@
 
 #include "sysdep.h"
 
-//#include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 //#include "part.h"
@@ -36,8 +40,8 @@
 static int
 cmd_shell_run( char *params[] )
 {
-int n,l1,l2;
-char *t;
+	int i, len, n = cmd_params(params);
+	char *shell_cmd;
 
 	if((n=cmd_params( params )) == 1)
 		return -1;
@@ -46,17 +50,30 @@ char *t;
 	* the following. If you can pass a shell argument past strtok the
 	* please fix this.
 	*/
+	/* The problem is the parser which splits commands into params[]
+	* and doesn't allow quoting. So we concatenate the params[] here
+	* with single spaces, although the original might have different
+	* whitespace (more than one space, tabs, ...) - kawk */
 
-	l1 = strlen(params[1]);
-	l2 = strlen(params[2]);
-	t = malloc(l1+l2+2); 	/* space + term */
-	strcpy(t,params[1]);	/* main command */
+	for(i=1,len=0; i<n; i++) len += (1 + strlen(params[i]));
 
-	if(n == 3) {
-		*(t+l1)= ' ';		/* add space */
-		strcpy((t+l1+1),params[2]);
-	}
-	system(t);
+	shell_cmd = malloc(len);
+	if(shell_cmd == NULL)
+	{
+		printf( _("Out of memory\n") );
+		exit -1;
+	};
+
+	strcpy(shell_cmd, params[1]);
+	for(i=2; i<n; i++)
+	{
+		strcat(shell_cmd, " ");
+		strcat(shell_cmd, params[i]);
+	};
+	printf("Executing '%s'\n", shell_cmd);
+
+	system(shell_cmd);
+	free(shell_cmd);
 
 	return 1;
 }
