@@ -1,52 +1,60 @@
-= UrJTAG =
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+         "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
 
-  = Copyright / Licensing
-  = Authors, contributors, ... thanks = 
+<book>
+<title>UrJTAG</title>
+<toc/>
 
-== General ==
+<chapter><title>General</title>
 
-  = Name
-  = About JTAG in general
-  = Installation
-    = from binary tarball
-    = from source tarball
-    = from svn
-  = Cygwin/MinGW specifics
-  = Getting updates
-  = Further info / support
+  <section><title>The name "UrJTAG"</title> <para/></section>
+  <section><title>Authors, contributors, ... thanks</title><para/></section>
+  <section><title>Copyright/Licensing</title> <para/> <para/></section>
+  <section><title>UrJTAG/openwince history</title> <para/> <para/></section>
+  <section><title>Installation </title><para/></section>
+  <section><title>from binary tarball </title><para/></section>
+  <section><title>from source tarball </title><para/></section>
+  <section><title>from svn </title><para/></section>
+  <section><title>Cygwin/MinGW specifics </title><para/></section>
+  <section><title>Getting updates </title><para/></section>
+  <section><title>Further info / support</title><para/></section>
+</chapter>
 
-== Usage ==
+<chapter><title>Usage</title>
 
-  = Quick start: flash example
-  = Configuration, cable setup
-  = Chain setup
-  = Part setup
-  = Doing things with parts
-    = Pin I/O
-    = Memory I/O
-    = FPGA configuration
-    = Flash programming
-    = ...
+  <section><title> Quick start: flash example </title><para/></section>
+  <section><title> Configuration, cable setup </title><para/></section>
+  <section><title> Chain setup </title><para/></section>
+  <section><title> Part setup </title><para/></section>
+  <section><title> Doing things with parts </title><para/></section>
+  <section><title> Pin I/O </title><para/></section>
+  <section><title> Memory I/O </title><para/></section>
+  <section><title> FPGA configuration </title><para/></section>
+  <section><title> Flash programming </title><para/></section>
+  <section><title> ...  </title><para/></section>
+  <section><title> SVF Player </title><para/></section>
+  <section><title> bsdl2jtag, data files </title><para/></section>
+  <section><title> target specific documentation</title><para/></section>
+  <section><title> EJTAG support </title><para/></section> 
+  <section><title> Blackfin support (when available) </title><para/></section> 
+</chapter>
 
-  = SVF Player
-   
-  = bsdl2jtag, data files
+<chapter><title> Internals </title>
 
-  = target specific documentation  =
-    = EJTAG support
-    = Blackfin support (when available)
-
-== Internals ==
-
-  = How to
+<section><title> How to</title>
+  <para>
       .. add a part
       .. add a command
       .. add a bus driver
       .. add a cable driver
       ,,
-      .. create a patch and upload to SF
-
-  = Directory structure
+     .. create a patch and upload to SF
+  </para>
+  <para/></section>
+  <section><title> Directory structure</title>
+  <para>
     data/
     ./include/
     ../include/
@@ -54,32 +62,43 @@
       cmd/ flash/
     src/
       bus/ cmd/ lib/ tap/ svf/
-
-  = Cable driver interface
+  </para>
+  <para/></section>
+  <section><title> Cable driver interface</title>
+  <para>
       parport
       cable
       chain
- 
-  = Bus driver interface
+  </para>
+  <para/></section> 
+  <section><title> Bus driver interface </title><para/></section>
+  <section><title> target specific internals  </title><para/></section><section><title>
+  </title><para/></section>
+</chapter>
 
-  ...
+<chapter><title> Frequently asked questions </title>
 
-  = target specific internals  =
+  <section><title> Cygwin/MinGW </title><para/></section>
+  <section><title> Compilation problems </title><para/></section>
+</chapter>
 
-== Frequently asked questions ==
+<chapter><title>Future plans</title>
 
-  = Cygwin/MinGW
-  = Compilation problems
+    <section><title> API and library package
+    </title><para/></section><section><title> Bindings for Python, Perl, ...
+    </title><para/></section><section><title> TCP/IP access
+    </title><para/></section><section><title> New cable drivers
+    </title><para/></section><section><title> ...
+    </title><para/></section>
+</chapter>
 
-== Future plans ==
+<appendix><title> UrJTAG quick reference</title><para/> </appendix>
 
-    = API and library package
-    = Bindings for Python, Perl, ...
-    = TCP/IP access
-    = New cable drivers
-    = ...
+<appendix><title> Exkurs: JTAG </title><para/></appendix>
 
-= Revision information / Changelog =
+<appendix><title>UrJTAG Revision information</title><para/> </appendix>
 
-= License(s) texts =
+<appendix><title>UrJTAG Licenses</title><para/> </appendix>
+
+</book>
 
