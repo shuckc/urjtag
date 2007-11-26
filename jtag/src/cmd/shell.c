@@ -25,7 +25,6 @@
 #include "sysdep.h"
 
 #include <sys/types.h>
-#include <sys/wait.h>
 #include <unistd.h>
 
 #include <stdio.h>
@@ -61,7 +60,7 @@ cmd_shell_run( char *params[] )
 	if(shell_cmd == NULL)
 	{
 		printf( _("Out of memory\n") );
-		exit -1;
+		return -1;
 	};
 
 	strcpy(shell_cmd, params[1]);
