@@ -1,11 +1,37 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
          "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY datafilespecs SYSTEM "internals.xml">
+  <!ENTITY FDL SYSTEM "fdl.xml">
+  <!ENTITY GPL SYSTEM "gpl.dbk">
+  <!ENTITY LGPL SYSTEM "lgpl.dbk">
 ]>
 
 <book>
-<title>UrJTAG</title>
-<toc/>
+  <bookinfo>
+    <title>Universal JTAG library, server and tools</title>
+    <authorgroup>
+      <author><firstname>Kolja</firstname><surname>Waschk</surname></author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free
+Documentation License, Version 1.2 or any later version published by the Free
+Software Foundation. A copy of the license is included in the section entitled
+"GNU Free Documentation License".
+      </para>
+    </legalnotice>
+
+    <copyright>
+      <year>2007</year>
+      <year>2008</year>
+      <holder>Kolja Waschk and the respective authors</holder>
+    </copyright>
+
+  </bookinfo>
+
+  <toc/>
 
 <chapter><title>General</title>
 
@@ -13,6 +39,7 @@
   <section><title>Authors, contributors, ... thanks</title><para/></section>
   <section><title>Copyright/Licensing</title> <para/> <para/></section>
   <section><title>UrJTAG/openwince history</title> <para/> <para/></section>
+  <section><title>Supported hardware</title> <para/> <para/></section>
   <section><title>Installation </title><para/></section>
   <section><title>from binary tarball </title><para/></section>
   <section><title>from source tarball </title><para/></section>
@@ -41,7 +68,8 @@
   <section><title> Blackfin support (when available) </title><para/></section> 
 </chapter>
 
-<chapter><title> Internals </title>
+<chapter><title>Internals</title>
+
 
 <section><title> How to</title>
   <para>
@@ -92,13 +120,24 @@
     </title><para/></section>
 </chapter>
 
-<appendix><title> UrJTAG quick reference</title><para/> </appendix>
+&datafilespecs;
+
+<appendix><title>UrJTAG shell quick reference sheet</title><para/> </appendix>
+<appendix><title>man pages</title>
+  <section><title>jtag(1)</title><para/></section>
+  <section><title>bsdl2jtag(1)</title><para/></section>
+</appendix>
 
 <appendix><title> Exkurs: JTAG </title><para/></appendix>
 
-<appendix><title>UrJTAG Revision information</title><para/> </appendix>
+<appendix><title>UrJTAG Revision information</title><para/>
+  <section><title>UrJTAG 0.6</title><para/></section>
+  <section><title>openwince JTAG Tools 0.5.1</title><para/></section>
+</appendix>
 
-<appendix><title>UrJTAG Licenses</title><para/> </appendix>
+&FDL;
+&GPL;
+&LGPL;
 
 </book>
 
