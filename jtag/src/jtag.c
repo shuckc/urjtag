@@ -310,6 +310,12 @@ main( int argc, const char **argv )
 	int norc = 0;
 	int help = 0;
 	int version = 0;
+	
+	if(geteuid()==0 && getuid()!=0)
+	{
+		printf (_("'%s' must not be run suid root!\n"), PACKAGE);
+		return(-1);
+	};
 
 #ifdef ENABLE_NLS
 	/* l10n support */
