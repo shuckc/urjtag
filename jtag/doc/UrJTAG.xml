@@ -10,9 +10,7 @@
 <book>
   <bookinfo>
     <title>Universal JTAG library, server and tools</title>
-    <authorgroup>
-      <author><firstname>Kolja</firstname><surname>Waschk</surname></author>
-    </authorgroup>
+    <editor><firstname>Kolja</firstname><surname>Waschk</surname></editor>
 
     <legalnotice>
       <para>
@@ -35,61 +33,122 @@ Software Foundation. A copy of the license is included in the section entitled
 
 <chapter><title>General</title>
 
-  <section><title>About UrJTAG</title>
-     <para>
-       UrJTAG Tools is a software package which enables working with JTAG-aware
-       (IEEE 1149.1) hardware devices (parts) and boards through JTAG adapter.
-     </para>
-     <para>
-       This package has open and modular architecture with ability to write
-       miscellaneous extensions (like board testers, flash memory programmers,
-       and so on).
-     </para>
-     <para>
-       JTAG Tools package is free software, covered by the GNU General Public
-       License, and you are welcome to change it and/or distribute copies of it
-       under certain conditions. There is absolutely no warranty for JTAG Tools.
-       Please read COPYING file for more info.
-     </para>
-     <para>
-       <emphasis>Warning: This software may damage your hardware!</emphasis>
-     </para>
-     <para>
-       Feedback and contributions are welcome.
-     </para>
+  <section><title>JTAG</title>
+    <para>
+      JTAG basics can be found all over the internet. This page should go into
+      some more details about working with JTAG. What hardwarde do you need, what is
+      the usage of JTAG, where do I get files. What file formats are available...
+    </para>
+
+    <section><title>Introduction</title>
+      <para>
+		JTAG (IEEE 1149.1) is a serial interface for testing devices with
+        integrated circuits. The problem that the JTAG interface was designed to solve
+        is checking if connections between ICs are OK. Therefore you can set and check
+        in- and outputs of ICs. In order to save pins and logic a very simple serial
+        design was invented.
+      </para>
+      <orderedlist>
+        <listitem><para>one pin serial input</para></listitem>
+        <listitem><para>one pin serial output</para></listitem>
+        <listitem><para>one pin clock</para></listitem> 
+        <listitem><para>one pin control</para></listitem> 
+      </orderedlist>
+      <para>
+        The control pin (together with clock) allows to switch device states. A state
+        machine inside each chip can be controlled, e.g. to reset the device.  This
+        control machine also allows to have two internal shift registers in each device
+        (although we only have on in- and one output-pin). The registers are called
+        instruction register (IR) and data register (DR).  The current UrJTAG tool
+        allows you to set the IR and set and get the DR. It doesn't allow you to
+        directly control the statemachine (yet).
+      </para>
+    </section><section><title>Interfaces</title>
+      <para>
+        The simplest interface that you can build is the Xilinx parallel cable (also
+        called DLC5). If your device works with a 5V or 3.3V supply voltage then this
+        device can even be build just with passive parts.  (picture missing here)
+        UrJTAG also supports a number of other interface adapters.
+      </para>
+    </section><section><title>Additions</title>
+      <para>
+In the meantime the jtag specification was used as a basis for programming flash files and debugging processors.
+UrJTAG supports programming a couple of different flash devices. It also supports programming of non-flash devices via svf files.
+UrJTAG does not support debugging yet. Other open source solutions allow you to debug ARM processors with gdb.
+      </para>
+    </section><section><title>BSDL files</title>
+      <para>
+The bsdl file format describes the jtag interface for one IC.
+It is a vhdl syntax with the needed information (like pin-names, register lengths and commands) that is usually done by the supplier. e.g. the Xilinx .bsd files are all included in their free web-pack.
+      </para><para>
+Urjtag uses a different file format internally. So in order to add a new device to UrJTAG you need to convert those files and produce a directory structure. Currently there are at least three tools available to do that. Please ask on the mailing list in case of problems with that. Please also send proven working files back to this project.
+      </para>
+    </section>
+    <section><title>SVF files</title>
+      <para>
+The svf file format contains a number of high level commands to drive the jtag bus. For example you can shift the IR or DR and even check for the results.
+The Xilinxs impact tool allows you to write this file to program devices.
+      </para>
+    </section>
   </section>
 
-  <section><title>UrJTAG Website</title>
-    <para>
-      The most current version of this documentation and UrJTAG sourcecode 
-      is always available from the project page at Sourceforge, http://urjtag.sourceforge.net
-    </para>
-  </section>
+  <section><title>UrJTAG</title>
+     <section><title>Introduction></title>
+       <para>
+         UrJTAG Tools is a software package which enables working with JTAG-aware
+         (IEEE 1149.1) hardware devices (parts) and boards through JTAG adapter.
+       </para>
+       <para>
+         This package has open and modular architecture with ability to write
+         miscellaneous extensions (like board testers, flash memory programmers,
+         and so on).
+       </para>
+       <para>
+         JTAG Tools package is free software, covered by the GNU General Public
+         License, and you are welcome to change it and/or distribute copies of it
+         under certain conditions. There is absolutely no warranty for JTAG Tools.
+         Please read COPYING file for more info.
+       </para>
+       <para>
+         <emphasis>Warning: This software may damage your hardware!</emphasis>
+       </para>
+       <para>
+         Feedback and contributions are welcome.
+       </para>
+    </section>
 
-  <section><title>The name "UrJTAG"</title>
-    <para>
-	  I (Kolja) favour short names, so I thought about adding only a few
-      letters to "JTAG". The prefix "Ur" in German means "ancestral", an "Ur-Vater"
-      is a forefather. UrJTAG shall become the forefather, the basis for many other
-      JTAG tools.
-    </para>
-  </section>
+    <section><title>UrJTAG Website</title>
+      <para>
+        The most current version of this documentation and UrJTAG sourcecode 
+        is always available from the project page at Sourceforge, http://urjtag.sourceforge.net
+      </para>
+    </section>
 
-  <section><title>Authors, contributors, ... thanks</title>
-    <para>
-      At the moment, please see the files AUTHORS and THANKS in the source distribution.
-    </para>
-  </section>
+    <section><title>The name "UrJTAG"</title>
+      <para>
+  	  Kolja wrote: I favour short names, so I thought about adding only a few
+        letters to "JTAG". The prefix "Ur" in German means "ancestral", an "Ur-Vater"
+        is a forefather. UrJTAG shall become the forefather, the basis for many other
+        JTAG tools.
+      </para>
+    </section>
 
-  <section><title>UrJTAG/openwince history</title>
-    <para>
-       The JTAG Tools originally were developed by Marcel Telka as part of the openwince project. Still
-       a large portion of the source code is his work. However, the last release of the JTAG tools was
-       version 0.5.1 in 2003. After a few years the development completely stalled. Every few months or
-       so on the project's mailing list someone asked about continuing, but a critical mass wasn't 
-       reached before late 2007. A fork of the JTAG tools was created under the wings of the UrJTAG
-       project at Sourceforge.
-    </para>
+    <section><title>Authors, contributors, ... thanks</title>
+      <para>
+        At the moment, please see the files AUTHORS and THANKS in the source distribution.
+      </para>
+    </section>
+
+    <section><title>UrJTAG/openwince history</title>
+      <para>
+         The JTAG Tools originally were developed by Marcel Telka as part of the openwince project. Still
+         a large portion of the source code is his work. However, the last release of the JTAG tools was
+         version 0.5.1 in 2003. After a few years the development completely stalled. Every few months or
+         so on the project's mailing list someone asked about continuing, but a critical mass wasn't 
+         reached before late 2007. A fork of the JTAG tools was created under the wings of the UrJTAG
+         project at Sourceforge.
+      </para>
+    </section>
   </section>
 
   <section><title>System requirements</title>
@@ -102,7 +161,7 @@ Software Foundation. A copy of the license is included in the section entitled
     <section><title>Required software for running UrJTAG</title>
       <para>
          More software is needed if you want to compile UrJTAG (which you probably want because
-         currently no pre-compiled binaries are avaible...). See "For developers..." below.
+         currently no pre-compiled binaries are avaible...). See "Installation" below.
       </para>
       <para>
          Required only for MS Windows:
@@ -127,7 +186,7 @@ Software Foundation. A copy of the license is included in the section entitled
         <listitem><para>Xilinx DLC5 JTAG Parallel Cable III</para></listitem>
         <listitem><para>ETC EA253 JTAG Cable</para></listitem>
         <listitem><para>ETC EI012 JTAG Cable</para></listitem>
-        <listitem><para>Keith & Koep JTAG Cable</para></listitem>
+        <listitem><para>Keith &amp; Koep JTAG Cable</para></listitem>
         <listitem><para>Lattice Parallel Port JTAG Cable</para></listitem>
         <listitem><para>Mpcbdm JTAG Cable</para></listitem>
         <listitem><para>Ka-Ro TRITON (PXA255/250) JTAG Cable</para></listitem>
@@ -367,6 +426,122 @@ jtag>
       </programlisting>
     </section>
   </section>
+ 
+  <section><title>JTAG commands</title>
+    <section><title>Overview</title>
+      <para>
+        Following is a list of commands currently supported by jtag and some example usage.
+      </para>
+      <programlisting>
+quit 	exit and terminate this session
+help 	display this help
+frequency 	setup JTAG frequency
+cable 	select JTAG cable
+discovery 	discovery of unknown parts in the JTAG chain
+detect 	detect parts on the JTAG chain
+signal 	define new signal for a part
+bit 	define new BSR bit
+register 	define new data register for a part
+initbus 	initialize bus driver for active part
+print 	display JTAG chain list/status
+part 	change active part for current JTAG chain
+bus 	change active bus
+instruction 	change active instruction for a part or declare new instruction
+shift 	shift data/instruction registers through JTAG chain
+dr 	display active data register for a part
+get 	get external signal value
+set 	set external signal value
+endian 	set/print endianess
+peek 	read a single word
+poke 	write a single word
+readmem 	read content of the memory and write it to file
+detectflash 	detect parameters of flash chips attached to a part
+flashmem 	burn flash memory with data from a file
+eraseflash 	erase flash memory by number of blocks
+script 	run command sequence from external file
+include 	include command sequence from external repository
+svf 	execute svf commands from file
+      </programlisting>
+    </section>
+    <section><title>Generic commands</title>
+      <section><title>quit</title>
+        <para>
+          Guess what. That command closes the jtag console.
+        </para>
+      </section>
+      <section><title>help</title>
+        <para>
+          Without additional parameter it gives an overview of the available commands.
+          With a parameter you can get more information about any of the commands. Example:
+        </para>
+        <programlisting>
+jtag> help cable
+        </programlisting>
+      </section>
+    </section>
+    <section><title>Part definition commands</title>
+      <para>
+		The following commands are also used in the data files to define a
+        device (IC) on the jtag bus. I do not recommend using those commands in an
+        interactive session. Instead you should produce a device definition file out of
+        a .bsd file using one of the supplied tools.
+      </para>
+      <section><title>signal</title><para/></section>
+      <section><title>bit</title><para/></section>
+      <section><title>register</title><para/></section>
+    </section>
+    <section><title>Flash commands</title>
+      <para>
+        These commands can be used if the device supports flashing.
+      </para>
+      <section><title>detectflash</title><para/></section> 
+      <section><title>flashmem</title><para/></section> 
+      <section><title>eraseflash</title><para/></section>
+    </section>
+    <section><title>Chain management</title>
+      <section><title>cable</title>
+        <para>
+		  Sets and initialized the cable driver. This is usually the first
+          command that you are executing in a session. Example:
+        </para>
+        <programlisting>
+jtag> cable parallel 0x378 EA253
+Initializing ETC EA253 JTAG Cable on parallel port at 0x378
+        </programlisting>
+        <para>
+          For a parallel cable using the ppdev driver you would use 
+        </para>
+        <programlisting>
+cable ppdev /dev/parport0 DLC5
+        </programlisting>
+        <para>
+          After seeing an error you will remember that the parallel port kernel driver
+          was compiled as a module in your Linux kernel. So you will probably also
+          execute (with root rights outside of UrJTAG):
+        </para>
+        <programlisting>
+modprobe ppdev
+modprobe parport
+modprobe parport_pc
+        </programlisting>
+      </section>
+      <section><title>detect</title>
+        <para>
+           Detects devices on the bus. Example:
+        </para>
+        <programlisting>
+jtag> detect
+IR length: 5
+Chain length: 1
+Device Id: 01011001001001100100000000010011
+  Manufacturer: Intel
+  Part:         PXA250
+  Stepping:     C0
+  Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
+        </programlisting>
+      </section>
+    </section>
+  </section>
 
   <section><title> Memory I/O </title><para/></section>
   <section><title> FPGA configuration </title><para/></section>
@@ -377,22 +552,25 @@ jtag>
   <section><title> Blackfin support (when available) </title><para/></section> 
 </chapter>
 
-<chapter><title>For developers</title>
-  <section><title>Source code directory layout</title>
-    <para>
-      <programlisting>
-    data/
-    ./include/
-    ../include/
-    libbrux/
-      cmd/ flash/
-    src/
-      bus/ cmd/ lib/ tap/ svf/
-      </programlisting>
-    </para>
-  </section>
+<chapter><title>Internals</title>
+  <section><title>Software structure</title>
+    <section><title>Overview</title>
+       <para/>
+    </section>
+    <section><title>Source code directory layout</title>
+      <para>
+        <programlisting>
+      data/
+      ./include/
+      ../include/
+      libbrux/
+        cmd/ flash/
+      src/
+        bus/ cmd/ lib/ tap/ svf/
+        </programlisting>
+      </para>
+    </section>
 
-  <section><title>Internal structure</title>
     <section><title>Parport drivers</title>
        <para/>
     </section>
@@ -476,9 +654,7 @@ Unfortunately, Cygwin comes with only 2.5.4a. You may try to compile and install
 
 <appendix><title> Exkurs: JTAG </title><para/></appendix>
 
-<appendix><title>UrJTAG Revision information</title><para/>
-  <section><title>UrJTAG 0.6</title><para/></section>
-  <section><title>openwince JTAG Tools 0.5.1</title><para/></section>
+<appendix><title>Document history</title><para/>
 </appendix>
 
 &FDL;
