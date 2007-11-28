@@ -33,6 +33,7 @@
 #include <sys/types.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <getopt.h>
 #ifdef ENABLE_NLS
 #include <locale.h>
 #endif /* ENABLE_NLS */
@@ -305,6 +306,10 @@ main( int argc, const char **argv )
 {
 	int go;
 	int i;
+	int c;
+	int norc = 0;
+	int help = 0;
+	int version = 0;
 
 #ifdef ENABLE_NLS
 	/* l10n support */
@@ -313,9 +318,94 @@ main( int argc, const char **argv )
 	textdomain( PACKAGE );
 #endif /* ENABLE_NLS */
 
+	while (1)
+	{
+		static struct option long_options[] =
+		{
+			{"version", no_argument,      0, 'v'},
+			{"norc",    no_argument,      0, 'n'},
+			{"help",    no_argument,      0, 'h'},
+			{0, 0, 0, 0}
+		};
+
+		/* `getopt_long' stores the option index here. */
+		int option_index = 0;
+
+		c = getopt_long (argc, argv, "vnh",
+		long_options, &option_index);
+
+		/* Detect the end of the options. */
+		if (c == -1)
+			break;
+
+		switch (c)
+		{
+		case 'v':
+			version = 1;
+			break;
+
+		case 'n':
+			norc = 1;
+			break;
+
+		case 'h':
+			help = 1;
+			break;
+
+		default:
+			abort ();
+		}
+	}
+
+	if (help)
+	{
+		/* Print help info and exit.  */
+		printf (_("%s\n"), PACKAGE_STRING);
+		printf ("\n");
+
+		printf (_("Usage: %s [OPTION] [FILE]\n"), PACKAGE);
+		printf ("\n");
+
+		printf (_("  -h, --help          display this help and exit\n"));
+		printf (_("  -v, --version       display version information and exit\n"));
+		printf ("\n");
+
+		printf (_("  -n, --norc          disable reading ~/.jtag/rc on startup\n"));
+		printf ("\n");
+
+		printf (_("  [FILE]              file containing commands to execute\n"));
+		printf ("\n");
+
+		printf (_("  Report bugs to <%s>.\n"), PACKAGE_BUGREPORT);
+
+		exit(0);
+	}
+
+	if (version)
+	{
+		printf(_("%s\nCopyright (C) 2002, 2003 ETC s.r.o.\n"), PACKAGE_STRING);
+		printf(_("\n"
+		"This program is free software; you can redistribute it and/or modify\n"
+		"it under the terms of the GNU General Public License as published by\n"
+		"the Free Software Foundation; either version 2 of the License, or\n"
+		"(at your option) any later version.\n"
+		"\n"
+		"This program is distributed in the hope that it will be useful,\n"
+		"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+		"GNU General Public License for more details.\n"
+		"\n"
+		"You should have received a copy of the GNU General Public License\n"
+		"along with this program; if not, write to the Free Software\n"
+		"Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"));
+
+		exit(0);
+	}
+
+
 	/* input from files */
-	if (argc > 1) {
-		for (i = 1; i < argc; i++) {
+	if (argc > optind) {
+		for (i = optind; i < argc; i++) {
 			chain = chain_alloc();
 			if (!chain) {
 				printf( _("Out of memory\n") );
@@ -369,7 +459,7 @@ main( int argc, const char **argv )
 	jtag_create_jtagdir();
 
 	/* Parse and execute the RC file */
-	go = jtag_parse_rc();
+	if(!norc) go = jtag_parse_rc();
 
 	if (go) {
 		/*  ajk: always run "setdevice auto" command */
