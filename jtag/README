@@ -1,18 +1,18 @@
 $Id$
 
-JTAG Tools
+UrJTAG
 ~~~~~~~~~~
 
-JTAG Tools is a software package which enables working with JTAG-aware
+UrJTAG is a software package which enables working with JTAG-aware
 (IEEE 1149.1) hardware devices (parts) and boards through JTAG adapter.
 
 This package has open and modular architecture with ability to write
 miscellaneous extensions (like board testers, flash memory programmers,
 and so on).
 
-JTAG Tools package is free software, covered by the GNU General Public
+UrJTAG package is free software, covered by the GNU General Public
 License, and you are welcome to change it and/or distribute copies of it
-under certain conditions. There is absolutely no warranty for JTAG Tools.
+under certain conditions. There is absolutely no warranty for UrJTAG.
 Please read COPYING file for more info.
 
 Warning: This software may damage your hardware!
@@ -23,7 +23,7 @@ Feedback and contributions are welcome.
 Supported host operating systems
 --------------------------------
 
-JTAG Tools should run on all Unix like operating systems including
+UrJTAG should run on all Unix like operating systems including
 MS Windows with Cygwin installed.
 
 Supported hardware
@@ -40,8 +40,12 @@ JTAG adapters/cables (see 'help cable' command for more info):
 - Mpcbdm JTAG Cable
 - Ka-Ro TRITON (PXA255/250) JTAG Cable
 - Macraigor Wiggler JTAG Cable
+- Altera USB-Blaster(tm)
+- ixo.de USB_JTAG Cable
+- Olimex ARM-USB-OCD and others based on FTDI FT223
+- Xilinx Platform Cable USB (experimental)
 
-JTAG-aware parts (chips):
+JTAG-aware parts (chips) (incomplete list)
 - Altera EP1C20F400
 - Altera EPM7128AETC100
 - Analog Devices Sharc-21065L
@@ -71,7 +75,7 @@ JTAG-aware parts (chips):
 - Xilinx XCR3128XL-VQ100
 - Xilinx XCR3256XL-FT256
 
-Flash chips:
+Flash chips (incomplete list)
 - Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)
 - Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)
 - Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)
@@ -87,7 +91,6 @@ Required only for MS Windows:
 - ioperm package (a part of the standard Cygwin net installation)
 
 Required for all systems:
-- include package from <http://openwince.sourceforge.net/include/>
 - readline (it is probably a standard part of your distribution)
 
 
@@ -95,26 +98,32 @@ Build & installation instructions
 ---------------------------------
 
 1. Download and install required software (see previous section).
-2. Download and unpack jtag sources.
-3. Run ./configure script. Use optional --with-include parameter if required.
-   See `./configure --help` for more info.
+
+2. Download and unpack "include" sources.
+3. Run ./configure script. See `./configure --help` for more info.
 4. Run `make`.
 5. Run `make install`.
 
+6. Download and unpack "jtag" sources.
+7. Run ./configure script. Use optional --with-include parameter if required.
+   See `./configure --help` for more info.
+8. Run `make`.
+9. Run `make install`.
 
-Running JTAG Tools
+
+Running UrJTAG
 ------------------
 
 Connect your JTAG adapter between your PC and target device and turn
 on your device.
 
-To run JTAG Tools type "jtag" and press <Enter>. jtag should start and
+To run UrJTAG type "jtag" and press <Enter>. jtag should start and
 display some initial informations. Output should end with line like this:
 
 jtag>
 
 This is "jtag command prompt". Type "help" and press <Enter> for initial help
-about available commands. To exit JTAG Tools type "quit" and press <Enter>.
+about available commands. To exit UrJTAG type "quit" and press <Enter>.
 
 ===> First task: Select JTAG cable and parallel port address.
 
@@ -237,24 +246,9 @@ A. Please install ioperm.sys driver using `ioperm -i` command.
 Contacts
 --------
 
-Homepage: <http://openwince.sourceforge.net/jtag/>
+Homepage: <http://urjtag.sourceforge.net/>
 
-CVS repository: <http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/openwince/jtag/>
+Please visit the homepage for more info about mailing lists,
+most current source code, releases, documentation -
+and if you have bugs to report or enhancements to add. 
 
-Please report and track bugs at (please use Category 'jtag'):
-<http://sourceforge.net/tracker/?group_id=52603&atid=469850>
-
-Mailing list (discussion, questions): openwince-list@lists.sourceforge.net
-Subscribe: <http://lists.sourceforge.net/mailman/listinfo/openwince-list>
-
-Mailing list (announce): openwince-announce@lists.sourceforge.net
-Subscribe: <http://lists.sourceforge.net/mailman/listinfo/openwince-announce>
-
-Patches and improvements are welcome at (please use Category 'jtag'):
-<http://sourceforge.net/tracker/?group_id=52603&atid=469852>
-
-Feature requests are welcome at (please use Category 'jtag'):
-<http://sourceforge.net/tracker/?group_id=52603&atid=469853>
-
-Support requests are welcome at (please use Category 'jtag'):
-<http://sourceforge.net/tracker/?group_id=52603&atid=469851>
