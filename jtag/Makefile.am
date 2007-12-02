@@ -24,6 +24,7 @@
 include $(top_srcdir)/Makefile.rules
 
 SUBDIRS = \
+	inclow \
 	libbrux \
 	doc \
 	include \
