@@ -1,3 +1,5 @@
+=== ChangeLog for UrJTAG $Revision$ ===
+
 2004-11-24  Marcel Telka  <marcel@telka.sk>
 
 	* src/cmd/reset.c: New file.
