@@ -34,7 +34,7 @@ typedef struct parport_t parport_t;
 
 typedef struct {
 	const char *type;
-	cable_t *(*connect)( const char **, int );
+        parport_t *(*connect)( const char **, int );
 	void (*parport_free)( parport_t * );
 	int (*open)( parport_t * );
 	int (*close)( parport_t * );

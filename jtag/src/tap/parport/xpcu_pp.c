@@ -129,15 +129,14 @@ xpcu_pp_free( parport_t *port )
 
 /* ---------------------------------------------------------------------- */
 
-static cable_t *
+parport_t *
 xpcu_pp_connect( const char **par, int parnum )
 {
-	int i;
 	port_node_t *pn;
 	parport_t *parport;
-	cable_t *cable;
 
-	if (parnum != 2) {
+
+	if (parnum != 1) {
 		printf( _("Syntax error!\n") );
 		return NULL;
 	}
@@ -149,21 +148,11 @@ xpcu_pp_connect( const char **par, int parnum )
 			break;
 		}
 
-	if (strcmp( par[1], "none" ) == 0) {
-		printf( _("Changed cable to 'none'\n") );
-		return NULL;
-	}
-
-	for (i = 0; cable_drivers[i]; i++)
-		if (strcmp( par[1], cable_drivers[i]->name ) == 0)
-			break;
-
-	if (!cable_drivers[i]) {
-		printf( _("Unknown cable: %s\n"), par[1] );
-		return NULL;
-	}
-
+#ifdef TODO
 	printf( _("Initializing %s, device %s\n"), _(cable_drivers[i]->description), par[0] );
+#else
+	printf( _("Initializing device %s\n"), par[0] );
+#endif
 
 	parport = xpcu_pp_alloc( par[0] );
 	if (!parport) {
@@ -171,11 +160,7 @@ xpcu_pp_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	cable = cable_drivers[i]->connect( cable_drivers[i], parport );
-	if (!cable)
-		xpcu_pp_free( parport );
-
-	return cable;
+	return parport;
 }
 
 /* ---------------------------------------------------------------------- */

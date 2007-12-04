@@ -148,24 +148,21 @@ direct_parport_free( parport_t *port )
 	free( port );
 }
 
-static cable_t *
+parport_t *
 direct_connect( const char **par, int parnum )
 {
-	int i;
 	long int port_scan_val;
 	unsigned int port;
 	port_node_t *pn = ports;
 	parport_t *parport;
-	cable_t *cable;
 
-	if (parnum != 2) {
+	if (parnum != 1) {
 		printf( _("Syntax error!\n") );
 		return NULL;
 	}
 
 	port_scan_val = strtol(par[0], NULL, 0);
 	
-	// if ((sscanf( par[0], "0x%x", &port ) != 1) && (sscanf( par[0], "%d", &port ) != 1)) {
 	if (port_scan_val < 0 || (port_scan_val + 3) > 0xffff) {
 		printf( _("Invalid port address!\n") );
 		return NULL;
@@ -185,21 +182,7 @@ direct_connect( const char **par, int parnum )
 			}
 		}
 
-	if (strcasecmp( par[1], "none" ) == 0) {
-		printf( _("Changed cable to 'none'\n") );
-		return NULL;
-	}
-
-	for (i = 0; cable_drivers[i]; i++)
-		if (strcasecmp( par[1], cable_drivers[i]->name ) == 0)
-			break;
-
-	if (!cable_drivers[i]) {
-		printf( _("Unknown cable: %s\n"), par[1] );
-		return NULL;
-	}
-
-	printf( _("Initializing %s on parallel port at 0x%x\n"), _(cable_drivers[i]->description), port );
+	printf( _("Initializing parallel port at 0x%x\n"), port );
 
 	parport = direct_parport_alloc( port );
 	if (!parport) {
@@ -207,11 +190,7 @@ direct_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	cable = cable_drivers[i]->connect( cable_drivers[i], parport );
-	if (!cable)
-		direct_parport_free( parport );
-
-	return cable;
+	return parport;
 }
 
 static int

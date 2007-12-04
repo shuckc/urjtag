@@ -107,15 +107,13 @@ ppdev_parport_free( parport_t *port )
 	free( port );
 }
 
-static cable_t *
+parport_t *
 ppdev_connect( const char **par, int parnum )
 {
-	int i;
 	port_node_t *pn;
 	parport_t *parport;
-	cable_t *cable;
 
-	if (parnum != 2) {
+	if (parnum != 1) {
 		printf( _("Syntax error!\n") );
 		return NULL;
 	}
@@ -127,21 +125,7 @@ ppdev_connect( const char **par, int parnum )
 			break;
 		}
 
-	if (strcasecmp( par[1], "none" ) == 0) {
-		printf( _("Changed cable to 'none'\n") );
-		return NULL;
-	}
-
-	for (i = 0; cable_drivers[i]; i++)
-		if (strcmp( par[1], cable_drivers[i]->name ) == 0)
-			break;
-
-	if (!cable_drivers[i]) {
-		printf( _("Unknown cable: %s\n"), par[1] );
-		return NULL;
-	}
-
-	printf( _("Initializing %s on ppdev port %s\n"), _(cable_drivers[i]->description), par[0] );
+	printf( _("Initializing ppdev port %s\n"), par[0] );
 
 	parport = ppdev_parport_alloc( par[0] );
 	if (!parport) {
@@ -149,11 +133,7 @@ ppdev_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	cable = cable_drivers[i]->connect( cable_drivers[i], parport );
-	if (!cable)
-		ppdev_parport_free( parport );
-
-	return cable;
+	return parport;
 }
 
 static int

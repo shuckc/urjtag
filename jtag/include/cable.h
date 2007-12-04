@@ -38,7 +38,7 @@ typedef struct cable_driver_t cable_driver_t;
 struct cable_driver_t {
 	const char *name;
 	const char *description;
-	cable_t *(*connect)( cable_driver_t *, parport_t * );
+	int (*connect)( char *params[], cable_t *cable );
 	void (*disconnect)( cable_t *cable );
 	void (*cable_free)( cable_t *cable );
 	int (*init)( cable_t * );

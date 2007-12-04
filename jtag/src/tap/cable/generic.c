@@ -22,7 +22,11 @@
  *
  */
 
+#include "sysdep.h"
+
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "cable.h"
 #include "parport.h"
@@ -30,23 +34,49 @@
 
 #include "generic.h"
 
-cable_t *
-generic_connect( cable_driver_t *cable_driver, parport_t *port )
+#include <brux/cmd.h>
+
+int
+generic_connect( char *params[], cable_t *cable )
 {
-	generic_params_t *params = malloc( sizeof *params );
-	cable_t *cable = malloc( sizeof *cable );
-	if (!params || !cable) {
-		free( params );
-		free( cable );
-		return NULL;
+	generic_params_t *cable_params = malloc( sizeof *cable_params );
+	parport_t *port;
+	int i;
+
+	if ( cmd_params( params ) < 3 ) {
+	  printf( _("not enough arguments!\n") );
+	  return 1;
+	}
+	  
+	/* search parport driver list */
+	for (i = 0; parport_drivers[i]; i++)
+		if (strcasecmp( params[1], parport_drivers[i]->type ) == 0)
+			break;
+	if (!parport_drivers[i]) {
+		printf( _("Unknown port driver: %s\n"), params[1] );
+		return 2;
 	}
 
-	cable->driver = cable_driver;
+	/* set up parport driver */
+	port = parport_drivers[i]->connect( (const char **) &params[2],
+					    cmd_params( params ) - 2 );
+
+        if (port == NULL) {
+	  printf( _("Error: Cable connection failed!\n") );
+	  return 3;
+        }
+
+	if (!cable_params) {
+		free( cable_params );
+		free( cable );
+		return 4;
+	}
+
 	cable->port = port;
-	cable->params = params;
+	cable->params = cable_params;
 	cable->chain = NULL;
 
-	return cable;
+	return 0;
 }
 
 void

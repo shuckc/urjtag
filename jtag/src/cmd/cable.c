@@ -39,18 +39,19 @@
 static int
 cmd_cable_run( char *params[] )
 {
+	cable_t *cable = malloc( sizeof *cable );
 	int i;
 
 	/* we need at least one parameter for 'cable' command */
 	if (cmd_params( params ) < 2)
 		return -1;
 
-	/* search connection type driver */
-	for (i = 0; parport_drivers[i]; i++)
-		if (strcasecmp( params[1], parport_drivers[i]->type ) == 0)
+	/* search cable driver list */
+	for (i = 0; cable_drivers[i]; i++)
+		if (strcasecmp( params[1], cable_drivers[i]->name ) == 0)
 			break;
-	if (!parport_drivers[i]) {
-		printf( _("Unknown connection type: %s\n"), params[1] );
+	if (!cable_drivers[i]) {
+		printf( _("Unknown cable type: %s\n"), params[1] );
 		return 1;
 	}
 
@@ -58,12 +59,22 @@ cmd_cable_run( char *params[] )
 		bus_free( bus );
 		bus = NULL;
 	}
+
 	chain_disconnect( chain );
-	chain->cable = parport_drivers[i]->connect( (const char **) &params[2], cmd_params( params ) - 2 );
-	if (!chain->cable) {
+
+	if (!cable) {
+	  printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+	  return 1;
+	}
+
+	cable->driver = cable_drivers[i];
+
+	if ( cable->driver->connect( ++params, cable ) ) {
 		printf( _("Error: Cable connection failed!\n") );
 		return 1;
 	}
+
+	chain->cable = cable;
 
 	if (cable_init( chain->cable )) {
 		printf( _("Error: Cable initialization failed!\n") );
@@ -83,43 +94,14 @@ cmd_cable_help( void )
 	int i;
 
 	printf( _(
-		"Usage: %s PORTADDR CABLE\n"
-		"Usage: %s DEV CABLE\n"
-#ifdef HAVE_LIBFTDI
-		"Usage: %s VID:PID:S/N CABLE\n"
-		"Usage: %s VID:PID:S/N CABLE\n"
-#endif
-#ifdef HAVE_LIBFTD2XX
-		"Usage: %s VID:PID:S/N CABLE\n"
-		"Usage: %s VID:PID:S/N CABLE\n"
-#endif
-#ifdef HAVE_LIBUSB
-		"Usage: %s VID:PID:S/N CABLE\n"
-#endif
-		"Select JTAG cable connected to parallel port.\n"
+		"Usage: %s DRIVER [DRIVER_OPTS]\n"
+		"Select JTAG cable type.\n"
 		"\n"
-		"PORTADDR   parallel port address (e.g. 0x378)\n"
-		"CABLE      cable type\n"
-#if defined HAVE_LIBUSB || defined HAVE_LIBFTDI || defined HAVE_LIBFTD2XX
-		"DEV        ppdev device (e.g. /dev/parport0)\n"
-		"VID        empty or USB vendor ID, hex (e.g. 09FB)\n"
-		"PID        empty or USB product ID, hex (e.g. 6001)\n"
-		"S/N        empty or USB product serial number, ASCII\n"
-#endif
+		"DRIVER      name of cable\n"
+		"DRIVER_OPTS options for the selected cable\n"
 		"\n"
 		"List of supported cables:\n"
-		"%-13s No cable connected\n"
-	), "cable parallel", "cable ppdev",
-#ifdef HAVE_LIBFTDI
-	   "cable ftdi", "cable ftdi-mpsse",
-#endif
-#ifdef HAVE_LIBFTD2XX
-	   "cable ftd2xx", "cable ftd2xx-mpsse",
-#endif
-#ifdef HAVE_LIBUSB
-	   "cable xpcu",
-#endif
-	   "none" );
+	), "cable" );
 
 	for (i = 0; cable_drivers[i]; i++)
 		printf( _("%-13s %s\n"), cable_drivers[i]->name, _(cable_drivers[i]->description) );

@@ -138,13 +138,12 @@ ftd2xx_parport_free( parport_t *port )
 }
 
 
-static cable_driver_t *
+int
 ftd2xx_pre_connect( const char **par, int parnum )
 {
-	int i;
 	port_node_t *pn;
 
-	if (parnum != 2) {
+	if (parnum != 1) {
 		printf( _("Syntax error!\n") );
 		return NULL;
 	}
@@ -156,35 +155,22 @@ ftd2xx_pre_connect( const char **par, int parnum )
 			break;
 		}
 
-	if (strcmp( par[1], "none" ) == 0) {
-		printf( _("Changed cable to 'none'\n") );
-		return NULL;
-	}
-
-	for (i = 0; cable_drivers[i]; i++)
-		if (strcmp( par[1], cable_drivers[i]->name ) == 0)
-			break;
-
-	if (!cable_drivers[i]) {
-		printf( _("Unknown cable: %s\n"), par[1] );
-		return NULL;
-	}
-
+#if TODO
 	printf( _("Initializing %s on FTDI device %s\n"), _(cable_drivers[i]->description), par[0] );
+#else
+	printf( _("Initializing on FTDI device %s\n"), par[0] );
+#endif
 
-	return cable_drivers[i];
+	return 1;
 }
 
 
-static cable_t *
+parport_t *
 ftd2xx_std_connect( const char **par, int parnum )
 {
 	parport_t *parport;
-	cable_driver_t *cable_driver;
-	cable_t *cable;
 
-	cable_driver = ftd2xx_pre_connect(par, parnum);
-	if (!cable_driver)
+	if (!ftd2xx_pre_connect(par, parnum))
 		return NULL;
 
 	parport = ftd2xx_parport_alloc( par[0], &ftd2xx_parport_driver, OUTBUF_LEN_STD );
@@ -193,23 +179,16 @@ ftd2xx_std_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	cable = cable_driver->connect( cable_driver, parport );
-	if (!cable)
-		ftd2xx_parport_free( parport );
-
-	return cable;
+	return parport;
 }
 
 
-static cable_t *
+parport_t *
 ftd2xx_mpsse_connect( const char **par, int parnum )
 {
 	parport_t *parport;
-	cable_driver_t *cable_driver;
-	cable_t *cable;
 
-	cable_driver = ftd2xx_pre_connect(par, parnum);
-	if (!cable_driver)
+	if (!ftd2xx_pre_connect(par, parnum))
 		return NULL;
 
 	parport = ftd2xx_parport_alloc( par[0], &ftd2xx_mpsse_parport_driver, OUTBUF_LEN_MPSSE );
@@ -218,11 +197,7 @@ ftd2xx_mpsse_connect( const char **par, int parnum )
 		return NULL;
 	}
 
-	cable = cable_driver->connect( cable_driver, parport );
-	if (!cable)
-		ftd2xx_parport_free( parport );
-
-	return cable;
+	return parport;
 }
 
 
