@@ -1,7 +1,7 @@
 2007-12-05  Arnim Laeuger  <arniml@users.sourceforge.net>
 
 	* src/jtag.c (main): Print build number based on version.h.
-	* src/Makefile.am (version.h): Added rules to generate version.h from ChangeLog's Revision tag.
+	* src/Makefile.am (version.h): Added rules to generate version.h from ChangeLog's revision tag.
 
 2004-11-24  Marcel Telka  <marcel@telka.sk>
 
