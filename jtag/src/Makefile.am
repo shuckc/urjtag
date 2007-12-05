@@ -68,5 +68,11 @@ jtag_LDADD = \
 	-lm \
 	@LIBINTL@
 
+nodist_jtag_SOURCES = version.h
+BUILT_SOURCES = version.h
+CLEANFILES = version.h
+version.h: ../ChangeLog version.awk
+	$(AWK) -f version.awk $< > $@
+
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"

@@ -24,6 +24,7 @@
  */
 
 #include "sysdep.h"
+#include "version.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -445,11 +446,12 @@ main( int argc, const char **argv )
 
 	/* interactive */
 	printf(
-			_("%s\n"
+			_("%s Build %s\n"
 			"Copyright (C) 2002, 2003 ETC s.r.o.\n"
 			"%s is free software, covered by the GNU General Public License, and you are\n"
 			"welcome to change it and/or distribute copies of it under certain conditions.\n"
-			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, PACKAGE_NAME, PACKAGE_NAME
+			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, URJTAG_BUILD_NUMBER,
+			PACKAGE_NAME, PACKAGE_NAME
 	);
 
 	chain = chain_alloc();
