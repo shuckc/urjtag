@@ -1,7 +1,600 @@
+2007-12-06  Kolja Waschk <kawk>
+
+	* ChangeLog: Import SVN commit messages from past month 
+	* THANKS: Added all missing names (that I know of) of the people who
+	  contributed the patches that have been integrated in the past weeks
+
 2007-12-05  Arnim Laeuger  <arniml@users.sourceforge.net>
 
 	* src/jtag.c (main): Print build number based on version.h.
 	* src/Makefile.am (version.h): Added rules to generate version.h from ChangeLog's revision tag.
+
+2007-12-04 07:06  Kolja Waschk <kawk>
+
+	* include/cable.h, include/parport.h, src/cmd/cable.c,
+	  src/tap/cable/generic.c, src/tap/cable/generic.h,
+	  src/tap/parport/direct.c, src/tap/parport/ftd2xx.c,
+	  src/tap/parport/ftdi.c, src/tap/parport/ppdev.c,
+	  src/tap/parport/xpcu_pp.c: [1839040] Make "cable" command less
+	  parport-centric. Changes "cable" command syntax!
+
+2007-12-03 12:18  Kolja Waschk <kawk>
+
+	* ChangeLog: added "Revision" keyword
+
+2007-12-02 17:56  Kolja Waschk <kawk>
+
+	* trunk/include, Makefile.am, configure.ac, inclow: openwince
+	  "include" package moved into "jtag" (now named "inclow")
+
+2007-11-30 07:06  Kolja Waschk <kawk>
+
+	* README: update fixes [1837364] Install instructions wrong
+
+2007-11-28 22:42  Kolja Waschk <kawk>
+
+	* doc/bsdl2jtag.1, doc/jtag.1: Imported man pages from
+	  openwince-jtag Debian package (w/permission from p2@debian)
+
+2007-11-28 20:20  Kolja Waschk <kawk>
+
+	* src/jtag.c: [ 1838018 ] "Forbid" to run JTAG tools with suid root
+
+2007-11-28 19:43  Kolja Waschk <kawk>
+
+	* src/jtag.c: [ 1839756 ] (openwince [972637]) add command line
+	  options to jtag
+
+2007-11-28 00:13  Kolja Waschk <kawk>
+
+	* doc/UrJTAG.xml: Integrated text from Wiki pages from Ralf,
+	  Incorporated README into UrJTAG.xml
+
+2007-11-27 22:06  Kolja Waschk <kawk>
+
+	* doc/UrJTAG.xml,doc-layout.txt: renamed top-level DocBook XML file
+
+2007-11-27 22:05  Kolja Waschk <kawk>
+
+	* doc/doc-layout.txt, doc/internals.xml: Include license text(s)
+	  and internals.xml
+
+2007-11-27 21:01  Kolja Waschk <kawk>
+
+	* doc/gpl.dbk, doc/lgpl.dbk: Use version 2, not 3
+
+2007-11-27 20:56  Kolja Waschk <kawk>
+
+	* doc/fdl.xml, doc/gpl.dbk, doc/lgpl.dbk: Added license texts
+	  (docbook) from www.gnu.org
+
+2007-11-26 14:01  Kolja Waschk <kawk>
+
+	* src/cmd/shell.c: Clean up fix for [1837985] "shell" command
+	  causes segfault
+
+2007-11-25 22:49  Kolja Waschk <kawk>
+
+	* doc/doc-layout.txt: Converted to DocBook-XSL
+
+2007-11-25 14:45  Kolja Waschk <kawk>
+
+	* doc/doc-layout.txt: Layout draft for new, comprehensive
+	  documentation...
+
+2007-11-25 13:08  Kolja Waschk <kawk>
+
+	* src/cmd/shell.c: Allow arbitrary number of arguments for "shell"
+	  command (fix for [1837985] "shell" command causes segfault)
+
+2007-11-25 00:02  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c: fix for '[
+	  1836616 ] Segfault/Memory corruption if USB device inaccessible'
+
+2007-11-23 19:52  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* configure.ac, src/svf/Makefile.am, src/svf/svf_bison.y,
+	  src/svf/svf_flex.l: make SVF parser/lexer backwards compatible to
+	  pre-2.5.31 flex
+	  for those the error location feature is skipped in svf_flex.l
+
+2007-11-20 20:35  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* configure.ac, src/cmd/cable.c, src/tap/Makefile.am,
+	  src/tap/cable/ft2232.c, src/tap/parport.c,
+	  src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c: ftd2xx parport
+	  driver added
+
+2007-11-18 13:38  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* configure.ac: add some messages to show configuration summary, to
+	  be extended
+
+2007-11-17 21:39  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* src/cmd/cable.c: report cable usage for USB & FTDI based cables
+	  only in case respective support is included
+
+2007-11-16 17:50  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* include/cable.h, include/chain.h, src/cmd/cable.c, src/svf/svf.c,
+	  src/tap/Makefile.am, src/tap/cable.c, src/tap/cable/arcom.c,
+	  src/tap/cable/byteblaster.c, src/tap/cable/dlc5.c,
+	  src/tap/cable/ea253.c, src/tap/cable/ei012.c,
+	  src/tap/cable/ft2232.c, src/tap/cable/generic.c,
+	  src/tap/cable/keithkoep.c, src/tap/cable/lattice.c,
+	  src/tap/cable/mpcbdm.c, src/tap/cable/triton.c,
+	  src/tap/cable/usbblaster.c, src/tap/cable/wiggler.c,
+	  src/tap/cable/wiggler2.c, src/tap/cable/xpc.c, src/tap/chain.c,
+	  src/tap/parport.c, src/tap/parport/ftdi.c, src/tap/tap.c: merged
+	  changes from /branches/ft2232_eval@770
+	  this is the initial stable version of the ft2232 cable driver
+
+2007-11-13 23:09  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* src/flash.c: removed obsolete declaration of amd_detect()
+
+2007-11-13 08:07  Kolja Waschk <kawk>
+
+	* configure.ac, src/tap/Makefile.am, src/tap/cable.c: Fix [ 1828368 ]
+	  Compilation fails without libusb/libftdi
+
+2007-11-10 17:17  Kolja Waschk <kawk>
+
+	* data/Makefile.am, data/lattice/PARTS,
+	  data/lattice/lc4128c-tqfp100,
+	  data/lattice/lc4128c-tqfp100/STEPPINGS,
+	  data/lattice/lc4128c-tqfp100/lc4128c-tqfp100: [ 1105256 ] jtag
+	  descriptor for Lattice LC4032V-TQFP100
+
+2007-11-10 16:22  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* README.svf: remove links to openwince
+
+2007-11-10 01:15  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+	  src/bus/zefant-xs3.c: added Zefant-XS3 bus
+
+2007-11-10 00:31  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* data/xilinx/xc3s1000/fg320, data/xilinx/xc3s1000/fg456,
+	  data/xilinx/xc3s1000/fg676, data/xilinx/xc3s1000/ft256,
+	  data/xilinx/xc3s1000/xc3s1000: xc3s1000 kw
+
+2007-11-10 00:15  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* data/Makefile.am, data/xilinx/xc3s1000/STEPPINGS,
+	  data/xilinx/xc3s1000/fg320, data/xilinx/xc3s1000/fg456,
+	  data/xilinx/xc3s1000/fg676, data/xilinx/xc3s1000/ft256,
+	  data/xilinx/xc3s1000/xc3s1000,
+	  data/xilinx/xc3s1000/xc3s1000_fg320,
+	  data/xilinx/xc3s1000/xc3s1000_fg456,
+	  data/xilinx/xc3s1000/xc3s1000_fg676,
+	  data/xilinx/xc3s1000/xc3s1000_ft256,
+	  data/xilinx/xc3s1000/xc3s1000l,
+	  data/xilinx/xc3s1000/xc3s1000l_fg320,
+	  data/xilinx/xc3s1000/xc3s1000l_fg456,
+	  data/xilinx/xc3s1000/xc3s1000l_fg676,
+	  data/xilinx/xc3s1000/xc3s1000l_ft256: unification xc3s1000
+
+2007-11-09 22:44  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* src/cmd/bit.c: fixed [ 1828672 ] cmd/bit.c broken
+
+2007-11-08 09:44  Kolja Waschk <kawk>
+
+	* configure.ac, data/Makefile.am, data/xilinx/PARTS,
+	  data/xilinx/xc2c256-vq100, data/xilinx/xc2c256-vq100/STEPPINGS,
+	  data/xilinx/xc2c256-vq100/xc2c256-vq100,
+	  data/xilinx/xc2c64a-vq44, data/xilinx/xc2c64a-vq44/STEPPINGS,
+	  data/xilinx/xc2c64a-vq44/xc2c64a-vq44, include/Makefile.am,
+	  include/cable.h, include/xpcu.h, src/cmd/cable.c,
+	  src/part/data_register.c, src/tap/Makefile.am, src/tap/cable.c,
+	  src/tap/cable/arcom.c, src/tap/cable/byteblaster.c,
+	  src/tap/cable/dlc5.c, src/tap/cable/ea253.c,
+	  src/tap/cable/ei012.c, src/tap/cable/generic.c,
+	  src/tap/cable/generic.h, src/tap/cable/keithkoep.c,
+	  src/tap/cable/lattice.c, src/tap/cable/mpcbdm.c,
+	  src/tap/cable/triton.c, src/tap/cable/usbblaster.c,
+	  src/tap/cable/wiggler.c, src/tap/cable/wiggler2.c,
+	  src/tap/cable/xpc.c, src/tap/parport.c, src/tap/parport/ftdi.c,
+	  src/tap/parport/xpcu_common.c, src/tap/parport/xpcu_pp.c,
+	  src/tap/tap.c: [ 1479632, 1649637 ] Drivers for Altera USB
+	  Blaster and Xilinx Platform Cable USB
+
+2007-11-08 09:13  Kolja Waschk <kawk>
+
+	* include/Makefile.am, README, README_21065L, THANKS, 
+	  data/Makefile.am, data/analog/PARTS, data/analog/sharc21065l,
+	  data/analog/sharc21065l/STEPPINGS,
+	  data/analog/sharc21065l/sharc21065l, include/setdevice.h,
+	  libbrux/Makefile.am, libbrux/flash/amd_flash.c,
+	  libbrux/flash/detectflash.c, libbrux/setdevice.h,
+	  src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+	  src/bus/sharc21065l.c, src/cmd/Makefile.am, src/cmd/cmd.c,
+	  src/cmd/setdevice.c, src/detect.c, src/flash.c, src/jtag.c: 
+	  [ 1605981 ] JTAG Support for ADSP-21065L Processor (with
+	  modifications) (Girish G Pai, Lesly A. M, Tony K Nadackal, Shaju Abraham)
+
+2007-11-08 07:33  Kolja Waschk <kawk>
+
+	* data/MANUFACTURERS, data/Makefile.am, data/admtek,
+	  data/admtek/adm5120, data/admtek/adm5120/adm5120, data/atheros,
+	  data/atheros/ar2312, data/atheros/ar2312/ar2312, data/brecis,
+	  data/brecis/PARTS, data/brecis/msp2006,
+	  data/brecis/msp2006/STEPPINGS, data/brecis/msp2006/msp2006,
+	  data/hitachi/PARTS, data/hitachi/ar7300,
+	  data/hitachi/ar7300/STEPPINGS, data/hitachi/ar7300/ar7300,
+	  data/lexra, data/lexra/PARTS, data/lexra/lx5280,
+	  data/lexra/lx5280/STEPPINGS, data/lexra/lx5280/lx5280,
+	  doc/README.ejtag: [ 1429825 ] EJTAG driver (new data files) (Oleg)
+
+2007-11-08 07:11  Kolja Waschk <kawk>
+
+	* src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+	  src/bus/ejtag.c, src/tap/parport/ppdev.c: [ 1429825 ] EJTAG
+	  driver (partial patch - only the bus driver for now) (Oleg)
+
+2007-11-07 23:17  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+	  src/bus/h7202.c: [ 1585617 ] support for the Magnachip h7202 cpu
+
+2007-11-07 22:43  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* README.svf: update README.svf
+
+2007-11-07 22:21  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* src/cmd/debug.c, src/cmd/eraseflash.c, src/cmd/peekpoke.c,
+	  src/cmd/script.c, src/cmd/shell.c, src/cmd/signal.c,
+	  src/cmd/test.c, src/detect.c, src/jtag.c, src/part/signal.c,
+	  src/readmem.c, src/svf/svf_bison.y, src/svf/svf_flex.l,
+	  src/writemem.c: get rid of (most) compiler warnings
+
+2007-11-07 09:56  Kolja Waschk <kawk>
+
+	* include/bssignal.h, include/jtag.h, include/part.h, src/jtag.c:
+	  Remaining diffs from gumstix repository: Add debug, test and
+	  shell command, aliases for parts, small fixes.
+
+2007-11-07 09:44  Kolja Waschk <kawk>
+
+	* src/bsdl2jtag.c, src/bus/ppc440gx_ebc8.c, src/cmd/Makefile.am,
+	  src/cmd/cmd.c, src/cmd/debug.c, src/cmd/part.c, src/cmd/print.c,
+	  src/cmd/script.c, src/cmd/shell.c, src/cmd/signal.c,
+	  src/cmd/test.c, src/detect.c, src/part/part.c, src/part/signal.c:
+	  Remaining diffs from gumstix repository: Add debug, test and
+	  shell command, aliases for parts, small fixes.
+
+2007-11-07 09:09  Kolja Waschk <kawk>
+
+	* doc/howto_add_support_for_more_flash.txt: [ 1460563 ] How to add
+	  Support more Flash chip???
+
+2007-11-07 09:07  Kolja Waschk <kawk>
+
+	* src/writemem.c: [ 1249554 ] Writemem command to write to SRAM
+	  (compile fix)
+
+2007-11-07 09:04  Kolja Waschk <kawk>
+
+	* src/svf/svf_flex.l: [ 1194137 ] better SVF diagnostics (compile
+	  fix)
+
+2007-11-07 09:03  Kolja Waschk <kawk>
+
+	* src/bus/ppc405ep.c, src/bus/Makefile.am: The 405ep support patch
+	  _still_ wasn't completely integrated.
+
+2007-11-07 08:55  Kolja Waschk <kawk>
+
+	* Makefile.am: Remove additional lines left over from unsuccessful
+	  patch before.
+
+2007-11-07 08:47  Kolja Waschk <kawk>
+
+	* data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc2s300e,
+	  data/xilinx/xc2s300e/STEPPINGS, data/xilinx/xc2s300e/fg456,
+	  data/xilinx/xc2s300e/ft256, data/xilinx/xc2s300e/pq208,
+	  data/xilinx/xc2s300e/xc2s300e: [ 1377859 ] Device description
+	  files for Xilinx XC2S300E (Spartan-IIE) (Arnim Laeuger)
+
+2007-11-07 08:41  Kolja Waschk <kawk>
+
+	* data/Makefile.am: Added Xilinx parts XC3S*
+
+2007-11-07 08:31  Kolja Waschk <kawk>
+
+	* data/Makefile.am: Added Atmel AT91SAM7S files to Makefile.am
+
+2007-11-07 08:16  Kolja Waschk <kawk>
+
+	* data/xilinx/PARTS, data/xilinx/xc18v04pc44,
+	  data/xilinx/xc18v04pc44/STEPPINGS,
+	  data/xilinx/xc18v04pc44/xc18v04pc44, data/xilinx/xc2s200e-pq208,
+	  data/xilinx/xc2s200e-pq208/STEPPINGS,
+	  data/xilinx/xc2s200e-pq208/xc2s200e-pq208, data/xilinx/xc3s1000,
+	  data/xilinx/xc3s1000/STEPPINGS, data/xilinx/xc3s1000/xc3s1000,
+	  data/xilinx/xc3s1000/xc3s1000_fg320,
+	  data/xilinx/xc3s1000/xc3s1000_fg456,
+	  data/xilinx/xc3s1000/xc3s1000_fg676,
+	  data/xilinx/xc3s1000/xc3s1000_ft256,
+	  data/xilinx/xc3s1000/xc3s1000l,
+	  data/xilinx/xc3s1000/xc3s1000l_fg320,
+	  data/xilinx/xc3s1000/xc3s1000l_fg456,
+	  data/xilinx/xc3s1000/xc3s1000l_fg676,
+	  data/xilinx/xc3s1000/xc3s1000l_ft256, data/xilinx/xc3s100e_die,
+	  data/xilinx/xc3s100e_die/STEPPINGS,
+	  data/xilinx/xc3s100e_die/xc3s100e_die,
+	  data/xilinx/xc3s100e_die/xc3s100e_pq208,
+	  data/xilinx/xc3s100e_die/xc3s100e_tq144,
+	  data/xilinx/xc3s100e_die/xc3s100e_vq100, data/xilinx/xc3s1500,
+	  data/xilinx/xc3s1500/STEPPINGS, data/xilinx/xc3s1500/xc3s1500,
+	  data/xilinx/xc3s1500/xc3s1500_fg320,
+	  data/xilinx/xc3s1500/xc3s1500_fg456,
+	  data/xilinx/xc3s1500/xc3s1500_fg676,
+	  data/xilinx/xc3s1500/xc3s1500l,
+	  data/xilinx/xc3s1500/xc3s1500l_fg320,
+	  data/xilinx/xc3s1500/xc3s1500l_fg456,
+	  data/xilinx/xc3s1500/xc3s1500l_fg676, data/xilinx/xc3s200,
+	  data/xilinx/xc3s200/STEPPINGS, data/xilinx/xc3s200/xc3s200,
+	  data/xilinx/xc3s200/xc3s200_ft256,
+	  data/xilinx/xc3s200/xc3s200_pq208,
+	  data/xilinx/xc3s200/xc3s200_tq144,
+	  data/xilinx/xc3s200/xc3s200_vq100, data/xilinx/xc3s2000,
+	  data/xilinx/xc3s2000/STEPPINGS, data/xilinx/xc3s2000/xc3s2000,
+	  data/xilinx/xc3s2000/xc3s2000_fg456,
+	  data/xilinx/xc3s2000/xc3s2000_fg676,
+	  data/xilinx/xc3s2000/xc3s2000_fg900,
+	  data/xilinx/xc3s2000/xc3s2000l,
+	  data/xilinx/xc3s2000/xc3s2000l_fg676,
+	  data/xilinx/xc3s2000/xc3s2000l_fg900, data/xilinx/xc3s400,
+	  data/xilinx/xc3s400/STEPPINGS, data/xilinx/xc3s400/xc3s400,
+	  data/xilinx/xc3s400/xc3s400_fg320,
+	  data/xilinx/xc3s400/xc3s400_fg456,
+	  data/xilinx/xc3s400/xc3s400_ft256,
+	  data/xilinx/xc3s400/xc3s400_pq208,
+	  data/xilinx/xc3s400/xc3s400_tq144, data/xilinx/xc3s4000,
+	  data/xilinx/xc3s4000/STEPPINGS, data/xilinx/xc3s4000/xc3s4000,
+	  data/xilinx/xc3s4000/xc3s4000_fg1156,
+	  data/xilinx/xc3s4000/xc3s4000_fg676,
+	  data/xilinx/xc3s4000/xc3s4000_fg900,
+	  data/xilinx/xc3s4000/xc3s4000l,
+	  data/xilinx/xc3s4000/xc3s4000l_fg1156,
+	  data/xilinx/xc3s4000/xc3s4000l_fg900, data/xilinx/xc3s50,
+	  data/xilinx/xc3s50/STEPPINGS, data/xilinx/xc3s50/xc3s50,
+	  data/xilinx/xc3s50/xc3s50_cp132, data/xilinx/xc3s50/xc3s50_pq208,
+	  data/xilinx/xc3s50/xc3s50_tq144, data/xilinx/xc3s50/xc3s50_vq100,
+	  data/xilinx/xc3s5000, data/xilinx/xc3s5000/STEPPINGS,
+	  data/xilinx/xc3s5000/xc3s5000,
+	  data/xilinx/xc3s5000/xc3s5000_fg1156,
+	  data/xilinx/xc3s5000/xc3s5000_fg900, data/xilinx/xc3s500e_fg320,
+	  data/xilinx/xc3s500e_fg320/STEPPINGS,
+	  data/xilinx/xc3s500e_fg320/xc3s500e_fg320,
+	  data/xilinx/xc3s500e_fg320/xc3s500e_ft256,
+	  data/xilinx/xc3s500e_fg320/xc3s500e_pq208,
+	  data/xilinx/xc9572xl_vq44, data/xilinx/xc9572xl_vq44/STEPPINGS,
+	  data/xilinx/xc9572xl_vq44/xc9572xl_vq44, data/xilinx/xcf04s,
+	  data/xilinx/xcf04s/STEPPINGS, data/xilinx/xcf04s/xcf04s: Added
+	  Xilinx XC3S* parts and others from gumstix repository
+
+2007-11-07 08:10  Kolja Waschk <kawk>
+
+	* data/atmel/PARTS, data/atmel/at91sam7s256,
+	  data/atmel/at91sam7s256/STEPPINGS,
+	  data/atmel/at91sam7s256/at91sam7s_tq48v0,
+	  data/atmel/at91sam7s256/at91sam7s_tq64v0: Added AT91SAM7S256 data
+	  from gumstix repository
+
+2007-11-06 21:39  Kolja Waschk <kawk>
+
+	* src/bus/Makefile.am, src/bus/au1500.c, src/bus/bcm1250.c,
+	  src/bus/buses.c, src/bus/buses.h, src/bus/jopcyc.c,
+	  src/bus/lh7a400.c, src/bus/mpc5200.c, src/bus/ppc440gx_ebc8.c,
+	  src/bus/slsup3.c, src/bus/tx4925.c: some more fixes, eg. ppc405
+	  support patch still wasn't completely applied
+
+2007-11-06 20:56  Kolja Waschk <kawk>
+
+	* data/ibm/PARTS: [ 1173994 ] IBM PPC405EP support (PARTS file
+	  wasn't updated when I applied the patch)
+
+2007-11-06 20:53  Kolja Waschk <kawk>
+
+	* src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+	  src/bus/jopcyc.c: [ 1281749 ] Bus driver for JOP.design Cyclone
+	  boards (jopcyc+serial patch) (Arnim Laeuger)
+
+2007-11-06 20:49  Kolja Waschk <kawk>
+
+	* data/Makefile.am, data/altera/PARTS, data/altera/ep1c12,
+	  data/altera/ep1c12/STEPPINGS, data/altera/ep1c12/ep1c12,
+	  data/altera/ep1c12/f256, data/altera/ep1c12/f324,
+	  data/altera/ep1c12/q240, data/altera/epm3064a,
+	  data/altera/epm3064a/STEPPINGS, data/altera/epm3064a/epm3064a,
+	  data/altera/epm3064a/l44, data/altera/epm3064a/t100,
+	  data/altera/epm3064a/t44: [ 1281673 ] Device description files
+	  for Altera EP1C12 and EPM3064A (Arnim Laeuger)
+
+2007-11-06 20:32  Kolja Waschk <kawk>
+
+	* include/jtag.h, src/Makefile.am, src/cmd/Makefile.am,
+	  src/cmd/cmd.c, src/cmd/writemem.c, src/writemem.c: [ 1249554 ]
+	  Writemem command to write to SRAM (Kent Palmkvist)
+
+2007-11-06 20:29  Kolja Waschk <kawk>
+
+	* data/Makefile.am, data/altera/PARTS, data/altera/ep1c6q240,
+	  data/altera/ep1c6q240/STEPPINGS, data/altera/ep1c6q240/ep1c6q240,
+	  src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+	  src/bus/slsup3.c: [ 1249552 ] New bus type SLS UP3 (Altera FPGA
+	  board) (Kent Palmkvist)
+
+2007-11-06 20:26  Kolja Waschk <kawk>
+
+	* src/tap/cable.c, src/tap/cable/wiggler.c: [ 1236272 ] Add support
+	  for Analog Devices Blackfin Processor: IGLOO.patch (Robin Getz)
+
+2007-11-06 20:24  Kolja Waschk <kawk>
+
+	* src/bus/Makefile.am, src/bus/bf533_ezkit.c,
+	  src/bus/bf533_stamp.c, src/bus/buses.c, src/bus/buses.h: [
+	  1236272 ] Add support for Analog Devices Blackfin Processor:
+	  STAMP_EZKIT.patch (Robin Getz)
+
+2007-11-06 20:20  Kolja Waschk <kawk>
+
+	* data/MANUFACTURERS, data/Makefile.am, data/analog,
+	  data/analog/PARTS, data/analog/bf533,
+	  data/analog/bf533/STEPPINGS, data/analog/bf533/bf533: [ 1236272 ]
+	  Add support for Analog Devices Blackfin Processor: Blackfin.patch
+
+2007-11-06 20:15  Kolja Waschk <kawk>
+
+	* src/tap/parport/ppdev.c: [ 1194141 ] better diagnostics for
+	  opening ppdev device (Hein Roehrig)
+
+2007-11-06 20:14  Kolja Waschk <kawk>
+
+	* src/svf/svf.c, src/svf/svf.h, src/svf/svf_bison.y,
+	  src/svf/svf_flex.l: [ 1194137 ] better SVF diagnostics (+ manual
+	  integration with previous jtag-svf-vec-hexa fix) (Hein Roehrig)
+
+2007-11-06 19:59  Kolja Waschk <kawk>
+
+	* src/svf/svf.c: [ 1194140 ] SVF better RUNTEST timing (Hein Roehrig)
+
+2007-11-06 19:53  Kolja Waschk <kawk>
+
+	* include/Makefile.am, include/cable.h, include/fclock.h, src/Makefile.am,
+	  src/cmd/frequency.c, src/lib/Makefile.am, src/lib/fclock.c,
+	  src/tap/cable.c: [ 1194130 ] busy-loop waiting (breaks compilation of
+	  svf.c... wait for next two patches) (Hein Roehrig)
+
+2007-11-06 19:34  Kolja Waschk <kawk>
+
+	* src/tap/register.c: [ 1174000 ] Miscellanous fixes (omitting the
+	  speedup for flash.c, obsoleted by an earlier patch) (Wojtek Kaniewski)
+
+2007-11-06 19:31  Kolja Waschk <kawk>
+
+	* src/bsdl2jtag.c: [ 1173997 ] bsdl2jtag bidir support (Wojtek$ Kaniewski)
+
+2007-11-06 19:29  Kolja Waschk <kawk>
+
+	* data/Makefile.am, data/ibm/ppc405ep, data/ibm/ppc405ep/STEPPINGS,
+	  data/ibm/ppc405ep/ppc405ep: [ 1173994 ] IBM PPC405EP support (Wojtek
+	  Kaniewski)
+
+2007-11-06 19:25  Kolja Waschk <kawk>
+
+	* src/bsdl2jtag.c: [ 1169349 ] better error codes for bsdl2jtag (Hein
+	  Roehrig)
+
+2007-11-06 19:23  Kolja Waschk <kawk>
+
+	* data/sharp/lh7a400/lh7a400: [ 1164111 ] FIX of the lh7a400 port (Marko
+	  Roessler)
+
+2007-11-06 19:22  Kolja Waschk <kawk>
+
+	* data/Makefile.am, data/intel/PARTS, data/intel/pxa270,
+	  data/intel/pxa270/STEPPINGS, data/intel/pxa270/pxa270,
+	  libbrux/flash/intel.c, src/bus/buses.c, src/bus/buses.h,
+	  src/bus/pxa2x0.c, src/flash.c: [ 1112022 ] PXA270 Support (Cliff Brake)
+
+2007-11-06 19:19  Kolja Waschk <kawk>
+
+	* README.svf, include/svf.h: [ 1074347 ] SVF Player (README and
+	  include file) (Arnim Laeuger)
+
+2007-11-06 19:18  Kolja Waschk <kawk>
+
+	* data/freescale, data/freescale/PARTS, data/freescale/mpc5200,
+	  data/freescale/mpc5200/STEPPINGS, data/freescale/mpc5200/mpc5200,
+	  src/bus/mpc5200.c: [ 1079531 ] jtag mpc5200 support (added files)
+
+2007-11-06 19:06  Kolja Waschk <kawk>
+
+	* configure.ac, data/MANUFACTURERS, data/Makefile.am,
+	  include/chain.h, src/bus/Makefile.am, src/bus/buses.c,
+	  src/bus/buses.h: [ 1079531 ] jtag mpc5200 support (Asier Llano Palacios)
+
+2007-11-06 19:01  Kolja Waschk <kawk>
+
+	* src/Makefile.am: add -lm because SVF player uses floor()
+
+2007-11-06 18:58  Kolja Waschk <kawk>
+
+	* src/Makefile.am, src/cmd/Makefile.am, src/cmd/cmd.c,
+	  src/cmd/svf.c, src/svf, src/svf/Makefile.am, src/svf/svf.c,
+	  src/svf/svf.h, src/svf/svf_bison.y, src/svf/svf_flex.l,
+	  src/tap/chain.c, src/tap/tap.c: [ 1074347 ] SVF Player (4
+	  patches: jtag-svf, -inc1, -goto_state, -vec-hexa) (Arnim Laeuger)
+
+2007-11-06 18:47  Kolja Waschk <kawk>
+
+	* src/tap/cable/wiggler.c, src/tap/cable/wiggler2.c: [ 1060345 ]
+	  Fix certain Wigglers. (David Vrabel)
+
+2007-11-06 18:37  Kolja Waschk <kawk>
+
+	* src/cmd/bit.c: fix error from merging 972649+1012149 in bit.c
+
+2007-11-06 18:32  Kolja Waschk <kawk>
+
+	* src/cmd/bit.c: [ 1012149 ] Error messages in src/cmd/bit.c file (Jerome
+	  Debard)
+
+2007-11-06 18:21  Kolja Waschk <kawk>
+
+	* src/flash.c: [ 1012144 ] User messages printed during flashmem (Jerome
+	  Debard)
+
+2007-11-06 18:14  Kolja Waschk <kawk>
+
+	* src/cmd/dr.c: [ 986415 ] Allow interactive loading of DR (Martin Buck)
+
+2007-11-06 18:09  Kolja Waschk <kawk>
+
+	* src/cmd/bit.c, src/cmd/cable.c, src/cmd/dr.c, src/cmd/endian.c,
+	  src/cmd/flashmem.c, src/cmd/get.c, src/cmd/print.c,
+	  src/cmd/register.c, src/cmd/set.c, src/cmd/shift.c,
+	  src/part/part.c, src/tap/parport/direct.c,
+	  src/tap/parport/ppdev.c: [ 972649 ] make jtag more tolerant of
+	  case (Andrew Dyer)
+
+2007-11-06 18:04  Kolja Waschk <kawk>
+
+	* src/bus/ixp425.c, src/bus/mpc824x.c, src/bus/pxa2x0.c,
+	  src/bus/s3c4510x.c, src/bus/sa1110.c, src/bus/sh7727.c,
+	  src/bus/sh7750r.c, src/bus/sh7751r.c, src/cmd/detect.c,
+	  src/tap/Makefile.am, src/tap/cable.c, src/tap/cable/wiggler2.c: [
+	  909598 ] Detect 16bit flash on PXA25x 1/2 (partially included for
+	  compatibility with other patches and wiggler2 driver, but actual
+	  new pxa2x0 patch omitted - another later patch will fix this) (Matej)
+
+2007-11-06 17:20  Kolja Waschk <kawk>
+
+	* src/bus/s3c4510x.c, src/cmd/peekpoke.c, src/jtag.c: [ 826404 ]
+	  s3c4510 bus driver (without jedec.c fix) (Krzysztof Blaszkowski)
+
+2007-11-06 16:51  Kolja Waschk <kawk>
+
+	* include/flash.h: [ 1268229 ] gcc4 compilation fix (Asier Llano Palacios)
+
+2007-11-06 09:30  Kolja Waschk <kawk>
+
+	* libbrux, trunk/libbrux: moved libbrux subdir into jtag subdir. See
+	  ChangeLog there too
+
+2007-11-02  Kolja Waschk <Kolja Waschk <kawk>>
+
+	* created "UrJTAG" project as fork of openwince jtag tools. All older
+	  log entries in this ChangeLog describe the openwince development.
 
 2004-11-24  Marcel Telka  <marcel@telka.sk>
 

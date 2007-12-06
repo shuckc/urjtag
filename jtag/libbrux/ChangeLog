@@ -1,3 +1,95 @@
+2007-12-06  Kolja Waschk <kawk>
+
+	* ChangeLog: Import SVN commit messages from past month.
+	* THANKS: now given in ../THANKS. Removed the file here.
+
+2007-11-18 19:52  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* flash/amd_flash.c, flash/detectflash.c: fix '[ 1830709 ] Missing
+	  base offset in amd_flash.c'
+
+2007-11-13 23:05  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* flash/jedec.c: set interface geometry from flash info
+
+2007-11-13 21:25  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* flash/amd.c, flash/jedec.c, trunk/jtag/src/flash.c: fix bugs
+	  * 1831321 amdstatus() broken in libbrux/flash/amd.c
+	  revert to previous implementation of amdstatus()
+	  RTL8181 specific implementation deactivated but kept for
+	  reference
+	  * 1830707 Flashing for Jedec devices broken
+	  removed flashcheck() and activated previous set_flash_chip() in
+	  src/flash.c
+	  * libbrux/flash/jedec.c fills in cfi_chip_t.width
+	  this is required for new functionality in find_block() of
+	  src/flash.c
+
+2007-11-08 09:13  Kolja Waschk <kawk>
+
+	* Makefile.am, flash/amd_flash.c, flash/detectflash.c: [ 1605981 ]
+	  JTAG Support for ADSP-21065L Processor (with modifications;
+	  Girish G Pai, Lesly A. M, Tony K Nadackal, Shaju Abraham)
+
+2007-11-08 08:04  Kolja Waschk <kawk>
+
+	* flash/amd.c: [ 1429825 ] EJTAG driver (some remaining patch lines
+		for flash/amd.c)
+
+2007-11-07 23:25  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* flash/amd.c: [ 1556323 ] AMD flash fix +Am29LV160DB
+	  identification, flash fix was already applied
+
+2007-11-07 08:49  Kolja Waschk <kawk>
+
+	* trunk/jtag/Makefile.am, flash/detectflash.c: [ 1427597 ] Prevent
+	  segfault in "no flash" case (Guennadi Liakhovetski)
+
+2007-11-06 20:42  Kolja Waschk <kawk>
+
+	* flash/amd.c, flash/jedec.c: [ 1281666 ] AMD Am29LV040B flash chip
+	  support (Arnim Laeuger)
+
+2007-11-06 20:35  Kolja Waschk <kawk>
+
+	* flash/amd.c: [ 1281277 ] Fix missing CFI base address offset in
+	  amd.c (Arnim Laeuger)
+
+2007-11-06 19:31  Kolja Waschk <kawk>
+
+	* flash/amd.c: [ 1173996 ] ST/Samsung M29W320D* flash chips support 
+	  (Wojtek Kaniewski)
+
+2007-11-06 19:22  Kolja Waschk <kawk>
+
+	* flash/intel.c: [ 1112022 ] PXA270 Support (Cliff Brake)
+
+2007-11-06 19:05  Kolja Waschk <kawk>
+
+	* Makefile.am, flash/amd.c: [ 1079526 ] Flash AMD29LV065D support
+	   (Asier Llano Palacios)
+
+2007-11-06 17:59  Kolja Waschk <kawk>
+
+	* flash/jedec.c: [ 1281432 ] Update jedec.c of patch #835292 to
+	  current environment (Arnim Läuger)
+
+2007-11-06 17:23  Kolja Waschk <kawk>
+
+	* flash/jedec.c: [ 835292 ] better jedec flash chips detection for
+	  jtag tools (Matan Ziv-Av)
+
+2007-11-06 09:30  Kolja Waschk <kawk>
+
+	* moved libbrux subdir (was separate in openwince CVS) into jtag subdir
+
+2007-11-02  Kolja Waschk <kawk>
+
+	* created "UrJTAG" project as fork of openwince jtag tools. All older
+	  log entries in this ChangeLog describe the openwince development.
+
 2004-11-18  Marcel Telka  <marcel@telka.sk>
 
 	* flash/jedec.c (jedec_detect): Added cfi_array allocation (patch 970946, Ian Campbell).

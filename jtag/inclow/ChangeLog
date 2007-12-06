@@ -1,3 +1,16 @@
+2007-12-02 17:56  kawk
+
+	* openwince "include" package moved into "jtag" (now named "inclow")
+
+2007-11-06 17:28  kawk
+
+	* trunk/include/brux/bus.h: [ 909598 ] Detect 16bit flash on PXA25x
+
+2007-11-02  Kolja Waschk <kawk>
+
+    * created "UrJTAG" project as fork of openwince jtag tools. All older
+      log entries in this ChangeLog describe the openwince development.
+
 2005-10-03  Marcel Telka  <marcel@telka.sk>
 
 	Version 0.4.2 released.

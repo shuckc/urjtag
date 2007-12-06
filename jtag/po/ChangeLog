@@ -1,3 +1,8 @@
+2007-11-02  Kolja Waschk <kawk>
+
+	* created "UrJTAG" project as fork of openwince jtag tools. All older
+	  log entries in this ChangeLog describe the openwince development.
+
 2005-04-06  Marcel Telka  <marcel@telka.sk>
 
 	* rw.po: Added Kinyarwanda translation by Steven Michael Murphy.
