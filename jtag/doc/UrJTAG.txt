@@ -1,0 +1,589 @@
+Universal JTAG library, server and tools
+========================================
+Kolja Waschk (Ed.)
+$Id $
+
+/////////////////////////////////////////////////////////////////////////////
+This document is formatted to be readable for "asciidoc". Before you
+make any changes, please read the use guide at the asciidoc home page
+www.methods.co.nz/asciidoc and try to adapt to the style used here; e.g.
+use the single-line section header style ("== header ==").
+/////////////////////////////////////////////////////////////////////////////
+
+== Copyright ==
+
+Copyright 2007, 2008 Kolja Waschk (and the respective authors)
+
+Permission is granted to copy, distribute and/or modify this document under the
+terms of the GNU Free Documentation License, Version 1.2 or any later version
+published by the Free Software Foundation. A copy of the license is included in
+the section entitled "GNU Free Documentation License".
+
+//=========================================================================
+
+== General ==
+
+=== JTAG ===
+
+JTAG basics can be found all over the internet. This section should go into
+some more details about working with JTAG. What hardwarde do you need, what is
+the usage of JTAG, where do I get files. What file formats are available...
+
+==== Introduction ====
+
+JTAG (IEEE 1149.1) is a serial interface for testing devices with
+integrated circuits. The problem that the JTAG interface was designed to solve
+is checking if connections between ICs are OK. Therefore you can set and check
+in- and outputs of ICs. In order to save pins and logic a very simple serial
+design was invented.
+
+* One pin serial input
+* One pin serial output
+* One pin clock
+* One pin control
+
+The control pin (together with clock) allows to switch device states. A state
+machine inside each chip can be controlled, e.g. to reset the device.  This
+control machine also allows to have two internal shift registers in each device
+(although we only have on in- and one output-pin). The registers are called
+instruction register (IR) and data register (DR).  The current UrJTAG tool
+allows you to set the IR and set and get the DR. It doesn't allow you to
+directly control the statemachine (yet).
+
+==== Interfaces ====
+
+The simplest interface that you can build is the Xilinx parallel cable (also
+called DLC5). If your device works with a 5V or 3.3V supply voltage then this
+device can even be build just with passive parts.  (picture missing here)
+UrJTAG also supports a number of other interface adapters.
+
+==== Additions ====
+
+In the meantime the jtag specification was used as a basis for programming
+flash files and debugging processors.  UrJTAG supports programming a couple of
+different flash devices. It also supports programming of non-flash devices via
+svf files.  UrJTAG does not support debugging yet. Other open source solutions
+such as OpenOCD allow you to debug ARM processors with gdb.
+
+==== BSDL and UrJTAG data files ====
+
+The bsdl file format describes the jtag interface for one IC.  It is a vhdl
+syntax with the needed information (like pin-names, register lengths and
+commands) that is usually done by the supplier. e.g. the Xilinx .bsd files are
+all included in their free web-pack.
+
+Urjtag uses a different file format internally. So in order to add a new device
+to UrJTAG you need to convert those files and produce a directory structure.
+Currently there are at least three tools available to do that. Please ask on
+the mailing list in case of problems with that. Please also send proven working
+files back to this project. 
+
+==== SVF files ====
+
+The svf file format contains a number of high level commands to drive the jtag
+bus. For example you can shift the IR or DR and even check for the results.
+The Xilinxs impact tool allows you to write this file to program devices.
+
+//------------------------------------------------------------------------
+
+=== UrJTAG ===
+
+==== Introduction ====
+
+UrJTAG Tools is a software package which enables working with JTAG-aware (IEEE
+1149.1) hardware devices (parts) and boards through JTAG adapter.
+
+This package has open and modular architecture with ability to write
+miscellaneous extensions (like board testers, flash memory programmers, and so
+on).
+
+JTAG Tools package is free software, covered by the GNU General Public License,
+and you are welcome to change it and/or distribute copies of it under certain
+conditions. There is absolutely no warranty for JTAG Tools.  Please read
+COPYING file for more info.
+
+WARNING: This software may damage your hardware!
+
+Feedback and contributions are welcome.
+
+==== UrJTAG Website ====
+
+The most current version of this documentation and UrJTAG sourcecode 
+is always available from the project page at Sourceforge,
+http://urjtag.sourceforge.net
+
+==== The name "UrJTAG" ====
+
+I (Kolja)  favour short names, so I thought about adding only a few
+letters to "JTAG". The prefix "Ur" in German means "ancestral", an "Ur-Vater"
+is a forefather. UrJTAG shall become the forefather, the basis for many other
+JTAG tools.
+
+==== Authors, contributors, ... thanks ====
+
+A list of contributors is maintained in the file THANKS in the source
+distribution.
+
+==== UrJTAG and openwince JTAG Tools ====
+
+The JTAG Tools originally were developed by Marcel Telka as part of
+the openwince project. Still a large portion of the source code is his work.
+However, the last release of the JTAG tools was version 0.5.1 in 2003. After a
+few years the development completely stalled. Every few months or so on the
+project's mailing list someone asked about continuing, but a critical mass
+wasn't reached before late 2007. A fork of the JTAG tools was created under the
+wings of the UrJTAG project at Sourceforge.
+
+//------------------------------------------------------------------------
+
+=== System requirements ====
+//Copied from original README
+
+==== Supported host operating systems ====
+
+JTAG Tools should run on all Unix like operating systems including MS Windows
+with Cygwin installed.
+
+==== Required software for running UrJTAG ====
+
+Required only for MS Windows:
+
+ * current Cygwin net installation from http://cygwin.com
+ * ioperm package (a part of the standard Cygwin net installation)
+
+Required for all systems:
+
+ * readline (it is probably a standard part of your distribution)
+
+More software is needed if you want to compile UrJTAG (which you probably want
+because currently no pre-compiled binaries are avaible...). See "Installation"
+below. 
+
+==== Supported JTAG adapters/cables ====
+
+See 'help cable' command for up-to-date info.
+
+ * Arcom JTAG Cable
+ * Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable
+ * Xilinx DLC5 JTAG Parallel Cable III
+ * ETC EA253 JTAG Cable
+ * ETC EI012 JTAG Cable
+ * Keith &amp; Koep JTAG Cable
+ * Lattice Parallel Port JTAG Cable
+ * Mpcbdm JTAG Cable
+ * Ka-Ro TRITON (PXA255/250) JTAG Cable
+ * Macraigor Wiggler JTAG Cable
+
+==== JTAG-aware parts (chips) ====
+
+The data/ directory of the UrJTAG installation has some more, but at
+least the following are supported:
+
+ * Altera EP1C20F400
+ * Altera EPM7128AETC100
+ * Analog Devices Sharc-21065L
+ * Atmel ATmega128 (partial support)
+ * Broadcom BCM1250
+ * Broadcom BCM3310 (partial support)
+ * Broadcom BCM5421S
+ * Broadcom BCM4712 (partial support)
+ * DEC SA1100
+ * Hitachi HD64465
+ * Hitachi SH7727
+ * Hitachi SH7729
+ * IBM PowerPC 440GX
+ * Intel IXP425
+ * Intel SA1110
+ * Intel PXA250/PXA255/PXA260/PXA261/PXA262/PXA263
+ * Lattice LC4032V
+ * Lattice M4A3-64/32
+ * Lattice M4A3-256/192
+ * Motorola MPC8245
+ * Samsung S3C4510B
+ * Sharp LH7A400
+ * Toshiba TX4925/TX4926
+ * Xilinx XC2C256-TQ144
+ * Xilinx XCR3032XL-VQ44
+ * Xilinx XCR3128XL-CS144
+ * Xilinx XCR3128XL-VQ100
+ * Xilinx XCR3256XL-FT256
+
+==== Flash chips ====
+
+NOTE: Not all chips are supported in every possible configuration, there may
+be untested combinations of chip type, bus width, ...
+
+ * Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)</para></listitem>
+ * Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)</para></listitem>
+ * Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)</para></listitem>
+ * AMD Am29LV64xD (Am29LV640D, Am29LV641D, Am29LV642D)</para></listitem>
+ * AMD Am29xx040B (Am29F040B, Am29LV040B)</para></listitem>
+
+//------------------------------------------------------------------------
+
+=== Installation ===
+
+==== Required software for compiling UrJTAG ====
+
+To run autogen.sh, you need autoconf and automake. Furthermore, libtool should
+be available. And if you plan to use any USB adapter with Linux, libusb-dev and
+probably libftdi-dev are a good choice (that are Debian package names; other
+distributions certainly have similar packages).
+
+==== Installing from source tar.gz ====
+
+The installation follows the standard configure, make, make install scheme:
+
+  tar xzvf urjtag.tar.gz
+  cd ../jtag
+  ./configure
+  make
+  make install
+
+==== Installing from Suvbersion repository ====
+
+If you want to try the very newest version of UrJTAG...
+
+  svn co http://urjtag.svn.sourceforge.net/svnroot/urjtag/trunk urjtag
+
+  cd urjtag/jtag ./autogen.sh
+  # ./configure is run by autogen.sh
+  make
+  make install
+
+//=========================================================================
+
+== Usage ==
+
+=== Quick start ===
+//Contributed by Ralf Engels
+
+==== Run the software ====
+
+Connect your JTAG adapter between your PC and target device and turn
+on your device.
+
+To run JTAG Tools type "jtag" and press Enter. jtag should start and
+display some initial informations. Output should end with line like this:
+
+  This is "jtag command prompt". Type "help" and press Enter for initial help
+  about available commands. To exit JTAG Tools type "quit" and press Enter.
+
+==== Configure the cable ====
+
+Type "help cable" for list of supported JTAG cables.
+
+Type "cable" command with arguments. Example:
+
+  jtag> cable parallel 0x378 EA253
+  Initializing ETC EA253 JTAG Cable on parallel port at 0x378
+
+==== Detect parts on the JTAG chain ====
+
+Type "detect" at the jtag command prompt:
+
+  jtag> detect
+
+Your output should look like this:
+
+  IR length: 5
+  Chain length: 1
+  Device Id: 01011001001001100100000000010011
+    Manufacturer: Intel
+    Part:         PXA250
+    Stepping:     C0
+    Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
+
+If you get empty output or an error message your JTAG adapter is not connected
+properly, or your target board doesn't work, or it is turned off.
+
+The "detect" command is required before all other commands.
+
+==== Print current JTAG chain status ====
+
+  jtag> print chain
+   No. Manufacturer Part   Stepping Instruction Register
+  ---------------------------------------------------------
+     0 Intel        PXA250 C0       BYPASS      BR
+
+==== Sample device pin status ====
+
+  jtag> instruction SAMPLE/PRELOAD
+  jtag> shift ir
+  jtag> shift dr
+  jtag> dr
+  1000110010000010000110010111111111111111111001101110...
+  jtag> print chain
+   No. Manufacturer Part   Stepping Instruction    Register
+  ------------------------------------------------------------
+     0 Intel        PXA250 C0       SAMPLE/PRELOAD BSR
+  jtag> get signal BOOT_SEL[0]
+  BOOT_SEL[0] = 0
+  jtag>
+
+  Note: BSR is "Boundary Scan Register"
+
+==== Burn flash connected to the part ====
+
+  jtag> flashmem 0 brux.b
+  0x00000000
+  Note: Supported configuration is 2 x 16 bit only
+  BOOT_SEL: Asynchronous 32-bit ROM
+
+  2 x 16 bit CFI devices detected (QRY ok)!
+
+  program:
+  block 0 unlocked
+  erasing block 0: 0
+  addr: 0x00002854
+  verify:
+  addr: 0x00002854
+  Done.
+  jtag>
+
+or:
+
+  jtag> flashmem msbin xboot.bin
+  Note: Supported configuration is 2 x 16 bit only
+  BOOT_SEL: Asynchronous 32-bit ROM
+
+  2 x 16 bit CFI devices detected (QRY ok)!
+
+  block 0 unlocked
+  erasing block 0: 0
+  program:
+  record: start = 0x00000000, len = 0x00000004, checksum = 0x000001EB
+  record: start = 0x00000040, len = 0x00000008, checksum = 0x000001B0
+  record: start = 0x00001000, len = 0x00002B30, checksum = 0x00122CAB
+  record: start = 0x00004000, len = 0x00000160, checksum = 0x0000684B
+  record: start = 0x00005000, len = 0x00000054, checksum = 0x000008EE
+  record: start = 0x00005054, len = 0x00000030, checksum = 0x00000DA9
+  record: start = 0x00000000, len = 0x00001000, checksum = 0x00000000
+
+  verify:
+  record: start = 0x00000000, len = 0x00000004, checksum = 0x000001EB
+  record: start = 0x00000040, len = 0x00000008, checksum = 0x000001B0
+  record: start = 0x00001000, len = 0x00002B30, checksum = 0x00122CAB
+  record: start = 0x00004000, len = 0x00000160, checksum = 0x0000684B
+  record: start = 0x00005000, len = 0x00000054, checksum = 0x000008EE
+  record: start = 0x00005054, len = 0x00000030, checksum = 0x00000DA9
+  record: start = 0x00000000, len = 0x00001000, checksum = 0x00000000
+
+  Done.
+  jtag>
+
+//------------------------------------------------------------------------
+
+=== JTAG commands ===
+
+==== Overview ====
+
+Following is a list of commands currently supported by jtag and some
+example usage.
+
+*bit*:: 	define new BSR bit
+*bus*:: 	change active bus
+*cable*:: 	select JTAG cable
+*detect*:: 	detect parts on the JTAG chain
+*detectflash*:: 	detect parameters of flash chips attached to a part
+*discovery*:: 	discovery of unknown parts in the JTAG chain
+*dr*:: 	display active data register for a part
+*endian*:: 	set/print endianess
+*eraseflash*:: 	erase flash memory by number of blocks
+*flashmem*:: 	burn flash memory with data from a file
+*frequency*:: 	setup JTAG frequency
+*get*:: 	get external signal value
+*help*:: 	display this help
+*include*:: 	include command sequence from external repository
+*initbus*:: 	initialize bus driver for active part
+*instruction*:: change active instruction for a part or declare new instruction
+*part*:: 	change active part for current JTAG chain
+*peek*:: 	read a single word
+*poke*:: 	write a single word
+*print*:: 	display JTAG chain list/status
+*quit*:: 	exit and terminate this session
+*readmem*:: 	read content of the memory and write it to file
+*register*:: 	define new data register for a part
+*script*:: 	run command sequence from external file
+*set*:: 	set external signal value
+*shift*:: 	shift data/instruction registers through JTAG chain
+*signal*:: 	define new signal for a part
+*svf*:: 	execute svf commands from file
+
+==== Basic commands ====
+
+===== quit =====
+
+This command closes the jtag console.
+
+===== help ====
+
+Without additional parameter it gives an overview of the available commands.
+With a parameter you can get more information about any of the commands.
+Example:
+
+  jtag> help cable
+
+==== Part definition commands ====
+
+The following commands are also used in the data files to define a device (IC)
+on the jtag bus. It is not recommended to use these commands in an interactive
+session. Instead you should produce a device definition file out of a .bsd file
+using one of the supplied tools.
+
+ * bit
+ * register 
+ * signal
+
+==== Flash commands ====
+
+These commands can be used if the device supports flashing.
+
+ * detectflash
+ * flashmem
+ * eraseflash
+
+==== Chain management ====
+
+===== cable =====
+
+Sets and initialized the cable driver. This is usually the first
+command that you are executing in a session. Example:
+
+  jtag> cable EA253 parallel 0x378
+  Initializing ETC EA253 JTAG Cable on parallel port at 0x378
+
+For a parallel cable using the ppdev driver you would use this:
+
+  jtag> cable DLC5 ppdev /dev/parport0
+
+If you get an error, it may be that the parallel port kernel driver
+was compiled as a module in your Linux kernel and wasn't loaded automatically.
+Then you should try to load the ppdev driver manually (with root rights outside
+the jtag shell):
+
+  modprobe ppdev
+  modprobe parport
+  modprobe parport_pc
+
+===== detect =====
+
+Detects devices on the bus. Example:
+
+  jtag> detect
+  IR length: 5
+  Chain length: 1
+  Device Id: 01011001001001100100000000010011
+    Manufacturer: Intel
+    Part:         PXA250
+    Stepping:     C0
+    Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
+
+//========================================================================
+
+== Internals ==
+
+This section yet is only a placeholder for the information that will
+be added soon...
+
+=== Files ===
+
+==== Source code Overview ====
+
+  data/
+
+  include/
+  inclow/
+
+  libbrux/
+    cmd/
+    flash/
+
+  src/
+    bus/
+    cmd/
+    lib/
+    tap/
+    svf/
+
+==== Data file format ====
+//By Marcel Telka
+
+JTAG declarations files are located in directory <filename>data</filename>. The
+files contains common part specific JTAG information in parseable form, e.g.
+list of the JTAG commands, boundary scan register, list of JTAG registers, etc.
+
+Syntax of the JTAG declaration file is defined in the following subsections.
+
+===== General rules =====
+<para>
+JTAG declaration file is text file which consists of lines. Empty lines are
+ignored. Text after first <constant>#</constant> on the line to the end of line
+is ignored. This is useful for comments.  All other lines are significant.
+
+Each significant line consists of tokens separated by whitespace. Whitespace
+could be spaces and/or tabs.
+
+===== Signal Definition =====
+
+Signal definition line consists of word <constant>signal</constant> followed by
+whitespace and signal name (without spaces in the name). Rest of the line
+should contain whitespace separated list of pins of the part. This list is
+currently not used for any purpose in JTAG Tools. It is intended for future
+use.  
+
+//------------------------------------------------------------------------
+
+=== Drivers ===
+
+ * Parport drivers
+ * Cable drivers
+ * TAP drivers
+ * Chain drivers
+ * Bus drivers
+ * Flash drivers
+ * Commands
+
+//------------------------------------------------------------------------
+
+=== Development ===
+
+==== Future Plans ====
+
+- C API and library package
+- Bindings for Python, Perl, ...
+- TCP/IP access
+- New cable drivers
+- ...
+
+==== How to contribute ====
+
+ * Using Subversion
+ * Create and submit a patch
+ * Use SourceForge trackers
+
+
+//========================================================================
+
+== F.A.Q. ==
+
+Q. When I type "cable parallel 0x378 DLC5" on Windows XP I get "Error: Cable initialization failed!". Where is the problem?::
+
+  A. Please install ioperm.sys driver using `ioperm -i` command.
+
+Q. When running autogen.sh, I get "Can't exec "autopoint": No such file or directory"::
+  A. You need the headers for gettext (e.g. Debian package "gettext-devel").
+
+Q. During compilation, I get "svf_bison.y: No such file or directory"::
+  A. You need "bison".
+
+Q. During compilation, I get "flex: can't open ... src/svf/svf_flex.l"::
+  A. You need "flex"
+
+Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option: bison-locations"::
+  A. You need a newer version of flex. It should be 2.5.31 or newer;
+    Unfortunately, Cygwin comes with only 2.5.4a. You may try to compile and
+    install a newer version of flex from source to solve this.
+
+//========================================================================
+
