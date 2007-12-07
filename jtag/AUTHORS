@@ -1,1 +1,4 @@
-Marcel Telka <marcel@telka.sk>
+Arnim Läuger <arniml@users.sourceforge.net>, Kolja Waschk <kawk>
+
+A major part of the sourcecode of UrJTAG 0.6 comes from the openwince JTAG
+Tools which are written by Marcel Telka <marcel@telka.sk>.

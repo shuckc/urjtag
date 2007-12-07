@@ -1,3 +1,12 @@
+2007-12-07  Kolja Waschk <kawk>
+
+	* README: All info moved to doc/UrJTAG.txt
+	* README_21065L: Merged into doc/UrJTAG.txt
+	* doc/UrJTAG.xml, UrJTAG.txt: converted DocBook to asciidoc
+	* COPYING: GPLv2 added
+	* AUTHORS: Updated
+    * TODO: removed (we're using SourceForge trackers)
+
 2007-12-06  Kolja Waschk <kawk>
 
 	* ChangeLog: Import SVN commit messages from past month 
