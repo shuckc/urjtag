@@ -33,6 +33,7 @@ noinst_LIBRARIES = libsvf.a
 libsvf_a_SOURCES = \
 	svf_bison.y \
 	svf_flex.l \
+	svf.h \
 	svf.c
 
 CLEANFILES = \

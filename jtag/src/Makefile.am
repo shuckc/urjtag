@@ -36,6 +36,7 @@ bin_PROGRAMS = \
 	bsdl2jtag
 
 jtag_SOURCES = \
+	version.awk \
 	jtag.c \
 	detect.c \
 	discovery.c \
