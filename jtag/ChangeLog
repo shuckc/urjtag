@@ -1,3 +1,10 @@
+2007-12-08  [819] Kolja Waschk <kawk>
+
+    * include/Makefile.am, src/Makefile.am, src/svf/Makefile.am
+	  configure.ac, libbrux/configure.ac: Mention more files to
+	  ensure that dist tar.gz is complete; prevent installation
+	  of inclow/ headers during "make install" on top level
+
 2007-12-07  Kolja Waschk <kawk>
 
 	* README: All info moved to doc/UrJTAG.txt
