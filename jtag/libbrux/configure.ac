@@ -46,23 +46,26 @@ AM_GNU_GETTEXT_VERSION(0.14.1)
 AC_PROG_CC
 AC_PROG_RANLIB
 
-AC_ARG_WITH(include,
-	AC_HELP_STRING([--with-include=PATH], [Path to the openwince includes]),
-	openwince_inc="$withval")
-
-AC_CACHE_CHECK([for the openwince includes], openwince_includes_path, [
-	openwince_includes_path="no"
-	for openwince_include in $openwince_inc /usr/include/openwince /usr/local/include/openwince; do
-		if test -f "$openwince_include/common.h"; then
-			openwince_includes_path="$openwince_include"
-			break
-		fi
-	done
-])
-if test "$openwince_includes_path" = "no"; then
-	AC_MSG_ERROR([The openwince include package not found.])
-fi
-CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device -I$openwince_includes_path/arm"
+#AC_ARG_WITH(include,
+#	AC_HELP_STRING([--with-include=PATH], [Path to the openwince includes]),
+#	openwince_inc="$withval")
+#
+#AC_CACHE_CHECK([for the openwince includes], openwince_includes_path, [
+#	openwince_includes_path="no"
+#	for openwince_include in $openwince_inc /usr/include/openwince /usr/local/include/openwince; do
+#		if test -f "$openwince_include/common.h"; then
+#			openwince_includes_path="$openwince_include"
+#			break
+#		fi
+#	done
+#])
+#if test "$openwince_includes_path" = "no"; then
+#	AC_MSG_ERROR([The openwince include package not found.])
+#fi
+#CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device -I$openwince_includes_path/arm"
+CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/../inclow"
+CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/../inclow/device"
+CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/../inclow/arm"
 
 CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/../include"

@@ -24,13 +24,16 @@
 include $(top_srcdir)/Makefile.rules
 
 SUBDIRS = \
-	inclow \
 	libbrux \
 	doc \
 	include \
 	data \
 	src \
 	po
+
+DIST_SUBDIRS = \
+	inclow \
+	$(SUBDIRS)
 
 noinst_HEADERS = \
 	sysdep.h
