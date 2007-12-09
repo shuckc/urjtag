@@ -3,6 +3,7 @@
     * configure.ac: Improve detection of flex version, get Subversion
           revision from 1. svn info, or 2. ChangeLog, or 3. Revision tag, 
 		  auto-detect whether -lrt is needed
+    * src/svf/svf_flex.l: derive HAVE_MODERN_FLEX internally
     * src/jtag.c: show version from config.h, compile without readline
     * src/version.awk: not needed; SVN info now available in config.h
     * src/Makefile.am: removed -lrt link and version.h target

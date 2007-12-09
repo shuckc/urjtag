@@ -28,9 +28,10 @@
  * Note: This lexer supports bison_locations if HAVE_MODERN_FLEX is
          defined. Apart from this, the option --bison-locations has
          to be specified on the command line.
-         Both the define and the command line option are controlled
-         by the configure script that enables this feature based on
-         the available version of flex.
+         The command line option is controlled by the configure
+         script that enables this feature based on the available
+         version of flex. The #define is derived below from the version
+         information that flex itself embeds in the *.c output.
  */
 
 
@@ -45,7 +46,17 @@
 static int map_keyw_ident(YYSTYPE *, char *);
 static void align_string(char *);
 
-/* autodetected by configure based on current flex version */
+#ifdef YY_FLEX_MAJOR_VERSION
+ #if (YY_FLEX_MAJOR_VERSION > 2) ||\
+     ((YY_FLEX_MAJOR_VERSION == 2) && ((YY_FLEX_MINOR_VERSION > 5) \
+        || ((YY_FLEX_MINOR_VERSION == 5) && (YY_FLEX_SUBMINOR_VERSION >= 31))))
+  #undef HAVE_MODERN_FLEX
+  #define HAVE_MODERN_FLEX 1
+ #else
+  #undef HAVE_MODERN_FLEX
+ #endif
+#endif
+
 #ifdef HAVE_MODERN_FLEX
 static void fix_yylloc(YYLTYPE *, char *);
 static void fix_yylloc_nl(YYLTYPE *, char *);

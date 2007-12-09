@@ -112,7 +112,6 @@ if test "$LEX" == flex ; then
    fi
 
    if test "$modern_flex" == yes ; then
-      AC_DEFINE([HAVE_MODERN_FLEX], 1, [Define if flex version is >= $flex_ref_version])
       AC_MSG_RESULT([yes - flex $flex_version])
       AM_CONDITIONAL([BISON_LOCATIONS], true)
    else
