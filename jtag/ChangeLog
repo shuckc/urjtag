@@ -1,5 +1,6 @@
 2007-12-09  [822] Kolja Waschk <kawk>
 
+    * src/jtag.c: show version from config.h, compile without readline
     * configure.ac: Improve detection of flex version, get Subversion
           revision from 1. svn info, or 2. ChangeLog, or 3. Revision tag
     * src/version.awk: not needed anymore as SVN info is now put into

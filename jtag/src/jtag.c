@@ -35,9 +35,9 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#ifdef HAVE_READLINE
+#ifdef HAVE_LIBREADLINE
 #include <readline/readline.h>
-#ifdef HAVE_READLINE_HISTORY
+#ifdef HAVE_READLINE_HISTORY_H
 #include <readline/history.h>
 #endif
 #endif
@@ -96,6 +96,7 @@ jtag_create_jtagdir( void )
 	free( jdir );
 }
 
+#ifdef HAVE_LIBREADLINE
 #ifdef HAVE_READLINE_HISTORY
 						 
 static void
@@ -149,6 +150,7 @@ jtag_save_history( void )
 }
 
 #endif /* HAVE_READLINE_HISTORY */
+#endif
 
 static int
 jtag_parse_line( char *line )
@@ -223,6 +225,7 @@ static int jtag_readline_multiple_commands_support(char * line) /* multiple comm
 static void
 jtag_readline_loop( const char *prompt )
 {
+#ifdef HAVE_LIBREADLINE
 	char *line = NULL;
 
 	/* Iterate */
@@ -232,11 +235,23 @@ jtag_readline_loop( const char *prompt )
 		/* Read a line from the terminal */
 		line = readline( prompt );
 
+#ifdef HAVE_READLINE_HISTORY
 		/* Check if we actually got something */
 		if (line && (strlen( line ) > 0))
 			add_history( line );
+#endif
 	}
 	free( line );
+#else
+	char line[1024];
+	line[0] = 0;
+	do
+	{
+		printf("%s", prompt);
+		jtag_readline_multiple_commands_support( line );
+	}
+	while(fgets(line, 1023, stdin));
+#endif
 }
 
 static int
@@ -498,14 +513,18 @@ main( int argc, const char **argv )
 			free(s);
 		}
 
+#ifdef HAVE_READLINE_HISTORY
 		/* Load history */
 		jtag_load_history();
+#endif
 
 		/* main loop */
 		jtag_readline_loop( "jtag> " );
 
+#ifdef HAVE_READLINE_HISTORY
 		/* Save history */
 		jtag_save_history();
+#endif
 	}
 
 	cleanup();
