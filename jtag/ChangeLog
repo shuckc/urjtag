@@ -1,15 +1,14 @@
-2007-12-09  [822] Kolja Waschk <kawk>
+2007-12-09  Kolja Waschk <kawk>
 
-    * src/jtag.c: show version from config.h, compile without readline
     * configure.ac: Improve detection of flex version, get Subversion
-          revision from 1. svn info, or 2. ChangeLog, or 3. Revision tag
-    * src/version.awk: not needed anymore as SVN info is now put into
-          config.h by configure.
-    * src/Makefile.am: removed -lrt link (not available on Cygwin, need
-          more checks whether it is needed elsewhere); no version.h target
-    * doc/UrJTAG.txt: Added info about required libraries and ioperm
+          revision from 1. svn info, or 2. ChangeLog, or 3. Revision tag, 
+		  auto-detect whether -lrt is needed
+    * src/jtag.c: show version from config.h, compile without readline
+    * src/version.awk: not needed; SVN info now available in config.h
+    * src/Makefile.am: removed -lrt link and version.h target
+    * doc/UrJTAG.txt: Added info about libraries, ioperm, "setdevice" cmd
 
-2007-12-08  [819] Kolja Waschk <kawk>
+2007-12-08  Kolja Waschk <kawk>
 
     * include/Makefile.am, src/Makefile.am, src/svf/Makefile.am
 	  configure.ac, libbrux/configure.ac: Mention more files to
