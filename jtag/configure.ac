@@ -32,12 +32,13 @@ dnl get svn revision
 SVN=`which svn`
 if test -n "$SVN" -a -x "$SVN"; then
     SVN_REVISION=`LC_ALL=C svn info | awk '/^Revision: / {printf "%d\n", $2}'`
-else if test -e "ChangeLog"; then
-    SVN_REVISION=`cat ChangeLog | awk '/^Revision: / {printf "%d\n", $2}'`
-else
-    SVN_REVISION=`echo '$Revision$' | awk '/^Revision: / {printf "%d\n", $2}'`
-fi fi
-
+fi
+if test -z "$SVN_REVISION" -a -e "ChangeLog"; then
+    SVN_REVISION=`cat ChangeLog | awk '/Revision: / {printf "%d\n", $2}'`
+fi
+if test -z "$SVN_REVISION" ; then
+    SVN_REVISION=0
+fi
 AC_DEFINE_UNQUOTED([SVN_REVISION], "$SVN_REVISION", [subversion revision number])
 AC_SUBST([SVN_REVISION])
 
