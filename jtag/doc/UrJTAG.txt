@@ -151,6 +151,9 @@ Required only for MS Windows:
  * current Cygwin net installation from http://cygwin.com
  * ioperm package (a part of the standard Cygwin net installation)
 
+It may be necessary to run the command "ioperm -i" to install the IOPERM.SYS
+driver in the system.
+
 Required for all systems:
 
  * readline (it is probably a standard part of your distribution)
@@ -225,10 +228,25 @@ be untested combinations of chip type, bus width, ...
 
 ==== Required software for compiling UrJTAG ====
 
-To run autogen.sh, you need autoconf and automake. Furthermore, libtool should
-be available. And if you plan to use any USB adapter with Linux, libusb-dev and
-probably libftdi-dev are a good choice (that are Debian package names; other
-distributions certainly have similar packages).
+To run autogen.sh, you need autoconf and automake, bison, and a recent flex.
+Flex 2.5.4a as it comes with Cygwin will work but some parts of UrJTAG (namely
+the SVF player) become more verbose if Flex 2.5.31 or newer is used.
+
+Furthermore, libtool should be available, and "devel" versions of the following
+packages:
+
+ * gettext
+ * readline
+
+If you plan to use any USB adapter with Linux, libusb-dev and probably
+libftdi-dev are a good choice (that are Debian package names; other
+distributions certainly have similar packages). On Windows, the FTDI
+FTD2XX library should work:
+
+ * http://libusb.sourceforge.net (libusb)
+ * http://libusb-win32.sourceforge.net (libusb for Windows)
+ * http://www.intra2net.com/de/produkte/opensource/ftdi/ (libftdi)
+ * http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
 
 ==== Installing from source tar.gz ====
 
@@ -275,7 +293,7 @@ Type "help cable" for list of supported JTAG cables.
 
 Type "cable" command with arguments. Example:
 
-  jtag> cable parallel 0x378 EA253
+  jtag> cable EA253 parallel 0x378
   Initializing ETC EA253 JTAG Cable on parallel port at 0x378
 
 ==== Detect parts on the JTAG chain ====
