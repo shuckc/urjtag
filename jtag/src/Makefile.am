@@ -68,10 +68,5 @@ jtag_LDADD = \
 	-lm \
 	@LIBINTL@
 
-# Removed -lrt (added in 704 for busy loop waiting; not
-# available in Cygwin. not needed? If you re-add -lrt here
-# please consider to add checks in configure.ac whether
-# it is avaiable and really needed
-
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"
