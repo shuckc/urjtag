@@ -21,11 +21,25 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
 #
 
-AC_INIT(JTAG Tools,0.6,,jtag)
+AC_INIT(UrJTAG,0.6,,urjtag)
 
 AC_PREREQ(2.54)
 AC_COPYRIGHT([Copyright (C) 2002, 2003 ETC s.r.o.])
 AC_REVISION($Revision$)
+
+# Get SVN Revision - idea from xfce-power-manager (C) 2007 by B.Tarricone
+dnl get svn revision
+SVN=`which svn`
+if test -n "$SVN" -a -x "$SVN"; then
+    SVN_REVISION=`LC_ALL=C svn info | awk '/^Revision: / {printf "%d\n", $2}'`
+else if test -e "ChangeLog"; then
+    SVN_REVISION=`cat ChangeLog | awk '/^Revision: / {printf "%d\n", $2}'`
+else
+    SVN_REVISION=`echo '$Revision$' | awk '/^Revision: / {printf "%d\n", $2}'`
+fi fi
+
+AC_DEFINE_UNQUOTED([SVN_REVISION], "$SVN_REVISION", [subversion revision number])
+AC_SUBST([SVN_REVISION])
 
 AC_CONFIG_AUX_DIR(tools)
 
@@ -74,6 +88,10 @@ if test "$LEX" == flex ; then
 
    modern_flex=no
    flex_version=`$LEX --version | $AWK '{print $2}'`
+   if test "$flex_version" == "version" ; then
+       flex_version=`$LEX --version | $AWK '{print $3}'`
+   fi
+
    flex_v1=`echo $flex_version | $AWK -F . '{print $1}' | $SED -e 's/[a-zA-Z]//g'`
    flex_v2=`echo $flex_version | $AWK -F . '{print $2}' | $SED -e 's/[a-zA-Z]//g'`
    flex_v3=`echo $flex_version | $AWK -F . '{print $3}' | $SED -e 's/[a-zA-Z]//g'`
@@ -100,6 +118,8 @@ if test "$LEX" == flex ; then
       AC_MSG_RESULT([no - flex $flex_version])
       AM_CONDITIONAL([BISON_LOCATIONS], false)
    fi
+else
+   AM_CONDITIONAL([BISON_LOCATIONS], false)
 fi
 
 AC_CONFIG_SUBDIRS(libbrux)

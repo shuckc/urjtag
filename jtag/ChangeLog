@@ -1,3 +1,13 @@
+2007-12-09  [822] Kolja Waschk <kawk>
+
+    * configure.ac: Improve detection of flex version, get Subversion
+          revision from 1. svn info, or 2. ChangeLog, or 3. Revision tag
+    * src/version.awk: not needed anymore as SVN info is now put into
+          config.h by configure.
+    * src/Makefile.am: removed -lrt link (not available on Cygwin, need
+          more checks whether it is needed elsewhere); no version.h target
+    * doc/UrJTAG.txt: Added info about required libraries and ioperm
+
 2007-12-08  [819] Kolja Waschk <kawk>
 
     * include/Makefile.am, src/Makefile.am, src/svf/Makefile.am

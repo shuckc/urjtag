@@ -24,7 +24,10 @@
  */
 
 #include "sysdep.h"
-#include "version.h"
+
+#ifndef SVN_REVISION
+#define SVN_REVISION "0"
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,8 +35,12 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#ifdef HAVE_READLINE
 #include <readline/readline.h>
+#ifdef HAVE_READLINE_HISTORY
 #include <readline/history.h>
+#endif
+#endif
 #include <getopt.h>
 #ifdef ENABLE_NLS
 #include <locale.h>
@@ -88,6 +95,8 @@ jtag_create_jtagdir( void )
 
 	free( jdir );
 }
+
+#ifdef HAVE_READLINE_HISTORY
 						 
 static void
 jtag_load_history( void )
@@ -138,6 +147,8 @@ jtag_save_history( void )
 
 	free( file );
 }
+
+#endif /* HAVE_READLINE_HISTORY */
 
 static int
 jtag_parse_line( char *line )
@@ -367,7 +378,7 @@ main( int argc, const char **argv )
 	if (help)
 	{
 		/* Print help info and exit.  */
-		printf (_("%s\n"), PACKAGE_STRING);
+		printf (_("%s #%s\n"), PACKAGE_STRING, SVN_REVISION);
 		printf ("\n");
 
 		printf (_("Usage: %s [OPTION] [FILE]\n"), PACKAGE);
@@ -390,7 +401,7 @@ main( int argc, const char **argv )
 
 	if (version)
 	{
-		printf(_("%s\nCopyright (C) 2002, 2003 ETC s.r.o.\n"), PACKAGE_STRING);
+		printf(_("%s #%s\nCopyright (C) 2002, 2003 ETC s.r.o.\n"), PACKAGE_STRING, SVN_REVISION);
 		printf(_("\n"
 		"This program is free software; you can redistribute it and/or modify\n"
 		"it under the terms of the GNU General Public License as published by\n"
@@ -446,11 +457,11 @@ main( int argc, const char **argv )
 
 	/* interactive */
 	printf(
-			_("%s Build %s\n"
+			_("%s #%s\n"
 			"Copyright (C) 2002, 2003 ETC s.r.o.\n"
 			"%s is free software, covered by the GNU General Public License, and you are\n"
 			"welcome to change it and/or distribute copies of it under certain conditions.\n"
-			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, URJTAG_BUILD_NUMBER,
+			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, SVN_REVISION,
 			PACKAGE_NAME, PACKAGE_NAME
 	);
 

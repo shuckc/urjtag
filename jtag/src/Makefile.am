@@ -65,15 +65,13 @@ jtag_LDADD = \
 	-L../libbrux -lbrux \
 	-Lbus -lbus \
 	-Lsvf -lsvf \
-	-lrt \
 	-lm \
 	@LIBINTL@
 
-nodist_jtag_SOURCES = version.h
-BUILT_SOURCES = version.h
-CLEANFILES = version.h
-version.h: ../ChangeLog version.awk
-	$(AWK) -f version.awk $< > $@
+# Removed -lrt (added in 704 for busy loop waiting; not
+# available in Cygwin. not needed? If you re-add -lrt here
+# please consider to add checks in configure.ac whether
+# it is avaiable and really needed
 
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"
