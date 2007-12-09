@@ -424,6 +424,7 @@ example usage.
 *register*:: 	define new data register for a part
 *script*:: 	run command sequence from external file
 *set*:: 	set external signal value
+*setdevice*::: force device detection
 *shift*:: 	shift data/instruction registers through JTAG chain
 *signal*:: 	define new signal for a part
 *svf*:: 	execute svf commands from file
@@ -496,6 +497,19 @@ Detects devices on the bus. Example:
     Part:         PXA250
     Stepping:     C0
     Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
+
+===== setdevice =====
+//From README_21065L
+
+This command is currently only there to support the SHARC 21065L processor,
+which has no IDCODE.
+
+In jtag prompt type command "setdevice sharc21065L", now the mode changes to
+SHARC 21065L specific. Note that this mode works only with SHARC 21065L
+processor. If you want to try another device, please restart the JTAG tool.
+
+  jtag> setdevice sharc21065L
+  Device is set to SHARC 21065L
 
 //========================================================================
 
@@ -579,7 +593,6 @@ use.
  * Using Subversion
  * Create and submit a patch
  * Use SourceForge trackers
-
 
 //========================================================================
 
