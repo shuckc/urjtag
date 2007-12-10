@@ -136,7 +136,7 @@ wings of the UrJTAG project at Sourceforge.
 
 //------------------------------------------------------------------------
 
-=== System requirements ====
+=== System requirements ===
 //Copied from original README
 
 ==== Supported host operating systems ====
@@ -435,7 +435,7 @@ example usage.
 
 This command closes the jtag console.
 
-===== help ====
+===== help =====
 
 Without additional parameter it gives an overview of the available commands.
 With a parameter you can get more information about any of the commands.
