@@ -1,3 +1,8 @@
+2007-12-12  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* data/Makefile.am (nobase_dist_pkgdata_DATA): add missing '\', fixes
+	  [ 1849477 ] Missing \ in data/Makefile.ac
+
 2007-12-09  Kolja Waschk <kawk>
 
     * configure.ac: Improve detection of flex version, get Subversion
