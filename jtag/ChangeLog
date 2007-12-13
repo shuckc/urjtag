@@ -1,3 +1,7 @@
+2007-12-13  Kolja Waschk <kawk>
+
+    * configure.ac: Run "svn info" with "-R" to get latest revision
+
 2007-12-12  Arnim Laeuger  <arniml@users.sourceforge.net>
 
 	* data/Makefile.am (nobase_dist_pkgdata_DATA): add missing '\', fixes
