@@ -65,6 +65,7 @@ jtag_LDADD = \
 	-Lbus -lbus \
 	-Lsvf -lsvf \
 	-lm \
+	@FTD2XXLIB@ \
 	@LIBINTL@
 
 localedir = $(datadir)/locale

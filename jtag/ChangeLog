@@ -1,3 +1,10 @@
+2007-12-14  Kolja Waschk <kawk>
+
+    * README, doc/UrJTAG.txt: pointer to http://www.urjtag.org
+    * configure.ac, src/Makefile.am, src/tap/parport/ftd2xx.c:
+      Changes to allow linking against FTDI FTD2XX in Cygwin, initial
+      support for --with-(libftdi|libusb|ftd2xx) configure options
+
 2007-12-13  Kolja Waschk <kawk>
 
     * configure.ac: Run "svn info" with "-R" to get latest revision

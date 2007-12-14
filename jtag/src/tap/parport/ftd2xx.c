@@ -30,9 +30,13 @@
 #include "sysdep.h"
 
 #include <fcntl.h>
-#include <stropts.h>
 #include <unistd.h>
+#if __CYGWIN__
+#include <windows.h>
+#else
+#include <stropts.h>
 #include <linux/ioctl.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -207,9 +211,11 @@ ftd2xx_generic_open( parport_t *parport )
 	ftd2xx_params_t *p = parport->params;
 	FT_STATUS status;
 
+#if !__CYGWIN__
         /* Add non-standard Vid/Pid to the linux driver */
 	if ((status = FT_SetVIDPID(p->vendor_id, p->product_id)) != FT_OK)
 		fprintf( stderr, "Warning: couldn't add %4.4x:%4.4x", p->vendor_id, p->product_id );
+#endif
 
 	if ((status = FT_Open(0, &(p->fc))) != FT_OK) {
 		fprintf( stderr, "Error: unable to open FTDI device: %li\n", status);
