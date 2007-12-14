@@ -109,15 +109,15 @@ Feedback and contributions are welcome.
 ==== UrJTAG Website ====
 
 The most current version of this documentation and UrJTAG sourcecode 
-is always available from the project page at Sourceforge,
-http://urjtag.sourceforge.net
+is always available from the project homepage at http://www.urjtag.org
 
 ==== The name "UrJTAG" ====
 
 I (Kolja)  favour short names, so I thought about adding only a few
 letters to "JTAG". The prefix "Ur" in German means "ancestral", an "Ur-Vater"
-is a forefather. UrJTAG shall become the forefather, the basis for many other
-JTAG tools.
+is a forefather. UrJTAG shall become the forefather, the prototype for many
+other JTAG tools. By mere chance the "Ur" is also another name for an aurochs,
+an animal similar to the GNU...
 
 ==== Authors, contributors, ... thanks ====
 
@@ -258,7 +258,7 @@ The installation follows the standard configure, make, make install scheme:
   make
   make install
 
-==== Installing from Suvbersion repository ====
+==== Installing from Subversion repository ====
 
 If you want to try the very newest version of UrJTAG...
 
