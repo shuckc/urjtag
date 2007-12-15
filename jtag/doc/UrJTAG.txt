@@ -443,6 +443,24 @@ Example:
 
   jtag> help cable
 
+===== include =====
+
+Run commands from a named script file installed with UrJTAG. The directory prefix
+is added automatically (e.g. /usr/share/urjtag/, depending on your installation).
+For example, the following startup sequence configures the cable, chain, and loads
+definitions and bus driver for a Samsung S3C4510B CPU to peek its memory at 0x0:
+
+  jtag> cable wiggler ppdev /dev/parport0
+  jtag> detect
+  jtag> include samsung/s3c4510b/s3c4510b
+  jtag> peek 0x0000
+
+===== script =====
+
+Run commands from a named script file located anywhere. No directory prefix is added.
+A number X may be specified after the name of the script file, causing the script to
+be run X times.
+
 ==== Part definition commands ====
 
 The following commands are also used in the data files to define a device (IC)
