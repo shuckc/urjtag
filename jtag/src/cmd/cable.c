@@ -54,19 +54,17 @@ cmd_cable_run( char *params[] )
 	if (parport_drivers[i] != 0)
 	{
 		/* Old syntax was used. Swap params. */
-		char *tmparam;
 		printf( _("Note: the 'cable' command syntax changed, please read the help text\n") );
 		if (paramc >= 4)
 		{
+			char *tmparam;
 			tmparam = params[3];
 			params[3] = params[2];
+			params[2] = params[1];
+			params[1] = tmparam;
 		}
-		else if (paramc >= 3)
-		{
-			char *tmparam = params[2];
-		};
-		params[2] = params[1];
-		params[1] = tmparam;
+		else
+			return -1;
 	}
 
 	/* search cable driver list */
