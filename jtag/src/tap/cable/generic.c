@@ -130,14 +130,28 @@ generic_lptcable_help( char *cablename )
 	printf( _(
 		"Usage: cable %s parallel PORTADDR\n"
 #if HAVE_LINUX_PPDEV_H
-		"   or: cable %s ppdev DEV\n"
+		"   or: cable %s ppdev PPDEV\n"
+#endif
+#if HAVE_DEV_PPBUS_PPI_H
+		"   or: cable %s ppi PPIDEV\n"
 #endif
 		"\n"
 		"PORTADDR   parallel port address (e.g. 0x378)\n"
 #if HAVE_LINUX_PPDEV_H
-		"DEV        ppdev device (e.g. /dev/parport0)\n"
+		"PPDEF      ppdev device (e.g. /dev/parport0)\n"
+#endif
+#if HAVE_DEV_PPBUS_PPI_H
+		"PPIDEF     ppi device (e.g. /dev/ppi0)\n"
 #endif
 		"\n"
-	), cablename, cablename );
+	),
+#if HAVE_LINUX_PPDEV_H
+    cablename,
+#endif
+#if HAVE_DEV_PPBUS_PPI_H
+    cablename,
+#endif
+    cablename 
+    );
 }
 
