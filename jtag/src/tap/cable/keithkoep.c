@@ -120,5 +120,6 @@ cable_driver_t keithkoep_cable_driver = {
 	keithkoep_get_tdo,
 	generic_transfer,
 	keithkoep_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	generic_lptcable_help,
 };

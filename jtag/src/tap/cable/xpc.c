@@ -94,6 +94,18 @@ xpc_set_trst( cable_t *cable, int trst )
 	return 1;
 }
 
+void
+xpcu_usbcable_help(char *cablename)
+{
+	printf( _(
+		"Usage: cable %s xpcu VID:PID\n"
+		"\n"
+		"VID        vendor ID (hex, e.g. 9FB, or empty)\n"
+		"PID        product ID (hex, e.g. 6001, or empty)\n"
+		"\n"
+	), cablename );
+}
+
 cable_driver_t xpc_int_cable_driver = {
 	"xpc_int",
 	N_("Xilinx Platform Cable USB internal chain"),
@@ -106,8 +118,15 @@ cable_driver_t xpc_int_cable_driver = {
 	xpc_get_tdo,
 	generic_transfer,
 	xpc_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	xpcu_usbcable_help
 };
+
+void
+xpc_ext_usbcable_help()
+{
+	xpcu_usbcable_help("xpc_ext");
+}
 
 cable_driver_t xpc_ext_cable_driver = {
 	"xpc_ext",
@@ -121,6 +140,7 @@ cable_driver_t xpc_ext_cable_driver = {
 	xpc_get_tdo,
 	generic_transfer,
 	xpc_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	xpcu_usbcable_help
 };
 

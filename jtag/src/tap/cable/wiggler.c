@@ -135,6 +135,7 @@ cable_driver_t igloo_cable_driver = {
 	wiggler_get_tdo,
 	generic_transfer,
 	wiggler_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	generic_lptcable_help,
 };
 

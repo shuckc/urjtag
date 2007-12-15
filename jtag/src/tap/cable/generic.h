@@ -42,5 +42,6 @@ void generic_cable_free( cable_t *cable );
 void generic_done( cable_t *cable );
 int generic_transfer( cable_t *cable, int len, char *in, char *out );
 int generic_get_trst( cable_t *cable );
+void generic_lptcable_help( char *name );
 
 #endif /* GENERIC_H */

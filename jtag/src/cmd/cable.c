@@ -39,12 +39,35 @@
 static int
 cmd_cable_run( char *params[] )
 {
-	cable_t *cable = malloc( sizeof *cable );
+	cable_t *cable;
 	int i;
+	int paramc = cmd_params( params );
 
 	/* we need at least one parameter for 'cable' command */
-	if (cmd_params( params ) < 2)
-		return -1;
+	if (paramc < 2) return -1;
+
+	/* maybe old syntax was used?  search connection type driver */
+	for (i = 0; parport_drivers[i]; i++)
+		if (strcasecmp( params[1], parport_drivers[i]->type ) == 0)
+			break;
+
+	if (parport_drivers[i] != 0)
+	{
+		/* Old syntax was used. Swap params. */
+		char *tmparam;
+		printf( _("Note: the 'cable' command syntax changed, please read the help text\n") );
+		if (paramc >= 4)
+		{
+			tmparam = params[3];
+			params[3] = params[2];
+		}
+		else if (paramc >= 3)
+		{
+			char *tmparam = params[2];
+		};
+		params[2] = params[1];
+		params[1] = tmparam;
+	}
 
 	/* search cable driver list */
 	for (i = 0; cable_drivers[i]; i++)
@@ -55,12 +78,23 @@ cmd_cable_run( char *params[] )
 		return 1;
 	}
 
+	if (paramc >= 3)
+	{
+		if (strcasecmp( params[2], "help" ) == 0)
+		{
+			cable_drivers[i]->help(cable_drivers[i]->name);
+			return 1;
+		}
+	}
+
 	if (bus) {
 		bus_free( bus );
 		bus = NULL;
 	}
 
 	chain_disconnect( chain );
+
+	cable = malloc( sizeof(cable_t) );
 
 	if (!cable) {
 	  printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
@@ -99,6 +133,8 @@ cmd_cable_help( void )
 		"\n"
 		"DRIVER      name of cable\n"
 		"DRIVER_OPTS options for the selected cable\n"
+		"\n"
+		"Type \"cable DRIVER help\" for info about options for cable DRIVER.\n"
 		"\n"
 		"List of supported cables:\n"
 	), "cable" );

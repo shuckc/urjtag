@@ -466,6 +466,18 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 	return 0;
 }
 
+void
+ft2232_usbcable_help(char *cablename)
+{
+	printf( _(
+		"Usage: cable %s ftdi-mpsse VID:PID\n"
+		"\n"
+		"VID        vendor ID (hex, e.g. 9FB, or empty)\n"
+		"PID        product ID (hex, e.g. 6001, or empty)\n"
+		"\n"
+	), cablename );
+}
+
 cable_driver_t ft2232_cable_driver = {
 	"FT2232",
 	N_("Generic FTDI FT2232 Cable"),
@@ -478,7 +490,8 @@ cable_driver_t ft2232_cable_driver = {
 	ft2232_get_tdo,
 	ft2232_transfer,
 	ft2232_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	ft2232_usbcable_help
 };
 
 cable_driver_t ft2232_armusbocd_cable_driver = {
@@ -493,7 +506,8 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
 	ft2232_get_tdo,
 	ft2232_transfer,
 	ft2232_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	ft2232_usbcable_help
 };
 
 

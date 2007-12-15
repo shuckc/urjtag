@@ -113,5 +113,6 @@ cable_driver_t ei012_cable_driver = {
 	ei012_get_tdo,
 	generic_transfer,
 	ei012_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	generic_lptcable_help
 };

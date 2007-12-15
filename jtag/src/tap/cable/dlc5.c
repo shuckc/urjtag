@@ -108,5 +108,6 @@ cable_driver_t dlc5_cable_driver = {
 	dlc5_get_tdo,
 	generic_transfer,
 	dlc5_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	generic_lptcable_help
 };

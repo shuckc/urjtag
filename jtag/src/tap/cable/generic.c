@@ -123,3 +123,21 @@ generic_get_trst( cable_t *cable )
 {
 	return PARAM_TRST(cable);
 }
+
+void
+generic_lptcable_help( char *cablename )
+{
+	printf( _(
+		"Usage: cable %s parallel PORTADDR\n"
+#if HAVE_LINUX_PPDEV_H
+		"   or: cable %s ppdev DEV\n"
+#endif
+		"\n"
+		"PORTADDR   parallel port address (e.g. 0x378)\n"
+#if HAVE_LINUX_PPDEV_H
+		"DEV        ppdev device (e.g. /dev/parport0)\n"
+#endif
+		"\n"
+	), cablename, cablename );
+}
+

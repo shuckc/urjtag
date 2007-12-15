@@ -163,6 +163,18 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 	return 0;
 }
 
+void
+usbblaster_help(char *cablename)
+{
+	printf( _(
+		"Usage: cable %s ftdi VID:PID\n"
+		"\n"
+		"VID        vendor ID (hex, e.g. 9FB, or empty)\n"
+		"PID        product ID (hex, e.g. 6001, or empty)\n"
+		"\n"
+	), cablename );
+}
+
 cable_driver_t usbblaster_cable_driver = {
 	"UsbBlaster",
 	N_("Altera USB-Blaster Cable"),
@@ -175,5 +187,6 @@ cable_driver_t usbblaster_cable_driver = {
 	usbblaster_get_tdo,
 	usbblaster_transfer,
 	usbblaster_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	usbblaster_help,
 };
