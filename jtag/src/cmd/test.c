@@ -44,7 +44,7 @@ cmd_test_run( char *params[] )
 	if (cmd_params( params ) != 4)
 		return -1;
 
-	if (strcmp( params[1], "signal") != 0)
+	if (strcasecmp( params[1], "signal") != 0)
 		return -1;
 
 	if (!cmd_test_cable())

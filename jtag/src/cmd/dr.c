@@ -64,9 +64,9 @@ cmd_dr_run( char *params[] )
 	}
 
 	if (params[1]) {
-		if (strcmp( params[1], "in" ) == 0)
+		if (strcasecmp( params[1], "in" ) == 0)
 			dir = 0;
-		else if (strcmp( params[1], "out" ) == 0)
+		else if (strcasecmp( params[1], "out" ) == 0)
 			dir = 1;
 		else {
 			unsigned int bit;

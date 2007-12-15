@@ -38,7 +38,7 @@ static int cmd_setdevice_run( char *params[] )
 {
 	if(cmd_params(params) != 2)
 		return -1;
-	if (strcmp( params[1], "sharc21065L" ) == 0)
+	if (strcasecmp( params[1], "sharc21065L" ) == 0)
 	{
 #if 0
 		buses_free();

@@ -48,7 +48,7 @@ cmd_help_run( char *params[] )
 
 	/* search and print help for a particular command */
 	for (i = 0; cmds[i]; i++)
-		if (strcmp( cmds[i]->name, params[1] ) == 0) {
+		if (strcasecmp( cmds[i]->name, params[1] ) == 0) {
 			if (cmds[i]->help)
 				cmds[i]->help();
 			return 1;

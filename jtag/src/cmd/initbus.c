@@ -53,7 +53,7 @@ cmd_initbus_run( char *params[] )
 	}
 
 	for (i = 0; bus_drivers[i] != NULL; i++) {
-		if (strcmp( bus_drivers[i]->name, params[1] ) == 0) {
+		if (strcasecmp( bus_drivers[i]->name, params[1] ) == 0) {
 			bus_t *bus = bus_drivers[i]->new_bus();
 			if (bus == NULL) {
 				printf( _("bus initialization failed!\n") );

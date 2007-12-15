@@ -7,6 +7,10 @@
 	  patches from F. Rysanek, adding C5 stepping of PXA270 and a few
 	  few functions that resolve the PXA270 address space into the 6 
 	  default nCS windows per 64MB. (Enhancement req. 1849493)
+	* cmd/part.c, cmd/setdevice.c, cmd/instruction.c, cmd/svf.c,
+	  cmd/dr.c, cmd/initbus.c, cmd/test.c, part/part.c, libbrux/cmd/cmd.c,
+	  libbrux/cmd/help.c: Make command string comparisons case-insensitive
+	  (fixes 1845811 "Case sensitivity in shell")
 
 2007-12-14  Kolja Waschk <kawk>
 

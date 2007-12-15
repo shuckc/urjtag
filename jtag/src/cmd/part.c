@@ -68,7 +68,7 @@ part_t *part;
 
 		for(i=0;i<chain->parts->len;i++) {
 			a = chain->parts->parts[i]->alias;
-			if(a && strcmp(a,params[1]) == 0)break;
+			if(a && strcasecmp(a,params[1]) == 0)break;
 		}
 		if(i < chain->parts->len)n = i;
 

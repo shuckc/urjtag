@@ -150,14 +150,14 @@ part_find_signal( part_t *p, const char *signalname )
 
 	s = p->signals;
 	while (s) {
-		if (strcmp( signalname, s->name ) == 0)
+		if (strcasecmp( signalname, s->name ) == 0)
 			return s;
 		s = s->next;
 	}
 
 	sa = p->saliases;
 	while (sa) {
-		if (strcmp( signalname, sa->name ) == 0)
+		if (strcasecmp( signalname, sa->name ) == 0)
 			return sa->signal;
 		sa = sa->next;
 	}

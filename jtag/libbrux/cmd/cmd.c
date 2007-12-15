@@ -38,7 +38,7 @@ cmd_run( char *params[] )
 		return 1;
 
 	for (i = 0; cmds[i]; i++)
-		if (strcmp( cmds[i]->name, params[0] ) == 0) {
+		if (strcasecmp( cmds[i]->name, params[0] ) == 0) {
 			int r = cmds[i]->run( params );
 			if (r < 0)
 				printf( _("%s: syntax error!\n"), params[0] );

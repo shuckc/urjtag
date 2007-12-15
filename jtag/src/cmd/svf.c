@@ -42,7 +42,7 @@ cmd_svf_run( char *params[] )
 		if ((SVF_FILE = fopen(params[1], "r")) != NULL) {
 
 			if (num_params == 3) {
-				if (strcmp(params[2], "stop") == 0) {
+				if (strcasecmp(params[2], "stop") == 0) {
 					svf_run(SVF_FILE, 1);
 					result = 1;
 				}

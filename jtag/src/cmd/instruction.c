@@ -62,7 +62,7 @@ cmd_instruction_run( char *params[] )
 	if (cmd_params( params ) == 3) {
 		unsigned int len;
 
-		if (strcmp( params[1], "length" ) != 0)
+		if (strcasecmp( params[1], "length" ) != 0)
 			return -1;
 
 		if (part->instructions != NULL) {
