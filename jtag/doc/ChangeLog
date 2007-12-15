@@ -1,6 +1,18 @@
+2007-12-15  Kolja Waschk   <kawk>
+
+	* lgpl.txt, gpl.txt, fdl.txt: licenses as plain text files
+	* jtag.1, bsdl2jtag.1: manpages copied (with permission) from
+	  Debian openwince jtag package.
+	* Makefile.am: add new files
+
 2007-12-10  Arnim Laeuger  <arniml@users.sourceforge.net>
 
 	* UrJTAG.txt: Balancing of tags.
+
+2007-12-07  Kolja Waschk <kawk>
+
+    * UrJTAG.txt: New software manual, using asciidoc formatting
+    * internals.xml: merged into UrJTAG.txt.
 
 2003-09-15  Marcel Telka  <marcel@telka.sk>
 

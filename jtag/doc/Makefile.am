@@ -23,5 +23,14 @@
 
 include $(top_srcdir)/Makefile.rules
 
+man_MANS = jtag.1 bsdl2jtag.1
+
 EXTRA_DIST = \
-	internals.xml
+	gpl.txt \
+	lgpl.txt \
+	fdl.txt \
+	UrJTAG.txt \
+	README.ejtag \
+	howto_add_support_for_more_flash.txt \
+	$(man_MANS)
+
