@@ -1,5 +1,8 @@
 2007-12-15  Kolja Waschk <kawk>
 
+	* src/cmd/cable.c, include/cable.h, src/tap/cable/*.c: Add
+	  help function to every cable; temporarily allow old syntax
+	  for cable command when used for parallel port cables
 	* data/intel/pxa270/STEPPINGS, src/bus/pxa2x0.c: Integrated two
 	  patches from F. Rysanek, adding C5 stepping of PXA270 and a few
 	  few functions that resolve the PXA270 address space into the 6 
