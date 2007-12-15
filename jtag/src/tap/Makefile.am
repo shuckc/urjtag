@@ -33,6 +33,7 @@ libtap_a_SOURCES = \
 	parport.c \
 	parport/direct.c \
 	parport/ppdev.c \
+	parport/ppi.c \
 	cable.c \
 	cable/generic.h \
 	cable/generic.c \

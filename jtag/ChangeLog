@@ -1,5 +1,9 @@
 2007-12-15  Kolja Waschk <kawk>
 
+	* configure.ac, tap/parport/parport.c, tap/parport/ppi.c,
+	  tap/parport/direct.c: Adapted openwince patch by Daniel
+	  O'Connor, [1235990] Add support for FreeBSD's ppi interface
+	  (closes our copy of that tracker item, 1829585)
 	* src/cmd/cable.c, include/cable.h, src/tap/cable/*.c: Add
 	  help function to every cable; temporarily allow old syntax
 	  for cable command when used for parallel port cables

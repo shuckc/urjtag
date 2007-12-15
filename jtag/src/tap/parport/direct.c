@@ -46,6 +46,10 @@
 static __inline int
 ioperm( unsigned long from, unsigned long num, int permit )
 {
+#ifdef __FreeBSD__
+	if (i386_set_ioperm( from, num, permit ) == -1)
+		return -1;
+#else
 	u_long ports[32];
 	u_long i;
 
@@ -60,14 +64,17 @@ ioperm( unsigned long from, unsigned long num, int permit )
 
 	if (i386_set_ioperm( ports ) == -1)
 		return -1;
-
+#endif
 	return 0;
 }
 
 static __inline int
 iopl( int level )
 {
+#ifndef __FreeBSD__
 	return i386_iopl( level );
+#endif
+	return 0;
 }
 
 static __inline unsigned char

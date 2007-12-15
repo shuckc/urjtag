@@ -43,6 +43,9 @@ extern parport_driver_t ftdi_mpsse_parport_driver;
 #ifdef HAVE_LIBUSB
 extern parport_driver_t xpcu_pp_driver;
 #endif /* HAVE_LIBUSB */
+#ifdef HAVE_DEV_PPBUS_PPI_H
+extern parport_driver_t ppi_parport_driver;
+#endif /* HAVE_DEV_PPBUS_PPI_H */
 
 parport_driver_t *parport_drivers[] = {
 #if defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
@@ -62,8 +65,12 @@ parport_driver_t *parport_drivers[] = {
 #ifdef HAVE_LIBUSB
 	&xpcu_pp_driver,
 #endif /* HAVE_LIBUSB */
+#ifdef HAVE_DEV_PPBUS_PPI_H
+	&ppi_parport_driver,
+#endif /* HAVE_DEV_PPBUS_PPI_H */
 	NULL				/* last must be NULL */
 };
+
 
 int
 parport_open( parport_t *port )
