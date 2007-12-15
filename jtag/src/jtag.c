@@ -340,7 +340,7 @@ main( int argc, const char **argv )
 	
 	if(geteuid()==0 && getuid()!=0)
 	{
-		printf (_("'%s' must not be run suid root!\n"), PACKAGE);
+		printf (_("'%s' must not be run suid root!\n"), "jtag");
 		return(-1);
 	};
 
@@ -396,7 +396,7 @@ main( int argc, const char **argv )
 		printf (_("%s #%s\n"), PACKAGE_STRING, SVN_REVISION);
 		printf ("\n");
 
-		printf (_("Usage: %s [OPTION] [FILE]\n"), PACKAGE);
+		printf (_("Usage: %s [OPTION] [FILE]\n"), "jtag");
 		printf ("\n");
 
 		printf (_("  -h, --help          display this help and exit\n"));
@@ -409,7 +409,7 @@ main( int argc, const char **argv )
 		printf (_("  [FILE]              file containing commands to execute\n"));
 		printf ("\n");
 
-		printf (_("  Report bugs to <%s>.\n"), PACKAGE_BUGREPORT);
+		printf (_("  Please report bugs at http://www.urjtag.org\n"));
 
 		exit(0);
 	}

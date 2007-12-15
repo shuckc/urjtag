@@ -21,7 +21,7 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
 #
 
-AC_INIT(UrJTAG,0.6,,urjtag)
+AC_INIT(UrJTAG,0.6,http://www.urjtag.org,urjtag)
 
 AC_PREREQ(2.54)
 AC_COPYRIGHT([Copyright (C) 2002, 2003 ETC s.r.o.])
