@@ -1,3 +1,10 @@
+2007-12-15  Kolja Waschk <kawk>
+
+	* data/intel/pxa270/STEPPINGS, src/bus/pxa2x0.c: Integrated two
+	  patches from F. Rysanek, adding C5 stepping of PXA270 and a few
+	  few functions that resolve the PXA270 address space into the 6 
+	  default nCS windows per 64MB. (Enhancement req. 1849493)
+
 2007-12-14  Kolja Waschk <kawk>
 
     * README, doc/UrJTAG.txt: pointer to http://www.urjtag.org
