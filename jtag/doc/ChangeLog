@@ -1,8 +1,9 @@
 2007-12-15  Kolja Waschk   <kawk>
 
-	* lgpl.txt, gpl.txt, fdl.txt: licenses as plain text files
+	* fdl.txt, gpl.txt: licenses as plain text files
+	* lgpl.txt: Lesser GPL not in use (yet), removed
 	* jtag.1, bsdl2jtag.1: manpages copied (with permission) from
-	  Debian openwince jtag package.
+	  Debian openwince jtag package, then updated for UrJTAG.
 	* Makefile.am: add new files
 
 2007-12-10  Arnim Laeuger  <arniml@users.sourceforge.net>

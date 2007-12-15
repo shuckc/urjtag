@@ -1,23 +1,33 @@
 .\" Process this file with
 .\" groff -man -Tascii foo.1
 .\"
-.TH jtag 1 "OCTOBER 2003" Linux "User Manuals"
+.TH bsdl2jtag 1 "DECEMBER 2007" UrJTAG "User Manuals"
 .SH NAME
-jtag \- bsdl2jtag
+bsdl2jtag \- UrJTAG declaration file conversion
 .SH SYNOPSIS
-.B bsdl2jtag 
+.B bsdl2jtag
+<
+.I infile
+>
+.I outfile
 .SH DESCRIPTION
-.B bsdl2jtag converts bsdl files to jtag files which can be used by B jtag. .B bsdl2jtag reads from stdin and produces its output on stdout.
+.B bsdl2jtag
+converts bsdl files to jtag files which can be used by
+.BR jtag (1).
+.B bsdl2jtag
+reads from stdin and produces its output on stdout.
 .SH OPTIONS
-none
-.SH FILES
-none
+None.
 .SH BUGS
-Lots
-.SH AUTHOR
-Marcel Telka <marcel@telka.sk>
+Bugs are tracked at the project homepage, http://www.urjtag.org
 .SH "SEE ALSO"
 .BR jtag (1)
+.SH AUTHORS
+Authors and contributors are listed in the AUTHORS and THANKS files in
+the source documentation.
+.SH HISTORY
+JTAG Tools originally have been developed as part of the openwince project by
+Marcel Telka. The became an independent project named UrJTAG in late 2007.
 
 
 

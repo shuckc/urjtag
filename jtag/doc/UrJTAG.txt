@@ -618,3 +618,21 @@ Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option
 
 //========================================================================
 
+== Licensing ==
+
+=== Overview ===
+
+Three licenses are used for the UrJTAG project. The GPL is used for most
+of the code except for the files in the inclow/ subdirectory; the FDL is
+used for this documentation.  The files in the inclow/ subdirectory are
+subject to different licensing as described in the file inclow/COPYING.
+
+=== GNU Free Documentation License (FDL) ===
+.........................................
+include::fdl.txt[]
+.........................................
+=== GNU General Public License (GPL) ===
+.........................................
+include::gpl.txt[]
+.........................................
+
