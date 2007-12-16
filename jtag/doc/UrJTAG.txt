@@ -224,7 +224,7 @@ be untested combinations of chip type, bus width, ...
 
 //------------------------------------------------------------------------
 
-=== Installation ===
+=== Compilation and installation ===
 
 ==== Required software for compiling UrJTAG ====
 
@@ -238,15 +238,38 @@ packages:
  * gettext
  * readline
 
-If you plan to use any USB adapter with Linux, libusb-dev and probably
-libftdi-dev are a good choice (that are Debian package names; other
-distributions certainly have similar packages). On Windows, the FTDI
-FTD2XX library should work:
+==== Required libraries for USB support ====
+
+For USB adapter support (including support for parallel port adapters attached
+to USB-to-parallel converters), one or more additional libraries are required.
+
+Many USB JTAG adapters and USB-to-parallel converters are based on chips
+made by FTDI. To support these, either intra.net's "libftdi" or FTDI's 
+"FTD2XX" library can be used.
+
+On many modern Linux distributions, libftdi is available as a precompiled
+package and can be installed using the distribution's package management system
+(e.g. "apt-get libftdi-dev" for Debian and Ubuntu). If it isn't available or
+you don't run Linux, you can get it from
+
+ * http://www.intra2net.com/de/produkte/opensource/ftdi/ 
+
+Alternatively, you can use the FTD2XX library from the chip manufacturer FTDI.
+It is available for Linux and Windows. To use the library for Windows in a
+Cygwin environment, first get it from:
+
+ * http://www.ftdichip.com/Drivers/D2XX.htm
+
+Unzip the CDM*.zip to some directory and tell UrJTAG about this directory
+during the configure step before actual compilation:
+
+ ./configure --with-libftd2xx=/cygdrive/c/windows/temp/CDM_Drivers
+
+All other USB JTAG adapters can be supported only if libusb is installed.
+There is a libusb-win32 variant that can be used in a Cygwin environment:
 
  * http://libusb.sourceforge.net (libusb)
  * http://libusb-win32.sourceforge.net (libusb for Windows)
- * http://www.intra2net.com/de/produkte/opensource/ftdi/ (libftdi)
- * http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
 
 ==== Installing from source tar.gz ====
 
@@ -265,9 +288,11 @@ If you want to try the very newest version of UrJTAG...
   svn co http://urjtag.svn.sourceforge.net/svnroot/urjtag/trunk urjtag
 
   cd urjtag/jtag ./autogen.sh
-  # ./configure is run by autogen.sh
+  # ./configure done by autogen.sh; run it here with special options if needed
   make
   make install
+
+==== Using 
 
 //=========================================================================
 
@@ -310,7 +335,7 @@ Your output should look like this:
     Manufacturer: Intel
     Part:         PXA250
     Stepping:     C0
-    Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
+    Filename:     /usr/local/share/urjtag/intel/pxa250/pxa250c0
 
 If you get empty output or an error message your JTAG adapter is not connected
 properly, or your target board doesn't work, or it is turned off.
@@ -447,6 +472,12 @@ Example:
 
   jtag> help cable
 
+Most cable drivers require some more details about the cable to start properly.
+To learn about the details, use the "cable" command with the name of the cable
+followed by the word "help". Example:
+
+  jtag> cable wiggler help
+
 ===== include =====
 
 Run commands from a named script file installed with UrJTAG. The directory prefix
@@ -519,6 +550,15 @@ Detects devices on the bus. Example:
     Part:         PXA250
     Stepping:     C0
     Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
+
+During "detect", UrJTAG searches through the files in its database (usually in
+/usr/share/urjtag) to find a match for the manufacturer, revision and part
+number for the IDCODE read from the part. However, not all parts identify
+themselves in a way that is useful for "detect". For example, many chips with
+an ARM processor core inside present an IDCODE that may be specific to the the
+particular core inside the chip (e.g.  ARM7TDMI), but doesn't tell about the
+actual manufacturer of the chip. In such case, the data for the part has to be
+included manually. See also the documentation for the "include" command.
 
 ==== Unsupported commands ====
 
