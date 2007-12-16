@@ -1,5 +1,7 @@
 2007-12-16  Kolja Waschk <kawk>
 
+	* libbrux/amd/amd_flash.c: Fix for [1851777] segfault when
+	  running detectflash
     * include/setdevice.h, include/Makefile.am, src/detect.c,
       src/cmd/setdevice.c, src/cmd/cmd.c, src/cmd/Makefile.am,
       src/jtag.c, doc/UrJTAG.txt, libbrux/flash/amd_flash.c,

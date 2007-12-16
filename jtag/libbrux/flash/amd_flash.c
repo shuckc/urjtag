@@ -90,6 +90,13 @@ int amd_detect(bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	bus_area_t area;
 	cfi_query_structure_t *cfi ;
 
+	if (!cfi_array || !bus)
+		return -1;		/* invalid parameters */
+
+	*cfi_array = calloc( 1, sizeof (cfi_array_t) );
+	if (!*cfi_array)
+		return -2;		/* out of memory */
+
 	bus_write( bus, adr+0x0, 0xf0 );
 	bus_write( bus, adr+0x555, 0xaa );
 	bus_write( bus, adr+0x2AA, 0x55 );
@@ -114,10 +121,6 @@ int amd_detect(bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 		default:
 			break;
 	}
-
-	 *cfi_array = calloc( 1, sizeof (cfi_array_t) );
-        if (!*cfi_array)
-                return -2;              /* out of memory */
 
         (*cfi_array)->bus = bus;
         (*cfi_array)->address = 0;
