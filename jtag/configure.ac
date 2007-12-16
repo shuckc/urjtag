@@ -180,59 +180,62 @@ AC_ARG_WITH([libftdi],
     [use libftdi for FTDI-based cables])],
     [], [with_libftdi=check])
 
-AS_IF([test "x$with_libftdi" == xyes -o "x$with_libftdi" = xcheck], [
-  AC_PATH_PROG(HAVELIBFTDI, libftdi-config, no) 
-  AS_IF([test "$HAVELIBFTDI" != "no" ],[
-    dnl LIBFTDI_CFLAGS=`$HAVELIBFTDI --cflags`
-    AM_CONDITIONAL(HAVE_LIBFTDI, true)
-    LIBFTDI_LIBS=`$HAVELIBFTDI --libs`
-    CFLAGS="$CFLAGS $LIBFTDI_CFLAGS"
-    LIBS="$LIBS $LIBFTDI_LIBS"
-    AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
-  ],[
-    AM_CONDITIONAL(HAVE_LIBFTDI, false)
-    AC_MSG_WARN([*** libftdi-config not found. No support for FTDI-based USB JTAG cables via libftdi.])
-  ])
-],[
-  AS_IF([test "x$with_libftdi" != xno], [
-    AM_CONDITIONAL(HAVE_LIBFTDI, true)
+AS_IF([test "x$with_libftdi" != xno], [
+  AS_IF([test "x$with_libftdi" != xyes -a "x$with_libftdi" != xcheck], [
     CFLAGS="$CFLAGS -I$with_libftdi -L$with_libftdi"
     LIBS="$LIBS -lftdi"
-    AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
   ],[
-    AM_CONDITIONAL(HAVE_LIBFTDI, false)
+    AC_PATH_PROG(LIBFTDI_CONFIG, libftdi-config, no) 
+    AS_IF([test "$LIBFTDI_CONFIG" != "no"],[
+      LIBS="$LIBS `$LIBFTDI_CONFIG --libs`"
+      CFLAGS="$CFLAGS `$LIBFTDI_CONFIG --cflags`"
+    ],)
   ])
+  AC_CHECK_FUNC([ftdi_usb_open], [
+    AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
+    HAVELIBFTDI=yes
+  ],[
+    AC_MSG_WARN([*** libftdi not detected. No support for FTDI-based USB JTAG cables via libftdi.])
+  ])
+],)
+
+AS_IF([test "x$HAVELIBFTDI" == "xyes"],[
+  AM_CONDITIONAL(HAVE_LIBFTDI, true)
+],[
+  AM_CONDITIONAL(HAVE_LIBFTDI, false)
 ])
+
 
 dnl check for libusb-config
 
 AC_ARG_WITH([libusb],
   [AS_HELP_STRING([--with-libusb],
-    [use libusb for some USB JTAG cables])],
-    [], [with_libusb=check])
+    [use libusb for some USB JTAG cables])],,
+    [with_libusb=check])
 
-AS_IF([test "x$with_libusb" == xyes -o "x$with_libusb" == xcheck], [
-  AC_PATH_PROG(HAVELIBUSB, libusb-config, no) 
-  AS_IF([test "$HAVELIBUSB" != "no"],[
-    dnl LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
-    AM_CONDITIONAL(HAVE_LIBUSB, true)
-    LIBUSB_LIBS=`$HAVELIBUSB --libs`
-    CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-    LIBS="$LIBS $LIBUSB_LIBS"
-    AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
-  ],[
-    AM_CONDITIONAL(HAVE_LIBUSB, false)
-    AC_MSG_WARN([*** libusb-config not found. Omitting support for some USB JTAG cables.])
-  ])
-],[
-  AS_IF([test "x$with_libusb" != xno], [
-    AM_CONDITIONAL(HAVE_LIBUSB, true)
+AS_IF([test "x$with_libusb" != xno], [
+  AS_IF([test "x$with_libusb" != xyes -a "x$with_libusb" != xcheck], [
     CFLAGS="$CFLAGS -I$with_libusb -L$with_libusb"
     LIBS="$LIBS -lusb"
-    AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
   ],[
-    AM_CONDITIONAL(HAVE_LIBUSB, false)
+    AC_PATH_PROG(LIBUSB_CONFIG, libusb-config, no) 
+    AS_IF([test "$LIBUSB_CONFIG" != "no"],[
+      LIBS="$LIBS `$LIBUSB_CONFIG --libs`"
+      CFLAGS="$CFLAGS `$LIBUSB_CONFIG --cflags`"
+    ],)
   ])
+  AC_CHECK_FUNC([usb_find_devices], [
+    AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
+    HAVELIBUSB=yes
+  ],[
+    AC_MSG_WARN([*** libusb not detected. No support for USB JTAG cables via libusb.])
+  ])
+],)
+
+AS_IF([test "x$HAVELIBUSB" == "xyes"],[
+  AM_CONDITIONAL(HAVE_LIBUSB, true)
+],[
+  AM_CONDITIONAL(HAVE_LIBUSB, false)
 ])
 
 
@@ -246,30 +249,35 @@ AC_ARG_WITH([ftd2xx],
 FTD2XXLIB=
 AS_IF([test "x$with_ftd2xx" == xyes -o "x$with_ftd2xx" = xcheck], [
   AC_CHECK_LIB([ftd2xx], [FT_Open], [
-    AM_CONDITIONAL(HAVE_LIBFTD2XX, true)
-    AC_DEFINE(HAVE_LIBFTD2XX, 1, [define if you have libftd2xx])
+    HAVELIBFTD2XX=yes
     LIBS="-lftd2xx $LIBS"
   ],[
-    AM_CONDITIONAL(HAVE_LIBFTD2XX, false)
     AC_MSG_WARN([*** libftd2xx not found. No support for FTDI-based USB JTAG cables via libftd2xx.])
   ])
 ],[
   AS_IF([test "x$with_ftd2xx" != xno], [
-    AM_CONDITIONAL(HAVE_LIBFTD2XX, true)
-    AC_DEFINE(HAVE_LIBFTD2XX, 1, [define if you have libftd2xx])
+    HAVELIBFTD2XX=yes
     case $host in
     *cygwin*)
       CFLAGS="$CFLAGS -I$with_ftd2xx"
-      FTD2XXLIB="$with_ftd2xx/ftd2xx.lib"
+      AS_IF([test -d "$with_ftd2xx/i386"], [
+        FTD2XXLIB="$with_ftd2xx/i386/ftd2xx.lib"
+      ],[
+        FTD2XXLIB="$with_ftd2xx/ftd2xx.lib"
+      ])
       ;;
     *)
       CFLAGS="$CFLAGS -I$with_ftd2xx -L$with_ftd2xx"
       LIBS="-lftd2xx $LIBS"
       ;;
     esac
-  ],[
-    AM_CONDITIONAL(HAVE_LIBFTD2XX, false)
-  ])
+  ],)
+])
+AS_IF([test "x$HAVELIBFTD2XX" == xyes], [
+  AM_CONDITIONAL(HAVE_LIBFTD2XX, true)
+  AC_DEFINE(HAVE_LIBFTD2XX, 1, [define if you have libftd2xx])
+],[
+  AM_CONDITIONAL(HAVE_LIBFTD2XX, false)
 ])
 AC_SUBST(FTD2XXLIB)
 
@@ -277,7 +285,6 @@ CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 
 AC_OUTPUT
-
 
 dnl
 dnl Configuration summary
@@ -292,7 +299,7 @@ if test ${HAVELIBUSB:-no} != no ; then
 else
    FLAG_HAVELIBUSB=no
 fi
-if echo $LIBS | grep -q 'ftd2xx' ; then
+if test ${HAVELIBFTD2XX:-no} != no ; then
    FLAG_HAVELIBFTD2XX=yes
 else
    FLAG_HAVELIBFTD2XX=no
