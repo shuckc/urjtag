@@ -382,11 +382,9 @@ main( int argc, const char **argv )
 			break;
 
 		case 'h':
+		default:
 			help = 1;
 			break;
-
-		default:
-			abort ();
 		}
 	}
 

@@ -1,5 +1,6 @@
 2007-12-16  Kolja Waschk <kawk>
 
+	* jtag.c: Don't abort on invalid command line options
     * configure.ac: Reorganized the libusb/libftdi detection.
     * data/MANUFACTURERS: Change 11110000111 code to point to
       "ARM" instead of Sharp to stop misdetection of other 
