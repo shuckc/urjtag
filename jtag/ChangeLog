@@ -1,20 +1,29 @@
+2007-12-16  Kolja Waschk <kawk>
+
+    * include/setdevice.h, include/Makefile.am, src/detect.c,
+      src/cmd/setdevice.c, src/cmd/cmd.c, src/cmd/Makefile.am,
+      src/jtag.c, doc/UrJTAG.txt, libbrux/flash/amd_flash.c,
+      libbrux/setdevice.h, libbrux/Makefile.am: Removed code for
+      "setdevice" command and added some documentation how to get
+      along without it.
+
 2007-12-15  Kolja Waschk <kawk>
 
-	* configure.ac, tap/parport/parport.c, tap/parport/ppi.c,
-	  tap/parport/direct.c: Adapted openwince patch by Daniel
-	  O'Connor, [1235990] Add support for FreeBSD's ppi interface
-	  (closes our copy of that tracker item, 1829585)
-	* src/cmd/cable.c, include/cable.h, src/tap/cable/*.c: Add
-	  help function to every cable; temporarily allow old syntax
-	  for cable command when used for parallel port cables
-	* data/intel/pxa270/STEPPINGS, src/bus/pxa2x0.c: Integrated two
-	  patches from F. Rysanek, adding C5 stepping of PXA270 and a few
-	  few functions that resolve the PXA270 address space into the 6 
-	  default nCS windows per 64MB. (Enhancement req. 1849493)
-	* cmd/part.c, cmd/setdevice.c, cmd/instruction.c, cmd/svf.c,
-	  cmd/dr.c, cmd/initbus.c, cmd/test.c, part/part.c, libbrux/cmd/cmd.c,
-	  libbrux/cmd/help.c: Make command string comparisons case-insensitive
-	  (fixes 1845811 "Case sensitivity in shell")
+    * configure.ac, tap/parport/parport.c, tap/parport/ppi.c,
+      tap/parport/direct.c: Adapted openwince patch by Daniel
+      O'Connor, [1235990] Add support for FreeBSD's ppi interface
+      (closes our copy of that tracker item, 1829585)
+    * src/cmd/cable.c, include/cable.h, src/tap/cable/*.c: Add
+      help function to every cable; temporarily allow old syntax
+      for cable command when used for parallel port cables
+    * data/intel/pxa270/STEPPINGS, src/bus/pxa2x0.c: Integrated two
+      patches from F. Rysanek, adding C5 stepping of PXA270 and a few
+      few functions that resolve the PXA270 address space into the 6 
+      default nCS windows per 64MB. (Enhancement req. 1849493)
+    * cmd/part.c, cmd/setdevice.c, cmd/instruction.c, cmd/svf.c,
+      cmd/dr.c, cmd/initbus.c, cmd/test.c, part/part.c, libbrux/cmd/cmd.c,
+      libbrux/cmd/help.c: Make command string comparisons case-insensitive
+      (fixes 1845811 "Case sensitivity in shell")
 
 2007-12-14  Kolja Waschk <kawk>
 
@@ -29,14 +38,14 @@
 
 2007-12-12  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): add missing '\', fixes
-	  [ 1849477 ] Missing \ in data/Makefile.ac
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): add missing '\', fixes
+      [ 1849477 ] Missing \ in data/Makefile.ac
 
 2007-12-09  Kolja Waschk <kawk>
 
     * configure.ac: Improve detection of flex version, get Subversion
-          revision from 1. svn info, or 2. ChangeLog, or 3. Revision tag, 
-		  auto-detect whether -lrt is needed
+      revision from 1. svn info, or 2. ChangeLog, or 3. Revision tag, 
+      auto-detect whether -lrt is needed
     * src/svf/svf_flex.l: derive HAVE_MODERN_FLEX internally
     * src/jtag.c: show version from config.h, compile without readline
     * src/version.awk: not needed; SVN info now available in config.h
@@ -46,2359 +55,2359 @@
 2007-12-08  Kolja Waschk <kawk>
 
     * include/Makefile.am, src/Makefile.am, src/svf/Makefile.am
-	  configure.ac, libbrux/configure.ac: Mention more files to
-	  ensure that dist tar.gz is complete; prevent installation
-	  of inclow/ headers during "make install" on top level
+      configure.ac, libbrux/configure.ac: Mention more files to
+      ensure that dist tar.gz is complete; prevent installation
+      of inclow/ headers during "make install" on top level
 
 2007-12-07  Kolja Waschk <kawk>
 
-	* README: All info moved to doc/UrJTAG.txt
-	* README_21065L: Merged into doc/UrJTAG.txt
-	* doc/UrJTAG.xml, UrJTAG.txt: converted DocBook to asciidoc
-	* COPYING: GPLv2 added
-	* AUTHORS: Updated
+    * README: All info moved to doc/UrJTAG.txt
+    * README_21065L: Merged into doc/UrJTAG.txt
+    * doc/UrJTAG.xml, UrJTAG.txt: converted DocBook to asciidoc
+    * COPYING: GPLv2 added
+    * AUTHORS: Updated
     * TODO: removed (we're using SourceForge trackers)
 
 2007-12-06  Kolja Waschk <kawk>
 
-	* ChangeLog: Import SVN commit messages from past month 
-	* THANKS: Added all missing names (that I know of) of the people who
-	  contributed the patches that have been integrated in the past weeks
+    * ChangeLog: Import SVN commit messages from past month 
+    * THANKS: Added all missing names (that I know of) of the people who
+      contributed the patches that have been integrated in the past weeks
 
 2007-12-05  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* src/jtag.c (main): Print build number based on version.h.
-	* src/Makefile.am (version.h): Added rules to generate version.h from ChangeLog's revision tag.
+    * src/jtag.c (main): Print build number based on version.h.
+    * src/Makefile.am (version.h): Added rules to generate version.h from ChangeLog's revision tag.
 
 2007-12-04 07:06  Kolja Waschk <kawk>
 
-	* include/cable.h, include/parport.h, src/cmd/cable.c,
-	  src/tap/cable/generic.c, src/tap/cable/generic.h,
-	  src/tap/parport/direct.c, src/tap/parport/ftd2xx.c,
-	  src/tap/parport/ftdi.c, src/tap/parport/ppdev.c,
-	  src/tap/parport/xpcu_pp.c: [1839040] Make "cable" command less
-	  parport-centric. Changes "cable" command syntax!
+    * include/cable.h, include/parport.h, src/cmd/cable.c,
+      src/tap/cable/generic.c, src/tap/cable/generic.h,
+      src/tap/parport/direct.c, src/tap/parport/ftd2xx.c,
+      src/tap/parport/ftdi.c, src/tap/parport/ppdev.c,
+      src/tap/parport/xpcu_pp.c: [1839040] Make "cable" command less
+      parport-centric. Changes "cable" command syntax!
 
 2007-12-03 12:18  Kolja Waschk <kawk>
 
-	* ChangeLog: added "Revision" keyword
+    * ChangeLog: added "Revision" keyword
 
 2007-12-02 17:56  Kolja Waschk <kawk>
 
-	* trunk/include, Makefile.am, configure.ac, inclow: openwince
-	  "include" package moved into "jtag" (now named "inclow")
+    * trunk/include, Makefile.am, configure.ac, inclow: openwince
+      "include" package moved into "jtag" (now named "inclow")
 
 2007-11-30 07:06  Kolja Waschk <kawk>
 
-	* README: update fixes [1837364] Install instructions wrong
+    * README: update fixes [1837364] Install instructions wrong
 
 2007-11-28 22:42  Kolja Waschk <kawk>
 
-	* doc/bsdl2jtag.1, doc/jtag.1: Imported man pages from
-	  openwince-jtag Debian package (w/permission from p2@debian)
+    * doc/bsdl2jtag.1, doc/jtag.1: Imported man pages from
+      openwince-jtag Debian package (w/permission from p2@debian)
 
 2007-11-28 20:20  Kolja Waschk <kawk>
 
-	* src/jtag.c: [ 1838018 ] "Forbid" to run JTAG tools with suid root
+    * src/jtag.c: [ 1838018 ] "Forbid" to run JTAG tools with suid root
 
 2007-11-28 19:43  Kolja Waschk <kawk>
 
-	* src/jtag.c: [ 1839756 ] (openwince [972637]) add command line
-	  options to jtag
+    * src/jtag.c: [ 1839756 ] (openwince [972637]) add command line
+      options to jtag
 
 2007-11-28 00:13  Kolja Waschk <kawk>
 
-	* doc/UrJTAG.xml: Integrated text from Wiki pages from Ralf,
-	  Incorporated README into UrJTAG.xml
+    * doc/UrJTAG.xml: Integrated text from Wiki pages from Ralf,
+      Incorporated README into UrJTAG.xml
 
 2007-11-27 22:06  Kolja Waschk <kawk>
 
-	* doc/UrJTAG.xml,doc-layout.txt: renamed top-level DocBook XML file
+    * doc/UrJTAG.xml,doc-layout.txt: renamed top-level DocBook XML file
 
 2007-11-27 22:05  Kolja Waschk <kawk>
 
-	* doc/doc-layout.txt, doc/internals.xml: Include license text(s)
-	  and internals.xml
+    * doc/doc-layout.txt, doc/internals.xml: Include license text(s)
+      and internals.xml
 
 2007-11-27 21:01  Kolja Waschk <kawk>
 
-	* doc/gpl.dbk, doc/lgpl.dbk: Use version 2, not 3
+    * doc/gpl.dbk, doc/lgpl.dbk: Use version 2, not 3
 
 2007-11-27 20:56  Kolja Waschk <kawk>
 
-	* doc/fdl.xml, doc/gpl.dbk, doc/lgpl.dbk: Added license texts
-	  (docbook) from www.gnu.org
+    * doc/fdl.xml, doc/gpl.dbk, doc/lgpl.dbk: Added license texts
+      (docbook) from www.gnu.org
 
 2007-11-26 14:01  Kolja Waschk <kawk>
 
-	* src/cmd/shell.c: Clean up fix for [1837985] "shell" command
-	  causes segfault
+    * src/cmd/shell.c: Clean up fix for [1837985] "shell" command
+      causes segfault
 
 2007-11-25 22:49  Kolja Waschk <kawk>
 
-	* doc/doc-layout.txt: Converted to DocBook-XSL
+    * doc/doc-layout.txt: Converted to DocBook-XSL
 
 2007-11-25 14:45  Kolja Waschk <kawk>
 
-	* doc/doc-layout.txt: Layout draft for new, comprehensive
-	  documentation...
+    * doc/doc-layout.txt: Layout draft for new, comprehensive
+      documentation...
 
 2007-11-25 13:08  Kolja Waschk <kawk>
 
-	* src/cmd/shell.c: Allow arbitrary number of arguments for "shell"
-	  command (fix for [1837985] "shell" command causes segfault)
+    * src/cmd/shell.c: Allow arbitrary number of arguments for "shell"
+      command (fix for [1837985] "shell" command causes segfault)
 
 2007-11-25 00:02  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c: fix for '[
-	  1836616 ] Segfault/Memory corruption if USB device inaccessible'
+    * src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c: fix for '[
+      1836616 ] Segfault/Memory corruption if USB device inaccessible'
 
 2007-11-23 19:52  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* configure.ac, src/svf/Makefile.am, src/svf/svf_bison.y,
-	  src/svf/svf_flex.l: make SVF parser/lexer backwards compatible to
-	  pre-2.5.31 flex
-	  for those the error location feature is skipped in svf_flex.l
+    * configure.ac, src/svf/Makefile.am, src/svf/svf_bison.y,
+      src/svf/svf_flex.l: make SVF parser/lexer backwards compatible to
+      pre-2.5.31 flex
+      for those the error location feature is skipped in svf_flex.l
 
 2007-11-20 20:35  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* configure.ac, src/cmd/cable.c, src/tap/Makefile.am,
-	  src/tap/cable/ft2232.c, src/tap/parport.c,
-	  src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c: ftd2xx parport
-	  driver added
+    * configure.ac, src/cmd/cable.c, src/tap/Makefile.am,
+      src/tap/cable/ft2232.c, src/tap/parport.c,
+      src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c: ftd2xx parport
+      driver added
 
 2007-11-18 13:38  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* configure.ac: add some messages to show configuration summary, to
-	  be extended
+    * configure.ac: add some messages to show configuration summary, to
+      be extended
 
 2007-11-17 21:39  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* src/cmd/cable.c: report cable usage for USB & FTDI based cables
-	  only in case respective support is included
+    * src/cmd/cable.c: report cable usage for USB & FTDI based cables
+      only in case respective support is included
 
 2007-11-16 17:50  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* include/cable.h, include/chain.h, src/cmd/cable.c, src/svf/svf.c,
-	  src/tap/Makefile.am, src/tap/cable.c, src/tap/cable/arcom.c,
-	  src/tap/cable/byteblaster.c, src/tap/cable/dlc5.c,
-	  src/tap/cable/ea253.c, src/tap/cable/ei012.c,
-	  src/tap/cable/ft2232.c, src/tap/cable/generic.c,
-	  src/tap/cable/keithkoep.c, src/tap/cable/lattice.c,
-	  src/tap/cable/mpcbdm.c, src/tap/cable/triton.c,
-	  src/tap/cable/usbblaster.c, src/tap/cable/wiggler.c,
-	  src/tap/cable/wiggler2.c, src/tap/cable/xpc.c, src/tap/chain.c,
-	  src/tap/parport.c, src/tap/parport/ftdi.c, src/tap/tap.c: merged
-	  changes from /branches/ft2232_eval@770
-	  this is the initial stable version of the ft2232 cable driver
+    * include/cable.h, include/chain.h, src/cmd/cable.c, src/svf/svf.c,
+      src/tap/Makefile.am, src/tap/cable.c, src/tap/cable/arcom.c,
+      src/tap/cable/byteblaster.c, src/tap/cable/dlc5.c,
+      src/tap/cable/ea253.c, src/tap/cable/ei012.c,
+      src/tap/cable/ft2232.c, src/tap/cable/generic.c,
+      src/tap/cable/keithkoep.c, src/tap/cable/lattice.c,
+      src/tap/cable/mpcbdm.c, src/tap/cable/triton.c,
+      src/tap/cable/usbblaster.c, src/tap/cable/wiggler.c,
+      src/tap/cable/wiggler2.c, src/tap/cable/xpc.c, src/tap/chain.c,
+      src/tap/parport.c, src/tap/parport/ftdi.c, src/tap/tap.c: merged
+      changes from /branches/ft2232_eval@770
+      this is the initial stable version of the ft2232 cable driver
 
 2007-11-13 23:09  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* src/flash.c: removed obsolete declaration of amd_detect()
+    * src/flash.c: removed obsolete declaration of amd_detect()
 
 2007-11-13 08:07  Kolja Waschk <kawk>
 
-	* configure.ac, src/tap/Makefile.am, src/tap/cable.c: Fix [ 1828368 ]
-	  Compilation fails without libusb/libftdi
+    * configure.ac, src/tap/Makefile.am, src/tap/cable.c: Fix [ 1828368 ]
+      Compilation fails without libusb/libftdi
 
 2007-11-10 17:17  Kolja Waschk <kawk>
 
-	* data/Makefile.am, data/lattice/PARTS,
-	  data/lattice/lc4128c-tqfp100,
-	  data/lattice/lc4128c-tqfp100/STEPPINGS,
-	  data/lattice/lc4128c-tqfp100/lc4128c-tqfp100: [ 1105256 ] jtag
-	  descriptor for Lattice LC4032V-TQFP100
+    * data/Makefile.am, data/lattice/PARTS,
+      data/lattice/lc4128c-tqfp100,
+      data/lattice/lc4128c-tqfp100/STEPPINGS,
+      data/lattice/lc4128c-tqfp100/lc4128c-tqfp100: [ 1105256 ] jtag
+      descriptor for Lattice LC4032V-TQFP100
 
 2007-11-10 16:22  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* README.svf: remove links to openwince
+    * README.svf: remove links to openwince
 
 2007-11-10 01:15  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
-	  src/bus/zefant-xs3.c: added Zefant-XS3 bus
+    * src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+      src/bus/zefant-xs3.c: added Zefant-XS3 bus
 
 2007-11-10 00:31  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* data/xilinx/xc3s1000/fg320, data/xilinx/xc3s1000/fg456,
-	  data/xilinx/xc3s1000/fg676, data/xilinx/xc3s1000/ft256,
-	  data/xilinx/xc3s1000/xc3s1000: xc3s1000 kw
+    * data/xilinx/xc3s1000/fg320, data/xilinx/xc3s1000/fg456,
+      data/xilinx/xc3s1000/fg676, data/xilinx/xc3s1000/ft256,
+      data/xilinx/xc3s1000/xc3s1000: xc3s1000 kw
 
 2007-11-10 00:15  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* data/Makefile.am, data/xilinx/xc3s1000/STEPPINGS,
-	  data/xilinx/xc3s1000/fg320, data/xilinx/xc3s1000/fg456,
-	  data/xilinx/xc3s1000/fg676, data/xilinx/xc3s1000/ft256,
-	  data/xilinx/xc3s1000/xc3s1000,
-	  data/xilinx/xc3s1000/xc3s1000_fg320,
-	  data/xilinx/xc3s1000/xc3s1000_fg456,
-	  data/xilinx/xc3s1000/xc3s1000_fg676,
-	  data/xilinx/xc3s1000/xc3s1000_ft256,
-	  data/xilinx/xc3s1000/xc3s1000l,
-	  data/xilinx/xc3s1000/xc3s1000l_fg320,
-	  data/xilinx/xc3s1000/xc3s1000l_fg456,
-	  data/xilinx/xc3s1000/xc3s1000l_fg676,
-	  data/xilinx/xc3s1000/xc3s1000l_ft256: unification xc3s1000
+    * data/Makefile.am, data/xilinx/xc3s1000/STEPPINGS,
+      data/xilinx/xc3s1000/fg320, data/xilinx/xc3s1000/fg456,
+      data/xilinx/xc3s1000/fg676, data/xilinx/xc3s1000/ft256,
+      data/xilinx/xc3s1000/xc3s1000,
+      data/xilinx/xc3s1000/xc3s1000_fg320,
+      data/xilinx/xc3s1000/xc3s1000_fg456,
+      data/xilinx/xc3s1000/xc3s1000_fg676,
+      data/xilinx/xc3s1000/xc3s1000_ft256,
+      data/xilinx/xc3s1000/xc3s1000l,
+      data/xilinx/xc3s1000/xc3s1000l_fg320,
+      data/xilinx/xc3s1000/xc3s1000l_fg456,
+      data/xilinx/xc3s1000/xc3s1000l_fg676,
+      data/xilinx/xc3s1000/xc3s1000l_ft256: unification xc3s1000
 
 2007-11-09 22:44  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* src/cmd/bit.c: fixed [ 1828672 ] cmd/bit.c broken
+    * src/cmd/bit.c: fixed [ 1828672 ] cmd/bit.c broken
 
 2007-11-08 09:44  Kolja Waschk <kawk>
 
-	* configure.ac, data/Makefile.am, data/xilinx/PARTS,
-	  data/xilinx/xc2c256-vq100, data/xilinx/xc2c256-vq100/STEPPINGS,
-	  data/xilinx/xc2c256-vq100/xc2c256-vq100,
-	  data/xilinx/xc2c64a-vq44, data/xilinx/xc2c64a-vq44/STEPPINGS,
-	  data/xilinx/xc2c64a-vq44/xc2c64a-vq44, include/Makefile.am,
-	  include/cable.h, include/xpcu.h, src/cmd/cable.c,
-	  src/part/data_register.c, src/tap/Makefile.am, src/tap/cable.c,
-	  src/tap/cable/arcom.c, src/tap/cable/byteblaster.c,
-	  src/tap/cable/dlc5.c, src/tap/cable/ea253.c,
-	  src/tap/cable/ei012.c, src/tap/cable/generic.c,
-	  src/tap/cable/generic.h, src/tap/cable/keithkoep.c,
-	  src/tap/cable/lattice.c, src/tap/cable/mpcbdm.c,
-	  src/tap/cable/triton.c, src/tap/cable/usbblaster.c,
-	  src/tap/cable/wiggler.c, src/tap/cable/wiggler2.c,
-	  src/tap/cable/xpc.c, src/tap/parport.c, src/tap/parport/ftdi.c,
-	  src/tap/parport/xpcu_common.c, src/tap/parport/xpcu_pp.c,
-	  src/tap/tap.c: [ 1479632, 1649637 ] Drivers for Altera USB
-	  Blaster and Xilinx Platform Cable USB
+    * configure.ac, data/Makefile.am, data/xilinx/PARTS,
+      data/xilinx/xc2c256-vq100, data/xilinx/xc2c256-vq100/STEPPINGS,
+      data/xilinx/xc2c256-vq100/xc2c256-vq100,
+      data/xilinx/xc2c64a-vq44, data/xilinx/xc2c64a-vq44/STEPPINGS,
+      data/xilinx/xc2c64a-vq44/xc2c64a-vq44, include/Makefile.am,
+      include/cable.h, include/xpcu.h, src/cmd/cable.c,
+      src/part/data_register.c, src/tap/Makefile.am, src/tap/cable.c,
+      src/tap/cable/arcom.c, src/tap/cable/byteblaster.c,
+      src/tap/cable/dlc5.c, src/tap/cable/ea253.c,
+      src/tap/cable/ei012.c, src/tap/cable/generic.c,
+      src/tap/cable/generic.h, src/tap/cable/keithkoep.c,
+      src/tap/cable/lattice.c, src/tap/cable/mpcbdm.c,
+      src/tap/cable/triton.c, src/tap/cable/usbblaster.c,
+      src/tap/cable/wiggler.c, src/tap/cable/wiggler2.c,
+      src/tap/cable/xpc.c, src/tap/parport.c, src/tap/parport/ftdi.c,
+      src/tap/parport/xpcu_common.c, src/tap/parport/xpcu_pp.c,
+      src/tap/tap.c: [ 1479632, 1649637 ] Drivers for Altera USB
+      Blaster and Xilinx Platform Cable USB
 
 2007-11-08 09:13  Kolja Waschk <kawk>
 
-	* include/Makefile.am, README, README_21065L, THANKS, 
-	  data/Makefile.am, data/analog/PARTS, data/analog/sharc21065l,
-	  data/analog/sharc21065l/STEPPINGS,
-	  data/analog/sharc21065l/sharc21065l, include/setdevice.h,
-	  libbrux/Makefile.am, libbrux/flash/amd_flash.c,
-	  libbrux/flash/detectflash.c, libbrux/setdevice.h,
-	  src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
-	  src/bus/sharc21065l.c, src/cmd/Makefile.am, src/cmd/cmd.c,
-	  src/cmd/setdevice.c, src/detect.c, src/flash.c, src/jtag.c: 
-	  [ 1605981 ] JTAG Support for ADSP-21065L Processor (with
-	  modifications) (Girish G Pai, Lesly A. M, Tony K Nadackal, Shaju Abraham)
+    * include/Makefile.am, README, README_21065L, THANKS, 
+      data/Makefile.am, data/analog/PARTS, data/analog/sharc21065l,
+      data/analog/sharc21065l/STEPPINGS,
+      data/analog/sharc21065l/sharc21065l, include/setdevice.h,
+      libbrux/Makefile.am, libbrux/flash/amd_flash.c,
+      libbrux/flash/detectflash.c, libbrux/setdevice.h,
+      src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+      src/bus/sharc21065l.c, src/cmd/Makefile.am, src/cmd/cmd.c,
+      src/cmd/setdevice.c, src/detect.c, src/flash.c, src/jtag.c: 
+      [ 1605981 ] JTAG Support for ADSP-21065L Processor (with
+      modifications) (Girish G Pai, Lesly A. M, Tony K Nadackal, Shaju Abraham)
 
 2007-11-08 07:33  Kolja Waschk <kawk>
 
-	* data/MANUFACTURERS, data/Makefile.am, data/admtek,
-	  data/admtek/adm5120, data/admtek/adm5120/adm5120, data/atheros,
-	  data/atheros/ar2312, data/atheros/ar2312/ar2312, data/brecis,
-	  data/brecis/PARTS, data/brecis/msp2006,
-	  data/brecis/msp2006/STEPPINGS, data/brecis/msp2006/msp2006,
-	  data/hitachi/PARTS, data/hitachi/ar7300,
-	  data/hitachi/ar7300/STEPPINGS, data/hitachi/ar7300/ar7300,
-	  data/lexra, data/lexra/PARTS, data/lexra/lx5280,
-	  data/lexra/lx5280/STEPPINGS, data/lexra/lx5280/lx5280,
-	  doc/README.ejtag: [ 1429825 ] EJTAG driver (new data files) (Oleg)
+    * data/MANUFACTURERS, data/Makefile.am, data/admtek,
+      data/admtek/adm5120, data/admtek/adm5120/adm5120, data/atheros,
+      data/atheros/ar2312, data/atheros/ar2312/ar2312, data/brecis,
+      data/brecis/PARTS, data/brecis/msp2006,
+      data/brecis/msp2006/STEPPINGS, data/brecis/msp2006/msp2006,
+      data/hitachi/PARTS, data/hitachi/ar7300,
+      data/hitachi/ar7300/STEPPINGS, data/hitachi/ar7300/ar7300,
+      data/lexra, data/lexra/PARTS, data/lexra/lx5280,
+      data/lexra/lx5280/STEPPINGS, data/lexra/lx5280/lx5280,
+      doc/README.ejtag: [ 1429825 ] EJTAG driver (new data files) (Oleg)
 
 2007-11-08 07:11  Kolja Waschk <kawk>
 
-	* src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
-	  src/bus/ejtag.c, src/tap/parport/ppdev.c: [ 1429825 ] EJTAG
-	  driver (partial patch - only the bus driver for now) (Oleg)
+    * src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+      src/bus/ejtag.c, src/tap/parport/ppdev.c: [ 1429825 ] EJTAG
+      driver (partial patch - only the bus driver for now) (Oleg)
 
 2007-11-07 23:17  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
-	  src/bus/h7202.c: [ 1585617 ] support for the Magnachip h7202 cpu
+    * src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+      src/bus/h7202.c: [ 1585617 ] support for the Magnachip h7202 cpu
 
 2007-11-07 22:43  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* README.svf: update README.svf
+    * README.svf: update README.svf
 
 2007-11-07 22:21  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* src/cmd/debug.c, src/cmd/eraseflash.c, src/cmd/peekpoke.c,
-	  src/cmd/script.c, src/cmd/shell.c, src/cmd/signal.c,
-	  src/cmd/test.c, src/detect.c, src/jtag.c, src/part/signal.c,
-	  src/readmem.c, src/svf/svf_bison.y, src/svf/svf_flex.l,
-	  src/writemem.c: get rid of (most) compiler warnings
+    * src/cmd/debug.c, src/cmd/eraseflash.c, src/cmd/peekpoke.c,
+      src/cmd/script.c, src/cmd/shell.c, src/cmd/signal.c,
+      src/cmd/test.c, src/detect.c, src/jtag.c, src/part/signal.c,
+      src/readmem.c, src/svf/svf_bison.y, src/svf/svf_flex.l,
+      src/writemem.c: get rid of (most) compiler warnings
 
 2007-11-07 09:56  Kolja Waschk <kawk>
 
-	* include/bssignal.h, include/jtag.h, include/part.h, src/jtag.c:
-	  Remaining diffs from gumstix repository: Add debug, test and
-	  shell command, aliases for parts, small fixes.
+    * include/bssignal.h, include/jtag.h, include/part.h, src/jtag.c:
+      Remaining diffs from gumstix repository: Add debug, test and
+      shell command, aliases for parts, small fixes.
 
 2007-11-07 09:44  Kolja Waschk <kawk>
 
-	* src/bsdl2jtag.c, src/bus/ppc440gx_ebc8.c, src/cmd/Makefile.am,
-	  src/cmd/cmd.c, src/cmd/debug.c, src/cmd/part.c, src/cmd/print.c,
-	  src/cmd/script.c, src/cmd/shell.c, src/cmd/signal.c,
-	  src/cmd/test.c, src/detect.c, src/part/part.c, src/part/signal.c:
-	  Remaining diffs from gumstix repository: Add debug, test and
-	  shell command, aliases for parts, small fixes.
+    * src/bsdl2jtag.c, src/bus/ppc440gx_ebc8.c, src/cmd/Makefile.am,
+      src/cmd/cmd.c, src/cmd/debug.c, src/cmd/part.c, src/cmd/print.c,
+      src/cmd/script.c, src/cmd/shell.c, src/cmd/signal.c,
+      src/cmd/test.c, src/detect.c, src/part/part.c, src/part/signal.c:
+      Remaining diffs from gumstix repository: Add debug, test and
+      shell command, aliases for parts, small fixes.
 
 2007-11-07 09:09  Kolja Waschk <kawk>
 
-	* doc/howto_add_support_for_more_flash.txt: [ 1460563 ] How to add
-	  Support more Flash chip???
+    * doc/howto_add_support_for_more_flash.txt: [ 1460563 ] How to add
+      Support more Flash chip???
 
 2007-11-07 09:07  Kolja Waschk <kawk>
 
-	* src/writemem.c: [ 1249554 ] Writemem command to write to SRAM
-	  (compile fix)
+    * src/writemem.c: [ 1249554 ] Writemem command to write to SRAM
+      (compile fix)
 
 2007-11-07 09:04  Kolja Waschk <kawk>
 
-	* src/svf/svf_flex.l: [ 1194137 ] better SVF diagnostics (compile
-	  fix)
+    * src/svf/svf_flex.l: [ 1194137 ] better SVF diagnostics (compile
+      fix)
 
 2007-11-07 09:03  Kolja Waschk <kawk>
 
-	* src/bus/ppc405ep.c, src/bus/Makefile.am: The 405ep support patch
-	  _still_ wasn't completely integrated.
+    * src/bus/ppc405ep.c, src/bus/Makefile.am: The 405ep support patch
+      _still_ wasn't completely integrated.
 
 2007-11-07 08:55  Kolja Waschk <kawk>
 
-	* Makefile.am: Remove additional lines left over from unsuccessful
-	  patch before.
+    * Makefile.am: Remove additional lines left over from unsuccessful
+      patch before.
 
 2007-11-07 08:47  Kolja Waschk <kawk>
 
-	* data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc2s300e,
-	  data/xilinx/xc2s300e/STEPPINGS, data/xilinx/xc2s300e/fg456,
-	  data/xilinx/xc2s300e/ft256, data/xilinx/xc2s300e/pq208,
-	  data/xilinx/xc2s300e/xc2s300e: [ 1377859 ] Device description
-	  files for Xilinx XC2S300E (Spartan-IIE) (Arnim Laeuger)
+    * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc2s300e,
+      data/xilinx/xc2s300e/STEPPINGS, data/xilinx/xc2s300e/fg456,
+      data/xilinx/xc2s300e/ft256, data/xilinx/xc2s300e/pq208,
+      data/xilinx/xc2s300e/xc2s300e: [ 1377859 ] Device description
+      files for Xilinx XC2S300E (Spartan-IIE) (Arnim Laeuger)
 
 2007-11-07 08:41  Kolja Waschk <kawk>
 
-	* data/Makefile.am: Added Xilinx parts XC3S*
+    * data/Makefile.am: Added Xilinx parts XC3S*
 
 2007-11-07 08:31  Kolja Waschk <kawk>
 
-	* data/Makefile.am: Added Atmel AT91SAM7S files to Makefile.am
+    * data/Makefile.am: Added Atmel AT91SAM7S files to Makefile.am
 
 2007-11-07 08:16  Kolja Waschk <kawk>
 
-	* data/xilinx/PARTS, data/xilinx/xc18v04pc44,
-	  data/xilinx/xc18v04pc44/STEPPINGS,
-	  data/xilinx/xc18v04pc44/xc18v04pc44, data/xilinx/xc2s200e-pq208,
-	  data/xilinx/xc2s200e-pq208/STEPPINGS,
-	  data/xilinx/xc2s200e-pq208/xc2s200e-pq208, data/xilinx/xc3s1000,
-	  data/xilinx/xc3s1000/STEPPINGS, data/xilinx/xc3s1000/xc3s1000,
-	  data/xilinx/xc3s1000/xc3s1000_fg320,
-	  data/xilinx/xc3s1000/xc3s1000_fg456,
-	  data/xilinx/xc3s1000/xc3s1000_fg676,
-	  data/xilinx/xc3s1000/xc3s1000_ft256,
-	  data/xilinx/xc3s1000/xc3s1000l,
-	  data/xilinx/xc3s1000/xc3s1000l_fg320,
-	  data/xilinx/xc3s1000/xc3s1000l_fg456,
-	  data/xilinx/xc3s1000/xc3s1000l_fg676,
-	  data/xilinx/xc3s1000/xc3s1000l_ft256, data/xilinx/xc3s100e_die,
-	  data/xilinx/xc3s100e_die/STEPPINGS,
-	  data/xilinx/xc3s100e_die/xc3s100e_die,
-	  data/xilinx/xc3s100e_die/xc3s100e_pq208,
-	  data/xilinx/xc3s100e_die/xc3s100e_tq144,
-	  data/xilinx/xc3s100e_die/xc3s100e_vq100, data/xilinx/xc3s1500,
-	  data/xilinx/xc3s1500/STEPPINGS, data/xilinx/xc3s1500/xc3s1500,
-	  data/xilinx/xc3s1500/xc3s1500_fg320,
-	  data/xilinx/xc3s1500/xc3s1500_fg456,
-	  data/xilinx/xc3s1500/xc3s1500_fg676,
-	  data/xilinx/xc3s1500/xc3s1500l,
-	  data/xilinx/xc3s1500/xc3s1500l_fg320,
-	  data/xilinx/xc3s1500/xc3s1500l_fg456,
-	  data/xilinx/xc3s1500/xc3s1500l_fg676, data/xilinx/xc3s200,
-	  data/xilinx/xc3s200/STEPPINGS, data/xilinx/xc3s200/xc3s200,
-	  data/xilinx/xc3s200/xc3s200_ft256,
-	  data/xilinx/xc3s200/xc3s200_pq208,
-	  data/xilinx/xc3s200/xc3s200_tq144,
-	  data/xilinx/xc3s200/xc3s200_vq100, data/xilinx/xc3s2000,
-	  data/xilinx/xc3s2000/STEPPINGS, data/xilinx/xc3s2000/xc3s2000,
-	  data/xilinx/xc3s2000/xc3s2000_fg456,
-	  data/xilinx/xc3s2000/xc3s2000_fg676,
-	  data/xilinx/xc3s2000/xc3s2000_fg900,
-	  data/xilinx/xc3s2000/xc3s2000l,
-	  data/xilinx/xc3s2000/xc3s2000l_fg676,
-	  data/xilinx/xc3s2000/xc3s2000l_fg900, data/xilinx/xc3s400,
-	  data/xilinx/xc3s400/STEPPINGS, data/xilinx/xc3s400/xc3s400,
-	  data/xilinx/xc3s400/xc3s400_fg320,
-	  data/xilinx/xc3s400/xc3s400_fg456,
-	  data/xilinx/xc3s400/xc3s400_ft256,
-	  data/xilinx/xc3s400/xc3s400_pq208,
-	  data/xilinx/xc3s400/xc3s400_tq144, data/xilinx/xc3s4000,
-	  data/xilinx/xc3s4000/STEPPINGS, data/xilinx/xc3s4000/xc3s4000,
-	  data/xilinx/xc3s4000/xc3s4000_fg1156,
-	  data/xilinx/xc3s4000/xc3s4000_fg676,
-	  data/xilinx/xc3s4000/xc3s4000_fg900,
-	  data/xilinx/xc3s4000/xc3s4000l,
-	  data/xilinx/xc3s4000/xc3s4000l_fg1156,
-	  data/xilinx/xc3s4000/xc3s4000l_fg900, data/xilinx/xc3s50,
-	  data/xilinx/xc3s50/STEPPINGS, data/xilinx/xc3s50/xc3s50,
-	  data/xilinx/xc3s50/xc3s50_cp132, data/xilinx/xc3s50/xc3s50_pq208,
-	  data/xilinx/xc3s50/xc3s50_tq144, data/xilinx/xc3s50/xc3s50_vq100,
-	  data/xilinx/xc3s5000, data/xilinx/xc3s5000/STEPPINGS,
-	  data/xilinx/xc3s5000/xc3s5000,
-	  data/xilinx/xc3s5000/xc3s5000_fg1156,
-	  data/xilinx/xc3s5000/xc3s5000_fg900, data/xilinx/xc3s500e_fg320,
-	  data/xilinx/xc3s500e_fg320/STEPPINGS,
-	  data/xilinx/xc3s500e_fg320/xc3s500e_fg320,
-	  data/xilinx/xc3s500e_fg320/xc3s500e_ft256,
-	  data/xilinx/xc3s500e_fg320/xc3s500e_pq208,
-	  data/xilinx/xc9572xl_vq44, data/xilinx/xc9572xl_vq44/STEPPINGS,
-	  data/xilinx/xc9572xl_vq44/xc9572xl_vq44, data/xilinx/xcf04s,
-	  data/xilinx/xcf04s/STEPPINGS, data/xilinx/xcf04s/xcf04s: Added
-	  Xilinx XC3S* parts and others from gumstix repository
+    * data/xilinx/PARTS, data/xilinx/xc18v04pc44,
+      data/xilinx/xc18v04pc44/STEPPINGS,
+      data/xilinx/xc18v04pc44/xc18v04pc44, data/xilinx/xc2s200e-pq208,
+      data/xilinx/xc2s200e-pq208/STEPPINGS,
+      data/xilinx/xc2s200e-pq208/xc2s200e-pq208, data/xilinx/xc3s1000,
+      data/xilinx/xc3s1000/STEPPINGS, data/xilinx/xc3s1000/xc3s1000,
+      data/xilinx/xc3s1000/xc3s1000_fg320,
+      data/xilinx/xc3s1000/xc3s1000_fg456,
+      data/xilinx/xc3s1000/xc3s1000_fg676,
+      data/xilinx/xc3s1000/xc3s1000_ft256,
+      data/xilinx/xc3s1000/xc3s1000l,
+      data/xilinx/xc3s1000/xc3s1000l_fg320,
+      data/xilinx/xc3s1000/xc3s1000l_fg456,
+      data/xilinx/xc3s1000/xc3s1000l_fg676,
+      data/xilinx/xc3s1000/xc3s1000l_ft256, data/xilinx/xc3s100e_die,
+      data/xilinx/xc3s100e_die/STEPPINGS,
+      data/xilinx/xc3s100e_die/xc3s100e_die,
+      data/xilinx/xc3s100e_die/xc3s100e_pq208,
+      data/xilinx/xc3s100e_die/xc3s100e_tq144,
+      data/xilinx/xc3s100e_die/xc3s100e_vq100, data/xilinx/xc3s1500,
+      data/xilinx/xc3s1500/STEPPINGS, data/xilinx/xc3s1500/xc3s1500,
+      data/xilinx/xc3s1500/xc3s1500_fg320,
+      data/xilinx/xc3s1500/xc3s1500_fg456,
+      data/xilinx/xc3s1500/xc3s1500_fg676,
+      data/xilinx/xc3s1500/xc3s1500l,
+      data/xilinx/xc3s1500/xc3s1500l_fg320,
+      data/xilinx/xc3s1500/xc3s1500l_fg456,
+      data/xilinx/xc3s1500/xc3s1500l_fg676, data/xilinx/xc3s200,
+      data/xilinx/xc3s200/STEPPINGS, data/xilinx/xc3s200/xc3s200,
+      data/xilinx/xc3s200/xc3s200_ft256,
+      data/xilinx/xc3s200/xc3s200_pq208,
+      data/xilinx/xc3s200/xc3s200_tq144,
+      data/xilinx/xc3s200/xc3s200_vq100, data/xilinx/xc3s2000,
+      data/xilinx/xc3s2000/STEPPINGS, data/xilinx/xc3s2000/xc3s2000,
+      data/xilinx/xc3s2000/xc3s2000_fg456,
+      data/xilinx/xc3s2000/xc3s2000_fg676,
+      data/xilinx/xc3s2000/xc3s2000_fg900,
+      data/xilinx/xc3s2000/xc3s2000l,
+      data/xilinx/xc3s2000/xc3s2000l_fg676,
+      data/xilinx/xc3s2000/xc3s2000l_fg900, data/xilinx/xc3s400,
+      data/xilinx/xc3s400/STEPPINGS, data/xilinx/xc3s400/xc3s400,
+      data/xilinx/xc3s400/xc3s400_fg320,
+      data/xilinx/xc3s400/xc3s400_fg456,
+      data/xilinx/xc3s400/xc3s400_ft256,
+      data/xilinx/xc3s400/xc3s400_pq208,
+      data/xilinx/xc3s400/xc3s400_tq144, data/xilinx/xc3s4000,
+      data/xilinx/xc3s4000/STEPPINGS, data/xilinx/xc3s4000/xc3s4000,
+      data/xilinx/xc3s4000/xc3s4000_fg1156,
+      data/xilinx/xc3s4000/xc3s4000_fg676,
+      data/xilinx/xc3s4000/xc3s4000_fg900,
+      data/xilinx/xc3s4000/xc3s4000l,
+      data/xilinx/xc3s4000/xc3s4000l_fg1156,
+      data/xilinx/xc3s4000/xc3s4000l_fg900, data/xilinx/xc3s50,
+      data/xilinx/xc3s50/STEPPINGS, data/xilinx/xc3s50/xc3s50,
+      data/xilinx/xc3s50/xc3s50_cp132, data/xilinx/xc3s50/xc3s50_pq208,
+      data/xilinx/xc3s50/xc3s50_tq144, data/xilinx/xc3s50/xc3s50_vq100,
+      data/xilinx/xc3s5000, data/xilinx/xc3s5000/STEPPINGS,
+      data/xilinx/xc3s5000/xc3s5000,
+      data/xilinx/xc3s5000/xc3s5000_fg1156,
+      data/xilinx/xc3s5000/xc3s5000_fg900, data/xilinx/xc3s500e_fg320,
+      data/xilinx/xc3s500e_fg320/STEPPINGS,
+      data/xilinx/xc3s500e_fg320/xc3s500e_fg320,
+      data/xilinx/xc3s500e_fg320/xc3s500e_ft256,
+      data/xilinx/xc3s500e_fg320/xc3s500e_pq208,
+      data/xilinx/xc9572xl_vq44, data/xilinx/xc9572xl_vq44/STEPPINGS,
+      data/xilinx/xc9572xl_vq44/xc9572xl_vq44, data/xilinx/xcf04s,
+      data/xilinx/xcf04s/STEPPINGS, data/xilinx/xcf04s/xcf04s: Added
+      Xilinx XC3S* parts and others from gumstix repository
 
 2007-11-07 08:10  Kolja Waschk <kawk>
 
-	* data/atmel/PARTS, data/atmel/at91sam7s256,
-	  data/atmel/at91sam7s256/STEPPINGS,
-	  data/atmel/at91sam7s256/at91sam7s_tq48v0,
-	  data/atmel/at91sam7s256/at91sam7s_tq64v0: Added AT91SAM7S256 data
-	  from gumstix repository
+    * data/atmel/PARTS, data/atmel/at91sam7s256,
+      data/atmel/at91sam7s256/STEPPINGS,
+      data/atmel/at91sam7s256/at91sam7s_tq48v0,
+      data/atmel/at91sam7s256/at91sam7s_tq64v0: Added AT91SAM7S256 data
+      from gumstix repository
 
 2007-11-06 21:39  Kolja Waschk <kawk>
 
-	* src/bus/Makefile.am, src/bus/au1500.c, src/bus/bcm1250.c,
-	  src/bus/buses.c, src/bus/buses.h, src/bus/jopcyc.c,
-	  src/bus/lh7a400.c, src/bus/mpc5200.c, src/bus/ppc440gx_ebc8.c,
-	  src/bus/slsup3.c, src/bus/tx4925.c: some more fixes, eg. ppc405
-	  support patch still wasn't completely applied
+    * src/bus/Makefile.am, src/bus/au1500.c, src/bus/bcm1250.c,
+      src/bus/buses.c, src/bus/buses.h, src/bus/jopcyc.c,
+      src/bus/lh7a400.c, src/bus/mpc5200.c, src/bus/ppc440gx_ebc8.c,
+      src/bus/slsup3.c, src/bus/tx4925.c: some more fixes, eg. ppc405
+      support patch still wasn't completely applied
 
 2007-11-06 20:56  Kolja Waschk <kawk>
 
-	* data/ibm/PARTS: [ 1173994 ] IBM PPC405EP support (PARTS file
-	  wasn't updated when I applied the patch)
+    * data/ibm/PARTS: [ 1173994 ] IBM PPC405EP support (PARTS file
+      wasn't updated when I applied the patch)
 
 2007-11-06 20:53  Kolja Waschk <kawk>
 
-	* src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
-	  src/bus/jopcyc.c: [ 1281749 ] Bus driver for JOP.design Cyclone
-	  boards (jopcyc+serial patch) (Arnim Laeuger)
+    * src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+      src/bus/jopcyc.c: [ 1281749 ] Bus driver for JOP.design Cyclone
+      boards (jopcyc+serial patch) (Arnim Laeuger)
 
 2007-11-06 20:49  Kolja Waschk <kawk>
 
-	* data/Makefile.am, data/altera/PARTS, data/altera/ep1c12,
-	  data/altera/ep1c12/STEPPINGS, data/altera/ep1c12/ep1c12,
-	  data/altera/ep1c12/f256, data/altera/ep1c12/f324,
-	  data/altera/ep1c12/q240, data/altera/epm3064a,
-	  data/altera/epm3064a/STEPPINGS, data/altera/epm3064a/epm3064a,
-	  data/altera/epm3064a/l44, data/altera/epm3064a/t100,
-	  data/altera/epm3064a/t44: [ 1281673 ] Device description files
-	  for Altera EP1C12 and EPM3064A (Arnim Laeuger)
+    * data/Makefile.am, data/altera/PARTS, data/altera/ep1c12,
+      data/altera/ep1c12/STEPPINGS, data/altera/ep1c12/ep1c12,
+      data/altera/ep1c12/f256, data/altera/ep1c12/f324,
+      data/altera/ep1c12/q240, data/altera/epm3064a,
+      data/altera/epm3064a/STEPPINGS, data/altera/epm3064a/epm3064a,
+      data/altera/epm3064a/l44, data/altera/epm3064a/t100,
+      data/altera/epm3064a/t44: [ 1281673 ] Device description files
+      for Altera EP1C12 and EPM3064A (Arnim Laeuger)
 
 2007-11-06 20:32  Kolja Waschk <kawk>
 
-	* include/jtag.h, src/Makefile.am, src/cmd/Makefile.am,
-	  src/cmd/cmd.c, src/cmd/writemem.c, src/writemem.c: [ 1249554 ]
-	  Writemem command to write to SRAM (Kent Palmkvist)
+    * include/jtag.h, src/Makefile.am, src/cmd/Makefile.am,
+      src/cmd/cmd.c, src/cmd/writemem.c, src/writemem.c: [ 1249554 ]
+      Writemem command to write to SRAM (Kent Palmkvist)
 
 2007-11-06 20:29  Kolja Waschk <kawk>
 
-	* data/Makefile.am, data/altera/PARTS, data/altera/ep1c6q240,
-	  data/altera/ep1c6q240/STEPPINGS, data/altera/ep1c6q240/ep1c6q240,
-	  src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
-	  src/bus/slsup3.c: [ 1249552 ] New bus type SLS UP3 (Altera FPGA
-	  board) (Kent Palmkvist)
+    * data/Makefile.am, data/altera/PARTS, data/altera/ep1c6q240,
+      data/altera/ep1c6q240/STEPPINGS, data/altera/ep1c6q240/ep1c6q240,
+      src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
+      src/bus/slsup3.c: [ 1249552 ] New bus type SLS UP3 (Altera FPGA
+      board) (Kent Palmkvist)
 
 2007-11-06 20:26  Kolja Waschk <kawk>
 
-	* src/tap/cable.c, src/tap/cable/wiggler.c: [ 1236272 ] Add support
-	  for Analog Devices Blackfin Processor: IGLOO.patch (Robin Getz)
+    * src/tap/cable.c, src/tap/cable/wiggler.c: [ 1236272 ] Add support
+      for Analog Devices Blackfin Processor: IGLOO.patch (Robin Getz)
 
 2007-11-06 20:24  Kolja Waschk <kawk>
 
-	* src/bus/Makefile.am, src/bus/bf533_ezkit.c,
-	  src/bus/bf533_stamp.c, src/bus/buses.c, src/bus/buses.h: [
-	  1236272 ] Add support for Analog Devices Blackfin Processor:
-	  STAMP_EZKIT.patch (Robin Getz)
+    * src/bus/Makefile.am, src/bus/bf533_ezkit.c,
+      src/bus/bf533_stamp.c, src/bus/buses.c, src/bus/buses.h: [
+      1236272 ] Add support for Analog Devices Blackfin Processor:
+      STAMP_EZKIT.patch (Robin Getz)
 
 2007-11-06 20:20  Kolja Waschk <kawk>
 
-	* data/MANUFACTURERS, data/Makefile.am, data/analog,
-	  data/analog/PARTS, data/analog/bf533,
-	  data/analog/bf533/STEPPINGS, data/analog/bf533/bf533: [ 1236272 ]
-	  Add support for Analog Devices Blackfin Processor: Blackfin.patch
+    * data/MANUFACTURERS, data/Makefile.am, data/analog,
+      data/analog/PARTS, data/analog/bf533,
+      data/analog/bf533/STEPPINGS, data/analog/bf533/bf533: [ 1236272 ]
+      Add support for Analog Devices Blackfin Processor: Blackfin.patch
 
 2007-11-06 20:15  Kolja Waschk <kawk>
 
-	* src/tap/parport/ppdev.c: [ 1194141 ] better diagnostics for
-	  opening ppdev device (Hein Roehrig)
+    * src/tap/parport/ppdev.c: [ 1194141 ] better diagnostics for
+      opening ppdev device (Hein Roehrig)
 
 2007-11-06 20:14  Kolja Waschk <kawk>
 
-	* src/svf/svf.c, src/svf/svf.h, src/svf/svf_bison.y,
-	  src/svf/svf_flex.l: [ 1194137 ] better SVF diagnostics (+ manual
-	  integration with previous jtag-svf-vec-hexa fix) (Hein Roehrig)
+    * src/svf/svf.c, src/svf/svf.h, src/svf/svf_bison.y,
+      src/svf/svf_flex.l: [ 1194137 ] better SVF diagnostics (+ manual
+      integration with previous jtag-svf-vec-hexa fix) (Hein Roehrig)
 
 2007-11-06 19:59  Kolja Waschk <kawk>
 
-	* src/svf/svf.c: [ 1194140 ] SVF better RUNTEST timing (Hein Roehrig)
+    * src/svf/svf.c: [ 1194140 ] SVF better RUNTEST timing (Hein Roehrig)
 
 2007-11-06 19:53  Kolja Waschk <kawk>
 
-	* include/Makefile.am, include/cable.h, include/fclock.h, src/Makefile.am,
-	  src/cmd/frequency.c, src/lib/Makefile.am, src/lib/fclock.c,
-	  src/tap/cable.c: [ 1194130 ] busy-loop waiting (breaks compilation of
-	  svf.c... wait for next two patches) (Hein Roehrig)
+    * include/Makefile.am, include/cable.h, include/fclock.h, src/Makefile.am,
+      src/cmd/frequency.c, src/lib/Makefile.am, src/lib/fclock.c,
+      src/tap/cable.c: [ 1194130 ] busy-loop waiting (breaks compilation of
+      svf.c... wait for next two patches) (Hein Roehrig)
 
 2007-11-06 19:34  Kolja Waschk <kawk>
 
-	* src/tap/register.c: [ 1174000 ] Miscellanous fixes (omitting the
-	  speedup for flash.c, obsoleted by an earlier patch) (Wojtek Kaniewski)
+    * src/tap/register.c: [ 1174000 ] Miscellanous fixes (omitting the
+      speedup for flash.c, obsoleted by an earlier patch) (Wojtek Kaniewski)
 
 2007-11-06 19:31  Kolja Waschk <kawk>
 
-	* src/bsdl2jtag.c: [ 1173997 ] bsdl2jtag bidir support (Wojtek$ Kaniewski)
+    * src/bsdl2jtag.c: [ 1173997 ] bsdl2jtag bidir support (Wojtek$ Kaniewski)
 
 2007-11-06 19:29  Kolja Waschk <kawk>
 
-	* data/Makefile.am, data/ibm/ppc405ep, data/ibm/ppc405ep/STEPPINGS,
-	  data/ibm/ppc405ep/ppc405ep: [ 1173994 ] IBM PPC405EP support (Wojtek
-	  Kaniewski)
+    * data/Makefile.am, data/ibm/ppc405ep, data/ibm/ppc405ep/STEPPINGS,
+      data/ibm/ppc405ep/ppc405ep: [ 1173994 ] IBM PPC405EP support (Wojtek
+      Kaniewski)
 
 2007-11-06 19:25  Kolja Waschk <kawk>
 
-	* src/bsdl2jtag.c: [ 1169349 ] better error codes for bsdl2jtag (Hein
-	  Roehrig)
+    * src/bsdl2jtag.c: [ 1169349 ] better error codes for bsdl2jtag (Hein
+      Roehrig)
 
 2007-11-06 19:23  Kolja Waschk <kawk>
 
-	* data/sharp/lh7a400/lh7a400: [ 1164111 ] FIX of the lh7a400 port (Marko
-	  Roessler)
+    * data/sharp/lh7a400/lh7a400: [ 1164111 ] FIX of the lh7a400 port (Marko
+      Roessler)
 
 2007-11-06 19:22  Kolja Waschk <kawk>
 
-	* data/Makefile.am, data/intel/PARTS, data/intel/pxa270,
-	  data/intel/pxa270/STEPPINGS, data/intel/pxa270/pxa270,
-	  libbrux/flash/intel.c, src/bus/buses.c, src/bus/buses.h,
-	  src/bus/pxa2x0.c, src/flash.c: [ 1112022 ] PXA270 Support (Cliff Brake)
+    * data/Makefile.am, data/intel/PARTS, data/intel/pxa270,
+      data/intel/pxa270/STEPPINGS, data/intel/pxa270/pxa270,
+      libbrux/flash/intel.c, src/bus/buses.c, src/bus/buses.h,
+      src/bus/pxa2x0.c, src/flash.c: [ 1112022 ] PXA270 Support (Cliff Brake)
 
 2007-11-06 19:19  Kolja Waschk <kawk>
 
-	* README.svf, include/svf.h: [ 1074347 ] SVF Player (README and
-	  include file) (Arnim Laeuger)
+    * README.svf, include/svf.h: [ 1074347 ] SVF Player (README and
+      include file) (Arnim Laeuger)
 
 2007-11-06 19:18  Kolja Waschk <kawk>
 
-	* data/freescale, data/freescale/PARTS, data/freescale/mpc5200,
-	  data/freescale/mpc5200/STEPPINGS, data/freescale/mpc5200/mpc5200,
-	  src/bus/mpc5200.c: [ 1079531 ] jtag mpc5200 support (added files)
+    * data/freescale, data/freescale/PARTS, data/freescale/mpc5200,
+      data/freescale/mpc5200/STEPPINGS, data/freescale/mpc5200/mpc5200,
+      src/bus/mpc5200.c: [ 1079531 ] jtag mpc5200 support (added files)
 
 2007-11-06 19:06  Kolja Waschk <kawk>
 
-	* configure.ac, data/MANUFACTURERS, data/Makefile.am,
-	  include/chain.h, src/bus/Makefile.am, src/bus/buses.c,
-	  src/bus/buses.h: [ 1079531 ] jtag mpc5200 support (Asier Llano Palacios)
+    * configure.ac, data/MANUFACTURERS, data/Makefile.am,
+      include/chain.h, src/bus/Makefile.am, src/bus/buses.c,
+      src/bus/buses.h: [ 1079531 ] jtag mpc5200 support (Asier Llano Palacios)
 
 2007-11-06 19:01  Kolja Waschk <kawk>
 
-	* src/Makefile.am: add -lm because SVF player uses floor()
+    * src/Makefile.am: add -lm because SVF player uses floor()
 
 2007-11-06 18:58  Kolja Waschk <kawk>
 
-	* src/Makefile.am, src/cmd/Makefile.am, src/cmd/cmd.c,
-	  src/cmd/svf.c, src/svf, src/svf/Makefile.am, src/svf/svf.c,
-	  src/svf/svf.h, src/svf/svf_bison.y, src/svf/svf_flex.l,
-	  src/tap/chain.c, src/tap/tap.c: [ 1074347 ] SVF Player (4
-	  patches: jtag-svf, -inc1, -goto_state, -vec-hexa) (Arnim Laeuger)
+    * src/Makefile.am, src/cmd/Makefile.am, src/cmd/cmd.c,
+      src/cmd/svf.c, src/svf, src/svf/Makefile.am, src/svf/svf.c,
+      src/svf/svf.h, src/svf/svf_bison.y, src/svf/svf_flex.l,
+      src/tap/chain.c, src/tap/tap.c: [ 1074347 ] SVF Player (4
+      patches: jtag-svf, -inc1, -goto_state, -vec-hexa) (Arnim Laeuger)
 
 2007-11-06 18:47  Kolja Waschk <kawk>
 
-	* src/tap/cable/wiggler.c, src/tap/cable/wiggler2.c: [ 1060345 ]
-	  Fix certain Wigglers. (David Vrabel)
+    * src/tap/cable/wiggler.c, src/tap/cable/wiggler2.c: [ 1060345 ]
+      Fix certain Wigglers. (David Vrabel)
 
 2007-11-06 18:37  Kolja Waschk <kawk>
 
-	* src/cmd/bit.c: fix error from merging 972649+1012149 in bit.c
+    * src/cmd/bit.c: fix error from merging 972649+1012149 in bit.c
 
 2007-11-06 18:32  Kolja Waschk <kawk>
 
-	* src/cmd/bit.c: [ 1012149 ] Error messages in src/cmd/bit.c file (Jerome
-	  Debard)
+    * src/cmd/bit.c: [ 1012149 ] Error messages in src/cmd/bit.c file (Jerome
+      Debard)
 
 2007-11-06 18:21  Kolja Waschk <kawk>
 
-	* src/flash.c: [ 1012144 ] User messages printed during flashmem (Jerome
-	  Debard)
+    * src/flash.c: [ 1012144 ] User messages printed during flashmem (Jerome
+      Debard)
 
 2007-11-06 18:14  Kolja Waschk <kawk>
 
-	* src/cmd/dr.c: [ 986415 ] Allow interactive loading of DR (Martin Buck)
+    * src/cmd/dr.c: [ 986415 ] Allow interactive loading of DR (Martin Buck)
 
 2007-11-06 18:09  Kolja Waschk <kawk>
 
-	* src/cmd/bit.c, src/cmd/cable.c, src/cmd/dr.c, src/cmd/endian.c,
-	  src/cmd/flashmem.c, src/cmd/get.c, src/cmd/print.c,
-	  src/cmd/register.c, src/cmd/set.c, src/cmd/shift.c,
-	  src/part/part.c, src/tap/parport/direct.c,
-	  src/tap/parport/ppdev.c: [ 972649 ] make jtag more tolerant of
-	  case (Andrew Dyer)
+    * src/cmd/bit.c, src/cmd/cable.c, src/cmd/dr.c, src/cmd/endian.c,
+      src/cmd/flashmem.c, src/cmd/get.c, src/cmd/print.c,
+      src/cmd/register.c, src/cmd/set.c, src/cmd/shift.c,
+      src/part/part.c, src/tap/parport/direct.c,
+      src/tap/parport/ppdev.c: [ 972649 ] make jtag more tolerant of
+      case (Andrew Dyer)
 
 2007-11-06 18:04  Kolja Waschk <kawk>
 
-	* src/bus/ixp425.c, src/bus/mpc824x.c, src/bus/pxa2x0.c,
-	  src/bus/s3c4510x.c, src/bus/sa1110.c, src/bus/sh7727.c,
-	  src/bus/sh7750r.c, src/bus/sh7751r.c, src/cmd/detect.c,
-	  src/tap/Makefile.am, src/tap/cable.c, src/tap/cable/wiggler2.c: [
-	  909598 ] Detect 16bit flash on PXA25x 1/2 (partially included for
-	  compatibility with other patches and wiggler2 driver, but actual
-	  new pxa2x0 patch omitted - another later patch will fix this) (Matej)
+    * src/bus/ixp425.c, src/bus/mpc824x.c, src/bus/pxa2x0.c,
+      src/bus/s3c4510x.c, src/bus/sa1110.c, src/bus/sh7727.c,
+      src/bus/sh7750r.c, src/bus/sh7751r.c, src/cmd/detect.c,
+      src/tap/Makefile.am, src/tap/cable.c, src/tap/cable/wiggler2.c: [
+      909598 ] Detect 16bit flash on PXA25x 1/2 (partially included for
+      compatibility with other patches and wiggler2 driver, but actual
+      new pxa2x0 patch omitted - another later patch will fix this) (Matej)
 
 2007-11-06 17:20  Kolja Waschk <kawk>
 
-	* src/bus/s3c4510x.c, src/cmd/peekpoke.c, src/jtag.c: [ 826404 ]
-	  s3c4510 bus driver (without jedec.c fix) (Krzysztof Blaszkowski)
+    * src/bus/s3c4510x.c, src/cmd/peekpoke.c, src/jtag.c: [ 826404 ]
+      s3c4510 bus driver (without jedec.c fix) (Krzysztof Blaszkowski)
 
 2007-11-06 16:51  Kolja Waschk <kawk>
 
-	* include/flash.h: [ 1268229 ] gcc4 compilation fix (Asier Llano Palacios)
+    * include/flash.h: [ 1268229 ] gcc4 compilation fix (Asier Llano Palacios)
 
 2007-11-06 09:30  Kolja Waschk <kawk>
 
-	* libbrux, trunk/libbrux: moved libbrux subdir into jtag subdir. See
-	  ChangeLog there too
+    * libbrux, trunk/libbrux: moved libbrux subdir into jtag subdir. See
+      ChangeLog there too
 
 2007-11-02  Kolja Waschk <Kolja Waschk <kawk>>
 
-	* created "UrJTAG" project as fork of openwince jtag tools. All older
-	  log entries in this ChangeLog describe the openwince development.
+    * created "UrJTAG" project as fork of openwince jtag tools. All older
+      log entries in this ChangeLog describe the openwince development.
 
 2004-11-24  Marcel Telka  <marcel@telka.sk>
 
-	* src/cmd/reset.c: New file.
-	* src/discovery.c (jtag_reset): Function changed to non-static.
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added reset.c.
-	* src/cmd/cmd.c (cmds): Added cmd_reset.
+    * src/cmd/reset.c: New file.
+    * src/discovery.c (jtag_reset): Function changed to non-static.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added reset.c.
+    * src/cmd/cmd.c (cmds): Added cmd_reset.
 
 2004-11-21  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (jtag_parse_stream, cleanup): New function.
-	(jtag_parse_file): Replaced stream parsing algorithm with jtag_parse_stream() call. Removed support
-		for special filename '-'.
-	(main): Rewritten and improved startup sequence to distinguish between interactive invocation
-		and stdin input (fixed bug 858535, thanks to Andrew Dyer for an idea).
+    * src/jtag.c (jtag_parse_stream, cleanup): New function.
+    (jtag_parse_file): Replaced stream parsing algorithm with jtag_parse_stream() call. Removed support
+        for special filename '-'.
+    (main): Rewritten and improved startup sequence to distinguish between interactive invocation
+        and stdin input (fixed bug 858535, thanks to Andrew Dyer for an idea).
 
 2004-11-17  Marcel Telka  <marcel@telka.sk>
 
-	* acinclude.m4: New file with VL_LIB_READLINE macro (removed dependency on ac-archive package).
-	* autogen.sh: Removed acinclude call (removed dependency on ac-archive package).
+    * acinclude.m4: New file with VL_LIB_READLINE macro (removed dependency on ac-archive package).
+    * autogen.sh: Removed acinclude call (removed dependency on ac-archive package).
 
 2004-11-16  Marcel Telka  <marcel@telka.sk>
 
-	* data/MANUFACTURERS: Added Lattice Semiconductors and IBM Semiconductors (patch 1012120, Jerome Debard).
-	* data/ibm/PARTS: New file (patch 1012120, Jerome Debard).
-	* data/ibm/ppc440gx/STEPPINGS: Ditto.
-	* data/ibm/ppc440gx/ppc440gx: Ditto.
-	* data/lattice/PARTS: Ditto.
-	* data/lattice/lc4032v-tqfp48/STEPPINGS: Ditto.
-	* data/lattice/lc4032v-tqfp48/lc4032v-tqfp48: Ditto.
-	* data/lattice/m4a3-256.192-fpbga256/STEPPINGS: Ditto.
-	* data/lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256: Ditto.
-	* data/lattice/m4a3-64.32-tqfp48/STEPPINGS: Ditto.
-	* data/lattice/m4a3-64.32-tqfp48/m4a3-64.32-tqfp48: Ditto.
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
+    * data/MANUFACTURERS: Added Lattice Semiconductors and IBM Semiconductors (patch 1012120, Jerome Debard).
+    * data/ibm/PARTS: New file (patch 1012120, Jerome Debard).
+    * data/ibm/ppc440gx/STEPPINGS: Ditto.
+    * data/ibm/ppc440gx/ppc440gx: Ditto.
+    * data/lattice/PARTS: Ditto.
+    * data/lattice/lc4032v-tqfp48/STEPPINGS: Ditto.
+    * data/lattice/lc4032v-tqfp48/lc4032v-tqfp48: Ditto.
+    * data/lattice/m4a3-256.192-fpbga256/STEPPINGS: Ditto.
+    * data/lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256: Ditto.
+    * data/lattice/m4a3-64.32-tqfp48/STEPPINGS: Ditto.
+    * data/lattice/m4a3-64.32-tqfp48/m4a3-64.32-tqfp48: Ditto.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
 
 2004-10-22  Marcel Telka  <marcel@telka.sk>
 
-	* data/MANUFACTURERS: Added Sharp manufacturer (patch 886068, Marko Rößler).
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files (patch 886068, Marko Rößler).
-	* data/sharp/PARTS: New file (patch 886068, Marko Rößler).
-	* data/sharp/lh7a400/STEPPINGS: Ditto.
-	* data/sharp/lh7a400/lh7a400: Ditto.
-	* src/bus/lh7a400.c: Ditto.
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added lh7a400.c (patch 886068, Marko Rößler).
-	* src/bus/buses.c (bus_drivers): Added lh7a400_bus (patch 886068, Marko Rößler).
-	* src/bus/buses.h: Ditto.
+    * data/MANUFACTURERS: Added Sharp manufacturer (patch 886068, Marko Rößler).
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files (patch 886068, Marko Rößler).
+    * data/sharp/PARTS: New file (patch 886068, Marko Rößler).
+    * data/sharp/lh7a400/STEPPINGS: Ditto.
+    * data/sharp/lh7a400/lh7a400: Ditto.
+    * src/bus/lh7a400.c: Ditto.
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added lh7a400.c (patch 886068, Marko Rößler).
+    * src/bus/buses.c (bus_drivers): Added lh7a400_bus (patch 886068, Marko Rößler).
+    * src/bus/buses.h: Ditto.
 
 2004-10-17  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_INIT): Changed version number to 0.6.
-	(AM_GNU_GETTEXT_VERSION): Changed version number for gettext to 0.14.1.
+    * configure.ac (AC_INIT): Changed version number to 0.6.
+    (AM_GNU_GETTEXT_VERSION): Changed version number for gettext to 0.14.1.
 
 2004-10-17  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/wiggler.c (nTRST): Changed pin value (patch 1040199, Andrew Dyer).
-	(nSRESET): New pin value (patch 1040199, Andrew Dyer).
-	(wiggler_init, wiggler_clock, wiggler_get_tdo, wiggler_set_trst): Changed nTRST to not inverted
-		signal (patch 1040199, Andrew Dyer).
+    * src/tap/cable/wiggler.c (nTRST): Changed pin value (patch 1040199, Andrew Dyer).
+    (nSRESET): New pin value (patch 1040199, Andrew Dyer).
+    (wiggler_init, wiggler_clock, wiggler_get_tdo, wiggler_set_trst): Changed nTRST to not inverted
+        signal (patch 1040199, Andrew Dyer).
 
 2004-09-21  Marcel Telka  <marcel@telka.sk>
 
-	* data/intel/PARTS: Added support for different IXP425 frequency variants (patch 1030647, Trevor Man).
+    * data/intel/PARTS: Added support for different IXP425 frequency variants (patch 1030647, Trevor Man).
 
 2004-08-24  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added ppc440gx_ebc8.c.
-	* src/bus/buses.c (bus_drivers): Added ppc440gx_ebc8_bus (patch 1012154, Jerome Debard).
-	* src/bus/buses.h: Ditto.
-	* src/bus/ppc440gx_ebc8.c: New file (patch 1012154, Jerome Debard).
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added ppc440gx_ebc8.c.
+    * src/bus/buses.c (bus_drivers): Added ppc440gx_ebc8_bus (patch 1012154, Jerome Debard).
+    * src/bus/buses.h: Ditto.
+    * src/bus/ppc440gx_ebc8.c: New file (patch 1012154, Jerome Debard).
 
 2004-08-20  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/pxa2x0.c (pxa2x0_bus_init): New function.
-	(pxa250_bus_prepare): Replaced bus initialization sequence with pxa2x0_bus_init() call.
-	(pxa2x0_bus_area): Added pxa2x0_bus_init() call.
+    * src/bus/pxa2x0.c (pxa2x0_bus_init): New function.
+    (pxa250_bus_prepare): Replaced bus initialization sequence with pxa2x0_bus_init() call.
+    (pxa2x0_bus_area): Added pxa2x0_bus_init() call.
 
 2004-08-20  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/Makefile.am (libtap_a_SOURCES): Added cable/lattice.c.
-	* src/tap/cable.c (cable_drivers): Added lattice_cable_driver (patch 1012138, Jerome Debard).
-	* src/tap/cable/lattice.c: New file (patch 1012138, Jerome Debard).
+    * src/tap/Makefile.am (libtap_a_SOURCES): Added cable/lattice.c.
+    * src/tap/cable.c (cable_drivers): Added lattice_cable_driver (patch 1012138, Jerome Debard).
+    * src/tap/cable/lattice.c: New file (patch 1012138, Jerome Debard).
 
 2004-08-19  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added tx4925.c (patch 972625, Andrew Dyer).
-	* src/bus/buses.c (bus_drivers): Added tx4925_bus (patch 972625, Andrew Dyer).
-	* src/bus/buses.h: Ditto.
-	* src/bus/tx4925.c: New file (patch 972625, Andrew Dyer).
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added tx4925.c (patch 972625, Andrew Dyer).
+    * src/bus/buses.c (bus_drivers): Added tx4925_bus (patch 972625, Andrew Dyer).
+    * src/bus/buses.h: Ditto.
+    * src/bus/tx4925.c: New file (patch 972625, Andrew Dyer).
 
 2004-08-17  Marcel Telka  <marcel@telka.sk>
 
-	* data/MANUFACTURERS: Added Toshiba manufacturer (patch 972621, Andrew Dyer).
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files (patch 972621, Andrew Dyer).
-	* data/xilinx/PARTS: Added XCR3032XL-VQ44 entry (patch 972621, Andrew Dyer).
-	* data/xilinx/xcr3032xl-vq44/STEPPINGS: New file (patch 972621, Andrew Dyer).
-	* data/xilinx/xcr3032xl-vq44/xcr3032xl-vq44: Ditto.
-	* data/toshiba/PARTS: Ditto.
-	* data/toshiba/tx4925/STEPPINGS: Ditto.
-	* data/toshiba/tx4925/tx4925: Ditto.
-	* data/toshiba/tx4926/STEPPINGS: Ditto.
-	* data/toshiba/tx4926/tx4926: Ditto.
+    * data/MANUFACTURERS: Added Toshiba manufacturer (patch 972621, Andrew Dyer).
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files (patch 972621, Andrew Dyer).
+    * data/xilinx/PARTS: Added XCR3032XL-VQ44 entry (patch 972621, Andrew Dyer).
+    * data/xilinx/xcr3032xl-vq44/STEPPINGS: New file (patch 972621, Andrew Dyer).
+    * data/xilinx/xcr3032xl-vq44/xcr3032xl-vq44: Ditto.
+    * data/toshiba/PARTS: Ditto.
+    * data/toshiba/tx4925/STEPPINGS: Ditto.
+    * data/toshiba/tx4925/tx4925: Ditto.
+    * data/toshiba/tx4926/STEPPINGS: Ditto.
+    * data/toshiba/tx4926/tx4926: Ditto.
 
 2004-08-17  Marcel Telka  <marcel@telka.sk>
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
-	* data/philips/PARTS: Added XCR3128XL-VQ100 entry (patch 1010714, Michael Lauer).
-	* data/xilinx/PARTS: Added directory for XCR3128XL-VQ100 entry (patch 1010714, Michael Lauer).
-	* data/philips/xcr3128xl-vq100/STEPPINGS: New file (patch 1010714, Michael Lauer).
-	* data/philips/xcr3128xl-vq100/xcr3128xl-vq100: Ditto.
-	* data/xilinx/xcr3128xl-vq100/xcr3128xl-vq100: Ditto.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
+    * data/philips/PARTS: Added XCR3128XL-VQ100 entry (patch 1010714, Michael Lauer).
+    * data/xilinx/PARTS: Added directory for XCR3128XL-VQ100 entry (patch 1010714, Michael Lauer).
+    * data/philips/xcr3128xl-vq100/STEPPINGS: New file (patch 1010714, Michael Lauer).
+    * data/philips/xcr3128xl-vq100/xcr3128xl-vq100: Ditto.
+    * data/xilinx/xcr3128xl-vq100/xcr3128xl-vq100: Ditto.
 
 2004-08-16  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/pxa2x0.c (bus_params_t): Added new member: inited.
-	(INITED): New macro.
-	(pxa2x0_bus_new): Removed BOOT_DEF initialization.
-	(pxa250_bus_prepare): Added BOOT_DEF initialization.
+    * src/bus/pxa2x0.c (bus_params_t): Added new member: inited.
+    (INITED): New macro.
+    (pxa2x0_bus_new): Removed BOOT_DEF initialization.
+    (pxa250_bus_prepare): Added BOOT_DEF initialization.
 
 2004-08-15  Marcel Telka  <marcel@telka.sk>
 
-	* include/jtag.h (detect_parts): Changed return type.
-	* src/detect.c (detect_parts): Changed return value to return number of detected parts.
-	* src/cmd/detect.c (cmd_detect_run): Added reset of the chain->parts to NULL before
-		detect_parts() call. Ignored detect_parts() return value.
+    * include/jtag.h (detect_parts): Changed return type.
+    * src/detect.c (detect_parts): Changed return value to return number of detected parts.
+    * src/cmd/detect.c (cmd_detect_run): Added reset of the chain->parts to NULL before
+        detect_parts() call. Ignored detect_parts() return value.
 
 2004-08-13  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c: Added missing locale.h include (patch 986414, Martin Buck).
+    * src/jtag.c: Added missing locale.h include (patch 986414, Martin Buck).
 
 2004-08-11  Marcel Telka  <marcel@telka.sk>
 
-	* Makefile.rules (RECURSIVE_TARGETS, lint-recursive): Removed.
-	(lint): Added command to run recursive make.
-	(.PHONY): Removed lint-recursive.
+    * Makefile.rules (RECURSIVE_TARGETS, lint-recursive): Removed.
+    (lint): Added command to run recursive make.
+    (.PHONY): Removed lint-recursive.
 
 2004-06-13  Marcel Telka  <marcel@telka.sk>
 
-	* data/broadcom/PARTS: Added BCM4712 entry (Alan Wallace).
-	* data/broadcom/bcm4712/STEPPINGS: New file (Alan Wallace).
-	* data/broadcom/bcm4712/bcm4712: Ditto.
+    * data/broadcom/PARTS: Added BCM4712 entry (Alan Wallace).
+    * data/broadcom/bcm4712/STEPPINGS: New file (Alan Wallace).
+    * data/broadcom/bcm4712/bcm4712: Ditto.
 
 2004-01-20  Marcel Telka  <marcel@telka.sk>
 
-	* acinclude.m4: File removed.
-	* autogen.sh: Added acinclude call.
+    * acinclude.m4: File removed.
+    * autogen.sh: Added acinclude call.
 
 2003-12-20  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added au1500.c.
-	* src/bus/au1500.c: New file (patch 853883, Zhang Wei).
-	* src/bus/buses.c (bus_drivers): Added au1500_bus (patch 853883, Zhang Wei).
-	* src/bus/buses.h: Added au1500_bus.
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added au1500.c.
+    * src/bus/au1500.c: New file (patch 853883, Zhang Wei).
+    * src/bus/buses.c (bus_drivers): Added au1500_bus (patch 853883, Zhang Wei).
+    * src/bus/buses.h: Added au1500_bus.
 
 2003-11-02  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_INIT): Changed version number to 0.5.2.
+    * configure.ac (AC_INIT): Changed version number to 0.5.2.
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added motorola/mpc8245/1.2.
-	* data/motorola/mpc8245/1.2: New file.
-	* src/bus/mpc824x.c: Ditto.
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added mpc824x.c.
-	* src/bus/buses.c (bus_drivers): Added mpc824x_bus.
-	* src/bus/buses.h (mpc824x_bus): Added bus declaration.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added motorola/mpc8245/1.2.
+    * data/motorola/mpc8245/1.2: New file.
+    * src/bus/mpc824x.c: Ditto.
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added mpc824x.c.
+    * src/bus/buses.c (bus_drivers): Added mpc824x_bus.
+    * src/bus/buses.h (mpc824x_bus): Added bus declaration.
 
-	* include/bsbit.h (bsbit_alloc): Changed parameter name (signals -> signal).
-	* src/part/bsbit.c (bsbit_alloc): Changed parameter behaviour.
-	* src/cmd/bit.c (cmd_bit_run): Passed exact signal to bsbit_alloc() instead of list of signals.
+    * include/bsbit.h (bsbit_alloc): Changed parameter name (signals -> signal).
+    * src/part/bsbit.c (bsbit_alloc): Changed parameter behaviour.
+    * src/cmd/bit.c (cmd_bit_run): Passed exact signal to bsbit_alloc() instead of list of signals.
 
-	* src/jtag.c (main): Added cfi_array deallocation.
+    * src/jtag.c (main): Added cfi_array deallocation.
 
-	* src/flash.c (set_flash_driver): Used global cfi_array variable to set flash driver.
-	(flashcheck): Function removed.
-	All function calls replaced by set_flash_driver().
-	(flashmsbin): Removed local cfi_array variable.
-	(flashmem): Removed local cfi_array variable. Fixed bug with one more block erase while programming
-		data at end of previous block.
-	(flasherase): Removed local cfi_array variable. Fixed block number calculation.
-	* src/readmem.c (readmem): Fixed bug while reading address near to end of 32 bit address range.
-	* src/bus/pxa2x0.c (pxa2x0_bus_new): Added BSR sampling before BOOT_DEF initialization (bugfix).
+    * src/flash.c (set_flash_driver): Used global cfi_array variable to set flash driver.
+    (flashcheck): Function removed.
+    All function calls replaced by set_flash_driver().
+    (flashmsbin): Removed local cfi_array variable.
+    (flashmem): Removed local cfi_array variable. Fixed bug with one more block erase while programming
+        data at end of previous block.
+    (flasherase): Removed local cfi_array variable. Fixed block number calculation.
+    * src/readmem.c (readmem): Fixed bug while reading address near to end of 32 bit address range.
+    * src/bus/pxa2x0.c (pxa2x0_bus_new): Added BSR sampling before BOOT_DEF initialization (bugfix).
 
 2003-10-23  Marcel Telka  <marcel@telka.sk>
 
-	* include/bssignal.h (salias_t): Added new type.
-	(salias_alloc, salias_free): Adde new function prototypes.
-	* include/part.h (struct part): Added new structure member 'saliases'.
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added salias.c.
-	* src/cmd/cmd.c (cmds): Added cmd_salias.
-	* src/cmd/salias.c: New file.
-	* src/part/part.c (part_alloc): Added saliases initialization.
-	(part_free): Added saliases deallocation.
-	(part_find_signal): Added signal aliases searching.
-	* src/part/signal.c (salias_alloc, salias_free): New functions.
+    * include/bssignal.h (salias_t): Added new type.
+    (salias_alloc, salias_free): Adde new function prototypes.
+    * include/part.h (struct part): Added new structure member 'saliases'.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added salias.c.
+    * src/cmd/cmd.c (cmds): Added cmd_salias.
+    * src/cmd/salias.c: New file.
+    * src/part/part.c (part_alloc): Added saliases initialization.
+    (part_free): Added saliases deallocation.
+    (part_find_signal): Added signal aliases searching.
+    * src/part/signal.c (salias_alloc, salias_free): New functions.
 
 2003-10-20  Marcel Telka  <marcel@telka.sk>
 
-	* data/hitachi/hd64465/hd64465: Completed BSR bits declaration.
+    * data/hitachi/hd64465/hd64465: Completed BSR bits declaration.
 
 2003-10-20  Marcel Telka  <marcel@telka.sk>
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added hitachi/sh7729/STEPPINGS and hitachi/sh7729/sh7729.
-	* data/hitachi/sh7729/STEPPINGS: New file (Beregnyei Balazs).
-	* data/hitachi/sh7729/sh7729: Ditto.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added hitachi/sh7729/STEPPINGS and hitachi/sh7729/sh7729.
+    * data/hitachi/sh7729/STEPPINGS: New file (Beregnyei Balazs).
+    * data/hitachi/sh7729/sh7729: Ditto.
 
 2003-10-17  Marcel Telka  <marcel@telka.sk>
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added hitachi/hd64465/hd64465.
-	* data/hitachi/hd64465/hd64465: New file.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added hitachi/hd64465/hd64465.
+    * data/hitachi/hd64465/hd64465: New file.
 
 2003-10-13  Marcel Telka  <marcel@telka>
 
-	* data/intel/ixp425/STEPPINGS: Added B0 stepping.
+    * data/intel/ixp425/STEPPINGS: Added B0 stepping.
 
 2003-10-11  Marcel Telka  <marcel@telka>
 
-	Version 0.5.1 released.
+    Version 0.5.1 released.
 
 2003-09-23  Marcel Telka  <marcel@telka.sk>
 
-	* src/flash.c (flash_drivers): Added amd_16_flash_driver (Bradley D. LaRonde).
-	(find_block): New function (Bradley D. LaRonde).
-	(flashmem): Added block calculations using exact CFI data (Bradley D. LaRonde).
+    * src/flash.c (flash_drivers): Added amd_16_flash_driver (Bradley D. LaRonde).
+    (find_block): New function (Bradley D. LaRonde).
+    (flashmem): Added block calculations using exact CFI data (Bradley D. LaRonde).
 
-	* src/tap/cable/triton.c (triton_init): Removed unused variable 'data'.
+    * src/tap/cable/triton.c (triton_init): Removed unused variable 'data'.
 
 2003-09-15  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac: Fixed spelling (patch 805108, Andreas Mohr).
-	* src/jtag.c (main): Ditto.
-	* src/cmd/discovery.c (cmd_discovery_help, cmd_discovery): Ditto.
-	* src/cmd/flashmem.c (cmd_flashmem_help): Ditto.
+    * configure.ac: Fixed spelling (patch 805108, Andreas Mohr).
+    * src/jtag.c (main): Ditto.
+    * src/cmd/discovery.c (cmd_discovery_help, cmd_discovery): Ditto.
+    * src/cmd/flashmem.c (cmd_flashmem_help): Ditto.
 
-	* src/tap/cable/ei012.c: Changed comment (patch 805108, Andreas Mohr).
-	* src/tap/cable/keithkoep.c: Ditto.
-	* src/tap/cable/mpcbdm.c: Ditto.
+    * src/tap/cable/ei012.c: Changed comment (patch 805108, Andreas Mohr).
+    * src/tap/cable/keithkoep.c: Ditto.
+    * src/tap/cable/mpcbdm.c: Ditto.
 
 2003-09-14  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/triton.c: New file (patch 805103, Andreas Mohr).
-	* src/tap/Makefile.am (libtap_a_SOURCES): Added cable/triton.c (patch 805103, Andreas Mohr).
-	* src/tap/cable.c (cable_drivers): Added triton_cable_driver member (patch 805103, Andreas Mohr).
-	* src/tap/cable/generic.h (PARAM_SRESET): New macro (patch 805103, Andreas Mohr).
-	(generic_params_t): New structure member 'sreset' (patch 805103, Andreas Mohr).
+    * src/tap/cable/triton.c: New file (patch 805103, Andreas Mohr).
+    * src/tap/Makefile.am (libtap_a_SOURCES): Added cable/triton.c (patch 805103, Andreas Mohr).
+    * src/tap/cable.c (cable_drivers): Added triton_cable_driver member (patch 805103, Andreas Mohr).
+    * src/tap/cable/generic.h (PARAM_SRESET): New macro (patch 805103, Andreas Mohr).
+    (generic_params_t): New structure member 'sreset' (patch 805103, Andreas Mohr).
 
-	* configure.ac: Changed description for --with-include parameter (thanks to Andreas Mohr).
-
-2003-09-12  Marcel Telka  <marcel@telka.sk>
-
-	* configure.ac (AC_CHECK_FUNCS): Added swprintf.
-	* src/cmd/print.c (cmd_print_run): Added alternative implementation of the header printing using
-		snprintf() for platforms without swprintf() function available.
+    * configure.ac: Changed description for --with-include parameter (thanks to Andreas Mohr).
 
 2003-09-12  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_INIT): Changed version number to 0.5.1.
+    * configure.ac (AC_CHECK_FUNCS): Added swprintf.
+    * src/cmd/print.c (cmd_print_run): Added alternative implementation of the header printing using
+        snprintf() for platforms without swprintf() function available.
+
+2003-09-12  Marcel Telka  <marcel@telka.sk>
+
+    * configure.ac (AC_INIT): Changed version number to 0.5.1.
 
 2003-09-11  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/wiggler.c (wiggler_init, wiggler_clock, wiggler_get_tdo, wiggler_set_trst): Fixed
-		inverted TRST signal (see patch 799377 for more info, thanks to Mike Tesch for reporting).
+    * src/tap/cable/wiggler.c (wiggler_init, wiggler_clock, wiggler_get_tdo, wiggler_set_trst): Fixed
+        inverted TRST signal (see patch 799377 for more info, thanks to Mike Tesch for reporting).
 
 2003-09-11  Marcel Telka  <marcel@telka.sk>
 
-	* src/cmd/dr.c (cmd_dr_run): Added test for missing active instruction and data register (thanks to
-		Mike Tesch for reporting).
+    * src/cmd/dr.c (cmd_dr_run): Added test for missing active instruction and data register (thanks to
+        Mike Tesch for reporting).
 
 2003-09-10  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/bcm1250.c (bcm1250_bus_printinfo, bcm1250_bus): Fixed typo (compatibile->compatible) in
-		output message (thanks to Andreas Mohr).
-	* src/bus/ixp425.c (ixp425_bus_printinfo, ixp425_bus): Ditto.
-	* src/bus/pxa2x0.c (pxa2x0_bus_printinfo, pxa2x0_bus): Ditto.
-	* src/bus/s3c4510x.c (s3c4510_bus_printinfo, s3c4510_bus): Ditto.
-	* src/bus/sa1110.c (sa1110_bus_printinfo, sa1110_bus): Ditto.
-	* src/bus/sh7727.c (sh7727_bus_printinfo, sh7727_bus): Ditto.
-	* src/bus/sh7750r.c (sh7750r_bus_printinfo, sh7750r_bus): Ditto.
-	* src/bus/sh7751r.c (sh7751r_bus_printinfo, sh7751r_bus): Ditto.
+    * src/bus/bcm1250.c (bcm1250_bus_printinfo, bcm1250_bus): Fixed typo (compatibile->compatible) in
+        output message (thanks to Andreas Mohr).
+    * src/bus/ixp425.c (ixp425_bus_printinfo, ixp425_bus): Ditto.
+    * src/bus/pxa2x0.c (pxa2x0_bus_printinfo, pxa2x0_bus): Ditto.
+    * src/bus/s3c4510x.c (s3c4510_bus_printinfo, s3c4510_bus): Ditto.
+    * src/bus/sa1110.c (sa1110_bus_printinfo, sa1110_bus): Ditto.
+    * src/bus/sh7727.c (sh7727_bus_printinfo, sh7727_bus): Ditto.
+    * src/bus/sh7750r.c (sh7750r_bus_printinfo, sh7750r_bus): Ditto.
+    * src/bus/sh7751r.c (sh7751r_bus_printinfo, sh7751r_bus): Ditto.
 
 2003-09-05  Marcel Telka  <marcel@telka.sk>
 
-	* include/bus.h (bus_drivers): Added constant declaration.
-	(new_sa1110_bus, new_pxa250_bus, new_ixp425_bus, new_sh7727_bus, new_sh7750r_bus, new_sh7751r_bus)
-	(new_bcm1250_bus): Function declarations removed.
-	* src/bus/buses.c (bus_drivers): New constant definition.
-	* src/bus/buses.h: New file.
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added buses.h.
+    * include/bus.h (bus_drivers): Added constant declaration.
+    (new_sa1110_bus, new_pxa250_bus, new_ixp425_bus, new_sh7727_bus, new_sh7750r_bus, new_sh7751r_bus)
+    (new_bcm1250_bus): Function declarations removed.
+    * src/bus/buses.c (bus_drivers): New constant definition.
+    * src/bus/buses.h: New file.
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added buses.h.
 
-	* src/bus/bcm1250.c (bcm1250_bus_printinfo): Added new function parameter 'bus'.
-	(bcm1250_bus): Changed structure type to bus_driver_t. Changed members.
-	(new_bcm1250_bus): Function renamed ...
-	(bcm1250_bus_new): ... to this one. Changed parameter list to void (and function body updated).
-	* src/bus/ixp425.c (ixp425_bus_printinfo): Added new function parameter 'bus'.
-	(ixp425_bus): Changed structure type to bus_driver_t. Changed members.
-	(new_ixp425_bus): Function renamed ...
-	(ixp425_bus_new): ... to this one. Changed parameter list to void (and function body updated).
-	* src/bus/pxa2x0.c (pxa2x0_bus_printinfo): Added new function parameter 'bus'.
-	(pxa250_bus): Structure transformed ...
-	(pxa2x0_bus): ... to this constant (changed type to bus_driver_t, changed members).
-	(new_pxa250_bus): Function renamed ...
-	(pxa2x0_bus_new): ... to this one. Changed parameter list to void (and function body updated).
-	* src/bus/s3c4510x.c (s3c4510_bus_printinfo): Added new function parameter 'bus'.
-	(s3c4510_bus): Changed structure type to bus_driver_t. Changed members.
-	(new_s3c4510_bus): Function renamed ...
-	(s3c4510_bus_new): ... to this one. Changed parameter list to void (and function body updated).
-	* src/bus/sa1110.c (sa1110_bus_printinfo): Added new function parameter 'bus'.
-	(sa1110_bus): Changed structure type to bus_driver_t. Changed members.
-	(new_sa1110_bus): Function renamed ...
-	(sa1110_bus_new): ... to this one. Changed parameter list to void (and function body updated).
-	* src/bus/sh7727.c (sh7727_bus_printinfo): Added new function parameter 'bus'.
-	(sh7727_bus): Changed structure type to bus_driver_t. Changed members.
-	(new_sh7727_bus): Function renamed ...
-	(sh7727_bus_new): ... to this one. Changed parameter list to void (and function body updated).
-	* src/bus/sh7750r.c (sh7750r_bus_printinfo): Added new function parameter 'bus'.
-	(sh7750r_bus): Changed structure type to bus_driver_t. Changed members.
-	(new_sh7750r_bus): Function renamed ...
-	(sh7750r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
-	* src/bus/sh7751r.c (sh7751r_bus_printinfo): Added new function parameter 'bus'.
-	(sh7751r_bus): Changed structure type to bus_driver_t. Changed members.
-	(new_sh7751r_bus): Function renamed ...
-	(sh7751r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+    * src/bus/bcm1250.c (bcm1250_bus_printinfo): Added new function parameter 'bus'.
+    (bcm1250_bus): Changed structure type to bus_driver_t. Changed members.
+    (new_bcm1250_bus): Function renamed ...
+    (bcm1250_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+    * src/bus/ixp425.c (ixp425_bus_printinfo): Added new function parameter 'bus'.
+    (ixp425_bus): Changed structure type to bus_driver_t. Changed members.
+    (new_ixp425_bus): Function renamed ...
+    (ixp425_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+    * src/bus/pxa2x0.c (pxa2x0_bus_printinfo): Added new function parameter 'bus'.
+    (pxa250_bus): Structure transformed ...
+    (pxa2x0_bus): ... to this constant (changed type to bus_driver_t, changed members).
+    (new_pxa250_bus): Function renamed ...
+    (pxa2x0_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+    * src/bus/s3c4510x.c (s3c4510_bus_printinfo): Added new function parameter 'bus'.
+    (s3c4510_bus): Changed structure type to bus_driver_t. Changed members.
+    (new_s3c4510_bus): Function renamed ...
+    (s3c4510_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+    * src/bus/sa1110.c (sa1110_bus_printinfo): Added new function parameter 'bus'.
+    (sa1110_bus): Changed structure type to bus_driver_t. Changed members.
+    (new_sa1110_bus): Function renamed ...
+    (sa1110_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+    * src/bus/sh7727.c (sh7727_bus_printinfo): Added new function parameter 'bus'.
+    (sh7727_bus): Changed structure type to bus_driver_t. Changed members.
+    (new_sh7727_bus): Function renamed ...
+    (sh7727_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+    * src/bus/sh7750r.c (sh7750r_bus_printinfo): Added new function parameter 'bus'.
+    (sh7750r_bus): Changed structure type to bus_driver_t. Changed members.
+    (new_sh7750r_bus): Function renamed ...
+    (sh7750r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
+    * src/bus/sh7751r.c (sh7751r_bus_printinfo): Added new function parameter 'bus'.
+    (sh7751r_bus): Changed structure type to bus_driver_t. Changed members.
+    (new_sh7751r_bus): Function renamed ...
+    (sh7751r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 
-	* src/cmd/cable.c (cmd_cable_run): Replaced bus->free() call with bus_free().
-	* src/jtag.c (main): Ditto.
+    * src/cmd/cable.c (cmd_cable_run): Replaced bus->free() call with bus_free().
+    * src/jtag.c (main): Ditto.
 
-	* src/cmd/cmd.c (cmds): Added cmd_initbus.
-	* src/cmd/detect.c (cmd_detect_run): Removed explicit bus driver detection.
-	* src/cmd/initbus.c: New file.
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added initbus.c.
+    * src/cmd/cmd.c (cmds): Added cmd_initbus.
+    * src/cmd/detect.c (cmd_detect_run): Removed explicit bus driver detection.
+    * src/cmd/initbus.c: New file.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added initbus.c.
 
-	* data/broadcom/bcm1250/bcm1250: Added 'initbus' command call.
-	* data/hitachi/sh7727/sh7727: Ditto.
-	* data/intel/ixp425/ixp425: Ditto.
-	* data/intel/pxa250/pxa250: Ditto.
-	* data/intel/pxa250/pxa250c0: Ditto.
-	* data/intel/sa1110/sa1110: Ditto.
-	* data/samsung/s3c4510b/s3c4510b: Ditto.
+    * data/broadcom/bcm1250/bcm1250: Added 'initbus' command call.
+    * data/hitachi/sh7727/sh7727: Ditto.
+    * data/intel/ixp425/ixp425: Ditto.
+    * data/intel/pxa250/pxa250: Ditto.
+    * data/intel/pxa250/pxa250c0: Ditto.
+    * data/intel/sa1110/sa1110: Ditto.
+    * data/samsung/s3c4510b/s3c4510b: Ditto.
 
 2003-09-04  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (CPPFLAGS): Added top_srcdir into include directory list.
+    * configure.ac (CPPFLAGS): Added top_srcdir into include directory list.
 
 2003-09-03  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/pxa2x0.c (set_data_in, setup_data): Added new 'adr' parameter. Used real data bus width
-		for data reading (based on patch 792591, thanks to Guennadi Liakhovetski).
-	All function callers updated.
-	(pxa250_bus_read_next, pxa250_bus_read_end): Used real data bus width for data reading (based on
-		patch 792591, thanks to Guennadi Liakhovetski).
-	* src/bus/sa1110.c (set_data_in, setup_data, sa1110_bus_read_next, sa1110_bus_read_end): Ditto.
-	* src/bus/sh7727.c (set_data_in, setup_data, sh7727_bus_read_next, sh7727_bus_read_end): Ditto.
+    * src/bus/pxa2x0.c (set_data_in, setup_data): Added new 'adr' parameter. Used real data bus width
+        for data reading (based on patch 792591, thanks to Guennadi Liakhovetski).
+    All function callers updated.
+    (pxa250_bus_read_next, pxa250_bus_read_end): Used real data bus width for data reading (based on
+        patch 792591, thanks to Guennadi Liakhovetski).
+    * src/bus/sa1110.c (set_data_in, setup_data, sa1110_bus_read_next, sa1110_bus_read_end): Ditto.
+    * src/bus/sh7727.c (set_data_in, setup_data, sh7727_bus_read_next, sh7727_bus_read_end): Ditto.
 
 2003-08-28  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/pxa2x0.c (pxa250_bus_read_next, pxa250_bus_read_end): Added support for BOOT_DEF register
-		emulation.
-	(pxa2x0_bus_area): Added Memory Mapped registers (Memory Ctl) area.
+    * src/bus/pxa2x0.c (pxa250_bus_read_next, pxa250_bus_read_end): Added support for BOOT_DEF register
+        emulation.
+    (pxa2x0_bus_area): Added Memory Mapped registers (Memory Ctl) area.
 
 2003-08-28  Marcel Telka  <marcel@telka.sk>
 
-	* src/readmem.c (readmem): Replaced bus_width macro with new bus_area.
-	* src/bus/bcm1250.c (bcm1250_bus_width): Function removed.
-	(bcm1250_bus_area): New function.
-	* src/bus/ixp425.c (ixp425_bus_width): Function removed.
-	(ixp425_bus_area): New function.
-	* src/bus/pxa2x0.c (pxa250_bus_width): Function removed.
-	(pxa2x0_bus_area): New function.
-	* src/bus/s3c4510x.c (s3c4510_bus_width): Function removed.
-	(s3c4510_bus_area): New function.
-	* src/bus/sa1110.c (sa1110_bus_width: Function removed.
-	(sa1110_bus_area): New function.
-	* src/bus/sh7727.c (sh7727_bus_width): Function removed.
-	(sh7727_bus_area): New function.
-	* src/bus/sh7750r.c (sh7750r_bus_width): Function removed.
-	(sh7750r_bus_area): New function.
-	* src/bus/sh7751r.c (sh7751r_bus_width): Function removed.
-	(sh7751r_bus_area): New function.
-	* src/cmd/print.c (cmd_print_run): Added bus area printing.
+    * src/readmem.c (readmem): Replaced bus_width macro with new bus_area.
+    * src/bus/bcm1250.c (bcm1250_bus_width): Function removed.
+    (bcm1250_bus_area): New function.
+    * src/bus/ixp425.c (ixp425_bus_width): Function removed.
+    (ixp425_bus_area): New function.
+    * src/bus/pxa2x0.c (pxa250_bus_width): Function removed.
+    (pxa2x0_bus_area): New function.
+    * src/bus/s3c4510x.c (s3c4510_bus_width): Function removed.
+    (s3c4510_bus_area): New function.
+    * src/bus/sa1110.c (sa1110_bus_width: Function removed.
+    (sa1110_bus_area): New function.
+    * src/bus/sh7727.c (sh7727_bus_width): Function removed.
+    (sh7727_bus_area): New function.
+    * src/bus/sh7750r.c (sh7750r_bus_width): Function removed.
+    (sh7750r_bus_area): New function.
+    * src/bus/sh7751r.c (sh7751r_bus_width): Function removed.
+    (sh7751r_bus_area): New function.
+    * src/cmd/print.c (cmd_print_run): Added bus area printing.
 
 2003-08-27  Marcel Telka  <marcel@telka.sk>
 
-	* include/flash.h: Removed CFI_INTEL_ERROR_* macros.
+    * include/flash.h: Removed CFI_INTEL_ERROR_* macros.
 
 2003-08-26  Marcel Telka  <marcel@telka.sk>
 
-	* src/cmd/print.c (cmd_print_run): Fixed header print format.
+    * src/cmd/print.c (cmd_print_run): Fixed header print format.
 
 2003-08-25  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_INIT): Changed package name.
-	* src/jtag.c (main): Added full package name to banner.
+    * configure.ac (AC_INIT): Changed package name.
+    * src/jtag.c (main): Added full package name to banner.
 
 2003-08-22  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/byteblaster.c (byteblaster_init): Added additional checks for valid ByteBlaster cable
-		connection and enabled all variants of the cable (patch 793313, Rojhalat Ibrahim).
+    * src/tap/cable/byteblaster.c (byteblaster_init): Added additional checks for valid ByteBlaster cable
+        connection and enabled all variants of the cable (patch 793313, Rojhalat Ibrahim).
 
 2003-08-22  Marcel Telka  <marcel@telka.sk>
 
-	* MANUFACTURERS: Added Altera manufacturer (Rojhalat Ibrahim).
-	* altera/PARTS: New file (Rojhalat Ibrahim).
-	* altera/ep1c20f400/STEPPINGS: Ditto.
-	* altera/ep1c20f400/ep1c20f400: Ditto.
-	* altera/epm7128aetc100/STEPPINGS: Ditto.
-	* altera/epm7128aetc100/epm7128aetc100: Ditto.
-	* Makefile.am (nobase_dist_pkgdata_DATA): Added new Altera JTAG files.
+    * MANUFACTURERS: Added Altera manufacturer (Rojhalat Ibrahim).
+    * altera/PARTS: New file (Rojhalat Ibrahim).
+    * altera/ep1c20f400/STEPPINGS: Ditto.
+    * altera/ep1c20f400/ep1c20f400: Ditto.
+    * altera/epm7128aetc100/STEPPINGS: Ditto.
+    * altera/epm7128aetc100/epm7128aetc100: Ditto.
+    * Makefile.am (nobase_dist_pkgdata_DATA): Added new Altera JTAG files.
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
-	Version 0.5 released.
+    Version 0.5 released.
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AM_GNU_GETTEXT_VERSION): Changed version number to 0.12.1.
+    * configure.ac (AM_GNU_GETTEXT_VERSION): Changed version number to 0.12.1.
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/s3c4510x.c: Changed comment.
+    * src/bus/s3c4510x.c: Changed comment.
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added s3c4510x.c.
-	* src/bus/s3c4510x.c: New file (Jiun-Shian Ho).
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added s3c4510x.c.
+    * src/bus/s3c4510x.c: New file (Jiun-Shian Ho).
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/parport/direct.c (direct_connect): Marked two indirect strings for translation.
-	* src/tap/parport/ppdev.c (ppdev_connect): Ditto.
+    * src/tap/parport/direct.c (direct_connect): Marked two indirect strings for translation.
+    * src/tap/parport/ppdev.c (ppdev_connect): Ditto.
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
-	* sysdep.h: Renamed pkgcfg.h to config.h.
-	* configure.ac (AM_CONFIG_HEADER): Ditto.
+    * sysdep.h: Renamed pkgcfg.h to config.h.
+    * configure.ac (AM_CONFIG_HEADER): Ditto.
 
 2003-08-19  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (main): Fixed setlocale() call.
-	* Makefile.am (noinst_HEADERS): Renamed config.h -> sysdep.h.
-	* config.h: Renamed this file ...
-	* sysdep.h: ... to this one.
-	Changed config.h -> sysdep.h include in all source files.
+    * src/jtag.c (main): Fixed setlocale() call.
+    * Makefile.am (noinst_HEADERS): Renamed config.h -> sysdep.h.
+    * config.h: Renamed this file ...
+    * sysdep.h: ... to this one.
+    Changed config.h -> sysdep.h include in all source files.
 
 2003-08-18  Marcel Telka  <marcel@telka.sk>
 
-	* data/samsung/s3c4510b/s3c4510b: Fixed some errors in instruction declarations (Jiun-Shian Ho).
+    * data/samsung/s3c4510b/s3c4510b: Fixed some errors in instruction declarations (Jiun-Shian Ho).
 
 2003-08-18  Marcel Telka  <marcel@telka.sk>
 
-	* src/detect.c (detect_parts): Marked one forgotten string for translation.
-	* src/cmd/bit.c (cmd_bit_run): Fixed control bit setup.
-	* src/cmd/eraseflash.c (cmd_eraseflash_run): Changed formatting.
-	(cmd_eraseflash_help): Updated help text.
-	* src/cmd/flashmem.c (cmd_flashmem_help): Ditto.
-	* src/cmd/readmem.c (cmd_readmem_help): Ditto.
+    * src/detect.c (detect_parts): Marked one forgotten string for translation.
+    * src/cmd/bit.c (cmd_bit_run): Fixed control bit setup.
+    * src/cmd/eraseflash.c (cmd_eraseflash_run): Changed formatting.
+    (cmd_eraseflash_help): Updated help text.
+    * src/cmd/flashmem.c (cmd_flashmem_help): Ditto.
+    * src/cmd/readmem.c (cmd_readmem_help): Ditto.
 
 2003-08-14  Marcel Telka  <marcel@telka.sk>
 
-	* include/jtag.h (flasherase): New function prototype (patch 772267, Thomas Fröhlich).
-	* src/flash.c (flasherase): New function (patch 772267, Thomas Fröhlich).
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added eraseflash.c (patch 772267, Thomas Fröhlich).
-	* src/cmd/cmd.c (cmds): Added cmd_eraseflash (patch 772267, Thomas Fröhlich).
-	* src/cmd/eraseflash.c: New file (patch 772267, Thomas Fröhlich).
+    * include/jtag.h (flasherase): New function prototype (patch 772267, Thomas Fröhlich).
+    * src/flash.c (flasherase): New function (patch 772267, Thomas Fröhlich).
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added eraseflash.c (patch 772267, Thomas Fröhlich).
+    * src/cmd/cmd.c (cmds): Added cmd_eraseflash (patch 772267, Thomas Fröhlich).
+    * src/cmd/eraseflash.c: New file (patch 772267, Thomas Fröhlich).
 
 2003-08-14  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/chain.c (chain_shift_instructions): Moved test for parts without active instruction before
-		shifting process.
-	(chain_shift_data_registers): Moved test for parts without active instruction or data register before
-		shifting process.
+    * src/tap/chain.c (chain_shift_instructions): Moved test for parts without active instruction before
+        shifting process.
+    (chain_shift_data_registers): Moved test for parts without active instruction or data register before
+        shifting process.
 
 2003-08-14  Marcel Telka  <marcel@telka.sk>
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added samsung/s3c4510b/s3c4510b.
-	* data/samsung/s3c4510b/s3c4510b: New file (Jiun-Shian Ho).
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added samsung/s3c4510b/s3c4510b.
+    * data/samsung/s3c4510b/s3c4510b: New file (Jiun-Shian Ho).
 
 2003-08-14  Marcel Telka  <marcel@telka.sk>
 
-	* data/MANUFACTURERS: Changed directory name for Philips.
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added philips/PARTS, philips/xcr3128xl-cs144/STEPPINGS, and
-		philips/xcr3128xl-cs144/xcr3128xl-cs144.
-	* data/philips/PARTS: New file.
-	* data/philips/xcr3128xl-cs144/STEPPINGS: Ditto.
-	* data/philips/xcr3128xl-cs144/xcr3128xl-cs144: Ditto.
-	* include/part.h (MAXLEN_MANUFACTURER): Increased size to 25.
+    * data/MANUFACTURERS: Changed directory name for Philips.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added philips/PARTS, philips/xcr3128xl-cs144/STEPPINGS, and
+        philips/xcr3128xl-cs144/xcr3128xl-cs144.
+    * data/philips/PARTS: New file.
+    * data/philips/xcr3128xl-cs144/STEPPINGS: Ditto.
+    * data/philips/xcr3128xl-cs144/xcr3128xl-cs144: Ditto.
+    * include/part.h (MAXLEN_MANUFACTURER): Increased size to 25.
 
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
-	* include/jtag.h (detect_register_size): Added function declaration.
-	* src/discovery.c (detect_register_size): Changed to non-static.
-	* src/detect.c (detect_parts): Added support for parts without IDCODE.
+    * include/jtag.h (detect_register_size): Added function declaration.
+    * src/discovery.c (detect_register_size): Changed to non-static.
+    * src/detect.c (detect_parts): Added support for parts without IDCODE.
 
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/sa1110.c (sa1110_bus_width): Removed bus width printing.
-	* src/bus/sh7751r.c (sh7751r_bus_printinfo): New function.
+    * src/bus/sa1110.c (sa1110_bus_width): Removed bus width printing.
+    * src/bus/sh7751r.c (sh7751r_bus_printinfo): New function.
 
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
-	* include/bus.h (new_sh7751r_bus): New function declaration (patch 773533, Matan Ziv-Av).
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added sh7751r.c (patch 773533, Matan Ziv-Av).
-	* src/bus/sh7751r.c: New file (patch 773533, Matan Ziv-Av).
+    * include/bus.h (new_sh7751r_bus): New function declaration (patch 773533, Matan Ziv-Av).
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added sh7751r.c (patch 773533, Matan Ziv-Av).
+    * src/bus/sh7751r.c: New file (patch 773533, Matan Ziv-Av).
 
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
-	* include/part.h (struct part): Added new member 'id'.
-	(part_alloc): Added new parameter 'id'.
-	* src/detect.c (detect_parts): Added execution JTAG declarations as script.
-	* src/jtag.c (get_token): Added support for in-line comments.
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added signal.c, bit.c, and register.c.
-	* src/cmd/bit.c: New file.
-	* src/cmd/register.c: Ditto.
-	* src/cmd/signal.c: Ditto.
-	* src/cmd/cmd.c (cmds): Added cmd_signal, cmd_bit, and cmd_register.
-	* src/cmd/instruction.c (cmd_instruction_run, cmd_instruction_help, cmd_instruction): Added support
-		for new instruction declaration.
-	* src/part/parse.c: File removed.
-	* src/part/Makefile.am (libpart_a_SOURCES): Removed parse.c.
-	* src/cmd/detect.c (cmd_detect_run): Fixed possible NULL pointer dereference.
-	* src/part/part.c (part_alloc): Added new parameter 'id'.
-	(part_free): Addedd id deallocation.
-	(part_print): Added support for instructions without data register.
-	* src/tap/chain.c (chain_shift_data_registers): Ditto.
+    * include/part.h (struct part): Added new member 'id'.
+    (part_alloc): Added new parameter 'id'.
+    * src/detect.c (detect_parts): Added execution JTAG declarations as script.
+    * src/jtag.c (get_token): Added support for in-line comments.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added signal.c, bit.c, and register.c.
+    * src/cmd/bit.c: New file.
+    * src/cmd/register.c: Ditto.
+    * src/cmd/signal.c: Ditto.
+    * src/cmd/cmd.c (cmds): Added cmd_signal, cmd_bit, and cmd_register.
+    * src/cmd/instruction.c (cmd_instruction_run, cmd_instruction_help, cmd_instruction): Added support
+        for new instruction declaration.
+    * src/part/parse.c: File removed.
+    * src/part/Makefile.am (libpart_a_SOURCES): Removed parse.c.
+    * src/cmd/detect.c (cmd_detect_run): Fixed possible NULL pointer dereference.
+    * src/part/part.c (part_alloc): Added new parameter 'id'.
+    (part_free): Addedd id deallocation.
+    (part_print): Added support for instructions without data register.
+    * src/tap/chain.c (chain_shift_data_registers): Ditto.
 
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
-	* data/broadcom/bcm5421s/bcm5421s: Fixed bad pin -> signal changes.
+    * data/broadcom/bcm5421s/bcm5421s: Fixed bad pin -> signal changes.
 
 2003-08-13  Marcel Telka  <marcel@telka.sk>
 
-	* data/broadcom/bcm1250/bcm1250: Changed pin -> signal keyword.
-	* data/broadcom/bcm5421s/bcm5421s: Ditto.
-	* data/hitachi/sh7727/sh7727: Ditto.
-	* data/intel/ixp425/ixp425: Ditto.
-	* data/intel/pxa250/pxa250: Ditto.
-	* data/intel/pxa250/pxa250c0: Ditto.
-	* data/intel/sa1110/sa1110: Ditto.
-	* data/xilinx/xc2c256-tq144/xc2c256-tq144: Ditto.
-	* data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Ditto.
-	* data/xilinx/xcr3256xl-ft256/xcr3256xl-ft256: Ditto.
+    * data/broadcom/bcm1250/bcm1250: Changed pin -> signal keyword.
+    * data/broadcom/bcm5421s/bcm5421s: Ditto.
+    * data/hitachi/sh7727/sh7727: Ditto.
+    * data/intel/ixp425/ixp425: Ditto.
+    * data/intel/pxa250/pxa250: Ditto.
+    * data/intel/pxa250/pxa250c0: Ditto.
+    * data/intel/sa1110/sa1110: Ditto.
+    * data/xilinx/xc2c256-tq144/xc2c256-tq144: Ditto.
+    * data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Ditto.
+    * data/xilinx/xcr3256xl-ft256/xcr3256xl-ft256: Ditto.
 
 2003-08-12  Marcel Telka  <marcel@telka.sk>
 
-	* src/bsdl2jtag.c (endline): Added support for "downto" in bit vectors and "observe_only" (patch 787346,
-		Brad Parker).
+    * src/bsdl2jtag.c (endline): Added support for "downto" in bit vectors and "observe_only" (patch 787346,
+        Brad Parker).
 
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added include.c.
-	* src/cmd/include.c: New file.
-	* src/cmd/cmd.c (cmds): Added cmd_include.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added include.c.
+    * src/cmd/include.c: New file.
+    * src/cmd/cmd.c (cmds): Added cmd_include.
 
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
-	* src/flash.c (flash_drivers): Added amd_8_flash_driver.
+    * src/flash.c (flash_drivers): Added amd_8_flash_driver.
 
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
-	* include/bus.h (buses_t): Added new structure.
-	* src/jtag.c (bus): Removed global variable.
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added buses.c.
-	* src/bus/buses.c: New file.
-	* src/bus/bcm1250.c (bcm1250_bus_printinfo): New function.
-	* src/bus/ixp425.c (ixp425_bus_printinfo): Ditto.
-	* src/bus/pxa2x0.c (pxa2x0_bus_printinfo): Ditto.
-	* src/bus/sa1110.c (sa1110_bus_printinfo): Ditto.
-	* src/bus/sh7727.c (sh7727_bus_printinfo): Ditto.
-	* src/bus/sh7750r.c (sh7750r_bus_printinfo): Ditto.
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added bus.c.
-	* src/cmd/bus.c: New file.
-	* src/cmd/cmd.c (cmds): Added cmd_bus.
-	* src/cmd/detect.c (cmd_detect_run): Added support for multiple buses detection.
-	* src/cmd/print.c (cmd_print_run): Fixed header printing while syntax error. Added support for printing
-		list of active buses.
-	(cmd_print_help): Added new parameter 'bus'.
+    * include/bus.h (buses_t): Added new structure.
+    * src/jtag.c (bus): Removed global variable.
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added buses.c.
+    * src/bus/buses.c: New file.
+    * src/bus/bcm1250.c (bcm1250_bus_printinfo): New function.
+    * src/bus/ixp425.c (ixp425_bus_printinfo): Ditto.
+    * src/bus/pxa2x0.c (pxa2x0_bus_printinfo): Ditto.
+    * src/bus/sa1110.c (sa1110_bus_printinfo): Ditto.
+    * src/bus/sh7727.c (sh7727_bus_printinfo): Ditto.
+    * src/bus/sh7750r.c (sh7750r_bus_printinfo): Ditto.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added bus.c.
+    * src/cmd/bus.c: New file.
+    * src/cmd/cmd.c (cmds): Added cmd_bus.
+    * src/cmd/detect.c (cmd_detect_run): Added support for multiple buses detection.
+    * src/cmd/print.c (cmd_print_run): Fixed header printing while syntax error. Added support for printing
+        list of active buses.
+    (cmd_print_help): Added new parameter 'bus'.
 
 2003-08-11  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_INIT): Changed version number to 0.5.
+    * configure.ac (AC_INIT): Changed version number to 0.5.
 
-	* include/chain.h (chain_t): Added active_part.
-	* src/tap/chain.c (chain_alloc): Added active_part initialization.
-	* include/part.h (parts_print): Removed 'header' parameter.
-	* src/part/part.c (parts_print): Removed header printing.
-	* src/cmd/print.c (cmd_print_run): Added header printg. Added new parameter 'chain' for print command.
-	(cmd_print_help): Added new parameter 'chain'.
-	* src/cmd/dr.c (cmd_dr_run, cmd_dr_help): Removed PART parameter.
-	* src/cmd/get.c (cmd_get_run, cmd_get_help): Ditto.
-	* src/cmd/instruction.c (cmd_instruction_run, cmd_instruction_help): Ditto.
-	* src/cmd/set.c (cmd_set_run, cmd_set_help): Ditto.
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Adde part.c.
-	* src/cmd/part.c: New file.
-	* src/cmd/cmd.c (cmds): Added cmd_part.
+    * include/chain.h (chain_t): Added active_part.
+    * src/tap/chain.c (chain_alloc): Added active_part initialization.
+    * include/part.h (parts_print): Removed 'header' parameter.
+    * src/part/part.c (parts_print): Removed header printing.
+    * src/cmd/print.c (cmd_print_run): Added header printg. Added new parameter 'chain' for print command.
+    (cmd_print_help): Added new parameter 'chain'.
+    * src/cmd/dr.c (cmd_dr_run, cmd_dr_help): Removed PART parameter.
+    * src/cmd/get.c (cmd_get_run, cmd_get_help): Ditto.
+    * src/cmd/instruction.c (cmd_instruction_run, cmd_instruction_help): Ditto.
+    * src/cmd/set.c (cmd_set_run, cmd_set_help): Ditto.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Adde part.c.
+    * src/cmd/part.c: New file.
+    * src/cmd/cmd.c (cmds): Added cmd_part.
 
 2003-07-25  Marcel Telka  <marcel@telka.sk>
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added broadcom/bcm3310/STEPPINGS and
-		broadcom/bcm3310/bcm3310.
-	* data/broadcom/PARTS: Added BCM3310.
-	* data/broadcom/bcm3310/STEPPINGS: New file.
-	* data/broadcom/bcm3310/bcm3310: Ditto.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added broadcom/bcm3310/STEPPINGS and
+        broadcom/bcm3310/bcm3310.
+    * data/broadcom/PARTS: Added BCM3310.
+    * data/broadcom/bcm3310/STEPPINGS: New file.
+    * data/broadcom/bcm3310/bcm3310: Ditto.
 
 2003-07-24  Marcel Telka  <marcel@telka.sk>
 
-	* po/POTFILES.in: Removed missing files.
-	* configure.ac: Removed VL_LIB_READLINE macro and moved it to ...
-	* acinclude.m4: ... this new file.
+    * po/POTFILES.in: Removed missing files.
+    * configure.ac: Removed VL_LIB_READLINE macro and moved it to ...
+    * acinclude.m4: ... this new file.
 
 2003-07-16  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (jtag_parse_line): Fixed invalid memory allocation size (core dump).
+    * src/jtag.c (jtag_parse_line): Fixed invalid memory allocation size (core dump).
 
 2003-07-01  Marcel Telka  <marcel@telka.sk>
 
-	* include/bus.h (new_sh7750r_bus, new_bcm1250_bus): New function declarations (patch 753300, Matan Ziv-Av).
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added bcm1250.c and sh7750r.c (patch 753300, Matan Ziv-Av).
-	* src/bus/bcm1250.c: New file (patch 753300, Matan Ziv-Av).
-	* src/bus/sh7750r.c: Ditto.
-	* src/cmd/detect.c (cmd_detect_run): Added bus driver for SH7750R and BCM1250 (patch 753300, Matan Ziv-Av).
+    * include/bus.h (new_sh7750r_bus, new_bcm1250_bus): New function declarations (patch 753300, Matan Ziv-Av).
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added bcm1250.c and sh7750r.c (patch 753300, Matan Ziv-Av).
+    * src/bus/bcm1250.c: New file (patch 753300, Matan Ziv-Av).
+    * src/bus/sh7750r.c: Ditto.
+    * src/cmd/detect.c (cmd_detect_run): Added bus driver for SH7750R and BCM1250 (patch 753300, Matan Ziv-Av).
 
 2003-06-19  Marcel Telka  <marcel@telka.sk>
 
-	* include/jtag.h (discovery): Removed 'filename' parameter.
-	* src/discovery.c (TEST_COUNT): Changed test repeat count from 5 to 1.
-	(detect_register_size): Removed 'f' parameter. Removed output messages.
-	(jtag_reset): Removed sleep() calls.
-	(discovery): Removed 'filename' parameter. Removed support for output to file. Simplified output
-		messages.
-	* src/cmd/discovery.c (cmd_discovery_run): Removed FILENAME parameter.
-	(cmd_discovery_help): Updated help text.
+    * include/jtag.h (discovery): Removed 'filename' parameter.
+    * src/discovery.c (TEST_COUNT): Changed test repeat count from 5 to 1.
+    (detect_register_size): Removed 'f' parameter. Removed output messages.
+    (jtag_reset): Removed sleep() calls.
+    (discovery): Removed 'filename' parameter. Removed support for output to file. Simplified output
+        messages.
+    * src/cmd/discovery.c (cmd_discovery_run): Removed FILENAME parameter.
+    (cmd_discovery_help): Updated help text.
 
 2003-06-18  Marcel Telka  <marcel@telka.sk>
 
-	* src/discovery.c (discovery): Removed explicit JTAG chain length detection. Changed starting of the DR
-		size detection from all 1 instead all 0 for IR (patch 753298, Matan Ziv-Av).
+    * src/discovery.c (discovery): Removed explicit JTAG chain length detection. Changed starting of the DR
+        size detection from all 1 instead all 0 for IR (patch 753298, Matan Ziv-Av).
 
 2003-06-18  Marcel Telka  <marcel@telka.sk>
 
-	* /src/flash.c (flash_drivers): Added 1 x 8 bit Intel Flash driver (patch 753295, Matan Ziv-Av).
+    * /src/flash.c (flash_drivers): Added 1 x 8 bit Intel Flash driver (patch 753295, Matan Ziv-Av).
 
 2003-06-12  Marcel Telka  <marcel@telka.sk>
 
-	* include/flash.h (flash_driver_t): Structure removed.
-	(flash_erase_block, flash_unlock_block, flash_program, flash_readarray): Macro removed.
-	* src/flash.c (set_flash_driver, flashcheck, flashmsbin, flashmem): Updated for new
-		flash_driver_t declared in brux/flash.h in include module.
+    * include/flash.h (flash_driver_t): Structure removed.
+    (flash_erase_block, flash_unlock_block, flash_program, flash_readarray): Macro removed.
+    * src/flash.c (set_flash_driver, flashcheck, flashmsbin, flashmem): Updated for new
+        flash_driver_t declared in brux/flash.h in include module.
 
 2003-06-10  Marcel Telka  <marcel@telka.sk>
 
-	* include/Makefile.am (noinst_HEADERS): Removed cfi.h.
-	* include/cfi.h: File removed.
-	* src/flash.c: Updated include header files.
+    * include/Makefile.am (noinst_HEADERS): Removed cfi.h.
+    * include/cfi.h: File removed.
+    * src/flash.c: Updated include header files.
 
 2003-06-10  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/sh7727.c (bus_params_t): Added md3 and md4.
-	(sh7727_bus_width): Moved to implementation using MD3 and MD4 (thanks to Rainer Dörken).
-	(new_sh7727_bus): Added MD3 and MD4 signal searching (thanks to Rainer Dörken).
+    * src/bus/sh7727.c (bus_params_t): Added md3 and md4.
+    (sh7727_bus_width): Moved to implementation using MD3 and MD4 (thanks to Rainer Dörken).
+    (new_sh7727_bus): Added MD3 and MD4 signal searching (thanks to Rainer Dörken).
 
 2003-06-10  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/ixp425.c (ixp425_bus_width): Changed return value type (int -> unsigned int).
-	* src/bus/pxa2x0.c (pxa250_bus_width): Ditto.
-	* src/bus/sa1110.c (sa1110_bus_width): Ditto.
-	* src/bus/sh7727.c (sh7727_bus_width): Ditto.
+    * src/bus/ixp425.c (ixp425_bus_width): Changed return value type (int -> unsigned int).
+    * src/bus/pxa2x0.c (pxa250_bus_width): Ditto.
+    * src/bus/sa1110.c (sa1110_bus_width): Ditto.
+    * src/bus/sh7727.c (sh7727_bus_width): Ditto.
 
 2003-06-06  Marcel Telka  <marcel@telka.sk>
 
-	* src/bus/sh7727.c (bus_params_t): Fixed cs array length.
-	(setup_address): Removed address shift by BASE.
-	(sh7727_bus_read_end): Simplified CS handling.
-	(new_sh7727_bus): Fixed CS signal searching (thanks to Rainer Dörken).
+    * src/bus/sh7727.c (bus_params_t): Fixed cs array length.
+    (setup_address): Removed address shift by BASE.
+    (sh7727_bus_read_end): Simplified CS handling.
+    (new_sh7727_bus): Fixed CS signal searching (thanks to Rainer Dörken).
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
-	* include/cfi.h (detect_cfi): Macro removed.
-	* src/flash.c (flashcheck): Renamed detect_cfi to cfi_detect.
+    * include/cfi.h (detect_cfi): Macro removed.
+    * src/flash.c (flashcheck): Renamed detect_cfi to cfi_detect.
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
-	* src/Makefile.am (jtag_LDADD): Added libbrux twice to resolve dependencies.
-	* src/jtag.c: Fixed cmd.h include path.
+    * src/Makefile.am (jtag_LDADD): Added libbrux twice to resolve dependencies.
+    * src/jtag.c: Fixed cmd.h include path.
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Removed quit.c, help.c, and detectflash.c.
-	* src/cmd/cmd.c (cmd_run, cmd_params, cmd_get_number): Functions moved to module libbrux,
-		file cmd/cmd.c.
-	* src/cmd/detectflash.c: File moved to module libbrux, directory cmd.
-	* src/cmd/help.c: Ditto.
-	* src/cmd/quit.c: Ditto.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Removed quit.c, help.c, and detectflash.c.
+    * src/cmd/cmd.c (cmd_run, cmd_params, cmd_get_number): Functions moved to module libbrux,
+        file cmd/cmd.c.
+    * src/cmd/detectflash.c: File moved to module libbrux, directory cmd.
+    * src/cmd/help.c: Ditto.
+    * src/cmd/quit.c: Ditto.
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
-	* include/Makefile.am (noinst_HEADERS): Added cmd.h.
-	* include/cmd.h: New file.
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Removed cmd.h.
-	* src/cmd/cmd.h: File removed. Partially moved to include module (file brux/cmd.h).
+    * include/Makefile.am (noinst_HEADERS): Added cmd.h.
+    * include/cmd.h: New file.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Removed cmd.h.
+    * src/cmd/cmd.h: File removed. Partially moved to include module (file brux/cmd.h).
 
-	* src/cmd/detectflash.c (cmd_detectflash_help): Changed help text.
-
-2003-06-03  Marcel Telka  <marcel@telka.sk>
-
-	* src/readmem.c (detectflash): Function extracted to module libbrux, file flash/detectflash.c.
+    * src/cmd/detectflash.c (cmd_detectflash_help): Changed help text.
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
-	* include/jtag.h (detectflash, flashmem, flashmsbin): Declarations moved to include module,
-		file brux/flash.h.
+    * src/readmem.c (detectflash): Function extracted to module libbrux, file flash/detectflash.c.
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
-	* src/cmd/cable.c (cmd_cable_run): Added bus deallocation.
-	* src/cmd/detectflash.c (cmd_detectflash_run): Removed cable connection test.
-	* src/cmd/flashmem.c (cmd_flashmem_run): Ditto.
-	* src/cmd/peekpoke.c (cmd_peek_run, cmd_poke_run): Ditto.
-	* src/cmd/readmem.c (cmd_readmem_run): Ditto.
+    * include/jtag.h (detectflash, flashmem, flashmsbin): Declarations moved to include module,
+        file brux/flash.h.
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
-	* src/flash.c (flashmsbin, flashmem): Removed '\r' from translatable messages.
-	* src/readmem.c (readmem): Ditto.
+    * src/cmd/cable.c (cmd_cable_run): Added bus deallocation.
+    * src/cmd/detectflash.c (cmd_detectflash_run): Removed cable connection test.
+    * src/cmd/flashmem.c (cmd_flashmem_run): Ditto.
+    * src/cmd/peekpoke.c (cmd_peek_run, cmd_poke_run): Ditto.
+    * src/cmd/readmem.c (cmd_readmem_run): Ditto.
 
 2003-06-03  Marcel Telka  <marcel@telka.sk>
 
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added peekpoke.c (patch 747447, Matan Ziv-Av).
-	* src/cmd/cmd.c (cmds): Added peek and poke commands (patch 747447, Matan Ziv-Av).
-	* src/cmd/peekpoke.c: New file (patch 747447, Matan Ziv-Av).
-	* po/POTFILES.in: Updated.
+    * src/flash.c (flashmsbin, flashmem): Removed '\r' from translatable messages.
+    * src/readmem.c (readmem): Ditto.
 
-	* include/bus.h (bus_t): Declaration moved to include module (brux/bus.h).
-	* include/cfi.h (cfi_chip_t, cfi_array_t, cfi_array_free, detect_cfi): Declarations moved
-		to include module (brux/cfi.h).
+2003-06-03  Marcel Telka  <marcel@telka.sk>
+
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added peekpoke.c (patch 747447, Matan Ziv-Av).
+    * src/cmd/cmd.c (cmds): Added peek and poke commands (patch 747447, Matan Ziv-Av).
+    * src/cmd/peekpoke.c: New file (patch 747447, Matan Ziv-Av).
+    * po/POTFILES.in: Updated.
+
+    * include/bus.h (bus_t): Declaration moved to include module (brux/bus.h).
+    * include/cfi.h (cfi_chip_t, cfi_array_t, cfi_array_free, detect_cfi): Declarations moved
+        to include module (brux/cfi.h).
 
 2003-06-02  Marcel Telka  <marcel@telka.sk>
 
-	* Makefile.am (SUBDIRS): Added libbrux.
-	* configure.ac (AC_CONFIG_FILES): Removed src/flash/Makefile.
-	(AC_CONFIG_SUBDIRS): Added libbrux.
-	* src/Makefile.am (SUBDIRS): Removed flash.
-	(jtag_DEPENDENCIES): Removed flash/libflash.a, added ../libbrux/libbrux.a.
-	(jtag_LDADD): Removed libflash, added libbrux.
-	* src/flash/Makefile.am: File removed.
-	* src/flash/amd.c: File moved to module libbrux, directory flash.
-	* src/flash/cfi.c: Ditto.
-	* src/flash/intel.c: Ditto.
+    * Makefile.am (SUBDIRS): Added libbrux.
+    * configure.ac (AC_CONFIG_FILES): Removed src/flash/Makefile.
+    (AC_CONFIG_SUBDIRS): Added libbrux.
+    * src/Makefile.am (SUBDIRS): Removed flash.
+    (jtag_DEPENDENCIES): Removed flash/libflash.a, added ../libbrux/libbrux.a.
+    (jtag_LDADD): Removed libflash, added libbrux.
+    * src/flash/Makefile.am: File removed.
+    * src/flash/amd.c: File moved to module libbrux, directory flash.
+    * src/flash/cfi.c: Ditto.
+    * src/flash/intel.c: Ditto.
 
 2003-05-30  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/parport/direct.c (direct_set_control): Inverted SELECT, AUTOFD, and STROBE
-		signals (bug 745824).
-	* src/tap/parport/ppdev.c (ppdev_set_control): Ditto.
-	* src/tap/cable/mpcbdm.c (mpcbdm_init, mpcbdm_set_trst): Changed (inverted) TRST handling.
-	(mpcbdm_clock, mpcbdm_get_tdo): Removed TRST setting.
+    * src/tap/parport/direct.c (direct_set_control): Inverted SELECT, AUTOFD, and STROBE
+        signals (bug 745824).
+    * src/tap/parport/ppdev.c (ppdev_set_control): Ditto.
+    * src/tap/cable/mpcbdm.c (mpcbdm_init, mpcbdm_set_trst): Changed (inverted) TRST handling.
+    (mpcbdm_clock, mpcbdm_get_tdo): Removed TRST setting.
 
 2003-05-29  Marcel Telka  <marcel@telka.sk>
 
-	Version 0.4 released.
+    Version 0.4 released.
 
 2003-05-29  Marcel Telka  <marcel@telka.sk>
 
-	* src/bsdl2jtag.c (main): Renamed 'pin' keyword to 'signal'.
-	* src/part/parse.c (read_part): Added support for 'signal' keyword.
+    * src/bsdl2jtag.c (main): Renamed 'pin' keyword to 'signal'.
+    * src/part/parse.c (read_part): Added support for 'signal' keyword.
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
-	* data/dec/PARTS: New file.
-	* data/dec/sa1100/STEPPINGS: New file (thanks to Jachym Holecek).
-	* data/dec/sa1100/sa1100: New file.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
+    * data/dec/PARTS: New file.
+    * data/dec/sa1100/STEPPINGS: New file (thanks to Jachym Holecek).
+    * data/dec/sa1100/sa1100: New file.
 
 2003-05-28  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_INIT): Changed version number to 0.4.
+    * configure.ac (AC_INIT): Changed version number to 0.4.
 
-	* src/cmd/frequency.c (cmd_frequency_run): Added support for printing current TCK frequency.
-	(cmd_frequency_help): Updated help text.
+    * src/cmd/frequency.c (cmd_frequency_run): Added support for printing current TCK frequency.
+    (cmd_frequency_help): Updated help text.
 
-	* po/POTFILES.in: Updated.
-	* src/detect.c (find_record, detect_parts): Marked messages for translation.
-	* src/discovery.c (detect_register_size, discovery): Ditto.
-	* src/flash.c (set_flash_driver, flashcheck, flashmsbin, flashmem): Ditto.
-	* src/readmem.c (readmem): Ditto.
-	* src/flash/amd.c (amd_flash_print_info, amd_32_flash_driver): Ditto.
-	* src/flash/intel.c (_intel_flash_print_info, intel_flash_erase_block, intel_flash_unlock_block)
-	(intel_flash_program, intel_32_flash_driver, intel_16_flash_driver): Ditto.
-	* src/tap/cable/arcom.c (arcom_cable_driver): Ditto.
-	* src/tap/cable/byteblaster.c (byteblaster_cable_driver): Ditto.
-	* src/tap/cable/dlc5.c (dlc5_cable_driver): Ditto.
-	* src/tap/cable/ea253.c (ea253_cable_driver): Ditto.
-	* src/tap/cable/ei012.c (ei012_cable_driver): Ditto.
-	* src/tap/cable/keithkoep.c (keithkoep_cable_driver): Ditto.
-	* src/tap/cable/mpcbdm.c (mpcbdm_cable_driver): Ditto.
-	* src/tap/cable/wiggler.c (wiggler_cable_driver): Ditto.
+    * po/POTFILES.in: Updated.
+    * src/detect.c (find_record, detect_parts): Marked messages for translation.
+    * src/discovery.c (detect_register_size, discovery): Ditto.
+    * src/flash.c (set_flash_driver, flashcheck, flashmsbin, flashmem): Ditto.
+    * src/readmem.c (readmem): Ditto.
+    * src/flash/amd.c (amd_flash_print_info, amd_32_flash_driver): Ditto.
+    * src/flash/intel.c (_intel_flash_print_info, intel_flash_erase_block, intel_flash_unlock_block)
+    (intel_flash_program, intel_32_flash_driver, intel_16_flash_driver): Ditto.
+    * src/tap/cable/arcom.c (arcom_cable_driver): Ditto.
+    * src/tap/cable/byteblaster.c (byteblaster_cable_driver): Ditto.
+    * src/tap/cable/dlc5.c (dlc5_cable_driver): Ditto.
+    * src/tap/cable/ea253.c (ea253_cable_driver): Ditto.
+    * src/tap/cable/ei012.c (ei012_cable_driver): Ditto.
+    * src/tap/cable/keithkoep.c (keithkoep_cable_driver): Ditto.
+    * src/tap/cable/mpcbdm.c (mpcbdm_cable_driver): Ditto.
+    * src/tap/cable/wiggler.c (wiggler_cable_driver): Ditto.
 
 2003-05-27  Marcel Telka  <marcel@telka.sk>
 
-	* src/part/part.c (part_set_signal, part_get_signal): Moved variable declarations to beginning
-		of a block (Matan Ziv-Av).
+    * src/part/part.c (part_set_signal, part_get_signal): Moved variable declarations to beginning
+        of a block (Matan Ziv-Av).
 
 2003-05-26  Marcel Telka  <marcel@telka.sk>
 
-	* include/bus.h (new_sh7727_bus): Added function declaration.
-	* src/cmd/detect.c (cmd_detect_run): Added bus driver for Hitachi SH7727.
-	* src/bus/Makefile.am (libbus_a_SOURCES): Added sh7727.c (patch 743140, Matan Ziv-Av).
-	* src/bus/sh7727.c: New file (based on patch 743140, Matan Ziv-Av).
+    * include/bus.h (new_sh7727_bus): Added function declaration.
+    * src/cmd/detect.c (cmd_detect_run): Added bus driver for Hitachi SH7727.
+    * src/bus/Makefile.am (libbus_a_SOURCES): Added sh7727.c (patch 743140, Matan Ziv-Av).
+    * src/bus/sh7727.c: New file (based on patch 743140, Matan Ziv-Av).
 
 2003-05-26  Marcel Telka  <marcel@telka.sk>
 
-	* include/chain.h (chain_shift_data_registers): Added new parameter `capture_output' (idea from
-		patch 743146, Matan Ziv-Av).
-	* src/tap/chain.c (chain_shift_data_registers): Ditto.
-	All chain_shift_data_registers() function callers updated.
+    * include/chain.h (chain_shift_data_registers): Added new parameter `capture_output' (idea from
+        patch 743146, Matan Ziv-Av).
+    * src/tap/chain.c (chain_shift_data_registers): Ditto.
+    All chain_shift_data_registers() function callers updated.
 
 2003-05-26  Marcel Telka  <marcel@telka.sk>
 
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added broadcom/bcm5421s/STEPPINGS
-		and broadcom/bcm5421s/bcm5421s.
-	* data/MANUFACTURERS: Added new manufacturer ID code for Boradcom (patch 743129, Matan Ziv-Av).
-	* data/broadcom/PARTS: Added entry for BC5421S (patch 743129, Matan Ziv-Av).
-	* data/broadcom/bcm5421s/STEPPINGS: New file (patch 743129, Matan Ziv-Av).
-	* data/broadcom/bcm5421s/bcm5421s: Ditto.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added broadcom/bcm5421s/STEPPINGS
+        and broadcom/bcm5421s/bcm5421s.
+    * data/MANUFACTURERS: Added new manufacturer ID code for Boradcom (patch 743129, Matan Ziv-Av).
+    * data/broadcom/PARTS: Added entry for BC5421S (patch 743129, Matan Ziv-Av).
+    * data/broadcom/bcm5421s/STEPPINGS: New file (patch 743129, Matan Ziv-Av).
+    * data/broadcom/bcm5421s/bcm5421s: Ditto.
 
 2003-05-22  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AM_CONFIG_HEADER): Renamed acconfig.h configuration header to pkgcfg.h.
-	* config.h: Ditto.
+    * configure.ac (AM_CONFIG_HEADER): Renamed acconfig.h configuration header to pkgcfg.h.
+    * config.h: Ditto.
 
 2003-05-22  Marcel Telka  <marcel@telka.sk>
 
-	* config.h: New file.
-	Changed all relevant source files to include this file unconditionaly.
-	* Makefile.am (noinst_HEADERS): Added config.h.
-	* configure.ac (AM_CONFIG_HEADER): Renamed generated configuration file
-		from config.h to acconfig.h.
+    * config.h: New file.
+    Changed all relevant source files to include this file unconditionaly.
+    * Makefile.am (noinst_HEADERS): Added config.h.
+    * configure.ac (AM_CONFIG_HEADER): Renamed generated configuration file
+        from config.h to acconfig.h.
 
 2003-05-22  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c: Added new global variable 'big_endian'.
-	* include/jtag.h: Ditto.
-	* src/flash.c (flashmem): Added full support for little/big endian.
-	* src/readmem.c (readmem): Ditto.
-	* src/cmd/Makefile.am (libcmd_a_SOURCES): Added endian.c.
-	* src/cmd/cmd.c (cmds): Added new command 'endian'.
-	* src/cmd/endian.c: New file.
+    * src/jtag.c: Added new global variable 'big_endian'.
+    * include/jtag.h: Ditto.
+    * src/flash.c (flashmem): Added full support for little/big endian.
+    * src/readmem.c (readmem): Ditto.
+    * src/cmd/Makefile.am (libcmd_a_SOURCES): Added endian.c.
+    * src/cmd/cmd.c (cmds): Added new command 'endian'.
+    * src/cmd/endian.c: New file.
 
 2003-05-21  Marcel Telka  <marcel@telka.sk>
 
-	* Makefile.rules: New file.
-	* Makefile.am: Added Makefile.rules include.
-	(EXTRA_DIST): Added Makefile.rules.
-	* data/Makefile.am: Added Makefile.rules include.
-	* doc/Makefile.am: Ditto.
-	* include/Makefile.am: Ditto.
-	* po/Makevars: Ditto.
-	* src/Makefile.am: Ditto.
-	* src/bus/Makefile.am: Ditto.
-	* src/cmd/Makefile.am: Ditto.
-	* src/flash/Makefile.am: Ditto.
-	* src/lib/Makefile.am: Ditto.
-	* src/part/Makefile.am: Ditto.
-	* src/tap/Makefile.am: Ditto.
+    * Makefile.rules: New file.
+    * Makefile.am: Added Makefile.rules include.
+    (EXTRA_DIST): Added Makefile.rules.
+    * data/Makefile.am: Added Makefile.rules include.
+    * doc/Makefile.am: Ditto.
+    * include/Makefile.am: Ditto.
+    * po/Makevars: Ditto.
+    * src/Makefile.am: Ditto.
+    * src/bus/Makefile.am: Ditto.
+    * src/cmd/Makefile.am: Ditto.
+    * src/flash/Makefile.am: Ditto.
+    * src/lib/Makefile.am: Ditto.
+    * src/part/Makefile.am: Ditto.
+    * src/tap/Makefile.am: Ditto.
 
 2003-05-21  Marcel Telka  <marcel@telka.sk>
 
-	* include/signal.h: Renamed this file ...
-	* include/bssignal.h: ... to this one.
-	All includes changed.
-	* include/Makefile.am (noinst_HEADERS): Renamed signal.h to bssignal.h.
+    * include/signal.h: Renamed this file ...
+    * include/bssignal.h: ... to this one.
+    All includes changed.
+    * include/Makefile.am (noinst_HEADERS): Renamed signal.h to bssignal.h.
 
-	* include/data_register.h: Marked local include files with double quotes.
-	* include/instruction.h: Ditto.
-	* include/part.h: Ditto.
-
-2003-05-21  Marcel Telka  <marcel@telka.sk>
-
-	* include/bsbit.h (bsbit, bsbit_t): Renamed typedef bsbit to bsbit_t.
-	All occurences of the bsbit type changed to bsbit_t.
+    * include/data_register.h: Marked local include files with double quotes.
+    * include/instruction.h: Ditto.
+    * include/part.h: Ditto.
 
 2003-05-21  Marcel Telka  <marcel@telka.sk>
 
-	* include/part.h (part_find_signal): New function declaration.
-	(part_set_signal, part_get_signal): Changed parameter signal name to signal pointer.
-	* src/part/part.c (part_find_signal): New function.
-	(part_set_signal, part_get_signal): Removed signal searching, used supplied pointer to signal.
-	* po/POTFILES.in: Added src/bus/ixp425.c, src/bus/pxa2x0.c, and src/bus/sa1110.c.
-	* src/bus/ixp425.c (bus_params_t, select_flash, unselect_flash, setup_address, set_data_in)
-	(setup_data, ixp425_bus_read_start, ixp425_bus_read_next, ixp425_bus_read_end, ixp425_bus_write)
-	(new_ixp425_bus): Optimized signal searching to increase bus access speed.
-	* src/bus/pxa2x0.c (bus_params_t, setup_address, set_data_in, setup_data, pxa250_bus_read_start)
-	(pxa250_bus_read_next, pxa250_bus_read_end, pxa250_bus_write, new_pxa250_bus): Ditto.
-	* src/bus/sa1110.c (bus_params_t, setup_address, set_data_in, setup_data, sa1110_bus_read_start)
-	(sa1110_bus_read_next, sa1110_bus_read_end, sa1110_bus_write, new_sa1110_bus): Ditto.
-	(sa1110_bus_width): Updated part_get_signal() function call. Added explicit signal search.
-	* src/cmd/get.c (cmd_get_run): Ditto.
-	* src/cmd/set.c (cmd_set_run): Updated part_set_signal() function call. Added explicit signal search.
+    * include/bsbit.h (bsbit, bsbit_t): Renamed typedef bsbit to bsbit_t.
+    All occurences of the bsbit type changed to bsbit_t.
+
+2003-05-21  Marcel Telka  <marcel@telka.sk>
+
+    * include/part.h (part_find_signal): New function declaration.
+    (part_set_signal, part_get_signal): Changed parameter signal name to signal pointer.
+    * src/part/part.c (part_find_signal): New function.
+    (part_set_signal, part_get_signal): Removed signal searching, used supplied pointer to signal.
+    * po/POTFILES.in: Added src/bus/ixp425.c, src/bus/pxa2x0.c, and src/bus/sa1110.c.
+    * src/bus/ixp425.c (bus_params_t, select_flash, unselect_flash, setup_address, set_data_in)
+    (setup_data, ixp425_bus_read_start, ixp425_bus_read_next, ixp425_bus_read_end, ixp425_bus_write)
+    (new_ixp425_bus): Optimized signal searching to increase bus access speed.
+    * src/bus/pxa2x0.c (bus_params_t, setup_address, set_data_in, setup_data, pxa250_bus_read_start)
+    (pxa250_bus_read_next, pxa250_bus_read_end, pxa250_bus_write, new_pxa250_bus): Ditto.
+    * src/bus/sa1110.c (bus_params_t, setup_address, set_data_in, setup_data, sa1110_bus_read_start)
+    (sa1110_bus_read_next, sa1110_bus_read_end, sa1110_bus_write, new_sa1110_bus): Ditto.
+    (sa1110_bus_width): Updated part_get_signal() function call. Added explicit signal search.
+    * src/cmd/get.c (cmd_get_run): Ditto.
+    * src/cmd/set.c (cmd_set_run): Updated part_set_signal() function call. Added explicit signal search.
 
 2003-05-20  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_CONFIG_FILES): Added src/cmd/Makefile.
-	* include/Makefile.am (noinst_HEADERS): Added jtag.h.
-	* include/jtag.h: New file.
-	* po/POTFILES.in: Updated.
-	* src/Makefile.am (SUBDIRS): Added cmd.
-	(jtag_SOURCES): Removed jtag.h and help.c.
-	(jtag_DEPENDENCIES): Added cmd/libcmd.a.
-	(jtag_LDADD): Added libcmd.
-	(INCLUDES): Removed JTAG_DATA_DIR.
-	* src/help.c: File removed.
-	* src/jtag.h: Ditto.
-	* src/jtag.c (jtag_parse_line): Removed command parsing and moved it to cmd directory.
-	(jtag_parse_file): Function is no longer static.
-	* src/cmd/Makefile.am: New file.
-	* src/cmd/cable.c: Ditto.
-	* src/cmd/cmd.c: Ditto.
-	* src/cmd/cmd.h: Ditto.
-	* src/cmd/detect.c: Ditto.
-	* src/cmd/detectflash.c: Ditto.
-	* src/cmd/discovery.c: Ditto.
-	* src/cmd/dr.c: Ditto.
-	* src/cmd/flashmem.c: Ditto.
-	* src/cmd/frequency.c: Ditto.
-	* src/cmd/get.c: Ditto.
-	* src/cmd/help.c: Ditto.
-	* src/cmd/instruction.c: Ditto.
-	* src/cmd/print.c: Ditto.
-	* src/cmd/quit.c: Ditto.
-	* src/cmd/readmem.c: Ditto.
-	* src/cmd/script.c: Ditto.
-	* src/cmd/set.c: Ditto.
-	* src/cmd/shift.c: Ditto.
+    * configure.ac (AC_CONFIG_FILES): Added src/cmd/Makefile.
+    * include/Makefile.am (noinst_HEADERS): Added jtag.h.
+    * include/jtag.h: New file.
+    * po/POTFILES.in: Updated.
+    * src/Makefile.am (SUBDIRS): Added cmd.
+    (jtag_SOURCES): Removed jtag.h and help.c.
+    (jtag_DEPENDENCIES): Added cmd/libcmd.a.
+    (jtag_LDADD): Added libcmd.
+    (INCLUDES): Removed JTAG_DATA_DIR.
+    * src/help.c: File removed.
+    * src/jtag.h: Ditto.
+    * src/jtag.c (jtag_parse_line): Removed command parsing and moved it to cmd directory.
+    (jtag_parse_file): Function is no longer static.
+    * src/cmd/Makefile.am: New file.
+    * src/cmd/cable.c: Ditto.
+    * src/cmd/cmd.c: Ditto.
+    * src/cmd/cmd.h: Ditto.
+    * src/cmd/detect.c: Ditto.
+    * src/cmd/detectflash.c: Ditto.
+    * src/cmd/discovery.c: Ditto.
+    * src/cmd/dr.c: Ditto.
+    * src/cmd/flashmem.c: Ditto.
+    * src/cmd/frequency.c: Ditto.
+    * src/cmd/get.c: Ditto.
+    * src/cmd/help.c: Ditto.
+    * src/cmd/instruction.c: Ditto.
+    * src/cmd/print.c: Ditto.
+    * src/cmd/quit.c: Ditto.
+    * src/cmd/readmem.c: Ditto.
+    * src/cmd/script.c: Ditto.
+    * src/cmd/set.c: Ditto.
+    * src/cmd/shift.c: Ditto.
 
-	* src/part/part.c (parts_print): Fixed header printing.
+    * src/part/part.c (parts_print): Fixed header printing.
 
 2003-05-20  Marcel Telka  <marcel@telka.sk>
 
-	* src/part/data_register.c: Added l10n support. Marked messages for translation.
-	* src/part/instruction.c: Ditto.
-	* src/part/parse.c: Ditto.
-	* po/POTFILES.in: Added above files.
+    * src/part/data_register.c: Added l10n support. Marked messages for translation.
+    * src/part/instruction.c: Ditto.
+    * src/part/parse.c: Ditto.
+    * po/POTFILES.in: Added above files.
 
 2003-05-19  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/parport/ppdev.c (ppdev_get_status): Inverted BUSY signal value.
+    * src/tap/parport/ppdev.c (ppdev_get_status): Inverted BUSY signal value.
 
-	* include/cfi.h (cfi_chip_t, cfi_array_t): New typedefs.
-	(cfi_array_free): New function prototype.
-	(detect_cfi): Changed function prototype.
-	* include/flash.h (set_flash_driver): Removed function prototype.
-	* src/flash/cfi.c (BW16): Macro removed.
-	(read2): Function removed.
-	(cfi_array_free): New function.
-	(detect_cfi): Added code to detect all CFI chips on the data bus.
-	* src/flash.c (flashcheck): Removed bus width checking. Updated due changes in src/flash/cfi.c.
-	(flashmsbin): Updated due changes in src/flash/cfi.c. Removed memory leak.
-	* src/readmem.c: Added l10n support. Marked messages for translation.
-	(detectflash): Updated due changes in src/flash/cfi.c. Removed memory leak.
-		Removed flash driver setup.
-	* po/POTFILES.in: Added src/readmem.c.
+    * include/cfi.h (cfi_chip_t, cfi_array_t): New typedefs.
+    (cfi_array_free): New function prototype.
+    (detect_cfi): Changed function prototype.
+    * include/flash.h (set_flash_driver): Removed function prototype.
+    * src/flash/cfi.c (BW16): Macro removed.
+    (read2): Function removed.
+    (cfi_array_free): New function.
+    (detect_cfi): Added code to detect all CFI chips on the data bus.
+    * src/flash.c (flashcheck): Removed bus width checking. Updated due changes in src/flash/cfi.c.
+    (flashmsbin): Updated due changes in src/flash/cfi.c. Removed memory leak.
+    * src/readmem.c: Added l10n support. Marked messages for translation.
+    (detectflash): Updated due changes in src/flash/cfi.c. Removed memory leak.
+        Removed flash driver setup.
+    * po/POTFILES.in: Added src/readmem.c.
 
 2003-05-16  Marcel Telka  <marcel@telka.sk>
 
-	* include/part.h (part_print): New function declaration.
-	* src/part/part.c: Marked all user visible messages for translation.
-	(part_print): New function.
-	(parts_print): Simplified. Added part_print() call.
-	* po/POTFILES.in: Added src/part/part.c.
+    * include/part.h (part_print): New function declaration.
+    * src/part/part.c: Marked all user visible messages for translation.
+    (part_print): New function.
+    (parts_print): Simplified. Added part_print() call.
+    * po/POTFILES.in: Added src/part/part.c.
 
-	* src/Makefile.am (jtag_DEPENDENCIES): Added flash/libflash.a.
-
-2003-05-15  Marcel Telka  <marcel@telka.sk>
-
-	* include/cfi.h (detect_cfi): Added new parameter `adr'.
-	All relevant functions and callers updated.
+    * src/Makefile.am (jtag_DEPENDENCIES): Added flash/libflash.a.
 
 2003-05-15  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (CPPFLAGS): Added path to the openwince include arm directory.
-	* include/bus.h (bus_width): Added new `adr' parameter for this macro.
-	All relevant functions and callers updated.
+    * include/cfi.h (detect_cfi): Added new parameter `adr'.
+    All relevant functions and callers updated.
 
-	* src/bus/pxa2x0.c (bus_params_t): Added last_adr and MC_registers structure members.
-	(LAST_ADR, MC_pointer): New macros.
-	(pxa250_bus_read_start, pxa250_bus_read_next, pxa250_bus_read_end, pxa250_bus_write): Disabled
-		external bus cycles for addresses above 0x04000000.
-	(pxa250_bus_width): Removed some output messages. Implemented BOOT_DEF emulation.
-	(new_pxa250_bus): Implemented BOOT_DEF emulation.
+2003-05-15  Marcel Telka  <marcel@telka.sk>
 
-2003-05-14  Marcel Telka  <marcel@telka.sk>
+    * configure.ac (CPPFLAGS): Added path to the openwince include arm directory.
+    * include/bus.h (bus_width): Added new `adr' parameter for this macro.
+    All relevant functions and callers updated.
 
-	* include/Makefile.am (noinst_HEADERS): Added cfi.h.
-	* include/cfi.h: New file.
-	* src/jtag.h (detect_cfi): Removed function declaration.
-	* src/flash.c: Replaced jtag.h include with cfi.h.
-	* src/readmem.c: Ditto.
-
-	* src/flash/Makefile.am (libflash_a_SOURCES): Added cfi.c.
-	* src/Makefie.am (jtag_SOURCES): Removed cfi.c.
-	* src/cfi.c: Moved this file ...
-	* src/flash/cfi.c: ... here and replaced jtag.h include with cfi.h one.
+    * src/bus/pxa2x0.c (bus_params_t): Added last_adr and MC_registers structure members.
+    (LAST_ADR, MC_pointer): New macros.
+    (pxa250_bus_read_start, pxa250_bus_read_next, pxa250_bus_read_end, pxa250_bus_write): Disabled
+        external bus cycles for addresses above 0x04000000.
+    (pxa250_bus_width): Removed some output messages. Implemented BOOT_DEF emulation.
+    (new_pxa250_bus): Implemented BOOT_DEF emulation.
 
 2003-05-14  Marcel Telka  <marcel@telka.sk>
 
-	* include/part.h (part_t, parts_t): Macros removed.
-	* src/detect.c: Replaced obsolete types `parts' with `parts_t' and `part' with `part_t'.
-	* src/part/parse.c: Ditto.
-	* src/part/part.c: Ditto.
+    * include/Makefile.am (noinst_HEADERS): Added cfi.h.
+    * include/cfi.h: New file.
+    * src/jtag.h (detect_cfi): Removed function declaration.
+    * src/flash.c: Replaced jtag.h include with cfi.h.
+    * src/readmem.c: Ditto.
+
+    * src/flash/Makefile.am (libflash_a_SOURCES): Added cfi.c.
+    * src/Makefie.am (jtag_SOURCES): Removed cfi.c.
+    * src/cfi.c: Moved this file ...
+    * src/flash/cfi.c: ... here and replaced jtag.h include with cfi.h one.
 
 2003-05-14  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_CONFIG_FILES): Added src/flash/Makefile.
-	* include/Makefile.am (noinst_HEADERS): Added flash.h.
-	* src/Makefile.am (SUBDIRS): Added flash.
-	(jtag_SOURCES): Removed flash.h, flash-intel.c, and flash-amd.c.
-	(jtag_LDADD): Added libflash.
-	* src/flash-amd.c: Moved this file ...
-	* src/flash/amd.c: ... here.
-	* src/flash-intel.c: Moved this file ...
-	* src/flash/intel.c: ... here.
-	* src/flash.h: Moved this file ...
-	* include/flash.h: ...here.
-	* src/flash/Makefile.am: New file.
+    * include/part.h (part_t, parts_t): Macros removed.
+    * src/detect.c: Replaced obsolete types `parts' with `parts_t' and `part' with `part_t'.
+    * src/part/parse.c: Ditto.
+    * src/part/part.c: Ditto.
+
+2003-05-14  Marcel Telka  <marcel@telka.sk>
+
+    * configure.ac (AC_CONFIG_FILES): Added src/flash/Makefile.
+    * include/Makefile.am (noinst_HEADERS): Added flash.h.
+    * src/Makefile.am (SUBDIRS): Added flash.
+    (jtag_SOURCES): Removed flash.h, flash-intel.c, and flash-amd.c.
+    (jtag_LDADD): Added libflash.
+    * src/flash-amd.c: Moved this file ...
+    * src/flash/amd.c: ... here.
+    * src/flash-intel.c: Moved this file ...
+    * src/flash/intel.c: ... here.
+    * src/flash.h: Moved this file ...
+    * include/flash.h: ...here.
+    * src/flash/Makefile.am: New file.
 
 2003-05-13  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (jtag_parse_file): Added support for command scripts from stdin.
+    * src/jtag.c (jtag_parse_file): Added support for command scripts from stdin.
 
 2003-04-29  Marcel Telka  <marcel@telka.sk>
 
-	* data/MANUFACTURERS: Added new manufacturer: DEC.
+    * data/MANUFACTURERS: Added new manufacturer: DEC.
 
-	* src/jtag.c (jtag_create_jtagdir): Changed permissions for jtag directory.
+    * src/jtag.c (jtag_create_jtagdir): Changed permissions for jtag directory.
 
-	* include/part.h (part_alloc, read_part): Changed return type from `part *' to `part_t *'.
-	(struct parts): Changed parts member type from `part **' to `part_t **'.
-	(parts_alloc): Changed return type from `parts *' to `parts_t *'.
-	* src/bus/ixp425.c (select_flash, unselect_flash, setup_address, set_data_in, setup_data):
-		Changed first parameter type from `part *' to `part_t *'.
-	* src/bus/pxa250.c (setup_address, set_data_in, setup_data): Ditto.
-	* src/bus/sa1110.c (setup_address, set_data_in, setup_data): Ditto.
+    * include/part.h (part_alloc, read_part): Changed return type from `part *' to `part_t *'.
+    (struct parts): Changed parts member type from `part **' to `part_t **'.
+    (parts_alloc): Changed return type from `parts *' to `parts_t *'.
+    * src/bus/ixp425.c (select_flash, unselect_flash, setup_address, set_data_in, setup_data):
+        Changed first parameter type from `part *' to `part_t *'.
+    * src/bus/pxa250.c (setup_address, set_data_in, setup_data): Ditto.
+    * src/bus/sa1110.c (setup_address, set_data_in, setup_data): Ditto.
 
-	* include/bus.h: Replaced static bus_driver_t architecture with dynamic bus_t.
-		Removed direct chain_t dependency. Added `params' and `prepare' members.
-	All related functions' parameter types changed.
-	* src/bus/ixp425.c (bus_params_t): New structure typedef.
-	(CHAIN, PART): New macros.
-	(ixp425_bus_prepare, ixp425_bus_free, new_ixp425_bus): New functions.
-	(ixp425_bus_driver, ixp425_bus): Renamed `ixp425_bus_driver' to `ixp425_bus' and updated
-		for new bus driver architecture.
-	* src/bus/pxa250.c (bus_params_t): New structure typedef.
-	(CHAIN, PART): New macros.
-	(pxa250_bus_prepare, pxa250_bus_free, new_pxa250_bus): New functions.
-	(pxa250_bus_driver, pxa250_bus): Renamed `pxa250_bus_driver' to `pxa250_bus' and updated
-		for new bus driver architecture.
-	* src/bus/sa1110.c (bus_params_t): New structure typedef.
-	(CHAIN, PART): New macros.
-	(sa1110_bus_prepare, sa1110_bus_free, new_sa1110_bus): New functions.
-	(sa1110_bus_driver, sa1110_bus): Renamed `sa1110_bus_driver' to `sa1110_bus' and updated
-		for new bus driver architecture.
-	* src/readmem.c (detectflash, readmem): Moved JTAG chain initialization to bus->prepare().
-	* src/flash.c (flashcheck): Ditto.
-	(flashmsbin, flashmem): Removed BYPASS instruction setup.
-	* src/jtag.c (bus_driver, bus): Replaced `bus_driver' with `bus' global variable.
-	(jtag_parse_line, main): Added `bus' deallocation.
-	* src/flash.h (flash_driver_t): Changed parameter type for all function members from
-		`chain_t*' to `bus_t *'.
-	All function callers changed.
-
-2003-04-04  Marcel Telka  <marcel@telka.sk>
-
-	Version 0.3.2 released.
+    * include/bus.h: Replaced static bus_driver_t architecture with dynamic bus_t.
+        Removed direct chain_t dependency. Added `params' and `prepare' members.
+    All related functions' parameter types changed.
+    * src/bus/ixp425.c (bus_params_t): New structure typedef.
+    (CHAIN, PART): New macros.
+    (ixp425_bus_prepare, ixp425_bus_free, new_ixp425_bus): New functions.
+    (ixp425_bus_driver, ixp425_bus): Renamed `ixp425_bus_driver' to `ixp425_bus' and updated
+        for new bus driver architecture.
+    * src/bus/pxa250.c (bus_params_t): New structure typedef.
+    (CHAIN, PART): New macros.
+    (pxa250_bus_prepare, pxa250_bus_free, new_pxa250_bus): New functions.
+    (pxa250_bus_driver, pxa250_bus): Renamed `pxa250_bus_driver' to `pxa250_bus' and updated
+        for new bus driver architecture.
+    * src/bus/sa1110.c (bus_params_t): New structure typedef.
+    (CHAIN, PART): New macros.
+    (sa1110_bus_prepare, sa1110_bus_free, new_sa1110_bus): New functions.
+    (sa1110_bus_driver, sa1110_bus): Renamed `sa1110_bus_driver' to `sa1110_bus' and updated
+        for new bus driver architecture.
+    * src/readmem.c (detectflash, readmem): Moved JTAG chain initialization to bus->prepare().
+    * src/flash.c (flashcheck): Ditto.
+    (flashmsbin, flashmem): Removed BYPASS instruction setup.
+    * src/jtag.c (bus_driver, bus): Replaced `bus_driver' with `bus' global variable.
+    (jtag_parse_line, main): Added `bus' deallocation.
+    * src/flash.h (flash_driver_t): Changed parameter type for all function members from
+        `chain_t*' to `bus_t *'.
+    All function callers changed.
 
 2003-04-04  Marcel Telka  <marcel@telka.sk>
 
-	* data/xilinx/PARTS: Added XCR3256XL-FT256 (Jachym Holecek).
-	* data/xilinx/xcr3256xl-ft256/STEPPINGS: New file (Jachym Holecek).
-	* data/xilinx/xcr3256xl-ft256/xcr3256xl-ft256: Ditto.
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
+    Version 0.3.2 released.
+
+2003-04-04  Marcel Telka  <marcel@telka.sk>
+
+    * data/xilinx/PARTS: Added XCR3256XL-FT256 (Jachym Holecek).
+    * data/xilinx/xcr3256xl-ft256/STEPPINGS: New file (Jachym Holecek).
+    * data/xilinx/xcr3256xl-ft256/xcr3256xl-ft256: Ditto.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added new files.
 
 2003-04-02  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_INIT): Changed version number to 0.3.2.
+    * configure.ac (AC_INIT): Changed version number to 0.3.2.
 
 2003-04-02  Marcel Telka  <marcel@telka.sk>
 
-	* include/signal.h: Changed signal typedef to signal_t (thanks to Jachym Holecek).
-		All `signal' instances renamed to `signal_t'.
-	* src/tap/parport.c: Ported to NetBSD/i386 (Jachym Holecek).
-	* src/tap/parport/direct.c (parport_drivers): Conditionally removed direct_parport_driver.
-	* configure.ac: Added test for i386_set_ioperm() function. Defined HAVE_IOPERM
-		and HAVE_I386_SET_IOPERM.
+    * include/signal.h: Changed signal typedef to signal_t (thanks to Jachym Holecek).
+        All `signal' instances renamed to `signal_t'.
+    * src/tap/parport.c: Ported to NetBSD/i386 (Jachym Holecek).
+    * src/tap/parport/direct.c (parport_drivers): Conditionally removed direct_parport_driver.
+    * configure.ac: Added test for i386_set_ioperm() function. Defined HAVE_IOPERM
+        and HAVE_I386_SET_IOPERM.
 
 2003-04-01  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/keithkoep.c: New file.
-	* src/tap/Makefile.am (libtap_a_SOURCES): Added cable/keithkoep.c.
-	* src/tap/cable.c (cable_drivers): Added keithkoep_cable_driver.
+    * src/tap/cable/keithkoep.c: New file.
+    * src/tap/Makefile.am (libtap_a_SOURCES): Added cable/keithkoep.c.
+    * src/tap/cable.c (cable_drivers): Added keithkoep_cable_driver.
 
 2003-03-19  Marcel Telka  <marcel@telka.sk>
 
-	Version 0.3.1 released.
+    Version 0.3.1 released.
 
 2003-03-19  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_CONFIG_FILES): Added doc/Makefile.
-	* Makefile.am (SUBDIRS): Added doc.
+    * configure.ac (AC_CONFIG_FILES): Added doc/Makefile.
+    * Makefile.am (SUBDIRS): Added doc.
 
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/parport/direct.c (direct_connect): Fixed cable disconnecting loop.
+    * src/tap/parport/direct.c (direct_connect): Fixed cable disconnecting loop.
 
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (jtag_parse_line) <script>: Added support for `quit' command in scripts.
-	(jtag_parse_rc): Ditto.
-	(jtag_parse_file): Added support for comments and `quit' command in scripts.
-	(main): Added command line parameter list execution as scripts.
-	* data/intel/pxa250/STEPPING: Added support for Intel PXA255 A0 (thanks to Mike Sprauve).
-	* configure.ac (AC_INIT): Changed version number to 0.3.1.
+    * src/jtag.c (jtag_parse_line) <script>: Added support for `quit' command in scripts.
+    (jtag_parse_rc): Ditto.
+    (jtag_parse_file): Added support for comments and `quit' command in scripts.
+    (main): Added command line parameter list execution as scripts.
+    * data/intel/pxa250/STEPPING: Added support for Intel PXA255 A0 (thanks to Mike Sprauve).
+    * configure.ac (AC_INIT): Changed version number to 0.3.1.
 
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
-	* po/POTFILES.in: Added src/tap/parport/direct.c and src/tap/parport/ppdev.c.
-	* src/help.c (help) <cable>: Added help for `cable ppdev' command.
-	* src/tap/parport/ppdev.c (ppdev_open): Removed debug messages.
-	* src/jtag.c (jtag_parse_line) <cable>: Added chain_disconnect() call before
-		new cable connection.
+    * po/POTFILES.in: Added src/tap/parport/direct.c and src/tap/parport/ppdev.c.
+    * src/help.c (help) <cable>: Added help for `cable ppdev' command.
+    * src/tap/parport/ppdev.c (ppdev_open): Removed debug messages.
+    * src/jtag.c (jtag_parse_line) <cable>: Added chain_disconnect() call before
+        new cable connection.
 
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_CHECK_HEADERS): Added test for linux/ppdev.h.
-	* src/tap/Makefile.am (libtap_a_SOURCES): Added parport/ppdev.c.
-	* src/tap/parport.c (parport_drivers): Added ppdev parport driver.
-	* src/tap/parport/ppdev.c: New file.
+    * configure.ac (AC_CHECK_HEADERS): Added test for linux/ppdev.h.
+    * src/tap/Makefile.am (libtap_a_SOURCES): Added parport/ppdev.c.
+    * src/tap/parport.c (parport_drivers): Added ppdev parport driver.
+    * src/tap/parport/ppdev.c: New file.
 
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
-	* src/bsdl2jtag.c (endline): Removed compile warning.
+    * src/bsdl2jtag.c (endline): Removed compile warning.
 
 2003-03-18  Marcel Telka  <marcel@telka.sk>
 
-	* include/parport.h: New file. Added parport driver support.
-		All cable drivers modified.
-	* src/tap/parport.c: Ditto.
-	* src/tap/parport/direct.c: Ditto.
-	* src/jtag.c (jtag_parse_line) <cable>: Added parport driver support.
-	* include/Makefile.am (noinst_HEADERS): Added parport.h.
-	* src/tap/cable/generic.c: New file withgGeneric functions for cable drivers.
-		All cable drivers modified.
-	* src/tap/cable/generic.h: Ditto.
-	* src/tap/Makefile.am (libtap_a_SOURCES): Added parport.c, parport/direct.c, cable/generic.h,
-		and cable/generic.c.
+    * include/parport.h: New file. Added parport driver support.
+        All cable drivers modified.
+    * src/tap/parport.c: Ditto.
+    * src/tap/parport/direct.c: Ditto.
+    * src/jtag.c (jtag_parse_line) <cable>: Added parport driver support.
+    * include/Makefile.am (noinst_HEADERS): Added parport.h.
+    * src/tap/cable/generic.c: New file withgGeneric functions for cable drivers.
+        All cable drivers modified.
+    * src/tap/cable/generic.h: Ditto.
+    * src/tap/Makefile.am (libtap_a_SOURCES): Added parport.c, parport/direct.c, cable/generic.h,
+        and cable/generic.c.
 
-	* include/cable.h: Added dynamic cable objects. Added cable interpose functions.
-		All callers changed.
-	* src/tap/cable.c: Ditto.
+    * include/cable.h: Added dynamic cable objects. Added cable interpose functions.
+        All callers changed.
+    * src/tap/cable.c: Ditto.
 
-	* include/chain.h (chain_connect): Function removed.
-	(chain_disconnect): New function.
-	* src/tap/chain.c (chain_free): Modified for chain_disconnect() call.
-	(chain_connect): Removed.
-	(chain_disconnect): New function.
+    * include/chain.h (chain_connect): Function removed.
+    (chain_disconnect): New function.
+    * src/tap/chain.c (chain_free): Modified for chain_disconnect() call.
+    (chain_connect): Removed.
+    (chain_disconnect): New function.
 
 2003-03-17  Marcel Telka  <marcel@telka.sk>
 
-	* src/Makefile.am (bin_PROGRAMS, bsdl2jtag_SOURCES): Added new bsdl2jtag conversion
-		tool (Matan Ziv-Av).
-	* src/bsdl2jtag.c: New file (Matan Ziv-Av).
+    * src/Makefile.am (bin_PROGRAMS, bsdl2jtag_SOURCES): Added new bsdl2jtag conversion
+        tool (Matan Ziv-Av).
+    * src/bsdl2jtag.c: New file (Matan Ziv-Av).
 
 2003-03-14  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (CPPFLAGS): Added common include paths.
-	* src/Makefile.am (INCLUDES): Removed common include paths.
-	* src/bus/Makefile.am (INCLUDES): Ditto.
-	* src/part/Makefile.am (INCLUDES): Ditto.
-	* src/tap/Makefile.am (INCLUDES): Ditto.
+    * configure.ac (CPPFLAGS): Added common include paths.
+    * src/Makefile.am (INCLUDES): Removed common include paths.
+    * src/bus/Makefile.am (INCLUDES): Ditto.
+    * src/part/Makefile.am (INCLUDES): Ditto.
+    * src/tap/Makefile.am (INCLUDES): Ditto.
 
 2003-03-13  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_CONFIG_HEADERS): Replaced this `new' macro ...
-	(AM_CONFIG_HEADER): ... with this `old' one to make build compatible with automake-1.6.
-	(AM_GNU_GETTEXT_VERSION): Relaxed version number from 0.11.5 to 0.11.4.
-	* src/Makefile.am (jtag_LDADD): Added LIBINTL.
-	(LIBS): Removed LIBINTL.
-	(DEFS): Removed whole content ...
-	(INCLUDE): ... and added it here.
+    * configure.ac (AC_CONFIG_HEADERS): Replaced this `new' macro ...
+    (AM_CONFIG_HEADER): ... with this `old' one to make build compatible with automake-1.6.
+    (AM_GNU_GETTEXT_VERSION): Relaxed version number from 0.11.5 to 0.11.4.
+    * src/Makefile.am (jtag_LDADD): Added LIBINTL.
+    (LIBS): Removed LIBINTL.
+    (DEFS): Removed whole content ...
+    (INCLUDE): ... and added it here.
 
 2003-03-13  Marcel Telka  <marcel@telka.sk>
 
-	* include/chain.h: New file.
-	* src/tap/chain.c: Ditto.
-	* src/tap/Makefile.am (libtap_a_SOURCES): Added chain.c.
-	* include/Makefile.am (noinst_HEADERS): Added chain.h.
-	* src/jtag.c: Encapsulated parts, cable and TAP state into one object - chain.
-		All relevant function parameters changed to `chain'.
-	* src/tap/state.c: `trst' state moved to cable drivers.
-		All cable drivers changed.
-	* include/cable.h (cable_driver_t) <set_trst>: Changed return value from void to int.
-		All cable drivers changed.
-	(cable_driver_t) <get_trst>: New function.
-		Implemented this function to all cable drivers.
-	* include/part.h (part_shift_instruction, part_shift_data_register)
-	(parts_shift_instructions, parts_shift_data_registers): Funcions removed.
-	* src/part/part.c (part_shift_instruction, part_shift_data_register)
-	(parts_shift_instructions, parts_shift_data_registers): Ditto.
-	* src/tap/cable/arcom.c: Removed dependency on state.h.
-	* src/tap/cable/byteblaster.c: Ditto.
-	* src/tap/cable/dlc5.c: Ditto.
-	* src/tap/cable/ea253.c: Ditto.
-	* src/tap/cable/ei012.c: Ditto.
-	* src/tap/cable/mpcbdm.c: Ditto.
-	* src/tap/cable/wiggler.c: Ditto.
+    * include/chain.h: New file.
+    * src/tap/chain.c: Ditto.
+    * src/tap/Makefile.am (libtap_a_SOURCES): Added chain.c.
+    * include/Makefile.am (noinst_HEADERS): Added chain.h.
+    * src/jtag.c: Encapsulated parts, cable and TAP state into one object - chain.
+        All relevant function parameters changed to `chain'.
+    * src/tap/state.c: `trst' state moved to cable drivers.
+        All cable drivers changed.
+    * include/cable.h (cable_driver_t) <set_trst>: Changed return value from void to int.
+        All cable drivers changed.
+    (cable_driver_t) <get_trst>: New function.
+        Implemented this function to all cable drivers.
+    * include/part.h (part_shift_instruction, part_shift_data_register)
+    (parts_shift_instructions, parts_shift_data_registers): Funcions removed.
+    * src/part/part.c (part_shift_instruction, part_shift_data_register)
+    (parts_shift_instructions, parts_shift_data_registers): Ditto.
+    * src/tap/cable/arcom.c: Removed dependency on state.h.
+    * src/tap/cable/byteblaster.c: Ditto.
+    * src/tap/cable/dlc5.c: Ditto.
+    * src/tap/cable/ea253.c: Ditto.
+    * src/tap/cable/ei012.c: Ditto.
+    * src/tap/cable/mpcbdm.c: Ditto.
+    * src/tap/cable/wiggler.c: Ditto.
 
-	* include/state.h (bit): Replaced with common.h include.
-	(Unknown_State, Run_Test_Idle, Select_DR_Scan, Select_IR_Scan): Removed parentheses.
-	* include/tap.h (write_command): Removed unused declaration.
+    * include/state.h (bit): Replaced with common.h include.
+    (Unknown_State, Run_Test_Idle, Select_DR_Scan, Select_IR_Scan): Removed parentheses.
+    * include/tap.h (write_command): Removed unused declaration.
 
-	* src/detect.h: Removed file.
-	* src/jtag.h: New file with common jtag function declarations.
-	* src/Makefile.am (jtag_SOURCES): Removed detect.h, added jtag.h.
-	* src/cfi.c: Added jtag.h include. Moved common function declarations to jtag.h file.
-	* src/detect.c: Ditto.
-	* src/discovery.c: Ditto.
-	* src/flash.c: Ditto.
-	* src/help.c: Ditto.
-	* src/jtag.c: Ditto.
-	* src/readmem.c: Ditto.
+    * src/detect.h: Removed file.
+    * src/jtag.h: New file with common jtag function declarations.
+    * src/Makefile.am (jtag_SOURCES): Removed detect.h, added jtag.h.
+    * src/cfi.c: Added jtag.h include. Moved common function declarations to jtag.h file.
+    * src/detect.c: Ditto.
+    * src/discovery.c: Ditto.
+    * src/flash.c: Ditto.
+    * src/help.c: Ditto.
+    * src/jtag.c: Ditto.
+    * src/readmem.c: Ditto.
 
-	* src/jtag.c (jtag_create_jtagdir, jtag_load_history, jtag_save_history, jtag_parse_line)
-	(jtag_readline_loop, jtag_parse_file, jtag_parse_rc): Changed functions to `static'.
+    * src/jtag.c (jtag_create_jtagdir, jtag_load_history, jtag_save_history, jtag_parse_line)
+    (jtag_readline_loop, jtag_parse_file, jtag_parse_rc): Changed functions to `static'.
 
-	* src/tap/tap.c: Added l10n support.
-	* po/POTFILES.in: Added src/tap/chain.c and src/tap/tap.c.
+    * src/tap/tap.c: Added l10n support.
+    * po/POTFILES.in: Added src/tap/chain.c and src/tap/tap.c.
 
 2003-03-13  Marcel Telka  <marcel@telka.sk>
 
-	* include/part.h: Renamed types part to part_t, parts to parts_t,
-		tap_register to tap_register_t.
-	* include/register.h: Renamed tap_register type to tap_register_t.
+    * include/part.h: Renamed types part to part_t, parts to parts_t,
+        tap_register to tap_register_t.
+    * include/register.h: Renamed tap_register type to tap_register_t.
 
 2003-03-11  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac: Improved openwince include package detection.
+    * configure.ac: Improved openwince include package detection.
 
 2003-03-07  Marcel Telka  <marcel@telka.sk>
 
-	* src/lib/getdelim.c: Added unistd.h include for ssize_t.
-	* src/lib/getline.c: Ditto.
+    * src/lib/getdelim.c: Added unistd.h include for ssize_t.
+    * src/lib/getline.c: Ditto.
 
 2003-03-06  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac: Added test for readline library.
-	* src/Makefile.am (jtag_LDADD): Removed readline and ncurses.
+    * configure.ac: Added test for readline library.
+    * src/Makefile.am (jtag_LDADD): Removed readline and ncurses.
 
 2003-03-06  Marcel Telka  <marcel@telka.sk>
 
-	* autogen.sh: Added test for autoreconf fail.
+    * autogen.sh: Added test for autoreconf fail.
 
 2003-02-25  Marcel Telka  <marcel@telka.sk>
 
-	Version 0.3 released.
+    Version 0.3 released.
 
 2003-02-25  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable.c: Added config.h include.
+    * src/tap/cable.c: Added config.h include.
 
 2003-02-25  Marcel Telka  <marcel@telka.sk>
 
-	* data/MANUFACTURERS: Added Hitachi (Matan Ziv-Av).
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added Hitachi SH7727
-		files (Matan Ziv-Av).
-	* data/hitachi/PARTS: New file (Matan Ziv-Av).
-	* data/hitachi/sh7727/STEPPINGS: Ditto.
-	* data/hitachi/sh7727/sh7727: Ditto.
+    * data/MANUFACTURERS: Added Hitachi (Matan Ziv-Av).
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added Hitachi SH7727
+        files (Matan Ziv-Av).
+    * data/hitachi/PARTS: New file (Matan Ziv-Av).
+    * data/hitachi/sh7727/STEPPINGS: Ditto.
+    * data/hitachi/sh7727/sh7727: Ditto.
 
 2003-02-25  Marcel Telka  <marcel@telka.sk>
 
-	* data/MANUFACTURERS: Added Broadcom (Matan Ziv-Av).
-	* data/Makefile.am (nobase_dist_pkgdata_DATA): Added Broadcom BCM1250
-		files (Matan Ziv-Av).
-	* data/broadcom/PARTS: New file (Matan Ziv-Av).
-	* data/broadcom/bcm1250/STEPPINGS: Ditto.
-	* data/broadcom/bcm1250/bcm1250: Ditto.
+    * data/MANUFACTURERS: Added Broadcom (Matan Ziv-Av).
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Added Broadcom BCM1250
+        files (Matan Ziv-Av).
+    * data/broadcom/PARTS: New file (Matan Ziv-Av).
+    * data/broadcom/bcm1250/STEPPINGS: Ditto.
+    * data/broadcom/bcm1250/bcm1250: Ditto.
 
 2003-02-21  Marcel Telka  <marcel@telka.sk>
 
-	* src/help.c (help): Marked translatable strings.
-	* src/jtag.c (jtag_parse_line): Ditto.
-	(jtag_parse_file): Ditto.
-	(main): Ditto.
-	* po/POTFILES.in: Added src/help.c and src/jtag.c.
+    * src/help.c (help): Marked translatable strings.
+    * src/jtag.c (jtag_parse_line): Ditto.
+    (jtag_parse_file): Ditto.
+    (main): Ditto.
+    * po/POTFILES.in: Added src/help.c and src/jtag.c.
 
 2003-02-21  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (main): Added conditional compilation for l10n.
+    * src/jtag.c (main): Added conditional compilation for l10n.
 
 2003-02-20  Marcel Telka  <marcel@telka.sk>
 
-	* src/Makefile.am (jtag_SOURCES): Added missing flash.h.
-	* src/jtag.c: Added missing string.h include. Moved gettext.h include
-		to the top level of the include list.
-	* src/help.c: Moved gettext.h include to the top level of the include list.
+    * src/Makefile.am (jtag_SOURCES): Added missing flash.h.
+    * src/jtag.c: Added missing string.h include. Moved gettext.h include
+        to the top level of the include list.
+    * src/help.c: Moved gettext.h include to the top level of the include list.
 
 2003-02-20  Marcel Telka  <marcel@telka.sk>
 
-	* Makefile.am (SUBDIRS): Removed intl.
-	* autogen.sh: Replaced subsequent call of auto* tools with autoreconf one.
-	* configure.ac (AC_CONFIG_FILES): Removed intl/Makefile.
-	(AM_GNU_GETTTEXT): Added 'external' parameter.
+    * Makefile.am (SUBDIRS): Removed intl.
+    * autogen.sh: Replaced subsequent call of auto* tools with autoreconf one.
+    * configure.ac (AC_CONFIG_FILES): Removed intl/Makefile.
+    (AM_GNU_GETTTEXT): Added 'external' parameter.
 
 2003-02-19  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_CONFIG_HEADERS): Added new macro with config.h.
-	* autogen.sh: Added autoheader invocation.
+    * configure.ac (AC_CONFIG_HEADERS): Added new macro with config.h.
+    * autogen.sh: Added autoheader invocation.
 
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
-	* include/Makefile.am (noinst_HEADERS): Added gettext.h.
+    * include/Makefile.am (noinst_HEADERS): Added gettext.h.
 
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
-	* autogen.sh: Added autopoint call. Added '-I m4' parameter for aclocal.
-	* Makefile.am (SUBDIRS): Added intl, include and po.
-	(DIST_SUBDIRS): Removed.
-	(ACLOCAL_AMFLAGS): Added '-I m4'.
-	* configure.ac (AC_INIT): Changed version number to 0.3.
-	(AC_CONFIG_FILES): Added intl/Makefile and po/Makefile.in.
-	(AM_GNU_GETTEXT): Added.
-	(AM_GNU_GETTEXT_VERSION): Added with version 0.11.5.
-	* include/gettext.h: Copied new file from gettext share.
-	* po/LINGUAS: Added new empty file.
-	* po/Makevars: Added new file.
-	* po/POTFILES.in: Added new empty file.
-	* src/Makefile.am (INCLUDES): Removed JTAG_DATA_DIR.
-	(localedir): Added path to locale directory.
-	(DEFS): Added JTAG_DATA_DIR and LOCALEDIR.
-	(LIBS): Added LIBINTL.
-	* src/help.c: Included gettext.h.
-	* src/jtag.c: Included gettext.h.
-	(main): Added l10n support.
+    * autogen.sh: Added autopoint call. Added '-I m4' parameter for aclocal.
+    * Makefile.am (SUBDIRS): Added intl, include and po.
+    (DIST_SUBDIRS): Removed.
+    (ACLOCAL_AMFLAGS): Added '-I m4'.
+    * configure.ac (AC_INIT): Changed version number to 0.3.
+    (AC_CONFIG_FILES): Added intl/Makefile and po/Makefile.in.
+    (AM_GNU_GETTEXT): Added.
+    (AM_GNU_GETTEXT_VERSION): Added with version 0.11.5.
+    * include/gettext.h: Copied new file from gettext share.
+    * po/LINGUAS: Added new empty file.
+    * po/Makevars: Added new file.
+    * po/POTFILES.in: Added new empty file.
+    * src/Makefile.am (INCLUDES): Removed JTAG_DATA_DIR.
+    (localedir): Added path to locale directory.
+    (DEFS): Added JTAG_DATA_DIR and LOCALEDIR.
+    (LIBS): Added LIBINTL.
+    * src/help.c: Included gettext.h.
+    * src/jtag.c: Included gettext.h.
+    (main): Added l10n support.
 
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
-	* src/flash.c (flashmsbin): Changed flash error message.
-	(flashmem): Changed output messages. Enabled verify for 2 x 16, not
-		for 1 x 16. Added better end of file test for verify.
+    * src/flash.c (flashmsbin): Changed flash error message.
+    (flashmem): Changed output messages. Enabled verify for 2 x 16, not
+        for 1 x 16. Added better end of file test for verify.
 
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_CONFIG_FILES): Added src/bus/Makefile.
-	* src/bus.h: Moved this file...
-	* include/bus.h: ...here.
-	* include/Makefile.am (noinst_HEADERS): Added bus.h.
-	* src/ixp425.c: Moved this file...
-	* src/bus/ixp425.c: ...here.
-	* src/pxa250.c: Moved this file...
-	* src/bus/pxa2x0.c: ...here.
-	* src/sa1110.c: Moved this file...
-	* src/bus/sa1110.c: ...here.
-	* src/bus/Makefile.am: New file.
-	* src/Makefile.am (SUBDIRS): Added bus.
-	(jtag_SOURCES): Removed bus.h, ixp425.c, pxa250.c, sa1110.c.
-	(jtag_DEPENDENCIES): Added libbus.a.
-	(jtag_LDADD): Ditto.
+    * configure.ac (AC_CONFIG_FILES): Added src/bus/Makefile.
+    * src/bus.h: Moved this file...
+    * include/bus.h: ...here.
+    * include/Makefile.am (noinst_HEADERS): Added bus.h.
+    * src/ixp425.c: Moved this file...
+    * src/bus/ixp425.c: ...here.
+    * src/pxa250.c: Moved this file...
+    * src/bus/pxa2x0.c: ...here.
+    * src/sa1110.c: Moved this file...
+    * src/bus/sa1110.c: ...here.
+    * src/bus/Makefile.am: New file.
+    * src/Makefile.am (SUBDIRS): Added bus.
+    (jtag_SOURCES): Removed bus.h, ixp425.c, pxa250.c, sa1110.c.
+    (jtag_DEPENDENCIES): Added libbus.a.
+    (jtag_LDADD): Ditto.
 
 2003-02-18  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable.c: Added <sys/types.h> include for useconds_t on some systems.
-	* src/flash-amd.c (amdstatus29): Disabled unused function.
-	(amdisprotected): Ditto.
+    * src/tap/cable.c: Added <sys/types.h> include for useconds_t on some systems.
+    * src/flash-amd.c (amdstatus29): Disabled unused function.
+    (amdisprotected): Ditto.
 
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (jtag_parse_line): Fixed segfault for 'set' command.
+    * src/jtag.c (jtag_parse_line): Fixed segfault for 'set' command.
 
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (jtag_parse_line): Added new 'get signal' command.
-	* src/help.c (help): Added help for new 'get signal' command.
+    * src/jtag.c (jtag_parse_line): Added new 'get signal' command.
+    * src/help.c (help): Added help for new 'get signal' command.
 
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
-	* data/intel/pxa250/pxa250: Changed comment.
-	* data/intel/pxa250/pxa250c0: Ditto.
+    * data/intel/pxa250/pxa250: Changed comment.
+    * data/intel/pxa250/pxa250c0: Ditto.
 
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
-	* src/help.c (help): Added help for new command 'script'.
+    * src/help.c (help): Added help for new command 'script'.
 
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
-	* src/flash-intel.c (intel_flash_autodetect): Fixed Intel flash algorithm Id.
-	(intel_flash_autodetect32): Ditto.
+    * src/flash-intel.c (intel_flash_autodetect): Fixed Intel flash algorithm Id.
+    (intel_flash_autodetect32): Ditto.
 
 2003-02-17  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac (AC_CHECK_FUNCS): Added getdelim and getline.
-	(AC_CONFIG_FILES): Added src/lib/Makefile.
-	* src/Makefile.am (SUBDIRS): Added lib.
-	(jtag_DEPENDENCIES): Added libjtaglib.a.
-	(jtag_LDADD): Ditto.
-	* src/jtag.c: Added portable getline() declaration.
-	* src/lib/Makefile.am: New file.
-	* src/lib/getdelim.c: Ditto.
-	* src/lib/getline.c: Ditto.
+    * configure.ac (AC_CHECK_FUNCS): Added getdelim and getline.
+    (AC_CONFIG_FILES): Added src/lib/Makefile.
+    * src/Makefile.am (SUBDIRS): Added lib.
+    (jtag_DEPENDENCIES): Added libjtaglib.a.
+    (jtag_LDADD): Ditto.
+    * src/jtag.c: Added portable getline() declaration.
+    * src/lib/Makefile.am: New file.
+    * src/lib/getdelim.c: Ditto.
+    * src/lib/getline.c: Ditto.
 
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (jtag_creae_jtagdir): New function (Alessandro Zummo).
-	(jtag_load_history): Ditto.
-	(jtag_save_history): Ditto.
-	(jtag_readline_loop): Ditto.
-	(jtag_parse_file): Ditto.
-	(jtag_parse_rc): Ditto.
-	(jtag_parse_line): New funcion, content extracted from main function, added new
-		'script' command (Alessandro Zummo).
-	(main): Moved parsing capability to jtag_parse_line function (Alessandro Zummo).
+    * src/jtag.c (jtag_creae_jtagdir): New function (Alessandro Zummo).
+    (jtag_load_history): Ditto.
+    (jtag_save_history): Ditto.
+    (jtag_readline_loop): Ditto.
+    (jtag_parse_file): Ditto.
+    (jtag_parse_rc): Ditto.
+    (jtag_parse_line): New funcion, content extracted from main function, added new
+        'script' command (Alessandro Zummo).
+    (main): Moved parsing capability to jtag_parse_line function (Alessandro Zummo).
 
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
-	* src/flash.c (flash_drivers): Added missing 1 x 16 Intel flash driver.
+    * src/flash.c (flash_drivers): Added missing 1 x 16 Intel flash driver.
 
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (main): Corrected error message for 'instruction' command and added
-		a notice when an instruction is unknown (Alessandro Zummo).
+    * src/jtag.c (main): Corrected error message for 'instruction' command and added
+        a notice when an instruction is unknown (Alessandro Zummo).
 
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (main): Fixed segfault in 'detectflash'. Thanks to August Hörandl
-		for reporting this issue.
+    * src/jtag.c (main): Fixed segfault in 'detectflash'. Thanks to August Hörandl
+        for reporting this issue.
 
 2003-02-16  Marcel Telka  <marcel@telka.sk>
 
-	* src/Makefile.am (jtag_SOURCES): Added new flash files with flash driver
-		framework (August Hörandl).
-	* src/flash-amd.c: New file with AMD flash support (August Hörandl).
-	* src/flash-intel.c: New file. Extracted Intel flash support from src/flash.c
-		file (August Hörandl, me).
-	* src/flash.c (set_flash_driver): New function. Added support for flash
-		drivers (August Hörandl).
-	(flashceck): Ditto.
-	(flashmsbin): Added support for flash driver (August Hörandl).
-	(flashmem): Ditto.
-	(flash_erase_block): Function moved to src/flash-intel.c (August Hörandl).
-	(flash_unlock_block): Ditto.
-	(flash_program): Ditto.
-	(flash_erase_block32): Ditto.
-	(flash_unlock_block32): Ditto.
-	(flash_program32): Ditto.
-	* src/flash.h: New file. Interface for flash drivers (August Hörandl).
-	* src/help.c (help): Added list of supported flash drivers for 'flashmem'
-		command (August Hörandl).
-	* src/readmem.c (detectflash): Removed Intel specific code. Enhanced output
-		messages (August Hörandl).
+    * src/Makefile.am (jtag_SOURCES): Added new flash files with flash driver
+        framework (August Hörandl).
+    * src/flash-amd.c: New file with AMD flash support (August Hörandl).
+    * src/flash-intel.c: New file. Extracted Intel flash support from src/flash.c
+        file (August Hörandl, me).
+    * src/flash.c (set_flash_driver): New function. Added support for flash
+        drivers (August Hörandl).
+    (flashceck): Ditto.
+    (flashmsbin): Added support for flash driver (August Hörandl).
+    (flashmem): Ditto.
+    (flash_erase_block): Function moved to src/flash-intel.c (August Hörandl).
+    (flash_unlock_block): Ditto.
+    (flash_program): Ditto.
+    (flash_erase_block32): Ditto.
+    (flash_unlock_block32): Ditto.
+    (flash_program32): Ditto.
+    * src/flash.h: New file. Interface for flash drivers (August Hörandl).
+    * src/help.c (help): Added list of supported flash drivers for 'flashmem'
+        command (August Hörandl).
+    * src/readmem.c (detectflash): Removed Intel specific code. Enhanced output
+        messages (August Hörandl).
 
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (jtag): Added command history load/save support (August Hörandl).
+    * src/jtag.c (jtag): Added command history load/save support (August Hörandl).
 
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
-	* src/readmem.c (readmem): Added support for 1 x 16 bit memory configuration and
-		buffered file writes (Christian Pellegrin).
-	* src/flash.c (flashmem): Added support for 1 x 16 bit flash configuration and
-		buffered file reads (Christian Pellegrin).
-	(flash_erase_block): Added debug messages (Christian Pellegrin).
-	(flash_unlock_block): Added debug message (Christian Pellegrin).
-	(flash_program): Ditto.
+    * src/readmem.c (readmem): Added support for 1 x 16 bit memory configuration and
+        buffered file writes (Christian Pellegrin).
+    * src/flash.c (flashmem): Added support for 1 x 16 bit flash configuration and
+        buffered file reads (Christian Pellegrin).
+    (flash_erase_block): Added debug messages (Christian Pellegrin).
+    (flash_unlock_block): Added debug message (Christian Pellegrin).
+    (flash_program): Ditto.
 
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
-	* src/cfi.c (detect_cfi): Added support for 1 x 16 bit flash configuration (Christian
-		Pellegrin).
-	* src/detect.c (find_record): Added error message if file cannot be opened (Christian
-		Pellegrin).
+    * src/cfi.c (detect_cfi): Added support for 1 x 16 bit flash configuration (Christian
+        Pellegrin).
+    * src/detect.c (find_record): Added error message if file cannot be opened (Christian
+        Pellegrin).
 
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
-	* data/xilinx/xc2c256-tq144/xc2c256-tq144: Added JTAG declarations for Xilinx
-		XC2C256-TQ144 (Alessandro Zummo).
-	* data/xilinx/xc2c256-tq144/STEPPINGS: Ditto.
-	* data/xilinx/PARTS: Ditto.
-	* data/Makefile.am: Ditto.
+    * data/xilinx/xc2c256-tq144/xc2c256-tq144: Added JTAG declarations for Xilinx
+        XC2C256-TQ144 (Alessandro Zummo).
+    * data/xilinx/xc2c256-tq144/STEPPINGS: Ditto.
+    * data/xilinx/PARTS: Ditto.
+    * data/Makefile.am: Ditto.
 
 2003-02-14  Marcel Telka  <marcel@telka.sk>
 
-	* src/ixp425.c (setup_address): Removed set_gpio() call.
-	(set_gpio): Removed unused function.
+    * src/ixp425.c (setup_address): Removed set_gpio() call.
+    (set_gpio): Removed unused function.
 
 2003-02-13  Marcel Telka  <marcel@telka.sk>
 
-	* src/ixp425.c: Added bus driver for Intel IXP425 (Christian Pellegrin).
-	* src/bus.h: Ditto.
-	* src/jtag.c (main): Ditto.
-	* src/Makefile.am (jtag_SOURCES): Added ixp425.c (Christian Pellegrin).
+    * src/ixp425.c: Added bus driver for Intel IXP425 (Christian Pellegrin).
+    * src/bus.h: Ditto.
+    * src/jtag.c (main): Ditto.
+    * src/Makefile.am (jtag_SOURCES): Added ixp425.c (Christian Pellegrin).
 
 2003-02-13  Marcel Telka  <marcel@telka.sk>
 
-	* data/intel/ixp425/ixp425: Added JTAG declarations for Intel IXP425 (Christian
-		Pellegrin).
-	* data/intel/ixp425/STEPPINGS: Ditto.
-	* data/intel/PARTS: Ditto.
-	* data/Makefile.am: Ditto.
+    * data/intel/ixp425/ixp425: Added JTAG declarations for Intel IXP425 (Christian
+        Pellegrin).
+    * data/intel/ixp425/STEPPINGS: Ditto.
+    * data/intel/PARTS: Ditto.
+    * data/Makefile.am: Ditto.
 
 2003-02-13  Marcel Telka  <marcel@telka.sk>
 
-	* include/bsbit.h (BSBIT_BIDIR): Added new macro (Christian Pellegrin).
-	* src/part/bsbit.c (bsbit_alloc): Added support for bidirectional pins (Christian
-		Pellegrin).
-	* src/part/parse.ci (read_part): Ditto.
+    * include/bsbit.h (BSBIT_BIDIR): Added new macro (Christian Pellegrin).
+    * src/part/bsbit.c (bsbit_alloc): Added support for bidirectional pins (Christian
+        Pellegrin).
+    * src/part/parse.ci (read_part): Ditto.
 
 2003-02-10  Marcel Telka  <marcel@telka.sk>
 
-	* src/sa1110.c (sa1110_bus_read_start): Added support for all six static memory banks.
-		The function is now 'static'.
-	(sa1110_bus_read_end): Ditto.
-	(sa1110_bus_read_next): The function is now 'static'.
-	(sa1110_bus_read): Ditto.
-	(sa1110_bus_width): Ditto.
-	(sa1110_bus_write): Added support for all six static memory banks (bug 682660).
-		The function is now 'static'.
+    * src/sa1110.c (sa1110_bus_read_start): Added support for all six static memory banks.
+        The function is now 'static'.
+    (sa1110_bus_read_end): Ditto.
+    (sa1110_bus_read_next): The function is now 'static'.
+    (sa1110_bus_read): Ditto.
+    (sa1110_bus_width): Ditto.
+    (sa1110_bus_write): Added support for all six static memory banks (bug 682660).
+        The function is now 'static'.
 
 2003-02-07  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/arcom.c: Added support for Arcom JTAG Cable (patch 682310,
-		Ian Campbell).
-	* src/tap/cable.c: Ditto.
-	* src/tap/Makefile.am: Ditto.
+    * src/tap/cable/arcom.c: Added support for Arcom JTAG Cable (patch 682310,
+        Ian Campbell).
+    * src/tap/cable.c: Ditto.
+    * src/tap/Makefile.am: Ditto.
 
 2003-02-07  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/mpcbdm.c (mpcbdm_clock): Fixed port address for TRST & TRST1.
+    * src/tap/cable/mpcbdm.c (mpcbdm_clock): Fixed port address for TRST & TRST1.
 
 2003-02-07  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/mpcbdm.c: Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
-	* src/tap/cable.c: Ditto.
-	* src/tap/Makefile.am: Ditto.
+    * src/tap/cable/mpcbdm.c: Added support for Mpcbdm JTAG Cable (Christian Pellegrin).
+    * src/tap/cable.c: Ditto.
+    * src/tap/Makefile.am: Ditto.
 
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
-	* src/help.c (help): Added missing short help description for 'set' command.
-	* src/jtag.c (main): Added test for uninitialized ps for 'set' command.
-	* src/tap/tap.c (tap_shift_register): Changed final state to Run-Test/Idle
-		for immediately propagation of the new BSR values.
+    * src/help.c (help): Added missing short help description for 'set' command.
+    * src/jtag.c (main): Added test for uninitialized ps for 'set' command.
+    * src/tap/tap.c (tap_shift_register): Changed final state to Run-Test/Idle
+        for immediately propagation of the new BSR values.
 
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (main): Added more checks for syntax errors. Added support for
-		printing input data registers - command 'dr'. Added 'set signal'
-		command.
-	* src/help.c (help): Updated help for 'dr' command, added help for 'set
-		signal.
+    * src/jtag.c (main): Added more checks for syntax errors. Added support for
+        printing input data registers - command 'dr'. Added 'set signal'
+        command.
+    * src/help.c (help): Updated help for 'dr' command, added help for 'set
+        signal.
 
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
-	Version 0.2.2 released.
+    Version 0.2.2 released.
 
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac: Changed version number to 0.2.2.
+    * configure.ac: Changed version number to 0.2.2.
 
 2003-02-04  Marcel Telka  <marcel@telka.sk>
 
-	* src/flash.c (flashmsbin): Changed instructions to BYPASS after successfull
-		flash.
-	(flashmem): Ditto.
+    * src/flash.c (flashmsbin): Changed instructions to BYPASS after successfull
+        flash.
+    (flashmem): Ditto.
 
 2003-01-30  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/byteblaster.c (byteblaster_init): Added support for
-		parallel ports with I/O addresses above 0x3FF.
-	(byteblaster_done): Ditto.
-	* src/tap/cable/dlc5.c (dlc5_init): Ditto.
-	(dlc5_done): Ditto.
-	* src/tap/cable/ea253.c (ea253_init): Ditto.
-	(ea253_done): Ditto.
-	* src/tap/cable/ei012.c (ei012_init): Ditto.
-	(ei012_done): Ditto.
-	* src/tap/cable/wiggler.c (wiggler_init): Ditto.
-	(wiggler_done): Ditto.
+    * src/tap/cable/byteblaster.c (byteblaster_init): Added support for
+        parallel ports with I/O addresses above 0x3FF.
+    (byteblaster_done): Ditto.
+    * src/tap/cable/dlc5.c (dlc5_init): Ditto.
+    (dlc5_done): Ditto.
+    * src/tap/cable/ea253.c (ea253_init): Ditto.
+    (ea253_done): Ditto.
+    * src/tap/cable/ei012.c (ei012_init): Ditto.
+    (ei012_done): Ditto.
+    * src/tap/cable/wiggler.c (wiggler_init): Ditto.
+    (wiggler_done): Ditto.
 
 2003-01-19  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac: Added AC_GNU_SOURCE.
+    * configure.ac: Added AC_GNU_SOURCE.
 
 2003-01-18  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (main): Added new 'frequency' command.
-	* src/help.c (help): Added help for 'frequency' command.
-	* include/cable.h (cable_wait): Added new function prototype.
-	* src/tap/cable.c (cable_wait): Added new function.
-	* src/tap/cable/byteblaster.c (byteblaster_clock): Added support for TCK
-		frequency limit.
-	(byteblaster_get_tdo): Ditto.
-	* src/tap/cable/dlc5.c (dlc5_clock): Ditto.
-	(dlc5_get_tdo): Ditto.
-	* src/tap/cable/ea253.c (ea253_clock): Ditto.
-	(ea253_get_tdo): Ditto.
-	* src/tap/cable/ei012.c (ei012_clock): Ditto.
-	(ei012_get_tdo): Ditto.
-	* src/tap/cable/wiggler.c (wiggler_clock): Ditto.
-	(wiggler_get_tdo): Ditto.
+    * src/jtag.c (main): Added new 'frequency' command.
+    * src/help.c (help): Added help for 'frequency' command.
+    * include/cable.h (cable_wait): Added new function prototype.
+    * src/tap/cable.c (cable_wait): Added new function.
+    * src/tap/cable/byteblaster.c (byteblaster_clock): Added support for TCK
+        frequency limit.
+    (byteblaster_get_tdo): Ditto.
+    * src/tap/cable/dlc5.c (dlc5_clock): Ditto.
+    (dlc5_get_tdo): Ditto.
+    * src/tap/cable/ea253.c (ea253_clock): Ditto.
+    (ea253_get_tdo): Ditto.
+    * src/tap/cable/ei012.c (ei012_clock): Ditto.
+    (ei012_get_tdo): Ditto.
+    * src/tap/cable/wiggler.c (wiggler_clock): Ditto.
+    (wiggler_get_tdo): Ditto.
 
 2003-01-16  Marcel Telka  <marcel@telka.sk>
 
-	* data/MANUFACTURERS: Added Cypress (patch 669157). Thanks to Chris Ellec.
+    * data/MANUFACTURERS: Added Cypress (patch 669157). Thanks to Chris Ellec.
 
 2003-01-13  Marcel Telka  <marcel@telka.sk>
 
-	Version 0.2.1 released.
+    Version 0.2.1 released.
 
 
 2003-01-13  Marcel Telka  <marcel@telka.sk>
 
-	* include/state.h: Added new function tap_state_reset().
-	* src/tap/state.c (tap_state_reset): Ditto.
-	* src/tap/tap.c (tap_reset): Added explicit TAP state reset.
+    * include/state.h: Added new function tap_state_reset().
+    * src/tap/state.c (tap_state_reset): Ditto.
+    * src/tap/tap.c (tap_reset): Added explicit TAP state reset.
 
 2003-01-13  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac: Changed version number to 0.2.1.
+    * configure.ac: Changed version number to 0.2.1.
 
 2003-01-11  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/bytebaster.c: Added support for Altera ByteBlaster family cables.
-	* src/tap/cable.c: Ditto.
-	* src/tap/Makefile.am: Ditto.
-	* src/help.c (help): Increased space for cable short name.
+    * src/tap/cable/bytebaster.c: Added support for Altera ByteBlaster family cables.
+    * src/tap/cable.c: Ditto.
+    * src/tap/Makefile.am: Ditto.
+    * src/help.c (help): Increased space for cable short name.
 
 2003-01-11  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable/wiggler.c: Added support for Macraigor Wiggler JTAG Cable (Stas Khirman).
-	* src/tap/cable.c: Ditto.
-	* src/tap/Makefile.am: Ditto.
+    * src/tap/cable/wiggler.c: Added support for Macraigor Wiggler JTAG Cable (Stas Khirman).
+    * src/tap/cable.c: Ditto.
+    * src/tap/Makefile.am: Ditto.
 
 2003-01-10  Marcel Telka  <marcel@telka.sk>
 
-	* src/tap/cable.c: Added missing stdlib.h include (bug 665923). Thanks to Chris Ellec.
+    * src/tap/cable.c: Added missing stdlib.h include (bug 665923). Thanks to Chris Ellec.
 
 2003-01-09  Marcel Telka  <marcel@telka.sk>
 
-	* src/jtag.c (main): Fixed minor typo in 'cable' output message.
+    * src/jtag.c (main): Fixed minor typo in 'cable' output message.
 
 2003-01-09  Marcel Telka  <marcel@telka.sk>
 
-	* src/discovery.c (detect_register_size): Changed register length test iteration.
-		Now the test iterates to MAX_REGISTER_LENGTH, not to MAX_REGISTER_LENGTH - 1.
+    * src/discovery.c (detect_register_size): Changed register length test iteration.
+        Now the test iterates to MAX_REGISTER_LENGTH, not to MAX_REGISTER_LENGTH - 1.
 
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
-	Version 0.2 released.
+    Version 0.2 released.
 
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
-	* include/cable.h: Unified and simplified cable driver handling, added driver name
-		and driver description into driver interface structure.
-	* src/help.c (help): Ditto.
-	* src/jtag.c (main): Ditto.
-	* src/tap/Makefile.am: Ditto.
-	* src/tap/cable.c: Ditto.
-	* src/tap/cable/dlc5.c: Ditto.
-	* src/tap/cable/ea253.c: Ditto.
-	* src/tap/cable/ei012.c: Ditto.
+    * include/cable.h: Unified and simplified cable driver handling, added driver name
+        and driver description into driver interface structure.
+    * src/help.c (help): Ditto.
+    * src/jtag.c (main): Ditto.
+    * src/tap/Makefile.am: Ditto.
+    * src/tap/cable.c: Ditto.
+    * src/tap/cable/dlc5.c: Ditto.
+    * src/tap/cable/ea253.c: Ditto.
+    * src/tap/cable/ei012.c: Ditto.
 
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
-	* include/cable.h: Added cable driver for ETC EI012 JTAG Cable.
-	* src/help.c (help): Ditto.
-	* src/jtag.c (main): Ditto.
-	* src/tap/Makefile.am: Ditto.
-	* src/tap/cable/ei012.c: Ditto.
+    * include/cable.h: Added cable driver for ETC EI012 JTAG Cable.
+    * src/help.c (help): Ditto.
+    * src/jtag.c (main): Ditto.
+    * src/tap/Makefile.am: Ditto.
+    * src/tap/cable/ei012.c: Ditto.
 
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
-	* configure.ac: Bumped version number to 0.2, added check-new and dist-bzip2
-		parameters to AM_INIT_AUTOMAKE() invocation.
-	* src/jtag.c: Updated year in initial banner.
+    * configure.ac: Bumped version number to 0.2, added check-new and dist-bzip2
+        parameters to AM_INIT_AUTOMAKE() invocation.
+    * src/jtag.c: Updated year in initial banner.
 
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
-	* include/cable.h: Added cable driver for Xilinx DLC5 JTAG Parallel Cable III.
-	* src/help.c (help): Ditto.
-	* src/jtag.c (main): Ditto.
-	* src/tap/Makefile.am: Ditto.
-	* src/tap/cable/dlc5.c: Ditto.
+    * include/cable.h: Added cable driver for Xilinx DLC5 JTAG Parallel Cable III.
+    * src/help.c (help): Ditto.
+    * src/jtag.c (main): Ditto.
+    * src/tap/Makefile.am: Ditto.
+    * src/tap/cable/dlc5.c: Ditto.
 
 2003-01-08  Marcel Telka  <marcel@telka.sk>
 
-	* include/Makefile.am: Removed ctrl.h, added cable.h.
-	* include/ctrl.h: Removed obsolete file.
-	* include/cable.h: Added common declarations for JTAG cable drivers.
-	* src/detect.c: Replaced ctrl.h include with cable.h (JTAG cable driver support).
-	* src/discovery.c: Ditto.
-	* src/tap/tap.c: Ditto.
-	* src/help.c (help): Added help for new command 'cable'.
-	* src/jtag.c (main): Added support for JTAG cable drivers, added new command 'cable'.
-	* src/tap/Makefile.am: Removed ctrl.c, added cable/ea253.c, updated includes.
-	* src/tap/ctrl.c: Removed obsolete file.
-	* src/tap/state.c: Changed default TRST state to 1.
-	* src/tap/cable/ea253.c: Added driver for EA253 JTAG cable.
+    * include/Makefile.am: Removed ctrl.h, added cable.h.
+    * include/ctrl.h: Removed obsolete file.
+    * include/cable.h: Added common declarations for JTAG cable drivers.
+    * src/detect.c: Replaced ctrl.h include with cable.h (JTAG cable driver support).
+    * src/discovery.c: Ditto.
+    * src/tap/tap.c: Ditto.
+    * src/help.c (help): Added help for new command 'cable'.
+    * src/jtag.c (main): Added support for JTAG cable drivers, added new command 'cable'.
+    * src/tap/Makefile.am: Removed ctrl.c, added cable/ea253.c, updated includes.
+    * src/tap/ctrl.c: Removed obsolete file.
+    * src/tap/state.c: Changed default TRST state to 1.
+    * src/tap/cable/ea253.c: Added driver for EA253 JTAG cable.
 
 2003-01-06  Marcel Telka  <marcel@telka.sk>
 
-	* src/discovery.c (discovery): Fixed memory leaks, added out of memory test,
-		added test for invalid IR length.
+    * src/discovery.c (discovery): Fixed memory leaks, added out of memory test,
+        added test for invalid IR length.
 
 2003-01-05  Marcel Telka  <marcel@telka.sk>
 
-	* include/register.h (register_inc, register_dec, register_shift_right,
-		register_shift_left): Added new functions.
-	* src/tap/register.c (register_inc, register_dec, register_shift_right,
-		register_shift_left): Ditto.
-	* src/Makefile.am: Added discovery.c file.
-	* src/discovery.c: Added new file with discovery() implementation.
-	* src/help.c (help): Added help for 'discovery' command.
-	* src/jtag.c (main): Added 'discovery' command.
-	* src/tap/tap.c (write_command): Removed unused function.
+    * include/register.h (register_inc, register_dec, register_shift_right,
+        register_shift_left): Added new functions.
+    * src/tap/register.c (register_inc, register_dec, register_shift_right,
+        register_shift_left): Ditto.
+    * src/Makefile.am: Added discovery.c file.
+    * src/discovery.c: Added new file with discovery() implementation.
+    * src/help.c (help): Added help for 'discovery' command.
+    * src/jtag.c (main): Added 'discovery' command.
+    * src/tap/tap.c (write_command): Removed unused function.
 
 2002-12-16  Marcel Telka  <marcel@telka.sk>
 
-	* data/Makefile.am: Renamed intel/pxa250/pxa260 to intel/pxa250/pxa250c0.
+    * data/Makefile.am: Renamed intel/pxa250/pxa260 to intel/pxa250/pxa250c0.
 
 2002-12-11  Marcel Telka  <marcel@telka.sk>
 
-	* data/intel/pxa250/STEPPINGS: Renamed file pxa260 to pxa250c0.
-	* data/intel/pxa260: Ditto.
-	* data/intel/pxa250c0: Ditto.
+    * data/intel/pxa250/STEPPINGS: Renamed file pxa260 to pxa250c0.
+    * data/intel/pxa260: Ditto.
+    * data/intel/pxa250c0: Ditto.
 
 2002-11-29  Marcel Telka  <marcel@telka.sk>
 
-	* src/flash.c (flashmsbin, flashmem): Fixed crash if flash memory is not detected.
-	* src/readmem.c (detectflash): Ditto.
+    * src/flash.c (flashmsbin, flashmem): Fixed crash if flash memory is not detected.
+    * src/readmem.c (detectflash): Ditto.
 
 2002-11-27  Marcel Telka  <marcel@telka.sk>
 
-	* data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Added pins and BSR bits.
+    * data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Added pins and BSR bits.
 
 2002-11-26  Marcel Telka  <marcel@telka.sk>
 
-	* data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Added user-defined
-		instructions.
+    * data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144: Added user-defined
+        instructions.
 
 2002-11-25  Marcel Telka  <marcel@telka.sk>
 
-	Version 0.1 released.
+    Version 0.1 released.
 
 
 $Revision$
