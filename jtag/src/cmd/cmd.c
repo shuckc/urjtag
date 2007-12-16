@@ -65,7 +65,6 @@ extern cmd_t cmd_script;
 extern cmd_t cmd_include;
 extern cmd_t cmd_svf;
 extern cmd_t cmd_debug;
-extern cmd_t cmd_setdevice;
 
 const cmd_t *cmds[] = {
 	&cmd_quit,
@@ -102,7 +101,6 @@ const cmd_t *cmds[] = {
 	&cmd_include,
 	&cmd_svf,
 	&cmd_debug,
-	&cmd_setdevice,
 	NULL			/* last must be NULL */
 };
 

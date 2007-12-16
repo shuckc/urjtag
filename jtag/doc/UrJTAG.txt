@@ -429,6 +429,10 @@ example usage.
 *signal*:: 	define new signal for a part
 *svf*:: 	execute svf commands from file
 
+Some tools derived from the same openwince JTAG Tools code base as UrJTAG 
+know additional commands, which are not supported in UrJTAG. See the section
+about "Unsupported commands", below, about workarounds.
+
 ==== Basic commands ====
 
 ===== quit =====
@@ -516,18 +520,16 @@ Detects devices on the bus. Example:
     Stepping:     C0
     Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
 
+==== Unsupported commands ====
+
 ===== setdevice =====
-//From README_21065L
 
-This command is currently only there to support the SHARC 21065L processor,
-which has no IDCODE.
+This command was only there to support the SHARC 21065L processor,
+which has no IDCODE and therefore can't be initialized correctly by
+just running "detect". However, the proper initialization can be done
+after "detect" by loading the proper declarations and bus driver manually:
 
-In jtag prompt type command "setdevice sharc21065L", now the mode changes to
-SHARC 21065L specific. Note that this mode works only with SHARC 21065L
-processor. If you want to try another device, please restart the JTAG tool.
-
-  jtag> setdevice sharc21065L
-  Device is set to SHARC 21065L
+  jtag> include analog/sharc21065l/sharc21065l
 
 //========================================================================
 

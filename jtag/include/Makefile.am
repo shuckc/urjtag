@@ -41,6 +41,5 @@ noinst_HEADERS = \
 	jtag.h \
 	tap.h \
 	fclock.h \
-	setdevice.h \
 	svf.h \
 	xpcu.h

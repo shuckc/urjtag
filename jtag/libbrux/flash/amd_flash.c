@@ -40,7 +40,6 @@
 #include <brux/bus.h>
 #include <brux/cfi.h>
 
-#include "setdevice.h"
 //write specific
 #define AMD_SECTOR_PROTECTED
 
@@ -67,8 +66,13 @@
 #define AMD_BYPASS_UNLOCK_MODE			1
 #define AMD_STANDARD_MODE			0
 
-
-forced_detection_t var_forced_detection;
+struct
+{
+	unsigned long flash;
+	unsigned short algorithm;
+	unsigned short unlock_bypass;
+}
+var_forced_detection;
 
 int amd_detect(bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
 static int amd_29xx040_autodetect( cfi_array_t *cfi_array );

@@ -27,8 +27,7 @@ SUBDIRS = po
 
 noinst_HEADERS = \
 	sysdep.h \
-	gettext.h \
-	setdevice.h
+	gettext.h
 
 EXTRA_DIST = \
 	Makefile.rules
