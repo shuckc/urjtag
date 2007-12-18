@@ -248,6 +248,7 @@ jtag_readline_loop( const char *prompt )
 	do
 	{
 		printf("%s", prompt);
+		fflush(stdout);
 		jtag_readline_multiple_commands_support( line );
 	}
 	while(fgets(line, 1023, stdin));
@@ -414,7 +415,11 @@ main( int argc, const char **argv )
 
 	if (version)
 	{
-		printf(_("%s #%s\nCopyright (C) 2002, 2003 ETC s.r.o.\n"), PACKAGE_STRING, SVN_REVISION);
+		printf(_("\n%s #%s\n\n"
+          "Copyright (C) 2002, 2003 ETC s.r.o.\n"
+          "Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n"
+         ), PACKAGE_STRING, SVN_REVISION);
+
 		printf(_("\n"
 		"This program is free software; you can redistribute it and/or modify\n"
 		"it under the terms of the GNU General Public License as published by\n"
@@ -470,8 +475,9 @@ main( int argc, const char **argv )
 
 	/* interactive */
 	printf(
-			_("%s #%s\n"
+			_("\n%s #%s\n"
 			"Copyright (C) 2002, 2003 ETC s.r.o.\n"
+			"Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n\n"
 			"%s is free software, covered by the GNU General Public License, and you are\n"
 			"welcome to change it and/or distribute copies of it under certain conditions.\n"
 			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, SVN_REVISION,
@@ -484,8 +490,8 @@ main( int argc, const char **argv )
 		return -1;
 	}
 
-	printf( _("Warning: %s may damage your hardware! Type \"quit\" to exit!\n\n"), PACKAGE_NAME );
-	printf( _("Type \"help\" for help.\n\n") );
+	printf( _("WARNING: %s may damage your hardware!\n"), PACKAGE_NAME );
+	printf( _("Type \"quit\" to exit, \"help\" for help.\n\n") );
 
 	/* Create ~/.jtag */
 	jtag_create_jtagdir();

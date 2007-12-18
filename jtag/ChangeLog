@@ -1,3 +1,7 @@
+2007-12-18  Kolja Waschk <kawk
+
+    * doc/UrJTAG.txt, src/jtag.txt: Cosmetics, Copyright
+
 2007-12-16  Kolja Waschk <kawk>
 
 	* jtag.c: Don't abort on invalid command line options
