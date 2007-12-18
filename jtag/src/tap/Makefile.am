@@ -58,12 +58,23 @@ endif
 
 if HAVE_LIBFTDI
 libtap_a_SOURCES += \
-	parport/ftdi.c \
-	cable/usbblaster.c \
-	cable/ft2232.c
+	parport/ftdi.c
 endif
 
 if HAVE_LIBFTD2XX
 libtap_a_SOURCES += \
 	parport/ftd2xx.c
 endif
+
+FTDIDEPENDENT= \
+	cable/usbblaster.c \
+	cable/ft2232.c
+
+if HAVE_LIBFTDI
+libtap_a_SOURCES += $(FTDIDEPENDENT)
+else
+if HAVE_LIBFTD2XX
+libtap_a_SOURCES += $(FTDIDEPENDENT)
+endif
+endif
+

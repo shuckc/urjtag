@@ -1,10 +1,12 @@
 2007-12-18  Kolja Waschk <kawk
 
     * doc/UrJTAG.txt, src/jtag.txt: Cosmetics, Copyright
+    * src/tap/Makefile.am: include cable driver for USB Blaster and
+      FT2232-based cables if any of libftdi or ftd2xx is present
 
 2007-12-16  Kolja Waschk <kawk>
 
-	* jtag.c: Don't abort on invalid command line options
+    * jtag.c: Don't abort on invalid command line options
     * configure.ac: Reorganized the libusb/libftdi detection.
     * data/MANUFACTURERS: Change 11110000111 code to point to
       "ARM" instead of Sharp to stop misdetection of other 
