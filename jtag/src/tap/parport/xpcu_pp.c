@@ -32,7 +32,9 @@
 #include <linux/ioctl.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef HAVE_STROPTS_H
 #include <stropts.h>
+#endif
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>

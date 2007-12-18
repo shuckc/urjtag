@@ -29,7 +29,9 @@
 #ifdef HAVE_LIBFTDI
 
 #include <fcntl.h>
+#ifdef HAVE_STROPTS_H
 #include <stropts.h>
+#endif
 #include <unistd.h>
 #include <linux/ioctl.h>
 

@@ -28,7 +28,9 @@
 #ifdef HAVE_LINUX_PPDEV_H
 
 #include <fcntl.h>
+#ifdef HAVE_STROPTS_H
 #include <stropts.h>
+#endif
 #include <unistd.h>
 #include <linux/ppdev.h>
 #include <linux/ioctl.h>

@@ -1,5 +1,7 @@
 2007-12-18  Kolja Waschk <kawk
 
+	* configure.ac, src/tap/parport/*.c: include stropts.h only if
+	  it's available (needed for uClinux and others; thanks Hartley)
     * doc/UrJTAG.txt, src/jtag.txt: Cosmetics, Copyright
     * src/tap/Makefile.am: include cable driver for USB Blaster and
       FT2232-based cables if any of libftdi or ftd2xx is present
