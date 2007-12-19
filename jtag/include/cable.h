@@ -48,7 +48,7 @@ struct cable_driver_t {
 	int (*transfer)( cable_t *, int, char *, char * );
 	int (*set_trst)( cable_t *, int );
 	int (*get_trst)( cable_t * );
-	void (*help)( char * );
+	void (*help)( const char * );
 };
 
 struct cable_t {
