@@ -121,14 +121,14 @@ cmd_print_run( char *params[] )
 
 			for (a = 0; a < UINT64_C(0x100000000); a = area.start + area.length) {
 				if (bus_area( bus, a, &area ) != 0) {
-					printf( _("Error in bus area discovery at 0x%08llX\n"), a );
+					printf( _("Error in bus area discovery at 0x%08llX\n"), (long long unsigned int)a );
 					break;
 				}
 				if (area.width != 0) {
 					if (area.description != NULL)
-						printf( _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"), area.start, area.length, area.width, _(area.description) );
+						printf( _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"), area.start,  (long long unsigned int)area.length, area.width, _(area.description) );
 					else
-						printf( _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"), area.start, area.length, area.width );
+						printf( _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"), area.start, (long long unsigned int)area.length, area.width );
 				}
 			}
 		}
