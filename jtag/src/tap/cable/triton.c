@@ -123,5 +123,5 @@ cable_driver_t triton_cable_driver = {
 	generic_transfer,
 	triton_set_trst,
 	generic_get_trst,
-	generic_lptcable_help,
+	generic_lptcable_help
 };

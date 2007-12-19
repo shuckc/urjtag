@@ -330,9 +330,9 @@ cleanup( void )
 }
 
 int
-main( int argc, const char **argv )
+main( int argc, char *const argv[] )
 {
-	int go;
+	int go = 0;
 	int i;
 	int c;
 	int norc = 0;

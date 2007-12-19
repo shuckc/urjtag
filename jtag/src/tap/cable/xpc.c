@@ -95,7 +95,7 @@ xpc_set_trst( cable_t *cable, int trst )
 }
 
 void
-xpcu_usbcable_help(char *cablename)
+xpcu_usbcable_help( const char *cablename )
 {
 	printf( _(
 		"Usage: cable %s xpcu VID:PID\n"
@@ -121,12 +121,6 @@ cable_driver_t xpc_int_cable_driver = {
 	generic_get_trst,
 	xpcu_usbcable_help
 };
-
-void
-xpc_ext_usbcable_help()
-{
-	xpcu_usbcable_help("xpc_ext");
-}
 
 cable_driver_t xpc_ext_cable_driver = {
 	"xpc_ext",

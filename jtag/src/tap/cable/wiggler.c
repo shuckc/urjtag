@@ -120,7 +120,8 @@ cable_driver_t wiggler_cable_driver = {
 	wiggler_get_tdo,
 	generic_transfer,
 	wiggler_set_trst,
-	generic_get_trst
+	generic_get_trst,
+	generic_lptcable_help
 };
 
 cable_driver_t igloo_cable_driver = {
@@ -136,6 +137,6 @@ cable_driver_t igloo_cable_driver = {
 	generic_transfer,
 	wiggler_set_trst,
 	generic_get_trst,
-	generic_lptcable_help,
+	generic_lptcable_help
 };
 

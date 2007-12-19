@@ -1,3 +1,8 @@
+2007-12-19  Kolja Waschk <kawk>
+
+    * tap/cable/*, tap/parport/xpcu_common.c, cmd/part.c, cmd/cable.c,
+      bus/pxa2x0.c, jtag.c: fix prototypes, include stdlib (thx Hartley)
+
 2007-12-18  Kolja Waschk <kawk
 
 	* configure.ac, src/tap/parport/*.c: include stropts.h only if

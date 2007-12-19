@@ -128,5 +128,5 @@ cable_driver_t wiggler2_cable_driver = {
 	generic_transfer,
 	wiggler2_set_trst,
 	generic_get_trst,
-	generic_lptcable_help,
+	generic_lptcable_help
 };

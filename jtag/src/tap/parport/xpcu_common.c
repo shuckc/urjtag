@@ -151,7 +151,7 @@ int xpcu_write_gpio(struct usb_dev_handle *xpcu, uint8_t bits)
 
 int xpcu_read_gpio(struct usb_dev_handle *xpcu, uint8_t *bits)
 {
-	if(usb_control_msg(xpcu, 0xC0, 0xB0, 0x0038, 0, bits, 1, 1000)<0)
+	if(usb_control_msg(xpcu, 0xC0, 0xB0, 0x0038, 0, (char*)bits, 1, 1000)<0)
 	{
 		perror("usb_control_msg(0x38.0x00) (read port E)");
 		return -1;

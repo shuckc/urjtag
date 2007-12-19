@@ -467,7 +467,7 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 }
 
 void
-ft2232_usbcable_help(char *cablename)
+ft2232_usbcable_help( const char *cablename )
 {
 	printf( _(
 		"Usage: cable %s ftdi-mpsse VID:PID\n"

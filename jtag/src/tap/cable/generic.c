@@ -125,7 +125,7 @@ generic_get_trst( cable_t *cable )
 }
 
 void
-generic_lptcable_help( char *cablename )
+generic_lptcable_help( const char *cablename )
 {
 	printf( _(
 		"Usage: cable %s parallel PORTADDR\n"

@@ -194,14 +194,14 @@ pxa27x_bus_printinfo( bus_t *bus )
 	printf( _("Intel PXA27x compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
-static void
+static int
 pxa2xx_bus_init( bus_t *bus )
 {
 	chain_t *chain = CHAIN;
 	part_t *p = PART;
 
 	if (INITED == 1)
-		return;
+		return 0;
 
 	part_set_instruction( p, "SAMPLE/PRELOAD" );
 	chain_shift_instructions( chain );
@@ -226,12 +226,14 @@ pxa2xx_bus_init( bus_t *bus )
 	chain_shift_instructions( chain );
 
 	INITED = 1;
+
+	return 0;
 }
 
 static void
 pxa2xx_bus_prepare( bus_t *bus )
 {
-	pxa2xx_bus_init( bus );
+	(void)pxa2xx_bus_init( bus );
 
 	part_set_instruction( PART, "EXTEST" );
 	chain_shift_instructions( CHAIN );
@@ -406,7 +408,7 @@ pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
 	uint32_t tmp_addr;
 	int ncs_index;
-	pxa2xx_bus_init( bus );
+	(void)pxa2xx_bus_init( bus );
 
 	/* Static Chip Select 0 (64 MB) */
 	if (adr < UINT32_C(0x04000000)) {
@@ -493,7 +495,7 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
 	uint32_t tmp_addr;
 	int ncs_index;
-	pxa2xx_bus_init( bus );
+	(void)pxa2xx_bus_init( bus );
 
 	/* Static Chip Select 0 (64 MB) */
 	if (adr < UINT32_C(0x04000000)) {

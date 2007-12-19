@@ -164,7 +164,7 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 }
 
 void
-usbblaster_help(char *cablename)
+usbblaster_help( const char *cablename )
 {
 	printf( _(
 		"Usage: cable %s ftdi VID:PID\n"
