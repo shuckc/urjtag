@@ -172,6 +172,7 @@ AC_CHECK_FUNC(clock_gettime, [], [ AC_CHECK_LIB(rt, clock_gettime) ])
 
 AC_CHECK_HEADERS(linux/ppdev.h)
 AC_CHECK_HEADERS(dev/ppbus/ppi.h)
+AC_CHECK_HEADERS(stropts.h)
 
 VL_LIB_READLINE
 
