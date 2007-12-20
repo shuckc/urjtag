@@ -1,10 +1,25 @@
 <html>
-<body style="margin:0px; background-color: #e0f0e0">
-<table cellspacing="0" cellpadding="0" width="100%" border="0">
-<tr style="background-color: #a0d0a0; background-image:url(images/top_bg_rt311.png); background-repeat:repeat-x">
-<td valign="top" width="169"><img src="images/topleft_rt311_top.png" style="background-color:#a0d0a0"/></td>
+<head><title>UrJTAG - Universal JTAG library, server and tools</title>
+<style type="text/css">
+  body {
+    margin:0px;
+    background-color: #f0fff0;
+    color:black;
+    font-family:Arial,Helvetica,sans-serif;
+  }
+  .top      { background-color:#a0d0a0 } 
+  a:link    { text-decoration:none; color:#006000 }
+  a:visited { text-decoration:none; color:#006000 }
+  a:hover   { text-decoration:underline; color:#006000 }
+  a:active  { text-decoration:underline; color:#006000 }
+  a:focus   { text-decoration:underline; color:#006000 }
+</style>
+<body>
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr class="top" style="background-image:url(images/top_bg_rt311.png); background-repeat:repeat-x">
+<td valign="top" width="169"><img class="top" src="images/topleft_rt311_top.png"/></td>
 <td>&nbsp;</td>
-<td valign="top" width="278" ><img src="images/topright_rt311.png" style="background-color:#a0d0a0"/></td>
+<td valign="top" width="278"><img class="top" src="images/topright_rt311.png"/></td>
 </tr>
 <tr>
 
@@ -15,30 +30,37 @@
 <table border="0" cellspacing="4" cellpadding="4">
 <tr><td><a href="http://sourceforge.net/project/showfiles.php?group_id=193266">Downloads</a></td></tr>
 <tr><td><a href="book/index.html">Documentation</a></td></tr>
+<tr><td><a href="http://http://sourceforge.net/mail/?group_id=193266">Mailing Lists</a>
 <tr><td><a href="http://sourceforge.net/projects/urjtag/">SF Project Data</a></td></tr>
 </table>
 
-
 </td>
 <td colspan="2">
+<p> &nbsp; </p>
+
+<h1>Introduction</h1>
+
 <p>
-&nbsp;
+UrJTAG aims to create an enhanced, modern tool for communicating over JTAG with
+flash chips, CPUs, and many more. It takes on the well proven openwince jtag
+tools code. <a href="http://urjtag.wiki.sourceforge.net/Future">Future plans</a>
+include conversion of the code base into a library that can be used with other applications. A flexible 
+<a href="http://urjtag.wiki.sourceforge.net/FutureProtocol">remote communication protocol</a>
+that can be used over almost any type of serial link (including TCP/IP) is
+currently being defined.
 </p>
-<p>
-UrJTAG aims to create an enhanced, modern tool for communicating over JTAG with flash chips, CPUs, and many more. It takes on the well proven openwince jtag tools code, with many of the available patches applied.
-</p>
-<p>
-Current efforts concentrate on reviving the popular openwince jtag tool. Development in openwince ceased about 2 years ago and an enourmous number of patches piled up in that project's tracker, awaiting integration with the code in CVS.
-</p>
-<p>
-We have taken the openwince jtag code into the UrJTAG subversion repository,
+
+<h1>Status</h1>
+
+  We have taken the openwince jtag code into the UrJTAG subversion repository,
 and applied all patches that have been submitted to the openwince patch
 tracking system in the past years. Several enhancements such as support for
 new flash devices, buses, and some USB cables have been integrated.
+
+The <b>first release is planned for December 24th, 2007</b>.
 </p>
-<p>
-&nbsp;
-</p>
+
+<p>&nbsp;</p>
 </td>
 </tr>
 </table>
