@@ -321,8 +321,6 @@ If you want to try the very newest version of UrJTAG...
   make
   make install
 
-==== Using 
-
 //=========================================================================
 
 == Usage ==
