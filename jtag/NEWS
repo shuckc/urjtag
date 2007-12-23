@@ -2,6 +2,8 @@ $Id$
 
 Also see libbrux/NEWS for more news, especially regarding the flash support.
 
+urjtag-0.7 (2007-12-23)
+
     * Integrated SVF player (Arnim Laeuger)
     * Updates to the jtag command shell
       - New writemem command to write to SRAM (Kent Palmkvist)
@@ -60,7 +62,7 @@ Also see libbrux/NEWS for more news, especially regarding the flash support.
       - Sharp LH7A400
       - Xilinx XC18V04, XC2C256, XC2C64, xC2S200E, XC2S300E, XC3S..., XCF04S, XC9572XL
 
--jtag-0.6 (2007-11-02, never released officially; many derivatives in the wild)
+jtag-0.6 (2007-11-02, never released officially; many derivatives in the wild)
   
     * Created UrJTAG fork at http://www.urjtag.org
     * Added new JTAG declarations for

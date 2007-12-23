@@ -1,5 +1,9 @@
 2007-12-23  Kolja Waschk <kawk>
 
+    Version 0.7 released.
+
+2007-12-23  Kolja Waschk <kawk>
+
     * NEWS: Summarized changes since fork from openwince CVS.
     * configure.ac: Updated copyright information.
 
