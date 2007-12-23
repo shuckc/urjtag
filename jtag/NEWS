@@ -1,101 +1,109 @@
 $Id$
 
-See libbrux/NEWS for more news especially regarding the flash support.
+Also see libbrux/NEWS for more news, especially regarding the flash support.
 
     * Integrated SVF player (Arnim Laeuger)
-
     * Updates to the jtag command shell
-      * New writemem command to write to SRAM (Kent Palmkvist)
-      * New debug, test and shell commands, aliasing for parts
-      * Version output includes subversion revision number
-      * New command line options "version","help","norc"
-      * Improved diagnostics for bsdl2jtag, SVF player (Hein Roehrig)
-      * More error messages added to cmd/bit.c (Jerome Debard)
-      * More verbose output during flashmem (Jerome Debard)
-      * DR can be loaded interactively (Martin Buck)
-      * JTAG commands now parsed case insensitive (Andrew Dyer)
-
+      - New writemem command to write to SRAM (Kent Palmkvist)
+      - New debug, test and shell commands, aliasing for parts
+      - Version output includes subversion revision number
+      - New command line options "version","help","norc"
+      - Improved diagnostics for bsdl2jtag, SVF player (Hein Roehrig)
+      - More error messages added to cmd/bit.c (Jerome Debard)
+      - More verbose output during flashmem (Jerome Debard)
+      - DR can be loaded interactively (Martin Buck)
+      - JTAG commands now parsed case insensitive (Andrew Dyer)
     * New and updated bus drivers
-      * Added optional 'init' function to every bus driver
-      * Analog Devices Blackfin BF533  (Robin Getz)
-      * Analog Devices SHARC ADSP-21065L (Girish G.Pai,Lesly A.M,T.Nadackal,S.Abraham)
-      * Freescale MPC5200 (Asier Llano Palacios)
-      * IBM PPC405EP (Wojtek Kaniewski)
-      * Intel PXA2x0 (Cliff Brake, F.Rysanek)
-      * JOP.design Cyclone boards (Arnim Laeuger)
-      * Magnachip H7202 (Arnim Laeuger)
-      * Updated Samsung S3C4510 bus driver (Krysztof Blaszkowski)
-      * SLS Corp. UP3 (Kent Palmkvist)
-      * Zefant XS3 (Arnim Laeuger)
-
+      - Added optional 'init' function to every bus driver
+      - Analog Devices Blackfin BF533  (Robin Getz)
+      - Analog Devices SHARC ADSP-21065L (Girish G.Pai,Lesly A.M,T.Nadackal,S.Abraham)
+      - Freescale MPC5200 (Asier Llano Palacios)
+      - IBM PPC405EP (Wojtek Kaniewski)
+      - Intel PXA2x0 (Cliff Brake, F.Rysanek)
+      - JOP.design Cyclone boards (Arnim Laeuger)
+      - Magnachip H7202 (Arnim Laeuger)
+      - Updated Samsung S3C4510 bus driver (Krysztof Blaszkowski)
+      - SLS Corp. UP3 (Kent Palmkvist)
+      - Zefant XS3 (Arnim Laeuger)
     * New and updated cable drivers
-      * Cable command syntax changed to allow better integration of
+      - Cable command syntax changed to allow better integration of
         non-parport-based cables (Laurent Pinchart)
-      * Added support for FreeBSD ppi interface
-      * Altera USB-Blaster and ixo.de usb_jtag (Kolja Waschk)
-      * EJTAG driver (Oleg)
-      * FT2232-based USB cables (Arnim Laeuger)
-      * IGLOO cable (Robin Getz)
-      * Xilinx Platform Cable USB (experimental) (Kolja Waschk)
-      * Fix for certain Wiggler cables (David Vrabel)
-      * Better diagnostics when opening ppdev (Hein Roehrig)
-
+      - Added support for FreeBSD ppi interface
+      - Altera USB-Blaster and ixo.de usb_jtag (Kolja Waschk)
+      - EJTAG driver (Oleg)
+      - FT2232-based USB cables (Arnim Laeuger)
+      - IGLOO cable (Robin Getz)
+      - Xilinx Platform Cable USB (experimental) (Kolja Waschk)
+      - Fix for certain Wiggler cables (David Vrabel)
+      - Better diagnostics when opening ppdev (Hein Roehrig)
     * Improved documentation:
-      * New doc/UrJTAG.txt
-      * Added man pages for jtag and bsdl2jtag
-
+      - New doc/UrJTAG.txt
+      - Added man pages for jtag and bsdl2jtag
     * Miscellaneous enhancements and fixes
-      * Improved timing and busy-loop waiting (Hein Roehrig)
-      * bidir support in bsdl2jtag (Wojtek Kaniewski)
-      * GCC4 Compilation fix (Asier Llano Palacios)
-      * Moved "libbrux" and "include" into jtag directory.
-
+      - Improved timing and busy-loop waiting (Hein Roehrig)
+      - bidir support in bsdl2jtag (Wojtek Kaniewski)
+      - GCC4 Compilation fix (Asier Llano Palacios)
+      - Moved "libbrux" and "include" into jtag directory.
     * Added new JTAG declarations for
+      - ADMtek ADM5120
+      - Altera EP1C6, EP1C12, EPM3064
+      - Analog Devices BF533, ADSP-21065L
+      - Atheros AR2312
+      - Atmel AT91SAM7S256
+      - Brecis MSP2006
+      - Freescale MPC5200
+      - Hitachi AR7300
+      - IBM PPC405EP
+      - Intel PXA270
+      - Lattice LC4128C
+      - Lexra LX5280
+      - Sharp LH7A400
+      - Xilinx XC18V04, XC2C256, XC2C64, xC2S200E, XC2S300E, XC3S..., XCF04S, XC9572XL
 
-jtag-0.6 (2007-11-02, never released officially; many derivatives in the wild)
-
+-jtag-0.6 (2007-11-02, never released officially; many derivatives in the wild)
+  
     * Created UrJTAG fork at http://www.urjtag.org
-	* Added new JTAG declarations for
-		- Hitachi HD64465
-		- Hitachi SH7729 (Beregnyei Balazs)
-		- Motorola MPC8245
-		- Broadcom BCM4712 (partial, Alan Wallace)
-		- Xilinx XCR3128XL-VQ100 (patch 1010714, Michael Lauer)
-		- Xilinx XCR3032XL-VQ44 (patch 972621, Andrew Dyer)
-		- Toshiba TX4925/TX4926 (patch 972621, Andrew Dyer)
-		- Sharp LH7A400 (patch 886068, Marko Rößler)
-		- IBM 440GX (patch 1012120, Jerome Debard)
-		- Lattice LC4032V (patch 1012120, Jerome Debard)
-		- Lattice M4A3-64/32 (patch 1012120, Jerome Debard)
-		- Lattice M4A3-256/192 (patch 1012120, Jerome Debard)
-	* Added new bus drivers:
-		- Motorola MPC824x
-		- AMD Alchemy Solutions Au1500 (patch 853883, Zhang Wei)
-		- Toshiba TX4925 (patch 972625, Andrew Dyer)
-		- IBM PowerPC 440GX (patch 1012154, Jerome Debard)
-		- Sharp LH7A400 (patch 886068, Marko Rößler)
-	* Added support for Lattice Parallel Port JTAG Cable (patch 1012138, Jerome Debard).
-	* Fixed pin assignment for Macraigor Wiggler JTAG Cable (patch 1040199, Andrew Dyer).
-	* Added new commands:
-		- 'salias' to define alias for a signal
-		- 'reset' to reset JTAG chain
-	* Explicit 'detectflash' command call is required before 'flashmem' command.
-	* Fixed minor bugs (including bug 857039).
-	* Fixed compiler error on Debian Woody (patch 986414, Martin Buck).
-	* Added support for different Intel IXP425 frequency variants (patch 1030647, Trevor Man).
-	* Rewritten and improved startup sequence to distinguish between interactive invocation
-		and stdin input (fixed bug 858535, thanks to Andrew Dyer for an idea).
-	* Removed support for parameter '-' (stdin).
-	* New translations:
-		- French (Michel Robitaille)
-		- Kinyarwanda (Steven Michael Murphy)
+    * Added new JTAG declarations for
+        - Hitachi HD64465
+        - Hitachi SH7729 (Beregnyei Balazs)
+        - Motorola MPC8245
+        - Broadcom BCM4712 (partial, Alan Wallace)
+        - Xilinx XCR3128XL-VQ100 (patch 1010714, Michael Lauer)
+        - Xilinx XCR3032XL-VQ44 (patch 972621, Andrew Dyer)
+        - Toshiba TX4925/TX4926 (patch 972621, Andrew Dyer)
+        - Sharp LH7A400 (patch 886068, Marko Rößler)
+        - IBM 440GX (patch 1012120, Jerome Debard)
+        - Lattice LC4032V (patch 1012120, Jerome Debard)
+        - Lattice M4A3-64/32 (patch 1012120, Jerome Debard)
+        - Lattice M4A3-256/192 (patch 1012120, Jerome Debard)
+    * Added new bus drivers:
+        - Motorola MPC824x
+        - AMD Alchemy Solutions Au1500 (patch 853883, Zhang Wei)
+        - Toshiba TX4925 (patch 972625, Andrew Dyer)
+        - IBM PowerPC 440GX (patch 1012154, Jerome Debard)
+        - Sharp LH7A400 (patch 886068, Marko Rößler)
+    * Added support for Lattice Parallel Port JTAG Cable (patch 1012138, Jerome Debard).
+    * Fixed pin assignment for Macraigor Wiggler JTAG Cable (patch 1040199, Andrew Dyer).
+    * Added new commands:
+        - 'salias' to define alias for a signal
+        - 'reset' to reset JTAG chain
+    * Explicit 'detectflash' command call is required before 'flashmem' command.
+    * Fixed minor bugs (including bug 857039).
+    * Fixed compiler error on Debian Woody (patch 986414, Martin Buck).
+    * Added support for different Intel IXP425 frequency variants (patch 1030647, Trevor Man).
+    * Rewritten and improved startup sequence to distinguish between interactive invocation
+        and stdin input (fixed bug 858535, thanks to Andrew Dyer for an idea).
+    * Removed support for parameter '-' (stdin).
+    * New translations:
+        - French (Michel Robitaille)
+        - Kinyarwanda (Steven Michael Murphy)
 
 jtag-0.5.1 (2003-10-11):
 
-	* Added new JTAG declarations for
-		- Altera EP1C20F400 (Rojhalat Ibrahim)
-		- Altera EPM7128AETC100 (Rojhalat Ibrahim)
-	* Added additional checks for valid ByteBlaster cable connection and enabled all variants
+    * Added new JTAG declarations for
+        - Altera EP1C20F400 (Rojhalat Ibrahim)
+        - Altera EPM7128AETC100 (Rojhalat Ibrahim)
+    * Added additional checks for valid ByteBlaster cable connection and enabled all variants
 		of the cable (patch 793313, Rojhalat Ibrahim).
 	* Used real data bus width for data reading in PXA2x0, SA1110, and SH7727 bus drivers
 		(based on patch 792591, thanks to Guennadi Liakhovetski).
