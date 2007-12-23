@@ -1,7 +1,8 @@
 #
 # $Id$
 #
-# Copyright (C) 2002, 2003 ETC s.r.o.
+# Copyright (C) 2007, 2008 Kolja Waschk and other
+#    UrJTAG.org developers, (C) 2002, 2003 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,13 +19,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
+# Written by Marcel Telka <marcel@telka.sk>, 2002, 2003,
+#  and other UrJTAG authors, 2007, 2008, ...
 #
 
 AC_INIT(UrJTAG,0.6,http://www.urjtag.org,urjtag)
 
 AC_PREREQ(2.54)
-AC_COPYRIGHT([Copyright (C) 2002, 2003 ETC s.r.o.])
+AC_COPYRIGHT([Copyright (C) 2007/08 Kolja Waschk and other UrJTAG authors; 2002/03 ETC s.r.o.])
 AC_REVISION($Revision$)
 
 # Get SVN Revision - idea from xfce-power-manager (C) 2007 by B.Tarricone

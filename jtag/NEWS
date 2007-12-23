@@ -1,7 +1,60 @@
 $Id$
 
-See libbrux/NEWS for more news.
+See libbrux/NEWS for more news especially regarding the flash support.
 
+    * Integrated SVF player (Arnim Laeuger)
+
+    * Updates to the jtag command shell
+      * New writemem command to write to SRAM (Kent Palmkvist)
+      * New debug, test and shell commands, aliasing for parts
+      * Version output includes subversion revision number
+      * New command line options "version","help","norc"
+      * Improved diagnostics for bsdl2jtag, SVF player (Hein Roehrig)
+      * More error messages added to cmd/bit.c (Jerome Debard)
+      * More verbose output during flashmem (Jerome Debard)
+      * DR can be loaded interactively (Martin Buck)
+      * JTAG commands now parsed case insensitive (Andrew Dyer)
+
+    * New and updated bus drivers
+      * Added optional 'init' function to every bus driver
+      * Analog Devices Blackfin BF533  (Robin Getz)
+      * Analog Devices SHARC ADSP-21065L (Girish G.Pai,Lesly A.M,T.Nadackal,S.Abraham)
+      * Freescale MPC5200 (Asier Llano Palacios)
+      * IBM PPC405EP (Wojtek Kaniewski)
+      * Intel PXA2x0 (Cliff Brake, F.Rysanek)
+      * JOP.design Cyclone boards (Arnim Laeuger)
+      * Magnachip H7202 (Arnim Laeuger)
+      * Updated Samsung S3C4510 bus driver (Krysztof Blaszkowski)
+      * SLS Corp. UP3 (Kent Palmkvist)
+      * Zefant XS3 (Arnim Laeuger)
+
+    * New and updated cable drivers
+      * Cable command syntax changed to allow better integration of
+        non-parport-based cables (Laurent Pinchart)
+      * Added support for FreeBSD ppi interface
+      * Altera USB-Blaster and ixo.de usb_jtag (Kolja Waschk)
+      * EJTAG driver (Oleg)
+      * FT2232-based USB cables (Arnim Laeuger)
+      * IGLOO cable (Robin Getz)
+      * Xilinx Platform Cable USB (experimental) (Kolja Waschk)
+      * Fix for certain Wiggler cables (David Vrabel)
+      * Better diagnostics when opening ppdev (Hein Roehrig)
+
+    * Improved documentation:
+      * New doc/UrJTAG.txt
+      * Added man pages for jtag and bsdl2jtag
+
+    * Miscellaneous enhancements and fixes
+      * Improved timing and busy-loop waiting (Hein Roehrig)
+      * bidir support in bsdl2jtag (Wojtek Kaniewski)
+      * GCC4 Compilation fix (Asier Llano Palacios)
+      * Moved "libbrux" and "include" into jtag directory.
+
+    * Added new JTAG declarations for
+
+jtag-0.6 (2007-11-02, never released officially; many derivatives in the wild)
+
+    * Created UrJTAG fork at http://www.urjtag.org
 	* Added new JTAG declarations for
 		- Hitachi HD64465
 		- Hitachi SH7729 (Beregnyei Balazs)
