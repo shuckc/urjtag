@@ -284,6 +284,23 @@ AS_IF([test "x$HAVELIBFTD2XX" == xyes], [
 ])
 AC_SUBST(FTD2XXLIB)
 
+
+dnl Enable cable driver for Vision EP9307?
+AC_ARG_ENABLE(ep9307,
+[  --enable-ep9307         Enable cable driver for EP9307],
+[case "${enableval}" in
+   yes) ep9307=true ;;
+   no)  ep9307=false ;;
+   *) AC_MSG_ERROR(bad value ${enableval} for --enable-ep9307) ;;
+ esac],
+[ep9307=false])
+AS_IF([test "x$ep9307" = xtrue], [
+  AM_CONDITIONAL(ENABLE_EP9307, true)
+  AC_DEFINE(ENABLE_EP9307, 1, [define if cable driver for ep9307 is enabled])
+],[
+  AM_CONDITIONAL(ENABLE_EP9307, false)
+])
+
 CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 

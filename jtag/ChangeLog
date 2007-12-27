@@ -1,3 +1,9 @@
+2007-12-26  Kolja Waschk <kawk>
+
+    * tap/cable/vision_ep9307.c, tap/cable.c, tap/Makefile.am, configure.ac:
+	  Integrated first modern (single-file w/o parport) cable driver
+      (1858709: EP9307 target specific cable driver, from Hartley Sweeten)
+
 2007-12-23  Kolja Waschk <kawk>
 
     Version 0.7 released.

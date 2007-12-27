@@ -2,6 +2,11 @@ $Id$
 
 Also see libbrux/NEWS for more news, especially regarding the flash support.
 
+urjtag-n/a
+
+    * New and updated cable drivers
+      - Vision EP9307 GPIO (Hartley Sweeten)
+
 urjtag-0.7 (2007-12-23)
 
     * Integrated SVF player (Arnim Laeuger)

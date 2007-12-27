@@ -57,6 +57,9 @@ extern cable_driver_t wiggler_cable_driver;
 extern cable_driver_t xpc_int_cable_driver;
 extern cable_driver_t xpc_ext_cable_driver;
 #endif
+#ifdef ENABLE_EP9307
+extern cable_driver_t ep9307_cable_driver;
+#endif
 
 cable_driver_t *cable_drivers[] = {
 	&arcom_cable_driver,
@@ -79,6 +82,9 @@ cable_driver_t *cable_drivers[] = {
 #ifdef HAVE_LIBUSB
 	&xpc_int_cable_driver,
 	&xpc_ext_cable_driver,
+#endif
+#ifdef ENABLE_EP9307
+	&ep9307_cable_driver,
 #endif
 	NULL				/* last must be NULL */
 };

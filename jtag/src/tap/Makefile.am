@@ -78,3 +78,9 @@ libtap_a_SOURCES += $(FTDIDEPENDENT)
 endif
 endif
 
+if ENABLE_EP9307
+libtap_a_SOURCES += \
+	cable/vision_ep9307.c
+endif
+
+
