@@ -1,3 +1,8 @@
+2007-12-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/cmd/print.c (cmd_print_run): applied patch:
+      '[ 1858985 ] possible fix to print the signal aliases' (Hartley Sweeten)
+
 2007-12-26  Kolja Waschk <kawk>
 
     * tap/cable/vision_ep9307.c, tap/cable.c, tap/Makefile.am, configure.ac:

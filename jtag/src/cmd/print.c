@@ -68,10 +68,15 @@ cmd_print_run( char *params[] )
 			signal_t *s;
 			part = chain->parts->parts[chain->active_part];
 			for(s = part->signals;s != NULL;s = s->next) {
+				salias_t *sa;
 				if(s->pin)printf("%s %s",s->name,s->pin);
 					else printf("%s",s->name);
 				if(s->input)printf("\tinput=%s",s->input->name);
 				if(s->output)printf("\toutput=%s",s->output->name);
+
+				for (sa = part->saliases; sa != NULL; sa = sa->next) {
+					if (s == sa->signal)printf("\tsalias=%s",sa->name);
+				}
 				printf("\n");
 			}
 			return(1);
