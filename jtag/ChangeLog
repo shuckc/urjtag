@@ -1,3 +1,7 @@
+2007-12-30  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* data/altera/ep1c12/ep1c12: CLAMP and HIGHZ instructions activated
+
 2007-12-29  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * data/altera/PARTS: ep2c8 added

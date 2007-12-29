@@ -40,11 +40,11 @@ instruction length 10
 instruction	BYPASS		1111111111	BYPASS
 instruction	IDCODE		0000000110	DEVICE_ID
 instruction	USERCODE	0000000111	USERCODE
-# instruction	CLAMP		0000001010	<unspecified>
+instruction	CLAMP		0000001010	BYPASS
 instruction	SAMPLE/PRELOAD	0000000101	BSR
 instruction	EXTEST		0000000000	BSR
 instruction	CONFIG_IO	0000001101	IOCSR
-# instruction	HIGHZ		0000001011	<unspecified>
+instruction	HIGHZ		0000001011	BYPASS
 
 signal	BSC0
 signal	BSC1
