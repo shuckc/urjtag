@@ -37,6 +37,11 @@ nobase_dist_pkgdata_DATA = \
 	altera/ep1c12/f256 \
 	altera/ep1c12/f324 \
 	altera/ep1c12/q240 \
+	altera/ep2c8/STEPPINGS \
+	altera/ep2c8/ep2c8 \
+	altera/ep2c8/f256 \
+	altera/ep2c8/q208 \
+	altera/ep2c8/t144 \
 	altera/epm3064a/STEPPINGS \
 	altera/epm3064a/epm3064a \
 	altera/epm3064a/l44 \
@@ -213,4 +218,3 @@ nobase_dist_pkgdata_DATA = \
 	xilinx/xcr3128xl-vq100/xcr3128xl-vq100 \
 	xilinx/xcr3256xl-ft256/STEPPINGS \
 	xilinx/xcr3256xl-ft256/xcr3256xl-ft256
-

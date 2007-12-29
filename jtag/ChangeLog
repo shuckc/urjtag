@@ -1,3 +1,10 @@
+2007-12-29  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * data/altera/PARTS: ep2c8 added
+	'[ 1859032 ] jtag support for Altera EP2C8' (Hartley Sweeten)
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): ep2c8 files added
+	'[ 1859032 ] jtag support for Altera EP2C8' (Hartley Sweeten)
+
 2007-12-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/cmd/print.c (cmd_print_run): applied patch:

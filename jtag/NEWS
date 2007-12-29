@@ -6,6 +6,8 @@ urjtag-n/a
 
     * New and updated cable drivers
       - Vision EP9307 GPIO (Hartley Sweeten)
+    * Added new JTAG declarations for
+      - Altera EP2C8 (Hartley Sweeten)
 
 urjtag-0.7 (2007-12-23)
 

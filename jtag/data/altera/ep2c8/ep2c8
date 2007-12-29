@@ -1,0 +1,2191 @@
+#
+# $Id$
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by H Hartley Sweeten <hsweeten@visionengravers.com>
+#
+# Note:
+#   The signals defined in this file are generic for any EP2C8/EP2C8A.
+#   Signalnames according to Altera's package tables are set in the
+#   package specific scripts.
+#
+#                  **Testing Differential Pin Pairs**
+#   Refer to the note in the original bsd-files for issues related to
+#   testing differential pin pairs!
+#
+#   Pins T144-1/Q208-1/F256-C3 (BSC198) and T144-2/Q208-2/F256-F4 (BSC197)
+#   are dedicated output pins (ASDO and nCSO respectively) when the MSEL
+#   pins are connected to set the device in Active Serial programming mode.
+#   This configuration file assumes that that mode is not used. Therefore,
+#   they are specified as I/O pins.
+#
+#         | Version (4 bits) | Part number (16 bits) | Manufacturer Id (11 bits) | LSB (1 bit) |
+# IDCODE: |         0000     |  0010 0000 1011 0010  |       000 0110 1110       |      1      |
+#
+# Documentation:
+# [1] Altera Corporation, "Cyclone II Device Handbook", CII5V1-3.2
+# [2] Altera Corporation, "Pin Information for the Cyclone(r) II EP2C8 & EP2C8A Devices", Version 1.8
+# [3] Altera Corporation, "EP2C8F256.BSD", Revision 1.03, 11/10/2006
+# [4] Altera Corporation, "EP2C8Q208.BSD", Revision 1.03, 11/10/2006
+# [5] Altera Corporation, "EP2C8T144.BSD", Revision 1.03, 11/10/2006
+
+register	BYPASS		1
+register	BSR		597
+register	IOCSR		5640
+register	DEVICE_ID	32
+register	USERCODE	32
+
+instruction length 10
+instruction	BYPASS		1111111111	BYPASS
+instruction	IDCODE		0000000110	DEVICE_ID
+instruction	USERCODE	0000000111	USERCODE
+instruction	CLAMP		0000001010	BYPASS
+instruction	SAMPLE/PRELOAD	0000000101	BSR
+instruction	EXTEST		0000001111	BSR
+instruction	CONFIG_IO	0000001101	IOCSR
+instruction	HIGHZ		0000001011	BYPASS
+
+
+			# Bank  VREFB Group  Pin Name  Optional Function(s)  Configuration Function  T144  Q208  F256
+			# ----  -----------  --------  --------------------  ----------------------  ----  ----  ----
+signal BSC198		#  B1    VREFB1N0    IO        ASDO                  ASDO                    1     1     C3
+signal BSC197		#  B1    VREFB1N0    IO        nCSO                  nCSO                    2     2     F4
+signal BSC196		#  B1    VREFB1N0    IO        LVDS15p               CRC_ERROR               3     3     C1
+signal BSC195		#  B1    VREFB1N0    IO        LVDS15n               CLKUSR                  4     4     C2
+signal BSC194		#  B1    VREFB1N0    IO        LVDS14p                                             5     D5
+signal BSC193		#  B1    VREFB1N0    IO        LVDS14n                                             6     E5
+			#  B1    VREFB1N0    VCCIO1                                                  5     7
+signal BSC192		#  B1    VREFB1N0    IO        LVDS13p                                             8     F5
+			#  B1    VREFB1N0    GND                                                     6     9
+signal BSC191		#  B1    VREFB1N0    IO        LVDS13n                                             10
+signal BSC190		#  B1    VREFB1N0    IO        LVDS12p                                             11    D3
+signal BSC189		#  B1    VREFB1N0    IO        LVDS12n                                             12    D4
+			#  B1    VREFB1N0    VCCIO1
+signal BSC188		#  B1    VREFB1N0    IO        VREFB1N0                                      7     13    F3
+signal BSC187		#  B1    VREFB1N0    IO        LVDS11p                                                   D2
+signal BSC186		#  B1    VREFB1N0    IO        LVDS11n                                                   D1
+signal BSC185		#  B1    VREFB1N0    IO        LVDS10p                                                   E3
+signal BSC184		#  B1    VREFB1N0    IO        LVDS10n                                                   E4
+                        #  B1    VREFB1N0    GND
+signal BSC183		#  B1    VREFB1N0    IO                                                                  G4
+signal BSC182		#  B1    VREFB1N0    IO        LVDS9p                                                    J6
+signal BSC181		#  B1    VREFB1N0    IO        LVDS9n                                                    H6
+signal BSC180		#  B1    VREFB1N0    IO        LVDS8p                                        8     14    E1
+signal BSC179		#  B1    VREFB1N0    IO        LVDS8n                                        9     15    E2
+			#  B1    VREFB1N0    VCCIO1
+signal TDO		#  B1    VREFB1N0    TDO                             TDO                     10    16    G2
+signal TMS		#  B1    VREFB1N0    TMS                             TMS                     11    17    G1
+signal TCK		#  B1    VREFB1N0    TCK                             TCK                     12    18    F2
+signal TDI		#  B1    VREFB1N0    TDI                             TDI                     13    19    F5
+signal BSC178		#  B1    VREFB1N0    DATA0     DATA0                 DATA0                   14    20    F1
+signal BSC177		#  B1    VREFB1N0    DCLK      DCLK                  DCLK                    15    21    H4
+signal BSC176		#  B1    VREFB1N0    nCE                             nCE                     16    22    G5
+signal BSC175		#  B1    VREFB1N0    CLK0      LVDSCLK0p/input(3)                            17    23    H2
+signal BSC174		#  B1    VREFB1N0    CLK1      LVDSCLK0n/input(3)                            18    24    H1
+                        #  B1    VREFB1N0    GND                                                     19    25
+signal BSC173		#  B1    VREFB1N0    nCONFIG                         nCONFIG                 20    26    J5
+signal BSC172		#  B1    VREFB1N1    CLK2      LVDSCLK1p/input(3)                            21    27    J2
+signal BSC171		#  B1    VREFB1N1    CLK3      LVDSCLK1n/input(3)                            22    28    J1
+			#  B1    VREFB1N1    VCCIO1                                                  23    29
+signal BSC170		#  B1    VREFB1N1    IO        LVDS7p                                        24    30    K2
+signal BSC169		#  B1    VREFB1N1    IO        LVDS7n                                        25    31    K1
+signal BSC168		#  B1    VREFB1N1    IO        LVDS6p                                                    K4
+			#  B1    VREFB1N1    VCCINT                                                  26    32
+signal BSC167		#  B1    VREFB1N1    IO        LVDS6n                                              33    K5
+signal BSC166		#  B1    VREFB1N1    IO                                                            34
+signal BSC165		#  B1    VREFB1N1    IO        LVDS5p                                              35    L1
+			#  B1    VREFB1N1    GND                                                     27    36
+signal BSC164		#  B1    VREFB1N1    IO        LVDS5n                                                    L2
+			#  B1    VREFB1N1    GND
+signal BSC163		#  B1    VREFB1N1    IO        VREFB1N1                                      28    37    J4
+			#  B1    VREFB1N1    VCCIO1
+signal BSC162		#  B1    VREFB1N1    IO        LVDS4p                                                    M1
+signal BSC161		#  B1    VREFB1N1    IO        LVDS4n                                                    M2
+signal BSC160		#  B1    VREFB1N1    IO        LVDS3p                                                    M3
+			#  B1    VREFB1N1    GND                                                           38
+signal BSC159		#  B1    VREFB1N1    IO        LVDS3n                                              39    L3
+signal BSC158		#  B1    VREFB1N1    IO        LVDS2p                                              40    N1
+signal BSC157		#  B1    VREFB1N1    IO        LVDS2n                                              41    N2
+signal BSC156		#  B1    VREFB1N1    IO        LVDS1p                                                    P1
+signal BSC155		#  B1    VREFB1N1    IO        LVDS1n                                                    P2
+			#  B1    VREFB1N1    VCCIO1                                                  29    42
+signal BSC154		#  B1    VREFB1N1    IO                                                            43
+signal BSC153		#  B1    VREFB1N1    IO        LVDS0p                                              44    N3
+signal BSC152		#  B1    VREFB1N1    IO        LVDS0n                                              45    N4
+signal BSC151		#  B1    VREFB1N1    IO                                                      30    46    P3
+signal BSC150		#  B1    VREFB1N1    IO        PLL1_OUTp                                     31    47    L4
+signal BSC149		#  B1    VREFB1N1    IO        PLL1_OUTn                                     32    48    M4
+			#  B1    VREFB1N1    GND                                                     33    49
+			#  B1    VREFB1N1    GND_PLL1                                                34    50    L5
+			#  B1    VREFB1N1    VCCD_PLL1                                               35    51    L6
+			#  B1    VREFB1N1    GND_PLL1                                                36    52    N5
+			#  B4    VREFB4N1    VCCA_PLL1                                               37    53    M5
+			#  B4    VREFB4N1    GNDA_PLL1                                               38    54    M6
+			#  B4    VREFB4N1    GND                                                     39    55
+signal BSC148		#  B4    VREFB4N1    IO        LVDS77n               DEV_OE                  40    56    R3
+signal BSC147		#  B4    VREFB4N1    IO        LVDS77p                                       41    57    T3
+signal BSC146		#  B4    VREFB4N1    IO        LVDS76p                                       42    58    P5
+signal BSC145		#  B4    VREFB4N1    IO        LVDS76n                                       43    59    P4
+signal BSC144		#  B4    VREFB4N1    IO        LVDS75p                                       44    60    T4
+signal BSC143		#  B4    VREFB4N1    IO        LVDS75n                                       45    61    R4
+			#  B4    VREFB4N1    VCCIO4                                                  46    62
+signal BSC142		#  B4    VREFB4N1    IO        LVDS74p                                       47    63    T5
+			#  B4    VREFB4N1    GND
+signal BSC141		#  B4    VREFB4N1    IO        LVDS74n                                       48    64    R5
+signal BSC140		#  B4    VREFB4N1    IO                                                                  N7
+signal BSC139		#  B4    VREFB4N1    IO        LVDS73p                                                   K7
+signal BSC138		#  B4    VREFB4N1    IO        LVDS73n                                                   K6
+			#  B4    VREFB4N1    VCCIO4
+			#  B4    VREFB4N1    GND
+signal BSC137		#  B4    VREFB4N1    IO        LVDS72p                                                   T6
+			#  B4    VREFB4N1    GND                                                     49    65
+signal BSC136		#  B4    VREFB4N1    IO        LVDS72n                                                   R6
+signal BSC135		#  B4    VREFB4N1    IO        LVDS71p                                                   P6
+signal BSC134		#  B4    VREFB4N1    IO        LVDS71n                                                   N6
+			#  B4    VREFB4N1    VCCINT                                                  50    66
+signal BSC133		#  B4    VREFB4N1    IO        VREFB4N1                                      51    67    N8
+			#  B4    VREFB4N1    VCCIO4
+			#  B4    VREFB4N1    GND
+signal BSC132		#  B4    VREFB4N1    IO        LVDS70p                                       52    68    T7
+signal BSC131		#  B4    VREFB4N1    IO        LVDS70n                                             69    R7
+signal BSC130		#  B4    VREFB4N1    IO        LVDS69p                                                   L7
+signal BSC129		#  B4    VREFB4N1    IO        LVDS69n                                                   L8
+signal BSC128		#  B4    VREFB4N1    IO        LVDS68p                                       53    70    T8
+			#  B4    VREFB4N1    VCCIO4                                                  54    71
+signal BSC127		#  B4    VREFB4N1    IO        LVDS68n                                       55    72    R8
+			#  B4    VREFB4N1    GND                                                     56    73
+signal BSC126		#  B4    VREFB4N1    IO        LVDS67p                                       57    74    T9
+signal BSC125		#  B4    VREFB4N1    IO        LVDS67n                                       58    75    R9
+signal BSC124		#  B4    VREFB4N0    IO        LVDS66p                                       59    76    N9
+signal BSC123		#  B4    VREFB4N0    IO        LVDS66n                                       60    77    N10
+			#  B4    VREFB4N1    GND                                                     61    78
+signal BSC122		#  B4    VREFB4N0    IO        LVDS65p                                                   T11
+			#  B4    VREFB4N1    VCCINT                                                  62    79
+signal BSC121		#  B4    VREFB4N0    IO        LVDS65n                                                   R11
+			#  B4    VREFB4N1    VCCIO4
+signal BSC120		#  B4    VREFB4N0    IO                                                            80    P11
+			#  B4    VREFB4N0    GND
+signal BSC119		#  B4    VREFB4N0    IO        LVDS64p                                             81    L9
+signal BSC118		#  B4    VREFB4N0    IO        LVDS64n                                             82    L10
+			#  B4    VREFB4N0    VCCIO4                                                        83
+signal BSC117		#  B4    VREFB4N0    IO        LVDS63p                                             84    R10
+			#  B4    VREFB4N0    GND                                                           85
+signal BSC116		#  B4    VREFB4N0    IO        LVDS63n                                             86    T10
+signal BSC115		#  B4    VREFB4N0    IO        LVDS62p                                             87    K11
+signal BSC114		#  B4    VREFB4N0    IO        LVDS62n                                             88    K10
+signal BSC113		#  B4    VREFB4N0    IO        VREFB4N0                                      63    89    N11
+signal BSC112		#  B4    VREFB4N0    IO        LVDS61p                                             90    P12
+			#  B4    VREFB4N0    VCCIO4                                                        91
+signal BSC111		#  B4    VREFB4N0    IO        LVDS61n                                             92    P13
+			#  B4    VREFB4N0    GND                                                           93
+signal BSC110		#  B4    VREFB4N0    IO        LVDS60p                                       64    94    T12
+signal BSC109		#  B4    VREFB4N0    IO        LVDS60n                                       65    95    R12
+signal BSC108		#  B4    VREFB4N0    IO                                                            96
+signal BSC107		#  B4    VREFB4N0    IO        LVDS59p                                             97    T13
+			#  B4    VREFB4N0    VCCIO4                                                  66    98
+signal BSC106		#  B4    VREFB4N0    IO        LVDS59n                                       67    99    R13
+			#  B4    VREFB4N0    GND                                                     68    100
+signal BSC105		#  B4    VREFB4N0    IO        LVDS58p                                       69    101   T14
+signal BSC104		#  B4    VREFB4N0    IO        LVDS58n                                       70    102   R14
+signal BSC103		#  B4    VREFB4N0    IO        LVDS57p                                       71    103   M11
+signal BSC102		#  B4    VREFB4N0    IO        LVDS57n                                       72    104   L11
+signal BSC101		#  B3    VREFB3N1    IO        LVDS56n                                       73    105   N12
+signal BSC100		#  B3    VREFB3N1    IO        LVDS56p                                       74    106   M12
+signal BSC099		#  B3    VREFB3N1    IO        LVDS55n                                                   L12
+signal BSC098		#  B3    VREFB3N1    IO        LVDS55p                                                   K13
+signal BSC097		#  B3    VREFB3N1    IO        LVDS54n               INIT_DONE               75    107   N13
+signal BSC096		#  B3    VREFB3N1    IO        LVDS54p               nCEO                    76    108   N14
+			#  B3    VREFB3N1    VCCIO3                                                  77    109
+signal BSC095		#  B3    VREFB3N1    IO        LVDS53n                                             110   P15
+			#  B3    VREFB3N1    GND                                                     78    111
+signal BSC094		#  B3    VREFB3N1    IO        LVDS53p                                             112   P16
+signal BSC093		#  B3    VREFB3N1    IO        LVDS52n                                             113   N15
+signal BSC092		#  B3    VREFB3N1    IO        LVDS52p                                             114   N16
+signal BSC091		#  B3    VREFB3N1    IO                                                                  P14
+signal BSC090		#  B3    VREFB3N1    IO        LVDS51n                                             115
+signal BSC089		#  B3    VREFB3N1    IO        LVDS51p                                             116
+signal BSC088		#  B3    VREFB3N1    IO        VREFB3N1                                      79    117   M14
+signal BSC087		#  B3    VREFB3N1    IO        LVDS50n                                                   M15
+			#  B3    VREFB3N1    VCCIO3
+signal BSC086		#  B3    VREFB3N1    IO        LVDS50p                                                   M16
+			#  B3    VREFB3N1    GND
+signal BSC085		#  B3    VREFB3N1    IO                                                            118
+			#  B3    VREFB3N1    GND                                                     80    119
+signal BSC084		#  B3    VREFB3N1    IO                                                                  L14
+signal BSC083		#  B3    VREFB3N1    IO        LVDS49n                                                   L15
+signal BSC082		#  B3    VREFB3N1    IO        LVDS49p                                                   L16
+			#  B3    VREFB3N1    VCCINT                                                  81    120
+signal BSC081		#  B3    VREFB3N1    nSTATUS                         nSTATUS                 82    121   M13
+			#  B3    VREFB3N1    VCCIO3                                                        122
+signal BSC080		#  B3    VREFB3N1    CONF_DONE                       CONF_DONE               83    123   L13
+			#  B3    VREFB3N1    GND                                                           124
+signal BSC079		#  B3    VREFB3N1    MSEL1                           MSEL1                   84    125   K12
+signal BSC078		#  B3    VREFB3N1    MSEL0                           MSEL0                   85    126   J13
+signal BSC077		#  B3    VREFB3N1    IO        LVDS48n                                       86    127   K16
+signal BSC076		#  B3    VREFB3N1    IO        LVDS48p                                       87    128   K15
+signal BSC075		#  B3    VREFB3N1    CLK7      LVDSCLK3n/input(3)                            88    129   J16
+signal BSC074		#  B3    VREFB3N1    CLK6      LVDSCLK3p/input(3)                            89    130   J15
+signal BSC073		#  B3    VREFB3N0    CLK5      LVDSCLK2n/input(3)                            90    131   H15
+signal BSC072		#  B3    VREFB3N0    CLK4      LVDSCLK2p/input(3)                            91    132   H16
+signal BSC071		#  B3    VREFB3N0    IO        LVDS47n                                       92    133   H12
+signal BSC070		#  B3    VREFB3N0    IO        LVDS47p                                       93    134   J12
+signal BSC069		#  B3    VREFB3N0    IO        LVDS46n                                       94    135   G16
+			#  B3    VREFB3N0    VCCIO3                                                  95    136
+signal BSC068		#  B3    VREFB3N0    IO        LVDS46p                                       96    137   G15
+signal BSC067		#  B3    VREFB3N0    IO        LVDS46n                                       97    138   F15
+signal BSC066		#  B3    VREFB3N0    IO        LVDS45p                                             139   F16
+			#  B3    VREFB3N0    GND                                                     98    140
+signal BSC065		#  B3    VREFB3N0    IO        LVDS44n                                             141   J11
+signal BSC064		#  B3    VREFB3N0    IO        LVDS44p                                             142   H11
+signal BSC063		#  B3    VREFB3N0    IO        LVDS43n                                                   G12
+signal BSC062		#  B3    VREFB3N0    IO        LVDS43p                                                   G13
+signal BSC061		#  B3    VREFB3N0    IO        LVDS32n                                             143   E13
+signal BSC060		#  B3    VREFB3N0    IO        LVDS42p                                             144   F13
+signal BSC059		#  B3    VREFB3N0    IO        VREFB3N0                                      99    145   H13
+			#  B3    VREFB3N0    VCCIO3
+signal BSC058		#  B3    VREFB3N0    IO        LVDS41n                                                   D15
+signal BSC057		#  B3    VREFB3N0    IO        LVDS41p                                                   D16
+signal BSC056		#  B3    VREFB3N0    IO        LVDS40n                                                   E15
+			#  B3    VREFB3N0    GND
+signal BSC055		#  B3    VREFB3N0    IO        LVDS40p                                                   E16
+signal BSC054		#  B3    VREFB3N0    IO                                                                  F14
+signal BSC053		#  B3    VREFB3N0    IO        LVDS39n                                       100   146   C15
+signal BSC052		#  B3    VREFB3N0    IO        LVDS39p                                       101   147   C16
+			#  B3    VREFB3N0    VCCIO3                                                  102   148
+signal BSC051		#  B3    VREFB3N0    IO        LVDS38n                                             149   C14
+signal BSC050		#  B3    VREFB3N0    IO        LVDS38p                                             150   D13
+signal BSC049		#  B3    VREFB3N0    IO        PLL2_OUTp                                     103   151   E14
+signal BSC048		#  B3    VREFB3N0    IO        PLL2_OUTn                                     104   152   D14
+			#  B3    VREFB3N0    GND                                                     105   153
+			#  B3    VREFB3N0    GND_PLL2                                                106   154   F12
+			#  B3    VREFB3N0    VCCD_PLL2                                               107   155   F11
+			#  B3    VREFB3N0    GND_PLL2                                                108   156   D12
+			#  B2    VREFB2N0    VCCA_PLL2                                               109   157   E12
+			#  B2    VREFB2N0    GNDA_PLL2                                               110   158   E11
+			#  B2    VREFB2N0    GND                                                     111   159
+signal BSC047		#  B2    VREFB2N0    IO        LVDS37n                                       112   160   B14
+signal BSC046		#  B2    VREFB2N0    IO        LVDS37p                                       113   161   A14
+signal BSC045		#  B2    VREFB2N0    IO        LVDS36n                                       114   162   C13
+signal BSC044		#  B2    VREFB2N0    IO        LVDS36p                                       115   163   C12
+signal BSC043		#  B2    VREFB2N0    IO        LVDS35n                                             164   B13
+signal BSC042		#  B2    VREFB2N0    IO        LVDS35p                                             165   A13
+			#  B2    VREFB2N0    VCCIO2                                                  116   166
+			#  B2    VREFB2N0    GND                                                     117   167
+signal BSC041		#  B2    VREFB2N0    IO        LVDS34n                                       118   168   B12
+signal BSC040		#  B2    VREFB2N0    IO        LVDS34p                                       119   169   A12
+signal BSC039		#  B2    VREFB2N0    IO        VREFB2N0                                      120   170   C11
+signal BSC038		#  B2    VREFB2N0    IO        LVDS33n                                       121   171   B11
+			#  B2    VREFB2N0    VCCIO2                                                        172
+signal BSC037		#  B2    VREFB2N0    IO        LVDS33p                                       122   173   A11
+			#  B2    VREFB2N0    GND                                                           174
+signal BSC036		#  B2    VREFB2N0    IO        LVDS32n                                                   G10
+signal BSC035		#  B2    VREFB2N0    IO        LVDS32p                                                   G11
+signal BSC034		#  B2    VREFB2N0    IO        LVDS31n                                             175   B10
+			#  B2    VREFB2N0    VCCIO2
+signal BSC033		#  B2    VREFB2N0    IO        LVDS21p                                             176   A10
+			#  B2    VREFB2N0    GND
+signal BSC032		#  B2    VREFB2N0    IO        LVDS30n                                                   F10
+signal BSC031		#  B2    VREFB2N0    IO        LVDS30p                                                   F9
+signal BSC030		#  B2    VREFB2N0    IO                                                                  D9
+			#  B2    VREFB2N0    GND                                                     123   177
+			#  B2    VREFB2N0    VCCINT                                                  124   178
+signal BSC029		#  B2    VREFB2N0    IO        LVDS29n                                       125   179   D11
+			#  B2    VREFB2N0    VCCIO2
+signal BSC028		#  B2    VREFB2N0    IO        LVDS29p                                       126   180   D10
+			#  B2    VREFB2N0    GND
+signal BSC027		#  B2    VREFB2N0    IO        LVDS28n                                             181   A9
+signal BSC026		#  B2    VREFB2N0    IO        LVDS28p                                             182   B9
+signal BSC025		#  B2    VREFB2N1    IO        LVDS27n                                                   A8
+signal BSC024		#  B2    VREFB2N1    IO        LVDS27p                                                   B8
+			#  B2    VREFB2N1    VCCIO2                                                  127   183
+signal BSC023		#  B2    VREFB2N1    IO        LVDS26n                                                   A7
+			#  B2    VREFB2N1    GND                                                     128   184
+signal BSC022		#  B2    VREFB2N1    IO        LVDS26p                                       129   185   B7
+			#  B2    VREFB2N1    GND                                                     130   186
+signal BSC021		#  B2    VREFB2N1    IO        LVDS25n                                             187   F7
+signal BSC020		#  B2    VREFB2N1    IO        LVDS25p                                             188   F8
+signal BSC019		#  B2    VREFB2N1    IO        LVDS24n                                             189
+			#  B2    VREFB2N1    VCCINT                                                  131   190
+signal BSC018		#  B2    VREFB2N1    IO        LVDS24p                                             191
+signal BSC017		#  B2    VREFB2N1    IO        VREFB2N1                                      132   192   D8
+signal BSC016		#  B2    VREFB2N1    IO        LVDS23n                                       133   193   B6
+			#  B2    VREFB2N1    VCCIO2                                                        194
+signal BSC015		#  B2    VREFB2N1    IO        LVDS23p                                       134   195   A6
+			#  B2    VREFB2N1    GND                                                           196
+signal BSC014		#  B2    VREFB2N1    IO        LVDS22n                                                   G6
+signal BSC013		#  B2    VREFB2N1    IO        LVDS22p                                                   G7
+signal BSC012		#  B2    VREFB2N1    IO                                                                  D7
+signal BSC011		#  B2    VREFB2N1    IO        LVDS21n                                             197   D6
+			#  B2    VREFB2N1    VCCIO2
+signal BSC010		#  B2    VREFB2N1    IO        LVDS21p                                             198   C6
+			#  B2    VREFB2N1    GND
+signal BSC009		#  B2    VREFB2N1    IO        LVDS20n                                                   C5
+signal BSC008		#  B2    VREFB2N1    IO        LVDS20p                                                   C4
+signal BSC007		#  B2    VREFB2N1    IO        LVDS19n                                       135   199   B5
+signal BSC006		#  B2    VREFB2N1    IO        LVDS19p                                       136   200   A5
+signal BSC005		#  B2    VREFB2N1    IO        LVDS18n                                       137   201   B4
+			#  B2    VREFB2N1    VCCIO2                                                  138   202
+signal BSC004		#  B2    VREFB2N1    IO        LVDS18p                                       139   203   A4
+			#  B2    VREFB2N1    GND                                                     140   204
+signal BSC003		#  B2    VREFB2N1    IO        LVDS17p                                       141   205   A3
+signal BSC002		#  B2    VREFB2N1    IO        LVDS17n               DEV_CLRn                142   206   B3
+signal BSC001		#  B2    VREFB2N1    IO        LVDS16p                                       143   207   E6
+signal BSC000		#  B2    VREFB2N1    IO        LVDS16n                                       144   208   F6
+			#                    VCCINT                                                              G9
+			#                    VCCINT                                                              H7
+			#                    VCCINT                                                              H10
+			#                    VCCINT                                                              J7
+			#                    VCCINT                                                              J10
+			#                    VCCINT                                                              K8
+			#                    VCCIO1                                                              B1
+			#                    VCCIO1                                                              G3
+			#                    VCCIO1                                                              K3
+			#                    VCCIO1                                                              R1
+			#                    VCCIO4                                                              M7
+			#                    VCCIO4                                                              M10
+			#                    VCCIO4                                                              P7
+			#                    VCCIO4                                                              P10
+			#                    VCCIO4                                                              T2
+			#                    VCCIO4                                                              T15
+			#                    VCCIO3                                                              B16
+			#                    VCCIO3                                                              G14
+			#                    VCCIO3                                                              K14
+			#                    VCCIO3                                                              R16
+			#                    VCCIO2                                                              A2
+			#                    VCCIO2                                                              A15
+			#                    VCCIO2                                                              C7
+			#                    VCCIO2                                                              C10
+			#                    VCCIO2                                                              E7
+			#                    VCCIO2                                                              E10
+			#                    GND                                                                 G8
+			#                    GND                                                                 H8
+			#                    GND                                                                 H9
+			#                    GND                                                                 J8
+			#                    GND                                                                 J9
+			#                    GND                                                                 K9
+			#                    GND                                                                 A1
+			#                    GND                                                                 A16
+			#                    GND                                                                 B2
+			#                    GND                                                                 B15
+			#                    GND                                                                 C8
+			#                    GND                                                                 C9
+			#                    GND                                                                 E8
+			#                    GND                                                                 E9
+			#                    GND                                                                 H3
+			#                    GND                                                                 H14
+			#                    GND                                                                 J3
+			#                    GND                                                                 J14
+			#                    GND                                                                 M8
+			#                    GND                                                                 M9
+			#                    GND                                                                 P8
+			#                    GND                                                                 P9
+			#                    GND                                                                 R2
+			#                    GND                                                                 R15
+			#                    GND                                                                 T1
+			#                    GND                                                                 T16
+
+#
+# BSC group 198
+#   T144 - I/O pin 1 (dedicated output pin in AS mode)
+#   Q208 - I/O pin 1 (dedicated output pin in AS mode)
+#   F256 - I/O pin C3 (dedicated output pin in AS mode)
+#
+bit 596 O 1 BSC198 595 1 Z
+bit 595 C 1 *
+bit 594 I 1 BSC198
+#
+# BSC group 197
+#   T144 - I/O pin 2 (dedicated output pin in AS mode)
+#   Q208 - I/O pin 2 (dedicated output pin in AS mode)
+#   F256 - I/O pin F4 (dedicated output pin in AS mode)
+#
+bit 593 O 1 BSC197 592 1 Z
+bit 592 C 1 *
+bit 591 I 1 BSC197
+#
+# BSC group 196
+#   T144 - I/O pin 3
+#   Q208 - I/O pin 3
+#   F256 - I/O pin C1
+#
+bit 590 O 1 BSC196 589 1 Z
+bit 589 C 1 *
+bit 588 I 1 BSC196
+#
+# BSC group 195
+#   T144 - I/O pin 4
+#   Q208 - I/O pin 4
+#   F256 - I/O pin C2
+#
+bit 587 O 1 BSC195 586 1 Z
+bit 586 C 1 *
+bit 585 I 1 BSC195
+#
+# BSC group 194 for
+#   T144 - unused pad
+#   Q208 - I/O pin 5
+#   F256 - I/O pin D5
+#
+bit 584 O 1 BSC194 583 1 Z
+bit 583 C 1 *
+bit 582 I 1 BSC194
+#
+# BSC group 193 for
+#   T144 - unused pad
+#   Q208 - I/O pin 6
+#   F256 - I/O pin E5
+#
+bit 581 O 1 BSC193 580 1 Z
+bit 580 C 1 *
+bit 579 I 1 BSC193
+#
+# BSC group 192
+#   T144 - unused pad
+#   Q208 - I/O pin 8
+#   F256 - I/O pin F5
+#
+bit 578 O 1 BSC192 577 1 Z
+bit 577 C 1 *
+bit 576 I 1 BSC192
+#
+# BSC group 191
+#   T144 - unused pad
+#   Q208 - I/O pin 10
+#   F256 - unused pad
+#
+bit 575 O 1 BSC191 574 1 Z
+bit 574 C 1 *
+bit 573 I 1 BSC191
+#
+# BSC group 190
+#   T144 - unused pad
+#   Q208 - I/O pin 11
+#   F256 - I/O pin D3
+#
+bit 572 O 1 BSC190 571 1 Z
+bit 571 C 1 *
+bit 570 I 1 BSC190
+#
+# BSC group 189
+#   T144 - unused pad
+#   Q208 - I/O pin 12
+#   F256 - I/O pin D4
+#
+bit 569 O 1 BSC189 568 1 Z
+bit 568 C 1 *
+bit 567 I 1 BSC189
+#
+# BSC group 188
+#   T144 - I/O pin 7
+#   Q208 - I/O pin 13
+#   F256 - I/O pin F3
+#
+bit 566 O 1 BSC188 565 1 Z
+bit 565 C 1 *
+bit 564 I 1 BSC188
+#
+# BSC group 187
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin D2
+#
+bit 563 O 1 BSC187 562 1 Z
+bit 562 C 1 *
+bit 561 I 1 BSC187
+#
+# BSC group 186
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin D1
+#
+bit 560 O 1 BSC186 559 1 Z
+bit 559 C 1 *
+bit 558 I 1 BSC186
+#
+# BSC group 185
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin E3
+#
+bit 557 O 1 BSC185 556 1 Z
+bit 556 C 1 *
+bit 555 I 1 BSC185
+#
+# BSC group 184
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin E4
+#
+bit 554 O 1 BSC184 553 1 Z
+bit 553 C 1 *
+bit 552 I 1 BSC184
+#
+# BSC group 183
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin G4
+#
+bit 551 O 1 BSC183 550 1 Z
+bit 550 C 1 *
+bit 549 I 1 BSC183
+#
+# BSC group 182
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin J6
+#
+bit 548 O 1 BSC182 547 1 Z
+bit 547 C 1 *
+bit 546 I 1 BSC182
+#
+# BSC group 181
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin H6
+#
+bit 545 O 1 BSC181 544 1 Z
+bit 544 C 1 *
+bit 543 I 1 BSC181
+#
+# BSC group 180
+#   T144 - I/O pin 8
+#   Q208 - I/O pin 14
+#   F256 - I/O pin E1
+#
+bit 542 O 1 BSC180 541 1 Z
+bit 541 C 1 *
+bit 540 I 1 BSC180
+#
+# BSC group 179
+#   T144 - I/O pin 9
+#   Q208 - I/O pin 15
+#   F256 - I/O pin E2
+#
+bit 539 O 1 BSC179 538 1 Z
+bit 538 C 1 *
+bit 537 I 1 BSC179
+#
+# BSC group 178 (DATA0)
+#   T144 - Family-specific input pin 14
+#   Q208 - Family-specific input pin 20
+#   F256 - Family-specific input pin F1
+#
+bit 536 O 1 *
+bit 535 O 1 *
+bit 534 I 1 BSC178
+#
+# BSC group 177 (DCLK)
+#   T144 - Family-specific input pin 15
+#   Q208 - Family-specific input pin 21
+#   F256 - Family-specific input pin H4
+#
+bit 533 O 1 BSC177 532 1 Z
+bit 532 C 1 *
+bit 531 I 1 BSC177
+#
+# BSC group 176 (nCE)
+#   T144 - untestable Family-specific pin 16
+#   Q208 - untestable Family-specific pin 22
+#   F256 - untestable Family-specific pin G5
+#
+bit 530 O 1 *
+bit 529 O 1 *
+bit 528 O 1 *
+#
+# BSC group 175 (CLK0)
+#   T144 - Family-specific input pin 17
+#   Q208 - Family-specific input pin 23
+#   F256 - Family-specific input pin H2
+#
+bit 527 O 1 *
+bit 526 O 1 *
+bit 525 I 1 BSC175
+#
+# BSC group 174 (CLK1)
+#   T144 - Family-specific input pin 18
+#   Q208 - Family-specific input pin 24
+#   F256 - Family-specific input pin H1
+#
+bit 524 O 1 *
+bit 523 O 1 *
+bit 522 I 1 BSC174
+#
+# BSC group 173 (nCONFIG)
+#   T144 - untestable Family-specific pin 20
+#   Q208 - untestable Family-specific pin 26
+#   F256 - untestable Family-specific pin J5
+#
+bit 521 O 1 *
+bit 520 O 1 *
+bit 519 O 1 *
+#
+# BSC group 172 (CLK2)
+#   T144 - Family-specific input pin 21
+#   Q208 - Family-specific input pin 27
+#   F256 - Family-specific input pin J2
+#
+bit 518 O 1 *
+bit 517 O 1 *
+bit 516 I 1 BSC172
+#
+# BSC group 171 (CLK3)
+#   T144 - Family-specific input pin 22
+#   Q208 - Family-specific input pin 28
+#   F256 - Family-specific input pin J1
+#
+bit 515 O 1 *
+bit 514 O 1 *
+bit 513 I 1 BSC171
+#
+# BSC group 170
+#   T144 - I/O pin 24
+#   Q208 - I/O pin 30
+#   F256 - I/O pin K2
+#
+bit 512 O 1 BSC170 511 1 Z
+bit 511 C 1 *
+bit 510 I 1 BSC170
+#
+# BSC group 169
+#   T144 - I/O pin 25
+#   Q208 - I/O pin 31
+#   F256 - I/O pin K1
+#
+bit 509 O 1 BSC169 508 1 Z
+bit 508 C 1 *
+bit 507 I 1 BSC169
+#
+# BSC group 168
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin K4
+#
+bit 506 O 1 BSC168 505 1 Z
+bit 505 C 1 *
+bit 504 I 1 BSC168
+#
+# BSC group 167
+#   T144 - unused pad
+#   Q208 - I/O pin 33
+#   F256 - I/O pin K5
+#
+bit 503 O 1 BSC167 502 1 Z
+bit 502 C 1 *
+bit 501 I 1 BSC167
+#
+# BSC group 166
+#   T144 - unused pad
+#   Q208 - I/O pin 34
+#   F256 - unused pad
+#
+bit 500 O 1 BSC166 499 1 Z
+bit 499 C 1 *
+bit 498 I 1 BSC166
+#
+# BSC group 165
+#   T144 - unused pad
+#   Q208 - I/O pin 35
+#   F256 - I/O pin L1
+#
+bit 497 O 1 BSC165 496 1 Z
+bit 496 C 1 *
+bit 495 I 1 BSC165
+#
+# BSC group 164
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin L2
+#
+bit 494 O 1 BSC164 493 1 Z
+bit 493 C 1 *
+bit 492 I 1 BSC164
+#
+# BSC group 163
+#   T144 - I/O pin 28
+#   Q208 - I/O pin 37
+#   F256 - I/O pin J4
+#
+bit 491 O 1 BSC163 490 1 Z
+bit 490 C 1 *
+bit 489 I 1 BSC163
+#
+# BSC group 162
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin M1
+#
+bit 488 O 1 BSC162 487 1 Z
+bit 487 C 1 *
+bit 486 I 1 BSC162
+#
+# BSC group 161
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin M2
+#
+bit 485 O 1 BSC161 484 1 Z
+bit 484 C 1 *
+bit 483 I 1 BSC161
+#
+# BSC group 160
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin M3
+#
+bit 482 O 1 BSC160 481 1 Z
+bit 481 C 1 *
+bit 480 I 1 BSC160
+#
+# BSC group 159
+#   T144 - unused pad
+#   Q208 - I/O pin 39
+#   F256 - I/O pin L3
+#
+bit 479 O 1 BSC159 478 1 Z
+bit 478 C 1 *
+bit 477 I 1 BSC159
+#
+# BSC group 158
+#   T144 - unused pad
+#   Q208 - I/O pin 40
+#   F256 - I/O pin N1
+#
+bit 476 O 1 BSC158 475 1 Z
+bit 475 C 1 *
+bit 474 I 1 BSC158
+#
+# BSC group 157
+#   T144 - unused pad
+#   Q208 - I/O pin 41
+#   F256 - I/O pin N2
+#
+bit 473 O 1 BSC157 472 1 Z
+bit 472 C 1 *
+bit 471 I 1 BSC157
+#
+# BSC group 156
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin P1
+#
+bit 470 O 1 BSC156 469 1 Z
+bit 469 C 1 *
+bit 468 I 1 BSC156
+#
+# BSC group 155
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin P2
+#
+bit 467 O 1 BSC155 466 1 Z
+bit 466 C 1 *
+bit 465 I 1 BSC155
+#
+# BSC group 154
+#   T144 - unused pad
+#   Q208 - I/O pin 43
+#   F256 - unused pad
+#
+bit 464 O 1 BSC154 463 1 Z
+bit 463 C 1 *
+bit 462 I 1 BSC154
+#
+# BSC group 153
+#   T144 - unused pad
+#   Q208 - I/O pin 44
+#   F256 - I/O pin N3
+#
+bit 461 O 1 BSC153 460 1 Z
+bit 460 C 1 *
+bit 459 I 1 BSC153
+#
+# BSC group 152
+#   T144 - unused pad
+#   Q208 - I/O pin 45
+#   F256 - I/O pin N4
+#
+bit 458 O 1 BSC152 457 1 Z
+bit 457 C 1 *
+bit 456 I 1 BSC152
+#
+# BSC group 151
+#   T144 - I/O pin 30
+#   Q208 - I/O pin 46
+#   F256 - I/O pin P3
+#
+bit 455 O 1 BSC151 454 1 Z
+bit 454 C 1 *
+bit 453 I 1 BSC151
+#
+# BSC group 150
+#   T144 - I/O pin 31
+#   Q208 - I/O pin 47
+#   F256 - I/O pin L4
+#
+bit 452 O 1 BSC150 451 1 Z
+bit 451 C 1 *
+bit 450 I 1 BSC150
+#
+# BSC group 149
+#   T144 - I/O pin 32
+#   Q208 - I/O pin 48
+#   F256 - I/O pin M4
+#
+bit 449 O 1 BSC149 448 1 Z
+bit 448 C 1 *
+bit 447 I 1 BSC149
+#
+# BSC group 148
+#   T144 - I/O pin 40
+#   Q208 - I/O pin 56
+#   F256 - I/O pin R3
+#
+bit 446 O 1 BSC148 445 1 Z
+bit 445 C 1 *
+bit 444 I 1 BSC148
+#
+# BSC group 147
+#   T144 - I/O pin 41
+#   Q208 - I/O pin 57
+#   F256 - I/O pin T3
+#
+bit 443 O 1 BSC147 442 1 Z
+bit 442 C 1 *
+bit 441 I 1 BSC147
+#
+# BSC group 146
+#   T144 - I/O pin 42
+#   Q208 - I/O pin 58
+#   F256 - I/O pin P5
+#
+bit 440 O 1 BSC146 439 1 Z
+bit 439 C 1 *
+bit 438 I 1 BSC146
+#
+# BSC group 145
+#   T144 - I/O pin 43
+#   Q208 - I/O pin 59
+#   F256 - I/O pin P4
+#
+bit 437 O 1 BSC145 436 1 Z
+bit 436 C 1 *
+bit 435 I 1 BSC145
+#
+# BSC group 144
+#   T144 - I/O pin 44
+#   Q208 - I/O pin 60
+#   F256 - I/O pin T4
+#
+bit 434 O 1 BSC144 433 1 Z
+bit 433 C 1 *
+bit 432 I 1 BSC144
+#
+# BSC group 143
+#   T144 - I/O pin 45
+#   Q208 - I/O pin 61
+#   F256 - I/O pin R4
+#
+bit 431 O 1 BSC143 430 1 Z
+bit 430 C 1 *
+bit 429 I 1 BSC143
+#
+# BSC group 142
+#   T144 - I/O pin 47
+#   Q208 - I/O pin 63
+#   F256 - I/O pin T5
+#
+bit 428 O 1 BSC142 427 1 Z
+bit 427 C 1 *
+bit 426 I 1 BSC142
+#
+# BSC group 141
+#   T144 - I/O pin 48
+#   Q208 - I/O pin 64
+#   F256 - I/O pin R5
+#
+bit 425 O 1 BSC141 424 1 Z
+bit 424 C 1 *
+bit 423 I 1 BSC141
+#
+# BSC group 140
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin N7
+#
+bit 422 O 1 BSC140 421 1 Z
+bit 421 C 1 *
+bit 420 I 1 BSC140
+#
+# BSC group 139
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin K7
+#
+bit 419 O 1 BSC139 418 1 Z
+bit 418 C 1 *
+bit 417 I 1 BSC139
+#
+# BSC group 138
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin K6
+#
+bit 416 O 1 BSC138 415 1 Z
+bit 415 C 1 *
+bit 414 I 1 BSC138
+#
+# BSC group 137
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin T6
+#
+bit 413 O 1 BSC137 412 1 Z
+bit 412 C 1 *
+bit 411 I 1 BSC137
+#
+# BSC group 136
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin R6
+#
+bit 410 O 1 BSC136 409 1 Z
+bit 409 C 1 *
+bit 408 I 1 BSC136
+#
+# BSC group 135
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin P6
+#
+bit 407 O 1 BSC135 406 1 Z
+bit 406 C 1 *
+bit 405 I 1 BSC135
+#
+# BSC group 134
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin N6
+#
+bit 404 O 1 BSC134 403 1 Z
+bit 403 C 1 *
+bit 402 I 1 BSC134
+#
+# BSC group 133
+#   T144 - I/O pin 51
+#   Q208 - I/O pin 67
+#   F256 - I/O pin N8
+#
+bit 401 O 1 BSC133 400 1 Z
+bit 400 C 1 *
+bit 399 I 1 BSC133
+#
+# BSC group 132
+#   T144 - I/O pin 52
+#   Q208 - I/O pin 68
+#   F256 - I/O pin T7
+#
+bit 398 O 1 BSC132 397 1 Z
+bit 397 C 1 *
+bit 396 I 1 BSC132
+#
+# BSC group 131
+#   T144 - unused pad
+#   Q208 - I/O pin 69
+#   F256 - I/O pin R7
+#
+bit 395 O 1 BSC131 394 1 Z
+bit 394 C 1 *
+bit 393 I 1 BSC131
+#
+# BSC group 130
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin L7
+#
+bit 392 O 1 BSC130 391 1 Z
+bit 391 C 1 *
+bit 390 I 1 BSC130
+#
+# BSC group 129
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin L8
+#
+bit 389 O 1 BSC129 388 1 Z
+bit 388 C 1 *
+bit 387 I 1 BSC129
+#
+# BSC group 128
+#   T144 - I/O pin 53
+#   Q208 - I/O pin 70
+#   F256 - I/O pin T8
+#
+bit 386 O 1 BSC128 385 1 Z
+bit 385 C 1 *
+bit 384 I 1 BSC128
+#
+# BSC group 127
+#   T144 - I/O pin 55
+#   Q208 - I/O pin 72
+#   F256 - I/O pin R8
+#
+bit 383 O 1 BSC127 382 1 Z
+bit 382 C 1 *
+bit 381 I 1 BSC127
+#
+# BSC group 126
+#   T144 - I/O pin 57
+#   Q208 - I/O pin 74
+#   F256 - I/O pin T9
+#
+bit 380 O 1 BSC126 379 1 Z
+bit 379 C 1 *
+bit 378 I 1 BSC126
+#
+# BSC group 125
+#   T144 - I/O pin 58
+#   Q208 - I/O pin 75
+#   F256 - I/O pin R9
+#
+bit 377 O 1 BSC125 376 1 Z
+bit 376 C 1 *
+bit 375 I 1 BSC125
+#
+# BSC group 124
+#   T144 - I/O pin 59
+#   Q208 - I/O pin 76
+#   F256 - I/O pin N9
+#
+bit 374 O 1 BSC124 373 1 Z
+bit 373 C 1 *
+bit 372 I 1 BSC124
+#
+# BSC group 123
+#   T144 - I/O pin 60
+#   Q208 - I/O pin 77
+#   F256 - I/O pin N10
+#
+bit 371 O 1 BSC123 370 1 Z
+bit 370 C 1 *
+bit 369 I 1 BSC123
+#
+# BSC group 122
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin T11
+#
+bit 368 O 1 BSC122 367 1 Z
+bit 367 C 1 *
+bit 366 I 1 BSC122
+#
+# BSC group 121
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin R11
+#
+bit 365 O 1 BSC121 364 1 Z
+bit 364 C 1 *
+bit 363 I 1 BSC121
+#
+# BSC group 120
+#   T144 - unused pad
+#   Q208 - I/O pin 80
+#   F256 - I/O pin P11
+#
+bit 362 O 1 BSC120 361 1 Z
+bit 361 C 1 *
+bit 360 I 1 BSC120
+#
+# BSC group 119
+#   T144 - unused pad
+#   Q208 - I/O pin 81
+#   F256 - I/O pin L9
+#
+bit 359 O 1 BSC119 358 1 Z
+bit 358 C 1 *
+bit 357 I 1 BSC119
+#
+# BSC group 118
+#   T144 - unused pad
+#   Q208 - I/O pin 82
+#   F256 - I/O pin L10
+#
+bit 356 O 1 BSC118 355 1 Z
+bit 355 C 1 *
+bit 354 I 1 BSC118
+#
+# BSC group 117
+#   T144 - unused pad
+#   Q208 - I/O pin 84
+#   F256 - I/O pin R10
+#
+bit 353 O 1 BSC117 352 1 Z
+bit 352 C 1 *
+bit 351 I 1 BSC117
+#
+# BSC group 116
+#   T144 - unused pad
+#   Q208 - I/O pin 86
+#   F256 - I/O pin T10
+#
+bit 350 O 1 BSC116 349 1 Z
+bit 349 C 1 *
+bit 348 I 1 BSC116
+#
+# BSC group 115
+#   T144 - unused pad
+#   Q208 - I/O pin 87
+#   F256 - I/O pin K11
+#
+bit 347 O 1 BSC115 346 1 Z
+bit 346 C 1 *
+bit 345 I 1 BSC115
+#
+# BSC group 114
+#   T144 - unused pad
+#   Q208 - I/O pin 88
+#   F256 - I/O pin K10
+#
+bit 344 O 1 BSC114 343 1 Z
+bit 343 C 1 *
+bit 342 I 1 BSC114
+#
+# BSC group 113
+#   T144 - I/O pin 63
+#   Q208 - I/O pin 89
+#   F256 - I/O pin N11
+#
+bit 341 O 1 BSC113 340 1 Z
+bit 340 C 1 *
+bit 339 I 1 BSC113
+#
+# BSC group 112
+#   T144 - unused pad
+#   Q208 - I/O pin 90
+#   F256 - I/O pin P12
+#
+bit 338 O 1 BSC112 337 1 Z
+bit 337 C 1 *
+bit 336 I 1 BSC112
+#
+# BSC group 111
+#   T144 - unused pad
+#   Q208 - I/O pin 92
+#   F256 - I/O pin P13
+#
+bit 335 O 1 BSC111 334 1 Z
+bit 334 C 1 *
+bit 333 I 1 BSC111
+#
+# BSC group 110
+#   T144 - I/O pin 64
+#   Q208 - I/O pin 94
+#   F256 - I/O pin T12
+#
+bit 332 O 1 BSC110 331 1 Z
+bit 331 C 1 *
+bit 330 I 1 BSC110
+#
+# BSC group 109
+#   T144 - I/O pin 65
+#   Q208 - I/O pin 95
+#   F256 - I/O pin R12
+#
+bit 329 O 1 BSC109 328 1 Z
+bit 328 C 1 *
+bit 327 I 1 BSC109
+#
+# BSC group 108
+#   T144 - unused pad
+#   Q208 - I/O pin 96
+#   F256 - unused pad
+#
+bit 326 O 1 BSC108 325 1 Z
+bit 325 C 1 *
+bit 324 I 1 BSC108
+#
+# BSC group 107
+#   T144 - unused pad
+#   Q208 - I/O pin 97
+#   F256 - I/O pin T13
+#
+bit 323 O 1 BSC107 322 1 Z
+bit 322 C 1 *
+bit 321 I 1 BSC107
+#
+# BSC group 106
+#   T144 - I/O pin 67
+#   Q208 - I/O pin 99
+#   F256 - I/O pin R13
+#
+bit 320 O 1 BSC106 319 1 Z
+bit 319 C 1 *
+bit 318 I 1 BSC106
+#
+# BSC group 105
+#   T144 - I/O pin 69
+#   Q208 - I/O pin 101
+#   F256 - I/O pin T14
+#
+bit 317 O 1 BSC105 316 1 Z
+bit 316 C 1 *
+bit 315 I 1 BSC105
+#
+# BSC group 104
+#   T144 - I/O pin 70
+#   Q208 - I/O pin 102
+#   F256 - I/O pin R14
+#
+bit 314 O 1 BSC104 313 1 Z
+bit 313 C 1 *
+bit 312 I 1 BSC104
+#
+# BSC group 103
+#   T144 - I/O pin 71
+#   Q208 - I/O pin 103
+#   F256 - I/O pin M11
+#
+bit 311 O 1 BSC103 310 1 Z
+bit 310 C 1 *
+bit 309 I 1 BSC103
+#
+# BSC group 102
+#   T144 - I/O pin 72
+#   Q208 - I/O pin 104
+#   F256 - I/O pin L11
+#
+bit 308 O 1 BSC102 307 1 Z
+bit 307 C 1 *
+bit 306 I 1 BSC102
+#
+# BSC group 101
+#   T144 - I/O pin 73
+#   Q208 - I/O pin 105
+#   F256 - I/O pin N12
+#
+bit 305 O 1 BSC101 304 1 Z
+bit 304 C 1 *
+bit 303 I 1 BSC101
+#
+# BSC group 100
+#   T144 - I/O pin 74
+#   Q208 - I/O pin 106
+#   F256 - I/O pin M12
+#
+bit 302 O 1 BSC100 301 1 Z
+bit 301 C 1 *
+bit 300 I 1 BSC100
+#
+# BSC group 99
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin L12
+#
+bit 299 O 1 BSC099 298 1 Z
+bit 298 C 1 *
+bit 297 I 1 BSC099
+#
+# BSC group 98
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin K13
+#
+bit 296 O 1 BSC098 295 1 Z
+bit 295 C 1 *
+bit 294 I 1 BSC098
+#
+# BSC group 97
+#   T144 - I/O pin 75
+#   Q208 - I/O pin 107
+#   F256 - I/O pin N13
+#
+bit 293 O 1 BSC097 292 1 Z
+bit 292 C 1 *
+bit 291 I 1 BSC097
+#
+# BSC group 96
+#   T144 - I/O pin 76
+#   Q208 - I/O pin 108
+#   F256 - I/O pin N14
+#
+bit 290 O 1 BSC096 289 1 Z
+bit 289 C 1 *
+bit 288 I 1 BSC096
+#
+# BSC group 95
+#   T144 - unused pad
+#   Q208 - I/O pin 110
+#   F256 - I/O pin P15
+#
+bit 287 O 1 BSC095 286 1 Z
+bit 286 C 1 *
+bit 285 I 1 BSC095
+#
+# BSC group 94
+#   T144 - unused pad
+#   Q208 - I/O pin 112
+#   F256 - I/O pin P16
+#
+bit 284 O 1 BSC094 283 1 Z
+bit 283 C 1 *
+bit 282 I 1 BSC094
+#
+# BSC group 93
+#   T144 - unused pad
+#   Q208 - I/O pin 113
+#   F256 - I/O pin N15
+#
+bit 281 O 1 BSC093 280 1 Z
+bit 280 C 1 *
+bit 279 I 1 BSC093
+#
+# BSC group 92
+#   T144 - unused pad
+#   Q208 - I/O pin 114
+#   F256 - I/O pin N16
+#
+bit 278 O 1 BSC092 277 1 Z
+bit 277 C 1 *
+bit 276 I 1 BSC092
+#
+# BSC group 91
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin P14
+#
+bit 275 O 1 BSC091 274 1 Z
+bit 274 C 1 *
+bit 273 I 1 BSC091
+#
+# BSC group 90
+#   T144 - unused pad
+#   Q208 - I/O pin 115
+#   F256 - unused pad
+#
+bit 272 O 1 BSC090 271 1 Z
+bit 271 C 1 *
+bit 270 I 1 BSC090
+#
+# BSC group 89
+#   T144 - unused pad
+#   Q208 - I/O pin 116
+#   F256 - unused pad
+#
+bit 269 O 1 BSC089 268 1 Z
+bit 268 C 1 *
+bit 267 I 1 BSC089
+#
+# BSC group 88
+#   T144 - I/O pin 79
+#   Q208 - I/O pin 117
+#   F256 - I/O pin M14
+#
+bit 266 O 1 BSC088 265 1 Z
+bit 265 C 1 *
+bit 264 I 1 BSC088
+#
+# BSC group 87
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin M15
+#
+bit 263 O 1 BSC087 262 1 Z
+bit 262 C 1 *
+bit 261 I 1 BSC087
+#
+# BSC group 86
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin M16
+#
+bit 260 O 1 BSC086 259 1 Z
+bit 259 C 1 *
+bit 258 I 1 BSC086
+#
+# BSC group 85
+#   T144 - unused pad
+#   Q208 - I/O pin 118
+#   F256 - unused pad
+#
+bit 257 O 1 BSC085 256 1 Z
+bit 256 C 1 *
+bit 255 I 1 BSC085
+#
+# BSC group 84
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin L14
+#
+bit 254 O 1 BSC084 253 1 Z
+bit 253 C 1 *
+bit 252 I 1 BSC084
+#
+# BSC group 83
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin L15
+#
+bit 251 O 1 BSC083 250 1 Z
+bit 250 C 1 *
+bit 249 I 1 BSC083
+#
+# BSC group 82
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin L16
+#
+bit 248 O 1 BSC082 247 1 Z
+bit 247 C 1 *
+bit 246 I 1 BSC082
+#
+# BSC group 81 (nSTATUS)
+#   T144 - untestable Family-specific pin 82
+#   Q208 - untestable Family-specific pin 121
+#   F256 - untestable Family-specific pin M13
+#
+bit 245 O 1 *
+bit 244 O 1 *
+bit 243 O 1 *
+#
+# BSC group 80 (CONF_DONE)
+#   T144 - untestable Family-specific pin 83
+#   Q208 - untestable Family-specific pin 123
+#   F256 - untestable Family-specific pin L13
+#
+bit 242 O 1 *
+bit 241 O 1 *
+bit 240 O 1 *
+#
+# BSC group 79 (MSEL1)
+#   T144 - Family-specific input pin 84
+#   Q208 - Family-specific input pin 125
+#   F256 - Family-specific input pin K12
+#
+bit 239 O 1 *
+bit 238 O 1 *
+bit 237 I 1 BSC079
+#
+# BSC group 78 (MSEL0)
+#   T144 - Family-specific input pin 85
+#   Q208 - Family-specific input pin 126
+#   F256 - Family-specific input pin J13
+#
+bit 236 O 1 *
+bit 235 O 1 *
+bit 234 I 1 BSC078
+#
+# BSC group 77
+#   T144 - I/O pin 86
+#   Q208 - I/O pin 127
+#   F256 - I/O pin K16
+#
+bit 233 O 1 BSC077 232 1 Z
+bit 232 C 1 *
+bit 231 I 1 BSC077
+#
+# BSC group 76
+#   T144 - I/O pin 87
+#   Q208 - I/O pin 128
+#   F256 - I/O pin K15
+#
+bit 230 O 1 BSC076 229 1 Z
+bit 229 C 1 *
+bit 228 I 1 BSC076
+#
+# BSC group 75 (CLK7)
+#   T144 - Family-specific input pin 88
+#   Q208 - Family-specific input pin 129
+#   F256 - Family-specific input pin J16
+#
+bit 227 O 1 *
+bit 226 O 1 *
+bit 225 I 1 BSC075
+#
+# BSC group 74 (CLK6)
+#   T144 - Family-specific input pin 89
+#   Q208 - Family-specific input pin 130
+#   F256 - Family-specific input pin J15
+#
+bit 224 O 1 *
+bit 223 O 1 *
+bit 222 I 1 BSC074
+#
+# BSC group 73 (CLK5)
+#   T144 - Family-specific input pin 90
+#   Q208 - Family-specific input pin 131
+#   F256 - Family-specific input pin H15
+#
+bit 221 O 1 *
+bit 220 O 1 *
+bit 219 I 1 BSC073
+#
+# BSC group 72 (CLK4)
+#   T144 - Family-specific input pin 91
+#   Q208 - Family-specific input pin 132
+#   F256 - Family-specific input pin H16
+#
+bit 218 O 1 *
+bit 217 O 1 *
+bit 216 I 1 BSC072
+#
+# BSC group 71
+#   T144 - I/O pin 92
+#   Q208 - I/O pin 133
+#   F256 - I/O pin H12
+#
+bit 215 O 1 BSC071 214 1 Z
+bit 214 C 1 *
+bit 213 I 1 BSC071
+#
+# BSC group 70
+#   T144 - I/O pin 93
+#   Q208 - I/O pin 134
+#   F256 - I/O pin J12
+#
+bit 212 O 1 BSC070 211 1 Z
+bit 211 C 1 *
+bit 210 I 1 BSC070
+#
+# BSC group 69
+#   T144 - I/O pin 94
+#   Q208 - I/O pin 135
+#   F256 - I/O pin G16
+#
+bit 209 O 1 BSC069 208 1 Z
+bit 208 C 1 *
+bit 207 I 1 BSC069
+#
+# BSC group 68
+#   T144 - I/O pin 96
+#   Q208 - I/O pin 137
+#   F256 - I/O pin G15
+#
+bit 206 O 1 BSC068 205 1 Z
+bit 205 C 1 *
+bit 204 I 1 BSC068
+#
+# BSC group 67
+#   T144 - I/O pin 97
+#   Q208 - I/O pin 138
+#   F256 - I/O pin F15
+#
+bit 203 O 1 BSC067 202 1 Z
+bit 202 C 1 *
+bit 201 I 1 BSC067
+#
+# BSC group 66
+#   T144 - unused pad
+#   Q208 - I/O pin 139
+#   F256 - I/O pin F16
+#
+bit 200 O 1 BSC066 199 1 Z
+bit 199 C 1 *
+bit 198 I 1 BSC066
+#
+# BSC group 65
+#   T144 - unused pad
+#   Q208 - I/O pin 141
+#   F256 - I/O pin J11
+#
+bit 197 O 1 BSC065 196 1 Z
+bit 196 C 1 *
+bit 195 I 1 BSC065
+#
+# BSC group 64
+#   T144 - unused pad
+#   Q208 - I/O pin 142
+#   F256 - I/O pin H11
+#
+bit 194 O 1 BSC064 193 1 Z
+bit 193 C 1 *
+bit 192 I 1 BSC064
+#
+# BSC group 63
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin G12
+#
+bit 191 O 1 BSC063 190 1 Z
+bit 190 C 1 *
+bit 189 I 1 BSC063
+#
+# BSC group 62
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin G13
+#
+bit 188 O 1 BSC062 187 1 Z
+bit 187 C 1 *
+bit 186 I 1 BSC062
+#
+# BSC group 61
+#   T144 - unused pad
+#   Q208 - I/O pin 143
+#   F256 - I/O pin E13
+#
+bit 185 O 1 BSC061 184 1 Z
+bit 184 C 1 *
+bit 183 I 1 BSC061
+#
+# BSC group 60
+#   T144 - unused pad
+#   Q208 - I/O pin 144
+#   F256 - I/O pin F13
+#
+bit 182 O 1 BSC060 181 1 Z
+bit 181 C 1 *
+bit 180 I 1 BSC060
+#
+# BSC group 59
+#   T144 - I/O pin 99
+#   Q208 - I/O pin 145
+#   F256 - I/O pin H13
+#
+bit 179 O 1 BSC059 178 1 Z
+bit 178 C 1 *
+bit 177 I 1 BSC059
+#
+# BSC group 58
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin D15
+#
+bit 176 O 1 BSC058 175 1 Z
+bit 175 C 1 *
+bit 174 I 1 BSC058
+#
+# BSC group 57
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin D16
+#
+bit 173 O 1 BSC057 172 1 Z
+bit 172 C 1 *
+bit 171 I 1 BSC057
+#
+# BSC group 56
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin E15
+#
+bit 170 O 1 BSC056 169 1 Z
+bit 169 C 1 *
+bit 168 I 1 BSC056
+#
+# BSC group 55
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin E16
+#
+bit 167 O 1 BSC055 166 1 Z
+bit 166 C 1 *
+bit 165 I 1 BSC055
+#
+# BSC group 54
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin F14
+#
+bit 164 O 1 BSC054 163 1 Z
+bit 163 C 1 *
+bit 162 I 1 BSC054
+#
+# BSC group 53
+#   T144 - I/O pin 100
+#   Q208 - I/O pin 146
+#   F256 - I/O pin C15
+#
+bit 161 O 1 BSC053 160 1 Z
+bit 160 C 1 *
+bit 159 I 1 BSC053
+#
+# BSC group 52
+#   T144 - I/O pin 101
+#   Q208 - I/O pin 147
+#   F256 - I/O pin C16
+#
+bit 158 O 1 BSC052 157 1 Z
+bit 157 C 1 *
+bit 156 I 1 BSC052
+#
+# BSC group 51
+#   T144 - unused pad
+#   Q208 - I/O pin 149
+#   F256 - I/O pin C14
+#
+bit 155 O 1 BSC051 154 1 Z
+bit 154 C 1 *
+bit 153 I 1 BSC051
+#
+# BSC group 50
+#   T144 - unused pad
+#   Q208 - I/O pin 150
+#   F256 - I/O pin D13
+#
+bit 152 O 1 BSC050 151 1 Z
+bit 151 C 1 *
+bit 150 I 1 BSC050
+#
+# BSC group 49
+#   T144 - I/O pin 103
+#   Q208 - I/O pin 151
+#   F256 - I/O pin E14
+#
+bit 149 O 1 BSC049 148 1 Z
+bit 148 C 1 *
+bit 147 I 1 BSC049
+#
+# BSC group 48
+#   T144 - I/O pin 104
+#   Q208 - I/O pin 152
+#   F256 - I/O pin D14
+#
+bit 146 O 1 BSC048 145 1 Z
+bit 145 C 1 *
+bit 144 I 1 BSC048
+#
+# BSC group 47
+#   T144 - I/O pin 112
+#   Q208 - I/O pin 160
+#   F256 - I/O pin B14
+#
+bit 143 O 1 BSC047 142 1 Z
+bit 142 C 1 *
+bit 141 I 1 BSC047
+#
+# BSC group 46
+#   T144 - I/O pin 113
+#   Q208 - I/O pin 161
+#   F256 - I/O pin A14
+#
+bit 140 O 1 BSC046 139 1 Z
+bit 139 C 1 *
+bit 138 I 1 BSC046
+#
+# BSC group 45
+#   T144 - I/O pin 114
+#   Q208 - I/O pin 162
+#   F256 - I/O pin C13
+#
+bit 137 O 1 BSC045 136 1 Z
+bit 136 C 1 *
+bit 135 I 1 BSC045
+#
+# BSC group 44
+#   T144 - I/O pin 115
+#   Q208 - I/O pin 163
+#   F256 - I/O pin C12
+#
+bit 134 O 1 BSC044 133 1 Z
+bit 133 C 1 *
+bit 132 I 1 BSC044
+#
+# BSC group 43
+#   T144 - unused pad
+#   Q208 - I/O pin 164
+#   F256 - I/O pin B13
+#
+bit 131 O 1 BSC043 130 1 Z
+bit 130 C 1 *
+bit 129 I 1 BSC043
+#
+# BSC group 42
+#   T144 - unused pad
+#   Q208 - I/O pin 165
+#   F256 - I/O pin A13
+#
+bit 128 O 1 BSC042 127 1 Z
+bit 127 C 1 *
+bit 126 I 1 BSC042
+#
+# BSC group 41
+#   T144 - I/O pin 118
+#   Q208 - I/O pin 168
+#   F256 - I/O pin B12
+#
+bit 125 O 1 BSC041 124 1 Z
+bit 124 C 1 *
+bit 123 I 1 BSC041
+#
+# BSC group 40
+#   T144 - I/O pin 119
+#   Q208 - I/O pin 169
+#   F256 - I/O pin A12
+#
+bit 122 O 1 BSC040 121 1 Z
+bit 121 C 1 *
+bit 120 I 1 BSC040
+#
+# BSC group 39
+#   T144 - I/O pin 120
+#   Q208 - I/O pin 170
+#   F256 - I/O pin C11
+#
+bit 119 O 1 BSC039 118 1 Z
+bit 118 C 1 *
+bit 117 I 1 BSC039
+#
+# BSC group 38
+#   T144 - I/O pin 121
+#   Q208 - I/O pin 171
+#   F256 - I/O pin B11
+#
+bit 116 O 1 BSC038 115 1 Z
+bit 115 C 1 *
+bit 114 I 1 BSC038
+#
+# BSC group 37
+#   T144 - I/O pin 122
+#   Q208 - I/O pin 173
+#   F256 - I/O pin A11
+#
+bit 113 O 1 BSC037 112 1 Z
+bit 112 C 1 *
+bit 111 I 1 BSC037
+#
+# BSC group 36
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin G10
+#
+bit 110 O 1 BSC036 109 1 Z
+bit 109 C 1 *
+bit 108 I 1 BSC036
+#
+# BSC group 35
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin G11
+#
+bit 107 O 1 BSC035 106 1 Z
+bit 106 C 1 *
+bit 105 I 1 BSC035
+#
+# BSC group 34
+#   T144 - unused pad
+#   Q208 - I/O pin 175
+#   F256 - I/O pin B10
+#
+bit 104 O 1 BSC034 103 1 Z
+bit 103 C 1 *
+bit 102 I 1 BSC034
+#
+# BSC group 33
+#   T144 - unused pad
+#   Q208 - I/O pin 176
+#   F256 - I/O pin A10
+#
+bit 101 O 1 BSC033 100 1 Z
+bit 100 C 1 *
+bit 99 I 1 BSC033
+#
+# BSC group 32
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin F10
+#
+bit 98 O 1 BSC032 97 1 Z
+bit 97 C 1 *
+bit 96 I 1 BSC032
+#
+# BSC group 31
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin F9
+#
+bit 95 O 1 BSC031 94 1 Z
+bit 94 C 1 *
+bit 93 I 1 BSC031
+#
+# BSC group 30
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin D9
+#
+bit 92 O 1 BSC030 91 1 Z
+bit 91 C 1 *
+bit 90 I 1 BSC030
+#
+# BSC group 29
+#   T144 - I/O pin 125
+#   Q208 - I/O pin 179
+#   F256 - I/O pin D11
+#
+bit 89 O 1 BSC029 88 1 Z
+bit 88 C 1 *
+bit 87 I 1 BSC029
+#
+# BSC group 28
+#   T144 - I/O pin 126
+#   Q208 - I/O pin 180
+#   F256 - I/O pin D10
+#
+bit 86 O 1 BSC028 85 1 Z
+bit 85 C 1 *
+bit 84 I 1 BSC028
+#
+# BSC group 27
+#   T144 - unused pad
+#   Q208 - I/O pin 181
+#   F256 - I/O pin A9
+#
+bit 83 O 1 BSC027 82 1 Z
+bit 82 C 1 *
+bit 81 I 1 BSC027
+#
+# BSC group 26
+#   T144 - unused pad
+#   Q208 - I/O pin 182
+#   F256 - I/O pin B9
+#
+bit 80 O 1 BSC026 79 1 Z
+bit 79 C 1 *
+bit 78 I 1 BSC026
+#
+# BSC group 25
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin A8
+#
+bit 77 O 1 BSC025 76 1 Z
+bit 76 C 1 *
+bit 75 I 1 BSC025
+#
+# BSC group 24
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin B8
+#
+bit 74 O 1 BSC024 73 1 Z
+bit 73 C 1 *
+bit 72 I 1 BSC024
+#
+# BSC group 23
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin A7
+#
+bit 71 O 1 BSC023 70 1 Z
+bit 70 C 1 *
+bit 69 I 1 BSC023
+#
+# BSC group 22
+#   T144 - I/O pin 129
+#   Q208 - I/O pin 185
+#   F256 - I/O pin B7
+#
+bit 68 O 1 BSC022 67 1 Z
+bit 67 C 1 *
+bit 66 I 1 BSC022
+#
+# BSC group 21
+#   T144 - unused pad
+#   Q208 - I/O pin 187
+#   F256 - I/O pin F7
+#
+bit 65 O 1 BSC021 64 1 Z
+bit 64 C 1 *
+bit 63 I 1 BSC021
+#
+# BSC group 20
+#   T144 - unused pad
+#   Q208 - I/O pin 188
+#   F256 - F8
+#
+bit 62 O 1 BSC020 61 1 Z
+bit 61 C 1 *
+bit 60 I 1 BSC020
+#
+# BSC group 19
+#   T144 - unused pad
+#   Q208 - I/O pin 189
+#   F256 - unused pad
+#
+bit 59 O 1 BSC019 58 1 Z
+bit 58 C 1 *
+bit 57 I 1 BSC019
+#
+# BSC group 18
+#   T144 - unused pad
+#   Q208 - I/O pad 191
+#   F256 - unused pad
+#
+bit 56 O 1 BSC018 55 1 Z
+bit 55 C 1 *
+bit 54 I 1 BSC018
+#
+# BSC group 17
+#   T144 - I/O pin 132
+#   Q208 - I/O pin 192
+#   F256 - I/O pin D8
+#
+bit 53 O 1 BSC017 52 1 Z
+bit 52 C 1 *
+bit 51 I 1 BSC017
+#
+# BSC group 16
+#   T144 - I/O pin 133
+#   Q208 - I/O pin 193
+#   F256 - I/O pin B6
+#
+bit 50 O 1 BSC016 49 1 Z
+bit 49 C 1 *
+bit 48 I 1 BSC016
+#
+# BSC group 15
+#   T144 - I/O pin 134
+#   Q208 - I/O pin 195
+#   F256 - I/O pin A6
+#
+bit 47 O 1 BSC015 46 1 Z
+bit 46 C 1 *
+bit 45 I 1 BSC015
+#
+# BSC group 14
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin G6
+#
+bit 44 O 1 BSC014 43 1 Z
+bit 43 C 1 *
+bit 42 I 1 BSC014
+#
+# BSC group 13
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin G7
+#
+bit 41 O 1 BSC013 40 1 Z
+bit 40 C 1 *
+bit 39 I 1 BSC013
+#
+# BSC group 12
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin D7
+#
+bit 38 O 1 BSC012 37 1 Z
+bit 37 C 1 *
+bit 36 I 1 BSC012
+#
+# BSC group 11
+#   T144 - unused pad
+#   Q208 - I/O pin 197
+#   F256 - I/O pin D6
+#
+bit 35 O 1 BSC011 34 1 Z
+bit 34 C 1 *
+bit 33 I 1 BSC011
+#
+# BSC group 10
+#   T144 - unused pad
+#   Q208 - I/O pin 198
+#   F256 - I/O pin C6
+#
+bit 32 O 1 BSC010 31 1 Z
+bit 31 C 1 *
+bit 30 I 1 BSC010
+#
+# BSC group 9
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin C5
+#
+bit 29 O 1 BSC009 28 1 Z
+bit 28 C 1 *
+bit 27 I 1 BSC009
+#
+# BSC group 8
+#   T144 - unused pad
+#   Q208 - unused pad
+#   F256 - I/O pin C4
+#
+bit 26 O 1 BSC008 25 1 Z
+bit 25 C 1 *
+bit 24 I 1 BSC008
+#
+# BSC group 7
+#   T144 - I/O pin 135
+#   Q208 - I/O pin 199
+#   F256 - I/O pin B5
+#
+bit 23 O 1 BSC007 22 1 Z
+bit 22 C 1 *
+bit 21 I 1 BSC007
+#
+# BSC group 6
+#   T144 - I/O pin 136
+#   Q208 - I/O pin 200
+#   F256 - I/O pin A5
+#
+bit 20 O 1 BSC006 19 1 Z
+bit 19 C 1 *
+bit 18 I 1 BSC006
+#
+# BSC group 5
+#   T144 - I/O pin 137
+#   Q208 - I/O pin 201
+#   F256 - I/O pin B4
+#
+bit 17 O 1 BSC005 16 1 Z
+bit 16 C 1 *
+bit 15 I 1 BSC005
+#
+# BSC group 4
+#   T144 - I/O pin 139
+#   Q208 - I/O pin 203
+#   F256 - I/O pin A4
+#
+bit 14 O 1 BSC004 13 1 Z
+bit 13 C 1 *
+bit 12 I 1 BSC004
+#
+# BSC group 3
+#   T144 - I/O pin 141
+#   Q208 - I/O pin 205
+#   F256 - I/O pin A3
+#
+bit 11 O 1 BSC003 10 1 Z
+bit 10 C 1 *
+bit 9 I 1 BSC003
+#
+# BSC group 2
+#   T144 - I/O pin 142
+#   Q208 - I/O pin 206
+#   F256 - I/O pin B3
+#
+bit 8 O 1 BSC002 7 1 Z
+bit 7 C 1 *
+bit 6 I 1 BSC002
+#
+# BSC group 1
+#   T144 - I/O pin 143
+#   Q208 - I/O pin 207
+#   F256 - I/O pin E6
+#
+bit 5 O 1 BSC001 4 1 Z
+bit 4 C 1 *
+bit 3 I 1 BSC001
+#
+# BSC group 0
+#   T144 - I/O pin 144
+#   Q208 - I/O pin 208
+#   F256 - I/O pin F6
+#
+bit 2 O 1 BSC000 1 1 Z
+bit 1 C 1 *
+bit 0 I 1 BSC000
