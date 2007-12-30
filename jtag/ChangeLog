@@ -1,5 +1,6 @@
 2007-12-30  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+    * README.svf: contents moved to doc/UrJTAG.txt, file deleted
     * data/Makefile.am (nobase_dist_pkgdata_DATA): fixed merge results
     * many files: integration of BSDL parser
     * data/xilinx/PARTS: added xc2v80-fg256,xc2v250-fg256,xc2v1000-fg256
