@@ -63,8 +63,12 @@ extern cmd_t cmd_flashmem;
 extern cmd_t cmd_eraseflash;
 extern cmd_t cmd_script;
 extern cmd_t cmd_include;
+#ifdef ENABLE_SVF
 extern cmd_t cmd_svf;
+#endif
+#ifdef ENABLE_BSDL
 extern cmd_t cmd_bsdl;
+#endif
 extern cmd_t cmd_debug;
 
 const cmd_t *cmds[] = {
@@ -100,8 +104,12 @@ const cmd_t *cmds[] = {
 	&cmd_eraseflash,
 	&cmd_script,
 	&cmd_include,
+#ifdef ENABLE_SVF
 	&cmd_svf,
+#endif
+#ifdef ENABLE_BSDL
 	&cmd_bsdl,
+#endif
 	&cmd_debug,
 	NULL			/* last must be NULL */
 };

@@ -305,6 +305,40 @@ AS_IF([test "x$ep9307" = xtrue], [
 CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 
+
+dnl Disable SVF player?
+AC_ARG_ENABLE(svf,
+[  --enable-svf            Enable SVF player (default is enabled)],
+[case "${enableval}" in
+   yes) svf=true ;;
+   no)  svf=false ;;
+   *)   AC_MSG_ERROR(bad value ${enableval} for --enable-svf) ;;
+ esac],
+[svf=true])
+AS_IF([test "x$svf" = xtrue], [
+  AM_CONDITIONAL(ENABLE_SVF, true)
+  AC_DEFINE(ENABLE_SVF, 1, [define if SVF player is enabled])
+],[
+  AM_CONDITIONAL(ENABLE_SVF, false)
+])
+
+
+dnl Disable BSDL subsystem?
+AC_ARG_ENABLE(bsdl,
+[  --enable-bsdl           Enable BSDL subsystem (default is enabled)],
+[case "${enableval}" in
+   yes) bsdl=true ;;
+   no)  bsdl=false ;;
+   *)   AC_MSG_ERROR(bad value ${enableval} for --enable-bsdl) ;;
+ esac],
+[bsdl=true])
+AS_IF([test "x$bsdl" = xtrue], [
+  AM_CONDITIONAL(ENABLE_BSDL, true)
+  AC_DEFINE(ENABLE_BSDL, 1, [define if BSDL subsystem is enabled])
+],[
+  AM_CONDITIONAL(ENABLE_BSDL, false)
+])
+
 AC_OUTPUT
 
 dnl
@@ -325,12 +359,24 @@ if test ${HAVELIBFTD2XX:-no} != no ; then
 else
    FLAG_HAVELIBFTD2XX=no
 fi
+if test ${svf:-false} != false ; then
+   FLAG_SVF=yes
+else
+   FLAG_SVF=no
+fi
+if test ${bsdl:-false} != false ; then
+   FLAG_BSDL=yes
+else
+   FLAG_BSDL=no
+fi
 AC_MSG_RESULT([
 jtag is now configured for
 
-  USB cable support      : $FLAG_HAVELIBUSB
+  USB cable support    : $FLAG_HAVELIBUSB
   FTDI cable support
-    via libftdi          : $FLAG_HAVELIBFTDI
-    via libftd2xx        : $FLAG_HAVELIBFTD2XX
-  Parser error locations : $modern_flex ($LEX $flex_version)
+    via libftdi        : $FLAG_HAVELIBFTDI
+    via libftd2xx      : $FLAG_HAVELIBFTD2XX
+  SVF error locations  : $modern_flex ($LEX $flex_version)
+  Build SVF player     : $FLAG_SVF
+  Build BSDL subsystem : $FLAG_BSDL
 ])

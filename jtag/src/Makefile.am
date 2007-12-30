@@ -28,9 +28,15 @@ SUBDIRS = \
 	tap \
 	part \
 	bus \
-	cmd \
-	svf \
-	bsdl
+	cmd
+
+if ENABLE_SVF
+SUBDIRS += svf
+endif
+
+if ENABLE_BSDL
+SUBDIRS += bsdl
+endif
 
 bin_PROGRAMS = \
 	jtag \
@@ -53,9 +59,15 @@ jtag_DEPENDENCIES = \
 	tap/libtap.a \
 	part/libpart.a \
 	bus/libbus.a \
-	cmd/libcmd.a \
-	svf/libsvf.a \
-	bsdl/libbsdl.a
+	cmd/libcmd.a
+
+if ENABLE_SVF
+jtag_DEPENDENCIES += svf/libsvf.a
+endif
+
+if ENABLE_BSDL
+jtag_DEPENDENCIES +=  bsdl/libbsdl.a
+endif
 
 jtag_LDADD = \
 	-Ltap -ltap \
@@ -65,11 +77,17 @@ jtag_LDADD = \
 	-Lcmd -lcmd \
 	-L../libbrux -lbrux \
 	-Lbus -lbus \
-	-Lsvf -lsvf \
-	-Lbsdl -lbsdl \
 	-lm \
 	@FTD2XXLIB@ \
 	@LIBINTL@
+
+if ENABLE_SVF
+jtag_LDADD += -Lsvf -lsvf
+endif
+
+if ENABLE_BSDL
+jtag_LDADD += -Lbsdl -lbsdl
+endif
 
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"

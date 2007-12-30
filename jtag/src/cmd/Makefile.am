@@ -55,8 +55,14 @@ libcmd_a_SOURCES = \
 	eraseflash.c \
 	script.c \
 	include.c \
-	cmd.c \
-	svf.c \
-	bsdl.c
+	cmd.c
+
+if ENABLE_SVF
+libcmd_a_SOURCES += svf.c
+endif
+
+if ENABLE_BSDL
+libcmd_a_SOURCES += bsdl.c
+endif
 
 INCLUDES = -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
