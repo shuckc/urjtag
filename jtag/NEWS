@@ -8,6 +8,7 @@ urjtag-n/a
       - Vision EP9307 GPIO (Hartley Sweeten)
     * Added new JTAG declarations for
       - Altera EP2C8 (Hartley Sweeten)
+      - Xilinx XC2V80-FG256, XC2V250-FG256, XC2V1000-FG256 (Alexander Didebulidze)
 
 urjtag-0.7 (2007-12-23)
 

@@ -1,6 +1,8 @@
 2007-12-30  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-	* data/altera/ep1c12/ep1c12: CLAMP and HIGHZ instructions activated
+    * data/xilinx/PARTS: added xc2v80-fg256,xc2v250-fg256,xc2v1000-fg256
+      '[ 1859678 ] jtag support for xilinx xc2v80-fg256, xc2v250, xc2v1000 FPGA' (Alexander Didebulidze)
+    * data/altera/ep1c12/ep1c12: CLAMP and HIGHZ instructions activated
 
 2007-12-29  Arnim Laeuger  <arniml@users.sourceforge.net>
 
