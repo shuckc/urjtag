@@ -1,0 +1,170 @@
+package STD_1149_1_1994 is
+
+-- Give component conformance declaration
+
+attribute COMPONENT_CONFORMANCE : string;
+-- Give pin mapping declarations
+
+attribute PIN_MAP : string;
+subtype PIN_MAP_STRING is string;
+
+-- Give TAP control declarations
+
+type CLOCK_LEVEL is (LOW, BOTH);
+type CLOCK_INFO  is record
+  FREQ : real;
+  LEVEL: CLOCK_LEVEL;
+end record;
+
+attribute   TAP_SCAN_IN   :  boolean;
+attribute   TAP_SCAN_OUT  :  boolean;
+attribute   TAP_SCAN_CLOCK:  CLOCK_INFO;
+attribute   TAP_SCAN_MODE :  boolean;
+attribute   TAP_SCAN_RESET:  boolean;
+
+-- Give instruction register declarations
+
+attribute   INSTRUCTION_LENGTH : integer;
+attribute   INSTRUCTION_OPCODE : string;
+attribute   INSTRUCTION_CAPTURE : string;
+attribute   INSTRUCTION_PRIVATE : string;
+
+-- Give ID and USER code declarations
+
+type ID_BITS is ('0', '1', 'x', 'X');
+type ID_STRING is array (31 downto 0) of ID_BITS;
+attribute IDCODE_REGISTER : ID_STRING;
+attribute USERCODE_REGISTER: ID_STRING;
+
+-- Give register declarations
+
+attribute REGISTER_ACCESS : string;
+
+-- Give boundary cell declarations
+
+type BSCAN_INST is (EXTEST, SAMPLE, INTEST);
+type CELL_TYPE is (INPUT, INTERNAL, CLOCK, OBSERVE_ONLY,
+                  CONTROL, CONTROLR, OUTPUT2,
+                  OUTPUT3, BIDIR_IN, BIDIR_OUT);
+type CAP_DATA is (PI, PO, UPD, CAP, X, ZERO, ONE);
+type CELL_DATA is record
+  CT : CELL_TYPE;
+  I  : BSCAN_INST;
+  CD : CAP_DATA;
+end record;
+type CELL_INFO is array (positive range <>) of CELL_DATA;
+
+-- Boundary cell deferred constants (see package body)
+
+constant  BC_0  : CELL_INFO;
+constant  BC_1  : CELL_INFO;
+constant  BC_2  : CELL_INFO;
+constant  BC_3  : CELL_INFO;
+constant  BC_4  : CELL_INFO;
+constant  BC_5  : CELL_INFO;
+constant  BC_6  : CELL_INFO;
+constant  BC_7  : CELL_INFO;
+
+-- Boundary register declarations
+
+attribute BOUNDARY_LENGTH : integer;
+attribute BOUNDARY_REGISTER : string;
+
+-- Miscellaneous
+
+attribute PORT_GROUPING : string;
+attribute RUNBIST_EXECUTION : string;
+attribute INTEST_EXECUTION : string;
+subtype BSDL_EXTENSION is string;
+attribute COMPLIANCE_PATTERNS : string;
+attribute DESIGN_WARNING : string;
+
+end STD_1149_1_1994;  -- End of 1149.1-1994 Package
+
+package body STD_1149_1_1994 is    -- Standard boundary cells
+
+-- Generic cell capturing minimum allowed data
+
+constant BC_0 : CELL_INFO :=
+ ((INPUT,   EXTEST,  PI),      (OUTPUT2, EXTEST,   X),
+  (INPUT,   SAMPLE,  PI),      (OUTPUT2, SAMPLE,   PI),
+  (INPUT,   INTEST,  X),       (OUTPUT2, INTEST,   PI),
+  (OUTPUT3, EXTEST,  X),       (INTERNAL, EXTEST,  X),
+  (OUTPUT3, SAMPLE,  PI),      (INTERNAL, SAMPLE,  X),
+  (OUTPUT3, INTEST,  PI),      (INTERNAL, INTEST,  X),
+  (CONTROL, EXTEST,  X),       (CONTROLR, EXTEST,  X),
+  (CONTROL, SAMPLE,  PI),      (CONTROLR, SAMPLE,  PI),
+  (CONTROL, INTEST,  PI),      (CONTROLR, INTEST,  PI),
+  (BIDIR_IN,EXTEST,  PI),      (BIDIR_OUT, EXTEST, X ),
+  (BIDIR_IN,SAMPLE,  PI),      (BIDIR_OUT, SAMPLE, PI),
+  (BIDIR_IN,INTEST,  X ),      (BIDIR_OUT, INTEST, PI),
+  (OBSERVE_ONLY, SAMPLE, PI),  (OBSERVE_ONLY, EXTEST, PI) );
+
+-- Description for f10-18, f10-29, f10-31c, f10-31d, f10-33c, f10-41d
+
+constant BC_1 : CELL_INFO :=
+ ((INPUT,   EXTEST,  PI),  (OUTPUT2,  EXTEST,  PI),
+  (INPUT,   SAMPLE,  PI),  (OUTPUT2,  SAMPLE,  PI),
+  (INPUT,   INTEST,  PI),  (OUTPUT2,  INTEST,  PI),
+  (OUTPUT3, EXTEST,  PI),  (INTERNAL, EXTEST,  PI),
+  (OUTPUT3, SAMPLE,  PI),  (INTERNAL, SAMPLE,  PI),
+  (OUTPUT3, INTEST,  PI),  (INTERNAL, INTEST,  PI),
+  (CONTROL, EXTEST,  PI),  (CONTROLR, EXTEST,  PI),
+  (CONTROL, SAMPLE,  PI),  (CONTROLR, SAMPLE,  PI),
+  (CONTROL, INTEST,  PI),  (CONTROLR, INTEST,  PI) );
+
+-- Description for f10-14, f10-30, f10-32c, f10-32d, f10-35c
+
+constant BC_2 : CELL_INFO :=
+ ((INPUT,   EXTEST,  PI),  (OUTPUT2, EXTEST,    UPD),
+  (INPUT,   SAMPLE,  PI),  (OUTPUT2, SAMPLE,    PI),
+  (INPUT,   INTEST,  UPD),   -- Intest on output2 not supported
+  (OUTPUT3, EXTEST,  UPD), (INTERNAL,  EXTEST,  PI),
+  (OUTPUT3, SAMPLE,  PI),  (INTERNAL,  SAMPLE,  PI),
+  (OUTPUT3, INTEST,  PI),  (INTERNAL,  INTEST,  UPD),
+  (CONTROL, EXTEST,  UPD), (CONTROLR,  EXTEST,  UPD),
+  (CONTROL, SAMPLE,  PI),  (CONTROLR,  SAMPLE,  PI),
+  (CONTROL, INTEST,  PI),  (CONTROLR,  INTEST,  PI) );
+
+-- Description for f10-15
+
+constant BC_3 : CELL_INFO :=
+ ((INPUT, EXTEST,  PI),    (INTERNAL, EXTEST,   PI),
+  (INPUT, SAMPLE,  PI),    (INTERNAL, SAMPLE,   PI),
+  (INPUT, INTEST,  PI),    (INTERNAL, INTEST,   PI) );
+
+-- Description for f10-16, f10-17
+
+constant BC_4 : CELL_INFO :=
+ ((INPUT, EXTEST,  PI),        -- Intest on input not supported
+  (INPUT, SAMPLE,  PI),
+  (OBSERVE_ONLY, EXTEST, PI),
+  (OBSERVE_ONLY, SAMPLE, PI),  -- Intest on observe_only not supported
+  (CLOCK, EXTEST,  PI),   (INTERNAL, EXTEST,  PI),
+  (CLOCK, SAMPLE,  PI),   (INTERNAL, SAMPLE,  PI),
+  (CLOCK, INTEST,  PI),   (INTERNAL, INTEST,  PI) );
+
+-- Description for f10-41c, a combined input/control
+
+constant BC_5 : CELL_INFO :=
+ ((INPUT, EXTEST,  PI),   (CONTROL, EXTEST,  PI),
+  (INPUT, SAMPLE,  PI),   (CONTROL, SAMPLE,  PI),
+  (INPUT, INTEST,  UPD),  (CONTROL, INTEST,  UPD) );
+
+-- Description for f10-35d, a reversible cell
+-- !! Not recommended; replaced by BC_7 below !!
+
+constant BC_6 : CELL_INFO :=
+ ((BIDIR_IN, EXTEST,  PI),  (BIDIR_OUT, EXTEST,  UPD),
+  (BIDIR_IN, SAMPLE,  PI),  (BIDIR_OUT, SAMPLE,  PI),
+  (BIDIR_IN, INTEST,  UPD), (BIDIR_OUT, INTEST,  PI) );
+
+-- Description for f10-34d, self monitor reversible
+-- !! Recommended over cell BC_6 !!
+
+constant BC_7 : CELL_INFO :=
+ ((BIDIR_IN, EXTEST,  PI),  (BIDIR_OUT, EXTEST,   PO),
+  (BIDIR_IN, SAMPLE,  PI),  (BIDIR_OUT, SAMPLE,   PI),
+  (BIDIR_IN, INTEST,  UPD), (BIDIR_OUT, INTEST,   PI) );
+
+end STD_1149_1_1994;  -- End of IEEE Std 1149.1-1994 Package Body

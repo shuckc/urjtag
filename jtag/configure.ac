@@ -68,6 +68,7 @@ AC_CONFIG_FILES(
 	src/bus/Makefile
 	src/cmd/Makefile
 	src/svf/Makefile
+	src/bsdl/Makefile
 	po/Makefile.in
 )
 

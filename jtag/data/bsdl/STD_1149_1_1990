@@ -1,0 +1,149 @@
+package STD_1149_1_1990 is
+
+-- Give pin mapping declarations
+
+attribute PIN_MAP : string; 
+
+subtype PIN_MAP_STRING is string;
+
+-- Give TAP control declarations
+
+type CLOCK_LEVEL is (LOW, BOTH);
+type CLOCK_INFO is record
+  FREQ : real;
+  LEVEL: CLOCK_LEVEL;
+end record;
+
+attribute TAP_SCAN_IN : boolean;
+attribute TAP_SCAN_OUT : boolean;
+attribute TAP_SCAN_CLOCK: CLOCK_INFO;
+attribute TAP_SCAN_MODE : boolean;
+attribute TAP_SCAN_RESET: boolean;
+
+-- Give instruction register declarations
+
+attribute INSTRUCTION_LENGTH : integer;
+attribute INSTRUCTION_OPCODE : string;
+attribute INSTRUCTION_CAPTURE : string;
+attribute INSTRUCTION_DISABLE : string;
+attribute INSTRUCTION_GUARD : string;
+attribute INSTRUCTION_PRIVATE : string;
+attribute INSTRUCTION_USAGE : string;
+attribute INSTRUCTION_SEQUENCE : string;
+
+-- Give ID and USER code declarations
+
+type ID_BITS is ('0', '1', 'x', 'X');
+type ID_STRING is array (31 downto 0) of ID_BITS;
+attribute IDCODE_REGISTER : ID_STRING;
+attribute USERCODE_REGISTER: ID_STRING;
+
+-- Give register declarations
+
+attribute REGISTER_ACCESS : string;
+
+-- Give boundary cell declarations
+
+type BSCAN_INST is (EXTEST, SAMPLE, INTEST, RUNBIST);
+type CELL_TYPE is (INPUT, INTERNAL, CLOCK,
+                   CONTROL, CONTROLR, OUTPUT2,
+                   OUTPUT3, BIDIR_IN, BIDIR_OUT);
+type CAP_DATA is (PI, PO, UPD, CAP, X, ZERO, ONE);
+type CELL_DATA is record
+  CT : CELL_TYPE;
+  I  : BSCAN_INST;
+  CD : CAP_DATA;
+end record;
+type CELL_INFO is array (positive range <>) of CELL_DATA;
+
+-- Boundary cell deferred constants (see package body)
+
+constant BC_1 : CELL_INFO;
+constant BC_2 : CELL_INFO;
+constant BC_3 : CELL_INFO;
+constant BC_4 : CELL_INFO;
+constant BC_5 : CELL_INFO;
+constant BC_6 : CELL_INFO;
+
+-- Boundary register declarations
+
+attribute BOUNDARY_CELLS : string;
+attribute BOUNDARY_LENGTH : integer;
+attribute BOUNDARY_REGISTER : string;
+
+-- Miscellaneous
+
+attribute DESIGN_WARNING : string;
+
+end STD_1149_1_1990; -- End of IEEE Std 1149.1-1990 Package
+
+
+package body STD_1149_1_1990 is -- Standard boundary cells
+
+-- Description for f10-12, f10-16, f10-18c, f10-18d, f10-21c
+
+constant BC_1 : CELL_INFO :=
+ ((INPUT,   EXTEST,  PI), (OUTPUT2,  EXTEST,  PI),
+  (INPUT,   SAMPLE,  PI), (OUTPUT2,  SAMPLE,  PI),
+  (INPUT,   INTEST,  PI), (OUTPUT2,  INTEST,  PI),
+  (INPUT,   RUNBIST, PI), (OUTPUT2,  RUNBIST, PI),
+  (OUTPUT3, EXTEST,  PI), (INTERNAL, EXTEST,  PI),
+  (OUTPUT3, SAMPLE,  PI), (INTERNAL, SAMPLE,  PI),
+  (OUTPUT3, INTEST,  PI), (INTERNAL, INTEST,  PI),
+  (OUTPUT3, RUNBIST, PI), (INTERNAL, RUNBIST, PI),
+  (CONTROL, EXTEST,  PI), (CONTROLR, EXTEST,  PI),
+  (CONTROL, SAMPLE,  PI), (CONTROLR, SAMPLE,  PI),
+  (CONTROL, INTEST,  PI), (CONTROLR, INTEST,  PI),
+  (CONTROL, RUNBIST, PI), (CONTROLR, RUNBIST, PI) );
+
+-- Description for f10-8, f10-17, f10-19c, f10-19d, f10-22c
+
+constant BC_2 : CELL_INFO :=
+ ((INPUT,   EXTEST,  PI),  (OUTPUT2,  EXTEST,  UPD),
+  (INPUT,   SAMPLE,  PI),  (OUTPUT2,  SAMPLE,  PI),
+  (INPUT,   INTEST,  UPD), -- Intest on output2 not supported
+  (INPUT,   RUNBIST, UPD), (OUTPUT2,  RUNBIST, UPD),
+  (OUTPUT3, EXTEST,  UPD), (INTERNAL, EXTEST,  PI),
+  (OUTPUT3, SAMPLE,  PI),  (INTERNAL, SAMPLE,  PI),
+  (OUTPUT3, INTEST,  PI),  (INTERNAL, INTEST,  UPD),
+  (OUTPUT3, RUNBIST, PI),  (INTERNAL, RUNBIST, UPD),
+  (CONTROL, EXTEST,  UPD), (CONTROLR, EXTEST,  UPD),
+  (CONTROL, SAMPLE,  PI),  (CONTROLR, SAMPLE,  PI),
+  (CONTROL, INTEST,  PI),  (CONTROLR, INTEST,  PI),
+  (CONTROL, RUNBIST, PI),  (CONTROLR, RUNBIST, PI) );
+
+-- Description for f10-9
+
+constant BC_3 : CELL_INFO :=
+ ((INPUT, EXTEST,  PI), (INTERNAL, EXTEST,  PI),
+  (INPUT, SAMPLE,  PI), (INTERNAL, SAMPLE,  PI),
+  (INPUT, INTEST,  PI), (INTERNAL, INTEST,  PI),
+  (INPUT, RUNBIST, PI), (INTERNAL, RUNBIST, PI) );
+
+-- Description for f10-10, f10-11
+
+constant BC_4 : CELL_INFO :=
+ ((INPUT, EXTEST,  PI), -- Intest on input not supported
+  (INPUT, SAMPLE,  PI), -- Runbist on input not supported
+  (CLOCK, EXTEST,  PI), (INTERNAL, EXTEST,  PI),
+  (CLOCK, SAMPLE,  PI), (INTERNAL, SAMPLE,  PI),
+  (CLOCK, INTEST,  PI), (INTERNAL, INTEST,  PI),
+  (CLOCK, RUNBIST, PI), (INTERNAL, RUNBIST, PI) );
+
+-- Description for f10-20c, a combined input/control
+
+constant BC_5 : CELL_INFO :=
+ ((INPUT, EXTEST,  PI),  (CONTROL, EXTEST,  PI),
+  (INPUT, SAMPLE,  PI),  (CONTROL, SAMPLE,  PI),
+  (INPUT, INTEST,  UPD), (CONTROL, INTEST,  UPD),
+  (INPUT, RUNBIST, PI),  (CONTROL, RUNBIST, PI) );
+
+-- Description for f10-22d, a reversible cell
+
+constant BC_6 : CELL_INFO :=
+ ((BIDIR_IN, EXTEST,  PI),  (BIDIR_OUT, EXTEST,  UPD),
+  (BIDIR_IN, SAMPLE,  PI),  (BIDIR_OUT, SAMPLE,  PI),
+  (BIDIR_IN, INTEST,  UPD), (BIDIR_OUT, INTEST,  PI),
+  (BIDIR_IN, RUNBIST, UPD), (BIDIR_OUT, RUNBIST, PI) );
+
+end STD_1149_1_1990; -- End of 1990 Package Body

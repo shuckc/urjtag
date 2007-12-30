@@ -4,6 +4,7 @@ Also see libbrux/NEWS for more news, especially regarding the flash support.
 
 urjtag-n/a
 
+    * Integration of BSDL parser (Arnim Laeuger)
     * New and updated cable drivers
       - Vision EP9307 GPIO (Hartley Sweeten)
     * Added new JTAG declarations for

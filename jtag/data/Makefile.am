@@ -59,6 +59,7 @@ nobase_dist_pkgdata_DATA = \
 	analog/bf533/bf533 \
 	analog/PARTS \
 	analog/sharc21065l/STEPPINGS \
+	analog/sharc21065l/sharc21065l
 	analog/sharc21065l/sharc21065l \
 	brecis/PARTS \
 	brecis/msp2006/STEPPINGS \
@@ -72,6 +73,8 @@ nobase_dist_pkgdata_DATA = \
 	broadcom/bcm4712/bcm4712 \
 	broadcom/bcm5421s/STEPPINGS \
 	broadcom/bcm5421s/bcm5421s \
+	bsdl/STD_1149_1_1990 \
+	bsdl/STD_1149_1_1994 \
 	dec/PARTS \
 	dec/sa1100/STEPPINGS \
 	dec/sa1100/sa1100 \

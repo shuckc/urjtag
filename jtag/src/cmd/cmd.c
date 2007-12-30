@@ -64,6 +64,7 @@ extern cmd_t cmd_eraseflash;
 extern cmd_t cmd_script;
 extern cmd_t cmd_include;
 extern cmd_t cmd_svf;
+extern cmd_t cmd_bsdl;
 extern cmd_t cmd_debug;
 
 const cmd_t *cmds[] = {
@@ -100,6 +101,7 @@ const cmd_t *cmds[] = {
 	&cmd_script,
 	&cmd_include,
 	&cmd_svf,
+	&cmd_bsdl,
 	&cmd_debug,
 	NULL			/* last must be NULL */
 };

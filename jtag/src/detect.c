@@ -31,6 +31,8 @@
 
 #include <brux/cmd.h>
 
+#include <bsdl.h>
+
 #include "register.h"
 #include "tap.h"
 #include "cable.h"
@@ -272,6 +274,10 @@ detect_parts( chain_t *chain, char *db_path )
 		if (did == br)
 			continue;
 
+		chain->active_part = ps->len - 1;
+
+		if (bsdl_scan_files(register_get_string( did ), 1) <= 0) {
+
 		/* find JTAG declarations for a part with id */
 
 		strcpy( data_path, db_path );		/* FIXME: Buffer overrun */
@@ -353,11 +359,12 @@ detect_parts( chain_t *chain, char *db_path )
 		printf( _("  Filename:     %s\n"), data_path );
 
 		/* run JTAG declarations */
-		chain->active_part = ps->len - 1;
 		strcpy( part->manufacturer, manufacturer );
 		strcpy( part->part, partname );
 		strcpy( part->stepping, stepping );
 		cmd_run( cmd );
+		}
+
 		if (part->active_instruction == NULL)
 			part->active_instruction = part_find_instruction( part, "IDCODE" );
 	}

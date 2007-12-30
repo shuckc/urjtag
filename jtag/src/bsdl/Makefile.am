@@ -1,7 +1,7 @@
 #
 # $Id$
 #
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2007, Arnim Laeuger
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,58 +18,22 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
-#
 
 include $(top_srcdir)/Makefile.rules
 
-SUBDIRS = \
-	lib \
-	tap \
-	part \
-	bus \
-	cmd \
-	svf \
-	bsdl
+noinst_LIBRARIES = libbsdl.a
 
-bin_PROGRAMS = \
-	jtag \
-	bsdl2jtag
+libbsdl_a_SOURCES = \
+	bsdl.c \
+	bsdl_bison.y \
+	bsdl_flex.l \
+	bsdl_sem.c
 
-jtag_SOURCES = \
-	jtag.c \
-	detect.c \
-	discovery.c \
-	readmem.c \
-	writemem.c \
-	flash.c
+AM_LFLAGS = -i
 
-bsdl2jtag_SOURCES = \
-	bsdl2jtag.c
+MAINTAINERCLEANFILES = \
+	bsdl_bison.c \
+	bsdl_bison.h \
+	bsdl_flex.c
 
-jtag_DEPENDENCIES = \
-	../libbrux/libbrux.a \
-	lib/libjtaglib.a \
-	tap/libtap.a \
-	part/libpart.a \
-	bus/libbus.a \
-	cmd/libcmd.a \
-	svf/libsvf.a \
-	bsdl/libbsdl.a
-
-jtag_LDADD = \
-	-Ltap -ltap \
-	-Lpart -lpart \
-	-Llib -ljtaglib \
-	-L../libbrux -lbrux \
-	-Lcmd -lcmd \
-	-L../libbrux -lbrux \
-	-Lbus -lbus \
-	-Lsvf -lsvf \
-	-Lbsdl -lbsdl \
-	-lm \
-	@FTD2XXLIB@ \
-	@LIBINTL@
-
-localedir = $(datadir)/locale
-INCLUDES = -DLOCALEDIR=\"$(localedir)\"
+INCLUDES = -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
