@@ -25,6 +25,7 @@ include $(top_srcdir)/Makefile.rules
 
 noinst_HEADERS = \
 	bsbit.h \
+	bsdl.h \
 	bus.h \
 	cable.h \
 	chain.h \
