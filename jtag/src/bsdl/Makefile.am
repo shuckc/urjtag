@@ -23,11 +23,14 @@ include $(top_srcdir)/Makefile.rules
 
 noinst_LIBRARIES = libbsdl.a
 
-libbsdl_a_SOURCES = \
-	bsdl.c \
+noinst_HEADERS = \
 	bsdl.h \
+	bsdl_bison.h
+
+libbsdl_a_SOURCES = \
 	bsdl_bison.y \
 	bsdl_flex.l \
+	bsdl.c \
 	bsdl_sem.c
 
 AM_LFLAGS = -i

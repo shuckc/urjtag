@@ -1,5 +1,6 @@
 2007-12-31  Arnim Laeuger <arniml@users.sourceforge.net>
 
+    * src/bsdl/Makefile.am (noinst_HEADERS): move headers to noinst_HEADERS
     * include/Makefile.am (noinst_HEADERS): add bsdl.h to list of headers
     * src/bsdl/Makefile.am (libbsdl_a_SOURCES): add bsdl.h to list of sources
 
