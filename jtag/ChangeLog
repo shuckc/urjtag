@@ -1,3 +1,7 @@
+2007-12-31  Arnim Laeuger <arniml@users.sourceforge.net>
+
+    * src/bsdl/Makefile.am (libbsdl_a_SOURCES): add bsdl.h to list of sources
+
 2007-12-30  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/detect.c (detect_parts): call bsdl_scan_file() if configure result indicates inclusion of BSDL subsystem

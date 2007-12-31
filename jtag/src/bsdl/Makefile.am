@@ -25,6 +25,7 @@ noinst_LIBRARIES = libbsdl.a
 
 libbsdl_a_SOURCES = \
 	bsdl.c \
+	bsdl.h \
 	bsdl_bison.y \
 	bsdl_flex.l \
 	bsdl_sem.c
