@@ -66,12 +66,13 @@
 /* macros used to stringify the defines above */
 #define xstr(s) str(s)
 #define str(s) #s
-const char *std_wgl_map = xstr(TDO)   ","
-                          xstr(nTRST) ","
-                          xstr(TDI)   ","
-                          xstr(TCK)   ","
-                          xstr(TMS)   ","
-                          "#" xstr(nSRESET);
+static const
+char *std_wgl_map = xstr(TDO)   ","
+                    xstr(nTRST) ","
+                    xstr(TDI)   ","
+                    xstr(TCK)   ","
+                    xstr(TMS)   ","
+                    "#" xstr(nSRESET);
 
 
 /* private parameters of this cable driver */

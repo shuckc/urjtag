@@ -1,6 +1,7 @@
 2008-01-06  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable/wiggler.c (wiggler_connect): enable bit<->pin mapping from parameter string
+    * src/tap/cable/wiggler.c: make std_wgl_map static
 
 2007-12-31  Arnim Laeuger <arniml@users.sourceforge.net>
 
