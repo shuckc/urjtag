@@ -1,3 +1,7 @@
+2008-01-06  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/tap/cable/wiggler.c (wiggler_connect): enable bit<->pin mapping from parameter string
+
 2007-12-31  Arnim Laeuger <arniml@users.sourceforge.net>
 
     * src/bsdl/Makefile.am (noinst_HEADERS): move headers to noinst_HEADERS
