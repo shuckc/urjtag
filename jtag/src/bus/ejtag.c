@@ -449,7 +449,7 @@ ejtag_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *ejtag_bus_new( void );
+static bus_t *ejtag_bus_new( char *cmd_params[] );
 
 const bus_driver_t ejtag_bus = {
 	"ejtag",
@@ -467,7 +467,7 @@ const bus_driver_t ejtag_bus = {
 };
 
 static bus_t *
-ejtag_bus_new( void )
+ejtag_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 

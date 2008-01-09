@@ -1,3 +1,33 @@
+2008-01-08  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/bus/prototype.c: new prototype bus driver (Detrick Martin)
+    * src/bus/zefant-xs3.c (zefant_xs3_bus_new): API extension: cmd_params for new_bus()
+    * src/bus/sharc21065l.c (sharc_21065L_bus_new): API extension
+    * src/bus/jopcyc.c (jopcyc_bus_new): API extension
+    * src/bus/tx4925.c (tx4925_bus_new): API extension
+    * src/bus/slsup3.c (slsup3_bus_new): API extension
+    * src/bus/sh7751r.c (sh7751r_bus_new): API extension
+    * src/bus/sh7750r.c (sh7750r_bus_new): API extension
+    * src/bus/sh7727.c (sh7727_bus_new): API extension
+    * src/bus/s3c4510x.c (s3c4510_bus_new): API extension
+    * src/bus/sa1110.c (sa1110_bus_new): API extension
+    * src/bus/pxa2x0.c (pxa2x0_bus_new): API extension
+    (pxa27x_bus_new): API extension
+    * src/bus/ppc405ep.c (ppc405ep_bus_new): API extension
+    * src/bus/ppc440gx_ebc8.c (ppc440gx_ebc8_bus_new): API extension
+    * src/bus/mpc5200.c (mpc5200_bus_new): API extension
+    * src/bus/mpc824x.c (mpc824x_bus_new): API extension
+    * src/bus/lh7a400.c (lh7a400_bus_new): API extension
+    * src/bus/ixp425.c (ixp425_bus_new): API extension
+    * src/bus/bf533_ezkit.c (bf533_ezkit_bus_new): API extension
+    * src/bus/bf533_stamp.c (bf533_stamp_bus_new): API extension
+    * src/bus/ejtag.c (ejtag_bus_new): API extension
+    * src/bus/bcm1250.c (bcm1250_bus_new): API extension
+    * src/bus/au1500.c (au1500_bus_new): API extension
+    * src/bus/Makefile.am (libbus_a_SOURCES): added prototype.c
+    * src/bus/buses.c: added prototype_bus (Detrick Martin)
+    * src/cmd/initbus.c (cmd_initbus_run): hand down command parameters to bus_new()
+
 2008-01-06  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable/wiggler.c (wiggler_connect): enable bit<->pin mapping from parameter string

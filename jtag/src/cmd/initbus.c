@@ -36,7 +36,7 @@ cmd_initbus_run( char *params[] )
 {
 	int i;
 
-	if (cmd_params( params ) != 2)
+	if (cmd_params( params ) < 2)
 		return -1;
 
 	if (!cmd_test_cable())
@@ -54,7 +54,7 @@ cmd_initbus_run( char *params[] )
 
 	for (i = 0; bus_drivers[i] != NULL; i++) {
 		if (strcasecmp( bus_drivers[i]->name, params[1] ) == 0) {
-			bus_t *bus = bus_drivers[i]->new_bus();
+			bus_t *bus = bus_drivers[i]->new_bus( params );
 			if (bus == NULL) {
 				printf( _("bus initialization failed!\n") );
 				return 1;

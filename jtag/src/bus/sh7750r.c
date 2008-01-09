@@ -259,7 +259,7 @@ sh7750r_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *sh7750r_bus_new( void );
+static bus_t *sh7750r_bus_new( char *cmd_params[] );
 
 const bus_driver_t sh7750r_bus = {
 	"sh7750r",
@@ -278,7 +278,7 @@ const bus_driver_t sh7750r_bus = {
 };
 
 static bus_t *
-sh7750r_bus_new( void )
+sh7750r_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];

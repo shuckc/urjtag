@@ -49,7 +49,7 @@ typedef struct bus bus_t;
 typedef struct bus_driver {
 	const char *name;
 	const char *description;
-	bus_t *(*new_bus)( void );
+	bus_t *(*new_bus)( char *cmd_params[] );
 	void (*free_bus)( bus_t *bus );
 	void (*printinfo)( bus_t *bus );
 	void (*prepare)( bus_t *bus );

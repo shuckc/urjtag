@@ -356,7 +356,7 @@ slsup3_bus_free( bus_t *bus )
 }
 
 static bus_t *
-slsup3_bus_new( void )
+slsup3_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];

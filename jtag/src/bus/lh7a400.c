@@ -257,7 +257,7 @@ lh7a400_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *lh7a400_bus_new( void );
+static bus_t *lh7a400_bus_new( char *cmd_params[] );
 
 const bus_driver_t lh7a400_bus = {
 	"lh7a400",
@@ -276,7 +276,7 @@ const bus_driver_t lh7a400_bus = {
 };
 
 static bus_t *
-lh7a400_bus_new( void )
+lh7a400_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];

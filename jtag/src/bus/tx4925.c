@@ -249,7 +249,7 @@ tx4925_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *tx4925_bus_new( void );
+static bus_t *tx4925_bus_new( char *cmd_params[] );
 
 const bus_driver_t tx4925_bus = {
 	"tx4925",
@@ -269,7 +269,7 @@ const bus_driver_t tx4925_bus = {
 
 
 static bus_t *
-tx4925_bus_new( void )
+tx4925_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[15];

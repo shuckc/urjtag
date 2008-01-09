@@ -114,7 +114,7 @@ setup_data( bus_t *bus, uint32_t d)
 		part_set_signal( p, RD[i], 1, ( d>>i ) & 1 );
 }
 
-static bus_t *au1500_bus_new(void)
+static bus_t *au1500_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];

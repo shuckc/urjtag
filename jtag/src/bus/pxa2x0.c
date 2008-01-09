@@ -606,8 +606,8 @@ pxa2xx_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *pxa2x0_bus_new( void );
-static bus_t *pxa27x_bus_new( void );
+static bus_t *pxa2x0_bus_new( char *cmd_params[] );
+static bus_t *pxa27x_bus_new( char *cmd_params[] );
 
 const bus_driver_t pxa2x0_bus = {
 	"pxa2x0",
@@ -753,7 +753,7 @@ pxa2xx_bus_new_common(bus_t * bus)
 }
 
 static bus_t *
-pxa2x0_bus_new( void )
+pxa2x0_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	int failed = 0;
@@ -790,7 +790,7 @@ pxa2x0_bus_new( void )
 }
 
 static bus_t *
-pxa27x_bus_new( void )
+pxa27x_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	int failed = 0;

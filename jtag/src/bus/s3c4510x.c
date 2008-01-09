@@ -308,7 +308,7 @@ s3c4510_bus_free( bus_t *bus )
         free( bus );
 }
 
-static bus_t *s3c4510_bus_new( void );
+static bus_t *s3c4510_bus_new( char *cmd_params[] );
 
 const bus_driver_t s3c4510_bus = {
 	"s3c4510x",
@@ -327,7 +327,7 @@ const bus_driver_t s3c4510_bus = {
 };
 
 static bus_t *
-s3c4510_bus_new( void )
+s3c4510_bus_new( char *cmd_params[] )
 {
         bus_t *bus;
         char buff[10];

@@ -1,3 +1,7 @@
+2008-01-08  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* brux/bus.h: new_bus gets command parameters to enable configuration from comamnd lien
+
 2007-12-02 17:56  kawk
 
 	* openwince "include" package moved into "jtag" (now named "inclow")

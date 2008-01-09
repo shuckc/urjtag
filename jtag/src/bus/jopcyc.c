@@ -500,7 +500,7 @@ attach_sig( bus_t *bus, signal_t **sig, char *id )
 }
 
 static bus_t *
-jopcyc_bus_new( void )
+jopcyc_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	int failed = 0;

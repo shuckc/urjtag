@@ -39,6 +39,7 @@ libbus_a_SOURCES = \
 	mpc5200.c \
 	ppc440gx_ebc8.c \
 	ppc405ep.c \
+	prototype.c \
 	pxa2x0.c \
 	sa1110.c \
 	s3c4510x.c \
