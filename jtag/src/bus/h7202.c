@@ -236,7 +236,7 @@ h7202_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *h7202_bus_new( void );
+static bus_t *h7202_bus_new( char *cmd_params[] );
 
 const bus_driver_t h7202_bus = {
 	"h7202",
@@ -254,7 +254,7 @@ const bus_driver_t h7202_bus = {
 };
 
 static bus_t *
-h7202_bus_new( void )
+h7202_bus_new( char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];
