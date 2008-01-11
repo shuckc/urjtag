@@ -1,3 +1,7 @@
+2008-01-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/bus/prototype.c: added
+
 2008-01-09  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/bus/h7202.c (h7202_bus_new): API extension
