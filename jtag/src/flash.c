@@ -217,7 +217,7 @@ flashmsbin( bus_t *bus, FILE *f )
 }
 
 static int
-find_block( cfi_query_structure_t *cfi, int adr, int bus_width, int chip_width )
+find_block( cfi_query_structure_t *cfi, int adr, int bus_width, int chip_width, int *bytes_until_next_block )
 {
 	int i;
 	int b = 0;
@@ -230,7 +230,11 @@ find_block( cfi_query_structure_t *cfi, int adr, int bus_width, int chip_width )
 		const int region_size = region_blocks * region_block_size;
 
 		if (adr < (bb + region_size))
-			return b + ((adr - bb) / region_block_size);
+		{
+			int bir = (adr - bb) / region_block_size;
+			*bytes_until_next_block = bb + (bir + 1) * region_block_size - adr;
+			return b + bir;
+		}
 		b += region_blocks;
 		bb += region_size;
 	}
@@ -275,17 +279,19 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		uint32_t data;
 #define BSIZE 4096
 		uint8_t b[BSIZE];
-		int bc = 0, bn = 0;
-//		int block_no = find_block( cfi, adr );
-		int block_no = find_block( cfi, adr - cfi_array->address, bus_width, chip_width);
-		if (!erased[block_no]) {
+		int bc = 0, bn = 0, btr = BSIZE;
+		int block_no = find_block( cfi, adr - cfi_array->address, bus_width, chip_width, &btr);
+
+		if(btr > BSIZE) btr = BSIZE;
+		bn = fread( b, 1, btr, f );
+
+		if (bn > 0 && !erased[block_no]) {
 			flash_driver->unlock_block( cfi_array, adr );
 			printf( _("\nblock %d unlocked\n"), block_no );
 			printf( _("erasing block %d: %d\n"), block_no, flash_driver->erase_block( cfi_array, adr ) );
 			erased[block_no] = 1;
 		}
 
-		bn = fread( b, 1, BSIZE, f );
 		for (bc = 0; bc < bn; bc += flash_driver->bus_width) {
 			int j;
 			if ((adr & 0xFF) == 0) {
@@ -341,7 +347,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		}
 		readed = bus_read( bus, adr );
 		if (data != readed) {
-			printf( _("\nverify error:\nreaded: 0x%08X\nexpected: 0x%08X\n"), readed, data );
+			printf( _("\nverify error:\nread: 0x%08X\nexpected: 0x%08X\n"), readed, data );
 			return;
 		}
 		adr += flash_driver->bus_width;
