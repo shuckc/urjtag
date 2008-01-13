@@ -51,7 +51,20 @@ static int amd_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr );
 static int amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
 static void amd_flash_read_array( cfi_array_t *cfi_array ); 
 
+/* The code below assumes a connection of the flash chip address LSB (A0)
+ * to A0, A1 or A2 of the CPU bus dependent on the bus width, which is the
+ * most common connection pattern:
+ *     8 Bit devices: A0..Ax connected to A0..Ax of CPU bus
+ *    16 Bit devices: A0..Ax connected to A1..Ax+1 of CPU bus
+ *    32 Bit devices: A0..Ax connected to A2..Ax+2 of CPU bus
+ * The offset "o" is used here dependent on the bus width (8, 16 or 32 bit) to
+ * align the patterns emitted on the address lines at either A0, A1 or A2. */
+
 static int o;
+
+/* NOTE: It does not work for SoC chips or boards with extra address decoders
+ * that do address alignment themselves, such as the Samsung S3C4510B. The bus
+ * driver has to deal with this. - kawk 2008-01 */
 
 /* autodetect, we can handle this chip */
 static int 
