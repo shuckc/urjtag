@@ -1,3 +1,7 @@
+2008-01-15  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/bus/prototype.c (prototype_bus_new): parameter amode added
+
 2008-01-11  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/bus/prototype.c: added

@@ -280,9 +280,23 @@ prototype_bus_new( char *cmd_params[] )
 
 	CS = OE = WE = NULL;
 	ALSBI = AMSBI = DLSBI = DMSBI = -1;
+	N_BYTES = 0;
 	for ( i = 2; cmd_params[i]; i++ ) {
 		if (!strstr( cmd_params[i], "=")) continue;
 		sscanf( cmd_params[i], "%[^=]%*c%s", param, value );
+
+		if (!strcmp( "amode", param )) {
+			if (!strcmp( "x8", value ))
+				N_BYTES = 1;
+			else if (!strcmp( "x16", value ))
+				N_BYTES = 2;
+			else if (!strcmp( "x32", value ))
+				N_BYTES = 4;
+			else if (strcmp( "auto", value ))
+				printf( _("value %s not defined for parameter %s\n"), value, param );
+			continue;
+		}
+
 		prototype_bus_signal_parse( value, fmt, &inst );
 		if( inst > 31 ) continue;
 
@@ -375,9 +389,11 @@ prototype_bus_new( char *cmd_params[] )
 
 		/* bus drivers are called with a byte address
 		   this address needs to be adjusted by setup_address() to the memory data width */
-		N_BYTES = DW / 8;
-		if ( DW % 8 > 0 )
-			N_BYTES++;
+		if (N_BYTES == 0) {
+			N_BYTES = DW / 8;
+			if ( DW % 8 > 0 )
+				N_BYTES++;
+		}
 	} else {
 		printf( _("parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n") );
 		failed = 1;
@@ -412,7 +428,7 @@ const bus_driver_t prototype_bus = {
 	"prototype",
 	N_("Configurable prototype bus driver via BSR, requires parameters:\n"
 	"           amsb=<addr MSB> alsb=<addr LSB> dmsb=<data MSB> dlsb=<data LSB>\n"
-	"           ncs=<CS#>|cs=<CS> noe=<OE#>|oe=<OE> nwe=<WE#>|we=<WE>"),
+	"           ncs=<CS#>|cs=<CS> noe=<OE#>|oe=<OE> nwe=<WE#>|we=<WE> [amode=auto|x8|x16|x32]"),
 	prototype_bus_new,
 	prototype_bus_free,
 	prototype_bus_printinfo,
