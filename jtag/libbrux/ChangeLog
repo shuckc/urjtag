@@ -1,3 +1,7 @@
+2008-01-15  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* flash/jedec.c (jedec_detect): fprintf for devid and manid moved to end of detection
+
 2007-12-08  [819] Kolja Waschk <kawk>
 
     * configure.ac: Do not search for openwince include, use ../inclow

@@ -419,8 +419,6 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	devid_as[AUTOSELECT_M2] = bus_read(bus, adr+1);
 	bus_write(bus, adr, 0xf0);
 	
-	fprintf(stderr, "dev ID=%04x   man ID=%04x\n", devid, manid);
-
 	for(i=0 ; i<sizeof(table)/sizeof(struct amd_flash_info) ; i++) {
 		/* compare manufacturer and device id based on the result
 		   of the device's Autoselect method */
@@ -428,6 +426,7 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 		devid = devid_as[table[i].as_method];
 		if(manid==table[i].mfr_id && devid==table[i].dev_id) break;
 	}
+	fprintf(stderr, "dev ID=%04x   man ID=%04x\n", devid, manid);
 
 	if(i==sizeof(table)/sizeof(struct amd_flash_info))
 		return -4;
