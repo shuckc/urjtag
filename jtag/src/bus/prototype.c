@@ -45,7 +45,7 @@ typedef struct {
 	signal_t *we;
 	signal_t *oe;
 	int alsbi, amsbi, ai, aw, dlsbi, dmsbi, di, dw, csa, wea, oea;
-	int n_bytes;
+	int ashift;
 } bus_params_t;
 
 #define	CHAIN	((bus_params_t *) bus->params)->chain
@@ -68,7 +68,7 @@ typedef struct {
 #define	WEA	((bus_params_t *) bus->params)->wea
 #define	OEA	((bus_params_t *) bus->params)->oea
 
-#define N_BYTES ((bus_params_t *) bus->params)->n_bytes
+#define ASHIFT ((bus_params_t *) bus->params)->ashift
 
 
 static void
@@ -77,7 +77,7 @@ setup_address( bus_t *bus, uint32_t a )
 	int i, j;
 	part_t *p = PART;
 
-	a >>= N_BYTES - 1;
+	a >>= ASHIFT;
 
 	for ( i = 0, j = ALSBI; i < AW; i++, j += AI )
 		part_set_signal( p, A[j], 1, (a >> i) & 1 );
@@ -260,6 +260,7 @@ prototype_bus_new( char *cmd_params[] )
 	char buff[16], fmt[16], afmt[16], dfmt[16], param[16], value[16];
 	int i, j, inst, max, min;
 	int failed = 0;
+	int ashift = -1;
 
 	if (!chain || !chain->parts || (chain->parts->len <= chain->active_part) || (chain->active_part < 0))
 		return NULL;
@@ -280,18 +281,17 @@ prototype_bus_new( char *cmd_params[] )
 
 	CS = OE = WE = NULL;
 	ALSBI = AMSBI = DLSBI = DMSBI = -1;
-	N_BYTES = 0;
 	for ( i = 2; cmd_params[i]; i++ ) {
 		if (!strstr( cmd_params[i], "=")) continue;
 		sscanf( cmd_params[i], "%[^=]%*c%s", param, value );
 
 		if (!strcmp( "amode", param )) {
 			if (!strcmp( "x8", value ))
-				N_BYTES = 1;
+				ashift = 0;
 			else if (!strcmp( "x16", value ))
-				N_BYTES = 2;
+				ashift = 1;
 			else if (!strcmp( "x32", value ))
-				N_BYTES = 4;
+				ashift = 2;
 			else if (strcmp( "auto", value ))
 				printf( _("value %s not defined for parameter %s\n"), value, param );
 			continue;
@@ -389,11 +389,23 @@ prototype_bus_new( char *cmd_params[] )
 
 		/* bus drivers are called with a byte address
 		   this address needs to be adjusted by setup_address() to the memory data width */
-		if (N_BYTES == 0) {
-			N_BYTES = DW / 8;
+		if (ashift < 0) {
+			int nbytes;
+
+			/* parameter 'amode' wasn't specified, derive the address shift from the
+			   data bus width */
+			nbytes = DW / 8;
 			if ( DW % 8 > 0 )
-				N_BYTES++;
+				nbytes++;
+
+			ashift = 0;
+			while (nbytes != 1) {
+				nbytes >>= 1;
+				ashift++;
+			}
+			ASHIFT = ashift;
 		}
+
 	} else {
 		printf( _("parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n") );
 		failed = 1;
