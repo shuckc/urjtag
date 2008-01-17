@@ -1,3 +1,8 @@
+2008-01-17  Kolja Waschk   <kawk>
+
+    * doc/UrJTAG.txt: Updates regarding Cygwin ioperm package and readline library
+    * src/jtag.c: Without readline library, informative output often was printed after prompt, not before
+
 2008-01-16  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/bus/prototype.c (prototype_bus_new): properly calculate the address shift based on the current bus width
