@@ -247,9 +247,9 @@ jtag_readline_loop( const char *prompt )
 	line[0] = 0;
 	do
 	{
+		jtag_readline_multiple_commands_support( line );
 		printf("%s", prompt);
 		fflush(stdout);
-		jtag_readline_multiple_commands_support( line );
 	}
 	while(fgets(line, 1023, stdin));
 #endif
