@@ -188,9 +188,8 @@ Required only for MS Windows:
 It may be necessary to run the command "ioperm -i" to install the IOPERM.SYS
 driver in the system.
 
-Required for all systems:
-
- * readline (it is probably a standard part of your distribution)
+If UrJTAG was compiled to use the readline library, it has to be present on
+the system as well. It's probably a standard part of your distribution.
 
 More software is needed if you want to compile UrJTAG (which you probably want
 because currently no pre-compiled binaries are avaible...). See "Installation"
@@ -274,7 +273,8 @@ Furthermore, libtool should be available, and "devel" versions of the following
 packages:
 
  * gettext
- * readline
+ * readline (not needed, but really eases interactive use)
+ * ioperm (needed only for Cygwin)
 
 ==== Required libraries for USB support ====
 
@@ -330,6 +330,27 @@ If you want to try the very newest version of UrJTAG...
   # ./configure done by autogen.sh; run it here with special options if needed
   make
   make install
+
+==== Linking to FTD2XX.DLL in Cygwin environment ====
+
+Before running configure, get the D2XX drivers from FTDI.
+
+ * http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
+
+Unzip the archive and copy _only_ the two files "ftd2xx.h" and
+"i386/ftd2xx.dll" into a directory of your choice (substitute the path of
+this directory for $FTDIDIR in the following example...). Then run
+configure like this:
+
+  CFLAGS="-I$FTDIDIR -L$FTDIDIR" ./configure 
+
+Configure should now report
+
+  checking for FT_Open in -lftd2xx... yes
+  ...
+  FTDI cable support
+    via libftdi          : no
+    via libftd2xx        : yes
 
 //=========================================================================
 
@@ -823,8 +844,13 @@ for any purpose in JTAG Tools. It is intended for future use.
 
 == F.A.Q. ==
 
-Q. When I type "cable parallel 0x378 DLC5" on Windows XP I get "Error: Cable initialization failed!". Where is the problem?::
+For a list of known problems in current versions, please also check the "Bugs"
+tracker at the UrJTAG website!
 
+Q. When I type "cable parallel 0x378 DLC5" (in a Cygwin environment) I get "Unknown port driver: parallel"?::
+  A. Please install the Cygwin ioperm package, and re-configure/compile.
+
+Q. When I type "cable parallel 0x378 DLC5" (in a Cygwin environment) I get "Error: Cable initialization failed!".::
   A. Please install ioperm.sys driver using `ioperm -i` command.
 
 Q. When running autogen.sh, I get "Can't exec "autopoint": No such file or directory"::
