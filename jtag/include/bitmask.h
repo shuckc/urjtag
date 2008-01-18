@@ -1,7 +1,8 @@
 /*
  * $Id$
  *
- * Copyright (C) 2003 ETC s.r.o.
+ * Common header file
+ * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,25 +28,36 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2003.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002.
  *
  */
 
-#ifndef CMD_H
-#define CMD_H
+#ifndef	COMMON_H
+#define	COMMON_H
 
-typedef struct {
-	char *name;
-	char *desc;
-	void (*help)( void );
-	int (*run)( char *params[] );
-} cmd_t;
+#ifndef LANGUAGE
+#	ifdef __ASSEMBLY__
+#		define LANGUAGE ASM
+#	else
+#		define LANGUAGE C
+#	endif
+#endif
 
-extern const cmd_t *cmds[];
+#ifndef ASM
+#define	ASM	0
+#endif
 
-int cmd_run( char *params[] );
-int cmd_params( char *params[] );
-int cmd_get_number( char *s, unsigned int *i );
-int cmd_test_cable( void );
+#ifndef C
+#define	C	1
+#endif
 
-#endif /* CMD_H */
+#define	MAX_BITS_ABS_VAL	1024
+#define	BITS_ABS(a)		(((((a) + MAX_BITS_ABS_VAL) / MAX_BITS_ABS_VAL) * 2 - 1) * (a))
+#define	BITS_MIN(a,b)		(((a) + (b) - BITS_ABS((a) - (b))) / 2)
+
+#define	bit(b)			(1 << (b))
+#define	bits(b1,b2)		(((2 << BITS_ABS((b1) - (b2))) - 1) << BITS_MIN(b1,b2))
+#define	bits_val(b1,b2,v)	(((v) << BITS_MIN(b1,b2)) & bits(b1,b2))
+#define	bits_get(b1,b2,v)	(((v) & bits(b1,b2)) >> BITS_MIN(b1,b2))
+
+#endif /* COMMON_H */

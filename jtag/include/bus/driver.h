@@ -1,7 +1,8 @@
 /*
  * $Id$
  *
- * Copyright (C) 2003 ETC s.r.o.
+ * Bus driver interface
+ * Copyright (C) 2002, 2003 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,67 +28,56 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2003.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  *
  */
 
-#ifndef FLASH_H
-#define FLASH_H
+#ifndef BRUX_BUS_H
+#define	BRUX_BUS_H
 
-#include <stdio.h>
 #include <stdint.h>
 
-#include <bus/driver.h>
-
-/* Following moved here from brux/cfi.h */
-
-#include <flash/cfi.h>
-
-#include <brux/bus.h>
-
 typedef struct {
-	int width;		/* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
-	cfi_query_structure_t cfi;
-} cfi_chip_t;
+	const char *description;
+	uint32_t start;
+	uint64_t length;
+	unsigned int width;
+} bus_area_t;
 
-typedef struct {
-	bus_t *bus;
-	uint32_t address;
-	int bus_width;		/* in cfi_chips, e.g. 4 for 32 bits */
-	cfi_chip_t **cfi_chips;
-} cfi_array_t;
+typedef struct bus bus_t;
 
-void cfi_array_free( cfi_array_t *cfi_array );
-int cfi_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
-
-/* End of brux/cfi.h */
-
-typedef struct {
-	unsigned int bus_width;		/* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
+typedef struct bus_driver {
 	const char *name;
 	const char *description;
-	int (*autodetect)( cfi_array_t *cfi_array );
-	void (*print_info)( cfi_array_t *cfi_array );
-	int (*erase_block)( cfi_array_t *cfi_array, uint32_t adr );
-	int (*unlock_block)( cfi_array_t *cfi_array, uint32_t adr );
-	int (*program)( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
-	void (*readarray)( cfi_array_t *cfi_array );
-} flash_driver_t;
+	bus_t *(*new_bus)( char *cmd_params[] );
+	void (*free_bus)( bus_t *bus );
+	void (*printinfo)( bus_t *bus );
+	void (*prepare)( bus_t *bus );
+	int (*area)( bus_t *bus, uint32_t adr, bus_area_t *area );
+	void (*read_start)( bus_t *bus, uint32_t adr );
+	uint32_t (*read_next)( bus_t *bus, uint32_t adr );
+	uint32_t (*read_end)( bus_t *bus );
+	uint32_t (*read)( bus_t *bus, uint32_t adr );
+	void (*write)( bus_t *bus, uint32_t adr, uint32_t data );
+	int (*init) (bus_t *bus);
+} bus_driver_t;
 
-#define	FLASH_ERROR_NOERROR			0
-#define	FLASH_ERROR_INVALID_COMMAND_SEQUENCE	1
-#define	FLASH_ERROR_LOW_VPEN			2
-#define	FLASH_ERROR_BLOCK_LOCKED		3
-#define	FLASH_ERROR_UNKNOWN			99
+struct bus {
+	void *params;
+	const bus_driver_t *driver;
+};
 
-void detectflash( bus_t *bus, uint32_t adr );
+extern bus_t *bus;
 
-void flashmem( bus_t *bus, FILE *f, uint32_t addr );
-void flashmsbin( bus_t *bus, FILE *f );
+#define	bus_printinfo(bus)	bus->driver->printinfo(bus)
+#define	bus_prepare(bus)	bus->driver->prepare(bus)
+#define	bus_area(bus,adr,a)	bus->driver->area(bus,adr,a)
+#define	bus_read_start(bus,adr)	bus->driver->read_start(bus,adr)
+#define	bus_read_next(bus,adr)	bus->driver->read_next(bus,adr)
+#define	bus_read_end(bus)	bus->driver->read_end(bus)
+#define	bus_read(bus,adr)	bus->driver->read(bus,adr)
+#define	bus_write(bus,adr,data)	bus->driver->write(bus,adr,data)
+#define	bus_free(bus)		bus->driver->free_bus(bus)
+#define	bus_init(bus)		bus->driver->init(bus)
 
-/* end of original brux/flash.h */
-
-extern flash_driver_t *flash_drivers[];
-
-#endif /* FLASH_H */
-
+#endif /* BRUX_BUS_H */
