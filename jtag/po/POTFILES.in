@@ -1,12 +1,12 @@
 # $Id$
 
-libbrux/cmd/cmd.c
-libbrux/cmd/cmd_detectflash.c
-libbrux/cmd/help.c
-libbrux/cmd/quit.c
-libbrux/flash/amd.c
-libbrux/flash/detectflash.c
-libbrux/flash/intel.c
+src/cmd/cmd.c
+src/cmd/detectflash.c
+src/cmd/help.c
+src/cmd/quit.c
+src/flash/amd.c
+src/flash/detectflash.c
+src/flash/intel.c
 src/bus/au1500.c
 src/bus/bcm1250.c
 src/bus/buses.c
