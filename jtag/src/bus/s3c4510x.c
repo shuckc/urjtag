@@ -65,7 +65,7 @@
 
 
 #ifndef DEBUG_LVL2
-#define DEBUG_LVL2(x)
+#define DEBUG_LVL2(x) x
 #endif
 
 /** @brief  Bus driver for Samsung S3C4510X */
@@ -102,11 +102,18 @@ unsigned char dbus_width = 16; */
 static void
 setup_address( bus_t *bus, uint32_t a )
 {
-        int i;
+        int i,so;
         part_t *p = PART;
 
+		switch(dbus_width)
+		{
+			case 32: so=2; break;
+			case 16: so=1; break;
+			default: so=0; break;
+		}
+
         for (i = 0; i < 22; i++)
-                part_set_signal( p, A[i], 1, (a >> i) & 1 );
+                part_set_signal( p, A[i], 1, (a >> (i+so)) & 1 );
 }
 
 static void
@@ -275,13 +282,16 @@ s3c4510_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 static int
 s3c4510_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
-        int b0size0, b0size1;
+        int b0size0, b0size1; // , endian;
 
 	area->description = NULL;
 	area->start = UINT32_C(0x00000000);
 	area->length = UINT64_C(0x100000000);
 
+        // endian = part_get_signal( PART, part_find_signal( PART, "LITTLE" ));
         b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
+        if(b0size0==0) // TODO: try again (initialization problem?)
+            b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
         b0size1 = part_get_signal( PART, part_find_signal( PART, "B0SIZE1" ));
 
         switch ((b0size1 << 1) | b0size0) {
@@ -408,6 +418,7 @@ s3c4510_bus_new( char *cmd_params[] )
                         break;
                 }
         }
+
         nOE = part_find_signal( PART, "nOE" );
         if (!nOE) {
                 printf( _("signal '%s' not found\n"), "nOE" );

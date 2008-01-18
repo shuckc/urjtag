@@ -28,6 +28,7 @@
 
     * doc/UrJTAG.txt: Updates regarding Cygwin ioperm package and readline library
     * src/jtag.c: Without readline library, informative output often was printed after prompt, not before
+	* src/bus/s3c4510x.c: Address alignment on A0..Ax lines changes dynamically with bus width
 
 2008-01-16  Arnim Laeuger  <arniml@users.sourceforge.net>
 
