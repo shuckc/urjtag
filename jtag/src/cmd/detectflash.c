@@ -22,32 +22,48 @@
  *
  */
 
-#ifndef JTAG_H
-#define JTAG_H
+#include "sysdep.h"
 
 #include <stdio.h>
-#include <stdint.h>
 
 #include <flash.h>
+#include <cmd.h>
 
-#include "chain.h"
-#include "bus.h"
-#include "part.h"
+static int
+cmd_detectflash_run( char *params[] )
+{
+	uint32_t adr;
 
-extern chain_t *chain;
-extern bus_t *bus;
-extern int big_endian;
-extern int debug_mode;
+	if (cmd_params( params ) != 2)
+		return -1;
 
-int jtag_parse_file( const char *filename );
+	if (!bus) {
+		printf( _("Error: Bus driver missing.\n") );
+		return 1;
+	}
 
-int detect_parts( chain_t *chain, char *db_path );
-int detect_register_size( chain_t *chain );
-void discovery( chain_t *chain );
+	if (cmd_get_number( params[1], &adr ))
+		return -1;
 
-void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
-void writemem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
+	detectflash( bus, adr );
 
-void flasherase( bus_t *bus, uint32_t addr, int number );
+	return 1;
+}
 
-#endif /* JTAG_H */
+static void
+cmd_detectflash_help( void )
+{
+	printf( _(
+		"Usage: %s ADDRESS\n"
+		"Detect flash memory type connected to a part.\n"
+		"\n"
+		"ADDRESS    Base address for memory region\n"
+	), "detectflash" );
+}
+
+cmd_t cmd_detectflash = {
+	"detectflash",
+	N_("detect parameters of flash chips attached to a part"),
+	cmd_detectflash_help,
+	cmd_detectflash_run
+};

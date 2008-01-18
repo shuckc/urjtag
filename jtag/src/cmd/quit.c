@@ -22,32 +22,33 @@
  *
  */
 
-#ifndef JTAG_H
-#define JTAG_H
+#include "sysdep.h"
 
 #include <stdio.h>
-#include <stdint.h>
 
-#include <flash.h>
+#include <cmd.h>
 
-#include "chain.h"
-#include "bus.h"
-#include "part.h"
+static int
+cmd_quit_run( char *params[] )
+{
+	if (params[1])
+		return -1;
 
-extern chain_t *chain;
-extern bus_t *bus;
-extern int big_endian;
-extern int debug_mode;
+	return 0;
+}
 
-int jtag_parse_file( const char *filename );
+static void
+cmd_quit_help( void )
+{
+	printf( _(
+		"Usage: %s\n"
+		"Exit from %s.\n"
+	), "quit", PACKAGE );
+}
 
-int detect_parts( chain_t *chain, char *db_path );
-int detect_register_size( chain_t *chain );
-void discovery( chain_t *chain );
-
-void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
-void writemem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
-
-void flasherase( bus_t *bus, uint32_t addr, int number );
-
-#endif /* JTAG_H */
+cmd_t cmd_quit = {
+	"quit",
+	N_("exit and terminate this session"),
+	cmd_quit_help,
+	cmd_quit_run
+};

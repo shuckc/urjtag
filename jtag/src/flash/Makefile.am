@@ -1,7 +1,7 @@
 #
-# $Id$
+# $Id: Makefile.am 506 2003-08-13 10:05:15Z telka $
 #
-# Copyright (C) 2003 ETC s.r.o.
+# Copyright (C) 2002 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,54 +18,17 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2003.
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
 #
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libcmd.a
+noinst_LIBRARIES = libflash.a
 
-libcmd_a_SOURCES = \
-	frequency.c \
-	cable.c \
-	reset.c \
-	discovery.c \
-	detect.c \
+libflash_a_SOURCES = \
+	amd.c \
+	amd_flash.c \
+	cfi.c \
 	detectflash.c \
-	help.c \
-	quit.c \
-	signal.c \
-	salias.c \
-	bit.c \
-	register.c \
-	initbus.c \
-	print.c \
-	part.c \
-	bus.c \
-	instruction.c \
-	shift.c \
-	dr.c \
-	get.c \
-	test.c \
-	debug.c \
-	shell.c \
-	set.c \
-	endian.c \
-	peekpoke.c \
-	readmem.c \
-	writemem.c \
-	flashmem.c \
-	eraseflash.c \
-	script.c \
-	include.c \
-	cmd.c
-
-if ENABLE_SVF
-libcmd_a_SOURCES += svf.c
-endif
-
-if ENABLE_BSDL
-libcmd_a_SOURCES += bsdl.c
-endif
-
-INCLUDES = -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
+	intel.c \
+	jedec.c

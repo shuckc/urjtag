@@ -29,7 +29,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include <brux/cmd.h>
+#include <cmd.h>
 
 #include <bsdl.h>
 

@@ -34,7 +34,7 @@
 
 #include "generic.h"
 
-#include <brux/cmd.h>
+#include <cmd.h>
 
 int
 generic_connect( char *params[], cable_t *cable )

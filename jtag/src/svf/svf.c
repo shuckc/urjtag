@@ -43,7 +43,7 @@
 #include <tap.h>
 #include <state.h>
 
-#include <brux/cmd.h>
+#include <cmd.h>
 
 #include "svf.h"
 #include "svf_bison.h"

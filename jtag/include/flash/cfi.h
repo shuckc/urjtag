@@ -41,9 +41,7 @@
 #ifndef	FLASH_CFI_H
 #define	FLASH_CFI_H
 
-#include <openwince.h>
-
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -62,14 +60,14 @@
 #define	ALT_VENDOR_ID_OFFSET		0x17
 #define	ALT_VENDOR_TABLE_ADR_OFFSET	0x19
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef struct cfi_query_identification_string {
 	uint16_t pri_id_code;
 	void *pri_vendor_tbl;
 	uint16_t alt_id_code;
 	void *alt_vendor_tbl;
 } cfi_query_identification_string_t;
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 /* Algorithm command set & control interface ID codes - see Table 1 in [2] */
 
@@ -97,7 +95,7 @@ typedef struct cfi_query_identification_string {
 #define	MAX_BLOCK_ERASE_TIMEOUT_OFFSET	0x25		/* Maximum timeout per individual block erase */
 #define	MAX_CHIP_ERASE_TIMEOUT_OFFSET	0x26		/* Maximum timeout for chip erase */
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef struct cfi_query_system_interface_information {
 	uint16_t vcc_min_wev;				/* in mV */
 	uint16_t vcc_max_wev;				/* in mV */
@@ -112,7 +110,7 @@ typedef struct cfi_query_system_interface_information {
 	uint32_t max_block_erase_timeout;		/* in ms, 0 - not supported */
 	uint32_t max_chip_erase_timeout;		/* in ms, 0 - not supported */
 } cfi_query_system_interface_information_t;
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 /* Device geometry definition - see 4.3.4 in [1] */
 
@@ -122,7 +120,7 @@ typedef struct cfi_query_system_interface_information {
 #define	NUMBER_OF_ERASE_REGIONS_OFFSET	0x2C		/* Number of Erase Block Regions */
 #define	ERASE_BLOCK_REGION_OFFSET	0x2D		/* Erase Block Region Information */
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef struct cfi_erase_block_region cfi_erase_block_region_t;
 
 typedef struct cfi_device_geometry {
@@ -137,7 +135,7 @@ struct cfi_erase_block_region {
 	uint32_t erase_block_size;			/* in B */
 	uint32_t number_of_erase_blocks;
 };
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 /* Device interface code assignments (for cfi_device_geometry.device_interface) - see Table 2 in [2] */
 
@@ -149,12 +147,12 @@ struct cfi_erase_block_region {
 
 /* CFI Query structure - see 4.3.1 in [1] */
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef struct cfi_query_structure {
 	cfi_query_identification_string_t identification_string;
 	cfi_query_system_interface_information_t system_interface_info;
 	cfi_device_geometry_t device_geometry;
 } cfi_query_structure_t;
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #endif /* FLASH_CFI_H */

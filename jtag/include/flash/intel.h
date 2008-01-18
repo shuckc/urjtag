@@ -40,7 +40,7 @@
 #ifndef	FLASH_INTEL_H
 #define	FLASH_INTEL_H
 
-#include <openwince.h>
+#include <bitmask.h>
 
 /* Intel CFI commands - see Table 4. in [1] and Table 3. in [2] */
 

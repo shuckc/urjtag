@@ -26,12 +26,17 @@ include $(top_srcdir)/Makefile.rules
 noinst_HEADERS = \
 	bsbit.h \
 	bsdl.h \
+	bitmask.h \
 	bus.h \
+	bus_driver.h \
 	cable.h \
 	chain.h \
 	data_register.h \
 	cmd.h \
 	flash.h \
+	flash/cfi.h \
+	flash/mic.h \
+	flash/intel.h \
 	gettext.h \
 	instruction.h \
 	parport.h \

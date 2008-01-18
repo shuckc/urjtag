@@ -27,7 +27,7 @@
 #include <string.h>
 #include <flash/cfi.h>
 #include <flash/intel.h>
-#include <std/mic.h>
+#include <flash/mic.h>
 
 #include "bus.h"
 #include "flash.h"

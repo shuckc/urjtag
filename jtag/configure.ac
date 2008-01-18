@@ -66,6 +66,7 @@ AC_CONFIG_FILES(
 	src/tap/Makefile
 	src/part/Makefile
 	src/bus/Makefile
+	src/flash/Makefile
 	src/cmd/Makefile
 	src/svf/Makefile
 	src/bsdl/Makefile
@@ -132,30 +133,6 @@ if test "$LEX" == flex ; then
 else
    AM_CONDITIONAL([BISON_LOCATIONS], false)
 fi
-
-AC_CONFIG_SUBDIRS(libbrux)
-
-#AC_ARG_WITH(include,
-#       AC_HELP_STRING([--with-include=PATH], [Absolute path to the openwince includes]),
-#       openwince_inc="$withval")
-#AC_CACHE_CHECK([for the openwince includes], openwince_includes_path, [
-#       openwince_includes_path="no"
-#       for openwince_include in $openwince_inc /usr/include/openwince /usr/local/include/openwince; do
-#               if test -f "$openwince_include/common.h"; then
-#                       openwince_includes_path="$openwince_include"
-#                       break
-#               fi
-#       done
-#])
-#if test "$openwince_includes_path" = "no"; then
-#       AC_MSG_ERROR([The openwince include package can not be found.])
-#fi
-#CPPFLAGS="$CPPFLAGS -I$openwince_includes_path -I$openwince_includes_path/device -I$openwince_includes_path/arm"
-
-AC_CONFIG_SUBDIRS(inclow)
-CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/inclow"
-CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/inclow/device"
-CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/inclow/arm"
 
 AC_SEARCH_LIBS([ioperm], [ioperm])
 if test "$ac_cv_search_ioperm" != "no"; then

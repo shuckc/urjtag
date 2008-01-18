@@ -39,7 +39,7 @@
 
 #include "generic.h"
 
-#include <brux/cmd.h>
+#include <cmd.h>
 
 /*
  * Bit <-> pin mapping of an original Wiggler

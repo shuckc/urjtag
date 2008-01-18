@@ -45,9 +45,9 @@
 #ifndef	PXA2X0_MC_H
 #define	PXA2X0_MC_H
 
-#include <openwince.h>
+#include <bitmask.h>
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 #include <stdint.h>
 #endif
 
@@ -63,7 +63,7 @@
 
 #define	MC_BASE		0x48000000
 
-#if LANGUAGE == C
+#ifndef __ASSEMBLY__
 typedef volatile struct MC_registers {
 	uint32_t mdcnfg;
 	uint32_t mdrefr;
@@ -119,7 +119,7 @@ typedef volatile struct MC_registers {
 #if !defined(PXA2X0_NOPXA260)
 #define	SA1111CR	MC_pointer->sa1111cr
 #endif /* PXA260 and above only */
-#endif /* LANGUAGE == C */
+#endif /* __ASSEMBLY__ */
 
 #define	MDCNFG_OFFSET	0x00
 #define	MDREFR_OFFSET	0x04

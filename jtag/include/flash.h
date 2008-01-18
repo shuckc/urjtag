@@ -37,13 +37,11 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include <bus/driver.h>
+#include <bus_driver.h>
 
 /* Following moved here from brux/cfi.h */
 
 #include <flash/cfi.h>
-
-#include <brux/bus.h>
 
 typedef struct {
 	int width;		/* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */

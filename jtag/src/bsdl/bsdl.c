@@ -34,7 +34,7 @@
 #include "sysdep.h"
 
 #include <jtag.h>
-#include <brux/cmd.h>
+#include <cmd.h>
 
 #include "bsdl.h"
 

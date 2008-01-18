@@ -36,13 +36,14 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <pxa2x0/mc.h>
-
 #include "part.h"
 #include "bus.h"
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+
+#include "pxa2x0_mc.h"
+
 
 /*
  * the following defines are used in proc field of the the 

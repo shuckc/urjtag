@@ -24,6 +24,7 @@
 include $(top_srcdir)/Makefile.rules
 
 SUBDIRS = \
+	flash \
 	lib \
 	tap \
 	part \
@@ -54,7 +55,7 @@ bsdl2jtag_SOURCES = \
 	bsdl2jtag.c
 
 jtag_DEPENDENCIES = \
-	../libbrux/libbrux.a \
+	flash/libflash.a \
 	lib/libjtaglib.a \
 	tap/libtap.a \
 	part/libpart.a \
@@ -73,9 +74,8 @@ jtag_LDADD = \
 	-Ltap -ltap \
 	-Lpart -lpart \
 	-Llib -ljtaglib \
-	-L../libbrux -lbrux \
+	-Lflash -lflash \
 	-Lcmd -lcmd \
-	-L../libbrux -lbrux \
 	-Lbus -lbus \
 	-lm \
 	@FTD2XXLIB@ \

@@ -29,7 +29,7 @@
 #include <stdint.h>
 #include "chain.h"
 
-#include <brux/bus.h>
+#include <bus_driver.h>
 
 typedef struct {
 	int len;

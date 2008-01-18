@@ -39,7 +39,7 @@
 
 #include "generic.h"
 
-#include <brux/cmd.h>
+#include <cmd.h>
 
 #define SYSCON_BASE		0x80930000
 #define SYSCON_DEVICE_CONFIG	0x80

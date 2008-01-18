@@ -41,6 +41,7 @@ libbus_a_SOURCES = \
 	ppc405ep.c \
 	prototype.c \
 	pxa2x0.c \
+	pxa2x0_mc.h \
 	sa1110.c \
 	s3c4510x.c \
 	sh7727.c \

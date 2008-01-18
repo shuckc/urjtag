@@ -30,7 +30,7 @@
 #include <string.h>
 
 #include <jtag.h>
-#include <brux/cmd.h>
+#include <cmd.h>
 
 #include "bsdl_bison.h"
 

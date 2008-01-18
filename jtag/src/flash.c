@@ -41,7 +41,6 @@
 
 #include <flash/cfi.h>
 #include <flash/intel.h>
-#include <brux/cfi.h>
 
 #include "bus.h"
 #include "flash.h"

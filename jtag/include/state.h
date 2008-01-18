@@ -25,7 +25,7 @@
 #ifndef	STATE_H
 #define	STATE_H
 
-#include <common.h>
+#include <bitmask.h>
 
 #include "chain.h"
 
