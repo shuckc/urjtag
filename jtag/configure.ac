@@ -86,53 +86,6 @@ AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_YACC
 
-# check for lex/flex
-AC_PROG_LEX
-# check for modern version of flex
-AC_PROG_AWK
-AC_PROG_SED
-if test "$LEX" == flex ; then
-   # compare >= 2.5.31
-   flex_ref_v1=2
-   flex_ref_v2=5
-   flex_ref_v3=31
-   flex_ref_version="$flex_ref_v1.$flex_ref_v2.$flex_ref_v3"
-   AC_MSG_CHECKING([for flex >= $flex_ref_version])
-
-   modern_flex=no
-   flex_version=`$LEX --version | $AWK '{print $2}'`
-   if test "$flex_version" == "version" ; then
-       flex_version=`$LEX --version | $AWK '{print $3}'`
-   fi
-
-   flex_v1=`echo $flex_version | $AWK -F . '{print $1}' | $SED -e 's/[a-zA-Z]//g'`
-   flex_v2=`echo $flex_version | $AWK -F . '{print $2}' | $SED -e 's/[a-zA-Z]//g'`
-   flex_v3=`echo $flex_version | $AWK -F . '{print $3}' | $SED -e 's/[a-zA-Z]//g'`
-
-   if test -n "$flex_v1" -a "$flex_v1" -gt "$flex_ref_v1" ; then
-      modern_flex=yes
-   fi
-   if test -n "$flex_v1" -a "$flex_v1" -eq "$flex_ref_v1" ; then
-      if test "$flex_v2" -gt "$flex_ref_v2" ; then
-	 modern_flex=yes
-      fi
-      if test "$flex_v2" -eq "$flex_ref_v2" ; then
-	 if test "$flex_v3" -ge "$flex_ref_v3" ; then
-	    modern_flex=yes
-	 fi
-      fi
-   fi
-
-   if test "$modern_flex" == yes ; then
-      AC_MSG_RESULT([yes - flex $flex_version])
-      AM_CONDITIONAL([BISON_LOCATIONS], true)
-   else
-      AC_MSG_RESULT([no - flex $flex_version])
-      AM_CONDITIONAL([BISON_LOCATIONS], false)
-   fi
-else
-   AM_CONDITIONAL([BISON_LOCATIONS], false)
-fi
 
 AC_SEARCH_LIBS([ioperm], [ioperm])
 if test "$ac_cv_search_ioperm" != "no"; then
@@ -283,7 +236,7 @@ CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 
 
-dnl Disable SVF player?
+dnl Enable SVF player?
 AC_ARG_ENABLE(svf,
 [  --enable-svf            Enable SVF player (default is enabled)],
 [case "${enableval}" in
@@ -300,7 +253,95 @@ AS_IF([test "x$svf" = xtrue], [
 ])
 
 
-dnl Disable BSDL subsystem?
+# check for lex/flex
+AC_PROG_LEX
+# check for modern version of flex
+AC_PROG_AWK
+AC_PROG_SED
+
+AS_IF([test "$LEX" == flex], [
+   ver_ge_ver () {
+      v1=$1
+      v2=$2
+      v3=$3
+      ref_v1=$4
+      ref_v2=$5
+      ref_v3=$6
+
+      AS_IF([test -n "$v1" -a "$v1" -gt "$ref_v1"], [
+         return 0
+      ])
+      AS_IF([test -n "$v1" -a "$v1" -eq "$ref_v1"], [
+         AS_IF([test "$v2" -gt "$ref_v2"], [
+	    return 0
+         ])
+         AS_IF([test "$v2" -eq "$ref_v2"], [
+            AS_IF([test "$v3" -ge "$ref_v3"], [
+	       return 0
+            ])
+         ])
+      ])
+
+      return 1
+   }
+
+   flex_version=`$LEX --version | $AWK '{print $2}'`
+   AS_IF([test "$flex_version" == "version"], [
+       flex_version=`$LEX --version | $AWK '{print $3}'`
+   ])
+
+   flex_v1=`echo $flex_version | $AWK -F . '{print $1}' | $SED -e 's/[a-zA-Z]//g'`
+   flex_v2=`echo $flex_version | $AWK -F . '{print $2}' | $SED -e 's/[a-zA-Z]//g'`
+   flex_v3=`echo $flex_version | $AWK -F . '{print $3}' | $SED -e 's/[a-zA-Z]//g'`
+
+   # bison error locations require flex >= 2.5.31
+   flex_ref_v1=2
+   flex_ref_v2=5
+   flex_ref_v3=31
+   flex_ref_version="$flex_ref_v1.$flex_ref_v2.$flex_ref_v3"
+   AC_MSG_CHECKING([for flex >= $flex_ref_version, required for SVF error locations])
+   #
+   AS_IF([ver_ge_ver $flex_v1 $flex_v2 $flex_v3 $flex_ref_v1 $flex_ref_v2 $flex_ref_v3], [
+      AC_MSG_RESULT([yes - flex $flex_version])
+      AM_CONDITIONAL([BISON_LOCATIONS], true)
+      bison_locations=yes
+   ], [
+      AC_MSG_RESULT([no - flex $flex_version])
+      AM_CONDITIONAL([BISON_LOCATIONS], false)
+      bison_locations=no
+   ])
+
+   # bsdl lexer requires flex >= 2.5.33
+   flex_ref_v1=2
+   flex_ref_v2=5
+   flex_ref_v3=33
+   flex_ref_version="$flex_ref_v1.$flex_ref_v2.$flex_ref_v3"
+   AC_MSG_CHECKING([for flex >= $flex_ref_version, required for BSDL lexer])
+   #
+   AS_IF([ver_ge_ver $flex_v1 $flex_v2 $flex_v3 $flex_ref_v1 $flex_ref_v2 $flex_ref_v3], [
+      AC_MSG_RESULT([yes - flex $flex_version])
+      bsdl_lexer=true
+   ], [
+      AC_MSG_RESULT([no - flex $flex_version])
+      bsdl_lexer=false
+   ])
+], [
+   bison_locations=no
+   AM_CONDITIONAL([BISON_LOCATIONS], false)
+   bsdl_lexer=false
+])
+
+
+dnl If the transformed bsdl_flex.c is already existing, it doesn't matter
+dnl that flex is too old for building the lexer.
+AS_IF([test "x$bsdl_lexer" == xfalse], [
+   AS_IF([test -r src/bsdl/bsdl_flex.c], [
+      bsdl_lexer=true
+   ])
+])
+
+
+dnl Enable BSDL subsystem?
 AC_ARG_ENABLE(bsdl,
 [  --enable-bsdl           Enable BSDL subsystem (default is enabled)],
 [case "${enableval}" in
@@ -308,7 +349,7 @@ AC_ARG_ENABLE(bsdl,
    no)  bsdl=false ;;
    *)   AC_MSG_ERROR(bad value ${enableval} for --enable-bsdl) ;;
  esac],
-[bsdl=true])
+[bsdl=$bsdl_lexer])
 AS_IF([test "x$bsdl" = xtrue], [
   AM_CONDITIONAL(ENABLE_BSDL, true)
   AC_DEFINE(ENABLE_BSDL, 1, [define if BSDL subsystem is enabled])
@@ -353,7 +394,7 @@ jtag is now configured for
   FTDI cable support
     via libftdi        : $FLAG_HAVELIBFTDI
     via libftd2xx      : $FLAG_HAVELIBFTD2XX
-  SVF error locations  : $modern_flex ($LEX $flex_version)
+  SVF error locations  : $bison_locations
   Build SVF player     : $FLAG_SVF
   Build BSDL subsystem : $FLAG_BSDL
 ])

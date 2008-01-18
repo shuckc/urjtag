@@ -1,7 +1,7 @@
 Universal JTAG library, server and tools
 ========================================
 Kolja Waschk (Ed.)
-$Id $
+$Id$
 
 /////////////////////////////////////////////////////////////////////////////
 This document is formatted to be readable for "asciidoc". Before you
@@ -267,7 +267,10 @@ be untested combinations of chip type, bus width, ...
 
 To run autogen.sh, you need autoconf and automake, bison, and a recent flex.
 Flex 2.5.4a as it comes with Cygwin will work but some parts of UrJTAG (namely
-the SVF player) become more verbose if Flex 2.5.31 or newer is used.
+the SVF player) become more verbose if Flex 2.5.31 or newer is used. Building
+the BSDL subsystem files requires Flex 2.5.33 or newer. The configure script
+will compare the availble Flex version against these preconditions and enables
+or disables the related features.
 
 Furthermore, libtool should be available, and "devel" versions of the following
 packages:
@@ -351,6 +354,23 @@ Configure should now report
   FTDI cable support
     via libftdi          : no
     via libftd2xx        : yes
+
+==== Building the BSDL subsystem ====
+
+As mentioned above, building the BSDL lexer requires Flex 2.5.33 or newer. If
+the detected Flex version is not recent enough, configure will disable the
+BSDL subsystem. The detection result is summarized at the end of configure:
+
+  jtag is now configured for
+    ...
+    Build BSDL subsystem : yes
+
+Flex is only required when you're working on a check-out of the Subversion
+repository. In this case Flex has to be called to transform bsdl_flex.l to
+bsdl_flex.c. When you're compiling from released sources, the local Flex
+version is not relevant since the output file of Flex is part of the
+tarball. I.e. even if the local Flex fails the check, the BSDL subsystem is
+enabled and will be compiled from the released C files.
 
 //=========================================================================
 
@@ -723,13 +743,13 @@ this standard process follows.
 To tell the BSDL subsytem where to look for BSDL files, the 'bsdl path
 pathlist' command has to be issued prior to 'detect'. The contents of
 'pathlist' must be a semicolon-separated list of directories where BSDL files
-are located. This list is stored by 'bsdl path' and used lateron when 'detect'
-calls the BSDL subsystem.
+are located. This list is stored by 'bsdl path' and is used lateron when
+'detect' calls the BSDL subsystem.
 
 IMPORTANT: The BSDL subsystem applies the first BSDL file that parses without
-errors and contains the correct IDCODE. Scanning the specified directories
-happens in extactly the given order. Inside a directory however, the order
-depends largely on your filesystem's behavior.
+errors and that contains the correct IDCODE. Scanning the specified
+directories happens in extactly the given order. Inside a directory however,
+the order depends largely on your filesystem's behavior.
 
 Further details of the 'bsdl' command:
 

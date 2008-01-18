@@ -1,3 +1,9 @@
+2008-01-18  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * configure.ac: restructured the test logic for bison error locations and the
+	the BSDL subsystem
+	[ 1873515 ] BSDL part doesn't compile under Cygwin
+
 2008-01-18  Kolja Waschk   <kawk>
 
     * Moved the code from libbrux/ subdirectory into appropriate locations in
