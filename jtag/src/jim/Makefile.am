@@ -26,4 +26,5 @@ include $(top_srcdir)/Makefile.rules
 noinst_LIBRARIES = libjim.a
 
 libjim_a_SOURCES = \
-	tap.c
+	tap.c \
+	some_cpu.c

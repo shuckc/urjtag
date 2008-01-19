@@ -2,7 +2,9 @@
 
     * ChangeLog: whitespace cosmetics
     * Makefile.am, configure.ac, jim/tap.c, jim/Makefile.am, jim/README.jim,
-      tap/cable/jim.c, tap/cable.c, tap/Makefile.am: JTAG target sim skeleton
+      tap/cable/jim.c, tap/cable.c, tap/Makefile.am, jim/some_cpu.c, 
+	  include/jim.h, include/jim/some_cpu.h: JTAG target simulator "JIM"
+	  and a "jim" cable driver to "connect" to it; detection already works.
 
 2008-01-18  Arnim Laeuger  <arniml@users.sourceforge.net>
 

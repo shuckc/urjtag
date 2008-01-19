@@ -35,6 +35,15 @@
 
 #include <cmd.h>
 
+#include <jim.h>
+
+/* private parameters of this cable driver */
+typedef struct
+{
+    jim_state_t *s;
+}
+jim_cable_params_t;
+
 int
 jim_cable_connect( char *params[], cable_t *cable )
 {
@@ -43,7 +52,31 @@ jim_cable_connect( char *params[], cable_t *cable )
 	  return 1;
 	}
 
+	printf( _("JTAG target simulator JIM - work in progress!\n"));
+
 	cable->chain = NULL;
+    cable->params = (jim_cable_params_t *)malloc(sizeof(jim_cable_params_t));
+
+    if(cable->params != NULL)
+    {
+        jim_state_t *s;
+        s = jim_init();
+        if(s == NULL)
+        {
+            free(cable->params);
+            cable->params = NULL;
+        }
+        else
+        {
+            ((jim_cable_params_t *)(cable->params))->s = s;
+        }
+    }
+
+    if(cable->params == NULL)
+    {
+      printf(_("Initialization failed.\n"));
+      return 1;
+    };
 
 	return 0;
 }
@@ -58,6 +91,11 @@ jim_cable_disconnect( cable_t *cable )
 void
 jim_cable_free( cable_t *cable )
 {
+    if(cable->params != NULL)
+    {
+        jim_free( ((jim_cable_params_t*)(cable->params))->s );
+        free( cable->params );
+    };
 	free( cable );
 }
 
@@ -69,31 +107,45 @@ jim_cable_done( cable_t *cable )
 static int
 jim_cable_init( cable_t *cable )
 {
-	printf( _("JTAG target simulator JIM - work in progress!\n"));
     return 0;
 }
 
 static void
 jim_cable_clock( cable_t *cable, int tms, int tdi, int n )
 {
+    int i;
+    jim_cable_params_t *jcp = (jim_cable_params_t*)(cable->params);
+
+    for(i = 0; i < n; i++)
+    {
+        jim_tck_rise( jcp->s, tms, tdi );
+        jim_tck_fall( jcp->s );
+    }
 }
 
 static int
 jim_cable_get_tdo( cable_t *cable )
 {
-    return 0;
+    jim_cable_params_t *jcp = (jim_cable_params_t*)(cable->params);
+
+    return jim_get_tdo( jcp->s );
 }
 
 static int
 jim_cable_get_trst( cable_t *cable )
 {
-    return 0;
+    jim_cable_params_t *jcp = (jim_cable_params_t*)(cable->params);
+
+    return jim_get_trst( jcp->s );
 }
 
 static int
 jim_cable_set_trst( cable_t *cable, int trst )
 {
-    return jim_cable_get_trst( cable );
+    jim_cable_params_t *jcp = (jim_cable_params_t*)(cable->params);
+
+    jim_set_trst( jcp->s, trst );
+    return jim_get_trst( jcp->s );
 }
 
 static void
