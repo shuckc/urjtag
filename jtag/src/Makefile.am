@@ -89,5 +89,11 @@ if ENABLE_BSDL
 jtag_LDADD += -Lbsdl -lbsdl
 endif
 
+if ENABLE_JIM
+SUBDIRS += jim
+jtag_LDADD += -Ljim -ljim
+jtag_DEPENDENCIES += jim/libjim.a
+endif
+
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"

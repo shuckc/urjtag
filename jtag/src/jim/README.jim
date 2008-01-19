@@ -1,0 +1,6 @@
+This directory contains source code that simulates various aspects of
+a target. It is mainly thought to assist in testing and debugging the
+rest of UrJTAG. The connection between UrJTAG and the code here is by
+means of special bus, cable or parport drivers. 
+
+

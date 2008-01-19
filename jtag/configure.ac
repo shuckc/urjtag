@@ -70,6 +70,7 @@ AC_CONFIG_FILES(
 	src/cmd/Makefile
 	src/svf/Makefile
 	src/bsdl/Makefile
+	src/jim/Makefile
 	po/Makefile.in
 )
 
@@ -355,6 +356,22 @@ AS_IF([test "x$bsdl" = xtrue], [
   AC_DEFINE(ENABLE_BSDL, 1, [define if BSDL subsystem is enabled])
 ],[
   AM_CONDITIONAL(ENABLE_BSDL, false)
+])
+
+dnl Enable JTAG target simulator JIM?
+AC_ARG_ENABLE(jim,
+[  --enable-jim            Enable JTAG target simulator JIM],
+[case "${enableval}" in
+   yes) jim=true ;;
+   no)  jim=false ;;
+   *)   AC_MSG_ERROR(bad value ${enableval} for --enable-jim) ;;
+ esac],
+[jim=false])
+AS_IF([test "x$jim" = xtrue], [
+  AM_CONDITIONAL(ENABLE_JIM, true)
+  AC_DEFINE(ENABLE_JIM, 1, [define if JTAG target simulator JIM is enabled])
+],[
+  AM_CONDITIONAL(ENABLE_JIM, false)
 ])
 
 AC_OUTPUT

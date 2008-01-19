@@ -50,6 +50,9 @@ extern cable_driver_t keithkoep_cable_driver;
 extern cable_driver_t lattice_cable_driver;
 extern cable_driver_t mpcbdm_cable_driver;
 extern cable_driver_t triton_cable_driver;
+#ifdef ENABLE_JIM
+extern cable_driver_t jim_cable_driver;
+#endif
 extern cable_driver_t wiggler_cable_driver;
 extern cable_driver_t wiggler2_cable_driver;
 extern cable_driver_t wiggler_cable_driver;
@@ -77,6 +80,9 @@ cable_driver_t *cable_drivers[] = {
 	&lattice_cable_driver,
 	&mpcbdm_cable_driver,
 	&triton_cable_driver,
+#ifdef ENABLE_JIM
+	&jim_cable_driver,
+#endif
 	&wiggler_cable_driver,
 	&wiggler2_cable_driver,	
 #ifdef HAVE_LIBUSB

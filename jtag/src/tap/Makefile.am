@@ -56,6 +56,11 @@ libtap_a_SOURCES += \
 	cable/xpc.c
 endif
 
+if ENABLE_JIM
+libtap_a_SOURCES += \
+	cable/jim.c
+endif
+
 if HAVE_LIBFTDI
 libtap_a_SOURCES += \
 	parport/ftdi.c
