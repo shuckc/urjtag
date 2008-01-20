@@ -619,6 +619,8 @@ void bsdl_ci_apply_cell_info(parser_priv_t *priv, int bit_num)
       case OUTPUT3:
         cmd[2] = "O";
         break;
+      case OBSERVE_ONLY:
+        /* fall through */
       case INPUT:
         /* fall through */
       case CLOCK:

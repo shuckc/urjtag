@@ -822,6 +822,8 @@ Cell_Function    : INPUT
                    { $$ = CLOCK; }
                  | BIDIR
                    { $$ = BIDIR; }
+                 | OBSERVE_ONLY
+                   { $$ = OBSERVE_ONLY; }
                  ;
 Safe_Value       : IDENTIFIER
                    { $$ = $1; }

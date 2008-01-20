@@ -241,6 +241,7 @@ Control        CONTROL
 Controlr       CONTROLR
 Internal       INTERNAL
 Clock          CLOCK
+Observe_Only   OBSERVE_ONLY
 Bidir          BIDIR
 Bidir_In       BIDIR_IN
 Bidir_Out      BIDIR_OUT
@@ -267,7 +268,6 @@ Runbist_Execution     RUNBIST_EXECUTION
 Intest_Execution      INTEST_EXECUTION
 Bsdl_Extension        BSDL_EXTENSION
 Compliance_Patterns   COMPLIANCE_PATTERNS
-Observe_Only          OBSERVE_ONLY
 %%
 {Entity}                {return(ENTITY); }
 {Port}                  {yyextra->Base = DECIMAL;  /* Default number base */
@@ -350,6 +350,7 @@ Observe_Only          OBSERVE_ONLY
 <BOU,PAC>{Control}      {return(CONTROL); }
 <BOU,PAC>{Internal}     {return(INTERNAL); }
 <BOU,PAC>{Clock}        {return(CLOCK); }
+<BOU,PAC>{Observe_Only} {return(OBSERVE_ONLY); }
 <BOU>{Bidir}            {return(BIDIR); }
 <PAC>{Bidir_In}         {return(BIDIR_IN); }
 <PAC>{Bidir_Out}        {return(BIDIR_OUT); }
@@ -357,7 +358,6 @@ Observe_Only          OBSERVE_ONLY
 <PAC>{Sample}           {return(SAMPLE); }
 <PAC>{Intest}           {return(INTEST); }
 <PAC>{Runbist}          {return(RUNBIST); }
-<PAC>{Observe_Only}     {return(OBSERVE_ONLY); }
 <PAC>{Pi}               {return(PI); }
 <PAC>{Po}               {return(PO); }
 <PAC>{Upd}              {return(UPD); }

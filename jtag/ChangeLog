@@ -3,6 +3,10 @@
     * src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c, src/bsdl/bsdl.h:
       handle vectored ports correctly, part 1 of fix for
       [ 1875737 ] Syntax errors/Port index warning parsing ATMEL BSDL files
+    * src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c, src/bsdl/bsdl_flex.l:
+      support OBSERVE_ONLY attribute in cell description (like input attribute)
+      part 2 of fix for
+      [ 1875737 ] Syntax errors/Port index warning parsing ATMEL BSDL files
 
 2008-01-20  Kolja Waschk <kawk>
  
