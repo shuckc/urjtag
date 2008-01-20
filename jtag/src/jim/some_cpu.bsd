@@ -24,42 +24,37 @@
 -- THE SOFTWARE.
 --
 -- #/usr/bin/perl
---
--- $bsi = 0;
 -- 
--- sub io_pin($$)
+-- sub io_pin($$$$$)
 -- {
---   my ($name,$dir) = @_;
---   if($dir eq 'inout' || $dir eq 'in')
---   { 
---     printf '"%d (BC_1, %s, input, X), " &%s', $bsi++, $name, "\n";
---   }
---   else
---   {
---     printf '"%d (BC_1, *, internal, X), " &%s', $bsi++, "\n"; 
+--   my ($inbitno, $outbitno, $ctrlbitno, $name,$dir) = @_;
+-- 
+--   if($dir eq 'inout' || $dir eq 'in') { 
+--     printf '"%d (BC_1, %s, input, X), " &%s', $inbitno, $name, "\n";
+--   } else {
+--     printf '"%d (BC_1, *, internal, X), " &%s', $inbitno, "\n"; 
 --   };
---   if($dir ne 'in') 
---   {
---     printf '"%d (BC_1, %s, output3, X, %d, 0, Z), " &%s', $bsi, $name, $bsi+1, "\n";
---     $bsi++;
---     printf '"%d (BC_1, *, control, 0), " &%s', $bsi++, "\n";
+--   if($dir ne 'in') {
+--     printf '"%d (BC_1, %s, output3, X, %d, 0, Z), " &%s', $outbitno, $name, $ctrlbitno, "\n";
+--     printf '"%d (BC_1, *, control, 0), " &%s', $ctrlbitno, "\n";
 --   }
 -- }
 -- 
--- for(my $i=0;$i<32; $i++)
--- {
---   io_pin(sprintf('A(%d)',$i),'out');
--- }
+-- #######################################
 -- 
--- for(my $i=0;$i<32; $i++)
--- {
---   io_pin(sprintf('D(%d)',$i),'inout');
--- }
+-- $bsi = 68;
 -- 
--- io_pin('OE','out');
--- io_pin('WE','out');
--- io_pin('CS','out');
--- io_pin('RESET','in');
+-- for(my $i=0;$i<32; $i++) {
+--   io_pin($i+$bsi,$i,$i+$bsi+32,sprintf('A(%d)',$i),'out');
+-- }
+-- for(my $i=0;$i<32; $i++) {
+--   io_pin($i+$bsi+64, $i+32, $i+$bsi+96, sprintf('D(%d)',$i), 'inout');
+-- };
+-- 
+-- io_pin(196, 64, 197, 'OE','out');
+-- io_pin(198, 65, 199, 'WE','out');
+-- io_pin(200, 66, 201, 'CS','out');
+-- io_pin(67,  0,  0, 'RESET','in');
 --
 
 entity some_cpu is
@@ -121,208 +116,210 @@ attribute BOUNDARY_LENGTH of some_cpu : entity is 202 ;
                                   
 attribute BOUNDARY_REGISTER of some_cpu : entity is                         
 
-"0 (BC_1, *, internal, X), " &
-"1 (BC_1, A(0), output3, X, 2, 0, Z), " &
-"2 (BC_1, *, control, 0), " &
-"3 (BC_1, *, internal, X), " &
-"4 (BC_1, A(1), output3, X, 5, 0, Z), " &
-"5 (BC_1, *, control, 0), " &
-"6 (BC_1, *, internal, X), " &
-"7 (BC_1, A(2), output3, X, 8, 0, Z), " &
-"8 (BC_1, *, control, 0), " &
-"9 (BC_1, *, internal, X), " &
-"10 (BC_1, A(3), output3, X, 11, 0, Z), " &
-"11 (BC_1, *, control, 0), " &
-"12 (BC_1, *, internal, X), " &
-"13 (BC_1, A(4), output3, X, 14, 0, Z), " &
-"14 (BC_1, *, control, 0), " &
-"15 (BC_1, *, internal, X), " &
-"16 (BC_1, A(5), output3, X, 17, 0, Z), " &
-"17 (BC_1, *, control, 0), " &
-"18 (BC_1, *, internal, X), " &
-"19 (BC_1, A(6), output3, X, 20, 0, Z), " &
-"20 (BC_1, *, control, 0), " &
-"21 (BC_1, *, internal, X), " &
-"22 (BC_1, A(7), output3, X, 23, 0, Z), " &
-"23 (BC_1, *, control, 0), " &
-"24 (BC_1, *, internal, X), " &
-"25 (BC_1, A(8), output3, X, 26, 0, Z), " &
-"26 (BC_1, *, control, 0), " &
-"27 (BC_1, *, internal, X), " &
-"28 (BC_1, A(9), output3, X, 29, 0, Z), " &
-"29 (BC_1, *, control, 0), " &
-"30 (BC_1, *, internal, X), " &
-"31 (BC_1, A(10), output3, X, 32, 0, Z), " &
-"32 (BC_1, *, control, 0), " &
-"33 (BC_1, *, internal, X), " &
-"34 (BC_1, A(11), output3, X, 35, 0, Z), " &
-"35 (BC_1, *, control, 0), " &
-"36 (BC_1, *, internal, X), " &
-"37 (BC_1, A(12), output3, X, 38, 0, Z), " &
-"38 (BC_1, *, control, 0), " &
-"39 (BC_1, *, internal, X), " &
-"40 (BC_1, A(13), output3, X, 41, 0, Z), " &
-"41 (BC_1, *, control, 0), " &
-"42 (BC_1, *, internal, X), " &
-"43 (BC_1, A(14), output3, X, 44, 0, Z), " &
-"44 (BC_1, *, control, 0), " &
-"45 (BC_1, *, internal, X), " &
-"46 (BC_1, A(15), output3, X, 47, 0, Z), " &
-"47 (BC_1, *, control, 0), " &
-"48 (BC_1, *, internal, X), " &
-"49 (BC_1, A(16), output3, X, 50, 0, Z), " &
-"50 (BC_1, *, control, 0), " &
-"51 (BC_1, *, internal, X), " &
-"52 (BC_1, A(17), output3, X, 53, 0, Z), " &
-"53 (BC_1, *, control, 0), " &
-"54 (BC_1, *, internal, X), " &
-"55 (BC_1, A(18), output3, X, 56, 0, Z), " &
-"56 (BC_1, *, control, 0), " &
-"57 (BC_1, *, internal, X), " &
-"58 (BC_1, A(19), output3, X, 59, 0, Z), " &
-"59 (BC_1, *, control, 0), " &
-"60 (BC_1, *, internal, X), " &
-"61 (BC_1, A(20), output3, X, 62, 0, Z), " &
-"62 (BC_1, *, control, 0), " &
-"63 (BC_1, *, internal, X), " &
-"64 (BC_1, A(21), output3, X, 65, 0, Z), " &
-"65 (BC_1, *, control, 0), " &
-"66 (BC_1, *, internal, X), " &
-"67 (BC_1, A(22), output3, X, 68, 0, Z), " &
-"68 (BC_1, *, control, 0), " &
+"68 (BC_1, *, internal, X), " &
+"0 (BC_1, A(0), output3, X, 100, 0, Z), " &
+"100 (BC_1, *, control, 0), " &
 "69 (BC_1, *, internal, X), " &
-"70 (BC_1, A(23), output3, X, 71, 0, Z), " &
-"71 (BC_1, *, control, 0), " &
-"72 (BC_1, *, internal, X), " &
-"73 (BC_1, A(24), output3, X, 74, 0, Z), " &
-"74 (BC_1, *, control, 0), " &
-"75 (BC_1, *, internal, X), " &
-"76 (BC_1, A(25), output3, X, 77, 0, Z), " &
-"77 (BC_1, *, control, 0), " &
-"78 (BC_1, *, internal, X), " &
-"79 (BC_1, A(26), output3, X, 80, 0, Z), " &
-"80 (BC_1, *, control, 0), " &
-"81 (BC_1, *, internal, X), " &
-"82 (BC_1, A(27), output3, X, 83, 0, Z), " &
-"83 (BC_1, *, control, 0), " &
-"84 (BC_1, *, internal, X), " &
-"85 (BC_1, A(28), output3, X, 86, 0, Z), " &
-"86 (BC_1, *, control, 0), " &
-"87 (BC_1, *, internal, X), " &
-"88 (BC_1, A(29), output3, X, 89, 0, Z), " &
-"89 (BC_1, *, control, 0), " &
-"90 (BC_1, *, internal, X), " &
-"91 (BC_1, A(30), output3, X, 92, 0, Z), " &
-"92 (BC_1, *, control, 0), " &
-"93 (BC_1, *, internal, X), " &
-"94 (BC_1, A(31), output3, X, 95, 0, Z), " &
-"95 (BC_1, *, control, 0), " &
-"96 (BC_1, D(0), input, X), " &
-"97 (BC_1, D(0), output3, X, 98, 0, Z), " &
-"98 (BC_1, *, control, 0), " &
-"99 (BC_1, D(1), input, X), " &
-"100 (BC_1, D(1), output3, X, 101, 0, Z), " &
+"1 (BC_1, A(1), output3, X, 101, 0, Z), " &
 "101 (BC_1, *, control, 0), " &
-"102 (BC_1, D(2), input, X), " &
-"103 (BC_1, D(2), output3, X, 104, 0, Z), " &
+"70 (BC_1, *, internal, X), " &
+"2 (BC_1, A(2), output3, X, 102, 0, Z), " &
+"102 (BC_1, *, control, 0), " &
+"71 (BC_1, *, internal, X), " &
+"3 (BC_1, A(3), output3, X, 103, 0, Z), " &
+"103 (BC_1, *, control, 0), " &
+"72 (BC_1, *, internal, X), " &
+"4 (BC_1, A(4), output3, X, 104, 0, Z), " &
 "104 (BC_1, *, control, 0), " &
-"105 (BC_1, D(3), input, X), " &
-"106 (BC_1, D(3), output3, X, 107, 0, Z), " &
+"73 (BC_1, *, internal, X), " &
+"5 (BC_1, A(5), output3, X, 105, 0, Z), " &
+"105 (BC_1, *, control, 0), " &
+"74 (BC_1, *, internal, X), " &
+"6 (BC_1, A(6), output3, X, 106, 0, Z), " &
+"106 (BC_1, *, control, 0), " &
+"75 (BC_1, *, internal, X), " &
+"7 (BC_1, A(7), output3, X, 107, 0, Z), " &
 "107 (BC_1, *, control, 0), " &
-"108 (BC_1, D(4), input, X), " &
-"109 (BC_1, D(4), output3, X, 110, 0, Z), " &
+"76 (BC_1, *, internal, X), " &
+"8 (BC_1, A(8), output3, X, 108, 0, Z), " &
+"108 (BC_1, *, control, 0), " &
+"77 (BC_1, *, internal, X), " &
+"9 (BC_1, A(9), output3, X, 109, 0, Z), " &
+"109 (BC_1, *, control, 0), " &
+"78 (BC_1, *, internal, X), " &
+"10 (BC_1, A(10), output3, X, 110, 0, Z), " &
 "110 (BC_1, *, control, 0), " &
-"111 (BC_1, D(5), input, X), " &
-"112 (BC_1, D(5), output3, X, 113, 0, Z), " &
+"79 (BC_1, *, internal, X), " &
+"11 (BC_1, A(11), output3, X, 111, 0, Z), " &
+"111 (BC_1, *, control, 0), " &
+"80 (BC_1, *, internal, X), " &
+"12 (BC_1, A(12), output3, X, 112, 0, Z), " &
+"112 (BC_1, *, control, 0), " &
+"81 (BC_1, *, internal, X), " &
+"13 (BC_1, A(13), output3, X, 113, 0, Z), " &
 "113 (BC_1, *, control, 0), " &
-"114 (BC_1, D(6), input, X), " &
-"115 (BC_1, D(6), output3, X, 116, 0, Z), " &
+"82 (BC_1, *, internal, X), " &
+"14 (BC_1, A(14), output3, X, 114, 0, Z), " &
+"114 (BC_1, *, control, 0), " &
+"83 (BC_1, *, internal, X), " &
+"15 (BC_1, A(15), output3, X, 115, 0, Z), " &
+"115 (BC_1, *, control, 0), " &
+"84 (BC_1, *, internal, X), " &
+"16 (BC_1, A(16), output3, X, 116, 0, Z), " &
 "116 (BC_1, *, control, 0), " &
-"117 (BC_1, D(7), input, X), " &
-"118 (BC_1, D(7), output3, X, 119, 0, Z), " &
+"85 (BC_1, *, internal, X), " &
+"17 (BC_1, A(17), output3, X, 117, 0, Z), " &
+"117 (BC_1, *, control, 0), " &
+"86 (BC_1, *, internal, X), " &
+"18 (BC_1, A(18), output3, X, 118, 0, Z), " &
+"118 (BC_1, *, control, 0), " &
+"87 (BC_1, *, internal, X), " &
+"19 (BC_1, A(19), output3, X, 119, 0, Z), " &
 "119 (BC_1, *, control, 0), " &
-"120 (BC_1, D(8), input, X), " &
-"121 (BC_1, D(8), output3, X, 122, 0, Z), " &
+"88 (BC_1, *, internal, X), " &
+"20 (BC_1, A(20), output3, X, 120, 0, Z), " &
+"120 (BC_1, *, control, 0), " &
+"89 (BC_1, *, internal, X), " &
+"21 (BC_1, A(21), output3, X, 121, 0, Z), " &
+"121 (BC_1, *, control, 0), " &
+"90 (BC_1, *, internal, X), " &
+"22 (BC_1, A(22), output3, X, 122, 0, Z), " &
 "122 (BC_1, *, control, 0), " &
-"123 (BC_1, D(9), input, X), " &
-"124 (BC_1, D(9), output3, X, 125, 0, Z), " &
+"91 (BC_1, *, internal, X), " &
+"23 (BC_1, A(23), output3, X, 123, 0, Z), " &
+"123 (BC_1, *, control, 0), " &
+"92 (BC_1, *, internal, X), " &
+"24 (BC_1, A(24), output3, X, 124, 0, Z), " &
+"124 (BC_1, *, control, 0), " &
+"93 (BC_1, *, internal, X), " &
+"25 (BC_1, A(25), output3, X, 125, 0, Z), " &
 "125 (BC_1, *, control, 0), " &
-"126 (BC_1, D(10), input, X), " &
-"127 (BC_1, D(10), output3, X, 128, 0, Z), " &
+"94 (BC_1, *, internal, X), " &
+"26 (BC_1, A(26), output3, X, 126, 0, Z), " &
+"126 (BC_1, *, control, 0), " &
+"95 (BC_1, *, internal, X), " &
+"27 (BC_1, A(27), output3, X, 127, 0, Z), " &
+"127 (BC_1, *, control, 0), " &
+"96 (BC_1, *, internal, X), " &
+"28 (BC_1, A(28), output3, X, 128, 0, Z), " &
 "128 (BC_1, *, control, 0), " &
-"129 (BC_1, D(11), input, X), " &
-"130 (BC_1, D(11), output3, X, 131, 0, Z), " &
+"97 (BC_1, *, internal, X), " &
+"29 (BC_1, A(29), output3, X, 129, 0, Z), " &
+"129 (BC_1, *, control, 0), " &
+"98 (BC_1, *, internal, X), " &
+"30 (BC_1, A(30), output3, X, 130, 0, Z), " &
+"130 (BC_1, *, control, 0), " &
+"99 (BC_1, *, internal, X), " &
+"31 (BC_1, A(31), output3, X, 131, 0, Z), " &
 "131 (BC_1, *, control, 0), " &
-"132 (BC_1, D(12), input, X), " &
-"133 (BC_1, D(12), output3, X, 134, 0, Z), " &
-"134 (BC_1, *, control, 0), " &
-"135 (BC_1, D(13), input, X), " &
-"136 (BC_1, D(13), output3, X, 137, 0, Z), " &
-"137 (BC_1, *, control, 0), " &
-"138 (BC_1, D(14), input, X), " &
-"139 (BC_1, D(14), output3, X, 140, 0, Z), " &
-"140 (BC_1, *, control, 0), " &
-"141 (BC_1, D(15), input, X), " &
-"142 (BC_1, D(15), output3, X, 143, 0, Z), " &
-"143 (BC_1, *, control, 0), " &
-"144 (BC_1, D(16), input, X), " &
-"145 (BC_1, D(16), output3, X, 146, 0, Z), " &
-"146 (BC_1, *, control, 0), " &
-"147 (BC_1, D(17), input, X), " &
-"148 (BC_1, D(17), output3, X, 149, 0, Z), " &
-"149 (BC_1, *, control, 0), " &
-"150 (BC_1, D(18), input, X), " &
-"151 (BC_1, D(18), output3, X, 152, 0, Z), " &
-"152 (BC_1, *, control, 0), " &
-"153 (BC_1, D(19), input, X), " &
-"154 (BC_1, D(19), output3, X, 155, 0, Z), " &
-"155 (BC_1, *, control, 0), " &
-"156 (BC_1, D(20), input, X), " &
-"157 (BC_1, D(20), output3, X, 158, 0, Z), " &
-"158 (BC_1, *, control, 0), " &
-"159 (BC_1, D(21), input, X), " &
-"160 (BC_1, D(21), output3, X, 161, 0, Z), " &
-"161 (BC_1, *, control, 0), " &
-"162 (BC_1, D(22), input, X), " &
-"163 (BC_1, D(22), output3, X, 164, 0, Z), " &
+"132 (BC_1, D(0), input, X), " &
+"32 (BC_1, D(0), output3, X, 164, 0, Z), " &
 "164 (BC_1, *, control, 0), " &
-"165 (BC_1, D(23), input, X), " &
-"166 (BC_1, D(23), output3, X, 167, 0, Z), " &
+"133 (BC_1, D(1), input, X), " &
+"33 (BC_1, D(1), output3, X, 165, 0, Z), " &
+"165 (BC_1, *, control, 0), " &
+"134 (BC_1, D(2), input, X), " &
+"34 (BC_1, D(2), output3, X, 166, 0, Z), " &
+"166 (BC_1, *, control, 0), " &
+"135 (BC_1, D(3), input, X), " &
+"35 (BC_1, D(3), output3, X, 167, 0, Z), " &
 "167 (BC_1, *, control, 0), " &
-"168 (BC_1, D(24), input, X), " &
-"169 (BC_1, D(24), output3, X, 170, 0, Z), " &
+"136 (BC_1, D(4), input, X), " &
+"36 (BC_1, D(4), output3, X, 168, 0, Z), " &
+"168 (BC_1, *, control, 0), " &
+"137 (BC_1, D(5), input, X), " &
+"37 (BC_1, D(5), output3, X, 169, 0, Z), " &
+"169 (BC_1, *, control, 0), " &
+"138 (BC_1, D(6), input, X), " &
+"38 (BC_1, D(6), output3, X, 170, 0, Z), " &
 "170 (BC_1, *, control, 0), " &
-"171 (BC_1, D(25), input, X), " &
-"172 (BC_1, D(25), output3, X, 173, 0, Z), " &
+"139 (BC_1, D(7), input, X), " &
+"39 (BC_1, D(7), output3, X, 171, 0, Z), " &
+"171 (BC_1, *, control, 0), " &
+"140 (BC_1, D(8), input, X), " &
+"40 (BC_1, D(8), output3, X, 172, 0, Z), " &
+"172 (BC_1, *, control, 0), " &
+"141 (BC_1, D(9), input, X), " &
+"41 (BC_1, D(9), output3, X, 173, 0, Z), " &
 "173 (BC_1, *, control, 0), " &
-"174 (BC_1, D(26), input, X), " &
-"175 (BC_1, D(26), output3, X, 176, 0, Z), " &
+"142 (BC_1, D(10), input, X), " &
+"42 (BC_1, D(10), output3, X, 174, 0, Z), " &
+"174 (BC_1, *, control, 0), " &
+"143 (BC_1, D(11), input, X), " &
+"43 (BC_1, D(11), output3, X, 175, 0, Z), " &
+"175 (BC_1, *, control, 0), " &
+"144 (BC_1, D(12), input, X), " &
+"44 (BC_1, D(12), output3, X, 176, 0, Z), " &
 "176 (BC_1, *, control, 0), " &
-"177 (BC_1, D(27), input, X), " &
-"178 (BC_1, D(27), output3, X, 179, 0, Z), " &
+"145 (BC_1, D(13), input, X), " &
+"45 (BC_1, D(13), output3, X, 177, 0, Z), " &
+"177 (BC_1, *, control, 0), " &
+"146 (BC_1, D(14), input, X), " &
+"46 (BC_1, D(14), output3, X, 178, 0, Z), " &
+"178 (BC_1, *, control, 0), " &
+"147 (BC_1, D(15), input, X), " &
+"47 (BC_1, D(15), output3, X, 179, 0, Z), " &
 "179 (BC_1, *, control, 0), " &
-"180 (BC_1, D(28), input, X), " &
-"181 (BC_1, D(28), output3, X, 182, 0, Z), " &
+"148 (BC_1, D(16), input, X), " &
+"48 (BC_1, D(16), output3, X, 180, 0, Z), " &
+"180 (BC_1, *, control, 0), " &
+"149 (BC_1, D(17), input, X), " &
+"49 (BC_1, D(17), output3, X, 181, 0, Z), " &
+"181 (BC_1, *, control, 0), " &
+"150 (BC_1, D(18), input, X), " &
+"50 (BC_1, D(18), output3, X, 182, 0, Z), " &
 "182 (BC_1, *, control, 0), " &
-"183 (BC_1, D(29), input, X), " &
-"184 (BC_1, D(29), output3, X, 185, 0, Z), " &
+"151 (BC_1, D(19), input, X), " &
+"51 (BC_1, D(19), output3, X, 183, 0, Z), " &
+"183 (BC_1, *, control, 0), " &
+"152 (BC_1, D(20), input, X), " &
+"52 (BC_1, D(20), output3, X, 184, 0, Z), " &
+"184 (BC_1, *, control, 0), " &
+"153 (BC_1, D(21), input, X), " &
+"53 (BC_1, D(21), output3, X, 185, 0, Z), " &
 "185 (BC_1, *, control, 0), " &
-"186 (BC_1, D(30), input, X), " &
-"187 (BC_1, D(30), output3, X, 188, 0, Z), " &
+"154 (BC_1, D(22), input, X), " &
+"54 (BC_1, D(22), output3, X, 186, 0, Z), " &
+"186 (BC_1, *, control, 0), " &
+"155 (BC_1, D(23), input, X), " &
+"55 (BC_1, D(23), output3, X, 187, 0, Z), " &
+"187 (BC_1, *, control, 0), " &
+"156 (BC_1, D(24), input, X), " &
+"56 (BC_1, D(24), output3, X, 188, 0, Z), " &
 "188 (BC_1, *, control, 0), " &
-"189 (BC_1, D(31), input, X), " &
-"190 (BC_1, D(31), output3, X, 191, 0, Z), " &
+"157 (BC_1, D(25), input, X), " &
+"57 (BC_1, D(25), output3, X, 189, 0, Z), " &
+"189 (BC_1, *, control, 0), " &
+"158 (BC_1, D(26), input, X), " &
+"58 (BC_1, D(26), output3, X, 190, 0, Z), " &
+"190 (BC_1, *, control, 0), " &
+"159 (BC_1, D(27), input, X), " &
+"59 (BC_1, D(27), output3, X, 191, 0, Z), " &
 "191 (BC_1, *, control, 0), " &
-"192 (BC_1, *, internal, X), " &
-"193 (BC_1, OE, output3, X, 194, 0, Z), " &
+"160 (BC_1, D(28), input, X), " &
+"60 (BC_1, D(28), output3, X, 192, 0, Z), " &
+"192 (BC_1, *, control, 0), " &
+"161 (BC_1, D(29), input, X), " &
+"61 (BC_1, D(29), output3, X, 193, 0, Z), " &
+"193 (BC_1, *, control, 0), " &
+"162 (BC_1, D(30), input, X), " &
+"62 (BC_1, D(30), output3, X, 194, 0, Z), " &
 "194 (BC_1, *, control, 0), " &
-"195 (BC_1, *, internal, X), " &
-"196 (BC_1, WE, output3, X, 197, 0, Z), " &
+"163 (BC_1, D(31), input, X), " &
+"63 (BC_1, D(31), output3, X, 195, 0, Z), " &
+"195 (BC_1, *, control, 0), " &
+"196 (BC_1, *, internal, X), " &
+"64 (BC_1, OE, output3, X, 197, 0, Z), " &
 "197 (BC_1, *, control, 0), " &
 "198 (BC_1, *, internal, X), " &
-"199 (BC_1, CS, output3, X, 200, 0, Z), " &
-"200 (BC_1, *, control, 0), " &
-"201 (BC_1, RESET, input, X) " ;
+"65 (BC_1, WE, output3, X, 199, 0, Z), " &
+"199 (BC_1, *, control, 0), " &
+"200 (BC_1, *, internal, X), " &
+"66 (BC_1, CS, output3, X, 201, 0, Z), " &
+"201 (BC_1, *, control, 0), " &
+"67 (BC_1, RESET, input, X) " ;
 
 end some_cpu ;
+
+
 

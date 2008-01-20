@@ -25,6 +25,8 @@
 #include <stdio.h>
 #include <jim.h>
 
+#define BSR_LEN 202
+
 void some_cpu_report_idcode(jim_device_t *dev)
 {
   dev->sreg[0].reg[0] = 0x1; /* IDCODE instruction b0001 */
@@ -34,6 +36,8 @@ void some_cpu_report_idcode(jim_device_t *dev)
 
 void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
 {
+  int i;
+
   // jim_print_tap_state(dev);
 
   switch(dev->tap_state)
@@ -42,16 +46,35 @@ void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
       some_cpu_report_idcode(dev);
       break;
 
+    case UPDATE_DR:
+      if(dev->current_dr == 2)
+      {
+        printf("UPDATE_DR(BSR): A=%08X, D=%08X%s%s%s\n",
+          dev->sreg[2].reg[0],
+          dev->sreg[2].reg[1],
+          (dev->sreg[2].reg[2] & 1) ? ", OE":"",
+          (dev->sreg[2].reg[2] & 2) ? ", WE":"",
+          (dev->sreg[2].reg[2] & 4) ? ", CS":"");
+      };
+      break;
+ 
     case UPDATE_IR:
       switch(dev->sreg[0].reg[0])
       {
+        case 0x0: /* EXTEST */
+          printf("EXTEST\n");
+          dev->current_dr = 2;
+          break;
         case 0x1: /* IDCODE */
+          printf("IDCODE\n");
           some_cpu_report_idcode(dev);
           break;
         case 0x2: /* SAMPLE */
+          printf("SAMPLE\n");
           dev->current_dr = 2;
           break;
         case 0x3: /* BYPASS */
+          printf("BYPASS\n");
         default:
           dev->current_dr = 0; /* BYPASS */
           break;
@@ -66,7 +89,7 @@ void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
 jim_device_t *some_cpu(void)
 {
   jim_device_t *dev;
-  const int reg_size[3] = { 2 /* IR */, 32 /* IDR */, 64 /* BSR */ };
+  const int reg_size[3] = { 2 /* IR */, 32 /* IDR */, BSR_LEN /* BSR */ };
 
   dev = jim_alloc_device(3, reg_size);
 

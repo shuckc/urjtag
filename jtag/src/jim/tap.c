@@ -152,7 +152,7 @@ void jim_tck_rise(jim_state_t *s, int tms, int tdi)
         for(i=0; i < (sr->len-1)/32; i++)
         {
           reg[i] >>= 1;
-          if(reg[i+1] & 1) reg[i] |= 0x8000;
+          if(reg[i+1] & 1) reg[i] |= 0x80000000;
         };
     
         /* End with MSW at index i */
