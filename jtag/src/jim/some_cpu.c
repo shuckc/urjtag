@@ -25,6 +25,13 @@
 #include <stdio.h>
 #include <jim.h>
 
+void some_cpu_report_idcode(jim_device_t *dev)
+{
+  dev->sreg[0].reg[0] = 0x1; /* IDCODE instruction b0001 */
+  dev->sreg[1].reg[0] = 0x87654321; /* Load IDR (fake) */
+  dev->current_dr = 1; /* IDR */
+}
+
 void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
 {
   // jim_print_tap_state(dev);
@@ -32,19 +39,19 @@ void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
   switch(dev->tap_state)
   {
     case RESET:
-      dev->sreg[0].reg[0] = 0x1; /* IDCODE instruction 0001 */
-      dev->sreg[1].reg[0] = 0x87654321; /* Load IDR (fake) */
-      dev->current_dr = 1; /* IDR */
+      some_cpu_report_idcode(dev);
       break;
 
     case UPDATE_IR:
       switch(dev->sreg[0].reg[0])
       {
         case 0x1: /* IDCODE */
-          dev->sreg[1].reg[0] = 0x87654321; /* Load IDR (fake) */
-          dev->current_dr = 1; /* IDR */
+          some_cpu_report_idcode(dev);
           break;
-        case 0xF: /* BYPASS */
+        case 0x2: /* SAMPLE */
+          dev->current_dr = 2;
+          break;
+        case 0x3: /* BYPASS */
         default:
           dev->current_dr = 0; /* BYPASS */
           break;
@@ -59,9 +66,9 @@ void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
 jim_device_t *some_cpu(void)
 {
   jim_device_t *dev;
-  const int reg_size[2] = { 4 /* IR */, 32 /* IDR */ };
+  const int reg_size[3] = { 2 /* IR */, 32 /* IDR */, 64 /* BSR */ };
 
-  dev = jim_alloc_device(2, reg_size);
+  dev = jim_alloc_device(3, reg_size);
 
   if(dev)
   {

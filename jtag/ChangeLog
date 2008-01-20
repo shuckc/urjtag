@@ -1,3 +1,7 @@
+2008-01-20  Kolja Waschk <kawk>
+ 
+    * src/jim/some_cpu.c, src/jim/some_cpu.bsd: Added BSDL file for some_cpu
+
 2008-01-19  Kolja Waschk <kawk>
 
     * ChangeLog: whitespace cosmetics
