@@ -1,3 +1,9 @@
+2008-01-20  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c, src/bsdl/bsdl.h:
+      handle vectored ports correctly, part 1 of fix for
+      [ 1875737 ] Syntax errors/Port index warning parsing ATMEL BSDL files
+
 2008-01-20  Kolja Waschk <kawk>
  
     * src/jim/some_cpu.c, src/jim/some_cpu.bsd: Added BSDL file for some_cpu

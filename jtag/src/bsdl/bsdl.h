@@ -89,12 +89,20 @@ struct cell_info {
     int   disable_safe_value;
 };
 
+struct port_desc {
+    char *name;
+    int   is_vector;
+    int   low_idx;
+    int   high_idx;
+};
+
 /* structure jtag_ctrl collects all elements that are required to interface
    with jtag internals */
 struct jtag_ctrl {
     int     mode;
     char   *idcode;       /* IDCODE string */
     part_t *part;
+    struct  port_desc port_desc;
     struct  cell_info cell_info;
     struct  instr_elem *instr_list;
     struct  access_data access_data;
@@ -136,13 +144,16 @@ void bsdl_sem_init(parser_priv_t *);
 void bsdl_sem_deinit(parser_priv_t *);
 void bsdl_set_entity(parser_priv_t *, char *);
 void bsdl_set_instruction_length(parser_priv_t *, int);
-void bsdl_add_pin(parser_priv_t *, char *);
+void bsdl_prt_add_name(parser_priv_t *, char *);
+void bsdl_prt_add_bit(parser_priv_t *);
+void bsdl_prt_add_range(parser_priv_t *, int, int);
+void bsdl_prt_apply_port(parser_priv_t *);
 void bsdl_set_idcode(parser_priv_t *, char *);
 void bsdl_set_usercode(parser_priv_t *, char *);
 void bsdl_add_instruction(parser_priv_t *, char *, char *);
 void bsdl_set_bsr_length(parser_priv_t *, int);
 void bsdl_ci_no_disable(parser_priv_t *);
-void bsdl_ci_set_cell_spec(parser_priv_t *, char *, int, char *);
+void bsdl_ci_set_cell_spec(parser_priv_t *, int, char *);
 void bsdl_ci_set_cell_spec_disable(parser_priv_t *, int, int, int);
 void bsdl_ci_apply_cell_info(parser_priv_t *, int);
 void bsdl_ac_set_register(parser_priv_t *, char *, int);

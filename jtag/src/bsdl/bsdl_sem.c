@@ -207,32 +207,134 @@ void bsdl_set_instruction_length(parser_priv_t *priv, int len)
 
 
 /*****************************************************************************
- * void bsdl_add_pin(parser_priv_t *priv, char *pin)
+ * void bsdl_prt_add_name(parser_priv_t *priv, char *name)
+ * Port name management function
  *
- * Adds the specified pin name as a signal via shell command
- *   signal <pin>
+ * Sets the name field of the temporary storage area for port description
+ * (port_desc) to the parameter name.
  *
  * Parameters
  *   priv : private data container for parser related tasks
- *   pin  : name of the new pin, memory gets free'd
+ *   name : base name of the port, memory get's free'd
  *
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_add_pin(parser_priv_t *priv, char *pin)
+void bsdl_prt_add_name(parser_priv_t *priv, char *name)
 {
+  struct port_desc *pd = &(priv->jtag_ctrl.port_desc);
+
+  pd->name = name;
+}
+
+
+/*****************************************************************************
+ * void bsdl_prt_add_bit(parser_priv_t *priv)
+ * Port name management function
+ *
+ * Sets the vector and index fields of the temporary storage area for port
+ * description (port_desc) to non-vector information. The low and high indice
+ * are set to equal numbers (exact value is irrelevant).
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+void bsdl_prt_add_bit(parser_priv_t *priv)
+{
+  struct port_desc *pd = &(priv->jtag_ctrl.port_desc);
+
+  pd->is_vector = 0;
+  pd->low_idx   = 0;
+  pd->high_idx  = 0;
+}
+
+
+/*****************************************************************************
+ * void bsdl_prt_add_range(parser_priv_t *priv, int low, int high)
+ * Port name management function
+ *
+ * Sets the vector and index fields of the temporary storage area for port
+ * description (port_desc) to the specified vector information.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *   low  : low index of vector
+ *   high : high index of vector
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+void bsdl_prt_add_range(parser_priv_t *priv, int low, int high)
+{
+  struct port_desc *pd = &(priv->jtag_ctrl.port_desc);
+
+  pd->is_vector = 1;
+  pd->low_idx   = low;
+  pd->high_idx  = high;
+}
+
+
+/*****************************************************************************
+ * void bsdl_prt_apply_port(parser_priv_t *priv)
+ * Port name management function
+ *
+ * Adds the specified port name as a signal via shell command
+ *   signal <pin>
+ * The port name is taken from the port_desc structure that was filled in
+ * previously by rule Scalar_or_Vector. This way, the function can build
+ * vectored ports as well.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+void bsdl_prt_apply_port(parser_priv_t *priv)
+{
+  struct port_desc *pd = &(priv->jtag_ctrl.port_desc);
+
   if (priv->jtag_ctrl.mode >= 0) {
     char *cmd[] = {"signal",
-                   pin,
+                   NULL,
                    NULL};
+    char *port_string;
+    size_t str_len, name_len;
+    int idx;
 
-    if (priv->jtag_ctrl.mode >= 1)
-      cmd_run(cmd);
-    else
-      print_cmd(cmd);
+    /* handle indexed port name:
+       - names of scalar ports are simply copied from the port_desc structure
+         to the final string that goes into ci
+       - names of vectored ports are expanded with their decimal index as
+         collected earlier earlier in rule Scalar_or_Vector
+    */
+    name_len = strlen(pd->name);
+    str_len = name_len + 1 + 10 + 1 + 1;
+    if ((port_string = (char *)malloc(str_len)) != NULL) {
+      cmd[1] = port_string;
+
+      for (idx = pd->low_idx; idx <= pd->high_idx; idx++) {
+        if (pd->is_vector)
+          snprintf(port_string, str_len-1, "%s(%d)", pd->name, idx);
+        else
+          strncpy(port_string, pd->name, str_len-1);
+        port_string[str_len-1] = '\0';
+
+        if (priv->jtag_ctrl.mode >= 1)
+          cmd_run(cmd);
+        else
+          print_cmd(cmd);
+      }
+
+      free(port_string);
+    } else
+      bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
   }
 
-  free(pin);
+  free(pd->name);
 }
 
 
@@ -391,14 +493,15 @@ void bsdl_ci_no_disable(parser_priv_t *priv)
 /*****************************************************************************
  * Cell Info management function
  * void bsdl_ci_set_cell_spec(parser_priv_t *priv,
- *                            char *port_name, int function, char *safe_value)
+ *                            int function, char *safe_value)
  *
  * Sets the specified values of the current cell_spec (without disable term)
  * to the variables for temporary storage of these information elements.
+ * The name of the related port is taken from the port_desc structure that
+ * was filled in previously by the rule Port_Name.
  *
  * Parameters
  *   priv       : private data container for parser related tasks
- *   port_name  : port name this spec applies to
  *   function   : cell function indentificator
  *   safe_value : safe value for initialization of this cell
  *
@@ -406,13 +509,38 @@ void bsdl_ci_no_disable(parser_priv_t *priv)
  *   void
  ****************************************************************************/
 void bsdl_ci_set_cell_spec(parser_priv_t *priv,
-                           char *port_name, int function, char *safe_value)
+                           int function, char *safe_value)
 {
   struct cell_info *ci = &(priv->jtag_ctrl.cell_info);
+  struct port_desc *pd = &(priv->jtag_ctrl.port_desc);
+  char   *port_string;
+  size_t  str_len, name_len;
 
-  ci->port_name        = port_name;
   ci->cell_function    = function;
   ci->basic_safe_value = safe_value;
+
+  /* handle indexed port name:
+   - names of scalar ports are simply copied from the port_desc structure
+     to the final string that goes into ci
+   - names of vectored ports are expanded with their decimal index as
+     collected earlier earlier in rule Port_Name
+  */
+  name_len = strlen(pd->name);
+  str_len = name_len + 1 + 10 + 1 + 1;
+  if ((port_string = (char *)malloc(str_len)) != NULL) {
+    if (pd->is_vector)
+      snprintf(port_string, str_len-1, "%s(%d)", pd->name, pd->low_idx);
+    else
+      strncpy(port_string, pd->name, str_len-1);
+    port_string[str_len-1] = '\0';
+
+    ci->port_name = port_string;
+  } else {
+    bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+    ci->port_name = NULL;
+  }
+
+  free(pd->name);
 }
 
 

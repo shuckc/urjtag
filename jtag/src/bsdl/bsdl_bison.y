@@ -192,7 +192,6 @@ void yyerror(parser_priv_t *, const char *);
 %type <str> Pattern_List
 %type <integer> DECIMAL_NUMBER
 %type <str> REAL_NUMBER
-%type <str> Port_Name
 %type <integer> Cell_Function
 %type <str> Safe_Value
 %type <integer> Disable_Value
@@ -269,19 +268,29 @@ Port_Specifier_List : Port_Specifier
                  | Port_Specifier_List SEMICOLON Port_Specifier
                  ;
 Port_Specifier   : Port_List COLON Function Scaler_Or_Vector
+                   {
+                     bsdl_prt_apply_port(priv_data);
+                   }
                  ;
 Port_List        : IDENTIFIER
-                   { free($1); }
+                   { bsdl_prt_add_name(priv_data, $1); }
                  | Port_List COMMA IDENTIFIER
-                   { free($3); }
+                   {
+                     Print_Warning(priv_data,
+                                   "Comma separated port names in port list not supported");
+                     bsdl_prt_add_name(priv_data, $3);
+                   }
                  ;
 Function         : IN | OUT | INOUT | BUFFER | LINKAGE
                  ;
 Scaler_Or_Vector : BIT
+                   { bsdl_prt_add_bit(priv_data); }
                  | BIT_VECTOR LPAREN Vector_Range RPAREN
                  ;
 Vector_Range     : DECIMAL_NUMBER TO DECIMAL_NUMBER
+                   { bsdl_prt_add_range(priv_data, $1, $3); }
                  | DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER
+                   { bsdl_prt_add_range(priv_data, $3, $1); }
                  ;
 VHDL_Use_Part    : Standard_Use 
                  | Standard_Use VHDL_Use_List
@@ -496,9 +505,7 @@ BSDL_Map_String  : Pin_Mapping
                  | BSDL_Map_String COMMA Pin_Mapping
                  ;
 Pin_Mapping      : IDENTIFIER COLON Physical_Pin_Desc
-                   {
-                     bsdl_add_pin(priv_data, $1);
-                   }
+                   { free($1); }
                  ;
 Physical_Pin_Desc: Physical_Pin
                  | LPAREN Physical_Pin_List RPAREN
@@ -780,19 +787,24 @@ Cell_Spec        : IDENTIFIER COMMA Port_Name COMMA Cell_Function
                    COMMA Safe_Value
                    {
                      free($1);
-                     bsdl_ci_set_cell_spec(priv_data, $3, $5, $7);
+                     bsdl_ci_set_cell_spec(priv_data, $5, $7);
                    }
                  ;
 Port_Name        : IDENTIFIER
-                   { $$ = $1; }
+                   {
+                     bsdl_prt_add_name(priv_data, $1);
+                     bsdl_prt_add_bit(priv_data);
+                   }
                  | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
                    {
-                     Print_Warning(priv_data, "Port name index not supported in Boundary Cell description");
-                     $$ = NULL;
-                     free($1);
+                     bsdl_prt_add_name(priv_data, $1);
+                     bsdl_prt_add_range(priv_data, $3, $3);
                    }
                  | ASTERISK
-                   { $$ = strdup("*"); }
+                   {
+                     bsdl_prt_add_name(priv_data, strdup("*"));
+                     bsdl_prt_add_bit(priv_data);
+                   }
                  ;
 Cell_Function    : INPUT
                    { $$ = INPUT; }
