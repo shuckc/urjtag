@@ -76,9 +76,12 @@ static void print_cmd(char **cmd)
 void bsdl_sem_init(parser_priv_t *priv)
 {
   struct access_data *ad = &(priv->jtag_ctrl.access_data);
+  struct port_desc   *pd = &(priv->jtag_ctrl.port_desc);
 
   ad->ainfo_list = NULL;
   ad->instr_list = NULL;
+
+  pd->names_list = NULL;
 
   priv->jtag_ctrl.instr_list = NULL;
 }
@@ -127,6 +130,27 @@ static void free_ainfo_list(struct ainfo_elem *ai)
     free_instr_list(ai->instr_list);
     free_ainfo_list(ai->next);
     free(ai);
+  }
+}
+
+
+/*****************************************************************************
+ * void free_string_list(struct string_elem *sl)
+ *
+ * Deallocates the given list of string_elem.
+ *
+ * Parameters
+ *  sl : first string_elem to deallocate
+ *
+ * Returns
+ *  void
+ ****************************************************************************/
+static void free_string_list(struct string_elem *sl)
+{
+  if (sl) {
+    free(sl->string);
+    free_string_list(sl->next);
+    free(sl);
   }
 }
 
@@ -223,8 +247,16 @@ void bsdl_set_instruction_length(parser_priv_t *priv, int len)
 void bsdl_prt_add_name(parser_priv_t *priv, char *name)
 {
   struct port_desc *pd = &(priv->jtag_ctrl.port_desc);
+  struct string_elem *new_string;
 
-  pd->name = name;
+  new_string = (struct string_elem *)malloc(sizeof(struct string_elem));
+  if (new_string) {
+    new_string->next   = pd->names_list;
+    new_string->string = name;
+
+    pd->names_list = new_string;
+  } else
+    bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
 }
 
 
@@ -286,6 +318,8 @@ void bsdl_prt_add_range(parser_priv_t *priv, int low, int high)
  * The port name is taken from the port_desc structure that was filled in
  * previously by rule Scalar_or_Vector. This way, the function can build
  * vectored ports as well.
+ * Keep in mind that multiple names can be defined by one port specification
+ * (there's a names_list in port_desc).
  *
  * Parameters
  *   priv : private data container for parser related tasks
@@ -301,40 +335,47 @@ void bsdl_prt_apply_port(parser_priv_t *priv)
     char *cmd[] = {"signal",
                    NULL,
                    NULL};
-    char *port_string;
+    struct string_elem *name;
     size_t str_len, name_len;
+    char *port_string;
     int idx;
 
-    /* handle indexed port name:
-       - names of scalar ports are simply copied from the port_desc structure
-         to the final string that goes into ci
-       - names of vectored ports are expanded with their decimal index as
-         collected earlier earlier in rule Scalar_or_Vector
-    */
-    name_len = strlen(pd->name);
-    str_len = name_len + 1 + 10 + 1 + 1;
-    if ((port_string = (char *)malloc(str_len)) != NULL) {
-      cmd[1] = port_string;
+    name = pd->names_list;
+    while (name) {
+      /* handle indexed port name:
+         - names of scalar ports are simply copied from the port_desc structure
+           to the final string that goes into ci
+         - names of vectored ports are expanded with their decimal index as
+           collected earlier in rule Scalar_or_Vector
+      */
+      name_len = strlen(name->string);
+      str_len = name_len + 1 + 10 + 1 + 1;
+      if ((port_string = (char *)malloc(str_len)) != NULL) {
+        cmd[1] = port_string;
 
-      for (idx = pd->low_idx; idx <= pd->high_idx; idx++) {
-        if (pd->is_vector)
-          snprintf(port_string, str_len-1, "%s(%d)", pd->name, idx);
-        else
-          strncpy(port_string, pd->name, str_len-1);
-        port_string[str_len-1] = '\0';
+        for (idx = pd->low_idx; idx <= pd->high_idx; idx++) {
+          if (pd->is_vector)
+            snprintf(port_string, str_len-1, "%s(%d)", name->string, idx);
+          else
+            strncpy(port_string, name->string, str_len-1);
+          port_string[str_len-1] = '\0';
 
-        if (priv->jtag_ctrl.mode >= 1)
-          cmd_run(cmd);
-        else
-          print_cmd(cmd);
-      }
+          if (priv->jtag_ctrl.mode >= 1)
+            cmd_run(cmd);
+          else
+            print_cmd(cmd);
+        }
 
-      free(port_string);
-    } else
-      bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+        free(port_string);
+      } else
+        bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+
+      name = name->next;
+    }
   }
 
-  free(pd->name);
+  free_string_list(pd->names_list);
+  pd->names_list = NULL;
 }
 
 
@@ -432,23 +473,15 @@ void bsdl_set_usercode(parser_priv_t *priv, char *usercode)
  ****************************************************************************/
 void bsdl_add_instruction(parser_priv_t *priv, char *instr, char *opcode)
 {
-  struct instr_elem  *new_instr;
+  struct instr_elem *new_instr;
 
   new_instr = (struct instr_elem *)malloc(sizeof(struct instr_elem));
   if (new_instr) {
-    new_instr->next   = NULL;
+    new_instr->next   = priv->jtag_ctrl.instr_list;
     new_instr->instr  = instr;
     new_instr->opcode = opcode;
 
-    if (priv->jtag_ctrl.instr_list) {
-      struct instr_elem *il = priv->jtag_ctrl.instr_list;
-
-      while (il->next)
-        il = il->next;
-
-      il->next = new_instr;
-    } else
-      priv->jtag_ctrl.instr_list = new_instr;
+    priv->jtag_ctrl.instr_list = new_instr;
   } else
     bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
 }
@@ -511,8 +544,9 @@ void bsdl_ci_no_disable(parser_priv_t *priv)
 void bsdl_ci_set_cell_spec(parser_priv_t *priv,
                            int function, char *safe_value)
 {
-  struct cell_info *ci = &(priv->jtag_ctrl.cell_info);
-  struct port_desc *pd = &(priv->jtag_ctrl.port_desc);
+  struct cell_info *ci     = &(priv->jtag_ctrl.cell_info);
+  struct port_desc *pd     = &(priv->jtag_ctrl.port_desc);
+  struct string_elem *name = priv->jtag_ctrl.port_desc.names_list;
   char   *port_string;
   size_t  str_len, name_len;
 
@@ -525,13 +559,13 @@ void bsdl_ci_set_cell_spec(parser_priv_t *priv,
    - names of vectored ports are expanded with their decimal index as
      collected earlier earlier in rule Port_Name
   */
-  name_len = strlen(pd->name);
+  name_len = strlen(name->string);
   str_len = name_len + 1 + 10 + 1 + 1;
   if ((port_string = (char *)malloc(str_len)) != NULL) {
     if (pd->is_vector)
-      snprintf(port_string, str_len-1, "%s(%d)", pd->name, pd->low_idx);
+      snprintf(port_string, str_len-1, "%s(%d)", name->string, pd->low_idx);
     else
-      strncpy(port_string, pd->name, str_len-1);
+      strncpy(port_string, name->string, str_len-1);
     port_string[str_len-1] = '\0';
 
     ci->port_name = port_string;
@@ -540,7 +574,9 @@ void bsdl_ci_set_cell_spec(parser_priv_t *priv,
     ci->port_name = NULL;
   }
 
-  free(pd->name);
+  free(name->string);
+  free(name);
+  name = NULL;
 }
 
 
@@ -716,19 +752,11 @@ void bsdl_ac_add_instruction(parser_priv_t *priv, char *instr)
 
   new_instr = (struct instr_elem *)malloc(sizeof(struct instr_elem));
   if (new_instr) {
-    new_instr->next   = NULL;
+    new_instr->next   = ad->instr_list;
     new_instr->instr  = instr;
     new_instr->opcode = NULL;
 
-    if (ad->instr_list) {
-      struct instr_elem *il = ad->instr_list;
-
-      while (il->next)
-	il = il->next;
-
-      il->next = new_instr;
-    } else
-      ad->instr_list = new_instr;
+    ad->instr_list = new_instr;
   } else
     bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
 }
@@ -754,20 +782,12 @@ void bsdl_ac_apply_assoc(parser_priv_t *priv)
 
   new_ainfo = (struct ainfo_elem *)malloc(sizeof(struct ainfo_elem));
   if (new_ainfo) {
-    new_ainfo->next       = NULL;
+    new_ainfo->next       = ad->ainfo_list;
     new_ainfo->reg        = ad->reg;
     new_ainfo->reg_len    = ad->reg_len;
     new_ainfo->instr_list = ad->instr_list;
 
-    if (ad->ainfo_list) {
-      struct ainfo_elem *ai = ad->ainfo_list;
-
-      while (ai->next)
-	ai = ai->next;
-
-      ai->next = new_ainfo;
-    } else
-      ad->ainfo_list = new_ainfo;
+    ad->ainfo_list = new_ainfo;
   } else
     bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
 

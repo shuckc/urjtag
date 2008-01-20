@@ -89,11 +89,22 @@ struct cell_info {
     int   disable_safe_value;
 };
 
+/* structure string_elem enables to build lists of strings */
+struct string_elem {
+    struct string_elem *next;
+    char *string;
+};
+
+/* structure port_desc contains all descriptive information for a port
+   definition:
+   - one or more names
+   - flag showing whether it's a vector (element) or a scalar
+   - low and high indice if it's a vector */
 struct port_desc {
-    char *name;
-    int   is_vector;
-    int   low_idx;
-    int   high_idx;
+    struct string_elem *names_list;
+    int is_vector;
+    int low_idx;
+    int high_idx;
 };
 
 /* structure jtag_ctrl collects all elements that are required to interface

@@ -276,8 +276,6 @@ Port_List        : IDENTIFIER
                    { bsdl_prt_add_name(priv_data, $1); }
                  | Port_List COMMA IDENTIFIER
                    {
-                     Print_Warning(priv_data,
-                                   "Comma separated port names in port list not supported");
                      bsdl_prt_add_name(priv_data, $3);
                    }
                  ;

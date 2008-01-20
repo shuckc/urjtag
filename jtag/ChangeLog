@@ -1,6 +1,8 @@
 2008-01-20  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c, src/bsdl/bsdl.h:
+      support multiple port names in one port definition
+    * src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c, src/bsdl/bsdl.h:
       handle vectored ports correctly, part 1 of fix for
       [ 1875737 ] Syntax errors/Port index warning parsing ATMEL BSDL files
     * src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c, src/bsdl/bsdl_flex.l:
