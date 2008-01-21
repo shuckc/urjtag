@@ -1,3 +1,7 @@
+2008-01-21  Kolja Waschk <kawk>
+
+    * New JTAG declarations for MPC5241 (from kurobox.com, enh. 1869671)
+
 2008-01-21  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/bsdl/*: use gettext for message strings, removed trailing whitespace
