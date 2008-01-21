@@ -44,7 +44,7 @@ static char **bsdl_path_list = NULL;
 int bsdl_debug = 0;
 
 
-void bsdl_msg(int type, char *format, ...)
+void bsdl_msg(int type, const char *format, ...)
 {
   va_list lst;
 
@@ -94,10 +94,10 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
   BSDL_File = fopen(BSDL_File_Name, "r");
 
   if (bsdl_debug || (mode == 0))
-    bsdl_msg(BSDL_MSG_NOTE, "Reading file '%s'\n", BSDL_File_Name);
+    bsdl_msg(BSDL_MSG_NOTE, _("Reading file '%s'\n"), BSDL_File_Name);
 
   if (BSDL_File == NULL) {
-    bsdl_msg(BSDL_MSG_ERR, "Unable to open BSDL_file '%s'\n", BSDL_File_Name);
+    bsdl_msg(BSDL_MSG_ERR, _("Unable to open BSDL_file '%s'\n"), BSDL_File_Name);
     return -1;
   }
 
@@ -111,7 +111,7 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
 	  return -1;
 	}
 	if (chain->parts == NULL) {
-	  bsdl_msg(BSDL_MSG_ERR, _("Shain without any parts\n"));
+	  bsdl_msg(BSDL_MSG_ERR, _("Chain without any parts\n"));
 	  bsdl_parser_deinit(parser_priv);
 	  fclose(BSDL_File);
 	  return -1;
@@ -135,9 +135,9 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
     Compile_Errors = bsdl_flex_get_compile_errors(parser_priv->scanner);
     if (Compile_Errors == 0) {
       if (bsdl_debug)
-        bsdl_msg(BSDL_MSG_NOTE, "BSDL file '%s' compiled correctly\n", BSDL_File_Name);
+        bsdl_msg(BSDL_MSG_NOTE, _("BSDL file '%s' compiled correctly\n"), BSDL_File_Name);
     } else {
-      bsdl_msg(BSDL_MSG_ERR, "BSDL file '%s' contains errors, stopping\n", BSDL_File_Name); 
+      bsdl_msg(BSDL_MSG_ERR, _("BSDL file '%s' contains errors, stopping\n"), BSDL_File_Name); 
     }
 
     if (Compile_Errors == 0)
@@ -145,7 +145,7 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
 
     if ((Compile_Errors == 0) && parser_priv->jtag_ctrl.idcode) {
       if (bsdl_debug)
-        bsdl_msg(BSDL_MSG_NOTE, "Got IDCODE: %s\n", parser_priv->jtag_ctrl.idcode);
+        bsdl_msg(BSDL_MSG_NOTE, _("Got IDCODE: %s\n"), parser_priv->jtag_ctrl.idcode);
 
       /* should be compare the idcodes? */
       if (idcode) {
@@ -295,7 +295,7 @@ int bsdl_scan_files(const char *idcode, int mode)
 
       closedir(dir);
     } else
-      bsdl_msg(BSDL_MSG_WARN, "Warning: Cannot open directory %s\n", bsdl_path_list[idx]);
+      bsdl_msg(BSDL_MSG_WARN, _("Cannot open directory %s\n"), bsdl_path_list[idx]);
 
     idx++;
   }

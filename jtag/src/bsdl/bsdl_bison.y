@@ -28,24 +28,24 @@ we are sending to people who request it from our publicized E-Mail address;
 
 You are free to redistribute this at will, but we feel that it would be
 better if respondents asked for it directly so that their addresses can
-be entered into our list for future mailings and updates. 
+be entered into our list for future mailings and updates.
 
 It would be helpful if you could confirm receipt of this transmission.
-We also would be very interested to hear about your experiences with this 
+We also would be very interested to hear about your experiences with this
 information and what you are planning to do with BSDL.
 
 Regards,
-  
+
 Ken Parker
 Hewlett-Packard Company
 
 
-*Boundary-Scan Description Language - as documented in: 
+*Boundary-Scan Description Language - as documented in:
 
-"A Language for Describing Boundary-Scan Devices", K.P. Parker 
-and S. Oresjo, Proceedings 1990 International Test Conference, 
+"A Language for Describing Boundary-Scan Devices", K.P. Parker
+and S. Oresjo, Proceedings 1990 International Test Conference,
 Washington DC, pp 222-234
- 
+
 
 - -----------------cut here---------------------------------------------------
 
@@ -57,7 +57,7 @@ Washington DC, pp 222-234
                                              USA
 
                                                              October 1990
-Hello BSDL Parser Requestor, 
+Hello BSDL Parser Requestor,
 
    This Electronic Mail reply contains the computer specifications for
 Hewlett-Packard's Version 0.0 BSDL parser.  This section of the reply
@@ -65,7 +65,7 @@ explains the contents of the rest of this file.
 
 This file is composed of seven (7) parts:
 
-   1) How to use this file 
+   1) How to use this file
 
    2) UNIX* Lex source  (lexicographical tokenizing rules)
 
@@ -81,12 +81,12 @@ This file is composed of seven (7) parts:
    7) [added 901016] Porting experiences to other systems.
 
 
-RECOMMENDATION: Save a copy of this file in archival storage before 
+RECOMMENDATION: Save a copy of this file in archival storage before
                 processing it via the instructions below.  This will
                 allow you to recover from errors, and allow you to
                 compare subsequently released data for changes.
 
-DISCLAIMERS:     
+DISCLAIMERS:
 
 1.  The IEEE 1149.1 Working Group has not endorsed BSDL Version 0.0 and
     therefore no person may represent it as an IEEE standard or imply that
@@ -96,7 +96,7 @@ DISCLAIMERS:
     well-conceived initiative that is likely to excelerate the creation
     of tools that support the 1149.1 standard.  As such, changes and
     enhancements will be carefully considered so as not to needlessly
-    disrupt these development efforts.  The overriding goal is the 
+    disrupt these development efforts.  The overriding goal is the
     ultimate success of the 1149.1 standard.
 
 LEGAL NOTICES:
@@ -127,6 +127,8 @@ LEGAL NOTICES:
 #include <stdio.h>
 #include <ctype.h>
 
+#include "bsdl_sysdep.h"
+
 /* interface to flex */
 #include "bsdl_bison.h"
 #include "bsdl.h"
@@ -145,8 +147,8 @@ int yylex (YYSTYPE *, void *);
 static void Init_Text(parser_priv_t *);
 static void Store_Text(parser_priv_t *, char *);
 static void Make_String(char *, char *);
-static void Print_Error(parser_priv_t *, char *);
-static void Print_Warning(parser_priv_t *, char *);
+static void Print_Error(parser_priv_t *, const char *);
+static void Print_Warning(parser_priv_t *, const char *);
 static void Give_Up_And_Quit(parser_priv_t *);
 
 void yyerror(parser_priv_t *, const char *);
@@ -158,18 +160,18 @@ void yyerror(parser_priv_t *, const char *);
 }
 
 
-%token ENTITY  PORT  GENERIC  USE  ATTRIBUTE  IS 
+%token ENTITY  PORT  GENERIC  USE  ATTRIBUTE  IS
 %token OF  CONSTANT  STRING  END  ALL  PIN_MAP
 %token PHYSICAL_PIN_MAP  PIN_MAP_STRING  TRUE  FALSE  SIGNAL
 %token TAP_SCAN_IN  TAP_SCAN_OUT  TAP_SCAN_MODE  TAP_SCAN_RESET
 %token TAP_SCAN_CLOCK  LOW  BOTH  IN  OUT  INOUT
 %token BUFFER  LINKAGE  BIT  BIT_VECTOR  TO  DOWNTO
 %token PACKAGE  BODY  TYPE  SUBTYPE  RECORD  ARRAY
-%token POSITIVE  RANGE  CELL_INFO  INSTRUCTION_LENGTH 
+%token POSITIVE  RANGE  CELL_INFO  INSTRUCTION_LENGTH
 %token INSTRUCTION_OPCODE  INSTRUCTION_CAPTURE  INSTRUCTION_DISABLE
 %token INSTRUCTION_GUARD INSTRUCTION_PRIVATE  INSTRUCTION_USAGE
 %token INSTRUCTION_SEQUENCE  REGISTER_ACCESS  BOUNDARY_CELLS
-%token BOUNDARY_LENGTH  BOUNDARY_REGISTER  IDCODE_REGISTER 
+%token BOUNDARY_LENGTH  BOUNDARY_REGISTER  IDCODE_REGISTER
 %token USERCODE_REGISTER  DESIGN_WARNING  BOUNDARY  BYPASS  HIGHZ  IDCODE  DEVICE_ID
 %token USERCODE  INPUT  OUTPUT2  OUTPUT3  CONTROL  CONTROLR  INTERNAL
 %token CLOCK  BIDIR  BIDIR_IN  BIDIR_OUT  EXTEST  SAMPLE
@@ -198,7 +200,7 @@ void yyerror(parser_priv_t *, const char *);
 %type <str> Standard_Reg
 %type <str> Standard_Inst
 
-%start BSDL_Program 
+%start BSDL_Program
 
 %%  /* End declarations, begin rules */
 
@@ -207,8 +209,8 @@ BSDL_Program     : Begin_BSDL Part_1 Part_2 End_BSDL
 Begin_BSDL       : ENTITY IDENTIFIER IS
                    { bsdl_set_entity(priv_data, $2); }
                  | error
-                   {Print_Error(priv_data, "Improper Entity declaration");
-                    Print_Error(priv_data, "Check if source file is BSDL");
+                   {Print_Error(priv_data, _("Improper Entity declaration"));
+                    Print_Error(priv_data, _("Check if source file is BSDL"));
                     YYABORT; /* Probably not a BSDL source file */
                    }
                  ;
@@ -224,7 +226,7 @@ Part_1           : VHDL_Generic        /* 1994 and later */
                    VHDL_Pin_Map
                    VHDL_Constant_List
                  | error
-                   {Print_Error(priv_data, "Syntax Error");        
+                   {Print_Error(priv_data, _("Syntax Error"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Part_2           : VHDL_Tap_Signals
@@ -241,16 +243,16 @@ Part_2           : VHDL_Tap_Signals
                    VHDL_Boundary_Details
                    VHDL_Boundary_Register
                  | error
-                   {Print_Error(priv_data, "Syntax Error");        
+                   {Print_Error(priv_data, _("Syntax Error"));
                     BUMP_ERROR; YYABORT; }
                  ;
 End_BSDL         : VHDL_Design_Warning END IDENTIFIER SEMICOLON
                    { free($3); }
                  | error
-                   {Print_Error(priv_data, "Syntax Error");        
+                   {Print_Error(priv_data, _("Syntax Error"));
                     BUMP_ERROR; YYABORT; }
                  ;
-VHDL_Generic     : GENERIC LPAREN PHYSICAL_PIN_MAP COLON STRING COLON_EQUAL 
+VHDL_Generic     : GENERIC LPAREN PHYSICAL_PIN_MAP COLON STRING COLON_EQUAL
                    Quoted_String  RPAREN SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
@@ -261,7 +263,7 @@ VHDL_Generic     : GENERIC LPAREN PHYSICAL_PIN_MAP COLON STRING COLON_EQUAL
                  ;
 VHDL_Port        : PORT LPAREN Port_Specifier_List RPAREN SEMICOLON
                  | error
-                   {Print_Error(priv_data, "Improper Port declaration");
+                   {Print_Error(priv_data, _("Improper Port declaration"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Port_Specifier_List : Port_Specifier
@@ -290,13 +292,13 @@ Vector_Range     : DECIMAL_NUMBER TO DECIMAL_NUMBER
                  | DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER
                    { bsdl_prt_add_range(priv_data, $3, $1); }
                  ;
-VHDL_Use_Part    : Standard_Use 
+VHDL_Use_Part    : Standard_Use
                  | Standard_Use VHDL_Use_List
                  | error
-                   {Print_Error(priv_data, "Error in Package declaration(s)");
+                   {Print_Error(priv_data, _("Error in Package declaration(s)"));
                     BUMP_ERROR; YYABORT; }
                  ;
-Standard_Use     : USE IDENTIFIER 
+Standard_Use     : USE IDENTIFIER
                    {/* Parse Standard 1149.1 Package */
                     strcpy(priv_data->Package_File_Name, $2);
                     free($2);
@@ -312,11 +314,11 @@ Standard_Use     : USE IDENTIFIER
                      priv_data->Reading_Package = 0;
                    }
                  ;
-Standard_Package : PACKAGE IDENTIFIER IS Standard_Decls Defered_Constants 
+Standard_Package : PACKAGE IDENTIFIER IS Standard_Decls Defered_Constants
                    Standard_Decls END IDENTIFIER SEMICOLON Package_Body
                    { free($2); free($8); }
                  | error
-                   {Print_Error(priv_data, "Error in Standard Package");
+                   {Print_Error(priv_data, _("Error in Standard Package"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Standard_Decls   : Standard_Decl
@@ -331,7 +333,7 @@ Standard_Decl    : ATTRIBUTE Standard_Attributes COLON Attribute_Type SEMICOLON
                  | SUBTYPE PIN_MAP_STRING IS STRING SEMICOLON
                  | SUBTYPE BSDL_EXTENSION IS STRING SEMICOLON
                  | error
-                   {Print_Error(priv_data, "Error in Standard Declarations");
+                   {Print_Error(priv_data, _("Error in Standard Declarations"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Standard_Attributes : PIN_MAP | TAP_SCAN_IN | TAP_SCAN_OUT
@@ -347,7 +349,7 @@ Standard_Attributes : PIN_MAP | TAP_SCAN_IN | TAP_SCAN_OUT
                  | BOUNDARY_LENGTH | BOUNDARY_REGISTER
                  | DESIGN_WARNING
                  | error
-                   {Print_Error(priv_data, "Error in Attribute identifier");
+                   {Print_Error(priv_data, _("Error in Attribute identifier"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Attribute_Type   : IDENTIFIER
@@ -355,7 +357,7 @@ Attribute_Type   : IDENTIFIER
                  | STRING
                  | DECIMAL_NUMBER
                  | error
-                   {Print_Error(priv_data, "Error in Attribute type identification");
+                   {Print_Error(priv_data, _("Error in Attribute type identification"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Type_Body        : LPAREN ID_Bits RPAREN
@@ -364,14 +366,14 @@ Type_Body        : LPAREN ID_Bits RPAREN
                  | ARRAY LPAREN DECIMAL_NUMBER TO DECIMAL_NUMBER RPAREN
                    OF IDENTIFIER
                    { free($8); }
-                 | ARRAY LPAREN DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER RPAREN 
+                 | ARRAY LPAREN DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER RPAREN
                    OF IDENTIFIER
                    { free($8); }
                  | RECORD Record_Body END RECORD
                  | error
-                   {Print_Error(priv_data, "Error in Type definition");
+                   {Print_Error(priv_data, _("Error in Type definition"));
                     BUMP_ERROR; YYABORT; }
-                 ; 
+                 ;
 ID_Bits          : ID_Bit
                  | ID_Bits COMMA ID_Bit
                  ;
@@ -383,7 +385,7 @@ ID_List          : IDENTIFIER
 ID_Bit           : SINGLE_QUOTE BIN_X_PATTERN SINGLE_QUOTE
                    { free($2); }
                  | error
-                   {Print_Error(priv_data, "Error in Bit definition");
+                   {Print_Error(priv_data, _("Error in Bit definition"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Record_Body      : Record_Element
@@ -392,7 +394,7 @@ Record_Body      : Record_Element
 Record_Element   : IDENTIFIER COLON IDENTIFIER SEMICOLON
                    { free($1); free($3); }
                  | error
-                   {Print_Error(priv_data, "Error in Record Definition");
+                   {Print_Error(priv_data, _("Error in Record Definition"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Defered_Constants: Defered_Constant
@@ -403,17 +405,17 @@ Defered_Constant : CONSTANT Constant_Body
 Constant_Body    : IDENTIFIER COLON CELL_INFO SEMICOLON
                    { free($1); }
                  | error
-                   {Print_Error(priv_data, "Error in defered constant");
+                   {Print_Error(priv_data, _("Error in defered constant"));
                     BUMP_ERROR; YYABORT; }
                  ;
 VHDL_Use_List    : VHDL_Use
                  | VHDL_Use_List VHDL_Use
                  ;
-Package_Body     : PACKAGE BODY IDENTIFIER IS Constant_List END IDENTIFIER 
+Package_Body     : PACKAGE BODY IDENTIFIER IS Constant_List END IDENTIFIER
                    { free($3); free($7); }
                    SEMICOLON
                  | error
-                   {Print_Error(priv_data, "Error in Package Body definition");
+                   {Print_Error(priv_data, _("Error in Package Body definition"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Constant_List    : Cell_Constant
@@ -423,7 +425,7 @@ Cell_Constant    : CONSTANT IDENTIFIER COLON CELL_INFO COLON_EQUAL
                    LPAREN Triples_List RPAREN SEMICOLON
                    { free($2); }
                  | error
-                   {Print_Error(priv_data, "Error in Cell Constant definition");
+                   {Print_Error(priv_data, _("Error in Cell Constant definition"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Triples_List     : Triple
@@ -432,27 +434,27 @@ Triples_List     : Triple
 Triple           : LPAREN Triple_Function COMMA Triple_Inst COMMA CAP_Data
                    RPAREN
                  | error
-                   {Print_Error(priv_data, "Error in Cell Data Record");
+                   {Print_Error(priv_data, _("Error in Cell Data Record"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Triple_Function  : INPUT | OUTPUT2 | OUTPUT3 | INTERNAL | CONTROL
                  | CONTROLR | CLOCK | BIDIR_IN | BIDIR_OUT
                  | OBSERVE_ONLY
                  | error
-                   {Print_Error(priv_data, "Error in Cell_Type Function field");
+                   {Print_Error(priv_data, _("Error in Cell_Type Function field"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Triple_Inst      : EXTEST | SAMPLE | INTEST | RUNBIST
                  | error
-                   {Print_Error(priv_data, "Error in BScan_Inst Instruction field");
+                   {Print_Error(priv_data, _("Error in BScan_Inst Instruction field"));
                     BUMP_ERROR; YYABORT; }
                  ;
 CAP_Data         : PI | PO | UPD | CAP | X | ZERO | ONE
                  | error
-                   {Print_Error(priv_data, "Error in Constant CAP data source field");
+                   {Print_Error(priv_data, _("Error in Constant CAP data source field"));
                     BUMP_ERROR; YYABORT; }
                  ;
-VHDL_Use         : USE IDENTIFIER 
+VHDL_Use         : USE IDENTIFIER
                    {/* Parse Standard 1149.1 Package */
                     strcpy(priv_data->Package_File_Name, $2);
                     free($2);
@@ -472,22 +474,22 @@ User_Package     : PACKAGE IDENTIFIER
                    IS Defered_Constants END IDENTIFIER SEMICOLON Package_Body
                    { free($2); free($6); }
                  | error
-                   {Print_Error(priv_data, "Error in User-Defined Package declarations");
+                   {Print_Error(priv_data, _("Error in User-Defined Package declarations"));
                     BUMP_ERROR; YYABORT; }
                  ;
-VHDL_Pin_Map     : ATTRIBUTE PIN_MAP OF IDENTIFIER 
+VHDL_Pin_Map     : ATTRIBUTE PIN_MAP OF IDENTIFIER
                    COLON ENTITY IS PHYSICAL_PIN_MAP SEMICOLON
                    { free($4); }
                  | error
-                   {Print_Error(priv_data, "Error in Pin_Map Attribute");
+                   {Print_Error(priv_data, _("Error in Pin_Map Attribute"));
                     BUMP_ERROR; YYABORT; }
                  ;
 VHDL_Constant_List : VHDL_Constant
-                 | VHDL_Constant_List VHDL_Constant 
+                 | VHDL_Constant_List VHDL_Constant
                  ;
 VHDL_Constant    : CONSTANT VHDL_Constant_Part
                  ;
-VHDL_Constant_Part : IDENTIFIER COLON PIN_MAP_STRING COLON_EQUAL 
+VHDL_Constant_Part : IDENTIFIER COLON PIN_MAP_STRING COLON_EQUAL
                    Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
@@ -496,7 +498,7 @@ VHDL_Constant_Part : IDENTIFIER COLON PIN_MAP_STRING COLON_EQUAL
                    BSDL_Map_String
                    { free($1); }
                  | error
-                   {Print_Error(priv_data, "Error in Pin_Map_String constant declaration");
+                   {Print_Error(priv_data, _("Error in Pin_Map_String constant declaration"));
                     BUMP_ERROR; YYABORT; }
                  ;
 BSDL_Map_String  : Pin_Mapping
@@ -515,24 +517,24 @@ Physical_Pin     : IDENTIFIER
                    { free($1); }
                  | DECIMAL_NUMBER
                  ;
-VHDL_Tap_Signals : VHDL_Tap_Signal 
+VHDL_Tap_Signals : VHDL_Tap_Signal
                  | VHDL_Tap_Signals VHDL_Tap_Signal
                  ;
-VHDL_Tap_Signal  : VHDL_Tap_Scan_In 
-                 | VHDL_Tap_Scan_Out 
-                 | VHDL_Tap_Scan_Clock 
-                 | VHDL_Tap_Scan_Mode 
-                 | VHDL_Tap_Scan_Reset 
+VHDL_Tap_Signal  : VHDL_Tap_Scan_In
+                 | VHDL_Tap_Scan_Out
+                 | VHDL_Tap_Scan_Clock
+                 | VHDL_Tap_Scan_Mode
+                 | VHDL_Tap_Scan_Reset
                  ;
-VHDL_Tap_Scan_In : ATTRIBUTE TAP_SCAN_IN OF IDENTIFIER 
-                   COLON SIGNAL IS Boolean SEMICOLON 
+VHDL_Tap_Scan_In : ATTRIBUTE TAP_SCAN_IN OF IDENTIFIER
+                   COLON SIGNAL IS Boolean SEMICOLON
                    { free($4); }
                  ;
 VHDL_Tap_Scan_Out : ATTRIBUTE TAP_SCAN_OUT OF IDENTIFIER
                     COLON SIGNAL IS Boolean SEMICOLON
                    { free($4); }
                  ;
-VHDL_Tap_Scan_Mode : ATTRIBUTE TAP_SCAN_MODE OF IDENTIFIER 
+VHDL_Tap_Scan_Mode : ATTRIBUTE TAP_SCAN_MODE OF IDENTIFIER
                    COLON SIGNAL IS Boolean SEMICOLON
                    { free($4); }
                  ;
@@ -548,15 +550,15 @@ Stop             : LOW | BOTH
                  ;
 Boolean          : TRUE | FALSE
                  ;
-VHDL_Inst_Length : ATTRIBUTE INSTRUCTION_LENGTH OF IDENTIFIER 
+VHDL_Inst_Length : ATTRIBUTE INSTRUCTION_LENGTH OF IDENTIFIER
                    COLON ENTITY IS DECIMAL_NUMBER SEMICOLON
                    {
                      bsdl_set_instruction_length(priv_data, $8);
                      free($4);
                    }
                  ;
-VHDL_Inst_Opcode : ATTRIBUTE INSTRUCTION_OPCODE OF IDENTIFIER 
-                   COLON ENTITY IS Quoted_String SEMICOLON 
+VHDL_Inst_Opcode : ATTRIBUTE INSTRUCTION_OPCODE OF IDENTIFIER
+                   COLON ENTITY IS Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
                                              priv_data->buffer_for_switch);
@@ -568,7 +570,7 @@ BSDL_Opcode_Table: Opcode_Desc
                  | BSDL_Opcode_Table COMMA Opcode_Desc
                  | error
                    {Print_Error(priv_data,
-                      "Error in Instruction_Opcode attribute statement");
+                      _("Error in Instruction_Opcode attribute statement"));
                     BUMP_ERROR;
                     YYABORT; }
                  ;
@@ -580,7 +582,7 @@ Pattern_List     : Binary_Pattern
                  | Pattern_List COMMA Binary_Pattern
                    {
                      Print_Warning(priv_data,
-                       "Multiple opcode patterns are not supported, first pattern will be used");
+                       _("Multiple opcode patterns are not supported, first pattern will be used"));
                      $$ = $1;
                      free($3);
                    }
@@ -601,7 +603,7 @@ VHDL_Inst_Detail : VHDL_Inst_Capture
                  | VHDL_Idcode_Register
                  | VHDL_Usercode_Register
                  ;
-VHDL_Inst_Capture: ATTRIBUTE INSTRUCTION_CAPTURE OF IDENTIFIER 
+VHDL_Inst_Capture: ATTRIBUTE INSTRUCTION_CAPTURE OF IDENTIFIER
                    COLON ENTITY IS Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
@@ -610,7 +612,7 @@ VHDL_Inst_Capture: ATTRIBUTE INSTRUCTION_CAPTURE OF IDENTIFIER
                    BIN_X_PATTERN
                    { free($4); free($11); }
                  ;
-VHDL_Inst_Disable: ATTRIBUTE INSTRUCTION_DISABLE OF IDENTIFIER 
+VHDL_Inst_Disable: ATTRIBUTE INSTRUCTION_DISABLE OF IDENTIFIER
                    COLON ENTITY IS Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
@@ -619,7 +621,7 @@ VHDL_Inst_Disable: ATTRIBUTE INSTRUCTION_DISABLE OF IDENTIFIER
                    IDENTIFIER
                    { free($4); free($11); }
                  ;
-VHDL_Inst_Guard  : ATTRIBUTE INSTRUCTION_GUARD OF IDENTIFIER 
+VHDL_Inst_Guard  : ATTRIBUTE INSTRUCTION_GUARD OF IDENTIFIER
                    COLON ENTITY IS Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
@@ -628,7 +630,7 @@ VHDL_Inst_Guard  : ATTRIBUTE INSTRUCTION_GUARD OF IDENTIFIER
                    IDENTIFIER
                    { free($4); free($11); }
                  ;
-VHDL_Inst_Private: ATTRIBUTE INSTRUCTION_PRIVATE OF IDENTIFIER 
+VHDL_Inst_Private: ATTRIBUTE INSTRUCTION_PRIVATE OF IDENTIFIER
                    COLON ENTITY IS Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
@@ -640,8 +642,8 @@ VHDL_Inst_Private: ATTRIBUTE INSTRUCTION_PRIVATE OF IDENTIFIER
 Private_Opcode_List : Private_Opcode
                  | Private_Opcode_List COMMA Private_Opcode
                  | error
-                   {Print_Error(priv_data, "Error in Opcode List");
-                    BUMP_ERROR; 
+                   {Print_Error(priv_data, _("Error in Opcode List"));
+                    BUMP_ERROR;
                     YYABORT; }
                  ;
 Private_Opcode   : IDENTIFIER
@@ -681,7 +683,7 @@ VHDL_Usercode_Register: ATTRIBUTE USERCODE_REGISTER OF IDENTIFIER
 		     free($4);
 		   }
                  ;
-VHDL_Register_Access: ATTRIBUTE REGISTER_ACCESS OF IDENTIFIER 
+VHDL_Register_Access: ATTRIBUTE REGISTER_ACCESS OF IDENTIFIER
                    COLON ENTITY IS Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
@@ -737,8 +739,8 @@ VHDL_Boundary_Details: VHDL_Boundary_Detail
 VHDL_Boundary_Detail: VHDL_Boundary_Cells
                  | VHDL_Boundary_Length
                  ;
-VHDL_Boundary_Cells: ATTRIBUTE BOUNDARY_CELLS OF IDENTIFIER 
-                   COLON ENTITY IS Quoted_String SEMICOLON 
+VHDL_Boundary_Cells: ATTRIBUTE BOUNDARY_CELLS OF IDENTIFIER
+                   COLON ENTITY IS Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
                                              priv_data->buffer_for_switch);
@@ -759,7 +761,7 @@ VHDL_Boundary_Length: ATTRIBUTE BOUNDARY_LENGTH OF IDENTIFIER
                      free($4);
                    }
                  ;
-VHDL_Boundary_Register: ATTRIBUTE BOUNDARY_REGISTER OF IDENTIFIER 
+VHDL_Boundary_Register: ATTRIBUTE BOUNDARY_REGISTER OF IDENTIFIER
                    COLON ENTITY IS Quoted_String SEMICOLON
                    {
                      bsdl_flex_switch_buffer(priv_data->scanner,
@@ -771,7 +773,7 @@ VHDL_Boundary_Register: ATTRIBUTE BOUNDARY_REGISTER OF IDENTIFIER
 BSDL_Cell_Table  : Cell_Entry
                  | BSDL_Cell_Table COMMA Cell_Entry
                  | error
-                   {Print_Error(priv_data, "Error in Boundary Cell description");
+                   {Print_Error(priv_data, _("Error in Boundary Cell description"));
                     BUMP_ERROR; YYABORT; }
                  ;
 Cell_Entry       : DECIMAL_NUMBER LPAREN Cell_Info RPAREN
@@ -781,7 +783,7 @@ Cell_Info        : Cell_Spec
                    { bsdl_ci_no_disable(priv_data); }
                  | Cell_Spec COMMA Disable_Spec
                  ;
-Cell_Spec        : IDENTIFIER COMMA Port_Name COMMA Cell_Function 
+Cell_Spec        : IDENTIFIER COMMA Port_Name COMMA Cell_Function
                    COMMA Safe_Value
                    {
                      free($1);
@@ -851,7 +853,7 @@ Disable_Value    : Z
                    { $$ = KEEPER; }
                  ;
 VHDL_Design_Warning: /* Null Statement */
-                 | ATTRIBUTE DESIGN_WARNING OF IDENTIFIER 
+                 | ATTRIBUTE DESIGN_WARNING OF IDENTIFIER
                    COLON ENTITY IS Quoted_String SEMICOLON
                    { free($4); }
                  ;
@@ -916,28 +918,28 @@ static void Make_String(char *Source, char *Dest)
   *Dest = '\0';
 }
 /*----------------------------------------------------------------------*/
-static void Print_Error(parser_priv_t *priv_data, char *Errmess)
+static void Print_Error(parser_priv_t *priv_data, const char *Errmess)
 {
   if (priv_data->Reading_Package)
-    bsdl_msg(BSDL_MSG_ERR, "Error in Package %s, Line %d, %s.\n", 
+    bsdl_msg(BSDL_MSG_ERR, _("Error in Package %s, Line %d, %s.\n"),
              priv_data->Package_File_Name,
              bsdl_flex_get_lineno(priv_data->scanner),
              Errmess);
   else
-    bsdl_msg(BSDL_MSG_ERR, "Error, Line %d, %s.\n",
+    bsdl_msg(BSDL_MSG_ERR, _("Error, Line %d, %s.\n"),
              bsdl_flex_get_lineno(priv_data->scanner),
              Errmess);
 }
 /*----------------------------------------------------------------------*/
-static void Print_Warning(parser_priv_t *priv_data, char *Warnmess)
+static void Print_Warning(parser_priv_t *priv_data, const char *Warnmess)
 {
   if (priv_data->Reading_Package)
-    bsdl_msg(BSDL_MSG_WARN, "Warning in Package %s, Line %d, %s.\n", 
+    bsdl_msg(BSDL_MSG_WARN, _("Warning in Package %s, Line %d, %s.\n"),
              priv_data->Package_File_Name,
              bsdl_flex_get_lineno(priv_data->scanner),
              Warnmess);
   else
-    bsdl_msg(BSDL_MSG_WARN, "Warning, Line %d, %s.\n",
+    bsdl_msg(BSDL_MSG_WARN, _("Warning, Line %d, %s.\n"),
              bsdl_flex_get_lineno(priv_data->scanner),
              Warnmess);
 }
@@ -956,7 +958,7 @@ parser_priv_t *bsdl_parser_init(FILE *f)
   parser_priv_t *new_priv;
 
   if (!(new_priv = (parser_priv_t *)malloc(sizeof(parser_priv_t)))) {
-    bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
     return NULL;
   }
 

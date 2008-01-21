@@ -32,8 +32,9 @@
 #include <jtag.h>
 #include <cmd.h>
 
-#include "bsdl_bison.h"
+#include "bsdl_sysdep.h"
 
+#include "bsdl_bison.h"
 #include "bsdl.h"
 
 
@@ -256,7 +257,7 @@ void bsdl_prt_add_name(parser_priv_t *priv, char *name)
 
     pd->names_list = new_string;
   } else
-    bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
 }
 
 
@@ -368,7 +369,7 @@ void bsdl_prt_apply_port(parser_priv_t *priv)
 
         free(port_string);
       } else
-        bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+        bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
 
       name = name->next;
     }
@@ -483,7 +484,7 @@ void bsdl_add_instruction(parser_priv_t *priv, char *instr, char *opcode)
 
     priv->jtag_ctrl.instr_list = new_instr;
   } else
-    bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
 }
 
 
@@ -570,7 +571,7 @@ void bsdl_ci_set_cell_spec(parser_priv_t *priv,
 
     ci->port_name = port_string;
   } else {
-    bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
     ci->port_name = NULL;
   }
 
@@ -758,7 +759,7 @@ void bsdl_ac_add_instruction(parser_priv_t *priv, char *instr)
 
     ad->instr_list = new_instr;
   } else
-    bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
 }
 
 
@@ -789,7 +790,7 @@ void bsdl_ac_apply_assoc(parser_priv_t *priv)
 
     ad->ainfo_list = new_ainfo;
   } else
-    bsdl_msg(BSDL_MSG_ERR, "Out of memory, %s line %i\n", __FILE__, __LINE__);
+    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
 
   /* clean up obsolete temporary entries */
   ad->reg        = NULL;

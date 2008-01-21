@@ -134,7 +134,7 @@ struct parser_priv {
 typedef struct parser_priv parser_priv_t;
 
 
-void bsdl_msg(int, char *, ...);
+void bsdl_msg(int, const char *, ...);
 
 /* BSDL lexer declarations */
 void *bsdl_flex_init(FILE *);

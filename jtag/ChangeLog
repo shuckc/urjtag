@@ -1,3 +1,7 @@
+2008-01-21  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/bsdl/*: use gettext for message strings, removed trailing whitespace
+
 2008-01-20  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c, src/bsdl/bsdl.h:

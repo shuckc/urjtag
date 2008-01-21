@@ -7,7 +7,7 @@
  */
 
 /*----------------------------------------------------------
- * 
+ *
  *  Lex source for BSDL
  *
  *----------------------------------------------------------*/
@@ -28,24 +28,24 @@ we are sending to people who request it from our publicized E-Mail address;
 
 You are free to redistribute this at will, but we feel that it would be
 better if respondents asked for it directly so that their addresses can
-be entered into our list for future mailings and updates. 
+be entered into our list for future mailings and updates.
 
 It would be helpful if you could confirm receipt of this transmission.
-We also would be very interested to hear about your experiences with this 
+We also would be very interested to hear about your experiences with this
 information and what you are planning to do with BSDL.
 
 Regards,
-  
+
 Ken Parker
 Hewlett-Packard Company
 
 
-*Boundary-Scan Description Language - as documented in: 
+*Boundary-Scan Description Language - as documented in:
 
-"A Language for Describing Boundary-Scan Devices", K.P. Parker 
-and S. Oresjo, Proceedings 1990 International Test Conference, 
+"A Language for Describing Boundary-Scan Devices", K.P. Parker
+and S. Oresjo, Proceedings 1990 International Test Conference,
 Washington DC, pp 222-234
- 
+
 
 - -----------------cut here---------------------------------------------------
 
@@ -57,7 +57,7 @@ Washington DC, pp 222-234
                                              USA
 
                                                              October 1990
-Hello BSDL Parser Requestor, 
+Hello BSDL Parser Requestor,
 
    This Electronic Mail reply contains the computer specifications for
 Hewlett-Packard's Version 0.0 BSDL parser.  This section of the reply
@@ -65,7 +65,7 @@ explains the contents of the rest of this file.
 
 This file is composed of seven (7) parts:
 
-   1) How to use this file 
+   1) How to use this file
 
    2) UNIX* Lex source  (lexicographical tokenizing rules)
 
@@ -81,12 +81,12 @@ This file is composed of seven (7) parts:
    7) [added 901016] Porting experiences to other systems.
 
 
-RECOMMENDATION: Save a copy of this file in archival storage before 
+RECOMMENDATION: Save a copy of this file in archival storage before
                 processing it via the instructions below.  This will
                 allow you to recover from errors, and allow you to
                 compare subsequently released data for changes.
 
-DISCLAIMERS:     
+DISCLAIMERS:
 
 1.  The IEEE 1149.1 Working Group has not endorsed BSDL Version 0.0 and
     therefore no person may represent it as an IEEE standard or imply that
@@ -96,7 +96,7 @@ DISCLAIMERS:
     well-conceived initiative that is likely to excelerate the creation
     of tools that support the 1149.1 standard.  As such, changes and
     enhancements will be carefully considered so as not to needlessly
-    disrupt these development efforts.  The overriding goal is the 
+    disrupt these development efforts.  The overriding goal is the
     ultimate success of the 1149.1 standard.
 
 LEGAL NOTICES:
@@ -126,8 +126,9 @@ LEGAL NOTICES:
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "bsdl_bison.h"
+#include "bsdl_sysdep.h"
 
+#include "bsdl_bison.h"
 #include "bsdl.h"
 
 #define YY_EXTRA_TYPE scan_extra_t *
@@ -275,7 +276,7 @@ Compliance_Patterns   COMPLIANCE_PATTERNS
 {Generic}               {yyextra->Base = DECIMAL; return(GENERIC); }
 {Use}                   {yyextra->Base = DECIMAL; return(USE); }
 {Attribute}             {yyextra->Base = DECIMAL; return(ATTRIBUTE); }
-{Is}                    {return(IS); } 
+{Is}                    {return(IS); }
 {Constant}              {yyextra->Base = DECIMAL; return(CONSTANT); }
 {String}                {return(STRING); }
 {End}                   {yyextra->Base = DECIMAL;
@@ -402,10 +403,10 @@ Compliance_Patterns   COMPLIANCE_PATTERNS
                          return(REAL_NUMBER);}
 {Concatenate}           {return(CONCATENATE);}
 {Semicolon}             {return(SEMICOLON);}
-{Illegal}               {fprintf(stderr, 
-                      "Error: Illegal character %c (/%03o) at line %d:\n",
+{Illegal}               {bsdl_msg(BSDL_MSG_ERR,
+                      _("Error: Illegal character %c (/%03o) at line %d:\n"),
                           (char)yytext[yyleng-1], (int)yytext[yyleng-1],
-                          yylineno); 
+                          yylineno);
                           yyextra->Compile_Errors++;
                          return(ILLEGAL);  /* Will cause syntax error */}
 <<EOF>> {
@@ -421,13 +422,13 @@ void *bsdl_flex_init(FILE *f)  /* Change input file from STDIN to BSDL file */
 
   /* get our scanner structure */
   if (yylex_init(&scanner) != 0) {
-    printf("%s: Scanner could not be initialized\n", "BSDL");
+    bsdl_msg(BSDL_MSG_ERR, _("Scanner could not be initialized\n") );
     return NULL;
   }
   yyset_in(f, scanner);
 
   if (!(extra = (scan_extra_t *)malloc(sizeof(scan_extra_t)))) {
-    printf("%s: Out of memory\n", "BSDL");
+    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
     yylex_destroy(scanner);
     return NULL;
   }
@@ -453,7 +454,7 @@ int yywrap(yyscan_t scanner)
     fclose(yyget_in(scanner));
     yyset_in(NULL, scanner);
   }
-  return(1); 
+  return(1);
 }
 
 
@@ -467,7 +468,7 @@ static char *new_string(const char *str)
     strncpy(n_str, str, n_str_size-1);
     n_str[n_str_size-1] = '\0';  /* set very last element to EOS */
   } else
-    printf("%s: Out of memory\n", "BSDL");
+    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
 
   return(n_str);
 }
@@ -498,7 +499,7 @@ void bsdl_flex_switch_file(yyscan_t scanner, const char *filename)
       f = fopen(db_file, "r");
 
       if (!f)
-        printf("%s: Cannot open file %s or %s.\n", "BSDL", filename, db_file);
+        bsdl_msg(BSDL_MSG_ERR, _("Cannot open file %s or %s.\n"), filename, db_file);
       free(db_file);
       if (!f)
         return;
