@@ -16,6 +16,7 @@
 /*
 
 Email header accompanying the original Yacc code:
+  http://www.eda.org/vug_bbs/bsdl.parser
 
 -----------------------------------8<--------------------------------------
 

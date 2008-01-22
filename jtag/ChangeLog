@@ -1,3 +1,9 @@
+2008-01-22  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/bsdl/bsdl_flex.l, src/bsdl/bsdl_bison.y,
+      data/bsdl/STD_1149_1_1990, data/bsdl/STD_1149_1_1994:
+      update header with link to source
+
 2008-01-21  Kolja Waschk <kawk>
 
     * New JTAG declarations for MPC5241 (from kurobox.com, enh. 1869671)
