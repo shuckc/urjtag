@@ -20,6 +20,7 @@
  * 02111-1307, USA.
  *
  * Written by Arnim Laeuger, 2007.
+ * Support for JTAGkey submitted by Laurent Gauch, 2008.
  *
  */
 
@@ -82,11 +83,13 @@
 #define BIT_TDI 1
 #define BIT_TDO 2
 #define BIT_TMS 3
+#define BIT_JTAGKEY_nOE 4
 #define BIT_ARMUSBOCD_nOE 4
 #define BITMASK_TDO (1 << BIT_TDO)
 #define BITMASK_TDI (1 << BIT_TDI)
 #define BITMASK_TCK (1 << BIT_TCK)
 #define BITMASK_TMS (1 << BIT_TMS)
+#define BITMASK_JTAGKEY_nOE (1 << BIT_JTAGKEY_nOE)
 #define BITMASK_ARMUSBOCD_nOE (1 << BIT_ARMUSBOCD_nOE)
 
 
@@ -169,6 +172,41 @@ ft2232_generic_init( cable_t *cable )
 }
 
 static int
+ft2232_jtagkey_init( cable_t *cable )
+{
+	parport_t *p = cable->port;
+
+	if (parport_open( p ))
+		return -1;
+
+	/* set loopback off */
+	parport_set_data( p, LOOPBACK_END );
+	parport_set_control( p, 1 ); // flush
+	parport_set_control( p, 0 ); // noflush
+
+	/* Set Data Bits Low Byte
+		 TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
+	parport_set_data( p, SET_BITS_LOW );
+	parport_set_data( p, BITMASK_TMS );
+	parport_set_data( p, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_JTAGKEY_nOE );
+	parport_set_control( p, 1 ); // flush
+	parport_set_control( p, 0 ); // noflush
+
+	/* Set TCK/SK Divisor */
+	parport_set_data( p, TCK_DIVISOR );
+	parport_set_data( p, 0 );
+	parport_set_data( p, 0 );
+	parport_set_control( p, 1 ); // flush
+	parport_set_control( p, 0 ); // noflush
+
+	mpsse_frequency = FT2232_MAX_TCK_FREQ;
+
+	last_tdo_valid = 0;
+
+	return 0;
+}
+
+static int
 ft2232_armusbocd_init( cable_t *cable )
 {
 	parport_t *p = cable->port;
@@ -212,6 +250,29 @@ ft2232_generic_done( cable_t *cable )
 		 set all to input */
 	parport_set_data( p, SET_BITS_LOW );
 	parport_set_data( p, 0 );
+	parport_set_data( p, 0 );
+	parport_set_control( p, 1 ); // flush
+	parport_set_control( p, 0 ); // noflush
+
+	parport_close( p );
+}
+
+static void
+ft2232_jtagkey_done( cable_t *cable )
+{
+	parport_t *p = cable->port;
+
+	/* Set Data Bits Low Byte
+		 disable output drivers */
+	parport_set_data( p, SET_BITS_LOW );
+	parport_set_data( p, BITMASK_JTAGKEY_nOE );
+	parport_set_data( p, BITMASK_JTAGKEY_nOE );
+	parport_set_control( p, 1 ); // flush
+	parport_set_control( p, 0 ); // noflush
+	/* Set Data Bits Low Byte
+		 set all to input */
+	parport_set_data( p, SET_BITS_LOW );
+	parport_set_data( p, BITMASK_JTAGKEY_nOE );
 	parport_set_data( p, 0 );
 	parport_set_control( p, 1 ); // flush
 	parport_set_control( p, 0 ); // noflush
@@ -509,6 +570,23 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
 	generic_get_trst,
 	ft2232_usbcable_help
 };
+
+cable_driver_t ft2232_jtagkey_cable_driver = {
+	"JTAGkey",
+	N_("Amontec JTAGkey (FT2232) Cable"),
+	generic_connect,
+	generic_disconnect,
+	generic_cable_free,
+	ft2232_jtagkey_init,
+	ft2232_jtagkey_done,
+	ft2232_clock,
+	ft2232_get_tdo,
+	ft2232_transfer,
+	ft2232_set_trst,
+	generic_get_trst,
+	ft2232_usbcable_help
+};
+
 
 
 /*

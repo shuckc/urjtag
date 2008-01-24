@@ -224,6 +224,7 @@ ftdi_generic_open( parport_t *parport )
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x09FB, 0x6002, NULL, p->serial); /* Cubic Cyclonium */
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x09FB, 0x6003, NULL, p->serial); /* NIOS II Evaluation board */
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x16C0, 0x06AD, NULL, p->serial); /* http://www.ixo.de/info/usb_jtag/ */
+		if(r<0) r = ftdi_usb_open_desc(fc, 0x0403, 0xCFF8, NULL, p->serial); /* Amontec JTAGkey http://www.amontec.com/jtagkey.shtml */
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x15BA, 0x0003, NULL, p->serial); /* Olimex ARM-USB-OCD */
 	};
 

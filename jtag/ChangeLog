@@ -1,3 +1,8 @@
+2008-01-24  Kolja Waschk <kawk>
+
+    * tap/cable/ft2232.c, tap/parport/ftdi.c, tap/cable.c: added support
+      for Amontec JTAGkey USB cable (submitted by Laurent Gauch - Amontec)
+
 2008-01-22  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/bsdl/bsdl_flex.l, src/bsdl/bsdl_bison.y,
