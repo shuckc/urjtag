@@ -210,6 +210,7 @@ See 'help cable' command for up-to-date info.
  * Lattice Parallel Port JTAG Cable
  * Mpcbdm JTAG Cable
  * Macraigor Wiggler JTAG Cable
+ * Amontec JTAGkey (FT2232-based)
  * Olimex FT2232-based ARM-USB-JTAG
  * Other FT2232-based USB JTAG cables (experimental)
  * Xilinx Platform USB Cable (experimental)
