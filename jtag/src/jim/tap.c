@@ -248,6 +248,7 @@ jim_state_t *jim_init(void)
 
   s->trst = 0;
   s->last_device_in_chain = some_cpu();
+
   if(s->last_device_in_chain != NULL)
   {
     s->last_device_in_chain->prev = NULL;

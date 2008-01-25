@@ -1,3 +1,9 @@
+2008-01-25  Kolja Waschk <kawk>
+
+    * include/jim.h, src/jim/tap.c, intel_28f800b3.c, Makefile.am,
+      some_cpu.c: Code skeleton and alloc/free calls for actual parts
+	  connected to JIM's some_cpu
+
 2008-01-24  Kolja Waschk <kawk>
 
     * tap/cable/ft2232.c, tap/parport/ftdi.c, tap/cable.c: added support

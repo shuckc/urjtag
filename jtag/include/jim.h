@@ -71,6 +71,7 @@ typedef struct jim_device
   void (*tck_rise)(struct jim_device *dev, int tms, int tdi);
   void (*tck_fall)(struct jim_device *dev);
   void (*dev_free)(struct jim_device *dev);
+  void *state;
   int num_sregs;
   int current_dr;
   shift_reg_t *sreg;
@@ -86,6 +87,24 @@ typedef struct jim_state
 }
 jim_state_t;
 
+typedef struct jim_bus_device
+{
+    int width; /* bits */
+    uint32_t size; /* bytes */
+	void *state; /* device-dependent */
+    void (*init)(struct jim_bus_device *x);
+    void (*access)(struct jim_bus_device *x,
+				uint32_t address, uint32_t data, uint32_t control);
+	void (*free)(struct jim_bus_device *x);
+}
+jim_bus_device_t;
+
+typedef struct
+{
+    uint32_t offset;
+	jim_bus_device_t *part;
+}
+jim_attached_part_t;
 
 void jim_set_trst(jim_state_t *s, int trst);
 int jim_get_trst(jim_state_t *s);

@@ -23,7 +23,17 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <jim.h>
+
+extern jim_bus_device_t intel_28f800b3;
+
+jim_attached_part_t some_cpu_attached[] =
+{
+    { 0x00000000, &intel_28f800b3 },
+    { 0xFFFFFFFF, NULL }
+};
 
 #define BSR_LEN 202
 
@@ -34,10 +44,28 @@ void some_cpu_report_idcode(jim_device_t *dev)
   dev->current_dr = 1; /* IDR */
 }
 
-void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
+void some_cpu_extest(char *st, jim_device_t *dev)
 {
   int i;
 
+  printf("EXTEST/%s with A=%08X, D=%08X%s%s%s\n", st,
+    dev->sreg[2].reg[0], dev->sreg[2].reg[1],
+    (dev->sreg[2].reg[2] & 1) ? ", OE":"",
+    (dev->sreg[2].reg[2] & 2) ? ", WE":"",
+    (dev->sreg[2].reg[2] & 4) ? ", CS":"");
+
+  for(i=0; some_cpu_attached[i].part; i++)
+  {
+    jim_bus_device_t *b = ((jim_attached_part_t*)(dev->state))[i].part;
+
+    b->access(b, dev->sreg[2].reg[0],
+                 dev->sreg[2].reg[1],
+                 dev->sreg[2].reg[2]);
+  }
+}
+
+void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
+{
   // jim_print_tap_state(dev);
 
   switch(dev->tap_state)
@@ -49,12 +77,7 @@ void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
     case UPDATE_DR:
       if(dev->current_dr == 2)
       {
-        printf("UPDATE_DR(BSR): A=%08X, D=%08X%s%s%s\n",
-          dev->sreg[2].reg[0],
-          dev->sreg[2].reg[1],
-          (dev->sreg[2].reg[2] & 1) ? ", OE":"",
-          (dev->sreg[2].reg[2] & 2) ? ", WE":"",
-          (dev->sreg[2].reg[2] & 4) ? ", CS":"");
+        if(dev->sreg[0].reg[0] == 0) some_cpu_extest("UPDATE_DR", dev);
       };
       break;
  
@@ -64,6 +87,7 @@ void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
         case 0x0: /* EXTEST */
           printf("EXTEST\n");
           dev->current_dr = 2;
+          some_cpu_extest("UPDATE_IR", dev);
           break;
         case 0x1: /* IDCODE */
           printf("IDCODE\n");
@@ -86,6 +110,21 @@ void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
   }
 }
 
+void some_cpu_free(jim_device_t *dev)
+{
+  int i;
+
+  if(!dev) return;
+  if(!dev->state) return;
+
+  for(i=0;some_cpu_attached[i].part;i++)
+  { 
+    jim_bus_device_t *b = ((jim_attached_part_t*)(dev->state))[i].part;
+    if(b->free != NULL) b->free(b);
+  }
+  free(dev->state);
+}
+
 jim_device_t *some_cpu(void)
 {
   jim_device_t *dev;
@@ -95,7 +134,24 @@ jim_device_t *some_cpu(void)
 
   if(dev)
   {
-    dev->tck_rise = some_cpu_tck_rise;
+    dev->state    = malloc(sizeof(some_cpu_attached));
+    if(!dev->state)
+    {
+      free(dev);
+      dev = NULL;
+    }
+    else
+    {
+      int i;
+      dev->tck_rise = some_cpu_tck_rise;
+      dev->dev_free = some_cpu_free;
+      memcpy(dev->state, some_cpu_attached, sizeof(some_cpu_attached));
+      for(i=0;some_cpu_attached[i].part;i++)
+      {
+        jim_bus_device_t *b = ((jim_attached_part_t*)(dev->state))[i].part;
+        b->init(b);
+      }
+    }
   }
 
   return dev;

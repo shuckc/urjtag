@@ -27,4 +27,5 @@ noinst_LIBRARIES = libjim.a
 
 libjim_a_SOURCES = \
 	tap.c \
-	some_cpu.c
+	some_cpu.c \
+	intel_28f800b3.c
