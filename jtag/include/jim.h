@@ -124,7 +124,7 @@ jim_device_t *jim_alloc_device(int num_sregs, const int reg_size[]);
 jim_state_t *jim_init(void);
 void jim_free(jim_state_t *s);
 void jim_print_sreg(shift_reg_t *r);
-void jim_print_tap_state(jim_device_t *dev);
+void jim_print_tap_state(char *rof, jim_device_t *dev);
 
 #endif
 
