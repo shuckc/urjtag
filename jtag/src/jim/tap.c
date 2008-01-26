@@ -52,7 +52,8 @@ const tap_state_t next_tap_state[16][2] =
 
 void jim_print_sreg(shift_reg_t *r)
 {
-  printf("%08X", r->reg[0]);
+  int i;
+  for(i=(r->len+31)/32; i>=0; i--) printf(" %08X", r->reg[i]);
 }
 
 void jim_print_tap_state(jim_device_t *dev)
@@ -80,7 +81,7 @@ void jim_print_tap_state(jim_device_t *dev)
       printf("_DR");
       if(dev->current_dr != 0)
       {
-        printf("=");
+        printf("(%d)=", dev->current_dr);
         jim_print_sreg(&dev->sreg[dev->current_dr]);
       }
     };
@@ -118,7 +119,7 @@ void jim_tck_rise(jim_state_t *s, int tms, int tdi)
 
     dev_tdi = (dev->prev != NULL) ? dev->prev->tdo : tdi;
 
-    if(dev->tck_rise != NULL) dev->tck_rise(dev, tms, dev_tdi);
+    if(dev->tck_rise != NULL) dev->tck_rise(dev, tms, dev_tdi, s->shmem, s->shmem_size);
 
     if(dev->tap_state & 8)
     {
@@ -181,7 +182,7 @@ void jim_tck_fall(jim_state_t *s)
   {
     dev->tdo = dev->tdo_buffer;
 
-    if(dev->tck_fall != NULL) dev->tck_fall(dev);
+    if(dev->tck_fall != NULL) dev->tck_fall(dev, s->shmem, s->shmem_size);
   }
 }
 
@@ -246,6 +247,21 @@ jim_state_t *jim_init(void)
     return NULL;
   };
 
+  s->shmem_size = (1<<20)*16; /* 16 MByte */
+  s->shmem = malloc(s->shmem_size);
+
+  if(s->shmem != NULL)
+  {
+    memset(s->shmem, 0xFF, s->shmem_size);
+    printf("Allocated %zd bytes for device memory simulation.\n", s->shmem_size);
+  }
+  else
+  {
+    free(s);
+    printf("Out of memory!\n");
+    return NULL;
+  }
+
   s->trst = 0;
   s->last_device_in_chain = some_cpu();
 
@@ -256,6 +272,8 @@ jim_state_t *jim_init(void)
   else
   {
     printf("Out of memory!\n");
+    free(s->shmem);
+    free(s);
     return NULL;
   }
   return s;
@@ -282,7 +300,7 @@ void jim_free(jim_state_t *s)
   }
 
   s->last_device_in_chain = NULL;
-
+  free(s->shmem);
   free(s);
 }
 

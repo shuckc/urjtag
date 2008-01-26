@@ -26,13 +26,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <jim.h>
+#include <bitmask.h>
 
-extern jim_bus_device_t intel_28f800b3;
+#undef VERBOSE
+
+extern jim_bus_device_t intel_28f800b3t;
 
 jim_attached_part_t some_cpu_attached[] =
 {
-    { 0x00000000, &intel_28f800b3 },
-    { 0xFFFFFFFF, NULL }
+    /* 1. Address offset: base offset [bytes]
+     * 2. Address shift: Distance between address LSB of device and CPU
+     * 3. Data shift: Distance between D0 of device and CPU e.g. 0, 8, 16 or 24 bits
+     * 4. Part: Pointer to part structure */
+ 
+    { 0x00000000, 1, 0, &intel_28f800b3t },
+
+    { 0xFFFFFFFF, 0, 0, NULL } /* Always end list with part == NULL */
 };
 
 #define BSR_LEN 202
@@ -44,65 +53,132 @@ void some_cpu_report_idcode(jim_device_t *dev)
   dev->current_dr = 1; /* IDR */
 }
 
-void some_cpu_extest(char *st, jim_device_t *dev)
+void some_cpu_tck_rise(jim_device_t *dev, 
+    int tms, int tdi, 
+    uint8_t *shmem, size_t shmem_size )
 {
   int i;
 
-  printf("EXTEST/%s with A=%08X, D=%08X%s%s%s\n", st,
-    dev->sreg[2].reg[0], dev->sreg[2].reg[1],
-    (dev->sreg[2].reg[2] & 1) ? ", OE":"",
-    (dev->sreg[2].reg[2] & 2) ? ", WE":"",
-    (dev->sreg[2].reg[2] & 4) ? ", CS":"");
-
-  for(i=0; some_cpu_attached[i].part; i++)
-  {
-    jim_bus_device_t *b = ((jim_attached_part_t*)(dev->state))[i].part;
-
-    b->access(b, dev->sreg[2].reg[0],
-                 dev->sreg[2].reg[1],
-                 dev->sreg[2].reg[2]);
-  }
-}
-
-void some_cpu_tck_rise(jim_device_t *dev, int tms, int tdi)
-{
   // jim_print_tap_state(dev);
 
   switch(dev->tap_state)
   {
     case RESET:
+
       some_cpu_report_idcode(dev);
       break;
 
-    case UPDATE_DR:
-      if(dev->current_dr == 2)
+    case CAPTURE_DR:
+
+      if(dev->current_dr==2) // if(dev->sreg[0].reg[0] == 0 && dev->current_dr == 2) /* EXTEST */
       {
-        if(dev->sreg[0].reg[0] == 0) some_cpu_extest("UPDATE_DR", dev);
+        uint32_t a = dev->sreg[2].reg[0];
+        uint32_t d = 0;
+        uint32_t c = dev->sreg[2].reg[3];
+
+#ifdef VERBOSE
+        printf("CAPTURE_DR/EXTEST\n");
+#endif
+
+        for(i=0; some_cpu_attached[i].part; i++)
+        {
+          jim_attached_part_t *tp = &(((jim_attached_part_t*)(dev->state))[i]);
+          jim_bus_device_t *b = tp->part;
+
+          /* Address decoder */
+          if(tp->offset < a)
+          {
+            uint32_t as = (a - (tp->offset)) >> tp->adr_shift;
+            if(as < b->size)
+            {
+              d |= b->capture(b, as, c, shmem, shmem_size) << tp->data_shift;
+            }
+          }
+        }
+
+        /* Store data into data "input" cells in BSR */
+        dev->sreg[2].reg[2] = d;
+        jim_print_tap_state(dev);
+
       };
       break;
- 
+
     case UPDATE_IR:
+
+#ifdef VERBOSE
+      printf("UPDATE_IR/");
+#endif
+
       switch(dev->sreg[0].reg[0])
       {
         case 0x0: /* EXTEST */
+#ifdef VERBOSE
           printf("EXTEST\n");
+#endif
           dev->current_dr = 2;
-          some_cpu_extest("UPDATE_IR", dev);
           break;
         case 0x1: /* IDCODE */
+#ifdef VERBOSE
           printf("IDCODE\n");
+#endif
           some_cpu_report_idcode(dev);
           break;
         case 0x2: /* SAMPLE */
+#ifdef VERBOSE
           printf("SAMPLE\n");
+#endif
           dev->current_dr = 2;
           break;
         case 0x3: /* BYPASS */
+#ifdef VERBOSE
           printf("BYPASS\n");
+#endif
         default:
           dev->current_dr = 0; /* BYPASS */
           break;
       }
+      break;
+
+    default:
+      break;
+  }
+}
+
+void some_cpu_tck_fall(jim_device_t *dev,
+    uint8_t *shmem, size_t shmem_size )
+{
+  int i;
+
+  switch(dev->tap_state)
+  {
+    case UPDATE_DR:
+
+      if(dev->sreg[0].reg[0] == 0 && dev->current_dr == 2) /* EXTEST */
+      {
+        uint32_t a = dev->sreg[2].reg[0];
+        uint32_t d = dev->sreg[2].reg[1];
+        uint32_t c = dev->sreg[2].reg[3];
+
+#ifdef VERBOSE
+        printf("UPDATE_DR/EXTEST\n");
+#endif
+
+        for(i=0; some_cpu_attached[i].part; i++)
+        {
+          jim_attached_part_t *tp = &(((jim_attached_part_t*)(dev->state))[i]);
+          jim_bus_device_t *b = tp->part;
+
+          /* Address decoder */
+          if(tp->offset < a)
+          {
+            uint32_t as = (a - (tp->offset)) >> tp->adr_shift;
+            if(as < b->size)
+            {
+              b->update(b, as, d >> tp->data_shift, c, shmem, shmem_size);
+            }
+          }
+        }
+      };
       break;
 
     default:
@@ -121,6 +197,7 @@ void some_cpu_free(jim_device_t *dev)
   { 
     jim_bus_device_t *b = ((jim_attached_part_t*)(dev->state))[i].part;
     if(b->free != NULL) b->free(b);
+    free(b);
   }
   free(dev->state);
 }
@@ -134,7 +211,10 @@ jim_device_t *some_cpu(void)
 
   if(dev)
   {
-    dev->state    = malloc(sizeof(some_cpu_attached));
+    /* Allocate memory for copies of the original structure for dynamic
+     * modifications (e.g. if bus width changes because of some signal) */
+
+    dev->state = malloc(sizeof(some_cpu_attached));
     if(!dev->state)
     {
       free(dev);
@@ -144,16 +224,28 @@ jim_device_t *some_cpu(void)
     {
       int i;
       dev->tck_rise = some_cpu_tck_rise;
+      dev->tck_fall = some_cpu_tck_fall;
       dev->dev_free = some_cpu_free;
       memcpy(dev->state, some_cpu_attached, sizeof(some_cpu_attached));
-      for(i=0;some_cpu_attached[i].part;i++)
+
+     for(i=0;some_cpu_attached[i].part;i++)
       {
-        jim_bus_device_t *b = ((jim_attached_part_t*)(dev->state))[i].part;
-        b->init(b);
+        jim_bus_device_t **b = &(((jim_attached_part_t*)(dev->state))[i].part);
+        *b = malloc(sizeof(jim_bus_device_t));
+        if(*b == NULL) break;
+        memcpy(*b, some_cpu_attached[i].part, sizeof(jim_bus_device_t));
+        (*b)->init(*b);
+      };
+
+      if(some_cpu_attached[i].part) /* loop broken; failed to malloc all parts */
+      {
+        for(i--;i>=0;i--) free(((jim_attached_part_t*)(dev->state))[i].part);
+        free(dev->state);
+        free(dev);
+        dev = NULL;
       }
     }
   }
-
   return dev;
 }
 

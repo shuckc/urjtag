@@ -35,6 +35,7 @@
 #define JIM_H 1
 
 #include <stdint.h>
+#include <stdlib.h>
 
 typedef enum 
 {
@@ -68,8 +69,8 @@ typedef struct jim_device
   struct jim_device *prev;
 
   tap_state_t tap_state;
-  void (*tck_rise)(struct jim_device *dev, int tms, int tdi);
-  void (*tck_fall)(struct jim_device *dev);
+  void (*tck_rise)(struct jim_device *dev, int tms, int tdi, uint8_t *shmem, size_t shmem_size);
+  void (*tck_fall)(struct jim_device *dev, uint8_t *shmem, size_t shmem_size);
   void (*dev_free)(struct jim_device *dev);
   void *state;
   int num_sregs;
@@ -83,18 +84,24 @@ jim_device_t;
 typedef struct jim_state
 {
   int trst;
+  uint8_t *shmem;
+  size_t shmem_size;
   jim_device_t *last_device_in_chain;
 }
 jim_state_t;
 
 typedef struct jim_bus_device
 {
-    int width; /* bits */
-    uint32_t size; /* bytes */
-	void *state; /* device-dependent */
+    int width; /* bytes */
+    int size ; /* words (each <width> bytes) */
+	void *state;    /* device-dependent */
     void (*init)(struct jim_bus_device *x);
-    void (*access)(struct jim_bus_device *x,
-				uint32_t address, uint32_t data, uint32_t control);
+    uint32_t (*capture)(struct jim_bus_device *x,
+				uint32_t address, uint32_t control,
+                uint8_t *shmem, size_t shmem_size);
+    void (*update)(struct jim_bus_device *x,
+				uint32_t address, uint32_t data, uint32_t control,
+                uint8_t *shmem, size_t shmem_size);
 	void (*free)(struct jim_bus_device *x);
 }
 jim_bus_device_t;
@@ -102,6 +109,8 @@ jim_bus_device_t;
 typedef struct
 {
     uint32_t offset;
+    int adr_shift;
+    int data_shift;
 	jim_bus_device_t *part;
 }
 jim_attached_part_t;

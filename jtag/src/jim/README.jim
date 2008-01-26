@@ -8,9 +8,6 @@
 cable jim
 bsdl path .
 detect
-initbus prototype amsb=A(31) alsb=A(0) dmsb=D(31) dlsb=D(0) cs=CS oe=OE we=WE amode=x32
+initbus prototype amsb=A(31) alsb=A(1) dmsb=D(15) dlsb=D(0) cs=CS oe=OE we=WE amode=x16
 detectflash 0x0000
-
-
-
 
