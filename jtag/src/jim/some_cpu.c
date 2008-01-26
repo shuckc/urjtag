@@ -59,8 +59,6 @@ void some_cpu_tck_rise(jim_device_t *dev,
 {
   int i;
 
-  // jim_print_tap_state(dev);
-
   switch(dev->tap_state)
   {
     case RESET:
@@ -86,7 +84,7 @@ void some_cpu_tck_rise(jim_device_t *dev,
           jim_bus_device_t *b = tp->part;
 
           /* Address decoder */
-          if(tp->offset < a)
+          if(tp->offset <= a)
           {
             uint32_t as = (a - (tp->offset)) >> tp->adr_shift;
             if(as < b->size)
@@ -98,8 +96,6 @@ void some_cpu_tck_rise(jim_device_t *dev,
 
         /* Store data into data "input" cells in BSR */
         dev->sreg[2].reg[2] = d;
-        jim_print_tap_state(dev);
-
       };
       break;
 
@@ -169,7 +165,7 @@ void some_cpu_tck_fall(jim_device_t *dev,
           jim_bus_device_t *b = tp->part;
 
           /* Address decoder */
-          if(tp->offset < a)
+          if(tp->offset <= a)
           {
             uint32_t as = (a - (tp->offset)) >> tp->adr_shift;
             if(as < b->size)

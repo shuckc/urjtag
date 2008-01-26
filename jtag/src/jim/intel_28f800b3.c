@@ -109,8 +109,8 @@ uint32_t intel_28fxxxb3_capture(jim_bus_device_t *d,
         data = is->status_buffer; 
         break;
       case READ_ID:
-        if(address == 0) data = is->identifier;
-        else if(address == 1) data = 0x0089;
+        if(address == 1) data = is->identifier;
+        else if(address == 0) data = 0x0089;
         break;
       case READ_ARRAY:
         data = shmem[(address<<1)]<<8;

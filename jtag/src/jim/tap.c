@@ -30,6 +30,8 @@
 
 #include <jim/some_cpu.h>
 
+#undef VERBOSE
+
 const tap_state_t next_tap_state[16][2] =
 {
   /* RESET       */ { IDLE,       RESET },
@@ -56,9 +58,9 @@ void jim_print_sreg(shift_reg_t *r)
   for(i=(r->len+31)/32; i>=0; i--) printf(" %08X", r->reg[i]);
 }
 
-void jim_print_tap_state(jim_device_t *dev)
+void jim_print_tap_state(char *rof, jim_device_t *dev)
 {
-  printf(" tck rise, state=");
+  printf(" tck %s, state=", rof);
   switch(dev->tap_state & 7)
   {
     case 0:  printf((dev->tap_state==RESET) ? "RESET":"IDLE" ); break;
@@ -110,12 +112,17 @@ void jim_tck_rise(jim_state_t *s, int tms, int tdi)
 {
   jim_device_t *dev;
 
+
   for(dev = s->last_device_in_chain; dev; dev = dev->prev)
   {
     int dev_tdi;
     int i, n;
     shift_reg_t *sr;
     uint32_t *reg;
+
+#ifdef VERBOSE
+    jim_print_tap_state("rise", dev);
+#endif
 
     dev_tdi = (dev->prev != NULL) ? dev->prev->tdo : tdi;
 
@@ -181,6 +188,10 @@ void jim_tck_fall(jim_state_t *s)
   for(dev = s->last_device_in_chain; dev; dev = dev->prev)
   {
     dev->tdo = dev->tdo_buffer;
+
+#ifdef VERBOSE
+    jim_print_tap_state("fall", dev);
+#endif
 
     if(dev->tck_fall != NULL) dev->tck_fall(dev, s->shmem, s->shmem_size);
   }
