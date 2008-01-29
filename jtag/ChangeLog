@@ -1,3 +1,9 @@
+2008-01-30  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/tap/tap.c (tap_reset): set instructions of all parts to BYPASS, fix
+      [ 1873260 ] Command 'reset' does not reset internal states
+    * src/part/part.c (parts_set_instruction): catch NULL pointer
+
 2008-01-25  Kolja Waschk <kawk>
 
     * include/jim.h, src/jim/tap.c, intel_28f800b3.c, Makefile.am,

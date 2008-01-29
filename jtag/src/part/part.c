@@ -306,6 +306,9 @@ parts_set_instruction( parts_t *ps, const char *iname )
 {
 	int i;
 
+	if (!ps)
+		return;
+
 	for (i = 0; i < ps->len; i++)
 		ps->parts[i]->active_instruction = part_find_instruction( ps->parts[i], iname );
 }

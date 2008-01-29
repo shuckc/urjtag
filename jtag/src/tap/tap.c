@@ -39,6 +39,8 @@ tap_reset( chain_t *chain )
 	chain_clock( chain, 1, 0, 5 );				/* Test-Logic-Reset */
 
 	chain_clock( chain, 0, 0, 1 );				/* Run-Test/Idle */
+
+	parts_set_instruction( chain->parts, "BYPASS" );
 }
 
 void
