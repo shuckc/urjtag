@@ -790,23 +790,192 @@ be added soon...
 
 ==== Source code Overview ====
 
-  data/
+doc/::
+  Documentation
 
-  include/
-  inclow/
+data/::
+  Part descriptions (Data files)
 
-  libbrux/
-    cmd/
-    flash/
+include/::
+  C header files
 
-  src/
-    bus/
-    cmd/
-    lib/
-    tap/
-    svf/
+src/::
+  C source code
 
-==== Data file format ====
+src/bsdl::
+  BSDL subsystem
+
+src/bus::
+  Bus driver for various CPUs and other parts
+
+src/cmd::
+  Implementation of the commands for the "jtag" shell
+
+src/flash::
+  Flash detection and programming algorithms
+
+src/jim::
+  JIM, the JTAG target simulator
+
+src/lib::
+  Utility functions
+
+src/part::
+  Functions for accessing specific parts in a chain
+
+src/svf::
+  SVF player
+
+src/tap::
+  Functions for accessing the chain in general
+
+=== Cable drivers ===
+
+==== Cable-specific drivers (src/tap/cable) ====
+
+Cable-specific drivers are those which are visible to the user through
+the "jtag" command shell. They're listed in response to the "help cable"
+command. Each driver has to provide the following functions:
+
+ * connect(), init() - Initialization 
+ * done(), cable_free(), disconnect() - Cleaning up
+ * clock(), get_tdo(), transfer() - immediate JTAG activities
+ * flush() - internally used to actually perform JTAG activities
+ * help() - a help text to be displayed by the jtag command shell
+
+=====  Initialization =====
+
+After allocating a "cable_t" structure, a pointer to it and further
+parameters (as strings) have to be passed first  to the selected cable's
+connect() function. 
+
+Following that, the init() function is called via cable_init(). If cable_init()
+returns a zero value, all is fine and the cable is ready for use.
+
+===== Cleaning up =====
+
+There are two functions for actual cleanup:
+
+ * done() is responsible for driving the hardware to a safe and consistent state.
+ * cable_free() then can be used to clean up eventually extra allocated memory etc.
+
+Both are usually called from chain_disconnect(). 
+
+An additional mechanism allows to clean up if a disconnection was detected by
+the low level driver (e.g. USB or parallel port driver). A cable has to provide
+a disconnect() function for this purpose:
+
+ 1. Low level (e.g. parport) driver calls cable driver->disconnect()
+ 2. cable driver->disconnect() calls chain_disconnect()
+ 3. chain_disconnect() calls cable driver->done()
+ 4. chain_disconnect() then calls cable driver->cable_free()
+
+After return from chain_disconnect() to cable driver->disconnect(), the cable_t
+structure has been freed and must not be accessed anymore.
+
+===== JTAG Activities =====
+
+Currently the API provides five different functions for performing operations
+at the JTAG interface on the low level signal level (using the four signals
+TMS, TCK, TDI, and TDO).
+
+ * clock() takes values for TMS and TDI output as its parameters, ensures that actual cable signals are set accordingly, and does a 0-1 transition on TCK.
+ * get_tdo() returns the current value at the TDO input.
+ * set_trst() sets the TRST signal and returns the current value.
+ * get_trst() returns the current value of the TRST signal.
+
+For many JTAG adapters, there's almost no delay when doing alternating clock()
+and get_tdo(). Writing and reading happens immediately and the result is
+available immediately as well. This is the case with most parallel port
+adapters (but not when attached to USB-to-parallel adapters or USB docking
+stations) and memory mapped IO (e.g. general purpose I/O pins of
+microcontrollers).
+
+But there are adapters, especially USB and Ethernet based adapters, which
+exhibit a rather long delay between the initiation of reading a bit and the
+delivery of the value of the bit. It is at least 1 millisecond with USB,
+which would limit the transfer rate to 1 kHz.  One way to workaround this
+is to transmit bits compacted into bytes and chunks of bytes, which is 
+possible with the transfer() function.
+
+The transfer() function does a series of TCK pulses, with data for TDI read as
+bytes from memory. The bytes are automatically serialized. TMS is set to zero
+during transfer()s. Optionally, prior to each bit shifted out to the interface,
+TDO input can be read into memory (deserialized into a byte array of the same
+size as the input array).
+
+It still doesn't yield much improvement if the operation consists of many read
+and write transitions (e.g. repeatedly writing an instruction and some data
+register values, then reading from the data register, as it is necessary for
+memory access). For that reason, the above functions are also available in
+variants that don't cause immediate activity, but rather schedule it for later.
+In the API, they're visible as
+
+ * cable_defer_clock()
+ * cable_defer_get_tdo()
+ * cable_defer_set_trst()
+ * cable_defer_get_trst()
+ * cable_defer_transfer()
+
+These functions aren't implemented in the cable driver (but currently in
+src/tap/cable.c).  The cable driver just has to provide a flush() function to
+actually execute the queued activity in some cable-specific optimal way, and
+to store the results of get_tdo() and transfer() activity. The caller later
+can pick up the results using these functions (implemented in cable.c):
+
+ * cable_get_tdo_late()
+ * cable_get_trst_late()
+ * cable_transfer_late()
+
+As an example, consider the following sequence of activities:
+
+ 1. clock()
+ 2. get_tdo()
+ 3. clock()
+ 4. get_tdo()
+
+If the result of the first get_tdo() isn't absolutely required before the
+second clock(), the sequence can be optimized into the following sequence (if
+
+ 1. defer_clock()
+ 2. defer_clock()
+ 3. flush()
+ 4. get_tdo_late()
+ 5. get_tdo_late()
+
+The next section explains the queueing mechanism and its limits in detail.
+
+===== JTAG activity queueing =====
+
+The source in src/tap/cable.c provides to important functions to access the
+two queues "todo" (with activity to be done) and "done" (with results):
+
+ * cable_add_queue_item
+ * cable_get_queue_item
+
+In src/tap/cable/generic.c you'll find two implementations of dequeueing 
+algorithms, i.e. implementations of the flush() function. These could be used
+by any new cable driver unless it provides a more sophisticated algorithm
+itself:
+
+ * generic_flush_one_by_one() simply calls the "classic" functions one after
+   another. The performance of the cable driver using this implementation will
+   be the same whether the immediate or defer variants of the functions are used.
+ * generic_flush_using_transfer() tries to optimize as many clock() and
+   get_tdo() by transforming them into calls to transfer() instead. This can
+   give a slight advantage.
+
+The generic implementations also serve as a template for new cable-specific
+implementations. 
+
+===== Generic implementations =====
+
+As a reference and in many cases completely sufficient for new cables, take a
+look at the code in src/tap/cable/generic.c, which contains generic routines,
+suitable for parallel port based cables (and some for other types of cables as
+well).
+
+=== Data file format ===
 // By Marcel Telka
 
 JTAG declarations files are located in directory "data". The files contains

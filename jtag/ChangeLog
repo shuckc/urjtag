@@ -1,3 +1,7 @@
+2008-02-01  Kolja Waschk <kawk>
+
+    * doc/UrJTAG.txt: New section about current cable driver internals
+
 2008-02-01  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/parport/ftd2xx.c (ftd2xx_pre_connect): fix compiler warning
