@@ -25,6 +25,8 @@
 
 #include "sysdep.h"
 
+#include <stdlib.h>
+
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
@@ -62,12 +64,14 @@ usbblaster_clock( cable_t *cable, int tms, int tdi, int n )
 {
 	int i;
 
-	tms = tms ? 1 : 0;
-	tdi = tdi ? 1 : 0;
+	tms = tms ? (1<<TMS) : 0;
+	tdi = tdi ? (1<<TDI) : 0;
+
+	// printf("clock: %d %d %d\n", tms, tdi, n);
 
 	for (i = 0; i < n; i++) {
-		parport_set_data( cable->port, OTHERS | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
-		parport_set_data( cable->port, OTHERS | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_data( cable->port, OTHERS | (0 << TCK) | tms | tdi );
+		parport_set_data( cable->port, OTHERS | (1 << TCK) | tms | tdi );
 		parport_set_control( cable->port, 1 ); // flush
 		parport_set_control( cable->port, 0 ); // noflush
 	}
@@ -105,6 +109,15 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 	int out_offset = 0;
 	parport_set_control( cable->port, 0 );
 	parport_set_data( cable->port, OTHERS ); /* TCK low */
+
+#if 0
+				{
+					int o;
+					printf("%d in: ", len);
+					for(o=0;o<len;o++) printf("%c", in[o]?'1':'0');
+					printf("\n");
+				}
+#endif
 
 	while(len - in_offset >= 8)
 	{
@@ -158,10 +171,133 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 
 		while(len > out_offset)
 			out[out_offset++] = ( parport_get_data( cable->port ) & (1 << TDO)) ? 1 : 0;
+
+#if 0
+				{
+					int o;
+					printf("%d out: ", len);
+					for(o=0;o<len;o++) printf("%c", out[o]?'1':'0');
+					printf("\n");
+				}
+#endif
+
 	}
 
 	return 0;
 }
+
+static void
+usbblaster_flush( cable_t *cable )
+{
+	while (cable->todo.num_items > 0)
+	{
+		int i, j, n, to_send = 0;
+
+		for(j=i=cable->todo.next_item, n=0; to_send < 64 && n<cable->todo.num_items; n++)
+		{
+			if(cable->todo.data[i].action == CABLE_TRANSFER) break;
+
+			switch(cable->todo.data[i].action)
+			{
+				case CABLE_CLOCK:
+				{
+					int tms = cable->todo.data[i].arg.clock.tms ? (1<<TMS) : 0;
+					int tdi = cable->todo.data[i].arg.clock.tdi ? (1<<TDI) : 0;
+					int m   = cable->todo.data[i].arg.clock.n;
+					// printf("clock: %d %d %d\n", tms, tdi, m);
+					for(; m>0; m--)
+					{
+						parport_set_data( cable->port, OTHERS | tms | tdi );
+						parport_set_data( cable->port, OTHERS | (1 << TCK) | tms | tdi );
+						to_send += 2;
+					}
+					break;
+				}
+				case CABLE_GET_TDO:
+				{
+					parport_set_data( cable->port, OTHERS ); /* TCK low */
+					parport_set_data( cable->port, OTHERS | (1 << READ) ); /* TCK low */
+					// printf("get_tdo\n");
+					to_send += 2;
+					break;
+				}
+				default:
+					break;
+			};
+
+			i++;
+			if (i >= cable->todo.max_items) i=0;
+		};
+
+#if 0
+		if(cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER)
+		{
+			parport_set_data( cable->port, OTHERS ); /* TCK low */
+		};
+#endif
+
+		if(to_send > 0)
+		{
+			parport_set_control( cable->port, 1 ); // flush
+			parport_set_control( cable->port, 0 );
+		}
+
+		while(j!=i)
+		{
+			switch(cable->todo.data[j].action)
+			{
+				case CABLE_GET_TDO:
+				{
+					int tdo = (parport_get_data( cable->port ) & (1<<TDO)) ? 1 : 0;
+					int m = cable_add_queue_item( cable, &(cable->done) );
+					cable->done.data[m].action = CABLE_GET_TDO;
+					cable->done.data[m].arg.value.tdo = tdo;
+					break;
+				}
+				case CABLE_GET_TRST:
+				{
+					int m = cable_add_queue_item( cable, &(cable->done) );
+					cable->done.data[m].action = CABLE_GET_TRST;
+					cable->done.data[m].arg.value.trst = 1;
+					break;
+				}
+				default:
+					break;
+			};
+
+			j++;
+			if (j >= cable->todo.max_items) j=0;
+			cable->todo.num_items --;
+		};
+
+		while(cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER)
+		{
+			int r = usbblaster_transfer( cable,
+				cable->todo.data[i].arg.transfer.len,
+				cable->todo.data[i].arg.transfer.in,
+				cable->todo.data[i].arg.transfer.out);
+
+			free(cable->todo.data[i].arg.transfer.in);
+			if(cable->todo.data[i].arg.transfer.out != NULL)
+			{
+				int m = cable_add_queue_item( cable, &(cable->done) );
+				if(m < 0) printf("out of memory!!\n");
+				cable->done.data[m].action = CABLE_TRANSFER;
+				cable->done.data[m].arg.xferred.len = cable->todo.data[i].arg.transfer.len;
+				cable->done.data[m].arg.xferred.res = r;
+				cable->done.data[m].arg.xferred.out = cable->todo.data[i].arg.transfer.out;
+					
+			};
+
+			i++;
+			if (i >= cable->todo.max_items) i=0;
+			cable->todo.num_items --;
+		};
+
+		cable->todo.next_item = i;
+	}
+}
+
 
 void
 usbblaster_help( const char *cablename )
@@ -188,5 +324,8 @@ cable_driver_t usbblaster_cable_driver = {
 	usbblaster_transfer,
 	usbblaster_set_trst,
 	generic_get_trst,
+//	generic_flush_one_by_one,
+//	generic_flush_using_transfer,
+	usbblaster_flush,
 	usbblaster_help,
 };

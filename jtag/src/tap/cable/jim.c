@@ -171,6 +171,7 @@ cable_driver_t jim_cable_driver = {
 	generic_transfer,
 	jim_cable_set_trst,
 	jim_cable_get_trst,
+	generic_flush_using_transfer,
 	jim_cable_help
 };
 

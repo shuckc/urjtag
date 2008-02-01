@@ -46,6 +46,7 @@ chain_t *chain_alloc( void );
 void chain_free( chain_t *chain );
 void chain_disconnect( chain_t *chain );
 void chain_clock( chain_t *chain, int tms, int tdi, int n );
+void chain_defer_clock( chain_t *chain, int tms, int tdi, int n );
 int chain_set_trst( chain_t *chain, int trst );
 int chain_get_trst( chain_t *chain );
 void chain_shift_instructions( chain_t *chain );

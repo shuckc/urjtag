@@ -78,9 +78,9 @@ ei012_clock( cable_t *cable, int tms, int tdi, int n )
 
 	for (i = 0; i < n; i++) {
 		parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
-		cable_wait();
+		cable_wait( cable );
 		parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
-		cable_wait();
+		cable_wait( cable );
 	}
 }
 
@@ -88,7 +88,7 @@ static int
 ei012_get_tdo( cable_t *cable )
 {
 	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (0 << TCK) );
-	cable_wait();
+	cable_wait( cable );
 	return (parport_get_status( cable->port ) >> TDO) & 1;
 }
 
@@ -114,5 +114,6 @@ cable_driver_t ei012_cable_driver = {
 	generic_transfer,
 	ei012_set_trst,
 	generic_get_trst,
+	generic_flush_one_by_one,
 	generic_lptcable_help
 };

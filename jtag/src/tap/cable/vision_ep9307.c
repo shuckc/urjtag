@@ -319,5 +319,6 @@ cable_driver_t ep9307_cable_driver = {
 	generic_transfer,
 	ep9307_set_trst,
 	ep9307_get_trst,
+	generic_flush_one_by_one,
 	ep9307_help
 };

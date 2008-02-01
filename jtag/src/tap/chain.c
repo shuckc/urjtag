@@ -83,6 +83,20 @@ chain_clock( chain_t *chain, int tms, int tdi, int n )
 		tap_state_clock( chain, tms );
 }
 
+void
+chain_defer_clock( chain_t *chain, int tms, int tdi, int n )
+{
+	int i;
+
+	if (!chain || !chain->cable)
+		return;
+
+	cable_defer_clock( chain->cable, tms, tdi, n );
+
+        for (i = 0; i < n; i++)
+		tap_state_clock( chain, tms );
+}
+
 int
 chain_set_trst( chain_t *chain, int trst )
 {

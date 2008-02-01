@@ -1,3 +1,20 @@
+2008-02-01  Kolja Waschk <kawk>
+
+    * include/cable.h, include/chain.h, src/tap/chain.c, src/tap/tap.c,
+      src/tap/cable/wiggler.c, src/tap/cable/arcom.c, src/tap/cable/mpcbdm.c,
+      src/tap/cable/usbblaster.c, src/tap/cable/generic.c,
+      src/tap/cable/vision_ep9307.c, src/tap/cable/ea253.c,
+      src/tap/cable/triton.c, src/tap/cable/jim.c, src/tap/cable/byteblaster.c,
+      src/tap/cable/ei012.c, src/tap/cable/generic.h, src/tap/cable/ft2232.c,
+      src/tap/cable/wiggler2.c, src/tap/cable/keithkoep.c,
+      src/tap/cable/lattice.c, src/tap/cable/dlc5.c, src/tap/cable/xpc.c,
+      src/tap/cable.c: New functions to queue "deferred" JTAG activity.
+        New code in cable drivers to flush the activity queue, both generic
+        (for parport-based and new drivers) and optimized implementations
+        for FT2232-based cables (by Arnim Laeuger) and USB-Blaster (by me).
+        Result is a vast speed improvement at least for FT2232; this
+        implements [ 1832990 ] Speed improvements for USB cables
+
 2008-01-30  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/tap.c (tap_reset): set instructions of all parts to BYPASS, fix
@@ -8,7 +25,7 @@
 
     * include/jim.h, src/jim/tap.c, intel_28f800b3.c, Makefile.am,
       some_cpu.c: Code skeleton and alloc/free calls for actual parts
-	  connected to JIM's some_cpu
+      connected to JIM's some_cpu
 
 2008-01-24  Kolja Waschk <kawk>
 
@@ -171,9 +188,9 @@
 2007-12-29  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * data/altera/PARTS: ep2c8 added
-	'[ 1859032 ] jtag support for Altera EP2C8' (Hartley Sweeten)
+      '[ 1859032 ] jtag support for Altera EP2C8' (Hartley Sweeten)
     * data/Makefile.am (nobase_dist_pkgdata_DATA): ep2c8 files added
-	'[ 1859032 ] jtag support for Altera EP2C8' (Hartley Sweeten)
+      '[ 1859032 ] jtag support for Altera EP2C8' (Hartley Sweeten)
 
 2007-12-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 
@@ -183,7 +200,7 @@
 2007-12-26  Kolja Waschk <kawk>
 
     * tap/cable/vision_ep9307.c, tap/cable.c, tap/Makefile.am, configure.ac:
-	  Integrated first modern (single-file w/o parport) cable driver
+      Integrated first modern (single-file w/o parport) cable driver
       (1858709: EP9307 target specific cable driver, from Hartley Sweeten)
 
 2007-12-23  Kolja Waschk <kawk>

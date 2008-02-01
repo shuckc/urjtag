@@ -73,12 +73,12 @@ xpc_clock( cable_t *cable, int tms, int tdi, int n )
 	tdi = tdi ? 1 : 0;
 
 	parport_set_data( cable->port, (1 << PROG) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
-	cable_wait();
+	cable_wait( cable );
 	for (i = 0; i < n; i++) {
 		parport_set_data( cable->port, (1 << PROG) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
-		cable_wait();
+		cable_wait( cable );
 		parport_set_data( cable->port, (1 << PROG) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
-		cable_wait();
+		cable_wait( cable );
 	}
 }
 
@@ -119,6 +119,7 @@ cable_driver_t xpc_int_cable_driver = {
 	generic_transfer,
 	xpc_set_trst,
 	generic_get_trst,
+	generic_flush_using_transfer,
 	xpcu_usbcable_help
 };
 
@@ -135,6 +136,7 @@ cable_driver_t xpc_ext_cable_driver = {
 	generic_transfer,
 	xpc_set_trst,
 	generic_get_trst,
+	generic_flush_using_transfer,
 	xpcu_usbcable_help
 };
 

@@ -245,13 +245,13 @@ wiggler_clock( cable_t *cable, int tms, int tdi, int n )
 				(tms ? PRM_TMS_ACT(cable) : PRM_TMS_INACT(cable)) |
 				(tdi ? PRM_TDI_ACT(cable) : PRM_TDI_INACT(cable)) |
 				PRM_UNUSED_BITS(cable) );
-		cable_wait();
+		cable_wait( cable );
 		parport_set_data( cable->port, PRM_TRST_LVL(cable) |
 				PRM_TCK_ACT(cable) |
 				(tms ? PRM_TMS_ACT(cable) : PRM_TMS_INACT(cable)) |
 				(tdi ? PRM_TDI_ACT(cable) : PRM_TDI_INACT(cable)) |
 				PRM_UNUSED_BITS(cable) );
-		cable_wait();
+		cable_wait( cable );
 	}
 }
 
@@ -261,7 +261,7 @@ wiggler_get_tdo( cable_t *cable )
 	parport_set_data( cable->port, PRM_TRST_LVL(cable) |
 			PRM_TCK_INACT(cable) |
 			PRM_UNUSED_BITS(cable) );
-	cable_wait();
+	cable_wait( cable );
 	return (parport_get_status( cable->port ) & (PRM_TDO_ACT(cable) | PRM_TDO_INACT(cable))) ^
 	PRM_TDO_ACT(cable) ? 0 : 1;
 }
@@ -329,6 +329,7 @@ cable_driver_t wiggler_cable_driver = {
 	generic_transfer,
 	wiggler_set_trst,
 	wiggler_get_trst,
+	generic_flush_one_by_one,
 	wiggler_help
 };
 
@@ -345,6 +346,7 @@ cable_driver_t igloo_cable_driver = {
 	generic_transfer,
 	wiggler_set_trst,
 	wiggler_get_trst,
+	generic_flush_one_by_one,
 	wiggler_help
 };
 

@@ -24,6 +24,8 @@
  *
  */
 
+#include <stdlib.h>
+
 #include "sysdep.h"
 
 #include "cable.h"
@@ -93,11 +95,13 @@
 #define BITMASK_ARMUSBOCD_nOE (1 << BIT_ARMUSBOCD_nOE)
 
 
+#ifdef LAST_TDO_CACHE
 /* global variables to save last TDO value
 	 this acts as a cache to prevent multiple "Read Data Bits Low" transfer
 	 over USB for ft2232_get_tdo */
 static unsigned int last_tdo_valid;
 static unsigned int last_tdo;
+#endif
 
 static uint32_t mpsse_frequency;
 
@@ -166,7 +170,9 @@ ft2232_generic_init( cable_t *cable )
 
 	mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
+#ifdef LAST_TDO_CACHE
 	last_tdo_valid = 0;
+#endif
 
 	return 0;
 }
@@ -201,7 +207,9 @@ ft2232_jtagkey_init( cable_t *cable )
 
 	mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
+#ifdef LAST_TDO_CACHE
 	last_tdo_valid = 0;
+#endif
 
 	return 0;
 }
@@ -236,7 +244,9 @@ ft2232_armusbocd_init( cable_t *cable )
 
 	mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
+#ifdef LAST_TDO_CACHE
 	last_tdo_valid = 0;
+#endif
 
 	return 0;
 }
@@ -304,7 +314,7 @@ ft2232_armusbocd_done( cable_t *cable )
 }
 
 static void
-ft2232_clock( cable_t *cable, int tms, int tdi, int n )
+ft2232_clock_defer( cable_t *cable, int defer, int tms, int tdi, int n )
 {
 	parport_t *p = cable->port;
 
@@ -327,10 +337,45 @@ ft2232_clock( cable_t *cable, int tms, int tdi, int n )
 		}
 		parport_set_data( p, tdi | tms );
 	}
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	if (!defer) {
+		parport_set_control( p, 1 ); // flush
+		parport_set_control( p, 0 ); // noflush
 
-	last_tdo_valid = 0;
+#ifdef LAST_TDO_CACHE
+		last_tdo_valid = 0;
+#endif
+	}
+}
+
+static void
+ft2232_clock( cable_t *cable, int tms, int tdi, int n )
+{
+	ft2232_clock_defer( cable, 0, tms, tdi, n );
+}
+
+static void
+ft2232_get_tdo_schedule( cable_t *cable )
+{
+	parport_t *p = cable->port;
+
+	/* Read Data Bits Low Byte */
+	parport_set_data( p, GET_BITS_LOW );
+}
+
+static int
+ft2232_get_tdo_finish( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	int value;
+
+	value = ( parport_get_data( p ) & BITMASK_TDO) ? 1 : 0;
+
+#ifdef LAST_TDO_CACHE
+	last_tdo = value;
+	last_tdo_valid = 1;
+#endif
+
+	return value;
 }
 
 static int
@@ -338,18 +383,10 @@ ft2232_get_tdo( cable_t *cable )
 {
 	parport_t *p = cable->port;
 
-	if (!last_tdo_valid) {
-		/* Read Data Bits Low Byte */
-		parport_set_data( p, GET_BITS_LOW );
-		parport_set_control( p, 1 ); // flush
-		parport_set_control( p, 0 ); // noflush
-		last_tdo = ( parport_get_data( p ) & BITMASK_TDO) ? 1 : 0;
-
-#ifdef LAST_TDO_CACHE
-		last_tdo_valid = 1;
-#endif
-	}
-	return last_tdo;
+	ft2232_get_tdo_schedule( cable );
+	parport_set_control( p, 1 ); // flush
+	parport_set_control( p, 0 ); // noflush
+	return ft2232_get_tdo_finish( cable );
 }
 
 static int
@@ -369,10 +406,11 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 	/* check for new frequency setting */
 	update_frequency( cable );
 
-#ifdef LAST_TDO_CACHE
-	/* invalidate TDO cache */
-	last_tdo_valid = 0;
-#endif
+	/* Set Data Bits Low Byte to lower TMS for transfer
+		 TCK = 0, TMS = 0, TDI = 0, nOE = 0 */
+	parport_set_data( p, SET_BITS_LOW );
+	parport_set_data( p, 0 );
+	parport_set_data( p, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_ARMUSBOCD_nOE );
 
 	while (len - in_offset > 0) {
 		int byte_idx;
@@ -466,6 +504,11 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 
 		parport_set_control( p, 1 ); // flush
 		parport_set_control( p, 0 ); // noflush
+#ifdef LAST_TDO_CACHE
+	/* invalidate TDO cache */
+	last_tdo_valid = 0;
+#endif
+
 
 		if (out) {
 			if (chunkbytes > 0) {
@@ -527,6 +570,155 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 	return 0;
 }
 
+#undef FLUSH_PUTS
+
+static void
+ft2232_flush( cable_t *cable )
+{
+#ifdef FLUSH_PUTS
+	puts("flush()");
+#endif
+	while (cable->todo.num_items > 0)
+	{
+		int i, j, n, to_send = 0, to_rec = 0;
+#ifdef LAST_TDO_CACHE
+		int last_tdo_valid_schedule = last_tdo_valid;
+		int last_tdo_valid_finish = last_tdo_valid;
+#endif
+
+		for(j=i=cable->todo.next_item, n=0; to_send < 64 && n<cable->todo.num_items; n++)
+		{
+			if(cable->todo.data[i].action == CABLE_TRANSFER) {
+#ifdef FLUSH_PUTS
+				puts("transfer");
+#endif
+				break;
+			}
+
+			switch(cable->todo.data[i].action) {
+				case CABLE_CLOCK:
+#ifdef FLUSH_PUTS
+					puts("clock");
+#endif
+					ft2232_clock_defer( cable, 1,
+					                    cable->todo.data[i].arg.clock.tms,
+					                    cable->todo.data[i].arg.clock.tdi,
+					                    cable->todo.data[i].arg.clock.n );
+					to_send += 3;
+#ifdef LAST_TDO_CACHE
+					last_tdo_valid_schedule = 0;
+#endif
+					break;
+
+				case CABLE_GET_TDO:
+#ifdef LAST_TDO_CACHE
+					if (!last_tdo_valid_schedule) {
+#else
+					{
+#endif
+						ft2232_get_tdo_schedule( cable );
+#ifdef FLUSH_PUTS
+						puts("get_tdo");
+#endif
+						to_send += 1;
+						to_rec  += 1;
+#ifdef LAST_TDO_CACHE
+						last_tdo_valid_schedule = 1;
+#endif
+					}
+					break;
+
+				default:
+					break;
+			}
+
+			i++;
+			if (i >= cable->todo.max_items) i=0;
+		}
+
+		if(to_rec > 0)
+		{
+#ifdef FLUSH_PUTS
+			puts("flush");
+#endif
+			parport_set_control( cable->port, 1 ); // flush
+			parport_set_control( cable->port, 0 );
+		}
+
+		while(j!=i)
+		{
+			switch(cable->todo.data[j].action)
+			{
+				case CABLE_CLOCK:
+#ifdef LAST_TDO_CACHE
+					last_tdo_valid_finish = 0;
+#endif
+					break;
+				case CABLE_GET_TDO:
+				{
+					int tdo;
+					int m;
+#ifdef LAST_TDO_CACHE
+					if (last_tdo_valid_finish) {
+						tdo = last_tdo;
+#ifdef FLUSH_PUTS
+						puts("tdo cached");
+#endif
+					} else
+						tdo = ft2232_get_tdo_finish( cable );
+					last_tdo_valid_finish = 1;
+#else
+					tdo = ft2232_get_tdo_finish( cable );
+#endif
+					m = cable_add_queue_item( cable, &(cable->done) );
+					cable->done.data[m].action = CABLE_GET_TDO;
+					cable->done.data[m].arg.value.tdo = tdo;
+					break;
+				}
+				case CABLE_GET_TRST:
+				{
+					int m = cable_add_queue_item( cable, &(cable->done) );
+					cable->done.data[m].action = CABLE_GET_TRST;
+					cable->done.data[m].arg.value.trst = 1;
+					break;
+				}
+				default:
+					break;
+			};
+
+			j++;
+			if (j >= cable->todo.max_items) j=0;
+			cable->todo.num_items --;
+		};
+
+		while(cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER)
+		{
+			int r = ft2232_transfer( cable,
+				cable->todo.data[i].arg.transfer.len,
+				cable->todo.data[i].arg.transfer.in,
+				cable->todo.data[i].arg.transfer.out);
+
+			free(cable->todo.data[i].arg.transfer.in);
+			if(cable->todo.data[i].arg.transfer.out != NULL)
+			{
+				int m = cable_add_queue_item( cable, &(cable->done) );
+				if(m < 0) printf("out of memory!!\n");
+				cable->done.data[m].action = CABLE_TRANSFER;
+				cable->done.data[m].arg.xferred.len = cable->todo.data[i].arg.transfer.len;
+				cable->done.data[m].arg.xferred.res = r;
+				cable->done.data[m].arg.xferred.out = cable->todo.data[i].arg.transfer.out;
+					
+			};
+
+			i++;
+			if (i >= cable->todo.max_items) i=0;
+			cable->todo.num_items --;
+		};
+
+		cable->todo.next_item = i;
+	}
+}
+
 void
 ft2232_usbcable_help( const char *cablename )
 {
@@ -552,6 +744,7 @@ cable_driver_t ft2232_cable_driver = {
 	ft2232_transfer,
 	ft2232_set_trst,
 	generic_get_trst,
+	ft2232_flush,
 	ft2232_usbcable_help
 };
 
@@ -568,6 +761,8 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
 	ft2232_transfer,
 	ft2232_set_trst,
 	generic_get_trst,
+//	generic_flush_using_transfer,
+	ft2232_flush,
 	ft2232_usbcable_help
 };
 
@@ -584,6 +779,7 @@ cable_driver_t ft2232_jtagkey_cable_driver = {
 	ft2232_transfer,
 	ft2232_set_trst,
 	generic_get_trst,
+	ft2232_flush,
 	ft2232_usbcable_help
 };
 
