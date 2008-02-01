@@ -829,7 +829,17 @@ src/svf::
 src/tap::
   Functions for accessing the chain in general
 
-=== Cable drivers ===
+//------------------------------------------------------------------------
+
+=== Drivers ===
+
+ * Cable-specific drivers
+ * Parport drivers
+ * TAP drivers
+ * Chain drivers
+ * Bus drivers
+ * Flash drivers
+ * Commands
 
 ==== Cable-specific drivers (src/tap/cable) ====
 
@@ -984,7 +994,7 @@ commands, boundary scan register, list of JTAG registers, etc.
 
 Syntax of the JTAG declaration file is defined in the following subsections.
 
-===== General rules =====
+==== General rules ====
 
 JTAG declaration file is text file which consists of lines. Empty lines are
 ignored. Text after first "#" on the line to the end of line is ignored. This
@@ -993,24 +1003,13 @@ is useful for comments.  All other lines are significant.
 Each significant line consists of tokens separated by whitespace. Whitespace
 could be spaces and/or tabs.
 
-===== Signal Definition =====
+==== Signal Definition ====
 
 Signal definition line consists of word "signal" followed by whitespace and
 signal name (without spaces in the name). Rest of the line should contain
 whitespace separated list of pins of the part. This list is currently not used
 for any purpose in JTAG Tools. It is intended for future use.  
 
-//------------------------------------------------------------------------
-
-=== Drivers ===
-
- * Parport drivers
- * Cable drivers
- * TAP drivers
- * Chain drivers
- * Bus drivers
- * Flash drivers
- * Commands
 
 //------------------------------------------------------------------------
 
