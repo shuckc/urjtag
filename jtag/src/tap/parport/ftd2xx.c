@@ -151,7 +151,7 @@ ftd2xx_pre_connect( const char **par, int parnum )
 
 	if (parnum != 1) {
 		printf( _("Syntax error!\n") );
-		return NULL;
+		return 0;
 	}
 
 	for (pn = ports; pn; pn = pn->next)

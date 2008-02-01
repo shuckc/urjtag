@@ -1,3 +1,9 @@
+2008-02-01  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/tap/parport/ftd2xx.c (ftd2xx_pre_connect): fix compiler warning
+    * src/tap/cable/ft2232.c: cleanup
+    (ft2232_usbcable_help): mention ftd2xx-mpsse in cable help
+
 2008-02-01  Kolja Waschk <kawk>
 
     * include/cable.h, include/chain.h, src/tap/chain.c, src/tap/tap.c,

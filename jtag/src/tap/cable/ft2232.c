@@ -35,10 +35,6 @@
 #include "generic.h"
 
 
-/* Define MULTI_BYTE to activate block read transfer from parport
-   no benefit over single byte read observed. */
-#undef MULTI_BYTE
-
 /* Maximum chunk to write to parport driver.
    Larger values might speed up comm, but there's an upper limit
    when too many bytes are sent and libftdi doesn't fetch the
@@ -104,10 +100,6 @@ static unsigned int last_tdo;
 #endif
 
 static uint32_t mpsse_frequency;
-
-#ifdef MULTIBYTE
-static uint8_t local_buffer[MAXCHUNK+16];
-#endif
 
 
 static void
@@ -512,32 +504,18 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 
 		if (out) {
 			if (chunkbytes > 0) {
-#ifdef MULTI_BYTE
-				int buf_idx;
-#endif
 				uint32_t xferred;
 
 				/*********************************************************************
 				 * Step 5:
 				 * Read TDO data in bundles of 8 bits if read is requested.
 				 *********************************************************************/
-#ifdef MULTI_BYTE
-				parport_get_block( p, local_buffer, chunkbytes, &xferred );
-				if (chunkbytes != xferred)
-					printf("Bummer\n");
-				buf_idx = 0;
-#else
 				xferred = chunkbytes;
-#endif
 				for (; xferred > 0; xferred--) {
 					int bit_idx;
 					unsigned char b;
 
-#ifdef MULTI_BYTE
-					b = local_buffer[buf_idx++];
-#else
 					b = parport_get_data( p );
-#endif
 					for (bit_idx = 1; bit_idx < 256; bit_idx <<= 1)
 						out[out_offset++] = (b & bit_idx) ? 1 : 0;
 				}
@@ -570,14 +548,9 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 	return 0;
 }
 
-#undef FLUSH_PUTS
-
 static void
 ft2232_flush( cable_t *cable )
 {
-#ifdef FLUSH_PUTS
-	puts("flush()");
-#endif
 	while (cable->todo.num_items > 0)
 	{
 		int i, j, n, to_send = 0, to_rec = 0;
@@ -586,20 +559,12 @@ ft2232_flush( cable_t *cable )
 		int last_tdo_valid_finish = last_tdo_valid;
 #endif
 
-		for(j=i=cable->todo.next_item, n=0; to_send < 64 && n<cable->todo.num_items; n++)
-		{
-			if(cable->todo.data[i].action == CABLE_TRANSFER) {
-#ifdef FLUSH_PUTS
-				puts("transfer");
-#endif
+		for ( j = i = cable->todo.next_item, n = 0; to_send < 64 && n < cable->todo.num_items; n++) {
+			if (cable->todo.data[i].action == CABLE_TRANSFER)
 				break;
-			}
 
-			switch(cable->todo.data[i].action) {
+			switch (cable->todo.data[i].action) {
 				case CABLE_CLOCK:
-#ifdef FLUSH_PUTS
-					puts("clock");
-#endif
 					ft2232_clock_defer( cable, 1,
 					                    cable->todo.data[i].arg.clock.tms,
 					                    cable->todo.data[i].arg.clock.tdi,
@@ -617,9 +582,6 @@ ft2232_flush( cable_t *cable )
 					{
 #endif
 						ft2232_get_tdo_schedule( cable );
-#ifdef FLUSH_PUTS
-						puts("get_tdo");
-#endif
 						to_send += 1;
 						to_rec  += 1;
 #ifdef LAST_TDO_CACHE
@@ -638,17 +600,12 @@ ft2232_flush( cable_t *cable )
 
 		if(to_rec > 0)
 		{
-#ifdef FLUSH_PUTS
-			puts("flush");
-#endif
 			parport_set_control( cable->port, 1 ); // flush
 			parport_set_control( cable->port, 0 );
 		}
 
-		while(j!=i)
-		{
-			switch(cable->todo.data[j].action)
-			{
+		while (j!=i) {
+			switch (cable->todo.data[j].action) {
 				case CABLE_CLOCK:
 #ifdef LAST_TDO_CACHE
 					last_tdo_valid_finish = 0;
@@ -659,12 +616,9 @@ ft2232_flush( cable_t *cable )
 					int tdo;
 					int m;
 #ifdef LAST_TDO_CACHE
-					if (last_tdo_valid_finish) {
+					if (last_tdo_valid_finish)
 						tdo = last_tdo;
-#ifdef FLUSH_PUTS
-						puts("tdo cached");
-#endif
-					} else
+					else
 						tdo = ft2232_get_tdo_finish( cable );
 					last_tdo_valid_finish = 1;
 #else
@@ -684,36 +638,36 @@ ft2232_flush( cable_t *cable )
 				}
 				default:
 					break;
-			};
+			}
 
 			j++;
 			if (j >= cable->todo.max_items) j=0;
 			cable->todo.num_items --;
-		};
+		}
 
-		while(cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER)
-		{
+		while (cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER) {
 			int r = ft2232_transfer( cable,
-				cable->todo.data[i].arg.transfer.len,
-				cable->todo.data[i].arg.transfer.in,
-				cable->todo.data[i].arg.transfer.out);
+			                         cable->todo.data[i].arg.transfer.len,
+			                         cable->todo.data[i].arg.transfer.in,
+			                         cable->todo.data[i].arg.transfer.out);
 
-			free(cable->todo.data[i].arg.transfer.in);
-			if(cable->todo.data[i].arg.transfer.out != NULL)
-			{
+			free( cable->todo.data[i].arg.transfer.in );
+			if (cable->todo.data[i].arg.transfer.out != NULL) {
 				int m = cable_add_queue_item( cable, &(cable->done) );
-				if(m < 0) printf("out of memory!!\n");
+				if (m < 0)
+					printf("out of memory!!\n");
 				cable->done.data[m].action = CABLE_TRANSFER;
 				cable->done.data[m].arg.xferred.len = cable->todo.data[i].arg.transfer.len;
 				cable->done.data[m].arg.xferred.res = r;
 				cable->done.data[m].arg.xferred.out = cable->todo.data[i].arg.transfer.out;
 					
-			};
+			}
 
 			i++;
-			if (i >= cable->todo.max_items) i=0;
-			cable->todo.num_items --;
-		};
+			if (i >= cable->todo.max_items)
+				i = 0;
+			cable->todo.num_items--;
+		}
 
 		cable->todo.next_item = i;
 	}
@@ -724,11 +678,12 @@ ft2232_usbcable_help( const char *cablename )
 {
 	printf( _(
 		"Usage: cable %s ftdi-mpsse VID:PID\n"
+		"Usage: cable %s ftd2xx-mpsse VID:PID\n"
 		"\n"
 		"VID        vendor ID (hex, e.g. 9FB, or empty)\n"
 		"PID        product ID (hex, e.g. 6001, or empty)\n"
 		"\n"
-	), cablename );
+	), cablename, cablename );
 }
 
 cable_driver_t ft2232_cable_driver = {
