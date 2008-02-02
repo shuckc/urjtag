@@ -157,9 +157,79 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
 	int i,j;
 	if( q->num_items >= q->max_items ) /* queue full? */
 	{
-		/* TODO: try to alloc more space for queue */
-		// printf("add_queue_item to %p: %d\n", q, -1);
-		return -1; /* report failure */
+		int new_max_items;
+		cable_queue_t *resized;
+
+        new_max_items = q->max_items + 128;
+        resized = realloc(q->data, new_max_items * sizeof(cable_queue_t));
+        if(resized == NULL)
+        {
+           printf(_("Out of memory: couldn't resize activity queue to %d\n"),
+                new_max_items);
+           return -1; /* report failure */
+        }
+        printf(_("(Resized JTAG activity queue to hold max %d items)\n"),
+             new_max_items);
+        q->data = resized;
+
+        /* The queue was full. Except for the special case when next_item is 0,
+		 * resizing just introduced a gap between old and new max, which has to
+		 * be filled; either by moving data from next_item .. max_items, or
+		 * from 0 .. next_free (whatever is smaller). */
+
+#define CHOOSE_SMALLEST_AREA_TO_MOVE 1
+
+        if(q->next_item != 0)
+        {
+          int added_space = new_max_items - q->max_items;
+          int num_to_move = q->max_items - q->next_item;
+
+#ifdef CHOOSE_SMALLEST_AREA_TO_MOVE
+          if(num_to_move <= q->next_free)
+#endif
+          {
+            /* Move queue items at end of old array
+             * towards end of new array: 345612__ -> 3456__12 */
+
+            memmove(&(q->data[q->max_items]), &(q->data[q->next_item]),
+                    num_to_move * sizeof(cable_queue_t));
+
+            q->next_item += num_to_move;
+          }
+#ifdef CHOOSE_SMALLEST_AREA_TO_MOVE
+          else
+          {
+            if(q->next_free <= added_space)
+            {
+              /* Relocate queue items at beginning of old array
+               * to end of new array: 561234__ -> __123456 */
+
+              memcpy(&(q->data[q->max_items]), &(q->data[0]), 
+                  q->next_free * sizeof(cable_queue_t));
+
+              q->next_free += q->max_items;
+            }
+            else
+            {
+              /* Same as above, but for the case if new space 
+               * isn't large enough to hold all relocated items */
+
+              /* Step 1: 456123__ -> __612345 */
+
+              memcpy(&(q->data[q->max_items]), &(q->data[0]), 
+                  added_space * sizeof(cable_queue_t));
+
+              /* Step 2: __612345 -> 6__12345 */
+
+              memmove(&(q->data[0]), &(q->data[added_space]), 
+                  (q->next_free - added_space) * sizeof(cable_queue_t));
+
+              q->next_free -= added_space;
+            }
+          }
+#endif
+        }
+        q->max_items = new_max_items;
 	}
 
 	i = q->next_free;

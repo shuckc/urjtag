@@ -1,5 +1,7 @@
-2008-02-01  Kolja Waschk <kawk>
+2008-02-02  Kolja Waschk <kawk>
 
+    * src/tap/cable.c: Automatically resize JTAG activity queue if necessary,
+	     this should fix [ 1884952 ] Internal error (untested!)
     * doc/UrJTAG.txt: New section about current cable driver internals
 
 2008-02-01  Arnim Laeuger  <arniml@users.sourceforge.net>
