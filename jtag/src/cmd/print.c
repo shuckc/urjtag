@@ -37,12 +37,12 @@
 static int
 cmd_print_run( char *params[] )
 {
-	char format[100];
+	char format[128];
 #if HAVE_SWPRINTF
-	wchar_t wformat[100];
+	wchar_t wformat[128];
 #endif /* HAVE_SWPRINTF */
-	wchar_t wheader[100];
-	char header[100];
+	wchar_t wheader[128];
+	char header[128];
 	int i;
 	int noheader = 0;
 
@@ -84,17 +84,17 @@ cmd_print_run( char *params[] )
 	}
 
 	if (noheader == 0) {
-		snprintf( format, 100, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
+		snprintf( format, 128, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
 				MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
 #if HAVE_SWPRINTF
-		if (mbstowcs( wformat, format, 100 ) == -1)
+		if (mbstowcs( wformat, format, 128 ) == -1)
 			printf( _("(%d) String conversion failed!\n"), __LINE__ );
-		swprintf( wheader, 100, wformat, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
-		if (wcstombs( header, wheader, 100 ) == -1)
+		swprintf( wheader, 128, wformat, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
+		if (wcstombs( header, wheader, 128 ) == -1)
 			printf( _("(%d) String conversion failed!\n"), __LINE__ );
 #else /* HAVE_SWPRINTF */
-		snprintf( header, 100, format, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
-		if (mbstowcs( wheader, header, 100 ) == -1)
+		snprintf( header, 128, format, _("Manufacturer"), _("Part"), _("Stepping"), _("Instruction"), _("Register") );
+		if (mbstowcs( wheader, header, 128 ) == -1)
 			printf( _("(%d) String conversion failed!\n"), __LINE__ );
 #endif /* HAVE_SWPRINTF */
 		printf( header );

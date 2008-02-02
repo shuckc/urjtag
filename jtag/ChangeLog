@@ -1,5 +1,10 @@
 2008-02-02  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+    * src/bsdl/bsdl.h, src/bsdl/bsdl_flex.l: convert filename to uppercase
+    * src/bsdl/bsdl_sem.c (create_register): don't create a new register if it's already there
+    * data/bsdl/STD_1149_1_2001: dummy file for 2001 standard added
+    * src/cmd/print.c (cmd_print_run): accept longer data register name
+    * include/data_register.h (MAXLEN_DATA_REGISTER): increased to 32 for some BSDL files
     * src/flash/amd.c (amdstatus): increase timeout count to address
       [ 1882111 ] Timeout in amdstatus() too small
 

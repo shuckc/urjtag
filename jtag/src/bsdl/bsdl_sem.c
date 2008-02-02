@@ -404,6 +404,9 @@ static void create_register(parser_priv_t *priv, char *reg_name, size_t len)
                    len_str,
                    NULL};
 
+    if (part_find_data_register(priv->jtag_ctrl.part, reg_name))
+      return;
+
     /* convert length information to string */
     snprintf(len_str, str_len, "%i", len);
 

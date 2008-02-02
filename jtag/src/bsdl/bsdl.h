@@ -139,7 +139,7 @@ void bsdl_msg(int, const char *, ...);
 /* BSDL lexer declarations */
 void *bsdl_flex_init(FILE *);
 void  bsdl_flex_deinit(void *);
-void  bsdl_flex_switch_file(void *, const char *);
+void  bsdl_flex_switch_file(void *, char *);
 void  bsdl_flex_switch_buffer(void *, const char *);
 int   bsdl_flex_get_compile_errors(void *);
 int   bsdl_flex_postinc_compile_errors(void *);

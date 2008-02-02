@@ -475,10 +475,19 @@ static char *new_string(const char *str)
 }
 
 
-void bsdl_flex_switch_file(yyscan_t scanner, const char *filename)
+void bsdl_flex_switch_file(yyscan_t scanner, char *filename)
 {
   scan_extra_t *extra;
   FILE *f;
+  char *s;
+
+  /* convert filename to all upper case */
+  s = filename;
+  while (*s) {
+    if (islower(*s))
+      *s = toupper(*s);
+    s++;
+  }
 
   /* file in current directory has precedence */
   f = fopen(filename, "r");

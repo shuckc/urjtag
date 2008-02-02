@@ -27,7 +27,7 @@
 
 #include "register.h"
 
-#define	MAXLEN_DATA_REGISTER	10
+#define	MAXLEN_DATA_REGISTER	32
 
 typedef struct data_register data_register;
 
