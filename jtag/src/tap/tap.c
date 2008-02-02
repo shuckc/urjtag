@@ -43,9 +43,9 @@ tap_reset( chain_t *chain )
 }
 
 void
-tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int exit )
+tap_defer_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int exit )
 {
-	int i,j;
+	int i;
 
 	if (!(tap_state( chain ) & TAPSTAT_SHIFT))
 		printf( _("%s: Invalid state: %2X\n"), "tap_shift_register", tap_state( chain ) );
@@ -63,7 +63,6 @@ tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, i
 	else
 		cable_defer_transfer( chain->cable, i, in->data, NULL );
 
-	j = i;
 	for (; i < in->len; i++) {
 		if (out != NULL && (i < out->len))
 			out->data[i] = cable_defer_get_tdo( chain->cable );
@@ -75,14 +74,33 @@ tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, i
 		chain_defer_clock( chain, 1, 0, 1 );	/* Update-DR or Update-IR */
 		chain_defer_clock( chain, 0, 0, 1 );	/* Run-Test/Idle */
 	}
+}
 
+void
+tap_shift_register_output( chain_t *chain, const tap_register *in, tap_register *out, int exit )
+{
 	if(out != NULL)
 	{
-		/* Asking for the result of the cable transfer actually flushes the queue */
+		int j;
+
+		j = in->len;
+		if(exit) j--;
+		if(out && out->len < j) j = out->len;
+
+		/* Asking for the result of the cable transfer
+         * actually flushes the queue */
+
 		(void)cable_transfer_late( chain->cable, out->data );
 		for (; j < in->len && j < out->len; j++) 
 				out->data[j] = cable_get_tdo_late( chain->cable );
 	}
+}
+
+void
+tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int exit )
+{
+	tap_defer_shift_register( chain, in, out, exit );
+	tap_shift_register_output( chain, in, out, exit );
 }
 
 void

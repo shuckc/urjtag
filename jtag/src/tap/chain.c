@@ -178,7 +178,7 @@ chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture
 				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
 				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
 	}
-#else
+#elif 1
 	{
 		/* new implementation:
 		   combine the data registers of all parts in the chain into one temporary register,
@@ -218,6 +218,26 @@ chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture
 		}
 
 		data_register_free( temp_reg );
+	}
+#else
+	/* new^2 implementation: split into defer + retrieve part
+	   shift the data register of each part in the chain one by one */
+
+	for (i = 0; i < ps->len; i++) {
+		puts("tap_defer_shift_register");
+		tap_defer_shift_register( chain, ps->parts[i]->active_instruction->data_register->in,
+				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
+				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+	}
+
+	if(capture_output)
+	{
+		for (i = 0; i < ps->len; i++) {
+			puts("tap_shift_register_output");
+			tap_shift_register_output( chain, ps->parts[i]->active_instruction->data_register->in,
+				ps->parts[i]->active_instruction->data_register->out,
+				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+		}
 	}
 #endif
 }
