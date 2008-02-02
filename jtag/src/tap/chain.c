@@ -25,6 +25,7 @@
 #include "sysdep.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "chain.h"
 #include "state.h"
@@ -167,10 +168,58 @@ chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture
 
 	if (capture)
 		tap_capture_dr( chain );
-	for (i = 0; i < ps->len; i++)
+
+#if 1
+	/* old implementation:
+	   shift the data register of each part in the chain one by one */
+	for (i = 0; i < ps->len; i++) {
+		puts("tap_shift_register");
 		tap_shift_register( chain, ps->parts[i]->active_instruction->data_register->in,
 				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
 				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+	}
+#else
+	{
+		/* new implementation:
+		   combine the data registers of all parts in the chain into one temporary register,
+		   shift once,
+		   copy back the "out" data to the data registers of all parts */
+		int total_length = 0;
+		data_register *temp_reg;
+		char *part_str, *temp_str;
+
+		/* determine total length of all data registers for temporary register */
+		for (i = 0; i < ps->len; i++)
+			total_length += ps->parts[i]->active_instruction->data_register->in->len;
+		temp_reg = data_register_alloc( "TEMP", total_length );
+
+		/* combine "in" data of all registers */
+		temp_str = register_get_string( temp_reg->in );
+		temp_str[0] = '\0';
+		for (i = ps->len - 1; i >= 0; i--) {
+			part_str = register_get_string( ps->parts[i]->active_instruction->data_register->in );
+			strcat( temp_str, part_str );
+		}
+		register_init( temp_reg->in, temp_str );
+
+		/* shift once */
+		tap_shift_register( chain, temp_reg->in, capture_output ? temp_reg->out : NULL, exit );
+		if (capture_output) {
+			char *idx_string;
+
+			/* copy back the "out" data */
+			temp_str = register_get_string( temp_reg->out );
+			for (i = ps->len - 1, idx_string = temp_str; i >= 0; i--) {
+				part_str = register_get_string( ps->parts[i]->active_instruction->data_register->out );
+				strncpy( part_str, idx_string, ps->parts[i]->active_instruction->data_register->out->len );
+				register_init( ps->parts[i]->active_instruction->data_register->out, part_str );
+				idx_string += ps->parts[i]->active_instruction->data_register->out->len;
+			}
+		}
+
+		data_register_free( temp_reg );
+	}
+#endif
 }
 
 void
