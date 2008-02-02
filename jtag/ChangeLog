@@ -1,3 +1,8 @@
+2008-02-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/flash/amd.c (amdstatus): increase timeout count to address
+      [ 1882111 ] Timeout in amdstatus() too small
+
 2008-02-02  Kolja Waschk <kawk>
 
     * src/tap/cable.c: Automatically resize JTAG activity queue if necessary,

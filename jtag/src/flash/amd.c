@@ -140,7 +140,7 @@ amdstatus( bus_t *bus, uint32_t adr, int data )
 	uint32_t togglemask = ((1 << 6) << 16) + (1 << 6); /* DQ 6 */
 	/*  int dq5mask = ((1 << 5) << 16) + (1 << 5); DQ5 */
 
-	for (timeout = 0; timeout < 100; timeout++) {
+	for (timeout = 0; timeout < 7000; timeout++) {
 		uint32_t data1 = bus_read( bus, adr );
 		uint32_t data2 = bus_read( bus, adr );
 
