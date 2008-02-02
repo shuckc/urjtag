@@ -2,6 +2,8 @@
  * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
+ * Copyright (C) 2005 Hein Roehrig,
+ * Copyright (C) 2008 Kolja Waschk
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +20,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2003.
+ * Written by Marcel Telka <marcel@telka.sk>, 2003;
+ * Busy loop waiting (*freq* functions) Hein Roehrig, 2005;
+ * JTAG activity queuing and API (*defer* functions) K. Waschk, 2008
  *
  */
 
