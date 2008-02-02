@@ -1,0 +1,17 @@
+  body {
+    color:black;
+    background-color: #f0fff0;
+    font-family:Arial,Helvetica,sans-serif;
+  }
+  .top      { background-color:#a0d0a0 } 
+  a         { text-decoration:underline; color:#007800 }
+  .nodeco   { text-decoration: none }
+  .NAVFOOTER
+  {
+    padding-right: 150px;
+    background-image: url(http://sflogo.sourceforge.net/sflogo.php?group_id=193266&type=2);
+    background-repeat:no-repeat;
+    background-position: right;
+  }
+
+

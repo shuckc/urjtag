@@ -107,6 +107,12 @@
 (define %generate-article-titlepage% #t)
 (define %generate-article-toc% #t)      ;; make TOC
 
+; === Stylesheet ===
+(define %stylesheet% "UrJTAG.css")      ;; Name of the stylesheet to use
+(define %stylesheet-type% "text/css")   ;; The type of the stylesheet to use
+
+
+
     </STYLE-SPECIFICATION-BODY>
   </STYLE-SPECIFICATION>
 
