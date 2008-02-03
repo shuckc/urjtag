@@ -51,26 +51,52 @@ static int amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t dat
 static void amd_flash_read_array( cfi_array_t *cfi_array ); 
 
 /* The code below assumes a connection of the flash chip address LSB (A0)
- * to A0, A1 or A2 of the CPU bus dependent on the bus width, which is the
- * most common connection pattern:
+ * to A0, A1 or A2 of the byte-addressed CPU bus dependent on the bus width.
+ *
  *     8 Bit devices: A0..Ax connected to A0..Ax of CPU bus
+ *  8/16 Bit devices: A0..Ax connected to A1..Ax+1 of CPU bus
  *    16 Bit devices: A0..Ax connected to A1..Ax+1 of CPU bus
+ * 16/32 Bit devices: A0..Ax connected to A2..Ax+2 of CPU bus
  *    32 Bit devices: A0..Ax connected to A2..Ax+2 of CPU bus
- * The offset "o" is used here dependent on the bus width (8, 16 or 32 bit) to
- * align the patterns emitted on the address lines at either A0, A1 or A2. */
-
-static int o;
+ *
+ * The offset computed by amd_flash_address_shift()  is used here dependent on
+ * the bus width (8, 16 or 32 bit) to align the patterns emitted on the
+ * address lines at either A0, A1 or A2. */
 
 /* NOTE: It does not work for SoC chips or boards with extra address decoders
  * that do address alignment themselves, such as the Samsung S3C4510B. The bus
  * driver has to deal with this. - kawk 2008-01 */
+
+static int
+amd_flash_address_shift( cfi_array_t *cfi_array )
+{
+	if(cfi_array->bus_width == 4) return 2;
+
+	/* else: cfi_array->bus_width is 2 (16 bit) or 1 (8 bit): */
+
+	switch( cfi_array->cfi_chips[0]->cfi.device_geometry.device_size )
+	{
+		case CFI_INTERFACE_X8_X16:  /* regardless whether 8 or 16 bit mode */
+		case CFI_INTERFACE_X16:     /* native */
+			return 1;
+
+		case CFI_INTERFACE_X16_X32: /* e.g. 32 bit flash in 16 bit mode */
+		case CFI_INTERFACE_X32:     /* unlikely */
+			return 2;
+
+		default: break;
+	}
+
+	if(cfi_array->bus_width == 2) return 1;
+
+	return 0;
+}
 
 /* autodetect, we can handle this chip */
 static int 
 amd_flash_autodetect32( cfi_array_t *cfi_array )
 {
 	if(cfi_array->bus_width != 4) return 0;
-	o = 2; /* Heuristic */
 	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
 }
 
@@ -78,7 +104,6 @@ static int
 amd_flash_autodetect16( cfi_array_t *cfi_array )
 {
 	if(cfi_array->bus_width != 2) return 0;
-	o = 1; /* Heuristic */
 	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
 }
 
@@ -86,7 +111,6 @@ static int
 amd_flash_autodetect8( cfi_array_t *cfi_array )
 {
 	if(cfi_array->bus_width != 1) return 0;
-	o = 0; /* Heuristic */
 	return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_AMD_SCS);
 }
 /*
@@ -99,8 +123,10 @@ amd_flash_autodetect8( cfi_array_t *cfi_array )
  */
 #if 0
 static int
-amdstatus29( parts *ps, uint32_t adr, uint32_t data )
+amdstatus29( cfi_array_t *cfi_array, uint32_t adr, int data )
 {
+	bus_t *bus = cfi_array->bus;
+	int o = amd_flash_address_shift( cfi_array );
 	int timeout;
 	uint32_t dq7mask = ((1 << 7) << 16) + (1 << 7);
 	uint32_t dq5mask = ((1 << 5) << 16) + (1 << 5);
@@ -108,8 +134,8 @@ amdstatus29( parts *ps, uint32_t adr, uint32_t data )
 	uint32_t data1;
 
 	for (timeout = 0; timeout < 100; timeout++) {
-		data1 = bus_read( ps, adr << o );
-		data1 = bus_read( ps, adr << o );
+		data1 = bus_read( bus, adr << o );
+		data1 = bus_read( bus, adr << o );
 		if (dbg)
 			printf( "amdstatus %d: %04X (%04X) = %04X\n", timeout, data1, (data1 & dq7mask), bit7 );
 		if (((data1 & dq7mask) == dq7mask) == bit7)		/* FIXME: This looks non-portable */
@@ -120,7 +146,7 @@ amdstatus29( parts *ps, uint32_t adr, uint32_t data )
 		usleep( 100 );
 	}
 
-	data1 = bus_read( ps, adr << o );
+	data1 = bus_read( bus, adr << o );
 	if (((data1 & dq7mask) == dq7mask) == bit7)			/* FIXME: This looks non-portable */
 		return 1;
 
@@ -134,8 +160,10 @@ amdstatus29( parts *ps, uint32_t adr, uint32_t data )
  * second implementation: see [1], page 30
  */
 static int
-amdstatus( bus_t *bus, uint32_t adr, int data )
+amdstatus( cfi_array_t *cfi_array, uint32_t adr, int data )
 {
+	bus_t *bus = cfi_array->bus;
+
 	int timeout;
 	uint32_t togglemask = ((1 << 6) << 16) + (1 << 6); /* DQ 6 */
 	/*  int dq5mask = ((1 << 5) << 16) + (1 << 5); DQ5 */
@@ -170,8 +198,10 @@ amdstatus( bus_t *bus, uint32_t adr, int data )
  * second implementation: see [1], page 30
  */
 static int
-amdstatus( bus_t *bus, uint32_t adr, int data )
+amdstatus( cfi_array_t *cfi_array, uint32_t adr, int data )
 {
+	bus_t *bus = cfi_array->bus;
+	int o = amd_flash_address_shift( cfi_array );
 	int timeout;
 	uint32_t togglemask = ((1 << 6) << 16) + (1 << 6); /* DQ 6 */
 	/*  int dq5mask = ((1 << 5) << 16) + (1 << 5); DQ5 */
@@ -215,6 +245,7 @@ static int
 amdisprotected( parts *ps, cfi_array_t *cfi_array, uint32_t adr )
 {
 	uint32_t data;
+	int o = amd_flash_address_shift( cfi_array );
 
 	bus_write( ps, cfi_array->address + (0x0555 << o), 0x00aa00aa );	/* autoselect p29, sector erase */
 	bus_write( ps, cfi_array->address + (0x02aa << o), 0x00550055 );
@@ -233,6 +264,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 {
 	int mid, cid, prot;
 	bus_t *bus = cfi_array->bus;
+    int o = amd_flash_address_shift( cfi_array );
 
 	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa );	/* autoselect p29 */
 	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
@@ -296,6 +328,7 @@ static int
 amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 {
 	bus_t *bus = cfi_array->bus;
+    int o = amd_flash_address_shift( cfi_array );
 
 	printf("flash_erase_block 0x%08X\n", adr);
 
@@ -308,7 +341,7 @@ amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
 	bus_write( bus, adr, 0x00300030 );
 
-	if (amdstatus( bus, adr, 0xffff )) {
+	if (amdstatus( cfi_array, adr, 0xffff )) {
 		printf( "flash_erase_block 0x%08X DONE\n", adr );
 		amd_flash_read_array( cfi_array );	/* AMD reset */
 		return 0;
@@ -332,6 +365,7 @@ amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
 	int status;
 	bus_t *bus = cfi_array->bus;
+	int o = amd_flash_address_shift( cfi_array );
 
 	if (dbg)
 		printf("\nflash_program 0x%08X = 0x%08X\n", adr, data);
@@ -341,7 +375,7 @@ amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00A000A0 );
 
 	bus_write( bus, adr, data );
-	status = amdstatus( bus, adr, data );
+	status = amdstatus( cfi_array, adr, data );
 	/*	amd_flash_read_array(ps); */
 
 	return !status;

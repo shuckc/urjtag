@@ -1,3 +1,11 @@
+2008-02-03  Kolja Waschk <kawk>
+
+    * src/flash/amd.c: Not only bus width but also device geometry affects
+        the address shift ([1869650] Improve flash detection and support)
+	* src/tap/tap.c, src/tap/chain.c: Split tap_shift_register into two
+        halves, one that queues transfers, another that picks up the results.
+        ([1832990] Speed improvements for USB cables) esp. for long chains
+
 2008-02-02  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/bsdl/bsdl.h, src/bsdl/bsdl_flex.l: convert filename to uppercase
@@ -10,8 +18,7 @@
 
 2008-02-02  Kolja Waschk <kawk>
 
-    * src/tap/cable.c: Automatically resize JTAG activity queue if necessary,
-	     this should fix [ 1884952 ] Internal error (untested!)
+    * src/tap/cable.c: Automatically resize JTAG activity queue if necessary
     * doc/UrJTAG.txt: New section about current cable driver internals
 
 2008-02-01  Arnim Laeuger  <arniml@users.sourceforge.net>
