@@ -29,7 +29,11 @@
 #ifdef HAVE_LIBUSB
 
 #include <fcntl.h>
+#if __CYGWIN__
+#include <windows.h>
+#else
 #include <linux/ioctl.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 #ifdef HAVE_STROPTS_H

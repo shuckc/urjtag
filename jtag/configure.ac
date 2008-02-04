@@ -150,7 +150,14 @@ AC_ARG_WITH([libusb],
 
 AS_IF([test "x$with_libusb" != xno], [
   AS_IF([test "x$with_libusb" != xyes -a "x$with_libusb" != xcheck], [
-    CFLAGS="$CFLAGS -I$with_libusb -L$with_libusb"
+    case $host in
+    *cygwin*)
+      CFLAGS="$CFLAGS -I$with_libusb/include -L$with_libusb/lib/gcc"
+      ;;
+    *)
+      CFLAGS="$CFLAGS -I$with_libusb -L$with_libusb"
+      ;;
+    esac
     LIBS="$LIBS -lusb"
   ],[
     AC_PATH_PROG(LIBUSB_CONFIG, libusb-config, no) 

@@ -1,8 +1,14 @@
+2008-02-04  Kolja Waschk <kawk>
+
+    * configure.ac, src/tap/parport/xpcu_common.c, src/tap/parport_xpcu_pp.c,
+        doc/UrJTAG.txt: Minor fixes regarding bug [1875234] "Can't compile 
+        UrJTAG with libusb on Cygwin"
+
 2008-02-03  Kolja Waschk <kawk>
 
     * src/flash/amd.c: Not only bus width but also device geometry affects
         the address shift ([1869650] Improve flash detection and support)
-	* src/tap/tap.c, src/tap/chain.c: Split tap_shift_register into two
+    * src/tap/tap.c, src/tap/chain.c: Split tap_shift_register into two
         halves, one that queues transfers, another that picks up the results.
         ([1832990] Speed improvements for USB cables) esp. for long chains
 

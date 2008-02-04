@@ -313,6 +313,9 @@ There is a libusb-win32 variant that can be used in a Cygwin environment:
  * http://libusb.sourceforge.net (libusb)
  * http://libusb-win32.sourceforge.net (libusb for Windows)
 
+For specific notes regarding the use of these libraries in a Cygwin
+environmen, see below.
+
 ==== Installing from source tar.gz ====
 
 The installation follows the standard configure, make, make install scheme:
@@ -346,7 +349,7 @@ Unzip the archive and copy _only_ the two files "ftd2xx.h" and
 this directory for $FTDIDIR in the following example...). Then run
 configure like this:
 
-  CFLAGS="-I$FTDIDIR -L$FTDIDIR" ./configure 
+  CFLAGS="-I$FTDIDIR" LDFLAGS="-L$FTDIDIR" ./configure 
 
 Configure should now report
 
@@ -355,6 +358,19 @@ Configure should now report
   FTDI cable support
     via libftdi          : no
     via libftd2xx        : yes
+
+
+==== Using LibUSB-Win32 in Cygwin environment ====
+
+Before running configure, install the LibUSB-Win32 "filter" driver from SF.
+
+ * http://libusb-win32.sourceforge.net
+
+Then point configure to the directory where LibUSB-Win32 was installed (it
+might give problems if the path contains spaces, as "Program Files" does!):
+
+  ./configure --with-libusb="/cygdrive/c/Programme/LibUSB-Win32/"
+
 
 ==== Building the BSDL subsystem ====
 
