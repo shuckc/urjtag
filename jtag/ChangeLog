@@ -3,6 +3,8 @@
     * configure.ac, src/tap/parport/xpcu_common.c, src/tap/parport_xpcu_pp.c,
         doc/UrJTAG.txt: Minor fixes regarding bug [1875234] "Can't compile 
         UrJTAG with libusb on Cygwin"
+    * src/svf/svf.c: define SA_ONESHOT SA_RESETHAND, fixes bug [1875235]
+        (On older Cygwin, SA_ONESHOT isn't known)
 
 2008-02-03  Kolja Waschk <kawk>
 

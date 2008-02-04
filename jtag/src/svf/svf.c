@@ -36,6 +36,9 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifndef SA_ONESHOT
+#define SA_ONESHOT SA_RESETHAND
+#endif
 
 #include "sysdep.h"
 
