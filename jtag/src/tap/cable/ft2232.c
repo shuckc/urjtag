@@ -25,12 +25,14 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "sysdep.h"
 
-#include "cable.h"
-#include "parport.h"
-#include "chain.h"
+#include <cable.h>
+#include <parport.h>
+#include <chain.h>
+#include <cmd.h>
 
 #include "generic.h"
 
@@ -40,10 +42,6 @@
    when too many bytes are sent and libftdi doesn't fetch the
    returned data in time -> deadlock */
 #define MAXCHUNK (4 * 64)
-
-/* Enable caching of last TDO to speed up things a bit.
-	 Should be left define'd unless comm/sync problems occur. */
-#define LAST_TDO_CACHE
 
 /* Maximum TCK frequency of FT2232 */
 #define FT2232_MAX_TCK_FREQ 6000000
@@ -91,15 +89,27 @@
 #define BITMASK_ARMUSBOCD_nOE (1 << BIT_ARMUSBOCD_nOE)
 
 
-#ifdef LAST_TDO_CACHE
-/* global variables to save last TDO value
-	 this acts as a cache to prevent multiple "Read Data Bits Low" transfer
-	 over USB for ft2232_get_tdo */
-static unsigned int last_tdo_valid;
-static unsigned int last_tdo;
-#endif
+struct reg_desc {
+	struct reg_desc *next;
+	char *in;
+	char *out;
+	int len;
+};
 
-static uint32_t mpsse_frequency;
+typedef struct reg_desc reg_desc_t;
+
+typedef struct {
+	uint32_t mpsse_frequency;
+	/* variables to save last TDO value
+	   this acts as a cache to prevent multiple "Read Data Bits Low" transfer
+	   over USB for ft2232_get_tdo */
+	unsigned int last_tdo_valid;
+	unsigned int last_tdo;
+
+	int total_length;
+	reg_desc_t *transfer_chain;
+} params_t;
+
 
 
 static void
@@ -107,12 +117,13 @@ update_frequency( cable_t *cable )
 {
 	parport_t *p = cable->port;
 	uint32_t new_frequency = cable_get_frequency( cable );
+	params_t *params = (params_t *)cable->params;
 
 	if (!new_frequency || new_frequency > FT2232_MAX_TCK_FREQ)
 		new_frequency = FT2232_MAX_TCK_FREQ;
 
 	/* update ft2232 frequency if cable setting changed */
-	if (new_frequency != mpsse_frequency) {
+	if (new_frequency != params->mpsse_frequency) {
 		uint32_t div;
 
 		div = FT2232_MAX_TCK_FREQ / new_frequency;
@@ -132,7 +143,7 @@ update_frequency( cable_t *cable )
 		parport_set_control( p, 1 ); // flush
 		parport_set_control( p, 0 ); // noflush
 
-		mpsse_frequency = FT2232_MAX_TCK_FREQ / (div + 1);
+		params->mpsse_frequency = FT2232_MAX_TCK_FREQ / (div + 1);
 	}
 }
 
@@ -141,6 +152,7 @@ static int
 ft2232_generic_init( cable_t *cable )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
 		return -1;
@@ -160,11 +172,9 @@ ft2232_generic_init( cable_t *cable )
 	parport_set_control( p, 1 ); // flush
 	parport_set_control( p, 0 ); // noflush
 
-	mpsse_frequency = FT2232_MAX_TCK_FREQ;
+	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
-#ifdef LAST_TDO_CACHE
-	last_tdo_valid = 0;
-#endif
+	params->last_tdo_valid = 0;
 
 	return 0;
 }
@@ -173,6 +183,7 @@ static int
 ft2232_jtagkey_init( cable_t *cable )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
 		return -1;
@@ -197,11 +208,9 @@ ft2232_jtagkey_init( cable_t *cable )
 	parport_set_control( p, 1 ); // flush
 	parport_set_control( p, 0 ); // noflush
 
-	mpsse_frequency = FT2232_MAX_TCK_FREQ;
+	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
-#ifdef LAST_TDO_CACHE
-	last_tdo_valid = 0;
-#endif
+	params->last_tdo_valid = 0;
 
 	return 0;
 }
@@ -210,6 +219,7 @@ static int
 ft2232_armusbocd_init( cable_t *cable )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
 		return -1;
@@ -234,11 +244,9 @@ ft2232_armusbocd_init( cable_t *cable )
 	parport_set_control( p, 1 ); // flush
 	parport_set_control( p, 0 ); // noflush
 
-	mpsse_frequency = FT2232_MAX_TCK_FREQ;
+	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
-#ifdef LAST_TDO_CACHE
-	last_tdo_valid = 0;
-#endif
+	params->last_tdo_valid = 0;
 
 	return 0;
 }
@@ -309,6 +317,7 @@ static void
 ft2232_clock_defer( cable_t *cable, int defer, int tms, int tdi, int n )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 
 	tms = tms ? 0x7f : 0;
 	tdi = tdi ? 1 << 7 : 0;
@@ -333,9 +342,7 @@ ft2232_clock_defer( cable_t *cable, int defer, int tms, int tdi, int n )
 		parport_set_control( p, 1 ); // flush
 		parport_set_control( p, 0 ); // noflush
 
-#ifdef LAST_TDO_CACHE
-		last_tdo_valid = 0;
-#endif
+		params->last_tdo_valid = 0;
 	}
 }
 
@@ -358,14 +365,13 @@ static int
 ft2232_get_tdo_finish( cable_t *cable )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 	int value;
 
 	value = ( parport_get_data( p ) & BITMASK_TDO) ? 1 : 0;
 
-#ifdef LAST_TDO_CACHE
-	last_tdo = value;
-	last_tdo_valid = 1;
-#endif
+	params->last_tdo = value;
+	params->last_tdo_valid = 1;
 
 	return value;
 }
@@ -391,6 +397,7 @@ static int
 ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 	int in_offset = 0;
 	int out_offset = 0;
 	int bitwise_len;
@@ -486,20 +493,17 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 			}
 		}
 
-#ifdef LAST_TDO_CACHE
 		if (out) {
 			/* Read Data Bits Low Byte to get current TDO,
 			   Do this only if we'll read out data nonetheless */
 			parport_set_data( p, GET_BITS_LOW );
 		}
-#endif
 
 		parport_set_control( p, 1 ); // flush
 		parport_set_control( p, 0 ); // noflush
-#ifdef LAST_TDO_CACHE
-	/* invalidate TDO cache */
-	last_tdo_valid = 0;
-#endif
+
+		/* invalidate TDO cache */
+		params->last_tdo_valid = 0;
 
 
 		if (out) {
@@ -536,57 +540,55 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 			}
 		}
 
-#ifdef LAST_TDO_CACHE
 		if (out) {
 			/* gather current TDO */
-			last_tdo = ( parport_get_data( p ) & BITMASK_TDO) ? 1 : 0;
-			last_tdo_valid = 1;
+			params->last_tdo = ( parport_get_data( p ) & BITMASK_TDO) ? 1 : 0;
+			params->last_tdo_valid = 1;
 		}
-#endif
 	}
 
 	return 0;
 }
 
+#undef VERBOSE
+
 static void
 ft2232_flush( cable_t *cable )
 {
+	params_t *params = (params_t *)cable->params;
+
 	while (cable->todo.num_items > 0)
 	{
 		int i, j, n, to_send = 0, to_rec = 0;
-#ifdef LAST_TDO_CACHE
-		int last_tdo_valid_schedule = last_tdo_valid;
-		int last_tdo_valid_finish = last_tdo_valid;
-#endif
+		int last_tdo_valid_schedule = params->last_tdo_valid;
+		int last_tdo_valid_finish = params->last_tdo_valid;
 
-		for ( j = i = cable->todo.next_item, n = 0; to_send < 64 && n < cable->todo.num_items; n++) {
+		for (j = i = cable->todo.next_item, n = 0; to_rec < 64 && n < cable->todo.num_items; n++) {
 			if (cable->todo.data[i].action == CABLE_TRANSFER)
 				break;
 
 			switch (cable->todo.data[i].action) {
 				case CABLE_CLOCK:
+#ifdef VERBOSE
+					puts("clock_defer");
+#endif
 					ft2232_clock_defer( cable, 1,
 					                    cable->todo.data[i].arg.clock.tms,
 					                    cable->todo.data[i].arg.clock.tdi,
 					                    cable->todo.data[i].arg.clock.n );
 					to_send += 3;
-#ifdef LAST_TDO_CACHE
 					last_tdo_valid_schedule = 0;
-#endif
 					break;
 
 				case CABLE_GET_TDO:
-#ifdef LAST_TDO_CACHE
 					if (!last_tdo_valid_schedule) {
-#else
-					{
+#ifdef VERBOSE
+						puts("get_tdo_schedule");
 #endif
 						ft2232_get_tdo_schedule( cable );
 						to_send += 1;
 						to_rec  += 1;
-#ifdef LAST_TDO_CACHE
 						last_tdo_valid_schedule = 1;
-#endif
 					}
 					break;
 
@@ -595,35 +597,29 @@ ft2232_flush( cable_t *cable )
 			}
 
 			i++;
-			if (i >= cable->todo.max_items) i=0;
+			if (i >= cable->todo.max_items)
+				i = 0;
 		}
 
-		if(to_rec > 0)
-		{
+		if (to_rec > 0) {
 			parport_set_control( cable->port, 1 ); // flush
 			parport_set_control( cable->port, 0 );
 		}
 
-		while (j!=i) {
+		while (j != i) {
 			switch (cable->todo.data[j].action) {
 				case CABLE_CLOCK:
-#ifdef LAST_TDO_CACHE
 					last_tdo_valid_finish = 0;
-#endif
 					break;
 				case CABLE_GET_TDO:
 				{
 					int tdo;
 					int m;
-#ifdef LAST_TDO_CACHE
 					if (last_tdo_valid_finish)
-						tdo = last_tdo;
+						tdo = params->last_tdo;
 					else
 						tdo = ft2232_get_tdo_finish( cable );
 					last_tdo_valid_finish = 1;
-#else
-					tdo = ft2232_get_tdo_finish( cable );
-#endif
 					m = cable_add_queue_item( cable, &(cable->done) );
 					cable->done.data[m].action = CABLE_GET_TDO;
 					cable->done.data[m].arg.value.tdo = tdo;
@@ -641,27 +637,33 @@ ft2232_flush( cable_t *cable )
 			}
 
 			j++;
-			if (j >= cable->todo.max_items) j=0;
-			cable->todo.num_items --;
+			if (j >= cable->todo.max_items)
+				j = 0;
+			cable->todo.num_items--;
 		}
 
 		while (cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER) {
-			int r = ft2232_transfer( cable,
-			                         cable->todo.data[i].arg.transfer.len,
-			                         cable->todo.data[i].arg.transfer.in,
-			                         cable->todo.data[i].arg.transfer.out);
+			reg_desc_t *new_reg = (reg_desc_t *)malloc( sizeof(reg_desc_t) );
+			reg_desc_t *r;
 
-			free( cable->todo.data[i].arg.transfer.in );
-			if (cable->todo.data[i].arg.transfer.out != NULL) {
-				int m = cable_add_queue_item( cable, &(cable->done) );
-				if (m < 0)
-					printf("out of memory!!\n");
-				cable->done.data[m].action = CABLE_TRANSFER;
-				cable->done.data[m].arg.xferred.len = cable->todo.data[i].arg.transfer.len;
-				cable->done.data[m].arg.xferred.res = r;
-				cable->done.data[m].arg.xferred.out = cable->todo.data[i].arg.transfer.out;
-					
+			if (!new_reg) {
+				printf( _("out of memory!\n") );
+				break;
 			}
+
+			new_reg->next          = NULL;
+			new_reg->in            = cable->todo.data[i].arg.transfer.in;
+			new_reg->out           = cable->todo.data[i].arg.transfer.out;
+			new_reg->len           = cable->todo.data[i].arg.transfer.len;
+			params->total_length  += cable->todo.data[i].arg.transfer.len;
+
+			if (params->transfer_chain) {
+				r = params->transfer_chain;
+				while (r->next)
+					r = r->next;
+				r->next = new_reg;
+			} else
+					params->transfer_chain = new_reg;
 
 			i++;
 			if (i >= cable->todo.max_items)
@@ -669,11 +671,134 @@ ft2232_flush( cable_t *cable )
 			cable->todo.num_items--;
 		}
 
+		/* build combined in- and out-strams */
+		if (params->transfer_chain) {
+			reg_desc_t *reg = params->transfer_chain;
+			char *full_in  = (char *)malloc( params->total_length );
+			char *full_out = (char *)malloc( params->total_length );
+			char *idx;
+			int do_out = 0;
+			int r;
+
+			if (full_in && full_out) {
+				/* combine all in-streams */
+				full_in[0] = '\0';
+				idx = full_in;
+				while (reg) {
+					reg_desc_t *t = reg;
+					memcpy( idx, reg->in, reg->len );
+					idx += reg->len;
+					if (reg->out)
+						do_out = 1;
+					reg = reg->next;
+					free( t );
+				}
+
+				/* and perform the transfer */
+#ifdef VERBOSE
+				printf( "transfer %d %s\n", cable->todo.data[i].arg.transfer.len,
+				        cable->todo.data[i].arg.transfer.out ? "out" : "" );
+#endif
+				r = ft2232_transfer( cable,
+				                     params->total_length,
+				                     full_in,
+				                     do_out ? full_out : NULL );
+				params->transfer_chain = NULL;
+				params->total_length   = 0;
+
+				/* copy the result of the combined transfer to the done queue */
+				idx = full_out;
+				while (j != i) {
+					free( cable->todo.data[j].arg.transfer.in );
+
+					if (cable->todo.data[j].arg.transfer.out != NULL) {
+						int m = cable_add_queue_item( cable, &(cable->done) );
+						if (m < 0)
+							printf("out of memory!\n");
+
+						memcpy( cable->todo.data[j].arg.transfer.out, idx,
+					          cable->todo.data[j].arg.transfer.len );
+
+						cable->done.data[m].action = CABLE_TRANSFER;
+						cable->done.data[m].arg.xferred.len = cable->todo.data[j].arg.transfer.len;
+						cable->done.data[m].arg.xferred.res = r;
+						cable->done.data[m].arg.xferred.out = cable->todo.data[j].arg.transfer.out;
+					}
+					idx += cable->todo.data[j].arg.transfer.len;
+
+					j++;
+					if (j >= cable->todo.max_items)
+						j = 0;
+				}
+
+			} else
+				printf( _("out of memory!\n") );
+
+			if (full_in)
+				free( full_in );
+			if (full_out);
+				free( full_out );
+		}
+
 		cable->todo.next_item = i;
 	}
 }
 
-void
+static int
+ft2232_connect( char *params[], cable_t *cable )
+{
+	params_t *cable_params = (params_t *)malloc( sizeof(params_t) );
+	parport_t *port;
+	int i;
+
+	if ( cmd_params( params ) < 3 ) {
+	  printf( _("not enough arguments!\n") );
+	  return 1;
+	}
+	  
+	/* search parport driver list */
+	for (i = 0; parport_drivers[i]; i++)
+		if (strcasecmp( params[1], parport_drivers[i]->type ) == 0)
+			break;
+	if (!parport_drivers[i]) {
+		printf( _("Unknown port driver: %s\n"), params[1] );
+		return 2;
+	}
+
+	/* set up parport driver */
+	port = parport_drivers[i]->connect( (const char **) &params[2],
+					    cmd_params( params ) - 2 );
+
+        if (port == NULL) {
+	  printf( _("Error: Cable connection failed!\n") );
+	  return 3;
+        }
+
+	if (!cable_params) {
+		free( cable );
+		return 4;
+	}
+
+	cable_params->last_tdo_valid = 0;
+	cable_params->total_length = 0;
+	cable_params->transfer_chain = NULL;
+
+	cable->port = port;
+	cable->params = cable_params;
+	cable->chain = NULL;
+
+	return 0;
+}
+
+static void
+ft2232_cable_free( cable_t *cable )
+{
+	cable->port->driver->parport_free( cable->port );
+	free( cable->params );
+	free( cable );
+}
+
+static void
 ft2232_usbcable_help( const char *cablename )
 {
 	printf( _(
@@ -689,9 +814,9 @@ ft2232_usbcable_help( const char *cablename )
 cable_driver_t ft2232_cable_driver = {
 	"FT2232",
 	N_("Generic FTDI FT2232 Cable"),
-	generic_connect,
+	ft2232_connect,
 	generic_disconnect,
-	generic_cable_free,
+	ft2232_cable_free,
 	ft2232_generic_init,
 	ft2232_generic_done,
 	ft2232_clock,
@@ -706,9 +831,9 @@ cable_driver_t ft2232_cable_driver = {
 cable_driver_t ft2232_armusbocd_cable_driver = {
 	"ARM-USB-OCD",
 	N_("Olimex ARM-USB-OCD (FT2232) Cable"),
-	generic_connect,
+	ft2232_connect,
 	generic_disconnect,
-	generic_cable_free,
+	ft2232_cable_free,
 	ft2232_armusbocd_init,
 	ft2232_armusbocd_done,
 	ft2232_clock,
@@ -716,7 +841,6 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
 	ft2232_transfer,
 	ft2232_set_trst,
 	generic_get_trst,
-//	generic_flush_using_transfer,
 	ft2232_flush,
 	ft2232_usbcable_help
 };
@@ -724,9 +848,9 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
 cable_driver_t ft2232_jtagkey_cable_driver = {
 	"JTAGkey",
 	N_("Amontec JTAGkey (FT2232) Cable"),
-	generic_connect,
+	ft2232_connect,
 	generic_disconnect,
-	generic_cable_free,
+	ft2232_cable_free,
 	ft2232_jtagkey_init,
 	ft2232_jtagkey_done,
 	ft2232_clock,

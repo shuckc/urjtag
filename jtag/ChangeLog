@@ -1,3 +1,8 @@
+2008-02-04  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/tap/cable/ft2232.c (ft2232_flush): rework flush implementation to benefit from
+      queued deferred transfers
+
 2008-02-04  Kolja Waschk <kawk>
 
     * configure.ac, src/tap/parport/xpcu_common.c, src/tap/parport_xpcu_pp.c,
