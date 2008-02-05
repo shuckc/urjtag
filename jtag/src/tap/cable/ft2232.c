@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Arnim Laeuger, 2007.
+ * Written by Arnim Laeuger, 2007-2008.
  * Support for JTAGkey submitted by Laurent Gauch, 2008.
  *
  */
@@ -41,7 +41,7 @@
    Larger values might speed up comm, but there's an upper limit
    when too many bytes are sent and libftdi doesn't fetch the
    returned data in time -> deadlock */
-#define MAXCHUNK (4 * 64)
+#define MAXRECV (6 * 64)
 
 /* Maximum TCK frequency of FT2232 */
 #define FT2232_MAX_TCK_FREQ 6000000
@@ -89,15 +89,6 @@
 #define BITMASK_ARMUSBOCD_nOE (1 << BIT_ARMUSBOCD_nOE)
 
 
-struct reg_desc {
-	struct reg_desc *next;
-	char *in;
-	char *out;
-	int len;
-};
-
-typedef struct reg_desc reg_desc_t;
-
 typedef struct {
 	uint32_t mpsse_frequency;
 	/* variables to save last TDO value
@@ -106,16 +97,133 @@ typedef struct {
 	unsigned int last_tdo_valid;
 	unsigned int last_tdo;
 
-	int total_length;
-	reg_desc_t *transfer_chain;
+	/* queue buffers */
+	uint32_t send_buffer_len;
+	uint32_t to_send;
+	uint16_t *send_buffer;
+	uint32_t recv_buffer_len;
+	uint32_t to_recv;
+	uint32_t recv_idx;
+	uint8_t *recv_buffer;
 } params_t;
 
+
+static int
+extend_send_buffer( params_t *params )
+{
+	/* check size of send_buffer and increase it if not sufficient */
+	if (params->to_send >= params->send_buffer_len) {
+		params->send_buffer_len *= 2;
+		params->send_buffer = (uint16_t *)realloc( params->send_buffer, params->send_buffer_len * sizeof(uint16_t) );
+	}
+
+	return params->send_buffer ? 1 : 0;
+}
+
+
+static void
+push_recv_cmd( params_t *params, uint16_t num_recv )
+{
+	extend_send_buffer( params );
+
+	/* set MSB to flag this as a header of a receive command */
+	params->send_buffer[params->to_send++] = (1 << 15) | num_recv;
+	params->to_recv += num_recv;
+}
+
+
+static void
+push_to_send( params_t *params, uint8_t d )
+{
+	extend_send_buffer( params );
+
+	params->send_buffer[params->to_send++] = d;
+}
+
+
+static void
+send_and_receive( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+	uint32_t bytes_sent, bytes_to_recv, bytes_recvd;
+	uint16_t *send_idx;
+	uint8_t *recv_idx;
+
+	/* TODO: move down before receive routine */
+	if (params->to_recv > params->recv_buffer_len) {
+		free( params->recv_buffer );
+		params->recv_buffer = (uint8_t *)malloc( params->to_recv );
+	}
+
+	send_idx = params->send_buffer;
+	bytes_sent = 0;
+	recv_idx = params->recv_buffer;
+	bytes_recvd = 0;
+	bytes_to_recv = 0;
+
+	while (bytes_sent < params->to_send) {
+
+		/* Step 1: send scheduled bytes through the parport driver */
+		while (bytes_sent < params->to_send) {
+			/* check for receive command header */
+			if (*send_idx & 0x8000) {
+				uint16_t num_recv = *send_idx & 0x7fff;
+
+				if (bytes_recvd + num_recv > MAXRECV) {
+					puts("Suspend sending");
+					/* suspend sending since we can't handle the receive data
+					   of this command */
+					break;
+				}
+
+				/* eat up entry */
+				send_idx++;
+				bytes_sent++;
+
+				bytes_to_recv += num_recv;
+			}
+
+			parport_set_data( p, *send_idx & 0xff );
+			send_idx++;
+			bytes_sent++;
+		}
+
+		/* Step 2: flush parport */
+		parport_set_control( p, 1 ); // flush
+		parport_set_control( p, 0 ); // noflush
+
+		/* Step 3: receive answers */
+		while (bytes_to_recv) {
+			*recv_idx = parport_get_data( p );
+			recv_idx++;
+			bytes_to_recv--;
+			bytes_recvd++;
+		}
+	}
+
+	params->recv_idx = 0;
+	params->to_recv  = bytes_recvd;
+	params->to_send  = 0;
+}
+
+
+static uint8_t
+pop_to_recv( params_t *params )
+{
+	if (params->to_recv == 0) {
+		printf( _("Error: Receive buffer underrun %s line %d\n"), __FILE__, __LINE__ );
+		return 0;
+	}
+
+	params->to_recv--;
+	return params->recv_buffer[params->recv_idx++];
+}
 
 
 static void
 update_frequency( cable_t *cable )
 {
-	parport_t *p = cable->port;
 	uint32_t new_frequency = cable_get_frequency( cable );
 	params_t *params = (params_t *)cable->params;
 
@@ -137,11 +245,11 @@ update_frequency( cable_t *cable )
 
 		/* send new divisor to device */
 		div -= 1;
-		parport_set_data( p, TCK_DIVISOR );
-		parport_set_data( p, div & 0xff );
-		parport_set_data( p, (div >> 8) & 0xff );
-		parport_set_control( p, 1 ); // flush
-		parport_set_control( p, 0 ); // noflush
+		push_to_send( params, TCK_DIVISOR );
+		push_to_send( params, div & 0xff );
+		push_to_send( params, (div >> 8) & 0xff );
+
+		send_and_receive( cable );
 
 		params->mpsse_frequency = FT2232_MAX_TCK_FREQ / (div + 1);
 	}
@@ -159,18 +267,16 @@ ft2232_generic_init( cable_t *cable )
 
 	/* Set Data Bits Low Byte
 		 TCK = 0, TMS = 1, TDI = 0 */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, BITMASK_TMS );
-	parport_set_data( p, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_TMS );
+	push_to_send( params, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+	send_and_receive( cable );
 
 	/* Set TCK/SK Divisor */
-	parport_set_data( p, TCK_DIVISOR );
-	parport_set_data( p, 0 );
-	parport_set_data( p, 0 );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, TCK_DIVISOR );
+	push_to_send( params, 0 );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
 
 	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
@@ -189,24 +295,21 @@ ft2232_jtagkey_init( cable_t *cable )
 		return -1;
 
 	/* set loopback off */
-	parport_set_data( p, LOOPBACK_END );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, LOOPBACK_END );
+	send_and_receive( cable );
 
 	/* Set Data Bits Low Byte
 		 TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, BITMASK_TMS );
-	parport_set_data( p, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_JTAGKEY_nOE );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_TMS );
+	push_to_send( params, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_JTAGKEY_nOE );
+	send_and_receive( cable );
 
 	/* Set TCK/SK Divisor */
-	parport_set_data( p, TCK_DIVISOR );
-	parport_set_data( p, 0 );
-	parport_set_data( p, 0 );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, TCK_DIVISOR );
+	push_to_send( params, 0 );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
 
 	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
@@ -214,6 +317,7 @@ ft2232_jtagkey_init( cable_t *cable )
 
 	return 0;
 }
+
 
 static int
 ft2232_armusbocd_init( cable_t *cable )
@@ -225,24 +329,21 @@ ft2232_armusbocd_init( cable_t *cable )
 		return -1;
 
 	/* set loopback off */
-	parport_set_data( p, LOOPBACK_END );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, LOOPBACK_END );
+	send_and_receive( cable );
 
 	/* Set Data Bits Low Byte
 		 TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, BITMASK_TMS );
-	parport_set_data( p, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_ARMUSBOCD_nOE );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_TMS );
+	push_to_send( params, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_ARMUSBOCD_nOE );
+	send_and_receive( cable );
 
 	/* Set TCK/SK Divisor */
-	parport_set_data( p, TCK_DIVISOR );
-	parport_set_data( p, 0 );
-	parport_set_data( p, 0 );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, TCK_DIVISOR );
+	push_to_send( params, 0 );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
 
 	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
 
@@ -251,72 +352,73 @@ ft2232_armusbocd_init( cable_t *cable )
 	return 0;
 }
 
+
 static void
 ft2232_generic_done( cable_t *cable )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
 		 set all to input */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, 0 );
-	parport_set_data( p, 0 );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, 0 );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
 
 	parport_close( p );
 }
+
 
 static void
 ft2232_jtagkey_done( cable_t *cable )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
 		 disable output drivers */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, BITMASK_JTAGKEY_nOE );
-	parport_set_data( p, BITMASK_JTAGKEY_nOE );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_JTAGKEY_nOE );
+	push_to_send( params, BITMASK_JTAGKEY_nOE );
+	send_and_receive( cable );
 	/* Set Data Bits Low Byte
 		 set all to input */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, BITMASK_JTAGKEY_nOE );
-	parport_set_data( p, 0 );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_JTAGKEY_nOE );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
 
 	parport_close( p );
 }
+
 
 static void
 ft2232_armusbocd_done( cable_t *cable )
 {
 	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
 		 disable output drivers */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, BITMASK_ARMUSBOCD_nOE );
-	parport_set_data( p, BITMASK_ARMUSBOCD_nOE );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_ARMUSBOCD_nOE );
+	push_to_send( params, BITMASK_ARMUSBOCD_nOE );
+	send_and_receive( cable );
 	/* Set Data Bits Low Byte
 		 set all to input */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, BITMASK_ARMUSBOCD_nOE );
-	parport_set_data( p, 0 );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_ARMUSBOCD_nOE );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
 
 	parport_close( p );
 }
 
+
 static void
 ft2232_clock_defer( cable_t *cable, int defer, int tms, int tdi, int n )
 {
-	parport_t *p = cable->port;
 	params_t *params = (params_t *)cable->params;
 
 	tms = tms ? 0x7f : 0;
@@ -327,24 +429,24 @@ ft2232_clock_defer( cable_t *cable, int defer, int tms, int tdi, int n )
 
 	while (n > 0) {
 		/* Clock Data to TMS/CS Pin (no Read) */
-		parport_set_data( p, MPSSE_WRITE_TMS |
-											MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG );
+		push_to_send( params, MPSSE_WRITE_TMS |
+		              MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG );
 		if (n <= 7) {
-			parport_set_data( p, n-1 );
+			push_to_send( params, n-1 );
 			n = 0;
 		} else {
-			parport_set_data( p, 7-1 );
+			push_to_send( params, 7-1 );
 			n -= 7;
 		}
-		parport_set_data( p, tdi | tms );
+		push_to_send( params, tdi | tms );
 	}
 	if (!defer) {
-		parport_set_control( p, 1 ); // flush
-		parport_set_control( p, 0 ); // noflush
+		send_and_receive( cable );
 
 		params->last_tdo_valid = 0;
 	}
 }
+
 
 static void
 ft2232_clock( cable_t *cable, int tms, int tdi, int n )
@@ -352,23 +454,25 @@ ft2232_clock( cable_t *cable, int tms, int tdi, int n )
 	ft2232_clock_defer( cable, 0, tms, tdi, n );
 }
 
+
 static void
 ft2232_get_tdo_schedule( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
 
 	/* Read Data Bits Low Byte */
-	parport_set_data( p, GET_BITS_LOW );
+	push_recv_cmd( params, 1 );
+	push_to_send( params, GET_BITS_LOW );
 }
+
 
 static int
 ft2232_get_tdo_finish( cable_t *cable )
 {
-	parport_t *p = cable->port;
 	params_t *params = (params_t *)cable->params;
 	int value;
 
-	value = ( parport_get_data( p ) & BITMASK_TDO) ? 1 : 0;
+	value = ( pop_to_recv( params ) & BITMASK_TDO) ? 1 : 0;
 
 	params->last_tdo = value;
 	params->last_tdo_valid = 1;
@@ -376,16 +480,15 @@ ft2232_get_tdo_finish( cable_t *cable )
 	return value;
 }
 
+
 static int
 ft2232_get_tdo( cable_t *cable )
 {
-	parport_t *p = cable->port;
-
 	ft2232_get_tdo_schedule( cable );
-	parport_set_control( p, 1 ); // flush
-	parport_set_control( p, 0 ); // noflush
+	send_and_receive( cable );
 	return ft2232_get_tdo_finish( cable );
 }
+
 
 static int
 ft2232_set_trst( cable_t *cable, int trst )
@@ -393,164 +496,179 @@ ft2232_set_trst( cable_t *cable, int trst )
 	return 1;
 }
 
-static int
-ft2232_transfer( cable_t *cable, int len, char *in, char *out )
+
+static void
+ft2232_transfer_schedule( cable_t *cable, int len, char *in, char *out )
 {
-	parport_t *p = cable->port;
 	params_t *params = (params_t *)cable->params;
 	int in_offset = 0;
-	int out_offset = 0;
 	int bitwise_len;
-
-	/* check for new frequency setting */
-	update_frequency( cable );
+	int chunkbytes;
 
 	/* Set Data Bits Low Byte to lower TMS for transfer
 		 TCK = 0, TMS = 0, TDI = 0, nOE = 0 */
-	parport_set_data( p, SET_BITS_LOW );
-	parport_set_data( p, 0 );
-	parport_set_data( p, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_ARMUSBOCD_nOE );
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, 0 );
+	push_to_send( params, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_ARMUSBOCD_nOE );
 
-	while (len - in_offset > 0) {
+
+	chunkbytes = len >> 3;
+	while (chunkbytes > 0) {
 		int byte_idx;
-		int chunkbytes = (len - in_offset) >> 3;
 
-		if (chunkbytes > MAXCHUNK)
-			chunkbytes = MAXCHUNK;
+		/* reduce chunkbytes to the maximum about we can receive in one step */
+		if (out && chunkbytes > MAXRECV)
+			chunkbytes = MAXRECV;
 
-		if ((chunkbytes < MAXCHUNK) &&
-				((len - in_offset) % 8 > 0))
-			bitwise_len = (len - in_offset) % 8;
-		else
-			bitwise_len = 0;
+		/***********************************************************************
+		 * Step 1:
+		 * Determine data shifting command (bytewise).
+		 * Either with or without read
+		 ***********************************************************************/
+		if (out) {
+			push_recv_cmd( params, chunkbytes );
+			/* Clock Data Bytes In and Out LSB First
+			   out on negative edge, in on positive edge */
+			push_to_send( params, MPSSE_DO_READ | MPSSE_DO_WRITE |
+			              MPSSE_LSB | MPSSE_WRITE_NEG );
+		} else
+			/* Clock Data Bytes Out on -ve Clock Edge LSB First (no Read) */
+			push_to_send( params, MPSSE_DO_WRITE |
+			              MPSSE_LSB | MPSSE_WRITE_NEG );
+		/* set byte count */
+		push_to_send( params, (chunkbytes - 1) & 0xff );
+		push_to_send( params, ((chunkbytes - 1) >> 8) & 0xff );
 
 
+		/*********************************************************************
+		 * Step 2:
+		 * Write TDI data in bundles of 8 bits.
+		 *********************************************************************/
+		for (byte_idx = 0; byte_idx < chunkbytes; byte_idx++) {
+			int bit_idx;
+			unsigned char b = 0;
+
+			for (bit_idx = 1; bit_idx < 256; bit_idx <<= 1)
+				if (in[in_offset++])
+					b |= bit_idx;
+			push_to_send( params, b );
+		}
+
+		/* recalc chunkbytes for next round */
+		chunkbytes = (len - in_offset) >> 3;
+	}
+
+	/* determine bitwise shift amount */
+	bitwise_len = (len - in_offset) % 8;
+	if (bitwise_len > 0) {
+		/***********************************************************************
+		 * Step 3:
+		 * Determine data shifting command (bitwise).
+		 * Either with or without read
+		 ***********************************************************************/
+		if (out) {
+			push_recv_cmd( params, 1 );
+			/* Clock Data Bytes In and Out LSB First
+			   out on negative edge, in on positive edge */
+			push_to_send( params, MPSSE_DO_READ | MPSSE_DO_WRITE |
+			              MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG );
+		} else
+			/* Clock Data Bytes Out on -ve Clock Edge LSB First (no Read) */
+			push_to_send( params, MPSSE_DO_WRITE |
+			              MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG );
+		/* determine bit count */
+		push_to_send( params, bitwise_len - 1 );
+
+		/***********************************************************************
+		 * Step 4:
+		 * Write TDI data bitwise
+		 ***********************************************************************/
+		{
+			int bit_idx;
+			unsigned char b = 0;
+			for (bit_idx = 1; bit_idx <= 1 << bitwise_len; bit_idx <<= 1) {
+				if (in[in_offset++])
+					b |= bit_idx;
+			}
+			push_to_send( params, b );
+		}
+	}
+
+	if (out) {
+		/* Read Data Bits Low Byte to get current TDO,
+		   Do this only if we'll read out data nonetheless */
+		push_recv_cmd( params, 1 );
+		push_to_send( params, GET_BITS_LOW );
+		params->last_tdo_valid = 1;
+	} else
+		params->last_tdo_valid = 0;
+}
+
+
+static int
+ft2232_transfer_finish( cable_t *cable, int len, char *out )
+{
+	params_t *params = (params_t *)cable->params;
+	int bitwise_len;
+	int chunkbytes;
+	int out_offset = 0;
+
+	chunkbytes = len >> 3;
+	bitwise_len = len % 8;
+
+	if (out) {
 		if (chunkbytes > 0) {
-			/***********************************************************************
-			 * Step 1:
-			 * Determine data shifting command (bytewise).
-			 * Either with or without read
-			 ***********************************************************************/
-			if (out)
-				/* Clock Data Bytes In and Out LSB First
-					 out on negative edge, in on positive edge */
-				parport_set_data( p, MPSSE_DO_READ | MPSSE_DO_WRITE |
-													MPSSE_LSB | MPSSE_WRITE_NEG );
-			else
-				/* Clock Data Bytes Out on -ve Clock Edge LSB First (no Read) */
-				parport_set_data( p, MPSSE_DO_WRITE |
-													MPSSE_LSB | MPSSE_WRITE_NEG );
-			/* set byte count */
-			parport_set_data( p, (chunkbytes - 1) & 0xff );
-			parport_set_data( p, ((chunkbytes - 1) >> 8) & 0xff );
-
+			uint32_t xferred;
 
 			/*********************************************************************
-			 * Step 2:
-			 * Write TDI data in bundles of 8 bits.
+			 * Step 5:
+			 * Read TDO data in bundles of 8 bits if read is requested.
 			 *********************************************************************/
-			for (byte_idx = 0; byte_idx < chunkbytes; byte_idx++) {
+			xferred = chunkbytes;
+			for (; xferred > 0; xferred--) {
 				int bit_idx;
-				unsigned char b = 0;
+				unsigned char b;
 
+				b = pop_to_recv( params );
 				for (bit_idx = 1; bit_idx < 256; bit_idx <<= 1)
-					if (in[in_offset++])
-						b |= bit_idx;
-				parport_set_data( p, b );
+					out[out_offset++] = (b & bit_idx) ? 1 : 0;
 			}
 		}
 
 		if (bitwise_len > 0) {
 			/***********************************************************************
-			 * Step 3:
-			 * Determine data shifting command (bitwise).
-			 * Either with or without read
+			 * Step 6:
+			 * Read TDO data bitwise if read is requested.
 			 ***********************************************************************/
-			if (out)
-				/* Clock Data Bytes In and Out LSB First
-					 out on negative edge, in on positive edge */
-				parport_set_data( p, MPSSE_DO_READ | MPSSE_DO_WRITE |
-													MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG );
-			else
-				/* Clock Data Bytes Out on -ve Clock Edge LSB First (no Read) */
-				parport_set_data( p, MPSSE_DO_WRITE |
-													MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG );
-			/* determine bit count */
-			parport_set_data( p, bitwise_len - 1 );
+			int bit_idx;
+			unsigned char b;
 
-			/***********************************************************************
-			 * Step 4:
-			 * Write TDI data bitwise
-			 ***********************************************************************/
-			{
-				int bit_idx;
-				unsigned char b = 0;
-				for (bit_idx = 1; bit_idx <= 1 << bitwise_len; bit_idx <<= 1) {
-					if (in[in_offset++])
-						b |= bit_idx;
-				}
-				parport_set_data( p, b );
-			}
-		}
-
-		if (out) {
-			/* Read Data Bits Low Byte to get current TDO,
-			   Do this only if we'll read out data nonetheless */
-			parport_set_data( p, GET_BITS_LOW );
-		}
-
-		parport_set_control( p, 1 ); // flush
-		parport_set_control( p, 0 ); // noflush
-
-		/* invalidate TDO cache */
-		params->last_tdo_valid = 0;
-
-
-		if (out) {
-			if (chunkbytes > 0) {
-				uint32_t xferred;
-
-				/*********************************************************************
-				 * Step 5:
-				 * Read TDO data in bundles of 8 bits if read is requested.
-				 *********************************************************************/
-				xferred = chunkbytes;
-				for (; xferred > 0; xferred--) {
-					int bit_idx;
-					unsigned char b;
-
-					b = parport_get_data( p );
-					for (bit_idx = 1; bit_idx < 256; bit_idx <<= 1)
-						out[out_offset++] = (b & bit_idx) ? 1 : 0;
-				}
-			}
-
-			if (bitwise_len > 0) {
-				/***********************************************************************
-				 * Step 6:
-				 * Read TDO data bitwise if read is requested.
-				 ***********************************************************************/
-				int bit_idx;
-				unsigned char b;
-
-				b = parport_get_data( p );
+			b = pop_to_recv( params );
 
 				for (bit_idx = (1 << (8 - bitwise_len)); bit_idx < 256; bit_idx <<= 1)
 					out[out_offset++] = (b & bit_idx) ? 1 : 0;
-			}
 		}
 
-		if (out) {
-			/* gather current TDO */
-			params->last_tdo = ( parport_get_data( p ) & BITMASK_TDO) ? 1 : 0;
-			params->last_tdo_valid = 1;
-		}
-	}
+		/* gather current TDO */
+		params->last_tdo = ( pop_to_recv( params ) & BITMASK_TDO) ? 1 : 0;
+		params->last_tdo_valid = 1;
+	} else
+		params->last_tdo_valid = 0;
 
 	return 0;
 }
 
-#undef VERBOSE
+
+static int
+ft2232_transfer( cable_t *cable, int len, char *in, char *out )
+{
+	/* check for new frequency setting */
+	update_frequency( cable );
+	ft2232_transfer_schedule( cable, len, in, out );
+	send_and_receive( cable );
+	return ft2232_transfer_finish( cable, len, out );
+}
+
 
 static void
 ft2232_flush( cable_t *cable )
@@ -559,37 +677,34 @@ ft2232_flush( cable_t *cable )
 
 	while (cable->todo.num_items > 0)
 	{
-		int i, j, n, to_send = 0, to_rec = 0;
+		int i, j, n;
 		int last_tdo_valid_schedule = params->last_tdo_valid;
 		int last_tdo_valid_finish = params->last_tdo_valid;
 
-		for (j = i = cable->todo.next_item, n = 0; to_rec < 64 && n < cable->todo.num_items; n++) {
-			if (cable->todo.data[i].action == CABLE_TRANSFER)
-				break;
+		for (j = i = cable->todo.next_item, n = 0; n < cable->todo.num_items; n++) {
 
 			switch (cable->todo.data[i].action) {
 				case CABLE_CLOCK:
-#ifdef VERBOSE
-					puts("clock_defer");
-#endif
 					ft2232_clock_defer( cable, 1,
 					                    cable->todo.data[i].arg.clock.tms,
 					                    cable->todo.data[i].arg.clock.tdi,
 					                    cable->todo.data[i].arg.clock.n );
-					to_send += 3;
 					last_tdo_valid_schedule = 0;
 					break;
 
 				case CABLE_GET_TDO:
 					if (!last_tdo_valid_schedule) {
-#ifdef VERBOSE
-						puts("get_tdo_schedule");
-#endif
 						ft2232_get_tdo_schedule( cable );
-						to_send += 1;
-						to_rec  += 1;
 						last_tdo_valid_schedule = 1;
 					}
+					break;
+
+				case CABLE_TRANSFER:
+					ft2232_transfer_schedule( cable,
+					                          cable->todo.data[i].arg.transfer.len,
+					                          cable->todo.data[i].arg.transfer.in,
+					                          cable->todo.data[i].arg.transfer.out );
+					last_tdo_valid_schedule = params->last_tdo_valid;
 					break;
 
 				default:
@@ -601,10 +716,7 @@ ft2232_flush( cable_t *cable )
 				i = 0;
 		}
 
-		if (to_rec > 0) {
-			parport_set_control( cable->port, 1 ); // flush
-			parport_set_control( cable->port, 0 );
-		}
+		send_and_receive( cable );
 
 		while (j != i) {
 			switch (cable->todo.data[j].action) {
@@ -632,6 +744,23 @@ ft2232_flush( cable_t *cable )
 					cable->done.data[m].arg.value.trst = 1;
 					break;
 				}
+				case CABLE_TRANSFER:
+				{
+					int  r = ft2232_transfer_finish( cable,
+					                                 cable->todo.data[j].arg.transfer.len,
+					                                 cable->todo.data[j].arg.transfer.out );
+					last_tdo_valid_finish = params->last_tdo_valid;
+					free( cable->todo.data[j].arg.transfer.in );
+					if (cable->todo.data[j].arg.transfer.out) {
+						int m = cable_add_queue_item( cable, &(cable->done) );
+						if (m < 0)
+							printf("out of memory!\n");
+						cable->done.data[m].action = CABLE_TRANSFER;
+						cable->done.data[m].arg.xferred.len = cable->todo.data[j].arg.transfer.len;
+						cable->done.data[m].arg.xferred.res = r;
+						cable->done.data[m].arg.xferred.out = cable->todo.data[j].arg.transfer.out;
+					}
+				}
 				default:
 					break;
 			}
@@ -642,107 +771,10 @@ ft2232_flush( cable_t *cable )
 			cable->todo.num_items--;
 		}
 
-		while (cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER) {
-			reg_desc_t *new_reg = (reg_desc_t *)malloc( sizeof(reg_desc_t) );
-			reg_desc_t *r;
-
-			if (!new_reg) {
-				printf( _("out of memory!\n") );
-				break;
-			}
-
-			new_reg->next          = NULL;
-			new_reg->in            = cable->todo.data[i].arg.transfer.in;
-			new_reg->out           = cable->todo.data[i].arg.transfer.out;
-			new_reg->len           = cable->todo.data[i].arg.transfer.len;
-			params->total_length  += cable->todo.data[i].arg.transfer.len;
-
-			if (params->transfer_chain) {
-				r = params->transfer_chain;
-				while (r->next)
-					r = r->next;
-				r->next = new_reg;
-			} else
-					params->transfer_chain = new_reg;
-
-			i++;
-			if (i >= cable->todo.max_items)
-				i = 0;
-			cable->todo.num_items--;
-		}
-
-		/* build combined in- and out-strams */
-		if (params->transfer_chain) {
-			reg_desc_t *reg = params->transfer_chain;
-			char *full_in  = (char *)malloc( params->total_length );
-			char *full_out = (char *)malloc( params->total_length );
-			char *idx;
-			int do_out = 0;
-			int r;
-
-			if (full_in && full_out) {
-				/* combine all in-streams */
-				full_in[0] = '\0';
-				idx = full_in;
-				while (reg) {
-					reg_desc_t *t = reg;
-					memcpy( idx, reg->in, reg->len );
-					idx += reg->len;
-					if (reg->out)
-						do_out = 1;
-					reg = reg->next;
-					free( t );
-				}
-
-				/* and perform the transfer */
-#ifdef VERBOSE
-				printf( "transfer %d %s\n", cable->todo.data[i].arg.transfer.len,
-				        cable->todo.data[i].arg.transfer.out ? "out" : "" );
-#endif
-				r = ft2232_transfer( cable,
-				                     params->total_length,
-				                     full_in,
-				                     do_out ? full_out : NULL );
-				params->transfer_chain = NULL;
-				params->total_length   = 0;
-
-				/* copy the result of the combined transfer to the done queue */
-				idx = full_out;
-				while (j != i) {
-					free( cable->todo.data[j].arg.transfer.in );
-
-					if (cable->todo.data[j].arg.transfer.out != NULL) {
-						int m = cable_add_queue_item( cable, &(cable->done) );
-						if (m < 0)
-							printf("out of memory!\n");
-
-						memcpy( cable->todo.data[j].arg.transfer.out, idx,
-					          cable->todo.data[j].arg.transfer.len );
-
-						cable->done.data[m].action = CABLE_TRANSFER;
-						cable->done.data[m].arg.xferred.len = cable->todo.data[j].arg.transfer.len;
-						cable->done.data[m].arg.xferred.res = r;
-						cable->done.data[m].arg.xferred.out = cable->todo.data[j].arg.transfer.out;
-					}
-					idx += cable->todo.data[j].arg.transfer.len;
-
-					j++;
-					if (j >= cable->todo.max_items)
-						j = 0;
-				}
-
-			} else
-				printf( _("out of memory!\n") );
-
-			if (full_in)
-				free( full_in );
-			if (full_out);
-				free( full_out );
-		}
-
 		cable->todo.next_item = i;
 	}
 }
+
 
 static int
 ft2232_connect( char *params[], cable_t *cable )
@@ -779,9 +811,14 @@ ft2232_connect( char *params[], cable_t *cable )
 		return 4;
 	}
 
-	cable_params->last_tdo_valid = 0;
-	cable_params->total_length = 0;
-	cable_params->transfer_chain = NULL;
+	cable_params->last_tdo_valid  = 0;
+	cable_params->send_buffer_len = 1024;
+	cable_params->to_send         = 0;
+	cable_params->send_buffer     = (uint16_t *)malloc( 1024 * sizeof(uint16_t) );
+	cable_params->recv_buffer_len = 1024;
+	cable_params->to_recv         = 0;
+	cable_params->recv_idx        = 0;
+	cable_params->recv_buffer     = (uint8_t *)malloc( 1024 );
 
 	cable->port = port;
 	cable->params = cable_params;
@@ -790,13 +827,19 @@ ft2232_connect( char *params[], cable_t *cable )
 	return 0;
 }
 
+
 static void
 ft2232_cable_free( cable_t *cable )
 {
+	params_t *params = (params_t *)cable->params;
+
 	cable->port->driver->parport_free( cable->port );
+	free( params->send_buffer );
+	free( params->recv_buffer );
 	free( cable->params );
 	free( cable );
 }
+
 
 static void
 ft2232_usbcable_help( const char *cablename )
@@ -810,6 +853,7 @@ ft2232_usbcable_help( const char *cablename )
 		"\n"
 	), cablename, cablename );
 }
+
 
 cable_driver_t ft2232_cable_driver = {
 	"FT2232",
