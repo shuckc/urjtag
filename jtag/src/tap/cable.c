@@ -211,7 +211,6 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
               memcpy(&(q->data[q->max_items]), &(q->data[0]), 
                   q->next_free * sizeof(cable_queue_t));
 
-              q->next_free += q->max_items;
             }
             else
             {
@@ -227,13 +226,14 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
 
               memmove(&(q->data[0]), &(q->data[added_space]), 
                   (q->next_free - added_space) * sizeof(cable_queue_t));
-
-              q->next_free -= added_space;
             }
           }
 #endif
         }
         q->max_items = new_max_items;
+        q->next_free = q->next_item + q->num_items;
+        if(q->next_free >= new_max_items) q->next_free -= new_max_items;
+
 	}
 
 	i = q->next_free;
@@ -450,31 +450,35 @@ cable_transfer_late( cable_t *cable, char *out )
 int
 cable_defer_transfer( cable_t *cable, int len, char *in, char *out )
 {
-	char *dbuf;
-	int i = cable_add_queue_item( cable, &(cable->todo) );
-	if( i < 0 ) return 1; /* report failure */
-	cable->todo.data[i].action = CABLE_TRANSFER;
-	cable->todo.data[i].arg.transfer.len = len;
+	char *ibuf, *obuf = NULL;
+	int i;
 
-	dbuf = malloc(len);
-	if(dbuf == NULL) return 1; /* report failure */
-	if(in) memcpy(dbuf, in, len);
-	cable->todo.data[i].arg.transfer.in  = dbuf;
+	ibuf = malloc(len);
+	if(ibuf == NULL) return 1;
 
 	if(out)
 	{
-		dbuf = malloc(len);
-		if(dbuf == NULL)
+		obuf = malloc(len);
+		if(obuf == NULL)
 		{
-			free(cable->todo.data[i].arg.transfer.in);
-			return 1; /* report failure */
+			free(ibuf);
+			return 1;
 		}
-		cable->todo.data[i].arg.transfer.out = dbuf;
-	}
-	else
+	};
+
+	i = cable_add_queue_item( cable, &(cable->todo) );
+	if( i < 0 )
 	{
-		cable->todo.data[i].arg.transfer.out = NULL;
-	}
+		free(ibuf);
+		if(obuf) free(obuf);
+		return 1; /* report failure */
+	};
+
+	cable->todo.data[i].action = CABLE_TRANSFER;
+	cable->todo.data[i].arg.transfer.len = len;
+	if(in) memcpy(ibuf, in, len);
+	cable->todo.data[i].arg.transfer.in  = ibuf;
+	cable->todo.data[i].arg.transfer.out = obuf;
 	return 0; /* success */
 }
 

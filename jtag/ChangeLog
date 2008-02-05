@@ -1,3 +1,8 @@
+2008-02-05  Kolja Waschk <kawk>
+
+    * src/tap/cable.c: cable_queue_add_item didn't always correct q->next_free,
+         and a memory leak in cable_defer_transfer was fixed [1884952].
+
 2008-02-04  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable/ft2232.c (ft2232_flush): rework flush implementation to benefit from
