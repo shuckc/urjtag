@@ -336,6 +336,7 @@ main( int argc, char *const argv[] )
 	int i;
 	int c;
 	int norc = 0;
+	int interactive = 0;
 	int help = 0;
 	int version = 0;
 	
@@ -358,6 +359,7 @@ main( int argc, char *const argv[] )
 		{
 			{"version", no_argument,      0, 'v'},
 			{"norc",    no_argument,      0, 'n'},
+			{"interactive", no_argument,  0, 'i'},
 			{"help",    no_argument,      0, 'h'},
 			{0, 0, 0, 0}
 		};
@@ -365,7 +367,7 @@ main( int argc, char *const argv[] )
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "vnh",
+		c = getopt_long (argc, argv, "vnhi",
 		long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -380,6 +382,10 @@ main( int argc, char *const argv[] )
 
 		case 'n':
 			norc = 1;
+			break;
+
+		case 'i':
+			interactive = 1;
 			break;
 
 		case 'h':
@@ -401,10 +407,9 @@ main( int argc, char *const argv[] )
 		printf (_("  -h, --help          display this help and exit\n"));
 		printf (_("  -v, --version       display version information and exit\n"));
 		printf ("\n");
-
 		printf (_("  -n, --norc          disable reading ~/.jtag/rc on startup\n"));
+		printf (_("  -i, --interactive   enter interactive mode after reading files\n"));
 		printf ("\n");
-
 		printf (_("  [FILE]              file containing commands to execute\n"));
 		printf ("\n");
 
@@ -455,7 +460,8 @@ main( int argc, char *const argv[] )
 				break;
 			}
 		}
-		return 0;
+
+		if(!interactive) return 0;
 	}
 
 	/* input from stdin */
@@ -497,7 +503,7 @@ main( int argc, char *const argv[] )
 	jtag_create_jtagdir();
 
 	/* Parse and execute the RC file */
-	if(!norc) go = jtag_parse_rc();
+	go = norc ? 1 : jtag_parse_rc();
 
 	if (go) {
 

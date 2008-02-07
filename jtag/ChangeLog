@@ -1,3 +1,9 @@
+2008-02-07  Kolja Waschk <kawk>
+
+    * src/jtag.c, doc/jtag.1: Fix dropthrough to caller if -n was given
+        (fixes [1887179] reported by A.Dyer), add command line option "-i"
+        to run interactive mode even after executing commands from files
+
 2008-02-07  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable/ft2232.c (ft2232_connect): check parport driver setting
