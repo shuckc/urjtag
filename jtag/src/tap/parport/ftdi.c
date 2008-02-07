@@ -356,7 +356,7 @@ ftdi_mpsse_open( parport_t *parport )
 		return -1;
 	}
 
-	if(ftdi_set_latency_timer(fc, 2) < 0)
+	if(ftdi_set_latency_timer(fc, 1) < 0)
 	{
 		fprintf (stderr, "Can't set minimum latency: %s\n",
 			ftdi_get_error_string (fc));
@@ -375,6 +375,8 @@ ftdi_flush_output ( ftdi_params_t *p )
 	int xferred;
 
 	xferred = ftdi_write_data(p->fc, p->outbuf, p->outcount);
+	if (xferred < 0)
+		printf( _("Error from ftdi_write_data(): %d\n"), xferred);
 
 	if(xferred > 0 && xferred < p->outcount)
 	{

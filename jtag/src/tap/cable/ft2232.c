@@ -39,9 +39,10 @@
 
 /* Maximum chunk to write to parport driver.
    Larger values might speed up comm, but there's an upper limit
-   when too many bytes are sent and libftdi doesn't fetch the
-   returned data in time -> deadlock */
-#define MAXRECV (6 * 64)
+   when too many bytes are sent and the underlying libftdi or libftd2xx
+   don't fetch the returned data in time -> deadlock */
+#define MAXRECV_FTD2XX (63 * 64)
+#define MAXRECV_FTDI   ( 4 * 64)
 
 /* Maximum TCK frequency of FT2232 */
 #define FT2232_MAX_TCK_FREQ 6000000
@@ -105,6 +106,7 @@ typedef struct {
 	uint32_t to_recv;
 	uint32_t recv_idx;
 	uint8_t *recv_buffer;
+	uint16_t maxrecv;
 } params_t;
 
 
@@ -170,8 +172,7 @@ send_and_receive( cable_t *cable )
 			if (*send_idx & 0x8000) {
 				uint16_t num_recv = *send_idx & 0x7fff;
 
-				if (bytes_recvd + num_recv > MAXRECV) {
-					puts("Suspend sending");
+				if (bytes_to_recv + num_recv > params->maxrecv) {
 					/* suspend sending since we can't handle the receive data
 					   of this command */
 					break;
@@ -516,9 +517,9 @@ ft2232_transfer_schedule( cable_t *cable, int len, char *in, char *out )
 	while (chunkbytes > 0) {
 		int byte_idx;
 
-		/* reduce chunkbytes to the maximum about we can receive in one step */
-		if (out && chunkbytes > MAXRECV)
-			chunkbytes = MAXRECV;
+		/* reduce chunkbytes to the maximum amount we can receive in one step */
+		if (out && chunkbytes > params->maxrecv)
+			chunkbytes = params->maxrecv;
 
 		/***********************************************************************
 		 * Step 1:
@@ -779,13 +780,25 @@ ft2232_flush( cable_t *cable )
 static int
 ft2232_connect( char *params[], cable_t *cable )
 {
-	params_t *cable_params = (params_t *)malloc( sizeof(params_t) );
+	params_t *cable_params;
 	parport_t *port;
 	int i;
+	uint16_t maxrecv;
 
 	if ( cmd_params( params ) < 3 ) {
-	  printf( _("not enough arguments!\n") );
+	  puts( _("not enough arguments!") );
 	  return 1;
+	}
+
+	if (strcasecmp( params[1], "ftdi-mpsse" ) == 0) {
+		maxrecv = MAXRECV_FTDI;
+		puts( _("FT2232 driver based on libftdi selected.") );
+		puts( _("Expect suboptimal performance for large shifts in comparison to libftd2xx.") );
+	} else if	(strcasecmp( params[1], "ftd2xx-mpsse" ) == 0) {
+		maxrecv = MAXRECV_FTD2XX;
+	} else {
+		puts( _("Wrong parport driver selected!") );
+		return 1;
 	}
 	  
 	/* search parport driver list */
@@ -806,6 +819,7 @@ ft2232_connect( char *params[], cable_t *cable )
 	  return 3;
         }
 
+	cable_params = (params_t *)malloc( sizeof(params_t) );
 	if (!cable_params) {
 		free( cable );
 		return 4;
@@ -814,11 +828,12 @@ ft2232_connect( char *params[], cable_t *cable )
 	cable_params->last_tdo_valid  = 0;
 	cable_params->send_buffer_len = 1024;
 	cable_params->to_send         = 0;
-	cable_params->send_buffer     = (uint16_t *)malloc( 1024 * sizeof(uint16_t) );
+	cable_params->send_buffer     = (uint16_t *)malloc( cable_params->send_buffer_len * sizeof(uint16_t) );
 	cable_params->recv_buffer_len = 1024;
 	cable_params->to_recv         = 0;
 	cable_params->recv_idx        = 0;
-	cable_params->recv_buffer     = (uint8_t *)malloc( 1024 );
+	cable_params->recv_buffer     = (uint8_t *)malloc( cable_params->recv_buffer_len );
+	cable_params->maxrecv         = maxrecv;
 
 	cable->port = port;
 	cable->params = cable_params;
