@@ -520,6 +520,10 @@ ft2232_transfer_schedule( cable_t *cable, int len, char *in, char *out )
 		/* reduce chunkbytes to the maximum amount we can receive in one step */
 		if (out && chunkbytes > params->maxrecv)
 			chunkbytes = params->maxrecv;
+		/* restrict chunkbytes to the maximum amount that can be transferred
+		   for one single operation */
+		if (chunkbytes > (1 << 16))
+			chunkbytes = 1 << 16;
 
 		/***********************************************************************
 		 * Step 1:
@@ -792,8 +796,6 @@ ft2232_connect( char *params[], cable_t *cable )
 
 	if (strcasecmp( params[1], "ftdi-mpsse" ) == 0) {
 		maxrecv = MAXRECV_FTDI;
-		puts( _("FT2232 driver based on libftdi selected.") );
-		puts( _("Expect suboptimal performance for large shifts in comparison to libftd2xx.") );
 	} else if	(strcasecmp( params[1], "ftd2xx-mpsse" ) == 0) {
 		maxrecv = MAXRECV_FTD2XX;
 	} else {
@@ -860,13 +862,31 @@ static void
 ft2232_usbcable_help( const char *cablename )
 {
 	printf( _(
+#ifdef HAVE_LIBFTDI
 		"Usage: cable %s ftdi-mpsse VID:PID\n"
+#endif
+#ifdef HAVE_LIBFTD2XX
 		"Usage: cable %s ftd2xx-mpsse VID:PID\n"
+#endif
 		"\n"
 		"VID        vendor ID (hex, e.g. 9FB, or empty)\n"
 		"PID        product ID (hex, e.g. 6001, or empty)\n"
+    "\n"
+#ifdef HAVE_LIBFTDI
+		"Expect suboptimal performance of ftdi-mpsse for large shifts with output capture.\n"
+#endif
 		"\n"
-	), cablename, cablename );
+	),
+#ifdef HAVE_LIBFTDI
+		 cablename
+#endif
+#if defined HAVE_LIBFTDI && defined HAVE_LIBFTD2XX
+		 ,
+#endif
+#ifdef HAVE_LIBFTD2XX
+		 cablename
+#endif
+		);
 }
 
 

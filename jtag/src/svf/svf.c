@@ -897,7 +897,10 @@ svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params, YYLTYPE *loc)
 
     case generic_dr:
       svf_goto_state(Shift_DR);
-      chain_shift_data_registers_mode(chain, 1, 0, EXITMODE_EXIT1);
+      chain_shift_data_registers_mode(chain,
+                                      sxr_params->params.tdo ? 1 : 0,
+                                      0,
+                                      EXITMODE_EXIT1);
       svf_goto_state(enddr);
 
       if (sxr_params->params.tdo)

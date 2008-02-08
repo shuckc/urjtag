@@ -1,3 +1,9 @@
+2008-02-09  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/tap/cable/ft2232.c (ft2232_transfer_schedule): ensure max number of bytes for
+        a single byte operation
+    * src/svf/svf.c (svf_sxr): avoid output capture in case TDO is not specified for SDR
+
 2008-02-07  Kolja Waschk <kawk>
 
     * src/jtag.c, doc/jtag.1: Fix dropthrough to caller if -n was given
