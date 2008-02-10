@@ -35,6 +35,14 @@ typedef struct cable_t cable_t;
 
 typedef struct cable_driver_t cable_driver_t;
 
+typedef enum
+{
+   OPTIONALLY,
+   TO_OUTPUT,
+   COMPLETELY
+}
+cable_flush_amount_t;
+
 struct cable_driver_t {
 	const char *name;
 	const char *description;
@@ -48,7 +56,7 @@ struct cable_driver_t {
 	int (*transfer)( cable_t *, int, char *, char * );
 	int (*set_trst)( cable_t *, int );
 	int (*get_trst)( cable_t * );
-	void (*flush)( cable_t * );
+	void (*flush)( cable_t *, cable_flush_amount_t );
 	void (*help)( const char * );
 };
 
@@ -110,7 +118,7 @@ struct cable_t {
 void cable_free( cable_t *cable );
 int cable_init( cable_t *cable );
 void cable_done( cable_t *cable );
-void cable_flush( cable_t *cable );
+void cable_flush( cable_t *cable, cable_flush_amount_t );
 void cable_clock( cable_t *cable, int tms, int tdi, int n );
    int cable_defer_clock( cable_t *cable, int tms, int tdi, int n );
 int cable_get_tdo( cable_t *cable );

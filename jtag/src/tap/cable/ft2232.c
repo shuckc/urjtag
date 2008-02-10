@@ -676,7 +676,7 @@ ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 
 
 static void
-ft2232_flush( cable_t *cable )
+ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 {
 	params_t *params = (params_t *)cable->params;
 

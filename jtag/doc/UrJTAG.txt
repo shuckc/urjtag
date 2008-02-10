@@ -254,11 +254,11 @@ least the following are supported:
 NOTE: Not all chips are supported in every possible configuration, there may
 be untested combinations of chip type, bus width, ...
 
- * Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)</para></listitem>
- * Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)</para></listitem>
- * Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)</para></listitem>
- * AMD Am29LV64xD (Am29LV640D, Am29LV641D, Am29LV642D)</para></listitem>
- * AMD Am29xx040B (Am29F040B, Am29LV040B)</para></listitem>
+ * Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)
+ * Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)
+ * Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)
+ * AMD Am29LV64xD (Am29LV640D, Am29LV641D, Am29LV642D)
+ * AMD Am29xx040B (Am29F040B, Am29LV040B)
 
 //------------------------------------------------------------------------
 
@@ -905,9 +905,9 @@ Currently the API provides five different functions for performing operations
 at the JTAG interface on the low level signal level (using the four signals
 TMS, TCK, TDI, and TDO).
 
- * clock() takes values for TMS and TDI output as its parameters, ensures that actual cable signals are set accordingly, and does a 0-1 transition on TCK.
+ * clock(tms,tdi,n) takes values for TMS and TDI output as its parameters, ensures that actual cable signals are set accordingly, and does a 0-1 transition on TCK (n times)
  * get_tdo() returns the current value at the TDO input.
- * set_trst() sets the TRST signal and returns the current value.
+ * set_trst(x) sets the TRST signal and returns the current value.
  * get_trst() returns the current value of the TRST signal.
 
 For many JTAG adapters, there's almost no delay when doing alternating clock()
@@ -923,6 +923,8 @@ delivery of the value of the bit. It is at least 1 millisecond with USB,
 which would limit the transfer rate to 1 kHz.  One way to workaround this
 is to transmit bits compacted into bytes and chunks of bytes, which is 
 possible with the transfer() function.
+
+ * transfer(in, out)
 
 The transfer() function does a series of TCK pulses, with data for TDI read as
 bytes from memory. The bytes are automatically serialized. TMS is set to zero
@@ -969,7 +971,30 @@ second clock(), the sequence can be optimized into the following sequence (if
  4. get_tdo_late()
  5. get_tdo_late()
 
-The next section explains the queueing mechanism and its limits in detail.
+The next sections explain the queueing mechanism and its limits in detail.
+
+===== When flushing occurs ======
+
+The cable_flush() function is used to flush the queue towards the cable. It
+takes one additional argument, "how_much", which may be one of
+
+ * OPTIONALLY: The cable driver may flush if it's reasonable (e.g. if the
+   queue has been filled so that some buffer limit for the cable interface
+   is reached). It would be wise to flush early to keep the queue small, if
+   there is no point in queueing up more items because the transfer to the
+   cable would have to be split into smaller chunks anyway. This is used by
+   UrJTAG immediately after adding items to the queue.
+
+ * TO_OUTPUT: The cable driver should at least flush as much so that one 
+   output becomes available in the output queue. If there's already something
+   in the output queue, this should be interpreted similar to OPTIONALLY. This
+   is used by UrJTAG immediately before it wants to use that output.
+
+ * COMPLETELY: The cable driver has to flush the queue completely. This is
+   used by UrJTAG immediately before actions that circumvent the queueing 
+   such as calls to the legacy clock/get_tdo functions. It could also be
+   used by application code to ensure that some action is actually done in
+   time.
 
 ===== JTAG activity queueing =====
 

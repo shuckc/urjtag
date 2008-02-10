@@ -138,15 +138,15 @@ cable_init( cable_t *cable )
 }
 
 void
-cable_flush ( cable_t *cable )
+cable_flush ( cable_t *cable, cable_flush_amount_t how_much )
 {
-	cable->driver->flush( cable );
+	cable->driver->flush( cable, how_much );
 }
 
 void
 cable_done( cable_t *cable )
 {
-	cable_flush( cable );
+	cable_flush( cable, COMPLETELY );
 	if( cable->todo.data != NULL)
 	{
 		free( cable->todo.data );
@@ -296,7 +296,7 @@ cable_purge_queue( cable_queue_info_t *q, int io )
 void
 cable_clock( cable_t *cable, int tms, int tdi, int n )
 {
-	cable_flush( cable );
+	cable_flush( cable, COMPLETELY );
 	cable->driver->clock( cable, tms, tdi, n );
 }
 
@@ -309,13 +309,14 @@ cable_defer_clock ( cable_t *cable, int tms, int tdi, int n )
 	cable->todo.data[i].arg.clock.tms = tms;
 	cable->todo.data[i].arg.clock.tdi = tdi;
 	cable->todo.data[i].arg.clock.n   = n;
+    cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
 int
 cable_get_tdo( cable_t *cable )
 {
-	cable_flush( cable );
+	cable_flush( cable, COMPLETELY );
 	return cable->driver->get_tdo( cable );
 }
 
@@ -323,7 +324,7 @@ int
 cable_get_tdo_late( cable_t *cable )
 {
 	int i;
-	cable_flush( cable );
+	cable_flush( cable, TO_OUTPUT );
 	i = cable_get_queue_item( cable, &(cable->done) );
 	if( i >= 0 )
 	{
@@ -347,13 +348,14 @@ cable_defer_get_tdo( cable_t *cable )
 	int i = cable_add_queue_item( cable, &(cable->todo) );
 	if( i < 0 ) return 1; /* report failure */
 	cable->todo.data[i].action = CABLE_GET_TDO;
+    cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
 int
 cable_set_trst( cable_t *cable, int trst )
 {
-    cable_flush( cable );
+    cable_flush( cable, COMPLETELY );
 	return cable->driver->set_trst( cable, trst );
 }
 
@@ -364,13 +366,14 @@ cable_defer_set_trst( cable_t *cable, int trst )
 	if( i < 0 ) return 1; /* report failure */
 	cable->todo.data[i].action = CABLE_SET_TRST;
 	cable->todo.data[i].arg.value.trst = trst;
+    cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
 int
 cable_get_trst( cable_t *cable )
 {
-	cable_flush( cable );
+	cable_flush( cable, COMPLETELY );
 	return cable->driver->get_trst( cable );
 }
 
@@ -378,7 +381,7 @@ int
 cable_get_trst_late( cable_t *cable )
 {
 	int i;
-	cable_flush( cable );
+	cable_flush( cable, TO_OUTPUT );
 	i = cable_get_queue_item( cable, &(cable->done) );
 	if( i >= 0 )
 	{
@@ -402,13 +405,14 @@ cable_defer_get_trst( cable_t *cable )
 	int i = cable_add_queue_item( cable, &(cable->todo) );
 	if( i < 0 ) return 1; /* report failure */
 	cable->todo.data[i].action = CABLE_GET_TRST;
+    cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
 int
 cable_transfer( cable_t *cable, int len, char *in, char *out )
 {
-	cable_flush( cable );
+	cable_flush( cable, COMPLETELY );
 	return cable->driver->transfer( cable, len, in, out );
 }
 
@@ -416,7 +420,7 @@ int
 cable_transfer_late( cable_t *cable, char *out )
 {
 	int i;
-	cable_flush( cable );
+	cable_flush( cable, TO_OUTPUT );
 	i = cable_get_queue_item( cable, &(cable->done) );
 
 	if( i >= 0 && cable->done.data[i].action == CABLE_TRANSFER)
@@ -479,6 +483,7 @@ cable_defer_transfer( cable_t *cable, int len, char *in, char *out )
 	if(in) memcpy(ibuf, in, len);
 	cable->todo.data[i].arg.transfer.in  = ibuf;
 	cable->todo.data[i].arg.transfer.out = obuf;
+    cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 

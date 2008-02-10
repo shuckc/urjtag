@@ -225,13 +225,13 @@ do_one_queued_action( cable_t *cable )
 }
 
 void
-generic_flush_one_by_one( cable_t *cable )
+generic_flush_one_by_one( cable_t *cable, cable_flush_amount_t how_much )
 {
 	while( do_one_queued_action( cable ) );
 }
 
 void
-generic_flush_using_transfer( cable_t *cable )
+generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 {
 	int i, j, n;
 	char *in, *out;
@@ -308,7 +308,7 @@ generic_flush_using_transfer( cable_t *cable )
 			{
 				if(in != NULL) free(in);
 				if(out != NULL) free(out);
-				generic_flush_one_by_one( cable );
+				generic_flush_one_by_one( cable, how_much );
 				break; 
 			};
 

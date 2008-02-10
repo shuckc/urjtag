@@ -187,7 +187,7 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 }
 
 static void
-usbblaster_flush( cable_t *cable )
+usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 {
 	while (cable->todo.num_items > 0)
 	{
