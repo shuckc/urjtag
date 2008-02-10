@@ -227,6 +227,8 @@ do_one_queued_action( cable_t *cable )
 void
 generic_flush_one_by_one( cable_t *cable, cable_flush_amount_t how_much )
 {
+    if( how_much == OPTIONALLY ) return;
+
 	while( do_one_queued_action( cable ) );
 }
 
@@ -235,6 +237,8 @@ generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 {
 	int i, j, n;
 	char *in, *out;
+
+    if( how_much == OPTIONALLY ) return;
 
 	if(cable->todo.num_items == 0) return;
 

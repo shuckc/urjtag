@@ -189,6 +189,8 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 static void
 usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 {
+    if( how_much == OPTIONALLY ) return;
+
 	while (cable->todo.num_items > 0)
 	{
 		int i, j, n, to_send = 0;
