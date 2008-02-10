@@ -92,6 +92,13 @@
 
 typedef struct {
 	uint32_t mpsse_frequency;
+
+	/* this driver issues several "Set Data Bits Low Byte" commands
+	   here is the place where cable specific values can be stored
+	   that are used each time this command is issued */
+	uint8_t low_byte_value;
+	uint8_t low_byte_dir;
+
 	/* variables to save last TDO value
 	   this acts as a cache to prevent multiple "Read Data Bits Low" transfer
 	   over USB for ft2232_get_tdo */
@@ -266,14 +273,22 @@ ft2232_generic_init( cable_t *cable )
 	if (parport_open( p ))
 		return -1;
 
+	/* set loopback off */
+	push_to_send( params, LOOPBACK_END );
+	send_and_receive( cable );
+
+	/* safe default values */
+	params->low_byte_value = 0;
+	params->low_byte_dir   = 0;
+
 	/* Set Data Bits Low Byte
 		 TCK = 0, TMS = 1, TDI = 0 */
 	push_to_send( params, SET_BITS_LOW );
-	push_to_send( params, BITMASK_TMS );
-	push_to_send( params, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+	push_to_send( params, params->low_byte_value | BITMASK_TMS );
+	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 	send_and_receive( cable );
 
-	/* Set TCK/SK Divisor */
+	/* Set TCK/SK Divisor to max frequency */
 	push_to_send( params, TCK_DIVISOR );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
@@ -299,14 +314,19 @@ ft2232_jtagkey_init( cable_t *cable )
 	push_to_send( params, LOOPBACK_END );
 	send_and_receive( cable );
 
+	/* static low byte value and direction:
+	   set nOE to '0' -> activate output enables */
+	params->low_byte_value = 0;
+	params->low_byte_dir   = BITMASK_JTAGKEY_nOE;
+
 	/* Set Data Bits Low Byte
 		 TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
 	push_to_send( params, SET_BITS_LOW );
-	push_to_send( params, BITMASK_TMS );
-	push_to_send( params, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_JTAGKEY_nOE );
+	push_to_send( params, params->low_byte_value | BITMASK_TMS );
+	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 	send_and_receive( cable );
 
-	/* Set TCK/SK Divisor */
+	/* Set TCK/SK Divisor to max frequency */
 	push_to_send( params, TCK_DIVISOR );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
@@ -333,11 +353,16 @@ ft2232_armusbocd_init( cable_t *cable )
 	push_to_send( params, LOOPBACK_END );
 	send_and_receive( cable );
 
+	/* static low byte value and direction:
+	   set nOE to '0' -> activate output enables */
+	params->low_byte_value = 0;
+	params->low_byte_dir   = BITMASK_ARMUSBOCD_nOE;
+
 	/* Set Data Bits Low Byte
 		 TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
 	push_to_send( params, SET_BITS_LOW );
-	push_to_send( params, BITMASK_TMS );
-	push_to_send( params, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_ARMUSBOCD_nOE );
+	push_to_send( params, params->low_byte_value | BITMASK_TMS );
+	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 	send_and_receive( cable );
 
 	/* Set TCK/SK Divisor */
@@ -509,8 +534,8 @@ ft2232_transfer_schedule( cable_t *cable, int len, char *in, char *out )
 	/* Set Data Bits Low Byte to lower TMS for transfer
 		 TCK = 0, TMS = 0, TDI = 0, nOE = 0 */
 	push_to_send( params, SET_BITS_LOW );
-	push_to_send( params, 0 );
-	push_to_send( params, BITMASK_TCK | BITMASK_TDI | BITMASK_TMS | BITMASK_ARMUSBOCD_nOE );
+	push_to_send( params, params->low_byte_value | 0 );
+	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 
 
 	chunkbytes = len >> 3;

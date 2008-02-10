@@ -1,3 +1,10 @@
+2008-02-10  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/tap/cable/ft2232.c (ft2232_generic_init, ft2232_jtagkey_init) 
+    (ft2232_armusbocd_init, ft2232_transfer_schedule): store low byte value and direction
+        information in param structure to enable "Set Data Bits Low Byte" commands in
+        non pod-specific functions.
+
 2008-02-10  Kolja Waschk <kawk>
 
     * acinclude.m4, configure.ac: Use local copy of AC_PROG_SED macro (renamed
