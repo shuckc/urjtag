@@ -89,3 +89,35 @@ AC_DEFUN([VL_LIB_READLINE], [
     fi
   fi
 ])dnl
+
+# ACI_PROG_SED
+# ------------
+# Check for a fully functional sed program that truncates
+# as few characters as possible.  Prefer GNU sed if found.
+#
+# Copyright (C) Free Software Foundation
+# 
+# Copied here from autoconf-2.60 programs.m4 (AC_PROG_SED) to maintain
+# compatibility with autoconf-2.59. Can be removed from acinclude.m4 if
+# autoconf-2.60 or newer is required for other reasons.. 
+#
+AC_DEFUN([ACI_PROG_SED],
+[AC_CACHE_CHECK([for a sed that does not truncate output], ac_cv_path_SED,
+    [dnl ac_script should not contain more than 99 commands (for HP-UX sed),
+     dnl but more than about 7000 bytes, to catch a limit in Solaris 8 /usr/ucb/sed.
+     ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
+     for ac_i in 1 2 3 4 5 6 7; do
+       ac_script="$ac_script$as_nl$ac_script"
+     done
+     echo "$ac_script" | sed 99q >conftest.sed
+     $as_unset ac_script || ac_script=
+     _AC_PATH_PROG_FEATURE_CHECK(SED, [sed gsed],
+	[_AC_FEATURE_CHECK_LENGTH([ac_path_SED], [ac_cv_path_SED],
+		["$ac_path_SED" -f conftest.sed])])])
+ SED="$ac_cv_path_SED"
+ AC_SUBST([SED])dnl
+ rm -f conftest.sed
+])# ACI_PROG_SED
+
+
+

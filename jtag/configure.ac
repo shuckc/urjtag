@@ -265,7 +265,7 @@ AS_IF([test "x$svf" = xtrue], [
 AC_PROG_LEX
 # check for modern version of flex
 AC_PROG_AWK
-AC_PROG_SED
+ACI_PROG_SED
 
 AS_IF([test "$LEX" == flex], [
    ver_ge_ver () {

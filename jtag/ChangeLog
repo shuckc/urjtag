@@ -1,3 +1,9 @@
+2008-02-10  Kolja Waschk <kawk>
+
+    * acinclude.m4, configure.ac: Use local copy of AC_PROG_SED macro (renamed
+        to ACI_PROG_SED) maintain compatibility with older autoconf; fixes
+        [1890192] - autogen.sh fails on AC_PROG_SED
+		
 2008-02-09  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable/ft2232.c (ft2232_transfer_schedule): ensure max number of bytes for
