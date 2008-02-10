@@ -40,7 +40,7 @@
 #include "jtag.h"
 #include "cable.h"
 
-#undef VERBOSE 
+#undef VERBOSE
 
 extern cable_driver_t arcom_cable_driver;
 extern cable_driver_t byteblaster_cable_driver;
@@ -203,14 +203,16 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
           {
             /* Move queue items at end of old array
              * towards end of new array: 345612__ -> 3456__12 */
+
+			int dest = new_max_items - num_to_move;
 #ifdef VERBOSE
 			printf("Resize: Move %d items towards end of queue memory (%d > %d)\n",
-                num_to_move, q->next_item, new_max_items - num_to_move);
+                num_to_move, q->next_item, dest);
 #endif
-            memmove(&(q->data[new_max_items - num_to_move]), &(q->data[q->next_item]),
+            memmove(&(q->data[dest]), &(q->data[q->next_item]),
                     num_to_move * sizeof(cable_queue_t));
 
-            q->next_item += num_to_move;
+			q->next_item = dest;
           }
 #ifdef CHOOSE_SMALLEST_AREA_TO_MOVE
           else
