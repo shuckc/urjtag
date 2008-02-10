@@ -40,6 +40,8 @@
 #include "jtag.h"
 #include "cable.h"
 
+#undef VERBOSE 
+
 extern cable_driver_t arcom_cable_driver;
 extern cable_driver_t byteblaster_cable_driver;
 #ifdef HAVE_LIBFTDI
@@ -164,6 +166,11 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
 		int new_max_items;
 		cable_queue_t *resized;
 
+#ifdef VERBOSE
+		printf("Queue %p needs resizing; n(%d) >= max(%d); free=%d, next=%d\n",
+             q, q->num_items, q->max_items, q->next_free, q->next_item);
+#endif
+
         new_max_items = q->max_items + 128;
         resized = realloc(q->data, new_max_items * sizeof(cable_queue_t));
         if(resized == NULL)
@@ -172,8 +179,10 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
                 new_max_items);
            return -1; /* report failure */
         }
+#ifdef VERBOSE
         printf(_("(Resized JTAG activity queue to hold max %d items)\n"),
              new_max_items);
+#endif
         q->data = resized;
 
         /* The queue was full. Except for the special case when next_item is 0,
@@ -194,8 +203,11 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
           {
             /* Move queue items at end of old array
              * towards end of new array: 345612__ -> 3456__12 */
-
-            memmove(&(q->data[q->max_items]), &(q->data[q->next_item]),
+#ifdef VERBOSE
+			printf("Resize: Move %d items towards end of queue memory (%d > %d)\n",
+                num_to_move, q->next_item, new_max_items - num_to_move);
+#endif
+            memmove(&(q->data[new_max_items - num_to_move]), &(q->data[q->next_item]),
                     num_to_move * sizeof(cable_queue_t));
 
             q->next_item += num_to_move;
@@ -208,6 +220,9 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
               /* Relocate queue items at beginning of old array
                * to end of new array: 561234__ -> __123456 */
 
+#ifdef VERBOSE
+			  printf("Resize: Move %d items from start to end\n", q->next_free);
+#endif
               memcpy(&(q->data[q->max_items]), &(q->data[0]), 
                   q->next_free * sizeof(cable_queue_t));
 
@@ -219,10 +234,19 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
 
               /* Step 1: 456123__ -> __612345 */
 
+#ifdef VERBOSE
+			  printf("Resize.A: Move %d items from start to end\n", added_space);
+#endif
+
               memcpy(&(q->data[q->max_items]), &(q->data[0]), 
                   added_space * sizeof(cable_queue_t));
 
               /* Step 2: __612345 -> 6__12345 */
+
+#ifdef VERBOSE
+			  printf("Resize.B: Move %d items towards start (offset %d)\n",
+                  (q->next_free - added_space), added_space);
+#endif
 
               memmove(&(q->data[0]), &(q->data[added_space]), 
                   (q->next_free - added_space) * sizeof(cable_queue_t));
@@ -234,6 +258,10 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
         q->next_free = q->next_item + q->num_items;
         if(q->next_free >= new_max_items) q->next_free -= new_max_items;
 
+#ifdef VERBOSE
+		printf("Queue %p after resizing; n(%d) >= max(%d); free=%d, next=%d\n",
+             q, q->num_items, q->max_items, q->next_free, q->next_item);
+#endif
 	}
 
 	i = q->next_free;

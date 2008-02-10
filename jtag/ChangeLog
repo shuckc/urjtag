@@ -6,7 +6,9 @@
     * include/cable.h, src/tap/cable/usbblaster.c, src/tap/cable/generic.c,
         src/tap/cable/generic.h, src/tap/cable/ft2232.c, src/tap/cable.c,
         doc/UrJTAG.txt: Extended cable_flush() to take one extra argument
-        regarding the amount of items to flush (see UrJTAG.txt for doc)
+        regarding the amount of items to flush (see UrJTAG.txt for doc),
+    * cable.c: possible fix and optional more verbose output (#ifdef VERBOSE)
+        for tracking down 1884952 Internal error (queue full)
 
 2008-02-09  Arnim Laeuger  <arniml@users.sourceforge.net>
 
