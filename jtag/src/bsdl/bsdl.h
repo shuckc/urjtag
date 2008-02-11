@@ -122,12 +122,10 @@ struct jtag_ctrl {
 /* private data of the bison parser
    used to store variables the would end up as globals otherwise */
 struct parser_priv {
-    char    String_Val[150];
     char    Package_File_Name[100];
     int     Reading_Package;
     char   *buffer_for_switch;
     size_t  len_buffer_for_switch;
-    int     idx_to_buffer;
     void   *scanner;
     struct  jtag_ctrl jtag_ctrl;
 };

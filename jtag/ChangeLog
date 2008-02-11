@@ -1,3 +1,9 @@
+2008-02-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/bsdl/bsdl_bison.y (Store_Text): removed function Make_String()
+        the QUOTED_STRING is directly copied to buffer_for_switch
+    * src/bsdl/bsdl.h: memeber String_Val of parser_priv obseleted
+
 2008-02-10  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable/ft2232.c (ft2232_generic_init, ft2232_jtagkey_init) 

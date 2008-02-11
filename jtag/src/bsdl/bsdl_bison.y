@@ -147,7 +147,6 @@ int yylex (YYSTYPE *, void *);
 
 static void Init_Text(parser_priv_t *);
 static void Store_Text(parser_priv_t *, char *);
-static void Make_String(char *, char *);
 static void Print_Error(parser_priv_t *, const char *);
 static void Print_Warning(parser_priv_t *, const char *);
 static void Give_Up_And_Quit(parser_priv_t *);
@@ -876,13 +875,11 @@ BSDL_Compliance_Pattern: LPAREN Physical_Pin_List RPAREN
                    { free($5); }
                  ;
 Quoted_String    : QUOTED_STRING
-                   {Make_String($1, priv_data->String_Val);
-                    Init_Text(priv_data);
-                    Store_Text(priv_data, priv_data->String_Val);
+                   {Init_Text(priv_data);
+                    Store_Text(priv_data, $1);
                     free($1); }
                  | Quoted_String CONCATENATE QUOTED_STRING
-                   {Make_String($3, priv_data->String_Val);
-                    Store_Text(priv_data, priv_data->String_Val);
+                   {Store_Text(priv_data, $3);
                     free($3); }
                  ;
 %%  /* End rules, begin programs  */
@@ -894,29 +891,26 @@ static void Init_Text(parser_priv_t *priv_data)
     priv_data->len_buffer_for_switch = 160;
   }
   priv_data->buffer_for_switch[0] = '\0';
-  priv_data->idx_to_buffer = 0;
 }
 /*----------------------------------------------------------------------*/
-static void Store_Text(parser_priv_t *priv_data, char *String)
+static void Store_Text(parser_priv_t *priv_data, char *Source)
 { /* Save characters from VHDL string in local string buffer.           */
   size_t req_len;
+  char   *SourceEnd;
 
-  req_len = strlen(priv_data->buffer_for_switch) + strlen(String) + 1;
+  SourceEnd = ++Source;   /* skip leading '"' */
+  while (*SourceEnd && (*SourceEnd != '"') && (*SourceEnd != '\n'))
+    SourceEnd++;
+  /* terminate Source string with NUL character */
+  *SourceEnd = '\0';
+
+  req_len = strlen(priv_data->buffer_for_switch) + strlen(Source) + 1;
   if (req_len > priv_data->len_buffer_for_switch) {
     priv_data->buffer_for_switch = (char *)realloc(priv_data->buffer_for_switch,
                                                    req_len);
     priv_data->len_buffer_for_switch = req_len;
   }
-  strcpy(&(priv_data->buffer_for_switch[priv_data->idx_to_buffer]), String);
-  priv_data->idx_to_buffer += strlen(String);
-}
-/*----------------------------------------------------------------------*/
-static void Make_String(char *Source, char *Dest)
-{
-  char Ch;
-  for (Source++; Ch = *Source, (Ch != '"') && (Ch != '\n'); Source++, Dest++)
-    *Dest = *Source;
-  *Dest = '\0';
+  strcat(priv_data->buffer_for_switch, Source);
 }
 /*----------------------------------------------------------------------*/
 static void Print_Error(parser_priv_t *priv_data, const char *Errmess)
