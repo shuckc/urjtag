@@ -81,13 +81,30 @@
 #define BIT_TDO 2
 #define BIT_TMS 3
 #define BIT_JTAGKEY_nOE 4
+#define BIT_JTAGKEY_TRST_N_OUT 0
+#define BIT_JTAGKEY_SRST_N_OUT 1
+#define BIT_JTAGKEY_TRST_N_OE_N 2
+#define BIT_JTAGKEY_SRST_N_OE_N 3
 #define BIT_ARMUSBOCD_nOE 4
+#define BIT_ARMUSBOCD_nTRST 0
+#define BIT_ARMUSBOCD_nTSRST 1
+#define BIT_ARMUSBOCD_nTRST_nOE 2
+#define BIT_ARMUSBOCD_RED_LED 3
+
 #define BITMASK_TDO (1 << BIT_TDO)
 #define BITMASK_TDI (1 << BIT_TDI)
 #define BITMASK_TCK (1 << BIT_TCK)
 #define BITMASK_TMS (1 << BIT_TMS)
 #define BITMASK_JTAGKEY_nOE (1 << BIT_JTAGKEY_nOE)
+#define BITMASK_JTAGKEY_TRST_N_OUT (1 << BIT_JTAGKEY_TRST_N_OUT)
+#define BITMASK_JTAGKEY_SRST_N_OUT (1 << BIT_JTAGKEY_SRST_N_OUT)
+#define BITMASK_JTAGKEY_TRST_N_OE_N (1 << BIT_JTAGKEY_TRST_N_OE_N)
+#define BITMASK_JTAGKEY_SRST_N_OE_N (1 << BIT_JTAGKEY_SRST_N_OE_N)
 #define BITMASK_ARMUSBOCD_nOE (1 << BIT_ARMUSBOCD_nOE)
+#define BITMASK_ARMUSBOCD_nTRST (1 << BIT_ARMUSBOCD_nTRST)
+#define BITMASK_ARMUSBOCD_nTSRST (1 << BIT_ARMUSBOCD_nTRST)
+#define BITMASK_ARMUSBOCD_nTRST_nOE (1 << BIT_ARMUSBOCD_nTRST_nOE)
+#define BITMASK_ARMUSBOCD_RED_LED (1 << BIT_ARMUSBOCD_RED_LED)
 
 
 typedef struct {
@@ -286,10 +303,14 @@ ft2232_generic_init( cable_t *cable )
 	push_to_send( params, SET_BITS_LOW );
 	push_to_send( params, params->low_byte_value | BITMASK_TMS );
 	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
-	send_and_receive( cable );
 
 	/* Set TCK/SK Divisor to max frequency */
 	push_to_send( params, TCK_DIVISOR );
+	push_to_send( params, 0 );
+	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte */
+	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
 	send_and_receive( cable );
@@ -324,12 +345,23 @@ ft2232_jtagkey_init( cable_t *cable )
 	push_to_send( params, SET_BITS_LOW );
 	push_to_send( params, params->low_byte_value | BITMASK_TMS );
 	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
-	send_and_receive( cable );
 
 	/* Set TCK/SK Divisor to max frequency */
 	push_to_send( params, TCK_DIVISOR );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+	   static low byte value and direction:
+	   TRST_N_OUT = 1
+	   TRST_N_OE_N = 0
+	   SRST_N_OUT = 1
+	   SRST_N_OE_N = 0 */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_JTAGKEY_TRST_N_OUT |
+	                      BITMASK_JTAGKEY_SRST_N_OUT );
+	push_to_send( params, BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
+	                      BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N );
 	send_and_receive( cable );
 
 	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
@@ -363,12 +395,23 @@ ft2232_armusbocd_init( cable_t *cable )
 	push_to_send( params, SET_BITS_LOW );
 	push_to_send( params, params->low_byte_value | BITMASK_TMS );
 	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
-	send_and_receive( cable );
 
 	/* Set TCK/SK Divisor */
 	push_to_send( params, TCK_DIVISOR );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+	   TRST = 1
+	   TRST buffer enable = 0
+	   TSRST = 1
+	   RED LED on */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_ARMUSBOCD_nTRST |
+	                      BITMASK_ARMUSBOCD_RED_LED );
+	push_to_send( params, BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
+	                      BITMASK_ARMUSBOCD_nTSRST |
+	                      BITMASK_ARMUSBOCD_RED_LED );
 	send_and_receive( cable );
 
 	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
@@ -390,6 +433,12 @@ ft2232_generic_done( cable_t *cable )
 	push_to_send( params, SET_BITS_LOW );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, 0 );
+	push_to_send( params, 0 );
 	send_and_receive( cable );
 
 	parport_close( p );
@@ -407,11 +456,26 @@ ft2232_jtagkey_done( cable_t *cable )
 	push_to_send( params, SET_BITS_LOW );
 	push_to_send( params, BITMASK_JTAGKEY_nOE );
 	push_to_send( params, BITMASK_JTAGKEY_nOE );
-	send_and_receive( cable );
+
 	/* Set Data Bits Low Byte
 		 set all to input */
 	push_to_send( params, SET_BITS_LOW );
 	push_to_send( params, BITMASK_JTAGKEY_nOE );
+	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+		 disable output drivers */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
+	                      BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N );
+	push_to_send( params, BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
+	                      BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N );
+
+	/* Set Data Bits High Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
+	                      BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N );
 	push_to_send( params, 0 );
 	send_and_receive( cable );
 
@@ -430,11 +494,27 @@ ft2232_armusbocd_done( cable_t *cable )
 	push_to_send( params, SET_BITS_LOW );
 	push_to_send( params, BITMASK_ARMUSBOCD_nOE );
 	push_to_send( params, BITMASK_ARMUSBOCD_nOE );
-	send_and_receive( cable );
+
 	/* Set Data Bits Low Byte
 		 set all to input */
 	push_to_send( params, SET_BITS_LOW );
 	push_to_send( params, BITMASK_ARMUSBOCD_nOE );
+	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+		 disable output drivers */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
+	                      BITMASK_ARMUSBOCD_nTSRST );
+	push_to_send( params, BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
+	                      BITMASK_ARMUSBOCD_nTSRST |
+	                      BITMASK_ARMUSBOCD_RED_LED );
+
+	/* Set Data Bits High Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
+	                      BITMASK_ARMUSBOCD_nTSRST );
 	push_to_send( params, 0 );
 	send_and_receive( cable );
 
@@ -705,7 +785,7 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 {
 	params_t *params = (params_t *)cable->params;
 
-    if( how_much == OPTIONALLY ) return;
+	if( how_much == OPTIONALLY ) return;
 
 	while (cable->todo.num_items > 0)
 	{
