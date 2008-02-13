@@ -1,3 +1,9 @@
+2008-02-13  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/tap/cable/ft2232.c: implemented control of TRST
+        second step of
+        [ 1891845 ] Add support for TRST/SRST/LEDs to FT2232 cable driver
+
 2008-02-12  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable/ft2232.c: statically set GPIO high byte with product-specific values

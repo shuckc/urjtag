@@ -116,6 +116,13 @@ typedef struct {
 	uint8_t low_byte_value;
 	uint8_t low_byte_dir;
 
+	/* this driver supports TRST control on high byte only
+	   set the variables below with value/direction for active and inactive TRST line
+	   static settings for other high byte signals must be entered here as well */
+	uint8_t high_byte_value_trst_active;
+	uint8_t high_byte_value_trst_inactive;
+	uint8_t high_byte_dir;
+
 	/* variables to save last TDO value
 	   this acts as a cache to prevent multiple "Read Data Bits Low" transfer
 	   over USB for ft2232_get_tdo */
@@ -310,9 +317,12 @@ ft2232_generic_init( cable_t *cable )
 	push_to_send( params, 0 );
 
 	/* Set Data Bits High Byte */
+	params->high_byte_value_trst_active   = 0;
+	params->high_byte_value_trst_inactive = 0;
+	params->high_byte_dir                 = 0;
 	push_to_send( params, SET_BITS_HIGH );
-	push_to_send( params, 0 );
-	push_to_send( params, 0 );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, params->high_byte_dir );
 	send_and_receive( cable );
 
 	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
@@ -352,16 +362,19 @@ ft2232_jtagkey_init( cable_t *cable )
 	push_to_send( params, 0 );
 
 	/* Set Data Bits High Byte
-	   static low byte value and direction:
+	   default:
 	   TRST_N_OUT = 1
 	   TRST_N_OE_N = 0
 	   SRST_N_OUT = 1
 	   SRST_N_OE_N = 0 */
+	params->high_byte_value_trst_active   = BITMASK_JTAGKEY_SRST_N_OUT;
+	params->high_byte_value_trst_inactive = BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OUT;
+	params->high_byte_dir                 = BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
+	                                        BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N;
 	push_to_send( params, SET_BITS_HIGH );
-	push_to_send( params, BITMASK_JTAGKEY_TRST_N_OUT |
-	                      BITMASK_JTAGKEY_SRST_N_OUT );
-	push_to_send( params, BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
-	                      BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, params->high_byte_dir );
+
 	send_and_receive( cable );
 
 	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
@@ -402,16 +415,22 @@ ft2232_armusbocd_init( cable_t *cable )
 	push_to_send( params, 0 );
 
 	/* Set Data Bits High Byte
+	   default:
 	   TRST = 1
 	   TRST buffer enable = 0
 	   TSRST = 1
 	   RED LED on */
+	params->high_byte_value_trst_active   = BITMASK_ARMUSBOCD_nTSRST |
+	                                        BITMASK_ARMUSBOCD_RED_LED;
+	params->high_byte_value_trst_inactive = BITMASK_ARMUSBOCD_nTRST |
+	                                        BITMASK_ARMUSBOCD_nTSRST |
+	                                        BITMASK_ARMUSBOCD_RED_LED;
+	params->high_byte_dir                 = BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
+	                                        BITMASK_ARMUSBOCD_nTSRST |
+	                                        BITMASK_ARMUSBOCD_RED_LED;
 	push_to_send( params, SET_BITS_HIGH );
-	push_to_send( params, BITMASK_ARMUSBOCD_nTRST |
-	                      BITMASK_ARMUSBOCD_RED_LED );
-	push_to_send( params, BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
-	                      BITMASK_ARMUSBOCD_nTSRST |
-	                      BITMASK_ARMUSBOCD_RED_LED );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, params->high_byte_dir );
 	send_and_receive( cable );
 
 	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
@@ -523,7 +542,7 @@ ft2232_armusbocd_done( cable_t *cable )
 
 
 static void
-ft2232_clock_defer( cable_t *cable, int defer, int tms, int tdi, int n )
+ft2232_clock_schedule( cable_t *cable, int tms, int tdi, int n )
 {
 	params_t *params = (params_t *)cable->params;
 
@@ -546,18 +565,17 @@ ft2232_clock_defer( cable_t *cable, int defer, int tms, int tdi, int n )
 		}
 		push_to_send( params, tdi | tms );
 	}
-	if (!defer) {
-		send_and_receive( cable );
-
-		params->last_tdo_valid = 0;
-	}
 }
 
 
 static void
 ft2232_clock( cable_t *cable, int tms, int tdi, int n )
 {
-	ft2232_clock_defer( cable, 0, tms, tdi, n );
+	params_t *params = (params_t *)cable->params;
+
+	ft2232_clock_schedule( cable, tms, tdi, n );
+	send_and_receive( cable );
+	params->last_tdo_valid = 0;
 }
 
 
@@ -596,10 +614,25 @@ ft2232_get_tdo( cable_t *cable )
 }
 
 
+static void
+ft2232_set_trst_schedule( params_t *params, int trst )
+{
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params,
+	              trst == 0 ? params->high_byte_value_trst_active : params->high_byte_value_trst_inactive );
+	push_to_send( params, params->high_byte_dir );
+}
+
 static int
 ft2232_set_trst( cable_t *cable, int trst )
 {
-	return 1;
+	params_t *params = (params_t *)cable->params;
+
+	ft2232_set_trst_schedule( params, trst );
+	send_and_receive( cable );
+	params->last_tdo_valid = 0;
+
+	return trst;
 }
 
 
@@ -797,10 +830,10 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 
 			switch (cable->todo.data[i].action) {
 				case CABLE_CLOCK:
-					ft2232_clock_defer( cable, 1,
-					                    cable->todo.data[i].arg.clock.tms,
-					                    cable->todo.data[i].arg.clock.tdi,
-					                    cable->todo.data[i].arg.clock.n );
+					ft2232_clock_schedule( cable,
+					                       cable->todo.data[i].arg.clock.tms,
+					                       cable->todo.data[i].arg.clock.tdi,
+					                       cable->todo.data[i].arg.clock.n );
 					last_tdo_valid_schedule = 0;
 					break;
 
@@ -809,6 +842,11 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 						ft2232_get_tdo_schedule( cable );
 						last_tdo_valid_schedule = 1;
 					}
+					break;
+
+				case CABLE_SET_TRST:
+					ft2232_set_trst_schedule( params, cable->todo.data[i].arg.value.trst );
+					last_tdo_valid_schedule = 0;
 					break;
 
 				case CABLE_TRANSFER:
@@ -848,6 +886,13 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 					cable->done.data[m].action = CABLE_GET_TDO;
 					cable->done.data[m].arg.value.tdo = tdo;
 					break;
+				}
+				case CABLE_SET_TRST:
+				{
+					int m = cable_add_queue_item( cable, &(cable->done) );
+					cable->done.data[m].action = CABLE_SET_TRST;
+					cable->done.data[m].arg.value.trst = cable->done.data[j].arg.value.trst;
+					last_tdo_valid_finish = 0;
 				}
 				case CABLE_GET_TRST:
 				{
