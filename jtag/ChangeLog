@@ -1,3 +1,9 @@
+2008-02-14  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+    * src/tap/cable.c (cable_flush), src/tap/chain.c (chain_shift_data_registers_mode),
+        include/cable.h, configure.ac: follow conservative flush strategy for transfers
+        without output capture (if not disabled via configure --disable-conservative-flush)
+
 2008-02-14  Kolja Waschk <kawk>
 
     * src/tap/chain.c: Enabled the new^2 implementation in tap_shift_register

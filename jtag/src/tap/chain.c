@@ -173,7 +173,6 @@ chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture
 	   shift the data register of each part in the chain one by one */
 
 	for (i = 0; i < ps->len; i++) {
-		puts("tap_defer_shift_register");
 		tap_defer_shift_register( chain, ps->parts[i]->active_instruction->data_register->in,
 				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
 				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
@@ -182,11 +181,17 @@ chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture
 	if(capture_output)
 	{
 		for (i = 0; i < ps->len; i++) {
-			puts("tap_shift_register_output");
 			tap_shift_register_output( chain, ps->parts[i]->active_instruction->data_register->in,
 				ps->parts[i]->active_instruction->data_register->out,
 				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
 		}
+	}
+	else
+	{
+		/* the todo queue should be flushed here when following a conservative strategy
+		   since otherwise transfers without output capture wouldn't be submitted until
+		   a transfer with output capture is executed */
+		cable_flush( chain->cable, CONSERVATIVELY );
 	}
 }
 

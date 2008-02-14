@@ -381,6 +381,21 @@ AS_IF([test "x$jim" = xtrue], [
   AM_CONDITIONAL(ENABLE_JIM, false)
 ])
 
+
+dnl Use conservative flush?
+AC_ARG_ENABLE(conservative_flush,
+[  --enable-conservative-flush  Perform conservative queue flushing (default is enabled)],
+[case "${enableval}" in
+   yes) conservative_flush=true ;;
+   no)  conservative_flush=false ;;
+   *)   AC_MSG_ERROR(cab value ${enableval} for --enable-conservative-flush) ;;
+ esac],
+[conservative_flush=true])
+AS_IF([test "x$conservative_flush" = xtrue], [
+  AC_DEFINE(CONSERVATIVE_FLUSH, 1, [define if conservative queue flushing is enabled])
+])
+
+
 AC_OUTPUT
 
 dnl

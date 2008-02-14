@@ -142,6 +142,15 @@ cable_init( cable_t *cable )
 void
 cable_flush ( cable_t *cable, cable_flush_amount_t how_much )
 {
+	if (how_much == CONSERVATIVELY)
+	{
+#ifdef CONSERVATIVE_FLUSH
+		how_much = COMPLETELY;
+#else
+		how_much = OPTIONALLY;
+#endif
+	}
+
 	cable->driver->flush( cable, how_much );
 }
 
