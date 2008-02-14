@@ -1,3 +1,27 @@
+008-02-14  Jie Zhang  <jie.zhang@analog.com>
+
+    * src/bus/bf537_stamp.c: New.
+    * src/bus/bf548_ezkit.c: New.
+    * src/bus/bf561_ezkit.c: New.
+    * src/bus/buses.c (bus_drivers): Add bf537_stamp_bus,
+        bf537_ezkit_bus, and bf561_ezkit_bus.
+    * src/bus/buses.h: Declare bf537_stamp_bus, bf537_ezkit_bus,
+        and bf561_ezkit_bus.
+    * src/bus/Makefile.am (libbus_a_SOURCES): Add bf537_stamp.c,
+        bf548_ezkit.c, and bf561_ezkit.c.
+    * data/analog/bf533/STEPPINGS: Add stepping 4.
+    * data/analog/bf537/bf537: New.
+    * data/analog/bf537/STEPPINGS: New.
+    * data/analog/bf549/bf549: New.
+    * data/analog/bf549/STEPPINGS: New.
+    * data/analog/bf561/bf561: New.
+    * data/analog/bf561/STEPPINGS: New.
+    * data/analog/PARTS: Add bf537, bf549, and bf561.
+    * data/Makefile.am (nobase_dist_pkgdata_DATA): Add
+       analog/bf537/STEPPINGS, analog/bf537/bf537,
+       analog/bf549/STEPPINGS, analog/bf549/bf549,
+       and analog/bf561/STEPPINGS, analog/bf561/bf561.
+
 2008-02-13  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable/ft2232.c: implemented control of TRST

@@ -33,6 +33,9 @@ libbus_a_SOURCES = \
 	ejtag.c \
 	bf533_stamp.c \
 	bf533_ezkit.c \
+	bf537_stamp.c \
+	bf548_ezkit.c \
+	bf561_ezkit.c \
 	ixp425.c \
 	lh7a400.c \
 	mpc824x.c \

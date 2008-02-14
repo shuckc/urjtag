@@ -57,6 +57,12 @@ nobase_dist_pkgdata_DATA = \
 	analog/PARTS \
 	analog/bf533/STEPPINGS \
 	analog/bf533/bf533 \
+	analog/bf537/STEPPINGS \
+	analog/bf537/bf537 \
+	analog/bf549/STEPPINGS \
+	analog/bf549/bf549 \
+	analog/bf561/STEPPINGS \
+	analog/bf561/bf561 \
 	analog/PARTS \
 	analog/sharc21065l/STEPPINGS \
 	analog/sharc21065l/sharc21065l \
