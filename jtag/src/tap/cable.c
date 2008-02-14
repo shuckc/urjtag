@@ -168,101 +168,101 @@ cable_add_queue_item( cable_t *cable, cable_queue_info_t *q )
 
 #ifdef VERBOSE
 		printf("Queue %p needs resizing; n(%d) >= max(%d); free=%d, next=%d\n",
-             q, q->num_items, q->max_items, q->next_free, q->next_item);
+			 q, q->num_items, q->max_items, q->next_free, q->next_item);
 #endif
 
-        new_max_items = q->max_items + 128;
-        resized = realloc(q->data, new_max_items * sizeof(cable_queue_t));
-        if(resized == NULL)
-        {
-           printf(_("Out of memory: couldn't resize activity queue to %d\n"),
-                new_max_items);
-           return -1; /* report failure */
-        }
+		new_max_items = q->max_items + 128;
+		resized = realloc(q->data, new_max_items * sizeof(cable_queue_t));
+		if(resized == NULL)
+		{
+			printf(_("Out of memory: couldn't resize activity queue to %d\n"),
+				new_max_items);
+			return -1; /* report failure */
+		}
 #ifdef VERBOSE
-        printf(_("(Resized JTAG activity queue to hold max %d items)\n"),
-             new_max_items);
+		printf(_("(Resized JTAG activity queue to hold max %d items)\n"),
+			new_max_items);
 #endif
-        q->data = resized;
+		q->data = resized;
 
-        /* The queue was full. Except for the special case when next_item is 0,
+		/* The queue was full. Except for the special case when next_item is 0,
 		 * resizing just introduced a gap between old and new max, which has to
 		 * be filled; either by moving data from next_item .. max_items, or
 		 * from 0 .. next_free (whatever is smaller). */
 
 #define CHOOSE_SMALLEST_AREA_TO_MOVE 1
 
-        if(q->next_item != 0)
-        {
-          int added_space = new_max_items - q->max_items;
-          int num_to_move = q->max_items - q->next_item;
+		if(q->next_item != 0)
+		{
+			int added_space = new_max_items - q->max_items;
+			int num_to_move = q->max_items - q->next_item;
 
 #ifdef CHOOSE_SMALLEST_AREA_TO_MOVE
-          if(num_to_move <= q->next_free)
+			if(num_to_move <= q->next_free)
 #endif
-          {
-            /* Move queue items at end of old array
-             * towards end of new array: 345612__ -> 3456__12 */
+			{
+			/* Move queue items at end of old array
+			 * towards end of new array: 345612__ -> 3456__12 */
 
-			int dest = new_max_items - num_to_move;
+				int dest = new_max_items - num_to_move;
 #ifdef VERBOSE
-			printf("Resize: Move %d items towards end of queue memory (%d > %d)\n",
-                num_to_move, q->next_item, dest);
+				printf("Resize: Move %d items towards end of queue memory (%d > %d)\n",
+					num_to_move, q->next_item, dest);
 #endif
-            memmove(&(q->data[dest]), &(q->data[q->next_item]),
-                    num_to_move * sizeof(cable_queue_t));
+				memmove(&(q->data[dest]), &(q->data[q->next_item]),
+					num_to_move * sizeof(cable_queue_t));
 
-			q->next_item = dest;
-          }
+				q->next_item = dest;
+			}
 #ifdef CHOOSE_SMALLEST_AREA_TO_MOVE
-          else
-          {
-            if(q->next_free <= added_space)
-            {
-              /* Relocate queue items at beginning of old array
-               * to end of new array: 561234__ -> __123456 */
+			else
+			{
+				if(q->next_free <= added_space)
+				{
+					/* Relocate queue items at beginning of old array
+					 * to end of new array: 561234__ -> __123456 */
 
 #ifdef VERBOSE
-			  printf("Resize: Move %d items from start to end\n", q->next_free);
+					printf("Resize: Move %d items from start to end\n", q->next_free);
 #endif
-              memcpy(&(q->data[q->max_items]), &(q->data[0]), 
-                  q->next_free * sizeof(cable_queue_t));
+				memcpy(&(q->data[q->max_items]), &(q->data[0]), 
+					q->next_free * sizeof(cable_queue_t));
 
-            }
-            else
-            {
-              /* Same as above, but for the case if new space 
-               * isn't large enough to hold all relocated items */
+				}
+				else
+				{
+					/* Same as above, but for the case if new space 
+					 * isn't large enough to hold all relocated items */
 
-              /* Step 1: 456123__ -> __612345 */
+					/* Step 1: 456123__ -> __612345 */
 
 #ifdef VERBOSE
-			  printf("Resize.A: Move %d items from start to end\n", added_space);
+					printf("Resize.A: Move %d items from start to end\n", added_space);
 #endif
 
-              memcpy(&(q->data[q->max_items]), &(q->data[0]), 
-                  added_space * sizeof(cable_queue_t));
+					memcpy(&(q->data[q->max_items]), &(q->data[0]), 
+						added_space * sizeof(cable_queue_t));
 
-              /* Step 2: __612345 -> 6__12345 */
+					/* Step 2: __612345 -> 6__12345 */
 
 #ifdef VERBOSE
-			  printf("Resize.B: Move %d items towards start (offset %d)\n",
-                  (q->next_free - added_space), added_space);
+					printf("Resize.B: Move %d items towards start (offset %d)\n",
+						(q->next_free - added_space), added_space);
 #endif
 
-              memmove(&(q->data[0]), &(q->data[added_space]), 
-                  (q->next_free - added_space) * sizeof(cable_queue_t));
-            }
-          }
+					memmove(&(q->data[0]), &(q->data[added_space]), 
+						(q->next_free - added_space) * sizeof(cable_queue_t));
+				}
+			}
 #endif
-        }
-        q->max_items = new_max_items;
-        q->next_free = q->next_item + q->num_items;
-        if(q->next_free >= new_max_items) q->next_free -= new_max_items;
+		}
+		q->max_items = new_max_items;
+		q->next_free = q->next_item + q->num_items;
+		if(q->next_free >= new_max_items) q->next_free -= new_max_items;
 
 #ifdef VERBOSE
 		printf("Queue %p after resizing; n(%d) >= max(%d); free=%d, next=%d\n",
-             q, q->num_items, q->max_items, q->next_free, q->next_item);
+			 q, q->num_items, q->max_items, q->next_free, q->next_item);
 #endif
 	}
 
@@ -291,7 +291,7 @@ cable_get_queue_item( cable_t *cable, cable_queue_info_t *q )
 	}
 
 	// printf("get_queue_item from %p: %d\n", q, -1);
-    return -1;
+	return -1;
 }
 
 void
@@ -339,7 +339,7 @@ cable_defer_clock ( cable_t *cable, int tms, int tdi, int n )
 	cable->todo.data[i].arg.clock.tms = tms;
 	cable->todo.data[i].arg.clock.tdi = tdi;
 	cable->todo.data[i].arg.clock.n   = n;
-    cable_flush( cable, OPTIONALLY );
+	cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
@@ -378,14 +378,14 @@ cable_defer_get_tdo( cable_t *cable )
 	int i = cable_add_queue_item( cable, &(cable->todo) );
 	if( i < 0 ) return 1; /* report failure */
 	cable->todo.data[i].action = CABLE_GET_TDO;
-    cable_flush( cable, OPTIONALLY );
+	cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
 int
 cable_set_trst( cable_t *cable, int trst )
 {
-    cable_flush( cable, COMPLETELY );
+	cable_flush( cable, COMPLETELY );
 	return cable->driver->set_trst( cable, trst );
 }
 
@@ -396,7 +396,7 @@ cable_defer_set_trst( cable_t *cable, int trst )
 	if( i < 0 ) return 1; /* report failure */
 	cable->todo.data[i].action = CABLE_SET_TRST;
 	cable->todo.data[i].arg.value.trst = trst;
-    cable_flush( cable, OPTIONALLY );
+	cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
@@ -435,7 +435,7 @@ cable_defer_get_trst( cable_t *cable )
 	int i = cable_add_queue_item( cable, &(cable->todo) );
 	if( i < 0 ) return 1; /* report failure */
 	cable->todo.data[i].action = CABLE_GET_TRST;
-    cable_flush( cable, OPTIONALLY );
+	cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
@@ -513,7 +513,7 @@ cable_defer_transfer( cable_t *cable, int len, char *in, char *out )
 	if(in) memcpy(ibuf, in, len);
 	cable->todo.data[i].arg.transfer.in  = ibuf;
 	cable->todo.data[i].arg.transfer.out = obuf;
-    cable_flush( cable, OPTIONALLY );
+	cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
@@ -577,6 +577,8 @@ cable_set_frequency( cable_t *cable, uint32_t new_frequency )
 				}
 			}
 		}
+
+		printf("done\n");
 
 		cable->delay = delay;
 		cable->frequency = frequency;
