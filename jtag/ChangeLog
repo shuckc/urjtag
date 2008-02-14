@@ -1,4 +1,9 @@
-008-02-14  Jie Zhang  <jie.zhang@analog.com>
+2008-02-14  Kolja Waschk <kawk>
+
+    * src/tap/chain.c: Enabled the new^2 implementation in tap_shift_register
+        (which was implemented 2008-02-03 but not proven (now it is...))
+
+2008-02-14  Jie Zhang  <jie.zhang@analog.com>
 
     * src/bus/bf537_stamp.c: New.
     * src/bus/bf548_ezkit.c: New.
