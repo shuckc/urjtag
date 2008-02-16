@@ -9,6 +9,11 @@ urjtag-n/a
       - Prototype bus driver (Detrick Martin)
     * New and updated cable drivers
       - Vision EP9307 GPIO (Hartley Sweeten)
+      - Amontec JTAGkey
+      - OOCDLink-s
+      - Turtelizer 2
+      - USB to JTAG Interface
+      - Xverve DT-USB-ST Signalyzer Tool
     * Added new JTAG declarations for
       - Altera EP2C8 (Hartley Sweeten)
       - Xilinx XC2V80-FG256, XC2V250-FG256, XC2V1000-FG256 (Alexander Didebulidze)

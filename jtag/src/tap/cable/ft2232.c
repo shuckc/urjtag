@@ -80,31 +80,67 @@
 #define BIT_TDI 1
 #define BIT_TDO 2
 #define BIT_TMS 3
+#define BITMASK_TDO (1 << BIT_TDO)
+#define BITMASK_TDI (1 << BIT_TDI)
+#define BITMASK_TCK (1 << BIT_TCK)
+#define BITMASK_TMS (1 << BIT_TMS)
+
+/* bit and bitmask definitions for Amontec JTAGkey */
 #define BIT_JTAGKEY_nOE 4
 #define BIT_JTAGKEY_TRST_N_OUT 0
 #define BIT_JTAGKEY_SRST_N_OUT 1
 #define BIT_JTAGKEY_TRST_N_OE_N 2
 #define BIT_JTAGKEY_SRST_N_OE_N 3
-#define BIT_ARMUSBOCD_nOE 4
-#define BIT_ARMUSBOCD_nTRST 0
-#define BIT_ARMUSBOCD_nTSRST 1
-#define BIT_ARMUSBOCD_nTRST_nOE 2
-#define BIT_ARMUSBOCD_RED_LED 3
-
-#define BITMASK_TDO (1 << BIT_TDO)
-#define BITMASK_TDI (1 << BIT_TDI)
-#define BITMASK_TCK (1 << BIT_TCK)
-#define BITMASK_TMS (1 << BIT_TMS)
 #define BITMASK_JTAGKEY_nOE (1 << BIT_JTAGKEY_nOE)
 #define BITMASK_JTAGKEY_TRST_N_OUT (1 << BIT_JTAGKEY_TRST_N_OUT)
 #define BITMASK_JTAGKEY_SRST_N_OUT (1 << BIT_JTAGKEY_SRST_N_OUT)
 #define BITMASK_JTAGKEY_TRST_N_OE_N (1 << BIT_JTAGKEY_TRST_N_OE_N)
 #define BITMASK_JTAGKEY_SRST_N_OE_N (1 << BIT_JTAGKEY_SRST_N_OE_N)
+/* bit and bitmask definitions for Olimex ARM-USB-OCD */
+#define BIT_ARMUSBOCD_nOE 4
+#define BIT_ARMUSBOCD_nTRST 0
+#define BIT_ARMUSBOCD_nTSRST 1
+#define BIT_ARMUSBOCD_nTRST_nOE 2
+#define BIT_ARMUSBOCD_RED_LED 3
 #define BITMASK_ARMUSBOCD_nOE (1 << BIT_ARMUSBOCD_nOE)
 #define BITMASK_ARMUSBOCD_nTRST (1 << BIT_ARMUSBOCD_nTRST)
 #define BITMASK_ARMUSBOCD_nTSRST (1 << BIT_ARMUSBOCD_nTRST)
 #define BITMASK_ARMUSBOCD_nTRST_nOE (1 << BIT_ARMUSBOCD_nTRST_nOE)
 #define BITMASK_ARMUSBOCD_RED_LED (1 << BIT_ARMUSBOCD_RED_LED)
+/* bit and bitmask definitions for OOCDLink-s */
+#define BIT_OOCDLINKS_nTRST_nOE 0
+#define BIT_OOCDLINKS_nTRST 1
+#define BIT_OOCDLINKS_nSRST_nOE 2
+#define BIT_OOCDLINKS_nSRST 3
+#define BITMASK_OOCDLINKS_nTRST_nOE (1 << BIT_OOCDLINKS_nTRST_nOE)
+#define BITMASK_OOCDLINKS_nTRST (1 << BIT_OOCDLINKS_nTRST)
+#define BITMASK_OOCDLINKS_nSRST_nOE (1 << BIT_OOCDLINKS_nSRST_nOE)
+#define BITMASK_OOCDLINKS_nSRST (1 << BIT_OOCDLINKS_nSRST)
+/* bit and bitmask definitions for Turtelizer 2 */
+#define BIT_TURTELIZER2_nJTAGOE 4
+#define BIT_TURTELIZER2_RST 6
+#define BIT_TURTELIZER2_nTX1LED 2
+#define BIT_TURTELIZER2_nRX1LED 3
+#define BITMASK_TURTELIZER2_nJTAGOE (1 << BIT_TURTELIZER2_nJTAGOE)
+#define BITMASK_TURTELIZER2_RST (1 << BIT_TURTELIZER2_RST)
+#define BITMASK_TURTELIZER2_nTX1LED (1 << BIT_TURTELIZER2_nTX1LED)
+#define BITMASK_TURTELIZER2_nRX1LED (1 << BIT_TURTELIZER2_nRX1LED)
+/* bit and bitmask definitions for USB to JTAG Interface */
+#define BIT_USBTOJTAGIF_nTRST 4
+#define BIT_USBTOJTAGIF_RST 6
+#define BIT_USBTOJTAGIF_DBGRQ 7
+#define BIT_USBTOJTAGIF_nRxLED 2
+#define BIT_USBTOJTAGIF_nTxLED 3
+#define BITMASK_USBTOJTAGIF_nTRST (1 << BIT_USBTOJTAGIF_nTRST)
+#define BITMASK_USBTOJTAGIF_RST (1 << BIT_USBTOJTAGIF_RST)
+#define BITMASK_USBTOJTAGIF_DBGRQ (1 << BIT_USBTOJTAGIF_DBGRQ)
+#define BITMASK_USBTOJTAGIF_nRxLED (1 << BIT_USBTOJTAGIF_nRxLED)
+#define BITMASK_USBTOJTAGIF_nTxLED (1 << BIT_USBTOJTAGIF_nTxLED)
+/* bit and bitmask definitions for Xverve DT-USB-ST Signalyzer Tool */
+#define BIT_SIGNALYZER_nTRST 4
+#define BIT_SIGNALYZER_nSRST 5
+#define BITMASK_SIGNALYZER_nTRST (1 << BIT_SIGNALYZER_nTRST)
+#define BITMASK_SIGNALYZER_nSRST (1 << BIT_SIGNALYZER_nSRST)
 
 
 typedef struct {
@@ -312,11 +348,6 @@ ft2232_generic_init( cable_t *cable )
 	push_to_send( params, params->low_byte_value | BITMASK_TMS );
 	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 
-	/* Set TCK/SK Divisor to max frequency */
-	push_to_send( params, TCK_DIVISOR );
-	push_to_send( params, 0 );
-	push_to_send( params, 0 );
-
 	/* Set Data Bits High Byte */
 	params->high_byte_value_trst_active   = 0;
 	params->high_byte_value_trst_inactive = 0;
@@ -356,11 +387,6 @@ ft2232_jtagkey_init( cable_t *cable )
 	push_to_send( params, params->low_byte_value | BITMASK_TMS );
 	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 
-	/* Set TCK/SK Divisor to max frequency */
-	push_to_send( params, TCK_DIVISOR );
-	push_to_send( params, 0 );
-	push_to_send( params, 0 );
-
 	/* Set Data Bits High Byte
 	   default:
 	   TRST_N_OUT = 1
@@ -371,6 +397,9 @@ ft2232_jtagkey_init( cable_t *cable )
 	params->high_byte_value_trst_inactive = BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OUT;
 	params->high_byte_dir                 = BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
 	                                        BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N;
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, 0 );
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, params->high_byte_value_trst_inactive );
 	push_to_send( params, params->high_byte_dir );
@@ -407,11 +436,6 @@ ft2232_armusbocd_init( cable_t *cable )
 	push_to_send( params, params->low_byte_value | BITMASK_TMS );
 	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 
-	/* Set TCK/SK Divisor */
-	push_to_send( params, TCK_DIVISOR );
-	push_to_send( params, 0 );
-	push_to_send( params, 0 );
-
 	/* Set Data Bits High Byte
 	   default:
 	   TRST = 1
@@ -426,6 +450,187 @@ ft2232_armusbocd_init( cable_t *cable )
 	params->high_byte_dir                 = BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
 	                                        BITMASK_ARMUSBOCD_nTSRST |
 	                                        BITMASK_ARMUSBOCD_RED_LED;
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, 0 );
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, params->high_byte_dir );
+
+	ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
+
+	params->last_tdo_valid = 0;
+
+	return 0;
+}
+
+
+static int
+ft2232_oocdlinks_init( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+
+	if (parport_open( p ))
+		return -1;
+
+	/* set loopback off */
+	push_to_send( params, LOOPBACK_END );
+	send_and_receive( cable );
+
+	/* static low byte value and direction */
+	params->low_byte_value = 0;
+	params->low_byte_dir   = 0;
+
+	/* Set Data Bits Low Byte
+		 TCK = 0, TMS = 1, TDI = 0 */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, params->low_byte_value | BITMASK_TMS );
+	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+
+	/* Set Data Bits High Byte
+	   default:
+	   TRST = 1
+	   TRST buffer enable = 0
+	   SRST = 1
+	   SRST buffer enable = 0 */
+	params->high_byte_value_trst_active   = BITMASK_OOCDLINKS_nSRST;
+	params->high_byte_value_trst_inactive = BITMASK_OOCDLINKS_nTRST |
+	                                        BITMASK_OOCDLINKS_nSRST;
+	params->high_byte_dir                 = BITMASK_OOCDLINKS_nTRST | BITMASK_OOCDLINKS_nTRST_nOE |
+	                                        BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE;
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, 0 );
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, params->high_byte_dir );
+
+	ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
+
+	params->last_tdo_valid = 0;
+
+	return 0;
+}
+
+
+static int
+ft2232_turtelizer2_init( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+
+	if (parport_open( p ))
+		return -1;
+
+	/* set loopback off */
+	push_to_send( params, LOOPBACK_END );
+	send_and_receive( cable );
+
+	/* static low byte value and direction:
+	   set nJTAGOE to '0' -> activate output enables
+	   set RST to 0 -> inactive nSRST */
+	params->low_byte_value = 0;
+	params->low_byte_dir   = BITMASK_TURTELIZER2_nJTAGOE | BITMASK_TURTELIZER2_RST;
+
+	/* Set Data Bits Low Byte
+		 TCK = 0, TMS = 1, TDI = 0 */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, params->low_byte_value | BITMASK_TMS );
+	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+
+	/* Set Data Bits High Byte
+	   default:
+	   TX1LED on
+	   RX1LED on */
+	params->high_byte_value_trst_active   = 0;
+	params->high_byte_value_trst_inactive = 0;
+	params->high_byte_dir                 = BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED;
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, params->high_byte_dir );
+
+	ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
+
+	params->last_tdo_valid = 0;
+
+	return 0;
+}
+
+
+static int
+ft2232_usbtojtagif_init( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+
+	if (parport_open( p ))
+		return -1;
+
+	/* set loopback off */
+	push_to_send( params, LOOPBACK_END );
+	send_and_receive( cable );
+
+	/* static low byte value and direction:
+	   nTRST = 1, RST = 1, DBGRQ = 0 */
+	params->low_byte_value = BITMASK_USBTOJTAGIF_nTRST | BITMASK_USBTOJTAGIF_RST;
+	params->low_byte_dir   = BITMASK_USBTOJTAGIF_nTRST | BITMASK_USBTOJTAGIF_RST | BITMASK_USBTOJTAGIF_DBGRQ;
+
+	/* Set Data Bits Low Byte
+		 TCK = 0, TMS = 1, TDI = 0 */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, params->low_byte_value | BITMASK_TMS );
+	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+
+	/* Set Data Bits High Byte
+	   default:
+	   RxLED on
+	   TxLED on */
+	params->high_byte_value_trst_active   = 0;
+	params->high_byte_value_trst_inactive = 0;
+	params->high_byte_dir                 = BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED;
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, params->high_byte_value_trst_inactive );
+	push_to_send( params, params->high_byte_dir );
+
+	/* I-couplers can only work up to 3 MHz
+	   ref. http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html */
+	ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ/2 );
+
+	params->last_tdo_valid = 0;
+
+	return 0;
+}
+
+
+static int
+ft2232_signalyzer_init( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+
+	if (parport_open( p ))
+		return -1;
+
+	/* set loopback off */
+	push_to_send( params, LOOPBACK_END );
+	send_and_receive( cable );
+
+	/* static low byte value and direction:
+	   nTRST = 1, RST = 1, DBGRQ = 0 */
+	params->low_byte_value = BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST;
+	params->low_byte_dir   = BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST;
+
+	/* Set Data Bits Low Byte
+		 TCK = 0, TMS = 1, TDI = 0 */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, params->low_byte_value | BITMASK_TMS );
+	push_to_send( params, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+
+	/* Set Data Bits High Byte */
+	params->high_byte_value_trst_active   = 0;
+	params->high_byte_value_trst_inactive = 0;
+	params->high_byte_dir                 = 0;
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, params->high_byte_value_trst_inactive );
 	push_to_send( params, params->high_byte_dir );
@@ -531,6 +736,131 @@ ft2232_armusbocd_done( cable_t *cable )
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
 	                      BITMASK_ARMUSBOCD_nTSRST );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
+
+	parport_close( p );
+}
+
+
+static void
+ft2232_oocdlinks_done( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+
+	/* Set Data Bits Low Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, 0 );
+	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+		 disable output drivers */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_OOCDLINKS_nTRST | BITMASK_OOCDLINKS_nTRST_nOE |
+	                      BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE );
+	push_to_send( params, BITMASK_OOCDLINKS_nTRST | BITMASK_OOCDLINKS_nTRST_nOE |
+	                      BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE );
+
+	/* Set Data Bits High Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_OOCDLINKS_nTRST | BITMASK_OOCDLINKS_nTRST_nOE |
+	                      BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
+
+	parport_close( p );
+}
+
+
+static void
+ft2232_turtelizer2_done( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+
+	/* Set Data Bits Low Byte
+		 disable output drivers */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_TURTELIZER2_nJTAGOE );
+	push_to_send( params, BITMASK_TURTELIZER2_nJTAGOE );
+
+	/* Set Data Bits Low Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_TURTELIZER2_nJTAGOE );
+	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+		 switch off LEDs */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED );
+	push_to_send( params, BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED );
+
+	/* Set Data Bits High Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, 0 );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
+
+	parport_close( p );
+}
+
+
+static void
+ft2232_usbtojtagif_done( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+
+	/* Set Data Bits Low Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_USBTOJTAGIF_nTRST | BITMASK_USBTOJTAGIF_RST );
+	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+		 disable output drivers */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED );
+	push_to_send( params, BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED );
+
+	/* Set Data Bits High Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED );
+	push_to_send( params, 0 );
+	send_and_receive( cable );
+
+	parport_close( p );
+}
+
+
+static void
+ft2232_signalyzer_done( cable_t *cable )
+{
+	parport_t *p = cable->port;
+	params_t *params = (params_t *)cable->params;
+
+	/* Set Data Bits Low Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_LOW );
+	push_to_send( params, BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST );
+	push_to_send( params, 0 );
+
+	/* Set Data Bits High Byte
+		 disable output drivers */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST );
+	push_to_send( params, BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST );
+
+	/* Set Data Bits High Byte
+		 set all to input */
+	push_to_send( params, SET_BITS_HIGH );
+	push_to_send( params, 0 );
 	push_to_send( params, 0 );
 	send_and_receive( cable );
 
@@ -1089,6 +1419,77 @@ cable_driver_t ft2232_jtagkey_cable_driver = {
 	ft2232_usbcable_help
 };
 
+cable_driver_t ft2232_oocdlinks_cable_driver = {
+	"OOCDLink-s",
+	N_("OOCDLink-s (FT2232) Cable (EXPERIMENTAL)"),
+	ft2232_connect,
+	generic_disconnect,
+	ft2232_cable_free,
+	ft2232_oocdlinks_init,
+	ft2232_oocdlinks_done,
+	ft2232_set_frequency,
+	ft2232_clock,
+	ft2232_get_tdo,
+	ft2232_transfer,
+	ft2232_set_trst,
+	generic_get_trst,
+	ft2232_flush,
+	ft2232_usbcable_help
+};
+
+cable_driver_t ft2232_turtelizer2_cable_driver = {
+	"Turtelizer2",
+	N_("Turtelizer 2 Rev. B (FT2232) Cable (EXPERIMENTAL)"),
+	ft2232_connect,
+	generic_disconnect,
+	ft2232_cable_free,
+	ft2232_turtelizer2_init,
+	ft2232_turtelizer2_done,
+	ft2232_set_frequency,
+	ft2232_clock,
+	ft2232_get_tdo,
+	ft2232_transfer,
+	ft2232_set_trst,
+	generic_get_trst,
+	ft2232_flush,
+	ft2232_usbcable_help
+};
+
+cable_driver_t ft2232_usbtojtagif_cable_driver = {
+	"USB-to-JTAG-IF",
+	N_("USB to JTAG Interface (FT2232) Cable (EXPERIMENTAL)"),
+	ft2232_connect,
+	generic_disconnect,
+	ft2232_cable_free,
+	ft2232_usbtojtagif_init,
+	ft2232_usbtojtagif_done,
+	ft2232_set_frequency,
+	ft2232_clock,
+	ft2232_get_tdo,
+	ft2232_transfer,
+	ft2232_set_trst,
+	generic_get_trst,
+	ft2232_flush,
+	ft2232_usbcable_help
+};
+
+cable_driver_t ft2232_signalyzer_cable_driver = {
+	"Signalyzer",
+	N_("Xverve DT-USB-ST Signalyzer Tool (FT2232) Cable (EXPERIMENTAL)"),
+	ft2232_connect,
+	generic_disconnect,
+	ft2232_cable_free,
+	ft2232_signalyzer_init,
+	ft2232_signalyzer_done,
+	ft2232_set_frequency,
+	ft2232_clock,
+	ft2232_get_tdo,
+	ft2232_transfer,
+	ft2232_set_trst,
+	generic_get_trst,
+	ft2232_flush,
+	ft2232_usbcable_help
+};
 
 
 /*

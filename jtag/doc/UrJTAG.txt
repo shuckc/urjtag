@@ -211,8 +211,13 @@ See 'help cable' command for up-to-date info.
  * Mpcbdm JTAG Cable
  * Macraigor Wiggler JTAG Cable
  * Amontec JTAGkey (FT2232-based)
- * Olimex FT2232-based ARM-USB-JTAG
+ * Olimex ARM-USB-JTAG (FT2232-based)
+ * Olimex ARM-USB-TINY (FT2232-based)
+ * OOCDLink-s (FT2232-based) (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
  * Other FT2232-based USB JTAG cables (experimental)
+ * Xverve Signalyzer Tool (FT2232-based) (experimental)
+ * Turtelizer 2 (FT2232-based) (experimental) http://www.ethernut.de/en/hardware/turtelizer/
+ * USB to JTAG Interface (FT2232-based) (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
  * Xilinx Platform USB Cable (experimental)
 
 ==== JTAG-aware parts (chips) ====
