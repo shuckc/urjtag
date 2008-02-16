@@ -41,6 +41,7 @@
 
 cfi_array_t *cfi_array = NULL;
 
+extern int jedec_exp_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
 extern int jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
 
 extern int amd_detect(bus_t *bus, uint32_t adr, cfi_array_t **cfi_array ); //Ajith
@@ -66,15 +67,25 @@ detectflash( bus_t *bus, uint32_t adr )
 		cfi_array = NULL;
 		if (jedec_detect( bus, adr, &cfi_array ) != 0) {
 			cfi_array_free( cfi_array );
+			cfi_array = NULL;
 			if(amd_detect(bus, adr, &cfi_array ) != 0)
 			{
 				cfi_array_free( cfi_array );
-				cfi_array->bus_width = 1;
 				cfi_array = NULL;
-				printf( _("Flash not found!\n") );
-				return;
+#ifdef JEDEC_EXP
+				if (jedec_exp_detect( bus, adr, &cfi_array )) {
+					cfi_array_free( cfi_array );
+					cfi_array = NULL;
+				}
+#endif
 			}
 		}
+	}
+
+	if (cfi_array == NULL)
+	{
+		printf( _("Flash not found!\n") );
+		return;
 	}
 
 	cfi = &cfi_array->cfi_chips[0]->cfi;

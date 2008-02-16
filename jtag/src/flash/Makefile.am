@@ -32,3 +32,9 @@ libflash_a_SOURCES = \
 	detectflash.c \
 	intel.c \
 	jedec.c
+
+if JEDEC_EXP
+libflash_a_SOURCES += \
+	jedec_exp.c
+endif
+

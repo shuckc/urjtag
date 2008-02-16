@@ -395,6 +395,21 @@ AS_IF([test "x$conservative_flush" = xtrue], [
   AC_DEFINE(CONSERVATIVE_FLUSH, 1, [define if conservative queue flushing is enabled])
 ])
 
+dnl Enable experimental brute-force JEDEC flash autodetection?
+AC_ARG_ENABLE(jedec-exp,
+[  --enable-jedec-exp            Enable experimental JEDEC flash detection],
+[case "${enableval}" in
+   yes) jedecexp=true ;;
+   no)  jedecexp=false ;;
+   *)   AC_MSG_ERROR(bad value ${enableval} for --enable-jedec-exp) ;;
+ esac],
+[jedecexp=false])
+AS_IF([test "x$jedecexp" = xtrue], [
+  AM_CONDITIONAL(JEDEC_EXP, true)
+  AC_DEFINE(JEDEC_EXP, 1, [define if experimental JEDEC flash detection is enabled])
+],[
+  AM_CONDITIONAL(JEDEC_EXP, false)
+])
 
 AC_OUTPUT
 
