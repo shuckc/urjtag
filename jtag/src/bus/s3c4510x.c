@@ -97,7 +97,7 @@ typedef struct {
 #define nOE     ((bus_params_t *) bus->params)->noe
 
 #define dbus_width ((bus_params_t *) bus->params)->dbuswidth
-/** @brief  Width of Data Bus. Detected by B0SIZE[1:0] 
+/** @brief  Width of Data Bus. Detected by B0SIZE[1:0]  */
 
 
 static void
