@@ -261,6 +261,8 @@ ft2232_set_frequency( cable_t *cable, uint32_t new_frequency )
 	if (!new_frequency || new_frequency > FT2232_MAX_TCK_FREQ)
 		new_frequency = FT2232_MAX_TCK_FREQ;
 
+	cable->frequency = new_frequency;
+
 	/* update ft2232 frequency if cable setting changed */
 	if (new_frequency != params->mpsse_frequency) {
 		uint32_t div;
@@ -1044,7 +1046,7 @@ cable_driver_t ft2232_cable_driver = {
 	ft2232_cable_free,
 	ft2232_generic_init,
 	ft2232_generic_done,
-    ft2232_set_frequency,
+	ft2232_set_frequency,
 	ft2232_clock,
 	ft2232_get_tdo,
 	ft2232_transfer,
@@ -1062,7 +1064,7 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
 	ft2232_cable_free,
 	ft2232_armusbocd_init,
 	ft2232_armusbocd_done,
-    ft2232_set_frequency,
+	ft2232_set_frequency,
 	ft2232_clock,
 	ft2232_get_tdo,
 	ft2232_transfer,
@@ -1080,7 +1082,7 @@ cable_driver_t ft2232_jtagkey_cable_driver = {
 	ft2232_cable_free,
 	ft2232_jtagkey_init,
 	ft2232_jtagkey_done,
-    ft2232_set_frequency,
+	ft2232_set_frequency,
 	ft2232_clock,
 	ft2232_get_tdo,
 	ft2232_transfer,
