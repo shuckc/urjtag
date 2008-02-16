@@ -344,19 +344,16 @@ Before running configure, get the D2XX drivers from FTDI.
 
  * http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
 
-Unzip the archive and copy _only_ the two files "ftd2xx.h" and
-"i386/ftd2xx.dll" into a directory of your choice (substitute the path of
-this directory for $FTDIDIR in the following example...). Then run
-configure like this:
+Unzip the archive into a directory of your choice (probably a choice
+without spaces in the name is better)  and afterwards run configure with the
+"--with-ftd2xx" pointing to that directory, e.g.
 
-  CFLAGS="-I$FTDIDIR" LDFLAGS="-L$FTDIDIR" ./configure 
+  ./configure --with-ftd2xx="/cygdrive/e/temp/cdm"
 
 Configure should now report
 
-  checking for FT_Open in -lftd2xx... yes
-  ...
   FTDI cable support
-    via libftdi          : no
+    ...
     via libftd2xx        : yes
 
 
