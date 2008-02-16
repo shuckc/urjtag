@@ -81,7 +81,7 @@ jedec_exp_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 				uint32_t dcmd = ~dmask | ( 0x90 << det_dataoffset );
 
 	  			printf("--- trying with flash dataoffset %d", det_dataoffset);
-				printf(" using %08X, %08X and %08X)\n", pata, patb, dcmd);
+				printf(" (using %08X, %08X and %08X)\n", pata, patb, dcmd);
 
 				for(det_addroffset = 0; det_addroffset <= 2; det_addroffset++)
 				{
