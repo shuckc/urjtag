@@ -3,7 +3,9 @@
     * src/flash/Makefile.am, src/flash/jedec_exp.c, src/flash/detectflash.c,
         configure.ac: Experimental new code for flash detection, to be enabled
         during configuration with --enable-jedec-exp (disabled by default)
-    * src/bus/s3c4510x.c: disable debug output (was enabled in 929..)
+    * src/bus/s3c4510x.c: disable debug output (was enabled in 929..), do a
+        chain_shift_data_registers before trying to read b0size (fixes the
+        old problem of B0SIZE unknown, needed for proper flash detection)
     * include/register.h, src/tap/register.c, src/discovery.c: report if tdo
         seems to be stuck during detect_register_size (ie. "detect").
 

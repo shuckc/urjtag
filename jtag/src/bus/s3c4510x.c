@@ -150,13 +150,6 @@ s3c4510_bus_printinfo( bus_t *bus )
 	printf( _("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%ubit\n"), i ,dbus_width );        
 }
 
-static void
-s3c4510_bus_prepare( bus_t *bus )
-{
-        part_set_instruction( PART, "EXTEST" );
-        chain_shift_instructions( CHAIN );
-}
-
 static void s3c4510_bus_setup_ctrl( bus_t *bus, int mode ) 
 {
   int k;
@@ -176,6 +169,19 @@ static void s3c4510_bus_setup_ctrl( bus_t *bus, int mode )
 	
   part_set_signal( p, nOE, 1, (mode & (1 << 16)) ? 1 : 0 );
 }
+
+static void
+s3c4510_bus_prepare( bus_t *bus )
+{
+        part_set_instruction( PART, "EXTEST" );
+        chain_shift_instructions( CHAIN );
+
+    /* Do one shift_data_registers to capture current values */
+
+	s3c4510_bus_setup_ctrl( bus, 0x1FFFF );
+	chain_shift_data_registers( chain, 1 );
+}
+
 
 static void
 s3c4510_bus_read_start( bus_t *bus, uint32_t adr )
@@ -288,11 +294,9 @@ s3c4510_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	area->start = UINT32_C(0x00000000);
 	area->length = UINT64_C(0x100000000);
 
-        // endian = part_get_signal( PART, part_find_signal( PART, "LITTLE" ));
-        b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
-        if(b0size0==0) // TODO: try again (initialization problem?)
-            b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
-        b0size1 = part_get_signal( PART, part_find_signal( PART, "B0SIZE1" ));
+	// endian = part_get_signal( PART, part_find_signal( PART, "LITTLE" ));
+	b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
+	b0size1 = part_get_signal( PART, part_find_signal( PART, "B0SIZE1" ));
 
         switch ((b0size1 << 1) | b0size0) {
                 case 1:
