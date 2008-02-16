@@ -865,7 +865,7 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 		while (j != i) {
 			switch (cable->todo.data[j].action) {
 				case CABLE_CLOCK:
-					last_tdo_valid_finish = 0;
+					params->last_tdo_valid = last_tdo_valid_finish = 0;
 					break;
 				case CABLE_GET_TDO:
 				{
@@ -875,7 +875,7 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 						tdo = params->last_tdo;
 					else
 						tdo = ft2232_get_tdo_finish( cable );
-					last_tdo_valid_finish = 1;
+					last_tdo_valid_finish = params->last_tdo_valid;
 					m = cable_add_queue_item( cable, &(cable->done) );
 					cable->done.data[m].action = CABLE_GET_TDO;
 					cable->done.data[m].arg.value.tdo = tdo;
@@ -886,7 +886,7 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 					int m = cable_add_queue_item( cable, &(cable->done) );
 					cable->done.data[m].action = CABLE_SET_TRST;
 					cable->done.data[m].arg.value.trst = cable->done.data[j].arg.value.trst;
-					last_tdo_valid_finish = 0;
+					params->last_tdo_valid = last_tdo_valid_finish = 0;
 				}
 				case CABLE_GET_TRST:
 				{
