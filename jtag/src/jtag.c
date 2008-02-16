@@ -58,6 +58,7 @@ ssize_t getline( char **lineptr, size_t *n, FILE *stream );
 chain_t *chain = NULL;
 int debug_mode = 0;
 int big_endian = 0;
+int interactive = 0;
 extern cfi_array_t *cfi_array;
 
 static char *
@@ -216,6 +217,8 @@ static int jtag_readline_multiple_commands_support(char * line) /* multiple comm
   } 
   
   r = jtag_parse_line( line );
+
+  chain_flush( chain );
   
   } while (nextcmd && r);
 
@@ -336,7 +339,6 @@ main( int argc, char *const argv[] )
 	int i;
 	int c;
 	int norc = 0;
-	int interactive = 0;
 	int help = 0;
 	int version = 0;
 	

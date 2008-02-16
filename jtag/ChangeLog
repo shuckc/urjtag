@@ -8,6 +8,8 @@
 
 2008-02-16  Kolja Waschk <kawk>
 
+    * src/jtag.c, src/tap/chain.c, include/chain.h: Always flush immediately
+        after each command when used interactively
     * src/cmd/scan.c, src/cmd/Makefile.am, src/cmd/cmd.c: Implemented basic
         boundary "scan" command to detect changes on input pins; tested with
         an (completely erased) Actel ProASIC3 A3P125

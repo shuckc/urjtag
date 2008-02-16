@@ -200,3 +200,11 @@ chain_shift_data_registers( chain_t *chain, int capture_output )
 {
 	chain_shift_data_registers_mode( chain, capture_output, 1, EXITMODE_IDLE );
 }
+
+void
+chain_flush( chain_t *chain )
+{
+	if( chain->cable != NULL)
+		cable_flush( chain->cable, COMPLETELY );
+}
+
