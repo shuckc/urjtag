@@ -324,9 +324,8 @@ ft2232_generic_init( cable_t *cable )
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, params->high_byte_value_trst_inactive );
 	push_to_send( params, params->high_byte_dir );
-	send_and_receive( cable );
 
-	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
+	ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
 	params->last_tdo_valid = 0;
 
@@ -376,9 +375,7 @@ ft2232_jtagkey_init( cable_t *cable )
 	push_to_send( params, params->high_byte_value_trst_inactive );
 	push_to_send( params, params->high_byte_dir );
 
-	send_and_receive( cable );
-
-	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
+	ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
 	params->last_tdo_valid = 0;
 
@@ -432,9 +429,8 @@ ft2232_armusbocd_init( cable_t *cable )
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, params->high_byte_value_trst_inactive );
 	push_to_send( params, params->high_byte_dir );
-	send_and_receive( cable );
 
-	params->mpsse_frequency = FT2232_MAX_TCK_FREQ;
+	ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
 	params->last_tdo_valid = 0;
 
@@ -975,6 +971,7 @@ ft2232_connect( char *params[], cable_t *cable )
 		return 4;
 	}
 
+	cable_params->mpsse_frequency = 0;
 	cable_params->last_tdo_valid  = 0;
 	cable_params->send_buffer_len = 1024;
 	cable_params->to_send         = 0;

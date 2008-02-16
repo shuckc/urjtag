@@ -3,6 +3,8 @@
    * src/tap/cable/ft2232.c (ft2232_flush): fix inconsistency of TDO caching
         in ft2232_flush()
    * THANKS: to the original SVF and BSDL parser programmers
+   * src/tap/cable/ft2232.c (ft2232_generic_init, ft2232_jtagkey_init, ft2232_armusbocd_init):
+        initialize mpsse frequency via ft2232_set_frequency()
 
 2008-02-16  Kolja Waschk <kawk>
 
