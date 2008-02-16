@@ -46,6 +46,9 @@ detect_register_size( chain_t *chain )
 	tap_register *rout;
 	tap_register *rpat;
 
+	/* This seems to be a good place to check if TDO changes at all */
+	int tdo, tdo_stuck = -2;
+
 	for (len = 1; len <= MAX_REGISTER_LENGTH; len++) {
 		int p;
 		int ok = 0;
@@ -67,6 +70,10 @@ detect_register_size( chain_t *chain )
 				tap_shift_register( chain, rz, NULL, 0 );
 				tap_shift_register( chain, rpat, rout, 0 );
 
+				tdo = register_all_bits_same_value(rout);
+				if(tdo_stuck == -2) tdo_stuck = tdo;
+				if(tdo_stuck != tdo) tdo_stuck = -1;
+
 				register_shift_right( rout, len );
 
 				if (register_compare( rpat, rout ) == 0)
@@ -86,6 +93,11 @@ detect_register_size( chain_t *chain )
 
 		if (ok)
 			return len;
+	}
+
+	if(tdo_stuck >= 0)
+	{
+		printf(_("Warning: TDO seems to be stuck at %d\n"), tdo_stuck);
 	}
 
 	return -1;

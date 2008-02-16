@@ -102,6 +102,25 @@ register_get_string( const tap_register *tr )
 	return tr->string;
 }
 
+int
+register_all_bits_same_value ( const tap_register *tr )
+{
+	int i, value;
+	if (!tr) return -1;
+	if (tr->len < 0) return -1;
+
+	/* Return -1 if any of the bits in the register
+	 * differs from the others; the value otherwise. */
+
+	value = tr->data[0] & 1;
+
+	for(i=1; i<tr->len; i++)
+	{
+		if((tr->data[i] & 1) != value) return -1;
+	}
+	return value;
+}
+
 tap_register *
 register_init( tap_register *tr, const char *value )
 {
