@@ -8,6 +8,7 @@
 
 2008-02-16  Kolja Waschk <kawk>
 
+    * src/svf/svf.c: Small fix for computation of run_count from min_time
     * doc/UrJTAG.txt: Updated doc about building with FTD2XX in Cygwin
     * src/tap/cable.c, include/cable.h, src/tap/cable/*.c (all drivers):
         moved cable_set_frequency functionality from cable.c to the cable

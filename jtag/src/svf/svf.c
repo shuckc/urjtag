@@ -678,7 +678,7 @@ svf_runtest(struct runtest *params)
   run_count = params->run_count;
   frequency = cable_get_frequency(chain->cable);
   if (frequency > 0) {
-    uint32_t min_time_run_count = ceil(params->min_time / frequency);
+    uint32_t min_time_run_count = ceil(params->min_time * frequency);
     if (min_time_run_count > run_count) {
       run_count = min_time_run_count;
     }
