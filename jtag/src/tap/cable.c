@@ -32,11 +32,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdint.h>
-#include <assert.h>
-#include <math.h>
 #include <string.h>
 
-#include "fclock.h"
 #include "jtag.h"
 #include "cable.h"
 
@@ -529,69 +526,8 @@ cable_defer_transfer( cable_t *cable, int len, char *in, char *out )
 void
 cable_set_frequency( cable_t *cable, uint32_t new_frequency )
 {
-	if (new_frequency == 0) {
-		cable->delay = 0;
-		cable-> frequency = 0;
-	} else {
-		const double tolerance = 0.1;
-		uint32_t loops;
-		uint32_t delay = cable->delay;
-		uint32_t frequency = cable->frequency;
-
-		printf("requested frequency %u, now calibrating delay loop\n", new_frequency);
-
-		if (delay == 0) {
-			delay = 1000;
-			loops = 10000;
-		} else {
-			loops = 3 * frequency;
-		}
-
-		while (1) {
-			uint32_t i, new_delay;
-			long double start, end, real_frequency;
-
-			start = frealtime();	
-			for (i = 0; i < loops; ++i) {
-				chain_clock(chain, 0, 0, 1);
-			}
-			end = frealtime();
-
-			assert(end > start);
-			real_frequency = (long double)loops / (end - start);
-			printf("new real frequency %Lg, delay %u\n", 
-			       real_frequency, delay);
-
-			loops = 3 * fmax(real_frequency, new_frequency);
-			new_delay = (long double)delay * real_frequency / new_frequency;
-
-			if (real_frequency >= (1.0 - tolerance)*new_frequency) {
-				if (real_frequency <= (1.0 + tolerance)*new_frequency) {
-					break;
-				}
-				if (new_delay > delay) {
-					delay = new_delay;
-				} else {
-					delay++;
-				}
-			} else {
-				if (new_delay < delay) {
-					delay = new_delay;
-				} else {
-					delay--;
-				}			
-				if (delay == 0) {
-					printf("operating without delay\n");
-					break;
-				}
-			}
-		}
-
-		printf("done\n");
-
-		cable->delay = delay;
-		cable->frequency = frequency;
-	}
+	cable_flush( cable, COMPLETELY );
+	cable->driver->set_frequency( cable, new_frequency );
 }
 
 uint32_t

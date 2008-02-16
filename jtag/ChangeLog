@@ -5,6 +5,9 @@
 2008-02-16  Kolja Waschk <kawk>
 
     * doc/UrJTAG.txt: Updated doc about building with FTD2XX in Cygwin
+    * src/tap/cable.c, include/cable.h, src/tap/cable/*.c (all drivers):
+        moved cable_set_frequency functionality from cable.c to the cable
+        drivers, to fix [ 1836319 ] Delay loop calibration takes ages
     * src/tap/cable.c: Include ftdi-based cable drivers if either libftdi or
         FTDI's FTD2XX (CDM) drivers are present (--with-ftd2xx)
     * src/flash/Makefile.am, src/flash/jedec_exp.c, src/flash/detectflash.c,

@@ -113,6 +113,7 @@ cable_driver_t mpcbdm_cable_driver = {
 	generic_cable_free,
 	mpcbdm_init,
 	generic_done,
+	generic_set_frequency,
 	mpcbdm_clock,
 	mpcbdm_get_tdo,
 	generic_transfer,

@@ -27,10 +27,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
+#include <math.h>
 
 #include "cable.h"
 #include "parport.h"
 #include "chain.h"
+#include "fclock.h"
 
 #include "generic.h"
 
@@ -244,7 +247,7 @@ generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 
 	do
 	{
-		int r, bits = 0, tdo;
+		int r, bits = 0, tdo = 0;
 
 #ifdef VERBOSE
 		printf("flush(%d)\n", cable->todo.num_items);
@@ -396,6 +399,74 @@ generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 		}
 	}
 	while(cable->todo.num_items > 0);
+}
+
+void
+generic_set_frequency( cable_t *cable, uint32_t new_frequency )
+{
+	if (new_frequency == 0) {
+		cable->delay = 0;
+		cable-> frequency = 0;
+	} else {
+		const double tolerance = 0.1;
+		uint32_t loops;
+		uint32_t delay = cable->delay;
+		uint32_t frequency = cable->frequency;
+
+		printf("requested frequency %u, now calibrating delay loop\n", new_frequency);
+
+		if (delay == 0) {
+			delay = 1000;
+			loops = 10000;
+		} else {
+			loops = 3 * frequency;
+		}
+
+		while (1) {
+			uint32_t i, new_delay;
+			long double start, end, real_frequency;
+
+			start = frealtime();	
+			for (i = 0; i < loops; ++i) {
+				cable->driver->clock(cable, 0, 0, 1);
+			}
+			end = frealtime();
+
+			assert(end > start);
+			real_frequency = (long double)loops / (end - start);
+			printf("new real frequency %Lg, delay %u\n", 
+			       real_frequency, delay);
+
+			loops = 3 * fmax(real_frequency, new_frequency);
+			new_delay = (long double)delay * real_frequency / new_frequency;
+
+			if (real_frequency >= (1.0 - tolerance)*new_frequency) {
+				if (real_frequency <= (1.0 + tolerance)*new_frequency) {
+					break;
+				}
+				if (new_delay > delay) {
+					delay = new_delay;
+				} else {
+					delay++;
+				}
+			} else {
+				if (new_delay < delay) {
+					delay = new_delay;
+				} else {
+					delay--;
+				}			
+				if (delay == 0) {
+					printf("operating without delay\n");
+					break;
+				}
+			}
+		}
+
+		printf("done\n");
+
+		cable->delay = delay;
+		cable->frequency = frequency;
+	}
 }
 
 void

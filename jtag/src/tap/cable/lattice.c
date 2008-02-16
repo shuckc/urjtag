@@ -99,6 +99,7 @@ cable_driver_t lattice_cable_driver = {
 	generic_cable_free,
 	lattice_init,
 	generic_done,
+	generic_set_frequency,
 	lattice_clock,
 	lattice_get_tdo,
 	generic_transfer,

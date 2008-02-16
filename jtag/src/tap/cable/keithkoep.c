@@ -116,6 +116,7 @@ cable_driver_t keithkoep_cable_driver = {
 	generic_cable_free,
 	keithkoep_init,
 	generic_done,
+	generic_set_frequency,
 	keithkoep_clock,
 	keithkoep_get_tdo,
 	generic_transfer,

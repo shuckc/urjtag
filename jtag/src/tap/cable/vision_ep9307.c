@@ -314,6 +314,7 @@ cable_driver_t ep9307_cable_driver = {
 	ep9307_cable_free,
 	ep9307_init,
 	ep9307_done,
+	generic_set_frequency,
 	ep9307_clock,
 	ep9307_get_tdo,
 	generic_transfer,

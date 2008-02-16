@@ -104,6 +104,7 @@ cable_driver_t dlc5_cable_driver = {
 	generic_cable_free,
 	dlc5_init,
 	generic_done,
+	generic_set_frequency,
 	dlc5_clock,
 	dlc5_get_tdo,
 	generic_transfer,

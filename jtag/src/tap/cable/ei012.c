@@ -109,6 +109,7 @@ cable_driver_t ei012_cable_driver = {
 	generic_cable_free,
 	ei012_init,
 	generic_done,
+	generic_set_frequency,
 	ei012_clock,
 	ei012_get_tdo,
 	generic_transfer,

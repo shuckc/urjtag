@@ -133,6 +133,7 @@ cable_driver_t byteblaster_cable_driver = {
 	generic_cable_free,
 	byteblaster_init,
 	generic_done,
+	generic_set_frequency,
 	byteblaster_clock,
 	byteblaster_get_tdo,
 	generic_transfer,

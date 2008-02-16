@@ -118,6 +118,7 @@ cable_driver_t triton_cable_driver = {
 	generic_cable_free,
 	triton_init,
 	generic_done,
+	generic_set_frequency,
 	triton_clock,
 	triton_get_tdo,
 	generic_transfer,

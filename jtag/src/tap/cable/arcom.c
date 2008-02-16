@@ -107,6 +107,7 @@ cable_driver_t arcom_cable_driver = {
 	generic_cable_free,
 	arcom_init,
 	generic_done,
+	generic_set_frequency,
 	arcom_clock,
 	arcom_get_tdo,
 	generic_transfer,

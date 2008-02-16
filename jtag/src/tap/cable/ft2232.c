@@ -254,9 +254,8 @@ pop_to_recv( params_t *params )
 
 
 static void
-update_frequency( cable_t *cable )
+ft2232_set_frequency( cable_t *cable, uint32_t new_frequency )
 {
-	uint32_t new_frequency = cable_get_frequency( cable );
 	params_t *params = (params_t *)cable->params;
 
 	if (!new_frequency || new_frequency > FT2232_MAX_TCK_FREQ)
@@ -549,9 +548,6 @@ ft2232_clock_schedule( cable_t *cable, int tms, int tdi, int n )
 	tms = tms ? 0x7f : 0;
 	tdi = tdi ? 1 << 7 : 0;
 
-	/* check for new frequency setting */
-	update_frequency( cable );
-
 	while (n > 0) {
 		/* Clock Data to TMS/CS Pin (no Read) */
 		push_to_send( params, MPSSE_WRITE_TMS |
@@ -805,8 +801,6 @@ ft2232_transfer_finish( cable_t *cable, int len, char *out )
 static int
 ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 {
-	/* check for new frequency setting */
-	update_frequency( cable );
 	ft2232_transfer_schedule( cable, len, in, out );
 	send_and_receive( cable );
 	return ft2232_transfer_finish( cable, len, out );
@@ -1050,6 +1044,7 @@ cable_driver_t ft2232_cable_driver = {
 	ft2232_cable_free,
 	ft2232_generic_init,
 	ft2232_generic_done,
+    ft2232_set_frequency,
 	ft2232_clock,
 	ft2232_get_tdo,
 	ft2232_transfer,
@@ -1067,6 +1062,7 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
 	ft2232_cable_free,
 	ft2232_armusbocd_init,
 	ft2232_armusbocd_done,
+    ft2232_set_frequency,
 	ft2232_clock,
 	ft2232_get_tdo,
 	ft2232_transfer,
@@ -1084,6 +1080,7 @@ cable_driver_t ft2232_jtagkey_cable_driver = {
 	ft2232_cable_free,
 	ft2232_jtagkey_init,
 	ft2232_jtagkey_done,
+    ft2232_set_frequency,
 	ft2232_clock,
 	ft2232_get_tdo,
 	ft2232_transfer,

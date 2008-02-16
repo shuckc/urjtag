@@ -166,6 +166,7 @@ cable_driver_t jim_cable_driver = {
 	jim_cable_free,
 	jim_cable_init,
 	jim_cable_done,
+	generic_set_frequency,
 	jim_cable_clock,
 	jim_cable_get_tdo,
 	generic_transfer,

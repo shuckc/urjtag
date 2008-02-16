@@ -52,6 +52,7 @@ struct cable_driver_t {
 	void (*cable_free)( cable_t *cable );
 	int (*init)( cable_t * );
 	void (*done)( cable_t * );
+	void (*set_frequency)( cable_t *, uint32_t freq );
 	void (*clock)( cable_t *, int, int, int );
 	int (*get_tdo)( cable_t * );
 	int (*transfer)( cable_t *, int, char *, char * );

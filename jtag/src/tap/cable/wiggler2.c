@@ -123,6 +123,7 @@ cable_driver_t wiggler2_cable_driver = {
 	generic_cable_free,
 	wiggler2_init,
 	generic_done,
+	generic_set_frequency,
 	wiggler2_clock,
 	wiggler2_get_tdo,
 	generic_transfer,

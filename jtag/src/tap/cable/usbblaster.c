@@ -300,6 +300,10 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 	}
 }
 
+void
+usbblaster_set_frequency( cable_t *cable, uint32_t new_frequency )
+{
+}
 
 void
 usbblaster_help( const char *cablename )
@@ -321,6 +325,7 @@ cable_driver_t usbblaster_cable_driver = {
 	generic_cable_free,
 	usbblaster_init,
 	generic_done,
+	usbblaster_set_frequency,
 	usbblaster_clock,
 	usbblaster_get_tdo,
 	usbblaster_transfer,

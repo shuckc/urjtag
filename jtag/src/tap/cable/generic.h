@@ -40,6 +40,7 @@ int generic_connect( char *params[], cable_t *cable );
 void generic_disconnect( cable_t *cable );
 void generic_cable_free( cable_t *cable );
 void generic_done( cable_t *cable );
+void generic_set_frequency( cable_t *cable, uint32_t new_freq );
 int generic_transfer( cable_t *cable, int len, char *in, char *out );
 int generic_get_trst( cable_t *cable );
 void generic_flush_one_by_one( cable_t *cable, cable_flush_amount_t hm );
