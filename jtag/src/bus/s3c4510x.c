@@ -46,6 +46,8 @@
 **      Otherwise, you must modify @ref s3c4510_bus_width().
 **    - ROM/Flash is selected by nRCS[5:0], now suppose only nRCS0.
 **      So is nWBE[4:0], now suppose only nWBE0
+**    - Unfortunately, B0SIZE isn't known before first SCAN/PRELOAD.
+**      Is bus driver allowed to do JTAG activity during bus_area or bus_new?
 **
 =============================================================================*/
 
@@ -96,7 +98,6 @@ typedef struct {
 
 #define dbus_width ((bus_params_t *) bus->params)->dbuswidth
 /** @brief  Width of Data Bus. Detected by B0SIZE[1:0] 
-unsigned char dbus_width = 16; */
 
 
 static void
@@ -173,13 +174,15 @@ static void s3c4510_bus_setup_ctrl( bus_t *bus, int mode )
 static void
 s3c4510_bus_prepare( bus_t *bus )
 {
-        part_set_instruction( PART, "EXTEST" );
-        chain_shift_instructions( CHAIN );
+		part_t *p = PART;
+        chain_t *chain = CHAIN;
 
-    /* Do one shift_data_registers to capture current values */
+        part_set_instruction( p, "SAMPLE/PRELOAD" );
+        chain_shift_instructions( chain );
+        chain_shift_data_registers( chain, 0 );
 
-	s3c4510_bus_setup_ctrl( bus, 0x1FFFF );
-	chain_shift_data_registers( chain, 1 );
+        part_set_instruction( p, "EXTEST" );
+        chain_shift_instructions( chain );
 }
 
 
