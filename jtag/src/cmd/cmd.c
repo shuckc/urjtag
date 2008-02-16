@@ -39,6 +39,7 @@ extern cmd_t cmd_reset;
 extern cmd_t cmd_discovery;
 extern cmd_t cmd_detect;
 extern cmd_t cmd_signal;
+extern cmd_t cmd_scan;
 extern const cmd_t cmd_salias;
 extern cmd_t cmd_bit;
 extern cmd_t cmd_register;
@@ -80,6 +81,7 @@ const cmd_t *cmds[] = {
 	&cmd_discovery,
 	&cmd_detect,
 	&cmd_signal,
+	&cmd_scan,
 	&cmd_salias,
 	&cmd_bit,
 	&cmd_register,

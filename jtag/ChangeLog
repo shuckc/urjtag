@@ -8,6 +8,9 @@
 
 2008-02-16  Kolja Waschk <kawk>
 
+    * src/cmd/scan.c, src/cmd/Makefile.am, src/cmd/cmd.c: Implemented basic
+        boundary "scan" command to detect changes on input pins; tested with
+        an (completely erased) Actel ProASIC3 A3P125
     * src/svf/svf.c: Small fix for computation of run_count from min_time
     * doc/UrJTAG.txt: Updated doc about building with FTD2XX in Cygwin
     * src/tap/cable.c, include/cable.h, src/tap/cable/*.c (all drivers):

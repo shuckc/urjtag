@@ -34,6 +34,7 @@ libcmd_a_SOURCES = \
 	detectflash.c \
 	help.c \
 	quit.c \
+	scan.c \
 	signal.c \
 	salias.c \
 	bit.c \
