@@ -65,7 +65,7 @@
 
 
 #ifndef DEBUG_LVL2
-#define DEBUG_LVL2(x) x
+#define DEBUG_LVL2(x)
 #endif
 
 /** @brief  Bus driver for Samsung S3C4510X */

@@ -1,3 +1,9 @@
+2008-02-15  Kolja Waschk <kawk>
+
+    * src/bus/s3c4510x.c: disable debug output (was enabled in 929..)
+    * include/register.h, src/tap/register.c, src/discovery.c: report if tdo
+        seems to be stuck during detect_register_size (ie. "detect").
+
 2008-02-14  Arnim Laeuger  <arniml@users.sourceforge.net>
 
     * src/tap/cable.c (cable_flush), src/tap/chain.c (chain_shift_data_registers_mode),
