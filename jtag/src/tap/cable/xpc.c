@@ -94,6 +94,7 @@ xpc_set_trst( cable_t *cable, int trst )
 void
 xpc_set_frequency( cable_t *cable, uint32_t new_frequency )
 {
+	cable->frequency = new_frequency;
 }
 
 

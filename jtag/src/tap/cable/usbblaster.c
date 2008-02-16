@@ -303,6 +303,7 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 void
 usbblaster_set_frequency( cable_t *cable, uint32_t new_frequency )
 {
+	cable->frequency = new_frequency;
 }
 
 void
