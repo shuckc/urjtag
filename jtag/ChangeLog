@@ -1,3 +1,7 @@
+2008-02-16  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * THANKS: to the original SVF and BSDL parser programmers
+
 2008-02-15  Kolja Waschk <kawk>
 
     * src/flash/Makefile.am, src/flash/jedec_exp.c, src/flash/detectflash.c,
