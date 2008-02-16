@@ -44,7 +44,7 @@
 
 extern cable_driver_t arcom_cable_driver;
 extern cable_driver_t byteblaster_cable_driver;
-#ifdef HAVE_LIBFTDI
+#if defined(HAVE_LIBFTDI) || defined(HAVE_LIBFTD2XX)
 extern cable_driver_t usbblaster_cable_driver;
 extern cable_driver_t ft2232_cable_driver;
 extern cable_driver_t ft2232_jtagkey_cable_driver;
@@ -75,7 +75,7 @@ extern cable_driver_t ep9307_cable_driver;
 cable_driver_t *cable_drivers[] = {
 	&arcom_cable_driver,
 	&byteblaster_cable_driver,
-#ifdef HAVE_LIBFTDI
+#if defined(HAVE_LIBFTDI) || defined(HAVE_LIBFTD2XX)
 	&usbblaster_cable_driver,
 	&ft2232_cable_driver,
 	&ft2232_jtagkey_cable_driver,

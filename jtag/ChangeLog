@@ -2,8 +2,11 @@
 
    * THANKS: to the original SVF and BSDL parser programmers
 
-2008-02-15  Kolja Waschk <kawk>
+2008-02-16  Kolja Waschk <kawk>
 
+    * doc/UrJTAG.txt: Updated doc about building with FTD2XX in Cygwin
+    * src/tap/cable.c: Include ftdi-based cable drivers if either libftdi or
+        FTDI's FTD2XX (CDM) drivers are present (--with-ftd2xx)
     * src/flash/Makefile.am, src/flash/jedec_exp.c, src/flash/detectflash.c,
         configure.ac: Experimental new code for flash detection, to be enabled
         during configuration with --enable-jedec-exp (disabled by default)
