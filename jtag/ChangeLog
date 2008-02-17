@@ -1,3 +1,7 @@
+2008-02-17  Kolja Waschk <kawk>
+
+   * doc/UrJTAG.txt: How to use USB cables. THANKS: some additions
+
 2008-02-16  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/cable/ft2232.c (ft2232_flush): fix inconsistency of TDO caching

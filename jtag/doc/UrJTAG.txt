@@ -413,10 +413,13 @@ display some initial informations. Output should end with line like this:
 
 Type "help cable" for list of supported JTAG cables.
 
-Type "cable" command with arguments. Example:
+Type "cable" command followed by the cable name and possibly further
+arguments for cable configuration. Example:
 
   jtag> cable EA253 parallel 0x378
   Initializing ETC EA253 JTAG Cable on parallel port at 0x378
+
+See the section about the "cable" command for details and USB support.
 
 ==== Detect parts on the JTAG chain ====
 
@@ -546,6 +549,7 @@ example usage.
 *quit*:: 	exit and terminate this session
 *readmem*:: 	read content of the memory and write it to file
 *register*:: 	define new data register for a part
+*scan*::	detect changes on input pins of current part
 *script*:: 	run command sequence from external file
 *set*:: 	set external signal value
 *setdevice*::: force device detection
@@ -636,6 +640,25 @@ the jtag shell):
   modprobe ppdev
   modprobe parport
   modprobe parport_pc
+
+UrJTAG now also supports some USB cables. Unfortunately, there is no standard
+for "JTAG over USB", so this support is limited to a few selected cables only.
+For cables based on the FT2232 chip from FTDI, the cable command has to be
+given cable name, driver name, and USB Vendor and Product ID of the cable:
+
+  jtag> cable ARM-USB-OCD ftdi-mpsse 15ba:3
+
+For some cables, UrJTAG knows the VID:PID and you can just say ":"
+
+  jtag> cable JTAGkey ftdi-mpsse :
+
+On Windows, if UrJTAG was compiled to use the drivers supplied by
+FTDI, the command should instead look like this:
+
+  jtag> cable ARM-USB-OCD ftd2xx-mpsse 15ba:3
+
+The support for USB-based cables and their configuration is work
+in progress; the above syntax may change (i.e. become simpler) soon.
 
 ===== detect =====
 
@@ -867,6 +890,7 @@ command. Each driver has to provide the following functions:
 
  * connect(), init() - Initialization 
  * done(), cable_free(), disconnect() - Cleaning up
+ * set_frequency() - set bitrate for shifting data through the chain
  * clock(), get_tdo(), transfer() - immediate JTAG activities
  * flush() - internally used to actually perform JTAG activities
  * help() - a help text to be displayed by the jtag command shell
@@ -1078,6 +1102,15 @@ for any purpose in JTAG Tools. It is intended for future use.
 
 For a list of known problems in current versions, please also check the "Bugs"
 tracker at the UrJTAG website!
+
+Q. The documentation is incomplete. Where can I get more information?::
+  A. Please ask in the "Using UrJTAG" Forum on http://urjtag.org
+
+Q. My flash isn't detected or can't be programmed. What can I do?::
+  A. Please record the output of the "detect" and "detectflash" commands and ask in the Forum. If possible, re-compile UrJTAG before with "--enable-jedec-exp" to get extra information.
+
+Q. My CPU/FPGA/etc. chip isn't detected. What can I do?::
+  A. First try to get hold of a "BSDL" description of the chip from the vendor, and specify where to find this file to UrJTAG using "bsdl path" before you "detect". Second, a bus driver has to be selected. Maybe "ejtag" or "prototype" work.
 
 Q. When I type "cable parallel 0x378 DLC5" (in a Cygwin environment) I get "Unknown port driver: parallel"?::
   A. Please install the Cygwin ioperm package, and re-configure/compile.
