@@ -25,7 +25,8 @@ noinst_LIBRARIES = libbsdl.a
 
 noinst_HEADERS = \
 	bsdl.h \
-	bsdl_bison.h
+	bsdl_bison.h \
+	bsdl_sysdep.h
 
 libbsdl_a_SOURCES = \
 	bsdl_bison.y \
