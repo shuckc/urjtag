@@ -1,5 +1,7 @@
 2008-02-17  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * configure.ac: check for pre-generated src/svf/svf_flex.c
+       -> second part of [ 1895353 ]
    * src/bsdl/Makefile.am (noinst_HEADERS): bsdl_sysdep.h added for proper
        release packing -> first part of [ 1895353 ]
 

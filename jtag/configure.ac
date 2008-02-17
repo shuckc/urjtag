@@ -314,9 +314,17 @@ AS_IF([test "$LEX" == flex], [
       AM_CONDITIONAL([BISON_LOCATIONS], true)
       bison_locations=yes
    ], [
-      AC_MSG_RESULT([no - flex $flex_version])
-      AM_CONDITIONAL([BISON_LOCATIONS], false)
-      bison_locations=no
+      AS_IF([test -r src/svf/svf_flex.c], [
+         # If the transformed svf_flex.c is already existing, it shouldn't matter
+         # that flex is too old for building a lexer with bison locations
+         AC_MSG_RESULT([using pre-generated src/svf/svf_flex.c])
+         AM_CONDITIONAL([BISON_LOCATIONS], false)
+         bison_locations="as is"
+      ], [
+         AC_MSG_RESULT([no - flex $flex_version])
+         AM_CONDITIONAL([BISON_LOCATIONS], false)
+         bison_locations=no
+      ])
    ])
 
    # bsdl lexer requires flex >= 2.5.33
