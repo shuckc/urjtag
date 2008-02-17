@@ -47,5 +47,7 @@ noinst_HEADERS = \
 	jtag.h \
 	tap.h \
 	fclock.h \
+	jim.h \
+	jim/some_cpu.h \
 	svf.h \
 	xpcu.h

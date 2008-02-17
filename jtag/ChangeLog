@@ -6,6 +6,7 @@
 2008-02-17  Kolja Waschk <kawk>
 
    * doc/UrJTAG.txt: How to use USB cables. THANKS: some additions
+   * include/Makefile.am: Add jim.h and jim/some_cpu.h headers for distr.
 
 2008-02-16  Arnim Laeuger  <arniml@users.sourceforge.net>
 
