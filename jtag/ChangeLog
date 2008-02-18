@@ -1,3 +1,7 @@
+2008-02-18  Kolja Waschk <kawk>
+
+   * doc/UrJTAG.txt: How to use initbus (and ejtag/prototype bus driver).
+
 2008-02-17  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * configure.ac: check for pre-generated src/svf/svf_flex.c
