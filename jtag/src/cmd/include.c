@@ -31,6 +31,7 @@
 #include "jtag.h"
 
 #include "cmd.h"
+#include "bsdl.h"
 
 static int
 cmd_include_run( char *params[] )
@@ -43,7 +44,7 @@ cmd_include_run( char *params[] )
 		return -1;
 
 	/* If "params[1]" begins with a slash, or dots followed by a slash,
-     * assume that user wants to ignore the search path */
+	 * assume that user wants to ignore the search path */
 
 	path = params[1];
 	while( *path == '.' ) path++; 
@@ -63,6 +64,18 @@ cmd_include_run( char *params[] )
 		printf( _("Out of memory\n") );
 		return 1;
 	}
+
+#ifdef ENABLE_BSDL
+	/* perform a test read to check for BSDL syntax */
+	if (bsdl_read_file( path, -1, NULL ) >= 0)
+	{
+		/* it seems to be a proper BSDL file, so re-read and execute */
+		go = bsdl_read_file( path, 1, NULL );
+
+		free( path );
+		return go >= 0 ? 1 : 0;
+	}
+#endif
 
 	if (cmd_params( params ) > 2) {
 		sscanf(params[2],"%d",&j);	/* loop n times option */

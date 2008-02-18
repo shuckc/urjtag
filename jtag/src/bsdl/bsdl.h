@@ -26,9 +26,10 @@
 
 
 /* message types for bsdl_msg() */
-#define BSDL_MSG_NOTE 0
-#define BSDL_MSG_WARN 1
-#define BSDL_MSG_ERR  2
+#define BSDL_MSG_NOTE  0
+#define BSDL_MSG_WARN  1
+#define BSDL_MSG_ERR   2
+#define BSDL_MSG_FATAL 3
 
 
 /* private data of the flex scanner
@@ -111,6 +112,7 @@ struct port_desc {
    with jtag internals */
 struct jtag_ctrl {
     int     mode;
+    int     debug;
     char   *idcode;       /* IDCODE string */
     part_t *part;
     struct  port_desc port_desc;

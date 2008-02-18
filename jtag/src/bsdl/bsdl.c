@@ -59,6 +59,9 @@ void bsdl_msg(int type, const char *format, ...)
     case BSDL_MSG_ERR:
       printf("-E- ");
       break;
+    case BSDL_MSG_FATAL:
+      printf("-F- ");
+      break;
     default:
       printf("-?- ");
       break;
@@ -128,6 +131,7 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
       parser_priv->jtag_ctrl.part = NULL;
 
     parser_priv->jtag_ctrl.mode   = mode;
+    parser_priv->jtag_ctrl.debug  = bsdl_debug;
     parser_priv->jtag_ctrl.idcode = NULL;
 
     bsdlparse(parser_priv);
@@ -137,7 +141,8 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
       if (bsdl_debug)
         bsdl_msg(BSDL_MSG_NOTE, _("BSDL file '%s' compiled correctly\n"), BSDL_File_Name);
     } else {
-      bsdl_msg(BSDL_MSG_ERR, _("BSDL file '%s' contains errors, stopping\n"), BSDL_File_Name); 
+      if (bsdl_debug || (mode >= 0))
+        bsdl_msg(BSDL_MSG_ERR, _("BSDL file '%s' contains errors, stopping\n"), BSDL_File_Name); 
     }
 
     if (Compile_Errors == 0)
@@ -169,7 +174,8 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
         }
       }
 
-      free(parser_priv->jtag_ctrl.idcode);
+      if (parser_priv->jtag_ctrl.idcode)
+        free(parser_priv->jtag_ctrl.idcode);
       parser_priv->jtag_ctrl.idcode = NULL;
     }
     bsdl_parser_deinit(parser_priv);

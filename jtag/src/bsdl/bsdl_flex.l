@@ -423,13 +423,13 @@ void *bsdl_flex_init(FILE *f)  /* Change input file from STDIN to BSDL file */
 
   /* get our scanner structure */
   if (yylex_init(&scanner) != 0) {
-    bsdl_msg(BSDL_MSG_ERR, _("Scanner could not be initialized\n") );
+    bsdl_msg(BSDL_MSG_FATAL, _("Scanner could not be initialized\n") );
     return NULL;
   }
   yyset_in(f, scanner);
 
   if (!(extra = (scan_extra_t *)malloc(sizeof(scan_extra_t)))) {
-    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
+    bsdl_msg(BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
     yylex_destroy(scanner);
     return NULL;
   }
@@ -469,7 +469,7 @@ static char *new_string(const char *str)
     strncpy(n_str, str, n_str_size-1);
     n_str[n_str_size-1] = '\0';  /* set very last element to EOS */
   } else
-    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
+    bsdl_msg(BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
 
   return(n_str);
 }
@@ -509,7 +509,7 @@ void bsdl_flex_switch_file(yyscan_t scanner, char *filename)
       f = fopen(db_file, "r");
 
       if (!f)
-        bsdl_msg(BSDL_MSG_ERR, _("Cannot open file %s or %s.\n"), filename, db_file);
+        bsdl_msg(BSDL_MSG_FATAL, _("Cannot open file %s or %s.\n"), filename, db_file);
       free(db_file);
       if (!f)
         return;
@@ -527,8 +527,6 @@ void bsdl_flex_switch_buffer(yyscan_t scanner, const char *buffer)
      prepare yyg for later use of YY_CURRENT_BUFFER */
   struct yyguts_t * yyg = (struct yyguts_t*)scanner;
   int lineno;
-
-/*  printf("bsdl_flex_switch_buffer(%s)\n", buffer);*/
 
   lineno = yyget_lineno(scanner);
   /* yy_scan_string() switches to the string buffer internally,

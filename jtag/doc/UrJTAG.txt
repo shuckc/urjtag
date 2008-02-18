@@ -582,9 +582,10 @@ followed by the word "help". Example:
 
 ===== include =====
 
-Run commands from a named script file installed with UrJTAG. The directory
-prefix is added automatically (e.g. /usr/share/urjtag/, depending on your
-installation), unless the file name starts with a dot or slash.
+Run commands from a named script file installed with UrJTAG or applies a BSDL
+file to the active part. The directory prefix is added automatically
+(e.g. /usr/share/urjtag/, depending on your installation), unless the file
+name starts with a dot or slash.
 
 For example, the following startup sequence configures the cable, chain, and
 loads definitions and bus driver for a Samsung S3C4510B CPU to peek its memory
@@ -594,6 +595,9 @@ at 0x0:
   jtag> detect
   jtag> include samsung/s3c4510b/s3c4510b
   jtag> peek 0x0000
+
+If the file contains valid BSDL syntax, it will be converted to native
+commands on the fly.
 
 Optionally, a number X may be specified following the file name, to cause
 an X times repetition of the command sequency from the file.

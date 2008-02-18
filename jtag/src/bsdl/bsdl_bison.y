@@ -211,7 +211,7 @@ Begin_BSDL       : ENTITY IDENTIFIER IS
                  | error
                    {Print_Error(priv_data, _("Improper Entity declaration"));
                     Print_Error(priv_data, _("Check if source file is BSDL"));
-                    YYABORT; /* Probably not a BSDL source file */
+                    BUMP_ERROR; YYABORT; /* Probably not a BSDL source file */
                    }
                  ;
 Part_1           : VHDL_Generic        /* 1994 and later */
@@ -916,27 +916,29 @@ static void Store_Text(parser_priv_t *priv_data, char *Source)
 static void Print_Error(parser_priv_t *priv_data, const char *Errmess)
 {
   if (priv_data->Reading_Package)
-    bsdl_msg(BSDL_MSG_ERR, _("Error in Package %s, Line %d, %s.\n"),
+    bsdl_msg(BSDL_MSG_ERR, _("In Package %s, Line %d, %s.\n"),
              priv_data->Package_File_Name,
              bsdl_flex_get_lineno(priv_data->scanner),
              Errmess);
   else
-    bsdl_msg(BSDL_MSG_ERR, _("Error, Line %d, %s.\n"),
-             bsdl_flex_get_lineno(priv_data->scanner),
-             Errmess);
+    if (priv_data->jtag_ctrl.debug || (priv_data->jtag_ctrl.mode >= 0))
+      bsdl_msg(BSDL_MSG_ERR, _("Line %d, %s.\n"),
+               bsdl_flex_get_lineno(priv_data->scanner),
+               Errmess);
 }
 /*----------------------------------------------------------------------*/
 static void Print_Warning(parser_priv_t *priv_data, const char *Warnmess)
 {
   if (priv_data->Reading_Package)
-    bsdl_msg(BSDL_MSG_WARN, _("Warning in Package %s, Line %d, %s.\n"),
+    bsdl_msg(BSDL_MSG_WARN, _("In Package %s, Line %d, %s.\n"),
              priv_data->Package_File_Name,
              bsdl_flex_get_lineno(priv_data->scanner),
              Warnmess);
   else
-    bsdl_msg(BSDL_MSG_WARN, _("Warning, Line %d, %s.\n"),
-             bsdl_flex_get_lineno(priv_data->scanner),
-             Warnmess);
+    if (priv_data->jtag_ctrl.debug || (priv_data->jtag_ctrl.mode >= 0))
+      bsdl_msg(BSDL_MSG_WARN, _("Line %d, %s.\n"),
+               bsdl_flex_get_lineno(priv_data->scanner),
+               Warnmess);
 }
 /*----------------------------------------------------------------------*/
 static void Give_Up_And_Quit(parser_priv_t *priv_data)
