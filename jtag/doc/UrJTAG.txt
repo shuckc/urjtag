@@ -688,13 +688,7 @@ Selects and initializes a bus of the currently selected part. This is required
 in order to access chips that aren't connected in the JTAG chain, but indirectly
 accessible through other chips (e.g. CPU or programmable logic). 
 
-Type "help initbus" to get a list of supported bus types. Most drivers work
-"via BSR", i.e. they directly access the pins of the device. Because it isn't
-possible to efficiently address only particular pins but only all at once, and
-data for all pins has to be transferred through JTAG for every single change,
-this method isn't the fastest, but usually easiest to implement and, well,
-sometimes it counts whether it works at all..
-
+Type "help initbus" to get a list of supported bus types. 
 If you do not find a bus driver for your specific hardware, you might be lucky
 enough to have EJTAG in your target (most MIPS-based CPUs do) and should try
 the "ejtag" bus driver. In contrast to the method "via BSR", it uploads some
@@ -704,10 +698,10 @@ should work with almost any EJTAG-capable chip (Note: JTAG isn't EJTAG):
   jtag> initbus ejtag
 
 There's another option to support new chips "via BSR", the "prototype" bus
-driver, which can be adapted to support your part with command parameters.  The
-only prerequisite for using this driver is knowledge of the names of the
+driver, which can be adapted to support your part with command parameters.
+The only prerequisite for using this driver is knowledge of the names of the
 signals that represent address bus, data bus, and enable signals, and that
-address and data lines are numbered in order.
+address and data lines are numbered in order. 
 
 For example, assume the signals are named in the BSDL description as follows:
 
@@ -726,12 +720,20 @@ access the bus:
   initbus prototype amsb=ADDR22 alsb=ADDR0 dmsb=D15 dlsb=D0
             ncs=nRCS0 nwe=nWE noe=nOE amode=x16
 
-The "prototype" bus driver yet cannot deal with systems where address and data bus
-are multiplexed on the same pins. 
+The "prototype" bus driver yet cannot deal with systems where address and data
+bus are multiplexed on the same pins. If signals aren't numbered in the right
+order or with gaps, you may get along by defining proper names for the actual
+signals, with commands like "salias BSCGX44 ADDR12".
 
-Some chips don't allow direct access to their pins via JTAG (using the method
-"via BSR") at all. For these, writing a new bus driver that utilizes a debug
-module to upload specific code to access the bus is inevitable.
+Most drivers work "via BSR", i.e. they directly access the pins of the device.
+Because it isn't possible to efficiently address only particular pins but only
+all at once, and data for all pins has to be transferred through JTAG for every
+single change, this method isn't the fastest, but usually easiest to implement
+and, well, sometimes it counts whether it works at all..
+
+Some chips don't allow direct access to their pins via BSR at all. For these,
+writing a new bus driver that utilizes a debug module to upload specific code
+to access the bus is inevitable.
 
 ==== Highlevel commands ====
 

@@ -1,6 +1,7 @@
 2008-02-18  Kolja Waschk <kawk>
 
-   * doc/UrJTAG.txt: How to use initbus (and ejtag/prototype bus driver).
+   * doc/UrJTAG.txt: How to use initbus (and ejtag/prototype bus driver)
+       (and some background notes about bus drivers in general)
 
 2008-02-17  Arnim Laeuger  <arniml@users.sourceforge.net>
 
