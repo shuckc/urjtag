@@ -709,8 +709,8 @@ access the bus:
 
 The "prototype" bus driver yet cannot deal with systems where address and data
 bus are multiplexed on the same pins. If signals aren't numbered in the right
-order or with gaps, you may get along by defining proper names for the actual
-signals, with commands like "salias BSCGX44 ADDR12".
+order or with gaps, you may get along by defining proper names as aliases for
+the actual signals, with commands like "salias ADDR12 BSCGX44".
 
 Most drivers work "via BSR", i.e. they directly access the pins of the device.
 Because it isn't possible to efficiently address only particular pins but only
