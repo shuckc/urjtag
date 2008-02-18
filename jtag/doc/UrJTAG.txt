@@ -539,7 +539,7 @@ example usage.
 *frequency*::   setup JTAG frequency
 *get*::         get external signal value
 *help*::        display this help
-*include*::     include command sequence from external repository
+*include*::     include command sequence from external file
 *initbus*::     initialize bus driver for active part
 *instruction*:: change active instruction for a part or declare new instruction
 *part*::        change active part for current JTAG chain
@@ -550,7 +550,6 @@ example usage.
 *readmem*::     read content of the memory and write it to file
 *register*::    define new data register for a part
 *scan*::        detect changes on input pins of current part
-*script*::      run command sequence from external file
 *set*::         set external signal value
 *shift*::       shift data/instruction registers through JTAG chain
 *signal*::      define new signal for a part
@@ -583,21 +582,21 @@ followed by the word "help". Example:
 
 ===== include =====
 
-Run commands from a named script file installed with UrJTAG. The directory prefix
-is added automatically (e.g. /usr/share/urjtag/, depending on your installation).
-For example, the following startup sequence configures the cable, chain, and loads
-definitions and bus driver for a Samsung S3C4510B CPU to peek its memory at 0x0:
+Run commands from a named script file installed with UrJTAG. The directory
+prefix is added automatically (e.g. /usr/share/urjtag/, depending on your
+installation), unless the file name starts with a dot or slash.
+
+For example, the following startup sequence configures the cable, chain, and
+loads definitions and bus driver for a Samsung S3C4510B CPU to peek its memory
+at 0x0:
 
   jtag> cable wiggler ppdev /dev/parport0
   jtag> detect
   jtag> include samsung/s3c4510b/s3c4510b
   jtag> peek 0x0000
 
-===== script =====
-
-Run commands from a named script file located anywhere. No directory prefix is added.
-A number X may be specified after the name of the script file, causing the script to
-be run X times.
+Optionally, a number X may be specified following the file name, to cause
+an X times repetition of the command sequency from the file.
 
 ==== Chain management ====
 
@@ -889,6 +888,11 @@ TIP: The 'bsdl dump file' command implements the same functionality as
 bsdl2jtag.
 
 ==== Unsupported commands ====
+
+===== script =====
+
+Although it's still there, its functionality has been merged into the include
+command. Please use "include" instead.
 
 ===== setdevice =====
 
