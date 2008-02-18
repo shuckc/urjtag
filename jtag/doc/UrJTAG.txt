@@ -899,6 +899,12 @@ after "detect" by loading the proper declarations and bus driver manually:
 
   jtag> include analog/sharc21065l/sharc21065l
 
+===== spiflashmem =====
+
+The commands "spidetectflash", "spiflashmem", "spireadflash" and
+"spieraseflash" only exist in a version of the JTAG tools copyrighted by
+Intratrade Ltd., we just know about them from a posting on the net.
+
 //========================================================================
 
 == Internals ==
