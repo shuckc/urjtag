@@ -525,37 +525,37 @@ or:
 Following is a list of commands currently supported by jtag and some
 example usage.
 
-*bit*:: 	define new BSR bit
-*bus*:: 	change active bus
-*bsdl*::	manage BSDL files
-*cable*:: 	select JTAG cable
-*detect*:: 	detect parts on the JTAG chain
-*detectflash*:: 	detect parameters of flash chips attached to a part
-*discovery*:: 	discovery of unknown parts in the JTAG chain
-*dr*:: 	display active data register for a part
-*endian*:: 	set/print endianess
-*eraseflash*:: 	erase flash memory by number of blocks
-*flashmem*:: 	burn flash memory with data from a file
-*frequency*:: 	setup JTAG frequency
-*get*:: 	get external signal value
-*help*:: 	display this help
-*include*:: 	include command sequence from external repository
-*initbus*:: 	initialize bus driver for active part
+*bit*::         define new BSR bit
+*bus*::         change active bus
+*bsdl*::        manage BSDL files
+*cable*::       select JTAG cable
+*detect*::      detect parts on the JTAG chain
+*detectflash*:: detect parameters of flash chips attached to a part
+*discovery*::   discovery of unknown parts in the JTAG chain
+*dr*::          display active data register for a part
+*endian*::      set/print endianess for reading/writing binary files
+*eraseflash*::  erase flash memory by number of blocks
+*flashmem*::    burn flash memory with data from a file
+*frequency*::   setup JTAG frequency
+*get*::         get external signal value
+*help*::        display this help
+*include*::     include command sequence from external repository
+*initbus*::     initialize bus driver for active part
 *instruction*:: change active instruction for a part or declare new instruction
-*part*:: 	change active part for current JTAG chain
-*peek*:: 	read a single word
-*poke*:: 	write a single word
-*print*:: 	display JTAG chain list/status
-*quit*:: 	exit and terminate this session
-*readmem*:: 	read content of the memory and write it to file
-*register*:: 	define new data register for a part
-*scan*::	detect changes on input pins of current part
-*script*:: 	run command sequence from external file
-*set*:: 	set external signal value
-*setdevice*::: force device detection
-*shift*:: 	shift data/instruction registers through JTAG chain
-*signal*:: 	define new signal for a part
-*svf*:: 	execute svf commands from file
+*part*::        change active part for current JTAG chain
+*peek*::        read a single word
+*poke*::        write a single word
+*print*::       display JTAG chain list/status
+*quit*::        exit and terminate this session
+*readmem*::     read content of the memory and write it to file
+*register*::    define new data register for a part
+*scan*::        detect changes on input pins of current part
+*script*::      run command sequence from external file
+*set*::         set external signal value
+*shift*::       shift data/instruction registers through JTAG chain
+*signal*::      define new signal for a part
+*svf*::         execute svf commands from file
+*writemem*::    write content from file to memory
 
 Some tools derived from the same openwince JTAG Tools code base as UrJTAG 
 know additional commands, which are not supported in UrJTAG. See the section
@@ -599,31 +599,12 @@ Run commands from a named script file located anywhere. No directory prefix is a
 A number X may be specified after the name of the script file, causing the script to
 be run X times.
 
-==== Part definition commands ====
-
-The following commands are also used in the data files to define a device (IC)
-on the jtag bus. It is not recommended to use these commands in an interactive
-session. Instead you should produce a device definition file out of a .bsd file
-using one of the supplied tools.
-
- * bit
- * register 
- * signal
-
-==== Flash commands ====
-
-These commands can be used if the device supports flashing.
-
- * detectflash
- * flashmem
- * eraseflash
-
 ==== Chain management ====
 
 ===== cable =====
 
-Sets and initialized the cable driver. This is usually the first
-command that you are executing in a session. Example:
+Sets and initialized the cable driver. This is usually the first command that
+you are executing in a session. Example:
 
   jtag> cable EA253 parallel 0x378
   Initializing ETC EA253 JTAG Cable on parallel port at 0x378
@@ -662,7 +643,7 @@ in progress; the above syntax may change (i.e. become simpler) soon.
 
 ===== detect =====
 
-Detects devices on the bus. Example:
+Detects devices on the chain. Example:
 
   jtag> detect
   IR length: 5
@@ -674,19 +655,25 @@ Detects devices on the bus. Example:
     Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
 
 During "detect", UrJTAG searches through the files in its database (usually in
-/usr/share/urjtag) to find a match for the manufacturer, revision and part
-number for the IDCODE read from the part. However, not all parts identify
-themselves in a way that is useful for "detect". For example, many chips with
-an ARM processor core inside present an IDCODE that may be specific to the the
-particular core inside the chip (e.g.  ARM7TDMI), but doesn't tell about the
-actual manufacturer of the chip. In such case, the data for the part has to be
-included manually. See also the documentation for the "include" command.
+/usr/share/urjtag) and optionally in the search path for BSDL files (see bsdl
+command) to find a match for the manufacturer, revision and part number for the
+IDCODE read from the part. However, not all parts identify themselves in a way
+that is useful for "detect". For example, many chips with an ARM processor core
+inside present an IDCODE that may be specific to the the particular core inside
+the chip (e.g.  ARM7TDMI), but doesn't tell about the actual manufacturer of
+the chip. In such case, the data for the part has to be included manually. See
+also the documentation for the "include" command.
+
+===== print =====
+
+Print a list of parts in the chain and the currently active instruction per part.
 
 ===== initbus =====
 
-Selects and initializes a bus of the currently selected part. This is required
-in order to access chips that aren't connected in the JTAG chain, but indirectly
-accessible through other chips (e.g. CPU or programmable logic). 
+Selects and initializes a bus of the currently selected part, e.g. the external
+memory bus of a CPU. This is required in order to access chips that aren't
+connected in the JTAG chain, but indirectly accessible through other chips
+(e.g. CPU or programmable logic). 
 
 Type "help initbus" to get a list of supported bus types. 
 If you do not find a bus driver for your specific hardware, you might be lucky
@@ -734,6 +721,45 @@ and, well, sometimes it counts whether it works at all..
 Some chips don't allow direct access to their pins via BSR at all. For these,
 writing a new bus driver that utilizes a debug module to upload specific code
 to access the bus is inevitable.
+
+==== Part definition commands ====
+
+The following commands are also used in the data files to define a device (IC)
+on the JTAG chain. It is not recommended to use these commands in an interactive
+session. Instead you should produce a device definition file out of a .bsd file
+using one of the supplied tools (or use the new BSDL subsystem, see below).
+
+*bit*::         define new BSR bit
+*instruction*:: change active instruction for a part or declare new instruction
+*register*::    define new data register for a part
+*signal*::      define new signal for a part
+
+==== TAP control ====
+
+The following commands can be used to directly manipulate and display the state
+of the TAP controller(s) and registers in the chain:
+
+*dr*::          display active data register for a part
+*instruction*:: change active instruction for a part or declare new instruction
+*get*::         get external signal value
+*scan*::        detect changes on input pins of current part
+*set*::         set external signal value
+*shift*::       shift data/instruction registers through JTAG chain
+
+==== RAM/Flash access ====
+
+These commands can be used if a part in the chain has memory connected to it
+(or integrated). Before they can be used, a bus driver has to be selected and
+initialized (see initbus command).
+
+*detectflash*:: detect parameters of flash chips attached to a part
+*endian*::      set/print endianess for reading/writing binary files
+*eraseflash*::  erase flash memory by number of blocks
+*flashmem*::    burn flash memory with data from a file
+*peek*::        read a single word
+*poke*::        write a single word
+*readmem*::     read content of the memory and write it to file
+*writemem*::    write content from file to memory
 
 ==== Highlevel commands ====
 
@@ -884,44 +910,23 @@ be added soon...
 
 ==== Source code Overview ====
 
-doc/::
-  Documentation
+doc/:: Documentation
 
-data/::
-  Part descriptions (Data files)
+data/:: Part descriptions (Data files)
 
-include/::
-  C header files
+include/:: C header files
 
-src/::
-  C source code
+src/:: C source code
 
-src/bsdl::
-  BSDL subsystem
-
-src/bus::
-  Bus driver for various CPUs and other parts
-
-src/cmd::
-  Implementation of the commands for the "jtag" shell
-
-src/flash::
-  Flash detection and programming algorithms
-
-src/jim::
-  JIM, the JTAG target simulator
-
-src/lib::
-  Utility functions
-
-src/part::
-  Functions for accessing specific parts in a chain
-
-src/svf::
-  SVF player
-
-src/tap::
-  Functions for accessing the chain in general
+src/bsdl::  BSDL subsystem
+src/bus::   Bus driver for various CPUs and other parts
+src/cmd::   Implementation of the commands for the "jtag" shell
+src/flash:: Flash detection and programming algorithms
+src/jim::   JIM, the JTAG target simulator
+src/lib::   Utility functions
+src/part::  Functions for accessing specific parts in a chain
+src/svf::   SVF player
+src/tap::   Functions for accessing the chain in general
 
 //------------------------------------------------------------------------
 
