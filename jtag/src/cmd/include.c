@@ -35,23 +35,48 @@
 static int
 cmd_include_run( char *params[] )
 {
-	int go;
+	int go = 0, i, j = 1;
 	char *path;
 	int len;
 
-	if (cmd_params( params ) != 2)
+	if (cmd_params( params ) < 2)
 		return -1;
 
-	path = malloc( len = strlen( JTAG_DATA_DIR ) + strlen( params[1] ) + 2 );
+	/* If "params[1]" begins with a slash, or dots followed by a slash,
+     * assume that user wants to ignore the search path */
+
+	path = params[1];
+	while( *path == '.' ) path++; 
+	if(*path == '/') // TODO: use sysdependent PATH_SEP
+	{
+		path = strdup(params[1]);
+	}
+	else
+	{
+		path = malloc(len = strlen( JTAG_DATA_DIR ) + strlen( params[1] ) + 2);
+		if(path != NULL)
+		{
+			snprintf( path, len, "%s/%s", JTAG_DATA_DIR, params[1] );
+		}
+	}
 	if (path == NULL) {
 		printf( _("Out of memory\n") );
 		return 1;
 	}
-	snprintf( path, len, "%s/%s", JTAG_DATA_DIR, params[1] );
 
-	go = jtag_parse_file( path );
-	if (go < 0)
-		printf( _("Unable to open file `%s'!\n"), params[1] );
+	if (cmd_params( params ) > 2) {
+		sscanf(params[2],"%d",&j);	/* loop n times option */
+	};
+
+	for(i = 0; i < j ;i++) {
+		go = jtag_parse_file( path );
+
+		if (go < 0) {
+			if (go != -99)
+				printf( _("Unable to open file `%s go=%d'!\n"), path, go );
+			break;
+		}
+	}
 
 	free( path );
 
@@ -59,19 +84,27 @@ cmd_include_run( char *params[] )
 }
 
 static void
-cmd_include_help( void )
+cmd_script_help( void )
 {
 	printf( _(
-		"Usage: %s FILENAME\n"
-		"Run command sequence from external FILENAME from the repository.\n"
+		"Usage: %s FILENAME [n] \n"
+		"Run command sequence n times from external FILENAME.\n"
 		"\n"
 		"FILENAME      Name of the file with commands\n"
-	), "include" );
+	), "script" );
 }
 
 cmd_t cmd_include = {
 	"include",
 	N_("include command sequence from external repository"),
-	cmd_include_help,
+	cmd_script_help,
 	cmd_include_run
 };
+
+cmd_t cmd_script = {
+	"script",
+	N_("run command sequence from external file"),
+	cmd_script_help,
+	cmd_include_run
+};
+

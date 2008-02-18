@@ -57,7 +57,6 @@ libcmd_a_SOURCES = \
 	writemem.c \
 	flashmem.c \
 	eraseflash.c \
-	script.c \
 	include.c \
 	cmd.c
 
