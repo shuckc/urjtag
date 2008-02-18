@@ -11,11 +11,13 @@
 
    * doc/UrJTAG.txt: How to use initbus (and ejtag/prototype bus driver)
        and some other smaller updates in the "commands" section. Also
-	   added note about unsupported spiflash* commands, and about now
+       added note about unsupported spiflash* commands, and about now
        obsolete script command (see below)
    * Merged src/script.c into src/include.c. The command looks for the
        specified file in the repository if it's neither an absolute path
        nor begins with ./ or ../, otherwise it uses the filename as is.
+       When called as "script", the command behaves as before but emits
+       a warning that "include" should be used in future.
 
 2008-02-17  Arnim Laeuger  <arniml@users.sourceforge.net>
 

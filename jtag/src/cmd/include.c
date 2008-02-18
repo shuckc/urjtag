@@ -34,7 +34,7 @@
 #include "bsdl.h"
 
 static int
-cmd_include_run( char *params[] )
+cmd_include_or_script_run( int is_include, char *params[] )
 {
 	int go = 0, i, j = 1;
 	char *path;
@@ -43,12 +43,17 @@ cmd_include_run( char *params[] )
 	if (cmd_params( params ) < 2)
 		return -1;
 
+	if( ! is_include )
+	{
+		printf(_("Please use the 'include' command instead of 'script'\n") );
+	}
+
 	/* If "params[1]" begins with a slash, or dots followed by a slash,
 	 * assume that user wants to ignore the search path */
 
 	path = params[1];
 	while( *path == '.' ) path++; 
-	if(*path == '/') // TODO: use sysdependent PATH_SEP
+	if(*path == '/' || ! is_include)
 	{
 		path = strdup(params[1]);
 	}
@@ -97,27 +102,51 @@ cmd_include_run( char *params[] )
 }
 
 static void
-cmd_script_help( void )
+cmd_include_or_script_help( char *cmd )
 {
 	printf( _(
 		"Usage: %s FILENAME [n] \n"
 		"Run command sequence n times from external FILENAME.\n"
 		"\n"
 		"FILENAME      Name of the file with commands\n"
-	), "script" );
+	), cmd );
+}
+
+static int
+cmd_include_run( char *params[] )
+{
+	return cmd_include_or_script_run( 1, params );
+}
+
+static void
+cmd_include_help( void )
+{
+	cmd_include_or_script_help( "include" );
 }
 
 cmd_t cmd_include = {
 	"include",
 	N_("include command sequence from external repository"),
-	cmd_script_help,
+	cmd_include_help,
 	cmd_include_run
 };
+
+static int
+cmd_script_run( char *params[] )
+{
+	return cmd_include_or_script_run( 0, params );
+}
+
+static void
+cmd_script_help( void )
+{
+	cmd_include_or_script_help( "script" );
+}
 
 cmd_t cmd_script = {
 	"script",
 	N_("run command sequence from external file"),
 	cmd_script_help,
-	cmd_include_run
+	cmd_script_run
 };
 
