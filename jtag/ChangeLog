@@ -1,3 +1,9 @@
+2008-02-19  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/bsdl/bsdl_flex.l (bsdl_flex_set_bin_x), src/bsdl/bsdl.h,
+     src/bsdl/bsdl_bison.y (Init_Text): properly support COMPLIANCE_PATTERNS
+	-> fix for [ 1896382 ]
+
 2008-02-18  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/bsdl/bsdl.c, src/bsdl/bsdl_flex.l, src/bsdl/bsdl_bison.y,

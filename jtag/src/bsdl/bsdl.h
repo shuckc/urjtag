@@ -144,6 +144,7 @@ void  bsdl_flex_switch_buffer(void *, const char *);
 int   bsdl_flex_get_compile_errors(void *);
 int   bsdl_flex_postinc_compile_errors(void *);
 int   bsdl_flex_get_lineno(void *);
+void  bsdl_flex_set_bin_x(void *);
 
 /* BSDL parser declarations */
 parser_priv_t *bsdl_parser_init(FILE *);

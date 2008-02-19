@@ -191,7 +191,7 @@ void yyerror(parser_priv_t *, const char *);
 %type <str> QUOTED_STRING
 %type <str> BINARY_PATTERN
 %type <str> Binary_Pattern
-%type <str> Pattern_List
+%type <str> Binary_Pattern_List
 %type <integer> DECIMAL_NUMBER
 %type <str> REAL_NUMBER
 %type <integer> Cell_Function
@@ -515,6 +515,8 @@ Physical_Pin_List: Physical_Pin
                  ;
 Physical_Pin     : IDENTIFIER
                    { free($1); }
+                 | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
+                   { free($1); }
                  | DECIMAL_NUMBER
                  ;
 VHDL_Tap_Signals : VHDL_Tap_Signal
@@ -574,12 +576,12 @@ BSDL_Opcode_Table: Opcode_Desc
                     BUMP_ERROR;
                     YYABORT; }
                  ;
-Opcode_Desc      : IDENTIFIER LPAREN Pattern_List RPAREN
+Opcode_Desc      : IDENTIFIER LPAREN Binary_Pattern_List RPAREN
                    { bsdl_add_instruction(priv_data, $1, $3); }
                  ;
-Pattern_List     : Binary_Pattern
+Binary_Pattern_List : Binary_Pattern
                    { $$ = $1; }
-                 | Pattern_List COMMA Binary_Pattern
+                 | Binary_Pattern_List COMMA Binary_Pattern
                    {
                      Print_Warning(priv_data,
                        _("Multiple opcode patterns are not supported, first pattern will be used"));
@@ -870,10 +872,15 @@ VHDL_Compliance_Patterns: ATTRIBUTE COMPLIANCE_PATTERNS OF IDENTIFIER
                    BSDL_Compliance_Pattern
                    { free($4); }
                  ;
-BSDL_Compliance_Pattern: LPAREN Physical_Pin_List RPAREN
-                   LPAREN BIN_X_PATTERN RPAREN
-                   { free($5); }
+BSDL_Compliance_Pattern : LPAREN Physical_Pin_List RPAREN
+                   {bsdl_flex_set_bin_x(priv_data->scanner);}
+                   LPAREN Bin_X_Pattern_List RPAREN
                  ;
+Bin_X_Pattern_List : BIN_X_PATTERN
+                     { free($1); }
+                   | Bin_X_Pattern_List COMMA BIN_X_PATTERN
+                     { free($3); }
+                   ;
 Quoted_String    : QUOTED_STRING
                    {Init_Text(priv_data);
                     Store_Text(priv_data, $1);

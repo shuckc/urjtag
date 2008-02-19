@@ -338,7 +338,7 @@ Compliance_Patterns   COMPLIANCE_PATTERNS
 {Runbist_Execution}     {return(RUNBIST_EXECUTION); }
 {Intest_Execution}      {return(INTEST_EXECUTION); }
 {Bsdl_Extension}        {return(BSDL_EXTENSION); }
-{Compliance_Patterns}   {yyextra->Base = BIN_X; return(COMPLIANCE_PATTERNS); }
+{Compliance_Patterns}   {yyextra->Base = DECIMAL; return(COMPLIANCE_PATTERNS); }
 <REG>{Boundary}         {return(BOUNDARY); }
 <REG>{Bypass}           {return(BYPASS); }
 <REG>{Highz}            {return(HIGHZ); }
@@ -563,4 +563,10 @@ int bsdl_flex_postinc_compile_errors(yyscan_t scanner)
 int bsdl_flex_get_lineno(yyscan_t scanner)
 {
   return yyget_lineno(scanner);
+}
+
+void bsdl_flex_set_bin_x(yyscan_t scanner)
+{
+  scan_extra_t *extra = yyget_extra(scanner);
+  extra->Base = BIN_X;
 }
