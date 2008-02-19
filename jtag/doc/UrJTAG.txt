@@ -156,7 +156,10 @@ an animal similar to the GNU...
 ==== Authors, contributors, ... thanks ====
 
 A list of contributors is maintained in the file THANKS in the source
-distribution.
+distribution. Special thanks go to Marcel Telka, who actually "invented" the
+JTAG tools and wrote most of this basis of UrJTAG, and Arnim Laeuger for his
+continuous support and development of SVF and BSDL subsystem and FT2232
+drivers.
 
 ==== UrJTAG and openwince JTAG Tools ====
 
