@@ -272,11 +272,14 @@ be untested combinations of chip type, bus width, ...
 ==== Required software for compiling UrJTAG ====
 
 To run autogen.sh, you need autoconf and automake, bison, and a recent flex.
-Flex 2.5.4a as it comes with Cygwin will work but some parts of UrJTAG (namely
-the SVF player) become more verbose if Flex 2.5.31 or newer is used. Building
-the BSDL subsystem files requires Flex 2.5.33 or newer. The configure script
-will compare the availble Flex version against these preconditions and enables
-or disables the related features.
+
+The distributed source tarball contains source pregenerated with a current flex
+version; flex therefore is only needed if you want to compile code checked
+out from our Subversion repository.  Flex 2.5.4a as it comes with Cygwin will
+work but some parts of UrJTAG (namely the SVF player) become more verbose if
+Flex 2.5.31 or newer is used. Building the BSDL subsystem files requires Flex
+2.5.33 or newer. The configure script will compare the available Flex version
+against these preconditions and enables or disables the related features.  ,
 
 Furthermore, libtool should be available, and "devel" versions of the following
 packages:
@@ -353,7 +356,7 @@ Unzip the archive into a directory of your choice (probably a choice
 without spaces in the name is better)  and afterwards run configure with the
 "--with-ftd2xx" pointing to that directory, e.g.
 
-  ./configure --with-ftd2xx="/cygdrive/e/temp/cdm"
+  ./configure --with-ftd2xx="/cygdrive/c/temp/ftdi-cdm-drivers"
 
 Configure should now report
 
@@ -600,7 +603,7 @@ If the file contains valid BSDL syntax, it will be converted to native
 commands on the fly.
 
 Optionally, a number X may be specified following the file name, to cause
-an X times repetition of the command sequency from the file.
+an X times repetition of the command sequence from the file.
 
 ==== Chain management ====
 
@@ -872,7 +875,7 @@ are located. This list is stored by 'bsdl path' and is used lateron when
 
 IMPORTANT: The BSDL subsystem applies the first BSDL file that parses without
 errors and that contains the correct IDCODE. Scanning the specified
-directories happens in extactly the given order. Inside a directory however,
+directories happens in exactly the given order. Inside a directory however,
 the order depends largely on your filesystem's behavior.
 
 Further details of the 'bsdl' command:
@@ -1202,7 +1205,9 @@ Q. During compilation, I get "flex: can't open ... src/svf/svf_flex.l"::
 Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option: bison-locations"::
   A. You need a newer version of flex. It should be 2.5.31 or newer;
     Unfortunately, Cygwin comes with only 2.5.4a. You may try to compile and
-    install a newer version of flex from source to solve this.
+    install a newer version of flex from source to solve this. The distributed
+    source tarball contains source pregenerated with a current flex version,
+    you need flex yourself only to compile from fresh SVN checkouts.
 
 //========================================================================
 
@@ -1210,10 +1215,9 @@ Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option
 
 === Overview ===
 
-Three licenses are used for the UrJTAG project. The GPL is used for most
-of the code except for the files in the inclow/ subdirectory; the FDL is
-used for this documentation.  The files in the inclow/ subdirectory are
-subject to different licensing as described in the file inclow/COPYING.
+Various licenses are used for the UrJTAG project. The GPL is used for most
+of the code except for some include files, JIM, and cable driver source, where
+a BSD or MIT license is used; this is noted in the file headers.
 
 === GNU Free Documentation License (FDL) ===
 .........................................
