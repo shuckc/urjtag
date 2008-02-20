@@ -1,3 +1,7 @@
+2008-02-20  Kolja Waschk <kawk>
+
+   * po/fr.po, po/sk.po, po/rw.po, POTFILES.in: Regenerated or updated
+
 2008-02-19  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/bsdl/bsdl_flex.l (bsdl_flex_set_bin_x), src/bsdl/bsdl.h,
