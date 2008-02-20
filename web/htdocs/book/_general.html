@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>General</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Universal JTAG library, server and tools"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Copyright"
+HREF="_copyright.html"><LINK
+REL="NEXT"
+TITLE="UrJTAG"
+HREF="_urjtag.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="UrJTAG.css"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Universal JTAG library, server and tools</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="_copyright.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="_urjtag.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="_general"
+></A
+>Chapter 2. General</H1
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="_jtag"
+>2.1. JTAG</A
+></H1
+><P
+>JTAG basics can be found all over the internet. This section should go into
+some more details about working with JTAG. What hardware do you need, what is
+the usage of JTAG, where do I get files. What file formats are available&#8230;</P
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_introduction"
+>2.1.1. Introduction</A
+></H2
+><P
+>JTAG (IEEE 1149.1) is a serial interface for testing devices with
+integrated circuits. The problem that the JTAG interface was designed to solve
+is checking if connections between ICs are OK. Therefore you can set and check
+in- and outputs of ICs. In order to save pins and logic a very simple serial
+design was invented.</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;One pin serial input
+</P
+></LI
+><LI
+><P
+>&#13;One pin serial output
+</P
+></LI
+><LI
+><P
+>&#13;One pin clock
+</P
+></LI
+><LI
+><P
+>&#13;One pin control
+</P
+></LI
+></UL
+><P
+>The control pin (together with clock) allows to switch device states. A state
+machine inside each chip can be controlled, e.g. to reset the device.  This
+control machine also allows to have two internal shift registers in each device
+(although we only have on in- and one output-pin). The registers are called
+instruction register (IR) and data register (DR).  The current UrJTAG tool
+allows you to set the IR and set and get the DR. It doesn't allow you to
+directly control the statemachine (yet).</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_interfaces"
+>2.1.2. Interfaces</A
+></H2
+><P
+>The simplest interface that you can build is like the Xilinx parallel cable
+(also called DLC5). If your device works with a 5V or 3.3V supply voltage then
+this device can even be build just with passive parts.  (picture missing here)
+UrJTAG also supports a number of other interface adapters.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_additions"
+>2.1.3. Additions</A
+></H2
+><P
+>In the meantime the jtag specification was used as a basis for programming
+flash files and debugging processors.  UrJTAG supports programming a couple of
+different flash devices. It also supports programming of non-flash devices via
+svf files.  UrJTAG does not support debugging yet. Other open source solutions
+such as OpenOCD allow you to debug ARM processors with gdb.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_bsdl_and_urjtag_data_files"
+>2.1.4. BSDL and UrJTAG data files</A
+></H2
+><P
+>The BSDL file format describes the jtag interface for one IC.  It is a VHDL
+syntax with the needed information (like pin-names, register lengths and
+commands) that is usually done by the supplier. e.g. Xilinx BSDL files are
+all included in their free web-pack (using file extension ".bsd").</P
+><P
+>UrJTAG uses a different file format internally. So in order to add a new device
+to UrJTAG you need to convert those files and produce a directory structure.
+Currently there are at least three tools available to do that; included with
+UrJTAG is "bsdl2jtag". Please ask on the mailing list in case of problems with
+that. Please also send proven working files back to this project.</P
+><P
+>Starting with post-0.7 releases, UrJTAG contains a BSDL subsystem that
+retrieves the descriptions for chips in the chain from BSDL files on the
+fly. Be aware that this feature is currently experimental and may not work
+with every BSDL file yet.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_svf_files"
+>2.1.5. SVF files</A
+></H2
+><P
+>The SVF file format contains a number of high level commands to drive the jtag
+bus. For example you can shift the IR or DR and even check for the results.
+The Xilinxs impact and Altera QuartusII tools allow you to write this file to
+program devices.</P
+><P
+>The player has been developed according to the "Serial Vector Format
+Specification", Revision E, 8 March 1999 issued by ASSET InterTech, Inc. The
+full specification can be found at
+http://www.asset-intertech.com/support/svf.pdf</P
+><P
+>UrJTAG features an "SVF player" that can read SVF files and perform the
+described actions on the bus.</P
+><P
+>SVF parser and lexer are also copyright 2002, CDS at http://www-csd.ijs.si/.
+They have been reused from the "Experimental Boundary Scan" project at
+http://ebsp.sourceforge.net/.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_jam_stapl_files"
+>2.1.6. JAM/STAPL files</A
+></H2
+><P
+>Another format for describing actions over JTAG interfaces is STAPL, actually
+standardized as JEDEC "JESD-71A". Compared to SVF, it looks more like an
+actual programming language and features looping, conditional execution, and
+more. STAPL is not yet supported by UrJTAG.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="_copyright.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="_urjtag.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Copyright</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>UrJTAG</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

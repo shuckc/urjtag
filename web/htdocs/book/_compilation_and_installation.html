@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Compilation and installation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Universal JTAG library, server and tools"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="General"
+HREF="_general.html"><LINK
+REL="PREVIOUS"
+TITLE="System requirements"
+HREF="_system_requirements.html"><LINK
+REL="NEXT"
+TITLE="Usage"
+HREF="_usage.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="UrJTAG.css"></HEAD
+><BODY
+CLASS="section"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Universal JTAG library, server and tools</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="_system_requirements.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. General</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="_usage.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="_compilation_and_installation"
+>2.4. Compilation and installation</A
+></H1
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_required_software_for_compiling_urjtag"
+>2.4.1. Required software for compiling UrJTAG</A
+></H2
+><P
+>To run autogen.sh, you need autoconf and automake, bison, and a recent flex.</P
+><P
+>The distributed source tarball contains source pregenerated with a current flex
+version; flex therefore is only needed if you want to compile code checked
+out from our Subversion repository.  Flex 2.5.4a as it comes with Cygwin will
+work but some parts of UrJTAG (namely the SVF player) become more verbose if
+Flex 2.5.31 or newer is used. Building the BSDL subsystem files requires Flex
+2.5.33 or newer. The configure script will compare the available Flex version
+against these preconditions and enables or disables the related features.  ,</P
+><P
+>Furthermore, libtool should be available, and "devel" versions of the following
+packages:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;gettext
+</P
+></LI
+><LI
+><P
+>&#13;readline (not needed, but really eases interactive use)
+</P
+></LI
+><LI
+><P
+>&#13;ioperm (needed only for Cygwin)
+</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_required_libraries_for_usb_support"
+>2.4.2. Required libraries for USB support</A
+></H2
+><P
+>For USB adapter support (including support for parallel port adapters attached
+to USB-to-parallel converters), one or more additional libraries are required.</P
+><P
+>Many USB JTAG adapters and USB-to-parallel converters are based on chips
+made by FTDI. To support these, either intra.net's "libftdi" or FTDI's
+"FTD2XX" library can be used.</P
+><P
+>On many modern Linux distributions, libftdi is available as a precompiled
+package and can be installed using the distribution's package management system
+(e.g. "apt-get libftdi-dev" for Debian and Ubuntu). If it isn't available or
+you don't run Linux, you can get it from</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;http://www.intra2net.com/de/produkte/opensource/ftdi/
+</P
+></LI
+></UL
+><P
+>Alternatively, you can use the FTD2XX library from the chip manufacturer FTDI.
+It is available for Linux and Windows. To use the library for Windows in a
+Cygwin environment, first get it from:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;http://www.ftdichip.com/Drivers/D2XX.htm
+</P
+></LI
+></UL
+><P
+>Unzip the CDM*.zip to some directory and tell UrJTAG about this directory
+during the configure step before actual compilation:</P
+><PRE
+CLASS="literallayout"
+>./configure --with-libftd2xx=/cygdrive/c/windows/temp/CDM_Drivers</PRE
+><P
+>All other USB JTAG adapters can be supported only if libusb is installed.
+There is a libusb-win32 variant that can be used in a Cygwin environment:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;http://libusb.sourceforge.net (libusb)
+</P
+></LI
+><LI
+><P
+>&#13;http://libusb-win32.sourceforge.net (libusb for Windows)
+</P
+></LI
+></UL
+><P
+>For specific notes regarding the use of these libraries in a Cygwin
+environmen, see below.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_installing_from_source_tar_gz"
+>2.4.3. Installing from source tar.gz</A
+></H2
+><P
+>The installation follows the standard configure, make, make install scheme:</P
+><PRE
+CLASS="literallayout"
+>tar xzvf urjtag.tar.gz
+cd ../jtag
+./configure
+make
+make install</PRE
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_installing_from_subversion_repository"
+>2.4.4. Installing from Subversion repository</A
+></H2
+><P
+>If you want to try the very newest version of UrJTAG&#8230;</P
+><PRE
+CLASS="literallayout"
+>svn co http://urjtag.svn.sourceforge.net/svnroot/urjtag/trunk urjtag</PRE
+><PRE
+CLASS="literallayout"
+>cd urjtag/jtag
+./autogen.sh
+# ./configure done by autogen.sh; run it here with special options if needed
+make
+make install</PRE
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_linking_to_ftd2xx_dll_in_cygwin_environment"
+>2.4.5. Linking to FTD2XX.DLL in Cygwin environment</A
+></H2
+><P
+>Before running configure, get the D2XX drivers from FTDI.</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
+</P
+></LI
+></UL
+><P
+>Unzip the archive into a directory of your choice (probably a choice
+without spaces in the name is better)  and afterwards run configure with the
+"&#8212;with-ftd2xx" pointing to that directory, e.g.</P
+><PRE
+CLASS="literallayout"
+>./configure --with-ftd2xx="/cygdrive/c/temp/ftdi-cdm-drivers"</PRE
+><P
+>Configure should now report</P
+><PRE
+CLASS="literallayout"
+>FTDI cable support
+  ...
+  via libftd2xx        : yes</PRE
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_using_libusb_win32_in_cygwin_environment"
+>2.4.6. Using LibUSB-Win32 in Cygwin environment</A
+></H2
+><P
+>Before running configure, install the LibUSB-Win32 "filter" driver from SF.</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;http://libusb-win32.sourceforge.net
+</P
+></LI
+></UL
+><P
+>Then point configure to the directory where LibUSB-Win32 was installed (it
+might give problems if the path contains spaces, as "Program Files" does!):</P
+><PRE
+CLASS="literallayout"
+>./configure --with-libusb="/cygdrive/c/Programme/LibUSB-Win32/"</PRE
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_building_the_bsdl_subsystem"
+>2.4.7. Building the BSDL subsystem</A
+></H2
+><P
+>As mentioned above, building the BSDL lexer requires Flex 2.5.33 or newer. If
+the detected Flex version is not recent enough, configure will disable the
+BSDL subsystem. The detection result is summarized at the end of configure:</P
+><PRE
+CLASS="literallayout"
+>jtag is now configured for
+  ...
+  Build BSDL subsystem : yes</PRE
+><P
+>Flex is only required when you're working on a check-out of the Subversion
+repository. In this case Flex has to be called to transform bsdl_flex.l to
+bsdl_flex.c. When you're compiling from released sources, the local Flex
+version is not relevant since the output file of Flex is part of the
+tarball. I.e. even if the local Flex fails the check, the BSDL subsystem is
+enabled and will be compiled from the released C files.</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="_system_requirements.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="_usage.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>System requirements</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="_general.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Usage</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

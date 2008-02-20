@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Data file format</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Universal JTAG library, server and tools"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Internals"
+HREF="_internals.html"><LINK
+REL="PREVIOUS"
+TITLE="Drivers"
+HREF="_drivers.html"><LINK
+REL="NEXT"
+TITLE="Development"
+HREF="_development.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="UrJTAG.css"></HEAD
+><BODY
+CLASS="section"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Universal JTAG library, server and tools</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="_drivers.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Internals</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="_development.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="_data_file_format"
+>4.3. Data file format</A
+></H1
+><P
+>JTAG declarations files are located in directory "data". The files contains
+common part specific JTAG information in parseable form, e.g.  list of the JTAG
+commands, boundary scan register, list of JTAG registers, etc.</P
+><P
+>Syntax of the JTAG declaration file is defined in the following subsections.</P
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_general_rules"
+>4.3.1. General rules</A
+></H2
+><P
+>JTAG declaration file is text file which consists of lines. Empty lines are
+ignored. Text after first "#" on the line to the end of line is ignored. This
+is useful for comments.  All other lines are significant.</P
+><P
+>Each significant line consists of tokens separated by whitespace. Whitespace
+could be spaces and/or tabs.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_signal_definition"
+>4.3.2. Signal Definition</A
+></H2
+><P
+>Signal definition line consists of word "signal" followed by whitespace and
+signal name (without spaces in the name). Rest of the line should contain
+whitespace separated list of pins of the part. This list is currently not used
+for any purpose in JTAG Tools. It is intended for future use.</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="_drivers.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="_development.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Drivers</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="_internals.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Development</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

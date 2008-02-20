@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>F.A.Q.</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Universal JTAG library, server and tools"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Development"
+HREF="_development.html"><LINK
+REL="NEXT"
+TITLE="Licensing"
+HREF="_licensing.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="UrJTAG.css"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Universal JTAG library, server and tools</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="_development.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="_licensing.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="_f_a_q"
+></A
+>Chapter 5. F.A.Q.</H1
+><P
+>For a list of known problems in current versions, please also check the "Bugs"
+tracker at the UrJTAG website!</P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>Q. The documentation is incomplete. Where can I get more information?</DT
+><DD
+><P
+>&#13;  A. Please ask in the "Using UrJTAG" Forum on http://urjtag.org
+</P
+></DD
+><DT
+>Q. My flash isn't detected or can't be programmed. What can I do?</DT
+><DD
+><P
+>&#13;  A. Please record the output of the "detect" and "detectflash" commands and ask in the Forum. If possible, re-compile UrJTAG before with "&#8212;enable-jedec-exp" to get extra information.
+</P
+></DD
+><DT
+>Q. My CPU/FPGA/etc. chip isn't detected. What can I do?</DT
+><DD
+><P
+>&#13;  A. First try to get hold of a "BSDL" description of the chip from the vendor, and specify where to find this file to UrJTAG using "bsdl path" before you "detect". Second, a bus driver has to be selected. Maybe "ejtag" or "prototype" work.
+</P
+></DD
+><DT
+>Q. When I type "cable parallel 0x378 DLC5" (in a Cygwin environment) I get "Unknown port driver: parallel"?</DT
+><DD
+><P
+>&#13;  A. Please install the Cygwin ioperm package, and re-configure/compile.
+</P
+></DD
+><DT
+>Q. When I type "cable parallel 0x378 DLC5" (in a Cygwin environment) I get "Error: Cable initialization failed!".</DT
+><DD
+><P
+>&#13;  A. Please install ioperm.sys driver using <TT
+CLASS="literal"
+>ioperm -i</TT
+> command.
+</P
+></DD
+><DT
+>Q. When running autogen.sh, I get "Can't exec "autopoint": No such file or directory"</DT
+><DD
+><P
+>&#13;  A. You need the headers for gettext (e.g. Debian package "gettext-devel").
+</P
+></DD
+><DT
+>Q. During compilation, I get "svf_bison.y: No such file or directory"</DT
+><DD
+><P
+>&#13;  A. You need "bison".
+</P
+></DD
+><DT
+>Q. During compilation, I get "flex: can't open &#8230; src/svf/svf_flex.l"</DT
+><DD
+><P
+>&#13;  A. You need "flex"
+</P
+></DD
+><DT
+>Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option: bison-locations"</DT
+><DD
+><P
+>&#13;  A. You need a newer version of flex. It should be 2.5.31 or newer;
+    Unfortunately, Cygwin comes with only 2.5.4a. You may try to compile and
+    install a newer version of flex from source to solve this. The distributed
+    source tarball contains source pregenerated with a current flex version,
+    you need flex yourself only to compile from fresh SVN checkouts.
+</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="_development.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="_licensing.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Development</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Licensing</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

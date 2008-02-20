@@ -1,0 +1,536 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>System requirements</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Universal JTAG library, server and tools"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="General"
+HREF="_general.html"><LINK
+REL="PREVIOUS"
+TITLE="UrJTAG"
+HREF="_urjtag.html"><LINK
+REL="NEXT"
+TITLE="Compilation and installation"
+HREF="_compilation_and_installation.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="UrJTAG.css"></HEAD
+><BODY
+CLASS="section"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Universal JTAG library, server and tools</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="_urjtag.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. General</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="_compilation_and_installation.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="_system_requirements"
+>2.3. System requirements</A
+></H1
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_supported_host_operating_systems"
+>2.3.1. Supported host operating systems</A
+></H2
+><P
+>JTAG Tools should run on all Unix like operating systems including MS Windows
+with Cygwin installed.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_required_software_for_running_urjtag"
+>2.3.2. Required software for running UrJTAG</A
+></H2
+><P
+>Required only for MS Windows:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;current Cygwin net installation from http://cygwin.com
+</P
+></LI
+><LI
+><P
+>&#13;ioperm package (a part of the standard Cygwin net installation)
+</P
+></LI
+></UL
+><P
+>It may be necessary to run the command "ioperm -i" to install the IOPERM.SYS
+driver in the system.</P
+><P
+>If UrJTAG was compiled to use the readline library, it has to be present on
+the system as well. It's probably a standard part of your distribution.</P
+><P
+>More software is needed if you want to compile UrJTAG (which you probably want
+because currently no pre-compiled binaries are avaible&#8230;). See "Installation"
+below.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_supported_jtag_adapters_cables"
+>2.3.3. Supported JTAG adapters/cables</A
+></H2
+><P
+>See <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>help cable</I
+></SPAN
+> command for up-to-date info.</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Arcom JTAG Cable
+</P
+></LI
+><LI
+><P
+>&#13;Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable
+</P
+></LI
+><LI
+><P
+>&#13;Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx DLC5 JTAG Parallel Cable III
+</P
+></LI
+><LI
+><P
+>&#13;ETC EA253 JTAG Cable
+</P
+></LI
+><LI
+><P
+>&#13;ETC EI012 JTAG Cable
+</P
+></LI
+><LI
+><P
+>&#13;Ka-Ro TRITON (PXA255/250) JTAG Cable
+</P
+></LI
+><LI
+><P
+>&#13;Keith &#38;amp; Koep JTAG Cable
+</P
+></LI
+><LI
+><P
+>&#13;Lattice Parallel Port JTAG Cable
+</P
+></LI
+><LI
+><P
+>&#13;Mpcbdm JTAG Cable
+</P
+></LI
+><LI
+><P
+>&#13;Macraigor Wiggler JTAG Cable
+</P
+></LI
+><LI
+><P
+>&#13;Amontec JTAGkey (FT2232-based)
+</P
+></LI
+><LI
+><P
+>&#13;Olimex ARM-USB-JTAG (FT2232-based)
+</P
+></LI
+><LI
+><P
+>&#13;Olimex ARM-USB-TINY (FT2232-based)
+</P
+></LI
+><LI
+><P
+>&#13;OOCDLink-s (FT2232-based) (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
+</P
+></LI
+><LI
+><P
+>&#13;Other FT2232-based USB JTAG cables (experimental)
+</P
+></LI
+><LI
+><P
+>&#13;Xverve Signalyzer Tool (FT2232-based) (experimental)
+</P
+></LI
+><LI
+><P
+>&#13;Turtelizer 2 (FT2232-based) (experimental) http://www.ethernut.de/en/hardware/turtelizer/
+</P
+></LI
+><LI
+><P
+>&#13;USB to JTAG Interface (FT2232-based) (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx Platform USB Cable (experimental)
+</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_jtag_aware_parts_chips"
+>2.3.4. JTAG-aware parts (chips)</A
+></H2
+><P
+>The data/ directory of the UrJTAG installation has some more, but at
+least the following are supported:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Altera EP1C20F400
+</P
+></LI
+><LI
+><P
+>&#13;Altera EPM7128AETC100
+</P
+></LI
+><LI
+><P
+>&#13;Analog Devices Sharc-21065L
+</P
+></LI
+><LI
+><P
+>&#13;Atmel ATmega128 (partial support)
+</P
+></LI
+><LI
+><P
+>&#13;Broadcom BCM1250
+</P
+></LI
+><LI
+><P
+>&#13;Broadcom BCM3310 (partial support)
+</P
+></LI
+><LI
+><P
+>&#13;Broadcom BCM5421S
+</P
+></LI
+><LI
+><P
+>&#13;Broadcom BCM4712 (partial support)
+</P
+></LI
+><LI
+><P
+>&#13;DEC SA1100
+</P
+></LI
+><LI
+><P
+>&#13;Hitachi HD64465
+</P
+></LI
+><LI
+><P
+>&#13;Hitachi SH7727
+</P
+></LI
+><LI
+><P
+>&#13;Hitachi SH7729
+</P
+></LI
+><LI
+><P
+>&#13;IBM PowerPC 440GX
+</P
+></LI
+><LI
+><P
+>&#13;Intel IXP425
+</P
+></LI
+><LI
+><P
+>&#13;Intel SA1110
+</P
+></LI
+><LI
+><P
+>&#13;Intel PXA250/PXA255/PXA260/PXA261/PXA262/PXA263
+</P
+></LI
+><LI
+><P
+>&#13;Lattice LC4032V
+</P
+></LI
+><LI
+><P
+>&#13;Lattice M4A3-64/32
+</P
+></LI
+><LI
+><P
+>&#13;Lattice M4A3-256/192
+</P
+></LI
+><LI
+><P
+>&#13;Motorola MPC8245
+</P
+></LI
+><LI
+><P
+>&#13;Samsung S3C4510B
+</P
+></LI
+><LI
+><P
+>&#13;Sharp LH7A400
+</P
+></LI
+><LI
+><P
+>&#13;Toshiba TX4925/TX4926
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx XC2C256-TQ144
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx XCR3032XL-VQ44
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx XCR3128XL-CS144
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx XCR3128XL-VQ100
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx XCR3256XL-FT256
+</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_flash_chips"
+>2.3.5. Flash chips</A
+></H2
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Not all chips are supported in every possible configuration, there may
+be untested combinations of chip type, bus width, &#8230;</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)
+</P
+></LI
+><LI
+><P
+>&#13;Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)
+</P
+></LI
+><LI
+><P
+>&#13;Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)
+</P
+></LI
+><LI
+><P
+>&#13;AMD Am29LV64xD (Am29LV640D, Am29LV641D, Am29LV642D)
+</P
+></LI
+><LI
+><P
+>&#13;AMD Am29xx040B (Am29F040B, Am29LV040B)
+</P
+></LI
+></UL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="_urjtag.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="_compilation_and_installation.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>UrJTAG</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="_general.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Compilation and installation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

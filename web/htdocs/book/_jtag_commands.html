@@ -1,0 +1,1889 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>JTAG commands</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Universal JTAG library, server and tools"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Usage"
+HREF="_usage.html"><LINK
+REL="PREVIOUS"
+TITLE="Usage"
+HREF="_usage.html"><LINK
+REL="NEXT"
+TITLE="Internals"
+HREF="_internals.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="UrJTAG.css"></HEAD
+><BODY
+CLASS="section"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Universal JTAG library, server and tools</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="_usage.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 3. Usage</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="_internals.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="_jtag_commands"
+>3.2. JTAG commands</A
+></H1
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_overview"
+>3.2.1. Overview</A
+></H2
+><P
+>Following is a list of commands currently supported by jtag and some
+example usage.</P
+><DIV
+CLASS="informaltable"
+><P
+></P
+><A
+NAME="AEN331"
+></A
+><TABLE
+BORDER="0"
+FRAME="void"
+RULES="none"
+CLASS="CALSTABLE"
+><COL
+WIDTH="3*"><COL
+WIDTH="7*"><TBODY
+VALIGN="top"
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>bit</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;define new BSR bit
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>bus</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;change active bus
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>bsdl</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;manage BSDL files
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>cable</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;select JTAG cable
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>detect</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;detect parts on the JTAG chain
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>detectflash</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;detect parameters of flash chips attached to a part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>discovery</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;discovery of unknown parts in the JTAG chain
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>dr</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;display active data register for a part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>endian</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;set/print endianess for reading/writing binary files
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>eraseflash</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;erase flash memory by number of blocks
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>flashmem</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;burn flash memory with data from a file
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>frequency</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;setup JTAG frequency
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>get</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;get external signal value
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>help</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;display this help
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>include</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;include command sequence from external file
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>initbus</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;initialize bus driver for active part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>instruction</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;change active instruction for a part or declare new instruction
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>part</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;change active part for current JTAG chain
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>peek</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;read a single word
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>poke</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;write a single word
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>print</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;display JTAG chain list/status
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>quit</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;exit and terminate this session
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>readmem</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;read content of the memory and write it to file
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>register</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;define new data register for a part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>scan</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;detect changes on input pins of current part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>set</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;set external signal value
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>shift</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;shift data/instruction registers through JTAG chain
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>signal</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;define new signal for a part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>svf</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;execute svf commands from file
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>writemem</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;write content from file to memory
+</P
+>
+</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><P
+>Some tools derived from the same openwince JTAG Tools code base as UrJTAG
+know additional commands, which are not supported in UrJTAG. See the section
+about "Unsupported commands", below, about workarounds.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_basic_commands"
+>3.2.2. Basic commands</A
+></H2
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_quit"
+>3.2.2.1. quit</A
+></H3
+><P
+>This command closes the jtag console.</P
+></DIV
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_help"
+>3.2.2.2. help</A
+></H3
+><P
+>Without additional parameter it gives an overview of the available commands.
+With a parameter you can get more information about any of the commands.
+Example:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; help cable</PRE
+><P
+>Most cable drivers require some more details about the cable to start properly.
+To learn about the details, use the "cable" command with the name of the cable
+followed by the word "help". Example:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; cable wiggler help</PRE
+></DIV
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_include"
+>3.2.2.3. include</A
+></H3
+><P
+>Run commands from a named script file installed with UrJTAG or applies a BSDL
+file to the active part. The directory prefix is added automatically
+(e.g. /usr/share/urjtag/, depending on your installation), unless the file
+name starts with a dot or slash.</P
+><P
+>For example, the following startup sequence configures the cable, chain, and
+loads definitions and bus driver for a Samsung S3C4510B CPU to peek its memory
+at 0x0:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; cable wiggler ppdev /dev/parport0
+jtag&#62; detect
+jtag&#62; include samsung/s3c4510b/s3c4510b
+jtag&#62; peek 0x0000</PRE
+><P
+>If the file contains valid BSDL syntax, it will be converted to native
+commands on the fly.</P
+><P
+>Optionally, a number X may be specified following the file name, to cause
+an X times repetition of the command sequence from the file.</P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_chain_management"
+>3.2.3. Chain management</A
+></H2
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_cable"
+>3.2.3.1. cable</A
+></H3
+><P
+>Sets and initialized the cable driver. This is usually the first command that
+you are executing in a session. Example:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; cable EA253 parallel 0x378
+Initializing ETC EA253 JTAG Cable on parallel port at 0x378</PRE
+><P
+>For a parallel cable using the ppdev driver you would use this:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; cable DLC5 ppdev /dev/parport0</PRE
+><P
+>If you get an error, it may be that the parallel port kernel driver
+was compiled as a module in your Linux kernel and wasn't loaded automatically.
+Then you should try to load the ppdev driver manually (with root rights outside
+the jtag shell):</P
+><PRE
+CLASS="literallayout"
+>modprobe ppdev
+modprobe parport
+modprobe parport_pc</PRE
+><P
+>UrJTAG now also supports some USB cables. Unfortunately, there is no standard
+for "JTAG over USB", so this support is limited to a few selected cables only.
+For cables based on the FT2232 chip from FTDI, the cable command has to be
+given cable name, driver name, and USB Vendor and Product ID of the cable:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; cable ARM-USB-OCD ftdi-mpsse 15ba:3</PRE
+><P
+>For some cables, UrJTAG knows the VID:PID and you can just say ":"</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; cable JTAGkey ftdi-mpsse :</PRE
+><P
+>On Windows, if UrJTAG was compiled to use the drivers supplied by
+FTDI, the command should instead look like this:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; cable ARM-USB-OCD ftd2xx-mpsse 15ba:3</PRE
+><P
+>The support for USB-based cables and their configuration is work
+in progress; the above syntax may change (i.e. become simpler) soon.</P
+></DIV
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_detect"
+>3.2.3.2. detect</A
+></H3
+><P
+>Detects devices on the chain. Example:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; detect
+IR length: 5
+Chain length: 1
+Device Id: 01011001001001100100000000010011
+  Manufacturer: Intel
+  Part:         PXA250
+  Stepping:     C0
+  Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0</PRE
+><P
+>During "detect", UrJTAG searches through the files in its database (usually in
+/usr/share/urjtag) and optionally in the search path for BSDL files (see bsdl
+command) to find a match for the manufacturer, revision and part number for the
+IDCODE read from the part. However, not all parts identify themselves in a way
+that is useful for "detect". For example, many chips with an ARM processor core
+inside present an IDCODE that may be specific to the the particular core inside
+the chip (e.g.  ARM7TDMI), but doesn't tell about the actual manufacturer of
+the chip. In such case, the data for the part has to be included manually. See
+also the documentation for the "include" command.</P
+></DIV
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_print"
+>3.2.3.3. print</A
+></H3
+><P
+>Print a list of parts in the chain and the currently active instruction per part.</P
+></DIV
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_initbus"
+>3.2.3.4. initbus</A
+></H3
+><P
+>Selects and initializes a bus of the currently selected part, e.g. the external
+memory bus of a CPU. This is required in order to access chips that aren't
+connected in the JTAG chain, but indirectly accessible through other chips
+(e.g. CPU or programmable logic).</P
+><P
+>Type "help initbus" to get a list of supported bus types.
+If you do not find a bus driver for your specific hardware, you might be lucky
+enough to have EJTAG in your target (most MIPS-based CPUs do) and should try
+the "ejtag" bus driver. In contrast to the method "via BSR", it uploads some
+instructions to the CPU and triggers their execution to access the bus, and
+should work with almost any EJTAG-capable chip (Note: JTAG isn't EJTAG):</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; initbus ejtag</PRE
+><P
+>There's another option to support new chips "via BSR", the "prototype" bus
+driver, which can be adapted to support your part with command parameters.
+The only prerequisite for using this driver is knowledge of the names of the
+signals that represent address bus, data bus, and enable signals, and that
+address and data lines are numbered in order.</P
+><P
+>For example, assume the signals are named in the BSDL description as follows:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Data bus: D0, D1, &#8230; D31
+</P
+></LI
+><LI
+><P
+>&#13;Address bus: ADDR0, ADDR1, &#8230; ADDR22
+</P
+></LI
+><LI
+><P
+>&#13;Output Enable: nOE
+</P
+></LI
+><LI
+><P
+>&#13;Write Enable: nWE
+</P
+></LI
+><LI
+><P
+>&#13;Chip Select: nRCS0
+</P
+></LI
+></UL
+><P
+>The enable signals seem to be active low (indicated by the leading "n" in their
+names). Further we assume the interesting connected part, some flash chip, is
+only 16 bits wide even though the data bus width is 32 bits.  With this
+information, you could use the following command (all on a single line!) to
+access the bus:</P
+><PRE
+CLASS="literallayout"
+>initbus prototype amsb=ADDR22 alsb=ADDR0 dmsb=D15 dlsb=D0
+          ncs=nRCS0 nwe=nWE noe=nOE amode=x16</PRE
+><P
+>The "prototype" bus driver yet cannot deal with systems where address and data
+bus are multiplexed on the same pins. If signals aren't numbered in the right
+order or with gaps, you may get along by defining proper names as aliases for
+the actual signals, with commands like "salias ADDR12 BSCGX44".</P
+><P
+>Most drivers work "via BSR", i.e. they directly access the pins of the device.
+Because it isn't possible to efficiently address only particular pins but only
+all at once, and data for all pins has to be transferred through JTAG for every
+single change, this method isn't the fastest, but usually easiest to implement
+and, well, sometimes it counts whether it works at all..</P
+><P
+>Some chips don't allow direct access to their pins via BSR at all. For these,
+writing a new bus driver that utilizes a debug module to upload specific code
+to access the bus is inevitable.</P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_part_definition_commands"
+>3.2.4. Part definition commands</A
+></H2
+><P
+>The following commands are also used in the data files to define a device (IC)
+on the JTAG chain. It is not recommended to use these commands in an interactive
+session. Instead you should produce a device definition file out of a .bsd file
+using one of the supplied tools (or use the new BSDL subsystem, see below).</P
+><DIV
+CLASS="informaltable"
+><P
+></P
+><A
+NAME="AEN586"
+></A
+><TABLE
+BORDER="0"
+FRAME="void"
+RULES="none"
+CLASS="CALSTABLE"
+><COL
+WIDTH="3*"><COL
+WIDTH="7*"><TBODY
+VALIGN="top"
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>bit</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;define new BSR bit
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>instruction</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;change active instruction for a part or declare new instruction
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>register</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;define new data register for a part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>signal</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;define new signal for a part
+</P
+>
+</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_tap_control"
+>3.2.5. TAP control</A
+></H2
+><P
+>The following commands can be used to directly manipulate and display the state
+of the TAP controller(s) and registers in the chain:</P
+><DIV
+CLASS="informaltable"
+><P
+></P
+><A
+NAME="AEN618"
+></A
+><TABLE
+BORDER="0"
+FRAME="void"
+RULES="none"
+CLASS="CALSTABLE"
+><COL
+WIDTH="3*"><COL
+WIDTH="7*"><TBODY
+VALIGN="top"
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>dr</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;display active data register for a part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>instruction</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;change active instruction for a part or declare new instruction
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>get</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;get external signal value
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>scan</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;detect changes on input pins of current part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>set</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;set external signal value
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>shift</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;shift data/instruction registers through JTAG chain
+</P
+>
+</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_ram_flash_access"
+>3.2.6. RAM/Flash access</A
+></H2
+><P
+>These commands can be used if a part in the chain has memory connected to it
+(or integrated). Before they can be used, a bus driver has to be selected and
+initialized (see initbus command).</P
+><DIV
+CLASS="informaltable"
+><P
+></P
+><A
+NAME="AEN662"
+></A
+><TABLE
+BORDER="0"
+FRAME="void"
+RULES="none"
+CLASS="CALSTABLE"
+><COL
+WIDTH="3*"><COL
+WIDTH="7*"><TBODY
+VALIGN="top"
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>detectflash</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;detect parameters of flash chips attached to a part
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>endian</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;set/print endianess for reading/writing binary files
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>eraseflash</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;erase flash memory by number of blocks
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>flashmem</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;burn flash memory with data from a file
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>peek</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;read a single word
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>poke</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;write a single word
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>readmem</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;read content of the memory and write it to file
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>writemem</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;write content from file to memory
+</P
+>
+</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_highlevel_commands"
+>3.2.7. Highlevel commands</A
+></H2
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_svf"
+>3.2.7.1. svf</A
+></H3
+><P
+>The SVF player operates on a single part in the scan chain. Therefore, you
+have to bring up the jtag software, specify a cable and detect the scan
+chain beforehand.</P
+><P
+>The player will establish a new instruction called "SIR" and a new register
+called "SDR". They are used internally by the respective SVF commands and are
+reassigned with new values as the player advances through the file. It is not
+recommended to use them outside of the SVF player as their content is dynamic.</P
+><P
+>An example session:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; cable ppdev /dev/parport0 DLC5
+Initializing Xilinx DLC5 JTAG Parallel Cable III on ppdev port /dev/parport0
+jtag&#62; detect
+IR length: 5
+Chain length: 1
+Device Id: 10010000101000100000000010010011
+  Manufacturer: Xilinx
+  Part:         XC2S300E-PQ208
+  Stepping:     9
+  Filename:     /usr/local/share/jtag/xilinx/xc2s300e-pq208/xc2s300e-pq208
+jtag&#62; part &#60;desired part of the scan chain&#62;
+jtag&#62; svf &#60;SVF file for selected part&#62;
+jtag&#62; instruction BYPASS
+jtag&#62; shift ir
+jtag&#62; part &#60;next part&#62;
+jtag&#62; svf &#60;SVF file for selected part&#62;
+jtag&#62; instruction BYPASS
+jtag&#62; shift ir</PRE
+><P
+>It is recommended to set the part's instruction register to BYPASS although
+most SVF files do this at the end. By setting the instruction explicitely to
+BYPASS the output of the print command will always show meaningful
+information.</P
+><P
+>The SVF player will issue messages when situations arise that cannot be
+handled. These messages are classified as warnings or errors depending on
+whether the player can continue operation (warning) or not (error).
+In case the TDO parameter of an SDR command leads to a mismatch the player
+issues a warning and continues. If the player should abort in this case then
+specify <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>stop</I
+></SPAN
+> at the svf command.</P
+><TABLE
+CLASS="sidebar"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="sidebar"
+><A
+NAME="AEN726"
+></A
+><P
+><B
+>Limitations and Deficiencies</B
+></P
+><P
+>Several limitations exist for the SVF player.</P
+><P
+>It has been tested so far with files generated by these tools:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Xilinx ISE WebPack 6.3.02i - 9.1.02i
+</P
+></LI
+><LI
+><P
+>&#13;Altera Quartus II 4.1sp1 - 7.0
+</P
+></LI
+></UL
+><P
+>Configuration for these devices has been tested so far:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Altera EPC1C12Q240
+</P
+></LI
+><LI
+><P
+>&#13;Altera MAX3032, EPM3032ALC44
+</P
+></LI
+><LI
+><P
+>&#13;Altera MAX3064, EPM3064ALC44
+</P
+></LI
+><LI
+><P
+>&#13;Altera MAX7032, EPM7032SLC44
+</P
+></LI
+><LI
+><P
+>&#13;Altera MAX7064, EPM7064SLC44, EPM7064STC44
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx Spartan-IIE, XC2S300E-PQ208
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx Spartan-3, XC3S1000-FG456, XC3S5000-FG900
+</P
+></LI
+></UL
+><P
+>The implementation of some SVF commands has deficiencies.</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;HIR, HDR commands not supported.
+    Their functionality should be covered by the part concept of JTAG Tools.
+</P
+></LI
+><LI
+><P
+>&#13;PIO command not supported.
+</P
+></LI
+><LI
+><P
+>&#13;PIOMAP command not supported.
+</P
+></LI
+><LI
+><P
+>&#13;RUNTEST SCK not supported.
+    The maximum time constraint is not guaranteed.
+</P
+></LI
+><LI
+><P
+>&#13;SIR
+    No check is done against the TDO parameter.
+</P
+></LI
+><LI
+><P
+>&#13;TRST
+    Parameters Z and ABSENT are not supported.
+</P
+></LI
+><LI
+><P
+>&#13;TIR, TDR commands not supported.
+    Their functionality should be covered by the part concept of JTAG Tools.
+</P
+></LI
+></UL
+><P
+>Operation can be slowed down significantly when the FREQUENCY command has
+been specified. This is not a problem of the SVF player itself but seem to
+happen when the frequency of UrJTAG is set to a value larger than 0.
+Configuration takes very long although the maximum allowed frequency is 10 MHz.
+Consider to comment out the FREQUENCY command at the beginning of the SVF file.</P
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_bsdl"
+>3.2.7.2. bsdl</A
+></H3
+><P
+>The <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>bsdl</I
+></SPAN
+> command is used to set up and test the underlying BSDL subsystem of
+UrJTAG.</P
+><P
+>Whenever <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+> encounters a new part, a configuration process is
+started. This involves matching the retrieved IDCODE against the part
+descriptions in /usr/share/urjtag as described above. However, before this
+database is searched for a suitable description, the BSDL subsystem is started
+and searches for BSDL file that matches this device. If it finds a matching
+file, traversal of the /usr/share/urjtag database is skipped. If not, then
+this standard process follows.</P
+><P
+>To tell the BSDL subsytem where to look for BSDL files, the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>bsdl path
+pathlist</I
+></SPAN
+> command has to be issued prior to <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+>. The contents of
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>pathlist</I
+></SPAN
+> must be a semicolon-separated list of directories where BSDL files
+are located. This list is stored by <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>bsdl path</I
+></SPAN
+> and is used lateron when
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+> calls the BSDL subsystem.</P
+><DIV
+CLASS="important"
+><P
+></P
+><TABLE
+CLASS="important"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The BSDL subsystem applies the first BSDL file that parses without
+errors and that contains the correct IDCODE. Scanning the specified
+directories happens in exactly the given order. Inside a directory however,
+the order depends largely on your filesystem's behavior.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Further details of the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>bsdl</I
+></SPAN
+> command:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;bsdl path &#60;path1&#62;[;&#60;path2&#62;[;&#60;pathN&#62;]]
+    set paths for locating BSDL files
+</P
+></LI
+><LI
+><P
+>&#13;bsdl debug on|off
+    switches debug messages on or off
+</P
+></LI
+><LI
+><P
+>&#13;bsdl test [file]
+    reads file (if specified) or all files found via <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>bsdl path</I
+></SPAN
+> and
+    prints a short status, an active part is not required
+</P
+></LI
+><LI
+><P
+>&#13;bsdl dump [file]
+    reads file (if specified) or all files found via <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>bsdl path</I
+></SPAN
+> and
+    prints all configuration commands, an active part is not required
+</P
+></LI
+></UL
+><DIV
+CLASS="tip"
+><P
+></P
+><TABLE
+CLASS="tip"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>bsdl dump file</I
+></SPAN
+> command implements the same functionality as
+bsdl2jtag.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_unsupported_commands"
+>3.2.8. Unsupported commands</A
+></H2
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_script"
+>3.2.8.1. script</A
+></H3
+><P
+>Although it's still there, its functionality has been merged into the include
+command. Please use "include" instead.</P
+></DIV
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_setdevice"
+>3.2.8.2. setdevice</A
+></H3
+><P
+>This command was only there to support the SHARC 21065L processor,
+which has no IDCODE and therefore can't be initialized correctly by
+just running "detect". However, the proper initialization can be done
+after "detect" by loading the proper declarations and bus driver manually:</P
+><PRE
+CLASS="literallayout"
+>jtag&#62; include analog/sharc21065l/sharc21065l</PRE
+></DIV
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_spiflashmem"
+>3.2.8.3. spiflashmem</A
+></H3
+><P
+>The commands "spidetectflash", "spiflashmem", "spireadflash" and
+"spieraseflash" only exist in a version of the JTAG tools copyrighted by
+Intratrade Ltd., we just know about them from a posting on the net.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="_usage.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="_internals.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Usage</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="_usage.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Internals</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
