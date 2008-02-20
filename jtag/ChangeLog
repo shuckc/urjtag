@@ -1,3 +1,7 @@
+2008-02-20  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * data/Makefile.am (nobase_dist_pkgdata_DATA): added bsdl/STD_1149_1_2001
+
 2008-02-20  Kolja Waschk <kawk>
 
    Version 0.8 released.

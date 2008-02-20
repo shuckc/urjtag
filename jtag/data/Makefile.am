@@ -80,6 +80,7 @@ nobase_dist_pkgdata_DATA = \
 	broadcom/bcm5421s/bcm5421s \
 	bsdl/STD_1149_1_1990 \
 	bsdl/STD_1149_1_1994 \
+	bsdl/STD_1149_1_2001 \
 	dec/PARTS \
 	dec/sa1100/STEPPINGS \
 	dec/sa1100/sa1100 \
