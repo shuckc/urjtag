@@ -30,7 +30,8 @@ urjtag-n/a
     * Numerous internal improvements
       - activity queuing mechanism to speed up JTAG over USB
       - simplified source directory layout; incorporated libbrux and inclow
-      - experimental implementation of improved JEDEC flash detection
+      - (hopefully) fixed problem with writing to dual-mode x8/x16 flash
+      - experimental (debug-only) new improved JEDEC flash detection
       - improved linking with USB drivers in Cygwin environment
       - varous smaller bug fixes and improvements
 
