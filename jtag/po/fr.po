@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2007-12-23 14:06+0100\n"
+"POT-Creation-Date: 2008-02-17 11:44+0100\n"
 "PO-Revision-Date: 2004-05-10 08:00-0500\n"
 "Last-Translator: Michel Robitaille <robitail@IRO.UMontreal.CA>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -16,24 +16,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: libbrux/cmd/cmd.c:44
+#: src/cmd/cmd.c:125
+#, c-format
+msgid "Error: Cable not configured. Please use '%s' command first!\n"
+msgstr "ERREUR: cable non configuré. SVP utiliser la commande '%s' d'abord!\n"
+
+#: src/cmd/cmd.c:143
 #, c-format
 msgid "%s: syntax error!\n"
 msgstr "%s: erreur de syntaxe!\n"
 
-#: libbrux/cmd/cmd.c:48 libbrux/cmd/help.c:57
+#: src/cmd/cmd.c:147 src/cmd/help.c:57
 #, c-format
 msgid "%s: unknown command\n"
 msgstr "%s: commande inconnue\n"
 
-#: libbrux/cmd/cmd_detectflash.c:41 src/cmd/eraseflash.c:47
-#: src/cmd/flashmem.c:47 src/cmd/peekpoke.c:47 src/cmd/peekpoke.c:109
-#: src/cmd/readmem.c:45
+#: src/cmd/detectflash.c:41 src/cmd/eraseflash.c:47 src/cmd/flashmem.c:47
+#: src/cmd/peekpoke.c:47 src/cmd/peekpoke.c:109 src/cmd/readmem.c:45
 #, c-format
 msgid "Error: Bus driver missing.\n"
 msgstr "Erreur: pilote du bus manquant.\n"
 
-#: libbrux/cmd/cmd_detectflash.c:57
+#: src/cmd/detectflash.c:57
 #, fuzzy, c-format
 msgid ""
 "Usage: %s ADDRESS\n"
@@ -44,11 +48,11 @@ msgstr ""
 "Usage: %s\n"
 "Détecter un type de mémoire flash connecté.\n"
 
-#: libbrux/cmd/cmd_detectflash.c:66
+#: src/cmd/detectflash.c:66
 msgid "detect parameters of flash chips attached to a part"
 msgstr "paramètres de détection de modules flahs connectés"
 
-#: libbrux/cmd/help.c:39
+#: src/cmd/help.c:39
 #, c-format
 msgid ""
 "Command list:\n"
@@ -57,16 +61,16 @@ msgstr ""
 "Liste de commandes:\n"
 "\n"
 
-#: libbrux/cmd/help.c:41 src/cmd/cable.c:142
+#: src/cmd/help.c:41 src/cmd/cable.c:142
 #, c-format
 msgid "%-13s %s\n"
 msgstr "%-13s %s\n"
 
-#: libbrux/cmd/help.c:41
+#: src/cmd/help.c:41
 msgid "(no description available)"
 msgstr "(pas de description disponible)"
 
-#: libbrux/cmd/help.c:42
+#: src/cmd/help.c:42
 #, c-format
 msgid ""
 "\n"
@@ -76,7 +80,7 @@ msgstr ""
 "Taper \"help COMMANDE\" pour des détails au sujet d'une commande "
 "particulière.\n"
 
-#: libbrux/cmd/help.c:66
+#: src/cmd/help.c:66
 #, c-format
 msgid ""
 "Usage: %s [COMMAND]\n"
@@ -86,11 +90,11 @@ msgstr ""
 "Afficher une aide sommaire de la COMMANDE ou lister les commandes "
 "disponibles.\n"
 
-#: libbrux/cmd/help.c:73
+#: src/cmd/help.c:73
 msgid "display this help"
 msgstr "afficher l'aide-mémoire"
 
-#: libbrux/cmd/quit.c:44
+#: src/cmd/quit.c:44
 #, c-format
 msgid ""
 "Usage: %s\n"
@@ -99,11 +103,11 @@ msgstr ""
 "Usage: %s\n"
 "Quitter à partir de %s.\n"
 
-#: libbrux/cmd/quit.c:51
+#: src/cmd/quit.c:51
 msgid "exit and terminate this session"
 msgstr "quitter et terminer la session"
 
-#: libbrux/flash/amd.c:232
+#: src/flash/amd.c:276
 #, c-format
 msgid ""
 "Chip: AMD Flash\n"
@@ -112,27 +116,27 @@ msgstr ""
 "Module: AMD Flash\n"
 "\tManufacturier: "
 
-#: libbrux/flash/amd.c:235
+#: src/flash/amd.c:279
 #, c-format
 msgid "AMD"
 msgstr "AMD"
 
-#: libbrux/flash/amd.c:238
+#: src/flash/amd.c:282
 #, c-format
 msgid "ST/Samsung"
 msgstr ""
 
-#: libbrux/flash/amd.c:241
+#: src/flash/amd.c:285
 #, c-format
 msgid "Macronix"
 msgstr ""
 
-#: libbrux/flash/amd.c:244
+#: src/flash/amd.c:288
 #, c-format
 msgid "Unknown manufacturer (ID 0x%04x)"
 msgstr "Manufacturier inconnu (ID 0x%04x)"
 
-#: libbrux/flash/amd.c:247
+#: src/flash/amd.c:291
 #, c-format
 msgid ""
 "\n"
@@ -141,52 +145,52 @@ msgstr ""
 "\n"
 "\tModule: "
 
-#: libbrux/flash/amd.c:250
+#: src/flash/amd.c:294
 #, fuzzy, c-format
 msgid "Am29LV040B"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:253
+#: src/flash/amd.c:297
 #, c-format
 msgid "Am29LV640D/Am29LV641D/Am29LV642D"
 msgstr "Am29LV640D/Am29LV641D/Am29LV642D"
 
-#: libbrux/flash/amd.c:256
+#: src/flash/amd.c:300
 #, c-format
 msgid "Am29LV800B"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:259
+#: src/flash/amd.c:303
 #, fuzzy, c-format
 msgid "MX29LV160B"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:262
+#: src/flash/amd.c:306
 #, fuzzy, c-format
 msgid "AM29LV160DB"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:265
+#: src/flash/amd.c:309
 #, fuzzy, c-format
 msgid "Am29LV065D"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:268
+#: src/flash/amd.c:312
 #, c-format
 msgid "M29W320DT"
 msgstr ""
 
-#: libbrux/flash/amd.c:271
+#: src/flash/amd.c:315
 #, c-format
 msgid "M29W320DB"
 msgstr ""
 
-#: libbrux/flash/amd.c:274
+#: src/flash/amd.c:318
 #, c-format
 msgid "Unknown (ID 0x%04x)"
 msgstr "Inconnu (ID 0x%04x)"
 
-#: libbrux/flash/amd.c:277
+#: src/flash/amd.c:321
 #, c-format
 msgid ""
 "\n"
@@ -195,75 +199,74 @@ msgstr ""
 "\n"
 "\tProtégé: %04x\n"
 
-#: libbrux/flash/amd.c:347 libbrux/flash/amd.c:359 libbrux/flash/amd.c:371
-#: libbrux/flash/detectflash.c:96 libbrux/flash/detectflash.c:126
+#: src/flash/amd.c:393 src/flash/amd.c:405 src/flash/amd.c:417
+#: src/flash/detectflash.c:106 src/flash/detectflash.c:136
 msgid "AMD/Fujitsu Standard Command Set"
 msgstr "AMD/Fujitsu Jeu standard de commandes"
 
-#: libbrux/flash/amd.c:348
+#: src/flash/amd.c:394
 msgid "supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 msgstr "supportés: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 
-#: libbrux/flash/amd.c:360
+#: src/flash/amd.c:406
 msgid "supported: AMD 29LV800B; 1x16 Bit"
 msgstr "supportés: AMD 29LV800B; 1x16 Bit"
 
-#: libbrux/flash/amd.c:372
+#: src/flash/amd.c:418
 #, fuzzy
 msgid "supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B; 1x8 Bit"
 msgstr "supportés: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 
-#: libbrux/flash/detectflash.c:56 src/readmem.c:55
+#: src/flash/detectflash.c:56 src/readmem.c:55
 #, c-format
 msgid "Error: Missing bus driver!\n"
 msgstr "Erreur: pilote de bus manquant!\n"
 
-#: libbrux/flash/detectflash.c:75
+#: src/flash/detectflash.c:87
 #, c-format
 msgid "Flash not found!\n"
 msgstr "Flash non détecté!\n"
 
-#: libbrux/flash/detectflash.c:86
+#: src/flash/detectflash.c:96
 #, c-format
 msgid "Query identification string:\n"
 msgstr "Chaîne de requêtre d'identification:\n"
 
-#: libbrux/flash/detectflash.c:90 libbrux/flash/detectflash.c:120
+#: src/flash/detectflash.c:100 src/flash/detectflash.c:130
 msgid "null"
 msgstr "nul"
 
-#: libbrux/flash/detectflash.c:93 libbrux/flash/detectflash.c:123
+#: src/flash/detectflash.c:103 src/flash/detectflash.c:133
 msgid "Intel/Sharp Extended Command Set"
 msgstr "Jeu étendu de commandes Intel/Sharp"
 
-#: libbrux/flash/detectflash.c:99 libbrux/flash/detectflash.c:129
-#: libbrux/flash/intel.c:349 libbrux/flash/intel.c:361
-#: libbrux/flash/intel.c:373
+#: src/flash/detectflash.c:109 src/flash/detectflash.c:139
+#: src/flash/intel.c:348 src/flash/intel.c:360 src/flash/intel.c:372
 msgid "Intel Standard Command Set"
 msgstr "Jeu standard de commandes Intel"
 
-#: libbrux/flash/detectflash.c:102 libbrux/flash/detectflash.c:132
+#: src/flash/detectflash.c:112 src/flash/detectflash.c:142
 msgid "AMD/Fujitsu Extended Command Set"
 msgstr "Jeu étendu de commandes AMD/Fujitsu"
 
-#: libbrux/flash/detectflash.c:105 libbrux/flash/detectflash.c:135
+#: src/flash/detectflash.c:115 src/flash/detectflash.c:145
 msgid "Mitsubishi Standard Command Set"
 msgstr "Jeu standard de commandes Mitsubishi"
 
-#: libbrux/flash/detectflash.c:108 libbrux/flash/detectflash.c:138
+#: src/flash/detectflash.c:118 src/flash/detectflash.c:148
 msgid "Mitsubishi Extended Command Set"
 msgstr "Jeu étendu de commandes Mitsubishi"
 
-#: libbrux/flash/detectflash.c:111 libbrux/flash/detectflash.c:141
+#: src/flash/detectflash.c:121 src/flash/detectflash.c:151
 msgid "Page Write Command Set"
 msgstr "Jeu de commande d'écriture de page"
 
-#: libbrux/flash/detectflash.c:114 libbrux/flash/detectflash.c:144
-#: libbrux/flash/detectflash.c:188
+#: src/flash/detectflash.c:124 src/flash/detectflash.c:154
+#: src/flash/detectflash.c:198
 msgid "unknown!!!"
 msgstr "inconnu!!!"
 
-#: libbrux/flash/detectflash.c:117
+#: src/flash/detectflash.c:127
 #, c-format
 msgid ""
 "\tPrimary Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"
@@ -271,7 +274,7 @@ msgstr ""
 "\tJeu de commandes Primary Algorithm et Code ID de contrôle d'interface: 0x%"
 "04X (%s)\n"
 
-#: libbrux/flash/detectflash.c:147
+#: src/flash/detectflash.c:157
 #, c-format
 msgid ""
 "\tAlternate Algorithm Command Set and Control Interface ID Code: 0x%04X (%"
@@ -280,201 +283,201 @@ msgstr ""
 "\tJeu alternatif de commandes Primary Algorithm et Code ID de contrôle "
 "d'interface: 0x%04X (%s)\n"
 
-#: libbrux/flash/detectflash.c:150
+#: src/flash/detectflash.c:160
 #, c-format
 msgid "Query system interface information:\n"
 msgstr "Requête d'information d'interface système:\n"
 
-#: libbrux/flash/detectflash.c:151
+#: src/flash/detectflash.c:161
 #, c-format
 msgid "\tVcc Logic Supply Minimum Write/Erase or Write voltage: %d mV\n"
 msgstr ""
 "\tVcc logique Puissance minimum Écri/Efface ou Voltage d'écriture: %d mV\n"
 
-#: libbrux/flash/detectflash.c:152
+#: src/flash/detectflash.c:162
 #, c-format
 msgid "\tVcc Logic Supply Maximum Write/Erase or Write voltage: %d mV\n"
 msgstr ""
 "\tVcc logique Puissance maximum Écri/Efface ou Voltage d'écriture: %d mV\n"
 
-#: libbrux/flash/detectflash.c:153
+#: src/flash/detectflash.c:163
 #, c-format
 msgid "\tVpp [Programming] Supply Minimum Write/Erase voltage: %d mV\n"
 msgstr ""
 "\tVpp [Programmation] puissance minimum Écriture/Efface voltage: %d mV\n"
 
-#: libbrux/flash/detectflash.c:154
+#: src/flash/detectflash.c:164
 #, c-format
 msgid "\tVpp [Programming] Supply Maximum Write/Erase voltage: %d mV\n"
 msgstr ""
 "\tVpp [Programmation] puissance maximum Écriture/Efface voltage: %d mV\n"
 
-#: libbrux/flash/detectflash.c:155
+#: src/flash/detectflash.c:165
 #, c-format
 msgid "\tTypical timeout per single byte/word program: %d us\n"
 msgstr "\tDélai d'expiration typique par programme simple octet/mot: %d us\n"
 
-#: libbrux/flash/detectflash.c:156
+#: src/flash/detectflash.c:166
 #, c-format
 msgid "\tTypical timeout for maximum-size multi-byte program: %d us\n"
 msgstr ""
 "\tDélai d'expiration typique pour la taille maximale par programme multi-"
 "octets: %d us\n"
 
-#: libbrux/flash/detectflash.c:157
+#: src/flash/detectflash.c:167
 #, c-format
 msgid "\tTypical timeout per individual block erase: %d ms\n"
 msgstr ""
 "\tDélai d'expiration typique par effacement individuel de blocs: %d ms\n"
 
-#: libbrux/flash/detectflash.c:158
+#: src/flash/detectflash.c:168
 #, c-format
 msgid "\tTypical timeout for full chip erase: %d ms\n"
 msgstr ""
 "\tDélai d'expiration typique pour un effacement complet du module: %d ms\n"
 
-#: libbrux/flash/detectflash.c:159
+#: src/flash/detectflash.c:169
 #, c-format
 msgid "\tMaximum timeout for byte/word program: %d us\n"
 msgstr "\tDélai d'expiration maximal pour un programme octer/mot: %d us\n"
 
-#: libbrux/flash/detectflash.c:160
+#: src/flash/detectflash.c:170
 #, c-format
 msgid "\tMaximum timeout for multi-byte program: %d us\n"
 msgstr "\tDélai d'expiration maximum pour programme multi-octets: %d us\n"
 
-#: libbrux/flash/detectflash.c:161
+#: src/flash/detectflash.c:171
 #, c-format
 msgid "\tMaximum timeout per individual block erase: %d ms\n"
 msgstr ""
 "\tDélai d'expiration maximum par effacement individuel de blocs: %d ms\n"
 
-#: libbrux/flash/detectflash.c:162
+#: src/flash/detectflash.c:172
 #, c-format
 msgid "\tMaximum timeout for chip erase: %d ms\n"
 msgstr ""
 "\tDélai d'expiration maximum pour un effacement complet du module: %d ms\n"
 
-#: libbrux/flash/detectflash.c:165
+#: src/flash/detectflash.c:175
 #, c-format
 msgid "Device geometry definition:\n"
 msgstr "Définition de la géométrie du périphérique:\n"
 
-#: libbrux/flash/detectflash.c:166
+#: src/flash/detectflash.c:176
 #, c-format
 msgid "\tDevice Size: %d B (%d KiB, %d MiB)\n"
 msgstr "\tTaille du périphérique: %d O (%d KiB, %d MiB)\n"
 
-#: libbrux/flash/detectflash.c:173
+#: src/flash/detectflash.c:183
 msgid "x8"
 msgstr "x8"
 
-#: libbrux/flash/detectflash.c:176
+#: src/flash/detectflash.c:186
 msgid "x16"
 msgstr "x16"
 
-#: libbrux/flash/detectflash.c:179
+#: src/flash/detectflash.c:189
 msgid "x8/x16"
 msgstr "x8/x16"
 
-#: libbrux/flash/detectflash.c:182
+#: src/flash/detectflash.c:192
 msgid "x32"
 msgstr "x32"
 
-#: libbrux/flash/detectflash.c:185
+#: src/flash/detectflash.c:195
 msgid "x16/x32"
 msgstr "x16/x32"
 
-#: libbrux/flash/detectflash.c:191
+#: src/flash/detectflash.c:201
 #, c-format
 msgid "\tFlash Device Interface Code description: 0x%04X (%s)\n"
 msgstr "\tDescription du code de l'interface du module: 0x%04X (%s)\n"
 
-#: libbrux/flash/detectflash.c:192
+#: src/flash/detectflash.c:202
 #, c-format
 msgid "\tMaximum number of bytes in multi-byte program: %d\n"
 msgstr "\tNombre maximum d'octets d'un programme multi-octest: %d\n"
 
-#: libbrux/flash/detectflash.c:193
+#: src/flash/detectflash.c:203
 #, c-format
 msgid "\tNumber of Erase Block Regions within device: %d\n"
 msgstr ""
 "\tNumbre de régions de blocs d'effacement à l'intérieur du périphérique: %d\n"
 
-#: libbrux/flash/detectflash.c:194
+#: src/flash/detectflash.c:204
 #, c-format
 msgid "\tErase Block Region Information:\n"
 msgstr "\tInformation sur la région du bloc d'effacement:\n"
 
-#: libbrux/flash/detectflash.c:199
+#: src/flash/detectflash.c:209
 #, c-format
 msgid "\t\tRegion %d:\n"
 msgstr "\t\tRégion %d:\n"
 
-#: libbrux/flash/detectflash.c:200
+#: src/flash/detectflash.c:210
 #, c-format
 msgid "\t\t\tErase Block Size: %d B (%d KiB)\n"
 msgstr "\t\t\tTaille du bloc d'effacement: %d B (%d KiB)\n"
 
-#: libbrux/flash/detectflash.c:203
+#: src/flash/detectflash.c:213
 #, c-format
 msgid "\t\t\tNumber of Erase Blocks: %d\n"
 msgstr "\t\t\tNombre de blocs d'effacement: %d\n"
 
-#: libbrux/flash/intel.c:105
+#: src/flash/intel.c:104
 #, c-format
 msgid "Manufacturer: %s\n"
 msgstr "Manufacturier: %s\n"
 
-#: libbrux/flash/intel.c:108
+#: src/flash/intel.c:107
 #, c-format
 msgid "Unknown manufacturer (0x%04X)!\n"
 msgstr "Manufacturier inconnu (0x%04X)!\n"
 
-#: libbrux/flash/intel.c:112
+#: src/flash/intel.c:111
 #, c-format
 msgid "Chip: "
 msgstr "Module: "
 
-#: libbrux/flash/intel.c:164
+#: src/flash/intel.c:163
 #, c-format
 msgid "Unknown (0x%02X)!\n"
 msgstr "Inconnu (0x%02X)!\n"
 
-#: libbrux/flash/intel.c:223
+#: src/flash/intel.c:222
 #, c-format
 msgid "flash: invalid command seq\n"
 msgstr "flash: séquence de commande invalide\n"
 
-#: libbrux/flash/intel.c:226
+#: src/flash/intel.c:225
 #, c-format
 msgid "flash: low vpen\n"
 msgstr "flash: vpen bas\n"
 
-#: libbrux/flash/intel.c:229
+#: src/flash/intel.c:228
 #, c-format
 msgid "flash: block locked\n"
 msgstr "flash: bloc verrouillé\n"
 
-#: libbrux/flash/intel.c:251
+#: src/flash/intel.c:250
 #, c-format
 msgid "flash: unknown error while unblocking\n"
 msgstr "flash: erreur inconnue lors du déverrouillage\n"
 
-#: libbrux/flash/intel.c:270
+#: src/flash/intel.c:269
 #, c-format
 msgid "flash: unknown error while programming\n"
 msgstr "flash: erreur inconnue lors de la programmation\n"
 
-#: libbrux/flash/intel.c:350
+#: src/flash/intel.c:349
 msgid "supported: 28Fxxxx, 2 x 16 bit"
 msgstr "supportés: 28Fxxxx, 2 x 16 bit"
 
-#: libbrux/flash/intel.c:362
+#: src/flash/intel.c:361
 msgid "supported: 28Fxxxx, 1 x 16 bit"
 msgstr "supportés: 28Fxxxx, 1 x 16 bit"
 
-#: libbrux/flash/intel.c:374
+#: src/flash/intel.c:373
 msgid "supported: 28Fxxxx, 1 x 8 bit"
 msgstr "supportés: 28Fxxxx, 1 x 8 bit"
 
@@ -491,11 +494,11 @@ msgstr "supportés: 28Fxxxx, 1 x 8 bit"
 #: src/bus/mpc824x.c:372 src/bus/ppc440gx_ebc8.c:264
 #: src/bus/ppc440gx_ebc8.c:273 src/bus/ppc440gx_ebc8.c:281
 #: src/bus/ppc440gx_ebc8.c:286 src/bus/ppc440gx_ebc8.c:291
-#: src/bus/pxa2x0.c:680 src/bus/pxa2x0.c:689 src/bus/pxa2x0.c:711
-#: src/bus/pxa2x0.c:726 src/bus/pxa2x0.c:733 src/bus/pxa2x0.c:738
-#: src/bus/pxa2x0.c:743 src/bus/pxa2x0.c:748 src/bus/s3c4510x.c:360
-#: src/bus/s3c4510x.c:369 src/bus/s3c4510x.c:378 src/bus/s3c4510x.c:388
-#: src/bus/s3c4510x.c:397 src/bus/s3c4510x.c:406 src/bus/s3c4510x.c:413
+#: src/bus/pxa2x0.c:681 src/bus/pxa2x0.c:690 src/bus/pxa2x0.c:712
+#: src/bus/pxa2x0.c:727 src/bus/pxa2x0.c:734 src/bus/pxa2x0.c:739
+#: src/bus/pxa2x0.c:744 src/bus/pxa2x0.c:749 src/bus/s3c4510x.c:377
+#: src/bus/s3c4510x.c:386 src/bus/s3c4510x.c:395 src/bus/s3c4510x.c:405
+#: src/bus/s3c4510x.c:414 src/bus/s3c4510x.c:423 src/bus/s3c4510x.c:431
 #: src/bus/sa1110.c:295 src/bus/sa1110.c:304 src/bus/sa1110.c:313
 #: src/bus/sa1110.c:320 src/bus/sa1110.c:325 src/bus/sa1110.c:330
 #: src/bus/sh7727.c:327 src/bus/sh7727.c:336 src/bus/sh7727.c:347
@@ -531,8 +534,8 @@ msgstr ""
 msgid "Broadcom BCM1250 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Broadcom BCM1250 via BSR"
 
-#: src/bus/buses.c:85 src/cmd/include.c:47 src/detect.c:267 src/jtag.c:181
-#: src/jtag.c:447 src/jtag.c:465 src/jtag.c:489
+#: src/bus/buses.c:89 src/cmd/include.c:47 src/detect.c:269 src/jtag.c:182
+#: src/jtag.c:454 src/jtag.c:473 src/jtag.c:497
 #, c-format
 msgid "Out of memory\n"
 msgstr "Mémoire épuisée\n"
@@ -587,42 +590,42 @@ msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 msgid "IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/pxa2x0.c:183
+#: src/bus/pxa2x0.c:184
 #, c-format
 msgid "Intel PXA2x0 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/pxa2x0.c:194
+#: src/bus/pxa2x0.c:195
 #, fuzzy, c-format
 msgid "Intel PXA27x compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/pxa2x0.c:415 src/bus/pxa2x0.c:502
+#: src/bus/pxa2x0.c:416 src/bus/pxa2x0.c:503
 msgid "Static Chip Select 0"
 msgstr "Sélection statique du module 0"
 
-#: src/bus/pxa2x0.c:477
+#: src/bus/pxa2x0.c:478
 msgid "Memory Mapped registers (Memory Ctl)"
 msgstr "Registres mémoire mappé (Ctl Mémoire)"
 
-#: src/bus/pxa2x0.c:567
+#: src/bus/pxa2x0.c:568
 msgid "PXA270 internal address space (cfg, SRAM)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:585
+#: src/bus/pxa2x0.c:586
 msgid "PXA270 SDRAM space (4x 64MB)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:614
+#: src/bus/pxa2x0.c:615
 msgid "Intel PXA2x0 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/pxa2x0.c:630
+#: src/bus/pxa2x0.c:631
 #, fuzzy
 msgid "Intel PXA27x compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/s3c4510x.c:143
+#: src/bus/s3c4510x.c:151
 #, fuzzy, c-format
 msgid ""
 "Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%"
@@ -630,7 +633,7 @@ msgid ""
 msgstr ""
 "pilote de bus compatible Samsung S3C4510B via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/s3c4510x.c:315
+#: src/bus/s3c4510x.c:332
 msgid "Samsung S3C4510B compatible bus driver via BSR"
 msgstr "pilote de bus compatible Samsung S3C4510B via BSR"
 
@@ -865,11 +868,6 @@ msgstr ""
 msgid "select JTAG cable"
 msgstr "sélectionner le cable JTAG"
 
-#: src/cmd/cmd.c:113
-#, c-format
-msgid "Error: Cable not configured. Please use '%s' command first!\n"
-msgstr "ERREUR: cable non configuré. SVP utiliser la commande '%s' d'abord!\n"
-
 #: src/cmd/detect.c:83
 #, c-format
 msgid ""
@@ -1022,7 +1020,7 @@ msgstr ""
 msgid "erase flash memory by number of blocks"
 msgstr "effacer la mémoire flash par numéro de bloc"
 
-#: src/cmd/flashmem.c:57 src/cmd/include.c:54 src/jtag.c:454
+#: src/cmd/flashmem.c:57 src/cmd/include.c:54 src/jtag.c:461
 #, c-format
 msgid "Unable to open file `%s'!\n"
 msgstr "Incapable d'ouvrir le fichier `%s'!\n"
@@ -1197,7 +1195,7 @@ msgid "Instruction '%s' already defined\n"
 msgstr "Instruction '%s' est déjà définie\n"
 
 #: src/cmd/instruction.c:95 src/cmd/register.c:71 src/cmd/register.c:85
-#: src/cmd/salias.c:72 src/cmd/signal.c:88 src/detect.c:208 src/detect.c:231
+#: src/cmd/salias.c:72 src/cmd/signal.c:88 src/detect.c:210 src/detect.c:233
 #, c-format
 msgid "out of memory\n"
 msgstr "mémoire épuisée\n"
@@ -1322,47 +1320,47 @@ msgstr ""
 msgid "write a single word"
 msgstr "écrire un mot simple"
 
-#: src/cmd/print.c:82
+#: src/cmd/print.c:87
 #, c-format
 msgid " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 msgstr " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 
-#: src/cmd/print.c:86 src/cmd/print.c:89 src/cmd/print.c:93
+#: src/cmd/print.c:91 src/cmd/print.c:94 src/cmd/print.c:98
 #, c-format
 msgid "(%d) String conversion failed!\n"
 msgstr "(%d) la conversion de chaîne a échoué!\n"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Manufacturer"
 msgstr "Manufacturier"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Part"
 msgstr "Pièce"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Stepping"
 msgstr "Pas"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Instruction"
 msgstr "Instruction"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Register"
 msgstr "Registre"
 
-#: src/cmd/print.c:105
+#: src/cmd/print.c:110
 #, fuzzy, c-format
 msgid " %3d %s "
 msgstr " %3d "
 
-#: src/cmd/print.c:107 src/part/part.c:327
+#: src/cmd/print.c:112 src/part/part.c:330
 #, c-format
 msgid " %3d "
 msgstr " %3d "
 
-#: src/cmd/print.c:119
+#: src/cmd/print.c:124
 #, c-format
 msgid ""
 "\n"
@@ -1373,33 +1371,33 @@ msgstr ""
 "Bus actif:\n"
 "*%d: "
 
-#: src/cmd/print.c:124
+#: src/cmd/print.c:129
 #, c-format
 msgid "Error in bus area discovery at 0x%08llX\n"
 msgstr "ERREUR dans la zone de découverte du bus à 0x%08llX\n"
 
-#: src/cmd/print.c:129
+#: src/cmd/print.c:134
 #, c-format
 msgid "\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"
 msgstr ""
 "\tdébut: 0x%08X, longueur: 0x%08llX, largeur des données: %d bits, (%s)\n"
 
-#: src/cmd/print.c:131
+#: src/cmd/print.c:136
 #, c-format
 msgid "\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"
 msgstr "\tdébut: 0x%08X, longueur: 0x%08llX, largeur des données: %d bits\n"
 
-#: src/cmd/print.c:146
+#: src/cmd/print.c:151
 #, c-format
 msgid "*%d: "
 msgstr "*%d: "
 
-#: src/cmd/print.c:148
+#: src/cmd/print.c:153
 #, c-format
 msgid "%d: "
 msgstr "%d: "
 
-#: src/cmd/print.c:159
+#: src/cmd/print.c:164
 #, fuzzy, c-format
 msgid ""
 "Usage: %s [chain|bus|signals]\n"
@@ -1415,7 +1413,7 @@ msgstr ""
 "le numéro de pièce, l'instruiction courante (active) et le registre de "
 "données.\n"
 
-#: src/cmd/print.c:169
+#: src/cmd/print.c:174
 msgid "display JTAG chain list/status"
 msgstr "afficher la liste/état de la chaîne JTAG"
 
@@ -1597,167 +1595,172 @@ msgstr ""
 msgid "define new signal for a part"
 msgstr "définir un nouveau signal pour une pièce"
 
-#: src/detect.c:56
+#: src/detect.c:58
 #, c-format
 msgid "Cannot open %s\n"
 msgstr "ne peut ouvrir %s\n"
 
-#: src/detect.c:203
+#: src/detect.c:205
 #, c-format
 msgid "IR length: %d\n"
 msgstr "longueur IR: %d\n"
 
-#: src/detect.c:219
+#: src/detect.c:221
 #, c-format
 msgid "Unable to detect JTAG chain length\n"
 msgstr "Incapable de détecter la longueur de la chaîne JTAG\n"
 
-#: src/detect.c:222
+#: src/detect.c:224
 #, c-format
 msgid "Chain length: %d\n"
 msgstr "Longueur de la chaîne: %d\n"
 
-#: src/detect.c:263
+#: src/detect.c:265
 #, fuzzy, c-format
 msgid "Device Id: %s (0x%016lX)\n"
 msgstr "Identificateur du périphérique: %s\n"
 
-#: src/detect.c:285
+#: src/detect.c:293
 #, c-format
 msgid "  Unknown manufacturer!\n"
 msgstr "  Manufacturier inconnu!\n"
 
-#: src/detect.c:291
+#: src/detect.c:299
 #, c-format
 msgid "  Manufacturer: %s\n"
 msgstr "  Manufacturier: %s\n"
 
-#: src/detect.c:293
+#: src/detect.c:301
 #, c-format
 msgid "Warning: Manufacturer too long\n"
 msgstr "AVERTISSEMENT: nom du manufacturier trop long\n"
 
-#: src/detect.c:309
+#: src/detect.c:317
 #, c-format
 msgid "  Unknown part!\n"
 msgstr "  Pièce inconnue!\n"
 
-#: src/detect.c:315
+#: src/detect.c:323
 #, fuzzy, c-format
 msgid "  Part(%d):         %s\n"
 msgstr "  Pièce:         %s\n"
 
-#: src/detect.c:317
+#: src/detect.c:325
 #, c-format
 msgid "Warning: Part too long\n"
 msgstr "AVERTISSEMENT: nom de pièce trop long\n"
 
-#: src/detect.c:333
+#: src/detect.c:341
 #, c-format
 msgid "  Unknown stepping!\n"
 msgstr "  Pas inconnu!\n"
 
-#: src/detect.c:339
+#: src/detect.c:347
 #, c-format
 msgid "  Stepping:     %s\n"
 msgstr "  Pas     :     %s\n"
 
-#: src/detect.c:341
+#: src/detect.c:349
 #, c-format
 msgid "Warning: Stepping too long\n"
 msgstr "AVERTISSEMENT: pas trop long\n"
 
-#: src/detect.c:353
+#: src/detect.c:361
 #, c-format
 msgid "  Filename:     %s\n"
 msgstr "  nom de fichier:     %s\n"
 
-#: src/detect.c:368
+#: src/detect.c:379
 #, c-format
 msgid "Error: Unable to detect JTAG chain end!\n"
 msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
 
-#: src/discovery.c:113
+#: src/discovery.c:100
+#, c-format
+msgid "Warning: TDO seems to be stuck at %d\n"
+msgstr ""
+
+#: src/discovery.c:125
 #, c-format
 msgid "Detecting IR length ... "
 msgstr "Détection de la longuer IR..."
 
-#: src/discovery.c:119 src/discovery.c:151
+#: src/discovery.c:131 src/discovery.c:163
 #, c-format
 msgid "%d\n"
 msgstr "%d\n"
 
-#: src/discovery.c:122
+#: src/discovery.c:134
 #, c-format
 msgid "Error: Invalid IR length!\n"
 msgstr "ERREUR: longueur IR invalide!\n"
 
-#: src/discovery.c:133
+#: src/discovery.c:145
 #, c-format
 msgid "Error: Out of memory!\n"
 msgstr "ERREUR: mémoire épuisée!\n"
 
-#: src/discovery.c:145
+#: src/discovery.c:157
 #, c-format
 msgid "Detecting DR length for IR %s ... "
 msgstr "Détection de la longeur DR de IR %s..."
 
-#: src/flash.c:90
+#: src/flash.c:89
 #, c-format
 msgid "unknown flash - vendor id: %d (0x%04x)\n"
 msgstr "flahs inconnu - identificateur du manufacturier: %d (0x%04x)\n"
 
-#: src/flash.c:94
+#: src/flash.c:93
 #, c-format
 msgid "Flash not supported!\n"
 msgstr "Flash non supporté!\n"
 
-#: src/flash.c:105 src/flash.c:253 src/flash.c:363
+#: src/flash.c:104 src/flash.c:256 src/flash.c:368
 #, c-format
 msgid "no flash driver found\n"
 msgstr "aucun pilote de flahs repéré\n"
 
-#: src/flash.c:116
+#: src/flash.c:115
 #, c-format
 msgid "Invalid sync sequence!\n"
 msgstr "Séquence de synchro invalide!\n"
 
-#: src/flash.c:134
+#: src/flash.c:133
 #, c-format
 msgid "block %d unlocked\n"
 msgstr "bloc %d déverrouillé\n"
 
-#: src/flash.c:135 src/flash.c:284
+#: src/flash.c:134 src/flash.c:290
 #, c-format
 msgid "erasing block %d: %d\n"
 msgstr "effacement du bloc %d: %d\n"
 
-#: src/flash.c:139 src/flash.c:272
+#: src/flash.c:138 src/flash.c:275
 #, c-format
 msgid "program:\n"
 msgstr "programme:\n"
 
-#: src/flash.c:147 src/flash.c:187
+#: src/flash.c:146 src/flash.c:186
 #, c-format
 msgid "Error: premature end of file\n"
 msgstr "ERREUR: fin prématurée du fichier\n"
 
-#: src/flash.c:150 src/flash.c:190
+#: src/flash.c:149 src/flash.c:189
 #, c-format
 msgid "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"
 msgstr "enregistrement: début = 0x%08X, longueur = 0x%08X, checksum = 0x%08X\n"
 
-#: src/flash.c:154 src/flash.c:194
+#: src/flash.c:153 src/flash.c:193
 #, c-format
 msgid "Error: Invalid record length!\n"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: src/flash.c:161 src/flash.c:201 src/readmem.c:105
+#: src/flash.c:160 src/flash.c:200 src/readmem.c:105
 #, c-format
 msgid "addr: 0x%08X"
 msgstr "adr: 0x%08X"
 
-#: src/flash.c:166 src/flash.c:304
+#: src/flash.c:165 src/flash.c:309
 #, c-format
 msgid ""
 "\n"
@@ -1766,12 +1769,12 @@ msgstr ""
 "\n"
 "erreur flash\n"
 
-#: src/flash.c:178 src/flash.c:315
+#: src/flash.c:177 src/flash.c:320
 #, c-format
 msgid "verify:\n"
 msgstr "vérifier:\n"
 
-#: src/flash.c:207
+#: src/flash.c:206
 #, c-format
 msgid ""
 "\n"
@@ -1780,7 +1783,7 @@ msgstr ""
 "\n"
 "ERREUR de vérification: 0x%08X vs. 0x%08X à l'adresse %08X\n"
 
-#: src/flash.c:216 src/flash.c:349 src/readmem.c:113
+#: src/flash.c:215 src/flash.c:354 src/readmem.c:113
 #, c-format
 msgid ""
 "\n"
@@ -1789,12 +1792,12 @@ msgstr ""
 "\n"
 "Complété.\n"
 
-#: src/flash.c:266
+#: src/flash.c:269
 #, c-format
 msgid "Out of memory!\n"
 msgstr "Mémoire épuisée!\n"
 
-#: src/flash.c:283
+#: src/flash.c:289
 #, c-format
 msgid ""
 "\n"
@@ -1803,22 +1806,22 @@ msgstr ""
 "\n"
 "bloc %d déverrouillé\n"
 
-#: src/flash.c:292 src/flash.c:339
+#: src/flash.c:297 src/flash.c:344
 #, fuzzy, c-format
 msgid "addr: 0x%08X\r"
 msgstr "adr: 0x%08X"
 
-#: src/flash.c:327
+#: src/flash.c:332
 #, c-format
 msgid "Error during file read.\n"
 msgstr "ERREUR durant la lecture du fichier.\n"
 
-#: src/flash.c:344
-#, c-format
+#: src/flash.c:349
+#, fuzzy, c-format
 msgid ""
 "\n"
 "verify error:\n"
-"readed: 0x%08X\n"
+"read: 0x%08X\n"
 "expected: 0x%08X\n"
 msgstr ""
 "\n"
@@ -1826,93 +1829,98 @@ msgstr ""
 "lu: 0x%08X\n"
 "attendu: 0x%08X\n"
 
-#: src/flash.c:368
+#: src/flash.c:373
 #, c-format
 msgid ""
 "\n"
 "Erasing %d Flash block%s from address 0x%x\n"
 msgstr ""
 
-#: src/flash.c:373
+#: src/flash.c:378
 #, c-format
 msgid "(%d%% Completed) FLASH Block %d : Unlocking ... "
 msgstr ""
 
-#: src/flash.c:376
+#: src/flash.c:381
 #, c-format
 msgid "Erasing ... "
 msgstr ""
 
-#: src/flash.c:381
+#: src/flash.c:386
 #, c-format
 msgid "\r(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"
 msgstr ""
 
-#: src/flash.c:383
+#: src/flash.c:388
 #, c-format
 msgid "Ok.\r%78s\r"
 msgstr ""
 
-#: src/flash.c:386
+#: src/flash.c:391
 #, c-format
 msgid "ERROR.\n"
 msgstr ""
 
-#: src/flash.c:392
+#: src/flash.c:397
 #, c-format
 msgid ""
 "\n"
 "Erasing Completed.\n"
 msgstr ""
 
-#: src/flash.c:394
+#: src/flash.c:399
 #, c-format
 msgid ""
 "\n"
 "Erasing Failed.\n"
 msgstr ""
 
-#: src/jtag.c:344
+#: src/jtag.c:347
 #, c-format
 msgid "'%s' must not be run suid root!\n"
 msgstr ""
 
-#: src/jtag.c:395
+#: src/jtag.c:403
 #, fuzzy, c-format
 msgid "%s #%s\n"
 msgstr "%-13s %s\n"
 
-#: src/jtag.c:398
+#: src/jtag.c:406
 #, c-format
 msgid "Usage: %s [OPTION] [FILE]\n"
 msgstr ""
 
-#: src/jtag.c:401
+#: src/jtag.c:409
 #, c-format
 msgid "  -h, --help          display this help and exit\n"
 msgstr ""
 
-#: src/jtag.c:402
+#: src/jtag.c:410
 #, c-format
 msgid "  -v, --version       display version information and exit\n"
 msgstr ""
 
-#: src/jtag.c:405
+#: src/jtag.c:412
 #, c-format
 msgid "  -n, --norc          disable reading ~/.jtag/rc on startup\n"
 msgstr ""
 
-#: src/jtag.c:408
+#: src/jtag.c:413
+#, c-format
+msgid "  -i, --interactive   enter interactive mode after reading files\n"
+msgstr ""
+
+#: src/jtag.c:415
 #, c-format
 msgid "  [FILE]              file containing commands to execute\n"
 msgstr ""
 
-#: src/jtag.c:411
+#: src/jtag.c:418
 #, c-format
 msgid "  Please report bugs at http://www.urjtag.org\n"
 msgstr ""
 
-#: src/jtag.c:418
+#: src/jtag.c:425
 #, c-format
 msgid ""
 "\n"
@@ -1922,7 +1930,7 @@ msgid ""
 "Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n"
 msgstr ""
 
-#: src/jtag.c:423
+#: src/jtag.c:430
 #, c-format
 msgid ""
 "\n"
@@ -1941,7 +1949,7 @@ msgid ""
 "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
 msgstr ""
 
-#: src/jtag.c:478
+#: src/jtag.c:486
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -1972,7 +1980,7 @@ msgstr ""
 "avec ce programme; sinon, écrire à la Free Software Foundation, Inc.,\n"
 "59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.\n"
 
-#: src/jtag.c:493
+#: src/jtag.c:501
 #, fuzzy, c-format
 msgid "WARNING: %s may damage your hardware!\n"
 msgstr ""
@@ -1980,7 +1988,7 @@ msgstr ""
 "quitter!\n"
 "\n"
 
-#: src/jtag.c:494
+#: src/jtag.c:502
 #, fuzzy, c-format
 msgid ""
 "Type \"quit\" to exit, \"help\" for help.\n"
@@ -2098,21 +2106,36 @@ msgstr "Cable JTAG Mpcbdm"
 msgid "Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"
 msgstr "Cable JTAG Ka-Ro TRITON Starterkit II (PXA255/250)"
 
-#: src/tap/cable/wiggler.c:113
+#: src/tap/cable/wiggler.c:289
+#, c-format
+msgid ""
+"Usage: cable %s parallel PORTADDR [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+"   or: cable %s ppdev PPDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+"   or: cable %s ppi PPIDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+"\n"
+"PORTADDR   parallel port address (e.g. 0x378)\n"
+"PPDEF      ppdev device (e.g. /dev/parport0)\n"
+"PPIDEF     ppi device (e.g. /dev/ppi0)\n"
+"TDO, ...   parallel port bit number, prepend '#' for inversion\n"
+"           default is '%s'\n"
+"\n"
+msgstr ""
+
+#: src/tap/cable/wiggler.c:321
 msgid "Macraigor Wiggler JTAG Cable"
 msgstr "Cable JTAG Macraigor Wiggler"
 
-#: src/tap/cable/wiggler.c:129
+#: src/tap/cable/wiggler.c:339
 #, fuzzy
 msgid "Excelpoint IGLOO JTAG Cable"
 msgstr "Cable JTAG Arcom"
 
-#: src/tap/chain.c:114 src/tap/chain.c:145
+#: src/tap/chain.c:129 src/tap/chain.c:160
 #, c-format
 msgid "%s(%d) Part %d without active instruction\n"
 msgstr "%s(%d) pièce %d sans instruction active\n"
 
-#: src/tap/chain.c:149
+#: src/tap/chain.c:164
 #, c-format
 msgid "%s(%d) Part %d without data register\n"
 msgstr "%s(%d) pièce %d sans registre de données\n"
@@ -2162,7 +2185,7 @@ msgstr "ne peut ouvrir %s\n"
 msgid "Could not claim ppdev device: %s\n"
 msgstr ""
 
-#: src/tap/tap.c:50 src/tap/tap.c:81 src/tap/tap.c:92
+#: src/tap/tap.c:51 src/tap/tap.c:110 src/tap/tap.c:121
 #, c-format
 msgid "%s: Invalid state: %2X\n"
 msgstr "%s: état invalide: %2X\n"

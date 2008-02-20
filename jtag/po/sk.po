@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2007-12-23 14:06+0100\n"
+"POT-Creation-Date: 2008-02-17 11:44+0100\n"
 "PO-Revision-Date: 2003-10-08 21:25+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -15,24 +15,29 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: libbrux/cmd/cmd.c:44
+#: src/cmd/cmd.c:125
+#, c-format
+msgid "Error: Cable not configured. Please use '%s' command first!\n"
+msgstr ""
+"Chyba: Kábel nie je nakonfigurovaný. Prosím najskôr použie príkaz '%s'!\n"
+
+#: src/cmd/cmd.c:143
 #, c-format
 msgid "%s: syntax error!\n"
 msgstr "%s: chyba syntaxe!\n"
 
-#: libbrux/cmd/cmd.c:48 libbrux/cmd/help.c:57
+#: src/cmd/cmd.c:147 src/cmd/help.c:57
 #, c-format
 msgid "%s: unknown command\n"
 msgstr "%s: neznámy príkaz\n"
 
-#: libbrux/cmd/cmd_detectflash.c:41 src/cmd/eraseflash.c:47
-#: src/cmd/flashmem.c:47 src/cmd/peekpoke.c:47 src/cmd/peekpoke.c:109
-#: src/cmd/readmem.c:45
+#: src/cmd/detectflash.c:41 src/cmd/eraseflash.c:47 src/cmd/flashmem.c:47
+#: src/cmd/peekpoke.c:47 src/cmd/peekpoke.c:109 src/cmd/readmem.c:45
 #, c-format
 msgid "Error: Bus driver missing.\n"
 msgstr "Chyba: Chýba ovládač zbernice.\n"
 
-#: libbrux/cmd/cmd_detectflash.c:57
+#: src/cmd/detectflash.c:57
 #, fuzzy, c-format
 msgid ""
 "Usage: %s ADDRESS\n"
@@ -43,11 +48,11 @@ msgstr ""
 "Použitie: %s\n"
 "Detekovať typ flash pamäte pripojený k súčiastke.\n"
 
-#: libbrux/cmd/cmd_detectflash.c:66
+#: src/cmd/detectflash.c:66
 msgid "detect parameters of flash chips attached to a part"
 msgstr "detekovať parametre čipov flash pripojených k súčiastke"
 
-#: libbrux/cmd/help.c:39
+#: src/cmd/help.c:39
 #, c-format
 msgid ""
 "Command list:\n"
@@ -56,16 +61,16 @@ msgstr ""
 "Zoznam príkazov:\n"
 "\n"
 
-#: libbrux/cmd/help.c:41 src/cmd/cable.c:142
+#: src/cmd/help.c:41 src/cmd/cable.c:142
 #, c-format
 msgid "%-13s %s\n"
 msgstr "%-13s %s\n"
 
-#: libbrux/cmd/help.c:41
+#: src/cmd/help.c:41
 msgid "(no description available)"
 msgstr "(popis je nedostupný)"
 
-#: libbrux/cmd/help.c:42
+#: src/cmd/help.c:42
 #, c-format
 msgid ""
 "\n"
@@ -74,7 +79,7 @@ msgstr ""
 "\n"
 "Napíšte \"help PRÍKAZ\" a získate podrobnosti o príslušnom príkaze.\n"
 
-#: libbrux/cmd/help.c:66
+#: src/cmd/help.c:66
 #, c-format
 msgid ""
 "Usage: %s [COMMAND]\n"
@@ -83,11 +88,11 @@ msgstr ""
 "Použitie: %s [PRÍKAZ]\n"
 "Vypísať krátku pomoc pre PRÍKAZ alebo zoznam dostupných príkazov.\n"
 
-#: libbrux/cmd/help.c:73
+#: src/cmd/help.c:73
 msgid "display this help"
 msgstr "zobraziť túto pomoc"
 
-#: libbrux/cmd/quit.c:44
+#: src/cmd/quit.c:44
 #, c-format
 msgid ""
 "Usage: %s\n"
@@ -96,11 +101,11 @@ msgstr ""
 "Použitie: %s\n"
 "Ukončit %s.\n"
 
-#: libbrux/cmd/quit.c:51
+#: src/cmd/quit.c:51
 msgid "exit and terminate this session"
 msgstr "ukončiť toto sedenie"
 
-#: libbrux/flash/amd.c:232
+#: src/flash/amd.c:276
 #, c-format
 msgid ""
 "Chip: AMD Flash\n"
@@ -109,27 +114,27 @@ msgstr ""
 "Čip: AMD Flash\n"
 "\tVýrobca: "
 
-#: libbrux/flash/amd.c:235
+#: src/flash/amd.c:279
 #, c-format
 msgid "AMD"
 msgstr "AMD"
 
-#: libbrux/flash/amd.c:238
+#: src/flash/amd.c:282
 #, c-format
 msgid "ST/Samsung"
 msgstr ""
 
-#: libbrux/flash/amd.c:241
+#: src/flash/amd.c:285
 #, c-format
 msgid "Macronix"
 msgstr ""
 
-#: libbrux/flash/amd.c:244
+#: src/flash/amd.c:288
 #, c-format
 msgid "Unknown manufacturer (ID 0x%04x)"
 msgstr "Neznámy výrobca (ID 0x%04x)"
 
-#: libbrux/flash/amd.c:247
+#: src/flash/amd.c:291
 #, c-format
 msgid ""
 "\n"
@@ -138,52 +143,52 @@ msgstr ""
 "\n"
 "\tČip: "
 
-#: libbrux/flash/amd.c:250
+#: src/flash/amd.c:294
 #, fuzzy, c-format
 msgid "Am29LV040B"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:253
+#: src/flash/amd.c:297
 #, c-format
 msgid "Am29LV640D/Am29LV641D/Am29LV642D"
 msgstr "Am29LV640D/Am29LV641D/Am29LV642D"
 
-#: libbrux/flash/amd.c:256
+#: src/flash/amd.c:300
 #, c-format
 msgid "Am29LV800B"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:259
+#: src/flash/amd.c:303
 #, fuzzy, c-format
 msgid "MX29LV160B"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:262
+#: src/flash/amd.c:306
 #, fuzzy, c-format
 msgid "AM29LV160DB"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:265
+#: src/flash/amd.c:309
 #, fuzzy, c-format
 msgid "Am29LV065D"
 msgstr "Am29LV800B"
 
-#: libbrux/flash/amd.c:268
+#: src/flash/amd.c:312
 #, c-format
 msgid "M29W320DT"
 msgstr ""
 
-#: libbrux/flash/amd.c:271
+#: src/flash/amd.c:315
 #, c-format
 msgid "M29W320DB"
 msgstr ""
 
-#: libbrux/flash/amd.c:274
+#: src/flash/amd.c:318
 #, c-format
 msgid "Unknown (ID 0x%04x)"
 msgstr "Neznámy (ID 0x%04x)"
 
-#: libbrux/flash/amd.c:277
+#: src/flash/amd.c:321
 #, c-format
 msgid ""
 "\n"
@@ -192,75 +197,74 @@ msgstr ""
 "\n"
 "\tChránené: %04x\n"
 
-#: libbrux/flash/amd.c:347 libbrux/flash/amd.c:359 libbrux/flash/amd.c:371
-#: libbrux/flash/detectflash.c:96 libbrux/flash/detectflash.c:126
+#: src/flash/amd.c:393 src/flash/amd.c:405 src/flash/amd.c:417
+#: src/flash/detectflash.c:106 src/flash/detectflash.c:136
 msgid "AMD/Fujitsu Standard Command Set"
 msgstr "Štandardná množina príkazov AMD/Fujitsu"
 
-#: libbrux/flash/amd.c:348
+#: src/flash/amd.c:394
 msgid "supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 msgstr "podporované: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 bitov"
 
-#: libbrux/flash/amd.c:360
+#: src/flash/amd.c:406
 msgid "supported: AMD 29LV800B; 1x16 Bit"
 msgstr "podporované: AMD 29LV800B; 1x16 bitov"
 
-#: libbrux/flash/amd.c:372
+#: src/flash/amd.c:418
 #, fuzzy
 msgid "supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B; 1x8 Bit"
 msgstr "podporované: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 bitov"
 
-#: libbrux/flash/detectflash.c:56 src/readmem.c:55
+#: src/flash/detectflash.c:56 src/readmem.c:55
 #, c-format
 msgid "Error: Missing bus driver!\n"
 msgstr "Chyba: Chýba ovládač zbernice!\n"
 
-#: libbrux/flash/detectflash.c:75
+#: src/flash/detectflash.c:87
 #, c-format
 msgid "Flash not found!\n"
 msgstr "Pamäť flash nebola nájdená!\n"
 
-#: libbrux/flash/detectflash.c:86
+#: src/flash/detectflash.c:96
 #, c-format
 msgid "Query identification string:\n"
 msgstr "Identifikačný reťazec:\n"
 
-#: libbrux/flash/detectflash.c:90 libbrux/flash/detectflash.c:120
+#: src/flash/detectflash.c:100 src/flash/detectflash.c:130
 msgid "null"
 msgstr "nič"
 
-#: libbrux/flash/detectflash.c:93 libbrux/flash/detectflash.c:123
+#: src/flash/detectflash.c:103 src/flash/detectflash.c:133
 msgid "Intel/Sharp Extended Command Set"
 msgstr "Rozšírená sada príkazov Intel/Sharp"
 
-#: libbrux/flash/detectflash.c:99 libbrux/flash/detectflash.c:129
-#: libbrux/flash/intel.c:349 libbrux/flash/intel.c:361
-#: libbrux/flash/intel.c:373
+#: src/flash/detectflash.c:109 src/flash/detectflash.c:139
+#: src/flash/intel.c:348 src/flash/intel.c:360 src/flash/intel.c:372
 msgid "Intel Standard Command Set"
 msgstr "Štandardná sada príkazov Intel"
 
-#: libbrux/flash/detectflash.c:102 libbrux/flash/detectflash.c:132
+#: src/flash/detectflash.c:112 src/flash/detectflash.c:142
 msgid "AMD/Fujitsu Extended Command Set"
 msgstr "Rozšírená sada príkazov AMD/Fujitsu"
 
-#: libbrux/flash/detectflash.c:105 libbrux/flash/detectflash.c:135
+#: src/flash/detectflash.c:115 src/flash/detectflash.c:145
 msgid "Mitsubishi Standard Command Set"
 msgstr "Štandardná sada príkazov Mitsubishi"
 
-#: libbrux/flash/detectflash.c:108 libbrux/flash/detectflash.c:138
+#: src/flash/detectflash.c:118 src/flash/detectflash.c:148
 msgid "Mitsubishi Extended Command Set"
 msgstr "Rozšírená sada príkazov Mitsubishi"
 
-#: libbrux/flash/detectflash.c:111 libbrux/flash/detectflash.c:141
+#: src/flash/detectflash.c:121 src/flash/detectflash.c:151
 msgid "Page Write Command Set"
 msgstr "Sada príkazov Page Write"
 
-#: libbrux/flash/detectflash.c:114 libbrux/flash/detectflash.c:144
-#: libbrux/flash/detectflash.c:188
+#: src/flash/detectflash.c:124 src/flash/detectflash.c:154
+#: src/flash/detectflash.c:198
 msgid "unknown!!!"
 msgstr "neznáma!!!"
 
-#: libbrux/flash/detectflash.c:117
+#: src/flash/detectflash.c:127
 #, c-format
 msgid ""
 "\tPrimary Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"
@@ -268,7 +272,7 @@ msgstr ""
 "\tID kód sady príkazov a riadiaceho rozhrania primárneho algoritmu: 0x%04X (%"
 "s)\n"
 
-#: libbrux/flash/detectflash.c:147
+#: src/flash/detectflash.c:157
 #, c-format
 msgid ""
 "\tAlternate Algorithm Command Set and Control Interface ID Code: 0x%04X (%"
@@ -277,200 +281,200 @@ msgstr ""
 "\tID kód sady príkazov a riadiaceho rozhrania alternatívneho algoritmu: 0x%"
 "04X (%s)\n"
 
-#: libbrux/flash/detectflash.c:150
+#: src/flash/detectflash.c:160
 #, c-format
 msgid "Query system interface information:\n"
 msgstr "Informácie systémového rozhrania:\n"
 
-#: libbrux/flash/detectflash.c:151
+#: src/flash/detectflash.c:161
 #, c-format
 msgid "\tVcc Logic Supply Minimum Write/Erase or Write voltage: %d mV\n"
 msgstr ""
 "\tVcc minimálne napäte zdroja logiky pre zápis/vymazávanie alebo zápis: %d "
 "mV\n"
 
-#: libbrux/flash/detectflash.c:152
+#: src/flash/detectflash.c:162
 #, c-format
 msgid "\tVcc Logic Supply Maximum Write/Erase or Write voltage: %d mV\n"
 msgstr ""
 "\tVcc maximálne napätie zdroja logiky pre zápis/vymazávanie alebo zápis: %d "
 "mV\n"
 
-#: libbrux/flash/detectflash.c:153
+#: src/flash/detectflash.c:163
 #, c-format
 msgid "\tVpp [Programming] Supply Minimum Write/Erase voltage: %d mV\n"
 msgstr ""
 "\tVpp [programovanie] minimálne napátie zdroja pre zápis/vymazanie: %d mV\n"
 
-#: libbrux/flash/detectflash.c:154
+#: src/flash/detectflash.c:164
 #, c-format
 msgid "\tVpp [Programming] Supply Maximum Write/Erase voltage: %d mV\n"
 msgstr ""
 "\tVpp [programovanie] maximálne napätie zdroja pre zápis/programovanie: %d "
 "mV\n"
 
-#: libbrux/flash/detectflash.c:155
+#: src/flash/detectflash.c:165
 #, c-format
 msgid "\tTypical timeout per single byte/word program: %d us\n"
 msgstr "\tTypický časový limit pre programovanie jedného bajtu/slova: %d µs\n"
 
-#: libbrux/flash/detectflash.c:156
+#: src/flash/detectflash.c:166
 #, c-format
 msgid "\tTypical timeout for maximum-size multi-byte program: %d us\n"
 msgstr ""
 "\tTypický časový limit pre programovanie maximálnej viacbajtovej sekvencie: %"
 "d µs\n"
 
-#: libbrux/flash/detectflash.c:157
+#: src/flash/detectflash.c:167
 #, c-format
 msgid "\tTypical timeout per individual block erase: %d ms\n"
 msgstr "\tTypický časový limit pre vymazanie jedného bloku: %d ms\n"
 
-#: libbrux/flash/detectflash.c:158
+#: src/flash/detectflash.c:168
 #, c-format
 msgid "\tTypical timeout for full chip erase: %d ms\n"
 msgstr "\tTypický časový limit pre vymazanie celého čipu: %d ms\n"
 
-#: libbrux/flash/detectflash.c:159
+#: src/flash/detectflash.c:169
 #, c-format
 msgid "\tMaximum timeout for byte/word program: %d us\n"
 msgstr "\tMaximálny časový limit pre programovanie bajtu/slova: %d µs\n"
 
-#: libbrux/flash/detectflash.c:160
+#: src/flash/detectflash.c:170
 #, c-format
 msgid "\tMaximum timeout for multi-byte program: %d us\n"
 msgstr ""
 "\tMaximálny časový limit pre programovanie viacbajtovej sekvencie: %d µs\n"
 
-#: libbrux/flash/detectflash.c:161
+#: src/flash/detectflash.c:171
 #, c-format
 msgid "\tMaximum timeout per individual block erase: %d ms\n"
 msgstr "\tMaximálny časový limit pre vymazanie jedného bloku: %d ms\n"
 
-#: libbrux/flash/detectflash.c:162
+#: src/flash/detectflash.c:172
 #, c-format
 msgid "\tMaximum timeout for chip erase: %d ms\n"
 msgstr "\tMaximálny časový limit pre vymazanie čipu: %d ms\n"
 
-#: libbrux/flash/detectflash.c:165
+#: src/flash/detectflash.c:175
 #, c-format
 msgid "Device geometry definition:\n"
 msgstr "Definícia geometrie zariadenia:\n"
 
-#: libbrux/flash/detectflash.c:166
+#: src/flash/detectflash.c:176
 #, c-format
 msgid "\tDevice Size: %d B (%d KiB, %d MiB)\n"
 msgstr "\tVeľkosť zariadenia: %d B (%d KiB, %d MiB)\n"
 
-#: libbrux/flash/detectflash.c:173
+#: src/flash/detectflash.c:183
 msgid "x8"
 msgstr "x8"
 
-#: libbrux/flash/detectflash.c:176
+#: src/flash/detectflash.c:186
 msgid "x16"
 msgstr "x16"
 
-#: libbrux/flash/detectflash.c:179
+#: src/flash/detectflash.c:189
 msgid "x8/x16"
 msgstr "x8/x16"
 
-#: libbrux/flash/detectflash.c:182
+#: src/flash/detectflash.c:192
 msgid "x32"
 msgstr "x32"
 
-#: libbrux/flash/detectflash.c:185
+#: src/flash/detectflash.c:195
 msgid "x16/x32"
 msgstr "x16/x32"
 
-#: libbrux/flash/detectflash.c:191
+#: src/flash/detectflash.c:201
 #, c-format
 msgid "\tFlash Device Interface Code description: 0x%04X (%s)\n"
 msgstr "\tPopisný kód rozhrania flash zariadenia: 0x%04X (%s)\n"
 
-#: libbrux/flash/detectflash.c:192
+#: src/flash/detectflash.c:202
 #, c-format
 msgid "\tMaximum number of bytes in multi-byte program: %d\n"
 msgstr "\tMaximálny počet bajtov pri viacbajtovom programovaní: %d\n"
 
-#: libbrux/flash/detectflash.c:193
+#: src/flash/detectflash.c:203
 #, c-format
 msgid "\tNumber of Erase Block Regions within device: %d\n"
 msgstr "\tPočet oblastí vymazávnia blokov v zariadení: %d\n"
 
-#: libbrux/flash/detectflash.c:194
+#: src/flash/detectflash.c:204
 #, c-format
 msgid "\tErase Block Region Information:\n"
 msgstr "\tInformácie o oblasti vymazávania blokov:\n"
 
-#: libbrux/flash/detectflash.c:199
+#: src/flash/detectflash.c:209
 #, c-format
 msgid "\t\tRegion %d:\n"
 msgstr "\t\tOblasť %d:\n"
 
-#: libbrux/flash/detectflash.c:200
+#: src/flash/detectflash.c:210
 #, c-format
 msgid "\t\t\tErase Block Size: %d B (%d KiB)\n"
 msgstr "\t\t\tVeľkosť vymazávacieho bloku: %d B (%d KiB)\n"
 
-#: libbrux/flash/detectflash.c:203
+#: src/flash/detectflash.c:213
 #, c-format
 msgid "\t\t\tNumber of Erase Blocks: %d\n"
 msgstr "\t\t\tPočet vymazávacích blokov: %d\n"
 
-#: libbrux/flash/intel.c:105
+#: src/flash/intel.c:104
 #, c-format
 msgid "Manufacturer: %s\n"
 msgstr "Výrobca: %s\n"
 
-#: libbrux/flash/intel.c:108
+#: src/flash/intel.c:107
 #, c-format
 msgid "Unknown manufacturer (0x%04X)!\n"
 msgstr "Neznámy výrobva (0x%04X)!\n"
 
-#: libbrux/flash/intel.c:112
+#: src/flash/intel.c:111
 #, c-format
 msgid "Chip: "
 msgstr "Čip: "
 
-#: libbrux/flash/intel.c:164
+#: src/flash/intel.c:163
 #, c-format
 msgid "Unknown (0x%02X)!\n"
 msgstr "Neznámy (0x%02X)!\n"
 
-#: libbrux/flash/intel.c:223
+#: src/flash/intel.c:222
 #, c-format
 msgid "flash: invalid command seq\n"
 msgstr "flash: neplatná sekvencia príkazov\n"
 
-#: libbrux/flash/intel.c:226
+#: src/flash/intel.c:225
 #, c-format
 msgid "flash: low vpen\n"
 msgstr "flash: nízke vpen\n"
 
-#: libbrux/flash/intel.c:229
+#: src/flash/intel.c:228
 #, c-format
 msgid "flash: block locked\n"
 msgstr "flash: blok uzamknutý\n"
 
-#: libbrux/flash/intel.c:251
+#: src/flash/intel.c:250
 #, c-format
 msgid "flash: unknown error while unblocking\n"
 msgstr "flash: neznáma chyba pri odblokovaní\n"
 
-#: libbrux/flash/intel.c:270
+#: src/flash/intel.c:269
 #, c-format
 msgid "flash: unknown error while programming\n"
 msgstr "flash: neznáma chyba pri programovaní\n"
 
-#: libbrux/flash/intel.c:350
+#: src/flash/intel.c:349
 msgid "supported: 28Fxxxx, 2 x 16 bit"
 msgstr "podporované: 28Fxxxx, 2 x 16 bitov"
 
-#: libbrux/flash/intel.c:362
+#: src/flash/intel.c:361
 msgid "supported: 28Fxxxx, 1 x 16 bit"
 msgstr "podporované: 28Fxxxx, 1 x 16 bitov"
 
-#: libbrux/flash/intel.c:374
+#: src/flash/intel.c:373
 msgid "supported: 28Fxxxx, 1 x 8 bit"
 msgstr "podporované: 28Fxxxx, 1 x 8 bitov"
 
@@ -487,11 +491,11 @@ msgstr "podporované: 28Fxxxx, 1 x 8 bitov"
 #: src/bus/mpc824x.c:372 src/bus/ppc440gx_ebc8.c:264
 #: src/bus/ppc440gx_ebc8.c:273 src/bus/ppc440gx_ebc8.c:281
 #: src/bus/ppc440gx_ebc8.c:286 src/bus/ppc440gx_ebc8.c:291
-#: src/bus/pxa2x0.c:680 src/bus/pxa2x0.c:689 src/bus/pxa2x0.c:711
-#: src/bus/pxa2x0.c:726 src/bus/pxa2x0.c:733 src/bus/pxa2x0.c:738
-#: src/bus/pxa2x0.c:743 src/bus/pxa2x0.c:748 src/bus/s3c4510x.c:360
-#: src/bus/s3c4510x.c:369 src/bus/s3c4510x.c:378 src/bus/s3c4510x.c:388
-#: src/bus/s3c4510x.c:397 src/bus/s3c4510x.c:406 src/bus/s3c4510x.c:413
+#: src/bus/pxa2x0.c:681 src/bus/pxa2x0.c:690 src/bus/pxa2x0.c:712
+#: src/bus/pxa2x0.c:727 src/bus/pxa2x0.c:734 src/bus/pxa2x0.c:739
+#: src/bus/pxa2x0.c:744 src/bus/pxa2x0.c:749 src/bus/s3c4510x.c:377
+#: src/bus/s3c4510x.c:386 src/bus/s3c4510x.c:395 src/bus/s3c4510x.c:405
+#: src/bus/s3c4510x.c:414 src/bus/s3c4510x.c:423 src/bus/s3c4510x.c:431
 #: src/bus/sa1110.c:295 src/bus/sa1110.c:304 src/bus/sa1110.c:313
 #: src/bus/sa1110.c:320 src/bus/sa1110.c:325 src/bus/sa1110.c:330
 #: src/bus/sh7727.c:327 src/bus/sh7727.c:336 src/bus/sh7727.c:347
@@ -529,8 +533,8 @@ msgstr ""
 msgid "Broadcom BCM1250 compatible bus driver via BSR"
 msgstr "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/buses.c:85 src/cmd/include.c:47 src/detect.c:267 src/jtag.c:181
-#: src/jtag.c:447 src/jtag.c:465 src/jtag.c:489
+#: src/bus/buses.c:89 src/cmd/include.c:47 src/detect.c:269 src/jtag.c:182
+#: src/jtag.c:454 src/jtag.c:473 src/jtag.c:497
 #, c-format
 msgid "Out of memory\n"
 msgstr "Nedostatok pamäte\n"
@@ -590,44 +594,44 @@ msgstr ""
 msgid "IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"
 msgstr "Intel IXP425 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/pxa2x0.c:183
+#: src/bus/pxa2x0.c:184
 #, c-format
 msgid "Intel PXA2x0 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/pxa2x0.c:194
+#: src/bus/pxa2x0.c:195
 #, fuzzy, c-format
 msgid "Intel PXA27x compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/pxa2x0.c:415 src/bus/pxa2x0.c:502
+#: src/bus/pxa2x0.c:416 src/bus/pxa2x0.c:503
 msgid "Static Chip Select 0"
 msgstr "Statický výber čipu 0"
 
-#: src/bus/pxa2x0.c:477
+#: src/bus/pxa2x0.c:478
 msgid "Memory Mapped registers (Memory Ctl)"
 msgstr "Pamäťovo mapované registre (Memory Ctl)"
 
-#: src/bus/pxa2x0.c:567
+#: src/bus/pxa2x0.c:568
 msgid "PXA270 internal address space (cfg, SRAM)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:585
+#: src/bus/pxa2x0.c:586
 msgid "PXA270 SDRAM space (4x 64MB)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:614
+#: src/bus/pxa2x0.c:615
 msgid "Intel PXA2x0 compatible bus driver via BSR"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/pxa2x0.c:630
+#: src/bus/pxa2x0.c:631
 #, fuzzy
 msgid "Intel PXA27x compatible bus driver via BSR"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/s3c4510x.c:143
+#: src/bus/s3c4510x.c:151
 #, fuzzy, c-format
 msgid ""
 "Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%"
@@ -636,7 +640,7 @@ msgstr ""
 "Samsung S3C4510B kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/s3c4510x.c:315
+#: src/bus/s3c4510x.c:332
 msgid "Samsung S3C4510B compatible bus driver via BSR"
 msgstr "Samsung S3C4510B kompatibilný ovládač zbernice cez BSR"
 
@@ -875,12 +879,6 @@ msgstr ""
 msgid "select JTAG cable"
 msgstr "nastaviť JTAG kábel"
 
-#: src/cmd/cmd.c:113
-#, c-format
-msgid "Error: Cable not configured. Please use '%s' command first!\n"
-msgstr ""
-"Chyba: Kábel nie je nakonfigurovaný. Prosím najskôr použie príkaz '%s'!\n"
-
 #: src/cmd/detect.c:83
 #, c-format
 msgid ""
@@ -1030,7 +1028,7 @@ msgstr ""
 msgid "erase flash memory by number of blocks"
 msgstr "vymazať pamäť flash podľa počtu blokov"
 
-#: src/cmd/flashmem.c:57 src/cmd/include.c:54 src/jtag.c:454
+#: src/cmd/flashmem.c:57 src/cmd/include.c:54 src/jtag.c:461
 #, c-format
 msgid "Unable to open file `%s'!\n"
 msgstr "Nepodarilo sa otvoriť súbor `%s'!\n"
@@ -1201,7 +1199,7 @@ msgid "Instruction '%s' already defined\n"
 msgstr "Inštrukcia '%s' je už definovaná\n"
 
 #: src/cmd/instruction.c:95 src/cmd/register.c:71 src/cmd/register.c:85
-#: src/cmd/salias.c:72 src/cmd/signal.c:88 src/detect.c:208 src/detect.c:231
+#: src/cmd/salias.c:72 src/cmd/signal.c:88 src/detect.c:210 src/detect.c:233
 #, c-format
 msgid "out of memory\n"
 msgstr "nedostatok pamäte\n"
@@ -1324,47 +1322,47 @@ msgstr ""
 msgid "write a single word"
 msgstr "zapísať jedno slovo"
 
-#: src/cmd/print.c:82
+#: src/cmd/print.c:87
 #, c-format
 msgid " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 msgstr "  Č. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 
-#: src/cmd/print.c:86 src/cmd/print.c:89 src/cmd/print.c:93
+#: src/cmd/print.c:91 src/cmd/print.c:94 src/cmd/print.c:98
 #, c-format
 msgid "(%d) String conversion failed!\n"
 msgstr "(%d) Konverzia reťazca zlyhala!\n"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Manufacturer"
 msgstr "Výrobca"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Part"
 msgstr "Súčiastka"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Stepping"
 msgstr "Stupeň"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Instruction"
 msgstr "Inštrukcia"
 
-#: src/cmd/print.c:87 src/cmd/print.c:91
+#: src/cmd/print.c:92 src/cmd/print.c:96
 msgid "Register"
 msgstr "Register"
 
-#: src/cmd/print.c:105
+#: src/cmd/print.c:110
 #, fuzzy, c-format
 msgid " %3d %s "
 msgstr " %3d "
 
-#: src/cmd/print.c:107 src/part/part.c:327
+#: src/cmd/print.c:112 src/part/part.c:330
 #, c-format
 msgid " %3d "
 msgstr " %3d "
 
-#: src/cmd/print.c:119
+#: src/cmd/print.c:124
 #, c-format
 msgid ""
 "\n"
@@ -1375,32 +1373,32 @@ msgstr ""
 "Aktívna zbernica:\n"
 "*%d: "
 
-#: src/cmd/print.c:124
+#: src/cmd/print.c:129
 #, c-format
 msgid "Error in bus area discovery at 0x%08llX\n"
 msgstr "Chyba pri zisťovaní oblasti zbernice na adrese 0x%08llX\n"
 
-#: src/cmd/print.c:129
+#: src/cmd/print.c:134
 #, c-format
 msgid "\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"
 msgstr "\tzačiatok: 0x%08X, dĺžka: 0x%08llX, šírka údajov: %d bitov, (%s)\n"
 
-#: src/cmd/print.c:131
+#: src/cmd/print.c:136
 #, c-format
 msgid "\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"
 msgstr "\tzačiatok: 0x%08X, dĺžka: 0x%08llX, šírka údajov: %d bitov\n"
 
-#: src/cmd/print.c:146
+#: src/cmd/print.c:151
 #, c-format
 msgid "*%d: "
 msgstr "*%d: "
 
-#: src/cmd/print.c:148
+#: src/cmd/print.c:153
 #, c-format
 msgid "%d: "
 msgstr "%d: "
 
-#: src/cmd/print.c:159
+#: src/cmd/print.c:164
 #, fuzzy, c-format
 msgid ""
 "Usage: %s [chain|bus|signals]\n"
@@ -1415,7 +1413,7 @@ msgstr ""
 "Zobraziť zoznam súčiastok zapojených v JTAG reťazci vrátane čísla\n"
 "súčiastky a aktuálnej (aktívnej) inštrukcie a dátového registra.\n"
 
-#: src/cmd/print.c:169
+#: src/cmd/print.c:174
 msgid "display JTAG chain list/status"
 msgstr "zobraziť zoznam/stav JTAG reťazca"
 
@@ -1596,167 +1594,172 @@ msgstr ""
 msgid "define new signal for a part"
 msgstr "definovať nový signál pre súčiastku"
 
-#: src/detect.c:56
+#: src/detect.c:58
 #, c-format
 msgid "Cannot open %s\n"
 msgstr "Nepodarilo sa otvoriť %s\n"
 
-#: src/detect.c:203
+#: src/detect.c:205
 #, c-format
 msgid "IR length: %d\n"
 msgstr "Dĺžka IR: %d\n"
 
-#: src/detect.c:219
+#: src/detect.c:221
 #, c-format
 msgid "Unable to detect JTAG chain length\n"
 msgstr "Nepodarilo sa zdetekovať dĺžku JTAG reťazca\n"
 
-#: src/detect.c:222
+#: src/detect.c:224
 #, c-format
 msgid "Chain length: %d\n"
 msgstr "Dĺžka reťazca: %d\n"
 
-#: src/detect.c:263
+#: src/detect.c:265
 #, fuzzy, c-format
 msgid "Device Id: %s (0x%016lX)\n"
 msgstr "Id zariadenia: %s\n"
 
-#: src/detect.c:285
+#: src/detect.c:293
 #, c-format
 msgid "  Unknown manufacturer!\n"
 msgstr "  Neznámy výrobca!\n"
 
-#: src/detect.c:291
+#: src/detect.c:299
 #, c-format
 msgid "  Manufacturer: %s\n"
 msgstr "  Výrobca:   %s\n"
 
-#: src/detect.c:293
+#: src/detect.c:301
 #, c-format
 msgid "Warning: Manufacturer too long\n"
 msgstr "Upozornenie: Výrobca je príliš dlhý\n"
 
-#: src/detect.c:309
+#: src/detect.c:317
 #, c-format
 msgid "  Unknown part!\n"
 msgstr "  Neznáma súčiastka!\n"
 
-#: src/detect.c:315
+#: src/detect.c:323
 #, fuzzy, c-format
 msgid "  Part(%d):         %s\n"
 msgstr "  Súčiastka: %s\n"
 
-#: src/detect.c:317
+#: src/detect.c:325
 #, c-format
 msgid "Warning: Part too long\n"
 msgstr "Upozornenie: Súčiastka je príliš dlhá\n"
 
-#: src/detect.c:333
+#: src/detect.c:341
 #, c-format
 msgid "  Unknown stepping!\n"
 msgstr "  Neznámy stupeň!\n"
 
-#: src/detect.c:339
+#: src/detect.c:347
 #, c-format
 msgid "  Stepping:     %s\n"
 msgstr "  Stupeň:    %s\n"
 
-#: src/detect.c:341
+#: src/detect.c:349
 #, c-format
 msgid "Warning: Stepping too long\n"
 msgstr "Upozornenie: Stupeň je príliš dlhý\n"
 
-#: src/detect.c:353
+#: src/detect.c:361
 #, c-format
 msgid "  Filename:     %s\n"
 msgstr "  Súbor:     %s\n"
 
-#: src/detect.c:368
+#: src/detect.c:379
 #, c-format
 msgid "Error: Unable to detect JTAG chain end!\n"
 msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
 
-#: src/discovery.c:113
+#: src/discovery.c:100
+#, c-format
+msgid "Warning: TDO seems to be stuck at %d\n"
+msgstr ""
+
+#: src/discovery.c:125
 #, c-format
 msgid "Detecting IR length ... "
 msgstr "Detekujem dĺžku IR ... "
 
-#: src/discovery.c:119 src/discovery.c:151
+#: src/discovery.c:131 src/discovery.c:163
 #, c-format
 msgid "%d\n"
 msgstr "%d\n"
 
-#: src/discovery.c:122
+#: src/discovery.c:134
 #, c-format
 msgid "Error: Invalid IR length!\n"
 msgstr "Chyba: Neplatná dĺžka IR!\n"
 
-#: src/discovery.c:133
+#: src/discovery.c:145
 #, c-format
 msgid "Error: Out of memory!\n"
 msgstr "Chyba: Nedostatok pamäte!\n"
 
-#: src/discovery.c:145
+#: src/discovery.c:157
 #, c-format
 msgid "Detecting DR length for IR %s ... "
 msgstr "Detekujem dĺžku DR pre IR %s ... "
 
-#: src/flash.c:90
+#: src/flash.c:89
 #, c-format
 msgid "unknown flash - vendor id: %d (0x%04x)\n"
 msgstr "neznáma flash pamäť - id dodávateľa: %d (0x%04x)\n"
 
-#: src/flash.c:94
+#: src/flash.c:93
 #, c-format
 msgid "Flash not supported!\n"
 msgstr "Nepodporovaná flash pamäť!\n"
 
-#: src/flash.c:105 src/flash.c:253 src/flash.c:363
+#: src/flash.c:104 src/flash.c:256 src/flash.c:368
 #, c-format
 msgid "no flash driver found\n"
 msgstr "ovládač pre flash pamäť nebol nájdený\n"
 
-#: src/flash.c:116
+#: src/flash.c:115
 #, c-format
 msgid "Invalid sync sequence!\n"
 msgstr "Neplatná synchronizačná sekvencia!\n"
 
-#: src/flash.c:134
+#: src/flash.c:133
 #, c-format
 msgid "block %d unlocked\n"
 msgstr "blok %d odomknutý\n"
 
-#: src/flash.c:135 src/flash.c:284
+#: src/flash.c:134 src/flash.c:290
 #, c-format
 msgid "erasing block %d: %d\n"
 msgstr "vymazávam blok %d: %d\n"
 
-#: src/flash.c:139 src/flash.c:272
+#: src/flash.c:138 src/flash.c:275
 #, c-format
 msgid "program:\n"
 msgstr "programovanie:\n"
 
-#: src/flash.c:147 src/flash.c:187
+#: src/flash.c:146 src/flash.c:186
 #, c-format
 msgid "Error: premature end of file\n"
 msgstr "Chyba: neočakávaný koniec súboru\n"
 
-#: src/flash.c:150 src/flash.c:190
+#: src/flash.c:149 src/flash.c:189
 #, c-format
 msgid "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"
 msgstr "záznam: začiatok = 0x%08X, dĺžka = 0x%08X, kontrolná suma = 0x%08X\n"
 
-#: src/flash.c:154 src/flash.c:194
+#: src/flash.c:153 src/flash.c:193
 #, c-format
 msgid "Error: Invalid record length!\n"
 msgstr "Chyba: Neplatná dĺžka záznamu!\n"
 
-#: src/flash.c:161 src/flash.c:201 src/readmem.c:105
+#: src/flash.c:160 src/flash.c:200 src/readmem.c:105
 #, c-format
 msgid "addr: 0x%08X"
 msgstr "adresa: 0x%08X"
 
-#: src/flash.c:166 src/flash.c:304
+#: src/flash.c:165 src/flash.c:309
 #, c-format
 msgid ""
 "\n"
@@ -1765,12 +1768,12 @@ msgstr ""
 "\n"
 "chyba flash\n"
 
-#: src/flash.c:178 src/flash.c:315
+#: src/flash.c:177 src/flash.c:320
 #, c-format
 msgid "verify:\n"
 msgstr "kontrola:\n"
 
-#: src/flash.c:207
+#: src/flash.c:206
 #, c-format
 msgid ""
 "\n"
@@ -1779,7 +1782,7 @@ msgstr ""
 "\n"
 "chyba pri kontrole: 0x%08X vs. 0x%08X na adrese %08X\n"
 
-#: src/flash.c:216 src/flash.c:349 src/readmem.c:113
+#: src/flash.c:215 src/flash.c:354 src/readmem.c:113
 #, c-format
 msgid ""
 "\n"
@@ -1788,12 +1791,12 @@ msgstr ""
 "\n"
 "Hotovo.\n"
 
-#: src/flash.c:266
+#: src/flash.c:269
 #, c-format
 msgid "Out of memory!\n"
 msgstr "Nedostatok pamäte!\n"
 
-#: src/flash.c:283
+#: src/flash.c:289
 #, c-format
 msgid ""
 "\n"
@@ -1802,22 +1805,22 @@ msgstr ""
 "\n"
 "blok %d odomknutý\n"
 
-#: src/flash.c:292 src/flash.c:339
+#: src/flash.c:297 src/flash.c:344
 #, fuzzy, c-format
 msgid "addr: 0x%08X\r"
 msgstr "adresa: 0x%08X"
 
-#: src/flash.c:327
+#: src/flash.c:332
 #, c-format
 msgid "Error during file read.\n"
 msgstr "Chyba pri čítaní zo súboru.\n"
 
-#: src/flash.c:344
-#, c-format
+#: src/flash.c:349
+#, fuzzy, c-format
 msgid ""
 "\n"
 "verify error:\n"
-"readed: 0x%08X\n"
+"read: 0x%08X\n"
 "expected: 0x%08X\n"
 msgstr ""
 "\n"
@@ -1825,93 +1828,98 @@ msgstr ""
 "načítané: 0x%08X\n"
 "očakávané: 0x%08X\n"
 
-#: src/flash.c:368
+#: src/flash.c:373
 #, c-format
 msgid ""
 "\n"
 "Erasing %d Flash block%s from address 0x%x\n"
 msgstr ""
 
-#: src/flash.c:373
+#: src/flash.c:378
 #, c-format
 msgid "(%d%% Completed) FLASH Block %d : Unlocking ... "
 msgstr ""
 
-#: src/flash.c:376
+#: src/flash.c:381
 #, c-format
 msgid "Erasing ... "
 msgstr ""
 
-#: src/flash.c:381
+#: src/flash.c:386
 #, c-format
 msgid "\r(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"
 msgstr ""
 
-#: src/flash.c:383
+#: src/flash.c:388
 #, c-format
 msgid "Ok.\r%78s\r"
 msgstr ""
 
-#: src/flash.c:386
+#: src/flash.c:391
 #, c-format
 msgid "ERROR.\n"
 msgstr ""
 
-#: src/flash.c:392
+#: src/flash.c:397
 #, c-format
 msgid ""
 "\n"
 "Erasing Completed.\n"
 msgstr ""
 
-#: src/flash.c:394
+#: src/flash.c:399
 #, c-format
 msgid ""
 "\n"
 "Erasing Failed.\n"
 msgstr ""
 
-#: src/jtag.c:344
+#: src/jtag.c:347
 #, c-format
 msgid "'%s' must not be run suid root!\n"
 msgstr ""
 
-#: src/jtag.c:395
+#: src/jtag.c:403
 #, fuzzy, c-format
 msgid "%s #%s\n"
 msgstr "%-13s %s\n"
 
-#: src/jtag.c:398
+#: src/jtag.c:406
 #, c-format
 msgid "Usage: %s [OPTION] [FILE]\n"
 msgstr ""
 
-#: src/jtag.c:401
+#: src/jtag.c:409
 #, c-format
 msgid "  -h, --help          display this help and exit\n"
 msgstr ""
 
-#: src/jtag.c:402
+#: src/jtag.c:410
 #, c-format
 msgid "  -v, --version       display version information and exit\n"
 msgstr ""
 
-#: src/jtag.c:405
+#: src/jtag.c:412
 #, c-format
 msgid "  -n, --norc          disable reading ~/.jtag/rc on startup\n"
 msgstr ""
 
-#: src/jtag.c:408
+#: src/jtag.c:413
+#, c-format
+msgid "  -i, --interactive   enter interactive mode after reading files\n"
+msgstr ""
+
+#: src/jtag.c:415
 #, c-format
 msgid "  [FILE]              file containing commands to execute\n"
 msgstr ""
 
-#: src/jtag.c:411
+#: src/jtag.c:418
 #, c-format
 msgid "  Please report bugs at http://www.urjtag.org\n"
 msgstr ""
 
-#: src/jtag.c:418
+#: src/jtag.c:425
 #, c-format
 msgid ""
 "\n"
@@ -1921,7 +1929,7 @@ msgid ""
 "Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n"
 msgstr ""
 
-#: src/jtag.c:423
+#: src/jtag.c:430
 #, c-format
 msgid ""
 "\n"
@@ -1940,7 +1948,7 @@ msgid ""
 "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
 msgstr ""
 
-#: src/jtag.c:478
+#: src/jtag.c:486
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -1961,14 +1969,14 @@ msgstr ""
 "Neposkytuje sa žiadna záruka pre %s.\n"
 "\n"
 
-#: src/jtag.c:493
+#: src/jtag.c:501
 #, fuzzy, c-format
 msgid "WARNING: %s may damage your hardware!\n"
 msgstr ""
 "Upozornenie: %s môže poškodiť váš hardvér! Napíšte \"quit\" pre ukončenie!\n"
 "\n"
 
-#: src/jtag.c:494
+#: src/jtag.c:502
 #, fuzzy, c-format
 msgid ""
 "Type \"quit\" to exit, \"help\" for help.\n"
@@ -2085,21 +2093,36 @@ msgstr "JTAG kábel Mpcbdm"
 msgid "Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"
 msgstr "JTAG kábel pre Ka-Ro TRITON Starterkit II (PXA255/250)"
 
-#: src/tap/cable/wiggler.c:113
+#: src/tap/cable/wiggler.c:289
+#, c-format
+msgid ""
+"Usage: cable %s parallel PORTADDR [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+"   or: cable %s ppdev PPDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+"   or: cable %s ppi PPIDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+"\n"
+"PORTADDR   parallel port address (e.g. 0x378)\n"
+"PPDEF      ppdev device (e.g. /dev/parport0)\n"
+"PPIDEF     ppi device (e.g. /dev/ppi0)\n"
+"TDO, ...   parallel port bit number, prepend '#' for inversion\n"
+"           default is '%s'\n"
+"\n"
+msgstr ""
+
+#: src/tap/cable/wiggler.c:321
 msgid "Macraigor Wiggler JTAG Cable"
 msgstr "JTAG kábel Macraigor Wiggler"
 
-#: src/tap/cable/wiggler.c:129
+#: src/tap/cable/wiggler.c:339
 #, fuzzy
 msgid "Excelpoint IGLOO JTAG Cable"
 msgstr "JTAG kábel Arcom"
 
-#: src/tap/chain.c:114 src/tap/chain.c:145
+#: src/tap/chain.c:129 src/tap/chain.c:160
 #, c-format
 msgid "%s(%d) Part %d without active instruction\n"
 msgstr "%s(%d) Súčiastka %d bez aktívnej inštrukcie\n"
 
-#: src/tap/chain.c:149
+#: src/tap/chain.c:164
 #, c-format
 msgid "%s(%d) Part %d without data register\n"
 msgstr "%s(%d) Súčiastka %d bez dátového registra\n"
@@ -2149,7 +2172,7 @@ msgstr "Nepodarilo sa otvoriť %s\n"
 msgid "Could not claim ppdev device: %s\n"
 msgstr ""
 
-#: src/tap/tap.c:50 src/tap/tap.c:81 src/tap/tap.c:92
+#: src/tap/tap.c:51 src/tap/tap.c:110 src/tap/tap.c:121
 #, c-format
 msgid "%s: Invalid state: %2X\n"
 msgstr "%s: Neplatný stav: %2X\n"
