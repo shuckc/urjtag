@@ -1,6 +1,6 @@
 $Id$
 
-urjtag-n/a
+urjtag-0.8
 
     * Integrated BSDL parser (Arnim Laeuger)
     * Updates to the jtag command shell
@@ -13,27 +13,28 @@ urjtag-n/a
       - Improvements in S3C4510B driver
     * New and updated cable drivers (by A. Laeuger, unless noted otherwise)
       - Wiggler driver with configurable pin mapping 
-      - TRST and partially LED support in drivers for FT2232-based cables
+      - TRST/SRST and LED support in drivers for FT2232-based cables
       - Vision EP9307 GPIO (Hartley Sweeten)
-      - Amontec JTAGkey (initially submitted by Laurent Gauch)
-      - OOCDLink-s
-      - Turtelizer 2
-      - USB to JTAG Interface
-      - Xverve DT-USB-ST Signalyzer Tool
-    * Added new JTAG declarations for
-      - Altera EP2C8 (Hartley Sweeten)
-      - Analog Devices Blackfin BF537, BF549, BF567 (Jie Zhang)
-      - Freescale MPC5241
-      - Xilinx XC2V80- XC2V250- and XC2V1000-FG256 (Alexander Didebulidze)
-	* Added JIM, a cable/part simulator for regression testing and demos
-    * Improved documentation
+      - Added new variants of FT2232-based cables
+        - Amontec JTAGkey (Laurent Gauch)
+        - OOCDLink-s
+        - Turtelizer 2
+        - USB to JTAG Interface
+        - Xverve DT-USB-ST Signalyzer Tool
     * Numerous internal improvements
       - activity queuing mechanism to speed up JTAG over USB
       - simplified source directory layout; incorporated libbrux and inclow
       - (hopefully) fixed problem with writing to dual-mode x8/x16 flash
       - experimental (debug-only) new improved JEDEC flash detection
       - improved linking with USB drivers in Cygwin environment
-      - varous smaller bug fixes and improvements
+      - several bug fixes and optimizations
+    * Added new JTAG declarations for
+      - Altera EP2C8 (Hartley Sweeten)
+      - Analog Devices Blackfin BF537, BF549, BF567 (Jie Zhang)
+      - Freescale MPC5241
+      - Xilinx XC2V80- XC2V250- and XC2V1000-FG256 (Alexander Didebulidze)
+    * Improved documentation
+	* Added JIM, a cable/part simulator for regression testing and demos
 
 urjtag-0.7 (2007-12-23)
 
