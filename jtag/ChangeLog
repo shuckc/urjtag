@@ -1,3 +1,8 @@
+2008-02-21  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/bus/fjmem.c: merged branches/jmem to trunk
+       -> added fjmem bus driver
+
 2008-02-20  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * data/Makefile.am (nobase_dist_pkgdata_DATA): added bsdl/STD_1149_1_2001

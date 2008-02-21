@@ -37,6 +37,7 @@ libbus_a_SOURCES = \
 	bf548_ezkit.c \
 	bf561_ezkit.c \
 	ixp425.c \
+	fjmem.c \
 	lh7a400.c \
 	mpc824x.c \
 	mpc5200.c \
