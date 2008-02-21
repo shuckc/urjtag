@@ -1,5 +1,9 @@
 2008-02-21  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/bsdl/bsdl_bison.y, src/bsdl/bsdl.h, src/bsdl/bsdl_flex.l, src/bsdl/bsdl.c:
+       push mode and debug through init tree to avoid error message from scanner
+       in simple test mode.
+
    * src/bus/fjmem.c: merged branches/jmem to trunk
        -> added fjmem bus driver
 

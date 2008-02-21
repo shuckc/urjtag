@@ -104,7 +104,7 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
     return -1;
   }
 
-  if ((parser_priv = bsdl_parser_init(BSDL_File))) {
+  if ((parser_priv = bsdl_parser_init(BSDL_File, mode, bsdl_debug))) {
     if (mode >= 0) {
       if (mode >= 1) {
 	if (chain == NULL) {
@@ -130,8 +130,6 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
     } else
       parser_priv->jtag_ctrl.part = NULL;
 
-    parser_priv->jtag_ctrl.mode   = mode;
-    parser_priv->jtag_ctrl.debug  = bsdl_debug;
     parser_priv->jtag_ctrl.idcode = NULL;
 
     bsdlparse(parser_priv);

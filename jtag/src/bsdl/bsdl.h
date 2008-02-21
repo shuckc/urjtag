@@ -35,6 +35,8 @@
 /* private data of the flex scanner
    handled internally in bsdl_flex.l as yyextra */
 struct scan_extra {
+    int mode;
+    int debug;
     int Compile_Errors;
     int Base;
 };
@@ -137,7 +139,7 @@ typedef struct parser_priv parser_priv_t;
 void bsdl_msg(int, const char *, ...);
 
 /* BSDL lexer declarations */
-void *bsdl_flex_init(FILE *);
+void *bsdl_flex_init(FILE *, int, int);
 void  bsdl_flex_deinit(void *);
 void  bsdl_flex_switch_file(void *, char *);
 void  bsdl_flex_switch_buffer(void *, const char *);
@@ -147,7 +149,7 @@ int   bsdl_flex_get_lineno(void *);
 void  bsdl_flex_set_bin_x(void *);
 
 /* BSDL parser declarations */
-parser_priv_t *bsdl_parser_init(FILE *);
+parser_priv_t *bsdl_parser_init(FILE *, int, int);
 void bsdl_parser_deinit(parser_priv_t *);
 int bsdlparse(parser_priv_t *);
 

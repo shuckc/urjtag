@@ -957,7 +957,7 @@ void yyerror(parser_priv_t *priv_data, const char *error_string)
 {
 }
 /*----------------------------------------------------------------------*/
-parser_priv_t *bsdl_parser_init(FILE *f)
+parser_priv_t *bsdl_parser_init(FILE *f, int mode, int debug)
 {
   parser_priv_t *new_priv;
 
@@ -966,11 +966,14 @@ parser_priv_t *bsdl_parser_init(FILE *f)
     return NULL;
   }
 
+  new_priv->jtag_ctrl.mode  = mode;
+  new_priv->jtag_ctrl.debug = debug;
+
   new_priv->Reading_Package = 0;
   new_priv->buffer_for_switch = NULL;
   new_priv->len_buffer_for_switch = 0;
 
-  if (!(new_priv->scanner = bsdl_flex_init(f))) {
+  if (!(new_priv->scanner = bsdl_flex_init(f, mode, debug))) {
     free(new_priv);
     new_priv = NULL;
   }

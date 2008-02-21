@@ -404,11 +404,12 @@ Compliance_Patterns   COMPLIANCE_PATTERNS
                          return(REAL_NUMBER);}
 {Concatenate}           {return(CONCATENATE);}
 {Semicolon}             {return(SEMICOLON);}
-{Illegal}               {bsdl_msg(BSDL_MSG_ERR,
-                      _("Error: Illegal character %c (/%03o) at line %d:\n"),
-                          (char)yytext[yyleng-1], (int)yytext[yyleng-1],
-                          yylineno);
-                          yyextra->Compile_Errors++;
+{Illegal}               {if (yyextra->debug || (yyextra->mode >= 0))
+                           bsdl_msg(BSDL_MSG_ERR,
+                                    _("Illegal character %c (/%03o) at line %d:\n"),
+                                    (char)yytext[yyleng-1], (int)yytext[yyleng-1],
+                                    yylineno);
+                         yyextra->Compile_Errors++;
                          return(ILLEGAL);  /* Will cause syntax error */}
 <<EOF>> {
   yypop_buffer_state(yyscanner);
@@ -416,7 +417,7 @@ Compliance_Patterns   COMPLIANCE_PATTERNS
     yyterminate();
 }
 %%
-void *bsdl_flex_init(FILE *f)  /* Change input file from STDIN to BSDL file */
+void *bsdl_flex_init(FILE *f, int mode, int debug)
 {
   scan_extra_t *extra;
   yyscan_t scanner;
@@ -434,8 +435,10 @@ void *bsdl_flex_init(FILE *f)  /* Change input file from STDIN to BSDL file */
     return NULL;
   }
 
+  extra->mode           = mode;
+  extra->debug          = debug;
   extra->Compile_Errors = 0;
-  extra->Base = DECIMAL;
+  extra->Base           = DECIMAL;
 
   yyset_extra(extra, scanner);
 
