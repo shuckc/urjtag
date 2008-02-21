@@ -292,6 +292,14 @@ ftd2xx_mpsse_open( parport_t *parport )
 		FT_Close(fc);
 		return -1;
 	}
+        /* set a reasonnable latency timer value
+           if this value is too low then the chip will send intermediate result data
+           in short packets (suboptimal performance) */
+	if ((status = FT_SetLatencyTimer(fc, 16)) != FT_OK) {
+		fprintf(stderr, "Can't set target latency timer: %li\n", status);
+		FT_Close(fc);
+		return -1;
+	}
 	if ((status = FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK) {
 		fprintf(stderr, "Can't disable bitmode: %li\n", status);
 		FT_Close(fc);
@@ -309,11 +317,6 @@ ftd2xx_mpsse_open( parport_t *parport )
 	}
 	if ((status = FT_Purge(fc, FT_PURGE_RX | FT_PURGE_TX)) != FT_OK) {
 		fprintf(stderr, "Can't purge buffers: %li\n", status);
-		FT_Close(fc);
-		return -1;
-	}
-	if ((status = FT_SetLatencyTimer(fc, 1)) != FT_OK) {
-		fprintf(stderr, "Can't set latency timer: %li\n", status);
 		FT_Close(fc);
 		return -1;
 	}

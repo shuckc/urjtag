@@ -322,6 +322,17 @@ ftdi_mpsse_open( parport_t *parport )
 		ftdi_deinit(fc);
 		return -1;
 	}
+        /* set a reasonnable latency timer value
+           if this value is too low then the chip will send intermediate result data
+           in short packets (suboptimal performance) */
+	if(ftdi_set_latency_timer(fc, 16) < 0)
+	{
+		fprintf (stderr, "Can't set target latency: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	}
 
 	if (ftdi_set_bitmode(fc, 0x0b, BITMODE_RESET) < 0)
 	{
@@ -330,7 +341,7 @@ ftdi_mpsse_open( parport_t *parport )
 		ftdi_usb_close(fc);
 		ftdi_deinit(fc);
 		return -1;
-	};
+	}
 	if (ftdi_set_bitmode(fc, 0x0b, BITMODE_MPSSE) < 0)
 	{
 		fprintf (stderr, "Can't set mpsse mode: %s\n",
@@ -338,7 +349,7 @@ ftdi_mpsse_open( parport_t *parport )
 		ftdi_usb_close(fc);
 		ftdi_deinit(fc);
 		return -1;
-	};
+	}
 
 	if (ftdi_usb_reset(fc) < 0)
 	{
@@ -357,14 +368,6 @@ ftdi_mpsse_open( parport_t *parport )
 		return -1;
 	}
 
-	if(ftdi_set_latency_timer(fc, 1) < 0)
-	{
-		fprintf (stderr, "Can't set minimum latency: %s\n",
-			ftdi_get_error_string (fc));
-		ftdi_usb_close(fc);
-		ftdi_deinit(fc);
-		return -1;
-	};
 
 	return 0;
 }

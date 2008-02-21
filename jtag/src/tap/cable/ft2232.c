@@ -73,6 +73,7 @@
 #define LOOPBACK_START 0x84
 #define LOOPBACK_END   0x85
 #define TCK_DIVISOR    0x86
+#define SEND_IMMEDIATE 0x87
 
 
 /* bit and bitmask definitions for GPIO commands */
@@ -256,6 +257,11 @@ send_and_receive( cable_t *cable )
 			send_idx++;
 			bytes_sent++;
 		}
+
+		/* the SEND_IMMEDIATE command will trigger the ft2232 to send
+		   its bytes immediately without waiting for the latency timeout */
+		if (bytes_to_recv)
+			parport_set_data( p, SEND_IMMEDIATE );
 
 		/* Step 2: flush parport */
 		parport_set_control( p, 1 ); // flush
