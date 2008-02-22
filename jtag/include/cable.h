@@ -38,7 +38,6 @@ typedef struct cable_driver_t cable_driver_t;
 typedef enum
 {
    OPTIONALLY,
-   CONSERVATIVELY,
    TO_OUTPUT,
    COMPLETELY
 }

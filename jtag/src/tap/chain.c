@@ -188,10 +188,8 @@ chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture
 	}
 	else
 	{
-		/* the todo queue should be flushed here when following a conservative strategy
-		   since otherwise transfers without output capture wouldn't be submitted until
-		   a transfer with output capture is executed */
-		cable_flush( chain->cable, CONSERVATIVELY );
+		/* give the cable driver a chance to flush if it's considered useful */
+		cable_flush( chain->cable, TO_OUTPUT );
 	}
 }
 

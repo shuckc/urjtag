@@ -1,3 +1,11 @@
+2008-02-23  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/cable/ft2232.c (send_and_receive): only flush if not TO_OUTPUT
+   * src/tap/chain.c (chain_shift_data_registers_mode): flush TO_OUTPUT instead
+       of CONSERVATIVELY
+   * src/tap/cable.c (cable_flush), include/cable.h (enum): removed CONSERVATIVELY
+   * configure.ac: conservative-flush removed
+
 2008-02-21  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/parport/ftdi.c (ftdi_mpsse_open): set latency timer to 16ms

@@ -212,7 +212,7 @@ push_to_send( params_t *params, uint8_t d )
 
 
 static void
-send_and_receive( cable_t *cable )
+send_and_receive( cable_t *cable, cable_flush_amount_t how_much )
 {
 	parport_t *p = cable->port;
 	params_t *params = (params_t *)cable->params;
@@ -263,16 +263,18 @@ send_and_receive( cable_t *cable )
 		if (bytes_to_recv)
 			parport_set_data( p, SEND_IMMEDIATE );
 
-		/* Step 2: flush parport */
-		parport_set_control( p, 1 ); // flush
-		parport_set_control( p, 0 ); // noflush
+		if (bytes_to_recv || (how_much != TO_OUTPUT)) {
+			/* Step 2: flush parport */
+			parport_set_control( p, 1 ); // flush
+			parport_set_control( p, 0 ); // noflush
 
-		/* Step 3: receive answers */
-		while (bytes_to_recv) {
-			*recv_idx = parport_get_data( p );
-			recv_idx++;
-			bytes_to_recv--;
-			bytes_recvd++;
+			/* Step 3: receive answers */
+			while (bytes_to_recv) {
+				*recv_idx = parport_get_data( p );
+				recv_idx++;
+				bytes_to_recv--;
+				bytes_recvd++;
+			}
 		}
 	}
 
@@ -324,7 +326,7 @@ ft2232_set_frequency( cable_t *cable, uint32_t new_frequency )
 		push_to_send( params, div & 0xff );
 		push_to_send( params, (div >> 8) & 0xff );
 
-		send_and_receive( cable );
+		send_and_receive( cable, COMPLETELY );
 
 		params->mpsse_frequency = FT2232_MAX_TCK_FREQ / (div + 1);
 	}
@@ -342,7 +344,7 @@ ft2232_generic_init( cable_t *cable )
 
 	/* set loopback off */
 	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	/* safe default values */
 	params->low_byte_value = 0;
@@ -380,7 +382,7 @@ ft2232_jtagkey_init( cable_t *cable )
 
 	/* set loopback off */
 	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   set nOE to '0' -> activate output enables */
@@ -429,7 +431,7 @@ ft2232_armusbocd_init( cable_t *cable )
 
 	/* set loopback off */
 	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   set nOE to '0' -> activate output enables */
@@ -482,7 +484,7 @@ ft2232_oocdlinks_init( cable_t *cable )
 
 	/* set loopback off */
 	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction */
 	params->low_byte_value = 0;
@@ -531,7 +533,7 @@ ft2232_turtelizer2_init( cable_t *cable )
 
 	/* set loopback off */
 	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   set nJTAGOE to '0' -> activate output enables
@@ -575,7 +577,7 @@ ft2232_usbtojtagif_init( cable_t *cable )
 
 	/* set loopback off */
 	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   nTRST = 1, RST = 1, DBGRQ = 0 */
@@ -620,7 +622,7 @@ ft2232_signalyzer_init( cable_t *cable )
 
 	/* set loopback off */
 	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   nTRST = 1, RST = 1, DBGRQ = 0 */
@@ -666,7 +668,7 @@ ft2232_generic_done( cable_t *cable )
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	parport_close( p );
 }
@@ -704,7 +706,7 @@ ft2232_jtagkey_done( cable_t *cable )
 	push_to_send( params, BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
 	                      BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N );
 	push_to_send( params, 0 );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	parport_close( p );
 }
@@ -743,7 +745,7 @@ ft2232_armusbocd_done( cable_t *cable )
 	push_to_send( params, BITMASK_ARMUSBOCD_nTRST | BITMASK_ARMUSBOCD_nTRST_nOE |
 	                      BITMASK_ARMUSBOCD_nTSRST );
 	push_to_send( params, 0 );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	parport_close( p );
 }
@@ -775,7 +777,7 @@ ft2232_oocdlinks_done( cable_t *cable )
 	push_to_send( params, BITMASK_OOCDLINKS_nTRST | BITMASK_OOCDLINKS_nTRST_nOE |
 	                      BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE );
 	push_to_send( params, 0 );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	parport_close( p );
 }
@@ -810,7 +812,7 @@ ft2232_turtelizer2_done( cable_t *cable )
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	parport_close( p );
 }
@@ -839,7 +841,7 @@ ft2232_usbtojtagif_done( cable_t *cable )
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED );
 	push_to_send( params, 0 );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	parport_close( p );
 }
@@ -868,7 +870,7 @@ ft2232_signalyzer_done( cable_t *cable )
 	push_to_send( params, SET_BITS_HIGH );
 	push_to_send( params, 0 );
 	push_to_send( params, 0 );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 
 	parport_close( p );
 }
@@ -904,7 +906,7 @@ ft2232_clock( cable_t *cable, int tms, int tdi, int n )
 	params_t *params = (params_t *)cable->params;
 
 	ft2232_clock_schedule( cable, tms, tdi, n );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 	params->last_tdo_valid = 0;
 }
 
@@ -939,7 +941,7 @@ static int
 ft2232_get_tdo( cable_t *cable )
 {
 	ft2232_get_tdo_schedule( cable );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 	return ft2232_get_tdo_finish( cable );
 }
 
@@ -959,7 +961,7 @@ ft2232_set_trst( cable_t *cable, int trst )
 	params_t *params = (params_t *)cable->params;
 
 	ft2232_set_trst_schedule( params, trst );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 	params->last_tdo_valid = 0;
 
 	return trst;
@@ -1136,7 +1138,7 @@ static int
 ft2232_transfer( cable_t *cable, int len, char *in, char *out )
 {
 	ft2232_transfer_schedule( cable, len, in, out );
-	send_and_receive( cable );
+	send_and_receive( cable, COMPLETELY );
 	return ft2232_transfer_finish( cable, len, out );
 }
 
@@ -1146,7 +1148,7 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 {
 	params_t *params = (params_t *)cable->params;
 
-	if( how_much == OPTIONALLY ) return;
+	if (how_much == OPTIONALLY) return;
 
 	while (cable->todo.num_items > 0)
 	{
@@ -1194,7 +1196,7 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
 				i = 0;
 		}
 
-		send_and_receive( cable );
+		send_and_receive( cable, how_much );
 
 		while (j != i) {
 			switch (cable->todo.data[j].action) {
