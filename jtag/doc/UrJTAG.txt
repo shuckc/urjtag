@@ -727,6 +727,13 @@ all at once, and data for all pins has to be transferred through JTAG for every
 single change, this method isn't the fastest, but usually easiest to implement
 and, well, sometimes it counts whether it works at all..
 
+The "fjmem" (FPGA JTAG memory) bus driver attempts to address this issue by
+moving control and observation away from BSR to a device-internal
+register. For sure this is only possible on FPGAs where the designer can hook
+additional logic to the JTAG chain. A core design plus examples for different
+FPGA families is available in the extra/fjmem directory. Refer to the README
+located there.
+
 Some chips don't allow direct access to their pins via BSR at all. For these,
 writing a new bus driver that utilizes a debug module to upload specific code
 to access the bus is inevitable.
@@ -1077,7 +1084,7 @@ second clock(), the sequence can be optimized into the following sequence (if
 
 The next sections explain the queueing mechanism and its limits in detail.
 
-===== When flushing occurs ======
+===== When flushing occurs =====
 
 The cable_flush() function is used to flush the queue towards the cable. It
 takes one additional argument, "how_much", which may be one of
@@ -1129,6 +1136,116 @@ As a reference and in many cases completely sufficient for new cables, take a
 look at the code in src/tap/cable/generic.c, which contains generic routines,
 suitable for parallel port based cables (and some for other types of cables as
 well).
+
+==== Bus drivers ====
+
+Bus drivers translate read and write operations on a bus into JTAG commands
+and methods. A bus in this context is neither restricted to a processor bus,
+nor to memory. Any system component that can be read from and written to could
+be seen as attached to a bus. I.e. external or internal memory (RAM, ROM,
+Flash) and peripherals connected to a processor or simply an FPGA with 1:1
+connections.
+
+The available bus drivers are listed in response to "help initbus". Each
+driver has to provide the following functions:
+
+ * bus_new() - Initialization
+ * bus_free() - Cleaning up
+ * bus_printinfo() - Short description
+ * bus_prepare() - Preparation
+ * bus_area() - Description of the bus geometry
+ * bus_read_start() - Initiate reading
+ * bus_read_next() - Read access
+ * bus_read_end() - Finish reading
+ * bus_read() - Atomic reading
+ * bus_write() - Write access
+
+IMPORTANT: Address parameters to the functions listed above apecify always
+byte locations, independent of the actual data width. The bus driver has to
+adjust the address on its own if required.
+
+===== Initialization =====
+
+Upon calling of its bus_new() function, the driver allocates a "bus_t"
+structure and performs all required internal initializations.
+
+===== Cleaning up =====
+
+The driver is supposed to free all allocated memory (including its "bus_t"
+structure). Additionally, it should set the device into a state that doesn't
+prevent it from normal operation.
+
+===== Short description =====
+
+Prints a message describing the driver. This function is called by the "print"
+command before it lists the areas covered by this bus driver.
+
+===== Preparation =====
+
+This function is called whenever at the start of a bus operation. The driver
+should perform the required preparation steps so that subsequent calls to the
+bus_read_* and bus_write functions can perform their tasks properly.
+
+E.g. a BSR bus driver would put the device into EXTEST mode to activate the
+boundary scan register on the device pins.
+
+===== Description of the bus geometry =====
+
+At certain stages, the bus driver's bus_area() function is called by other
+commands to query the bus geometry for a given address. The bus driver must
+fill in the fields of a "bus_area_t" structure describing the geometry of the
+area in which the specified address is located:
+
+ * a short textual description of the area
+ * start address of area
+ * length of area in bytes
+ * data width in bits
+
+Queries with an address out of range must result in an area length of
+
+  UINT64_C(0x100000000)
+
+===== Initiate reading =====
+
+Since the JTAG state machine defines a capture-shift-update sequence, it is
+required to shift the address for a read prior to capturing the read
+data. Therefore, the bus_read_start() function is called with the very first
+address to read from. This enables the driver to shift the address into the
+device before it can actually retrieve the read data for this address.
+
+===== Read access =====
+
+The bus_read_next() function fetches the read data from the device that has
+been addressed by a previous call to bus_read_start() or
+bus_read_next(). Again, this is due to the capture-shift-update sequence of
+JTAG:
+
+ 1. capture read data from device pins
+ 2. shift new address
+ 3. update new address to device pins
+
+IMPORTANT: The address parameter specifies the location of the 'following'
+read access. It is not the address of the data returned by this function call.
+
+===== Finish reading =====
+
+Function "bus_read_end()" is called at the end of a read sequence. I.e. when
+the higher level command determines that the last data portion is to be read
+from the device. There is no new address and the function driver is supposed
+to return the read data that was addressed previously.
+
+===== Atomic reading =====
+
+For ease of use, a bus driver has to supply a "bus_read()" function that
+encapsulates reading data from a single address in an atomic operation. Bus
+drivers typically build this function from "bus_read_start()" and a subsequent
+"bus_read_end()".
+
+===== Write access =====
+
+This function writes one data element at the specified address. Since this
+translates to a single JTAG operation (capture ignored, shift and update
+address & data), there is no splitting as with the read functions.
 
 === Data file format ===
 // By Marcel Telka
