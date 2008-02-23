@@ -34,6 +34,8 @@ libbsdl_a_SOURCES = \
 	bsdl.c \
 	bsdl_sem.c
 
+bsdl_flex.o bsdl_sem.o: bsdl_bison.o
+
 AM_LFLAGS = -i
 
 MAINTAINERCLEANFILES = \

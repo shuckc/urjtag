@@ -36,6 +36,8 @@ libsvf_a_SOURCES = \
 	svf.h \
 	svf.c
 
+svf_flex.o svf.o: svf_bison.o
+
 MAINTAINERCLEANFILES = \
 	svf_bison.c \
 	svf_bison.h \
