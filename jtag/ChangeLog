@@ -1,5 +1,6 @@
 2008-02-23  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * extra/fjmem/README: new file
    * doc/UrJTAG.txt: mention fjmem driver, document bus driver internals
    * src/svf/Makefile.am (svf_flex.o svf.o): fix dependencies to svf_bison.h
    * src/bsdl/Makefile.am (bsdl_flex.o bsdl_sem.o): fix dependencies to bsdl_bison.h
