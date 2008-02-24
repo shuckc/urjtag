@@ -35,12 +35,12 @@ AC_MSG_CHECKING([code revision])
 SVN=`which svn`
 SVN_REVISION=0
 if test -n "$SVN" -a -x "$SVN"; then
-    SVN_REVISION=`LC_ALL=C svn info -R | awk 'BEGIN { x=0 } /^Revision: / { if($2>x) x=$2; } END { printf "%d\n",x }'`
+    SVN_REVISION=`LC_ALL=C svn info -R "$srcdir" | awk 'BEGIN { x=0 } /^Revision: / { if($2>x) x=$2; } END { printf "%d\n",x }'`
     if test "$SVN_REVISION" -ne "0" ; then
         AC_MSG_RESULT([from svn info: $SVN_REVISION])
     fi
 fi
-if test "$SVN_REVISION" -eq 0 -a -e "ChangeLog"; then
+if test "$SVN_REVISION" -eq 0 -a -e "$srcdir/ChangeLog"; then
     SVN_REVISION=`awk 'BEGIN { x=0 } /Revision: / { if($2>x) x=$2; } END { printf "%d\n",x }' ChangeLog`
     if test "$SVN_REVISION" -ne "0" ; then
         AC_MSG_RESULT([from ChangeLog: $SVN_REVISION])
@@ -107,6 +107,7 @@ AC_CHECK_FUNC(clock_gettime, [], [ AC_CHECK_LIB(rt, clock_gettime) ])
 AC_CHECK_HEADERS(linux/ppdev.h)
 AC_CHECK_HEADERS(dev/ppbus/ppi.h)
 AC_CHECK_HEADERS(stropts.h)
+AC_CHECK_HEADERS(wchar.h)
 
 VL_LIB_READLINE
 
@@ -162,15 +163,21 @@ AS_IF([test "x$with_libusb" != xno], [
   ],[
     AC_PATH_PROG(LIBUSB_CONFIG, libusb-config, no) 
     AS_IF([test "$LIBUSB_CONFIG" != "no"],[
-      LIBS="$LIBS `$LIBUSB_CONFIG --libs`"
-      CFLAGS="$CFLAGS `$LIBUSB_CONFIG --cflags`"
+      USBLIBS=`$LIBUSB_CONFIG --libs`
+      USBCFLAGS=`$LIBUSB_CONFIG --cflags`
     ],)
   ])
+  save_LIBS=$LIBS
+  save_CFLAGS=$CFLAGS
+  LIBS="$LIBS $USBLIBS"
+  CFLAGS="$CFLAGS $USBCFLAGS"
   AC_CHECK_FUNC([usb_find_devices], [
     AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
     HAVELIBUSB=yes
   ],[
     AC_MSG_WARN([*** libusb not detected. No support for USB JTAG cables via libusb.])
+    LIBS=$save_LIBS
+    CFLAGS=$save_CFLAGS
   ])
 ],)
 

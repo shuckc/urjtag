@@ -22,12 +22,21 @@
  *
  */
 
+#include <config.h>
+
 #include "sysdep.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifdef HAVE_WCHAR_H
 #include <wchar.h>
+#else
+typedef char wchar_t;
+# define mbstowcs(dst,src,n) 0
+# define wcslen(str) strlen(str)
+#endif
 
 #include "part.h"
 #include "jtag.h"
