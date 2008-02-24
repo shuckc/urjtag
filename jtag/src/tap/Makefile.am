@@ -34,9 +34,14 @@ libtap_a_SOURCES = \
 	parport/direct.c \
 	parport/ppdev.c \
 	parport/ppi.c \
+	usbconn.c \
 	cable.c \
 	cable/generic.h \
 	cable/generic.c \
+	cable/generic_usbconn.h \
+	cable/generic_usbconn.c \
+	cable/generic_parport.h \
+	cable/generic_parport.c \
 	cable/arcom.c \
 	cable/byteblaster.c \
 	cable/dlc5.c \
@@ -51,9 +56,9 @@ libtap_a_SOURCES = \
 
 if HAVE_LIBUSB
 libtap_a_SOURCES += \
-	parport/xpcu_common.c \
-	parport/xpcu_pp.c \
-	cable/xpc.c
+	cable/xpc.c \
+	cable/jlink.c \
+	usbconn/libusb.c
 endif
 
 if ENABLE_JIM

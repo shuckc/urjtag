@@ -36,7 +36,6 @@
 
 #include "generic.h"
 
-
 /* Maximum chunk to write to parport driver.
    Larger values might speed up comm, but there's an upper limit
    when too many bytes are sent and the underlying libftdi or libftd2xx
@@ -214,7 +213,7 @@ push_to_send( params_t *params, uint8_t d )
 static void
 send_and_receive( cable_t *cable, cable_flush_amount_t how_much )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 	uint32_t bytes_sent, bytes_to_recv, bytes_recvd;
 	uint16_t *send_idx;
@@ -336,7 +335,7 @@ ft2232_set_frequency( cable_t *cable, uint32_t new_frequency )
 static int
 ft2232_generic_init( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
@@ -374,7 +373,7 @@ ft2232_generic_init( cable_t *cable )
 static int
 ft2232_jtagkey_init( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
@@ -423,7 +422,7 @@ ft2232_jtagkey_init( cable_t *cable )
 static int
 ft2232_armusbocd_init( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
@@ -476,7 +475,7 @@ ft2232_armusbocd_init( cable_t *cable )
 static int
 ft2232_oocdlinks_init( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
@@ -525,7 +524,7 @@ ft2232_oocdlinks_init( cable_t *cable )
 static int
 ft2232_turtelizer2_init( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
@@ -569,7 +568,7 @@ ft2232_turtelizer2_init( cable_t *cable )
 static int
 ft2232_usbtojtagif_init( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
@@ -614,7 +613,7 @@ ft2232_usbtojtagif_init( cable_t *cable )
 static int
 ft2232_signalyzer_init( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	if (parport_open( p ))
@@ -654,7 +653,7 @@ ft2232_signalyzer_init( cable_t *cable )
 static void
 ft2232_generic_done( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
@@ -677,7 +676,7 @@ ft2232_generic_done( cable_t *cable )
 static void
 ft2232_jtagkey_done( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
@@ -715,7 +714,7 @@ ft2232_jtagkey_done( cable_t *cable )
 static void
 ft2232_armusbocd_done( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
@@ -754,7 +753,7 @@ ft2232_armusbocd_done( cable_t *cable )
 static void
 ft2232_oocdlinks_done( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
@@ -786,7 +785,7 @@ ft2232_oocdlinks_done( cable_t *cable )
 static void
 ft2232_turtelizer2_done( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
@@ -821,7 +820,7 @@ ft2232_turtelizer2_done( cable_t *cable )
 static void
 ft2232_usbtojtagif_done( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
@@ -850,7 +849,7 @@ ft2232_usbtojtagif_done( cable_t *cable )
 static void
 ft2232_signalyzer_done( cable_t *cable )
 {
-	parport_t *p = cable->port;
+	parport_t *p = cable->link.port;
 	params_t *params = (params_t *)cable->params;
 
 	/* Set Data Bits Low Byte
@@ -1320,7 +1319,7 @@ ft2232_connect( char *params[], cable_t *cable )
 	cable_params->recv_buffer     = (uint8_t *)malloc( cable_params->recv_buffer_len );
 	cable_params->maxrecv         = maxrecv;
 
-	cable->port = port;
+	cable->link.port = port;
 	cable->params = cable_params;
 	cable->chain = NULL;
 
@@ -1333,7 +1332,7 @@ ft2232_cable_free( cable_t *cable )
 {
 	params_t *params = (params_t *)cable->params;
 
-	cable->port->driver->parport_free( cable->port );
+	cable->link.port->driver->parport_free( cable->link.port );
 	free( params->send_buffer );
 	free( params->recv_buffer );
 	free( cable->params );

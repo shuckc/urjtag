@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: generic.h 1002 2008-02-10 09:50:59Z kawk $
  *
  * Copyright (C) 2003 ETC s.r.o.
  *
@@ -22,25 +22,15 @@
  *
  */
 
-#ifndef GENERIC_H
-#define	GENERIC_H
+#ifndef GENERIC_USBCONN_H
+#define	GENERIC_USBCONN_H
 
 #include "cable.h"
-#include "parport.h"
+#include "usbconn.h"
 
-typedef struct {
-	int trst;
-	int sreset;
-} generic_params_t;
-
-#define	PARAM_TRST(cable)	((generic_params_t *) cable->params)->trst
-#define	PARAM_SRESET(cable)	((generic_params_t *) cable->params)->sreset
-
-void generic_disconnect( cable_t *cable );
-void generic_set_frequency( cable_t *cable, uint32_t new_freq );
-int generic_transfer( cable_t *cable, int len, char *in, char *out );
-int generic_get_trst( cable_t *cable );
-void generic_flush_one_by_one( cable_t *cable, cable_flush_amount_t hm );
-void generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t hm );
+int generic_usbconn_connect( char *params[], cable_t *cable );
+void generic_usbconn_done( cable_t *cable );
+void generic_usbconn_help( const char *name );
+void generic_usbconn_free( cable_t *cable );
 
 #endif /* GENERIC_H */

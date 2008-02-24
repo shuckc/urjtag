@@ -34,6 +34,7 @@
 #include "chain.h"
 
 #include "generic.h"
+#include "generic_parport.h"
 
 /*
  * data D[7:0] (pins 9:2)
@@ -63,10 +64,10 @@
 static int
 mpcbdm_init( cable_t *cable )
 {
-	if (parport_open( cable->port ))
+	if (parport_open( cable->link.port ))
 		return -1;
 
-	parport_set_control( cable->port, 0 << TRST );
+	parport_set_control( cable->link.port, 0 << TRST );
 	PARAM_TRST(cable) = 1;
 
 	return 0;
@@ -81,9 +82,9 @@ mpcbdm_clock( cable_t *cable, int tms, int tdi, int n )
 	tdi = tdi ? 1 : 0;
 
 	for (i = 0; i < n; i++) {
-		parport_set_data( cable->port, (0 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_data( cable->link.port, (0 << TCK) | (tms << TMS) | (tdi << TDI) );
 		cable_wait( cable );
-		parport_set_data( cable->port, (1 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_data( cable->link.port, (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 		cable_wait( cable );
 	}
 }
@@ -91,9 +92,9 @@ mpcbdm_clock( cable_t *cable, int tms, int tdi, int n )
 static int
 mpcbdm_get_tdo( cable_t *cable )
 {
-	parport_set_data( cable->port, 0 << TCK );
+	parport_set_data( cable->link.port, 0 << TCK );
 	cable_wait( cable );
-	return (parport_get_status( cable->port ) >> TDO) & 1;
+	return (parport_get_status( cable->link.port ) >> TDO) & 1;
 }
 
 static int
@@ -101,18 +102,18 @@ mpcbdm_set_trst( cable_t *cable, int trst )
 {
 	PARAM_TRST(cable) = trst ? 1 : 0;
 
-	parport_set_control( cable->port, (PARAM_TRST(cable) ^ 1) << TRST );
+	parport_set_control( cable->link.port, (PARAM_TRST(cable) ^ 1) << TRST );
 	return PARAM_TRST(cable);
 }
 
 cable_driver_t mpcbdm_cable_driver = {
 	"MPCBDM",
 	N_("Mpcbdm JTAG cable"),
-	generic_connect,
+	generic_parport_connect,
 	generic_disconnect,
-	generic_cable_free,
+	generic_parport_free,
 	mpcbdm_init,
-	generic_done,
+	generic_parport_done,
 	generic_set_frequency,
 	mpcbdm_clock,
 	mpcbdm_get_tdo,
@@ -120,5 +121,5 @@ cable_driver_t mpcbdm_cable_driver = {
 	mpcbdm_set_trst,
 	generic_get_trst,
 	generic_flush_one_by_one,
-	generic_lptcable_help
+	generic_parport_help
 };

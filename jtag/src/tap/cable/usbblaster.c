@@ -32,6 +32,7 @@
 #include "chain.h"
 
 #include "generic.h"
+#include "generic_parport.h"
 
 #define TCK    0
 #define TMS    1
@@ -47,14 +48,14 @@ usbblaster_init( cable_t *cable )
 {
 	int i;
 
-	if (parport_open( cable->port ))
+	if (parport_open( cable->link.port ))
 		return -1;
 
 	for(i=0;i<64;i++)
-		parport_set_data( cable->port, 0 );
+		parport_set_data( cable->link.port, 0 );
 
-	parport_set_control( cable->port, 1 ); // flush
-	parport_set_control( cable->port, 0 ); // noflush
+	parport_set_control( cable->link.port, 1 ); // flush
+	parport_set_control( cable->link.port, 0 ); // noflush
 
 	return 0;
 }
@@ -70,29 +71,29 @@ usbblaster_clock( cable_t *cable, int tms, int tdi, int n )
 	// printf("clock: %d %d %d\n", tms, tdi, n);
 
 	for (i = 0; i < n; i++) {
-		parport_set_data( cable->port, OTHERS | (0 << TCK) | tms | tdi );
-		parport_set_data( cable->port, OTHERS | (1 << TCK) | tms | tdi );
-		parport_set_control( cable->port, 1 ); // flush
-		parport_set_control( cable->port, 0 ); // noflush
+		parport_set_data( cable->link.port, OTHERS | (0 << TCK) | tms | tdi );
+		parport_set_data( cable->link.port, OTHERS | (1 << TCK) | tms | tdi );
+		parport_set_control( cable->link.port, 1 ); // flush
+		parport_set_control( cable->link.port, 0 ); // noflush
 	}
 }
 
 static int
 usbblaster_get_tdo( cable_t *cable )
 {
-	parport_set_control( cable->port, 0 ); // noflush
-	parport_set_data( cable->port, OTHERS ); /* TCK low */
-	parport_set_data( cable->port, OTHERS | (1 << READ) ); /* TCK low */
-	parport_set_control( cable->port, 1 ); // flush
-	parport_set_control( cable->port, 0 ); // noflush
+	parport_set_control( cable->link.port, 0 ); // noflush
+	parport_set_data( cable->link.port, OTHERS ); /* TCK low */
+	parport_set_data( cable->link.port, OTHERS | (1 << READ) ); /* TCK low */
+	parport_set_control( cable->link.port, 1 ); // flush
+	parport_set_control( cable->link.port, 0 ); // noflush
 #if 0
     {
-	  char x = ( parport_get_data( cable->port ) & (1 << TDO)) ? 1 : 0;
+	  char x = ( parport_get_data( cable->link.port ) & (1 << TDO)) ? 1 : 0;
       printf("GetTDO %d\n", x);
       return x;
     }
 #else
-	return ( parport_get_data( cable->port ) & (1 << TDO)) ? 1 : 0;
+	return ( parport_get_data( cable->link.port ) & (1 << TDO)) ? 1 : 0;
 #endif
 }
 
@@ -107,8 +108,8 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 {
 	int in_offset = 0;
 	int out_offset = 0;
-	parport_set_control( cable->port, 0 );
-	parport_set_data( cable->port, OTHERS ); /* TCK low */
+	parport_set_control( cable->link.port, 0 );
+	parport_set_data( cable->link.port, OTHERS ); /* TCK low */
 
 #if 0
 				{
@@ -126,27 +127,27 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 		if(chunkbytes > 63) chunkbytes = 63;
 
 		if(out)
-			parport_set_data( cable->port,(1<<SHMODE)|(1<<READ)|chunkbytes);
+			parport_set_data( cable->link.port,(1<<SHMODE)|(1<<READ)|chunkbytes);
 		else
-			parport_set_data( cable->port,(1<<SHMODE)|(0<<READ)|chunkbytes);
+			parport_set_data( cable->link.port,(1<<SHMODE)|(0<<READ)|chunkbytes);
 
 		for(i=0; i<chunkbytes; i++)
 		{
 			int j;
 			unsigned char b = 0;
 			for(j=1; j<256; j<<=1) if(in[in_offset++]) b |= j;
-			parport_set_data( cable->port, b );
+			parport_set_data( cable->link.port, b );
 		};
 
 		if(out) 
 		{
-			parport_set_control( cable->port, 1 ); // flush
-			parport_set_control( cable->port, 0 ); 
+			parport_set_control( cable->link.port, 1 ); // flush
+			parport_set_control( cable->link.port, 0 ); 
 
 			for(i=0; i<chunkbytes; i++)
 			{
 				int j;
-				unsigned char b = parport_get_data( cable->port );
+				unsigned char b = parport_get_data( cable->link.port );
 #if 0
                 printf("read byte: %02X\n", b);
 #endif
@@ -159,18 +160,18 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 	while(len > in_offset)
 	{
 		char tdi = in[in_offset++] ? 1 : 0;
-		parport_set_data( cable->port, OTHERS ); /* TCK low */
-		if(out) parport_set_data( cable->port, OTHERS | (1 << READ) | (tdi << TDI)); 
-		parport_set_data( cable->port, OTHERS | (1 << TCK)  | (tdi << TDI));
+		parport_set_data( cable->link.port, OTHERS ); /* TCK low */
+		if(out) parport_set_data( cable->link.port, OTHERS | (1 << READ) | (tdi << TDI)); 
+		parport_set_data( cable->link.port, OTHERS | (1 << TCK)  | (tdi << TDI));
 	}
 
 	if(out)
 	{
-		parport_set_control( cable->port, 1 ); // flush
-		parport_set_control( cable->port, 0 );
+		parport_set_control( cable->link.port, 1 ); // flush
+		parport_set_control( cable->link.port, 0 );
 
 		while(len > out_offset)
-			out[out_offset++] = ( parport_get_data( cable->port ) & (1 << TDO)) ? 1 : 0;
+			out[out_offset++] = ( parport_get_data( cable->link.port ) & (1 << TDO)) ? 1 : 0;
 
 #if 0
 				{
@@ -209,16 +210,16 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 					// printf("clock: %d %d %d\n", tms, tdi, m);
 					for(; m>0; m--)
 					{
-						parport_set_data( cable->port, OTHERS | tms | tdi );
-						parport_set_data( cable->port, OTHERS | (1 << TCK) | tms | tdi );
+						parport_set_data( cable->link.port, OTHERS | tms | tdi );
+						parport_set_data( cable->link.port, OTHERS | (1 << TCK) | tms | tdi );
 						to_send += 2;
 					}
 					break;
 				}
 				case CABLE_GET_TDO:
 				{
-					parport_set_data( cable->port, OTHERS ); /* TCK low */
-					parport_set_data( cable->port, OTHERS | (1 << READ) ); /* TCK low */
+					parport_set_data( cable->link.port, OTHERS ); /* TCK low */
+					parport_set_data( cable->link.port, OTHERS | (1 << READ) ); /* TCK low */
 					// printf("get_tdo\n");
 					to_send += 2;
 					break;
@@ -234,14 +235,14 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 #if 0
 		if(cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER)
 		{
-			parport_set_data( cable->port, OTHERS ); /* TCK low */
+			parport_set_data( cable->link.port, OTHERS ); /* TCK low */
 		};
 #endif
 
 		if(to_send > 0)
 		{
-			parport_set_control( cable->port, 1 ); // flush
-			parport_set_control( cable->port, 0 );
+			parport_set_control( cable->link.port, 1 ); // flush
+			parport_set_control( cable->link.port, 0 );
 		}
 
 		while(j!=i)
@@ -250,7 +251,7 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 			{
 				case CABLE_GET_TDO:
 				{
-					int tdo = (parport_get_data( cable->port ) & (1<<TDO)) ? 1 : 0;
+					int tdo = (parport_get_data( cable->link.port ) & (1<<TDO)) ? 1 : 0;
 					int m = cable_add_queue_item( cable, &(cable->done) );
 					cable->done.data[m].action = CABLE_GET_TDO;
 					cable->done.data[m].arg.value.tdo = tdo;
@@ -321,11 +322,11 @@ usbblaster_help( const char *cablename )
 cable_driver_t usbblaster_cable_driver = {
 	"UsbBlaster",
 	N_("Altera USB-Blaster Cable"),
-	generic_connect,
+	generic_parport_connect,
 	generic_disconnect,
-	generic_cable_free,
+	generic_parport_free,
 	usbblaster_init,
-	generic_done,
+	generic_parport_done,
 	usbblaster_set_frequency,
 	usbblaster_clock,
 	usbblaster_get_tdo,

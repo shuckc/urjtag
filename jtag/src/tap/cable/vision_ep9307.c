@@ -206,7 +206,7 @@ ep9307_connect( char *params[], cable_t *cable )
 		return 4;
 	}
 
-	cable->port = NULL;
+	cable->link.port = NULL;
 	cable->params = cable_params;
 	cable->chain = NULL;
 

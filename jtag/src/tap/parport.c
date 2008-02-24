@@ -40,9 +40,6 @@ extern parport_driver_t ftd2xx_mpsse_parport_driver;
 extern parport_driver_t ftdi_parport_driver;
 extern parport_driver_t ftdi_mpsse_parport_driver;
 #endif /* HAVE_LIBFTDI */
-#ifdef HAVE_LIBUSB
-extern parport_driver_t xpcu_pp_driver;
-#endif /* HAVE_LIBUSB */
 #ifdef HAVE_DEV_PPBUS_PPI_H
 extern parport_driver_t ppi_parport_driver;
 #endif /* HAVE_DEV_PPBUS_PPI_H */
@@ -62,9 +59,6 @@ parport_driver_t *parport_drivers[] = {
 	&ftdi_parport_driver,
 	&ftdi_mpsse_parport_driver,
 #endif /* HAVE_LIBFTDI */
-#ifdef HAVE_LIBUSB
-	&xpcu_pp_driver,
-#endif /* HAVE_LIBUSB */
 #ifdef HAVE_DEV_PPBUS_PPI_H
 	&ppi_parport_driver,
 #endif /* HAVE_DEV_PPBUS_PPI_H */

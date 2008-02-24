@@ -43,6 +43,7 @@
 #include "chain.h"
 
 #include "generic.h"
+#include "generic_parport.h"
 
 /*
  * data D[7:0] (pins 9:2)
@@ -68,7 +69,7 @@
 static int
 triton_init( cable_t *cable )
 {
-	if (parport_open( cable->port ))
+	if (parport_open( cable->link.port ))
 		return -1;
 
 	PARAM_TRST(cable) = 1;
@@ -86,9 +87,9 @@ triton_clock( cable_t *cable, int tms, int tdi, int n )
 	tdi = tdi ? 1 : 0;
 
 	for (i = 0; i < n; i++) {
-		parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_SRESET(cable) << SRESET) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_data( cable->link.port, (PARAM_TRST(cable) << TRST) | (PARAM_SRESET(cable) << SRESET) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
 		cable_wait( cable );
-		parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_SRESET(cable) << SRESET) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_data( cable->link.port, (PARAM_TRST(cable) << TRST) | (PARAM_SRESET(cable) << SRESET) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 		cable_wait( cable );
 	}
 }
@@ -96,9 +97,9 @@ triton_clock( cable_t *cable, int tms, int tdi, int n )
 static int
 triton_get_tdo( cable_t *cable )
 {
-	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_SRESET(cable) << SRESET) | (0 << TCK) );
+	parport_set_data( cable->link.port, (PARAM_TRST(cable) << TRST) | (PARAM_SRESET(cable) << SRESET) | (0 << TCK) );
 	cable_wait( cable );
-	return (parport_get_status( cable->port ) >> TDO) & 1;
+	return (parport_get_status( cable->link.port ) >> TDO) & 1;
 }
 
 static int
@@ -106,18 +107,18 @@ triton_set_trst( cable_t *cable, int trst )
 {
 	PARAM_TRST(cable) = trst ? 1 : 0;
 
-	parport_set_data( cable->port, (PARAM_TRST(cable) << TRST) | (PARAM_SRESET(cable) << SRESET) );
+	parport_set_data( cable->link.port, (PARAM_TRST(cable) << TRST) | (PARAM_SRESET(cable) << SRESET) );
 	return PARAM_TRST(cable);
 }
 
 cable_driver_t triton_cable_driver = {
 	"TRITON",
 	N_("Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"),
-	generic_connect,
+	generic_parport_connect,
 	generic_disconnect,
-	generic_cable_free,
+	generic_parport_free,
 	triton_init,
-	generic_done,
+	generic_parport_done,
 	generic_set_frequency,
 	triton_clock,
 	triton_get_tdo,
@@ -125,5 +126,5 @@ cable_driver_t triton_cable_driver = {
 	triton_set_trst,
 	generic_get_trst,
 	generic_flush_one_by_one,
-	generic_lptcable_help
+	generic_parport_help
 };

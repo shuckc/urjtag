@@ -1,8 +1,34 @@
+2008-02-24  Kolja Waschk <kawk>
+
+   * include/cable.h, include/usbconn.h, include/usbconn/libusb.h,
+     src/tap/cable.c, src/tap/usbconn/libusb.c, src/tap/parport.c,
+     src/tap/usbconn.c, src/tap/Makefile.am: Merged code from usb_abstraction
+       branch, adding a "usbconn" link driver (similar to the existing
+       parport link driver) for USB cables.
+
+   * src/tap/cable/generic_parport.c, src/tap/cable/generic_parport.h,
+     src/tap/cable/generic_usbconn.h, src/tap/cable/generic_usbconn.c,
+     src/tap/cable/generic.c, src/tap/cable/generic.h: Separated link-specific
+       code from generic.c into addition source files for parport and usbconn
+
+   * src/tap/cable/wiggler.c, src/tap/cable/arcom.c, src/tap/cable/mpcbdm.c,
+     src/tap/cable/usbblaster.c, src/tap/cable/jlink.c, src/tap/cable/ea253.c,
+     src/tap/cable/vision_ep9307.c, src/tap/cable/triton.c, src/tap/cable/ei012.c,
+     src/tap/cable/byteblaster.c, src/tap/cable/wiggler2.c, src/tap/cable/dlc5.c,
+     src/tap/cable/ft2232.c, src/tap/cable/keithkoep.c, src/tap/cable/lattice.c:
+        Small modifications to adapt to the changes in cable.h and generic.h
+
+   * src/tap/cable/xpc.c, src/tap/parport/xpcu_pp.c, src/tap/parport/xpcu_common.c:
+     Xilinx Platform Cable USB driver now based on usbconn link driver
+
+   * src/tap/cable/jlink.c: New driver for Segger J-Link, Atmel SAM-ICE etc.
+       based on usbconn link driver
+
 2008-02-24  Eugene Boldenkov <eugene_b>
 
    * src/bus/mpc824x.c: Add 32-bit bus support (1900847)
 
-2008-02-24	Mike Frysinger  <vapier>
+2008-02-24  Mike Frysinger  <vapier>
 
    * configure.ac: Fix building out of tree (1899908), only use libusb flags
        as needed (1899930), provide flag about wchar.h presence (1899922)

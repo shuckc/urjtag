@@ -1,7 +1,9 @@
 /*
- * $Id$
+ * $Id: usbconn/libusb.h,v 1.7 2003/08/19 09:05:25 telka Exp $
  *
- * Copyright (C) 2003 ETC s.r.o.
+ * Link driver for accessing USB devices via libusb
+ *
+ * Copyright (C) 2008 K. Waschk
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,29 +20,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2003.
+ * Written by Kolja Waschk, 2008
  *
  */
 
-#ifndef GENERIC_H
-#define	GENERIC_H
+#ifndef _USBCONN_LIBUSB_H
+#define _USBCONN_LIBUSB_H 1
 
-#include "cable.h"
-#include "parport.h"
+#include <usb.h>
 
 typedef struct {
-	int trst;
-	int sreset;
-} generic_params_t;
+	struct usb_device *dev;
+    struct usb_dev_handle *handle;
+} libusb_param_t;
 
-#define	PARAM_TRST(cable)	((generic_params_t *) cable->params)->trst
-#define	PARAM_SRESET(cable)	((generic_params_t *) cable->params)->sreset
+#endif
 
-void generic_disconnect( cable_t *cable );
-void generic_set_frequency( cable_t *cable, uint32_t new_freq );
-int generic_transfer( cable_t *cable, int len, char *in, char *out );
-int generic_get_trst( cable_t *cable );
-void generic_flush_one_by_one( cable_t *cable, cable_flush_amount_t hm );
-void generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t hm );
-
-#endif /* GENERIC_H */

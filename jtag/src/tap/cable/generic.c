@@ -50,68 +50,11 @@ print_vector(int len, char *vec)
 }
 #endif
 
-int
-generic_connect( char *params[], cable_t *cable )
-{
-	generic_params_t *cable_params = malloc( sizeof *cable_params );
-	parport_t *port;
-	int i;
-
-	if ( cmd_params( params ) < 3 ) {
-	  printf( _("not enough arguments!\n") );
-	  return 1;
-	}
-	  
-	/* search parport driver list */
-	for (i = 0; parport_drivers[i]; i++)
-		if (strcasecmp( params[1], parport_drivers[i]->type ) == 0)
-			break;
-	if (!parport_drivers[i]) {
-		printf( _("Unknown port driver: %s\n"), params[1] );
-		return 2;
-	}
-
-	/* set up parport driver */
-	port = parport_drivers[i]->connect( (const char **) &params[2],
-					    cmd_params( params ) - 2 );
-
-        if (port == NULL) {
-	  printf( _("Error: Cable connection failed!\n") );
-	  return 3;
-        }
-
-	if (!cable_params) {
-		free( cable_params );
-		free( cable );
-		return 4;
-	}
-
-	cable->port = port;
-	cable->params = cable_params;
-	cable->chain = NULL;
-
-	return 0;
-}
-
 void
 generic_disconnect( cable_t *cable )
 {
 	cable_done( cable );
 	chain_disconnect( cable->chain );
-}
-
-void
-generic_cable_free( cable_t *cable )
-{
-	cable->port->driver->parport_free( cable->port );
-	free( cable->params );
-	free( cable );
-}
-
-void
-generic_done( cable_t *cable )
-{
-	parport_close( cable->port );
 }
 
 int
@@ -467,36 +410,5 @@ generic_set_frequency( cable_t *cable, uint32_t new_frequency )
 		cable->delay = delay;
 		cable->frequency = frequency;
 	}
-}
-
-void
-generic_lptcable_help( const char *cablename )
-{
-	printf( _(
-		"Usage: cable %s parallel PORTADDR\n"
-#if HAVE_LINUX_PPDEV_H
-		"   or: cable %s ppdev PPDEV\n"
-#endif
-#if HAVE_DEV_PPBUS_PPI_H
-		"   or: cable %s ppi PPIDEV\n"
-#endif
-		"\n"
-		"PORTADDR   parallel port address (e.g. 0x378)\n"
-#if HAVE_LINUX_PPDEV_H
-		"PPDEF      ppdev device (e.g. /dev/parport0)\n"
-#endif
-#if HAVE_DEV_PPBUS_PPI_H
-		"PPIDEF     ppi device (e.g. /dev/ppi0)\n"
-#endif
-		"\n"
-	),
-#if HAVE_LINUX_PPDEV_H
-    cablename,
-#endif
-#if HAVE_DEV_PPBUS_PPI_H
-    cablename,
-#endif
-    cablename 
-    );
 }
 

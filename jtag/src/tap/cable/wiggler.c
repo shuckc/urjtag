@@ -38,6 +38,7 @@
 #include "chain.h"
 
 #include "generic.h"
+#include "generic_parport.h"
 
 #include <cmd.h>
 
@@ -177,11 +178,11 @@ wiggler_connect( char *params[], cable_t *cable )
 	if ( cmd_params ( params ) == 4 ) {
 		/* acquire optional parameter for bit<->pin mapping */
 		param_bitmap = params[3];
-		/* generic_connect() shouldn't see this parameter */
+		/* generic_parport_connect() shouldn't see this parameter */
 		params[3] = NULL;
 	}
 
-	if ( ( result = generic_connect( params, cable ) ) != 0)
+	if ( ( result = generic_parport_connect( params, cable ) ) != 0)
 		return result;
 
 	if ( param_bitmap )
@@ -218,11 +219,11 @@ wiggler_init( cable_t *cable )
 {
 	int data;
 
-	if (parport_open( cable->port ))
+	if (parport_open( cable->link.port ))
 		return -1;
 
-	if ((data = parport_get_data( cable->port )) < 0) {
-		if (parport_set_data( cable->port, (PRM_TRST_ACT(cable) | PRM_TRST_INACT(cable)) | PRM_UNUSED_BITS(cable)))
+	if ((data = parport_get_data( cable->link.port )) < 0) {
+		if (parport_set_data( cable->link.port, (PRM_TRST_ACT(cable) | PRM_TRST_INACT(cable)) | PRM_UNUSED_BITS(cable)))
 			return -1;
 		PRM_TRST_LVL(cable) = PRM_TRST_ACT(cable) | PRM_TRST_INACT(cable);
 	} else
@@ -240,13 +241,13 @@ wiggler_clock( cable_t *cable, int tms, int tdi, int n )
 	tdi = tdi ? 1 : 0;
 
 	for (i = 0; i < n; i++) {
-		parport_set_data( cable->port, PRM_TRST_LVL(cable) |
+		parport_set_data( cable->link.port, PRM_TRST_LVL(cable) |
 				PRM_TCK_INACT(cable) |
 				(tms ? PRM_TMS_ACT(cable) : PRM_TMS_INACT(cable)) |
 				(tdi ? PRM_TDI_ACT(cable) : PRM_TDI_INACT(cable)) |
 				PRM_UNUSED_BITS(cable) );
 		cable_wait( cable );
-		parport_set_data( cable->port, PRM_TRST_LVL(cable) |
+		parport_set_data( cable->link.port, PRM_TRST_LVL(cable) |
 				PRM_TCK_ACT(cable) |
 				(tms ? PRM_TMS_ACT(cable) : PRM_TMS_INACT(cable)) |
 				(tdi ? PRM_TDI_ACT(cable) : PRM_TDI_INACT(cable)) |
@@ -258,11 +259,11 @@ wiggler_clock( cable_t *cable, int tms, int tdi, int n )
 static int
 wiggler_get_tdo( cable_t *cable )
 {
-	parport_set_data( cable->port, PRM_TRST_LVL(cable) |
+	parport_set_data( cable->link.port, PRM_TRST_LVL(cable) |
 			PRM_TCK_INACT(cable) |
 			PRM_UNUSED_BITS(cable) );
 	cable_wait( cable );
-	return (parport_get_status( cable->port ) & (PRM_TDO_ACT(cable) | PRM_TDO_INACT(cable))) ^
+	return (parport_get_status( cable->link.port ) & (PRM_TDO_ACT(cable) | PRM_TDO_INACT(cable))) ^
 	PRM_TDO_ACT(cable) ? 0 : 1;
 }
 
@@ -271,7 +272,7 @@ wiggler_set_trst( cable_t *cable, int trst )
 {
 	PRM_TRST_LVL(cable) = trst ? PRM_TRST_ACT(cable) : PRM_TRST_INACT(cable);
 
-	parport_set_data( cable->port, PRM_TRST_LVL(cable) |
+	parport_set_data( cable->link.port, PRM_TRST_LVL(cable) |
 			PRM_UNUSED_BITS(cable) );
 	return PRM_TRST_LVL(cable) ^ PRM_TRST_ACT(cable) ? 0 : 1;
 }
@@ -321,9 +322,9 @@ cable_driver_t wiggler_cable_driver = {
 	N_("Macraigor Wiggler JTAG Cable"),
 	wiggler_connect,
 	generic_disconnect,
-	generic_cable_free,
+	generic_parport_free,
 	wiggler_init,
-	generic_done,
+	generic_parport_done,
 	generic_set_frequency,
 	wiggler_clock,
 	wiggler_get_tdo,
@@ -339,9 +340,9 @@ cable_driver_t igloo_cable_driver = {
 	N_("Excelpoint IGLOO JTAG Cable"),
 	wiggler_connect,
 	generic_disconnect,
-	generic_cable_free,
+	generic_parport_free,
 	wiggler_init,
-	generic_done,
+	generic_parport_done,
 	generic_set_frequency,
 	wiggler_clock,
 	wiggler_get_tdo,

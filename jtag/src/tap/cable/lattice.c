@@ -30,6 +30,7 @@
 #include "chain.h"
 
 #include "generic.h"
+#include "generic_parport.h"
 
 /*
  * 0 - STROBE (pin 1)
@@ -53,7 +54,7 @@
 static int
 lattice_init( cable_t *cable )
 {
-	if (parport_open( cable->port ))
+	if (parport_open( cable->link.port ))
 		return -1;
 
 	PARAM_TRST(cable) = 1;
@@ -70,9 +71,9 @@ lattice_clock( cable_t *cable, int tms, int tdi, int n )
 	tdi = tdi ? 1 : 0;
 
 	for (i = 0; i < n; i++) {
-		parport_set_data( cable->port, (0 << TCK) | (tms << TMS) | (tdi << TDI) | (1 << TRST) );
+		parport_set_data( cable->link.port, (0 << TCK) | (tms << TMS) | (tdi << TDI) | (1 << TRST) );
 		cable_wait( cable );
-		parport_set_data( cable->port, (1 << TCK) | (tms << TMS) | (tdi << TDI) | (1 << TRST) );
+		parport_set_data( cable->link.port, (1 << TCK) | (tms << TMS) | (tdi << TDI) | (1 << TRST) );
 		cable_wait( cable );
 	}
 }
@@ -80,25 +81,25 @@ lattice_clock( cable_t *cable, int tms, int tdi, int n )
 static int
 lattice_get_tdo( cable_t *cable )
 {
-	parport_set_data( cable->port, (0 << TCK) | (1 << TRST) );
+	parport_set_data( cable->link.port, (0 << TCK) | (1 << TRST) );
 	cable_wait( cable );
-	return (parport_get_status( cable->port ) >> TDO) & 1;
+	return (parport_get_status( cable->link.port ) >> TDO) & 1;
 }
 
 static int
 lattice_set_trst( cable_t *cable, int trst )
 {
-	return parport_set_data( cable->port, trst << TRST );
+	return parport_set_data( cable->link.port, trst << TRST );
 }
 
 cable_driver_t lattice_cable_driver = {
 	"Lattice",
 	N_("Lattice Parallel Port JTAG Cable"),
-	generic_connect,
+	generic_parport_connect,
 	generic_disconnect,
-	generic_cable_free,
+	generic_parport_free,
 	lattice_init,
-	generic_done,
+	generic_parport_done,
 	generic_set_frequency,
 	lattice_clock,
 	lattice_get_tdo,
@@ -106,5 +107,5 @@ cable_driver_t lattice_cable_driver = {
 	lattice_set_trst,
 	generic_get_trst,
 	generic_flush_one_by_one,
-	generic_lptcable_help
+	generic_parport_help
 };

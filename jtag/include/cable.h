@@ -30,6 +30,7 @@
 
 typedef struct cable_t cable_t;
 
+#include "usbconn.h"
 #include "parport.h"
 #include "chain.h"
 
@@ -107,7 +108,10 @@ struct cable_queue_info_t {
 
 struct cable_t {
 	cable_driver_t *driver;
-	parport_t *port;
+	union {
+		usbconn_t *usb;
+		parport_t *port;
+	} link;
 	void *params;
 	chain_t *chain;
 	cable_queue_info_t todo;
