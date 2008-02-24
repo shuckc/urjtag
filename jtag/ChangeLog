@@ -1,3 +1,7 @@
+2008-02-24  Eugene Boldenkov <eugene_b>
+
+   * src/bus/mpc824x.c: Add 32-bit bus support (1900847)
+
 2008-02-24	Mike Frysinger  <vapier>
 
    * configure.ac: Fix building out of tree (1899908), only use libusb flags
