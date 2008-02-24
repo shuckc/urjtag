@@ -24,6 +24,8 @@
    * src/tap/cable/jlink.c: New driver for Segger J-Link, Atmel SAM-ICE etc.
        based on usbconn link driver
 
+   * doc/UrJTAG.txt: Added section about link drivers
+
 2008-02-24  Eugene Boldenkov <eugene_b>
 
    * src/bus/mpc824x.c: Add 32-bit bus support (1900847)

@@ -316,7 +316,7 @@ Cygwin environment, first get it from:
 Unzip the CDM*.zip to some directory and tell UrJTAG about this directory
 during the configure step before actual compilation:
 
- ./configure --with-libftd2xx=/cygdrive/c/windows/temp/CDM_Drivers
+ ./configure --with-ftd2xx=/cygdrive/c/windows/temp/CDM_Drivers
 
 All other USB JTAG adapters can be supported only if libusb is installed.
 There is a libusb-win32 variant that can be used in a Cygwin environment:
@@ -959,8 +959,8 @@ src/tap::   Functions for accessing the chain in general
 
 === Drivers ===
 
- * Cable-specific drivers
- * Parport drivers
+ * Cable drivers
+ * Link drivers
  * TAP drivers
  * Chain drivers
  * Bus drivers
@@ -1136,6 +1136,46 @@ As a reference and in many cases completely sufficient for new cables, take a
 look at the code in src/tap/cable/generic.c, which contains generic routines,
 suitable for parallel port based cables (and some for other types of cables as
 well).
+
+==== Link drivers ====
+
+Link drivers like the "parport" driver collection provide the basis for
+communication between cable driver and actual JTAG adapter. The openwince JTAG
+tools supported only parallel port links with the "parport" drivers. UrJTAG
+introduced support for USB links, but in the early releases the drivers for
+these just mimic the parallel port links.
+
+The basic functions provided by all link drivers are
+
+ * connect(), to called from cable driver connect()
+ * open(), to actually connect to the device during cable driver init()
+ * close(), to disconnect from the device during cable driver done()
+ * free(), to free all resources, called from cable driver free()
+
+===== parport =====
+
+Currently there are parport drivers for direct access to the parallel port on a
+PC using I/O addresses (direct.c), and for using ppdev on Linux or ppi on FreeBSD.
+
+In addition, there are "ftdi" and "ftd2xx" parport drivers that actually are for
+communication with USB cables based on FTDI chips. They cannot be used for
+connecting old parallel port cables through parallel to USB adapters with FTDI
+chips, and probably soon will be rewritten as "usbconn" drivers instead.
+
+All parport drivers present a common API for setting and reading signals.
+
+===== usbconn =====
+
+The usbconn drivers provide a common API to search for and connect with USB
+devices. At the moment, there's only a libusb driver, but others will follow
+(e.g. to communicate with FTDI chip based cables through libftdi and/or FTD2XX,
+to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and more).
+
+In contrast to the parport API, the usbconn drivers provide only the functions
+for connecting, disconnecting, and for releasing ressources. The actual
+communication must be implemented using the underlying library's functions,
+e.g. usb_write from libusb, or ftdi_write from libftdi. Therefore, each driver
+using usbconn usually only works together with one particular usbconn driver.
 
 ==== Bus drivers ====
 
