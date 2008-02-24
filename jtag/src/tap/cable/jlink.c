@@ -48,9 +48,9 @@
 #include <usb.h>
 #include <string.h>
 
-#define INFO     printf
-#define ERROR    printf
-#define DEBUG    printf
+#define INFO(...)   printf(__VA_ARGS__)
+#define ERROR(...)  printf(__VA_ARGS__)
+#define DEBUG(...)
 
 #define JLINK_WRITE_ENDPOINT 0x02
 #define JLINK_READ_ENDPOINT  0x81
@@ -244,7 +244,7 @@ static int jlink_tap_execute( cable_t *cable )
         else
         {
             ERROR(
-                "jlink_tap_execute, wrong result %d, expected %d",
+                "jlink_tap_execute, wrong result %d, expected %d\n",
                 result,
                 byte_length);
 
@@ -393,7 +393,6 @@ jlink_init( cable_t *cable )
     jlink_set_frequency( cable, 4E6 );
     jlink_reset( cable, 0, 0);
     jlink_tap_init();
-
 
     PARAM_TRST(cable) = 1;
 
