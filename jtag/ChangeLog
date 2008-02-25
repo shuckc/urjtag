@@ -1,3 +1,8 @@
+2008-02-25  Jie Zhang  <jie.zhang@analog.com>
+
+   * src/bus/buses.c (bus_drivers): bf548_ezkit_bus.
+   * src/bus/buses.h: Declare bf548_ezkit_bus.
+
 2008-02-24  Kolja Waschk <kawk>
 
    * include/cable.h, include/usbconn.h, include/usbconn/libusb.h,

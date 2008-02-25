@@ -32,6 +32,7 @@ extern const bus_driver_t bf533_stamp_bus;
 extern const bus_driver_t bf533_ezkit_bus;
 extern const bus_driver_t bf537_stamp_bus;
 extern const bus_driver_t bf537_ezkit_bus;
+extern const bus_driver_t bf548_ezkit_bus;
 extern const bus_driver_t bf561_ezkit_bus;
 extern const bus_driver_t ixp425_bus;
 extern const bus_driver_t fjmem_bus;
