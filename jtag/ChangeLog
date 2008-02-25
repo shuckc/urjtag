@@ -1,3 +1,8 @@
+2008-02-25  Kolja Waschk <kawk>
+
+   * include/usbconn/libusb.h, src/tap/cable/jlink.c: J-Link driver
+       doesn't use global variables anymore
+
 2008-02-25  Jie Zhang  <jie.zhang@analog.com>
 
    * src/bus/buses.c (bus_drivers): bf548_ezkit_bus.

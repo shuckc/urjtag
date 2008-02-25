@@ -60,9 +60,22 @@
 #define JLINK_IN_BUFFER_SIZE  2064
 #define JLINK_OUT_BUFFER_SIZE 2064
 
-/* Global USB buffers */
-static char usb_in_buffer[JLINK_IN_BUFFER_SIZE];
-static char usb_out_buffer[JLINK_OUT_BUFFER_SIZE];
+/* We use the maximal value observed */
+#define JLINK_TAP_BUFFER_SIZE 390
+
+typedef struct
+{
+    /* Global USB buffers */
+    char usb_in_buffer[JLINK_IN_BUFFER_SIZE];
+    char usb_out_buffer[JLINK_OUT_BUFFER_SIZE];
+
+    int tap_length;
+    uint8_t tms_buffer[JLINK_TAP_BUFFER_SIZE];
+    uint8_t tdi_buffer[JLINK_TAP_BUFFER_SIZE];
+
+    int last_tdo;
+}
+jlink_usbconn_data_t;
 
 /* Constants for JLink command */
 #define JLINK_SPEED_COMMAND                0x05
@@ -74,82 +87,64 @@ static char usb_out_buffer[JLINK_OUT_BUFFER_SIZE];
 
 #define JLINK_MAX_SPEED 12000
 
-
 /* Queue command functions */
-static void jlink_reset( cable_t *cable, int trst, int srst);
-static void jlink_simple_command( cable_t *cable, uint8_t command );
+static void jlink_reset( libusb_param_t *params, int trst, int srst);
+static void jlink_simple_command( libusb_param_t *params, uint8_t command );
+
 
 /* J-Link tap buffer functions */
-static void jlink_tap_init();
-static int jlink_tap_execute();
-static void jlink_tap_append_step(int tms, int tdi);
+static void jlink_tap_init( jlink_usbconn_data_t *data );
+static int  jlink_tap_execute( libusb_param_t *params );
+static void jlink_tap_append_step( jlink_usbconn_data_t *data, int, int);
 
 /* Jlink lowlevel functions */
-static int jlink_usb_message( cable_t *cable, int out_length, int in_length);
-static int jlink_usb_write( cable_t *cable, unsigned int out_length);
-static int jlink_usb_read( cable_t *cable );
+static int jlink_usb_message( libusb_param_t *params, int, int );
+static int jlink_usb_write( libusb_param_t *params, unsigned int );
+static int jlink_usb_read( libusb_param_t *params );
+
 static void jlink_debug_buffer(uint8_t *buffer, int length);
 
+/* API functions */
 
+void jlink_set_frequency( cable_t *cable, uint32_t frequency );
 
-void jlink_set_frequency( cable_t *cable, uint32_t frequency )
-{
-    int result;
-	int speed = frequency / 1E3;
+/***************************************************************************/
+/* J-Link tap functions */
 
-    if (1 <= speed && speed <= JLINK_MAX_SPEED)
-    {
-        usb_out_buffer[0] = JLINK_SPEED_COMMAND;
-        usb_out_buffer[1] = (speed >> 0) & 0xff;
-        usb_out_buffer[2] = (speed >> 8) & 0xff;
-
-        result = jlink_usb_write( cable, 3 );
-
-        if (result != 3)
-        {
-            ERROR("J-Link setting speed failed (%d)\n", result);
-        }
-    }
-    else
-    {
-        INFO("Requested speed %dkHz exceeds maximum of %dkHz, ignored\n", 
-            speed, JLINK_MAX_SPEED);
-    }
-}
-
-void jlink_reset( cable_t *cable, int trst, int srst)
+void jlink_reset( libusb_param_t *params, int trst, int srst)
 {
     DEBUG("trst: %i, srst: %i\n", trst, srst);
 
     /* Signals are active low */
     if (trst == 0)
     {
-        jlink_simple_command( cable, JLINK_SET_TRST_HIGH_COMMAND);
+        jlink_simple_command( params, JLINK_SET_TRST_HIGH_COMMAND);
     }
     else if (trst == 1)
     {
-        jlink_simple_command( cable, JLINK_SET_TRST_LOW_COMMAND);
+        jlink_simple_command( params, JLINK_SET_TRST_LOW_COMMAND);
     }
 
     if (srst == 0)
     {
-        jlink_simple_command( cable, JLINK_SET_SRST_HIGH_COMMAND);
+        jlink_simple_command( params, JLINK_SET_SRST_HIGH_COMMAND);
     }
     else if (srst == 1)
     {
-        jlink_simple_command( cable, JLINK_SET_SRST_LOW_COMMAND);
+        jlink_simple_command( params, JLINK_SET_SRST_LOW_COMMAND);
     }
 }
 
 
-static void jlink_simple_command( cable_t *cable, uint8_t command)
+static void jlink_simple_command( libusb_param_t *params, uint8_t command)
 {
     int result;
+    jlink_usbconn_data_t *data = params->data;
 
     DEBUG("simple_command: 0x%02x\n", command);
 
-    usb_out_buffer[0] = command;
-    result = jlink_usb_write( cable, 1 );
+    data->usb_out_buffer[0] = command;
+    result = jlink_usb_write( params, 1 );
 
     if (result != 1)
     {
@@ -158,41 +153,31 @@ static void jlink_simple_command( cable_t *cable, uint8_t command)
 }
 
 /***************************************************************************/
-/* J-Link tap functions */
 
-/* We use the maximal value observed */
-#define JLINK_TAP_BUFFER_SIZE 390
-
-static int tap_length;
-static uint8_t tms_buffer[JLINK_TAP_BUFFER_SIZE];
-static uint8_t tdi_buffer[JLINK_TAP_BUFFER_SIZE];
-
-static int last_tdo;
-
-static void jlink_tap_init()
+static void jlink_tap_init( jlink_usbconn_data_t *data )
 {
-    tap_length = 0;
+    data->tap_length = 0;
 }
 
-static void jlink_tap_append_step(int tms, int tdi)
+static void jlink_tap_append_step( jlink_usbconn_data_t *data, int tms, int tdi)
 {
-    int index = tap_length >> 3;
+    int index = data->tap_length >> 3;
 
     if (index < JLINK_TAP_BUFFER_SIZE)
     {
-        int bit_index = tap_length & 7;
+        int bit_index = data->tap_length & 7;
         uint8_t bit = 1 << bit_index;
 
-		if(bit_index == 0)
-		{
-			tms_buffer[index] = 0;
-			tdi_buffer[index] = 0;
-		};
+        if(bit_index == 0)
+        {
+            data->tms_buffer[index] = 0;
+            data->tdi_buffer[index] = 0;
+        };
 
-		if(tms) tms_buffer[index] |= bit;
-		if(tdi) tdi_buffer[index] |= bit;
+        if(tms) data->tms_buffer[index] |= bit;
+        if(tdi) data->tdi_buffer[index] |= bit;
 
-        tap_length++;
+        data->tap_length++;
     }
     else
     {
@@ -200,46 +185,50 @@ static void jlink_tap_append_step(int tms, int tdi)
     }
 }
 
-/* Pad and send a tap sequence to the device, and receive the answer.
- * For the purpose of padding we assume that we are in idle or pause state. */
-static int jlink_tap_execute( cable_t *cable )
+/* Send a tap sequence to the device, and receive the answer */
+
+static int jlink_tap_execute( libusb_param_t *params )
 {
+    jlink_usbconn_data_t *data = params->data;
     int byte_length;
     int tms_offset;
     int tdi_offset;
     int i;
     int result;
 
-    if (tap_length > 0)
+    if (data->tap_length > 0)
     {
-        byte_length = (tap_length + 7) >> 3;
-        usb_out_buffer[0] = JLINK_TAP_SEQUENCE_COMMAND;
-        usb_out_buffer[1] = (tap_length >> 0) & 0xff;
-        usb_out_buffer[2] = (tap_length >> 8) & 0xff;
+        byte_length = (data->tap_length + 7) >> 3;
+        data->usb_out_buffer[0] = JLINK_TAP_SEQUENCE_COMMAND;
+        data->usb_out_buffer[1] = (data->tap_length >> 0) & 0xff;
+        data->usb_out_buffer[2] = (data->tap_length >> 8) & 0xff;
 
         tms_offset = 3;
         for (i = 0; i < byte_length; i++)
         {
-            usb_out_buffer[tms_offset + i] = tms_buffer[i];
+            data->usb_out_buffer[tms_offset + i] = 
+                 data->tms_buffer[i];
         }
 
         tdi_offset = tms_offset + byte_length;
         for (i = 0; i < byte_length; i++)
         {
-            usb_out_buffer[tdi_offset + i] = tdi_buffer[i];
+            data->usb_out_buffer[tdi_offset + i] =
+                data->tdi_buffer[i];
         }
 
         result = jlink_usb_message(
-            cable,
+            params, 
             3 + 2 * byte_length,
             byte_length);
 
         if (result == byte_length)
         {
-            int bit_index = (tap_length - 1) & 7;
+            int bit_index = (data->tap_length - 1) & 7;
             uint8_t bit = 1 << bit_index;
 
-            last_tdo = ((usb_in_buffer[byte_length-1]) & bit ) ? 1 : 0;
+            data->last_tdo = 
+                ((data->usb_in_buffer[byte_length-1]) & bit ) ? 1 : 0;
         }
         else
         {
@@ -251,7 +240,7 @@ static int jlink_tap_execute( cable_t *cable )
             return -2;
         }
 
-        jlink_tap_init();
+        jlink_tap_init( data );
     }
     return 0;
 }
@@ -260,16 +249,16 @@ static int jlink_tap_execute( cable_t *cable )
 
 /* Send a message and receive the reply. */
 static int jlink_usb_message(
-    cable_t *cable,
+    libusb_param_t *params,
     int out_length,
     int in_length)
 {
     int result;
 
-    result = jlink_usb_write( cable, out_length );
+    result = jlink_usb_write( params, out_length );
     if (result == out_length)
     {
-        result = jlink_usb_read( cable );
+        result = jlink_usb_read( params );
         if (result == in_length)
         {
             return result;
@@ -298,11 +287,12 @@ static int jlink_usb_message(
 /* ---------------------------------------------------------------------- */
 
 /* Write data from out_buffer to USB. */
-static int jlink_usb_write( cable_t *cable, unsigned int out_length )
+static int jlink_usb_write( libusb_param_t *params, unsigned int out_length )
 {
     int result;
-    struct usb_dev_handle *jlink;
-    jlink = ((libusb_param_t*)(cable->link.usb->params))->handle;
+    jlink_usbconn_data_t *data;
+
+    data = params->data;
 
     if (out_length > JLINK_OUT_BUFFER_SIZE)
     {
@@ -313,34 +303,33 @@ static int jlink_usb_write( cable_t *cable, unsigned int out_length )
     }
 
     result = usb_bulk_write(
-        jlink, 
+        params->handle, 
         JLINK_WRITE_ENDPOINT,
-        usb_out_buffer,
+        data->usb_out_buffer,
         out_length,
         JLINK_USB_TIMEOUT);
 
     DEBUG("jlink_usb_write, out_length = %d, result = %d\n", out_length, result);
-    jlink_debug_buffer(usb_out_buffer, out_length);
+    jlink_debug_buffer(data->usb_out_buffer, out_length);
     return result;
 }
 
 /* ---------------------------------------------------------------------- */
 
 /* Read data from USB into in_buffer. */
-static int jlink_usb_read( cable_t *cable )
+static int jlink_usb_read( libusb_param_t *params )
 {
-    struct usb_dev_handle *jlink;
-    jlink = ((libusb_param_t*)(cable->link.usb->params))->handle;
+    jlink_usbconn_data_t *data = params->data;
 
     int result = usb_bulk_read(
-        jlink,
+        params->handle,
         JLINK_READ_ENDPOINT,
-        usb_in_buffer, 
+        data->usb_in_buffer, 
         JLINK_IN_BUFFER_SIZE, 
         JLINK_USB_TIMEOUT);
 
     DEBUG("jlink_usb_read, result = %d\n", result);
-    jlink_debug_buffer(usb_in_buffer, result);
+    jlink_debug_buffer(data->usb_in_buffer, result);
     return result;
 }
 
@@ -374,16 +363,25 @@ static int
 jlink_init( cable_t *cable )
 {
     int result;
-    struct usb_dev_handle *jlink;
+    libusb_param_t *params;
+    jlink_usbconn_data_t *data;
+
+    params = cable->link.usb->params;
+    params->data = malloc(sizeof(jlink_usbconn_data_t));
+    if(params->data == NULL)
+    {
+        return -1;
+    }
+    data = params->data;
 
     if (usbconn_open( cable->link.usb )) return -1;
 
-    jlink = ((libusb_param_t*)(cable->link.usb->params))->handle;
+    jlink_tap_init( data );
 
-    jlink_tap_init();
+    result = jlink_usb_read( params );
 
-    result = jlink_usb_read( cable );
-    if (result != 2 || usb_in_buffer[0] != 0x07 || usb_in_buffer[1] != 0x00)
+    if (result != 2 || data->usb_in_buffer[0] != 0x07
+                    || data->usb_in_buffer[1] != 0x00)
     {
         INFO("J-Link initial read failed, don't worry (result=%d)\n", result);
     }
@@ -391,28 +389,67 @@ jlink_init( cable_t *cable )
     INFO("J-Link JTAG Interface ready\n");
 
     jlink_set_frequency( cable, 4E6 );
-    jlink_reset( cable, 0, 0);
-    jlink_tap_init();
 
-    PARAM_TRST(cable) = 1;
+    jlink_reset( params, 0, 0);
 
     return 0;
 }
 
 /* ---------------------------------------------------------------------- */
 
-int tdo_cache;
+static
+void jlink_free( cable_t *cable )
+{
+    jlink_usbconn_data_t *data;
+    data = ((libusb_param_t*)(cable->link.usb->params))->data;
+    free(data);
+
+    generic_usbconn_free( cable );
+}
+
+/* ---------------------------------------------------------------------- */
+
+void jlink_set_frequency( cable_t *cable, uint32_t frequency )
+{
+    int result;
+    int speed = frequency / 1E3;
+    libusb_param_t *params = cable->link.usb->params;
+    jlink_usbconn_data_t *data = params->data;
+
+    if (1 <= speed && speed <= JLINK_MAX_SPEED)
+    {
+        data->usb_out_buffer[0] = JLINK_SPEED_COMMAND;
+        data->usb_out_buffer[1] = (speed >> 0) & 0xff;
+        data->usb_out_buffer[2] = (speed >> 8) & 0xff;
+
+        result = jlink_usb_write( params, 3 );
+
+        if (result != 3)
+        {
+            ERROR("J-Link setting speed failed (%d)\n", result);
+        }
+    }
+    else
+    {
+        INFO("Requested speed %dkHz exceeds maximum of %dkHz, ignored\n", 
+            speed, JLINK_MAX_SPEED);
+    }
+}
+
+/* ---------------------------------------------------------------------- */
 
 static void
 jlink_clock( cable_t *cable, int tms, int tdi, int n )
 {
     int i;
+    libusb_param_t *params = cable->link.usb->params;
+    jlink_usbconn_data_t *data = params->data;
 
     for (i = 0; i < n; i++)
     {
-        jlink_tap_append_step(tms, tdi);
+        jlink_tap_append_step( data, tms, tdi);
     }
-    jlink_tap_execute( cable );
+    jlink_tap_execute( params );
 }
 
 /* ---------------------------------------------------------------------- */
@@ -420,49 +457,54 @@ jlink_clock( cable_t *cable, int tms, int tdi, int n )
 static int
 jlink_get_tdo( cable_t *cable )
 {
-	// TODO: This is the TDO _before_ last clock occured
-	// ...   Anyone knows how to get the current TDO state?
+    libusb_param_t *params = cable->link.usb->params;
+    jlink_usbconn_data_t *data = params->data;
 
-    return last_tdo;
+    // TODO: This is the TDO _before_ last clock occured
+    // ...   Anyone knows how to get the current TDO state?
+
+    return data->last_tdo;
 }
 
 /* ---------------------------------------------------------------------- */
 
 void
-jlink_copy_out_data( cable_t *cable, int len, int offset, char *buf )
+jlink_copy_out_data( jlink_usbconn_data_t *data, int len, int offset, char *buf )
 {
     int i;
     for(i=0;i<len;i++)
     {
         int bit = (1<<(i&7));
         int byte = i>>3;
-        buf[offset+i] = (usb_in_buffer[byte] & bit) ? 1 : 0;
+        buf[offset+i] = (data->usb_in_buffer[byte] & bit) ? 1 : 0;
     }
 }
 
 int
 jlink_transfer( cable_t *cable, int len, char *in, char *out )
 {
-	int i,j;
+    int i,j;
+    libusb_param_t *params = cable->link.usb->params;
+    jlink_usbconn_data_t *data = params->data;
 
     for(j=0, i=0; i<len; i++)
     {
-        jlink_tap_append_step(0, in[i]);
+        jlink_tap_append_step(data, 0, in[i]);
 
-        if(tap_length >= 8*JLINK_TAP_BUFFER_SIZE)
+        if(data->tap_length >= 8*JLINK_TAP_BUFFER_SIZE)
         {
-            jlink_tap_execute( cable );
-            if(out) jlink_copy_out_data( cable, i-j, j, out);
+            jlink_tap_execute( params );
+            if(out) jlink_copy_out_data( data, i-j, j, out);
             j = i;
         }
     };
-    if(tap_length > 0)
+    if(data->tap_length > 0)
     {
-        jlink_tap_execute( cable );
-        if(out) jlink_copy_out_data( cable, i-j, j, out);
+        jlink_tap_execute( params );
+        if(out) jlink_copy_out_data( data, i-j, j, out);
     }
     
-	return i;
+    return i;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -478,7 +520,7 @@ cable_driver_t jlink_cable_driver = {
     N_("Segger/IAR J-Link, Atmel SAM-ICE and others."),
     generic_usbconn_connect,
     generic_disconnect,
-    generic_usbconn_free,
+    jlink_free,
     jlink_init,
     generic_usbconn_done,
     jlink_set_frequency,
