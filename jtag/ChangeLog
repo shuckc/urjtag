@@ -1,3 +1,8 @@
+2008-02-25  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/bus/fjmem.c (fjmem_bus_new): accept 'len' parameter to suppress
+       data register length detection
+
 2008-02-25  Kolja Waschk <kawk>
 
    * include/usbconn/libusb.h, src/tap/cable/jlink.c: J-Link driver

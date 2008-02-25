@@ -378,7 +378,7 @@ fjmem_bus_free( bus_t *bus )
 }
 
 static int
-fjmem_detect_reg_len( chain_t *chain, part_t *part, char *opcode )
+fjmem_detect_reg_len( chain_t *chain, part_t *part, char *opcode, int len )
 {
 	data_register *dr;
 	instruction *i;
@@ -427,6 +427,10 @@ fjmem_detect_reg_len( chain_t *chain, part_t *part, char *opcode )
 	/* set the FJMEM_INST instruction and activate it */
 	part_set_instruction( part, FJMEM_INST_NAME );
 	chain_shift_instructions( chain );
+
+	/* skip autodetect if register length was already specified */
+	if (len)
+		return len;
 
 	/* now detect the register length of FJMEM_REG:
 	   shift 1s through the data register until they appear at TDO
@@ -490,9 +494,11 @@ fjmem_detect_fields( chain_t *chain, part_t *part, bus_t *bus )
 		return 0;
 	}
 
-	/* The detect instruction (all-1) has been shifted into FJMEM_REG
-	   previously, with the next shift we will read the field marker
-	   pattern.
+	/* Shift the detect instruction (all-1) into FJMEM_REG. */
+	register_fill( dr->in, 1 );
+	chain_shift_data_registers( chain, 1 );
+
+	/* With the next shift we will read the field marker pattern.
 	   Shift in the query for block 0, will be used lateron. */
 	register_fill( dr->in, 0 );
 	/* enter query instruction: 110 */
@@ -641,9 +647,10 @@ fjmem_bus_new( char *params[] )
 {
 	bus_t *bus = NULL;
 	int failed = 0;
-	char param[16], value[16];
 	part_t *part;
-	int fjmem_reg_len;
+	char *opcode = NULL;
+	int fjmem_reg_len = 0;
+	int idx;
 
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
@@ -654,15 +661,33 @@ fjmem_bus_new( char *params[] )
 	}
 	part = chain->parts->parts[chain->active_part];
 
-	if ( cmd_params(params) != 3 ) {
-		printf( _("Parameter for instruction code missing.\n") );
-		return NULL;
+	/* parse parameters */
+	for (idx = 2; idx < cmd_params( params ); idx++) {
+		char *comma, *value;
+
+		comma = strchr( params[idx], '=' );
+		if (comma == NULL) {
+			printf( _("Wrong parameter specification: %s\n"), params[idx] );
+			continue;
+		}
+
+		/* set value and terminate parameter name string */
+		value = comma + 1;
+		*comma = '\0';
+
+		if (strcasecmp( params[idx], "opcode" ) == 0)
+			opcode = value;
+		if (strcasecmp( params[idx], "len" ) == 0) {
+			unsigned int tmp;
+			cmd_get_number( value, &tmp );
+			fjmem_reg_len = (int)tmp;
+		}
 	}
-	sscanf( params[2], "%[^=]%*c%s", param, value );
-	if (strcasecmp( param, "opcode" ) == 0) {
+
+	if (opcode) {
 		block_desc_t *bd;
 
-		fjmem_reg_len = fjmem_detect_reg_len( chain, part, value );
+		fjmem_reg_len = fjmem_detect_reg_len( chain, part, opcode, fjmem_reg_len );
 		if (fjmem_reg_len <= 0)
 			return NULL;
 
@@ -698,7 +723,8 @@ fjmem_bus_new( char *params[] )
 			free( bus );
 			return NULL;
 		}
-	}
+	} else
+		printf( _("Parameter for instruction opcode missing.\n") );
 
 	return bus;
 }
@@ -706,7 +732,7 @@ fjmem_bus_new( char *params[] )
 const bus_driver_t fjmem_bus = {
 	"fjmem",
 	N_("FPGA JTAG memory bus driver via USER register, requires parameters:\n"
-	   "           opcode=<USERx OPCODE>"),
+	   "           opcode=<USERx OPCODE> [len=<FJMEM REG LEN>]"),
 	fjmem_bus_new,
 	fjmem_bus_free,
 	fjmem_bus_printinfo,
