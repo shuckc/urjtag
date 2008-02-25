@@ -51,6 +51,8 @@ cfi_array_free( cfi_array_t *cfi_array )
 				continue;
 
 			free( cfi_array->cfi_chips[i]->cfi.device_geometry.erase_block_regions );
+			if (cfi_array->cfi_chips[i]->cfi.identification_string.pri_vendor_tbl)
+				free (cfi_array->cfi_chips[i]->cfi.identification_string.pri_vendor_tbl);
 			free( cfi_array->cfi_chips[i] );
 		}
 		free( cfi_array->cfi_chips );
@@ -98,6 +100,7 @@ cfi_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 		cfi_query_structure_t *cfi;
 		uint32_t tmp;
 		int ret = -4;		/* CFI not detected (Q) */
+		uint16_t pri_vendor_tbl_adr;
 
 		/* detect CFI capable devices - see Table 1 in [1] */
 		for (ma = 1; ma <= 4; ma *= 2) {
@@ -200,6 +203,106 @@ cfi_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 					z = 128;
 				cfi->device_geometry.erase_block_regions[i].erase_block_size = z;
 				cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks = y + 1;
+			}
+		}
+
+		pri_vendor_tbl_adr = read2(PRI_VENDOR_TABLE_ADR_OFFSET);
+
+		/* AMD CFI Primary Vendor-Specific Extended Query Table - see [3] and [4] */
+		if (cfi->identification_string.pri_id_code == CFI_VENDOR_AMD_SCS
+		    && pri_vendor_tbl_adr != 0) {
+			amd_pri_extened_query_structure_t *pri_vendor_tbl;
+			uint8_t major_version;
+			uint8_t minor_version;
+			uint8_t num_of_banks;
+			int i;
+#undef A
+#define	A(off)			(adr + (pri_vendor_tbl_adr + off) * ba * ma)
+
+			if (read1 (0) != 'P' || read1 (1) != 'R' || read1 (2) != 'I') {
+				write1 (0, CFI_CMD_READ_ARRAY1);
+				return -9;	/* CFI primary vendor table not detected */
+			}
+
+			major_version = read1 (MAJOR_VERSION_OFFSET);
+			minor_version = read1 (MINOR_VERSION_OFFSET);
+			if (major_version > '1' || (major_version == '1' && minor_version >= '3'))
+				num_of_banks = read1 (BANK_ORGANIZATION_OFFSET);
+			else
+				num_of_banks = 0;
+			pri_vendor_tbl = (amd_pri_extened_query_structure_t *)
+				calloc (1, sizeof (amd_pri_extened_query_structure_t)
+					+ num_of_banks * sizeof (uint8_t));
+			if (!pri_vendor_tbl) {
+				write1 (0, CFI_CMD_READ_ARRAY1);
+				return -2;	/* out of memory */
+			}
+
+			if (major_version > '1' || (major_version == '1' && minor_version >= '0')) {
+				pri_vendor_tbl->major_version = major_version;
+				pri_vendor_tbl->minor_version = minor_version;
+				pri_vendor_tbl->address_sensitive_unlock = read1 (ADDRESS_SENSITIVE_UNLOCK_OFFSET);
+				pri_vendor_tbl->erase_suspend = read1 (ERASE_SUSPEND_OFFSET);
+				pri_vendor_tbl->sector_protect = read1 (SECTOR_PROTECT_OFFSET);
+				pri_vendor_tbl->sector_temporary_unprotect = read1 (SECTOR_TEMPORARY_UNPROTECT_OFFSET);
+				pri_vendor_tbl->sector_protect_scheme = read1 (SECTOR_PROTECT_SCHEME_OFFSET);
+				pri_vendor_tbl->simultaneous_operation = read1 (SIMULTANEOUS_OPERATION_OFFSET);
+				pri_vendor_tbl->burst_mode_type = read1 (BURST_MODE_TYPE_OFFSET);
+				pri_vendor_tbl->page_mode_type = read1 (PAGE_MODE_TYPE_OFFSET);
+			}
+			if (major_version > '1' || (major_version == '1' && minor_version >= '1')) {
+				tmp = read1 (ACC_MIN_OFFSET);
+				pri_vendor_tbl->acc_min = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
+				tmp = read1 (ACC_MAX_OFFSET);
+				pri_vendor_tbl->acc_max = ((tmp >> 4) & 0xF) * 1000 + (tmp & 0xF) * 100;
+				pri_vendor_tbl->top_bottom_sector_flag = read1 (TOP_BOTTOM_SECTOR_FLAG_OFFSET);
+			}
+			if (major_version > '1' || (major_version == '1' && minor_version >= '2'))
+				pri_vendor_tbl->program_suspend = read1 (PROGRAM_SUSPEND_OFFSET);
+			if (major_version > '1' || (major_version == '1' && minor_version >= '3')) {
+				if (pri_vendor_tbl->simultaneous_operation)
+					pri_vendor_tbl->bank_organization = read1 (BANK_ORGANIZATION_OFFSET);
+				else
+					pri_vendor_tbl->bank_organization = 0;
+				for (i = 0; i < pri_vendor_tbl->bank_organization; i++)
+					pri_vendor_tbl->bank_region_info[i] = read1 (BANK_REGION_INFO_OFFSET + i * sizeof (uint8_t));
+			}
+			if (major_version > '1' || (major_version == '1' && minor_version >= '4')) {
+				pri_vendor_tbl->unlock_bypass = read1 (UNLOCK_BYPASS_OFFSET);
+				tmp = read1 (SECSI_SECTOR_SIZE_OFFSET);
+				pri_vendor_tbl->secsi_sector_size = tmp ? (1 << tmp) : 0;
+				tmp = read1 (EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET);
+				pri_vendor_tbl->embedded_hwrst_timeout_max = tmp ? (1 << tmp) : 0;
+				tmp = read1 (NON_EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET);
+				pri_vendor_tbl->non_embedded_hwrst_timeout_max = tmp ? (1 << tmp) : 0;
+				tmp = read1 (ERASE_SUSPEND_TIMEOUT_MAX_OFFSET);
+				pri_vendor_tbl->erase_suspend_timeout_max = tmp ? (1 << tmp) : 0;
+				tmp = read1 (PROGRAM_SUSPEND_TIMEOUT_MAX_OFFSET);
+				pri_vendor_tbl->program_suspend_timeout_max = tmp ? (1 << tmp) : 0;
+			}
+
+			cfi->identification_string.pri_vendor_tbl = (void *) pri_vendor_tbl;
+
+#undef A
+#define	A(off)			(adr + (off) * ba * ma)
+
+			/* Reverse the order of erase block region information for top boot devices.  */
+			if ((major_version > '1' || (major_version == '1' && minor_version >= '1'))
+			    && pri_vendor_tbl->top_bottom_sector_flag == 0x3)
+			{
+				uint32_t y, z;
+				uint32_t n = cfi->device_geometry.number_of_erase_regions;
+
+				for (i = 0; i < n / 2; i++) {
+					z = cfi->device_geometry.erase_block_regions[i].erase_block_size;
+					y = cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
+					cfi->device_geometry.erase_block_regions[i].erase_block_size
+						= cfi->device_geometry.erase_block_regions[n - i - 1].erase_block_size;
+					cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks
+						= cfi->device_geometry.erase_block_regions[n - i - 1].number_of_erase_blocks;
+					cfi->device_geometry.erase_block_regions[n - i - 1].erase_block_size = z;
+					cfi->device_geometry.erase_block_regions[n - i - 1].number_of_erase_blocks = y;
+				}
 			}
 		}
 

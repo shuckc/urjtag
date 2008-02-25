@@ -35,6 +35,10 @@
  *     September 1999, Order Number: JESD68
  * [2] JEDEC Solid State Technology Association, "Common Flash Interface (CFI) ID Codes",
  *     September 2001, Order Number: JEP137-A
+ * [3] AMD, "Common Flash Memory Interface Specification", Release 2.0
+ *     December 1, 2001.
+ * [4] SPANSION, "Common Flash Interface Version 1.4 Vendor Specific
+ *     Extensions", March 22, 2004.
  *
  */
 
@@ -153,6 +157,57 @@ typedef struct cfi_query_structure {
 	cfi_query_system_interface_information_t system_interface_info;
 	cfi_device_geometry_t device_geometry;
 } cfi_query_structure_t;
+#endif /* __ASSEMBLY__ */
+
+/* AMD primary vendor-specific extended query structure - see [3] and [4] */
+#define MAJOR_VERSION_OFFSET			0x03
+#define MINOR_VERSION_OFFSET			0x04
+#define ADDRESS_SENSITIVE_UNLOCK_OFFSET		0x05
+#define ERASE_SUSPEND_OFFSET			0x06
+#define SECTOR_PROTECT_OFFSET			0x07
+#define SECTOR_TEMPORARY_UNPROTECT_OFFSET	0x08
+#define SECTOR_PROTECT_SCHEME_OFFSET		0x09
+#define SIMULTANEOUS_OPERATION_OFFSET		0x0A
+#define BURST_MODE_TYPE_OFFSET			0x0B
+#define PAGE_MODE_TYPE_OFFSET			0x0C
+#define ACC_MIN_OFFSET				0x0D
+#define ACC_MAX_OFFSET				0x0E
+#define TOP_BOTTOM_SECTOR_FLAG_OFFSET		0x0F
+#define PROGRAM_SUSPEND_OFFSET			0x10
+#define UNLOCK_BYPASS_OFFSET			0x11
+#define SECSI_SECTOR_SIZE_OFFSET		0x12
+#define EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET	0x13
+#define NON_EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET	0x14
+#define ERASE_SUSPEND_TIMEOUT_MAX_OFFSET	0x15
+#define PROGRAM_SUSPEND_TIMEOUT_MAX_OFFSET	0x16
+#define BANK_ORGANIZATION_OFFSET		0x17
+#define BANK_REGION_INFO_OFFSET			0X18
+
+#ifndef __ASSEMBLY__
+typedef struct amd_pri_extened_query_structure {
+	uint8_t major_version;
+	uint8_t minor_version;
+	uint8_t address_sensitive_unlock;
+	uint8_t erase_suspend;
+	uint8_t sector_protect;
+	uint8_t sector_temporary_unprotect;
+	uint8_t sector_protect_scheme;
+	uint8_t simultaneous_operation;
+	uint8_t burst_mode_type;
+	uint8_t page_mode_type;
+	uint16_t acc_min;			/* in mV */
+	uint16_t acc_max;			/* in mV */
+	uint8_t top_bottom_sector_flag;
+	uint8_t program_suspend;
+	uint8_t unlock_bypass;
+	uint8_t secsi_sector_size;
+	uint8_t embedded_hwrst_timeout_max;
+	uint8_t non_embedded_hwrst_timeout_max;	/* in ns */
+	uint8_t erase_suspend_timeout_max;	/* in ns */
+	uint8_t program_suspend_timeout_max;	/* in us */
+	uint8_t bank_organization;		/* in us */
+	uint8_t bank_region_info[0];
+} amd_pri_extened_query_structure_t;
 #endif /* __ASSEMBLY__ */
 
 #endif /* FLASH_CFI_H */

@@ -3,6 +3,38 @@
    * src/bus/buses.c (bus_drivers): bf548_ezkit_bus.
    * src/bus/buses.h: Declare bf548_ezkit_bus.
 
+   * include/flash/cfi.h (MAJOR_VERSION_OFFSET): New macro.
+     (MAJOR_VERSION_OFFSET): New macro.
+     (MINOR_VERSION_OFFSET): New macro.
+     (ADDRESS_SENSITIVE_UNLOCK_OFFSET): New macro.
+     (ERASE_SUSPEND_OFFSET): New macro.
+     (SECTOR_PROTECT_OFFSET): New macro.
+     (SECTOR_TEMPORARY_UNPROTECT_OFFSET): New macro.
+     (SECTOR_PROTECT_SCHEME_OFFSET): New macro.
+     (SIMULTANEOUS_OPERATION_OFFSET): New macro.
+     (BURST_MODE_TYPE_OFFSET): New macro.
+     (PAGE_MODE_TYPE_OFFSET): New macro.
+     (ACC_MIN_OFFSET): New macro.
+     (ACC_MAX_OFFSET): New macro.
+     (TOP_BOTTOM_SECTOR_FLAG_OFFSET): New macro.
+     (PROGRAM_SUSPEND_OFFSET): New macro.
+     (UNLOCK_BYPASS_OFFSET): New macro.
+     (SECSI_SECTOR_SIZE_OFFSET): New macro.
+     (EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET): New macro.
+     (NON_EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET): New macro.
+     (ERASE_SUSPEND_TIMEOUT_MAX_OFFSET): New macro.
+     (PROGRAM_SUSPEND_TIMEOUT_MAX_OFFSET): New macro.
+     (BANK_ORGANIZATION_OFFSET): New macro.
+     (BANK_REGION_INFO_OFFSET): New macro.
+     (struct amd_pri_extened_query_structure): Define.
+     (amd_pri_extened_query_structure_t): Typedef.
+   * src/flash/cfi.c (cfi_array_free): Free primary vendor table.
+     (cfi_detect): Detect AMD CFI primary vendor-specific extended
+     query table. Reverse the order of erase block region information
+     for top boot devices.
+   * src/flash/detectflash.c (detectflash): Print out information
+     of AMD CFI primary vendor-specific extended query table.
+
 2008-02-24  Kolja Waschk <kawk>
 
    * include/cable.h, include/usbconn.h, include/usbconn/libusb.h,

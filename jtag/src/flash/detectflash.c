@@ -213,4 +213,144 @@ detectflash( bus_t *bus, uint32_t adr )
 			printf( _("\t\t\tNumber of Erase Blocks: %d\n"), cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks );
 		}
 	}
+
+	if (cfi->identification_string.pri_id_code == CFI_VENDOR_AMD_SCS
+	    && cfi->identification_string.pri_vendor_tbl != NULL)
+	{
+		amd_pri_extened_query_structure_t *pri_vendor_tbl;
+		uint8_t major_version;
+		uint8_t minor_version;
+		int i;
+		const char *required_or_not[2] = {
+			N_("Required"), N_("Not required")
+		};
+		const char *supported_or_not[2] = {
+			N_("Supported"), N_("Not supported")
+		};
+		const char *process_technology[6] = {
+			N_("170-nm Floating Gate technology"), N_("230-nm MirrorBit(tm) technology"),
+			N_("130-nm Floating Gate technology"), N_("110-nm MirrorBit(tm) technology"),
+			N_("90-nm Floating Gate technology"), N_("90-nm MirrorBit(tm) technology")
+		};
+		const char *process_technology_13[3] = {
+			N_("CS49"), N_("CS59"), N_("CS99")
+		};
+		const char *erase_suspend[3] = {
+			N_("Not supported"), N_("Read only"), N_("Read/write")
+		};
+		const char *sector_protect_scheme[8] = {
+			N_("29F040 mode"), N_("29F016 mode"), N_("29F400 mode"),
+			N_("29LV800 mode"), N_("29BDS640 mode (Software Command Locking)"),
+			N_("29BDD160 mode (New Sector Protect)"),
+			N_("29PDL128 mode (New Sector Protect + 29LV800)"),
+			N_("Advanced Sector Protect")
+		};
+		const char *page_mode_type[4] = {
+			N_("Not supported"), N_("4 word Page"), N_("8 word Page"), N_("16 word Page")
+		};
+
+		const char *top_bottom[6] = {
+			N_("No boot"), N_("8x8kb sectors at top and bottom with WP control"),
+			N_("Bottom boot device"), N_("Top boot device"),
+			N_("Uniform bottom boot device"), N_("Uniform top boot device")
+		};
+		const char *bad_value = N_("Bad value");
+
+#define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
+
+		pri_vendor_tbl = cfi->identification_string.pri_vendor_tbl;
+		major_version = pri_vendor_tbl->major_version;
+		minor_version = pri_vendor_tbl->minor_version;
+
+		printf (_("Primary Vendor-Specific Extended Query:\n"));
+		printf (_("\tMajor version number: %c\n"), pri_vendor_tbl->major_version);
+		printf (_("\tMinor version number: %c\n"), pri_vendor_tbl->minor_version);
+		if (major_version > '1' || (major_version == '1' && minor_version >= '0'))
+		{
+			if ((pri_vendor_tbl->address_sensitive_unlock & 0x3) < ARRAY_SIZE (required_or_not))
+				printf (_("\tAddress Sensitive Unlock: %s\n"),
+					required_or_not[pri_vendor_tbl->address_sensitive_unlock & 0x3]);
+			else
+				printf (_("\tAddress Sensitive Unlock: %s\n"), bad_value);
+
+			if (major_version > '1' || (major_version == '1' && minor_version >= '4'))
+			{
+				if ((pri_vendor_tbl->address_sensitive_unlock >> 2) < ARRAY_SIZE (process_technology))
+					printf (_("\tProcess Technology: %s\n"),
+						process_technology[pri_vendor_tbl->address_sensitive_unlock >> 2]);
+				else
+					printf (_("\tProcess Technology: %s\n"), bad_value);
+			}
+			else if (major_version == '1' && minor_version == '3')
+			{
+				if ((pri_vendor_tbl->address_sensitive_unlock >> 2) < ARRAY_SIZE (process_technology_13))
+					printf (_("\tProcess Technology: %s\n"),
+						process_technology_13[pri_vendor_tbl->address_sensitive_unlock >> 2]);
+				else
+					printf (_("\tProcess Technology: %s\n"), bad_value);
+			}
+			if (pri_vendor_tbl->erase_suspend < ARRAY_SIZE (erase_suspend))
+			printf (_("\tErase Suspend: %s\n"), erase_suspend[pri_vendor_tbl->erase_suspend]);
+			if (pri_vendor_tbl->sector_protect == 0)
+				printf (_("\tSector Protect: Not supported\n"));
+			else
+				printf (_("\tSector Protect: %d sectors per group\n"), pri_vendor_tbl->sector_protect);
+			if (pri_vendor_tbl->sector_temporary_unprotect < ARRAY_SIZE (supported_or_not))
+				printf (_("\tSector Temporary Unprotect: %s\n"), supported_or_not[pri_vendor_tbl->sector_temporary_unprotect]);
+			else
+				printf (_("\tSector Temporary Unprotect: %s\n"), bad_value);
+			if (pri_vendor_tbl->sector_protect_scheme < ARRAY_SIZE (sector_protect_scheme))
+				printf (_("\tSector Protect/Unprotect Scheme: %s\n"),
+					sector_protect_scheme[pri_vendor_tbl->sector_protect_scheme]);
+			else
+				printf (_("\tSector Protect/Unprotect Scheme: %s\n"), bad_value);
+			if (pri_vendor_tbl->simultaneous_operation == 0)
+				printf (_("\tSimultaneous Operation: Not supported\n"));
+			else
+				printf (_("\tSimultaneous Operation: %d sectors\n"), pri_vendor_tbl->simultaneous_operation);
+			if (pri_vendor_tbl->burst_mode_type < ARRAY_SIZE (supported_or_not))
+				printf (_("\tBurst Mode Type: %s\n"), supported_or_not[pri_vendor_tbl->burst_mode_type]);
+			else
+				printf (_("\tBurst Mode Type: %s\n"), bad_value);
+			if (pri_vendor_tbl->page_mode_type < ARRAY_SIZE (page_mode_type))
+				printf (_("\tPage Mode Type: %s\n"), page_mode_type[pri_vendor_tbl->page_mode_type]);
+			else
+				printf (_("\tPage Mode Type: %s\n"), bad_value);
+		}
+		if (major_version > '1' || (major_version == '1' && minor_version >= '1'))
+		{
+			printf (_("\tACC (Acceleration) Supply Minimum: %d mV\n"), pri_vendor_tbl->acc_min);
+			printf (_("\tACC (Acceleration) Supply Maximum: %d mV\n"), pri_vendor_tbl->acc_max);
+			if (pri_vendor_tbl->top_bottom_sector_flag < ARRAY_SIZE (top_bottom))
+				printf (_("\tTop/Bottom Sector Flag: %s\n"), top_bottom[pri_vendor_tbl->top_bottom_sector_flag]);
+			else
+				printf (_("\tTop/Bottom Sector Flag: %s\n"), bad_value);
+		}
+		if (major_version > '1' || (major_version == '1' && minor_version >= '2'))
+		{
+			if (pri_vendor_tbl->program_suspend < ARRAY_SIZE (supported_or_not))
+				printf (_("\tProgram Suspend: %s\n"), supported_or_not[pri_vendor_tbl->program_suspend]);
+			else
+				printf (_("\tProgram Suspend: %s\n"), bad_value);
+		}
+		if (major_version > '1' || (major_version == '1' && minor_version >= '4'))
+		{
+			if (pri_vendor_tbl->unlock_bypass < ARRAY_SIZE (supported_or_not))
+				printf (_("\tUnlock Bypass: %s\n"), supported_or_not[pri_vendor_tbl->unlock_bypass]);
+			else
+				printf (_("\tUnlock Bypass: %s\n"), bad_value);
+			printf (_("\tSecSi Sector (Customer OTP Area) Size: %d bytes\n"), pri_vendor_tbl->secsi_sector_size);
+			printf (_("\tEmbedded Hardware Reset Timeout Maximum: %d ns\n"), pri_vendor_tbl->embedded_hwrst_timeout_max);
+			printf (_("\tNon-Embedded Hardware Reset Timeout Maximum: %d ns\n"), pri_vendor_tbl->non_embedded_hwrst_timeout_max);
+			printf (_("\tErase Suspend Timeout Maximum: %d us\n"), pri_vendor_tbl->erase_suspend_timeout_max);
+			printf (_("\tProgram Suspend Timeout Maximum: %d us\n"), pri_vendor_tbl->program_suspend_timeout_max);
+		}
+		if ((major_version > '1' || (major_version == '1' && minor_version >= '3'))
+		    && pri_vendor_tbl->bank_organization)
+		{
+			printf (_("\tBank Organization:\n"));
+			for (i = 0; i < pri_vendor_tbl->bank_organization; i++)
+				printf (_("\t\tBank%d: %d sectors\n"), i + 1, pri_vendor_tbl->bank_region_info[i]);
+		}
+	}
 }
