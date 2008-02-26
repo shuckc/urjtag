@@ -238,9 +238,17 @@ jtag_readline_loop( const char *prompt )
 		/* Read a line from the terminal */
 		line = readline( prompt );
 
+		/* We got EOF, bail */
+		if (!line) {
+			line = strdup( "quit\n" );
+			puts( "quit" );
+			if (!line)
+				return;
+		}
+
 #ifdef HAVE_READLINE_HISTORY
 		/* Check if we actually got something */
-		if (line && (strlen( line ) > 0))
+		if (strlen( line ))
 			add_history( line );
 #endif
 	}
