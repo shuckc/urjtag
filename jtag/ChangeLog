@@ -1,3 +1,9 @@
+2008-02-26  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/cable/ft2232.c (send_and_receive): loopback_off moved to ftdi.c/ftd2xx.c
+   * src/tap/parport/ftd2xx.c (ftd2xx_mpsse_open): set TCK, loopback_off, reset, purge
+   * src/tap/parport/ftdi.c (ftdi_mpsse_open): set TCK, loopback_off, reset, purge
+
 2008-02-24  Mike Frysinger  <vapier>
 
    * src/jtag.c: allow people to disable startup message (1901877),

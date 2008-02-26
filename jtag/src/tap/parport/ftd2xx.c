@@ -74,6 +74,8 @@ typedef struct {
 	int outbuf_len;
 } ftd2xx_params_t;
 
+static int ftd2xx_set_data ( parport_t *parport, uint8_t data );
+static int ftd2xx_set_control ( parport_t *parport, uint8_t data );
 static int ftd2xx_flush_output ( ftd2xx_params_t *p );
 
 static parport_t *
@@ -283,7 +285,7 @@ ftd2xx_mpsse_open( parport_t *parport )
 	     Ref. FTCJTAGPG10.pdf
 	   Intermittent problems will occur when certain steps are skipped. */
 	if ((status = FT_ResetDevice(fc)) != FT_OK) {
-		fprintf(stderr, "Can't reset 1 device: %li\n", status);
+		fprintf(stderr, "Can't reset device: %li\n", status);
 		FT_Close(fc);
 		return -1;
 	}
@@ -311,7 +313,27 @@ ftd2xx_mpsse_open( parport_t *parport )
 		return -1;
 	}
 	if ((status = FT_ResetDevice(fc)) != FT_OK) {
-		fprintf(stderr, "Can't reset 2 device: %li\n", status);
+		fprintf(stderr, "Can't reset device: %li\n", status);
+		FT_Close(fc);
+		return -1;
+	}
+	if ((status = FT_Purge(fc, FT_PURGE_RX | FT_PURGE_TX)) != FT_OK) {
+		fprintf(stderr, "Can't purge buffers: %li\n", status);
+		FT_Close(fc);
+		return -1;
+	}
+	/* set TCK Divisor */
+	ftd2xx_set_data(parport, 0x86);
+	ftd2xx_set_data(parport, 0x00);
+	ftd2xx_set_data(parport, 0x00);
+	ftd2xx_set_control(parport, 1);
+	ftd2xx_set_control(parport, 0);
+	/* switch off loopback */
+	ftd2xx_set_data(parport, 0x85);
+	ftd2xx_set_control(parport, 1);
+	ftd2xx_set_control(parport, 0);
+	if ((status = FT_ResetDevice(fc)) != FT_OK) {
+		fprintf(stderr, "Can't reset device: %li\n", status);
 		FT_Close(fc);
 		return -1;
 	}

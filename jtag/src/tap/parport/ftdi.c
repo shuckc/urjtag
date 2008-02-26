@@ -69,6 +69,8 @@ typedef struct {
 	int outbuf_len;
 } ftdi_params_t;
 
+static int ftdi_set_data ( parport_t *parport, uint8_t data );
+static int ftdi_set_control ( parport_t *parport, uint8_t data );
 static int ftdi_flush_output ( ftdi_params_t *p );
 
 static parport_t *
@@ -367,7 +369,32 @@ ftdi_mpsse_open( parport_t *parport )
 		ftdi_deinit(fc);
 		return -1;
 	}
-
+	/* set TCK Divisor */
+	ftdi_set_data(parport, TCK_DIVISOR);
+	ftdi_set_data(parport, 0x00);
+	ftdi_set_data(parport, 0x00);
+	ftdi_set_control(parport, 1);
+	ftdi_set_control(parport, 0);
+	/* switch off loopback */
+	ftdi_set_data(parport, LOOPBACK_END);
+	ftdi_set_control(parport, 1);
+	ftdi_set_control(parport, 0);
+	if (ftdi_usb_reset(fc) < 0)
+	{
+		fprintf (stderr, "Can't reset USB: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	}
+	if (ftdi_usb_purge_buffers(fc) < 0)
+	{
+		fprintf (stderr, "Can't purge USB buffers: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	}
 
 	return 0;
 }

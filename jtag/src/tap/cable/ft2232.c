@@ -341,10 +341,6 @@ ft2232_generic_init( cable_t *cable )
 	if (parport_open( p ))
 		return -1;
 
-	/* set loopback off */
-	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable, COMPLETELY );
-
 	/* safe default values */
 	params->low_byte_value = 0;
 	params->low_byte_dir   = 0;
@@ -378,10 +374,6 @@ ft2232_jtagkey_init( cable_t *cable )
 
 	if (parport_open( p ))
 		return -1;
-
-	/* set loopback off */
-	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   set nOE to '0' -> activate output enables */
@@ -427,10 +419,6 @@ ft2232_armusbocd_init( cable_t *cable )
 
 	if (parport_open( p ))
 		return -1;
-
-	/* set loopback off */
-	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   set nOE to '0' -> activate output enables */
@@ -481,10 +469,6 @@ ft2232_oocdlinks_init( cable_t *cable )
 	if (parport_open( p ))
 		return -1;
 
-	/* set loopback off */
-	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable, COMPLETELY );
-
 	/* static low byte value and direction */
 	params->low_byte_value = 0;
 	params->low_byte_dir   = 0;
@@ -530,10 +514,6 @@ ft2232_turtelizer2_init( cable_t *cable )
 	if (parport_open( p ))
 		return -1;
 
-	/* set loopback off */
-	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable, COMPLETELY );
-
 	/* static low byte value and direction:
 	   set nJTAGOE to '0' -> activate output enables
 	   set RST to 0 -> inactive nSRST */
@@ -573,10 +553,6 @@ ft2232_usbtojtagif_init( cable_t *cable )
 
 	if (parport_open( p ))
 		return -1;
-
-	/* set loopback off */
-	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   nTRST = 1, RST = 1, DBGRQ = 0 */
@@ -618,10 +594,6 @@ ft2232_signalyzer_init( cable_t *cable )
 
 	if (parport_open( p ))
 		return -1;
-
-	/* set loopback off */
-	push_to_send( params, LOOPBACK_END );
-	send_and_receive( cable, COMPLETELY );
 
 	/* static low byte value and direction:
 	   nTRST = 1, RST = 1, DBGRQ = 0 */
