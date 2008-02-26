@@ -1,3 +1,7 @@
+2008-02-24  Mike Frysinger  <vapier>
+
+   * src/jtag.c: allow people to disable startup message (1901877)
+
 2008-02-25  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/bus/fjmem.c (fjmem_bus_new): accept 'len' parameter to suppress

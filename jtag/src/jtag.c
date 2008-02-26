@@ -341,7 +341,8 @@ main( int argc, char *const argv[] )
 	int norc = 0;
 	int help = 0;
 	int version = 0;
-	
+	int quiet = 0;
+
 	if(geteuid()==0 && getuid()!=0)
 	{
 		printf (_("'%s' must not be run suid root!\n"), "jtag");
@@ -363,13 +364,14 @@ main( int argc, char *const argv[] )
 			{"norc",    no_argument,      0, 'n'},
 			{"interactive", no_argument,  0, 'i'},
 			{"help",    no_argument,      0, 'h'},
+			{"quiet",   no_argument,      0, 'q'},
 			{0, 0, 0, 0}
 		};
 
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "vnhi",
+		c = getopt_long (argc, argv, "vnhiq",
 		long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -394,6 +396,10 @@ main( int argc, char *const argv[] )
 		default:
 			help = 1;
 			break;
+
+		case 'q':
+			quiet = 1;
+			break;
 		}
 	}
 
@@ -411,6 +417,7 @@ main( int argc, char *const argv[] )
 		printf ("\n");
 		printf (_("  -n, --norc          disable reading ~/.jtag/rc on startup\n"));
 		printf (_("  -i, --interactive   enter interactive mode after reading files\n"));
+		printf (_("  -q, --quiet         Do not print help on startup\n"));
 		printf ("\n");
 		printf (_("  [FILE]              file containing commands to execute\n"));
 		printf ("\n");
@@ -482,7 +489,8 @@ main( int argc, char *const argv[] )
 	}
 
 	/* interactive */
-	printf(
+	if (!quiet)
+		printf(
 			_("\n%s #%s\n"
 			"Copyright (C) 2002, 2003 ETC s.r.o.\n"
 			"Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n\n"
@@ -490,7 +498,7 @@ main( int argc, char *const argv[] )
 			"welcome to change it and/or distribute copies of it under certain conditions.\n"
 			"There is absolutely no warranty for %s.\n\n"), PACKAGE_STRING, SVN_REVISION,
 			PACKAGE_NAME, PACKAGE_NAME
-	);
+		);
 
 	chain = chain_alloc();
 	if (!chain) {
@@ -498,8 +506,10 @@ main( int argc, char *const argv[] )
 		return -1;
 	}
 
-	printf( _("WARNING: %s may damage your hardware!\n"), PACKAGE_NAME );
-	printf( _("Type \"quit\" to exit, \"help\" for help.\n\n") );
+	if (!quiet) {
+		printf( _("WARNING: %s may damage your hardware!\n"), PACKAGE_NAME );
+		printf( _("Type \"quit\" to exit, \"help\" for help.\n\n") );
+	}
 
 	/* Create ~/.jtag */
 	jtag_create_jtagdir();
