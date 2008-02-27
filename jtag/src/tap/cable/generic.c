@@ -173,7 +173,8 @@ do_one_queued_action( cable_t *cable )
 void
 generic_flush_one_by_one( cable_t *cable, cable_flush_amount_t how_much )
 {
-    if( how_much == OPTIONALLY ) return;
+	/* This will flush always, even if how_much == OPTIONALLY,
+     * because there is no reason to let the queue grow */
 
 	while( do_one_queued_action( cable ) );
 }

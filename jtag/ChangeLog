@@ -1,3 +1,8 @@
+2008-02-27  Kolja Waschk <kawk>
+
+   * src/tap/cable/generic.c (generic_flush_one_by_one): Always flush,
+       don't let the queue grow unnecessarily.
+
 2008-02-27  Jie Zhang  <jie.zhang@analog.com>
 
    * include/bus.h: Don't include chain.h.
