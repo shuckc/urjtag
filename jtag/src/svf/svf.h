@@ -25,6 +25,7 @@
 
 #include <stdint.h>
 
+#include "chain.h"
 
 #define MAX_PATH_STATES 64
 
@@ -68,10 +69,10 @@ struct runtest {
 struct YYLTYPE;
 
 void svf_endxr(enum generic_irdr_coding, int);
-void svf_frequency(double);
+void svf_frequency(chain_t *, double);
 int  svf_hxr(enum generic_irdr_coding, struct ths_params *);
-int  svf_runtest(struct runtest *);
-int  svf_state(struct path_states *, int);
-int  svf_sxr(enum generic_irdr_coding, struct ths_params *, struct YYLTYPE *);
-int  svf_trst(int);
+int  svf_runtest(chain_t *, struct runtest *);
+int  svf_state(chain_t *, struct path_states *, int);
+int  svf_sxr(chain_t *, enum generic_irdr_coding, struct ths_params *, struct YYLTYPE *);
+int  svf_trst(chain_t *, int);
 int  svf_txr(enum generic_irdr_coding, struct ths_params *);

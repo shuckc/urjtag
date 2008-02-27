@@ -214,7 +214,7 @@ ppc440gx_ebc8_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *ppc440gx_ebc8_bus_new( char *cmd_params[] );
+static bus_t *ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] );
 
 const bus_driver_t ppc440gx_ebc8_bus = {
 	"ppc440gx_ebc8",
@@ -233,7 +233,7 @@ const bus_driver_t ppc440gx_ebc8_bus = {
 };
 
 static bus_t *
-ppc440gx_ebc8_bus_new( char *cmd_params[] )
+ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];

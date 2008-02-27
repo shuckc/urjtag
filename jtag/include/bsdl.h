@@ -25,10 +25,12 @@
 #ifndef BSDL_H
 #define BSDL_H
 
+#include "chain.h"
+
 extern int bsdl_debug;
 
-int bsdl_read_file(const char *, int, char *);
+int bsdl_read_file(chain_t *, const char *, int, char *);
 void bsdl_set_path(const char *);
-int bsdl_scan_files(const char *, int);
+int bsdl_scan_files(chain_t *, const char *, int);
 
 #endif /* BSDL_H */

@@ -32,7 +32,7 @@
 #include <cmd.h>
 
 static int
-cmd_bsdl_run( char *params[] )
+cmd_bsdl_run( chain_t *chain, char *params[] )
 {
 	int num_params, result = -1;
 
@@ -44,9 +44,9 @@ cmd_bsdl_run( char *params[] )
 			debug_save = bsdl_debug;
 			bsdl_debug = 1;
 			if (num_params == 3) {
-				result = bsdl_read_file(params[2], -1, NULL) >= 0 ? 1 : -1;
+				result = bsdl_read_file(chain, params[2], -1, NULL) >= 0 ? 1 : -1;
 			} else if (num_params == 2) {
-				bsdl_scan_files(NULL, -1);
+				bsdl_scan_files(chain, NULL, -1);
 				result = 1;
 			}
 			bsdl_debug = debug_save;
@@ -54,9 +54,9 @@ cmd_bsdl_run( char *params[] )
 
 		if (strcmp(params[1], "dump") == 0) {
 			if (num_params == 3) {
-				result = bsdl_read_file(params[2], 0, NULL) >= 0 ? 1 : -1;
+				result = bsdl_read_file(chain, params[2], 0, NULL) >= 0 ? 1 : -1;
 			} else if (num_params == 2) {
-				bsdl_scan_files(NULL, 0);
+				bsdl_scan_files(chain, NULL, 0);
 				result = 1;
 			}
 		}

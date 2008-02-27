@@ -44,7 +44,7 @@ typedef char wchar_t;
 #include "cmd.h"
 
 static int
-cmd_print_run( char *params[] )
+cmd_print_run( chain_t *chain, char *params[] )
 {
 	char format[128];
 #if HAVE_SWPRINTF
@@ -58,7 +58,7 @@ cmd_print_run( char *params[] )
 	if (cmd_params( params ) > 2)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {

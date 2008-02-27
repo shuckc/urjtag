@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_salias_run( char *params[] )
+cmd_salias_run( chain_t *chain, char *params[] )
 {
 	part_t *part;
 	signal_t *s;
@@ -42,7 +42,7 @@ cmd_salias_run( char *params[] )
 	if (cmd_params( params ) != 3)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {

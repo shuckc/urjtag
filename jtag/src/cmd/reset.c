@@ -34,12 +34,12 @@
 void jtag_reset( chain_t *chain );
 
 static int
-cmd_reset_run( char *params[] )
+cmd_reset_run( chain_t *chain, char *params[] )
 {
 	if (cmd_params( params ) > 1)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	jtag_reset( chain );

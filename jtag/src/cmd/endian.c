@@ -32,7 +32,7 @@
 #include "cmd.h"
 
 static int
-cmd_endian_run( char *params[] )
+cmd_endian_run( chain_t *chain, char *params[] )
 {
 	if (cmd_params( params ) > 2)
 		return -1;

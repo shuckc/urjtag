@@ -237,7 +237,7 @@ void bsdl_set_instruction_length(parser_priv_t *priv, int len)
     lenstring[5] = '\0';
 
     if (priv->jtag_ctrl.mode >= 1)
-      cmd_run(cmd);
+      cmd_run(priv->jtag_ctrl.chain, cmd);
     else
       print_cmd(cmd);
   }
@@ -375,7 +375,7 @@ void bsdl_prt_apply_port(parser_priv_t *priv)
           port_string[str_len-1] = '\0';
 
           if (priv->jtag_ctrl.mode >= 1)
-            cmd_run(cmd);
+            cmd_run(priv->jtag_ctrl.chain, cmd);
           else
             print_cmd(cmd);
         }
@@ -426,7 +426,7 @@ static void create_register(parser_priv_t *priv, char *reg_name, size_t len)
     snprintf(len_str, str_len, "%i", len);
 
     if (priv->jtag_ctrl.mode >= 1)
-      cmd_run(cmd);
+      cmd_run(priv->jtag_ctrl.chain, cmd);
     else
       print_cmd(cmd);
   }
@@ -712,7 +712,7 @@ void bsdl_ci_apply_cell_info(parser_priv_t *priv, int bit_num)
       cmd[5] = NULL;
 
     if (priv->jtag_ctrl.mode >= 1)
-      cmd_run(cmd);
+      cmd_run(priv->jtag_ctrl.chain, cmd);
     else
       print_cmd(cmd);
   }
@@ -932,7 +932,7 @@ void bsdl_ac_finalize(parser_priv_t *priv)
                        NULL};
 
         if (priv->jtag_ctrl.mode >= 1)
-          cmd_run(cmd);
+          cmd_run(priv->jtag_ctrl.chain, cmd);
         else
           print_cmd(cmd);
       }

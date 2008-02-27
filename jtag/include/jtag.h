@@ -34,12 +34,11 @@
 #include "bus.h"
 #include "part.h"
 
-extern chain_t *chain;
 extern bus_t *bus;
 extern int big_endian;
 extern int debug_mode;
 
-int jtag_parse_file( const char *filename );
+int jtag_parse_file( chain_t *chain, const char *filename );
 
 int detect_parts( chain_t *chain, char *db_path );
 int detect_register_size( chain_t *chain );

@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_part_run( char *params[] )
+cmd_part_run( chain_t *chain, char *params[] )
 {
 	unsigned int n;
 
@@ -52,7 +52,7 @@ part_t *part;
 	if (cmd_params( params ) != 2)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {

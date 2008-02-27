@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_dr_run( char *params[] )
+cmd_dr_run( chain_t *chain, char *params[] )
 {
 	int dir = 1;
 	tap_register *r;
@@ -41,7 +41,7 @@ cmd_dr_run( char *params[] )
 	if (cmd_params( params ) < 1 || cmd_params( params ) > 2)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {

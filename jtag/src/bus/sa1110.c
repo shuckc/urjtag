@@ -245,7 +245,7 @@ sa1110_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *sa1110_bus_new( char *cmd_params[] );
+static bus_t *sa1110_bus_new( chain_t *chain, char *cmd_params[] );
 
 const bus_driver_t sa1110_bus = {
 	"sa1110",
@@ -264,7 +264,7 @@ const bus_driver_t sa1110_bus = {
 };
 
 static bus_t *
-sa1110_bus_new( char *cmd_params[] )
+sa1110_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];

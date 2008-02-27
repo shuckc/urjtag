@@ -288,13 +288,13 @@ mpc824x_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 
 	setup_data( bus, adr, data );
 
-	chain_shift_data_registers( chain, 0 );
+	chain_shift_data_registers( CHAIN, 0 );
 
 	part_set_signal( p, nWE, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
+	chain_shift_data_registers( CHAIN, 0 );
 	part_set_signal( p, nWE, 1, 1 );
 	part_set_signal( p, nRCS0, 1, 1 );
-	chain_shift_data_registers( chain, 0 );
+	chain_shift_data_registers( CHAIN, 0 );
 
 
 
@@ -357,7 +357,7 @@ mpc824x_bus_free( bus_t *bus )
 }
 
 static bus_t *
-mpc824x_bus_new( char *cmd_params[] )
+mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];

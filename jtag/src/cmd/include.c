@@ -34,7 +34,7 @@
 #include "bsdl.h"
 
 static int
-cmd_include_or_script_run( int is_include, char *params[] )
+cmd_include_or_script_run( chain_t *chain, int is_include, char *params[] )
 {
 	int go = 0, i, j = 1;
 	char *path;
@@ -72,10 +72,10 @@ cmd_include_or_script_run( int is_include, char *params[] )
 
 #ifdef ENABLE_BSDL
 	/* perform a test read to check for BSDL syntax */
-	if (bsdl_read_file( path, -1, NULL ) >= 0)
+	if (bsdl_read_file( chain, path, -1, NULL ) >= 0)
 	{
 		/* it seems to be a proper BSDL file, so re-read and execute */
-		go = bsdl_read_file( path, 1, NULL );
+		go = bsdl_read_file( chain, path, 1, NULL );
 
 		free( path );
 		return go >= 0 ? 1 : 0;
@@ -87,7 +87,7 @@ cmd_include_or_script_run( int is_include, char *params[] )
 	};
 
 	for(i = 0; i < j ;i++) {
-		go = jtag_parse_file( path );
+		go = jtag_parse_file( chain, path );
 
 		if (go < 0) {
 			if (go != -99)
@@ -113,9 +113,9 @@ cmd_include_or_script_help( char *cmd )
 }
 
 static int
-cmd_include_run( char *params[] )
+cmd_include_run( chain_t *chain, char *params[] )
 {
-	return cmd_include_or_script_run( 1, params );
+	return cmd_include_or_script_run( chain, 1, params );
 }
 
 static void
@@ -132,9 +132,9 @@ cmd_t cmd_include = {
 };
 
 static int
-cmd_script_run( char *params[] )
+cmd_script_run( chain_t *chain, char *params[] )
 {
-	return cmd_include_or_script_run( 0, params );
+	return cmd_include_or_script_run( chain, 0, params );
 }
 
 static void

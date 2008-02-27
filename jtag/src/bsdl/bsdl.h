@@ -116,6 +116,7 @@ struct jtag_ctrl {
     int     mode;
     int     debug;
     char   *idcode;       /* IDCODE string */
+    chain_t *chain;
     part_t *part;
     struct  port_desc port_desc;
     struct  cell_info cell_info;

@@ -32,14 +32,14 @@
 #include "jtag.h"
 
 static int
-cmd_initbus_run( char *params[] )
+cmd_initbus_run( chain_t *chain, char *params[] )
 {
 	int i;
 
 	if (cmd_params( params ) < 2)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {
@@ -54,7 +54,7 @@ cmd_initbus_run( char *params[] )
 
 	for (i = 0; bus_drivers[i] != NULL; i++) {
 		if (strcasecmp( bus_drivers[i]->name, params[1] ) == 0) {
-			bus_t *bus = bus_drivers[i]->new_bus( params );
+			bus_t *bus = bus_drivers[i]->new_bus( chain, params );
 			if (bus == NULL) {
 				printf( _("bus initialization failed!\n") );
 				return 1;

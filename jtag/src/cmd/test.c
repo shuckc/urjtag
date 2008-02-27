@@ -35,7 +35,7 @@
 #include "cmd.h"
 
 static int
-cmd_test_run( char *params[] )
+cmd_test_run( chain_t *chain, char *params[] )
 {
 	int data;
 	unsigned int i;
@@ -47,7 +47,7 @@ cmd_test_run( char *params[] )
 	if (strcasecmp( params[1], "signal") != 0)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {

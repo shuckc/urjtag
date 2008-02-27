@@ -117,7 +117,7 @@ const cmd_t *cmds[] = {
 };
 
 int
-cmd_test_cable( void )
+cmd_test_cable( chain_t *chain )
 {
 	if (chain->cable)
 		return 1;
@@ -129,7 +129,7 @@ cmd_test_cable( void )
 /* Remainder copied from libbrux/cmd/cmd.c */
 
 int
-cmd_run( char *params[] )
+cmd_run( chain_t *chain, char *params[] )
 {
 	int i;
 
@@ -138,7 +138,7 @@ cmd_run( char *params[] )
 
 	for (i = 0; cmds[i]; i++)
 		if (strcasecmp( cmds[i]->name, params[0] ) == 0) {
-			int r = cmds[i]->run( params );
+			int r = cmds[i]->run( chain, params );
 			if (r < 0)
 				printf( _("%s: syntax error!\n"), params[0] );
 			return r;

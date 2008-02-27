@@ -32,14 +32,14 @@
 #include "cmd.h"
 
 static int
-cmd_bus_run( char *params[] )
+cmd_bus_run( chain_t *chain, char *params[] )
 {
 	unsigned int n;
 
 	if (cmd_params( params ) != 2)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {

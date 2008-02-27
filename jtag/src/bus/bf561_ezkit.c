@@ -260,7 +260,7 @@ bf561_ezkit_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *bf561_ezkit_bus_new( char *cmd_params[] );
+static bus_t *bf561_ezkit_bus_new( chain_t *chain, char *cmd_params[] );
 
 const bus_driver_t bf561_ezkit_bus = {
 	"bf561_ezkit",
@@ -278,7 +278,7 @@ const bus_driver_t bf561_ezkit_bus = {
 };
 
 static bus_t *
-bf561_ezkit_bus_new( char *cmd_params[] )
+bf561_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[15];

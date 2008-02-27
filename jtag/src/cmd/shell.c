@@ -37,7 +37,7 @@
 #include "cmd.h"
 
 static int
-cmd_shell_run( char *params[] )
+cmd_shell_run( chain_t *chain, char *params[] )
 {
 	int i, len, n = cmd_params(params);
 	char *shell_cmd;

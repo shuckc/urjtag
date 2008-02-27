@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_signal_run( char *params[] )
+cmd_signal_run( chain_t *chain, char *params[] )
 {
 	part_t *part;
 	signal_t *s;
@@ -43,7 +43,7 @@ cmd_signal_run( char *params[] )
 		return -1;
 
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {

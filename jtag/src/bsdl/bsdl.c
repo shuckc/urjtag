@@ -87,7 +87,7 @@ void bsdl_msg(int type, const char *format, ...)
  * > 0 : No errors, idcode checked and matched
  *
  ****************************************************************************/
-int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
+int bsdl_read_file(chain_t *chain, const char *BSDL_File_Name, int mode, const char *idcode)
 {
   FILE *BSDL_File;
   parser_priv_t *parser_priv;
@@ -124,11 +124,16 @@ int bsdl_read_file(const char *BSDL_File_Name, int mode, const char *idcode)
 	  fclose(BSDL_File);
 	  return -1;
 	}
+	parser_priv->jtag_ctrl.chain = chain;
 	parser_priv->jtag_ctrl.part = chain->parts->parts[chain->active_part];
-      } else
+      } else {
+	parser_priv->jtag_ctrl.chain = NULL;
 	parser_priv->jtag_ctrl.part = NULL;
-    } else
+      }
+    } else {
+      parser_priv->jtag_ctrl.chain = NULL;
       parser_priv->jtag_ctrl.part = NULL;
+    }
 
     parser_priv->jtag_ctrl.idcode = NULL;
 
@@ -250,7 +255,7 @@ void bsdl_set_path(const char *pathlist)
  * > 0 : No errors, idcode checked and matched
  *
  ****************************************************************************/
-int bsdl_scan_files(const char *idcode, int mode)
+int bsdl_scan_files(chain_t *chain, const char *idcode, int mode)
 {
   int idx = 0;
   int result = 0;
@@ -282,14 +287,14 @@ int bsdl_scan_files(const char *idcode, int mode)
 	      if (mode >= 1) {
 		/* now we know we can finally read the file */
 		/* do a test read first */
-		result = bsdl_read_file(name, -1, idcode);
+		result = bsdl_read_file(chain, name, -1, idcode);
 		if (result > 0) {
 		  /* read in BSDL file if IDCODE matched */
 		  printf( _("  Filename:     %s\n"), name );
-		  result = bsdl_read_file(name, 1, idcode);
+		  result = bsdl_read_file(chain, name, 1, idcode);
 		}
 	      } else
-		result = bsdl_read_file(name, mode, idcode);
+		result = bsdl_read_file(chain, name, mode, idcode);
             }
           }
 

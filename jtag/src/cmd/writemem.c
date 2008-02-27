@@ -30,7 +30,7 @@
 #include "cmd.h"
 
 static int
-cmd_writemem_run( char *params[] )
+cmd_writemem_run( chain_t *chain, char *params[] )
 {
 	uint32_t adr;
 	uint32_t len;

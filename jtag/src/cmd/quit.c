@@ -29,7 +29,7 @@
 #include <cmd.h>
 
 static int
-cmd_quit_run( char *params[] )
+cmd_quit_run( chain_t *chain, char *params[] )
 {
 	if (params[1])
 		return -1;

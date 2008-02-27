@@ -38,7 +38,7 @@
 #include "cmd.h"
 
 static int
-cmd_cable_run( char *params[] )
+cmd_cable_run( chain_t *chain, char *params[] )
 {
 	cable_t *cable;
 	int i;

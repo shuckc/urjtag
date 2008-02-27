@@ -253,7 +253,7 @@ prototype_bus_signal_parse( char *str, char *fmt, int *inst )
 }
 
 static bus_t *
-prototype_bus_new( char *cmd_params[] )
+prototype_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
 	signal_t *sig;

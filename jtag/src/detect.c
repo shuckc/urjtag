@@ -277,7 +277,7 @@ detect_parts( chain_t *chain, char *db_path )
 		chain->active_part = ps->len - 1;
 
 #ifdef ENABLE_BSDL
-		if (bsdl_scan_files(register_get_string( did ), 1) <= 0) {
+		if (bsdl_scan_files(chain, register_get_string( did ), 1) <= 0) {
 #endif
 
 		/* find JTAG declarations for a part with id */
@@ -364,7 +364,7 @@ detect_parts( chain_t *chain, char *db_path )
 		strcpy( part->manufacturer, manufacturer );
 		strcpy( part->part, partname );
 		strcpy( part->stepping, stepping );
-		cmd_run( cmd );
+		cmd_run( chain, cmd );
 #ifdef ENABLE_BSDL
 		}
 #endif

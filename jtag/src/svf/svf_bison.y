@@ -51,10 +51,12 @@ static struct svf_parser_params parser_params = {
   {0, 0.0, 0, 0, 0, 0}
 };
 
-void yyerror(const char *);
+void yyerror(YYLTYPE *, chain_t *, const char *);
 
 static void svf_free_ths_params(struct ths_params *);
 %}
+
+%parse-param {chain_t *chain}
 
 %union {
   int    token;
@@ -115,12 +117,12 @@ svf_statement
 
     | FREQUENCY ';'
       {
-        svf_frequency(0.0);
+        svf_frequency(chain, 0.0);
       }
 
     | FREQUENCY NUMBER HZ ';'
       {
-        svf_frequency($2);
+        svf_frequency(chain, $2);
       }
 
     | HDR NUMBER ths_param_list ';'
@@ -144,7 +146,7 @@ svf_statement
     | PIOMAP '(' direction IDENTIFIER piomap_rec ')' ';'
       {
         printf("PIOMAP not implemented\n");
-        yyerror("PIOMAP");
+        yyerror(&@$, chain, "PIOMAP");
         YYERROR;
       }
 
@@ -152,7 +154,7 @@ svf_statement
       {
         free($<cvalue>2);
         printf("PIO not implemented\n");
-        yyerror("PIO");
+        yyerror(&@$, chain, "PIO");
         YYERROR;
       }
 
@@ -165,8 +167,8 @@ svf_statement
         rt->run_clk   = $3.token;
         rt->end_state = $5;
 
-        if (!svf_runtest(rt)) {
-          yyerror("RUNTEST");
+        if (!svf_runtest(chain, rt)) {
+          yyerror(&@$, chain, "RUNTEST");
           YYERROR;
         }
       }
@@ -180,8 +182,8 @@ svf_statement
         rt->run_clk   = 0;
         rt->end_state = $4;
 
-        if (!svf_runtest(rt)) {
-          yyerror("RUNTEST");
+        if (!svf_runtest(chain, rt)) {
+          yyerror(&@$, chain, "RUNTEST");
           YYERROR;
         }
       }
@@ -192,11 +194,11 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = svf_sxr(generic_dr, p, &@$);
+        result = svf_sxr(chain, generic_dr, p, &@$);
         svf_free_ths_params(p);
 
         if (!result) {
-          yyerror("SDR");
+          yyerror(&@$, chain, "SDR");
           YYERROR;
         }
       }
@@ -207,19 +209,19 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = svf_sxr(generic_ir, p, &@$);
+        result = svf_sxr(chain, generic_ir, p, &@$);
         svf_free_ths_params(p);
 
         if (!result) {
-          yyerror("SIR");
+          yyerror(&@$, chain, "SIR");
           YYERROR;
         }
       }
 
     | STATE path_states stable_state ';'
       {
-        if (!svf_state(&parser_params.path_states, $<token>3)) {
-          yyerror("STATE");
+        if (!svf_state(chain, &parser_params.path_states, $<token>3)) {
+          yyerror(&@$, chain, "STATE");
           YYERROR;
         }
       }
@@ -234,7 +236,7 @@ svf_statement
         svf_free_ths_params(p);
 
         if (!result) {
-          yyerror("TDR");
+          yyerror(&@$, chain, "TDR");
           YYERROR;
         }
       }
@@ -249,15 +251,15 @@ svf_statement
         svf_free_ths_params(p);
 
         if (!result) {
-          yyerror("TIR");
+          yyerror(&@$, chain, "TIR");
           YYERROR;
         }
       }
 
     | TRST trst_mode ';'
     {
-      if (!svf_trst($<token>2)) {
-        yyerror("TRST");
+      if (!svf_trst(chain, $<token>2)) {
+        yyerror(&@$, chain, "TRST");
         YYERROR;
       }
     }
@@ -413,7 +415,7 @@ direction
 
 
 void
-yyerror(const char *error_string)
+yyerror(YYLTYPE *locp, chain_t *chain, const char *error_string)
 {
   printf("Error occured for SVF command %s.\n", error_string);
 }

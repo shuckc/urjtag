@@ -32,7 +32,7 @@
 #include "cmd.h"
 
 static int
-cmd_frequency_run( char *params[] )
+cmd_frequency_run( chain_t *chain, char *params[] )
 {
 	unsigned int freq;
 

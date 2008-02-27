@@ -277,7 +277,7 @@ sh7727_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *sh7727_bus_new( char *cmd_params[] );
+static bus_t *sh7727_bus_new( chain_t *chain, char *cmd_params[] );
 
 const bus_driver_t sh7727_bus = {
 	"sh7727",
@@ -296,7 +296,7 @@ const bus_driver_t sh7727_bus = {
 };
 
 static bus_t *
-sh7727_bus_new( char *cmd_params[] )
+sh7727_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
 	char buff[10];

@@ -55,7 +55,6 @@
 ssize_t getline( char **lineptr, size_t *n, FILE *stream );
 #endif
 
-chain_t *chain = NULL;
 int debug_mode = 0;
 int big_endian = 0;
 int interactive = 0;
@@ -154,7 +153,7 @@ jtag_save_history( void )
 #endif
 
 static int
-jtag_parse_line( char *line )
+jtag_parse_line( chain_t *chain, char *line )
 {
 	char *t;
 	int l;
@@ -190,14 +189,14 @@ jtag_parse_line( char *line )
 		t = get_token( NULL );
 	}
 
-	r = cmd_run( a );
+	r = cmd_run( chain, a );
 	if(debug_mode & 1)printf("Return in jtag_parse_line r=%d\n",r);
 	free( a );
 	return r;
 }
 
 
-static int jtag_readline_multiple_commands_support(char * line) /* multiple commands should be separated with '::' */
+static int jtag_readline_multiple_commands_support(chain_t *chain, char * line) /* multiple commands should be separated with '::' */
 {
   int 	r;
   char	*nextcmd = line;
@@ -216,7 +215,7 @@ static int jtag_readline_multiple_commands_support(char * line) /* multiple comm
      while (*line == ':') ++line;
   } 
   
-  r = jtag_parse_line( line );
+  r = jtag_parse_line( chain, line );
 
   chain_flush( chain );
   
@@ -226,13 +225,13 @@ static int jtag_readline_multiple_commands_support(char * line) /* multiple comm
 }
 
 static void
-jtag_readline_loop( const char *prompt )
+jtag_readline_loop( chain_t *chain, const char *prompt )
 {
 #ifdef HAVE_LIBREADLINE
 	char *line = NULL;
 
 	/* Iterate */
-	while (jtag_readline_multiple_commands_support( line )) {
+	while (jtag_readline_multiple_commands_support( chain, line )) {
 		free( line );
 
 		/* Read a line from the terminal */
@@ -267,7 +266,7 @@ jtag_readline_loop( const char *prompt )
 }
 
 static int
-jtag_parse_stream( FILE *f )
+jtag_parse_stream( chain_t *chain, FILE *f )
 {
 	int go = 1;
 	char *line = NULL;
@@ -275,7 +274,7 @@ jtag_parse_stream( FILE *f )
 
 	while (go && (getline( &line, &n, f ) != -1))
 		if ((strlen(line) > 0) && (line[0] != '#'))
-			go = jtag_parse_line(line);
+			go = jtag_parse_line(chain, line);
 
 	free(line);
 
@@ -283,7 +282,7 @@ jtag_parse_stream( FILE *f )
 }
 
 int
-jtag_parse_file( const char *filename )
+jtag_parse_file( chain_t *chain, const char *filename )
 {
 	FILE *f;
 	int go;
@@ -292,7 +291,7 @@ jtag_parse_file( const char *filename )
 	if (!f)
 		return -1;
 
-	go = jtag_parse_stream( f );
+	go = jtag_parse_stream( chain, f );
 
 	fclose(f);
 	if(debug_mode & 1)printf("File Closed gp=%d\n",go);
@@ -300,7 +299,7 @@ jtag_parse_file( const char *filename )
 }
 
 static int
-jtag_parse_rc( void )
+jtag_parse_rc( chain_t *chain )
 {
 	char *home = getenv( "HOME" );
 	char *file;
@@ -319,7 +318,7 @@ jtag_parse_rc( void )
 	strcat( file, "/" );
 	strcat( file, RCFILE );
 
-	go = jtag_parse_file( file );
+	go = jtag_parse_file( chain, file );
 
 	free( file );
 
@@ -327,7 +326,7 @@ jtag_parse_rc( void )
 }
 
 static void
-cleanup( void )
+cleanup( chain_t *chain )
 {
 	cfi_array_free( cfi_array );
 	cfi_array = NULL;
@@ -350,6 +349,7 @@ main( int argc, char *const argv[] )
 	int help = 0;
 	int version = 0;
 	int quiet = 0;
+	chain_t *chain = NULL;
 
 	if(geteuid()==0 && getuid()!=0)
 	{
@@ -470,8 +470,8 @@ main( int argc, char *const argv[] )
 				return -1;
 			}
 
-			go = jtag_parse_file( argv[i] );
-			cleanup();
+			go = jtag_parse_file( chain, argv[i] );
+			cleanup( chain );
 			if (go < 0) {
 				printf( _("Unable to open file `%s'!\n"), argv[i] );
 				break;
@@ -489,9 +489,9 @@ main( int argc, char *const argv[] )
 			return -1;
 		}
 
-		jtag_parse_stream( stdin );
+		jtag_parse_stream( chain, stdin );
 
-		cleanup();
+		cleanup( chain );
 
 		return 0;
 	}
@@ -523,7 +523,7 @@ main( int argc, char *const argv[] )
 	jtag_create_jtagdir();
 
 	/* Parse and execute the RC file */
-	go = norc ? 1 : jtag_parse_rc();
+	go = norc ? 1 : jtag_parse_rc( chain );
 
 	if (go) {
 
@@ -533,7 +533,7 @@ main( int argc, char *const argv[] )
 #endif
 
 		/* main loop */
-		jtag_readline_loop( "jtag> " );
+		jtag_readline_loop( chain, "jtag> " );
 
 #ifdef HAVE_READLINE_HISTORY
 		/* Save history */
@@ -541,7 +541,7 @@ main( int argc, char *const argv[] )
 #endif
 	}
 
-	cleanup();
+	cleanup( chain );
 
 	return 0;
 }

@@ -33,12 +33,12 @@
 #include "cmd.h"
 
 static int
-cmd_shift_run( char *params[] )
+cmd_shift_run( chain_t *chain, char *params[] )
 {
 	if (cmd_params( params ) != 2)
 		return -1;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (strcasecmp( params[1], "ir" ) == 0) {

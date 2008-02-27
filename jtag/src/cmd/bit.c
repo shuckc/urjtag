@@ -44,7 +44,7 @@ cmd_bit_print_params( char *params[], unsigned int parameters, char *command )
 }
 
 static int
-cmd_bit_run( char *params[] )
+cmd_bit_run( chain_t *chain, char *params[] )
 {
 	part_t *part;
 	data_register *bsr;
@@ -62,7 +62,7 @@ cmd_bit_run( char *params[] )
 		return -1;
 	}
 
-	if (!cmd_test_cable()) {
+	if (!cmd_test_cable( chain )) {
 		printf( _("%s: cable test failed for command '%s'\n"), "bit", command);
 		return 1;
 	}

@@ -32,7 +32,7 @@
 #include <cmd.h>
 
 static int
-cmd_svf_run( char *params[] )
+cmd_svf_run( chain_t *chain, char *params[] )
 {
 	FILE *SVF_FILE;
 	int   num_params, result = -1;
@@ -43,11 +43,11 @@ cmd_svf_run( char *params[] )
 
 			if (num_params == 3) {
 				if (strcasecmp(params[2], "stop") == 0) {
-					svf_run(SVF_FILE, 1);
+					svf_run(chain, SVF_FILE, 1);
 					result = 1;
 				}
 			} else {
-				svf_run(SVF_FILE, 0);
+				svf_run(chain, SVF_FILE, 0);
 				result = 1;
 			}
 

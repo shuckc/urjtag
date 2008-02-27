@@ -25,6 +25,8 @@
 #ifndef SVF_H
 #define SVF_H
 
-void svf_run(FILE *, int);
+#include "chain.h"
+
+void svf_run(chain_t *chain, FILE *, int);
 
 #endif /* SVF_H */

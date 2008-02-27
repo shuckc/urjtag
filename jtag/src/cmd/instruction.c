@@ -33,11 +33,11 @@
 #include "cmd.h"
 
 static int
-cmd_instruction_run( char *params[] )
+cmd_instruction_run( chain_t *chain, char *params[] )
 {
 	part_t *part;
 
-	if (!cmd_test_cable())
+	if (!cmd_test_cable( chain ))
 		return 1;
 
 	if (!chain->parts) {

@@ -27,7 +27,6 @@
 #define	BUS_H
 
 #include <stdint.h>
-#include "chain.h"
 
 #include <bus_driver.h>
 

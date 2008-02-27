@@ -643,7 +643,7 @@ fjmem_query_blocks( chain_t *chain, part_t *part, bus_t *bus )
 }
 
 static bus_t *
-fjmem_bus_new( char *params[] )
+fjmem_bus_new( chain_t *chain, char *params[] )
 {
 	bus_t *bus = NULL;
 	int failed = 0;

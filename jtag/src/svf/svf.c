@@ -51,7 +51,7 @@
 #include "svf.h"
 #include "svf_bison.h"
 
-int yyparse(void);
+int yyparse(chain_t *chain);
 
 
 struct sxr {
@@ -93,7 +93,7 @@ static int issued_runtest_maxtime;
  * Puts TAP controller into reset state by clocking 5 times with TMS = 1.
  */
 static void
-svf_force_reset_state(void)
+svf_force_reset_state( chain_t *chain )
 {
   chain_clock(chain, 1, 0, 5);
   tap_state_reset(chain);
@@ -113,7 +113,7 @@ svf_force_reset_state(void)
  *   state : new TAP controller state
  */
 static void
-svf_goto_state(int new_state)
+svf_goto_state( chain_t *chain, int new_state)
 {
   int current_state;
 
@@ -226,12 +226,12 @@ svf_goto_state(int new_state)
       break;
 
     default:
-      svf_force_reset_state();
+      svf_force_reset_state(chain);
       break;
   }
 
   /* continue state changes */
-  svf_goto_state(new_state);
+  svf_goto_state(chain, new_state);
 }
 
 
@@ -582,7 +582,7 @@ svf_endxr(enum generic_irdr_coding ir_dr, int state)
 
 
 /* ***************************************************************************
- * svf_frequency(freq)
+ * svf_frequency(chain, freq)
  *
  * Implements the FREQUENCY command.
  *
@@ -590,7 +590,7 @@ svf_endxr(enum generic_irdr_coding ir_dr, int state)
  *   freq : frequency in HZ
  * ***************************************************************************/
 void
-svf_frequency(double freq)
+svf_frequency(chain_t *chain, double freq)
 {
   cable_set_frequency(chain->cable, freq);
 }
@@ -643,7 +643,7 @@ static void sigalrm_handler(int signal)
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_runtest(struct runtest *params)
+svf_runtest(chain_t *chain, struct runtest *params)
 {
   uint32_t run_count, frequency;
 
@@ -685,7 +685,7 @@ svf_runtest(struct runtest *params)
   }
   assert(run_count > 0);
 
-  svf_goto_state(runtest_run_state);
+  svf_goto_state(chain, runtest_run_state);
 
   /* set up the timer for max_time */
   if (params->max_time > 0.0) {
@@ -714,7 +714,7 @@ svf_runtest(struct runtest *params)
   else
     chain_clock(chain, 0, 0, run_count);
 
-  svf_goto_state(runtest_end_state);
+  svf_goto_state(chain, runtest_end_state);
 
   /* stop the timer */
   if (params->max_time > 0.0) {
@@ -748,17 +748,17 @@ svf_runtest(struct runtest *params)
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_state(struct path_states *path_states, int stable_state)
+svf_state(chain_t *chain, struct path_states *path_states, int stable_state)
 {
   int i;
 
   svf_state_executed = 1;
 
   for (i = 0; i < path_states->num_states; i++)
-    svf_goto_state(svf_map_state(path_states->states[i]));
+    svf_goto_state(chain, svf_map_state(path_states->states[i]));
 
   if (stable_state)
-    svf_goto_state(svf_map_state(stable_state));
+    svf_goto_state(chain, svf_map_state(stable_state));
 
   return(1);
 }
@@ -778,7 +778,7 @@ svf_state(struct path_states *path_states, int stable_state)
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params, YYLTYPE *loc)
+svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *params, YYLTYPE *loc)
 {
   struct sxr *sxr_params;
   int len, result = 1;
@@ -883,9 +883,9 @@ svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params, YYLTYPE *loc)
   /* shift selected instruction/register */
   switch (ir_dr) {
     case generic_ir:
-      svf_goto_state(Shift_IR);
+      svf_goto_state(chain, Shift_IR);
       chain_shift_instructions_mode(chain, 0, EXITMODE_EXIT1);
-      svf_goto_state(endir);
+      svf_goto_state(chain, endir);
 
       if (sxr_params->params.tdo)
         if (!issued_sir_tdo) {
@@ -896,12 +896,12 @@ svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params, YYLTYPE *loc)
       break;
 
     case generic_dr:
-      svf_goto_state(Shift_DR);
+      svf_goto_state(chain, Shift_DR);
       chain_shift_data_registers_mode(chain,
                                       sxr_params->params.tdo ? 1 : 0,
                                       0,
                                       EXITMODE_EXIT1);
-      svf_goto_state(enddr);
+      svf_goto_state(chain, enddr);
 
       if (sxr_params->params.tdo)
         result = svf_compare_tdo(sxr_params->params.tdo, sxr_params->params.mask, dr->out, loc);
@@ -930,7 +930,7 @@ svf_sxr(enum generic_irdr_coding ir_dr, struct ths_params *params, YYLTYPE *loc)
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_trst(int trst_mode)
+svf_trst(chain_t *chain, int trst_mode)
 {
   int  trst_cable = -1;
   char *unimplemented_mode;
@@ -1009,7 +1009,7 @@ svf_txr(enum generic_irdr_coding ir_dr, struct ths_params *params)
 
 
 /* ***************************************************************************
- * svf_run(SVF_FILE, stop_on_mismatch)
+ * svf_run(chain, SVF_FILE, stop_on_mismatch)
  *
  * Main entry point for the 'svf' command. Calls the svf parser.
  *
@@ -1027,7 +1027,7 @@ svf_txr(enum generic_irdr_coding ir_dr, struct ths_params *params)
  *   0 : error occured
  * ***************************************************************************/
 void
-svf_run(FILE *SVF_FILE, int stop_on_mismatch)
+svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
 {
   const struct sxr sxr_default = { {0.0, NULL, NULL, NULL, NULL},
                                    1, 1};
@@ -1053,7 +1053,7 @@ svf_run(FILE *SVF_FILE, int stop_on_mismatch)
                             "32",
                             NULL};
 
-    if (cmd_run(register_cmd) < 1)
+    if (cmd_run(chain, register_cmd) < 1)
       return;
 
     if (!(dr = part_find_data_register(part, "SDR"))) {
@@ -1079,7 +1079,7 @@ svf_run(FILE *SVF_FILE, int stop_on_mismatch)
         instruction_string[len] = '\0';
         instruction_cmd[2] = instruction_string;
 
-        result = cmd_run(instruction_cmd);
+        result = cmd_run(chain,instruction_cmd);
 
         free(instruction_string);
 
@@ -1115,7 +1115,7 @@ svf_run(FILE *SVF_FILE, int stop_on_mismatch)
   part_set_instruction(part, "SIR");
 
   yyin = SVF_FILE;
-  yyparse();
+  yyparse(chain);
 
   /* clean up */
   /* SIR */

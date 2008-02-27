@@ -1,3 +1,120 @@
+2008-02-27  Jie Zhang  <jie.zhang@analog.com>
+
+   * include/bus.h: Don't include chain.h.
+   * include/svf.h: Include chain.h.
+     (svf_run): Add a parameter to pass chain.
+   * include/cmd.h: Include chain.h.
+     (cmd_t): Add a parameter to pass chain for run.
+     (cmd_run, cmd_test_cable): Add a parameter to pass chain.
+   * include/bus_driver.h: Include chain.h.
+     (struct bus_driver): Add a parameter to pass chain for new_bus.
+   * include/bsdl.h: Include chain.h
+     (bsdl_read_file, bsdl_scan_files): Add a parameter to pass chain.
+   * include/jtag.h (chain): Don't declare.
+     (jtag_parse_file): Add a parameter to pass chain.
+   * src/bsdl/bsdl.c (bsdl_read_file): Add a parameter to pass chain.
+       Initialize parser_priv->jtag_ctrl.chain.
+     (bsdl_scan_files): Add a parameter to pass chain.
+   * src/bsdl/bsdl_sem.c (bsdl_set_instruction_length): Call cmd_run
+       with priv->jtag_ctrl.chain.
+   * src/bsdl/bsdl.h (struct jtag_ctrl): Add chain field.
+   * src/detect.c (detect_parts): Pass chain to bsdl_scan_files
+       and cmd_run.
+   * src/bus/bf548_ezkit.c (bf548_ezkit_bus_new): Add a parameter to
+       pass chain.
+   * src/bus/fjmem.c (fjmem_bus_new): Likewise.
+   * src/bus/ppc405ep.c (ppc405ep_bus_new): Likewise.
+   * src/bus/sh7727.c (sh7727_bus_new): Likewise.
+   * src/bus/prototype.c (prototype_bus_new): Likewise.
+   * src/bus/sa1110.c (sa1110_bus_new): Likewise.
+   * src/bus/ppc440gx_ebc8.c (ppc440gx_ebc8_bus_new): Likewise.
+   * src/bus/tx4925.c (tx4925_bus_new): Likewise.
+   * src/bus/sh7750r.c (sh7750r_bus_new): Likewise.
+   * src/bus/pxa2x0.c (pxa2x0_bus_new): Likewise.
+     (pxa27x_bus_new): Likewise.
+   * src/bus/bf533_stamp.c (bf533_stamp_bus_new): Likewise.
+   * src/bus/bf533_ezkit.c (bf533_ezkit_bus_new): Likewise.
+   * src/bus/bf537_stamp.c (bf537_stamp_bus_new): Likewise.
+   * src/bus/ixp425.c (ixp425_bus_new): Likewise.
+   * src/bus/h7202.c (h7202_bus_new): Likewise.
+   * src/bus/zefant-xs3.c (zefant_xs3_bus_new): Likewise.
+   * src/bus/bcm1250.c (bcm1250_bus_new): Likewise.
+   * src/bus/sharc21065l.c (sharc_21065L_bus_new): Likewise.
+   * src/bus/au1500.c (au1500_bus_new): Likewise.
+   * src/bus/lh7a400.c (lh7a400_bus_new): Likewise.
+   * src/bus/sh7751r.c (sh7751r_bus_new): Likewise.
+   * src/bus/mpc5200.c (mpc5200_bus_new): Likewise.
+   * src/bus/jopcyc.c (jopcyc_bus_new): Likewise.
+   * src/bus/slsup3.c (slsup3_bus_new): Likewise.
+   * src/bus/bf561_ezkit.c (bf561_ezkit_bus_new): Likewise.
+   * src/bus/s3c4510x.c (s3c4510_bus_new): Likewise.
+   * src/bus/ejtag.c (ejtag_bus_new): Likewise.
+   * src/bus/mpc824x.c (mpc824x_bus_new): Likewise.
+     (mpc824x_bus_write): Change chain to CHAIN.
+   * src/svf/svf.c (yyparse): Add a parameter to pass chain. And update
+       all call sites.
+     (svf_force_reset_state): Likewise.
+     (svf_goto_state): Likewise.
+     (svf_frequency): Likewise.
+     (svf_runtest): Likewise.
+     (svf_state): Likewise.
+     (svf_sxr): Likewise.
+     (svf_trst): Likewsie.
+     (svf_run): Likewise.
+   * src/svf/svf_bison.y (yyerror): Update declaration and call sites.
+     (chain): %parse-param.
+   * src/svf/svf.h: Include chain.h and update function declarations.
+   * src/cmd/endian.c (cmd_endian_run): Add a parameter to pass chain.
+       And update all call sites.
+   * src/cmd/frequency.c (cmd_frequency_run): Likewise.
+   * src/cmd/part.c (cmd_part_run): Likewise.
+   * src/cmd/salias.c (cmd_salias_run): Likewise.
+   * src/cmd/instruction.c (cmd_instruction_run): Likewise.
+   * src/cmd/quit.c (cmd_quit_run): Likewise.
+   * src/cmd/register.c (cmd_register_run): Likewise.
+   * src/cmd/debug.c (cmd_debug_run): Likewise.
+   * src/cmd/flashmem.c (cmd_flashmem_run): Likewise.
+   * src/cmd/svf.c (cmd_svf_run): Likewise.
+   * src/cmd/peekpoke.c (cmd_peek_run): Likewise.
+     (cmd_poke_run): Likewise.
+   * src/cmd/cmd.c (cmd_test_cable): Likewise.
+     (cmd_run): Likewise.
+   * src/cmd/dr.c (cmd_dr_run): Likewise.
+   * src/cmd/cable.c (cmd_cable_run): Likewise.
+   * src/cmd/shell.c (cmd_shell_run): Likewise.
+   * src/cmd/discovery.c (cmd_discovery_run): Likewise.
+   * src/cmd/detect.c (cmd_detect_run): Likewise.
+   * src/cmd/readmem.c (cmd_readmem_run): Likewise.
+   * src/cmd/signal.c (cmd_signal_run): Likewise.
+   * src/cmd/shift.c (cmd_shift_run): Likewise.
+   * src/cmd/initbus.c (cmd_initbus_run): Likewise.
+   * src/cmd/eraseflash.c (cmd_eraseflash_run): Likewise.
+   * src/cmd/bit.c (cmd_bit_run): Likewise.
+   * src/cmd/get.c (cmd_get_run): Likewise.
+   * src/cmd/test.c (cmd_test_run): Likewise.
+   * src/cmd/reset.c (cmd_reset_run): Likewise.
+   * src/cmd/include.c (cmd_include_or_script_run): Likewise.
+     (cmd_include_run): Likewise.
+     (cmd_script_run): Likewise.
+   * src/cmd/bsdl.c (cmd_bsdl_run): Likewise.
+   * src/cmd/scan.c (cmd_scan_run): Likewise.
+   * src/cmd/detectflash.c (cmd_detectflash_run): Likewise.
+   * src/cmd/help.c (cmd_help_run): Likewise.
+   * src/cmd/writemem.c (cmd_writemem_run): Likewise.
+   * src/cmd/bus.c (cmd_bus_run): Likewise.
+   * src/cmd/set.c (cmd_set_run): Likewise.
+   * src/cmd/print.c (cmd_print_run): Likewise.
+   * src/jtag.c (chain): Don't define.
+     (jtag_parse_line): Add a parameter to pass chain.
+       And update all call sites.
+     (jtag_readline_multiple_commands_support): Likewise.
+     (jtag_readline_loop): Likewise.
+     (jtag_parse_stream): Likewise.
+     (jtag_parse_file): Likewise.
+     (jtag_parse_rc): Likewise.
+     (cleanup): Likewise.
+     (main): Define a local chain.
+
 2008-02-26  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/cable/ft2232.c (send_and_receive): loopback_off moved to ftdi.c/ftd2xx.c
