@@ -1,3 +1,7 @@
+2008-02-28  Kolja Waschk <kawk>
+
+   * doc/UrJTAG.txt: Concretized list of supported USB cables.
+
 2008-02-27  Kolja Waschk <kawk>
 
    * src/tap/cable/generic.c (generic_flush_one_by_one): Always flush,
