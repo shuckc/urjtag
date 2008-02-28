@@ -1,6 +1,7 @@
 2008-02-28  Kolja Waschk <kawk>
 
    * doc/UrJTAG.txt: Concretized list of supported USB cables.
+   * src/detect.c: Use "include" internally instead of "script", avoid errmsg
 
 2008-02-27  Kolja Waschk <kawk>
 

@@ -190,7 +190,7 @@ detect_parts( chain_t *chain, char *db_path )
 	int i;
 
 	char data_path[1024];
-	char *cmd[3] = {"script", data_path, NULL};
+	char *cmd[3] = {"include", data_path, NULL};
 	char manufacturer[MAXLEN_MANUFACTURER + 1];
 	char partname[MAXLEN_PART + 1];
 	char stepping[MAXLEN_STEPPING + 1];
