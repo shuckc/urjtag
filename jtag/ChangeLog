@@ -1,3 +1,8 @@
+2008-03-01  Kolja Waschk <kawk>
+
+   * src/tap/cable/xpc.c: Implemented much faster access method using GPIF
+      transfers via vendor request 0xA6.
+
 2008-02-28  Kolja Waschk <kawk>
 
    * doc/UrJTAG.txt: Concretized list of supported USB cables.
