@@ -38,6 +38,16 @@
 #include <errno.h>
 #include <string.h>
 
+// #define VERBOSE 1
+#undef VERBOSE
+typedef struct
+{
+	int last_tdo;
+}
+xpc_cable_params_t;
+
+static int last_tdo;
+
 /* Connectivity on Spartan-3E starter kit:
  *
  * = FX2 Port A =
@@ -221,7 +231,9 @@ xpcu_shift(struct usb_dev_handle *xpcu, int reqno, int bits, int in_len, uint8_t
         return -1;
     }
 
-#if 0
+#if VERBOSE
+	{
+	int i;
     printf("###\n");
     printf("reqno = %02X\n", reqno);
     printf("bits    = %d\n", bits);
@@ -231,6 +243,7 @@ xpcu_shift(struct usb_dev_handle *xpcu, int reqno, int bits, int in_len, uint8_t
     printf("a6_display(\"%02X\", \"", bits);
     for(i=0;i<in_len;i++) printf("%02X%s", in[i], (i+1<in_len)?",":"");
     printf("\", ");
+	}
 #endif
 
     if(usb_bulk_write(xpcu, 0x02, (char*)in, in_len, 1000)<0)
@@ -248,10 +261,13 @@ xpcu_shift(struct usb_dev_handle *xpcu, int reqno, int bits, int in_len, uint8_t
       }
     }
 
-#if 0
+#if VERBOSE
+	{
+	int i;
     printf("\"");
     for(i=0;i<out_len;i++) printf("%02X%s", out[i], (i+1<out_len)?",":"");
     printf("\")\n");
+	}
 #endif
  
     return 0;
@@ -262,56 +278,44 @@ xpcu_shift(struct usb_dev_handle *xpcu, int reqno, int bits, int in_len, uint8_t
 static int 
 xpcu_common_init( cable_t *cable )
 {
-	uint16_t buf;
-	struct usb_dev_handle *xpcu;
+    int r;
+    uint16_t buf;
+    struct usb_dev_handle *xpcu;
 
-	if (usbconn_open( cable->link.usb )) return -1;
+    if (usbconn_open( cable->link.usb )) return -1;
 
-	xpcu = ((libusb_param_t*)(cable->link.usb->params))->handle;
+    xpcu = ((libusb_param_t*)(cable->link.usb->params))->handle;
 
-    if(xpcu_request_28(xpcu, 0x11)<0)
-    {
-        usb_close(xpcu);
-        return -1;
-    };
-
-    if(xpcu_write_gpio(xpcu, 8)<0)
-    {
-        usb_close(xpcu);
-        return -1;
-    };
+    r = xpcu_request_28(xpcu, 0x11);
+    if (r>=0) r = xpcu_write_gpio(xpcu, 8);
 
     /* Read firmware version (constant embedded in firmware) */
 
-    if(xpcu_read_firmware_version(xpcu, &buf) < 0)
-    {
-        usb_close(xpcu);
-        return -1;
-    }
-    else
+    if (r>=0) r = xpcu_read_firmware_version(xpcu, &buf);
+    if (r>=0)
     {
         printf("firmware version = 0x%04X (%u)\n", buf, buf);
     };
 
     /* Read CPLD version (via GPIF) */
 
-    if(xpcu_read_cpld_version(xpcu, &buf) < 0)
-    {
-        usb_close(xpcu);
-        return -1;
-    }
-    else
+    if (r>=0) xpcu_read_cpld_version(xpcu, &buf);
+    if (r>=0)
     {
         printf("cable CPLD version = 0x%04X (%u)\n", buf, buf);
         if(buf == 0)
         {
             printf("Warning: version '0' can't be correct. Please try resetting the cable\n");
+            r = -1;
         };
     };
 
-	PARAM_TRST(cable) = 1;
+    if (r<0)
+    {
+        usb_close(xpcu);
+    };
 
-	return 0;
+    return r;
 }
 
 static int
@@ -332,20 +336,58 @@ xpc_ext_init( cable_t *cable )
 {
 	struct usb_dev_handle *xpcu;
 	uint8_t zero[2] = {0,0};
-	uint8_t iostate;
+	int r;
 
-	if (xpcu_common_init( cable )<0) return -1;
+	free(cable->params);
+	cable->params = NULL;
+
+	r = xpcu_common_init( cable );
+
+	if (r<0) return r;
+
+	cable->params = malloc(sizeof(xpc_cable_params_t));
+	if(cable->params == NULL) r = -1;
 
 	xpcu = ((libusb_param_t*)(cable->link.usb->params))->handle;
 
-	if (xpcu_request_28(xpcu, 0x11)<0)
-	if (xpcu_select_gpio(xpcu, 1)<0) return -1;
-	if (xpcu_output_enable(xpcu, 1)<0) return -1;
-	if (xpcu_shift(xpcu, 0xA6, 2, 2, zero, 0, NULL)<0) return -1;
-	if (xpcu_read_gpio(xpcu, &iostate)<0) return -1;
-	if (xpcu_request_28(xpcu, 0x12)<0) return -1;
+	if (r>=0) r = xpcu_request_28(xpcu, 0x11);
+	if (r>=0) r = xpcu_output_enable(xpcu, 1);
+	if (r>=0) r = xpcu_shift(xpcu, 0xA6, 2, 2, zero, 0, NULL);
+	if (r>=0) r = xpcu_request_28(xpcu, 0x12);
 
-	return 0;
+	if (r<0)
+	{
+		usb_close(xpcu);
+
+		free(cable->params);
+		cable->params = NULL;
+	}
+
+	return r;
+}
+
+/* ---------------------------------------------------------------------- */
+
+static void
+xpc_ext_done( cable_t *cable )
+{
+	struct usb_dev_handle *xpcu;
+	xpcu = ((libusb_param_t*)(cable->link.usb->params))->handle;
+	xpcu_output_enable(xpcu, 0);
+	generic_usbconn_done( cable );
+}
+
+/* ---------------------------------------------------------------------- */
+
+static void
+xpc_ext_free( cable_t *cable )
+{
+	if(cable->params) 
+	{
+		free(cable->params);
+		cable->params = NULL;
+	}
+    generic_usbconn_free( cable );
 }
 
 /* ---------------------------------------------------------------------- */
@@ -402,8 +444,6 @@ xpc_set_trst( cable_t *cable, int trst )
 
 /* ---------------------------------------------------------------------- */
 
-static int last_tdo;
-
 static void
 xpc_ext_clock( cable_t *cable, int tms, int tdi, int n )
 {
@@ -419,7 +459,8 @@ xpc_ext_clock( cable_t *cable, int tms, int tdi, int n )
 
 	for(i=0;i<n;i++) xpcu_shift(xpcu, 0xA6, 1, 2, clock, 2, tdo);
 
-    last_tdo = tdo[1] ? 1:0;
+	last_tdo = tdo[1] ? 1:0;
+	// ((xpc_cable_params_t*)(cable->params))->last_tdo = tdo[1] ? 1:0;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -427,21 +468,24 @@ xpc_ext_clock( cable_t *cable, int tms, int tdi, int n )
 static int
 xpc_ext_get_tdo( cable_t *cable )
 {
-    return last_tdo;
+	return last_tdo;
+	// return ((xpc_cable_params_t*)(cable->params))->last_tdo;
 }
 
 /* ---------------------------------------------------------------------- */
 
-#define XPC_A6_CHUNKSIZE 1 /* 16-bit words */
+/* 16-bit words. More than 4 currently leads to bit errors; 13 to serious problems */
+#define XPC_A6_CHUNKSIZE 4
 
 typedef struct
 {
+	cable_t *cable;
 	struct usb_dev_handle *xpcu;
 	int in_bits;
 	int out_bits;
 	int out_done;
 	uint8_t *out;
-	uint8_t in[XPC_A6_CHUNKSIZE*2];
+	uint8_t buf[XPC_A6_CHUNKSIZE*2];
 }
 xpc_ext_transfer_state_t;
 
@@ -452,6 +496,7 @@ xpcu_do_ext_transfer( xpc_ext_transfer_state_t *xts )
 {
 	int r;
 	int in_len, out_len;
+	// int last_tdo;
 
 	in_len = 2 * (xts->in_bits >> 2);
 	if ((xts->in_bits & 3) != 0) in_len += 2;
@@ -459,9 +504,16 @@ xpcu_do_ext_transfer( xpc_ext_transfer_state_t *xts )
 	out_len = 2 * (xts->out_bits >> 4);
 	if ((xts->out_bits & 15) != 0) out_len += 2;
 
-	r = xpcu_shift (xts->xpcu, 0xA6, xts->in_bits, in_len, xts->in, out_len, xts->in);
+	if(xts->out != NULL)
+	{
+		r = xpcu_shift (xts->xpcu, 0xA6, xts->in_bits, in_len, xts->buf, out_len, xts->buf);
+	}
+	else
+	{
+		r = xpcu_shift (xts->xpcu, 0xA6, xts->in_bits, in_len, xts->buf, 0, NULL);
+	}
 
-	if(r>=0 && xts->out != NULL)
+	if(r >= 0 && xts->out_bits > 0)
 	{
 		int out_idx = 0;
 		int out_rem = xts->out_bits;
@@ -470,13 +522,18 @@ xpcu_do_ext_transfer( xpc_ext_transfer_state_t *xts )
 		{
 			uint32_t mask, rxw;
 
-			rxw = (xts->in[out_idx+1]<<8) | xts->in[out_idx];
+			rxw = (xts->buf[out_idx+1]<<8) | xts->buf[out_idx];
+
+			/* In the last (incomplete) word, the data isn't shifted completely to LSB */
 
 			mask = (out_rem >= 16) ? 1 : (1<<(16 - out_rem));
 
-			for(;mask <= 32768 && out_rem > 0; mask <<= 1)
+			while(mask <= 32768 && out_rem > 0)
 			{
-				xts->out[xts->out_done++] = (rxw & mask) ? 1 : 0;
+				last_tdo = (rxw & mask) ? 1 : 0;
+				xts->out[xts->out_done] = last_tdo;
+				xts->out_done++;
+				mask <<= 1;
 				out_rem--;
 			}
 
@@ -486,6 +543,8 @@ xpcu_do_ext_transfer( xpc_ext_transfer_state_t *xts )
 
 	xts->in_bits = 0;
 	xts->out_bits = 0;
+
+	// ((xpc_cable_params_t*)(xts->cable->params))->last_tdo = last_tdo;
 
 	return r;
 }
@@ -500,24 +559,24 @@ xpcu_add_bit_for_ext_transfer( xpc_ext_transfer_state_t *xts, char in, char is_r
 
 	if(bit_idx == 0)
 	{
-		xts->in[buf_idx] = 0;
-		xts->in[buf_idx+1] = 0;
+		xts->buf[buf_idx] = 0;
+		xts->buf[buf_idx+1] = 0;
 	};
 
 	xts->in_bits++;
 
 	if(is_real)
 	{
-		if(in) xts->in[buf_idx] |= (0x01<<bit_idx);
+		if(in) xts->buf[buf_idx] |= (0x01<<bit_idx);
 
 		if(xts->out)
 		{
-			xts->in[buf_idx+1] |= (0x11<<bit_idx);
+			xts->buf[buf_idx+1] |= (0x11<<bit_idx);
 			xts->out_bits++;
 		}
 		else
 		{
-			xts->in[buf_idx+1] |= (0x01<<bit_idx);
+			xts->buf[buf_idx+1] |= (0x01<<bit_idx);
 		}
 	}
 }
@@ -530,7 +589,7 @@ xpc_ext_transfer( cable_t *cable, int len, char *in, char *out )
 	int i,j;
 	xpc_ext_transfer_state_t xts;
 
-#if 0
+#if VERBOSE
 	printf("---\n");
 	printf("transfer size %d, %s output\n", len, (out!=NULL) ? "with" : "without");
 	printf("tdi: ");
@@ -543,11 +602,12 @@ xpc_ext_transfer( cable_t *cable, int len, char *in, char *out )
 	xts.in_bits = 0;
 	xts.out_bits = 0;
 	xts.out_done = 0;
+	xts.cable = cable;
 
 	for(i=0,j=0; i<len && j>=0; i++)
 	{
 		xpcu_add_bit_for_ext_transfer( &xts, in[i], 1 );
-		if(xts.in_bits == (4*XPC_A6_CHUNKSIZE*4 - 1))
+		if(xts.in_bits == (4*XPC_A6_CHUNKSIZE - 1))
 		{
 			j = xpcu_do_ext_transfer( &xts );
 		}
@@ -600,9 +660,9 @@ cable_driver_t xpc_ext_cable_driver = {
 	N_("Xilinx Platform Cable USB external chain"),
 	generic_usbconn_connect,
 	generic_disconnect,
-	generic_usbconn_free,
+	xpc_ext_free,
 	xpc_ext_init,
-	generic_usbconn_done,
+	xpc_ext_done,
 	generic_set_frequency,
 	xpc_ext_clock,
 	xpc_ext_get_tdo,
