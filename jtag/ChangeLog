@@ -1,3 +1,10 @@
+2008-03-01  Arnim  <arnim@>
+
+   * src/tap/parport/ftdi.c (ftdi_mpsse_open): rework sequence to fix
+       a system that shows similar hangs as reported in
+       [ 1904970 ] JTAG operations hang with libftdi
+   * src/tap/parport/ftd2xx.c (ftd2xx_mpsse_open): align with ftdi.c
+
 2008-03-01  Kolja Waschk <kawk>
 
    * src/tap/cable/xpc.c: Implemented much faster access method using GPIF

@@ -293,6 +293,57 @@ ftdi_std_open( parport_t *parport )
 }
 
 
+#undef LIBFTDI_UNIMPLEMENTED
+
+static int
+seq_purge( struct ftdi_context *fc, int purge_rx, int purge_tx )
+{
+	int result = 0;
+	unsigned char buf;
+
+#ifndef LIBFTDI_UNIMPLEMENTED
+	result = ftdi_usb_purge_buffers( fc );
+	if (result == 0)
+		result = ftdi_read_data( fc, &buf, 1 );
+#else /* not yet available */
+	{
+		int rx_loop;
+
+		if (purge_rx)
+			for (rx_loop = 0; (rx_loop < 6) && (result == 0); rx_loop++)
+				result = ftdi_usb_purge_rx_buffer( fc );
+
+		if (purge_tx)
+			if (result == 0)
+				result = ftdi_usb_purge_tx_buffer( fc );
+		if (result == 0)
+			ftdi_read_data( fc, &buf, 1 );
+	}
+#endif
+
+	return result;
+}
+
+
+static int
+seq_reset( struct ftdi_context *fc )
+{
+	int result = 0;
+
+#ifdef LIBFTDI_UNIMPLEMENTED /* not yet available */
+	{
+		unsigned short status;
+		if ((result = ftdi_poll_status( fc, &status )) < 0)
+			return result;
+	}
+#endif
+	if ((result  = ftdi_usb_reset( fc)) < 0)
+		return result;
+
+	return seq_purge( fc, 1, 1 );
+}
+
+
 static int
 ftdi_mpsse_open( parport_t *parport )
 {
@@ -308,7 +359,7 @@ ftdi_mpsse_open( parport_t *parport )
 	   However, it's built after the description of JTAG_InitDevice
 	     Ref. FTCJTAGPG10.pdf
 	   Intermittent problems will occur when certain steps are skipped. */
-	if (ftdi_usb_reset(fc) < 0)
+	if (seq_reset(fc) < 0)
 	{
 		fprintf (stderr, "Can't reset USB: %s\n",
 			ftdi_get_error_string (fc));
@@ -316,17 +367,27 @@ ftdi_mpsse_open( parport_t *parport )
 		ftdi_deinit(fc);
 		return -1;
 	}
-	if (ftdi_usb_purge_buffers(fc) < 0)
+	if (seq_purge(fc, 1, 0) < 0)
 	{
-		fprintf (stderr, "Can't purge USB buffers: %s\n",
+		fprintf (stderr, "Can't purge USB RX buffer: %s\n",
 			ftdi_get_error_string (fc));
 		ftdi_usb_close(fc);
 		ftdi_deinit(fc);
 		return -1;
 	}
-        /* set a reasonnable latency timer value
-           if this value is too low then the chip will send intermediate result data
-           in short packets (suboptimal performance) */
+#ifdef LIBFTDI_UNIMPLEMENTED /* not yet available */
+	if (ftdi_set_chars(fc, 0, 0, 0, 0) < 0)
+	{
+		fprintf (stderr, "Can't set special characters: %s\n",
+			ftdi_get_error_string (fc));
+		ftdi_usb_close(fc);
+		ftdi_deinit(fc);
+		return -1;
+	}
+#endif
+	/* set a reasonable latency timer value
+	   if this value is too low then the chip will send intermediate result data
+	   in short packets (suboptimal performance) */
 	if(ftdi_set_latency_timer(fc, 16) < 0)
 	{
 		fprintf (stderr, "Can't set target latency: %s\n",
@@ -336,7 +397,7 @@ ftdi_mpsse_open( parport_t *parport )
 		return -1;
 	}
 
-	if (ftdi_set_bitmode(fc, 0x0b, BITMODE_RESET) < 0)
+	if (ftdi_disable_bitbang(fc) < 0)
 	{
 		fprintf (stderr, "Can't reset bitmode: %s\n",
 			ftdi_get_error_string (fc));
@@ -361,9 +422,9 @@ ftdi_mpsse_open( parport_t *parport )
 		ftdi_deinit(fc);
 		return -1;
 	}
-	if (ftdi_usb_purge_buffers(fc) < 0)
+	if (seq_purge(fc, 1, 0) < 0)
 	{
-		fprintf (stderr, "Can't purge USB buffers: %s\n",
+		fprintf (stderr, "Can't purge USB RX buffer: %s\n",
 			ftdi_get_error_string (fc));
 		ftdi_usb_close(fc);
 		ftdi_deinit(fc);
@@ -387,9 +448,9 @@ ftdi_mpsse_open( parport_t *parport )
 		ftdi_deinit(fc);
 		return -1;
 	}
-	if (ftdi_usb_purge_buffers(fc) < 0)
+	if (seq_purge(fc, 1, 0) < 0)
 	{
-		fprintf (stderr, "Can't purge USB buffers: %s\n",
+		fprintf (stderr, "Can't purge USB RX buffer: %s\n",
 			ftdi_get_error_string (fc));
 		ftdi_usb_close(fc);
 		ftdi_deinit(fc);

@@ -289,12 +289,17 @@ ftd2xx_mpsse_open( parport_t *parport )
 		FT_Close(fc);
 		return -1;
 	}
-	if ((status = FT_Purge(fc, FT_PURGE_RX | FT_PURGE_TX)) != FT_OK) {
+	if ((status = FT_Purge(fc, FT_PURGE_RX)) != FT_OK) {
 		fprintf(stderr, "Can't purge buffers: %li\n", status);
 		FT_Close(fc);
 		return -1;
 	}
-        /* set a reasonnable latency timer value
+	if ((status = FT_SetChars(fc, 7, 1, 6, 1)) != FT_OK) {
+		fprintf(stderr, "Can't set special characters: %li\n", status);
+		FT_Close(fc);
+		return -1;
+	}
+        /* set a reasonable latency timer value
            if this value is too low then the chip will send intermediate result data
            in short packets (suboptimal performance) */
 	if ((status = FT_SetLatencyTimer(fc, 16)) != FT_OK) {
@@ -317,7 +322,7 @@ ftd2xx_mpsse_open( parport_t *parport )
 		FT_Close(fc);
 		return -1;
 	}
-	if ((status = FT_Purge(fc, FT_PURGE_RX | FT_PURGE_TX)) != FT_OK) {
+	if ((status = FT_Purge(fc, FT_PURGE_RX)) != FT_OK) {
 		fprintf(stderr, "Can't purge buffers: %li\n", status);
 		FT_Close(fc);
 		return -1;
@@ -337,7 +342,7 @@ ftd2xx_mpsse_open( parport_t *parport )
 		FT_Close(fc);
 		return -1;
 	}
-	if ((status = FT_Purge(fc, FT_PURGE_RX | FT_PURGE_TX)) != FT_OK) {
+	if ((status = FT_Purge(fc, FT_PURGE_RX)) != FT_OK) {
 		fprintf(stderr, "Can't purge buffers: %li\n", status);
 		FT_Close(fc);
 		return -1;
