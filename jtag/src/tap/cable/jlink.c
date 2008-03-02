@@ -78,7 +78,15 @@ typedef struct
 jlink_usbconn_data_t;
 
 /* Constants for JLink command */
+#define JLINK_DO_TRST_CYCLE                0x02
 #define JLINK_SPEED_COMMAND                0x05
+#define JLINK_GET_STATUS_COMMAND           0x07
+#define JLINK_GET_A                        0xc1
+#define JLINK_GET_B                        0xc2
+#define JLINK_SET_TMS_LOW_COMMAND          0xc9
+#define JLINK_SET_TMS_HIGH_COMMAND         0xca
+#define JLINK_SET_TDI_LOW_COMMAND          0xcb
+#define JLINK_SET_TDI_HIGH_COMMAND         0xcc
 #define JLINK_TAP_SEQUENCE_COMMAND         0xcd
 #define JLINK_SET_SRST_LOW_COMMAND         0xdc
 #define JLINK_SET_SRST_HIGH_COMMAND        0xdd
@@ -102,7 +110,7 @@ static int jlink_usb_message( libusb_param_t *params, int, int );
 static int jlink_usb_write( libusb_param_t *params, unsigned int );
 static int jlink_usb_read( libusb_param_t *params );
 
-static void jlink_debug_buffer(uint8_t *buffer, int length);
+static void jlink_debug_buffer(char *buffer, int length);
 
 /* API functions */
 
@@ -151,6 +159,41 @@ static void jlink_simple_command( libusb_param_t *params, uint8_t command)
         ERROR("J-Link command 0x%02x failed (%d)\n", command, result);
     }
 }
+
+static int jlink_get_status( libusb_param_t *params )
+{
+    int result;
+    jlink_usbconn_data_t *data = params->data;
+	
+	jlink_simple_command( params, 0x07 );
+
+    result = jlink_usb_read( params );
+
+	if(result == 8)
+	{
+		int vref = data->usb_in_buffer[0] + (data->usb_in_buffer[1]<<8);
+		INFO("Vref = %d.%d TCK=%d TDI=%d TDO=%d TMS=%d TRES=%d TRST=%d\n",
+			vref / 1000, vref % 1000,
+			data->usb_in_buffer[2],
+			data->usb_in_buffer[3],
+			data->usb_in_buffer[4],
+			data->usb_in_buffer[5],
+			data->usb_in_buffer[6],
+			data->usb_in_buffer[7]);
+		if(vref < 1500) 
+		{
+			ERROR("Vref too low. Eventually the target isn't powered or disconnected?\n");
+			result = -15;
+		};
+	}
+	else
+    {
+        ERROR("J-Link command 0x07 (get status) failed (%d)\n", result);
+    }
+
+	return result;
+}
+	
 
 /***************************************************************************/
 
@@ -337,7 +380,7 @@ static int jlink_usb_read( libusb_param_t *params )
 
 #define BYTES_PER_LINE  16
 
-static void jlink_debug_buffer(uint8_t *buffer, int length)
+static void jlink_debug_buffer(char *buffer, int length)
 {
     char line[81];
     char s[4];
@@ -386,6 +429,14 @@ jlink_init( cable_t *cable )
         INFO("J-Link initial read failed, don't worry (result=%d)\n", result);
     }
 
+	result = jlink_get_status( params );
+	if (result < 0)
+	{
+		ERROR("Resetting J-Link. Please retry the cable command.\n");
+		usb_reset ( params->handle ); 
+		return -1;
+	}
+
     INFO("J-Link JTAG Interface ready\n");
 
     jlink_set_frequency( cable, 4E6 );
@@ -419,6 +470,7 @@ void jlink_set_frequency( cable_t *cable, uint32_t frequency )
     if (1 <= speed && speed <= JLINK_MAX_SPEED)
     {
         data->usb_out_buffer[0] = JLINK_SPEED_COMMAND;
+		/* speed = 0xFFFF for automatic (probably needs RTCK) */
         data->usb_out_buffer[1] = (speed >> 0) & 0xff;
         data->usb_out_buffer[2] = (speed >> 8) & 0xff;
 

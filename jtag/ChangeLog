@@ -7,8 +7,10 @@
 
 2008-03-01  Kolja Waschk <kawk>
 
+   * src/tap/cable/jlink.c: Added VREF detection and a call to usb_reset()
+      when cable initialization failed
    * src/tap/cable/xpc.c: Implemented much faster access method using GPIF
-      transfers via vendor request 0xA6.
+      transfers via vendor request 0xA6. Reportedly works with DLC9 now.
 
 2008-02-28  Kolja Waschk <kawk>
 
