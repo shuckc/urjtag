@@ -1202,7 +1202,7 @@ driver has to provide the following functions:
  * bus_read() - Atomic reading
  * bus_write() - Write access
 
-IMPORTANT: Address parameters to the functions listed above apecify always
+IMPORTANT: Address parameters to the functions listed above specify always
 byte locations, independent of the actual data width. The bus driver has to
 adjust the address on its own if required.
 
@@ -1224,9 +1224,10 @@ command before it lists the areas covered by this bus driver.
 
 ===== Preparation =====
 
-This function is called whenever at the start of a bus operation. The driver
-should perform the required preparation steps so that subsequent calls to the
-bus_read_* and bus_write functions can perform their tasks properly.
+This function is called whenever a bus operation is initiated. The
+driver should perform the required preparation steps so that
+subsequent calls to the bus_read_* and bus_write functions can perform
+their tasks properly.
 
 E.g. a BSR bus driver would put the device into EXTEST mode to activate the
 boundary scan register on the device pins.

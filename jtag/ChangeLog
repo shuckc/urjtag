@@ -1,4 +1,8 @@
-2008-03-01  Arnim  <arnim@>
+2008-03-03  Arnim  <arniml@users.sourceforge.net>
+
+   * doc/UrJTAG.txt: fix some typos
+
+2008-03-01  Arnim  <arniml@users.sourceforge.net>
 
    * src/tap/parport/ftdi.c (ftdi_mpsse_open): rework sequence to fix
        a system that shows similar hangs as reported in
