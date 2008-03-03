@@ -1,5 +1,6 @@
-2008-03-03  Arnim  <arniml@users.sourceforge.net>
+2008-03-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/tap/parport/ftd2xx.c (ftd2xx_mpsse_open): fix FT_SetChar() parameters
    * doc/UrJTAG.txt: fix some typos
 
 2008-03-01  Arnim  <arniml@users.sourceforge.net>

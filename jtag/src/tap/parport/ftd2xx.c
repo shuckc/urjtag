@@ -294,7 +294,7 @@ ftd2xx_mpsse_open( parport_t *parport )
 		FT_Close(fc);
 		return -1;
 	}
-	if ((status = FT_SetChars(fc, 7, 1, 6, 1)) != FT_OK) {
+	if ((status = FT_SetChars(fc, 0, 0, 0, 0)) != FT_OK) {
 		fprintf(stderr, "Can't set special characters: %li\n", status);
 		FT_Close(fc);
 		return -1;
