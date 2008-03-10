@@ -83,7 +83,6 @@ static int svf_trst_absent;
 static int svf_state_executed;
 
 /* protocol issued warnings */
-static int issued_sir_tdo;
 static int issued_runtest_maxtime;
 
 
@@ -884,15 +883,14 @@ svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *param
   switch (ir_dr) {
     case generic_ir:
       svf_goto_state(chain, Shift_IR);
-      chain_shift_instructions_mode(chain, 0, EXITMODE_EXIT1);
+      chain_shift_instructions_mode(chain,
+                                    sxr_params->params.tdo ? 1 : 0,
+                                    0,
+                                    EXITMODE_EXIT1);
       svf_goto_state(chain, endir);
 
       if (sxr_params->params.tdo)
-        if (!issued_sir_tdo) {
-          printf( _("Warning %s: checking of TDO not supported for SIR.\n"), "svf");
-          printf( _(" This message is only displayed once.\n"));
-          issued_sir_tdo = 1;
-        }
+        result = svf_compare_tdo(sxr_params->params.tdo, sxr_params->params.mask, ir->out, loc);
       break;
 
     case generic_dr:
@@ -1107,7 +1105,6 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
   svf_state_executed = 0;
 
   /* set back flags for issued warnings */
-  issued_sir_tdo         = 0;
   issued_runtest_maxtime = 0;
 
 

@@ -49,7 +49,12 @@ instruction_alloc( const char *name, int len, const char *val )
 
 	i->value = register_alloc( len );
 	if (!i->value) {
-		free( i->name );
+		free( i );
+		return NULL;
+	}
+	i->out = register_alloc( len );
+	if (!i->out) {
+		free( i->value );
 		free( i );
 		return NULL;
 	}
@@ -67,6 +72,9 @@ instruction_free( instruction *i )
 	if (!i)
 		return;
 
-	register_free( i->value );
+	if (i->value)
+		register_free( i->value );
+	if (i->out)
+		register_free( i->out );
 	free( i );
 }

@@ -852,8 +852,6 @@ The implementation of some SVF commands has deficiencies.
   - PIOMAP command not supported.
   - RUNTEST SCK not supported. +
     The maximum time constraint is not guaranteed.
-  - SIR +
-    No check is done against the TDO parameter.
   - TRST +
     Parameters Z and ABSENT are not supported.
   - TIR, TDR commands not supported. +

@@ -114,7 +114,7 @@ chain_get_trst( chain_t *chain )
 }
 
 void
-chain_shift_instructions_mode( chain_t *chain, int capture, int exit )
+chain_shift_instructions_mode( chain_t *chain, int capture_output, int capture, int exit )
 {
 	int i;
 	parts_t *ps;
@@ -133,15 +133,35 @@ chain_shift_instructions_mode( chain_t *chain, int capture, int exit )
 
 	if (capture)
 		tap_capture_ir( chain );
-	for (i = 0; i < ps->len; i++)
-		tap_shift_register( chain, ps->parts[i]->active_instruction->value, NULL,
-                                    (i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+
+	/* new implementation: split into defer + retrieve part
+	   shift the data register of each part in the chain one by one */
+
+	for (i = 0; i < ps->len; i++) {
+		tap_defer_shift_register( chain, ps->parts[i]->active_instruction->value,
+		                          capture_output ? ps->parts[i]->active_instruction->out : NULL,
+		                          (i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+	}
+
+	if(capture_output)
+	{
+		for (i = 0; i < ps->len; i++) {
+			tap_shift_register_output( chain, ps->parts[i]->active_instruction->value,
+			                           ps->parts[i]->active_instruction->out,
+			                           (i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+		}
+	}
+	else
+	{
+		/* give the cable driver a chance to flush if it's considered useful */
+		cable_flush( chain->cable, TO_OUTPUT );
+	}
 }
 
 void
 chain_shift_instructions( chain_t *chain )
 {
-	chain_shift_instructions_mode( chain, 1, EXITMODE_IDLE );
+	chain_shift_instructions_mode( chain, 0, 1, EXITMODE_IDLE );
 }
 
 void

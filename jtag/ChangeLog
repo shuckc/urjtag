@@ -1,3 +1,14 @@
+2008-03-10  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   [ 1911429 ] Read TDO data from instruction shift:
+   * doc/UrJTAG.txt: removed note about SIR deficiency
+   * src/svf/svf.c (svf_sxr): request TDO capture for SIR when command specifies TDO paramters
+   * src/tap/chain.c (chain_shift_instructions_mode): use defered shifting and capture TDO
+       output when requested
+   * src/part/instruction.c (instruction_alloc): allocate tap_register out
+   * include/chain.h: parameter capture_output added to chain_shift_instructions_mode()
+   * include/instruction.h: tap_register out added
+
 2008-03-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/parport/ftd2xx.c (ftd2xx_mpsse_open): fix FT_SetChar() parameters
