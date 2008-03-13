@@ -13,6 +13,7 @@ src/bus/bf548_ezkit.c
 src/bus/bf561_ezkit.c
 src/bus/buses.c
 src/bus/ejtag.c
+src/bus/fjmem.c
 src/bus/h7202.c
 src/bus/ixp425.c
 src/bus/jopcyc.c
@@ -101,7 +102,10 @@ src/tap/cable/ea253.c
 src/tap/cable/ei012.c
 src/tap/cable/ft2232.c
 src/tap/cable/generic.c
+src/tap/cable/generic_parport.c
+src/tap/cable/generic_usbconn.c
 src/tap/cable/jim.c
+src/tap/cable/jlink.c
 src/tap/cable/keithkoep.c
 src/tap/cable/lattice.c
 src/tap/cable/mpcbdm.c
@@ -118,9 +122,9 @@ src/tap/parport/ftd2xx.c
 src/tap/parport/ftdi.c
 src/tap/parport/ppdev.c
 src/tap/parport/ppi.c
-src/tap/parport/xpcu_common.c
-src/tap/parport/xpcu_pp.c
 src/tap/register.c
 src/tap/state.c
 src/tap/tap.c
+src/tap/usbconn.c
+src/tap/usbconn/libusb.c
 src/writemem.c

@@ -1,3 +1,9 @@
+2008-03-13  Kolja Waschk <kawk>
+
+   * po/POTFILES.in: Sorted and updated to fix [1904952] Missing xpcu_pp.c
+       prevents "make urjtag.pot-update"
+   * po/fr.po, po/rw.po, po/sk.po: Updated
+
 2008-03-10  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    [ 1911429 ] Read TDO data from instruction shift:
