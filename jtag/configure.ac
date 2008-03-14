@@ -233,7 +233,7 @@ AC_SUBST(FTD2XXLIB)
 
 dnl Enable cable driver for Vision EP9307?
 AC_ARG_ENABLE(ep9307,
-[  --enable-ep9307         Enable cable driver for EP9307],
+[AS_HELP_STRING([--enable-ep9307], [Enable cable driver for EP9307])],
 [case "${enableval}" in
    yes) ep9307=true ;;
    no)  ep9307=false ;;
@@ -253,7 +253,7 @@ CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 
 dnl Enable SVF player?
 AC_ARG_ENABLE(svf,
-[  --enable-svf            Enable SVF player (default is enabled)],
+[AS_HELP_STRING([--enable-svf], [Enable SVF player (default is enabled)])],
 [case "${enableval}" in
    yes) svf=true ;;
    no)  svf=false ;;
@@ -366,7 +366,7 @@ AS_IF([test "x$bsdl_lexer" == xfalse], [
 
 dnl Enable BSDL subsystem?
 AC_ARG_ENABLE(bsdl,
-[  --enable-bsdl           Enable BSDL subsystem (default is enabled)],
+[AS_HELP_STRING([--enable-bsdl], [Enable BSDL subsystem (default is enabled)])],
 [case "${enableval}" in
    yes) bsdl=true ;;
    no)  bsdl=false ;;
@@ -382,7 +382,7 @@ AS_IF([test "x$bsdl" = xtrue], [
 
 dnl Enable JTAG target simulator JIM?
 AC_ARG_ENABLE(jim,
-[  --enable-jim            Enable JTAG target simulator JIM],
+[AS_HELP_STRING([--enable-jim], [Enable JTAG target simulator JIM])],
 [case "${enableval}" in
    yes) jim=true ;;
    no)  jim=false ;;
@@ -398,7 +398,7 @@ AS_IF([test "x$jim" = xtrue], [
 
 dnl Enable experimental brute-force JEDEC flash autodetection?
 AC_ARG_ENABLE(jedec-exp,
-[  --enable-jedec-exp            Enable experimental JEDEC flash detection],
+[AS_HELP_STRING([--enable-jedec-exp], [Enable experimental JEDEC flash detection])],
 [case "${enableval}" in
    yes) jedecexp=true ;;
    no)  jedecexp=false ;;
