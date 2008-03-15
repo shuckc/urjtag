@@ -52,6 +52,7 @@ libcmd_a_SOURCES = \
 	shell.c \
 	set.c \
 	endian.c \
+	parse.c \
 	peekpoke.c \
 	readmem.c \
 	writemem.c \

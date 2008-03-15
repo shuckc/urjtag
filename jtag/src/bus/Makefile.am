@@ -46,6 +46,7 @@ libbus_a_SOURCES = \
 	prototype.c \
 	pxa2x0.c \
 	pxa2x0_mc.h \
+	readmem.c \
 	sa1110.c \
 	s3c4510x.c \
 	sh7727.c \
@@ -56,4 +57,5 @@ libbus_a_SOURCES = \
 	tx4925.c \
 	jopcyc.c \
 	sharc21065l.c \
+	writemem.c \
 	zefant-xs3.c

@@ -30,6 +30,8 @@ libtap_a_SOURCES = \
 	register.c \
 	state.c \
 	chain.c \
+	detect.c \
+	discovery.c \
 	parport.c \
 	parport/direct.c \
 	parport/ppdev.c \

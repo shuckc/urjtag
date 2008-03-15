@@ -60,15 +60,6 @@ int big_endian = 0;
 int interactive = 0;
 extern cfi_array_t *cfi_array;
 
-static char *
-get_token( char *buf )
-{
-	char *t = strtok( buf, " \f\n\r\t\v" );
-	if (t && (*t == '#'))
-		return NULL;
-	return t;
-}
-
 #define	JTAGDIR		".jtag"
 #define	HISTORYFILE	"history"
 #define	RCFILE		"rc"
@@ -152,50 +143,6 @@ jtag_save_history( void )
 #endif /* HAVE_READLINE_HISTORY */
 #endif
 
-static int
-jtag_parse_line( chain_t *chain, char *line )
-{
-	char *t;
-	int l;
-	int n;
-	char **a;
-	int r;
-
-	if (!line || !(strlen( line ) > 0))
-		return 1;
-
-	t = get_token( line );
-	if (!t)
-		return 1;
-
-	n = 0;
-	l = 0;
-	a = NULL;
-	while (t) {
-		if (n + 2 > l) {
-			char **newa;
-			l = (l < 16) ? 16 : (l * 2);
-			newa = realloc( a, l * sizeof (char *) );
-			if (!newa) {
-				free( a );
-				printf( _("Out of memory\n") );
-				return 1;
-			}
-			a = newa;
-		}
-		a[n++] = t;
-		a[n] = NULL;
-		
-		t = get_token( NULL );
-	}
-
-	r = cmd_run( chain, a );
-	if(debug_mode & 1)printf("Return in jtag_parse_line r=%d\n",r);
-	free( a );
-	return r;
-}
-
-
 static int jtag_readline_multiple_commands_support(chain_t *chain, char * line) /* multiple commands should be separated with '::' */
 {
   int 	r;
@@ -263,39 +210,6 @@ jtag_readline_loop( chain_t *chain, const char *prompt )
 	}
 	while(fgets(line, 1023, stdin));
 #endif
-}
-
-static int
-jtag_parse_stream( chain_t *chain, FILE *f )
-{
-	int go = 1;
-	char *line = NULL;
-	size_t n = 0;
-
-	while (go && (getline( &line, &n, f ) != -1))
-		if ((strlen(line) > 0) && (line[0] != '#'))
-			go = jtag_parse_line(chain, line);
-
-	free(line);
-
-	return go;
-}
-
-int
-jtag_parse_file( chain_t *chain, const char *filename )
-{
-	FILE *f;
-	int go;
-
-	f = fopen( filename, "r" );
-	if (!f)
-		return -1;
-
-	go = jtag_parse_stream( chain, f );
-
-	fclose(f);
-	if(debug_mode & 1)printf("File Closed gp=%d\n",go);
-	return go;
 }
 
 static int

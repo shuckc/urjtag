@@ -30,6 +30,7 @@ libflash_a_SOURCES = \
 	amd_flash.c \
 	cfi.c \
 	detectflash.c \
+	flash.c \
 	intel.c \
 	jedec.c
 

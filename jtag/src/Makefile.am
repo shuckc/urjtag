@@ -44,12 +44,7 @@ bin_PROGRAMS = \
 	bsdl2jtag
 
 jtag_SOURCES = \
-	jtag.c \
-	detect.c \
-	discovery.c \
-	readmem.c \
-	writemem.c \
-	flash.c
+	jtag.c
 
 bsdl2jtag_SOURCES = \
 	bsdl2jtag.c
@@ -76,6 +71,8 @@ jtag_LDADD = \
 	-Llib -ljtaglib \
 	-Lflash -lflash \
 	-Lcmd -lcmd \
+	-Ltap -ltap \
+	-Lflash -lflash \
 	-Lbus -lbus \
 	-lm \
 	@FTD2XXLIB@ \
