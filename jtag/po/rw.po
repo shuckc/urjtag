@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2008-03-13 20:47+0100\n"
+"POT-Creation-Date: 2008-03-15 12:05+0800\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -190,7 +190,7 @@ msgstr ""
 msgid "IDCODE mismatch\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:293 src/detect.c:361
+#: src/bsdl/bsdl.c:293 src/tap/detect.c:361
 #, fuzzy, c-format
 msgid "  Filename:     %s\n"
 msgstr "Izina ry'idosiye:"
@@ -360,9 +360,9 @@ msgstr "Musomyi: Biturutse"
 msgid "Blackfin BF561 EZ-KIT board bus driver"
 msgstr ""
 
-#: src/bus/buses.c:91 src/cmd/include.c:69 src/cmd/scan.c:88
-#: src/cmd/shell.c:62 src/detect.c:269 src/jtag.c:181 src/jtag.c:469
-#: src/jtag.c:488 src/jtag.c:513 src/tap/usbconn/libusb.c:152
+#: src/bus/buses.c:91 src/cmd/include.c:69 src/cmd/parse.c:72
+#: src/cmd/scan.c:88 src/cmd/shell.c:62 src/jtag.c:383 src/jtag.c:402
+#: src/jtag.c:427 src/tap/detect.c:269 src/tap/usbconn/libusb.c:152
 #, fuzzy, c-format
 msgid "Out of memory\n"
 msgstr "Bya"
@@ -433,7 +433,7 @@ msgstr ""
 #: src/bus/fjmem.c:391 src/bus/fjmem.c:406 src/bus/fjmem.c:487
 #: src/bus/fjmem.c:493 src/bus/fjmem.c:595 src/cmd/instruction.c:95
 #: src/cmd/register.c:71 src/cmd/register.c:85 src/cmd/salias.c:72
-#: src/cmd/signal.c:88 src/detect.c:210 src/detect.c:233
+#: src/cmd/signal.c:88 src/tap/detect.c:210 src/tap/detect.c:233
 #, fuzzy, c-format
 msgid "out of memory\n"
 msgstr "Inyuma Bya"
@@ -683,6 +683,55 @@ msgstr "Musomyi: Biturutse"
 msgid "Intel PXA27x compatible bus driver via BSR"
 msgstr "Musomyi: Biturutse"
 
+#: src/bus/readmem.c:55 src/bus/writemem.c:49 src/flash/detectflash.c:56
+#, fuzzy, c-format
+msgid "Error: Missing bus driver!\n"
+msgstr "Musomyi:"
+
+#: src/bus/readmem.c:62 src/bus/writemem.c:56
+#, fuzzy, c-format
+msgid "Error: Bus width detection failed\n"
+msgstr "Ubugari"
+
+#: src/bus/readmem.c:68 src/bus/writemem.c:62
+#, fuzzy, c-format
+msgid "Unknown bus width!\n"
+msgstr "Ubugari"
+
+#: src/bus/readmem.c:75 src/bus/writemem.c:69
+#, fuzzy, c-format
+msgid "address: 0x%08X\n"
+msgstr "Aderesi"
+
+#: src/bus/readmem.c:76 src/bus/writemem.c:70
+#, fuzzy, c-format
+msgid "length:  0x%08X\n"
+msgstr "Uburebure"
+
+#: src/bus/readmem.c:79 src/bus/writemem.c:73
+#, fuzzy, c-format
+msgid "length is 0.\n"
+msgstr "Uburebure ni 0"
+
+#: src/bus/readmem.c:85
+#, c-format
+msgid "reading:\n"
+msgstr ""
+
+#: src/bus/readmem.c:105 src/bus/writemem.c:87 src/flash/flash.c:160
+#: src/flash/flash.c:200
+#, fuzzy, c-format
+msgid "addr: 0x%08X"
+msgstr "Aderesi"
+
+#: src/bus/readmem.c:113 src/bus/writemem.c:122 src/flash/flash.c:215
+#: src/flash/flash.c:354
+#, fuzzy, c-format
+msgid ""
+"\n"
+"Done.\n"
+msgstr "Byakozwe."
+
 #: src/bus/s3c4510x.c:151
 #, fuzzy, c-format
 msgid ""
@@ -787,6 +836,31 @@ msgstr "Musomyi: Biturutse"
 #, fuzzy
 msgid "Toshiba TX4925 compatible bus driver via BSR"
 msgstr "Musomyi: Biturutse"
+
+#: src/bus/writemem.c:79
+#, c-format
+msgid "writing:\n"
+msgstr ""
+
+#: src/bus/writemem.c:91
+#, c-format
+msgid "Data not on word boundary, NOT SUPPORTED!"
+msgstr ""
+
+#: src/bus/writemem.c:93
+#, fuzzy, c-format
+msgid "Unexpected end of file!\n"
+msgstr "Impera Bya"
+
+#: src/bus/writemem.c:94
+#, fuzzy, c-format
+msgid "Addr: 0x%08X\n"
+msgstr "Aderesi"
+
+#: src/bus/writemem.c:99
+#, c-format
+msgid "Short read: bc=0x%X\n"
+msgstr ""
 
 #: src/bus/zefant-xs3.c:252
 #, fuzzy, c-format
@@ -1172,7 +1246,7 @@ msgstr "%s%s"
 msgid "erase flash memory by number of blocks"
 msgstr "Umurabyo Ububiko ku Umubare Bya"
 
-#: src/cmd/flashmem.c:57 src/cmd/writemem.c:52 src/jtag.c:476
+#: src/cmd/flashmem.c:57 src/cmd/writemem.c:52 src/jtag.c:390
 #, fuzzy, c-format
 msgid "Unable to open file `%s'!\n"
 msgstr "Kuri Gufungura IDOSIYE"
@@ -1797,112 +1871,6 @@ msgstr ""
 msgid "write content of file to the memory"
 msgstr ""
 
-#: src/detect.c:58
-#, fuzzy, c-format
-msgid "Cannot open %s\n"
-msgstr "Gufungura"
-
-#: src/detect.c:205
-#, fuzzy, c-format
-msgid "IR length: %d\n"
-msgstr "Uburebure"
-
-#: src/detect.c:221
-#, fuzzy, c-format
-msgid "Unable to detect JTAG chain length\n"
-msgstr "Kuri"
-
-#: src/detect.c:224
-#, fuzzy, c-format
-msgid "Chain length: %d\n"
-msgstr "Uburebure"
-
-#: src/detect.c:265
-#, c-format
-msgid "Device Id: %s (0x%016lX)\n"
-msgstr ""
-
-#: src/detect.c:293
-#, fuzzy, c-format
-msgid "  Unknown manufacturer!\n"
-msgstr "Ukora mu nganda"
-
-#: src/detect.c:299
-#, fuzzy, c-format
-msgid "  Manufacturer: %s\n"
-msgstr "Ukora mu nganda"
-
-#: src/detect.c:301
-#, c-format
-msgid "Warning: Manufacturer too long\n"
-msgstr ""
-
-#: src/detect.c:317
-#, c-format
-msgid "  Unknown part!\n"
-msgstr ""
-
-#: src/detect.c:323
-#, c-format
-msgid "  Part(%d):         %s\n"
-msgstr ""
-
-#: src/detect.c:325
-#, c-format
-msgid "Warning: Part too long\n"
-msgstr ""
-
-#: src/detect.c:341
-#, c-format
-msgid "  Unknown stepping!\n"
-msgstr ""
-
-#: src/detect.c:347
-#, c-format
-msgid "  Stepping:     %s\n"
-msgstr ""
-
-#: src/detect.c:349
-#, c-format
-msgid "Warning: Stepping too long\n"
-msgstr ""
-
-#: src/detect.c:379
-#, fuzzy, c-format
-msgid "Error: Unable to detect JTAG chain end!\n"
-msgstr "Kuri Impera"
-
-#: src/discovery.c:100
-#, c-format
-msgid "Warning: TDO seems to be stuck at %d\n"
-msgstr ""
-
-#: src/discovery.c:125
-#, fuzzy, c-format
-msgid "Detecting IR length ... "
-msgstr "Uburebure"
-
-# basctl/source\basicide\basidesh.src:RID_IMGBTN_REMOVEWATCH.text
-#: src/discovery.c:131 src/discovery.c:163
-#, fuzzy, c-format
-msgid "%d\n"
-msgstr "%d"
-
-#: src/discovery.c:134
-#, fuzzy, c-format
-msgid "Error: Invalid IR length!\n"
-msgstr "Uburebure"
-
-#: src/discovery.c:145
-#, fuzzy, c-format
-msgid "Error: Out of memory!\n"
-msgstr "Bya Ububiko"
-
-#: src/discovery.c:157
-#, fuzzy, c-format
-msgid "Detecting DR length for IR %s ... "
-msgstr "Uburebure kugirango"
-
 #: src/flash/amd.c:276
 #, c-format
 msgid ""
@@ -2041,170 +2009,6 @@ msgstr ""
 #: src/flash/amd_flash.c:346
 msgid "supported: AMD 29LV040B, 29C040B, 1x8 Bit"
 msgstr ""
-
-#: src/flash.c:89
-#, fuzzy, c-format
-msgid "unknown flash - vendor id: %d (0x%04x)\n"
-msgstr "Kitazwi Umurabyo Umucuruzi ID"
-
-#: src/flash.c:93
-#, fuzzy, c-format
-msgid "Flash not supported!\n"
-msgstr "OYA"
-
-#: src/flash.c:104 src/flash.c:256 src/flash.c:368
-#, fuzzy, c-format
-msgid "no flash driver found\n"
-msgstr "Oya Umurabyo Musomyi:"
-
-#: src/flash.c:115
-#, c-format
-msgid "Invalid sync sequence!\n"
-msgstr ""
-
-#: src/flash.c:133
-#, fuzzy, c-format
-msgid "block %d unlocked\n"
-msgstr "Funga"
-
-#: src/flash.c:134 src/flash.c:290
-#, fuzzy, c-format
-msgid "erasing block %d: %d\n"
-msgstr "Funga"
-
-# offmgr/source\offapp\dialog\optgdlg.src:OFA_TP_HELPERPROG.FT_PROGRAM.text
-#: src/flash.c:138 src/flash.c:275
-#, fuzzy, c-format
-msgid "program:\n"
-msgstr "Porogaramu"
-
-#: src/flash.c:146 src/flash.c:186
-#, fuzzy, c-format
-msgid "Error: premature end of file\n"
-msgstr "Impera Bya"
-
-#: src/flash.c:149 src/flash.c:189
-#, fuzzy, c-format
-msgid "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"
-msgstr "Icyabitswe Gutangira LEN"
-
-#: src/flash.c:153 src/flash.c:193
-#, fuzzy, c-format
-msgid "Error: Invalid record length!\n"
-msgstr "Icyabitswe Uburebure"
-
-#: src/flash.c:160 src/flash.c:200 src/readmem.c:105 src/writemem.c:87
-#, fuzzy, c-format
-msgid "addr: 0x%08X"
-msgstr "Aderesi"
-
-#: src/flash.c:165 src/flash.c:309
-#, fuzzy, c-format
-msgid ""
-"\n"
-"flash error\n"
-msgstr "Umurabyo"
-
-#: src/flash.c:177 src/flash.c:320
-#, c-format
-msgid "verify:\n"
-msgstr ""
-
-#: src/flash.c:206
-#, fuzzy, c-format
-msgid ""
-"\n"
-"verify error: 0x%08X vs. 0x%08X at addr %08X\n"
-msgstr "Ikosa ku Aderesi"
-
-#: src/flash.c:215 src/flash.c:354 src/readmem.c:113 src/writemem.c:122
-#, fuzzy, c-format
-msgid ""
-"\n"
-"Done.\n"
-msgstr "Byakozwe."
-
-#: src/flash.c:269
-#, fuzzy, c-format
-msgid "Out of memory!\n"
-msgstr "Ububiko bwarenzwe"
-
-#: src/flash.c:289
-#, fuzzy, c-format
-msgid ""
-"\n"
-"block %d unlocked\n"
-msgstr "Funga"
-
-#: src/flash.c:297 src/flash.c:344
-#, fuzzy, c-format
-msgid "addr: 0x%08X\r"
-msgstr "Aderesi"
-
-#: src/flash.c:332
-#, fuzzy, c-format
-msgid "Error during file read.\n"
-msgstr "IDOSIYE Gusoma"
-
-#: src/flash.c:349
-#, fuzzy, c-format
-msgid ""
-"\n"
-"verify error:\n"
-"read: 0x%08X\n"
-"expected: 0x%08X\n"
-msgstr "Ikosa Ikitezwe:"
-
-#: src/flash.c:373
-#, c-format
-msgid ""
-"\n"
-"Erasing %d Flash block%s from address 0x%x\n"
-msgstr ""
-
-#: src/flash.c:378
-#, c-format
-msgid "(%d%% Completed) FLASH Block %d : Unlocking ... "
-msgstr ""
-
-#: src/flash.c:381
-#, c-format
-msgid "Erasing ... "
-msgstr ""
-
-#: src/flash.c:386
-#, c-format
-msgid "\r(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"
-msgstr ""
-
-#: src/flash.c:388
-#, c-format
-msgid "Ok.\r%78s\r"
-msgstr ""
-
-#: src/flash.c:391
-#, c-format
-msgid "ERROR.\n"
-msgstr ""
-
-#: src/flash.c:397
-#, c-format
-msgid ""
-"\n"
-"Erasing Completed.\n"
-msgstr ""
-
-#: src/flash.c:399
-#, c-format
-msgid ""
-"\n"
-"Erasing Failed.\n"
-msgstr ""
-
-#: src/flash/detectflash.c:56 src/readmem.c:55 src/writemem.c:49
-#, fuzzy, c-format
-msgid "Error: Missing bus driver!\n"
-msgstr "Musomyi:"
 
 #: src/flash/detectflash.c:87
 #, fuzzy, c-format
@@ -2661,6 +2465,153 @@ msgstr ""
 msgid "\t\tBank%d: %d sectors\n"
 msgstr ""
 
+#: src/flash/flash.c:89
+#, fuzzy, c-format
+msgid "unknown flash - vendor id: %d (0x%04x)\n"
+msgstr "Kitazwi Umurabyo Umucuruzi ID"
+
+#: src/flash/flash.c:93
+#, fuzzy, c-format
+msgid "Flash not supported!\n"
+msgstr "OYA"
+
+#: src/flash/flash.c:104 src/flash/flash.c:256 src/flash/flash.c:368
+#, fuzzy, c-format
+msgid "no flash driver found\n"
+msgstr "Oya Umurabyo Musomyi:"
+
+#: src/flash/flash.c:115
+#, c-format
+msgid "Invalid sync sequence!\n"
+msgstr ""
+
+#: src/flash/flash.c:133
+#, fuzzy, c-format
+msgid "block %d unlocked\n"
+msgstr "Funga"
+
+#: src/flash/flash.c:134 src/flash/flash.c:290
+#, fuzzy, c-format
+msgid "erasing block %d: %d\n"
+msgstr "Funga"
+
+# offmgr/source\offapp\dialog\optgdlg.src:OFA_TP_HELPERPROG.FT_PROGRAM.text
+#: src/flash/flash.c:138 src/flash/flash.c:275
+#, fuzzy, c-format
+msgid "program:\n"
+msgstr "Porogaramu"
+
+#: src/flash/flash.c:146 src/flash/flash.c:186
+#, fuzzy, c-format
+msgid "Error: premature end of file\n"
+msgstr "Impera Bya"
+
+#: src/flash/flash.c:149 src/flash/flash.c:189
+#, fuzzy, c-format
+msgid "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"
+msgstr "Icyabitswe Gutangira LEN"
+
+#: src/flash/flash.c:153 src/flash/flash.c:193
+#, fuzzy, c-format
+msgid "Error: Invalid record length!\n"
+msgstr "Icyabitswe Uburebure"
+
+#: src/flash/flash.c:165 src/flash/flash.c:309
+#, fuzzy, c-format
+msgid ""
+"\n"
+"flash error\n"
+msgstr "Umurabyo"
+
+#: src/flash/flash.c:177 src/flash/flash.c:320
+#, c-format
+msgid "verify:\n"
+msgstr ""
+
+#: src/flash/flash.c:206
+#, fuzzy, c-format
+msgid ""
+"\n"
+"verify error: 0x%08X vs. 0x%08X at addr %08X\n"
+msgstr "Ikosa ku Aderesi"
+
+#: src/flash/flash.c:269
+#, fuzzy, c-format
+msgid "Out of memory!\n"
+msgstr "Ububiko bwarenzwe"
+
+#: src/flash/flash.c:289
+#, fuzzy, c-format
+msgid ""
+"\n"
+"block %d unlocked\n"
+msgstr "Funga"
+
+#: src/flash/flash.c:297 src/flash/flash.c:344
+#, fuzzy, c-format
+msgid "addr: 0x%08X\r"
+msgstr "Aderesi"
+
+#: src/flash/flash.c:332
+#, fuzzy, c-format
+msgid "Error during file read.\n"
+msgstr "IDOSIYE Gusoma"
+
+#: src/flash/flash.c:349
+#, fuzzy, c-format
+msgid ""
+"\n"
+"verify error:\n"
+"read: 0x%08X\n"
+"expected: 0x%08X\n"
+msgstr "Ikosa Ikitezwe:"
+
+#: src/flash/flash.c:373
+#, c-format
+msgid ""
+"\n"
+"Erasing %d Flash block%s from address 0x%x\n"
+msgstr ""
+
+#: src/flash/flash.c:378
+#, c-format
+msgid "(%d%% Completed) FLASH Block %d : Unlocking ... "
+msgstr ""
+
+#: src/flash/flash.c:381
+#, c-format
+msgid "Erasing ... "
+msgstr ""
+
+#: src/flash/flash.c:386
+#, c-format
+msgid "\r(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"
+msgstr ""
+
+#: src/flash/flash.c:388
+#, c-format
+msgid "Ok.\r%78s\r"
+msgstr ""
+
+#: src/flash/flash.c:391
+#, c-format
+msgid "ERROR.\n"
+msgstr ""
+
+#: src/flash/flash.c:397
+#, c-format
+msgid ""
+"\n"
+"Erasing Completed.\n"
+msgstr ""
+
+#: src/flash/flash.c:399
+#, c-format
+msgid ""
+"\n"
+"Erasing Failed.\n"
+msgstr ""
+
 #: src/flash/intel.c:104
 #, fuzzy, c-format
 msgid "Manufacturer: %s\n"
@@ -2721,7 +2672,7 @@ msgstr "1. X"
 msgid "supported: 28Fxxxx, 1 x 8 bit"
 msgstr "1. X 8"
 
-#: src/jtag.c:356
+#: src/jtag.c:270
 #, c-format
 msgid "'%s' must not be run suid root!\n"
 msgstr ""
@@ -2729,52 +2680,52 @@ msgstr ""
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-#: src/jtag.c:417
+#: src/jtag.c:331
 #, fuzzy, c-format
 msgid "%s #%s\n"
 msgstr "%-13s%s"
 
-#: src/jtag.c:420
+#: src/jtag.c:334
 #, c-format
 msgid "Usage: %s [OPTION] [FILE]\n"
 msgstr ""
 
-#: src/jtag.c:423
+#: src/jtag.c:337
 #, c-format
 msgid "  -h, --help          display this help and exit\n"
 msgstr ""
 
-#: src/jtag.c:424
+#: src/jtag.c:338
 #, c-format
 msgid "  -v, --version       display version information and exit\n"
 msgstr ""
 
-#: src/jtag.c:426
+#: src/jtag.c:340
 #, c-format
 msgid "  -n, --norc          disable reading ~/.jtag/rc on startup\n"
 msgstr ""
 
-#: src/jtag.c:427
+#: src/jtag.c:341
 #, c-format
 msgid "  -i, --interactive   enter interactive mode after reading files\n"
 msgstr ""
 
-#: src/jtag.c:428
+#: src/jtag.c:342
 #, c-format
 msgid "  -q, --quiet         Do not print help on startup\n"
 msgstr ""
 
-#: src/jtag.c:430
+#: src/jtag.c:344
 #, c-format
 msgid "  [FILE]              file containing commands to execute\n"
 msgstr ""
 
-#: src/jtag.c:433
+#: src/jtag.c:347
 #, c-format
 msgid "  Please report bugs at http://www.urjtag.org\n"
 msgstr ""
 
-#: src/jtag.c:440
+#: src/jtag.c:354
 #, c-format
 msgid ""
 "\n"
@@ -2784,7 +2735,7 @@ msgid ""
 "Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n"
 msgstr ""
 
-#: src/jtag.c:445
+#: src/jtag.c:359
 #, c-format
 msgid ""
 "\n"
@@ -2803,7 +2754,7 @@ msgid ""
 "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
 msgstr ""
 
-#: src/jtag.c:502
+#: src/jtag.c:416
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -2818,12 +2769,12 @@ msgid ""
 "\n"
 msgstr "%sR. o."
 
-#: src/jtag.c:518
+#: src/jtag.c:432
 #, fuzzy, c-format
 msgid "WARNING: %s may damage your hardware!\n"
 msgstr "Gicurasi Kuvamo Kuri Gusohoka"
 
-#: src/jtag.c:519
+#: src/jtag.c:433
 #, fuzzy, c-format
 msgid ""
 "Type \"quit\" to exit, \"help\" for help.\n"
@@ -2863,36 +2814,6 @@ msgstr ""
 #: src/part/part.c:254 src/part/part.c:256
 msgid "(none)"
 msgstr "(ntacyo)"
-
-#: src/readmem.c:62 src/writemem.c:56
-#, fuzzy, c-format
-msgid "Error: Bus width detection failed\n"
-msgstr "Ubugari"
-
-#: src/readmem.c:68 src/writemem.c:62
-#, fuzzy, c-format
-msgid "Unknown bus width!\n"
-msgstr "Ubugari"
-
-#: src/readmem.c:75 src/writemem.c:69
-#, fuzzy, c-format
-msgid "address: 0x%08X\n"
-msgstr "Aderesi"
-
-#: src/readmem.c:76 src/writemem.c:70
-#, fuzzy, c-format
-msgid "length:  0x%08X\n"
-msgstr "Uburebure"
-
-#: src/readmem.c:79 src/writemem.c:73
-#, fuzzy, c-format
-msgid "length is 0.\n"
-msgstr "Uburebure ni 0"
-
-#: src/readmem.c:85
-#, c-format
-msgid "reading:\n"
-msgstr ""
 
 #: src/svf/svf.c:375 src/svf/svf.c:546 src/svf/svf.c:863 src/svf/svf.c:867
 #, fuzzy, c-format
@@ -3288,6 +3209,112 @@ msgstr "%s(%d)Gikora"
 msgid "%s(%d) Part %d without data register\n"
 msgstr "%s(%d)Ibyatanzwe"
 
+#: src/tap/detect.c:58
+#, fuzzy, c-format
+msgid "Cannot open %s\n"
+msgstr "Gufungura"
+
+#: src/tap/detect.c:205
+#, fuzzy, c-format
+msgid "IR length: %d\n"
+msgstr "Uburebure"
+
+#: src/tap/detect.c:221
+#, fuzzy, c-format
+msgid "Unable to detect JTAG chain length\n"
+msgstr "Kuri"
+
+#: src/tap/detect.c:224
+#, fuzzy, c-format
+msgid "Chain length: %d\n"
+msgstr "Uburebure"
+
+#: src/tap/detect.c:265
+#, c-format
+msgid "Device Id: %s (0x%016lX)\n"
+msgstr ""
+
+#: src/tap/detect.c:293
+#, fuzzy, c-format
+msgid "  Unknown manufacturer!\n"
+msgstr "Ukora mu nganda"
+
+#: src/tap/detect.c:299
+#, fuzzy, c-format
+msgid "  Manufacturer: %s\n"
+msgstr "Ukora mu nganda"
+
+#: src/tap/detect.c:301
+#, c-format
+msgid "Warning: Manufacturer too long\n"
+msgstr ""
+
+#: src/tap/detect.c:317
+#, c-format
+msgid "  Unknown part!\n"
+msgstr ""
+
+#: src/tap/detect.c:323
+#, c-format
+msgid "  Part(%d):         %s\n"
+msgstr ""
+
+#: src/tap/detect.c:325
+#, c-format
+msgid "Warning: Part too long\n"
+msgstr ""
+
+#: src/tap/detect.c:341
+#, c-format
+msgid "  Unknown stepping!\n"
+msgstr ""
+
+#: src/tap/detect.c:347
+#, c-format
+msgid "  Stepping:     %s\n"
+msgstr ""
+
+#: src/tap/detect.c:349
+#, c-format
+msgid "Warning: Stepping too long\n"
+msgstr ""
+
+#: src/tap/detect.c:379
+#, fuzzy, c-format
+msgid "Error: Unable to detect JTAG chain end!\n"
+msgstr "Kuri Impera"
+
+#: src/tap/discovery.c:100
+#, c-format
+msgid "Warning: TDO seems to be stuck at %d\n"
+msgstr ""
+
+#: src/tap/discovery.c:125
+#, fuzzy, c-format
+msgid "Detecting IR length ... "
+msgstr "Uburebure"
+
+# basctl/source\basicide\basidesh.src:RID_IMGBTN_REMOVEWATCH.text
+#: src/tap/discovery.c:131 src/tap/discovery.c:163
+#, fuzzy, c-format
+msgid "%d\n"
+msgstr "%d"
+
+#: src/tap/discovery.c:134
+#, fuzzy, c-format
+msgid "Error: Invalid IR length!\n"
+msgstr "Uburebure"
+
+#: src/tap/discovery.c:145
+#, fuzzy, c-format
+msgid "Error: Out of memory!\n"
+msgstr "Bya Ububiko"
+
+#: src/tap/discovery.c:157
+#, fuzzy, c-format
+msgid "Detecting DR length for IR %s ... "
+msgstr "Uburebure kugirango"
+
 #: src/tap/parport/direct.c:167 src/tap/parport/ftd2xx.c:155
 #: src/tap/parport/ftdi.c:155 src/tap/parport/ppdev.c:119
 #: src/tap/parport/ppi.c:115
@@ -3372,31 +3399,6 @@ msgstr "ku Umuyoboro"
 #, fuzzy, c-format
 msgid "%s: Invalid state: %2X\n"
 msgstr "%s:Leta"
-
-#: src/writemem.c:79
-#, c-format
-msgid "writing:\n"
-msgstr ""
-
-#: src/writemem.c:91
-#, c-format
-msgid "Data not on word boundary, NOT SUPPORTED!"
-msgstr ""
-
-#: src/writemem.c:93
-#, fuzzy, c-format
-msgid "Unexpected end of file!\n"
-msgstr "Impera Bya"
-
-#: src/writemem.c:94
-#, fuzzy, c-format
-msgid "Addr: 0x%08X\n"
-msgstr "Aderesi"
-
-#: src/writemem.c:99
-#, c-format
-msgid "Short read: bc=0x%X\n"
-msgstr ""
 
 #, fuzzy
 #~ msgid "Disconnecting %s, device %s\n"

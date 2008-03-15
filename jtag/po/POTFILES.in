@@ -24,6 +24,7 @@ src/bus/ppc405ep.c
 src/bus/ppc440gx_ebc8.c
 src/bus/prototype.c
 src/bus/pxa2x0.c
+src/bus/readmem.c
 src/bus/s3c4510x.c
 src/bus/sa1110.c
 src/bus/sh7727.c
@@ -32,6 +33,7 @@ src/bus/sh7751r.c
 src/bus/sharc21065l.c
 src/bus/slsup3.c
 src/bus/tx4925.c
+src/bus/writemem.c
 src/bus/zefant-xs3.c
 src/cmd/bit.c
 src/cmd/bsdl.c
@@ -52,6 +54,7 @@ src/cmd/help.c
 src/cmd/include.c
 src/cmd/initbus.c
 src/cmd/instruction.c
+src/cmd/parse.c
 src/cmd/part.c
 src/cmd/peekpoke.c
 src/cmd/print.c
@@ -68,13 +71,11 @@ src/cmd/signal.c
 src/cmd/svf.c
 src/cmd/test.c
 src/cmd/writemem.c
-src/detect.c
-src/discovery.c
 src/flash/amd.c
 src/flash/amd_flash.c
-src/flash.c
 src/flash/cfi.c
 src/flash/detectflash.c
+src/flash/flash.c
 src/flash/intel.c
 src/flash/jedec.c
 src/flash/jedec_exp.c
@@ -90,7 +91,6 @@ src/part/data_register.c
 src/part/instruction.c
 src/part/part.c
 src/part/signal.c
-src/readmem.c
 src/svf/svf_bison.c
 src/svf/svf.c
 src/svf/svf_flex.c
@@ -116,6 +116,8 @@ src/tap/cable/wiggler2.c
 src/tap/cable/wiggler.c
 src/tap/cable/xpc.c
 src/tap/chain.c
+src/tap/detect.c
+src/tap/discovery.c
 src/tap/parport.c
 src/tap/parport/direct.c
 src/tap/parport/ftd2xx.c
@@ -127,4 +129,3 @@ src/tap/state.c
 src/tap/tap.c
 src/tap/usbconn.c
 src/tap/usbconn/libusb.c
-src/writemem.c
