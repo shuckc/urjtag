@@ -309,7 +309,11 @@ ejtag_gen_read( uint32_t *code, uint32_t adr )
 
 	/* 16-bit signed offset, phys -> kseg1 */
 	adr_lo = adr & 0xffff;
-	adr_hi = ((adr >> 16) & 0x1fff) + (adr_lo >> 15) + 0xa000;
+	adr_hi = ((adr >> 16) & 0x1fff);
+	/* Increment adr_hi if adr_lo < 0 */
+	adr_hi += (adr_lo >> 15);
+	/* Bypass cache */
+	adr_hi += 0xa000;
 
 	if (BP->adr_hi != adr_hi) {
 		BP->adr_hi = adr_hi;
