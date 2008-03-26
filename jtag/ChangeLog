@@ -1,3 +1,7 @@
+2008-03-26  Kolja Waschk <kawk>
+
+   * src/flash/amd.c: Fix address shift (Jeff Wittrock)
+
 2008-03-15  Jie Zhang  <jie.zhang@analog.com>
 
    * include/jtag.h (jtag_parse_line): Declare.

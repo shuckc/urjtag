@@ -74,7 +74,7 @@ amd_flash_address_shift( cfi_array_t *cfi_array )
 
 	/* else: cfi_array->bus_width is 2 (16 bit) or 1 (8 bit): */
 
-	switch( cfi_array->cfi_chips[0]->cfi.device_geometry.device_size )
+	switch( cfi_array->cfi_chips[0]->cfi.device_geometry.device_interface )
 	{
 		case CFI_INTERFACE_X8_X16:  /* regardless whether 8 or 16 bit mode */
 		case CFI_INTERFACE_X16:     /* native */
