@@ -30,36 +30,96 @@
 #include "buses.h"
 
 const bus_driver_t *bus_drivers[] = {
+#ifdef ENABLE_BUS_AU1500
 	&au1500_bus,
+#endif
+#ifdef ENABLE_BUS_BCM1250
 	&bcm1250_bus,
-	&ejtag_bus,
+#endif
+#ifdef ENABLE_BUS_BF533_STAMP
 	&bf533_stamp_bus,
+#endif
+#ifdef ENABLE_BUS_BF533_EZKIT
 	&bf533_ezkit_bus,
+#endif
+#ifdef ENABLE_BUS_BF537_STAMP
 	&bf537_stamp_bus,
+#endif
+#ifdef ENABLE_BUS_BF537_EZKIT
 	&bf537_ezkit_bus,
+#endif
+#ifdef ENABLE_BUS_BF548_EZKIT
 	&bf548_ezkit_bus,
+#endif
+#ifdef ENABLE_BUS_BF561_EZKIT
 	&bf561_ezkit_bus,
-	&ixp425_bus,
+#endif
+#ifdef ENABLE_BUS_EJTAG
+	&ejtag_bus,
+#endif
+#ifdef ENABLE_BUS_FJMEM
 	&fjmem_bus,
-	&lh7a400_bus,
-	&mpc824x_bus,
-	&mpc5200_bus,
-	&ppc440gx_ebc8_bus,
-	&ppc405ep_bus,
-	&prototype_bus,
-	&pxa2x0_bus,
-	&pxa27x_bus,
-	&s3c4510_bus,
-	&sa1110_bus,
-	&sh7727_bus,
-	&sh7750r_bus,
-	&sh7751r_bus,
-	&h7202_bus,
-	&slsup3_bus,
-	&tx4925_bus,
+#endif
+#ifdef ENABLE_BUS_IXP425
+	&ixp425_bus,
+#endif
+#ifdef ENABLE_BUS_JOPCYC
 	&jopcyc_bus,
+#endif
+#ifdef ENABLE_BUS_H7202
+	&h7202_bus,
+#endif
+#ifdef ENABLE_BUS_LH7A400
+	&lh7a400_bus,
+#endif
+#ifdef ENABLE_BUS_MPC5200
+	&mpc5200_bus,
+#endif
+#ifdef ENABLE_BUS_MPC824X
+	&mpc824x_bus,
+#endif
+#ifdef ENABLE_BUS_PPC405EP
+	&ppc405ep_bus,
+#endif
+#ifdef ENABLE_BUS_PPC440GX_EBC8
+	&ppc440gx_ebc8_bus,
+#endif
+#ifdef ENABLE_BUS_PROTOTYPE
+	&prototype_bus,
+#endif
+#ifdef ENABLE_BUS_PXA2X0
+	&pxa2x0_bus,
+#endif
+#ifdef ENABLE_BUS_PXA27X
+	&pxa27x_bus,
+#endif
+#ifdef ENABLE_BUS_S3C4510
+	&s3c4510_bus,
+#endif
+#ifdef ENABLE_BUS_SA1110
+	&sa1110_bus,
+#endif
+#ifdef ENABLE_BUS_SH7727
+	&sh7727_bus,
+#endif
+#ifdef ENABLE_BUS_SH7750R
+	&sh7750r_bus,
+#endif
+#ifdef ENABLE_BUS_SH7751R
+	&sh7751r_bus,
+#endif
+#ifdef ENABLE_BUS_SHARC_21065L
 	&sharc_21065L_bus,
+#endif
+#ifdef ENABLE_BUS_SLSUP3
+	&slsup3_bus,
+#endif
+#ifdef ENABLE_BUS_TX4925
+	&tx4925_bus,
+#endif
+#ifdef ENABLE_BUS_ZEFANT_XS3
 	&zefant_xs3_bus,
+#endif
 	NULL			/* last must be NULL */
 };
 

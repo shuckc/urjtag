@@ -26,42 +26,36 @@
 
 #include "parport.h"
 
-#if defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
 extern parport_driver_t direct_parport_driver;
-#endif /* defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM) */
-#ifdef HAVE_LINUX_PPDEV_H
 extern parport_driver_t ppdev_parport_driver;
-#endif /* HAVE_LINUX_PPDEV_H */
-#ifdef HAVE_LIBFTD2XX
 extern parport_driver_t ftd2xx_parport_driver;
 extern parport_driver_t ftd2xx_mpsse_parport_driver;
-#endif /* HAVE_LIBFTD2xx */
-#ifdef HAVE_LIBFTDI
 extern parport_driver_t ftdi_parport_driver;
 extern parport_driver_t ftdi_mpsse_parport_driver;
-#endif /* HAVE_LIBFTDI */
-#ifdef HAVE_DEV_PPBUS_PPI_H
 extern parport_driver_t ppi_parport_driver;
-#endif /* HAVE_DEV_PPBUS_PPI_H */
 
 parport_driver_t *parport_drivers[] = {
-#if defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
+#ifdef ENABLE_PARPORT_DIRECT
 	&direct_parport_driver,
-#endif /* defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM) */
-#ifdef HAVE_LINUX_PPDEV_H
+#endif /* ENABLE_PARPORT_DIRECT */
+
+#ifdef ENABLE_PARPORT_PPDEV
 	&ppdev_parport_driver,
-#endif /* HAVE_LINUX_PPDEV_H */
-#ifdef HAVE_LIBFTD2XX
+#endif /* ENABLE_PARPORT_PPDEV */
+
+#ifdef ENABLE_PARPORT_FTD2XX
 	&ftd2xx_parport_driver,
 	&ftd2xx_mpsse_parport_driver,
-#endif /* HAVE_LIBFTD2XX */
-#ifdef HAVE_LIBFTDI
+#endif /* ENABLE_PARPORT_FTD2XX */
+
+#ifdef ENABLE_PARPORT_FTDI
 	&ftdi_parport_driver,
 	&ftdi_mpsse_parport_driver,
-#endif /* HAVE_LIBFTDI */
-#ifdef HAVE_DEV_PPBUS_PPI_H
+#endif /* ENABLE_PARPORT_FTDI */
+
+#ifdef ENABLE_PARPORT_PPI
 	&ppi_parport_driver,
-#endif /* HAVE_DEV_PPBUS_PPI_H */
+#endif /* ENABLE_PARPORT_PPI */
 	NULL				/* last must be NULL */
 };
 

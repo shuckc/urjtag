@@ -33,9 +33,6 @@ libtap_a_SOURCES = \
 	detect.c \
 	discovery.c \
 	parport.c \
-	parport/direct.c \
-	parport/ppdev.c \
-	parport/ppi.c \
 	usbconn.c \
 	cable.c \
 	cable/generic.h \
@@ -43,56 +40,117 @@ libtap_a_SOURCES = \
 	cable/generic_usbconn.h \
 	cable/generic_usbconn.c \
 	cable/generic_parport.h \
-	cable/generic_parport.c \
-	cable/arcom.c \
-	cable/byteblaster.c \
-	cable/dlc5.c \
-	cable/ea253.c \
-	cable/ei012.c \
-	cable/keithkoep.c \
-	cable/lattice.c \
-	cable/mpcbdm.c \
-	cable/triton.c \
+	cable/generic_parport.c
+
+if ENABLE_CABLE_ARCOM
+libtap_a_SOURCES += \
+	cable/arcom.c
+endif
+
+if ENABLE_CABLE_BYTEBLASTER
+libtap_a_SOURCES += \
+	cable/byteblaster.c
+endif
+
+if ENABLE_CABLE_DLC5
+libtap_a_SOURCES += \
+	cable/dlc5.c
+endif
+
+if ENABLE_CABLE_EA253
+libtap_a_SOURCES += \
+	cable/ea253.c
+endif
+
+if ENABLE_CABLE_EI012
+libtap_a_SOURCES += \
+	cable/ei012.c
+endif
+
+if ENABLE_CABLE_KEITHKOEP
+libtap_a_SOURCES += \
+	cable/keithkoep.c
+endif
+
+if ENABLE_CABLE_LATTICE
+libtap_a_SOURCES += \
+	cable/lattice.c
+endif
+
+if ENABLE_CABLE_MPCBDM
+libtap_a_SOURCES += \
+	cable/mpcbdm.c
+endif
+
+if ENABLE_CABLE_TRITON
+libtap_a_SOURCES += \
+	cable/triton.c
+endif
+
+if ENABLE_CABLE_WIGGLER
+libtap_a_SOURCES += \
 	cable/wiggler.c \
 	cable/wiggler2.c
+endif
+
+if ENABLE_CABLE_JLINK
+libtap_a_SOURCES += \
+	cable/jlink.c
+endif
+
+if ENABLE_CABLE_XPC
+libtap_a_SOURCES += \
+	cable/xpc.c
+endif
+
+if ENABLE_CABLE_USBBLASTER
+libtap_a_SOURCES += \
+	cable/usbblaster.c
+endif
+
+if ENABLE_CABLE_FT2232
+libtap_a_SOURCES += \
+	cable/ft2232.c
+endif
+
 
 if HAVE_LIBUSB
 libtap_a_SOURCES += \
-	cable/xpc.c \
-	cable/jlink.c \
 	usbconn/libusb.c
 endif
+
 
 if ENABLE_JIM
 libtap_a_SOURCES += \
 	cable/jim.c
 endif
 
-if HAVE_LIBFTDI
+if ENABLE_PARPORT_FTDI
 libtap_a_SOURCES += \
 	parport/ftdi.c
 endif
 
-if HAVE_LIBFTD2XX
+if ENABLE_PARPORT_FTD2XX
 libtap_a_SOURCES += \
 	parport/ftd2xx.c
 endif
 
-FTDIDEPENDENT= \
-	cable/usbblaster.c \
-	cable/ft2232.c
-
-if HAVE_LIBFTDI
-libtap_a_SOURCES += $(FTDIDEPENDENT)
-else
-if HAVE_LIBFTD2XX
-libtap_a_SOURCES += $(FTDIDEPENDENT)
-endif
+if ENABLE_PARPORT_DIRECT
+libtap_a_SOURCES += \
+	parport/direct.c
 endif
 
-if ENABLE_EP9307
+if ENABLE_PARPORT_PPDEV
+libtap_a_SOURCES += \
+	parport/ppdev.c
+endif
+
+if ENABLE_PARPORT_PPI
+libtap_a_SOURCES += \
+	parport/ppi.c
+endif
+
+if ENABLE_CABLE_EP9307
 libtap_a_SOURCES += \
 	cable/vision_ep9307.c
 endif
-
-

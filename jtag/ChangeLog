@@ -1,3 +1,22 @@
+2008-04-01  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   [ 1887221 ] Add configure switch to disable all cable&parport drivers:
+   * doc/UrJTAG.txt: updates for new options and summary reporting
+   * src/tap/parport.c: reworked driver referencing based on
+     ENABLE_PARPORT_* macros
+   * src/tap/cable.c: reworked driver referencing based on
+     ENABLE_CABLE_* macros
+   * src/tap/Makefile.am (libtap_a_SOURCES): include sources based on
+     ENABLE_CABLE_* and ENABLE_PARPORT_* macros
+   * src/bus/buses.c: reference bus drivers based on ENABLE_BUS_* macros
+   * src/bus/buses.h: sorted sequence of extern declarations
+   * src/bus/Makefile.am (libbus_a_SOURCES): include sources based on
+     ENABLE_BUS_* macros
+   * src/Makefile.am (jtag_LDADD): moved -lcmd to top of list to prevent
+     linker error for --enable-cable=jim
+   * configure.ac: added switches --enable-bus, --enable-cable and enable-parport
+     removed (superseeded) --enable-jim and --enable-ep9307
+
 2008-03-26  Kolja Waschk <kawk>
 
    * src/flash/amd.c: Fix address shift (Jeff Wittrock)

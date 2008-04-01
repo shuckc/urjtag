@@ -41,7 +41,6 @@
 
 extern cable_driver_t arcom_cable_driver;
 extern cable_driver_t byteblaster_cable_driver;
-#if defined(HAVE_LIBFTDI) || defined(HAVE_LIBFTD2XX)
 extern cable_driver_t usbblaster_cable_driver;
 extern cable_driver_t ft2232_cable_driver;
 extern cable_driver_t ft2232_jtagkey_cable_driver;
@@ -50,7 +49,6 @@ extern cable_driver_t ft2232_oocdlinks_cable_driver;
 extern cable_driver_t ft2232_signalyzer_cable_driver;
 extern cable_driver_t ft2232_turtelizer2_cable_driver;
 extern cable_driver_t ft2232_usbtojtagif_cable_driver;
-#endif
 extern cable_driver_t dlc5_cable_driver;
 extern cable_driver_t ea253_cable_driver;
 extern cable_driver_t ei012_cable_driver;
@@ -59,26 +57,28 @@ extern cable_driver_t keithkoep_cable_driver;
 extern cable_driver_t lattice_cable_driver;
 extern cable_driver_t mpcbdm_cable_driver;
 extern cable_driver_t triton_cable_driver;
-#ifdef ENABLE_JIM
 extern cable_driver_t jim_cable_driver;
-#endif
 extern cable_driver_t wiggler_cable_driver;
 extern cable_driver_t wiggler2_cable_driver;
 extern cable_driver_t wiggler_cable_driver;
-#ifdef HAVE_LIBUSB
 extern cable_driver_t xpc_int_cable_driver;
 extern cable_driver_t xpc_ext_cable_driver;
 extern cable_driver_t jlink_cable_driver;
-#endif
-#ifdef ENABLE_EP9307
 extern cable_driver_t ep9307_cable_driver;
-#endif
 
 cable_driver_t *cable_drivers[] = {
+#ifdef ENABLE_CABLE_ARCOM
 	&arcom_cable_driver,
+#endif
+#ifdef ENABLE_CABLE_BYTEBLASTER
 	&byteblaster_cable_driver,
-#if defined(HAVE_LIBFTDI) || defined(HAVE_LIBFTD2XX)
+#endif
+
+#ifdef ENABLE_CABLE_USBBLASTER
 	&usbblaster_cable_driver,
+#endif
+
+#ifdef ENABLE_CABLE_FT2232
 	&ft2232_cable_driver,
 	&ft2232_jtagkey_cable_driver,
 	&ft2232_armusbocd_cable_driver,
@@ -87,25 +87,49 @@ cable_driver_t *cable_drivers[] = {
 	&ft2232_turtelizer2_cable_driver,
 	&ft2232_usbtojtagif_cable_driver,
 #endif
+
+#ifdef ENABLE_CABLE_DLC5
 	&dlc5_cable_driver,
+#endif
+#ifdef ENABLE_CABLE_EA253
 	&ea253_cable_driver,
+#endif
+#ifdef ENABLE_CABLE_EI012
 	&ei012_cable_driver,
+#endif
+#ifdef ENABLE_CABLE_IGLOO
 	&igloo_cable_driver,
+#endif
+#ifdef ENABLE_CABLE_KEITHKOEP
 	&keithkoep_cable_driver,
+#endif
+#ifdef ENABLE_CABLE_LATTICE
 	&lattice_cable_driver,
+#endif
+#ifdef ENABLE_CABLE_MPCBDM
 	&mpcbdm_cable_driver,
+#endif
+#ifdef ENABLE_CABLE_TRITON
 	&triton_cable_driver,
+#endif
 #ifdef ENABLE_JIM
 	&jim_cable_driver,
 #endif
+#ifdef ENABLE_CABLE_WIGGLER
 	&wiggler_cable_driver,
-	&wiggler2_cable_driver,	
-#ifdef HAVE_LIBUSB
+	&wiggler2_cable_driver,
+#endif
+
+#ifdef ENABLE_CABLE_XPC
 	&xpc_int_cable_driver,
 	&xpc_ext_cable_driver,
+#endif
+
+#ifdef ENABLE_CABLE_JLINK
 	&jlink_cable_driver,
 #endif
-#ifdef ENABLE_EP9307
+
+#ifdef ENABLE_CABLE_EP9307
 	&ep9307_cable_driver,
 #endif
 	NULL				/* last must be NULL */

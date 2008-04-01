@@ -91,11 +91,13 @@ AC_PROG_YACC
 AC_SEARCH_LIBS([ioperm], [ioperm])
 if test "$ac_cv_search_ioperm" != "no"; then
 	AC_DEFINE(HAVE_IOPERM, 1, [Define to 1 if you have the ioperm() function])
+	HAVE_IOPERM="yes"
 else
 	AC_SEARCH_LIBS([i386_set_ioperm], [i386])
 	if test "$ac_cv_search_i386_set_ioperm" != "no"; then
 		AC_DEFINE(HAVE_I386_SET_IOPERM, 1,
 			[Define to 1 if you have the i386_set_ioperm() function])
+		HAVE_I386_SET_IOPERM="yes"
 	fi
 fi
 
@@ -104,8 +106,8 @@ AC_CHECK_FUNCS(swprintf)
 
 AC_CHECK_FUNC(clock_gettime, [], [ AC_CHECK_LIB(rt, clock_gettime) ])
 
-AC_CHECK_HEADERS(linux/ppdev.h)
-AC_CHECK_HEADERS(dev/ppbus/ppi.h)
+AC_CHECK_HEADERS([linux/ppdev.h], [HAVE_LINUX_PPDEV_H="yes"])
+AC_CHECK_HEADERS([dev/ppbus/ppi.h], [HAVE_DEV_PPBUS_PPI_H="yes"])
 AC_CHECK_HEADERS(stropts.h)
 AC_CHECK_HEADERS(wchar.h)
 
@@ -230,22 +232,6 @@ AS_IF([test "x$HAVELIBFTD2XX" == xyes], [
 ])
 AC_SUBST(FTD2XXLIB)
 
-
-dnl Enable cable driver for Vision EP9307?
-AC_ARG_ENABLE(ep9307,
-[AS_HELP_STRING([--enable-ep9307], [Enable cable driver for EP9307])],
-[case "${enableval}" in
-   yes) ep9307=true ;;
-   no)  ep9307=false ;;
-   *) AC_MSG_ERROR(bad value ${enableval} for --enable-ep9307) ;;
- esac],
-[ep9307=false])
-AS_IF([test "x$ep9307" = xtrue], [
-  AM_CONDITIONAL(ENABLE_EP9307, true)
-  AC_DEFINE(ENABLE_EP9307, 1, [define if cable driver for ep9307 is enabled])
-],[
-  AM_CONDITIONAL(ENABLE_EP9307, false)
-])
 
 CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
@@ -380,22 +366,6 @@ AS_IF([test "x$bsdl" = xtrue], [
   AM_CONDITIONAL(ENABLE_BSDL, false)
 ])
 
-dnl Enable JTAG target simulator JIM?
-AC_ARG_ENABLE(jim,
-[AS_HELP_STRING([--enable-jim], [Enable JTAG target simulator JIM])],
-[case "${enableval}" in
-   yes) jim=true ;;
-   no)  jim=false ;;
-   *)   AC_MSG_ERROR(bad value ${enableval} for --enable-jim) ;;
- esac],
-[jim=false])
-AS_IF([test "x$jim" = xtrue], [
-  AM_CONDITIONAL(ENABLE_JIM, true)
-  AC_DEFINE(ENABLE_JIM, 1, [define if JTAG target simulator JIM is enabled])
-],[
-  AM_CONDITIONAL(ENABLE_JIM, false)
-])
-
 dnl Enable experimental brute-force JEDEC flash autodetection?
 AC_ARG_ENABLE(jedec-exp,
 [AS_HELP_STRING([--enable-jedec-exp], [Enable experimental JEDEC flash detection])],
@@ -412,44 +382,199 @@ AS_IF([test "x$jedecexp" = xtrue], [
   AM_CONDITIONAL(JEDEC_EXP, false)
 ])
 
+
+# Macro for driver include check
+AC_DEFUN([CHECK_DRIVER], [
+    AS_IF([echo "$1" | $GREP -q $3], [
+       AC_DEFINE([$4], 1, [define if $3 is enabled])
+       AM_CONDITIONAL([$4], true)
+       $2="${$2}$3 "
+    ], [
+       AM_CONDITIONAL([$4], false)
+    ])
+])
+
+
+# Enable bus drivers
+AC_DEFUN([DEF_ENABLE_BUSDRIVERS], [\
+au1500 bcm1250 bf533_stamp bf533_ezkit bf537_stamp bf537_ezkit bf548_ezkit bf561_ezkit ejtag \
+fjmem ixp425 jopcyc h7202 lh7a400  mpc5200 mpc824x ppc405ep ppc440gx_ebc8 prototype pxa2x0 pxa27x \
+s3c4510 sa1110 sh7727 sh7750r sh7751r sharc_21065L slsup3 tx4925 zefant_xs3])
+AC_ARG_ENABLE(bus,
+[AS_HELP_STRING([--enable-bus], [Enable default set or specific bus drivers:])]
+[AS_HELP_STRING([],             ['default' enables:])]
+[AS_HELP_STRING([],DEF_ENABLE_BUSDRIVERS)]
+,
+[AS_CASE([${enableval}],
+    [yes],  [busdrivers=default],
+    [no],   [busdrivers=none],
+    [none], [busdrivers=none],
+            [busdrivers=`echo ${enableval} | $SED -e 's/,/ /g'`])],
+[busdrivers=default])
+# expand 'default' to default enabled busdrivers
+busdrivers=`echo ${busdrivers} | $SED -e "s/default/DEF_ENABLE_BUSDRIVERS/"`
+#
+enabled_bus_drivers=''
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [au1500],        [ENABLE_BUS_AU1500])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bcm1250],       [ENABLE_BUS_BCM1250])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf533_stamp],   [ENABLE_BUS_BF533_STAMP])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf533_ezkit],   [ENABLE_BUS_BF533_EZKIT])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf537_stamp],   [ENABLE_BUS_BF537_STAMP])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf537_ezkit],   [ENABLE_BUS_BF537_EZKIT])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf548_ezkit],   [ENABLE_BUS_BF548_EZKIT])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf561_ezkit],   [ENABLE_BUS_BF561_EZKIT])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [ejtag],         [ENABLE_BUS_EJTAG])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [fjmem],         [ENABLE_BUS_FJMEM])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [ixp425],        [ENABLE_BUS_IXP425])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [jopcyc],        [ENABLE_BUS_JOPCYC])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [h7202],         [ENABLE_BUS_H7202])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [lh7a400],       [ENABLE_BUS_LH7A400])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [mpc5200],       [ENABLE_BUS_MPC5200])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [mpc824x],       [ENABLE_BUS_MPC824X])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [ppc405ep],      [ENABLE_BUS_PPC405EP])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [ppc440gx_ebc8], [ENABLE_BUS_PPC440GX_EBC8])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [prototype],     [ENABLE_BUS_PROTOTYPE])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [pxa2x0],        [ENABLE_BUS_PXA2X0])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [pxa27x],        [ENABLE_BUS_PXA27X])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [s3c4510],       [ENABLE_BUS_S3C4510])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sa1110],        [ENABLE_BUS_SA1110])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sh7727],        [ENABLE_BUS_SH7727])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sh7750r],       [ENABLE_BUS_SH7750R])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sh7751r],       [ENABLE_BUS_SH7751R])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sharc_21065L],  [ENABLE_BUS_SHARC_21065L])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [slsup3],        [ENABLE_BUS_SLSUP3])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [tx4925],        [ENABLE_BUS_TX4925])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [zefant_xs3],    [ENABLE_BUS_ZEFANT_XS3])
+
+# Enable cable drivers
+AC_DEFUN([DEF_ENABLE_CABLEDRIVERS], [\
+arcom byteblaster dlc5 ea253 ei012 ft2232 igloo jlink keithkoep lattice mpcbdm triton usbblaster wiggler xpc])
+AC_DEFUN([DEF_DISABLE_CABLEDRIVERS], [ep9307 jim])
+AC_ARG_ENABLE(cable,
+[AS_HELP_STRING([--enable-cable], [Enable default set or specific cable drivers.])]
+[AS_HELP_STRING([],               ['default' enables:])]
+[AS_HELP_STRING([],DEF_ENABLE_CABLEDRIVERS)]
+[AS_HELP_STRING([],               [Disabled by default are:])]
+[AS_HELP_STRING([],DEF_DISABLE_CABLEDRIVERS)]
+,
+[AS_CASE([${enableval}],
+    [yes],  [cabledrivers=default],
+    [no],   [cabledrivers=none],
+    [none], [cabledrivers=none],
+            [cabledrivers=`echo ${enableval} | $SED -e 's/,/ /g'`])],
+[cabledrivers=default])
+# expand 'default' to default enabled cabledrivers
+cabledrivers=`echo ${cabledrivers} | $SED -e "s/default/DEF_ENABLE_CABLEDRIVERS/"`
+# automatically disable cable drivers when a required feature is not available
+AS_IF([test "x$HAVELIBFTDI" != "xyes" -a "x$HAVELIBFTD2XX" != "xyes"], [
+    cabledrivers=`echo ${cabledrivers} | $SED -e "s/ft2232//" -e "s/usbblaster//"`
+])
+AS_IF([test "x$HAVELIBUSB" != "xyes"], [
+    cabledrivers=`echo ${cabledrivers} | $SED -e "s/jlink//" -e "s/xpc//"`
+])
+#
+enabled_cable_drivers=''
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [arcom],       [ENABLE_CABLE_ARCOM])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [byteblaster], [ENABLE_CABLE_BYTEBLASTER])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [dlc5],        [ENABLE_CABLE_DLC5])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [ea253],       [ENABLE_CABLE_EA253])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [ei012],       [ENABLE_CABLE_EI012])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [ep9307],      [ENABLE_CABLE_EP9307])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [ft2232],      [ENABLE_CABLE_FT2232])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [igloo],       [ENABLE_CABLE_IGLOO])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [jim],         [ENABLE_JIM])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [jlink],       [ENABLE_CABLE_JLINK])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [keithkoep],   [ENABLE_CABLE_KEITHKOEP])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [lattice],     [ENABLE_CABLE_LATTICE])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [mpcbdm],      [ENABLE_CABLE_MPCBDM])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [triton],      [ENABLE_CABLE_TRITON])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [usbblaster],  [ENABLE_CABLE_USBBLASTER])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [wiggler],     [ENABLE_CABLE_WIGGLER])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [xpc],         [ENABLE_CABLE_XPC])
+
+
+# Enable parport drivers
+AC_DEFUN([DEF_ENABLE_PARPORTDRIVERS], [\
+direct ftdi ftd2xx ppdev ppi])
+AC_ARG_ENABLE(parport,
+[AS_HELP_STRING([--enable-parport], [Enable default set or specific parport drivers:])]
+[AS_HELP_STRING([],                 ['default' enables:])]
+[AS_HELP_STRING([],DEF_ENABLE_PARPORTDRIVERS)]
+,
+[AS_CASE([${enableval}],
+    [yes],  [parportdrivers=default],
+    [no],   [parportdrivers=none],
+    [none], [parportdrivers=none],
+            [parportdrivers=`echo ${enableval} | $SED -e 's/,/ /g'`])],
+[parportdrivers=default])
+# expand 'default' to default enabled parportdrivers
+parportdrivers=`echo ${parportdrivers} | $SED -e "s/default/DEF_ENABLE_PARPORTDRIVERS/"`
+# automatically disable parport drivers when a required feature is not available
+AS_IF([test "x$HAVELIBFTDI" != "xyes"], [
+    parportdrivers=`echo ${parportdrivers} | $SED -e "s/ftdi//"`
+])
+AS_IF([test "x$HAVELIBFTD2XX" != "xyes"], [
+    parportdrivers=`echo ${parportdrivers} | $SED -e "s/ftd2xx//"`
+])
+AS_IF([test "x$HAVE_LINUX_PPDEV_H" != "xyes"], [
+    parportdrivers=`echo ${parportdrivers} | $SED -e "s/ppdev//"`
+])
+AS_IF([test "x$HAVE_DEV_PPBUS_PPI_H" != "xyes"], [
+    parportdrivers=`echo ${parportdrivers} | $SED -e "s/ppi//"`
+])
+AS_IF([test "x$HAVE_IOPERM" != "xyes" -a "x$HAVE_I386_SET_IOPERM" != "xyes"], [
+    parportdrivers=`echo ${parportdrivers} | $SED -e "s/direct//"`
+])
+#
+enabled_parport_drivers=''
+CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [direct], [ENABLE_PARPORT_DIRECT])
+CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ftd2xx], [ENABLE_PARPORT_FTD2XX])
+CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ftdi],   [ENABLE_PARPORT_FTDI])
+CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ppdev],  [ENABLE_PARPORT_PPDEV])
+CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ppi],    [ENABLE_PARPORT_PPI])
+
+
 AC_OUTPUT
 
 dnl
 dnl Configuration summary
 dnl
-if test ${HAVELIBFTDI:-no} != no ; then
+AS_IF([test ${HAVELIBFTDI:-no} != no], [
    FLAG_HAVELIBFTDI=yes
-else
+], [
    FLAG_HAVELIBFTDI=no
-fi
-if test ${HAVELIBUSB:-no} != no ; then
+])
+AS_IF([test ${HAVELIBUSB:-no} != no], [
    FLAG_HAVELIBUSB=yes
-else
+], [
    FLAG_HAVELIBUSB=no
-fi
-if test ${HAVELIBFTD2XX:-no} != no ; then
+])
+AS_IF([test ${HAVELIBFTD2XX:-no} != no], [
    FLAG_HAVELIBFTD2XX=yes
-else
+], [
    FLAG_HAVELIBFTD2XX=no
-fi
-if test ${svf:-false} != false ; then
+])
+AS_IF([test ${svf:-false} != false], [
    FLAG_SVF=yes
-else
+], [
    FLAG_SVF=no
-fi
-if test ${bsdl:-false} != false ; then
+])
+AS_IF([test ${bsdl:-false} != false], [
    FLAG_BSDL=yes
-else
+], [
    FLAG_BSDL=no
-fi
-AC_MSG_RESULT([
+])
+AC_MSG_NOTICE([
+
 jtag is now configured for
 
-  USB cable support    : $FLAG_HAVELIBUSB
-  FTDI cable support
-    via libftdi        : $FLAG_HAVELIBFTDI
-    via libftd2xx      : $FLAG_HAVELIBFTD2XX
+  Detected libusb      : $FLAG_HAVELIBUSB
+  Detected libftdi     : $FLAG_HAVELIBFTDI
+  Detected libftd2xx   : $FLAG_HAVELIBFTD2XX
   SVF error locations  : $bison_locations
   Build SVF player     : $FLAG_SVF
   Build BSDL subsystem : $FLAG_BSDL
+  Bus drivers          : $enabled_bus_drivers
+  Cable drivers        : $enabled_cable_drivers
+  Parport drivers      : $enabled_parport_drivers
 ])

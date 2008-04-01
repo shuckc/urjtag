@@ -365,9 +365,9 @@ without spaces in the name is better)  and afterwards run configure with the
 
 Configure should now report
 
-  FTDI cable support
+  jtag is now configured for
     ...
-    via libftd2xx        : yes
+    Detected libftd2xx   : yes
 
 
 ==== Using LibUSB-Win32 in Cygwin environment ====
@@ -380,6 +380,18 @@ Then point configure to the directory where LibUSB-Win32 was installed (it
 might give problems if the path contains spaces, as "Program Files" does!):
 
   ./configure --with-libusb="/cygdrive/c/Programme/LibUSB-Win32/"
+
+
+==== Driver tailoring ====
+
+The configure script enables all default bus, cable and parport drivers. You
+can include and exclude specific drivers if required. For a list of parameters
+run
+
+  ./configure --help
+
+to figure out the appropriate --enable-bus, --enable-cable and --enable-parport
+options.
 
 
 ==== Building the BSDL subsystem ====
