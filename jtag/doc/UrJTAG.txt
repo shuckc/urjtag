@@ -285,13 +285,13 @@ be untested combinations of chip type, bus width, ...
 
 To run autogen.sh, you need autoconf and automake, bison, and a recent flex.
 
-The distributed source tarball contains source pregenerated with a current flex
-version; flex therefore is only needed if you want to compile code checked
-out from our Subversion repository.  Flex 2.5.4a as it comes with Cygwin will
-work but some parts of UrJTAG (namely the SVF player) become more verbose if
-Flex 2.5.31 or newer is used. Building the BSDL subsystem files requires Flex
-2.5.33 or newer. The configure script will compare the available Flex version
-against these preconditions and enables or disables the related features.  ,
+The distributed source tarball contains source pregenerated with a current
+flex version; flex therefore is only needed if you want to compile code
+checked out from our Subversion repository.  Flex 2.5.4a as it comes with
+Cygwin cannot build the scanners for BSDL and SVF. Building these files
+requires Flex 2.5.33 or newer. The configure script will compare the available
+Flex version against these preconditions and enables or disables the related
+features.
 
 Furthermore, libtool should be available, and "devel" versions of the following
 packages:

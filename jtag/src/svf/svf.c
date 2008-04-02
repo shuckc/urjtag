@@ -51,39 +51,7 @@
 #include "svf.h"
 #include "svf_bison.h"
 
-int yyparse(chain_t *chain);
-
-
-struct sxr {
-    struct ths_params params;
-    int    no_tdi;
-    int    no_tdo;
-};
-
-
-FILE *yyin, *yyout;
-
-int svf_stop_on_mismatch;
-
-static part_t        *part;
-static instruction   *ir;
-static data_register *dr;
-
-
-static struct sxr sir_params,
-                  sdr_params;
-
-static int endir,
-           enddr;
-
-static int runtest_run_state,
-           runtest_end_state;
-
-static int svf_trst_absent;
-static int svf_state_executed;
-
-/* protocol issued warnings */
-static int issued_runtest_maxtime;
+int svfparse(parser_priv_t *priv_data, chain_t *chain);
 
 
 /*
@@ -449,7 +417,7 @@ svf_copy_hex_to_register(char *hex_string, tap_register *reg)
  *   0 : tdo and reg do not match or error occured
  */
 static int
-svf_compare_tdo(char *tdo, char *mask, tap_register *reg, YYLTYPE *loc)
+svf_compare_tdo(parser_priv_t *priv, char *tdo, char *mask, tap_register *reg, YYLTYPE *loc)
 {
   char *tdo_bit, *mask_bit;
   int   pos, mismatch, result = 1;
@@ -478,7 +446,7 @@ svf_compare_tdo(char *tdo, char *mask, tap_register *reg, YYLTYPE *loc)
               loc->last_line+1, 
               loc->last_column+1 );
     }
-    if (svf_stop_on_mismatch)
+    if (priv->svf_stop_on_mismatch)
       result = 0;
   }
 
@@ -567,14 +535,14 @@ svf_all_care(char **string, double number)
  *   state : required end state (SVF parser encoding)
  * ***************************************************************************/
 void
-svf_endxr(enum generic_irdr_coding ir_dr, int state)
+svf_endxr(parser_priv_t *priv, enum generic_irdr_coding ir_dr, int state)
 {
   switch (ir_dr) {
     case generic_ir:
-      endir = svf_map_state(state);
+      priv->endir = svf_map_state(state);
       break;
     case generic_dr:
-      enddr = svf_map_state(state);
+      priv->enddr = svf_map_state(state);
       break;
   }
 }
@@ -642,7 +610,7 @@ static void sigalrm_handler(int signal)
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_runtest(chain_t *chain, struct runtest *params)
+svf_runtest(chain_t *chain, parser_priv_t *priv, struct runtest *params)
 {
   uint32_t run_count, frequency;
 
@@ -657,21 +625,21 @@ svf_runtest(chain_t *chain, struct runtest *params)
     return(0);
   }
   if (params->max_time > 0.0)
-    if (!issued_runtest_maxtime) {
+    if (!priv->issued_runtest_maxtime) {
       printf( _("Warning %s: maximum time for RUNTEST not guaranteed.\n"), "svf");
       printf( _(" This message is only displayed once.\n"));
-      issued_runtest_maxtime = 1;
+      priv->issued_runtest_maxtime = 1;
     }
 
   /* update default values for run_state and end_state */
   if (params->run_state != 0) {
-    runtest_run_state = svf_map_state(params->run_state);
+    priv->runtest_run_state = svf_map_state(params->run_state);
 
     if (params->end_state == 0)
-      runtest_end_state = svf_map_state(params->run_state);
+      priv->runtest_end_state = svf_map_state(params->run_state);
   }
   if (params->end_state != 0)
-    runtest_end_state = svf_map_state(params->end_state);
+    priv->runtest_end_state = svf_map_state(params->end_state);
 
   /* compute run_count */
   run_count = params->run_count;
@@ -684,7 +652,7 @@ svf_runtest(chain_t *chain, struct runtest *params)
   }
   assert(run_count > 0);
 
-  svf_goto_state(chain, runtest_run_state);
+  svf_goto_state(chain, priv->runtest_run_state);
 
   /* set up the timer for max_time */
   if (params->max_time > 0.0) {
@@ -713,7 +681,7 @@ svf_runtest(chain_t *chain, struct runtest *params)
   else
     chain_clock(chain, 0, 0, run_count);
 
-  svf_goto_state(chain, runtest_end_state);
+  svf_goto_state(chain, priv->runtest_end_state);
 
   /* stop the timer */
   if (params->max_time > 0.0) {
@@ -747,11 +715,12 @@ svf_runtest(chain_t *chain, struct runtest *params)
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_state(chain_t *chain, struct path_states *path_states, int stable_state)
+svf_state(chain_t *chain, parser_priv_t *priv, struct path_states *path_states,
+          int stable_state)
 {
   int i;
 
-  svf_state_executed = 1;
+  priv->svf_state_executed = 1;
 
   for (i = 0; i < path_states->num_states; i++)
     svf_goto_state(chain, svf_map_state(path_states->states[i]));
@@ -777,12 +746,13 @@ svf_state(chain_t *chain, struct path_states *path_states, int stable_state)
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *params, YYLTYPE *loc)
+svf_sxr(chain_t *chain, parser_priv_t *priv, enum generic_irdr_coding ir_dr,
+        struct ths_params *params, YYLTYPE *loc)
 {
-  struct sxr *sxr_params;
+  sxr_t *sxr_params;
   int len, result = 1;
 
-  sxr_params = ir_dr == generic_ir ? &sir_params : &sdr_params;
+  sxr_params = ir_dr == generic_ir ? &(priv->sir_params) : &(priv->sdr_params);
 
   /* remember parameters */
   svf_remember_param(&sxr_params->params.tdi, params->tdi);
@@ -836,7 +806,7 @@ svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *param
   switch (ir_dr) {
     case generic_ir:
       /* is SIR large enough? */
-      if (ir->value->len != len) {
+      if (priv->ir->value->len != len) {
         printf( _("Error %s: SIR command length inconsistent.\n"),
                 "svf");
         if (loc != NULL) {
@@ -852,18 +822,18 @@ svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *param
 
     case generic_dr:
       /* check data register SDR */
-      if (dr->in->len != len) {
+      if (priv->dr->in->len != len) {
         /* length does not match, so install proper registers */
-        register_free(dr->in);
-        dr->in = NULL;
-        register_free(dr->out);
-        dr->out = NULL;
+        register_free(priv->dr->in);
+        priv->dr->in = NULL;
+        register_free(priv->dr->out);
+        priv->dr->out = NULL;
 
-        if (!(dr->in = register_alloc(len))) {
+        if (!(priv->dr->in = register_alloc(len))) {
           printf( _("out of memory") );
           return(0);
         }
-        if (!(dr->out = register_alloc(len))) {
+        if (!(priv->dr->out = register_alloc(len))) {
           printf( _("out of memory") );
           return(0);
         }
@@ -874,8 +844,8 @@ svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *param
 
   /* fill register with value of TDI parameter */
   if (!svf_copy_hex_to_register(sxr_params->params.tdi,
-                                ir_dr == generic_ir ? ir->value :
-                                                      dr->in))
+                                ir_dr == generic_ir ? priv->ir->value :
+                                                      priv->dr->in))
     return(0);
 
 
@@ -887,10 +857,10 @@ svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *param
                                     sxr_params->params.tdo ? 1 : 0,
                                     0,
                                     EXITMODE_EXIT1);
-      svf_goto_state(chain, endir);
+      svf_goto_state(chain, priv->endir);
 
       if (sxr_params->params.tdo)
-        result = svf_compare_tdo(sxr_params->params.tdo, sxr_params->params.mask, ir->out, loc);
+        result = svf_compare_tdo(priv, sxr_params->params.tdo, sxr_params->params.mask, priv->ir->out, loc);
       break;
 
     case generic_dr:
@@ -899,10 +869,10 @@ svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *param
                                       sxr_params->params.tdo ? 1 : 0,
                                       0,
                                       EXITMODE_EXIT1);
-      svf_goto_state(chain, enddr);
+      svf_goto_state(chain, priv->enddr);
 
       if (sxr_params->params.tdo)
-        result = svf_compare_tdo(sxr_params->params.tdo, sxr_params->params.mask, dr->out, loc);
+        result = svf_compare_tdo(priv, sxr_params->params.tdo, sxr_params->params.mask, priv->dr->out, loc);
       break;
   }
 
@@ -928,12 +898,12 @@ svf_sxr(chain_t *chain, enum generic_irdr_coding ir_dr, struct ths_params *param
  *   0 : error occured
  * ***************************************************************************/
 int
-svf_trst(chain_t *chain, int trst_mode)
+svf_trst(chain_t *chain, parser_priv_t *priv, int trst_mode)
 {
   int  trst_cable = -1;
   char *unimplemented_mode;
 
-  if (svf_trst_absent) {
+  if (priv->svf_trst_absent) {
     printf( _("Error %s: no further TRST command allowed after mode ABSENT\n"),
             "svf");
     return(0);
@@ -951,15 +921,15 @@ svf_trst(chain_t *chain, int trst_mode)
       break;
     case ABSENT:
       unimplemented_mode = "ABSENT";
-      svf_trst_absent = 1;
+      priv->svf_trst_absent = 1;
 
-      if (svf_state_executed) {
+      if (priv->svf_state_executed) {
         printf( _("Error %s: TRST ABSENT must not be issued after a STATE command\n"),
                 "svf");
         return(0);
       }
-      if (sir_params.params.number > 0.0 ||
-          sdr_params.params.number > 0.0) {
+      if (priv->sir_params.params.number > 0.0 ||
+          priv->sdr_params.params.number > 0.0) {
         printf( _("Error %s: TRST ABSENT must not be issued after an SIR or SDR command\n"),
                 "svf");
       }
@@ -1027,8 +997,9 @@ svf_txr(enum generic_irdr_coding ir_dr, struct ths_params *params)
 void
 svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
 {
-  const struct sxr sxr_default = { {0.0, NULL, NULL, NULL, NULL},
-                                   1, 1};
+  const sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},
+                              1, 1};
+  parser_priv_t priv;
 
   /* initialize
      - part
@@ -1042,10 +1013,10 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
     printf( _("Error %s: chain without any parts\n"), "svf");
     return;
   }
-  part = chain->parts->parts[chain->active_part];
+  priv.part = chain->parts->parts[chain->active_part];
 
   /* setup register SDR if not already existing */
-  if (!(dr = part_find_data_register(part, "SDR"))) {
+  if (!(priv.dr = part_find_data_register(priv.part, "SDR"))) {
     char *register_cmd[] = {"register",
                             "SDR",
                             "32",
@@ -1054,14 +1025,14 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
     if (cmd_run(chain, register_cmd) < 1)
       return;
 
-    if (!(dr = part_find_data_register(part, "SDR"))) {
+    if (!(priv.dr = part_find_data_register(priv.part, "SDR"))) {
       printf( _("Error %s: could not establish SDR register\n"), "svf");
       return;
     }
   }
 
   /* setup instruction SIR if not already existing */
-  if (!(ir = part_find_instruction(part, "SIR"))) {
+  if (!(priv.ir = part_find_instruction(priv.part, "SIR"))) {
     char *instruction_cmd[] = {"instruction",
                                "SIR",
                                "",
@@ -1070,7 +1041,7 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
     char *instruction_string;
     int   len, result;
 
-    len = part->instruction_length;
+    len = priv.part->instruction_length;
     if (len > 0) {
       if ((instruction_string = (char *)calloc(len+1, sizeof(char))) != NULL) {
         memset(instruction_string, '1', len);
@@ -1086,47 +1057,49 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
       }
     }
 
-    if (!(ir = part_find_instruction(part, "SIR"))) {
+    if (!(priv.ir = part_find_instruction(priv.part, "SIR"))) {
       printf( _("Error %s: could not establish SIR instruction\n"), "svf");
       return;
     }
   }
 
   /* initialize variables for new parser run */
-  svf_stop_on_mismatch = stop_on_mismatch;
+  priv.svf_stop_on_mismatch = stop_on_mismatch;
 
-  sir_params = sdr_params = sxr_default;
+  priv.sir_params = priv.sdr_params = sxr_default;
 
-  endir = enddr = Run_Test_Idle;
+  priv.endir = priv.enddr = Run_Test_Idle;
 
-  runtest_run_state = runtest_end_state = Run_Test_Idle;
+  priv.runtest_run_state = priv.runtest_end_state = Run_Test_Idle;
 
-  svf_trst_absent    = 0;
-  svf_state_executed = 0;
+  priv.svf_trst_absent    = 0;
+  priv.svf_state_executed = 0;
 
   /* set back flags for issued warnings */
-  issued_runtest_maxtime = 0;
+  priv.issued_runtest_maxtime = 0;
 
 
   /* select SIR instruction */
-  part_set_instruction(part, "SIR");
+  part_set_instruction(priv.part, "SIR");
 
-  yyin = SVF_FILE;
-  yyparse(chain);
+  if (svf_bison_init(&priv, SVF_FILE)) {
+    svfparse(&priv, chain);
+    svf_bison_deinit(&priv);
+  }
 
   /* clean up */
   /* SIR */
-  if (sir_params.params.tdi)
-    free(sir_params.params.tdi);
-  if (sir_params.params.mask)
-    free(sir_params.params.mask);
-  if (sir_params.params.smask)
-    free(sir_params.params.smask);
+  if (priv.sir_params.params.tdi)
+    free(priv.sir_params.params.tdi);
+  if (priv.sir_params.params.mask)
+    free(priv.sir_params.params.mask);
+  if (priv.sir_params.params.smask)
+    free(priv.sir_params.params.smask);
   /* SDR */
-  if (sdr_params.params.tdi)
-    free(sdr_params.params.tdi);
-  if (sdr_params.params.mask)
-    free(sdr_params.params.mask);
-  if (sdr_params.params.smask)
-    free(sdr_params.params.smask);
+  if (priv.sdr_params.params.tdi)
+    free(priv.sdr_params.params.tdi);
+  if (priv.sdr_params.params.mask)
+    free(priv.sdr_params.params.mask);
+  if (priv.sdr_params.params.smask)
+    free(priv.sdr_params.params.smask);
 }

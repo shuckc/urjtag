@@ -66,13 +66,55 @@ struct runtest {
     int    end_state;
 };
 
+typedef struct {
+    struct ths_params params;
+    int    no_tdi;
+    int    no_tdo;
+} sxr_t;
+
+
+struct svf_parser_params {
+    struct ths_params  ths_params;
+    struct path_states path_states;
+    struct runtest     runtest;
+};
+
+
+/* private data of the bison parser
+   used to store variables the would end up as globals otherwise */
+struct parser_priv {
+    struct svf_parser_params parser_params;
+    void   *scanner;
+    part_t *part;
+    instruction   *ir;
+    data_register *dr;
+    sxr_t   sir_params;
+    sxr_t   sdr_params;
+    int     endir;
+    int     enddr;
+    int     runtest_run_state;
+    int     runtest_end_state;
+    int     svf_stop_on_mismatch;
+    int     svf_trst_absent;
+    int     svf_state_executed;
+    /* protocol issued warnings */
+    int     issued_runtest_maxtime;
+};
+typedef struct parser_priv parser_priv_t;
+
 struct YYLTYPE;
 
-void svf_endxr(enum generic_irdr_coding, int);
+void *svf_flex_init(FILE *);
+void svf_flex_deinit(void *);
+
+int  svf_bison_init(parser_priv_t *, FILE *);
+void svf_bison_deinit(parser_priv_t *);
+
+void svf_endxr(parser_priv_t *, enum generic_irdr_coding, int);
 void svf_frequency(chain_t *, double);
 int  svf_hxr(enum generic_irdr_coding, struct ths_params *);
-int  svf_runtest(chain_t *, struct runtest *);
-int  svf_state(chain_t *, struct path_states *, int);
-int  svf_sxr(chain_t *, enum generic_irdr_coding, struct ths_params *, struct YYLTYPE *);
-int  svf_trst(chain_t *, int);
+int  svf_runtest(chain_t *, parser_priv_t *, struct runtest *);
+int  svf_state(chain_t *, parser_priv_t *, struct path_states *, int);
+int  svf_sxr(chain_t *, parser_priv_t *, enum generic_irdr_coding, struct ths_params *, struct YYLTYPE *);
+int  svf_trst(chain_t *, parser_priv_t *, int);
 int  svf_txr(enum generic_irdr_coding, struct ths_params *);

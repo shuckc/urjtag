@@ -23,11 +23,6 @@ include $(top_srcdir)/Makefile.rules
 
 AM_YFLAGS = -d
 
-if BISON_LOCATIONS
-AM_LFLAGS  = --bison-locations
-AM_YFLAGS += --locations
-endif
-
 noinst_LIBRARIES = libsvf.a
 
 libsvf_a_SOURCES = \

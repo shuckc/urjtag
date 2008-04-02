@@ -24,16 +24,11 @@
  */
 
 
-/*
- * Note: This lexer supports bison_locations if HAVE_MODERN_FLEX is
-         defined. Apart from this, the option --bison-locations has
-         to be specified on the command line.
-         The command line option is controlled by the configure
-         script that enables this feature based on the available
-         version of flex. The #define is derived below from the version
-         information that flex itself embeds in the *.c output.
- */
-
+%option bison-bridge
+%option reentrant
+%option prefix="svf"
+%option outfile="lex.yy.c"
+%option bison-locations
 
 %{
 #include <strings.h>
@@ -46,41 +41,17 @@
 static int map_keyw_ident(YYSTYPE *, char *);
 static void align_string(char *);
 
-#ifdef YY_FLEX_MAJOR_VERSION
- #if (YY_FLEX_MAJOR_VERSION > 2) ||\
-     ((YY_FLEX_MAJOR_VERSION == 2) && ((YY_FLEX_MINOR_VERSION > 5) \
-        || ((YY_FLEX_MINOR_VERSION == 5) && (YY_FLEX_SUBMINOR_VERSION >= 31))))
-  #undef HAVE_MODERN_FLEX
-  #define HAVE_MODERN_FLEX 1
- #else
-  #undef HAVE_MODERN_FLEX
- #endif
-#endif
-
-#ifdef HAVE_MODERN_FLEX
 static void fix_yylloc(YYLTYPE *, char *);
 static void fix_yylloc_nl(YYLTYPE *, char *);
 #define FIX_YYLLOC(lloc, text) fix_yylloc(lloc, text);
 #define FIX_YYLLOC_NL(lloc, text) fix_yylloc_nl(lloc, text);
 
-#else
-
-#define MAP_KEYW_IDENT(LVAL, TEXT) map_keyw_ident(LVAL, TEXT)
-#define FIX_YYLLOC(lloc, text)
-#define FIX_YYLLOC_NL(lloc, text)
-
-#define YY_DECL int yylex (YYSTYPE *yylval)
-
-#endif /* HAVE_MODERN_FLEX */
-
-int yywrap(void)
+int yywrap(yyscan_t scanner)
 {
   return(1);
 }
 
-#ifdef HAVE_MODERN_FLEX
 #define YY_USER_INIT do { yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 0; } while (0)
-#endif /* HAVE_MODERN_FLEX */
  
 %}
 
@@ -177,12 +148,10 @@ COMMENT         (!.*)|("//".*)[^\n]
 
 \n {
   /* token is a new line character */
-#ifdef HAVE_MODERN_FLEX
   yylloc->first_line = yylloc->last_line;
   yylloc->first_column = yylloc->last_column;
   ++yylloc->last_line;
   yylloc->last_column = 0;
-#endif /* HAVE_MODERN_FLEX */
 } /* end of new line */
 
 
@@ -279,18 +248,18 @@ static struct rwtable
 #define END(v) (sizeof(v) / sizeof(v[0]) - 1)
 
 static int
-map_keyw_ident(YYSTYPE * yylval, char *str)
+map_keyw_ident(YYSTYPE * mylval, char *str)
 {
   int idx;
   int rw = IDENTIFIER;
 
-  yylval->cvalue = str;
+  mylval->cvalue = str;
 
   for (idx = 0; idx <= END(rwtable); idx++) {
     if (strcasecmp(rwtable[idx].rw_name, str) == 0) {
       /* always return terminal value as semantic value */
       rw = rwtable[idx].rw_yylex;
-      yylval->token = rw;
+      mylval->token = rw;
     }
   }
 
@@ -314,30 +283,48 @@ align_string(char *str)
 }
 
 
-#ifdef HAVE_MODERN_FLEX
 static void
-fix_yylloc(YYLTYPE * yylloc, char *str)
+fix_yylloc(YYLTYPE * mylloc, char *str)
 {
-  yylloc->first_line = yylloc->last_line;
-  yylloc->first_column = yylloc->last_column;
-  yylloc->last_column += strlen(str);
+  mylloc->first_line = mylloc->last_line;
+  mylloc->first_column = mylloc->last_column;
+  mylloc->last_column += strlen(str);
 }
 
 
 static void
-fix_yylloc_nl(YYLTYPE * yylloc, char *str)
+fix_yylloc_nl(YYLTYPE * mylloc, char *str)
 {
   char *p;
 
-  yylloc->first_line = yylloc->last_line;
-  yylloc->first_column = yylloc->last_column;
+  mylloc->first_line = mylloc->last_line;
+  mylloc->first_column = mylloc->last_column;
   for (p = str; *p; ++p) {
     if (*p == '\n') {
-      yylloc->last_column = 0;
-      ++yylloc->last_line;
+      mylloc->last_column = 0;
+      ++mylloc->last_line;
     } else {
-      ++yylloc->last_column;
+      ++mylloc->last_column;
     }
   }
 }
-#endif /* HAVE_MODERN_FLEX */
+
+
+void *svf_flex_init(FILE *f)
+{
+  yyscan_t scanner;
+
+  /* get our scanner structure */
+  if (yylex_init(&scanner) != 0)
+    return NULL;
+
+  yyset_in(f, scanner);
+
+  return scanner;
+}
+
+
+void svf_flex_deinit(void *scanner)
+{
+  yylex_destroy(scanner);
+}

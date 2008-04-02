@@ -237,23 +237,6 @@ CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 
 
-dnl Enable SVF player?
-AC_ARG_ENABLE(svf,
-[AS_HELP_STRING([--enable-svf], [Enable SVF player (default is enabled)])],
-[case "${enableval}" in
-   yes) svf=true ;;
-   no)  svf=false ;;
-   *)   AC_MSG_ERROR(bad value ${enableval} for --enable-svf) ;;
- esac],
-[svf=true])
-AS_IF([test "x$svf" = xtrue], [
-  AM_CONDITIONAL(ENABLE_SVF, true)
-  AC_DEFINE(ENABLE_SVF, 1, [define if SVF player is enabled])
-],[
-  AM_CONDITIONAL(ENABLE_SVF, false)
-])
-
-
 # check for lex/flex
 AC_PROG_LEX
 # check for modern version of flex
@@ -295,49 +278,50 @@ AS_IF([test "$LEX" == flex], [
    flex_v2=`echo $flex_version | $AWK -F . '{print $2}' | $SED -e 's/[a-zA-Z]//g'`
    flex_v3=`echo $flex_version | $AWK -F . '{print $3}' | $SED -e 's/[a-zA-Z]//g'`
 
-   # bison error locations require flex >= 2.5.31
-   flex_ref_v1=2
-   flex_ref_v2=5
-   flex_ref_v3=31
-   flex_ref_version="$flex_ref_v1.$flex_ref_v2.$flex_ref_v3"
-   AC_MSG_CHECKING([for flex >= $flex_ref_version, required for SVF error locations])
-   #
-   AS_IF([ver_ge_ver $flex_v1 $flex_v2 $flex_v3 $flex_ref_v1 $flex_ref_v2 $flex_ref_v3], [
-      AC_MSG_RESULT([yes - flex $flex_version])
-      AM_CONDITIONAL([BISON_LOCATIONS], true)
-      bison_locations=yes
-   ], [
-      AS_IF([test -r src/svf/svf_flex.c], [
-         # If the transformed svf_flex.c is already existing, it shouldn't matter
-         # that flex is too old for building a lexer with bison locations
-         AC_MSG_RESULT([using pre-generated src/svf/svf_flex.c])
-         AM_CONDITIONAL([BISON_LOCATIONS], false)
-         bison_locations="as is"
-      ], [
-         AC_MSG_RESULT([no - flex $flex_version])
-         AM_CONDITIONAL([BISON_LOCATIONS], false)
-         bison_locations=no
-      ])
-   ])
-
-   # bsdl lexer requires flex >= 2.5.33
+   # svf and bsdl lexer require flex >= 2.5.33
    flex_ref_v1=2
    flex_ref_v2=5
    flex_ref_v3=33
    flex_ref_version="$flex_ref_v1.$flex_ref_v2.$flex_ref_v3"
-   AC_MSG_CHECKING([for flex >= $flex_ref_version, required for BSDL lexer])
+   AC_MSG_CHECKING([for flex >= $flex_ref_version, required for SVF and BSDL lexer])
    #
    AS_IF([ver_ge_ver $flex_v1 $flex_v2 $flex_v3 $flex_ref_v1 $flex_ref_v2 $flex_ref_v3], [
       AC_MSG_RESULT([yes - flex $flex_version])
+      svf_lexer=true
       bsdl_lexer=true
    ], [
       AC_MSG_RESULT([no - flex $flex_version])
+      svf_lexer=false
       bsdl_lexer=false
    ])
 ], [
-   bison_locations=no
-   AM_CONDITIONAL([BISON_LOCATIONS], false)
+   svf_lexer=false
    bsdl_lexer=false
+])
+
+
+dnl If the transformed svf_flex.c is already existing, it doesn't matter
+dnl that flex is too old for building the lexer.
+AS_IF([test "x$svf_lexer" == xfalse], [
+   AS_IF([test -r src/svf/svf_flex.c], [
+      svf_lexer=true
+   ])
+])
+
+dnl Enable SVF player?
+AC_ARG_ENABLE(svf,
+[AS_HELP_STRING([--enable-svf], [Enable SVF player (default is enabled)])],
+[case "${enableval}" in
+   yes) svf=true ;;
+   no)  svf=false ;;
+   *)   AC_MSG_ERROR(bad value ${enableval} for --enable-svf) ;;
+ esac],
+[svf=$svf_lexer])
+AS_IF([test "x$svf" = xtrue], [
+  AM_CONDITIONAL(ENABLE_SVF, true)
+  AC_DEFINE(ENABLE_SVF, 1, [define if SVF player is enabled])
+],[
+  AM_CONDITIONAL(ENABLE_SVF, false)
 ])
 
 
@@ -348,7 +332,6 @@ AS_IF([test "x$bsdl_lexer" == xfalse], [
       bsdl_lexer=true
    ])
 ])
-
 
 dnl Enable BSDL subsystem?
 AC_ARG_ENABLE(bsdl,
@@ -571,7 +554,6 @@ jtag is now configured for
   Detected libusb      : $FLAG_HAVELIBUSB
   Detected libftdi     : $FLAG_HAVELIBFTDI
   Detected libftd2xx   : $FLAG_HAVELIBFTD2XX
-  SVF error locations  : $bison_locations
   Build SVF player     : $FLAG_SVF
   Build BSDL subsystem : $FLAG_BSDL
   Bus drivers          : $enabled_bus_drivers

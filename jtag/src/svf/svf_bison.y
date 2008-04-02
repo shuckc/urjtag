@@ -25,6 +25,10 @@
  */
 
 %pure-parser
+%parse-param {parser_priv_t *priv_data}
+%parse-param {chain_t *chain}
+%name-prefix="svf"
+%locations
 
 %{
 #include <stdio.h>
@@ -34,29 +38,16 @@
 
 /* interface to flex */
 #include "svf_bison.h"
-int yylex (YYSTYPE *, YYLTYPE *);
+#define YYLEX_PARAM priv_data->scanner
+int yylex (YYSTYPE *, YYLTYPE *, void *);
 
 #define YYERROR_VERBOSE
 
-struct svf_parser_params {
-    struct ths_params  ths_params;
-    struct path_states path_states;
-    struct runtest     runtest;
-};
 
-
-static struct svf_parser_params parser_params = {
-  {0.0, NULL, NULL, NULL, NULL},
-  {{}, 0},
-  {0, 0.0, 0, 0, 0, 0}
-};
-
-void yyerror(YYLTYPE *, chain_t *, const char *);
+void yyerror(YYLTYPE *, parser_priv_t *priv_data, chain_t *, const char *);
 
 static void svf_free_ths_params(struct ths_params *);
 %}
-
-%parse-param {chain_t *chain}
 
 %union {
   int    token;
@@ -107,12 +98,12 @@ line
 svf_statement
     : ENDIR stable_state ';'
     {
-      svf_endxr(generic_ir, $<token>2);
+      svf_endxr(priv_data, generic_ir, $<token>2);
     }
 
     | ENDDR stable_state ';'
     {
-      svf_endxr(generic_dr, $<token>2);
+      svf_endxr(priv_data, generic_dr, $<token>2);
     }
 
     | FREQUENCY ';'
@@ -127,7 +118,7 @@ svf_statement
 
     | HDR NUMBER ths_param_list ';'
       {
-        struct ths_params *p = &parser_params.ths_params;
+        struct ths_params *p = &(priv_data->parser_params.ths_params);
 
         p->number = $2;
         svf_hxr(generic_dr, p);
@@ -136,7 +127,7 @@ svf_statement
 
     | HIR NUMBER ths_param_list ';'
       {
-        struct ths_params *p = &parser_params.ths_params;
+        struct ths_params *p = &(priv_data->parser_params.ths_params);
 
         p->number = $2;
         svf_hxr(generic_ir, p);
@@ -146,7 +137,7 @@ svf_statement
     | PIOMAP '(' direction IDENTIFIER piomap_rec ')' ';'
       {
         printf("PIOMAP not implemented\n");
-        yyerror(&@$, chain, "PIOMAP");
+        yyerror(&@$, priv_data, chain, "PIOMAP");
         YYERROR;
       }
 
@@ -154,81 +145,81 @@ svf_statement
       {
         free($<cvalue>2);
         printf("PIO not implemented\n");
-        yyerror(&@$, chain, "PIO");
+        yyerror(&@$, priv_data, chain, "PIO");
         YYERROR;
       }
 
     | RUNTEST runtest_run_state_opt runtest_clk_count runtest_time_opt runtest_end_state_opt ';'
       {
-        struct runtest *rt = &parser_params.runtest;
+        struct runtest *rt = &(priv_data->parser_params.runtest);
 
         rt->run_state = $2;
         rt->run_count = $3.dvalue;
         rt->run_clk   = $3.token;
         rt->end_state = $5;
 
-        if (!svf_runtest(chain, rt)) {
-          yyerror(&@$, chain, "RUNTEST");
+        if (!svf_runtest(chain, priv_data, rt)) {
+          yyerror(&@$, priv_data, chain, "RUNTEST");
           YYERROR;
         }
       }
 
     | RUNTEST runtest_run_state_opt runtest_time runtest_end_state_opt ';'
       {
-        struct runtest *rt = &parser_params.runtest;
+        struct runtest *rt = &(priv_data->parser_params.runtest);
 
         rt->run_state = $2;
         rt->run_count = 0;
         rt->run_clk   = 0;
         rt->end_state = $4;
 
-        if (!svf_runtest(chain, rt)) {
-          yyerror(&@$, chain, "RUNTEST");
+        if (!svf_runtest(chain, priv_data, rt)) {
+          yyerror(&@$, priv_data, chain, "RUNTEST");
           YYERROR;
         }
       }
 
     | SDR NUMBER ths_param_list ';'
       {
-        struct ths_params *p = &parser_params.ths_params;
+        struct ths_params *p = &(priv_data->parser_params.ths_params);
         int result;
 
         p->number = $2;
-        result = svf_sxr(chain, generic_dr, p, &@$);
+        result = svf_sxr(chain, priv_data, generic_dr, p, &@$);
         svf_free_ths_params(p);
 
         if (!result) {
-          yyerror(&@$, chain, "SDR");
+          yyerror(&@$, priv_data, chain, "SDR");
           YYERROR;
         }
       }
 
     | SIR NUMBER ths_param_list ';'
       {
-        struct ths_params *p = &parser_params.ths_params;
+        struct ths_params *p = &(priv_data->parser_params.ths_params);
         int result;
 
         p->number = $2;
-        result = svf_sxr(chain, generic_ir, p, &@$);
+        result = svf_sxr(chain, priv_data, generic_ir, p, &@$);
         svf_free_ths_params(p);
 
         if (!result) {
-          yyerror(&@$, chain, "SIR");
+          yyerror(&@$, priv_data, chain, "SIR");
           YYERROR;
         }
       }
 
     | STATE path_states stable_state ';'
       {
-        if (!svf_state(chain, &parser_params.path_states, $<token>3)) {
-          yyerror(&@$, chain, "STATE");
+        if (!svf_state(chain, priv_data, &(priv_data->parser_params.path_states), $<token>3)) {
+          yyerror(&@$, priv_data, chain, "STATE");
           YYERROR;
         }
       }
 
     | TDR NUMBER ths_param_list ';'
       {
-        struct ths_params *p = &parser_params.ths_params;
+        struct ths_params *p = &(priv_data->parser_params.ths_params);
         int result;
 
         p->number = $2;
@@ -236,14 +227,14 @@ svf_statement
         svf_free_ths_params(p);
 
         if (!result) {
-          yyerror(&@$, chain, "TDR");
+          yyerror(&@$, priv_data, chain, "TDR");
           YYERROR;
         }
       }
 
     | TIR NUMBER ths_param_list ';'
       {
-        struct ths_params *p = &parser_params.ths_params;
+        struct ths_params *p = &(priv_data->parser_params.ths_params);
         int result;
 
         p->number = $2;
@@ -251,15 +242,15 @@ svf_statement
         svf_free_ths_params(p);
 
         if (!result) {
-          yyerror(&@$, chain, "TIR");
+          yyerror(&@$, priv_data, chain, "TIR");
           YYERROR;
         }
       }
 
     | TRST trst_mode ';'
     {
-      if (!svf_trst(chain, $<token>2)) {
-        yyerror(&@$, chain, "TRST");
+      if (!svf_trst(chain, priv_data, $<token>2)) {
+        yyerror(&@$, priv_data, chain, "TRST");
         YYERROR;
       }
     }
@@ -274,22 +265,22 @@ ths_param_list
 ths_opt_param
             : TDI   HEXA_NUM
               {
-                parser_params.ths_params.tdi = $<cvalue>2;
+                priv_data->parser_params.ths_params.tdi = $<cvalue>2;
               }
 
             | TDO   HEXA_NUM
               {
-                parser_params.ths_params.tdo = $<cvalue>2;
+                priv_data->parser_params.ths_params.tdo = $<cvalue>2;
               }
 
             | MASK  HEXA_NUM
               {
-                parser_params.ths_params.mask = $<cvalue>2;
+                priv_data->parser_params.ths_params.mask = $<cvalue>2;
               }
 
             | SMASK HEXA_NUM
               {
-                parser_params.ths_params.smask = $<cvalue>2;
+                priv_data->parser_params.ths_params.smask = $<cvalue>2;
               }
 ;
 
@@ -325,8 +316,8 @@ runtest_clk_count
 runtest_time_opt
             :
               {
-                parser_params.runtest.min_time = 0.0;
-                parser_params.runtest.max_time = 0.0;
+                priv_data->parser_params.runtest.min_time = 0.0;
+                priv_data->parser_params.runtest.max_time = 0.0;
               }
 
             | runtest_time
@@ -335,7 +326,7 @@ runtest_time_opt
 runtest_time
             : NUMBER SEC runtest_max_time_opt
               {
-                parser_params.runtest.min_time = $<dvalue>1;
+                priv_data->parser_params.runtest.min_time = $<dvalue>1;
               }
 ;
 
@@ -343,7 +334,7 @@ runtest_max_time_opt
             : 
             | MAXIMUM NUMBER SEC
               {
-                parser_params.runtest.max_time = $<dvalue>2;
+                priv_data->parser_params.runtest.max_time = $<dvalue>2;
               }
 ;
 
@@ -377,12 +368,12 @@ all_states
 path_states
             : /* empty element, returns index 0 */
               {
-                parser_params.path_states.num_states = 0;
+                priv_data->parser_params.path_states.num_states = 0;
               }
 
             | path_states all_states
               {
-                struct path_states *ps = &parser_params.path_states;
+                struct path_states *ps = &(priv_data->parser_params.path_states);
 
                 if (ps->num_states < MAX_PATH_STATES) {
                   ps->states[ps->num_states] = $<token>2;
@@ -415,7 +406,7 @@ direction
 
 
 void
-yyerror(YYLTYPE *locp, chain_t *chain, const char *error_string)
+yyerror(YYLTYPE *locp, parser_priv_t *priv_data, chain_t *chain, const char *error_string)
 {
   printf("Error occured for SVF command %s.\n", error_string);
 }
@@ -442,4 +433,29 @@ svf_free_ths_params(struct ths_params *params)
     free(params->smask);
     params->smask = NULL;
   }
+}
+
+
+int
+svf_bison_init(parser_priv_t *priv_data, FILE *f)
+{
+  const struct svf_parser_params params = {
+    {0.0, NULL, NULL, NULL, NULL},
+    {{}, 0},
+    {0, 0.0, 0, 0, 0, 0}
+  };
+
+  priv_data->parser_params = params;
+
+  if ((priv_data->scanner = svf_flex_init(f)) == NULL)
+    return 0;
+  else
+    return 1;
+}
+
+
+void
+svf_bison_deinit(parser_priv_t *priv_data)
+{
+  svf_flex_deinit(priv_data->scanner);
 }

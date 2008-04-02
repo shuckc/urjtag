@@ -1,3 +1,14 @@
+2008-04-03  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   [ 1929235 ] Use less global and static variables:
+   * src/svf/svf.c, src/svf/svf.h: support reentrant parser and scanner
+   * src/svf/svf_bison.y: provisions for reentrant parser
+   * src/svf/svf_flex.l: made scanner reentrant
+   * src/svf/Makefile.am: removed command line options for
+     bison and flex
+   * configure.ac: require flex 2.5.33 also for SVF scanner
+   * doc/UrJTAG.txt: document flex version for SVF scanner
+
 2008-04-02  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    [ 1929235 ] Use less global and static variables:
