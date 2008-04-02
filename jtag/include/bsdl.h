@@ -25,12 +25,20 @@
 #ifndef BSDL_H
 #define BSDL_H
 
+typedef struct {
+    char **path_list;
+    int    debug;
+} bsdl_globs_t;
+
+#define BSDL_GLOBS_INIT(bsdl) {\
+  bsdl.path_list = NULL;\
+  bsdl.debug = 0;\
+}
+
 #include "chain.h"
 
-extern int bsdl_debug;
-
-int bsdl_read_file(chain_t *, const char *, int, char *);
-void bsdl_set_path(const char *);
+int bsdl_read_file(chain_t *, const char *, int, const char *);
+void bsdl_set_path(chain_t *, const char *);
 int bsdl_scan_files(chain_t *, const char *, int);
 
 #endif /* BSDL_H */

@@ -132,7 +132,7 @@ LEGAL NOTICES:
 
 /* interface to flex */
 #include "bsdl_bison.h"
-#include "bsdl.h"
+#include "bsdl_local.h"
 
 #define YYLEX_PARAM priv_data->scanner
 int yylex (YYSTYPE *, void *);

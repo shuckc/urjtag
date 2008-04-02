@@ -130,7 +130,7 @@ LEGAL NOTICES:
 #include "bsdl_sysdep.h"
 
 #include "bsdl_bison.h"
-#include "bsdl.h"
+#include "bsdl_local.h"
 
 #define YY_EXTRA_TYPE scan_extra_t *
 

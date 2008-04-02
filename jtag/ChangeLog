@@ -1,3 +1,14 @@
+2008-04-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   [ 1929235 ] Use less global and static variables:
+   * src/bsdl/bsdl.c, src/cmd/bsdl.c: use globals from chain_t
+   * src/tap/chain.c (chain_alloc): init BSDL globals
+   * include/chain.h: added bsdl_globs_t to chain_t
+   * include/bsdl.h: defined structure for BSDL globals
+   * src/bsdl/Makefile.am, src/bsdl/bsdl_sem.c, src/bsdl/bsdl_flex.l,
+     src/bsdl/bsdl_bison.y, src/bsdl/bsdl.c, src/bsdl/bsdl_local.h:
+       renamed bsdl.h to bsdl_local.h
+
 2008-04-01  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    [ 1887221 ] Add configure switch to disable all cable&parport drivers:

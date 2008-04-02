@@ -35,7 +35,7 @@
 #include "bsdl_sysdep.h"
 
 #include "bsdl_bison.h"
-#include "bsdl.h"
+#include "bsdl_local.h"
 
 
 /*****************************************************************************

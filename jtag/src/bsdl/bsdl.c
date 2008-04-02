@@ -33,15 +33,10 @@
 
 #include "sysdep.h"
 
-#include <jtag.h>
-#include <cmd.h>
+#include "jtag.h"
+#include "cmd.h"
 
-#include "bsdl.h"
-
-
-static char **bsdl_path_list = NULL;
-
-int bsdl_debug = 0;
+#include "bsdl_local.h"
 
 
 void bsdl_msg(int type, const char *format, ...)
@@ -89,6 +84,7 @@ void bsdl_msg(int type, const char *format, ...)
  ****************************************************************************/
 int bsdl_read_file(chain_t *chain, const char *BSDL_File_Name, int mode, const char *idcode)
 {
+  bsdl_globs_t *globs = &(chain->bsdl);
   FILE *BSDL_File;
   parser_priv_t *parser_priv;
   int Compile_Errors = 1;
@@ -96,7 +92,7 @@ int bsdl_read_file(chain_t *chain, const char *BSDL_File_Name, int mode, const c
 
   BSDL_File = fopen(BSDL_File_Name, "r");
 
-  if (bsdl_debug || (mode == 0))
+  if (globs->debug || (mode == 0))
     bsdl_msg(BSDL_MSG_NOTE, _("Reading file '%s'\n"), BSDL_File_Name);
 
   if (BSDL_File == NULL) {
@@ -104,7 +100,7 @@ int bsdl_read_file(chain_t *chain, const char *BSDL_File_Name, int mode, const c
     return -1;
   }
 
-  if ((parser_priv = bsdl_parser_init(BSDL_File, mode, bsdl_debug))) {
+  if ((parser_priv = bsdl_parser_init(BSDL_File, mode, globs->debug))) {
     if (mode >= 0) {
       if (mode >= 1) {
 	if (chain == NULL) {
@@ -141,10 +137,10 @@ int bsdl_read_file(chain_t *chain, const char *BSDL_File_Name, int mode, const c
 
     Compile_Errors = bsdl_flex_get_compile_errors(parser_priv->scanner);
     if (Compile_Errors == 0) {
-      if (bsdl_debug)
+      if (globs->debug)
         bsdl_msg(BSDL_MSG_NOTE, _("BSDL file '%s' compiled correctly\n"), BSDL_File_Name);
     } else {
-      if (bsdl_debug || (mode >= 0))
+      if (globs->debug || (mode >= 0))
         bsdl_msg(BSDL_MSG_ERR, _("BSDL file '%s' contains errors, stopping\n"), BSDL_File_Name); 
     }
 
@@ -152,7 +148,7 @@ int bsdl_read_file(chain_t *chain, const char *BSDL_File_Name, int mode, const c
       bsdl_ac_finalize(parser_priv);
 
     if ((Compile_Errors == 0) && parser_priv->jtag_ctrl.idcode) {
-      if (bsdl_debug)
+      if (globs->debug)
         bsdl_msg(BSDL_MSG_NOTE, _("Got IDCODE: %s\n"), parser_priv->jtag_ctrl.idcode);
 
       /* should be compare the idcodes? */
@@ -168,7 +164,7 @@ int bsdl_read_file(chain_t *chain, const char *BSDL_File_Name, int mode, const c
               if (idcode[idx] != parser_priv->jtag_ctrl.idcode[idx])
                 idcode_match = 0;
 
-          if (bsdl_debug) {
+          if (globs->debug) {
             if (idcode_match)
               bsdl_msg(BSDL_MSG_NOTE, _("IDCODE matched\n") );
             else
@@ -192,24 +188,25 @@ int bsdl_read_file(chain_t *chain, const char *BSDL_File_Name, int mode, const c
  * void bsdl_set_path(const char *pathlist)
  *
  * Dissects pathlist and enters its elements to the global variable
- * bsdl_path_list.
+ * bsdl.path_list.
  *
  * Return value:
  * void
  ****************************************************************************/
-void bsdl_set_path(const char *pathlist)
+void bsdl_set_path(chain_t *chain, const char *pathlist)
 {
+  bsdl_globs_t *globs = &(chain->bsdl);
   char *delim;
   char *elem;
   int num;
 
   /* free memory of current path list */
-  if (bsdl_path_list) {
-    for (num = 0; bsdl_path_list[num]; num++)
-      if (bsdl_path_list[num])
-        free(bsdl_path_list[num]);
-    free(bsdl_path_list);
-    bsdl_path_list = NULL;
+  if (globs->path_list) {
+    for (num = 0; globs->path_list[num]; num++)
+      if (globs->path_list[num])
+        free(globs->path_list[num]);
+    free(globs->path_list);
+    globs->path_list = NULL;
   }
 
   /* run through path list and determine number of elements */
@@ -218,17 +215,17 @@ void bsdl_set_path(const char *pathlist)
     if ((delim - elem > 0) || (delim == NULL)) {
       num++;
       /* extend path list array */
-      bsdl_path_list = (char **)realloc(bsdl_path_list, (num+1) * sizeof(char *));
+      globs->path_list = (char **)realloc(globs->path_list, (num+1) * sizeof(char *));
       /* enter path element up to the delimeter */
-      bsdl_path_list[num-1] = strndup(elem, (size_t)(delim - elem));
-      bsdl_path_list[num] = NULL;
+      globs->path_list[num-1] = strndup(elem, (size_t)(delim - elem));
+      globs->path_list[num] = NULL;
     }
     elem = delim ? delim + 1 : elem + strlen(elem);
   }
 
-  if (bsdl_debug)
-    for (num = 0; bsdl_path_list[num] != NULL; num++) {
-      bsdl_msg(BSDL_MSG_NOTE, "%s\n", bsdl_path_list[num]);
+  if (globs->debug)
+    for (num = 0; globs->path_list[num] != NULL; num++) {
+      bsdl_msg(BSDL_MSG_NOTE, "%s\n", globs->path_list[num]);
     }
 }
 
@@ -257,28 +254,29 @@ void bsdl_set_path(const char *pathlist)
  ****************************************************************************/
 int bsdl_scan_files(chain_t *chain, const char *idcode, int mode)
 {
+  bsdl_globs_t *globs = &(chain->bsdl);
   int idx = 0;
   int result = 0;
 
   /* abort if no path list was specified */
-  if (bsdl_path_list == NULL)
+  if (globs->path_list == NULL)
     return 0;
 
-  while (bsdl_path_list[idx] && (result <= 0)) {
+  while (globs->path_list[idx] && (result <= 0)) {
     DIR *dir;
 
-    if ((dir = opendir(bsdl_path_list[idx]))) {
+    if ((dir = opendir(globs->path_list[idx]))) {
       struct dirent *elem;
 
       /* run through all elements in the current directory */
       while ((elem = readdir(dir)) && (result <= 0)) {
         char *name;
 
-        name = (char *)malloc(strlen(bsdl_path_list[idx]) + strlen(elem->d_name) + 1 + 1);
+        name = (char *)malloc(strlen(globs->path_list[idx]) + strlen(elem->d_name) + 1 + 1);
         if (name) {
           struct stat buf;
 
-          strcpy(name, bsdl_path_list[idx]);
+          strcpy(name, globs->path_list[idx]);
           strcat(name, "/");
           strcat(name, elem->d_name);
 
@@ -304,7 +302,7 @@ int bsdl_scan_files(chain_t *chain, const char *idcode, int mode)
 
       closedir(dir);
     } else
-      bsdl_msg(BSDL_MSG_WARN, _("Cannot open directory %s\n"), bsdl_path_list[idx]);
+      bsdl_msg(BSDL_MSG_WARN, _("Cannot open directory %s\n"), globs->path_list[idx]);
 
     idx++;
   }

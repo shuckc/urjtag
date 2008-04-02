@@ -28,28 +28,30 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <bsdl.h>
-#include <cmd.h>
+#include "bsdl.h"
+#include "chain.h"
+#include "cmd.h"
 
 static int
 cmd_bsdl_run( chain_t *chain, char *params[] )
 {
 	int num_params, result = -1;
+	bsdl_globs_t *globs = &(chain->bsdl);
 
 	num_params = cmd_params(params);
 	if (num_params >= 2) {
 		if (strcmp(params[1], "test") == 0) {
 			int debug_save;
 
-			debug_save = bsdl_debug;
-			bsdl_debug = 1;
+			debug_save = globs->debug;
+			globs->debug = 1;
 			if (num_params == 3) {
 				result = bsdl_read_file(chain, params[2], -1, NULL) >= 0 ? 1 : -1;
 			} else if (num_params == 2) {
 				bsdl_scan_files(chain, NULL, -1);
 				result = 1;
 			}
-			bsdl_debug = debug_save;
+			globs->debug = debug_save;
 		}
 
 		if (strcmp(params[1], "dump") == 0) {
@@ -63,17 +65,17 @@ cmd_bsdl_run( chain_t *chain, char *params[] )
 
 		if (num_params == 3) {
 			if (strcmp(params[1], "path") == 0) {
-				bsdl_set_path(params[2]);
+				bsdl_set_path(chain, params[2]);
 				result = 1;
 			}
 
 			if (strcmp(params[1], "debug") == 0) {
 				if (strcmp(params[2], "on") == 0) {
-					bsdl_debug = 1;
+					globs->debug = 1;
 					result = 1;
 				}
 				if (strcmp(params[2], "off") == 0) {
-					bsdl_debug = 0;
+					globs->debug = 0;
 					result = 1;
 				}
 			}

@@ -24,7 +24,7 @@ include $(top_srcdir)/Makefile.rules
 noinst_LIBRARIES = libbsdl.a
 
 noinst_HEADERS = \
-	bsdl.h \
+	bsdl_local.h \
 	bsdl_bison.h \
 	bsdl_sysdep.h
 
