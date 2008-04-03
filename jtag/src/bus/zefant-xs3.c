@@ -119,6 +119,7 @@ typedef struct {
 typedef struct {
 	chain_t     *chain;
 	part_t      *part;
+	uint32_t     last_addr; /* holds last address of read or write access */
 	component_t  flash;
 	component_t  ram0;
 	component_t  ram1;
@@ -126,30 +127,28 @@ typedef struct {
 	component_t  eeprom_status;
 } bus_params_t;
 
-#define CHAIN  ((bus_params_t *) bus->params)->chain
-#define PART   ((bus_params_t *) bus->params)->part
-#define A      comp->a
-#define D      comp->d
-#define nCS    comp->ncs
-#define nOE    comp->noe
-#define nWE    comp->nwe
-#define nLB    comp->nlb
-#define nUB    comp->nub
-#define nBYTE  comp->nbyte
-#define STS    comp->sts
-#define nRP    comp->nrp
-#define SI     comp->si
-#define SO     comp->so
-#define SCK    comp->sck
+#define CHAIN     ((bus_params_t *) bus->params)->chain
+#define PART      ((bus_params_t *) bus->params)->part
+#define LAST_ADDR ((bus_params_t *) bus->params)->last_addr
+#define A         comp->a
+#define D         comp->d
+#define nCS       comp->ncs
+#define nOE       comp->noe
+#define nWE       comp->nwe
+#define nLB       comp->nlb
+#define nUB       comp->nub
+#define nBYTE     comp->nbyte
+#define STS       comp->sts
+#define nRP       comp->nrp
+#define SI        comp->si
+#define SO        comp->so
+#define SCK       comp->sck
 
 #define COMP_FLASH         &(((bus_params_t *) bus->params)->flash)
 #define COMP_RAM0          &(((bus_params_t *) bus->params)->ram0)
 #define COMP_RAM1          &(((bus_params_t *) bus->params)->ram1)
 #define COMP_EEPROM        &(((bus_params_t *) bus->params)->eeprom)
 #define COMP_EEPROM_STATUS &(((bus_params_t *) bus->params)->eeprom_status)
-
-/* holds last address of read or write access */
-static uint32_t last_address = 0;
 
 static void
 setup_address( bus_t *bus, uint32_t a, component_t *comp )
@@ -158,7 +157,7 @@ setup_address( bus_t *bus, uint32_t a, component_t *comp )
 	part_t *p = PART;
 	int addr_width;
 
-	last_address = a;
+	LAST_ADDR = a;
 
 	switch (comp->ctype) {
 		case FLASH:
@@ -373,7 +372,7 @@ zefant_xs3_bus_read_start( bus_t *bus, uint32_t adr )
 	comp_bus_area( bus, adr, &area, &comp );
 	if (!comp) {
 		printf( _("Address out of range\n") );
-		last_address = adr;
+		LAST_ADDR = adr;
 		return;
 	}
 
@@ -413,7 +412,7 @@ zefant_xs3_bus_read_start( bus_t *bus, uint32_t adr )
 				eeprom_shift_byte( chain, p, comp, adr & 0xff);
 			}
 
-			last_address = adr;
+			LAST_ADDR = adr;
 			break;
 
 		default:
@@ -440,7 +439,7 @@ zefant_xs3_bus_read_next( bus_t *bus, uint32_t adr )
 	comp_bus_area( bus, adr, &area, &comp );
 	if (!comp) {
 		printf( _("Address out of range\n") );
-		last_address = adr;
+		LAST_ADDR = adr;
 		return 0;
 	}
 
@@ -485,7 +484,7 @@ zefant_xs3_bus_read_end( bus_t *bus )
 	component_t *comp;
 
 	/* use last address of access to determine component */
-	comp_bus_area( bus, last_address, &area, &comp );
+	comp_bus_area( bus, LAST_ADDR, &area, &comp );
 	if (!comp) {
 		printf( _("Address out of range\n") );
 		return 0;

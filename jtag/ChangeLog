@@ -1,6 +1,8 @@
 2008-04-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    [ 1929235 ] Use less global and static variables:
+   * src/bus/jopcyc.c, src/bus/zefant-xs3.c: made global variable
+     last_address local
    * src/svf/svf.c, src/svf/svf.h: support reentrant parser and scanner
    * src/svf/svf_bison.y: provisions for reentrant parser
    * src/svf/svf_flex.l: made scanner reentrant

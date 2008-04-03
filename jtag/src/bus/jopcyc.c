@@ -100,6 +100,7 @@ typedef struct {
 typedef struct {
 	chain_t     *chain;
 	part_t      *part;
+	uint32_t     last_addr; /* holds last address of read or write access */
 	component_t  rama;
 	component_t  ramb;
 	component_t  flash;
@@ -109,17 +110,18 @@ typedef struct {
 	signal_t     *ser_ncts;
 } bus_params_t;
 
-#define CHAIN  ((bus_params_t *) bus->params)->chain
-#define PART   ((bus_params_t *) bus->params)->part
-#define A      comp->a
-#define D      comp->d
-#define nCS    comp->ncs
-#define nOE    comp->noe
-#define nWE    comp->nwe
-#define nLB    comp->nlb
-#define nUB    comp->nub
-#define nCS2   comp->ncs2
-#define nRDY   comp->nrdy
+#define CHAIN     ((bus_params_t *) bus->params)->chain
+#define PART      ((bus_params_t *) bus->params)->part
+#define LAST_ADDR ((bus_params_t *) bus->params)->last_addr
+#define A         comp->a
+#define D         comp->d
+#define nCS       comp->ncs
+#define nOE       comp->noe
+#define nWE       comp->nwe
+#define nLB       comp->nlb
+#define nUB       comp->nub
+#define nCS2      comp->ncs2
+#define nRDY      comp->nrdy
 
 #define COMP_RAMA  &(((bus_params_t *) bus->params)->rama)
 #define COMP_RAMB  &(((bus_params_t *) bus->params)->ramb)
@@ -130,8 +132,6 @@ typedef struct {
 #define SER_TXD  ((bus_params_t *) bus->params)->ser_txd
 #define SER_NCTS ((bus_params_t *) bus->params)->ser_ncts
 
-/* holds last address of read or write access */
-static uint32_t last_address = 0;
 
 static void
 setup_address( bus_t *bus, uint32_t a, component_t *comp )
@@ -140,7 +140,7 @@ setup_address( bus_t *bus, uint32_t a, component_t *comp )
 	part_t *p = PART;
 	int addr_width;
 
-	last_address = a;
+	LAST_ADDR = a;
 
 	switch (comp->ctype) {
 		case RAM:
@@ -295,7 +295,7 @@ jopcyc_bus_read_start( bus_t *bus, uint32_t adr )
 	comp_bus_area( bus, adr, &area, &comp );
 	if (!comp) {
 		printf( _("Address out of range\n") );
-		last_address = adr;
+		LAST_ADDR = adr;
 		return;
 	}
 
@@ -330,7 +330,7 @@ jopcyc_bus_read_next( bus_t *bus, uint32_t adr )
 	comp_bus_area( bus, adr, &area, &comp );
 	if (!comp) {
 		printf( _("Address out of range\n") );
-		last_address = adr;
+		LAST_ADDR = adr;
 		return 0;
 	}
 
@@ -358,7 +358,7 @@ jopcyc_bus_read_end( bus_t *bus )
 	component_t *comp;
 
 	/* use last address of access to determine component */
-	comp_bus_area( bus, last_address, &area, &comp );
+	comp_bus_area( bus, LAST_ADDR, &area, &comp );
 	if (!comp) {
 		printf( _("Address out of range\n") );
 		return 0;
@@ -716,3 +716,12 @@ const bus_driver_t jopcyc_bus = {
 	jopcyc_bus_write,
 	NULL
 };
+
+
+/*
+ Local Variables:
+ mode:C
+ tab-width:2
+ indent-tabs-mode:t
+ End:
+*/
