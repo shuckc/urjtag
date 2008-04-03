@@ -45,6 +45,7 @@ int jtag_parse_stream( chain_t *chain, FILE *f );
 int detect_parts( chain_t *chain, char *db_path );
 int detect_register_size( chain_t *chain );
 void discovery( chain_t *chain );
+void idcode( chain_t *chain , unsigned int bytes);
 
 void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
 void writemem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );

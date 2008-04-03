@@ -32,6 +32,7 @@ libtap_a_SOURCES = \
 	chain.c \
 	detect.c \
 	discovery.c \
+	idcode.c \
 	parport.c \
 	usbconn.c \
 	cable.c \

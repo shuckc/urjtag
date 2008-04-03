@@ -1,3 +1,9 @@
+2008-04-03  Kolja Waschk <kawk>
+
+   * include/jtag.h, src/cmd/cmd.c, src/cmd/idcode.c, src/cmd/Makefile.am,
+     src/tap/parport/ftdi.c, src/tap/idcode.c, src/tap/Makefile.am, THANKS:
+	 [1933730] new "idcode" command (by U.Bonnes)
+
 2008-04-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    [ 1929235 ] Use less global and static variables:

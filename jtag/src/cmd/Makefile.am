@@ -30,6 +30,7 @@ libcmd_a_SOURCES = \
 	cable.c \
 	reset.c \
 	discovery.c \
+	idcode.c \
 	detect.c \
 	detectflash.c \
 	help.c \

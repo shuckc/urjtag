@@ -465,7 +465,13 @@ static int
 ftdi_flush_output ( ftdi_params_t *p )
 {
 	int xferred;
+	int i;
+	unsigned char * q;
 
+	//	printf("ftdi_flush_output, length %d", p->outcount);
+	//	for (i=0, q=p->outbuf;  i<p->outcount; i++, q++)
+	//	  printf(" %01x", *q);
+	//	printf("\n");
 	xferred = ftdi_write_data(p->fc, p->outbuf, p->outcount);
 	if (xferred < 0)
 		printf( _("Error from ftdi_write_data(): %d\n"), xferred);
@@ -539,12 +545,15 @@ ftdi_get_data( parport_t *parport )
 {
 	unsigned char d;
 	ftdi_params_t *p = parport->params;
+	int res = 0;
 
 	if (p->fc) {
 		while(ftdi_read_data( p->fc, &d, 1) == 0);
-		return d;
+		res = d;
 	} else
-		return 0;
+		res = 0;
+	//	printf("ftdi_get_data %01x\n", d);
+	return res;
 }
 
 static int

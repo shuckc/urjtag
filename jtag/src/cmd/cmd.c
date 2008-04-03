@@ -37,6 +37,7 @@ extern cmd_t cmd_frequency;
 extern cmd_t cmd_cable;
 extern cmd_t cmd_reset;
 extern cmd_t cmd_discovery;
+extern cmd_t cmd_idcode;
 extern cmd_t cmd_detect;
 extern cmd_t cmd_signal;
 extern cmd_t cmd_scan;
@@ -79,6 +80,7 @@ const cmd_t *cmds[] = {
 	&cmd_cable,
 	&cmd_reset,
 	&cmd_discovery,
+	&cmd_idcode,
 	&cmd_detect,
 	&cmd_signal,
 	&cmd_scan,
