@@ -1,8 +1,15 @@
 2008-04-03  Kolja Waschk <kawk>
 
+   * include/jtag.h, src/cmd/jtag_data_dir.c, src/cmd/include.c,
+     src/cmd/Makefile.am, src/bsdl/Makefile.am, src/bsdl/bsdl_flex.l,
+     src/lib/make-relative-prefix.c, src/lib/safe-ctype.h,
+     src/lib/lbasename.c, src/lib/Makefile.am, src/lib/filenames.h,
+     src/lib/lrealpath.c, src/jtag.c, configure.ac:
+     [ 1916428 ] support runtime-relocatable urjtag (by Mike Frysinger)
+
    * include/jtag.h, src/cmd/cmd.c, src/cmd/idcode.c, src/cmd/Makefile.am,
      src/tap/parport/ftdi.c, src/tap/idcode.c, src/tap/Makefile.am, THANKS:
-	 [1933730] new "idcode" command (by U.Bonnes)
+     [ 1933730 ] new "idcode" command (by Uwe Bonnes)
 
 2008-04-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 

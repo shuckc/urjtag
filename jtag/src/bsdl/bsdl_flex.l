@@ -495,7 +495,7 @@ void bsdl_flex_switch_file(yyscan_t scanner, char *filename)
   /* file in current directory has precedence */
   f = fopen(filename, "r");
   if (!f) {
-    char db_path[] = JTAG_DATA_DIR;
+    char *db_path = jtag_get_data_dir();
     char *db_file;
 
     if ((db_file = (char *)malloc(strlen(db_path) +

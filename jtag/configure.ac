@@ -517,6 +517,17 @@ CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ppdev],  [ENABLE_PAR
 CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ppi],    [ENABLE_PARPORT_PPI])
 
 
+dnl Enable a relocatable jtag?
+AC_ARG_ENABLE(relocatable,
+[AS_HELP_STRING([--enable-relocatable], [Enable relocatable paths])],
+[relocatable=$enableval], [relocatable=no])
+AS_IF([test "x$relocatable" = xyes], [
+  AM_CONDITIONAL(JTAG_RELOCATABLE, true)
+  AC_DEFINE(JTAG_RELOCATABLE, 1, [define for relocatable paths])
+],[
+  AM_CONDITIONAL(JTAG_RELOCATABLE, false)
+])
+
 AC_OUTPUT
 
 dnl

@@ -25,7 +25,17 @@ include $(top_srcdir)/Makefile.rules
 
 noinst_LIBRARIES = libjtaglib.a
 
+if JTAG_RELOCATABLE
+libiberty_sources = \
+	lbasename.c \
+	lrealpath.c \
+	make-relative-prefix.c
+else
+libiberty_sources =
+endif
+
 libjtaglib_a_SOURCES = \
 	getdelim.c \
 	getline.c \
-	fclock.c
+	fclock.c \
+	$(libiberty_sources)

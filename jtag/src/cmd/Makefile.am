@@ -60,7 +60,8 @@ libcmd_a_SOURCES = \
 	flashmem.c \
 	eraseflash.c \
 	include.c \
-	cmd.c
+	cmd.c \
+	jtag_data_dir.c
 
 if ENABLE_SVF
 libcmd_a_SOURCES += svf.c
@@ -70,4 +71,4 @@ if ENABLE_BSDL
 libcmd_a_SOURCES += bsdl.c
 endif
 
-INCLUDES = -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
+AM_CPPFLAGS = -DJTAG_BIN_DIR=\"$(bindir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

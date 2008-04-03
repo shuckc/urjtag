@@ -253,6 +253,7 @@ cleanup( chain_t *chain )
 	chain = NULL;
 }
 
+const char *jtag_argv0;
 int
 main( int argc, char *const argv[] )
 {
@@ -265,11 +266,13 @@ main( int argc, char *const argv[] )
 	int quiet = 0;
 	chain_t *chain = NULL;
 
+	jtag_argv0 = argv[0];
+
 	if(geteuid()==0 && getuid()!=0)
 	{
 		printf (_("'%s' must not be run suid root!\n"), "jtag");
 		return(-1);
-	};
+	}
 
 #ifdef ENABLE_NLS
 	/* l10n support */
@@ -373,7 +376,6 @@ main( int argc, char *const argv[] )
 
 		exit(0);
 	}
-
 
 	/* input from files */
 	if (argc > optind) {

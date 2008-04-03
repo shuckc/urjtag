@@ -59,10 +59,11 @@ cmd_include_or_script_run( chain_t *chain, int is_include, char *params[] )
 	}
 	else
 	{
-		path = malloc(len = strlen( JTAG_DATA_DIR ) + strlen( params[1] ) + 2);
+		char *jtag_data_dir = jtag_get_data_dir();
+		path = malloc(len = strlen( jtag_data_dir ) + strlen( params[1] ) + 2);
 		if(path != NULL)
 		{
-			snprintf( path, len, "%s/%s", JTAG_DATA_DIR, params[1] );
+			snprintf( path, len, "%s/%s", jtag_data_dir, params[1] );
 		}
 	}
 	if (path == NULL) {

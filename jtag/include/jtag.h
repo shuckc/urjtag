@@ -38,6 +38,8 @@ extern bus_t *bus;
 extern int big_endian;
 extern int debug_mode;
 
+const char *jtag_get_data_dir( void );
+
 int jtag_parse_file( chain_t *chain, const char *filename );
 int jtag_parse_line( chain_t *chain, char *line );
 int jtag_parse_stream( chain_t *chain, FILE *f );
