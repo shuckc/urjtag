@@ -449,7 +449,7 @@ main( int argc, char *const argv[] )
 #endif
 
 		/* main loop */
-		jtag_readline_loop( chain, "jtag> " );
+		jtag_readline_loop( chain, getenv("JTAG_PROMPT") ? : "jtag> " );
 
 #ifdef HAVE_READLINE_HISTORY
 		/* Save history */

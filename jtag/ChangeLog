@@ -1,5 +1,8 @@
 2008-04-03  Kolja Waschk <kawk>
 
+   * src/jtag.c: Optionally use JTAG_PROMPT environment setting for
+     prompt instead of "jtag>" (by Mike Frysinger)
+
    * include/jtag.h, src/cmd/jtag_data_dir.c, src/cmd/include.c,
      src/cmd/Makefile.am, src/bsdl/Makefile.am, src/bsdl/bsdl_flex.l,
      src/lib/make-relative-prefix.c, src/lib/safe-ctype.h,
