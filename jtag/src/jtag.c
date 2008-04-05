@@ -193,8 +193,8 @@ jtag_readline_loop( chain_t *chain, const char *prompt )
 		}
 
 #ifdef HAVE_READLINE_HISTORY
-		/* Check if we actually got something */
-		if (strlen( line ))
+		/* Check if we actually got something , Don't add duplicate lines*/
+		if (strlen( line ) &&( !history_length ||strcmp(line,history_get(history_length)->line)))
 			add_history( line );
 #endif
 	}

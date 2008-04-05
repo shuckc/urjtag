@@ -1,6 +1,7 @@
 2008-04-09  Kolja Waschk <kawk>
 
    * src/tap/cable/usbblaster.c: [ 1934843 ] Fix for USBBLASTER (U.Bonnes)
+   * src/jtag.c: [ 1933141 ] Don't add duplicate history lines (U.Bonnes)
 
 2008-04-03  Kolja Waschk <kawk>
 
