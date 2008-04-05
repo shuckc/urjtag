@@ -160,8 +160,7 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 	while(len > in_offset)
 	{
 		char tdi = in[in_offset++] ? 1 : 0;
-		parport_set_data( cable->link.port, OTHERS ); /* TCK low */
-		if(out) parport_set_data( cable->link.port, OTHERS | (1 << READ) | (tdi << TDI)); 
+		parport_set_data( cable->link.port, OTHERS | ((out)?(1 << READ):0) | (tdi << TDI));/* TCK low */
 		parport_set_data( cable->link.port, OTHERS | (1 << TCK)  | (tdi << TDI));
 	}
 

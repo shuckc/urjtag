@@ -1,3 +1,7 @@
+2008-04-09  Kolja Waschk <kawk>
+
+   * src/tap/cable/usbblaster.c: [ 1934843 ] Fix for USBBLASTER (U.Bonnes)
+
 2008-04-03  Kolja Waschk <kawk>
 
    * src/jtag.c: Optionally use JTAG_PROMPT environment setting for
