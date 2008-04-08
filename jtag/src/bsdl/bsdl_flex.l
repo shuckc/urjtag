@@ -447,6 +447,12 @@ void *bsdl_flex_init(FILE *f, int mode, int debug)
 
 void bsdl_flex_deinit(void *scanner)
 {
+  if (yyget_in(scanner)) {
+    /* file might still be open so close it in any case
+       e.g. when a compile error occured and the parser didn't hit EOF/yywrap() */
+    fclose(yyget_in(scanner));
+    yyset_in(NULL, scanner);
+  }
   free(yyget_extra(scanner));
   yylex_destroy(scanner);
 }
@@ -495,7 +501,7 @@ void bsdl_flex_switch_file(yyscan_t scanner, char *filename)
   /* file in current directory has precedence */
   f = fopen(filename, "r");
   if (!f) {
-    char *db_path = jtag_get_data_dir();
+    const char *db_path = jtag_get_data_dir();
     char *db_file;
 
     if ((db_file = (char *)malloc(strlen(db_path) +

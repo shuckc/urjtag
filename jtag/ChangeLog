@@ -1,3 +1,7 @@
+2008-04-08  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/bsdl/bsdl_flex.l (bsdl_flex_deinit): close file if still open
+
 2008-04-08  Kolja Waschk <kawk>
 
    * src/cmd/idcode.c: [ 1936543 ] Check for set-up cable in idcode (U.Bonnes)
