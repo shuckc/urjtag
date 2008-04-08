@@ -44,6 +44,9 @@ cmd_idcode_run( chain_t *chain, char *params[] )
         else if (cmd_get_number( params[1], &bytes ))
                 return -1;
 
+        if (!cmd_test_cable( chain ))
+                return 1;
+
         printf( _("Reading %d bytes if idcode\n"), bytes );
 	idcode( chain , bytes);
         return 1;
