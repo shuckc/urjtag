@@ -40,6 +40,10 @@ if ENABLE_BUS_BCM1250
 libbus_a_SOURCES += bcm1250.c
 endif
 
+if ENABLE_BUS_BF527_EZKIT
+libbus_a_SOURCES += bf537_stamp.c
+endif
+
 if ENABLE_BUS_BF533_STAMP
 libbus_a_SOURCES += bf533_stamp.c
 endif
@@ -50,10 +54,10 @@ endif
 
 if ENABLE_BUS_BF537_STAMP
 libbus_a_SOURCES += bf537_stamp.c
-else
+endif
+
 if ENABLE_BUS_BF537_EZKIT
 libbus_a_SOURCES += bf537_stamp.c
-endif
 endif
 
 if ENABLE_BUS_BF548_EZKIT
