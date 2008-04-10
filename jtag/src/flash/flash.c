@@ -312,7 +312,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 			adr += flash_driver->bus_width;
 		}
 	}
-	printf( "\n" );
+	printf( _("addr: 0x%08X\n"), adr - flash_driver->bus_width);
 
 	flash_driver->readarray( cfi_array );
 
@@ -321,37 +321,36 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	fflush( stdout );
 	adr = addr;
 	while (!feof( f )) {
-		uint8_t buf[16];
-		uint32_t data;
-		uint32_t readed;
-		int j;
+		uint32_t data, readed;
+		uint8_t b[BSIZE];
+		int bc = 0, bn = 0, btr = BSIZE;
 
-		if (fread( buf, flash_driver->bus_width, 1, f ) != 1) {
-			if (feof(f))
-				break;
-			printf( _("Error during file read.\n") );
-			return;
-		}
+		bn = fread( b, 1, btr, f );
 
-		data = 0;
-		for (j = 0; j < flash_driver->bus_width; j++)
-			if (big_endian)
-				data = (data << 8) | buf[j];
-			else
-				data |= buf[j] << (j * 8);
+		for (bc = 0; bc < bn; bc += flash_driver->bus_width) {
+			int j;
+			if ((adr & 0xFF) == 0) {
+				printf( _("addr: 0x%08X\r"), adr );
+				fflush( stdout );
+			}
 
-		if ((addr && 0xffffff00) == 0) {
-			printf( _("addr: 0x%08X\r"), adr );
-			fflush( stdout );
+			data = 0;
+			for (j = 0; j < flash_driver->bus_width; j++)
+				if (big_endian)
+					data = (data << 8) | b[bc + j];
+				else
+					data |= b[bc + j] << (j * 8);
+
+			readed = bus_read( bus, adr );
+			if (data != readed) {
+				printf( _("addr: 0x%08X\n"), adr );
+				printf( _("verify error:\nread: 0x%08X\nexpected: 0x%08X\n"), readed, data );
+				return;
+			}
+			adr += flash_driver->bus_width;
 		}
-		readed = bus_read( bus, adr );
-		if (data != readed) {
-			printf( _("\nverify error:\nread: 0x%08X\nexpected: 0x%08X\n"), readed, data );
-			return;
-		}
-		adr += flash_driver->bus_width;
 	}
-	printf( _("\nDone.\n") );
+	printf( _("addr: 0x%08X\nDone.\n"), adr - flash_driver->bus_width);
 
 	free( erased );
 }

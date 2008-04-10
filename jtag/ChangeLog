@@ -1,5 +1,10 @@
 2008-04-10  Jie Zhang  <jie.zhang@analog.com>
 
+   * src/flash/flash.c (flashmem): Show the address when verifying.
+     Show the end address when program and verify complete.
+
+2008-04-10  Jie Zhang  <jie.zhang@analog.com>
+
    From Stefan Pledl  <stefan.pledl@mesutronic.de>
    * src/bsdl2jtag.c (endline): Set mode to 0 for INSTRUCTION_LENGTH
      and BOUNDARY_LENGTH attributes.
