@@ -73,6 +73,7 @@ int endline(void) {
 			i=sscanf(pline, "attribute INSTRUCTION_LENGTH of %s : entity is %i ;", tmp, &j);
 			if(i!=2) return -2;
 			IR_l=j;
+			mode=0;
 		} else
 		if(!strncmp(att, "BOUNDARY_LENGTH", 15)){
 			i=sscanf(pline, "attribute BOUNDARY_LENGTH of %s : entity is %i ;", tmp, &j);
@@ -81,6 +82,7 @@ int endline(void) {
 			bs_bits=malloc(BR_l * sizeof(struct bsbit));
 			if(bs_bits==NULL)return -80; /* djf */
 			for(i=0;i<BR_l;i++)bs_bits[i].bit=-1;
+			mode=0;
 		} else
 		if(!strncmp(att, "IDCODE_REGISTER", 15)) {
 			i=sscanf(pline, "attribute IDCODE_REGISTER of %s : entity is %n", tmp, &j);

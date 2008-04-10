@@ -1,3 +1,14 @@
+2008-04-10  Jie Zhang  <jie.zhang@analog.com>
+
+   From Stefan Pledl  <stefan.pledl@mesutronic.de>
+   * src/bsdl2jtag.c (endline): Set mode to 0 for INSTRUCTION_LENGTH
+     and BOUNDARY_LENGTH attributes.
+   * data/atmel/atf15xx/STEPPINGS: New file.
+   * data/atmel/atf15xx/atf1504asv: New file.
+   * data/atmel/PARTS: Add atf15xx.
+   * data/Makefile.am (nobase_dist_pkgdata_DATA): Add
+     atmel/atf15xx/STEPPINGS and atmel/atf15xx/atf1504asv.
+
 2008-04-09  Jie Zhang  <jie.zhang@analog.com>
 
    * src/bus/bf537_stamp.c (bf537_stamp_bus_new_1): Renamed

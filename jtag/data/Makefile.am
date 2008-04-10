@@ -54,6 +54,8 @@ nobase_dist_pkgdata_DATA = \
 	atmel/at91sam7s256/STEPPINGS \
 	atmel/at91sam7s256/at91sam7s_tq64v0 \
 	atmel/at91sam7s256/at91sam7s_tq48v0 \
+	atmel/atf15xx/STEPPINGS \
+	atmel/atf15xx/atf1504asv \
 	analog/PARTS \
 	analog/bf527c/STEPPINGS \
 	analog/bf527c/bf527c \
