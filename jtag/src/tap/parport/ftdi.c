@@ -229,6 +229,7 @@ ftdi_generic_open( parport_t *parport )
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x0403, 0xCFF8, NULL, p->serial); /* Amontec JTAGkey http://www.amontec.com/jtagkey.shtml */
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x15BA, 0x0003, NULL, p->serial); /* Olimex ARM-USB-OCD */
 		if(r<0) r = ftdi_usb_open_desc(fc, 0x0403, 0xBDC8, NULL, p->serial); /* Turtelizer 2 */
+		if(r<0) r = ftdi_usb_open_desc(fc, 0x0456, 0xF000, NULL, p->serial); /* Analog Devices BFIN-UJTAG */
 	};
 
 	if(r<0)

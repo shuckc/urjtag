@@ -1,3 +1,17 @@
+2008-04-11  Jie Zhang  <jie.zhang@analog.com>
+
+   From Michael Hennerich <michael.hennerich@analog.com>
+   * src/tap/parport/ftdi.c (ftdi_generic_open): Detect
+     BFIN-UJTAG cable.
+   * src/tap/cable.c (ft2232_bfin_ujtag_cable_driver): Declare.
+     (cable_drivers): Add ft2232_bfin_ujtag_cable_driver.
+   * src/tap/cable/ft2232.c (BIT_BFIN_UJTAG_nTRST,
+     BIT_BFIN_UJTAG_nLED, BITMASK_BFIN_UJTAG_nTRST,
+     BITMASK_BFIN_UJTAG_nLED): Define.
+     (ft2232_bfin_ujtag_init): New.
+     (ft2232_bfin_ujtag_done): New.
+     (ft2232_bfin_ujtag_cable_driver): Define.
+
 2008-04-10  Jie Zhang  <jie.zhang@analog.com>
 
    * src/flash/flash.c (flashmem): Show the address when verifying.
