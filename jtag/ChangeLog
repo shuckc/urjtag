@@ -1,3 +1,9 @@
+2008-04-11  Kolja Waschk <kawk>
+
+   * src/bsdl/bsdl.c, src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c,
+     src/tap/usbconn/libusb.c, src/lib/fclock.c, src/jtag.c:
+     [ 1940323 ] OS X support for UrJTAG (by Ville Voipio)
+
 2008-04-11  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/parport/ftdi.c (ftdi_flush_output): removed unused variables

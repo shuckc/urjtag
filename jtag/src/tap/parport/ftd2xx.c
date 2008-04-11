@@ -33,8 +33,6 @@
 #include <unistd.h>
 #if __CYGWIN__
 #include <windows.h>
-#else
-#include <linux/ioctl.h>
 #endif
 #ifdef HAVE_STROPTS_H
 #include <stropts.h>

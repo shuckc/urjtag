@@ -33,7 +33,6 @@
 #include <stropts.h>
 #endif
 #include <unistd.h>
-#include <linux/ioctl.h>
 
 #include <stdlib.h>
 #include <string.h>
