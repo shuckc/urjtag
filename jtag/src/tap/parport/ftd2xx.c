@@ -31,7 +31,7 @@
 
 #include <fcntl.h>
 #include <unistd.h>
-#if __CYGWIN__
+#if __CYGWIN__ || __MINGW32__
 #include <windows.h>
 #endif
 #ifdef HAVE_STROPTS_H
@@ -213,8 +213,8 @@ ftd2xx_generic_open( parport_t *parport )
 	ftd2xx_params_t *p = parport->params;
 	FT_STATUS status;
 
-#if !__CYGWIN__
-        /* Add non-standard Vid/Pid to the linux driver */
+#if !__CYGWIN__ && !__MINGW32__
+	/* Add non-standard Vid/Pid to the linux driver */
 	if ((status = FT_SetVIDPID(p->vendor_id, p->product_id)) != FT_OK)
 		fprintf( stderr, "Warning: couldn't add %4.4x:%4.4x", p->vendor_id, p->product_id );
 #endif

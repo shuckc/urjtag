@@ -29,7 +29,7 @@
 #ifdef HAVE_LIBUSB
 
 #include <fcntl.h>
-#if __CYGWIN__
+#if __CYGWIN__ || __MINGW32__
 #include <windows.h>
 #endif
 #include <stdio.h>

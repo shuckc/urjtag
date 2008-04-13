@@ -82,7 +82,11 @@ jtag_create_jtagdir( void )
 	strcat( jdir, JTAGDIR );
 
 	/* Create the directory if it doesn't exists. */
+#ifdef __MINGW32__
+	mkdir( jdir );
+#else
 	mkdir( jdir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+#endif
 
 	free( jdir );
 }
@@ -285,11 +289,13 @@ main( int argc, char *const argv[] )
 
 	jtag_argv0 = argv[0];
 
+#ifndef __MINGW32__
 	if(geteuid()==0 && getuid()!=0)
 	{
 		printf (_("'%s' must not be run suid root!\n"), "jtag");
 		return(-1);
 	}
+#endif
 
 #ifdef ENABLE_NLS
 	/* l10n support */

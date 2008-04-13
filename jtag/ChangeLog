@@ -1,3 +1,10 @@
+2008-04-13  Kolja Waschk <kawk>
+
+  * src/tap/parport/ftd2xx.c, src/tap/usbconn/libusb.c, src/lib/fclock.c,
+    src/jtag.c, src/flash/amd_flash.c, src/flash/amd.c, src/flash/jedec.c,
+    src/svf/svf.c, configure.ac, doc/UrJTAG.txt: Provide variants of
+	  usleep, frealtime, mkdir for [ 1838732 ] EXE built with MinGW
+
 2008-04-11  Kolja Waschk <kawk>
 
    * src/bsdl/bsdl.c, src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c,

@@ -60,9 +60,9 @@
 #define AUTOSELECT_NUM 2
 
 struct mtd_erase_region_info {
-	u_int32_t offset;           /* At which this region starts, from the beginning of the MTD */
-	u_int32_t erasesize;        /* For this region */
-	u_int32_t numblocks;        /* Number of blocks of erasesize in this region */
+	uint32_t offset;           /* At which this region starts, from the beginning of the MTD */
+	uint32_t erasesize;        /* For this region */
+	uint32_t numblocks;        /* Number of blocks of erasesize in this region */
 };
 
 struct amd_flash_info {
@@ -70,7 +70,7 @@ struct amd_flash_info {
 	const int dev_id;
 	const char *name;
 	const long size;
-	const u_int8_t interface_width;
+	const uint8_t interface_width;
 	const int as_method;
 	const int numeraseregions;
 	const struct mtd_erase_region_info regions[4];

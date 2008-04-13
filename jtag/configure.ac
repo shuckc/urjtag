@@ -209,7 +209,7 @@ AS_IF([test "x$with_ftd2xx" == xyes -o "x$with_ftd2xx" = xcheck], [
   AS_IF([test "x$with_ftd2xx" != xno], [
     HAVELIBFTD2XX=yes
     case $host in
-    *cygwin*)
+    *cygwin*|*mingw*)
       CFLAGS="$CFLAGS -I$with_ftd2xx"
       AS_IF([test -d "$with_ftd2xx/i386"], [
         FTD2XXLIB="$with_ftd2xx/i386/ftd2xx.lib"

@@ -381,6 +381,19 @@ might give problems if the path contains spaces, as "Program Files" does!):
 
   ./configure --with-libusb="/cygdrive/c/Programme/LibUSB-Win32/"
 
+==== Compiling with MinGW ====
+
+UrJTAG may be compiled into a Windows executable using the MinGW compiler
+(http://www.mingw.org). This has the advantage over running in a Cygwin
+environment that you don't need to install anything else but the jtag.exe. 
+However, because support for MinGW is quite new in UrJTAG, it may lack some
+features (e.g. readline support) or run a little slower.
+
+It is even possible to cross-compile and build the executable on a Linux
+host:
+
+  ./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers
+  make
 
 ==== Driver tailoring ====
 

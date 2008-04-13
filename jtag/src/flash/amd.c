@@ -43,6 +43,11 @@
 #include <flash.h>
 #include <bus.h>
 
+#ifdef __MINGW32__
+#include <windows.h>
+#define usleep(x) Sleep(x/1E3)
+#endif
+
 static int dbg = 0;
 
 static int amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr );

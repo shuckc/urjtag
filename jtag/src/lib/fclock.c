@@ -26,16 +26,94 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#ifndef __MINGW32__
 #include <sys/times.h>
+#endif
 #include <math.h>
 #include <assert.h>
+
+/* ------------------------------------------------------------------ */
 
 #ifdef __APPLE__
 #include <mach/mach_time.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#endif
 
+long double
+frealtime()
+{
+    long double result;
+    static uint64_t start_mat;
+    static long double start_time;
+    static double multiplier;
+
+    mach_timebase_info_data_t mtid;
+    struct timeval tv;
+       
+    if(!mtid.denom == 0) {
+        mach_timebase_info(&mtid);
+        multiplier = (double)mtid.numer / (double)mtid.denom;
+        gettimeofday(&tv, NULL);
+        start_time = (long double)tv.tv_sec + (long double)tv.tv_usec * 1000.0;
+        start_mat = mach_absolute_time();
+    }
+
+    result = start_time + (mach_absolute_time() - start_mat) * multiplier;
+
+    assert(isnormal(result));
+    assert(result > 0);
+    return result;
+}
+#else /* def __APPLE__ */
+
+/* ------------------------------------------------------------------ */
+
+#ifdef _POSIX_TIMERS
+
+long double
+frealtime()
+{
+    long double result;
+
+    struct timespec t;    
+    if (clock_gettime(CLOCK_REALTIME, &t)==-1) {
+        perror("frealtime (clock_gettime)");
+        exit(EXIT_FAILURE);
+    }
+    result = (long double)t.tv_sec + (long double)t.tv_nsec*(long double)1e-9;
+
+    assert(isnormal(result));
+    assert(result > 0);
+    return result;
+}
+
+#else /* def _POSIX_TIMERS */
+
+/* ------------------------------------------------------------------ */
+
+#ifdef __MINGW32__
+
+#include <sys/timeb.h>
+
+long double
+frealtime()
+{
+    long double result;
+
+    struct timeb t;
+
+    ftime(&t);
+    result = (long double)t.time + (long double)t.millitm * (long double)1e-3;
+
+    assert(isnormal(result));
+    assert(result > 0);
+    return result;
+}
+
+
+#else /* def __MINGW32__ */
+
+/* ------------------------------------------------------------------ */
 
 #ifndef CLK_TCK
 static clock_t CLK_TCK = 0;
@@ -51,37 +129,12 @@ static void set_clk_tck(void)
 }
 #endif
 
-
 long double
 frealtime()
 {
     long double result;
-#ifdef __APPLE__
-	static uint64_t start_mat;
-    static long double start_time;
-    static double multiplier;
 
-	mach_timebase_info_data_t mtid;
-	struct timeval tv;
-       
-	if(!mtid.denom == 0) {
-		mach_timebase_info(&mtid);
-		multiplier = (double)mtid.numer / (double)mtid.denom;
-		gettimeofday(&tv, NULL);
-		start_time = (long double)tv.tv_sec + (long double)tv.tv_usec * 1000.0;
-		start_mat = mach_absolute_time();
-	}
-	
-	result = start_time + (mach_absolute_time() - start_mat) * multiplier;
-#else
-#ifdef _POSIX_TIMERS
-    struct timespec t;    
-    if (clock_gettime(CLOCK_REALTIME, &t)==-1) {
-        perror("frealtime (clock_gettime)");
-        exit(EXIT_FAILURE);
-    }
-    result = (long double)t.tv_sec + (long double)t.tv_nsec*(long double)1e-9;
-#else
+
     struct tms t;
     clock_t c=times(&t);
     if (c==(clock_t)-1) {
@@ -89,23 +142,14 @@ frealtime()
         exit(EXIT_FAILURE);
     }
     result = (long double)c/CLK_TCK;
-#endif
-#endif
+
     assert(isnormal(result));
     assert(result > 0);
     return result;
 }
 
+#endif
+#endif
+#endif
 
-long double
-fcputime()
-{
-    struct tms t;
-    clock_t c=times(&t);
-    if (c==(clock_t)-1) {
-        perror("fcputime (times)");
-        exit(EXIT_FAILURE);
-    }
-    return ((long double)t.tms_utime+t.tms_stime)/CLK_TCK;
-}
 

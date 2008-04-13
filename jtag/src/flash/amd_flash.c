@@ -39,6 +39,11 @@
 #include <flash.h>
 #include <bus.h>
 
+#ifdef __MINGW32__
+#include <windows.h>
+#define usleep(x) Sleep(x/1E3)
+#endif
+
 //write specific
 #define AMD_SECTOR_PROTECTED
 
