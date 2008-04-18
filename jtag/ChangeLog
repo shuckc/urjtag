@@ -1,3 +1,10 @@
+2008-04-19  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/bsdl/Makefile.am, src/svf/Makefile.am: ensure that
+     bsdl_bison.h is generated prior to compiling bsdl_flex.c and
+     bsdl_bison.c
+     [ 1943435 ] fixup bsdl parallel build issue (part2)
+
 2008-04-13  Kolja Waschk <kawk>
 
   * src/tap/parport/ftd2xx.c, src/tap/usbconn/libusb.c, src/lib/fclock.c,
