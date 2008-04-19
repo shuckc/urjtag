@@ -36,6 +36,9 @@ cmd_frequency_run( chain_t *chain, char *params[] )
 {
 	unsigned int freq;
 
+	if (!cmd_test_cable( chain ))
+		return 1;
+
 	if (cmd_params( params ) == 1) {
 		printf( _("Current TCK frequency is %u Hz\n"), cable_get_frequency(chain->cable) );
 		return 1;
