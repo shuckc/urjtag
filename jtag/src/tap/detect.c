@@ -177,7 +177,7 @@ uint64_t bits_to_uint64(tap_register *t)
 
 
 int
-detect_parts( chain_t *chain, char *db_path )
+detect_parts( chain_t *chain, const char *db_path )
 {
 	int irlen;
 	tap_register *ir;

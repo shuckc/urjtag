@@ -2,6 +2,8 @@
 
    * configure.ac, acinclude.m4: [ 1946114 ] make AC_PROG_SED
      workaround sane (Mike Frysinger)
+   * include/jtag.h, src/cmd/detect.c, src/tap/detect.c:
+     [ 1946119 ] fixup relocatable jtag in detection (M.Frysinger)
    * src/cmd/frequency.c: ensure that cable is initialized. Fixes
      [ 1933736 ] "frequency" command segfaults without args
 
@@ -17,7 +19,7 @@
   * src/tap/parport/ftd2xx.c, src/tap/usbconn/libusb.c, src/lib/fclock.c,
     src/jtag.c, src/flash/amd_flash.c, src/flash/amd.c, src/flash/jedec.c,
     src/svf/svf.c, configure.ac, doc/UrJTAG.txt: Provide variants of
-	  usleep, frealtime, mkdir for [ 1838732 ] EXE built with MinGW
+    usleep, frealtime, mkdir for [ 1838732 ] EXE built with MinGW
 
 2008-04-11  Kolja Waschk <kawk>
 
@@ -498,7 +500,7 @@
 
    * src/bsdl/bsdl_flex.l (bsdl_flex_set_bin_x), src/bsdl/bsdl.h,
      src/bsdl/bsdl_bison.y (Init_Text): properly support COMPLIANCE_PATTERNS
-	-> fix for [ 1896382 ]
+     -> fix for [ 1896382 ]
 
 2008-02-18  Arnim Laeuger  <arniml@users.sourceforge.net>
 

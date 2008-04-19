@@ -44,7 +44,7 @@ int jtag_parse_file( chain_t *chain, const char *filename );
 int jtag_parse_line( chain_t *chain, char *line );
 int jtag_parse_stream( chain_t *chain, FILE *f );
 
-int detect_parts( chain_t *chain, char *db_path );
+int detect_parts( chain_t *chain, const char *db_path );
 int detect_register_size( chain_t *chain );
 void discovery( chain_t *chain );
 void idcode( chain_t *chain , unsigned int bytes);
