@@ -61,7 +61,9 @@ intel_flash_autodetect32( cfi_array_t *cfi_array )
 	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != 0)
 		return 0;
 
-	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
+	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
 		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_SCS))
 		 && (area.width == 32);
 }
@@ -74,7 +76,9 @@ intel_flash_autodetect( cfi_array_t *cfi_array )
 	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != 0)
 		return 0;
 
-	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
+	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
 		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_SCS))
 		 && (area.width == 16);
 }
@@ -87,7 +91,9 @@ intel_flash_autodetect8( cfi_array_t *cfi_array )
 	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != 0)
 		return 0;
 
-	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
+	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
+		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_ECS)
 		 || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_INTEL_SCS))
 		 && (area.width == 8);
 }
@@ -102,6 +108,9 @@ _intel_flash_print_info( cfi_array_t *cfi_array, int o )
 	switch (mid) {
 		case STD_MIC_INTEL:
 			printf( _("Manufacturer: %s\n"), STD_MICN_INTEL );
+			break;
+		case STD_MIC_MITSUBISHI:
+			printf( _("Manufacturer: %s\n"), STD_MICN_MITSUBISHI );
 			break;
 		default:
 			printf( _("Unknown manufacturer (0x%04X)!\n"), mid);
