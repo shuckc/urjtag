@@ -241,7 +241,7 @@ CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 AC_PROG_LEX
 # check for modern version of flex
 AC_PROG_AWK
-ACI_PROG_SED
+AC_PROG_SED
 
 AS_IF([test "$LEX" == flex], [
    ver_ge_ver () {

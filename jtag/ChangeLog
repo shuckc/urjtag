@@ -1,5 +1,7 @@
 2008-04-19  Kolja Waschk <kawk>
 
+   * configure.ac, acinclude.m4: [ 1946114 ] make AC_PROG_SED
+     workaround sane (Mike Frysinger)
    * src/cmd/frequency.c: ensure that cable is initialized. Fixes
      [ 1933736 ] "frequency" command segfaults without args
 

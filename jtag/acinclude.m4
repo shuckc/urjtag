@@ -101,7 +101,8 @@ AC_DEFUN([VL_LIB_READLINE], [
 # compatibility with autoconf-2.59. Can be removed from acinclude.m4 if
 # autoconf-2.60 or newer is required for other reasons.. 
 #
-AC_DEFUN([ACI_PROG_SED],
+m4_ifndef([AC_PROG_SED],[dnl
+AC_DEFUN([AC_PROG_SED],
 [AC_CACHE_CHECK([for a sed that does not truncate output], ac_cv_path_SED,
     [dnl ac_script should not contain more than 99 commands (for HP-UX sed),
      dnl but more than about 7000 bytes, to catch a limit in Solaris 8 /usr/ucb/sed.
@@ -118,6 +119,6 @@ AC_DEFUN([ACI_PROG_SED],
  AC_SUBST([SED])dnl
  rm -f conftest.sed
 ])# ACI_PROG_SED
-
+])dnl
 
 
