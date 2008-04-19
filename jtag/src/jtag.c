@@ -463,6 +463,10 @@ main( int argc, char *const argv[] )
 	/* Parse and execute the RC file */
 	go = norc ? 1 : jtag_parse_rc( chain );
 
+#ifdef HAVE_LIBREADLINE
+	rl_attempted_completion_function = cmd_completion;
+#endif
+
 	if (go) {
 
 #ifdef HAVE_READLINE_HISTORY

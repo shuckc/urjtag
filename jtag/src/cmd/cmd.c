@@ -26,6 +26,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#ifdef HAVE_LIBREADLINE
+#include <readline/readline.h>
+#endif
 
 #include "jtag.h"
 
@@ -118,6 +121,38 @@ const cmd_t *cmds[] = {
 	NULL			/* last must be NULL */
 };
 
+#ifdef HAVE_LIBREADLINE
+static char *
+cmd_find_next( const char *text, int state )
+{
+	static size_t cmd_idx, len;
+
+	if (!state) {
+		cmd_idx = 0;
+		len = strlen(text);
+	}
+
+	while (cmds[cmd_idx]) {
+		char *name = cmds[cmd_idx++]->name;
+		if (!strncmp(name, text, len))
+			return strdup(name);
+	}
+
+	return NULL;
+}
+
+char **
+cmd_completion( const char *text, int start, int end )
+{
+	char **ret = NULL;
+
+	if (start == 0)
+		ret = rl_completion_matches(text, cmd_find_next);
+
+	return ret;
+}
+#endif
+
 int
 cmd_test_cable( chain_t *chain )
 {
@@ -133,20 +168,37 @@ cmd_test_cable( chain_t *chain )
 int
 cmd_run( chain_t *chain, char *params[] )
 {
-	int i;
+	int i, pidx;
+	size_t len;
 
 	if (!params[0])
 		return 1;
 
-	for (i = 0; cmds[i]; i++)
+	pidx = -1;
+	len = strlen(params[0]);
+
+	for (i = 0; cmds[i]; ++i) {
 		if (strcasecmp( cmds[i]->name, params[0] ) == 0) {
-			int r = cmds[i]->run( chain, params );
+			int r;
+ run_cmd:
+			r = cmds[i]->run( chain, params );
 			if (r < 0)
 				printf( _("%s: syntax error!\n"), params[0] );
 			return r;
+		} else if (strncasecmp( cmds[i]->name, params[0], len ) == 0) {
+			if (pidx == -1)
+				pidx = i;
+			else
+				pidx = -2;
 		}
+	}
 
-	printf( _("%s: unknown command\n"), params[0] );
+	switch (pidx) {
+		case -2: printf( _("%s: Ambiguous command\n"), params[0] ); break;
+		case -1: printf( _("%s: unknown command\n"), params[0] ); break;
+		default: i = pidx; goto run_cmd;
+	}
+
 	return 1;
 }
 

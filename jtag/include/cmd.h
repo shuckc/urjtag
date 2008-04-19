@@ -45,6 +45,7 @@ typedef struct {
 
 extern const cmd_t *cmds[];
 
+char **cmd_completion( const char *text, int start, int end );
 int cmd_run( chain_t *chain, char *params[] );
 int cmd_params( char *params[] );
 int cmd_get_number( char *s, unsigned int *i );

@@ -1,5 +1,7 @@
 2008-04-19  Kolja Waschk <kawk>
 
+   * include/cmd.h, src/cmd/cmd.c, src/jtag.c: [ 1946331 ] command
+     completion support (by Mike Frysinger)
    * configure.ac, acinclude.m4: [ 1946114 ] make AC_PROG_SED
      workaround sane (Mike Frysinger)
    * include/jtag.h, src/cmd/detect.c, src/tap/detect.c:
