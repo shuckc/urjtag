@@ -63,14 +63,38 @@ usbblaster_init( cable_t *cable )
 static void
 usbblaster_clock( cable_t *cable, int tms, int tdi, int n )
 {
-	int i;
+	int i, m;
 
 	tms = tms ? (1<<TMS) : 0;
 	tdi = tdi ? (1<<TDI) : 0;
 
 	// printf("clock: %d %d %d\n", tms, tdi, n);
 
-	for (i = 0; i < n; i++) {
+	m = n;
+	if (tms == 0 && m >= 8)
+	{
+		unsigned char tdis = tdi ? 0xFF : 0;
+
+		parport_set_control( cable->link.port, 0 ); // noflush
+
+		while (m >= 8)
+		{
+			int i;
+			int chunkbytes = (m >> 3);
+			if(chunkbytes > 63) chunkbytes = 63;
+
+			parport_set_data( cable->link.port,(1<<SHMODE)|(0<<READ)|chunkbytes);
+
+			for (i=0; i<chunkbytes; i++)
+			{
+				parport_set_data( cable->link.port, tdis);
+			}
+
+			m -= (chunkbytes << 3);
+		}
+	}
+			
+	for (i = 0; i < m; i++) {
 		parport_set_data( cable->link.port, OTHERS | (0 << TCK) | tms | tdi );
 		parport_set_data( cable->link.port, OTHERS | (1 << TCK) | tms | tdi );
 		parport_set_control( cable->link.port, 1 ); // flush
@@ -189,7 +213,7 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 static void
 usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 {
-    if( how_much == OPTIONALLY ) return;
+	if( how_much == OPTIONALLY ) return;
 
 	while (cable->todo.num_items > 0)
 	{

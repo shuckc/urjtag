@@ -1,5 +1,7 @@
 2008-04-19  Kolja Waschk <kawk>
 
+   * src/tap/cable/usbblaster.c: clock() at highest possible rate
+     using the byte shift mode for n>=8 (Thanks M. Banditt)
    * include/cmd.h, src/cmd/cmd.c, src/jtag.c: [ 1946331 ] command
      completion support (by Mike Frysinger)
    * configure.ac, acinclude.m4: [ 1946114 ] make AC_PROG_SED
