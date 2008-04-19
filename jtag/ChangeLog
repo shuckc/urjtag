@@ -1,5 +1,7 @@
 2008-04-19  Kolja Waschk <kawk>
 
+   * src/tap/parport/ftd2xx.c: SetBaudRate to 3E6, not 48E6. Should
+     fix [ 1925509 ] ftd2xx: SetBaudRate fails with FT245
    * src/flash/intel.c: Handle chips that support "Mitsubishi
      standard/enhanced command set" just like Intel chips. Need
      to do more research about the differences (if any) [1946559]

@@ -254,7 +254,7 @@ ftd2xx_std_open( parport_t *parport )
 		FT_Close(fc);
 		return -1;
 	}
-	if ((status = FT_SetBaudRate(fc, 48000000)) != FT_OK) {
+	if ((status = FT_SetBaudRate(fc, 3E6)) != FT_OK) {
 		fprintf(stderr, "Can't set baudrate: %li\n", status);
 		FT_Close(fc);
 		return -1;
