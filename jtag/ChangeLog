@@ -5,6 +5,7 @@
      variable due to portability issues (like with libusb-win32).
    * src/jtag.c (jtag_readline_loop): [ 1950315 ] Fix quiting when
      using the non readline version.
+   * configure.ac: [ 1950061 ] Look for the ChangeLog in $srcdir.
 
 2008-04-19  Kolja Waschk <kawk>
 

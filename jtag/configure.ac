@@ -41,7 +41,7 @@ if test -n "$SVN" -a -x "$SVN"; then
     fi
 fi
 if test "$SVN_REVISION" -eq 0 -a -e "$srcdir/ChangeLog"; then
-    SVN_REVISION=`awk 'BEGIN { x=0 } /Revision: / { if($2>x) x=$2; } END { printf "%d\n",x }' ChangeLog`
+    SVN_REVISION=`awk 'BEGIN { x=0 } /Revision: / { if($2>x) x=$2; } END { printf "%d\n",x }' "$srcdir/ChangeLog"`
     if test "$SVN_REVISION" -ne "0" ; then
         AC_MSG_RESULT([from ChangeLog: $SVN_REVISION])
     fi
