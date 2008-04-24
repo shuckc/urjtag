@@ -1,3 +1,9 @@
+2008-04-24  Mike Frysinger  <vapier@gentoo.org>
+
+   * src/tap/usbconn/libusb.c (usbconn_libusb_connect): Use the
+     usb_get_busses() function rather than the usb_busses global
+     variable due to portability issues (like with libusb-win32).
+
 2008-04-19  Kolja Waschk <kawk>
 
    * src/tap/parport/ftd2xx.c: SetBaudRate to 3E6, not 48E6. Should

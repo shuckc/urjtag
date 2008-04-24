@@ -121,7 +121,7 @@ usbconn_libusb_connect( const char **param, int paramc, usbconn_cable_t *templat
 		return NULL;
 	}
 
-	for (bus = usb_busses; bus && !found_dev; bus = bus->next)
+	for (bus = usb_get_busses(); bus && !found_dev; bus = bus->next)
 	{
 		struct usb_device *dev;
 	
