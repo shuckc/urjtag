@@ -3,6 +3,8 @@
    * src/tap/usbconn/libusb.c (usbconn_libusb_connect): Use the
      usb_get_busses() function rather than the usb_busses global
      variable due to portability issues (like with libusb-win32).
+   * src/jtag.c (jtag_readline_loop): [ 1950315 ] Fix quiting when
+     using the non readline version.
 
 2008-04-19  Kolja Waschk <kawk>
 

@@ -225,7 +225,8 @@ jtag_readline_loop( chain_t *chain, const char *prompt )
 	line[0] = 0;
 	do
 	{
-		jtag_readline_multiple_commands_support( chain, line );
+		if (!jtag_readline_multiple_commands_support( chain, line ))
+			break;
 		printf("%s", prompt);
 		fflush(stdout);
 	}
