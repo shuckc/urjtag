@@ -282,45 +282,57 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 	switch (mid) {
 		case 0x0001:
 			printf( _("AMD") );
-			break;
-		case 0x0020:
-			printf( _("ST/Samsung") );
-			break;
-		case 0x002C:
-			printf( _("Macronix") );
-			break;
-		default:
-			printf( _("Unknown manufacturer (ID 0x%04x)"), mid );
-			break;
-	}
-	printf( _("\n\tChip: ") );
-	switch (cid) {
-		case 0x004F:
-			printf( _("Am29LV040B") );
-			break;
-		case 0x22D7:
-			printf( _("Am29LV640D/Am29LV641D/Am29LV642D") );
-			break;
-		case 0x225B:
-			printf( _("Am29LV800B") );
-			break;
-		case 0x2249:
-			printf( _("MX29LV160B") );
-			break;
-		case 0x0049:
+		printf( _("\n\tChip: ") );
+			switch (cid) {
+			case 0x0049:
 			printf( _("AM29LV160DB") );
 			break;
-		case 0x0093:
+			case 0x0093:
 			printf( _("Am29LV065D") );
 			break;
-		case 0x00ca:
+			case 0x004F:
+			printf( _("Am29LV040B") );
+			break;
+			case 0x22D7:
+			printf( _("Am29LV640D/Am29LV641D/Am29LV642D") );
+			break;
+			case 0x225B:
+			printf( _("Am29LV800B") );
+			break;
+			default:
+			printf ( _("Unknown (ID 0x%04x)"), cid );
+			break;
+		}
+		break;
+		case 0x0020:
+			printf( _("ST/Samsung") );
+		printf( _("\n\tChip: ") );
+			switch (cid) {
+			case 0x00ca:
 			printf( _("M29W320DT") );
 			break;
-		case 0x00cb:
+			case 0x00cb:
 			printf( _("M29W320DB") );
 			break;
-		default:
+			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
+			break;
+		}
+		break;
+		case 0x00C2:
+			printf( _("Macronix") );
+		printf( _("\n\tChip: ") );
+			switch (cid) {
+			case 0x2249:
+			printf( _("MX29LV160B") );
+			break;
+			default:
+			printf ( _("Unknown (ID 0x%04x)"), cid );
+			break;
+		}
+		break;
+		default:
+			printf( _("Unknown manufacturer (ID 0x%04x) Chip (ID 0x%04x)"), mid, cid );
 			break;
 	}
 	printf( _("\n\tProtected: %04x\n"), prot );

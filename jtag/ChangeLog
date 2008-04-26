@@ -1,3 +1,7 @@
+2008-04-26  Kolja Waschk <kawk>
+
+   * src/flash/amd.c: Separate Chip name by Manufacturer (Andrey F. Ilchuk)
+
 2008-04-24  Mike Frysinger  <vapier@gentoo.org>
 
    * src/tap/usbconn/libusb.c (usbconn_libusb_connect): Use the
