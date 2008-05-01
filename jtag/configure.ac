@@ -133,7 +133,7 @@ AS_IF([test "x$with_libusb" != xno], [
     esac
     LIBS="$LIBS -lusb"
   ],[
-    AC_PATH_PROG(LIBUSB_CONFIG, libusb-config, no) 
+    AC_PATH_TOOL(LIBUSB_CONFIG, libusb-config, no) 
     AS_IF([test "$LIBUSB_CONFIG" != "no"],[
       USBLIBS=`$LIBUSB_CONFIG --libs`
       USBCFLAGS=`$LIBUSB_CONFIG --cflags`
@@ -172,7 +172,7 @@ AS_IF([test "x$with_libftdi" != xno], [
     CFLAGS="$CFLAGS -I$with_libftdi -L$with_libftdi"
     LIBS="$LIBS -lftdi"
   ],[
-    AC_PATH_PROG(LIBFTDI_CONFIG, libftdi-config, no) 
+    AC_PATH_TOOL(LIBFTDI_CONFIG, libftdi-config, no) 
     AS_IF([test "$LIBFTDI_CONFIG" != "no"],[
       LIBS="$LIBS `$LIBFTDI_CONFIG --libs`"
       CFLAGS="$CFLAGS `$LIBFTDI_CONFIG --cflags`"

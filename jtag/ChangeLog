@@ -2,6 +2,8 @@
 
    * configure.ac: Check for libusb before libftdi since the latter needs
      the former.
+   * configure.ac: Use AC_PATH_TOOL() instead of AC_PATH_PROG() so that we
+     handle cross-compiling sanely.
 
 2008-04-26  Kolja Waschk <kawk>
 
