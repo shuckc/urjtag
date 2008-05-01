@@ -1,3 +1,8 @@
+2008-05-01  Mike Frysinger  <vapier@gentoo.org>
+
+   * configure.ac: Check for libusb before libftdi since the latter needs
+     the former.
+
 2008-04-26  Kolja Waschk <kawk>
 
    * src/flash/amd.c: Separate Chip name by Manufacturer (Andrey F. Ilchuk)

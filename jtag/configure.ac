@@ -113,36 +113,6 @@ AC_CHECK_HEADERS(wchar.h)
 
 VL_LIB_READLINE
 
-AC_ARG_WITH([libftdi],
-  [AS_HELP_STRING([--with-libftdi],
-    [use libftdi for FTDI-based cables])],
-    [], [with_libftdi=check])
-
-AS_IF([test "x$with_libftdi" != xno], [
-  AS_IF([test "x$with_libftdi" != xyes -a "x$with_libftdi" != xcheck], [
-    CFLAGS="$CFLAGS -I$with_libftdi -L$with_libftdi"
-    LIBS="$LIBS -lftdi"
-  ],[
-    AC_PATH_PROG(LIBFTDI_CONFIG, libftdi-config, no) 
-    AS_IF([test "$LIBFTDI_CONFIG" != "no"],[
-      LIBS="$LIBS `$LIBFTDI_CONFIG --libs`"
-      CFLAGS="$CFLAGS `$LIBFTDI_CONFIG --cflags`"
-    ],)
-  ])
-  AC_CHECK_FUNC([ftdi_usb_open], [
-    AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
-    HAVELIBFTDI=yes
-  ],[
-    AC_MSG_WARN([*** libftdi not detected. No support for FTDI-based USB JTAG cables via libftdi.])
-  ])
-],)
-
-AS_IF([test "x$HAVELIBFTDI" == "xyes"],[
-  AM_CONDITIONAL(HAVE_LIBFTDI, true)
-],[
-  AM_CONDITIONAL(HAVE_LIBFTDI, false)
-])
-
 
 dnl check for libusb-config
 
@@ -187,6 +157,39 @@ AS_IF([test "x$HAVELIBUSB" == "xyes"],[
   AM_CONDITIONAL(HAVE_LIBUSB, true)
 ],[
   AM_CONDITIONAL(HAVE_LIBUSB, false)
+])
+
+
+dnl Use FTDI library?
+
+AC_ARG_WITH([libftdi],
+  [AS_HELP_STRING([--with-libftdi],
+    [use libftdi for FTDI-based cables])],
+    [], [with_libftdi=check])
+
+AS_IF([test "x$with_libftdi" != xno], [
+  AS_IF([test "x$with_libftdi" != xyes -a "x$with_libftdi" != xcheck], [
+    CFLAGS="$CFLAGS -I$with_libftdi -L$with_libftdi"
+    LIBS="$LIBS -lftdi"
+  ],[
+    AC_PATH_PROG(LIBFTDI_CONFIG, libftdi-config, no) 
+    AS_IF([test "$LIBFTDI_CONFIG" != "no"],[
+      LIBS="$LIBS `$LIBFTDI_CONFIG --libs`"
+      CFLAGS="$CFLAGS `$LIBFTDI_CONFIG --cflags`"
+    ],)
+  ])
+  AC_CHECK_FUNC([ftdi_usb_open], [
+    AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
+    HAVELIBFTDI=yes
+  ],[
+    AC_MSG_WARN([*** libftdi not detected. No support for FTDI-based USB JTAG cables via libftdi.])
+  ])
+],)
+
+AS_IF([test "x$HAVELIBFTDI" == "xyes"],[
+  AM_CONDITIONAL(HAVE_LIBFTDI, true)
+],[
+  AM_CONDITIONAL(HAVE_LIBFTDI, false)
 ])
 
 
