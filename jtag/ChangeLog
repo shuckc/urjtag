@@ -6,6 +6,7 @@
      handle cross-compiling sanely.
    * configure.ac: Make LIBS/CPPFLAGS sane and consistent when checking for
      libusb and libftdi.
+   * configure.ac: Use POSIX compliant tests for equality ("=", not "==").
 
 2008-04-26  Kolja Waschk <kawk>
 

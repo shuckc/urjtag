@@ -154,7 +154,7 @@ AS_IF([test "x$with_libusb" != xno], [
   ])
 ],)
 
-AS_IF([test "x$HAVELIBUSB" == "xyes"],[
+AS_IF([test "x$HAVELIBUSB" = "xyes"],[
   AM_CONDITIONAL(HAVE_LIBUSB, true)
 ],[
   AM_CONDITIONAL(HAVE_LIBUSB, false)
@@ -193,7 +193,7 @@ AS_IF([test "x$with_libftdi" != xno], [
   ])
 ],)
 
-AS_IF([test "x$HAVELIBFTDI" == "xyes"],[
+AS_IF([test "x$HAVELIBFTDI" = "xyes"],[
   AM_CONDITIONAL(HAVE_LIBFTDI, true)
 ],[
   AM_CONDITIONAL(HAVE_LIBFTDI, false)
@@ -208,7 +208,7 @@ AC_ARG_WITH([ftd2xx],
     [], [with_ftd2xx=check])
 
 FTD2XXLIB=
-AS_IF([test "x$with_ftd2xx" == xyes -o "x$with_ftd2xx" = xcheck], [
+AS_IF([test "x$with_ftd2xx" = xyes -o "x$with_ftd2xx" = xcheck], [
   AC_CHECK_LIB([ftd2xx], [FT_Open], [
     HAVELIBFTD2XX=yes
     LIBS="-lftd2xx $LIBS"
@@ -234,7 +234,7 @@ AS_IF([test "x$with_ftd2xx" == xyes -o "x$with_ftd2xx" = xcheck], [
     esac
   ],)
 ])
-AS_IF([test "x$HAVELIBFTD2XX" == xyes], [
+AS_IF([test "x$HAVELIBFTD2XX" = xyes], [
   AM_CONDITIONAL(HAVE_LIBFTD2XX, true)
   AC_DEFINE(HAVE_LIBFTD2XX, 1, [define if you have libftd2xx])
 ],[
@@ -253,7 +253,7 @@ AC_PROG_LEX
 AC_PROG_AWK
 AC_PROG_SED
 
-AS_IF([test "$LEX" == flex], [
+AS_IF([test "$LEX" = flex], [
    ver_ge_ver () {
       v1=$1
       v2=$2
@@ -280,7 +280,7 @@ AS_IF([test "$LEX" == flex], [
    }
 
    flex_version=`$LEX --version | $AWK '{print $2}'`
-   AS_IF([test "$flex_version" == "version"], [
+   AS_IF([test "$flex_version" = "version"], [
        flex_version=`$LEX --version | $AWK '{print $3}'`
    ])
 
@@ -312,7 +312,7 @@ AS_IF([test "$LEX" == flex], [
 
 dnl If the transformed svf_flex.c is already existing, it doesn't matter
 dnl that flex is too old for building the lexer.
-AS_IF([test "x$svf_lexer" == xfalse], [
+AS_IF([test "x$svf_lexer" = xfalse], [
    AS_IF([test -r src/svf/svf_flex.c], [
       svf_lexer=true
    ])
@@ -337,7 +337,7 @@ AS_IF([test "x$svf" = xtrue], [
 
 dnl If the transformed bsdl_flex.c is already existing, it doesn't matter
 dnl that flex is too old for building the lexer.
-AS_IF([test "x$bsdl_lexer" == xfalse], [
+AS_IF([test "x$bsdl_lexer" = xfalse], [
    AS_IF([test -r src/bsdl/bsdl_flex.c], [
       bsdl_lexer=true
    ])
