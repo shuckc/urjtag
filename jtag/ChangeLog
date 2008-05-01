@@ -4,6 +4,8 @@
      the former.
    * configure.ac: Use AC_PATH_TOOL() instead of AC_PATH_PROG() so that we
      handle cross-compiling sanely.
+   * configure.ac: Make LIBS/CPPFLAGS sane and consistent when checking for
+     libusb and libftdi.
 
 2008-04-26  Kolja Waschk <kawk>
 

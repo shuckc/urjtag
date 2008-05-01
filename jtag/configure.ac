@@ -122,16 +122,19 @@ AC_ARG_WITH([libusb],
     [with_libusb=check])
 
 AS_IF([test "x$with_libusb" != xno], [
+  save_LIBS=$LIBS
+  save_CPPFLAGS=$CPPFLAGS
   AS_IF([test "x$with_libusb" != xyes -a "x$with_libusb" != xcheck], [
     case $host in
     *cygwin*)
-      CFLAGS="$CFLAGS -I$with_libusb/include -L$with_libusb/lib/gcc"
+      USBLIBS="-L$with_libusb/lib/gcc -lusb"
+      USBCLAGS="-I$with_libusb/include"
       ;;
     *)
-      CFLAGS="$CFLAGS -I$with_libusb -L$with_libusb"
+      USBLIBS="-Lwith_libusb -lusb"
+      USBCFLAGS="-I$with_libusb"
       ;;
     esac
-    LIBS="$LIBS -lusb"
   ],[
     AC_PATH_TOOL(LIBUSB_CONFIG, libusb-config, no) 
     AS_IF([test "$LIBUSB_CONFIG" != "no"],[
@@ -139,17 +142,15 @@ AS_IF([test "x$with_libusb" != xno], [
       USBCFLAGS=`$LIBUSB_CONFIG --cflags`
     ],)
   ])
-  save_LIBS=$LIBS
-  save_CFLAGS=$CFLAGS
   LIBS="$LIBS $USBLIBS"
-  CFLAGS="$CFLAGS $USBCFLAGS"
+  CPPFLAGS="$CPPFLAGS $USBCFLAGS"
   AC_CHECK_FUNC([usb_find_devices], [
     AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
     HAVELIBUSB=yes
   ],[
     AC_MSG_WARN([*** libusb not detected. No support for USB JTAG cables via libusb.])
     LIBS=$save_LIBS
-    CFLAGS=$save_CFLAGS
+    CPPFLAGS=$save_CPPFLAGS
   ])
 ],)
 
@@ -168,21 +169,27 @@ AC_ARG_WITH([libftdi],
     [], [with_libftdi=check])
 
 AS_IF([test "x$with_libftdi" != xno], [
+  save_LIBS=$LIBS
+  save_CPPFLAGS=$CPPFLAGS
   AS_IF([test "x$with_libftdi" != xyes -a "x$with_libftdi" != xcheck], [
-    CFLAGS="$CFLAGS -I$with_libftdi -L$with_libftdi"
-    LIBS="$LIBS -lftdi"
+    FTDILIBS="-L$with_libftdi -lftdi"
+    FTDICFLAGS="-I$with_libftdi"
   ],[
     AC_PATH_TOOL(LIBFTDI_CONFIG, libftdi-config, no) 
     AS_IF([test "$LIBFTDI_CONFIG" != "no"],[
-      LIBS="$LIBS `$LIBFTDI_CONFIG --libs`"
-      CFLAGS="$CFLAGS `$LIBFTDI_CONFIG --cflags`"
+      FTDILIBS=`$LIBFTDI_CONFIG --libs`
+      FTDICFLAGS=`$LIBFTDI_CONFIG --cflags`
     ],)
   ])
+  LIBS="$FTDILIBS $LIBS"
+  CPPFLAGS="$CPPFLAGS $FTDICFLAGS"
   AC_CHECK_FUNC([ftdi_usb_open], [
     AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
     HAVELIBFTDI=yes
   ],[
     AC_MSG_WARN([*** libftdi not detected. No support for FTDI-based USB JTAG cables via libftdi.])
+    LIBS=$save_LIBS
+    CPPFLAGS=$save_CPPFLAGS
   ])
 ],)
 
