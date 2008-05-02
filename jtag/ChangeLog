@@ -1,3 +1,8 @@
+2008-05-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/cable/generic_usbconn.c (generic_usbconn_connect):
+     fix user_specified.driver comparison
+
 2008-05-01  Mike Frysinger  <vapier@gentoo.org>
 
    * configure.ac: Check for libusb before libftdi since the latter needs

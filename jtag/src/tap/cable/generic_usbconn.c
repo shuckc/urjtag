@@ -107,7 +107,7 @@ generic_usbconn_connect( char *params[], cable_t *cable )
 	for (i = 0; usbconn_drivers[i] && !conn; i++)
 	{
 		if ((user_specified.driver == NULL)
-			|| (strcasecmp(user_specified.name, usbconn_drivers[i]->type) == 0))
+			|| (strcasecmp(user_specified.driver, usbconn_drivers[i]->type) == 0))
 		{
 			int j;
 
