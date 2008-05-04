@@ -314,6 +314,9 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			case 0x00cb:
 			printf( _("M29W320DB") );
 			break;
+			case 0x22ed:
+			printf( _("M29W640DT") );
+			break;
 			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
 			break;

@@ -1,3 +1,7 @@
+2008-05-04  Mike Frysinger  <vapier@gentoo.org>
+
+   * src/flash/amd.c: Handle chipid 0x22ed M29W640DT.
+
 2008-05-02  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/cable/generic_usbconn.c (generic_usbconn_connect):
