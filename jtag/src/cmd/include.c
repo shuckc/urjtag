@@ -52,8 +52,11 @@ cmd_include_or_script_run( chain_t *chain, int is_include, char *params[] )
 	 * assume that user wants to ignore the search path */
 
 	path = params[1];
+#ifdef __MINGW32__
+	if (isalpha(*path) && path[1] == ':') path += 2;
+#endif
 	while( *path == '.' ) path++; 
-	if(*path == '/' || ! is_include)
+	if(*path == '/' || *path == '\\' || ! is_include)
 	{
 		path = strdup(params[1]);
 	}

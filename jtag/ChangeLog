@@ -5,6 +5,8 @@
    * src/flash/amd_flash.c: Likewise.
    * src/lib/safe-ctype.c: Include from libiberty as it is needed on some
      non-POSIX ports (like mingw).
+   * src/cmd/include.c (cmd_include_or_script_run): Add handling of absolute
+     paths under Windows that take the form <letter>:\.
 
 2008-05-04  Mike Frysinger  <vapier@gentoo.org>
 
