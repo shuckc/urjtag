@@ -51,7 +51,7 @@
 #include "svf.h"
 #include "svf_bison.h"
 
-#ifdef __MINGW__
+#ifdef __MINGW32__
 #include "fclock.h"
 #endif
 

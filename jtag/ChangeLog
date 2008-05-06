@@ -1,3 +1,7 @@
+2008-05-05  Mike Frysinger  <vapier@gentoo.org>
+
+   * src/svf/svf.c: Fix __MINGW32__ typo.
+
 2008-05-04  Mike Frysinger  <vapier@gentoo.org>
 
    * src/flash/amd.c: Handle chipid 0x22ed M29W640DT.
