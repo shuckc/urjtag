@@ -29,7 +29,8 @@ if JTAG_RELOCATABLE
 libiberty_sources = \
 	lbasename.c \
 	lrealpath.c \
-	make-relative-prefix.c
+	make-relative-prefix.c \
+	safe-ctype.c
 else
 libiberty_sources =
 endif

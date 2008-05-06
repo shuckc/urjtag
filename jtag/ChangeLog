@@ -3,6 +3,8 @@
    * src/svf/svf.c: Fix __MINGW32__ typo.
    * src/flash/amd.c: Remove _() around part names.
    * src/flash/amd_flash.c: Likewise.
+   * src/lib/safe-ctype.c: Include from libiberty as it is needed on some
+     non-POSIX ports (like mingw).
 
 2008-05-04  Mike Frysinger  <vapier@gentoo.org>
 
