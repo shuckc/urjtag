@@ -239,11 +239,11 @@ static void amd_29xx040_print_info( cfi_array_t *cfi_array )
 	printf( _("\n\tChip: ") );
 	switch (did) {
 		case 0xA4:
-			printf( _("Am29C040B\t-\t") );
+			printf( "Am29C040B\t-\t" );
 			printf( _("5V Flash\n") );
 			break;
 		case 0x4F:
-			printf( _("Am29LV040B\t-\t") );
+			printf( "Am29LV040B\t-\t" );
 			printf( _("3V Flash\n") );
 			break;
 		default:

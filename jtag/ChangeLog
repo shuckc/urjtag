@@ -1,6 +1,8 @@
 2008-05-05  Mike Frysinger  <vapier@gentoo.org>
 
    * src/svf/svf.c: Fix __MINGW32__ typo.
+   * src/flash/amd.c: Remove _() around part names.
+   * src/flash/amd_flash.c: Likewise.
 
 2008-05-04  Mike Frysinger  <vapier@gentoo.org>
 

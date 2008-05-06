@@ -281,23 +281,23 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 	printf( _("Chip: AMD Flash\n\tManufacturer: ") );
 	switch (mid) {
 		case 0x0001:
-			printf( _("AMD") );
+			printf( "AMD" );
 		printf( _("\n\tChip: ") );
 			switch (cid) {
 			case 0x0049:
-			printf( _("AM29LV160DB") );
+			printf( "AM29LV160DB" );
 			break;
 			case 0x0093:
-			printf( _("Am29LV065D") );
+			printf( "Am29LV065D" );
 			break;
 			case 0x004F:
-			printf( _("Am29LV040B") );
+			printf( "Am29LV040B" );
 			break;
 			case 0x22D7:
-			printf( _("Am29LV640D/Am29LV641D/Am29LV642D") );
+			printf( "Am29LV640D/Am29LV641D/Am29LV642D" );
 			break;
 			case 0x225B:
-			printf( _("Am29LV800B") );
+			printf( "Am29LV800B" );
 			break;
 			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
@@ -305,17 +305,17 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		}
 		break;
 		case 0x0020:
-			printf( _("ST/Samsung") );
+			printf( "ST/Samsung" );
 		printf( _("\n\tChip: ") );
 			switch (cid) {
 			case 0x00ca:
-			printf( _("M29W320DT") );
+			printf( "M29W320DT" );
 			break;
 			case 0x00cb:
-			printf( _("M29W320DB") );
+			printf( "M29W320DB" );
 			break;
 			case 0x22ed:
-			printf( _("M29W640DT") );
+			printf( "M29W640DT" );
 			break;
 			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
@@ -323,11 +323,11 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		}
 		break;
 		case 0x00C2:
-			printf( _("Macronix") );
+			printf( "Macronix" );
 		printf( _("\n\tChip: ") );
 			switch (cid) {
 			case 0x2249:
-			printf( _("MX29LV160B") );
+			printf( "MX29LV160B" );
 			break;
 			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
