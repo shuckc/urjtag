@@ -463,7 +463,9 @@ main( int argc, char *const argv[] )
 	go = norc ? 1 : jtag_parse_rc( chain );
 
 #ifdef HAVE_LIBREADLINE
+#ifdef HAVE_READLINE_COMPLETION
 	rl_attempted_completion_function = cmd_completion;
+#endif
 #endif
 
 	if (go) {

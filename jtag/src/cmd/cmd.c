@@ -141,6 +141,7 @@ cmd_find_next( const char *text, int state )
 	return NULL;
 }
 
+#ifdef HAVE_READLINE_COMPLETION
 char **
 cmd_completion( const char *text, int start, int end )
 {
@@ -151,6 +152,7 @@ cmd_completion( const char *text, int start, int end )
 
 	return ret;
 }
+#endif
 #endif
 
 int

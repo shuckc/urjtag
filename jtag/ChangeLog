@@ -1,3 +1,8 @@
+2005-05-06  Kolja Waschk <kawk>
+
+   * acinclude.m4, src/cmd/cmd.c, src/jtag.c: 
+     Update for [ 1940323 ] OS X support for UrJTAG (by Ville Voipio)
+
 2008-05-05  Mike Frysinger  <vapier@gentoo.org>
 
    * src/svf/svf.c: Fix __MINGW32__ typo.
