@@ -43,4 +43,12 @@
 #define	ngettext(s,p,n)	s
 #endif
 
+#ifdef __MINGW32__
+#define _NO_W32_PSEUDO_MODIFIERS
+#include <windows.h>
+#define geteuid() 0
+#define getuid() 0
+#define usleep(x) Sleep(x/1E3)
+#endif
+
 #endif /* SYSDEP_H */

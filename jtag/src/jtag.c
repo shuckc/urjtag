@@ -290,13 +290,11 @@ main( int argc, char *const argv[] )
 
 	jtag_argv0 = argv[0];
 
-#ifndef __MINGW32__
 	if(geteuid()==0 && getuid()!=0)
 	{
 		printf (_("'%s' must not be run suid root!\n"), "jtag");
 		return(-1);
 	}
-#endif
 
 #ifdef ENABLE_NLS
 	/* l10n support */

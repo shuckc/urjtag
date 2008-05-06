@@ -7,6 +7,9 @@
      non-POSIX ports (like mingw).
    * src/cmd/include.c (cmd_include_or_script_run): Add handling of absolute
      paths under Windows that take the form <letter>:\.
+   * sysdep.h, src/flash/amd.c, src/flash/amd_flash.c, src/jtag.c: Move some
+     Windows stub functions to sysdep.h so we don't have to redeclare them in
+     every single file and so we don't trigger future bitrot.
 
 2008-05-04  Mike Frysinger  <vapier@gentoo.org>
 
