@@ -68,6 +68,7 @@ extern cmd_t cmd_flashmem;
 extern cmd_t cmd_eraseflash;
 extern cmd_t cmd_script;
 extern cmd_t cmd_include;
+extern cmd_t cmd_addpart;
 #ifdef ENABLE_SVF
 extern cmd_t cmd_svf;
 #endif
@@ -111,6 +112,7 @@ const cmd_t *cmds[] = {
 	&cmd_eraseflash,
 	&cmd_script,
 	&cmd_include,
+	&cmd_addpart,
 #ifdef ENABLE_SVF
 	&cmd_svf,
 #endif

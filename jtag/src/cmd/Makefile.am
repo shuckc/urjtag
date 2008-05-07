@@ -60,6 +60,7 @@ libcmd_a_SOURCES = \
 	flashmem.c \
 	eraseflash.c \
 	include.c \
+	addpart.c \
 	cmd.c \
 	jtag_data_dir.c
 

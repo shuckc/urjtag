@@ -389,3 +389,76 @@ detect_parts( chain_t *chain, const char *db_path )
 
 	return ps->len;
 }
+
+
+/* In case we do not want to detect, we can add parts manually */
+
+int manual_add(chain_t *chain, int instr_len)
+{
+	tap_register *id;
+	part_t *part;
+	char *cmd[] = {NULL, NULL, NULL, NULL, NULL};
+	char *str;
+	int result;
+
+	id = register_alloc( 1 );
+	if (id == NULL) {
+		printf( _("Error: Unable to allocate a register!\n") );
+		return 0;
+	}
+
+	/* if there are no parts, create the parts list */
+	if (chain->parts == NULL) {
+		chain->parts = parts_alloc();
+		if (chain->parts == NULL) {
+			printf( _("Error: Unable to allocate space for parts!\n") );
+			return 0;
+		}
+	}
+
+	part = part_alloc(id);
+	if (part == NULL) {
+		printf( _("Error: Unable to allocate space for a part!\n") );
+		return 0;
+	}
+		
+	strncpy(part->part, "unknown", MAXLEN_PART);
+	part->instruction_length = instr_len;
+
+	parts_add_part(chain->parts, part);
+	chain->active_part = chain->parts->len - 1;
+
+	/* make the BR register available */
+	cmd[0] = "register";
+	cmd[1] = "BR";
+	cmd[2] = "1";
+	cmd[3] = NULL;
+	if (cmd_run(chain, cmd) < 1) {
+		printf( _("Error: could not set BR register") );
+		return 0;
+	}
+
+	/* create a string of 1's for BYPASS instruction */
+	cmd[0] = "instruction";
+	cmd[1] = "BYPASS";
+	cmd[3] = "BR";
+	cmd[4] = NULL;
+	str = (char *)calloc(instr_len + 1, sizeof(char));
+	if (str == NULL) {
+		printf( _("Out of memory!\n") );
+		return 0;
+	}
+
+	memset(str, '1', instr_len);
+    str[instr_len] = '\0';
+    cmd[2] = str;
+	result = cmd_run(chain, cmd);
+	free(str);
+
+	if (result < 1) {
+		printf( _("Error: could not set BYPASS instruction") );
+		return 0;
+	}
+
+	return chain->parts->len;
+}
