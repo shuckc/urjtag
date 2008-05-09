@@ -1,3 +1,8 @@
+2008-05-09  Mike Frysinger  <vapier@gentoo.org>
+
+   * data/analog/PARTS, data/Makefile.am, data/analog/bf527/:
+   Rename BF527c to BF527 and relocate files as appropriate.
+
 2005-05-06  Kolja Waschk <kawk>
 
    * acinclude.m4, src/cmd/cmd.c, src/jtag.c: 
