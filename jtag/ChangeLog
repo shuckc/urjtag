@@ -1,9 +1,10 @@
 2008-05-09  Mike Frysinger  <vapier@gentoo.org>
 
    * data/analog/PARTS, data/Makefile.am, data/analog/bf527/:
-   Rename BF527c to BF527 and relocate files as appropriate.
+     Rename BF527c to BF527 and relocate files as appropriate.
    * data/analog/PARTS, data/Makefile.am, data/analog/bf548/:
-   Rename BF549 to BF548 and relocate files as appropriate.
+     Rename BF549 to BF548 and relocate files as appropriate.
+   * data/analog/bf527/STEPPINGS: Add support for bf527 0.1.
 
 2005-05-06  Kolja Waschk <kawk>
 
