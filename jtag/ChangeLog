@@ -2,6 +2,8 @@
 
    * data/analog/PARTS, data/Makefile.am, data/analog/bf527/:
    Rename BF527c to BF527 and relocate files as appropriate.
+   * data/analog/PARTS, data/Makefile.am, data/analog/bf548/:
+   Rename BF549 to BF548 and relocate files as appropriate.
 
 2005-05-06  Kolja Waschk <kawk>
 
