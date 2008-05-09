@@ -21,7 +21,7 @@
  */
 
 #define _ISOC99_SOURCE
-#define _POSIX_C_SOURCE 199309L
+#define _POSIX_C_SOURCE 200112L
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
