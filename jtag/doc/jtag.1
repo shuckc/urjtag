@@ -6,7 +6,7 @@
 jtag \- UrJTAG command shell
 .SH SYNOPSIS
 .B jtag 
-[\-hnv]
+[\-hinv]
 .I file
 .B ...
 .SH DESCRIPTION
@@ -25,9 +25,15 @@ Disable reading ~/.jtag/rc on startup
 .TP
 .I \-v, \-\-version
 Display version information and exit
+.SH ARGUMENTS
+If arguments remain after option processing, they are taken as names of files
+containing jtag commands, one per line. Unless the
+.I \-\-interactive
+option was specified, the program will exit after processing the commands from
+the file[s].
 .SH FILES
 .PP
-.I ~/jtag/rc
+.I ~/.jtag/rc
 .IP
 A per-user text file containing jtag commands to execute at startup.
 .PP
