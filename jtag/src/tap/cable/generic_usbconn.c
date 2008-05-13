@@ -87,11 +87,11 @@ generic_usbconn_connect( char *params[], cable_t *cable )
 	{
 		if(strncasecmp("pid=", params[i], 4) == 0)
 		{
-			user_specified.pid = strtol( params[i] + 4, NULL, 10 );
+			user_specified.pid = strtol( params[i] + 4, NULL, 16 );
 		}
 		else if(strncasecmp("vid=", params[i], 4) == 0)
 		{
-			user_specified.vid = strtol( params[i] + 4, NULL, 10 );
+			user_specified.vid = strtol( params[i] + 4, NULL, 16 );
 		}
 		else if(strncasecmp("desc=", params[i], 5) == 0)
 		{

@@ -1,3 +1,8 @@
+2008-05-13  Kolja Waschk <kawk>
+
+   * src/tap/cable/generic_usbconn.c: Read VID/PID as hexadecimal, fixes 
+	 Bug [1962628] VID/PID for usbconn cables are parsed as decimal
+
 2008-05-12  Kolja Waschk <kawk>
 
    * doc/jtag.1: Explanation of [file] argument, correct location
