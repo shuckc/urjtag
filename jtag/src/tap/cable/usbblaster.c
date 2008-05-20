@@ -406,7 +406,7 @@ usbblaster_help( const char *cablename )
 		"VID        vendor ID (hex, e.g. 0abc)\n"
 		"PID        product ID (hex, e.g. 0abc)\n"
 		"DESC       Some string to match in description or serial no.\n"
-		"DRIVER     usbconn driver, either ftdi of ftd2xx\n"
+		"DRIVER     usbconn driver, either ftdi or ftd2xx\n"
 		"           defaults to %s if not specified\n"
 		"\n"
 		),

@@ -1,6 +1,8 @@
 2008-05-20  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/cable/ft2232.c, src/tap/cable/usbblaster.c:
+     typo in help string fixed
+   * src/tap/cable/ft2232.c, src/tap/cable/usbblaster.c:
      run on top of usbconn drivers
    * src/tap/cable/cmd_xfer.c, src/tap/cable/cmd_xfer.h:
      provide command queueing functions to ft2232.c and usbblaster.c

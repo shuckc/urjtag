@@ -1360,7 +1360,7 @@ found:
             "VID        vendor ID (hex), defaults to %04X\n"
             "PID        product ID (hex), defaults to %04X\n"
             "DESC       Some string to match in description or serial no.\n"
-            "DRIVER     usbconn driver, either ftdi-mpsse of ftd2xx-mpsse\n"
+            "DRIVER     usbconn driver, either ftdi-mpsse or ftd2xx-mpsse\n"
             "           defaults to %s if not specified\n"
             "\n"
             ),
