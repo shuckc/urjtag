@@ -1,3 +1,19 @@
+2008-05-20  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/cable/ft2232.c, src/tap/cable/usbblaster.c:
+     run on top of usbconn drivers
+   * src/tap/cable/cmd_xfer.c, src/tap/cable/cmd_xfer.h:
+     provide command queueing functions to ft2232.c and usbblaster.c
+   * src/tap/usbconn/libftd2xx.c, src/tap/usbconn/libftdi.c,
+     include/usbconn/libftdx.h, src/tap/parport/ftdi.c,
+     src/tap/parport/ftd2xx.c, src/tap/parport.c, src/tap/Makefile.am,
+     src/tap/usbconn.c, src/tap/cable/generic_usbconn.c,
+     src/tap/cable/generic_usbconn.h, doc/UrJTAG.txt:
+     ftdi & ftd2xx drivers ported from parport to usbconn
+   * src/tap/usbconn/libusb.c, include/usbconn.h: added read and write
+   * configure.ac: --enable-parport renamed to --enable-lowlevel
+     respective renaming for Makefile and C macros
+
 2008-05-13  Kolja Waschk <kawk>
 
    * src/tap/cable/generic_usbconn.c: Read VID/PID as hexadecimal, fixes 

@@ -1,10 +1,6 @@
 /*
  * $Id$
  *
- * Link driver for accessing USB devices via libusb
- *
- * Copyright (C) 2008 K. Waschk
- *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -20,20 +16,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Kolja Waschk, 2008
+ * Written by A. Laeuger, 2008
  *
  */
 
-#ifndef _USBCONN_LIBUSB_H
-#define _USBCONN_LIBUSB_H 1
+#ifndef _USBCONN_LIBFTDX_H
+#define _USBCONN_LIBFTDX_H 1
 
-#include <usb.h>
+#define FTDX_MAXSEND 4096
 
-typedef struct {
-	struct usb_device *dev;
-	struct usb_dev_handle *handle;
-	void *data;
-} libusb_param_t;
+/* Maximum chunk to receive from ftdi/ftd2xx driver.
+   Larger values might speed up comm, but there's an upper limit
+   when too many bytes are sent and the underlying libftdi or libftd2xx
+   don't fetch the returned data in time -> deadlock */
+#define FTDI_MAXRECV   ( 4 * 64)
+#define FTD2XX_MAXRECV (63 * 64)
+#define FTDX_MAXRECV   (FTD2XX_MAXRECV < FTDI_MAXRECV ? FTD2XX_MAXRECV : FTDI_MAXRECV)
 
 #endif
-

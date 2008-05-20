@@ -1,5 +1,5 @@
 /*
- * $Id: ftdi.c,v 1.7 2003/08/19 09:05:25 telka Exp $
+ * $Id$
  *
  * Link driver for accessing USB devices via libusb
  *
@@ -148,8 +148,10 @@ usbconn_libusb_connect( const char **param, int paramc, usbconn_cable_t *templat
 	if(libusb_params == NULL || libusb_conn == NULL)
 	{
 		printf(_("Out of memory\n"));
-		free(libusb_params);
-		free(libusb_conn);
+		if (libusb_params)
+			free(libusb_params);
+		if (libusb_conn)
+			free(libusb_conn);
 		return NULL;
 	};
 
@@ -235,7 +237,9 @@ usbconn_driver_t usbconn_libusb_driver = {
 	usbconn_libusb_connect,
 	usbconn_libusb_free,
 	usbconn_libusb_open,
-	usbconn_libusb_close
+	usbconn_libusb_close,
+	NULL,
+	NULL
 };
 
 #endif /* HAVE_LIBUSB */

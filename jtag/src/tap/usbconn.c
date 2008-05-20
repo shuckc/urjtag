@@ -1,5 +1,5 @@
 /*
- * $Id: usbconn.c 851 2007-12-15 22:53:24Z kawk $
+ * $Id$
  *
  * Copyright (C) 2008 K. Waschk
  *
@@ -31,11 +31,27 @@
 #ifdef HAVE_LIBUSB
 extern usbconn_driver_t usbconn_libusb_driver;
 #endif /* HAVE_LIBUSB */
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+extern usbconn_driver_t usbconn_ftd2xx_driver;
+extern usbconn_driver_t usbconn_ftd2xx_mpsse_driver;
+#endif /* ENABLE_LOWLEVEL_FTD2XX */
+#ifdef ENABLE_LOWLEVEL_FTDI
+extern usbconn_driver_t usbconn_ftdi_driver;
+extern usbconn_driver_t usbconn_ftdi_mpsse_driver;
+#endif /* ENABLE_LOWLEVEL_FTDI */
 
 usbconn_driver_t *usbconn_drivers[] = {
 #ifdef HAVE_LIBUSB
 	&usbconn_libusb_driver,
 #endif /* HAVE_LIBUSB */
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+	&usbconn_ftd2xx_driver,
+	&usbconn_ftd2xx_mpsse_driver,
+#endif /* ENABLE_LOWLEVEL_FTD2XX */
+#ifdef ENABLE_LOWLEVEL_FTDI
+	&usbconn_ftdi_driver,
+	&usbconn_ftdi_mpsse_driver,
+#endif /* ENABLE_LOWLEVEL_FTDI */
 	NULL				/* last must be NULL */
 };
 
@@ -49,4 +65,22 @@ int
 usbconn_close( usbconn_t *conn )
 {
 	return conn->driver->close( conn );
+}
+
+int
+usbconn_read( usbconn_t *conn, uint8_t *buf, int len )
+{
+	if (conn->driver->read)
+		return conn->driver->read( conn, buf, len );
+	else
+		return 0;
+}
+
+int
+usbconn_write( usbconn_t *conn, uint8_t *buf, int len, int recv )
+{
+	if (conn->driver->write)
+		return conn->driver->write( conn, buf, len, recv );
+	else
+		return 0;
 }

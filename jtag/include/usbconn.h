@@ -1,5 +1,5 @@
 /*
- * $Id: usbconn.h 809 2007-12-04 07:06:49Z kawk $
+ * $Id$
  *
  * USB Device Connection Driver Interface
  * Copyright (C) 2008 K. Waschk
@@ -27,6 +27,7 @@
 #define	USBCONN_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 typedef struct usbconn_t usbconn_t;
 
@@ -47,6 +48,8 @@ typedef struct {
 	void (*free)( usbconn_t * );
 	int (*open)( usbconn_t * );
 	int (*close)( usbconn_t * );
+	int (*read)( usbconn_t *, uint8_t *, int );
+	int (*write)( usbconn_t *, uint8_t *, int, int );
 } usbconn_driver_t;
 
 struct usbconn_t {
@@ -59,6 +62,8 @@ usbconn_t *usbconn_connect( const char **, int, usbconn_cable_t *);
 int usbconn_free( usbconn_t *conn );
 int usbconn_open( usbconn_t *conn );
 int usbconn_close( usbconn_t *conn );
+int usbconn_read( usbconn_t *conn, uint8_t *buf, int len );
+int usbconn_write( usbconn_t *conn, uint8_t *buf, int len, int recv );
 extern usbconn_driver_t *usbconn_drivers[];
 
 #endif /* USBCONN_H */

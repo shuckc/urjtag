@@ -26,13 +26,20 @@
 #include "sysdep.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "cable.h"
-#include "parport.h"
 #include "chain.h"
+#include "cmd.h"
 
 #include "generic.h"
-#include "generic_parport.h"
+#include "generic_usbconn.h"
+
+#include "usbconn.h"
+#include "usbconn/libftdx.h"
+
+#include "cmd_xfer.h"
+
 
 #define TCK    0
 #define TMS    1
@@ -43,26 +50,71 @@
 
 #define TDO    0
 
+/* The default driver if not specified otherwise during connect */
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+#define DEFAULT_DRIVER "ftd2xx"
+#else
+#define DEFAULT_DRIVER "ftdi"
+#endif
+
+typedef struct {
+	cx_cmd_root_t  cmd_root;
+} params_t;
+
+static int
+usbblaster_connect( char *params[], cable_t *cable )
+{
+	params_t *cable_params;
+	int result;
+
+	/* perform generic_usbconn_connect */
+	result = generic_usbconn_connect( params, cable );
+
+	if (result == 0)
+	{
+		cx_cmd_init( &(cable_params->cmd_root) );
+
+		/* exchange generic cable parameters with our private parameter set */
+		free( cable->params );
+		cable->params = cable_params;
+	}
+
+	return result;
+}
+
 static int
 usbblaster_init( cable_t *cable )
 {
 	int i;
+	params_t *params = (params_t *)cable->params;
+	cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-	if (parport_open( cable->link.port ))
-		return -1;
+	if (usbconn_open( cable->link.usb )) return -1;
 
+	cx_cmd_queue( cmd_root, 0 );
 	for(i=0;i<64;i++)
-		parport_set_data( cable->link.port, 0 );
+		cx_cmd_push( cmd_root, 0 );
 
-	parport_set_control( cable->link.port, 1 ); // flush
-	parport_set_control( cable->link.port, 0 ); // noflush
+	cx_xfer( cmd_root, NULL, cable, COMPLETELY );
 
 	return 0;
 }
 
 static void
+usbblaster_cable_free( cable_t *cable )
+{
+	params_t *params = (params_t *)cable->params;
+
+	cx_cmd_deinit( &(params->cmd_root) );
+
+	generic_usbconn_free( cable );
+}
+
+static void
 usbblaster_clock( cable_t *cable, int tms, int tdi, int n )
 {
+	params_t *params = (params_t *)cable->params;
+	cx_cmd_root_t *cmd_root = &(params->cmd_root);
 	int i, m;
 
 	tms = tms ? (1<<TMS) : 0;
@@ -75,49 +127,52 @@ usbblaster_clock( cable_t *cable, int tms, int tdi, int n )
 	{
 		unsigned char tdis = tdi ? 0xFF : 0;
 
-		parport_set_control( cable->link.port, 0 ); // noflush
-
+		cx_cmd_queue( cmd_root, 0 );
 		while (m >= 8)
 		{
 			int i;
 			int chunkbytes = (m >> 3);
 			if(chunkbytes > 63) chunkbytes = 63;
 
-			parport_set_data( cable->link.port,(1<<SHMODE)|(0<<READ)|chunkbytes);
+			cx_cmd_push( cmd_root, (1<<SHMODE)|(0<<READ)|chunkbytes );
 
 			for (i=0; i<chunkbytes; i++)
 			{
-				parport_set_data( cable->link.port, tdis);
+				cx_cmd_push( cmd_root, tdis );
 			}
 
 			m -= (chunkbytes << 3);
 		}
+
+		cx_xfer( cmd_root, NULL, cable, COMPLETELY );
 	}
-			
+
 	for (i = 0; i < m; i++) {
-		parport_set_data( cable->link.port, OTHERS | (0 << TCK) | tms | tdi );
-		parport_set_data( cable->link.port, OTHERS | (1 << TCK) | tms | tdi );
-		parport_set_control( cable->link.port, 1 ); // flush
-		parport_set_control( cable->link.port, 0 ); // noflush
+		cx_cmd_queue( cmd_root, 0 );
+		cx_cmd_push( cmd_root, OTHERS | (0 << TCK) | tms | tdi );
+		cx_cmd_push( cmd_root, OTHERS | (1 << TCK) | tms | tdi );
+		cx_xfer( cmd_root, NULL, cable, COMPLETELY );
 	}
 }
 
 static int
 usbblaster_get_tdo( cable_t *cable )
 {
-	parport_set_control( cable->link.port, 0 ); // noflush
-	parport_set_data( cable->link.port, OTHERS ); /* TCK low */
-	parport_set_data( cable->link.port, OTHERS | (1 << READ) ); /* TCK low */
-	parport_set_control( cable->link.port, 1 ); // flush
-	parport_set_control( cable->link.port, 0 ); // noflush
+	params_t *params = (params_t *)cable->params;
+	cx_cmd_root_t *cmd_root = &(params->cmd_root);
+
+	cx_cmd_queue( cmd_root, 1 );
+	cx_cmd_push( cmd_root, OTHERS ); /* TCK low */
+	cx_cmd_push( cmd_root, OTHERS | (1 << READ) ); /* TCK low */
+	cx_xfer( cmd_root, NULL, cable, COMPLETELY );
 #if 0
-    {
-	  char x = ( parport_get_data( cable->link.port ) & (1 << TDO)) ? 1 : 0;
-      printf("GetTDO %d\n", x);
-      return x;
-    }
+		{
+		char x = ( cx_xfer_recv( cable ) & (1 << TDO)) ? 1 : 0;
+			printf("GetTDO %d\n", x);
+			return x;
+		}
 #else
-	return ( parport_get_data( cable->link.port ) & (1 << TDO)) ? 1 : 0;
+	return ( cx_xfer_recv( cable ) & (1 << TDO)) ? 1 : 0;
 #endif
 }
 
@@ -130,10 +185,13 @@ usbblaster_set_trst( cable_t *cable, int trst )
 static int
 usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 {
+	params_t *params = (params_t *)cable->params;
+	cx_cmd_root_t *cmd_root = &(params->cmd_root);
 	int in_offset = 0;
 	int out_offset = 0;
-	parport_set_control( cable->link.port, 0 );
-	parport_set_data( cable->link.port, OTHERS ); /* TCK low */
+
+	cx_cmd_queue( cmd_root, 0 );
+	cx_cmd_push( cmd_root, OTHERS ); /* TCK low */
 
 #if 0
 				{
@@ -151,27 +209,31 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 		if(chunkbytes > 63) chunkbytes = 63;
 
 		if(out)
-			parport_set_data( cable->link.port,(1<<SHMODE)|(1<<READ)|chunkbytes);
-		else
-			parport_set_data( cable->link.port,(1<<SHMODE)|(0<<READ)|chunkbytes);
+		{
+			cx_cmd_queue( cmd_root, chunkbytes );
+			cx_cmd_push( cmd_root, (1<<SHMODE)|(1<<READ)|chunkbytes );
+		}
+		else {
+			cx_cmd_queue( cmd_root, 0 );
+			cx_cmd_push( cmd_root, (1<<SHMODE)|(0<<READ)|chunkbytes );
+		}
 
 		for(i=0; i<chunkbytes; i++)
 		{
 			int j;
 			unsigned char b = 0;
 			for(j=1; j<256; j<<=1) if(in[in_offset++]) b |= j;
-			parport_set_data( cable->link.port, b );
+			cx_cmd_push( cmd_root, b );
 		};
 
 		if(out) 
 		{
-			parport_set_control( cable->link.port, 1 ); // flush
-			parport_set_control( cable->link.port, 0 ); 
+			cx_xfer( cmd_root, NULL, cable, COMPLETELY );
 
 			for(i=0; i<chunkbytes; i++)
 			{
 				int j;
-				unsigned char b = parport_get_data( cable->link.port );
+				unsigned char b = cx_xfer_recv( cable );
 #if 0
                 printf("read byte: %02X\n", b);
 #endif
@@ -184,17 +246,18 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 	while(len > in_offset)
 	{
 		char tdi = in[in_offset++] ? 1 : 0;
-		parport_set_data( cable->link.port, OTHERS | ((out)?(1 << READ):0) | (tdi << TDI));/* TCK low */
-		parport_set_data( cable->link.port, OTHERS | (1 << TCK)  | (tdi << TDI));
+
+		cx_cmd_queue( cmd_root, out ? 1 : 0 );
+		cx_cmd_push( cmd_root, OTHERS | ((out)?(1 << READ):0) | (tdi << TDI));/* TCK low */
+		cx_cmd_push( cmd_root, OTHERS | (1 << TCK)  | (tdi << TDI));
 	}
 
 	if(out)
 	{
-		parport_set_control( cable->link.port, 1 ); // flush
-		parport_set_control( cable->link.port, 0 );
+		cx_xfer( cmd_root, NULL, cable, COMPLETELY );
 
 		while(len > out_offset)
-			out[out_offset++] = ( parport_get_data( cable->link.port ) & (1 << TDO)) ? 1 : 0;
+			out[out_offset++] = ( cx_xfer_recv( cable ) & (1 << TDO)) ? 1 : 0;
 
 #if 0
 				{
@@ -213,6 +276,9 @@ usbblaster_transfer( cable_t *cable, int len, char *in, char *out )
 static void
 usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 {
+	params_t *params = (params_t *)cable->params;
+	cx_cmd_root_t *cmd_root = &(params->cmd_root);
+
 	if( how_much == OPTIONALLY ) return;
 
 	while (cable->todo.num_items > 0)
@@ -233,16 +299,18 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 					// printf("clock: %d %d %d\n", tms, tdi, m);
 					for(; m>0; m--)
 					{
-						parport_set_data( cable->link.port, OTHERS | tms | tdi );
-						parport_set_data( cable->link.port, OTHERS | (1 << TCK) | tms | tdi );
+						cx_cmd_queue( cmd_root, 0 );
+						cx_cmd_push( cmd_root, OTHERS | tms | tdi );
+						cx_cmd_push( cmd_root, OTHERS | (1 << TCK) | tms | tdi );
 						to_send += 2;
 					}
 					break;
 				}
 				case CABLE_GET_TDO:
 				{
-					parport_set_data( cable->link.port, OTHERS ); /* TCK low */
-					parport_set_data( cable->link.port, OTHERS | (1 << READ) ); /* TCK low */
+					cx_cmd_queue( cmd_root, 1 );
+					cx_cmd_push( cmd_root, OTHERS ); /* TCK low */
+					cx_cmd_push( cmd_root, OTHERS | (1 << READ) ); /* TCK low */
 					// printf("get_tdo\n");
 					to_send += 2;
 					break;
@@ -258,14 +326,13 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 #if 0
 		if(cable->todo.num_items > 0 && cable->todo.data[i].action == CABLE_TRANSFER)
 		{
-			parport_set_data( cable->link.port, OTHERS ); /* TCK low */
+			cx_cmd_push( cmd_root, OTHERS ); /* TCK low */
 		};
 #endif
 
 		if(to_send > 0)
 		{
-			parport_set_control( cable->link.port, 1 ); // flush
-			parport_set_control( cable->link.port, 0 );
+			cx_xfer( cmd_root, NULL, cable, COMPLETELY );
 		}
 
 		while(j!=i)
@@ -274,7 +341,7 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 			{
 				case CABLE_GET_TDO:
 				{
-					int tdo = (parport_get_data( cable->link.port ) & (1<<TDO)) ? 1 : 0;
+					int tdo = (cx_xfer_recv( cable ) & (1<<TDO)) ? 1 : 0;
 					int m = cable_add_queue_item( cable, &(cable->done) );
 					cable->done.data[m].action = CABLE_GET_TDO;
 					cable->done.data[m].arg.value.tdo = tdo;
@@ -334,22 +401,28 @@ void
 usbblaster_help( const char *cablename )
 {
 	printf( _(
-		"Usage: cable %s ftdi VID:PID\n"
+		"Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
 		"\n"
-		"VID        vendor ID (hex, e.g. 9FB, or empty)\n"
-		"PID        product ID (hex, e.g. 6001, or empty)\n"
+		"VID        vendor ID (hex, e.g. 0abc)\n"
+		"PID        product ID (hex, e.g. 0abc)\n"
+		"DESC       Some string to match in description or serial no.\n"
+		"DRIVER     usbconn driver, either ftdi of ftd2xx\n"
+		"           defaults to %s if not specified\n"
 		"\n"
-	), cablename );
+		),
+		cablename,
+		DEFAULT_DRIVER
+		);
 }
 
 cable_driver_t usbblaster_cable_driver = {
 	"UsbBlaster",
 	N_("Altera USB-Blaster Cable"),
-	generic_parport_connect,
+	usbblaster_connect,
 	generic_disconnect,
-	generic_parport_free,
+	usbblaster_cable_free,
 	usbblaster_init,
-	generic_parport_done,
+	generic_usbconn_done,
 	usbblaster_set_frequency,
 	usbblaster_clock,
 	usbblaster_get_tdo,
@@ -360,4 +433,60 @@ cable_driver_t usbblaster_cable_driver = {
 //	generic_flush_using_transfer,
 	usbblaster_flush,
 	usbblaster_help,
+};
+usbconn_cable_t usbconn_cable_usbblaster_ftdi = {
+  "UsbBlaster",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftdi",             /* default usbconn driver */
+  0x09FB,             /* VID */
+  0x6001              /* PID */
+};
+usbconn_cable_t usbconn_cable_cubic_cyclonium_ftdi = {
+  "UsbBlaster",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftdi",             /* default usbconn driver */
+  0x09FB,             /* VID */
+  0x6002              /* PID */
+};
+usbconn_cable_t usbconn_cable_nios_eval_ftdi = {
+  "UsbBlaster",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftdi",             /* default usbconn driver */
+  0x09FB,             /* VID */
+  0x6003              /* PID */
+};
+usbconn_cable_t usbconn_cable_usb_jtag_ftdi = {
+  "UsbBlaster",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftdi",             /* default usbconn driver */
+  0x16C0,             /* VID */
+  0x06AD              /* PID */
+};
+usbconn_cable_t usbconn_cable_usbblaster_ftd2xx = {
+  "UsbBlaster",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftd2xx",           /* default usbconn driver */
+  0x09FB,             /* VID */
+  0x6001              /* PID */
+};
+usbconn_cable_t usbconn_cable_cubic_cyclonium_ftd2xx = {
+  "UsbBlaster",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftd2xx",           /* default usbconn driver */
+  0x09FB,             /* VID */
+  0x6002              /* PID */
+};
+usbconn_cable_t usbconn_cable_nios_eval_ftd2xx = {
+  "UsbBlaster",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftdi",             /* default usbconn driver */
+  0x09FB,             /* VID */
+  0x6003              /* PID */
+};
+usbconn_cable_t usbconn_cable_usb_jtag_ftd2xx = {
+  "UsbBlaster",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftd2xx",           /* default usbconn driver */
+  0x16C0,             /* VID */
+  0x06AD              /* PID */
 };

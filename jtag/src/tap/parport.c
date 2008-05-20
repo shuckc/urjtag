@@ -28,34 +28,20 @@
 
 extern parport_driver_t direct_parport_driver;
 extern parport_driver_t ppdev_parport_driver;
-extern parport_driver_t ftd2xx_parport_driver;
-extern parport_driver_t ftd2xx_mpsse_parport_driver;
-extern parport_driver_t ftdi_parport_driver;
-extern parport_driver_t ftdi_mpsse_parport_driver;
 extern parport_driver_t ppi_parport_driver;
 
 parport_driver_t *parport_drivers[] = {
-#ifdef ENABLE_PARPORT_DIRECT
+#ifdef ENABLE_LOWLEVEL_DIRECT
 	&direct_parport_driver,
-#endif /* ENABLE_PARPORT_DIRECT */
+#endif /* ENABLE_LOWLEVEL_DIRECT */
 
-#ifdef ENABLE_PARPORT_PPDEV
+#ifdef ENABLE_LOWLEVEL_PPDEV
 	&ppdev_parport_driver,
-#endif /* ENABLE_PARPORT_PPDEV */
+#endif /* ENABLE_LOWLEVEL_PPDEV */
 
-#ifdef ENABLE_PARPORT_FTD2XX
-	&ftd2xx_parport_driver,
-	&ftd2xx_mpsse_parport_driver,
-#endif /* ENABLE_PARPORT_FTD2XX */
-
-#ifdef ENABLE_PARPORT_FTDI
-	&ftdi_parport_driver,
-	&ftdi_mpsse_parport_driver,
-#endif /* ENABLE_PARPORT_FTDI */
-
-#ifdef ENABLE_PARPORT_PPI
+#ifdef ENABLE_LOWLEVEL_PPI
 	&ppi_parport_driver,
-#endif /* ENABLE_PARPORT_PPI */
+#endif /* ENABLE_LOWLEVEL_PPI */
 	NULL				/* last must be NULL */
 };
 

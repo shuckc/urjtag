@@ -487,45 +487,45 @@ CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [wiggler],     [ENABLE_CA
 CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [xpc],         [ENABLE_CABLE_XPC])
 
 
-# Enable parport drivers
-AC_DEFUN([DEF_ENABLE_PARPORTDRIVERS], [\
+# Enable lowlevel drivers
+AC_DEFUN([DEF_ENABLE_LOWLEVELDRIVERS], [\
 direct ftdi ftd2xx ppdev ppi])
-AC_ARG_ENABLE(parport,
-[AS_HELP_STRING([--enable-parport], [Enable default set or specific parport drivers:])]
-[AS_HELP_STRING([],                 ['default' enables:])]
-[AS_HELP_STRING([],DEF_ENABLE_PARPORTDRIVERS)]
+AC_ARG_ENABLE(lowlevel,
+[AS_HELP_STRING([--enable-lowlevel], [Enable default set or specific lowlevel drivers:])]
+[AS_HELP_STRING([],                  ['default' enables:])]
+[AS_HELP_STRING([],DEF_ENABLE_LOWLEVELDRIVERS)]
 ,
 [AS_CASE([${enableval}],
-    [yes],  [parportdrivers=default],
-    [no],   [parportdrivers=none],
-    [none], [parportdrivers=none],
-            [parportdrivers=`echo ${enableval} | $SED -e 's/,/ /g'`])],
-[parportdrivers=default])
-# expand 'default' to default enabled parportdrivers
-parportdrivers=`echo ${parportdrivers} | $SED -e "s/default/DEF_ENABLE_PARPORTDRIVERS/"`
-# automatically disable parport drivers when a required feature is not available
+    [yes],  [lowleveldrivers=default],
+    [no],   [lowleveldrivers=none],
+    [none], [lowleveldrivers=none],
+            [lowleveldrivers=`echo ${enableval} | $SED -e 's/,/ /g'`])],
+[lowleveldrivers=default])
+# expand 'default' to default enabled lowlevel drivers
+lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/default/DEF_ENABLE_LOWLEVELDRIVERS/"`
+# automatically disable lowlevel drivers when a required feature is not available
 AS_IF([test "x$HAVELIBFTDI" != "xyes"], [
-    parportdrivers=`echo ${parportdrivers} | $SED -e "s/ftdi//"`
+    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ftdi//"`
 ])
 AS_IF([test "x$HAVELIBFTD2XX" != "xyes"], [
-    parportdrivers=`echo ${parportdrivers} | $SED -e "s/ftd2xx//"`
+    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ftd2xx//"`
 ])
 AS_IF([test "x$HAVE_LINUX_PPDEV_H" != "xyes"], [
-    parportdrivers=`echo ${parportdrivers} | $SED -e "s/ppdev//"`
+    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ppdev//"`
 ])
 AS_IF([test "x$HAVE_DEV_PPBUS_PPI_H" != "xyes"], [
-    parportdrivers=`echo ${parportdrivers} | $SED -e "s/ppi//"`
+    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ppi//"`
 ])
 AS_IF([test "x$HAVE_IOPERM" != "xyes" -a "x$HAVE_I386_SET_IOPERM" != "xyes"], [
-    parportdrivers=`echo ${parportdrivers} | $SED -e "s/direct//"`
+    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/direct//"`
 ])
 #
-enabled_parport_drivers=''
-CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [direct], [ENABLE_PARPORT_DIRECT])
-CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ftd2xx], [ENABLE_PARPORT_FTD2XX])
-CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ftdi],   [ENABLE_PARPORT_FTDI])
-CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ppdev],  [ENABLE_PARPORT_PPDEV])
-CHECK_DRIVER([$parportdrivers], [enabled_parport_drivers], [ppi],    [ENABLE_PARPORT_PPI])
+enabled_lowlevel_drivers=''
+CHECK_DRIVER([$lowleveldrivers], [enabled_lowlevel_drivers], [direct], [ENABLE_LOWLEVEL_DIRECT])
+CHECK_DRIVER([$lowleveldrivers], [enabled_lowlevel_drivers], [ftd2xx], [ENABLE_LOWLEVEL_FTD2XX])
+CHECK_DRIVER([$lowleveldrivers], [enabled_lowlevel_drivers], [ftdi],   [ENABLE_LOWLEVEL_FTDI])
+CHECK_DRIVER([$lowleveldrivers], [enabled_lowlevel_drivers], [ppdev],  [ENABLE_LOWLEVEL_PPDEV])
+CHECK_DRIVER([$lowleveldrivers], [enabled_lowlevel_drivers], [ppi],    [ENABLE_LOWLEVEL_PPI])
 
 
 dnl Enable a relocatable jtag?
@@ -580,5 +580,5 @@ jtag is now configured for
   Build BSDL subsystem : $FLAG_BSDL
   Bus drivers          : $enabled_bus_drivers
   Cable drivers        : $enabled_cable_drivers
-  Parport drivers      : $enabled_parport_drivers
+  Lowlevel drivers     : $enabled_lowlevel_drivers
 ])

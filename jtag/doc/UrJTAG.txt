@@ -397,13 +397,13 @@ host:
 
 ==== Driver tailoring ====
 
-The configure script enables all default bus, cable and parport drivers. You
+The configure script enables all default bus, cable and lowlevel drivers. You
 can include and exclude specific drivers if required. For a list of parameters
 run
 
   ./configure --help
 
-to figure out the appropriate --enable-bus, --enable-cable and --enable-parport
+to figure out the appropriate --enable-bus, --enable-cable and --enable-lowlevel
 options.
 
 
@@ -661,21 +661,26 @@ the jtag shell):
 UrJTAG now also supports some USB cables. Unfortunately, there is no standard
 for "JTAG over USB", so this support is limited to a few selected cables only.
 For cables based on the FT2232 chip from FTDI, the cable command has to be
-given cable name, driver name, and USB Vendor and Product ID of the cable:
+given cable name and optionally the driver name, USB Vendor, and Product ID of
+the cable:
 
-  jtag> cable ARM-USB-OCD ftdi-mpsse 15ba:3
+  jtag> cable ARM-USB-OCD vid=15ba pid=0003 driver=ftdi-mpsse
 
-For some cables, UrJTAG knows the VID:PID and you can just say ":"
+For all known cables, UrJTAG knows the VID and PID so you can just say
 
-  jtag> cable JTAGkey ftdi-mpsse :
+  jtag> cable ARM-USB-OCD
 
-On Windows, if UrJTAG was compiled to use the drivers supplied by
-FTDI, the command should instead look like this:
+If your cable isn't detected automatically though it's listed as a known and
+supported cable, feel free to report its VID and PID. It might be a different
+revision and should be added to the known & tested list of cables.
 
-  jtag> cable ARM-USB-OCD ftd2xx-mpsse 15ba:3
-
-The support for USB-based cables and their configuration is work
-in progress; the above syntax may change (i.e. become simpler) soon.
+As stated above, the driver name is not mandatory for the cable
+command. UrJTAG will select the driver automatically based on UrJTAG's
+configuration.  In case your system provides just one of libftdi or FTD2XX
+the respective driver is selected. If both libraries are available, then
+FTD2XX is selected. That's simply because FTD2XX showed some performance
+advantages over libftdi in the past. You can still force libftdi with the
+respective parameter.
 
 ===== detect =====
 
@@ -1192,15 +1197,19 @@ All parport drivers present a common API for setting and reading signals.
 ===== usbconn =====
 
 The usbconn drivers provide a common API to search for and connect with USB
-devices. At the moment, there's only a libusb driver, but others will follow
-(e.g. to communicate with FTDI chip based cables through libftdi and/or FTD2XX,
-to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and more).
+devices. At the moment, there are drivers for libusd, libftdi and FTD2XX
+(e.g. to communicate with FTDI chip based cables through libftdi and/or
+FTD2XX, to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and
+more).
 
+/////////////////////////////////////////////////////////////////////////////
+arniml, 18-may-2008: Obsolete?
 In contrast to the parport API, the usbconn drivers provide only the functions
 for connecting, disconnecting, and for releasing ressources. The actual
 communication must be implemented using the underlying library's functions,
 e.g. usb_write from libusb, or ftdi_write from libftdi. Therefore, each driver
 using usbconn usually only works together with one particular usbconn driver.
+/////////////////////////////////////////////////////////////////////////////
 
 ==== Bus drivers ====
 

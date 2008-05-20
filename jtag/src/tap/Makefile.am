@@ -41,7 +41,9 @@ libtap_a_SOURCES = \
 	cable/generic_usbconn.h \
 	cable/generic_usbconn.c \
 	cable/generic_parport.h \
-	cable/generic_parport.c
+	cable/generic_parport.c \
+	cable/cmd_xfer.h \
+	cable/cmd_xfer.c
 
 if ENABLE_CABLE_ARCOM
 libtap_a_SOURCES += \
@@ -126,27 +128,27 @@ libtap_a_SOURCES += \
 	cable/jim.c
 endif
 
-if ENABLE_PARPORT_FTDI
+if ENABLE_LOWLEVEL_FTDI
 libtap_a_SOURCES += \
-	parport/ftdi.c
+	usbconn/libftdi.c
 endif
 
-if ENABLE_PARPORT_FTD2XX
+if ENABLE_LOWLEVEL_FTD2XX
 libtap_a_SOURCES += \
-	parport/ftd2xx.c
+	usbconn/libftd2xx.c
 endif
 
-if ENABLE_PARPORT_DIRECT
+if ENABLE_LOWLEVEL_DIRECT
 libtap_a_SOURCES += \
 	parport/direct.c
 endif
 
-if ENABLE_PARPORT_PPDEV
+if ENABLE_LOWLEVEL_PPDEV
 libtap_a_SOURCES += \
 	parport/ppdev.c
 endif
 
-if ENABLE_PARPORT_PPI
+if ENABLE_LOWLEVEL_PPI
 libtap_a_SOURCES += \
 	parport/ppi.c
 endif

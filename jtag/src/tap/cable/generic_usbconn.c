@@ -1,5 +1,5 @@
 /*
- * $Id: generic.c 1003 2008-02-10 10:00:30Z kawk $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *
@@ -37,18 +37,94 @@
 
 #undef VERBOSE
 
-#ifdef HAVE_LIBUSB
+#ifdef ENABLE_CABLE_XPC
 extern usbconn_cable_t usbconn_cable_xpc_int;
 extern usbconn_cable_t usbconn_cable_xpc_ext;
+#endif
+#ifdef ENABLE_CABLE_JLINK
 extern usbconn_cable_t usbconn_cable_jlink;
+#endif
+#ifdef ENABLE_CABLE_FT2232
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+extern usbconn_cable_t usbconn_cable_ft2232_ftd2xx;
+extern usbconn_cable_t usbconn_cable_armusbocd_ftd2xx;
+extern usbconn_cable_t usbconn_cable_bfin_ujtag_ftd2xx;
+extern usbconn_cable_t usbconn_cable_jtagkey_ftd2xx;
+extern usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx;
+extern usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx;
+extern usbconn_cable_t usbconn_cable_usbtojtagif_ftd2xx;
+extern usbconn_cable_t usbconn_cable_signalyzer_ftd2xx;
+#endif
+#ifdef ENABLE_LOWLEVEL_FTDI
+extern usbconn_cable_t usbconn_cable_ft2232_ftdi;
+extern usbconn_cable_t usbconn_cable_armusbocd_ftdi;
+extern usbconn_cable_t usbconn_cable_bfin_ujtag_ftdi;
+extern usbconn_cable_t usbconn_cable_jtagkey_ftdi;
+extern usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
+extern usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
+extern usbconn_cable_t usbconn_cable_usbtojtagif_ftdi;
+extern usbconn_cable_t usbconn_cable_signalyzer_ftdi;
+#endif
+#endif
+#ifdef ENABLE_CABLE_USBBLASTER
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+extern usbconn_cable_t usbconn_cable_usbblaster_ftd2xx;
+extern usbconn_cable_t usbconn_cable_cubic_cyclonium_ftd2xx;
+extern usbconn_cable_t usbconn_cable_nios_eval_ftd2xx;
+extern usbconn_cable_t usbconn_cable_usb_jtag_ftd2xx;
+#endif
+#ifdef ENABLE_LOWLEVEL_FTDI
+extern usbconn_cable_t usbconn_cable_usbblaster_ftdi;
+extern usbconn_cable_t usbconn_cable_cubic_cyclonium_ftdi;
+extern usbconn_cable_t usbconn_cable_nios_eval_ftdi;
+extern usbconn_cable_t usbconn_cable_usb_jtag_ftdi;
+#endif
 #endif
 
 usbconn_cable_t *usbconn_cables[] =
 {
-#ifdef HAVE_LIBUSB
+#ifdef ENABLE_CABLE_XPC
 	&usbconn_cable_xpc_int,
 	&usbconn_cable_xpc_ext,
+#endif
+#ifdef ENABLE_CABLE_JLINK
 	&usbconn_cable_jlink,
+#endif
+#ifdef ENABLE_CABLE_FT2232
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+	&usbconn_cable_ft2232_ftd2xx,
+	&usbconn_cable_armusbocd_ftd2xx,
+	&usbconn_cable_bfin_ujtag_ftd2xx,
+	&usbconn_cable_jtagkey_ftd2xx,
+	&usbconn_cable_oocdlinks_ftd2xx,
+	&usbconn_cable_turtelizer2_ftd2xx,
+	&usbconn_cable_usbtojtagif_ftd2xx,
+	&usbconn_cable_signalyzer_ftd2xx,
+#endif
+#ifdef ENABLE_LOWLEVEL_FTDI
+	&usbconn_cable_ft2232_ftdi,
+	&usbconn_cable_armusbocd_ftdi,
+	&usbconn_cable_bfin_ujtag_ftdi,
+	&usbconn_cable_jtagkey_ftdi,
+	&usbconn_cable_oocdlinks_ftdi,
+	&usbconn_cable_turtelizer2_ftdi,
+	&usbconn_cable_usbtojtagif_ftdi,
+	&usbconn_cable_signalyzer_ftdi,
+#endif
+#endif
+#ifdef ENABLE_CABLE_USBBLASTER
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+	&usbconn_cable_usbblaster_ftd2xx,
+	&usbconn_cable_cubic_cyclonium_ftd2xx,
+	&usbconn_cable_nios_eval_ftd2xx,
+	&usbconn_cable_usb_jtag_ftd2xx,
+#endif
+#ifdef ENABLE_LOWLEVEL_FTDI
+	&usbconn_cable_usbblaster_ftdi,
+	&usbconn_cable_cubic_cyclonium_ftdi,
+	&usbconn_cable_nios_eval_ftdi,
+	&usbconn_cable_usb_jtag_ftdi,
+#endif
 #endif
 	NULL
 };
