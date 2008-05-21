@@ -73,7 +73,8 @@ tap_defer_shift_register( chain_t *chain, const tap_register *in, tap_register *
 	if (exit == EXITMODE_IDLE) {
 		chain_defer_clock( chain, 1, 0, 1 );	/* Update-DR or Update-IR */
 		chain_defer_clock( chain, 0, 0, 1 );	/* Run-Test/Idle */
-	}
+	} else if (exit == EXITMODE_UPDATE)
+		chain_defer_clock( chain, 1, 0, 1 );	/* Update-DR or Update-IR */
 }
 
 void

@@ -35,6 +35,7 @@ typedef struct chain_t chain_t;
 #define EXITMODE_SHIFT 0
 #define EXITMODE_IDLE  1
 #define EXITMODE_EXIT1 2
+#define EXITMODE_UPDATE 3
 
 struct chain_t {
 	int state;
