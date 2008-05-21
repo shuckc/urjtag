@@ -1,5 +1,10 @@
 2008-05-21  Jie Zhang  <jie.zhang@analog.com>
 
+   [ 1951767 ] bsdl2jtag cannot parse some bsdl files
+   * src/bsdl2jtag.c (endline): Prevent `:' from being scanned in.
+
+2008-05-21  Jie Zhang  <jie.zhang@analog.com>
+
    [ 1968455 ] Enter UPDATE state after register shift
    * include/chain.h (EXITMODE_UPDATE): Define.
    * src/tap/tap.c (tap_defer_shift_register): Enter Update-DR

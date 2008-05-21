@@ -70,13 +70,13 @@ int endline(void) {
 		i=sscanf(pline, "attribute %s", att);
 		if(i!=1) return -1;
 		if(!strncmp(att, "INSTRUCTION_LENGTH", 18)) {
-			i=sscanf(pline, "attribute INSTRUCTION_LENGTH of %s : entity is %i ;", tmp, &j);
+			i=sscanf(pline, "attribute INSTRUCTION_LENGTH of %[^:] : entity is %i ;", tmp, &j);
 			if(i!=2) return -2;
 			IR_l=j;
 			mode=0;
 		} else
 		if(!strncmp(att, "BOUNDARY_LENGTH", 15)){
-			i=sscanf(pline, "attribute BOUNDARY_LENGTH of %s : entity is %i ;", tmp, &j);
+			i=sscanf(pline, "attribute BOUNDARY_LENGTH of %[^:] : entity is %i ;", tmp, &j);
 			if(i!=2) return -3;
 			BR_l=j;
 			bs_bits=malloc(BR_l * sizeof(struct bsbit));
@@ -85,19 +85,19 @@ int endline(void) {
 			mode=0;
 		} else
 		if(!strncmp(att, "IDCODE_REGISTER", 15)) {
-			i=sscanf(pline, "attribute IDCODE_REGISTER of %s : entity is %n", tmp, &j);
+			i=sscanf(pline, "attribute IDCODE_REGISTER of %[^:] : entity is %n", tmp, &j);
 			if(i!=1) return -4;
 			memmove(pline, pline+j, strlen(pline+j)+1);
 			mode=4;
 		} else 
 		if(!strncmp(att, "BOUNDARY_REGISTER", 17)) {
-			i=sscanf(pline, "attribute BOUNDARY_REGISTER of %s : entity is %n", tmp, &j);
+			i=sscanf(pline, "attribute BOUNDARY_REGISTER of %[^:] : entity is %n", tmp, &j);
 			if(i!=1) return -5;
 			memmove(pline, pline+j, strlen(pline+j)+1);
 			mode=5;
 		} else
 		if(!strncmp(att, "INSTRUCTION_OPCODE", 18)) {
-			i=sscanf(pline, "attribute INSTRUCTION_OPCODE of %s : entity is %n", tmp, &j);
+			i=sscanf(pline, "attribute INSTRUCTION_OPCODE of %[^:] : entity is %n", tmp, &j);
 			if(i!=1) return -6;
 			memmove(pline, pline+j, strlen(pline+j)+1);
 			mode=6;
