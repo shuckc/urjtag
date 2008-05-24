@@ -67,6 +67,13 @@ usbblaster_connect( char *params[], cable_t *cable )
 	params_t *cable_params;
 	int result;
 
+	cable_params = (params_t *)malloc( sizeof(params_t) );
+	if (!cable_params)
+	{
+		free( cable );
+		return 4;
+	}
+
 	/* perform generic_usbconn_connect */
 	result = generic_usbconn_connect( params, cable );
 
