@@ -1,5 +1,5 @@
 /*
- * $Id: usbblaster.c,v 1.8 2003/08/22 22:42:02 telka Exp $
+ * $Id$
  *
  * Altera USB-Blaster<tm> Cable Driver
  * Copyright (C) 2006 K. Waschk

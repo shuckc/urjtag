@@ -1,3 +1,8 @@
+2008-05-24  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/cable/usbblaster.c (usbblaster_connect): added missing
+     malloc for cable_params
+
 2008-05-23  Mike Frysinger  <vapier@gentoo.org>
 
    * data/analog/PARTS: Add BF526 id.
