@@ -1,3 +1,7 @@
+2008-05-23  Mike Frysinger  <vapier@gentoo.org>
+
+   * data/analog/PARTS: Add BF526 id.
+
 2008-05-21  Jie Zhang  <jie.zhang@analog.com>
 
    [ 1951767 ] bsdl2jtag cannot parse some bsdl files
