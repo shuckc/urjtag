@@ -1019,6 +1019,22 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
   const sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},
                               1, 1};
   parser_priv_t priv;
+  int c = ~EOF;
+  int num_lines;
+
+  /* get number of lines in svf file so we can give user some feedback on long
+     files or slow cables */
+  rewind( SVF_FILE );
+  num_lines = 0;
+  while (EOF != c) {
+    c = fgetc( SVF_FILE );
+    if ('\n' == c)
+      num_lines++;
+  }
+  rewind( SVF_FILE );
+  if (0 == num_lines)
+    /* avoid those annoying divide/0 crashes */
+    num_lines++;
 
   /* initialize
      - part
@@ -1101,7 +1117,7 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
   /* select SIR instruction */
   part_set_instruction(priv.part, "SIR");
 
-  if (svf_bison_init(&priv, SVF_FILE)) {
+  if (svf_bison_init(&priv, SVF_FILE, num_lines, 0)) {
     svfparse(&priv, chain);
     svf_bison_deinit(&priv);
   }

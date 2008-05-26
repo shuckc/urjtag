@@ -437,7 +437,7 @@ svf_free_ths_params(struct ths_params *params)
 
 
 int
-svf_bison_init(parser_priv_t *priv_data, FILE *f)
+svf_bison_init(parser_priv_t *priv_data, FILE *f, int num_lines, int print_progress)
 {
   const struct svf_parser_params params = {
     {0.0, NULL, NULL, NULL, NULL},
@@ -447,7 +447,7 @@ svf_bison_init(parser_priv_t *priv_data, FILE *f)
 
   priv_data->parser_params = params;
 
-  if ((priv_data->scanner = svf_flex_init(f)) == NULL)
+  if ((priv_data->scanner = svf_flex_init(f, num_lines, print_progress)) == NULL)
     return 0;
   else
     return 1;

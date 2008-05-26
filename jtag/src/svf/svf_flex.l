@@ -38,21 +38,23 @@
 #include "svf.h"
 #include "svf_bison.h"
 
+#define YY_EXTRA_TYPE scanner_extra_t *
+
 static int map_keyw_ident(YYSTYPE *, char *);
 static void align_string(char *);
 
 static void fix_yylloc(YYLTYPE *, char *);
-static void fix_yylloc_nl(YYLTYPE *, char *);
-#define FIX_YYLLOC(lloc, text) fix_yylloc(lloc, text);
-#define FIX_YYLLOC_NL(lloc, text) fix_yylloc_nl(lloc, text);
+static void fix_yylloc_nl(YYLTYPE *, char *, YY_EXTRA_TYPE);
 
 int yywrap(yyscan_t scanner)
 {
   return(1);
 }
 
-#define YY_USER_INIT do { yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 0; } while (0)
- 
+#define YY_USER_INIT { \
+  yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 0; \
+}
+
 %}
 
 %pointer
@@ -72,7 +74,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a keyword or identifier */
   int keyw;
 
-  FIX_YYLLOC(yylloc, yytext);
+  fix_yylloc(yylloc, yytext);
   keyw = map_keyw_ident(yylval, yytext);
 
   /* enable detection of VECTOR_STRING when this is a PIO command */
@@ -88,7 +90,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a real number */
 
   yylval->dvalue = strtod(yytext, (char **) NULL);
-  FIX_YYLLOC(yylloc, yytext);
+  fix_yylloc(yylloc, yytext);
 
   return(NUMBER);
 } /* end of real number */
@@ -103,7 +105,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a vector string */
   char *cstring;
 
-  FIX_YYLLOC_NL(yylloc, yytext);
+  fix_yylloc_nl(yylloc, yytext, yyget_extra(yyscanner));
   align_string(yytext);
 
   cstring = calloc(strlen(yytext) + 1, sizeof(char));
@@ -117,7 +119,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a hexadecimal value (2) */
   char *cstring;
 
-  FIX_YYLLOC_NL(yylloc, yytext);
+  fix_yylloc_nl(yylloc, yytext, yyget_extra(yyscanner));
   align_string(yytext);
 
   cstring = calloc(strlen(yytext) + 1, sizeof(char));
@@ -129,19 +131,19 @@ COMMENT         (!.*)|("//".*)[^\n]
 
 {WSPACE}+ {
   /* token is a white space character */
-  FIX_YYLLOC(yylloc, yytext);
+  fix_yylloc(yylloc, yytext);
 } /* end of white space */
 
 
 {COMMENT} {
   /* token is a comment */
-  FIX_YYLLOC(yylloc, yytext);
+  fix_yylloc(yylloc, yytext);
 } /* end of comment */
 
 
 [()] {
   /* left or right parenthes */
-  FIX_YYLLOC(yylloc, yytext);
+  fix_yylloc(yylloc, yytext);
   return(yytext[0]);
 } /* end of left or right parenthesis */
 
@@ -161,7 +163,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* release expect_vector */
   BEGIN(INITIAL);
 
-  FIX_YYLLOC(yylloc, yytext);
+  fix_yylloc(yylloc, yytext);
   return(yytext[0]);
 } /* end of statement character */
 
@@ -293,7 +295,7 @@ fix_yylloc(YYLTYPE * mylloc, char *str)
 
 
 static void
-fix_yylloc_nl(YYLTYPE * mylloc, char *str)
+fix_yylloc_nl(YYLTYPE * mylloc, char *str, YY_EXTRA_TYPE extra)
 {
   char *p;
 
@@ -303,6 +305,8 @@ fix_yylloc_nl(YYLTYPE * mylloc, char *str)
     if (*p == '\n') {
       mylloc->last_column = 0;
       ++mylloc->last_line;
+      if (extra->print_progress)
+        printf( _("\rParsing (%3.0d%%)"), ((mylloc->last_line * 100) + 1) / extra->num_lines);
     } else {
       ++mylloc->last_column;
     }
@@ -310,8 +314,9 @@ fix_yylloc_nl(YYLTYPE * mylloc, char *str)
 }
 
 
-void *svf_flex_init(FILE *f)
+void *svf_flex_init(FILE *f, int num_lines, int print_progress)
 {
+  YY_EXTRA_TYPE extra;
   yyscan_t scanner;
 
   /* get our scanner structure */
@@ -320,11 +325,26 @@ void *svf_flex_init(FILE *f)
 
   yyset_in(f, scanner);
 
+  if (!(extra = (scanner_extra_t *)malloc(sizeof(scanner_extra_t)))) {
+    printf( _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    yylex_destroy(scanner);
+    return NULL;
+  }
+
+  extra->num_lines = num_lines;
+  extra->print_progress = print_progress;
+
+  yyset_extra(extra, scanner);
+
   return scanner;
 }
 
 
 void svf_flex_deinit(void *scanner)
 {
+  YY_EXTRA_TYPE extra = yyget_extra(scanner);
+  if (extra->print_progress)
+    printf("\n");
+  free(extra);
   yylex_destroy(scanner);
 }

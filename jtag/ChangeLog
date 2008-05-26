@@ -1,3 +1,13 @@
+2008-05-26  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   [adding svf progress output] (Steve Franks)
+   * src/svf/svf_bison.y (svf_bison_init): hand down parameters for scanner
+     initialization
+   * src/svf/svf_flex.l: output progress indicator upon newline detection
+   * src/svf/svf.c (svf_run): caluclate number of lines and pass result
+     to scanner initialization
+   * src/svf/svf.h: added "extra" data type for scanner
+
 2008-05-26  Kolja Waschk <kawk>
 
    * src/bus/avr32.c, src/bus/buses.c, src/bus/buses.h,

@@ -102,12 +102,18 @@ struct parser_priv {
 };
 typedef struct parser_priv parser_priv_t;
 
+struct scanner_extra {
+  int num_lines;
+  int print_progress;
+};
+typedef struct scanner_extra scanner_extra_t;
+
 struct YYLTYPE;
 
-void *svf_flex_init(FILE *);
+void *svf_flex_init(FILE *, int, int);
 void svf_flex_deinit(void *);
 
-int  svf_bison_init(parser_priv_t *, FILE *);
+int  svf_bison_init(parser_priv_t *, FILE *, int, int);
 void svf_bison_deinit(parser_priv_t *);
 
 void svf_endxr(parser_priv_t *, enum generic_irdr_coding, int);
