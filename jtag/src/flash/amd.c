@@ -299,6 +299,21 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			break;
 		}
 		break;
+		case 0x001f:
+			printf( "Atmel" );
+		printf( _("\n\tChip: ") );
+			switch (cid) {
+			case 0x01d2:
+			printf( "AT49BW642DT" );
+			break;
+			case 0x01d6:
+			printf( "AT49BW642D" );
+			break;
+			default:
+			printf ( _("Unknown (ID 0x%04x)"), cid );
+			break;
+		}
+		break;
 		case 0x0020:
 			printf( "ST/Samsung" );
 		printf( _("\n\tChip: ") );

@@ -1,3 +1,11 @@
+2008-05-26  Kolja Waschk <kawk>
+
+   * src/bus/avr32.c, src/bus/buses.c, src/bus/buses.h,
+     src/bus/Makefile.am, src/flash/amd.c, THANKS, configure.ac,
+     doc/UrJTAG.txt, data/atmel/at32ap7000, data/atmel/at32ap7000/at32ap7000,
+     data/atmel/at32ap7000/STEPPINGS, data/atmel/PARTS, data/Makefile.am:
+     add support for Atmel's AT32AP7000 (by Gabor Juhos)
+
 2008-05-24  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/cable/usbblaster.c (usbblaster_connect): added missing

@@ -241,6 +241,7 @@ least the following are supported:
  * Altera EPM7128AETC100
  * Analog Devices Sharc-21065L
  * Atmel ATmega128 (partial support)
+ * Atmel AT32AP7000 (partial support)
  * Broadcom BCM1250
  * Broadcom BCM3310 (partial support)
  * Broadcom BCM5421S

@@ -36,6 +36,10 @@ if ENABLE_BUS_AU1500
 libbus_a_SOURCES += au1500.c
 endif
 
+if ENABLE_BUS_AVR32
+libbus_a_SOURCES += avr32.c
+endif
+
 if ENABLE_BUS_BCM1250
 libbus_a_SOURCES += bcm1250.c
 endif

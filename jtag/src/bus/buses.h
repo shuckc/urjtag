@@ -26,6 +26,7 @@
 #define	BUSES_H
 
 extern const bus_driver_t au1500_bus;
+extern const bus_driver_t avr32_bus_driver;
 extern const bus_driver_t bcm1250_bus;
 extern const bus_driver_t bf527_ezkit_bus;
 extern const bus_driver_t bf533_stamp_bus;

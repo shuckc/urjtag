@@ -33,6 +33,9 @@ const bus_driver_t *bus_drivers[] = {
 #ifdef ENABLE_BUS_AU1500
 	&au1500_bus,
 #endif
+#ifdef ENABLE_BUS_AVR32
+	&avr32_bus_driver,
+#endif
 #ifdef ENABLE_BUS_BCM1250
 	&bcm1250_bus,
 #endif

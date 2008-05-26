@@ -49,6 +49,8 @@ nobase_dist_pkgdata_DATA = \
 	altera/epm3064a/t44 \
 	atheros/ar2312/ar2312 \
 	atmel/PARTS \
+	atmel/at32ap7000/STEPPINGS \
+	atmel/at32ap7000/at32ap7000 \
 	atmel/atmega128/STEPPINGS \
 	atmel/atmega128/atmega128 \
 	atmel/at91sam7s256/STEPPINGS \

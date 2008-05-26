@@ -27,6 +27,9 @@
 #
 # [2] Atmel Corporation,  1504BSDL.ZIP - BSDL files for ATF1504AS/ASL and
 #     ATF1504ASV/ASVL
+# 
+# [3] Atmel Corporation, "AT32AP7000 - High Performance, Low Power 
+#     AVR(R)32 32-Bit Microcontroller", Rev. 32003K-AVR32-10/07
 #
 
 # bits 27-12 of the Device Identification Register
@@ -38,4 +41,5 @@
 0101101100001100	at91sam7s321	AT91SAM7S321
 0001010100010100	atf15xx		ATF1504ASV	# see 1504ASV_J44.bsd
 							# in [2]
+0001111010000010	at32ap7000	AT32AP7000	# see Table 38-11 in [3]
 
