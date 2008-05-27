@@ -1008,13 +1008,15 @@ svf_txr(enum generic_irdr_coding ir_dr, struct ths_params *params)
  *   SVF_FILE         : file handle of SVF file
  *   stop_on_mismatch : 1 = stop upon tdo mismatch
  *                      0 = continue upon mismatch
+ *   print_progress   : 1 = continually print progress status
+ *                      0 = don't print
  *
  * Return value:
  *   1 : all ok
  *   0 : error occured
  * ***************************************************************************/
 void
-svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
+svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress)
 {
   const sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},
                               1, 1};
@@ -1117,7 +1119,7 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch)
   /* select SIR instruction */
   part_set_instruction(priv.part, "SIR");
 
-  if (svf_bison_init(&priv, SVF_FILE, num_lines, 0)) {
+  if (svf_bison_init(&priv, SVF_FILE, num_lines, print_progress)) {
     svfparse(&priv, chain);
     svf_bison_deinit(&priv);
   }

@@ -856,6 +856,10 @@ In case the TDO parameter of an SDR command leads to a mismatch the player
 issues a warning and continues. If the player should abort in this case then
 specify 'stop' at the svf command.
 
+The absence of error or warning messages indicate that the SVF file could be
+executed without problems. To get a progress reporting while the player advances
+through the SVF file, specify 'progress' at the svf command.
+
 .Limitations and Deficiencies
 *****************************
 Several limitations exist for the SVF player.

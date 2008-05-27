@@ -35,21 +35,24 @@ static int
 cmd_svf_run( chain_t *chain, char *params[] )
 {
 	FILE *SVF_FILE;
-	int   num_params, result = -1;
+	int   num_params, i, result = -1;
+	int   stop = 0;
+	int   print_progress = 0;
 
 	num_params = cmd_params( params );
-	if (num_params == 2 || num_params == 3) {
-		if ((SVF_FILE = fopen(params[1], "r")) != NULL) {
+	if (num_params > 1) {
+		for (i = 2; i < num_params; i++) {
+			if (strcasecmp(params[i], "stop") == 0)
+				stop = 1;
+			else if (strcasecmp(params[i], "progress") == 0)
+				print_progress = 1;
+			else
+				return -1;
+		}
 
-			if (num_params == 3) {
-				if (strcasecmp(params[2], "stop") == 0) {
-					svf_run(chain, SVF_FILE, 1);
-					result = 1;
-				}
-			} else {
-				svf_run(chain, SVF_FILE, 0);
-				result = 1;
-			}
+		if ((SVF_FILE = fopen(params[1], "r")) != NULL) {
+			svf_run(chain, SVF_FILE, stop, print_progress);
+			result = 1;
 
 			fclose(SVF_FILE);
 		} else {
@@ -66,13 +69,13 @@ static void
 cmd_svf_help( void )
 {
 	printf( _(
-		"Usage: %s FILE\n"
-		"Usage: %s FILE stop\n"
+		"Usage: %s FILE [stop] [progress]\n"
 		"Execute svf commands from FILE.\n"
-		"Command execution stops upon TDO mismatch when 'stop' is specified.\n"
+		"stop     : Command execution stops upon TDO mismatch.\n"
+		"progress : Continually displays progress status.\n"
 		"\n"
 		"FILE file containing SVF commans\n"
-	), "svf", "svf" );
+	), "svf" );
 }
 
 cmd_t cmd_svf = {

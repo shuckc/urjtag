@@ -1,3 +1,11 @@
+2008-05-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * UrJTAG.txt: document progress option of svf command
+   * src/cmd/svf.c (cmd_svf_run): new command option 'progress'
+   * src/svf/svf.c (svf_run), include/svf.h (svf_run): new parameter
+     print_progress
+   * src/svf/svf_flex.l (fix_yylloc_nl): report line / total number
+
 2008-05-26  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    [adding svf progress output] (Steve Franks)
