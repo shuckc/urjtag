@@ -146,10 +146,8 @@ generic_usbconn_connect( char *params[], cable_t *cable )
 	int i;
 
 	cable_params = malloc( sizeof(generic_params_t) );
-
-	if (!cable_params)
-	{
-		free( cable );
+	if (!cable_params) {
+		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
 		return 4;
 	}
 

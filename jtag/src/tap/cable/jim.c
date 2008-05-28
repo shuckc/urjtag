@@ -47,6 +47,9 @@ jim_cable_params_t;
 int
 jim_cable_connect( char *params[], cable_t *cable )
 {
+	jim_cable_params_t *cable_params;
+	jim_state_t *s;
+
 	if ( cmd_params( params ) < 1 ) {
 	  printf( _("not enough arguments!\n") );
 	  return 1;
@@ -54,29 +57,21 @@ jim_cable_connect( char *params[], cable_t *cable )
 
 	printf( _("JTAG target simulator JIM - work in progress!\n"));
 
-	cable->chain = NULL;
-    cable->params = (jim_cable_params_t *)malloc(sizeof(jim_cable_params_t));
-
-    if(cable->params != NULL)
-    {
-        jim_state_t *s;
         s = jim_init();
-        if(s == NULL)
-        {
-            free(cable->params);
-            cable->params = NULL;
+	if (!s) {
+		printf( _("Initialization failed.\n") );
+		return 3;
         }
-        else
-        {
-            ((jim_cable_params_t *)(cable->params))->s = s;
-        }
+
+	cable_params = malloc( sizeof(jim_cable_params_t) );
+	if (!cable_params) {
+		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+		return 4;
     }
 
-    if(cable->params == NULL)
-    {
-      printf(_("Initialization failed.\n"));
-      return 1;
-    };
+	cable->params = cable_params;
+	((jim_cable_params_t *)(cable->params))->s = s;
+	cable->chain = NULL;
 
 	return 0;
 }

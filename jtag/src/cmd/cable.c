@@ -93,8 +93,7 @@ cmd_cable_run( chain_t *chain, char *params[] )
 
 	chain_disconnect( chain );
 
-	cable = malloc( sizeof(cable_t) );
-
+	cable = calloc(1, sizeof(cable_t) );
 	if (!cable) {
 	  printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
 	  return 1;
@@ -104,6 +103,7 @@ cmd_cable_run( chain_t *chain, char *params[] )
 
 	if ( cable->driver->connect( ++params, cable ) ) {
 		printf( _("Error: Cable connection failed!\n") );
+		free( cable );
 		return 1;
 	}
 

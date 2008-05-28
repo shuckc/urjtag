@@ -1280,9 +1280,8 @@ ft2232_connect( char *params[], cable_t *cable )
   int result;
 
   cable_params = (params_t *)malloc( sizeof(params_t) );
-  if (!cable_params)
-  {
-    free( cable );
+  if (!cable_params) {
+    printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
     return 4;
   }
 

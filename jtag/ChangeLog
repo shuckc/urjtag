@@ -1,7 +1,10 @@
 2008-05-28  Kolja Waschk <kawk>
 
-   *  src/tap/cable/generic_parport.c: Fix cmd/cable.c malloc issue
-      (Hartley Sweeten)
+   * src/cmd/cable.c, src/tap/cable/wiggler.c,
+     src/tap/cable/generic_usbconn.c, src/tap/cable/vision_ep9307.c,
+     src/tap/cable/jim.c, src/tap/cable/ft2232.c,
+     src/tap/cable/generic_parport.c: Cable connect/disconnect cleanup,
+     fix malloc/free issues (Hartley Sweeten)
 
 2008-05-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 

@@ -164,7 +164,7 @@ ep9307_gpio_write( cable_t *cable, uint8_t data )
 	uint32_t tmp;
 
 	tmp = *((uint32_t*)p->gpio_PHDR);
-	tmp &= GPIO_BITMASK;
+	tmp &= ~GPIO_OUTPUT_MASK;
 	tmp |= data;
 	*((uint32_t*)p->gpio_PHDR) = tmp;
 
@@ -201,8 +201,7 @@ ep9307_connect( char *params[], cable_t *cable )
 
 	cable_params = malloc( sizeof *cable_params );
 	if (!cable_params) {
-		printf( _("%s(%d) Out of memory\n"), __FILE__, __LINE__ );
-		free( cable );
+		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
 		return 4;
 	}
 
@@ -211,13 +210,6 @@ ep9307_connect( char *params[], cable_t *cable )
 	cable->chain = NULL;
 
 	return 0;
-}
-
-static void
-ep9307_disconnect( cable_t *cable )
-{
-	ep9307_gpio_close( cable );
-	chain_disconnect( cable->chain );
 }
 
 static void
@@ -236,6 +228,7 @@ ep9307_init( cable_t *cable )
 		return -1;
 
 	ep9307_gpio_write( cable, 1 << TRST );
+	cable_wait( cable );
 	p->trst = 1;
 
 	return 0;
@@ -261,7 +254,9 @@ ep9307_clock( cable_t *cable, int tms, int tdi, int n )
 
 	for (i = 0; i < n; i++) {
 		ep9307_gpio_write( cable, (0 << TCK) | bit_mask );
+		cable_wait( cable );
 		ep9307_gpio_write( cable, (1 << TCK) | bit_mask );
+		cable_wait( cable );
 	}
 }
 
@@ -274,6 +269,7 @@ ep9307_get_tdo( cable_t *cable )
 	ep9307_params_t *p = cable->params;
 
 	ep9307_gpio_write( cable, (0 << TCK) | (p->trst << TRST) );
+	cable_wait( cable );
 	return (ep9307_gpio_read( cable ) >> TDO) & 1;
 }
 
@@ -288,6 +284,7 @@ ep9307_set_trst( cable_t *cable, int trst )
 	p->trst = trst ? 1 : 0;
 
 	ep9307_gpio_write( cable, p->trst << TRST );
+	cable_wait( cable );
 	return p->trst;
 }
 
@@ -310,7 +307,7 @@ cable_driver_t ep9307_cable_driver = {
 	"EP9307",
 	N_("Vision EP9307 SoM GPIO JTAG Cable"),
 	ep9307_connect,
-	ep9307_disconnect,
+	generic_disconnect,
 	ep9307_cable_free,
 	ep9307_init,
 	ep9307_done,
