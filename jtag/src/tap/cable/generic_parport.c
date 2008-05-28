@@ -50,7 +50,7 @@ print_vector(int len, char *vec)
 int
 generic_parport_connect( char *params[], cable_t *cable )
 {
-	generic_params_t *cable_params = malloc( sizeof *cable_params );
+	generic_params_t *cable_params;
 	parport_t *port;
 	int i;
 
@@ -72,11 +72,12 @@ generic_parport_connect( char *params[], cable_t *cable )
 	port = parport_drivers[i]->connect( (const char **) &params[2],
 					    cmd_params( params ) - 2 );
 
-        if (port == NULL) {
-	  printf( _("Error: Cable connection failed!\n") );
-	  return 3;
-        }
+	if (port == NULL) {
+		printf( _("Error: Cable connection failed!\n") );
+		return 3;
+	}
 
+	cable_params = malloc( sizeof *cable_params );
 	if (!cable_params) {
 		free( cable_params );
 		free( cable );

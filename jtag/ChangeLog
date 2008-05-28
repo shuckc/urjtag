@@ -1,3 +1,8 @@
+2008-05-28  Kolja Waschk <kawk>
+
+   *  src/tap/cable/generic_parport.c: Fix cmd/cable.c malloc issue
+      (Hartley Sweeten)
+
 2008-05-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * UrJTAG.txt: document progress option of svf command
