@@ -151,23 +151,8 @@ you don't run Linux, you can get it from</P
 ></UL
 ><P
 >Alternatively, you can use the FTD2XX library from the chip manufacturer FTDI.
-It is available for Linux and Windows. To use the library for Windows in a
-Cygwin environment, first get it from:</P
-><P
-></P
-><UL
-><LI
-><P
->&#13;http://www.ftdichip.com/Drivers/D2XX.htm
-</P
-></LI
-></UL
-><P
->Unzip the CDM*.zip to some directory and tell UrJTAG about this directory
-during the configure step before actual compilation:</P
-><PRE
-CLASS="literallayout"
->./configure --with-libftd2xx=/cygdrive/c/windows/temp/CDM_Drivers</PRE
+It is available for Linux and Windows. There's more information about linking
+to that library in a Cygwin environment below.</P
 ><P
 >All other USB JTAG adapters can be supported only if libusb is installed.
 There is a libusb-win32 variant that can be used in a Cygwin environment:</P

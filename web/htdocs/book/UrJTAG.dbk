@@ -4,7 +4,7 @@
 <book lang="en">
 <bookinfo>
     <title>Universal JTAG library, server and tools</title>
-    <date>2008-02-19</date>
+    <date>2008-02-28</date>
     <author>
         <firstname>Kolja</firstname>
         <othername>Waschk</othername>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>KW(</authorinitials>
 
-<revhistory><revision><revnumber>1061</revnumber><date>2008-02-19</date><authorinitials>KW(</authorinitials></revision></revhistory>
+<revhistory><revision><revnumber>1105</revnumber><date>2008-02-28</date><authorinitials>KW(</authorinitials></revision></revhistory>
 
 </bookinfo>
 <chapter id="_copyright">
@@ -239,6 +239,8 @@ below.</simpara>
 <title>Supported JTAG adapters/cables</title>
 <simpara>See <emphasis>help cable</emphasis> command for up-to-date info.</simpara>
 
+<simpara>Parallel-port cables:</simpara>
+
 <itemizedlist>
 <listitem>
 <simpara>
@@ -248,11 +250,6 @@ Arcom JTAG Cable
 <listitem>
 <simpara>
 Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag
 </simpara>
 </listitem>
 <listitem>
@@ -295,24 +292,28 @@ Mpcbdm JTAG Cable
 Macraigor Wiggler JTAG Cable
 </simpara>
 </listitem>
+</itemizedlist>
+<simpara>FT2232-based USB cables:</simpara>
+
+<itemizedlist>
 <listitem>
 <simpara>
-Amontec JTAGkey (FT2232-based)
+Amontec JTAGkey
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Olimex ARM-USB-JTAG (FT2232-based)
+Olimex ARM-USB-JTAG
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Olimex ARM-USB-TINY (FT2232-based)
+Olimex ARM-USB-TINY
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-OOCDLink-s (FT2232-based) (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
+OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
 </simpara>
 </listitem>
 <listitem>
@@ -322,22 +323,36 @@ Other FT2232-based USB JTAG cables (experimental)
 </listitem>
 <listitem>
 <simpara>
-Xverve Signalyzer Tool (FT2232-based) (experimental)
+Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Turtelizer 2 (FT2232-based) (experimental) http://www.ethernut.de/en/hardware/turtelizer/
+USB to JTAG Interface (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-USB to JTAG Interface (FT2232-based) (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
+Xverve Signalyzer Tool (experimental)
+</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Other USB cables:</simpara>
+
+<itemizedlist>
+<listitem>
+<simpara>
+Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Xilinx Platform USB Cable (experimental)
+Segger/IAR J-Link / Atmel SAM-ICE (experimental, work in progress)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Xilinx Platform USB Cable / DLC9 (slow, experimental, work in progress - don't use)
 </simpara>
 </listitem>
 </itemizedlist>
@@ -580,20 +595,9 @@ http://www.intra2net.com/de/produkte/opensource/ftdi/
 </listitem>
 </itemizedlist>
 <simpara>Alternatively, you can use the FTD2XX library from the chip manufacturer FTDI.
-It is available for Linux and Windows. To use the library for Windows in a
-Cygwin environment, first get it from:</simpara>
+It is available for Linux and Windows. There's more information about linking
+to that library in a Cygwin environment below.</simpara>
 
-<itemizedlist>
-<listitem>
-<simpara>
-http://www.ftdichip.com/Drivers/D2XX.htm
-</simpara>
-</listitem>
-</itemizedlist>
-<simpara>Unzip the CDM*.zip to some directory and tell UrJTAG about this directory
-during the configure step before actual compilation:</simpara>
-
-<literallayout class="monospaced">./configure --with-libftd2xx=/cygdrive/c/windows/temp/CDM_Drivers</literallayout>
 <simpara>All other USB JTAG adapters can be supported only if libusb is installed.
 There is a libusb-win32 variant that can be used in a Cygwin environment:</simpara>
 
@@ -1295,6 +1299,13 @@ all at once, and data for all pins has to be transferred through JTAG for every
 single change, this method isn't the fastest, but usually easiest to implement
 and, well, sometimes it counts whether it works at all..</simpara>
 
+<simpara>The "fjmem" (FPGA JTAG memory) bus driver attempts to address this issue by
+moving control and observation away from BSR to a device-internal
+register. For sure this is only possible on FPGAs where the designer can hook
+additional logic to the JTAG chain. A core design plus examples for different
+FPGA families is available in the extra/fjmem directory. Refer to the README
+located there.</simpara>
+
 <simpara>Some chips don't allow direct access to their pins via BSR at all. For these,
 writing a new bus driver that utilizes a debug module to upload specific code
 to access the bus is inevitable.</simpara>
@@ -1894,12 +1905,12 @@ Functions for accessing the chain in general
 <itemizedlist>
 <listitem>
 <simpara>
-Cable-specific drivers
+Cable drivers
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Parport drivers
+Link drivers
 </simpara>
 </listitem>
 <listitem>
@@ -2194,7 +2205,7 @@ get_tdo_late()
 
 </section>
 <section id="_when_flushing_occurs">
-<title>When flushing occurs ======</title>
+<title>When flushing occurs</title>
 <simpara>The cable_flush() function is used to flush the queue towards the cable. It
 takes one additional argument, "how_much", which may be one of</simpara>
 
@@ -2276,6 +2287,255 @@ implementations.</simpara>
 look at the code in src/tap/cable/generic.c, which contains generic routines,
 suitable for parallel port based cables (and some for other types of cables as
 well).</simpara>
+
+</section>
+</section>
+<section id="_link_drivers">
+<title>Link drivers</title>
+<simpara>Link drivers like the "parport" driver collection provide the basis for
+communication between cable driver and actual JTAG adapter. The openwince JTAG
+tools supported only parallel port links with the "parport" drivers. UrJTAG
+introduced support for USB links, but in the early releases the drivers for
+these just mimic the parallel port links.</simpara>
+
+<simpara>The basic functions provided by all link drivers are</simpara>
+
+<itemizedlist>
+<listitem>
+<simpara>
+connect(), to called from cable driver connect()
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+open(), to actually connect to the device during cable driver init()
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+close(), to disconnect from the device during cable driver done()
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+free(), to free all resources, called from cable driver free()
+</simpara>
+</listitem>
+</itemizedlist>
+<section id="_parport">
+<title>parport</title>
+<simpara>Currently there are parport drivers for direct access to the parallel port on a
+PC using I/O addresses (direct.c), and for using ppdev on Linux or ppi on FreeBSD.</simpara>
+
+<simpara>In addition, there are "ftdi" and "ftd2xx" parport drivers that actually are for
+communication with USB cables based on FTDI chips. They cannot be used for
+connecting old parallel port cables through parallel to USB adapters with FTDI
+chips, and probably soon will be rewritten as "usbconn" drivers instead.</simpara>
+
+<simpara>All parport drivers present a common API for setting and reading signals.</simpara>
+
+</section>
+<section id="_usbconn">
+<title>usbconn</title>
+<simpara>The usbconn drivers provide a common API to search for and connect with USB
+devices. At the moment, there's only a libusb driver, but others will follow
+(e.g. to communicate with FTDI chip based cables through libftdi and/or FTD2XX,
+to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and more).</simpara>
+
+<simpara>In contrast to the parport API, the usbconn drivers provide only the functions
+for connecting, disconnecting, and for releasing ressources. The actual
+communication must be implemented using the underlying library's functions,
+e.g. usb_write from libusb, or ftdi_write from libftdi. Therefore, each driver
+using usbconn usually only works together with one particular usbconn driver.</simpara>
+
+</section>
+</section>
+<section id="_bus_drivers">
+<title>Bus drivers</title>
+<simpara>Bus drivers translate read and write operations on a bus into JTAG commands
+and methods. A bus in this context is neither restricted to a processor bus,
+nor to memory. Any system component that can be read from and written to could
+be seen as attached to a bus. I.e. external or internal memory (RAM, ROM,
+Flash) and peripherals connected to a processor or simply an FPGA with 1:1
+connections.</simpara>
+
+<simpara>The available bus drivers are listed in response to "help initbus". Each
+driver has to provide the following functions:</simpara>
+
+<itemizedlist>
+<listitem>
+<simpara>
+bus_new() - Initialization
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_free() - Cleaning up
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_printinfo() - Short description
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_prepare() - Preparation
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_area() - Description of the bus geometry
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_read_start() - Initiate reading
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_read_next() - Read access
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_read_end() - Finish reading
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_read() - Atomic reading
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+bus_write() - Write access
+</simpara>
+</listitem>
+</itemizedlist>
+<important><simpara>Address parameters to the functions listed above apecify always
+byte locations, independent of the actual data width. The bus driver has to
+adjust the address on its own if required.</simpara></important>
+<section id="_initialization_2">
+<title>Initialization</title>
+<simpara>Upon calling of its bus_new() function, the driver allocates a "bus_t"
+structure and performs all required internal initializations.</simpara>
+
+</section>
+<section id="_cleaning_up_2">
+<title>Cleaning up</title>
+<simpara>The driver is supposed to free all allocated memory (including its "bus_t"
+structure). Additionally, it should set the device into a state that doesn't
+prevent it from normal operation.</simpara>
+
+</section>
+<section id="_short_description">
+<title>Short description</title>
+<simpara>Prints a message describing the driver. This function is called by the "print"
+command before it lists the areas covered by this bus driver.</simpara>
+
+</section>
+<section id="_preparation">
+<title>Preparation</title>
+<simpara>This function is called whenever at the start of a bus operation. The driver
+should perform the required preparation steps so that subsequent calls to the
+bus_read_* and bus_write functions can perform their tasks properly.</simpara>
+
+<simpara>E.g. a BSR bus driver would put the device into EXTEST mode to activate the
+boundary scan register on the device pins.</simpara>
+
+</section>
+<section id="_description_of_the_bus_geometry">
+<title>Description of the bus geometry</title>
+<simpara>At certain stages, the bus driver's bus_area() function is called by other
+commands to query the bus geometry for a given address. The bus driver must
+fill in the fields of a "bus_area_t" structure describing the geometry of the
+area in which the specified address is located:</simpara>
+
+<itemizedlist>
+<listitem>
+<simpara>
+a short textual description of the area
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+start address of area
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+length of area in bytes
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+data width in bits
+</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Queries with an address out of range must result in an area length of</simpara>
+
+<literallayout class="monospaced">UINT64_C(0x100000000)</literallayout>
+</section>
+<section id="_initiate_reading">
+<title>Initiate reading</title>
+<simpara>Since the JTAG state machine defines a capture-shift-update sequence, it is
+required to shift the address for a read prior to capturing the read
+data. Therefore, the bus_read_start() function is called with the very first
+address to read from. This enables the driver to shift the address into the
+device before it can actually retrieve the read data for this address.</simpara>
+
+</section>
+<section id="_read_access">
+<title>Read access</title>
+<simpara>The bus_read_next() function fetches the read data from the device that has
+been addressed by a previous call to bus_read_start() or
+bus_read_next(). Again, this is due to the capture-shift-update sequence of
+JTAG:</simpara>
+
+<orderedlist>
+<listitem>
+<simpara>
+capture read data from device pins
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+shift new address
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+update new address to device pins
+</simpara>
+</listitem>
+</orderedlist>
+<important><simpara>The address parameter specifies the location of the <emphasis>following</emphasis>
+read access. It is not the address of the data returned by this function call.</simpara></important>
+</section>
+<section id="_finish_reading">
+<title>Finish reading</title>
+<simpara>Function "bus_read_end()" is called at the end of a read sequence. I.e. when
+the higher level command determines that the last data portion is to be read
+from the device. There is no new address and the function driver is supposed
+to return the read data that was addressed previously.</simpara>
+
+</section>
+<section id="_atomic_reading">
+<title>Atomic reading</title>
+<simpara>For ease of use, a bus driver has to supply a "bus_read()" function that
+encapsulates reading data from a single address in an atomic operation. Bus
+drivers typically build this function from "bus_read_start()" and a subsequent
+"bus_read_end()".</simpara>
+
+</section>
+<section id="_write_access">
+<title>Write access</title>
+<simpara>This function writes one data element at the specified address. Since this
+translates to a single JTAG operation (capture ignored, shift and update
+address &amp; data), there is no splitting as with the read functions.</simpara>
 
 </section>
 </section>

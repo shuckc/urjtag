@@ -95,7 +95,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN331"
+NAME="AEN333"
 ></A
 ><TABLE
 BORDER="0"
@@ -944,6 +944,13 @@ all at once, and data for all pins has to be transferred through JTAG for every
 single change, this method isn't the fastest, but usually easiest to implement
 and, well, sometimes it counts whether it works at all..</P
 ><P
+>The "fjmem" (FPGA JTAG memory) bus driver attempts to address this issue by
+moving control and observation away from BSR to a device-internal
+register. For sure this is only possible on FPGAs where the designer can hook
+additional logic to the JTAG chain. A core design plus examples for different
+FPGA families is available in the extra/fjmem directory. Refer to the README
+located there.</P
+><P
 >Some chips don't allow direct access to their pins via BSR at all. For these,
 writing a new bus driver that utilizes a debug module to upload specific code
 to access the bus is inevitable.</P
@@ -967,7 +974,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN586"
+NAME="AEN589"
 ></A
 ><TABLE
 BORDER="0"
@@ -1076,7 +1083,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN618"
+NAME="AEN621"
 ></A
 ><TABLE
 BORDER="0"
@@ -1224,7 +1231,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN662"
+NAME="AEN665"
 ></A
 ><TABLE
 BORDER="0"
@@ -1467,7 +1474,7 @@ CELLPADDING="5"
 ><DIV
 CLASS="sidebar"
 ><A
-NAME="AEN726"
+NAME="AEN729"
 ></A
 ><P
 ><B

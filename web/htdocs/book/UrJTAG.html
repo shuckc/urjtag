@@ -343,6 +343,16 @@ HREF="#_drivers"
 HREF="#_cable_specific_drivers_src_tap_cable"
 >Cable-specific drivers (src/tap/cable)</A
 ></DT
+><DT
+>4.2.2. <A
+HREF="#_link_drivers"
+>Link drivers</A
+></DT
+><DT
+>4.2.3. <A
+HREF="#_bus_drivers"
+>Bus drivers</A
+></DT
 ></DL
 ></DD
 ><DT
@@ -794,6 +804,8 @@ CLASS="emphasis"
 ></SPAN
 > command for up-to-date info.</P
 ><P
+>Parallel-port cables:</P
+><P
 ></P
 ><UL
 ><LI
@@ -804,11 +816,6 @@ CLASS="emphasis"
 ><LI
 ><P
 >&#13;Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable
-</P
-></LI
-><LI
-><P
->&#13;Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag
 </P
 ></LI
 ><LI
@@ -851,24 +858,30 @@ CLASS="emphasis"
 >&#13;Macraigor Wiggler JTAG Cable
 </P
 ></LI
+></UL
+><P
+>FT2232-based USB cables:</P
+><P
+></P
+><UL
 ><LI
 ><P
->&#13;Amontec JTAGkey (FT2232-based)
+>&#13;Amontec JTAGkey
 </P
 ></LI
 ><LI
 ><P
->&#13;Olimex ARM-USB-JTAG (FT2232-based)
+>&#13;Olimex ARM-USB-JTAG
 </P
 ></LI
 ><LI
 ><P
->&#13;Olimex ARM-USB-TINY (FT2232-based)
+>&#13;Olimex ARM-USB-TINY
 </P
 ></LI
 ><LI
 ><P
->&#13;OOCDLink-s (FT2232-based) (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
+>&#13;OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
 </P
 ></LI
 ><LI
@@ -878,22 +891,38 @@ CLASS="emphasis"
 ></LI
 ><LI
 ><P
->&#13;Xverve Signalyzer Tool (FT2232-based) (experimental)
+>&#13;Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/
 </P
 ></LI
 ><LI
 ><P
->&#13;Turtelizer 2 (FT2232-based) (experimental) http://www.ethernut.de/en/hardware/turtelizer/
+>&#13;USB to JTAG Interface (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
 </P
 ></LI
 ><LI
 ><P
->&#13;USB to JTAG Interface (FT2232-based) (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
+>&#13;Xverve Signalyzer Tool (experimental)
+</P
+></LI
+></UL
+><P
+>Other USB cables:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag
 </P
 ></LI
 ><LI
 ><P
->&#13;Xilinx Platform USB Cable (experimental)
+>&#13;Segger/IAR J-Link / Atmel SAM-ICE (experimental, work in progress)
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx Platform USB Cable / DLC9 (slow, experimental, work in progress - don't use)
 </P
 ></LI
 ></UL
@@ -1200,23 +1229,8 @@ you don't run Linux, you can get it from</P
 ></UL
 ><P
 >Alternatively, you can use the FTD2XX library from the chip manufacturer FTDI.
-It is available for Linux and Windows. To use the library for Windows in a
-Cygwin environment, first get it from:</P
-><P
-></P
-><UL
-><LI
-><P
->&#13;http://www.ftdichip.com/Drivers/D2XX.htm
-</P
-></LI
-></UL
-><P
->Unzip the CDM*.zip to some directory and tell UrJTAG about this directory
-during the configure step before actual compilation:</P
-><PRE
-CLASS="literallayout"
->./configure --with-libftd2xx=/cygdrive/c/windows/temp/CDM_Drivers</PRE
+It is available for Linux and Windows. There's more information about linking
+to that library in a Cygwin environment below.</P
 ><P
 >All other USB JTAG adapters can be supported only if libusb is installed.
 There is a libusb-win32 variant that can be used in a Cygwin environment:</P
@@ -1578,7 +1592,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN331"
+NAME="AEN333"
 ></A
 ><TABLE
 BORDER="0"
@@ -2427,6 +2441,13 @@ all at once, and data for all pins has to be transferred through JTAG for every
 single change, this method isn't the fastest, but usually easiest to implement
 and, well, sometimes it counts whether it works at all..</P
 ><P
+>The "fjmem" (FPGA JTAG memory) bus driver attempts to address this issue by
+moving control and observation away from BSR to a device-internal
+register. For sure this is only possible on FPGAs where the designer can hook
+additional logic to the JTAG chain. A core design plus examples for different
+FPGA families is available in the extra/fjmem directory. Refer to the README
+located there.</P
+><P
 >Some chips don't allow direct access to their pins via BSR at all. For these,
 writing a new bus driver that utilizes a debug module to upload specific code
 to access the bus is inevitable.</P
@@ -2450,7 +2471,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN586"
+NAME="AEN589"
 ></A
 ><TABLE
 BORDER="0"
@@ -2559,7 +2580,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN618"
+NAME="AEN621"
 ></A
 ><TABLE
 BORDER="0"
@@ -2707,7 +2728,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN662"
+NAME="AEN665"
 ></A
 ><TABLE
 BORDER="0"
@@ -2950,7 +2971,7 @@ CELLPADDING="5"
 ><DIV
 CLASS="sidebar"
 ><A
-NAME="AEN726"
+NAME="AEN729"
 ></A
 ><P
 ><B
@@ -3337,7 +3358,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN817"
+NAME="AEN820"
 ></A
 ><TABLE
 BORDER="0"
@@ -3537,12 +3558,12 @@ NAME="_drivers"
 ><UL
 ><LI
 ><P
->&#13;Cable-specific drivers
+>&#13;Cable drivers
 </P
 ></LI
 ><LI
 ><P
->&#13;Parport drivers
+>&#13;Link drivers
 </P
 ></LI
 ><LI
@@ -3887,7 +3908,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_when_flushing_occurs"
->4.2.1.4. When flushing occurs ======</A
+>4.2.1.4. When flushing occurs</A
 ></H4
 ><P
 >The cable_flush() function is used to flush the queue towards the cable. It
@@ -3989,6 +4010,406 @@ NAME="_generic_implementations"
 look at the code in src/tap/cable/generic.c, which contains generic routines,
 suitable for parallel port based cables (and some for other types of cables as
 well).</P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="_link_drivers"
+>4.2.2. Link drivers</A
+></H3
+><P
+>Link drivers like the "parport" driver collection provide the basis for
+communication between cable driver and actual JTAG adapter. The openwince JTAG
+tools supported only parallel port links with the "parport" drivers. UrJTAG
+introduced support for USB links, but in the early releases the drivers for
+these just mimic the parallel port links.</P
+><P
+>The basic functions provided by all link drivers are</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;connect(), to called from cable driver connect()
+</P
+></LI
+><LI
+><P
+>&#13;open(), to actually connect to the device during cable driver init()
+</P
+></LI
+><LI
+><P
+>&#13;close(), to disconnect from the device during cable driver done()
+</P
+></LI
+><LI
+><P
+>&#13;free(), to free all resources, called from cable driver free()
+</P
+></LI
+></UL
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_parport"
+>4.2.2.1. parport</A
+></H4
+><P
+>Currently there are parport drivers for direct access to the parallel port on a
+PC using I/O addresses (direct.c), and for using ppdev on Linux or ppi on FreeBSD.</P
+><P
+>In addition, there are "ftdi" and "ftd2xx" parport drivers that actually are for
+communication with USB cables based on FTDI chips. They cannot be used for
+connecting old parallel port cables through parallel to USB adapters with FTDI
+chips, and probably soon will be rewritten as "usbconn" drivers instead.</P
+><P
+>All parport drivers present a common API for setting and reading signals.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_usbconn"
+>4.2.2.2. usbconn</A
+></H4
+><P
+>The usbconn drivers provide a common API to search for and connect with USB
+devices. At the moment, there's only a libusb driver, but others will follow
+(e.g. to communicate with FTDI chip based cables through libftdi and/or FTD2XX,
+to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and more).</P
+><P
+>In contrast to the parport API, the usbconn drivers provide only the functions
+for connecting, disconnecting, and for releasing ressources. The actual
+communication must be implemented using the underlying library's functions,
+e.g. usb_write from libusb, or ftdi_write from libftdi. Therefore, each driver
+using usbconn usually only works together with one particular usbconn driver.</P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="_bus_drivers"
+>4.2.3. Bus drivers</A
+></H3
+><P
+>Bus drivers translate read and write operations on a bus into JTAG commands
+and methods. A bus in this context is neither restricted to a processor bus,
+nor to memory. Any system component that can be read from and written to could
+be seen as attached to a bus. I.e. external or internal memory (RAM, ROM,
+Flash) and peripherals connected to a processor or simply an FPGA with 1:1
+connections.</P
+><P
+>The available bus drivers are listed in response to "help initbus". Each
+driver has to provide the following functions:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;bus_new() - Initialization
+</P
+></LI
+><LI
+><P
+>&#13;bus_free() - Cleaning up
+</P
+></LI
+><LI
+><P
+>&#13;bus_printinfo() - Short description
+</P
+></LI
+><LI
+><P
+>&#13;bus_prepare() - Preparation
+</P
+></LI
+><LI
+><P
+>&#13;bus_area() - Description of the bus geometry
+</P
+></LI
+><LI
+><P
+>&#13;bus_read_start() - Initiate reading
+</P
+></LI
+><LI
+><P
+>&#13;bus_read_next() - Read access
+</P
+></LI
+><LI
+><P
+>&#13;bus_read_end() - Finish reading
+</P
+></LI
+><LI
+><P
+>&#13;bus_read() - Atomic reading
+</P
+></LI
+><LI
+><P
+>&#13;bus_write() - Write access
+</P
+></LI
+></UL
+><DIV
+CLASS="important"
+><P
+></P
+><TABLE
+CLASS="important"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Address parameters to the functions listed above apecify always
+byte locations, independent of the actual data width. The bus driver has to
+adjust the address on its own if required.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_initialization_2"
+>4.2.3.1. Initialization</A
+></H4
+><P
+>Upon calling of its bus_new() function, the driver allocates a "bus_t"
+structure and performs all required internal initializations.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_cleaning_up_2"
+>4.2.3.2. Cleaning up</A
+></H4
+><P
+>The driver is supposed to free all allocated memory (including its "bus_t"
+structure). Additionally, it should set the device into a state that doesn't
+prevent it from normal operation.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_short_description"
+>4.2.3.3. Short description</A
+></H4
+><P
+>Prints a message describing the driver. This function is called by the "print"
+command before it lists the areas covered by this bus driver.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_preparation"
+>4.2.3.4. Preparation</A
+></H4
+><P
+>This function is called whenever at the start of a bus operation. The driver
+should perform the required preparation steps so that subsequent calls to the
+bus_read_* and bus_write functions can perform their tasks properly.</P
+><P
+>E.g. a BSR bus driver would put the device into EXTEST mode to activate the
+boundary scan register on the device pins.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_description_of_the_bus_geometry"
+>4.2.3.5. Description of the bus geometry</A
+></H4
+><P
+>At certain stages, the bus driver's bus_area() function is called by other
+commands to query the bus geometry for a given address. The bus driver must
+fill in the fields of a "bus_area_t" structure describing the geometry of the
+area in which the specified address is located:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;a short textual description of the area
+</P
+></LI
+><LI
+><P
+>&#13;start address of area
+</P
+></LI
+><LI
+><P
+>&#13;length of area in bytes
+</P
+></LI
+><LI
+><P
+>&#13;data width in bits
+</P
+></LI
+></UL
+><P
+>Queries with an address out of range must result in an area length of</P
+><PRE
+CLASS="literallayout"
+>UINT64_C(0x100000000)</PRE
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_initiate_reading"
+>4.2.3.6. Initiate reading</A
+></H4
+><P
+>Since the JTAG state machine defines a capture-shift-update sequence, it is
+required to shift the address for a read prior to capturing the read
+data. Therefore, the bus_read_start() function is called with the very first
+address to read from. This enables the driver to shift the address into the
+device before it can actually retrieve the read data for this address.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_read_access"
+>4.2.3.7. Read access</A
+></H4
+><P
+>The bus_read_next() function fetches the read data from the device that has
+been addressed by a previous call to bus_read_start() or
+bus_read_next(). Again, this is due to the capture-shift-update sequence of
+JTAG:</P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;capture read data from device pins
+</P
+></LI
+><LI
+><P
+>&#13;shift new address
+</P
+></LI
+><LI
+><P
+>&#13;update new address to device pins
+</P
+></LI
+></OL
+><DIV
+CLASS="important"
+><P
+></P
+><TABLE
+CLASS="important"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The address parameter specifies the location of the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>following</I
+></SPAN
+>
+read access. It is not the address of the data returned by this function call.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_finish_reading"
+>4.2.3.8. Finish reading</A
+></H4
+><P
+>Function "bus_read_end()" is called at the end of a read sequence. I.e. when
+the higher level command determines that the last data portion is to be read
+from the device. There is no new address and the function driver is supposed
+to return the read data that was addressed previously.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_atomic_reading"
+>4.2.3.9. Atomic reading</A
+></H4
+><P
+>For ease of use, a bus driver has to supply a "bus_read()" function that
+encapsulates reading data from a single address in an atomic operation. Bus
+drivers typically build this function from "bus_read_start()" and a subsequent
+"bus_read_end()".</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_write_access"
+>4.2.3.10. Write access</A
+></H4
+><P
+>This function writes one data element at the specified address. Since this
+translates to a single JTAG operation (capture ignored, shift and update
+address &#38; data), there is no splitting as with the read functions.</P
 ></DIV
 ></DIV
 ></DIV
