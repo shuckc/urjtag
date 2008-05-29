@@ -4,7 +4,7 @@
 <book lang="en">
 <bookinfo>
     <title>Universal JTAG library, server and tools</title>
-    <date>2008-02-28</date>
+    <date>2008-05-27</date>
     <author>
         <firstname>Kolja</firstname>
         <othername>Waschk</othername>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>KW(</authorinitials>
 
-<revhistory><revision><revnumber>1105</revnumber><date>2008-02-28</date><authorinitials>KW(</authorinitials></revision></revhistory>
+<revhistory><revision><revnumber>1256</revnumber><date>2008-05-27</date><authorinitials>KW(</authorinitials></revision></revhistory>
 
 </bookinfo>
 <chapter id="_copyright">
@@ -385,6 +385,11 @@ Atmel ATmega128 (partial support)
 </listitem>
 <listitem>
 <simpara>
+Atmel AT32AP7000 (partial support)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Broadcom BCM1250
 </simpara>
 </listitem>
@@ -544,13 +549,13 @@ AMD Am29xx040B (Am29F040B, Am29LV040B)
 <title>Required software for compiling UrJTAG</title>
 <simpara>To run autogen.sh, you need autoconf and automake, bison, and a recent flex.</simpara>
 
-<simpara>The distributed source tarball contains source pregenerated with a current flex
-version; flex therefore is only needed if you want to compile code checked
-out from our Subversion repository.  Flex 2.5.4a as it comes with Cygwin will
-work but some parts of UrJTAG (namely the SVF player) become more verbose if
-Flex 2.5.31 or newer is used. Building the BSDL subsystem files requires Flex
-2.5.33 or newer. The configure script will compare the available Flex version
-against these preconditions and enables or disables the related features.  ,</simpara>
+<simpara>The distributed source tarball contains source pregenerated with a current
+flex version; flex therefore is only needed if you want to compile code
+checked out from our Subversion repository.  Flex 2.5.4a as it comes with
+Cygwin cannot build the scanners for BSDL and SVF. Building these files
+requires Flex 2.5.33 or newer. The configure script will compare the available
+Flex version against these preconditions and enables or disables the related
+features.</simpara>
 
 <simpara>Furthermore, libtool should be available, and "devel" versions of the following
 packages:</simpara>
@@ -656,9 +661,9 @@ without spaces in the name is better)  and afterwards run configure with the
 <literallayout class="monospaced">./configure --with-ftd2xx="/cygdrive/c/temp/ftdi-cdm-drivers"</literallayout>
 <simpara>Configure should now report</simpara>
 
-<literallayout class="monospaced">FTDI cable support
+<literallayout class="monospaced">jtag is now configured for
   ...
-  via libftd2xx        : yes</literallayout>
+  Detected libftd2xx   : yes</literallayout>
 </section>
 <section id="_using_libusb_win32_in_cygwin_environment">
 <title>Using LibUSB-Win32 in Cygwin environment</title>
@@ -675,6 +680,31 @@ http://libusb-win32.sourceforge.net
 might give problems if the path contains spaces, as "Program Files" does!):</simpara>
 
 <literallayout class="monospaced">./configure --with-libusb="/cygdrive/c/Programme/LibUSB-Win32/"</literallayout>
+</section>
+<section id="_compiling_with_mingw">
+<title>Compiling with MinGW</title>
+<simpara>UrJTAG may be compiled into a Windows executable using the MinGW compiler
+(http://www.mingw.org). This has the advantage over running in a Cygwin
+environment that you don't need to install anything else but the jtag.exe.
+However, because support for MinGW is quite new in UrJTAG, it may lack some
+features (e.g. readline support) or run a little slower.</simpara>
+
+<simpara>It is even possible to cross-compile and build the executable on a Linux
+host:</simpara>
+
+<literallayout class="monospaced">./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers
+make</literallayout>
+</section>
+<section id="_driver_tailoring">
+<title>Driver tailoring</title>
+<simpara>The configure script enables all default bus, cable and lowlevel drivers. You
+can include and exclude specific drivers if required. For a list of parameters
+run</simpara>
+
+<literallayout class="monospaced">./configure --help</literallayout>
+<simpara>to figure out the appropriate &#8212;enable-bus, &#8212;enable-cable and &#8212;enable-lowlevel
+options.</simpara>
+
 </section>
 <section id="_building_the_bsdl_subsystem">
 <title>Building the BSDL subsystem</title>
@@ -1188,18 +1218,24 @@ modprobe parport_pc</literallayout>
 <simpara>UrJTAG now also supports some USB cables. Unfortunately, there is no standard
 for "JTAG over USB", so this support is limited to a few selected cables only.
 For cables based on the FT2232 chip from FTDI, the cable command has to be
-given cable name, driver name, and USB Vendor and Product ID of the cable:</simpara>
+given cable name and optionally the driver name, USB Vendor, and Product ID of
+the cable:</simpara>
 
-<literallayout class="monospaced">jtag&gt; cable ARM-USB-OCD ftdi-mpsse 15ba:3</literallayout>
-<simpara>For some cables, UrJTAG knows the VID:PID and you can just say ":"</simpara>
+<literallayout class="monospaced">jtag&gt; cable ARM-USB-OCD vid=15ba pid=0003 driver=ftdi-mpsse</literallayout>
+<simpara>For all known cables, UrJTAG knows the VID and PID so you can just say</simpara>
 
-<literallayout class="monospaced">jtag&gt; cable JTAGkey ftdi-mpsse :</literallayout>
-<simpara>On Windows, if UrJTAG was compiled to use the drivers supplied by
-FTDI, the command should instead look like this:</simpara>
+<literallayout class="monospaced">jtag&gt; cable ARM-USB-OCD</literallayout>
+<simpara>If your cable isn't detected automatically though it's listed as a known and
+supported cable, feel free to report its VID and PID. It might be a different
+revision and should be added to the known &amp; tested list of cables.</simpara>
 
-<literallayout class="monospaced">jtag&gt; cable ARM-USB-OCD ftd2xx-mpsse 15ba:3</literallayout>
-<simpara>The support for USB-based cables and their configuration is work
-in progress; the above syntax may change (i.e. become simpler) soon.</simpara>
+<simpara>As stated above, the driver name is not mandatory for the cable
+command. UrJTAG will select the driver automatically based on UrJTAG's
+configuration.  In case your system provides just one of libftdi or FTD2XX
+the respective driver is selected. If both libraries are available, then
+FTD2XX is selected. That's simply because FTD2XX showed some performance
+advantages over libftdi in the past. You can still force libftdi with the
+respective parameter.</simpara>
 
 </section>
 <section id="_detect">
@@ -1564,6 +1600,10 @@ In case the TDO parameter of an SDR command leads to a mismatch the player
 issues a warning and continues. If the player should abort in this case then
 specify <emphasis>stop</emphasis> at the svf command.</simpara>
 
+<simpara>The absence of error or warning messages indicate that the SVF file could be
+executed without problems. To get a progress reporting while the player advances
+through the SVF file, specify <emphasis>progress</emphasis> at the svf command.</simpara>
+
 <sidebar>
 <title>Limitations and Deficiencies</title>
 <simpara>Several limitations exist for the SVF player.</simpara>
@@ -1644,12 +1684,6 @@ PIOMAP command not supported.
 <simpara>
 RUNTEST SCK not supported.
     The maximum time constraint is not guaranteed.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-SIR
-    No check is done against the TDO parameter.
 </simpara>
 </listitem>
 <listitem>
@@ -2338,15 +2372,10 @@ chips, and probably soon will be rewritten as "usbconn" drivers instead.</simpar
 <section id="_usbconn">
 <title>usbconn</title>
 <simpara>The usbconn drivers provide a common API to search for and connect with USB
-devices. At the moment, there's only a libusb driver, but others will follow
-(e.g. to communicate with FTDI chip based cables through libftdi and/or FTD2XX,
-to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and more).</simpara>
-
-<simpara>In contrast to the parport API, the usbconn drivers provide only the functions
-for connecting, disconnecting, and for releasing ressources. The actual
-communication must be implemented using the underlying library's functions,
-e.g. usb_write from libusb, or ftdi_write from libftdi. Therefore, each driver
-using usbconn usually only works together with one particular usbconn driver.</simpara>
+devices. At the moment, there are drivers for libusd, libftdi and FTD2XX
+(e.g. to communicate with FTDI chip based cables through libftdi and/or
+FTD2XX, to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and
+more).</simpara>
 
 </section>
 </section>
@@ -2414,7 +2443,7 @@ bus_write() - Write access
 </simpara>
 </listitem>
 </itemizedlist>
-<important><simpara>Address parameters to the functions listed above apecify always
+<important><simpara>Address parameters to the functions listed above specify always
 byte locations, independent of the actual data width. The bus driver has to
 adjust the address on its own if required.</simpara></important>
 <section id="_initialization_2">
@@ -2438,9 +2467,10 @@ command before it lists the areas covered by this bus driver.</simpara>
 </section>
 <section id="_preparation">
 <title>Preparation</title>
-<simpara>This function is called whenever at the start of a bus operation. The driver
-should perform the required preparation steps so that subsequent calls to the
-bus_read_* and bus_write functions can perform their tasks properly.</simpara>
+<simpara>This function is called whenever a bus operation is initiated. The
+driver should perform the required preparation steps so that
+subsequent calls to the bus_read_* and bus_write functions can perform
+their tasks properly.</simpara>
 
 <simpara>E.g. a BSR bus driver would put the device into EXTEST mode to activate the
 boundary scan register on the device pins.</simpara>

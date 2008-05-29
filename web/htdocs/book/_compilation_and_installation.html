@@ -90,13 +90,13 @@ NAME="_required_software_for_compiling_urjtag"
 ><P
 >To run autogen.sh, you need autoconf and automake, bison, and a recent flex.</P
 ><P
->The distributed source tarball contains source pregenerated with a current flex
-version; flex therefore is only needed if you want to compile code checked
-out from our Subversion repository.  Flex 2.5.4a as it comes with Cygwin will
-work but some parts of UrJTAG (namely the SVF player) become more verbose if
-Flex 2.5.31 or newer is used. Building the BSDL subsystem files requires Flex
-2.5.33 or newer. The configure script will compare the available Flex version
-against these preconditions and enables or disables the related features.  ,</P
+>The distributed source tarball contains source pregenerated with a current
+flex version; flex therefore is only needed if you want to compile code
+checked out from our Subversion repository.  Flex 2.5.4a as it comes with
+Cygwin cannot build the scanners for BSDL and SVF. Building these files
+requires Flex 2.5.33 or newer. The configure script will compare the available
+Flex version against these preconditions and enables or disables the related
+features.</P
 ><P
 >Furthermore, libtool should be available, and "devel" versions of the following
 packages:</P
@@ -243,9 +243,9 @@ CLASS="literallayout"
 >Configure should now report</P
 ><PRE
 CLASS="literallayout"
->FTDI cable support
+>jtag is now configured for
   ...
-  via libftd2xx        : yes</PRE
+  Detected libftd2xx   : yes</PRE
 ></DIV
 ><DIV
 CLASS="section"
@@ -278,8 +278,49 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
+NAME="_compiling_with_mingw"
+>2.4.7. Compiling with MinGW</A
+></H2
+><P
+>UrJTAG may be compiled into a Windows executable using the MinGW compiler
+(http://www.mingw.org). This has the advantage over running in a Cygwin
+environment that you don't need to install anything else but the jtag.exe.
+However, because support for MinGW is quite new in UrJTAG, it may lack some
+features (e.g. readline support) or run a little slower.</P
+><P
+>It is even possible to cross-compile and build the executable on a Linux
+host:</P
+><PRE
+CLASS="literallayout"
+>./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers
+make</PRE
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_driver_tailoring"
+>2.4.8. Driver tailoring</A
+></H2
+><P
+>The configure script enables all default bus, cable and lowlevel drivers. You
+can include and exclude specific drivers if required. For a list of parameters
+run</P
+><PRE
+CLASS="literallayout"
+>./configure --help</PRE
+><P
+>to figure out the appropriate &#8212;enable-bus, &#8212;enable-cable and &#8212;enable-lowlevel
+options.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
 NAME="_building_the_bsdl_subsystem"
->2.4.7. Building the BSDL subsystem</A
+>2.4.9. Building the BSDL subsystem</A
 ></H2
 ><P
 >As mentioned above, building the BSDL lexer requires Flex 2.5.33 or newer. If

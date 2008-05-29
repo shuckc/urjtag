@@ -206,6 +206,16 @@ HREF="#_using_libusb_win32_in_cygwin_environment"
 ></DT
 ><DT
 >2.4.7. <A
+HREF="#_compiling_with_mingw"
+>Compiling with MinGW</A
+></DT
+><DT
+>2.4.8. <A
+HREF="#_driver_tailoring"
+>Driver tailoring</A
+></DT
+><DT
+>2.4.9. <A
 HREF="#_building_the_bsdl_subsystem"
 >Building the BSDL subsystem</A
 ></DT
@@ -963,6 +973,11 @@ least the following are supported:</P
 ></LI
 ><LI
 ><P
+>&#13;Atmel AT32AP7000 (partial support)
+</P
+></LI
+><LI
+><P
 >&#13;Broadcom BCM1250
 </P
 ></LI
@@ -1168,13 +1183,13 @@ NAME="_required_software_for_compiling_urjtag"
 ><P
 >To run autogen.sh, you need autoconf and automake, bison, and a recent flex.</P
 ><P
->The distributed source tarball contains source pregenerated with a current flex
-version; flex therefore is only needed if you want to compile code checked
-out from our Subversion repository.  Flex 2.5.4a as it comes with Cygwin will
-work but some parts of UrJTAG (namely the SVF player) become more verbose if
-Flex 2.5.31 or newer is used. Building the BSDL subsystem files requires Flex
-2.5.33 or newer. The configure script will compare the available Flex version
-against these preconditions and enables or disables the related features.  ,</P
+>The distributed source tarball contains source pregenerated with a current
+flex version; flex therefore is only needed if you want to compile code
+checked out from our Subversion repository.  Flex 2.5.4a as it comes with
+Cygwin cannot build the scanners for BSDL and SVF. Building these files
+requires Flex 2.5.33 or newer. The configure script will compare the available
+Flex version against these preconditions and enables or disables the related
+features.</P
 ><P
 >Furthermore, libtool should be available, and "devel" versions of the following
 packages:</P
@@ -1321,9 +1336,9 @@ CLASS="literallayout"
 >Configure should now report</P
 ><PRE
 CLASS="literallayout"
->FTDI cable support
+>jtag is now configured for
   ...
-  via libftd2xx        : yes</PRE
+  Detected libftd2xx   : yes</PRE
 ></DIV
 ><DIV
 CLASS="section"
@@ -1356,8 +1371,49 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
+NAME="_compiling_with_mingw"
+>2.4.7. Compiling with MinGW</A
+></H3
+><P
+>UrJTAG may be compiled into a Windows executable using the MinGW compiler
+(http://www.mingw.org). This has the advantage over running in a Cygwin
+environment that you don't need to install anything else but the jtag.exe.
+However, because support for MinGW is quite new in UrJTAG, it may lack some
+features (e.g. readline support) or run a little slower.</P
+><P
+>It is even possible to cross-compile and build the executable on a Linux
+host:</P
+><PRE
+CLASS="literallayout"
+>./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers
+make</PRE
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="_driver_tailoring"
+>2.4.8. Driver tailoring</A
+></H3
+><P
+>The configure script enables all default bus, cable and lowlevel drivers. You
+can include and exclude specific drivers if required. For a list of parameters
+run</P
+><PRE
+CLASS="literallayout"
+>./configure --help</PRE
+><P
+>to figure out the appropriate &#8212;enable-bus, &#8212;enable-cable and &#8212;enable-lowlevel
+options.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
 NAME="_building_the_bsdl_subsystem"
->2.4.7. Building the BSDL subsystem</A
+>2.4.9. Building the BSDL subsystem</A
 ></H3
 ><P
 >As mentioned above, building the BSDL lexer requires Flex 2.5.33 or newer. If
@@ -1592,7 +1648,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN333"
+NAME="AEN345"
 ></A
 ><TABLE
 BORDER="0"
@@ -2298,24 +2354,28 @@ modprobe parport_pc</PRE
 >UrJTAG now also supports some USB cables. Unfortunately, there is no standard
 for "JTAG over USB", so this support is limited to a few selected cables only.
 For cables based on the FT2232 chip from FTDI, the cable command has to be
-given cable name, driver name, and USB Vendor and Product ID of the cable:</P
+given cable name and optionally the driver name, USB Vendor, and Product ID of
+the cable:</P
 ><PRE
 CLASS="literallayout"
->jtag&#62; cable ARM-USB-OCD ftdi-mpsse 15ba:3</PRE
+>jtag&#62; cable ARM-USB-OCD vid=15ba pid=0003 driver=ftdi-mpsse</PRE
 ><P
->For some cables, UrJTAG knows the VID:PID and you can just say ":"</P
+>For all known cables, UrJTAG knows the VID and PID so you can just say</P
 ><PRE
 CLASS="literallayout"
->jtag&#62; cable JTAGkey ftdi-mpsse :</PRE
+>jtag&#62; cable ARM-USB-OCD</PRE
 ><P
->On Windows, if UrJTAG was compiled to use the drivers supplied by
-FTDI, the command should instead look like this:</P
-><PRE
-CLASS="literallayout"
->jtag&#62; cable ARM-USB-OCD ftd2xx-mpsse 15ba:3</PRE
+>If your cable isn't detected automatically though it's listed as a known and
+supported cable, feel free to report its VID and PID. It might be a different
+revision and should be added to the known &#38; tested list of cables.</P
 ><P
->The support for USB-based cables and their configuration is work
-in progress; the above syntax may change (i.e. become simpler) soon.</P
+>As stated above, the driver name is not mandatory for the cable
+command. UrJTAG will select the driver automatically based on UrJTAG's
+configuration.  In case your system provides just one of libftdi or FTD2XX
+the respective driver is selected. If both libraries are available, then
+FTD2XX is selected. That's simply because FTD2XX showed some performance
+advantages over libftdi in the past. You can still force libftdi with the
+respective parameter.</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -2471,7 +2531,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN589"
+NAME="AEN600"
 ></A
 ><TABLE
 BORDER="0"
@@ -2580,7 +2640,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN621"
+NAME="AEN632"
 ></A
 ><TABLE
 BORDER="0"
@@ -2728,7 +2788,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN665"
+NAME="AEN676"
 ></A
 ><TABLE
 BORDER="0"
@@ -2962,6 +3022,16 @@ CLASS="emphasis"
 >stop</I
 ></SPAN
 > at the svf command.</P
+><P
+>The absence of error or warning messages indicate that the SVF file could be
+executed without problems. To get a progress reporting while the player advances
+through the SVF file, specify <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>progress</I
+></SPAN
+> at the svf command.</P
 ><TABLE
 CLASS="sidebar"
 BORDER="1"
@@ -2971,7 +3041,7 @@ CELLPADDING="5"
 ><DIV
 CLASS="sidebar"
 ><A
-NAME="AEN729"
+NAME="AEN742"
 ></A
 ><P
 ><B
@@ -3061,12 +3131,6 @@ NAME="AEN729"
 ><P
 >&#13;RUNTEST SCK not supported.
     The maximum time constraint is not guaranteed.
-</P
-></LI
-><LI
-><P
->&#13;SIR
-    No check is done against the TDO parameter.
 </P
 ></LI
 ><LI
@@ -3358,7 +3422,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN820"
+NAME="AEN831"
 ></A
 ><TABLE
 BORDER="0"
@@ -4081,15 +4145,10 @@ NAME="_usbconn"
 ></H4
 ><P
 >The usbconn drivers provide a common API to search for and connect with USB
-devices. At the moment, there's only a libusb driver, but others will follow
-(e.g. to communicate with FTDI chip based cables through libftdi and/or FTD2XX,
-to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and more).</P
-><P
->In contrast to the parport API, the usbconn drivers provide only the functions
-for connecting, disconnecting, and for releasing ressources. The actual
-communication must be implemented using the underlying library's functions,
-e.g. usb_write from libusb, or ftdi_write from libftdi. Therefore, each driver
-using usbconn usually only works together with one particular usbconn driver.</P
+devices. At the moment, there are drivers for libusd, libftdi and FTD2XX
+(e.g. to communicate with FTDI chip based cables through libftdi and/or
+FTD2XX, to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and
+more).</P
 ></DIV
 ></DIV
 ><DIV
@@ -4185,7 +4244,7 @@ ALT="Important"></TD
 ALIGN="LEFT"
 VALIGN="TOP"
 ><P
->Address parameters to the functions listed above apecify always
+>Address parameters to the functions listed above specify always
 byte locations, independent of the actual data width. The bus driver has to
 adjust the address on its own if required.</P
 ></TD
@@ -4238,9 +4297,10 @@ NAME="_preparation"
 >4.2.3.4. Preparation</A
 ></H4
 ><P
->This function is called whenever at the start of a bus operation. The driver
-should perform the required preparation steps so that subsequent calls to the
-bus_read_* and bus_write functions can perform their tasks properly.</P
+>This function is called whenever a bus operation is initiated. The
+driver should perform the required preparation steps so that
+subsequent calls to the bus_read_* and bus_write functions can perform
+their tasks properly.</P
 ><P
 >E.g. a BSR bus driver would put the device into EXTEST mode to activate the
 boundary scan register on the device pins.</P

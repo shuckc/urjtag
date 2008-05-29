@@ -607,15 +607,10 @@ NAME="_usbconn"
 ></H3
 ><P
 >The usbconn drivers provide a common API to search for and connect with USB
-devices. At the moment, there's only a libusb driver, but others will follow
-(e.g. to communicate with FTDI chip based cables through libftdi and/or FTD2XX,
-to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and more).</P
-><P
->In contrast to the parport API, the usbconn drivers provide only the functions
-for connecting, disconnecting, and for releasing ressources. The actual
-communication must be implemented using the underlying library's functions,
-e.g. usb_write from libusb, or ftdi_write from libftdi. Therefore, each driver
-using usbconn usually only works together with one particular usbconn driver.</P
+devices. At the moment, there are drivers for libusd, libftdi and FTD2XX
+(e.g. to communicate with FTDI chip based cables through libftdi and/or
+FTD2XX, to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and
+more).</P
 ></DIV
 ></DIV
 ><DIV
@@ -711,7 +706,7 @@ ALT="Important"></TD
 ALIGN="LEFT"
 VALIGN="TOP"
 ><P
->Address parameters to the functions listed above apecify always
+>Address parameters to the functions listed above specify always
 byte locations, independent of the actual data width. The bus driver has to
 adjust the address on its own if required.</P
 ></TD
@@ -764,9 +759,10 @@ NAME="_preparation"
 >4.2.3.4. Preparation</A
 ></H3
 ><P
->This function is called whenever at the start of a bus operation. The driver
-should perform the required preparation steps so that subsequent calls to the
-bus_read_* and bus_write functions can perform their tasks properly.</P
+>This function is called whenever a bus operation is initiated. The
+driver should perform the required preparation steps so that
+subsequent calls to the bus_read_* and bus_write functions can perform
+their tasks properly.</P
 ><P
 >E.g. a BSR bus driver would put the device into EXTEST mode to activate the
 boundary scan register on the device pins.</P

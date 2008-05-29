@@ -95,7 +95,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN333"
+NAME="AEN345"
 ></A
 ><TABLE
 BORDER="0"
@@ -801,24 +801,28 @@ modprobe parport_pc</PRE
 >UrJTAG now also supports some USB cables. Unfortunately, there is no standard
 for "JTAG over USB", so this support is limited to a few selected cables only.
 For cables based on the FT2232 chip from FTDI, the cable command has to be
-given cable name, driver name, and USB Vendor and Product ID of the cable:</P
+given cable name and optionally the driver name, USB Vendor, and Product ID of
+the cable:</P
 ><PRE
 CLASS="literallayout"
->jtag&#62; cable ARM-USB-OCD ftdi-mpsse 15ba:3</PRE
+>jtag&#62; cable ARM-USB-OCD vid=15ba pid=0003 driver=ftdi-mpsse</PRE
 ><P
->For some cables, UrJTAG knows the VID:PID and you can just say ":"</P
+>For all known cables, UrJTAG knows the VID and PID so you can just say</P
 ><PRE
 CLASS="literallayout"
->jtag&#62; cable JTAGkey ftdi-mpsse :</PRE
+>jtag&#62; cable ARM-USB-OCD</PRE
 ><P
->On Windows, if UrJTAG was compiled to use the drivers supplied by
-FTDI, the command should instead look like this:</P
-><PRE
-CLASS="literallayout"
->jtag&#62; cable ARM-USB-OCD ftd2xx-mpsse 15ba:3</PRE
+>If your cable isn't detected automatically though it's listed as a known and
+supported cable, feel free to report its VID and PID. It might be a different
+revision and should be added to the known &#38; tested list of cables.</P
 ><P
->The support for USB-based cables and their configuration is work
-in progress; the above syntax may change (i.e. become simpler) soon.</P
+>As stated above, the driver name is not mandatory for the cable
+command. UrJTAG will select the driver automatically based on UrJTAG's
+configuration.  In case your system provides just one of libftdi or FTD2XX
+the respective driver is selected. If both libraries are available, then
+FTD2XX is selected. That's simply because FTD2XX showed some performance
+advantages over libftdi in the past. You can still force libftdi with the
+respective parameter.</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -974,7 +978,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN589"
+NAME="AEN600"
 ></A
 ><TABLE
 BORDER="0"
@@ -1083,7 +1087,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN621"
+NAME="AEN632"
 ></A
 ><TABLE
 BORDER="0"
@@ -1231,7 +1235,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN665"
+NAME="AEN676"
 ></A
 ><TABLE
 BORDER="0"
@@ -1465,6 +1469,16 @@ CLASS="emphasis"
 >stop</I
 ></SPAN
 > at the svf command.</P
+><P
+>The absence of error or warning messages indicate that the SVF file could be
+executed without problems. To get a progress reporting while the player advances
+through the SVF file, specify <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>progress</I
+></SPAN
+> at the svf command.</P
 ><TABLE
 CLASS="sidebar"
 BORDER="1"
@@ -1474,7 +1488,7 @@ CELLPADDING="5"
 ><DIV
 CLASS="sidebar"
 ><A
-NAME="AEN729"
+NAME="AEN742"
 ></A
 ><P
 ><B
@@ -1564,12 +1578,6 @@ NAME="AEN729"
 ><P
 >&#13;RUNTEST SCK not supported.
     The maximum time constraint is not guaranteed.
-</P
-></LI
-><LI
-><P
->&#13;SIR
-    No check is done against the TDO parameter.
 </P
 ></LI
 ><LI
