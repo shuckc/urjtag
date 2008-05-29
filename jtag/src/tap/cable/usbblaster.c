@@ -75,6 +75,12 @@ usbblaster_connect( char *params[], cable_t *cable )
 	if (!cable_params)
 	{
 		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+		/* NOTE:
+		 * Call the underlying usbport driver (*free) routine directly
+		 * not generic_usbconn_free() since it also free's cable->params
+		 * (which is not established) and cable (which the caller will do)
+		 */
+		cable->link.usb->driver->free( cable->link.usb );
 		return 4;
 	}
 

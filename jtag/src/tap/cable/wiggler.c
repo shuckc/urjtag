@@ -191,6 +191,12 @@ wiggler_connect( char *params[], cable_t *cable )
 	wiggler_params = malloc( sizeof *wiggler_params );
 	if (!wiggler_params) {
 		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+		/* NOTE:
+		 * Call the underlying parport driver (*free) routine directly
+		 * not generic_parconn_free() since it also free's cable->params
+		 * (which is not established) and cable (which the caller will do)
+		 */
+		cable->link.port->driver->parport_free( cable->link.port );
 		return 4;
 	}
 
@@ -198,13 +204,18 @@ wiggler_connect( char *params[], cable_t *cable )
 	free(cable->params);
 	cable->params = wiggler_params;
 
-
 	if ( ! param_bitmap )
 		param_bitmap = (char *)std_wgl_map;
 
 	if ( ( result = set_mapping( param_bitmap, cable ) ) != 0 ) {
 		printf( _("Pin mapping failed\n") );
-		free(cable->params);
+		/* NOTE:
+		 * Call the underlying parport driver (*free) routine directly
+		 * not generic_parconn_free() since it also free'scable (which
+		 * the caller will do)
+		 */
+		cable->link.port->driver->parport_free( cable->link.port );
+		free( cable->params );
 		return result;
 	}
 

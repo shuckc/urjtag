@@ -145,12 +145,6 @@ generic_usbconn_connect( char *params[], cable_t *cable )
 	usbconn_t *conn = NULL;
 	int i;
 
-	cable_params = malloc( sizeof(generic_params_t) );
-	if (!cable_params) {
-		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
-		return 4;
-	}
-
 	if(strcasecmp(params[0], "usb") != 0)
 	{
 		user_specified.name = params[0];
@@ -210,6 +204,13 @@ generic_usbconn_connect( char *params[], cable_t *cable )
 	if (!conn) {
 		printf( _("Couldn't connect to suitable USB device.\n") );
 		return 2;
+	}
+
+	cable_params = malloc( sizeof(generic_params_t) );
+	if (!cable_params) {
+		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+		usbconn_drivers[i]->free( conn );
+		return 4;
 	}
 
 	cable->link.usb = conn;

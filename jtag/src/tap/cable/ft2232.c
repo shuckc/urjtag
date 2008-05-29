@@ -1279,17 +1279,22 @@ ft2232_connect( char *params[], cable_t *cable )
   params_t *cable_params;
   int result;
 
+  /* perform generic_usbconn_connect */
+  if ( ( result = generic_usbconn_connect( params, cable ) ) != 0 )
+    return result;
+
   cable_params = (params_t *)malloc( sizeof(params_t) );
   if (!cable_params) {
     printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+    /* NOTE:
+     * Call the underlying usbport driver (*free) routine directly
+     * not generic_usbconn_free() since it also free's cable->params
+     * (which is not established) and cable (which the caller will do)
+     */
+    cable->link.usb->driver->free( cable->link.usb );
     return 4;
   }
 
-  /* perform generic_usbconn_connect */
-  result = generic_usbconn_connect( params, cable );
-
-  if (result == 0)
-  {
     cable_params->mpsse_frequency = 0;
     cable_params->last_tdo_valid  = 0;
 
@@ -1298,9 +1303,8 @@ ft2232_connect( char *params[], cable_t *cable )
     /* exchange generic cable parameters with our private parameter set */
     free( cable->params );
     cable->params = cable_params;
-  }
 
-  return result;
+  return 0;
 }
 
 

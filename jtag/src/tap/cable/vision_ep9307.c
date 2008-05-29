@@ -192,11 +192,6 @@ ep9307_connect( char *params[], cable_t *cable )
 	  return 1;
 	}
 
-	if (cable->params != NULL) {
-		printf( _("Disconnecting %s\n"), _(cable->driver->description) );
-		cable->driver->disconnect( cable );
-	}
-
 	printf( _("Initializing Vision EP9307 SoM GPIO JTAG Cable\n") );
 
 	cable_params = malloc( sizeof *cable_params );

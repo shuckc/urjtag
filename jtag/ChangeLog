@@ -1,3 +1,11 @@
+2008-05-29  Kolja Waschk <kawk>
+
+   *  src/tap/cable/wiggler.c src/tap/cable/generic_usbconn.c,
+      src/tap/cable/usbblaster.c, src/tap/cable/vision_ep9307.c,
+      src/tap/cable/jim.c, src/tap/cable/ft2232.c,
+      src/tap/cable/generic_parport.c: More malloc/free cleanup
+	   in cable drivers (Hartley Sweeten)
+
 2008-05-28  Kolja Waschk <kawk>
 
    * src/cmd/cable.c, src/tap/cable/wiggler.c,

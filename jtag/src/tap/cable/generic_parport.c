@@ -80,6 +80,7 @@ generic_parport_connect( char *params[], cable_t *cable )
 	cable_params = malloc( sizeof *cable_params );
 	if (!cable_params) {
 		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+		parport_drivers[i]->parport_free( port );
 		return 4;
 	}
 
