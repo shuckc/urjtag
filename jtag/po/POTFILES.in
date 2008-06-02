@@ -120,8 +120,6 @@ src/tap/detect.c
 src/tap/discovery.c
 src/tap/parport.c
 src/tap/parport/direct.c
-src/tap/parport/ftd2xx.c
-src/tap/parport/ftdi.c
 src/tap/parport/ppdev.c
 src/tap/parport/ppi.c
 src/tap/register.c
@@ -129,3 +127,5 @@ src/tap/state.c
 src/tap/tap.c
 src/tap/usbconn.c
 src/tap/usbconn/libusb.c
+src/tap/usbconn/libftd2xx.c
+src/tap/usbconn/libftdi.c
