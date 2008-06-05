@@ -277,24 +277,6 @@ sh7727_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *sh7727_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t sh7727_bus = {
-	"sh7727",
-	N_("Hitachi SH7727 compatible bus driver via BSR"),
-	sh7727_bus_new,
-	sh7727_bus_free,
-	sh7727_bus_printinfo,
-	sh7727_bus_prepare,
-	sh7727_bus_area,
-	sh7727_bus_read_start,
-	sh7727_bus_read_next,
-	sh7727_bus_read_end,
-	sh7727_bus_read,
-	sh7727_bus_write,
-	NULL
-};
-
 static bus_t *
 sh7727_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -306,7 +288,7 @@ sh7727_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
@@ -387,3 +369,19 @@ sh7727_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t sh7727_bus = {
+	"sh7727",
+	N_("Hitachi SH7727 compatible bus driver via BSR"),
+	sh7727_bus_new,
+	sh7727_bus_free,
+	sh7727_bus_printinfo,
+	sh7727_bus_prepare,
+	sh7727_bus_area,
+	sh7727_bus_read_start,
+	sh7727_bus_read_next,
+	sh7727_bus_read_end,
+	sh7727_bus_read,
+	sh7727_bus_write,
+	NULL
+};

@@ -237,24 +237,6 @@ bf548_ezkit_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *bf548_ezkit_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t bf548_ezkit_bus = {
-	"bf548_ezkit",
-	N_("Blackfin BF548 EZ-KIT board bus driver"),
-	bf548_ezkit_bus_new,
-	bf548_ezkit_bus_free,
-	bf548_ezkit_bus_printinfo,
-	bf548_ezkit_bus_prepare,
-	bf548_ezkit_bus_area,
-	bf548_ezkit_bus_read_start,
-	bf548_ezkit_bus_read_next,
-	bf548_ezkit_bus_read_end,
-	bf548_ezkit_bus_read,
-	bf548_ezkit_bus_write
-};
-
-
 static bus_t *
 bf548_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -266,12 +248,12 @@ bf548_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &bf548_ezkit_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -368,3 +350,19 @@ bf548_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t bf548_ezkit_bus = {
+	"bf548_ezkit",
+	N_("Blackfin BF548 EZ-KIT board bus driver"),
+	bf548_ezkit_bus_new,
+	bf548_ezkit_bus_free,
+	bf548_ezkit_bus_printinfo,
+	bf548_ezkit_bus_prepare,
+	bf548_ezkit_bus_area,
+	bf548_ezkit_bus_read_start,
+	bf548_ezkit_bus_read_next,
+	bf548_ezkit_bus_read_end,
+	bf548_ezkit_bus_read,
+	bf548_ezkit_bus_write,
+	NULL
+};

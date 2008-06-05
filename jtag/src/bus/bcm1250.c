@@ -268,24 +268,6 @@ bcm1250_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *bcm1250_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t bcm1250_bus = {
-	"bcm1250",
-	N_("Broadcom BCM1250 compatible bus driver via BSR"),
-	bcm1250_bus_new,
-	bcm1250_bus_free,
-	bcm1250_bus_printinfo,
-	bcm1250_bus_prepare,
-	bcm1250_bus_area,
-	bcm1250_bus_read_start,
-	bcm1250_bus_read_next,
-	bcm1250_bus_read_end,
-	bcm1250_bus_read,
-	bcm1250_bus_write,
-	NULL
-};
-
 static bus_t *
 bcm1250_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -297,7 +279,7 @@ bcm1250_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-    bus = malloc( sizeof (bus_t) );
+    bus = calloc( 1, sizeof (bus_t) );
     if (!bus)
         return NULL;
 
@@ -492,3 +474,20 @@ int bcm1250_ejtag_do(bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
 	return 0;
 }
 #endif
+
+const bus_driver_t bcm1250_bus = {
+	"bcm1250",
+	N_("Broadcom BCM1250 compatible bus driver via BSR"),
+	bcm1250_bus_new,
+	bcm1250_bus_free,
+	bcm1250_bus_printinfo,
+	bcm1250_bus_prepare,
+	bcm1250_bus_area,
+	bcm1250_bus_read_start,
+	bcm1250_bus_read_next,
+	bcm1250_bus_read_end,
+	bcm1250_bus_read,
+	bcm1250_bus_write,
+	NULL
+};
+

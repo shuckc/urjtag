@@ -731,12 +731,12 @@ avr32_bus_new (chain_t * chain, char *cmd_params[])
     break;
   }
 
-  bus = malloc (sizeof (bus_t));
+  bus = calloc( 1, sizeof (bus_t) );
   if (!bus)
     return NULL;
 
   bus->driver = &avr32_bus_driver;
-  bus->params = malloc (sizeof (bus_params_t));
+  bus->params = calloc( 1, sizeof (bus_params_t) );
   if (!bus->params)
   {
     free (bus);
@@ -767,5 +767,6 @@ const bus_driver_t avr32_bus_driver = {
   avr32_bus_read_next,
   avr32_bus_read_end,
   avr32_bus_read,
-  avr32_bus_write
+  avr32_bus_write,
+  NULL
 };

@@ -265,12 +265,12 @@ prototype_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || (chain->parts->len <= chain->active_part) || (chain->active_part < 0))
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &prototype_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -450,6 +450,7 @@ const bus_driver_t prototype_bus = {
 	prototype_bus_read_next,
 	prototype_bus_read_end,
 	prototype_bus_read,
-	prototype_bus_write
+	prototype_bus_write,
+	NULL
 };
 

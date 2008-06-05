@@ -249,25 +249,6 @@ tx4925_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *tx4925_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t tx4925_bus = {
-	"tx4925",
-	N_("Toshiba TX4925 compatible bus driver via BSR"),
-	tx4925_bus_new,
-	tx4925_bus_free,
-	tx4925_bus_printinfo,
-	tx4925_bus_prepare,
-	tx4925_bus_area,
-	tx4925_bus_read_start,
-	tx4925_bus_read_next,
-	tx4925_bus_read_end,
-	tx4925_bus_read,
-	tx4925_bus_write,
-	NULL
-};
-
-
 static bus_t *
 tx4925_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -279,12 +260,12 @@ tx4925_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &tx4925_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -353,3 +334,19 @@ tx4925_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t tx4925_bus = {
+	"tx4925",
+	N_("Toshiba TX4925 compatible bus driver via BSR"),
+	tx4925_bus_new,
+	tx4925_bus_free,
+	tx4925_bus_printinfo,
+	tx4925_bus_prepare,
+	tx4925_bus_area,
+	tx4925_bus_read_start,
+	tx4925_bus_read_next,
+	tx4925_bus_read_end,
+	tx4925_bus_read,
+	tx4925_bus_write,
+	NULL
+};

@@ -257,24 +257,6 @@ lh7a400_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *lh7a400_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t lh7a400_bus = {
-	"lh7a400",
-	N_("Sharp LH7A400 compatible bus driver via BSR (flash access only!)"),
-	lh7a400_bus_new,
-	lh7a400_bus_free,
-	lh7a400_bus_printinfo,
-	lh7a400_bus_prepare,
-	lh7a400_bus_area,
-	lh7a400_bus_read_start,
-	lh7a400_bus_read_next,
-	lh7a400_bus_read_end,
-	lh7a400_bus_read,
-	lh7a400_bus_write,
-    NULL
-};
-
 static bus_t *
 lh7a400_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -286,12 +268,12 @@ lh7a400_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &lh7a400_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -355,3 +337,19 @@ lh7a400_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t lh7a400_bus = {
+	"lh7a400",
+	N_("Sharp LH7A400 compatible bus driver via BSR (flash access only!)"),
+	lh7a400_bus_new,
+	lh7a400_bus_free,
+	lh7a400_bus_printinfo,
+	lh7a400_bus_prepare,
+	lh7a400_bus_area,
+	lh7a400_bus_read_start,
+	lh7a400_bus_read_next,
+	lh7a400_bus_read_end,
+	lh7a400_bus_read,
+	lh7a400_bus_write,
+    NULL
+};

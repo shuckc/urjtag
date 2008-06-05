@@ -214,24 +214,6 @@ ppc440gx_ebc8_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t ppc440gx_ebc8_bus = {
-	"ppc440gx_ebc8",
-	N_("IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"),
-	ppc440gx_ebc8_bus_new,
-	ppc440gx_ebc8_bus_free,
-	ppc440gx_ebc8_bus_printinfo,
-	ppc440gx_ebc8_bus_prepare,
-	ppc440gx_ebc8_bus_area,
-	ppc440gx_ebc8_bus_read_start,
-	ppc440gx_ebc8_bus_read_next,
-	ppc440gx_ebc8_bus_read_end,
-	ppc440gx_ebc8_bus_read,
-	ppc440gx_ebc8_bus_write,
-	NULL
-};
-
 static bus_t *
 ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -243,12 +225,12 @@ ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || (chain->parts->len <= chain->active_part) || (chain->active_part < 0))
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &ppc440gx_ebc8_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -300,3 +282,19 @@ ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t ppc440gx_ebc8_bus = {
+	"ppc440gx_ebc8",
+	N_("IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"),
+	ppc440gx_ebc8_bus_new,
+	ppc440gx_ebc8_bus_free,
+	ppc440gx_ebc8_bus_printinfo,
+	ppc440gx_ebc8_bus_prepare,
+	ppc440gx_ebc8_bus_area,
+	ppc440gx_ebc8_bus_read_start,
+	ppc440gx_ebc8_bus_read_next,
+	ppc440gx_ebc8_bus_read_end,
+	ppc440gx_ebc8_bus_read,
+	ppc440gx_ebc8_bus_write,
+	NULL
+};

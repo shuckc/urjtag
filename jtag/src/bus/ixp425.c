@@ -231,24 +231,6 @@ ixp425_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *ixp425_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t ixp425_bus = {
-	"ixp425",
-	N_("Intel IXP425 compatible bus driver via BSR"),
-	ixp425_bus_new,
-	ixp425_bus_free,
-	ixp425_bus_printinfo,
-	ixp425_bus_prepare,
-	ixp425_bus_area,
-	ixp425_bus_read_start,
-	ixp425_bus_read_next,
-	ixp425_bus_read_end,
-	ixp425_bus_read,
-	ixp425_bus_write,
-	NULL
-};
-
 static bus_t *
 ixp425_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -260,12 +242,12 @@ ixp425_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &ixp425_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -320,3 +302,19 @@ ixp425_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t ixp425_bus = {
+	"ixp425",
+	N_("Intel IXP425 compatible bus driver via BSR"),
+	ixp425_bus_new,
+	ixp425_bus_free,
+	ixp425_bus_printinfo,
+	ixp425_bus_prepare,
+	ixp425_bus_area,
+	ixp425_bus_read_start,
+	ixp425_bus_read_next,
+	ixp425_bus_read_end,
+	ixp425_bus_read,
+	ixp425_bus_write,
+	NULL
+};

@@ -216,23 +216,6 @@ ppc405ep_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *ppc405ep_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t ppc405ep_bus = {
-	"ppc405ep",
-	N_("IBM PowerPC 405EP compatible bus driver via BSR"),
-	ppc405ep_bus_new,
-	ppc405ep_bus_free,
-	ppc405ep_bus_printinfo,
-	ppc405ep_bus_prepare,
-	ppc405ep_bus_area,
-	ppc405ep_bus_read_start,
-	ppc405ep_bus_read_next,
-	ppc405ep_bus_read_end,
-	ppc405ep_bus_read,
-	ppc405ep_bus_write
-};
-
 static bus_t *
 ppc405ep_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -244,12 +227,12 @@ ppc405ep_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || (chain->parts->len <= chain->active_part) || (chain->active_part < 0))
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &ppc405ep_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -301,3 +284,19 @@ ppc405ep_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t ppc405ep_bus = {
+	"ppc405ep",
+	N_("IBM PowerPC 405EP compatible bus driver via BSR"),
+	ppc405ep_bus_new,
+	ppc405ep_bus_free,
+	ppc405ep_bus_printinfo,
+	ppc405ep_bus_prepare,
+	ppc405ep_bus_area,
+	ppc405ep_bus_read_start,
+	ppc405ep_bus_read_next,
+	ppc405ep_bus_read_end,
+	ppc405ep_bus_read,
+	ppc405ep_bus_write,
+	NULL
+};

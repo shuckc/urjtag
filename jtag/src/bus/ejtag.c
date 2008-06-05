@@ -453,7 +453,31 @@ ejtag_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *ejtag_bus_new( chain_t *chain, char *cmd_params[] );
+static bus_t *
+ejtag_bus_new( chain_t *chain, char *cmd_params[] )
+{
+	bus_t *bus;
+
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
+
+	bus = calloc( 1, sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	bus->driver = &ejtag_bus;
+	bus->params = calloc( 1, sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[chain->active_part];
+	BP->initialized = 0;
+
+	return bus;
+}
 
 const bus_driver_t ejtag_bus = {
 	"ejtag",
@@ -467,31 +491,6 @@ const bus_driver_t ejtag_bus = {
 	ejtag_bus_read_next,
 	ejtag_bus_read_end,
 	ejtag_bus_read,
-	ejtag_bus_write
+	ejtag_bus_write,
+	NULL
 };
-
-static bus_t *
-ejtag_bus_new( chain_t *chain, char *cmd_params[] )
-{
-	bus_t *bus;
-
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
-
-	bus = malloc( sizeof (bus_t) );
-	if (!bus)
-		return NULL;
-
-	bus->driver = &ejtag_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
-	if (!bus->params) {
-		free( bus );
-		return NULL;
-	}
-
-	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
-	BP->initialized = 0;
-
-	return bus;
-}

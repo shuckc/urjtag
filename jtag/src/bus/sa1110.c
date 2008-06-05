@@ -245,24 +245,6 @@ sa1110_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *sa1110_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t sa1110_bus = {
-	"sa1110",
-	N_("Intel SA-1110 compatible bus driver via BSR"),
-	sa1110_bus_new,
-	sa1110_bus_free,
-	sa1110_bus_printinfo,
-	sa1110_bus_prepare,
-	sa1110_bus_area,
-	sa1110_bus_read_start,
-	sa1110_bus_read_next,
-	sa1110_bus_read_end,
-	sa1110_bus_read,
-	sa1110_bus_write,
-	NULL
-};
-
 static bus_t *
 sa1110_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -274,12 +256,12 @@ sa1110_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &sa1110_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -339,3 +321,19 @@ sa1110_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t sa1110_bus = {
+	"sa1110",
+	N_("Intel SA-1110 compatible bus driver via BSR"),
+	sa1110_bus_new,
+	sa1110_bus_free,
+	sa1110_bus_printinfo,
+	sa1110_bus_prepare,
+	sa1110_bus_area,
+	sa1110_bus_read_start,
+	sa1110_bus_read_next,
+	sa1110_bus_read_end,
+	sa1110_bus_read,
+	sa1110_bus_write,
+	NULL
+};

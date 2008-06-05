@@ -259,24 +259,6 @@ sh7750r_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *sh7750r_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t sh7750r_bus = {
-	"sh7750r",
-	N_("Hitachi SH7750R compatible bus driver via BSR"),
-	sh7750r_bus_new,
-	sh7750r_bus_free,
-	sh7750r_bus_printinfo,
-	sh7750r_bus_prepare,
-	sh7750r_bus_area,
-	sh7750r_bus_read_start,
-	sh7750r_bus_read_next,
-	sh7750r_bus_read_end,
-	sh7750r_bus_read,
-	sh7750r_bus_write,
-	NULL
-};
-
 static bus_t *
 sh7750r_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -288,7 +270,7 @@ sh7750r_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
@@ -367,3 +349,19 @@ sh7750r_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t sh7750r_bus = {
+	"sh7750r",
+	N_("Hitachi SH7750R compatible bus driver via BSR"),
+	sh7750r_bus_new,
+	sh7750r_bus_free,
+	sh7750r_bus_printinfo,
+	sh7750r_bus_prepare,
+	sh7750r_bus_area,
+	sh7750r_bus_read_start,
+	sh7750r_bus_read_next,
+	sh7750r_bus_read_end,
+	sh7750r_bus_read,
+	sh7750r_bus_write,
+	NULL
+};

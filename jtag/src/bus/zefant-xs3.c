@@ -732,12 +732,12 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
 	bus->driver = &zefant_xs3_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -991,7 +991,8 @@ const bus_driver_t zefant_xs3_bus = {
 	zefant_xs3_bus_read_next,
 	zefant_xs3_bus_read_end,
 	zefant_xs3_bus_read,
-	zefant_xs3_bus_write
+	zefant_xs3_bus_write,
+	NULL
 };
 
 

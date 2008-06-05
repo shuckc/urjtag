@@ -591,7 +591,7 @@ fjmem_query_blocks( chain_t *chain, part_t *part, bus_t *bus )
 			block_param_t *bl;
 			int nbytes;
 
-			if ((bl = (block_param_t *)malloc( sizeof( block_param_t ) )) == NULL) {
+			if ((bl = (block_param_t *)calloc( 1, sizeof( block_param_t ) )) == NULL) {
 				printf( _("out of memory\n") );
 				failed |= 1;
 				break;
@@ -691,12 +691,12 @@ fjmem_bus_new( chain_t *chain, char *params[] )
 		if (fjmem_reg_len <= 0)
 			return NULL;
 
-		bus = malloc( sizeof (bus_t) );
+		bus = calloc( 1, sizeof (bus_t) );
 		if (!bus)
 			return NULL;
 
 		bus->driver = &fjmem_bus;
-		bus->params = malloc( sizeof (bus_params_t) );
+		bus->params = calloc( 1, sizeof (bus_params_t) );
 		if (!bus->params) {
 			free( bus );
 			return NULL;

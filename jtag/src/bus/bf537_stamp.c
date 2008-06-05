@@ -252,11 +252,11 @@ bf537_stamp_bus_new_1( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
 		return NULL;
@@ -385,7 +385,8 @@ const bus_driver_t bf537_stamp_bus = {
 	bf537_stamp_bus_read_next,
 	bf537_stamp_bus_read_end,
 	bf537_stamp_bus_read,
-	bf537_stamp_bus_write
+	bf537_stamp_bus_write,
+	NULL
 };
 #endif
 
@@ -423,7 +424,8 @@ const bus_driver_t bf537_ezkit_bus = {
 	bf537_stamp_bus_read_next,
 	bf537_stamp_bus_read_end,
 	bf537_stamp_bus_read,
-	bf537_stamp_bus_write
+	bf537_stamp_bus_write,
+	NULL
 };
 #endif
 
@@ -461,7 +463,8 @@ const bus_driver_t bf527_ezkit_bus = {
 	bf537_stamp_bus_read_next,
 	bf537_stamp_bus_read_end,
 	bf537_stamp_bus_read,
-	bf537_stamp_bus_write
+	bf537_stamp_bus_write,
+	NULL
 };
 #endif
 

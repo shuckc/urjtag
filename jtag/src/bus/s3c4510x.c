@@ -325,24 +325,6 @@ s3c4510_bus_free( bus_t *bus )
         free( bus );
 }
 
-static bus_t *s3c4510_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t s3c4510_bus = {
-	"s3c4510x",
-	N_("Samsung S3C4510B compatible bus driver via BSR"),
-	s3c4510_bus_new,
-	s3c4510_bus_free,
-        s3c4510_bus_printinfo,
-        s3c4510_bus_prepare,
-        s3c4510_bus_area,
-        s3c4510_bus_read_start,
-        s3c4510_bus_read_next,
-        s3c4510_bus_read_end,
-        s3c4510_bus_read,
-	s3c4510_bus_write,
-	NULL
-};
-
 static bus_t *
 s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -354,12 +336,12 @@ s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
                 return NULL;
 
-        bus = malloc( sizeof (bus_t) );
+        bus = calloc( 1, sizeof (bus_t) );
         if (!bus)
                 return NULL;
 
 	bus->driver = &s3c4510_bus;
-	bus->params = malloc( sizeof (bus_params_t) );
+	bus->params = calloc( 1, sizeof (bus_params_t) );
         if (!bus->params) {
                 free( bus );
                 return NULL;
@@ -440,6 +422,22 @@ s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
 
         return bus;
 }
+
+const bus_driver_t s3c4510_bus = {
+	"s3c4510x",
+	N_("Samsung S3C4510B compatible bus driver via BSR"),
+	s3c4510_bus_new,
+	s3c4510_bus_free,
+        s3c4510_bus_printinfo,
+        s3c4510_bus_prepare,
+        s3c4510_bus_area,
+        s3c4510_bus_read_start,
+        s3c4510_bus_read_next,
+        s3c4510_bus_read_end,
+        s3c4510_bus_read,
+	s3c4510_bus_write,
+	NULL
+};
 
 
 

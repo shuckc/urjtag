@@ -607,41 +607,6 @@ pxa2xx_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *pxa2x0_bus_new( chain_t *chain, char *cmd_params[] );
-static bus_t *pxa27x_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t pxa2x0_bus = {
-	"pxa2x0",
-	N_("Intel PXA2x0 compatible bus driver via BSR"),
-	pxa2x0_bus_new,
-	pxa2xx_bus_free,
-	pxa2x0_bus_printinfo,
-	pxa2xx_bus_prepare,
-	pxa2xx_bus_area,
-	pxa2xx_bus_read_start,
-	pxa2xx_bus_read_next,
-	pxa2xx_bus_read_end,
-	pxa2xx_bus_read,
-	pxa2xx_bus_write,
-	NULL /* patch 909598 call pxax0_bus_init, but the patch fails and doesnt look compatible */
-};
-
-const bus_driver_t pxa27x_bus = {
-	"pxa27x",
-	N_("Intel PXA27x compatible bus driver via BSR"),
-	pxa27x_bus_new,
-	pxa2xx_bus_free,
-	pxa27x_bus_printinfo,
-	pxa2xx_bus_prepare,
-	pxa27x_bus_area,
-	pxa2xx_bus_read_start,
-	pxa2xx_bus_read_next,
-	pxa2xx_bus_read_end,
-	pxa2xx_bus_read,
-	pxa2xx_bus_write,
-	pxa2xx_bus_init
-};
-
 //static bus_t *
 //pxa2x0_bus_new( void )
 static int
@@ -657,7 +622,7 @@ pxa2xx_bus_new_common(bus_t * bus)
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
@@ -762,7 +727,7 @@ pxa2x0_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
@@ -799,7 +764,7 @@ pxa27x_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
@@ -826,3 +791,35 @@ pxa27x_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t pxa2x0_bus = {
+	"pxa2x0",
+	N_("Intel PXA2x0 compatible bus driver via BSR"),
+	pxa2x0_bus_new,
+	pxa2xx_bus_free,
+	pxa2x0_bus_printinfo,
+	pxa2xx_bus_prepare,
+	pxa2xx_bus_area,
+	pxa2xx_bus_read_start,
+	pxa2xx_bus_read_next,
+	pxa2xx_bus_read_end,
+	pxa2xx_bus_read,
+	pxa2xx_bus_write,
+	NULL /* patch 909598 call pxax0_bus_init, but the patch fails and doesnt look compatible */
+};
+
+const bus_driver_t pxa27x_bus = {
+	"pxa27x",
+	N_("Intel PXA27x compatible bus driver via BSR"),
+	pxa27x_bus_new,
+	pxa2xx_bus_free,
+	pxa27x_bus_printinfo,
+	pxa2xx_bus_prepare,
+	pxa27x_bus_area,
+	pxa2xx_bus_read_start,
+	pxa2xx_bus_read_next,
+	pxa2xx_bus_read_end,
+	pxa2xx_bus_read,
+	pxa2xx_bus_write,
+	pxa2xx_bus_init
+};

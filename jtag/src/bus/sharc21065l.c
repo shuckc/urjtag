@@ -258,23 +258,6 @@ static void sharc_21065L_bus_free( bus_t *bus )
 	free( bus );
 }
 
-static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] );
-
-const bus_driver_t sharc_21065L_bus = {
-	"SHARC_21065L",
-	N_("SHARC_21065L compatible bus driver via BSR"),
-	sharc_21065L_bus_new,
-	sharc_21065L_bus_free,
-	sharc_21065L_bus_printinfo,
-	sharc_21065L_bus_prepare,
-	sharc_21065L_bus_area,
-	sharc_21065L_bus_read_start,
-	sharc_21065L_bus_read_next,
-	sharc_21065L_bus_read_end,
-	sharc_21065L_bus_read,
-	sharc_21065L_bus_write
-};
-
 
 static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -286,7 +269,7 @@ static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
-	bus = malloc( sizeof (bus_t) );
+	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
@@ -344,3 +327,19 @@ static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] )
 
 	return bus;
 }
+
+const bus_driver_t sharc_21065L_bus = {
+	"SHARC_21065L",
+	N_("SHARC_21065L compatible bus driver via BSR"),
+	sharc_21065L_bus_new,
+	sharc_21065L_bus_free,
+	sharc_21065L_bus_printinfo,
+	sharc_21065L_bus_prepare,
+	sharc_21065L_bus_area,
+	sharc_21065L_bus_read_start,
+	sharc_21065L_bus_read_next,
+	sharc_21065L_bus_read_end,
+	sharc_21065L_bus_read,
+	sharc_21065L_bus_write,
+	NULL
+};
