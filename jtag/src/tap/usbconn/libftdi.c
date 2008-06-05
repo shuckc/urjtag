@@ -309,48 +309,6 @@ usbconn_ftdi_common_open( usbconn_t *conn )
 
 /* ---------------------------------------------------------------------- */
 
-static int
-usbconn_ftdi_open( usbconn_t *conn )
-{
-  ftdi_param_t *p = conn->params;
-  struct ftdi_context *fc = p->fc;
-  int r;
-
-  if (usbconn_ftdi_common_open( conn ) < 0)
-    return -1;
-
-  if ((r = ftdi_disable_bitbang( fc )) < 0)
-    perror( ftdi_get_error_string( fc ) );
-
-  if (r >= 0) if ((r = ftdi_set_latency_timer( fc, 2 )) < 0)
-    perror( ftdi_get_error_string( fc ) );
-
-#if 1
-  /* libftdi 0.6 doesn't allow high baudrates, so we send the control
-     message outselves */
-  if (r >= 0) if (usb_control_msg( fc->usb_dev, 0x40, 3, 1, 0, NULL, 0, fc->usb_write_timeout ) != 0)
-  {
-    perror( "Can't set max baud rate.\n" );
-    r = -1;
-  }
-#else
-  if (r >= 0) if ((r = ftdi_set_baudrate( fc, 48000000 )) < 0)
-    perror( ftdi_get_error_string( fc ) );
-#endif
-
-  if (r < 0)
-  {
-    ftdi_usb_close( fc );
-    ftdi_deinit( fc );
-    /* mark ftdi layer as not initialized */
-    p->fc = NULL;
-  }
-
-  return r < 0 ? -1 : 0;
-}
-
-/* ---------------------------------------------------------------------- */
-
 #undef LIBFTDI_UNIMPLEMENTED
 
 static int
@@ -402,6 +360,53 @@ seq_reset( struct ftdi_context *fc )
   if (r >= 0) r = seq_purge( fc, 1, 1 );
   return r < 0 ? -1 : 0;
 }
+
+/* ---------------------------------------------------------------------- */
+
+static int
+usbconn_ftdi_open( usbconn_t *conn )
+{
+  ftdi_param_t *p = conn->params;
+  struct ftdi_context *fc = p->fc;
+  int r;
+
+  if (usbconn_ftdi_common_open( conn ) < 0)
+    return -1;
+
+  r = seq_reset( fc );
+  if (r >= 0) r = seq_purge( fc, 1, 0 );
+
+  if (r >= 0) if ((r = ftdi_disable_bitbang( fc )) < 0)
+    perror( ftdi_get_error_string( fc ) );
+
+  if (r >= 0) if ((r = ftdi_set_latency_timer( fc, 2 )) < 0)
+    perror( ftdi_get_error_string( fc ) );
+
+#if 0
+  /* libftdi 0.6 doesn't allow high baudrates, so we send the control
+     message outselves */
+  if (r >= 0) if (usb_control_msg( fc->usb_dev, 0x40, 3, 1, 0, NULL, 0, fc->usb_write_timeout ) != 0)
+  {
+    perror( "Can't set max baud rate.\n" );
+    r = -1;
+  }
+#else
+  if (r >= 0) if ((r = ftdi_set_baudrate( fc, 3E6 )) < 0)
+    perror( ftdi_get_error_string( fc ) );
+#endif
+
+  if (r < 0)
+  {
+    ftdi_usb_close( fc );
+    ftdi_deinit( fc );
+    /* mark ftdi layer as not initialized */
+    p->fc = NULL;
+  }
+
+  return r < 0 ? -1 : 0;
+}
+
+/* ---------------------------------------------------------------------- */
 
 static int
 usbconn_ftdi_mpsse_open( usbconn_t *conn )

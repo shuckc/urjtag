@@ -1,3 +1,10 @@
+2008-06-05  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/usbconn/libftdi.c: issue device reset in usbconn_ftdi_open(), fixes
+     hang of FT245 chip when initializing the cable more than once
+   * src/tap/cable/usbblaster.c: split get_tdo and transfer functions into schedule
+     finish parts for deeper queueing with extended flush function
+
 2008-06-05  Kolja Waschk <kawk>
 
    * src/bus/bf548_ezkit.c, src/bus/fjmem.c, src/bus/ppc405ep.c,
