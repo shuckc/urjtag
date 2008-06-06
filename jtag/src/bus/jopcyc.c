@@ -66,6 +66,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 #define RAM_ADDR_WIDTH 18
 #define RAM_DATA_WIDTH 16
@@ -478,13 +479,6 @@ jopcyc_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 }
 
 
-static void
-jopcyc_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static int
 attach_sig( bus_t *bus, signal_t **sig, char *id )
 {
@@ -705,7 +699,7 @@ const bus_driver_t jopcyc_bus = {
 	"jopcyc",
 	N_("JOP.design Cyclone Board compatible bus driver via BSR"),
 	jopcyc_bus_new,
-	jopcyc_bus_free,
+	generic_bus_free,
 	jopcyc_bus_printinfo,
 	jopcyc_bus_prepare,
 	jopcyc_bus_area,

@@ -36,6 +36,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 // FIXME board level write protect is ignored here
 //  should be okay because pin isn't implemented
@@ -242,13 +243,6 @@ tx4925_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-tx4925_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 tx4925_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -339,7 +333,7 @@ const bus_driver_t tx4925_bus = {
 	"tx4925",
 	N_("Toshiba TX4925 compatible bus driver via BSR"),
 	tx4925_bus_new,
-	tx4925_bus_free,
+	generic_bus_free,
 	tx4925_bus_printinfo,
 	tx4925_bus_prepare,
 	tx4925_bus_area,

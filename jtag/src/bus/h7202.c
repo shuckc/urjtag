@@ -35,6 +35,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -229,13 +230,6 @@ h7202_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-h7202_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 h7202_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -316,7 +310,7 @@ const bus_driver_t h7202_bus = {
 	"h7202",
 	"H7202 compatible bus driver via BSR",
 	h7202_bus_new,
-	h7202_bus_free,
+	generic_bus_free,
 	h7202_bus_printinfo,
 	h7202_bus_prepare,
 	h7202_bus_area,

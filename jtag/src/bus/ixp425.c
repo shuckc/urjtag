@@ -35,6 +35,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -224,13 +225,6 @@ ixp425_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-ixp425_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 ixp425_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -307,7 +301,7 @@ const bus_driver_t ixp425_bus = {
 	"ixp425",
 	N_("Intel IXP425 compatible bus driver via BSR"),
 	ixp425_bus_new,
-	ixp425_bus_free,
+	generic_bus_free,
 	ixp425_bus_printinfo,
 	ixp425_bus_prepare,
 	ixp425_bus_area,

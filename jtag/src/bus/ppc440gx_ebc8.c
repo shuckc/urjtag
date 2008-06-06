@@ -31,6 +31,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 #define PPC440GX_ADDR_LINES 32
 #define PPC440GX_DATA_LINES  8
@@ -207,13 +208,6 @@ ppc440gx_ebc8_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-ppc440gx_ebc8_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -287,7 +281,7 @@ const bus_driver_t ppc440gx_ebc8_bus = {
 	"ppc440gx_ebc8",
 	N_("IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"),
 	ppc440gx_ebc8_bus_new,
-	ppc440gx_ebc8_bus_free,
+	generic_bus_free,
 	ppc440gx_ebc8_bus_printinfo,
 	ppc440gx_ebc8_bus_prepare,
 	ppc440gx_ebc8_bus_area,

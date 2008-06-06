@@ -35,6 +35,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -245,13 +246,6 @@ sh7751r_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-sh7751r_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 sh7751r_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -337,7 +331,7 @@ const bus_driver_t sh7751r_bus = {
 	"sh7751r",
 	N_("Hitachi SH7751R compatible bus driver via BSR"),
 	sh7751r_bus_new,
-	sh7751r_bus_free,
+	generic_bus_free,
 	sh7751r_bus_printinfo,
 	sh7751r_bus_prepare,
 	sh7751r_bus_area,

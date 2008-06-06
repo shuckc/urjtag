@@ -35,6 +35,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -253,13 +254,6 @@ bf561_ezkit_bus_area( bus_t *bus, uint32_t addr, bus_area_t *area )
 	return 0;
 }
 
-static void
-bf561_ezkit_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 bf561_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -378,7 +372,7 @@ const bus_driver_t bf561_ezkit_bus = {
 	"bf561_ezkit",
 	N_("Blackfin BF561 EZ-KIT board bus driver"),
 	bf561_ezkit_bus_new,
-	bf561_ezkit_bus_free,
+	generic_bus_free,
 	bf561_ezkit_bus_printinfo,
 	bf561_ezkit_bus_prepare,
 	bf561_ezkit_bus_area,

@@ -44,6 +44,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 #define ADR_NUM 24
 #define D_NUM   32
@@ -250,13 +251,6 @@ lh7a400_bus_area ( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-lh7a400_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 lh7a400_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -342,7 +336,7 @@ const bus_driver_t lh7a400_bus = {
 	"lh7a400",
 	N_("Sharp LH7A400 compatible bus driver via BSR (flash access only!)"),
 	lh7a400_bus_new,
-	lh7a400_bus_free,
+	generic_bus_free,
 	lh7a400_bus_printinfo,
 	lh7a400_bus_prepare,
 	lh7a400_bus_area,

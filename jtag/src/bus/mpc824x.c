@@ -38,6 +38,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -349,13 +350,6 @@ mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-mpc824x_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -552,7 +546,7 @@ const bus_driver_t mpc824x_bus = {
 	"mpc824x",
 	N_("Motorola MPC824x compatible bus driver via BSR"),
 	mpc824x_bus_new,
-	mpc824x_bus_free,
+	generic_bus_free,
 	mpc824x_bus_printinfo,
 	mpc824x_bus_prepare,
 	mpc824x_bus_area,

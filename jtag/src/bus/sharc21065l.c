@@ -38,6 +38,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 //no SDRAM access
 
@@ -252,13 +253,6 @@ static int sharc_21065L_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 }
 
 
-static void sharc_21065L_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
-
 static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
@@ -332,7 +326,7 @@ const bus_driver_t sharc_21065L_bus = {
 	"SHARC_21065L",
 	N_("SHARC_21065L compatible bus driver via BSR"),
 	sharc_21065L_bus_new,
-	sharc_21065L_bus_free,
+	generic_bus_free,
 	sharc_21065L_bus_printinfo,
 	sharc_21065L_bus_prepare,
 	sharc_21065L_bus_area,

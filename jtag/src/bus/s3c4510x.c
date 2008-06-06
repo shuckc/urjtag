@@ -64,6 +64,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 
 #ifndef DEBUG_LVL2
@@ -318,13 +319,6 @@ s3c4510_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
         }
 }
 
-static void
-s3c4510_bus_free( bus_t *bus )
-{
-        free( bus->params );
-        free( bus );
-}
-
 static bus_t *
 s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -427,7 +421,7 @@ const bus_driver_t s3c4510_bus = {
 	"s3c4510x",
 	N_("Samsung S3C4510B compatible bus driver via BSR"),
 	s3c4510_bus_new,
-	s3c4510_bus_free,
+	generic_bus_free,
         s3c4510_bus_printinfo,
         s3c4510_bus_prepare,
         s3c4510_bus_area,

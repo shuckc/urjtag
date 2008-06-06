@@ -28,6 +28,8 @@ noinst_LIBRARIES = libbus.a
 libbus_a_SOURCES = \
 	buses.c \
 	buses.h \
+	generic_bus.c \
+	generic_bus.h \
 	pxa2x0_mc.h \
 	readmem.c \
 	writemem.c

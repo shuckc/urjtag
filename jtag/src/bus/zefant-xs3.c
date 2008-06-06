@@ -66,6 +66,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 /* EEPROM commands */
 #define EEPROM_CMD_WREN  0x06
@@ -700,13 +701,6 @@ zefant_xs3_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 }
 
 
-static void
-zefant_xs3_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static int
 attach_sig( bus_t *bus, signal_t **sig, char *id )
 {
@@ -983,7 +977,7 @@ const bus_driver_t zefant_xs3_bus = {
 	"zefant-xs3",
 	N_("Simple Solutions Zefant-XS3 Board compatible bus driver via BSR"),
 	zefant_xs3_bus_new,
-	zefant_xs3_bus_free,
+	generic_bus_free,
 	zefant_xs3_bus_printinfo,
 	zefant_xs3_bus_prepare,
 	zefant_xs3_bus_area,

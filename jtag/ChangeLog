@@ -1,3 +1,22 @@
+2008-06-06  Kolja Waschk <kawk>
+
+   * src/bus/bcm1250.c: Allow for 8 IO_CS_L signals, not just 7
+      (Hartley Sweeten)
+
+   * src/bus/bf548_ezkit.c, src/bus/fjmem.c, src/bus/ppc405ep.c,
+     src/bus/sh7727.c, src/bus/prototype.c, src/bus/sa1110.c,
+     src/bus/ppc440gx_ebc8.c, src/bus/sh7750r.c, src/bus/tx4925.c,
+     src/bus/pxa2x0.c, src/bus/bf533_stamp.c, src/bus/bf533_ezkit.c,
+     src/bus/bf537_stamp.c, src/bus/ixp425.c, src/bus/avr32.c,
+     src/bus/zefant-xs3.c, src/bus/h7202.c, src/bus/mpc824x.c,
+     src/bus/bcm1250.c, src/bus/sharc21065l.c, src/bus/au1500.c,
+     src/bus/lh7a400.c, src/bus/sh7751r.c, src/bus/generic_bus.c,
+     src/bus/mpc5200.c, src/bus/jopcyc.c, src/bus/Makefile.am,
+     src/bus/slsup3.c, src/bus/bf561_ezkit.c, src/bus/s3c4510x.c,
+     src/bus/ejtag.c, src/bus/generic_bus.h: [ 1984813 ] Bus driver
+      cleanup: Unified *bus_free functions and moved them to new
+      src/bus/generic_bus.c/h (Hartley  Sweeten)
+
 2008-06-05  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/usbconn/libftdi.c: issue device reset in usbconn_ftdi_open(), fixes
@@ -17,16 +36,16 @@
      src/bus/lh7a400.c, src/bus/sh7751r.c, src/bus/mpc5200.c,
      src/bus/jopcyc.c, src/bus/slsup3.c, src/bus/bf561_ezkit.c,
      src/bus/s3c4510x.c, src/bus/ejtag.c: Partial [ 1984813 ]
-	  Bus driver cleanup: Changed mallocs to callocs, added (NULL) pointer
-	  for *init to the drivers where it was missing (Hartley Sweeten)
+      Bus driver cleanup: Changed mallocs to callocs, added (NULL) pointer
+      for *init to the drivers where it was missing (Hartley Sweeten)
 
 2008-05-29  Kolja Waschk <kawk>
 
-   *  src/tap/cable/wiggler.c src/tap/cable/generic_usbconn.c,
-      src/tap/cable/usbblaster.c, src/tap/cable/vision_ep9307.c,
-      src/tap/cable/jim.c, src/tap/cable/ft2232.c,
-      src/tap/cable/generic_parport.c: More malloc/free cleanup
-	   in cable drivers (Hartley Sweeten)
+   * src/tap/cable/wiggler.c src/tap/cable/generic_usbconn.c,
+     src/tap/cable/usbblaster.c, src/tap/cable/vision_ep9307.c,
+     src/tap/cable/jim.c, src/tap/cable/ft2232.c,
+     src/tap/cable/generic_parport.c: More malloc/free cleanup
+       in cable drivers (Hartley Sweeten)
 
 2008-05-28  Kolja Waschk <kawk>
 

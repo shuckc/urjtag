@@ -41,6 +41,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 #include "pxa2x0_mc.h"
 
@@ -599,14 +600,6 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-//pxa250_bus_free( bus_t *bus )
-pxa2xx_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 //static bus_t *
 //pxa2x0_bus_new( void )
 static int
@@ -796,7 +789,7 @@ const bus_driver_t pxa2x0_bus = {
 	"pxa2x0",
 	N_("Intel PXA2x0 compatible bus driver via BSR"),
 	pxa2x0_bus_new,
-	pxa2xx_bus_free,
+	generic_bus_free,
 	pxa2x0_bus_printinfo,
 	pxa2xx_bus_prepare,
 	pxa2xx_bus_area,
@@ -812,7 +805,7 @@ const bus_driver_t pxa27x_bus = {
 	"pxa27x",
 	N_("Intel PXA27x compatible bus driver via BSR"),
 	pxa27x_bus_new,
-	pxa2xx_bus_free,
+	generic_bus_free,
 	pxa27x_bus_printinfo,
 	pxa2xx_bus_prepare,
 	pxa27x_bus_area,

@@ -35,6 +35,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -270,13 +271,6 @@ sh7727_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	}
 }
 
-static void
-sh7727_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 sh7727_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -374,7 +368,7 @@ const bus_driver_t sh7727_bus = {
 	"sh7727",
 	N_("Hitachi SH7727 compatible bus driver via BSR"),
 	sh7727_bus_new,
-	sh7727_bus_free,
+	generic_bus_free,
 	sh7727_bus_printinfo,
 	sh7727_bus_prepare,
 	sh7727_bus_area,

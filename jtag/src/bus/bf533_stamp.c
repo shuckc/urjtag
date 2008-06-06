@@ -35,6 +35,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -245,13 +246,6 @@ bf533_stamp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-bf533_stamp_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 bf533_stamp_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -365,7 +359,7 @@ const bus_driver_t bf533_stamp_bus = {
 	"bf533_stamp",
 	N_("Blackfin BF533 Stamp board bus driver"),
 	bf533_stamp_bus_new,
-	bf533_stamp_bus_free,
+	generic_bus_free,
 	bf533_stamp_bus_printinfo,
 	bf533_stamp_bus_prepare,
 	bf533_stamp_bus_area,

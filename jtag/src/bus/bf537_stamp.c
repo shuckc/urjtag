@@ -35,6 +35,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -234,13 +235,6 @@ bf537_stamp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-bf537_stamp_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 bf537_stamp_bus_new_1( chain_t *chain, char *cmd_params[] )
 {
@@ -377,7 +371,7 @@ const bus_driver_t bf537_stamp_bus = {
 	"bf537_stamp",
 	N_("Blackfin BF537 Stamp board bus driver"),
 	bf537_stamp_bus_new,
-	bf537_stamp_bus_free,
+	generic_bus_free,
 	bf537_stamp_bus_printinfo,
 	bf537_stamp_bus_prepare,
 	bf537_stamp_bus_area,
@@ -416,7 +410,7 @@ const bus_driver_t bf537_ezkit_bus = {
 	"bf537_ezkit",
 	N_("Blackfin BF537 EZ-KIT board bus driver"),
 	bf537_ezkit_bus_new,
-	bf537_stamp_bus_free,
+	generic_bus_free,
 	bf537_ezkit_bus_printinfo,
 	bf537_stamp_bus_prepare,
 	bf537_stamp_bus_area,
@@ -455,7 +449,7 @@ const bus_driver_t bf527_ezkit_bus = {
 	"bf527_ezkit",
 	N_("Blackfin BF527 EZ-KIT board bus driver"),
 	bf527_ezkit_bus_new,
-	bf537_stamp_bus_free,
+	generic_bus_free,
 	bf527_ezkit_bus_printinfo,
 	bf537_stamp_bus_prepare,
 	bf537_stamp_bus_area,

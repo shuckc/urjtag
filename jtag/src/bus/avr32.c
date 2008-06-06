@@ -37,6 +37,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 #include "data_register.h"
 
 void jtag_reset (chain_t * chain);
@@ -601,13 +602,6 @@ avr32_bus_area (bus_t * bus, uint32_t addr, bus_area_t * area)
 }
 
 static void
-avr32_bus_free (bus_t * bus)
-{
-  free (bus->params);
-  free (bus);
-}
-
-static void
 avr32_bus_setup (bus_t * bus, chain_t * chain, part_t * part,
                  unsigned int mode)
 {
@@ -759,7 +753,7 @@ const bus_driver_t avr32_bus_driver = {
      "               HSBC: 32 bit bus for the cached HSB area, via SAB\n"
      "               HSBU: 32 bit bus for the uncached HSB area, via SAB"),
   avr32_bus_new,
-  avr32_bus_free,
+  generic_bus_free,
   avr32_bus_printinfo,
   avr32_bus_prepare,
   avr32_bus_area,

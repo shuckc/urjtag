@@ -35,6 +35,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -226,13 +227,6 @@ prototype_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	part_set_signal( p, WE, 1, WEA ? 0 : 1 );
 	part_set_signal( p, CS, 1, CSA ? 0 : 1 );
 	chain_shift_data_registers( chain, 0 );
-}
-
-static void
-prototype_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
 }
 
 static void
@@ -442,7 +436,7 @@ const bus_driver_t prototype_bus = {
 	"           amsb=<addr MSB> alsb=<addr LSB> dmsb=<data MSB> dlsb=<data LSB>\n"
 	"           ncs=<CS#>|cs=<CS> noe=<OE#>|oe=<OE> nwe=<WE#>|we=<WE> [amode=auto|x8|x16|x32]"),
 	prototype_bus_new,
-	prototype_bus_free,
+	generic_bus_free,
 	prototype_bus_printinfo,
 	prototype_bus_prepare,
 	prototype_bus_area,

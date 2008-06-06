@@ -39,6 +39,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -446,13 +447,6 @@ ejtag_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-ejtag_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 ejtag_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -483,7 +477,7 @@ const bus_driver_t ejtag_bus = {
 	"ejtag",
 	N_("EJTAG compatible bus driver via PrAcc"),
 	ejtag_bus_new,
-	ejtag_bus_free,
+	generic_bus_free,
 	ejtag_bus_printinfo,
 	ejtag_bus_prepare,
 	ejtag_bus_area,

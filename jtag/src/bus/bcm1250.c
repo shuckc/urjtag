@@ -36,6 +36,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 #ifdef USE_BCM_EJTAG
 int bcm1250_ejtag_do(bus_t *, uint64_t, uint64_t, int, int, unsigned char *, int);
@@ -44,7 +45,7 @@ typedef struct {
 	chain_t *chain;
 	part_t *part;
 	signal_t *io_ad[32];
-	signal_t *io_cs_l[7];
+	signal_t *io_cs_l[8];
 	signal_t *io_rw;
 	signal_t *io_wr_l;
 	signal_t *io_oe_l;
@@ -261,13 +262,6 @@ bcm1250_bus_prepare( bus_t *bus )
 	chain_shift_instructions( CHAIN );
 }
 
-static void
-bcm1250_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 bcm1250_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -479,7 +473,7 @@ const bus_driver_t bcm1250_bus = {
 	"bcm1250",
 	N_("Broadcom BCM1250 compatible bus driver via BSR"),
 	bcm1250_bus_new,
-	bcm1250_bus_free,
+	generic_bus_free,
 	bcm1250_bus_printinfo,
 	bcm1250_bus_prepare,
 	bcm1250_bus_area,

@@ -37,6 +37,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 int databusio[16] = {94,96,98,100,102,104,106,113,95,97,99,101,103,105,107,114};
 int addrbusio[20] = {93,88,87,86,85,84,83,63,64,65,66,67,68,74,75,76,77,82,81,78};
@@ -348,13 +349,6 @@ slsup3_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-slsup3_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 slsup3_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -480,7 +474,7 @@ const bus_driver_t slsup3_bus = {
 	"slsup3",
 	N_("SLS UP3 compatible bus driver via BSR"),
 	slsup3_bus_new,
-	slsup3_bus_free,
+	generic_bus_free,
 	slsup3_bus_printinfo,
 	slsup3_bus_prepare,
 	slsup3_bus_area,

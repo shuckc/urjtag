@@ -28,13 +28,14 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <part.h>
-#include <bus.h>
-#include <chain.h>
-#include <jtag.h>
-#include <buses.h>
-#include <cmd.h>
-#include <tap.h>
+#include "part.h"
+#include "bus.h"
+#include "chain.h"
+#include "jtag.h"
+#include "buses.h"
+#include "generic_bus.h"
+#include "cmd.h"
+#include "tap.h"
 
 
 #undef DEBUG
@@ -373,8 +374,8 @@ fjmem_bus_free( bus_t *bus )
 
 	fjmem_free_blocks( BLOCK_DESC.blocks );
 	BLOCK_DESC.blocks = NULL;
-	free( bus->params );
-	free( bus );
+
+	generic_bus_free( bus );
 }
 
 static int

@@ -38,6 +38,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct {
 	chain_t *chain;
@@ -235,13 +236,6 @@ mpc5200_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-static void
-mpc5200_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free( bus );
-}
-
 static bus_t *
 mpc5200_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -320,7 +314,7 @@ const bus_driver_t mpc5200_bus = {
 	"mpc5200",
 	N_("Freescale MPC5200 compatible bus driver via BSR"),
 	mpc5200_bus_new,
-	mpc5200_bus_free,
+	generic_bus_free,
 	mpc5200_bus_printinfo,
 	mpc5200_bus_prepare,
 	mpc5200_bus_area,

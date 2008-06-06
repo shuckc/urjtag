@@ -39,6 +39,7 @@
 #include "bssignal.h"
 #include "jtag.h"
 #include "buses.h"
+#include "generic_bus.h"
 
 typedef struct{
 	chain_t *chain;
@@ -207,13 +208,6 @@ au1500_bus_area(bus_t *bus, uint32_t addr, bus_area_t *area)
 }
 
 static void
-au1500_bus_free( bus_t *bus )
-{
-	free( bus->params );
-	free ( bus );
-}
-
-static void
 au1500_bus_printinfo( bus_t *bus)
 {
 	int i;
@@ -321,7 +315,7 @@ const bus_driver_t au1500_bus = {
 	"au1500",
 	N_("AU1500 BUS Driver via BSR"),
 	au1500_bus_new,
-	au1500_bus_free,
+	generic_bus_free,
 	au1500_bus_printinfo,
 	au1500_bus_prepare,
 	au1500_bus_area,
