@@ -23,7 +23,7 @@
  *
  * Documentation:
  *
- * [1] Sharp Microelectronics, "LH7A400 Universal SOC Preliminary 
+ * [1] Sharp Microelectronics, "LH7A400 Universal SOC Preliminary
  *     Users's Guide", May 2003, Reference No. SMA02010
  *
  *
@@ -71,186 +71,10 @@ typedef struct {
 #define	nOE	((bus_params_t *) bus->params)->noe
 #define WIDTH   ((bus_params_t *) bus->params)->width
 
-static void
-setup_address( bus_t *bus, uint32_t a )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < ADR_NUM; i++)
-		part_set_signal( p, A[i], 1, (a >> i) & 1 );
-}
-
-static int lh7a400_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
-
-static void
-set_data_in( bus_t *bus )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	lh7a400_bus_area( bus, 0, &area );
-
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, D[i], 0, 0 );
-	
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	lh7a400_bus_area( bus, 0, &area );
-
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, D[i], 1, (d >> i) & 1 );
-}
-
-static void
-lh7a400_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Sharp LH7A400 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-static void
-lh7a400_bus_prepare( bus_t *bus )
-{       
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-static void
-lh7a400_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	/* see Figure 3-3 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, nCS[0], 1, (adr >> 27) != 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 0 );
-
-	setup_address( bus, adr );
-	set_data_in( bus );
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-static uint32_t
-lh7a400_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	/* see Figure 3-3 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-	bus_area_t area;
-
-	lh7a400_bus_area( bus, adr, &area );
-
-	setup_address( bus, adr );
-	chain_shift_data_registers( chain, 1 );
-
-	for (i = 0; i < area.width; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-	return d;
-}
-
-static uint32_t 
-lh7a400_bus_read_end( bus_t *bus )
-{
-	/* see Figure 3-3 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-	bus_area_t area;
-
-	lh7a400_bus_area( bus, 0, &area );
-
-	part_set_signal( p, nCS[0], 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-
-	chain_shift_data_registers( chain, 1 );
-
-	for (i = 0; i < area.width; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-	return d;
-}
-
-static uint32_t
-lh7a400_bus_read( bus_t *bus, uint32_t adr )
-{
-	lh7a400_bus_read_start( bus, adr );
-	return lh7a400_bus_read_end( bus );
-}
-
-static void
-lh7a400_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	/* see Figure 3-3 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, nCS[0], 1, (adr >> 27) != 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-
-	setup_address( bus, adr );
-	setup_data( bus, data );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, nWE, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nCS[0], 1, 1 );
-	chain_shift_data_registers( chain, 0 );
-}
-
-static int
-lh7a400_bus_area ( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-  unsigned int width;
-
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x10000000);
-
-	/* we determine the size of the flash that was booted from [1] table 3.1 */
-	width = part_get_signal( PART, part_find_signal( PART, "WIDTH0" ) );	
-	width |= part_get_signal( PART, part_find_signal( PART, "WIDTH1" ) ) << 1;
-
-	if (width < 0)
-	  return -1;
-
-	switch (width) {
-	case 0:
-	  area->width = 8;
-	  break;
-	case 1:
-	  area->width = 16;
-	  break;
-	case 2:
-	case 3:
-	  area->width = 32;
-	}
-
-	return 0;
-}
-
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 lh7a400_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -330,6 +154,216 @@ lh7a400_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+lh7a400_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Sharp LH7A400 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+lh7a400_bus_prepare( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+lh7a400_bus_area ( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+  unsigned int width;
+
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x10000000);
+
+	/* we determine the size of the flash that was booted from [1] table 3.1 */
+	width = part_get_signal( PART, part_find_signal( PART, "WIDTH0" ) );
+	width |= part_get_signal( PART, part_find_signal( PART, "WIDTH1" ) ) << 1;
+
+	if (width < 0)
+	  return -1;
+
+	switch (width) {
+	case 0:
+	  area->width = 8;
+	  break;
+	case 1:
+	  area->width = 16;
+	  break;
+	case 2:
+	case 3:
+	  area->width = 32;
+	}
+
+	return 0;
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < ADR_NUM; i++)
+		part_set_signal( p, A[i], 1, (a >> i) & 1 );
+}
+
+static void
+set_data_in( bus_t *bus )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	lh7a400_bus_area( bus, 0, &area );
+
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, D[i], 0, 0 );
+
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	lh7a400_bus_area( bus, 0, &area );
+
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, D[i], 1, (d >> i) & 1 );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+lh7a400_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	/* see Figure 3-3 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, nCS[0], 1, (adr >> 27) != 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 0 );
+
+	setup_address( bus, adr );
+	set_data_in( bus );
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+lh7a400_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	/* see Figure 3-3 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+	bus_area_t area;
+
+	lh7a400_bus_area( bus, adr, &area );
+
+	setup_address( bus, adr );
+	chain_shift_data_registers( chain, 1 );
+
+	for (i = 0; i < area.width; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+lh7a400_bus_read_end( bus_t *bus )
+{
+	/* see Figure 3-3 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+	bus_area_t area;
+
+	lh7a400_bus_area( bus, 0, &area );
+
+	part_set_signal( p, nCS[0], 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+
+	chain_shift_data_registers( chain, 1 );
+
+	for (i = 0; i < area.width; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+lh7a400_bus_read( bus_t *bus, uint32_t adr )
+{
+	lh7a400_bus_read_start( bus, adr );
+	return lh7a400_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+lh7a400_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	/* see Figure 3-3 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, nCS[0], 1, (adr >> 27) != 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+
+	setup_address( bus, adr );
+	setup_data( bus, data );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, nWE, 1, 0 );
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nCS[0], 1, 1 );
+	chain_shift_data_registers( chain, 0 );
 }
 
 const bus_driver_t lh7a400_bus = {

@@ -133,352 +133,6 @@ typedef struct {
 #define SER_TXD  ((bus_params_t *) bus->params)->ser_txd
 #define SER_NCTS ((bus_params_t *) bus->params)->ser_ncts
 
-
-static void
-setup_address( bus_t *bus, uint32_t a, component_t *comp )
-{
-	int i;
-	part_t *p = PART;
-	int addr_width;
-
-	LAST_ADDR = a;
-
-	switch (comp->ctype) {
-		case RAM:
-			addr_width = RAM_ADDR_WIDTH;
-			/* address a is a byte address so it is transferred into
-			   a word address here */
-			a >>= 1;
-			break;
-		case FLASH:
-			addr_width = FLASH_ADDR_WIDTH;
-			break;
-		default:
-			addr_width = 0;
-			break;
-	}
-
-	for (i = 0; i < addr_width; i++)
-		part_set_signal( p, A[i], 1, (a >> i) & 1 );
-}
-
-static int
-detect_data_width( component_t *comp )
-{
-	int width;
-
-	switch (comp->ctype) {
-		case RAM:
-			width = RAM_DATA_WIDTH;
-			break;
-		case FLASH:
-			width = FLASH_DATA_WIDTH;
-			break;
-		default:
-			width = 0;
-			break;
-	}
-
-	return width;
-}
-
-static void
-set_data_in( bus_t *bus, component_t *comp )
-{
-	int i;
-	part_t *p = PART;
-	int width;
-
-	width = detect_data_width( comp );
-
-	for (i = 0; i < width; i++)
-		part_set_signal( p, D[i], 0, 0 );
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d, component_t *comp )
-{
-	int i;
-	part_t *p = PART;
-	int width;
-
-	width = detect_data_width( comp );
-
-	for (i = 0; i < width; i++)
-		part_set_signal( p, D[i], 1, (d >> i) & 1 );
-}
-
-static int comp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp );
-
-
-/* ***************************************************************************
- * jopcyc_printinfo
- * ***************************************************************************/
-static void
-jopcyc_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("JOP.design Cyclone Board compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-
-/* ***************************************************************************
- * jopcyc_bus_prepare
- * ***************************************************************************/
-static void
-jopcyc_bus_prepare( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	component_t *comp;
-
-	/* Preload update registers
-	   See AN039, "Guidelines for IEEE Std. 1149.1 Boundary Scan Testing */
-
-	part_set_instruction( p, "SAMPLE/PRELOAD" );
-	chain_shift_instructions( chain );
-
-	/* RAMA */
-	comp = COMP_RAMA;
-	set_data_in( bus, comp );
-	part_set_signal( p, nCS, 1, 1 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	part_set_signal( p, nLB, 1, 1 );
-	part_set_signal( p, nUB, 1, 1 );
-
-	/* RAMB */
-	comp = COMP_RAMB;
-	set_data_in( bus, comp );
-	part_set_signal( p, nCS, 1, 1 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	part_set_signal( p, nLB, 1, 1 );
-	part_set_signal( p, nUB, 1, 1 );
-
-	/* FLASH */
-	comp = COMP_FLASH;
-	set_data_in( bus, comp );
-	part_set_signal( p, nCS,  1, 1 );
-	part_set_signal( p, nWE,  1, 1 );
-	part_set_signal( p, nOE,  1, 1 );
-	part_set_signal( p, nCS2, 1, 1 );
-	part_set_signal( p, nRDY, 0, 0 );
-
-	/* Serial Port */
-	part_set_signal( p, SER_RXD,  0, 0 );
-	part_set_signal( p, SER_NRTS, 1, 1 );
-	part_set_signal( p, SER_TXD,  1, 1 );
-	part_set_signal( p, SER_NCTS, 0, 0 );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_instruction( p, "EXTEST" );
-	chain_shift_instructions( chain );
-}
-
-
-/* ***************************************************************************
- * jopcyc_bus_read_start
- * ***************************************************************************/
-static void
-jopcyc_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	bus_area_t area;
-	component_t *comp;
-
-	comp_bus_area( bus, adr, &area, &comp );
-	if (!comp) {
-		printf( _("Address out of range\n") );
-		LAST_ADDR = adr;
-		return;
-	}
-
-	part_set_signal( p, nCS, 1, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 0 );
-	if (comp->ctype == RAM) {
-		part_set_signal( p, nLB, 1, 0 );
-		part_set_signal( p, nUB, 1, 0 );
-	}
-
-	setup_address( bus, adr, comp );
-	set_data_in( bus, comp );
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-
-/* ***************************************************************************
- * jopcyc_bus_read_next
- * ***************************************************************************/
-static uint32_t
-jopcyc_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-	bus_area_t area;
-	component_t *comp;
-
-	comp_bus_area( bus, adr, &area, &comp );
-	if (!comp) {
-		printf( _("Address out of range\n") );
-		LAST_ADDR = adr;
-		return 0;
-	}
-
-	setup_address( bus, adr, comp );
-	chain_shift_data_registers( chain, 1 );
-
-	for (i = 0; i < area.width; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-	return d;
-}
-
-
-/* ***************************************************************************
- * jopcyc_bus_read_end
- * ***************************************************************************/
-static uint32_t
-jopcyc_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-	bus_area_t area;
-	component_t *comp;
-
-	/* use last address of access to determine component */
-	comp_bus_area( bus, LAST_ADDR, &area, &comp );
-	if (!comp) {
-		printf( _("Address out of range\n") );
-		return 0;
-	}
-
-	part_set_signal( p, nCS, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	if (comp->ctype == RAM) {
-		part_set_signal( p, nLB, 1, 1 );
-		part_set_signal( p, nUB, 1, 1 );
-	}
-	chain_shift_data_registers( chain, 1 );
-
-	for (i = 0; i < area.width; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-	return d;
-}
-
-
-/* ***************************************************************************
- * jopcyc_bus_read
- * ***************************************************************************/
-static uint32_t
-jopcyc_bus_read( bus_t *bus, uint32_t adr )
-{
-	jopcyc_bus_read_start( bus, adr );
-	return jopcyc_bus_read_end( bus );
-}
-
-
-/* ***************************************************************************
- * jopcyc_bus_write
- * ***************************************************************************/
-static void
-jopcyc_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	bus_area_t area;
-	component_t *comp;
-
-	comp_bus_area( bus, adr, &area, &comp );
-	if (!comp) {
-		printf( _("Address out of range\n") );
-		return;
-	}
-
-	part_set_signal( p, nCS, 1, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	if (comp->ctype == RAM) {
-		part_set_signal( p, nLB, 1, 0 );
-		part_set_signal( p, nUB, 1, 0 );
-	}
-
-	setup_address( bus, adr, comp );
-	setup_data( bus, data, comp );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, nWE, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nCS, 1, 1 );
-	if (comp->ctype == RAM) {
-		part_set_signal( p, nLB, 1, 1 );
-		part_set_signal( p, nUB, 1, 1 );
-	}
-	chain_shift_data_registers( chain, 0 );
-}
-
-
-/* ***************************************************************************
- * jopcyc_bus_area
- * ***************************************************************************/
-
-static int
-comp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp )
-{
-	if (adr < RAMB_START) {
-		area->description = "RAMA Component";
-		area->start  = RAMA_START;
-		area->length = RAM_LENGTH;
-		area->width  = RAM_DATA_WIDTH;
-		*comp        = COMP_RAMA;
-	} else if (adr < FLASH_START) {
-		area->description = "RAMB Component";
-		area->start  = RAMB_START;
-		area->length = RAM_LENGTH;
-		area->width  = RAM_DATA_WIDTH;
-		*comp        = COMP_RAMB;
-	} else if (adr < FLASH_START + FLASH_LENGTH) {
-		area->description = "FLASH Component";
-		area->start  = FLASH_START;
-		area->length = FLASH_LENGTH;
-		area->width  = FLASH_DATA_WIDTH;
-		*comp        = COMP_FLASH;
-	} else {
-		area->description = "Dummy";
-		area->start  = 2 * RAM_LENGTH + FLASH_LENGTH;
-		area->length = UINT64_C(0x100000000);
-		area->width  = 0;
-		*comp        = NULL;
-	}
-
-	return 0;
-}
-
-
-static int
-jopcyc_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	component_t *comp;
-
-	return comp_bus_area( bus, adr, area, &comp );
-}
-
-
 static int
 attach_sig( bus_t *bus, signal_t **sig, char *id )
 {
@@ -493,6 +147,10 @@ attach_sig( bus_t *bus, signal_t **sig, char *id )
 	return failed;
 }
 
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -693,6 +351,346 @@ jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+jopcyc_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("JOP.design Cyclone Board compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a, component_t *comp )
+{
+	int i;
+	part_t *p = PART;
+	int addr_width;
+
+	LAST_ADDR = a;
+
+	switch (comp->ctype) {
+		case RAM:
+			addr_width = RAM_ADDR_WIDTH;
+			/* address a is a byte address so it is transferred into
+			   a word address here */
+			a >>= 1;
+			break;
+		case FLASH:
+			addr_width = FLASH_ADDR_WIDTH;
+			break;
+		default:
+			addr_width = 0;
+			break;
+	}
+
+	for (i = 0; i < addr_width; i++)
+		part_set_signal( p, A[i], 1, (a >> i) & 1 );
+}
+
+static int
+detect_data_width( component_t *comp )
+{
+	int width;
+
+	switch (comp->ctype) {
+		case RAM:
+			width = RAM_DATA_WIDTH;
+			break;
+		case FLASH:
+			width = FLASH_DATA_WIDTH;
+			break;
+		default:
+			width = 0;
+			break;
+	}
+
+	return width;
+}
+
+static void
+set_data_in( bus_t *bus, component_t *comp )
+{
+	int i;
+	part_t *p = PART;
+	int width;
+
+	width = detect_data_width( comp );
+
+	for (i = 0; i < width; i++)
+		part_set_signal( p, D[i], 0, 0 );
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d, component_t *comp )
+{
+	int i;
+	part_t *p = PART;
+	int width;
+
+	width = detect_data_width( comp );
+
+	for (i = 0; i < width; i++)
+		part_set_signal( p, D[i], 1, (d >> i) & 1 );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+jopcyc_bus_prepare( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	component_t *comp;
+
+	/* Preload update registers
+	   See AN039, "Guidelines for IEEE Std. 1149.1 Boundary Scan Testing */
+
+	part_set_instruction( p, "SAMPLE/PRELOAD" );
+	chain_shift_instructions( chain );
+
+	/* RAMA */
+	comp = COMP_RAMA;
+	set_data_in( bus, comp );
+	part_set_signal( p, nCS, 1, 1 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	part_set_signal( p, nLB, 1, 1 );
+	part_set_signal( p, nUB, 1, 1 );
+
+	/* RAMB */
+	comp = COMP_RAMB;
+	set_data_in( bus, comp );
+	part_set_signal( p, nCS, 1, 1 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	part_set_signal( p, nLB, 1, 1 );
+	part_set_signal( p, nUB, 1, 1 );
+
+	/* FLASH */
+	comp = COMP_FLASH;
+	set_data_in( bus, comp );
+	part_set_signal( p, nCS,  1, 1 );
+	part_set_signal( p, nWE,  1, 1 );
+	part_set_signal( p, nOE,  1, 1 );
+	part_set_signal( p, nCS2, 1, 1 );
+	part_set_signal( p, nRDY, 0, 0 );
+
+	/* Serial Port */
+	part_set_signal( p, SER_RXD,  0, 0 );
+	part_set_signal( p, SER_NRTS, 1, 1 );
+	part_set_signal( p, SER_TXD,  1, 1 );
+	part_set_signal( p, SER_NCTS, 0, 0 );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_instruction( p, "EXTEST" );
+	chain_shift_instructions( chain );
+}
+
+static int
+comp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp )
+{
+	if (adr < RAMB_START) {
+		area->description = "RAMA Component";
+		area->start  = RAMA_START;
+		area->length = RAM_LENGTH;
+		area->width  = RAM_DATA_WIDTH;
+		*comp        = COMP_RAMA;
+	} else if (adr < FLASH_START) {
+		area->description = "RAMB Component";
+		area->start  = RAMB_START;
+		area->length = RAM_LENGTH;
+		area->width  = RAM_DATA_WIDTH;
+		*comp        = COMP_RAMB;
+	} else if (adr < FLASH_START + FLASH_LENGTH) {
+		area->description = "FLASH Component";
+		area->start  = FLASH_START;
+		area->length = FLASH_LENGTH;
+		area->width  = FLASH_DATA_WIDTH;
+		*comp        = COMP_FLASH;
+	} else {
+		area->description = "Dummy";
+		area->start  = 2 * RAM_LENGTH + FLASH_LENGTH;
+		area->length = UINT64_C(0x100000000);
+		area->width  = 0;
+		*comp        = NULL;
+	}
+
+	return 0;
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+jopcyc_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	component_t *comp;
+
+	return comp_bus_area( bus, adr, area, &comp );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+jopcyc_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	bus_area_t area;
+	component_t *comp;
+
+	comp_bus_area( bus, adr, &area, &comp );
+	if (!comp) {
+		printf( _("Address out of range\n") );
+		LAST_ADDR = adr;
+		return;
+	}
+
+	part_set_signal( p, nCS, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 0 );
+	if (comp->ctype == RAM) {
+		part_set_signal( p, nLB, 1, 0 );
+		part_set_signal( p, nUB, 1, 0 );
+	}
+
+	setup_address( bus, adr, comp );
+	set_data_in( bus, comp );
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+jopcyc_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+	bus_area_t area;
+	component_t *comp;
+
+	comp_bus_area( bus, adr, &area, &comp );
+	if (!comp) {
+		printf( _("Address out of range\n") );
+		LAST_ADDR = adr;
+		return 0;
+	}
+
+	setup_address( bus, adr, comp );
+	chain_shift_data_registers( chain, 1 );
+
+	for (i = 0; i < area.width; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+jopcyc_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+	bus_area_t area;
+	component_t *comp;
+
+	/* use last address of access to determine component */
+	comp_bus_area( bus, LAST_ADDR, &area, &comp );
+	if (!comp) {
+		printf( _("Address out of range\n") );
+		return 0;
+	}
+
+	part_set_signal( p, nCS, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	if (comp->ctype == RAM) {
+		part_set_signal( p, nLB, 1, 1 );
+		part_set_signal( p, nUB, 1, 1 );
+	}
+	chain_shift_data_registers( chain, 1 );
+
+	for (i = 0; i < area.width; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+jopcyc_bus_read( bus_t *bus, uint32_t adr )
+{
+	jopcyc_bus_read_start( bus, adr );
+	return jopcyc_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+jopcyc_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	bus_area_t area;
+	component_t *comp;
+
+	comp_bus_area( bus, adr, &area, &comp );
+	if (!comp) {
+		printf( _("Address out of range\n") );
+		return;
+	}
+
+	part_set_signal( p, nCS, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	if (comp->ctype == RAM) {
+		part_set_signal( p, nLB, 1, 0 );
+		part_set_signal( p, nUB, 1, 0 );
+	}
+
+	setup_address( bus, adr, comp );
+	setup_data( bus, data, comp );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, nWE, 1, 0 );
+	chain_shift_data_registers( chain, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nCS, 1, 1 );
+	if (comp->ctype == RAM) {
+		part_set_signal( p, nLB, 1, 1 );
+		part_set_signal( p, nUB, 1, 1 );
+	}
+	chain_shift_data_registers( chain, 0 );
 }
 
 const bus_driver_t jopcyc_bus = {

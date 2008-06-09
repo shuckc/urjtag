@@ -82,302 +82,6 @@ typedef struct {
 #define FJMEM_REG  ((bus_params_t *) bus->params)->fjmem_reg
 #define BLOCK_DESC ((bus_params_t *) bus->params)->block_desc
 
-static void
-setup_address( bus_t *bus, uint32_t a, block_param_t *block )
-{
-	data_register *dr = FJMEM_REG;
-	block_desc_t *bd = &(BLOCK_DESC);
-	int idx;
-	uint16_t num = block->num;
-
-	LAST_ADDR = a;
-
-	/* correct address for > 8 bit data widths */
-	a >>= block->ashift;
-
-	/* set block number */
-	for (idx = 0; idx < bd->block_len; idx++) {
-		dr->in->data[bd->block_pos + idx] = num & 1;
-		num >>= 1;
-	}
-
-	/* set address */
-	for (idx = 0; idx < block->addr_width; idx++) {
-		dr->in->data[bd->addr_pos + idx] = a & 1;
-		a >>= 1;
-	}
-}
-
-
-static void
-setup_data( bus_t *bus, uint32_t d, block_param_t *block )
-{
-	data_register *dr = FJMEM_REG;
-	block_desc_t *bd = &(BLOCK_DESC);
-	int idx;
-
-	/* set data */
-	for (idx = 0; idx < block->data_width; idx++) {
-		dr->in->data[bd->data_pos + idx] = d & 1;
-		d >>= 1;
-	}
-}
-
-
-static int block_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, block_param_t **bl_match );
-
-
-/* ***************************************************************************
- * fjmem_bus_printinfo
- * ***************************************************************************/
-static void
-fjmem_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"), i );
-}
-
-
-/* ***************************************************************************
- * fjmem_bus_prepare
- * ***************************************************************************/
-static void
-fjmem_bus_prepare( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	/* ensure FJMEM_INST is active */
-	part_set_instruction( p, FJMEM_INST_NAME );
-	chain_shift_instructions( chain );
-}
-
-
-/* ***************************************************************************
- * fjmem_bus_read_start
- * ***************************************************************************/
-static void
-fjmem_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	chain_t *chain = CHAIN;
-	block_desc_t *bd = &(BLOCK_DESC);
-	data_register *dr = FJMEM_REG;
-	bus_area_t area;
-	block_param_t *block;
-
-	block_bus_area( bus, adr, &area, &block );
-	if (!block) {
-		printf( _("Address out of range\n") );
-		LAST_ADDR = adr;
-		return;
-	}
-
-	setup_address( bus, adr, block );
-
-	/* select read instruction */
-	dr->in->data[bd->instr_pos+0] = 1;
-	dr->in->data[bd->instr_pos+1] = 0;
-	dr->in->data[bd->instr_pos+2] = 0;
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-
-/* ***************************************************************************
- * fjmem_bus_read_next
- * ***************************************************************************/
-static uint32_t
-fjmem_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	chain_t *chain = CHAIN;
-	block_desc_t *bd = &(BLOCK_DESC);
-	data_register *dr = FJMEM_REG;
-	uint32_t d;
-	bus_area_t area;
-	block_param_t *block;
-	int idx;
-
-	block_bus_area( bus, adr, &area, &block );
-	if (!block) {
-		printf( _("Address out of range\n") );
-		LAST_ADDR = adr;
-		return 0;
-	}
-
-	setup_address( bus, adr, block );
-	chain_shift_data_registers( chain, 1 );
-
-	/* extract data from TDO stream */
-	d = 0;
-	for (idx = 0; idx < block->data_width; idx++)
-		if (dr->out->data[bd->data_pos + idx])
-			d |= 1 << idx;
-
-	return d;
-}
-
-
-/* ***************************************************************************
- * fjmem_bus_read_end
- * ***************************************************************************/
-static uint32_t
-fjmem_bus_read_end( bus_t *bus )
-{
-	chain_t *chain = CHAIN;
-	block_desc_t *bd = &(BLOCK_DESC);
-	data_register *dr = FJMEM_REG;
-	uint32_t d;
-	bus_area_t area;
-	block_param_t *block;
-	int idx;
-
-	block_bus_area( bus, LAST_ADDR, &area, &block );
-	if (!block) {
-		printf( _("Address out of range\n") );
-		return 0;
-	}
-
-	/* prepare idle instruction to disable any spurious unintentional reads */
-	dr->in->data[bd->instr_pos+0] = 0;
-	dr->in->data[bd->instr_pos+1] = 0;
-	dr->in->data[bd->instr_pos+2] = 0;
-
-	chain_shift_data_registers( chain, 1 );
-
-	/* extract data from TDO stream */
-	d = 0;
-	for (idx = 0; idx < block->data_width; idx++)
-		if (dr->out->data[bd->data_pos + idx])
-			d |= 1 << idx;
-
-	return d;
-}
-
-
-/* ***************************************************************************
- * fjmem_bus_read
- * ***************************************************************************/
-static uint32_t
-fjmem_bus_read( bus_t *bus, uint32_t adr )
-{
-	fjmem_bus_read_start( bus, adr );
-	return fjmem_bus_read_end( bus );
-}
-
-
-/* ***************************************************************************
- * fjmem_bus_write
- * ***************************************************************************/
-static void
-fjmem_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	chain_t *chain = CHAIN;
-	block_desc_t *bd = &(BLOCK_DESC);
-	data_register *dr = FJMEM_REG;
-	bus_area_t area;
-	block_param_t *block;
-
-	block_bus_area( bus, adr, &area, &block );
-	if (!block) {
-		printf( _("Address out of range\n") );
-		return;
-	}
-
-	setup_address( bus, adr, block );
-	setup_data( bus, data, block );
-
-	/* select write instruction */
-	dr->in->data[bd->instr_pos+0] = 0;
-	dr->in->data[bd->instr_pos+1] = 1;
-	dr->in->data[bd->instr_pos+2] = 0;
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-
-/* ***************************************************************************
- * jopcyc_bus_area
- * ***************************************************************************/
-
-static int
-block_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, block_param_t **bl_match )
-{
-	block_param_t *bl = BLOCK_DESC.blocks;
-	uint32_t prev_start;
-
-	*bl_match = NULL;
-
-	/* run through all detected/queried blocks and check if adr falls into
-	   one of their ranges */
-	prev_start = 0;
-	while (bl) {
-		if ((bl->start <= adr) && (bl->end >= adr)) {
-			/* adr lies inside a matching block range */
-			area->description = NULL;
-			area->start  = bl->start;
-			area->length = bl->end - bl->start + 1;
-			area->width  = bl->data_width;
-			*bl_match    = bl;
-			prev_start   = area->start;
-		} else if (((prev_start > adr) || (prev_start == 0)) && (bl->end < adr)) {
-			/* a gap between blocks */
-			area->description = "Dummy";
-			area->start  = bl->end + 1;
-			area->length = prev_start > 0 ? prev_start - (bl->end+1) : UINT64_C(0x100000000);
-			area->width  = 0;
-			*bl_match    = NULL;
-			prev_start   = area->start;
-		} else
-			prev_start   = bl->start;
-
-		bl = bl->next;
-	}
-
-	return 0;
-}
-
-
-static int
-fjmem_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	block_param_t *bl;
-
-	return block_bus_area( bus, adr, area, &bl );
-}
-
-
-static void
-fjmem_free_blocks( block_param_t *bl )
-{
-	if (bl) {
-		fjmem_free_blocks( bl->next );
-		free( bl );
-	}
-}
-
-static void
-fjmem_bus_free( bus_t *bus )
-{
-	data_register *dr = FJMEM_REG;
-
-	/* fill all fields with '0'
-	   -> prepare idle instruction for next startup/detect */
-	part_set_instruction( PART, FJMEM_INST_NAME );
-	chain_shift_instructions( CHAIN );
-
-	register_fill( dr->in, 0 );
-	chain_shift_data_registers( CHAIN, 0 );
-
-	fjmem_free_blocks( BLOCK_DESC.blocks );
-	BLOCK_DESC.blocks = NULL;
-
-	generic_bus_free( bus );
-}
-
 static int
 fjmem_detect_reg_len( chain_t *chain, part_t *part, char *opcode, int len )
 {
@@ -643,6 +347,10 @@ fjmem_query_blocks( chain_t *chain, part_t *part, bus_t *bus )
 	return failed ? 0 : 1;
 }
 
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 fjmem_bus_new( chain_t *chain, char *params[] )
 {
@@ -728,6 +436,299 @@ fjmem_bus_new( chain_t *chain, char *params[] )
 		printf( _("Parameter for instruction opcode missing.\n") );
 
 	return bus;
+}
+
+static void
+fjmem_free_blocks( block_param_t *bl )
+{
+	if (bl) {
+		fjmem_free_blocks( bl->next );
+		free( bl );
+	}
+}
+
+/**
+ * bus->driver->(*free_bus)
+ *
+ */
+static void
+fjmem_bus_free( bus_t *bus )
+{
+	data_register *dr = FJMEM_REG;
+
+	/* fill all fields with '0'
+	   -> prepare idle instruction for next startup/detect */
+	part_set_instruction( PART, FJMEM_INST_NAME );
+	chain_shift_instructions( CHAIN );
+
+	register_fill( dr->in, 0 );
+	chain_shift_data_registers( CHAIN, 0 );
+
+	fjmem_free_blocks( BLOCK_DESC.blocks );
+	BLOCK_DESC.blocks = NULL;
+
+	generic_bus_free( bus );
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+fjmem_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+fjmem_bus_prepare( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	/* ensure FJMEM_INST is active */
+	part_set_instruction( p, FJMEM_INST_NAME );
+	chain_shift_instructions( chain );
+}
+
+static int
+block_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, block_param_t **bl_match )
+{
+	block_param_t *bl = BLOCK_DESC.blocks;
+	uint32_t prev_start;
+
+	*bl_match = NULL;
+
+	/* run through all detected/queried blocks and check if adr falls into
+	   one of their ranges */
+	prev_start = 0;
+	while (bl) {
+		if ((bl->start <= adr) && (bl->end >= adr)) {
+			/* adr lies inside a matching block range */
+			area->description = NULL;
+			area->start  = bl->start;
+			area->length = bl->end - bl->start + 1;
+			area->width  = bl->data_width;
+			*bl_match    = bl;
+			prev_start   = area->start;
+		} else if (((prev_start > adr) || (prev_start == 0)) && (bl->end < adr)) {
+			/* a gap between blocks */
+			area->description = "Dummy";
+			area->start  = bl->end + 1;
+			area->length = prev_start > 0 ? prev_start - (bl->end+1) : UINT64_C(0x100000000);
+			area->width  = 0;
+			*bl_match    = NULL;
+			prev_start   = area->start;
+		} else
+			prev_start   = bl->start;
+
+		bl = bl->next;
+	}
+
+	return 0;
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+fjmem_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	block_param_t *bl;
+
+	return block_bus_area( bus, adr, area, &bl );
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a, block_param_t *block )
+{
+	data_register *dr = FJMEM_REG;
+	block_desc_t *bd = &(BLOCK_DESC);
+	int idx;
+	uint16_t num = block->num;
+
+	LAST_ADDR = a;
+
+	/* correct address for > 8 bit data widths */
+	a >>= block->ashift;
+
+	/* set block number */
+	for (idx = 0; idx < bd->block_len; idx++) {
+		dr->in->data[bd->block_pos + idx] = num & 1;
+		num >>= 1;
+	}
+
+	/* set address */
+	for (idx = 0; idx < block->addr_width; idx++) {
+		dr->in->data[bd->addr_pos + idx] = a & 1;
+		a >>= 1;
+	}
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d, block_param_t *block )
+{
+	data_register *dr = FJMEM_REG;
+	block_desc_t *bd = &(BLOCK_DESC);
+	int idx;
+
+	/* set data */
+	for (idx = 0; idx < block->data_width; idx++) {
+		dr->in->data[bd->data_pos + idx] = d & 1;
+		d >>= 1;
+	}
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+fjmem_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	chain_t *chain = CHAIN;
+	block_desc_t *bd = &(BLOCK_DESC);
+	data_register *dr = FJMEM_REG;
+	bus_area_t area;
+	block_param_t *block;
+
+	block_bus_area( bus, adr, &area, &block );
+	if (!block) {
+		printf( _("Address out of range\n") );
+		LAST_ADDR = adr;
+		return;
+	}
+
+	setup_address( bus, adr, block );
+
+	/* select read instruction */
+	dr->in->data[bd->instr_pos+0] = 1;
+	dr->in->data[bd->instr_pos+1] = 0;
+	dr->in->data[bd->instr_pos+2] = 0;
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+fjmem_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	chain_t *chain = CHAIN;
+	block_desc_t *bd = &(BLOCK_DESC);
+	data_register *dr = FJMEM_REG;
+	uint32_t d;
+	bus_area_t area;
+	block_param_t *block;
+	int idx;
+
+	block_bus_area( bus, adr, &area, &block );
+	if (!block) {
+		printf( _("Address out of range\n") );
+		LAST_ADDR = adr;
+		return 0;
+	}
+
+	setup_address( bus, adr, block );
+	chain_shift_data_registers( chain, 1 );
+
+	/* extract data from TDO stream */
+	d = 0;
+	for (idx = 0; idx < block->data_width; idx++)
+		if (dr->out->data[bd->data_pos + idx])
+			d |= 1 << idx;
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+fjmem_bus_read_end( bus_t *bus )
+{
+	chain_t *chain = CHAIN;
+	block_desc_t *bd = &(BLOCK_DESC);
+	data_register *dr = FJMEM_REG;
+	uint32_t d;
+	bus_area_t area;
+	block_param_t *block;
+	int idx;
+
+	block_bus_area( bus, LAST_ADDR, &area, &block );
+	if (!block) {
+		printf( _("Address out of range\n") );
+		return 0;
+	}
+
+	/* prepare idle instruction to disable any spurious unintentional reads */
+	dr->in->data[bd->instr_pos+0] = 0;
+	dr->in->data[bd->instr_pos+1] = 0;
+	dr->in->data[bd->instr_pos+2] = 0;
+
+	chain_shift_data_registers( chain, 1 );
+
+	/* extract data from TDO stream */
+	d = 0;
+	for (idx = 0; idx < block->data_width; idx++)
+		if (dr->out->data[bd->data_pos + idx])
+			d |= 1 << idx;
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+fjmem_bus_read( bus_t *bus, uint32_t adr )
+{
+	fjmem_bus_read_start( bus, adr );
+	return fjmem_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+fjmem_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	chain_t *chain = CHAIN;
+	block_desc_t *bd = &(BLOCK_DESC);
+	data_register *dr = FJMEM_REG;
+	bus_area_t area;
+	block_param_t *block;
+
+	block_bus_area( bus, adr, &area, &block );
+	if (!block) {
+		printf( _("Address out of range\n") );
+		return;
+	}
+
+	setup_address( bus, adr, block );
+	setup_data( bus, data, block );
+
+	/* select write instruction */
+	dr->in->data[bd->instr_pos+0] = 0;
+	dr->in->data[bd->instr_pos+1] = 1;
+	dr->in->data[bd->instr_pos+2] = 0;
+
+	chain_shift_data_registers( chain, 0 );
 }
 
 const bus_driver_t fjmem_bus = {

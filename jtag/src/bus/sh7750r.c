@@ -61,198 +61,10 @@ typedef struct {
 #define	RDWR2	((bus_params_t *) bus->params)->rdwr2
 #define	RD2	((bus_params_t *) bus->params)->rd2
 
-static void
-setup_address( bus_t *bus, uint32_t a )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 26; i++)
-		part_set_signal( p, A[i], 1, (a >> i) & 1 );
-}
-
-static void
-set_data_in( bus_t *bus )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 32; i++)
-		part_set_signal( p, D[i], 0, 0 );
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 32; i++)
-		part_set_signal( p, D[i], 1, (d >> i) & 1 );
-}
-
-static void
-sh7750r_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Hitachi SH7750R compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-static void
-sh7750r_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-static void
-sh7750r_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	int cs[8];
-	int i;
-
-	for (i = 0; i < 8; i++)
-		cs[i] = 1;
-	cs[(adr & 0x1C000000) >> 26] = 0;
-
-	part_set_signal( p, CS[0], 1, cs[0] );
-	part_set_signal( p, CS[1], 1, cs[1] );
-	part_set_signal( p, CS[2], 1, cs[2] );
-	part_set_signal( p, CS[3], 1, cs[3] );
-	part_set_signal( p, CS[4], 1, cs[4] );
-	part_set_signal( p, CS[5], 1, cs[5] );
-	part_set_signal( p, CS[6], 1, cs[6] );
-	part_set_signal( p, RDWR, 1, 1 );
-	part_set_signal( p, RDWR2, 1, 1 );
-	part_set_signal( p, WE[0], 1, 1 );
-	part_set_signal( p, WE[1], 1, 1 );
-	part_set_signal( p, WE[2], 1, 1 );
-	part_set_signal( p, WE[3], 1, 1 );
-	part_set_signal( p, RD, 1, 0 );
-	part_set_signal( p, RD2, 1, 0 );
-
-	setup_address( bus, adr );
-	set_data_in( bus );
-	chain_shift_data_registers( CHAIN, 0 );
-}
-
-static uint32_t
-sh7750r_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	int i;
-	uint32_t d = 0;
-
-	setup_address( bus, adr );
-	chain_shift_data_registers( CHAIN, 1 );
-
-	for (i = 0; i < 32; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-	return d;
-}
-
-static uint32_t
-sh7750r_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-	int cs[8];
-	int i;
-	uint32_t d = 0;
-
-	for (i = 0; i < 8; i++)
-		cs[i] = 1;
-
-	part_set_signal( p, CS[0], 1, cs[0] );
-	part_set_signal( p, CS[1], 1, cs[1] );
-	part_set_signal( p, CS[2], 1, cs[2] );
-	part_set_signal( p, CS[3], 1, cs[3] );
-	part_set_signal( p, CS[4], 1, cs[4] );
-	part_set_signal( p, CS[5], 1, cs[5] );
-	part_set_signal( p, CS[6], 1, cs[6] );
-
-	part_set_signal( p, RD, 1, 1 );
-	part_set_signal( p, RD2, 1, 1 );
-	chain_shift_data_registers( CHAIN, 1 );
-
-	for (i = 0; i < 32; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-	return d;
-}
-
-static uint32_t
-sh7750r_bus_read( bus_t *bus, uint32_t adr )
-{
-	sh7750r_bus_read_start( bus, adr );
-	return sh7750r_bus_read_end( bus );
-}
-
-static void
-sh7750r_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	chain_t *chain = CHAIN;
-	part_t *p = PART;
-	int cs[8];
-	int i;
-
-	for (i = 0; i < 8 ; i++)
-		cs[i] = 1;
-	cs[(adr & 0x1C000000) >> 26] = 0;
-
-	part_set_signal( p, CS[0], 1, cs[0] );
-	part_set_signal( p, CS[1], 1, cs[1] );
-	part_set_signal( p, CS[2], 1, cs[2] );
-	part_set_signal( p, CS[3], 1, cs[3] );
-	part_set_signal( p, CS[4], 1, cs[4] );
-	part_set_signal( p, CS[5], 1, cs[5] );
-	part_set_signal( p, CS[6], 1, cs[6] );
-
-	part_set_signal( p, RDWR, 1, 0 );
-	part_set_signal( p, RDWR2, 1, 0 );
-	part_set_signal( p, WE[0], 1, 1 );
-	part_set_signal( p, WE[1], 1, 1 );
-	part_set_signal( p, WE[2], 1, 1 );
-	part_set_signal( p, WE[3], 1, 1 );
-	part_set_signal( p, RD, 1, 1 );
-	part_set_signal( p, RD2, 1, 1 );
-
-	setup_address( bus, adr );
-	setup_data( bus, data );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, WE[0], 1, 0 );
-	part_set_signal( p, WE[1], 1, 0 );
-	part_set_signal( p, WE[2], 1, 0 );
-	part_set_signal( p, WE[3], 1, 0 );
-	
-	chain_shift_data_registers( chain, 0 );
-	
-	part_set_signal( p, WE[0], 1, 1 );
-	part_set_signal( p, WE[1], 1, 1 );
-	part_set_signal( p, WE[2], 1, 1 );
-	part_set_signal( p, WE[3], 1, 1 );
-	
-	chain_shift_data_registers( chain, 0 );
-}
-
-static int
-sh7750r_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x100000000);
-	area->width = 32;
-
-	return 0;
-}
-
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 sh7750r_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -342,6 +154,230 @@ sh7750r_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+sh7750r_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Hitachi SH7750R compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+sh7750r_bus_prepare( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+sh7750r_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+	area->width = 32;
+
+	return 0;
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 26; i++)
+		part_set_signal( p, A[i], 1, (a >> i) & 1 );
+}
+
+static void
+set_data_in( bus_t *bus )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 32; i++)
+		part_set_signal( p, D[i], 0, 0 );
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 32; i++)
+		part_set_signal( p, D[i], 1, (d >> i) & 1 );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+sh7750r_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	int cs[8];
+	int i;
+
+	for (i = 0; i < 8; i++)
+		cs[i] = 1;
+	cs[(adr & 0x1C000000) >> 26] = 0;
+
+	part_set_signal( p, CS[0], 1, cs[0] );
+	part_set_signal( p, CS[1], 1, cs[1] );
+	part_set_signal( p, CS[2], 1, cs[2] );
+	part_set_signal( p, CS[3], 1, cs[3] );
+	part_set_signal( p, CS[4], 1, cs[4] );
+	part_set_signal( p, CS[5], 1, cs[5] );
+	part_set_signal( p, CS[6], 1, cs[6] );
+	part_set_signal( p, RDWR, 1, 1 );
+	part_set_signal( p, RDWR2, 1, 1 );
+	part_set_signal( p, WE[0], 1, 1 );
+	part_set_signal( p, WE[1], 1, 1 );
+	part_set_signal( p, WE[2], 1, 1 );
+	part_set_signal( p, WE[3], 1, 1 );
+	part_set_signal( p, RD, 1, 0 );
+	part_set_signal( p, RD2, 1, 0 );
+
+	setup_address( bus, adr );
+	set_data_in( bus );
+	chain_shift_data_registers( CHAIN, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+sh7750r_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	int i;
+	uint32_t d = 0;
+
+	setup_address( bus, adr );
+	chain_shift_data_registers( CHAIN, 1 );
+
+	for (i = 0; i < 32; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+sh7750r_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+	int cs[8];
+	int i;
+	uint32_t d = 0;
+
+	for (i = 0; i < 8; i++)
+		cs[i] = 1;
+
+	part_set_signal( p, CS[0], 1, cs[0] );
+	part_set_signal( p, CS[1], 1, cs[1] );
+	part_set_signal( p, CS[2], 1, cs[2] );
+	part_set_signal( p, CS[3], 1, cs[3] );
+	part_set_signal( p, CS[4], 1, cs[4] );
+	part_set_signal( p, CS[5], 1, cs[5] );
+	part_set_signal( p, CS[6], 1, cs[6] );
+
+	part_set_signal( p, RD, 1, 1 );
+	part_set_signal( p, RD2, 1, 1 );
+	chain_shift_data_registers( CHAIN, 1 );
+
+	for (i = 0; i < 32; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+sh7750r_bus_read( bus_t *bus, uint32_t adr )
+{
+	sh7750r_bus_read_start( bus, adr );
+	return sh7750r_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+sh7750r_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	chain_t *chain = CHAIN;
+	part_t *p = PART;
+	int cs[8];
+	int i;
+
+	for (i = 0; i < 8 ; i++)
+		cs[i] = 1;
+	cs[(adr & 0x1C000000) >> 26] = 0;
+
+	part_set_signal( p, CS[0], 1, cs[0] );
+	part_set_signal( p, CS[1], 1, cs[1] );
+	part_set_signal( p, CS[2], 1, cs[2] );
+	part_set_signal( p, CS[3], 1, cs[3] );
+	part_set_signal( p, CS[4], 1, cs[4] );
+	part_set_signal( p, CS[5], 1, cs[5] );
+	part_set_signal( p, CS[6], 1, cs[6] );
+
+	part_set_signal( p, RDWR, 1, 0 );
+	part_set_signal( p, RDWR2, 1, 0 );
+	part_set_signal( p, WE[0], 1, 1 );
+	part_set_signal( p, WE[1], 1, 1 );
+	part_set_signal( p, WE[2], 1, 1 );
+	part_set_signal( p, WE[3], 1, 1 );
+	part_set_signal( p, RD, 1, 1 );
+	part_set_signal( p, RD2, 1, 1 );
+
+	setup_address( bus, adr );
+	setup_data( bus, data );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, WE[0], 1, 0 );
+	part_set_signal( p, WE[1], 1, 0 );
+	part_set_signal( p, WE[2], 1, 0 );
+	part_set_signal( p, WE[3], 1, 0 );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, WE[0], 1, 1 );
+	part_set_signal( p, WE[1], 1, 1 );
+	part_set_signal( p, WE[2], 1, 1 );
+	part_set_signal( p, WE[3], 1, 1 );
+
+	chain_shift_data_registers( chain, 0 );
 }
 
 const bus_driver_t sh7750r_bus = {

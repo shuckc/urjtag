@@ -151,556 +151,6 @@ typedef struct {
 #define COMP_EEPROM        &(((bus_params_t *) bus->params)->eeprom)
 #define COMP_EEPROM_STATUS &(((bus_params_t *) bus->params)->eeprom_status)
 
-static void
-setup_address( bus_t *bus, uint32_t a, component_t *comp )
-{
-	int i;
-	part_t *p = PART;
-	int addr_width;
-
-	LAST_ADDR = a;
-
-	switch (comp->ctype) {
-		case FLASH:
-			addr_width = FLASH_ADDR_WIDTH;
-			/* address a is a byte address,
-				 A0 is ignored by the flash chip */
-			break;
-		case RAM:
-			addr_width = RAM_ADDR_WIDTH;
-			/* address a is a byte address so it is transferred into
-			   a word address here */
-			a >>= 1;
-			break;
-		case EEPROM:
-		case EEPROM_STATUS:
-			addr_width = EEPROM_ADDR_WIDTH;
-			break;
-		default:
-			addr_width = 0;
-			break;
-	}
-
-	for (i = 0; i < addr_width; i++)
-		part_set_signal( p, A[i], 1, (a >> i) & 1 );
-}
-
-static int
-detect_data_width( component_t *comp )
-{
-	int width;
-
-	switch (comp->ctype) {
-		case RAM:
-			width = RAM_DATA_WIDTH;
-			break;
-		case FLASH:
-			width = FLASH_DATA_WIDTH;
-			break;
-		case EEPROM:
-		case EEPROM_STATUS:
-			width = EEPROM_DATA_WIDTH;
-			break;
-		default:
-			width = 0;
-			break;
-	}
-
-	return width;
-}
-
-static void
-set_data_in( bus_t *bus, component_t *comp )
-{
-	int i;
-	part_t *p = PART;
-	int width;
-
-	width = detect_data_width( comp );
-
-	for (i = 0; i < width; i++)
-		part_set_signal( p, D[i], 0, 0 );
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d, component_t *comp )
-{
-	int i;
-	part_t *p = PART;
-	int width;
-
-	width = detect_data_width( comp );
-
-	for (i = 0; i < width; i++)
-		part_set_signal( p, D[i], 1, (d >> i) & 1 );
-}
-
-static int comp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp );
-
-
-/* ***************************************************************************
- * zefant_xs3_printinfo
- * ***************************************************************************/
-static void
-zefant_xs3_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Simple Solutions Zefant-XS3 Board compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-
-/* ***************************************************************************
- * zefant_xs3_bus_prepare
- * ***************************************************************************/
-static void
-zefant_xs3_bus_prepare( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	component_t *comp;
-
-	/* Preload update registers
-	   See AN039, "Guidelines for IEEE Std. 1149.1 Boundary Scan Testing */
-
-	part_set_instruction( p, "SAMPLE/PRELOAD" );
-	chain_shift_instructions( chain );
-
-	/* FLASH */
-	comp = COMP_FLASH;
-	setup_data( bus, 0, comp );
-	part_set_signal( p, nCS,   1, 1 );
-	part_set_signal( p, nWE,   1, 1 );
-	part_set_signal( p, nOE,   1, 1 );
-	part_set_signal( p, nRP,   1, 1 );
-	part_set_signal( p, nBYTE, 1, 1 );
-	part_set_signal( p, STS,   0, 0 );
-
-	/* RAM0 */
-	comp = COMP_RAM0;
-	setup_data( bus, 0, comp );
-	part_set_signal( p, nCS, 1, 1 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	part_set_signal( p, nLB, 1, 1 );
-	part_set_signal( p, nUB, 1, 1 );
-
-	/* RAM1 */
-	comp = COMP_RAM1;
-	setup_data( bus, 0, comp );
-	part_set_signal( p, nCS, 1, 1 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	part_set_signal( p, nLB, 1, 1 );
-	part_set_signal( p, nUB, 1, 1 );
-
-	/* EEPROM */
-	comp = COMP_EEPROM;
-	part_set_signal(p, SI,  1, 0 );
-	part_set_signal(p, SO,  0, 0 );
-	part_set_signal(p, SCK, 1, 0 );
-	part_set_signal(p, nCS, 1, 1 );
-
-	/* EEPROM Status */
-	comp = COMP_EEPROM_STATUS;
-	part_set_signal(p, SI,  1, 0 );
-	part_set_signal(p, SO,  0, 0 );
-	part_set_signal(p, SCK, 1, 0 );
-	part_set_signal(p, nCS, 1, 1 );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_instruction( p, "EXTEST" );
-	chain_shift_instructions( chain );
-}
-
-
-static uint8_t
-eeprom_shift_byte( chain_t *chain, part_t *p, component_t *comp, uint8_t byte )
-{
-	int pos;
-	uint8_t so_data = 0x00;
-
-	for (pos = 7; pos >= 0; pos--) {
-		/* set clock to 0 */
-		part_set_signal( p, SCK, 1, 0 );
-		/* apply data bit */
-		part_set_signal( p, SI,  1, (byte >> pos) & 0x01 );
-		/* commit signals */
-		chain_shift_data_registers( chain, 1 );
-
-		/* set clock to 1 */
-		part_set_signal( p, SCK, 1, 1 );
-		/* commit signals */
-		chain_shift_data_registers( chain, 1 );
-
-		/* read data on SO that was asserted by device after SCK went 0 */
-		so_data |= (uint8_t) (part_get_signal( p, SO ) << pos);
-	}
-
-	return so_data;
-}
-
-
-static void
-eeprom_disable_device( chain_t *chain, part_t *p, component_t *comp )
-{
-	/* ensure that SCK is low before disabling device */
-	part_set_signal( p, SCK, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-
-	/* finally disable device */
-	part_set_signal( p, nCS, 1, 1 );
-	chain_shift_data_registers( chain, 0 );
-}
-
-
-/* ***************************************************************************
- * zefant_xs3_bus_read_start
- * ***************************************************************************/
-static void
-zefant_xs3_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	bus_area_t area;
-	component_t *comp;
-	uint8_t cmd = EEPROM_CMD_READ;
-
-	comp_bus_area( bus, adr, &area, &comp );
-	if (!comp) {
-		printf( _("Address out of range\n") );
-		LAST_ADDR = adr;
-		return;
-	}
-
-	/* determine proper address setup strategy for component */
-	switch (comp->ctype) {
-		case FLASH:
-		case RAM:
-			part_set_signal( p, nCS, 1, 0 );
-			part_set_signal( p, nWE, 1, 1 );
-			part_set_signal( p, nOE, 1, 0 );
-			if (comp->ctype == RAM) {
-				part_set_signal( p, nLB, 1, 0 );
-				part_set_signal( p, nUB, 1, 0 );
-			}
-
-			setup_address( bus, adr, comp );
-			set_data_in( bus, comp );
-
-			chain_shift_data_registers( chain, 0 );
-
-			break;
-
-		case EEPROM_STATUS:
-			cmd = EEPROM_CMD_RDSR;
-			/* fall through */
-		case EEPROM:
-			/* enable device */
-			part_set_signal( p, nCS, 1, 0 );
-
-			/* shift command */
-			eeprom_shift_byte( chain, p, comp, cmd );
-
-			if (comp->ctype == EEPROM) {
-				/* send address high part */
-				eeprom_shift_byte( chain, p, comp, (adr >> 8) & 0xff);
-				/* send address low part */
-				eeprom_shift_byte( chain, p, comp, adr & 0xff);
-			}
-
-			LAST_ADDR = adr;
-			break;
-
-		default:
-			printf( _("Component type not supported\n") );
-			break;
-	}
-
-}
-
-
-/* ***************************************************************************
- * zefant_xs3_bus_read_next
- * ***************************************************************************/
-static uint32_t
-zefant_xs3_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-	bus_area_t area;
-	component_t *comp;
-
-	comp_bus_area( bus, adr, &area, &comp );
-	if (!comp) {
-		printf( _("Address out of range\n") );
-		LAST_ADDR = adr;
-		return 0;
-	}
-
-	/* determine proper read strategy for component */
-	switch (comp->ctype) {
-		case FLASH:
-		case RAM:
-			setup_address( bus, adr, comp );
-			chain_shift_data_registers( chain, 1 );
-
-			for (i = 0; i < area.width; i++)
-				d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-			break;
-
-		case EEPROM_STATUS:
-		case EEPROM:
-			/* read next byte */
-			d = (uint32_t)eeprom_shift_byte( chain, p, comp, 0x00 );
-			break;
-
-		default:
-			printf( _("Component type not supported\n") );
-			break;
-	}
-
-	return d;
-}
-
-
-/* ***************************************************************************
- * zefant_xs3_bus_read_end
- * ***************************************************************************/
-static uint32_t
-zefant_xs3_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-	bus_area_t area;
-	component_t *comp;
-
-	/* use last address of access to determine component */
-	comp_bus_area( bus, LAST_ADDR, &area, &comp );
-	if (!comp) {
-		printf( _("Address out of range\n") );
-		return 0;
-	}
-
-	/* determine proper read strategy for component */
-	switch (comp->ctype) {
-		case FLASH:
-		case RAM:
-			part_set_signal( p, nCS, 1, 1 );
-			part_set_signal( p, nOE, 1, 1 );
-			if (comp->ctype == RAM) {
-				part_set_signal( p, nLB, 1, 1 );
-				part_set_signal( p, nUB, 1, 1 );
-			}
-			chain_shift_data_registers( chain, 1 );
-
-			for (i = 0; i < area.width; i++)
-				d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-			break;
-
-		case EEPROM_STATUS:
-		case EEPROM:
-			/* read final byte */
-			d = (uint32_t)eeprom_shift_byte( chain, p, comp, 0x00 );
-			eeprom_disable_device( chain, p, comp );
-
-			break;
-
-		default:
-			printf( _("Component type not supported\n") );
-			break;
-	}
-
-	return d;
-}
-
-
-/* ***************************************************************************
- * zefant_xs3_bus_read
- * ***************************************************************************/
-static uint32_t
-zefant_xs3_bus_read( bus_t *bus, uint32_t adr )
-{
-	zefant_xs3_bus_read_start( bus, adr );
-	return zefant_xs3_bus_read_end( bus );
-}
-
-
-/* ***************************************************************************
- * zefant_xs3_bus_write
- * ***************************************************************************/
-static void
-zefant_xs3_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	bus_area_t area;
-	component_t *comp;
-	uint8_t cmd = EEPROM_CMD_WRITE;
-
-	comp_bus_area( bus, adr, &area, &comp );
-	if (!comp) {
-		printf( _("Address out of range\n") );
-		return;
-	}
-
-	switch (comp->ctype) {
-		case FLASH:
-		case RAM:
-			part_set_signal( p, nCS, 1, 0 );
-			part_set_signal( p, nWE, 1, 1 );
-			part_set_signal( p, nOE, 1, 1 );
-			if (comp->ctype == RAM) {
-				part_set_signal( p, nLB, 1, 0 );
-				part_set_signal( p, nUB, 1, 0 );
-			}
-
-			setup_address( bus, adr, comp );
-			setup_data( bus, data, comp );
-
-			chain_shift_data_registers( chain, 0 );
-
-			part_set_signal( p, nWE, 1, 0 );
-			chain_shift_data_registers( chain, 0 );
-			part_set_signal( p, nWE, 1, 1 );
-			part_set_signal( p, nCS, 1, 1 );
-			if (comp->ctype == RAM) {
-				part_set_signal( p, nLB, 1, 1 );
-				part_set_signal( p, nUB, 1, 1 );
-			}
-			chain_shift_data_registers( chain, 0 );
-
-			break;
-
-		case EEPROM_STATUS:
-			cmd = EEPROM_CMD_WRSR;
-			/* fall through */
-		case EEPROM:
-			/*
-			 * Step 1:
-			 * Poll status register and ensure that device is ready.
-			 */
-			part_set_signal( p, nCS, 1, 0 );
-
-			/* poll status register for nRDY */
-			do {
-				eeprom_shift_byte( chain, p, comp, EEPROM_CMD_RDSR );
-			} while (eeprom_shift_byte( chain, p, comp, 0x00) & 0x01);
-
-			eeprom_disable_device( chain, p, comp );
-
-
-			/* 
-			 * Step 2:
-       * Enable writing.
-			 */
-			part_set_signal( p, nCS, 1, 0 );
-
-			/* enable writing */
-			eeprom_shift_byte( chain, p, comp, EEPROM_CMD_WREN );
-
-			eeprom_disable_device( chain, p, comp );
-
-
-			/*
-			 * Step 3:
-			 * Write data to device.
-			 */
-			part_set_signal( p, nCS, 1, 0 );
-
-			/* send command 
-			   command code has been determined by component type */
-			eeprom_shift_byte( chain, p, comp, cmd );
-
-			if (comp->ctype == EEPROM) {
-				/* send address high part */
-				eeprom_shift_byte( chain, p, comp, (adr >> 8) & 0xff);
-				/* send address low part */
-				eeprom_shift_byte( chain, p, comp, adr & 0xff);
-			}
-
-			/* send data to be written */
-			eeprom_shift_byte( chain, p, comp, (uint8_t)(data & 0xff) );
-
-			eeprom_disable_device( chain, p, comp );
-
-			break;
-
-		default:
-			printf( _("Component type not supported\n") );
-			break;
-	}
-}
-
-
-/* ***************************************************************************
- * comp_bus_area
- * ***************************************************************************/
-
-static int
-comp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp )
-{
-	if (adr < RAM0_START) {
-		area->description = "FLASH Component";
-		area->start  = FLASH_START;
-		area->length = FLASH_LENGTH;
-		area->width  = FLASH_DATA_WIDTH;
-		*comp        = COMP_FLASH;
-	} else if (adr < RAM1_START) {
-		area->description = "SO-DIMM RAM0 Component";
-		area->start  = RAM0_START;
-		area->length = RAM_LENGTH;
-		area->width  = RAM_DATA_WIDTH;
-		*comp        = COMP_RAM0;
-	} else if (adr < EEPROM_START) {
-		area->description = "SO-DIMM RAM1 Component";
-		area->start  = RAM1_START;
-		area->length = RAM_LENGTH;
-		area->width  = RAM_DATA_WIDTH;
-		*comp        = COMP_RAM1;
-	} else if (adr < EEPROM_STATUS_START) {
-		area->description = "EEPROM Component";
-		area->start  = EEPROM_START;
-		area->length = EEPROM_LENGTH;
-		area->width  = EEPROM_DATA_WIDTH;
-		*comp        = COMP_EEPROM;
-	} else if (adr < EEPROM_STATUS_START + EEPROM_STATUS) {
-		area->description = "EEPROM Component Status";
-		area->start  = EEPROM_STATUS_START;
-		area->length = EEPROM_LENGTH;
-		area->width  = EEPROM_DATA_WIDTH;
-		*comp        = COMP_EEPROM_STATUS;
-	} else {
-		area->description = "Dummy";
-		area->start  = FLASH_LENGTH + 2*RAM_LENGTH +2* EEPROM_LENGTH;
-		area->length = UINT64_C(0x100000000);
-		area->width  = 0;
-		*comp        = NULL;
-	}
-
-	return 0;
-}
-
-
-static int
-zefant_xs3_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	component_t *comp;
-
-	return comp_bus_area( bus, adr, area, &comp );
-}
-
-
 static int
 attach_sig( bus_t *bus, signal_t **sig, char *id )
 {
@@ -715,6 +165,10 @@ attach_sig( bus_t *bus, signal_t **sig, char *id )
 	return failed;
 }
 
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -971,6 +425,549 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+zefant_xs3_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Simple Solutions Zefant-XS3 Board compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a, component_t *comp )
+{
+	int i;
+	part_t *p = PART;
+	int addr_width;
+
+	LAST_ADDR = a;
+
+	switch (comp->ctype) {
+		case FLASH:
+			addr_width = FLASH_ADDR_WIDTH;
+			/* address a is a byte address,
+				 A0 is ignored by the flash chip */
+			break;
+		case RAM:
+			addr_width = RAM_ADDR_WIDTH;
+			/* address a is a byte address so it is transferred into
+			   a word address here */
+			a >>= 1;
+			break;
+		case EEPROM:
+		case EEPROM_STATUS:
+			addr_width = EEPROM_ADDR_WIDTH;
+			break;
+		default:
+			addr_width = 0;
+			break;
+	}
+
+	for (i = 0; i < addr_width; i++)
+		part_set_signal( p, A[i], 1, (a >> i) & 1 );
+}
+
+static int
+detect_data_width( component_t *comp )
+{
+	int width;
+
+	switch (comp->ctype) {
+		case RAM:
+			width = RAM_DATA_WIDTH;
+			break;
+		case FLASH:
+			width = FLASH_DATA_WIDTH;
+			break;
+		case EEPROM:
+		case EEPROM_STATUS:
+			width = EEPROM_DATA_WIDTH;
+			break;
+		default:
+			width = 0;
+			break;
+	}
+
+	return width;
+}
+
+static void
+set_data_in( bus_t *bus, component_t *comp )
+{
+	int i;
+	part_t *p = PART;
+	int width;
+
+	width = detect_data_width( comp );
+
+	for (i = 0; i < width; i++)
+		part_set_signal( p, D[i], 0, 0 );
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d, component_t *comp )
+{
+	int i;
+	part_t *p = PART;
+	int width;
+
+	width = detect_data_width( comp );
+
+	for (i = 0; i < width; i++)
+		part_set_signal( p, D[i], 1, (d >> i) & 1 );
+}
+
+static uint8_t
+eeprom_shift_byte( chain_t *chain, part_t *p, component_t *comp, uint8_t byte )
+{
+	int pos;
+	uint8_t so_data = 0x00;
+
+	for (pos = 7; pos >= 0; pos--) {
+		/* set clock to 0 */
+		part_set_signal( p, SCK, 1, 0 );
+		/* apply data bit */
+		part_set_signal( p, SI,  1, (byte >> pos) & 0x01 );
+		/* commit signals */
+		chain_shift_data_registers( chain, 1 );
+
+		/* set clock to 1 */
+		part_set_signal( p, SCK, 1, 1 );
+		/* commit signals */
+		chain_shift_data_registers( chain, 1 );
+
+		/* read data on SO that was asserted by device after SCK went 0 */
+		so_data |= (uint8_t) (part_get_signal( p, SO ) << pos);
+	}
+
+	return so_data;
+}
+
+static void
+eeprom_disable_device( chain_t *chain, part_t *p, component_t *comp )
+{
+	/* ensure that SCK is low before disabling device */
+	part_set_signal( p, SCK, 1, 0 );
+	chain_shift_data_registers( chain, 0 );
+
+	/* finally disable device */
+	part_set_signal( p, nCS, 1, 1 );
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+zefant_xs3_bus_prepare( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	component_t *comp;
+
+	/* Preload update registers
+	   See AN039, "Guidelines for IEEE Std. 1149.1 Boundary Scan Testing */
+
+	part_set_instruction( p, "SAMPLE/PRELOAD" );
+	chain_shift_instructions( chain );
+
+	/* FLASH */
+	comp = COMP_FLASH;
+	setup_data( bus, 0, comp );
+	part_set_signal( p, nCS,   1, 1 );
+	part_set_signal( p, nWE,   1, 1 );
+	part_set_signal( p, nOE,   1, 1 );
+	part_set_signal( p, nRP,   1, 1 );
+	part_set_signal( p, nBYTE, 1, 1 );
+	part_set_signal( p, STS,   0, 0 );
+
+	/* RAM0 */
+	comp = COMP_RAM0;
+	setup_data( bus, 0, comp );
+	part_set_signal( p, nCS, 1, 1 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	part_set_signal( p, nLB, 1, 1 );
+	part_set_signal( p, nUB, 1, 1 );
+
+	/* RAM1 */
+	comp = COMP_RAM1;
+	setup_data( bus, 0, comp );
+	part_set_signal( p, nCS, 1, 1 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	part_set_signal( p, nLB, 1, 1 );
+	part_set_signal( p, nUB, 1, 1 );
+
+	/* EEPROM */
+	comp = COMP_EEPROM;
+	part_set_signal(p, SI,  1, 0 );
+	part_set_signal(p, SO,  0, 0 );
+	part_set_signal(p, SCK, 1, 0 );
+	part_set_signal(p, nCS, 1, 1 );
+
+	/* EEPROM Status */
+	comp = COMP_EEPROM_STATUS;
+	part_set_signal(p, SI,  1, 0 );
+	part_set_signal(p, SO,  0, 0 );
+	part_set_signal(p, SCK, 1, 0 );
+	part_set_signal(p, nCS, 1, 1 );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_instruction( p, "EXTEST" );
+	chain_shift_instructions( chain );
+}
+
+static int
+comp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp )
+{
+	if (adr < RAM0_START) {
+		area->description = "FLASH Component";
+		area->start  = FLASH_START;
+		area->length = FLASH_LENGTH;
+		area->width  = FLASH_DATA_WIDTH;
+		*comp        = COMP_FLASH;
+	} else if (adr < RAM1_START) {
+		area->description = "SO-DIMM RAM0 Component";
+		area->start  = RAM0_START;
+		area->length = RAM_LENGTH;
+		area->width  = RAM_DATA_WIDTH;
+		*comp        = COMP_RAM0;
+	} else if (adr < EEPROM_START) {
+		area->description = "SO-DIMM RAM1 Component";
+		area->start  = RAM1_START;
+		area->length = RAM_LENGTH;
+		area->width  = RAM_DATA_WIDTH;
+		*comp        = COMP_RAM1;
+	} else if (adr < EEPROM_STATUS_START) {
+		area->description = "EEPROM Component";
+		area->start  = EEPROM_START;
+		area->length = EEPROM_LENGTH;
+		area->width  = EEPROM_DATA_WIDTH;
+		*comp        = COMP_EEPROM;
+	} else if (adr < EEPROM_STATUS_START + EEPROM_STATUS) {
+		area->description = "EEPROM Component Status";
+		area->start  = EEPROM_STATUS_START;
+		area->length = EEPROM_LENGTH;
+		area->width  = EEPROM_DATA_WIDTH;
+		*comp        = COMP_EEPROM_STATUS;
+	} else {
+		area->description = "Dummy";
+		area->start  = FLASH_LENGTH + 2*RAM_LENGTH +2* EEPROM_LENGTH;
+		area->length = UINT64_C(0x100000000);
+		area->width  = 0;
+		*comp        = NULL;
+	}
+
+	return 0;
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+zefant_xs3_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	component_t *comp;
+
+	return comp_bus_area( bus, adr, area, &comp );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+zefant_xs3_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	bus_area_t area;
+	component_t *comp;
+	uint8_t cmd = EEPROM_CMD_READ;
+
+	comp_bus_area( bus, adr, &area, &comp );
+	if (!comp) {
+		printf( _("Address out of range\n") );
+		LAST_ADDR = adr;
+		return;
+	}
+
+	/* determine proper address setup strategy for component */
+	switch (comp->ctype) {
+		case FLASH:
+		case RAM:
+			part_set_signal( p, nCS, 1, 0 );
+			part_set_signal( p, nWE, 1, 1 );
+			part_set_signal( p, nOE, 1, 0 );
+			if (comp->ctype == RAM) {
+				part_set_signal( p, nLB, 1, 0 );
+				part_set_signal( p, nUB, 1, 0 );
+			}
+
+			setup_address( bus, adr, comp );
+			set_data_in( bus, comp );
+
+			chain_shift_data_registers( chain, 0 );
+
+			break;
+
+		case EEPROM_STATUS:
+			cmd = EEPROM_CMD_RDSR;
+			/* fall through */
+		case EEPROM:
+			/* enable device */
+			part_set_signal( p, nCS, 1, 0 );
+
+			/* shift command */
+			eeprom_shift_byte( chain, p, comp, cmd );
+
+			if (comp->ctype == EEPROM) {
+				/* send address high part */
+				eeprom_shift_byte( chain, p, comp, (adr >> 8) & 0xff);
+				/* send address low part */
+				eeprom_shift_byte( chain, p, comp, adr & 0xff);
+			}
+
+			LAST_ADDR = adr;
+			break;
+
+		default:
+			printf( _("Component type not supported\n") );
+			break;
+	}
+
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+zefant_xs3_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+	bus_area_t area;
+	component_t *comp;
+
+	comp_bus_area( bus, adr, &area, &comp );
+	if (!comp) {
+		printf( _("Address out of range\n") );
+		LAST_ADDR = adr;
+		return 0;
+	}
+
+	/* determine proper read strategy for component */
+	switch (comp->ctype) {
+		case FLASH:
+		case RAM:
+			setup_address( bus, adr, comp );
+			chain_shift_data_registers( chain, 1 );
+
+			for (i = 0; i < area.width; i++)
+				d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+			break;
+
+		case EEPROM_STATUS:
+		case EEPROM:
+			/* read next byte */
+			d = (uint32_t)eeprom_shift_byte( chain, p, comp, 0x00 );
+			break;
+
+		default:
+			printf( _("Component type not supported\n") );
+			break;
+	}
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+zefant_xs3_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+	bus_area_t area;
+	component_t *comp;
+
+	/* use last address of access to determine component */
+	comp_bus_area( bus, LAST_ADDR, &area, &comp );
+	if (!comp) {
+		printf( _("Address out of range\n") );
+		return 0;
+	}
+
+	/* determine proper read strategy for component */
+	switch (comp->ctype) {
+		case FLASH:
+		case RAM:
+			part_set_signal( p, nCS, 1, 1 );
+			part_set_signal( p, nOE, 1, 1 );
+			if (comp->ctype == RAM) {
+				part_set_signal( p, nLB, 1, 1 );
+				part_set_signal( p, nUB, 1, 1 );
+			}
+			chain_shift_data_registers( chain, 1 );
+
+			for (i = 0; i < area.width; i++)
+				d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+			break;
+
+		case EEPROM_STATUS:
+		case EEPROM:
+			/* read final byte */
+			d = (uint32_t)eeprom_shift_byte( chain, p, comp, 0x00 );
+			eeprom_disable_device( chain, p, comp );
+
+			break;
+
+		default:
+			printf( _("Component type not supported\n") );
+			break;
+	}
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+zefant_xs3_bus_read( bus_t *bus, uint32_t adr )
+{
+	zefant_xs3_bus_read_start( bus, adr );
+	return zefant_xs3_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+zefant_xs3_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	bus_area_t area;
+	component_t *comp;
+	uint8_t cmd = EEPROM_CMD_WRITE;
+
+	comp_bus_area( bus, adr, &area, &comp );
+	if (!comp) {
+		printf( _("Address out of range\n") );
+		return;
+	}
+
+	switch (comp->ctype) {
+		case FLASH:
+		case RAM:
+			part_set_signal( p, nCS, 1, 0 );
+			part_set_signal( p, nWE, 1, 1 );
+			part_set_signal( p, nOE, 1, 1 );
+			if (comp->ctype == RAM) {
+				part_set_signal( p, nLB, 1, 0 );
+				part_set_signal( p, nUB, 1, 0 );
+			}
+
+			setup_address( bus, adr, comp );
+			setup_data( bus, data, comp );
+
+			chain_shift_data_registers( chain, 0 );
+
+			part_set_signal( p, nWE, 1, 0 );
+			chain_shift_data_registers( chain, 0 );
+			part_set_signal( p, nWE, 1, 1 );
+			part_set_signal( p, nCS, 1, 1 );
+			if (comp->ctype == RAM) {
+				part_set_signal( p, nLB, 1, 1 );
+				part_set_signal( p, nUB, 1, 1 );
+			}
+			chain_shift_data_registers( chain, 0 );
+
+			break;
+
+		case EEPROM_STATUS:
+			cmd = EEPROM_CMD_WRSR;
+			/* fall through */
+		case EEPROM:
+			/*
+			 * Step 1:
+			 * Poll status register and ensure that device is ready.
+			 */
+			part_set_signal( p, nCS, 1, 0 );
+
+			/* poll status register for nRDY */
+			do {
+				eeprom_shift_byte( chain, p, comp, EEPROM_CMD_RDSR );
+			} while (eeprom_shift_byte( chain, p, comp, 0x00) & 0x01);
+
+			eeprom_disable_device( chain, p, comp );
+
+
+			/*
+			 * Step 2:
+       * Enable writing.
+			 */
+			part_set_signal( p, nCS, 1, 0 );
+
+			/* enable writing */
+			eeprom_shift_byte( chain, p, comp, EEPROM_CMD_WREN );
+
+			eeprom_disable_device( chain, p, comp );
+
+
+			/*
+			 * Step 3:
+			 * Write data to device.
+			 */
+			part_set_signal( p, nCS, 1, 0 );
+
+			/* send command
+			   command code has been determined by component type */
+			eeprom_shift_byte( chain, p, comp, cmd );
+
+			if (comp->ctype == EEPROM) {
+				/* send address high part */
+				eeprom_shift_byte( chain, p, comp, (adr >> 8) & 0xff);
+				/* send address low part */
+				eeprom_shift_byte( chain, p, comp, adr & 0xff);
+			}
+
+			/* send data to be written */
+			eeprom_shift_byte( chain, p, comp, (uint8_t)(data & 0xff) );
+
+			eeprom_disable_device( chain, p, comp );
+
+			break;
+
+		default:
+			printf( _("Component type not supported\n") );
+			break;
+	}
 }
 
 const bus_driver_t zefant_xs3_bus = {

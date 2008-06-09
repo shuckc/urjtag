@@ -1,4 +1,3 @@
-//#define USE_BCM_EJTAG
 /*
  * $Id$
  *
@@ -38,9 +37,8 @@
 #include "buses.h"
 #include "generic_bus.h"
 
-#ifdef USE_BCM_EJTAG
-int bcm1250_ejtag_do(bus_t *, uint64_t, uint64_t, int, int, unsigned char *, int);
-#endif
+//#define USE_BCM_EJTAG
+
 typedef struct {
 	chain_t *chain;
 	part_t *part;
@@ -60,208 +58,10 @@ typedef struct {
 #define IO_WR_L ((bus_params_t *) bus->params)->io_wr_l
 #define IO_OE_L ((bus_params_t *) bus->params)->io_oe_l
 
-static void
-setup_address( bus_t *bus, uint32_t a )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 24; i++) {
-		part_set_signal( p, IO_AD[i], 1, (a >> i) & 1 );
-	}
-}
-
-static void
-set_data_in( bus_t *bus )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 8; i++) {
-		part_set_signal( p, IO_AD[i+24], 0, 0 );
-	}
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 8; i++) {
-		part_set_signal( p, IO_AD[i+24], 1, (d >> i) & 1 );
-	}
-}
-
-#ifndef USE_BCM_EJTAG
-static void
-bcm1250_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Broadcom BCM1250 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-void
-bcm1250_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, IO_CS_L[0], 1, 0 );
-	part_set_signal( p, IO_CS_L[1], 1, 1 );
-	part_set_signal( p, IO_CS_L[2], 1, 1 );
-	part_set_signal( p, IO_CS_L[3], 1, 1 );
-	part_set_signal( p, IO_CS_L[4], 1, 1 );
-	part_set_signal( p, IO_CS_L[5], 1, 1 );
-	part_set_signal( p, IO_CS_L[6], 1, 1 );
-	part_set_signal( p, IO_CS_L[7], 1, 1 );
-	part_set_signal( p, IO_RW, 1, 1 );
-	part_set_signal( p, IO_WR_L, 1, 1 );
-	part_set_signal( p, IO_OE_L, 1, 0 );
-
-	setup_address( bus, adr );
-	set_data_in( bus );
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-uint32_t
-bcm1250_bus_read_next( bus_t *bus , uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	setup_address( bus, adr );
-	chain_shift_data_registers( chain, 1 );
-
-	{
-		int i;
-		uint32_t d = 0;
-
-		for (i = 0; i < 8; i++) {
-			d |= (uint32_t) (part_get_signal( p, IO_AD[i+24] ) << i);
-		}
-
-		return d;
-	}
-}
-
-uint32_t
-bcm1250_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, IO_CS_L[0], 1, 1 );
-	part_set_signal( p, IO_OE_L, 1, 1 );
-	chain_shift_data_registers( chain, 1 );
-
-	{
-		int i;
-		uint32_t d = 0;
-
-		for (i = 0; i < 8; i++) {
-			d |= (uint32_t) (part_get_signal( p, IO_AD[i+24] ) << i);
-		}
-
-		return d;
-	}
-}
-
-uint32_t
-bcm1250_bus_read( bus_t *bus, uint32_t adr )
-{
-	uint32_t i;
-	bcm1250_bus_read_start( bus, adr );
-	i=bcm1250_bus_read_end( bus );
-	return i;
-}
-
-void
-bcm1250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, IO_CS_L[0], 1, 0 );
-	part_set_signal( p, IO_CS_L[1], 1, 1 );
-	part_set_signal( p, IO_CS_L[2], 1, 1 );
-	part_set_signal( p, IO_CS_L[3], 1, 1 );
-	part_set_signal( p, IO_CS_L[4], 1, 1 );
-	part_set_signal( p, IO_CS_L[5], 1, 1 );
-	part_set_signal( p, IO_CS_L[6], 1, 1 );
-	part_set_signal( p, IO_CS_L[7], 1, 1 );
-	part_set_signal( p, IO_RW, 1, 0 );
-	part_set_signal( p, IO_WR_L, 1, 1 );
-	part_set_signal( p, IO_OE_L, 1, 1 );
-
-	setup_address( bus, adr );
-	setup_data( bus, data );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, IO_WR_L, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-	
-	part_set_signal( p, IO_WR_L, 1, 1 );
-	chain_shift_data_registers( chain, 0 );
-}
-
-#else /* BCM_EJTAG */
-int addr;
-uint64_t base = 0x1fc00000;
-uint32_t bcm1250_bus_read(bus_t *bus, uint32_t adr ) {
-	unsigned char buf[32];
-	bcm1250_ejtag_do(bus, adr+base, 0, 1, 0, buf, 0);
-	return buf[adr&0x1f];
-		
-}
-
-uint32_t bcm1250_bus_read_next(bus_t *bus, uint32_t adr ) {
-	uint32_t t;
-	t=bcm1250_bus_read(bus, addr);
-	addr=adr;
-	return t;
-}
-
-uint32_t bcm1250_bus_read_end(bus_t *bus) {
-	return bcm1250_bus_read(bus, addr);
-}
-
-void bcm1250_bus_read_start(bus_t *bus, uint32_t adr ) {
-addr=adr;
-}
-
-void
-bcm1250_bus_write( bus_t *bus, uint32_t adr, uint32_t data ) {
-	unsigned char buf[32];
-	bcm1250_ejtag_do(bus, adr+base, data, 0, 0, buf, 0);
-}
-
-#endif
-	
-static int
-bcm1250_bus_area( bus_t *bus, uint32_t addr, bus_area_t *area )
-{
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x100000000);
-	area->width = 8;
-
-	return 0;
-}
-
-static void
-bcm1250_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 bcm1250_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -330,32 +130,238 @@ bcm1250_bus_new( chain_t *chain, char *cmd_params[] )
     return bus;
 }
 
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+bcm1250_bus_printinfo( bus_t *bus )
+{
+	int i;
 
-#ifdef USE_BCM_EJTAG
-int bcm1250_ejtag_do(bus_t *bus, uint64_t ad, uint64_t da, int read, int type, 
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Broadcom BCM1250 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+bcm1250_bus_prepare( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+bcm1250_bus_area( bus_t *bus, uint32_t addr, bus_area_t *area )
+{
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+	area->width = 8;
+
+	return 0;
+}
+
+#ifndef USE_BCM_EJTAG
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 24; i++) {
+		part_set_signal( p, IO_AD[i], 1, (a >> i) & 1 );
+	}
+}
+
+static void
+set_data_in( bus_t *bus )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 8; i++) {
+		part_set_signal( p, IO_AD[i+24], 0, 0 );
+	}
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 8; i++) {
+		part_set_signal( p, IO_AD[i+24], 1, (d >> i) & 1 );
+	}
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+bcm1250_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, IO_CS_L[0], 1, 0 );
+	part_set_signal( p, IO_CS_L[1], 1, 1 );
+	part_set_signal( p, IO_CS_L[2], 1, 1 );
+	part_set_signal( p, IO_CS_L[3], 1, 1 );
+	part_set_signal( p, IO_CS_L[4], 1, 1 );
+	part_set_signal( p, IO_CS_L[5], 1, 1 );
+	part_set_signal( p, IO_CS_L[6], 1, 1 );
+	part_set_signal( p, IO_CS_L[7], 1, 1 );
+	part_set_signal( p, IO_RW, 1, 1 );
+	part_set_signal( p, IO_WR_L, 1, 1 );
+	part_set_signal( p, IO_OE_L, 1, 0 );
+
+	setup_address( bus, adr );
+	set_data_in( bus );
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+bcm1250_bus_read_next( bus_t *bus , uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	setup_address( bus, adr );
+	chain_shift_data_registers( chain, 1 );
+
+	{
+		int i;
+		uint32_t d = 0;
+
+		for (i = 0; i < 8; i++) {
+			d |= (uint32_t) (part_get_signal( p, IO_AD[i+24] ) << i);
+		}
+
+		return d;
+	}
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+bcm1250_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, IO_CS_L[0], 1, 1 );
+	part_set_signal( p, IO_OE_L, 1, 1 );
+	chain_shift_data_registers( chain, 1 );
+
+	{
+		int i;
+		uint32_t d = 0;
+
+		for (i = 0; i < 8; i++) {
+			d |= (uint32_t) (part_get_signal( p, IO_AD[i+24] ) << i);
+		}
+
+		return d;
+	}
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+bcm1250_bus_read( bus_t *bus, uint32_t adr )
+{
+	uint32_t i;
+	bcm1250_bus_read_start( bus, adr );
+	i=bcm1250_bus_read_end( bus );
+	return i;
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+bcm1250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, IO_CS_L[0], 1, 0 );
+	part_set_signal( p, IO_CS_L[1], 1, 1 );
+	part_set_signal( p, IO_CS_L[2], 1, 1 );
+	part_set_signal( p, IO_CS_L[3], 1, 1 );
+	part_set_signal( p, IO_CS_L[4], 1, 1 );
+	part_set_signal( p, IO_CS_L[5], 1, 1 );
+	part_set_signal( p, IO_CS_L[6], 1, 1 );
+	part_set_signal( p, IO_CS_L[7], 1, 1 );
+	part_set_signal( p, IO_RW, 1, 0 );
+	part_set_signal( p, IO_WR_L, 1, 1 );
+	part_set_signal( p, IO_OE_L, 1, 1 );
+
+	setup_address( bus, adr );
+	setup_data( bus, data );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, IO_WR_L, 1, 0 );
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, IO_WR_L, 1, 1 );
+	chain_shift_data_registers( chain, 0 );
+}
+
+#else /* #ifndef USE_BCM_EJTAG */
+
+int addr;
+uint64_t base = 0x1fc00000;
+
+static int
+bcm1250_ejtag_do(bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
 		unsigned char *buf, int verbose) {
-	
+
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
 	char ctrl[15]="010000000000";
-	char addrr[80]="0000" "111" "000" 
+	char addrr[80]="0000" "111" "000"
 		"11111111111111111111111111111111"
 		"00000000" "00011111" "11000000" "00000000" "000";
 	int j, k, n, m;
 	uint64_t a;
 
 	if(verbose)printf("BCM1250: ejtag_do(%08Lx, %08Lx, %i, %i)\n", ad, da, read, type);
-	
+
 	a=ad>>5;
 	for(j=0;j<35;j++) {
 		addrr[76-j]='0'+(a&1);
 		a>>=1;
 	}
-	
+
 	j=(1<<type)-1;
 	for(m=10; m<42; m++) addrr[m]='0';
 	n=ad&(~j&0x1f);
-	for(m=n; m<n+(1<<type); m++) addrr[m+10]='1';	
+	for(m=n; m<n+(1<<type); m++) addrr[m+10]='1';
 
 	ctrl[2]='0';
 	ctrl[3]='0';
@@ -436,13 +442,13 @@ int bcm1250_ejtag_do(bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
 	if(verbose || read) {
 		volatile int q;
 		int to;
-		
+
 		to=5;
 		for(q=0;q<100;q++);
 		part_set_instruction( p, "DATA");
 		chain_shift_instructions(chain);
 		chain_shift_data_registers( chain, 1 );
-		
+
 		while((p->active_instruction->data_register->out->data[276-17]==0) && to--) {
 			chain_shift_data_registers( chain, 1 );
 		}
@@ -467,7 +473,64 @@ int bcm1250_ejtag_do(bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
 	}
 	return 0;
 }
-#endif
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+bcm1250_bus_read_start(bus_t *bus, uint32_t adr )
+{
+	addr=adr;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+bcm1250_bus_read(bus_t *bus, uint32_t adr )
+{
+	unsigned char buf[32];
+	bcm1250_ejtag_do(bus, adr+base, 0, 1, 0, buf, 0);
+	return buf[adr&0x1f];
+
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+bcm1250_bus_read_next(bus_t *bus, uint32_t adr )
+{
+	uint32_t t;
+	t=bcm1250_bus_read(bus, addr);
+	addr=adr;
+	return t;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t bcm1250_bus_read_end(bus_t *bus)
+{
+	return bcm1250_bus_read(bus, addr);
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+bcm1250_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	unsigned char buf[32];
+	bcm1250_ejtag_do(bus, adr+base, data, 0, 0, buf, 0);
+}
+
+#endif /* #else #ifndef USE_BCM_EJTAG */
 
 const bus_driver_t bcm1250_bus = {
 	"bcm1250",

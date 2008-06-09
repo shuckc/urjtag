@@ -47,13 +47,13 @@
 
 
 /*
- * the following defines are used in proc field of the the 
+ * the following defines are used in proc field of the the
  * bus_params_t structure and are used in various functions
- * below 
+ * below
  */
 
 #define PROC_PXA25x	1	// including px26x series
-#define PROC_PXA27x	2	
+#define PROC_PXA27x	2
 
 
 #define nCS_TOTAL 6
@@ -71,10 +71,10 @@ typedef struct {
  *
  * Note: the setup of nCS[*] is board-specific, rather than chip-specific!
  * The memory mapping and nCS[*] functions are normally set up by the boot loader.
- * In our JTAG code, we manipulate the outer pins explicitly, without the help 
+ * In our JTAG code, we manipulate the outer pins explicitly, without the help
  * of the CPU's memory controller - hence the need to mimick its setup.
  *
- * Note that bus_area() and bus_read()/bus_write() use a window of 64MB 
+ * Note that bus_area() and bus_read()/bus_write() use a window of 64MB
  * per nCS pin (26bit addresses), which seems to be the most common option.
  * For static CS[0] and CS[1] == 128 MB, the algorithms have to be modified...
  */
@@ -91,7 +91,7 @@ static ncs_map_entry pxa25x_ncs_map[nCS_TOTAL] = {
 };
 
 // Default mapping with all nCS[*] GPIO pins used as nCS.
-// Note that the same GPIO pins might be used e.g. for PCCard 
+// Note that the same GPIO pins might be used e.g. for PCCard
 // service space access or PWM outputs, or some other purpose.
 static ncs_map_entry pxa27x_ncs_map[nCS_TOTAL] = {
 	{"nCS[0]",   1,  0},   // nCS[0]
@@ -137,43 +137,205 @@ typedef struct {
 
 #define	INITED		((bus_params_t *) bus->params)->inited
 
-
-static void
-setup_address( bus_t *bus, uint32_t a )
+/*
+ * bus->driver->(*new_bus)
+ *
+ */
+static int
+pxa2xx_bus_new_common(bus_t * bus)
 {
+        int failed = 0;
+        ncs_map_entry* ncs_map = NULL;
+#ifdef PREPATCHNEVER
+	bus_t *bus;
+	char buff[10];
 	int i;
-	part_t *p = PART;
 
-	for (i = 0; i < 26; i++)
-		part_set_signal( p, MA[i], 1, (a >> i) & 1 );
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
+
+	bus = calloc( 1, sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	bus->driver = &pxa2x0_bus;
+	bus->params = calloc( 1, sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[chain->active_part];
+#endif
+	int i;
+	char buff[10];
+
+	for (i = 0; i < 26; i++) {
+		sprintf( buff, "MA[%d]", i );
+		MA[i] = part_find_signal( PART, buff );
+		if (!MA[i]) {
+			printf( _("signal '%s' not found\n"), buff );
+			failed = 1;
+			break;
+		}
+	}
+	for (i = 0; i < 32; i++) {
+		sprintf( buff, "MD[%d]", i );
+		MD[i] = part_find_signal( PART, buff );
+		if (!MD[i]) {
+			printf( _("signal '%s' not found\n"), buff );
+			failed = 1;
+			break;
+		}
+	}
+
+	if (PROC == PROC_PXA25x) {
+		ncs_map = pxa25x_ncs_map;
+	}
+	else if (PROC == PROC_PXA27x) {
+		ncs_map = pxa27x_ncs_map;
+	}
+	else
+	{
+		printf( "BUG in the code, file %s, line %d: unknown PROC\n", __FILE__, __LINE__ );
+		ncs_map = pxa25x_ncs_map; // be dumb by default
+	}
+	for (i = 0; i < nCS_TOTAL; i++) {
+		if (ncs_map[i].enabled > 0)
+		{
+			nCS[i] = part_find_signal( PART, ncs_map[i].sig_name );
+			if (!nCS[i]) {
+				printf( _("signal '%s' not found\n"), buff );
+				failed = 1;
+				break;
+			}
+		}
+		else // disabled - this GPIO pin is unused or used for some other function
+		{
+			nCS[i] = NULL;
+		}
+	}
+
+	for (i = 0; i < 4; i++) {
+		sprintf( buff, "DQM[%d]", i );
+		DQM[i] = part_find_signal( PART, buff );
+		if (!DQM[i]) {
+			printf( _("signal '%s' not found\n"), buff );
+			failed = 1;
+			break;
+		}
+	}
+	RDnWR = part_find_signal( PART, "RDnWR" );
+	if (!RDnWR) {
+		printf( _("signal '%s' not found\n"), "RDnWR" );
+		failed = 1;
+	}
+	nWE = part_find_signal( PART, "nWE" );
+	if (!nWE) {
+		printf( _("signal '%s' not found\n"), "nWE" );
+		failed = 1;
+	}
+	nOE = part_find_signal( PART, "nOE" );
+	if (!nOE) {
+		printf( _("signal '%s' not found\n"), "nOE" );
+		failed = 1;
+	}
+	nSDCAS = part_find_signal( PART, "nSDCAS" );
+	if (!nSDCAS) {
+		printf( _("signal '%s' not found\n"), "nSDCAS" );
+		failed = 1;
+	}
+
+	return failed;
 }
 
-static void
-set_data_in( bus_t *bus, uint32_t adr )
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
+static bus_t *
+pxa2x0_bus_new( chain_t *chain, char *cmd_params[] )
 {
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
+	bus_t *bus;
+	int failed = 0;
 
-	bus->driver->area( bus, adr, &area );
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
 
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, MD[i], 0, 0 );
+	bus = calloc( 1, sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	bus->driver = &pxa2x0_bus;
+	bus->params = calloc( 1, sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[chain->active_part];
+	PROC = PROC_PXA25x;
+
+	failed = pxa2xx_bus_new_common(bus);
+
+	if (failed) {
+		free( bus->params );
+		free( bus );
+		return NULL;
+	}
+
+	INITED = 0;
+
+	return bus;
 }
 
-static void
-setup_data( bus_t *bus, uint32_t adr, uint32_t d )
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
+static bus_t *
+pxa27x_bus_new( chain_t *chain, char *cmd_params[] )
 {
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
+	bus_t *bus;
+	int failed = 0;
 
-	bus->driver->area( bus, adr, &area );
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
 
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, MD[i], 1, (d >> i) & 1 );
+	bus = calloc( 1, sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	bus->driver = &pxa27x_bus;
+	bus->params = calloc( 1, sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[chain->active_part];
+	PROC = PROC_PXA27x;
+
+	failed = pxa2xx_bus_new_common(bus);
+
+	if (failed) {
+		free( bus->params );
+		free( bus );
+		return NULL;
+	}
+
+	INITED = 0;
+
+	return bus;
 }
 
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
 static void
 pxa2x0_bus_printinfo( bus_t *bus )
 {
@@ -185,6 +347,10 @@ pxa2x0_bus_printinfo( bus_t *bus )
 	printf( _("Intel PXA2x0 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
 static void
 pxa27x_bus_printinfo( bus_t *bus )
 {
@@ -196,6 +362,10 @@ pxa27x_bus_printinfo( bus_t *bus )
 	printf( _("Intel PXA27x compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
+/**
+ * bus->driver->(*init)
+ *
+ */
 static int
 pxa2xx_bus_init( bus_t *bus )
 {
@@ -211,7 +381,7 @@ pxa2xx_bus_init( bus_t *bus )
 
 	if (PROC == PROC_PXA25x)
 	{
-		BOOT_DEF = BOOT_DEF_PKG_TYPE | 
+		BOOT_DEF = BOOT_DEF_PKG_TYPE |
 			BOOT_DEF_BOOT_SEL(part_get_signal( p, part_find_signal( p, "BOOT_SEL[2]" ) ) << 2
 					| part_get_signal( p, part_find_signal( p, "BOOT_SEL[1]" ) ) << 1
 					| part_get_signal( p, part_find_signal( p, "BOOT_SEL[0]" ) ));
@@ -232,6 +402,10 @@ pxa2xx_bus_init( bus_t *bus )
 	return 0;
 }
 
+/**
+ * bus->driver->(*prepare)
+ *
+ */
 static void
 pxa2xx_bus_prepare( bus_t *bus )
 {
@@ -241,170 +415,10 @@ pxa2xx_bus_prepare( bus_t *bus )
 	chain_shift_instructions( CHAIN );
 }
 
-static void
-pxa2xx_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	int cs_index = 0;
-
-	chain_t *chain = CHAIN;
-	part_t *p = PART;
-
-	LAST_ADR = adr;
-	if (adr >= 0x18000000)
-		return;
-	
-	cs_index = adr >> 26;	
-	if (nCS[cs_index] == NULL)
-		return;
-
-	/* see Figure 6-13 in [1] */
-	part_set_signal( p, nCS[cs_index], 1, 0 );
-	part_set_signal( p, DQM[0], 1, 0 );
-	part_set_signal( p, DQM[1], 1, 0 );
-	part_set_signal( p, DQM[2], 1, 0 );
-	part_set_signal( p, DQM[3], 1, 0 );
-	part_set_signal( p, RDnWR, 1, 1 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 0 );
-	part_set_signal( p, nSDCAS, 1, 0 );
-
-	setup_address( bus, adr );
-	set_data_in( bus, adr );
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-static uint32_t
-pxa2xx_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	uint32_t d;
-	uint32_t old_last_adr = LAST_ADR;
-
-	LAST_ADR = adr;
-
-	if (adr < UINT32_C(0x18000000)) {
-		int i;
-		bus_area_t area;
-
-		if (nCS[adr >> 26] == NULL) // avoid undefined nCS windows
-			return 0;
-
-		bus->driver->area( bus, adr, &area );
-
-		/* see Figure 6-13 in [1] */
-		setup_address( bus, adr );
-		chain_shift_data_registers( chain, 1 );
-
-		d = 0;
-		for (i = 0; i < area.width; i++)
-			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
-
-		return d;
-	}
-
-        // anything above 0x18000000 is essentially unreachable...
-	if (adr < UINT32_C(0x48000000))
-		return 0;
-
-	if (adr < UINT32_C(0x4C000000)) {
-		if (old_last_adr == (MC_BASE + BOOT_DEF_OFFSET))
-			return BOOT_DEF;
-
-		return 0;
-	}
-
-	return 0;
-}
-
-static uint32_t
-pxa2xx_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	if (LAST_ADR < UINT32_C(0x18000000)) {
-		int i;
-		uint32_t d = 0;
-		bus_area_t area;
-
-		if (nCS[LAST_ADR >> 26] == NULL) // avoid undefined nCS windows
-			return 0;
-
-		bus->driver->area( bus, LAST_ADR, &area );
-
-		/* see Figure 6-13 in [1] */
-		part_set_signal( p, nCS[0], 1, 1 );
-		part_set_signal( p, nOE, 1, 1 );
-		part_set_signal( p, nSDCAS, 1, 1 );
-
-		chain_shift_data_registers( chain, 1 );
-
-		for (i = 0; i < area.width; i++)
-			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
-
-		return d;
-	}
-
-        // anything above 0x18000000 is essentially unreachable...
-	if (LAST_ADR < UINT32_C(0x48000000))
-		return 0;
-
-	if (LAST_ADR < UINT32_C(0x4C000000)) {
-		if (LAST_ADR == (MC_BASE + BOOT_DEF_OFFSET))
-			return BOOT_DEF;
-
-		return 0;
-	}
-
-	return 0;
-}
-
-static uint32_t
-pxa2xx_bus_read( bus_t *bus, uint32_t adr )
-{
-	pxa2xx_bus_read_start( bus, adr );
-	return pxa2xx_bus_read_end( bus );
-}
-
-static void
-pxa2xx_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	int cs_index = 0;
-
-	/* see Figure 6-17 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	if (adr >= 0x18000000)
-		return;
-
-	cs_index = adr >> 26;
-	if (nCS[cs_index] == NULL)
-		return;
-
-	part_set_signal( p, nCS[cs_index], 1, 0 );
-	part_set_signal( p, DQM[0], 1, 0 );
-	part_set_signal( p, DQM[1], 1, 0 );
-	part_set_signal( p, DQM[2], 1, 0 );
-	part_set_signal( p, DQM[3], 1, 0 );
-	part_set_signal( p, RDnWR, 1, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	part_set_signal( p, nSDCAS, 1, 0 );
-
-	setup_address( bus, adr );
-	setup_data( bus, adr, data );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, nWE, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	chain_shift_data_registers( chain, 0 );
-}
-
+/**
+ * bus->driver->(*area)
+ *
+ */
 static int
 pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
@@ -492,6 +506,10 @@ pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
+/**
+ * bus->driver->(*area)
+ *
+ */
 static int
 pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
@@ -600,189 +618,224 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	return 0;
 }
 
-//static bus_t *
-//pxa2x0_bus_new( void )
-static int
-pxa2xx_bus_new_common(bus_t * bus)
+static void
+setup_address( bus_t *bus, uint32_t a )
 {
-        int failed = 0;
-        ncs_map_entry* ncs_map = NULL;
-#ifdef PREPATCHNEVER
-	bus_t *bus;
-	char buff[10];
 	int i;
+	part_t *p = PART;
 
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
-
-	bus = calloc( 1, sizeof (bus_t) );
-	if (!bus)
-		return NULL;
-
-	bus->driver = &pxa2x0_bus;
-	bus->params = calloc( 1, sizeof (bus_params_t) );
-	if (!bus->params) {
-		free( bus );
-		return NULL;
-	}
-
-	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
-#endif
-	int i;
-	char buff[10];
-
-	for (i = 0; i < 26; i++) {
-		sprintf( buff, "MA[%d]", i );
-		MA[i] = part_find_signal( PART, buff );
-		if (!MA[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
-	}
-	for (i = 0; i < 32; i++) {
-		sprintf( buff, "MD[%d]", i );
-		MD[i] = part_find_signal( PART, buff );
-		if (!MD[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
-	}
-        
-	if (PROC == PROC_PXA25x) {
-		ncs_map = pxa25x_ncs_map;
-	}
-	else if (PROC == PROC_PXA27x) {
-		ncs_map = pxa27x_ncs_map;
-	}
-	else
-	{
-		printf( "BUG in the code, file %s, line %d: unknown PROC\n", __FILE__, __LINE__ );
-		ncs_map = pxa25x_ncs_map; // be dumb by default
-	}
-	for (i = 0; i < nCS_TOTAL; i++) {
-		if (ncs_map[i].enabled > 0)
-		{
-			nCS[i] = part_find_signal( PART, ncs_map[i].sig_name );
-			if (!nCS[i]) {
-				printf( _("signal '%s' not found\n"), buff );
-				failed = 1;
-				break;
-			}
-		}
-		else // disabled - this GPIO pin is unused or used for some other function
-		{
-			nCS[i] = NULL;
-		}
-	}
-
-	for (i = 0; i < 4; i++) {
-		sprintf( buff, "DQM[%d]", i );
-		DQM[i] = part_find_signal( PART, buff );
-		if (!DQM[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
-	}
-	RDnWR = part_find_signal( PART, "RDnWR" );
-	if (!RDnWR) {
-		printf( _("signal '%s' not found\n"), "RDnWR" );
-		failed = 1;
-	}
-	nWE = part_find_signal( PART, "nWE" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nWE" );
-		failed = 1;
-	}
-	nOE = part_find_signal( PART, "nOE" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "nOE" );
-		failed = 1;
-	}
-	nSDCAS = part_find_signal( PART, "nSDCAS" );
-	if (!nSDCAS) {
-		printf( _("signal '%s' not found\n"), "nSDCAS" );
-		failed = 1;
-	}
-
-	return failed;
+	for (i = 0; i < 26; i++)
+		part_set_signal( p, MA[i], 1, (a >> i) & 1 );
 }
 
-static bus_t *
-pxa2x0_bus_new( chain_t *chain, char *cmd_params[] )
+static void
+set_data_in( bus_t *bus, uint32_t adr )
 {
-	bus_t *bus;
-	int failed = 0;
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
 
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
+	bus->driver->area( bus, adr, &area );
 
-	bus = calloc( 1, sizeof (bus_t) );
-	if (!bus)
-		return NULL;
-
-	bus->driver = &pxa2x0_bus;
-	bus->params = calloc( 1, sizeof (bus_params_t) );
-	if (!bus->params) {
-		free( bus );
-		return NULL;
-	}
-
-	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
-	PROC = PROC_PXA25x;
-
-	failed = pxa2xx_bus_new_common(bus);
-
-	if (failed) {
-		free( bus->params );
-		free( bus );
-		return NULL;
-	}
-
-	INITED = 0;
-
-	return bus;
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, MD[i], 0, 0 );
 }
 
-static bus_t *
-pxa27x_bus_new( chain_t *chain, char *cmd_params[] )
+static void
+setup_data( bus_t *bus, uint32_t adr, uint32_t d )
 {
-	bus_t *bus;
-	int failed = 0;
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
 
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
+	bus->driver->area( bus, adr, &area );
 
-	bus = calloc( 1, sizeof (bus_t) );
-	if (!bus)
-		return NULL;
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, MD[i], 1, (d >> i) & 1 );
+}
 
-	bus->driver = &pxa27x_bus;
-	bus->params = calloc( 1, sizeof (bus_params_t) );
-	if (!bus->params) {
-		free( bus );
-		return NULL;
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+pxa2xx_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	int cs_index = 0;
+
+	chain_t *chain = CHAIN;
+	part_t *p = PART;
+
+	LAST_ADR = adr;
+	if (adr >= 0x18000000)
+		return;
+
+	cs_index = adr >> 26;
+	if (nCS[cs_index] == NULL)
+		return;
+
+	/* see Figure 6-13 in [1] */
+	part_set_signal( p, nCS[cs_index], 1, 0 );
+	part_set_signal( p, DQM[0], 1, 0 );
+	part_set_signal( p, DQM[1], 1, 0 );
+	part_set_signal( p, DQM[2], 1, 0 );
+	part_set_signal( p, DQM[3], 1, 0 );
+	part_set_signal( p, RDnWR, 1, 1 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 0 );
+	part_set_signal( p, nSDCAS, 1, 0 );
+
+	setup_address( bus, adr );
+	set_data_in( bus, adr );
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+pxa2xx_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	uint32_t d;
+	uint32_t old_last_adr = LAST_ADR;
+
+	LAST_ADR = adr;
+
+	if (adr < UINT32_C(0x18000000)) {
+		int i;
+		bus_area_t area;
+
+		if (nCS[adr >> 26] == NULL) // avoid undefined nCS windows
+			return 0;
+
+		bus->driver->area( bus, adr, &area );
+
+		/* see Figure 6-13 in [1] */
+		setup_address( bus, adr );
+		chain_shift_data_registers( chain, 1 );
+
+		d = 0;
+		for (i = 0; i < area.width; i++)
+			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
+
+		return d;
 	}
 
-	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
-	PROC = PROC_PXA27x;
+        // anything above 0x18000000 is essentially unreachable...
+	if (adr < UINT32_C(0x48000000))
+		return 0;
 
-	failed = pxa2xx_bus_new_common(bus);
+	if (adr < UINT32_C(0x4C000000)) {
+		if (old_last_adr == (MC_BASE + BOOT_DEF_OFFSET))
+			return BOOT_DEF;
 
-	if (failed) {
-		free( bus->params );
-		free( bus );
-		return NULL;
+		return 0;
 	}
 
-	INITED = 0;
+	return 0;
+}
 
-	return bus;
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+pxa2xx_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	if (LAST_ADR < UINT32_C(0x18000000)) {
+		int i;
+		uint32_t d = 0;
+		bus_area_t area;
+
+		if (nCS[LAST_ADR >> 26] == NULL) // avoid undefined nCS windows
+			return 0;
+
+		bus->driver->area( bus, LAST_ADR, &area );
+
+		/* see Figure 6-13 in [1] */
+		part_set_signal( p, nCS[0], 1, 1 );
+		part_set_signal( p, nOE, 1, 1 );
+		part_set_signal( p, nSDCAS, 1, 1 );
+
+		chain_shift_data_registers( chain, 1 );
+
+		for (i = 0; i < area.width; i++)
+			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
+
+		return d;
+	}
+
+        // anything above 0x18000000 is essentially unreachable...
+	if (LAST_ADR < UINT32_C(0x48000000))
+		return 0;
+
+	if (LAST_ADR < UINT32_C(0x4C000000)) {
+		if (LAST_ADR == (MC_BASE + BOOT_DEF_OFFSET))
+			return BOOT_DEF;
+
+		return 0;
+	}
+
+	return 0;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+pxa2xx_bus_read( bus_t *bus, uint32_t adr )
+{
+	pxa2xx_bus_read_start( bus, adr );
+	return pxa2xx_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+pxa2xx_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	int cs_index = 0;
+
+	/* see Figure 6-17 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	if (adr >= 0x18000000)
+		return;
+
+	cs_index = adr >> 26;
+	if (nCS[cs_index] == NULL)
+		return;
+
+	part_set_signal( p, nCS[cs_index], 1, 0 );
+	part_set_signal( p, DQM[0], 1, 0 );
+	part_set_signal( p, DQM[1], 1, 0 );
+	part_set_signal( p, DQM[2], 1, 0 );
+	part_set_signal( p, DQM[3], 1, 0 );
+	part_set_signal( p, RDnWR, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	part_set_signal( p, nSDCAS, 1, 0 );
+
+	setup_address( bus, adr );
+	setup_data( bus, adr, data );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, nWE, 1, 0 );
+	chain_shift_data_registers( chain, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	chain_shift_data_registers( chain, 0 );
 }
 
 const bus_driver_t pxa2x0_bus = {

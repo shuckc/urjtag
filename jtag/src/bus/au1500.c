@@ -21,7 +21,7 @@
  * Written by ZHANG WEI <zwblue@sohu.com>, 2003
  *
  * Documentation:
- * [1] AMD, "AMD Alchemy Solutions AU1500 Processor Data Book - 
+ * [1] AMD, "AMD Alchemy Solutions AU1500 Processor Data Book -
  *     Preliminary Information", June 2003, Publication ID: 30361B
  *
  */
@@ -60,61 +60,10 @@ typedef struct{
 #define nROE ((bus_params_t *) bus->params)->nroe
 #define RD ((bus_params_t *) bus->params)->rd
 
-static void
-setup_address( bus_t *bus, uint32_t a)
-{
-	int i;
-	part_t *p = PART;
-
-	for( i = 0; i < 32; i++)
-		part_set_signal( p, RAD[i], 1, (a >>i) & 1);
-}
-
-static int au1500_bus_area(bus_t * bus, uint32_t addr, bus_area_t * area);
-
-static void
-set_data_in( bus_t *bus )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	au1500_bus_area( bus, 0, &area);
-
-	for( i = 0; i < area.width; i++ )
-		part_set_signal( p, RD[i], 0, 0 );
-	
-}
-
-static uint32_t
-get_data_out( bus_t *bus )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-	uint32_t d = 0;
-
-	au1500_bus_area( bus, 0, &area);
-
-	for( i = 0; i < area.width; i++ )
-		d |= (uint32_t)(part_get_signal( p, RD[i] ) << i);
-
-	return d;	
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d)
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	au1500_bus_area( bus, 0, &area);
-
-	for( i = 0; i < area.width; i++ )
-		part_set_signal( p, RD[i], 1, ( d>>i ) & 1 );
-}
-
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *au1500_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
@@ -122,14 +71,14 @@ static bus_t *au1500_bus_new( chain_t *chain, char *cmd_params[] )
 	int i;
 	int failed = 0;
 
-	
+
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
 
 	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
-		
+
 	bus->driver  = &au1500_bus;
 	bus->params = calloc( 1, sizeof(bus_params_t) );
 	if (!bus->params){
@@ -190,23 +139,13 @@ static bus_t *au1500_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
- 		
+
 }
 
-static int 
-au1500_bus_area(bus_t *bus, uint32_t addr, bus_area_t *area)
-{
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x00100000000);
-//	area->width = 16;
-	area->width = part_get_signal( PART, part_find_signal( PART, "ROMSIZ" ) ) ? 16 : 32;
-
-
-	return 0;
-	
-}
-
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
 static void
 au1500_bus_printinfo( bus_t *bus)
 {
@@ -218,6 +157,10 @@ au1500_bus_printinfo( bus_t *bus)
 	printf( _("AU1500 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
 }
 
+/**
+ * bus->driver->(*prepare)
+ *
+ */
 static void
 au1500_bus_prepare( bus_t *bus )
 {
@@ -225,7 +168,82 @@ au1500_bus_prepare( bus_t *bus )
 	chain_shift_instructions( CHAIN );
 }
 
-static void 
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+au1500_bus_area(bus_t *bus, uint32_t addr, bus_area_t *area)
+{
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x00100000000);
+//	area->width = 16;
+	area->width = part_get_signal( PART, part_find_signal( PART, "ROMSIZ" ) ) ? 16 : 32;
+
+
+	return 0;
+
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a)
+{
+	int i;
+	part_t *p = PART;
+
+	for( i = 0; i < 32; i++)
+		part_set_signal( p, RAD[i], 1, (a >>i) & 1);
+}
+
+static void
+set_data_in( bus_t *bus )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	au1500_bus_area( bus, 0, &area);
+
+	for( i = 0; i < area.width; i++ )
+		part_set_signal( p, RD[i], 0, 0 );
+
+}
+
+static uint32_t
+get_data_out( bus_t *bus )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+	uint32_t d = 0;
+
+	au1500_bus_area( bus, 0, &area);
+
+	for( i = 0; i < area.width; i++ )
+		d |= (uint32_t)(part_get_signal( p, RD[i] ) << i);
+
+	return d;
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d)
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	au1500_bus_area( bus, 0, &area);
+
+	for( i = 0; i < area.width; i++ )
+		part_set_signal( p, RD[i], 1, ( d>>i ) & 1 );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
 au1500_bus_read_start( bus_t *bus, uint32_t adr )
 {
 	part_t *p = PART;
@@ -244,6 +262,10 @@ au1500_bus_read_start( bus_t *bus, uint32_t adr )
 	chain_shift_data_registers( chain, 0 );
 }
 
+/**
+ * bus->driver->(*read_next)
+ *
+ */
 static uint32_t
 au1500_bus_read_next( bus_t *bus, uint32_t adr )
 {
@@ -255,6 +277,10 @@ au1500_bus_read_next( bus_t *bus, uint32_t adr )
 	return get_data_out( bus );
 }
 
+/**
+ * bus->driver->(*read_end)
+ *
+ */
 static uint32_t
 au1500_bus_read_end( bus_t *bus )
 {
@@ -273,6 +299,10 @@ au1500_bus_read_end( bus_t *bus )
 	return get_data_out( bus );
 }
 
+/**
+ * bus->driver->(*read)
+ *
+ */
 static uint32_t
 au1500_bus_read( bus_t *bus, uint32_t adr )
 {
@@ -280,6 +310,10 @@ au1500_bus_read( bus_t *bus, uint32_t adr )
 	return au1500_bus_read_end( bus );
 }
 
+/**
+ * bus->driver->(*write)
+ *
+ */
 static void
 au1500_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 {

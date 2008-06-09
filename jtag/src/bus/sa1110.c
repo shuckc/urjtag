@@ -60,185 +60,10 @@ typedef struct {
 #define	nWE	((bus_params_t *) bus->params)->nwe
 #define	nOE	((bus_params_t *) bus->params)->noe
 
-static void
-setup_address( bus_t *bus, uint32_t a )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 26; i++)
-		part_set_signal( p, A[i], 1, (a >> i) & 1 );
-}
-
-static int sa1110_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
-
-static void
-set_data_in( bus_t *bus )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	sa1110_bus_area( bus, 0, &area );
-
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, D[i], 0, 0 );
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	sa1110_bus_area( bus, 0, &area );
-
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, D[i], 1, (d >> i) & 1 );
-}
-
-static void
-sa1110_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Intel SA-1110 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-static void
-sa1110_bus_prepare( bus_t *bus )
-{       
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-static void
-sa1110_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	/* see Figure 10-12 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, nCS[0], 1, (adr >> 27) != 0 );
-	part_set_signal( p, nCS[1], 1, (adr >> 27) != 1 );
-	part_set_signal( p, nCS[2], 1, (adr >> 27) != 2 );
-	part_set_signal( p, nCS[3], 1, (adr >> 27) != 3 );
-	part_set_signal( p, nCS[4], 1, (adr >> 27) != 8 );
-	part_set_signal( p, nCS[5], 1, (adr >> 27) != 9 );
-	part_set_signal( p, RD_nWR, 1, 1 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 0 );
-
-	setup_address( bus, adr );
-	set_data_in( bus );
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-static uint32_t
-sa1110_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	/* see Figure 10-12 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-	bus_area_t area;
-
-	sa1110_bus_area( bus, adr, &area );
-
-	setup_address( bus, adr );
-	chain_shift_data_registers( chain, 1 );
-
-	for (i = 0; i < area.width; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-	return d;
-}
-
-static uint32_t
-sa1110_bus_read_end( bus_t *bus )
-{
-	/* see Figure 10-12 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-	bus_area_t area;
-
-	sa1110_bus_area( bus, 0, &area );
-
-	part_set_signal( p, nCS[0], 1, 1 );
-	part_set_signal( p, nCS[1], 1, 1 );
-	part_set_signal( p, nCS[2], 1, 1 );
-	part_set_signal( p, nCS[3], 1, 1 );
-	part_set_signal( p, nCS[4], 1, 1 );
-	part_set_signal( p, nCS[5], 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-	chain_shift_data_registers( chain, 1 );
-
-	for (i = 0; i < area.width; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-	return d;
-}
-
-static uint32_t
-sa1110_bus_read( bus_t *bus, uint32_t adr )
-{
-	sa1110_bus_read_start( bus, adr );
-	return sa1110_bus_read_end( bus );
-}
-
-static void
-sa1110_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	/* see Figure 10-16 in [1] */
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, nCS[0], 1, (adr >> 27) != 0 );
-	part_set_signal( p, nCS[1], 1, (adr >> 27) != 1 );
-	part_set_signal( p, nCS[2], 1, (adr >> 27) != 2 );
-	part_set_signal( p, nCS[3], 1, (adr >> 27) != 3 );
-	part_set_signal( p, nCS[4], 1, (adr >> 27) != 8 );
-	part_set_signal( p, nCS[5], 1, (adr >> 27) != 9 );
-	part_set_signal( p, RD_nWR, 1, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-
-	setup_address( bus, adr );
-	setup_data( bus, data );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, nWE, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nCS[0], 1, 1 );
-	part_set_signal( p, nCS[1], 1, 1 );
-	part_set_signal( p, nCS[2], 1, 1 );
-	part_set_signal( p, nCS[3], 1, 1 );
-	part_set_signal( p, nCS[4], 1, 1 );
-	part_set_signal( p, nCS[5], 1, 1 );
-	chain_shift_data_registers( chain, 0 );
-}
-
-static int
-sa1110_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x100000000);
-	area->width = part_get_signal( PART, part_find_signal( PART, "ROM_SEL" ) ) ? 32 : 16;
-
-	return 0;
-}
-
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 sa1110_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -314,6 +139,215 @@ sa1110_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+sa1110_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Intel SA-1110 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+sa1110_bus_prepare( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+sa1110_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+	area->width = part_get_signal( PART, part_find_signal( PART, "ROM_SEL" ) ) ? 32 : 16;
+
+	return 0;
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 26; i++)
+		part_set_signal( p, A[i], 1, (a >> i) & 1 );
+}
+
+static void
+set_data_in( bus_t *bus )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	sa1110_bus_area( bus, 0, &area );
+
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, D[i], 0, 0 );
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	sa1110_bus_area( bus, 0, &area );
+
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, D[i], 1, (d >> i) & 1 );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+sa1110_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	/* see Figure 10-12 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, nCS[0], 1, (adr >> 27) != 0 );
+	part_set_signal( p, nCS[1], 1, (adr >> 27) != 1 );
+	part_set_signal( p, nCS[2], 1, (adr >> 27) != 2 );
+	part_set_signal( p, nCS[3], 1, (adr >> 27) != 3 );
+	part_set_signal( p, nCS[4], 1, (adr >> 27) != 8 );
+	part_set_signal( p, nCS[5], 1, (adr >> 27) != 9 );
+	part_set_signal( p, RD_nWR, 1, 1 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 0 );
+
+	setup_address( bus, adr );
+	set_data_in( bus );
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+sa1110_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	/* see Figure 10-12 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+	bus_area_t area;
+
+	sa1110_bus_area( bus, adr, &area );
+
+	setup_address( bus, adr );
+	chain_shift_data_registers( chain, 1 );
+
+	for (i = 0; i < area.width; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+sa1110_bus_read_end( bus_t *bus )
+{
+	/* see Figure 10-12 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+	bus_area_t area;
+
+	sa1110_bus_area( bus, 0, &area );
+
+	part_set_signal( p, nCS[0], 1, 1 );
+	part_set_signal( p, nCS[1], 1, 1 );
+	part_set_signal( p, nCS[2], 1, 1 );
+	part_set_signal( p, nCS[3], 1, 1 );
+	part_set_signal( p, nCS[4], 1, 1 );
+	part_set_signal( p, nCS[5], 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+	chain_shift_data_registers( chain, 1 );
+
+	for (i = 0; i < area.width; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+sa1110_bus_read( bus_t *bus, uint32_t adr )
+{
+	sa1110_bus_read_start( bus, adr );
+	return sa1110_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+sa1110_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	/* see Figure 10-16 in [1] */
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, nCS[0], 1, (adr >> 27) != 0 );
+	part_set_signal( p, nCS[1], 1, (adr >> 27) != 1 );
+	part_set_signal( p, nCS[2], 1, (adr >> 27) != 2 );
+	part_set_signal( p, nCS[3], 1, (adr >> 27) != 3 );
+	part_set_signal( p, nCS[4], 1, (adr >> 27) != 8 );
+	part_set_signal( p, nCS[5], 1, (adr >> 27) != 9 );
+	part_set_signal( p, RD_nWR, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+
+	setup_address( bus, adr );
+	setup_data( bus, data );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, nWE, 1, 0 );
+	chain_shift_data_registers( chain, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nCS[0], 1, 1 );
+	part_set_signal( p, nCS[1], 1, 1 );
+	part_set_signal( p, nCS[2], 1, 1 );
+	part_set_signal( p, nCS[3], 1, 1 );
+	part_set_signal( p, nCS[4], 1, 1 );
+	part_set_signal( p, nCS[5], 1, 1 );
+	chain_shift_data_registers( chain, 0 );
 }
 
 const bus_driver_t sa1110_bus = {

@@ -419,189 +419,6 @@ nexus_memacc_write (bus_t * bus, uint32_t addr, uint32_t data, uint32_t rwcs)
 /* ------------------------------------------------------------------------- */
 
 static void
-avr32_bus_printinfo (bus_t * bus)
-{
-  int i;
-
-  for (i = 0; i < CHAIN->parts->len; i++)
-    if (PART == CHAIN->parts->parts[i])
-      break;
-
-  printf (_("AVR32 multi-mode bus driver (JTAG part No. %d)\n"), i);
-}
-
-static void
-avr32_bus_prepare (bus_t * bus)
-{
-}
-
-static void
-avr32_bus_read_start (bus_t * bus, uint32_t addr)
-{
-  addr &= ADDR_MASK;
-
-  DBG (DBG_BASIC, _("%s:addr=%08x\n"), __FUNCTION__, addr);
-
-  switch (MODE)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    part_set_instruction (PART, "MEMORY_WORD_ACCESS");
-    mwa_scan_in_instr (bus);
-    mwa_scan_in_addr (bus, SLAVE, addr, ACCESS_MODE_READ);
-    break;
-
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    part_set_instruction (PART, "NEXUS_ACCESS");
-    nexus_access_start (bus);
-    nexus_memacc_set_addr (bus, addr, RWCS_RD);
-    break;
-  }
-}
-
-static uint32_t
-avr32_bus_read_end (bus_t * bus)
-{
-  uint32_t data;
-
-  switch (MODE)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    mwa_scan_out_data (bus, &data);
-    break;
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    nexus_memacc_read (bus, &data);
-    nexus_access_end (bus);
-    break;
-  }
-
-  return data;
-}
-
-static uint32_t
-avr32_bus_read_next (bus_t * bus, uint32_t addr)
-{
-  uint32_t data;
-
-  addr &= ADDR_MASK;
-
-  switch (MODE)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    data = avr32_bus_read_end (bus);
-    avr32_bus_read_start (bus, addr);
-    break;
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    nexus_memacc_read (bus, &data);
-    nexus_memacc_set_addr (bus, addr, RWCS_RD);
-    break;
-  }
-
-  return data;
-}
-
-static uint32_t
-avr32_bus_read (bus_t * bus, uint32_t addr)
-{
-  uint32_t ret;
-
-  avr32_bus_read_start (bus, addr);
-  ret = avr32_bus_read_end (bus);
-
-  return ret;
-}
-
-static void
-avr32_bus_write (bus_t * bus, uint32_t addr, uint32_t data)
-{
-  addr &= ADDR_MASK;
-
-  switch (MODE)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    part_set_instruction (PART, "MEMORY_WORD_ACCESS");
-    mwa_write_word (bus, SLAVE, addr, data);
-    break;
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    part_set_instruction (PART, "NEXUS_ACCESS");
-    nexus_access_start (bus);
-    nexus_memacc_write (bus, addr, data, RWCS_WR);
-    nexus_access_end (bus);
-    break;
-  }
-}
-
-static int
-avr32_bus_area (bus_t * bus, uint32_t addr, bus_area_t * area)
-{
-  switch (MODE)
-  {
-  case BUS_MODE_HSBC:
-    area->description = "HSB memory space, cached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 32;
-    break;
-  case BUS_MODE_HSBU:
-    area->description = "HSB memory space, uncached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 32;
-    break;
-  case BUS_MODE_x8:
-    area->description = "HSB memory space, uncached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 8;
-    break;
-  case BUS_MODE_x16:
-    area->description = "HSB memory space, uncached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 16;
-    break;
-  case BUS_MODE_x32:
-    area->description = "HSB memory space, uncached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 32;
-    break;
-  case BUS_MODE_OCD:
-    if (addr < SAB_OCD_AREA_SIZE)
-    {
-      area->description = "OCD registers";
-      area->start = UINT32_C (0x00000000);
-      area->length = SAB_OCD_AREA_SIZE;
-      area->width = 32;
-      break;
-    }
-    /* fallthrough */
-  default:
-    area->description = NULL;
-    area->length = UINT64_C (0x100000000);
-    area->width = 0;
-    break;
-  }
-
-  return 0;
-}
-
-static void
 avr32_bus_setup (bus_t * bus, chain_t * chain, part_t * part,
                  unsigned int mode)
 {
@@ -658,6 +475,10 @@ check_instruction (part_t * part, const char *instr)
   return ret;
 }
 
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 avr32_bus_new (chain_t * chain, char *cmd_params[])
 {
@@ -740,6 +561,221 @@ avr32_bus_new (chain_t * chain, char *cmd_params[])
   avr32_bus_setup (bus, chain, part, mode);
 
   return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+avr32_bus_printinfo (bus_t * bus)
+{
+  int i;
+
+  for (i = 0; i < CHAIN->parts->len; i++)
+    if (PART == CHAIN->parts->parts[i])
+      break;
+
+  printf (_("AVR32 multi-mode bus driver (JTAG part No. %d)\n"), i);
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+avr32_bus_prepare (bus_t * bus)
+{
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+avr32_bus_area (bus_t * bus, uint32_t addr, bus_area_t * area)
+{
+  switch (MODE)
+  {
+  case BUS_MODE_HSBC:
+    area->description = "HSB memory space, cached";
+    area->start = UINT32_C (0x00000000);
+    area->length = SAB_HSB_AREA_SIZE;
+    area->width = 32;
+    break;
+  case BUS_MODE_HSBU:
+    area->description = "HSB memory space, uncached";
+    area->start = UINT32_C (0x00000000);
+    area->length = SAB_HSB_AREA_SIZE;
+    area->width = 32;
+    break;
+  case BUS_MODE_x8:
+    area->description = "HSB memory space, uncached";
+    area->start = UINT32_C (0x00000000);
+    area->length = SAB_HSB_AREA_SIZE;
+    area->width = 8;
+    break;
+  case BUS_MODE_x16:
+    area->description = "HSB memory space, uncached";
+    area->start = UINT32_C (0x00000000);
+    area->length = SAB_HSB_AREA_SIZE;
+    area->width = 16;
+    break;
+  case BUS_MODE_x32:
+    area->description = "HSB memory space, uncached";
+    area->start = UINT32_C (0x00000000);
+    area->length = SAB_HSB_AREA_SIZE;
+    area->width = 32;
+    break;
+  case BUS_MODE_OCD:
+    if (addr < SAB_OCD_AREA_SIZE)
+    {
+      area->description = "OCD registers";
+      area->start = UINT32_C (0x00000000);
+      area->length = SAB_OCD_AREA_SIZE;
+      area->width = 32;
+      break;
+    }
+    /* fallthrough */
+  default:
+    area->description = NULL;
+    area->length = UINT64_C (0x100000000);
+    area->width = 0;
+    break;
+  }
+
+  return 0;
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+avr32_bus_read_start (bus_t * bus, uint32_t addr)
+{
+  addr &= ADDR_MASK;
+
+  DBG (DBG_BASIC, _("%s:addr=%08x\n"), __FUNCTION__, addr);
+
+  switch (MODE)
+  {
+  case BUS_MODE_OCD:
+  case BUS_MODE_HSBC:
+  case BUS_MODE_HSBU:
+    part_set_instruction (PART, "MEMORY_WORD_ACCESS");
+    mwa_scan_in_instr (bus);
+    mwa_scan_in_addr (bus, SLAVE, addr, ACCESS_MODE_READ);
+    break;
+
+  case BUS_MODE_x8:
+  case BUS_MODE_x16:
+  case BUS_MODE_x32:
+    part_set_instruction (PART, "NEXUS_ACCESS");
+    nexus_access_start (bus);
+    nexus_memacc_set_addr (bus, addr, RWCS_RD);
+    break;
+  }
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+avr32_bus_read_end (bus_t * bus)
+{
+  uint32_t data;
+
+  switch (MODE)
+  {
+  case BUS_MODE_OCD:
+  case BUS_MODE_HSBC:
+  case BUS_MODE_HSBU:
+    mwa_scan_out_data (bus, &data);
+    break;
+  case BUS_MODE_x8:
+  case BUS_MODE_x16:
+  case BUS_MODE_x32:
+    nexus_memacc_read (bus, &data);
+    nexus_access_end (bus);
+    break;
+  }
+
+  return data;
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+avr32_bus_read_next (bus_t * bus, uint32_t addr)
+{
+  uint32_t data;
+
+  addr &= ADDR_MASK;
+
+  switch (MODE)
+  {
+  case BUS_MODE_OCD:
+  case BUS_MODE_HSBC:
+  case BUS_MODE_HSBU:
+    data = avr32_bus_read_end (bus);
+    avr32_bus_read_start (bus, addr);
+    break;
+  case BUS_MODE_x8:
+  case BUS_MODE_x16:
+  case BUS_MODE_x32:
+    nexus_memacc_read (bus, &data);
+    nexus_memacc_set_addr (bus, addr, RWCS_RD);
+    break;
+  }
+
+  return data;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+avr32_bus_read (bus_t * bus, uint32_t addr)
+{
+  uint32_t ret;
+
+  avr32_bus_read_start (bus, addr);
+  ret = avr32_bus_read_end (bus);
+
+  return ret;
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+avr32_bus_write (bus_t * bus, uint32_t addr, uint32_t data)
+{
+  addr &= ADDR_MASK;
+
+  switch (MODE)
+  {
+  case BUS_MODE_OCD:
+  case BUS_MODE_HSBC:
+  case BUS_MODE_HSBU:
+    part_set_instruction (PART, "MEMORY_WORD_ACCESS");
+    mwa_write_word (bus, SLAVE, addr, data);
+    break;
+  case BUS_MODE_x8:
+  case BUS_MODE_x16:
+  case BUS_MODE_x32:
+    part_set_instruction (PART, "NEXUS_ACCESS");
+    nexus_access_start (bus);
+    nexus_memacc_write (bus, addr, data, RWCS_WR);
+    nexus_access_end (bus);
+    break;
+  }
 }
 
 const bus_driver_t avr32_bus_driver = {

@@ -81,7 +81,7 @@ typedef struct {
                               ** Only using nRCS0. */
         signal_t *necs[4];
         signal_t *nsdcs[4];
-				      
+
         signal_t *nwbe[4];    /**< not Write Byte Enable */
         signal_t *noe;        /**< not Output Enable */
 	int	 dbuswidth;
@@ -100,225 +100,10 @@ typedef struct {
 #define dbus_width ((bus_params_t *) bus->params)->dbuswidth
 /** @brief  Width of Data Bus. Detected by B0SIZE[1:0]  */
 
-
-static void
-setup_address( bus_t *bus, uint32_t a )
-{
-        int i,so;
-        part_t *p = PART;
-
-		switch(dbus_width)
-		{
-			case 32: so=2; break;
-			case 16: so=1; break;
-			default: so=0; break;
-		}
-
-        for (i = 0; i < 22; i++)
-                part_set_signal( p, A[i], 1, (a >> (i+so)) & 1 );
-}
-
-static void
-set_data_in( bus_t *bus )
-{
-        int i;
-        part_t *p = PART;
-
-        for (i = 0; i < dbus_width; i++)
-                part_set_signal( p, D[i], 0, 0 );
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d )
-{
-        int i;
-        part_t *p = PART;
-
-        for (i = 0; i < dbus_width; i++)
-                part_set_signal( p, D[i], 1, (d >> i) & 1 );
-        /* Set other bits as 0 */
-        for (i = dbus_width; i < 32; i++)
-                part_set_signal( p, D[i], 1, 0 );
-}
-
-static void
-s3c4510_bus_printinfo( bus_t *bus )
-{
-        int i;
-
-        for (i = 0; i < CHAIN->parts->len; i++)
-                if (PART == CHAIN->parts->parts[i])
-                        break;
-	printf( _("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%ubit\n"), i ,dbus_width );        
-}
-
-static void s3c4510_bus_setup_ctrl( bus_t *bus, int mode ) 
-{
-  int k;
-  part_t *p = PART;
-  
-  for (k = 0; k < 6; k++) 
-	part_set_signal( p, nRCS[k], 1, (mode & (1 << k)) ? 1 : 0 );
-
-  for (k = 0; k < 4; k++) 
-	part_set_signal( p, nECS[k], 1, 1 );
-
-  for (k = 0; k < 4; k++) 
-	part_set_signal( p, nSDCS[k], 1, 1 );
-
-  for (k = 0; k < 4; k++) 
-	part_set_signal( p, nWBE[k], 1, (mode & (1 << (k + 8))) ? 1 : 0 );
-	
-  part_set_signal( p, nOE, 1, (mode & (1 << 16)) ? 1 : 0 );
-}
-
-static void
-s3c4510_bus_prepare( bus_t *bus )
-{
-		part_t *p = PART;
-        chain_t *chain = CHAIN;
-
-        part_set_instruction( p, "SAMPLE/PRELOAD" );
-        chain_shift_instructions( chain );
-        chain_shift_data_registers( chain, 0 );
-
-        part_set_instruction( p, "EXTEST" );
-        chain_shift_instructions( chain );
-}
-
-
-static void
-s3c4510_bus_read_start( bus_t *bus, uint32_t adr )
-{
-        /* see Figure 4-19 in [1] */
-        chain_t *chain = CHAIN;
-
-	s3c4510_bus_setup_ctrl( bus, 0x00fffe);  /* nOE=0, nRCS0 =0 */
-        setup_address( bus, adr );
-        set_data_in( bus );
-        chain_shift_data_registers( chain, 0 );
-}
-
-static uint32_t
-s3c4510_bus_read_next( bus_t *bus, uint32_t adr )
-{
-        /* see Figure 4-20 in [1] */
-        part_t *p = PART;
-        chain_t *chain = CHAIN;
-        int i;
-        uint32_t d = 0;
-
-	s3c4510_bus_setup_ctrl( bus, 0x00fffe);  /* nOE=0, nRCS0 =0 */
-        setup_address( bus, adr );
-	set_data_in( bus );
-        chain_shift_data_registers( chain, 1 );
-
-        for (i = 0; i < dbus_width; i++)
-                d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-        return d;
-}
-
-static uint32_t
-s3c4510_bus_read_end( bus_t *bus )
-{
-        /* see Figure 4-19 in [1] */
-        part_t *p = PART;
-        chain_t *chain = CHAIN;
-        int i;
-        uint32_t d = 0;
-
-	s3c4510_bus_setup_ctrl( bus, 0x01ffff);  /* nOE=1, nRCS0 =1 */
-        chain_shift_data_registers( chain, 1 );
-
-        for (i = 0; i < dbus_width; i++)
-                d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
-
-        return d;
-}
-
-static uint32_t
-s3c4510_bus_read( bus_t *bus, uint32_t adr )
-{
-        s3c4510_bus_read_start( bus, adr );
-        return s3c4510_bus_read_end( bus );
-}
-
-
 /**
-**  @brief
-**    ROM/SRAM/FlashPage Write Access Timing
-*/
-
-static void
-s3c4510_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-        /* see Figure 4-21 in [1] */
-        chain_t *chain = CHAIN;
-
-	s3c4510_bus_setup_ctrl( bus, 0x01fffe);  /* nOE=1, nRCS0 =0 */
-        setup_address( bus, adr );
-        setup_data( bus, data );
-
-        chain_shift_data_registers( chain, 0 );
-
-	switch (dbus_width)
-	{
-	    default:
-	    case 8:
-		    s3c4510_bus_setup_ctrl( bus, 0x01fefe);  /* nOE=1, nRCS0 =0, nWBE0=0 */    
-		    break;
-	    case 16:
-		    s3c4510_bus_setup_ctrl( bus, 0x01fcfe);  /* nOE=1, nRCS0 =0, nWBE0-1=0 */    
-		    break;
-	    
-	    case 32:
-		    s3c4510_bus_setup_ctrl( bus, 0x01f0fe);  /* nOE=1, nRCS0 =0, nWBE0-3=0 */    
-		    break;
-	}
-	
-        setup_address( bus, adr );
-        setup_data( bus, data );
-        
-        chain_shift_data_registers( chain, 0 );
-
-	s3c4510_bus_setup_ctrl( bus, 0x01ffff);  /* nOE=1, nRCS0 =1 */
-        chain_shift_data_registers( chain, 0 );
-	
-	DEBUG_LVL2( printf("bus_write %08x @ %08x\n", data, adr); )
-}
-
-
-static int
-s3c4510_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-        int b0size0, b0size1; // , endian;
-
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x100000000);
-
-	// endian = part_get_signal( PART, part_find_signal( PART, "LITTLE" ));
-	b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
-	b0size1 = part_get_signal( PART, part_find_signal( PART, "B0SIZE1" ));
-
-        switch ((b0size1 << 1) | b0size0) {
-                case 1:
-			area->width = dbus_width = 8;
-			return 0;
-                case 2:
-			area->width = dbus_width = 16;
-			return 0;
-                case 3:
-			area->width = dbus_width = 32;
-			return 0;
-                default:
-                        printf( "B0SIZE[1:0]: Unknown\n" );
-			area->width = 0;
-			return -1;
-        }
-}
-
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -373,7 +158,7 @@ s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
                         break;
                 }
         }
-	
+
 	for (i = 0; i < 4; i++) {
                 sprintf( buff, "nECS%d", i );
                 nECS[i] = part_find_signal( PART, buff );
@@ -415,6 +200,250 @@ s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
         }
 
         return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+s3c4510_bus_printinfo( bus_t *bus )
+{
+        int i;
+
+        for (i = 0; i < CHAIN->parts->len; i++)
+                if (PART == CHAIN->parts->parts[i])
+                        break;
+	printf( _("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%ubit\n"), i ,dbus_width );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+s3c4510_bus_prepare( bus_t *bus )
+{
+		part_t *p = PART;
+        chain_t *chain = CHAIN;
+
+        part_set_instruction( p, "SAMPLE/PRELOAD" );
+        chain_shift_instructions( chain );
+        chain_shift_data_registers( chain, 0 );
+
+        part_set_instruction( p, "EXTEST" );
+        chain_shift_instructions( chain );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+s3c4510_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+        int b0size0, b0size1; // , endian;
+
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+
+	// endian = part_get_signal( PART, part_find_signal( PART, "LITTLE" ));
+	b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
+	b0size1 = part_get_signal( PART, part_find_signal( PART, "B0SIZE1" ));
+
+        switch ((b0size1 << 1) | b0size0) {
+                case 1:
+			area->width = dbus_width = 8;
+			return 0;
+                case 2:
+			area->width = dbus_width = 16;
+			return 0;
+                case 3:
+			area->width = dbus_width = 32;
+			return 0;
+                default:
+                        printf( "B0SIZE[1:0]: Unknown\n" );
+			area->width = 0;
+			return -1;
+        }
+}
+
+static void s3c4510_bus_setup_ctrl( bus_t *bus, int mode )
+{
+  int k;
+  part_t *p = PART;
+
+  for (k = 0; k < 6; k++)
+	part_set_signal( p, nRCS[k], 1, (mode & (1 << k)) ? 1 : 0 );
+
+  for (k = 0; k < 4; k++)
+	part_set_signal( p, nECS[k], 1, 1 );
+
+  for (k = 0; k < 4; k++)
+	part_set_signal( p, nSDCS[k], 1, 1 );
+
+  for (k = 0; k < 4; k++)
+	part_set_signal( p, nWBE[k], 1, (mode & (1 << (k + 8))) ? 1 : 0 );
+
+  part_set_signal( p, nOE, 1, (mode & (1 << 16)) ? 1 : 0 );
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+        int i,so;
+        part_t *p = PART;
+
+		switch(dbus_width)
+		{
+			case 32: so=2; break;
+			case 16: so=1; break;
+			default: so=0; break;
+		}
+
+        for (i = 0; i < 22; i++)
+                part_set_signal( p, A[i], 1, (a >> (i+so)) & 1 );
+}
+
+static void
+set_data_in( bus_t *bus )
+{
+        int i;
+        part_t *p = PART;
+
+        for (i = 0; i < dbus_width; i++)
+                part_set_signal( p, D[i], 0, 0 );
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d )
+{
+        int i;
+        part_t *p = PART;
+
+        for (i = 0; i < dbus_width; i++)
+                part_set_signal( p, D[i], 1, (d >> i) & 1 );
+        /* Set other bits as 0 */
+        for (i = dbus_width; i < 32; i++)
+                part_set_signal( p, D[i], 1, 0 );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+s3c4510_bus_read_start( bus_t *bus, uint32_t adr )
+{
+        /* see Figure 4-19 in [1] */
+        chain_t *chain = CHAIN;
+
+	s3c4510_bus_setup_ctrl( bus, 0x00fffe);  /* nOE=0, nRCS0 =0 */
+        setup_address( bus, adr );
+        set_data_in( bus );
+        chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+s3c4510_bus_read_next( bus_t *bus, uint32_t adr )
+{
+        /* see Figure 4-20 in [1] */
+        part_t *p = PART;
+        chain_t *chain = CHAIN;
+        int i;
+        uint32_t d = 0;
+
+	s3c4510_bus_setup_ctrl( bus, 0x00fffe);  /* nOE=0, nRCS0 =0 */
+        setup_address( bus, adr );
+	set_data_in( bus );
+        chain_shift_data_registers( chain, 1 );
+
+        for (i = 0; i < dbus_width; i++)
+                d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+        return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+s3c4510_bus_read_end( bus_t *bus )
+{
+        /* see Figure 4-19 in [1] */
+        part_t *p = PART;
+        chain_t *chain = CHAIN;
+        int i;
+        uint32_t d = 0;
+
+	s3c4510_bus_setup_ctrl( bus, 0x01ffff);  /* nOE=1, nRCS0 =1 */
+        chain_shift_data_registers( chain, 1 );
+
+        for (i = 0; i < dbus_width; i++)
+                d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+
+        return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+s3c4510_bus_read( bus_t *bus, uint32_t adr )
+{
+        s3c4510_bus_read_start( bus, adr );
+        return s3c4510_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ *  @brief
+ *    ROM/SRAM/FlashPage Write Access Timing
+ */
+static void
+s3c4510_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+        /* see Figure 4-21 in [1] */
+        chain_t *chain = CHAIN;
+
+	s3c4510_bus_setup_ctrl( bus, 0x01fffe);  /* nOE=1, nRCS0 =0 */
+        setup_address( bus, adr );
+        setup_data( bus, data );
+
+        chain_shift_data_registers( chain, 0 );
+
+	switch (dbus_width)
+	{
+	    default:
+	    case 8:
+		    s3c4510_bus_setup_ctrl( bus, 0x01fefe);  /* nOE=1, nRCS0 =0, nWBE0=0 */
+		    break;
+	    case 16:
+		    s3c4510_bus_setup_ctrl( bus, 0x01fcfe);  /* nOE=1, nRCS0 =0, nWBE0-1=0 */
+		    break;
+
+	    case 32:
+		    s3c4510_bus_setup_ctrl( bus, 0x01f0fe);  /* nOE=1, nRCS0 =0, nWBE0-3=0 */
+		    break;
+	}
+
+        setup_address( bus, adr );
+        setup_data( bus, data );
+
+        chain_shift_data_registers( chain, 0 );
+
+	s3c4510_bus_setup_ctrl( bus, 0x01ffff);  /* nOE=1, nRCS0 =1 */
+        chain_shift_data_registers( chain, 0 );
+
+	DEBUG_LVL2( printf("bus_write %08x @ %08x\n", data, adr); )
 }
 
 const bus_driver_t s3c4510_bus = {

@@ -64,195 +64,10 @@ typedef struct
 #define	nWE		((bus_params_t *) bus->params)->nwe
 #define	nOE		((bus_params_t *) bus->params)->noe
 
-
-
-
-static void setup_address( bus_t *bus, uint32_t a )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 19; i++)
-		part_set_signal( p, MA[i], 1, (a >> i) & 1 );
-}
-
-static int sharc_21065L_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
-
-
-static void set_data_in( bus_t *bus, uint32_t adr )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	sharc_21065L_bus_area( bus, adr, &area );
-
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, MD[i], 0, 0 );
-}
-
-
-static void setup_data( bus_t *bus, uint32_t adr, uint32_t d )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	sharc_21065L_bus_area( bus, adr, &area );
-
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, MD[i], 1, (d >> i) & 1 );
-}
-
-
-static void sharc_21065L_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Analog Device's SHARC 21065L compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-static void sharc_21065L_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-
-static void sharc_21065L_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	chain_t *chain = CHAIN;
-	part_t *p = PART;
-
-	LAST_ADR = adr;
-	if (adr >= 0x080000)
-		return;
-
-
-	part_set_signal( p, BMS, 1, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 0 );
-
-	setup_address( bus, adr );
-	set_data_in( bus, adr );
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-
-static uint32_t sharc_21065L_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	uint32_t d;
-	//uint32_t old_last_adr = LAST_ADR;
-
-	LAST_ADR = adr;
-
-	if (adr < UINT32_C(0x080000)) {
-		int i;
-		bus_area_t area;
-
-		sharc_21065L_bus_area( bus, adr, &area );
-
-
-		setup_address( bus, adr );
-		chain_shift_data_registers( chain, 1 );
-
-		d = 0;
-		for (i = 0; i < area.width; i++)
-			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
-
-		return d;
-	}
-	return 0;
-}
-
-
-static uint32_t sharc_21065L_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	if (LAST_ADR < UINT32_C(0x080000)) {
-		int i;
-		uint32_t d = 0;
-		bus_area_t area;
-
-		sharc_21065L_bus_area( bus, LAST_ADR, &area );
-
-
-		part_set_signal( p, BMS, 1, 1 );
-		part_set_signal( p, nWE, 1, 1 );
-		part_set_signal( p, nOE, 1, 1 );
-
-		chain_shift_data_registers( chain, 1 );
-
-		for (i = 0; i < area.width; i++)
-			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
-
-		return d;
-	}
-
-	return 0;
-}
-
-static uint32_t sharc_21065L_bus_read( bus_t *bus, uint32_t adr )
-{
-	sharc_21065L_bus_read_start( bus, adr );
-	return sharc_21065L_bus_read_end( bus );
-}
-
-
-
-static void sharc_21065L_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	if (adr >= 0x080000)
-		return;
-
-
-	part_set_signal( p, BMS, 1, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nOE, 1, 1 );
-
-	setup_address( bus, adr );
-	setup_data( bus, adr, data );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, nWE, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	chain_shift_data_registers( chain, 0 );
-}
-
-
-static int sharc_21065L_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	/* BMS  (512 KB) */
-	if (adr < UINT32_C(0x080000)) {
-		area->description = N_("Boot Memory Select");
-		area->start = UINT32_C(0x000000);
-		area->length = UINT64_C(0x080000);
-		area->width = 8;
-
-		return 0;
-	}
-
-	area->description = NULL;
-	area->start = UINT32_C(0xffffffff);
-	area->length = UINT64_C(0x080000);
-	area->width = 0;
-	return 0;
-}
-
-
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
@@ -320,6 +135,223 @@ static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void sharc_21065L_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Analog Device's SHARC 21065L compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+sharc_21065L_bus_prepare( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+sharc_21065L_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	/* BMS  (512 KB) */
+	if (adr < UINT32_C(0x080000)) {
+		area->description = N_("Boot Memory Select");
+		area->start = UINT32_C(0x000000);
+		area->length = UINT64_C(0x080000);
+		area->width = 8;
+
+		return 0;
+	}
+
+	area->description = NULL;
+	area->start = UINT32_C(0xffffffff);
+	area->length = UINT64_C(0x080000);
+	area->width = 0;
+	return 0;
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 19; i++)
+		part_set_signal( p, MA[i], 1, (a >> i) & 1 );
+}
+
+static void
+set_data_in( bus_t *bus, uint32_t adr )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	sharc_21065L_bus_area( bus, adr, &area );
+
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, MD[i], 0, 0 );
+}
+
+
+static void
+setup_data( bus_t *bus, uint32_t adr, uint32_t d )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	sharc_21065L_bus_area( bus, adr, &area );
+
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, MD[i], 1, (d >> i) & 1 );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+sharc_21065L_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	chain_t *chain = CHAIN;
+	part_t *p = PART;
+
+	LAST_ADR = adr;
+	if (adr >= 0x080000)
+		return;
+
+
+	part_set_signal( p, BMS, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 0 );
+
+	setup_address( bus, adr );
+	set_data_in( bus, adr );
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+sharc_21065L_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	uint32_t d;
+	//uint32_t old_last_adr = LAST_ADR;
+
+	LAST_ADR = adr;
+
+	if (adr < UINT32_C(0x080000)) {
+		int i;
+		bus_area_t area;
+
+		sharc_21065L_bus_area( bus, adr, &area );
+
+
+		setup_address( bus, adr );
+		chain_shift_data_registers( chain, 1 );
+
+		d = 0;
+		for (i = 0; i < area.width; i++)
+			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
+
+		return d;
+	}
+	return 0;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+sharc_21065L_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	if (LAST_ADR < UINT32_C(0x080000)) {
+		int i;
+		uint32_t d = 0;
+		bus_area_t area;
+
+		sharc_21065L_bus_area( bus, LAST_ADR, &area );
+
+
+		part_set_signal( p, BMS, 1, 1 );
+		part_set_signal( p, nWE, 1, 1 );
+		part_set_signal( p, nOE, 1, 1 );
+
+		chain_shift_data_registers( chain, 1 );
+
+		for (i = 0; i < area.width; i++)
+			d |= (uint32_t) (part_get_signal( p, MD[i] ) << i);
+
+		return d;
+	}
+
+	return 0;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+sharc_21065L_bus_read( bus_t *bus, uint32_t adr )
+{
+	sharc_21065L_bus_read_start( bus, adr );
+	return sharc_21065L_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+sharc_21065L_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	if (adr >= 0x080000)
+		return;
+
+
+	part_set_signal( p, BMS, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nOE, 1, 1 );
+
+	setup_address( bus, adr );
+	setup_data( bus, adr, data );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, nWE, 1, 0 );
+	chain_shift_data_registers( chain, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	chain_shift_data_registers( chain, 0 );
 }
 
 const bus_driver_t sharc_21065L_bus = {

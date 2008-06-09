@@ -70,286 +70,10 @@ char dbgAddr = 0;
 char dbgData = 0;
 
 
-static void
-setup_address( bus_t *bus, uint32_t a )
-{
-	int i;
-	part_t *p = PART;
-
-	switch (BUS_WIDTH) { 
-	case 8:/* 8-bit data bus */
-	  for (i = 0; i < 23; i++)
-	    part_set_signal( p, AR[i], 1, (a >> i) & 1 );
-	case 32:/* 32-bit data bus */
-	  for (i = 0; i < 21; i++)
-	    part_set_signal( p, AR[i], 1, (a >> (i+2)) & 1 );
-	  break;
-	case 64:
-	  for (i = 0; i < 20; i++)
-	    part_set_signal( p, AR[i], 1, (a >> (i+3)) & 1 );
-	}
-	
-	/* Just for debugging */
-	if (dbgAddr) {
-	  int j, k;
-	  switch (BUS_WIDTH) {
-	  case 8:  k = 23; break;
-	  case 32: k = 21; break;
-	  case 64: k = 20;
-	  }
-
-	  printf(_("Addr    [%2d:0]: %06X   "), k, a);
-	  for (i=0; i<3; i++) {
-	    for (j=0; j<8; j++)
-	      if ((i*8+j) >= (23 - k)) 
-		printf("%1d", (a >> (23 - (i*8+j)) ) & 1);
-	      else
-		printf(" ");
-	    printf(" ");
-	  };
-	  printf("\n");
-	}
-
-}
-
-static int mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
-
-static void
-set_data_in( bus_t *bus, uint32_t adr )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	mpc824x_bus_area( bus, adr, &area );
-	if (area.width > 64)
-		return;
-
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, D[i], 0, 0 );
-}
-
-static void
-setup_data( bus_t *bus, uint32_t adr, uint32_t d )
-{
-	int i;
-	part_t *p = PART;
-	bus_area_t area;
-
-	mpc824x_bus_area( bus, adr, &area );
-	if (area.width > 64)
-	  return;
-
-	for (i = 0; i < area.width; i++)
-		part_set_signal( p, D[i], 1, (d >> ((REVBITS==1) ? BUS_WIDTH-1-i : i)) & 1 );
-
-	/* Just for debugging */
-	if (dbgData) {
-	  printf(_("Data WR [%d:0]: %08X   "), area.width-1, d);
-	  int j;
-	  int bytes =0;
-	  if (BUS_WIDTH==8) bytes = 1; 
-	  else if (BUS_WIDTH==32) bytes = 4; 
-	  else if (BUS_WIDTH==64) bytes = 4; /* Needs to be fixed - d is 32-bit long, so no 64 bit mode is possible */
-
-	  for (i=0; i<bytes; i++) {
-	    for (j=0; j<8; j++)
-	      if (REVBITS)
-		printf("%1d", (d >> (BUS_WIDTH-1 - (i*8+j)) ) & 1);
-	      else
-		printf("%1d", (d >> (              (i*8+j)) ) & 1);
-	    printf(" ");
-	  };
-	  printf("\n");
-	}
-
-}
-
-static uint32_t
-get_data( bus_t *bus, uint32_t adr )
-{
-	bus_area_t area;
-	int i;
-	uint32_t d = 0;
-	part_t *p = PART;
-
-	mpc824x_bus_area( bus, adr, &area );
-	if (area.width > 64)
-		return 0;
-
-	for (i = 0; i < area.width; i++)
-		d |= (uint32_t) (part_get_signal( p, D[i] ) << ((REVBITS==1) ? BUS_WIDTH-1-i : i));
-
-	/* Just for debugging */
-	if (dbgData) {
-	  printf(_("Data RD [%d:0]: %08X   "), area.width-1, d);
-	  int j;
-	  int bytes = 0;
-	  if (BUS_WIDTH==8) bytes = 1; 
-	  else if (BUS_WIDTH==32) bytes = 4; 
-	  else if (BUS_WIDTH==64) bytes = 4; /* Needs to be fixed - d is 32-bit long, so no 64 bit mode is possible */
-
-	  for (i=0; i<bytes; i++) {
-	    for (j=0; j<8; j++)
-	      if (REVBITS) 
-		printf("%1d", (d >> (BUS_WIDTH-1 - (i*8+j)) ) & 1);
-	      else
-		printf("%1d", (d >> (              (i*8+j)) ) & 1);
-	    printf(" ");  
-	  };
-	  printf("\n");
-	}
-
-	return d;
-}
-
-static void
-mpc824x_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Motorola MPC824x compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-static void
-mpc824x_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-static void
-mpc824x_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-
-	LAST_ADR = adr;
-
-	/* see Figure 6-45 in [1] */
-	part_set_signal( p, nRCS0, 1, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nFOE, 1, 0 );
-
-	setup_address( bus, adr );
-	set_data_in( bus, adr );
-
-	chain_shift_data_registers( CHAIN, 0 );
-}
-
-static uint32_t
-mpc824x_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	uint32_t d;
-
-	setup_address( bus, adr );
-	chain_shift_data_registers( CHAIN, 1 );
-
-	d = get_data( bus, LAST_ADR );
-	LAST_ADR = adr;
-	return d;
-}
-
-static uint32_t
-mpc824x_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-
-	part_set_signal( p, nRCS0, 1, 1 );
-	part_set_signal( p, nFOE, 1, 1 );
-
-	chain_shift_data_registers( CHAIN, 1 );
-
-	return get_data( bus, LAST_ADR );
-}
-
-static uint32_t
-mpc824x_bus_read( bus_t *bus, uint32_t adr )
-{
-	mpc824x_bus_read_start( bus, adr );
-	return mpc824x_bus_read_end( bus );
-}
-
-static void
-mpc824x_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	part_t *p = PART;
-
-	LAST_ADR = adr;
-
-
-	/* see Figure 6-47 in [1] */
-	part_set_signal( p, nRCS0, 1, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nFOE, 1, 1 );
-
-	setup_address( bus, adr );
-
-	setup_data( bus, adr, data );
-
-	chain_shift_data_registers( CHAIN, 0 );
-
-	part_set_signal( p, nWE, 1, 0 );
-	chain_shift_data_registers( CHAIN, 0 );
-	part_set_signal( p, nWE, 1, 1 );
-	part_set_signal( p, nRCS0, 1, 1 );
-	chain_shift_data_registers( CHAIN, 0 );
-
-
-
-}
-
-static int
-mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-
-	if (adr < UINT32_C(0xFF000000)) {
-		area->description = NULL;
-		area->start = UINT32_C(0x00000000);
-		area->length = UINT64_C(0xFF000000);
-		area->width = 0;
-
-		return 0;
-	}
-
-	if (adr < UINT32_C(0xFF800000)) {
-		area->description = N_("Base ROM Interface (Bank 1)");
-		area->start = UINT32_C(0xFF000000);
-		area->length = UINT64_C(0x00800000);
-		area->width = 0;
-
-		return 0;
-	}
-
-	if (boot_SDMA1 == 0) {
-		area->description = N_("Base ROM Interface (Bank 0)");
-		area->start = UINT32_C(0xFF800000);
-		area->length = UINT64_C(0x00800000);
-		area->width = BUS_WIDTH;
-
-		return 0;
-	}
-
-	/* extended addresing mode is disabled (SDMA1 is 1) */
-	if (adr < UINT32_C(0xFFC00000)) {
-		area->description = NULL;
-		area->start = UINT32_C(0xFF800000);
-		area->length = UINT64_C(0x00400000);
-		area->width = BUS_WIDTH;
-
-		return 0;
-	}
-
-	area->description = N_("Base ROM Interface (Bank 0)");
-	area->start = UINT32_C(0xFFC00000);
-	area->length = UINT64_C(0x00400000);
-	area->width = BUS_WIDTH;
-
-	return 0;
-}
-
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -393,9 +117,9 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 	      }
 	    }
 	  } else {
-	    if (!strcmp( "revbits", cmd_params[i])) 
+	    if (!strcmp( "revbits", cmd_params[i]))
 	      REVBITS = 1;
-	    
+
 	    if (!strcmp( "help", cmd_params[i])) {
 	      printf(_("Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n\n"
 		       "   WIDTH      data bus width - 8, 32, 64 (default 8)\n"
@@ -405,11 +129,11 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 	      return NULL;
 	    }
 
-	    if (!strcmp( "dbgAddr", cmd_params[i])) 
+	    if (!strcmp( "dbgAddr", cmd_params[i]))
 	      dbgAddr = 1;
 
 
-	    if (!strcmp( "dbgData", cmd_params[i])) 
+	    if (!strcmp( "dbgData", cmd_params[i]))
 	      dbgData = 1;
 
 
@@ -420,7 +144,7 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 	  printf(_("   Using default bus width %d\n"), BUS_WIDTH);
 
 	//	REVBITS = 0;
-	
+
 
 
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
@@ -512,14 +236,14 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 		failed = 1;
 	}
 
-	/*  
+	/*
 	    Freescale MPC824x uses inversed bit order ([1], p. 2-18):
 	    msb is MDH[0] while lsb is MDH[31]
 	    Flash chips usually use another bit orded:
 	    msb is D[31] and lsb is D[0]
-	    
-	    This should be rewired in the PCB (MDH[0] - D[31], ..., MDH[31] - D[0]). 
-	    Otherwise you will have to use "revbits" UrJTAG parameter and 
+
+	    This should be rewired in the PCB (MDH[0] - D[31], ..., MDH[31] - D[0]).
+	    Otherwise you will have to use "revbits" UrJTAG parameter and
 	    binary files with reversed bit order.
 	*/
 
@@ -540,6 +264,316 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+mpc824x_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Motorola MPC824x compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+mpc824x_bus_prepare( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+
+	if (adr < UINT32_C(0xFF000000)) {
+		area->description = NULL;
+		area->start = UINT32_C(0x00000000);
+		area->length = UINT64_C(0xFF000000);
+		area->width = 0;
+
+		return 0;
+	}
+
+	if (adr < UINT32_C(0xFF800000)) {
+		area->description = N_("Base ROM Interface (Bank 1)");
+		area->start = UINT32_C(0xFF000000);
+		area->length = UINT64_C(0x00800000);
+		area->width = 0;
+
+		return 0;
+	}
+
+	if (boot_SDMA1 == 0) {
+		area->description = N_("Base ROM Interface (Bank 0)");
+		area->start = UINT32_C(0xFF800000);
+		area->length = UINT64_C(0x00800000);
+		area->width = BUS_WIDTH;
+
+		return 0;
+	}
+
+	/* extended addresing mode is disabled (SDMA1 is 1) */
+	if (adr < UINT32_C(0xFFC00000)) {
+		area->description = NULL;
+		area->start = UINT32_C(0xFF800000);
+		area->length = UINT64_C(0x00400000);
+		area->width = BUS_WIDTH;
+
+		return 0;
+	}
+
+	area->description = N_("Base ROM Interface (Bank 0)");
+	area->start = UINT32_C(0xFFC00000);
+	area->length = UINT64_C(0x00400000);
+	area->width = BUS_WIDTH;
+
+	return 0;
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+	int i;
+	part_t *p = PART;
+
+	switch (BUS_WIDTH) {
+	case 8:/* 8-bit data bus */
+	  for (i = 0; i < 23; i++)
+	    part_set_signal( p, AR[i], 1, (a >> i) & 1 );
+	case 32:/* 32-bit data bus */
+	  for (i = 0; i < 21; i++)
+	    part_set_signal( p, AR[i], 1, (a >> (i+2)) & 1 );
+	  break;
+	case 64:
+	  for (i = 0; i < 20; i++)
+	    part_set_signal( p, AR[i], 1, (a >> (i+3)) & 1 );
+	}
+
+	/* Just for debugging */
+	if (dbgAddr) {
+	  int j, k;
+	  switch (BUS_WIDTH) {
+	  case 8:  k = 23; break;
+	  case 32: k = 21; break;
+	  case 64: k = 20;
+	  }
+
+	  printf(_("Addr    [%2d:0]: %06X   "), k, a);
+	  for (i=0; i<3; i++) {
+	    for (j=0; j<8; j++)
+	      if ((i*8+j) >= (23 - k))
+		printf("%1d", (a >> (23 - (i*8+j)) ) & 1);
+	      else
+		printf(" ");
+	    printf(" ");
+	  };
+	  printf("\n");
+	}
+
+}
+
+static void
+set_data_in( bus_t *bus, uint32_t adr )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	mpc824x_bus_area( bus, adr, &area );
+	if (area.width > 64)
+		return;
+
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, D[i], 0, 0 );
+}
+
+static void
+setup_data( bus_t *bus, uint32_t adr, uint32_t d )
+{
+	int i;
+	part_t *p = PART;
+	bus_area_t area;
+
+	mpc824x_bus_area( bus, adr, &area );
+	if (area.width > 64)
+	  return;
+
+	for (i = 0; i < area.width; i++)
+		part_set_signal( p, D[i], 1, (d >> ((REVBITS==1) ? BUS_WIDTH-1-i : i)) & 1 );
+
+	/* Just for debugging */
+	if (dbgData) {
+	  printf(_("Data WR [%d:0]: %08X   "), area.width-1, d);
+	  int j;
+	  int bytes =0;
+	  if (BUS_WIDTH==8) bytes = 1;
+	  else if (BUS_WIDTH==32) bytes = 4;
+	  else if (BUS_WIDTH==64) bytes = 4; /* Needs to be fixed - d is 32-bit long, so no 64 bit mode is possible */
+
+	  for (i=0; i<bytes; i++) {
+	    for (j=0; j<8; j++)
+	      if (REVBITS)
+		printf("%1d", (d >> (BUS_WIDTH-1 - (i*8+j)) ) & 1);
+	      else
+		printf("%1d", (d >> (              (i*8+j)) ) & 1);
+	    printf(" ");
+	  };
+	  printf("\n");
+	}
+
+}
+
+static uint32_t
+get_data( bus_t *bus, uint32_t adr )
+{
+	bus_area_t area;
+	int i;
+	uint32_t d = 0;
+	part_t *p = PART;
+
+	mpc824x_bus_area( bus, adr, &area );
+	if (area.width > 64)
+		return 0;
+
+	for (i = 0; i < area.width; i++)
+		d |= (uint32_t) (part_get_signal( p, D[i] ) << ((REVBITS==1) ? BUS_WIDTH-1-i : i));
+
+	/* Just for debugging */
+	if (dbgData) {
+	  printf(_("Data RD [%d:0]: %08X   "), area.width-1, d);
+	  int j;
+	  int bytes = 0;
+	  if (BUS_WIDTH==8) bytes = 1;
+	  else if (BUS_WIDTH==32) bytes = 4;
+	  else if (BUS_WIDTH==64) bytes = 4; /* Needs to be fixed - d is 32-bit long, so no 64 bit mode is possible */
+
+	  for (i=0; i<bytes; i++) {
+	    for (j=0; j<8; j++)
+	      if (REVBITS)
+		printf("%1d", (d >> (BUS_WIDTH-1 - (i*8+j)) ) & 1);
+	      else
+		printf("%1d", (d >> (              (i*8+j)) ) & 1);
+	    printf(" ");
+	  };
+	  printf("\n");
+	}
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+mpc824x_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+
+	LAST_ADR = adr;
+
+	/* see Figure 6-45 in [1] */
+	part_set_signal( p, nRCS0, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nFOE, 1, 0 );
+
+	setup_address( bus, adr );
+	set_data_in( bus, adr );
+
+	chain_shift_data_registers( CHAIN, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+mpc824x_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	uint32_t d;
+
+	setup_address( bus, adr );
+	chain_shift_data_registers( CHAIN, 1 );
+
+	d = get_data( bus, LAST_ADR );
+	LAST_ADR = adr;
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+mpc824x_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+
+	part_set_signal( p, nRCS0, 1, 1 );
+	part_set_signal( p, nFOE, 1, 1 );
+
+	chain_shift_data_registers( CHAIN, 1 );
+
+	return get_data( bus, LAST_ADR );
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+mpc824x_bus_read( bus_t *bus, uint32_t adr )
+{
+	mpc824x_bus_read_start( bus, adr );
+	return mpc824x_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+mpc824x_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	part_t *p = PART;
+
+	LAST_ADR = adr;
+
+
+	/* see Figure 6-47 in [1] */
+	part_set_signal( p, nRCS0, 1, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nFOE, 1, 1 );
+
+	setup_address( bus, adr );
+
+	setup_data( bus, adr, data );
+
+	chain_shift_data_registers( CHAIN, 0 );
+
+	part_set_signal( p, nWE, 1, 0 );
+	chain_shift_data_registers( CHAIN, 0 );
+	part_set_signal( p, nWE, 1, 1 );
+	part_set_signal( p, nRCS0, 1, 1 );
+	chain_shift_data_registers( CHAIN, 0 );
+
+
+
 }
 
 const bus_driver_t mpc824x_bus = {

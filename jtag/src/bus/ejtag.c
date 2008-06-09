@@ -60,19 +60,6 @@ typedef struct {
 #define EJTAG_25	1
 #define EJTAG_26	2
 
-static int ejtag_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area );
-
-static void
-ejtag_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("EJTAG compatible bus driver via PrAcc (JTAG part No. %d)\n"), i );
-}
-
 /* EJTAG control register bits */
 #define PerRst		20
 #define PRnW		19
@@ -85,6 +72,51 @@ ejtag_bus_printinfo( bus_t *bus )
 /* EJTAG 2.6 */
 #define Rocc		31
 #define ProbTrap	14
+
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
+static bus_t *
+ejtag_bus_new( chain_t *chain, char *cmd_params[] )
+{
+	bus_t *bus;
+
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
+
+	bus = calloc( 1, sizeof (bus_t) );
+	if (!bus)
+		return NULL;
+
+	bus->driver = &ejtag_bus;
+	bus->params = calloc( 1, sizeof (bus_params_t) );
+	if (!bus->params) {
+		free( bus );
+		return NULL;
+	}
+
+	CHAIN = chain;
+	PART = chain->parts->parts[chain->active_part];
+	BP->initialized = 0;
+
+	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+ejtag_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("EJTAG compatible bus driver via PrAcc (JTAG part No. %d)\n"), i );
+}
 
 static uint32_t
 reg_value( tap_register *reg )
@@ -293,6 +325,10 @@ ejtag_bus_init( bus_t *bus )
 	BP->initialized = 1;
 }
 
+/**
+ * bus->driver->(*prepare)
+ *
+ */
 static void
 ejtag_bus_prepare( bus_t *bus )
 {
@@ -300,6 +336,37 @@ ejtag_bus_prepare( bus_t *bus )
 		return;
 
 	ejtag_bus_init( bus );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+ejtag_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	if (adr < UINT32_C(0x20000000)) {
+		area->description = NULL;
+		area->start  = UINT32_C(0x00000000);
+		area->length = UINT64_C(0x20000000);
+		area->width = 8;
+	} else if (adr < UINT32_C(0x40000000)) {
+		area->description = NULL;
+		area->start  = UINT32_C(0x20000000);
+		area->length = UINT64_C(0x20000000);
+		area->width = 16;
+	} else if (adr < UINT32_C(0x60000000)) {
+		area->description = NULL;
+		area->start  = UINT32_C(0x40000000);
+		area->length = UINT64_C(0x20000000);
+		area->width = 32;
+	} else {
+		area->description = NULL;
+		area->start  = UINT32_C(0x60000000);
+		area->length = UINT64_C(0xa0000000);
+		area->width = 0;
+	}
+	return 0;
 }
 
 static int
@@ -338,6 +405,10 @@ ejtag_gen_read( uint32_t *code, uint32_t adr )
 	return p - code;
 }
 
+/**
+ * bus->driver->(*read_start)
+ *
+ */
 static void
 ejtag_bus_read_start( bus_t *bus, uint32_t adr )
 {
@@ -347,6 +418,10 @@ ejtag_bus_read_start( bus_t *bus, uint32_t adr )
 	// printf("bus_read_start: adr=0x%08x\n", adr);
 }
 
+/**
+ * bus->driver->(*read_next)
+ *
+ */
 static uint32_t
 ejtag_bus_read_next( bus_t *bus, uint32_t adr )
 {
@@ -362,6 +437,10 @@ ejtag_bus_read_next( bus_t *bus, uint32_t adr )
 	return d;
 }
 
+/**
+ * bus->driver->(*read_end)
+ *
+ */
 static uint32_t
 ejtag_bus_read_end( bus_t *bus )
 {
@@ -377,6 +456,10 @@ ejtag_bus_read_end( bus_t *bus )
 	return d;
 }
 
+/**
+ * bus->driver->(*read)
+ *
+ */
 static uint32_t
 ejtag_bus_read( bus_t *bus, uint32_t adr )
 {
@@ -384,6 +467,10 @@ ejtag_bus_read( bus_t *bus, uint32_t adr )
 	return ejtag_bus_read_end( bus );
 }
 
+/**
+ * bus->driver->(*write)
+ *
+ */
 static void
 ejtag_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 {
@@ -418,59 +505,6 @@ ejtag_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	ejtag_run_pracc( bus, code, p - code );
 
 	// printf("bus_write: adr=0x%08x data=0x%08x\n", adr, data);
-}
-
-static int
-ejtag_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	if (adr < UINT32_C(0x20000000)) {
-		area->description = NULL;
-		area->start  = UINT32_C(0x00000000);
-		area->length = UINT64_C(0x20000000);
-		area->width = 8;
-	} else if (adr < UINT32_C(0x40000000)) {
-		area->description = NULL;
-		area->start  = UINT32_C(0x20000000);
-		area->length = UINT64_C(0x20000000);
-		area->width = 16;
-	} else if (adr < UINT32_C(0x60000000)) {
-		area->description = NULL;
-		area->start  = UINT32_C(0x40000000);
-		area->length = UINT64_C(0x20000000);
-		area->width = 32;
-	} else {
-		area->description = NULL;
-		area->start  = UINT32_C(0x60000000);
-		area->length = UINT64_C(0xa0000000);
-		area->width = 0;
-	}
-	return 0;
-}
-
-static bus_t *
-ejtag_bus_new( chain_t *chain, char *cmd_params[] )
-{
-	bus_t *bus;
-
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
-
-	bus = calloc( 1, sizeof (bus_t) );
-	if (!bus)
-		return NULL;
-
-	bus->driver = &ejtag_bus;
-	bus->params = calloc( 1, sizeof (bus_params_t) );
-	if (!bus->params) {
-		free( bus );
-		return NULL;
-	}
-
-	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
-	BP->initialized = 0;
-
-	return bus;
 }
 
 const bus_driver_t ejtag_bus = {

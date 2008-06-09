@@ -60,177 +60,10 @@ typedef struct {
 #define	DCS0	((bus_params_t *) bus->params)->dcs0
 #define NCE	((bus_params_t *) bus->params)->nce
 
-static void
-select_flash( bus_t *bus )
-{
-	part_t *p = PART;
-
-	part_set_signal( p, AMS[0], 1, 0 );
-	part_set_signal( p, AMS[1], 1, 1 );
-	part_set_signal( p, AMS[2], 1, 1 );
-	part_set_signal( p, AMS[3], 1, 1 );
-	part_set_signal( p, DCS0, 1, 1 );
-	part_set_signal( p, NCE, 1, 1 );
-}
-
-static void
-unselect_flash( bus_t *bus )
-{
-	part_t *p = PART;
-
-	part_set_signal( p, AMS[0], 1, 1 );
-	part_set_signal( p, AMS[1], 1, 1 );
-	part_set_signal( p, AMS[2], 1, 1 );
-	part_set_signal( p, AMS[3], 1, 1 );
-	part_set_signal( p, DCS0, 1, 1 );
-	part_set_signal( p, NCE, 1, 1 );
-}
-
-static void
-setup_address( bus_t *bus, uint32_t a )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 24; i++)
-		part_set_signal( p, ADDR[i], 1, (a >> (i + 1)) & 1 );
-}
-
-static void
-set_data_in( bus_t *bus )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 16; i++)
-		part_set_signal( p, DATA[i], 0, 0 );
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d )
-{
-	int i;
-	part_t *p = PART;
-
-	for (i = 0; i < 16; i++)
-		part_set_signal( p, DATA[i], 1, (d >> i) & 1 );
-
-}
-
-static void
-bf548_ezkit_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Blackfin BF548 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-static void
-bf548_ezkit_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-static void
-bf548_ezkit_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	select_flash( bus );
-	part_set_signal( p, AOE, 1, 0 );
-	part_set_signal( p, ARE, 1, 0 );
-	part_set_signal( p, AWE, 1, 1 );
-
-	setup_address( bus, adr );
-	set_data_in( bus );
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-static uint32_t
-bf548_ezkit_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-
-	setup_address( bus, adr );
-	chain_shift_data_registers( chain, 1 );
-
-	for (i = 0; i < 16; i++)
-		d |= (uint32_t) (part_get_signal( p, DATA[i] ) << i);
-
-	return d;
-}
-
-static uint32_t
-bf548_ezkit_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
-
-	part_set_signal( p, AOE, 1, 1 );
-	part_set_signal( p, ARE, 1, 1 );
-	part_set_signal( p, AWE, 1, 1 );
-	unselect_flash( bus );
-
-	chain_shift_data_registers( chain, 1 );
-
-	for (i = 0; i < 16; i++)
-		d |= (uint32_t) (part_get_signal( p, DATA[i] ) << i);
-
-	return d;
-}
-
-static uint32_t
-bf548_ezkit_bus_read( bus_t *bus, uint32_t adr )
-{
-	bf548_ezkit_bus_read_start( bus, adr );
-	return bf548_ezkit_bus_read_end( bus );
-}
-
-static void
-bf548_ezkit_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	select_flash( bus );
-	part_set_signal( p, AOE, 1, 0 );
-	part_set_signal( p, ARE, 1, 1 );
-
-	setup_address( bus, adr );
-	setup_data( bus, data );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, AWE, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-	part_set_signal( p, AWE, 1, 1 );
-	part_set_signal( p, AOE, 1, 1 );
-	unselect_flash( bus );
-	chain_shift_data_registers( chain, 0 );
-}
-
-static int
-bf548_ezkit_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x100000000);
-	area->width = 16;
-
-	return 0;
-}
-
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 bf548_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -343,6 +176,209 @@ bf548_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	return bus;
+}
+
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+bf548_ezkit_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for (i = 0; i < CHAIN->parts->len; i++)
+		if (PART == CHAIN->parts->parts[i])
+			break;
+	printf( _("Blackfin BF548 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+bf548_ezkit_bus_prepare( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+bf548_ezkit_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+	area->width = 16;
+
+	return 0;
+}
+
+static void
+select_flash( bus_t *bus )
+{
+	part_t *p = PART;
+
+	part_set_signal( p, AMS[0], 1, 0 );
+	part_set_signal( p, AMS[1], 1, 1 );
+	part_set_signal( p, AMS[2], 1, 1 );
+	part_set_signal( p, AMS[3], 1, 1 );
+	part_set_signal( p, DCS0, 1, 1 );
+	part_set_signal( p, NCE, 1, 1 );
+}
+
+static void
+unselect_flash( bus_t *bus )
+{
+	part_t *p = PART;
+
+	part_set_signal( p, AMS[0], 1, 1 );
+	part_set_signal( p, AMS[1], 1, 1 );
+	part_set_signal( p, AMS[2], 1, 1 );
+	part_set_signal( p, AMS[3], 1, 1 );
+	part_set_signal( p, DCS0, 1, 1 );
+	part_set_signal( p, NCE, 1, 1 );
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 24; i++)
+		part_set_signal( p, ADDR[i], 1, (a >> (i + 1)) & 1 );
+}
+
+static void
+set_data_in( bus_t *bus )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 16; i++)
+		part_set_signal( p, DATA[i], 0, 0 );
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d )
+{
+	int i;
+	part_t *p = PART;
+
+	for (i = 0; i < 16; i++)
+		part_set_signal( p, DATA[i], 1, (d >> i) & 1 );
+
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+bf548_ezkit_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	select_flash( bus );
+	part_set_signal( p, AOE, 1, 0 );
+	part_set_signal( p, ARE, 1, 0 );
+	part_set_signal( p, AWE, 1, 1 );
+
+	setup_address( bus, adr );
+	set_data_in( bus );
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+bf548_ezkit_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+
+	setup_address( bus, adr );
+	chain_shift_data_registers( chain, 1 );
+
+	for (i = 0; i < 16; i++)
+		d |= (uint32_t) (part_get_signal( p, DATA[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+bf548_ezkit_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i;
+	uint32_t d = 0;
+
+	part_set_signal( p, AOE, 1, 1 );
+	part_set_signal( p, ARE, 1, 1 );
+	part_set_signal( p, AWE, 1, 1 );
+	unselect_flash( bus );
+
+	chain_shift_data_registers( chain, 1 );
+
+	for (i = 0; i < 16; i++)
+		d |= (uint32_t) (part_get_signal( p, DATA[i] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+bf548_ezkit_bus_read( bus_t *bus, uint32_t adr )
+{
+	bf548_ezkit_bus_read_start( bus, adr );
+	return bf548_ezkit_bus_read_end( bus );
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+bf548_ezkit_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	select_flash( bus );
+	part_set_signal( p, AOE, 1, 0 );
+	part_set_signal( p, ARE, 1, 1 );
+
+	setup_address( bus, adr );
+	setup_data( bus, data );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, AWE, 1, 0 );
+	chain_shift_data_registers( chain, 0 );
+	part_set_signal( p, AWE, 1, 1 );
+	part_set_signal( p, AOE, 1, 1 );
+	unselect_flash( bus );
+	chain_shift_data_registers( chain, 0 );
 }
 
 const bus_driver_t bf548_ezkit_bus = {

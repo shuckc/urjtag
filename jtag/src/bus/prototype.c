@@ -71,164 +71,6 @@ typedef struct {
 
 #define ASHIFT ((bus_params_t *) bus->params)->ashift
 
-
-static void
-setup_address( bus_t *bus, uint32_t a )
-{
-	int i, j;
-	part_t *p = PART;
-
-	a >>= ASHIFT;
-
-	for ( i = 0, j = ALSBI; i < AW; i++, j += AI )
-		part_set_signal( p, A[j], 1, (a >> i) & 1 );
-}
-
-static int
-prototype_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
-{
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x100000000);
-	area->width = DW;
-
-	return 0;
-}
-
-static void
-set_data_in( bus_t *bus )
-{
-	int i, j;
-	part_t *p = PART;
-	bus_area_t area;
-
-	prototype_bus_area( bus, 0, &area );
-
-	for ( i = 0, j = DLSBI; i < DW; i++, j += DI )
-		part_set_signal( p, D[j], 0, 0 );
-}
-
-static void
-setup_data( bus_t *bus, uint32_t d )
-{
-	int i, j;
-	part_t *p = PART;
-	bus_area_t area;
-
-	prototype_bus_area( bus, 0, &area );
-
-	for ( i = 0, j = DLSBI; i < DW; i++, j += DI )
-		part_set_signal( p, D[j], 1, (d >> i) & 1 );
-}
-
-static void
-prototype_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for ( i = 0; i < CHAIN->parts->len; i++ )
-		if ( PART == CHAIN->parts->parts[i] )
-			break;
-	printf( _("Configurable prototype bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-static void
-prototype_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-static void
-prototype_bus_read_start( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, CS, 1, CSA );
-	part_set_signal( p, WE, 1, WEA ? 0 : 1 );
-	part_set_signal( p, OE, 1, OEA );
-
-	setup_address( bus, adr );
-	set_data_in( bus );
-
-	chain_shift_data_registers( chain, 0 );
-}
-
-static uint32_t
-prototype_bus_read_next( bus_t *bus, uint32_t adr )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i, j;
-	uint32_t d = 0;
-	bus_area_t area;
-
-	prototype_bus_area( bus, adr, &area );
-
-	setup_address( bus, adr );
-	chain_shift_data_registers( chain, 1 );
-
-	for ( i = 0, j = DLSBI; i < DW; i++, j += DI )
-		d |= (uint32_t) (part_get_signal( p, D[j] ) << i);
-
-	return d;
-}
-
-static uint32_t
-prototype_bus_read_end( bus_t *bus )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i, j;
-	uint32_t d = 0;
-	bus_area_t area;
-
-	prototype_bus_area( bus, 0, &area );
-
-	part_set_signal( p, CS, 1, CSA ? 0 : 1 );
-	part_set_signal( p, OE, 1, OEA ? 0 : 1 );
-	chain_shift_data_registers( chain, 1 );
-
-	for ( i = 0, j = DLSBI; i < DW; i++, j += DI )
-		d |= (uint32_t) (part_get_signal( p, D[j] ) << i);
-
-	return d;
-}
-
-static uint32_t
-prototype_bus_read( bus_t *bus, uint32_t adr )
-{
-	int res;
-	
-	prototype_bus_read_start( bus, adr );
-	res = prototype_bus_read_end( bus );
-	
-	return res;
-}
-
-static void
-prototype_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
-{
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
-	part_set_signal( p, CS, 1, CSA );
-	part_set_signal( p, WE, 1, WEA ? 0 : 1 );
-	part_set_signal( p, OE, 1, OEA ? 0 : 1 );
-
-	setup_address( bus, adr );
-	setup_data( bus, data );
-
-	chain_shift_data_registers( chain, 0 );
-
-	part_set_signal( p, WE, 1, WEA );
-	chain_shift_data_registers( chain, 0 );
-	part_set_signal( p, WE, 1, WEA ? 0 : 1 );
-	part_set_signal( p, CS, 1, CSA ? 0 : 1 );
-	chain_shift_data_registers( chain, 0 );
-}
-
 static void
 prototype_bus_signal_parse( char *str, char *fmt, int *inst )
 {
@@ -246,6 +88,10 @@ prototype_bus_signal_parse( char *str, char *fmt, int *inst )
 	}
 }
 
+/**
+ * bus->driver->(*new_bus)
+ *
+ */
 static bus_t *
 prototype_bus_new( chain_t *chain, char *cmd_params[] )
 {
@@ -351,7 +197,7 @@ prototype_bus_new( chain_t *chain, char *cmd_params[] )
 		for (i = 0, j = ALSBI; i < AW; i++, j += AI ) {
 			sprintf( buff, afmt, j );
 			A[j] = part_find_signal( PART, buff );
-		}	
+		}
 	} else {
 		printf( _("parameters alsb=<signal> and/or amsb=<signal> are not defined\n") );
 		failed = 1;
@@ -379,7 +225,7 @@ prototype_bus_new( chain_t *chain, char *cmd_params[] )
 		for ( i = 0, j = DLSBI; i < DW; i++, j += DI ) {
 			sprintf( buff, dfmt, j );
 			D[j] = part_find_signal( PART, buff );
-		}	
+		}
 
 		/* bus drivers are called with a byte address
 		   this address needs to be adjusted by setup_address() to the memory data width */
@@ -429,6 +275,194 @@ prototype_bus_new( chain_t *chain, char *cmd_params[] )
 	return bus;
 }
 
+/**
+ * bus->driver->(*printinfo)
+ *
+ */
+static void
+prototype_bus_printinfo( bus_t *bus )
+{
+	int i;
+
+	for ( i = 0; i < CHAIN->parts->len; i++ )
+		if ( PART == CHAIN->parts->parts[i] )
+			break;
+	printf( _("Configurable prototype bus driver via BSR (JTAG part No. %d)\n"), i );
+}
+
+/**
+ * bus->driver->(*prepare)
+ *
+ */
+static void
+prototype_bus_prepare( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
+ * bus->driver->(*area)
+ *
+ */
+static int
+prototype_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+{
+	area->description = NULL;
+	area->start = UINT32_C(0x00000000);
+	area->length = UINT64_C(0x100000000);
+	area->width = DW;
+
+	return 0;
+}
+
+static void
+setup_address( bus_t *bus, uint32_t a )
+{
+	int i, j;
+	part_t *p = PART;
+
+	a >>= ASHIFT;
+
+	for ( i = 0, j = ALSBI; i < AW; i++, j += AI )
+		part_set_signal( p, A[j], 1, (a >> i) & 1 );
+}
+
+static void
+set_data_in( bus_t *bus )
+{
+	int i, j;
+	part_t *p = PART;
+	bus_area_t area;
+
+	prototype_bus_area( bus, 0, &area );
+
+	for ( i = 0, j = DLSBI; i < DW; i++, j += DI )
+		part_set_signal( p, D[j], 0, 0 );
+}
+
+static void
+setup_data( bus_t *bus, uint32_t d )
+{
+	int i, j;
+	part_t *p = PART;
+	bus_area_t area;
+
+	prototype_bus_area( bus, 0, &area );
+
+	for ( i = 0, j = DLSBI; i < DW; i++, j += DI )
+		part_set_signal( p, D[j], 1, (d >> i) & 1 );
+}
+
+/**
+ * bus->driver->(*read_start)
+ *
+ */
+static void
+prototype_bus_read_start( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, CS, 1, CSA );
+	part_set_signal( p, WE, 1, WEA ? 0 : 1 );
+	part_set_signal( p, OE, 1, OEA );
+
+	setup_address( bus, adr );
+	set_data_in( bus );
+
+	chain_shift_data_registers( chain, 0 );
+}
+
+/**
+ * bus->driver->(*read_next)
+ *
+ */
+static uint32_t
+prototype_bus_read_next( bus_t *bus, uint32_t adr )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i, j;
+	uint32_t d = 0;
+	bus_area_t area;
+
+	prototype_bus_area( bus, adr, &area );
+
+	setup_address( bus, adr );
+	chain_shift_data_registers( chain, 1 );
+
+	for ( i = 0, j = DLSBI; i < DW; i++, j += DI )
+		d |= (uint32_t) (part_get_signal( p, D[j] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read_end)
+ *
+ */
+static uint32_t
+prototype_bus_read_end( bus_t *bus )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+	int i, j;
+	uint32_t d = 0;
+	bus_area_t area;
+
+	prototype_bus_area( bus, 0, &area );
+
+	part_set_signal( p, CS, 1, CSA ? 0 : 1 );
+	part_set_signal( p, OE, 1, OEA ? 0 : 1 );
+	chain_shift_data_registers( chain, 1 );
+
+	for ( i = 0, j = DLSBI; i < DW; i++, j += DI )
+		d |= (uint32_t) (part_get_signal( p, D[j] ) << i);
+
+	return d;
+}
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+static uint32_t
+prototype_bus_read( bus_t *bus, uint32_t adr )
+{
+	int res;
+
+	prototype_bus_read_start( bus, adr );
+	res = prototype_bus_read_end( bus );
+
+	return res;
+}
+
+/**
+ * bus->driver->(*write)
+ *
+ */
+static void
+prototype_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+{
+	part_t *p = PART;
+	chain_t *chain = CHAIN;
+
+	part_set_signal( p, CS, 1, CSA );
+	part_set_signal( p, WE, 1, WEA ? 0 : 1 );
+	part_set_signal( p, OE, 1, OEA ? 0 : 1 );
+
+	setup_address( bus, adr );
+	setup_data( bus, data );
+
+	chain_shift_data_registers( chain, 0 );
+
+	part_set_signal( p, WE, 1, WEA );
+	chain_shift_data_registers( chain, 0 );
+	part_set_signal( p, WE, 1, WEA ? 0 : 1 );
+	part_set_signal( p, CS, 1, CSA ? 0 : 1 );
+	chain_shift_data_registers( chain, 0 );
+}
 
 const bus_driver_t prototype_bus = {
 	"prototype",
