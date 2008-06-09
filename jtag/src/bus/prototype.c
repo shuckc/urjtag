@@ -424,21 +424,6 @@ prototype_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-prototype_bus_read( bus_t *bus, uint32_t adr )
-{
-	int res;
-
-	prototype_bus_read_start( bus, adr );
-	res = prototype_bus_read_end( bus );
-
-	return res;
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -477,7 +462,7 @@ const bus_driver_t prototype_bus = {
 	prototype_bus_read_start,
 	prototype_bus_read_next,
 	prototype_bus_read_end,
-	prototype_bus_read,
+	generic_bus_read,
 	prototype_bus_write,
 	NULL
 };

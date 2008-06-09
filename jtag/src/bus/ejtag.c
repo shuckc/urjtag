@@ -457,17 +457,6 @@ ejtag_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-ejtag_bus_read( bus_t *bus, uint32_t adr )
-{
-	ejtag_bus_read_start( bus, adr );
-	return ejtag_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -518,7 +507,7 @@ const bus_driver_t ejtag_bus = {
 	ejtag_bus_read_start,
 	ejtag_bus_read_next,
 	ejtag_bus_read_end,
-	ejtag_bus_read,
+	generic_bus_read,
 	ejtag_bus_write,
 	NULL
 };

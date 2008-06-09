@@ -300,17 +300,6 @@ au1500_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-au1500_bus_read( bus_t *bus, uint32_t adr )
-{
-	au1500_bus_read_start( bus, adr );
-	return au1500_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -356,7 +345,7 @@ const bus_driver_t au1500_bus = {
 	au1500_bus_read_start,
 	au1500_bus_read_next,
 	au1500_bus_read_end,
-	au1500_bus_read,
+	generic_bus_read,
 	au1500_bus_write,
 	NULL
 };

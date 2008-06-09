@@ -736,21 +736,6 @@ avr32_bus_read_next (bus_t * bus, uint32_t addr)
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-avr32_bus_read (bus_t * bus, uint32_t addr)
-{
-  uint32_t ret;
-
-  avr32_bus_read_start (bus, addr);
-  ret = avr32_bus_read_end (bus);
-
-  return ret;
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -796,7 +781,7 @@ const bus_driver_t avr32_bus_driver = {
   avr32_bus_read_start,
   avr32_bus_read_next,
   avr32_bus_read_end,
-  avr32_bus_read,
+  generic_bus_read,
   avr32_bus_write,
   NULL
 };

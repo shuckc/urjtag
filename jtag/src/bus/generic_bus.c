@@ -38,3 +38,14 @@ generic_bus_free( bus_t *bus )
 	free( bus->params );
 	free( bus );
 }
+
+/**
+ * bus->driver->(*read)
+ *
+ */
+uint32_t
+generic_bus_read( bus_t *bus, uint32_t adr )
+{
+	bus_read_start( bus, adr );
+	return bus_read_end( bus );
+}

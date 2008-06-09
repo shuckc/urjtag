@@ -286,19 +286,6 @@ bcm1250_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-bcm1250_bus_read( bus_t *bus, uint32_t adr )
-{
-	uint32_t i;
-	bcm1250_bus_read_start( bus, adr );
-	i=bcm1250_bus_read_end( bus );
-	return i;
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -543,7 +530,11 @@ const bus_driver_t bcm1250_bus = {
 	bcm1250_bus_read_start,
 	bcm1250_bus_read_next,
 	bcm1250_bus_read_end,
+#ifndef USE_BCM_EJTAG
+	generic_bus_read,
+#else
 	bcm1250_bus_read,
+#endif
 	bcm1250_bus_write,
 	NULL
 };

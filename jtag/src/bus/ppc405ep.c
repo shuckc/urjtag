@@ -273,21 +273,6 @@ ppc405ep_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-ppc405ep_bus_read( bus_t *bus, uint32_t adr )
-{
-	int res;
-
-	ppc405ep_bus_read_start( bus, adr );
-	res = ppc405ep_bus_read_end( bus );
-
-	return res;
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -324,7 +309,7 @@ const bus_driver_t ppc405ep_bus = {
 	ppc405ep_bus_read_start,
 	ppc405ep_bus_read_next,
 	ppc405ep_bus_read_end,
-	ppc405ep_bus_read,
+	generic_bus_read,
 	ppc405ep_bus_write,
 	NULL
 };

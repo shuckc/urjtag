@@ -641,17 +641,6 @@ jopcyc_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-jopcyc_bus_read( bus_t *bus, uint32_t adr )
-{
-	jopcyc_bus_read_start( bus, adr );
-	return jopcyc_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -704,7 +693,7 @@ const bus_driver_t jopcyc_bus = {
 	jopcyc_bus_read_start,
 	jopcyc_bus_read_next,
 	jopcyc_bus_read_end,
-	jopcyc_bus_read,
+	generic_bus_read,
 	jopcyc_bus_write,
 	NULL
 };

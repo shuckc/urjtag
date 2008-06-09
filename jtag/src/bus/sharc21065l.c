@@ -315,17 +315,6 @@ sharc_21065L_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-sharc_21065L_bus_read( bus_t *bus, uint32_t adr )
-{
-	sharc_21065L_bus_read_start( bus, adr );
-	return sharc_21065L_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -365,7 +354,7 @@ const bus_driver_t sharc_21065L_bus = {
 	sharc_21065L_bus_read_start,
 	sharc_21065L_bus_read_next,
 	sharc_21065L_bus_read_end,
-	sharc_21065L_bus_read,
+	generic_bus_read,
 	sharc_21065L_bus_write,
 	NULL
 };

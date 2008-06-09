@@ -298,17 +298,6 @@ ixp425_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-ixp425_bus_read( bus_t *bus, uint32_t adr )
-{
-	ixp425_bus_read_start( bus, adr );
-	return ixp425_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -344,7 +333,7 @@ const bus_driver_t ixp425_bus = {
 	ixp425_bus_read_start,
 	ixp425_bus_read_next,
 	ixp425_bus_read_end,
-	ixp425_bus_read,
+	generic_bus_read,
 	ixp425_bus_write,
 	NULL
 };

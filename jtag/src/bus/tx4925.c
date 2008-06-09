@@ -327,17 +327,6 @@ tx4925_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-tx4925_bus_read( bus_t *bus, uint32_t adr )
-{
-	tx4925_bus_read_start( bus, adr );
-	return tx4925_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -373,7 +362,7 @@ const bus_driver_t tx4925_bus = {
 	tx4925_bus_read_start,
 	tx4925_bus_read_next,
 	tx4925_bus_read_end,
-	tx4925_bus_read,
+	generic_bus_read,
 	tx4925_bus_write,
 	NULL
 };

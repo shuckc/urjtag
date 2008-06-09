@@ -853,17 +853,6 @@ zefant_xs3_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-zefant_xs3_bus_read( bus_t *bus, uint32_t adr )
-{
-	zefant_xs3_bus_read_start( bus, adr );
-	return zefant_xs3_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -981,7 +970,7 @@ const bus_driver_t zefant_xs3_bus = {
 	zefant_xs3_bus_read_start,
 	zefant_xs3_bus_read_next,
 	zefant_xs3_bus_read_end,
-	zefant_xs3_bus_read,
+	generic_bus_read,
 	zefant_xs3_bus_write,
 	NULL
 };

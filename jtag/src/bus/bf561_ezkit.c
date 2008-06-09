@@ -369,17 +369,6 @@ bf561_ezkit_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-bf561_ezkit_bus_read( bus_t *bus, uint32_t adr )
-{
-	bf561_ezkit_bus_read_start( bus, adr );
-	return bf561_ezkit_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -415,7 +404,7 @@ const bus_driver_t bf561_ezkit_bus = {
 	bf561_ezkit_bus_read_start,
 	bf561_ezkit_bus_read_next,
 	bf561_ezkit_bus_read_end,
-	bf561_ezkit_bus_read,
+	generic_bus_read,
 	bf561_ezkit_bus_write,
 	NULL
 };

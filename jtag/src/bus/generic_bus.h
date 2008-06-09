@@ -28,5 +28,6 @@
 #include "bus.h"
 
 void generic_bus_free( bus_t *bus );
+uint32_t generic_bus_read( bus_t *bus, uint32_t adr );
 
 #endif /* GENERIC_BUS_H */

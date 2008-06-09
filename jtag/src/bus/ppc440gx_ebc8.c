@@ -275,17 +275,6 @@ ppc440gx_ebc8_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-ppc440gx_ebc8_bus_read( bus_t *bus, uint32_t adr )
-{
-	ppc440gx_ebc8_bus_read_start( bus, adr );
-	return ppc440gx_ebc8_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -322,7 +311,7 @@ const bus_driver_t ppc440gx_ebc8_bus = {
 	ppc440gx_ebc8_bus_read_start,
 	ppc440gx_ebc8_bus_read_next,
 	ppc440gx_ebc8_bus_read_end,
-	ppc440gx_ebc8_bus_read,
+	generic_bus_read,
 	ppc440gx_ebc8_bus_write,
 	NULL
 };

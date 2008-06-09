@@ -328,17 +328,6 @@ lh7a400_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-lh7a400_bus_read( bus_t *bus, uint32_t adr )
-{
-	lh7a400_bus_read_start( bus, adr );
-	return lh7a400_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -377,7 +366,7 @@ const bus_driver_t lh7a400_bus = {
 	lh7a400_bus_read_start,
 	lh7a400_bus_read_next,
 	lh7a400_bus_read_end,
-	lh7a400_bus_read,
+	generic_bus_read,
 	lh7a400_bus_write,
     NULL
 };

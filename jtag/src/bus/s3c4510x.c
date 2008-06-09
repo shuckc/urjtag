@@ -392,17 +392,6 @@ s3c4510_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-s3c4510_bus_read( bus_t *bus, uint32_t adr )
-{
-        s3c4510_bus_read_start( bus, adr );
-        return s3c4510_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  *  @brief
@@ -457,7 +446,7 @@ const bus_driver_t s3c4510_bus = {
         s3c4510_bus_read_start,
         s3c4510_bus_read_next,
         s3c4510_bus_read_end,
-        s3c4510_bus_read,
+        generic_bus_read,
 	s3c4510_bus_write,
 	NULL
 };

@@ -451,20 +451,6 @@ slsup3_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-slsup3_bus_read( bus_t *bus, uint32_t adr )
-{
-        uint32_t d;
-
-	slsup3_bus_read_start( bus, adr );
-	d = slsup3_bus_read_end( bus );
-	return d;
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -515,7 +501,7 @@ const bus_driver_t slsup3_bus = {
 	slsup3_bus_read_start,
 	slsup3_bus_read_next,
 	slsup3_bus_read_end,
-	slsup3_bus_read,
+	generic_bus_read,
 	slsup3_bus_write,
 	NULL
 };

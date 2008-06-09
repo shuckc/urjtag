@@ -317,17 +317,6 @@ sh7750r_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-sh7750r_bus_read( bus_t *bus, uint32_t adr )
-{
-	sh7750r_bus_read_start( bus, adr );
-	return sh7750r_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -391,7 +380,7 @@ const bus_driver_t sh7750r_bus = {
 	sh7750r_bus_read_start,
 	sh7750r_bus_read_next,
 	sh7750r_bus_read_end,
-	sh7750r_bus_read,
+	generic_bus_read,
 	sh7750r_bus_write,
 	NULL
 };

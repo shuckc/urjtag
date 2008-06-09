@@ -291,17 +291,6 @@ h7202_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-h7202_bus_read( bus_t *bus, uint32_t adr )
-{
-	h7202_bus_read_start( bus, adr );
-	return h7202_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -351,7 +340,7 @@ const bus_driver_t h7202_bus = {
 	h7202_bus_read_start,
 	h7202_bus_read_next,
 	h7202_bus_read_end,
-	h7202_bus_read,
+	generic_bus_read,
 	h7202_bus_write,
 	NULL
 };

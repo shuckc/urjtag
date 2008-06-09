@@ -691,17 +691,6 @@ fjmem_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-fjmem_bus_read( bus_t *bus, uint32_t adr )
-{
-	fjmem_bus_read_start( bus, adr );
-	return fjmem_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -743,7 +732,7 @@ const bus_driver_t fjmem_bus = {
 	fjmem_bus_read_start,
 	fjmem_bus_read_next,
 	fjmem_bus_read_end,
-	fjmem_bus_read,
+	generic_bus_read,
 	fjmem_bus_write,
 	NULL
 };

@@ -305,17 +305,6 @@ mpc5200_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-mpc5200_bus_read( bus_t *bus, uint32_t adr )
-{
-	mpc5200_bus_read_start( bus, adr );
-	return mpc5200_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -355,7 +344,7 @@ const bus_driver_t mpc5200_bus = {
 	mpc5200_bus_read_start,
 	mpc5200_bus_read_next,
 	mpc5200_bus_read_end,
-	mpc5200_bus_read,
+	generic_bus_read,
 	mpc5200_bus_write,
     NULL
 };

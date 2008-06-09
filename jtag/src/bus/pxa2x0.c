@@ -787,17 +787,6 @@ pxa2xx_bus_read_end( bus_t *bus )
 }
 
 /**
- * bus->driver->(*read)
- *
- */
-static uint32_t
-pxa2xx_bus_read( bus_t *bus, uint32_t adr )
-{
-	pxa2xx_bus_read_start( bus, adr );
-	return pxa2xx_bus_read_end( bus );
-}
-
-/**
  * bus->driver->(*write)
  *
  */
@@ -849,7 +838,7 @@ const bus_driver_t pxa2x0_bus = {
 	pxa2xx_bus_read_start,
 	pxa2xx_bus_read_next,
 	pxa2xx_bus_read_end,
-	pxa2xx_bus_read,
+	generic_bus_read,
 	pxa2xx_bus_write,
 	NULL /* patch 909598 call pxax0_bus_init, but the patch fails and doesnt look compatible */
 };
@@ -865,7 +854,7 @@ const bus_driver_t pxa27x_bus = {
 	pxa2xx_bus_read_start,
 	pxa2xx_bus_read_next,
 	pxa2xx_bus_read_end,
-	pxa2xx_bus_read,
+	generic_bus_read,
 	pxa2xx_bus_write,
 	pxa2xx_bus_init
 };
