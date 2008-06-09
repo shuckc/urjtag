@@ -1,3 +1,9 @@
+2008-06-09  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/svf/svf_flex.l, src/flash/flash.c (flashmem):
+     avoid '\r' in i18n strings (Hartley Sweeten)
+   * po/fr.po, po/rw.po, po/sk.po: remove '\r'
+
 2008-06-06  Kolja Waschk <kawk>
 
    * src/bus/bcm1250.c: Allow for 8 IO_CS_L signals, not just 7

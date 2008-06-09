@@ -2697,7 +2697,7 @@ msgstr ""
 
 #: src/flash/flash.c:297 src/flash/flash.c:344
 #, fuzzy, c-format
-msgid "addr: 0x%08X\r"
+msgid "addr: 0x%08X"
 msgstr "adr: 0x%08X"
 
 #: src/flash/flash.c:332
@@ -2737,12 +2737,12 @@ msgstr ""
 
 #: src/flash/flash.c:386
 #, c-format
-msgid "\r(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"
+msgid "(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"
 msgstr ""
 
 #: src/flash/flash.c:388
 #, c-format
-msgid "Ok.\r%78s\r"
+msgid "Ok.%78s"
 msgstr ""
 
 #: src/flash/flash.c:391

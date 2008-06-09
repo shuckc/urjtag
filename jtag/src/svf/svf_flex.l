@@ -305,10 +305,12 @@ fix_yylloc_nl(YYLTYPE * mylloc, char *str, YY_EXTRA_TYPE extra)
     if (*p == '\n') {
       mylloc->last_column = 0;
       ++mylloc->last_line;
-      if (extra->print_progress)
-        printf( _("\rParsing %6d/%d (%3.0d%%)"),
+      if (extra->print_progress) {
+        printf( "\r" );
+        printf( _("Parsing %6d/%d (%3.0d%%)"),
                 mylloc->last_line, extra->num_lines,
                 ((mylloc->last_line * 100) + 1) / extra->num_lines );
+      }
     } else {
       ++mylloc->last_column;
     }

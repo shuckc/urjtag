@@ -294,7 +294,8 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		for (bc = 0; bc < bn; bc += flash_driver->bus_width) {
 			int j;
 			if ((adr & 0xFF) == 0) {
-				printf( _("addr: 0x%08X\r"), adr );
+				printf( _("addr: 0x%08X"), adr );
+				printf( "\r" );
 				fflush( stdout );
 			}
 
@@ -330,7 +331,8 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		for (bc = 0; bc < bn; bc += flash_driver->bus_width) {
 			int j;
 			if ((adr & 0xFF) == 0) {
-				printf( _("addr: 0x%08X\r"), adr );
+				printf( _("addr: 0x%08X"), adr );
+				printf( "\r" );
 				fflush( stdout );
 			}
 
@@ -381,10 +383,15 @@ flasherase( bus_t *bus, uint32_t addr, int number )
 		fflush(stdout);
 		status = flash_driver->erase_block( cfi_array, addr );
 		if (status == 0) {
-			if (i == number)
-				printf( _("\r(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"), block_no );
-			else
-				printf( _("Ok.\r%78s\r"), "" );
+			if (i == number) {
+				printf( "\r" );
+				printf( _("(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"), block_no );
+			} else {
+				printf( _("Ok.") );
+				printf( "\r" );
+				printf( _("%78s"), "" );
+				printf( "\r" );
+			}
 		}
 		else
 			printf( _("ERROR.\n") );
