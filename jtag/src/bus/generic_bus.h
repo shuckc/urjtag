@@ -27,6 +27,8 @@
 
 #include "bus.h"
 
+int generic_bus_attach_sig( part_t *part, signal_t **sig, char *id );
+
 void generic_bus_free( bus_t *bus );
 uint32_t generic_bus_read( bus_t *bus, uint32_t adr );
 

@@ -28,6 +28,20 @@
 
 #include "generic_bus.h"
 
+int
+generic_bus_attach_sig( part_t *part, signal_t **sig, char *id )
+{
+	int failed = 0;
+
+	*sig = part_find_signal( part, id );
+	if (!*sig) {
+		printf( _("signal '%s' not found\n"), id );
+		failed = 1;
+	}
+
+	return failed;
+}
+
 /**
  * bus->driver->(*free_bus)
  *

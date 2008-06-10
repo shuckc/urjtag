@@ -151,20 +151,6 @@ typedef struct {
 #define COMP_EEPROM        &(((bus_params_t *) bus->params)->eeprom)
 #define COMP_EEPROM_STATUS &(((bus_params_t *) bus->params)->eeprom_status)
 
-static int
-attach_sig( bus_t *bus, signal_t **sig, char *id )
-{
-	int failed = 0;
-
-	*sig = part_find_signal( PART, id );
-	if (!*sig) {
-		printf( _("signal '%s' not found\n"), id );
-		failed = 1;
-	}
-
-	return failed;
-}
-
 /**
  * bus->driver->(*new_bus)
  *
@@ -173,6 +159,7 @@ static bus_t *
 zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	int failed = 0;
 	component_t *comp;
 	int idx;
@@ -192,7 +179,7 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	/*
 	 * Setup FLASH
@@ -201,58 +188,58 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	comp->ctype = FLASH;
 	comp->cname = "FLASH";
 
-	failed |= attach_sig( bus, &(A[ 0]), "IO_V9"   );
-	failed |= attach_sig( bus, &(A[ 1]), "IO_U10"  );
-	failed |= attach_sig( bus, &(A[ 2]), "IO_V10"  );
-	failed |= attach_sig( bus, &(A[ 3]), "IO_W10"  );
-	failed |= attach_sig( bus, &(A[ 4]), "IO_Y10"  );
-	failed |= attach_sig( bus, &(A[ 5]), "IO_W8"   );
-	failed |= attach_sig( bus, &(A[ 6]), "IO_W9"   );
-	failed |= attach_sig( bus, &(A[ 7]), "IO_V8"   );
-	failed |= attach_sig( bus, &(A[ 8]), "IO_V6"   );
-	failed |= attach_sig( bus, &(A[ 9]), "IO_AA8"  );
-	failed |= attach_sig( bus, &(A[10]), "IO_AB8"  );
-	failed |= attach_sig( bus, &(A[11]), "IO_U7"   );
-	failed |= attach_sig( bus, &(A[12]), "IO_V7"   );
-	failed |= attach_sig( bus, &(A[13]), "IO_U6"   );
-	failed |= attach_sig( bus, &(A[14]), "IO_Y6"   );
-	failed |= attach_sig( bus, &(A[15]), "IO_AB11" );
-	failed |= attach_sig( bus, &(A[16]), "IO_AB10" );
-	failed |= attach_sig( bus, &(A[17]), "IO_AA10" );
-	failed |= attach_sig( bus, &(A[18]), "IO_W6"   );
-	failed |= attach_sig( bus, &(A[19]), "IO_AA6"  );
-	failed |= attach_sig( bus, &(A[20]), "IO_U11"  );
-	failed |= attach_sig( bus, &(A[21]), "IO_Y13"  );
-	failed |= attach_sig( bus, &(A[22]), "IO_AB13" );
-	failed |= attach_sig( bus, &(A[23]), "IO_U13"  );
-	failed |= attach_sig( bus, &(A[24]), "IO_AA13" );
+	failed |= generic_bus_attach_sig( part, &(A[ 0]), "IO_V9"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 1]), "IO_U10"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 2]), "IO_V10"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 3]), "IO_W10"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 4]), "IO_Y10"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 5]), "IO_W8"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 6]), "IO_W9"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 7]), "IO_V8"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 8]), "IO_V6"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 9]), "IO_AA8"  );
+	failed |= generic_bus_attach_sig( part, &(A[10]), "IO_AB8"  );
+	failed |= generic_bus_attach_sig( part, &(A[11]), "IO_U7"   );
+	failed |= generic_bus_attach_sig( part, &(A[12]), "IO_V7"   );
+	failed |= generic_bus_attach_sig( part, &(A[13]), "IO_U6"   );
+	failed |= generic_bus_attach_sig( part, &(A[14]), "IO_Y6"   );
+	failed |= generic_bus_attach_sig( part, &(A[15]), "IO_AB11" );
+	failed |= generic_bus_attach_sig( part, &(A[16]), "IO_AB10" );
+	failed |= generic_bus_attach_sig( part, &(A[17]), "IO_AA10" );
+	failed |= generic_bus_attach_sig( part, &(A[18]), "IO_W6"   );
+	failed |= generic_bus_attach_sig( part, &(A[19]), "IO_AA6"  );
+	failed |= generic_bus_attach_sig( part, &(A[20]), "IO_U11"  );
+	failed |= generic_bus_attach_sig( part, &(A[21]), "IO_Y13"  );
+	failed |= generic_bus_attach_sig( part, &(A[22]), "IO_AB13" );
+	failed |= generic_bus_attach_sig( part, &(A[23]), "IO_U13"  );
+	failed |= generic_bus_attach_sig( part, &(A[24]), "IO_AA13" );
 
-	failed |= attach_sig( bus, &(D[ 0]), "IO_AA14" );
-	failed |= attach_sig( bus, &(D[ 1]), "IO_AB14" );
-	failed |= attach_sig( bus, &(D[ 2]), "IO_U12"  );
-	failed |= attach_sig( bus, &(D[ 3]), "IO_V12"  );
-	failed |= attach_sig( bus, &(D[ 4]), "IO_W11"  );
-	failed |= attach_sig( bus, &(D[ 5]), "IO_V11"  );
-	failed |= attach_sig( bus, &(D[ 6]), "IO_AB9"  );
-	failed |= attach_sig( bus, &(D[ 7]), "IO_AA9"  );
-	failed |= attach_sig( bus, &(D[ 8]), "IO_U16"  );
-	failed |= attach_sig( bus, &(D[ 9]), "IO_AB15" );
-	failed |= attach_sig( bus, &(D[10]), "IO_AA15" );
-	failed |= attach_sig( bus, &(D[11]), "IO_W14"  );
-	failed |= attach_sig( bus, &(D[12]), "IO_V14"  );
-	failed |= attach_sig( bus, &(D[13]), "IO_U14"  );
-	failed |= attach_sig( bus, &(D[14]), "IO_W13"  );
-	failed |= attach_sig( bus, &(D[15]), "IO_V13"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 0]), "IO_AA14" );
+	failed |= generic_bus_attach_sig( part, &(D[ 1]), "IO_AB14" );
+	failed |= generic_bus_attach_sig( part, &(D[ 2]), "IO_U12"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 3]), "IO_V12"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 4]), "IO_W11"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 5]), "IO_V11"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 6]), "IO_AB9"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 7]), "IO_AA9"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 8]), "IO_U16"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 9]), "IO_AB15" );
+	failed |= generic_bus_attach_sig( part, &(D[10]), "IO_AA15" );
+	failed |= generic_bus_attach_sig( part, &(D[11]), "IO_W14"  );
+	failed |= generic_bus_attach_sig( part, &(D[12]), "IO_V14"  );
+	failed |= generic_bus_attach_sig( part, &(D[13]), "IO_U14"  );
+	failed |= generic_bus_attach_sig( part, &(D[14]), "IO_W13"  );
+	failed |= generic_bus_attach_sig( part, &(D[15]), "IO_V13"  );
 
-	failed |= attach_sig( bus, &(nWE),   "IO_Y17"  );
-	failed |= attach_sig( bus, &(nOE),   "IO_AA17" );
-	failed |= attach_sig( bus, &(nCS),   "IO_U17"  );
+	failed |= generic_bus_attach_sig( part, &(nWE),   "IO_Y17"  );
+	failed |= generic_bus_attach_sig( part, &(nOE),   "IO_AA17" );
+	failed |= generic_bus_attach_sig( part, &(nCS),   "IO_U17"  );
 	nLB = NULL;
 	nUB = NULL;
 
-	failed |= attach_sig( bus, &(nRP),   "IO_V16"  );
-	failed |= attach_sig( bus, &(nBYTE), "IO_Y16"  );
-	failed |= attach_sig( bus, &(STS),   "IO_W16"  );
+	failed |= generic_bus_attach_sig( part, &(nRP),   "IO_V16"  );
+	failed |= generic_bus_attach_sig( part, &(nBYTE), "IO_Y16"  );
+	failed |= generic_bus_attach_sig( part, &(STS),   "IO_W16"  );
 
 	SI  = NULL;
 	SO  = NULL;
@@ -265,24 +252,24 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	comp->ctype = RAM;
 	comp->cname = "RAM0";
 
-	failed |= attach_sig( bus, &(A[ 0]), "IO_AA4"  );
-	failed |= attach_sig( bus, &(A[ 1]), "IO_AB4"  );
-	failed |= attach_sig( bus, &(A[ 2]), "IO_W5"   );
-	failed |= attach_sig( bus, &(A[ 3]), "IO_Y3"   );
-	failed |= attach_sig( bus, &(A[ 4]), "IO_Y1"   );
-	failed |= attach_sig( bus, &(A[ 5]), "IO_M1"   );
-	failed |= attach_sig( bus, &(A[ 6]), "IO_N2"   );
-	failed |= attach_sig( bus, &(A[ 7]), "IO_L2"   );
-	failed |= attach_sig( bus, &(A[ 8]), "IO_L1"   );
-	failed |= attach_sig( bus, &(A[ 9]), "IO_K1"   );
-	failed |= attach_sig( bus, &(A[10]), "IO_K3"   );
-	failed |= attach_sig( bus, &(A[11]), "IO_L6"   );
-	failed |= attach_sig( bus, &(A[12]), "IO_L4"   );
-	failed |= attach_sig( bus, &(A[13]), "IO_L3"   );
-	failed |= attach_sig( bus, &(A[14]), "IO_K4"   );
-	failed |= attach_sig( bus, &(A[15]), "IO_AB5"  );
-	failed |= attach_sig( bus, &(A[16]), "IO_AA5"  );
-	failed |= attach_sig( bus, &(A[17]), "IO_Y5"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 0]), "IO_AA4"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 1]), "IO_AB4"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 2]), "IO_W5"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 3]), "IO_Y3"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 4]), "IO_Y1"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 5]), "IO_M1"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 6]), "IO_N2"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 7]), "IO_L2"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 8]), "IO_L1"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 9]), "IO_K1"   );
+	failed |= generic_bus_attach_sig( part, &(A[10]), "IO_K3"   );
+	failed |= generic_bus_attach_sig( part, &(A[11]), "IO_L6"   );
+	failed |= generic_bus_attach_sig( part, &(A[12]), "IO_L4"   );
+	failed |= generic_bus_attach_sig( part, &(A[13]), "IO_L3"   );
+	failed |= generic_bus_attach_sig( part, &(A[14]), "IO_K4"   );
+	failed |= generic_bus_attach_sig( part, &(A[15]), "IO_AB5"  );
+	failed |= generic_bus_attach_sig( part, &(A[16]), "IO_AA5"  );
+	failed |= generic_bus_attach_sig( part, &(A[17]), "IO_Y5"   );
 	A[18] = NULL;
 	A[19] = NULL;
 	A[20] = NULL;
@@ -291,28 +278,28 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	A[23] = NULL;
 	A[24] = NULL;
 
-	failed |= attach_sig( bus, &(D[ 0]), "IO_W1"   );
-	failed |= attach_sig( bus, &(D[ 1]), "IO_V5"   );
-	failed |= attach_sig( bus, &(D[ 2]), "IO_V3"   );
-	failed |= attach_sig( bus, &(D[ 3]), "IO_V1"   );
-	failed |= attach_sig( bus, &(D[ 4]), "IO_N1"   );
-	failed |= attach_sig( bus, &(D[ 5]), "IO_N3"   );
-	failed |= attach_sig( bus, &(D[ 6]), "IO_M2"   );
-	failed |= attach_sig( bus, &(D[ 7]), "IO_M5"   );
-	failed |= attach_sig( bus, &(D[ 8]), "IO_M4"   );
-	failed |= attach_sig( bus, &(D[ 9]), "IO_M6"   );
-	failed |= attach_sig( bus, &(D[10]), "IO_L5"   );
-	failed |= attach_sig( bus, &(D[11]), "IO_N4"   );
-	failed |= attach_sig( bus, &(D[12]), "IO_T6"   );
-	failed |= attach_sig( bus, &(D[13]), "IO_V2"   );
-	failed |= attach_sig( bus, &(D[14]), "IO_V4"   );
-	failed |= attach_sig( bus, &(D[15]), "IO_U5"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 0]), "IO_W1"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 1]), "IO_V5"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 2]), "IO_V3"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 3]), "IO_V1"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 4]), "IO_N1"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 5]), "IO_N3"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 6]), "IO_M2"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 7]), "IO_M5"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 8]), "IO_M4"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 9]), "IO_M6"   );
+	failed |= generic_bus_attach_sig( part, &(D[10]), "IO_L5"   );
+	failed |= generic_bus_attach_sig( part, &(D[11]), "IO_N4"   );
+	failed |= generic_bus_attach_sig( part, &(D[12]), "IO_T6"   );
+	failed |= generic_bus_attach_sig( part, &(D[13]), "IO_V2"   );
+	failed |= generic_bus_attach_sig( part, &(D[14]), "IO_V4"   );
+	failed |= generic_bus_attach_sig( part, &(D[15]), "IO_U5"   );
 
-	failed |= attach_sig( bus, &(nCS),   "IO_W3"   );
-	failed |= attach_sig( bus, &(nOE),   "IO_Y2"   );
-	failed |= attach_sig( bus, &(nWE),   "IO_M3"   );
-	failed |= attach_sig( bus, &(nLB),   "IO_W2"   );
-	failed |= attach_sig( bus, &(nUB),   "IO_W4"   );
+	failed |= generic_bus_attach_sig( part, &(nCS),   "IO_W3"   );
+	failed |= generic_bus_attach_sig( part, &(nOE),   "IO_Y2"   );
+	failed |= generic_bus_attach_sig( part, &(nWE),   "IO_M3"   );
+	failed |= generic_bus_attach_sig( part, &(nLB),   "IO_W2"   );
+	failed |= generic_bus_attach_sig( part, &(nUB),   "IO_W4"   );
 	nRP   = NULL;
 	nBYTE = NULL;
 	STS   = NULL;
@@ -328,24 +315,24 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	comp->ctype = RAM;
 	comp->cname = "RAM1";
 
-	failed |= attach_sig( bus, &(A[ 0]), "IO_H5"   );
-	failed |= attach_sig( bus, &(A[ 1]), "IO_F5"   );
-	failed |= attach_sig( bus, &(A[ 2]), "IO_F2"   );
-	failed |= attach_sig( bus, &(A[ 3]), "IO_D1"   );
-	failed |= attach_sig( bus, &(A[ 4]), "IO_E1"   );
-	failed |= attach_sig( bus, &(A[ 5]), "IO_F10"  );
-	failed |= attach_sig( bus, &(A[ 6]), "IO_C7"   );
-	failed |= attach_sig( bus, &(A[ 7]), "IO_C10"  );
-	failed |= attach_sig( bus, &(A[ 8]), "IO_A10"  );
-	failed |= attach_sig( bus, &(A[ 9]), "IO_B10"  );
-	failed |= attach_sig( bus, &(A[10]), "IO_F11"  );
-	failed |= attach_sig( bus, &(A[11]), "IO_A9"   );
-	failed |= attach_sig( bus, &(A[12]), "IO_B9"   );
-	failed |= attach_sig( bus, &(A[13]), "IO_B8"   );
-	failed |= attach_sig( bus, &(A[14]), "IO_F9"   );
-	failed |= attach_sig( bus, &(A[15]), "IO_F4"   );
-	failed |= attach_sig( bus, &(A[16]), "IO_G6"   );
-	failed |= attach_sig( bus, &(A[17]), "IO_G5"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 0]), "IO_H5"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 1]), "IO_F5"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 2]), "IO_F2"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 3]), "IO_D1"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 4]), "IO_E1"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 5]), "IO_F10"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 6]), "IO_C7"   );
+	failed |= generic_bus_attach_sig( part, &(A[ 7]), "IO_C10"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 8]), "IO_A10"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 9]), "IO_B10"  );
+	failed |= generic_bus_attach_sig( part, &(A[10]), "IO_F11"  );
+	failed |= generic_bus_attach_sig( part, &(A[11]), "IO_A9"   );
+	failed |= generic_bus_attach_sig( part, &(A[12]), "IO_B9"   );
+	failed |= generic_bus_attach_sig( part, &(A[13]), "IO_B8"   );
+	failed |= generic_bus_attach_sig( part, &(A[14]), "IO_F9"   );
+	failed |= generic_bus_attach_sig( part, &(A[15]), "IO_F4"   );
+	failed |= generic_bus_attach_sig( part, &(A[16]), "IO_G6"   );
+	failed |= generic_bus_attach_sig( part, &(A[17]), "IO_G5"   );
 	A[18] = NULL;
 	A[19] = NULL;
 	A[20] = NULL;
@@ -354,28 +341,28 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	A[23] = NULL;
 	A[24] = NULL;
 
-	failed |= attach_sig( bus, &(D[ 0]), "IO_C1"   );
-	failed |= attach_sig( bus, &(D[ 1]), "IO_E2"   );
-	failed |= attach_sig( bus, &(D[ 2]), "IO_C2"   );
-	failed |= attach_sig( bus, &(D[ 3]), "IO_C3"   );
-	failed |= attach_sig( bus, &(D[ 4]), "IO_B5"   );
-	failed |= attach_sig( bus, &(D[ 5]), "IO_A5"   );
-	failed |= attach_sig( bus, &(D[ 6]), "IO_B6"   );
-	failed |= attach_sig( bus, &(D[ 7]), "IO_D7"   );
-	failed |= attach_sig( bus, &(D[ 8]), "IO_D9"   );
-	failed |= attach_sig( bus, &(D[ 9]), "IO_E9"   );
-	failed |= attach_sig( bus, &(D[10]), "IO_F7"   );
-	failed |= attach_sig( bus, &(D[11]), "IO_E7"   );
-	failed |= attach_sig( bus, &(D[12]), "IO_D5"   );
-	failed |= attach_sig( bus, &(D[13]), "IO_C4"   );
-	failed |= attach_sig( bus, &(D[14]), "IO_D3"   );
-	failed |= attach_sig( bus, &(D[15]), "IO_D4"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 0]), "IO_C1"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 1]), "IO_E2"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 2]), "IO_C2"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 3]), "IO_C3"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 4]), "IO_B5"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 5]), "IO_A5"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 6]), "IO_B6"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 7]), "IO_D7"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 8]), "IO_D9"   );
+	failed |= generic_bus_attach_sig( part, &(D[ 9]), "IO_E9"   );
+	failed |= generic_bus_attach_sig( part, &(D[10]), "IO_F7"   );
+	failed |= generic_bus_attach_sig( part, &(D[11]), "IO_E7"   );
+	failed |= generic_bus_attach_sig( part, &(D[12]), "IO_D5"   );
+	failed |= generic_bus_attach_sig( part, &(D[13]), "IO_C4"   );
+	failed |= generic_bus_attach_sig( part, &(D[14]), "IO_D3"   );
+	failed |= generic_bus_attach_sig( part, &(D[15]), "IO_D4"   );
 
-	failed |= attach_sig( bus, &(nCS),   "IO_D2"   );
-	failed |= attach_sig( bus, &(nOE),   "IO_F3"   );
-	failed |= attach_sig( bus, &(nWE),   "IO_E10"  );
-	failed |= attach_sig( bus, &(nLB),   "IO_E4"   );
-	failed |= attach_sig( bus, &(nUB),   "IO_E3"   );
+	failed |= generic_bus_attach_sig( part, &(nCS),   "IO_D2"   );
+	failed |= generic_bus_attach_sig( part, &(nOE),   "IO_F3"   );
+	failed |= generic_bus_attach_sig( part, &(nWE),   "IO_E10"  );
+	failed |= generic_bus_attach_sig( part, &(nLB),   "IO_E4"   );
+	failed |= generic_bus_attach_sig( part, &(nUB),   "IO_E3"   );
 	nRP   = NULL;
 	nBYTE = NULL;
 	STS   = NULL;
@@ -391,10 +378,10 @@ zefant_xs3_bus_new( chain_t *chain, char *cmd_params[] )
 	comp->ctype = EEPROM;
 	comp->cname = "EEPROM";
 
-	failed |= attach_sig( bus, &(SI),    "IO_H19"  );
-	failed |= attach_sig( bus, &(SO),    "IO_J21"  );
-	failed |= attach_sig( bus, &(SCK),   "IO_H21"  );
-	failed |= attach_sig( bus, &(nCS),   "IO_K22"  );
+	failed |= generic_bus_attach_sig( part, &(SI),    "IO_H19"  );
+	failed |= generic_bus_attach_sig( part, &(SO),    "IO_J21"  );
+	failed |= generic_bus_attach_sig( part, &(SCK),   "IO_H21"  );
+	failed |= generic_bus_attach_sig( part, &(nCS),   "IO_K22"  );
 
 	for (idx = 0; idx < FLASH_ADDR_WIDTH; idx++)
 		A[idx] = NULL;
