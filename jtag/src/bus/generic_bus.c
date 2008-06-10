@@ -1,5 +1,5 @@
 /*
- * $Id: generic_bus.c $
+ * $Id$
  *
  * Generic bus driver utility functions
  *
