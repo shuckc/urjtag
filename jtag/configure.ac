@@ -540,6 +540,13 @@ AS_IF([test "x$relocatable" = xyes], [
   AM_CONDITIONAL(JTAG_RELOCATABLE, false)
 ])
 
+
+dnl Is fmax() provided by libm?
+AC_CHECK_LIB([m], [fmax], [
+  AC_DEFINE(HAVE_FMAX, 1, [Define if -lm provides fmax()])
+])
+
+
 AC_OUTPUT
 
 dnl

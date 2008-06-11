@@ -1,5 +1,9 @@
 2008-06-11  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/tap/cable/generic.c (fmax): define fallback in case libm doesn't
+     provide fmax()
+   * configure.ac: detect availability of fmax() in libm
+
    * src/bus/bf548_ezkit.c, src/bus/ppc405ep.c, src/bus/sh7727.c,
      src/bus/sa1110.c, src/bus/ppc440gx_ebc8.c, src/bus/tx4925.c,
      src/bus/sh7750r.c, src/bus/pxa2x0.c, src/bus/bf533_stamp.c,

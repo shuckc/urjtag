@@ -39,6 +39,13 @@
 
 #include <cmd.h>
 
+
+#ifndef HAVE_FMAX
+/* workaround for libm implementations that don't provide the fmax() function */
+#define fmax(_f1_,_f2_) ( (_f1_) > (_f2_) ? (_f1_) : (_f2_) )
+#endif
+
+
 #undef VERBOSE
 
 #ifdef VERBOSE
