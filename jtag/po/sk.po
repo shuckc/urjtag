@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2008-03-15 12:05+0800\n"
+"POT-Creation-Date: 2008-06-11 22:56+0200\n"
 "PO-Revision-Date: 2003-10-08 21:25+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -132,61 +132,61 @@ msgstr ""
 msgid "Line %d, %s.\n"
 msgstr ""
 
-#: bsdl_bison.y:965 bsdl_flex.l:434 bsdl_flex.l:476 src/bsdl/bsdl_sem.c:273
+#: bsdl_bison.y:965 bsdl_flex.l:434 bsdl_flex.l:482 src/bsdl/bsdl_sem.c:273
 #: src/bsdl/bsdl_sem.c:385 src/bsdl/bsdl_sem.c:505 src/bsdl/bsdl_sem.c:592
-#: src/bsdl/bsdl_sem.c:784 src/bsdl/bsdl_sem.c:815
+#: src/bsdl/bsdl_sem.c:784 src/bsdl/bsdl_sem.c:815 svf_flex.l:334
 #, fuzzy, c-format
 msgid "Out of memory, %s line %i\n"
 msgstr "Nedostatok pamäte\n"
 
-#: src/bsdl/bsdl.c:100
+#: src/bsdl/bsdl.c:96
 #, c-format
 msgid "Reading file '%s'\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:103
+#: src/bsdl/bsdl.c:99
 #, fuzzy, c-format
 msgid "Unable to open BSDL_file '%s'\n"
 msgstr "Nepodarilo sa otvoriť súbor `%s'!\n"
 
-#: src/bsdl/bsdl.c:111
+#: src/bsdl/bsdl.c:107
 #, fuzzy
 msgid "No JTAG chain available\n"
 msgstr "(popis je nedostupný)"
 
-#: src/bsdl/bsdl.c:117
+#: src/bsdl/bsdl.c:113
 msgid "Chain without any parts\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:145
+#: src/bsdl/bsdl.c:141
 #, c-format
 msgid "BSDL file '%s' compiled correctly\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:148
+#: src/bsdl/bsdl.c:144
 #, c-format
 msgid "BSDL file '%s' contains errors, stopping\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:156
+#: src/bsdl/bsdl.c:152
 #, c-format
 msgid "Got IDCODE: %s\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:173
+#: src/bsdl/bsdl.c:169
 msgid "IDCODE matched\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:175
+#: src/bsdl/bsdl.c:171
 msgid "IDCODE mismatch\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:293 src/tap/detect.c:361
+#: src/bsdl/bsdl.c:300 src/tap/detect.c:361
 #, c-format
 msgid "  Filename:     %s\n"
 msgstr "  Súbor:     %s\n"
 
-#: src/bsdl/bsdl.c:307
+#: src/bsdl/bsdl.c:314
 #, fuzzy, c-format
 msgid "Cannot open directory %s\n"
 msgstr "Nepodarilo sa otvoriť %s\n"
@@ -200,132 +200,66 @@ msgstr ""
 msgid "Scanner could not be initialized\n"
 msgstr ""
 
-#: bsdl_flex.l:516
+#: bsdl_flex.l:522
 #, fuzzy, c-format
 msgid "Cannot open file %s or %s.\n"
 msgstr "Nepodarilo sa otvoriť %s\n"
 
-#: src/bus/au1500.c:146 src/bus/au1500.c:156 src/bus/au1500.c:165
-#: src/bus/au1500.c:171 src/bus/au1500.c:179 src/bus/bcm1250.c:318
-#: src/bus/bcm1250.c:327 src/bus/bcm1250.c:334 src/bus/bcm1250.c:339
-#: src/bus/bcm1250.c:344 src/bus/bf533_ezkit.c:301 src/bus/bf533_ezkit.c:311
-#: src/bus/bf533_ezkit.c:320 src/bus/bf533_ezkit.c:328
-#: src/bus/bf533_ezkit.c:334 src/bus/bf533_ezkit.c:340
-#: src/bus/bf533_ezkit.c:346 src/bus/bf533_ezkit.c:352
-#: src/bus/bf533_ezkit.c:358 src/bus/bf533_ezkit.c:364
-#: src/bus/bf533_ezkit.c:370 src/bus/bf533_stamp.c:301
-#: src/bus/bf533_stamp.c:311 src/bus/bf533_stamp.c:321
-#: src/bus/bf533_stamp.c:330 src/bus/bf533_stamp.c:338
-#: src/bus/bf533_stamp.c:344 src/bus/bf533_stamp.c:350
-#: src/bus/bf533_stamp.c:356 src/bus/bf533_stamp.c:362
-#: src/bus/bf533_stamp.c:368 src/bus/bf537_stamp.c:328
-#: src/bus/bf537_stamp.c:338 src/bus/bf537_stamp.c:347
-#: src/bus/bf537_stamp.c:355 src/bus/bf537_stamp.c:361
-#: src/bus/bf537_stamp.c:367 src/bus/bf537_stamp.c:373
-#: src/bus/bf537_stamp.c:379 src/bus/bf537_stamp.c:385
-#: src/bus/bf537_stamp.c:391 src/bus/bf537_stamp.c:397
-#: src/bus/bf548_ezkit.c:287 src/bus/bf548_ezkit.c:297
-#: src/bus/bf548_ezkit.c:307 src/bus/bf548_ezkit.c:317
-#: src/bus/bf548_ezkit.c:327 src/bus/bf548_ezkit.c:335
-#: src/bus/bf548_ezkit.c:341 src/bus/bf548_ezkit.c:347
-#: src/bus/bf548_ezkit.c:353 src/bus/bf548_ezkit.c:359
-#: src/bus/bf561_ezkit.c:309 src/bus/bf561_ezkit.c:319
-#: src/bus/bf561_ezkit.c:329 src/bus/bf561_ezkit.c:339
-#: src/bus/bf561_ezkit.c:347 src/bus/bf561_ezkit.c:353
-#: src/bus/bf561_ezkit.c:359 src/bus/bf561_ezkit.c:365
-#: src/bus/bf561_ezkit.c:371 src/bus/bf561_ezkit.c:379 src/bus/ixp425.c:281
-#: src/bus/ixp425.c:290 src/bus/ixp425.c:299 src/bus/ixp425.c:306
-#: src/bus/ixp425.c:311 src/bus/jopcyc.c:495 src/bus/lh7a400.c:307
-#: src/bus/lh7a400.c:316 src/bus/lh7a400.c:325 src/bus/lh7a400.c:334
-#: src/bus/lh7a400.c:341 src/bus/lh7a400.c:346 src/bus/mpc5200.c:276
-#: src/bus/mpc5200.c:285 src/bus/mpc5200.c:292 src/bus/mpc5200.c:297
-#: src/bus/mpc5200.c:304 src/bus/mpc824x.c:469 src/bus/mpc824x.c:476
-#: src/bus/mpc824x.c:483 src/bus/mpc824x.c:490 src/bus/mpc824x.c:495
-#: src/bus/mpc824x.c:500 src/bus/mpc824x.c:507 src/bus/mpc824x.c:512
-#: src/bus/mpc824x.c:517 src/bus/mpc824x.c:536 src/bus/ppc405ep.c:265
-#: src/bus/ppc405ep.c:274 src/bus/ppc405ep.c:282 src/bus/ppc405ep.c:287
-#: src/bus/ppc405ep.c:292 src/bus/ppc440gx_ebc8.c:264
-#: src/bus/ppc440gx_ebc8.c:273 src/bus/ppc440gx_ebc8.c:281
-#: src/bus/ppc440gx_ebc8.c:286 src/bus/ppc440gx_ebc8.c:291
-#: src/bus/pxa2x0.c:681 src/bus/pxa2x0.c:690 src/bus/pxa2x0.c:712
-#: src/bus/pxa2x0.c:727 src/bus/pxa2x0.c:734 src/bus/pxa2x0.c:739
-#: src/bus/pxa2x0.c:744 src/bus/pxa2x0.c:749 src/bus/s3c4510x.c:377
-#: src/bus/s3c4510x.c:386 src/bus/s3c4510x.c:395 src/bus/s3c4510x.c:405
-#: src/bus/s3c4510x.c:414 src/bus/s3c4510x.c:423 src/bus/s3c4510x.c:431
-#: src/bus/sa1110.c:295 src/bus/sa1110.c:304 src/bus/sa1110.c:313
-#: src/bus/sa1110.c:320 src/bus/sa1110.c:325 src/bus/sa1110.c:330
-#: src/bus/sh7727.c:327 src/bus/sh7727.c:336 src/bus/sh7727.c:347
-#: src/bus/sh7727.c:356 src/bus/sh7727.c:363 src/bus/sh7727.c:368
-#: src/bus/sh7727.c:373 src/bus/sh7727.c:378 src/bus/sh7750r.c:309
-#: src/bus/sh7750r.c:318 src/bus/sh7750r.c:327 src/bus/sh7750r.c:336
-#: src/bus/sh7750r.c:343 src/bus/sh7750r.c:348 src/bus/sh7750r.c:353
-#: src/bus/sh7750r.c:358 src/bus/sh7751r.c:302 src/bus/sh7751r.c:311
-#: src/bus/sh7751r.c:320 src/bus/sh7751r.c:329 src/bus/sh7751r.c:336
-#: src/bus/sh7751r.c:341 src/bus/sharc21065l.c:307 src/bus/sharc21065l.c:316
-#: src/bus/sharc21065l.c:324 src/bus/sharc21065l.c:329
-#: src/bus/sharc21065l.c:334 src/bus/slsup3.c:388 src/bus/slsup3.c:398
-#: src/bus/slsup3.c:406 src/bus/slsup3.c:412 src/bus/slsup3.c:418
-#: src/bus/slsup3.c:424 src/bus/slsup3.c:430 src/bus/slsup3.c:436
-#: src/bus/slsup3.c:442 src/bus/slsup3.c:448 src/bus/slsup3.c:454
-#: src/bus/slsup3.c:460 src/bus/slsup3.c:466 src/bus/tx4925.c:298
-#: src/bus/tx4925.c:304 src/bus/tx4925.c:312 src/bus/tx4925.c:322
-#: src/bus/tx4925.c:332 src/bus/tx4925.c:342 src/bus/zefant-xs3.c:718
-#: src/cmd/get.c:63 src/cmd/set.c:77 src/cmd/test.c:65
-#, c-format
-msgid "signal '%s' not found\n"
-msgstr "signál '%s' nenájdený\n"
-
-#: src/bus/au1500.c:224
+#: src/bus/au1500.c:135
 #, fuzzy, c-format
 msgid "AU1500 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/au1500.c:322
+#: src/bus/au1500.c:317
 msgid "AU1500 BUS Driver via BSR"
 msgstr ""
 
-#: src/bus/bcm1250.c:104
+#: src/bus/bcm1250.c:128
 #, c-format
 msgid "Broadcom BCM1250 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bcm1250.c:275
+#: src/bus/bcm1250.c:507
 msgid "Broadcom BCM1250 compatible bus driver via BSR"
 msgstr "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/bf533_ezkit.c:144
+#: src/bus/bf533_ezkit.c:150
 #, fuzzy, c-format
 msgid "Blackfin BF533 EZKit compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bf533_ezkit.c:259
+#: src/bus/bf533_ezkit.c:342
 msgid "Blackfin BF533 EZKit board bus driver"
 msgstr ""
 
-#: src/bus/bf533_stamp.c:144
+#: src/bus/bf533_stamp.c:151
 #, fuzzy, c-format
 msgid "Blackfin BF533 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bf533_stamp.c:259
+#: src/bus/bf533_stamp.c:343
 msgid "Blackfin BF533 Stamp board bus driver"
 msgstr ""
 
-#: src/bus/bf537_stamp.c:144
+#: src/bus/bf537_stamp.c:352
 #, fuzzy, c-format
 msgid "Blackfin BF537 Stamp compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bf537_stamp.c:155
+#: src/bus/bf537_stamp.c:357
+msgid "Blackfin BF537 Stamp board bus driver"
+msgstr ""
+
+#: src/bus/bf537_stamp.c:401
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF537 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
@@ -333,15 +267,26 @@ msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bf537_stamp.c:270
-msgid "Blackfin BF537 Stamp board bus driver"
-msgstr ""
-
-#: src/bus/bf537_stamp.c:285
+#: src/bus/bf537_stamp.c:406
 msgid "Blackfin BF537 EZ-KIT board bus driver"
 msgstr ""
 
-#: src/bus/bf548_ezkit.c:127
+#: src/bus/bf537_stamp.c:450
+#, fuzzy, c-format
+msgid ""
+"Blackfin BF527 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr ""
+"Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
+"d)\n"
+
+#: src/bus/bf537_stamp.c:455
+#, fuzzy
+msgid "Blackfin BF527 EZ-KIT board bus driver"
+msgstr ""
+"Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
+"d)\n"
+
+#: src/bus/bf548_ezkit.c:149
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF548 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
@@ -349,11 +294,11 @@ msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bf548_ezkit.c:244
+#: src/bus/bf548_ezkit.c:331
 msgid "Blackfin BF548 EZ-KIT board bus driver"
 msgstr ""
 
-#: src/bus/bf561_ezkit.c:155
+#: src/bus/bf561_ezkit.c:154
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF561 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
@@ -361,96 +306,84 @@ msgstr ""
 "Hitachi SH7751R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bf561_ezkit.c:267
+#: src/bus/bf561_ezkit.c:354
 msgid "Blackfin BF561 EZ-KIT board bus driver"
 msgstr ""
 
-#: src/bus/buses.c:91 src/cmd/include.c:69 src/cmd/parse.c:72
-#: src/cmd/scan.c:88 src/cmd/shell.c:62 src/jtag.c:383 src/jtag.c:402
-#: src/jtag.c:427 src/tap/detect.c:269 src/tap/usbconn/libusb.c:152
+#: src/bus/buses.c:157 src/cmd/include.c:73 src/cmd/parse.c:59
+#: src/cmd/parse.c:93 src/cmd/scan.c:88 src/cmd/shell.c:62 src/jtag.c:407
+#: src/jtag.c:426 src/jtag.c:450 src/tap/detect.c:269
+#: src/tap/usbconn/libusb.c:150 src/tap/usbconn/libftd2xx.c:246
+#: src/tap/usbconn/libftdi.c:246
 #, c-format
 msgid "Out of memory\n"
 msgstr "Nedostatok pamäte\n"
 
-#: src/bus/ejtag.c:72
+#: src/bus/ejtag.c:118
 #, fuzzy, c-format
 msgid "EJTAG compatible bus driver via PrAcc (JTAG part No. %d)\n"
 msgstr ""
 "Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/ejtag.c:112
+#: src/bus/ejtag.c:145
 #, c-format
 msgid "%s(%d) EJADDRESS, EJDATA or EJCONTROL register not found\n"
 msgstr ""
 
-#: src/bus/ejtag.c:131
+#: src/bus/ejtag.c:164
 #, c-format
 msgid "%s(%d) Reset occurred, ctrl=%s\n"
 msgstr ""
 
-#: src/bus/ejtag.c:138
+#: src/bus/ejtag.c:171
 #, c-format
 msgid "%s(%d) No processor access, ctrl=%s\n"
 msgstr ""
 
-#: src/bus/ejtag.c:151
+#: src/bus/ejtag.c:184
 #, c-format
 msgid "%s(%d) PrAcc bad alignment: addr=0x%08x\n"
 msgstr ""
 
-#: src/bus/ejtag.c:165
+#: src/bus/ejtag.c:198
 #, c-format
 msgid "%s(%d) PrAcc write: addr=0x%08x data=0x%08x\n"
 msgstr ""
 
-#: src/bus/ejtag.c:172
+#: src/bus/ejtag.c:205
 #, c-format
 msgid "%s(%d) Unknown write addr=0x%08x data=0x%08x\n"
 msgstr ""
 
-#: src/bus/ejtag.c:216
+#: src/bus/ejtag.c:249
 #, c-format
 msgid "%s(%d) EJCONTROL or EJIMPCODE register not found\n"
 msgstr ""
 
-#: src/bus/ejtag.c:277
+#: src/bus/ejtag.c:310
 #, c-format
 msgid "%s(%d) Failed to enter debug mode, ctrl=%s\n"
 msgstr ""
 
-#: src/bus/ejtag.c:456
+#: src/bus/ejtag.c:501
 #, fuzzy
 msgid "EJTAG compatible bus driver via PrAcc"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/fjmem.c:140
-#, fuzzy, c-format
-msgid "fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"
-msgstr ""
-"Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
-
-#: src/bus/fjmem.c:173 src/bus/fjmem.c:205 src/bus/fjmem.c:239
-#: src/bus/fjmem.c:285 src/bus/jopcyc.c:297 src/bus/jopcyc.c:332
-#: src/bus/jopcyc.c:363 src/bus/jopcyc.c:406 src/bus/zefant-xs3.c:375
-#: src/bus/zefant-xs3.c:442 src/bus/zefant-xs3.c:490 src/bus/zefant-xs3.c:553
-#, c-format
-msgid "Address out of range\n"
-msgstr ""
-
-#: src/bus/fjmem.c:391 src/bus/fjmem.c:406 src/bus/fjmem.c:487
-#: src/bus/fjmem.c:493 src/bus/fjmem.c:595 src/cmd/instruction.c:95
+#: src/bus/fjmem.c:96 src/bus/fjmem.c:111 src/bus/fjmem.c:192
+#: src/bus/fjmem.c:198 src/bus/fjmem.c:300 src/cmd/instruction.c:95
 #: src/cmd/register.c:71 src/cmd/register.c:85 src/cmd/salias.c:72
 #: src/cmd/signal.c:88 src/tap/detect.c:210 src/tap/detect.c:233
 #, c-format
 msgid "out of memory\n"
 msgstr "nedostatok pamäte\n"
 
-#: src/bus/fjmem.c:401 src/cmd/instruction.c:84
+#: src/bus/fjmem.c:106 src/cmd/instruction.c:84
 #, c-format
 msgid "invalid instruction length\n"
 msgstr "neplatná dĺžka inštrukcie\n"
 
-#: src/bus/fjmem.c:659 src/cmd/bit.c:76 src/cmd/dr.c:53 src/cmd/get.c:57
+#: src/bus/fjmem.c:368 src/cmd/bit.c:76 src/cmd/dr.c:53 src/cmd/get.c:57
 #: src/cmd/initbus.c:51 src/cmd/instruction.c:49 src/cmd/register.c:55
 #: src/cmd/salias.c:54 src/cmd/scan.c:55 src/cmd/set.c:58 src/cmd/signal.c:55
 #: src/cmd/test.c:59
@@ -458,33 +391,47 @@ msgstr "neplatná dĺžka inštrukcie\n"
 msgid "%s: no active part\n"
 msgstr "%s: nie je aktívna súčiastka\n"
 
-#: src/bus/fjmem.c:670
+#: src/bus/fjmem.c:379
 #, c-format
 msgid "Wrong parameter specification: %s\n"
 msgstr ""
 
-#: src/bus/fjmem.c:727
+#: src/bus/fjmem.c:436
 #, c-format
 msgid "Parameter for instruction opcode missing.\n"
 msgstr ""
 
-#: src/bus/fjmem.c:734
+#: src/bus/fjmem.c:485
+#, fuzzy, c-format
+msgid "fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"
+msgstr ""
+"Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
+
+#: src/bus/fjmem.c:607 src/bus/fjmem.c:639 src/bus/fjmem.c:673
+#: src/bus/fjmem.c:708 src/bus/jopcyc.c:546 src/bus/jopcyc.c:581
+#: src/bus/jopcyc.c:612 src/bus/jopcyc.c:644 src/bus/zefant-xs3.c:690
+#: src/bus/zefant-xs3.c:757 src/bus/zefant-xs3.c:805 src/bus/zefant-xs3.c:857
+#, c-format
+msgid "Address out of range\n"
+msgstr ""
+
+#: src/bus/fjmem.c:725
 msgid ""
 "FPGA JTAG memory bus driver via USER register, requires parameters:\n"
 "           opcode=<USERx OPCODE> [len=<FJMEM REG LEN>]"
 msgstr ""
 
-#: src/bus/ixp425.c:125
+#: src/bus/ixp425.c:128
 #, c-format
 msgid "Intel IXP425 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel IXP425 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/ixp425.c:238
+#: src/bus/ixp425.c:309
 msgid "Intel IXP425 compatible bus driver via BSR"
 msgstr "Intel IXP425 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/jopcyc.c:224
+#: src/bus/jopcyc.c:355
 #, fuzzy, c-format
 msgid ""
 "JOP.design Cyclone Board compatible bus driver via BSR (JTAG part No. %d)\n"
@@ -492,81 +439,52 @@ msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/jopcyc.c:706
+#: src/bus/jopcyc.c:674
 #, fuzzy
 msgid "JOP.design Cyclone Board compatible bus driver via BSR"
 msgstr "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/lh7a400.c:120
+#: src/bus/lh7a400.c:149
 #, fuzzy, c-format
 msgid "Sharp LH7A400 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Hitachi SH7750R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/lh7a400.c:264
+#: src/bus/lh7a400.c:338
 #, fuzzy
 msgid "Sharp LH7A400 compatible bus driver via BSR (flash access only!)"
 msgstr ""
 "Hitachi SH7750R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/mpc5200.c:130
+#: src/bus/mpc5200.c:134
 #, fuzzy, c-format
 msgid "Freescale MPC5200 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/mpc5200.c:224
+#: src/bus/mpc5200.c:157
 msgid "LocalPlus Bus"
 msgstr ""
 
-#: src/bus/mpc5200.c:321
+#: src/bus/mpc5200.c:319
 #, fuzzy
 msgid "Freescale MPC5200 compatible bus driver via BSR"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/mpc824x.c:100
-#, c-format
-msgid "Addr    [%2d:0]: %06X   "
-msgstr ""
-
-#: src/bus/mpc824x.c:147
-#, c-format
-msgid "Data WR [%d:0]: %08X   "
-msgstr ""
-
-#: src/bus/mpc824x.c:184
-#, c-format
-msgid "Data RD [%d:0]: %08X   "
-msgstr ""
-
-#: src/bus/mpc824x.c:213
-#, fuzzy, c-format
-msgid "Motorola MPC824x compatible bus driver via BSR (JTAG part No. %d)\n"
-msgstr ""
-"Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
-
-#: src/bus/mpc824x.c:317
-msgid "Base ROM Interface (Bank 1)"
-msgstr ""
-
-#: src/bus/mpc824x.c:326 src/bus/mpc824x.c:344
-msgid "Base ROM Interface (Bank 0)"
-msgstr ""
-
-#: src/bus/mpc824x.c:393
+#: src/bus/mpc824x.c:111
 #, c-format
 msgid ""
 "   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:397
+#: src/bus/mpc824x.c:115
 #, c-format
 msgid "   Only 8,32 and 64 bus width are supported for Banks 0 and 1\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:406
+#: src/bus/mpc824x.c:124
 #, c-format
 msgid ""
 "Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n"
@@ -577,86 +495,115 @@ msgid ""
 "   dbgData    display data bus state (default - no)\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:426
+#: src/bus/mpc824x.c:144
 #, c-format
 msgid "   Using default bus width %d\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:553
+#: src/bus/mpc824x.c:244
+#, fuzzy, c-format
+msgid "Motorola MPC824x compatible bus driver via BSR (JTAG part No. %d)\n"
+msgstr ""
+"Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
+
+#: src/bus/mpc824x.c:276
+msgid "Base ROM Interface (Bank 1)"
+msgstr ""
+
+#: src/bus/mpc824x.c:285 src/bus/mpc824x.c:303
+msgid "Base ROM Interface (Bank 0)"
+msgstr ""
+
+#: src/bus/mpc824x.c:339
+#, c-format
+msgid "Addr    [%2d:0]: %06X   "
+msgstr ""
+
+#: src/bus/mpc824x.c:384
+#, c-format
+msgid "Data WR [%d:0]: %08X   "
+msgstr ""
+
+#: src/bus/mpc824x.c:421
+#, c-format
+msgid "Data RD [%d:0]: %08X   "
+msgstr ""
+
+#: src/bus/mpc824x.c:533
 #, fuzzy
 msgid "Motorola MPC824x compatible bus driver via BSR"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/ppc405ep.c:101
+#: src/bus/ppc405ep.c:123
 #, fuzzy, c-format
 msgid "IBM PowerPC 405EP compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel IXP425 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/ppc405ep.c:223
+#: src/bus/ppc405ep.c:285
 #, fuzzy
 msgid "IBM PowerPC 405EP compatible bus driver via BSR"
 msgstr "Intel IXP425 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/ppc440gx_ebc8.c:103
+#: src/bus/ppc440gx_ebc8.c:125
 #, fuzzy, c-format
 msgid ""
 "IBM PowerPC 440GX 8-bit compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel IXP425 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/ppc440gx_ebc8.c:221
+#: src/bus/ppc440gx_ebc8.c:287
 #, fuzzy
 msgid "IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"
 msgstr "Intel IXP425 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/prototype.c:131
+#: src/bus/prototype.c:136
+#, c-format
+msgid "value %s not defined for parameter %s\n"
+msgstr ""
+
+#: src/bus/prototype.c:145
+#, fuzzy, c-format
+msgid "signal '%s' is not found\n"
+msgstr "signál '%s' nenájdený\n"
+
+#: src/bus/prototype.c:173
+#, c-format
+msgid "parameter %s is unknown\n"
+msgstr ""
+
+#: src/bus/prototype.c:202
+#, c-format
+msgid "parameters alsb=<signal> and/or amsb=<signal> are not defined\n"
+msgstr ""
+
+#: src/bus/prototype.c:250
+#, c-format
+msgid "parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n"
+msgstr ""
+
+#: src/bus/prototype.c:255
+#, c-format
+msgid "parameter cs=<signal> or ncs=<signal> is not defined\n"
+msgstr ""
+
+#: src/bus/prototype.c:260
+#, c-format
+msgid "parameter oe=<signal> or noe=<signal> is not defined\n"
+msgstr ""
+
+#: src/bus/prototype.c:265
+#, c-format
+msgid "parameter we=<signal> or nwe=<signal> is not defined\n"
+msgstr ""
+
+#: src/bus/prototype.c:290
 #, fuzzy, c-format
 msgid "Configurable prototype bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/prototype.c:296
-#, c-format
-msgid "value %s not defined for parameter %s\n"
-msgstr ""
-
-#: src/bus/prototype.c:305
-#, fuzzy, c-format
-msgid "signal '%s' is not found\n"
-msgstr "signál '%s' nenájdený\n"
-
-#: src/bus/prototype.c:333
-#, c-format
-msgid "parameter %s is unknown\n"
-msgstr ""
-
-#: src/bus/prototype.c:362
-#, c-format
-msgid "parameters alsb=<signal> and/or amsb=<signal> are not defined\n"
-msgstr ""
-
-#: src/bus/prototype.c:410
-#, c-format
-msgid "parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n"
-msgstr ""
-
-#: src/bus/prototype.c:415
-#, c-format
-msgid "parameter cs=<signal> or ncs=<signal> is not defined\n"
-msgstr ""
-
-#: src/bus/prototype.c:420
-#, c-format
-msgid "parameter oe=<signal> or noe=<signal> is not defined\n"
-msgstr ""
-
-#: src/bus/prototype.c:425
-#, c-format
-msgid "parameter we=<signal> or nwe=<signal> is not defined\n"
-msgstr ""
-
-#: src/bus/prototype.c:441
+#: src/bus/prototype.c:454
 msgid ""
 "Configurable prototype bus driver via BSR, requires parameters:\n"
 "           amsb=<addr MSB> alsb=<addr LSB> dmsb=<data MSB> dlsb=<data LSB>\n"
@@ -664,39 +611,39 @@ msgid ""
 "x8|x16|x32]"
 msgstr ""
 
-#: src/bus/pxa2x0.c:184
+#: src/bus/pxa2x0.c:315
 #, c-format
 msgid "Intel PXA2x0 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/pxa2x0.c:195
+#: src/bus/pxa2x0.c:330
 #, fuzzy, c-format
 msgid "Intel PXA27x compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/pxa2x0.c:416 src/bus/pxa2x0.c:503
+#: src/bus/pxa2x0.c:399 src/bus/pxa2x0.c:490
 msgid "Static Chip Select 0"
 msgstr "Statický výber čipu 0"
 
-#: src/bus/pxa2x0.c:478
+#: src/bus/pxa2x0.c:461
 msgid "Memory Mapped registers (Memory Ctl)"
 msgstr "Pamäťovo mapované registre (Memory Ctl)"
 
-#: src/bus/pxa2x0.c:568
+#: src/bus/pxa2x0.c:555
 msgid "PXA270 internal address space (cfg, SRAM)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:586
+#: src/bus/pxa2x0.c:573
 msgid "PXA270 SDRAM space (4x 64MB)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:615
+#: src/bus/pxa2x0.c:800
 msgid "Intel PXA2x0 compatible bus driver via BSR"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/pxa2x0.c:631
+#: src/bus/pxa2x0.c:816
 #, fuzzy
 msgid "Intel PXA27x compatible bus driver via BSR"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
@@ -737,13 +684,12 @@ msgid "reading:\n"
 msgstr "čítam:\n"
 
 #: src/bus/readmem.c:105 src/bus/writemem.c:87 src/flash/flash.c:160
-#: src/flash/flash.c:200
+#: src/flash/flash.c:200 src/flash/flash.c:297 src/flash/flash.c:334
 #, c-format
 msgid "addr: 0x%08X"
 msgstr "adresa: 0x%08X"
 
 #: src/bus/readmem.c:113 src/bus/writemem.c:122 src/flash/flash.c:215
-#: src/flash/flash.c:354
 #, c-format
 msgid ""
 "\n"
@@ -752,7 +698,7 @@ msgstr ""
 "\n"
 "Hotovo.\n"
 
-#: src/bus/s3c4510x.c:151
+#: src/bus/s3c4510x.c:188
 #, fuzzy, c-format
 msgid ""
 "Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%"
@@ -761,58 +707,58 @@ msgstr ""
 "Samsung S3C4510B kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/s3c4510x.c:332
+#: src/bus/s3c4510x.c:411
 msgid "Samsung S3C4510B compatible bus driver via BSR"
 msgstr "Samsung S3C4510B kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/sa1110.c:108
+#: src/bus/sa1110.c:135
 #, c-format
 msgid "Intel SA-1110 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/sa1110.c:252
+#: src/bus/sa1110.c:323
 msgid "Intel SA-1110 compatible bus driver via BSR"
 msgstr "Intel SA-1110 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/sh7727.c:109
+#: src/bus/sh7727.c:145
 #, c-format
 msgid "Hitachi SH7727 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Hitachi SH7727 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/sh7727.c:267
+#: src/bus/sh7727.c:183
 #, c-format
 msgid "Error: Invalid bus width (MD3 = MD4 = 0)!\n"
 msgstr "Chyba: Neplatná šírka zbernice (MD3 = MD4 = 0)!\n"
 
-#: src/bus/sh7727.c:284
+#: src/bus/sh7727.c:364
 msgid "Hitachi SH7727 compatible bus driver via BSR"
 msgstr "Hitachi SH7727 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/sh7750r.c:101
+#: src/bus/sh7750r.c:143
 #, c-format
 msgid "Hitachi SH7750R compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Hitachi SH7750R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/sh7750r.c:266
+#: src/bus/sh7750r.c:346
 msgid "Hitachi SH7750R compatible bus driver via BSR"
 msgstr "Hitachi SH7750R kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/sh7751r.c:99
+#: src/bus/sh7751r.c:137
 #, c-format
 msgid "Hitachi SH7751R compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Hitachi SH7751R kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/sh7751r.c:259
+#: src/bus/sh7751r.c:334
 msgid "Hitachi SH7751R compatible bus driver via BSR"
 msgstr "Hitachi SH7751R kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/sharc21065l.c:114
+#: src/bus/sharc21065l.c:132
 #, fuzzy, c-format
 msgid ""
 "Analog Device's SHARC 21065L compatible bus driver via BSR (JTAG part No. %"
@@ -820,45 +766,45 @@ msgid ""
 msgstr ""
 "Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/sharc21065l.c:239
+#: src/bus/sharc21065l.c:155
 msgid "Boot Memory Select"
 msgstr ""
 
-#: src/bus/sharc21065l.c:265
+#: src/bus/sharc21065l.c:329
 #, fuzzy
 msgid "SHARC_21065L compatible bus driver via BSR"
 msgstr "Intel SA-1110 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/slsup3.c:181
+#: src/bus/slsup3.c:174
 #, fuzzy, c-format
 msgid "SLS UP3 bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/slsup3.c:317
+#: src/bus/slsup3.c:196
 msgid "Flash Memory (2 MByte) byte mode"
 msgstr ""
 
-#: src/bus/slsup3.c:326
+#: src/bus/slsup3.c:205
 msgid "SRAM 128KByte (64K x 16)"
 msgstr ""
 
-#: src/bus/slsup3.c:335
+#: src/bus/slsup3.c:214
 msgid "LCD Display (RS select by A0)"
 msgstr ""
 
-#: src/bus/slsup3.c:481
+#: src/bus/slsup3.c:441
 #, fuzzy
 msgid "SLS UP3 compatible bus driver via BSR"
 msgstr "Intel IXP425 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/tx4925.c:143
+#: src/bus/tx4925.c:147
 #, fuzzy, c-format
 msgid "Toshiba TX4925 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel IXP425 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/tx4925.c:256
+#: src/bus/tx4925.c:329
 #, fuzzy
 msgid "Toshiba TX4925 compatible bus driver via BSR"
 msgstr "Intel IXP425 kompatibilný ovládač zbernice cez BSR"
@@ -888,7 +834,7 @@ msgstr "adresa: 0x%08X\n"
 msgid "Short read: bc=0x%X\n"
 msgstr ""
 
-#: src/bus/zefant-xs3.c:252
+#: src/bus/zefant-xs3.c:429
 #, fuzzy, c-format
 msgid ""
 "Simple Solutions Zefant-XS3 Board compatible bus driver via BSR (JTAG part "
@@ -896,13 +842,13 @@ msgid ""
 msgstr ""
 "Hitachi SH7727 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/zefant-xs3.c:420 src/bus/zefant-xs3.c:466 src/bus/zefant-xs3.c:520
-#: src/bus/zefant-xs3.c:640
+#: src/bus/zefant-xs3.c:735 src/bus/zefant-xs3.c:781 src/bus/zefant-xs3.c:835
+#: src/bus/zefant-xs3.c:944
 #, fuzzy, c-format
 msgid "Component type not supported\n"
 msgstr "Nepodporovaná flash pamäť!\n"
 
-#: src/bus/zefant-xs3.c:985
+#: src/bus/zefant-xs3.c:951
 #, fuzzy
 msgid "Simple Solutions Zefant-XS3 Board compatible bus driver via BSR"
 msgstr "Samsung S3C4510B kompatibilný ovládač zbernice cez BSR"
@@ -1012,7 +958,7 @@ msgstr ""
 msgid "define new BSR bit"
 msgstr "definuje nový BSR bit"
 
-#: src/cmd/bsdl.c:91
+#: src/cmd/bsdl.c:93
 #, c-format
 msgid ""
 "Usage: %s path PATHLIST\n"
@@ -1026,7 +972,7 @@ msgid ""
 "FILE file containing part description in BSDL format\n"
 msgstr ""
 
-#: src/cmd/bsdl.c:104
+#: src/cmd/bsdl.c:106
 msgid "manage BSDL files"
 msgstr ""
 
@@ -1062,13 +1008,15 @@ msgstr ""
 msgid "Unknown cable type: %s\n"
 msgstr "Neznámy kábel: %s\n"
 
-#: src/cmd/cable.c:99
+#: src/cmd/cable.c:98 src/tap/cable/ft2232.c:1288
+#: src/tap/cable/generic_parport.c:82 src/tap/cable/generic_usbconn.c:211
+#: src/tap/cable/jim.c:68 src/tap/cable/usbblaster.c:77
+#: src/tap/cable/vision_ep9307.c:199 src/tap/cable/wiggler.c:193
 #, c-format
 msgid "%s(%d) malloc failed!\n"
 msgstr ""
 
-#: src/cmd/cable.c:106 src/tap/cable/ft2232.c:1273
-#: src/tap/cable/generic_parport.c:76
+#: src/cmd/cable.c:105 src/tap/cable/generic_parport.c:76
 #, c-format
 msgid "Error: Cable connection failed!\n"
 msgstr "Chyba: Pripojenie kábla zlyhalo!\n"
@@ -1101,18 +1049,23 @@ msgstr "%-13s %s\n"
 msgid "select JTAG cable"
 msgstr "nastaviť JTAG kábel"
 
-#: src/cmd/cmd.c:125
+#: src/cmd/cmd.c:166
 #, c-format
 msgid "Error: Cable not configured. Please use '%s' command first!\n"
 msgstr ""
 "Chyba: Kábel nie je nakonfigurovaný. Prosím najskôr použie príkaz '%s'!\n"
 
-#: src/cmd/cmd.c:143
+#: src/cmd/cmd.c:190
 #, c-format
 msgid "%s: syntax error!\n"
 msgstr "%s: chyba syntaxe!\n"
 
-#: src/cmd/cmd.c:147 src/cmd/help.c:57
+#: src/cmd/cmd.c:201
+#, fuzzy, c-format
+msgid "%s: Ambiguous command\n"
+msgstr "%s: neznámy príkaz\n"
+
+#: src/cmd/cmd.c:202 src/cmd/help.c:57
 #, c-format
 msgid "%s: unknown command\n"
 msgstr "%s: neznámy príkaz\n"
@@ -1301,7 +1254,7 @@ msgstr ""
 msgid "erase flash memory by number of blocks"
 msgstr "vymazať pamäť flash podľa počtu blokov"
 
-#: src/cmd/flashmem.c:57 src/cmd/writemem.c:52 src/jtag.c:390
+#: src/cmd/flashmem.c:57 src/cmd/writemem.c:52 src/jtag.c:414
 #, c-format
 msgid "Unable to open file `%s'!\n"
 msgstr "Nepodarilo sa otvoriť súbor `%s'!\n"
@@ -1337,17 +1290,17 @@ msgstr ""
 msgid "burn flash memory with data from a file"
 msgstr "napáliť dáta zo súboru do pamäte flash"
 
-#: src/cmd/frequency.c:40
+#: src/cmd/frequency.c:43
 #, c-format
 msgid "Current TCK frequency is %u Hz\n"
 msgstr "Aktuálna frekvencia TCK je %u Hz\n"
 
-#: src/cmd/frequency.c:50
+#: src/cmd/frequency.c:53
 #, c-format
 msgid "Setting TCK frequency to %u Hz\n"
 msgstr "Nastavujem frekvenciu TCK na %u Hz\n"
 
-#: src/cmd/frequency.c:60
+#: src/cmd/frequency.c:63
 #, c-format
 msgid ""
 "Usage: %s [FREQ]\n"
@@ -1372,9 +1325,14 @@ msgstr ""
 "FREK musí byť celé číslo bez znamienka. Minimálna povolená frekvencia\n"
 "je 1 Hz. Ak chcete vypnúť obmedzenie frekvencie, použite 0 pre FREK.\n"
 
-#: src/cmd/frequency.c:75
+#: src/cmd/frequency.c:78
 msgid "setup JTAG frequency"
 msgstr "nastaviť JTAG frekvenciu"
+
+#: src/cmd/get.c:63 src/cmd/set.c:77 src/cmd/test.c:65
+#, c-format
+msgid "signal '%s' not found\n"
+msgstr "signál '%s' nenájdený\n"
 
 #: src/cmd/get.c:68
 #, c-format
@@ -1438,12 +1396,12 @@ msgstr "zobraziť túto pomoc"
 msgid "Please use the 'include' command instead of 'script'\n"
 msgstr ""
 
-#: src/cmd/include.c:94
+#: src/cmd/include.c:98
 #, fuzzy, c-format
 msgid "Unable to open file `%s go=%d'!\n"
 msgstr "Nepodarilo sa otvoriť súbor `%s'!\n"
 
-#: src/cmd/include.c:108
+#: src/cmd/include.c:112
 #, fuzzy, c-format
 msgid ""
 "Usage: %s FILENAME [n] \n"
@@ -1456,11 +1414,11 @@ msgstr ""
 "\n"
 "SÚBOR         Názov súboru s príkazmi\n"
 
-#: src/cmd/include.c:129
+#: src/cmd/include.c:133
 msgid "include command sequence from external repository"
 msgstr "vložiť sekvenciu príkazov zo štandardného externého súboru"
 
-#: src/cmd/include.c:148
+#: src/cmd/include.c:152
 msgid "run command sequence from external file"
 msgstr "spustiť sekvenciu príkazov z externého súboru"
 
@@ -1935,23 +1893,23 @@ msgstr ""
 msgid "define new signal for a part"
 msgstr "definovať nový signál pre súčiastku"
 
-#: src/cmd/svf.c:56
+#: src/cmd/svf.c:59
 #, c-format
 msgid "%s: cannot open file '%s' for reading\n"
 msgstr ""
 
-#: src/cmd/svf.c:69
+#: src/cmd/svf.c:72
 #, c-format
 msgid ""
-"Usage: %s FILE\n"
-"Usage: %s FILE stop\n"
+"Usage: %s FILE [stop] [progress]\n"
 "Execute svf commands from FILE.\n"
-"Command execution stops upon TDO mismatch when 'stop' is specified.\n"
+"stop     : Command execution stops upon TDO mismatch.\n"
+"progress : Continually displays progress status.\n"
 "\n"
 "FILE file containing SVF commans\n"
 msgstr ""
 
-#: src/cmd/svf.c:80
+#: src/cmd/svf.c:83
 msgid "execute svf commands from file"
 msgstr ""
 
@@ -2014,27 +1972,8 @@ msgstr ""
 "Čip: AMD Flash\n"
 "\tVýrobca: "
 
-#: src/flash/amd.c:279
-#, c-format
-msgid "AMD"
-msgstr "AMD"
-
-#: src/flash/amd.c:282
-#, c-format
-msgid "ST/Samsung"
-msgstr ""
-
-#: src/flash/amd.c:285
-#, c-format
-msgid "Macronix"
-msgstr ""
-
-#: src/flash/amd.c:288 src/flash/amd_flash.c:231
-#, c-format
-msgid "Unknown manufacturer (ID 0x%04x)"
-msgstr "Neznámy výrobca (ID 0x%04x)"
-
-#: src/flash/amd.c:291 src/flash/amd_flash.c:234
+#: src/flash/amd.c:280 src/flash/amd.c:304 src/flash/amd.c:319
+#: src/flash/amd.c:337 src/flash/amd_flash.c:234
 #, c-format
 msgid ""
 "\n"
@@ -2043,52 +1982,18 @@ msgstr ""
 "\n"
 "\tČip: "
 
-#: src/flash/amd.c:294
-#, fuzzy, c-format
-msgid "Am29LV040B"
-msgstr "Am29LV800B"
-
-#: src/flash/amd.c:297
-#, c-format
-msgid "Am29LV640D/Am29LV641D/Am29LV642D"
-msgstr "Am29LV640D/Am29LV641D/Am29LV642D"
-
-#: src/flash/amd.c:300
-#, c-format
-msgid "Am29LV800B"
-msgstr "Am29LV800B"
-
-#: src/flash/amd.c:303
-#, fuzzy, c-format
-msgid "MX29LV160B"
-msgstr "Am29LV800B"
-
-#: src/flash/amd.c:306
-#, fuzzy, c-format
-msgid "AM29LV160DB"
-msgstr "Am29LV800B"
-
-#: src/flash/amd.c:309
-#, fuzzy, c-format
-msgid "Am29LV065D"
-msgstr "Am29LV800B"
-
-#: src/flash/amd.c:312
-#, c-format
-msgid "M29W320DT"
-msgstr ""
-
-#: src/flash/amd.c:315
-#, c-format
-msgid "M29W320DB"
-msgstr ""
-
-#: src/flash/amd.c:318 src/flash/amd_flash.c:245
+#: src/flash/amd.c:298 src/flash/amd.c:313 src/flash/amd.c:331
+#: src/flash/amd.c:343 src/flash/amd_flash.c:245
 #, c-format
 msgid "Unknown (ID 0x%04x)"
 msgstr "Neznámy (ID 0x%04x)"
 
-#: src/flash/amd.c:321 src/flash/amd_flash.c:248
+#: src/flash/amd.c:348
+#, fuzzy, c-format
+msgid "Unknown manufacturer (ID 0x%04x) Chip (ID 0x%04x)"
+msgstr "Neznámy výrobca (ID 0x%04x)"
+
+#: src/flash/amd.c:351 src/flash/amd_flash.c:248
 #, c-format
 msgid ""
 "\n"
@@ -2097,20 +2002,20 @@ msgstr ""
 "\n"
 "\tChránené: %04x\n"
 
-#: src/flash/amd.c:393 src/flash/amd.c:405 src/flash/amd.c:417
+#: src/flash/amd.c:423 src/flash/amd.c:435 src/flash/amd.c:447
 #: src/flash/detectflash.c:106 src/flash/detectflash.c:136
 msgid "AMD/Fujitsu Standard Command Set"
 msgstr "Štandardná množina príkazov AMD/Fujitsu"
 
-#: src/flash/amd.c:394
+#: src/flash/amd.c:424
 msgid "supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 msgstr "podporované: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 bitov"
 
-#: src/flash/amd.c:406
+#: src/flash/amd.c:436
 msgid "supported: AMD 29LV800B; 1x16 Bit"
 msgstr "podporované: AMD 29LV800B; 1x16 bitov"
 
-#: src/flash/amd.c:418
+#: src/flash/amd.c:448
 #, fuzzy
 msgid "supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B; 1x8 Bit"
 msgstr "podporované: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 bitov"
@@ -2124,20 +2029,15 @@ msgstr ""
 "Čip: AMD Flash\n"
 "\tVýrobca: "
 
-#: src/flash/amd_flash.c:237
-#, fuzzy, c-format
-msgid "Am29C040B\t-\t"
-msgstr "Am29LV800B"
+#: src/flash/amd_flash.c:231
+#, c-format
+msgid "Unknown manufacturer (ID 0x%04x)"
+msgstr "Neznámy výrobca (ID 0x%04x)"
 
 #: src/flash/amd_flash.c:238
 #, c-format
 msgid "5V Flash\n"
 msgstr ""
-
-#: src/flash/amd_flash.c:241
-#, fuzzy, c-format
-msgid "Am29LV040B\t-\t"
-msgstr "Am29LV800B"
 
 #: src/flash/amd_flash.c:242
 #, c-format
@@ -2173,7 +2073,7 @@ msgid "Intel/Sharp Extended Command Set"
 msgstr "Rozšírená sada príkazov Intel/Sharp"
 
 #: src/flash/detectflash.c:109 src/flash/detectflash.c:139
-#: src/flash/intel.c:348 src/flash/intel.c:360 src/flash/intel.c:372
+#: src/flash/intel.c:357 src/flash/intel.c:369 src/flash/intel.c:381
 msgid "Intel Standard Command Set"
 msgstr "Štandardná sada príkazov Intel"
 
@@ -2631,7 +2531,7 @@ msgstr "neznáma flash pamäť - id dodávateľa: %d (0x%04x)\n"
 msgid "Flash not supported!\n"
 msgstr "Nepodporovaná flash pamäť!\n"
 
-#: src/flash/flash.c:104 src/flash/flash.c:256 src/flash/flash.c:368
+#: src/flash/flash.c:104 src/flash/flash.c:256 src/flash/flash.c:369
 #, c-format
 msgid "no flash driver found\n"
 msgstr "ovládač pre flash pamäť nebol nájdený\n"
@@ -2671,7 +2571,7 @@ msgstr "záznam: začiatok = 0x%08X, dĺžka = 0x%08X, kontrolná suma = 0x%08X\
 msgid "Error: Invalid record length!\n"
 msgstr "Chyba: Neplatná dĺžka záznamu!\n"
 
-#: src/flash/flash.c:165 src/flash/flash.c:309
+#: src/flash/flash.c:165 src/flash/flash.c:310
 #, c-format
 msgid ""
 "\n"
@@ -2680,7 +2580,7 @@ msgstr ""
 "\n"
 "chyba flash\n"
 
-#: src/flash/flash.c:177 src/flash/flash.c:320
+#: src/flash/flash.c:177 src/flash/flash.c:321
 #, c-format
 msgid "verify:\n"
 msgstr "kontrola:\n"
@@ -2694,7 +2594,7 @@ msgstr ""
 "\n"
 "chyba pri kontrole: 0x%08X vs. 0x%08X na adrese %08X\n"
 
-#: src/flash/flash.c:269
+#: src/flash/flash.c:269 src/tap/detect.c:448
 #, c-format
 msgid "Out of memory!\n"
 msgstr "Nedostatok pamäte!\n"
@@ -2708,20 +2608,14 @@ msgstr ""
 "\n"
 "blok %d odomknutý\n"
 
-#: src/flash/flash.c:297 src/flash/flash.c:344
+#: src/flash/flash.c:316 src/flash/flash.c:348
 #, fuzzy, c-format
-msgid "addr: 0x%08X"
+msgid "addr: 0x%08X\n"
 msgstr "adresa: 0x%08X"
-
-#: src/flash/flash.c:332
-#, c-format
-msgid "Error during file read.\n"
-msgstr "Chyba pri čítaní zo súboru.\n"
 
 #: src/flash/flash.c:349
 #, fuzzy, c-format
 msgid ""
-"\n"
 "verify error:\n"
 "read: 0x%08X\n"
 "expected: 0x%08X\n"
@@ -2731,160 +2625,172 @@ msgstr ""
 "načítané: 0x%08X\n"
 "očakávané: 0x%08X\n"
 
-#: src/flash/flash.c:373
+#: src/flash/flash.c:355
+#, fuzzy, c-format
+msgid ""
+"addr: 0x%08X\n"
+"Done.\n"
+msgstr "adresa: 0x%08X"
+
+#: src/flash/flash.c:374
 #, c-format
 msgid ""
 "\n"
 "Erasing %d Flash block%s from address 0x%x\n"
 msgstr ""
 
-#: src/flash/flash.c:378
+#: src/flash/flash.c:379
 #, c-format
 msgid "(%d%% Completed) FLASH Block %d : Unlocking ... "
 msgstr ""
 
-#: src/flash/flash.c:381
+#: src/flash/flash.c:382
 #, c-format
 msgid "Erasing ... "
 msgstr ""
 
-#: src/flash/flash.c:386
+#: src/flash/flash.c:388
 #, c-format
 msgid "(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"
 msgstr ""
 
-#: src/flash/flash.c:388
+#: src/flash/flash.c:390
 #, c-format
-msgid "Ok.%78s"
+msgid "Ok."
 msgstr ""
 
-#: src/flash/flash.c:391
+#: src/flash/flash.c:392
+#, c-format
+msgid "%78s"
+msgstr ""
+
+#: src/flash/flash.c:397
 #, c-format
 msgid "ERROR.\n"
 msgstr ""
 
-#: src/flash/flash.c:397
+#: src/flash/flash.c:403
 #, c-format
 msgid ""
 "\n"
 "Erasing Completed.\n"
 msgstr ""
 
-#: src/flash/flash.c:399
+#: src/flash/flash.c:405
 #, c-format
 msgid ""
 "\n"
 "Erasing Failed.\n"
 msgstr ""
 
-#: src/flash/intel.c:104
+#: src/flash/intel.c:110 src/flash/intel.c:113
 #, c-format
 msgid "Manufacturer: %s\n"
 msgstr "Výrobca: %s\n"
 
-#: src/flash/intel.c:107
+#: src/flash/intel.c:116
 #, c-format
 msgid "Unknown manufacturer (0x%04X)!\n"
 msgstr "Neznámy výrobva (0x%04X)!\n"
 
-#: src/flash/intel.c:111
+#: src/flash/intel.c:120
 #, c-format
 msgid "Chip: "
 msgstr "Čip: "
 
-#: src/flash/intel.c:163
+#: src/flash/intel.c:172
 #, c-format
 msgid "Unknown (0x%02X)!\n"
 msgstr "Neznámy (0x%02X)!\n"
 
-#: src/flash/intel.c:222
+#: src/flash/intel.c:231
 #, c-format
 msgid "flash: invalid command seq\n"
 msgstr "flash: neplatná sekvencia príkazov\n"
 
-#: src/flash/intel.c:225
+#: src/flash/intel.c:234
 #, c-format
 msgid "flash: low vpen\n"
 msgstr "flash: nízke vpen\n"
 
-#: src/flash/intel.c:228
+#: src/flash/intel.c:237
 #, c-format
 msgid "flash: block locked\n"
 msgstr "flash: blok uzamknutý\n"
 
-#: src/flash/intel.c:250
+#: src/flash/intel.c:259
 #, c-format
 msgid "flash: unknown error while unblocking\n"
 msgstr "flash: neznáma chyba pri odblokovaní\n"
 
-#: src/flash/intel.c:269
+#: src/flash/intel.c:278
 #, c-format
 msgid "flash: unknown error while programming\n"
 msgstr "flash: neznáma chyba pri programovaní\n"
 
-#: src/flash/intel.c:349
+#: src/flash/intel.c:358
 msgid "supported: 28Fxxxx, 2 x 16 bit"
 msgstr "podporované: 28Fxxxx, 2 x 16 bitov"
 
-#: src/flash/intel.c:361
+#: src/flash/intel.c:370
 msgid "supported: 28Fxxxx, 1 x 16 bit"
 msgstr "podporované: 28Fxxxx, 1 x 16 bitov"
 
-#: src/flash/intel.c:373
+#: src/flash/intel.c:382
 msgid "supported: 28Fxxxx, 1 x 8 bit"
 msgstr "podporované: 28Fxxxx, 1 x 8 bitov"
 
-#: src/jtag.c:270
+#: src/jtag.c:295
 #, c-format
 msgid "'%s' must not be run suid root!\n"
 msgstr ""
 
-#: src/jtag.c:331
+#: src/jtag.c:356
 #, fuzzy, c-format
 msgid "%s #%s\n"
 msgstr "%-13s %s\n"
 
-#: src/jtag.c:334
+#: src/jtag.c:359
 #, c-format
 msgid "Usage: %s [OPTION] [FILE]\n"
 msgstr ""
 
-#: src/jtag.c:337
+#: src/jtag.c:362
 #, c-format
 msgid "  -h, --help          display this help and exit\n"
 msgstr ""
 
-#: src/jtag.c:338
+#: src/jtag.c:363
 #, c-format
 msgid "  -v, --version       display version information and exit\n"
 msgstr ""
 
-#: src/jtag.c:340
+#: src/jtag.c:365
 #, c-format
 msgid "  -n, --norc          disable reading ~/.jtag/rc on startup\n"
 msgstr ""
 
-#: src/jtag.c:341
+#: src/jtag.c:366
 #, c-format
 msgid "  -i, --interactive   enter interactive mode after reading files\n"
 msgstr ""
 
-#: src/jtag.c:342
+#: src/jtag.c:367
 #, c-format
 msgid "  -q, --quiet         Do not print help on startup\n"
 msgstr ""
 
-#: src/jtag.c:344
+#: src/jtag.c:369
 #, c-format
 msgid "  [FILE]              file containing commands to execute\n"
 msgstr ""
 
-#: src/jtag.c:347
+#: src/jtag.c:372
 #, c-format
 msgid "  Please report bugs at http://www.urjtag.org\n"
 msgstr ""
 
-#: src/jtag.c:354
+#: src/jtag.c:379
 #, c-format
 msgid ""
 "\n"
@@ -2894,7 +2800,7 @@ msgid ""
 "Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n"
 msgstr ""
 
-#: src/jtag.c:359
+#: src/jtag.c:384
 #, c-format
 msgid ""
 "\n"
@@ -2913,7 +2819,7 @@ msgid ""
 "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
 msgstr ""
 
-#: src/jtag.c:416
+#: src/jtag.c:439
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -2934,14 +2840,14 @@ msgstr ""
 "Neposkytuje sa žiadna záruka pre %s.\n"
 "\n"
 
-#: src/jtag.c:432
+#: src/jtag.c:455
 #, fuzzy, c-format
 msgid "WARNING: %s may damage your hardware!\n"
 msgstr ""
 "Upozornenie: %s môže poškodiť váš hardvér! Napíšte \"quit\" pre ukončenie!\n"
 "\n"
 
-#: src/jtag.c:433
+#: src/jtag.c:456
 #, fuzzy, c-format
 msgid ""
 "Type \"quit\" to exit, \"help\" for help.\n"
@@ -2984,89 +2890,94 @@ msgstr "%%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 msgid "(none)"
 msgstr "(nič)"
 
-#: src/svf/svf.c:375 src/svf/svf.c:546 src/svf/svf.c:863 src/svf/svf.c:867
+#: src/svf/svf.c:347 src/svf/svf.c:518 src/svf/svf.c:852 src/svf/svf.c:856
 #, fuzzy, c-format
 msgid "out of memory"
 msgstr "nedostatok pamäte\n"
 
-#: src/svf/svf.c:473
+#: src/svf/svf.c:445
 #, c-format
 msgid "Error %s: mismatch at position %d for TDO\n"
 msgstr ""
 
-#: src/svf/svf.c:618 src/svf/svf.c:1002
+#: src/svf/svf.c:590 src/svf/svf.c:991
 #, c-format
 msgid "Warning %s: command %s not implemented\n"
 msgstr ""
 
-#: src/svf/svf.c:651
+#: src/svf/svf.c:623
 #, c-format
 msgid "Error %s: only TCK is supported for RUNTEST.\n"
 msgstr ""
 
-#: src/svf/svf.c:655
+#: src/svf/svf.c:627
 #, c-format
 msgid "Error %s: maximum time must be larger or equal to minimum time.\n"
 msgstr ""
 
-#: src/svf/svf.c:661
+#: src/svf/svf.c:633
 #, c-format
 msgid "Warning %s: maximum time for RUNTEST not guaranteed.\n"
 msgstr ""
 
-#: src/svf/svf.c:662
+#: src/svf/svf.c:634
 #, c-format
 msgid " This message is only displayed once.\n"
 msgstr ""
 
-#: src/svf/svf.c:815
+#: src/svf/svf.c:804
 #, c-format
 msgid "Error %s: first %s command after length change must have a TDI value.\n"
 msgstr ""
 
-#: src/svf/svf.c:840
+#: src/svf/svf.c:829
 #, c-format
 msgid "Error %s: SIR command length inconsistent.\n"
 msgstr ""
 
-#: src/svf/svf.c:937
+#: src/svf/svf.c:926
 #, c-format
 msgid "Error %s: no further TRST command allowed after mode ABSENT\n"
 msgstr ""
 
-#: src/svf/svf.c:957
+#: src/svf/svf.c:946
 #, c-format
 msgid "Error %s: TRST ABSENT must not be issued after a STATE command\n"
 msgstr ""
 
-#: src/svf/svf.c:963
+#: src/svf/svf.c:952
 #, c-format
 msgid "Error %s: TRST ABSENT must not be issued after an SIR or SDR command\n"
 msgstr ""
 
-#: src/svf/svf.c:973
+#: src/svf/svf.c:962
 #, c-format
 msgid "Warning %s: unimplemented mode '%s' for TRST\n"
 msgstr ""
 
-#: src/svf/svf.c:1038
+#: src/svf/svf.c:1046
 #, fuzzy, c-format
 msgid "Error %s: no JTAG chain available\n"
 msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
 
-#: src/svf/svf.c:1042
+#: src/svf/svf.c:1050
 #, c-format
 msgid "Error %s: chain without any parts\n"
 msgstr ""
 
-#: src/svf/svf.c:1058
+#: src/svf/svf.c:1066
 #, c-format
 msgid "Error %s: could not establish SDR register\n"
 msgstr ""
 
-#: src/svf/svf.c:1090
+#: src/svf/svf.c:1098
 #, c-format
 msgid "Error %s: could not establish SIR instruction\n"
+msgstr ""
+
+#: svf_flex.l:311
+#, c-format
+msgid "Parsing %6d/%d (%3.0d%%)"
 msgstr ""
 
 #: src/tap/cable/arcom.c:105
@@ -3079,32 +2990,32 @@ msgid ""
 msgstr ""
 "JTAG kábel Altera ByteBlaster/ByteBlaster II/ByteBlasterMV pre paralelný port"
 
-#: src/tap/cable.c:140
+#: src/tap/cable.c:166
 #, c-format
 msgid "Failed to allocate memory for cable activity queue.\n"
 msgstr ""
 
-#: src/tap/cable.c:185
+#: src/tap/cable.c:211
 #, c-format
 msgid "Out of memory: couldn't resize activity queue to %d\n"
 msgstr ""
 
-#: src/tap/cable.c:190
+#: src/tap/cable.c:216
 #, c-format
 msgid "(Resized JTAG activity queue to hold max %d items)\n"
 msgstr ""
 
-#: src/tap/cable.c:370 src/tap/cable.c:427
+#: src/tap/cable.c:396 src/tap/cable.c:453
 #, c-format
 msgid "Internal error: Got wrong type of result from queue (%d? %p.%d)\n"
 msgstr ""
 
-#: src/tap/cable.c:480
+#: src/tap/cable.c:506
 #, c-format
 msgid "Internal error: Got wrong type of result from queue (#%d %p.%d)\n"
 msgstr ""
 
-#: src/tap/cable.c:486
+#: src/tap/cable.c:512
 #, c-format
 msgid "Internal error: Wanted transfer result but none was queued\n"
 msgstr ""
@@ -3121,82 +3032,72 @@ msgstr "JTAG kábel ETC EA253"
 msgid "ETC EI012 JTAG Cable"
 msgstr "JTAG kábel ETC EI012"
 
-#: src/tap/cable/ft2232.c:290
-#, c-format
-msgid "Error: Receive buffer underrun %s line %d\n"
-msgstr ""
-
-#: src/tap/cable/ft2232.c:319
+#: src/tap/cable/ft2232.c:210
 #, c-format
 msgid "Warning: Setting lowest supported frequency for FT2232: %d\n"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1246
-msgid "not enough arguments!"
-msgstr ""
-
-#: src/tap/cable/ft2232.c:1255
-msgid "Wrong parport driver selected!"
-msgstr ""
-
-#: src/tap/cable/ft2232.c:1264 src/tap/cable/generic_parport.c:67
-#, fuzzy, c-format
-msgid "Unknown port driver: %s\n"
-msgstr "neznámy dátový register '%s'\n"
-
-#: src/tap/cable/ft2232.c:1320
+#: src/tap/cable/ft2232.c:1361
 #, c-format
 msgid ""
-"Usage: cable %s ftdi-mpsse VID:PID\n"
-"Usage: cable %s ftd2xx-mpsse VID:PID\n"
+"Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
 "\n"
-"VID        vendor ID (hex, e.g. 9FB, or empty)\n"
-"PID        product ID (hex, e.g. 6001, or empty)\n"
-"\n"
-"Expect suboptimal performance of ftdi-mpsse for large shifts with output "
-"capture.\n"
+"VID        vendor ID (hex), defaults to %04X\n"
+"PID        product ID (hex), defaults to %04X\n"
+"DESC       Some string to match in description or serial no.\n"
+"DRIVER     usbconn driver, either ftdi-mpsse or ftd2xx-mpsse\n"
+"           defaults to %s if not specified\n"
 "\n"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1349
+#: src/tap/cable/ft2232.c:1379
 msgid "Generic FTDI FT2232 Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1367
+#: src/tap/cable/ft2232.c:1411
 msgid "Olimex ARM-USB-OCD (FT2232) Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1385
+#: src/tap/cable/ft2232.c:1443
+msgid "Analog Devices BFIN-UJTAG (FT2232) Cable (EXPERIMENTAL)"
+msgstr ""
+
+#: src/tap/cable/ft2232.c:1475
 msgid "Amontec JTAGkey (FT2232) Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1403
+#: src/tap/cable/ft2232.c:1507
 msgid "OOCDLink-s (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1421
+#: src/tap/cable/ft2232.c:1539
 msgid "Turtelizer 2 Rev. B (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1439
+#: src/tap/cable/ft2232.c:1571
 msgid "USB to JTAG Interface (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1457
+#: src/tap/cable/ft2232.c:1603
 msgid "Xverve DT-USB-ST Signalyzer Tool (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/generic.c:103
+#: src/tap/cable/generic.c:110
 #, c-format
 msgid "No space in cable activity results queue.\n"
 msgstr ""
 
-#: src/tap/cable/generic_parport.c:58 src/tap/cable/jim.c:51
+#: src/tap/cable/generic_parport.c:58 src/tap/cable/jim.c:54
 #, c-format
 msgid "not enough arguments!\n"
 msgstr ""
 
-#: src/tap/cable/generic_parport.c:111
+#: src/tap/cable/generic_parport.c:67
+#, fuzzy, c-format
+msgid "Unknown port driver: %s\n"
+msgstr "neznámy dátový register '%s'\n"
+
+#: src/tap/cable/generic_parport.c:112
 #, c-format
 msgid ""
 "Usage: cable %s parallel PORTADDR\n"
@@ -3209,12 +3110,12 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/generic_usbconn.c:137
+#: src/tap/cable/generic_usbconn.c:205
 #, c-format
 msgid "Couldn't connect to suitable USB device.\n"
 msgstr ""
 
-#: src/tap/cable/generic_usbconn.c:166
+#: src/tap/cable/generic_usbconn.c:241
 #, c-format
 msgid ""
 "Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [...]\n"
@@ -3225,22 +3126,22 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/jim.c:55
+#: src/tap/cable/jim.c:58
 #, c-format
 msgid "JTAG target simulator JIM - work in progress!\n"
 msgstr ""
 
-#: src/tap/cable/jim.c:77
+#: src/tap/cable/jim.c:62
 #, fuzzy, c-format
 msgid "Initialization failed.\n"
 msgstr "inicializácia zbernice zlyhala!\n"
 
-#: src/tap/cable/jim.c:155
+#: src/tap/cable/jim.c:151
 #, c-format
 msgid "Usage: cable %s\n"
 msgstr ""
 
-#: src/tap/cable/jim.c:163
+#: src/tap/cable/jim.c:159
 msgid "JTAG target simulator JIM"
 msgstr ""
 
@@ -3265,17 +3166,20 @@ msgstr "JTAG kábel Mpcbdm"
 msgid "Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"
 msgstr "JTAG kábel pre Ka-Ro TRITON Starterkit II (PXA255/250)"
 
-#: src/tap/cable/usbblaster.c:314
+#: src/tap/cable/usbblaster.c:434
 #, c-format
 msgid ""
-"Usage: cable %s ftdi VID:PID\n"
+"Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
 "\n"
-"VID        vendor ID (hex, e.g. 9FB, or empty)\n"
-"PID        product ID (hex, e.g. 6001, or empty)\n"
+"VID        vendor ID (hex, e.g. 0abc)\n"
+"PID        product ID (hex, e.g. 0abc)\n"
+"DESC       Some string to match in description or serial no.\n"
+"DRIVER     usbconn driver, either ftdi or ftd2xx\n"
+"           defaults to %s if not specified\n"
 "\n"
 msgstr ""
 
-#: src/tap/cable/usbblaster.c:324
+#: src/tap/cable/usbblaster.c:450
 msgid "Altera USB-Blaster Cable"
 msgstr ""
 
@@ -3309,29 +3213,19 @@ msgstr ""
 msgid "Error: This cable type does not accept parameters!\n"
 msgstr ""
 
-#: src/tap/cable/vision_ep9307.c:196
-#, fuzzy, c-format
-msgid "Disconnecting %s\n"
-msgstr "Odpájam %s z ppdev portu %s\n"
-
-#: src/tap/cable/vision_ep9307.c:200
+#: src/tap/cable/vision_ep9307.c:195
 #, c-format
 msgid "Initializing Vision EP9307 SoM GPIO JTAG Cable\n"
 msgstr ""
 
-#: src/tap/cable/vision_ep9307.c:204
-#, fuzzy, c-format
-msgid "%s(%d) Out of memory\n"
-msgstr "%s(%d) Nedostatok pamäte.\n"
-
-#: src/tap/cable/vision_ep9307.c:304
+#: src/tap/cable/vision_ep9307.c:296
 #, c-format
 msgid ""
 "Usage: cable %s\n"
 "\n"
 msgstr ""
 
-#: src/tap/cable/vision_ep9307.c:311
+#: src/tap/cable/vision_ep9307.c:303
 msgid "Vision EP9307 SoM GPIO JTAG Cable"
 msgstr ""
 
@@ -3339,7 +3233,12 @@ msgstr ""
 msgid "Modified (with CPU Reset) WIGGLER JTAG Cable"
 msgstr ""
 
-#: src/tap/cable/wiggler.c:290
+#: src/tap/cable/wiggler.c:211
+#, c-format
+msgid "Pin mapping failed\n"
+msgstr ""
+
+#: src/tap/cable/wiggler.c:306
 #, c-format
 msgid ""
 "Usage: cable %s parallel PORTADDR [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
@@ -3354,11 +3253,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/wiggler.c:322
+#: src/tap/cable/wiggler.c:338
 msgid "Macraigor Wiggler JTAG Cable"
 msgstr "JTAG kábel Macraigor Wiggler"
 
-#: src/tap/cable/wiggler.c:340
+#: src/tap/cable/wiggler.c:356
 #, fuzzy
 msgid "Excelpoint IGLOO JTAG Cable"
 msgstr "JTAG kábel Arcom"
@@ -3371,12 +3270,12 @@ msgstr ""
 msgid "Xilinx Platform Cable USB external chain"
 msgstr ""
 
-#: src/tap/chain.c:129 src/tap/chain.c:180
+#: src/tap/chain.c:132 src/tap/chain.c:183
 #, c-format
 msgid "%s(%d) Part %d without active instruction\n"
 msgstr "%s(%d) Súčiastka %d bez aktívnej inštrukcie\n"
 
-#: src/tap/chain.c:184
+#: src/tap/chain.c:187
 #, c-format
 msgid "%s(%d) Part %d without data register\n"
 msgstr "%s(%d) Súčiastka %d bez dátového registra\n"
@@ -3456,6 +3355,31 @@ msgstr "Upozornenie: Stupeň je príliš dlhý\n"
 msgid "Error: Unable to detect JTAG chain end!\n"
 msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
 
+#: src/tap/detect.c:406
+#, fuzzy, c-format
+msgid "Error: Unable to allocate a register!\n"
+msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
+
+#: src/tap/detect.c:414
+#, fuzzy, c-format
+msgid "Error: Unable to allocate space for parts!\n"
+msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
+
+#: src/tap/detect.c:421
+#, fuzzy, c-format
+msgid "Error: Unable to allocate space for a part!\n"
+msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
+
+#: src/tap/detect.c:437
+#, c-format
+msgid "Error: could not set BR register"
+msgstr ""
+
+#: src/tap/detect.c:459
+#, c-format
+msgid "Error: could not set BYPASS instruction"
+msgstr ""
+
 #: src/tap/discovery.c:100
 #, c-format
 msgid "Warning: TDO seems to be stuck at %d\n"
@@ -3486,8 +3410,7 @@ msgstr "Chyba: Nedostatok pamäte!\n"
 msgid "Detecting DR length for IR %s ... "
 msgstr "Detekujem dĺžku DR pre IR %s ... "
 
-#: src/tap/parport/direct.c:167 src/tap/parport/ftd2xx.c:155
-#: src/tap/parport/ftdi.c:155 src/tap/parport/ppdev.c:119
+#: src/tap/parport/direct.c:167 src/tap/parport/ppdev.c:119
 #: src/tap/parport/ppi.c:115
 #, c-format
 msgid "Syntax error!\n"
@@ -3508,33 +3431,11 @@ msgstr "Odpájam %s z paralelného portu na adrese 0x%x\n"
 msgid "Initializing parallel port at 0x%x\n"
 msgstr "Inicializujem %s na paralelnom porte na adrese 0x%x\n"
 
-#: src/tap/parport/direct.c:196 src/tap/parport/ftd2xx.c:186
-#: src/tap/parport/ftd2xx.c:204 src/tap/parport/ftdi.c:186
-#: src/tap/parport/ftdi.c:204 src/tap/parport/ppdev.c:134
+#: src/tap/parport/direct.c:196 src/tap/parport/ppdev.c:134
 #: src/tap/parport/ppi.c:130
 #, c-format
 msgid "%s(%d) Out of memory.\n"
 msgstr "%s(%d) Nedostatok pamäte.\n"
-
-#: src/tap/parport/ftd2xx.c:161 src/tap/parport/ftdi.c:161
-#, fuzzy, c-format
-msgid "Disconnecting %s from FTDI device %s\n"
-msgstr "Odpájam %s z ppdev portu %s\n"
-
-#: src/tap/parport/ftd2xx.c:167 src/tap/parport/ftdi.c:167
-#, fuzzy, c-format
-msgid "Initializing %s on FTDI device %s\n"
-msgstr "Inicializujem %s na ppdev porte %s\n"
-
-#: src/tap/parport/ftd2xx.c:169 src/tap/parport/ftdi.c:169
-#, fuzzy, c-format
-msgid "Initializing on FTDI device %s\n"
-msgstr "Inicializujem %s na ppdev porte %s\n"
-
-#: src/tap/parport/ftdi.c:471
-#, c-format
-msgid "Error from ftdi_write_data(): %d\n"
-msgstr ""
 
 #: src/tap/parport/ppdev.c:125
 #, c-format
@@ -3566,10 +3467,172 @@ msgstr "Odpájam %s z ppdev portu %s\n"
 msgid "Initializing on ppi port %s\n"
 msgstr "Inicializujem %s na ppdev porte %s\n"
 
-#: src/tap/tap.c:51 src/tap/tap.c:110 src/tap/tap.c:121
+#: src/tap/tap.c:51 src/tap/tap.c:111 src/tap/tap.c:122
 #, c-format
 msgid "%s: Invalid state: %2X\n"
 msgstr "%s: Neplatný stav: %2X\n"
+
+#: src/tap/usbconn/libftd2xx.c:83
+msgid "usbconn_ftd2xx_flush(): FT_Write() failed.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:87
+msgid "usbconn_ftd2xx_flush(): Written fewer bytes than requested.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:106
+msgid "usbconn_ftd2xx_flush(): Receive buffer does not exist.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:113
+#, c-format
+msgid "usbconn_ftd2xx_flush(): Error from FT_Read(): %d\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:116
+#, c-format
+msgid "usbconn_ftd2xx_flush(): Received less bytes than requested.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:165
+#, c-format
+msgid "usbconn_ftd2xx_read(): Error from FT_Read(): %d\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:219
+msgid "usbconn_ftd2xx_write(): Send buffer does not exist.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:267
+#, c-format
+msgid "Connected to libftd2xx driver.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:325 src/tap/usbconn/libftd2xx.c:376
+msgid "Can't disable bitmode.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:328
+msgid "Can't set latency timer.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:331
+msgid "Can't set baudrate.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:362 src/tap/usbconn/libftd2xx.c:381
+#: src/tap/usbconn/libftd2xx.c:404
+msgid "Can't reset device.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:364 src/tap/usbconn/libftd2xx.c:383
+#: src/tap/usbconn/libftd2xx.c:406
+msgid "Can't purge RX buffer.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:367
+msgid "Can't set special characters.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:373
+msgid "Can't set target latency timer.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:378
+msgid "Can't set MPSSE bitmode.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:85
+msgid "usbconn_ftdi_flush(): Written fewer bytes than requested.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:104
+msgid "usbconn_ftdi_flush(): Receive buffer does not exist.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:111
+#, c-format
+msgid "usbconn_ftdi_flush(): Error from ftdi_read_data(): %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:115
+#, c-format
+msgid "usbconn_ftdi_flush(): Received less bytes than requested.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:163
+#, c-format
+msgid "usbconn_ftdi_read(): Error from ftdi_read_data(): %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:218
+msgid "usbconn_ftdi_write(): Send buffer does not exist.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:270
+#, c-format
+msgid "Connected to libftdi driver.\n"
+msgstr ""
+
+#~ msgid "AMD"
+#~ msgstr "AMD"
+
+#, fuzzy
+#~ msgid "Am29LV040B"
+#~ msgstr "Am29LV800B"
+
+#~ msgid "Am29LV640D/Am29LV641D/Am29LV642D"
+#~ msgstr "Am29LV640D/Am29LV641D/Am29LV642D"
+
+#~ msgid "Am29LV800B"
+#~ msgstr "Am29LV800B"
+
+#, fuzzy
+#~ msgid "MX29LV160B"
+#~ msgstr "Am29LV800B"
+
+#, fuzzy
+#~ msgid "AM29LV160DB"
+#~ msgstr "Am29LV800B"
+
+#, fuzzy
+#~ msgid "Am29LV065D"
+#~ msgstr "Am29LV800B"
+
+#, fuzzy
+#~ msgid "Am29C040B\t-\t"
+#~ msgstr "Am29LV800B"
+
+#, fuzzy
+#~ msgid "Am29LV040B\t-\t"
+#~ msgstr "Am29LV800B"
+
+#, fuzzy
+#~ msgid "addr: 0x%08X\r"
+#~ msgstr "adresa: 0x%08X"
+
+#~ msgid "Error during file read.\n"
+#~ msgstr "Chyba pri čítaní zo súboru.\n"
+
+#, fuzzy
+#~ msgid "Disconnecting %s\n"
+#~ msgstr "Odpájam %s z ppdev portu %s\n"
+
+#, fuzzy
+#~ msgid "%s(%d) Out of memory\n"
+#~ msgstr "%s(%d) Nedostatok pamäte.\n"
+
+#, fuzzy
+#~ msgid "Disconnecting %s from FTDI device %s\n"
+#~ msgstr "Odpájam %s z ppdev portu %s\n"
+
+#, fuzzy
+#~ msgid "Initializing %s on FTDI device %s\n"
+#~ msgstr "Inicializujem %s na ppdev porte %s\n"
+
+#, fuzzy
+#~ msgid "Initializing on FTDI device %s\n"
+#~ msgstr "Inicializujem %s na ppdev porte %s\n"
 
 #, fuzzy
 #~ msgid "Disconnecting %s, device %s\n"

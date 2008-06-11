@@ -1,5 +1,7 @@
 2008-06-11  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * po/fr.po, po/rw.po, po/sk.po: updated
+
    * src/tap/cable/generic.c (fmax): define fallback in case libm doesn't
      provide fmax()
    * configure.ac: detect availability of fmax() in libm
