@@ -61,6 +61,7 @@ static bus_t *
 ppc405ep_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
@@ -80,42 +81,23 @@ ppc405ep_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for (i = 6; i < 32; i++) {
 		sprintf( buff, "PerAddr%d", i );
-		A[i] = part_find_signal( PART, buff );
-		if (!A[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(A[i]), buff );
 	}
+
 	for (i = 0; i < 16; i++) {
 		sprintf( buff, "PerData%d", i );
-		D[i] = part_find_signal( PART, buff );
-		if (!D[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
 	}
-	sprintf( buff, "PerCS0");
-	nCS = part_find_signal( PART, buff );
-	if (!nCS) {
-		printf( _("signal '%s' not found\n"), "nCS0" );
-		failed = 1;
-	}
-	nWE = part_find_signal( PART, "PerWBE1" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nWE" );
-		failed = 1;
-	}
-	nOE = part_find_signal( PART, "PerOE" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "nOE" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(nCS), "PerCS0"  );
+
+	failed |= generic_bus_attach_sig( part, &(nWE), "PerWBE1" );
+
+	failed |= generic_bus_attach_sig( part, &(nOE), "PerOE"   );
 
 	if (failed) {
 		free( bus->params );

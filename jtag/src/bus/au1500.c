@@ -67,6 +67,7 @@ typedef struct{
 static bus_t *au1500_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
@@ -87,49 +88,26 @@ static bus_t *au1500_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for(i=0; i<32; i++){
 		sprintf( buff, "RAD%d", i);
-		RAD[i] = part_find_signal( PART, buff);
-		if(!RAD[i]){
-			printf( _("signal '%s' not found\n"), buff );
-			failed =1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(RAD[i]), buff );
 	}
 
 	for(i=0; i<4; i++){
 		sprintf( buff, "RCE_N%d", i);
-		nRCS[i] = part_find_signal( PART, buff);
-		if(!nRCS[i]){
-			printf( _("signal '%s' not found\n"), buff );
-			failed =1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(nRCS[i]), buff );
 	}
 
 
-	nRWE = part_find_signal( PART, "RWE_N" );
-	if (!nRWE) {
-		printf( _("signal '%s' not found\n"), "RWE_N" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nRWE), "RWE_N" );
 
-	nROE = part_find_signal( PART, "ROE_N" );
-	if (!nROE) {
-		printf( _("signal '%s' not found\n"), "ROE_N" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nROE), "ROE_N" );
 
 	for(i=0; i<32; i++){
 		sprintf( buff, "RD%d", i);
-		RD[i] = part_find_signal( PART, buff);
-		if(!RD[i]){
-			printf( _("signal '%s' not found\n"), buff);
-			failed =1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(RD[i]), buff );
 	}
 
 	if (failed) {

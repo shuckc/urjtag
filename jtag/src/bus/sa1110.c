@@ -68,6 +68,7 @@ static bus_t *
 sa1110_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
@@ -87,50 +88,28 @@ sa1110_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 26; i++) {
 		sprintf( buff, "A%d", i );
-		A[i] = part_find_signal( PART, buff );
-		if (!A[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(A[i]), buff );
 	}
+
 	for (i = 0; i < 32; i++) {
 		sprintf( buff, "D%d", i );
-		D[i] = part_find_signal( PART, buff );
-		if (!D[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
 	}
+
 	for (i = 0; i < 6; i++) {
 		sprintf( buff, "nCS%d", i );
-		nCS[i] = part_find_signal( PART, buff );
-		if (!nCS[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(nCS[i]), buff );
 	}
-	RD_nWR = part_find_signal( PART, "RD_nWR" );
-	if (!RD_nWR) {
-		printf( _("signal '%s' not found\n"), "RD_nWR" );
-		failed = 1;
-	}
-	nWE = part_find_signal( PART, "nWE" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nWE" );
-		failed = 1;
-	}
-	nOE = part_find_signal( PART, "nOE" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "nOE" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(RD_nWR), "RD_nWR" );
+
+	failed |= generic_bus_attach_sig( part, &(nWE),    "nWE"    );
+
+	failed |= generic_bus_attach_sig( part, &(nOE),    "nOE"    );
 
 	if (failed) {
 		free( bus->params );

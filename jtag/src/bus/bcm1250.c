@@ -66,6 +66,7 @@ static bus_t *
 bcm1250_bus_new( chain_t *chain, char *cmd_params[] )
 {
     bus_t *bus;
+    part_t *part;
     char buff[10];
     int i;
     int failed = 0;
@@ -85,41 +86,23 @@ bcm1250_bus_new( chain_t *chain, char *cmd_params[] )
     }
 
     CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+    PART = part = chain->parts->parts[chain->active_part];
 
     for (i = 0; i < 32; i++) {
         sprintf( buff, "IO_AD%d", i );
-        IO_AD[i] = part_find_signal( PART, buff );
-        if (!IO_AD[i]) {
-            printf( _("signal '%s' not found\n"), buff );
-            failed = 1;
-            break;
-        }
+        failed |= generic_bus_attach_sig( part, &(IO_AD[i]), buff );
     }
+
     for (i = 0; i < 8; i++) {
         sprintf( buff, "IO_CS_L%d", i );
-        IO_CS_L[i] = part_find_signal( PART, buff );
-        if (!IO_CS_L[i]) {
-            printf( _("signal '%s' not found\n"), buff );
-            failed = 1;
-            break;
-        }
+        failed |= generic_bus_attach_sig( part, &(IO_CS_L[i]), buff );
     }
-    IO_RW = part_find_signal( PART, "IO_RW" );
-    if (!IO_RW) {
-        printf( _("signal '%s' not found\n"), "IO_RW" );
-        failed = 1;
-    }
-    IO_WR_L = part_find_signal( PART, "IO_WR_L" );
-    if (!IO_WR_L) {
-        printf( _("signal '%s' not found\n"), "IO_WR_L" );
-        failed = 1;
-    }
-    IO_OE_L = part_find_signal( PART, "IO_OE_L" );
-    if (!IO_OE_L) {
-        printf( _("signal '%s' not found\n"), "IO_OE_L" );
-        failed = 1;
-    }
+
+    failed |= generic_bus_attach_sig( part, &(IO_RW),   "IO_RW"   );
+
+    failed |= generic_bus_attach_sig( part, &(IO_WR_L), "IO_WR_L" );
+
+    failed |= generic_bus_attach_sig( part, &(IO_OE_L), "IO_OE_L" );
 
     if (failed) {
         free( bus->params );

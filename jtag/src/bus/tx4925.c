@@ -77,6 +77,7 @@ static bus_t *
 tx4925_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[15];
 	int i;
 	int failed = 0;
@@ -96,58 +97,30 @@ tx4925_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
-	OE = part_find_signal( PART, "OE" );
-	if (!OE) {
-		printf( _("signal '%s' not found\n"), "OE" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(OE),  "OE"  );
 
-	SWE = part_find_signal( PART, "SWE" );
-	if (!SWE) {
-		printf( _("signal '%s' not found\n"), "SWE" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(SWE), "SWE" );
 
 	for (i = 0; i < 4; i++) {
 		sprintf( buff, "ROMCE_%d", i );
-		ROMCE[i] = part_find_signal( PART, buff );
-		if (!ROMCE[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(ROMCE[i]), buff );
 	}
 
 	for (i = 0; i < 4; i++) {
 		sprintf( buff, "SDCS_%d", i );
-		SDCS[i] = part_find_signal( PART, buff );
-		if (!SDCS[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(SDCS[i]), buff );
 	}
 
 	for (i = 0; i < 20; i++) {
 		sprintf( buff, "ADDR_%d", i );
-		ADDR[i] = part_find_signal( PART, buff );
-		if (!ADDR[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(ADDR[i]), buff );
 	}
 
 	for (i = 0; i < 16; i++) {
 		sprintf( buff, "DATA_%d", i );
-		DATA[i] = part_find_signal( PART, buff );
-		if (!DATA[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(DATA[i]), buff );
 	}
 
 	if (failed) {

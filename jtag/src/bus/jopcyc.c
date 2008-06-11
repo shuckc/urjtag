@@ -133,20 +133,6 @@ typedef struct {
 #define SER_TXD  ((bus_params_t *) bus->params)->ser_txd
 #define SER_NCTS ((bus_params_t *) bus->params)->ser_ncts
 
-static int
-attach_sig( bus_t *bus, signal_t **sig, char *id )
-{
-	int failed = 0;
-
-	*sig = part_find_signal( PART, id );
-	if (!*sig) {
-		printf( _("signal '%s' not found\n"), id );
-		failed = 1;
-	}
-
-	return failed;
-}
-
 /**
  * bus->driver->(*new_bus)
  *
@@ -155,6 +141,7 @@ static bus_t *
 jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	int failed = 0;
 	component_t *comp;
 
@@ -173,7 +160,7 @@ jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	/*
 	 * Setup RAMA
@@ -182,48 +169,48 @@ jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 	comp->ctype = RAM;
 	comp->cname = "RAMA";
 
-	failed |= attach_sig( bus, &(A[ 0]), "IO64"  );
-	failed |= attach_sig( bus, &(A[ 1]), "IO66"  );
-	failed |= attach_sig( bus, &(A[ 2]), "IO68"  );
-	failed |= attach_sig( bus, &(A[ 3]), "IO74"  );
-	failed |= attach_sig( bus, &(A[ 4]), "IO76"  );
-	failed |= attach_sig( bus, &(A[ 5]), "IO107" );
-	failed |= attach_sig( bus, &(A[ 6]), "IO113" );
-	failed |= attach_sig( bus, &(A[ 7]), "IO115" );
-	failed |= attach_sig( bus, &(A[ 8]), "IO117" );
-	failed |= attach_sig( bus, &(A[ 9]), "IO119" );
-	failed |= attach_sig( bus, &(A[10]), "IO118" );
-	failed |= attach_sig( bus, &(A[11]), "IO116" );
-	failed |= attach_sig( bus, &(A[12]), "IO114" );
-	failed |= attach_sig( bus, &(A[13]), "IO108" );
-	failed |= attach_sig( bus, &(A[14]), "IO106" );
-	failed |= attach_sig( bus, &(A[15]), "IO67"  );
-	failed |= attach_sig( bus, &(A[16]), "IO65"  );
-	failed |= attach_sig( bus, &(A[17]), "IO63"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 0]), "IO64"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 1]), "IO66"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 2]), "IO68"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 3]), "IO74"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 4]), "IO76"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 5]), "IO107" );
+	failed |= generic_bus_attach_sig( part, &(A[ 6]), "IO113" );
+	failed |= generic_bus_attach_sig( part, &(A[ 7]), "IO115" );
+	failed |= generic_bus_attach_sig( part, &(A[ 8]), "IO117" );
+	failed |= generic_bus_attach_sig( part, &(A[ 9]), "IO119" );
+	failed |= generic_bus_attach_sig( part, &(A[10]), "IO118" );
+	failed |= generic_bus_attach_sig( part, &(A[11]), "IO116" );
+	failed |= generic_bus_attach_sig( part, &(A[12]), "IO114" );
+	failed |= generic_bus_attach_sig( part, &(A[13]), "IO108" );
+	failed |= generic_bus_attach_sig( part, &(A[14]), "IO106" );
+	failed |= generic_bus_attach_sig( part, &(A[15]), "IO67"  );
+	failed |= generic_bus_attach_sig( part, &(A[16]), "IO65"  );
+	failed |= generic_bus_attach_sig( part, &(A[17]), "IO63"  );
 	A[18] = NULL;
 
-	failed |= attach_sig( bus, &(D[ 0]), "IO82"  );
-	failed |= attach_sig( bus, &(D[ 1]), "IO84"  );
-	failed |= attach_sig( bus, &(D[ 2]), "IO86"  );
-	failed |= attach_sig( bus, &(D[ 3]), "IO88"  );
-	failed |= attach_sig( bus, &(D[ 4]), "IO94"  );
-	failed |= attach_sig( bus, &(D[ 5]), "IO98"  );
-	failed |= attach_sig( bus, &(D[ 6]), "IO100" );
-	failed |= attach_sig( bus, &(D[ 7]), "IO104" );
-	failed |= attach_sig( bus, &(D[ 8]), "IO101" );
-	failed |= attach_sig( bus, &(D[ 9]), "IO99"  );
-	failed |= attach_sig( bus, &(D[10]), "IO95"  );
-	failed |= attach_sig( bus, &(D[11]), "IO93"  );
-	failed |= attach_sig( bus, &(D[12]), "IO87"  );
-	failed |= attach_sig( bus, &(D[13]), "IO85"  );
-	failed |= attach_sig( bus, &(D[14]), "IO83"  );
-	failed |= attach_sig( bus, &(D[15]), "IO79"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 0]), "IO82"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 1]), "IO84"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 2]), "IO86"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 3]), "IO88"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 4]), "IO94"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 5]), "IO98"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 6]), "IO100" );
+	failed |= generic_bus_attach_sig( part, &(D[ 7]), "IO104" );
+	failed |= generic_bus_attach_sig( part, &(D[ 8]), "IO101" );
+	failed |= generic_bus_attach_sig( part, &(D[ 9]), "IO99"  );
+	failed |= generic_bus_attach_sig( part, &(D[10]), "IO95"  );
+	failed |= generic_bus_attach_sig( part, &(D[11]), "IO93"  );
+	failed |= generic_bus_attach_sig( part, &(D[12]), "IO87"  );
+	failed |= generic_bus_attach_sig( part, &(D[13]), "IO85"  );
+	failed |= generic_bus_attach_sig( part, &(D[14]), "IO83"  );
+	failed |= generic_bus_attach_sig( part, &(D[15]), "IO79"  );
 
-	failed |= attach_sig( bus, &(nCS),   "IO78"  );
-	failed |= attach_sig( bus, &(nOE),   "IO73"  );
-	failed |= attach_sig( bus, &(nWE),   "IO105" );
-	failed |= attach_sig( bus, &(nLB),   "IO77"  );
-	failed |= attach_sig( bus, &(nUB),   "IO75"  );
+	failed |= generic_bus_attach_sig( part, &(nCS),   "IO78"  );
+	failed |= generic_bus_attach_sig( part, &(nOE),   "IO73"  );
+	failed |= generic_bus_attach_sig( part, &(nWE),   "IO105" );
+	failed |= generic_bus_attach_sig( part, &(nLB),   "IO77"  );
+	failed |= generic_bus_attach_sig( part, &(nUB),   "IO75"  );
 	nCS2 = NULL;
 	nRDY = NULL;
 
@@ -234,48 +221,48 @@ jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 	comp->ctype = RAM;
 	comp->cname = "RAMB";
 
-	failed |= attach_sig( bus, &(A[ 0]), "IO237" );
-	failed |= attach_sig( bus, &(A[ 1]), "IO235" );
-	failed |= attach_sig( bus, &(A[ 2]), "IO233" );
-	failed |= attach_sig( bus, &(A[ 3]), "IO227" );
-	failed |= attach_sig( bus, &(A[ 4]), "IO225" );
-	failed |= attach_sig( bus, &(A[ 5]), "IO194" );
-	failed |= attach_sig( bus, &(A[ 6]), "IO188" );
-	failed |= attach_sig( bus, &(A[ 7]), "IO186" );
-	failed |= attach_sig( bus, &(A[ 8]), "IO184" );
-	failed |= attach_sig( bus, &(A[ 9]), "IO182" );
-	failed |= attach_sig( bus, &(A[10]), "IO183" );
-	failed |= attach_sig( bus, &(A[11]), "IO185" );
-	failed |= attach_sig( bus, &(A[12]), "IO187" );
-	failed |= attach_sig( bus, &(A[13]), "IO193" );
-	failed |= attach_sig( bus, &(A[14]), "IO195" );
-	failed |= attach_sig( bus, &(A[15]), "IO234" );
-	failed |= attach_sig( bus, &(A[16]), "IO236" );
-	failed |= attach_sig( bus, &(A[17]), "IO238" );
+	failed |= generic_bus_attach_sig( part, &(A[ 0]), "IO237" );
+	failed |= generic_bus_attach_sig( part, &(A[ 1]), "IO235" );
+	failed |= generic_bus_attach_sig( part, &(A[ 2]), "IO233" );
+	failed |= generic_bus_attach_sig( part, &(A[ 3]), "IO227" );
+	failed |= generic_bus_attach_sig( part, &(A[ 4]), "IO225" );
+	failed |= generic_bus_attach_sig( part, &(A[ 5]), "IO194" );
+	failed |= generic_bus_attach_sig( part, &(A[ 6]), "IO188" );
+	failed |= generic_bus_attach_sig( part, &(A[ 7]), "IO186" );
+	failed |= generic_bus_attach_sig( part, &(A[ 8]), "IO184" );
+	failed |= generic_bus_attach_sig( part, &(A[ 9]), "IO182" );
+	failed |= generic_bus_attach_sig( part, &(A[10]), "IO183" );
+	failed |= generic_bus_attach_sig( part, &(A[11]), "IO185" );
+	failed |= generic_bus_attach_sig( part, &(A[12]), "IO187" );
+	failed |= generic_bus_attach_sig( part, &(A[13]), "IO193" );
+	failed |= generic_bus_attach_sig( part, &(A[14]), "IO195" );
+	failed |= generic_bus_attach_sig( part, &(A[15]), "IO234" );
+	failed |= generic_bus_attach_sig( part, &(A[16]), "IO236" );
+	failed |= generic_bus_attach_sig( part, &(A[17]), "IO238" );
 	A[18] = NULL;
 
-	failed |= attach_sig( bus, &(D[ 0]), "IO219" );
-	failed |= attach_sig( bus, &(D[ 1]), "IO217" );
-	failed |= attach_sig( bus, &(D[ 2]), "IO215" );
-	failed |= attach_sig( bus, &(D[ 3]), "IO213" );
-	failed |= attach_sig( bus, &(D[ 4]), "IO207" );
-	failed |= attach_sig( bus, &(D[ 5]), "IO203" );
-	failed |= attach_sig( bus, &(D[ 6]), "IO201" );
-	failed |= attach_sig( bus, &(D[ 7]), "IO197" );
-	failed |= attach_sig( bus, &(D[ 8]), "IO200" );
-	failed |= attach_sig( bus, &(D[ 9]), "IO202" );
-	failed |= attach_sig( bus, &(D[10]), "IO206" );
-	failed |= attach_sig( bus, &(D[11]), "IO208" );
-	failed |= attach_sig( bus, &(D[12]), "IO214" );
-	failed |= attach_sig( bus, &(D[13]), "IO216" );
-	failed |= attach_sig( bus, &(D[14]), "IO218" );
-	failed |= attach_sig( bus, &(D[15]), "IO222" );
+	failed |= generic_bus_attach_sig( part, &(D[ 0]), "IO219" );
+	failed |= generic_bus_attach_sig( part, &(D[ 1]), "IO217" );
+	failed |= generic_bus_attach_sig( part, &(D[ 2]), "IO215" );
+	failed |= generic_bus_attach_sig( part, &(D[ 3]), "IO213" );
+	failed |= generic_bus_attach_sig( part, &(D[ 4]), "IO207" );
+	failed |= generic_bus_attach_sig( part, &(D[ 5]), "IO203" );
+	failed |= generic_bus_attach_sig( part, &(D[ 6]), "IO201" );
+	failed |= generic_bus_attach_sig( part, &(D[ 7]), "IO197" );
+	failed |= generic_bus_attach_sig( part, &(D[ 8]), "IO200" );
+	failed |= generic_bus_attach_sig( part, &(D[ 9]), "IO202" );
+	failed |= generic_bus_attach_sig( part, &(D[10]), "IO206" );
+	failed |= generic_bus_attach_sig( part, &(D[11]), "IO208" );
+	failed |= generic_bus_attach_sig( part, &(D[12]), "IO214" );
+	failed |= generic_bus_attach_sig( part, &(D[13]), "IO216" );
+	failed |= generic_bus_attach_sig( part, &(D[14]), "IO218" );
+	failed |= generic_bus_attach_sig( part, &(D[15]), "IO222" );
 
-	failed |= attach_sig( bus, &(nCS),   "IO223" );
-	failed |= attach_sig( bus, &(nOE),   "IO228" );
-	failed |= attach_sig( bus, &(nWE),   "IO196" );
-	failed |= attach_sig( bus, &(nLB),   "IO224" );
-	failed |= attach_sig( bus, &(nUB),   "IO226" );
+	failed |= generic_bus_attach_sig( part, &(nCS),   "IO223" );
+	failed |= generic_bus_attach_sig( part, &(nOE),   "IO228" );
+	failed |= generic_bus_attach_sig( part, &(nWE),   "IO196" );
+	failed |= generic_bus_attach_sig( part, &(nLB),   "IO224" );
+	failed |= generic_bus_attach_sig( part, &(nUB),   "IO226" );
 	nCS2 = NULL;
 	nRDY = NULL;
 
@@ -286,34 +273,34 @@ jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 	comp->ctype = FLASH;
 	comp->cname = "FLASH";
 
-	failed |= attach_sig( bus, &(A[ 0]), "IO47"  );
-	failed |= attach_sig( bus, &(A[ 1]), "IO48"  );
-	failed |= attach_sig( bus, &(A[ 2]), "IO49"  );
-	failed |= attach_sig( bus, &(A[ 3]), "IO50"  );
-	failed |= attach_sig( bus, &(A[ 4]), "IO125" );
-	failed |= attach_sig( bus, &(A[ 5]), "IO127" );
-	failed |= attach_sig( bus, &(A[ 6]), "IO131" );
-	failed |= attach_sig( bus, &(A[ 7]), "IO133" );
-	failed |= attach_sig( bus, &(A[ 8]), "IO158" );
-	failed |= attach_sig( bus, &(A[ 9]), "IO16"  );
-	failed |= attach_sig( bus, &(A[10]), "IO20"  );
-	failed |= attach_sig( bus, &(A[11]), "IO14"  );
-	failed |= attach_sig( bus, &(A[12]), "IO135" );
-	failed |= attach_sig( bus, &(A[13]), "IO156" );
-	failed |= attach_sig( bus, &(A[14]), "IO144" );
-	failed |= attach_sig( bus, &(A[15]), "IO137" );
-	failed |= attach_sig( bus, &(A[16]), "IO139" );
-	failed |= attach_sig( bus, &(A[17]), "IO143" );
-	failed |= attach_sig( bus, &(A[18]), "IO141" );
+	failed |= generic_bus_attach_sig( part, &(A[ 0]), "IO47"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 1]), "IO48"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 2]), "IO49"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 3]), "IO50"  );
+	failed |= generic_bus_attach_sig( part, &(A[ 4]), "IO125" );
+	failed |= generic_bus_attach_sig( part, &(A[ 5]), "IO127" );
+	failed |= generic_bus_attach_sig( part, &(A[ 6]), "IO131" );
+	failed |= generic_bus_attach_sig( part, &(A[ 7]), "IO133" );
+	failed |= generic_bus_attach_sig( part, &(A[ 8]), "IO158" );
+	failed |= generic_bus_attach_sig( part, &(A[ 9]), "IO16"  );
+	failed |= generic_bus_attach_sig( part, &(A[10]), "IO20"  );
+	failed |= generic_bus_attach_sig( part, &(A[11]), "IO14"  );
+	failed |= generic_bus_attach_sig( part, &(A[12]), "IO135" );
+	failed |= generic_bus_attach_sig( part, &(A[13]), "IO156" );
+	failed |= generic_bus_attach_sig( part, &(A[14]), "IO144" );
+	failed |= generic_bus_attach_sig( part, &(A[15]), "IO137" );
+	failed |= generic_bus_attach_sig( part, &(A[16]), "IO139" );
+	failed |= generic_bus_attach_sig( part, &(A[17]), "IO143" );
+	failed |= generic_bus_attach_sig( part, &(A[18]), "IO141" );
 
-	failed |= attach_sig( bus, &(D[ 0]), "IO46"  );
-	failed |= attach_sig( bus, &(D[ 1]), "IO45"  );
-	failed |= attach_sig( bus, &(D[ 2]), "IO44"  );
-	failed |= attach_sig( bus, &(D[ 3]), "IO165" );
-	failed |= attach_sig( bus, &(D[ 4]), "IO164" );
-	failed |= attach_sig( bus, &(D[ 5]), "IO17"  );
-	failed |= attach_sig( bus, &(D[ 6]), "IO18"  );
-	failed |= attach_sig( bus, &(D[ 7]), "IO19"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 0]), "IO46"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 1]), "IO45"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 2]), "IO44"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 3]), "IO165" );
+	failed |= generic_bus_attach_sig( part, &(D[ 4]), "IO164" );
+	failed |= generic_bus_attach_sig( part, &(D[ 5]), "IO17"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 6]), "IO18"  );
+	failed |= generic_bus_attach_sig( part, &(D[ 7]), "IO19"  );
 	D[ 8] = NULL;
 	D[ 9] = NULL;
 	D[10] = NULL;
@@ -323,13 +310,13 @@ jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 	D[14] = NULL;
 	D[15] = NULL;
 
-	failed |= attach_sig( bus, &(nWE),   "IO15"  );
-	failed |= attach_sig( bus, &(nOE),   "IO24"  );
-	failed |= attach_sig( bus, &(nCS),   "IO37"  );
-	failed |= attach_sig( bus, &(nCS2),  "IO23"  );
+	failed |= generic_bus_attach_sig( part, &(nWE),   "IO15"  );
+	failed |= generic_bus_attach_sig( part, &(nOE),   "IO24"  );
+	failed |= generic_bus_attach_sig( part, &(nCS),   "IO37"  );
+	failed |= generic_bus_attach_sig( part, &(nCS2),  "IO23"  );
 
 	/* CLK1 is not observable :-(
-	failed |= attach_sig( bus, &(nRDY),  "CLK1"  );
+	failed |= generic_bus_attach_sig( part, &(nRDY),  "CLK1"  );
 	*/
 	nRDY = NULL;
 
@@ -339,10 +326,10 @@ jopcyc_bus_new( chain_t *chain, char *cmd_params[] )
 	/*
 	 * Setup Serial Port
 	 */
-	failed |= attach_sig( bus, &(SER_RXD),  "CLK2" );
-	failed |= attach_sig( bus, &(SER_NRTS), "IO177" );
-	failed |= attach_sig( bus, &(SER_TXD),  "IO178"  );
-	failed |= attach_sig( bus, &(SER_NCTS), "CLK0"  );
+	failed |= generic_bus_attach_sig( part, &(SER_RXD),  "CLK2" );
+	failed |= generic_bus_attach_sig( part, &(SER_NRTS), "IO177" );
+	failed |= generic_bus_attach_sig( part, &(SER_TXD),  "IO178"  );
+	failed |= generic_bus_attach_sig( part, &(SER_NCTS), "CLK0"  );
 
 	if (failed) {
 		free( bus->params );

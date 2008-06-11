@@ -68,6 +68,7 @@ static bus_t *
 bf548_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[15];
 	int i;
 	int failed = 0;
@@ -87,87 +88,42 @@ bf548_ezkit_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 4; i++) {
 		sprintf( buff, "AMS%dB", i );
-		AMS[i] = part_find_signal( PART, buff );
-		if (!AMS[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(AMS[i]), buff );
 	}
 
 	for (i = 0; i < 3; i++) {
 		sprintf( buff, "ADDR%d", i + 1);
-		ADDR[i] = part_find_signal( PART, buff );
-		if (!ADDR[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(ADDR[i]), buff );
 	}
 
 	for (i = 3; i < 9; i++) {
 		sprintf( buff, "PORTH_%d", i + 5);
-		ADDR[i] = part_find_signal( PART, buff );
-		if (!ADDR[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(ADDR[i]), buff );
 	}
 
 	for (i = 9; i < 24; i++) {
 		sprintf( buff, "PORTI_%d", i - 9);
-		ADDR[i] = part_find_signal( PART, buff );
-		if (!ADDR[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(ADDR[i]), buff );
 	}
 
 	for (i = 0; i < 16; i++) {
 		sprintf( buff, "DATA%d", i);
-		DATA[i] = part_find_signal( PART, buff );
-		if (!DATA[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(DATA[i]), buff );
 	}
 
-	AWE = part_find_signal( PART, "AWEB" );
-	if (!AWE) {
-		printf( _("signal '%s' not found\n"), "AWEB" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(AWE),    "AWEB"  );
 
-	ARE = part_find_signal( PART, "AREB" );
-	if (!ARE) {
-		printf( _("signal '%s' not found\n"), "AREB" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(ARE),    "AREB"  );
 
-	AOE = part_find_signal( PART, "AOEB" );
-	if (!AOE) {
-		printf( _("signal '%s' not found\n"), "AOEB" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(AOE),    "AOEB"  );
 
-	DCS0 = part_find_signal( PART, "CS0_B" );
-	if (!DCS0) {
-		printf( _("signal '%s' not found\n"), "CS0_B" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(DCS0),   "CS0_B"  );
 
-	NCE = part_find_signal( PART, "PORTJ_1" );
-	if (!NCE) {
-		printf( _("signal '%s' not found\n"), "PORTJ_1" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(NCE),    "PORTJ_1"  );
 
 	if (failed) {
 		free( bus->params );

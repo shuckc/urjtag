@@ -69,6 +69,7 @@ static bus_t *
 sh7727_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
@@ -88,66 +89,37 @@ sh7727_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 26; i++) {
 		sprintf( buff, "A%d", i );
-		A[i] = part_find_signal( PART, buff );
-		if (!A[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(A[i]), buff );
 	}
+
 	for (i = 0; i < 32; i++) {
 		sprintf( buff, "D%d", i );
-		D[i] = part_find_signal( PART, buff );
-		if (!D[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
 	}
+
 	for (i = 0; i < 7; i++) {
 		if (i == 1)
 			continue;
 		sprintf( buff, "CS%d", i );
-		CS[i] = part_find_signal( PART, buff );
-		if (!CS[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(CS[i]), buff );
 	}
+
 	for (i = 0; i < 4; i++) {
 		sprintf( buff, "WE%d", i );
-		WE[i] = part_find_signal( PART, buff );
-		if (!WE[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(WE[i]), buff );
 	}
-	RDWR = part_find_signal( PART, "RDWR" );
-	if (!RDWR) {
-		printf( _("signal '%s' not found\n"), "RDWR" );
-		failed = 1;
-	}
-	RD = part_find_signal( PART, "RD" );
-	if (!RD) {
-		printf( _("signal '%s' not found\n"), "RD" );
-		failed = 1;
-	}
-	MD3 = part_find_signal( PART, "MD3" );
-	if (!MD3) {
-		printf( _("signal '%s' not found\n"), "MD3" );
-		failed = 1;
-	}
-	MD4 = part_find_signal( PART, "MD4" );
-	if (!MD4) {
-		printf( _("signal '%s' not found\n"), "MD4" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(RDWR), "RDWR" );
+
+	failed |= generic_bus_attach_sig( part, &(RD),   "RD"   );
+
+	failed |= generic_bus_attach_sig( part, &(MD3),  "MD3"  );
+
+	failed |= generic_bus_attach_sig( part, &(MD4),  "MD4"  );
 
 	if (failed) {
 		free( bus->params );

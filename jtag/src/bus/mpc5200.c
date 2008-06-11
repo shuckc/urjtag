@@ -68,10 +68,10 @@ static bus_t *
 mpc5200_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
-	part_t *part;
 
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
@@ -93,40 +93,21 @@ mpc5200_bus_new( chain_t *chain, char *cmd_params[] )
 	/* Get the signals */
 	for (i = 0; i < 24; i++) {
 		sprintf( buff, "EXT_AD_%d", i );
-		AD[i] = part_find_signal( part, buff );
-		if (!AD[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(AD[i]), buff );
 	}
+
 	for (i = 0; i < 4; i++) {
 		sprintf( buff, "LP_CS%d_B", i );
-		nCS[i] = part_find_signal( part, buff );
-		if (!nCS[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(nCS[i]), buff );
 	}
-	nWE = part_find_signal( part, "LP_RW" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "LP_RW" );
-		failed = 1;
-	}
-	nOE = part_find_signal( part, "LP_OE" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "LP_OE" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(nWE), "LP_RW" );
+
+	failed |= generic_bus_attach_sig( part, &(nOE), "LP_OE" );
+
 	for (i = 0; i < 8; i++) {
 		sprintf( buff, "EXT_AD_%d", i+24 );
-		D[i] = part_find_signal( part, buff );
-		if (!D[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
 	}
 
 	if (failed) {

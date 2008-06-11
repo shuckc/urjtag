@@ -144,12 +144,13 @@ typedef struct {
 static int
 pxa2xx_bus_new_common(bus_t * bus)
 {
-        int failed = 0;
+	part_t *part;
         ncs_map_entry* ncs_map = NULL;
-#ifdef PREPATCHNEVER
-	bus_t *bus;
 	char buff[10];
 	int i;
+	int failed = 0;
+#ifdef PREPATCHNEVER
+	bus_t *bus;
 
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
@@ -168,26 +169,16 @@ pxa2xx_bus_new_common(bus_t * bus)
 	CHAIN = chain;
 	PART = chain->parts->parts[chain->active_part];
 #endif
-	int i;
-	char buff[10];
+	part = PART;
 
 	for (i = 0; i < 26; i++) {
 		sprintf( buff, "MA[%d]", i );
-		MA[i] = part_find_signal( PART, buff );
-		if (!MA[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(MA[i]), buff );
 	}
+
 	for (i = 0; i < 32; i++) {
 		sprintf( buff, "MD[%d]", i );
-		MD[i] = part_find_signal( PART, buff );
-		if (!MD[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(MD[i]), buff );
 	}
 
 	if (PROC == PROC_PXA25x) {
@@ -202,14 +193,8 @@ pxa2xx_bus_new_common(bus_t * bus)
 		ncs_map = pxa25x_ncs_map; // be dumb by default
 	}
 	for (i = 0; i < nCS_TOTAL; i++) {
-		if (ncs_map[i].enabled > 0)
-		{
-			nCS[i] = part_find_signal( PART, ncs_map[i].sig_name );
-			if (!nCS[i]) {
-				printf( _("signal '%s' not found\n"), buff );
-				failed = 1;
-				break;
-			}
+		if (ncs_map[i].enabled > 0) {
+			failed |= generic_bus_attach_sig( part, &(nCS[i]), ncs_map[i].sig_name );
 		}
 		else // disabled - this GPIO pin is unused or used for some other function
 		{
@@ -219,33 +204,16 @@ pxa2xx_bus_new_common(bus_t * bus)
 
 	for (i = 0; i < 4; i++) {
 		sprintf( buff, "DQM[%d]", i );
-		DQM[i] = part_find_signal( PART, buff );
-		if (!DQM[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(DQM[i]), buff );
 	}
-	RDnWR = part_find_signal( PART, "RDnWR" );
-	if (!RDnWR) {
-		printf( _("signal '%s' not found\n"), "RDnWR" );
-		failed = 1;
-	}
-	nWE = part_find_signal( PART, "nWE" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nWE" );
-		failed = 1;
-	}
-	nOE = part_find_signal( PART, "nOE" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "nOE" );
-		failed = 1;
-	}
-	nSDCAS = part_find_signal( PART, "nSDCAS" );
-	if (!nSDCAS) {
-		printf( _("signal '%s' not found\n"), "nSDCAS" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(RDnWR),  "RDnWR"  );
+
+	failed |= generic_bus_attach_sig( part, &(nWE),    "nWE"    );
+
+	failed |= generic_bus_attach_sig( part, &(nOE),    "nOE"    );
+
+	failed |= generic_bus_attach_sig( part, &(nSDCAS), "nSDCAS" );
 
 	return failed;
 }

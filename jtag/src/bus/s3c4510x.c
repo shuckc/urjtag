@@ -108,6 +108,7 @@ static bus_t *
 s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
 {
         bus_t *bus;
+        part_t *part;
         char buff[10];
         int i;
         int failed = 0;
@@ -129,69 +130,39 @@ s3c4510_bus_new( chain_t *chain, char *cmd_params[] )
 
 	dbus_width = 16;
         CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
         for (i = 0; i < 22; i++) {
                 sprintf( buff, "ADDR%d", i );
-                A[i] = part_find_signal( PART, buff );
-                if (!A[i]) {
-                        printf( _("signal '%s' not found\n"), buff );
-                        failed = 1;
-                        break;
-                }
+		failed |= generic_bus_attach_sig( part, &(A[i]), buff );
         }
+
         for (i = 0; i < 32; i++) {
                 sprintf( buff, "XDATA%d", i );
-                D[i] = part_find_signal( PART, buff );
-                if (!D[i]) {
-                        printf( _("signal '%s' not found\n"), buff );
-                        failed = 1;
-                        break;
-                }
+		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
         }
+
         for (i = 0; i < 6; i++) {
                 sprintf( buff, "nRCS%d", i );
-                nRCS[i] = part_find_signal( PART, buff );
-                if (!nRCS[i]) {
-                        printf( _("signal '%s' not found\n"), buff );
-                        failed = 1;
-                        break;
-                }
+		failed |= generic_bus_attach_sig( part, &(nRCS[i]), buff );
         }
 
 	for (i = 0; i < 4; i++) {
                 sprintf( buff, "nECS%d", i );
-                nECS[i] = part_find_signal( PART, buff );
-                if (!nECS[i]) {
-                        printf( _("signal '%s' not found\n"), buff );
-                        failed = 1;
-                        break;
-                }
-        }
-	for (i = 0; i < 4; i++) {
-                sprintf( buff, "nRAS%d", i );  /* those are nSDCS for SDRAMs only */
-                nSDCS[i] = part_find_signal( PART, buff );
-                if (!nSDCS[i]) {
-                        printf( _("signal '%s' not found\n"), buff );
-                        failed = 1;
-                        break;
-                }
-        }
-        for (i = 0; i < 4; i++) {
-                sprintf( buff, "nWBE%d", i );
-                nWBE[i] = part_find_signal( PART, buff );
-                if (!nWBE[i]) {
-                        printf( _("signal '%s' not found\n"), buff );
-                        failed = 1;
-                        break;
-                }
+		failed |= generic_bus_attach_sig( part, &(nECS[i]), buff );
         }
 
-        nOE = part_find_signal( PART, "nOE" );
-        if (!nOE) {
-                printf( _("signal '%s' not found\n"), "nOE" );
-                failed = 1;
+	for (i = 0; i < 4; i++) {
+                sprintf( buff, "nRAS%d", i );  /* those are nSDCS for SDRAMs only */
+		failed |= generic_bus_attach_sig( part, &(nSDCS[i]), buff );
         }
+
+        for (i = 0; i < 4; i++) {
+                sprintf( buff, "nWBE%d", i );
+		failed |= generic_bus_attach_sig( part, &(nWBE[i]), buff );
+        }
+
+	failed |= generic_bus_attach_sig( part, &(nOE), "nOE" );
 
         if (failed) {
                 free( bus->params );

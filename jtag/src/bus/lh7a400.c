@@ -79,6 +79,7 @@ static bus_t *
 lh7a400_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
@@ -98,54 +99,31 @@ lh7a400_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < ADR_NUM; i++) {
 		sprintf( buff, "A%d", i );
-		A[i] = part_find_signal( PART, buff );
-		if (!A[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(A[i]), buff );
 	}
+
 	for (i = 0; i < D_NUM; i++) {
 		sprintf( buff, "D%d", i );
-		D[i] = part_find_signal( PART, buff );
-		if (!D[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
 	}
+
 	for (i = 0; i < nCS_NUM; i++) {
 		sprintf( buff, "nCS%d", i );
-		nCS[i] = part_find_signal( PART, buff );
-		if (!nCS[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(nCS[i]), buff );
 	}
+
 	for (i = 0; i < WIDTH_NUM; i++) {
 		sprintf( buff, "WIDTH%d", i );
-		WIDTH[i] = part_find_signal( PART, buff );
-		if (!WIDTH[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(WIDTH[i]), buff );
 	}
-	nWE = part_find_signal( PART, "nWE0" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nWE" );
-		failed = 1;
-	}
-	nOE = part_find_signal( PART, "nOE" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "nOE" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(nWE), "nWE0" );
+
+	failed |= generic_bus_attach_sig( part, &(nOE), "nOE" );
 
 	if (failed) {
 		free( bus->params );

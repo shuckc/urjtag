@@ -63,6 +63,7 @@ static bus_t *
 ixp425_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[15];
 	int i;
 	int failed = 0;
@@ -82,45 +83,26 @@ ixp425_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 8; i++) {
 		sprintf( buff, "EX_CS[%d]", i );
-		EX_CS[i] = part_find_signal( PART, buff );
-		if (!EX_CS[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(EX_CS[i]), buff );
 	}
+
 	for (i = 0; i < 24; i++) {
 		sprintf( buff, "EX_ADDR[%d]", i );
-		EX_ADDR[i] = part_find_signal( PART, buff );
-		if (!EX_ADDR[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(EX_ADDR[i]), buff );
 	}
+
 	for (i = 0; i < 16; i++) {
 		sprintf( buff, "EX_DATA[%d]", i );
-		EX_DATA[i] = part_find_signal( PART, buff );
-		if (!EX_DATA[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(EX_DATA[i]), buff );
 	}
-	EX_WR = part_find_signal( PART, "EX_WR" );
-	if (!EX_WR) {
-		printf( _("signal '%s' not found\n"), "EX_WR" );
-		failed = 1;
-	}
-	EX_RD = part_find_signal( PART, "EX_RD" );
-	if (!EX_RD) {
-		printf( _("signal '%s' not found\n"), "EX_RD" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(EX_WR), "EX_WR" );
+
+	failed |= generic_bus_attach_sig( part, &(EX_RD), "EX_RD" );
 
 	if (failed) {
 		free( bus->params );

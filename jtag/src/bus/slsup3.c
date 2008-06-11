@@ -96,10 +96,10 @@ static bus_t *
 slsup3_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
-	part_t *part;
 
 	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
 		return NULL;
@@ -120,89 +120,35 @@ slsup3_bus_new( chain_t *chain, char *cmd_params[] )
 
 	for(i = 0; i < 20 ; i++) {
 		sprintf( buff, "IO%d", addrbusio[i] );
-		AD[i] = part_find_signal( part, buff );
-		if (!AD[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(AD[i]), buff );
 	}
 
 	for(i = 0; i < 16 ; i++) {
 		sprintf( buff, "IO%d", databusio[i] );
-		DQ[i] = part_find_signal( part, buff );
-		if (!DQ[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(DQ[i]), buff );
 	}
 
-	nOE = part_find_signal( part, "IO118" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "nOE" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nOE),     "IO118" );
 
-	nSRce = part_find_signal( part, "IO116" );
-	if (!nSRce) {
-		printf( _("signal '%s' not found\n"), "nSRce" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nSRce),   "IO116" );
 
-	nSDce = part_find_signal( part, "IO119" );
-	if (!nSDce) {
-		printf( _("signal '%s' not found\n"), "nSDce" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nSDce),   "IO119" );
 
-	nFLce = part_find_signal( part, "IO117" );
-	if (!nFLce) {
-		printf( _("signal '%s' not found\n"), "nFLce" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nFLce),   "IO117" );
 
-	nFLbyte = part_find_signal( part, "IO115" );
-	if (!nFLbyte) {
-		printf( _("signal '%s' not found\n"), "nFLbyte" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nFLbyte), "IO115" );
 
-	nFLby = part_find_signal( part, "IO80" );
-	if (!nFLby) {
-		printf( _("signal '%s' not found\n"), "nFLby" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nFLby),   "IO80"  );
 
-	nWE = part_find_signal( part, "IO79" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nWE" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(nWE),     "IO79"  );
 
-	SDclk = part_find_signal( part, "IO11" );
-	if (!SDclk) {
-		printf( _("signal '%s' not found\n"), "SDclk" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(SDclk),   "IO11"  );
 
-	LCDe = part_find_signal( part, "IO50" );
-	if (!LCDe) {
-		printf( _("signal '%s' not found\n"), "LCDe" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(LCDe),    "IO50"  );
 
-	LCDrs = part_find_signal( part, "IO108" );
-	if (!LCDrs) {
-		printf( _("signal '%s' not found\n"), "LCDrs" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(LCDrs),   "IO108" );
 
-	LCDrw = part_find_signal( part, "IO73" );
-	if (!LCDrw) {
-		printf( _("signal '%s' not found\n"), "LCDrw" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(LCDrw),   "IO73"  );
 
 	if (failed) {
 		free( bus->params );

@@ -78,10 +78,10 @@ static bus_t *
 mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
-	part_t *part;
 	signal_t *s_nfoe;
 	signal_t *s_sdma1;
 
@@ -182,59 +182,27 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 
 	for (i = 0; i <= 10; i++) {
 		sprintf( buff, "SDMA%d", i );
-		AR[i] = part_find_signal( part, buff );
-		if (!AR[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(AR[i]), buff );
 	}
-	AR[11] = part_find_signal( part, "SDBA0" );
-	if (!AR[11]) {
-		printf( _("signal '%s' not found\n"), "SDBA0" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(AR[11]), "SDBA0" );
+
 	for (i = 0; i < 8; i++) {
 		sprintf( buff, "PAR%d", i );
-		AR[19 - i] = part_find_signal( part, buff );
-		if (!AR[19 - i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
-	}
-	AR[20] = part_find_signal( part, "SDBA1" );
-	if (!AR[20]) {
-		printf( _("signal '%s' not found\n"), "SDBA1" );
-		failed = 1;
-	}
-	AR[21] = part_find_signal( part, "SDMA11" );
-	if (!AR[21]) {
-	  printf( _("signal '%s' not found\n"), "SDMA11" );
-	  failed = 1;
-	}
-	AR[22] = part_find_signal( part, "SDMA12" );
-	if (!AR[22]) {
-	  printf( _("signal '%s' not found\n"), "SDMA12" );
-	  failed = 1;
+		failed |= generic_bus_attach_sig( part, &(AR[19 - i]), buff );
 	}
 
+	failed |= generic_bus_attach_sig( part, &(AR[20]), "SDBA1"  );
 
-	nRCS0 = part_find_signal( part, "nRCS0" );
-	if (!nRCS0) {
-		printf( _("signal '%s' not found\n"), "nRCS0" );
-		failed = 1;
-	}
-	nWE = part_find_signal( part, "nWE" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nWE" );
-		failed = 1;
-	}
-	nFOE = part_find_signal( part, "nFOE" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nFOE" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(AR[21]), "SDMA11" );
+
+	failed |= generic_bus_attach_sig( part, &(AR[22]), "SDMA12" );
+
+	failed |= generic_bus_attach_sig( part, &(nRCS0), "nRCS0" );
+
+	failed |= generic_bus_attach_sig( part, &(nWE),   "nWE"   );
+
+	failed |= generic_bus_attach_sig( part, &(nFOE),  "nFOE"  );
 
 	/*
 	    Freescale MPC824x uses inversed bit order ([1], p. 2-18):
@@ -249,12 +217,7 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 
 	for (i = 0; i < 32; i++) { /* Needs to be fixed for 64-bit bus width */
 	  sprintf( buff, "MDH%d",  31 - i );
-	  D[i] = part_find_signal( part, buff );
-	  if (!D[i]) {
-	    printf( _("signal '%s' not found\n"), buff );
-	    failed = 1;
-	    break;
-	  }
+		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
 	}
 
 	if (failed) {

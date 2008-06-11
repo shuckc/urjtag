@@ -71,6 +71,7 @@ typedef struct
 static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[15];
 	int i;
 	int failed = 0;
@@ -90,43 +91,23 @@ static bus_t *sharc_21065L_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < 19; i++) {
 		sprintf( buff, "ADDR%d", i );
-		MA[i] = part_find_signal( PART, buff );
-		if (!MA[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(MA[i]), buff );
 	}
+
 	for (i = 0; i < 8; i++) {
 		sprintf( buff, "DATA%d", i );
-		MD[i] = part_find_signal( PART, buff );
-		if (!MD[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(MD[i]), buff );
 	}
 
-	BMS = part_find_signal( PART, "BMS_B" );
-	if (!BMS) {
-		printf( _("signal '%s' not found\n"), "BMS_B" );
-		failed = 1;
-	}
-	nWE = part_find_signal( PART, "WR_B" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "WR_B" );
-		failed = 1;
-	}
-	nOE = part_find_signal( PART, "RD_B" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "RD_B" );
-		failed = 1;
-	}
+	failed |= generic_bus_attach_sig( part, &(BMS), "BMS_B" );
 
+	failed |= generic_bus_attach_sig( part, &(nWE), "WR_B"  );
+
+	failed |= generic_bus_attach_sig( part, &(nOE), "RD_B"  );
 
 	if (failed) {
 		free( bus->params );

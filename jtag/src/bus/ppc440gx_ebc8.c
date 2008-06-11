@@ -63,6 +63,7 @@ static bus_t *
 ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] )
 {
 	bus_t *bus;
+	part_t *part;
 	char buff[10];
 	int i;
 	int failed = 0;
@@ -82,42 +83,23 @@ ppc440gx_ebc8_bus_new( chain_t *chain, char *cmd_params[] )
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
+	PART = part = chain->parts->parts[chain->active_part];
 
 	for (i = 0; i < PPC440GX_ADDR_LINES; i++) {
 		sprintf( buff, "EBCADR%d", i );
-		A[i] = part_find_signal( PART, buff );
-		if (!A[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(A[i]), buff );
 	}
+
 	for (i = 0; i < PPC440GX_DATA_LINES; i++) {
 		sprintf( buff, "EBCDATA%d", i );
-		D[i] = part_find_signal( PART, buff );
-		if (!D[i]) {
-			printf( _("signal '%s' not found\n"), buff );
-			failed = 1;
-			break;
-		}
+		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
 	}
-	sprintf( buff, "EBCCS0_N");
-	nCS = part_find_signal( PART, buff );
-	if (!nCS) {
-		printf( _("signal '%s' not found\n"), buff );
-		failed = 1;
-	}
-	nWE = part_find_signal( PART, "EBCWE_N" );
-	if (!nWE) {
-		printf( _("signal '%s' not found\n"), "nWE" );
-		failed = 1;
-	}
-	nOE = part_find_signal( PART, "EBCOE_N" );
-	if (!nOE) {
-		printf( _("signal '%s' not found\n"), "nOE" );
-		failed = 1;
-	}
+
+	failed |= generic_bus_attach_sig( part, &(nCS), "EBCCS0_N" );
+
+	failed |= generic_bus_attach_sig( part, &(nWE), "EBCWE_N"  );
+
+	failed |= generic_bus_attach_sig( part, &(nOE), "EBCOE_N"  );
 
 	if (failed) {
 		free( bus->params );
