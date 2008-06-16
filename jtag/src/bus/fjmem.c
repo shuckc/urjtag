@@ -361,13 +361,6 @@ fjmem_bus_new( chain_t *chain, char *params[] )
 	int fjmem_reg_len = 0;
 	int idx;
 
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
-
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "fjmem" );
-		return NULL;
-	}
 	part = chain->parts->parts[chain->active_part];
 
 	/* parse parameters */

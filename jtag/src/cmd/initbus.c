@@ -47,7 +47,7 @@ cmd_initbus_run( chain_t *chain, char *params[] )
 		return 1;
 	}
 
-	if (chain->active_part >= chain->parts->len) {
+	if (chain->active_part >= chain->parts->len || chain->active_part < 0) {
 		printf( _("%s: no active part\n"), "initbus" );
 		return 1;
 	}

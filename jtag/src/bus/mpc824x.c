@@ -145,11 +145,6 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 
 	//	REVBITS = 0;
 
-
-
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
-
 	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;

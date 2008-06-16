@@ -152,9 +152,6 @@ pxa2xx_bus_new_common(bus_t * bus)
 #ifdef PREPATCHNEVER
 	bus_t *bus;
 
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
-
 	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;

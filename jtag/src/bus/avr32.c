@@ -487,10 +487,6 @@ avr32_bus_new (chain_t * chain, char *cmd_params[])
   char *param;
   unsigned int mode;
 
-  if (!chain || !chain->parts ||
-      chain->parts->len <= chain->active_part || chain->active_part < 0)
-    return NULL;
-
   part = chain->parts->parts[chain->active_part];
 
   param = cmd_params[2];
