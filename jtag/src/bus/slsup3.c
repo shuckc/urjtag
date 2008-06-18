@@ -43,8 +43,6 @@ int databusio[16] = {94,96,98,100,102,104,106,113,95,97,99,101,103,105,107,114};
 int addrbusio[20] = {93,88,87,86,85,84,83,63,64,65,66,67,68,74,75,76,77,82,81,78};
 
 typedef struct {
-	chain_t *chain;
-	part_t *part;
 	uint32_t last_adr;
 	signal_t *ad[20];
 	signal_t *dq[16];
@@ -61,8 +59,6 @@ typedef struct {
         signal_t *lcdrw;
 } bus_params_t;
 
-#define	CHAIN		((bus_params_t *) bus->params)->chain
-#define	PART		((bus_params_t *) bus->params)->part
 #define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
 #define	AD		((bus_params_t *) bus->params)->ad
 #define DQ              ((bus_params_t *) bus->params)->dq

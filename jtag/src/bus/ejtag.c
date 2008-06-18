@@ -42,17 +42,12 @@
 #include "generic_bus.h"
 
 typedef struct {
-	chain_t *chain;
-	part_t *part;
 	int initialized;
 	uint32_t impcode;  /* EJTAG Implementation Register */
 	uint16_t adr_hi;   /* cached high bits of $3 */
 } bus_params_t;
 
 #define BP ((bus_params_t *) bus->params)
-
-#define	CHAIN	(BP->chain)
-#define	PART	(BP->part)
 
 #define EJTAG_VER ((BP->impcode >> 29) & 7)
 

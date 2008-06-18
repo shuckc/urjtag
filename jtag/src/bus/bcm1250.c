@@ -40,17 +40,12 @@
 //#define USE_BCM_EJTAG
 
 typedef struct {
-	chain_t *chain;
-	part_t *part;
 	signal_t *io_ad[32];
 	signal_t *io_cs_l[8];
 	signal_t *io_rw;
 	signal_t *io_wr_l;
 	signal_t *io_oe_l;
 } bus_params_t;
-
-#define CHAIN   ((bus_params_t *) bus->params)->chain
-#define PART    ((bus_params_t *) bus->params)->part
 
 #define IO_AD ((bus_params_t *) bus->params)->io_ad
 #define IO_CS_L ((bus_params_t *) bus->params)->io_cs_l

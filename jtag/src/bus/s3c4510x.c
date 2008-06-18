@@ -73,8 +73,6 @@
 
 /** @brief  Bus driver for Samsung S3C4510X */
 typedef struct {
-        chain_t *chain;
-        part_t *part;
         signal_t *a[22];      /**< Only 22-bits addressing */
         signal_t *d[32];      /**< Data bus */
         signal_t *nrcs[6];    /**< not ROM/SRAM/Flash Chip Select;
@@ -87,8 +85,6 @@ typedef struct {
 	int	 dbuswidth;
 } bus_params_t;
 
-#define CHAIN   ((bus_params_t *) bus->params)->chain
-#define PART    ((bus_params_t *) bus->params)->part
 #define A       ((bus_params_t *) bus->params)->a
 #define D       ((bus_params_t *) bus->params)->d
 #define nRCS    ((bus_params_t *) bus->params)->nrcs

@@ -42,10 +42,7 @@
 
 //no SDRAM access
 
-typedef struct
-{
-	chain_t *chain;
-	part_t *part;
+typedef struct {
 	uint32_t last_adr;
 	signal_t *ma[19];	//19 - 512K flash address are used
 	signal_t *md[8];	//8 bit data bus connected to Flash are used
@@ -54,9 +51,6 @@ typedef struct
 	signal_t *noe;
 } bus_params_t;
 
-
-#define	CHAIN	((bus_params_t *) bus->params)->chain
-#define	PART	((bus_params_t *) bus->params)->part
 #define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
 #define	MA		((bus_params_t *) bus->params)->ma
 #define	MD		((bus_params_t *) bus->params)->md

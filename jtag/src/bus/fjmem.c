@@ -68,16 +68,11 @@ struct block_desc {
 typedef struct block_desc block_desc_t;
 
 typedef struct {
-	chain_t       *chain;
-	part_t        *part;
 	uint32_t       last_addr;
 	data_register *fjmem_reg;
 	block_desc_t   block_desc;
 } bus_params_t;
 
-
-#define CHAIN      ((bus_params_t *) bus->params)->chain
-#define PART       ((bus_params_t *) bus->params)->part
 #define LAST_ADDR  ((bus_params_t *) bus->params)->last_addr
 #define FJMEM_REG  ((bus_params_t *) bus->params)->fjmem_reg
 #define BLOCK_DESC ((bus_params_t *) bus->params)->block_desc

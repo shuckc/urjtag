@@ -65,11 +65,16 @@ typedef struct bus_driver {
 } bus_driver_t;
 
 struct bus {
+	chain_t *chain;
+	part_t *part;
 	void *params;
 	const bus_driver_t *driver;
 };
 
 extern bus_t *bus;
+
+#define CHAIN			bus->chain
+#define PART			bus->part
 
 #define	bus_printinfo(bus)	bus->driver->printinfo(bus)
 #define	bus_prepare(bus)	bus->driver->prepare(bus)

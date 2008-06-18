@@ -43,8 +43,6 @@
 //  on 29LV200 we use now.
 
 typedef struct {
-	chain_t *chain;
-	part_t *part;
     signal_t *oe;
     signal_t *swe;
     signal_t *romce[4];
@@ -53,8 +51,6 @@ typedef struct {
     signal_t *data[16];
 } bus_params_t;
 
-#define	CHAIN	((bus_params_t *) bus->params)->chain
-#define	PART	((bus_params_t *) bus->params)->part
 #define	OE	    ((bus_params_t *) bus->params)->oe
 #define	SWE  	((bus_params_t *) bus->params)->swe
 #define	ROMCE	((bus_params_t *) bus->params)->romce

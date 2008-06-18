@@ -104,8 +104,6 @@ static ncs_map_entry pxa27x_ncs_map[nCS_TOTAL] = {
 
 
 typedef struct {
-	chain_t *chain;
-	part_t *part;
 	uint32_t last_adr;
 	signal_t *ma[26];
 	signal_t *md[32];
@@ -120,8 +118,6 @@ typedef struct {
 	int proc;
 } bus_params_t;
 
-#define	CHAIN	((bus_params_t *) bus->params)->chain
-#define	PART	((bus_params_t *) bus->params)->part
 #define PROC	((bus_params_t *) bus->params)->proc
 #define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
 #define	MA		((bus_params_t *) bus->params)->ma

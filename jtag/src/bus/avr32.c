@@ -42,10 +42,7 @@
 
 void jtag_reset (chain_t * chain);
 
-typedef struct
-{
-  chain_t *chain;
-  part_t *part;
+typedef struct {
   unsigned int mode;
 
   unsigned int slave;
@@ -63,8 +60,6 @@ typedef struct
 #define BUS_MODE_x32	5
 
 #define BP (( bus_params_t *) bus->params)
-#define	CHAIN		(BP->chain)
-#define	PART		(BP->part)
 #define SLAVE		(BP->slave)
 #define MODE		(BP->mode)
 #define ADDR_MASK	(BP->addr_mask)

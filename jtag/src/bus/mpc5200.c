@@ -41,8 +41,6 @@
 #include "generic_bus.h"
 
 typedef struct {
-	chain_t *chain;
-	part_t *part;
 	uint32_t last_adr;
 	signal_t *ad[24];
 	signal_t *ncs[4];
@@ -51,8 +49,6 @@ typedef struct {
 	signal_t *d[8];
 } bus_params_t;
 
-#define	CHAIN		((bus_params_t *) bus->params)->chain
-#define	PART		((bus_params_t *) bus->params)->part
 #define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
 #define	AD		((bus_params_t *) bus->params)->ad
 #define	nCS		((bus_params_t *) bus->params)->ncs

@@ -99,8 +99,6 @@ typedef struct {
 } component_t;
 
 typedef struct {
-	chain_t     *chain;
-	part_t      *part;
 	uint32_t     last_addr; /* holds last address of read or write access */
 	component_t  rama;
 	component_t  ramb;
@@ -111,8 +109,6 @@ typedef struct {
 	signal_t     *ser_ncts;
 } bus_params_t;
 
-#define CHAIN     ((bus_params_t *) bus->params)->chain
-#define PART      ((bus_params_t *) bus->params)->part
 #define LAST_ADDR ((bus_params_t *) bus->params)->last_addr
 #define A         comp->a
 #define D         comp->d

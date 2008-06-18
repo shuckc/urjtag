@@ -38,8 +38,6 @@
 #include "generic_bus.h"
 
 typedef struct {
-	chain_t *chain;
-	part_t *part;
 	signal_t *ams[4];
 	signal_t *addr[19];
 	signal_t *data[16];
@@ -52,8 +50,6 @@ typedef struct {
 	signal_t *swe;
 } bus_params_t;
 
-#define	CHAIN	((bus_params_t *) bus->params)->chain
-#define	PART	((bus_params_t *) bus->params)->part
 #define	AMS	((bus_params_t *) bus->params)->ams
 #define	ADDR	((bus_params_t *) bus->params)->addr
 #define	DATA	((bus_params_t *) bus->params)->data

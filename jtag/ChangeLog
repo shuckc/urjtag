@@ -1,3 +1,18 @@
+2008-06-18  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * include/bus_driver.h, src/bus/bf548_ezkit.c, src/bus/fjmem.c,
+     src/bus/ppc405ep.c, src/bus/sh7727.c, src/bus/prototype.c,
+     src/bus/sa1110.c, src/bus/ppc440gx_ebc8.c, src/bus/tx4925.c,
+     src/bus/sh7750r.c, src/bus/pxa2x0.c, src/bus/bf533_stamp.c,
+     src/bus/bf533_ezkit.c, src/bus/bf537_stamp.c, src/bus/ixp425.c,
+     src/bus/avr32.c, src/bus/h7202.c, src/bus/zefant-xs3.c,
+     src/bus/mpc824x.c, src/bus/bcm1250.c, src/bus/sharc21065l.c,
+     src/bus/au1500.c, src/bus/lh7a400.c, src/bus/sh7751r.c,
+     src/bus/mpc5200.c, src/bus/jopcyc.c, src/bus/bf561_ezkit.c,
+     src/bus/slsup3.c, src/bus/s3c4510x.c, src/bus/ejtag.c:
+     [ 1984813 ] Bus driver cleanup, uniquify chain and part in
+     bus_t struct (Hartley Sweeten)
+
 2008-06-16  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/cmd/initbus.c (cmd_initbus_run),

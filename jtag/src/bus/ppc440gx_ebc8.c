@@ -37,8 +37,6 @@
 #define PPC440GX_DATA_LINES  8
 
 typedef struct {
-	chain_t *chain;
-	part_t *part;
 	signal_t *a[PPC440GX_ADDR_LINES];
 	signal_t *d[PPC440GX_DATA_LINES];
 	signal_t *ncs;
@@ -46,8 +44,6 @@ typedef struct {
 	signal_t *noe;
 } bus_params_t;
 
-#define	CHAIN	((bus_params_t *) bus->params)->chain
-#define	PART	((bus_params_t *) bus->params)->part
 #define	A	((bus_params_t *) bus->params)->a
 #define	D	((bus_params_t *) bus->params)->d
 #define	nCS	((bus_params_t *) bus->params)->ncs
