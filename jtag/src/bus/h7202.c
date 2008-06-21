@@ -125,17 +125,6 @@ h7202_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-h7202_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -309,7 +298,7 @@ const bus_driver_t h7202_bus = {
 	h7202_bus_new,
 	generic_bus_free,
 	h7202_bus_printinfo,
-	h7202_bus_prepare,
+	generic_bus_prepare_extest,
 	h7202_bus_area,
 	h7202_bus_read_start,
 	h7202_bus_read_next,

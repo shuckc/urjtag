@@ -122,17 +122,6 @@ ixp425_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-ixp425_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -303,7 +292,7 @@ const bus_driver_t ixp425_bus = {
 	ixp425_bus_new,
 	generic_bus_free,
 	ixp425_bus_printinfo,
-	ixp425_bus_prepare,
+	generic_bus_prepare_extest,
 	ixp425_bus_area,
 	ixp425_bus_read_start,
 	ixp425_bus_read_next,

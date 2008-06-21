@@ -54,6 +54,17 @@ generic_bus_free( bus_t *bus )
 }
 
 /**
+ * bus->driver->(*prepare)
+ *
+ */
+void
+generic_bus_prepare_extest( bus_t *bus )
+{
+	part_set_instruction( PART, "EXTEST" );
+	chain_shift_instructions( CHAIN );
+}
+
+/**
  * bus->driver->(*read)
  *
  */

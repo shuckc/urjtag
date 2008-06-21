@@ -119,17 +119,6 @@ ppc440gx_ebc8_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-ppc440gx_ebc8_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -281,7 +270,7 @@ const bus_driver_t ppc440gx_ebc8_bus = {
 	ppc440gx_ebc8_bus_new,
 	generic_bus_free,
 	ppc440gx_ebc8_bus_printinfo,
-	ppc440gx_ebc8_bus_prepare,
+	generic_bus_prepare_extest,
 	ppc440gx_ebc8_bus_area,
 	ppc440gx_ebc8_bus_read_start,
 	ppc440gx_ebc8_bus_read_next,

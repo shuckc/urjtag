@@ -480,12 +480,9 @@ fjmem_bus_printinfo( bus_t *bus )
 static void
 fjmem_bus_prepare( bus_t *bus )
 {
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-
 	/* ensure FJMEM_INST is active */
-	part_set_instruction( p, FJMEM_INST_NAME );
-	chain_shift_instructions( chain );
+	part_set_instruction( PART, FJMEM_INST_NAME );
+	chain_shift_instructions( CHAIN );
 }
 
 static int

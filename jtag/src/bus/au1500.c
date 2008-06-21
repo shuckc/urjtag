@@ -127,17 +127,6 @@ au1500_bus_printinfo( bus_t *bus)
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-au1500_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -309,7 +298,7 @@ const bus_driver_t au1500_bus = {
 	au1500_bus_new,
 	generic_bus_free,
 	au1500_bus_printinfo,
-	au1500_bus_prepare,
+	generic_bus_prepare_extest,
 	au1500_bus_area,
 	au1500_bus_read_start,
 	au1500_bus_read_next,

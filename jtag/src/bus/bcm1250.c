@@ -121,17 +121,6 @@ bcm1250_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-bcm1250_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -500,7 +489,7 @@ const bus_driver_t bcm1250_bus = {
 	bcm1250_bus_new,
 	generic_bus_free,
 	bcm1250_bus_printinfo,
-	bcm1250_bus_prepare,
+	generic_bus_prepare_extest,
 	bcm1250_bus_area,
 	bcm1250_bus_read_start,
 	bcm1250_bus_read_next,

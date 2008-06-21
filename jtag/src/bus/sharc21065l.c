@@ -124,17 +124,6 @@ static void sharc_21065L_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-sharc_21065L_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -321,7 +310,7 @@ const bus_driver_t sharc_21065L_bus = {
 	sharc_21065L_bus_new,
 	generic_bus_free,
 	sharc_21065L_bus_printinfo,
-	sharc_21065L_bus_prepare,
+	generic_bus_prepare_extest,
 	sharc_21065L_bus_area,
 	sharc_21065L_bus_read_start,
 	sharc_21065L_bus_read_next,

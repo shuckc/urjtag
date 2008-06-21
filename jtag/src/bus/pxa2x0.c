@@ -372,8 +372,7 @@ pxa2xx_bus_prepare( bus_t *bus )
 {
 	(void)pxa2xx_bus_init( bus );
 
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
+	generic_bus_prepare_extest( bus );
 }
 
 /**

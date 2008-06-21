@@ -139,17 +139,6 @@ sh7727_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-sh7727_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -358,7 +347,7 @@ const bus_driver_t sh7727_bus = {
 	sh7727_bus_new,
 	generic_bus_free,
 	sh7727_bus_printinfo,
-	sh7727_bus_prepare,
+	generic_bus_prepare_extest,
 	sh7727_bus_area,
 	sh7727_bus_read_start,
 	sh7727_bus_read_next,

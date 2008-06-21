@@ -143,17 +143,6 @@ lh7a400_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-lh7a400_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -332,7 +321,7 @@ const bus_driver_t lh7a400_bus = {
 	lh7a400_bus_new,
 	generic_bus_free,
 	lh7a400_bus_printinfo,
-	lh7a400_bus_prepare,
+	generic_bus_prepare_extest,
 	lh7a400_bus_area,
 	lh7a400_bus_read_start,
 	lh7a400_bus_read_next,

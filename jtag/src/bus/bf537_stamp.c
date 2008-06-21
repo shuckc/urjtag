@@ -128,17 +128,6 @@ bf537_stamp_bus_new_1( chain_t *chain, char *cmd_params[] )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-bf537_stamp_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -351,7 +340,7 @@ const bus_driver_t bf537_stamp_bus = {
 	bf537_stamp_bus_new,
 	generic_bus_free,
 	bf537_stamp_bus_printinfo,
-	bf537_stamp_bus_prepare,
+	generic_bus_prepare_extest,
 	bf537_stamp_bus_area,
 	bf537_stamp_bus_read_start,
 	bf537_stamp_bus_read_next,
@@ -400,7 +389,7 @@ const bus_driver_t bf537_ezkit_bus = {
 	bf537_ezkit_bus_new,
 	generic_bus_free,
 	bf537_ezkit_bus_printinfo,
-	bf537_stamp_bus_prepare,
+	generic_bus_prepare_extest,
 	bf537_stamp_bus_area,
 	bf537_stamp_bus_read_start,
 	bf537_stamp_bus_read_next,
@@ -449,7 +438,7 @@ const bus_driver_t bf527_ezkit_bus = {
 	bf527_ezkit_bus_new,
 	generic_bus_free,
 	bf527_ezkit_bus_printinfo,
-	bf537_stamp_bus_prepare,
+	generic_bus_prepare_extest,
 	bf537_stamp_bus_area,
 	bf537_stamp_bus_read_start,
 	bf537_stamp_bus_read_next,

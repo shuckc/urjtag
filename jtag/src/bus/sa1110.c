@@ -129,17 +129,6 @@ sa1110_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-sa1110_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -317,7 +306,7 @@ const bus_driver_t sa1110_bus = {
 	sa1110_bus_new,
 	generic_bus_free,
 	sa1110_bus_printinfo,
-	sa1110_bus_prepare,
+	generic_bus_prepare_extest,
 	sa1110_bus_area,
 	sa1110_bus_read_start,
 	sa1110_bus_read_next,

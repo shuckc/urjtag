@@ -168,17 +168,6 @@ slsup3_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
- *
- */
-static void
-slsup3_bus_prepare( bus_t *bus )
-{
-	part_set_instruction( PART, "EXTEST" );
-	chain_shift_instructions( CHAIN );
-}
-
-/**
  * bus->driver->(*area)
  *
  */
@@ -435,7 +424,7 @@ const bus_driver_t slsup3_bus = {
 	slsup3_bus_new,
 	generic_bus_free,
 	slsup3_bus_printinfo,
-	slsup3_bus_prepare,
+	generic_bus_prepare_extest,
 	slsup3_bus_area,
 	slsup3_bus_read_start,
 	slsup3_bus_read_next,
