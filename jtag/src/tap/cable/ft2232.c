@@ -112,11 +112,11 @@
 #define BITMASK_ARMUSBOCD_nTSRST (1 << BIT_ARMUSBOCD_nTRST)
 #define BITMASK_ARMUSBOCD_nTRST_nOE (1 << BIT_ARMUSBOCD_nTRST_nOE)
 #define BITMASK_ARMUSBOCD_RED_LED (1 << BIT_ARMUSBOCD_RED_LED)
-/* bit and bitmask definitions for BFIN-UJTAG */
-#define BIT_BFIN_UJTAG_nTRST 1
-#define BIT_BFIN_UJTAG_nLED 3 
-#define BITMASK_BFIN_UJTAG_nTRST (1 << BIT_BFIN_UJTAG_nTRST)
-#define BITMASK_BFIN_UJTAG_nLED (1 << BIT_BFIN_UJTAG_nLED)
+/* bit and bitmask definitions for gnICE */
+#define BIT_GNICE_nTRST 1
+#define BIT_GNICE_nLED 3 
+#define BITMASK_GNICE_nTRST (1 << BIT_GNICE_nTRST)
+#define BITMASK_GNICE_nLED (1 << BIT_GNICE_nLED)
 /* bit and bitmask definitions for OOCDLink-s */
 #define BIT_OOCDLINKS_nTRST_nOE 0
 #define BIT_OOCDLINKS_nTRST 1
@@ -356,7 +356,7 @@ ft2232_armusbocd_init( cable_t *cable )
 
 
 static int
-ft2232_bfin_ujtag_init( cable_t *cable )
+ft2232_gnice_init( cable_t *cable )
 {
   params_t *params = (params_t *)cable->params;
   cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -375,9 +375,9 @@ ft2232_bfin_ujtag_init( cable_t *cable )
   cx_cmd_push( cmd_root, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 
   /* Set Data Bits High Byte */
-  params->high_byte_value_trst_active   = BITMASK_BFIN_UJTAG_nLED;
-  params->high_byte_value_trst_inactive = BITMASK_BFIN_UJTAG_nTRST;
-  params->high_byte_dir                 = BITMASK_BFIN_UJTAG_nTRST | BITMASK_BFIN_UJTAG_nLED;
+  params->high_byte_value_trst_active   = BITMASK_GNICE_nLED;
+  params->high_byte_value_trst_inactive = BITMASK_GNICE_nTRST;
+  params->high_byte_dir                 = BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
   cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
   cx_cmd_push( cmd_root, 0 );
@@ -675,7 +675,7 @@ ft2232_armusbocd_done( cable_t *cable )
 }
 
 static void
-ft2232_bfin_ujtag_done( cable_t *cable )
+ft2232_gnice_done( cable_t *cable )
 {
   params_t *params = (params_t *)cable->params;
   cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -690,13 +690,13 @@ ft2232_bfin_ujtag_done( cable_t *cable )
   /* Set Data Bits High Byte
      disable output drivers */
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, BITMASK_BFIN_UJTAG_nTRST);
-  cx_cmd_push( cmd_root, BITMASK_BFIN_UJTAG_nTRST | BITMASK_BFIN_UJTAG_nLED);
+  cx_cmd_push( cmd_root, BITMASK_GNICE_nTRST);
+  cx_cmd_push( cmd_root, BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED);
 
   /* Set Data Bits High Byte
      set all to input */
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, BITMASK_BFIN_UJTAG_nTRST);
+  cx_cmd_push( cmd_root, BITMASK_GNICE_nTRST);
   cx_cmd_push( cmd_root, 0 );
   cx_xfer( cmd_root, &imm_cmd, cable, COMPLETELY );
 
@@ -1321,7 +1321,7 @@ ft2232_cable_free( cable_t *cable )
 
 usbconn_cable_t usbconn_cable_ft2232_ftdi;
 usbconn_cable_t usbconn_cable_armusbocd_ftdi;
-usbconn_cable_t usbconn_cable_bfin_ujtag_ftdi;
+usbconn_cable_t usbconn_cable_gnice_ftdi;
 usbconn_cable_t usbconn_cable_jtagkey_ftdi;
 usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
 usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
@@ -1336,7 +1336,7 @@ ft2232_usbcable_help( const char *cablename )
   conn = &usbconn_cable_armusbocd_ftdi;
   if (strcasecmp( conn->name, cablename ) == 0)
     goto found;
-  conn = &usbconn_cable_bfin_ujtag_ftdi;
+  conn = &usbconn_cable_gnice_ftdi;
   if (strcasecmp( conn->name, cablename ) == 0)
     goto found;
   conn = &usbconn_cable_jtagkey_ftdi;
@@ -1438,14 +1438,14 @@ usbconn_cable_t usbconn_cable_armusbocd_ftd2xx = {
   0x0003              /* PID */
 };
 
-cable_driver_t ft2232_bfin_ujtag_cable_driver = {
-  "BFIN-UJTAG",
-  N_("Analog Devices BFIN-UJTAG (FT2232) Cable (EXPERIMENTAL)"),
+cable_driver_t ft2232_gnice_cable_driver = {
+  "gnICE",
+  N_("Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"),
   ft2232_connect,
   generic_disconnect,
   ft2232_cable_free,
-  ft2232_bfin_ujtag_init,
-  ft2232_bfin_ujtag_done,
+  ft2232_gnice_init,
+  ft2232_gnice_done,
   ft2232_set_frequency,
   ft2232_clock,
   ft2232_get_tdo,
@@ -1455,15 +1455,15 @@ cable_driver_t ft2232_bfin_ujtag_cable_driver = {
   ft2232_flush,
   ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_bfin_ujtag_ftdi = {
-  "BFIN-UJTAG",       /* cable name */
+usbconn_cable_t usbconn_cable_gnice_ftdi = {
+  "gnICE",            /* cable name */
   NULL,               /* string pattern, not used */
   "ftdi-mpsse",       /* default usbconn driver */
   0x0456,             /* VID */
   0xF000              /* PID */
 };
-usbconn_cable_t usbconn_cable_bfin_ujtag_ftd2xx = {
-  "BFIN-UJTAG",       /* cable name */
+usbconn_cable_t usbconn_cable_gnice_ftd2xx = {
+  "gnICE",            /* cable name */
   NULL,               /* string pattern, not used */
   "ftd2xx-mpsse",     /* default usbconn driver */
   0x0456,             /* VID */

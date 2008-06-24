@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2008-06-11 22:56+0200\n"
+"POT-Creation-Date: 2008-06-24 15:18+0800\n"
 "PO-Revision-Date: 2004-05-10 08:00-0500\n"
 "Last-Translator: Michel Robitaille <robitail@IRO.UMontreal.CA>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -206,98 +206,98 @@ msgstr ""
 msgid "Cannot open file %s or %s.\n"
 msgstr "ne peut ouvrir %s\n"
 
-#: src/bus/au1500.c:135
+#: src/bus/au1500.c:126
 #, fuzzy, c-format
 msgid "AU1500 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/au1500.c:317
+#: src/bus/au1500.c:297
 msgid "AU1500 BUS Driver via BSR"
 msgstr ""
 
-#: src/bus/bcm1250.c:128
+#: src/bus/bcm1250.c:120
 #, c-format
 msgid "Broadcom BCM1250 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bcm1250.c:507
+#: src/bus/bcm1250.c:488
 msgid "Broadcom BCM1250 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Broadcom BCM1250 via BSR"
 
-#: src/bus/bf533_ezkit.c:150
+#: src/bus/bf533_ezkit.c:143
 #, fuzzy, c-format
 msgid "Blackfin BF533 EZKit compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf533_ezkit.c:342
+#: src/bus/bf533_ezkit.c:324
 msgid "Blackfin BF533 EZKit board bus driver"
 msgstr ""
 
-#: src/bus/bf533_stamp.c:151
+#: src/bus/bf533_stamp.c:144
 #, fuzzy, c-format
 msgid "Blackfin BF533 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf533_stamp.c:343
+#: src/bus/bf533_stamp.c:325
 msgid "Blackfin BF533 Stamp board bus driver"
 msgstr ""
 
-#: src/bus/bf537_stamp.c:352
+#: src/bus/bf537_stamp.c:334
 #, fuzzy, c-format
 msgid "Blackfin BF537 Stamp compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf537_stamp.c:357
+#: src/bus/bf537_stamp.c:339
 msgid "Blackfin BF537 Stamp board bus driver"
 msgstr ""
 
-#: src/bus/bf537_stamp.c:401
+#: src/bus/bf537_stamp.c:383
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF537 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf537_stamp.c:406
+#: src/bus/bf537_stamp.c:388
 msgid "Blackfin BF537 EZ-KIT board bus driver"
 msgstr ""
 
-#: src/bus/bf537_stamp.c:450
+#: src/bus/bf537_stamp.c:432
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF527 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf537_stamp.c:455
+#: src/bus/bf537_stamp.c:437
 #, fuzzy
 msgid "Blackfin BF527 EZ-KIT board bus driver"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf548_ezkit.c:149
+#: src/bus/bf548_ezkit.c:142
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF548 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf548_ezkit.c:331
+#: src/bus/bf548_ezkit.c:313
 msgid "Blackfin BF548 EZ-KIT board bus driver"
 msgstr ""
 
-#: src/bus/bf561_ezkit.c:154
+#: src/bus/bf561_ezkit.c:147
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF561 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "pilote de bus compatible Hitachi SH7751R via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/bf561_ezkit.c:354
+#: src/bus/bf561_ezkit.c:336
 msgid "Blackfin BF561 EZ-KIT board bus driver"
 msgstr ""
 
@@ -310,165 +310,157 @@ msgstr ""
 msgid "Out of memory\n"
 msgstr "Mémoire épuisée\n"
 
-#: src/bus/ejtag.c:118
+#: src/bus/ejtag.c:110
 #, fuzzy, c-format
 msgid "EJTAG compatible bus driver via PrAcc (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/ejtag.c:145
+#: src/bus/ejtag.c:137
 #, c-format
 msgid "%s(%d) EJADDRESS, EJDATA or EJCONTROL register not found\n"
 msgstr ""
 
-#: src/bus/ejtag.c:164
+#: src/bus/ejtag.c:156
 #, c-format
 msgid "%s(%d) Reset occurred, ctrl=%s\n"
 msgstr ""
 
-#: src/bus/ejtag.c:171
+#: src/bus/ejtag.c:163
 #, c-format
 msgid "%s(%d) No processor access, ctrl=%s\n"
 msgstr ""
 
-#: src/bus/ejtag.c:184
+#: src/bus/ejtag.c:176
 #, c-format
 msgid "%s(%d) PrAcc bad alignment: addr=0x%08x\n"
 msgstr ""
 
-#: src/bus/ejtag.c:198
+#: src/bus/ejtag.c:190
 #, c-format
 msgid "%s(%d) PrAcc write: addr=0x%08x data=0x%08x\n"
 msgstr ""
 
-#: src/bus/ejtag.c:205
+#: src/bus/ejtag.c:197
 #, c-format
 msgid "%s(%d) Unknown write addr=0x%08x data=0x%08x\n"
 msgstr ""
 
-#: src/bus/ejtag.c:249
+#: src/bus/ejtag.c:241
 #, c-format
 msgid "%s(%d) EJCONTROL or EJIMPCODE register not found\n"
 msgstr ""
 
-#: src/bus/ejtag.c:310
+#: src/bus/ejtag.c:302
 #, c-format
 msgid "%s(%d) Failed to enter debug mode, ctrl=%s\n"
 msgstr ""
 
-#: src/bus/ejtag.c:501
+#: src/bus/ejtag.c:493
 #, fuzzy
 msgid "EJTAG compatible bus driver via PrAcc"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/fjmem.c:96 src/bus/fjmem.c:111 src/bus/fjmem.c:192
-#: src/bus/fjmem.c:198 src/bus/fjmem.c:300 src/cmd/instruction.c:95
+#: src/bus/fjmem.c:91 src/bus/fjmem.c:106 src/bus/fjmem.c:187
+#: src/bus/fjmem.c:193 src/bus/fjmem.c:295 src/cmd/instruction.c:95
 #: src/cmd/register.c:71 src/cmd/register.c:85 src/cmd/salias.c:72
 #: src/cmd/signal.c:88 src/tap/detect.c:210 src/tap/detect.c:233
 #, c-format
 msgid "out of memory\n"
 msgstr "mémoire épuisée\n"
 
-#: src/bus/fjmem.c:106 src/cmd/instruction.c:84
+#: src/bus/fjmem.c:101 src/cmd/instruction.c:84
 #, c-format
 msgid "invalid instruction length\n"
 msgstr "longueur d'instruction invalide\n"
 
-#: src/bus/fjmem.c:368 src/cmd/bit.c:76 src/cmd/dr.c:53 src/cmd/get.c:57
-#: src/cmd/initbus.c:51 src/cmd/instruction.c:49 src/cmd/register.c:55
-#: src/cmd/salias.c:54 src/cmd/scan.c:55 src/cmd/set.c:58 src/cmd/signal.c:55
-#: src/cmd/test.c:59
-#, c-format
-msgid "%s: no active part\n"
-msgstr "%s: aucune pièce active\n"
-
-#: src/bus/fjmem.c:379
+#: src/bus/fjmem.c:367
 #, c-format
 msgid "Wrong parameter specification: %s\n"
 msgstr ""
 
-#: src/bus/fjmem.c:436
+#: src/bus/fjmem.c:424
 #, c-format
 msgid "Parameter for instruction opcode missing.\n"
 msgstr ""
 
-#: src/bus/fjmem.c:485
+#: src/bus/fjmem.c:473
 #, fuzzy, c-format
 msgid "fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/fjmem.c:607 src/bus/fjmem.c:639 src/bus/fjmem.c:673
-#: src/bus/fjmem.c:708 src/bus/jopcyc.c:546 src/bus/jopcyc.c:581
-#: src/bus/jopcyc.c:612 src/bus/jopcyc.c:644 src/bus/zefant-xs3.c:690
-#: src/bus/zefant-xs3.c:757 src/bus/zefant-xs3.c:805 src/bus/zefant-xs3.c:857
+#: src/bus/fjmem.c:592 src/bus/fjmem.c:624 src/bus/fjmem.c:658
+#: src/bus/fjmem.c:693 src/bus/jopcyc.c:539 src/bus/jopcyc.c:574
+#: src/bus/jopcyc.c:605 src/bus/jopcyc.c:637 src/bus/zefant-xs3.c:683
+#: src/bus/zefant-xs3.c:750 src/bus/zefant-xs3.c:798 src/bus/zefant-xs3.c:850
 #, c-format
 msgid "Address out of range\n"
 msgstr ""
 
-#: src/bus/fjmem.c:725
+#: src/bus/fjmem.c:710
 msgid ""
 "FPGA JTAG memory bus driver via USER register, requires parameters:\n"
 "           opcode=<USERx OPCODE> [len=<FJMEM REG LEN>]"
 msgstr ""
 
-#: src/bus/ixp425.c:128
+#: src/bus/ixp425.c:121
 #, c-format
 msgid "Intel IXP425 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/ixp425.c:309
+#: src/bus/ixp425.c:291
 msgid "Intel IXP425 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/jopcyc.c:355
+#: src/bus/jopcyc.c:348
 #, fuzzy, c-format
 msgid ""
 "JOP.design Cyclone Board compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/jopcyc.c:674
+#: src/bus/jopcyc.c:667
 #, fuzzy
 msgid "JOP.design Cyclone Board compatible bus driver via BSR"
 msgstr "pilote de bus compatible Broadcom BCM1250 via BSR"
 
-#: src/bus/lh7a400.c:149
+#: src/bus/lh7a400.c:142
 #, fuzzy, c-format
 msgid "Sharp LH7A400 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "pilote de bus compatible Hitachi SH7750R via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/lh7a400.c:338
+#: src/bus/lh7a400.c:320
 #, fuzzy
 msgid "Sharp LH7A400 compatible bus driver via BSR (flash access only!)"
 msgstr ""
 "pilote de bus compatible Hitachi SH7750R via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/mpc5200.c:134
+#: src/bus/mpc5200.c:127
 #, fuzzy, c-format
 msgid "Freescale MPC5200 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/mpc5200.c:157
+#: src/bus/mpc5200.c:139
 msgid "LocalPlus Bus"
 msgstr ""
 
-#: src/bus/mpc5200.c:319
+#: src/bus/mpc5200.c:301
 #, fuzzy
 msgid "Freescale MPC5200 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/mpc824x.c:111
+#: src/bus/mpc824x.c:107
 #, c-format
 msgid ""
 "   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:115
+#: src/bus/mpc824x.c:111
 #, c-format
 msgid "   Only 8,32 and 64 bus width are supported for Banks 0 and 1\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:124
+#: src/bus/mpc824x.c:120
 #, c-format
 msgid ""
 "Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n"
@@ -479,111 +471,111 @@ msgid ""
 "   dbgData    display data bus state (default - no)\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:144
+#: src/bus/mpc824x.c:140
 #, c-format
 msgid "   Using default bus width %d\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:244
+#: src/bus/mpc824x.c:235
 #, fuzzy, c-format
 msgid "Motorola MPC824x compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/mpc824x.c:276
+#: src/bus/mpc824x.c:256
 msgid "Base ROM Interface (Bank 1)"
 msgstr ""
 
-#: src/bus/mpc824x.c:285 src/bus/mpc824x.c:303
+#: src/bus/mpc824x.c:265 src/bus/mpc824x.c:283
 msgid "Base ROM Interface (Bank 0)"
 msgstr ""
 
-#: src/bus/mpc824x.c:339
+#: src/bus/mpc824x.c:319
 #, c-format
 msgid "Addr    [%2d:0]: %06X   "
 msgstr ""
 
-#: src/bus/mpc824x.c:384
+#: src/bus/mpc824x.c:364
 #, c-format
 msgid "Data WR [%d:0]: %08X   "
 msgstr ""
 
-#: src/bus/mpc824x.c:421
+#: src/bus/mpc824x.c:401
 #, c-format
 msgid "Data RD [%d:0]: %08X   "
 msgstr ""
 
-#: src/bus/mpc824x.c:533
+#: src/bus/mpc824x.c:513
 #, fuzzy
 msgid "Motorola MPC824x compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/ppc405ep.c:123
+#: src/bus/ppc405ep.c:116
 #, fuzzy, c-format
 msgid "IBM PowerPC 405EP compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/ppc405ep.c:285
+#: src/bus/ppc405ep.c:267
 #, fuzzy
 msgid "IBM PowerPC 405EP compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/ppc440gx_ebc8.c:125
+#: src/bus/ppc440gx_ebc8.c:118
 #, fuzzy, c-format
 msgid ""
 "IBM PowerPC 440GX 8-bit compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/ppc440gx_ebc8.c:287
+#: src/bus/ppc440gx_ebc8.c:269
 #, fuzzy
 msgid "IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/prototype.c:136
+#: src/bus/prototype.c:129
 #, c-format
 msgid "value %s not defined for parameter %s\n"
 msgstr ""
 
-#: src/bus/prototype.c:145
+#: src/bus/prototype.c:138
 #, fuzzy, c-format
 msgid "signal '%s' is not found\n"
 msgstr "signal '%s' non repéré\n"
 
-#: src/bus/prototype.c:173
+#: src/bus/prototype.c:166
 #, c-format
 msgid "parameter %s is unknown\n"
 msgstr ""
 
-#: src/bus/prototype.c:202
+#: src/bus/prototype.c:195
 #, c-format
 msgid "parameters alsb=<signal> and/or amsb=<signal> are not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:250
+#: src/bus/prototype.c:243
 #, c-format
 msgid "parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:255
+#: src/bus/prototype.c:248
 #, c-format
 msgid "parameter cs=<signal> or ncs=<signal> is not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:260
+#: src/bus/prototype.c:253
 #, c-format
 msgid "parameter oe=<signal> or noe=<signal> is not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:265
+#: src/bus/prototype.c:258
 #, c-format
 msgid "parameter we=<signal> or nwe=<signal> is not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:290
+#: src/bus/prototype.c:283
 #, fuzzy, c-format
 msgid "Configurable prototype bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/prototype.c:454
+#: src/bus/prototype.c:436
 msgid ""
 "Configurable prototype bus driver via BSR, requires parameters:\n"
 "           amsb=<addr MSB> alsb=<addr LSB> dmsb=<data MSB> dlsb=<data LSB>\n"
@@ -591,37 +583,37 @@ msgid ""
 "x8|x16|x32]"
 msgstr ""
 
-#: src/bus/pxa2x0.c:315
+#: src/bus/pxa2x0.c:308
 #, c-format
 msgid "Intel PXA2x0 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/pxa2x0.c:330
+#: src/bus/pxa2x0.c:323
 #, fuzzy, c-format
 msgid "Intel PXA27x compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/pxa2x0.c:399 src/bus/pxa2x0.c:490
+#: src/bus/pxa2x0.c:391 src/bus/pxa2x0.c:482
 msgid "Static Chip Select 0"
 msgstr "Sélection statique du module 0"
 
-#: src/bus/pxa2x0.c:461
+#: src/bus/pxa2x0.c:453
 msgid "Memory Mapped registers (Memory Ctl)"
 msgstr "Registres mémoire mappé (Ctl Mémoire)"
 
-#: src/bus/pxa2x0.c:555
+#: src/bus/pxa2x0.c:547
 msgid "PXA270 internal address space (cfg, SRAM)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:573
+#: src/bus/pxa2x0.c:565
 msgid "PXA270 SDRAM space (4x 64MB)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:800
+#: src/bus/pxa2x0.c:792
 msgid "Intel PXA2x0 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/pxa2x0.c:816
+#: src/bus/pxa2x0.c:808
 #, fuzzy
 msgid "Intel PXA27x compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
@@ -676,7 +668,7 @@ msgstr ""
 "\n"
 "Complété.\n"
 
-#: src/bus/s3c4510x.c:188
+#: src/bus/s3c4510x.c:181
 #, fuzzy, c-format
 msgid ""
 "Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%"
@@ -684,98 +676,98 @@ msgid ""
 msgstr ""
 "pilote de bus compatible Samsung S3C4510B via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/s3c4510x.c:411
+#: src/bus/s3c4510x.c:404
 msgid "Samsung S3C4510B compatible bus driver via BSR"
 msgstr "pilote de bus compatible Samsung S3C4510B via BSR"
 
-#: src/bus/sa1110.c:135
+#: src/bus/sa1110.c:128
 #, c-format
 msgid "Intel SA-1110 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/sa1110.c:323
+#: src/bus/sa1110.c:305
 msgid "Intel SA-1110 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR"
 
-#: src/bus/sh7727.c:145
+#: src/bus/sh7727.c:138
 #, c-format
 msgid "Hitachi SH7727 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "pilote de bus compatible Hitachi SH7727 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/sh7727.c:183
+#: src/bus/sh7727.c:165
 #, c-format
 msgid "Error: Invalid bus width (MD3 = MD4 = 0)!\n"
 msgstr "ERREUR: largeur de bus invalide (MD3 = MD4 = 0)!\n"
 
-#: src/bus/sh7727.c:364
+#: src/bus/sh7727.c:346
 msgid "Hitachi SH7727 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Hitachi SH7727 via BSR"
 
-#: src/bus/sh7750r.c:143
+#: src/bus/sh7750r.c:136
 #, c-format
 msgid "Hitachi SH7750R compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "pilote de bus compatible Hitachi SH7750R via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/sh7750r.c:346
+#: src/bus/sh7750r.c:328
 msgid "Hitachi SH7750R compatible bus driver via BSR"
 msgstr "pilote de bus compatible Hitachi SH7750R via BSR"
 
-#: src/bus/sh7751r.c:137
+#: src/bus/sh7751r.c:130
 #, c-format
 msgid "Hitachi SH7751R compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "pilote de bus compatible Hitachi SH7751R via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/sh7751r.c:334
+#: src/bus/sh7751r.c:316
 msgid "Hitachi SH7751R compatible bus driver via BSR"
 msgstr "pilote de bus compatible Hitachi SH7751R via BSR"
 
-#: src/bus/sharc21065l.c:132
+#: src/bus/sharc21065l.c:123
 #, fuzzy, c-format
 msgid ""
 "Analog Device's SHARC 21065L compatible bus driver via BSR (JTAG part No. %"
 "d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/sharc21065l.c:155
+#: src/bus/sharc21065l.c:135
 msgid "Boot Memory Select"
 msgstr ""
 
-#: src/bus/sharc21065l.c:329
+#: src/bus/sharc21065l.c:309
 #, fuzzy
 msgid "SHARC_21065L compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR"
 
-#: src/bus/slsup3.c:174
+#: src/bus/slsup3.c:167
 #, fuzzy, c-format
 msgid "SLS UP3 bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/slsup3.c:196
+#: src/bus/slsup3.c:178
 msgid "Flash Memory (2 MByte) byte mode"
 msgstr ""
 
-#: src/bus/slsup3.c:205
+#: src/bus/slsup3.c:187
 msgid "SRAM 128KByte (64K x 16)"
 msgstr ""
 
-#: src/bus/slsup3.c:214
+#: src/bus/slsup3.c:196
 msgid "LCD Display (RS select by A0)"
 msgstr ""
 
-#: src/bus/slsup3.c:441
+#: src/bus/slsup3.c:423
 #, fuzzy
 msgid "SLS UP3 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/tx4925.c:147
+#: src/bus/tx4925.c:140
 #, fuzzy, c-format
 msgid "Toshiba TX4925 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/tx4925.c:329
+#: src/bus/tx4925.c:311
 #, fuzzy
 msgid "Toshiba TX4925 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
@@ -805,7 +797,7 @@ msgstr "adr: 0x%08X\n"
 msgid "Short read: bc=0x%X\n"
 msgstr ""
 
-#: src/bus/zefant-xs3.c:429
+#: src/bus/zefant-xs3.c:422
 #, fuzzy, c-format
 msgid ""
 "Simple Solutions Zefant-XS3 Board compatible bus driver via BSR (JTAG part "
@@ -813,13 +805,13 @@ msgid ""
 msgstr ""
 "pilote de bus compatible Hitachi SH7727 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/zefant-xs3.c:735 src/bus/zefant-xs3.c:781 src/bus/zefant-xs3.c:835
-#: src/bus/zefant-xs3.c:944
+#: src/bus/zefant-xs3.c:728 src/bus/zefant-xs3.c:774 src/bus/zefant-xs3.c:828
+#: src/bus/zefant-xs3.c:937
 #, fuzzy, c-format
 msgid "Component type not supported\n"
 msgstr "Flash non supporté!\n"
 
-#: src/bus/zefant-xs3.c:951
+#: src/bus/zefant-xs3.c:944
 #, fuzzy
 msgid "Simple Solutions Zefant-XS3 Board compatible bus driver via BSR"
 msgstr "pilote de bus compatible Samsung S3C4510B via BSR"
@@ -841,6 +833,13 @@ msgstr ""
 #, c-format
 msgid "Run \"detect\" first.\n"
 msgstr "Eéxcuer \"détecter\" d'abord.\n"
+
+#: src/cmd/bit.c:76 src/cmd/dr.c:53 src/cmd/get.c:57 src/cmd/initbus.c:51
+#: src/cmd/instruction.c:49 src/cmd/register.c:55 src/cmd/salias.c:54
+#: src/cmd/scan.c:55 src/cmd/set.c:58 src/cmd/signal.c:55 src/cmd/test.c:59
+#, c-format
+msgid "%s: no active part\n"
+msgstr "%s: aucune pièce active\n"
 
 #: src/cmd/bit.c:83
 #, fuzzy, c-format
@@ -3056,7 +3055,7 @@ msgid "Olimex ARM-USB-OCD (FT2232) Cable"
 msgstr ""
 
 #: src/tap/cable/ft2232.c:1443
-msgid "Analog Devices BFIN-UJTAG (FT2232) Cable (EXPERIMENTAL)"
+msgid "Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
 #: src/tap/cable/ft2232.c:1475

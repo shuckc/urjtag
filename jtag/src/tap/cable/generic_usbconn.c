@@ -48,7 +48,7 @@ extern usbconn_cable_t usbconn_cable_jlink;
 #ifdef ENABLE_LOWLEVEL_FTD2XX
 extern usbconn_cable_t usbconn_cable_ft2232_ftd2xx;
 extern usbconn_cable_t usbconn_cable_armusbocd_ftd2xx;
-extern usbconn_cable_t usbconn_cable_bfin_ujtag_ftd2xx;
+extern usbconn_cable_t usbconn_cable_gnice_ftd2xx;
 extern usbconn_cable_t usbconn_cable_jtagkey_ftd2xx;
 extern usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx;
 extern usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx;
@@ -58,7 +58,7 @@ extern usbconn_cable_t usbconn_cable_signalyzer_ftd2xx;
 #ifdef ENABLE_LOWLEVEL_FTDI
 extern usbconn_cable_t usbconn_cable_ft2232_ftdi;
 extern usbconn_cable_t usbconn_cable_armusbocd_ftdi;
-extern usbconn_cable_t usbconn_cable_bfin_ujtag_ftdi;
+extern usbconn_cable_t usbconn_cable_gnice_ftdi;
 extern usbconn_cable_t usbconn_cable_jtagkey_ftdi;
 extern usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
 extern usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
@@ -94,7 +94,7 @@ usbconn_cable_t *usbconn_cables[] =
 #ifdef ENABLE_LOWLEVEL_FTD2XX
 	&usbconn_cable_ft2232_ftd2xx,
 	&usbconn_cable_armusbocd_ftd2xx,
-	&usbconn_cable_bfin_ujtag_ftd2xx,
+	&usbconn_cable_gnice_ftd2xx,
 	&usbconn_cable_jtagkey_ftd2xx,
 	&usbconn_cable_oocdlinks_ftd2xx,
 	&usbconn_cable_turtelizer2_ftd2xx,
@@ -104,7 +104,7 @@ usbconn_cable_t *usbconn_cables[] =
 #ifdef ENABLE_LOWLEVEL_FTDI
 	&usbconn_cable_ft2232_ftdi,
 	&usbconn_cable_armusbocd_ftdi,
-	&usbconn_cable_bfin_ujtag_ftdi,
+	&usbconn_cable_gnice_ftdi,
 	&usbconn_cable_jtagkey_ftdi,
 	&usbconn_cable_oocdlinks_ftdi,
 	&usbconn_cable_turtelizer2_ftdi,
