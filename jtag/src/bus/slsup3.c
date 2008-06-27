@@ -431,5 +431,5 @@ const bus_driver_t slsup3_bus = {
 	slsup3_bus_read_end,
 	generic_bus_read,
 	slsup3_bus_write,
-	NULL
+	generic_bus_no_init
 };

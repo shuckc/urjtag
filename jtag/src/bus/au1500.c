@@ -305,6 +305,6 @@ const bus_driver_t au1500_bus = {
 	au1500_bus_read_end,
 	generic_bus_read,
 	au1500_bus_write,
-	NULL
+	generic_bus_no_init
 };
 

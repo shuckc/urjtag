@@ -423,11 +423,11 @@ setup_data( bus_t *bus, uint32_t d, component_t *comp )
 }
 
 /**
- * bus->driver->(*prepare)
+ * bus->driver->(*init)
  *
  */
-static void
-jopcyc_bus_prepare( bus_t *bus )
+static int
+jopcyc_bus_init( bus_t *bus )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
@@ -474,8 +474,9 @@ jopcyc_bus_prepare( bus_t *bus )
 
 	chain_shift_data_registers( chain, 0 );
 
-	part_set_instruction( p, "EXTEST" );
-	chain_shift_instructions( chain );
+	INITIALIZED = 1;
+
+	return 0;
 }
 
 static int
@@ -668,14 +669,14 @@ const bus_driver_t jopcyc_bus = {
 	jopcyc_bus_new,
 	generic_bus_free,
 	jopcyc_bus_printinfo,
-	jopcyc_bus_prepare,
+	generic_bus_prepare_extest,
 	jopcyc_bus_area,
 	jopcyc_bus_read_start,
 	jopcyc_bus_read_next,
 	jopcyc_bus_read_end,
 	generic_bus_read,
 	jopcyc_bus_write,
-	NULL
+	jopcyc_bus_init
 };
 
 

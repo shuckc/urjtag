@@ -333,5 +333,5 @@ const bus_driver_t bf533_stamp_bus = {
 	bf533_stamp_bus_read_end,
 	generic_bus_read,
 	bf533_stamp_bus_write,
-	NULL
+	generic_bus_no_init
 };

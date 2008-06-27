@@ -54,12 +54,27 @@ generic_bus_free( bus_t *bus )
 }
 
 /**
+ * bus->driver->(*init)
+ *
+ */
+int
+generic_bus_no_init( bus_t *bus )
+{
+	INITIALIZED = 1;
+
+	return 0;
+}
+
+/**
  * bus->driver->(*prepare)
  *
  */
 void
 generic_bus_prepare_extest( bus_t *bus )
 {
+	if (!INITIALIZED)
+		bus_init( bus );
+
 	part_set_instruction( PART, "EXTEST" );
 	chain_shift_instructions( CHAIN );
 }

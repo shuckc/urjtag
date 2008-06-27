@@ -324,5 +324,5 @@ const bus_driver_t sh7751r_bus = {
 	sh7751r_bus_read_end,
 	generic_bus_read,
 	sh7751r_bus_write,
-	NULL
+	generic_bus_no_init
 };

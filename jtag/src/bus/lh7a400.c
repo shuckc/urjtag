@@ -328,5 +328,5 @@ const bus_driver_t lh7a400_bus = {
 	lh7a400_bus_read_end,
 	generic_bus_read,
 	lh7a400_bus_write,
-    NULL
+	generic_bus_no_init
 };

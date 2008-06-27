@@ -347,7 +347,7 @@ const bus_driver_t bf537_stamp_bus = {
 	bf537_stamp_bus_read_end,
 	generic_bus_read,
 	bf537_stamp_bus_write,
-	NULL
+	generic_bus_no_init
 };
 
 #endif /* #ifdef ENABLE_BUS_BF537_STAMP */
@@ -396,7 +396,7 @@ const bus_driver_t bf537_ezkit_bus = {
 	bf537_stamp_bus_read_end,
 	generic_bus_read,
 	bf537_stamp_bus_write,
-	NULL
+	generic_bus_no_init
 };
 
 #endif /* #ifdef ENABLE_BUS_BF537_EZKIT */
@@ -445,7 +445,7 @@ const bus_driver_t bf527_ezkit_bus = {
 	bf537_stamp_bus_read_end,
 	generic_bus_read,
 	bf537_stamp_bus_write,
-	NULL
+	generic_bus_no_init
 };
 
 #endif /* #ifdef ENABLE_BUS_BF527_EZKIT */

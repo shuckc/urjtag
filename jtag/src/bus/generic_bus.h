@@ -30,6 +30,7 @@
 int generic_bus_attach_sig( part_t *part, signal_t **sig, char *id );
 
 void generic_bus_free( bus_t *bus );
+int generic_bus_no_init( bus_t *bus );
 void generic_bus_prepare_extest( bus_t *bus );
 uint32_t generic_bus_read( bus_t *bus, uint32_t adr );
 

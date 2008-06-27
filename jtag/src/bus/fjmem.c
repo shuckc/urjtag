@@ -480,6 +480,9 @@ fjmem_bus_printinfo( bus_t *bus )
 static void
 fjmem_bus_prepare( bus_t *bus )
 {
+	if (!INITIALIZED)
+		bus_init( bus );
+
 	/* ensure FJMEM_INST is active */
 	part_set_instruction( PART, FJMEM_INST_NAME );
 	chain_shift_instructions( CHAIN );
@@ -719,7 +722,7 @@ const bus_driver_t fjmem_bus = {
 	fjmem_bus_read_end,
 	generic_bus_read,
 	fjmem_bus_write,
-	NULL
+	generic_bus_no_init
 };
 
 

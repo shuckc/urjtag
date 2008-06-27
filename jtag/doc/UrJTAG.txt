@@ -1243,10 +1243,17 @@ IMPORTANT: Address parameters to the functions listed above specify always
 byte locations, independent of the actual data width. The bus driver has to
 adjust the address on its own if required.
 
-===== Initialization =====
+===== Creation =====
 
 Upon calling of its bus_new() function, the driver allocates a "bus_t"
 structure and performs all required internal initializations.
+
+===== Initialization =====
+
+After creation of the new "bus_t" structure, the bus_init() function will
+be called to give the driver the possibility to initialize it's internal
+states or BSR bits as required. Such functionality has been split from
+bus_new() since some drivers require to re-initialize during runtime.
 
 ===== Cleaning up =====
 

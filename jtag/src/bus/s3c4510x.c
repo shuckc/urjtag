@@ -182,11 +182,11 @@ s3c4510_bus_printinfo( bus_t *bus )
 }
 
 /**
- * bus->driver->(*prepare)
+ * bus->driver->(*init)
  *
  */
-static void
-s3c4510_bus_prepare( bus_t *bus )
+static int
+s3c4510_bus_init( bus_t *bus )
 {
 		part_t *p = PART;
         chain_t *chain = CHAIN;
@@ -195,8 +195,9 @@ s3c4510_bus_prepare( bus_t *bus )
         chain_shift_instructions( chain );
         chain_shift_data_registers( chain, 0 );
 
-        part_set_instruction( p, "EXTEST" );
-        chain_shift_instructions( chain );
+	INITIALIZED = 1;
+
+	return 0;
 }
 
 /**
@@ -405,14 +406,14 @@ const bus_driver_t s3c4510_bus = {
 	s3c4510_bus_new,
 	generic_bus_free,
         s3c4510_bus_printinfo,
-        s3c4510_bus_prepare,
+        generic_bus_prepare_extest,
         s3c4510_bus_area,
         s3c4510_bus_read_start,
         s3c4510_bus_read_next,
         s3c4510_bus_read_end,
         generic_bus_read,
 	s3c4510_bus_write,
-	NULL
+	s3c4510_bus_init
 };
 
 

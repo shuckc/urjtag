@@ -277,5 +277,5 @@ const bus_driver_t ppc440gx_ebc8_bus = {
 	ppc440gx_ebc8_bus_read_end,
 	generic_bus_read,
 	ppc440gx_ebc8_bus_write,
-	NULL
+	generic_bus_no_init
 };

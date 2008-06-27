@@ -332,5 +332,5 @@ const bus_driver_t bf533_ezkit_bus = {
 	bf533_ezkit_bus_read_end,
 	generic_bus_read,
 	bf533_ezkit_bus_write,
-	NULL
+	generic_bus_no_init
 };

@@ -313,5 +313,5 @@ const bus_driver_t sa1110_bus = {
 	sa1110_bus_read_end,
 	generic_bus_read,
 	sa1110_bus_write,
-	NULL
+	generic_bus_no_init
 };

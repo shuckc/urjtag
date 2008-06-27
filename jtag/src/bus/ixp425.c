@@ -299,5 +299,5 @@ const bus_driver_t ixp425_bus = {
 	ixp425_bus_read_end,
 	generic_bus_read,
 	ixp425_bus_write,
-	NULL
+	generic_bus_no_init
 };

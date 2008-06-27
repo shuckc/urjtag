@@ -42,7 +42,6 @@
 #include "generic_bus.h"
 
 typedef struct {
-	int initialized;
 	uint32_t impcode;  /* EJTAG Implementation Register */
 	uint16_t adr_hi;   /* cached high bits of $3 */
 } bus_params_t;
@@ -90,7 +89,6 @@ ejtag_bus_new( chain_t *chain, char *cmd_params[] )
 
 	CHAIN = chain;
 	PART = chain->parts->parts[chain->active_part];
-	BP->initialized = 0;
 
 	return bus;
 }
@@ -156,14 +154,14 @@ ejtag_run_pracc( bus_t *bus, const uint32_t *code, unsigned int len )
 			printf( _("%s(%d) Reset occurred, ctrl=%s\n"),
 				__FILE__, __LINE__,
 				register_get_string( ejctrl->out ) );
-			BP->initialized = 0;
+			INITIALIZED = 0;
 			break;
 		}
 		if (! ejctrl->out->data[PrAcc]) {
 			printf( _("%s(%d) No processor access, ctrl=%s\n"),
 				__FILE__, __LINE__,
 				register_get_string( ejctrl->out ) );
-			BP->initialized = 0;
+			INITIALIZED = 0;
 			break;
 		}
 
@@ -314,7 +312,7 @@ ejtag_bus_init( bus_t *bus )
 
 	ejtag_run_pracc( bus, code, 4 );
 	BP->adr_hi = 0;
-	BP->initialized = 1;
+	INITIALIZED = 1;
 }
 
 /**
@@ -324,10 +322,8 @@ ejtag_bus_init( bus_t *bus )
 static void
 ejtag_bus_prepare( bus_t *bus )
 {
-	if (BP->initialized)
-		return;
-
-	ejtag_bus_init( bus );
+	if (!INITIALIZED)
+		bus_init( bus );
 }
 
 /**
@@ -501,5 +497,5 @@ const bus_driver_t ejtag_bus = {
 	ejtag_bus_read_end,
 	generic_bus_read,
 	ejtag_bus_write,
-	NULL
+	ejtag_bus_init
 };

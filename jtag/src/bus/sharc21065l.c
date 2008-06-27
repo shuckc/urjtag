@@ -317,5 +317,5 @@ const bus_driver_t sharc_21065L_bus = {
 	sharc_21065L_bus_read_end,
 	generic_bus_read,
 	sharc_21065L_bus_write,
-	NULL
+	generic_bus_no_init
 };

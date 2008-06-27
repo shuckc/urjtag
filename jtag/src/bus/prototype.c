@@ -446,6 +446,6 @@ const bus_driver_t prototype_bus = {
 	prototype_bus_read_end,
 	generic_bus_read,
 	prototype_bus_write,
-	NULL
+	generic_bus_no_init
 };
 

@@ -56,10 +56,12 @@ cmd_initbus_run( chain_t *chain, char *params[] )
 		if (strcasecmp( bus_drivers[i]->name, params[1] ) == 0) {
 			bus_t *bus = bus_drivers[i]->new_bus( chain, params );
 			if (bus == NULL) {
-				printf( _("bus initialization failed!\n") );
+				printf( _("bus alloc/attach failed!\n") );
 				return 1;
 			}
 			buses_add( bus );
+			if (bus_init( bus ))
+				printf( _("bus initialization failed!\n") );
 			return 1;
 		}
 	}

@@ -305,5 +305,5 @@ const bus_driver_t h7202_bus = {
 	h7202_bus_read_end,
 	generic_bus_read,
 	h7202_bus_write,
-	NULL
+	generic_bus_no_init
 };

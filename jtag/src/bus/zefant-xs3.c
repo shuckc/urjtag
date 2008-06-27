@@ -545,11 +545,11 @@ eeprom_disable_device( chain_t *chain, part_t *p, component_t *comp )
 }
 
 /**
- * bus->driver->(*prepare)
+ * bus->driver->(*init)
  *
  */
-static void
-zefant_xs3_bus_prepare( bus_t *bus )
+static int
+zefant_xs3_bus_init( bus_t *bus )
 {
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
@@ -605,8 +605,9 @@ zefant_xs3_bus_prepare( bus_t *bus )
 
 	chain_shift_data_registers( chain, 0 );
 
-	part_set_instruction( p, "EXTEST" );
-	chain_shift_instructions( chain );
+	INITIALIZED = 1;
+
+	return 0;
 }
 
 static int
@@ -945,14 +946,14 @@ const bus_driver_t zefant_xs3_bus = {
 	zefant_xs3_bus_new,
 	generic_bus_free,
 	zefant_xs3_bus_printinfo,
-	zefant_xs3_bus_prepare,
+	generic_bus_prepare_extest,
 	zefant_xs3_bus_area,
 	zefant_xs3_bus_read_start,
 	zefant_xs3_bus_read_next,
 	zefant_xs3_bus_read_end,
 	generic_bus_read,
 	zefant_xs3_bus_write,
-	NULL
+	zefant_xs3_bus_init
 };
 
 

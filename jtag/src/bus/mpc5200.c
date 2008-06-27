@@ -309,5 +309,5 @@ const bus_driver_t mpc5200_bus = {
 	mpc5200_bus_read_end,
 	generic_bus_read,
 	mpc5200_bus_write,
-    NULL
+	generic_bus_no_init
 };

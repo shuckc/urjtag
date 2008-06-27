@@ -247,8 +247,6 @@ pxa2x0_bus_new( chain_t *chain, char *cmd_params[] )
 		return NULL;
 	}
 
-	INITED = 0;
-
 	return bus;
 }
 
@@ -287,8 +285,6 @@ pxa27x_bus_new( chain_t *chain, char *cmd_params[] )
 		free( bus );
 		return NULL;
 	}
-
-	INITED = 0;
 
 	return bus;
 }
@@ -333,9 +329,6 @@ pxa2xx_bus_init( bus_t *bus )
 	chain_t *chain = CHAIN;
 	part_t *p = PART;
 
-	if (INITED == 1)
-		return 0;
-
 	part_set_instruction( p, "SAMPLE/PRELOAD" );
 	chain_shift_instructions( chain );
 	chain_shift_data_registers( chain, 1 );
@@ -358,21 +351,9 @@ pxa2xx_bus_init( bus_t *bus )
 	part_set_instruction( p, "BYPASS" );
 	chain_shift_instructions( chain );
 
-	INITED = 1;
+	INITIALIZED = 1;
 
 	return 0;
-}
-
-/**
- * bus->driver->(*prepare)
- *
- */
-static void
-pxa2xx_bus_prepare( bus_t *bus )
-{
-	(void)pxa2xx_bus_init( bus );
-
-	generic_bus_prepare_extest( bus );
 }
 
 /**
@@ -384,7 +365,6 @@ pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
 	uint32_t tmp_addr;
 	int ncs_index;
-	(void)pxa2xx_bus_init( bus );
 
 	/* Static Chip Select 0 (64 MB) */
 	if (adr < UINT32_C(0x04000000)) {
@@ -475,7 +455,6 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
 	uint32_t tmp_addr;
 	int ncs_index;
-	(void)pxa2xx_bus_init( bus );
 
 	/* Static Chip Select 0 (64 MB) */
 	if (adr < UINT32_C(0x04000000)) {
@@ -793,14 +772,14 @@ const bus_driver_t pxa2x0_bus = {
 	pxa2x0_bus_new,
 	generic_bus_free,
 	pxa2x0_bus_printinfo,
-	pxa2xx_bus_prepare,
+	generic_bus_prepare_extest,
 	pxa2xx_bus_area,
 	pxa2xx_bus_read_start,
 	pxa2xx_bus_read_next,
 	pxa2xx_bus_read_end,
 	generic_bus_read,
 	pxa2xx_bus_write,
-	NULL /* patch 909598 call pxax0_bus_init, but the patch fails and doesnt look compatible */
+	pxa2xx_bus_init
 };
 
 const bus_driver_t pxa27x_bus = {
@@ -809,7 +788,7 @@ const bus_driver_t pxa27x_bus = {
 	pxa27x_bus_new,
 	generic_bus_free,
 	pxa27x_bus_printinfo,
-	pxa2xx_bus_prepare,
+	generic_bus_prepare_extest,
 	pxa27x_bus_area,
 	pxa2xx_bus_read_start,
 	pxa2xx_bus_read_next,

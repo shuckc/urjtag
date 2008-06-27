@@ -577,6 +577,8 @@ avr32_bus_printinfo (bus_t * bus)
 static void
 avr32_bus_prepare (bus_t * bus)
 {
+	if (!INITIALIZED)
+		bus_init( bus );
 }
 
 /**
@@ -774,5 +776,5 @@ const bus_driver_t avr32_bus_driver = {
   avr32_bus_read_end,
   generic_bus_read,
   avr32_bus_write,
-  NULL
+  generic_bus_no_init
 };

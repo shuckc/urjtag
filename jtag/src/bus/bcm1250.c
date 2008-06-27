@@ -500,6 +500,6 @@ const bus_driver_t bcm1250_bus = {
 	bcm1250_bus_read,
 #endif
 	bcm1250_bus_write,
-	NULL
+	generic_bus_no_init
 };
 

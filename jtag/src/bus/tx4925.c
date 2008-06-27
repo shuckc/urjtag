@@ -319,5 +319,5 @@ const bus_driver_t tx4925_bus = {
 	tx4925_bus_read_end,
 	generic_bus_read,
 	tx4925_bus_write,
-	NULL
+	generic_bus_no_init
 };
