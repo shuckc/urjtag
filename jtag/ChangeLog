@@ -1,5 +1,7 @@
 2008-06-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * UrJTAG.txt: JTAGkey-Tiny
+
    * UrJTAG.txt: update of bus driver init() function
    * include/bus_driver.h, src/cmd/initbus.c, src/bus/bf548_ezkit.c,
      src/bus/fjmem.c, src/bus/ppc405ep.c, src/bus/sh7727.c,
