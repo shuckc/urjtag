@@ -1,0 +1,48 @@
+# 
+# $Id: smp8634 599 2004-06-13 18:16:43Z telka $ 
+# 
+# Copyright (C) 2008 andi2k (sf.net)
+# 
+# This program is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License 
+# as published by the Free Software Foundation; either version 2 
+# of the License, or (at your option) any later version. 
+# 
+# This program is distributed in the hope that it will be useful, 
+# but WITHOUT ANY WARRANTY; without even the implied warranty of 
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+# GNU General Public License for more details. 
+# 
+# You should have received a copy of the GNU General Public License 
+# along with this program; if not, write to the Free Software 
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 
+# 02111-1307, USA. 
+
+register BR 1 
+register BSR 1 
+register DIR 32 
+register EJIMPCODE 32 
+register EJADDRESS 32 
+register EJDATA 32 
+register EJCONTROL 32 
+register EJALL 96 
+register EJFASTDATA 33 
+ 
+instruction length 5 
+ 
+instruction BYPASS 11111 BR 
+instruction SAMPLE/PRELOAD 00010 BSR 
+instruction IDCODE 00001 DIR 
+instruction EJTAG_IMPCODE 00011 EJIMPCODE 
+instruction EJTAG_ADDRESS 01000 EJADDRESS 
+instruction EJTAG_DATA 01001 EJDATA 
+instruction EJTAG_CONTROL 01010 EJCONTROL 
+instruction EJTAG_ALL 01011 EJALL 
+instruction EJTAGBOOT 01100 BR 
+instruction NORMALBOOT 01101 BR 
+instruction EJTAG_FASTDATA 01110 EJFASTDATA 
+ 
+initbus ejtag 
+endian little 
+
+

@@ -138,6 +138,9 @@ nobase_dist_pkgdata_DATA = \
 	sharp/PARTS \
 	sharp/lh7a400/STEPPINGS \
 	sharp/lh7a400/lh7a400 \
+	sigma/PARTS \
+	sigma/smp8634/STEPPINGS \
+	sigma/smp8634/smp8634 \
 	toshiba/PARTS \
 	toshiba/tx4925/STEPPINGS \
 	toshiba/tx4925/tx4925 \

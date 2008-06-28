@@ -1,3 +1,8 @@
+2008-06-28  Kolja Waschk <kawk>
+
+   * data/sigma/smp8634/smp8634, data/sigma/smp8634/STEPPINGS,
+     data/sigma/PARTS, data/Makefile.am: Added Sigma SMP8634 (andi2k)
+
 2008-06-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * UrJTAG.txt: JTAGkey-Tiny
