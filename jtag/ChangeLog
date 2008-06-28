@@ -2,6 +2,8 @@
 
    * data/sigma/smp8634/smp8634, data/sigma/smp8634/STEPPINGS,
      data/sigma/PARTS, data/Makefile.am: Added Sigma SMP8634 (andi2k)
+   * doc/UrJTAG.txt: FAQ about CVS needed for autogen.sh and superuser
+     rights being needed for running "make install" (frankvh)
 
 2008-06-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 

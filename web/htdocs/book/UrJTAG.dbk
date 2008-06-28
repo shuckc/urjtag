@@ -4,7 +4,7 @@
 <book lang="en">
 <bookinfo>
     <title>Universal JTAG library, server and tools</title>
-    <date>2008-05-27</date>
+    <date>2008-06-27</date>
     <author>
         <firstname>Kolja</firstname>
         <othername>Waschk</othername>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>KW(</authorinitials>
 
-<revhistory><revision><revnumber>1256</revnumber><date>2008-05-27</date><authorinitials>KW(</authorinitials></revision></revhistory>
+<revhistory><revision><revnumber>1289</revnumber><date>2008-06-27</date><authorinitials>KW(</authorinitials></revision></revhistory>
 
 </bookinfo>
 <chapter id="_copyright">
@@ -299,6 +299,11 @@ Macraigor Wiggler JTAG Cable
 <listitem>
 <simpara>
 Amontec JTAGkey
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Amontec JTAGkey-Tiny (supported as cable "JTAGkey")
 </simpara>
 </listitem>
 <listitem>
@@ -2446,10 +2451,18 @@ bus_write() - Write access
 <important><simpara>Address parameters to the functions listed above specify always
 byte locations, independent of the actual data width. The bus driver has to
 adjust the address on its own if required.</simpara></important>
-<section id="_initialization_2">
-<title>Initialization</title>
+<section id="_creation">
+<title>Creation</title>
 <simpara>Upon calling of its bus_new() function, the driver allocates a "bus_t"
 structure and performs all required internal initializations.</simpara>
+
+</section>
+<section id="_initialization_2">
+<title>Initialization</title>
+<simpara>After creation of the new "bus_t" structure, the bus_init() function will
+be called to give the driver the possibility to initialize it's internal
+states or BSR bits as required. Such functionality has been split from
+bus_new() since some drivers require to re-initialize during runtime.</simpara>
 
 </section>
 <section id="_cleaning_up_2">
@@ -2719,6 +2732,16 @@ Q. When running autogen.sh, I get "Can't exec "autopoint": No such file or direc
 </varlistentry>
 <varlistentry>
 <term>
+Q. When running autogen.sh, it complains about missing CVS
+</term>
+<listitem>
+<simpara>
+  A. The easiest solution is to actually install CVS for this step, just to get around this error message.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
 Q. During compilation, I get "svf_bison.y: No such file or directory"
 </term>
 <listitem>
@@ -2748,6 +2771,16 @@ Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option
     install a newer version of flex from source to solve this. The distributed
     source tarball contains source pregenerated with a current flex version,
     you need flex yourself only to compile from fresh SVN checkouts.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+Q. When running "make install", I get "Permission denied" errors
+</term>
+<listitem>
+<simpara>
+  A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
 </simpara>
 </listitem>
 </varlistentry>

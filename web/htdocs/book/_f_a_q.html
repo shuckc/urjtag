@@ -129,6 +129,13 @@ CLASS="literal"
 </P
 ></DD
 ><DT
+>Q. When running autogen.sh, it complains about missing CVS</DT
+><DD
+><P
+>&#13;  A. The easiest solution is to actually install CVS for this step, just to get around this error message.
+</P
+></DD
+><DT
 >Q. During compilation, I get "svf_bison.y: No such file or directory"</DT
 ><DD
 ><P
@@ -151,6 +158,13 @@ CLASS="literal"
     install a newer version of flex from source to solve this. The distributed
     source tarball contains source pregenerated with a current flex version,
     you need flex yourself only to compile from fresh SVN checkouts.
+</P
+></DD
+><DT
+>Q. When running "make install", I get "Permission denied" errors</DT
+><DD
+><P
+>&#13;  A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
 </P
 ></DD
 ></DL

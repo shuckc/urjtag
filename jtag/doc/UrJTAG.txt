@@ -1404,6 +1404,9 @@ Q. When I type "cable parallel 0x378 DLC5" (in a Cygwin environment) I get "Erro
 Q. When running autogen.sh, I get "Can't exec "autopoint": No such file or directory"::
   A. You need the headers for gettext (e.g. Debian package "gettext-devel").
 
+Q. When running autogen.sh, it complains about missing CVS::
+  A. The easiest solution is to actually install CVS for this step, just to get around this error message.
+
 Q. During compilation, I get "svf_bison.y: No such file or directory"::
   A. You need "bison".
 
@@ -1416,6 +1419,9 @@ Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option
     install a newer version of flex from source to solve this. The distributed
     source tarball contains source pregenerated with a current flex version,
     you need flex yourself only to compile from fresh SVN checkouts.
+
+Q. When running "make install", I get "Permission denied" errors::
+  A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
 
 //========================================================================
 

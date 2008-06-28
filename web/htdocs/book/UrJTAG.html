@@ -881,6 +881,11 @@ CLASS="emphasis"
 ></LI
 ><LI
 ><P
+>&#13;Amontec JTAGkey-Tiny (supported as cable "JTAGkey")
+</P
+></LI
+><LI
+><P
 >&#13;Olimex ARM-USB-JTAG
 </P
 ></LI
@@ -1648,7 +1653,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN345"
+NAME="AEN347"
 ></A
 ><TABLE
 BORDER="0"
@@ -2531,7 +2536,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN600"
+NAME="AEN602"
 ></A
 ><TABLE
 BORDER="0"
@@ -2640,7 +2645,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN632"
+NAME="AEN634"
 ></A
 ><TABLE
 BORDER="0"
@@ -2788,7 +2793,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN676"
+NAME="AEN678"
 ></A
 ><TABLE
 BORDER="0"
@@ -3041,7 +3046,7 @@ CELLPADDING="5"
 ><DIV
 CLASS="sidebar"
 ><A
-NAME="AEN742"
+NAME="AEN744"
 ></A
 ><P
 ><B
@@ -3422,7 +3427,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN831"
+NAME="AEN833"
 ></A
 ><TABLE
 BORDER="0"
@@ -4256,8 +4261,8 @@ CLASS="section"
 ><HR><H4
 CLASS="section"
 ><A
-NAME="_initialization_2"
->4.2.3.1. Initialization</A
+NAME="_creation"
+>4.2.3.1. Creation</A
 ></H4
 ><P
 >Upon calling of its bus_new() function, the driver allocates a "bus_t"
@@ -4268,8 +4273,22 @@ CLASS="section"
 ><HR><H4
 CLASS="section"
 ><A
+NAME="_initialization_2"
+>4.2.3.2. Initialization</A
+></H4
+><P
+>After creation of the new "bus_t" structure, the bus_init() function will
+be called to give the driver the possibility to initialize it's internal
+states or BSR bits as required. Such functionality has been split from
+bus_new() since some drivers require to re-initialize during runtime.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
 NAME="_cleaning_up_2"
->4.2.3.2. Cleaning up</A
+>4.2.3.3. Cleaning up</A
 ></H4
 ><P
 >The driver is supposed to free all allocated memory (including its "bus_t"
@@ -4282,7 +4301,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_short_description"
->4.2.3.3. Short description</A
+>4.2.3.4. Short description</A
 ></H4
 ><P
 >Prints a message describing the driver. This function is called by the "print"
@@ -4294,7 +4313,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_preparation"
->4.2.3.4. Preparation</A
+>4.2.3.5. Preparation</A
 ></H4
 ><P
 >This function is called whenever a bus operation is initiated. The
@@ -4311,7 +4330,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_description_of_the_bus_geometry"
->4.2.3.5. Description of the bus geometry</A
+>4.2.3.6. Description of the bus geometry</A
 ></H4
 ><P
 >At certain stages, the bus driver's bus_area() function is called by other
@@ -4354,7 +4373,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_initiate_reading"
->4.2.3.6. Initiate reading</A
+>4.2.3.7. Initiate reading</A
 ></H4
 ><P
 >Since the JTAG state machine defines a capture-shift-update sequence, it is
@@ -4369,7 +4388,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_read_access"
->4.2.3.7. Read access</A
+>4.2.3.8. Read access</A
 ></H4
 ><P
 >The bus_read_next() function fetches the read data from the device that has
@@ -4436,7 +4455,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_finish_reading"
->4.2.3.8. Finish reading</A
+>4.2.3.9. Finish reading</A
 ></H4
 ><P
 >Function "bus_read_end()" is called at the end of a read sequence. I.e. when
@@ -4450,7 +4469,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_atomic_reading"
->4.2.3.9. Atomic reading</A
+>4.2.3.10. Atomic reading</A
 ></H4
 ><P
 >For ease of use, a bus driver has to supply a "bus_read()" function that
@@ -4464,7 +4483,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_write_access"
->4.2.3.10. Write access</A
+>4.2.3.11. Write access</A
 ></H4
 ><P
 >This function writes one data element at the specified address. Since this
@@ -4655,6 +4674,13 @@ CLASS="literal"
 </P
 ></DD
 ><DT
+>Q. When running autogen.sh, it complains about missing CVS</DT
+><DD
+><P
+>&#13;  A. The easiest solution is to actually install CVS for this step, just to get around this error message.
+</P
+></DD
+><DT
 >Q. During compilation, I get "svf_bison.y: No such file or directory"</DT
 ><DD
 ><P
@@ -4677,6 +4703,13 @@ CLASS="literal"
     install a newer version of flex from source to solve this. The distributed
     source tarball contains source pregenerated with a current flex version,
     you need flex yourself only to compile from fresh SVN checkouts.
+</P
+></DD
+><DT
+>Q. When running "make install", I get "Permission denied" errors</DT
+><DD
+><P
+>&#13;  A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
 </P
 ></DD
 ></DL
