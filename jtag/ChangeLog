@@ -6,6 +6,20 @@
    * src/lib/lrealpath.c: Likewise.
    * doc/UrJTAG.txt: Likewise.
    * data/atmel/PARTS: Likewise.
+
+   * src/bus/bf537_stamp.c (bus_driver_t bf538f_ezkit_bus): New.
+     (bus_driver_t bf526_ezkit_bus): New.
+   * src/bus/buses.c (bus_drivers[]): Add bf526_ezkit_bus and
+       bf538f_ezkit_bus.
+   * src/bus/buses.h (bf526_ezkit_bus): Declare.
+     (bf538f_ezkit_bus): Declare.
+   * src/bus/Makefile.am (libbus_a_SOURCES): Add bf537_stamp.c
+       for bf526 ezkit and bf538f ezkit.
+   * configure.ac: Add bf526_ezkit and bf538f_ezkit.
+   * data/analog/PARTS: Add bf538.
+   * data/Makefile.am (nobase_dist_pkgdata_DATA): Add
+       analog/bf538/STEPPINGS and analog/bf538/bf538.
+
    * src/tap/cable/ft2232.c: Make the gnICE comment a little more specific.
 
 2008-07-02  Jie Zhang  <jie.zhang@analog.com>
