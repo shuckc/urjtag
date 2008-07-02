@@ -54,7 +54,7 @@ cmd_initbus_run( chain_t *chain, char *params[] )
 
 	for (i = 0; bus_drivers[i] != NULL; i++) {
 		if (strcasecmp( bus_drivers[i]->name, params[1] ) == 0) {
-			bus_t *bus = bus_drivers[i]->new_bus( chain, params );
+			bus_t *bus = bus_drivers[i]->new_bus( chain, bus_drivers[i], params );
 			if (bus == NULL) {
 				printf( _("bus alloc/attach failed!\n") );
 				return 1;

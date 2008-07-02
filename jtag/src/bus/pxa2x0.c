@@ -133,26 +133,28 @@ typedef struct {
 
 #define	INITED		((bus_params_t *) bus->params)->inited
 
-/*
+/**
  * bus->driver->(*new_bus)
  *
  */
-static int
-pxa2xx_bus_new_common(bus_t * bus)
+static bus_t *
+pxa2xx_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] )
 {
 	part_t *part;
+	bus_t *bus;
         ncs_map_entry* ncs_map = NULL;
 	char buff[10];
 	int i;
 	int failed = 0;
-#ifdef PREPATCHNEVER
-	bus_t *bus;
+
+	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
+		return NULL;
 
 	bus = calloc( 1, sizeof (bus_t) );
 	if (!bus)
 		return NULL;
 
-	bus->driver = &pxa2x0_bus;
+	bus->driver = driver;
 	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );
@@ -160,9 +162,16 @@ pxa2xx_bus_new_common(bus_t * bus)
 	}
 
 	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
-#endif
-	part = PART;
+	PART = part = chain->parts->parts[chain->active_part];
+	if (strcmp (driver->name, "pxa2x0") == 0)
+		PROC = PROC_PXA25x;
+	else if (strcmp (driver->name, "pxa27x") == 0)
+		PROC = PROC_PXA27x;
+	else {
+		free (bus->params);
+		free (bus);
+		return NULL;
+	}
 
 	for (i = 0; i < 26; i++) {
 		sprintf( buff, "MA[%d]", i );
@@ -208,78 +217,6 @@ pxa2xx_bus_new_common(bus_t * bus)
 
 	failed |= generic_bus_attach_sig( part, &(nSDCAS), "nSDCAS" );
 
-	return failed;
-}
-
-/**
- * bus->driver->(*new_bus)
- *
- */
-static bus_t *
-pxa2x0_bus_new( chain_t *chain, char *cmd_params[] )
-{
-	bus_t *bus;
-	int failed = 0;
-
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
-
-	bus = calloc( 1, sizeof (bus_t) );
-	if (!bus)
-		return NULL;
-
-	bus->driver = &pxa2x0_bus;
-	bus->params = calloc( 1, sizeof (bus_params_t) );
-	if (!bus->params) {
-		free( bus );
-		return NULL;
-	}
-
-	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
-	PROC = PROC_PXA25x;
-
-	failed = pxa2xx_bus_new_common(bus);
-
-	if (failed) {
-		free( bus->params );
-		free( bus );
-		return NULL;
-	}
-
-	return bus;
-}
-
-/**
- * bus->driver->(*new_bus)
- *
- */
-static bus_t *
-pxa27x_bus_new( chain_t *chain, char *cmd_params[] )
-{
-	bus_t *bus;
-	int failed = 0;
-
-	if (!chain || !chain->parts || chain->parts->len <= chain->active_part || chain->active_part < 0)
-		return NULL;
-
-	bus = calloc( 1, sizeof (bus_t) );
-	if (!bus)
-		return NULL;
-
-	bus->driver = &pxa27x_bus;
-	bus->params = calloc( 1, sizeof (bus_params_t) );
-	if (!bus->params) {
-		free( bus );
-		return NULL;
-	}
-
-	CHAIN = chain;
-	PART = chain->parts->parts[chain->active_part];
-	PROC = PROC_PXA27x;
-
-	failed = pxa2xx_bus_new_common(bus);
-
 	if (failed) {
 		free( bus->params );
 		free( bus );
@@ -294,29 +231,14 @@ pxa27x_bus_new( chain_t *chain, char *cmd_params[] )
  *
  */
 static void
-pxa2x0_bus_printinfo( bus_t *bus )
+pxa2xx_bus_printinfo( bus_t *bus )
 {
 	int i;
 
 	for (i = 0; i < CHAIN->parts->len; i++)
 		if (PART == CHAIN->parts->parts[i])
 			break;
-	printf( _("Intel PXA2x0 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
-}
-
-/**
- * bus->driver->(*printinfo)
- *
- */
-static void
-pxa27x_bus_printinfo( bus_t *bus )
-{
-	int i;
-
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Intel PXA27x compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+	printf( _("%s (JTAG part No. %d)\n"), bus->driver->description, i );
 }
 
 /**
@@ -769,9 +691,9 @@ pxa2xx_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 const bus_driver_t pxa2x0_bus = {
 	"pxa2x0",
 	N_("Intel PXA2x0 compatible bus driver via BSR"),
-	pxa2x0_bus_new,
+	pxa2xx_bus_new,
 	generic_bus_free,
-	pxa2x0_bus_printinfo,
+	pxa2xx_bus_printinfo,
 	generic_bus_prepare_extest,
 	pxa2xx_bus_area,
 	pxa2xx_bus_read_start,
@@ -785,9 +707,9 @@ const bus_driver_t pxa2x0_bus = {
 const bus_driver_t pxa27x_bus = {
 	"pxa27x",
 	N_("Intel PXA27x compatible bus driver via BSR"),
-	pxa27x_bus_new,
+	pxa2xx_bus_new,
 	generic_bus_free,
-	pxa27x_bus_printinfo,
+	pxa2xx_bus_printinfo,
 	generic_bus_prepare_extest,
 	pxa27x_bus_area,
 	pxa2xx_bus_read_start,

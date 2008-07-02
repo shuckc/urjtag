@@ -71,7 +71,7 @@ char dbgData = 0;
  *
  */
 static bus_t *
-mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
+mpc824x_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] )
 {
 	bus_t *bus;
 	part_t *part;
@@ -145,7 +145,7 @@ mpc824x_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!bus)
 		return NULL;
 
-	bus->driver = &mpc824x_bus;
+	bus->driver = driver;
 	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );

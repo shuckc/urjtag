@@ -47,11 +47,12 @@ typedef struct {
 } bus_area_t;
 
 typedef struct bus bus_t;
+typedef struct bus_driver bus_driver_t;
 
-typedef struct bus_driver {
+struct bus_driver {
 	const char *name;
 	const char *description;
-	bus_t *(*new_bus)( chain_t *chain, char *cmd_params[] );
+	bus_t *(*new_bus)( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] );
 	void (*free_bus)( bus_t *bus );
 	void (*printinfo)( bus_t *bus );
 	void (*prepare)( bus_t *bus );
@@ -62,7 +63,7 @@ typedef struct bus_driver {
 	uint32_t (*read)( bus_t *bus, uint32_t adr );
 	void (*write)( bus_t *bus, uint32_t adr, uint32_t data );
 	int (*init) (bus_t *bus);
-} bus_driver_t;
+};
 
 struct bus {
 	chain_t *chain;

@@ -89,7 +89,7 @@ prototype_bus_signal_parse( char *str, char *fmt, int *inst )
  *
  */
 static bus_t *
-prototype_bus_new( chain_t *chain, char *cmd_params[] )
+prototype_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] )
 {
 	bus_t *bus;
 	signal_t *sig;
@@ -102,7 +102,7 @@ prototype_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!bus)
 		return NULL;
 
-	bus->driver = &prototype_bus;
+	bus->driver = driver;
 	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );

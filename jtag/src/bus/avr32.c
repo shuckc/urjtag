@@ -475,7 +475,7 @@ check_instruction (part_t * part, const char *instr)
  *
  */
 static bus_t *
-avr32_bus_new (chain_t * chain, char *cmd_params[])
+avr32_bus_new (chain_t * chain, const bus_driver_t *driver, char *cmd_params[])
 {
   bus_t *bus;
   part_t *part;
@@ -541,7 +541,7 @@ avr32_bus_new (chain_t * chain, char *cmd_params[])
   if (!bus)
     return NULL;
 
-  bus->driver = &avr32_bus_driver;
+  bus->driver = driver;
   bus->params = calloc( 1, sizeof (bus_params_t) );
   if (!bus->params)
   {

@@ -70,7 +70,7 @@ typedef struct {
  *
  */
 static bus_t *
-tx4925_bus_new( chain_t *chain, char *cmd_params[] )
+tx4925_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] )
 {
 	bus_t *bus;
 	part_t *part;
@@ -82,7 +82,7 @@ tx4925_bus_new( chain_t *chain, char *cmd_params[] )
 	if (!bus)
 		return NULL;
 
-	bus->driver = &tx4925_bus;
+	bus->driver = driver;
 	bus->params = calloc( 1, sizeof (bus_params_t) );
 	if (!bus->params) {
 		free( bus );

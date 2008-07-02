@@ -347,7 +347,7 @@ fjmem_query_blocks( chain_t *chain, part_t *part, bus_t *bus )
  *
  */
 static bus_t *
-fjmem_bus_new( chain_t *chain, char *params[] )
+fjmem_bus_new( chain_t *chain, const bus_driver_t *driver, char *params[] )
 {
 	bus_t *bus = NULL;
 	int failed = 0;
@@ -392,7 +392,7 @@ fjmem_bus_new( chain_t *chain, char *params[] )
 		if (!bus)
 			return NULL;
 
-		bus->driver = &fjmem_bus;
+		bus->driver = driver;
 		bus->params = calloc( 1, sizeof (bus_params_t) );
 		if (!bus->params) {
 			free( bus );

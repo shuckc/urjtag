@@ -1,3 +1,63 @@
+2008-07-02  Jie Zhang  <jie.zhang@analog.com>
+
+   * include/bus_driver.h (struct bus_driver): Add driver argument
+       to new_bus.
+   * src/cmd/initbus.c (cmd_initbus_run): Pass driver to new_bus.
+   * src/bus/bf548_ezkit.c (bf548_ezkit_bus_new): Add driver
+       argument and use it.
+   * src/bus/fjmem.c (fjmem_bus_new): Likewise.
+   * src/bus/ppc405ep.c (ppc405ep_bus_new): Likewise.
+   * src/bus/sh7727.c (sh7727_bus_new): Likewise.
+   * src/bus/prototype.c (prototype_bus_new): Likewise.
+   * src/bus/sa1110.c (sa1110_bus_new): Likewise.
+   * src/bus/ppc440gx_ebc8.c (ppc440gx_ebc8_bus_new): Likewise.
+   * src/bus/sh7750r.c (sh7750r_bus_new): Likewise.
+   * src/bus/tx4925.c (tx4925_bus_new): Likewise.
+   * src/bus/bf533_stamp.c (bf533_stamp_bus_new): Likewise.
+   * src/bus/bf533_ezkit.c (bf533_ezkit_bus_new): Likewise.
+   * src/bus/ixp425.c (ixp425_bus_new): Likewise.
+   * src/bus/avr32.c (avr32_bus_new): Likewise.
+   * src/bus/zefant-xs3.c (zefant_xs3_bus_new): Likewise.
+   * src/bus/h7202.c (h7202_bus_new): Likewise.
+   * src/bus/mpc824x.c (mpc824x_bus_new): Likewise.
+   * src/bus/bcm1250.c (bcm1250_bus_new): Likewise.
+   * src/bus/sharc21065l.c (sharc_21065L_bus_new): Likewise.
+   * src/bus/au1500.c (au1500_bus_new): Likewise.
+   * src/bus/lh7a400.c (lh7a400_bus_new): Likewise.
+   * src/bus/sh7751r.c (sh7751r_bus_new): Likewise.
+   * src/bus/mpc5200.c (mpc5200_bus_new): Likewise.
+   * src/bus/jopcyc.c (jopcyc_bus_new): Likewise.
+   * src/bus/bf561_ezkit.c (bf561_ezkit_bus_new): Likewise.
+   * src/bus/slsup3.c (slsup3_bus_new): Likewise.
+   * src/bus/s3c4510x.c (s3c4510_bus_new): Likewise.
+   * src/bus/ejtag.c (ejtag_bus_new): Likewise.
+   * src/bus/pxa2x0.c (pxa2xx_bus_new_common): Remove.
+     (pxa2xx_bus_new): New.
+     (pxa2x0_bus_new): Remove.
+     (pxa27x_bus_new): Remove.
+     (pxa2xx_bus_printinfo): New.
+     (pxa2x0_bus_printinfo): Remove.
+     (pxa27x_bus_printinfo): Remove.
+     (bus_driver_t pxa2x0_bus): Replace pxa2x0_bus_new with
+       pxa2xx_bus_new. Replace pxa2x0_bus_printinfo with
+       pxa2xx_bus_printinfo.
+     (bus_driver_t pxa27x_bus): Replace pxa27x_bus_new with
+       pxa2xx_bus_new. Replace pxa27x_bus_printinfo with
+       pxa2xx_bus_printinfo.
+   * src/bus/bf537_stamp.c (bf537_stamp_bus_new_1): Rename
+       to ...
+     (bf537_stamp_bus_new): ... this. And use the new driver
+       argument.
+     (bf537_ezkit_bus_new): Remove.
+     (bf527_ezkit_bus_new): Remove.
+     (bf537_stamp_bus_printinfo): Use description in bus driver.
+     (bf537_ezkit_bus_printinfo): Remove.
+     (bf527_ezkit_bus_printinfo): Remove.
+     (BF537_STAMP_BUS_FUNCTIONS): Define.
+     (bus_driver_t bf537_stamp_bus): Use BF537_STAMP_BUS_FUNCTIONS.
+     (bus_driver_t bf537_ezkit_bus): Likewise.
+     (bus_driver_t bf527_ezkit_bus): Likewise.
+
 2008-06-28  Kolja Waschk <kawk>
 
    * data/sigma/smp8634/smp8634, data/sigma/smp8634/STEPPINGS,
