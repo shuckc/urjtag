@@ -6,6 +6,7 @@
    * src/lib/lrealpath.c: Likewise.
    * doc/UrJTAG.txt: Likewise.
    * data/atmel/PARTS: Likewise.
+   * src/tap/cable/ft2232.c: Make the gnICE comment a little more specific.
 
 2008-07-02  Jie Zhang  <jie.zhang@analog.com>
 

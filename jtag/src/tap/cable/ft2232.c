@@ -112,7 +112,7 @@
 #define BITMASK_ARMUSBOCD_nTSRST (1 << BIT_ARMUSBOCD_nTRST)
 #define BITMASK_ARMUSBOCD_nTRST_nOE (1 << BIT_ARMUSBOCD_nTRST_nOE)
 #define BITMASK_ARMUSBOCD_RED_LED (1 << BIT_ARMUSBOCD_RED_LED)
-/* bit and bitmask definitions for gnICE */
+/* bit and bitmask definitions for Blackfin gnICE */
 #define BIT_GNICE_nTRST 1
 #define BIT_GNICE_nLED 3 
 #define BITMASK_GNICE_nTRST (1 << BIT_GNICE_nTRST)
