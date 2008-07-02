@@ -17,6 +17,8 @@
        for bf526 ezkit and bf538f ezkit.
    * configure.ac: Add bf526_ezkit and bf538f_ezkit.
    * data/analog/PARTS: Add bf538.
+   * analog/bf538/STEPPINGS: New file.
+   * analog/bf538/bf538: New file.
    * data/Makefile.am (nobase_dist_pkgdata_DATA): Add
        analog/bf538/STEPPINGS and analog/bf538/bf538.
 
