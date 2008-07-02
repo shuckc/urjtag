@@ -78,7 +78,7 @@ relative prefix can be found, return @code{NULL}.
 #  define HAVE_DOS_BASED_FILE_SYSTEM
 #  define HAVE_HOST_EXECUTABLE_SUFFIX
 #  define HOST_EXECUTABLE_SUFFIX ".exe"
-#  ifndef DIR_SEPARATOR_2 
+#  ifndef DIR_SEPARATOR_2
 #    define DIR_SEPARATOR_2 '\\'
 #  endif
 #  define PATH_SEPARATOR ';'

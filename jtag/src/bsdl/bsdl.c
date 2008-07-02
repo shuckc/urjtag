@@ -201,7 +201,7 @@ void bsdl_set_path(chain_t *chain, const char *pathlist)
   char *pathelem;
   int num;
   size_t len;
-  
+
   /* free memory of current path list */
   if (globs->path_list) {
     for (num = 0; globs->path_list[num]; num++)
@@ -220,9 +220,9 @@ void bsdl_set_path(chain_t *chain, const char *pathlist)
       globs->path_list = (char **)realloc(globs->path_list, (num+1) * sizeof(char *));
       /* enter path element up to the delimeter */
       if (delim == NULL)
-      	len = strlen(elem);
+        len = strlen(elem);
       else
-      	len = delim-elem;
+        len = delim-elem;
       pathelem = malloc(len + 1);
       memcpy(pathelem, elem, len);
       pathelem[len] = '\0';
