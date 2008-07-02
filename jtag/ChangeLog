@@ -1,3 +1,9 @@
+2008-07-03  Mike Frysinger  <vapier@gentoo.org>
+
+   * src/lib/ansidecl.h, src/lib/libiberty.h: Import headers from binutils
+     that the local src/lib/ files need for relocatable support.
+   * src/lib/Makefile.am (libiberty_sources): Add local headers to the list.
+
 2008-07-03  Jie Zhang  <jie.zhang@analog.com>
 
    * src/bsdl/bsdl.c: Remove trailing whitespaces.
