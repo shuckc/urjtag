@@ -359,3 +359,23 @@ const bus_driver_t bf527_ezkit_bus = {
 };
 
 #endif /* #ifdef ENABLE_BUS_BF527_EZKIT */
+
+#ifdef ENABLE_BUS_BF538F_EZKIT
+
+const bus_driver_t bf538f_ezkit_bus = {
+	"bf538f_ezkit",
+	N_("Blackfin BF538F EZ-KIT board bus driver"),
+	BF537_STAMP_BUS_FUNCTIONS
+};
+
+#endif /* #ifdef ENABLE_BUS_BF538F_EZKIT */
+
+#ifdef ENABLE_BUS_BF526_EZKIT
+
+const bus_driver_t bf526_ezkit_bus = {
+	"bf526_ezkit",
+	N_("Blackfin BF526 EZ-KIT board bus driver"),
+	BF537_STAMP_BUS_FUNCTIONS
+};
+
+#endif /* #ifdef ENABLE_BUS_BF526_EZKIT */

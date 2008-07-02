@@ -65,6 +65,8 @@ nobase_dist_pkgdata_DATA = \
 	analog/bf533/bf533 \
 	analog/bf537/STEPPINGS \
 	analog/bf537/bf537 \
+	analog/bf538/STEPPINGS \
+	analog/bf538/bf538 \
 	analog/bf548/STEPPINGS \
 	analog/bf548/bf548 \
 	analog/bf561/STEPPINGS \

@@ -39,6 +39,9 @@ const bus_driver_t *bus_drivers[] = {
 #ifdef ENABLE_BUS_BCM1250
 	&bcm1250_bus,
 #endif
+#ifdef ENABLE_BUS_BF526_EZKIT
+	&bf526_ezkit_bus,
+#endif
 #ifdef ENABLE_BUS_BF527_EZKIT
 	&bf527_ezkit_bus,
 #endif
@@ -53,6 +56,9 @@ const bus_driver_t *bus_drivers[] = {
 #endif
 #ifdef ENABLE_BUS_BF537_EZKIT
 	&bf537_ezkit_bus,
+#endif
+#ifdef ENABLE_BUS_BF538F_EZKIT
+	&bf538f_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF548_EZKIT
 	&bf548_ezkit_bus,
