@@ -44,6 +44,13 @@
 #include "usbconn/libftdx.h"
 
 
+/* enables debug output */
+#undef DEBUG
+#ifdef DEBUG
+static const char *module = "usbconn_ftd2xx_";
+#endif
+
+
 typedef struct {
   /* USB device information */
   unsigned int vid;
@@ -75,6 +82,13 @@ usbconn_ftd2xx_flush( ftd2xx_param_t *p )
 
   if (!p->fc)
     return -1;
+
+#ifdef DEBUG
+  printf( "%sflush begin:\n", module );
+  printf( "  send_buf_len %d, send_buffered %d\n", p->send_buf_len, p->send_buffered );
+  printf( "  recv_buf_len %d, to_recv %d\n", p->recv_buf_len, p->to_recv );
+  printf( "  recv_write_idx %d, recv_read_idx %d\n", p->recv_write_idx, p->recv_read_idx );
+#endif
 
   if (p->send_buffered == 0)
     return 0;
@@ -119,6 +133,9 @@ usbconn_ftd2xx_flush( ftd2xx_param_t *p )
     p->recv_write_idx += recvd;
   }
 
+#ifdef DEBUG
+  printf( "%sflush end: status %ld, xferred %ld, recvd %ld\n", module, status, xferred, recvd );
+#endif
   return status != FT_OK ? -1 : xferred;
 }
 
@@ -131,6 +148,10 @@ usbconn_ftd2xx_read( usbconn_t *conn, uint8_t *buf, int len )
   int cpy_len;
   FT_STATUS status = FT_OK;
   DWORD recvd = 0;
+
+#ifdef DEBUG
+  printf( "%sread begin: len %d\n", module, len );
+#endif
 
   if (!p->fc)
     return -1;
@@ -165,6 +186,9 @@ usbconn_ftd2xx_read( usbconn_t *conn, uint8_t *buf, int len )
         printf( _("usbconn_ftd2xx_read(): Error from FT_Read(): %d\n"), (int)status );
   }
 
+#ifdef DEBUG
+  printf( "%sread end  : status %ld, length %d\n", module, status, cpy_len+len );
+#endif
   return status != FT_OK ? -1 : cpy_len + len;
 }
 
@@ -178,6 +202,10 @@ usbconn_ftd2xx_write( usbconn_t *conn, uint8_t *buf, int len, int recv )
 
   if (!p->fc)
     return -1;
+
+#ifdef DEBUG
+  printf( "%swrite begin: len %d, recv %d\n", module, len, recv );
+#endif
 
   /* this write function will try to buffer write data
      buffering will be ceased and a flush triggered in two cases. */
@@ -213,6 +241,9 @@ usbconn_ftd2xx_write( usbconn_t *conn, uint8_t *buf, int len, int recv )
       xferred = usbconn_ftd2xx_flush( p );
     }
 
+#ifdef DEBUG
+    printf( "%swrite end: xferred %d\n", module, xferred );
+#endif
     return xferred < 0 ? -1 : len;
   }
   else

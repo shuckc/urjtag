@@ -1,5 +1,7 @@
 2008-07-09  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/tap/usbconn/libftd2xx.c: added some debugging messages
+
    * src/tap/usbconn/libftd2xx.c (usbconn_ftd2xx_write),
      src/tap/usbconn/libftdi.c (usbconn_ftdi_write): don't subtract from
      p->to_recv
