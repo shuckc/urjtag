@@ -1,3 +1,9 @@
+2008-07-09  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/usbconn/libftd2xx.c (usbconn_ftd2xx_write),
+     src/tap/usbconn/libftdi.c (usbconn_ftdi_write): don't subtract from
+     p->to_recv
+
 2008-07-03  Mike Frysinger  <vapier@gentoo.org>
 
    * src/lib/ansidecl.h, src/lib/libiberty.h: Import headers from binutils

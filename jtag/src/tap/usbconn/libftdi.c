@@ -203,7 +203,8 @@ usbconn_ftdi_write( usbconn_t *conn, uint8_t *buf, int len, int recv )
   {
     memcpy( &(p->send_buf[p->send_buffered]), buf, len );
     p->send_buffered += len;
-    p->to_recv       += recv;
+    if (recv > 0)
+      p->to_recv     += recv;
 
     if (recv < 0)
     {
