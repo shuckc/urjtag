@@ -1,3 +1,8 @@
+2008-07-10  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/usbconn/libftd2xx.c (usbconn_ftd2xx_open): perform device reset
+     and RX purge
+
 2008-07-09  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/usbconn/libftd2xx.c: added some debugging messages

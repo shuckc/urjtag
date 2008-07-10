@@ -330,7 +330,7 @@ usbconn_ftd2xx_common_open( usbconn_t *conn )
 
   if ((status = FT_Open( 0, &(p->fc) )) != FT_OK)
   {
-    perror( "Unable to open FTDO device.\n" );
+    perror( "Unable to open FTDI device.\n" );
     /* mark ftd2xx layer as not initialized */
     p->fc = NULL;
     return -1;
@@ -353,7 +353,12 @@ usbconn_ftd2xx_open( usbconn_t *conn )
 
   fc = p->fc;
 
-  if ((status =  FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK)
+  if ((status = FT_ResetDevice( fc )) != FT_OK)
+    perror( _("Can't reset device.\n") );
+  if (status == FT_OK) if ((status =  FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
+    perror( _("Can't purge RX buffer.\n") );
+
+  if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK)
     perror( _("Can't disable bitmode.\n") );
 
   if (status == FT_OK) if ((status = FT_SetLatencyTimer(fc, 2)) != FT_OK)
