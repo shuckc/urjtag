@@ -28,10 +28,9 @@
 #include <string.h>
 
 #include "jtag.h"
+#include "tap.h"
 
 #include "cmd.h"
-
-void jtag_reset( chain_t *chain );
 
 static int
 cmd_reset_run( chain_t *chain, char *params[] )
@@ -42,7 +41,7 @@ cmd_reset_run( chain_t *chain, char *params[] )
 	if (!cmd_test_cable( chain ))
 		return 1;
 
-	jtag_reset( chain );
+	tap_reset_bypass( chain );
 
 	return 1;
 }

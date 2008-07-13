@@ -40,6 +40,7 @@ typedef struct chain_t chain_t;
 struct chain_t {
 	int state;
 	parts_t *parts;
+	int total_instr_len;
 	int active_part;
 	cable_t *cable;
 	bsdl_globs_t bsdl;

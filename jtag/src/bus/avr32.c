@@ -39,8 +39,7 @@
 #include "buses.h"
 #include "generic_bus.h"
 #include "data_register.h"
-
-void jtag_reset (chain_t * chain);
+#include "tap.h"
 
 typedef struct {
   unsigned int mode;
@@ -271,7 +270,7 @@ nexus_access_start (bus_t * bus)
 static void
 nexus_access_end (bus_t * bus)
 {
-  jtag_reset (CHAIN);
+  tap_reset_bypass (CHAIN);
 }
 
 static void

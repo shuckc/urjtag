@@ -36,10 +36,30 @@ tap_reset( chain_t *chain )
 {
 	tap_state_reset( chain );
 
-	chain_defer_clock( chain, 1, 0, 5 );				/* Test-Logic-Reset */
-	chain_defer_clock( chain, 0, 0, 1 );				/* Run-Test/Idle */
+	chain_clock( chain, 1, 0, 5 );				/* Test-Logic-Reset */
+	chain_clock( chain, 0, 0, 1 );				/* Run-Test/Idle */
+}
 
-	parts_set_instruction( chain->parts, "BYPASS" );
+void
+tap_reset_bypass( chain_t *chain )
+{
+	tap_reset( chain );
+
+	/* set all parts in the chain to BYPASS instruction if the total
+		 instruction register length of the chain is already known */
+	if (chain->total_instr_len > 0) {
+		tap_register *ir = register_fill( register_alloc( chain->total_instr_len ), 1 );
+		if (!ir) {
+			printf( _("out of memory\n") );
+			return;
+		}
+
+		tap_capture_ir( chain );
+		tap_shift_register( chain, ir, NULL, EXITMODE_IDLE );
+		register_free( ir );
+
+		parts_set_instruction( chain->parts, "BYPASS" );
+	}
 }
 
 void

@@ -203,6 +203,7 @@ detect_parts( chain_t *chain, const char *db_path )
 		return 0;
 
 	printf( _("IR length: %d\n"), irlen );
+	chain->total_instr_len = irlen;
 
 	/* Allocate IR */
 	ir = register_fill( register_alloc( irlen ), 1 );
@@ -211,7 +212,7 @@ detect_parts( chain_t *chain, const char *db_path )
 		return 0;
 	}
 
-	tap_shift_register( chain, ir, NULL, 1 );
+	tap_shift_register( chain, ir, NULL, EXITMODE_IDLE );
 	register_free( ir );
 
 	/* Detect chain length */
@@ -253,10 +254,10 @@ detect_parts( chain_t *chain, const char *db_path )
 		struct id_record idr;
 		char *p;
 
-		tap_shift_register( chain, one, br, 0 );
+		tap_shift_register( chain, one, br, EXITMODE_SHIFT );
 		if (register_compare( one, br ) == 0) {
 			/* part with id */
-			tap_shift_register( chain, ones, id, 0 );
+			tap_shift_register( chain, ones, id, EXITMODE_SHIFT );
 			register_shift_left( id, 1 );
 			id->data[0] = 1;
 			did = id;
@@ -374,13 +375,13 @@ detect_parts( chain_t *chain, const char *db_path )
 	}
 
 	for (i = 0; i < 32; i++) {
-		tap_shift_register( chain, one, br, 0 );
+		tap_shift_register( chain, one, br, EXITMODE_SHIFT );
 		if (register_compare( one, br ) != 0) {
 			printf( _("Error: Unable to detect JTAG chain end!\n") );
 			break;
 		}
 	}
-	tap_shift_register( chain, one, NULL, 1 );
+	tap_shift_register( chain, one, NULL, EXITMODE_IDLE );
 
 	register_free( one );
 	register_free( ones );
@@ -459,6 +460,9 @@ int manual_add(chain_t *chain, int instr_len)
 		printf( _("Error: could not set BYPASS instruction") );
 		return 0;
 	}
+
+	/* update total instruction register length of chain */
+	chain->total_instr_len += instr_len;
 
 	return chain->parts->len;
 }

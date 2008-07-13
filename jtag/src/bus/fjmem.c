@@ -114,7 +114,7 @@ fjmem_detect_reg_len( chain_t *chain, part_t *part, char *opcode, int len )
 	   -> they're in BYPASS mode now */
 	chain_set_trst( chain, 0 );
 	chain_set_trst( chain, 1 );
-	tap_reset( chain );
+	tap_reset_bypass( chain );
 
 	/* flood all BYPASS registers with 0 for the following detection */
 	register_fill( dr->in, 0);

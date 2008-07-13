@@ -42,6 +42,7 @@ chain_alloc( void )
 
 	chain->cable = NULL;
 	chain->parts = NULL;
+	chain->total_instr_len = 0;
 	chain->active_part = 0;
 	BSDL_GLOBS_INIT(chain->bsdl);
 	tap_state_init( chain );
