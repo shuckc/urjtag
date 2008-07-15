@@ -1,3 +1,8 @@
+2008-07-15  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * doc/UrJTAG.txt, src/cmd/dr.c (cmd_dr_help):
+     document feature to set active data register with dr
+
 2008-07-14  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * include/chain.h, include/tap.h, src/cmd/reset.c, src/tap/detect.c,

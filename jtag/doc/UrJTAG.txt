@@ -567,7 +567,7 @@ example usage.
 *detect*::      detect parts on the JTAG chain
 *detectflash*:: detect parameters of flash chips attached to a part
 *discovery*::   discovery of unknown parts in the JTAG chain
-*dr*::          display active data register for a part
+*dr*::          display or set active data register for a part
 *endian*::      set/print endianess for reading/writing binary files
 *eraseflash*::  erase flash memory by number of blocks
 *flashmem*::    burn flash memory with data from a file
@@ -789,7 +789,7 @@ using one of the supplied tools (or use the new BSDL subsystem, see below).
 The following commands can be used to directly manipulate and display the state
 of the TAP controller(s) and registers in the chain:
 
-*dr*::          display active data register for a part
+*dr*::          display or set active data register for a part
 *instruction*:: change active instruction for a part or declare new instruction
 *get*::         get external signal value
 *scan*::        detect changes on input pins of current part
