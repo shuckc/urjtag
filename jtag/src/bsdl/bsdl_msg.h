@@ -1,9 +1,7 @@
 /*
  * $Id$
  *
- * Reduced version of the global sysdep.h that is suitable for the
- * BSDL subsystem components. config.h defines a number of macros
- * that collide with BSDL tokens.
+ * Copyright (C) 2008, Arnim Laeuger
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,26 +18,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
+ * Written by Arnim Laeuger <arniml@users.sourceforge.net>, 2007.
+ *
  */
 
-#ifndef BSDL_SYSDEP_H
-#define	BSDL_SYSDEP_H
+#ifndef BSDL_MSG_H
+#define BSDL_MSG_H
 
+/* message types for bsdl_msg() */
+#define BSDL_MSG_NOTE  0
+#define BSDL_MSG_WARN  1
+#define BSDL_MSG_ERR   2
+#define BSDL_MSG_FATAL 3
 
-#include "bsdl_config.h"
+void bsdl_msg( int, const char *, ... );
 
-#include "gettext.h"
-#define	_(s)		gettext(s)
-#define	N_(s)		gettext_noop(s)
-#define	P_(s,p,n)	ngettext(s,p,n)
-
-#ifdef S_SPLINT_S
-#undef gettext
-#define	gettext(s)	s
-#undef gettext_noop
-#define	gettext_noop(s)	s
-#undef ngettext
-#define	ngettext(s,p,n)	s
-#endif
-
-#endif /* BSDL_SYSDEP_H */
+#endif /* BSDL_MSG_H */

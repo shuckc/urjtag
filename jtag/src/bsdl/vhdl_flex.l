@@ -118,7 +118,7 @@ LEGAL NOTICES:
 
 %option bison-bridge
 %option reentrant
-%option prefix="bsdl"
+%option prefix="vhdl"
 %option outfile="lex.yy.c"
 
 %{
@@ -131,8 +131,8 @@ LEGAL NOTICES:
 
 #include "bsdl_msg.h"
 
-#include "bsdl_bison.h"
-#include "bsdl_parser.h"
+#include "vhdl_bison.h"
+#include "vhdl_parser.h"
 
 #ifdef DMALLOC
 #include "dmalloc.h"
@@ -145,7 +145,6 @@ static char *new_string( const char * );
 #define BINARY 0
 #define DECIMAL 1
 #define BIN_X 2
-#define HEX 3
 
 %}
 %a  2800
@@ -154,68 +153,64 @@ static char *new_string( const char * );
 %n   520
 %k   140
 %o  3000
-%START RES BOU REG PAC ISC
+%START RES BOU REG PAC
 White          [ \t\b\r]*
 VHDL_Comment   \-\-[^\n]*
-Binary_Pattern [0-1]+
 Bin_X_Pattern  [0-1X]+
-Hex_String     [0-9A-F]+
 Digit          [0-9]
 Exponent       [E][+-]?{Digit}+
 Real_Number    {Digit}+[\.]{Digit}+{Exponent}
 Decimal_Number {Digit}+
 Identifier     [A-Z][A-Z0-9_]*
+Quoted_String  \"[^\"\n]*\"
+Concatenate    &
+Single_Quote   [\']
+Semicolon      ;
 Eol            [\n]
 Comma          [,]
 Lparen         [\(]
 Rparen         [\)]
-Lbracket       [\[]
-Rbracket       [\]]
+Colon_Equal    \:\=
 Colon          [\:]
-Asterisk       [\*]
-Dollar         [\$]
-Equal          [\=]
-Plus           [\+]
-Minus          [\-]
-Sh_Right       [\>][\>]
-Sh_Left        [\<][\<]
-Tilde          [\~]
-Question_Exclamation [\?][\!]
-Question       [\?]
-Exclamation    [\!]
-Illegal        [^A-Z0-9 \t\b\n\r\"\&\'\*\(\)\[\]\_\:\.\,\;\$\=\+\-\>\<\~\?\!]
+Period         [\.]
+Box            [\<][\>]
+Illegal        [^A-Z0-9 \t\b\n\r\"\&\'\*\(\)\[\]\_\:\.\,\;\<\>]
+Entity         ENTITY
+Port           PORT
+Generic        GENERIC
+Use            USE
+Attribute      ATTRIBUTE
+Is             IS
+Of             OF
 Constant       CONSTANT
+String         STRING
+End            END
+All            ALL
 Physical_Pin_Map PHYSICAL_PIN_MAP
-Pin_Map        PIN_MAP
 Pin_Map_String PIN_MAP_STRING
-Tap_Scan_In    TAP_SCAN_IN
-Tap_Scan_Out   TAP_SCAN_OUT
-Tap_Scan_Clock TAP_SCAN_CLOCK
-Tap_Scan_Mode  TAP_SCAN_MODE
-Tap_Scan_Reset TAP_SCAN_RESET
-Instruction_Length   INSTRUCTION_LENGTH
-Instruction_Opcode   INSTRUCTION_OPCODE
-Instruction_Capture  INSTRUCTION_CAPTURE
-Instruction_Disable  INSTRUCTION_DISABLE
-Instruction_Guard    INSTRUCTION_GUARD
-Instruction_Private  INSTRUCTION_PRIVATE
-Register_Access      REGISTER_ACCESS
-Boundary_Length      BOUNDARY_LENGTH
-Boundary_Register    BOUNDARY_REGISTER
-Idcode_Register      IDCODE_REGISTER
-Usercode_Register    USERCODE_REGISTER
-Boundary       BOUNDARY
-Bypass         BYPASS
-Clamp          CLAMP
-Extest         EXTEST
-Highz          HIGHZ
-Idcode         IDCODE
-Intest         INTEST
-Preload        PRELOAD
-Runbist        RUNBIST
-Sample         SAMPLE
-Usercode       USERCODE
-Device_Id      DEVICE_ID
+True           TRUE
+False          FALSE
+Signal         SIGNAL
+Low            LOW
+Both           BOTH
+Out            OUT
+Inout          INOUT
+In             IN
+Buffer         BUFFER
+Linkage        LINKAGE
+Bit_Vector     BIT_VECTOR
+Bit            BIT
+To             TO
+Downto         DOWNTO
+Package        PACKAGE
+Body           BODY
+Type           TYPE
+Subtype        SUBTYPE
+Record         RECORD
+Array          ARRAY
+Positive       POSITIVE
+Range          RANGE
+Cell_Info      CELL_INFO
 Input          INPUT
 Output2        OUTPUT2
 Output3        OUTPUT3
@@ -228,135 +223,63 @@ Bidir          BIDIR
 Bidir_In       BIDIR_IN
 Bidir_Out      BIDIR_OUT
 Z              Z
-Weak0          WEAK0
-Weak1          WEAK1
-Pull0          PULL0
-Pull1          PULL1
-Keeper         KEEPER
-Compliance_Patterns   COMPLIANCE_PATTERNS
-Component_Conformance COMPONENT_CONFORMANCE
-Std_1149_1_1990       STD_1149_1_1990
-Std_1149_1_1993       STD_1149_1_1993
-Std_1149_1_2001       STD_1149_1_2001
-ISC_Conformance       ISC_CONFORMANCE
-Std_1532_2001         STD_1532_2001
-Std_1532_2002         STD_1532_2002
-ISC_Pin_Behavior      ISC_PIN_BEHAVIOR
-ISC_Fixed_System_Pins ISC_FIXED_SYSTEM_PINS
-ISC_Status            ISC_STATUS
-Implemented           IMPLEMENTED
-ISC_Blank_Usercode    ISC_BLANK_USERCODE
-ISC_Security          ISC_SECURITY
-ISC_Disable_Read      ISC_DISABLE_READ
-ISC_Disable_Program   ISC_DISABLE_PROGRAM
-ISC_Disable_Erase     ISC_DISABLE_ERASE
-ISC_Disable_Key       ISC_DISABLE_KEY
-ISC_Flow              ISC_FLOW
-Unprocessed           UNPROCESSED
-Exit_On_Error         EXIT_ON_ERROR
-Array                 ARRAY
-Security              SECURITY
-Initialize            INITIALIZE
-Repeat                REPEAT
-Terminate             TERMINATE
-Loop                  LOOP
-Wait                  WAIT
-Min                   MIN
-Max                   MAX
-Crc                   CRC
-Ost                   OST
-ISC_Procedure         ISC_PROCEDURE
-ISC_Action            ISC_ACTION
-Proprierary           PROPRIETARY
-Optional              OPTIONAL
-Recommended           RECOMMENDED
-ISC_Illegal_Exit      ISC_ILLEGAL_EXIT
+Extest         EXTEST
+Sample         SAMPLE
+Intest         INTEST
+Runbist        RUNBIST
+Pi             PI
+Po             PO
+Upd            UPD
+Cap            CAP
+X              X
+Zero           ZERO
+One            ONE
+Bsdl_Extension BSDL_EXTENSION
+Std_1532_2001  STD_1532_2001
+Std_1532_2002  STD_1532_2002
 %%
+{Entity}                {return( ENTITY ); }
+{Port}                  {yyextra->Base = DECIMAL;  /* Default number base */
+                         return( PORT ); }
+{Generic}               {yyextra->Base = DECIMAL; return( GENERIC ); }
+{Use}                   {yyextra->Base = DECIMAL; return( USE ); }
+{Attribute}             {yyextra->Base = DECIMAL; return( ATTRIBUTE ); }
+{Is}                    {return( IS ); }
 {Constant}              {yyextra->Base = DECIMAL; return( CONSTANT ); }
-{Pin_Map}               {return( PIN_MAP ); }
+{String}                {return( STRING ); }
+{End}                   {yyextra->Base = DECIMAL;
+                         BEGIN INITIAL; /* Turn off start conditions */
+                         return( END ); }
+{All}                   {return( ALL ); }
+{Of}                    {return( OF ); }
 {Physical_Pin_Map}      {return( PHYSICAL_PIN_MAP ); }
 {Pin_Map_String}        {return( PIN_MAP_STRING ); }
-{Tap_Scan_In}           {return( TAP_SCAN_IN ); }
-{Tap_Scan_Out}          {return( TAP_SCAN_OUT ); }
-{Tap_Scan_Clock}        {return( TAP_SCAN_CLOCK ); }
-{Tap_Scan_Mode}         {return( TAP_SCAN_MODE ); }
-{Tap_Scan_Reset}        {return( TAP_SCAN_RESET ); }
-{Instruction_Length}    {yyextra->Base = DECIMAL; return( INSTRUCTION_LENGTH ); }
-{Instruction_Opcode}    {yyextra->Base = BINARY;  /* Enable Binary Patterns */
-                         return( INSTRUCTION_OPCODE ); }
-{Instruction_Capture}   {yyextra->Base = BIN_X;  /* Enable Bin_X Patterns */
-                         return( INSTRUCTION_CAPTURE ); }
-{Instruction_Disable}   {return( INSTRUCTION_DISABLE ); }
-{Instruction_Guard}     {return( INSTRUCTION_GUARD ); }
-{Instruction_Private}   {return( INSTRUCTION_PRIVATE ); }
-{Register_Access}       {BEGIN(REG); yyextra->Base = DECIMAL;
-                         return( REGISTER_ACCESS ); }
-{Boundary_Length}       {return( BOUNDARY_LENGTH ); }
-{Boundary_Register}     {BEGIN(BOU); yyextra->Base = DECIMAL;
-                         return( BOUNDARY_REGISTER ); }
-{Idcode_Register}       {yyextra->Base = BIN_X; return( IDCODE_REGISTER ); }
-{Usercode_Register}     {yyextra->Base = BIN_X; return( USERCODE_REGISTER ); }
-{Compliance_Patterns}   {yyextra->Base = DECIMAL; return( COMPLIANCE_PATTERNS ); }
-{Component_Conformance} {return( COMPONENT_CONFORMANCE ); }
-{Std_1149_1_1990}       {return( STD_1149_1_1990 ); }
-{Std_1149_1_1993}       {return( STD_1149_1_1993 ); }
-{Std_1149_1_2001}       {return( STD_1149_1_2001 ); }
-{ISC_Conformance}       {yyextra->Base = DECIMAL; return( ISC_CONFORMANCE ); }
+{True}                  {return( TRUE ); }
+{False}                 {return( FALSE ); }
+{Signal}                {return( SIGNAL ); }
+{Low}                   {return( LOW ); }
+{Both}                  {return( BOTH ); }
+{In}                    {return( IN ); }
+{Out}                   {return( OUT ); }
+{Inout}                 {return( INOUT ); }
+{Buffer}                {return( BUFFER ); }
+{Linkage}               {return( LINKAGE ); }
+{Bit}                   {return( BIT ); }
+{Bit_Vector}            {return( BIT_VECTOR ); }
+{To}                    {return( TO ); }
+{Downto}                {return( DOWNTO ); }
+{Package}               {return( PACKAGE ); }
+{Body}                  {return( BODY ); }
+{Type}                  {return( TYPE ); }
+{Subtype}               {return( SUBTYPE ); }
+{Record}                {return( RECORD ); }
+{Array}                 {yyextra->Base = DECIMAL; return( ARRAY ); }
+{Positive}              {return( POSITIVE ); }
+{Range}                 {return( RANGE ); }
+{Cell_Info}             {BEGIN PAC; return( CELL_INFO ); }
+{Bsdl_Extension}        {return( BSDL_EXTENSION ); }
 {Std_1532_2001}         {return( STD_1532_2001 ); }
 {Std_1532_2002}         {return( STD_1532_2002 ); }
-{ISC_Pin_Behavior}      {BEGIN(ISC); yyextra->Base = DECIMAL; return( ISC_PIN_BEHAVIOR ); }
-{ISC_Fixed_System_Pins} {yyextra->Base = DECIMAL; return( ISC_FIXED_SYSTEM_PINS ); }
-{ISC_Status}            {yyextra->Base = DECIMAL; return( ISC_STATUS ); }
-<ISC>{Implemented}      {return( IMPLEMENTED ); }
-{ISC_Blank_Usercode}    {yyextra->Base = BIN_X; return( ISC_BLANK_USERCODE ); }
-{ISC_Security}          {yyextra->Base = DECIMAL; return( ISC_SECURITY ); }
-{ISC_Disable_Read}      {yyextra->Base = DECIMAL; return( ISC_DISABLE_READ ); }
-{ISC_Disable_Program}   {yyextra->Base = DECIMAL; return( ISC_DISABLE_PROGRAM ); }
-{ISC_Disable_Erase}     {yyextra->Base = DECIMAL; return( ISC_DISABLE_ERASE ); }
-{ISC_Disable_Key}       {yyextra->Base = DECIMAL; return( ISC_DISABLE_KEY ); }
-{ISC_Flow}              {yyextra->Base = DECIMAL; return( ISC_FLOW ); }
-<ISC>{Unprocessed}      {return( UNPROCESSED ); }
-<ISC>{Exit_On_Error}    {return( EXIT_ON_ERROR ); }
-<ISC>{Array}            {return( ARRAY ); }
-<ISC>{Security}         {return( SECURITY ); }
-<ISC>{Preload}          {return( PRELOAD ); }
-<ISC>{Initialize}       {return( INITIALIZE ); }
-<ISC>{Repeat}           {yyextra->Base = DECIMAL; return( REPEAT ); }
-<ISC>{Terminate}        {return( TERMINATE ); }
-<ISC>{Loop}             {return( LOOP ); }
-<ISC>{Wait}             {return( WAIT ); }
-<ISC>{Min}              {return( MIN ); }
-<ISC>{Max}              {return( MAX ); }
-<ISC>{Crc}              {return( CRC ); }
-<ISC>{Ost}              {return( OST ); }
-<ISC>{Dollar}           {return( DOLLAR ); }
-<ISC>{Equal}            {return( EQUAL ); }
-<ISC>{Plus}             {return( PLUS ); }
-<ISC>{Minus}            {return( MINUS ); }
-<ISC>{Sh_Right}         {return( SH_RIGHT ); }
-<ISC>{Sh_Left}          {return( SH_LEFT ); }
-<ISC>{Tilde}            {return( TILDE ); }
-<ISC>{Question_Exclamation}  {return( QUESTION_EXCLAMATION ); }
-<ISC>{Question}         {return( QUESTION_MARK ); }
-<ISC>{Exclamation}      {return( EXCLAMATION_MARK ); }
-{ISC_Procedure}         {yyextra->Base = DECIMAL; return( ISC_PROCEDURE ); }
-{ISC_Action}            {yyextra->Base = DECIMAL; return( ISC_ACTION ); }
-<ISC>{Proprierary}      {return( PROPRIETARY ); }
-<ISC>{Optional}         {return( OPTIONAL ); }
-<ISC>{Recommended}      {return( RECOMMENDED ); }
-{ISC_Illegal_Exit}      {return( ISC_ILLEGAL_EXIT ); }
-<REG,ISC>{Bypass}       {return( BYPASS ); }
-<REG,ISC>{Boundary}     {return( BOUNDARY ); }
-<REG,ISC>{Clamp}        {return( CLAMP ); }
-<REG,ISC>{Extest}       {return( EXTEST ); }
-<REG,ISC>{Highz}        {return( HIGHZ ); }
-<REG,ISC>{Idcode}       {return( IDCODE ); }
-<REG,ISC>{Intest}       {return( INTEST ); }
-<REG,ISC>{Preload}      {return( PRELOAD ); }
-<REG,ISC>{Runbist}      {return( RUNBIST ); }
-<REG,ISC>{Sample}       {return( SAMPLE ); }
-<REG,ISC>{Usercode}     {return( USERCODE ); }
-<REG,ISC>{Device_Id}    {return( DEVICE_ID ); }
 <BOU,PAC>{Input}        {return( INPUT ); }
 <BOU,PAC>{Output2}      {return( OUTPUT2 ); }
 <BOU,PAC>{Output3}      {return( OUTPUT3 ); }
@@ -368,38 +291,43 @@ ISC_Illegal_Exit      ISC_ILLEGAL_EXIT
 <BOU>{Bidir}            {return( BIDIR ); }
 <PAC>{Bidir_In}         {return( BIDIR_IN ); }
 <PAC>{Bidir_Out}        {return( BIDIR_OUT ); }
+<PAC>{Extest}           {return( EXTEST ); }
+<PAC>{Sample}           {return( SAMPLE ); }
+<PAC>{Intest}           {return( INTEST ); }
+<PAC>{Runbist}          {return( RUNBIST ); }
+<PAC>{Pi}               {return( PI ); }
+<PAC>{Po}               {return( PO ); }
+<PAC>{Upd}              {return( UPD ); }
+<PAC>{Cap}              {return( CAP ); }
+<PAC>{X}                {return( X ); }
+<PAC>{Zero}             {return( ZERO ); }
+<PAC>{One}              {return( ONE ); }
 <BOU>{Z}                {return( Z ); }
-<BOU>{Weak0}            {return( WEAK0 ); }
-<BOU>{Weak1}            {return( WEAK1 ); }
-<BOU>{Pull0}            {return( PULL0 ); }
-<BOU>{Pull1}            {return( PULL1 ); }
-<BOU>{Keeper}           {return( KEEPER ); }
 {Eol}                   {yylineno++; /* Count lines */}
 {Comma}                 {return( COMMA ); }
 {Lparen}                {return( LPAREN );}
 {Rparen}                {return( RPAREN );}
-{Lbracket}              {return( LBRACKET ); }
-{Rbracket}              {return( RBRACKET ); }
+{Period}                {return( PERIOD ); }
 {Colon}                 {return( COLON );  }
-{Asterisk}              {return( ASTERISK );  }
+{Box}                   {return( BOX );  }
+{Single_Quote}          {yyextra->Base = BIN_X; return( SINGLE_QUOTE ); }
+{Colon_Equal}           {return( COLON_EQUAL ); }
 {White}                 { /* Do Nothing on White Space */ }
 {VHDL_Comment}          { /* Do Nothing on Comments    */ }
 {Bin_X_Pattern}         {if (yyextra->Base != BIN_X) REJECT;
                          yylval->str = new_string( yytext );
                          return( BIN_X_PATTERN );}
-{Hex_String}            {if (yyextra->Base != HEX) REJECT;
-                         yylval->str = new_string( yytext );
-                         return( HEX_STRING );}
 {Identifier}            {yylval->str = new_string( yytext );
                          return( IDENTIFIER ); }
-{Binary_Pattern}        {if (yyextra->Base != BINARY) REJECT;
-                         yylval->str = new_string( yytext );
-                         return( BINARY_PATTERN );}
+{Quoted_String}         {yylval->str = new_string( yytext );
+                         return( QUOTED_STRING ); }
 {Decimal_Number}        {if (yyextra->Base != DECIMAL) REJECT;
                          yylval->integer = atoi( (char *)yytext );
                          return( DECIMAL_NUMBER );}
 {Real_Number}           {yylval->str = new_string( yytext );
                          return( REAL_NUMBER );}
+{Concatenate}           {return( CONCATENATE );}
+{Semicolon}             {return( SEMICOLON );}
 {Illegal}               {if (yyextra->debug || (yyextra->mode >= 0))
                            bsdl_msg( BSDL_MSG_ERR,
                                      _("Illegal character %c (/%03o) at line %d:\n"),
@@ -414,11 +342,12 @@ ISC_Illegal_Exit      ISC_ILLEGAL_EXIT
 }
 %%
 /*****************************************************************************
- * void *bsdl_flex_init( int mode, int debug )
+ * void *vhdl_flex_init( FILE *f, int mode, int debug )
  *
  * Initializes the scanner and storage elements extra data structure.
  *
  * Parameters
+ *   f     : descriptor of file for scanning
  *   mode  : -1 -> read file
  *                 no further action based on components
  *            0 -> read file and extract all components
@@ -431,19 +360,21 @@ ISC_Illegal_Exit      ISC_ILLEGAL_EXIT
  * Returns
  *   pointer to newly initialized scanner structure
  ****************************************************************************/
-void *bsdl_flex_init( int mode, int debug )
+void *vhdl_flex_init( FILE *f, int mode, int debug )
 {
   scan_extra_t *extra;
   yyscan_t scanner;
 
   /* get our scanner structure */
-  if (yylex_init(&scanner) != 0)
+  if (yylex_init( &scanner ) != 0)
   {
     bsdl_msg( BSDL_MSG_FATAL, _("Scanner could not be initialized\n") );
     return NULL;
   }
+  yyset_in( f, scanner );
 
-  if (!(extra = (scan_extra_t *)malloc( sizeof( scan_extra_t ) ))) {
+  if (!(extra = (scan_extra_t *)malloc( sizeof( scan_extra_t ) )))
+  {
     bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     yylex_destroy( scanner );
     return NULL;
@@ -461,7 +392,7 @@ void *bsdl_flex_init( int mode, int debug )
 
 
 /*****************************************************************************
- * void bsdl_flex_deinit( void *scanner )
+ * void vhdl_flex_deinit( void *scanner )
  *
  * Deinitializes the scanner and closes the input file.
  *
@@ -471,7 +402,7 @@ void *bsdl_flex_init( int mode, int debug )
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_flex_deinit( void *scanner )
+void vhdl_flex_deinit( void *scanner )
 {
   if (yyget_in( scanner ))
   {
@@ -498,7 +429,8 @@ void bsdl_flex_deinit( void *scanner )
  ****************************************************************************/
 int yywrap( yyscan_t scanner )
 {
-  if (yyget_in( scanner )) {
+  if (yyget_in( scanner ))
+  {
     fclose( yyget_in( scanner ) );
     yyset_in( NULL, scanner );
   }
@@ -529,64 +461,76 @@ static char *new_string( const char *str )
     n_str[n_str_size-1] = '\0';  /* set very last element to EOS */
   }
   else
-    bsdl_msg(BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
+    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 
-  return(n_str);
+  return n_str;
 }
 
 
 /*****************************************************************************
- * void bsdl_flex_switch_buffer( yyscan_t scanner, const char *buffer, int lineno )
+ * void vhdl_flex_switch_file( yyscan_t scanner, char *filename )
  *
- * Selects the specified string buffer for further scanning.
+ * Selects the specified file for further scanning.
  *
  * Parameters
- *   scanner : pointer to scanner definition structure
- *   buffer  : pointer to string buffer to be scanned
- *   lineno  : initial line number offset
+ *   scanner  : pointer to scanner definition structure
+ *   filename : name of the new file to be scanned
  *
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_flex_switch_buffer( yyscan_t scanner, const char *buffer, int lineno )
+void vhdl_flex_switch_file( yyscan_t scanner, char *filename )
 {
-  /* ugly, ulgy, ugly
-     prepare yyg for later use of YY_CURRENT_BUFFER */
-  struct yyguts_t * yyg = (struct yyguts_t*)scanner;
+  scan_extra_t *extra;
+  FILE *f;
+  char *s;
 
-  /* yy_scan_string() switches to the string buffer internally,
-     so we must save the current buffer state explicitly by pushing the stack
-     and setting top of stack to the current buffer state again.
-     yy_scan_string() can then savely switch YY_CURRENT_BUFFER to the string buffer.
-     yypop_buffer_state() will delete the string buffer afterwards and pop the saved
-     current buffer state. */
-  yypush_buffer_state( YY_CURRENT_BUFFER, scanner );
-  yy_scan_string( buffer, scanner );
-  yyset_lineno( lineno, scanner );
+  /* convert filename to all upper case */
+  s = filename;
+  while (*s)
+  {
+    if (islower( *s ))
+      *s = toupper( *s );
+    s++;
+  }
+
+  /* file in current directory has precedence */
+  f = fopen( filename, "r" );
+  if (!f)
+  {
+    const char *db_path = jtag_get_data_dir();
+    char *db_file;
+
+    if ((db_file = (char *)malloc( strlen( db_path ) +
+                                   1 +  /* "/"    */
+                                   4 +  /* "bsdl" */
+                                   1 +  /* "/"    */
+                                   strlen( filename ) +
+                                  1 )))
+    {
+      strcpy( db_file, db_path );
+      strcat( db_file, "/" );
+      strcat( db_file, "bsdl" );
+      strcat( db_file, "/" );
+      strcat( db_file, filename );
+      f = fopen( db_file, "r" );
+
+      if (!f)
+        bsdl_msg( BSDL_MSG_FATAL, _("Cannot open file %s or %s.\n"), filename, db_file );
+      free( db_file );
+      if (!f)
+        return;
+    }
+  }
+
+  yypush_buffer_state( yy_create_buffer( f, YY_BUF_SIZE, scanner ), scanner );
+  extra = yyget_extra( scanner );
+  yyset_lineno( 1, scanner );
 }
 
 
 /*****************************************************************************
- * void bsdl_flex_stop_buffer( yyscan_t scanner )
- *
- * Removes the current buffer from the scanner stack.
- *
- * Parameters
- *   scanner : pointer to scanner definition structure
- *
- * Returns
- *   void
- ****************************************************************************/
-void bsdl_flex_stop_buffer( yyscan_t scanner )
-{
-  yypop_buffer_state( scanner );
-//  if ( !YY_CURRENT_BUFFER )
-//    yyterminate();
-}
-
-
-/*****************************************************************************
- * int bsdl_flex_get_compile_errors( yyscan_t scanner )
+ * int vhdl_flex_get_compile_errors( yyscan_t scanner )
  *
  * Retrieves the accumulated number of compile errors encountered so far.
  *
@@ -596,7 +540,7 @@ void bsdl_flex_stop_buffer( yyscan_t scanner )
  * Returns
  *   number of compile errors
  ****************************************************************************/
-int bsdl_flex_get_compile_errors( yyscan_t scanner )
+int vhdl_flex_get_compile_errors( yyscan_t scanner )
 {
   scan_extra_t *extra = yyget_extra( scanner );
   return extra->Compile_Errors;
@@ -604,7 +548,7 @@ int bsdl_flex_get_compile_errors( yyscan_t scanner )
 
 
 /*****************************************************************************
- * void bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
+ * void vhdl_flex_set_compile_errors( int n, yyscan_t scanner )
  *
  * Sets the number of compile errors to n.
  *
@@ -615,7 +559,7 @@ int bsdl_flex_get_compile_errors( yyscan_t scanner )
  * Returns
  *   void
  ****************************************************************************/
-static void bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
+static void vhdl_flex_set_compile_errors( int n, yyscan_t scanner )
 {
   scan_extra_t *extra = yyget_extra( scanner );
   extra->Compile_Errors = n;
@@ -623,7 +567,7 @@ static void bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
 
 
 /*****************************************************************************
- * int bsdl_flex_postinc_compile_errors( yyscan_t scanner )
+ * int vhdl_flex_postinc_compile_errors( yyscan_t scanner )
  *
  * Increments the number of compile errors.
  *
@@ -633,66 +577,29 @@ static void bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
  * Returns
  *   number of compile errors before increment
  ****************************************************************************/
-int bsdl_flex_postinc_compile_errors( yyscan_t scanner )
+int vhdl_flex_postinc_compile_errors( yyscan_t scanner )
 {
-  int errors = bsdl_flex_get_compile_errors( scanner );
+  int errors = vhdl_flex_get_compile_errors( scanner );
 
-  bsdl_flex_set_compile_errors( errors+1, scanner );
+  vhdl_flex_set_compile_errors( errors+1, scanner );
   return errors;
 }
 
 
 /*****************************************************************************
- * void bsdl_flex_set_bin_x( yyscan_t scanner )
+ * int vhdl_flex_get_lineno( yyscan_t scanner )
  *
- * Selects BIN_X mode for pattern matching.
- *
- * Parameters
- *   scanner : pointer to scanner definition structure
- *
- * Returns
- *   void
- ****************************************************************************/
-void bsdl_flex_set_bin_x( yyscan_t scanner )
-{
-  scan_extra_t *extra = yyget_extra( scanner );
-  extra->Base = BIN_X;
-}
-
-
-/*****************************************************************************
- * void bsdl_flex_set_hex( yyscan_t scanner )
- *
- * Selects HEX mode for pattern matching.
+ * Returns the current line number in the scanned file.
  *
  * Parameters
  *   scanner : pointer to scanner definition structure
  *
  * Returns
- *   void
+ *   current line number
  ****************************************************************************/
-void bsdl_flex_set_hex( yyscan_t scanner )
+int vhdl_flex_get_lineno( yyscan_t scanner )
 {
-  scan_extra_t *extra = yyget_extra( scanner );
-  extra->Base = HEX;
-}
-
-
-/*****************************************************************************
- * void bsdl_flex_set_decimal( yyscan_t scanner )
- *
- * Selects DECIMAL mode for pattern matching.
- *
- * Parameters
- *   scanner : pointer to scanner definition structure
- *
- * Returns
- *   void
- ****************************************************************************/
-void bsdl_flex_set_decimal( yyscan_t scanner )
-{
-  scan_extra_t *extra = yyget_extra( scanner );
-  extra->Base = DECIMAL;
+  return yyget_lineno( scanner );
 }
 
 

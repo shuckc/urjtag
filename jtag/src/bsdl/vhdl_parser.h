@@ -1,9 +1,7 @@
 /*
  * $Id$
  *
- * Reduced version of the global sysdep.h that is suitable for the
- * BSDL subsystem components. config.h defines a number of macros
- * that collide with BSDL tokens.
+ * Copyright (C) 2008, Arnim Laeuger
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,26 +18,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
+ * Written by Arnim Laeuger <arniml@users.sourceforge.net>, 2008.
+ *
  */
 
-#ifndef BSDL_SYSDEP_H
-#define	BSDL_SYSDEP_H
+#ifndef VHDL_PARSER_H
+#define VHDL_PARSER_H
 
+#include "bsdl_types.h"
 
-#include "bsdl_config.h"
+/* VHDL lexer declarations */
+void *vhdl_flex_init( FILE *, int, int );
+void  vhdl_flex_deinit( void * );
+void  vhdl_flex_switch_file( void *, char * );
+int   vhdl_flex_get_compile_errors( void * );
+int   vhdl_flex_postinc_compile_errors( void * );
+int   vhdl_flex_get_lineno( void * );
 
-#include "gettext.h"
-#define	_(s)		gettext(s)
-#define	N_(s)		gettext_noop(s)
-#define	P_(s,p,n)	ngettext(s,p,n)
+/* VHDL parser declarations */
+vhdl_parser_priv_t *vhdl_parser_init( FILE *, jtag_ctrl_t * );
+void vhdl_parser_deinit( vhdl_parser_priv_t * );
+int vhdlparse( vhdl_parser_priv_t * );
 
-#ifdef S_SPLINT_S
-#undef gettext
-#define	gettext(s)	s
-#undef gettext_noop
-#define	gettext_noop(s)	s
-#undef ngettext
-#define	ngettext(s,p,n)	s
-#endif
-
-#endif /* BSDL_SYSDEP_H */
+#endif /* VHDL_PARSER_H */

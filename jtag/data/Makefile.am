@@ -89,6 +89,8 @@ nobase_dist_pkgdata_DATA = \
 	bsdl/STD_1149_1_1990 \
 	bsdl/STD_1149_1_1994 \
 	bsdl/STD_1149_1_2001 \
+	bsdl/STD_1532_2001 \
+	bsdl/STD_1532_2002 \
 	dec/PARTS \
 	dec/sa1100/STEPPINGS \
 	dec/sa1100/sa1100 \

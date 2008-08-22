@@ -23,19 +23,37 @@ include $(top_srcdir)/Makefile.rules
 
 noinst_LIBRARIES = libbsdl.a
 
-libbsdl_a_SOURCES = \
+libbsdl_a_SOURCES =  \
+	vhdl_bison.y \
+	vhdl_flex.l  \
 	bsdl_bison.y \
-	bsdl_flex.l \
-	bsdl.c \
+	bsdl_flex.l  \
+	bsdl.c       \
 	bsdl_sem.c
 
-bsdl_flex.$(OBJEXT) bsdl_sem.$(OBJEXT): bsdl_bison.$(OBJEXT)
+# additional dependencies
+# - all files depend on bsdl_config.h which dynamically generated
+# - *_flex files must be processed after their *_bison counterparts
+#   to ensure that *_bison.h is present
+vhdl_flex.$(OBJEXT): vhdl_bison.$(OBJEXT) bsdl_config.h
+vhdl_bison.$(OBJEXT): bsdl_config.h
+bsdl_flex.$(OBJEXT): bsdl_bison.$(OBJEXT) bsdl_config.h
+bsdl_bison.$(OBJEXT): bsdl_config.h
+bsdl.$(OBJEXT) : bsdl_config.h
+bsdl_sem.$(OBJEXT): bsdl_config.h
 
+vhdl_bison.h: vhdl_bison.c
 bsdl_bison.h: bsdl_bison.c
+
+bsdl_config.h: ../../config.h
+	grep 'DMALLOC' $< > $@
 
 AM_LFLAGS = -i
 
 MAINTAINERCLEANFILES = \
+	vhdl_bison.c \
+	vhdl_bison.h \
 	bsdl_bison.c \
 	bsdl_bison.h \
-	bsdl_flex.c
+	vhdl_flex.c \
+	bsdl_config.h

@@ -92,5 +92,9 @@ jtag_LDADD += -Ljim -ljim
 jtag_DEPENDENCIES += jim/libjim.a
 endif
 
+if DMALLOC
+jtag_LDADD += -ldmalloc
+endif
+
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"

@@ -118,7 +118,7 @@ LEGAL NOTICES:
 
 
 %pure-parser
-%parse-param {parser_priv_t *priv_data}
+%parse-param {bsdl_parser_priv_t *priv_data}
 %defines
 %name-prefix="bsdl"
 
@@ -130,862 +130,1388 @@ LEGAL NOTICES:
 
 #include "bsdl_sysdep.h"
 
+#include "bsdl_types.h"
+#include "bsdl_msg.h"
+
 /* interface to flex */
 #include "bsdl_bison.h"
-#include "bsdl_local.h"
+#include "bsdl_parser.h"
+
+#ifdef DMALLOC
+#include "dmalloc.h"
+#endif
 
 #define YYLEX_PARAM priv_data->scanner
 int yylex (YYSTYPE *, void *);
 
 #if 1
-#define ERROR_LIMIT 15
-#define BUMP_ERROR if (bsdl_flex_postinc_compile_errors(priv_data->scanner)>ERROR_LIMIT) \
-                          {Give_Up_And_Quit(priv_data);YYABORT;}
+#define ERROR_LIMIT 0
+#define BUMP_ERROR if (bsdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
+                          {Give_Up_And_Quit( priv_data ); YYABORT;}
 #else
-#define BUMP_ERROR {Give_Up_And_Quit(priv_data);YYABORT;}
+#define BUMP_ERROR {Give_Up_And_Quit( priv_data );YYABORT;}
 #endif
 
-static void Init_Text(parser_priv_t *);
-static void Store_Text(parser_priv_t *, char *);
-static void Print_Error(parser_priv_t *, const char *);
-static void Print_Warning(parser_priv_t *, const char *);
-static void Give_Up_And_Quit(parser_priv_t *);
+static void Print_Error( bsdl_parser_priv_t *, const char * );
+static void Print_Warning( bsdl_parser_priv_t *, const char * );
+static void Give_Up_And_Quit( bsdl_parser_priv_t * );
 
-void yyerror(parser_priv_t *, const char *);
+/* semantic functions */
+static void add_instruction( bsdl_parser_priv_t *, char *, char * );
+static void ac_set_register( bsdl_parser_priv_t *, char *, int );
+static void ac_add_instruction( bsdl_parser_priv_t *, char * );
+static void ac_apply_assoc( bsdl_parser_priv_t * );
+static void prt_add_name( bsdl_parser_priv_t *, char * );
+static void prt_add_bit( bsdl_parser_priv_t * );
+static void prt_add_range( bsdl_parser_priv_t *, int, int );
+static void ci_no_disable( bsdl_parser_priv_t * );
+static void ci_set_cell_spec_disable( bsdl_parser_priv_t *, int, int, int );
+static void ci_set_cell_spec( bsdl_parser_priv_t *, int, char * );
+static void ci_append_cell_info( bsdl_parser_priv_t *, int );
+
+void yyerror( bsdl_parser_priv_t *, const char * );
 %}
 
 %union {
-    int   integer;
-    char *str;
+  int   integer;
+  char *str;
 }
 
 
-%token ENTITY  PORT  GENERIC  USE  ATTRIBUTE  IS
-%token OF  CONSTANT  STRING  END  ALL  PIN_MAP
-%token PHYSICAL_PIN_MAP  PIN_MAP_STRING  TRUE  FALSE  SIGNAL
-%token TAP_SCAN_IN  TAP_SCAN_OUT  TAP_SCAN_MODE  TAP_SCAN_RESET
-%token TAP_SCAN_CLOCK  LOW  BOTH  IN  OUT  INOUT
-%token BUFFER  LINKAGE  BIT  BIT_VECTOR  TO  DOWNTO
-%token PACKAGE  BODY  TYPE  SUBTYPE  RECORD  ARRAY
-%token POSITIVE  RANGE  CELL_INFO  INSTRUCTION_LENGTH
-%token INSTRUCTION_OPCODE  INSTRUCTION_CAPTURE  INSTRUCTION_DISABLE
-%token INSTRUCTION_GUARD INSTRUCTION_PRIVATE  INSTRUCTION_USAGE
-%token INSTRUCTION_SEQUENCE  REGISTER_ACCESS  BOUNDARY_CELLS
-%token BOUNDARY_LENGTH  BOUNDARY_REGISTER  IDCODE_REGISTER
-%token USERCODE_REGISTER  DESIGN_WARNING  BOUNDARY  BYPASS  HIGHZ  IDCODE  DEVICE_ID
-%token USERCODE  INPUT  OUTPUT2  OUTPUT3  CONTROL  CONTROLR  INTERNAL
-%token CLOCK  BIDIR  BIDIR_IN  BIDIR_OUT  EXTEST  SAMPLE
-%token INTEST  RUNBIST  PI  PO  UPD  CAP  X
-%token ZERO  ONE  Z  WEAK0  WEAK1 IDENTIFIER
+%token CONSTANT PIN_MAP
+%token PHYSICAL_PIN_MAP PIN_MAP_STRING
+%token TAP_SCAN_IN TAP_SCAN_OUT TAP_SCAN_MODE TAP_SCAN_RESET
+%token TAP_SCAN_CLOCK
+%token INSTRUCTION_LENGTH INSTRUCTION_OPCODE INSTRUCTION_CAPTURE INSTRUCTION_DISABLE
+%token INSTRUCTION_GUARD INSTRUCTION_PRIVATE
+%token REGISTER_ACCESS
+%token BOUNDARY_LENGTH BOUNDARY_REGISTER IDCODE_REGISTER
+%token USERCODE_REGISTER BOUNDARY DEVICE_ID
+%token INPUT OUTPUT2 OUTPUT3 CONTROL CONTROLR INTERNAL
+%token CLOCK BIDIR BIDIR_IN BIDIR_OUT
+%token Z WEAK0 WEAK1 IDENTIFIER
 %token PULL0 PULL1 KEEPER
-%token SINGLE_QUOTE  QUOTED_STRING  DECIMAL_NUMBER  BINARY_PATTERN
-%token BIN_X_PATTERN  REAL_NUMBER  CONCATENATE  SEMICOLON  COMMA
-%token LPAREN  RPAREN  LBRACKET  RBRACKET  COLON  ASTERISK
-%token BOX  COLON_EQUAL  PERIOD ILLEGAL
-%token COMPONENT_CONFORMANCE PORT_GROUPING RUNBIST_EXECUTION
-%token INTEST_EXECUTION BSDL_EXTENSION COMPLIANCE_PATTERNS
+%token DECIMAL_NUMBER BINARY_PATTERN
+%token BIN_X_PATTERN COMMA
+%token LPAREN RPAREN LBRACKET RBRACKET COLON ASTERISK
+%token COMPLIANCE_PATTERNS
 %token OBSERVE_ONLY
+%token BYPASS CLAMP EXTEST HIGHZ IDCODE INTEST PRELOAD RUNBIST SAMPLE USERCODE
+%token COMPONENT_CONFORMANCE STD_1149_1_1990 STD_1149_1_1993 STD_1149_1_2001
+%token ISC_CONFORMANCE STD_1532_2001 STD_1532_2002
+%token ISC_PIN_BEHAVIOR
+%token ISC_FIXED_SYSTEM_PINS
+%token ISC_STATUS IMPLEMENTED
+%token ISC_BLANK_USERCODE
+%token ISC_SECURITY ISC_DISABLE_READ ISC_DISABLE_PROGRAM ISC_DISABLE_ERASE ISC_DISABLE_KEY
+%token ISC_FLOW UNPROCESSED EXIT_ON_ERROR ARRAY SECURITY INITIALIZE REPEAT TERMINATE
+%token LOOP MIN MAX DOLLAR EQUAL HEX_STRING WAIT REAL_NUMBER
+%token PLUS MINUS SH_RIGHT SH_LEFT TILDE QUESTION_MARK EXCLAMATION_MARK QUESTION_EXCLAMATION
+%token CRC OST
+%token ISC_PROCEDURE
+%token ISC_ACTION PROPRIETARY OPTIONAL RECOMMENDED
+%token ISC_ILLEGAL_EXIT
+%token ILLEGAL
 
+%type <str> HEX_STRING
 %type <str> BIN_X_PATTERN
 %type <str> IDENTIFIER
-%type <str> QUOTED_STRING
 %type <str> BINARY_PATTERN
 %type <str> Binary_Pattern
 %type <str> Binary_Pattern_List
-%type <integer> DECIMAL_NUMBER
 %type <str> REAL_NUMBER
+%type <integer> DECIMAL_NUMBER
 %type <integer> Cell_Function
 %type <str> Safe_Value
 %type <integer> Disable_Value
 %type <str> Standard_Reg
-%type <str> Standard_Inst
+%type <str> Instruction_Name
 
-%start BSDL_Program
+%start BSDL_Statement
 
 %%  /* End declarations, begin rules */
 
-BSDL_Program     : Begin_BSDL Part_1 Part_2 End_BSDL
-                 ;
-Begin_BSDL       : ENTITY IDENTIFIER IS
-                   { bsdl_set_entity(priv_data, $2); }
+BSDL_Statement   : BSDL_Pin_Map
+                 | BSDL_Map_String
+                 | BSDL_Tap_Scan_In
+                 | BSDL_Tap_Scan_Out
+                 | BSDL_Tap_Scan_Mode
+                 | BSDL_Tap_Scan_Reset
+                 | BSDL_Tap_Scan_Clock
+                 | BSDL_Inst_Length
+                 | BSDL_Opcode
+                 | BSDL_Inst_Capture
+                 | BSDL_Inst_Disable
+                 | BSDL_Inst_Guard
+                 | BSDL_Inst_Private
+                 | BSDL_Idcode_Register
+                 | BSDL_Usercode_Register
+                 | BSDL_Register_Access
+                 | BSDL_Boundary_Length
+                 | BSDL_Boundary_Register
+                 | BSDL_Compliance_Patterns
+                 | BSDL_Component_Conformance
+                 | ISC_Extension
                  | error
-                   {Print_Error(priv_data, _("Improper Entity declaration"));
-                    Print_Error(priv_data, _("Check if source file is BSDL"));
-                    BUMP_ERROR; YYABORT; /* Probably not a BSDL source file */
-                   }
-                 ;
-Part_1           : VHDL_Generic        /* 1994 and later */
-                   VHDL_Port
-                   VHDL_Use_Part
-                   VHDL_Component_Conformance
-                   VHDL_Pin_Map
-                   VHDL_Constant_List
-                 | VHDL_Generic        /* 1990 */
-                   VHDL_Port
-                   VHDL_Use_Part
-                   VHDL_Pin_Map
-                   VHDL_Constant_List
-                 | error
-                   {Print_Error(priv_data, _("Syntax Error"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Part_2           : VHDL_Tap_Signals
-                   VHDL_Compliance_Patterns
-                   VHDL_Inst_Length
-                   VHDL_Inst_Opcode
-                   VHDL_Inst_Details
-                   VHDL_Boundary_Details
-                   VHDL_Boundary_Register
-                 | VHDL_Tap_Signals
-                   VHDL_Inst_Length
-                   VHDL_Inst_Opcode
-                   VHDL_Inst_Details
-                   VHDL_Boundary_Details
-                   VHDL_Boundary_Register
-                 | error
-                   {Print_Error(priv_data, _("Syntax Error"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-End_BSDL         : VHDL_Design_Warning END IDENTIFIER SEMICOLON
-                   { free($3); }
-                 | error
-                   {Print_Error(priv_data, _("Syntax Error"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-VHDL_Generic     : GENERIC LPAREN PHYSICAL_PIN_MAP COLON STRING COLON_EQUAL
-                   Quoted_String  RPAREN SEMICOLON
                    {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
+                     Print_Error( priv_data, _("Unsupported BSDL construct found") );
+                     BUMP_ERROR;
+                     YYABORT;
                    }
-                   IDENTIFIER
-                   { free($11); }
-                 ;
-VHDL_Port        : PORT LPAREN Port_Specifier_List RPAREN SEMICOLON
-                 | error
-                   {Print_Error(priv_data, _("Improper Port declaration"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Port_Specifier_List : Port_Specifier
-                 | Port_Specifier_List SEMICOLON Port_Specifier
-                 ;
-Port_Specifier   : Port_List COLON Function Scaler_Or_Vector
-                   {
-                     bsdl_prt_apply_port(priv_data);
-                   }
-                 ;
-Port_List        : IDENTIFIER
-                   { bsdl_prt_add_name(priv_data, $1); }
-                 | Port_List COMMA IDENTIFIER
-                   {
-                     bsdl_prt_add_name(priv_data, $3);
-                   }
-                 ;
-Function         : IN | OUT | INOUT | BUFFER | LINKAGE
-                 ;
-Scaler_Or_Vector : BIT
-                   { bsdl_prt_add_bit(priv_data); }
-                 | BIT_VECTOR LPAREN Vector_Range RPAREN
-                 ;
-Vector_Range     : DECIMAL_NUMBER TO DECIMAL_NUMBER
-                   { bsdl_prt_add_range(priv_data, $1, $3); }
-                 | DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER
-                   { bsdl_prt_add_range(priv_data, $3, $1); }
-                 ;
-VHDL_Use_Part    : Standard_Use
-                 | Standard_Use VHDL_Use_List
-                 | error
-                   {Print_Error(priv_data, _("Error in Package declaration(s)"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Standard_Use     : USE IDENTIFIER
-                   {/* Parse Standard 1149.1 Package */
-                    strcpy(priv_data->Package_File_Name, $2);
-                    free($2);
-                   }
-                   PERIOD ALL SEMICOLON
-                   {
-                     priv_data->Reading_Package = 1;
-                     bsdl_flex_switch_file(priv_data->scanner,
-                                           priv_data->Package_File_Name);
-                   }
-                   Standard_Package
-                   {
-                     priv_data->Reading_Package = 0;
-                   }
-                 ;
-Standard_Package : PACKAGE IDENTIFIER IS Standard_Decls Defered_Constants
-                   Standard_Decls END IDENTIFIER SEMICOLON Package_Body
-                   { free($2); free($8); }
-                 | error
-                   {Print_Error(priv_data, _("Error in Standard Package"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Standard_Decls   : Standard_Decl
-                 | Standard_Decls Standard_Decl
-                 ;
-Standard_Decl    : ATTRIBUTE Standard_Attributes COLON Attribute_Type SEMICOLON
-                 | TYPE IDENTIFIER IS Type_Body SEMICOLON
-                   { free($2); }
-                 | TYPE CELL_INFO IS ARRAY LPAREN POSITIVE RANGE BOX RPAREN
-                   OF IDENTIFIER SEMICOLON
-                   { free($11); }
-                 | SUBTYPE PIN_MAP_STRING IS STRING SEMICOLON
-                 | SUBTYPE BSDL_EXTENSION IS STRING SEMICOLON
-                 | error
-                   {Print_Error(priv_data, _("Error in Standard Declarations"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Standard_Attributes : PIN_MAP | TAP_SCAN_IN | TAP_SCAN_OUT
-                 | TAP_SCAN_CLOCK | TAP_SCAN_MODE | TAP_SCAN_RESET
-                 | COMPONENT_CONFORMANCE | PORT_GROUPING | RUNBIST_EXECUTION
-                 | INTEST_EXECUTION | COMPLIANCE_PATTERNS
-                 | INSTRUCTION_LENGTH | INSTRUCTION_OPCODE
-                 | INSTRUCTION_CAPTURE | INSTRUCTION_DISABLE
-                 | INSTRUCTION_GUARD | INSTRUCTION_PRIVATE
-                 | INSTRUCTION_USAGE | INSTRUCTION_SEQUENCE
-                 | IDCODE_REGISTER | USERCODE_REGISTER
-                 | REGISTER_ACCESS | BOUNDARY_CELLS
-                 | BOUNDARY_LENGTH | BOUNDARY_REGISTER
-                 | DESIGN_WARNING
-                 | error
-                   {Print_Error(priv_data, _("Error in Attribute identifier"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Attribute_Type   : IDENTIFIER
-                   { free($1); }
-                 | STRING
-                 | DECIMAL_NUMBER
-                 | error
-                   {Print_Error(priv_data, _("Error in Attribute type identification"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Type_Body        : LPAREN ID_Bits RPAREN
-                 | LPAREN ID_List RPAREN
-                 | LPAREN LOW COMMA BOTH RPAREN
-                 | ARRAY LPAREN DECIMAL_NUMBER TO DECIMAL_NUMBER RPAREN
-                   OF IDENTIFIER
-                   { free($8); }
-                 | ARRAY LPAREN DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER RPAREN
-                   OF IDENTIFIER
-                   { free($8); }
-                 | RECORD Record_Body END RECORD
-                 | error
-                   {Print_Error(priv_data, _("Error in Type definition"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-ID_Bits          : ID_Bit
-                 | ID_Bits COMMA ID_Bit
-                 ;
-ID_List          : IDENTIFIER
-                   { free($1); }
-                 | ID_List COMMA IDENTIFIER
-                   { free($3); }
-                 ;
-ID_Bit           : SINGLE_QUOTE BIN_X_PATTERN SINGLE_QUOTE
-                   { free($2); }
-                 | error
-                   {Print_Error(priv_data, _("Error in Bit definition"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Record_Body      : Record_Element
-                 | Record_Body Record_Element
-                 ;
-Record_Element   : IDENTIFIER COLON IDENTIFIER SEMICOLON
-                   { free($1); free($3); }
-                 | error
-                   {Print_Error(priv_data, _("Error in Record Definition"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Defered_Constants: Defered_Constant
-                 | Defered_Constants Defered_Constant
-                 ;
-Defered_Constant : CONSTANT Constant_Body
-                 ;
-Constant_Body    : IDENTIFIER COLON CELL_INFO SEMICOLON
-                   { free($1); }
-                 | error
-                   {Print_Error(priv_data, _("Error in defered constant"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-VHDL_Use_List    : VHDL_Use
-                 | VHDL_Use_List VHDL_Use
-                 ;
-Package_Body     : PACKAGE BODY IDENTIFIER IS Constant_List END IDENTIFIER
-                   { free($3); free($7); }
-                   SEMICOLON
-                 | error
-                   {Print_Error(priv_data, _("Error in Package Body definition"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Constant_List    : Cell_Constant
-                 | Constant_List Cell_Constant
-                 ;
-Cell_Constant    : CONSTANT IDENTIFIER COLON CELL_INFO COLON_EQUAL
-                   LPAREN Triples_List RPAREN SEMICOLON
-                   { free($2); }
-                 | error
-                   {Print_Error(priv_data, _("Error in Cell Constant definition"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Triples_List     : Triple
-                 | Triples_List COMMA Triple
-                 ;
-Triple           : LPAREN Triple_Function COMMA Triple_Inst COMMA CAP_Data
-                   RPAREN
-                 | error
-                   {Print_Error(priv_data, _("Error in Cell Data Record"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Triple_Function  : INPUT | OUTPUT2 | OUTPUT3 | INTERNAL | CONTROL
-                 | CONTROLR | CLOCK | BIDIR_IN | BIDIR_OUT
-                 | OBSERVE_ONLY
-                 | error
-                   {Print_Error(priv_data, _("Error in Cell_Type Function field"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Triple_Inst      : EXTEST | SAMPLE | INTEST | RUNBIST
-                 | error
-                   {Print_Error(priv_data, _("Error in BScan_Inst Instruction field"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-CAP_Data         : PI | PO | UPD | CAP | X | ZERO | ONE
-                 | error
-                   {Print_Error(priv_data, _("Error in Constant CAP data source field"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-VHDL_Use         : USE IDENTIFIER
-                   {/* Parse Standard 1149.1 Package */
-                    strcpy(priv_data->Package_File_Name, $2);
-                    free($2);
-                   }
-                   PERIOD ALL SEMICOLON
-                   {
-                     priv_data->Reading_Package = 1;
-                     bsdl_flex_switch_file(priv_data->scanner,
-                                           priv_data->Package_File_Name);
-                   }
-                   User_Package
-                   {
-                     priv_data->Reading_Package = 0;
-                   }
-                 ;
-User_Package     : PACKAGE IDENTIFIER
-                   IS Defered_Constants END IDENTIFIER SEMICOLON Package_Body
-                   { free($2); free($6); }
-                 | error
-                   {Print_Error(priv_data, _("Error in User-Defined Package declarations"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-VHDL_Pin_Map     : ATTRIBUTE PIN_MAP OF IDENTIFIER
-                   COLON ENTITY IS PHYSICAL_PIN_MAP SEMICOLON
-                   { free($4); }
-                 | error
-                   {Print_Error(priv_data, _("Error in Pin_Map Attribute"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-VHDL_Constant_List : VHDL_Constant
-                 | VHDL_Constant_List VHDL_Constant
-                 ;
-VHDL_Constant    : CONSTANT VHDL_Constant_Part
-                 ;
-VHDL_Constant_Part : IDENTIFIER COLON PIN_MAP_STRING COLON_EQUAL
-                   Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   BSDL_Map_String
-                   { free($1); }
-                 | error
-                   {Print_Error(priv_data, _("Error in Pin_Map_String constant declaration"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-BSDL_Map_String  : Pin_Mapping
-                 | BSDL_Map_String COMMA Pin_Mapping
-                 ;
-Pin_Mapping      : IDENTIFIER COLON Physical_Pin_Desc
-                   { free($1); }
-                 ;
-Physical_Pin_Desc: Physical_Pin
-                 | LPAREN Physical_Pin_List RPAREN
-                 ;
-Physical_Pin_List: Physical_Pin
-                 | Physical_Pin_List COMMA Physical_Pin
-                 ;
-Physical_Pin     : IDENTIFIER
-                   { free($1); }
-                 | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
-                   { free($1); }
-                 | DECIMAL_NUMBER
-                 ;
-VHDL_Tap_Signals : VHDL_Tap_Signal
-                 | VHDL_Tap_Signals VHDL_Tap_Signal
-                 ;
-VHDL_Tap_Signal  : VHDL_Tap_Scan_In
-                 | VHDL_Tap_Scan_Out
-                 | VHDL_Tap_Scan_Clock
-                 | VHDL_Tap_Scan_Mode
-                 | VHDL_Tap_Scan_Reset
-                 ;
-VHDL_Tap_Scan_In : ATTRIBUTE TAP_SCAN_IN OF IDENTIFIER
-                   COLON SIGNAL IS Boolean SEMICOLON
-                   { free($4); }
-                 ;
-VHDL_Tap_Scan_Out : ATTRIBUTE TAP_SCAN_OUT OF IDENTIFIER
-                    COLON SIGNAL IS Boolean SEMICOLON
-                   { free($4); }
-                 ;
-VHDL_Tap_Scan_Mode : ATTRIBUTE TAP_SCAN_MODE OF IDENTIFIER
-                   COLON SIGNAL IS Boolean SEMICOLON
-                   { free($4); }
-                 ;
-VHDL_Tap_Scan_Reset : ATTRIBUTE TAP_SCAN_RESET OF IDENTIFIER
-                   COLON SIGNAL IS Boolean SEMICOLON
-                   { free($4); }
-                 ;
-VHDL_Tap_Scan_Clock : ATTRIBUTE TAP_SCAN_CLOCK OF IDENTIFIER COLON SIGNAL
-                   IS LPAREN REAL_NUMBER COMMA Stop RPAREN SEMICOLON
-                   { free($4); free($9); }
-                 ;
-Stop             : LOW | BOTH
-                 ;
-Boolean          : TRUE | FALSE
-                 ;
-VHDL_Inst_Length : ATTRIBUTE INSTRUCTION_LENGTH OF IDENTIFIER
-                   COLON ENTITY IS DECIMAL_NUMBER SEMICOLON
-                   {
-                     bsdl_set_instruction_length(priv_data, $8);
-                     free($4);
-                   }
-                 ;
-VHDL_Inst_Opcode : ATTRIBUTE INSTRUCTION_OPCODE OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   BSDL_Opcode_Table
-                   { free($4); }
-                 ;
-BSDL_Opcode_Table: Opcode_Desc
-                 | BSDL_Opcode_Table COMMA Opcode_Desc
-                 | error
-                   {Print_Error(priv_data,
-                      _("Error in Instruction_Opcode attribute statement"));
-                    BUMP_ERROR;
-                    YYABORT; }
-                 ;
-Opcode_Desc      : IDENTIFIER LPAREN Binary_Pattern_List RPAREN
-                   { bsdl_add_instruction(priv_data, $1, $3); }
-                 ;
+;
+
+/****************************************************************************/
+BSDL_Pin_Map : PIN_MAP PHYSICAL_PIN_MAP
+;
+
+/****************************************************************************/
+BSDL_Map_String   : PIN_MAP_STRING Pin_Mapping
+                  | BSDL_Map_String COMMA Pin_Mapping
+;
+Pin_Mapping       : IDENTIFIER COLON Physical_Pin_Desc
+                    { free( $1 ); }
+;
+Physical_Pin_Desc : Physical_Pin
+                  | LPAREN Physical_Pin_List RPAREN
+;
+Physical_Pin_List : Physical_Pin
+                  | Physical_Pin_List COMMA Physical_Pin
+;
+Physical_Pin      : IDENTIFIER
+                    { free( $1 ); }
+                  | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
+                    { free( $1 ); }
+                  | DECIMAL_NUMBER
+;
+
+/****************************************************************************/
+BSDL_Tap_Scan_In : TAP_SCAN_IN DECIMAL_NUMBER
+;
+
+/****************************************************************************/
+BSDL_Tap_Scan_Out : TAP_SCAN_OUT DECIMAL_NUMBER
+;
+
+/****************************************************************************/
+BSDL_Tap_Scan_Mode : TAP_SCAN_MODE DECIMAL_NUMBER
+;
+
+/****************************************************************************/
+BSDL_Tap_Scan_Reset : TAP_SCAN_RESET DECIMAL_NUMBER
+;
+
+/****************************************************************************/
+BSDL_Tap_Scan_Clock : TAP_SCAN_CLOCK DECIMAL_NUMBER
+;
+
+/****************************************************************************/
+BSDL_Inst_Length : INSTRUCTION_LENGTH DECIMAL_NUMBER
+                   { priv_data->jtag_ctrl->instr_len = $2; }
+;
+
+/****************************************************************************/
+BSDL_Opcode         : INSTRUCTION_OPCODE BSDL_Opcode_Table
+;
+BSDL_Opcode_Table   : Opcode_Desc
+                    | BSDL_Opcode_Table COMMA Opcode_Desc
+                    | error
+                      {
+                        Print_Error( priv_data,
+                                     _("Error in Instruction_Opcode attribute statement") );
+                        BUMP_ERROR;
+                        YYABORT;
+                      }
+;
+Opcode_Desc         : IDENTIFIER LPAREN Binary_Pattern_List RPAREN
+                      { add_instruction( priv_data, $1, $3 ); }
+;
 Binary_Pattern_List : Binary_Pattern
-                   { $$ = $1; }
-                 | Binary_Pattern_List COMMA Binary_Pattern
-                   {
-                     Print_Warning(priv_data,
-                       _("Multiple opcode patterns are not supported, first pattern will be used"));
-                     $$ = $1;
-                     free($3);
-                   }
-                 ;
-Binary_Pattern   : BINARY_PATTERN
-                   { $$ = $1; }
-                 ;
-VHDL_Inst_Details: VHDL_Inst_Detail
-                 | VHDL_Inst_Details VHDL_Inst_Detail
-                 ;
-VHDL_Inst_Detail : VHDL_Inst_Capture
-                 | VHDL_Inst_Disable
-                 | VHDL_Inst_Guard
-                 | VHDL_Inst_Private
-                 | VHDL_Register_Access
-                 | VHDL_Inst_Usage
-                 | VHDL_Inst_Sequence
-                 | VHDL_Idcode_Register
-                 | VHDL_Usercode_Register
-                 ;
-VHDL_Inst_Capture: ATTRIBUTE INSTRUCTION_CAPTURE OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   BIN_X_PATTERN
-                   { free($4); free($11); }
-                 ;
-VHDL_Inst_Disable: ATTRIBUTE INSTRUCTION_DISABLE OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   IDENTIFIER
-                   { free($4); free($11); }
-                 ;
-VHDL_Inst_Guard  : ATTRIBUTE INSTRUCTION_GUARD OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   IDENTIFIER
-                   { free($4); free($11); }
-                 ;
-VHDL_Inst_Private: ATTRIBUTE INSTRUCTION_PRIVATE OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   Private_Opcode_List
-                   { free($4); }
-                 ;
+                      { $$ = $1; }
+                    | Binary_Pattern_List COMMA Binary_Pattern
+                      {
+                        Print_Warning( priv_data,
+                                       _("Multiple opcode patterns are not supported, first pattern will be used") );
+                        $$ = $1;
+                        free( $3 );
+                      }
+;
+Binary_Pattern      : BINARY_PATTERN
+                      { $$ = $1; }
+;
+
+/****************************************************************************/
+BSDL_Inst_Capture : INSTRUCTION_CAPTURE BIN_X_PATTERN
+                    { free( $2 ); }
+;
+
+/****************************************************************************/
+BSDL_Inst_Disable : INSTRUCTION_DISABLE IDENTIFIER
+                    { free( $2 ); }
+;
+
+/****************************************************************************/
+BSDL_Inst_Guard : INSTRUCTION_GUARD IDENTIFIER
+                  { free( $2 ); }
+;
+
+/****************************************************************************/
+BSDL_Inst_Private : INSTRUCTION_PRIVATE Private_Opcode_List
+;
 Private_Opcode_List : Private_Opcode
-                 | Private_Opcode_List COMMA Private_Opcode
-                 | error
-                   {Print_Error(priv_data, _("Error in Opcode List"));
-                    BUMP_ERROR;
-                    YYABORT; }
-                 ;
-Private_Opcode   : IDENTIFIER
-                   { free($1); }
-                 ;
-VHDL_Inst_Usage  : ATTRIBUTE INSTRUCTION_USAGE OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {/* Syntax of string content to be changed in future */
-                    free($4); }
-                 ;
-VHDL_Inst_Sequence : ATTRIBUTE INSTRUCTION_SEQUENCE OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {/* Syntax of string content to be determined in future */
-                    free($4); }
-                 ;
-VHDL_Idcode_Register: ATTRIBUTE IDCODE_REGISTER OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   BIN_X_PATTERN
-                   {
-                     bsdl_set_idcode(priv_data, $11);
-                     free($4);
-                   }
-                 ;
-VHDL_Usercode_Register: ATTRIBUTE USERCODE_REGISTER OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   BIN_X_PATTERN
-                   {
-		     bsdl_set_usercode(priv_data, $11);
-		     free($4);
-		   }
-                 ;
-VHDL_Register_Access: ATTRIBUTE REGISTER_ACCESS OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   Register_String
-                   { free($4); }
-                 ;
-Register_String  : Register_Assoc
-                 | Register_String COMMA Register_Assoc
-                 ;
-Register_Assoc   : Register_Decl LPAREN Reg_Opcode_List RPAREN
-                   { bsdl_ac_apply_assoc(priv_data); }
-                 ;
-Register_Decl    : Standard_Reg
-                   { bsdl_ac_set_register(priv_data, $1, 0); }
-                 | IDENTIFIER LBRACKET DECIMAL_NUMBER RBRACKET
-                   { bsdl_ac_set_register(priv_data, $1, $3); }
-                 ;
-Standard_Reg     : BOUNDARY
-                   { $$ = strdup("BOUNDARY"); }
-                 | BYPASS
-                   { $$ = strdup("BYPASS"); }
-                 | IDCODE
-                   { $$ = strdup("IDCODE"); }
-                 | USERCODE
-                   { $$ = strdup("USERCODE"); }
-                 | DEVICE_ID
-                   { $$ = strdup("DEVICE_ID"); }
-                 ;
-Reg_Opcode_List  : Reg_Opcode
-                 | Reg_Opcode_List COMMA Reg_Opcode
-                 ;
-Standard_Inst    : BOUNDARY
-                   { $$ = strdup("BOUNDARY"); }
-                 | BYPASS
-                   { $$ = strdup("BYPASS"); }
-                 | HIGHZ
-                   { $$ = strdup("HIGHZ"); }
-                 | IDCODE
-                   { $$ = strdup("IDCODE"); }
-                 | USERCODE
-                   { $$ = strdup("USERCODE"); }
-                 ;
-Reg_Opcode       : IDENTIFIER
-                   { bsdl_ac_add_instruction(priv_data, $1); }
-                 | Standard_Inst
-                   { bsdl_ac_add_instruction(priv_data, $1); }
-                 ;
-VHDL_Boundary_Details: VHDL_Boundary_Detail
-                 | VHDL_Boundary_Details VHDL_Boundary_Detail
-                 ;
-VHDL_Boundary_Detail: VHDL_Boundary_Cells
-                 | VHDL_Boundary_Length
-                 ;
-VHDL_Boundary_Cells: ATTRIBUTE BOUNDARY_CELLS OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   BSDL_Cell_List
-                   { free($4); }
-                 ;
-BSDL_Cell_List   : BCell_Identifier
-                 | BSDL_Cell_List COMMA BCell_Identifier
-                 ;
-BCell_Identifier : IDENTIFIER
-                   { free($1); }
-                 ;
-VHDL_Boundary_Length: ATTRIBUTE BOUNDARY_LENGTH OF IDENTIFIER
-                   COLON ENTITY IS DECIMAL_NUMBER SEMICOLON
-                   {
-                     bsdl_set_bsr_length(priv_data, $8);
-                     free($4);
-                   }
-                 ;
-VHDL_Boundary_Register: ATTRIBUTE BOUNDARY_REGISTER OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   BSDL_Cell_Table
-                   { free($4); }
-                 ;
-BSDL_Cell_Table  : Cell_Entry
-                 | BSDL_Cell_Table COMMA Cell_Entry
-                 | error
-                   {Print_Error(priv_data, _("Error in Boundary Cell description"));
-                    BUMP_ERROR; YYABORT; }
-                 ;
-Cell_Entry       : DECIMAL_NUMBER LPAREN Cell_Info RPAREN
-                   { bsdl_ci_apply_cell_info(priv_data, $1); }
-                 ;
-Cell_Info        : Cell_Spec
-                   { bsdl_ci_no_disable(priv_data); }
-                 | Cell_Spec COMMA Disable_Spec
-                 ;
-Cell_Spec        : IDENTIFIER COMMA Port_Name COMMA Cell_Function
-                   COMMA Safe_Value
-                   {
-                     free($1);
-                     bsdl_ci_set_cell_spec(priv_data, $5, $7);
-                   }
-                 ;
-Port_Name        : IDENTIFIER
-                   {
-                     bsdl_prt_add_name(priv_data, $1);
-                     bsdl_prt_add_bit(priv_data);
-                   }
-                 | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
-                   {
-                     bsdl_prt_add_name(priv_data, $1);
-                     bsdl_prt_add_range(priv_data, $3, $3);
-                   }
-                 | ASTERISK
-                   {
-                     bsdl_prt_add_name(priv_data, strdup("*"));
-                     bsdl_prt_add_bit(priv_data);
-                   }
-                 ;
-Cell_Function    : INPUT
-                   { $$ = INPUT; }
-                 | OUTPUT2
-                   { $$ = OUTPUT2; }
-                 | OUTPUT3
-                   { $$ = OUTPUT3; }
-                 | CONTROL
-                   { $$ = CONTROL; }
-                 | CONTROLR
-                   { $$ = CONTROLR; }
-                 | INTERNAL
-                   { $$ = INTERNAL; }
-                 | CLOCK
-                   { $$ = CLOCK; }
-                 | BIDIR
-                   { $$ = BIDIR; }
-                 | OBSERVE_ONLY
-                   { $$ = OBSERVE_ONLY; }
-                 ;
-Safe_Value       : IDENTIFIER
-                   { $$ = $1; }
-                 | DECIMAL_NUMBER
-                   {
-                     char *tmp;
-                     tmp = (char *)malloc(2);
-                     snprintf(tmp, 2, "%i", $1);
-		     tmp[1] = '\0';
-                     $$ = tmp;
-                   }
-                 ;
-Disable_Spec     : DECIMAL_NUMBER COMMA DECIMAL_NUMBER COMMA Disable_Value
-                   { bsdl_ci_set_cell_spec_disable(priv_data, $1, $3, $5); }
-                 ;
-Disable_Value    : Z
-                   { $$ = Z; }
-                 | WEAK0
-                   { $$ = WEAK0; }
-                 | WEAK1
-                   { $$ = WEAK1; }
-                 | PULL0
-                   { $$ = PULL0; }
-                 | PULL1
-                   { $$ = PULL1; }
-                 | KEEPER
-                   { $$ = KEEPER; }
-                 ;
-VHDL_Design_Warning: /* Null Statement */
-                 | ATTRIBUTE DESIGN_WARNING OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   { free($4); }
-                 ;
-VHDL_Component_Conformance: ATTRIBUTE COMPONENT_CONFORMANCE OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   { free($4); }
-                 ;
-VHDL_Compliance_Patterns: ATTRIBUTE COMPLIANCE_PATTERNS OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
-                   {
-                     bsdl_flex_switch_buffer(priv_data->scanner,
-                                             priv_data->buffer_for_switch);
-                   }
-                   BSDL_Compliance_Pattern
-                   { free($4); }
-                 ;
+                    | Private_Opcode_List COMMA Private_Opcode
+                    | error
+                      {
+                        Print_Error( priv_data, _("Error in Opcode List") );
+                        BUMP_ERROR;
+                        YYABORT;
+                      }
+;
+Private_Opcode      : IDENTIFIER
+                      { free( $1 ); }
+;
+
+/****************************************************************************/
+BSDL_Idcode_Register : IDCODE_REGISTER BIN_X_PATTERN
+                       { priv_data->jtag_ctrl->idcode = $2; }
+;
+
+/****************************************************************************/
+BSDL_Usercode_Register : USERCODE_REGISTER BIN_X_PATTERN
+                         { priv_data->jtag_ctrl->usercode = $2; }
+;
+
+/****************************************************************************/
+BSDL_Register_Access : REGISTER_ACCESS Register_String
+;
+Register_String      : Register_Assoc
+                     | Register_String COMMA Register_Assoc
+;
+Register_Assoc       : Register_Decl LPAREN Reg_Opcode_List RPAREN
+                       { ac_apply_assoc( priv_data ); }
+;
+Register_Decl        : Standard_Reg
+                       { ac_set_register( priv_data, $1, 0 ); }
+                     | IDENTIFIER LBRACKET DECIMAL_NUMBER RBRACKET
+                       { ac_set_register( priv_data, $1, $3 ); }
+;
+Standard_Reg         : BOUNDARY
+                       { $$ = strdup( "BOUNDARY" ); }
+                     | BYPASS
+                       { $$ = strdup( "BYPASS" ); }
+                     | IDCODE
+                       { $$ = strdup( "IDCODE" ); }
+                     | USERCODE
+                       { $$ = strdup( "USERCODE" ); }
+                     | DEVICE_ID
+                       { $$ = strdup( "DEVICE_ID" ); }
+;
+Reg_Opcode_List      : Reg_Opcode
+                     | Reg_Opcode_List COMMA Reg_Opcode
+;
+Instruction_Name     : BYPASS
+                       { $$ = strdup( "BYPASS" ); }
+                     | CLAMP
+                       { $$ = strdup( "CLAMP" ); }
+                     | EXTEST
+                       { $$ = strdup( "EXTEST" ); }
+                     | HIGHZ
+                       { $$ = strdup( "HIGHZ" ); }
+                     | IDCODE
+                       { $$ = strdup( "IDCODE" ); }
+                     | INTEST
+                       { $$ = strdup( "INTEST" ); }
+                     | PRELOAD
+                       { $$ = strdup( "PRELOAD" ); }
+                     | RUNBIST
+                       { $$ = strdup( "RUNBIST" ); }
+                     | SAMPLE
+                       { $$ = strdup( "SAMPLE" ); }
+                     | USERCODE
+                       { $$ = strdup( "USERCODE" ); }
+                     | IDENTIFIER
+                       { $$ = $1; }
+;
+Reg_Opcode           : Instruction_Name
+                       { ac_add_instruction( priv_data, $1 ); }
+;
+
+
+/****************************************************************************/
+BSDL_Boundary_Length : BOUNDARY_LENGTH DECIMAL_NUMBER
+                       { priv_data->jtag_ctrl->bsr_len = $2; }
+;
+
+/****************************************************************************/
+BSDL_Boundary_Register : BOUNDARY_REGISTER BSDL_Cell_Table
+;
+BSDL_Cell_Table : Cell_Entry
+                | BSDL_Cell_Table COMMA Cell_Entry
+                | error
+                  {Print_Error( priv_data, _("Error in Boundary Cell description") );
+                   BUMP_ERROR; YYABORT; }
+;
+Cell_Entry      : DECIMAL_NUMBER LPAREN Cell_Info RPAREN
+                  { ci_append_cell_info( priv_data, $1 ); }
+;
+Cell_Info       : Cell_Spec
+                  { ci_no_disable( priv_data ); }
+                | Cell_Spec COMMA Disable_Spec
+;
+Cell_Spec       : IDENTIFIER COMMA Port_Name COMMA Cell_Function
+                  COMMA Safe_Value
+                  {
+                    free( $1 );
+                    ci_set_cell_spec( priv_data, $5, $7 );
+                  }
+;
+Port_Name       : IDENTIFIER
+                  {
+                    prt_add_name( priv_data, $1 );
+                    prt_add_bit( priv_data );
+                  }
+                | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
+                  {
+                    prt_add_name( priv_data, $1 );
+                    prt_add_range( priv_data, $3, $3 );
+                  }
+                | ASTERISK
+                  {
+                    prt_add_name( priv_data, strdup( "*" ) );
+                    prt_add_bit( priv_data );
+                  }
+;
+Cell_Function   : INPUT
+                  { $$ = INPUT; }
+                | OUTPUT2
+                  { $$ = OUTPUT2; }
+                | OUTPUT3
+                  { $$ = OUTPUT3; }
+                | CONTROL
+                  { $$ = CONTROL; }
+                | CONTROLR
+                  { $$ = CONTROLR; }
+                | INTERNAL
+                  { $$ = INTERNAL; }
+                | CLOCK
+                  { $$ = CLOCK; }
+                | BIDIR
+                  { $$ = BIDIR; }
+                | OBSERVE_ONLY
+                  { $$ = OBSERVE_ONLY; }
+;
+Safe_Value      : IDENTIFIER
+                  { $$ = $1; }
+                | DECIMAL_NUMBER
+                  {
+                    char *tmp;
+                    tmp = (char *)malloc( 2 );
+                    snprintf( tmp, 2, "%i", $1 );
+	            tmp[1] = '\0';
+                    $$ = tmp;
+                  }
+;
+Disable_Spec    : DECIMAL_NUMBER COMMA DECIMAL_NUMBER COMMA Disable_Value
+                  { ci_set_cell_spec_disable( priv_data, $1, $3, $5 ); }
+;
+Disable_Value   : Z
+                  { $$ = Z; }
+                | WEAK0
+                  { $$ = WEAK0; }
+                | WEAK1
+                  { $$ = WEAK1; }
+                | PULL0
+                  { $$ = PULL0; }
+                | PULL1
+                  { $$ = PULL1; }
+                | KEEPER
+                  { $$ = KEEPER; }
+;
+
+/****************************************************************************/
+BSDL_Compliance_Patterns : COMPLIANCE_PATTERNS BSDL_Compliance_Pattern
+;
 BSDL_Compliance_Pattern : LPAREN Physical_Pin_List RPAREN
-                   {bsdl_flex_set_bin_x(priv_data->scanner);}
-                   LPAREN Bin_X_Pattern_List RPAREN
-                 ;
+                          { bsdl_flex_set_bin_x( priv_data->scanner ); }
+                          LPAREN Bin_X_Pattern_List RPAREN
+;
 Bin_X_Pattern_List : BIN_X_PATTERN
-                     { free($1); }
+                     { free( $1 ); }
                    | Bin_X_Pattern_List COMMA BIN_X_PATTERN
-                     { free($3); }
-                   ;
-Quoted_String    : QUOTED_STRING
-                   {Init_Text(priv_data);
-                    Store_Text(priv_data, $1);
-                    free($1); }
-                 | Quoted_String CONCATENATE QUOTED_STRING
-                   {Store_Text(priv_data, $3);
-                    free($3); }
-                 ;
+                     { free( $3 ); }
+;
+
+/****************************************************************************/
+BSDL_Component_Conformance : COMPONENT_CONFORMANCE STD_1149_1_1990
+                             { priv_data->jtag_ctrl->conformance = CONF_1990; }
+                           | COMPONENT_CONFORMANCE STD_1149_1_1993
+                             { priv_data->jtag_ctrl->conformance = CONF_1993; }
+                           | COMPONENT_CONFORMANCE STD_1149_1_2001
+                             { priv_data->jtag_ctrl->conformance = CONF_2001; }
+;
+/****************************************************************************/
+ISC_Extension : ISC_Conformance
+              | ISC_Pin_Behavior
+              | ISC_Fixed_System_Pins
+              | ISC_Status
+              | ISC_Blank_Usercode
+              | ISC_Security
+              | ISC_Flow
+              | ISC_Procedure
+              | ISC_Action
+              | ISC_Illegal_Exit
+;
+/****************************************************************************/
+ISC_Conformance : ISC_CONFORMANCE STD_1532_2001
+                | ISC_CONFORMANCE STD_1532_2002
+;
+/****************************************************************************/
+ISC_Pin_Behavior    : ISC_PIN_BEHAVIOR Pin_Behavior_Option
+;
+Pin_Behavior_Option : HIGHZ
+                    | CLAMP
+                    | error
+                      {
+                        Print_Error( priv_data, _("Error in ISC_Pin_Behavior Definition") );
+                        BUMP_ERROR;
+                        YYABORT;
+                      }
+;
+/****************************************************************************/
+ISC_Fixed_System_Pins : ISC_FIXED_SYSTEM_PINS Fixed_Pin_List
+;
+Fixed_Pin_List        : Port_Id
+                      | Fixed_Pin_List COMMA Port_Id
+                      | error
+                        {
+                          Print_Error( priv_data, _("Error in ISC_Fixed_System_Pins Definition") );
+                          BUMP_ERROR;
+                          YYABORT;
+                        }
+;
+Port_Id               : IDENTIFIER
+                        { free( $1 ); }
+                      | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
+                        { free( $1 ); }
+;
+/****************************************************************************/
+ISC_Status      : ISC_STATUS Status_Modifier IMPLEMENTED
+;
+Status_Modifier : /* empty */
+                | IDENTIFIER
+                  { free( $1 ); }
+;
+/****************************************************************************/
+ISC_Blank_Usercode : ISC_BLANK_USERCODE BIN_X_PATTERN
+                     { free( $2 ); }
+;
+/****************************************************************************/
+ISC_Security : ISC_SECURITY Protection_Spec
+;
+Protection_Spec : Read_Spec COMMA Program_Spec COMMA Erase_Spec COMMA Key_Spec
+                | error
+                  {
+                    Print_Error( priv_data, _("Error in ISC_Security Definition") );
+                    BUMP_ERROR;
+                    YYABORT;
+                  }
+;
+Read_Spec       : ISC_DISABLE_READ Bit_Spec
+;
+Program_Spec    : ISC_DISABLE_PROGRAM Bit_Spec
+;
+Erase_Spec      : ISC_DISABLE_ERASE Bit_Spec
+;
+Key_Spec        : ISC_DISABLE_KEY Bit_Range
+;
+Bit_Spec        : ASTERISK
+                | DECIMAL_NUMBER
+;
+Bit_Range       : ASTERISK
+                | DECIMAL_NUMBER MINUS DECIMAL_NUMBER
+;
+/****************************************************************************/
+ISC_Flow               : ISC_FLOW Flow_Definition_List
+;
+Flow_Definition_List   : Flow_Definition
+                       | Flow_Definition_List COMMA Flow_Definition
+;
+Flow_Definition        : Flow_Descriptor
+                       | Flow_Descriptor Initialize_Block
+                       | Flow_Descriptor Initialize_Block Repeat_Block
+                       | Flow_Descriptor Initialize_Block Repeat_Block Terminate_Block
+                       | Flow_Descriptor Repeat_Block
+                       | Flow_Descriptor Repeat_Block Terminate_Block
+                       | Flow_Descriptor Terminate_Block
+                       | error
+                         {
+                           Print_Error( priv_data, _("Error in ISC_Flow Definition") );
+                           BUMP_ERROR;
+                           YYABORT;
+                         }
+;
+Flow_Descriptor        : IDENTIFIER
+                         { free( $1 ); }
+                       | IDENTIFIER Data_Name
+                         { free( $1 ); }
+                       | IDENTIFIER Data_Name UNPROCESSED
+                         { free( $1 ); }
+                       | IDENTIFIER Data_Name UNPROCESSED EXIT_ON_ERROR
+                         { free( $1 ); }
+                       | IDENTIFIER UNPROCESSED
+                         { free( $1 ); }
+                       | IDENTIFIER UNPROCESSED EXIT_ON_ERROR
+                         { free( $1 ); }
+                       | IDENTIFIER EXIT_ON_ERROR
+                         { free( $1 ); }
+;
+Data_Name              : LPAREN Standard_Data_Name RPAREN
+                       | LPAREN IDENTIFIER RPAREN
+                         { free( $2 ); }
+;
+Standard_Data_Name     : ARRAY | USERCODE | SECURITY | IDCODE | PRELOAD
+;
+Initialize_Block       : INITIALIZE Activity_List
+;
+Repeat_Block           : REPEAT DECIMAL_NUMBER Activity_List
+;
+Terminate_Block        : TERMINATE Activity_List
+;
+Activity_List          : Activity_Element
+                       | Activity_List Activity_Element
+;
+Activity_Element       : Activity
+                       | Loop_Block
+;
+Loop_Block             : LOOP Loop_Min_Spec Loop_Max_Spec LPAREN Loop_Activity_List RPAREN
+;
+Loop_Min_Spec          : /* empty */
+                       | MIN DECIMAL_NUMBER
+;
+Loop_Max_Spec          : MAX DECIMAL_NUMBER
+;
+Loop_Activity_List     : Activity
+                       | Loop_Activity_List Activity
+;
+Activity               : LPAREN Instruction_Name Wait_Specification RPAREN
+                         { free( $2 ); }
+                       | LPAREN Instruction_Name Update_Field_List Wait_Specification RPAREN
+                         { free( $2 ); }
+                       | LPAREN Instruction_Name Wait_Specification Capture_Field_List RPAREN
+                         { free( $2 ); }
+                       | LPAREN Instruction_Name Update_Field_List Wait_Specification Capture_Field_List RPAREN
+                         { free( $2 ); }
+;
+Update_Field_List      : Update_Field
+                       | Update_Field_List COMMA Update_Field
+;
+Update_Field           : DECIMAL_NUMBER
+                       | DECIMAL_NUMBER COLON 
+                         { bsdl_flex_set_hex( priv_data->scanner ); }
+                         Data_Expression
+                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+;
+Data_Expression        : HEX_STRING
+                         { free( $1 ); }
+                       | Input_Specifier
+                       | Variable_Expression
+;
+Variable_Expression    : Variable
+                       | Variable_Assignment
+                       | Variable_Update
+;
+Variable_Assignment    : Variable EQUAL
+                         { bsdl_flex_set_hex( priv_data->scanner ); }
+                         HEX_STRING
+                         {
+                           free( $4 );
+                           bsdl_flex_set_decimal( priv_data->scanner );
+                         }
+                       | Variable Input_Specifier
+;
+Variable_Update        : Variable Complement_Operator
+                       | Variable Binary_Operator DECIMAL_NUMBER
+;
+Input_Specifier        : Input_Operator
+                       | IO_Operator
+;
+Capture_Field_List     : Capture_Field
+                       | Capture_Field_List COMMA Capture_Field
+;
+Capture_Field          : DECIMAL_NUMBER COLON
+                         { bsdl_flex_set_hex( priv_data->scanner ); }
+                         Capture_Field_Rest
+                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+;
+Capture_Field_Rest     : Capture_Specification
+                       | Capture_Specification CRC_Tag
+                       | Capture_Specification CRC_Tag OST_Tag
+                       | Capture_Specification OST_Tag
+;
+Capture_Specification  : Expected_Data
+                       | Expected_Data Compare_Mask
+;
+Expected_Data          : /* empty */
+                       | Output_Operator
+                       | Output_Operator Data_Expression
+                       | Data_Expression
+;
+Compare_Mask           : ASTERISK
+                       | ASTERISK Output_Operator
+                       | ASTERISK Output_Operator Data_Expression
+                       | ASTERISK Data_Expression
+;
+Wait_Specification     : WAIT Duration_Specification
+                       | WAIT Duration_Specification MIN
+                       | WAIT Duration_Specification MIN COLON Duration_Specification MAX
+;
+Duration_Specification : Clock_Cycles
+                       | REAL_NUMBER
+                         { free( $1 ); }
+                       | Clock_Cycles COMMA REAL_NUMBER
+                         { free( $3 ); }
+;
+Clock_Cycles           : Port_Id DECIMAL_NUMBER
+;
+Variable               : DOLLAR IDENTIFIER
+                         { free( $2 ); }
+;
+Binary_Operator        : PLUS
+                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                       | MINUS
+                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                       | SH_RIGHT
+                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                       | SH_LEFT
+                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+;
+Complement_Operator    : TILDE
+;
+Input_Operator         : QUESTION_MARK
+;
+Output_Operator        : EXCLAMATION_MARK
+;
+IO_Operator            : QUESTION_EXCLAMATION
+;
+CRC_Tag                : COLON CRC
+;
+OST_Tag                : COLON OST
+;
+/****************************************************************************/
+ISC_Procedure        : ISC_PROCEDURE Procedure_List
+;
+Procedure_List       : Procedure
+                     | Procedure_List COMMA Procedure
+;
+Procedure            : IDENTIFIER EQUAL LPAREN Flow_Descriptor_List RPAREN
+                       { free( $1 ); }
+                     | IDENTIFIER Data_Name EQUAL LPAREN Flow_Descriptor_List RPAREN
+                       { free( $1 ); }
+                     | error
+                       {
+                         Print_Error( priv_data, _("Error in ISC_Procedure Definition") );
+                         BUMP_ERROR;
+                         YYABORT;
+                       }
+;
+Flow_Descriptor_List : Flow_Descriptor
+                     | Flow_Descriptor_List COMMA Flow_Descriptor
+;
+/****************************************************************************/
+ISC_Action                : ISC_ACTION Action_List
+;
+Action_List               : Action
+                          | Action_List COMMA Action
+;
+Action                    : IDENTIFIER EQUAL LPAREN Action_Specification_List RPAREN
+                            { free( $1 ); }
+                          | IDENTIFIER Data_Name EQUAL LPAREN Action_Specification_List RPAREN
+                            { free( $1 ); }
+                          | IDENTIFIER PROPRIETARY EQUAL LPAREN Action_Specification_List RPAREN
+                            { free( $1 ); }
+                          | IDENTIFIER Data_Name PROPRIETARY EQUAL LPAREN Action_Specification_List RPAREN
+                            { free( $1 ); }
+                          | error
+                            {
+                              Print_Error( priv_data, _("Error in ISC_Action Definition") );
+                              BUMP_ERROR;
+                              YYABORT;
+                            }
+;
+Action_Specification_List : Action_Specification
+                          | Action_Specification_List COMMA Action_Specification
+;
+Action_Specification      : IDENTIFIER
+                            { free( $1 ); }
+                          | IDENTIFIER Data_Name
+                            { free( $1 ); }
+                          | IDENTIFIER Data_Name PROPRIETARY
+                            { free( $1 ); }
+                          | IDENTIFIER Data_Name Option_Specification
+                            { free( $1 ); }
+                          | IDENTIFIER Data_Name PROPRIETARY Option_Specification
+                            { free( $1 ); }
+                          | IDENTIFIER PROPRIETARY
+                            { free( $1 ); }
+                          | IDENTIFIER PROPRIETARY Option_Specification
+                            { free( $1 ); }
+                          | IDENTIFIER Option_Specification
+                            { free( $1 ); }
+;
+Option_Specification      : OPTIONAL | RECOMMENDED
+;
+/****************************************************************************/
+ISC_Illegal_Exit : ISC_ILLEGAL_EXIT Exit_Instruction_List
+;
+Exit_Instruction_List : IDENTIFIER
+                        { free( $1 ); }
+                      | Exit_Instruction_List COMMA IDENTIFIER
+                        { free( $3 ); }
+;
 %%  /* End rules, begin programs  */
 /*----------------------------------------------------------------------*/
-static void Init_Text(parser_priv_t *priv_data)
+static void Print_Error( bsdl_parser_priv_t *priv_data, const char *Errmess )
 {
-  if (priv_data->len_buffer_for_switch == 0) {
-    priv_data->buffer_for_switch = (char *)malloc(160);
-    priv_data->len_buffer_for_switch = 160;
+  if (priv_data->jtag_ctrl->debug || (priv_data->jtag_ctrl->mode >= 0))
+    bsdl_msg( BSDL_MSG_ERR, _("Line %d, %s.\n"),
+              priv_data->lineno,
+              Errmess );
+}
+/*----------------------------------------------------------------------*/
+static void Print_Warning( bsdl_parser_priv_t *priv_data, const char *Warnmess )
+{
+  if (priv_data->jtag_ctrl->debug || (priv_data->jtag_ctrl->mode >= 0))
+    bsdl_msg( BSDL_MSG_WARN, _("Line %d, %s.\n"),
+              priv_data->lineno,
+              Warnmess );
+}
+/*----------------------------------------------------------------------*/
+static void Give_Up_And_Quit( bsdl_parser_priv_t *priv_data )
+{
+  //Print_Error( priv_data, "Too many errors" );
+  bsdl_flex_stop_buffer( priv_data->scanner );
+}
+/*----------------------------------------------------------------------*/
+void yyerror( bsdl_parser_priv_t *priv_data, const char *error_string )
+{
+}
+
+
+/*****************************************************************************
+ * void bsdl_sem_init( bsdl_parser_priv_t *priv )
+ *
+ * Initializes storage elements in the private parser and jtag control
+ * structures that are used for semantic purposes.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void bsdl_sem_init( bsdl_parser_priv_t *priv )
+{
+  jtag_ctrl_t *jc = priv->jtag_ctrl;
+
+  jc->instr_len   = -1;
+  jc->bsr_len     = -1;
+  jc->conformance = CONF_UNKNOWN;
+  jc->idcode      = NULL;
+  jc->usercode    = NULL;
+
+  jc->instr_list = NULL;
+
+  priv->ainfo.next       = NULL;
+  priv->ainfo.reg        = NULL;
+  priv->ainfo.instr_list = NULL;
+  jc->ainfo_list         = NULL;
+
+  priv->tmp_cell_info.next             = NULL;
+  priv->tmp_cell_info.port_name        = NULL;
+  priv->tmp_cell_info.basic_safe_value = NULL;
+  jc->cell_info_first                  = NULL;
+  jc->cell_info_last                   = NULL;
+
+  priv->tmp_port_desc.names_list = NULL;
+  priv->tmp_port_desc.next       = NULL;
+}
+
+
+/*****************************************************************************
+ * void free_instr_list( struct instr_elem *il )
+ *
+ * Deallocates the given list of instr_elem.
+ *
+ * Parameters
+ *   il : first instr_elem to deallocate
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void free_instr_list( instr_elem_t *il )
+{
+  if (il)
+  {
+    if (il->instr)
+      free( il->instr );
+    if (il->opcode)
+      free( il->opcode );
+    free_instr_list( il->next );
+    free( il );
   }
-  priv_data->buffer_for_switch[0] = '\0';
 }
-/*----------------------------------------------------------------------*/
-static void Store_Text(parser_priv_t *priv_data, char *Source)
-{ /* Save characters from VHDL string in local string buffer.           */
-  size_t req_len;
-  char   *SourceEnd;
 
-  SourceEnd = ++Source;   /* skip leading '"' */
-  while (*SourceEnd && (*SourceEnd != '"') && (*SourceEnd != '\n'))
-    SourceEnd++;
-  /* terminate Source string with NUL character */
-  *SourceEnd = '\0';
 
-  req_len = strlen(priv_data->buffer_for_switch) + strlen(Source) + 1;
-  if (req_len > priv_data->len_buffer_for_switch) {
-    priv_data->buffer_for_switch = (char *)realloc(priv_data->buffer_for_switch,
-                                                   req_len);
-    priv_data->len_buffer_for_switch = req_len;
+/*****************************************************************************
+ * void free_ainfo_list( ainfo_elem_t *ai, int free_me )
+ *
+ * Deallocates the given list of ainfo_elem.
+ *
+ * Parameters
+ *  ai      : first ainfo_elem to deallocate
+ *  free_me : set to 1 to free memory for ai as well
+ *
+ * Returns
+ *  void
+ ****************************************************************************/
+static void free_ainfo_list( ainfo_elem_t *ai, int free_me )
+{
+  if (ai)
+  {
+    if (ai->reg)
+      free( ai->reg );
+
+    free_instr_list( ai->instr_list );
+    free_ainfo_list( ai->next, 1 );
+
+    if (free_me)
+      free( ai );
   }
-  strcat(priv_data->buffer_for_switch, Source);
 }
-/*----------------------------------------------------------------------*/
-static void Print_Error(parser_priv_t *priv_data, const char *Errmess)
-{
-  if (priv_data->Reading_Package)
-    bsdl_msg(BSDL_MSG_ERR, _("In Package %s, Line %d, %s.\n"),
-             priv_data->Package_File_Name,
-             bsdl_flex_get_lineno(priv_data->scanner),
-             Errmess);
-  else
-    if (priv_data->jtag_ctrl.debug || (priv_data->jtag_ctrl.mode >= 0))
-      bsdl_msg(BSDL_MSG_ERR, _("Line %d, %s.\n"),
-               bsdl_flex_get_lineno(priv_data->scanner),
-               Errmess);
-}
-/*----------------------------------------------------------------------*/
-static void Print_Warning(parser_priv_t *priv_data, const char *Warnmess)
-{
-  if (priv_data->Reading_Package)
-    bsdl_msg(BSDL_MSG_WARN, _("In Package %s, Line %d, %s.\n"),
-             priv_data->Package_File_Name,
-             bsdl_flex_get_lineno(priv_data->scanner),
-             Warnmess);
-  else
-    if (priv_data->jtag_ctrl.debug || (priv_data->jtag_ctrl.mode >= 0))
-      bsdl_msg(BSDL_MSG_WARN, _("Line %d, %s.\n"),
-               bsdl_flex_get_lineno(priv_data->scanner),
-               Warnmess);
-}
-/*----------------------------------------------------------------------*/
-static void Give_Up_And_Quit(parser_priv_t *priv_data)
-{
-  Print_Error(priv_data, "Too many errors");
-}
-/*----------------------------------------------------------------------*/
-void yyerror(parser_priv_t *priv_data, const char *error_string)
-{
-}
-/*----------------------------------------------------------------------*/
-parser_priv_t *bsdl_parser_init(FILE *f, int mode, int debug)
-{
-  parser_priv_t *new_priv;
 
-  if (!(new_priv = (parser_priv_t *)malloc(sizeof(parser_priv_t)))) {
-    bsdl_msg(BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__);
+
+/*****************************************************************************
+ * void free_string_list( string_elem_t *sl )
+ *
+ * Deallocates the given list of string_elem items.
+ *
+ * Parameters
+ *  sl : first string_elem to deallocate
+ *
+ * Returns
+ *  void
+ ****************************************************************************/
+static void free_string_list( string_elem_t *sl) 
+{
+  if (sl)
+  {
+    if (sl->string)
+      free( sl->string );
+    free_string_list( sl->next );
+    free( sl );
+  }
+}
+
+
+/*****************************************************************************
+ * void free_c_list( cell_info_t *ci, int free_me )
+ *
+ * Deallocates the given list of cell_info items.
+ *
+ * Parameters
+ *  ci      : first cell_info item to deallocate
+ *  free_me : 1 -> free memory for *ci as well
+ *            0 -> don't free *ci memory
+ *
+ * Returns
+ *  void
+ ****************************************************************************/
+static void free_ci_list( cell_info_t *ci, int free_me )
+{
+  if (ci)
+  {
+    free_ci_list( ci->next, 1 );
+
+    if (ci->port_name)
+      free( ci->port_name );
+
+    if (ci->basic_safe_value)
+      free( ci->basic_safe_value );
+
+    if (free_me)
+      free( ci );
+  }
+}
+
+
+/*****************************************************************************
+ * void bsdl_sem_deinit( bsdl_parser_priv_t *priv )
+ *
+ * Frees and deinitializes storage elements in the private parser and
+ * jtag control structures that were filled by semantic rules.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void bsdl_sem_deinit( bsdl_parser_priv_t *priv )
+{
+  jtag_ctrl_t *jc = priv->jtag_ctrl;
+
+  if (jc->idcode)
+  {
+    free( jc->idcode );
+    jc->idcode = NULL;
+  }
+
+  if (jc->usercode)
+  {
+    free( jc->usercode );
+    jc->usercode = NULL;
+  }
+
+  /* free cell_info list */
+  free_ci_list( jc->cell_info_first, 1 );
+  jc->cell_info_first = jc->cell_info_last = NULL;
+  free_ci_list( &(priv->tmp_cell_info), 0 );
+
+  /* free instr_list */
+  free_instr_list( jc->instr_list );
+  jc->instr_list = NULL;
+
+  /* free ainfo_list */
+  free_ainfo_list( jc->ainfo_list, 1 );
+  jc->ainfo_list = NULL;
+  free_ainfo_list( &(priv->ainfo), 0 );
+
+  /* free string list in temporary port descritor */
+  free_string_list( priv->tmp_port_desc.names_list );
+  priv->tmp_port_desc.names_list = NULL;
+}
+
+
+/*****************************************************************************
+ * bsdl_parser_priv_t *bsdl_parser_init( jtag_ctrl_t *jtag_ctrl )
+ *
+ * Initializes storage elements in the private parser structure that are
+ * used for parser maintenance purposes.
+ * Subsequently calls initializer functions for the scanner and the semantic 
+ * parts.
+ *
+ * Parameters
+ *   jtag_ctrl : pointer to jtag control structure
+ *
+ * Returns
+ *   pointer to private parser structure
+ ****************************************************************************/
+bsdl_parser_priv_t *bsdl_parser_init( jtag_ctrl_t *jtag_ctrl )
+{
+  bsdl_parser_priv_t *new_priv;
+
+  if (!(new_priv = (bsdl_parser_priv_t *)malloc( sizeof( bsdl_parser_priv_t ) ))) {
+    bsdl_msg( BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     return NULL;
   }
 
-  new_priv->jtag_ctrl.mode  = mode;
-  new_priv->jtag_ctrl.debug = debug;
+  new_priv->jtag_ctrl = jtag_ctrl;
 
-  new_priv->Reading_Package = 0;
-  new_priv->buffer_for_switch = NULL;
-  new_priv->len_buffer_for_switch = 0;
-
-  if (!(new_priv->scanner = bsdl_flex_init(f, mode, debug))) {
+  if (!(new_priv->scanner = bsdl_flex_init( jtag_ctrl->mode, jtag_ctrl->debug ))) {
     free(new_priv);
     new_priv = NULL;
   }
 
-  bsdl_sem_init(new_priv);
+  bsdl_sem_init( new_priv );
 
   return new_priv;
 }
-/*----------------------------------------------------------------------*/
-void bsdl_parser_deinit(parser_priv_t *priv_data)
+
+
+/*****************************************************************************
+ * void bsdl_parser_deinit( bsdl_parser_priv_t *priv )
+ *
+ * Frees storage elements in the private parser structure that are
+ * used for parser maintenance purposes.
+ * Subsequently calls deinitializer functions for the scanner and the semantic
+ * parts.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+void bsdl_parser_deinit( bsdl_parser_priv_t *priv_data )
 {
-  bsdl_sem_deinit(priv_data);
-  bsdl_flex_deinit(priv_data->scanner);
-  free(priv_data);
+  bsdl_sem_deinit( priv_data );
+  bsdl_flex_deinit( priv_data->scanner );
+  free( priv_data );
 }
+
+
+/*****************************************************************************
+ * void add_instruction( bsdl_parser_priv_t *priv, char *instr, char *opcode )
+ *
+ * Converts the instruction specification into a member of the main
+ * list of instructions at priv->jtag_ctrl->instr_list.
+ *
+ * Parameters
+ *   priv   : private data container for parser related tasks
+ *   instr  : instruction name
+ *   opcode : instruction opcode
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void add_instruction( bsdl_parser_priv_t *priv, char *instr, char *opcode )
+{
+  instr_elem_t *new_instr;
+
+  new_instr = (instr_elem_t *)malloc( sizeof( instr_elem_t ) );
+  if (new_instr)
+  {
+    new_instr->next   = priv->jtag_ctrl->instr_list;
+    new_instr->instr  = instr;
+    new_instr->opcode = opcode;
+
+    priv->jtag_ctrl->instr_list = new_instr;
+  }
+  else
+    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+}
+
+
+/*****************************************************************************
+ * void ac_set_register( bsdl_parser_priv_t *priv, char *reg, int reg_len )
+ * Register Access management function
+ *
+ * Stores the register specification values for the current register access
+ * specification in the temporary storage region for later usage.
+ *
+ * Parameters
+ *   priv    : private data container for parser related tasks
+ *   reg     : register name
+ *   reg_len : optional register length
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void ac_set_register( bsdl_parser_priv_t *priv, char *reg, int reg_len )
+{
+  ainfo_elem_t *tmp_ai = &(priv->ainfo);
+
+  tmp_ai->reg     = reg;
+  tmp_ai->reg_len = reg_len;
+}
+
+
+/*****************************************************************************
+ * void ac_add_instruction( bsdl_parser_priv_t *priv, char *instr )
+ * Register Access management function
+ *
+ * Appends the specified instruction to the list of instructions for the
+ * current register access specification in the temporary storage region
+ * for later usage.
+ *
+ * Parameters
+ *   priv  : private data container for parser related tasks
+ *   instr : instruction name
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void ac_add_instruction( bsdl_parser_priv_t *priv, char *instr )
+{
+  ainfo_elem_t *tmp_ai = &(priv->ainfo);
+  instr_elem_t *new_instr;
+
+  new_instr = (instr_elem_t *)malloc( sizeof( instr_elem_t ) );
+  if (new_instr)
+  {
+    new_instr->next   = tmp_ai->instr_list;
+    new_instr->instr  = instr;
+    new_instr->opcode = NULL;
+
+    tmp_ai->instr_list = new_instr;
+  }
+  else
+    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+}
+
+
+/*****************************************************************************
+ * void ac_apply_assoc( bsdl_parser_priv_t *priv )
+ * Register Access management function
+ *
+ * Appends the collected register access specification from the temporary
+ * storage region to the main ainfo list.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void ac_apply_assoc( bsdl_parser_priv_t *priv )
+{
+  jtag_ctrl_t  *jc = priv->jtag_ctrl;
+  ainfo_elem_t *tmp_ai = &(priv->ainfo);
+  ainfo_elem_t *new_ai;
+
+  new_ai = (ainfo_elem_t *)malloc( sizeof( ainfo_elem_t ) );
+  if (new_ai)
+  {
+    new_ai->next       = jc->ainfo_list;
+    new_ai->reg        = tmp_ai->reg;
+    new_ai->reg_len    = tmp_ai->reg_len;
+    new_ai->instr_list = tmp_ai->instr_list;
+
+    jc->ainfo_list = new_ai;
+  }
+  else
+    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+
+  /* clean up obsolete temporary entries */
+  tmp_ai->reg        = NULL;
+  tmp_ai->reg_len    = 0;
+  tmp_ai->instr_list = NULL;
+}
+
+
+/*****************************************************************************
+ * void prt_add_name( bsdl_parser_priv_t *priv, char *name )
+ * Port name management function
+ *
+ * Sets the name field of the temporary storage area for port description
+ * (port_desc) to the parameter name.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *   name : base name of the port, memory get's free'd lateron
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void prt_add_name( bsdl_parser_priv_t *priv, char *name )
+{
+  port_desc_t *pd = &(priv->tmp_port_desc);
+  string_elem_t *new_string;
+
+  new_string = (string_elem_t *)malloc( sizeof( string_elem_t ) );
+  if (new_string)
+  {
+    new_string->next   = pd->names_list;
+    new_string->string = name;
+
+    pd->names_list = new_string;
+  }
+  else
+    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+}
+
+
+/*****************************************************************************
+ * void prt_add_bit( bsdl_parser_priv_t *priv )
+ * Port name management function
+ *
+ * Sets the vector and index fields of the temporary storage area for port
+ * description (port_desc) to non-vector information. The low and high indice
+ * are set to equal numbers (exact value is irrelevant).
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void prt_add_bit( bsdl_parser_priv_t *priv )
+{
+  port_desc_t *pd = &(priv->tmp_port_desc);
+
+  pd->is_vector = 0;
+  pd->low_idx   = 0;
+  pd->high_idx  = 0;
+}
+
+
+/*****************************************************************************
+ * void prt_add_range( bsdl_parser_priv_t *priv, int low, int high )
+ * Port name management function
+ *
+ * Sets the vector and index fields of the temporary storage area for port
+ * description (port_desc) to the specified vector information.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *   low  : low index of vector
+ *   high : high index of vector
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void prt_add_range( bsdl_parser_priv_t *priv, int low, int high )
+{
+  port_desc_t *pd = &(priv->tmp_port_desc);
+
+  pd->is_vector = 1;
+  pd->low_idx   = low;
+  pd->high_idx  = high;
+}
+
+
+/*****************************************************************************
+ * void ci_no_disable( bsdl_parser_priv_t *priv )
+ * Cell Info management function
+ *
+ * Tracks that there is no disable term for the current cell info.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void ci_no_disable( bsdl_parser_priv_t *priv )
+{
+  priv->tmp_cell_info.ctrl_bit_num = -1;
+}
+
+
+/*****************************************************************************
+ * void ci_set_cell_spec_disable( bsdl_parser_priv_t *priv, int ctrl_bit_num,
+ *                                int safe_value, int disable_value )
+ * Cell Info management function
+ *
+ * Applies the disable specification of the current cell spec to the variables
+ * for temporary storage of these information elements.
+ *
+ * Parameters
+ *   priv          : private data container for parser related tasks
+ *   ctrl_bit_num  : bit number of related control cell
+ *   safe_value    : safe value for initialization of this cell
+ *   disable_value : currently ignored
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void ci_set_cell_spec_disable( bsdl_parser_priv_t *priv, int ctrl_bit_num,
+                                      int safe_value, int disable_value )
+{
+  cell_info_t *ci = &(priv->tmp_cell_info);
+
+  ci->ctrl_bit_num       = ctrl_bit_num;
+  ci->disable_safe_value = safe_value;
+  /* disable value is ignored at the moment */
+}
+
+
+/*****************************************************************************
+ * void ci_set_cell_spec( bsdl_parser_priv_t *priv,
+ *                        int function, char *safe_value )
+ * Cell Info management function
+ *
+ * Sets the specified values of the current cell_spec (without disable term)
+ * to the variables for temporary storage of these information elements.
+ * The name of the related port is taken from the port_desc structure that
+ * was filled in previously by the rule Port_Name.
+ *
+ * Parameters
+ *   priv       : private data container for parser related tasks
+ *   function   : cell function indentificator
+ *   safe_value : safe value for initialization of this cell
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void ci_set_cell_spec( bsdl_parser_priv_t *priv,
+                              int function, char *safe_value )
+{
+  cell_info_t *ci     = &(priv->tmp_cell_info);
+  port_desc_t *pd     = &(priv->tmp_port_desc);
+  string_elem_t *name = priv->tmp_port_desc.names_list;
+  char   *port_string;
+  size_t  str_len, name_len;
+
+  ci->cell_function    = function;
+  ci->basic_safe_value = safe_value;
+
+  /* handle indexed port name:
+   - names of scalar ports are simply copied from the port_desc structure
+     to the final string that goes into ci
+   - names of vectored ports are expanded with their decimal index as
+     collected earlier earlier in rule Port_Name
+  */
+  name_len = strlen( name->string );
+  str_len = name_len + 1 + 10 + 1 + 1;
+  if ((port_string = (char *)malloc( str_len )) != NULL)
+  {
+    if (pd->is_vector)
+      snprintf( port_string, str_len-1, "%s(%d)", name->string, pd->low_idx );
+    else
+      strncpy( port_string, name->string, str_len-1 );
+    port_string[str_len-1] = '\0';
+
+    ci->port_name = port_string;
+  }
+  else
+  {
+    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    ci->port_name = NULL;
+  }
+
+  free_string_list( priv->tmp_port_desc.names_list );
+  priv->tmp_port_desc.names_list = NULL;
+}
+
+
+/*****************************************************************************
+ * void ci_append_cell_info( bsdl_parser_priv_t *priv, int bit_num )
+ * Cell Info management function
+ *
+ * Appends the temporary cell info to the global list of cell infos.
+ *
+ * Parameters
+ *   priv    : private data container for parser related tasks
+ *   bit_num : bit number of current cell
+ *
+ * Returns
+ *   void
+ ****************************************************************************/
+static void ci_append_cell_info( bsdl_parser_priv_t *priv, int bit_num )
+{
+  cell_info_t *tmp_ci = &(priv->tmp_cell_info);
+  cell_info_t *ci;
+  jtag_ctrl_t *jc     = priv->jtag_ctrl;
+
+  ci = (cell_info_t *)malloc( sizeof( cell_info_t ) );
+  if (ci)
+  {
+    ci->next = NULL;
+    if (jc->cell_info_last)
+      jc->cell_info_last->next = ci;
+    else
+      jc->cell_info_first = ci;
+    jc->cell_info_last = ci;
+
+    ci->bit_num            = bit_num;
+    ci->port_name          = tmp_ci->port_name;
+    ci->cell_function      = tmp_ci->cell_function;
+    ci->basic_safe_value   = tmp_ci->basic_safe_value;
+    ci->ctrl_bit_num       = tmp_ci->ctrl_bit_num;
+    ci->disable_safe_value = tmp_ci->disable_safe_value;
+
+    tmp_ci->port_name        = NULL;
+    tmp_ci->basic_safe_value = NULL;
+  }
+  else
+    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+}
+
+
+/*
+ Local Variables:
+ mode:C
+ c-default-style:gnu
+ indent-tabs-mode:nil
+ End:
+*/

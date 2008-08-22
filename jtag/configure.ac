@@ -549,6 +549,18 @@ AC_CHECK_LIB([m], [fmax], [
 ])
 
 
+dnl Enable use of DMALLOC library?
+AC_ARG_ENABLE(dmalloc,
+[AS_HELP_STRING([--enable-dmalloc], [Enable heap debugging with dmalloc library])],
+[dmalloc=$enableval], [dmalloc=no])
+AS_IF([test "x$dmalloc" = xyes], [
+  AM_CONDITIONAL(DMALLOC, true)
+  AC_DEFINE(DMALLOC, 1, [define for dmalloc library])
+],[
+  AM_CONDITIONAL(DMALLOC, false)
+])
+
+
 AC_OUTPUT
 
 dnl
