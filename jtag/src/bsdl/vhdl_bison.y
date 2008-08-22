@@ -485,19 +485,25 @@ VHDL_Constant_Part : IDENTIFIER COLON PIN_MAP_STRING COLON_EQUAL
 		     // { set_attr_const( priv_data, $1, strdup( "PIN_MAP_STRING" ) ); }
                      { free( $1 ); }
 ;
-VHDL_Attribute     : VHDL_Attr_Boolean
-                   | VHDL_Attr_Decimal
-                   | VHDL_Attr_Real
-                   | VHDL_Attr_String
-                   | VHDL_Attr_PhysicalPinMap
+VHDL_Attribute     : ATTRIBUTE VHDL_Attribute_Types
 ;
-VHDL_Attr_Boolean  : ATTRIBUTE IDENTIFIER OF IDENTIFIER
-                     COLON SIGNAL IS Boolean SEMICOLON
+VHDL_Attribute_Types : VHDL_Attr_Boolean
+                     | VHDL_Attr_Decimal
+                     | VHDL_Attr_Real
+                     | VHDL_Attr_String
+                     | VHDL_Attr_PhysicalPinMap
+                     | error
+                       {
+                         Print_Error( priv_data, _("Error in Attribute specification") );
+                         BUMP_ERROR; YYABORT;
+                       }
+;
+VHDL_Attr_Boolean  : IDENTIFIER OF IDENTIFIER COLON SIGNAL IS Boolean SEMICOLON
                      { 
-                       //set_attr_bool( priv_data, $2, $8 );
-                       //free( $4 );
+                       //set_attr_bool( priv_data, $1, $7 );
+                       //free( $3 );
                        /* skip boolean attributes for the time being */
-                       free( $2 ); free( $4 );
+                       free( $1 ); free( $3 );
 		     }
 ;
 Boolean            : TRUE
@@ -505,36 +511,30 @@ Boolean            : TRUE
                    | FALSE
                      { $$ = 0; }
 ;
-VHDL_Attr_Decimal : ATTRIBUTE IDENTIFIER OF IDENTIFIER
-                    COLON ENTITY IS DECIMAL_NUMBER SEMICOLON
+VHDL_Attr_Decimal : IDENTIFIER OF IDENTIFIER COLON ENTITY IS DECIMAL_NUMBER SEMICOLON
                     {
-                      set_attr_decimal( priv_data, $2, $8 );
-                      free( $4 );
-                      /* skip decimal attributes for the time being */
-                      //free( $2 ); free( $4 );
+                      set_attr_decimal( priv_data, $1, $7 );
+                      free( $3 );
 		    }
 ;
-VHDL_Attr_Real   : ATTRIBUTE IDENTIFIER OF IDENTIFIER COLON SIGNAL
-                   IS LPAREN REAL_NUMBER COMMA Stop RPAREN SEMICOLON
+VHDL_Attr_Real   : IDENTIFIER OF IDENTIFIER COLON SIGNAL IS LPAREN REAL_NUMBER COMMA Stop RPAREN SEMICOLON
                    {
-		     //set_attr_real( priv_data, $2, $9 );
-		     //free( $4 );
+		     //set_attr_real( priv_data, $1, $8 );
+		     //free( $3 );
                      /* skip real attributes for the time being */
-                     free( $2 ); free( $4 ); free( $9 );
+                     free( $1 ); free( $3 ); free( $8 );
 		   }
 ;
 Stop             : LOW | BOTH
 ;
-VHDL_Attr_String : ATTRIBUTE IDENTIFIER OF IDENTIFIER
-                   COLON ENTITY IS Quoted_String SEMICOLON
+VHDL_Attr_String : IDENTIFIER OF IDENTIFIER COLON ENTITY IS Quoted_String SEMICOLON
                    {
-		     set_attr_string( priv_data, $2, strdup( priv_data->buffer ) );
-		     free( $4 );
+		     set_attr_string( priv_data, $1, strdup( priv_data->buffer ) );
+		     free( $3 );
 		   }
 ;
-VHDL_Attr_PhysicalPinMap : ATTRIBUTE IDENTIFIER OF IDENTIFIER
-                           COLON ENTITY IS PHYSICAL_PIN_MAP SEMICOLON
-                           { free( $2 ); free( $4 ); }
+VHDL_Attr_PhysicalPinMap : IDENTIFIER OF IDENTIFIER COLON ENTITY IS PHYSICAL_PIN_MAP SEMICOLON
+                           { free( $1 ); free( $3 ); }
 ;
 Quoted_String    : QUOTED_STRING
                    {

@@ -1,3 +1,16 @@
+2008-08-22  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/bsdl/vhdl_bison.y: enhanced error reporting
+
+   * configure.ac, data/Makefile.am, src/Makefile.am,
+     src/bsdl/Makefile.am, src/bsdl/bsdl.c, src/bsdl/bsdl_bison.y,
+     src/bsdl/bsdl_flex.l, src/bsdl/bsdl_sem.c, src/bsdl/bsdl_sysdep.h,
+     data/bsdl/STD_1532_2001, data/bsdl/STD_1532_2002, src/bsdl/bsdl_msg.h,
+     src/bsdl/bsdl_parser.h, src/bsdl/bsdl_types.h, src/bsdl/vhdl_bison.y,
+     src/bsdl/vhdl_flex.l, src/bsdl/vhdl_parser.h, src/bsdl/bsdl_local.h:
+     merged from branches/bsdl 1304:1340
+     rewrite of BSDL parser
+
 2008-07-15  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * doc/UrJTAG.txt, src/cmd/dr.c (cmd_dr_help):
