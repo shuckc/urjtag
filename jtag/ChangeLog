@@ -1,3 +1,8 @@
+2008-08-24  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/bsdl/bsdl_sem.c (bsdl_process_cell_info): fix error with
+     repeated usage of cmd[]
+
 2008-08-22  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/bsdl/vhdl_bison.y: enhanced error reporting

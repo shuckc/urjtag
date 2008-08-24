@@ -299,7 +299,7 @@ static void bsdl_process_cell_info( jtag_ctrl_t *jc )
                    NULL,
                    NULL,
                    NULL,
-                   ctrl_bit_num_str,
+                   NULL,
                    disable_safe_value_str,
                    "Z",
                    NULL};
@@ -353,6 +353,7 @@ static void bsdl_process_cell_info( jtag_ctrl_t *jc )
         /* convert disable safe value to string */
         snprintf( disable_safe_value_str, str_len, "%i", ci->disable_safe_value );
         disable_safe_value_str[str_len] = '\0';
+        cmd[5] = ctrl_bit_num_str;
       }
       else
         /* stop command procssing here */
