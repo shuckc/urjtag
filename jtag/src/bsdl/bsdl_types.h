@@ -26,13 +26,13 @@
 #define BSDL_TYPES_H
 
 #include <jtag.h>
+#include <bsdl_mode.h>
 
 /* private data of the flex scanner
    handled internally in bsdl_flex.l as yyextra */
 struct scan_extra
 {
-  int mode;
-  int debug;
+  int proc_mode;
   int Compile_Errors;
   int Base;
 };
@@ -135,8 +135,7 @@ typedef enum
    with jtag internals */
 struct jtag_ctrl
 {
-  int      mode;
-  int      debug;
+  int      proc_mode;
   chain_t *chain;
   part_t  *part;
   /* collected by VHDL parser */

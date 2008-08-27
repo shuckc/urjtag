@@ -46,9 +46,9 @@ cmd_bsdl_run( chain_t *chain, char *params[] )
 			debug_save = globs->debug;
 			globs->debug = 1;
 			if (num_params == 3) {
-				result = bsdl_read_file(chain, params[2], -1, NULL) >= 0 ? 1 : -1;
+				result = bsdl_read_file(chain, params[2], BSDL_MODE_TEST, NULL) >= 0 ? 1 : -1;
 			} else if (num_params == 2) {
-				bsdl_scan_files(chain, NULL, -1);
+				bsdl_scan_files(chain, NULL, BSDL_MODE_TEST);
 				result = 1;
 			}
 			globs->debug = debug_save;
@@ -56,9 +56,9 @@ cmd_bsdl_run( chain_t *chain, char *params[] )
 
 		if (strcmp(params[1], "dump") == 0) {
 			if (num_params == 3) {
-				result = bsdl_read_file(chain, params[2], 0, NULL) >= 0 ? 1 : -1;
+				result = bsdl_read_file(chain, params[2], BSDL_MODE_DUMP, NULL) >= 0 ? 1 : -1;
 			} else if (num_params == 2) {
-				bsdl_scan_files(chain, NULL, 0);
+				bsdl_scan_files(chain, NULL, BSDL_MODE_DUMP);
 				result = 1;
 			}
 		}

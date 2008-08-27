@@ -1,3 +1,13 @@
+2008-08-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * include/Makefile.am, include/bsdl.h, include/bsdl_mode.h,
+     src/cmd/include.c, src/cmd/bsdl.c, src/bsdl/vhdl_parser.h,
+     src/bsdl/bsdl_msg.h, src/bsdl/bsdl.c, src/bsdl/bsdl_bison.y,
+     src/bsdl/vhdl_flex.l, src/bsdl/bsdl_parser.h, src/bsdl/bsdl_sem.c,
+     src/bsdl/bsdl_flex.l, src/bsdl/bsdl_types.h, src/bsdl/vhdl_bison.y,
+     src/tap/detect.c: cleaned-up bsdl subsystem, avoid double reading
+     during detect, commenting
+
 2008-08-24  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/bsdl/bsdl_sem.c (bsdl_process_cell_info): fix error with

@@ -474,6 +474,11 @@ User_Package     : PACKAGE IDENTIFIER
 ;
 VHDL_Elements : VHDL_Element
               | VHDL_Elements VHDL_Element
+              | error
+                {
+                  Print_Error( priv_data, _("Unknown VHDL statement") );
+                  BUMP_ERROR; YYABORT;
+                }
 ;
 VHDL_Element  : VHDL_Constant
               | VHDL_Attribute
@@ -639,16 +644,19 @@ static void Store_Text( vhdl_parser_priv_t *priv, char *Source )
 /*----------------------------------------------------------------------*/
 static void Print_Error( vhdl_parser_priv_t *priv_data, const char *Errmess )
 {
+  jtag_ctrl_t *jc = priv_data->jtag_ctrl;
+
   if (priv_data->Reading_Package)
-    bsdl_msg( BSDL_MSG_ERR, _("In Package %s, Line %d, %s.\n"),
+    bsdl_msg( jc->proc_mode,
+              BSDL_MSG_ERR, _("In Package %s, Line %d, %s.\n"),
               priv_data->Package_File_Name,
               vhdl_flex_get_lineno( priv_data->scanner ),
               Errmess );
   else
-    if (priv_data->jtag_ctrl->debug || (priv_data->jtag_ctrl->mode >= 0))
-      bsdl_msg( BSDL_MSG_ERR, _("Line %d, %s.\n"),
-                vhdl_flex_get_lineno( priv_data->scanner ),
-                Errmess );
+    bsdl_msg( jc->proc_mode,
+              BSDL_MSG_ERR, _("Line %d, %s.\n"),
+              vhdl_flex_get_lineno( priv_data->scanner ),
+              Errmess );
 }
 /*----------------------------------------------------------------------*/
 static void Give_Up_And_Quit( vhdl_parser_priv_t *priv_data )
@@ -809,7 +817,8 @@ vhdl_parser_priv_t *vhdl_parser_init( FILE *f, jtag_ctrl_t *jtag_ctrl )
 
   if (!(new_priv = (vhdl_parser_priv_t *)malloc( sizeof( vhdl_parser_priv_t ) )))
   {
-    bsdl_msg( BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( jtag_ctrl->proc_mode,
+              BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     return NULL;
   }
 
@@ -819,7 +828,7 @@ vhdl_parser_priv_t *vhdl_parser_init( FILE *f, jtag_ctrl_t *jtag_ctrl )
   new_priv->buffer          = NULL;
   new_priv->len_buffer      = 0;
 
-  if (!(new_priv->scanner = vhdl_flex_init( f, jtag_ctrl->mode, jtag_ctrl->debug )))
+  if (!(new_priv->scanner = vhdl_flex_init( f, jtag_ctrl->proc_mode )))
   {
     free( new_priv );
     new_priv = NULL;
@@ -872,7 +881,7 @@ void vhdl_parser_deinit( vhdl_parser_priv_t *priv_data )
  ****************************************************************************/
 static void vhdl_set_entity( vhdl_parser_priv_t *priv, char *entityname )
 {
-  if (priv->jtag_ctrl->mode >= 1)
+  if (priv->jtag_ctrl->proc_mode & BSDL_MODE_INSTR_EXEC)
   {
     strncpy( priv->jtag_ctrl->part->part, entityname, MAXLEN_PART );
     priv->jtag_ctrl->part->part[MAXLEN_PART] = '\0';
@@ -909,7 +918,8 @@ static void vhdl_port_add_name( vhdl_parser_priv_t *priv, char *name )
     pd->names_list = new_string;
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 
@@ -996,7 +1006,8 @@ static void vhdl_port_apply_port( vhdl_parser_priv_t *priv )
     tmp_pd->next       = NULL;
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 static void add_elem( vhdl_parser_priv_t *priv, vhdl_elem_t *el )
@@ -1047,7 +1058,8 @@ static void set_attr_decimal( vhdl_parser_priv_t *priv, char *name, int value )
     add_elem( priv, el );
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 static void set_attr_string( vhdl_parser_priv_t *priv, char *name, char *string )
@@ -1076,7 +1088,8 @@ static void set_attr_string( vhdl_parser_priv_t *priv, char *name, char *string 
     add_elem(priv, el);
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 #if 0

@@ -871,18 +871,18 @@ Exit_Instruction_List : IDENTIFIER
 /*----------------------------------------------------------------------*/
 static void Print_Error( bsdl_parser_priv_t *priv_data, const char *Errmess )
 {
-  if (priv_data->jtag_ctrl->debug || (priv_data->jtag_ctrl->mode >= 0))
-    bsdl_msg( BSDL_MSG_ERR, _("Line %d, %s.\n"),
-              priv_data->lineno,
-              Errmess );
+  bsdl_msg( priv_data->jtag_ctrl->proc_mode,
+            BSDL_MSG_ERR, _("Line %d, %s.\n"),
+            priv_data->lineno,
+            Errmess );
 }
 /*----------------------------------------------------------------------*/
 static void Print_Warning( bsdl_parser_priv_t *priv_data, const char *Warnmess )
 {
-  if (priv_data->jtag_ctrl->debug || (priv_data->jtag_ctrl->mode >= 0))
-    bsdl_msg( BSDL_MSG_WARN, _("Line %d, %s.\n"),
-              priv_data->lineno,
-              Warnmess );
+  bsdl_msg( priv_data->jtag_ctrl->proc_mode,
+            BSDL_MSG_WARN, _("Line %d, %s.\n"),
+            priv_data->lineno,
+            Warnmess );
 }
 /*----------------------------------------------------------------------*/
 static void Give_Up_And_Quit( bsdl_parser_priv_t *priv_data )
@@ -1110,13 +1110,14 @@ bsdl_parser_priv_t *bsdl_parser_init( jtag_ctrl_t *jtag_ctrl )
   bsdl_parser_priv_t *new_priv;
 
   if (!(new_priv = (bsdl_parser_priv_t *)malloc( sizeof( bsdl_parser_priv_t ) ))) {
-    bsdl_msg( BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( jtag_ctrl->proc_mode,
+              BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     return NULL;
   }
 
   new_priv->jtag_ctrl = jtag_ctrl;
 
-  if (!(new_priv->scanner = bsdl_flex_init( jtag_ctrl->mode, jtag_ctrl->debug ))) {
+  if (!(new_priv->scanner = bsdl_flex_init( jtag_ctrl->proc_mode ))) {
     free(new_priv);
     new_priv = NULL;
   }
@@ -1177,7 +1178,8 @@ static void add_instruction( bsdl_parser_priv_t *priv, char *instr, char *opcode
     priv->jtag_ctrl->instr_list = new_instr;
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 
@@ -1235,7 +1237,8 @@ static void ac_add_instruction( bsdl_parser_priv_t *priv, char *instr )
     tmp_ai->instr_list = new_instr;
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 
@@ -1269,7 +1272,8 @@ static void ac_apply_assoc( bsdl_parser_priv_t *priv )
     jc->ainfo_list = new_ai;
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( jc->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 
   /* clean up obsolete temporary entries */
   tmp_ai->reg        = NULL;
@@ -1306,7 +1310,8 @@ static void prt_add_name( bsdl_parser_priv_t *priv, char *name )
     pd->names_list = new_string;
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 
@@ -1455,7 +1460,8 @@ static void ci_set_cell_spec( bsdl_parser_priv_t *priv,
   }
   else
   {
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     ci->port_name = NULL;
   }
 
@@ -1504,7 +1510,8 @@ static void ci_append_cell_info( bsdl_parser_priv_t *priv, int bit_num )
     tmp_ci->basic_safe_value = NULL;
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( jc->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 

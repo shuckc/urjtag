@@ -76,13 +76,13 @@ cmd_include_or_script_run( chain_t *chain, int is_include, char *params[] )
 
 #ifdef ENABLE_BSDL
 	/* perform a test read to check for BSDL syntax */
-	if (bsdl_read_file( chain, path, -1, NULL ) >= 0)
+	if (bsdl_read_file( chain, path, BSDL_MODE_INCLUDE1, NULL ) >= 0)
 	{
 		/* it seems to be a proper BSDL file, so re-read and execute */
-		go = bsdl_read_file( chain, path, 1, NULL );
+		go = bsdl_read_file( chain, path, BSDL_MODE_INCLUDE2, NULL );
 
 		free( path );
-		return go >= 0 ? 1 : 0;
+		return 1;
 	}
 #endif
 

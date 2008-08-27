@@ -69,7 +69,7 @@ static void print_cmd(char **cmd)
 
 
 /*****************************************************************************
- * void bsdl_set_instruction_length( jtag_ctrl_t *jc )
+ * int bsdl_set_instruction_length( jtag_ctrl_t *jc )
  *
  * Sets the specified length of the instruction register via shell command
  *   instruction length <len>
@@ -78,31 +78,31 @@ static void print_cmd(char **cmd)
  *   jc : jtag control structure
  *
  * Returns
- *   void
+ *   1 -> all ok
+ *   0 -> error occured
  ****************************************************************************/
-static void bsdl_set_instruction_length( jtag_ctrl_t *jc )
+static int bsdl_set_instruction_length( jtag_ctrl_t *jc )
 {
-  if (jc->mode >= 0)
-  {
-    char lenstring[6];
-    char *cmd[] = {"instruction",
-                   "length",
-                   lenstring,
-                   NULL};
+  char lenstring[6];
+  char *cmd[] = {"instruction",
+                 "length",
+                 lenstring,
+                 NULL};
 
-    snprintf( lenstring, 6, "%i", jc->instr_len );
-    lenstring[5] = '\0';
+  snprintf( lenstring, 6, "%i", jc->instr_len );
+  lenstring[5] = '\0';
 
-    if (jc->mode >= 1)
-      cmd_run( jc->chain, cmd );
-    else
-      print_cmd( cmd );
-  }
+  if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
+    cmd_run( jc->chain, cmd );
+  if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+    print_cmd( cmd );
+
+  return 1;
 }
 
 
 /*****************************************************************************
- * void bsdl_emit_ports( jtag_ctrl_t *jc )
+ * int bsdl_emit_ports( jtag_ctrl_t *jc )
  *
  * Adds the specified port name as a signal via shell command
  *   signal <pin>
@@ -116,67 +116,70 @@ static void bsdl_set_instruction_length( jtag_ctrl_t *jc )
  *   jc : jtag control structure
  *
  * Returns
- *   void
+ *   1 -> all ok
+ *   0 -> error occured
  ****************************************************************************/
-static void bsdl_emit_ports(jtag_ctrl_t *jc)
+static int bsdl_emit_ports(jtag_ctrl_t *jc)
 {
   port_desc_t *pd = jc->port_desc;
+  struct string_elem *name;
+  size_t str_len, name_len;
+  char *port_string;
+  int idx;
+  int result = 0;
+  char *cmd[] = {"signal",
+                 NULL,
+                 NULL};
 
-  if (jc->mode >= 0) {
-    char *cmd[] = {"signal",
-                   NULL,
-                   NULL};
-    struct string_elem *name;
-    size_t str_len, name_len;
-    char *port_string;
-    int idx;
+  while (pd)
+  {
+    name = pd->names_list;
+    while (name) {
+      /* handle indexed port name:
+         - names of scalar ports are simply copied from the port_desc structure
+           to the final string that goes into ci
+         - names of vectored ports are expanded with their decimal index as
+           collected earlier in rule Scalar_or_Vector
+      */
+      name_len = strlen( name->string );
+      str_len = name_len + 1 + 10 + 1 + 1;
+      if ((port_string = (char *)malloc( str_len )) != NULL)
+      {
+        cmd[1] = port_string;
 
-    while (pd)
-    {
-      name = pd->names_list;
-      while (name) {
-        /* handle indexed port name:
-           - names of scalar ports are simply copied from the port_desc structure
-             to the final string that goes into ci
-           - names of vectored ports are expanded with their decimal index as
-             collected earlier in rule Scalar_or_Vector
-        */
-        name_len = strlen( name->string );
-        str_len = name_len + 1 + 10 + 1 + 1;
-        if ((port_string = (char *)malloc( str_len )) != NULL)
+        for (idx = pd->low_idx; idx <= pd->high_idx; idx++)
         {
-          cmd[1] = port_string;
+          if (pd->is_vector)
+            snprintf( port_string, str_len-1, "%s(%d)", name->string, idx );
+          else
+            strncpy( port_string, name->string, str_len-1 );
+          port_string[str_len-1] = '\0';
 
-          for (idx = pd->low_idx; idx <= pd->high_idx; idx++)
-          {
-            if (pd->is_vector)
-              snprintf( port_string, str_len-1, "%s(%d)", name->string, idx );
-            else
-              strncpy( port_string, name->string, str_len-1 );
-            port_string[str_len-1] = '\0';
-
-            if (jc->mode >= 1)
-              cmd_run( jc->chain, cmd );
-            else
-              print_cmd( cmd );
-          }
-
-          free( port_string );
+          if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
+            cmd_run( jc->chain, cmd );
+          if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+            print_cmd( cmd );
         }
-        else
-          bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 
-        name = name->next;
+        free( port_string );
+        result = 1;
       }
+      else
+        bsdl_msg( jc->proc_mode,
+                  BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 
-      pd = pd->next;
+      name = name->next;
     }
+
+    pd = pd->next;
   }
+
+  return result;
 }
 
 
 /*****************************************************************************
- * void create_register( jtag_ctrl_t *jc, char *reg_name, size_t len )
+ * int create_register( jtag_ctrl_t *jc, char *reg_name, size_t len )
  *
  * Generic function to create a jtag register via shell command
  *   register <reg_name> <len>
@@ -187,34 +190,35 @@ static void bsdl_emit_ports(jtag_ctrl_t *jc)
  *   len      : number of bits (= length) of new register
  *
  * Returns
- *   void
+ *   1 -> all ok
+ *   0 -> error occured
  ****************************************************************************/
-static void create_register( jtag_ctrl_t *jc, char *reg_name, size_t len)
+static int create_register( jtag_ctrl_t *jc, char *reg_name, size_t len)
 {
-  if (jc->mode >= 0) {
-    const size_t str_len = 10;
-    char len_str[str_len+1];
-    char *cmd[] = {"register",
-                   reg_name,
-                   len_str,
-                   NULL};
+  const size_t str_len = 10;
+  char len_str[str_len+1];
+  char *cmd[] = {"register",
+                 reg_name,
+                 len_str,
+                 NULL};
 
-    if (part_find_data_register( jc->part, reg_name ))
-      return;
+  if (part_find_data_register( jc->part, reg_name ))
+    return 1;
 
-    /* convert length information to string */
-    snprintf( len_str, str_len, "%i", len );
+  /* convert length information to string */
+  snprintf( len_str, str_len, "%i", len );
 
-    if (jc->mode >= 1)
-      cmd_run( jc->chain, cmd );
-    else
-      print_cmd( cmd );
-  }
+  if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
+    cmd_run( jc->chain, cmd );
+  if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+    print_cmd( cmd );
+
+  return 1;
 }
 
 
 /*****************************************************************************
- * void bsdl_process_idcode( jtag_ctrl_t *jc )
+ * int bsdl_process_idcode( jtag_ctrl_t *jc )
  *
  * Creates the DIR register based on the extracted idcode.
  *
@@ -222,19 +226,23 @@ static void create_register( jtag_ctrl_t *jc, char *reg_name, size_t len)
  *   jc : jtag control structure
  *
  * Returns
- *   void
+ *   1 -> all ok
+ *   0 -> error occured
  ****************************************************************************/
-static void bsdl_process_idcode(jtag_ctrl_t *jc)
+static int bsdl_process_idcode(jtag_ctrl_t *jc)
 {
   if (jc->idcode)
     create_register( jc, "DIR", strlen( jc->idcode ) );
   else
-    bsdl_msg( BSDL_MSG_WARN, _("No IDCODE specification found.\n") );
+    bsdl_msg( jc->proc_mode,
+              BSDL_MSG_WARN, _("No IDCODE specification found.\n") );
+
+  return 1;
 }
 
 
 /*****************************************************************************
- * void bsdl_process_usercode( jtag_ctrl_t *jc )
+ * int bsdl_process_usercode( jtag_ctrl_t *jc )
  *
  * Creates the USERCODE register, the contents of the usercode string is
  * ignored.
@@ -243,19 +251,22 @@ static void bsdl_process_idcode(jtag_ctrl_t *jc)
  *   jc : jtag control structure
  *
  * Returns
- *   void
+ *   1 -> all ok
+ *   0 -> error occured
  ****************************************************************************/
-static void bsdl_process_usercode( jtag_ctrl_t *jc )
+static int bsdl_process_usercode( jtag_ctrl_t *jc )
 {
   if (jc->usercode)
     create_register( jc, "USERCODE", strlen( jc->usercode ) );
 
   /* we're not interested in the usercode value at all */
+
+  return 1;
 }
 
 
 /*****************************************************************************
- * void bsdl_set_bsr_length( jtag_ctrl_t *jc )
+ * int bsdl_set_bsr_length( jtag_ctrl_t *jc )
  *
  * Creates the BSR register based on the specified length.
  *
@@ -263,16 +274,19 @@ static void bsdl_process_usercode( jtag_ctrl_t *jc )
  *   jc : jtag control structure
  *
  * Returns
- *   void
+ *   1 -> all ok
+ *   0 -> error occured
  ****************************************************************************/
-static void bsdl_set_bsr_length( jtag_ctrl_t *jc )
+static int bsdl_set_bsr_length( jtag_ctrl_t *jc )
 {
   create_register( jc, "BSR", jc->bsr_len );
+
+  return 1;
 }
 
 
 /*****************************************************************************
- * void bsdl_process_cell_info( jtag_ctrl_t *jc )
+ * int bsdl_process_cell_info( jtag_ctrl_t *jc )
  * Cell Info management function
  *
  * Creates a BSR cell from the temporary storage variables via shell command
@@ -282,96 +296,95 @@ static void bsdl_set_bsr_length( jtag_ctrl_t *jc )
  *   jc : jtag control structure
  *
  * Returns
- *   void
+ *   1 -> all ok
+ *   0 -> error occured
  ****************************************************************************/
-static void bsdl_process_cell_info( jtag_ctrl_t *jc )
+static int bsdl_process_cell_info( jtag_ctrl_t *jc )
 {
   cell_info_t *ci = jc->cell_info_first;
+  const size_t str_len = 10;
+  char bit_num_str[str_len+1];
+  char ctrl_bit_num_str[str_len+1];
+  char disable_safe_value_str[str_len+1];
+  char *cmd[] = {"bit",
+                 bit_num_str,
+                 NULL,
+                 NULL,
+                 NULL,
+                 NULL,
+                 disable_safe_value_str,
+                 "Z",
+                 NULL};
 
-  if (jc->mode >= 0)
+  while (ci)
   {
-    const size_t str_len = 10;
-    char bit_num_str[str_len+1];
-    char ctrl_bit_num_str[str_len+1];
-    char disable_safe_value_str[str_len+1];
-    char *cmd[] = {"bit",
-                   bit_num_str,
-                   NULL,
-                   NULL,
-                   NULL,
-                   NULL,
-                   disable_safe_value_str,
-                   "Z",
-                   NULL};
+    /* convert bit number to string */
+    snprintf( bit_num_str, str_len, "%i", ci->bit_num );
+    bit_num_str[str_len] = '\0';
+    /* convert cell function from BSDL token to jtag syntax */
+    switch (ci->cell_function)
+    {
+      case INTERNAL:
+        /* fall through */
+      case OUTPUT2:
+        /* fall through */
+      case OUTPUT3:
+        cmd[2] = "O";
+        break;
+      case OBSERVE_ONLY:
+        /* fall through */
+      case INPUT:
+        /* fall through */
+      case CLOCK:
+        cmd[2] = "I";
+        break;
+      case CONTROL:
+        /* fall through */
+      case CONTROLR:
+        cmd[2] = "C";
+        break;
+      case BIDIR:
+        cmd[2] = "B";
+        break;
+      default:
+        /* spoil command */
+        cmd[2] = "?";
+        break;
+    }
+    /* convert basic safe value */
+    cmd[3] = strcasecmp( ci->basic_safe_value, "x" ) == 0 ? "?" : ci->basic_safe_value;
+    /* apply port name */
+    cmd[4] = ci->port_name;
 
-    while (ci)
+    /* add disable spec if present */
+    if (ci->ctrl_bit_num >= 0)
     {
       /* convert bit number to string */
-      snprintf( bit_num_str, str_len, "%i", ci->bit_num );
-      bit_num_str[str_len] = '\0';
-      /* convert cell function from BSDL token to jtag syntax */
-      switch (ci->cell_function)
-      {
-        case INTERNAL:
-          /* fall through */
-        case OUTPUT2:
-          /* fall through */
-        case OUTPUT3:
-          cmd[2] = "O";
-          break;
-        case OBSERVE_ONLY:
-          /* fall through */
-        case INPUT:
-          /* fall through */
-        case CLOCK:
-          cmd[2] = "I";
-          break;
-        case CONTROL:
-          /* fall through */
-        case CONTROLR:
-          cmd[2] = "C";
-          break;
-        case BIDIR:
-          cmd[2] = "B";
-          break;
-        default:
-          /* spoil command */
-          cmd[2] = "?";
-          break;
-      }
-      /* convert basic safe value */
-      cmd[3] = strcasecmp( ci->basic_safe_value, "x" ) == 0 ? "?" : ci->basic_safe_value;
-      /* apply port name */
-      cmd[4] = ci->port_name;
-
-      /* add disable spec if present */
-      if (ci->ctrl_bit_num >= 0)
-      {
-        /* convert bit number to string */
-        snprintf( ctrl_bit_num_str, str_len, "%i", ci->ctrl_bit_num );
-        ctrl_bit_num_str[str_len] = '\0';
-        /* convert disable safe value to string */
-        snprintf( disable_safe_value_str, str_len, "%i", ci->disable_safe_value );
-        disable_safe_value_str[str_len] = '\0';
-        cmd[5] = ctrl_bit_num_str;
-      }
-      else
-        /* stop command procssing here */
-        cmd[5] = NULL;
-
-      if (jc->mode >= 1)
-        cmd_run( jc->chain, cmd );
-      else
-        print_cmd( cmd );
-
-      ci = ci->next;
+      snprintf( ctrl_bit_num_str, str_len, "%i", ci->ctrl_bit_num );
+      ctrl_bit_num_str[str_len] = '\0';
+      /* convert disable safe value to string */
+      snprintf( disable_safe_value_str, str_len, "%i", ci->disable_safe_value );
+      disable_safe_value_str[str_len] = '\0';
+      cmd[5] = ctrl_bit_num_str;
     }
+    else
+      /* stop command procssing here */
+      cmd[5] = NULL;
+
+    if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
+      cmd_run( jc->chain, cmd );
+    if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+      print_cmd( cmd );
+
+    ci = ci->next;
   }
+
+  return 1;
 }
 
 
 /*****************************************************************************
- * void bsdl_process_register_access( jtag_ctrl_t *jc )
+ * int bsdl_process_register_access( jtag_ctrl_t *jc )
  * Register Access management function
  *
  * Runs through the main instruction list and builds the instruction/register
@@ -391,10 +404,14 @@ static void bsdl_process_cell_info( jtag_ctrl_t *jc )
  *   jc : jtag control structure
  *
  * Returns
- *   void
+ *   1 -> all ok
+ *   0 -> error occured
  ****************************************************************************/
-static void bsdl_process_register_access( jtag_ctrl_t *jc )
+static int bsdl_process_register_access( jtag_ctrl_t *jc )
 {
+  ainfo_elem_t *ai;
+  instr_elem_t *cinst;
+
   /* ensure that all mandatory registers are created prior to
      handling the instruction/register associations
      + BOUNDARY/BSR has been generated during the parsing process
@@ -403,151 +420,139 @@ static void bsdl_process_register_access( jtag_ctrl_t *jc )
   /* we need a BYPASS register */
   create_register( jc, "BYPASS", 1 );
 
-  if (jc->mode >= 0) {
-    ainfo_elem_t *ai;
-    instr_elem_t *cinst;
+  /* next scan through all register_access definitions and create
+     the non-standard registers */
+  ai = jc->ainfo_list;
+  while (ai)
+  {
+    int is_std = 0;
 
-    /* next scan through all register_access definitions and create
-       the non-standard registers */
+    if (strcasecmp( ai->reg, "BOUNDARY"  ) == 0) is_std = 1;
+    if (strcasecmp( ai->reg, "BYPASS"    ) == 0) is_std = 1;
+    if (strcasecmp( ai->reg, "DEVICE_ID" ) == 0) is_std = 1;
+    if (strcasecmp( ai->reg, "USERCODE"  ) == 0) is_std = 1;
+
+    if (!is_std)
+      create_register( jc, ai->reg, ai->reg_len );
+
+    ai = ai->next;
+  }
+
+
+  /* next scan through all instruction/opcode definitions and resolve
+     the instruction/register associations for these */
+  cinst = jc->instr_list;
+  while (cinst)
+  {
+    char *reg_name = NULL;
+    char *instr_name = NULL;
+
+    /* now see which of the register_access elements matches this instruction */
     ai = jc->ainfo_list;
-    while (ai)
+    while (ai && (reg_name == NULL))
     {
-      int is_std = 0;
+      instr_elem_t *tinst = ai->instr_list;
 
-      if (strcasecmp( ai->reg, "BOUNDARY"  ) == 0) is_std = 1;
-      if (strcasecmp( ai->reg, "BYPASS"    ) == 0) is_std = 1;
-      if (strcasecmp( ai->reg, "DEVICE_ID" ) == 0) is_std = 1;
-      if (strcasecmp( ai->reg, "USERCODE"  ) == 0) is_std = 1;
+      while (tinst && (reg_name == NULL))
+      {
+        if (strcasecmp( tinst->instr, cinst->instr ) == 0)
+        {
+          /* found the instruction inside the current access info,
+             now set the register name
+             map some standard register names to different internal names*/
+          if (strcasecmp( ai->reg, "BOUNDARY" ) == 0) reg_name = "BSR";
+          else if (strcasecmp( ai->reg, "DEVICE_ID" ) == 0) reg_name = "DIR";
+          else reg_name = ai->reg;
+        }
 
-      if (!is_std)
-        create_register( jc, ai->reg, ai->reg_len );
+        tinst = tinst->next;
+      }
 
       ai = ai->next;
     }
 
-
-    /* next scan through all instruction/opcode definitions and resolve
-       the instruction/register associations for these */
-    cinst = jc->instr_list;
-    while (cinst)
+    if (reg_name == NULL)
     {
-      char *reg_name = NULL;
-      char *instr_name = NULL;
-
-      /* now see which of the register_access elements matches this instruction */
-      ai = jc->ainfo_list;
-      while (ai && (reg_name == NULL))
-      {
-        instr_elem_t *tinst = ai->instr_list;
-
-        while (tinst && (reg_name == NULL))
-        {
-          if (strcasecmp( tinst->instr, cinst->instr ) == 0)
-          {
-            /* found the instruction inside the current access info,
-               now set the register name
-               map some standard register names to different internal names*/
-            if (strcasecmp( ai->reg, "BOUNDARY" ) == 0) reg_name = "BSR";
-            else if (strcasecmp( ai->reg, "DEVICE_ID" ) == 0) reg_name = "DIR";
-            else reg_name = ai->reg;
-          }
-
-          tinst = tinst->next;
-        }
-
-        ai = ai->next;
-      }
-
-      if (reg_name == NULL)
-      {
-        /* BSDL file didn't specify an explicit register_access definition
-           if we're looking at a standard mandatory instruction, we should
-           build the association ourselves */
-        if      (strcasecmp( cinst->instr, "BYPASS"   ) == 0) reg_name = "BYPASS";
-        else if (strcasecmp( cinst->instr, "CLAMP"    ) == 0) reg_name = "BYPASS";
-        else if (strcasecmp( cinst->instr, "EXTEST"   ) == 0) reg_name = "BSR";
-        else if (strcasecmp( cinst->instr, "HIGHZ"    ) == 0) reg_name = "BYPASS";
-        else if (strcasecmp( cinst->instr, "IDCODE"   ) == 0) reg_name = "DIR";
-        else if (strcasecmp( cinst->instr, "INTEST"   ) == 0) reg_name = "BSR";
-        else if (strcasecmp( cinst->instr, "PRELOAD"  ) == 0) reg_name = "BSR";
-        else if (strcasecmp( cinst->instr, "SAMPLE"   ) == 0) reg_name = "BSR";
-        else if (strcasecmp( cinst->instr, "USERCODE" ) == 0) reg_name = "USERCODE";
-      }
-
-      if (strcasecmp( cinst->instr, "SAMPLE" ) == 0)
-        instr_name = "SAMPLE/PRELOAD";
-      else
-        instr_name = cinst->instr;
-
-      if (reg_name)
-      {
-        char *cmd[] = {"instruction",
-                       instr_name,
-                       cinst->opcode,
-                       reg_name,
-                       NULL};
-
-        if (jc->mode >= 1)
-          cmd_run( jc->chain, cmd );
-        else
-          print_cmd( cmd );
-      }
-
-      cinst = cinst->next;
+      /* BSDL file didn't specify an explicit register_access definition
+         if we're looking at a standard mandatory instruction, we should
+         build the association ourselves */
+      if      (strcasecmp( cinst->instr, "BYPASS"   ) == 0) reg_name = "BYPASS";
+      else if (strcasecmp( cinst->instr, "CLAMP"    ) == 0) reg_name = "BYPASS";
+      else if (strcasecmp( cinst->instr, "EXTEST"   ) == 0) reg_name = "BSR";
+      else if (strcasecmp( cinst->instr, "HIGHZ"    ) == 0) reg_name = "BYPASS";
+      else if (strcasecmp( cinst->instr, "IDCODE"   ) == 0) reg_name = "DIR";
+      else if (strcasecmp( cinst->instr, "INTEST"   ) == 0) reg_name = "BSR";
+      else if (strcasecmp( cinst->instr, "PRELOAD"  ) == 0) reg_name = "BSR";
+      else if (strcasecmp( cinst->instr, "SAMPLE"   ) == 0) reg_name = "BSR";
+      else if (strcasecmp( cinst->instr, "USERCODE" ) == 0) reg_name = "USERCODE";
     }
+
+    if (strcasecmp( cinst->instr, "SAMPLE" ) == 0)
+      instr_name = "SAMPLE/PRELOAD";
+    else
+      instr_name = cinst->instr;
+
+    if (reg_name)
+    {
+      char *cmd[] = {"instruction",
+                     instr_name,
+                     cinst->opcode,
+                     reg_name,
+                     NULL};
+
+      if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
+        cmd_run( jc->chain, cmd );
+      if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+        print_cmd( cmd );
+    }
+
+    cinst = cinst->next;
   }
+
+  return 1;
 }
 
 
+/*****************************************************************************
+ * int parse_vhdl_elem( bsdl_parser_priv_t *priv, vhdl_elem_t *elem )
+ *
+ * Runs the specified vhdl element through the BSDl parser.
+ *
+ * Parameters
+ *   priv : private data container for parser related tasks
+ *   elem : vhdl element to be parsed
+ *
+ * Returns
+ *   BSDL_MODE_SYN_CHECK -> parsing successful
+ *   0                   -> error occured
+ ****************************************************************************/
 static int parse_vhdl_elem( bsdl_parser_priv_t *priv, vhdl_elem_t *elem )
 {
   char  *buf;
   size_t buf_len;
-  char  *type_string = NULL;
-  size_t type_string_len = 0;
   size_t name_string_len;
   size_t elem_string_len;
-
-#if 0
-  /* decode element type and set initial string for the parser */
-  switch (elem->type)
-  {
-    case VET_CONSTANT:
-      type_string = "CONSTANT ";
-      break;
-    case VET_UNKNOWN:
-      /* use default initializations */
-      break;
-    default:
-      type_string = "ATTRIBUTE ";
-      break;
-  }
-
-  type_string_len = type_string ? strlen( type_string ) : 0;
-#endif
 
   name_string_len = elem->name ? strlen( elem->name ) : 0;
   elem_string_len = elem->payload ? strlen( elem->payload ) : 0;
 
   /* allocate enough memory for total buffer */
-  buf_len = type_string_len + name_string_len + 1 + elem_string_len + 1;
+  buf_len = name_string_len + 1 + elem_string_len + 1;
   buf = (char *)malloc( buf_len );
   if (!buf)
   {
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( priv->jtag_ctrl->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     return -1;
   }
   buf[0] = '\0';
 
-  if (type_string_len > 0)
-    strncat( buf, type_string, buf_len );
-
   if (name_string_len > 0)
-    strncat( buf, elem->name, buf_len - type_string_len );
-  strncat( buf, " ", buf_len - type_string_len - name_string_len );
+    strncat( buf, elem->name, buf_len );
+  strncat( buf, " ", buf_len - name_string_len );
 
   if (elem_string_len > 0)
-    strncat( buf, elem->payload, buf_len - type_string_len - name_string_len - 1 );
+    strncat( buf, elem->payload, buf_len - name_string_len - 1 );
 
   buf[buf_len - 1] = '\0';
 
@@ -559,51 +564,158 @@ static int parse_vhdl_elem( bsdl_parser_priv_t *priv, vhdl_elem_t *elem )
 
   free( buf );
 
-  return bsdl_flex_get_compile_errors( priv->scanner );
+  return bsdl_flex_get_compile_errors( priv->scanner ) == 0 ? BSDL_MODE_SYN_CHECK : 0;
 }
 
 
+/*****************************************************************************
+ * int build_commands( bsdl_parser_priv_t *priv )
+ *
+ * Calls the various functions that execute or print the information extracted
+ * from the BSDL/vhdl elements.
+ *
+ * Parameters
+ *   priv    : private data container for parser related tasks
+ *
+ * Returns
+ *   bit field consisting of BSDL_MODE_* actions
+ *   telling if INSTR_EXEC or INSTR_PRINT succeeded
+ ****************************************************************************/
 static int build_commands( bsdl_parser_priv_t *priv )
 {
   jtag_ctrl_t *jc = priv->jtag_ctrl;
+  int result = 1;
 
-  bsdl_emit_ports( jc );
+  result &= bsdl_emit_ports( jc );
 
-  bsdl_set_instruction_length( jc );
+  result &= bsdl_set_instruction_length( jc );
 
-  bsdl_process_idcode( jc );
+  result &= bsdl_process_idcode( jc );
 
-  bsdl_process_usercode( jc );
+  result &= bsdl_process_usercode( jc );
 
-  bsdl_set_bsr_length( jc );
+  result &= bsdl_set_bsr_length( jc );
 
-  bsdl_process_register_access( jc );
+  result &= bsdl_process_register_access( jc );
 
-  bsdl_process_cell_info( jc );
+  result &= bsdl_process_cell_info( jc );
 
-  return 0;
+  return result ? BSDL_MODE_INSTR_EXEC | BSDL_MODE_INSTR_PRINT : 0;
 }
 
 
-int bsdl_sem_process_elements( bsdl_parser_priv_t *priv )
+/*****************************************************************************
+ * int compare_idcode( jtag_ctrl_t *jc, const char *idcode )
+ *
+ * Compares idcode versus jtag_ctrl->idcode.
+ *
+ * Parameters
+ *   jc     : jtag_ctrl structure
+ *   idcode : idcode string
+ *
+ * Returns
+ *   1 -> idcodes match
+ *   0 -> idcodes don't match
+ ****************************************************************************/
+static int compare_idcode( jtag_ctrl_t *jc, const char *idcode )
 {
-  vhdl_elem_t *el = priv->jtag_ctrl->vhdl_elem_first;
-  int result = 0;
+  int idcode_match = 0;
 
-  while (el && (result == 0))
+  /* should we compare the idcodes? */
+  if (idcode)
   {
-    result = parse_vhdl_elem( priv, el );
+    if (strlen( idcode ) == strlen(jc->idcode))
+    {
+      int idx;
 
-    el = el->next;
+      /* compare given idcode with idcode from BSDL file */
+      idcode_match = BSDL_MODE_IDCODE_CHECK;
+      for (idx = 0; idx < strlen( idcode ); idx++)
+        if (jc->idcode[idx] != 'X')
+          if (idcode[idx] != jc->idcode[idx])
+            idcode_match = 0;
+
+      if (idcode_match)
+        bsdl_msg( jc->proc_mode,
+                  BSDL_MSG_NOTE, _("IDCODE matched\n") );
+      else
+        bsdl_msg( jc->proc_mode,
+                  BSDL_MSG_NOTE, _("IDCODE mismatch\n") );
+    }
   }
 
-  if (result != 0)
+  return idcode_match;
+}
+
+
+/*****************************************************************************
+ * int bsdl_process_elements( jtag_ctrl_t *jc, const char *idcode )
+ *
+ * If enabled, runs through the list of vhdl elements in jtag ctrl and parser
+ * them as BSDL statements.
+ * If enabled, compares idcode versus jc->idcode.
+ * If enabled, prints or executes the resulting jtag commands.
+ *
+ * Parameters
+ *   jc     : jtag_ctrl structure
+ *   idcode : idcode string
+ *
+ * Returns
+ *   < 0 : Error occured, parse/syntax problems or out of memory
+ *   = 0 : No errors, idcode not checked or mismatching
+ *   > 0 : No errors, idcode checked and matched
+ *
+ ****************************************************************************/
+int bsdl_process_elements( jtag_ctrl_t *jc, const char *idcode )
+{
+  bsdl_parser_priv_t *priv;
+  vhdl_elem_t *el = jc->vhdl_elem_first;
+  int result = BSDL_MODE_SYN_CHECK;
+
+  if ((priv = bsdl_parser_init( jc )) == NULL)
+    return -1;
+
+  if (jc->proc_mode & BSDL_MODE_SYN_CHECK)
   {
-    bsdl_msg( BSDL_MSG_ERR, _("BSDL stage reported errors, aborting.\n") );
-    return result;
+    while (el && (result & BSDL_MODE_SYN_CHECK))
+    {
+      result = parse_vhdl_elem( priv, el );
+
+      el = el->next;
+    }
+
+    if (!(result & BSDL_MODE_SYN_CHECK))
+    {
+      bsdl_msg( jc->proc_mode,
+                BSDL_MSG_ERR, _("BSDL stage reported errors, aborting.\n") );
+      bsdl_parser_deinit( priv );
+      return result;
+    }
   }
 
-  result = build_commands( priv );
+  if (jc->idcode)
+    bsdl_msg( jc->proc_mode,
+              BSDL_MSG_NOTE, _("Got IDCODE: %s\n"), jc->idcode );
+
+  if (jc->proc_mode & BSDL_MODE_IDCODE_CHECK)
+    result |= compare_idcode( jc, idcode );
+
+  if (jc->proc_mode & (BSDL_MODE_INSTR_EXEC | BSDL_MODE_INSTR_PRINT))
+    /* IDCODE check positive if requested? */
+    if ( ((jc->proc_mode & BSDL_MODE_IDCODE_CHECK) &&
+          (result & BSDL_MODE_IDCODE_CHECK))
+         || (!(jc->proc_mode & BSDL_MODE_IDCODE_CHECK)) )
+      result |= build_commands( priv );
+
+  if ((result & jc->proc_mode) == (jc->proc_mode & BSDL_MODE_ACTION_ALL))
+    if (jc->proc_mode & BSDL_MODE_IDCODE_CHECK)
+      result = 1;
+    else
+      result = 0;
+  else
+    result = -1;
+
+  bsdl_parser_deinit( priv );
 
   return result;
 }

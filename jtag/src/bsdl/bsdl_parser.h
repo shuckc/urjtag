@@ -28,7 +28,7 @@
 #include "bsdl_types.h"
 
 /* VHDL lexer declarations */
-void *bsdl_flex_init( int, int );
+void *bsdl_flex_init( int );
 void  bsdl_flex_deinit( void * );
 void  bsdl_flex_set_bin_x( void * );
 void  bsdl_flex_set_hex( void * );
@@ -44,6 +44,6 @@ void bsdl_parser_deinit( bsdl_parser_priv_t * );
 int bsdlparse( bsdl_parser_priv_t * );
 
 /* BSDL semantic functions */
-int bsdl_sem_process_elements( bsdl_parser_priv_t * );
+int bsdl_process_elements( jtag_ctrl_t *, const char * );
 
 #endif /* BSDL_PARSER_H */

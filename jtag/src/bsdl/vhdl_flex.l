@@ -140,7 +140,7 @@ LEGAL NOTICES:
 
 #define YY_EXTRA_TYPE scan_extra_t *
 
-static char *new_string( const char * );
+static char *new_string( scan_extra_t *, const char * );
 
 #define BINARY 0
 #define DECIMAL 1
@@ -315,24 +315,24 @@ Std_1532_2002  STD_1532_2002
 {White}                 { /* Do Nothing on White Space */ }
 {VHDL_Comment}          { /* Do Nothing on Comments    */ }
 {Bin_X_Pattern}         {if (yyextra->Base != BIN_X) REJECT;
-                         yylval->str = new_string( yytext );
+                         yylval->str = new_string( yyextra, yytext );
                          return( BIN_X_PATTERN );}
-{Identifier}            {yylval->str = new_string( yytext );
+{Identifier}            {yylval->str = new_string( yyextra, yytext );
                          return( IDENTIFIER ); }
-{Quoted_String}         {yylval->str = new_string( yytext );
+{Quoted_String}         {yylval->str = new_string( yyextra, yytext );
                          return( QUOTED_STRING ); }
 {Decimal_Number}        {if (yyextra->Base != DECIMAL) REJECT;
                          yylval->integer = atoi( (char *)yytext );
                          return( DECIMAL_NUMBER );}
-{Real_Number}           {yylval->str = new_string( yytext );
+{Real_Number}           {yylval->str = new_string( yyextra, yytext );
                          return( REAL_NUMBER );}
 {Concatenate}           {return( CONCATENATE );}
 {Semicolon}             {return( SEMICOLON );}
-{Illegal}               {if (yyextra->debug || (yyextra->mode >= 0))
-                           bsdl_msg( BSDL_MSG_ERR,
-                                     _("Illegal character %c (/%03o) at line %d:\n"),
-                                     (char)yytext[yyleng-1], (int)yytext[yyleng-1],
-                                     yylineno );
+{Illegal}               {bsdl_msg( yyextra->proc_mode,
+                                   BSDL_MSG_ERR,
+                                   _("Illegal character %c (/%03o) at line %d:\n"),
+                                   (char)yytext[yyleng-1], (int)yytext[yyleng-1],
+                                   yylineno );
                          yyextra->Compile_Errors++;
                          return( ILLEGAL );  /* Will cause syntax error */}
 <<EOF>> {
@@ -342,25 +342,18 @@ Std_1532_2002  STD_1532_2002
 }
 %%
 /*****************************************************************************
- * void *vhdl_flex_init( FILE *f, int mode, int debug )
+ * void *vhdl_flex_init( FILE *f, int mode )
  *
  * Initializes the scanner and storage elements extra data structure.
  *
  * Parameters
- *   f     : descriptor of file for scanning
- *   mode  : -1 -> read file
- *                 no further action based on components
- *            0 -> read file and extract all components
- *                 dump commands to stdout, do not execute commands
- *            1 -> read file and extract all components
- *                 execute commands
- *   debug : 1 -> emit failure messages
- *           0 -> no failure messages
+ *   f         : descriptor of file for scanning
+ *   proc_mode : processing mode, consisting of BSDL_MODE_* bits
  *
  * Returns
  *   pointer to newly initialized scanner structure
  ****************************************************************************/
-void *vhdl_flex_init( FILE *f, int mode, int debug )
+void *vhdl_flex_init( FILE *f, int proc_mode )
 {
   scan_extra_t *extra;
   yyscan_t scanner;
@@ -368,20 +361,20 @@ void *vhdl_flex_init( FILE *f, int mode, int debug )
   /* get our scanner structure */
   if (yylex_init( &scanner ) != 0)
   {
-    bsdl_msg( BSDL_MSG_FATAL, _("Scanner could not be initialized\n") );
+    bsdl_msg( proc_mode, BSDL_MSG_FATAL, _("Scanner could not be initialized\n") );
     return NULL;
   }
   yyset_in( f, scanner );
 
   if (!(extra = (scan_extra_t *)malloc( sizeof( scan_extra_t ) )))
   {
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     yylex_destroy( scanner );
     return NULL;
   }
 
-  extra->mode           = mode;
-  extra->debug          = debug;
+  extra->proc_mode      = proc_mode;
   extra->Compile_Errors = 0;
   extra->Base           = DECIMAL;
 
@@ -439,17 +432,18 @@ int yywrap( yyscan_t scanner )
 
 
 /*****************************************************************************
- * char *new_string( const char *str )
+ * char *new_string( scan_extra_t * extra, const char *str )
  *
  * Allocates memory for a string and copies the contents of *str.
  *
  * Parameters
- *   str : pointer to string to be duplicated
+ *   extra : pointer to extra data structure
+ *   str   : pointer to string to be duplicated
  *
  * Returns
  *   pointer to allocated and initialized string memory
  ****************************************************************************/
-static char *new_string( const char *str )
+static char *new_string( scan_extra_t *extra, const char *str )
 {
   char   *n_str;
   size_t  n_str_size;
@@ -461,7 +455,8 @@ static char *new_string( const char *str )
     n_str[n_str_size-1] = '\0';  /* set very last element to EOS */
   }
   else
-    bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    bsdl_msg( extra->proc_mode,
+              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 
   return n_str;
 }
@@ -494,6 +489,8 @@ void vhdl_flex_switch_file( yyscan_t scanner, char *filename )
     s++;
   }
 
+  extra = yyget_extra( scanner );
+
   /* file in current directory has precedence */
   f = fopen( filename, "r" );
   if (!f)
@@ -516,7 +513,8 @@ void vhdl_flex_switch_file( yyscan_t scanner, char *filename )
       f = fopen( db_file, "r" );
 
       if (!f)
-        bsdl_msg( BSDL_MSG_FATAL, _("Cannot open file %s or %s.\n"), filename, db_file );
+        bsdl_msg( extra->proc_mode,
+                  BSDL_MSG_FATAL, _("Cannot open file %s or %s.\n"), filename, db_file );
       free( db_file );
       if (!f)
         return;
@@ -524,7 +522,6 @@ void vhdl_flex_switch_file( yyscan_t scanner, char *filename )
   }
 
   yypush_buffer_state( yy_create_buffer( f, YY_BUF_SIZE, scanner ), scanner );
-  extra = yyget_extra( scanner );
   yyset_lineno( 1, scanner );
 }
 

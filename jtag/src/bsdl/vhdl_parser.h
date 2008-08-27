@@ -28,7 +28,7 @@
 #include "bsdl_types.h"
 
 /* VHDL lexer declarations */
-void *vhdl_flex_init( FILE *, int, int );
+void *vhdl_flex_init( FILE *, int );
 void  vhdl_flex_deinit( void * );
 void  vhdl_flex_switch_file( void *, char * );
 int   vhdl_flex_get_compile_errors( void * );

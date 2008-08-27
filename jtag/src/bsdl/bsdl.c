@@ -49,19 +49,20 @@
 
 
 /*****************************************************************************
- * bsdl_msg( type, format, ... )
+ * bsdl_msg( proc_mode, type, format, ... )
  *
  * Main printing function for the BSDL subsystem.
  *
  * Parameters
- *   type   : one of the BSDL_MSG_* defines, determines message tag
- *   format : printf format
- *   ...    : additional parameters to fill the printf format string
+ *   proc_mode : processing mode, consisting of BSDL_MODE_* bits
+ *   type      : one of the BSDL_MSG_* defines, determines message tag
+ *   format    : printf format
+ *   ...       : additional parameters to fill the printf format string
  *
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_msg( int type, const char *format, ... )
+void bsdl_msg( int proc_mode, int type, const char *format, ... )
 {
   va_list lst;
 
@@ -69,15 +70,23 @@ void bsdl_msg( int type, const char *format, ... )
   switch (type)
   {
     case BSDL_MSG_NOTE:
+      if (!(proc_mode & BSDL_MODE_MSG_NOTE))
+        return;
       printf( "-N- " );
       break;
     case BSDL_MSG_WARN:
+      if (!(proc_mode & BSDL_MODE_MSG_WARN))
+        return;
       printf( "-W- " );
       break;
     case BSDL_MSG_ERR:
+      if (!(proc_mode & BSDL_MODE_MSG_ERR))
+        return;
       printf( "-E- " );
       break;
     case BSDL_MSG_FATAL:
+      if (!(proc_mode & BSDL_MODE_MSG_FATAL))
+        return;
       printf( "-F- " );
       break;
     default:
@@ -90,20 +99,15 @@ void bsdl_msg( int type, const char *format, ... )
 
 
 /*****************************************************************************
- * bsdl_read_file( chain, BSDL_File_Name, mode, idcode )
+ * bsdl_read_file( chain, BSDL_File_Name, proc_mode, idcode )
  *
  * Read, parse and optionally apply contents of BSDL file.
  *
  * Parameters
- *    chain  : pointer to active chain structure
- *    BSDL_File_Name : name of BSDL file to read
- *    mode   : -1 -> read file
- *                   no further action based on components
- *              0 -> read file and extract all components
- *                   dump commands to stdout, do not execute commands
- *              1 -> read file and extract all components
- *                   execute commands
- *    idcode : reference idcode string
+ *   chain     : pointer to active chain structure
+ *   BSDL_File_Name : name of BSDL file to read
+ *   proc_mode : processing mode, consisting of BSDL_MODE_* bits
+ *   idcode    : reference idcode string
  *
  * Returns
  *   < 0 : Error occured, parse/syntax problems or out of memory
@@ -111,46 +115,39 @@ void bsdl_msg( int type, const char *format, ... )
  *   > 0 : No errors, idcode checked and matched
  *
  ****************************************************************************/
-int bsdl_read_file( chain_t *chain, const char *BSDL_File_Name, int mode,
+int bsdl_read_file( chain_t *chain, const char *BSDL_File_Name, int proc_mode,
                     const char *idcode )
 {
   bsdl_globs_t *globs = &(chain->bsdl);
   FILE *BSDL_File;
   vhdl_parser_priv_t *vhdl_parser_priv;
-  bsdl_parser_priv_t *bsdl_parser_priv;
   jtag_ctrl_t jtag_ctrl;
   int Compile_Errors = 1;
-  int idcode_match = 0;
+  int result;
 
-  jtag_ctrl.mode = mode;
-  jtag_ctrl.debug = globs->debug;
+  if (globs->debug)
+    proc_mode |= BSDL_MODE_MSG_ALL;
+
+  jtag_ctrl.proc_mode = proc_mode;
 
   /* perform some basic checks */
-  if (mode >= 0)
+  if (proc_mode & BSDL_MODE_INSTR_EXEC)
   {
-    if (mode >= 1)
+    if (chain == NULL)
     {
-      if (chain == NULL)
-      {
-	bsdl_msg( BSDL_MSG_ERR, _("No JTAG chain available\n") );
-	return -1;
-      }
-      if (chain->parts == NULL)
-      {
-	bsdl_msg( BSDL_MSG_ERR, _("Chain without any parts\n") );
-	return -1;
-      }
-      if (!(chain && chain->parts))
-	return -1;
+      bsdl_msg( proc_mode, BSDL_MSG_ERR, _("No JTAG chain available\n") );
+      return -1;
+    }
+    if (chain->parts == NULL)
+    {
+      bsdl_msg( proc_mode, BSDL_MSG_ERR, _("Chain without any parts\n") );
+      return -1;
+    }
+    if (!(chain && chain->parts))
+      return -1;
 
-      jtag_ctrl.chain = chain;
-      jtag_ctrl.part = chain->parts->parts[chain->active_part];
-    }
-    else
-    {
-      jtag_ctrl.chain = NULL;
-      jtag_ctrl.part = NULL;
-    }
+    jtag_ctrl.chain = chain;
+    jtag_ctrl.part = chain->parts->parts[chain->active_part];
   }
   else
   {
@@ -160,11 +157,11 @@ int bsdl_read_file( chain_t *chain, const char *BSDL_File_Name, int mode,
 
   BSDL_File = fopen( BSDL_File_Name, "r" );
 
-  if (globs->debug || (mode == 0))
-    bsdl_msg( BSDL_MSG_NOTE, _("Reading file '%s'\n"), BSDL_File_Name );
+  bsdl_msg( proc_mode, BSDL_MSG_NOTE, _("Reading file '%s'\n"), BSDL_File_Name );
 
   if (BSDL_File == NULL) {
-    bsdl_msg( BSDL_MSG_ERR, _("Unable to open BSDL file '%s'\n"), BSDL_File_Name );
+    bsdl_msg( proc_mode,
+              BSDL_MSG_ERR, _("Unable to open BSDL file '%s'\n"), BSDL_File_Name );
     return -1;
   }
 
@@ -177,68 +174,30 @@ int bsdl_read_file( chain_t *chain, const char *BSDL_File_Name, int mode,
     Compile_Errors = vhdl_flex_get_compile_errors( vhdl_parser_priv->scanner );
     if (Compile_Errors == 0)
     {
-      if (globs->debug)
-        bsdl_msg( BSDL_MSG_NOTE, _("BSDL file '%s' passed VHDL stage correctly\n"),
-		 BSDL_File_Name );
+      bsdl_msg( proc_mode,
+                BSDL_MSG_NOTE, _("BSDL file '%s' passed VHDL stage correctly\n"),
+                BSDL_File_Name );
 
-      if ((bsdl_parser_priv = bsdl_parser_init( &jtag_ctrl )))
-      {
+      result = bsdl_process_elements( &jtag_ctrl, idcode );
 
-        Compile_Errors = bsdl_sem_process_elements( bsdl_parser_priv );
+      if (result >= 0)
+        bsdl_msg( proc_mode,
+                  BSDL_MSG_NOTE, _("BSDL file '%s' passed BSDL stage correctly\n"),
+                  BSDL_File_Name );
 
-        if ((Compile_Errors == 0) && globs->debug)
-          bsdl_msg( BSDL_MSG_NOTE, _("BSDL file '%s' passed BSDL stage correctly\n"),
-                    BSDL_File_Name );
-
-
-        /* handle IDCODE comparison */
-        if ((Compile_Errors == 0) && jtag_ctrl.idcode)
-        {
-          if (globs->debug)
-            bsdl_msg( BSDL_MSG_NOTE, _("Got IDCODE: %s\n"), jtag_ctrl.idcode );
-
-          /* should we compare the idcodes? */
-          if (idcode)
-          {
-            if (strlen( idcode ) == strlen(jtag_ctrl.idcode))
-            {
-              int idx;
-
-              /* compare given idcode with idcode from BSDL file
-                 including the end of string character */
-              idcode_match = 1;
-              for (idx = 0; idx <= strlen( idcode ); idx++)
-                if (jtag_ctrl.idcode[idx] != 'X')
-                  if (idcode[idx] != jtag_ctrl.idcode[idx])
-                    idcode_match = 0;
-
-              if (globs->debug)
-              {
-                if (idcode_match)
-                  bsdl_msg( BSDL_MSG_NOTE, _("IDCODE matched\n") );
-                else
-                  bsdl_msg( BSDL_MSG_NOTE, _("IDCODE mismatch\n") );
-              }
-            }
-          }
-        }
-
-
-        bsdl_parser_deinit( bsdl_parser_priv );
-      }
     }
     else
     {
-      if (globs->debug || (mode >= 0))
-        bsdl_msg( BSDL_MSG_ERR, _("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
-		 BSDL_File_Name );
+      bsdl_msg( proc_mode,
+                BSDL_MSG_ERR, _("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
+                BSDL_File_Name );
     }
 
 
     vhdl_parser_deinit( vhdl_parser_priv );
   }
 
-  return Compile_Errors == 0 ? idcode_match : -1;
+  return Compile_Errors == 0 ? result : -1;
 }
 
 
@@ -300,12 +259,13 @@ void bsdl_set_path( chain_t *chain, const char *pathlist )
 
   if (globs->debug)
     for (num = 0; globs->path_list[num] != NULL; num++)
-      bsdl_msg( BSDL_MSG_NOTE, "%s\n", globs->path_list[num] );
+      bsdl_msg( BSDL_MODE_MSG_ALL,
+                BSDL_MSG_NOTE, "%s\n", globs->path_list[num] );
 }
 
 
 /*****************************************************************************
- * bsdl_scan_files( chain, idcode, mode )
+ * bsdl_scan_files( chain, idcode, proc_mode )
  *
  * Scans through all files found via the elements in bsdl_path_list
  * and does a test read on each of them.
@@ -314,14 +274,9 @@ void bsdl_set_path( chain_t *chain, const char *pathlist )
  * the current part.
  *
  * Parameters
- *   chain  : pointer to active chain structure
- *   idcode : reference idcode string
- *   mode   : -1 -> read file
- *                  no further action based on components
- *             0 -> read file and extract all components
- *                  dump commands to stdout, do not execute commands
- *             1 -> read file and extract all components
- *                  execute commands
+ *   chain     : pointer to active chain structure
+ *   idcode    : reference idcode string
+ *   proc_mode : processing mode, consisting of BSDL_MODE_* bits
  *
  * Returns
  *   < 0 : Error occured, parse/syntax problems or out of memory
@@ -329,7 +284,7 @@ void bsdl_set_path( chain_t *chain, const char *pathlist )
  *   > 0 : No errors, idcode checked and matched
  *
  ****************************************************************************/
-int bsdl_scan_files( chain_t *chain, const char *idcode, int mode )
+int bsdl_scan_files( chain_t *chain, const char *idcode, int proc_mode )
 {
   bsdl_globs_t *globs = &(chain->bsdl);
   int idx = 0;
@@ -366,20 +321,9 @@ int bsdl_scan_files( chain_t *chain, const char *idcode, int mode )
           {
             if (buf.st_mode & S_IFREG)
             {
-	      if (mode >= 1)
-              {
-		/* now we know we can finally read the file */
-		/* do a test read first */
-		result = bsdl_read_file( chain, name, -1, idcode );
-		if (result > 0)
-                {
-		  /* read in BSDL file if IDCODE matched */
-		  printf( _("  Filename:     %s\n"), name );
-		  result = bsdl_read_file( chain, name, 1, idcode );
-		}
-	      }
-              else
-		result = bsdl_read_file( chain, name, mode, idcode );
+              result = bsdl_read_file( chain, name, proc_mode, idcode );
+              if (result == 1)
+                printf( _("  Filename:     %s\n"), name );
             }
           }
 
@@ -390,7 +334,8 @@ int bsdl_scan_files( chain_t *chain, const char *idcode, int mode )
       closedir( dir );
     }
     else
-      bsdl_msg( BSDL_MSG_WARN, _("Cannot open directory %s\n"), globs->path_list[idx] );
+      bsdl_msg( proc_mode,
+                BSDL_MSG_WARN, _("Cannot open directory %s\n"), globs->path_list[idx] );
 
     idx++;
   }

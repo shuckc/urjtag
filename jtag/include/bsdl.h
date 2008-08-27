@@ -25,6 +25,8 @@
 #ifndef BSDL_H
 #define BSDL_H
 
+#include <bsdl_mode.h>
+
 typedef struct {
     char **path_list;
     int    debug;
