@@ -25,7 +25,7 @@
 
 #include "sysdep.h"
 
-#ifdef HAVE_LINUX_PPDEV_H
+#ifdef ENABLE_LOWLEVEL_PPDEV
 
 #include <fcntl.h>
 #ifdef HAVE_STROPTS_H
@@ -235,4 +235,4 @@ parport_driver_t ppdev_parport_driver = {
 	ppdev_set_control
 };
 
-#endif /* HAVE_LINUX_PPDEV_H */
+#endif /* ENABLE_LOWLEVEL_PPDEV */

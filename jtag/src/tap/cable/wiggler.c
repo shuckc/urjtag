@@ -304,7 +304,7 @@ wiggler_help( const char *cablename )
 {
 	printf( _(
 		"Usage: cable %s parallel PORTADDR [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
-#if HAVE_LINUX_PPDEV_H
+#if ENABLE_LOWLEVEL_PPDEV
 		"   or: cable %s ppdev PPDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
@@ -312,7 +312,7 @@ wiggler_help( const char *cablename )
 #endif
 		"\n"
 		"PORTADDR   parallel port address (e.g. 0x378)\n"
-#if HAVE_LINUX_PPDEV_H
+#if ENABLE_LOWLEVEL_PPDEV
 		"PPDEF      ppdev device (e.g. /dev/parport0)\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
@@ -322,7 +322,7 @@ wiggler_help( const char *cablename )
 		"           default is '%s'\n"
 		"\n"
 	),
-#if HAVE_LINUX_PPDEV_H
+#if ENABLE_LOWLEVEL_PPDEV
     cablename,
 #endif
 #if HAVE_DEV_PPBUS_PPI_H

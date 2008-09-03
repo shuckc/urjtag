@@ -110,7 +110,7 @@ generic_parport_help( const char *cablename )
 {
 	printf( _(
 		"Usage: cable %s parallel PORTADDR\n"
-#if HAVE_LINUX_PPDEV_H
+#if ENABLE_LOWLEVEL_PPDEV
 		"   or: cable %s ppdev PPDEV\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
@@ -118,7 +118,7 @@ generic_parport_help( const char *cablename )
 #endif
 		"\n"
 		"PORTADDR   parallel port address (e.g. 0x378)\n"
-#if HAVE_LINUX_PPDEV_H
+#if ENABLE_LOWLEVEL_PPDEV
 		"PPDEF      ppdev device (e.g. /dev/parport0)\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
@@ -126,7 +126,7 @@ generic_parport_help( const char *cablename )
 #endif
 		"\n"
 	),
-#if HAVE_LINUX_PPDEV_H
+#if ENABLE_LOWLEVEL_PPDEV
     cablename,
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
