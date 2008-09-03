@@ -94,11 +94,11 @@ usbconn_ftd2xx_flush( ftd2xx_param_t *p )
     return 0;
 
   if ((status = FT_Write( p->fc, p->send_buf, p->send_buffered, &xferred )) != FT_OK)
-    perror( _("usbconn_ftd2xx_flush(): FT_Write() failed.\n") );
+    printf( _("usbconn_ftd2xx_flush(): FT_Write() failed.\n") );
 
   if (xferred < p->send_buffered)
   {
-    perror( _("usbconn_ftd2xx_flush(): Written fewer bytes than requested.\n") );
+    printf( _("usbconn_ftd2xx_flush(): Written fewer bytes than requested.\n") );
     return -1;
   }
 
@@ -117,7 +117,7 @@ usbconn_ftd2xx_flush( ftd2xx_param_t *p )
 
     if (!p->recv_buf)
     {
-      perror( _("usbconn_ftd2xx_flush(): Receive buffer does not exist.\n") );
+      printf( _("usbconn_ftd2xx_flush(): Receive buffer does not exist.\n") );
       return -1;
     }
 
@@ -248,7 +248,7 @@ usbconn_ftd2xx_write( usbconn_t *conn, uint8_t *buf, int len, int recv )
   }
   else
   {
-    perror( _("usbconn_ftd2xx_write(): Send buffer does not exist.\n") );
+    printf( _("usbconn_ftd2xx_write(): Send buffer does not exist.\n") );
     return -1;
   }
 }
@@ -330,7 +330,7 @@ usbconn_ftd2xx_common_open( usbconn_t *conn )
 
   if ((status = FT_Open( 0, &(p->fc) )) != FT_OK)
   {
-    perror( "Unable to open FTDI device.\n" );
+    printf( "Unable to open FTDI device.\n" );
     /* mark ftd2xx layer as not initialized */
     p->fc = NULL;
     return -1;
@@ -354,18 +354,18 @@ usbconn_ftd2xx_open( usbconn_t *conn )
   fc = p->fc;
 
   if ((status = FT_ResetDevice( fc )) != FT_OK)
-    perror( _("Can't reset device.\n") );
+    printf( _("Can't reset device.\n") );
   if (status == FT_OK) if ((status =  FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
-    perror( _("Can't purge RX buffer.\n") );
+    printf( _("Can't purge RX buffer.\n") );
 
   if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK)
-    perror( _("Can't disable bitmode.\n") );
+    printf( _("Can't disable bitmode.\n") );
 
   if (status == FT_OK) if ((status = FT_SetLatencyTimer(fc, 2)) != FT_OK)
-    perror( _("Can't set latency timer.\n") );
+    printf( _("Can't set latency timer.\n") );
 
   if (status == FT_OK) if ((status = FT_SetBaudRate(fc, 3E6)) != FT_OK)
-    perror( _("Can't set baudrate.\n") );
+    printf( _("Can't set baudrate.\n") );
 
   if (status != FT_OK)
   {
@@ -396,28 +396,28 @@ usbconn_ftd2xx_mpsse_open( usbconn_t *conn )
      Ref. FTCJTAGPG10.pdf
      Intermittent problems will occur when certain steps are skipped. */
   if ((status = FT_ResetDevice( fc )) != FT_OK)
-    perror( _("Can't reset device.\n") );
+    printf( _("Can't reset device.\n") );
   if (status == FT_OK) if ((status =  FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
-    perror( _("Can't purge RX buffer.\n") );
+    printf( _("Can't purge RX buffer.\n") );
 
   if (status == FT_OK) if ((status = FT_SetChars( fc, 0, 0, 0, 0 )) != FT_OK)
-    perror( _("Can't set special characters.\n") );
+    printf( _("Can't set special characters.\n") );
 
   /* set a reasonable latency timer value
      if this value is too low then the chip will send intermediate result data
      in short packets (suboptimal performance) */
   if (status == FT_OK) if ((status = FT_SetLatencyTimer( fc, 16 )) != FT_OK)
-    perror( _("Can't set target latency timer.\n") );
+    printf( _("Can't set target latency timer.\n") );
 
   if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK)
-    perror( _("Can't disable bitmode.\n") );
+    printf( _("Can't disable bitmode.\n") );
   if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x0b, 0x02 /* BITMODE_MPSSE */ )) != FT_OK)
-    perror( _("Can't set MPSSE bitmode.\n") );
+    printf( _("Can't set MPSSE bitmode.\n") );
 
   if (status == FT_OK) if ((status = FT_ResetDevice( fc )) != FT_OK)
-    perror( _("Can't reset device.\n") );
+    printf( _("Can't reset device.\n") );
   if (status == FT_OK) if ((status = FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
-    perror( _("Can't purge RX buffer.\n") );
+    printf( _("Can't purge RX buffer.\n") );
 
   /* set TCK Divisor */
   if (status == FT_OK)
@@ -438,9 +438,9 @@ usbconn_ftd2xx_mpsse_open( usbconn_t *conn )
       status = FT_OTHER_ERROR;
 
   if (status == FT_OK) if ((status = FT_ResetDevice( fc )) != FT_OK)
-    perror( _("Can't reset device.\n") );
+    printf( _("Can't reset device.\n") );
   if (status == FT_OK) if ((status = FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
-    perror( _("Can't purge RX buffer.\n") );
+    printf( _("Can't purge RX buffer.\n") );
 
   if (status != FT_OK)
   {

@@ -78,11 +78,11 @@ usbconn_ftdi_flush( ftdi_param_t *p )
     return 0;
 
   if ((xferred = ftdi_write_data( p->fc, p->send_buf, p->send_buffered )) < 0)
-    perror( ftdi_get_error_string( p->fc ) );
+    puts( ftdi_get_error_string( p->fc ) );
 
   if (xferred < p->send_buffered)
   {
-    perror( _("usbconn_ftdi_flush(): Written fewer bytes than requested.\n") );
+    printf( _("usbconn_ftdi_flush(): Written fewer bytes than requested.\n") );
     return -1;
   }
 
@@ -101,7 +101,7 @@ usbconn_ftdi_flush( ftdi_param_t *p )
 
     if (!p->recv_buf)
     {
-      perror( _("usbconn_ftdi_flush(): Receive buffer does not exist.\n") );
+      printf( _("usbconn_ftdi_flush(): Receive buffer does not exist.\n") );
       return -1;
     }
 
@@ -216,7 +216,7 @@ usbconn_ftdi_write( usbconn_t *conn, uint8_t *buf, int len, int recv )
   }
   else
   {
-    perror( _("usbconn_ftdi_write(): Send buffer does not exist.\n") );
+    printf( _("usbconn_ftdi_write(): Send buffer does not exist.\n") );
     return -1;
   }
 }
@@ -296,7 +296,7 @@ usbconn_ftdi_common_open( usbconn_t *conn )
 
   if (ftdi_usb_open_desc( fc, p->vid, p->pid, NULL, p->serial ) < 0)
   {
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
     ftdi_deinit( fc );
     /* mark ftdi layer as not initialized */
     p->fc = NULL;
@@ -320,9 +320,9 @@ seq_purge( struct ftdi_context *fc, int purge_rx, int purge_tx )
 
 #ifndef LIBFTDI_UNIMPLEMENTED
   if ((r = ftdi_usb_purge_buffers( fc )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
   if (r >= 0) if ((r = ftdi_read_data( fc, &buf, 1 )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 #else /* not yet available */
   {
     int rx_loop;
@@ -330,13 +330,13 @@ seq_purge( struct ftdi_context *fc, int purge_rx, int purge_tx )
     if (purge_rx)
       for (rx_loop = 0; (rx_loop < 6) && (r >= 0); rx_loop++)
         if ((r = ftdi_usb_purge_rx_buffer( fc )) < 0)
-          perror( ftdi_get_error_string( fc ) );
+          puts( ftdi_get_error_string( fc ) );
 
     if (purge_tx)
       if (r >= 0) if ((r = ftdi_usb_purge_tx_buffer( fc )) < 0)
-        perror( ftdi_get_error_string( fc ) );
+        puts( ftdi_get_error_string( fc ) );
     if (r >= 0) if ((r = ftdi_read_data( fc, &buf, 1 )) < 0)
-      perror( ftdi_get_error_string( fc ) );
+      puts( ftdi_get_error_string( fc ) );
   }
 #endif
 
@@ -352,11 +352,11 @@ seq_reset( struct ftdi_context *fc )
   {
     unsigned short status;
     if ((r = ftdi_poll_status( fc, &status )) < 0)
-      perror( ftdi_get_error_string( fc ) );
+      puts( ftdi_get_error_string( fc ) );
   }
 #endif
   if ((r = ftdi_usb_reset( fc )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 
   if (r >= 0) r = seq_purge( fc, 1, 1 );
   return r < 0 ? -1 : 0;
@@ -378,22 +378,22 @@ usbconn_ftdi_open( usbconn_t *conn )
   if (r >= 0) r = seq_purge( fc, 1, 0 );
 
   if (r >= 0) if ((r = ftdi_disable_bitbang( fc )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 
   if (r >= 0) if ((r = ftdi_set_latency_timer( fc, 2 )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 
 #if 0
   /* libftdi 0.6 doesn't allow high baudrates, so we send the control
      message outselves */
   if (r >= 0) if (usb_control_msg( fc->usb_dev, 0x40, 3, 1, 0, NULL, 0, fc->usb_write_timeout ) != 0)
   {
-    perror( "Can't set max baud rate.\n" );
+    printf( "Can't set max baud rate.\n" );
     r = -1;
   }
 #else
   if (r >= 0) if ((r = ftdi_set_baudrate( fc, 3E6 )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 #endif
 
   if (r < 0)
@@ -428,25 +428,25 @@ usbconn_ftdi_mpsse_open( usbconn_t *conn )
 
 #ifdef LIBFTDI_UNIMPLEMENTED
   if (r >= 0) if ((r = ftdi_set_event_char( fc, 0, 0 )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
   if (r >= 0) if ((r = ftdi_set_error_char( fc, 0, 0 )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 #endif
 
   /* set a reasonable latency timer value
      if this value is too low then the chip will send intermediate result data
      in short packets (suboptimal performance) */
   if (r >= 0) if ((r = ftdi_set_latency_timer( fc, 16 )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 
   if (r >= 0) if ((r = ftdi_disable_bitbang( fc )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 
   if (r >= 0) if ((r = ftdi_set_bitmode( fc, 0x0b, BITMODE_MPSSE )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
 
   if (r >= 0) if ((r = ftdi_usb_reset( fc )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
   if (r >= 0) r = seq_purge( fc, 1, 0 );
 
   /* set TCK Divisor */
@@ -464,7 +464,7 @@ usbconn_ftdi_mpsse_open( usbconn_t *conn )
   if (r >= 0) r = usbconn_ftdi_read( conn, NULL, 0 );
 
   if (r >= 0) if ((r = ftdi_usb_reset( fc )) < 0)
-    perror( ftdi_get_error_string( fc ) );
+    puts( ftdi_get_error_string( fc ) );
   if (r >= 0) r = seq_purge( fc, 1, 0 );
 
   if (r < 0)
