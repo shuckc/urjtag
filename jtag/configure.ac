@@ -209,7 +209,7 @@ AC_ARG_WITH([ftd2xx],
 
 FTD2XXLIB=
 AS_IF([test "x$with_ftd2xx" = xyes -o "x$with_ftd2xx" = xcheck], [
-  AC_CHECK_LIB([ftd2xx], [FT_Open], [
+  AC_CHECK_LIB([ftd2xx], [FT_OpenEx], [
     HAVELIBFTD2XX=yes
     LIBS="-lftd2xx $LIBS"
   ],[

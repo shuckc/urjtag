@@ -262,7 +262,7 @@ usbconn_ftdi_connect( const char **param, int paramc, usbconn_cable_t *template 
   p->fc     = fc;
   p->pid    = template->pid;
   p->vid    = template->vid;
-  p->serial = NULL;
+  p->serial = template->desc ? strdup( template->desc ) : NULL;
 
   c->params = p;
   c->driver = &usbconn_ftdi_driver;
@@ -293,8 +293,16 @@ usbconn_ftdi_common_open( usbconn_t *conn )
 {
   ftdi_param_t *p = conn->params;
   struct ftdi_context *fc = p->fc;
+  int status;
 
-  if (ftdi_usb_open_desc( fc, p->vid, p->pid, NULL, p->serial ) < 0)
+  /* use command line string for desc= as serial number and try to
+     open a matching device */
+  status = ftdi_usb_open_desc( fc, p->vid, p->pid, NULL, p->serial );
+  if (status < 0)
+    /* try again with matching the string against the description */
+    status = ftdi_usb_open_desc( fc, p->vid, p->pid, p->serial, NULL );
+
+  if (status < 0)
   {
     puts( ftdi_get_error_string( fc ) );
     ftdi_deinit( fc );

@@ -1,3 +1,9 @@
+2008-09-04  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * configure.ac, src/tap/usbconn/libftd2xx.c,
+     src/tap/usbconn/libftdi.c: forward and use the desc= paramter
+     [ 2085244 ] Wrong device chosen by ftd2xx driver
+
 2008-09-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/usbconn/libftd2xx.c,  src/tap/usbconn/libftdi.c:

@@ -290,7 +290,7 @@ usbconn_ftd2xx_connect( const char **param, int paramc, usbconn_cable_t *templat
   p->fc     = NULL;
   p->pid    = template->pid;
   p->vid    = template->vid;
-  p->serial = NULL;
+  p->serial = template->desc ? strdup( template->desc ) : NULL;
 
   c->params   = p;
   c->driver   = &usbconn_ftd2xx_driver;
@@ -328,7 +328,23 @@ usbconn_ftd2xx_common_open( usbconn_t *conn )
     fprintf( stderr, "Warning: couldn't add %4.4x:%4.4x", p->vid, p->pid );
 #endif
 
-  if ((status = FT_Open( 0, &(p->fc) )) != FT_OK)
+  /* try various methods to open a FTDI device */
+  if (p->serial)
+  {
+    /* serial number/description is specified */
+
+    /* first try to match against the serial string */
+    status = FT_OpenEx( p->serial, FT_OPEN_BY_SERIAL_NUMBER, &(p->fc) );
+
+    if (status != FT_OK)
+      /* then try to match against the description string */
+      status = FT_OpenEx( p->serial, FT_OPEN_BY_DESCRIPTION, &(p->fc) );
+  }
+  else
+    /* give it a plain try */
+    status = FT_Open( 0, &(p->fc) );
+
+  if (status != FT_OK)
   {
     printf( "Unable to open FTDI device.\n" );
     /* mark ftd2xx layer as not initialized */
