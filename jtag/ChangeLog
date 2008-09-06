@@ -1,5 +1,8 @@
 2008-09-06  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c:
+     [ 2091744 ] Automatic detection of alternative VID/PID cables broken
+
    * src/tap/cable/usbblaster.c: set fixed frequency and print warning
      if a different frequency is requested
 

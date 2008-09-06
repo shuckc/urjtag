@@ -63,6 +63,9 @@ typedef struct {
 usbconn_driver_t usbconn_ftdi_driver;
 usbconn_driver_t usbconn_ftdi_mpsse_driver;
 
+static int usbconn_ftdi_common_open( usbconn_t *conn, int printerr );
+static void usbconn_ftdi_free( usbconn_t *conn );
+
 /* ---------------------------------------------------------------------- */
 
 static int
@@ -78,11 +81,12 @@ usbconn_ftdi_flush( ftdi_param_t *p )
     return 0;
 
   if ((xferred = ftdi_write_data( p->fc, p->send_buf, p->send_buffered )) < 0)
-    puts( ftdi_get_error_string( p->fc ) );
+    printf( _("%s(): ftdi_write_data() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( p->fc ) );
 
   if (xferred < p->send_buffered)
   {
-    printf( _("usbconn_ftdi_flush(): Written fewer bytes than requested.\n") );
+    printf( _("%s(): Written fewer bytes than requested.\n"), __FUNCTION__ );
     return -1;
   }
 
@@ -101,18 +105,19 @@ usbconn_ftdi_flush( ftdi_param_t *p )
 
     if (!p->recv_buf)
     {
-      printf( _("usbconn_ftdi_flush(): Receive buffer does not exist.\n") );
+      printf( _("%s(): Receive buffer does not exist.\n"), __FUNCTION__ );
       return -1;
     }
 
     while (recvd == 0)
       if ((recvd = ftdi_read_data( p->fc, &(p->recv_buf[p->recv_write_idx]),
                                    p->to_recv )) < 0)
-        printf( _("usbconn_ftdi_flush(): Error from ftdi_read_data(): %s\n"),
-                ftdi_get_error_string( p->fc ) );
+        printf( _("%s(): Error from ftdi_read_data(): %s\n"),
+                __FUNCTION__, ftdi_get_error_string( p->fc ) );
 
     if (recvd < p->to_recv)
-      printf( _("usbconn_ftdi_flush(): Received less bytes than requested.\n") );
+      printf( _("%s(): Received less bytes than requested.\n"),
+              __FUNCTION__ );
 
     p->to_recv        -= recvd;
     p->recv_write_idx += recvd;
@@ -160,8 +165,8 @@ usbconn_ftdi_read( usbconn_t *conn, uint8_t *buf, int len )
     /* need to get more data directly from the device */
     while (recvd == 0)
       if ((recvd = ftdi_read_data( p->fc, &(buf[cpy_len]), len )) < 0)
-        printf( _("usbconn_ftdi_read(): Error from ftdi_read_data(): %s\n"),
-                ftdi_get_error_string( p->fc ) );
+        printf( _("%s(): Error from ftdi_read_data(): %s\n"),
+                __FUNCTION__, ftdi_get_error_string( p->fc ) );
   }
 
   return recvd < 0 ? -1 : cpy_len + len;
@@ -216,7 +221,7 @@ usbconn_ftdi_write( usbconn_t *conn, uint8_t *buf, int len, int recv )
   }
   else
   {
-    printf( _("usbconn_ftdi_write(): Send buffer does not exist.\n") );
+    printf( _("%s(): Send buffer does not exist.\n"), __FUNCTION__ );
     return -1;
   }
 }
@@ -268,6 +273,16 @@ usbconn_ftdi_connect( const char **param, int paramc, usbconn_cable_t *template 
   c->driver = &usbconn_ftdi_driver;
   c->cable  = NULL;
 
+  /* do a test open with the specified cable paramters,
+     alternatively we could use libusb to detect the presence of the
+     specified USB device */
+  if (usbconn_ftdi_common_open( c, 0 ) != 0)
+  {
+    usbconn_ftdi_free( c );
+    return NULL;
+  }
+  ftdi_usb_close( fc );
+
   printf( _("Connected to libftdi driver.\n") );
 
   return c;
@@ -289,7 +304,7 @@ usbconn_ftdi_mpsse_connect( const char **param, int paramc, usbconn_cable_t *tem
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_common_open( usbconn_t *conn )
+usbconn_ftdi_common_open( usbconn_t *conn, int printerr )
 {
   ftdi_param_t *p = conn->params;
   struct ftdi_context *fc = p->fc;
@@ -304,7 +319,9 @@ usbconn_ftdi_common_open( usbconn_t *conn )
 
   if (status < 0)
   {
-    puts( ftdi_get_error_string( fc ) );
+    if (printerr)
+      printf( _("%s() failed: %s\n"), __FUNCTION__,
+              ftdi_get_error_string( fc ) );
     ftdi_deinit( fc );
     /* mark ftdi layer as not initialized */
     p->fc = NULL;
@@ -328,9 +345,11 @@ seq_purge( struct ftdi_context *fc, int purge_rx, int purge_tx )
 
 #ifndef LIBFTDI_UNIMPLEMENTED
   if ((r = ftdi_usb_purge_buffers( fc )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_usb_purge_buffers() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
   if (r >= 0) if ((r = ftdi_read_data( fc, &buf, 1 )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_read_data() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
 #else /* not yet available */
   {
     int rx_loop;
@@ -338,13 +357,16 @@ seq_purge( struct ftdi_context *fc, int purge_rx, int purge_tx )
     if (purge_rx)
       for (rx_loop = 0; (rx_loop < 6) && (r >= 0); rx_loop++)
         if ((r = ftdi_usb_purge_rx_buffer( fc )) < 0)
-          puts( ftdi_get_error_string( fc ) );
+          printf( _("%s(): ftdi_usb_purge_rx_buffer() failed: %s\n"),
+                  __FUNCTION__, ftdi_get_error_string( fc ) );
 
     if (purge_tx)
       if (r >= 0) if ((r = ftdi_usb_purge_tx_buffer( fc )) < 0)
-        puts( ftdi_get_error_string( fc ) );
+        printf( _("%s(): ftdi_usb_purge_tx_buffer() failed: %s\n"),
+                __FUNCTION__, ftdi_get_error_string( fc ) );
     if (r >= 0) if ((r = ftdi_read_data( fc, &buf, 1 )) < 0)
-      puts( ftdi_get_error_string( fc ) );
+      printf( _("%s(): ftdi_read_data() failed: %s\n"),
+              __FUNCTION__, ftdi_get_error_string( fc ) );
   }
 #endif
 
@@ -360,11 +382,13 @@ seq_reset( struct ftdi_context *fc )
   {
     unsigned short status;
     if ((r = ftdi_poll_status( fc, &status )) < 0)
-      puts( ftdi_get_error_string( fc ) );
+      printf( _("%s(): ftdi_poll_status() failed: %s\n"),
+              __FUNCTION__, ftdi_get_error_string( fc ) );
   }
 #endif
   if ((r = ftdi_usb_reset( fc )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_usb_reset() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
 
   if (r >= 0) r = seq_purge( fc, 1, 1 );
   return r < 0 ? -1 : 0;
@@ -379,17 +403,19 @@ usbconn_ftdi_open( usbconn_t *conn )
   struct ftdi_context *fc = p->fc;
   int r;
 
-  if (usbconn_ftdi_common_open( conn ) < 0)
+  if (usbconn_ftdi_common_open( conn, 1 ) < 0)
     return -1;
 
   r = seq_reset( fc );
   if (r >= 0) r = seq_purge( fc, 1, 0 );
 
   if (r >= 0) if ((r = ftdi_disable_bitbang( fc )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_disable_bitbang() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
 
   if (r >= 0) if ((r = ftdi_set_latency_timer( fc, 2 )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_set_latency_timer() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
 
 #if 0
   /* libftdi 0.6 doesn't allow high baudrates, so we send the control
@@ -401,7 +427,8 @@ usbconn_ftdi_open( usbconn_t *conn )
   }
 #else
   if (r >= 0) if ((r = ftdi_set_baudrate( fc, 3E6 )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_set_baudrate() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
 #endif
 
   if (r < 0)
@@ -424,7 +451,7 @@ usbconn_ftdi_mpsse_open( usbconn_t *conn )
   struct ftdi_context *fc = p->fc;
   int r;
 
-  if (usbconn_ftdi_common_open( conn ) < 0)
+  if (usbconn_ftdi_common_open( conn, 1 ) < 0)
     return -1;
 
   /* This sequence might seem weird and containing superfluous stuff.
@@ -445,16 +472,20 @@ usbconn_ftdi_mpsse_open( usbconn_t *conn )
      if this value is too low then the chip will send intermediate result data
      in short packets (suboptimal performance) */
   if (r >= 0) if ((r = ftdi_set_latency_timer( fc, 16 )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_set_latency_timer() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
 
   if (r >= 0) if ((r = ftdi_disable_bitbang( fc )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_disable_bitbang() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
 
   if (r >= 0) if ((r = ftdi_set_bitmode( fc, 0x0b, BITMODE_MPSSE )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_set_bitmode() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
 
   if (r >= 0) if ((r = ftdi_usb_reset( fc )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_usb_reset() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
   if (r >= 0) r = seq_purge( fc, 1, 0 );
 
   /* set TCK Divisor */
@@ -472,7 +503,8 @@ usbconn_ftdi_mpsse_open( usbconn_t *conn )
   if (r >= 0) r = usbconn_ftdi_read( conn, NULL, 0 );
 
   if (r >= 0) if ((r = ftdi_usb_reset( fc )) < 0)
-    puts( ftdi_get_error_string( fc ) );
+    printf( _("%s(): ftdi_usb_reset() failed: %s\n"),
+            __FUNCTION__, ftdi_get_error_string( fc ) );
   if (r >= 0) r = seq_purge( fc, 1, 0 );
 
   if (r < 0)

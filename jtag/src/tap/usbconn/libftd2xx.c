@@ -71,6 +71,9 @@ typedef struct {
 usbconn_driver_t usbconn_ftd2xx_driver;
 usbconn_driver_t usbconn_ftd2xx_mpsse_driver;
 
+static int usbconn_ftd2xx_common_open( usbconn_t *conn, int printerr );
+static void usbconn_ftd2xx_free( usbconn_t *conn );
+
 /* ---------------------------------------------------------------------- */
 
 static int
@@ -94,11 +97,11 @@ usbconn_ftd2xx_flush( ftd2xx_param_t *p )
     return 0;
 
   if ((status = FT_Write( p->fc, p->send_buf, p->send_buffered, &xferred )) != FT_OK)
-    printf( _("usbconn_ftd2xx_flush(): FT_Write() failed.\n") );
+    printf( _("%s(): FT_Write() failed.\n"), __FUNCTION__ );
 
   if (xferred < p->send_buffered)
   {
-    printf( _("usbconn_ftd2xx_flush(): Written fewer bytes than requested.\n") );
+    printf( _("%s(): Written fewer bytes than requested.\n"), __FUNCTION__ );
     return -1;
   }
 
@@ -117,17 +120,18 @@ usbconn_ftd2xx_flush( ftd2xx_param_t *p )
 
     if (!p->recv_buf)
     {
-      printf( _("usbconn_ftd2xx_flush(): Receive buffer does not exist.\n") );
+      printf( _("%s(): Receive buffer does not exist.\n"), __FUNCTION__ );
       return -1;
     }
 
     while (recvd == 0)
       if ((status = FT_Read( p->fc, &(p->recv_buf[p->recv_write_idx]),
                              p->to_recv, &recvd )) != FT_OK)
-        printf( _("usbconn_ftd2xx_flush(): Error from FT_Read(): %d\n"), (int)status );
+        printf( _("%s(): Error from FT_Read(): %d\n"),
+                __FUNCTION__, (int)status );
 
     if (recvd < p->to_recv)
-      printf( _("usbconn_ftd2xx_flush(): Received less bytes than requested.\n") );
+      printf( _("%s(): Received less bytes than requested.\n"), __FUNCTION__ );
 
     p->to_recv        -= recvd;
     p->recv_write_idx += recvd;
@@ -183,7 +187,8 @@ usbconn_ftd2xx_read( usbconn_t *conn, uint8_t *buf, int len )
     /* need to get more data directly from the device */
     while (recvd == 0)
       if ((status = FT_Read( p->fc, &(buf[cpy_len]), len, &recvd )) != FT_OK)
-        printf( _("usbconn_ftd2xx_read(): Error from FT_Read(): %d\n"), (int)status );
+        printf( _("%s(): Error from FT_Read(): %d\n"), __FUNCTION__,
+                (int)status );
   }
 
 #ifdef DEBUG
@@ -248,7 +253,7 @@ usbconn_ftd2xx_write( usbconn_t *conn, uint8_t *buf, int len, int recv )
   }
   else
   {
-    printf( _("usbconn_ftd2xx_write(): Send buffer does not exist.\n") );
+    printf( _("%s(): Send buffer does not exist.\n"), __FUNCTION__ );
     return -1;
   }
 }
@@ -296,6 +301,16 @@ usbconn_ftd2xx_connect( const char **param, int paramc, usbconn_cable_t *templat
   c->driver   = &usbconn_ftd2xx_driver;
   c->cable    = NULL;
 
+  /* do a test open with the specified cable paramters,
+     there's no other way to detect the presence of the specified
+     USB device */
+  if (usbconn_ftd2xx_common_open( c, 0 ) != 0)
+  {
+    usbconn_ftd2xx_free( c );
+    return NULL;
+  }
+  FT_Close( p->fc );
+
   printf( _("Connected to libftd2xx driver.\n") );
 
   return c;
@@ -317,7 +332,7 @@ usbconn_ftd2xx_mpsse_connect( const char **param, int paramc, usbconn_cable_t *t
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_common_open( usbconn_t *conn )
+usbconn_ftd2xx_common_open( usbconn_t *conn, int printerr )
 {
   ftd2xx_param_t *p = conn->params;
   FT_STATUS status;
@@ -346,7 +361,8 @@ usbconn_ftd2xx_common_open( usbconn_t *conn )
 
   if (status != FT_OK)
   {
-    printf( "Unable to open FTDI device.\n" );
+    if (printerr)
+      printf( "Unable to open FTDI device.\n" );
     /* mark ftd2xx layer as not initialized */
     p->fc = NULL;
     return -1;
@@ -364,24 +380,24 @@ usbconn_ftd2xx_open( usbconn_t *conn )
   FT_HANDLE fc;
   FT_STATUS status;
 
-  if (usbconn_ftd2xx_common_open( conn ) < 0)
+  if (usbconn_ftd2xx_common_open( conn, 1 ) < 0)
     return -1;
 
   fc = p->fc;
 
   if ((status = FT_ResetDevice( fc )) != FT_OK)
-    printf( _("Can't reset device.\n") );
+    printf( _("%s(): Can't reset device.\n"), __FUNCTION__ );
   if (status == FT_OK) if ((status =  FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
-    printf( _("Can't purge RX buffer.\n") );
+    printf( _("%s(): Can't purge RX buffer.\n"), __FUNCTION__ );
 
   if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK)
-    printf( _("Can't disable bitmode.\n") );
+    printf( _("%s(): Can't disable bitmode.\n"), __FUNCTION__ );
 
   if (status == FT_OK) if ((status = FT_SetLatencyTimer(fc, 2)) != FT_OK)
-    printf( _("Can't set latency timer.\n") );
+    printf( _("%s(): Can't set latency timer.\n"), __FUNCTION__ );
 
   if (status == FT_OK) if ((status = FT_SetBaudRate(fc, 3E6)) != FT_OK)
-    printf( _("Can't set baudrate.\n") );
+    printf( _("%s(): Can't set baudrate.\n"), __FUNCTION__ );
 
   if (status != FT_OK)
   {
@@ -402,7 +418,7 @@ usbconn_ftd2xx_mpsse_open( usbconn_t *conn )
   FT_HANDLE fc;
   FT_STATUS status;
 
-  if (usbconn_ftd2xx_common_open( conn ) < 0)
+  if (usbconn_ftd2xx_common_open( conn, 1 ) < 0)
     return -1;
 
   fc = p->fc;
@@ -412,28 +428,28 @@ usbconn_ftd2xx_mpsse_open( usbconn_t *conn )
      Ref. FTCJTAGPG10.pdf
      Intermittent problems will occur when certain steps are skipped. */
   if ((status = FT_ResetDevice( fc )) != FT_OK)
-    printf( _("Can't reset device.\n") );
+    printf( _("%s(): Can't reset device.\n"), __FUNCTION__ );
   if (status == FT_OK) if ((status =  FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
-    printf( _("Can't purge RX buffer.\n") );
+    printf( _("%s(): Can't purge RX buffer.\n"), __FUNCTION__ );
 
   if (status == FT_OK) if ((status = FT_SetChars( fc, 0, 0, 0, 0 )) != FT_OK)
-    printf( _("Can't set special characters.\n") );
+    printf( _("%s(): Can't set special characters.\n"), __FUNCTION__ );
 
   /* set a reasonable latency timer value
      if this value is too low then the chip will send intermediate result data
      in short packets (suboptimal performance) */
   if (status == FT_OK) if ((status = FT_SetLatencyTimer( fc, 16 )) != FT_OK)
-    printf( _("Can't set target latency timer.\n") );
+    printf( _("%s(): Can't set target latency timer.\n"), __FUNCTION__ );
 
   if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK)
-    printf( _("Can't disable bitmode.\n") );
+    printf( _("%s(): Can't disable bitmode.\n"), __FUNCTION__ );
   if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x0b, 0x02 /* BITMODE_MPSSE */ )) != FT_OK)
-    printf( _("Can't set MPSSE bitmode.\n") );
+    printf( _("%s(): Can't set MPSSE bitmode.\n"), __FUNCTION__ );
 
   if (status == FT_OK) if ((status = FT_ResetDevice( fc )) != FT_OK)
-    printf( _("Can't reset device.\n") );
+    printf( _("%s(): Can't reset device.\n"), __FUNCTION__ );
   if (status == FT_OK) if ((status = FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
-    printf( _("Can't purge RX buffer.\n") );
+    printf( _("%s(): Can't purge RX buffer.\n"), __FUNCTION__ );
 
   /* set TCK Divisor */
   if (status == FT_OK)
@@ -454,9 +470,9 @@ usbconn_ftd2xx_mpsse_open( usbconn_t *conn )
       status = FT_OTHER_ERROR;
 
   if (status == FT_OK) if ((status = FT_ResetDevice( fc )) != FT_OK)
-    printf( _("Can't reset device.\n") );
+    printf( _("%s(): Can't reset device.\n"), __FUNCTION__ );
   if (status == FT_OK) if ((status = FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
-    printf( _("Can't purge RX buffer.\n") );
+    printf( _("%s(): Can't purge RX buffer.\n"), __FUNCTION__ );
 
   if (status != FT_OK)
   {
