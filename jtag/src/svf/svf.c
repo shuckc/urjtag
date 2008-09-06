@@ -647,14 +647,19 @@ svf_runtest(chain_t *chain, parser_priv_t *priv, struct runtest *params)
 
   /* compute run_count */
   run_count = params->run_count;
-  frequency = cable_get_frequency(chain->cable);
-  if (frequency > 0) {
-    uint32_t min_time_run_count = ceil(params->min_time * frequency);
-    if (min_time_run_count > run_count) {
-      run_count = min_time_run_count;
+  if (params->min_time > 0.0) {
+    frequency = cable_get_frequency(chain->cable);
+    if (frequency > 0) {
+      uint32_t min_time_run_count = ceil(params->min_time * frequency);
+      if (min_time_run_count > run_count) {
+        run_count = min_time_run_count;
+      }
+    } else {
+      printf( _("Error %s: Maximum cable clock frequency required for RUNTEST.\n"), "svf" );
+      printf( _("  Set the cable frequency with 'FREQUENCY <Hz>'.\n") );
+      return 0;
     }
   }
-  assert(run_count > 0);
 
   svf_goto_state(chain, priv->runtest_run_state);
 
@@ -1023,6 +1028,7 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress
   parser_priv_t priv;
   int c = ~EOF;
   int num_lines;
+  uint32_t old_frequency = cable_get_frequency( chain->cable );
 
   /* get number of lines in svf file so we can give user some feedback on long
      files or slow cables */
@@ -1139,4 +1145,8 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress
     free(priv.sdr_params.params.mask);
   if (priv.sdr_params.params.smask)
     free(priv.sdr_params.params.smask);
+
+  /* restore previous frequency setting, required by SVF spec */
+  if (old_frequency != cable_get_frequency( chain->cable ))
+    cable_set_frequency( chain->cable, old_frequency );
 }

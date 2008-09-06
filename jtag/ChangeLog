@@ -1,3 +1,10 @@
+2008-09-06  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/svf/svf.c: require frequency setting from cable for
+     RUNTEST MIN SEC command, fixes
+     [ 2090432 ] SVF programming problem with "x SEC" arg to runtest
+     also restore previous frequency setting at end of SVF execution
+
 2008-09-04  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * configure.ac, src/tap/usbconn/libftd2xx.c,
