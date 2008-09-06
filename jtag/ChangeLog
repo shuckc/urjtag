@@ -1,5 +1,7 @@
 2008-09-06  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/tap/cable/generic.c: fixed calibration loop
+
    * src/svf/svf.c: require frequency setting from cable for
      RUNTEST MIN SEC command, fixes
      [ 2090432 ] SVF programming problem with "x SEC" arg to runtest

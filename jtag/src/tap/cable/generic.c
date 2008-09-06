@@ -357,26 +357,24 @@ generic_set_frequency( cable_t *cable, uint32_t new_frequency )
 {
 	if (new_frequency == 0) {
 		cable->delay = 0;
-		cable-> frequency = 0;
+		cable->frequency = 0;
 	} else {
 		const double tolerance = 0.1;
-		uint32_t loops;
+		const uint32_t loops = 2000;
 		uint32_t delay = cable->delay;
 		uint32_t frequency = cable->frequency;
 
-		printf("requested frequency %u, now calibrating delay loop\n", new_frequency);
+		if (new_frequency > (1.0 - tolerance) * frequency &&
+		    new_frequency < (1.0 + tolerance) * frequency)
+			return;
 
-		if (delay == 0) {
-			delay = 1000;
-			loops = 10000;
-		} else {
-			loops = 3 * frequency;
-		}
+		printf("requested frequency %u, now calibrating delay loop\n", new_frequency);
 
 		while (1) {
 			uint32_t i, new_delay;
 			long double start, end, real_frequency;
 
+			cable->delay = delay;
 			start = frealtime();	
 			for (i = 0; i < loops; ++i) {
 				cable->driver->clock(cable, 0, 0, 1);
@@ -388,11 +386,11 @@ generic_set_frequency( cable_t *cable, uint32_t new_frequency )
 			printf("new real frequency %Lg, delay %u\n", 
 			       real_frequency, delay);
 
-			loops = 3 * fmax(real_frequency, new_frequency);
 			new_delay = (long double)delay * real_frequency / new_frequency;
 
 			if (real_frequency >= (1.0 - tolerance)*new_frequency) {
 				if (real_frequency <= (1.0 + tolerance)*new_frequency) {
+					frequency = real_frequency;
 					break;
 				}
 				if (new_delay > delay) {
@@ -400,16 +398,20 @@ generic_set_frequency( cable_t *cable, uint32_t new_frequency )
 				} else {
 					delay++;
 				}
+
 			} else {
+				if (delay == 0) {
+					printf("operating without delay\n");
+					frequency = real_frequency;
+					break;
+				}
+
 				if (new_delay < delay) {
 					delay = new_delay;
 				} else {
-					delay--;
+					if (delay > 0)
+						delay--;
 				}			
-				if (delay == 0) {
-					printf("operating without delay\n");
-					break;
-				}
 			}
 		}
 
