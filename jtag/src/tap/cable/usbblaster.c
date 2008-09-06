@@ -50,6 +50,8 @@
 
 #define TDO    0
 
+#define FIXED_FREQUENCY 12000000L
+
 /* The default driver if not specified otherwise during connect */
 #ifdef ENABLE_LOWLEVEL_FTD2XX
 #define DEFAULT_DRIVER "ftd2xx"
@@ -93,6 +95,16 @@ usbblaster_connect( char *params[], cable_t *cable )
 	return 0;
 }
 
+void
+usbblaster_set_frequency( cable_t *cable, uint32_t new_frequency )
+{
+	if (new_frequency != FIXED_FREQUENCY)
+		printf( _("Warning: USB-Blaster frequency is fixed to %ld Hz\n"),
+		        FIXED_FREQUENCY );
+
+	cable->frequency = FIXED_FREQUENCY;
+}
+
 static int
 usbblaster_init( cable_t *cable )
 {
@@ -107,6 +119,8 @@ usbblaster_init( cable_t *cable )
 		cx_cmd_push( cmd_root, 0 );
 
 	cx_xfer( cmd_root, NULL, cable, COMPLETELY );
+
+	usbblaster_set_frequency( cable, FIXED_FREQUENCY );
 
 	return 0;
 }
@@ -419,12 +433,6 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 
 		cable->todo.next_item = i;
 	}
-}
-
-void
-usbblaster_set_frequency( cable_t *cable, uint32_t new_frequency )
-{
-	cable->frequency = new_frequency;
 }
 
 void
