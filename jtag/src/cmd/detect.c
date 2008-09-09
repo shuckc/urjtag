@@ -68,7 +68,7 @@ cmd_detect_run( chain_t *chain, char *params[] )
 		abus = buses.buses[i];
 		if(abus->driver->init)
 		{
-			if(!abus->driver->init(abus))
+			if(abus->driver->init(abus))
 				return -1;
 		}
 	}

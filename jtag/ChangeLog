@@ -1,5 +1,7 @@
 2008-09-09  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/cmd/detect.c: test correct return value of bus->driver->init()
+
    * src/bsdl2jtag.c: fix from and to for downto vectors
 
 2008-09-06  Arnim Laeuger  <arniml@users.sourceforge.net>
