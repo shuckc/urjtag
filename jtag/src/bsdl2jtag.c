@@ -271,7 +271,7 @@ int endline(void) {
 					strcpy(tmp, pins[pins_num]);
 					n = sscanf(pline+i, "bit_vector ( %i to %i )", &f, &t);
 					if (n < 2)
-						n = sscanf(pline+i, "bit_vector ( %i downto %i )", &f, &t);
+						n = sscanf(pline+i, "bit_vector ( %i downto %i )", &t, &f);
 					if (n < 2) {
 						exit(1);
 					}
