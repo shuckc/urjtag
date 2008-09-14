@@ -23,7 +23,7 @@
 #  and other UrJTAG authors, 2007, 2008, ...
 #
 
-AC_INIT(UrJTAG,0.8,http://urjtag.org,urjtag)
+AC_INIT(UrJTAG,0.9,http://urjtag.org,urjtag)
 
 AC_PREREQ(2.54)
 AC_COPYRIGHT([Copyright (C) 2007/08 Kolja Waschk and other UrJTAG authors; 2002/03 ETC s.r.o.])

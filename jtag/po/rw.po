@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2008-09-03 11:19-0400\n"
+"POT-Creation-Date: 2008-09-13 22:55+0200\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -251,8 +251,8 @@ msgstr ""
 #: src/bus/buses.c:163 src/cmd/include.c:73 src/cmd/parse.c:59
 #: src/cmd/parse.c:93 src/cmd/scan.c:88 src/cmd/shell.c:62 src/jtag.c:407
 #: src/jtag.c:426 src/jtag.c:450 src/tap/detect.c:270
-#: src/tap/usbconn/libusb.c:150 src/tap/usbconn/libftd2xx.c:278
-#: src/tap/usbconn/libftdi.c:247
+#: src/tap/usbconn/libusb.c:150 src/tap/usbconn/libftd2xx.c:283
+#: src/tap/usbconn/libftdi.c:252
 #, fuzzy, c-format
 msgid "Out of memory\n"
 msgstr "Bya"
@@ -904,7 +904,7 @@ msgstr "Ukwihuza Ubwoko"
 
 #: src/cmd/cable.c:98 src/tap/cable/ft2232.c:1288
 #: src/tap/cable/generic_parport.c:82 src/tap/cable/generic_usbconn.c:211
-#: src/tap/cable/jim.c:68 src/tap/cable/usbblaster.c:77
+#: src/tap/cable/jim.c:68 src/tap/cable/usbblaster.c:79
 #: src/tap/cable/vision_ep9307.c:199 src/tap/cable/wiggler.c:193
 #, c-format
 msgid "%s(%d) malloc failed!\n"
@@ -1257,12 +1257,12 @@ msgstr "Kugaragaza iyi Ifashayobora"
 msgid "Please use the 'include' command instead of 'script'\n"
 msgstr ""
 
-#: src/cmd/include.c:98
+#: src/cmd/include.c:100
 #, fuzzy, c-format
 msgid "Unable to open file `%s go=%d'!\n"
 msgstr "Kuri Gufungura IDOSIYE"
 
-#: src/cmd/include.c:112
+#: src/cmd/include.c:114
 #, fuzzy, c-format
 msgid ""
 "Usage: %s FILENAME [n] \n"
@@ -1271,12 +1271,12 @@ msgid ""
 "FILENAME      Name of the file with commands\n"
 msgstr "Komandi: Bivuye external Bya i IDOSIYE Na:"
 
-#: src/cmd/include.c:133
+#: src/cmd/include.c:135
 #, fuzzy
 msgid "include command sequence from external repository"
 msgstr "Gushyiramo Komandi: Bivuye external"
 
-#: src/cmd/include.c:152
+#: src/cmd/include.c:154
 #, fuzzy
 msgid "run command sequence from external file"
 msgstr "Gukoresha Komandi: Bivuye external IDOSIYE"
@@ -1769,54 +1769,54 @@ msgstr ""
 msgid "write content of file to the memory"
 msgstr ""
 
-#: src/flash/amd.c:276
+#: src/flash/amd.c:281
 #, c-format
 msgid ""
 "Chip: AMD Flash\n"
 "\tManufacturer: "
 msgstr ""
 
-#: src/flash/amd.c:280 src/flash/amd.c:304 src/flash/amd.c:319
-#: src/flash/amd.c:337 src/flash/amd_flash.c:234
+#: src/flash/amd.c:285 src/flash/amd.c:309 src/flash/amd.c:324
+#: src/flash/amd.c:342 src/flash/amd_flash.c:234
 #, c-format
 msgid ""
 "\n"
 "\tChip: "
 msgstr ""
 
-#: src/flash/amd.c:298 src/flash/amd.c:313 src/flash/amd.c:331
-#: src/flash/amd.c:343 src/flash/amd_flash.c:245
+#: src/flash/amd.c:303 src/flash/amd.c:318 src/flash/amd.c:336
+#: src/flash/amd.c:348 src/flash/amd_flash.c:245
 #, c-format
 msgid "Unknown (ID 0x%04x)"
 msgstr ""
 
-#: src/flash/amd.c:348
+#: src/flash/amd.c:353
 #, fuzzy, c-format
 msgid "Unknown manufacturer (ID 0x%04x) Chip (ID 0x%04x)"
 msgstr "Ukora mu nganda"
 
 # sc/source\ui\src\attrdlg.src:RID_SCPAGE_PROTECTION.BTN_PROTECTED.text
-#: src/flash/amd.c:351 src/flash/amd_flash.c:248
+#: src/flash/amd.c:356 src/flash/amd_flash.c:248
 #, fuzzy, c-format
 msgid ""
 "\n"
 "\tProtected: %04x\n"
 msgstr "Birinzwe"
 
-#: src/flash/amd.c:423 src/flash/amd.c:435 src/flash/amd.c:447
+#: src/flash/amd.c:428 src/flash/amd.c:440 src/flash/amd.c:452
 #: src/flash/detectflash.c:106 src/flash/detectflash.c:136
 msgid "AMD/Fujitsu Standard Command Set"
 msgstr ""
 
-#: src/flash/amd.c:424
+#: src/flash/amd.c:429
 msgid "supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 msgstr ""
 
-#: src/flash/amd.c:436
+#: src/flash/amd.c:441
 msgid "supported: AMD 29LV800B; 1x16 Bit"
 msgstr ""
 
-#: src/flash/amd.c:448
+#: src/flash/amd.c:453
 msgid "supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B; 1x8 Bit"
 msgstr ""
 
@@ -2661,7 +2661,7 @@ msgstr ""
 msgid "(none)"
 msgstr "(ntacyo)"
 
-#: src/svf/svf.c:347 src/svf/svf.c:518 src/svf/svf.c:852 src/svf/svf.c:856
+#: src/svf/svf.c:347 src/svf/svf.c:518 src/svf/svf.c:857 src/svf/svf.c:861
 #, fuzzy, c-format
 msgid "out of memory"
 msgstr "Inyuma Bya"
@@ -2671,7 +2671,7 @@ msgstr "Inyuma Bya"
 msgid "Error %s: mismatch at position %d for TDO\n"
 msgstr ""
 
-#: src/svf/svf.c:590 src/svf/svf.c:991
+#: src/svf/svf.c:590 src/svf/svf.c:996
 #, c-format
 msgid "Warning %s: command %s not implemented\n"
 msgstr ""
@@ -2696,52 +2696,62 @@ msgstr ""
 msgid " This message is only displayed once.\n"
 msgstr ""
 
-#: src/svf/svf.c:804
+#: src/svf/svf.c:658
+#, c-format
+msgid "Error %s: Maximum cable clock frequency required for RUNTEST.\n"
+msgstr ""
+
+#: src/svf/svf.c:659
+#, c-format
+msgid "  Set the cable frequency with 'FREQUENCY <Hz>'.\n"
+msgstr ""
+
+#: src/svf/svf.c:809
 #, c-format
 msgid "Error %s: first %s command after length change must have a TDI value.\n"
 msgstr ""
 
-#: src/svf/svf.c:829
+#: src/svf/svf.c:834
 #, c-format
 msgid "Error %s: SIR command length inconsistent.\n"
 msgstr ""
 
-#: src/svf/svf.c:926
+#: src/svf/svf.c:931
 #, c-format
 msgid "Error %s: no further TRST command allowed after mode ABSENT\n"
 msgstr ""
 
-#: src/svf/svf.c:946
+#: src/svf/svf.c:951
 #, c-format
 msgid "Error %s: TRST ABSENT must not be issued after a STATE command\n"
 msgstr ""
 
-#: src/svf/svf.c:952
+#: src/svf/svf.c:957
 #, c-format
 msgid "Error %s: TRST ABSENT must not be issued after an SIR or SDR command\n"
 msgstr ""
 
-#: src/svf/svf.c:962
+#: src/svf/svf.c:967
 #, c-format
 msgid "Warning %s: unimplemented mode '%s' for TRST\n"
 msgstr ""
 
-#: src/svf/svf.c:1046
+#: src/svf/svf.c:1052
 #, fuzzy, c-format
 msgid "Error %s: no JTAG chain available\n"
 msgstr "Kuri Impera"
 
-#: src/svf/svf.c:1050
+#: src/svf/svf.c:1056
 #, c-format
 msgid "Error %s: chain without any parts\n"
 msgstr ""
 
-#: src/svf/svf.c:1066
+#: src/svf/svf.c:1072
 #, c-format
 msgid "Error %s: could not establish SDR register\n"
 msgstr ""
 
-#: src/svf/svf.c:1098
+#: src/svf/svf.c:1104
 #, c-format
 msgid "Error %s: could not establish SIR instruction\n"
 msgstr ""
@@ -2875,7 +2885,7 @@ msgid ""
 "   or: cable %s ppi PPIDEV\n"
 "\n"
 "PORTADDR   parallel port address (e.g. 0x378)\n"
-"PPDEF      ppdev device (e.g. /dev/parport0)\n"
+"PPDEV      ppdev device (e.g. /dev/parport0)\n"
 "PPIDEF     ppi device (e.g. /dev/ppi0)\n"
 "\n"
 msgstr ""
@@ -2935,7 +2945,12 @@ msgstr ""
 msgid "Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"
 msgstr ""
 
-#: src/tap/cable/usbblaster.c:434
+#: src/tap/cable/usbblaster.c:102
+#, c-format
+msgid "Warning: USB-Blaster frequency is fixed to %ld Hz\n"
+msgstr ""
+
+#: src/tap/cable/usbblaster.c:442
 #, c-format
 msgid ""
 "Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
@@ -2948,7 +2963,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/usbblaster.c:450
+#: src/tap/cable/usbblaster.c:458
 msgid "Altera USB-Blaster Cable"
 msgstr ""
 
@@ -3015,7 +3030,7 @@ msgid ""
 "   or: cable %s ppi PPIDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
 "\n"
 "PORTADDR   parallel port address (e.g. 0x378)\n"
-"PPDEF      ppdev device (e.g. /dev/parport0)\n"
+"PPDEV      ppdev device (e.g. /dev/parport0)\n"
 "PPIDEF     ppi device (e.g. /dev/ppi0)\n"
 "TDO, ...   parallel port bit number, prepend '#' for inversion\n"
 "           default is '%s'\n"
@@ -3241,106 +3256,152 @@ msgstr "ku Umuyoboro"
 msgid "%s: Invalid state: %2X\n"
 msgstr "%s:Leta"
 
-#: src/tap/usbconn/libftd2xx.c:97
-msgid "usbconn_ftd2xx_flush(): FT_Write() failed.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:101
-msgid "usbconn_ftd2xx_flush(): Written fewer bytes than requested.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:120
-msgid "usbconn_ftd2xx_flush(): Receive buffer does not exist.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:127
+#: src/tap/usbconn/libftd2xx.c:100
 #, c-format
-msgid "usbconn_ftd2xx_flush(): Error from FT_Read(): %d\n"
+msgid "%s(): FT_Write() failed.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:130
+#: src/tap/usbconn/libftd2xx.c:104 src/tap/usbconn/libftdi.c:89
 #, c-format
-msgid "usbconn_ftd2xx_flush(): Received less bytes than requested.\n"
+msgid "%s(): Written fewer bytes than requested.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:186
+#: src/tap/usbconn/libftd2xx.c:123 src/tap/usbconn/libftdi.c:108
 #, c-format
-msgid "usbconn_ftd2xx_read(): Error from FT_Read(): %d\n"
+msgid "%s(): Receive buffer does not exist.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:251
-msgid "usbconn_ftd2xx_write(): Send buffer does not exist.\n"
+#: src/tap/usbconn/libftd2xx.c:130 src/tap/usbconn/libftd2xx.c:190
+#, c-format
+msgid "%s(): Error from FT_Read(): %d\n"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:299
+#: src/tap/usbconn/libftd2xx.c:134 src/tap/usbconn/libftdi.c:119
+#, c-format
+msgid "%s(): Received less bytes than requested.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:256 src/tap/usbconn/libftdi.c:224
+#, c-format
+msgid "%s(): Send buffer does not exist.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:314
 #, c-format
 msgid "Connected to libftd2xx driver.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:357 src/tap/usbconn/libftd2xx.c:399
-#: src/tap/usbconn/libftd2xx.c:418 src/tap/usbconn/libftd2xx.c:441
-msgid "Can't reset device.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:359 src/tap/usbconn/libftd2xx.c:401
-#: src/tap/usbconn/libftd2xx.c:420 src/tap/usbconn/libftd2xx.c:443
-msgid "Can't purge RX buffer.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:362 src/tap/usbconn/libftd2xx.c:413
-msgid "Can't disable bitmode.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:365
-msgid "Can't set latency timer.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:368
-msgid "Can't set baudrate.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:404
-msgid "Can't set special characters.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:410
-msgid "Can't set target latency timer.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftd2xx.c:415
-msgid "Can't set MPSSE bitmode.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftdi.c:85
-msgid "usbconn_ftdi_flush(): Written fewer bytes than requested.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftdi.c:104
-msgid "usbconn_ftdi_flush(): Receive buffer does not exist.\n"
-msgstr ""
-
-#: src/tap/usbconn/libftdi.c:111
+#: src/tap/usbconn/libftd2xx.c:389 src/tap/usbconn/libftd2xx.c:431
+#: src/tap/usbconn/libftd2xx.c:450 src/tap/usbconn/libftd2xx.c:473
 #, c-format
-msgid "usbconn_ftdi_flush(): Error from ftdi_read_data(): %s\n"
+msgid "%s(): Can't reset device.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:115
+#: src/tap/usbconn/libftd2xx.c:391 src/tap/usbconn/libftd2xx.c:433
+#: src/tap/usbconn/libftd2xx.c:452 src/tap/usbconn/libftd2xx.c:475
 #, c-format
-msgid "usbconn_ftdi_flush(): Received less bytes than requested.\n"
+msgid "%s(): Can't purge RX buffer.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:163
+#: src/tap/usbconn/libftd2xx.c:394 src/tap/usbconn/libftd2xx.c:445
 #, c-format
-msgid "usbconn_ftdi_read(): Error from ftdi_read_data(): %s\n"
+msgid "%s(): Can't disable bitmode.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:219
-msgid "usbconn_ftdi_write(): Send buffer does not exist.\n"
+#: src/tap/usbconn/libftd2xx.c:397
+#, c-format
+msgid "%s(): Can't set latency timer.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:271
+#: src/tap/usbconn/libftd2xx.c:400
+#, c-format
+msgid "%s(): Can't set baudrate.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:436
+#, c-format
+msgid "%s(): Can't set special characters.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:442
+#, c-format
+msgid "%s(): Can't set target latency timer.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftd2xx.c:447
+#, c-format
+msgid "%s(): Can't set MPSSE bitmode.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:84
+#, c-format
+msgid "%s(): ftdi_write_data() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:115 src/tap/usbconn/libftdi.c:168
+#, c-format
+msgid "%s(): Error from ftdi_read_data(): %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:286
 #, c-format
 msgid "Connected to libftdi driver.\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:323
+#, c-format
+msgid "%s() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:348
+#, c-format
+msgid "%s(): ftdi_usb_purge_buffers() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:351 src/tap/usbconn/libftdi.c:368
+#, c-format
+msgid "%s(): ftdi_read_data() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:360
+#, c-format
+msgid "%s(): ftdi_usb_purge_rx_buffer() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:365
+#, c-format
+msgid "%s(): ftdi_usb_purge_tx_buffer() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:385
+#, c-format
+msgid "%s(): ftdi_poll_status() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:390 src/tap/usbconn/libftdi.c:487
+#: src/tap/usbconn/libftdi.c:506
+#, c-format
+msgid "%s(): ftdi_usb_reset() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:413 src/tap/usbconn/libftdi.c:479
+#, c-format
+msgid "%s(): ftdi_disable_bitbang() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:417 src/tap/usbconn/libftdi.c:475
+#, c-format
+msgid "%s(): ftdi_set_latency_timer() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:430
+#, c-format
+msgid "%s(): ftdi_set_baudrate() failed: %s\n"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:483
+#, c-format
+msgid "%s(): ftdi_set_bitmode() failed: %s\n"
 msgstr ""
 
 #, fuzzy
@@ -3348,7 +3409,39 @@ msgstr ""
 #~ msgstr "Ikosa ry'imyandikire"
 
 #, fuzzy
+#~ msgid "Error in Standard Declarations"
+#~ msgstr "Icyabitswe Uburebure"
+
+#, fuzzy
+#~ msgid "Error in Attribute type identification"
+#~ msgstr "Icyabitswe Uburebure"
+
+#, fuzzy
+#~ msgid "Error in Type definition"
+#~ msgstr "Icyabitswe Uburebure"
+
+#, fuzzy
+#~ msgid "Error in Bit definition"
+#~ msgstr "Icyabitswe Uburebure"
+
+#, fuzzy
+#~ msgid "Error in Package Body definition"
+#~ msgstr "Icyabitswe Uburebure"
+
+#, fuzzy
+#~ msgid "Error in Cell Constant definition"
+#~ msgstr "Icyabitswe Uburebure"
+
+#, fuzzy
+#~ msgid "Error in Cell Data Record"
+#~ msgstr "Ukwihuza Byanze"
+
+#, fuzzy
 #~ msgid "Error in Cell_Type Function field"
+#~ msgstr "Ukwihuza Byanze"
+
+#, fuzzy
+#~ msgid "Error in BScan_Inst Instruction field"
 #~ msgstr "Ukwihuza Byanze"
 
 #, fuzzy

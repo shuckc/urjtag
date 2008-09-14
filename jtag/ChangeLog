@@ -1,5 +1,7 @@
 2008-09-14  Kolja Waschk <kawk>
 
+   * configure.ac, NEWS, po/fr.po, po/rw.po, po/sk.po: Preparation
+     for release of UrJTAG 0.9 tarball
    * include/Makefile.am, src/bsdl/Makefile.am: list new header
      files here so they get included in distribution
 

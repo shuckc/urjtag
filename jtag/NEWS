@@ -1,5 +1,62 @@
 $Id$
 
+urjtag-0.9
+
+	* Completely rewritten BSDL parser, making it better maintainable,
+		extendable, and also adding support for IEEE 1532 extensions 
+        (Arnim Laeuger)
+    * Major internal improvements
+      - Most if not all internal functions now take a pointer to the
+        chain configuration data as an argument, instead of using a 
+        global "chain" variable. Needed for use as a library (Jie Zhang)
+      - Generally UrJTAG uses less global variables now (all)
+      - Added new "link driver" layer where previously only parport
+        was known; now there's a separate subsystem for USB cables,
+        named "usbconn". Due to the switch, some "cable" command 
+        arguments for USB cables changed! (Arnim Laeuger, Kolja Waschk)
+    * Improvements to the build system
+      - Cable and link driver selection during ./configure (Arnim Laeuger)
+      - Fix building out of tree (Mike Frysinger)
+      - Support run-time relocatable UrJTAG (Mike Frysinger)
+      - Many improvements for building on Windows and generally on
+        other platforms (by Mike Frysinger)
+      - Support building under Mac OS X (Ville Voipio)
+      - Some initial work to support building in MinGW (Kolja Waschk)
+    * Updates to the jtag command shell
+      - Allow to disable startup message and quit upon EOF (Mike Frysinger)
+      - Allow customization of jtag prompt via env variable (Mike Frysinger)
+      - Don't add duplicate history lines (Uwe Bonnes)
+      - Fixes to handling of the "frequency" command (many contributors)
+      - Fix quitting when not using readline (Mike Frysinger)
+      - Fix some irritating warning messages even if there was nothing wrong
+      - New "idcode" command (Uwe Bonnes)
+    * Updates to the SVF player
+      - Added progress indicator (Steve Franks)
+      - Fix for RUNTEST command with SEC argument (Arnim Laeuger)
+      - Read TDO data from instruction shift (Arnim Laeuger)
+    * New and updated bus drivers 
+      - General cleanup and malloc/free issues fixed (Hartley Sweeten)
+      - Added avr32 bus driver (Gabor Juhos)
+      - Added bf526,bf527,bf538 and bf548_ezkit bus driver (Jie Zhang)
+      - Added fjmem bus driver (A. Laeuger)
+      - Add 32 bit bus support for mpc824x (Eugene Boldenkov)
+    * New and updated cable drivers
+      - General cleanup and malloc/free issues fixed (Hartley Sweeten)
+      - Generic FT2232 driver improvements for performance and
+        stability (Arnim Laeuger)
+      - New FT2232 based cable BFIN-UJTAG/gnICE (Michael Hennerich)
+      - New Segger J-Link driver (not really functional yet) (Kolja Waschk)
+      - Xilinx XPCU cable driver now using fast GPIF transfers via vendor
+        request instead of bit banging (Kolja Waschk)
+    * Updated flash drivers
+      - Fix address shift (Jeff Wittrock)
+      - Fixes and better verbosity in flash drivers (Jie Zhang)
+    * Added new JTAG declarations for
+      - Analog Devices Blackfin BF527 (Jie Zhang)
+      - Atmel ATF1504ASV (Stefan Pledl)
+      - Atmel AT32AP7000 (Gabor Juhos)
+    * Updated documentation
+
 urjtag-0.8
 
     * Integrated BSDL parser (Arnim Laeuger)
