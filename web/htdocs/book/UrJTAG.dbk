@@ -4,7 +4,7 @@
 <book lang="en">
 <bookinfo>
     <title>Universal JTAG library, server and tools</title>
-    <date>2008-06-27</date>
+    <date>2008-07-15</date>
     <author>
         <firstname>Kolja</firstname>
         <othername>Waschk</othername>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>KW(</authorinitials>
 
-<revhistory><revision><revnumber>1289</revnumber><date>2008-06-27</date><authorinitials>KW(</authorinitials></revision></revhistory>
+<revhistory><revision><revnumber>1303</revnumber><date>2008-07-15</date><authorinitials>KW(</authorinitials></revision></revhistory>
 
 </bookinfo>
 <chapter id="_copyright">
@@ -927,7 +927,7 @@ discovery of unknown parts in the JTAG chain
 </simpara></entry>
 <entry>
 <simpara>
-display active data register for a part
+display or set active data register for a part
 </simpara>
 </entry>
 </row>
@@ -1415,7 +1415,7 @@ of the TAP controller(s) and registers in the chain:</simpara>
 </simpara></entry>
 <entry>
 <simpara>
-display active data register for a part
+display or set active data register for a part
 </simpara>
 </entry>
 </row>
