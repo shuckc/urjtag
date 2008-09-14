@@ -51,4 +51,7 @@ noinst_HEADERS = \
 	jim.h \
 	jim/some_cpu.h \
 	svf.h \
+	usbconn.h \
+	usbconn/libftdx.h \
+	usbconn/libusb.h \
 	xpcu.h

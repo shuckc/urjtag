@@ -31,6 +31,16 @@ libbsdl_a_SOURCES =  \
 	bsdl.c       \
 	bsdl_sem.c
 
+noinst_HEADERS = \
+	bsdl_bison.h \
+	bsdl_config.h \
+	bsdl_msg.h \
+	bsdl_parser.h \
+	bsdl_sysdep.h \
+	bsdl_types.h \
+	vhdl_bison.h \
+	vhdl_parser.h
+
 # additional dependencies
 # - all files depend on bsdl_config.h which dynamically generated
 # - *_flex files must be processed after their *_bison counterparts

@@ -1,3 +1,8 @@
+2008-09-14  Kolja Waschk <kawk>
+
+   * include/Makefile.am, src/bsdl/Makefile.am: list new header
+     files here so they get included in distribution
+
 2008-09-09  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/cmd/detect.c: test correct return value of bus->driver->init()
