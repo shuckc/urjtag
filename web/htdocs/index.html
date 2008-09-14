@@ -41,6 +41,7 @@
 <table border="0" cellspacing="4" cellpadding="4">
 <tr><td><a class="nodeco" href="http://sourceforge.net/project/showfiles.php?group_id=193266">Downloads</a></td></tr>
 <tr><td><a class="nodeco" href="book/index.html">Documentation</a></td></tr>
+<tr><td align="right"><a class="nodeco" href="http://urjtag.svn.sourceforge.net/viewvc/*checkout*/urjtag/tags/URJTAG_0_9/web/htdocs/book/index.html">... for 0.9</a></td></tr>
 <tr><td align="right"><a class="nodeco" href="http://urjtag.svn.sourceforge.net/viewvc/*checkout*/urjtag/tags/URJTAG_0_8/web/htdocs/book/index.html">... for 0.8</a></td></tr>
 <tr><td><a class="nodeco" href="http://sourceforge.net/forum/forum.php?forum_id=682993">Forum</a></td></tr>
 <tr><td><a class="nodeco" href="http://sourceforge.net/mail/?group_id=193266">Mailing Lists</a>
@@ -70,19 +71,21 @@ tools code. <a href="http://urjtag.wiki.sourceforge.net/Future">Future plans</a>
 include conversion of the code base into a library that can be used with other applications. A flexible 
 <a href="http://urjtag.wiki.sourceforge.net/FutureProtocol">remote communication protocol</a>
 that can be used over almost any type of serial link (including TCP/IP) is
-currently being defined.
+in the works.
 </p>
 
 <h2>Status</h2>
 <p>
-Since release 0.7, support for reading BSDL descriptions natively has been
-added, USB cable transfers are much faster, and new bus and cable drivers 
-have been added as well as numerous other improvements and bug fixes. The
-internal structure was straightened, to ease conversion of the existing
-code base into a library in near future.
+Between release 0.8 and the most recent 0.9, the BSDL parser has been rewritten
+with added support for IEEE 1532 extensions. Internally, we got rid of many global
+variables, which is a major improvement for everyone who wants to use UrJTAG as a
+library. The low level communication with USB cables has been properly
+separated from that with parport cables into new "usbconn" and "parport" link
+drivers, making it easier to support new USB cables with their custom protocols
+natively. Many annoyances and bugs have been fixed.
 </p><p>
 <b>
-Version 0.8 has been released on February, 20th and is now available in the 
+Version 0.9 has been released on September, 14th and is now available in the 
 <a href="http://sourceforge.net/project/showfiles.php?group_id=193266">Downloads</a> section!
 </b>
 </p>
