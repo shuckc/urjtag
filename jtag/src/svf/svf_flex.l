@@ -35,6 +35,11 @@
 #include <ctype.h>
 
 #include <sysdep.h>
+
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include "svf.h"
 #include "svf_bison.h"
 
@@ -89,8 +94,26 @@ COMMENT         (!.*)|("//".*)[^\n]
 {DIGIT}+(\.{DIGIT}+)?([eE][-+]?{DIGIT}+)? {
   /* token is a real number */
 
-  yylval->dvalue = strtod(yytext, (char **) NULL);
-  fix_yylloc(yylloc, yytext);
+  char *real_string = strdup(yytext);
+
+  /* Note: We need to compensate the current locale's representation
+           of the decimal point since strtod() functionality depends
+           on the locale settings. */
+
+  if (real_string) {
+    char *point_pos = index(real_string, '.');
+    YY_EXTRA_TYPE extra = yyget_extra(yyscanner);
+
+    if (point_pos)
+      /* convert decimal point into current locale's representation */
+      *point_pos = extra->decimal_point;
+
+    yylval->dvalue = strtod(real_string, (char **) NULL);
+    fix_yylloc(yylloc, yytext);
+
+    free(real_string);
+  } else
+    yylval->dvalue = 0.0;
 
   return(NUMBER);
 } /* end of real number */
@@ -337,6 +360,15 @@ void *svf_flex_init(FILE *f, int num_lines, int print_progress)
 
   extra->num_lines = num_lines;
   extra->print_progress = print_progress;
+
+#ifdef ENABLE_NLS
+ {
+   struct lconv *lc = localeconv();
+   extra->decimal_point = lc->decimal_point[0];
+ }
+#else
+  extra->decimal_point = '.';
+#endif
 
   yyset_extra(extra, scanner);
 

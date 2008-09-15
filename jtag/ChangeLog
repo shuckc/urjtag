@@ -1,3 +1,8 @@
+2008-09-15  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * src/svf/svf.h, src/svf/svf_flex.l: SVF player fix for
+    [ 2112823 ] Conversion with strtod and similar influenced by locale
+
 2008-09-14  Kolja Waschk <kawk>
 
    Version 0.9 released.

@@ -105,6 +105,7 @@ typedef struct parser_priv parser_priv_t;
 struct scanner_extra {
   int num_lines;
   int print_progress;
+  char decimal_point;
 };
 typedef struct scanner_extra scanner_extra_t;
 
