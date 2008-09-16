@@ -1,3 +1,9 @@
+2008-09-16  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/analog/bf527/STEPPINGS: Add bf527 0.2.
+  * data/analog/bf533/STEPPINGS: Add bf533 0.5 and 0.6.
+  * data/analog/bf548/STEPPINGS: Add bf548 0.2.
+
 2008-09-15  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * src/svf/svf.h, src/svf/svf_flex.l: SVF player fix for

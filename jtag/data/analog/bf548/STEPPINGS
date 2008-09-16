@@ -22,3 +22,4 @@
 # bits 31-28 of the Device Identification Register
 0000	bf548		0
 0001	bf548		1
+0010	bf548		2
