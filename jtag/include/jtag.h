@@ -34,6 +34,11 @@
 #include "bus.h"
 #include "part.h"
 
+#define URJTAG_STATUS_OK            0
+#define URJTAG_STATUS_FAIL          1
+#define URJTAG_STATUS_SYNTAX_ERROR -1
+
+
 extern bus_t *bus;
 extern int big_endian;
 extern int debug_mode;

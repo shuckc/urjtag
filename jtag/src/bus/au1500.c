@@ -140,7 +140,7 @@ au1500_bus_area(bus_t *bus, uint32_t addr, bus_area_t *area)
 	area->width = part_get_signal( PART, part_find_signal( PART, "ROMSIZ" ) ) ? 16 : 32;
 
 
-	return 0;
+	return URJTAG_STATUS_OK;
 
 }
 

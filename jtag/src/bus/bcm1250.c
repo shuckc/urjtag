@@ -132,7 +132,7 @@ bcm1250_bus_area( bus_t *bus, uint32_t addr, bus_area_t *area )
 	area->length = UINT64_C(0x100000000);
 	area->width = 8;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 #ifndef USE_BCM_EJTAG
@@ -422,7 +422,7 @@ bcm1250_ejtag_do(bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
 			printf("\n");
 		}
 	}
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 /**

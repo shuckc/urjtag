@@ -154,17 +154,17 @@ sh7727_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	switch (part_get_signal( p, MD4 ) << 1 | part_get_signal( p, MD3 )) {
 		case 1:
 			area->width = 8;
-			return 0;
+			return URJTAG_STATUS_OK;
 		case 2:
 			area->width = 16;
-			return 0;
+			return URJTAG_STATUS_OK;
 		case 3:
 			area->width = 32;
-			return 0;
+			return URJTAG_STATUS_OK;
 		default:
 			printf( _("Error: Invalid bus width (MD3 = MD4 = 0)!\n") );
 			area->width = 0;
-			return -1;
+			return URJTAG_STATUS_FAIL;
 	}
 }
 

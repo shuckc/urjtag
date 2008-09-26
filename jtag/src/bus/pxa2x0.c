@@ -275,7 +275,7 @@ pxa2xx_bus_init( bus_t *bus )
 
 	INITIALIZED = 1;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 /**
@@ -317,13 +317,13 @@ pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 				case 6:
 				case 7:
 					printf( "TODO - BOOT_SEL: %d\n", get_BOOT_DEF_BOOT_SEL(BOOT_DEF) );
-					return -1;
+					return URJTAG_STATUS_FAIL;
 				default:
 					printf( "BUG in the code, file %s, line %d.\n", __FILE__, __LINE__ );
-					return -1;
+					return URJTAG_STATUS_FAIL;
 			}
 		}
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	/* Static Chip Select 1..5 (per 64 MB) */
@@ -338,7 +338,7 @@ pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 			area->length = UINT64_C(0x04000000);
 			area->width = pxa25x_ncs_map[ncs_index].bus_width;
 
-			return 0;
+			return URJTAG_STATUS_OK;
 		}
 	}
 
@@ -348,7 +348,7 @@ pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x30000000);
 		area->width = 0;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	if (adr < UINT32_C(0x4C000000)) {
@@ -357,7 +357,7 @@ pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x04000000);
 		area->width = 32;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	area->description = NULL;
@@ -365,7 +365,7 @@ pxa2xx_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	area->length = UINT64_C(0xB4000000);
 	area->width = 0;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 /**
@@ -407,13 +407,13 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 				case 6:
 				case 7:
 					printf( "TODO - BOOT_SEL: %d\n", get_BOOT_DEF_BOOT_SEL(BOOT_DEF) );
-					return -1;
+					return URJTAG_STATUS_FAIL;
 				default:
 					printf( "BUG in the code, file %s, line %d.\n", __FILE__, __LINE__ );
-					return -1;
+					return URJTAG_STATUS_FAIL;
 			}
                 }
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	/* Static Chip Select 1..5 (per 64 MB) */
@@ -430,7 +430,7 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 			area->length = UINT64_C(0x04000000);
 			area->width = pxa27x_ncs_map[ncs_index].bus_width;
 
-			return 0;
+			return URJTAG_STATUS_OK;
 		}
 		//else printf( "no match\n");
 	}
@@ -441,7 +441,7 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x28000000);
 		area->width = 0;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	if (adr < UINT32_C(0x60000000)) {
@@ -450,7 +450,7 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x20000000);
 		area->width = 32;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	if (adr < UINT32_C(0xA0000000)) {
@@ -459,7 +459,7 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x40000000);
 		area->width = 0;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	if (adr < UINT32_C(0xB0000000)) {
@@ -468,7 +468,7 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x10000000);
 		area->width = 32;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	area->description = NULL;
@@ -476,7 +476,7 @@ pxa27x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	area->length = UINT64_C(0x50000000);
 	area->width = 0;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 static void

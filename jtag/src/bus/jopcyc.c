@@ -476,7 +476,7 @@ jopcyc_bus_init( bus_t *bus )
 
 	INITIALIZED = 1;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 static int
@@ -508,7 +508,7 @@ comp_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp )
 		*comp        = NULL;
 	}
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 /**

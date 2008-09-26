@@ -636,7 +636,7 @@ avr32_bus_area (bus_t * bus, uint32_t addr, bus_area_t * area)
     break;
   }
 
-  return 0;
+  return URJTAG_STATUS_OK;
 }
 
 /**

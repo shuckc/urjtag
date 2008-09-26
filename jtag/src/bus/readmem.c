@@ -58,7 +58,7 @@ readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
 
 	bus_prepare( bus );
 
-	if (bus_area( bus, addr, &area ) != 0) {
+	if (bus_area( bus, addr, &area ) != URJTAG_STATUS_OK) {
 		printf( _("Error: Bus width detection failed\n") );
 		return;
 	}

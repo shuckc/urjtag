@@ -522,7 +522,7 @@ block_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area, block_param_t **bl_m
 		bl = bl->next;
 	}
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 /**

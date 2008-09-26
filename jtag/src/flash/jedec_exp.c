@@ -6,6 +6,7 @@
 #include <flash/intel.h>
 #include <unistd.h>
 
+#include <jtag.h>
 #include <flash.h>
 #include <bus.h>
 #include <bitmask.h>
@@ -45,7 +46,7 @@ jedec_exp_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 	
 	(*cfi_array)->bus = bus;
 	(*cfi_array)->address = adr;
-	if (bus_area( bus, adr, &area ) != 0)
+	if (bus_area( bus, adr, &area ) != URJTAG_STATUS_OK)
 		return -8;		/* bus width detection failed */
 	bw = area.width;
 

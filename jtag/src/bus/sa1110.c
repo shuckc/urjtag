@@ -140,7 +140,7 @@ sa1110_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	area->length = UINT64_C(0x100000000);
 	area->width = part_get_signal( PART, part_find_signal( PART, "ROM_SEL" ) ) ? 32 : 16;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 static void

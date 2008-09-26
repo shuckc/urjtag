@@ -60,7 +60,7 @@ cmd_initbus_run( chain_t *chain, char *params[] )
 				return 1;
 			}
 			buses_add( bus );
-			if (bus_init( bus ))
+			if (bus_init( bus ) != URJTAG_STATUS_OK)
 				printf( _("bus initialization failed!\n") );
 			return 1;
 		}

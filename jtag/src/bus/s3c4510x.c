@@ -197,7 +197,7 @@ s3c4510_bus_init( bus_t *bus )
 
 	INITIALIZED = 1;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 /**
@@ -220,17 +220,17 @@ s3c4510_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
         switch ((b0size1 << 1) | b0size0) {
                 case 1:
 			area->width = dbus_width = 8;
-			return 0;
+			return URJTAG_STATUS_OK;
                 case 2:
 			area->width = dbus_width = 16;
-			return 0;
+			return URJTAG_STATUS_OK;
                 case 3:
 			area->width = dbus_width = 32;
-			return 0;
+			return URJTAG_STATUS_OK;
                 default:
                         printf( "B0SIZE[1:0]: Unknown\n" );
 			area->width = 0;
-			return -1;
+			return URJTAG_STATUS_FAIL;
         }
 }
 

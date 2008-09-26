@@ -249,7 +249,7 @@ mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0xFF000000);
 		area->width = 0;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	if (adr < UINT32_C(0xFF800000)) {
@@ -258,7 +258,7 @@ mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x00800000);
 		area->width = 0;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	if (boot_SDMA1 == 0) {
@@ -267,7 +267,7 @@ mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x00800000);
 		area->width = BUS_WIDTH;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	/* extended addresing mode is disabled (SDMA1 is 1) */
@@ -277,7 +277,7 @@ mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x00400000);
 		area->width = BUS_WIDTH;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	area->description = N_("Base ROM Interface (Bank 0)");
@@ -285,7 +285,7 @@ mpc824x_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	area->length = UINT64_C(0x00400000);
 	area->width = BUS_WIDTH;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 static void

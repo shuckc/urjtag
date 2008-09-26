@@ -1,13 +1,31 @@
+2008-09-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * include/jtag.h, src/cmd/detect.c, src/cmd/initbus.c,
+     src/cmd/print.c, src/bus/bf548_ezkit.c, src/bus/fjmem.c,
+     src/bus/ppc405ep.c, src/bus/sh7727.c, src/bus/prototype.c,
+     src/bus/sa1110.c, src/bus/ppc440gx_ebc8.c, src/bus/tx4925.c,
+     src/bus/sh7750r.c, src/bus/pxa2x0.c, src/bus/bf533_stamp.c,
+     src/bus/bf533_ezkit.c, src/bus/bf537_stamp.c, src/bus/ixp425.c,
+     src/bus/avr32.c, src/bus/h7202.c, src/bus/zefant-xs3.c,
+     src/bus/mpc824x.c, src/bus/bcm1250.c, src/bus/sharc21065l.c,
+     src/bus/readmem.c, src/bus/au1500.c, src/bus/lh7a400.c,
+     src/bus/sh7751r.c, src/bus/generic_bus.c, src/bus/mpc5200.c,
+     src/bus/jopcyc.c, src/bus/bf561_ezkit.c, src/bus/slsup3.c,
+     src/bus/writemem.c, src/bus/s3c4510x.c, src/bus/ejtag.c,
+     src/flash/amd_flash.c, src/flash/cfi.c, src/flash/jedec_exp.c,
+     src/flash/jedec.c, src/flash/intel.c:
+     [ 2102453 ] Use macros for std return values instead of literals
+
 2008-09-16  Mike Frysinger  <vapier@gentoo.org>
 
-  * data/analog/bf527/STEPPINGS: Add bf527 0.2.
-  * data/analog/bf533/STEPPINGS: Add bf533 0.5 and 0.6.
-  * data/analog/bf548/STEPPINGS: Add bf548 0.2.
+   * data/analog/bf527/STEPPINGS: Add bf527 0.2.
+   * data/analog/bf533/STEPPINGS: Add bf533 0.5 and 0.6.
+   * data/analog/bf548/STEPPINGS: Add bf548 0.2.
 
 2008-09-15  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-  * src/svf/svf.h, src/svf/svf_flex.l: SVF player fix for
-    [ 2112823 ] Conversion with strtod and similar influenced by locale
+   * src/svf/svf.h, src/svf/svf_flex.l: SVF player fix for
+     [ 2112823 ] Conversion with strtod and similar influenced by locale
 
 2008-09-14  Kolja Waschk <kawk>
 

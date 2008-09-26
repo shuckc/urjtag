@@ -26,17 +26,19 @@
 
 #include <stdlib.h>
 
+#include <jtag.h>
+
 #include "generic_bus.h"
 
 int
 generic_bus_attach_sig( part_t *part, signal_t **sig, char *id )
 {
-	int failed = 0;
+	int failed = URJTAG_STATUS_OK;
 
 	*sig = part_find_signal( part, id );
 	if (!*sig) {
 		printf( _("signal '%s' not found\n"), id );
-		failed = 1;
+		failed = URJTAG_STATUS_FAIL;
 	}
 
 	return failed;
@@ -62,7 +64,7 @@ generic_bus_no_init( bus_t *bus )
 {
 	INITIALIZED = 1;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 /**

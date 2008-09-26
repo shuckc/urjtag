@@ -134,7 +134,7 @@ cmd_print_run( chain_t *chain, char *params[] )
 			bus_printinfo( bus );
 
 			for (a = 0; a < UINT64_C(0x100000000); a = area.start + area.length) {
-				if (bus_area( bus, a, &area ) != 0) {
+				if (bus_area( bus, a, &area ) != URJTAG_STATUS_OK) {
 					printf( _("Error in bus area discovery at 0x%08llX\n"), (long long unsigned int)a );
 					break;
 				}

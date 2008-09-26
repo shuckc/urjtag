@@ -128,7 +128,7 @@ ppc405ep_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 	area->length = UINT64_C(0x100000000);
 	area->width = 16;
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 static void

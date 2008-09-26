@@ -160,7 +160,7 @@ lh7a400_bus_area ( bus_t *bus, uint32_t adr, bus_area_t *area )
 	width |= part_get_signal( PART, part_find_signal( PART, "WIDTH1" ) ) << 1;
 
 	if (width < 0)
-	  return -1;
+	  return URJTAG_STATUS_FAIL;
 
 	switch (width) {
 	case 0:
@@ -174,7 +174,7 @@ lh7a400_bus_area ( bus_t *bus, uint32_t adr, bus_area_t *area )
 	  area->width = 32;
 	}
 
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 static void

@@ -140,14 +140,14 @@ mpc5200_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->start = UINT32_C(0x00000000);
 		area->length = UINT64_C(0x01000000);
 		area->width = 8;
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	area->description = NULL;
 	area->start = 0x01000000;
 	area->length = 0xFF000000;
 	area->width = 0;
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 static void

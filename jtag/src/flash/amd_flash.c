@@ -36,6 +36,7 @@
 #include <flash/intel.h>
 #include <unistd.h>
 
+#include <jtag.h>
 #include <flash.h>
 #include <bus.h>
 
@@ -123,7 +124,7 @@ int amd_detect(bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 
         (*cfi_array)->bus = bus;
         (*cfi_array)->address = 0;
-        if (bus_area( bus, adr+0, &area ) != 0)
+        if (bus_area( bus, adr+0, &area ) != URJTAG_STATUS_OK)
                 return -8;              /* bus width detection failed */
         unsigned int bw = area.width;
 	int ba,i;

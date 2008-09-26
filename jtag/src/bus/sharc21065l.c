@@ -137,14 +137,14 @@ sharc_21065L_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 		area->length = UINT64_C(0x080000);
 		area->width = 8;
 
-		return 0;
+		return URJTAG_STATUS_OK;
 	}
 
 	area->description = NULL;
 	area->start = UINT32_C(0xffffffff);
 	area->length = UINT64_C(0x080000);
 	area->width = 0;
-	return 0;
+	return URJTAG_STATUS_OK;
 }
 
 static void

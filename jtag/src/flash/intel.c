@@ -42,6 +42,7 @@
 #include <flash/intel.h>
 #include <flash/mic.h>
 
+#include <jtag.h>
 #include <flash.h>
 #include <bus.h>
 
@@ -58,7 +59,7 @@ intel_flash_autodetect32( cfi_array_t *cfi_array )
 {
 	bus_area_t area;
 
-	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != 0)
+	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != URJTAG_STATUS_OK)
 		return 0;
 
 	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
@@ -73,7 +74,7 @@ intel_flash_autodetect( cfi_array_t *cfi_array )
 {
 	bus_area_t area;
 
-	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != 0)
+	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != URJTAG_STATUS_OK)
 		return 0;
 
 	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
@@ -88,7 +89,7 @@ intel_flash_autodetect8( cfi_array_t *cfi_array )
 {
 	bus_area_t area;
 
-	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != 0)
+	if (bus_area( cfi_array->bus, cfi_array->address, &area ) != URJTAG_STATUS_OK)
 		return 0;
 
 	return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
