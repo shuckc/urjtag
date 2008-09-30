@@ -1,4 +1,4 @@
-WEB=shell.urjtag.sourceforge.net:/home/groups/u/ur/urjtag
+WEB=kawk,urjtag@web.sourceforge.net:/home/groups/u/ur/urjtag
 JTAG=../jtag
 BOOK=./htdocs/book
 
