@@ -1,3 +1,8 @@
+2008-10-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/bus/ejtag.c (ejtag_bus_init): added remaining return values
+     (Stanislav Sinyagin)
+
 2008-09-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * include/jtag.h, src/cmd/detect.c, src/cmd/initbus.c,

@@ -222,7 +222,7 @@ ejtag_run_pracc( bus_t *bus, const uint32_t *code, unsigned int len )
 	return retval;
 }
 
-static void
+static int
 ejtag_bus_init( bus_t *bus )
 {
 	data_register *ejctrl, *ejimpl;
@@ -238,7 +238,7 @@ ejtag_bus_init( bus_t *bus )
 	if (!(ejctrl && ejimpl)) {
 		printf( _("%s(%d) EJCONTROL or EJIMPCODE register not found\n"),
 			__FILE__, __LINE__ );
-		return;
+		return URJTAG_STATUS_FAIL;
 	}
 
 	part_set_instruction( PART, "EJTAG_IMPCODE" );
@@ -300,7 +300,7 @@ ejtag_bus_init( bus_t *bus )
 		printf( _("%s(%d) Failed to enter debug mode, ctrl=%s\n"),
 			__FILE__, __LINE__,
 			register_get_string( ejctrl->out ) );
-		return;
+		return URJTAG_STATUS_FAIL;
 	}
 
 	if (ejctrl->out->data[Rocc]) {
@@ -313,6 +313,7 @@ ejtag_bus_init( bus_t *bus )
 	ejtag_run_pracc( bus, code, 4 );
 	BP->adr_hi = 0;
 	INITIALIZED = 1;
+	return URJTAG_STATUS_OK;
 }
 
 /**
