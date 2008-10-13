@@ -1052,7 +1052,7 @@ ft2232_transfer_schedule( cable_t *cable, int len, char *in, char *out )
     {
       int bit_idx;
       unsigned char b = 0;
-      for (bit_idx = 1; bit_idx <= 1 << bitwise_len; bit_idx <<= 1)
+      for (bit_idx = 1; bit_idx < 1 << bitwise_len; bit_idx <<= 1)
       {
         if (in[in_offset++])
           b |= bit_idx;

@@ -1,3 +1,8 @@
+2008-10-13  Jie Zhang  <jie.zhang@analog.com>
+
+   * src/tap/cable/ft2232.c (ft2232_transfer_schedule): Don't
+     access memory out of bounds.
+
 2008-10-11  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/bus/ejtag.c (ejtag_bus_init): added remaining return values
