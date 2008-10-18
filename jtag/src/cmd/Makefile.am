@@ -62,6 +62,7 @@ libcmd_a_SOURCES = \
 	include.c \
 	addpart.c \
 	cmd.c \
+	usleep.c \
 	jtag_data_dir.c
 
 if ENABLE_SVF

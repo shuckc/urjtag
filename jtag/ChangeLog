@@ -1,3 +1,8 @@
+2008-10-18  Kolja Waschk <kawk
+
+   * src/cmd/usleep.c, src/cmd/cmd.c, src/cmd/Makefile.am:
+     Add usleep command (Stanislav Sinyagin)
+
 2008-10-18  Kolja Waschk <kawk>
 
    * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c:
