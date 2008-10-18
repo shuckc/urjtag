@@ -1408,7 +1408,7 @@ usbconn_cable_t usbconn_cable_ft2232_ftd2xx = {
 
 cable_driver_t ft2232_armusbocd_cable_driver = {
   "ARM-USB-OCD",
-  N_("Olimex ARM-USB-OCD (FT2232) Cable"),
+  N_("Olimex ARM-USB-OCD[-TINY] (FT2232) Cable"),
   ft2232_connect,
   generic_disconnect,
   ft2232_cable_free,
@@ -1436,6 +1436,20 @@ usbconn_cable_t usbconn_cable_armusbocd_ftd2xx = {
   "ftd2xx-mpsse",     /* default usbconn driver */
   0x15BA,             /* VID */
   0x0003              /* PID */
+};
+usbconn_cable_t usbconn_cable_armusbocdtiny_ftdi = {
+  "ARM-USB-OCD",      /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftdi-mpsse",       /* default usbconn driver */
+  0x15BA,             /* VID */
+  0x0004              /* PID */
+};
+usbconn_cable_t usbconn_cable_armusbocdtiny_ftd2xx = {
+  "ARM-USB-OCD",      /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftd2xx-mpsse",     /* default usbconn driver */
+  0x15BA,             /* VID */
+  0x0004              /* PID */
 };
 
 cable_driver_t ft2232_gnice_cable_driver = {

@@ -1,3 +1,8 @@
+2008-10-18  Kolja Waschk <kawk>
+
+   * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c:
+     Add support for ARM-USB-OCD TINY (Sebastian Hesselbarth)
+
 2008-10-13  Jie Zhang  <jie.zhang@analog.com>
 
    * src/tap/cable/ft2232.c (ft2232_transfer_schedule): Don't
