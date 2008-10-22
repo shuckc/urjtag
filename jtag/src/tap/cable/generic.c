@@ -360,7 +360,7 @@ generic_set_frequency( cable_t *cable, uint32_t new_frequency )
 		cable->frequency = 0;
 	} else {
 		const double tolerance = 0.1;
-		const uint32_t loops = 2000;
+		uint32_t loops = 2048;
 		uint32_t delay = cable->delay;
 		uint32_t frequency = cable->frequency;
 
@@ -375,13 +375,22 @@ generic_set_frequency( cable_t *cable, uint32_t new_frequency )
 			long double start, end, real_frequency;
 
 			cable->delay = delay;
-			start = frealtime();	
+			start = frealtime();
 			for (i = 0; i < loops; ++i) {
 				cable->driver->clock(cable, 0, 0, 1);
 			}
 			end = frealtime();
 
-			assert(end > start);
+			if (end < start) {
+				 printf( _("calibration error, wall clock is not monotonically increasing\n") );
+				break;
+			}
+			if (end == start) {
+				/* retry with higher loop count
+				   if the timer is not fine grained enough */
+				loops *= 2;
+				continue;
+			}
 			real_frequency = (long double)loops / (end - start);
 			printf("new real frequency %Lg, delay %u\n", 
 			       real_frequency, delay);

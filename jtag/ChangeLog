@@ -1,3 +1,8 @@
+2008-10-22  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/cable/generic.c: make calibration loop more tolerant for
+     less accurate OS timers
+
 2008-10-18  Kolja Waschk <kawk
 
    * src/cmd/usleep.c, src/cmd/cmd.c, src/cmd/Makefile.am:
