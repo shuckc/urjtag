@@ -332,6 +332,9 @@ runtest_time
 
 runtest_max_time_opt
             : 
+              {
+                priv_data->parser_params.runtest.max_time = 0.0;
+              }
             | MAXIMUM NUMBER SEC
               {
                 priv_data->parser_params.runtest.max_time = $<dvalue>2;
