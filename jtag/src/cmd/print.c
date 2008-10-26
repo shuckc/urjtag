@@ -90,6 +90,43 @@ cmd_print_run( chain_t *chain, char *params[] )
 			}
 			return(1);
 		}
+
+		if (strcasecmp( params[1], "instructions") == 0) {
+			part_t *part;
+			instruction *inst;
+
+			snprintf( format, 128, _(" Active %%-%ds %%-%ds\n"),
+				MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
+#if HAVE_SWPRINTF
+			if (mbstowcs( wformat, format, 128 ) == -1)
+				printf( _("(%d) String conversion failed!\n"), __LINE__ );
+			swprintf( wheader, 128, wformat, _("Instruction"), _("Register") );
+			if (wcstombs( header, wheader, 128 ) == -1)
+				printf( _("(%d) String conversion failed!\n"), __LINE__ );
+#else /* HAVE_SWPRINTF */
+			snprintf( header, 128, format, _("Instruction"), _("Register") );
+			if (mbstowcs( wheader, header, 128 ) == -1)
+				printf( _("(%d) String conversion failed!\n"), __LINE__ );
+#endif /* HAVE_SWPRINTF */
+			printf( header );
+
+			for (i = 0; i < wcslen( wheader ); i++ )
+				putchar( '-' );
+			putchar( '\n' );
+
+			snprintf( format, 128, _("   %%c    %%-%ds %%-%ds\n"),
+				MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
+
+			part = chain->parts->parts[chain->active_part];
+			for (inst = part->instructions; inst != NULL; inst = inst->next) {
+				printf( format,
+					inst == part->active_instruction
+					? 'X'
+					: ' ',
+					inst->name, inst->data_register->name);
+			}
+			return(1);
+		}
 	}
 
 	if (noheader == 0) {
@@ -170,7 +207,7 @@ static void
 cmd_print_help( void )
 {
 	printf( _(
-		"Usage: %s [chain|bus|signals]\n"
+		"Usage: %s [chain|bus|signals|instructions]\n"
 		"Display JTAG chain status.\n"
 		"\n"
 		"Display list of the parts connected to the JTAG chain including\n"

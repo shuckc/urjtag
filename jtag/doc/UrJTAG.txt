@@ -710,6 +710,8 @@ also the documentation for the "include" command.
 ===== print =====
 
 Print a list of parts in the chain and the currently active instruction per part.
+Further details of bus, signals and instructions can be obtained with dedicated
+command options, see "help print".
 
 ===== initbus =====
 
