@@ -116,6 +116,11 @@ libtap_a_SOURCES += \
 	cable/ft2232.c
 endif
 
+if ENABLE_CABLE_TS7800
+libtap_a_SOURCES += \
+	cable/ts7800.c
+endif
+
 
 if HAVE_LIBUSB
 libtap_a_SOURCES += \

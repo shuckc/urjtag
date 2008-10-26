@@ -1,5 +1,11 @@
 2008-10-26  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * configure.ac, doc/UrJTAG.txt, src/tap/Makefile.am,
+     src/tap/cable/ts7800.c, src/tap/cable.c, THANKS:
+     [ 2187342 ] Technologic Systems TS-7800 JTAG support
+     (Catalin Ionescu, Stanislav Sinyagin)
+     cable driver only
+
    * src/cmd/print.c, doc/UrJTAG.txt:
      [ 1964834 ] Add 'print instruction' support to print command
      (Hartley Sweeten)

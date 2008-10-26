@@ -446,7 +446,7 @@ CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [zefant_xs3],    [ENABLE_BUS_
 # Enable cable drivers
 AC_DEFUN([DEF_ENABLE_CABLEDRIVERS], [\
 arcom byteblaster dlc5 ea253 ei012 ft2232 igloo jlink keithkoep lattice mpcbdm triton usbblaster wiggler xpc])
-AC_DEFUN([DEF_DISABLE_CABLEDRIVERS], [ep9307 jim])
+AC_DEFUN([DEF_DISABLE_CABLEDRIVERS], [ep9307 jim ts7800])
 AC_ARG_ENABLE(cable,
 [AS_HELP_STRING([--enable-cable], [Enable default set or specific cable drivers.])]
 [AS_HELP_STRING([],               ['default' enables:])]
@@ -488,6 +488,7 @@ CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [triton],      [ENABLE_CA
 CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [usbblaster],  [ENABLE_CABLE_USBBLASTER])
 CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [wiggler],     [ENABLE_CABLE_WIGGLER])
 CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [xpc],         [ENABLE_CABLE_XPC])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [ts7800],      [ENABLE_CABLE_TS7800])
 
 
 # Enable lowlevel drivers

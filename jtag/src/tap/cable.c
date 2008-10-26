@@ -66,6 +66,7 @@ extern cable_driver_t xpc_int_cable_driver;
 extern cable_driver_t xpc_ext_cable_driver;
 extern cable_driver_t jlink_cable_driver;
 extern cable_driver_t ep9307_cable_driver;
+extern cable_driver_t ts7800_cable_driver;
 
 cable_driver_t *cable_drivers[] = {
 #ifdef ENABLE_CABLE_ARCOM
@@ -133,6 +134,10 @@ cable_driver_t *cable_drivers[] = {
 
 #ifdef ENABLE_CABLE_EP9307
 	&ep9307_cable_driver,
+#endif
+
+#ifdef ENABLE_CABLE_TS7800
+	&ts7800_cable_driver,
 #endif
 	NULL				/* last must be NULL */
 };

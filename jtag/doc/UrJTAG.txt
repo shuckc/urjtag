@@ -233,6 +233,9 @@ Other USB cables:
  * Segger/IAR J-Link / Atmel SAM-ICE (experimental, work in progress)
  * Xilinx Platform USB Cable / DLC9 (slow, experimental, work in progress - don't use)
 
+Other cables:
+ * Technologic Systems TS-7800 SoC GPIO builtin JTAG interface
+ 
 ==== JTAG-aware parts (chips) ====
 
 The data/ directory of the UrJTAG installation has some more, but at
