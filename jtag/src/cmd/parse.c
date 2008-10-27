@@ -1,5 +1,5 @@
 /*
- * parse.c
+ * $Id$
  *
  * Copyright (C) 2002, 2003 ETC s.r.o.
  *
@@ -116,19 +116,22 @@ int
 jtag_parse_stream( chain_t *chain, FILE *f )
 {
 	char inputline[MAXINPUTLINE + 1];
-	int go = 1, i, c, lnr, clip;
+	int go = 1, i, c, lnr, clip, found_comment;
 
 	/* read the stream line-by-line until EOF or "quit" */
 	lnr = 0;
 	do {
 		i = 0;
 		clip = 0;
+		found_comment = 0;
 		
 		/* read stream until '\n' or EOF, copy at most MAXINPUTLINE-1 chars */
 		while (1) {
 			c = fgetc(f);
 			if (c == EOF || c == '\n')
 				break;
+			if (c == '#')
+				found_comment = 1;
 			if (i < sizeof(inputline) - 1)
 				inputline[i++] = c;
 			else 
@@ -136,7 +139,7 @@ jtag_parse_stream( chain_t *chain, FILE *f )
 			}
 		inputline[i] = '\0';
 		lnr++;
-		if (clip)
+		if (clip && !found_comment)
 			fprintf(stdout, "Warning: line %d exceeds %d characters, clipped\n", lnr, (int)sizeof(inputline) - 1);  
 		go = jtag_parse_line(chain, inputline);
 	}

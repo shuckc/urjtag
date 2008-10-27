@@ -1,5 +1,8 @@
 2008-10-28  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/cmd/parse.c (jtag_parse_stream): avoid clipping message when
+     reading comments (Hartley)
+
    * renamed data/lattice/lfec2-12e/lfec2_12e to lfec2-12e
 
    * data/MANUFACTURERS, data/lattice/lfec2-12e, data/lattice/lfec2-12e/lfec2_12e,
