@@ -1,5 +1,7 @@
 2008-10-28  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * renamed data/lattice/lfec2-12e/lfec2_12e to lfec2-12e
+
    * data/MANUFACTURERS, data/lattice/lfec2-12e, data/lattice/lfec2-12e/lfec2_12e,
      data/lattice/lfec2-12e/STEPPINGS, data/lattice/PARTS, data/lattice/lc4064zc,
      data/lattice/lc4064zc/lc4064zc, data/lattice/lc4064zc/STEPPINGS, data/marvell/88e1118,
