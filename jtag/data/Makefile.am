@@ -123,8 +123,12 @@ nobase_dist_pkgdata_DATA = \
 	lattice/PARTS \
 	lattice/lc4032v-tqfp48/STEPPINGS \
 	lattice/lc4032v-tqfp48/lc4032v-tqfp48 \
+	lattice/lc4064zc/STEPPINGS \
+	lattice/lc4064zc/lc4064zc \
 	lattice/lc4128c-tqfp100/STEPPINGS \
 	lattice/lc4128c-tqfp100/lc4128c-tqfp100 \
+	lattice/lfec2-12e/STEPPINGS \
+	lattice/lfec2-12e/lfec2-12e \
 	lattice/m4a3-256.192-fpbga256/STEPPINGS \
 	lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256 \
 	lattice/m4a3-64.32-tqfp48/STEPPINGS \
@@ -132,6 +136,11 @@ nobase_dist_pkgdata_DATA = \
 	lexra/PARTS \
 	lexra/lx5280/STEPPINGS \
 	lexra/lx5280/lx5280 \
+	marvell/PARTS \
+	marvell/88e1118/STEPPINGS \
+	marvell/88e1118/88e1118 \
+	marvell/88f5182/STEPPINGS \
+	marvell/88f5182/88f5182-a2 \
 	motorola/mpc8245/1.2 \
 	philips/PARTS \
 	philips/xcr3128xl-cs144/STEPPINGS \

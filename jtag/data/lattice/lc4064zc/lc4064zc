@@ -1,0 +1,238 @@
+##############################################################################
+#
+# Lattice LC4064ZC part description file
+#
+# This file represents the superset of the following packages:
+#   * TQFP 48
+#   * csBGA 56
+#   * TQFP 100
+#   * csBGA 132
+#
+##############################################################################
+
+signal IOA8
+signal IOA9
+signal IOA10
+signal IOA11
+signal IOA12
+signal IOA13
+signal IOA14
+signal IOA15
+signal I0
+signal I1
+signal I2
+signal I3
+signal I4
+signal I5
+signal IOB15
+signal IOB14
+signal IOB13
+signal IOB12
+signal IOB11
+signal IOB10
+signal IOB9
+signal IOB8
+signal IOB7
+signal IOB6
+signal IOB5
+signal IOB4
+signal IOB3
+signal IOB2
+signal IOB1
+signal IOB0
+signal CLK1
+signal CLK2
+signal IOC0
+signal IOC1
+signal IOC2
+signal IOC3
+signal IOC4
+signal IOC5
+signal IOC6
+signal IOC7
+signal IOC8
+signal IOC9
+signal IOC10
+signal IOC11
+signal IOC12
+signal IOC13
+signal IOC14
+signal IOC15
+signal IOD15
+signal IOD14
+signal IOD13
+signal IOD12
+signal IOD11
+signal IOD10
+signal IOD9
+signal IOD8
+signal IOD7
+signal IOD6
+signal IOD5
+signal IOD4
+signal IOD3
+signal IOD2
+signal IOD1
+signal IOD0
+signal CLK3
+signal CLK0
+signal IOA0
+signal IOA1
+signal IOA2
+signal IOA3
+signal IOA4
+signal IOA5
+signal IOA6
+
+register	BSR	138
+register	BR	1
+register	DIR	32
+
+instruction length 8
+
+instruction BYPASS 11111111 BR
+instruction SAMPLE/PRELOAD 00011100 BSR
+instruction EXTEST 00000000 BSR
+instruction IDCODE 00010110 DIR
+instruction USERCODE 00010111 DIR
+instruction HIGHZ 00011000 BR
+instruction CLAMP 00100000 BR
+
+bit 137 I 1 CLK0
+bit 136 B 1 IOA0 135 0 Z
+bit 135 C 0 *
+bit 134 B 1 IOA1 133 0 Z
+bit 133 C 0 *
+bit 132 B 1 IOA2 131 0 Z
+bit 131 C 0 *
+bit 130 B 1 IOA3 129 0 Z
+bit 129 C 0 *
+bit 128 B 1 IOA4 127 0 Z
+bit 127 C 0 *
+bit 126 B 1 IOA5 125 0 Z
+bit 125 C 0 *
+bit 124 B 1 IOA6 123 0 Z
+bit 123 C 0 *
+bit 122 B 1 IOA7 121 0 Z
+bit 121 C 0 *
+bit 120 B 1 IOA8 119 0 Z
+bit 119 C 0 *
+bit 118 B 1 IOA9 117 0 Z
+bit 117 C 0 *
+bit 116 B 1 IOA10 115 0 Z
+bit 115 C 0 *
+bit 114 B 1 IOA11 113 0 Z
+bit 113 C 0 *
+bit 112 B 1 IOA12 111 0 Z
+bit 111 C 0 *
+bit 110 B 1 IOA13 109 0 Z
+bit 109 C 0 *
+bit 108 B 1 IOA14 107 0 Z
+bit 107 C 0 *
+bit 106 B 1 IOA15 105 0 Z
+bit 105 C 0 *
+bit 104 I 1 I0
+bit 103 I 1 I1
+bit 102 I 1 I2
+bit 101 B 1 IOB0 100 0 Z
+bit 100 C 0 *
+bit 99 B 1 IOB1 98 0 Z
+bit 98 C 0 *
+bit 97 B 1 IOB2 96 0 Z
+bit 96 C 0 *
+bit 95 B 1 IOB3 94 0 Z
+bit 94 C 0 *
+bit 93 B 1 IOB4 92 0 Z
+bit 92 C 0 *
+bit 91 B 1 IOB5 90 0 Z
+bit 90 C 0 *
+bit 89 B 1 IOB6 88 0 Z
+bit 88 C 0 *
+bit 87 B 1 IOB7 86 0 Z
+bit 86 C 0 *
+bit 85 B 1 IOB8 84 0 Z
+bit 84 C 0 *
+bit 83 B 1 IOB9 82 0 Z
+bit 82 C 0 *
+bit 81 B 1 IOB10 80 0 Z
+bit 80 C 0 *
+bit 79 B 1 IOB11 78 0 Z
+bit 78 C 0 *
+bit 77 B 1 IOB12 76 0 Z
+bit 76 C 0 *
+bit 75 B 1 IOB13 74 0 Z
+bit 74 C 0 *
+bit 73 B 1 IOB14 72 0 Z
+bit 72 C 0 *
+bit 71 B 1 IOB15 70 0 Z
+bit 70 C 0 *
+bit 69 I 1 CLK1
+bit 68 I 1 CLK2
+bit 67 B 1 IOC0 66 0 Z
+bit 66 C 0 *
+bit 65 B 1 IOC1 64 0 Z
+bit 64 C 0 *
+bit 63 B 1 IOC2 62 0 Z
+bit 62 C 0 *
+bit 61 B 1 IOC3 60 0 Z
+bit 60 C 0 *
+bit 59 B 1 IOC4 58 0 Z
+bit 58 C 0 *
+bit 57 B 1 IOC5 56 0 Z
+bit 56 C 0 *
+bit 55 B 1 IOC6 54 0 Z
+bit 54 C 0 *
+bit 53 B 1 IOC7 52 0 Z
+bit 52 C 0 *
+bit 51 B 1 IOC8 50 0 Z
+bit 50 C 0 *
+bit 49 B 1 IOC9 48 0 Z
+bit 48 C 0 *
+bit 47 B 1 IOC10 46 0 Z
+bit 46 C 0 *
+bit 45 B 1 IOC11 44 0 Z
+bit 44 C 0 *
+bit 43 B 1 IOC12 42 0 Z
+bit 42 C 0 *
+bit 41 B 1 IOC13 40 0 Z
+bit 40 C 0 *
+bit 39 B 1 IOC14 38 0 Z
+bit 38 C 0 *
+bit 37 B 1 IOC15 36 0 Z
+bit 36 C 0 *
+bit 35 I 1 I3
+bit 34 I 1 I4
+bit 33 I 1 I5
+bit 32 B 1 IOD0 31 0 Z
+bit 31 C 0 *
+bit 30 B 1 IOD1 29 0 Z
+bit 29 C 0 *
+bit 28 B 1 IOD2 27 0 Z
+bit 27 C 0 *
+bit 26 B 1 IOD3 25 0 Z
+bit 25 C 0 *
+bit 24 B 1 IOD4 23 0 Z
+bit 23 C 0 *
+bit 22 B 1 IOD5 21 0 Z
+bit 21 C 0 *
+bit 20 B 1 IOD6 19 0 Z
+bit 19 C 0 *
+bit 18 B 1 IOD7 17 0 Z
+bit 17 C 0 *
+bit 16 B 1 IOD8 15 0 Z
+bit 15 C 0 *
+bit 14 B 1 IOD9 13 0 Z
+bit 13 C 0 *
+bit 12 B 1 IOD10 11 0 Z
+bit 11 C 0 *
+bit 10 B 1 IOD11 9 0 Z
+bit 9 C 0 *
+bit 8 B 1 IOD12 7 0 Z
+bit 7 C 0 *
+bit 6 B 1 IOD13 5 0 Z
+bit 5 C 0 *
+bit 4 B 1 IOD14 3 0 Z
+bit 3 C 0 *
+bit 2 B 1 IOD15 1 0 Z
+bit 1 C 0 *
+bit 0 I 1 CLK3

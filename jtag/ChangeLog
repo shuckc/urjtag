@@ -1,3 +1,15 @@
+2008-10-28  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * data/MANUFACTURERS, data/lattice/lfec2-12e, data/lattice/lfec2-12e/lfec2_12e,
+     data/lattice/lfec2-12e/STEPPINGS, data/lattice/PARTS, data/lattice/lc4064zc,
+     data/lattice/lc4064zc/lc4064zc, data/lattice/lc4064zc/STEPPINGS, data/marvell/88e1118,
+     data/marvell/88e1118/88e1118, data/marvell/88e1118/STEPPINGS, data/marvell/88f5182,
+     data/marvell/88f5182/88f5182-a2, data/marvell/88f5182/STEPPINGS, data/marvell/PARTS,
+     data/Makefile.am:
+     [ 2187342 ] Technologic Systems TS-7800 JTAG support
+     (Catalin Ionescu)
+     part description files
+
 2008-10-26  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * configure.ac, doc/UrJTAG.txt, src/tap/Makefile.am,
