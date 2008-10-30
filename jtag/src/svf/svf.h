@@ -120,7 +120,7 @@ int  svf_bison_init(parser_priv_t *, FILE *, int, int);
 void svf_bison_deinit(parser_priv_t *);
 
 void svf_endxr(parser_priv_t *, enum generic_irdr_coding, int);
-void svf_frequency(chain_t *, parser_priv_t *, double);
+void svf_frequency(chain_t *, double);
 int  svf_hxr(enum generic_irdr_coding, struct ths_params *);
 int  svf_runtest(chain_t *, parser_priv_t *, struct runtest *);
 int  svf_state(chain_t *, parser_priv_t *, struct path_states *, int);

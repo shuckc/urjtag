@@ -560,7 +560,7 @@ svf_endxr(parser_priv_t *priv, enum generic_irdr_coding ir_dr, int state)
  *   freq : frequency in HZ
  * ***************************************************************************/
 void
-svf_frequency(chain_t *chain, parser_priv_t *priv, double freq)
+svf_frequency(chain_t *chain, double freq)
 {
   cable_set_frequency(chain->cable, freq);
 }

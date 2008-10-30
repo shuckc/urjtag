@@ -108,12 +108,12 @@ svf_statement
 
     | FREQUENCY ';'
       {
-        svf_frequency(chain, priv_data, 0.0);
+        svf_frequency(chain, 0.0);
       }
 
     | FREQUENCY NUMBER HZ ';'
       {
-        svf_frequency(chain, priv_data, $2);
+        svf_frequency(chain, $2);
       }
 
     | HDR NUMBER ths_param_list ';'

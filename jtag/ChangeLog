@@ -1,5 +1,8 @@
 2008-10-30  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/svf/svf_bison.y, src/svf/svf.c, src/svf/svf.h:
+     removed obsolete parameter
+
    * include/svf.h, src/cmd/svf.c, src/svf/svf.c,
      src/svf/svf_bison.y, src/svf/svf.h, doc/UrJTAG.txt:
      add the ref_freq option to svf command
