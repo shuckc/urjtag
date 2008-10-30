@@ -1,3 +1,9 @@
+2008-10-30  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * include/svf.h, src/cmd/svf.c, src/svf/svf.c,
+     src/svf/svf_bison.y, src/svf/svf.h, doc/UrJTAG.txt:
+     add the ref_freq option to svf command
+
 2008-10-28  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/cmd/parse.c (jtag_parse_stream): avoid clipping message when

@@ -26,6 +26,7 @@
 #include "sysdep.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include <svf.h>
@@ -34,10 +35,11 @@
 static int
 cmd_svf_run( chain_t *chain, char *params[] )
 {
-	FILE *SVF_FILE;
-	int   num_params, i, result = -1;
-	int   stop = 0;
-	int   print_progress = 0;
+	FILE    *SVF_FILE;
+	int      num_params, i, result = -1;
+	int      stop = 0;
+	int      print_progress = 0;
+	uint32_t ref_freq = 0;
 
 	num_params = cmd_params( params );
 	if (num_params > 1) {
@@ -46,12 +48,14 @@ cmd_svf_run( chain_t *chain, char *params[] )
 				stop = 1;
 			else if (strcasecmp(params[i], "progress") == 0)
 				print_progress = 1;
+			else if (strncasecmp(params[i], "ref_freq=", 9) == 0)
+				ref_freq = strtol(params[i]+9, NULL, 10);
 			else
 				return -1;
 		}
 
 		if ((SVF_FILE = fopen(params[1], "r")) != NULL) {
-			svf_run(chain, SVF_FILE, stop, print_progress);
+			svf_run(chain, SVF_FILE, stop, print_progress, ref_freq);
 			result = 1;
 
 			fclose(SVF_FILE);
@@ -69,12 +73,13 @@ static void
 cmd_svf_help( void )
 {
 	printf( _(
-		"Usage: %s FILE [stop] [progress]\n"
+		"Usage: %s FILE [stop] [progress] [ref_freq=<frequency>]\n"
 		"Execute svf commands from FILE.\n"
 		"stop     : Command execution stops upon TDO mismatch.\n"
 		"progress : Continually displays progress status.\n"
+		"ref_freq : Use <frequency> as the reference for 'RUNTEST xxx SEC' commands\n"
 		"\n"
-		"FILE file containing SVF commans\n"
+		"FILE file containing SVF commands\n"
 	), "svf" );
 }
 

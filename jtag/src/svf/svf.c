@@ -560,7 +560,7 @@ svf_endxr(parser_priv_t *priv, enum generic_irdr_coding ir_dr, int state)
  *   freq : frequency in HZ
  * ***************************************************************************/
 void
-svf_frequency(chain_t *chain, double freq)
+svf_frequency(chain_t *chain, parser_priv_t *priv, double freq)
 {
   cable_set_frequency(chain->cable, freq);
 }
@@ -647,7 +647,7 @@ svf_runtest(chain_t *chain, parser_priv_t *priv, struct runtest *params)
   /* compute run_count */
   run_count = params->run_count;
   if (params->min_time > 0.0) {
-    frequency = cable_get_frequency(chain->cable);
+    frequency = priv->ref_freq > 0 ? priv->ref_freq : cable_get_frequency(chain->cable);
     if (frequency > 0) {
       uint32_t min_time_run_count = ceil(params->min_time * frequency);
       if (min_time_run_count > run_count) {
@@ -1000,7 +1000,7 @@ svf_txr(enum generic_irdr_coding ir_dr, struct ths_params *params)
 
 
 /* ***************************************************************************
- * svf_run(chain, SVF_FILE, stop_on_mismatch)
+ * svf_run(chain, SVF_FILE, stop_on_mismatch, ref_freq)
  *
  * Main entry point for the 'svf' command. Calls the svf parser.
  *
@@ -1009,18 +1009,21 @@ svf_txr(enum generic_irdr_coding ir_dr, struct ths_params *params)
  * afterwards.
  *
  * Parameter:
+ *   chain            : pointer to global chain
  *   SVF_FILE         : file handle of SVF file
  *   stop_on_mismatch : 1 = stop upon tdo mismatch
  *                      0 = continue upon mismatch
  *   print_progress   : 1 = continually print progress status
  *                      0 = don't print
+ *   ref_freq         : reference frequency for RUNTEST
  *
  * Return value:
  *   1 : all ok
  *   0 : error occured
  * ***************************************************************************/
 void
-svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress)
+svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress,
+        uint32_t ref_freq)
 {
   const sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},
                               1, 1};
@@ -1120,6 +1123,7 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress
   /* set back flags for issued warnings */
   priv.issued_runtest_maxtime = 0;
 
+  priv.ref_freq      = ref_freq;
 
   /* select SIR instruction */
   part_set_instruction(priv.part, "SIR");

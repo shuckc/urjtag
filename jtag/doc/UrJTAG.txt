@@ -862,7 +862,7 @@ In case the TDO parameter of an SDR command leads to a mismatch the player
 issues a warning and continues. If the player should abort in this case then
 specify 'stop' at the svf command.
 
-The absence of error or warning messages indicate that the SVF file could be
+The absence of error or warning messages indicate that the SVF file was
 executed without problems. To get a progress reporting while the player advances
 through the SVF file, specify 'progress' at the svf command.
 
@@ -898,11 +898,15 @@ The implementation of some SVF commands has deficiencies.
   - TIR, TDR commands not supported. +
     Their functionality should be covered by the part concept of JTAG Tools.
 
-Operation can be slowed down significantly when the FREQUENCY command has
-been specified. This is not a problem of the SVF player itself but seem to
-happen when the frequency of UrJTAG is set to a value larger than 0.
-Configuration takes very long although the maximum allowed frequency is 10 MHz.
-Consider to comment out the FREQUENCY command at the beginning of the SVF file.
+SVF files for programming flash-based devices might or might not work for a given
+setup. This has been observed for Actel IGLOO devices where success and failure
+depends on the actual clocking rate of the chosen cable.
+
+The ref_freq=<...> option to the svf command allows to tweak the calculation
+of 'RUNTEST xxx SEC' commands. For these commands, the SVF player needs to
+calculate the equivalent number of clocks and per default it will use the
+current cable clock frequency. This can be overridden with the ref_freq option
+that specifies a fixed reference frequency for such calculations.
 *****************************
 
 ===== bsdl =====

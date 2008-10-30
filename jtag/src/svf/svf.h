@@ -97,6 +97,7 @@ struct parser_priv {
     int     svf_stop_on_mismatch;
     int     svf_trst_absent;
     int     svf_state_executed;
+    uint32_t ref_freq;
     /* protocol issued warnings */
     int     issued_runtest_maxtime;
 };
@@ -105,6 +106,7 @@ typedef struct parser_priv parser_priv_t;
 struct scanner_extra {
   int num_lines;
   int print_progress;
+  int planb;
   char decimal_point;
 };
 typedef struct scanner_extra scanner_extra_t;
@@ -118,7 +120,7 @@ int  svf_bison_init(parser_priv_t *, FILE *, int, int);
 void svf_bison_deinit(parser_priv_t *);
 
 void svf_endxr(parser_priv_t *, enum generic_irdr_coding, int);
-void svf_frequency(chain_t *, double);
+void svf_frequency(chain_t *, parser_priv_t *, double);
 int  svf_hxr(enum generic_irdr_coding, struct ths_params *);
 int  svf_runtest(chain_t *, parser_priv_t *, struct runtest *);
 int  svf_state(chain_t *, parser_priv_t *, struct path_states *, int);
