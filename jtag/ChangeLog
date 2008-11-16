@@ -1,3 +1,7 @@
+2008-11-16  Kolja Waschk  <kawk>
+
+   * src/bus/ejtag.c: Support BCM6348/EJTAG 3.1 (by Andy Potter/livebox)
+
 2008-10-30  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/svf/svf_bison.y, src/svf/svf.c, src/svf/svf.h:

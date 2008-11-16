@@ -53,19 +53,59 @@ typedef struct {
 #define EJTAG_20	0
 #define EJTAG_25	1
 #define EJTAG_26	2
+#define EJTAG_31	3
 
-/* EJTAG control register bits */
-#define PerRst		20
-#define PRnW		19
-#define PrAcc		18
-#define PrRst		16
-#define ProbEn		15
-#define JtagBrk		12
-#define BrkSt		 3
+/* EJTAG 3.1 Control Register Bits */
+#define VPED		23	/* R	*/
+/* EJTAG 2.6 Control Register Bits */
+#define Rocc		31	/* R/W0 */
+#define Psz1		30	/* R    */
+#define Psz0		29	/* R    */
+#define Doze		22	/* R    */
+#define ProbTrap	14	/* R/W  */
+#define DebugMode	 3	/* R	*/
+/* EJTAG 1.5.3 Control Register Bits */
+#define Dnm		28 /* */
+#define Sync		23	/* R/W  */
+#define Run		21	/* R    */
+#define PerRst		20	/* R/W  */
+#define PRnW		19	/* R    0 = Read, 1 = Write */
+#define PrAcc		18	/* R/W0 */
+#define DmaAcc		17	/* R/W  */
+#define PrRst		16	/* R/W  */
+#define ProbEn		15	/* R/W  */
+#define SetDev		14	/* R    */
+#define JtagBrk		12	/* R/W1 */
+#define DStrt		11	/* R/W1 */
+#define DeRR		10	/* R    */
+#define DrWn		 9	/* R/W  */
+#define Dsz1		 8	/* R/W  */
+#define Dsz0		 7	/* R/W  */
+#define DLock		 5	/* R/W  */
+#define BrkSt		 3	/* R    */
+#define TIF		 2	/* W0/R	*/
+#define TOF		 1	/* W0/R */
+#define ClkEn		 0	/* R/W  */
 
-/* EJTAG 2.6 */
-#define Rocc		31
-#define ProbTrap	14
+/* EJTAG 3.1 Debug Control Register at drseg 0xFF300000 */
+#define PCS			 9	/* R	*/
+#define PCR2		 8	/* R/W	*/
+#define PCR1		 7	/* R/W	*/
+#define PCR0		 6	/* R/W	*/
+/* EJTAG 2.X Debug Control Register at drseg 0xFF300000 */
+#define	DataBrk		17	/* R	*/
+#define	InstBrk		16	/* R	*/
+#define	NMIPend		 2	/* R	*/
+#define	SRstE		 1	/* R/W	*/
+#define	DCRProbeEn	 0	/* R	*/
+/* EJTAG 1.5.3 Debug Control Register at drseg 0xFF300000*/
+#define HIS			30	/* R	*/
+#define ENM			29	/* R 0=Little End,1=Big Endian */
+#define MIntE		4	/* R/W	*/
+#define MNmiE		3	/* R/W	*/
+#define MemProt		2	/* R/W 0=WriteOK,1=Protected */
+#define MRst		1	/* R/W	*/
+#define TraceMode	0	/* R/W	*/
 
 /**
  * bus->driver->(*new_bus)
@@ -148,7 +188,7 @@ ejtag_run_pracc( bus_t *bus, const uint32_t *code, unsigned int len )
 		chain_shift_data_registers( CHAIN, 0 );
 		chain_shift_data_registers( CHAIN, 1 );
 
-		// printf( "ctrl=%s\n", register_get_string( ejctrl->out ) );
+//		printf( "ctrl=%s\n", register_get_string( ejctrl->out ) );
 
 		if (ejctrl->out->data[Rocc]) {
 			printf( _("%s(%d) Reset occurred, ctrl=%s\n"),
@@ -225,7 +265,7 @@ ejtag_run_pracc( bus_t *bus, const uint32_t *code, unsigned int len )
 static int
 ejtag_bus_init( bus_t *bus )
 {
-	data_register *ejctrl, *ejimpl;
+	data_register *ejctrl, *ejimpl, *ejaddr, *ejdata, *ejall;
 	uint32_t code[4] = {
 		0x3c04ff20,				// lui $4,0xff20
 		0x349f0200,				// ori $31,$4,0x0200
@@ -235,6 +275,9 @@ ejtag_bus_init( bus_t *bus )
 
 	ejctrl = part_find_data_register( PART, "EJCONTROL" );
 	ejimpl = part_find_data_register( PART, "EJIMPCODE" );
+	ejaddr = part_find_data_register( PART, "EJADDRESS" );
+	ejdata = part_find_data_register( PART, "EJDATA"    );
+	ejall  = part_find_data_register( PART, "EJALL"     );
 	if (!(ejctrl && ejimpl)) {
 		printf( _("%s(%d) EJCONTROL or EJIMPCODE register not found\n"),
 			__FILE__, __LINE__ );
@@ -243,15 +286,16 @@ ejtag_bus_init( bus_t *bus )
 
 	part_set_instruction( PART, "EJTAG_IMPCODE" );
 	chain_shift_instructions( CHAIN );
-	chain_shift_data_registers( CHAIN, 0 );
-	chain_shift_data_registers( CHAIN, 1 );
-	printf( "ImpCode=%s\n", register_get_string( ejimpl->out ) );
+	chain_shift_data_registers( CHAIN, 0 );//Write
+	chain_shift_data_registers( CHAIN, 1 );//Read
+	printf( "ImpCode=%s %08X\n", register_get_string( ejimpl->out ), reg_value( ejimpl->out ) );
 	BP->impcode = reg_value( ejimpl->out );
 
 	switch (EJTAG_VER) {
 	case EJTAG_20: printf( "EJTAG version: <= 2.0\n"); break;
 	case EJTAG_25: printf( "EJTAG version: 2.5\n"); break;
 	case EJTAG_26: printf( "EJTAG version: 2.6\n"); break;
+	case EJTAG_31: printf( "EJTAG version: 3.1\n"); break;
 	default:
 		printf( "EJTAG version: unknown (%d)\n", EJTAG_VER );
 	}
@@ -261,27 +305,151 @@ ejtag_bus_init( bus_t *bus )
 		(BP->impcode & (1 << 22)) ? " ASID_8"	: "",
 		(BP->impcode & (1 << 21)) ? " ASID_6"	: "",
 		(BP->impcode & (1 << 16)) ? " MIPS16"	: "",
-		(BP->impcode & (1 << 14)) ? " NoDMA"	: "",
+		(BP->impcode & (1 << 14)) ? " NoDMA"	: " DMA",
 		(BP->impcode & (1      )) ? " MIPS64"	: " MIPS32" );
 
 	if (EJTAG_VER >= EJTAG_25) {
 		part_set_instruction( PART, "EJTAGBOOT" );
 		chain_shift_instructions( CHAIN );
 	}
+	part_set_instruction( PART, "EJTAG_CONTROL" );
+	chain_shift_instructions( CHAIN );
+	//Reset
+	register_fill( ejctrl->in, 0 );
+	ejctrl->in->data[PrRst] = 1;
+	ejctrl->in->data[PerRst] = 1;
+	chain_shift_data_registers( CHAIN, 0 );//Write
+	ejctrl->in->data[PrRst] = 0;
+	ejctrl->in->data[PerRst] = 0;
+	chain_shift_data_registers( CHAIN, 0 );//Write
+//
+	if (EJTAG_VER == EJTAG_20)
+	{
+		// Try enabling memory write on EJTAG_20 (BCM6348)
+		// Badly Copied from HairyDairyMaid V4.8
+		//ejtag_dma_write(0xff300000, (ejtag_dma_read(0xff300000) & ~(1<<2)) );
+//		printf("Set Address to READ from\n");
+//		printf("Select EJTAG ADDRESS Register\n");
+		part_set_instruction( PART, "EJTAG_ADDRESS" );
+		chain_shift_instructions ( CHAIN );
+		//Set to Debug Control Register Address, 0xFF300000
+		register_init( ejaddr->in, "11111111001100000000000000000000");
+//		printf("Write to ejaddr->in     =%s %08X\n",register_get_string( ejaddr->in),reg_value( ejaddr->in ) );
+		chain_shift_data_registers (CHAIN, 0);//Write
+//		printf("Select EJTAG CONTROL Register\n");
+		part_set_instruction( PART, "EJTAG_CONTROL" );
+		chain_shift_instructions( CHAIN );
+		//Set some bits in CONTROL Register 0x00068B00
+		register_fill( ejctrl->in, 0 ); // Clear Register
+		ejctrl->in->data[PrAcc]    = 1; // 18----|||
+		ejctrl->in->data[DmaAcc]   = 1; // 17----|||
+		ejctrl->in->data[ProbEn]   = 1; // 15-----||
+		ejctrl->in->data[DStrt]    = 1; // 11------|
+		ejctrl->in->data[DrWn]     = 1; // 9-------|
+		ejctrl->in->data[Dsz1]     = 1; // 8-------| DMA_WORD = 0x00000100 = Bit8
+		chain_shift_data_registers( CHAIN, 1 );//WriteRead
+//		printf("Write To ejctrl->in     =%s %08X\n",register_get_string( ejctrl->in), reg_value( ejctrl->in ) );
+//		printf("Read From ejctrl->out   =%s %08X\n",register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
+		do {
+//		    printf("Wait for DStrt to clear\n");
+		    part_set_instruction( PART, "EJTAG_CONTROL" );
+		    chain_shift_instructions( CHAIN );
+		    register_fill( ejctrl->in, 0 );
+		    //Set some bits in CONTROL Register 0x00068000
+		    ejctrl->in->data[PrAcc]    = 1; // 18----||
+		    ejctrl->in->data[DmaAcc]   = 1; // 17----||
+		    ejctrl->in->data[ProbEn]   = 1; // 15-----|
+		    chain_shift_data_registers( CHAIN, 1 );//WriteRead
+//			printf("Write To ejctrl->in     =%s %08X\n",register_get_string( ejctrl->in), reg_value( ejctrl->in ) );
+//			printf("Read From ejctrl->out   =%s %08X\n",register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
+		} while ( ejctrl->out->data[DStrt]==1 );
+//		printf("Select EJTAG DATA Register\n");
+		part_set_instruction( PART, "EJTAG_DATA" );
+		chain_shift_instructions (CHAIN );
+		register_fill( ejdata->in, 0 ); // Clear Register
+		chain_shift_data_registers( CHAIN, 1 );//WriteRead
+//		printf( "Write To ejdata->in    =%s %08X\n", register_get_string( ejdata->in), reg_value( ejdata->in ) );
+//		printf( "Read From ejdata->out  =%s %08X\n", register_get_string( ejdata->out),reg_value( ejdata->out ) );
+//		printf("Select EJTAG CONTROL Register\n");
+		part_set_instruction( PART, "EJTAG_CONTROL" );
+		chain_shift_instructions( CHAIN );
+		register_fill( ejctrl->in, 0 );
+		//Set some bits in CONTROL Register 0x00048000
+		ejctrl->in->data[PrAcc]    = 1; // 18----||
+		ejctrl->in->data[ProbEn]   = 1; // 15-----|
+		chain_shift_data_registers( CHAIN, 1 );//WriteRead
+//		printf("Write To ejctrl->in     =%s %08X\n",register_get_string( ejctrl->in), reg_value( ejctrl->in ) );
+//		printf("Read From ejctrl->out   =%s %08X\n",register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
+		if (ejctrl->out->data[DeRR]==1)
+		{
+			printf("DMA READ ERROR\n");
+		}
+		//Now have data from DCR, need to reset the MP Bit (2) and write it back out
+		register_init( ejdata->in, register_get_string( ejdata->out ) );
+		ejdata->in->data[MemProt] = 0;
+//		printf( "Need to Write ejdata-> =%s %08X\n", register_get_string( ejdata->in),reg_value( ejdata->in ) );
+
+	// Now the Write
+//		printf("Set Address To Write To\n");
+//		printf("Select EJTAG ADDRESS Register\n");
+		part_set_instruction( PART, "EJTAG_ADDRESS" );
+		chain_shift_instructions ( CHAIN );
+		register_init( ejaddr->in, "11111111001100000000000000000000" );
+//		printf("Write to ejaddr->in     =%s %08X\n",register_get_string( ejaddr->in), reg_value( ejaddr->in ) );
+		//This appears to be a write with NO Read
+		chain_shift_data_registers ( CHAIN, 0 );//Write
+//		printf("Select EJTAG DATA Register\n");
+		part_set_instruction( PART, "EJTAG_DATA" );
+		chain_shift_instructions ( CHAIN );
+		//The value is already in ejdata->in, so write it
+//		printf("Write To ejdata->in     =%s %08X\n", register_get_string( ejdata->in),reg_value( ejdata->in ) );
+		chain_shift_data_registers( CHAIN, 0 );//Write
+//		printf("Select EJTAG CONTROL Register\n");
+		part_set_instruction( PART, "EJTAG_CONTROL" );
+		chain_shift_instructions( CHAIN );
+
+		//Set some bits in CONTROL Register
+		register_fill( ejctrl->in, 0 ); // Clear Register
+		ejctrl->in->data[DmaAcc]   = 1; // 17
+		ejctrl->in->data[Dsz1]     = 1; // DMA_WORD = 0x00000100 = Bit8
+		ejctrl->in->data[DStrt]    = 1; // 11
+		ejctrl->in->data[ProbEn]   = 1; // 15
+		ejctrl->in->data[PrAcc]    = 1; // 18
+		chain_shift_data_registers( CHAIN, 1 );//Write/Read
+//		printf("Write to ejctrl->in     =%s %08X\n",register_get_string( ejctrl->in),  reg_value( ejctrl->in ) );
+//		printf("Read from ejctrl->out   =%s %08X\n",register_get_string( ejctrl->out), reg_value( ejctrl->out ) );
+		do {
+//		    printf("Wait for DStrt to clear\n");
+		    //Might not need these 2 lines
+		    part_set_instruction( PART, "EJTAG_CONTROL" );
+		    chain_shift_instructions( CHAIN );
+		    ejctrl->in->data[DmaAcc]   = 1; // 17
+		    ejctrl->in->data[ProbEn]   = 1; // 15
+		    ejctrl->in->data[PrAcc]    = 1; // 18
+		    chain_shift_data_registers( CHAIN, 1 );//Write/Read
+//		    printf("Write to ejctrl->in     =%s %08X\n",register_get_string( ejctrl->in),  reg_value( ejctrl->in ) );
+//		    printf("Read from ejctrl->out   =%s %08X\n",register_get_string( ejctrl->out), reg_value( ejctrl->out ) );
+		} while ( ejctrl->out->data[DStrt]==1 );
+//		printf("Select EJTAG CONTROL Register\n");
+		part_set_instruction( PART, "EJTAG_CONTROL" );
+		chain_shift_instructions( CHAIN );
+		register_fill( ejctrl->in, 0 );
+		//Set some bits in CONTROL Register 0x00048000
+		ejctrl->in->data[PrAcc]    = 1; // 18----||
+		ejctrl->in->data[ProbEn]   = 1; // 15-----|
+		chain_shift_data_registers( CHAIN, 1 );//Write/Read
+//		printf("Write To ejctrl->in     =%s %08X\n",register_get_string( ejctrl->in),reg_value( ejctrl->in ) );
+//		printf("Read From ejctrl->out   =%s %08X\n",register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
+		if ( ejctrl->out->data[DeRR]==1 )
+		{
+			printf("DMA WRITE ERROR\n");
+		}
+	}
 
 	part_set_instruction( PART, "EJTAG_CONTROL" );
 	chain_shift_instructions( CHAIN );
 
 	register_fill( ejctrl->in, 0 );
-
-	ejctrl->in->data[PrRst] = 1;
-	ejctrl->in->data[PerRst] = 1;
-	chain_shift_data_registers( CHAIN, 0 );
-
-	ejctrl->in->data[PrRst] = 0;
-	ejctrl->in->data[PerRst] = 0;
-	chain_shift_data_registers( CHAIN, 0 );
-
 	ejctrl->in->data[PrAcc] = 1;
 	ejctrl->in->data[ProbEn] = 1;
 	if (EJTAG_VER >= EJTAG_25) {
@@ -290,7 +458,11 @@ ejtag_bus_init( bus_t *bus )
 	}
 	chain_shift_data_registers( CHAIN, 0 );
 
+	ejctrl->in->data[PrAcc] = 1;
+	ejctrl->in->data[ProbEn] = 1;
+	ejctrl->in->data[ProbTrap] = 1;
 	ejctrl->in->data[JtagBrk] = 1;
+
 	chain_shift_data_registers( CHAIN, 0 );
 
 	ejctrl->in->data[JtagBrk] = 0;
@@ -302,13 +474,19 @@ ejtag_bus_init( bus_t *bus )
 			register_get_string( ejctrl->out ) );
 		return URJTAG_STATUS_FAIL;
 	}
-
+	else
+	{
+		printf("Processor entered Debug Mode.\n");
+	}
 	if (ejctrl->out->data[Rocc]) {
 		ejctrl->in->data[Rocc] = 0;
 		chain_shift_data_registers( CHAIN, 0 );
 		ejctrl->in->data[Rocc] = 1;
 		chain_shift_data_registers( CHAIN, 1 );
 	}
+
+	//HDM now Clears Watchdog
+
 
 	ejtag_run_pracc( bus, code, 4 );
 	BP->adr_hi = 0;
