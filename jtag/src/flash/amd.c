@@ -181,8 +181,6 @@ amdstatus( cfi_array_t *cfi_array, uint32_t adr, int data )
 		/*      return 0; */
 		if (dbg) 
 			printf( "amdstatus %d: %04X/%04X\n", timeout, data1, data2 );
-		else
-			printf( "." );
 		usleep( 100 );
 	}
 	return 0;
@@ -264,7 +262,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 {
 	int mid, cid, prot;
 	bus_t *bus = cfi_array->bus;
-    int o = amd_flash_address_shift( cfi_array );
+	int o = amd_flash_address_shift( cfi_array );
 
 	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa );	/* autoselect p29 */
 	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
@@ -293,6 +291,10 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			break;
 			case 0x225B:
 			printf( "Am29LV800B" );
+			break;
+			case 0x227E:  /* 16-bit mode */
+			case 0x007E:  /* 8-bit mode */
+			printf( "S92GL" );
 			break;
 			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
@@ -358,7 +360,7 @@ static int
 amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 {
 	bus_t *bus = cfi_array->bus;
-    int o = amd_flash_address_shift( cfi_array );
+	int o = amd_flash_address_shift( cfi_array );
 
 	printf("flash_erase_block 0x%08X\n", adr);
 
