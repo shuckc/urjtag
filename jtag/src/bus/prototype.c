@@ -236,8 +236,8 @@ prototype_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[
 				nbytes >>= 1;
 				ashift++;
 			}
-			ASHIFT = ashift;
 		}
+		ASHIFT = ashift;
 
 	} else {
 		printf( _("parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n") );

@@ -1,5 +1,9 @@
 2008-12-01  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/bus/prototype.c (prototype_bus_new): consider amode parameter properly
+     when specified on the command line. pervious version didn't set ASHIFT in
+     this case.
+
    * src/flash/amd.c (amd_flash_print_info): added Spansion S92GL chips
 
 2008-11-16  Kolja Waschk  <kawk>
