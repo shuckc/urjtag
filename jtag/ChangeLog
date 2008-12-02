@@ -1,3 +1,12 @@
+2008-12-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * include/flash/intel.h, src/flash/intel.c:
+     support for multi-byte write mode
+     chips must match the following criteria to qualify
+     - CFI data specifies multi-byte write mode supported
+     - handled by intel.c
+     - 8 or 16 bit interface
+
 2008-12-01  Arnim Laeuger  <arniml@users.sourceforge.net>
    * include/flash.h, src/flash/amd_flash.c, src/flash/amd.c,
      src/flash/intel.c, src/flash/flash.c, configure.ac:

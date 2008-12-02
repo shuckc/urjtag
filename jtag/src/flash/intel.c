@@ -113,6 +113,9 @@ _intel_flash_print_info( cfi_array_t *cfi_array, int o )
 		case STD_MIC_MITSUBISHI:
 			printf( _("Manufacturer: %s\n"), STD_MICN_MITSUBISHI );
 			break;
+		case STD_MIC_MICRON_TECHNOLOGY:
+			printf( _("Manufacturer: %s\n"), STD_MICN_MICRON_TECHNOLOGY );
+			break;
 		default:
 			printf( _("Unknown manufacturer (0x%04X)!\n"), mid);
 			break;
@@ -283,6 +286,41 @@ intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 }
 
 static int
+intel_flash_program_buffer( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
+{
+	uint16_t sr;
+	bus_t *bus = cfi_array->bus;
+	int idx;
+	uint32_t block_adr = adr;
+
+	/* issue command WRITE_TO_BUFFER */
+	bus_write( bus, cfi_array->address, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
+	bus_write( bus, adr, CFI_INTEL_CMD_WRITE_TO_BUFFER );
+	/* poll XSR7 == 1 */
+	while (!((sr = bus_read( bus, cfi_array->address ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+
+	/* write count value (number of upcoming writes - 1) */
+	bus_write( bus, adr, count-1 );
+
+	/* write payload to buffer */
+	for (idx = 0; idx < count; idx++) {
+		bus_write( bus, adr, buffer[idx] );
+		adr += cfi_array->bus_width;
+	}
+
+	/* issued command WRITE_CONFIRM */
+	bus_write( bus, block_adr, CFI_INTEL_CMD_WRITE_CONFIRM );
+
+	/* poll SR7 == 1 */
+	while (!((sr = bus_read( bus, cfi_array->address ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+	if (sr != CFI_INTEL_SR_READY) {
+		printf( _("flash: unknown error while programming\n") );
+		return FLASH_ERROR_UNKNOWN;
+	} else
+		return 0;
+}
+
+static int
 intel_flash_erase_block32( cfi_array_t *cfi_array, uint32_t adr )
 {
 	uint32_t sr;
@@ -375,7 +413,7 @@ flash_driver_t intel_16_flash_driver = {
 	intel_flash_erase_block,
 	intel_flash_unlock_block,
 	intel_flash_program,
-	NULL,
+	intel_flash_program_buffer,
 	intel_flash_readarray,
 };
 
@@ -388,6 +426,6 @@ flash_driver_t intel_8_flash_driver = {
 	intel_flash_erase_block,
 	intel_flash_unlock_block,
 	intel_flash_program,
-	NULL,
+	intel_flash_program_buffer,
 	intel_flash_readarray,
 };

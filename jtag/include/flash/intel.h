@@ -56,6 +56,7 @@
 #define	CFI_INTEL_CMD_BLOCK_ERASE		0x20	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
 #define	CFI_INTEL_CMD_SUSPEND			0xB0	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
 #define	CFI_INTEL_CMD_RESUME			0xD0	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_CMD_WRITE_CONFIRM		0xD0	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
 #define	CFI_INTEL_CMD_LOCK_SETUP		0x60	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
 #define	CFI_INTEL_CMD_LOCK_BLOCK		0x01	/* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
 #define	CFI_INTEL_CMD_UNLOCK_BLOCK		0xD0	/* 28FxxxJ3A - unlocks all blocks, 28FFxxxK3, 28FxxxK18 */
