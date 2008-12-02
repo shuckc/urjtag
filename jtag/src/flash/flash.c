@@ -250,6 +250,9 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	int neb;
 	int bus_width;
 	int chip_width;
+	uint32_t *write_buffer = NULL;
+	uint32_t write_buffer_adr = 0;
+	int write_buffer_count, cfi_max_entries;
 
 	set_flash_driver();
 	if (!cfi_array || !flash_driver) {
@@ -264,6 +267,20 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 	for (i = 0, neb = 0; i < cfi->device_geometry.number_of_erase_regions; i++)
 		neb += cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
 
+	/* prepare multi-byte write */
+#ifdef MULTI_BYTE
+	cfi_max_entries = flash_driver->program_buffer ? cfi->device_geometry.max_bytes_write / flash_driver->bus_width : 0;
+#else
+	cfi_max_entries = 0;
+#endif
+	if (cfi_max_entries > 0) {
+		write_buffer = (uint32_t *)calloc( cfi_max_entries, sizeof( uint32_t ) );
+		if (!write_buffer) {
+			printf( _("Out of memory!\n") );
+			return;
+		}
+	}
+
 	erased = malloc( neb * sizeof *erased );
 	if (!erased) {
 		printf( _("Out of memory!\n") );
@@ -274,6 +291,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 
 	printf( _("program:\n") );
 	adr = addr;
+	write_buffer_count = 0;
 	while (!feof( f )) {
 		uint32_t data;
 #define BSIZE 4096
@@ -306,13 +324,47 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 				else
 					data |= b[bc + j] << (j * 8);
 
-			if (flash_driver->program( cfi_array, adr, data )) {
-				printf( _("\nflash error\n") );
-				return;
+			if (cfi_max_entries > 0) {
+				/* handle multi-byte writes via write buffer */
+				if (write_buffer_count == 0)
+					write_buffer_adr = adr;   /* note address of first entry that goes into write buffer */
+				write_buffer[write_buffer_count++] = data;
+
+				if ((write_buffer_count == cfi_max_entries) ||
+						((adr + flash_driver->bus_width) % (cfi_max_entries * flash_driver->bus_width) == 0)) {
+					/* program buffer to flash conditions matched:
+						 a) write buffer is full (cfi_max_bytes_write bytes entered)
+						 b) next adr will leave current page */
+					if (flash_driver->program_buffer( cfi_array, write_buffer_adr, write_buffer, write_buffer_count )) {
+						printf( _("\nflash error\n") );
+						return;
+					}
+					write_buffer_count = 0;
+				}
+
+			} else {
+				/* single word write */
+				if (flash_driver->program( cfi_array, adr, data )) {
+					printf( _("\nflash error\n") );
+					return;
+				}
 			}
 			adr += flash_driver->bus_width;
 		}
 	}
+
+	/* flush partly filled write buffer */
+	if (cfi_max_entries > 0) {
+		if (write_buffer_count > 0) {
+			if (flash_driver->program_buffer( cfi_array, write_buffer_adr, write_buffer, write_buffer_count )) {
+				free( write_buffer );
+				printf( _("\nflash error\n") );
+				return;
+			}
+		}
+		free( write_buffer );
+	}
+
 	printf( _("addr: 0x%08X\n"), adr - flash_driver->bus_width);
 
 	flash_driver->readarray( cfi_array );

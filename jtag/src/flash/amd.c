@@ -275,7 +275,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 	switch (mid) {
 		case 0x0001:
 			printf( "AMD" );
-		printf( _("\n\tChip: ") );
+			printf( _("\n\tChip: ") );
 			switch (cid) {
 			case 0x0049:
 			printf( "AM29LV160DB" );
@@ -294,7 +294,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			break;
 			case 0x227E:  /* 16-bit mode */
 			case 0x007E:  /* 8-bit mode */
-			printf( "S92GL" );
+			printf( "S92GLxxxN" );
 			break;
 			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
@@ -303,7 +303,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		break;
 		case 0x001f:
 			printf( "Atmel" );
-		printf( _("\n\tChip: ") );
+			printf( _("\n\tChip: ") );
 			switch (cid) {
 			case 0x01d2:
 			printf( "AT49BW642DT" );
@@ -318,7 +318,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		break;
 		case 0x0020:
 			printf( "ST/Samsung" );
-		printf( _("\n\tChip: ") );
+			printf( _("\n\tChip: ") );
 			switch (cid) {
 			case 0x00ca:
 			printf( "M29W320DT" );
@@ -336,7 +336,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 		break;
 		case 0x00C2:
 			printf( "Macronix" );
-		printf( _("\n\tChip: ") );
+			printf( _("\n\tChip: ") );
 			switch (cid) {
 			case 0x2249:
 			printf( "MX29LV160B" );
@@ -413,6 +413,67 @@ amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 	return !status;
 }
 
+static int
+amd_program_buffer_status( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
+{
+	bus_t *bus = cfi_array->bus;
+	int timeout;
+	const uint32_t dq7mask = (1 << 7);
+	const uint32_t dq5mask = (1 << 5);
+	uint32_t bit7 = data & dq7mask;
+	uint32_t data1;
+
+	for (timeout = 0; timeout < 7000; timeout++) {
+		data1 = bus_read( bus, adr );
+		if (dbg)
+			printf( "amd_program_buffer_status %d: %04X (%04X) = %04X\n", timeout, data1, (data1 & dq7mask), bit7 );
+		if ((data1 & dq7mask) == bit7)
+			return 1;
+
+		if ((data1 & dq5mask) == dq5mask)
+			break;
+		usleep( 100 );
+	}
+
+	data1 = bus_read( bus, adr );
+	if ((data1 & dq7mask) == bit7)
+		return 1;
+
+	return 0;
+}
+
+static int
+amd_flash_program_buffer( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
+{
+	int status;
+	bus_t *bus = cfi_array->bus;
+	int o = amd_flash_address_shift( cfi_array );
+	int idx;
+	uint32_t sa = adr;
+
+	if (dbg)
+		printf("\nflash_program_buffer 0x%08X, count 0x%08X\n", adr, count);
+
+	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa );
+	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
+	bus_write( bus, adr, 0x00250025 );
+	bus_write( bus, sa, count-1 );
+
+	/* write payload to write buffer */
+	for (idx = 0; idx < count; idx++) {
+		bus_write( bus, adr, buffer[idx] );
+		adr += cfi_array->bus_width;
+	}
+
+	/* program buffer to flash */
+	bus_write( bus, sa, 0x00290029 );
+
+	status = amd_program_buffer_status( cfi_array, adr - cfi_array->bus_width, buffer[idx - 1] );
+	/*	amd_flash_read_array(ps); */
+
+	return !status;
+}
+
 static void
 amd_flash_read_array( cfi_array_t *cfi_array )
 {
@@ -429,29 +490,32 @@ flash_driver_t amd_32_flash_driver = {
 	amd_flash_erase_block,
 	amd_flash_unlock_block,
 	amd_flash_program,
+	NULL,
 	amd_flash_read_array,
 };
 
 flash_driver_t amd_16_flash_driver = {
 	2, /* buswidth */
 	N_("AMD/Fujitsu Standard Command Set"),
-	N_("supported: AMD 29LV800B; 1x16 Bit"),
+	N_("supported: AMD 29LV800B, S92GLxxxN; 1x16 Bit"),
 	amd_flash_autodetect16,
 	amd_flash_print_info,
 	amd_flash_erase_block,
 	amd_flash_unlock_block,
 	amd_flash_program,
+	amd_flash_program_buffer,
 	amd_flash_read_array,
 };
 
 flash_driver_t amd_8_flash_driver = {
 	1, /* buswidth */
 	N_("AMD/Fujitsu Standard Command Set"),
-	N_("supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B; 1x8 Bit"),
+	N_("supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S92GLxxxN; 1x8 Bit"),
 	amd_flash_autodetect8,
 	amd_flash_print_info,
 	amd_flash_erase_block,
 	amd_flash_unlock_block,
 	amd_flash_program,
+	amd_flash_program_buffer,
 	amd_flash_read_array,
 };

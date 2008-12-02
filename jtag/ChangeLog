@@ -1,4 +1,11 @@
 2008-12-01  Arnim Laeuger  <arniml@users.sourceforge.net>
+   * include/flash.h, src/flash/amd_flash.c, src/flash/amd.c,
+     src/flash/intel.c, src/flash/flash.c, configure.ac:
+     support multi-byte write mode
+     chips must match the following criteria to qualify
+     - CFI data specifies multi-byte write mode supported
+     - handled by amd.c
+     - 8 or 16 bit interface
 
    * src/bus/prototype.c (prototype_bus_new): consider amode parameter properly
      when specified on the command line. pervious version didn't set ASHIFT in

@@ -350,5 +350,6 @@ flash_driver_t amd_29xx040_flash_driver = {
 	amd_29xx040_erase_block,
 	amd_29xx040_unlock_block,
 	amd_29xx040_program,
+	NULL,
 	amd_29xx040_read_array,
 };

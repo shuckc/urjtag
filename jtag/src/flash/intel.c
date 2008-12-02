@@ -362,6 +362,7 @@ flash_driver_t intel_32_flash_driver = {
 	intel_flash_erase_block32,
 	intel_flash_unlock_block32,
 	intel_flash_program32,
+	NULL,
 	intel_flash_readarray32,
 };
 
@@ -374,6 +375,7 @@ flash_driver_t intel_16_flash_driver = {
 	intel_flash_erase_block,
 	intel_flash_unlock_block,
 	intel_flash_program,
+	NULL,
 	intel_flash_readarray,
 };
 
@@ -386,5 +388,6 @@ flash_driver_t intel_8_flash_driver = {
 	intel_flash_erase_block,
 	intel_flash_unlock_block,
 	intel_flash_program,
+	NULL,
 	intel_flash_readarray,
 };
