@@ -151,7 +151,17 @@
 #define BIT_SIGNALYZER_nSRST 5
 #define BITMASK_SIGNALYZER_nTRST (1 << BIT_SIGNALYZER_nTRST)
 #define BITMASK_SIGNALYZER_nSRST (1 << BIT_SIGNALYZER_nSRST)
-
+/* bit and bitmask definitions for TinCanTools Flyswatter board*/
+#define BIT_FLYSWATTER_nLED2 3
+#define BIT_FLYSWATTER_nTRST 4
+#define BIT_FLYSWATTER_nSRST 5
+#define BIT_FLYSWATTER_nOE1  6
+#define BIT_FLYSWATTER_nOE2  7
+#define BITMASK_FLYSWATTER_nLED2 (1 << BIT_FLYSWATTER_nLED2)
+#define BITMASK_FLYSWATTER_nTRST (1 << BIT_FLYSWATTER_nTRST)
+#define BITMASK_FLYSWATTER_nSRST (1 << BIT_FLYSWATTER_nSRST)
+#define BITMASK_FLYSWATTER_nOE1  (1 << BIT_FLYSWATTER_nOE1)
+#define BITMASK_FLYSWATTER_nOE2  (1 << BIT_FLYSWATTER_nOE2)
 
 
 typedef struct {
@@ -557,6 +567,44 @@ ft2232_signalyzer_init( cable_t *cable )
 }
 
 
+static int
+ft2232_flyswatter_init( cable_t *cable )
+{
+  params_t *params = (params_t *)cable->params;
+  cx_cmd_root_t *cmd_root = &(params->cmd_root);
+
+  if (usbconn_open( cable->link.usb )) return -1;
+
+  /* static low byte value and direction:
+     nTRST = 1, set nOE1 and nOE2 to '0' -> activate output enables */
+  params->low_byte_value = BITMASK_FLYSWATTER_nTRST;
+  params->low_byte_dir   = BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2 |
+                           BITMASK_FLYSWATTER_nTRST | BITMASK_FLYSWATTER_nSRST;
+
+  /* Set Data Bits Low Byte
+     TCK = 0, TMS = 1, TDI = 0 */
+  cx_cmd_queue( cmd_root, 0 );
+  cx_cmd_push( cmd_root, SET_BITS_LOW );
+  cx_cmd_push( cmd_root, params->low_byte_value | BITMASK_TMS );
+  cx_cmd_push( cmd_root, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+
+  /* Set Data Bits High Byte */
+  /* Turn LED2 on */
+  params->high_byte_value_trst_active   = 0;
+  params->high_byte_value_trst_inactive = 0;
+  params->high_byte_dir                 = BITMASK_FLYSWATTER_nLED2;
+  cx_cmd_push( cmd_root, SET_BITS_HIGH );
+  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_dir );
+
+  ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
+
+  params->last_tdo_valid = 0;
+
+  return 0;
+}
+
+
 static void
 ft2232_generic_done( cable_t *cable )
 {
@@ -834,6 +882,36 @@ ft2232_signalyzer_done( cable_t *cable )
      set all to input */
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
   cx_cmd_push( cmd_root, 0 );
+  cx_cmd_push( cmd_root, 0 );
+  cx_xfer( cmd_root, &imm_cmd, cable, COMPLETELY );
+
+  generic_usbconn_done( cable );
+}
+
+
+static void
+ft2232_flyswatter_done( cable_t *cable )
+{
+  params_t *params = (params_t *)cable->params;
+  cx_cmd_root_t *cmd_root = &(params->cmd_root);
+
+  /* Set Data Bits Low Byte
+     disable output drivers */
+  cx_cmd_queue( cmd_root, 0 );
+  cx_cmd_push( cmd_root, SET_BITS_LOW );
+  cx_cmd_push( cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2 );
+  cx_cmd_push( cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2 );
+
+  /* Set Data Bits Low Byte
+     set all to input */
+  cx_cmd_push( cmd_root, SET_BITS_LOW );
+  cx_cmd_push( cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2 );
+  cx_cmd_push( cmd_root, 0 );
+
+  /* Set Data Bits High Byte
+     set all to input */
+  cx_cmd_push( cmd_root, SET_BITS_HIGH );
+  cx_cmd_push( cmd_root, BITMASK_FLYSWATTER_nLED2 );
   cx_cmd_push( cmd_root, 0 );
   cx_xfer( cmd_root, &imm_cmd, cable, COMPLETELY );
 
@@ -1327,6 +1405,7 @@ usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
 usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
 usbconn_cable_t usbconn_cable_usbtojtagif_ftdi;
 usbconn_cable_t usbconn_cable_signalyzer_ftdi;
+usbconn_cable_t usbconn_cable_flyswatter_ftdi;
 
 static void
 ft2232_usbcable_help( const char *cablename )
@@ -1352,6 +1431,9 @@ ft2232_usbcable_help( const char *cablename )
   if (strcasecmp( conn->name, cablename ) == 0)
     goto found;
   conn = &usbconn_cable_signalyzer_ftdi;
+  if (strcasecmp( conn->name, cablename ) == 0)
+    goto found;
+  conn = &usbconn_cable_flyswatter_ftdi;
   if (strcasecmp( conn->name, cablename ) == 0)
     goto found;
   conn = &usbconn_cable_ft2232_ftdi;
@@ -1644,6 +1726,37 @@ usbconn_cable_t usbconn_cable_signalyzer_ftd2xx = {
   0x0000              /* PID */
 };
 
+cable_driver_t ft2232_flyswatter_cable_driver = {
+  "Flyswatter",
+  N_("TinCanTools Flyswatter Cable"),
+  ft2232_connect,
+  generic_disconnect,
+  ft2232_cable_free,
+  ft2232_flyswatter_init,
+  ft2232_flyswatter_done,
+  ft2232_set_frequency,
+  ft2232_clock,
+  ft2232_get_tdo,
+  ft2232_transfer,
+  ft2232_set_trst,
+  generic_get_trst,
+  ft2232_flush,
+  ft2232_usbcable_help
+};
+usbconn_cable_t usbconn_cable_flyswatter_ftdi = {
+  "Flyswatter",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftdi-mpsse",       /* default usbconn driver */
+  0x0403,             /* VID */
+  0x6010              /* PID */
+};
+usbconn_cable_t usbconn_cable_flyswatter_ftd2xx = {
+  "Flyswatter",       /* cable name */
+  NULL,               /* string pattern, not used */
+  "ftd2xx-mpsse",     /* default usbconn driver */
+  0x0403,             /* VID */
+  0x6010              /* PID */
+};
 
 /*
  Local Variables:

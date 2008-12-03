@@ -1,5 +1,10 @@
 2008-12-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c,
+     src/tap/cable.c, doc/UrJTAG.txt:
+     [ 2382324 ] Patch to add support for TinCanTools Flyswatter JTAG cable
+     (Mark Norman)
+
    * include/flash.h, src/flash/amd_flash.c, src/flash/amd.c, 
      src/flash/intel.c, src/flash/flash.c, configure.ac:
      restructure multi-byte flash programming support

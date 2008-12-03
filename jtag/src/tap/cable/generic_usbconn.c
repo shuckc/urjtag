@@ -55,6 +55,7 @@ extern usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx;
 extern usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx;
 extern usbconn_cable_t usbconn_cable_usbtojtagif_ftd2xx;
 extern usbconn_cable_t usbconn_cable_signalyzer_ftd2xx;
+extern usbconn_cable_t usbconn_cable_flyswatter_ftd2xx;
 #endif
 #ifdef ENABLE_LOWLEVEL_FTDI
 extern usbconn_cable_t usbconn_cable_ft2232_ftdi;
@@ -66,6 +67,7 @@ extern usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
 extern usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
 extern usbconn_cable_t usbconn_cable_usbtojtagif_ftdi;
 extern usbconn_cable_t usbconn_cable_signalyzer_ftdi;
+extern usbconn_cable_t usbconn_cable_flyswatter_ftdi;
 #endif
 #endif
 #ifdef ENABLE_CABLE_USBBLASTER
@@ -103,6 +105,7 @@ usbconn_cable_t *usbconn_cables[] =
 	&usbconn_cable_turtelizer2_ftd2xx,
 	&usbconn_cable_usbtojtagif_ftd2xx,
 	&usbconn_cable_signalyzer_ftd2xx,
+	&usbconn_cable_flyswatter_ftd2xx,
 #endif
 #ifdef ENABLE_LOWLEVEL_FTDI
 	&usbconn_cable_ft2232_ftdi,
@@ -114,6 +117,7 @@ usbconn_cable_t *usbconn_cables[] =
 	&usbconn_cable_turtelizer2_ftdi,
 	&usbconn_cable_usbtojtagif_ftdi,
 	&usbconn_cable_signalyzer_ftdi,
+    &usbconn_cable_flyswatter_ftdi,
 #endif
 #endif
 #ifdef ENABLE_CABLE_USBBLASTER

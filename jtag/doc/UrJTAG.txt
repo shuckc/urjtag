@@ -219,6 +219,7 @@ FT2232-based USB cables:
 
  * Amontec JTAGkey
  * Amontec JTAGkey-Tiny (supported as cable "JTAGkey")
+ * TinCanTools Flyswatter
  * Olimex ARM-USB-JTAG
  * Olimex ARM-USB-TINY
  * OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks

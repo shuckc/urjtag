@@ -50,6 +50,7 @@ extern cable_driver_t ft2232_oocdlinks_cable_driver;
 extern cable_driver_t ft2232_signalyzer_cable_driver;
 extern cable_driver_t ft2232_turtelizer2_cable_driver;
 extern cable_driver_t ft2232_usbtojtagif_cable_driver;
+extern cable_driver_t ft2232_flyswatter_cable_driver;
 extern cable_driver_t dlc5_cable_driver;
 extern cable_driver_t ea253_cable_driver;
 extern cable_driver_t ei012_cable_driver;
@@ -89,6 +90,7 @@ cable_driver_t *cable_drivers[] = {
 	&ft2232_signalyzer_cable_driver,
 	&ft2232_turtelizer2_cable_driver,
 	&ft2232_usbtojtagif_cable_driver,
+	&ft2232_flyswatter_cable_driver,
 #endif
 
 #ifdef ENABLE_CABLE_DLC5
