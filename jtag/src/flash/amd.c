@@ -27,6 +27,8 @@
  *     September 20, 2002     Rev B, 22366b8.pdf
  * [2] Advanced Micro Devices, "Am29LV642D",
  *     August 14, 2001    Rev A, 25022.pdf
+ * [3] Spansion, "S29GL-N MirrorBit Flash Family"
+ *     October 13, 2006    Rev B, Amendment 3
  *
  */
 
@@ -47,7 +49,10 @@ static int dbg = 0;
 
 static int amd_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr );
 static int amd_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr );
-static int amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int amd_flash_program_single( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int amd_flash_program_buffer( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
+static int amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
+static int amd_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
 static void amd_flash_read_array( cfi_array_t *cfi_array ); 
 
 /* The code below assumes a connection of the flash chip address LSB (A0)
@@ -393,7 +398,7 @@ amd_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr )
 }
 
 static int
-amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
+amd_flash_program_single( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
 	int status;
 	bus_t *bus = cfi_array->bus;
@@ -416,6 +421,9 @@ amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 static int
 amd_program_buffer_status( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
+	/* NOTE: Status polling according to [3], Figure 1.
+	   The current method for status polling is not compatible with 32 bit (2x16) configurations
+		 since it only checks the DQ7 bit of the lower chip. */
 	bus_t *bus = cfi_array->bus;
 	int timeout;
 	const uint32_t dq7mask = (1 << 7);
@@ -445,33 +453,102 @@ amd_program_buffer_status( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 static int
 amd_flash_program_buffer( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
 {
+	/* NOTE: Write buffer programming operation according to [3], Figure 1. */
 	int status;
 	bus_t *bus = cfi_array->bus;
+	cfi_chip_t *cfi_chip = cfi_array->cfi_chips[0];
 	int o = amd_flash_address_shift( cfi_array );
-	int idx;
-	uint32_t sa = adr;
+	int wb_bytes = cfi_chip->cfi.device_geometry.max_bytes_write;
+	int chip_width = cfi_chip->width;
+	int offset = 0;
 
 	if (dbg)
 		printf("\nflash_program_buffer 0x%08X, count 0x%08X\n", adr, count);
 
-	bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa );
-	bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
-	bus_write( bus, adr, 0x00250025 );
-	bus_write( bus, sa, count-1 );
+	while (count > 0) {
+		int wcount, idx;
+		uint32_t sa = adr;
 
-	/* write payload to write buffer */
+		/* determine length of next multi-byte write */
+		wcount = wb_bytes - (adr % wb_bytes);
+		wcount /= chip_width;
+		if (wcount > count)
+			wcount = count;
+
+		bus_write( bus, cfi_array->address + (0x0555 << o), 0x00aa00aa );
+		bus_write( bus, cfi_array->address + (0x02aa << o), 0x00550055 );
+		bus_write( bus, adr, 0x00250025 );
+		bus_write( bus, sa, wcount-1 );
+
+		/* write payload to write buffer */
+		for (idx = 0; idx < wcount; idx++) {
+			bus_write( bus, adr, buffer[offset + idx] );
+			adr += cfi_array->bus_width;
+		}
+		offset += wcount;
+
+		/* program buffer to flash */
+		bus_write( bus, sa, 0x00290029 );
+
+		status = amd_program_buffer_status( cfi_array, adr - cfi_array->bus_width, buffer[offset - 1] );
+		/*	amd_flash_read_array(ps); */
+		if (status != 1)
+			return 1;
+
+		count -= wcount;
+	}
+
+	return 0;
+}
+
+static int
+amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
+{
+	cfi_query_structure_t *cfi = &(cfi_array->cfi_chips[0]->cfi);
+	int max_bytes_write = cfi->device_geometry.max_bytes_write;
+
+#ifndef FLASH_MULTI_BYTE
+	max_bytes_write = 0;
+#endif
+
+	/* multi-byte writes supported? */
+	if (max_bytes_write > 0)
+		return amd_flash_program_buffer( cfi_array, adr, buffer, count );
+
+	else {
+		/* unroll buffer to single writes */
+		int idx;
+
+		for (idx = 0; idx < count; idx++) {
+			int status = amd_flash_program_single( cfi_array, adr, buffer[idx] );
+			if (status)
+				return status;
+			adr += cfi_array->bus_width;
+		}
+	}
+
+	return 0;
+}
+
+static int
+amd_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
+{
+	/* Single byte programming is forced for 32 bit (2x16) flash configuration.
+	   a) lack of testing capbilities for 2x16 multi-byte write operation
+	   b) amd_flash_program_buffer() is not 2x16 compatible at the moment
+	      due to insufficiency of amd_program_buffer_status()
+	   Closing these issues will obsolete amd_flash_program32(). */
+	int idx;
+
+	/* unroll buffer to single writes */
 	for (idx = 0; idx < count; idx++) {
-		bus_write( bus, adr, buffer[idx] );
+		int status = amd_flash_program_single( cfi_array, adr, buffer[idx] );
+		if (status)
+			return status;
 		adr += cfi_array->bus_width;
 	}
 
-	/* program buffer to flash */
-	bus_write( bus, sa, 0x00290029 );
-
-	status = amd_program_buffer_status( cfi_array, adr - cfi_array->bus_width, buffer[idx - 1] );
-	/*	amd_flash_read_array(ps); */
-
-	return !status;
+	return 0;
 }
 
 static void
@@ -489,8 +566,7 @@ flash_driver_t amd_32_flash_driver = {
 	amd_flash_print_info,
 	amd_flash_erase_block,
 	amd_flash_unlock_block,
-	amd_flash_program,
-	NULL,
+	amd_flash_program32,
 	amd_flash_read_array,
 };
 
@@ -503,7 +579,6 @@ flash_driver_t amd_16_flash_driver = {
 	amd_flash_erase_block,
 	amd_flash_unlock_block,
 	amd_flash_program,
-	amd_flash_program_buffer,
 	amd_flash_read_array,
 };
 
@@ -516,6 +591,5 @@ flash_driver_t amd_8_flash_driver = {
 	amd_flash_erase_block,
 	amd_flash_unlock_block,
 	amd_flash_program,
-	amd_flash_program_buffer,
 	amd_flash_read_array,
 };

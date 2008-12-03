@@ -30,6 +30,8 @@
  *     Application Note 646", April 2000, Order Number: 292204-004
  * [4] Advanced Micro Devices, "Common Flash Memory Interface Publication 100 Vendor & Device
  *     ID Code Assignments", December 1, 2001, Volume Number: 96.1
+ * [5] Micron Technology, Inc. "Q-Flash Memory MT28F123J3, MT28F640J3, MT28F320J3",
+ *     MT28F640J3.fm - Rev. N 3/05 EN
  *
  */
 
@@ -48,10 +50,13 @@
 
 static int intel_flash_erase_block( cfi_array_t *cfi_array, uint32_t adr );
 static int intel_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr );
-static int intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int intel_flash_program_single( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int intel_flash_program_buffer( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
+static int intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
 static int intel_flash_erase_block32( cfi_array_t *cfi_array, uint32_t adr );
 static int intel_flash_unlock_block32( cfi_array_t *cfi_array, uint32_t adr );
-static int intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int intel_flash_program32_single( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
 
 /* autodetect, we can handle this chip */
 static int 
@@ -267,7 +272,7 @@ intel_flash_unlock_block( cfi_array_t *cfi_array, uint32_t adr )
 }
 
 static int
-intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
+intel_flash_program_single( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
 	uint16_t sr;
 	bus_t *bus = cfi_array->bus;
@@ -288,36 +293,83 @@ intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 static int
 intel_flash_program_buffer( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
 {
+	/* NOTE: Write-to-buffer programming operation according to [5], Figure 9 */
 	uint16_t sr;
 	bus_t *bus = cfi_array->bus;
-	int idx;
-	uint32_t block_adr = adr;
+	cfi_chip_t *cfi_chip = cfi_array->cfi_chips[0];
+	int wb_bytes = cfi_chip->cfi.device_geometry.max_bytes_write;
+	int chip_width = cfi_chip->width;
+	int offset = 0;
 
-	/* issue command WRITE_TO_BUFFER */
-	bus_write( bus, cfi_array->address, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
-	bus_write( bus, adr, CFI_INTEL_CMD_WRITE_TO_BUFFER );
-	/* poll XSR7 == 1 */
-	while (!((sr = bus_read( bus, cfi_array->address ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+	while (count > 0) {
+		int wcount, idx;
+		uint32_t block_adr = adr;
 
-	/* write count value (number of upcoming writes - 1) */
-	bus_write( bus, adr, count-1 );
+		/* determine length of next multi-byte write */
+		wcount = wb_bytes - (adr % wb_bytes);
+		wcount /= chip_width;
+		if (wcount > count)
+			wcount = count;
 
-	/* write payload to buffer */
-	for (idx = 0; idx < count; idx++) {
-		bus_write( bus, adr, buffer[idx] );
-		adr += cfi_array->bus_width;
+		/* issue command WRITE_TO_BUFFER */
+		bus_write( bus, cfi_array->address, CFI_INTEL_CMD_CLEAR_STATUS_REGISTER );
+		bus_write( bus, adr, CFI_INTEL_CMD_WRITE_TO_BUFFER );
+		/* poll XSR7 == 1 */
+		while (!((sr = bus_read( bus, cfi_array->address ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
+
+		/* write count value (number of upcoming writes - 1) */
+		bus_write( bus, adr, wcount-1 );
+
+		/* write payload to buffer */
+		for (idx = 0; idx < wcount; idx++) {
+			bus_write( bus, adr, buffer[offset + idx] );
+			adr += cfi_array->bus_width;
+		}
+		offset += wcount;
+
+		/* issue command WRITE_CONFIRM */
+		bus_write( bus, block_adr, CFI_INTEL_CMD_WRITE_CONFIRM );
+
+		count -= wcount;
 	}
-
-	/* issued command WRITE_CONFIRM */
-	bus_write( bus, block_adr, CFI_INTEL_CMD_WRITE_CONFIRM );
 
 	/* poll SR7 == 1 */
 	while (!((sr = bus_read( bus, cfi_array->address ) & 0xFE) & CFI_INTEL_SR_READY)) ; 		/* TODO: add timeout */
 	if (sr != CFI_INTEL_SR_READY) {
 		printf( _("flash: unknown error while programming\n") );
 		return FLASH_ERROR_UNKNOWN;
-	} else
-		return 0;
+	}
+
+	return 0;
+}
+
+static int
+intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
+{
+	cfi_query_structure_t *cfi = &(cfi_array->cfi_chips[0]->cfi);
+	int max_bytes_write = cfi->device_geometry.max_bytes_write;
+
+#ifndef FLASH_MULTI_BYTE
+	max_bytes_write = 0;
+#endif
+
+	/* multi-byte writes supported? */
+	if (max_bytes_write > 0)
+		return intel_flash_program_buffer( cfi_array, adr, buffer, count );
+
+	else {
+		/* unroll buffer to single writes */
+		int idx;
+
+		for (idx = 0; idx < count; idx++) {
+			int status = intel_flash_program_single( cfi_array, adr, buffer[idx] );
+			if (status)
+				return status;
+			adr += cfi_array->bus_width;
+		}
+	}
+
+	return 0;
 }
 
 static int
@@ -359,7 +411,7 @@ intel_flash_unlock_block32( cfi_array_t *cfi_array, uint32_t adr )
 }
 
 static int
-intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
+intel_flash_program32_single( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
 	uint32_t sr;
 	bus_t *bus = cfi_array->bus;
@@ -375,6 +427,26 @@ intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 		return FLASH_ERROR_UNKNOWN;
 	} else
 		return 0;
+}
+
+static int
+intel_flash_program32( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
+{
+	/* Single byte programming is forced for 32 bit (2x16) flash configuration.
+	   a) lack of testing capbilities for 2x16 multi-byte write operation
+	   b) no implementation of intel_flash_program32_buffer() available
+	   Closing these issues will enable multi-byte for 2x16 as well. */
+	int idx;
+
+	/* unroll buffer to single writes */
+	for (idx = 0; idx < count; idx++) {
+		int status = intel_flash_program32_single( cfi_array, adr, buffer[idx] );
+		if (status)
+			return status;
+		adr += cfi_array->bus_width;
+	}
+
+	return 0;
 }
 
 static void
@@ -400,7 +472,6 @@ flash_driver_t intel_32_flash_driver = {
 	intel_flash_erase_block32,
 	intel_flash_unlock_block32,
 	intel_flash_program32,
-	NULL,
 	intel_flash_readarray32,
 };
 
@@ -413,7 +484,6 @@ flash_driver_t intel_16_flash_driver = {
 	intel_flash_erase_block,
 	intel_flash_unlock_block,
 	intel_flash_program,
-	intel_flash_program_buffer,
 	intel_flash_readarray,
 };
 
@@ -426,6 +496,5 @@ flash_driver_t intel_8_flash_driver = {
 	intel_flash_erase_block,
 	intel_flash_unlock_block,
 	intel_flash_program,
-	intel_flash_program_buffer,
 	intel_flash_readarray,
 };

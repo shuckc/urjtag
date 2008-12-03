@@ -1,3 +1,11 @@
+2008-12-03  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * include/flash.h, src/flash/amd_flash.c, src/flash/amd.c, 
+     src/flash/intel.c, src/flash/flash.c, configure.ac:
+     restructure multi-byte flash programming support
+     flashmem no longer needs to know about the capabilities of
+     the flash chip to handle multi-byte programming
+
 2008-12-02  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * include/flash/intel.h, src/flash/intel.c:

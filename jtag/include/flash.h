@@ -68,8 +68,7 @@ typedef struct {
 	void (*print_info)( cfi_array_t *cfi_array );
 	int (*erase_block)( cfi_array_t *cfi_array, uint32_t adr );
 	int (*unlock_block)( cfi_array_t *cfi_array, uint32_t adr );
-	int (*program)( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
-	int (*program_buffer)( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
+	int (*program)( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
 	void (*readarray)( cfi_array_t *cfi_array );
 } flash_driver_t;
 

@@ -80,7 +80,8 @@ static int amd_29xx040_status( bus_t *bus, uint32_t adr, unsigned short data );
 static void amd_29xx040_print_info( cfi_array_t *cfi_array );
 static void amd_29xx040_read_array( cfi_array_t *cfi_array );
 static int amd_29xx040_erase_block( cfi_array_t *cfi_array, uint32_t adr );
-static int amd_29xx040_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int amd_29xx040_program_single( cfi_array_t *cfi_array, uint32_t adr, uint32_t data );
+static int amd_29xx040_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
 static int amd_29xx040_unlock_block( cfi_array_t *cfi_array, uint32_t adr );
 
 int amd_detect(bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
@@ -302,7 +303,7 @@ static int amd_29xx040_erase_block( cfi_array_t *cfi_array, uint32_t adr )
 	return FLASH_ERASE_ERROR;
 }
 
-static int amd_29xx040_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
+static int amd_29xx040_program_single( cfi_array_t *cfi_array, uint32_t adr, uint32_t data )
 {
 	int status;
 	bus_t *bus = cfi_array->bus;
@@ -334,6 +335,21 @@ static int amd_29xx040_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t d
 	return !status;
 }
 
+static int amd_29xx040_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count )
+{
+	int idx;
+
+	/* unroll buffer to single writes */
+	for (idx = 0; idx < count; idx++) {
+		int status = amd_29xx040_program_single( cfi_array, adr, buffer[idx] );
+		if (status)
+			return status;
+		adr += cfi_array->bus_width;
+	}
+
+	return 0;	
+}
+
 static int amd_29xx040_unlock_block( cfi_array_t *cfi_array, uint32_t adr )
 {
 	printf( "flash_unlock_block 0x%08X IGNORE\n", adr );
@@ -350,6 +366,5 @@ flash_driver_t amd_29xx040_flash_driver = {
 	amd_29xx040_erase_block,
 	amd_29xx040_unlock_block,
 	amd_29xx040_program,
-	NULL,
 	amd_29xx040_read_array,
 };
