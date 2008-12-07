@@ -3,6 +3,8 @@
    * data/analog/bf518/bf518, data/analog/bf518/STEPPINGS, data/analog/PARTS,
      data/Makefile.am: Initial support for BF518 processors.
 
+   * data/analog/bf548/STEPPINGS: Add 0.3 silicon revision.
+
 2008-12-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c,
