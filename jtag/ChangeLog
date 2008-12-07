@@ -5,6 +5,8 @@
 
    * data/analog/bf548/STEPPINGS: Add 0.3 silicon revision.
 
+   * data/analog/PARTS: Add BF534 and BF548M ids.
+
 2008-12-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c,
