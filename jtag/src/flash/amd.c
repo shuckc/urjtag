@@ -346,6 +346,9 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			case 0x2249:
 			printf( "MX29LV160B" );
 			break;
+			case 0x22CB:
+			printf( "MX29LV640B" );
+			break;
 			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
 			break;
@@ -573,7 +576,7 @@ flash_driver_t amd_32_flash_driver = {
 flash_driver_t amd_16_flash_driver = {
 	2, /* buswidth */
 	N_("AMD/Fujitsu Standard Command Set"),
-	N_("supported: AMD 29LV800B, S92GLxxxN; 1x16 Bit"),
+	N_("supported: AMD 29LV800B, S92GLxxxN; MX29LV640B; 1x16 Bit"),
 	amd_flash_autodetect16,
 	amd_flash_print_info,
 	amd_flash_erase_block,

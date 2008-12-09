@@ -5,6 +5,9 @@
      [ 2412479 ] neufbox4 support. BCM6358 data files (by
      Julien Aube, slightly modified)
 
+   * src/flash/amd.c: [ 2412481 ] neufbox4 support: MX29LV640B
+     recognition (by Julien Aube)
+
 2008-12-08 Julien Aube  <obconseil@gmail.com>
 
    * src/bus/ejtag_dma.c, src/bus/Makefile.am, src/bus/buses.c,
