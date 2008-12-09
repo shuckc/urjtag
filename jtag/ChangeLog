@@ -1,7 +1,14 @@
+2008-12-09  Kolja Waschk <kawk>
+
+   * data/broadcom/bcm6358, data/broadcom/bcm6358/bcm6358,
+     data/broadcom/bcm6358/STEPPINGS, data/broadcom/PARTS:
+     [ 2412479 ] neufbox4 support. BCM6358 data files (by
+     Julien Aube, slightly modified)
+
 2008-12-08 Julien Aube  <obconseil@gmail.com>
 
-   * src/bus/ejtag_dma.c:
-     Support for ejtag in DMA mode.
+   * src/bus/ejtag_dma.c, src/bus/Makefile.am, src/bus/buses.c,
+	 src/bus/buses.h, configure.ac: [ 2412486 ] Support for ejtag in DMA mode.
 
 2008-12-07  Mike Frysinger  <vapier@gentoo.org>
 
