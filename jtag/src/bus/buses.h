@@ -59,5 +59,5 @@ extern const bus_driver_t sharc_21065L_bus;
 extern const bus_driver_t slsup3_bus;
 extern const bus_driver_t tx4925_bus;
 extern const bus_driver_t zefant_xs3_bus;
-
+extern const bus_driver_t ejtag_dma_bus;
 #endif /* BUSES_H */

@@ -1,3 +1,8 @@
+2008-12-08 Julien Aube  <obconseil@gmail.com>
+
+   * src/bus/ejtag_dma.c:
+     Support for ejtag in DMA mode.
+
 2008-12-07  Mike Frysinger  <vapier@gentoo.org>
 
    * data/analog/bf518/bf518, data/analog/bf518/STEPPINGS, data/analog/PARTS,

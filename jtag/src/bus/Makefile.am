@@ -86,6 +86,10 @@ if ENABLE_BUS_EJTAG
 libbus_a_SOURCES += ejtag.c
 endif
 
+if ENABLE_BUS_EJTAG_DMA
+libbus_a_SOURCES += ejtag_dma.c
+endif
+
 if ENABLE_BUS_FJMEM
 libbus_a_SOURCES += fjmem.c
 endif

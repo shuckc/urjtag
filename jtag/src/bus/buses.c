@@ -68,6 +68,7 @@ const bus_driver_t *bus_drivers[] = {
 #endif
 #ifdef ENABLE_BUS_EJTAG
 	&ejtag_bus,
+	&ejtag_dma_bus,
 #endif
 #ifdef ENABLE_BUS_FJMEM
 	&fjmem_bus,
