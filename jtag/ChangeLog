@@ -1,3 +1,7 @@
+2008-12-16  Kolja Waschk <kawk>
+
+   * data/Makefile.am: Added bcm6358 files, thanks Anselmo Luginbuehl
+
 2008-12-09  Kolja Waschk <kawk>
 
    * data/broadcom/bcm6358, data/broadcom/bcm6358/bcm6358,
@@ -11,7 +15,7 @@
 2008-12-08 Julien Aube  <obconseil@gmail.com>
 
    * src/bus/ejtag_dma.c, src/bus/Makefile.am, src/bus/buses.c,
-	 src/bus/buses.h, configure.ac: [ 2412486 ] Support for ejtag in DMA mode.
+     src/bus/buses.h, configure.ac: [ 2412486 ] Support for ejtag in DMA mode.
 
 2008-12-07  Mike Frysinger  <vapier@gentoo.org>
 
