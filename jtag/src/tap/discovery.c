@@ -38,6 +38,8 @@
 #define	TEST_COUNT		1
 #define	TEST_THRESHOLD		100		/* in % */
 
+#undef VERY_LOW_LEVEL_DEBUG
+
 int
 detect_register_size( chain_t *chain )
 {
@@ -70,14 +72,20 @@ detect_register_size( chain_t *chain )
 				tap_shift_register( chain, rz, NULL, 0 );
 				tap_shift_register( chain, rpat, rout, 0 );
 
+#ifdef VERY_LOW_LEVEL_DEBUG
+				printf(">>> %s\n", register_get_string(rz));
+				printf("  + %s\n", register_get_string(rpat));
+#endif
 				tdo = register_all_bits_same_value(rout);
 				if(tdo_stuck == -2) tdo_stuck = tdo;
 				if(tdo_stuck != tdo) tdo_stuck = -1;
 
 				register_shift_right( rout, len );
-
 				if (register_compare( rpat, rout ) == 0)
 					ok++;
+#ifdef VERY_LOW_LEVEL_DEBUG
+				printf("  = %s => %d\n", register_get_string(rout), ok);
+#endif
 			}
 			if (100 * ok / TEST_COUNT < TEST_THRESHOLD) {
 				ok = 0;

@@ -1,3 +1,7 @@
+2008-12-17  Kolja Waschk <kawk>
+
+   * src/tap/discovery.c: Optional (#ifdef) printf for discovery debugging
+
 2008-12-16  Kolja Waschk <kawk>
 
    * data/Makefile.am: Added bcm6358 files, thanks Anselmo Luginbuehl
