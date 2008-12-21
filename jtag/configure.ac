@@ -243,6 +243,45 @@ AS_IF([test "x$HAVELIBFTD2XX" = xyes], [
 AC_SUBST(FTD2XXLIB)
 
 
+dnl Use InpOut I/O library?
+dnl http://www.highrez.co.uk/Downloads/InpOut32/default.htm
+
+AC_ARG_WITH([inpout],
+  [AS_HELP_STRING([--with-inpout],
+    [use InpOutXX for parallel port access on Windows])],
+    [], [with_inpout=check])
+
+INPOUTXX=
+AS_IF([test "x$with_inpout" = xyes -o "x$with_inpout" = xcheck], [
+  AC_CHECK_LIB([inpout32], [Out32], [
+    HAVEINPOUTXX=yes
+    LIBS="-linpout32 $LIBS"
+  ],[
+    AC_MSG_WARN([*** InpOutXX libray not found])
+  ])
+],[
+  AS_IF([test "x$with_inpout" != xno], [
+    HAVEINPOUTXX=yes
+    AS_IF([test -d "$with_inpout/Win32"], [
+        INPOUTXX="$with_inpout/Win32/inpout32.lib"
+        CFLAGS="$CFLAGS -I$with_inpout/Win32"
+      ],[
+        INPOUTXX="$with_inpout/inpout32.lib"
+        CFLAGS="$CFLAGS -I$with_inpout"
+      ])
+  ],)
+])
+AS_IF([test "x$HAVEINPOUTXX" = xyes], [
+  AM_CONDITIONAL(HAVE_INPOUTXX, true)
+  AC_DEFINE(HAVE_INPOUTXX, 1, [define if you have libinpout])
+],[
+  AM_CONDITIONAL(HAVE_INPOUTXX, false)
+])
+AC_SUBST(INPOUTXX)
+
+
+
+
 CFLAGS="$CFLAGS -Wall"
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
 
@@ -592,6 +631,11 @@ AS_IF([test ${HAVELIBFTD2XX:-no} != no], [
 ], [
    FLAG_HAVELIBFTD2XX=no
 ])
+AS_IF([test ${HAVEINPOUTXX:-no} != no], [
+   FLAG_HAVEINPOUTXX=yes
+], [
+   FLAG_HAVEINPOUTXX=no
+])
 AS_IF([test ${svf:-false} != false], [
    FLAG_SVF=yes
 ], [
@@ -609,6 +653,7 @@ jtag is now configured for
   Detected libusb      : $FLAG_HAVELIBUSB
   Detected libftdi     : $FLAG_HAVELIBFTDI
   Detected libftd2xx   : $FLAG_HAVELIBFTD2XX
+  Detected inpout32    : $FLAG_HAVEINPOUTXX
   Build SVF player     : $FLAG_SVF
   Build BSDL subsystem : $FLAG_BSDL
   Bus drivers          : $enabled_bus_drivers

@@ -1,3 +1,8 @@
+2008-12-21  Kolja Waschk <kawk>
+
+   * configure.ac, src/tap/parport/direct.c: added detection of InpOut32
+     library and support for using it for I/O port access even under Vista
+
 2008-12-17  Kolja Waschk <kawk>
 
    * src/tap/discovery.c: Optional (#ifdef) printf for discovery debugging

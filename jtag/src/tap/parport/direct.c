@@ -32,7 +32,14 @@
 #include "parport.h"
 #include "cable.h"
 
-#if defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
+#if defined(WIN32) && defined(HAVE_INPOUTXX)
+void    _stdcall Out32(short PortAddress, short data);
+short   _stdcall Inp32(short PortAddress);
+
+#define inb(p) Inp32(p)
+#define outb(d,p) Out32(p,d)
+
+#elif defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
 
 #if defined(HAVE_IOPERM)
 #include <sys/io.h>
