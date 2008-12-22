@@ -62,6 +62,38 @@ extend_cmd_buffer( cx_cmd_t *cmd )
 
 
 /*****************************************************************************
+ * cx_cmd_space( cmd, max_len )
+ *
+ * Return the difference between actually allocated bytes in the buffer of
+ * the current last command and max_len.  If there are already more bytes
+ * allocated than max_len, this function will return zero.
+ *
+ * cmd      : pointer to cx_cmd_t struct
+ * max_len  : upper limit for the space to allocate
+ *
+ * Return value:
+ * 0 : No space left
+ * >0: Number of bytes left
+ *
+ ****************************************************************************/
+int
+cx_cmd_space( cx_cmd_root_t *cmd_root, int max_len )
+{
+  int n;
+  cx_cmd_t *cmd = cmd_root->last;
+
+  if (!cmd)
+    return max_len;
+
+  n = max_len - cmd->buf_pos;
+  if (n < 0)
+    return 0;
+
+  return n;
+}
+
+
+/*****************************************************************************
  * cx_cmd_push( cmd, d )
  *
  * Pushes the byte value d to the buffer of the current last command.

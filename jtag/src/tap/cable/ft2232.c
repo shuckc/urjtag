@@ -931,6 +931,12 @@ ft2232_clock_schedule( cable_t *cable, int tms, int tdi, int n )
   cx_cmd_queue( cmd_root, 0 );
   while (n > 0)
   {
+    if (cx_cmd_space( cmd_root, 4096 ) < 3)
+    {
+      cx_xfer( cmd_root, &imm_cmd, cable, COMPLETELY );
+      cx_cmd_queue( cmd_root, 0 );
+    }
+
     /* Clock Data to TMS/CS Pin (no Read) */
     cx_cmd_push( cmd_root, MPSSE_WRITE_TMS |
                  MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG );

@@ -1,5 +1,10 @@
 2008-12-21  Kolja Waschk <kawk>
 
+   * src/tap/cable/ft2232.c, src/tap/cable/cmd_xfer.c,
+     src/tap/cable/cmd_xfer.h: limit maximum number of bytes queued 
+     into one cmd buffer. Should fix problems with high clocks count for
+     SVF runtest execution (Bug 2456024 - FTD2XX fails with certain SVF file)
+
    * configure.ac, src/tap/parport/direct.c: added detection of InpOut32
      library and support for using it for I/O port access even under Vista
 
