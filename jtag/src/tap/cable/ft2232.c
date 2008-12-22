@@ -203,8 +203,6 @@ ft2232_set_frequency( cable_t *cable, uint32_t new_frequency )
   if (!new_frequency || new_frequency > FT2232_MAX_TCK_FREQ)
     new_frequency = FT2232_MAX_TCK_FREQ;
 
-  cable->frequency = new_frequency;
-
   /* update ft2232 frequency if cable setting changed */
   if (new_frequency != params->mpsse_frequency)
   {
@@ -230,6 +228,7 @@ ft2232_set_frequency( cable_t *cable, uint32_t new_frequency )
     cx_xfer( cmd_root, &imm_cmd, cable, COMPLETELY );
 
     params->mpsse_frequency = FT2232_MAX_TCK_FREQ / (div + 1);
+    cable->frequency = params->mpsse_frequency;
   }
 }
 

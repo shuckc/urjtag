@@ -1,5 +1,8 @@
 2008-12-22  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/tap/cable/ft2232.c:
+     set cable frequency to real FT2232 frequency
+
    * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c,
      include/usbconn/libftdx.h, src/tap/cable/ft2232.c:
      increased MPSSE buffer size from 4k to 64k
