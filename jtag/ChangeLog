@@ -1,5 +1,7 @@
 2008-12-21  Kolja Waschk <kawk>
 
+   * src/svf/svf.c: Fix 2456021 - SVF compare_tdo flaw
+
    * src/tap/cable/ft2232.c, src/tap/cable/cmd_xfer.c,
      src/tap/cable/cmd_xfer.h: limit maximum number of bytes queued 
      into one cmd buffer. Should fix problems with high clocks count for

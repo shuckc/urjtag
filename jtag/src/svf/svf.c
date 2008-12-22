@@ -437,7 +437,7 @@ svf_compare_tdo(parser_priv_t *priv, char *tdo, char *mask, tap_register *reg, Y
 
   mismatch = -1;
   for (pos = 0; pos < reg->len; pos++)
-    if ((svf_hex2dec(tdo_bit[pos]) ^ reg->string[pos]) & svf_hex2dec(mask_bit[pos]))
+    if ((tdo_bit[pos] != reg->string[pos]) && (mask_bit[pos] == '1'))
       mismatch = pos;
 
   if (mismatch >= 0) {
