@@ -24,6 +24,7 @@
 #define _USBCONN_LIBFTDX_H 1
 
 #define FTDX_MAXSEND 4096
+#define FTDX_MAXSEND_MPSSE (64 * 1024)
 
 /* Maximum chunk to receive from ftdi/ftd2xx driver.
    Larger values might speed up comm, but there's an upper limit

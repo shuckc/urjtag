@@ -461,6 +461,11 @@ usbconn_ftdi_mpsse_open( usbconn_t *conn )
   r = seq_reset( fc );
   if (r >= 0) r = seq_purge( fc, 1, 0 );
 
+  if (r >= 0) if ((r = ftdi_write_data_set_chunksize( fc, FTDX_MAXSEND_MPSSE )) < 0)
+    puts( ftdi_get_error_string( fc ) );
+  if (r >= 0) if ((r = ftdi_read_data_set_chunksize( fc, FTDX_MAXSEND_MPSSE )) < 0)
+    puts( ftdi_get_error_string( fc ) );
+
 #ifdef LIBFTDI_UNIMPLEMENTED
   if (r >= 0) if ((r = ftdi_set_event_char( fc, 0, 0 )) < 0)
     puts( ftdi_get_error_string( fc ) );

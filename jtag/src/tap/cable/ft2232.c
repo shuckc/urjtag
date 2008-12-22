@@ -931,8 +931,11 @@ ft2232_clock_schedule( cable_t *cable, int tms, int tdi, int n )
   cx_cmd_queue( cmd_root, 0 );
   while (n > 0)
   {
-    if (cx_cmd_space( cmd_root, 4096 ) < 3)
+    if (cx_cmd_space( cmd_root, FTDX_MAXSEND_MPSSE ) < 4)
     {
+      /* no space left for Clock Data plus Send Immediate
+         transfer queued commands to device and read receive data
+         to internal buffer */
       cx_xfer( cmd_root, &imm_cmd, cable, COMPLETELY );
       cx_cmd_queue( cmd_root, 0 );
     }
@@ -1054,6 +1057,10 @@ ft2232_transfer_schedule( cable_t *cable, int len, char *in, char *out )
     /* reduce chunkbytes to the maximum amount we can receive in one step */
     if (out && chunkbytes > FTDX_MAXRECV)
       chunkbytes = FTDX_MAXRECV;
+    /* reduce chunkbytes to the maximum amount that fits into one buffer
+       for performance reasons */
+    if (chunkbytes > FTDX_MAXSEND_MPSSE - 4)
+      chunkbytes = FTDX_MAXSEND_MPSSE - 4;
     /* restrict chunkbytes to the maximum amount that can be transferred
        for one single operation */
     if (chunkbytes > (1 << 16))

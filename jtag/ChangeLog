@@ -1,3 +1,10 @@
+2008-12-22  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c,
+     include/usbconn/libftdx.h, src/tap/cable/ft2232.c:
+     increased MPSSE buffer size from 4k to 64k
+     mitigates performance decrease for mid-sized clock operations
+
 2008-12-21  Kolja Waschk <kawk>
 
    * src/svf/svf.c: Fix 2456021 - SVF compare_tdo flaw

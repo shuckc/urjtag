@@ -432,6 +432,9 @@ usbconn_ftd2xx_mpsse_open( usbconn_t *conn )
   if (status == FT_OK) if ((status =  FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
     printf( _("%s(): Can't purge RX buffer.\n"), __FUNCTION__ );
 
+  if (status == FT_OK) if ((status = FT_SetUSBParameters( fc, FTDX_MAXSEND_MPSSE, FTDX_MAXSEND_MPSSE )) != FT_OK)
+    printf( _("%s(): Can't set USB parameters.\n"), __FUNCTION__ );
+
   if (status == FT_OK) if ((status = FT_SetChars( fc, 0, 0, 0, 0 )) != FT_OK)
     printf( _("%s(): Can't set special characters.\n"), __FUNCTION__ );
 
