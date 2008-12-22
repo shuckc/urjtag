@@ -159,6 +159,16 @@ usbblaster_clock_schedule( cable_t *cable, int tms, int tdi, int n )
 			int chunkbytes = (m >> 3);
 			if(chunkbytes > 63) chunkbytes = 63;
 
+			if (cx_cmd_space( cmd_root, FTDX_MAXSEND ) < chunkbytes+1)
+			{
+				/* no space left for next clocking command
+					 transfer queued commands to device and read receive data
+					 to internal buffer */
+				cx_xfer( cmd_root, NULL, cable, COMPLETELY );
+				cx_cmd_queue( cmd_root, 0 );
+			}
+
+
 			cx_cmd_push( cmd_root, (1<<SHMODE)|(0<<READ)|chunkbytes );
 
 			for (i=0; i<chunkbytes; i++)

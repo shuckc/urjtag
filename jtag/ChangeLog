@@ -1,5 +1,9 @@
 2008-12-22  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+   * src/tap/cable/usbblaster.c:
+     limit maximum number of bytes queued, equivalent for
+     Bug 2456024 - FTD2XX fails with certain SVF file
+
    * src/tap/cable/ft2232.c:
      set cable frequency to real FT2232 frequency
 
