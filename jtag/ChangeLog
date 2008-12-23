@@ -1,3 +1,7 @@
+2008-12-23  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+   * src/svf/svf.c: added debug output for svf_compare_tdo()
+
 2008-12-23  Kolja Waschk <kawk>
 
    * src/tap/parport/direct.c, configure.ac, doc/UrJTAG.txt:

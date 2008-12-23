@@ -54,6 +54,11 @@
 #include "fclock.h"
 #endif
 
+
+/* define for debug messages */
+#undef DEBUG
+
+
 int svfparse(parser_priv_t *priv_data, chain_t *chain);
 
 
@@ -449,6 +454,13 @@ svf_compare_tdo(parser_priv_t *priv, char *tdo, char *mask, tap_register *reg, Y
               loc->last_line+1, 
               loc->last_column+1 );
     }
+
+#ifdef DEBUG
+    printf( "Expected : %s\n", tdo_bit );
+    printf( "Mask     : %s\n", mask_bit );
+    printf( "TDO data : %s\n", reg->string );
+#endif
+
     if (priv->svf_stop_on_mismatch)
       result = 0;
   }
