@@ -26,30 +26,37 @@
 
 #include "sysdep.h"
 
+#ifdef ENABLE_LOWLEVEL_DIRECT
+
 #include <stdlib.h>
 #include <string.h>
 
 #include "parport.h"
 #include "cable.h"
 
-#if defined(WIN32) && defined(HAVE_INPOUTXX)
-void    _stdcall Out32(short PortAddress, short data);
-short   _stdcall Inp32(short PortAddress);
+#if defined(HAVE_INPOUTXX)
 
-#define inb(p) Inp32(p)
-#define outb(d,p) Out32(p,d)
+HINSTANCE inpout32_dll_handle = NULL;
 
-#elif defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM)
+typedef short _stdcall (*inpfuncPtr)(short p);
+typedef void  _stdcall (*outfuncPtr)(short p, short d);
 
-#if defined(HAVE_IOPERM)
+inpfuncPtr Inp32;
+outfuncPtr Out32;
+
+#define inb(p) (Inp32)(p)
+#define outb(d,p) (Out32)(p,d)
+
+#elif defined(HAVE_IOPERM)
+
 #include <sys/io.h>
+
 #elif defined(HAVE_I386_SET_IOPERM)
+
 #include <sys/types.h>
 #include <machine/sysarch.h>
 #include <err.h>
-#endif
 
-#ifdef HAVE_I386_SET_IOPERM
 static __inline int
 ioperm( unsigned long from, unsigned long num, int permit )
 {
@@ -122,7 +129,27 @@ direct_parport_alloc( unsigned int port )
 	parport_t *parport = malloc( sizeof *parport );
 	port_node_t *node = malloc( sizeof *node );
 
-	if (!node || !parport || !params) {
+#if defined(HAVE_INPOUTXX)
+	if (inpout32_dll_handle == NULL)
+	{
+		inpout32_dll_handle = LoadLibrary("inpout32.dll");
+	}
+	if (inpout32_dll_handle == NULL)
+	{
+		fprintf(stderr, _("Couldn't load InpOut32.dll; maybe not installed?\n"));
+	}
+	else
+	{
+		Inp32 = (inpfuncPtr) GetProcAddress(inpout32_dll_handle, "Inp32");
+		Out32 = (outfuncPtr) GetProcAddress(inpout32_dll_handle, "Out32");
+	}
+
+	if (!node || !parport || !params || !inpout32_dll_handle)
+#else
+	if (!node || !parport || !params)
+#endif
+        {
+
 		free( node );
 		free( parport );
 		free( params );
@@ -160,6 +187,11 @@ direct_parport_free( parport_t *port )
 
 	free( port->params );
 	free( port );
+
+#if defined(HAVE_INPOUTXX)
+	if (inpout32_dll_handle != NULL)
+		FreeLibrary(inpout32_dll_handle);
+#endif
 }
 
 parport_t *
@@ -210,15 +242,23 @@ direct_connect( const char **par, int parnum )
 static int
 direct_open( parport_t *parport )
 {
+#ifdef HAVE_INPOUTXX
+	return 0;
+#else
 	unsigned int port = ((direct_params_t *) parport->params)->port;
 	return ((port + 3 <= 0x400) && ioperm( port, 3, 1 )) || ((port + 3 > 0x400) && iopl( 3 ));
+#endif
 }
 
 static int
 direct_close( parport_t *parport )
 {
+#if defined(HAVE_INPOUTXX)
+	return 0;
+#else
 	unsigned int port = ((direct_params_t *) parport->params)->port;
 	return (port + 3 <= 0x400) ? ioperm( port, 3, 0 ) : iopl( 0 );
+#endif
 }
 
 static int
@@ -263,4 +303,4 @@ parport_driver_t direct_parport_driver = {
 	direct_set_control
 };
 
-#endif /* defined(HAVE_IOPERM) || defined(HAVE_I386_SET_IOPERM) */
+#endif /* ENABLE_LOWLEVEL_DIRECT */

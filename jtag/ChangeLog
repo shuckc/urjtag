@@ -1,5 +1,10 @@
 2008-12-23  Kolja Waschk <kawk>
 
+   * src/tap/parport/direct.c, configure.ac, doc/UrJTAG.txt:
+     Dynamically load the InpOut32.dll for parallel port access. Tested
+     in MinGW environment (Cygwin GCC with -mno-cygwin flag), and 
+     documented how to compile it. Could build a distributable EXE now.
+
    * src/cmd/usleep.c, sysdep.h: usleep() is declared in
      unistd.h, also present in modern MinGW environments.
      Defining it in sysdep.h collides with unistd.h. 

@@ -246,40 +246,22 @@ AC_SUBST(FTD2XXLIB)
 dnl Use InpOut I/O library?
 dnl http://www.highrez.co.uk/Downloads/InpOut32/default.htm
 
-AC_ARG_WITH([inpout],
-  [AS_HELP_STRING([--with-inpout],
-    [use InpOutXX for parallel port access on Windows])],
-    [], [with_inpout=check])
+AC_ARG_WITH([inpout32],
+  [AS_HELP_STRING([--with-inpout32],
+    [use InpOut32.dll for parallel port access on Windows])],
+    [], [with_inpout32=no])
 
-INPOUTXX=
-AS_IF([test "x$with_inpout" = xyes -o "x$with_inpout" = xcheck], [
-  AC_CHECK_LIB([inpout32], [Out32], [
-    HAVEINPOUTXX=yes
-    LIBS="-linpout32 $LIBS"
-  ],[
-    AC_MSG_WARN([*** InpOutXX libray not found])
-  ])
-],[
-  AS_IF([test "x$with_inpout" != xno], [
-    HAVEINPOUTXX=yes
-    AS_IF([test -d "$with_inpout/Win32"], [
-        INPOUTXX="$with_inpout/Win32/inpout32.lib"
-        CFLAGS="$CFLAGS -I$with_inpout/Win32"
-      ],[
-        INPOUTXX="$with_inpout/inpout32.lib"
-        CFLAGS="$CFLAGS -I$with_inpout"
-      ])
-  ],)
-])
-AS_IF([test "x$HAVEINPOUTXX" = xyes], [
+case $host in
+  *cygwin*|*mingw*) ;;
+  *) with_inpout32=no ;;
+esac
+
+AS_IF([test "x$with_inpout32" = xyes], [
   AM_CONDITIONAL(HAVE_INPOUTXX, true)
-  AC_DEFINE(HAVE_INPOUTXX, 1, [define if you have libinpout])
+  AC_DEFINE(HAVE_INPOUTXX, 1, [define if you have inpout32.dll])
 ],[
   AM_CONDITIONAL(HAVE_INPOUTXX, false)
 ])
-AC_SUBST(INPOUTXX)
-
-
 
 
 CFLAGS="$CFLAGS -Wall"
@@ -560,7 +542,7 @@ AS_IF([test "x$HAVE_LINUX_PPDEV_H" != "xyes"], [
 AS_IF([test "x$HAVE_DEV_PPBUS_PPI_H" != "xyes"], [
     lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ppi//"`
 ])
-AS_IF([test "x$HAVE_IOPERM" != "xyes" -a "x$HAVE_I386_SET_IOPERM" != "xyes"], [
+AS_IF([test "x$HAVE_IOPERM" != "xyes" -a "x$HAVE_I386_SET_IOPERM" != "xyes" -a "x$HAVE_INPOUTXX" != "xyes" ], [
     lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/direct//"`
 ])
 #
