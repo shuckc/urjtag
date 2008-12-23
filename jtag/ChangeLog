@@ -1,3 +1,9 @@
+2008-12-23  Kolja Waschk <kawk>
+
+   * src/cmd/usleep.c, sysdep.h: usleep() is declared in
+     unistd.h, also present in modern MinGW environments.
+     Defining it in sysdep.h collides with unistd.h. 
+
 2008-12-22  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/tap/cable/usbblaster.c:

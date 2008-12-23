@@ -48,7 +48,6 @@
 #include <windows.h>
 #define geteuid() 0
 #define getuid() 0
-#define usleep(x) Sleep(x/1E3)
 #endif
 
 #endif /* SYSDEP_H */
