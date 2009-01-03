@@ -1,3 +1,10 @@
+2009-01-03  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * configure.ac, src/bus/bscoach.c, src/bus/buses.c,
+    src/bus/buses.h, src/bus/Makefile.am:
+    [ 2187115 ] Bus driver for Goepel Boundary Scan Coach
+    (by Markus Schneider)
+
 2008-12-23  Arnim Laeuger  <arniml@users.sourceforge.net>
 
    * src/svf/svf.c: added debug output for svf_compare_tdo()

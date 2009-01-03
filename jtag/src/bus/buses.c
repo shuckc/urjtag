@@ -66,6 +66,9 @@ const bus_driver_t *bus_drivers[] = {
 #ifdef ENABLE_BUS_BF561_EZKIT
 	&bf561_ezkit_bus,
 #endif
+#ifdef ENABLE_BUS_BSCOACH
+	&bscoach_bus,
+#endif
 #ifdef ENABLE_BUS_EJTAG
 	&ejtag_bus,
 	&ejtag_dma_bus,
