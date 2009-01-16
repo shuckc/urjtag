@@ -142,6 +142,7 @@ jtag_parse_stream( chain_t *chain, FILE *f )
 		if (clip && !found_comment)
 			fprintf(stdout, "Warning: line %d exceeds %d characters, clipped\n", lnr, (int)sizeof(inputline) - 1);  
 		go = jtag_parse_line(chain, inputline);
+		chain_flush( chain );
 	}
 	while (go && c != EOF);
 	

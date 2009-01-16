@@ -1,3 +1,8 @@
+2009-01-16  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * src/cmd/parse.c: flush_chain() between commands read from file
+    [ 2499176 ] No chain_flush() when executing commands from file
+
 2009-01-03  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * configure.ac, src/bus/bscoach.c, src/bus/buses.c,
