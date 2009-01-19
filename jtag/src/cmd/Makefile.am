@@ -55,6 +55,7 @@ libcmd_a_SOURCES = \
 	endian.c \
 	parse.c \
 	peekpoke.c \
+	pod.c \
 	readmem.c \
 	writemem.c \
 	flashmem.c \

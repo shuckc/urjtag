@@ -816,6 +816,7 @@ of the TAP controller(s) and registers in the chain:
 *dr*::          display or set active data register for a part
 *instruction*:: change active instruction for a part or declare new instruction
 *get*::         get external signal value
+*pod*::         low level direct access to POD signals like TRST; use with care
 *scan*::        detect changes on input pins of current part
 *set*::         set external signal value
 *shift*::       shift data/instruction registers through JTAG chain

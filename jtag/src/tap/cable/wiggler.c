@@ -78,6 +78,7 @@ char *std_wgl_map = xstr(TDO)   ","
 
 /* private parameters of this cable driver */
 typedef struct {
+	int signals;
 	int trst_lvl;
 	int srst_act, srst_inact;
 	int tms_act, tms_inact;
@@ -90,6 +91,7 @@ typedef struct {
 
 
 /* access macros for the parameters */
+#define	PRM_SIGNALS(cable)     ((wiggler_params_t *) cable->params)->signals
 #define	PRM_TRST_LVL(cable)    ((wiggler_params_t *) cable->params)->trst_lvl
 #define	PRM_SRST_ACT(cable)    ((wiggler_params_t *) cable->params)->srst_act
 #define	PRM_SRST_INACT(cable)  ((wiggler_params_t *) cable->params)->srst_inact
@@ -245,6 +247,8 @@ wiggler_init( cable_t *cable )
 	} else
 		PRM_TRST_LVL(cable) = data & (PRM_TRST_ACT(cable) | PRM_TRST_INACT(cable));
 
+	PRM_SIGNALS (cable) = (PRM_TRST_LVL(cable) == PRM_TRST_ACT(cable)) ? CS_TRST : 0;
+
 	return 0;
 }
 
@@ -270,6 +274,10 @@ wiggler_clock( cable_t *cable, int tms, int tdi, int n )
 				PRM_UNUSED_BITS(cable) );
 		cable_wait( cable );
 	}
+
+	PRM_SIGNALS (cable) &= ~(CS_TDI | CS_TMS);
+	if (tms) PRM_SIGNALS(cable) |= CS_TMS;
+	if (tdi) PRM_SIGNALS(cable) |= CS_TDI;
 }
 
 static int
@@ -279,24 +287,37 @@ wiggler_get_tdo( cable_t *cable )
 			PRM_TCK_INACT(cable) |
 			PRM_UNUSED_BITS(cable) );
 	cable_wait( cable );
+
 	return (parport_get_status( cable->link.port ) & (PRM_TDO_ACT(cable) | PRM_TDO_INACT(cable))) ^
-	PRM_TDO_ACT(cable) ? 0 : 1;
+				PRM_TDO_ACT(cable) ? 0 : 1;
 }
 
 static int
-wiggler_set_trst( cable_t *cable, int trst )
+wiggler_set_signal( cable_t *cable, int mask, int val )
 {
-	PRM_TRST_LVL(cable) = trst ? PRM_TRST_ACT(cable) : PRM_TRST_INACT(cable);
+	int prev_sigs = PRM_SIGNALS(cable);
 
-	parport_set_data( cable->link.port, PRM_TRST_LVL(cable) |
-			PRM_UNUSED_BITS(cable) );
-	return PRM_TRST_LVL(cable) ^ PRM_TRST_ACT(cable) ? 0 : 1;
+	mask &= (CS_TMS | CS_TDI | CS_TCK | CS_TRST); // Only these can be modified
+
+	if (mask != 0)
+	{
+		int sigs = (prev_sigs & ~mask) | (val & mask);
+		PRM_TRST_LVL(cable) = ((sigs & CS_TRST) ? PRM_TRST_ACT(cable) : PRM_TRST_INACT(cable));
+		int data = PRM_UNUSED_BITS(cable) | PRM_TRST_LVL(cable);
+		data |= ((sigs & CS_TCK) ? PRM_TCK_ACT(cable) : PRM_TCK_INACT(cable));
+		data |= ((sigs & CS_TMS) ? PRM_TMS_ACT(cable) : PRM_TMS_INACT(cable));
+		data |= ((sigs & CS_TDI) ? PRM_TDI_ACT(cable) : PRM_TDI_INACT(cable));
+		parport_set_data( cable->link.port, data );
+		PRM_SIGNALS(cable) = sigs;
+	}
+
+	return prev_sigs;
 }
 
 static int
-wiggler_get_trst( cable_t *cable )
+wiggler_get_signal( cable_t *cable, pod_sigsel_t sig )
 {
-	return PRM_TRST_LVL(cable) ^ PRM_TRST_ACT(cable) ? 0 : 1;
+	return (PRM_SIGNALS(cable) & sig) ? 1 : 0;
 }
 
 static void
@@ -345,8 +366,8 @@ cable_driver_t wiggler_cable_driver = {
 	wiggler_clock,
 	wiggler_get_tdo,
 	generic_transfer,
-	wiggler_set_trst,
-	wiggler_get_trst,
+	wiggler_set_signal,
+	wiggler_get_signal,
 	generic_flush_one_by_one,
 	wiggler_help
 };
@@ -363,8 +384,8 @@ cable_driver_t igloo_cable_driver = {
 	wiggler_clock,
 	wiggler_get_tdo,
 	generic_transfer,
-	wiggler_set_trst,
-	wiggler_get_trst,
+	wiggler_set_signal,
+	wiggler_get_signal,
 	generic_flush_one_by_one,
 	wiggler_help
 };

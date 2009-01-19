@@ -978,7 +978,7 @@ svf_trst(chain_t *chain, parser_priv_t *priv, int trst_mode)
     printf( _("Warning %s: unimplemented mode '%s' for TRST\n"), "svf",
             unimplemented_mode);
   else
-    cable_set_trst(chain->cable, trst_cable);
+    cable_set_signal(chain->cable, CS_TRST, trst_cable ? CS_TRST : 0);
 
   return(1);
 }

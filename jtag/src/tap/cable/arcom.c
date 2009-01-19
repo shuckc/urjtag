@@ -60,9 +60,9 @@ arcom_init( cable_t *cable )
 	if ((data = parport_get_data( cable->link.port )) < 0) {
 		if (parport_set_data( cable->link.port, 1 << TRST ))
 			return -1;
-		PARAM_TRST(cable) = 1;
+		PARAM_SIGNALS(cable) = CS_TRST;
 	} else
-		PARAM_TRST(cable) = (data >> TRST) & 1;
+		PARAM_SIGNALS(cable) = ((data >> TRST) && 1) ? CS_TRST : 0;
 
         return 0;
 }
@@ -71,33 +71,57 @@ static void
 arcom_clock( cable_t *cable, int tms, int tdi, int n )
 {
 	int i;
+	int trst = (PARAM_SIGNALS(cable) & CS_TRST) ? 1 : 0;
 
 	tms = tms ? 1 : 0;
 	tdi = tdi ? 1 : 0;
 
 	for (i = 0; i < n; i++) {
-		parport_set_data( cable->link.port, (PARAM_TRST(cable) << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_data( cable->link.port, (trst << TRST) | (0 << TCK) | (tms << TMS) | (tdi << TDI) );
 		cable_wait( cable );
-		parport_set_data( cable->link.port, (PARAM_TRST(cable) << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
+		parport_set_data( cable->link.port, (trst << TRST) | (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 		cable_wait( cable );
 	}
+
+	PARAM_SIGNALS(cable) &= CS_TRST;
+	PARAM_SIGNALS(cable) |= CS_TCK;
+	PARAM_SIGNALS(cable) |= tms ? CS_TMS : 0;
+	PARAM_SIGNALS(cable) |= tdi ? CS_TDI : 0;
 }
 
 static int
 arcom_get_tdo( cable_t *cable )
 {
-	parport_set_data( cable->link.port, (PARAM_TRST(cable) << TRST) | (0 << TCK) );
+	int trst = (PARAM_SIGNALS(cable) & CS_TRST) ? 1 : 0;
+
+	parport_set_data( cable->link.port, (trst << TRST) | (0 << TCK) );
+	PARAM_SIGNALS(cable) &= ~(CS_TDI | CS_TCK | CS_TMS);
+
 	cable_wait( cable );
+
 	return (parport_get_status( cable->link.port ) >> TDO) & 1;
 }
 
 static int
-arcom_set_trst( cable_t *cable, int trst )
+arcom_set_signal( cable_t *cable, int mask, int val )
 {
-	PARAM_TRST(cable) = trst ? 1 : 0;
+	int prev_sigs = PARAM_SIGNALS(cable);
 
-	parport_set_data( cable->link.port, PARAM_TRST(cable) << TRST );
-	return PARAM_TRST(cable);
+	mask &= (CS_TDI | CS_TCK | CS_TMS | CS_TRST); // only these can be modified
+
+	if (mask != 0)
+	{
+		int data = 0;
+		int sigs = (prev_sigs & ~mask) | (val & mask);
+		data |= (sigs & CS_TDI)  ? (1 << TDI)  : 0;
+		data |= (sigs & CS_TCK)  ? (1 << TCK)  : 0;
+		data |= (sigs & CS_TMS)  ? (1 << TMS)  : 0;
+		data |= (sigs & CS_TRST) ? (1 << TRST) : 0;
+		parport_set_data( cable->link.port, data );
+		PARAM_SIGNALS(cable) = sigs;
+	}
+
+	return prev_sigs;
 }
 
 cable_driver_t arcom_cable_driver = {
@@ -112,8 +136,8 @@ cable_driver_t arcom_cable_driver = {
 	arcom_clock,
 	arcom_get_tdo,
 	generic_transfer,
-	arcom_set_trst,
-	generic_get_trst,
+	arcom_set_signal,
+	generic_get_signal,
 	generic_flush_one_by_one,
 	generic_parport_help
 };

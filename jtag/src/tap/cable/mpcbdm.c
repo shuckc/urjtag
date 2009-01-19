@@ -67,8 +67,8 @@ mpcbdm_init( cable_t *cable )
 	if (parport_open( cable->link.port ))
 		return -1;
 
-	parport_set_control( cable->link.port, 0 << TRST );
-	PARAM_TRST(cable) = 1;
+	parport_set_control( cable->link.port, 0 );
+	PARAM_SIGNALS(cable) = ( CS_TRST | CS_RESET );
 
 	return 0;
 }
@@ -87,23 +87,54 @@ mpcbdm_clock( cable_t *cable, int tms, int tdi, int n )
 		parport_set_data( cable->link.port, (1 << TCK) | (tms << TMS) | (tdi << TDI) );
 		cable_wait( cable );
 	}
+
+	PARAM_SIGNALS(cable) &= (CS_TRST | CS_RESET);
+	PARAM_SIGNALS(cable) |= CS_TCK;
+	PARAM_SIGNALS(cable) |= tms ? CS_TMS : 0;
+	PARAM_SIGNALS(cable) |= tdi ? CS_TDI : 0;
 }
 
 static int
 mpcbdm_get_tdo( cable_t *cable )
 {
 	parport_set_data( cable->link.port, 0 << TCK );
+	PARAM_SIGNALS(cable) &= ~(CS_TDI | CS_TCK | CS_TMS);
+
 	cable_wait( cable );
+
 	return (parport_get_status( cable->link.port ) >> TDO) & 1;
 }
 
 static int
-mpcbdm_set_trst( cable_t *cable, int trst )
+mpcbdm_set_signal( cable_t *cable, int mask, int val )
 {
-	PARAM_TRST(cable) = trst ? 1 : 0;
+	int prev_sigs = PARAM_SIGNALS(cable);
 
-	parport_set_control( cable->link.port, (PARAM_TRST(cable) ^ 1) << TRST );
-	return PARAM_TRST(cable);
+	mask &= (CS_TDI | CS_TCK | CS_TMS | CS_TRST | CS_RESET); // only these can be modified
+
+	if (mask)
+	{
+		int sigs = (PARAM_SIGNALS(cable) & ~mask) | (val & mask);
+
+		if ((mask & ~(CS_TRST | CS_RESET)) != 0)
+		{
+			int data = 0;
+			data |= (sigs & CS_TDI)  ? (1 << TDI)  : 0;
+			data |= (sigs & CS_TCK)  ? (1 << TCK)  : 0;
+			data |= (sigs & CS_TMS)  ? (1 << TMS)  : 0;
+			parport_set_data( cable->link.port, data );
+		}
+		if ((mask & (CS_TRST | CS_RESET)) != 0)
+		{
+			int data = 0;
+			data |= (sigs & CS_TRST) ? 0 : (1 << TRST);
+			// data |= (sigs & CS_RESET) ? 0 :  (1 << SRESET); // use SRESET or HRESET? which polarity?
+			parport_set_control( cable->link.port, data );
+		}
+		PARAM_SIGNALS(cable) = sigs;
+	}
+
+	return prev_sigs;
 }
 
 cable_driver_t mpcbdm_cable_driver = {
@@ -118,8 +149,8 @@ cable_driver_t mpcbdm_cable_driver = {
 	mpcbdm_clock,
 	mpcbdm_get_tdo,
 	generic_transfer,
-	mpcbdm_set_trst,
-	generic_get_trst,
+	mpcbdm_set_signal,
+	generic_get_signal,
 	generic_flush_one_by_one,
 	generic_parport_help
 };

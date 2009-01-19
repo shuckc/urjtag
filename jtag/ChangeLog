@@ -1,3 +1,25 @@
+2009-01-19  Kolja Waschk <kawk>
+
+  * doc/UrJTAG.txt,
+    include/cable.h, include/chain.h, include/pod.h, include/Makefile.am,
+    src/cmd/cmd.c, src/cmd/pod.c, src/cmd/Makefile.am, src/tap/cable.c,
+    src/tap/chain.c, src/tap/cable/wiggler.c, src/tap/cable/arcom.c,
+    src/tap/cable/mpcbdm.c, src/tap/cable/ts7800.c,
+    src/tap/cable/usbblaster.c, src/tap/cable/jlink.c,
+    src/tap/cable/generic.c, src/tap/cable/vision_ep9307.c,
+    src/tap/cable/ea253.c, src/tap/cable/triton.c, src/tap/cable/ei012.c,
+    src/tap/cable/byteblaster.c, src/tap/cable/generic.h,
+    src/tap/cable/ft2232.c, src/tap/cable/wiggler2.c,
+    src/tap/cable/keithkoep.c, src/tap/cable/lattice.c,
+    src/tap/cable/dlc5.c, src/tap/cable/xpc.c, src/svf/svf.c:
+    [ 2187351 ] Direct JTAG signal access, get/set_trst extension;
+    Integrated changes from getset_pod branch, substituting the
+    get/set_trst cable functions with more mighty get/set_signal
+    functions. Finally, this gives low level access to cable signals
+    as Sebastian Hesselbarth suggested and implemented first (thanks).
+    Arnim implemented it for the FTDI cable drivers, while I worked
+    on the parport cable drivers and new "pod" command.
+
 2009-01-16  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * src/cmd/parse.c: flush_chain() between commands read from file

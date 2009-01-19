@@ -73,7 +73,8 @@ typedef struct {
 	void		*map_base;
 	size_t		map_size;
 	uint32_t	*gpio_PHDR;
-	int		trst;
+	uint32_t	lastout;
+	int		signals;
 } ep9307_params_t;
 
 static int
@@ -167,6 +168,7 @@ ep9307_gpio_write( cable_t *cable, uint8_t data )
 	tmp &= ~GPIO_OUTPUT_MASK;
 	tmp |= data;
 	*((uint32_t*)p->gpio_PHDR) = tmp;
+	p->lastout = tmp;
 
 	return 0;
 }
@@ -224,7 +226,7 @@ ep9307_init( cable_t *cable )
 
 	ep9307_gpio_write( cable, 1 << TRST );
 	cable_wait( cable );
-	p->trst = 1;
+	p->signals = CS_TRST;
 
 	return 0;
 }
@@ -265,28 +267,50 @@ ep9307_get_tdo( cable_t *cable )
 
 	ep9307_gpio_write( cable, (0 << TCK) | (p->trst << TRST) );
 	cable_wait( cable );
+
 	return (ep9307_gpio_read( cable ) >> TDO) & 1;
 }
 
-/**
- * NOTE: This also lowers the TCK, TDI, and TMS lines; is this intended?
- */
 static int
-ep9307_set_trst( cable_t *cable, int trst )
+ep9307_current_signals( cable_t *cable )
 {
 	ep9307_params_t *p = cable->params;
 
-	p->trst = trst ? 1 : 0;
+	int sigs = p->signals & ~(CS_TMS | CS_TDI | CS_TCK | CS_TRST);
+	if (p->lastout & (1 << TCK)) sigs |= CS_TCK;
+	if (p->lastout & (1 << TDI)) sigs |= CS_TDI;
+	if (p->lastout & (1 << TMS)) sigs |= CS_TMS;
+	if (p->lastout & (1 << TRST)) sigs |= CS_TRST;
 
-	ep9307_gpio_write( cable, p->trst << TRST );
-	cable_wait( cable );
-	return p->trst;
+	return sigs;
 }
 
 static int
-ep9307_get_trst( cable_t *cable )
+ep9307_set_signal( cable_t *cable, int mask, int val )
 {
-	return (ep9307_gpio_read( cable ) >> TRST) & 1;
+	ep9307_params_t *p = cable->params;
+
+	int prev_sigs = ep9307_current_signals (cable);
+
+	int mask &= (CS_TMS | CS_TDI | CS_TCK | CS_TRST); // only these can be modified
+
+	if (mask != 0)
+	{
+		int sigs = (prev_sigs & ~mask) | (val & mask);
+		int tms = (sigs & CS_TMS) ? (1 << TMS) : 0;
+		int tdi = (sigs & CS_TDI) ? (1 << TDI) : 0;
+		int tck = (sigs & CS_TCK) ? (1 << TCK) : 0;
+		int trst = (sigs & CS_TRST) ? (1 << TRST) : 0;
+		ep9307_gpio_write( cable, tms | tdi | tck | trst );
+	}
+
+	return prev_sigs;
+}
+
+static int
+ep9307_get_signal( cable_t *cable, pod_sigsel_t sig )
+{
+	return (ep9307_current_signals( cable ) & sig) ? 1 : 0;
 }
 
 static void

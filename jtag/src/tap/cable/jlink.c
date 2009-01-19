@@ -562,7 +562,7 @@ jlink_transfer( cable_t *cable, int len, char *in, char *out )
 /* ---------------------------------------------------------------------- */
 
 static int
-jlink_set_trst( cable_t *cable, int trst )
+jlink_set_signal( cable_t *cable, int mask, int val )
 {
     return 1;
 }
@@ -579,8 +579,8 @@ cable_driver_t jlink_cable_driver = {
     jlink_clock,
     jlink_get_tdo,
     jlink_transfer,
-    jlink_set_trst,
-    generic_get_trst,
+    jlink_set_signal,
+    generic_get_signal,
     generic_flush_using_transfer,
     generic_usbconn_help
 };

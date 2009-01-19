@@ -50,6 +50,7 @@ noinst_HEADERS = \
 	fclock.h \
 	jim.h \
 	jim/some_cpu.h \
+	pod.h \
 	svf.h \
 	usbconn.h \
 	usbconn/libftdx.h \

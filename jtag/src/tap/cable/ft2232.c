@@ -53,8 +53,8 @@
 
 
 /* repeat the definitions for MPSSE command processor here
-	 since we cannot rely on the existence of ftdih. even though
-	 they're defined there */
+   since we cannot rely on the existence of ftdi.h even though
+   they're defined there */
 
 /* Shifting commands IN MPSSE Mode*/
 #define MPSSE_WRITE_NEG 0x01   /* Write TDI/DO on negative TCK/SK edge*/
@@ -109,7 +109,7 @@
 #define BIT_ARMUSBOCD_RED_LED 3
 #define BITMASK_ARMUSBOCD_nOE (1 << BIT_ARMUSBOCD_nOE)
 #define BITMASK_ARMUSBOCD_nTRST (1 << BIT_ARMUSBOCD_nTRST)
-#define BITMASK_ARMUSBOCD_nTSRST (1 << BIT_ARMUSBOCD_nTRST)
+#define BITMASK_ARMUSBOCD_nTSRST (1 << BIT_ARMUSBOCD_nTSRST)
 #define BITMASK_ARMUSBOCD_nTRST_nOE (1 << BIT_ARMUSBOCD_nTRST_nOE)
 #define BITMASK_ARMUSBOCD_RED_LED (1 << BIT_ARMUSBOCD_RED_LED)
 /* bit and bitmask definitions for Blackfin gnICE */
@@ -173,18 +173,27 @@ typedef struct {
   uint8_t low_byte_value;
   uint8_t low_byte_dir;
 
-  /* this driver supports TRST control on high byte only
-     set the variables below with value/direction for active and inactive TRST line
-     static settings for other high byte signals must be entered here as well */
-  uint8_t high_byte_value_trst_active;
-  uint8_t high_byte_value_trst_inactive;
+  /* this driver issues several "Set Data Bits High Byte" commands
+     here is the place where cable specific values can be stored
+     that are used each time this command is issued */
+  uint8_t high_byte_value;
   uint8_t high_byte_dir;
+
+  /* the following variables store the bit position of TRST and RESET (SRST)
+     for XOR'ing with the default values of low_byte_value and high_byte_value
+     allowed values:
+       <  0 : feature not used
+       <  8 : applies to low byte
+       < 12 : applies to high byte */
+  int bit_trst;
+  int bit_reset;
 
   /* variables to save last TDO value
      this acts as a cache to prevent multiple "Read Data Bits Low" transfer
      over USB for ft2232_get_tdo */
   unsigned int last_tdo_valid;
   unsigned int last_tdo;
+  int signals;
 
   cx_cmd_root_t cmd_root;
 } params_t;
@@ -253,16 +262,20 @@ ft2232_generic_init( cable_t *cable )
   cx_cmd_push( cmd_root, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 
   /* Set Data Bits High Byte */
-  params->high_byte_value_trst_active   = 0;
-  params->high_byte_value_trst_inactive = 0;
-  params->high_byte_dir                 = 0;
+  params->high_byte_value = 0;
+  params->high_byte_value = 0;
+  params->high_byte_dir   = 0;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
+  params->bit_trst  = -1;  /* not used */
+  params->bit_reset = -1;  /* not used */
+
   params->last_tdo_valid = 0;
+  params->signals = 0;
 
   return 0;
 }
@@ -293,22 +306,25 @@ ft2232_jtagkey_init( cable_t *cable )
      TRST_N_OE_N = 0
      SRST_N_OUT = 1
      SRST_N_OE_N = 0 */
-  params->high_byte_value_trst_active   = BITMASK_JTAGKEY_SRST_N_OUT;
-  params->high_byte_value_trst_inactive = BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OUT;
-  params->high_byte_dir                 = BITMASK_JTAGKEY_TRST_N_OUT
+  params->high_byte_value = BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OUT;
+  params->high_byte_dir   = BITMASK_JTAGKEY_TRST_N_OUT
     | BITMASK_JTAGKEY_TRST_N_OE_N
     | BITMASK_JTAGKEY_SRST_N_OUT
     | BITMASK_JTAGKEY_SRST_N_OE_N;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, 0 );
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
+  params->bit_trst  = BIT_JTAGKEY_TRST_N_OUT + 8;  /* member of HIGH byte */
+  params->bit_reset = BIT_JTAGKEY_SRST_N_OUT + 8;  /* member of HIGH byte */
+
   params->last_tdo_valid = 0;
+  params->signals = CS_TRST | CS_RESET;
 
   return 0;
 }
@@ -340,25 +356,27 @@ ft2232_armusbocd_init( cable_t *cable )
      TRST buffer enable = 0
      TSRST = 1
      RED LED on */
-  params->high_byte_value_trst_active   = BITMASK_ARMUSBOCD_nTSRST
-    | BITMASK_ARMUSBOCD_RED_LED;
-  params->high_byte_value_trst_inactive = BITMASK_ARMUSBOCD_nTRST
+  params->high_byte_value = BITMASK_ARMUSBOCD_nTRST
     | BITMASK_ARMUSBOCD_nTSRST
     | BITMASK_ARMUSBOCD_RED_LED;
-  params->high_byte_dir                 = BITMASK_ARMUSBOCD_nTRST
+  params->high_byte_dir   = BITMASK_ARMUSBOCD_nTRST
     | BITMASK_ARMUSBOCD_nTRST_nOE
     | BITMASK_ARMUSBOCD_nTSRST
     | BITMASK_ARMUSBOCD_RED_LED;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, 0 );
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
+  params->bit_trst  = BIT_ARMUSBOCD_nTRST + 8;   /* member of HIGH byte */
+  params->bit_reset = BIT_ARMUSBOCD_nTSRST + 8;  /* member of HIGH byte */
+
   params->last_tdo_valid = 0;
+  params->signals = CS_TRST | CS_RESET;
 
   return 0;
 }
@@ -384,19 +402,22 @@ ft2232_gnice_init( cable_t *cable )
   cx_cmd_push( cmd_root, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 
   /* Set Data Bits High Byte */
-  params->high_byte_value_trst_active   = BITMASK_GNICE_nLED;
-  params->high_byte_value_trst_inactive = BITMASK_GNICE_nTRST;
-  params->high_byte_dir                 = BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED;
+  params->high_byte_value = BITMASK_GNICE_nTRST;
+  params->high_byte_dir   = BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, 0 );
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
+  params->bit_trst  = BIT_GNICE_nTRST + 8;  /* member of HIGH byte */
+  params->bit_reset = -1;  /* not used */
+
   params->last_tdo_valid = 0;
+  params->signals = CS_TRST;
 
   return 0;
 }
@@ -427,23 +448,26 @@ ft2232_oocdlinks_init( cable_t *cable )
      TRST buffer enable = 0
      SRST = 1
      SRST buffer enable = 0 */
-  params->high_byte_value_trst_active   = BITMASK_OOCDLINKS_nSRST;
-  params->high_byte_value_trst_inactive = BITMASK_OOCDLINKS_nTRST
+  params->high_byte_value = BITMASK_OOCDLINKS_nTRST
     | BITMASK_OOCDLINKS_nSRST;
-  params->high_byte_dir                 = BITMASK_OOCDLINKS_nTRST
+  params->high_byte_dir   = BITMASK_OOCDLINKS_nTRST
     | BITMASK_OOCDLINKS_nTRST_nOE
     | BITMASK_OOCDLINKS_nSRST
     | BITMASK_OOCDLINKS_nSRST_nOE;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, 0 );
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
+  params->bit_trst  = BIT_OOCDLINKS_nTRST + 8;  /* member of HIGH byte */
+  params->bit_reset = BIT_OOCDLINKS_nSRST + 8;  /* member of HIGH byte */
+
   params->last_tdo_valid = 0;
+  params->signals = CS_TRST | CS_RESET;
 
   return 0;
 }
@@ -474,16 +498,19 @@ ft2232_turtelizer2_init( cable_t *cable )
      default:
      TX1LED on
      RX1LED on */
-  params->high_byte_value_trst_active   = 0;
-  params->high_byte_value_trst_inactive = 0;
-  params->high_byte_dir                 = BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED;
+  params->high_byte_value = 0;
+  params->high_byte_dir   = BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
+  params->bit_trst  = -1;  /* not used */
+  params->bit_reset = BIT_TURTELIZER2_RST;  /* member of LOW byte */
+
   params->last_tdo_valid = 0;
+  params->signals = CS_RESET;
 
   return 0;
 }
@@ -513,18 +540,22 @@ ft2232_usbtojtagif_init( cable_t *cable )
      default:
      RxLED on
      TxLED on */
-  params->high_byte_value_trst_active   = 0;
-  params->high_byte_value_trst_inactive = 0;
-  params->high_byte_dir                 = BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED;
+  params->high_byte_value = 0;
+  params->high_byte_value = 0;
+  params->high_byte_dir   = BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   /* I-couplers can only work up to 3 MHz
      ref. http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html */
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ/2 );
 
+  params->bit_trst  = BIT_USBTOJTAGIF_nTRST;  /* member of LOW byte */
+  params->bit_reset = BIT_USBTOJTAGIF_RST;    /* member of LOW byte */
+
   params->last_tdo_valid = 0;
+  params->signals = CS_TRST | CS_RESET;
 
   return 0;
 }
@@ -539,7 +570,7 @@ ft2232_signalyzer_init( cable_t *cable )
   if (usbconn_open( cable->link.usb )) return -1;
 
   /* static low byte value and direction:
-     nTRST = 1, RST = 1, DBGRQ = 0 */
+     nTRST = 1, nSRST = 1 */
   params->low_byte_value = BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST;
   params->low_byte_dir   = BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST;
 
@@ -551,16 +582,19 @@ ft2232_signalyzer_init( cable_t *cable )
   cx_cmd_push( cmd_root, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
 
   /* Set Data Bits High Byte */
-  params->high_byte_value_trst_active   = 0;
-  params->high_byte_value_trst_inactive = 0;
-  params->high_byte_dir                 = 0;
+  params->high_byte_value = 0;
+  params->high_byte_dir   = 0;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
+  params->bit_trst  = BIT_SIGNALYZER_nTRST;  /* member of LOW byte */
+  params->bit_reset = BIT_SIGNALYZER_nSRST;  /* member of LOW byte */
+
   params->last_tdo_valid = 0;
+  params->signals = CS_TRST | CS_RESET;
 
   return 0;
 }
@@ -575,8 +609,8 @@ ft2232_flyswatter_init( cable_t *cable )
   if (usbconn_open( cable->link.usb )) return -1;
 
   /* static low byte value and direction:
-     nTRST = 1, set nOE1 and nOE2 to '0' -> activate output enables */
-  params->low_byte_value = BITMASK_FLYSWATTER_nTRST;
+     nTRST = 1, nSRST = 1, set nOE1 and nOE2 to '0' -> activate output enables */
+  params->low_byte_value = BITMASK_FLYSWATTER_nTRST | BIT_FLYSWATTER_nSRST;
   params->low_byte_dir   = BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2 |
                            BITMASK_FLYSWATTER_nTRST | BITMASK_FLYSWATTER_nSRST;
 
@@ -589,16 +623,19 @@ ft2232_flyswatter_init( cable_t *cable )
 
   /* Set Data Bits High Byte */
   /* Turn LED2 on */
-  params->high_byte_value_trst_active   = 0;
-  params->high_byte_value_trst_inactive = 0;
-  params->high_byte_dir                 = BITMASK_FLYSWATTER_nLED2;
+  params->high_byte_value = 0;
+  params->high_byte_dir   = BITMASK_FLYSWATTER_nLED2;
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root, params->high_byte_value_trst_inactive );
+  cx_cmd_push( cmd_root, params->high_byte_value );
   cx_cmd_push( cmd_root, params->high_byte_dir );
 
   ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
 
+  params->bit_trst  = BIT_FLYSWATTER_nTRST;  /* member of LOW byte */
+  params->bit_reset = BIT_FLYSWATTER_nSRST;  /* member of LOW byte */
+
   params->last_tdo_valid = 0;
+  params->signals = CS_TRST | CS_RESET;
 
   return 0;
 }
@@ -954,6 +991,11 @@ ft2232_clock_schedule( cable_t *cable, int tms, int tdi, int n )
     }
     cx_cmd_push( cmd_root, tdi | tms );
   }
+
+  params->signals &= ~(CS_TMS | CS_TDI | CS_TCK);
+  if (tms) params->signals |= CS_TMS;
+  if (tdi) params->signals |= CS_TDI;
+  // if (tck) params->signals |= CS_TCK;
 }
 
 
@@ -1007,27 +1049,84 @@ ft2232_get_tdo( cable_t *cable )
 
 
 static void
-ft2232_set_trst_schedule( params_t *params, int trst )
+ft2232_set_signal_schedule( params_t *params, int mask, int val,
+                            int set_low, int set_high )
 {
   cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-  cx_cmd_queue( cmd_root, 0 );
-  cx_cmd_push( cmd_root, SET_BITS_HIGH );
-  cx_cmd_push( cmd_root,
-               trst == 0 ? params->high_byte_value_trst_active : params->high_byte_value_trst_inactive );
-  cx_cmd_push( cmd_root, params->high_byte_dir );
+  /* filter for supported signals */
+  mask &= CS_TCK | CS_TDI | CS_TMS | CS_TRST | CS_RESET;
+  if (mask != 0)
+  {
+    int sigs = (params->signals & ~mask) | (val & mask);
+    uint8_t low_or   = 0;
+    uint8_t low_xor  = 0;
+    uint8_t high_xor = 0;
+
+    /* prepare low and high byte */
+    if (sigs & CS_TCK) low_or |= BITMASK_TCK;
+    if (sigs & CS_TDI) low_or |= BITMASK_TDI;
+    if (sigs & CS_TMS) low_or |= BITMASK_TMS;
+    /* TRST and RESET (SRST) are XOR'ed to the default value since
+       the right value depends on the external circuitry (inverter or not) */
+    if ((sigs & CS_TRST) == 0)
+      if (params->bit_trst >= 0)
+      {
+        if (params->bit_trst < 8)
+        {
+          low_xor |= 1 << params->bit_trst;
+        }
+        else
+        {
+          high_xor |= 1 << (params->bit_trst - 8);
+        }
+      }
+    if ((sigs & CS_RESET) == 0)
+      if (params->bit_reset >= 0)
+      {
+        if (params->bit_reset < 8)
+        {
+          low_xor |= 1 << params->bit_reset;
+        }
+        else
+        {
+          high_xor |= 1 << (params->bit_reset - 8);
+        }
+      }
+
+    if (set_low)
+    {
+      cx_cmd_queue( cmd_root, 0 );
+      cx_cmd_push( cmd_root, SET_BITS_LOW );
+      cx_cmd_push( cmd_root, (params->low_byte_value | low_or) ^ low_xor );
+      cx_cmd_push( cmd_root, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+    }
+
+    if (set_high)
+    {
+      cx_cmd_queue( cmd_root, 0 );
+      cx_cmd_push( cmd_root, SET_BITS_HIGH );
+      cx_cmd_push( cmd_root, params->high_byte_value ^ high_xor );
+      cx_cmd_push( cmd_root, params->high_byte_dir );
+    }
+
+    params->signals = sigs;
+  }
 }
 
+
 static int
-ft2232_set_trst( cable_t *cable, int trst )
+ft2232_set_signal( cable_t *cable, int mask, int val )
 {
   params_t *params = (params_t *)cable->params;
 
-  ft2232_set_trst_schedule( params, trst );
+  int prev_sigs = params->signals;
+
+  ft2232_set_signal_schedule( params, mask, val, 1, 1 );
   cx_xfer( &(params->cmd_root), &imm_cmd, cable, COMPLETELY );
   params->last_tdo_valid = 0;
 
-  return trst;
+  return prev_sigs;
 }
 
 
@@ -1040,13 +1139,9 @@ ft2232_transfer_schedule( cable_t *cable, int len, char *in, char *out )
   int bitwise_len;
   int chunkbytes;
 
-  /* Set Data Bits Low Byte to lower TMS for transfer
-     TCK = 0, TMS = 0, TDI = 0, nOE = 0 */
-  cx_cmd_queue( cmd_root, 0 );
-  cx_cmd_push( cmd_root, SET_BITS_LOW );
-  cx_cmd_push( cmd_root, params->low_byte_value | 0 );
-  cx_cmd_push( cmd_root, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
-
+  /* lower TMS for transfer
+     also lower TCK to ensure correct clocking */
+  ft2232_set_signal_schedule( params, CS_TCK | CS_TMS, 0, 1, 0 );
 
   chunkbytes = len >> 3;
   while (chunkbytes > 0)
@@ -1247,6 +1342,7 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
   while (cable->todo.num_items > 0)
   {
     int i, j, n;
+    int post_signals = params->signals;
     int last_tdo_valid_schedule = params->last_tdo_valid;
     int last_tdo_valid_finish = params->last_tdo_valid;
 
@@ -1271,8 +1367,10 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
         }
         break;
 
-      case CABLE_SET_TRST:
-        ft2232_set_trst_schedule( params, cable->todo.data[i].arg.value.trst );
+      case CABLE_SET_SIGNAL:
+        ft2232_set_signal_schedule( params, 
+                           cable->todo.data[i].arg.value.mask,
+                           cable->todo.data[i].arg.value.val, 1, 1 );
         last_tdo_valid_schedule = 0;
         break;
 
@@ -1300,8 +1398,13 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
       switch (cable->todo.data[j].action)
       {
       case CABLE_CLOCK:
-        params->last_tdo_valid = last_tdo_valid_finish = 0;
-        break;
+        {
+          post_signals &= ~(CS_TCK | CS_TDI | CS_TMS);
+          post_signals |= (cable->todo.data[j].arg.clock.tms ? CS_TMS : 0);
+          post_signals |= (cable->todo.data[j].arg.clock.tdi ? CS_TDI : 0);
+          params->last_tdo_valid = last_tdo_valid_finish = 0;
+          break;
+        }
       case CABLE_GET_TDO:
         {
           int tdo;
@@ -1313,21 +1416,24 @@ ft2232_flush( cable_t *cable, cable_flush_amount_t how_much )
           last_tdo_valid_finish = params->last_tdo_valid;
           m = cable_add_queue_item( cable, &(cable->done) );
           cable->done.data[m].action = CABLE_GET_TDO;
-          cable->done.data[m].arg.value.tdo = tdo;
+          cable->done.data[m].arg.value.val = tdo;
           break;
         }
-      case CABLE_SET_TRST:
+      case CABLE_SET_SIGNAL:
         {
           int m = cable_add_queue_item( cable, &(cable->done) );
-          cable->done.data[m].action = CABLE_SET_TRST;
-          cable->done.data[m].arg.value.trst = cable->done.data[j].arg.value.trst;
-          params->last_tdo_valid = last_tdo_valid_finish = 0;
+          cable->done.data[m].action = CABLE_SET_SIGNAL;
+          cable->done.data[m].arg.value.mask = cable->todo.data[j].arg.value.mask;
+          cable->done.data[m].arg.value.val = post_signals;
+          int mask = cable->todo.data[j].arg.value.mask & ~(CS_TCK | CS_TDI | CS_TMS | CS_TRST | CS_RESET);
+          post_signals = (post_signals & ~mask) | (cable->todo.data[j].arg.value.val & mask);
         }
-      case CABLE_GET_TRST:
+      case CABLE_GET_SIGNAL:
         {
           int m = cable_add_queue_item( cable, &(cable->done) );
-          cable->done.data[m].action = CABLE_GET_TRST;
-          cable->done.data[m].arg.value.trst = 1;
+          cable->done.data[m].action = CABLE_GET_SIGNAL;
+          cable->done.data[m].arg.value.sig = cable->todo.data[j].arg.value.sig;
+          cable->done.data[m].arg.value.val = (post_signals & cable->todo.data[j].arg.value.sig) ? 1 : 0;
           break;
         }
       case CABLE_TRANSFER:
@@ -1480,8 +1586,8 @@ cable_driver_t ft2232_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };
@@ -1512,8 +1618,8 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };
@@ -1558,8 +1664,8 @@ cable_driver_t ft2232_gnice_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };
@@ -1590,8 +1696,8 @@ cable_driver_t ft2232_jtagkey_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };
@@ -1622,8 +1728,8 @@ cable_driver_t ft2232_oocdlinks_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };
@@ -1654,8 +1760,8 @@ cable_driver_t ft2232_turtelizer2_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };
@@ -1686,8 +1792,8 @@ cable_driver_t ft2232_usbtojtagif_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };
@@ -1718,8 +1824,8 @@ cable_driver_t ft2232_signalyzer_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };
@@ -1750,8 +1856,8 @@ cable_driver_t ft2232_flyswatter_cable_driver = {
   ft2232_clock,
   ft2232_get_tdo,
   ft2232_transfer,
-  ft2232_set_trst,
-  generic_get_trst,
+  ft2232_set_signal,
+  generic_get_signal,
   ft2232_flush,
   ft2232_usbcable_help
 };

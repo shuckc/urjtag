@@ -33,6 +33,7 @@ typedef struct cable_t cable_t;
 #include "usbconn.h"
 #include "parport.h"
 #include "chain.h"
+#include "pod.h"
 
 typedef struct cable_driver_t cable_driver_t;
 
@@ -56,8 +57,8 @@ struct cable_driver_t {
 	void (*clock)( cable_t *, int, int, int );
 	int (*get_tdo)( cable_t * );
 	int (*transfer)( cable_t *, int, char *, char * );
-	int (*set_trst)( cable_t *, int );
-	int (*get_trst)( cable_t * );
+	int (*set_signal)( cable_t *, int, int );
+	int (*get_signal)( cable_t *, pod_sigsel_t );
 	void (*flush)( cable_t *, cable_flush_amount_t );
 	void (*help)( const char * );
 };
@@ -69,8 +70,8 @@ struct cable_queue_t {
 		CABLE_CLOCK,
 		CABLE_GET_TDO,
 		CABLE_TRANSFER,
-		CABLE_SET_TRST,
-		CABLE_GET_TRST
+		CABLE_SET_SIGNAL,
+		CABLE_GET_SIGNAL
 	} action;
 	union {
 		struct {
@@ -79,8 +80,8 @@ struct cable_queue_t {
 			int n;
 		} clock;
 		struct {
-			int tdo;
-			int trst;
+            pod_sigsel_t sig;
+			int mask;
 			int val;
 		} value;
 		struct {
@@ -129,11 +130,11 @@ void cable_clock( cable_t *cable, int tms, int tdi, int n );
 int cable_get_tdo( cable_t *cable );
    int cable_get_tdo_late( cable_t *cable );
    int cable_defer_get_tdo( cable_t *cable );
-int cable_set_trst( cable_t *cable, int trst );
-  int cable_defer_set_trst( cable_t *cable, int trst );
-int cable_get_trst( cable_t *cable );
-   int cable_get_trst_late( cable_t *cable );
-   int cable_defer_get_trst( cable_t *cable );
+int cable_set_signal( cable_t *cable, int mask, int val );
+  int cable_defer_set_signal( cable_t *cable, int mask, int val );
+int cable_get_signal( cable_t *cable, pod_sigsel_t sig );
+   int cable_get_signal_late( cable_t *cable, pod_sigsel_t sig );
+   int cable_defer_get_signal( cable_t *cable, pod_sigsel_t sig );
 int cable_transfer( cable_t *cable, int len, char *in, char *out );
    int cable_transfer_late( cable_t *cable, char *out );
    int cable_defer_transfer( cable_t *cable, int len, char *in, char *out );

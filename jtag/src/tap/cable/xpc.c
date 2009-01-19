@@ -437,7 +437,7 @@ xpc_get_tdo( cable_t *cable )
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_set_trst( cable_t *cable, int trst )
+xpc_set_signal( cable_t *cable, int mask, int val )
 {
 	return 1;
 }
@@ -641,8 +641,8 @@ cable_driver_t xpc_int_cable_driver = {
 	xpc_clock,
 	xpc_get_tdo,
 	generic_transfer,
-	xpc_set_trst,
-	generic_get_trst,
+	xpc_set_signal,
+	generic_get_signal,
 	generic_flush_using_transfer,
 	generic_usbconn_help
 };
@@ -667,8 +667,8 @@ cable_driver_t xpc_ext_cable_driver = {
 	xpc_ext_clock,
 	xpc_ext_get_tdo,
 	xpc_ext_transfer,
-	xpc_set_trst,
-	generic_get_trst,
+	xpc_set_signal,
+	generic_get_signal,
 	generic_flush_using_transfer,
 	generic_usbconn_help
 };

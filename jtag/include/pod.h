@@ -1,7 +1,8 @@
 /*
  * $Id$
  *
- * Copyright (C) 2003 ETC s.r.o.
+ * Pod signal names
+ * Copyright (C) 2008 K. Waschk
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,27 +19,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2003.
- *
  */
 
-#ifndef GENERIC_H
-#define	GENERIC_H
+#ifndef POD_H
+#define	POD_H
 
-#include "cable.h"
-#include "parport.h"
+typedef enum
+{
+   CS_NONE   = 0,      // no/invalid signal
+   CS_TDI    = (1<<0), // out: JTAG/SPI data in
+   CS_TCK    = (1<<1), // out: JTAG/SPI clock
+   CS_TMS    = (1<<2), // out: JTAG test mode select/SPI slave select
+   CS_TRST   = (1<<3), // out: JTAG TAP reset
+   CS_RESET  = (1<<4), // out: system reset
+   CS_SCK    = (1<<5), // out: I2C clock (not yet used)
+   CS_SDA    = (1<<6), // inout: I2C data (not yet used)
+   CS_SS     = (1<<7), // out: SPI slave select (not yet used)
+}
+pod_sigsel_t;
 
-typedef struct {
-    int signals;
-} generic_params_t;
-
-#define	PARAM_SIGNALS(cable)	((generic_params_t *) cable->params)->signals
-
-void generic_disconnect( cable_t *cable );
-void generic_set_frequency( cable_t *cable, uint32_t new_freq );
-int generic_transfer( cable_t *cable, int len, char *in, char *out );
-int generic_get_signal( cable_t *cable, pod_sigsel_t sig );
-void generic_flush_one_by_one( cable_t *cable, cable_flush_amount_t hm );
-void generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t hm );
-
-#endif /* GENERIC_H */
+#endif /* POD_H */

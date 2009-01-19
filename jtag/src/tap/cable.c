@@ -406,7 +406,7 @@ cable_get_tdo_late( cable_t *cable )
 		}
 		else
 		{
-			return cable->done.data[i].arg.value.tdo;
+			return cable->done.data[i].arg.value.val;
 		}
 	};
 	return cable->driver->get_tdo( cable );
@@ -423,58 +423,66 @@ cable_defer_get_tdo( cable_t *cable )
 }
 
 int
-cable_set_trst( cable_t *cable, int trst )
+cable_set_signal( cable_t *cable, int mask, int val )
 {
 	cable_flush( cable, COMPLETELY );
-	return cable->driver->set_trst( cable, trst );
+	return cable->driver->set_signal( cable, mask, val );
 }
 
 int
-cable_defer_set_trst( cable_t *cable, int trst )
+cable_defer_set_signal( cable_t *cable, int mask, int val )
 {
 	int i = cable_add_queue_item( cable, &(cable->todo) );
 	if( i < 0 ) return 1; /* report failure */
-	cable->todo.data[i].action = CABLE_SET_TRST;
-	cable->todo.data[i].arg.value.trst = trst;
+	cable->todo.data[i].action = CABLE_SET_SIGNAL;
+	cable->todo.data[i].arg.value.mask = mask;
+	cable->todo.data[i].arg.value.val = val;
 	cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }
 
 int
-cable_get_trst( cable_t *cable )
+cable_get_signal( cable_t *cable, pod_sigsel_t sig )
 {
 	cable_flush( cable, COMPLETELY );
-	return cable->driver->get_trst( cable );
+	return cable->driver->get_signal( cable, sig );
 }
 
 int
-cable_get_trst_late( cable_t *cable )
+cable_get_signal_late( cable_t *cable, pod_sigsel_t sig )
 {
 	int i;
 	cable_flush( cable, TO_OUTPUT );
 	i = cable_get_queue_item( cable, &(cable->done) );
 	if( i >= 0 )
 	{
-		if(cable->done.data[i].action != CABLE_GET_TRST)
+		if(cable->done.data[i].action != CABLE_GET_SIGNAL)
 		{
 			printf(_("Internal error: Got wrong type of result from queue (%d? %p.%d)\n"),
 				cable->done.data[i].action, &(cable->done), i);
 			cable_purge_queue( &(cable->done), 1 );
 		}
+		else if(cable->done.data[i].arg.value.sig != sig)
+		{
+			printf(_("Internal error: Got wrong signal's value from queue (%d? %p.%d)\n"),
+				cable->done.data[i].action, &(cable->done), i);
+			cable_purge_queue( &(cable->done), 1 );
+		}
 		else
 		{
-			return cable->done.data[i].arg.value.trst;
+			return cable->done.data[i].arg.value.val;
 		}
 	};
-	return cable->driver->get_trst( cable );
+	return cable->driver->get_signal( cable, sig );
 }
 
 int
-cable_defer_get_trst( cable_t *cable )
+cable_defer_get_signal( cable_t *cable, pod_sigsel_t sig )
 {
 	int i = cable_add_queue_item( cable, &(cable->todo) );
 	if( i < 0 ) return 1; /* report failure */
-	cable->todo.data[i].action = CABLE_GET_TRST;
+	cable->todo.data[i].action = CABLE_GET_SIGNAL;
+	cable->todo.data[i].arg.value.sig = sig;
 	cable_flush( cable, OPTIONALLY );
 	return 0; /* success */
 }

@@ -83,9 +83,9 @@ generic_transfer( cable_t *cable, int len, char *in, char *out )
 }
 
 int
-generic_get_trst( cable_t *cable )
+generic_get_signal( cable_t *cable, pod_sigsel_t sig )
 {
-	return PARAM_TRST(cable);
+	return (((PARAM_SIGNALS(cable)) & sig) != 0) ? 1:0;
 }
 
 int
@@ -104,7 +104,7 @@ do_one_queued_action( cable_t *cable )
 		if( cable->done.num_items >= cable->done.max_items )
 		{
 			if( cable->todo.data[i].action == CABLE_GET_TDO
-				|| cable->todo.data[i].action == CABLE_GET_TRST
+				|| cable->todo.data[i].action == CABLE_GET_SIGNAL
 				|| cable->todo.data[i].action == CABLE_TRANSFER )
 			{
 				printf(_("No space in cable activity results queue.\n"));
@@ -120,9 +120,10 @@ do_one_queued_action( cable_t *cable )
 					cable->todo.data[i].arg.clock.tdi,
 					cable->todo.data[i].arg.clock.n );
 				break;
-			case CABLE_SET_TRST:
-				cable_set_trst( cable,
-					cable->todo.data[i].arg.value.trst );
+			case CABLE_SET_SIGNAL:
+				cable_set_signal( cable, 
+					cable->todo.data[i].arg.value.sig,
+					cable->todo.data[i].arg.value.val );
 				break;
 			case CABLE_TRANSFER:
 			{
@@ -151,17 +152,20 @@ do_one_queued_action( cable_t *cable )
 				printf("add result from get_tdo to %p.%d\n", &(cable->done), j);
 #endif
 				cable->done.data[j].action = CABLE_GET_TDO;
-				cable->done.data[j].arg.value.tdo =
+				cable->done.data[j].arg.value.val =
 					cable->driver->get_tdo( cable );
 				break;
-			case CABLE_GET_TRST:
+			case CABLE_GET_SIGNAL:
 				j = cable_add_queue_item( cable, &(cable->done) );
 #ifdef VERBOSE
-				printf("add result from get_trst to %p.%d\n", &(cable->done), j);
+				printf("add result from get_signal to %p.%d\n", &(cable->done), j);
 #endif
-				cable->done.data[j].action = CABLE_GET_TRST;
-				cable->done.data[j].arg.value.trst =
-					cable->driver->get_trst( cable );
+				cable->done.data[j].action = CABLE_GET_SIGNAL;
+				cable->done.data[j].arg.value.sig = 
+					cable->todo.data[i].arg.value.sig;
+				cable->done.data[j].arg.value.val =
+					cable->driver->get_signal( cable, 
+						cable->todo.data[i].arg.value.sig );
 				break;
 		};
 #ifdef VERBOSE
@@ -316,7 +320,7 @@ generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 					printf("add result from transfer to %p.%d\n", &(cable->done), c);
 #endif
 					cable->done.data[c].action = CABLE_GET_TDO;
-					cable->done.data[c].arg.value.tdo = tdo;
+					cable->done.data[c].arg.value.val = tdo;
 				}
 				else if(cable->todo.data[i].action == CABLE_TRANSFER)
 				{

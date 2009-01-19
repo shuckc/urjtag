@@ -26,6 +26,7 @@
 #define	CHAIN_H
 
 #include "part.h"
+#include "pod.h"
 
 typedef struct chain_t chain_t;
 
@@ -58,6 +59,8 @@ void chain_shift_instructions_mode( chain_t *chain, int capture_output, int capt
 void chain_shift_data_registers( chain_t *chain, int capture_output );
 void chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture, int exit );
 void chain_flush( chain_t *chain );
+int chain_set_pod_signal( chain_t *chain, int mask, int val );
+int chain_get_pod_signal( chain_t *chain, pod_sigsel_t sig  );
 
 typedef struct {
 	chain_t **chains;

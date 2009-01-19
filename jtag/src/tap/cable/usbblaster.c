@@ -230,7 +230,7 @@ usbblaster_get_tdo( cable_t *cable )
 }
 
 static int
-usbblaster_set_trst( cable_t *cable, int trst )
+usbblaster_set_signal( cable_t *cable, int mask, int val )
 {
 	return 1;
 }
@@ -404,16 +404,20 @@ usbblaster_flush( cable_t *cable, cable_flush_amount_t how_much )
 					int m;
 					m = cable_add_queue_item( cable, &(cable->done) );
 					cable->done.data[m].action = CABLE_GET_TDO;
-					cable->done.data[m].arg.value.tdo = usbblaster_get_tdo_finish( cable );
+					cable->done.data[m].arg.value.val = usbblaster_get_tdo_finish( cable );
 					break;
 				}
-			case CABLE_GET_TRST:
+			case CABLE_GET_SIGNAL:
 				{
 					int m = cable_add_queue_item( cable, &(cable->done) );
-					cable->done.data[m].action = CABLE_GET_TRST;
-					cable->done.data[m].arg.value.trst = 1;
+					cable->done.data[m].action = CABLE_GET_SIGNAL;
+					cable->done.data[m].arg.value.sig = cable->todo.data[j].arg.value.sig;
+					if (cable->todo.data[j].arg.value.sig == CS_TRST)
+						cable->done.data[m].arg.value.val = 1;
+					else
+						cable->done.data[m].arg.value.val = -1; // not supported yet
 					break;
-        }
+				}
 			case CABLE_TRANSFER:
 				{
 					int  r = usbblaster_transfer_finish( cable,
@@ -475,8 +479,8 @@ cable_driver_t usbblaster_cable_driver = {
 	usbblaster_clock,
 	usbblaster_get_tdo,
 	usbblaster_transfer,
-	usbblaster_set_trst,
-	generic_get_trst,
+	usbblaster_set_signal,
+	generic_get_signal,
 //	generic_flush_one_by_one,
 //	generic_flush_using_transfer,
 	usbblaster_flush,

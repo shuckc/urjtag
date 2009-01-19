@@ -71,7 +71,7 @@ typedef struct {
 	void		*map_base;
 	size_t		map_size;
 	uint32_t	*gpio_base;
-	int		trst;
+	int		signals;
 	uint32_t	lastout;
 } ts7800_params_t;
 
@@ -126,6 +126,7 @@ ts7800_gpio_close( cable_t *cable )
 static int
 ts7800_gpio_write( cable_t *cable, uint8_t data )
 {
+	int sigs;
 	ts7800_params_t *p = cable->params;
 
 	p->gpio_base[GPIO_OUT] = p->lastout = (p->lastout & GPIO_BITMASK) | data;
@@ -190,7 +191,7 @@ ts7800_init( cable_t *cable )
 	if (ts7800_gpio_open( cable ))
 		return -1;
 
-	p->trst = 1;
+	p->signals = CS_TRST;
 
 	return 0;
 }
@@ -225,24 +226,52 @@ ts7800_clock( cable_t *cable, int tms, int tdi, int n )
 static int
 ts7800_get_tdo( cable_t *cable )
 {
-	ts7800_gpio_write( cable, ((ts7800_params_t *)cable->params)->lastout & ~(0 << TCK) );
+	ts7800_params_t *p = cable->params;
+	ts7800_gpio_write( cable, p->lastout & ~(0 << TCK) );
+
 	return (ts7800_gpio_read( cable ) >> TDO) & 1;
 }
 
 static int
-ts7800_set_trst( cable_t *cable, int trst )
+ts7800_current_signals( cable_t *cable )
 {
 	ts7800_params_t *p = cable->params;
 
-	p->trst = trst ? 1 : 0;
+	int sigs = p->signals & ~(CS_TMS | CS_TDI | CS_TCK);
+	if (p->lastout & (1 << TCK)) sigs |= CS_TCK;
+	if (p->lastout & (1 << TDI)) sigs |= CS_TDI;
+	if (p->lastout & (1 << TMS)) sigs |= CS_TMS;
 
-	return p->trst;
+	return sigs;
 }
 
 static int
-ts7800_get_trst( cable_t *cable )
+ts7800_set_signal( cable_t *cable, int mask, int val )
 {
-	return ((ts7800_params_t *)cable->params)->trst;
+	ts7800_params_t *p = cable->params;
+
+	int prev_sigs = current_signals( cable );
+
+	mask &= (CS_TDI | CS_TCK | CS_TMS); // only these can be modified
+
+	if (mask != 0)
+	{
+		sigs = (prev_sigs & ~mask) | (val & mask);
+		tms = (sigs & CS_TMS) ? (1 << TMS) : 0;
+		tdi = (sigs & CS_TDI) ? (1 << TDI) : 0;
+		tck = (sigs & CS_TCK) ? (1 << TCK) : 0;
+		ts7800_gpio_write( cable, tms | tdi | tck );
+	}
+
+	return prev_sigs;
+}
+
+static int
+ts7800_get_signal( cable_t *cable, pod_sigsel_t sig )
+{
+	ts7800_params_t *p = cable->params;
+
+	return (current_signals( cable ) & sig) ? 1 : 0;
 }
 
 static void
@@ -266,8 +295,8 @@ cable_driver_t ts7800_cable_driver = {
 	ts7800_clock,
 	ts7800_get_tdo,
 	generic_transfer,
-	ts7800_set_trst,
-	ts7800_get_trst,
+	ts7800_set_signal,
+	ts7800_get_signal,
 	generic_flush_one_by_one,
 	ts7800_help
 };
