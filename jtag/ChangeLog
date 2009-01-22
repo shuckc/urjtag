@@ -1,3 +1,7 @@
+2009-01-22  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/include.c: Include ctype.h for isalpha().
+
 2009-01-19  Kolja Waschk <kawk>
 
   * doc/UrJTAG.txt,
