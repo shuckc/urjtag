@@ -2,6 +2,8 @@
 
   * src/cmd/include.c: Include ctype.h for isalpha().
 
+  * src/bsdl/bsdl_sem.c (create_register): Use %zu for size_t with printf().
+
 2009-01-19  Kolja Waschk <kawk>
 
   * doc/UrJTAG.txt,

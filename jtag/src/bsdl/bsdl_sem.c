@@ -206,7 +206,7 @@ static int create_register( jtag_ctrl_t *jc, char *reg_name, size_t len)
     return 1;
 
   /* convert length information to string */
-  snprintf( len_str, str_len, "%i", len );
+  snprintf( len_str, str_len, "%zu", len );
 
   if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
     cmd_run( jc->chain, cmd );
