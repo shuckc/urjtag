@@ -7,6 +7,8 @@
   * src/tap/detect.c (detect_parts): Use the PRIX64 format string for 64bit
     types with printf().
 
+  * src/part/part.c (part_print): Use const markings with const strings.
+
 2009-01-19  Kolja Waschk <kawk>
 
   * doc/UrJTAG.txt,

@@ -235,8 +235,8 @@ part_get_signal( part_t *p, signal_t *s )
 void
 part_print( part_t *p )
 {
-	char *instruction = NULL;
-	char *dr = NULL;
+	const char *instruction = NULL;
+	const char *dr = NULL;
 	char format[100];
 
 	if (!p)
