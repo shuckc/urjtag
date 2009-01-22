@@ -8,6 +8,7 @@
     types with printf().
 
   * src/part/part.c (part_print): Use const markings with const strings.
+  * src/cmd/include.c (cmd_include_or_script_run): Likewise.
 
 2009-01-19  Kolja Waschk <kawk>
 

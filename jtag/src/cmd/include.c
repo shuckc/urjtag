@@ -63,7 +63,7 @@ cmd_include_or_script_run( chain_t *chain, int is_include, char *params[] )
 	}
 	else
 	{
-		char *jtag_data_dir = jtag_get_data_dir();
+		const char *jtag_data_dir = jtag_get_data_dir();
 		path = malloc(len = strlen( jtag_data_dir ) + strlen( params[1] ) + 2);
 		if(path != NULL)
 		{
