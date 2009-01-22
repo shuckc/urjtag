@@ -10,6 +10,9 @@
   * src/part/part.c (part_print): Use const markings with const strings.
   * src/cmd/include.c (cmd_include_or_script_run): Likewise.
 
+  * sysdep.h: Redirect swprintf() calls to _snwprintf() for Windows as they
+    implemented a different function from ISO C (theirs does not take a count).
+
 2009-01-19  Kolja Waschk <kawk>
 
   * doc/UrJTAG.txt,

@@ -48,6 +48,9 @@
 #include <windows.h>
 #define geteuid() 0
 #define getuid() 0
+/* Microsoft uses a different swprintf() than ISO C requires */
+#include <stdio.h>
+#define swprintf _snwprintf
 #endif
 
 #endif /* SYSDEP_H */
