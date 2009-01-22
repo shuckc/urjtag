@@ -24,6 +24,7 @@
 
 #include "sysdep.h"
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -263,7 +264,7 @@ detect_parts( chain_t *chain, const char *db_path )
 			did = id;
 		}
 
-		printf( _("Device Id: %s (0x%016lX)\n"), register_get_string( did ), bits_to_uint64(did) );
+		printf( _("Device Id: %s (0x%016"PRIX64")\n"), register_get_string( did ), bits_to_uint64(did) );
 
 		part = part_alloc( did );
 		if (part == NULL) {

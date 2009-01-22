@@ -4,6 +4,9 @@
 
   * src/bsdl/bsdl_sem.c (create_register): Use %zu for size_t with printf().
 
+  * src/tap/detect.c (detect_parts): Use the PRIX64 format string for 64bit
+    types with printf().
+
 2009-01-19  Kolja Waschk <kawk>
 
   * doc/UrJTAG.txt,
