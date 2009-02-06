@@ -1,3 +1,7 @@
+2009-02-06  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * src/tap/cable/ft2232.c: fix nSRST for flyswatter (Kees Jongenburger)
+
 2009-01-26  Kolja Waschk <kawk>
 
   * UrJTAG.nsi: Script to create Windows installer using NSIS.

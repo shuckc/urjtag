@@ -609,8 +609,9 @@ ft2232_flyswatter_init( cable_t *cable )
   if (usbconn_open( cable->link.usb )) return -1;
 
   /* static low byte value and direction:
-     nTRST = 1, nSRST = 1, set nOE1 and nOE2 to '0' -> activate output enables */
-  params->low_byte_value = BITMASK_FLYSWATTER_nTRST | BIT_FLYSWATTER_nSRST;
+     nTRST = 1, nSRST = 1 (ADBUS5 inverted),
+     set nOE1 and nOE2 to '0' -> activate output enables */
+  params->low_byte_value = BITMASK_FLYSWATTER_nTRST;
   params->low_byte_dir   = BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2 |
                            BITMASK_FLYSWATTER_nTRST | BITMASK_FLYSWATTER_nSRST;
 
