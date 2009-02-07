@@ -95,14 +95,14 @@ program devices.
 The player has been developed according to the "Serial Vector Format
 Specification", Revision E, 8 March 1999 issued by ASSET InterTech, Inc. The
 full specification can be found at
-http://www.asset-intertech.com/support/svf.pdf
+http://www.asset-intertech.com/support/svf.pdf[]
 
 UrJTAG features an "SVF player" that can read SVF files and perform the
 described actions on the bus.
 
-SVF parser and lexer are also copyright 2002, CDS at http://www-csd.ijs.si/.
+SVF parser and lexer are also copyright 2002, CDS at http://www-csd.ijs.si/[].
 They have been reused from the "Experimental Boundary Scan" project at
-http://ebsp.sourceforge.net/.
+http://ebsp.sourceforge.net/[].
 
 ==== JAM/STAPL files ====
 
@@ -143,7 +143,7 @@ at the UrJTAG website.
 ==== UrJTAG Website ====
 
 The most current version of this documentation and UrJTAG sourcecode 
-is always available from the project homepage at http://www.urjtag.org
+is always available from the project homepage at http://www.urjtag.org[]
 
 ==== The name "UrJTAG" ====
 
@@ -185,7 +185,7 @@ with Cygwin installed.
 
 Required only for MS Windows:
 
- * current Cygwin net installation from http://cygwin.com
+ * current Cygwin net installation from http://cygwin.com[]
  * ioperm package (a part of the standard Cygwin net installation)
 
 It may be necessary to run the command "ioperm -i" to install the IOPERM.SYS
@@ -222,15 +222,15 @@ FT2232-based USB cables:
  * TinCanTools Flyswatter
  * Olimex ARM-USB-JTAG
  * Olimex ARM-USB-TINY
- * OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
+ * OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks[]
  * Other FT2232-based USB JTAG cables (experimental)
- * Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/
- * USB to JTAG Interface (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
+ * Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/[]
+ * USB to JTAG Interface (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html[]
  * Xverve Signalyzer Tool (experimental)
 
 Other USB cables:
 
- * Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag
+ * Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag[]
  * Segger/IAR J-Link / Atmel SAM-ICE (experimental, work in progress)
  * Xilinx Platform USB Cable / DLC9 (slow, experimental, work in progress - don't use)
 
@@ -320,7 +320,7 @@ package and can be installed using the distribution's package management system
 (e.g. "apt-get libftdi-dev" for Debian and Ubuntu). If it isn't available or
 you don't run Linux, you can get it from
 
- * http://www.intra2net.com/en/developer/libftdi/
+ * http://www.intra2net.com/en/developer/libftdi/[]
 
 Alternatively, you can use the FTD2XX library from the chip manufacturer FTDI.
 It is available for Linux and Windows. There's more information about linking
@@ -329,8 +329,8 @@ to that library in a Cygwin environment below.
 All other USB JTAG adapters can be supported only if libusb is installed.
 There is a libusb-win32 variant that can be used in a Cygwin environment:
 
- * http://libusb.sourceforge.net (libusb)
- * http://libusb-win32.sourceforge.net (libusb for Windows)
+ * http://libusb.sourceforge.net[] (libusb)
+ * http://libusb-win32.sourceforge.net[] (libusb for Windows)
 
 For specific notes regarding the use of these libraries in a Cygwin
 environmen, see below.
@@ -361,7 +361,7 @@ If you want to try the very newest version of UrJTAG...
 
 Before running configure, get the D2XX drivers from FTDI.
 
- * http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
+ * http://www.ftdichip.com/Drivers/D2XX.htm[] (FTDI FTD2XX library)
 
 Unzip the archive into a directory of your choice (probably a choice
 without spaces in the name is better)  and afterwards run configure with the
@@ -380,7 +380,7 @@ Configure should now report
 
 Before running configure, install the LibUSB-Win32 "filter" driver from SF.
 
- * http://libusb-win32.sourceforge.net
+ * http://libusb-win32.sourceforge.net[]
 
 Then point configure to the directory where LibUSB-Win32 was installed (it
 might give problems if the path contains spaces, as "Program Files" does!):
@@ -390,7 +390,7 @@ might give problems if the path contains spaces, as "Program Files" does!):
 ==== Compiling with MinGW ====
 
 UrJTAG may be compiled into a Windows executable using the MinGW compiler
-(http://www.mingw.org), or Cygwin GCC with the "-mno-cygwin" compiler flag.
+(http://www.mingw.org[]), or Cygwin GCC with the "-mno-cygwin" compiler flag.
 
 This has the advantage over running in a Cygwin environment that you don't need
 to install anything else but the jtag.exe (plus libraries like FTD2XX.dll or
@@ -1416,7 +1416,7 @@ For a list of known problems in current versions, please also check the "Bugs"
 tracker at the UrJTAG website!
 
 Q. The documentation is incomplete. Where can I get more information?::
-  A. Please ask in the "Using UrJTAG" Forum on http://urjtag.org
+  A. Please ask in the "Using UrJTAG" Forum on http://urjtag.org[]
 
 Q. My flash isn't detected or can't be programmed. What can I do?::
   A. Please record the output of the "detect" and "detectflash" commands and ask in the Forum. If possible, re-compile UrJTAG before with "--enable-jedec-exp" to get extra information.
