@@ -320,7 +320,7 @@ package and can be installed using the distribution's package management system
 (e.g. "apt-get libftdi-dev" for Debian and Ubuntu). If it isn't available or
 you don't run Linux, you can get it from
 
- * http://www.intra2net.com/de/produkte/opensource/ftdi/ 
+ * http://www.intra2net.com/en/developer/libftdi/
 
 Alternatively, you can use the FTD2XX library from the chip manufacturer FTDI.
 It is available for Linux and Windows. There's more information about linking

@@ -1,3 +1,7 @@
+2009-02-07  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * doc/UrJTAG.txt: libftdi URL changed
+
 2009-02-06  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * src/tap/cable/ft2232.c: fix nSRST for flyswatter (Kees Jongenburger)
