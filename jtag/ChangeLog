@@ -1,3 +1,7 @@
+2009-02-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * src/bsdl/bsdl_sem.c: return proper error code to upper level
+
 2009-02-07  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * doc/UrJTAG.txt: turn http links into real hyperlinks

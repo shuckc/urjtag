@@ -689,7 +689,7 @@ int bsdl_process_elements( jtag_ctrl_t *jc, const char *idcode )
       bsdl_msg( jc->proc_mode,
                 BSDL_MSG_ERR, _("BSDL stage reported errors, aborting.\n") );
       bsdl_parser_deinit( priv );
-      return result;
+      return -1;
     }
   }
 
