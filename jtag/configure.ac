@@ -265,7 +265,7 @@ AS_IF([test "x$with_inpout32" = xyes], [
 
 
 CFLAGS="$CFLAGS -Wall"
-CPPFLAGS="$CPPFLAGS -I\$(top_srcdir) -I\$(top_srcdir)/include"
+CPPFLAGS="-I\$(top_srcdir) -I\$(top_srcdir)/include $CPPFLAGS"
 
 
 # check for lex/flex
