@@ -95,7 +95,7 @@ cmd_print_run( chain_t *chain, char *params[] )
 			part_t *part;
 			instruction *inst;
 
-			snprintf( format, 128, _(" Active %%-%ds %%-%ds\n"),
+			snprintf( format, 128, _(" Active %%-%ds %%-%ds"),
 				MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
 #if HAVE_SWPRINTF
 			if (mbstowcs( wformat, format, 128 ) == -1)
@@ -108,7 +108,7 @@ cmd_print_run( chain_t *chain, char *params[] )
 			if (mbstowcs( wheader, header, 128 ) == -1)
 				printf( _("(%d) String conversion failed!\n"), __LINE__ );
 #endif /* HAVE_SWPRINTF */
-			printf( header );
+			puts( header );
 
 			for (i = 0; i < wcslen( wheader ); i++ )
 				putchar( '-' );
@@ -130,7 +130,7 @@ cmd_print_run( chain_t *chain, char *params[] )
 	}
 
 	if (noheader == 0) {
-		snprintf( format, 128, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
+		snprintf( format, 128, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds"), MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
 				MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER );
 #if HAVE_SWPRINTF
 		if (mbstowcs( wformat, format, 128 ) == -1)
@@ -143,7 +143,7 @@ cmd_print_run( chain_t *chain, char *params[] )
 		if (mbstowcs( wheader, header, 128 ) == -1)
 			printf( _("(%d) String conversion failed!\n"), __LINE__ );
 #endif /* HAVE_SWPRINTF */
-		printf( header );
+		puts( header );
 
 		for (i = 0; i < wcslen( wheader ); i++ )
 			putchar( '-' );
