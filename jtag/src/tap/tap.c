@@ -63,7 +63,7 @@ tap_reset_bypass( chain_t *chain )
 }
 
 void
-tap_defer_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int exit )
+tap_defer_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int tap_exit )
 {
 	int i;
 
@@ -75,7 +75,7 @@ tap_defer_shift_register( chain_t *chain, const tap_register *in, tap_register *
 		chain_defer_clock( chain, 0, 0, 1 );	/* save last TDO bit :-) */
 
 	i = in->len;
-	if(exit) i--;
+	if (tap_exit) i--;
 	if(out && out->len < i) i = out->len;
 
 	if(out)
@@ -86,26 +86,26 @@ tap_defer_shift_register( chain_t *chain, const tap_register *in, tap_register *
 	for (; i < in->len; i++) {
 		if (out != NULL && (i < out->len))
 			out->data[i] = cable_defer_get_tdo( chain->cable );
-		chain_defer_clock( chain, (exit != EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i], 1 );	/* Shift (& Exit1) */
+		chain_defer_clock( chain, (tap_exit != EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i], 1 );	/* Shift (& Exit1) */
 	}
 
 	/* Shift-DR, Shift-IR, Exit1-DR or Exit1-IR state */
-	if (exit == EXITMODE_IDLE) {
+	if (tap_exit == EXITMODE_IDLE) {
 		chain_defer_clock( chain, 1, 0, 1 );	/* Update-DR or Update-IR */
 		chain_defer_clock( chain, 0, 0, 1 );	/* Run-Test/Idle */
-	} else if (exit == EXITMODE_UPDATE)
+	} else if (tap_exit == EXITMODE_UPDATE)
 		chain_defer_clock( chain, 1, 0, 1 );	/* Update-DR or Update-IR */
 }
 
 void
-tap_shift_register_output( chain_t *chain, const tap_register *in, tap_register *out, int exit )
+tap_shift_register_output( chain_t *chain, const tap_register *in, tap_register *out, int tap_exit )
 {
 	if(out != NULL)
 	{
 		int j;
 
 		j = in->len;
-		if(exit) j--;
+		if (tap_exit) j--;
 		if(out && out->len < j) j = out->len;
 
 		/* Asking for the result of the cable transfer
@@ -118,10 +118,10 @@ tap_shift_register_output( chain_t *chain, const tap_register *in, tap_register 
 }
 
 void
-tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int exit )
+tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int tap_exit )
 {
-	tap_defer_shift_register( chain, in, out, exit );
-	tap_shift_register_output( chain, in, out, exit );
+	tap_defer_shift_register( chain, in, out, tap_exit );
+	tap_shift_register_output( chain, in, out, tap_exit );
 }
 
 void

@@ -1,3 +1,9 @@
+2009-02-13  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/chain.h, include/tap.h, src/tap/chain.c, src/tap/tap.c: Add a
+    prefix to all local variables named "exit" to avoid shadowing the system
+    exit() function.
+
 2009-02-11  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * src/bsdl/bsdl_sem.c: return proper error code to upper level

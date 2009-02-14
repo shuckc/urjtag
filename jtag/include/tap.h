@@ -32,8 +32,8 @@ void tap_reset( chain_t *chain );
 void tap_reset_bypass( chain_t *chain );
 void tap_capture_dr( chain_t *chain );
 void tap_capture_ir( chain_t *chain );
-void tap_defer_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int exit );
-void tap_shift_register_output( chain_t *chain, const tap_register *in, tap_register *out, int exit );
-void tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int exit );
+void tap_defer_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int tap_exit );
+void tap_shift_register_output( chain_t *chain, const tap_register *in, tap_register *out, int tap_exit );
+void tap_shift_register( chain_t *chain, const tap_register *in, tap_register *out, int tap_exit );
 
 #endif /* TAP_H */

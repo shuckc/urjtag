@@ -134,7 +134,7 @@ chain_get_pod_signal( chain_t *chain, pod_sigsel_t sig  )
 }
 
 void
-chain_shift_instructions_mode( chain_t *chain, int capture_output, int capture, int exit )
+chain_shift_instructions_mode( chain_t *chain, int capture_output, int capture, int chain_exit )
 {
 	int i;
 	parts_t *ps;
@@ -160,7 +160,7 @@ chain_shift_instructions_mode( chain_t *chain, int capture_output, int capture, 
 	for (i = 0; i < ps->len; i++) {
 		tap_defer_shift_register( chain, ps->parts[i]->active_instruction->value,
 		                          capture_output ? ps->parts[i]->active_instruction->out : NULL,
-		                          (i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+		                          (i + 1) == ps->len ? chain_exit : EXITMODE_SHIFT );
 	}
 
 	if(capture_output)
@@ -168,7 +168,7 @@ chain_shift_instructions_mode( chain_t *chain, int capture_output, int capture, 
 		for (i = 0; i < ps->len; i++) {
 			tap_shift_register_output( chain, ps->parts[i]->active_instruction->value,
 			                           ps->parts[i]->active_instruction->out,
-			                           (i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+			                           (i + 1) == ps->len ? chain_exit : EXITMODE_SHIFT );
 		}
 	}
 	else
@@ -185,7 +185,7 @@ chain_shift_instructions( chain_t *chain )
 }
 
 void
-chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture, int exit )
+chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture, int chain_exit )
 {
 	int i;
 	parts_t *ps;
@@ -215,7 +215,7 @@ chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture
 	for (i = 0; i < ps->len; i++) {
 		tap_defer_shift_register( chain, ps->parts[i]->active_instruction->data_register->in,
 				capture_output ? ps->parts[i]->active_instruction->data_register->out : NULL,
-				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+				(i + 1) == ps->len ? chain_exit : EXITMODE_SHIFT );
 	}
 
 	if(capture_output)
@@ -223,7 +223,7 @@ chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture
 		for (i = 0; i < ps->len; i++) {
 			tap_shift_register_output( chain, ps->parts[i]->active_instruction->data_register->in,
 				ps->parts[i]->active_instruction->data_register->out,
-				(i + 1) == ps->len ? exit : EXITMODE_SHIFT );
+				(i + 1) == ps->len ? chain_exit : EXITMODE_SHIFT );
 		}
 	}
 	else
