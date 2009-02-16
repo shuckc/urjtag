@@ -1452,6 +1452,17 @@ Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option
 Q. When running "make install", I get "Permission denied" errors::
   A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
 
+Q. My BSDL file defines the bus DAT as bit_vector(15 downto 0), how should I access single elements?::
+  A. BSDL syntax is an extension of the VHDL language. Array elements are indexed with
+    parentheses: DAT(4) selects index number 4 of the DAT vector. Also refer to the "print
+    signals" command.
+
+Q. My board requires certain signals to be set to dedicated values before external memories can be accessed.::
+  A. Most (if not all) BSR-based bus drivers allow for static configurations of
+    pins that are controlled by BSR bits. Apply the required "set" commands before
+    issueing the "initbus ..." command. These settings are preserved by all bus
+    related commands if they don't collide with the signals required for bus operation.
+
 //========================================================================
 
 == Licensing ==

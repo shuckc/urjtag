@@ -1,3 +1,7 @@
+2009-02-16  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * doc/UrJTAG.txt: some FAQs
+
 2009-02-13  Mike Frysinger  <vapier@gentoo.org>
 
   * include/chain.h, include/tap.h, src/tap/chain.c, src/tap/tap.c: Add a
