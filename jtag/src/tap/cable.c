@@ -174,7 +174,7 @@ cable_init( cable_t *cable )
 		if(cable->todo.data != NULL) free(cable->todo.data);
 		if(cable->done.data != NULL) free(cable->done.data);
 		return 1;
-	};
+	}
 
 	return cable->driver->init( cable );
 }
@@ -356,7 +356,7 @@ cable_purge_queue( cable_queue_info_t *q, int io )
 		i++;
 		if(i >= q->max_items) i = 0;
 		q->num_items--;
-	};
+	}
 
 	q->num_items = 0;
 	q->next_item = 0;
@@ -408,7 +408,7 @@ cable_get_tdo_late( cable_t *cable )
 		{
 			return cable->done.data[i].arg.value.val;
 		}
-	};
+	}
 	return cable->driver->get_tdo( cable );
 }
 
@@ -472,7 +472,7 @@ cable_get_signal_late( cable_t *cable, pod_sigsel_t sig )
 		{
 			return cable->done.data[i].arg.value.val;
 		}
-	};
+	}
 	return cable->driver->get_signal( cable, sig );
 }
 
@@ -514,7 +514,7 @@ cable_transfer_late( cable_t *cable, char *out )
 				cable->done.data[i].arg.xferred.len);
 		free(cable->done.data[i].arg.xferred.out);
 		return cable->done.data[i].arg.xferred.res;
-	};
+	}
 	
 	if(cable->done.data[i].action != CABLE_TRANSFER)
 	{
@@ -546,7 +546,7 @@ cable_defer_transfer( cable_t *cable, int len, char *in, char *out )
 			free(ibuf);
 			return 1;
 		}
-	};
+	}
 
 	i = cable_add_queue_item( cable, &(cable->todo) );
 	if( i < 0 )
@@ -554,7 +554,7 @@ cable_defer_transfer( cable_t *cable, int len, char *in, char *out )
 		free(ibuf);
 		if(obuf) free(obuf);
 		return 1; /* report failure */
-	};
+	}
 
 	cable->todo.data[i].action = CABLE_TRANSFER;
 	cable->todo.data[i].arg.transfer.len = len;

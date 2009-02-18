@@ -295,7 +295,7 @@ xpcu_common_init( cable_t *cable )
     if (r>=0)
     {
         printf("firmware version = 0x%04X (%u)\n", buf, buf);
-    };
+    }
 
     /* Read CPLD version (via GPIF) */
 
@@ -307,13 +307,13 @@ xpcu_common_init( cable_t *cable )
         {
             printf("Warning: version '0' can't be correct. Please try resetting the cable\n");
             r = -1;
-        };
-    };
+        }
+    }
 
     if (r<0)
     {
         usb_close(xpcu);
-    };
+    }
 
     return r;
 }
@@ -561,7 +561,7 @@ xpcu_add_bit_for_ext_transfer( xpc_ext_transfer_state_t *xts, char in, char is_r
 	{
 		xts->buf[buf_idx] = 0;
 		xts->buf[buf_idx+1] = 0;
-	};
+	}
 
 	xts->in_bits++;
 
@@ -611,7 +611,7 @@ xpc_ext_transfer( cable_t *cable, int len, char *in, char *out )
 		{
 			j = xpcu_do_ext_transfer( &xts );
 		}
-	};
+	}
 
 	if(xts.in_bits > 0 && j>=0)
 	{

@@ -330,7 +330,7 @@ setup_address( bus_t *bus, uint32_t a )
 	      else
 		printf(" ");
 	    printf(" ");
-	  };
+	  }
 	  printf("\n");
 	}
 
@@ -381,7 +381,7 @@ setup_data( bus_t *bus, uint32_t adr, uint32_t d )
 	      else
 		printf("%1d", (d >> (              (i*8+j)) ) & 1);
 	    printf(" ");
-	  };
+	  }
 	  printf("\n");
 	}
 
@@ -418,7 +418,7 @@ get_data( bus_t *bus, uint32_t adr )
 	      else
 		printf("%1d", (d >> (              (i*8+j)) ) & 1);
 	    printf(" ");
-	  };
+	  }
 	  printf("\n");
 	}
 

@@ -71,7 +71,7 @@ void jim_print_tap_state(char *rof, jim_device_t *dev)
     case 5:  printf("PAUSE"); break;
     case 6:  printf("EXIT2"); break;
     default: printf("UPDATE"); break;
-  };
+  }
   if(dev->tap_state & 7)
   {
     if(dev->tap_state & 8)
@@ -86,8 +86,8 @@ void jim_print_tap_state(char *rof, jim_device_t *dev)
         printf("(%d)=", dev->current_dr);
         jim_print_sreg(&dev->sreg[dev->current_dr]);
       }
-    };
-  };
+    }
+  }
   printf("\n");
 }
 
@@ -161,7 +161,7 @@ void jim_tck_rise(jim_state_t *s, int tms, int tdi)
         {
           reg[i] >>= 1;
           if(reg[i+1] & 1) reg[i] |= 0x80000000;
-        };
+        }
     
         /* End with MSW at index i */
     
@@ -256,7 +256,7 @@ jim_state_t *jim_init(void)
   {
     printf("Out of memory!\n");
     return NULL;
-  };
+  }
 
   s->shmem_size = (1<<20)*16; /* 16 MByte */
   s->shmem = malloc(s->shmem_size);

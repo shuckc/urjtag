@@ -110,7 +110,7 @@ do_one_queued_action( cable_t *cable )
 				printf(_("No space in cable activity results queue.\n"));
 				cable_purge_queue( &(cable->done), 1 );
 			}
-		};
+		}
 
 		switch(cable->todo.data[i].action)
 		{
@@ -143,9 +143,9 @@ do_one_queued_action( cable_t *cable )
 					cable->done.data[j].arg.xferred.len = cable->todo.data[i].arg.transfer.len;
 					cable->done.data[j].arg.xferred.res = r;
 					cable->done.data[j].arg.xferred.out = cable->todo.data[i].arg.transfer.out;
-				};
+				}
 				break;
-			};
+			}
 			case CABLE_GET_TDO:
 				j = cable_add_queue_item( cable, &(cable->done) );
 #ifdef VERBOSE
@@ -167,7 +167,7 @@ do_one_queued_action( cable_t *cable )
 					cable->driver->get_signal( cable, 
 						cable->todo.data[i].arg.value.sig );
 				break;
-		};
+		}
 #ifdef VERBOSE
 		printf("do_one_queued done\n");
 #endif
@@ -249,7 +249,7 @@ generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 			}
 			i++;
 			if(i >= cable->todo.max_items) i = 0;
-		};
+		}
 
 #ifdef VERBOSE
 		printf("%d combined into one (%d bits)\n", n, bits);
@@ -272,7 +272,7 @@ generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 				if(out != NULL) free(out);
 				generic_flush_one_by_one( cable, how_much );
 				break; 
-			};
+			}
 
 			for(j=0, bits=0, i=cable->todo.next_item; j<n; j++)
 			{
@@ -289,18 +289,18 @@ generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 					{
 						memcpy(in+bits, cable->todo.data[i].arg.transfer.in, len);
 						bits += len;
-					};
-				};
+					}
+				}
 				i++;
 				if(i >= cable->todo.max_items) i = 0;
-			};
+			}
 
 			/* Step 3: Do the transfer */
 	
 			r = cable->driver->transfer( cable, bits, in, out );
 #ifdef VERBOSE
 			printf("in: "); print_vector(bits,in); printf("\n");
-			if(out) { printf("out: "); print_vector(bits,out); printf("\n"); };
+			if(out) { printf("out: "); print_vector(bits,out); printf("\n"); }
 #endif
 	
 			/* Step 4: Pick results from transfer */ 
@@ -341,7 +341,7 @@ generic_flush_using_transfer( cable_t *cable, cable_flush_amount_t how_much )
 					}
 					if(len>0) bits += len;
 					if(bits>0) tdo = out[bits-1];
-				};
+				}
 				i++;
 				if(i >= cable->todo.max_items) i = 0;
 			}

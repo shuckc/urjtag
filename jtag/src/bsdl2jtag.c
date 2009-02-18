@@ -241,7 +241,7 @@ int endline(void) {
 				break;
 			case 7:
 				j=0;
-				for(i=0;i<strlen(pline);i++)if(pline[i]==':'){j=1; break;};
+				for(i=0;i<strlen(pline);i++)if(pline[i]==':'){j=1; break;}
                 for(i=0;i<strlen(pline);i++)
 					if((pline[i]==',')||(pline[i]=='"')||(pline[i]=='(')||(pline[i]==')'))
 						pline[i]=' ';
@@ -281,7 +281,7 @@ int endline(void) {
 						pins_num++;
 					}
 					pins_num--;
-				};
+				}
 				break;
 						
 			case 0:

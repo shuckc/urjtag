@@ -61,14 +61,14 @@ cmd_shell_run( chain_t *chain, char *params[] )
 	{
 		printf( _("Out of memory\n") );
 		return -1;
-	};
+	}
 
 	strcpy(shell_cmd, params[1]);
 	for(i=2; i<n; i++)
 	{
 		strcat(shell_cmd, " ");
 		strcat(shell_cmd, params[i]);
-	};
+	}
 	printf("Executing '%s'\n", shell_cmd);
 
 	system(shell_cmd);

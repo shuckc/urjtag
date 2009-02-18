@@ -77,7 +77,7 @@ cmd_scan_run( chain_t *chain, char *params[] )
 	{
 		printf( _("%s(%s:%d) Part can't SAMPLE\n"), __FUNCTION__, __FILE__, __LINE__ );
 		return 1;
-	};
+	}
 
 	chain_shift_instructions( chain );
 

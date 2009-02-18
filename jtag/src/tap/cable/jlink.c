@@ -184,7 +184,7 @@ static int jlink_get_status( libusb_param_t *params )
 		{
 			ERROR("Vref too low. Eventually the target isn't powered or disconnected?\n");
 			result = -15;
-		};
+		}
 	}
 	else
     {
@@ -215,7 +215,7 @@ static void jlink_tap_append_step( jlink_usbconn_data_t *data, int tms, int tdi)
         {
             data->tms_buffer[index] = 0;
             data->tdi_buffer[index] = 0;
-        };
+        }
 
         if(tms) data->tms_buffer[index] |= bit;
         if(tdi) data->tdi_buffer[index] |= bit;
@@ -549,7 +549,7 @@ jlink_transfer( cable_t *cable, int len, char *in, char *out )
             if(out) jlink_copy_out_data( data, i-j, j, out);
             j = i;
         }
-    };
+    }
     if(data->tap_length > 0)
     {
         jlink_tap_execute( params );

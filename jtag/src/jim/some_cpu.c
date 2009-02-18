@@ -96,7 +96,7 @@ void some_cpu_tck_rise(jim_device_t *dev,
 
         /* Store data into data "input" cells in BSR */
         dev->sreg[2].reg[2] = d;
-      };
+      }
       break;
 
     case UPDATE_IR:
@@ -174,7 +174,7 @@ void some_cpu_tck_fall(jim_device_t *dev,
             }
           }
         }
-      };
+      }
       break;
 
     default:
@@ -231,7 +231,7 @@ jim_device_t *some_cpu(void)
         if(*b == NULL) break;
         memcpy(*b, some_cpu_attached[i].part, sizeof(jim_bus_device_t));
         (*b)->init(*b);
-      };
+      }
 
       if(some_cpu_attached[i].part) /* loop broken; failed to malloc all parts */
       {

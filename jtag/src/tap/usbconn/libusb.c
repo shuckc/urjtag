@@ -153,7 +153,7 @@ usbconn_libusb_connect( const char **param, int paramc, usbconn_cable_t *templat
 		if (libusb_conn)
 			free(libusb_conn);
 		return NULL;
-	};
+	}
 
 	libusb_params->dev = found_dev;
 	libusb_params->handle = NULL;

@@ -236,7 +236,7 @@ void intel_28fxxxb3_update(jim_bus_device_t *d,
         }
       }
       is->status_buffer = is->status; /* latch status */
-    };
+    }
 
     if(((control&7)==6)&&((is->control_buffer&2)!=2)) /* WE rise, CS active: WRITE */
     {
@@ -327,7 +327,7 @@ void intel_28fxxxb3_update(jim_bus_device_t *d,
           {
             is->opstate = ERASE_SUSP_TO_READ_STATUS;
             is->status |= I28F_ERASE_SUSPENDED;
-          };
+          }
           break;
 
         case ERASE_SUSP_TO_READ_STATUS:
@@ -357,7 +357,7 @@ void intel_28fxxxb3_update(jim_bus_device_t *d,
           }
           break;
       }
-    };
+    }
     is->control_buffer = control;
   }
 }

@@ -89,7 +89,7 @@ cmd_include_or_script_run( chain_t *chain, int is_include, char *params[] )
 
 	if (cmd_params( params ) > 2) {
 		sscanf(params[2],"%d",&j);	/* loop n times option */
-	};
+	}
 
 	for(i = 0; i < j ;i++) {
 		go = jtag_parse_file( chain, path );

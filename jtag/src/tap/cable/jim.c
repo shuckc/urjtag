@@ -91,7 +91,7 @@ jim_cable_free( cable_t *cable )
     {
         jim_free( ((jim_cable_params_t*)(cable->params))->s );
         free( cable->params );
-    };
+    }
 	free( cable );
 }
 

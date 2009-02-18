@@ -56,7 +56,7 @@ data_register_alloc( const char *name, int len )
 	{
 		dr->in = register_alloc( 1 );
 		dr->out = register_alloc( 1 );
-	};
+	}
 	if (!dr->in || !dr->out) {
 		free( dr->in );
 		free( dr->out );

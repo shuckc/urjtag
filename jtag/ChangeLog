@@ -3,6 +3,13 @@
   * src/bus/mpc824x.c (setup_address): Return on unhandled sizes to avoid
     compiler warnings.
 
+  * src/bsdl2jtag.c, src/bus/mpc824x.c, src/cmd/include.c, src/cmd/scan.c,
+    src/cmd/shell.c, src/jim/intel_28f800b3.c, src/jim/some_cpu.c,
+    src/jim/tap.c, src/part/data_register.c, src/tap/cable.c,
+    src/tap/cable/generic.c, src/tap/cable/jim.c, src/tap/cable/jlink.c,
+    src/tap/cable/xpc.c, src/tap/usbconn/libusb.c: Remove spurious semicolons
+    from places they do not belong (like at the end of braces).
+
 2009-02-16  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * doc/UrJTAG.txt: some FAQs
