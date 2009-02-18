@@ -298,6 +298,7 @@ setup_address( bus_t *bus, uint32_t a )
 	case 8:/* 8-bit data bus */
 	  for (i = 0; i < 23; i++)
 	    part_set_signal( p, AR[i], 1, (a >> i) & 1 );
+	  break;
 	case 32:/* 32-bit data bus */
 	  for (i = 0; i < 21; i++)
 	    part_set_signal( p, AR[i], 1, (a >> (i+2)) & 1 );
@@ -305,6 +306,10 @@ setup_address( bus_t *bus, uint32_t a )
 	case 64:
 	  for (i = 0; i < 20; i++)
 	    part_set_signal( p, AR[i], 1, (a >> (i+3)) & 1 );
+	  break;
+	default:
+	  printf(_("Warning: unhandled bus width: %i\n"), BUS_WIDTH);
+	  return;
 	}
 
 	/* Just for debugging */
@@ -313,7 +318,8 @@ setup_address( bus_t *bus, uint32_t a )
 	  switch (BUS_WIDTH) {
 	  case 8:  k = 23; break;
 	  case 32: k = 21; break;
-	  case 64: k = 20;
+	  case 64: k = 20; break;
+	  default: return;
 	  }
 
 	  printf(_("Addr    [%2d:0]: %06X   "), k, a);
