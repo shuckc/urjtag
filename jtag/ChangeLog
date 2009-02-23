@@ -1,5 +1,8 @@
 2009-02-23  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+  * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c:
+    keep JTAG dongle in current mode (Holger Schurig)
+
   * data/atmel/at32ap7000/at32ap7000: clarifications for AVR32 data
     (Holger Schurig)
 

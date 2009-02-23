@@ -390,9 +390,6 @@ usbconn_ftd2xx_open( usbconn_t *conn )
   if (status == FT_OK) if ((status =  FT_Purge( fc, FT_PURGE_RX )) != FT_OK)
     printf( _("%s(): Can't purge RX buffer.\n"), __FUNCTION__ );
 
-  if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK)
-    printf( _("%s(): Can't disable bitmode.\n"), __FUNCTION__ );
-
   if (status == FT_OK) if ((status = FT_SetLatencyTimer(fc, 2)) != FT_OK)
     printf( _("%s(): Can't set latency timer.\n"), __FUNCTION__ );
 
@@ -444,8 +441,6 @@ usbconn_ftd2xx_mpsse_open( usbconn_t *conn )
   if (status == FT_OK) if ((status = FT_SetLatencyTimer( fc, 16 )) != FT_OK)
     printf( _("%s(): Can't set target latency timer.\n"), __FUNCTION__ );
 
-  if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x00, 0x00 )) != FT_OK)
-    printf( _("%s(): Can't disable bitmode.\n"), __FUNCTION__ );
   if (status == FT_OK) if ((status =  FT_SetBitMode( fc, 0x0b, 0x02 /* BITMODE_MPSSE */ )) != FT_OK)
     printf( _("%s(): Can't set MPSSE bitmode.\n"), __FUNCTION__ );
 
@@ -496,7 +491,6 @@ usbconn_ftd2xx_close( usbconn_t *conn )
 
   if (p->fc)
   {
-    FT_SetBitMode( p->fc, 0x00, 0x00 );
     FT_Close( p->fc );
     p->fc = NULL;
   }

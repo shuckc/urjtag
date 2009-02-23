@@ -409,10 +409,6 @@ usbconn_ftdi_open( usbconn_t *conn )
   r = seq_reset( fc );
   if (r >= 0) r = seq_purge( fc, 1, 0 );
 
-  if (r >= 0) if ((r = ftdi_disable_bitbang( fc )) < 0)
-    printf( _("%s(): ftdi_disable_bitbang() failed: %s\n"),
-            __FUNCTION__, ftdi_get_error_string( fc ) );
-
   if (r >= 0) if ((r = ftdi_set_latency_timer( fc, 2 )) < 0)
     printf( _("%s(): ftdi_set_latency_timer() failed: %s\n"),
             __FUNCTION__, ftdi_get_error_string( fc ) );
@@ -480,10 +476,6 @@ usbconn_ftdi_mpsse_open( usbconn_t *conn )
     printf( _("%s(): ftdi_set_latency_timer() failed: %s\n"),
             __FUNCTION__, ftdi_get_error_string( fc ) );
 
-  if (r >= 0) if ((r = ftdi_disable_bitbang( fc )) < 0)
-    printf( _("%s(): ftdi_disable_bitbang() failed: %s\n"),
-            __FUNCTION__, ftdi_get_error_string( fc ) );
-
   if (r >= 0) if ((r = ftdi_set_bitmode( fc, 0x0b, BITMODE_MPSSE )) < 0)
     printf( _("%s(): ftdi_set_bitmode() failed: %s\n"),
             __FUNCTION__, ftdi_get_error_string( fc ) );
@@ -532,7 +524,6 @@ usbconn_ftdi_close( usbconn_t *conn )
 
   if (p->fc)
   {
-    ftdi_disable_bitbang( p->fc );
     ftdi_usb_close( p->fc );
     ftdi_deinit( p->fc );
     p->fc = NULL;
