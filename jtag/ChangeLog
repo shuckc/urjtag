@@ -1,3 +1,8 @@
+2009-02-23  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * data/atmel/at32ap7000/at32ap7000: clarifications for AVR32 data
+    (Holger Schurig)
+
 2009-02-17  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/mpc824x.c (setup_address): Return on unhandled sizes to avoid

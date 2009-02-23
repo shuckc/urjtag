@@ -21,6 +21,7 @@
 # Documentation:
 # [1] Atmel Corporation, "AT32AP7000 - High Performance, Low Power
 #     AVR(R)32 32-Bit Microcontroller", Rev. 32003K-AVR32-10/07
+#     http://www.atmel.com/dyn/resources/prod_documents/doc32003.pdf
 #
 
 # mandatory data registers
@@ -43,7 +44,7 @@ instruction length 5
 instruction EXTEST		00000	BSR	# see page 914 in [1]
 instruction IDCODE		00001	DIR	# see page 914 in [1]
 instruction SAMPLE/PRELOAD	00010	BSR	# see page 914 in [1]
-instruction BYPASS		01111	BR	# see page 914 in [1]
+instruction BYPASS		01111	BR	# see page 915 in [1]
 
 # optional instructions
 instruction INTEST		00100	BSR	# see page 914 in [1]
@@ -53,9 +54,16 @@ instruction CLAMP		00110	BR	# see page 915 in [1]
 instruction AVR_RESET		01100	ARR	# see page 919 in [1]
 instruction NEXUS_ACCESS	10000	NAR	# see page 916 in [1]
 instruction MEMORY_WORD_ACCESS	10001	MWAR	# see page 917 in [1]
-instruction MEMORY_BLOCK_ACCESS	10011	MBAR	# see page 917 in [1]
+instruction MEMORY_BLOCK_ACCESS	10010	MBAR	# see page 918 in [1]
 instruction CANCEL_ACCESS	10011	CAR	# see page 918 in [1]
 instruction SYNC		10111	SYR	# see page 919 in [1]
+
+# undocumented instructions, detected by the "discovery" command:
+#Detecting DR length for IR 11000 ... 35
+#Detecting DR length for IR 11001 ... 32
+#Detecting DR length for IR 11010 ... 35
+#Detecting DR length for IR 11011 ... 64
+#Detecting DR length for IR 11111 ... 1         # probably BYPASS
 
 signal AGNDOSC
 signal AGNDPLL
