@@ -1,3 +1,7 @@
+2009-02-25  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * src/svf/svf_flex.l: [ 2635979 ] Replace index() to strchr()
+
 2009-02-23  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c:

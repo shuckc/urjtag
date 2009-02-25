@@ -101,7 +101,7 @@ COMMENT         (!.*)|("//".*)[^\n]
            on the locale settings. */
 
   if (real_string) {
-    char *point_pos = index(real_string, '.');
+    char *point_pos = strchr(real_string, '.');
     YY_EXTRA_TYPE extra = yyget_extra(yyscanner);
 
     if (point_pos)
