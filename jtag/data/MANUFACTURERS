@@ -32,6 +32,7 @@
 00000001001	intel		Intel
 00000001110	freescale	Freescale (Motorola)
 00000010101	philips		Philips Semi. (Signetics)
+00000010111	ti		Texas Instruments
 00000011000	toshiba		Toshiba
 00000011111	atmel		Atmel
 00000100001	lattice		Lattice Semiconductors

@@ -1,5 +1,9 @@
 2009-02-26  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+  * data/Makefile.am, data/MANUFACTURERS, data/ti/PARTS,
+    data/ti/tnetv1061/STEPPINGS, data/ti/tnetv1061/tnetv1061:
+    TI tnetv1061 (Kenny)
+
   * src/svf/svf_flex.l:
     [ 2638083 ] SVF progress indicator not visible for some .svf files
     (William)
