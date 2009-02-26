@@ -50,6 +50,7 @@ static void align_string(char *);
 
 static void fix_yylloc(YYLTYPE *, char *);
 static void fix_yylloc_nl(YYLTYPE *, char *, YY_EXTRA_TYPE);
+static void progress_nl(YYLTYPE *, YY_EXTRA_TYPE);
 
 int yywrap(yyscan_t scanner)
 {
@@ -177,6 +178,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   yylloc->first_column = yylloc->last_column;
   ++yylloc->last_line;
   yylloc->last_column = 0;
+  progress_nl(yylloc, yyget_extra(yyscanner));
 } /* end of new line */
 
 
@@ -328,15 +330,25 @@ fix_yylloc_nl(YYLTYPE * mylloc, char *str, YY_EXTRA_TYPE extra)
     if (*p == '\n') {
       mylloc->last_column = 0;
       ++mylloc->last_line;
-      if (extra->print_progress) {
-        printf( "\r" );
-        printf( _("Parsing %6d/%d (%3.0d%%)"),
-                mylloc->last_line, extra->num_lines,
-                ((mylloc->last_line * 100) + 1) / extra->num_lines );
-      }
+      progress_nl(mylloc, extra);
     } else {
       ++mylloc->last_column;
     }
+  }
+}
+
+
+static void
+progress_nl(YYLTYPE * mylloc, YY_EXTRA_TYPE extra)
+{
+  int percent;
+
+  if ((extra->print_progress) && (mylloc->last_line % 10==0)) {
+    percent = ((mylloc->last_line * 100) + 1) / extra->num_lines;
+    if (percent <= 1) return; // dont bother printing < 1 %
+    printf( "\r" );
+    printf( _("Parsing %6d/%d (%3.0d%%)"),
+            mylloc->last_line, extra->num_lines, percent);
   }
 }
 

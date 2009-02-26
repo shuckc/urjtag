@@ -1,6 +1,13 @@
+2009-02-26  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * src/svf/svf_flex.l:
+    [ 2638083 ] SVF progress indicator not visible for some .svf files
+    (William)
+
 2009-02-25  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * src/svf/svf_flex.l: [ 2635979 ] Replace index() to strchr()
+    (MURANAKA Masaki)
 
 2009-02-23  Arnim Laeuger  <arniml@users.sourceforge.net>
 
