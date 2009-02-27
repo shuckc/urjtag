@@ -706,6 +706,15 @@ FTD2XX is selected. That's simply because FTD2XX showed some performance
 advantages over libftdi in the past. You can still force libftdi with the
 respective parameter.
 
+WARNING: There's one quirk to consider when using FTDI's FTD2XX driver. It
+connects to any known FTDI chip, randomly. I.e. if there's more than one FTDI
+device connected to the host, chances are that the driver connects to the
+wrong USB device. This might be an OEM USB-serial converter and you'll be
+banging your head why there's no proper reading from the JTAG chain. Therefore
+it's strongly recommended to specify the desc=xxx parameter for the cable
+command if the ftd2xx driver is to be used. Set xxx to the product or serial
+number descriptor string that are exhibited by the USB device.
+
 ===== detect =====
 
 Detects devices on the chain. Example:
@@ -1462,6 +1471,14 @@ Q. My board requires certain signals to be set to dedicated values before extern
     pins that are controlled by BSR bits. Apply the required "set" commands before
     issueing the "initbus ..." command. These settings are preserved by all bus
     related commands if they don't collide with the signals required for bus operation.
+
+Q. My USB pod seems slow.::
+  A. USB-based JTAG pods suffer from a couple of intrinsic issues. Consider the
+    following to get maximum performance:
+    * Run UrJTAG on native linux. Cygwin and VMWare are reportedly slower.
+    * Connect the pod via a high speed USB hub to a high speed USB host port.
+      Even though the pod is a full speed device, it benefits from the shorter
+      turn-around times between host and hub.
 
 //========================================================================
 

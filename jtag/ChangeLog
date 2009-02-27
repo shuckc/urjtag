@@ -1,5 +1,7 @@
 2009-02-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 
+  * doc/UrJTAG.txt: Warning about FTD2XX driver, USB FAQ.
+
   * src/cmd/flashmem.c, src/flash/flash.c, include/flash.h:
     [ 2645787 ] Bypass verify stage of flashmem cmd (Jeff Wittrock)
 
