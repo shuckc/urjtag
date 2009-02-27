@@ -1,3 +1,8 @@
+2009-02-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * src/cmd/flashmem.c, src/flash/flash.c, include/flash.h:
+    [ 2645787 ] Bypass verify stage of flashmem cmd (Jeff Wittrock)
+
 2009-02-26  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * data/Makefile.am, data/MANUFACTURERS, data/ti/PARTS,

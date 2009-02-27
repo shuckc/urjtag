@@ -94,7 +94,7 @@ set_flash_driver( void )
 }
 
 void
-flashmsbin( bus_t *bus, FILE *f )
+flashmsbin( bus_t *bus, FILE *f, int noverify )
 {
 	uint32_t adr;
 	cfi_query_structure_t *cfi;
@@ -173,6 +173,11 @@ flashmsbin( bus_t *bus, FILE *f )
 
 	flash_driver->readarray( cfi_array );
 
+	if (noverify) {
+		printf( _("verify skipped\n") );
+		return;
+	}
+
 	fseek( f, 15, SEEK_SET );
 	printf( _("verify:\n") );
 
@@ -241,7 +246,7 @@ find_block( cfi_query_structure_t *cfi, int adr, int bus_width, int chip_width, 
 }
 
 void
-flashmem( bus_t *bus, FILE *f, uint32_t addr )
+flashmem( bus_t *bus, FILE *f, uint32_t addr, int noverify )
 {
 	uint32_t adr;
 	cfi_query_structure_t *cfi;
@@ -325,10 +330,16 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 			}
 		
 	}
+	free( erased );
 
 	printf( _("addr: 0x%08X\n"), adr - flash_driver->bus_width);
 
 	flash_driver->readarray( cfi_array );
+
+	if (noverify) {
+		printf( _("verify skipped\n") );
+                return;
+	}
 
 	fseek( f, 0, SEEK_SET );
 	printf( _("verify:\n") );
@@ -366,8 +377,6 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr )
 		}
 	}
 	printf( _("addr: 0x%08X\nDone.\n"), adr - flash_driver->bus_width);
-
-	free( erased );
 }
 
 void

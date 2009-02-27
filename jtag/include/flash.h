@@ -80,8 +80,8 @@ typedef struct {
 
 void detectflash( bus_t *bus, uint32_t adr );
 
-void flashmem( bus_t *bus, FILE *f, uint32_t addr );
-void flashmsbin( bus_t *bus, FILE *f );
+void flashmem( bus_t *bus, FILE *f, uint32_t addr, int );
+void flashmsbin( bus_t *bus, FILE *f, int );
 
 /* end of original brux/flash.h */
 
