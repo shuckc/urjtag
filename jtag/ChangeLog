@@ -1,3 +1,8 @@
+2009-03-01  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * data/ti/PARTS, data/ti/tnetv1060/tnetv1060, data/ti/tnetv1060/STEPPINGS:
+    TI tnetv1060 (Kenny)
+
 2009-02-27  Arnim Laeuger  <arniml@users.sourceforge.net>
 
   * doc/UrJTAG.txt: Warning about FTD2XX driver, USB FAQ.
