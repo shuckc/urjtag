@@ -159,6 +159,8 @@ nobase_dist_pkgdata_DATA = \
 	sigma/smp8634/STEPPINGS \
 	sigma/smp8634/smp8634 \
 	ti/PARTS \
+	ti/tnetv1060/STEPPINGS \
+	ti/tnetv1060/tnetv1060 \
 	ti/tnetv1061/STEPPINGS \
 	ti/tnetv1061/tnetv1061 \
 	toshiba/PARTS \

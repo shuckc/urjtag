@@ -1,6 +1,7 @@
 2009-03-01  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-  * data/ti/PARTS, data/ti/tnetv1060/tnetv1060, data/ti/tnetv1060/STEPPINGS:
+  * data/ti/PARTS, data/ti/tnetv1060/tnetv1060, data/ti/tnetv1060/STEPPINGS,
+    data/Makefile.am:
     TI tnetv1060 (Kenny)
 
 2009-02-27  Arnim Laeuger  <arniml@users.sourceforge.net>
