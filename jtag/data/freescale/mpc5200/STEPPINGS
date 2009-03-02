@@ -28,3 +28,4 @@
 # bits 31-28 of the Device Identification Register
 # see 21.8.1.1 in [1]
 0000	mpc5200		0
+0001	mpc5200		B
