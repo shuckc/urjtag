@@ -1,26 +1,26 @@
-2009-03-04  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-03-04  Arnim Laeuger  <arniml>
 
   * src/bus/mpc5200.c: add additional address decoding to mpc5200 bus driver
     (Jeff Wittrock)
 
-2009-03-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-03-02  Arnim Laeuger  <arniml>
 
   * data/freescale/PARTS: add stepping for MPC5200B (Jeff Wittrock)
 
-2009-03-01  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-03-01  Arnim Laeuger  <arniml>
 
   * data/ti/PARTS, data/ti/tnetv1060/tnetv1060, data/ti/tnetv1060/STEPPINGS,
     data/Makefile.am:
     TI tnetv1060 (Kenny)
 
-2009-02-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-02-27  Arnim Laeuger  <arniml>
 
   * doc/UrJTAG.txt: Warning about FTD2XX driver, USB FAQ.
 
   * src/cmd/flashmem.c, src/flash/flash.c, include/flash.h:
     [ 2645787 ] Bypass verify stage of flashmem cmd (Jeff Wittrock)
 
-2009-02-26  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-02-26  Arnim Laeuger  <arniml>
 
   * data/Makefile.am, data/MANUFACTURERS, data/ti/PARTS,
     data/ti/tnetv1061/STEPPINGS, data/ti/tnetv1061/tnetv1061:
@@ -30,12 +30,12 @@
     [ 2638083 ] SVF progress indicator not visible for some .svf files
     (William)
 
-2009-02-25  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-02-25  Arnim Laeuger  <arniml>
 
   * src/svf/svf_flex.l: [ 2635979 ] Replace index() to strchr()
     (MURANAKA Masaki)
 
-2009-02-23  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-02-23  Arnim Laeuger  <arniml>
 
   * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c:
     keep JTAG dongle in current mode (Holger Schurig)
@@ -55,7 +55,7 @@
     src/tap/cable/xpc.c, src/tap/usbconn/libusb.c: Remove spurious semicolons
     from places they do not belong (like at the end of braces).
 
-2009-02-16  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-02-16  Arnim Laeuger  <arniml>
 
   * doc/UrJTAG.txt: some FAQs
 
@@ -74,17 +74,17 @@
     from the user as we want to make sure our local paths take precedence.
     Reported by Steve Franks from a FreeBSD report.
 
-2009-02-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-02-11  Arnim Laeuger  <arniml>
 
   * src/bsdl/bsdl_sem.c: return proper error code to upper level
 
-2009-02-07  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-02-07  Arnim Laeuger  <arniml>
 
   * doc/UrJTAG.txt: turn http links into real hyperlinks
 
   * doc/UrJTAG.txt: libftdi URL changed
 
-2009-02-06  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-02-06  Arnim Laeuger  <arniml>
 
   * src/tap/cable/ft2232.c: fix nSRST for flyswatter (Kees Jongenburger)
 
@@ -129,19 +129,19 @@
     Arnim implemented it for the FTDI cable drivers, while I worked
     on the parport cable drivers and new "pod" command.
 
-2009-01-16  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-01-16  Arnim Laeuger  <arniml>
 
   * src/cmd/parse.c: flush_chain() between commands read from file
     [ 2499176 ] No chain_flush() when executing commands from file
 
-2009-01-03  Arnim Laeuger  <arniml@users.sourceforge.net>
+2009-01-03  Arnim Laeuger  <arniml>
 
   * configure.ac, src/bus/bscoach.c, src/bus/buses.c,
     src/bus/buses.h, src/bus/Makefile.am:
     [ 2187115 ] Bus driver for Goepel Boundary Scan Coach
     (by Markus Schneider)
 
-2008-12-23  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-12-23  Arnim Laeuger  <arniml>
 
    * src/svf/svf.c: added debug output for svf_compare_tdo()
 
@@ -156,7 +156,7 @@
      unistd.h, also present in modern MinGW environments.
      Defining it in sysdep.h collides with unistd.h. 
 
-2008-12-22  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-12-22  Arnim Laeuger  <arniml>
 
    * src/tap/cable/usbblaster.c:
      limit maximum number of bytes queued, equivalent for
@@ -214,7 +214,7 @@
 
    * data/analog/PARTS: Add BF534 and BF548M ids.
 
-2008-12-03  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-12-03  Arnim Laeuger  <arniml>
 
    * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c,
      src/tap/cable.c, doc/UrJTAG.txt:
@@ -227,7 +227,7 @@
      flashmem no longer needs to know about the capabilities of
      the flash chip to handle multi-byte programming
 
-2008-12-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-12-02  Arnim Laeuger  <arniml>
 
    * include/flash/intel.h, src/flash/intel.c:
      support for multi-byte write mode
@@ -236,7 +236,7 @@
      - handled by intel.c
      - 8 or 16 bit interface
 
-2008-12-01  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-12-01  Arnim Laeuger  <arniml>
    * include/flash.h, src/flash/amd_flash.c, src/flash/amd.c,
      src/flash/intel.c, src/flash/flash.c, configure.ac:
      support multi-byte write mode
@@ -255,7 +255,7 @@
 
    * src/bus/ejtag.c: Support BCM6348/EJTAG 3.1 (by Andy Potter/livebox)
 
-2008-10-30  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-10-30  Arnim Laeuger  <arniml>
 
    * src/svf/svf_bison.y, src/svf/svf.c, src/svf/svf.h:
      removed obsolete parameter
@@ -264,7 +264,7 @@
      src/svf/svf_bison.y, src/svf/svf.h, doc/UrJTAG.txt:
      add the ref_freq option to svf command
 
-2008-10-28  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-10-28  Arnim Laeuger  <arniml>
 
    * src/cmd/parse.c (jtag_parse_stream): avoid clipping message when
      reading comments (Hartley)
@@ -281,7 +281,7 @@
      (Catalin Ionescu)
      part description files
 
-2008-10-26  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-10-26  Arnim Laeuger  <arniml>
 
    * configure.ac, doc/UrJTAG.txt, src/tap/Makefile.am,
      src/tap/cable/ts7800.c, src/tap/cable.c, THANKS:
@@ -293,12 +293,12 @@
      [ 1964834 ] Add 'print instruction' support to print command
      (Hartley Sweeten)
 
-2008-10-23  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-10-23  Arnim Laeuger  <arniml>
 
    * src/svf/svf_bison.y: initialize max_time to 0.0 if
      the optional MAXIMUM is missing for RUNTEST commands
 
-2008-10-22  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-10-22  Arnim Laeuger  <arniml>
 
    * src/tap/cable/generic.c: make calibration loop more tolerant for
      less accurate OS timers
@@ -318,12 +318,12 @@
    * src/tap/cable/ft2232.c (ft2232_transfer_schedule): Don't
      access memory out of bounds.
 
-2008-10-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-10-11  Arnim Laeuger  <arniml>
 
    * src/bus/ejtag.c (ejtag_bus_init): added remaining return values
      (Stanislav Sinyagin)
 
-2008-09-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-09-27  Arnim Laeuger  <arniml>
 
    * include/jtag.h, src/cmd/detect.c, src/cmd/initbus.c,
      src/cmd/print.c, src/bus/bf548_ezkit.c, src/bus/fjmem.c,
@@ -347,7 +347,7 @@
    * data/analog/bf533/STEPPINGS: Add bf533 0.5 and 0.6.
    * data/analog/bf548/STEPPINGS: Add bf548 0.2.
 
-2008-09-15  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-09-15  Arnim Laeuger  <arniml>
 
    * src/svf/svf.h, src/svf/svf_flex.l: SVF player fix for
      [ 2112823 ] Conversion with strtod and similar influenced by locale
@@ -363,13 +363,13 @@
    * include/Makefile.am, src/bsdl/Makefile.am: list new header
      files here so they get included in distribution
 
-2008-09-09  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-09-09  Arnim Laeuger  <arniml>
 
    * src/cmd/detect.c: test correct return value of bus->driver->init()
 
    * src/bsdl2jtag.c: fix from and to for downto vectors
 
-2008-09-06  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-09-06  Arnim Laeuger  <arniml>
 
    * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c:
      [ 2091744 ] Automatic detection of alternative VID/PID cables broken
@@ -384,13 +384,13 @@
      [ 2090432 ] SVF programming problem with "x SEC" arg to runtest
      also restore previous frequency setting at end of SVF execution
 
-2008-09-04  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-09-04  Arnim Laeuger  <arniml>
 
    * configure.ac, src/tap/usbconn/libftd2xx.c,
      src/tap/usbconn/libftdi.c: forward and use the desc= paramter
      [ 2085244 ] Wrong device chosen by ftd2xx driver
 
-2008-09-03  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-09-03  Arnim Laeuger  <arniml>
 
    * src/tap/usbconn/libftd2xx.c,  src/tap/usbconn/libftdi.c:
      use puts() and printf() instead of perror()
@@ -404,7 +404,7 @@
    * src/tap/cable/generic_parport.c, src/tap/cable/wiggler.c:
      Fix typo: PPDEF -> PPDEV.
 
-2008-08-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-08-27  Arnim Laeuger  <arniml>
 
    * include/Makefile.am, include/bsdl.h, include/bsdl_mode.h,
      src/cmd/include.c, src/cmd/bsdl.c, src/bsdl/vhdl_parser.h,
@@ -414,12 +414,12 @@
      src/tap/detect.c: cleaned-up bsdl subsystem, avoid double reading
      during detect, commenting
 
-2008-08-24  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-08-24  Arnim Laeuger  <arniml>
 
    * src/bsdl/bsdl_sem.c (bsdl_process_cell_info): fix error with
      repeated usage of cmd[]
 
-2008-08-22  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-08-22  Arnim Laeuger  <arniml>
 
    * src/bsdl/vhdl_bison.y: enhanced error reporting
 
@@ -432,24 +432,24 @@
      merged from branches/bsdl 1304:1340
      rewrite of BSDL parser
 
-2008-07-15  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-07-15  Arnim Laeuger  <arniml>
 
    * doc/UrJTAG.txt, src/cmd/dr.c (cmd_dr_help):
      document feature to set active data register with dr
 
-2008-07-14  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-07-14  Arnim Laeuger  <arniml>
 
    * include/chain.h, include/tap.h, src/cmd/reset.c, src/tap/detect.c,
      src/tap/chain.c, src/tap/tap.c, src/bus/fjmem.c, src/bus/avr32.c:
      [ 1873260 ] Command 'reset' does not reset internal states
      next round to fix this one
 
-2008-07-10  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-07-10  Arnim Laeuger  <arniml>
 
    * src/tap/usbconn/libftd2xx.c (usbconn_ftd2xx_open): perform device reset
      and RX purge
 
-2008-07-09  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-07-09  Arnim Laeuger  <arniml>
 
    * src/tap/usbconn/libftd2xx.c: added some debugging messages
 
@@ -556,7 +556,7 @@
    * doc/UrJTAG.txt: FAQ about CVS needed for autogen.sh and superuser
      rights being needed for running "make install" (frankvh)
 
-2008-06-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-06-27  Arnim Laeuger  <arniml>
 
    * UrJTAG.txt: JTAGkey-Tiny
 
@@ -611,7 +611,7 @@
    * po/rw.po: Update.
    * po/sk.po: Update.
 
-2008-06-21  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-06-21  Arnim Laeuger  <arniml>
 
    * src/bus/bf548_ezkit.c, src/bus/fjmem.c, src/bus/ppc405ep.c,
      src/bus/sh7727.c, src/bus/prototype.c, src/bus/sa1110.c,
@@ -626,7 +626,7 @@
      all bus drivers that just load the EXTEST instruction
      (Hartley Sweeten)
 
-2008-06-18  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-06-18  Arnim Laeuger  <arniml>
 
    * include/bus_driver.h, src/bus/bf548_ezkit.c, src/bus/fjmem.c,
      src/bus/ppc405ep.c, src/bus/sh7727.c, src/bus/prototype.c,
@@ -641,7 +641,7 @@
      [ 1984813 ] Bus driver cleanup, uniquify chain and part in
      bus_t struct (Hartley Sweeten)
 
-2008-06-16  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-06-16  Arnim Laeuger  <arniml>
 
    * src/cmd/initbus.c (cmd_initbus_run),
      src/cmd/initbus.c, src/bus/bf548_ezkit.c, src/bus/fjmem.c,
@@ -657,7 +657,7 @@
      [ 1984813 ] Bus driver cleanup, remove unnecessary sanity checking
      (Hartley Sweeten)
 
-2008-06-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-06-11  Arnim Laeuger  <arniml>
 
    * po/fr.po, po/rw.po, po/sk.po: updated
 
@@ -676,7 +676,7 @@
      [ 1984813 ] Bus driver cleanup, second step of part 2) (Hartley Sweeten)
      use generic_bus_attach_sig() in all bus drivers
 
-2008-06-10  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-06-10  Arnim Laeuger  <arniml>
 
    * src/bus/generic_bus.c, src/bus/generic_bus.h, src/bus/zefant-xs3.c:
      [ 1984813 ] Bus driver cleanup, first step of part 2) (Hartley Sweeten)
@@ -696,7 +696,7 @@
      [ 1984813 ] Bus driver cleanup, second step of part 4) (Hartley Sweeten)
      generic_bus_read() added
 
-2008-06-09  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-06-09  Arnim Laeuger  <arniml>
 
    * src/bus/bf548_ezkit.c, src/bus/fjmem.c, src/bus/ppc405ep.c,
      src/bus/sh7727.c, src/bus/prototype.c, src/bus/sa1110.c,
@@ -733,7 +733,7 @@
       cleanup: Unified *bus_free functions and moved them to new
       src/bus/generic_bus.c/h (Hartley  Sweeten)
 
-2008-06-05  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-06-05  Arnim Laeuger  <arniml>
 
    * src/tap/usbconn/libftdi.c: issue device reset in usbconn_ftdi_open(), fixes
      hang of FT245 chip when initializing the cable more than once
@@ -771,7 +771,7 @@
       src/tap/cable/usbblaster.c, src/tap/cable/generic_parport.c: Cable
       connect/disconnect cleanup, fix malloc/free issues (Hartley Sweeten)
 
-2008-05-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-05-27  Arnim Laeuger  <arniml>
 
    * UrJTAG.txt: document progress option of svf command
    * src/cmd/svf.c (cmd_svf_run): new command option 'progress'
@@ -779,7 +779,7 @@
      print_progress
    * src/svf/svf_flex.l (fix_yylloc_nl): report line / total number
 
-2008-05-26  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-05-26  Arnim Laeuger  <arniml>
 
    [adding svf progress output] (Steve Franks)
    * src/svf/svf_bison.y (svf_bison_init): hand down parameters for scanner
@@ -797,7 +797,7 @@
      data/atmel/at32ap7000/STEPPINGS, data/atmel/PARTS, data/Makefile.am:
      add support for Atmel's AT32AP7000 (by Gabor Juhos)
 
-2008-05-24  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-05-24  Arnim Laeuger  <arniml>
 
    * src/tap/cable/usbblaster.c (usbblaster_connect): added missing
      malloc for cable_params
@@ -818,7 +818,7 @@
    * src/tap/tap.c (tap_defer_shift_register): Enter Update-DR
      or Update-IR when requested.
 
-2008-05-20  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-05-20  Arnim Laeuger  <arniml>
 
    * src/tap/cable/ft2232.c, src/tap/cable/usbblaster.c:
      typo in help string fixed
@@ -876,7 +876,7 @@
 
    * src/flash/amd.c: Handle chipid 0x22ed M29W640DT.
 
-2008-05-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-05-02  Arnim Laeuger  <arniml>
 
    * src/tap/cable/generic_usbconn.c (generic_usbconn_connect):
      fix user_specified.driver comparison
@@ -922,7 +922,7 @@
    * src/cmd/frequency.c: ensure that cable is initialized. Fixes
      [ 1933736 ] "frequency" command segfaults without args
 
-2008-04-19  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-04-19  Arnim Laeuger  <arniml>
 
    * src/bsdl/Makefile.am, src/svf/Makefile.am: ensure that
      bsdl_bison.h is generated prior to compiling bsdl_flex.c and
@@ -942,7 +942,7 @@
      src/tap/usbconn/libusb.c, src/lib/fclock.c, src/jtag.c:
      [ 1940323 ] OS X support for UrJTAG (by Ville Voipio)
 
-2008-04-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-04-11  Arnim Laeuger  <arniml>
 
    * src/tap/parport/ftdi.c (ftdi_flush_output): removed unused variables
 
@@ -1004,7 +1004,7 @@
 
    * data/analog/bf537/STEPPINGS: Add stepping 3.
 
-2008-04-08  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-04-08  Arnim Laeuger  <arniml>
 
    * src/bsdl/bsdl_flex.l (bsdl_flex_deinit): close file if still open
 
@@ -1033,7 +1033,7 @@
      src/tap/parport/ftdi.c, src/tap/idcode.c, src/tap/Makefile.am, THANKS:
      [ 1933730 ] new "idcode" command (by Uwe Bonnes)
 
-2008-04-03  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-04-03  Arnim Laeuger  <arniml>
 
    [ 1929235 ] Use less global and static variables:
    * src/bus/jopcyc.c, src/bus/zefant-xs3.c: made global variable
@@ -1046,7 +1046,7 @@
    * configure.ac: require flex 2.5.33 also for SVF scanner
    * doc/UrJTAG.txt: document flex version for SVF scanner
 
-2008-04-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-04-02  Arnim Laeuger  <arniml>
 
    [ 1929235 ] Use less global and static variables:
    * src/bsdl/bsdl.c, src/cmd/bsdl.c: use globals from chain_t
@@ -1057,7 +1057,7 @@
      src/bsdl/bsdl_bison.y, src/bsdl/bsdl.c, src/bsdl/bsdl_local.h:
        renamed bsdl.h to bsdl_local.h
 
-2008-04-01  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-04-01  Arnim Laeuger  <arniml>
 
    [ 1887221 ] Add configure switch to disable all cable&parport drivers:
    * doc/UrJTAG.txt: updates for new options and summary reporting
@@ -1111,7 +1111,7 @@
    * po/POTFILES.in: Update according to the changes above.
    * po/fr.po, po/rw.po, po/sk.po: Update.
 
-2008-03-14  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-03-14  Arnim Laeuger  <arniml>
 
    * configure.ac: format AC_ARG_ENABLE help with AS_HELP_STRING macro
 
@@ -1121,7 +1121,7 @@
        prevents "make urjtag.pot-update"
    * po/fr.po, po/rw.po, po/sk.po: Updated
 
-2008-03-10  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-03-10  Arnim Laeuger  <arniml>
 
    [ 1911429 ] Read TDO data from instruction shift:
    * doc/UrJTAG.txt: removed note about SIR deficiency
@@ -1132,12 +1132,12 @@
    * include/chain.h: parameter capture_output added to chain_shift_instructions_mode()
    * include/instruction.h: tap_register out added
 
-2008-03-03  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-03-03  Arnim Laeuger  <arniml>
 
    * src/tap/parport/ftd2xx.c (ftd2xx_mpsse_open): fix FT_SetChar() parameters
    * doc/UrJTAG.txt: fix some typos
 
-2008-03-01  Arnim  <arniml@users.sourceforge.net>
+2008-03-01  Arnim  <arniml>
 
    * src/tap/parport/ftdi.c (ftdi_mpsse_open): rework sequence to fix
        a system that shows similar hangs as reported in
@@ -1278,7 +1278,7 @@
      (cleanup): Likewise.
      (main): Define a local chain.
 
-2008-02-26  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-26  Arnim Laeuger  <arniml>
 
    * src/tap/cable/ft2232.c (send_and_receive): loopback_off moved to ftdi.c/ftd2xx.c
    * src/tap/parport/ftd2xx.c (ftd2xx_mpsse_open): set TCK, loopback_off, reset, purge
@@ -1289,7 +1289,7 @@
    * src/jtag.c: allow people to disable startup message (1901877),
        quit upon EOF (1901880)
 
-2008-02-25  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-25  Arnim Laeuger  <arniml>
 
    * src/bus/fjmem.c (fjmem_bus_new): accept 'len' parameter to suppress
        data register length detection
@@ -1374,7 +1374,7 @@
        as needed (1899930), provide flag about wchar.h presence (1899922)
    * src/cmd/print.c: Fix dependency on wchar.h (1899922)
 
-2008-02-23  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-23  Arnim Laeuger  <arniml>
 
    * extra/fjmem/README: new file
    * doc/UrJTAG.txt: mention fjmem driver, document bus driver internals
@@ -1387,7 +1387,7 @@
    * src/tap/cable.c (cable_flush), include/cable.h (enum): removed CONSERVATIVELY
    * configure.ac: conservative-flush removed
 
-2008-02-21  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-21  Arnim Laeuger  <arniml>
 
    * src/tap/parport/ftdi.c (ftdi_mpsse_open): set latency timer to 16ms
    * src/tap/parport/ftd2xx.c (ftd2xx_mpsse_open): set latency timer to 16ms
@@ -1399,7 +1399,7 @@
    * src/bus/fjmem.c: merged branches/jmem to trunk
        -> added fjmem bus driver
 
-2008-02-20  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-20  Arnim Laeuger  <arniml>
 
    * data/Makefile.am (nobase_dist_pkgdata_DATA): added bsdl/STD_1149_1_2001
 
@@ -1411,13 +1411,13 @@
 
    * po/fr.po, po/sk.po, po/rw.po, POTFILES.in: Regenerated or updated
 
-2008-02-19  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-19  Arnim Laeuger  <arniml>
 
    * src/bsdl/bsdl_flex.l (bsdl_flex_set_bin_x), src/bsdl/bsdl.h,
      src/bsdl/bsdl_bison.y (Init_Text): properly support COMPLIANCE_PATTERNS
      -> fix for [ 1896382 ]
 
-2008-02-18  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-18  Arnim Laeuger  <arniml>
 
    * src/bsdl/bsdl.c, src/bsdl/bsdl_flex.l, src/bsdl/bsdl_bison.y,
      src/bsdl/bsdl.h, src/bsdl/bsdl_sem.c: support quiet scanning of files
@@ -1438,7 +1438,7 @@
        When called as "script", the command behaves as before but emits
        a warning that "include" should be used in future.
 
-2008-02-17  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-17  Arnim Laeuger  <arniml>
 
    * configure.ac: check for pre-generated src/svf/svf_flex.c
        -> second part of [ 1895353 ]
@@ -1450,7 +1450,7 @@
    * doc/UrJTAG.txt: How to use USB cables. THANKS: some additions
    * include/Makefile.am: Add jim.h and jim/some_cpu.h headers for distr.
 
-2008-02-16  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-16  Arnim Laeuger  <arniml>
 
    * src/tap/cable/ft2232.c (ft2232_flush): fix inconsistency of TDO caching
         in ft2232_flush()
@@ -1481,7 +1481,7 @@
     * include/register.h, src/tap/register.c, src/discovery.c: report if tdo
         seems to be stuck during detect_register_size (ie. "detect").
 
-2008-02-14  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-14  Arnim Laeuger  <arniml>
 
     * src/tap/cable.c (cable_flush), src/tap/chain.c (chain_shift_data_registers_mode),
         include/cable.h, configure.ac: follow conservative flush strategy for transfers
@@ -1516,25 +1516,25 @@
        analog/bf549/STEPPINGS, analog/bf549/bf549,
        and analog/bf561/STEPPINGS, analog/bf561/bf561.
 
-2008-02-13  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-13  Arnim Laeuger  <arniml>
 
     * src/tap/cable/ft2232.c: implemented control of TRST
         second step of
         [ 1891845 ] Add support for TRST/SRST/LEDs to FT2232 cable driver
 
-2008-02-12  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-12  Arnim Laeuger  <arniml>
 
     * src/tap/cable/ft2232.c: statically set GPIO high byte with product-specific values
         first step of
         [ 1891845 ] Add support for TRST/SRST/LEDs to FT2232 cable driver
 
-2008-02-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-11  Arnim Laeuger  <arniml>
 
     * src/bsdl/bsdl_bison.y (Store_Text): removed function Make_String()
         the QUOTED_STRING is directly copied to buffer_for_switch
     * src/bsdl/bsdl.h: memeber String_Val of parser_priv obseleted
 
-2008-02-10  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-10  Arnim Laeuger  <arniml>
 
     * src/tap/cable/ft2232.c (ft2232_generic_init, ft2232_jtagkey_init) 
     (ft2232_armusbocd_init, ft2232_transfer_schedule): store low byte value and direction
@@ -1553,7 +1553,7 @@
     * cable.c: possible fix and optional more verbose output (#ifdef VERBOSE)
         for tracking down 1884952 Internal error (queue full)
 
-2008-02-09  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-09  Arnim Laeuger  <arniml>
 
     * src/tap/cable/ft2232.c (ft2232_transfer_schedule): ensure max number of bytes for
         a single byte operation
@@ -1565,7 +1565,7 @@
         (fixes [1887179] reported by A.Dyer), add command line option "-i"
         to run interactive mode even after executing commands from files
 
-2008-02-07  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-07  Arnim Laeuger  <arniml>
 
     * src/tap/cable/ft2232.c (ft2232_connect): check parport driver setting
       and set maxrecv accordingly
@@ -1574,7 +1574,7 @@
       (ftdi_flush_output): return error code from ftdi_write_data
     * src/tap/parport/ftd2xx.c (ftd2xx_mpsse_open): decreased latency timer
 
-2008-02-05  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-05  Arnim Laeuger  <arniml>
 
     * src/tap/cable/ft2232.c: massive rewrite to support deferred transfers
       initial version with clean queue handling
@@ -1584,7 +1584,7 @@
     * src/tap/cable.c: cable_queue_add_item didn't always correct q->next_free,
          and a memory leak in cable_defer_transfer was fixed [1884952].
 
-2008-02-04  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-04  Arnim Laeuger  <arniml>
 
     * src/tap/cable/ft2232.c (ft2232_flush): rework flush implementation to benefit from
       queued deferred transfers
@@ -1605,7 +1605,7 @@
         halves, one that queues transfers, another that picks up the results.
         ([1832990] Speed improvements for USB cables) esp. for long chains
 
-2008-02-02  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-02  Arnim Laeuger  <arniml>
 
     * src/bsdl/bsdl.h, src/bsdl/bsdl_flex.l: convert filename to uppercase
     * src/bsdl/bsdl_sem.c (create_register): don't create a new register if it's already there
@@ -1620,7 +1620,7 @@
     * src/tap/cable.c: Automatically resize JTAG activity queue if necessary
     * doc/UrJTAG.txt: New section about current cable driver internals
 
-2008-02-01  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-02-01  Arnim Laeuger  <arniml>
 
     * src/tap/parport/ftd2xx.c (ftd2xx_pre_connect): fix compiler warning
     * src/tap/cable/ft2232.c: cleanup
@@ -1643,7 +1643,7 @@
         Result is a vast speed improvement at least for FT2232; this
         implements [ 1832990 ] Speed improvements for USB cables
 
-2008-01-30  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-30  Arnim Laeuger  <arniml>
 
     * src/tap/tap.c (tap_reset): set instructions of all parts to BYPASS, fix
       [ 1873260 ] Command 'reset' does not reset internal states
@@ -1660,7 +1660,7 @@
     * tap/cable/ft2232.c, tap/parport/ftdi.c, tap/cable.c: added support
       for Amontec JTAGkey USB cable (submitted by Laurent Gauch - Amontec)
 
-2008-01-22  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-22  Arnim Laeuger  <arniml>
 
     * src/bsdl/bsdl_flex.l, src/bsdl/bsdl_bison.y,
       data/bsdl/STD_1149_1_1990, data/bsdl/STD_1149_1_1994:
@@ -1670,11 +1670,11 @@
 
     * New JTAG declarations for MPC5241 (from kurobox.com, enh. 1869671)
 
-2008-01-21  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-21  Arnim Laeuger  <arniml>
 
     * src/bsdl/*: use gettext for message strings, removed trailing whitespace
 
-2008-01-20  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-20  Arnim Laeuger  <arniml>
 
     * src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c, src/bsdl/bsdl.h:
       support multiple port names in one port definition
@@ -1702,7 +1702,7 @@
       include/jim.h, include/jim/some_cpu.h: JTAG target simulator "JIM"
       and a "jim" cable driver to "connect" to it; detection already works.
 
-2008-01-18  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-18  Arnim Laeuger  <arniml>
 
     * configure.ac: restructured the test logic for bison error locations and
       the BSDL subsystem [ 1873515 ] BSDL part doesn't compile under Cygwin
@@ -1741,24 +1741,24 @@
     * src/bus/s3c4510x.c: Address alignment on A0..Ax lines changes dynamically
        with bus width
 
-2008-01-16  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-16  Arnim Laeuger  <arniml>
 
     * src/bus/prototype.c (prototype_bus_new): properly calculate the address
        shift based on the current bus width
 
-2008-01-15  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-15  Arnim Laeuger  <arniml>
 
     * src/bus/prototype.c (prototype_bus_new): parameter amode added
 
-2008-01-11  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-11  Arnim Laeuger  <arniml>
 
     * src/bus/prototype.c: added
 
-2008-01-09  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-09  Arnim Laeuger  <arniml>
 
     * src/bus/h7202.c (h7202_bus_new): API extension
 
-2008-01-08  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-08  Arnim Laeuger  <arniml>
 
     * src/bus/prototype.c: new prototype bus driver (Detrick Martin)
     * src/bus/zefant-xs3.c (zefant_xs3_bus_new): API extension: cmd_params for new_bus()
@@ -1788,18 +1788,18 @@
     * src/bus/buses.c: added prototype_bus (Detrick Martin)
     * src/cmd/initbus.c (cmd_initbus_run): hand down command parameters to bus_new()
 
-2008-01-06  Arnim Laeuger  <arniml@users.sourceforge.net>
+2008-01-06  Arnim Laeuger  <arniml>
 
     * src/tap/cable/wiggler.c (wiggler_connect): enable bit<->pin mapping from parameter string
     * src/tap/cable/wiggler.c: make std_wgl_map static
 
-2007-12-31  Arnim Laeuger <arniml@users.sourceforge.net>
+2007-12-31  Arnim Laeuger <arniml>
 
     * src/bsdl/Makefile.am (noinst_HEADERS): move headers to noinst_HEADERS
     * include/Makefile.am (noinst_HEADERS): add bsdl.h to list of headers
     * src/bsdl/Makefile.am (libbsdl_a_SOURCES): add bsdl.h to list of sources
 
-2007-12-30  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-12-30  Arnim Laeuger  <arniml>
 
     * src/detect.c (detect_parts): call bsdl_scan_file() if configure result indicates inclusion of BSDL subsystem
     * src/cmd/cmd.c: include cmd_svf and cmd_bsdl based on configure result
@@ -1813,14 +1813,14 @@
       '[ 1859678 ] jtag support for xilinx xc2v80-fg256, xc2v250, xc2v1000 FPGA' (Alexander Didebulidze)
     * data/altera/ep1c12/ep1c12: CLAMP and HIGHZ instructions activated
 
-2007-12-29  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-12-29  Arnim Laeuger  <arniml>
 
     * data/altera/PARTS: ep2c8 added
       '[ 1859032 ] jtag support for Altera EP2C8' (Hartley Sweeten)
     * data/Makefile.am (nobase_dist_pkgdata_DATA): ep2c8 files added
       '[ 1859032 ] jtag support for Altera EP2C8' (Hartley Sweeten)
 
-2007-12-27  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-12-27  Arnim Laeuger  <arniml>
 
     * src/cmd/print.c (cmd_print_run): applied patch:
       '[ 1858985 ] possible fix to print the signal aliases' (Hartley Sweeten)
@@ -1899,7 +1899,7 @@
 
     * configure.ac: Run "svn info" with "-R" to get latest revision
 
-2007-12-12  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-12-12  Arnim Laeuger  <arniml>
 
     * data/Makefile.am (nobase_dist_pkgdata_DATA): add missing '\', fixes
       [ 1849477 ] Missing \ in data/Makefile.ac
@@ -1937,7 +1937,7 @@
     * THANKS: Added all missing names (that I know of) of the people who
       contributed the patches that have been integrated in the past weeks
 
-2007-12-05  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-12-05  Arnim Laeuger  <arniml>
 
     * src/jtag.c (main): Print build number based on version.h.
     * src/Makefile.am (version.h): Added rules to generate version.h from ChangeLog's revision tag.
@@ -2020,36 +2020,36 @@
     * src/cmd/shell.c: Allow arbitrary number of arguments for "shell"
       command (fix for [1837985] "shell" command causes segfault)
 
-2007-11-25 00:02  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-25 00:02  Arnim Laeuger  <arniml>
 
     * src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c: fix for '[
       1836616 ] Segfault/Memory corruption if USB device inaccessible'
 
-2007-11-23 19:52  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-23 19:52  Arnim Laeuger  <arniml>
 
     * configure.ac, src/svf/Makefile.am, src/svf/svf_bison.y,
       src/svf/svf_flex.l: make SVF parser/lexer backwards compatible to
       pre-2.5.31 flex
       for those the error location feature is skipped in svf_flex.l
 
-2007-11-20 20:35  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-20 20:35  Arnim Laeuger  <arniml>
 
     * configure.ac, src/cmd/cable.c, src/tap/Makefile.am,
       src/tap/cable/ft2232.c, src/tap/parport.c,
       src/tap/parport/ftd2xx.c, src/tap/parport/ftdi.c: ftd2xx parport
       driver added
 
-2007-11-18 13:38  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-18 13:38  Arnim Laeuger  <arniml>
 
     * configure.ac: add some messages to show configuration summary, to
       be extended
 
-2007-11-17 21:39  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-17 21:39  Arnim Laeuger  <arniml>
 
     * src/cmd/cable.c: report cable usage for USB & FTDI based cables
       only in case respective support is included
 
-2007-11-16 17:50  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-16 17:50  Arnim Laeuger  <arniml>
 
     * include/cable.h, include/chain.h, src/cmd/cable.c, src/svf/svf.c,
       src/tap/Makefile.am, src/tap/cable.c, src/tap/cable/arcom.c,
@@ -2064,7 +2064,7 @@
       changes from /branches/ft2232_eval@770
       this is the initial stable version of the ft2232 cable driver
 
-2007-11-13 23:09  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-13 23:09  Arnim Laeuger  <arniml>
 
     * src/flash.c: removed obsolete declaration of amd_detect()
 
@@ -2081,22 +2081,22 @@
       data/lattice/lc4128c-tqfp100/lc4128c-tqfp100: [ 1105256 ] jtag
       descriptor for Lattice LC4032V-TQFP100
 
-2007-11-10 16:22  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-10 16:22  Arnim Laeuger  <arniml>
 
     * README.svf: remove links to openwince
 
-2007-11-10 01:15  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-10 01:15  Arnim Laeuger  <arniml>
 
     * src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
       src/bus/zefant-xs3.c: added Zefant-XS3 bus
 
-2007-11-10 00:31  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-10 00:31  Arnim Laeuger  <arniml>
 
     * data/xilinx/xc3s1000/fg320, data/xilinx/xc3s1000/fg456,
       data/xilinx/xc3s1000/fg676, data/xilinx/xc3s1000/ft256,
       data/xilinx/xc3s1000/xc3s1000: xc3s1000 kw
 
-2007-11-10 00:15  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-10 00:15  Arnim Laeuger  <arniml>
 
     * data/Makefile.am, data/xilinx/xc3s1000/STEPPINGS,
       data/xilinx/xc3s1000/fg320, data/xilinx/xc3s1000/fg456,
@@ -2112,7 +2112,7 @@
       data/xilinx/xc3s1000/xc3s1000l_fg676,
       data/xilinx/xc3s1000/xc3s1000l_ft256: unification xc3s1000
 
-2007-11-09 22:44  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-09 22:44  Arnim Laeuger  <arniml>
 
     * src/cmd/bit.c: fixed [ 1828672 ] cmd/bit.c broken
 
@@ -2170,16 +2170,16 @@
       src/bus/ejtag.c, src/tap/parport/ppdev.c: [ 1429825 ] EJTAG
       driver (partial patch - only the bus driver for now) (Oleg)
 
-2007-11-07 23:17  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-07 23:17  Arnim Laeuger  <arniml>
 
     * src/bus/Makefile.am, src/bus/buses.c, src/bus/buses.h,
       src/bus/h7202.c: [ 1585617 ] support for the Magnachip h7202 cpu
 
-2007-11-07 22:43  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-07 22:43  Arnim Laeuger  <arniml>
 
     * README.svf: update README.svf
 
-2007-11-07 22:21  Arnim Laeuger  <arniml@users.sourceforge.net>
+2007-11-07 22:21  Arnim Laeuger  <arniml>
 
     * src/cmd/debug.c, src/cmd/eraseflash.c, src/cmd/peekpoke.c,
       src/cmd/script.c, src/cmd/shell.c, src/cmd/signal.c,
