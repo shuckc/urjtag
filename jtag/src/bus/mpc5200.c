@@ -40,13 +40,21 @@
 #include "buses.h"
 #include "generic_bus.h"
 
+#define LPC_NUM_CS	6
+#define LPC_NUM_AD	24
+#define LPC_NUM_D	8
+#define LPC_ADDR_TO_CS(a) (a >> LPC_NUM_AD)
+#define LPC_ADDR_SIZE ( ( 0x00000001 << LPC_NUM_AD ) * LPC_NUM_CS )
+
+
 typedef struct {
 	uint32_t last_adr;
-	signal_t *ad[24];
-	signal_t *ncs[4];
+	signal_t *ad[LPC_NUM_AD];
+	signal_t *ncs[LPC_NUM_CS];
 	signal_t *nwe;
 	signal_t *noe;
-	signal_t *d[8];
+	signal_t *d[LPC_NUM_D];
+	signal_t *ata_iso;
 } bus_params_t;
 
 #define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
@@ -55,6 +63,7 @@ typedef struct {
 #define	nWE		((bus_params_t *) bus->params)->nwe
 #define	nOE		((bus_params_t *) bus->params)->noe
 #define	D		((bus_params_t *) bus->params)->d
+#define ATA_ISO		((bus_params_t *) bus->params)->ata_iso
 
 /**
  * bus->driver->(*new_bus)
@@ -84,12 +93,12 @@ mpc5200_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] 
 	PART = part = chain->parts->parts[chain->active_part];
 
 	/* Get the signals */
-	for (i = 0; i < 24; i++) {
+	for (i = 0; i < LPC_NUM_AD; i++) {
 		sprintf( buff, "EXT_AD_%d", i );
 		failed |= generic_bus_attach_sig( part, &(AD[i]), buff );
 	}
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < LPC_NUM_CS; i++) {
 		sprintf( buff, "LP_CS%d_B", i );
 		failed |= generic_bus_attach_sig( part, &(nCS[i]), buff );
 	}
@@ -98,10 +107,12 @@ mpc5200_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] 
 
 	failed |= generic_bus_attach_sig( part, &(nOE), "LP_OE" );
 
-	for (i = 0; i < 8; i++) {
-		sprintf( buff, "EXT_AD_%d", i+24 );
+	for (i = 0; i < LPC_NUM_D; i++) {
+		sprintf( buff, "EXT_AD_%d", i+LPC_NUM_AD );
 		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
 	}
+
+	failed |= generic_bus_attach_sig( part, &(ATA_ISO), "ATA_ISOLATION" );
 
 	if (failed) {
 		free( bus->params );
@@ -134,18 +145,18 @@ mpc5200_bus_printinfo( bus_t *bus )
 static int
 mpc5200_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 {
-	if( adr < UINT32_C(0x01000000) )
+	if( adr < LPC_ADDR_SIZE )
 	{
 		area->description = N_("LocalPlus Bus");
 		area->start = UINT32_C(0x00000000);
-		area->length = UINT64_C(0x01000000);
-		area->width = 8;
+		area->length = LPC_ADDR_SIZE;
+		area->width = LPC_NUM_D;
 		return URJTAG_STATUS_OK;
 	}
 
 	area->description = NULL;
-	area->start = 0x01000000;
-	area->length = 0xFF000000;
+	area->start = LPC_ADDR_SIZE;
+	area->length = UINT64_C(0x100000000) - LPC_ADDR_SIZE;
 	area->width = 0;
 	return URJTAG_STATUS_OK;
 }
@@ -156,7 +167,7 @@ setup_address( bus_t *bus, uint32_t a )
 	int i;
 	part_t *p = PART;
 
-	for (i = 0; i < 24; i++)
+	for (i = 0; i < LPC_NUM_AD; i++)
 		part_set_signal( p, AD[i], 1, (a >> i) & 1 );
 }
 
@@ -168,7 +179,7 @@ set_data_in( bus_t *bus, uint32_t adr )
 	bus_area_t area;
 
 	mpc5200_bus_area( bus, adr, &area );
-	if (area.width > 8)
+	if (area.width > LPC_NUM_D)
 		return;
 
 	for (i = 0; i < area.width; i++)
@@ -183,7 +194,7 @@ setup_data( bus_t *bus, uint32_t adr, uint32_t d )
 	bus_area_t area;
 
 	mpc5200_bus_area( bus, adr, &area );
-	if (area.width > 8)
+	if (area.width > LPC_NUM_D)
 		return;
 
 	for (i = 0; i < area.width; i++)
@@ -199,7 +210,7 @@ get_data( bus_t *bus, uint32_t adr )
 	part_t *p = PART;
 
 	mpc5200_bus_area( bus, adr, &area );
-	if (area.width > 8)
+	if (area.width > LPC_NUM_D)
 		return 0;
 
 	for (i = 0; i < area.width; i++)
@@ -216,14 +227,18 @@ static void
 mpc5200_bus_read_start( bus_t *bus, uint32_t adr )
 {
 	part_t *p = PART;
+	int i;
+	uint8_t cs = LPC_ADDR_TO_CS(adr);
 
 	LAST_ADR = adr;
 
 	/* see Figure 6-45 in [1] */
-	part_set_signal( p, nCS[0], 1, 0 );
-	part_set_signal( p, nCS[1], 1, 1 );
-	part_set_signal( p, nCS[2], 1, 1 );
-	part_set_signal( p, nCS[3], 1, 1 );
+
+	for (i = 0; i < LPC_NUM_CS; i++) {
+		part_set_signal( p, nCS[i], 1, !(cs==i) );
+	}
+
+	part_set_signal( p, ATA_ISO,1, 1 );
 	part_set_signal( p, nWE, 1, 1 );
 	part_set_signal( p, nOE, 1, 0 );
 
@@ -258,8 +273,11 @@ static uint32_t
 mpc5200_bus_read_end( bus_t *bus )
 {
 	part_t *p = PART;
+	int i;
 
-	part_set_signal( p, nCS[0], 1, 1 );
+	for (i = 0; i < LPC_NUM_CS; i++) {
+		part_set_signal( p, nCS[i], 1, 1 );
+	}
 	part_set_signal( p, nOE, 1, 1 );
 
 	chain_shift_data_registers( CHAIN, 1 );
@@ -277,11 +295,13 @@ mpc5200_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 	/* see Figure 6-47 in [1] */
 	part_t *p = PART;
 	chain_t *chain = CHAIN;
+	uint8_t cs = LPC_ADDR_TO_CS(adr);
+	int i;
 
-	part_set_signal( p, nCS[0], 1, 0 );
-	part_set_signal( p, nCS[1], 1, 1 );
-	part_set_signal( p, nCS[2], 1, 1 );
-	part_set_signal( p, nCS[3], 1, 1 );
+	for (i = 0; i < LPC_NUM_CS; i++) {
+		part_set_signal( p, nCS[i], 1, !(cs==i) );
+	}
+	part_set_signal( p, ATA_ISO,1, 1 );
 	part_set_signal( p, nWE, 1, 1 );
 	part_set_signal( p, nOE, 1, 1 );
 

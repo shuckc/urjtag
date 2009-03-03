@@ -1,6 +1,11 @@
+2009-03-04  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+  * src/bus/mpc5200.c: add additional address decoding to mpc5200 bus driver
+    (Jeff Wittrock)
+
 2009-03-02  Arnim Laeuger  <arniml@users.sourceforge.net>
 
-  * data/freescale/PARTS: add stepping for MPC5200B (Jeff Wittroc)
+  * data/freescale/PARTS: add stepping for MPC5200B (Jeff Wittrock)
 
 2009-03-01  Arnim Laeuger  <arniml@users.sourceforge.net>
 
