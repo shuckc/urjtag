@@ -1,3 +1,11 @@
+2009-03-05  Arnim Laeuger  <arniml>
+
+  * src/tap/print_queue.c, src/bus/bscoach.c, src/bus/ejtag_dma.c,
+    src/bus/pxa2x0.c, src/bus/zefant-xs3.c, src/bus/jopcyc.c,
+    src/bus/s3c4510x.c, src/bus/ejtag.c: skip operations of *_bus_init()
+    if TAP is not in RUNTEST/IDLE state
+    [ 2658604 ] Errors when part description contains commands accessing TAP
+
 2009-03-04  Arnim Laeuger  <arniml>
 
   * src/bus/mpc5200.c: add additional address decoding to mpc5200 bus driver

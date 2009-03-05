@@ -42,6 +42,7 @@
 #include "jtag.h"
 #include "buses.h"
 #include "generic_bus.h"
+#include "state.h"
 
 #include "pxa2x0_mc.h"
 
@@ -250,6 +251,14 @@ pxa2xx_bus_init( bus_t *bus )
 {
 	chain_t *chain = CHAIN;
 	part_t *p = PART;
+
+	if (tap_state(chain) != Run_Test_Idle) {
+		/* silently skip initialization if TAP isn't in RUNTEST/IDLE state
+		   this is required to avoid interfering with detect when initbus
+		   is contained in the part description file
+		   bus_init() will be called latest by bus_prepare() */
+		return URJTAG_STATUS_OK;
+	}
 
 	part_set_instruction( p, "SAMPLE/PRELOAD" );
 	chain_shift_instructions( chain );

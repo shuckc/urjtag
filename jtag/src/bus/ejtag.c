@@ -40,6 +40,7 @@
 #include "jtag.h"
 #include "buses.h"
 #include "generic_bus.h"
+#include "state.h"
 
 typedef struct {
 	uint32_t impcode;  /* EJTAG Implementation Register */
@@ -272,6 +273,14 @@ ejtag_bus_init( bus_t *bus )
 		0x03e00008,				// jr $31
 		0x3c030000				// lui $3,0
 	};
+
+	if (tap_state(CHAIN) != Run_Test_Idle) {
+		/* silently skip initialization if TAP isn't in RUNTEST/IDLE state
+		   this is required to avoid interfering with detect when initbus
+		   is contained in the part description file
+		   bus_init() will be called latest by bus_prepare() */
+		return URJTAG_STATUS_OK;
+	}
 
 	ejctrl = part_find_data_register( PART, "EJCONTROL" );
 	ejimpl = part_find_data_register( PART, "EJIMPCODE" );
