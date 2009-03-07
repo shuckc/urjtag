@@ -61,7 +61,5 @@ instruction TCBCONTROLA		10000	BR
 instruction TCBCONTROLB		10001	BR
 instruction TCBDATA		10010	BR
 
-# initbus ejtag from here produces a bunch of noise.
-# But run it right after detect and all is well.
-#initbus ejtag
+initbus ejtag
 endian little
