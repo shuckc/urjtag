@@ -411,7 +411,7 @@ direction
 void
 yyerror(YYLTYPE *locp, parser_priv_t *priv_data, chain_t *chain, const char *error_string)
 {
-  printf("Error occured for SVF command %s.\n", error_string);
+  printf("Error occurred for SVF command %s.\n", error_string);
 }
 
 

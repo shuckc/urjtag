@@ -387,7 +387,7 @@ svf_build_bit_string(char *hex_string, int len)
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  */
 static int
 svf_copy_hex_to_register(char *hex_string, tap_register *reg)
@@ -422,7 +422,7 @@ svf_copy_hex_to_register(char *hex_string, tap_register *reg)
  *
  * Return value:
  *   1 : tdo matches reg at all positions where mask is '1'
- *   0 : tdo and reg do not match or error occured
+ *   0 : tdo and reg do not match or error occurred
  */
 static int
 svf_compare_tdo(parser_priv_t *priv, char *tdo, char *mask, tap_register *reg, YYLTYPE *loc)
@@ -511,7 +511,7 @@ svf_remember_param(char **rem, char *new)
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  */
 static int
 svf_all_care(char **string, double number)
@@ -592,7 +592,7 @@ svf_frequency(chain_t *chain, double freq)
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  * ***************************************************************************/
 int
 svf_hxr(enum generic_irdr_coding ir_dr, struct ths_params *params)
@@ -622,7 +622,7 @@ static void sigalrm_handler(int signal)
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  * ***************************************************************************/
 int
 svf_runtest(chain_t *chain, parser_priv_t *priv, struct runtest *params)
@@ -747,7 +747,7 @@ svf_runtest(chain_t *chain, parser_priv_t *priv, struct runtest *params)
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  * ***************************************************************************/
 int
 svf_state(chain_t *chain, parser_priv_t *priv, struct path_states *path_states,
@@ -778,7 +778,7 @@ svf_state(chain_t *chain, parser_priv_t *priv, struct path_states *path_states,
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  * ***************************************************************************/
 int
 svf_sxr(chain_t *chain, parser_priv_t *priv, enum generic_irdr_coding ir_dr,
@@ -911,6 +911,10 @@ svf_sxr(chain_t *chain, parser_priv_t *priv, enum generic_irdr_coding ir_dr,
       break;
   }
 
+  /* log mismatches */
+  if (result == 0)
+    priv->mismatch_occurred = 1;
+
   return(result);
 }
 
@@ -930,7 +934,7 @@ svf_sxr(chain_t *chain, parser_priv_t *priv, enum generic_irdr_coding ir_dr,
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  * ***************************************************************************/
 int
 svf_trst(chain_t *chain, parser_priv_t *priv, int trst_mode)
@@ -998,7 +1002,7 @@ svf_trst(chain_t *chain, parser_priv_t *priv, int trst_mode)
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  * ***************************************************************************/
 int
 svf_txr(enum generic_irdr_coding ir_dr, struct ths_params *params)
@@ -1031,7 +1035,7 @@ svf_txr(enum generic_irdr_coding ir_dr, struct ths_params *params)
  *
  * Return value:
  *   1 : all ok
- *   0 : error occured
+ *   0 : error occurred
  * ***************************************************************************/
 void
 svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress,
@@ -1132,6 +1136,8 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress
   priv.svf_trst_absent    = 0;
   priv.svf_state_executed = 0;
 
+  priv.mismatch_occurred  = 0;
+
   /* set back flags for issued warnings */
   priv.issued_runtest_maxtime = 0;
 
@@ -1143,6 +1149,13 @@ svf_run(chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch, int print_progress
   if (svf_bison_init(&priv, SVF_FILE, num_lines, print_progress)) {
     svfparse(&priv, chain);
     svf_bison_deinit(&priv);
+  }
+
+  if (print_progress) {
+    if (priv.mismatch_occurred > 0)
+      printf( _("Mismatches occurred between scanned device output and expected TDO values.\n") );
+    else
+      printf( _("Scanned device output matched expected TDO values.\n") );
   }
 
   /* clean up */

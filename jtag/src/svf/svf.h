@@ -98,6 +98,7 @@ struct parser_priv {
     int     svf_trst_absent;
     int     svf_state_executed;
     uint32_t ref_freq;
+    int     mismatch_occurred;
     /* protocol issued warnings */
     int     issued_runtest_maxtime;
 };
