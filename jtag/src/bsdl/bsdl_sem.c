@@ -61,7 +61,7 @@ static void print_cmd(char **cmd)
   char *elem;
 
   while ((elem = cmd[idx])) {
-    printf(" %s", elem);
+    printf("%s%s", idx > 0 ? " ": "", elem);
     idx++;
   }
   printf("\n");
