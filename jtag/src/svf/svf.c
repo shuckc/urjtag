@@ -824,14 +824,14 @@ svf_sxr(chain_t *chain, parser_priv_t *priv, enum generic_irdr_coding ir_dr,
     sxr_params->no_tdi = 0;
   }
 
-  /* result of consistency check */
-  if (!result)
-    return(0);
-
   /* take over responsability for free'ing parameter strings */
   params->tdi   = NULL;
   params->mask  = NULL;
   params->smask = NULL;
+
+  /* result of consistency check */
+  if (!result)
+    return(0);
 
 
   /*

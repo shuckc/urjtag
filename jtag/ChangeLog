@@ -1,5 +1,8 @@
 2009-03-08  Arnim Laeuger  <arniml>
 
+  * src/svf/svf.c: avoid double free for SIR/SDR parameter strings in case
+    of a consistency check error
+
   * src/bsdl/bsdl_sem.c: avoid leading space when printing commands
 
 2009-03-07  Arnim Laeuger  <arniml>
