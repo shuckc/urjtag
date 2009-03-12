@@ -48,3 +48,5 @@ instruction	EJTAG_FASTDATA	01110	EJFASTDATA
 
 initbus ejtag
 endian big
+#Enable flash read/write
+poke 0x58400000 0x100e3ce1
