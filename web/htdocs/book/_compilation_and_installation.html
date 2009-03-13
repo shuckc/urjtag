@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -93,10 +93,10 @@ NAME="_required_software_for_compiling_urjtag"
 >The distributed source tarball contains source pregenerated with a current
 flex version; flex therefore is only needed if you want to compile code
 checked out from our Subversion repository.  Flex 2.5.4a as it comes with
-Cygwin cannot build the scanners for BSDL and SVF. Building these files
-requires Flex 2.5.33 or newer. The configure script will compare the available
-Flex version against these preconditions and enables or disables the related
-features.</P
+most but the very latest Cygwin release cannot build the scanners for BSDL and
+SVF. Building these files requires Flex 2.5.33 or newer. The configure script
+will compare the available Flex version against these preconditions and enables
+or disables the related features.</P
 ><P
 >Furthermore, libtool should be available, and "devel" versions of the following
 packages:</P
@@ -145,7 +145,11 @@ you don't run Linux, you can get it from</P
 ><UL
 ><LI
 ><P
->&#13;http://www.intra2net.com/de/produkte/opensource/ftdi/
+>&#13;<A
+HREF="http://www.intra2net.com/en/developer/libftdi/"
+TARGET="_top"
+>http://www.intra2net.com/en/developer/libftdi/</A
+>
 </P
 ></LI
 ></UL
@@ -161,12 +165,20 @@ There is a libusb-win32 variant that can be used in a Cygwin environment:</P
 ><UL
 ><LI
 ><P
->&#13;http://libusb.sourceforge.net (libusb)
+>&#13;<A
+HREF="http://libusb.sourceforge.net"
+TARGET="_top"
+>http://libusb.sourceforge.net</A
+> (libusb)
 </P
 ></LI
 ><LI
 ><P
->&#13;http://libusb-win32.sourceforge.net (libusb for Windows)
+>&#13;<A
+HREF="http://libusb-win32.sourceforge.net"
+TARGET="_top"
+>http://libusb-win32.sourceforge.net</A
+> (libusb for Windows)
 </P
 ></LI
 ></UL
@@ -228,7 +240,11 @@ NAME="_linking_to_ftd2xx_dll_in_cygwin_environment"
 ><UL
 ><LI
 ><P
->&#13;http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
+>&#13;<A
+HREF="http://www.ftdichip.com/Drivers/D2XX.htm"
+TARGET="_top"
+>http://www.ftdichip.com/Drivers/D2XX.htm</A
+> (FTDI FTD2XX library)
 </P
 ></LI
 ></UL
@@ -262,7 +278,11 @@ NAME="_using_libusb_win32_in_cygwin_environment"
 ><UL
 ><LI
 ><P
->&#13;http://libusb-win32.sourceforge.net
+>&#13;<A
+HREF="http://libusb-win32.sourceforge.net"
+TARGET="_top"
+>http://libusb-win32.sourceforge.net</A
+>
 </P
 ></LI
 ></UL
@@ -283,17 +303,38 @@ NAME="_compiling_with_mingw"
 ></H2
 ><P
 >UrJTAG may be compiled into a Windows executable using the MinGW compiler
-(http://www.mingw.org). This has the advantage over running in a Cygwin
-environment that you don't need to install anything else but the jtag.exe.
-However, because support for MinGW is quite new in UrJTAG, it may lack some
+(<A
+HREF="http://www.mingw.org"
+TARGET="_top"
+>http://www.mingw.org</A
+>), or Cygwin GCC with the "-mno-cygwin" compiler flag.</P
+><P
+>This has the advantage over running in a Cygwin environment that you don't need
+to install anything else but the jtag.exe (plus libraries like FTD2XX.dll or
+InpOut32.DLL that are required for device access under Windows in any case).</P
+><P
+>However, because support for MinGW is quite new in UrJTAG, it may lack some
 features (e.g. readline support) or run a little slower.</P
+><P
+>Because it seems to be easier to set up a Cygwin environment, we recommend
+using the Cygwin GCC with "-mno-cygwin" flag instead of using a MinGW setup:</P
+><PRE
+CLASS="literallayout"
+>CFLAGS="-mno-cygwin -O2" ./configure --with-ftd2xx=/tmp/cdm-drivers --with-inpout32</PRE
 ><P
 >It is even possible to cross-compile and build the executable on a Linux
 host:</P
 ><PRE
 CLASS="literallayout"
->./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers
+>./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers --with-inpout32
 make</PRE
+><P
+>The "&#8212;with-inpout32" switch tells UrJTAG to use the InpOut32.DLL for access to
+parallel ports, because the Cygwin ioperm isn't available for MinGW. The InpOut32
+library is available from logix4u.net:</P
+><PRE
+CLASS="literallayout"
+>http://logix4u.net/Legacy_Ports/Parallel_Port/Inpout32.dll_for_Windows_98/2000/NT/XP.html</PRE
 ></DIV
 ><DIV
 CLASS="section"

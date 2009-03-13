@@ -4,7 +4,7 @@
 <book lang="en">
 <bookinfo>
     <title>Universal JTAG library, server and tools</title>
-    <date>2008-07-15</date>
+    <date>2009-02-27</date>
     <author>
         <firstname>Kolja</firstname>
         <othername>Waschk</othername>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>KW(</authorinitials>
 
-<revhistory><revision><revnumber>1303</revnumber><date>2008-07-15</date><authorinitials>KW(</authorinitials></revision></revhistory>
+<revhistory><revision><revnumber>1445</revnumber><date>2009-02-27</date><authorinitials>KW(</authorinitials></revision></revhistory>
 
 </bookinfo>
 <chapter id="_copyright">
@@ -118,14 +118,14 @@ program devices.</simpara>
 <simpara>The player has been developed according to the "Serial Vector Format
 Specification", Revision E, 8 March 1999 issued by ASSET InterTech, Inc. The
 full specification can be found at
-http://www.asset-intertech.com/support/svf.pdf</simpara>
+<ulink url="http://www.asset-intertech.com/support/svf.pdf">http://www.asset-intertech.com/support/svf.pdf</ulink></simpara>
 
 <simpara>UrJTAG features an "SVF player" that can read SVF files and perform the
 described actions on the bus.</simpara>
 
-<simpara>SVF parser and lexer are also copyright 2002, CDS at http://www-csd.ijs.si/.
+<simpara>SVF parser and lexer are also copyright 2002, CDS at <ulink url="http://www-csd.ijs.si/">http://www-csd.ijs.si/</ulink>.
 They have been reused from the "Experimental Boundary Scan" project at
-http://ebsp.sourceforge.net/.</simpara>
+<ulink url="http://ebsp.sourceforge.net/">http://ebsp.sourceforge.net/</ulink>.</simpara>
 
 </section>
 <section id="_jam_stapl_files">
@@ -167,7 +167,7 @@ at the UrJTAG website.</simpara>
 <section id="_urjtag_website">
 <title>UrJTAG Website</title>
 <simpara>The most current version of this documentation and UrJTAG sourcecode
-is always available from the project homepage at http://www.urjtag.org</simpara>
+is always available from the project homepage at <ulink url="http://www.urjtag.org">http://www.urjtag.org</ulink></simpara>
 
 </section>
 <section id="_the_name_urjtag">
@@ -215,7 +215,7 @@ with Cygwin installed.</simpara>
 <itemizedlist>
 <listitem>
 <simpara>
-current Cygwin net installation from http://cygwin.com
+current Cygwin net installation from <ulink url="http://cygwin.com">http://cygwin.com</ulink>
 </simpara>
 </listitem>
 <listitem>
@@ -308,6 +308,11 @@ Amontec JTAGkey-Tiny (supported as cable "JTAGkey")
 </listitem>
 <listitem>
 <simpara>
+TinCanTools Flyswatter
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Olimex ARM-USB-JTAG
 </simpara>
 </listitem>
@@ -318,7 +323,7 @@ Olimex ARM-USB-TINY
 </listitem>
 <listitem>
 <simpara>
-OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
+OOCDLink-s (experimental) <ulink url="http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks">http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks</ulink>
 </simpara>
 </listitem>
 <listitem>
@@ -328,12 +333,12 @@ Other FT2232-based USB JTAG cables (experimental)
 </listitem>
 <listitem>
 <simpara>
-Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/
+Turtelizer 2 (experimental) <ulink url="http://www.ethernut.de/en/hardware/turtelizer/">http://www.ethernut.de/en/hardware/turtelizer/</ulink>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-USB to JTAG Interface (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
+USB to JTAG Interface (experimental) <ulink url="http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html">http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html</ulink>
 </simpara>
 </listitem>
 <listitem>
@@ -347,7 +352,7 @@ Xverve Signalyzer Tool (experimental)
 <itemizedlist>
 <listitem>
 <simpara>
-Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag
+Altera USB-Blaster and compatible <ulink url="http://www.ixo.de/info/usb_jtag">http://www.ixo.de/info/usb_jtag</ulink>
 </simpara>
 </listitem>
 <listitem>
@@ -361,6 +366,9 @@ Xilinx Platform USB Cable / DLC9 (slow, experimental, work in progress - don't u
 </simpara>
 </listitem>
 </itemizedlist>
+<simpara>Other cables:
+ * Technologic Systems TS-7800 SoC GPIO builtin JTAG interface</simpara>
+
 </section>
 <section id="_jtag_aware_parts_chips">
 <title>JTAG-aware parts (chips)</title>
@@ -557,10 +565,10 @@ AMD Am29xx040B (Am29F040B, Am29LV040B)
 <simpara>The distributed source tarball contains source pregenerated with a current
 flex version; flex therefore is only needed if you want to compile code
 checked out from our Subversion repository.  Flex 2.5.4a as it comes with
-Cygwin cannot build the scanners for BSDL and SVF. Building these files
-requires Flex 2.5.33 or newer. The configure script will compare the available
-Flex version against these preconditions and enables or disables the related
-features.</simpara>
+most but the very latest Cygwin release cannot build the scanners for BSDL and
+SVF. Building these files requires Flex 2.5.33 or newer. The configure script
+will compare the available Flex version against these preconditions and enables
+or disables the related features.</simpara>
 
 <simpara>Furthermore, libtool should be available, and "devel" versions of the following
 packages:</simpara>
@@ -600,7 +608,7 @@ you don't run Linux, you can get it from</simpara>
 <itemizedlist>
 <listitem>
 <simpara>
-http://www.intra2net.com/de/produkte/opensource/ftdi/
+<ulink url="http://www.intra2net.com/en/developer/libftdi/">http://www.intra2net.com/en/developer/libftdi/</ulink>
 </simpara>
 </listitem>
 </itemizedlist>
@@ -614,12 +622,12 @@ There is a libusb-win32 variant that can be used in a Cygwin environment:</simpa
 <itemizedlist>
 <listitem>
 <simpara>
-http://libusb.sourceforge.net (libusb)
+<ulink url="http://libusb.sourceforge.net">http://libusb.sourceforge.net</ulink> (libusb)
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-http://libusb-win32.sourceforge.net (libusb for Windows)
+<ulink url="http://libusb-win32.sourceforge.net">http://libusb-win32.sourceforge.net</ulink> (libusb for Windows)
 </simpara>
 </listitem>
 </itemizedlist>
@@ -655,7 +663,7 @@ make install</literallayout>
 <itemizedlist>
 <listitem>
 <simpara>
-http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
+<ulink url="http://www.ftdichip.com/Drivers/D2XX.htm">http://www.ftdichip.com/Drivers/D2XX.htm</ulink> (FTDI FTD2XX library)
 </simpara>
 </listitem>
 </itemizedlist>
@@ -677,7 +685,7 @@ without spaces in the name is better)  and afterwards run configure with the
 <itemizedlist>
 <listitem>
 <simpara>
-http://libusb-win32.sourceforge.net
+<ulink url="http://libusb-win32.sourceforge.net">http://libusb-win32.sourceforge.net</ulink>
 </simpara>
 </listitem>
 </itemizedlist>
@@ -689,16 +697,29 @@ might give problems if the path contains spaces, as "Program Files" does!):</sim
 <section id="_compiling_with_mingw">
 <title>Compiling with MinGW</title>
 <simpara>UrJTAG may be compiled into a Windows executable using the MinGW compiler
-(http://www.mingw.org). This has the advantage over running in a Cygwin
-environment that you don't need to install anything else but the jtag.exe.
-However, because support for MinGW is quite new in UrJTAG, it may lack some
+(<ulink url="http://www.mingw.org">http://www.mingw.org</ulink>), or Cygwin GCC with the "-mno-cygwin" compiler flag.</simpara>
+
+<simpara>This has the advantage over running in a Cygwin environment that you don't need
+to install anything else but the jtag.exe (plus libraries like FTD2XX.dll or
+InpOut32.DLL that are required for device access under Windows in any case).</simpara>
+
+<simpara>However, because support for MinGW is quite new in UrJTAG, it may lack some
 features (e.g. readline support) or run a little slower.</simpara>
 
+<simpara>Because it seems to be easier to set up a Cygwin environment, we recommend
+using the Cygwin GCC with "-mno-cygwin" flag instead of using a MinGW setup:</simpara>
+
+<literallayout class="monospaced">CFLAGS="-mno-cygwin -O2" ./configure --with-ftd2xx=/tmp/cdm-drivers --with-inpout32</literallayout>
 <simpara>It is even possible to cross-compile and build the executable on a Linux
 host:</simpara>
 
-<literallayout class="monospaced">./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers
+<literallayout class="monospaced">./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers --with-inpout32
 make</literallayout>
+<simpara>The "&#8212;with-inpout32" switch tells UrJTAG to use the InpOut32.DLL for access to
+parallel ports, because the Cygwin ioperm isn't available for MinGW. The InpOut32
+library is available from logix4u.net:</simpara>
+
+<literallayout class="monospaced">http://logix4u.net/Legacy_Ports/Parallel_Port/Inpout32.dll_for_Windows_98/2000/NT/XP.html</literallayout>
 </section>
 <section id="_driver_tailoring">
 <title>Driver tailoring</title>
@@ -1242,6 +1263,14 @@ FTD2XX is selected. That's simply because FTD2XX showed some performance
 advantages over libftdi in the past. You can still force libftdi with the
 respective parameter.</simpara>
 
+<warning><simpara>There's one quirk to consider when using FTDI's FTD2XX driver. It
+connects to any known FTDI chip, randomly. I.e. if there's more than one FTDI
+device connected to the host, chances are that the driver connects to the
+wrong USB device. This might be an OEM USB-serial converter and you'll be
+banging your head why there's no proper reading from the JTAG chain. Therefore
+it's strongly recommended to specify the desc=xxx parameter for the cable
+command if the ftd2xx driver is to be used. Set xxx to the product or serial
+number descriptor string that are exhibited by the USB device.</simpara></warning>
 </section>
 <section id="_detect">
 <title>detect</title>
@@ -1268,7 +1297,9 @@ also the documentation for the "include" command.</simpara>
 </section>
 <section id="_print">
 <title>print</title>
-<simpara>Print a list of parts in the chain and the currently active instruction per part.</simpara>
+<simpara>Print a list of parts in the chain and the currently active instruction per part.
+Further details of bus, signals and instructions can be obtained with dedicated
+command options, see "help print".</simpara>
 
 </section>
 <section id="_initbus">
@@ -1441,6 +1472,16 @@ get external signal value
 </row>
 <row>
 <entry><simpara>
+<emphasis role="strong">pod</emphasis>
+</simpara></entry>
+<entry>
+<simpara>
+low level direct access to POD signals like TRST; use with care
+</simpara>
+</entry>
+</row>
+<row>
+<entry><simpara>
 <emphasis role="strong">scan</emphasis>
 </simpara></entry>
 <entry>
@@ -1605,7 +1646,7 @@ In case the TDO parameter of an SDR command leads to a mismatch the player
 issues a warning and continues. If the player should abort in this case then
 specify <emphasis>stop</emphasis> at the svf command.</simpara>
 
-<simpara>The absence of error or warning messages indicate that the SVF file could be
+<simpara>The absence of error or warning messages indicate that the SVF file was
 executed without problems. To get a progress reporting while the player advances
 through the SVF file, specify <emphasis>progress</emphasis> at the svf command.</simpara>
 
@@ -1704,11 +1745,15 @@ TIR, TDR commands not supported.
 </simpara>
 </listitem>
 </itemizedlist>
-<simpara>Operation can be slowed down significantly when the FREQUENCY command has
-been specified. This is not a problem of the SVF player itself but seem to
-happen when the frequency of UrJTAG is set to a value larger than 0.
-Configuration takes very long although the maximum allowed frequency is 10 MHz.
-Consider to comment out the FREQUENCY command at the beginning of the SVF file.</simpara>
+<simpara>SVF files for programming flash-based devices might or might not work for a given
+setup. This has been observed for Actel IGLOO devices where success and failure
+depends on the actual clocking rate of the chosen cable.</simpara>
+
+<simpara>The ref_freq=&lt;&#8230;&gt; option to the svf command allows to tweak the calculation
+of <emphasis>RUNTEST xxx SEC</emphasis> commands. For these commands, the SVF player needs to
+calculate the equivalent number of clocks and per default it will use the
+current cable clock frequency. This can be overridden with the ref_freq option
+that specifies a fixed reference frequency for such calculations.</simpara>
 
 </sidebar>
 </section>
@@ -2676,7 +2721,7 @@ Q. The documentation is incomplete. Where can I get more information?
 </term>
 <listitem>
 <simpara>
-  A. Please ask in the "Using UrJTAG" Forum on http://urjtag.org
+  A. Please ask in the "Using UrJTAG" Forum on <ulink url="http://urjtag.org">http://urjtag.org</ulink>
 </simpara>
 </listitem>
 </varlistentry>
@@ -2782,6 +2827,56 @@ Q. When running "make install", I get "Permission denied" errors
 <simpara>
   A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
 </simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+Q. My BSDL file defines the bus DAT as bit_vector(15 downto 0), how should I access single elements?
+</term>
+<listitem>
+<simpara>
+  A. BSDL syntax is an extension of the VHDL language. Array elements are indexed with
+    parentheses: DAT(4) selects index number 4 of the DAT vector. Also refer to the "print
+    signals" command.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+Q. My board requires certain signals to be set to dedicated values before external memories can be accessed.
+</term>
+<listitem>
+<simpara>
+  A. Most (if not all) BSR-based bus drivers allow for static configurations of
+    pins that are controlled by BSR bits. Apply the required "set" commands before
+    issueing the "initbus &#8230;" command. These settings are preserved by all bus
+    related commands if they don't collide with the signals required for bus operation.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+Q. My USB pod seems slow.
+</term>
+<listitem>
+<simpara>
+  A. USB-based JTAG pods suffer from a couple of intrinsic issues. Consider the
+    following to get maximum performance:
+</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+Run UrJTAG on native linux. Cygwin and VMWare are reportedly slower.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Connect the pod via a high speed USB hub to a high speed USB host port.
+      Even though the pod is a full speed device, it benefits from the shorter
+      turn-around times between host and hub.
+</simpara>
+</listitem>
+</itemizedlist>
 </listitem>
 </varlistentry>
 </variablelist>

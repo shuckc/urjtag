@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -95,7 +95,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN347"
+NAME="AEN371"
 ></A
 ><TABLE
 BORDER="0"
@@ -823,6 +823,39 @@ the respective driver is selected. If both libraries are available, then
 FTD2XX is selected. That's simply because FTD2XX showed some performance
 advantages over libftdi in the past. You can still force libftdi with the
 respective parameter.</P
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>There's one quirk to consider when using FTDI's FTD2XX driver. It
+connects to any known FTDI chip, randomly. I.e. if there's more than one FTDI
+device connected to the host, chances are that the driver connects to the
+wrong USB device. This might be an OEM USB-serial converter and you'll be
+banging your head why there's no proper reading from the JTAG chain. Therefore
+it's strongly recommended to specify the desc=xxx parameter for the cable
+command if the ftd2xx driver is to be used. Set xxx to the product or serial
+number descriptor string that are exhibited by the USB device.</P
+></TD
+></TR
+></TABLE
+></DIV
 ></DIV
 ><DIV
 CLASS="section"
@@ -864,7 +897,9 @@ NAME="_print"
 >3.2.3.3. print</A
 ></H3
 ><P
->Print a list of parts in the chain and the currently active instruction per part.</P
+>Print a list of parts in the chain and the currently active instruction per part.
+Further details of bus, signals and instructions can be obtained with dedicated
+command options, see "help print".</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -978,7 +1013,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN602"
+NAME="AEN628"
 ></A
 ><TABLE
 BORDER="0"
@@ -1087,7 +1122,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN634"
+NAME="AEN660"
 ></A
 ><TABLE
 BORDER="0"
@@ -1151,6 +1186,25 @@ CLASS="emphasis"
 ><TD
 >&#13;<P
 >&#13;get external signal value
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>pod</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;low level direct access to POD signals like TRST; use with care
 </P
 >
 </TD
@@ -1235,7 +1289,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN678"
+NAME="AEN710"
 ></A
 ><TABLE
 BORDER="0"
@@ -1470,7 +1524,7 @@ CLASS="emphasis"
 ></SPAN
 > at the svf command.</P
 ><P
->The absence of error or warning messages indicate that the SVF file could be
+>The absence of error or warning messages indicate that the SVF file was
 executed without problems. To get a progress reporting while the player advances
 through the SVF file, specify <SPAN
 CLASS="emphasis"
@@ -1488,7 +1542,7 @@ CELLPADDING="5"
 ><DIV
 CLASS="sidebar"
 ><A
-NAME="AEN744"
+NAME="AEN776"
 ></A
 ><P
 ><B
@@ -1594,11 +1648,21 @@ NAME="AEN744"
 ></LI
 ></UL
 ><P
->Operation can be slowed down significantly when the FREQUENCY command has
-been specified. This is not a problem of the SVF player itself but seem to
-happen when the frequency of UrJTAG is set to a value larger than 0.
-Configuration takes very long although the maximum allowed frequency is 10 MHz.
-Consider to comment out the FREQUENCY command at the beginning of the SVF file.</P
+>SVF files for programming flash-based devices might or might not work for a given
+setup. This has been observed for Actel IGLOO devices where success and failure
+depends on the actual clocking rate of the chosen cable.</P
+><P
+>The ref_freq=&#60;&#8230;&#62; option to the svf command allows to tweak the calculation
+of <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>RUNTEST xxx SEC</I
+></SPAN
+> commands. For these commands, the SVF player needs to
+calculate the equivalent number of clocks and per default it will use the
+current cable clock frequency. This can be overridden with the ref_freq option
+that specifies a fixed reference frequency for such calculations.</P
 ></DIV
 ></TD
 ></TR

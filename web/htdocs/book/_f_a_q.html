@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -87,7 +87,11 @@ CLASS="variablelist"
 >Q. The documentation is incomplete. Where can I get more information?</DT
 ><DD
 ><P
->&#13;  A. Please ask in the "Using UrJTAG" Forum on http://urjtag.org
+>&#13;  A. Please ask in the "Using UrJTAG" Forum on <A
+HREF="http://urjtag.org"
+TARGET="_top"
+>http://urjtag.org</A
+>
 </P
 ></DD
 ><DT
@@ -166,6 +170,49 @@ CLASS="literal"
 ><P
 >&#13;  A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
 </P
+></DD
+><DT
+>Q. My BSDL file defines the bus DAT as bit_vector(15 downto 0), how should I access single elements?</DT
+><DD
+><P
+>&#13;  A. BSDL syntax is an extension of the VHDL language. Array elements are indexed with
+    parentheses: DAT(4) selects index number 4 of the DAT vector. Also refer to the "print
+    signals" command.
+</P
+></DD
+><DT
+>Q. My board requires certain signals to be set to dedicated values before external memories can be accessed.</DT
+><DD
+><P
+>&#13;  A. Most (if not all) BSR-based bus drivers allow for static configurations of
+    pins that are controlled by BSR bits. Apply the required "set" commands before
+    issueing the "initbus &#8230;" command. These settings are preserved by all bus
+    related commands if they don't collide with the signals required for bus operation.
+</P
+></DD
+><DT
+>Q. My USB pod seems slow.</DT
+><DD
+><P
+>&#13;  A. USB-based JTAG pods suffer from a couple of intrinsic issues. Consider the
+    following to get maximum performance:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Run UrJTAG on native linux. Cygwin and VMWare are reportedly slower.
+</P
+></LI
+><LI
+><P
+>&#13;Connect the pod via a high speed USB hub to a high speed USB host port.
+      Even though the pod is a full speed device, it benefits from the shorter
+      turn-around times between host and hub.
+</P
+></LI
+></UL
 ></DD
 ></DL
 ></DIV

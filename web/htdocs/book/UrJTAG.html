@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -588,14 +588,26 @@ program devices.</P
 >The player has been developed according to the "Serial Vector Format
 Specification", Revision E, 8 March 1999 issued by ASSET InterTech, Inc. The
 full specification can be found at
-http://www.asset-intertech.com/support/svf.pdf</P
+<A
+HREF="http://www.asset-intertech.com/support/svf.pdf"
+TARGET="_top"
+>http://www.asset-intertech.com/support/svf.pdf</A
+></P
 ><P
 >UrJTAG features an "SVF player" that can read SVF files and perform the
 described actions on the bus.</P
 ><P
->SVF parser and lexer are also copyright 2002, CDS at http://www-csd.ijs.si/.
+>SVF parser and lexer are also copyright 2002, CDS at <A
+HREF="http://www-csd.ijs.si/"
+TARGET="_top"
+>http://www-csd.ijs.si/</A
+>.
 They have been reused from the "Experimental Boundary Scan" project at
-http://ebsp.sourceforge.net/.</P
+<A
+HREF="http://ebsp.sourceforge.net/"
+TARGET="_top"
+>http://ebsp.sourceforge.net/</A
+>.</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -692,7 +704,11 @@ NAME="_urjtag_website"
 ></H3
 ><P
 >The most current version of this documentation and UrJTAG sourcecode
-is always available from the project homepage at http://www.urjtag.org</P
+is always available from the project homepage at <A
+HREF="http://www.urjtag.org"
+TARGET="_top"
+>http://www.urjtag.org</A
+></P
 ></DIV
 ><DIV
 CLASS="section"
@@ -777,7 +793,11 @@ NAME="_required_software_for_running_urjtag"
 ><UL
 ><LI
 ><P
->&#13;current Cygwin net installation from http://cygwin.com
+>&#13;current Cygwin net installation from <A
+HREF="http://cygwin.com"
+TARGET="_top"
+>http://cygwin.com</A
+>
 </P
 ></LI
 ><LI
@@ -886,6 +906,11 @@ CLASS="emphasis"
 ></LI
 ><LI
 ><P
+>&#13;TinCanTools Flyswatter
+</P
+></LI
+><LI
+><P
 >&#13;Olimex ARM-USB-JTAG
 </P
 ></LI
@@ -896,7 +921,11 @@ CLASS="emphasis"
 ></LI
 ><LI
 ><P
->&#13;OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks
+>&#13;OOCDLink-s (experimental) <A
+HREF="http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks"
+TARGET="_top"
+>http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks</A
+>
 </P
 ></LI
 ><LI
@@ -906,12 +935,20 @@ CLASS="emphasis"
 ></LI
 ><LI
 ><P
->&#13;Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/
+>&#13;Turtelizer 2 (experimental) <A
+HREF="http://www.ethernut.de/en/hardware/turtelizer/"
+TARGET="_top"
+>http://www.ethernut.de/en/hardware/turtelizer/</A
+>
 </P
 ></LI
 ><LI
 ><P
->&#13;USB to JTAG Interface (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html
+>&#13;USB to JTAG Interface (experimental) <A
+HREF="http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html"
+TARGET="_top"
+>http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html</A
+>
 </P
 ></LI
 ><LI
@@ -927,7 +964,11 @@ CLASS="emphasis"
 ><UL
 ><LI
 ><P
->&#13;Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag
+>&#13;Altera USB-Blaster and compatible <A
+HREF="http://www.ixo.de/info/usb_jtag"
+TARGET="_top"
+>http://www.ixo.de/info/usb_jtag</A
+>
 </P
 ></LI
 ><LI
@@ -941,6 +982,9 @@ CLASS="emphasis"
 </P
 ></LI
 ></UL
+><P
+>Other cables:
+ * Technologic Systems TS-7800 SoC GPIO builtin JTAG interface</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -1191,10 +1235,10 @@ NAME="_required_software_for_compiling_urjtag"
 >The distributed source tarball contains source pregenerated with a current
 flex version; flex therefore is only needed if you want to compile code
 checked out from our Subversion repository.  Flex 2.5.4a as it comes with
-Cygwin cannot build the scanners for BSDL and SVF. Building these files
-requires Flex 2.5.33 or newer. The configure script will compare the available
-Flex version against these preconditions and enables or disables the related
-features.</P
+most but the very latest Cygwin release cannot build the scanners for BSDL and
+SVF. Building these files requires Flex 2.5.33 or newer. The configure script
+will compare the available Flex version against these preconditions and enables
+or disables the related features.</P
 ><P
 >Furthermore, libtool should be available, and "devel" versions of the following
 packages:</P
@@ -1243,7 +1287,11 @@ you don't run Linux, you can get it from</P
 ><UL
 ><LI
 ><P
->&#13;http://www.intra2net.com/de/produkte/opensource/ftdi/
+>&#13;<A
+HREF="http://www.intra2net.com/en/developer/libftdi/"
+TARGET="_top"
+>http://www.intra2net.com/en/developer/libftdi/</A
+>
 </P
 ></LI
 ></UL
@@ -1259,12 +1307,20 @@ There is a libusb-win32 variant that can be used in a Cygwin environment:</P
 ><UL
 ><LI
 ><P
->&#13;http://libusb.sourceforge.net (libusb)
+>&#13;<A
+HREF="http://libusb.sourceforge.net"
+TARGET="_top"
+>http://libusb.sourceforge.net</A
+> (libusb)
 </P
 ></LI
 ><LI
 ><P
->&#13;http://libusb-win32.sourceforge.net (libusb for Windows)
+>&#13;<A
+HREF="http://libusb-win32.sourceforge.net"
+TARGET="_top"
+>http://libusb-win32.sourceforge.net</A
+> (libusb for Windows)
 </P
 ></LI
 ></UL
@@ -1326,7 +1382,11 @@ NAME="_linking_to_ftd2xx_dll_in_cygwin_environment"
 ><UL
 ><LI
 ><P
->&#13;http://www.ftdichip.com/Drivers/D2XX.htm (FTDI FTD2XX library)
+>&#13;<A
+HREF="http://www.ftdichip.com/Drivers/D2XX.htm"
+TARGET="_top"
+>http://www.ftdichip.com/Drivers/D2XX.htm</A
+> (FTDI FTD2XX library)
 </P
 ></LI
 ></UL
@@ -1360,7 +1420,11 @@ NAME="_using_libusb_win32_in_cygwin_environment"
 ><UL
 ><LI
 ><P
->&#13;http://libusb-win32.sourceforge.net
+>&#13;<A
+HREF="http://libusb-win32.sourceforge.net"
+TARGET="_top"
+>http://libusb-win32.sourceforge.net</A
+>
 </P
 ></LI
 ></UL
@@ -1381,17 +1445,38 @@ NAME="_compiling_with_mingw"
 ></H3
 ><P
 >UrJTAG may be compiled into a Windows executable using the MinGW compiler
-(http://www.mingw.org). This has the advantage over running in a Cygwin
-environment that you don't need to install anything else but the jtag.exe.
-However, because support for MinGW is quite new in UrJTAG, it may lack some
+(<A
+HREF="http://www.mingw.org"
+TARGET="_top"
+>http://www.mingw.org</A
+>), or Cygwin GCC with the "-mno-cygwin" compiler flag.</P
+><P
+>This has the advantage over running in a Cygwin environment that you don't need
+to install anything else but the jtag.exe (plus libraries like FTD2XX.dll or
+InpOut32.DLL that are required for device access under Windows in any case).</P
+><P
+>However, because support for MinGW is quite new in UrJTAG, it may lack some
 features (e.g. readline support) or run a little slower.</P
+><P
+>Because it seems to be easier to set up a Cygwin environment, we recommend
+using the Cygwin GCC with "-mno-cygwin" flag instead of using a MinGW setup:</P
+><PRE
+CLASS="literallayout"
+>CFLAGS="-mno-cygwin -O2" ./configure --with-ftd2xx=/tmp/cdm-drivers --with-inpout32</PRE
 ><P
 >It is even possible to cross-compile and build the executable on a Linux
 host:</P
 ><PRE
 CLASS="literallayout"
->./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers
+>./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers --with-inpout32
 make</PRE
+><P
+>The "&#8212;with-inpout32" switch tells UrJTAG to use the InpOut32.DLL for access to
+parallel ports, because the Cygwin ioperm isn't available for MinGW. The InpOut32
+library is available from logix4u.net:</P
+><PRE
+CLASS="literallayout"
+>http://logix4u.net/Legacy_Ports/Parallel_Port/Inpout32.dll_for_Windows_98/2000/NT/XP.html</PRE
 ></DIV
 ><DIV
 CLASS="section"
@@ -1653,7 +1738,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN347"
+NAME="AEN371"
 ></A
 ><TABLE
 BORDER="0"
@@ -2381,6 +2466,39 @@ the respective driver is selected. If both libraries are available, then
 FTD2XX is selected. That's simply because FTD2XX showed some performance
 advantages over libftdi in the past. You can still force libftdi with the
 respective parameter.</P
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>There's one quirk to consider when using FTDI's FTD2XX driver. It
+connects to any known FTDI chip, randomly. I.e. if there's more than one FTDI
+device connected to the host, chances are that the driver connects to the
+wrong USB device. This might be an OEM USB-serial converter and you'll be
+banging your head why there's no proper reading from the JTAG chain. Therefore
+it's strongly recommended to specify the desc=xxx parameter for the cable
+command if the ftd2xx driver is to be used. Set xxx to the product or serial
+number descriptor string that are exhibited by the USB device.</P
+></TD
+></TR
+></TABLE
+></DIV
 ></DIV
 ><DIV
 CLASS="section"
@@ -2422,7 +2540,9 @@ NAME="_print"
 >3.2.3.3. print</A
 ></H4
 ><P
->Print a list of parts in the chain and the currently active instruction per part.</P
+>Print a list of parts in the chain and the currently active instruction per part.
+Further details of bus, signals and instructions can be obtained with dedicated
+command options, see "help print".</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -2536,7 +2656,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN602"
+NAME="AEN628"
 ></A
 ><TABLE
 BORDER="0"
@@ -2645,7 +2765,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN634"
+NAME="AEN660"
 ></A
 ><TABLE
 BORDER="0"
@@ -2709,6 +2829,25 @@ CLASS="emphasis"
 ><TD
 >&#13;<P
 >&#13;get external signal value
+</P
+>
+</TD
+></TR
+><TR
+><TD
+><P
+>&#13;<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>pod</B
+></SPAN
+>
+</P
+></TD
+><TD
+>&#13;<P
+>&#13;low level direct access to POD signals like TRST; use with care
 </P
 >
 </TD
@@ -2793,7 +2932,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN678"
+NAME="AEN710"
 ></A
 ><TABLE
 BORDER="0"
@@ -3028,7 +3167,7 @@ CLASS="emphasis"
 ></SPAN
 > at the svf command.</P
 ><P
->The absence of error or warning messages indicate that the SVF file could be
+>The absence of error or warning messages indicate that the SVF file was
 executed without problems. To get a progress reporting while the player advances
 through the SVF file, specify <SPAN
 CLASS="emphasis"
@@ -3046,7 +3185,7 @@ CELLPADDING="5"
 ><DIV
 CLASS="sidebar"
 ><A
-NAME="AEN744"
+NAME="AEN776"
 ></A
 ><P
 ><B
@@ -3152,11 +3291,21 @@ NAME="AEN744"
 ></LI
 ></UL
 ><P
->Operation can be slowed down significantly when the FREQUENCY command has
-been specified. This is not a problem of the SVF player itself but seem to
-happen when the frequency of UrJTAG is set to a value larger than 0.
-Configuration takes very long although the maximum allowed frequency is 10 MHz.
-Consider to comment out the FREQUENCY command at the beginning of the SVF file.</P
+>SVF files for programming flash-based devices might or might not work for a given
+setup. This has been observed for Actel IGLOO devices where success and failure
+depends on the actual clocking rate of the chosen cable.</P
+><P
+>The ref_freq=&#60;&#8230;&#62; option to the svf command allows to tweak the calculation
+of <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>RUNTEST xxx SEC</I
+></SPAN
+> commands. For these commands, the SVF player needs to
+calculate the equivalent number of clocks and per default it will use the
+current cable clock frequency. This can be overridden with the ref_freq option
+that specifies a fixed reference frequency for such calculations.</P
 ></DIV
 ></TD
 ></TR
@@ -3427,7 +3576,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN833"
+NAME="AEN867"
 ></A
 ><TABLE
 BORDER="0"
@@ -4632,7 +4781,11 @@ CLASS="variablelist"
 >Q. The documentation is incomplete. Where can I get more information?</DT
 ><DD
 ><P
->&#13;  A. Please ask in the "Using UrJTAG" Forum on http://urjtag.org
+>&#13;  A. Please ask in the "Using UrJTAG" Forum on <A
+HREF="http://urjtag.org"
+TARGET="_top"
+>http://urjtag.org</A
+>
 </P
 ></DD
 ><DT
@@ -4711,6 +4864,49 @@ CLASS="literal"
 ><P
 >&#13;  A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
 </P
+></DD
+><DT
+>Q. My BSDL file defines the bus DAT as bit_vector(15 downto 0), how should I access single elements?</DT
+><DD
+><P
+>&#13;  A. BSDL syntax is an extension of the VHDL language. Array elements are indexed with
+    parentheses: DAT(4) selects index number 4 of the DAT vector. Also refer to the "print
+    signals" command.
+</P
+></DD
+><DT
+>Q. My board requires certain signals to be set to dedicated values before external memories can be accessed.</DT
+><DD
+><P
+>&#13;  A. Most (if not all) BSR-based bus drivers allow for static configurations of
+    pins that are controlled by BSR bits. Apply the required "set" commands before
+    issueing the "initbus &#8230;" command. These settings are preserved by all bus
+    related commands if they don't collide with the signals required for bus operation.
+</P
+></DD
+><DT
+>Q. My USB pod seems slow.</DT
+><DD
+><P
+>&#13;  A. USB-based JTAG pods suffer from a couple of intrinsic issues. Consider the
+    following to get maximum performance:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Run UrJTAG on native linux. Cygwin and VMWare are reportedly slower.
+</P
+></LI
+><LI
+><P
+>&#13;Connect the pod via a high speed USB hub to a high speed USB host port.
+      Even though the pod is a full speed device, it benefits from the shorter
+      turn-around times between host and hub.
+</P
+></LI
+></UL
 ></DD
 ></DL
 ></DIV
