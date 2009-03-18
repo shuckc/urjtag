@@ -354,7 +354,7 @@ intel_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int
 #endif
 
 	/* multi-byte writes supported? */
-	if (max_bytes_write > 0)
+	if (max_bytes_write > 1)
 		return intel_flash_program_buffer( cfi_array, adr, buffer, count );
 
 	else {

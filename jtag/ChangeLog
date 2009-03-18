@@ -1,3 +1,9 @@
+2009-03-18  Arnim Laeuger  <arniml>
+
+  * src/flash/intel.c, src/flash/amd.c: activate multi byte write mode
+    for > 1, not > 0
+    [ 2690857 ] Can't write flashes
+
 2009-03-12  Arnim Laeuger  <arniml>
 
   * data/atheros/ar2312/ar2312: AR2313 flash access patch
