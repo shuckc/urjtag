@@ -1,5 +1,8 @@
 2009-03-18  Arnim Laeuger  <arniml>
 
+  * acinclude.m4: add libtinfo, fix for
+    [ 2691154 ] Configure fails to detect libtinfo
+
   * src/flash/intel.c, src/flash/amd.c: activate multi byte write mode
     for > 1, not > 0
     [ 2690857 ] Can't write flashes

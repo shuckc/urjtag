@@ -10,8 +10,8 @@ dnl
 dnl The libraries that may be readline compatible are `libedit',
 dnl `libeditline' and `libreadline'.  Sometimes we need to link a termcap
 dnl library for readline to work, this macro tests these cases too by
-dnl trying to link with `libtermcap', `libcurses' or `libncurses' before
-dnl giving up.
+dnl trying to link with `libtermcap', `libcurses', `libncurses' or
+dnl `libtinfo' before giving up.
 dnl
 dnl Here is an example of how to use the information provided by this
 dnl macro to perform the necessary includes or declarations in a C file:
@@ -52,7 +52,7 @@ AC_DEFUN([VL_LIB_READLINE], [
                  vl_cv_lib_readline, [
     ORIG_LIBS="$LIBS"
     for readline_lib in readline edit editline; do
-      for termcap_lib in "" termcap curses ncurses; do
+      for termcap_lib in "" termcap curses ncurses tinfo; do
         if test -z "$termcap_lib"; then
           TRY_LIB="-l$readline_lib"
         else
