@@ -1,3 +1,7 @@
+2009-03-23  Arnim Laeuger  <arniml>
+
+  * src/cmd/pod.c: show signal names for TRST and RESET
+
 2009-03-18  Arnim Laeuger  <arniml>
 
   * acinclude.m4: add libtinfo, fix for

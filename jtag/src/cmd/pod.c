@@ -78,7 +78,7 @@ cmd_pod_help( void )
 		"Usage: %s SIGNAL=# [SIGNAL=# ...]\n"
 		"Set state of POD signal(s) to 0 or 1.\n"
 		"\n"
-		"SIGNAL	    e.g. TCK,TMS or TDI\n"
+		"SIGNAL	    TCK,TMS, TDI, TRST, or RESET\n"
         "#          0 or 1\n"
 	), "pod" );
 }
