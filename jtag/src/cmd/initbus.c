@@ -54,14 +54,21 @@ cmd_initbus_run( chain_t *chain, char *params[] )
 
 	for (i = 0; bus_drivers[i] != NULL; i++) {
 		if (strcasecmp( bus_drivers[i]->name, params[1] ) == 0) {
-			bus_t *bus = bus_drivers[i]->new_bus( chain, bus_drivers[i], params );
-			if (bus == NULL) {
+			bus_t *abus = bus_drivers[i]->new_bus( chain, bus_drivers[i], params );
+			if (abus == NULL) {
 				printf( _("bus alloc/attach failed!\n") );
 				return 1;
 			}
-			buses_add( bus );
-			if (bus_init( bus ) != URJTAG_STATUS_OK)
+			buses_add( abus );
+			if (bus_init( abus ) != URJTAG_STATUS_OK)
 				printf( _("bus initialization failed!\n") );
+
+			for (i = 0; i < buses.len; i++)
+				if (buses.buses[i] == bus)
+					break;
+			if (i != buses.len - 1)
+				printf( _("Initialized bus %d, active bus %d\n"), buses.len - 1, i );
+
 			return 1;
 		}
 	}
