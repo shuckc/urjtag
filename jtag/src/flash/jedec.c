@@ -391,7 +391,7 @@ jedec_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 		return -3;              /* invalid bus width */
 	(*cfi_array)->bus_width = ba = bw / 8;
 
-	(*cfi_array)->cfi_chips = calloc( 1, sizeof (cfi_chip_t *) );
+	(*cfi_array)->cfi_chips = calloc( 1, sizeof (cfi_chip_t *) * ba);
 	if (!(*cfi_array)->cfi_chips)
 		return -2;              /* out of memory */
 	

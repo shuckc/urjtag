@@ -1,3 +1,7 @@
+2009-03-27  Arnim Laeuger  <arniml>
+
+  * src/flash/jedec.c: fix memory corruption from jedec code (Jon Smirl)
+
 2009-03-26  Arnim Laeuger  <arniml>
 
   * src/cmd/initbus.c: Notify which bus is active when a new bus is initialized
