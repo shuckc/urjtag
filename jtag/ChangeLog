@@ -1,5 +1,7 @@
 2009-03-27  Arnim Laeuger  <arniml>
 
+  * src/jtag.c: more than one optional file can be specified
+
   * src/flash/jedec.c: fix memory corruption from jedec code (Jon Smirl)
 
 2009-03-26  Arnim Laeuger  <arniml>

@@ -356,7 +356,7 @@ main( int argc, char *const argv[] )
 		printf (_("%s #%s\n"), PACKAGE_STRING, SVN_REVISION);
 		printf ("\n");
 
-		printf (_("Usage: %s [OPTION] [FILE]\n"), "jtag");
+		printf (_("Usage: %s [OPTIONS] [FILE [FILE ... ]] \n"), "jtag");
 		printf ("\n");
 
 		printf (_("  -h, --help          display this help and exit\n"));
