@@ -40,14 +40,10 @@ SUBDIRS += bsdl
 endif
 
 bin_PROGRAMS = \
-	jtag \
-	bsdl2jtag
+	jtag
 
 jtag_SOURCES = \
 	jtag.c
-
-bsdl2jtag_SOURCES = \
-	bsdl2jtag.c
 
 jtag_DEPENDENCIES = \
 	flash/libflash.a \
