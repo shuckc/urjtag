@@ -1,5 +1,8 @@
 2009-03-28  Arnim Laeuger  <arniml>
 
+  * src/bsdl2jtag, src/Makefile.am, doc/UrJTAG.txt: implement bsdl2jtag
+    as a wrapper script that calls jtag shell with 'bsdl dump ...'
+
   * src/Makefile.am, src/bsdl2jtag.c: removed bsdl2jtag
 
 2009-03-27  Arnim Laeuger  <arniml>

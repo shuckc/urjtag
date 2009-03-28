@@ -42,6 +42,9 @@ endif
 bin_PROGRAMS = \
 	jtag
 
+bin_SCRIPTS = \
+	bsdl2jtag
+
 jtag_SOURCES = \
 	jtag.c
 
