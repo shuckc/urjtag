@@ -105,8 +105,8 @@ chain_defer_clock( chain_t *chain, int tms, int tdi, int n )
 int
 chain_set_trst( chain_t *chain, int trst )
 {
-	int old_trst = cable_set_signal( chain->cable, CS_TRST, trst ? CS_TRST : 0 );
-	old_trst = (old_trst & CS_TRST) ? 1 : 0;
+	int old_val = cable_set_signal( chain->cable, CS_TRST, trst ? CS_TRST : 0 );
+	int old_trst = (old_val & CS_TRST) ? 1 : 0;
 	tap_state_set_trst( chain, old_trst, trst );
 	return trst;
 }
@@ -121,8 +121,8 @@ int
 chain_set_pod_signal( chain_t *chain, int mask, int val )
 {
 	int old_val = cable_set_signal( chain->cable, mask, val );
-	int old_trst = (old_trst & CS_TRST) ? 1 : 0;
-    int new_trst = (val & mask & CS_TRST)  ? 1 : 0;
+	int old_trst = (old_val & CS_TRST) ? 1 : 0;
+	int new_trst = (val & mask & CS_TRST)  ? 1 : 0;
 	tap_state_set_trst( chain, old_trst, new_trst );
 	return old_val;
 }
