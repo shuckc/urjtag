@@ -122,7 +122,7 @@ chain_set_pod_signal( chain_t *chain, int mask, int val )
 {
 	int old_val = cable_set_signal( chain->cable, mask, val );
 	int old_trst = (old_val & CS_TRST) ? 1 : 0;
-	int new_trst = (val & mask & CS_TRST)  ? 1 : 0;
+	int new_trst = (((old_val & ~mask) | (val & mask)) & CS_TRST) ? 1 : 0;
 	tap_state_set_trst( chain, old_trst, new_trst );
 	return old_val;
 }

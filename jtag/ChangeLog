@@ -1,5 +1,8 @@
 2009-03-28  Arnim Laeuger  <arniml>
 
+  * src/tap/chain.c (chain_set_pod_signal) : keep old value of trst in
+    case trst isn't modified by mask/val
+
   * src/tap/chain.c: [ 2610857 ] chain_set_pod_signal() looks funky
 
   * UrJTAG.txt: typo
