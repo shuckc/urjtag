@@ -225,7 +225,9 @@ FT2232-based USB cables:
  * OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks[]
  * Other FT2232-based USB JTAG cables (experimental)
  * Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/[]
- * USB to JTAG Interface (experimental) http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html[]
+ * USB to JTAG Interface (experimental)
+ * http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html[]
+ * Black gnICE http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice[]
  * Xverve Signalyzer Tool (experimental)
 
 Other USB cables:
@@ -243,7 +245,9 @@ The data/ directory of the UrJTAG installation has some more, but at
 least the following are supported:
 
  * Altera EP1C20F400
+ * Altera MAX7000 (w/ BSDL)
  * Altera EPM7128AETC100
+ * Altera Cyclone I & II (w/ BSDL)
  * Analog Devices Sharc-21065L
  * Atmel ATmega128 (partial support)
  * Atmel AT32AP7000 (partial support)
@@ -271,6 +275,9 @@ least the following are supported:
  * Xilinx XCR3128XL-CS144
  * Xilinx XCR3128XL-VQ100
  * Xilinx XCR3256XL-FT256
+ * Xilinx Spartan-IIE
+ * Xilinx Spartan-3/E
+ * Xilinx Spartan-3AN
 
 ==== Flash chips ====
 
