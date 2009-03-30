@@ -586,8 +586,8 @@ AS_IF([test "x$dmalloc" = xyes], [
 
 
 # Enable flash multi-byte write mode?
-AC_ARG_ENABLE(flash_multi_byte,
-[AS_HELP_STRING([--enable-flash_multi_byte], [Enable flash multi-byte write mode])],
+AC_ARG_ENABLE(flash-multi-byte,
+[AS_HELP_STRING([--enable-flash-multi-byte], [Enable flash multi-byte write mode (default is enabled)])],
 [flash_multi_byte=$enableval], [flash_multi_byte=yes])
 AS_IF([test "x$flash_multi_byte" = xyes], [
   AC_DEFINE(FLASH_MULTI_BYTE, 1, [define for flash multi-byte write mode])
