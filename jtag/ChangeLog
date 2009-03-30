@@ -1,5 +1,7 @@
 2009-03-30  Arnim Laeuger  <arniml>
 
+  * UrJTAG.txt: multi-byte description
+
   * configure.ac: better description for flash-multi-byte
 
 2009-03-29  Arnim Laeuger <arniml>
