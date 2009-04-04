@@ -1,3 +1,8 @@
+2009-04-04  Arnim Laeuger  <arniml>
+
+  * src/tap/cable/ft2232.c, src/tap/cable.c, src/tap/cable/generic_usbconn.c,
+    THANKS, doc/UrJTAG.txt: usbscarab2 cable driver added (Tomek Cedro)
+
 2009-03-30  Arnim Laeuger  <arniml>
 
   * UrJTAG.txt: multi-byte description

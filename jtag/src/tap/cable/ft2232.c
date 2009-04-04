@@ -101,6 +101,7 @@
 #define BITMASK_JTAGKEY_SRST_N_OUT (1 << BIT_JTAGKEY_SRST_N_OUT)
 #define BITMASK_JTAGKEY_TRST_N_OE_N (1 << BIT_JTAGKEY_TRST_N_OE_N)
 #define BITMASK_JTAGKEY_SRST_N_OE_N (1 << BIT_JTAGKEY_SRST_N_OE_N)
+
 /* bit and bitmask definitions for Olimex ARM-USB-OCD */
 #define BIT_ARMUSBOCD_nOE 4
 #define BIT_ARMUSBOCD_nTRST 0
@@ -112,11 +113,13 @@
 #define BITMASK_ARMUSBOCD_nTSRST (1 << BIT_ARMUSBOCD_nTSRST)
 #define BITMASK_ARMUSBOCD_nTRST_nOE (1 << BIT_ARMUSBOCD_nTRST_nOE)
 #define BITMASK_ARMUSBOCD_RED_LED (1 << BIT_ARMUSBOCD_RED_LED)
+
 /* bit and bitmask definitions for Blackfin gnICE */
 #define BIT_GNICE_nTRST 1
 #define BIT_GNICE_nLED 3 
 #define BITMASK_GNICE_nTRST (1 << BIT_GNICE_nTRST)
 #define BITMASK_GNICE_nLED (1 << BIT_GNICE_nLED)
+
 /* bit and bitmask definitions for OOCDLink-s */
 #define BIT_OOCDLINKS_nTRST_nOE 0
 #define BIT_OOCDLINKS_nTRST 1
@@ -126,6 +129,7 @@
 #define BITMASK_OOCDLINKS_nTRST (1 << BIT_OOCDLINKS_nTRST)
 #define BITMASK_OOCDLINKS_nSRST_nOE (1 << BIT_OOCDLINKS_nSRST_nOE)
 #define BITMASK_OOCDLINKS_nSRST (1 << BIT_OOCDLINKS_nSRST)
+
 /* bit and bitmask definitions for Turtelizer 2 */
 #define BIT_TURTELIZER2_nJTAGOE 4
 #define BIT_TURTELIZER2_RST 6
@@ -135,6 +139,7 @@
 #define BITMASK_TURTELIZER2_RST (1 << BIT_TURTELIZER2_RST)
 #define BITMASK_TURTELIZER2_nTX1LED (1 << BIT_TURTELIZER2_nTX1LED)
 #define BITMASK_TURTELIZER2_nRX1LED (1 << BIT_TURTELIZER2_nRX1LED)
+
 /* bit and bitmask definitions for USB to JTAG Interface */
 #define BIT_USBTOJTAGIF_nTRST 4
 #define BIT_USBTOJTAGIF_RST 6
@@ -146,11 +151,13 @@
 #define BITMASK_USBTOJTAGIF_DBGRQ (1 << BIT_USBTOJTAGIF_DBGRQ)
 #define BITMASK_USBTOJTAGIF_nRxLED (1 << BIT_USBTOJTAGIF_nRxLED)
 #define BITMASK_USBTOJTAGIF_nTxLED (1 << BIT_USBTOJTAGIF_nTxLED)
+
 /* bit and bitmask definitions for Xverve DT-USB-ST Signalyzer Tool */
 #define BIT_SIGNALYZER_nTRST 4
 #define BIT_SIGNALYZER_nSRST 5
 #define BITMASK_SIGNALYZER_nTRST (1 << BIT_SIGNALYZER_nTRST)
 #define BITMASK_SIGNALYZER_nSRST (1 << BIT_SIGNALYZER_nSRST)
+
 /* bit and bitmask definitions for TinCanTools Flyswatter board*/
 #define BIT_FLYSWATTER_nLED2 3
 #define BIT_FLYSWATTER_nTRST 4
@@ -162,6 +169,20 @@
 #define BITMASK_FLYSWATTER_nSRST (1 << BIT_FLYSWATTER_nSRST)
 #define BITMASK_FLYSWATTER_nOE1  (1 << BIT_FLYSWATTER_nOE1)
 #define BITMASK_FLYSWATTER_nOE2  (1 << BIT_FLYSWATTER_nOE2)
+
+/* --- Bit and bitmask definitions for usbScarab2 --- */
+/* usbScarabeus2 is a design of Krzysztof Kajstura ( http://www.kristech.eu ). */
+/* UrJTAG support added by Tomek Cedro ( http://www.tomek.cedro.info ) */
+/* as a part of work for TP R&D (Polish Telecom, FT/Orange Group) http://www.tp.pl */
+#define BIT_USBSCARAB2_nCONNECTED 5    //ADBUS
+#define BIT_USBSCARAB2_TRST 0  //ACBUS
+#define BIT_USBSCARAB2_nSRST 1  //ACBUS
+#define BIT_USBSCARAB2_LED 3    //ACBUS
+#define BITMASK_USBSCARAB2_LED (1 << BIT_USBSCARAB2_LED)
+#define BITMASK_USBSCARAB2_TRST (1 << BIT_USBSCARAB2_TRST)
+#define BITMASK_USBSCARAB2_nSRST (1 << BIT_USBSCARAB2_nSRST)
+#define BITMASK_USBSCARAB2_nCONNECTED (1 << BIT_USBSCARAB2_nCONNECTED)
+
 
 
 typedef struct {
@@ -638,6 +659,45 @@ ft2232_flyswatter_init( cable_t *cable )
   params->last_tdo_valid = 0;
   params->signals = CS_TRST | CS_RESET;
 
+
+  return 0;
+}
+
+static int
+ft2232_usbscarab2_init( cable_t *cable )
+{
+  params_t *params = (params_t *)cable->params;
+  cx_cmd_root_t *cmd_root = &(params->cmd_root);
+
+  if (usbconn_open( cable->link.usb )) return -1;
+
+  /* These bits will be set by default to: */
+  params->low_byte_value = 0;
+  params->low_byte_dir   = 0;
+
+  /* Set Data Bits Low Byte
+     TCK = 0, TMS = 1, TDI = 0 */
+  cx_cmd_queue( cmd_root, 0 );
+  cx_cmd_push( cmd_root, SET_BITS_LOW );
+  cx_cmd_push( cmd_root, params->low_byte_value | BITMASK_TMS );
+  cx_cmd_push( cmd_root, params->low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS );
+
+  /* Set Data Bits High Byte */
+  /* nLED=0 */
+  params->high_byte_value	= 0 | BITMASK_USBSCARAB2_TRST;
+  params->high_byte_dir		= 0 | BITMASK_USBSCARAB2_LED | BITMASK_USBSCARAB2_TRST | BITMASK_USBSCARAB2_nSRST;
+  cx_cmd_push( cmd_root, SET_BITS_HIGH );
+  cx_cmd_push( cmd_root, params->high_byte_value);
+  cx_cmd_push( cmd_root, params->high_byte_dir);
+
+  ft2232_set_frequency( cable, FT2232_MAX_TCK_FREQ );
+
+  params->bit_trst  = BIT_USBSCARAB2_TRST + 8;  /* member of HIGH byte */
+  params->bit_reset = BIT_USBSCARAB2_nSRST + 8;  /* member of HIGH byte */
+
+  params->last_tdo_valid = 0;
+  params->signals = CS_TRST | CS_RESET;
+
   return 0;
 }
 
@@ -950,6 +1010,30 @@ ft2232_flyswatter_done( cable_t *cable )
   cx_cmd_push( cmd_root, SET_BITS_HIGH );
   cx_cmd_push( cmd_root, BITMASK_FLYSWATTER_nLED2 );
   cx_cmd_push( cmd_root, 0 );
+  cx_xfer( cmd_root, &imm_cmd, cable, COMPLETELY );
+
+  generic_usbconn_done( cable );
+}
+
+static void
+ft2232_usbscarab2_done( cable_t *cable )
+{
+  params_t *params = (params_t *)cable->params;
+  cx_cmd_root_t *cmd_root = &(params->cmd_root);
+
+  /* Set Data Bits Low Byte
+     set all to input */
+  cx_cmd_queue( cmd_root, 0 );
+  cx_cmd_push( cmd_root, SET_BITS_LOW );
+  cx_cmd_push( cmd_root, 0 );
+  cx_cmd_push( cmd_root, 0 );
+
+  /* Set Data Bits High Byte
+     deassert RST signals and blank LED */
+  cx_cmd_push( cmd_root, SET_BITS_HIGH );
+  cx_cmd_push( cmd_root, 0 );
+  cx_cmd_push( cmd_root, 0 );
+
   cx_xfer( cmd_root, &imm_cmd, cable, COMPLETELY );
 
   generic_usbconn_done( cable );
@@ -1525,6 +1609,8 @@ usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
 usbconn_cable_t usbconn_cable_usbtojtagif_ftdi;
 usbconn_cable_t usbconn_cable_signalyzer_ftdi;
 usbconn_cable_t usbconn_cable_flyswatter_ftdi;
+usbconn_cable_t usbconn_cable_usbscarab2_ftdi;
+
 
 static void
 ft2232_usbcable_help( const char *cablename )
@@ -1553,6 +1639,9 @@ ft2232_usbcable_help( const char *cablename )
   if (strcasecmp( conn->name, cablename ) == 0)
     goto found;
   conn = &usbconn_cable_flyswatter_ftdi;
+  if (strcasecmp( conn->name, cablename ) == 0)
+    goto found;
+  conn = &usbconn_cable_usbscarab2_ftdi;
   if (strcasecmp( conn->name, cablename ) == 0)
     goto found;
   conn = &usbconn_cable_ft2232_ftdi;
@@ -1876,6 +1965,39 @@ usbconn_cable_t usbconn_cable_flyswatter_ftd2xx = {
   0x0403,             /* VID */
   0x6010              /* PID */
 };
+
+cable_driver_t ft2232_usbscarab2_cable_driver = {
+  "usbScarab2",
+  N_("KrisTech usbScarabeus2 (FT2232) Cable"),
+  ft2232_connect,
+  generic_disconnect,
+  ft2232_cable_free,
+  ft2232_usbscarab2_init,
+  ft2232_usbscarab2_done,
+  ft2232_set_frequency,
+  ft2232_clock,
+  ft2232_get_tdo,
+  ft2232_transfer,
+  ft2232_set_signal,
+  generic_get_signal,
+  ft2232_flush,
+  ft2232_usbcable_help
+};
+usbconn_cable_t usbconn_cable_usbscarab2_ftdi = {
+  "usbScarab2",       /* cable name */
+  "usbScarab2",               /* string pattern, not used */
+  "ftdi-mpsse",       /* default usbconn driver */
+  0x0403,             /* VID */
+  0xbbe0              /* PID */
+};
+usbconn_cable_t usbconn_cable_usbscarab2_ftd2xx = {
+  "usbScarab2",       /* cable name */
+  "usbScarab2",               /* string pattern, not used */
+  "ftd2xx-mpsse",     /* default usbconn driver */
+  0x0403,             /* VID */
+  0xbbe0              /* PID */
+};
+
 
 /*
  Local Variables:
