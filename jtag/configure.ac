@@ -341,7 +341,7 @@ AS_IF([test "x$svf_lexer" = xfalse], [
 
 dnl Enable SVF player?
 AC_ARG_ENABLE(svf,
-[AS_HELP_STRING([--enable-svf], [Enable SVF player (default is enabled)])],
+[AS_HELP_STRING([--disable-svf], [Disable SVF player])],
 [case "${enableval}" in
    yes) svf=true ;;
    no)  svf=false ;;
@@ -366,7 +366,7 @@ AS_IF([test "x$bsdl_lexer" = xfalse], [
 
 dnl Enable BSDL subsystem?
 AC_ARG_ENABLE(bsdl,
-[AS_HELP_STRING([--enable-bsdl], [Enable BSDL subsystem (default is enabled)])],
+[AS_HELP_STRING([--disable-bsdl], [Disable BSDL subsystem])],
 [case "${enableval}" in
    yes) bsdl=true ;;
    no)  bsdl=false ;;
@@ -587,7 +587,7 @@ AS_IF([test "x$dmalloc" = xyes], [
 
 # Enable flash multi-byte write mode?
 AC_ARG_ENABLE(flash-multi-byte,
-[AS_HELP_STRING([--enable-flash-multi-byte], [Enable flash multi-byte write mode (default is enabled)])],
+[AS_HELP_STRING([--disable-flash-multi-byte], [Disable flash multi-byte write mode])],
 [flash_multi_byte=$enableval], [flash_multi_byte=yes])
 AS_IF([test "x$flash_multi_byte" = xyes], [
   AC_DEFINE(FLASH_MULTI_BYTE, 1, [define for flash multi-byte write mode])

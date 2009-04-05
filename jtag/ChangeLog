@@ -1,5 +1,8 @@
 2009-04-05  Arnim Laeuger  <arniml>
 
+  * configure.ac: turn feature options that are enabled by default into
+    --disable-*
+
   * src/tap/cable/ft2232.c: check target status for UsbScarab2 (Tomek Cedro)
 
 2009-04-04  Arnim Laeuger  <arniml>
