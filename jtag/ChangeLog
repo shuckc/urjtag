@@ -1,3 +1,7 @@
+2009-04-05  Arnim Laeuger  <arniml>
+
+  * src/tap/cable/ft2232.c: check target status for UsbScarab2 (Tomek Cedro)
+
 2009-04-04  Arnim Laeuger  <arniml>
 
   * src/tap/cable/ft2232.c, src/tap/cable.c, src/tap/cable/generic_usbconn.c,

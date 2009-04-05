@@ -671,6 +671,16 @@ ft2232_usbscarab2_init( cable_t *cable )
 
   if (usbconn_open( cable->link.usb )) return -1;
 
+  /* Check if cable is connected to the target and the target is powered on */
+  cx_cmd_queue(cmd_root,1);
+  cx_cmd_push(cmd_root, GET_BITS_LOW);
+  cx_xfer( &(params->cmd_root), &imm_cmd, cable, COMPLETELY);
+  if ( (cx_xfer_recv( cable ) & BITMASK_USBSCARAB2_nCONNECTED) != 0)
+  {
+    printf( _("Error: Please power on the TARGET board and connect VCC signal!\n") );
+    return -1;
+  }
+
   /* These bits will be set by default to: */
   params->low_byte_value = 0;
   params->low_byte_dir   = 0;
@@ -698,6 +708,7 @@ ft2232_usbscarab2_init( cable_t *cable )
   params->last_tdo_valid = 0;
   params->signals = CS_TRST | CS_RESET;
 
+  printf("Cable initialization OK!\n");
   return 0;
 }
 
