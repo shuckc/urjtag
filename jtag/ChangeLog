@@ -1,5 +1,7 @@
 2009-04-06  Arnim Laeuger  <arniml>
 
+  * src/tap/usbconn/libftdi.c: Better errors from ftdi (Jon Smirl)
+
   * src/flash/jedec.c: Author added.
 
 2009-04-05  Arnim Laeuger  <arniml>

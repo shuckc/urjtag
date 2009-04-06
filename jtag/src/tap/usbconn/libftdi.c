@@ -319,7 +319,8 @@ usbconn_ftdi_common_open( usbconn_t *conn, int printerr )
 
   if (status < 0)
   {
-    if (printerr)
+    /* device not found == -3 */
+    if (printerr || (status != -3))
       printf( _("%s() failed: %s\n"), __FUNCTION__,
               ftdi_get_error_string( fc ) );
     ftdi_deinit( fc );
