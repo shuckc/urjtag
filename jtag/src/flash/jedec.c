@@ -1,3 +1,10 @@
+/*
+ * $Id$
+ *
+ * Written by Matan Ziv-Av, 2003.
+ *
+ */
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
