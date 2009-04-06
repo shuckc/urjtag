@@ -1,5 +1,7 @@
 2009-04-06  Arnim Laeuger  <arniml>
 
+  * src/Makefile.am, po/POTFILES.in: fix two build issues (Uwe Hermann)
+
   * src/tap/usbconn/libftdi.c: Better errors from ftdi (Jon Smirl)
 
   * src/flash/jedec.c: Author added.

@@ -1,5 +1,4 @@
 # $Id$
-src/bsdl2jtag.c
 src/bsdl/bsdl_bison.c
 src/bsdl/bsdl.c
 src/bsdl/bsdl_flex.c
