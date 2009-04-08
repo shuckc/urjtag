@@ -1,5 +1,7 @@
 2009-04-08  Arnim Laeuger  <arniml>
 
+  * po/POTFILES.in: update to current file list
+
   * data/Makefile.am: added missing files for install
 
   * doc/UrJTAG.txt: describe bus command
