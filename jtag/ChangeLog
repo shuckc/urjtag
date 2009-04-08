@@ -1,5 +1,7 @@
 2009-04-08  Arnim Laeuger  <arniml>
 
+  * po/fr.po, po/rw.po, po/sk.po: update to latest status
+
   * src/bus/bscoach.c: use english text per default
 
   * po/POTFILES.in: update to current file list
