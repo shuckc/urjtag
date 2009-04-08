@@ -825,6 +825,12 @@ Some chips don't allow direct access to their pins via BSR at all. For these,
 writing a new bus driver that utilizes a debug module to upload specific code
 to access the bus is inevitable.
 
+===== bus =====
+
+It's possible to initialize more than one bus for part(s) within a chain. The
+"bus" command allows to select the active bus for readmem, flashmem,
+etc. operation.
+
 ==== Part definition commands ====
 
 The following commands are also used in the data files to define a device (IC)

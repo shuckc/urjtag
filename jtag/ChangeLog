@@ -1,5 +1,7 @@
 2009-04-08  Arnim Laeuger  <arniml>
 
+  * doc/UrJTAG.txt: describe bus command
+
   * doc/bsdl2jtag.1, doc/jtag.1, THANKS: Various manpage updates (Uwe Hermann)
 
 2009-04-06  Arnim Laeuger  <arniml>
@@ -24,7 +26,7 @@
 
 2009-03-30  Arnim Laeuger  <arniml>
 
-  * UrJTAG.txt: multi-byte description
+  * doc/UrJTAG.txt: multi-byte description
 
   * configure.ac: better description for flash-multi-byte
 
