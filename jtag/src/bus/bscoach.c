@@ -379,7 +379,7 @@ flashbscoach_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 
 const bus_driver_t bscoach_bus = {
 	"flashbscoach",
-	N_("Bustreiber für Flashprogrammierung auf Goepel Boundary Scan Coach via BSR"),
+	N_("Goepel Boundary Scan Coach compatible bus driver for flash programming via BSR"),
 	flashbscoach_bus_new,
 	generic_bus_free,
 	flashbscoach_bus_printinfo,
