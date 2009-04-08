@@ -29,6 +29,7 @@ nobase_dist_pkgdata_DATA = \
 	altera/PARTS \
 	altera/ep1c20f400/STEPPINGS \
 	altera/ep1c20f400/ep1c20f400 \
+	altera/ep1c6q240/STEPPINGS \
 	altera/ep1c6q240/ep1c6q240 \
 	altera/epm7128aetc100/STEPPINGS \
 	altera/epm7128aetc100/epm7128aetc100 \
@@ -145,6 +146,7 @@ nobase_dist_pkgdata_DATA = \
 	marvell/88e1118/88e1118 \
 	marvell/88f5182/STEPPINGS \
 	marvell/88f5182/88f5182-a2 \
+	motorola/mpc8241/1.2 \
 	motorola/mpc8245/1.2 \
 	philips/PARTS \
 	philips/xcr3128xl-cs144/STEPPINGS \

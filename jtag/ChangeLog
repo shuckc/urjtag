@@ -1,5 +1,7 @@
 2009-04-08  Arnim Laeuger  <arniml>
 
+  * data/Makefile.am: added missing files for install
+
   * doc/UrJTAG.txt: describe bus command
 
   * doc/bsdl2jtag.1, doc/jtag.1, THANKS: Various manpage updates (Uwe Hermann)
