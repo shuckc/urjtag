@@ -1,3 +1,8 @@
+2009-04-10  Arnim Laeuger  <arniml>
+
+  * src/flash/flash.c (flasherase): fix missing base address for block_no calculation,
+    re-use find_block() from flashmem() to align block_no calculation
+
 2009-04-08  Arnim Laeuger  <arniml>
 
   * couple of files: enable Id keyword substitution

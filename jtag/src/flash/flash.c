@@ -287,7 +287,7 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr, int noverify )
 		uint32_t data;
 		uint8_t b[BSIZE];
 		int bc = 0, bn = 0, btr = BSIZE;
-		int block_no = find_block( cfi, adr - cfi_array->address, bus_width, chip_width, &btr);
+		int block_no = find_block( cfi, adr - cfi_array->address, bus_width, chip_width, &btr );
 
 		write_buffer_count = 0;
 		write_buffer_adr = adr;
@@ -385,6 +385,8 @@ flasherase( bus_t *bus, uint32_t addr, int number )
 	cfi_query_structure_t *cfi;
 	int i;
 	int status = 0;
+	int bus_width;
+	int chip_width;
 
 	set_flash_driver();
 	if (!cfi_array || !flash_driver) {
@@ -393,12 +395,21 @@ flasherase( bus_t *bus, uint32_t addr, int number )
 	}
 	cfi = &cfi_array->cfi_chips[0]->cfi;
 
-	printf( _("\nErasing %d Flash block%s from address 0x%x\n"), number, number > 1 ? "s" : "", addr);
+	bus_width = cfi_array->bus_width;
+	chip_width = cfi_array->cfi_chips[0]->width;
+
+	printf( _("\nErasing %d Flash block%s from address 0x%x\n"), number, number > 1 ? "s" : "", addr );
 
 	for (i = 1; i <= number; i++) {
-		int addr_block = (cfi->device_geometry.erase_block_regions[0].erase_block_size * flash_driver->bus_width / 2);
-		int block_no = addr / addr_block;
-		printf( _("(%d%% Completed) FLASH Block %d : Unlocking ... "), i*100/number, block_no);
+		int btr = 0;
+		int block_no = find_block( cfi, addr - cfi_array->address, bus_width, chip_width, &btr );
+
+		if (block_no < 0) {
+			status = FLASH_ERROR_UNKNOWN;
+			break;
+		}
+
+		printf( _("(%d%% Completed) FLASH Block %d : Unlocking ... "), i*100/number, block_no );
 		fflush(stdout);
 		flash_driver->unlock_block( cfi_array, addr );
 		printf( _("Erasing ... ") );
@@ -417,8 +428,7 @@ flasherase( bus_t *bus, uint32_t addr, int number )
 		}
 		else
 			printf( _("ERROR.\n") );
-		addr |= (addr_block - 1);
-		addr += 1;
+		addr += btr;
 	}
 
 	if (status == 0)
