@@ -219,7 +219,11 @@ CLASS="emphasis"
 ></LI
 ><LI
 ><P
->&#13;TinCanTools Flyswatter
+>&#13;KrisTech UsbScarab2 ARM JTAG <A
+HREF="http://www.kristech.eu/"
+TARGET="_top"
+>http://www.kristech.eu/</A
+>
 </P
 ></LI
 ><LI
@@ -248,6 +252,11 @@ TARGET="_top"
 ></LI
 ><LI
 ><P
+>&#13;TinCanTools Flyswatter
+</P
+></LI
+><LI
+><P
 >&#13;Turtelizer 2 (experimental) <A
 HREF="http://www.ethernut.de/en/hardware/turtelizer/"
 TARGET="_top"
@@ -257,10 +266,24 @@ TARGET="_top"
 ></LI
 ><LI
 ><P
->&#13;USB to JTAG Interface (experimental) <A
+>&#13;USB to JTAG Interface (experimental)
+</P
+></LI
+><LI
+><P
+>&#13;<A
 HREF="http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html"
 TARGET="_top"
 >http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html</A
+>
+</P
+></LI
+><LI
+><P
+>&#13;Black gnICE <A
+HREF="http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice"
+TARGET="_top"
+>http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice</A
 >
 </P
 ></LI
@@ -320,7 +343,17 @@ least the following are supported:</P
 ></LI
 ><LI
 ><P
+>&#13;Altera MAX7000 (w/ BSDL)
+</P
+></LI
+><LI
+><P
 >&#13;Altera EPM7128AETC100
+</P
+></LI
+><LI
+><P
+>&#13;Altera Cyclone I &#38; II (w/ BSDL)
 </P
 ></LI
 ><LI
@@ -458,6 +491,21 @@ least the following are supported:</P
 >&#13;Xilinx XCR3256XL-FT256
 </P
 ></LI
+><LI
+><P
+>&#13;Xilinx Spartan-IIE
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx Spartan-3/E
+</P
+></LI
+><LI
+><P
+>&#13;Xilinx Spartan-3AN
+</P
+></LI
 ></UL
 ></DIV
 ><DIV
@@ -524,6 +572,30 @@ be untested combinations of chip type, bus width, &#8230;</P
 </P
 ></LI
 ></UL
+><P
+>UrJTAG uses the multi-byte write mode if supported by the particular flash
+device. The flash code will automatically switch to this algorithm if the
+Device Geometry Definition reports that more than one memory location can be
+written in a single step (refer to CFI details shown by <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detectflash</I
+></SPAN
+>). Since
+multiple locations are written in a burst-like manner with only one polling
+sequence afterwards, the overall flashing performance increases by factor of
+5-17.</P
+><P
+>In case you encounter any issues with the multi-byte write mode, run configure
+with the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>&#8212;disable-flash-multi-byte</I
+></SPAN
+> option and re-compile to disable this
+algorithm.</P
 ></DIV
 ></DIV
 ><DIV

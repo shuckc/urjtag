@@ -4,7 +4,7 @@
 <book lang="en">
 <bookinfo>
     <title>Universal JTAG library, server and tools</title>
-    <date>2009-02-27</date>
+    <date>2009-04-08</date>
     <author>
         <firstname>Kolja</firstname>
         <othername>Waschk</othername>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>KW(</authorinitials>
 
-<revhistory><revision><revnumber>1445</revnumber><date>2009-02-27</date><authorinitials>KW(</authorinitials></revision></revhistory>
+<revhistory><revision><revnumber>1482</revnumber><date>2009-04-08</date><authorinitials>KW(</authorinitials></revision></revhistory>
 
 </bookinfo>
 <chapter id="_copyright">
@@ -104,8 +104,8 @@ that. Please also send proven working files back to this project.</simpara>
 
 <simpara>Starting with post-0.7 releases, UrJTAG contains a BSDL subsystem that
 retrieves the descriptions for chips in the chain from BSDL files on the
-fly. Be aware that this feature is currently experimental and may not work
-with every BSDL file yet.</simpara>
+fly. "bsdl2jtag" is in fact a wrapper that uses the BSDL subsystem to
+convert the BSDL file.</simpara>
 
 </section>
 <section id="_svf_files">
@@ -308,7 +308,7 @@ Amontec JTAGkey-Tiny (supported as cable "JTAGkey")
 </listitem>
 <listitem>
 <simpara>
-TinCanTools Flyswatter
+KrisTech UsbScarab2 ARM JTAG <ulink url="http://www.kristech.eu/">http://www.kristech.eu/</ulink>
 </simpara>
 </listitem>
 <listitem>
@@ -333,12 +333,27 @@ Other FT2232-based USB JTAG cables (experimental)
 </listitem>
 <listitem>
 <simpara>
+TinCanTools Flyswatter
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Turtelizer 2 (experimental) <ulink url="http://www.ethernut.de/en/hardware/turtelizer/">http://www.ethernut.de/en/hardware/turtelizer/</ulink>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-USB to JTAG Interface (experimental) <ulink url="http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html">http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html</ulink>
+USB to JTAG Interface (experimental)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+<ulink url="http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html">http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html</ulink>
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Black gnICE <ulink url="http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice">http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice</ulink>
 </simpara>
 </listitem>
 <listitem>
@@ -383,7 +398,17 @@ Altera EP1C20F400
 </listitem>
 <listitem>
 <simpara>
+Altera MAX7000 (w/ BSDL)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Altera EPM7128AETC100
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Altera Cyclone I &amp; II (w/ BSDL)
 </simpara>
 </listitem>
 <listitem>
@@ -521,6 +546,21 @@ Xilinx XCR3128XL-VQ100
 Xilinx XCR3256XL-FT256
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Xilinx Spartan-IIE
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Xilinx Spartan-3/E
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Xilinx Spartan-3AN
+</simpara>
+</listitem>
 </itemizedlist>
 </section>
 <section id="_flash_chips">
@@ -554,6 +594,18 @@ AMD Am29xx040B (Am29F040B, Am29LV040B)
 </simpara>
 </listitem>
 </itemizedlist>
+<simpara>UrJTAG uses the multi-byte write mode if supported by the particular flash
+device. The flash code will automatically switch to this algorithm if the
+Device Geometry Definition reports that more than one memory location can be
+written in a single step (refer to CFI details shown by <emphasis>detectflash</emphasis>). Since
+multiple locations are written in a burst-like manner with only one polling
+sequence afterwards, the overall flashing performance increases by factor of
+5-17.</simpara>
+
+<simpara>In case you encounter any issues with the multi-byte write mode, run configure
+with the <emphasis>&#8212;disable-flash-multi-byte</emphasis> option and re-compile to disable this
+algorithm.</simpara>
+
 </section>
 </section>
 <section id="_compilation_and_installation">
@@ -632,7 +684,7 @@ There is a libusb-win32 variant that can be used in a Cygwin environment:</simpa
 </listitem>
 </itemizedlist>
 <simpara>For specific notes regarding the use of these libraries in a Cygwin
-environmen, see below.</simpara>
+environment, see below.</simpara>
 
 </section>
 <section id="_installing_from_source_tar_gz">
@@ -1381,6 +1433,13 @@ located there.</simpara>
 <simpara>Some chips don't allow direct access to their pins via BSR at all. For these,
 writing a new bus driver that utilizes a debug module to upload specific code
 to access the bus is inevitable.</simpara>
+
+</section>
+<section id="_bus">
+<title>bus</title>
+<simpara>It's possible to initialize more than one bus for part(s) within a chain. The
+"bus" command allows to select the active bus for readmem, flashmem,
+etc. operation.</simpara>
 
 </section>
 </section>
