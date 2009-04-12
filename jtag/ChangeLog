@@ -1,5 +1,7 @@
 2009-04-12  Arnim  <arniml>
 
+  * src/tap/cable/ft2232.c: flyswatter description update
+
   * NEWS: prepare for 0.10 release, still requires version update
 
 2009-04-10  Arnim Laeuger  <arniml>

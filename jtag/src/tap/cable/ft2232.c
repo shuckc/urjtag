@@ -1947,7 +1947,7 @@ usbconn_cable_t usbconn_cable_signalyzer_ftd2xx = {
 
 cable_driver_t ft2232_flyswatter_cable_driver = {
   "Flyswatter",
-  N_("TinCanTools Flyswatter Cable"),
+  N_("TinCanTools Flyswatter (FT2232) Cable"),
   ft2232_connect,
   generic_disconnect,
   ft2232_cable_free,
