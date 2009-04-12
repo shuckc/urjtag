@@ -1,5 +1,72 @@
 $Id$
 
+urjtag-pre-0.10
+
+    * Major internal improvements
+      - Flash write/program API function now operates on a buffer instead
+        of single bytes/words. Required for the multi-byte write mode.
+        (Arnim Laeuger)
+      - Limit maximum number of bytes queued for usbconn based cables.
+        Reduces the requested amount of memory for SVF runtest (Kolja Waschk)
+      - Command and methods to access JTAG signals directly, including
+        TRST and SRST (Sebastian Hesselbarth, Kolja Waschk, Arnim Laeuger)
+    * Improvements to the build system
+      - Several updates for Windows build compatability (Mike Frysinger)
+      - CPP include strategy sanitized (Mike Frysinger)
+      - Resolved formatting/printing mismatches (Mike Frysinger)
+      - bsdl2jtag program replaced by wrapper script (Arnim Laeuger)
+      - Man page updates (Uwe Hermann)
+    * Updates to the jtag command shell
+      - New usleep command (Stanislav Sinyagin)
+      - Added instruction parameter to the print command (Hartley Sweeten)
+      - Added ref_freq parameter to the svf command (Arnim Laeuger)
+      - New pod command (Kolja Waschk)
+      - Added noverify parameter to the flashmem command (Jeff Wittrock)
+    * Updates to the SVF player
+      - Optional reference frequency (Arnim Laeuger)
+      - Fix compare TDO flaw (Kolja Waschk)
+      - Fix progress indicator visibility (William)
+      - Add pass/fail report for progress reporting (Arnim Laeuger)
+    * New and updated bus drivers
+      - Support BCM6348/EJTAG 3.1 (by Andy Potter/livebox)
+      - Fixed address mode behvavior of prototype driver (Arnim Laeuger)
+      - Support foe EJTAG in DMA mode (Julien Aube)
+      - Added Goepel Boundary Scan Coach (Markus Schneider)
+      - Added additional address decoding for mpc5200 (Jeff Wittrock)
+      - General fix for part descriptions containing initbus (Arnim Laeuger)
+      - Support multiplexed bus operation for mpc5200 (Jon Smirl)
+    * New and updated cable drivers
+      - New FT2232 based cable ARM-USB-OCD TINY (Sebastian Hesselbarth)
+      - Parport calibration loop is more tolerant (Arnim Laeuger)
+      - Technology Systems TS-7800 support (Catalin Ionescu)
+      - New FT2232 based cable TinCanTools Flyswatter (Mark Norman)
+      - Added detection of InpOut32.dll and usage for I/O port access even
+        under Vista (Kolja Waschk)
+      - FT2232 MPSSE buffer increased to mitigate performance decrease (Arnim
+        Laeuger)
+      - Keep FTDI based JTAG dongles in current mode during initialization
+        (Holger Schurig)
+      - New FT2232 based cable UsbScarab2 (Tomek Cedro)
+    * Updated flash drivers
+      - Spansion S92GL chips added (Arnim Laeuger)
+      - Multi-byte write mode support for Intel and AMD chips (Arnim Laeuger)
+      - MX29LV640B recognition (Julien Aube)
+      - Fixed memory corruption from jedec code (Jon Smirl)
+      - Fix and polish flasherase implementation (Jeff Wittrock, Arnim Laeuger)
+    * Added new JTAG declarations for
+      - New steppings for BF527, BF533, BF548 (Mike Frysinger)
+      - New IDs for BF534 and BF548M (Mike Frysinger)
+      - Addes stepping for MPC5200B (Jeff Wittrock)
+      - Analog Devices Blackfin BF518 (Mike Frysinger)
+      - Atheros AR2313 flash access (snowwiehua)
+      - Atmel AVR32 clarifications (Holger Schurig)
+      - Broadcom BCM6358 / neufbox4 (Julien Aube)
+      - Lattice LC4064ZC (Catalin Ionescu)
+      - Lattice LFEC2-12E (Catalin Ionescu)
+      - Marvell 88E1118, 88F5182-A2 (Catalin Ionescu)
+      - Texas Instruments TNETV1060, TNETV1061 (Kenny)
+    * Updated documentation
+
 urjtag-0.9
 
 	* Completely rewritten BSDL parser, making it better maintainable,

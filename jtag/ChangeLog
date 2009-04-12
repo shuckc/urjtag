@@ -1,3 +1,7 @@
+2009-04-12  Arnim  <arniml>
+
+  * NEWS: prepare for 0.10 release, still requires version update
+
 2009-04-10  Arnim Laeuger  <arniml>
 
   * src/flash/flash.c (flasherase): fix missing base address for block_no calculation,
