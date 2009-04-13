@@ -1,3 +1,7 @@
+2009-04-13  Arnim  <arniml>
+
+  * configure.ac: follow version info in NEWS
+
 2009-04-12  Arnim  <arniml>
 
   * src/tap/cable/ft2232.c: flyswatter description update
