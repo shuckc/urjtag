@@ -27,7 +27,7 @@ the section entitled "GNU Free Documentation License".
 === JTAG ===
 // Contributed by Ralf Engels
 
-JTAG basics can be found all over the internet. This section should go into
+JTAG basics can be found all over the Internet. This section should go into
 some more details about working with JTAG. What hardware do you need, what is
 the usage of JTAG, where do I get files. What file formats are available...
 
@@ -50,28 +50,28 @@ control machine also allows to have two internal shift registers in each device
 (although we only have on in- and one output-pin). The registers are called
 instruction register (IR) and data register (DR).  The current UrJTAG tool
 allows you to set the IR and set and get the DR. It doesn't allow you to
-directly control the statemachine (yet).
+directly control the state machine (yet).
 
 ==== Interfaces ====
 
 The simplest interface that you can build is like the Xilinx parallel cable
 (also called DLC5). If your device works with a 5V or 3.3V supply voltage then
-this device can even be build just with passive parts.  (picture missing here)
+this device can even be built just with passive parts.  (picture missing here)
 UrJTAG also supports a number of other interface adapters.
 
 ==== Additions ====
 
-In the meantime the jtag specification was used as a basis for programming
+In the meantime the JTAG specification was used as a basis for programming
 flash files and debugging processors.  UrJTAG supports programming a couple of
 different flash devices. It also supports programming of non-flash devices via
-svf files.  UrJTAG does not support debugging yet. Other open source solutions
+SVF files.  UrJTAG does not support debugging yet. Other open source solutions
 such as OpenOCD allow you to debug ARM processors with gdb.
 
 ==== BSDL and UrJTAG data files ====
 
-The BSDL file format describes the jtag interface for one IC.  It is a VHDL
+The BSDL file format describes the JTAG interface for one IC.  It is a VHDL
 syntax with the needed information (like pin-names, register lengths and
-commands) that is usually done by the supplier. e.g. Xilinx BSDL files are
+commands) that is usually created by the supplier. e.g. Xilinx BSDL files are
 all included in their free web-pack (using file extension ".bsd").
 
 UrJTAG uses a different file format internally. So in order to add a new device
@@ -87,15 +87,15 @@ convert the BSDL file.
 
 ==== SVF files ====
 
-The SVF file format contains a number of high level commands to drive the jtag
+The SVF file format contains a number of high level commands to drive the JTAG
 bus. For example you can shift the IR or DR and even check for the results.
-The Xilinxs impact and Altera QuartusII tools allow you to write this file to
+The Xilinx Impact and Altera QuartusII tools allow you to write this file to
 program devices.
 
 The player has been developed according to the "Serial Vector Format
 Specification", Revision E, 8 March 1999 issued by ASSET InterTech, Inc. The
 full specification can be found at
-http://www.asset-intertech.com/support/svf.pdf[]
+http://www.asset-intertech.com/support/svf.pdf[].
 
 UrJTAG features an "SVF player" that can read SVF files and perform the
 described actions on the bus.
@@ -118,17 +118,17 @@ more. STAPL is not yet supported by UrJTAG.
 
 ==== Introduction ====
 
-UrJTAG Tools is a software package which enables working with JTAG-aware (IEEE
-1149.1) hardware devices (parts) and boards through JTAG adapter.
+UrJTAG is a software package which enables working with JTAG-aware (IEEE
+1149.1) hardware devices (parts) and boards through a JTAG adapter.
 
-This package has open and modular architecture with ability to write
+This package has an open and modular architecture with the ability to write
 miscellaneous extensions (like board testers, flash memory programmers, and so
 on).
 
-JTAG Tools package is free software, covered by the GNU General Public License,
+UrJTAG is free software, covered by the GNU General Public License,
 and you are welcome to change it and/or distribute copies of it under certain
-conditions. There is absolutely no warranty for JTAG Tools.  Please read
-COPYING file for more info.
+conditions. There is absolutely no warranty for UrJTAG.  Please read
+the COPYING file for more info.
 
 WARNING: This software may damage your hardware!
 
@@ -142,8 +142,8 @@ at the UrJTAG website.
 
 ==== UrJTAG Website ====
 
-The most current version of this documentation and UrJTAG sourcecode 
-is always available from the project homepage at http://www.urjtag.org[]
+The most current version of this documentation and UrJTAG source code
+is always available from the project homepage at http://www.urjtag.org[].
 
 ==== The name "UrJTAG" ====
 
@@ -195,8 +195,8 @@ If UrJTAG was compiled to use the readline library, it has to be present on
 the system as well. It's probably a standard part of your distribution.
 
 More software is needed if you want to compile UrJTAG (which you probably want
-because currently no pre-compiled binaries are avaible...). See "Installation"
-below. 
+because currently no pre-compiled binaries are available...).
+See "Installation" below. 
 
 ==== Supported JTAG adapters/cables ====
 
@@ -238,6 +238,7 @@ Other USB cables:
  * Xilinx Platform USB Cable / DLC9 (slow, experimental, work in progress - don't use)
 
 Other cables:
+
  * Technologic Systems TS-7800 SoC GPIO builtin JTAG interface
  
 ==== JTAG-aware parts (chips) ====
@@ -359,8 +360,8 @@ environment, see below.
 
 The installation follows the standard configure, make, make install scheme:
 
-  tar xzvf urjtag.tar.gz
-  cd ../jtag
+  tar xzvf urjtag-x.y.tar.gz
+  cd urjtag-x.y
   ./configure
   make
   make install
@@ -384,7 +385,7 @@ Before running configure, get the D2XX drivers from FTDI.
  * http://www.ftdichip.com/Drivers/D2XX.htm[] (FTDI FTD2XX library)
 
 Unzip the archive into a directory of your choice (probably a choice
-without spaces in the name is better)  and afterwards run configure with the
+without spaces in the name is better) and afterwards run configure with the
 "--with-ftd2xx" pointing to that directory, e.g.
 
   ./configure --with-ftd2xx="/cygdrive/c/temp/ftdi-cdm-drivers"
@@ -447,7 +448,7 @@ run
 
   ./configure --help
 
-to figure out the appropriate --enable-bus, --enable-cable and --enable-lowlevel
+to figure out the appropriate --enable-bus, --enable-cable, and --enable-lowlevel
 options.
 
 
@@ -480,17 +481,17 @@ enabled and will be compiled from the released C files.
 Connect your JTAG adapter between your PC and target device and turn
 on your device.
 
-To run JTAG Tools type "jtag" and press Enter. jtag should start and
-display some initial informations. Output should end with line like this:
+To run UrJTAG type "jtag" and press Enter; jtag should start and
+display some initial information. Output should end with a line like this:
 
-  This is "jtag command prompt". Type "help" and press Enter for initial help
-  about available commands. To exit JTAG Tools type "quit" and press Enter.
+  WARNING: UrJTAG may damage your hardware!
+  Type "quit" to exit, "help" for help.
 
 ==== Configure the cable ====
 
-Type "help cable" for list of supported JTAG cables.
+Type "help cable" for a list of supported JTAG cables.
 
-Type "cable" command followed by the cable name and possibly further
+Type the "cable" command followed by the cable name and possibly further
 arguments for cable configuration. Example:
 
   jtag> cable EA253 parallel 0x378
@@ -630,7 +631,7 @@ example usage.
 *set*::         set external signal value
 *shift*::       shift data/instruction registers through JTAG chain
 *signal*::      define new signal for a part
-*svf*::         execute svf commands from file
+*svf*::         execute SVF commands from file
 *writemem*::    write content from file to memory
 
 Some tools derived from the same openwince JTAG Tools code base as UrJTAG 
@@ -683,7 +684,7 @@ an X times repetition of the command sequence from the file.
 
 ===== cable =====
 
-Sets and initialized the cable driver. This is usually the first command that
+Sets and initializes the cable driver. This is usually the first command that
 you are executing in a session. Example:
 
   jtag> cable EA253 parallel 0x378
@@ -754,7 +755,7 @@ command) to find a match for the manufacturer, revision and part number for the
 IDCODE read from the part. However, not all parts identify themselves in a way
 that is useful for "detect". For example, many chips with an ARM processor core
 inside present an IDCODE that may be specific to the the particular core inside
-the chip (e.g.  ARM7TDMI), but doesn't tell about the actual manufacturer of
+the chip (e.g. ARM7TDMI), but doesn't tell about the actual manufacturer of
 the chip. In such case, the data for the part has to be included manually. See
 also the documentation for the "include" command.
 
@@ -803,7 +804,7 @@ access the bus:
   initbus prototype amsb=ADDR22 alsb=ADDR0 dmsb=D15 dlsb=D0
             ncs=nRCS0 nwe=nWE noe=nOE amode=x16
 
-The "prototype" bus driver yet cannot deal with systems where address and data
+The "prototype" bus driver cannot deal with systems where address and data
 bus are multiplexed on the same pins. If signals aren't numbered in the right
 order or with gaps, you may get along by defining proper names as aliases for
 the actual signals, with commands like "salias ADDR12 BSCGX44".
@@ -812,7 +813,7 @@ Most drivers work "via BSR", i.e. they directly access the pins of the device.
 Because it isn't possible to efficiently address only particular pins but only
 all at once, and data for all pins has to be transferred through JTAG for every
 single change, this method isn't the fastest, but usually easiest to implement
-and, well, sometimes it counts whether it works at all..
+and, well, sometimes it counts whether it works at all.
 
 The "fjmem" (FPGA JTAG memory) bus driver attempts to address this issue by
 moving control and observation away from BSR to a device-internal
@@ -876,7 +877,7 @@ initialized (see initbus command).
 ===== svf =====
 
 The SVF player operates on a single part in the scan chain. Therefore, you
-have to bring up the jtag software, specify a cable and detect the scan
+have to bring up the JTAG software, specify a cable and detect the scan
 chain beforehand.
 
 The player will establish a new instruction called "SIR" and a new register
@@ -943,7 +944,7 @@ Configuration for these devices has been tested so far:
 The implementation of some SVF commands has deficiencies.
 
   - HIR, HDR commands not supported. +
-    Their functionality should be covered by the part concept of JTAG Tools.
+    Their functionality should be covered by the part concept of UrJTAG.
   - PIO command not supported.
   - PIOMAP command not supported.
   - RUNTEST SCK not supported. +
@@ -951,7 +952,7 @@ The implementation of some SVF commands has deficiencies.
   - TRST +
     Parameters Z and ABSENT are not supported.
   - TIR, TDR commands not supported. +
-    Their functionality should be covered by the part concept of JTAG Tools.
+    Their functionality should be covered by the part concept of UrJTAG.
 
 SVF files for programming flash-based devices might or might not work for a given
 setup. This has been observed for Actel IGLOO devices where success and failure
@@ -973,14 +974,14 @@ Whenever 'detect' encounters a new part, a configuration process is
 started. This involves matching the retrieved IDCODE against the part
 descriptions in /usr/share/urjtag as described above. However, before this
 database is searched for a suitable description, the BSDL subsystem is started
-and searches for BSDL file that matches this device. If it finds a matching
+and searches for a BSDL file that matches this device. If it finds a matching
 file, traversal of the /usr/share/urjtag database is skipped. If not, then
 this standard process follows.
 
 To tell the BSDL subsytem where to look for BSDL files, the 'bsdl path
 pathlist' command has to be issued prior to 'detect'. The contents of
 'pathlist' must be a semicolon-separated list of directories where BSDL files
-are located. This list is stored by 'bsdl path' and is used lateron when
+are located. This list is stored by 'bsdl path' and is used later on when
 'detect' calls the BSDL subsystem.
 
 IMPORTANT: The BSDL subsystem applies the first BSDL file that parses without
@@ -1030,7 +1031,7 @@ Intratrade Ltd., we just know about them from a posting on the net.
 
 == Internals ==
 
-This section yet is only a placeholder for the information that will
+This section is only a placeholder for the information that will
 be added soon...
 
 === Files ===
@@ -1039,7 +1040,7 @@ be added soon...
 
 doc/:: Documentation
 
-data/:: Part descriptions (Data files)
+data/:: Part descriptions (data files)
 
 include/:: C header files
 
