@@ -1,3 +1,7 @@
+2009-04-16  Kolja Waschk <kawk>
+
+  * include/xpcu.h, src/flash/jedec_exp.c: Add license info
+
 2009-04-16  Arnim  <arniml>
 
   * doc/UrJTAG.txt: Documentation fixes (Uwe Hermann)
