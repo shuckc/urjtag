@@ -1,3 +1,7 @@
+2009-04-16  Arnim Laeuger  <arniml>
+
+  * THANKS: added contributors
+
 2009-04-16  Kolja Waschk <kawk>
 
   * include/xpcu.h, src/flash/jedec_exp.c: Add license info
