@@ -439,6 +439,9 @@ library is available from logix4u.net:
 
   http://logix4u.net/Legacy_Ports/Parallel_Port/Inpout32.dll_for_Windows_98/2000/NT/XP.html
 
+An version updated to work in Windows Vista and 64 bit Windows is available from highrez:
+
+  http://www.highrez.co.uk/Downloads/InpOut32/
 
 ==== Driver tailoring ====
 

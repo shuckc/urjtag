@@ -5,6 +5,8 @@
 2009-04-16  Kolja Waschk <kawk>
 
   * include/xpcu.h, src/flash/jedec_exp.c: Add license info
+  * doc/UrJTAG.txt: Info about source for 64bit/Vista inpout32.dll
+  * UrJTAG.nsi: Include inpout32.dll (needs some manual work)
 
 2009-04-16  Arnim  <arniml>
 

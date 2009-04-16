@@ -1,5 +1,5 @@
 ;
-; $Id: UrJTAG.nsi 1205 2008-05-06 15:35:49Z kawk $
+; $Id$
 ;
 ; Script to create Installer for Windows platforms using 
 ;   "nullsoft scriptable install system" (NSIS)
@@ -31,11 +31,23 @@
 ; extracted from a distributed archive of UrJTAG (make dist)
 ; after configuring and compiling. Usually you want to compile
 ; with --with-ftd2xx, --with-inpout32, --enable-relocatable and
-; the CFLAGS=-mno-cygwin setting.
+; the CFLAGS=-mno-cygwin setting. To make UrJTAG search for
+; its data files and BSDL declarations in the correct path,
+; add JTAG_BIN_DIR and JTAG_DATA_DIR as follows to the CFLAGS
+; (this is used for building the UrJTAG.exe distributable):
 ;
-; TODO: Install DLLs for cables (InpOut32.DLL, FTD2XX.DLL etc.)
-
-
+;  CFLAGS="-mno-cygwin -O2 -DJTAG_BIN_DIR=\\\"/\\\" -DJTAG_DATA_DIR=\\\"/data\\\""
+;  ./configure --with-ftd2xx=/cygdrive/e/ftd2xx --with-inpout32 --enable-relocatable
+;
+; This script now expects InpOut32.dll in the current directory
+; as well. You can get an InpOut32.dll that works on 32 bit AND
+; 64 bit Windows, including Vista, from 
+;     http://www.highrez.co.uk/Downloads/InpOut32/
+;
+; No drivers for FTDI cables are installed. FTD2XX.DLL must be
+; in your PATH somewhere. It usually is installed with the cable
+; drivers.
+;
 ;--------------------------------
 ;Include Modern UI
 
@@ -85,6 +97,7 @@ Section "UrJTAG executable" SecExe
 
   SetOutPath "$INSTDIR"
   File src\jtag.exe
+  File inpout32.dll
   WriteRegStr HKCU "Software\UrJTAG" "" $INSTDIR
   WriteUninstaller "$INSTDIR\uninst.exe"
 
