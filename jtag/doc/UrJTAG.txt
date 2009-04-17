@@ -179,11 +179,12 @@ wings of the UrJTAG project at Sourceforge.
 ==== Supported host operating systems ====
 
 JTAG Tools should run on all Unix like operating systems including MS Windows
-with Cygwin installed.
+with Cygwin installed. A precompiled version that runs on MS Windows without
+Cygwin is available as a Windows installer executable.
 
 ==== Required software for running UrJTAG ====
 
-Required only for MS Windows:
+Required only for MS Windows, unless you use the precompiled version:
 
  * current Cygwin net installation from http://cygwin.com[]
  * ioperm package (a part of the standard Cygwin net installation)
@@ -307,6 +308,32 @@ algorithm.
 //------------------------------------------------------------------------
 
 === Compilation and installation ===
+
+==== Installation of precompiled UrJTAG for Windows ====
+
+By simply running UrJTAG-xxx.exe, the executable and data files will
+be installed in your Windows program folder, usually some place like
+C:\Program Files\UrJTAG. It comes ready with support for JTAG cables that are
+directly attached to a parallel port. However, if you work with Windows Vista
+and want access to the parallel port, a driver for it has to be installed
+separately. It is available from
+
+  http://www.highrez.co.uk/Downloads/InpOut32/
+
+If you want to use UrJTAG with a JTAG cable attached to the USB port, 
+actual cable drivers have to be installed beside UrJTAG itself. Usually,
+the cable vendor will provide the drivers. For example, drivers for
+Altera USB-Blaster come with their Quartus software. For FTDI-based
+cables, you need an INF file describing the cable and FTDIBUS.SYS and
+FTD2XX.DLL from FTDI (CDM drivers). If your cable shows up in the device
+manager without any warning sign, UrJTAG probably is able to talk to it.
+
+Finally, UrJTAG additionally needs libusb-win32 to talk to some USB cables that
+are not based on FTDI chips (Xilinx Platform Cable USB, Segger J-Link). The
+so-called libusb-win32 filter driver is available from the project's download
+page at Sourceforge:
+
+  http://libusb-win32.sourceforge.net/#downloads
 
 ==== Required software for compiling UrJTAG ====
 
