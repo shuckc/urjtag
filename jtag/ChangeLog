@@ -2,7 +2,7 @@
 
   * configure.ac, NEWS: set release version 0.10
 
-  * src/jtag.c: Update copyright year
+  * src/jtag.c: Update copyright year at both instances
 
 2009-04-17  Kolja Waschk <kawk>
 
