@@ -1,7 +1,9 @@
 2009-04-17  Kolja Waschk <kawk>
 
-  * src/flash/jedec.c: Add license info
+  * configure.ac: Last minute fix for USBCFLAGS for libusb
   * doc/UrJTAG.txt: Info about installing precompiled version on Win
+  * src/flash/jedec.c: Add license info
+  * UrJTAG.nsi: Create links to EXE and UrJTAG.txt in Start Menu
 
 2009-04-16  Arnim Laeuger  <arniml>
 

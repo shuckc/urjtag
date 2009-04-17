@@ -34,10 +34,14 @@
 ; the CFLAGS=-mno-cygwin setting. To make UrJTAG search for
 ; its data files and BSDL declarations in the correct path,
 ; add JTAG_BIN_DIR and JTAG_DATA_DIR as follows to the CFLAGS
+; on the same line together with ./configure and its options
 ; (this is used for building the UrJTAG.exe distributable):
 ;
 ;  CFLAGS="-mno-cygwin -O2 -DJTAG_BIN_DIR=\\\"/\\\" -DJTAG_DATA_DIR=\\\"/data\\\""
-;  ./configure --with-ftd2xx=/cygdrive/e/ftd2xx --with-inpout32 --enable-relocatable
+;  ./configure --enable-relocatable \
+;       --with-ftd2xx=/tmp/FTDI_CDM_204 \
+;       --with-libusb=/tmp/LibUSB-Win32_112 \
+;       --with-inpout32
 ;
 ; This script now expects InpOut32.dll in the current directory
 ; as well. You can get an InpOut32.dll that works on 32 bit AND
@@ -75,11 +79,23 @@
   !define MUI_ABORTWARNING
 
 ;--------------------------------
+;Variables
+
+  Var StartMenuFolder
+
+;--------------------------------
 ;Pages
 
   !insertmacro MUI_PAGE_LICENSE "COPYING"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
+
+  ;Start Menu Folder Page Configuration
+  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\UrJTAG" 
+  !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
+  !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
+
   !insertmacro MUI_PAGE_INSTFILES
   
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -112,7 +128,6 @@ Section "Documentation" SecDoc
 
 SectionEnd
 
-
 Section "Data files" SecData
 
   SetOutPath "$INSTDIR\data"
@@ -121,6 +136,19 @@ Section "Data files" SecData
   WriteUninstaller "$INSTDIR\uninst.exe"
 
 SectionEnd
+
+Section "Start Menu Entries" SecStartMenu
+
+ !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+    ;Create shortcuts
+    CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\JTAG Shell.lnk" "$INSTDIR\jtag.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Documentation.lnk" "$INSTDIR\doc\UrJTAG.txt"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  !insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
 
 
 ;--------------------------------
@@ -137,6 +165,9 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SecData} \
     "BSDL include files and part descriptions for autodetection"
 
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecStartMenu} \
+    "Links to UrJTAG in Start Menu"
+
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
@@ -149,6 +180,11 @@ Section "Uninstall"
   Delete "$INSTDIR\jtag.exe"
   Delete "$INSTDIR\uninst.exe"
   RMDir /r "$INSTDIR"
+
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
+  Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
+  RMDir "$SMPROGRAMS\$StartMenuFolder"
+
   DeleteRegKey /ifempty HKCU "Software\UrJTAG"
 
 SectionEnd

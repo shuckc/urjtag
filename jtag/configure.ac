@@ -128,7 +128,7 @@ AS_IF([test "x$with_libusb" != xno], [
     case $host in
     *cygwin*)
       USBLIBS="-L$with_libusb/lib/gcc -lusb"
-      USBCLAGS="-I$with_libusb/include"
+      USBCFLAGS="-I$with_libusb/include"
       ;;
     *)
       USBLIBS="-Lwith_libusb -lusb"
