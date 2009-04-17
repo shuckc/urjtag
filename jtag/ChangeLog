@@ -1,3 +1,9 @@
+2009-04-17  Arnim Laeuger  <arniml>
+
+  * configure.ac, NEWS: set release version 0.10
+
+  * src/jtag.c: Update copyright year
+
 2009-04-17  Kolja Waschk <kawk>
 
   * configure.ac: Last minute fix for USBCFLAGS for libusb

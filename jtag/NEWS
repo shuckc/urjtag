@@ -1,6 +1,6 @@
 $Id$
 
-urjtag-pre-0.10
+urjtag-0.10
 
     * Major internal improvements
       - Flash write/program API function now operates on a buffer instead

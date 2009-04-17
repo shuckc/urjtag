@@ -378,7 +378,7 @@ main( int argc, char *const argv[] )
 	{
 		printf(_("\n%s #%s\n\n"
           "Copyright (C) 2002, 2003 ETC s.r.o.\n"
-          "Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n"
+          "Copyright (C) 2007, 2008, 2009 Kolja Waschk and the respective authors\n"
          ), PACKAGE_STRING, SVN_REVISION);
 
 		printf(_("\n"
