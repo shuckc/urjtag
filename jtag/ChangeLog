@@ -1,3 +1,7 @@
+2009-04-17  Kolja Waschk <kawk>
+
+  * Makefile.am: Distribute UrJTAG.nsi in source tarball next time
+
 2009-04-17  Arnim Laeuger  <arniml>
 
   Version 0.10 released.

@@ -37,7 +37,8 @@ noinst_HEADERS = \
 	sysdep.h
 
 EXTRA_DIST = \
-	Makefile.rules
+	Makefile.rules \
+	UrJTAG.nsi
 
 ACLOCAL_AMFLAGS = -I m4
 
