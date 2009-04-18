@@ -1,0 +1,802 @@
+#
+# $Id: pxa250c0,v 1.4 2003/09/05 21:09:11 telka Exp $
+#
+# JTAG declarations for PXA250C0
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
+#
+# 2005-01-03: Cliff Brake <cliff.brake@gmail.com> <http://bec-systems.com>
+#   - Modified for PXA270 (from PXA255)
+#
+# Documentation:
+# [1] Intel Corporation, "Jflash source code", 
+#
+# [2] Intel Corporation, "Intel PAX270 Processor Electrical, Mechanical,
+#     and Thermal Specification", December 2004, Order Number: 280002-004
+
+# signals -- see "bulbcx.dat" file in [1] and Table 4-1 in [2]
+
+signal  nBATT_FAULT	AB24
+signal  BOOT_SEL	AB23
+signal  CLK_REQ		W24
+signal	nCS[0]		B3
+signal  DQM[0]		AB9
+signal  DQM[1]		AB10
+signal  DQM[2]		AC9
+signal  DQM[3]		AC10
+signal  GPIO[0]		V22
+signal  GPIO[1]		Y24
+signal  SYS_EN		AA24	# dedicated
+signal  GPIO[3]		W21
+signal  GPIO[4]		W23
+signal	PWR_CAP[0]	AB21
+signal  PWR_CAP[1]	AD22
+signal  PWR_CAP[2]	AC22
+signal	PWR_CAP[3]	AA20
+signal	GPIO[9]		U22
+signal  GPIO[10]	V23
+signal	GPIO[11]  	C11
+signal	GPIO[12]  	B10
+signal	GPIO[13]  	C10
+signal	GPIO[14]  	T24
+signal	GPIO[15]  	A3
+signal	GPIO[16]  	A18
+signal	GPIO[17]  	C16
+signal	GPIO[18]  	B9
+signal	GPIO[19]  	R22
+signal	GPIO[20]  	AB6
+signal	GPIO[21]  	AD5
+signal	GPIO[22]  	D13
+signal	GPIO[23]  	B16
+signal	GPIO[24]  	A17
+signal	GPIO[25]  	D16
+signal	GPIO[26]  	B15
+signal	GPIO[27]  	C15
+signal	GPIO[28]  	A14
+signal	GPIO[29]  	B13
+signal	GPIO[30]  	C13
+signal	GPIO[31]  	C12
+signal	GPIO[32]  	A20
+signal	GPIO[33]  	B6
+signal	GPIO[34]  	A21
+signal	GPIO[35]  	B19
+signal	GPIO[36]  	C14
+signal	GPIO[37]  	A15
+signal	GPIO[38]  	B14
+signal	GPIO[39]  	D19
+signal	GPIO[40]  	D14
+signal	GPIO[41]  	C18
+signal	GPIO[42]  	C21
+signal	GPIO[43]  	C22
+signal	GPIO[44]  	B20
+signal	GPIO[45]  	C19
+signal	GPIO[46]  	B11
+signal	GPIO[47]  	A11
+signal	GPIO[48]  	AC13
+signal	GPIO[49]  	A10
+signal	GPIO[50]  	AB13
+signal	GPIO[51]  	AD13
+signal	GPIO[52]  	AC14
+signal	GPIO[53]  	AB14
+signal	GPIO[54]  	AA14
+signal	GPIO[55]  	AA10
+signal	GPIO[56]  	AB11
+signal	GPIO[57]  	AC11
+signal	GPIO[58]  	G24
+signal	GPIO[59]  	G22
+signal	GPIO[60]  	G23
+signal	GPIO[61]  	H24
+signal	GPIO[62]  	H22
+signal	GPIO[63]  	H23
+signal	GPIO[64]  	J22
+signal	GPIO[65]  	K24
+signal	GPIO[66]  	K22
+signal	GPIO[67]  	K23
+signal	GPIO[68]  	L21
+signal	GPIO[69]  	L23
+signal	GPIO[70]  	M24
+signal	GPIO[71]  	L22
+signal	GPIO[72]  	N24
+signal	GPIO[73]  	M22
+signal	GPIO[74]  	R23
+signal	GPIO[75]  	P23
+signal	GPIO[76]  	P22
+signal	GPIO[77]  	R21
+signal	GPIO[78]  	B7
+signal	GPIO[79]  	C8
+signal	GPIO[80]  	C7
+signal	GPIO[81]  	AB12
+signal	GPIO[82]  	AD9
+signal	GPIO[83]  	AD10
+signal	GPIO[84]  	AA11
+signal	GPIO[85]  	AC12
+signal	GPIO[86]  	N22
+signal	GPIO[87]  	N23
+signal	GPIO[88]  	C23
+signal	GPIO[89]  	D22
+signal	GPIO[90]  	F22
+signal	GPIO[91]  	F23
+signal	GPIO[92]  	A19
+signal	GPIO[93]  	AB19
+signal	GPIO[94]  	AD19
+signal	GPIO[95]  	AA18
+signal	GPIO[96]  	AC19
+signal	GPIO[97]  	AA17
+signal	GPIO[98]  	AD18
+signal	GPIO[99]  	AB18
+signal	GPIO[100] 	AC18
+signal	GPIO[101] 	AC17
+signal	GPIO[102] 	AB17
+signal	GPIO[103] 	AC16
+signal	GPIO[104] 	AD15
+signal	GPIO[105] 	AB16
+signal	GPIO[106] 	AB15
+signal	GPIO[107] 	AC15
+signal	GPIO[108] 	AD14
+signal	GPIO[109] 	D17
+signal	GPIO[110] 	B17
+signal	GPIO[111] 	C17
+signal	GPIO[112] 	B18
+signal	GPIO[113] 	A13
+signal	GPIO[114] 	D24
+signal	GPIO[115] 	E21
+signal	GPIO[116] 	C24
+signal	GPIO[117] 	D20
+signal	GPIO[118] 	A22
+signal  MA[0]		C6
+signal  MA[1]		A6
+signal  MA[2]		K4
+signal  MA[3]		J1
+signal  MA[4]		K2
+signal  MA[5]		K3
+signal  MA[6]		J2
+signal  MA[7]		J3
+signal  MA[8]		G1
+signal  MA[9]		H2
+signal  MA[10]		H3
+signal  MA[11]		G2
+signal  MA[12]		G3
+signal  MA[13]		E1
+signal  MA[14]		F2
+signal  MA[15]		G4
+signal  MA[16]		F3
+signal  MA[17]		D1
+signal  MA[18]		C1
+signal  MA[19]		E3
+signal  MA[20]		E4
+signal  MA[21]		D2
+signal  MA[22]		C2
+signal  MA[23]		D4
+signal  MA[24]		C4
+signal  MA[25]		D6
+signal  MD[0]		AB4
+signal  MD[1]		AB1
+signal  MD[2]		AA3
+signal  MD[3]		Y3
+signal  MD[4]		Y2
+signal  MD[5]		U4
+signal  MD[6]		V3
+signal  MD[7]		U1
+signal  MD[8]		T3
+signal  MD[9]		R4
+signal  MD[10]		P4
+signal  MD[11]		P2
+signal  MD[12]		N3
+signal  MD[13]		M4
+signal  MD[14]		L1
+signal  MD[15]		K1
+signal  MD[16]		AA4
+signal  MD[17]		AB3
+signal  MD[18]		AA1
+signal  MD[19]		Y1
+signal  MD[20]		W1
+signal  MD[21]		V1
+signal  MD[22]		V2
+signal  MD[23]		T1
+signal  MD[24]		R1
+signal  MD[25]		R3
+signal  MD[26]		P3
+signal  MD[27]		N1
+signal  MD[28]		N2
+signal  MD[29]		M3
+signal  MD[30]		M2
+signal  MD[31]		L2
+signal	nOE		AC5
+signal	PWR_EN		Y23
+signal	PWR_OUT		AB22  
+signal	PXTAL_IN	AC21
+signal	PXTAL_OUT	AD21
+signal	nRESET		Y22
+signal	nRESET_OUT	Y21
+signal  RDnWR		C9
+signal	nSDCAS		AA6
+signal	nSDCS[0]	AB7
+signal	nSDCS[1]	AB8
+signal	SDCKE[1]	AD6
+signal	SDCLK[0]	AC4
+signal	SDCLK[1]	AD7
+signal	SDCLK[2]	AD3
+signal	nSDRAS		AC7
+signal	TEST		U24
+signal	TESTCLK		T23
+signal	TXTAL_IN	AA22
+signal	TXTAL_OUT	AA23
+signal	TDI		U23  
+signal  TMS		T21  
+signal	TCK		T22  
+signal	TDO		V24  
+signal	nTRST		U21
+signal	UIO		E23
+signal	USBC_N		C20
+signal	USBC_P		B22
+signal	USBH_N_0	D23
+signal	USBH_P_0	E22
+signal	VCC_BATT	AB20
+signal	VCC_BB		AD12
+signal	VCC_CORE	AD11 T2 AD4 W3 B21 M23 R24 AD16 F24 L24 J23 D3 A7 B12
+signal	VCC_IO		AD17 A12 A16
+signal	VCC_LCD		J24 P24
+signal	VCC_MEM		W2 AC6 A4 B8 AC8 AA2 U2 AD8 F1 H1 M1 AD1 AC1 AC2 AD2 L3 E2 C3 P1  
+signal  VCC_PLL     	AC20  
+signal	VCC_RAM		B4 A5 A8 A9  
+signal	VCC_USB		A23 A24 B23 B24
+signal	VCC_USIM	E24  
+signal	VSS_BB		AA13  
+signal	VSS_CORE	AA12 W4 D8 D12 D21 G21 K21 P21 AA7 U3 M21 AA15 D10 J21 A1 B1 A2 B2 D7 B5  
+signal	VSS_IO		D11 D15 D18 F21 H21 N21 AA19 AA16                        
+signal	VSS_MEM		Y4 C5 R2 N4 D9 AA9 AA8 AA5 V4 T4 L4 AB2 AC3 J4 H4 F4 D5  
+signal	VSS_PAD		V21 AD23 AC23 AD24 AC24 AA21  
+signal	VSS_PLL		AD20  
+signal	nVDD_FAULT	W22
+signal	nWE		AB5
+
+# mandatory data registers
+register	BSR		504	# Boundary Scan Register (see [3])
+register	BR		1	# Bypass Register
+# optional data registers
+register	DIR		32	# Device Identification Register
+# user defined registers
+#register	DBG_SR		36	# see 10.10 in [2]
+#register	LDIC_SR1	33	# see 10.13.2 in [2]
+
+# see 9.3.1 in [2]
+instruction length 7
+# mandatory instructions
+instruction EXTEST		0000000	BSR
+instruction SAMPLE/PRELOAD	0000001	BSR
+instruction BYPASS		1111111	BR
+# optional instructions
+instruction CLAMP		0000100	BR
+instruction HIGHZ		0001000	BR
+instruction IDCODE		1111110	DIR
+# user-defined instructions
+#instruction DBGRX		00010	DBG_SR
+#instruction LDIC		00111	LDIC_SR1
+#instruction SELDCSR		01001	DBG_SR	# see 10.10.1 in [2]
+#instruction DBGTX		10000	DBG_SR
+
+#========================================================================
+
+bit 503 O 0 *
+bit 502 I 1 USBH_P_0
+bit 501 O 0 *
+bit 500 I 1 USBH_N_0
+bit 499 I 1 USBC_P
+bit 498 I 1 USBC_N
+bit 497 I 1 UIO
+bit 496 I 1 TESTCLK
+bit 495 I 1 TEST
+bit 494 I 1 NVDD_FAULT
+bit 493 I 1 NRESET
+bit 492 I 1 NBATT_FAULT
+bit 491 I 1 MD[0]
+bit 490 I 1 MD[1]
+bit 489 I 1 MD[2]
+bit 488 I 1 MD[3]
+bit 487 I 1 MD[4]
+bit 486 I 1 MD[5]
+bit 485 I 1 MD[6]
+bit 484 I 1 MD[7]
+bit 483 I 1 MD[8]
+bit 482 I 1 MD[9]
+bit 481 I 1 MD[10]
+bit 480 I 1 MD[11]
+bit 479 I 1 MD[12]
+bit 478 I 1 MD[13]
+bit 477 I 1 MD[14]
+bit 476 I 1 MD[15]
+bit 475 I 1 MD[16]
+bit 474 I 1 MD[17]
+bit 473 I 1 MD[18]
+bit 472 I 1 MD[19]
+bit 471 I 1 MD[20]
+bit 470 I 1 MD[21]
+bit 469 I 1 MD[22]
+bit 468 I 1 MD[23]
+bit 467 I 1 MD[24]
+bit 466 I 1 MD[25]
+bit 465 I 1 MD[26]
+bit 464 I 1 MD[27]
+bit 463 I 1 MD[28]
+bit 462 I 1 MD[29]
+bit 461 I 1 MD[30]
+bit 460 I 1 MD[31]
+bit 459 I 1 GPIO[0]
+bit 458 I 1 GPIO[1]
+bit 457 I 1 GPIO[2]
+bit 456 I 1 GPIO[3]
+bit 455 I 1 GPIO[4]
+bit 454 I 1 GPIO[5]
+bit 453 I 1 GPIO[6]
+bit 452 I 1 GPIO[7]
+bit 451 I 1 GPIO[8]
+bit 450 I 1 GPIO[9]
+bit 449 I 1 GPIO[10]
+bit 448 I 1 GPIO[11]
+bit 447 I 1 GPIO[12]
+bit 446 I 1 GPIO[13]
+bit 445 I 1 GPIO[14]
+bit 444 I 1 GPIO[15]
+bit 443 I 1 GPIO[16]
+bit 442 I 1 GPIO[17]
+bit 441 I 1 GPIO[18]
+bit 440 I 1 GPIO[19]
+bit 439 I 1 GPIO[20]
+bit 438 I 1 GPIO[21]
+bit 437 I 1 GPIO[22]
+bit 436 I 1 GPIO[23]
+bit 435 I 1 GPIO[24]
+bit 434 I 1 GPIO[25]
+bit 433 I 1 GPIO[26]
+bit 432 I 1 GPIO[27]
+bit 431 I 1 GPIO[28]
+bit 430 I 1 GPIO[29]
+bit 429 I 1 GPIO[30]
+bit 428 I 1 GPIO[31]
+bit 427 I 1 GPIO[32]
+bit 426 I 1 GPIO[33]
+bit 425 I 1 GPIO[34]
+bit 424 I 1 GPIO[35]
+bit 423 I 1 GPIO[36]
+bit 422 I 1 GPIO[37]
+bit 421 I 1 GPIO[38]
+bit 420 I 1 GPIO[39]
+bit 419 I 1 GPIO[40]
+bit 418 I 1 GPIO[41]
+bit 417 I 1 GPIO[42]
+bit 416 I 1 GPIO[43]
+bit 415 I 1 GPIO[44]
+bit 414 I 1 GPIO[45]
+bit 413 I 1 GPIO[46]
+bit 412 I 1 GPIO[47]
+bit 411 I 1 GPIO[48]
+bit 410 I 1 GPIO[49]
+bit 409 I 1 GPIO[50]
+bit 408 I 1 GPIO[51]
+bit 407 I 1 GPIO[52]
+bit 406 I 1 GPIO[53]
+bit 405 I 1 GPIO[54]
+bit 404 I 1 GPIO[55]
+bit 403 I 1 GPIO[56]
+bit 402 I 1 GPIO[57]
+bit 401 I 1 GPIO[58]
+bit 400 I 1 GPIO[59]
+bit 399 I 1 GPIO[60]
+bit 398 I 1 GPIO[61]
+bit 397 I 1 GPIO[62]
+bit 396 I 1 GPIO[63]
+bit 395 I 1 GPIO[64]
+bit 394 I 1 GPIO[65]
+bit 393 I 1 GPIO[66]
+bit 392 I 1 GPIO[67]
+bit 391 I 1 GPIO[68]
+bit 390 I 1 GPIO[69]
+bit 389 I 1 GPIO[70]
+bit 388 I 1 GPIO[71]
+bit 387 I 1 GPIO[72]
+bit 386 I 1 GPIO[73]
+bit 385 I 1 GPIO[74]
+bit 384 I 1 GPIO[75]
+bit 383 I 1 GPIO[76]
+bit 382 I 1 GPIO[77]
+bit 381 I 1 GPIO[78]
+bit 380 I 1 GPIO[79]
+bit 379 I 1 GPIO[80]
+bit 378 I 1 GPIO[81]
+bit 377 I 1 GPIO[82]
+bit 376 I 1 GPIO[83]
+bit 375 I 1 GPIO[84]
+bit 374 I 1 GPIO[85]
+bit 373 I 1 GPIO[86]
+bit 372 I 1 GPIO[87]
+bit 371 I 1 GPIO[88]
+bit 370 I 1 GPIO[89]
+bit 369 I 1 GPIO[90]
+bit 368 I 1 GPIO[91]
+bit 367 I 1 GPIO[92]
+bit 366 I 1 GPIO[93]
+bit 365 I 1 GPIO[94]
+bit 364 I 1 GPIO[95]
+bit 363 I 1 GPIO[96]
+bit 362 I 1 GPIO[97]
+bit 361 I 1 GPIO[98]
+bit 360 I 1 GPIO[99]
+bit 359 I 1 GPIO[100]
+bit 358 I 1 GPIO[101]
+bit 357 I 1 GPIO[102]
+bit 356 I 1 GPIO[103]
+bit 355 I 1 GPIO[104]
+bit 354 I 1 GPIO[105]
+bit 353 I 1 GPIO[106]
+bit 352 I 1 GPIO[107]
+bit 351 I 1 GPIO[108]
+bit 350 I 1 GPIO[109]
+bit 349 I 1 GPIO[110]
+bit 348 I 1 GPIO[111]
+bit 347 I 1 GPIO[112]
+bit 346 I 1 GPIO[113]
+bit 345 I 1 GPIO[114]
+bit 344 I 1 GPIO[115]
+bit 343 I 1 GPIO[116]
+bit 342 I 1 GPIO[117]
+bit 341 I 1 GPIO[118]
+bit 340 O 0 *
+bit 339 O 0 *
+bit 338 I 1 CLK_REQ
+bit 337 I 1 BOOT_SEL
+bit 336 O 0 *
+bit 335 O 1 USBH_P_0 331 1 Z
+bit 334 O 0 *
+bit 333 O 1 USBH_N_0 331 1 Z
+bit 332 O 1 *
+bit 331 C 1 *
+bit 330 O 1 USBC_P 328 0 Z
+bit 329 O 1 USBC_N 328 0 Z
+bit 328 C 0 *
+bit 327 C 0 *
+bit 326 O 1 UIO 327 0 Z
+bit 325 C 0 *
+bit 324 O 1 SDCLK[2] 75 0 Z
+bit 323 O 1 SDCLK[1] 69 0 Z
+bit 322 O 1 SDCKE[1] 75 0 Z
+bit 321 O 1 nSDRAS 69 0 Z
+bit 320 O 1 nSDCS[1] 75 0 Z
+bit 319 O 1 nSDCS[0] 69 0 Z
+bit 318 O 1 GPIO[0] 197 0 Z
+bit 317 O 1 GPIO[1] 196 0 Z
+bit 316 O 1 GPIO[2] 195 0 Z
+bit 315 O 1 GPIO[3] 194 0 Z
+bit 314 O 1 GPIO[4] 193 0 Z
+bit 313 O 1 GPIO[5] 192 0 Z
+bit 312 O 1 GPIO[6] 191 0 Z
+bit 311 O 1 GPIO[7] 190 0 Z
+bit 310 O 1 GPIO[8] 189 0 Z
+bit 309 O 1 GPIO[9] 188 0 Z
+bit 308 O 1 GPIO[10] 187 0 Z
+bit 307 O 1 GPIO[11] 186 0 Z
+bit 306 O 1 GPIO[12] 185 0 Z
+bit 305 O 1 GPIO[13] 184 0 Z
+bit 304 O 1 GPIO[14] 183 0 Z
+bit 303 O 1 GPIO[15] 182 0 Z
+bit 302 O 1 GPIO[16] 181 0 Z
+bit 301 O 1 GPIO[17] 180 0 Z
+bit 300 O 1 GPIO[18] 179 0 Z
+bit 299 O 1 GPIO[19] 178 0 Z
+bit 298 O 1 GPIO[20] 177 0 Z
+bit 297 O 1 GPIO[21] 176 0 Z
+bit 296 O 1 GPIO[22] 175 0 Z
+bit 295 O 1 GPIO[23] 174 0 Z
+bit 294 O 1 GPIO[24] 173 0 Z
+bit 293 O 1 GPIO[25] 172 0 Z
+bit 292 O 1 GPIO[26] 171 0 Z
+bit 291 O 1 GPIO[27] 170 0 Z
+bit 290 O 1 GPIO[28] 169 0 Z
+bit 289 O 1 GPIO[29] 168 0 Z
+bit 288 O 1 GPIO[30] 167 0 Z
+bit 287 O 1 GPIO[31] 166 0 Z
+bit 286 O 1 GPIO[32] 165 0 Z
+bit 285 O 1 GPIO[33] 164 0 Z
+bit 284 O 1 GPIO[34] 163 0 Z
+bit 283 O 1 GPIO[35] 162 0 Z
+bit 282 O 1 GPIO[36] 161 0 Z
+bit 281 O 1 GPIO[37] 160 0 Z
+bit 280 O 1 GPIO[38] 159 0 Z
+bit 279 O 1 GPIO[39] 158 0 Z
+bit 278 O 1 GPIO[40] 157 0 Z
+bit 277 O 1 GPIO[41] 156 0 Z
+bit 276 O 1 GPIO[42] 155 0 Z
+bit 275 O 1 GPIO[43] 154 0 Z
+bit 274 O 1 GPIO[44] 153 0 Z
+bit 273 O 1 GPIO[45] 152 0 Z
+bit 272 O 1 GPIO[46] 151 0 Z
+bit 271 O 1 GPIO[47] 150 0 Z
+bit 270 O 1 GPIO[48] 149 0 Z
+bit 269 O 1 GPIO[49] 148 0 Z
+bit 268 O 1 GPIO[50] 147 0 Z
+bit 267 O 1 GPIO[51] 146 0 Z
+bit 266 O 1 GPIO[52] 145 0 Z
+bit 265 O 1 GPIO[53] 144 0 Z
+bit 264 O 1 GPIO[54] 143 0 Z
+bit 263 O 1 GPIO[55] 142 0 Z
+bit 262 O 1 GPIO[56] 141 0 Z
+bit 261 O 1 GPIO[57] 140 0 Z
+bit 260 O 1 GPIO[58] 139 0 Z
+bit 259 O 1 GPIO[59] 138 0 Z
+bit 258 O 1 GPIO[60] 137 0 Z
+bit 257 O 1 GPIO[61] 136 0 Z
+bit 256 O 1 GPIO[62] 135 0 Z
+bit 255 O 1 GPIO[63] 134 0 Z
+bit 254 O 1 GPIO[64] 133 0 Z
+bit 253 O 1 GPIO[65] 132 0 Z
+bit 252 O 1 GPIO[66] 131 0 Z
+bit 251 O 1 GPIO[67] 130 0 Z
+bit 250 O 1 GPIO[68] 129 0 Z
+bit 249 O 1 GPIO[69] 128 0 Z
+bit 248 O 1 GPIO[70] 127 0 Z
+bit 247 O 1 GPIO[71] 126 0 Z
+bit 246 O 1 GPIO[72] 125 0 Z
+bit 245 O 1 GPIO[73] 124 0 Z
+bit 244 O 1 GPIO[74] 123 0 Z
+bit 243 O 1 GPIO[75] 122 0 Z
+bit 242 O 1 GPIO[76] 121 0 Z
+bit 241 O 1 GPIO[77] 120 0 Z
+bit 240 O 1 GPIO[78] 119 0 Z
+bit 239 O 1 GPIO[79] 118 0 Z
+bit 238 O 1 GPIO[80] 117 0 Z
+bit 237 O 1 GPIO[81] 116 0 Z
+bit 236 O 1 GPIO[82] 115 0 Z
+bit 235 O 1 GPIO[83] 114 0 Z
+bit 234 O 1 GPIO[84] 113 0 Z
+bit 233 O 1 GPIO[85] 112 0 Z
+bit 232 O 1 GPIO[86] 111 0 Z
+bit 231 O 1 GPIO[87] 110 0 Z
+bit 230 O 1 GPIO[88] 109 0 Z
+bit 229 O 1 GPIO[89] 108 0 Z
+bit 228 O 1 GPIO[90] 107 0 Z
+bit 227 O 1 GPIO[91] 106 0 Z
+bit 226 O 1 GPIO[92] 105 0 Z
+bit 225 O 1 GPIO[93] 104 0 Z
+bit 224 O 1 GPIO[94] 103 0 Z
+bit 223 O 1 GPIO[95] 102 0 Z
+bit 222 O 1 GPIO[96] 101 0 Z
+bit 221 O 1 GPIO[97] 100 0 Z
+bit 220 O 1 GPIO[98] 99 0 Z
+bit 219 O 1 GPIO[99] 98 0 Z
+bit 218 O 1 GPIO[100] 97 0 Z
+bit 217 O 1 GPIO[101] 96 0 Z
+bit 216 O 1 GPIO[102] 95 0 Z
+bit 215 O 1 GPIO[103] 94 0 Z
+bit 214 O 1 GPIO[104] 93 0 Z
+bit 213 O 1 GPIO[105] 92 0 Z
+bit 212 O 1 GPIO[106] 91 0 Z
+bit 211 O 1 GPIO[107] 90 0 Z
+bit 210 O 1 GPIO[108] 89 0 Z
+bit 209 O 1 GPIO[109] 88 0 Z
+bit 208 O 1 GPIO[110] 87 0 Z
+bit 207 O 1 GPIO[111] 86 0 Z
+bit 206 O 1 GPIO[112] 85 0 Z
+bit 205 O 1 GPIO[113] 84 0 Z
+bit 204 O 1 GPIO[114] 83 0 Z
+bit 203 O 1 GPIO[115] 82 0 Z
+bit 202 O 1 GPIO[116] 81 0 Z
+bit 201 O 1 GPIO[117] 80 0 Z
+bit 200 O 1 GPIO[118] 79 0 Z
+bit 199 O 0 *       
+bit 198 O 0 *
+bit 197 C 0 *
+bit 196 C 0 *
+bit 195 C 0 *
+bit 194 C 0 *
+bit 193 C 0 *
+bit 192 C 0 *
+bit 191 C 0 *
+bit 190 C 0 *
+bit 189 C 0 *
+bit 188 C 0 *
+bit 187 C 0 *
+bit 186 C 0 *
+bit 185 C 0 *
+bit 184 C 0 *
+bit 183 C 0 *
+bit 182 C 0 *
+bit 181 C 0 *
+bit 180 C 0 *
+bit 179 C 0 *
+bit 178 C 0 *
+bit 177 C 0 *
+bit 176 C 0 *
+bit 175 C 0 *
+bit 174 C 0 *
+bit 173 C 0 *
+bit 172 C 0 *
+bit 171 C 0 *
+bit 170 C 0 *
+bit 169 C 0 *
+bit 168 C 0 *
+bit 167 C 0 *
+bit 166 C 0 *
+bit 165 C 0 *
+bit 164 C 0 *
+bit 163 C 0 *
+bit 162 C 0 *
+bit 161 C 0 *
+bit 160 C 0 *
+bit 159 C 0 *
+bit 158 C 0 *
+bit 157 C 0 *
+bit 156 C 0 *
+bit 155 C 0 *
+bit 154 C 0 *
+bit 153 C 0 *
+bit 152 C 0 *
+bit 151 C 0 *
+bit 150 C 0 *
+bit 149 C 0 *
+bit 148 C 0 *
+bit 147 C 0 *
+bit 146 C 0 *
+bit 145 C 0 *
+bit 144 C 0 *
+bit 143 C 0 *
+bit 142 C 0 *
+bit 141 C 0 *
+bit 140 C 0 *
+bit 139 C 0 *
+bit 138 C 0 *
+bit 137 C 0 *
+bit 136 C 0 *
+bit 135 C 0 *
+bit 134 C 0 *
+bit 133 C 0 *
+bit 132 C 0 *
+bit 131 C 0 *
+bit 130 C 0 *
+bit 129 C 0 *
+bit 128 C 0 *
+bit 127 C 0 *
+bit 126 C 0 *
+bit 125 C 0 *
+bit 124 C 0 *
+bit 123 C 0 *
+bit 122 C 0 *
+bit 121 C 0 *
+bit 120 C 0 *
+bit 119 C 0 *
+bit 118 C 0 *
+bit 117 C 0 *
+bit 116 C 0 *
+bit 115 C 0 *
+bit 114 C 0 *
+bit 113 C 0 *
+bit 112 C 0 *
+bit 111 C 0 *
+bit 110 C 0 *
+bit 109 C 0 *
+bit 108 C 0 *
+bit 107 C 0 *
+bit 106 C 0 *
+bit 105 C 0 *
+bit 104 C 0 *
+bit 103 C 0 *
+bit 102 C 0 *
+bit 101 C 0 *
+bit 100 C 0 *                            
+bit 99 C 0 *
+bit 98 C 0 *
+bit 97 C 0 *
+bit 96 C 0 *
+bit 95 C 0 *
+bit 94 C 0 *
+bit 93 C 0 *
+bit 92 C 0 *
+bit 91 C 0 *
+bit 90 C 0 *
+bit 89 C 0 *
+bit 88 C 0 *
+bit 87 C 0 *
+bit 86 C 0 *
+bit 85 C 0 *
+bit 84 C 0 *
+bit 83 C 0 *
+bit 82 C 0 *
+bit 81 C 0 *
+bit 80 C 0 *
+bit 79 C 0 *
+bit 78 O 0 *
+bit 77 O 0 *
+bit 76 O 1 CLK_REQ 325 0 Z
+bit 75 C 0 *
+bit 74 C 0 *
+bit 73 C 0 *
+bit 72 C 0 *
+bit 71 C 0 *
+bit 70 C 0 *
+bit 69 C 0 *
+bit 68 O 1 RDnWR 69 0 Z
+bit 67 O 1 DQM[0] 69 0 Z
+bit 66 O 1 DQM[1] 69 0 Z
+bit 65 O 1 DQM[2] 70 0 Z
+bit 64 O 1 DQM[3] 70 0 Z
+bit 63 O 0 *
+bit 62 O 1 SDCLK[0] 75 0 Z
+bit 61 O 1 nCS[0] 74 0 Z
+bit 60 O 1 nOE 74 0 Z
+bit 59 O 1 nWE 73 0 Z
+bit 58 O 1 nSDCAS 69 0 Z
+bit 57 O 1 MD[0] 71 0 Z
+bit 56 O 1 MD[1] 71 0 Z
+bit 55 O 1 MD[2] 71 0 Z
+bit 54 O 1 MD[3] 71 0 Z
+bit 53 O 1 MD[4] 71 0 Z
+bit 52 O 1 MD[5] 71 0 Z
+bit 51 O 1 MD[6] 71 0 Z
+bit 50 O 1 MD[7] 71 0 Z
+bit 49 O 1 MD[8] 71 0 Z
+bit 48 O 1 MD[9] 71 0 Z
+bit 47 O 1 MD[10] 71 0 Z
+bit 46 O 1 MD[11] 71 0 Z
+bit 45 O 1 MD[12] 71 0 Z
+bit 44 O 1 MD[13] 71 0 Z
+bit 43 O 1 MD[14] 71 0 Z
+bit 42 O 1 MD[15] 71 0 Z
+bit 41 O 1 MD[16] 72 0 Z
+bit 40 O 1 MD[17] 72 0 Z
+bit 39 O 1 MD[18] 72 0 Z
+bit 38 O 1 MD[19] 72 0 Z
+bit 37 O 1 MD[20] 72 0 Z
+bit 36 O 1 MD[21] 72 0 Z
+bit 35 O 1 MD[22] 72 0 Z
+bit 34 O 1 MD[23] 72 0 Z
+bit 33 O 1 MD[24] 72 0 Z
+bit 32 O 1 MD[25] 72 0 Z
+bit 31 O 1 MD[26] 72 0 Z
+bit 30 O 1 MD[27] 72 0 Z
+bit 29 O 1 MD[28] 72 0 Z
+bit 28 O 1 MD[29] 72 0 Z
+bit 27 O 1 MD[30] 72 0 Z
+bit 26 O 1 MD[31] 72 0 Z
+bit 25 O 1 MA[0] 69 0 Z
+bit 24 O 1 MA[1] 69 0 Z
+bit 23 O 1 MA[2] 69 0 Z
+bit 22 O 1 MA[3] 69 0 Z
+bit 21 O 1 MA[4] 69 0 Z
+bit 20 O 1 MA[5] 69 0 Z
+bit 19 O 1 MA[6] 69 0 Z
+bit 18 O 1 MA[7] 69 0 Z
+bit 17 O 1 MA[8] 69 0 Z
+bit 16 O 1 MA[9] 69 0 Z
+bit 15 O 1 MA[10] 69 0 Z
+bit 14 O 1 MA[11] 69 0 Z
+bit 13 O 1 MA[12] 69 0 Z
+bit 12 O 1 MA[13] 69 0 Z
+bit 11 O 1 MA[14] 69 0 Z
+bit 10 O 1 MA[15] 69 0 Z
+bit 9 O 1 MA[16] 69 0 Z
+bit 8 O 1 MA[17] 69 0 Z
+bit 7 O 1 MA[18] 69 0 Z
+bit 6 O 1 MA[19] 69 0 Z
+bit 5 O 1 MA[20] 69 0 Z
+bit 4 O 1 MA[21] 69 0 Z
+bit 3 O 1 MA[22] 69 0 Z
+bit 2 O 1 MA[23] 69 0 Z
+bit 1 O 1 MA[24] 69 0 Z
+bit 0 O 1 MA[25] 69 0 Z
+
+initbus pxa27x
+

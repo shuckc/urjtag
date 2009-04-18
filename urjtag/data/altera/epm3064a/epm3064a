@@ -1,0 +1,297 @@
+#
+# $Id$
+#
+# JTAG declarations for EPM3064A
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Arnim Laeuger <arniml@users.sourceforge.net>
+#
+# Note:
+#   The signals defined in this file are generic for any EPM3064A.
+#   Signalnames according to Altera's package tables are set in the
+#   package specific scripts.
+#
+
+register	BYPASS		1
+register	BSR		192
+register	DEVICE_ID	32
+register	USERCODE	32
+
+instruction length 10
+instruction	BYPASS		1111111111	BYPASS
+instruction	IDCODE		0001011001	DEVICE_ID
+instruction	USERCODE	0000000111	USERCODE
+instruction	SAMPLE/PRELOAD	0001010101	BSR
+instruction	EXTEST		0000000000	BSR
+
+signal	BSC0
+signal	BSC1
+signal	BSC10
+signal	BSC11
+signal	BSC12
+signal	BSC13
+signal	BSC14
+signal	BSC15
+signal	BSC16
+signal	BSC17
+signal	BSC18
+signal	BSC19
+signal	BSC2
+signal	BSC20
+signal	BSC21
+signal	BSC22
+signal	BSC23
+signal	BSC24
+signal	BSC25
+signal	BSC26
+signal	BSC27
+signal	BSC28
+signal	BSC29
+signal	BSC3
+signal	BSC30
+signal	BSC31
+signal	BSC32
+signal	BSC33
+signal	BSC34
+signal	BSC35
+signal	BSC36
+signal	BSC37
+signal	BSC38
+signal	BSC39
+signal	BSC4
+signal	BSC40
+signal	BSC41
+signal	BSC42
+signal	BSC43
+signal	BSC44
+signal	BSC45
+signal	BSC46
+signal	BSC47
+signal	BSC48
+signal	BSC49
+signal	BSC5
+signal	BSC50
+signal	BSC51
+signal	BSC52
+signal	BSC53
+signal	BSC54
+signal	BSC55
+signal	BSC56
+signal	BSC57
+signal	BSC58
+signal	BSC59
+signal	BSC6
+signal	BSC60
+signal	BSC61
+signal	BSC62
+signal	BSC63
+signal	BSC7
+signal	BSC8
+signal	BSC9
+
+bit  0 I ? BSC0
+bit  1 X ? *
+bit  2 X ? *
+bit  3 I ? BSC1
+bit  4 X ? *
+bit  5 X ? *
+bit  6 I ? BSC2
+bit  7 C 0 *
+bit  8 O ? BSC2 7 0 Z
+bit  9 I ? BSC3
+bit 10 C 0 *
+bit 11 O ? BSC3 10 0 Z
+bit 12 I ? BSC4
+bit 13 C 0 *
+bit 14 O ? BSC4 13 0 Z
+bit 15 I ? BSC5
+bit 16 C 0 *
+bit 17 O ? BSC5 16 0 Z
+bit 18 I ? BSC6
+bit 19 C 0 *
+bit 20 O ? BSC6 19 0 Z
+bit 21 I ? BSC7
+bit 22 C 0 *
+bit 23 O ? BSC7 22 0 Z
+bit 24 I ? BSC8
+bit 25 C 0 *
+bit 26 O ? BSC8 25 0 Z
+bit 27 I ? BSC9
+bit 28 C 0 *
+bit 29 O ? BSC9 28 0 Z
+bit 30 I ? BSC10
+bit 31 C 0 *
+bit 32 O ? BSC10 31 0 Z
+bit 33 I ? BSC11
+bit 34 C 0 *
+bit 35 O ? BSC11 34 0 Z
+bit 36 I ? BSC12
+bit 37 C 0 *
+bit 38 O ? BSC12 37 0 Z
+bit 39 I ? BSC13
+bit 40 C 0 *
+bit 41 O ? BSC13 40 0 Z
+bit 42 I ? BSC14
+bit 43 C 0 *
+bit 44 O ? BSC14 43 0 Z
+bit 45 I ? BSC15
+bit 46 C 0 *
+bit 47 O ? BSC15 46 0 Z
+bit 48 I ? BSC16
+bit 49 C 0 *
+bit 50 O ? BSC16 49 0 Z
+bit 51 I ? BSC17
+bit 52 C 0 *
+bit 53 O ? BSC17 52 0 Z
+bit 54 I ? BSC18
+bit 55 C 0 *
+bit 56 O ? BSC18 55 0 Z
+bit 57 I ? BSC19
+bit 58 C 0 *
+bit 59 O ? BSC19 58 0 Z
+bit 60 I ? BSC20
+bit 61 C 0 *
+bit 62 O ? BSC20 61 0 Z
+bit 63 I ? BSC21
+bit 64 C 0 *
+bit 65 O ? BSC21 64 0 Z
+bit 66 I ? BSC22
+bit 67 C 0 *
+bit 68 O ? BSC22 67 0 Z
+bit 69 I ? BSC23
+bit 70 C 0 *
+bit 71 O ? BSC23 70 0 Z
+bit 72 I ? BSC24
+bit 73 C 0 *
+bit 74 O ? BSC24 73 0 Z
+bit 75 I ? BSC25
+bit 76 C 0 *
+bit 77 O ? BSC25 76 0 Z
+bit 78 I ? BSC26
+bit 79 C 0 *
+bit 80 O ? BSC26 79 0 Z
+bit 81 I ? BSC27
+bit 82 C 0 *
+bit 83 O ? BSC27 82 0 Z
+bit 84 I ? BSC28
+bit 85 C 0 *
+bit 86 O ? BSC28 85 0 Z
+bit 87 I ? BSC29
+bit 88 C 0 *
+bit 89 O ? BSC29 88 0 Z
+bit 90 I ? BSC30
+bit 91 C 0 *
+bit 92 O ? BSC30 91 0 Z
+bit 93 I ? BSC31
+bit 94 C 0 *
+bit 95 O ? BSC31 94 0 Z
+bit 96 I ? BSC32
+bit 97 C 0 *
+bit 98 O ? BSC32 97 0 Z
+bit 99 I ? BSC33
+bit 100 C 0 *
+bit 101 O ? BSC33 100 0 Z
+bit 102 I ? BSC34
+bit 103 C 0 *
+bit 104 O ? BSC34 103 0 Z
+bit 105 I ? BSC35
+bit 106 C 0 *
+bit 107 O ? BSC35 106 0 Z
+bit 108 I ? BSC36
+bit 109 C 0 *
+bit 110 O ? BSC36 109 0 Z
+bit 111 I ? BSC37
+bit 112 C 0 *
+bit 113 O ? BSC37 112 0 Z
+bit 114 I ? BSC38
+bit 115 C 0 *
+bit 116 O ? BSC38 115 0 Z
+bit 117 I ? BSC39
+bit 118 C 0 *
+bit 119 O ? BSC39 118 0 Z
+bit 120 I ? BSC40
+bit 121 C 0 *
+bit 122 O ? BSC40 121 0 Z
+bit 123 I ? BSC41
+bit 124 C 0 *
+bit 125 O ? BSC41 124 0 Z
+bit 126 I ? BSC42
+bit 127 C 0 *
+bit 128 O ? BSC42 127 0 Z
+bit 129 I ? BSC43
+bit 130 C 0 *
+bit 131 O ? BSC43 130 0 Z
+bit 132 I ? BSC44
+bit 133 C 0 *
+bit 134 O ? BSC44 133 0 Z
+bit 135 I ? BSC45
+bit 136 C 0 *
+bit 137 O ? BSC45 136 0 Z
+bit 138 I ? BSC46
+bit 139 C 0 *
+bit 140 O ? BSC46 139 0 Z
+bit 141 I ? BSC47
+bit 142 C 0 *
+bit 143 O ? BSC47 142 0 Z
+bit 144 I ? BSC48
+bit 145 C 0 *
+bit 146 O ? BSC48 145 0 Z
+bit 147 I ? BSC49
+bit 148 C 0 *
+bit 149 O ? BSC49 148 0 Z
+bit 150 I ? BSC50
+bit 151 C 0 *
+bit 152 O ? BSC50 151 0 Z
+bit 153 I ? BSC51
+bit 154 C 0 *
+bit 155 O ? BSC51 154 0 Z
+bit 156 I ? BSC52
+bit 157 C 0 *
+bit 158 O ? BCS52 157 0 Z
+bit 159 I ? BSC53
+bit 160 C 0 *
+bit 161 O ? BSC53 160 0 Z
+bit 162 I ? BSC54
+bit 163 C 0 *
+bit 164 O ? BSC54 163 0 Z
+bit 165 I ? BSC55
+bit 166 C 0 *
+bit 167 O ? BSC55 166 0 Z
+bit 168 I ? BSC56
+bit 169 C 0 *
+bit 170 O ? BSC56 169 0 Z
+bit 171 I ? BSC57
+bit 172 C 0 *
+bit 173 O ? BSC57 172 0 Z
+bit 174 I ? BSC58
+bit 175 C 0 *
+bit 176 O ? BSC58 175 0 Z
+bit 177 I ? BSC59
+bit 178 C 0 *
+bit 179 O ? BSC59 178 0 Z
+bit 180 I ? BSC60
+bit 181 C 0 *
+bit 182 O ? BSC60 181 0 Z
+bit 183 I ? BSC61
+bit 184 C 0 *
+bit 185 O ? BSC61 184 0 Z
+bit 186 I ? BSC62
+bit 187 X ? *
+bit 188 X ? *
+bit 189 I ? BSC63
+bit 190 X ? *
+bit 191 X ? *

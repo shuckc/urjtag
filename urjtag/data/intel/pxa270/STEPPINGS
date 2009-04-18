@@ -1,0 +1,36 @@
+#
+# $Id: STEPPINGS,v 1.7 2003/03/18 22:54:45 telka Exp $
+#
+# Copyright (C) 2004 BEC Systems <http://bec-systems.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Cliff Brake <cliff.brake@gmail.com>
+#
+# Documentation:
+# [1] Intel Corporation, "Intel PXA270 Developers Manual"
+#     February 2003, Order Number: 278534-012
+#
+
+# bits 31-28 of the Device Identification Register
+# see D55. in [1]
+0000	pxa270		A0
+0001	pxa270		A1
+0010	pxa270		B0
+0011	pxa270		B1
+0100	pxa270		C0
+0111	pxa270		C5
+

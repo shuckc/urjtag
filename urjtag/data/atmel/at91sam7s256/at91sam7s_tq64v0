@@ -1,0 +1,138 @@
+signal erase 55
+signal icetck 53
+signal icetdi 33
+signal icetms 51
+signal jtagsel 50
+signal selv32 61
+signal test 40
+signal nrst 39
+signal pa0 48
+signal pa1 47
+signal pa10 29
+signal pa11 28
+signal pa12 27
+signal pa13 22
+signal pa14 21
+signal pa15 20
+signal pa16 19
+signal pa17 9
+signal pa18 10
+signal pa19 13
+signal pa2 44
+signal pa20 16
+signal pa3 43
+signal pa4 36
+signal pa5 35
+signal pa6 34
+signal pa7 32
+signal pa8 31
+signal pa9 30
+
+register	BSR	97
+register	BR	1
+register	DIR	32
+
+instruction length 3
+
+instruction BYPASS 111 BR
+instruction EXTEST 000 BSR
+instruction SAMPLE/PRELOAD 001 BSR
+instruction IDCODE 010 DIR
+
+bit 96 I 1 pa17
+bit 95 O 1 pa17 94 1 Z
+bit 94 C 1 *
+bit 93 I 1 pa18
+bit 92 O 1 pa18 91 1 Z
+bit 91 C 1 *
+bit 90 O 1 *
+bit 89 O 1 *
+bit 88 O 1 *
+bit 87 I 1 pa19
+bit 86 O 1 pa19 85 1 Z
+bit 85 C 1 *
+bit 84 I 1 pa20
+bit 83 O 1 pa20 82 1 Z
+bit 82 C 1 *
+bit 81 I 1 pa16
+bit 80 O 1 pa16 79 1 Z
+bit 79 C 1 *
+bit 78 I 1 pa15
+bit 77 O 1 pa15 76 1 Z
+bit 76 C 1 *
+bit 75 I 1 pa14
+bit 74 O 1 pa14 73 1 Z
+bit 73 C 1 *
+bit 72 I 1 pa13
+bit 71 O 1 pa13 70 1 Z
+bit 70 C 1 *
+bit 69 O 1 *
+bit 68 O 1 *
+bit 67 O 1 *
+bit 66 O 1 *
+bit 65 O 1 *
+bit 64 O 1 *
+bit 63 O 1 *
+bit 62 O 1 *
+bit 61 O 1 *
+bit 60 I 1 pa12
+bit 59 O 1 pa12 58 1 Z
+bit 58 C 1 *
+bit 57 I 1 pa11
+bit 56 O 1 pa11 55 1 Z
+bit 55 C 1 *
+bit 54 I 1 pa10
+bit 53 O 1 pa10 52 1 Z
+bit 52 C 1 *
+bit 51 I 1 pa9
+bit 50 O 1 pa9 49 1 Z
+bit 49 C 1 *
+bit 48 I 1 pa8
+bit 47 O 1 pa8 46 1 Z
+bit 46 C 1 *
+bit 45 I 1 pa7
+bit 44 O 1 pa7 43 1 Z
+bit 43 C 1 *
+bit 42 I 1 pa6
+bit 41 O 1 pa6 40 1 Z
+bit 40 C 1 *
+bit 39 I 1 pa5
+bit 38 O 1 pa5 37 1 Z
+bit 37 C 1 *
+bit 36 I 1 pa4
+bit 35 O 1 pa4 34 1 Z
+bit 34 C 1 *
+bit 33 O 1 *
+bit 32 O 1 *
+bit 31 O 1 *
+bit 30 O 1 *
+bit 29 O 1 *
+bit 28 O 1 *
+bit 27 O 1 *
+bit 26 O 1 *
+bit 25 O 1 *
+bit 24 O 1 *
+bit 23 O 1 *
+bit 22 O 1 *
+bit 21 I 1 pa3
+bit 20 O 1 pa3 19 1 Z
+bit 19 C 1 *
+bit 18 I 1 pa2
+bit 17 O 1 pa2 16 1 Z
+bit 16 C 1 *
+bit 15 I 1 pa1
+bit 14 O 1 pa1 13 1 Z
+bit 13 C 1 *
+bit 12 I 1 pa0
+bit 11 O 1 pa0 10 1 Z
+bit 10 C 1 *
+bit 9 O 1 *
+bit 8 O 1 *
+bit 7 O 1 *
+bit 6 O 1 *
+bit 5 O 1 *
+bit 4 O 1 *
+bit 3 O 1 *
+bit 2 O 1 *
+bit 1 O 1 *
+bit 0 I 1 erase

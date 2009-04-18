@@ -1,0 +1,767 @@
+#
+# $Id$
+#
+# Copyright (C) 2004 IDK Chemnitz GmbH
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marko Roessler <marko.roessler@indakom.de> , 2004.
+#
+
+# mandatory data registers
+register	BSR	507
+register	BR	1
+register	IR	4
+register	DIR	32
+
+# see page 250 in [1]
+instruction length 4
+# mandatory instructions
+instruction EXTEST		0000	BSR	# 
+instruction SCAN_N              0010    BSR	# choose chain
+instruction INTEST              1100    BSR	#
+instruction IDCODE		1110	DIR	#
+instruction BYPASS		1111	BR	# 
+instruction CLAMP               0101    BSR	#
+instruction HIGHZ               0111    BSR	#
+instruction CLAMPZ              1001    BSR	#
+instruction SAMPLE/PRELOAD	0011	BSR	# 
+
+
+
+signal	CS6	B10
+signal	CS7	C10
+signal	nCS3	M12
+signal	nCS2	P13
+signal	nCS1	K10
+signal	nCS0	K11
+signal	nWE3	D10
+signal	OSCEN	P14
+signal	PA7	L3
+signal	PA6	L2
+signal	PA5	L1
+signal	PA4	K5
+signal	PA3	K3
+signal	PA2	K2
+signal	PA1	K1
+signal	PA0	J5
+signal	PB7	N3
+signal	PB6	N2
+signal	PB5	N1
+signal	PB4	M4
+signal	PB3	M2
+signal	PB2	L7
+signal	PB1	L5
+signal	PB0	L4
+signal	PC7	R2
+signal	PC6	T2
+signal	PC5	T1
+signal	PC4	L8
+signal	PC3	K6
+signal	PC2	R1
+signal	PC1	P2
+signal	PC0	P1
+signal	PD7	R10
+signal	PD6	P10
+signal	PD5	T9
+signal	PD4	R9
+signal	PD3	N11
+signal	PD2	K8
+signal	PD1	L11
+signal	PD0	M11
+signal	PE3	M10
+signal	PE2	M9
+signal	PE1	N10
+signal	PE0	L10
+signal	PF7	C5
+signal	PF6	E6
+signal	PF5	D6
+signal	PF4	B5
+signal	PF3	H8
+signal	PF2	C6
+signal	PF1	B6
+signal	PF0	A6
+signal	PG7	N4
+signal	PG6	M8
+signal	PG5	M7
+signal	PG4	N6
+signal	PG3	M6
+signal	PG2	L6
+signal	PG1	T3
+signal	PG0	R3
+signal	PH7	T5
+signal	PH6	R5
+signal	PH5	P5
+signal	PH4	P8
+signal	PH3	N7
+signal	PH2	T4 
+signal	PH1	R4
+signal	PH0	P4
+signal	IRTX2	F2
+signal	IRRX2	F3
+signal	UARTTXD2	F4
+signal	UARTRXD2	J7
+signal	UARTCTS2	E2
+signal	UARTDCD2	E3
+signal	UARTDSR2	E5
+signal	XTAL32OUT	P15
+signal	XTAL32IN	P16
+signal	AC97IN	A4
+signal	AC97CLK	C4
+signal	AC97OUT	D5
+signal	AC97SYNC	B4
+signal	SSPRX	J1
+signal	SSPFRM	J3
+signal	SSPTX	J2
+signal	SSPCLK	H4
+signal	PGMCLK	J6
+signal	PWM1	B7
+signal	PWM0	C7
+signal	PWMEN1 D7
+signal	PWMEN0 E7
+signal	COL7	H2
+signal	COL6	H1
+signal	COL5	G5
+signal	COL4	G4
+signal	COL3	G2
+signal	COL2	G1
+signal	COL1	F5
+signal	COL0	F6
+signal	BUZ	H3
+signal	D31	D11
+signal	D30	B11
+signal 	D29	B12
+signal	D28	G10
+signal	D27	E12
+signal	D26	C13
+signal	D25	B13
+signal	D24	A14
+signal	D23	A16
+signal	D22	F10
+signal	D21	D14
+signal	D20	H10
+signal	D19	D16
+signal	D18	E14
+signal	D17	F12
+signal	D16	F15
+signal	D15	G12
+signal	D14	G11
+signal	D13	G15
+signal	D12	H13
+signal	D11	H15
+signal	D10	J10
+signal	D9	J13
+signal	D8	J15
+signal	D7	K12
+signal	D6	H11
+signal	D5	L14
+signal	D4	L15
+signal	D3	L16
+signal	D2	N13
+signal	D1	M15
+signal	D0	L12
+signal	A27	A8
+signal	A26	F8
+signal	A25	G8
+signal	A24	A13 
+signal	A23	A15
+signal	A22	B16
+signal	A21	C16
+signal	A20	D15
+signal	A19	F11
+signal	A18	E13
+signal	A17	E16
+signal	A16	F14
+signal	A15	F16
+signal	A14	G13
+signal	A13	G14
+signal	A12	G16 
+signal	A11	H14
+signal	A10	H16
+signal	A9	J9
+signal	A8	J14 
+signal	A7	J16
+signal	A6	J8
+signal	A5	K14
+signal	A4	K15
+signal	A3	K16
+signal	A2	M13
+signal	A1	N14
+signal	A0	M16
+signal	nBATCHG	D2
+signal	nEXTPWR	C2
+signal	BATOK	D1
+signal	nPOR	D3
+signal	MEDCHG	C3
+signal	XTALIN	R13
+signal	XTALOUT	T13
+signal	nURESET	H6
+signal	WAKEUP	D4
+signal	nPWRFL	E4
+signal	LCDLP	R8
+signal	LCDDCLK	N9
+signal	LCDFP	R6
+signal	LCDM	P9
+signal	LCDVD3	N8
+signal	LCDVD2	T7
+signal	LCDVD1	R7
+signal	LCDVD0	P7
+signal	nRAS	F9
+signal	nCAS	C11
+signal	nSWE	C12
+signal	nSCS3	A12
+signal	nSCS2	E11
+signal	nSCS1	D13
+signal	nSCS0	C14
+signal	SCLK	A10
+signal	SCKEN3	G9
+signal	DQM0	A9
+signal	DQM1	B9
+signal	DQM2	D9
+signal	DQM3	E9
+signal	nWE0	C8
+signal	nOE	D8
+signal	MMCCLK	A3
+signal	MMCCMD	B3
+signal	MMCDATA	A2
+signal	nTEST1	R15
+signal	nTEST0	T12
+signal	WIDTH1	R12
+signal	WIDTH0	P11
+signal	USBDP	T15
+signal	USBDN	T16
+signal	TDI	A1
+signal	TDO	B2
+signal	TMST	C1
+signal	TCLK	B1
+signal	VDD	G17 F1 K7 M1 M5 T6 R14 M14 J11 J12 F13 E10 B8
+signal	VSS	H7 G3 K4 N5 P6 T14 R16 N16 K13 H9 C15 A11 E8 A5 F7
+signal	VDDC	E1 J4 P3 T8 K9 L13 E15 D12 A7
+signal	VSSC	C9 M3 L9 T10 N15 H12 B15 G6
+signal	VDDA1	R11
+signal	VSSA1	T11
+signal	VDDA2	N12
+signal	VSSA2	P12
+
+
+
+bit 506 I 1 nEXTPWR
+bit 505 I 1 MEDCHG
+bit 504 I 1 BATOK
+bit 503 I 1 nBATCHG
+bit 502 I 1 WAKEUP
+bit 501 I 1 UARTCTS2
+bit 500 C 0 UARTCTS2
+bit 499 O 1 UARTCTS2 500 0 Z
+bit 498 I 1 UARTDCD2
+bit 497 C 0 UARTDCD2
+bit 496 O 1 UARTDCD2 497 0 Z
+bit 495 I 1 nPWRFL
+bit 494 I 1 UARTDSR2
+bit 493 C 0 UARTDSR2
+bit 492 O 1 UARTDSR2 493 0 Z
+bit 491 I 1 IRTX2
+bit 490 C 0 IRTX2
+bit 489 O 1 IRTX2 490 0 Z
+bit 488 I 1 IRRX2
+bit 487 C 0 IRRX2
+bit 486 O 1 IRRX2 487 0 Z
+bit 485 I 1 UARTTXD2
+bit 484 C 0 UARTTXD2
+bit 483 O 1 UARTTXD2 484 0 Z
+bit 482 I 1 UARTRXD2
+bit 481 C 0 UARTRXD2
+bit 480 O 1 UARTRXD2 481 0 Z
+bit 479 I 1 COL0
+bit 478 C 0 COL0
+bit 477 O 1 COL0 478 0 Z
+bit 476 I 1 COL1
+bit 475 C 0 COL1
+bit 474 O 1 COL1 475 0 Z
+bit 473 I 1 COL2
+bit 472 C 0 COL2
+bit 471 O 1 COL2 472 0 Z
+bit 470 I 1 COL3
+bit 469 C 0 COL3
+bit 468 O 1 COL3 469 0 Z
+bit 467 I 1 COL4
+bit 466 C 0 COL4
+bit 465 O 1 COL4 466 0 Z
+bit 464 I 1 COL5
+bit 463 C 0 COL5
+bit 462 O 1 COL5 463 0 Z
+bit 461 I 1 COL6
+bit 460 C 0 COL6
+bit 459 O 1 COL6 460 0 Z
+bit 458 I 1 COL7
+bit 457 C 0 COL7
+bit 456 O 1 COL7 457 0 Z
+bit 455 I 1 BUZ
+bit 454 C 0 BUZ
+bit 453 O 1 BUZ 454 0 Z
+bit 452 C 0 SSPCLK
+bit 451 O 1 SSPCLK 452 0 Z
+bit 450 C 0 PGMCLK
+bit 449 O 1 PGMCLK 450 0 Z
+bit 448 I 1 SSPRX
+bit 447 C 0 SSPRX
+bit 446 O 1 SSPRX 447 0 Z
+bit 445 C 0 SSPTX
+bit 444 O 1 SSPTX 445 0 Z
+bit 443 C 0 SSPFRM
+bit 442 O 1 SSPFRM 443 0 Z
+bit 441 I 1 PA0
+bit 440 C 0 PA0
+bit 439 O 1 PA0 440 0 Z
+bit 438 I 1 PA1
+bit 437 C 0 PA1
+bit 436 O 1 PA1 437 0 Z
+bit 435 I 1 PA2
+bit 434 C 0 PA2
+bit 433 O 1 PA2 434 0 Z
+bit 432 I 1 PA3
+bit 431 C 0 PA3
+bit 430 O 1 PA3 431 0 Z
+bit 429 I 1 PA4
+bit 428 C 0 PA4
+bit 427 O 1 PA4 428 0 Z
+bit 426 I 1 PA5
+bit 425 C 0 PA5
+bit 424 O 1 PA5 425 0 Z
+bit 423 I 1 PA6
+bit 422 C 0 PA6
+bit 421 O 1 PA6 422 0 Z
+bit 420 I 1 PA7
+bit 419 C 0 PA7
+bit 418 O 1 PA7 419 0 Z
+bit 417 I 1 PB0
+bit 416 C 0 PB0
+bit 415 O 1 PB0 416 0 Z
+bit 414 I 1 PB1
+bit 413 C 0 PB1
+bit 412 O 1 PB1 413 0 Z
+bit 411 I 1 PB2
+bit 410 C 0 PB2
+bit 409 O 1 PB2 410 0 Z
+bit 408 I 1 PB3
+bit 407 C 0 PB3
+bit 406 O 1 PB3 407 0 Z
+bit 405 I 1 PB4
+bit 404 C 0 PB4
+bit 403 O 1 PB4 404 0 Z
+bit 402 I 1 PB5
+bit 401 C 0 PB5
+bit 400 O 1 PB5 401 0 Z
+bit 399 I 1 PB6
+bit 398 C 0 PB6
+bit 397 O 1 PB6 398 0 Z
+bit 396 I 1 PB7
+bit 395 C 0 PB7
+bit 394 O 1 PB7 395 0 Z
+bit 393 I 1 PC0
+bit 392 C 0 PC0
+bit 391 O 1 PC0 392 0 Z
+bit 390 I 1 PC1
+bit 389 C 0 PC1
+bit 388 O 1 PC1 389 0 Z
+bit 387 I 1 PC2
+bit 386 C 0 PC2
+bit 385 O 1 PC2 386 0 Z
+bit 384 I 1 PC3
+bit 383 C 0 PC3
+bit 382 O 1 PC3 383 0 Z
+bit 381 I 1 PC4
+bit 380 C 0 PC4
+bit 379 O 1 PC4 380 0 Z
+bit 378 I 1 PC5
+bit 377 C 0 PC5
+bit 376 O 1 PC5 377 0 Z
+bit 375 I 1 PC6
+bit 374 C 0 PC6
+bit 373 O 1 PC6 374 0 Z
+bit 372 I 1 PC7
+bit 371 C 0 PC7
+bit 370 O 1 PC7 371 0 Z
+bit 369 I 1 PG0
+bit 368 C 0 PG0
+bit 367 O 1 PG0 368 0 Z
+bit 366 I 1 PG1
+bit 365 C 0 PG1
+bit 364 O 1 PG1 365 0 Z
+bit 363 I 1 PG2
+bit 362 C 0 PG2
+bit 361 O 1 PG2 362 0 Z
+bit 360 I 1 PG3
+bit 359 C 0 PG3
+bit 358 O 1 PG3 359 0 Z
+bit 357 I 1 PG4
+bit 356 C 0 PG4
+bit 355 O 1 PG4 356 0 Z
+bit 354 I 1 PG5
+bit 353 C 0 PG5
+bit 352 O 1 PG5 353 0 Z
+bit 351 I 1 PG6
+bit 350 C 0 PG6
+bit 349 O 1 PG6 350 0 Z
+bit 348 I 1 PG7
+bit 347 C 0 PG7
+bit 346 O 1 PG7 347 0 Z
+bit 345 I 1 PH0
+bit 344 C 0 PH0
+bit 343 O 1 PH0 344 0 Z
+bit 342 I 1 PH1
+bit 341 C 0 PH1
+bit 340 O 1 PH1 341 0 Z
+bit 339 I 1 PH2
+bit 338 C 0 PH2
+bit 337 O 1 PH2 338 0 Z
+bit 336 I 1 PH3
+bit 335 C 0 PH3
+bit 334 O 1 PH3 335 0 Z
+bit 333 I 1 PH4
+bit 332 C 0 PH4
+bit 331 O 1 PH4 332 0 Z
+bit 330 I 1 PH5
+bit 329 C 0 PH5
+bit 328 O 1 PH5 329 0 Z
+bit 327 I 1 PH6
+bit 326 C 0 PH6
+bit 325 O 1 PH6 326 0 Z
+bit 324 I 1 PH7
+bit 323 C 0 PH7
+bit 322 O 1 PH7 323 0 Z
+bit 321 C 0 LCDFP
+bit 320 O 1 LCDFP 321 0 Z
+bit 319 C 0 LCDVD0
+bit 318 O 1 LCDVD0 319 0 Z
+bit 317 C 0 LCDVD1
+bit 316 O 1 LCDVD1 317 0 Z
+bit 315 C 0 LCDVD2
+bit 314 O 1 LCDVD2 315 0 Z
+bit 313 C 0 LCDVD3
+bit 312 O 1 LCDVD3 313 0 Z
+bit 311 I 1 PE0
+bit 310 C 0 PE0
+bit 309 O 1 PE0 310 0 Z
+bit 308 C 0 LCDLP
+bit 307 O 1 LCDLP 308 0 Z
+bit 306 C 0 LCDM
+bit 305 O 1 LCDM 306 0 Z
+bit 304 C 0 LCDDCLK
+bit 303 O 1 LCDDCLK 304 0 Z
+bit 302 I 1 PE1
+bit 301 C 0 PE1
+bit 300 O 1 PE1 301 0 Z
+bit 299 I 1 PE2
+bit 298 C 0 PE2
+bit 297 O 1 PE2 298 0 Z
+bit 296 I 1 PE3
+bit 295 C 0 PE3
+bit 294 O 1 PE3 295 0 Z
+bit 293 I 1 PD0
+bit 292 C 0 PD0
+bit 291 O 1 PD0 292 0 Z
+bit 290 I 1 PD1
+bit 289 C 0 PD1
+bit 288 O 1 PD1 289 0 Z
+bit 287 I 1 PD2
+bit 286 C 0 PD2
+bit 285 O 1 PD2 286 0 Z
+bit 284 I 1 PD3
+bit 283 C 0 PD3
+bit 282 O 1 PD3 283 0 Z
+bit 281 I 1 PD4
+bit 280 C 0 PD4
+bit 279 O 1 PD4 280 0 Z
+bit 278 I 1 PD5
+bit 277 C 0 PD5
+bit 276 O 1 PD5 277 0 Z
+bit 275 I 1 PD6
+bit 274 C 0 PD6
+bit 273 O 1 PD6 274 0 Z
+bit 272 I 1 PD7
+bit 271 C 0 PD7
+bit 270 O 1 PD7 271 0 Z
+bit 269 I 1 WIDTH0
+bit 268 I 1 WIDTH1
+bit 267 C 0 nCS0
+bit 266 O 1 nCS0 267 0 Z
+bit 265 C 0 nCS1
+bit 264 O 1 nCS1 265 0 Z
+bit 263 I 1 OSCEN
+bit 262 C 0 OSCEN
+bit 261 O 1 OSCEN 262 0 Z
+bit 260 C 0 nCS2
+bit 259 O 1 nCS2 260 0 Z
+bit 258 C 0 nCS3
+bit 257 O 1 nCS3 258 0 Z
+bit 256 I 1 D0
+bit 255 C 0 D0
+bit 254 O 1 D0 255 0 Z
+bit 253 C 0 A0
+bit 252 O 1 A0 253 0 Z
+bit 251 I 1 D1
+bit 250 C 0 D1
+bit 249 O 1 D1 250 0 Z
+bit 248 C 0 A1
+bit 247 O 1 A1 248 0 Z
+bit 246 I 1 D2
+bit 245 C 0 D2
+bit 244 O 1 D2 245 0 Z
+bit 243 C 0 A2
+bit 242 O 1 A2 243 0 Z
+bit 241 I 1 D3
+bit 240 C 0 D3
+bit 239 O 1 D3 240 0 Z
+bit 238 C 0 A3
+bit 237 O 1 A3 238 0 Z
+bit 236 I 1 D4
+bit 235 C 0 D4
+bit 234 O 1 D4 235 0 Z
+bit 233 C 0 A4
+bit 232 O 1 A4 233 0 Z
+bit 231 I 1 D5
+bit 230 C 0 D5
+bit 229 O 1 D5 230 0 Z
+bit 228 C 0 A5
+bit 227 O 1 A5 228 0 Z
+bit 226 I 1 D6
+bit 225 C 0 D6
+bit 224 O 1 D6 225 0 Z
+bit 223 C 0 A6
+bit 222 O 1 A6 223 0 Z
+bit 221 I 1 D7
+bit 220 C 0 D7
+bit 219 O 1 D7 220 0 Z
+bit 218 C 0 A7
+bit 217 O 1 A7 218 0 Z
+bit 216 I 1 D8
+bit 215 C 0 D8
+bit 214 O 1 D8 215 0 Z
+bit 213 C 0 A8
+bit 212 O 1 A8 213 0 Z
+bit 211 I 1 D9
+bit 210 C 0 D9
+bit 209 O 1 D9 210 0 Z
+bit 208 C 0 A9
+bit 207 O 1 A9 208 0 Z
+bit 206 I 1 D10
+bit 205 C 0 D10
+bit 204 O 1 D10 205 0 Z
+bit 203 C 0 A10
+bit 202 O 1 A10 203 0 Z
+bit 201 I 1 D11
+bit 200 C 0 D11
+bit 199 O 1 D11 200 0 Z
+bit 198 C 0 A11
+bit 197 O 1 A11 198 0 Z
+bit 196 I 1 D12
+bit 195 C 0 D12
+bit 194 O 1 D12 195 0 Z
+bit 193 C 0 A12
+bit 192 O 1 A12 193 0 Z
+bit 191 I 1 D13
+bit 190 C 0 D13
+bit 189 O 1 D13 190 0 Z
+bit 188 C 0 A13
+bit 187 O 1 A13 188 0 Z
+bit 186 I 1 D14
+bit 185 C 0 D14
+bit 184 O 1 D14 185 0 Z
+bit 183 C 0 A14
+bit 182 O 1 A14 183 0 Z
+bit 181 I 1 D15
+bit 180 C 0 D15
+bit 179 O 1 D15 180 0 Z
+bit 178 C 0 A15
+bit 177 O 1 A15 178 0 Z
+bit 176 I 1 D16
+bit 175 C 0 D16
+bit 174 O 1 D16 175 0 Z
+bit 173 C 0 A16
+bit 172 O 1 A16 173 0 Z
+bit 171 I 1 D17
+bit 170 C 0 D17
+bit 169 O 1 D17 170 0 Z
+bit 168 C 0 A17
+bit 167 O 1 A17 168 0 Z
+bit 166 I 1 D18
+bit 165 C 0 D18
+bit 164 O 1 D18 165 0 Z
+bit 163 C 0 A18
+bit 162 O 1 A18 163 0 Z
+bit 161 I 1 D19
+bit 160 C 0 D19
+bit 159 O 1 D19 160 0 Z
+bit 158 C 0 A19
+bit 157 O 1 A19 158 0 Z
+bit 156 I 1 D20
+bit 155 C 0 D20
+bit 154 O 1 D20 155 0 Z
+bit 153 C 0 A20
+bit 152 O 1 A20 153 0 Z
+bit 151 I 1 D21
+bit 150 C 0 D21
+bit 149 O 1 D21 150 0 Z
+bit 148 C 0 A21
+bit 147 O 1 A21 148 0 Z
+bit 146 I 1 D22
+bit 145 C 0 D22
+bit 144 O 1 D22 145 0 Z
+bit 143 C 0 A22
+bit 142 O 1 A22 143 0 Z
+bit 141 I 1 D23
+bit 140 C 0 D23
+bit 139 O 1 D23 140 0 Z
+bit 138 C 0 A23
+bit 137 O 1 A23 138 0 Z
+bit 136 I 1 D24
+bit 135 C 0 D24
+bit 134 O 1 D24 135 0 Z
+bit 133 C 0 A24
+bit 132 O 1 A24 133 0 Z
+bit 131 I 1 D25
+bit 130 C 0 D25
+bit 129 O 1 D25 130 0 Z
+bit 128 I 1 nSCS0
+bit 127 C 0 nSCS0
+bit 126 O 1 nSCS0 127 0 Z
+bit 125 I 1 D26
+bit 124 C 0 D26
+bit 123 O 1 D26 124 0 Z
+bit 122 I 1 nSCS1
+bit 121 C 0 nSCS1
+bit 120 O 1 nSCS1 121 0 Z
+bit 119 I 1 D27
+bit 118 C 0 D27
+bit 117 O 1 D27 118 0 Z
+bit 116 I 1 nSCS2
+bit 115 C 0 nSCS2
+bit 114 O 1 nSCS2 115 0 Z
+bit 113 I 1 D28
+bit 112 C 0 D28
+bit 111 O 1 D28 112 0 Z
+bit 110 I 1 nSCS3
+bit 109 C 0 nSCS3
+bit 108 O 1 nSCS3 109 0 Z
+bit 107 I 1 D29
+bit 106 C 0 D29
+bit 105 O 1 D29 106 0 Z
+bit 104 C 0 nSWE
+bit 103 O 1 nSWE 104 0 Z
+bit 102 I 1 D30
+bit 101 C 0 D30
+bit 100 O 1 D30 101 0 Z
+bit 99 I 1 nCAS
+bit 98 C 0 nCAS
+bit 97 O 1 nCAS 98 0 Z
+bit 96 I 1 D31
+bit 95 C 0 D31
+bit 94 O 1 D31 95 0 Z
+bit 93 I 1 nRAS
+bit 92 C 0 nRAS
+bit 91 O 1 nRAS 92 0 Z
+bit 90 I 1 SCKEN3
+bit 89 C 0 SCKEN3
+bit 88 O 1 SCKEN3 89 0 Z
+bit 87 I 1 SCLK
+bit 86 C 0 SCLK
+bit 85 O 1 SCLK 86 0 Z
+bit 84 C 0 CS6
+bit 83 O 1 CS6 84 0 Z
+bit 82 C 0 CS7
+bit 81 O 1 CS7 82 0 Z
+bit 80 C 0 nWE3
+bit 79 O 1 nWE3 80 0 Z
+bit 78 I 1 DQM0
+bit 77 C 0 DQM0
+bit 76 O 1 DQM0 77 0 Z
+bit 75 I 1 DQM1
+bit 74 C 0 DQM1
+bit 73 O 1 DQM1 74 0 Z
+bit 72 I 1 DQM2
+bit 71 C 0 DQM2
+bit 70 O 1 DQM2 71 0 Z
+bit 69 C 0 DQM3
+bit 68 O 1 DQM3 69 0 Z
+bit 67 C 0 nOE
+bit 66 O 1 nOE 67 0 Z
+bit 65 I 1 nWE0
+bit 64 C 0 nWE0
+bit 63 O 1 nWE0 64 0 Z
+bit 62 I 1 A25
+bit 61 C 0 A25
+bit 60 O 1 A25 61 0 Z
+bit 59 I 1 A26
+bit 58 C 0 A26
+bit 57 O 1 A26 58 0 Z
+bit 56 C 0 A27
+bit 55 O 1 A27 56 0 Z
+bit 54 I 1 PWMEN0
+bit 53 C 0 PWMEN0
+bit 52 O 1 PWMEN0 53 0 Z
+bit 51 I 1 PWMEN1
+bit 50 C 0 PWMEN1
+bit 49 O 1 PWMEN1 50 0 Z
+bit 48 I 1 PWM0
+bit 47 C 0 PWM0
+bit 46 O 1 PWM0 47 0 Z
+bit 45 I 1 PWM1
+bit 44 C 0 PWM1
+bit 43 O 1 PWM1 44 0 Z
+bit 42 I 1 PF0
+bit 41 C 0 PF0
+bit 40 O 1 PF0 41 0 Z
+bit 39 I 1 PF1
+bit 38 C 0 PF1
+bit 37 O 1 PF1 38 0 Z
+bit 36 I 1 PF2
+bit 35 C 0 PF2
+bit 34 O 1 PF2 35 0 Z
+bit 33 I 1 PF4
+bit 32 C 0 PF4
+bit 31 O 1 PF4 32 0 Z
+bit 30 I 1 PF5
+bit 29 C 0 PF5
+bit 28 O 1 PF5 29 0 Z
+bit 27 I 1 PF6
+bit 26 C 0 PF6
+bit 25 O 1 PF6 26 0 Z
+bit 24 I 1 PF7
+bit 23 C 0 PF7
+bit 22 O 1 PF7 23 0 Z
+bit 21 I 1 AC97CLK
+bit 20 C 0 AC97CLK
+bit 19 O 1 AC97CLK 20 0 Z
+bit 18 I 1 PF3
+bit 17 C 0 PF3
+bit 16 O 1 PF3 17 0 Z
+bit 15 C 0 AC97OUT
+bit 14 O 1 AC97OUT 15 0 Z
+bit 13 C 0 AC97SYNC
+bit 12 O 1 AC97SYNC 13 0 Z
+bit 11 I 1 AC97IN
+bit 10 C 0 AC97IN
+bit 9 O 1 AC97IN 10 0 Z
+bit 8 I 1 MMCCLK
+bit 7 C 0 MMCCLK
+bit 6 O 1 MMCCLK 7 0 Z
+bit 5 I 1 MMCCMD
+bit 4 C 0 MMCCMD
+bit 3 O 1 MMCCMD 4 0 Z
+bit 2 I 1 MMCDATA
+bit 1 C 0 MMCDATA
+bit 0 O 1 MMCDATA 1 0 Z

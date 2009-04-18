@@ -1,0 +1,992 @@
+#
+# $Id$
+#
+# JTAG declarations for Hitachi HD64465BP/HD64465BQ
+# Copyright (C) 2003 Elcom s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2003.
+#
+# Documentation:
+# [1] Hitachi Ltd., "Windows CE Intelligent Peripheral Controller
+#     HD64465 User's Manual", 03/08/01, Rev. 3.0, ADE-602-168B
+#
+
+# Test Mode (see Table 4.3 in [1])
+signal	TST
+signal	TDI
+signal	TDO
+signal	TMS
+signal	TCK
+signal	TRST
+
+# CPU interface (see Table 4.4 in [1])
+signal	CKIO
+signal	A0
+signal	A1
+signal	A2
+signal	A3
+signal	A4
+signal	A5
+signal	A6
+signal	A7
+signal	A8
+signal	A9
+signal	A10
+signal	A11
+signal	A12
+signal	A13
+signal	A14
+signal	A15
+signal	A16
+signal	A17
+signal	A18
+signal	A19
+signal	A20
+signal	A21
+signal	A22
+signal	A23
+signal	A24
+signal	A25
+signal	D0
+signal	D1
+signal	D2
+signal	D3
+signal	D4
+signal	D5
+signal	D6
+signal	D7
+signal	D8
+signal	D9
+signal	D10
+signal	D11
+signal	D12
+signal	D13
+signal	D14
+signal	D15
+signal	D16
+signal	D17
+signal	D18
+signal	D19
+signal	D20
+signal	D21
+signal	D22
+signal	D23
+signal	D24
+signal	D25
+signal	D26
+signal	D27
+signal	D28
+signal	D29
+signal	D30
+signal	D31
+signal	nCS4
+signal	nWE0
+signal	nWE1
+signal	nWE2
+signal	nWE3
+signal	nRDWR
+signal	nRD
+signal	nRDY
+signal	nBS
+signal	nDREQ0
+signal	nDREQ1
+signal	DRAK0
+signal	DRAK1
+signal	nIRQ0
+signal	SH_MODE
+signal	nCE1B
+signal	nCE2B
+signal	nCE1A
+signal	nCE2A
+signal	nIOIS16
+
+# PCMCIA 0 (see Table 4.5 in [1])
+signal	PCC0A0
+signal	PCC0A1
+signal	PCC0A2
+signal	PCC0A3
+signal	PCC0A4
+signal	PCC0A5
+signal	PCC0A6
+signal	PCC0A7
+signal	PCC0A8
+signal	PCC0A9
+signal	PCC0A10
+signal	PCC0A11
+signal	PCC0A12
+signal	PCC0A13
+signal	PCC0A14
+signal	PCC0A15
+signal	PCC0A16
+signal	PCC0A17
+signal	PCC0A18
+signal	PCC0A19
+signal	PCC0A20
+signal	PCC0A21
+signal	PCC0A22
+signal	PCC0A23
+signal	PCC0A24
+signal	PCC0A25
+signal	PCC0D0
+signal	PCC0D1
+signal	PCC0D2
+signal	PCC0D3
+signal	PCC0D4
+signal	PCC0D5
+signal	PCC0D6
+signal	PCC0D7
+signal	PCC0D8
+signal	PCC0D9
+signal	PCC0D10
+signal	PCC0D11
+signal	PCC0D12
+signal	PCC0D13
+signal	PCC0D14
+signal	PCC0D15
+signal	nPCC0CE1B
+signal	nPCC0CE2B
+signal	nRDB
+signal	nWEB
+signal	nPCC0ICIORDB
+signal	nPCC0ICIOWRB
+signal	PCC0RESET
+signal	nPCC0WAIT
+signal	nPCC0WP
+signal	PCC0RDY
+signal	PCC0BVD1
+signal	PCC0BVD2
+signal	nPCC0CD1
+signal	nPCC0CD2
+signal	nPCC0VS1
+signal	nPCC0VS2
+signal	nPCC0REG
+signal	VCC0SEL1
+signal	VCC0SEL0
+signal	VCC0VPP1
+signal	VCC0VPP0
+
+# PCMCIA 1 (see Table 4.6 in [1])
+signal	PCC1A0
+signal	PCC1A1
+signal	PCC1A2
+signal	PCC1A3
+signal	PCC1A4
+signal	PCC1A5
+signal	PCC1A6
+signal	PCC1A7
+signal	PCC1A8
+signal	PCC1A9
+signal	PCC1A10
+signal	PCC1A11
+signal	PCC1A12
+signal	PCC1A13
+signal	PCC1A14
+signal	PCC1A15
+signal	PCC1A16
+signal	PCC1A17
+signal	PCC1A18
+signal	PCC1A19
+signal	PCC1A20
+signal	PCC1A21
+signal	PCC1A22
+signal	PCC1A23
+signal	PCC1A24
+signal	PCC1A25
+signal	PCC1D0
+signal	PCC1D1
+signal	PCC1D2
+signal	PCC1D3
+signal	PCC1D4
+signal	PCC1D5
+signal	PCC1D6
+signal	PCC1D7
+signal	PCC1D8
+signal	PCC1D9
+signal	PCC1D10
+signal	PCC1D11
+signal	PCC1D12
+signal	PCC1D13
+signal	PCC1D14
+signal	PCC1D15
+signal	nPCC1CE1A
+signal	nPCC1CE2A
+signal	nRDA
+signal	nWEA
+signal	nPCC1ICIORDA
+signal	nPCC1ICIOWRA
+signal	PCC1RESET
+signal	nPCC1WAIT
+signal	nPCC1WP
+signal	PCC1RDY
+signal	PCC1BVD1
+signal	PCC1BVD2
+signal	nPCC1CD1
+signal	nPCC1CD2
+signal	nPCC1VS1
+signal	nPCC1VS2
+signal	nPCC1REG
+signal	VCC1SEL1
+signal	VCC1SEL0
+signal	VCC1VPP1
+signal	VCC1VPP0
+
+# UART 0 (see Table 4.7 in [1])
+signal	TXD0
+signal	RXD0
+signal	nRTS0
+signal	nCTS0
+signal	nDTR0
+signal	nDSR0
+signal	nDCD0
+signal	nRI0
+
+# IrDA (see Table 4.8 in [1])
+signal	MODSEL
+signal	TXD
+signal	nRX
+
+# Printer Interface (see Table 4.9 in [1])
+signal	nSTB
+signal	nAFD
+signal	nERR
+signal	nINIT
+signal	nSLIN
+signal	nACK
+signal	BUSY
+signal	PE
+signal	SLCT
+signal	PPD0
+signal	PPD1
+signal	PPD2
+signal	PPD3
+signal	PPD4
+signal	PPD5
+signal	PPD6
+signal	PPD7
+
+# AFE Interface (see Table 4.10 in [1])
+signal	DOUT
+signal	DIN
+signal	SCLK
+signal	HC1
+signal	FS
+signal	nAFERST
+signal	nAFEPDN
+signal	MCLKO
+signal	OFFHOOK
+signal	RING
+
+# CODEC Interface (see Table 4.11 in [1])
+signal	ACCLK
+signal	nACRST
+signal	nACPD
+signal	SIBDIN
+signal	SIBCLK
+signal	SIBDOUT
+signal	SIBSYNC
+
+# USB Interface (see Table 4.12 in [1])
+signal	nUSBPEN
+signal	nUSBOVR
+signal	USBD1P
+signal	USBD1M
+signal	USBD2P
+signal	USBD2M
+
+# Keyboard Interface (see Table 4.13 in [1])
+signal	nKBCS
+signal	nXIOW
+signal	nXIOR
+signal	KBIRQ0
+signal	KBIRQ1
+
+# IO Port A (see Table 4.14 in [1])
+signal	PA0
+signal	PA1
+signal	PA2
+signal	PA3
+signal	PA4
+signal	PA5
+signal	PA6
+signal	PA7
+
+# IO Port B (see Table 4.15 in [1])
+signal	PB0
+signal	PB1
+signal	PB2
+signal	PB3
+signal	PB4
+signal	PB5
+signal	PB6
+signal	PB7
+
+# IO Port C (see Table 4.16 in [1])
+signal	PC0
+signal	PC1
+signal	PC2
+signal	PC3
+signal	PC4
+signal	PC5
+signal	PC6
+signal	PC7
+
+# IO Port D (see Table 4.17 in [1])
+signal	PD0
+signal	PD1
+signal	PD2
+signal	PD3
+signal	PD4
+signal	PD5
+signal	PD6
+signal	PD7
+
+# IO Port E (see Table 4.18 in [1])
+signal	PE0
+signal	PE1
+signal	PE2
+signal	PE3
+signal	PE4
+signal	PE5
+signal	PE6
+signal	PE7
+
+# 10-bit ADC Interface (see Table 4.19 in [1])
+signal	TSMX
+signal	TSMY
+signal	TSPX
+signal	TSPY
+
+# PS/2 Interface (see Table 4.20 in [1])
+signal	KBCK
+signal	KBDATA
+signal	MSCK
+signal	MSDATA
+
+# System Reset Interface (see Table 4.21 in [1])
+signal	nRESETPI
+signal	nRESETMI
+signal	nRESETPO
+signal	nRESETMO
+
+# Crystal Interface (see Table 4.22 in [1])
+signal	AFECK
+signal	AFECKE
+signal	UCK
+signal	UCKE
+
+# Miscellaneous Interface (see Table 4.23 in [1])
+signal	PWM0
+signal	PWM1
+signal	P80LE
+
+# No Connected Pins (see Table 4.24 in [1])
+signal	NC(1)
+signal	NC(2)
+signal	NC(3)
+signal	NC(4)
+signal	NC(5)
+signal	NC(6)
+signal	NC(7)
+signal	NC(8)
+signal	NC(9)
+signal	NC(10)
+signal	NC(11)
+signal	NC(12)
+signal	NC(13)
+signal	NC(14)
+
+# Power/Ground (see Tabe 4.25 in [1])
+signal	VSS
+signal	VCC
+signal	VCC5
+signal	VCCA
+signal	VCCB
+signal	AVCC1
+signal	AVSS1
+signal	AVCC2
+signal	AVSS2
+signal	AVCC3
+signal	AVSS3
+signal	AVCC4
+signal	AVSS4
+signal	AVCC5
+signal	AVCC6
+signal	AVSS6
+
+# mandatory data registers
+register	BSR	550
+register	BR	1
+
+# instructions
+instruction length 3
+# mandatory instructions
+instruction BYPASS		111	BR
+instruction EXTEST		000	BSR
+instruction SAMPLE/PRELOAD	001	BSR
+
+# boundary scan register
+bit 549 I ? nBS
+bit 548 I ? RING
+bit 547 I ? FS
+bit 546 I ? SCLK
+bit 545 I ? DIN
+bit 544 O ? nAFERST
+bit 543 O ? nAFEPDN
+bit 542 O ? HC1 541 0 Z
+bit 541 C 0 .
+bit 540 O ? OFFHOOK 541 0 Z
+bit 539 O ? MCLKO 541 0 Z
+bit 538 O ? DOUT 541 0 Z
+bit 537 O ? PA0 535 0 Z
+bit 536 I ? PA0
+bit 535 C 0 .
+bit 534 O ? PA1 532 0 Z
+bit 533 I ? PA1
+bit 532 C 0 .
+bit 531 O ? PA2 529 0 Z
+bit 530 I ? PA2
+bit 529 C 0 .
+bit 528 O ? PA3 526 0 Z
+bit 527 I ? PA3
+bit 526 C 0 .
+bit 525 O ? PA4 523 0 Z
+bit 524 I ? PA4
+bit 523 C 0 .
+bit 522 O ? PA5 520 0 Z
+bit 521 I ? PA5
+bit 520 C 0 .
+bit 519 O ? PA6 517 0 Z
+bit 518 I ? PA6
+bit 517 C 0 .
+bit 516 O ? PA7 514 0 Z
+bit 515 I ? PA7
+bit 514 C 0 .
+bit 513 O ? nXIOW
+bit 512 O ? nXIOR
+bit 511 O ? nKBCS
+bit 510 I ? KBIRQ0
+bit 509 I ? KBIRQ1
+bit 508 O ? P80LE
+bit 507 I ? CKIO
+bit 506 I ? nRESETPI
+bit 505 I ? SH_MODE
+bit 504 I ? A12
+bit 503 I ? A11
+bit 502 I ? A10
+bit 501 I ? A9
+bit 500 I ? A8
+bit 499 I ? A7
+bit 498 I ? A6
+bit 497 I ? A5
+bit 496 I ? A4
+bit 495 I ? A3
+bit 494 I ? A2
+bit 493 I ? A1
+bit 492 I ? A0
+bit 491 O ? D31 489 0 Z
+bit 490 I ? D31
+bit 489 C 0 .
+bit 488 O ? D30 489 0 Z
+bit 487 I ? D30
+bit 486 O ? D29 489 0 Z
+bit 485 I ? D29
+bit 484 O ? D28 489 0 Z
+bit 483 I ? D28
+bit 482 O ? D27 489 0 Z
+bit 481 I ? D27
+bit 480 O ? D26 489 0 Z
+bit 479 I ? D26
+bit 478 O ? D25 489 0 Z
+bit 477 I ? D25
+bit 476 O ? D24 489 0 Z
+bit 475 I ? D24
+bit 474 O ? D15 472 0 Z
+bit 473 I ? D15
+bit 472 C 0 .
+bit 471 O ? D14 472 0 Z
+bit 470 I ? D14
+bit 469 O ? D13 472 0 Z
+bit 468 I ? D13
+bit 467 O ? D12 472 0 Z
+bit 466 I ? D12
+bit 465 O ? D11 472 0 Z
+bit 464 I ? D11
+bit 463 O ? D10 472 0 Z
+bit 462 I ? D10
+bit 461 O ? D9 472 0 Z
+bit 460 I ? D9
+bit 459 O ? D8 472 0 Z
+bit 458 I ? D8
+bit 457 O ? D23 455 0 Z
+bit 456 I ? D23
+bit 455 C 0 .
+bit 454 O ? D22 455 0 Z
+bit 453 I ? D22
+bit 452 O ? D21 455 0 Z
+bit 451 I ? D21
+bit 450 O ? D20 455 0 Z
+bit 449 I ? D20
+bit 448 O ? D19 455 0 Z
+bit 447 I ? D19
+bit 446 O ? D18 455 0 Z
+bit 445 I ? D18
+bit 444 O ? D17 455 0 Z
+bit 443 I ? D17
+bit 442 O ? D16 455 0 Z
+bit 441 I ? D16
+bit 440 O ? D7 438 0 Z
+bit 439 I ? D7
+bit 438 C 0 .
+bit 437 O ? D6 438 0 Z
+bit 436 I ? D6
+bit 435 O ? D5 438 0 Z
+bit 434 I ? D5
+bit 433 O ? D4 438 0 Z
+bit 432 I ? D4
+bit 431 O ? D3 438 0 Z
+bit 430 I ? D3
+bit 429 O ? D2 438 0 Z
+bit 428 I ? D2
+bit 427 O ? D1 438 0 Z
+bit 426 I ? D1
+bit 425 O ? D0 438 0 Z
+bit 424 I ? D0
+bit 423 O ? nIRQ0
+bit 422 O ? nRDY 421 0 Z
+bit 421 C 0 .
+bit 420 I ? DRAK1
+bit 419 O ? nDREQ1
+bit 418 I ? DRAK0
+bit 417 O ? nDREQ0
+bit 416 I ? A13
+bit 415 I ? A14
+bit 414 I ? A15
+bit 413 I ? A16
+bit 412 I ? A17
+bit 411 I ? A18
+bit 410 I ? A19
+bit 409 I ? A20
+bit 408 I ? A21
+bit 407 I ? A22
+bit 406 I ? A23
+bit 405 I ? A24
+bit 404 I ? A25
+bit 403 I ? nCS4
+bit 402 I ? nRDWR
+bit 401 I ? nRD
+bit 400 I ? nWE0
+bit 399 I ? nWE1
+bit 398 I ? nWE2
+bit 397 I ? nWE3
+bit 396 I ? nCE2A
+bit 395 I ? nCE1A
+bit 394 I ? nCE2B
+bit 393 I ? nCE1B
+bit 392 O ? nIOIS16 391 0 Z
+bit 391 C 0 .
+bit 390 O ? VCC0SEL1
+bit 389 O ? VCC0SEL0
+bit 388 O ? VCC0VPP1
+bit 387 O ? VCC0VPP0
+bit 386 I ? nPCC0CD2
+bit 385 I ? nPCC0CD1
+bit 384 I ? nPCC0VS2
+bit 383 I ? nPCC0VS1
+bit 382 I ? PCC0BVD2
+bit 381 I ? PCC0BVD1
+bit 380 I ? PCC0RDY
+bit 379 I ? nPCC0WP
+bit 378 I ? nPCC0WAIT
+bit 377 O ? PCC0D0 375 0 Z
+bit 376 I ? PCC0D0
+bit 375 C 0 .
+bit 374 O ? PCC0D8 372 0 Z
+bit 373 I ? PCC0D8
+bit 372 C 0 .
+bit 371 O ? PCC0D1 375 0 Z
+bit 370 I ? PCC0D1
+bit 369 O ? PCC0D9 372 0 Z
+bit 368 I ? PCC0D9
+bit 367 O ? PCC0D2 375 0 Z
+bit 366 I ? PCC0D2
+bit 365 O ? PCC0D10 372 0 Z
+bit 364 I ? PCC0D10
+bit 363 O ? PCC0D3 375 0 Z
+bit 362 I ? PCC0D3
+bit 361 O ? PCC0D11 372 0 Z
+bit 360 I ? PCC0D11
+bit 359 O ? PCC0A25 358 0 Z
+bit 358 C 0 .
+bit 357 O ? PCC0A24 358 0 Z
+bit 356 O ? PCC0A23 358 0 Z
+bit 355 O ? PCC0A22 358 0 Z
+bit 354 O ? PCC0A21 358 0 Z
+bit 353 O ? PCC0A20 358 0 Z
+bit 352 O ? PCC0A19 358 0 Z
+bit 351 O ? PCC0A18 358 0 Z
+bit 350 O ? PCC0A17 358 0 Z
+bit 349 O ? PCC0A16 358 0 Z
+bit 348 O ? PCC0A15 358 0 Z
+bit 347 O ? PCC0A14 358 0 Z
+bit 346 O ? PCC0A13 358 0 Z
+bit 345 O ? PCC0RESET 358 0 Z
+bit 344 O ? nPCC0ICIORDB 358 0 Z
+bit 343 O ? nPCC0ICIOWRB 358 0 Z
+bit 342 O ? nWEB 358 0 Z
+bit 341 O ? nRDB 358 0 Z
+bit 340 O ? nPCC0CE1B 358 0 Z
+bit 339 O ? nPCC0CE2B 358 0 Z
+bit 338 O ? nPCC0REG 358 0 Z
+bit 337 O ? PCC0A12 358 0 Z
+bit 336 O ? PCC0A11 358 0 Z
+bit 335 O ? PCC0A10 358 0 Z
+bit 334 O ? PCC0A9 358 0 Z
+bit 333 O ? PCC0A8 358 0 Z
+bit 332 O ? PCC0A7 358 0 Z
+bit 331 O ? PCC0A6 358 0 Z
+bit 330 O ? PCC0A5 358 0 Z
+bit 329 O ? PCC0A4 358 0 Z
+bit 328 O ? PCC0A3 358 0 Z
+bit 327 O ? PCC0A2 358 0 Z
+bit 326 O ? PCC0A1 358 0 Z
+bit 325 O ? PCC0A0 358 0 Z
+bit 324 O ? PCC0D12 372 0 Z
+bit 323 I ? PCC0D12
+bit 322 O ? PCC0D4 375 0 Z
+bit 321 I ? PCC0D4
+bit 320 O ? PCC0D13 372 0 Z
+bit 319 I ? PCC0D13
+bit 318 O ? PCC0D5 375 0 Z
+bit 317 I ? PCC0D5
+bit 316 O ? PCC0D14 372 0 Z
+bit 315 I ? PCC0D14
+bit 314 O ? PCC0D6 375 0 Z
+bit 313 I ? PCC0D6
+bit 312 O ? PCC0D15 372 0 Z
+bit 311 I ? PCC0D15
+bit 310 O ? PCC0D7 375 0 Z
+bit 309 I ? PCC0D7
+bit 308 O ? PCC1A15 307 0 Z
+bit 307 C 0 .
+bit 306 O ? PCC1A14 307 0 Z
+bit 305 O ? PCC1A13 307 0 Z
+bit 304 O ? PCC1A12 307 0 Z
+bit 303 O ? PCC1A11 307 0 Z
+bit 302 O ? PCC1A10 307 0 Z
+bit 301 O ? PCC1A9 307 0 Z
+bit 300 O ? PCC1A8 307 0 Z
+bit 299 O ? PCC1A7 307 0 Z
+bit 298 O ? PCC1A6 307 0 Z
+bit 297 O ? PCC1A5 307 0 Z
+bit 296 O ? PCC1A4 307 0 Z
+bit 295 O ? PCC1A3 307 0 Z
+bit 294 O ? PCC1A2 307 0 Z
+bit 293 O ? PCC1A1 307 0 Z
+bit 292 O ? PCC1A0 307 0 Z
+bit 291 O ? PCC1D7 289 0 Z
+bit 290 I ? PCC1D7
+bit 289 C 0 .
+bit 288 O ? PCC1D15 286 0 Z
+bit 287 I ? PCC1D15
+bit 286 C 0 .
+bit 285 O ? PCC1D6 289 0 Z
+bit 284 I ? PCC1D6
+bit 283 O ? PCC1D14 286 0 Z
+bit 282 I ? PCC1D14
+bit 281 O ? PCC1D5 289 0 Z
+bit 280 I ? PCC1D5
+bit 279 O ? PCC1D13 286 0 Z
+bit 278 I ? PCC1D13
+bit 277 O ? PCC1D4 289 0 Z
+bit 276 I ? PCC1D4
+bit 275 O ? PCC1D12 286 0 Z
+bit 274 I ? PCC1D12
+bit 273 O ? PCC1D3 289 0 Z
+bit 272 I ? PCC1D3
+bit 271 O ? PCC1D11 286 0 Z
+bit 270 I ? PCC1D11
+bit 269 O ? PCC1D2 289 0 Z
+bit 268 I ? PCC1D2
+bit 267 O ? PCC1D10 286 0 Z
+bit 266 I ? PCC1D10
+bit 265 O ? PCC1D1 289 0 Z
+bit 264 I ? PCC1D1
+bit 263 O ? PCC1D9 286 0 Z
+bit 262 I ? PCC1D9
+bit 261 O ? PCC1D0 289 0 Z
+bit 260 I ? PCC1D0
+bit 259 O ? PCC1D8 286 0 Z
+bit 258 I ? PCC1D8
+bit 257 O ? PCC1A16 307 0 Z
+bit 256 O ? PCC1A17 307 0 Z
+bit 255 O ? PCC1A18 307 0 Z
+bit 254 O ? PCC1A19 307 0 Z
+bit 253 O ? PCC1A20 307 0 Z
+bit 252 O ? PCC1A21 307 0 Z
+bit 251 O ? PCC1A22 307 0 Z
+bit 250 O ? PCC1A23 307 0 Z
+bit 249 O ? PCC1A24 307 0 Z
+bit 248 O ? PCC1A25 307 0 Z
+bit 247 O ? nPCC1REG 307 0 Z
+bit 246 O ? nPCC1CE2A 307 0 Z
+bit 245 O ? nPCC1CE1A 307 0 Z
+bit 244 O ? nRDA 307 0 Z
+bit 243 O ? nWEA 307 0 Z
+bit 242 O ? nPCC1ICIORDA 307 0 Z
+bit 241 O ? nPCC1ICIOWRA 307 0 Z
+bit 240 O ? PCC1RESET 307 0 Z
+bit 239 I ? nPCC1WAIT
+bit 238 I ? nPCC1WP
+bit 237 I ? PCC1RDY
+bit 236 I ? PCC1BVD1
+bit 235 I ? PCC1BVD2
+bit 234 I ? nPCC1VS1
+bit 233 I ? nPCC1VS2
+bit 232 I ? nPCC1CD1
+bit 231 I ? nPCC1CD2
+bit 230 O ? VCC1VPP0
+bit 229 O ? VCC1VPP1
+bit 228 O ? VCC1SEL0
+bit 227 O ? VCC1SEL1
+bit 226 O ? NC(14) 224 0 Z
+bit 225 I ? NC(14)
+bit 224 C 0 .
+bit 223 O ? NC(13) 221 0 Z
+bit 222 I ? NC(13)
+bit 221 C 0 .
+bit 220 O ? NC(12) 218 0 Z
+bit 219 I ? NC(12)
+bit 218 C 0 .
+bit 217 O ? NC(11) 215 0 Z
+bit 216 I ? NC(11)
+bit 215 C 0 .
+bit 214 O ? NC(10) 212 0 Z
+bit 213 I ? NC(10)
+bit 212 C 0 .
+bit 211 O ? NC(9) 209 0 Z
+bit 210 I ? NC(9)
+bit 209 C 0 .
+bit 208 O ? NC(8) 206 0 Z
+bit 207 I ? NC(8)
+bit 206 C 0 .
+bit 205 O ? NC(7) 203 0 Z
+bit 204 I ? NC(7)
+bit 203 C 0 .
+bit 202 O ? NC(6) 200 0 Z
+bit 201 I ? NC(6)
+bit 200 C 0 .
+bit 199 O ? NC(5) 197 0 Z
+bit 198 I ? NC(5)
+bit 197 C 0 .
+bit 196 O ? NC(4) 194 0 Z
+bit 195 I ? NC(4)
+bit 194 C 0 .
+bit 193 O ? NC(3) 191 0 Z
+bit 192 I ? NC(3)
+bit 191 C 0 .
+bit 190 O ? NC(2) 188 0 Z
+bit 189 I ? NC(2)
+bit 188 C 0 .
+bit 187 O ? NC(1) 185 0 Z
+bit 186 I ? NC(1)
+bit 185 C 0 .
+bit 184 O ? PWM0 182 0 Z
+bit 183 I ? PWM0
+bit 182 C 0 .
+bit 181 O ? nRESETMI 179 0 Z
+bit 180 I ? nRESETMI
+bit 179 C 0 .
+bit 178 O ? nRESETPO 176 0 Z
+bit 177 I ? nRESETPO
+bit 176 C 0 .
+bit 175 O ? nRESETMO 173 0 Z
+bit 174 I ? nRESETMO
+bit 173 C 0 .
+bit 172 O ? PWM1 170 0 Z
+bit 171 I ? PWM1
+bit 170 C 0 .
+bit 169 O ? KBCK 167 0 Z
+bit 168 I ? KBCK
+bit 167 C 0 .
+bit 166 O ? KBDATA 164 0 Z
+bit 165 I ? KBDATA
+bit 164 C 0 .
+bit 163 O ? MSCK 161 0 Z
+bit 162 I ? MSCK
+bit 161 C 0 .
+bit 160 O ? MSDATA 158 0 Z
+bit 159 I ? MSDATA
+bit 158 C 0 .
+bit 157 O ? PE7 155 0 Z
+bit 156 I ? PE7
+bit 155 C 0 .
+bit 154 O ? PE6 152 0 Z
+bit 153 I ? PE6
+bit 152 C 0 .
+bit 151 O ? PE5 149 0 Z
+bit 150 I ? PE5
+bit 149 C 0 .
+bit 148 O ? PE4 146 0 Z
+bit 147 I ? PE4
+bit 146 C 0 .
+bit 145 O ? PE3 143 0 Z
+bit 144 I ? PE3
+bit 143 C 0 .
+bit 142 O ? PE2 140 0 Z
+bit 141 I ? PE2
+bit 140 C 0 .
+bit 139 O ? PE1 137 0 Z
+bit 138 I ? PE1
+bit 137 C 0 .
+bit 136 O ? PE0 134 0 Z
+bit 135 I ? PE0
+bit 134 C 0 .
+bit 133 O ? PD7 131 0 Z
+bit 132 I ? PD7
+bit 131 C 0 .
+bit 130 O ? PD6 128 0 Z
+bit 129 I ? PD6
+bit 128 C 0 .
+bit 127 O ? PD5 125 0 Z
+bit 126 I ? PD5
+bit 125 C 0 .
+bit 124 O ? PD4 122 0 Z
+bit 123 I ? PD4
+bit 122 C 0 .
+bit 121 O ? PD3 119 0 Z
+bit 120 I ? PD3
+bit 119 C 0 .
+bit 118 O ? PD2 116 0 Z
+bit 117 I ? PD2
+bit 116 C 0 .
+bit 115 O ? PD1 113 0 Z
+bit 114 I ? PD1
+bit 113 C 0 .
+bit 112 O ? PD0 110 0 Z
+bit 111 I ? PD0
+bit 110 C 0 .
+bit 109 O ? PC7 107 0 Z
+bit 108 I ? PC7
+bit 107 C 0 .
+bit 106 O ? PC6 104 0 Z
+bit 105 I ? PC6
+bit 104 C 0 .
+bit 103 O ? PC5 101 0 Z
+bit 102 I ? PC5
+bit 101 C 0 .
+bit 100 O ? PC4 98 0 Z
+bit 99 I ? PC4
+bit 98 C 0 .
+bit 97 I ? RXD0
+bit 96 I ? nCTS0
+bit 95 I ? nDSR0
+bit 94 I ? nDCD0
+bit 93 I ? nRI0
+bit 92 O ? TXD0
+bit 91 O ? nRTS0
+bit 90 O ? nDTR0
+bit 89 O ? PC3 87 0 Z
+bit 88 I ? PC3
+bit 87 C 0 .
+bit 86 O ? PC2 84 0 Z
+bit 85 I ? PC2
+bit 84 C 0 .
+bit 83 O ? PC1 81 0 Z
+bit 82 I ? PC1
+bit 81 C 0 .
+bit 80 O ? PC0 78 0 Z
+bit 79 I ? PC0
+bit 78 C 0 .
+bit 77 O ? nUSBPEN 75 0 Z
+bit 76 I ? nUSBPEN
+bit 75 C 0 .
+bit 74 I ? nUSBOVR
+bit 73 O ? MODSEL 71 0 Z
+bit 72 I ? MODSEL
+bit 71 C 0 .
+bit 70 O ? TXD
+bit 69 O ? nRX 67 0 Z
+bit 68 I ? nRX
+bit 67 C 0 .
+bit 66 O ? PPD0 64 0 Z
+bit 65 I ? PPD0
+bit 64 C 0 .
+bit 63 O ? PPD1 64 0 Z
+bit 62 I ? PPD1
+bit 61 O ? PPD2 64 0 Z
+bit 60 I ? PPD2
+bit 59 O ? PPD3 64 0 Z
+bit 58 I ? PPD3
+bit 57 O ? nINIT 56 0 Z
+bit 56 C 0 .
+bit 55 I ? nERR
+bit 54 O ? nAFD 56 0 Z
+bit 53 O ? nSTB 56 0 Z
+bit 52 I ? SLCT
+bit 51 I ? PE
+bit 50 I ? BUSY
+bit 49 I ? nACK
+bit 48 O ? nSLIN 56 0 Z
+bit 47 O ? PPD4 64 0 Z
+bit 46 I ? PPD4
+bit 45 O ? PPD5 64 0 Z
+bit 44 I ? PPD5
+bit 43 O ? PPD6 64 0 Z
+bit 42 I ? PPD6
+bit 41 O ? PPD7 64 0 Z
+bit 40 I ? PPD7
+bit 39 O ? PB0 37 0 Z
+bit 38 I ? PB0
+bit 37 C 0 .
+bit 36 O ? PB1 34 0 Z
+bit 35 I ? PB1
+bit 34 C 0 .
+bit 33 O ? PB2 31 0 Z
+bit 32 I ? PB2
+bit 31 C 0 .
+bit 30 O ? PB3 28 0 Z
+bit 29 I ? PB3
+bit 28 C 0 .
+bit 27 O ? PB4 25 0 Z
+bit 26 I ? PB4
+bit 25 C 0 .
+bit 24 O ? PB5 22 0 Z
+bit 23 I ? PB5
+bit 22 C 0 .
+bit 21 O ? PB6 19 0 Z
+bit 20 I ? PB6
+bit 19 C 0 .
+bit 18 O ? PB7 16 0 Z
+bit 17 I ? PB7
+bit 16 C 0 .
+bit 15 O ? nACPD 13 0 Z
+bit 14 I ? nACPD
+bit 13 C 0 .
+bit 12 O ? ACCLK 11 0 Z
+bit 11 C 0 .
+bit 10 I ? SIBDIN
+bit 9 O ? SIBCLK 7 0 Z
+bit 8 I ? SIBCLK
+bit 7 C 0 .
+bit 6 O ? SIBDOUT 5 0 Z
+bit 5 C 0 .
+bit 4 O ? SIBSYNC 2 0 Z
+bit 3 I ? SIBSYNC
+bit 2 C 0 .
+bit 1 O ? nACRST 0 0 Z
+bit 0 C 0 .

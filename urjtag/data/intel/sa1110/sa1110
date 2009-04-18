@@ -1,0 +1,516 @@
+#
+# $Id$
+#
+# JTAG declarations for SA-1110
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
+#
+# Documentation:
+# [1] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
+#     Developer's Manual", October 2001, Order Number: 278240-004
+# [2] Intel Corporation, "Intel StrongARM SA-1110 Microprocessor
+#     Specification Update", December 2001, Order Number: 278259-023
+#
+
+# see Table 14-2 in [1]
+signal	A0		D12
+signal	A1		C12
+signal	A2		B12
+signal	A3		A13
+signal	A4		C13
+signal	A5		B13
+signal	A6		A14
+signal	A7		A15
+signal	A8		A16
+signal	A9		B15
+signal	A10		B14
+signal	A11		C14
+signal	A12		B16
+signal	A13		D13
+signal	A14		E13
+signal	A15		C16
+signal	A16		D15
+signal	A17		E14
+signal	A18		D16
+signal	A19		E15
+signal	A20		F14
+signal	A21		E16
+signal	A22		F15
+signal	A23		F13
+signal	A24		G13
+signal	A25		F16
+signal	BATT_FAULT	A4
+signal	nCAS0		J14
+signal	nCAS1		J15
+signal	nCAS2		K15
+signal	nCAS3		K13
+signal	nCS0		G14
+signal	nCS1		G15
+signal	nCS2		G16
+signal	nCS3		H14
+signal	nCS4		H15
+signal	nCS5		H16
+signal	D0		E4
+signal	D1		F4
+signal	D2		F2
+signal	D3		G2
+signal	D4		H1
+signal	D5		J4
+signal	D6		K1
+signal	D7		L1
+signal	D8		D2
+signal	D9		E2
+signal	D10		F1
+signal	D11		H6
+signal	D12		J6
+signal	D13		J1
+signal	D14		K4
+signal	D15		L4
+signal	D16		D1
+signal	D17		E1
+signal	D18		G4
+signal	D19		G1
+signal	D20		J2
+signal	D21		K2
+signal	D22		L3
+signal	D23		M2
+signal	D24		E3
+signal	D25		F3
+signal	D26		G3
+signal	D27		H4
+signal	D28		J3
+signal	D29		K3
+signal	D30		L2
+signal	D31		M1
+signal	GP0		T10
+signal	GP1		P10
+signal	GP2		R10
+signal	GP3		N10
+signal	GP4		T9
+signal	GP5		P9
+signal	GP6		R8
+signal	GP7		N8
+signal	GP8		P8
+signal	GP9		T7
+signal	GP10		P7
+signal	GP11		T6
+signal	GP12		R7
+signal	GP13		R6
+signal	GP14		P6
+signal	GP15		N6
+signal	GP16		T5
+signal	GP17		R5
+signal	GP18		P5
+signal	GP19		T4
+signal	GP20		R4
+signal	GP21		T3
+signal	GP22		R3
+signal	GP23		T2
+signal	GP24		P4
+signal	GP25		R2
+signal	GP26		T1
+signal	GP27		R1
+signal	nIOIS16		N13
+signal	L_BIAS		R11
+signal	L_FCLK		T14
+signal	L_LCLK		R14
+signal	L_PCLK		P11
+signal	LDD0		N12
+signal	LDD1		T11
+signal	LDD2		R12
+signal	LDD3		P12
+signal	LDD4		T12
+signal	LDD5		R13
+signal	LDD6		T13
+signal	LDD7		P13
+signal	nOE		M15
+signal	nPCE1		M16
+signal	nPCE2		N15
+signal	PEXTAL		A8
+signal	nPIOR		T16
+signal	nPIOW		R16
+signal	nPOE		R15
+signal	nPREG		N14
+signal	PSKTSEL		P16
+signal	nPWAIT		N16
+signal	nPWE		T16
+signal	PWR_EN		A3
+signal	PXTAL		B8
+signal	nRAS0		K16
+signal	nRAS1		L13
+signal	nRAS2		L14
+signal	nRAS3		L15
+signal	RD_nWR		J13
+signal	RDY		H13
+signal	nRESET		B7
+signal	nRESET_OUT	C7
+signal	ROM_SEL		D6		# typo in Table 14-2 in [1] ('ROMSEL' is bad pin name)
+signal	RXD_1		B11
+signal	RXD_2		B10
+signal	RXD_3		C10
+signal	RXD_C		B1
+signal	SCLK_C		A2
+signal	nSDCAS		L16
+signal	SDCKE0		N1
+signal	SDCKE1		N2
+signal	SDCLK0		P1
+signal	SDCLK1		N3
+signal	SDCLK2		M3
+signal	nSDRAS		M14
+signal	SFRM_C		B3
+signal	SMROM_EN	M4
+signal	TCK		C5
+signal	TCK_BYP		A6
+signal	TDI		A5
+signal	TDO		B5
+signal	TESTCLK		B6
+signal	TEXTAL		C9
+signal	TMS		C6
+signal	nTRST		B4
+signal	TXTAL		B9
+signal	TXD_1		A11
+signal	TXD_2		D10
+signal	TXD_3		A10
+signal	TXD_C		C2
+signal	UDC-		A12
+signal	UDC+		C11
+signal	VDD		A7 C1 C15 H3 J16 P3 P15 T8
+signal	VDD_FAULT	C4
+signal	VDDP		C8
+signal	VDDX1		D5 D9 D11 E6 E7 E8 E9 E10 E11 K10 K11 L10 L11 M6 M7 M8 M9 M10 M11 N7 N9 N11
+signal	VDDX2		E12 F5 F12 G5 G12 H5 H12 J5 J12 K5 K12 L5 L12 M5 M12 N4 N5
+signal	VDDX3		D7
+signal	VSS		A8 D3 D8 D14 H2 K14 P2 P14 R9
+signal	VSSX		A1 B2 C3 D4 E5 F6 F7 F8 F9 F10 F11 G6 G7 G8 G9 G10 G11 H7 H8 H9 H10 H11 J7 J8 J9 J10 J11 K6 K7 K8 K9 L6 L7 L8 L9
+signal	nWE		M13
+
+# mandatory data registers
+register	BSR	292	# Boundary Scan Register (see Table 16-2 in [1])
+register	BR	1	# Bypass Register
+# optional data registers
+register	DIR	32	# Device Identification Register
+
+# see 16.5 in [1]
+instruction length 5
+
+# mandatory instructions
+instruction EXTEST		00000	BSR
+instruction SAMPLE/PRELOAD	00001	BSR
+instruction BYPASS		11111	BR
+
+# optional instructions
+instruction CLAMP		00100	BR
+instruction HIGHZ		00101	BR
+instruction IDCODE		00110	DIR
+
+# see Table 16-2 in [1]
+bit 291 I ? BATT_FAULT
+bit 290 I ? VDD_FAULT
+bit 289 O 1 PWR_EN
+bit 288 C 0 SFRM_C
+bit 287 O ? SFRM_C 288 0 Z
+bit 286 I ? SFRM_C
+bit 285 C 0 SCLK_C
+bit 284 O ? SCLK_C 285 0 Z
+bit 283 I ? SCLK_C
+bit 282 C 0 RXD_C
+bit 281 O ? RXD_C 282 0 Z
+bit 280 I ? RXD_C
+bit 279 C 0 TXD_C
+bit 278 O ? TXD_C 279 0 Z
+bit 277 I ? TXD_C
+bit 276 O ? D0 212 1 Z
+bit 275 I ? D0
+bit 274 O ? D8 212 1 Z
+bit 273 I ? D8
+bit 272 O ? D16 212 1 Z
+bit 271 I ? D16
+bit 270 O ? D24 212 1 Z
+bit 269 I ? D24
+bit 268 O ? D1 212 1 Z
+bit 267 I ? D1
+bit 266 O ? D9 212 1 Z
+bit 265 I ? D9
+bit 264 O ? D17 212 1 Z
+bit 263 I ? D17
+bit 262 O ? D25 212 1 Z
+bit 261 I ? D25
+bit 260 O ? D2 212 1 Z
+bit 259 I ? D2
+bit 258 O ? D10 212 1 Z
+bit 257 I ? D10
+bit 256 O ? D18 212 1 Z
+bit 255 I ? D18
+bit 254 O ? D26 212 1 Z
+bit 253 I ? D26
+bit 252 O ? D3 212 1 Z
+bit 251 I ? D3
+bit 250 O ? D11 212 1 Z
+bit 249 I ? D11
+bit 248 O ? D19 212 1 Z
+bit 247 I ? D19
+bit 246 O ? D27 212 1 Z
+bit 245 I ? D27
+bit 244 O ? D4 212 1 Z
+bit 243 I ? D4
+bit 242 O ? D12 212 1 Z
+bit 241 I ? D12
+bit 240 O ? D20 212 1 Z
+bit 239 I ? D20
+bit 238 O ? D28 212 1 Z
+bit 237 I ? D28
+bit 236 O ? D5 212 1 Z
+bit 235 I ? D5
+bit 234 O ? D13 212 1 Z
+bit 233 I ? D13
+bit 232 O ? D21 212 1 Z
+bit 231 I ? D21
+bit 230 O ? D29 212 1 Z
+bit 229 I ? D29
+bit 228 O ? D6 212 1 Z
+bit 227 I ? D6
+bit 226 O ? D14 212 1 Z
+bit 225 I ? D14
+bit 224 O ? D22 212 1 Z
+bit 223 I ? D22
+bit 222 O ? D30 212 1 Z
+bit 221 I ? D30
+bit 220 O ? D7 212 1 Z
+bit 219 I ? D7
+bit 218 O ? D15 212 1 Z
+bit 217 I ? D15
+bit 216 O ? D23 212 1 Z
+bit 215 I ? D23
+bit 214 O ? D31 212 1 Z
+bit 213 I ? D31
+bit 212 C 1 D[31:0]
+bit 211 O 0 SDCLK2
+bit 210 O 1 SDCKE1
+bit 209 C 1 SDCLK1
+bit 208 O ? SDCLK1 209 1 Z	# error (bad name) in Table 16-2 in [1]
+bit 207 O 0 SDCLK0
+bit 206 O 0 SDCKE0
+bit 205 I ? SMROM_EN
+bit 204 C 0 GP27
+bit 203 O ? GP27 204 0 Z
+bit 202 I ? GP27
+bit 201 C 0 GP26
+bit 200 O ? GP26 201 0 Z
+bit 199 I ? GP26
+bit 198 C 0 GP25
+bit 197 O ? GP25 198 0 Z
+bit 196 I ? GP25
+bit 195 C 0 GP24
+bit 194 O ? GP24 195 0 Z
+bit 193 I ? GP24
+bit 192 C 0 GP23
+bit 191 O ? GP23 192 0 Z
+bit 190 I ? GP23
+bit 189 C 0 GP22
+bit 188 O ? GP22 189 0 Z
+bit 187 I ? GP22
+bit 186 C 0 GP21
+bit 185 O ? GP21 186 0 Z
+bit 184 I ? GP21
+bit 183 C 0 GP20
+bit 182 O ? GP20 183 0 Z
+bit 181 I ? GP20
+bit 180 C 0 GP19
+bit 179 O ? GP19 180 0 Z
+bit 178 I ? GP19
+bit 177 C 0 GP18
+bit 176 O ? GP18 177 0 Z
+bit 175 I ? GP18
+bit 174 C 0 GP17
+bit 173 O ? GP17 174 0 Z
+bit 172 I ? GP17
+bit 171 C 0 GP16
+bit 170 O ? GP16 171 0 Z
+bit 169 I ? GP16
+bit 168 C 0 GP15
+bit 167 O ? GP15 168 0 Z
+bit 166 I ? GP15
+bit 165 C 0 GP14
+bit 164 O ? GP14 165 0 Z
+bit 163 I ? GP14
+bit 162 C 0 GP13
+bit 161 O ? GP13 162 0 Z
+bit 160 I ? GP13
+bit 159 C 0 GP12
+bit 158 O ? GP12 159 0 Z
+bit 157 I ? GP12
+bit 156 C 0 GP11
+bit 155 O ? GP11 156 0 Z
+bit 154 I ? GP11
+bit 153 C 0 GP10
+bit 152 O ? GP10 153 0 Z
+bit 151 I ? GP10
+bit 150 C 0 GP9
+bit 149 O ? GP9 150 0 Z
+bit 148 I ? GP9
+bit 147 C 0 GP8
+bit 146 O ? GP8 147 0 Z
+bit 145 I ? GP8
+bit 144 C 0 GP7
+bit 143 O ? GP7 144 0 Z
+bit 142 I ? GP7
+bit 141 C 0 GP6
+bit 140 O ? GP6 141 0 Z
+bit 139 I ? GP6
+bit 138 C 0 GP5
+bit 137 O ? GP5 138 0 Z
+bit 136 I ? GP5
+bit 135 C 0 GP4
+bit 134 O ? GP4 135 0 Z
+bit 133 I ? GP4
+bit 132 C 0 GP3
+bit 131 O ? GP3 132 0 Z
+bit 130 I ? GP3
+bit 129 C 0 GP2
+bit 128 O ? GP2 129 0 Z
+bit 127 I ? GP2
+bit 126 C 0 GP1
+bit 125 O ? GP1 126 0 Z
+bit 124 I ? GP1
+bit 123 C 0 GP0
+bit 122 O ? GP0 123 0 Z
+bit 121 I ? GP0
+bit 120 C 0 L_BIAS
+bit 119 O ? L_BIAS 120 0 Z
+bit 118 I ? L_BIAS
+bit 117 C 0 L_PCLK
+bit 116 O ? L_PCLK 117 0 Z
+bit 115 I ? L_PCLK
+bit 114 C 0 LDD0
+bit 113 O ? LDD0 114 0 Z
+bit 112 I ? LDD0
+bit 111 C 0 LDD1
+bit 110 O ? LDD1 111 0 Z
+bit 109 I ? LDD1
+bit 108 C 0 LDD2
+bit 107 O ? LDD2 108 0 Z
+bit 106 I ? LDD2
+bit 105 C 0 LDD3
+bit 104 O ? LDD3 105 0 Z
+bit 103 I ? LDD3
+bit 102 C 0 LDD4
+bit 101 O ? LDD4 102 0 Z
+bit 100 I ? LDD4
+bit  99 C 0 LDD5
+bit  98 O ? LDD5 99 0 Z
+bit  97 I ? LDD5
+bit  96 C 0 LDD6
+bit  95 O ? LDD6 96 0 Z
+bit  94 I ? LDD6
+bit  93 C 0 LDD7
+bit  92 O ? LDD7 93 0 Z
+bit  91 I ? LDD7
+bit  90 C 0 L_LCLK
+bit  89 O ? L_LCLK 90 0 Z
+bit  88 I ? L_LCLK
+bit  87 C 0 L_FCLK
+bit  86 O ? L_FCLK 87 0 Z
+bit  85 I ? L_FCLK
+bit  84 O 0 nPOE
+bit  83 O 0 nPWE
+bit  82 O 0 nPIOR
+bit  81 O 0 nPIOW
+bit  80 O 0 PSKTSEL
+bit  79 I ? nIOIS16
+bit  78 I ? nPWAIT
+bit  77 O 0 nPREG
+bit  76 O 1 nPCE2
+bit  75 O 1 nPCE1
+bit  74 O 1 .
+bit  73 O 1 nWE 74 1 Z
+bit  72 O 0 nOE 74 1 Z
+bit  71 O 0 nSDRAS 74 1 Z
+bit  70 O 0 nSDCAS 74 1 Z
+bit  69 O 0 nRAS3
+bit  68 O 0 nRAS2
+bit  67 O 0 nRAS1
+bit  66 O 1 nRAS0 74 1 Z
+bit  65 O 1 nCAS3 74 1 Z
+bit  64 O 1 nCAS2 74 1 Z
+bit  63 O 1 nCAS1 74 1 Z
+bit  62 O 1 nCAS0 74 1 Z
+bit  61 O 0 RD_nWR
+bit  60 I ? RDY
+bit  59 O 1 nCS5
+bit  58 O 1 nCS4
+bit  57 O 1 nCS3
+bit  56 O 1 nCS2
+bit  55 O 1 nCS1
+bit  54 O 1 nCS0
+bit  53 O 0 A25 74 1 Z
+bit  52 O 0 A24 74 1 Z
+bit  51 O 0 A23 74 1 Z
+bit  50 O 0 A22 74 1 Z
+bit  49 O 0 A21 74 1 Z
+bit  48 O 0 A20 74 1 Z
+bit  47 O 0 A19 74 1 Z
+bit  46 O 0 A18 74 1 Z
+bit  45 O 0 A17 74 1 Z
+bit  44 O 0 A16 74 1 Z
+bit  43 O 0 A15 74 1 Z
+bit  42 O 0 A14 74 1 Z
+bit  41 O 0 A13 74 1 Z
+bit  40 O 0 A12 74 1 Z
+bit  39 O 0 A11 74 1 Z
+bit  38 O 0 A10 74 1 Z
+bit  37 O 0 A9 74 1 Z
+bit  36 O 0 A8 74 1 Z
+bit  35 O 0 A7 74 1 Z
+bit  34 O 0 A6 74 1 Z
+bit  33 O 0 A5 74 1 Z
+bit  32 O 0 A4 74 1 Z
+bit  31 O 0 A3 74 1 Z
+bit  30 O 0 A2 74 1 Z
+bit  29 O 0 A1 74 1 Z
+bit  28 O 0 A0 74 1 Z
+bit  27 C 1 UDC-
+bit  26 O ? UDC- 27 1 Z
+bit  25 I ? UDC-
+bit  24 X ? UDC-/UDC+
+bit  23 C 1 UDC+
+bit  22 O ? UDC+ 23 1 Z
+bit  21 I ? UDC+
+bit  20 C 0 RXD_1
+bit  19 O ? RXD_1 20 0 Z
+bit  18 I ? RXD_1
+bit  17 C 0 TXD_1
+bit  16 O ? TXD_1 17 0 Z
+bit  15 I ? TXD_1
+bit  14 C 0 RXD_2
+bit  13 O ? RXD_2 14 0 Z
+bit  12 I ? RXD_2
+bit  11 C 0 TXD_2
+bit  10 O ? TXD_2 11 0 Z
+bit   9 I ? TXD_2
+bit   8 C 0 RXD_3
+bit   7 O ? RXD_3 8 0 Z
+bit   6 I ? RXD_3
+bit   5 C 0 TXD_3
+bit   4 O ? TXD_3 5 0 Z
+bit   3 I ? TXD_3
+bit   2 I ? nRESET
+bit   1 O 1 nRESET_OUT
+bit   0 I ? ROM_SEL
+
+initbus sa1110

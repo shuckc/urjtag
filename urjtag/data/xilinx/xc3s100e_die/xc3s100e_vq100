@@ -1,0 +1,383 @@
+signal TCK
+signal TDI
+signal TDO
+signal TMS
+signal PAD56
+signal PAD92
+signal PAD38
+signal PAD93
+signal PAD75
+signal PAD39
+signal PAD58
+signal PAD94
+signal PAD76
+signal PAD59
+signal PAD96
+signal PAD78
+signal PAD97
+signal PAD79
+signal PAD98
+signal PAD1
+signal PAD99
+signal PAD2
+signal IPAD66
+signal IPAD67
+signal PAD7
+signal PAD8
+signal PAD9
+signal PROG_B
+signal PAD40
+signal PAD24
+signal PAD42
+signal PAD25
+signal PAD61
+signal PAD43
+signal PAD62
+signal PAD44
+signal PAD63
+signal PAD45
+signal PAD64
+signal PAD82
+signal PAD65
+signal PAD83
+signal PAD48
+signal IPAD12
+signal PAD49
+signal IPAD13
+signal PAD68
+signal PAD69
+signal DONE
+signal IPAD36
+signal IPAD73
+signal PAD105
+signal PAD106
+signal IPAD95
+signal PAD107
+signal PAD108
+signal PAD10
+signal PAD11
+signal PAD14
+signal PAD15
+signal PAD34
+signal PAD70
+signal PAD35
+signal PAD71
+signal PAD53
+signal PAD17
+signal PAD72
+signal PAD54
+signal PAD18
+signal PAD37
+signal PAD55
+signal PAD91
+signal GND0
+signal GND1
+signal GND2
+signal GND3
+signal GND4
+signal GND5
+signal GND6
+signal GND7
+signal GND8
+signal GND9
+signal GND10
+signal GND11
+signal VDD0
+signal VDD1
+signal VDD2
+signal VDD3
+signal VDD4
+signal VDD5
+signal VDD6
+signal VDD7
+signal VDD8
+signal VDD9
+signal VDD10
+signal VDD11
+signal Vaux0
+signal Vaux1
+signal Vaux2
+
+register	BSR	272
+register	BR	1
+register	DIR	32
+
+instruction length 6
+
+instruction SAMPLE/PRELOAD 100000 BSR
+instruction IDCODE 100100 DIR
+instruction EXTEST 111100 BSR
+instruction BYPASS 111111 BR
+
+bit 271 O 1 *
+bit 270 O 1 *
+bit 269 O 1 *
+bit 268 O 1 *
+bit 267 O 1 *
+bit 266 O 1 *
+bit 265 O 1 *
+bit 264 O 1 *
+bit 263 O 1 *
+bit 262 O 1 *
+bit 261 O 1 *
+bit 260 O 1 *
+bit 259 O 1 *
+bit 258 O 1 *
+bit 257 O 1 *
+bit 256 O 1 *
+bit 255 O 1 *
+bit 254 I 1 PAD34
+bit 253 O 1 PAD34 252 0 Z
+bit 252 C 0 *
+bit 251 I 1 PAD35
+bit 250 O 1 PAD35 249 0 Z
+bit 249 C 0 *
+bit 248 I 1 IPAD36
+bit 247 I 1 PAD37
+bit 246 O 1 PAD37 245 0 Z
+bit 245 C 0 *
+bit 244 I 1 PAD38
+bit 243 O 1 PAD38 242 0 Z
+bit 242 C 0 *
+bit 241 I 1 PAD39
+bit 240 O 1 PAD39 239 0 Z
+bit 239 C 0 *
+bit 238 I 1 PAD40
+bit 237 O 1 PAD40 236 0 Z
+bit 236 C 0 *
+bit 235 O 1 *
+bit 234 I 1 PAD42
+bit 233 O 1 PAD42 232 0 Z
+bit 232 C 0 *
+bit 231 I 1 PAD43
+bit 230 O 1 PAD43 229 0 Z
+bit 229 C 0 *
+bit 228 I 1 PAD44
+bit 227 O 1 PAD44 226 0 Z
+bit 226 C 0 *
+bit 225 I 1 PAD45
+bit 224 O 1 PAD45 223 0 Z
+bit 223 C 0 *
+bit 222 O 1 *
+bit 221 O 1 *
+bit 220 O 1 *
+bit 219 O 1 *
+bit 218 I 1 PAD48
+bit 217 O 1 PAD48 216 0 Z
+bit 216 C 0 *
+bit 215 I 1 PAD49
+bit 214 O 1 PAD49 213 0 Z
+bit 213 C 0 *
+bit 212 O 1 *
+bit 211 O 1 *
+bit 210 O 1 *
+bit 209 O 1 *
+bit 208 O 1 *
+bit 207 O 1 *
+bit 206 O 1 *
+bit 205 I 1 PAD53
+bit 204 O 1 PAD53 203 0 Z
+bit 203 C 0 *
+bit 202 I 1 PAD54
+bit 201 O 1 PAD54 200 0 Z
+bit 200 C 0 *
+bit 199 I 1 DONE
+bit 198 O 1 *
+bit 197 O 1 *
+bit 196 I 1 PAD55
+bit 195 O 1 PAD55 194 0 Z
+bit 194 C 0 *
+bit 193 I 1 PAD56
+bit 192 O 1 PAD56 191 0 Z
+bit 191 C 0 *
+bit 190 O 1 *
+bit 189 I 1 PAD58
+bit 188 O 1 PAD58 187 0 Z
+bit 187 C 0 *
+bit 186 I 1 PAD59
+bit 185 O 1 PAD59 184 0 Z
+bit 184 C 0 *
+bit 183 O 1 *
+bit 182 I 1 PAD61
+bit 181 O 1 PAD61 180 0 Z
+bit 180 C 0 *
+bit 179 I 1 PAD62
+bit 178 O 1 PAD62 177 0 Z
+bit 177 C 0 *
+bit 176 I 1 PAD63
+bit 175 O 1 PAD63 174 0 Z
+bit 174 C 0 *
+bit 173 I 1 PAD64
+bit 172 O 1 PAD64 171 0 Z
+bit 171 C 0 *
+bit 170 I 1 PAD65
+bit 169 O 1 PAD65 168 0 Z
+bit 168 C 0 *
+bit 167 I 1 IPAD66
+bit 166 I 1 IPAD67
+bit 165 I 1 PAD68
+bit 164 O 1 PAD68 163 0 Z
+bit 163 C 0 *
+bit 162 I 1 PAD69
+bit 161 O 1 PAD69 160 0 Z
+bit 160 C 0 *
+bit 159 I 1 PAD70
+bit 158 O 1 PAD70 157 0 Z
+bit 157 C 0 *
+bit 156 I 1 PAD71
+bit 155 O 1 PAD71 154 0 Z
+bit 154 C 0 *
+bit 153 I 1 PAD72
+bit 152 O 1 PAD72 151 0 Z
+bit 151 C 0 *
+bit 150 I 1 IPAD73
+bit 149 O 1 *
+bit 148 I 1 PAD75
+bit 147 O 1 PAD75 146 0 Z
+bit 146 C 0 *
+bit 145 I 1 PAD76
+bit 144 O 1 PAD76 143 0 Z
+bit 143 C 0 *
+bit 142 O 1 *
+bit 141 I 1 PAD78
+bit 140 O 1 PAD78 139 0 Z
+bit 139 C 0 *
+bit 138 I 1 PAD79
+bit 137 O 1 PAD79 136 0 Z
+bit 136 C 0 *
+bit 135 O 1 *
+bit 134 O 1 *
+bit 133 I 1 PAD82
+bit 132 O 1 PAD82 131 0 Z
+bit 131 C 0 *
+bit 130 I 1 PAD83
+bit 129 O 1 PAD83 128 0 Z
+bit 128 C 0 *
+bit 127 O 1 *
+bit 126 O 1 *
+bit 125 O 1 *
+bit 124 O 1 *
+bit 123 O 1 *
+bit 122 O 1 *
+bit 121 O 1 *
+bit 120 O 1 *
+bit 119 O 1 *
+bit 118 O 1 *
+bit 117 O 1 *
+bit 116 O 1 *
+bit 115 O 1 *
+bit 114 O 1 *
+bit 113 O 1 *
+bit 112 O 1 *
+bit 111 O 1 *
+bit 110 I 1 PAD91
+bit 109 O 1 PAD91 108 0 Z
+bit 108 C 0 *
+bit 107 I 1 PAD92
+bit 106 O 1 PAD92 105 0 Z
+bit 105 C 0 *
+bit 104 I 1 PAD93
+bit 103 O 1 PAD93 102 0 Z
+bit 102 C 0 *
+bit 101 I 1 PAD94
+bit 100 O 1 PAD94 99 0 Z
+bit 99 C 0 *
+bit 98 I 1 IPAD95
+bit 97 I 1 PAD96
+bit 96 O 1 PAD96 95 0 Z
+bit 95 C 0 *
+bit 94 I 1 PAD97
+bit 93 O 1 PAD97 92 0 Z
+bit 92 C 0 *
+bit 91 I 1 PAD98
+bit 90 O 1 PAD98 89 0 Z
+bit 89 C 0 *
+bit 88 I 1 PAD99
+bit 87 O 1 PAD99 86 0 Z
+bit 86 C 0 *
+bit 85 O 1 *
+bit 84 O 1 *
+bit 83 O 1 *
+bit 82 O 1 *
+bit 81 O 1 *
+bit 80 O 1 *
+bit 79 O 1 *
+bit 78 O 1 *
+bit 77 O 1 *
+bit 76 O 1 *
+bit 75 O 1 *
+bit 74 I 1 PAD105
+bit 73 O 1 PAD105 72 0 Z
+bit 72 C 0 *
+bit 71 I 1 PAD106
+bit 70 O 1 PAD106 69 0 Z
+bit 69 C 0 *
+bit 68 I 1 PAD107
+bit 67 O 1 PAD107 66 0 Z
+bit 66 C 0 *
+bit 65 I 1 PAD108
+bit 64 O 1 PAD108 63 0 Z
+bit 63 C 0 *
+bit 62 I 1 PROG_B
+bit 61 I 1 PAD1
+bit 60 O 1 PAD1 59 0 Z
+bit 59 C 0 *
+bit 58 I 1 PAD2
+bit 57 O 1 PAD2 56 0 Z
+bit 56 C 0 *
+bit 55 O 1 *
+bit 54 O 1 *
+bit 53 O 1 *
+bit 52 O 1 *
+bit 51 O 1 *
+bit 50 O 1 *
+bit 49 O 1 *
+bit 48 O 1 *
+bit 47 I 1 PAD7
+bit 46 O 1 PAD7 45 0 Z
+bit 45 C 0 *
+bit 44 I 1 PAD8
+bit 43 O 1 PAD8 42 0 Z
+bit 42 C 0 *
+bit 41 I 1 PAD9
+bit 40 O 1 PAD9 39 0 Z
+bit 39 C 0 *
+bit 38 I 1 PAD10
+bit 37 O 1 PAD10 36 0 Z
+bit 36 C 0 *
+bit 35 I 1 PAD11
+bit 34 O 1 PAD11 33 0 Z
+bit 33 C 0 *
+bit 32 I 1 IPAD12
+bit 31 I 1 IPAD13
+bit 30 I 1 PAD14
+bit 29 O 1 PAD14 28 0 Z
+bit 28 C 0 *
+bit 27 I 1 PAD15
+bit 26 O 1 PAD15 25 0 Z
+bit 25 C 0 *
+bit 24 O 1 *
+bit 23 O 1 *
+bit 22 O 1 *
+bit 21 I 1 PAD17
+bit 20 O 1 PAD17 19 0 Z
+bit 19 C 0 *
+bit 18 I 1 PAD18
+bit 17 O 1 PAD18 16 0 Z
+bit 16 C 0 *
+bit 15 O 1 *
+bit 14 O 1 *
+bit 13 O 1 *
+bit 12 O 1 *
+bit 11 O 1 *
+bit 10 O 1 *
+bit 9 O 1 *
+bit 8 O 1 *
+bit 7 O 1 *
+bit 6 I 1 PAD24
+bit 5 O 1 PAD24 4 0 Z
+bit 4 C 0 *
+bit 3 I 1 PAD25
+bit 2 O 1 PAD25 1 0 Z
+bit 1 C 0 *
+bit 0 O 1 *

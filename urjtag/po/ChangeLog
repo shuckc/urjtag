@@ -1,0 +1,83 @@
+2007-12-23  Kolja Waschk <kawk>
+
+    * rw/fr/sk.po: Committed machine-updated files.
+
+2007-11-02  Kolja Waschk <kawk>
+
+	* created "UrJTAG" project as fork of openwince jtag tools. All older
+	  log entries in this ChangeLog describe the openwince development.
+
+2005-04-06  Marcel Telka  <marcel@telka.sk>
+
+	* rw.po: Added Kinyarwanda translation by Steven Michael Murphy.
+	* LINGUAS: Added rw.
+
+2004-11-24  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/cmd/reset.c.
+
+2004-11-18  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/bus/ppc440gx_ebc8.c, src/bus/tx4925.c, and src/tap/cable/lattice.c.
+
+2004-10-22  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/bus/lh7a400.c (patch 886068, Marko Rößler).
+
+2004-05-11  Marcel Telka  <marcel@telka.sk>
+
+	* fr.po: Updated French translation by Michel Robitaille.
+
+2004-01-07  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added missing files.
+
+2004-01-07  Marcel Telka  <marcel@telka.sk>
+
+	* fr.po: Updated French translation by Michel Robitaille.
+
+2004-01-06  Marcel Telka  <marcel@telka.sk>
+
+	* fr.po: Added French translation by Michel Robitaille.
+	* LINGUAS: Added fr.
+
+2003-10-08  Marcel Telka  <marcel@telka.sk>
+
+	* sk.po: Updated Slovak translation.
+
+2003-09-23  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/tap/cable/triton.c.
+
+2003-09-05  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/cmd/initbus.c.
+
+2003-09-04  Marcel Telka  <marcel@telka.sk>
+
+	* sk.po: Updated Slovak translation for 0.5 release reformatted by TP-Robot.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
+	* Makevars (MSGID_BUGS_ADDRESS): Added e-mail address.
+	* sk.po: Added e-mail address for bugs. Removed some comments.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/bus/s3c4510x.c.
+	* sk.po: Updated Slovak translation.
+
+2003-08-19  Marcel Telka  <marcel@telka.sk>
+
+	* sk.po: Updated Slovak translation.
+
+2003-08-18  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added src/cmd/eraseflash.c.
+	* sk.po: Added Slovak translations.
+	* LINGUAS: Added sk.
+
+2003-08-14  Marcel Telka  <marcel@telka.sk>
+
+	* POTFILES.in: Added new source files.
+

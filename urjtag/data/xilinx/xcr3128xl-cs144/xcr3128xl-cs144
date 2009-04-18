@@ -1,0 +1,617 @@
+#
+# $Id$
+#
+# JTAG declarations for XCR3128XL-CS144
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
+#
+# Documentation:
+# [1] Xilinx Inc., "CoolRunner XPLA3 CPLD Advance Product Specification",
+#     DS012 (v1.5) January 7, 2002
+# [2] Xilinx Inc., "BSDL file for device xcr3128xl, package cs144
+#     Revision 1.3", 2002-01-03
+# [3] Xilinx Inc., "XCR3128XL 128 Macrocell CPLD Preliminary Product
+#     Specification", DS016 (v1.8) January 8, 2002
+#
+
+# 8 function blocks (A to H) by 16 macrocells (0 to 15)
+# see Table 3 in [3] and Table 4 in [3]
+signal	A0		B12
+signal	A2		D12
+signal	A3		D13
+signal	A4		E10
+signal	A5		E11
+signal	A6		E12
+signal	A10		E13
+signal	A11		F10
+signal	A12		F12
+signal	A13		F13
+signal	A14		G10
+signal	A15		G11
+signal	B0		A13
+signal	B1		A12
+signal	B2		B11
+signal	B3		A11
+signal	B4		D10
+signal	B5		C10
+signal	B6		B10
+signal	B10		D9
+signal	B11		C9
+signal	B12		B9
+signal	B13		A9
+signal	B14		D8
+signal	B15		C8
+signal	C0		G13
+signal	C2		H13
+signal	C3		H12
+signal	C4		H11
+signal	C5		J13
+signal	C6		J12
+signal	C10		J11
+signal	C11		J10
+signal	C12		K13
+signal	C13		K12
+signal	C14		K11
+signal	C15		K10
+signal	D0		M8
+signal	D1		L8
+signal	D2		K8
+signal	D3		N9
+signal	D4		L9
+signal	D5		K9
+signal	D6		N10
+signal	D10		M10
+signal	D11		L10
+signal	D12		N11
+signal	D13		M11
+signal	D14		L11
+signal	D15		M12
+signal	E0		A1
+signal	E1		A2
+signal	E2		C3
+signal	E3		B3
+signal	E4		A3
+signal	E5		C4
+signal	E6		B4
+signal	E10		A4
+signal	E11		D5
+signal	E12		B5
+signal	E13		A5
+signal	E14		D6
+signal	E15		C6
+signal	F0		B1
+signal	F2		D1
+signal	F3		E4
+signal	F4		E3
+signal	F5		E2
+signal	F6		E1
+signal	F10		F4
+signal	F11		F3
+signal	F12		F2
+signal	F13		G2
+signal	F14		G1
+signal	F15		G3
+signal	G0		N7
+signal	G1		M7
+signal	G2		N6
+signal	G3		M6
+signal	G4		M5
+signal	G5		L5
+signal	G6		K5
+signal	G10		N4
+signal	G11		M4
+signal	G12		L4
+signal	G13		K4
+signal	G14		N3
+signal	G15		M3
+signal	GND		A6 A8 C5 C13 D3 G4 H10 L6 L7 M9 N2 N8
+signal	H0		H1
+signal	H2		H3
+signal	H3		H4
+signal	H4		J1
+signal	H5		J3
+signal	H6		J4
+signal	H10		K1
+signal	H11		K2
+signal	H12		K3
+signal	H13		L1
+signal	H14		M2
+signal	H15		N1
+signal	IN0_CLK0	D7
+signal	IN1_CLK1	C7
+signal	IN2_CLK2	A7
+signal	IN3_CLK3	B7
+signal	PORT_EN		F1
+signal	TCK		G12
+signal	TDI		D2
+signal	TDO		D11
+signal	TMS		H2
+signal	Vcc		A10 B2 B6 B8 D4 F11 J2 K6 K7 L13 N5 N12
+signal	N/C		B13 C1 C2 C11 C12 L2 L3 L12 M1 M13 N13
+
+# mandatory data registers
+register	BSR	444	# see [2]
+register	BR	1
+# optional data registers
+register	DIR	32
+# user-defined registers
+register	ISPSR	274	# ISP (In-System Programming) Shift Register, see [2]
+
+# instructions - see [2]
+instruction length 5
+# mandatory instructions - see Table 3 in [1]
+instruction EXTEST		00000	BSR
+instruction SAMPLE/PRELOAD	00010	BSR
+instruction BYPASS		11111	BR
+# optional instructions - see Table 3 in [1]
+instruction IDCODE		00001	DIR
+instruction HIGHZ		00101	BR
+instruction INTEST		00011	BSR
+# user-defined instructions - see Table 5 in [1]
+instruction ENABLE		01001	ISPSR
+instruction ERASE		01010	ISPSR
+instruction PROGRAM		01011	ISPSR
+instruction DISABLE		10000	ISPSR
+instruction VERIFY		01100	ISPSR
+
+# see [2]
+bit 443 X ? .
+bit 442 I ? A0
+bit 441 O ? A0 440 0 Z
+bit 440 C ? A0
+bit 439 X ? .
+bit 438 X ? .
+bit 437 X ? .
+bit 436 X ? .
+bit 435 X ? .
+bit 434 I ? A2
+bit 433 O ? A2 432 0 Z
+bit 432 C ? A2
+bit 431 X ? .
+bit 430 I ? A3
+bit 429 O ? A3 428 0 Z
+bit 428 C ? A3
+bit 427 X ? .
+bit 426 I ? A4
+bit 425 O ? A4 424 0 Z
+bit 424 C ? A4
+bit 423 X ? .
+bit 422 I ? A5
+bit 421 O ? A5 420 0 Z
+bit 420 C ? A5
+bit 419 X ? .
+bit 418 I ? A6
+bit 417 O ? A6 416 0 Z
+bit 416 C ? A6
+bit 415 X ? .
+bit 414 X ? .
+bit 413 X ? .
+bit 412 X ? .
+bit 411 I ? A10
+bit 410 O ? A10 409 0 Z
+bit 409 C ? A10
+bit 408 X ? .
+bit 407 I ? A11
+bit 406 O ? A11 405 0 Z
+bit 405 C ? A11
+bit 404 X ? .
+bit 403 I ? A12
+bit 402 O ? A12 401 0 Z
+bit 401 C ? A12
+bit 400 X ? .
+bit 399 I ? A13
+bit 398 O ? A13 397 0 Z
+bit 397 C ? A13
+bit 396 X ? .
+bit 395 I ? A14
+bit 394 O ? A14 393 0 Z
+bit 393 C ? A14
+bit 392 X ? .
+bit 391 I ? A15
+bit 390 O ? A15 389 0 Z
+bit 389 C ? A15
+bit 388 X ? .
+bit 387 I ? C0
+bit 386 O ? C0 385 0 Z
+bit 385 C ? C0
+bit 384 X ? .
+bit 383 X ? .
+bit 382 X ? .
+bit 381 X ? .
+bit 380 X ? .
+bit 379 I ? C2
+bit 378 O ? C2 377 0 Z
+bit 377 C ? C2
+bit 376 X ? .
+bit 375 I ? C3
+bit 374 O ? C3 373 0 Z
+bit 373 C ? C3
+bit 372 X ? .
+bit 371 I ? C4
+bit 370 O ? C4 369 0 Z
+bit 369 C ? C4
+bit 368 X ? .
+bit 367 I ? C5
+bit 366 O ? C5 365 0 Z
+bit 365 C ? C5
+bit 364 X ? .
+bit 363 I ? C6
+bit 362 O ? C6 361 0 Z
+bit 361 C ? C6
+bit 360 X ? .
+bit 359 X ? .
+bit 358 X ? .
+bit 357 X ? .
+bit 356 I ? C10
+bit 355 O ? C10 354 0 Z
+bit 354 C ? C10
+bit 353 X ? .
+bit 352 I ? C11
+bit 351 O ? C11 350 0 Z
+bit 350 C ? C11
+bit 349 X ? .
+bit 348 I ? C12
+bit 347 O ? C12 346 0 Z
+bit 346 C ? C12
+bit 345 X ? .
+bit 344 I ? C13
+bit 343 O ? C13 342 0 Z
+bit 342 C ? C13
+bit 341 X ? .
+bit 340 I ? C14
+bit 339 O ? C14 338 0 Z
+bit 338 C ? C14
+bit 337 X ? .
+bit 336 I ? C15
+bit 335 O ? C15 334 0 Z
+bit 334 C ? C15
+bit 333 X ? .
+bit 332 I ? B0
+bit 331 O ? B0 330 0 Z
+bit 330 C ? B0
+bit 329 X ? .
+bit 328 I ? B1
+bit 327 O ? B1 326 0 Z
+bit 326 C ? B1
+bit 325 X ? .
+bit 324 I ? B2
+bit 323 O ? B2 322 0 Z
+bit 322 C ? B2
+bit 321 X ? .
+bit 320 I ? B3
+bit 319 O ? B3 318 0 Z
+bit 318 C ? B3
+bit 317 X ? .
+bit 316 I ? B4
+bit 315 O ? B4 314 0 Z
+bit 314 C ? B4
+bit 313 X ? .
+bit 312 I ? B5
+bit 311 O ? B5 310 0 Z
+bit 310 C ? B5
+bit 309 X ? .
+bit 308 I ? B6
+bit 307 O ? B6 306 0 Z
+bit 306 C ? B6
+bit 305 X ? .
+bit 304 X ? .
+bit 303 X ? .
+bit 302 X ? .
+bit 301 I ? B10
+bit 300 O ? B10 299 0 Z
+bit 299 C ? B10
+bit 298 X ? .
+bit 297 I ? B11
+bit 296 O ? B11 295 0 Z
+bit 295 C ? B11
+bit 294 X ? .
+bit 293 I ? B12
+bit 292 O ? B12 291 0 Z
+bit 291 C ? B12
+bit 290 X ? .
+bit 289 I ? B13
+bit 288 O ? B13 287 0 Z
+bit 287 C ? B13
+bit 286 X ? .
+bit 285 I ? B14
+bit 284 O ? B14 283 0 Z
+bit 283 C ? B14
+bit 282 X ? .
+bit 281 I ? B15
+bit 280 O ? B15 279 0 Z
+bit 279 C ? B15
+bit 278 X ? .
+bit 277 I ? D0
+bit 276 O ? D0 275 0 Z
+bit 275 C ? D0
+bit 274 X ? .
+bit 273 I ? D1
+bit 272 O ? D1 271 0 Z
+bit 271 C ? D1
+bit 270 X ? .
+bit 269 I ? D2
+bit 268 O ? D2 267 0 Z
+bit 267 C ? D2
+bit 266 X ? .
+bit 265 I ? D3
+bit 264 O ? D3 263 0 Z
+bit 263 C ? D3
+bit 262 X ? .
+bit 261 I ? D4
+bit 260 O ? D4 259 0 Z
+bit 259 C ? D4
+bit 258 X ? .
+bit 257 I ? D5
+bit 256 O ? D5 255 0 Z
+bit 255 C ? D5
+bit 254 X ? .
+bit 253 I ? D6
+bit 252 O ? D6 251 0 Z
+bit 251 C ? D6
+bit 250 X ? .
+bit 249 X ? .
+bit 248 X ? .
+bit 247 X ? .
+bit 246 I ? D10
+bit 245 O ? D10 244 0 Z
+bit 244 C ? D10
+bit 243 X ? .
+bit 242 I ? D11
+bit 241 O ? D11 240 0 Z
+bit 240 C ? D11
+bit 239 X ? .
+bit 238 I ? D12
+bit 237 O ? D12 236 0 Z
+bit 236 C ? D12
+bit 235 X ? .
+bit 234 I ? D13
+bit 233 O ? D13 232 0 Z
+bit 232 C ? D13
+bit 231 X ? .
+bit 230 I ? D14
+bit 229 O ? D14 228 0 Z
+bit 228 C ? D14
+bit 227 X ? .
+bit 226 I ? D15
+bit 225 O ? D15 224 0 Z
+bit 224 C ? D15
+bit 223 X ? .
+bit 222 I ? E0
+bit 221 O ? E0 220 0 Z
+bit 220 C ? E0
+bit 219 X ? .
+bit 218 I ? E1
+bit 217 O ? E1 216 0 Z
+bit 216 C ? E1
+bit 215 X ? .
+bit 214 I ? E2
+bit 213 O ? E2 212 0 Z
+bit 212 C ? E2
+bit 211 X ? .
+bit 210 I ? E3
+bit 209 O ? E3 208 0 Z
+bit 208 C ? E3
+bit 207 X ? .
+bit 206 I ? E4
+bit 205 O ? E4 204 0 Z
+bit 204 C ? E4
+bit 203 X ? .
+bit 202 I ? E5
+bit 201 O ? E5 200 0 Z
+bit 200 C ? E5
+bit 199 X ? .
+bit 198 I ? E6
+bit 197 O ? E6 196 0 Z
+bit 196 C ? E6
+bit 195 X ? .
+bit 194 X ? .
+bit 193 X ? .
+bit 192 X ? .
+bit 191 I ? E10
+bit 190 O ? E10 189 0 Z
+bit 189 C ? E10
+bit 188 X ? .
+bit 187 I ? E11
+bit 186 O ? E11 185 0 Z
+bit 185 C ? E11
+bit 184 X ? .
+bit 183 I ? E12
+bit 182 O ? E12 181 0 Z
+bit 181 C ? E12
+bit 180 X ? .
+bit 179 I ? E13
+bit 178 O ? E13 177 0 Z
+bit 177 C ? E13
+bit 176 X ? .
+bit 175 I ? E14
+bit 174 O ? E14 173 0 Z
+bit 173 C ? E14
+bit 172 X ? .
+bit 171 I ? E15
+bit 170 O ? E15 169 0 Z
+bit 169 C ? E15
+bit 168 X ? .
+bit 167 I ? G0
+bit 166 O ? G0 165 0 Z
+bit 165 C ? G0
+bit 164 X ? .
+bit 163 I ? G1
+bit 162 O ? G1 161 0 Z
+bit 161 C ? G1
+bit 160 X ? .
+bit 159 I ? G2
+bit 158 O ? G2 157 0 Z
+bit 157 C ? G2
+bit 156 X ? .
+bit 155 I ? G3
+bit 154 O ? G3 153 0 Z
+bit 153 C ? G3
+bit 152 X ? .
+bit 151 I ? G4
+bit 150 O ? G4 149 0 Z
+bit 149 C ? G4
+bit 148 X ? .
+bit 147 I ? G5
+bit 146 O ? G5 145 0 Z
+bit 145 C ? G5
+bit 144 X ? .
+bit 143 I ? G6
+bit 142 O ? G6 141 0 Z
+bit 141 C ? G6
+bit 140 X ? .
+bit 139 X ? .
+bit 138 X ? .
+bit 137 X ? .
+bit 136 I ? G10
+bit 135 O ? G10 134 0 Z
+bit 134 C ? G10
+bit 133 X ? .
+bit 132 I ? G11
+bit 131 O ? G11 130 0 Z
+bit 130 C ? G11
+bit 129 X ? .
+bit 128 I ? G12
+bit 127 O ? G12 126 0 Z
+bit 126 C ? G12
+bit 125 X ? .
+bit 124 I ? G13
+bit 123 O ? G13 122 0 Z
+bit 122 C ? G13
+bit 121 X ? .
+bit 120 I ? G14
+bit 119 O ? G14 118 0 Z
+bit 118 C ? G14
+bit 117 X ? .
+bit 116 I ? G15
+bit 115 O ? G15 114 0 Z
+bit 114 C ? G15
+bit 113 X ? .
+bit 112 I ? F0
+bit 111 O ? F0 110 0 Z
+bit 110 C ? F0
+bit 109 X ? .
+bit 108 X ? .
+bit 107 X ? .
+bit 106 X ? .
+bit 105 X ? .
+bit 104 I ? F2
+bit 103 O ? F2 102 0 Z
+bit 102 C ? F2
+bit 101 X ? .
+bit 100 I ? F3
+bit 99 O ? F3 98 0 Z
+bit 98 C ? F3
+bit 97 X ? .
+bit 96 I ? F4
+bit 95 O ? F4 94 0 Z
+bit 94 C ? F4
+bit 93 X ? .
+bit 92 I ? F5
+bit 91 O ? F5 90 0 Z
+bit 90 C ? F5
+bit 89 X ? .
+bit 88 I ? F6
+bit 87 O ? F6 86 0 Z
+bit 86 C ? F6
+bit 85 X ? .
+bit 84 X ? .
+bit 83 X ? .
+bit 82 X ? .
+bit 81 I ? F10
+bit 80 O ? F10 79 0 Z
+bit 79 C ? F10
+bit 78 X ? .
+bit 77 I ? F11
+bit 76 O ? F11 75 0 Z
+bit 75 C ? F11
+bit 74 X ? .
+bit 73 I ? F12
+bit 72 O ? F12 71 0 Z
+bit 71 C ? F12
+bit 70 X ? .
+bit 69 I ? F13
+bit 68 O ? F13 67 0 Z
+bit 67 C ? F13
+bit 66 X ? .
+bit 65 I ? F14
+bit 64 O ? F14 63 0 Z
+bit 63 C ? F14
+bit 62 X ? .
+bit 61 I ? F15
+bit 60 O ? F15 59 0 Z
+bit 59 C ? F15
+bit 58 X ? .
+bit 57 I ? H0
+bit 56 O ? H0 55 0 Z
+bit 55 C ? H0
+bit 54 X ? .
+bit 53 X ? .
+bit 52 X ? .
+bit 51 X ? .
+bit 50 X ? .
+bit 49 I ? H2
+bit 48 O ? H2 47 0 Z
+bit 47 C ? .
+bit 46 X ? .
+bit 45 I ? H3
+bit 44 O ? H3 43 0 Z
+bit 43 C ? H3
+bit 42 X ? .
+bit 41 I ? H4
+bit 40 O ? H4 39 0 Z
+bit 39 C ? H4
+bit 38 X ? .
+bit 37 I ? H5
+bit 36 O ? H5 35 0 Z
+bit 35 C ? H5
+bit 34 X ? .
+bit 33 I ? H6
+bit 32 O ? H6 31 0 Z
+bit 31 C ? H6
+bit 30 X ? .
+bit 29 X ? .
+bit 28 X ? .
+bit 27 X ? .
+bit 26 I ? H10
+bit 25 O ? H10 24 0 Z
+bit 24 C ? H10
+bit 23 X ? .
+bit 22 I ? H11
+bit 21 O ? H11 20 0 Z
+bit 20 C ? H11
+bit 19 X ? .
+bit 18 I ? H12
+bit 17 O ? H12 16 0 Z
+bit 16 C ? H12
+bit 15 X ? .
+bit 14 I ? H13
+bit 13 O ? H13 12 0 Z
+bit 12 C ? H13
+bit 11 X ? .
+bit 10 I ? H14
+bit 9 O ? H14 8 0 Z
+bit 8 C ? H14
+bit 7 X ? .
+bit 6 I ? H15
+bit 5 O ? H15 4 0 Z
+bit 4 C ? H15
+bit 3 I ? IN0_CLK0
+bit 2 I ? IN1_CLK1
+bit 1 I ? IN2_CLK2
+bit 0 I ? IN3_CLK3

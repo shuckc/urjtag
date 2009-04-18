@@ -1,0 +1,342 @@
+--
+-- $Id: $
+--
+-- BSDL definitions for "some_cpu" of "JTAG target simulator"
+--
+-- Copyright (C) 2008 Kolja Waschk <kawk>
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this software and associated documentation files (the "Software"), to deal
+-- in the Software without restriction, including without limitation the rights
+-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-- copies of the Software, and to permit persons to whom the Software is
+-- furnished to do so, subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in
+-- all copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+-- THE SOFTWARE.
+--
+--
+--
+-- The following Perl code has been used to create the BSR mapping.
+-- It is aligned for easy access to the register in the some_cpu.c code:
+--
+--   31.. 0 address output A31..A0 (A0 addresses bytes!)
+--   63..32 data output (from CPU to attached parts) D31..D0
+--   95..64 data input (from attached parts to CPU) D31..D0
+--       96 control output OE
+--       97 control output WE
+--       98 control output CS
+--       99 control input RESET
+--
+--
+-- sub io_pin($$$$$)
+-- {
+--   my ($inbitno, $outbitno, $ctrlbitno, $name,$dir) = @_;
+-- 
+--   if($dir eq 'inout' || $dir eq 'in') { 
+--     printf '"%d (BC_1, %s, input, X), " &%s', $inbitno, $name, "\n";
+--   } else {
+--     printf '"%d (BC_1, *, internal, X), " &%s', $inbitno, "\n"; 
+--   };
+--   if($dir ne 'in') {
+--     printf '"%d (BC_1, %s, output3, X, %d, 0, Z), " &%s', $outbitno, $name, $ctrlbitno, "\n";
+--     printf '"%d (BC_1, *, control, 0), " &%s', $ctrlbitno, "\n";
+--   }
+-- }
+-- 
+-- #######################################
+-- 
+-- io_pin(100, 96, 103, 'OE','out');
+-- io_pin(101, 97, 104, 'WE','out');
+-- io_pin(102, 98, 105, 'CS','out');
+-- io_pin(99,  0,  0, 'RESET','in');
+-- $bsi = 106;
+-- 
+-- for(my $i=0;$i<32; $i++) {
+--   # address output  in   0.. 31
+--   # address buffer  in  
+--   # address control in
+--   io_pin($i+$bsi,$i,$i+$bsi+32,sprintf('A(%d)',$i),'out');
+-- }
+-- for(my $i=0;$i<32; $i++) {
+--   # data output  in  32.. 63
+--   # data input   in  64.. 95
+--   # data control in  
+--   io_pin($i+64, $i+32, $i+$bsi+64, sprintf('D(%d)',$i), 'inout');
+-- };
+
+
+entity some_cpu is
+
+generic (PHYSICAL_PIN_MAP : string := " JIM ");
+
+port  (
+  RESET : in  bit ;
+  TCK   : in  bit ;
+  TMS   : in  bit ;
+  TDO   : out bit ;
+  TDI   : in  bit ;
+  OE    : out bit ;
+  CS    : out bit ;
+  WE    : out bit ;
+  A     : out bit_vector(0 to 31);
+  D     : inout bit_vector(0 to 31)
+);        
+
+use STD_1149_1_1994.all;
+
+attribute COMPONENT_CONFORMANCE of  some_cpu : entity is " STD_1149_1_1993 ";
+attribute PIN_MAP of  some_cpu : entity is PHYSICAL_PIN_MAP  ;
+          
+constant JIM : PIN_MAP_STRING:=
+" CS    : 2, " &
+" OE    : 3, " &
+" WE    : 4, " &
+" TCK   : 5, " &
+" TMS   : 6, " &
+" TDO   : 7, " &
+" TDI   : 8, " &
+" A     : (100,101,102,103,104,105,106,107,108,109," &
+          "110,111,112,113,114,115,116,117,118,119," &
+          "120,121,122,123,124,125,126,127,128,129,130,131) , " &
+" D     : (200,201,202,203,204,205,206,207,208,209," &
+          "210,211,212,213,214,215,216,217,218,219," &
+          "220,221,222,223,224,225,226,227,228,229,230,231) , " &
+" RESET : 1 " ;
+
+attribute TAP_SCAN_IN    of TDI : signal is true  ;
+attribute TAP_SCAN_OUT   of TDO : signal is true  ;
+attribute TAP_SCAN_MODE  of TMS : signal is true  ;
+attribute TAP_SCAN_CLOCK of TCK : signal is (8.0e6, BOTH) ;
+
+attribute INSTRUCTION_LENGTH  of some_cpu : entity is 2 ;
+            
+attribute INSTRUCTION_OPCODE  of some_cpu : entity is
+" EXTEST    ( 00  )," & 
+" IDCODE    ( 01  )," & 
+" SAMPLE    ( 10  )," & 
+" BYPASS    ( 11  )"  ; 
+
+attribute INSTRUCTION_CAPTURE of some_cpu : entity is " 01 ";
+            
+attribute IDCODE_REGISTER of some_cpu : entity is "10000111011001010100001100100001" ;
+
+attribute BOUNDARY_LENGTH of some_cpu : entity is 202 ;
+                                  
+attribute BOUNDARY_REGISTER of some_cpu : entity is                         
+
+"100 (BC_1, *, internal, X), " &
+"96 (BC_1, OE, output3, X, 103, 0, Z), " &
+"103 (BC_1, *, control, 0), " &
+"101 (BC_1, *, internal, X), " &
+"97 (BC_1, WE, output3, X, 104, 0, Z), " &
+"104 (BC_1, *, control, 0), " &
+"102 (BC_1, *, internal, X), " &
+"98 (BC_1, CS, output3, X, 105, 0, Z), " &
+"105 (BC_1, *, control, 0), " &
+"99 (BC_1, RESET, input, X), " &
+"106 (BC_1, *, internal, X), " &
+"0 (BC_1, A(0), output3, X, 138, 0, Z), " &
+"138 (BC_1, *, control, 0), " &
+"107 (BC_1, *, internal, X), " &
+"1 (BC_1, A(1), output3, X, 139, 0, Z), " &
+"139 (BC_1, *, control, 0), " &
+"108 (BC_1, *, internal, X), " &
+"2 (BC_1, A(2), output3, X, 140, 0, Z), " &
+"140 (BC_1, *, control, 0), " &
+"109 (BC_1, *, internal, X), " &
+"3 (BC_1, A(3), output3, X, 141, 0, Z), " &
+"141 (BC_1, *, control, 0), " &
+"110 (BC_1, *, internal, X), " &
+"4 (BC_1, A(4), output3, X, 142, 0, Z), " &
+"142 (BC_1, *, control, 0), " &
+"111 (BC_1, *, internal, X), " &
+"5 (BC_1, A(5), output3, X, 143, 0, Z), " &
+"143 (BC_1, *, control, 0), " &
+"112 (BC_1, *, internal, X), " &
+"6 (BC_1, A(6), output3, X, 144, 0, Z), " &
+"144 (BC_1, *, control, 0), " &
+"113 (BC_1, *, internal, X), " &
+"7 (BC_1, A(7), output3, X, 145, 0, Z), " &
+"145 (BC_1, *, control, 0), " &
+"114 (BC_1, *, internal, X), " &
+"8 (BC_1, A(8), output3, X, 146, 0, Z), " &
+"146 (BC_1, *, control, 0), " &
+"115 (BC_1, *, internal, X), " &
+"9 (BC_1, A(9), output3, X, 147, 0, Z), " &
+"147 (BC_1, *, control, 0), " &
+"116 (BC_1, *, internal, X), " &
+"10 (BC_1, A(10), output3, X, 148, 0, Z), " &
+"148 (BC_1, *, control, 0), " &
+"117 (BC_1, *, internal, X), " &
+"11 (BC_1, A(11), output3, X, 149, 0, Z), " &
+"149 (BC_1, *, control, 0), " &
+"118 (BC_1, *, internal, X), " &
+"12 (BC_1, A(12), output3, X, 150, 0, Z), " &
+"150 (BC_1, *, control, 0), " &
+"119 (BC_1, *, internal, X), " &
+"13 (BC_1, A(13), output3, X, 151, 0, Z), " &
+"151 (BC_1, *, control, 0), " &
+"120 (BC_1, *, internal, X), " &
+"14 (BC_1, A(14), output3, X, 152, 0, Z), " &
+"152 (BC_1, *, control, 0), " &
+"121 (BC_1, *, internal, X), " &
+"15 (BC_1, A(15), output3, X, 153, 0, Z), " &
+"153 (BC_1, *, control, 0), " &
+"122 (BC_1, *, internal, X), " &
+"16 (BC_1, A(16), output3, X, 154, 0, Z), " &
+"154 (BC_1, *, control, 0), " &
+"123 (BC_1, *, internal, X), " &
+"17 (BC_1, A(17), output3, X, 155, 0, Z), " &
+"155 (BC_1, *, control, 0), " &
+"124 (BC_1, *, internal, X), " &
+"18 (BC_1, A(18), output3, X, 156, 0, Z), " &
+"156 (BC_1, *, control, 0), " &
+"125 (BC_1, *, internal, X), " &
+"19 (BC_1, A(19), output3, X, 157, 0, Z), " &
+"157 (BC_1, *, control, 0), " &
+"126 (BC_1, *, internal, X), " &
+"20 (BC_1, A(20), output3, X, 158, 0, Z), " &
+"158 (BC_1, *, control, 0), " &
+"127 (BC_1, *, internal, X), " &
+"21 (BC_1, A(21), output3, X, 159, 0, Z), " &
+"159 (BC_1, *, control, 0), " &
+"128 (BC_1, *, internal, X), " &
+"22 (BC_1, A(22), output3, X, 160, 0, Z), " &
+"160 (BC_1, *, control, 0), " &
+"129 (BC_1, *, internal, X), " &
+"23 (BC_1, A(23), output3, X, 161, 0, Z), " &
+"161 (BC_1, *, control, 0), " &
+"130 (BC_1, *, internal, X), " &
+"24 (BC_1, A(24), output3, X, 162, 0, Z), " &
+"162 (BC_1, *, control, 0), " &
+"131 (BC_1, *, internal, X), " &
+"25 (BC_1, A(25), output3, X, 163, 0, Z), " &
+"163 (BC_1, *, control, 0), " &
+"132 (BC_1, *, internal, X), " &
+"26 (BC_1, A(26), output3, X, 164, 0, Z), " &
+"164 (BC_1, *, control, 0), " &
+"133 (BC_1, *, internal, X), " &
+"27 (BC_1, A(27), output3, X, 165, 0, Z), " &
+"165 (BC_1, *, control, 0), " &
+"134 (BC_1, *, internal, X), " &
+"28 (BC_1, A(28), output3, X, 166, 0, Z), " &
+"166 (BC_1, *, control, 0), " &
+"135 (BC_1, *, internal, X), " &
+"29 (BC_1, A(29), output3, X, 167, 0, Z), " &
+"167 (BC_1, *, control, 0), " &
+"136 (BC_1, *, internal, X), " &
+"30 (BC_1, A(30), output3, X, 168, 0, Z), " &
+"168 (BC_1, *, control, 0), " &
+"137 (BC_1, *, internal, X), " &
+"31 (BC_1, A(31), output3, X, 169, 0, Z), " &
+"169 (BC_1, *, control, 0), " &
+"64 (BC_1, D(0), input, X), " &
+"32 (BC_1, D(0), output3, X, 170, 0, Z), " &
+"170 (BC_1, *, control, 0), " &
+"65 (BC_1, D(1), input, X), " &
+"33 (BC_1, D(1), output3, X, 171, 0, Z), " &
+"171 (BC_1, *, control, 0), " &
+"66 (BC_1, D(2), input, X), " &
+"34 (BC_1, D(2), output3, X, 172, 0, Z), " &
+"172 (BC_1, *, control, 0), " &
+"67 (BC_1, D(3), input, X), " &
+"35 (BC_1, D(3), output3, X, 173, 0, Z), " &
+"173 (BC_1, *, control, 0), " &
+"68 (BC_1, D(4), input, X), " &
+"36 (BC_1, D(4), output3, X, 174, 0, Z), " &
+"174 (BC_1, *, control, 0), " &
+"69 (BC_1, D(5), input, X), " &
+"37 (BC_1, D(5), output3, X, 175, 0, Z), " &
+"175 (BC_1, *, control, 0), " &
+"70 (BC_1, D(6), input, X), " &
+"38 (BC_1, D(6), output3, X, 176, 0, Z), " &
+"176 (BC_1, *, control, 0), " &
+"71 (BC_1, D(7), input, X), " &
+"39 (BC_1, D(7), output3, X, 177, 0, Z), " &
+"177 (BC_1, *, control, 0), " &
+"72 (BC_1, D(8), input, X), " &
+"40 (BC_1, D(8), output3, X, 178, 0, Z), " &
+"178 (BC_1, *, control, 0), " &
+"73 (BC_1, D(9), input, X), " &
+"41 (BC_1, D(9), output3, X, 179, 0, Z), " &
+"179 (BC_1, *, control, 0), " &
+"74 (BC_1, D(10), input, X), " &
+"42 (BC_1, D(10), output3, X, 180, 0, Z), " &
+"180 (BC_1, *, control, 0), " &
+"75 (BC_1, D(11), input, X), " &
+"43 (BC_1, D(11), output3, X, 181, 0, Z), " &
+"181 (BC_1, *, control, 0), " &
+"76 (BC_1, D(12), input, X), " &
+"44 (BC_1, D(12), output3, X, 182, 0, Z), " &
+"182 (BC_1, *, control, 0), " &
+"77 (BC_1, D(13), input, X), " &
+"45 (BC_1, D(13), output3, X, 183, 0, Z), " &
+"183 (BC_1, *, control, 0), " &
+"78 (BC_1, D(14), input, X), " &
+"46 (BC_1, D(14), output3, X, 184, 0, Z), " &
+"184 (BC_1, *, control, 0), " &
+"79 (BC_1, D(15), input, X), " &
+"47 (BC_1, D(15), output3, X, 185, 0, Z), " &
+"185 (BC_1, *, control, 0), " &
+"80 (BC_1, D(16), input, X), " &
+"48 (BC_1, D(16), output3, X, 186, 0, Z), " &
+"186 (BC_1, *, control, 0), " &
+"81 (BC_1, D(17), input, X), " &
+"49 (BC_1, D(17), output3, X, 187, 0, Z), " &
+"187 (BC_1, *, control, 0), " &
+"82 (BC_1, D(18), input, X), " &
+"50 (BC_1, D(18), output3, X, 188, 0, Z), " &
+"188 (BC_1, *, control, 0), " &
+"83 (BC_1, D(19), input, X), " &
+"51 (BC_1, D(19), output3, X, 189, 0, Z), " &
+"189 (BC_1, *, control, 0), " &
+"84 (BC_1, D(20), input, X), " &
+"52 (BC_1, D(20), output3, X, 190, 0, Z), " &
+"190 (BC_1, *, control, 0), " &
+"85 (BC_1, D(21), input, X), " &
+"53 (BC_1, D(21), output3, X, 191, 0, Z), " &
+"191 (BC_1, *, control, 0), " &
+"86 (BC_1, D(22), input, X), " &
+"54 (BC_1, D(22), output3, X, 192, 0, Z), " &
+"192 (BC_1, *, control, 0), " &
+"87 (BC_1, D(23), input, X), " &
+"55 (BC_1, D(23), output3, X, 193, 0, Z), " &
+"193 (BC_1, *, control, 0), " &
+"88 (BC_1, D(24), input, X), " &
+"56 (BC_1, D(24), output3, X, 194, 0, Z), " &
+"194 (BC_1, *, control, 0), " &
+"89 (BC_1, D(25), input, X), " &
+"57 (BC_1, D(25), output3, X, 195, 0, Z), " &
+"195 (BC_1, *, control, 0), " &
+"90 (BC_1, D(26), input, X), " &
+"58 (BC_1, D(26), output3, X, 196, 0, Z), " &
+"196 (BC_1, *, control, 0), " &
+"91 (BC_1, D(27), input, X), " &
+"59 (BC_1, D(27), output3, X, 197, 0, Z), " &
+"197 (BC_1, *, control, 0), " &
+"92 (BC_1, D(28), input, X), " &
+"60 (BC_1, D(28), output3, X, 198, 0, Z), " &
+"198 (BC_1, *, control, 0), " &
+"93 (BC_1, D(29), input, X), " &
+"61 (BC_1, D(29), output3, X, 199, 0, Z), " &
+"199 (BC_1, *, control, 0), " &
+"94 (BC_1, D(30), input, X), " &
+"62 (BC_1, D(30), output3, X, 200, 0, Z), " &
+"200 (BC_1, *, control, 0), " &
+"95 (BC_1, D(31), input, X), " &
+"63 (BC_1, D(31), output3, X, 201, 0, Z), " &
+"201 (BC_1, *, control, 0) " ;
+
+end some_cpu ;
+
+
+

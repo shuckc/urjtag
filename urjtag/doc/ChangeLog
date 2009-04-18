@@ -1,0 +1,37 @@
+2008-01-18  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* UrJTAG.txt (packages): Some notes about Flex & BSDL
+
+2007-12-30  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* UrJTAG.txt (Example): Added contents from README.svf, new section on BSDL
+
+2007-12-15  Kolja Waschk   <kawk>
+
+	* fdl.txt, gpl.txt: licenses as plain text files
+	* lgpl.txt: Lesser GPL not in use (yet), removed
+	* jtag.1, bsdl2jtag.1: manpages copied (with permission) from
+	  Debian openwince jtag package, then updated for UrJTAG.
+	* Makefile.am: add new files
+
+2007-12-10  Arnim Laeuger  <arniml@users.sourceforge.net>
+
+	* UrJTAG.txt: Balancing of tags.
+
+2007-12-07  Kolja Waschk <kawk>
+
+    * UrJTAG.txt: New software manual, using asciidoc formatting
+    * internals.xml: merged into UrJTAG.txt.
+
+2003-09-15  Marcel Telka  <marcel@telka.sk>
+
+	* internals.xml: Fixed spelling (patch 805108, Andreas Mohr).
+
+2003-03-19  Marcel Telka  <marcel@telka.sk>
+
+	* Makefile.am: New file.
+
+2003-03-06  Marcel Telka  <marcel@telka.sk>
+
+	* internals.xml: Internals documentation started.
+

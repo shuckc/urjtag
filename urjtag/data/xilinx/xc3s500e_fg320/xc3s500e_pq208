@@ -1,0 +1,881 @@
+signal TCK
+signal TDI
+signal TDO
+signal TMS
+signal PAD100
+signal PAD101
+signal PAD102
+signal PAD60
+signal PAD61
+signal PAD104
+signal IPAD93
+signal PAD62
+signal PAD105
+signal PAD63
+signal PAD106
+signal PAD107
+signal IPAD204
+signal PAD65
+signal PAD109
+signal IPAD98
+signal PAD66
+signal PAD67
+signal PAD69
+signal IPAD209
+signal IPAD137
+signal IPAD138
+signal PAD181
+signal PAD182
+signal PAD183
+signal IPAD21
+signal PAD185
+signal IPAD22
+signal PAD186
+signal PAD187
+signal PAD188
+signal IPAD28
+signal IPAD29
+signal PAD110
+signal PAD111
+signal PAD70
+signal PAD113
+signal PAD71
+signal PAD114
+signal PAD72
+signal PAD115
+signal PAD116
+signal PAD117
+signal PAD74
+signal IPAD214
+signal PAD118
+signal PAD75
+signal PAD76
+signal PAD77
+signal IPAD144
+signal IPAD145
+signal PAD79
+signal IPAD219
+signal PAD190
+signal PAD191
+signal PAD192
+signal PAD193
+signal PAD195
+signal PAD196
+signal PAD197
+signal PAD198
+signal IPAD35
+signal IPAD36
+signal PAD120
+signal DONE
+signal PAD121
+signal PAD122
+signal PAD80
+signal PAD123
+signal PAD81
+signal PAD124
+signal PAD82
+signal PAD127
+signal PAD84
+signal IPAD151
+signal PAD128
+signal PAD85
+signal IPAD224
+signal IPAD152
+signal PAD86
+signal PAD87
+signal IPAD228
+signal PAD89
+signal IPAD3
+signal IPAD158
+signal IPAD159
+signal IPAD9
+signal PAD11
+signal IPAD42
+signal PAD12
+signal IPAD43
+signal PAD14
+signal IPAD46
+signal PAD15
+signal PAD16
+signal PAD17
+signal PAD18
+signal PAD19
+signal PAD200
+signal PAD201
+signal PAD202
+signal PAD203
+signal PAD130
+signal PAD131
+signal PAD205
+signal PAD132
+signal PAD90
+signal PAD206
+signal PAD133
+signal PAD91
+signal PAD207
+signal PAD134
+signal PAD208
+signal PAD92
+signal PAD135
+signal PAD136
+signal PAD94
+signal PAD95
+signal IPAD162
+signal PAD139
+signal PAD96
+signal PAD97
+signal PAD99
+signal PAD20
+signal IPAD54
+signal PAD23
+signal IPAD55
+signal PAD24
+signal PAD25
+signal PAD26
+signal IPAD58
+signal PAD27
+signal IPAD59
+signal PAD210
+signal PAD211
+signal PAD212
+signal PAD140
+signal PAD213
+signal PAD141
+signal PAD142
+signal PAD215
+signal PAD143
+signal PAD216
+signal PAD217
+signal PAD218
+signal PAD146
+signal PAD147
+signal IPAD170
+signal PAD148
+signal IPAD171
+signal PAD149
+signal IPAD174
+signal IPAD175
+signal PAD30
+signal PAD31
+signal PAD32
+signal IPAD64
+signal PAD33
+signal PAD34
+signal PAD1
+signal PAD2
+signal IPAD68
+signal PAD37
+signal PAD4
+signal IPAD103
+signal PAD5
+signal PAD38
+signal PAD6
+signal PAD39
+signal PAD220
+signal PAD7
+signal PAD221
+signal PAD8
+signal PAD222
+signal IPAD108
+signal PAD150
+signal PAD223
+signal PAD225
+signal PAD153
+signal PAD226
+signal PAD154
+signal PAD227
+signal PAD155
+signal PAD156
+signal PAD229
+signal PAD157
+signal IPAD180
+signal IPAD184
+signal IPAD189
+signal PAD40
+signal PAD41
+signal IPAD73
+signal PAD44
+signal PAD45
+signal IPAD112
+signal IPAD78
+signal PAD47
+signal PAD48
+signal PAD49
+signal PAD230
+signal PAD231
+signal PAD232
+signal IPAD119
+signal PAD160
+signal PAD161
+signal PAD163
+signal PAD164
+signal PAD165
+signal PAD166
+signal PAD167
+signal PAD168
+signal PAD169
+signal PROG_B
+signal IPAD194
+signal IPAD199
+signal PAD50
+signal PAD51
+signal IPAD83
+signal PAD52
+signal PAD53
+signal IPAD88
+signal PAD56
+signal PAD57
+signal IPAD125
+signal IPAD126
+signal IPAD129
+signal PAD172
+signal IPAD10
+signal PAD173
+signal PAD176
+signal IPAD13
+signal PAD177
+signal PAD178
+signal PAD179
+signal GND0
+signal GND1
+signal GND2
+signal GND3
+signal GND4
+signal GND5
+signal GND6
+signal GND7
+signal GND8
+signal GND9
+signal GND10
+signal GND11
+signal GND12
+signal GND13
+signal GND14
+signal GND15
+signal GND16
+signal GND17
+signal GND18
+signal GND19
+signal VDD0
+signal VDD1
+signal VDD2
+signal VDD3
+signal VDD4
+signal VDD5
+signal VDD6
+signal VDD7
+signal VDD8
+signal VDD9
+signal VDD10
+signal VDD11
+signal VDD12
+signal VDD13
+signal VDD14
+signal VDD15
+signal Vaux0
+signal Vaux1
+signal Vaux2
+signal Vaux3
+signal Vaux4
+signal Vaux5
+signal Vaux6
+
+register	BSR	588
+register	BR	1
+register	DIR	32
+
+instruction length 6
+
+instruction SAMPLE/PRELOAD 100000 BSR
+instruction IDCODE 100100 DIR
+instruction EXTEST 111100 BSR
+instruction BYPASS 111111 BR
+
+bit 587 I 1 IPAD59
+bit 586 I 1 PAD60
+bit 585 O 1 PAD60 584 0 Z
+bit 584 C 0 *
+bit 583 I 1 PAD61
+bit 582 O 1 PAD61 581 0 Z
+bit 581 C 0 *
+bit 580 I 1 PAD62
+bit 579 O 1 PAD62 578 0 Z
+bit 578 C 0 *
+bit 577 I 1 PAD63
+bit 576 O 1 PAD63 575 0 Z
+bit 575 C 0 *
+bit 574 O 1 *
+bit 573 O 1 *
+bit 572 O 1 *
+bit 571 O 1 *
+bit 570 O 1 *
+bit 569 O 1 *
+bit 568 O 1 *
+bit 567 O 1 *
+bit 566 O 1 *
+bit 565 O 1 *
+bit 564 I 1 IPAD68
+bit 563 O 1 *
+bit 562 O 1 *
+bit 561 O 1 *
+bit 560 O 1 *
+bit 559 O 1 *
+bit 558 O 1 *
+bit 557 I 1 PAD71
+bit 556 O 1 PAD71 555 0 Z
+bit 555 C 0 *
+bit 554 I 1 PAD72
+bit 553 O 1 PAD72 552 0 Z
+bit 552 C 0 *
+bit 551 O 1 *
+bit 550 I 1 PAD74
+bit 549 O 1 PAD74 548 0 Z
+bit 548 C 0 *
+bit 547 I 1 PAD75
+bit 546 O 1 PAD75 545 0 Z
+bit 545 C 0 *
+bit 544 O 1 *
+bit 543 O 1 *
+bit 542 O 1 *
+bit 541 O 1 *
+bit 540 O 1 *
+bit 539 O 1 *
+bit 538 I 1 IPAD78
+bit 537 I 1 PAD79
+bit 536 O 1 PAD79 535 0 Z
+bit 535 C 0 *
+bit 534 I 1 PAD80
+bit 533 O 1 PAD80 532 0 Z
+bit 532 C 0 *
+bit 531 I 1 PAD81
+bit 530 O 1 PAD81 529 0 Z
+bit 529 C 0 *
+bit 528 I 1 PAD82
+bit 527 O 1 PAD82 526 0 Z
+bit 526 C 0 *
+bit 525 I 1 IPAD83
+bit 524 I 1 PAD84
+bit 523 O 1 PAD84 522 0 Z
+bit 522 C 0 *
+bit 521 I 1 PAD85
+bit 520 O 1 PAD85 519 0 Z
+bit 519 C 0 *
+bit 518 I 1 PAD86
+bit 517 O 1 PAD86 516 0 Z
+bit 516 C 0 *
+bit 515 I 1 PAD87
+bit 514 O 1 PAD87 513 0 Z
+bit 513 C 0 *
+bit 512 I 1 IPAD88
+bit 511 I 1 PAD89
+bit 510 O 1 PAD89 509 0 Z
+bit 509 C 0 *
+bit 508 I 1 PAD90
+bit 507 O 1 PAD90 506 0 Z
+bit 506 C 0 *
+bit 505 I 1 PAD91
+bit 504 O 1 PAD91 503 0 Z
+bit 503 C 0 *
+bit 502 I 1 PAD92
+bit 501 O 1 PAD92 500 0 Z
+bit 500 C 0 *
+bit 499 I 1 IPAD93
+bit 498 I 1 PAD94
+bit 497 O 1 PAD94 496 0 Z
+bit 496 C 0 *
+bit 495 I 1 PAD95
+bit 494 O 1 PAD95 493 0 Z
+bit 493 C 0 *
+bit 492 I 1 PAD96
+bit 491 O 1 PAD96 490 0 Z
+bit 490 C 0 *
+bit 489 I 1 PAD97
+bit 488 O 1 PAD97 487 0 Z
+bit 487 C 0 *
+bit 486 I 1 IPAD98
+bit 485 O 1 *
+bit 484 O 1 *
+bit 483 O 1 *
+bit 482 O 1 *
+bit 481 O 1 *
+bit 480 O 1 *
+bit 479 I 1 PAD101
+bit 478 O 1 PAD101 477 0 Z
+bit 477 C 0 *
+bit 476 I 1 PAD102
+bit 475 O 1 PAD102 474 0 Z
+bit 474 C 0 *
+bit 473 O 1 *
+bit 472 O 1 *
+bit 471 O 1 *
+bit 470 O 1 *
+bit 469 O 1 *
+bit 468 O 1 *
+bit 467 O 1 *
+bit 466 I 1 PAD106
+bit 465 O 1 PAD106 464 0 Z
+bit 464 C 0 *
+bit 463 I 1 PAD107
+bit 462 O 1 PAD107 461 0 Z
+bit 461 C 0 *
+bit 460 O 1 *
+bit 459 O 1 *
+bit 458 O 1 *
+bit 457 O 1 *
+bit 456 O 1 *
+bit 455 O 1 *
+bit 454 O 1 *
+bit 453 O 1 *
+bit 452 O 1 *
+bit 451 O 1 *
+bit 450 I 1 IPAD112
+bit 449 I 1 PAD113
+bit 448 O 1 *
+bit 447 O 1 *
+bit 446 I 1 PAD114
+bit 445 O 1 *
+bit 444 O 1 *
+bit 443 I 1 PAD115
+bit 442 O 1 *
+bit 441 O 1 *
+bit 440 I 1 PAD116
+bit 439 O 1 *
+bit 438 O 1 *
+bit 437 I 1 DONE
+bit 436 O 1 *
+bit 435 O 1 *
+bit 434 I 1 PAD117
+bit 433 O 1 *
+bit 432 O 1 *
+bit 431 I 1 PAD118
+bit 430 O 1 *
+bit 429 O 1 *
+bit 428 I 1 IPAD119
+bit 427 I 1 PAD120
+bit 426 O 1 *
+bit 425 O 1 *
+bit 424 I 1 PAD121
+bit 423 O 1 *
+bit 422 O 1 *
+bit 421 I 1 PAD122
+bit 420 O 1 *
+bit 419 O 1 *
+bit 418 I 1 PAD123
+bit 417 O 1 *
+bit 416 O 1 *
+bit 415 I 1 PAD124
+bit 414 O 1 *
+bit 413 O 1 *
+bit 412 O 1 *
+bit 411 O 1 *
+bit 410 I 1 PAD127
+bit 409 O 1 *
+bit 408 O 1 *
+bit 407 I 1 PAD128
+bit 406 O 1 *
+bit 405 O 1 *
+bit 404 I 1 IPAD129
+bit 403 I 1 PAD130
+bit 402 O 1 *
+bit 401 O 1 *
+bit 400 I 1 PAD131
+bit 399 O 1 *
+bit 398 O 1 *
+bit 397 O 1 *
+bit 396 O 1 *
+bit 395 O 1 *
+bit 394 O 1 *
+bit 393 O 1 *
+bit 392 O 1 *
+bit 391 O 1 *
+bit 390 O 1 *
+bit 389 O 1 *
+bit 388 O 1 *
+bit 387 O 1 *
+bit 386 O 1 *
+bit 385 O 1 *
+bit 384 O 1 *
+bit 383 O 1 *
+bit 382 O 1 *
+bit 381 O 1 *
+bit 380 I 1 PAD139
+bit 379 O 1 *
+bit 378 O 1 *
+bit 377 I 1 PAD140
+bit 376 O 1 *
+bit 375 O 1 *
+bit 374 I 1 PAD141
+bit 373 O 1 *
+bit 372 O 1 *
+bit 371 I 1 PAD142
+bit 370 O 1 PAD113 369 0 Z
+bit 369 C 0 *
+bit 368 I 1 PAD143
+bit 367 O 1 IPAD112 366 0 Z
+bit 366 C 0 *
+bit 365 I 1 IPAD144
+bit 364 I 1 IPAD145
+bit 363 I 1 PAD146
+bit 362 O 1 *
+bit 361 O 1 *
+bit 360 I 1 PAD147
+bit 359 O 1 *
+bit 358 O 1 *
+bit 357 I 1 PAD148
+bit 356 O 1 *
+bit 355 O 1 *
+bit 354 I 1 PAD149
+bit 353 O 1 *
+bit 352 O 1 *
+bit 351 I 1 PAD150
+bit 350 O 1 *
+bit 349 O 1 *
+bit 348 I 1 IPAD151
+bit 347 I 1 IPAD152
+bit 346 O 1 *
+bit 345 O 1 *
+bit 344 O 1 *
+bit 343 O 1 *
+bit 342 O 1 *
+bit 341 O 1 *
+bit 340 O 1 *
+bit 339 O 1 *
+bit 338 O 1 *
+bit 337 I 1 PAD156
+bit 336 O 1 *
+bit 335 O 1 *
+bit 334 I 1 PAD157
+bit 333 O 1 *
+bit 332 O 1 *
+bit 331 O 1 *
+bit 330 O 1 *
+bit 329 O 1 *
+bit 328 O 1 *
+bit 327 O 1 *
+bit 326 O 1 *
+bit 325 O 1 *
+bit 324 O 1 *
+bit 323 O 1 *
+bit 322 I 1 PAD163
+bit 321 O 1 *
+bit 320 O 1 *
+bit 319 I 1 PAD164
+bit 318 O 1 *
+bit 317 O 1 *
+bit 316 I 1 PAD165
+bit 315 O 1 *
+bit 314 O 1 *
+bit 313 I 1 PAD166
+bit 312 O 1 *
+bit 311 O 1 *
+bit 310 O 1 *
+bit 309 O 1 *
+bit 308 O 1 *
+bit 307 I 1 PAD168
+bit 306 O 1 *
+bit 305 O 1 *
+bit 304 I 1 PAD169
+bit 303 O 1 *
+bit 302 O 1 *
+bit 301 I 1 IPAD170
+bit 300 I 1 IPAD171
+bit 299 I 1 PAD172
+bit 298 O 1 *
+bit 297 O 1 *
+bit 296 I 1 PAD173
+bit 295 O 1 *
+bit 294 O 1 *
+bit 293 I 1 IPAD174
+bit 292 I 1 IPAD175
+bit 291 I 1 PAD176
+bit 290 O 1 *
+bit 289 O 1 *
+bit 288 I 1 PAD177
+bit 287 O 1 *
+bit 286 O 1 *
+bit 285 I 1 PAD178
+bit 284 O 1 *
+bit 283 O 1 *
+bit 282 I 1 PAD179
+bit 281 O 1 *
+bit 280 O 1 *
+bit 279 O 1 *
+bit 278 I 1 PAD181
+bit 277 O 1 *
+bit 276 O 1 *
+bit 275 O 1 *
+bit 274 O 1 *
+bit 273 O 1 *
+bit 272 O 1 *
+bit 271 O 1 *
+bit 270 O 1 *
+bit 269 I 1 IPAD184
+bit 268 O 1 *
+bit 267 O 1 *
+bit 266 O 1 *
+bit 265 O 1 *
+bit 264 O 1 *
+bit 263 O 1 *
+bit 262 I 1 PAD187
+bit 261 O 1 *
+bit 260 O 1 *
+bit 259 I 1 PAD188
+bit 258 O 1 *
+bit 257 O 1 *
+bit 256 O 1 *
+bit 255 I 1 PAD190
+bit 254 O 1 *
+bit 253 O 1 *
+bit 252 I 1 PAD191
+bit 251 O 1 *
+bit 250 O 1 *
+bit 249 O 1 *
+bit 248 O 1 *
+bit 247 O 1 *
+bit 246 O 1 *
+bit 245 O 1 *
+bit 244 O 1 *
+bit 243 O 1 *
+bit 242 I 1 PAD195
+bit 241 O 1 *
+bit 240 O 1 *
+bit 239 I 1 PAD196
+bit 238 O 1 *
+bit 237 O 1 *
+bit 236 I 1 PAD197
+bit 235 O 1 *
+bit 234 O 1 *
+bit 233 I 1 PAD198
+bit 232 O 1 *
+bit 231 O 1 *
+bit 230 I 1 IPAD199
+bit 229 I 1 PAD200
+bit 228 O 1 *
+bit 227 O 1 *
+bit 226 I 1 PAD201
+bit 225 O 1 *
+bit 224 O 1 *
+bit 223 I 1 PAD202
+bit 222 O 1 *
+bit 221 O 1 *
+bit 220 I 1 PAD203
+bit 219 O 1 *
+bit 218 O 1 *
+bit 217 I 1 IPAD204
+bit 216 I 1 PAD205
+bit 215 O 1 *
+bit 214 O 1 *
+bit 213 I 1 PAD206
+bit 212 O 1 *
+bit 211 O 1 *
+bit 210 I 1 PAD207
+bit 209 O 1 *
+bit 208 O 1 *
+bit 207 I 1 PAD208
+bit 206 O 1 *
+bit 205 O 1 *
+bit 204 I 1 IPAD209
+bit 203 I 1 PAD210
+bit 202 O 1 *
+bit 201 O 1 *
+bit 200 I 1 PAD104
+bit 199 O 1 *
+bit 198 O 1 *
+bit 197 I 1 PAD212
+bit 196 O 1 *
+bit 195 O 1 *
+bit 194 I 1 PAD109
+bit 193 O 1 *
+bit 192 O 1 *
+bit 191 I 1 IPAD214
+bit 190 O 1 *
+bit 189 O 1 *
+bit 188 O 1 *
+bit 187 O 1 *
+bit 186 O 1 *
+bit 185 O 1 *
+bit 184 I 1 PAD217
+bit 183 O 1 *
+bit 182 O 1 *
+bit 181 I 1 PAD136
+bit 180 O 1 *
+bit 179 O 1 *
+bit 178 O 1 *
+bit 177 O 1 *
+bit 176 O 1 *
+bit 175 O 1 *
+bit 174 O 1 *
+bit 173 O 1 *
+bit 172 O 1 *
+bit 171 I 1 PAD222
+bit 170 O 1 *
+bit 169 O 1 *
+bit 168 I 1 PAD223
+bit 167 O 1 *
+bit 166 O 1 *
+bit 165 O 1 *
+bit 164 O 1 *
+bit 163 O 1 *
+bit 162 O 1 *
+bit 161 O 1 *
+bit 160 O 1 *
+bit 159 O 1 *
+bit 158 O 1 *
+bit 157 O 1 *
+bit 156 O 1 *
+bit 155 I 1 IPAD228
+bit 154 I 1 PAD229
+bit 153 O 1 *
+bit 152 O 1 *
+bit 151 I 1 PAD230
+bit 150 O 1 *
+bit 149 O 1 *
+bit 148 I 1 PAD231
+bit 147 O 1 *
+bit 146 O 1 *
+bit 145 I 1 PAD183
+bit 144 O 1 *
+bit 143 O 1 *
+bit 142 I 1 PAD182
+bit 141 I 1 PAD1
+bit 140 O 1 PAD1 139 0 Z
+bit 139 C 0 *
+bit 138 I 1 PAD2
+bit 137 O 1 PAD2 136 0 Z
+bit 136 C 0 *
+bit 135 I 1 IPAD3
+bit 134 I 1 PAD4
+bit 133 O 1 PAD4 132 0 Z
+bit 132 C 0 *
+bit 131 I 1 PAD5
+bit 130 O 1 PAD5 129 0 Z
+bit 129 C 0 *
+bit 128 O 1 *
+bit 127 O 1 *
+bit 126 O 1 *
+bit 125 I 1 PAD7
+bit 124 O 1 PAD7 123 0 Z
+bit 123 C 0 *
+bit 122 I 1 PAD8
+bit 121 O 1 PAD8 120 0 Z
+bit 120 C 0 *
+bit 119 O 1 *
+bit 118 O 1 *
+bit 117 I 1 PAD11
+bit 116 O 1 PAD11 115 0 Z
+bit 115 C 0 *
+bit 114 I 1 PAD12
+bit 113 O 1 PAD12 112 0 Z
+bit 112 C 0 *
+bit 111 I 1 IPAD13
+bit 110 O 1 *
+bit 109 O 1 *
+bit 108 O 1 *
+bit 107 O 1 *
+bit 106 O 1 *
+bit 105 O 1 *
+bit 104 I 1 PAD16
+bit 103 O 1 PAD16 102 0 Z
+bit 102 C 0 *
+bit 101 I 1 PAD17
+bit 100 O 1 PAD17 99 0 Z
+bit 99 C 0 *
+bit 98 O 1 *
+bit 97 O 1 *
+bit 96 O 1 *
+bit 95 O 1 *
+bit 94 O 1 *
+bit 93 O 1 *
+bit 92 O 1 *
+bit 91 O 1 *
+bit 90 O 1 *
+bit 89 O 1 *
+bit 88 O 1 *
+bit 87 I 1 PAD23
+bit 86 O 1 PAD23 85 0 Z
+bit 85 C 0 *
+bit 84 I 1 PAD24
+bit 83 O 1 PAD24 82 0 Z
+bit 82 C 0 *
+bit 81 I 1 PAD25
+bit 80 O 1 PAD25 79 0 Z
+bit 79 C 0 *
+bit 78 I 1 PAD26
+bit 77 O 1 PAD26 76 0 Z
+bit 76 C 0 *
+bit 75 I 1 PAD27
+bit 74 O 1 PAD27 73 0 Z
+bit 73 C 0 *
+bit 72 I 1 IPAD28
+bit 71 I 1 IPAD29
+bit 70 I 1 PAD30
+bit 69 O 1 PAD30 68 0 Z
+bit 68 C 0 *
+bit 67 I 1 PAD31
+bit 66 O 1 PAD31 65 0 Z
+bit 65 C 0 *
+bit 64 I 1 PAD32
+bit 63 O 1 PAD32 62 0 Z
+bit 62 C 0 *
+bit 61 I 1 PAD33
+bit 60 O 1 PAD33 59 0 Z
+bit 59 C 0 *
+bit 58 I 1 PAD34
+bit 57 O 1 PAD34 56 0 Z
+bit 56 C 0 *
+bit 55 I 1 IPAD35
+bit 54 I 1 IPAD36
+bit 53 O 1 *
+bit 52 O 1 *
+bit 51 O 1 *
+bit 50 O 1 *
+bit 49 O 1 *
+bit 48 O 1 *
+bit 47 O 1 *
+bit 46 O 1 *
+bit 45 O 1 *
+bit 44 I 1 PAD40
+bit 43 O 1 PAD40 42 0 Z
+bit 42 C 0 *
+bit 41 I 1 PAD41
+bit 40 O 1 PAD41 39 0 Z
+bit 39 C 0 *
+bit 38 O 1 *
+bit 37 O 1 *
+bit 36 O 1 *
+bit 35 O 1 *
+bit 34 O 1 *
+bit 33 O 1 *
+bit 32 O 1 *
+bit 31 O 1 *
+bit 30 I 1 IPAD46
+bit 29 I 1 PAD47
+bit 28 O 1 PAD47 27 0 Z
+bit 27 C 0 *
+bit 26 I 1 PAD48
+bit 25 O 1 PAD48 24 0 Z
+bit 24 C 0 *
+bit 23 I 1 PAD49
+bit 22 O 1 PAD49 21 0 Z
+bit 21 C 0 *
+bit 20 I 1 PAD50
+bit 19 O 1 PAD50 18 0 Z
+bit 18 C 0 *
+bit 17 O 1 *
+bit 16 O 1 *
+bit 15 O 1 *
+bit 14 I 1 PAD52
+bit 13 O 1 PAD52 12 0 Z
+bit 12 C 0 *
+bit 11 I 1 PAD53
+bit 10 O 1 PAD53 9 0 Z
+bit 9 C 0 *
+bit 8 O 1 *
+bit 7 O 1 *
+bit 6 I 1 PAD56
+bit 5 O 1 PAD56 4 0 Z
+bit 4 C 0 *
+bit 3 I 1 PAD57
+bit 2 O 1 PAD57 1 0 Z
+bit 1 C 0 *
+bit 0 I 1 IPAD58

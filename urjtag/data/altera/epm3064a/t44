@@ -1,0 +1,53 @@
+#
+# $Id$
+#
+# JTAG package script for EPM3064AT44
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Arnim Laeuger <arniml@users.sourceforge.net>
+#
+
+salias	IN38	BSC0
+salias	IN37	BSC1
+salias	IO35	BSC2
+salias	IO34	BSC4
+salias	IO33	BSC9
+salias	IO31	BSC12
+salias	IO28	BSC14
+salias	IO27	BSC16
+salias	IO25	BSC18
+salias	IO23	BSC23
+salias	IO22	BSC24
+salias	IO21	BSC27
+salias	IO20	BSC28
+salias	IO19	BSC29
+salias	IO18	BSC31
+salias	IO15	BSC32
+salias	IO14	BSC34
+salias	IO13	BSC35
+salias	IO12	BSC36
+salias	IO10	BSC40
+salias	IO8	BSC45
+salias	IO6	BSC47
+salias	IO5	BSC49
+salias	IO3	BSC50
+salias	IO2	BSC51
+salias	IO44	BSC56
+salias	IO43	BSC59
+salias	IO42	BSC61
+salias	IN40	BSC62
+salias	IN39	BSC63

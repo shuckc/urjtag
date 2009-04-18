@@ -1,0 +1,732 @@
+#
+# $Id$
+#
+# Copyright (c) 2008 Gabor Juhos <juhosg@openwrt.org>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Documentation:
+# [1] Atmel Corporation, "AT32AP7000 - High Performance, Low Power
+#     AVR(R)32 32-Bit Microcontroller", Rev. 32003K-AVR32-10/07
+#     http://www.atmel.com/dyn/resources/prod_documents/doc32003.pdf
+#
+
+# mandatory data registers
+register	BSR	388	# Boundary Scan Register
+register	BR	1	# Bypass Register
+# optional data registers
+register	DIR	32	# Device Identification Register
+# user-defined registers
+register	ARR	5	# AVR Reset Register
+register	NAR	34	# Nexus Access Register
+register	MWAR	35	# Memory Word Access Register
+register	MBAR	34	# Memory Block Access Register
+register	CAR	1	# Cancel Access Register
+register	SYR	16	# Sync Register
+
+# see page 909 in [1]
+instruction length 5
+
+# mandatory instructions
+instruction EXTEST		00000	BSR	# see page 914 in [1]
+instruction IDCODE		00001	DIR	# see page 914 in [1]
+instruction SAMPLE/PRELOAD	00010	BSR	# see page 914 in [1]
+instruction BYPASS		01111	BR	# see page 915 in [1]
+
+# optional instructions
+instruction INTEST		00100	BSR	# see page 914 in [1]
+instruction CLAMP		00110	BR	# see page 915 in [1]
+
+# user-defined instructions
+instruction AVR_RESET		01100	ARR	# see page 919 in [1]
+instruction NEXUS_ACCESS	10000	NAR	# see page 916 in [1]
+instruction MEMORY_WORD_ACCESS	10001	MWAR	# see page 917 in [1]
+instruction MEMORY_BLOCK_ACCESS	10010	MBAR	# see page 918 in [1]
+instruction CANCEL_ACCESS	10011	CAR	# see page 918 in [1]
+instruction SYNC		10111	SYR	# see page 919 in [1]
+
+# undocumented instructions, detected by the "discovery" command:
+#Detecting DR length for IR 11000 ... 35
+#Detecting DR length for IR 11001 ... 32
+#Detecting DR length for IR 11010 ... 35
+#Detecting DR length for IR 11011 ... 64
+#Detecting DR length for IR 11111 ... 1         # probably BYPASS
+
+signal AGNDOSC
+signal AGNDPLL
+signal AGNDUSB
+signal AVDDOSC
+signal AVDDPLL
+signal AVDDUSB
+signal EVTI_N
+signal FSDM
+signal FSDP
+signal GNDCORE_0
+signal GNDCORE_1
+signal GNDCORE_2
+signal GNDCORE_3
+signal GNDCORE_4
+signal GNDCORE_5
+signal GNDIOP_CBL
+signal GNDIOP_CBR
+signal GNDIOP_CUL
+signal GNDIOP_CUR
+signal GNDIOP_0
+signal GNDIOP_1
+signal GNDIOP_2
+signal GNDIOP_3
+signal GNDIOP_4a
+signal GNDIOP_4b
+signal GNDIOP_6a
+signal GNDIOP_6b
+signal GNDIOP_7
+signal GNDIOP_8a
+signal GNDIOP_8b
+signal GNDIOP_9a
+signal GNDIOP_9b
+signal GNDIOP_10
+signal HSDM
+signal HSDP
+signal OSCEN_N
+signal PA00
+signal PA01
+signal PA02
+signal PA03
+signal PA04
+signal PA05
+signal PA06
+signal PA07
+signal PA08
+signal PA09
+signal PA10
+signal PA11
+signal PA12
+signal PA13
+signal PA14
+signal PA15
+signal PA16
+signal PA17
+signal PA18
+signal PA19
+signal PA20
+signal PA21
+signal PA22
+signal PA23
+signal PA24
+signal PA25
+signal PA26
+signal PA27
+signal PA28
+signal PA29
+signal PA30
+signal PA31
+signal PB00
+signal PB01
+signal PB02
+signal PB03
+signal PB04
+signal PB05
+signal PB06
+signal PB07
+signal PB08
+signal PB09
+signal PB10
+signal PB11
+signal PB12
+signal PB13
+signal PB14
+signal PB15
+signal PB16
+signal PB17
+signal PB18
+signal PB19
+signal PB20
+signal PB21
+signal PB22
+signal PB23
+signal PB24
+signal PB25
+signal PB26
+signal PB27
+signal PB28
+signal PB29
+signal PB30
+signal PC00
+signal PC01
+signal PC02
+signal PC03
+signal PC04
+signal PC05
+signal PC06
+signal PC07
+signal PC08
+signal PC09
+signal PC10
+signal PC11
+signal PC12
+signal PC13
+signal PC14
+signal PC15
+signal PC16
+signal PC17
+signal PC18
+signal PC19
+signal PC20
+signal PC21
+signal PC22
+signal PC23
+signal PC24
+signal PC25
+signal PC26
+signal PC27
+signal PC28
+signal PC29
+signal PC30
+signal PC31
+signal PD00
+signal PD01
+signal PD02
+signal PD03
+signal PD04
+signal PD05
+signal PD06
+signal PD07
+signal PD08
+signal PD09
+signal PD10
+signal PD11
+signal PD12
+signal PD13
+signal PD14
+signal PD15
+signal PD16
+signal PD17
+signal PE00
+signal PE01
+signal PE02
+signal PE03
+signal PE04
+signal PE05
+signal PE06
+signal PE07
+signal PE08
+signal PE09
+signal PE10
+signal PE11
+signal PE12
+signal PE13
+signal PE14
+signal PE15
+signal PE16
+signal PE17
+signal PE18
+signal PE19
+signal PE20
+signal PE21
+signal PE22
+signal PE23
+signal PE24
+signal PE25
+signal PE26
+signal PLL0
+signal PLL1
+signal PX00
+signal PX01
+signal PX02
+signal PX03
+signal PX04
+signal PX05
+signal PX06
+signal PX07
+signal PX08
+signal PX09
+signal PX10
+signal PX11
+signal PX12
+signal PX13
+signal PX14
+signal PX15
+signal PX16
+signal PX17
+signal PX18
+signal PX19
+signal PX20
+signal PX21
+signal PX22
+signal PX23
+signal PX24
+signal PX25
+signal PX26
+signal PX27
+signal PX28
+signal PX29
+signal PX30
+signal PX31
+signal PX32
+signal PX33
+signal PX34
+signal PX35
+signal PX36
+signal PX37
+signal PX38
+signal PX39
+signal PX40
+signal PX41
+signal PX42
+signal PX43
+signal PX44
+signal PX45
+signal PX46
+signal PX47
+signal PX48
+signal PX49
+signal PX50
+signal PX51
+signal PX52
+signal PX53
+signal RESET_N
+signal TCK
+signal TDI
+signal TDO
+signal TMS
+signal TRST_N
+signal VBG
+signal VDDCORE_0
+signal VDDCORE_1
+signal VDDCORE_2
+signal VDDCORE_3
+signal VDDCORE_4
+signal VDDIOP_CBL
+signal VDDIOP_CBR
+signal VDDIOP_CUL
+signal VDDIOP_CUR
+signal VDDIOP_0a
+signal VDDIOP_0b
+signal VDDIOP_1
+signal VDDIOP_2a
+signal VDDIOP_2b
+signal VDDIOP_3
+signal VDDIOP_4a
+signal VDDIOP_4b
+signal VDDIOP_6a
+signal VDDIOP_6b
+signal VDDIOP_7
+signal VDDIOP_8a
+signal VDDIOP_8b
+signal VDDIOP_9a
+signal VDDIOP_9b
+signal VDDIOP_10a
+signal VDDIOP_10b
+signal VDDIOP_11
+signal WAKE_N
+signal XIN0
+signal XIN1
+signal XIN32
+signal XOUT0
+signal XOUT1
+
+# Boundary Scan Register bits
+
+bit 387 C 1 *
+bit 386 B 1 PD00 387 1 Z
+bit 385 C 1 *
+bit 384 B 1 PD01 385 1 Z
+bit 383 C 1 *
+bit 382 B 1 PD02 383 1 Z
+bit 381 C 1 *
+bit 380 B 1 PE17 381 1 Z
+bit 379 C 1 *
+bit 378 B 1 PE18 379 1 Z
+bit 377 C 1 *
+bit 376 B 1 PX47 377 1 Z
+bit 375 C 1 *
+bit 374 B 1 PX48 375 1 Z
+bit 373 C 1 *
+bit 372 B 1 PX49 373 1 Z
+bit 371 C 1 *
+bit 370 B 1 PX50 371 1 Z
+bit 369 C 1 *
+bit 368 B 1 PX51 369 1 Z
+bit 367 C 1 *
+bit 366 B 1 PX32 367 1 Z
+bit 365 C 1 *
+bit 364 B 1 PX33 365 1 Z
+bit 363 C 1 *
+bit 362 B 1 PX00 363 1 Z
+bit 361 C 1 *
+bit 360 B 1 PX01 361 1 Z
+bit 359 C 1 *
+bit 358 B 1 PX02 359 1 Z
+bit 357 C 1 *
+bit 356 B 1 PX03 357 1 Z
+bit 355 C 1 *
+bit 354 B 1 PX04 355 1 Z
+bit 353 C 1 *
+bit 352 B 1 PX05 353 1 Z
+bit 351 C 1 *
+bit 350 B 1 PD03 351 1 Z
+bit 349 C 1 *
+bit 348 B 1 PD04 349 1 Z
+bit 347 C 1 *
+bit 346 B 1 PD05 347 1 Z
+bit 345 C 1 *
+bit 344 B 1 PD06 345 1 Z
+bit 343 C 1 *
+bit 342 B 1 PD07 343 1 Z
+bit 341 C 1 *
+bit 340 B 1 PD08 341 1 Z
+bit 339 C 1 *
+bit 338 B 1 PD09 339 1 Z
+bit 337 C 1 *
+bit 336 B 1 PA00 337 1 Z
+bit 335 C 1 *
+bit 334 B 1 PA01 335 1 Z
+bit 333 C 1 *
+bit 332 B 1 PA02 333 1 Z
+bit 331 C 1 *
+bit 330 B 1 PA03 331 1 Z
+bit 329 C 1 *
+bit 328 B 1 PA04 329 1 Z
+bit 327 C 1 *
+bit 326 B 1 PA05 327 1 Z
+bit 325 C 1 *
+bit 324 B 1 PB24 325 1 Z
+bit 323 C 1 *
+bit 322 B 1 PB25 323 1 Z
+bit 321 C 1 *
+bit 320 B 1 PA08 321 1 Z
+bit 319 C 1 *
+bit 318 B 1 PA09 319 1 Z
+bit 317 C 1 *
+bit 316 B 1 PA10 317 1 Z
+bit 315 C 1 *
+bit 314 B 1 PA11 315 1 Z
+bit 313 C 1 *
+bit 312 B 1 PA12 313 1 Z
+bit 311 C 1 *
+bit 310 B 1 PA13 311 1 Z
+bit 309 C 1 *
+bit 308 B 1 PA14 309 1 Z
+bit 307 C 1 *
+bit 306 B 1 PA15 307 1 Z
+bit 305 C 1 *
+bit 304 B 1 PA16 305 1 Z
+bit 303 C 1 *
+bit 302 B 1 PA17 303 1 Z
+bit 301 C 1 *
+bit 300 B 1 PA18 301 1 Z
+bit 299 C 1 *
+bit 298 B 1 PA19 299 1 Z
+bit 297 C 1 *
+bit 296 B 1 PA20 297 1 Z
+bit 295 C 1 *
+bit 294 B 1 PA21 295 1 Z
+bit 293 C 1 *
+bit 292 B 1 PA22 293 1 Z
+bit 291 C 1 *
+bit 290 B 1 PD10 291 1 Z
+bit 289 C 1 *
+bit 288 B 1 PA23 289 1 Z
+bit 287 C 1 *
+bit 286 B 1 PA24 287 1 Z
+bit 285 C 1 *
+bit 284 B 1 PD11 285 1 Z
+bit 283 C 1 *
+bit 282 B 1 PD12 283 1 Z
+bit 281 C 1 *
+bit 280 B 1 PD13 281 1 Z
+bit 279 C 1 *
+bit 278 B 1 PD14 279 1 Z
+bit 277 C 1 *
+bit 276 B 1 PD15 277 1 Z
+bit 275 C 1 *
+bit 274 B 1 PD16 275 1 Z
+bit 273 C 1 *
+bit 272 B 1 PD17 273 1 Z
+bit 271 C 1 *
+bit 270 B 1 PA25 271 1 Z
+bit 269 C 1 *
+bit 268 B 1 PA26 269 1 Z
+bit 267 C 1 *
+bit 266 B 1 PA27 267 1 Z
+bit 265 C 1 *
+bit 264 B 1 PA28 265 1 Z
+bit 263 C 1 *
+bit 262 B 1 PA29 263 1 Z
+bit 261 C 1 *
+bit 260 B 1 PA30 261 1 Z
+bit 259 C 1 *
+bit 258 B 1 PA31 259 1 Z
+bit 257 C 1 *
+bit 256 B 1 PB26 257 1 Z
+bit 255 C 1 *
+bit 254 B 1 PB27 255 1 Z
+bit 253 C 1 *
+bit 252 B 1 PB28 253 1 Z
+bit 251 C 1 *
+bit 250 B 1 PX53 251 1 Z
+bit 249 C 1 *
+bit 248 B 1 PX52 249 1 Z
+bit 247 C 1 *
+bit 246 B 1 PX41 247 1 Z
+bit 245 C 1 *
+bit 244 B 1 PE25 245 1 Z
+bit 243 C 1 *
+bit 242 B 1 PE24 243 1 Z
+bit 241 C 1 *
+bit 240 B 1 PE23 241 1 Z
+bit 239 C 1 *
+bit 238 B 1 PE22 239 1 Z
+bit 237 C 1 *
+bit 236 B 1 PE21 237 1 Z
+bit 235 C 1 *
+bit 234 B 1 PE20 235 1 Z
+bit 233 C 1 *
+bit 232 B 1 PE19 233 1 Z
+bit 231 C 1 *
+bit 230 B 1 PX06 231 1 Z
+bit 229 C 1 *
+bit 228 B 1 PX07 229 1 Z
+bit 227 C 1 *
+bit 226 B 1 PX08 227 1 Z
+bit 225 C 1 *
+bit 224 B 1 PX09 225 1 Z
+bit 223 C 1 *
+bit 222 B 1 PX10 223 1 Z
+bit 221 C 1 *
+bit 220 B 1 PX11 221 1 Z
+bit 219 C 1 *
+bit 218 B 1 PB29 219 1 Z
+bit 217 C 1 *
+bit 216 B 1 PB30 217 1 Z
+bit 215 C 1 *
+bit 214 B 1 PX12 215 1 Z
+bit 213 C 1 *
+bit 212 B 1 PX13 213 1 Z
+bit 211 C 1 *
+bit 210 B 1 PC01 211 1 Z
+bit 209 C 1 *
+bit 208 B 1 PC02 209 1 Z
+bit 207 C 1 *
+bit 206 B 1 PC03 207 1 Z
+bit 205 C 1 *
+bit 204 B 1 PC04 205 1 Z
+bit 203 C 1 *
+bit 202 B 1 PC00 203 1 Z
+bit 201 C 1 *
+bit 200 B 1 PX14 201 1 Z
+bit 199 C 1 *
+bit 198 B 1 PX15 199 1 Z
+bit 197 C 1 *
+bit 196 B 1 PX16 197 1 Z
+bit 195 C 1 *
+bit 194 B 1 PX17 195 1 Z
+bit 193 C 1 *
+bit 192 B 1 PX34 193 1 Z
+bit 191 C 1 *
+bit 190 B 1 PX35 191 1 Z
+bit 189 C 1 *
+bit 188 B 1 PX36 189 1 Z
+bit 187 C 1 *
+bit 186 B 1 PX37 187 1 Z
+bit 185 C 1 *
+bit 184 B 1 PX38 185 1 Z
+bit 183 C 1 *
+bit 182 B 1 PX18 183 1 Z
+bit 181 C 1 *
+bit 180 B 1 PX19 181 1 Z
+bit 179 C 1 *
+bit 178 B 1 PX20 179 1 Z
+bit 177 C 1 *
+bit 176 B 1 PX21 177 1 Z
+bit 175 C 1 *
+bit 174 B 1 PX22 175 1 Z
+bit 173 C 1 *
+bit 172 B 1 PX23 173 1 Z
+bit 171 C 1 *
+bit 170 B 1 PX24 171 1 Z
+bit 169 C 1 *
+bit 168 B 1 PX25 169 1 Z
+bit 167 C 1 *
+bit 166 B 1 PX26 167 1 Z
+bit 165 C 1 *
+bit 164 B 1 PX27 165 1 Z
+bit 163 C 1 *
+bit 162 B 1 PX28 163 1 Z
+bit 161 C 1 *
+bit 160 B 1 PX29 161 1 Z
+bit 159 C 1 *
+bit 158 B 1 PX30 159 1 Z
+bit 157 C 1 *
+bit 156 B 1 PX31 157 1 Z
+bit 155 C 1 *
+bit 154 B 1 PC05 155 1 Z
+bit 153 C 1 *
+bit 152 B 1 PC06 153 1 Z
+bit 151 C 1 *
+bit 150 B 1 PE26 151 1 Z
+bit 149 C 1 *
+bit 148 B 1 PX39 149 1 Z
+bit 147 C 1 *
+bit 146 B 1 PC07 147 1 Z
+bit 145 C 1 *
+bit 144 B 1 PC08 145 1 Z
+bit 143 C 1 *
+bit 142 B 1 PC09 143 1 Z
+bit 141 C 1 *
+bit 140 B 1 PC10 141 1 Z
+bit 139 C 1 *
+bit 138 B 1 PC11 139 1 Z
+bit 137 C 1 *
+bit 136 B 1 PC12 137 1 Z
+bit 135 C 1 *
+bit 134 B 1 PC13 135 1 Z
+bit 133 C 1 *
+bit 132 B 1 PC14 133 1 Z
+bit 131 C 1 *
+bit 130 B 1 PC15 131 1 Z
+bit 129 C 1 *
+bit 128 B 1 PX40 129 1 Z
+bit 127 C 1 *
+bit 126 B 1 PX42 127 1 Z
+bit 125 C 1 *
+bit 124 B 1 PX43 125 1 Z
+bit 123 C 1 *
+bit 122 B 1 PX44 123 1 Z
+bit 121 C 1 *
+bit 120 B 1 PX45 121 1 Z
+bit 119 C 1 *
+bit 118 B 1 PX46 119 1 Z
+bit 117 C 1 *
+bit 116 B 1 PB00 117 1 Z
+bit 115 C 1 *
+bit 114 B 1 PB01 115 1 Z
+bit 113 C 1 *
+bit 112 B 1 PB02 113 1 Z
+bit 111 C 1 *
+bit 110 B 1 PB03 111 1 Z
+bit 109 C 1 *
+bit 108 B 1 PB04 109 1 Z
+bit 107 C 1 *
+bit 106 B 1 PB05 107 1 Z
+bit 105 C 1 *
+bit 104 B 1 PB06 105 1 Z
+bit 103 C 1 *
+bit 102 B 1 PB07 103 1 Z
+bit 101 C 1 *
+bit 100 B 1 PB08 101 1 Z
+bit 99 C 1 *
+bit 98 B 1 PB09 99 1 Z
+bit 97 C 1 *
+bit 96 B 1 PC16 97 1 Z
+bit 95 C 1 *
+bit 94 B 1 PC17 95 1 Z
+bit 93 C 1 *
+bit 92 B 1 PB10 93 1 Z
+bit 91 C 1 *
+bit 90 B 1 PB11 91 1 Z
+bit 89 C 1 *
+bit 88 B 1 PB12 89 1 Z
+bit 87 C 1 *
+bit 86 B 1 PB13 87 1 Z
+bit 85 C 1 *
+bit 84 B 1 PB14 85 1 Z
+bit 83 C 1 *
+bit 82 B 1 PB15 83 1 Z
+bit 81 C 1 *
+bit 80 B 1 PB16 81 1 Z
+bit 79 C 1 *
+bit 78 B 1 PB17 79 1 Z
+bit 77 C 1 *
+bit 76 B 1 PB18 77 1 Z
+bit 75 C 1 *
+bit 74 B 1 PB19 75 1 Z
+bit 73 C 1 *
+bit 72 B 1 PB20 73 1 Z
+bit 71 C 1 *
+bit 70 B 1 PB21 71 1 Z
+bit 69 C 1 *
+bit 68 B 1 PB22 69 1 Z
+bit 67 C 1 *
+bit 66 B 1 PB23 67 1 Z
+bit 65 C 1 *
+bit 64 B 1 PC18 65 1 Z
+bit 63 C 1 *
+bit 62 B 1 PA06 63 1 Z
+bit 61 C 1 *
+bit 60 B 1 PA07 61 1 Z
+bit 59 C 1 *
+bit 58 B 1 PC19 59 1 Z
+bit 57 C 1 *
+bit 56 B 1 PC20 57 1 Z
+bit 55 C 1 *
+bit 54 B 1 PC21 55 1 Z
+bit 53 C 1 *
+bit 52 B 1 PC22 53 1 Z
+bit 51 C 1 *
+bit 50 B 1 PC23 51 1 Z
+bit 49 C 1 *
+bit 48 B 1 PC24 49 1 Z
+bit 47 C 1 *
+bit 46 B 1 PC25 47 1 Z
+bit 45 C 1 *
+bit 44 B 1 PC26 45 1 Z
+bit 43 C 1 *
+bit 42 B 1 PC27 43 1 Z
+bit 41 C 1 *
+bit 40 B 1 PC28 41 1 Z
+bit 39 C 1 *
+bit 38 B 1 PC29 39 1 Z
+bit 37 C 1 *
+bit 36 B 1 PC30 37 1 Z
+bit 35 C 1 *
+bit 34 B 1 PC31 35 1 Z
+bit 33 C 1 *
+bit 32 B 1 PE00 33 1 Z
+bit 31 C 1 *
+bit 30 B 1 PE01 31 1 Z
+bit 29 C 1 *
+bit 28 B 1 PE02 29 1 Z
+bit 27 C 1 *
+bit 26 B 1 PE03 27 1 Z
+bit 25 C 1 *
+bit 24 B 1 PE04 25 1 Z
+bit 23 C 1 *
+bit 22 B 1 PE05 23 1 Z
+bit 21 C 1 *
+bit 20 B 1 PE06 21 1 Z
+bit 19 C 1 *
+bit 18 B 1 PE07 19 1 Z
+bit 17 C 1 *
+bit 16 B 1 PE08 17 1 Z
+bit 15 C 1 *
+bit 14 B 1 PE09 15 1 Z
+bit 13 C 1 *
+bit 12 B 1 PE10 13 1 Z
+bit 11 C 1 *
+bit 10 B 1 PE11 11 1 Z
+bit 9 C 1 *
+bit 8 B 1 PE12 9 1 Z
+bit 7 C 1 *
+bit 6 B 1 PE13 7 1 Z
+bit 5 C 1 *
+bit 4 B 1 PE14 5 1 Z
+bit 3 C 1 *
+bit 2 B 1 PE15 3 1 Z
+bit 1 C 1 *
+bit 0 B 1 PE16 1 1 Z
+
+endian big

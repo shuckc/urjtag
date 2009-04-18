@@ -1,0 +1,226 @@
+#
+# $Id$
+#
+# JTAG package script for EP2C8F256
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by H Hartley Sweeten <hsweeten@visionengravers.com>
+#
+# Note:
+#   The signals defined in this file as unused pad are specified as
+#   I/O pins in the main configuration file ep2c8.
+#
+
+salias	IOC3	BSC198	# Note: this pin is specified as I/O. If AS mode is specified by MSEL it is output only (ASDO)
+salias	IOF4	BSC197	# Note: this pin is specified as I/O. If AS mode is specified by MSEL it is output only (nCSO)
+salias	IOC1	BSC196
+salias	IOC2	BSC195
+salias	IOD5	BSC194
+salias	IOE5	BSC193
+salias	IOF5	BSC192
+#		BSC191	# unused pad
+salias	IOD3	BSC190
+salias	IOD4	BSC189
+salias	IOF3	BSC188
+salias	IOD2	BSC187
+salias	IOD1	BSC186
+salias	IOE3	BSC185
+salias	IOE4	BSC184
+salias	IOG4	BSC183
+salias	IOJ6	BSC182
+salias	IOH6	BSC181
+salias	IOE1	BSC180
+salias	IOE2	BSC179
+salias	DATA0	BSC178	# Family-specific input pin F1
+salias	DCLK	BSC177	# Family-specific input pin H4
+#	nCE	BSC176	# untestable Family-specific pin G5
+salias	CLK0	BSC175	# Family-specific input pin H2
+salias	CLK1	BSC174	# Family-specific input pin H1
+#	nCONFIG	BSC173	# untestable Family-specific pin J5
+salias	CLK2	BSC172	# Family-specific input pin J2
+salias	CLK3	BSC171	# Family-specific input pin J1
+salias	IOK2	BSC170
+salias	IOK1	BSC169
+salias	IOK4	BSC168
+salias	IOK5	BSC167
+#		BSC166	# unused pad
+salias	IOL1	BSC165
+salias	IOL2	BSC164
+salias	IOJ4	BSC163
+salias	IOM1	BSC162
+salias	IOM2	BSC161
+salias	IOM3	BSC160
+salias	IOL3	BSC159
+salias	ION1	BSC158
+salias	ION2	BSC157
+salias	IOP1	BSC156
+salias	IOP2	BSC155
+#		BSC154	# unused pad
+salias	ION3	BSC153
+salias	ION4	BSC152
+salias	IOP3	BSC151
+salias	IOL4	BSC150
+salias	IOM4	BSC149
+salias	IOR3	BSC148
+salias	IOT3	BSC147
+salias	IOP5	BSC146
+salias	IOP4	BSC145
+salias	IOT4	BSC144
+salias	IOR4	BSC143
+salias	IOT5	BSC142
+salias	IOR5	BSC141
+salias	ION7	BSC140
+salias	IOK7	BSC139
+salias	IOK6	BSC138
+salias	IOT6	BSC137
+salias	IOR6	BSC136
+salias	IOP6	BSC135
+salias	ION6	BSC134
+salias	ION8	BSC133
+salias	IOT7	BSC132
+salias	IOR7	BSC131
+salias	IOL7	BSC130
+salias	IOL8	BSC129
+salias	IOT8	BSC128
+salias	IOR8	BSC127
+salias	IOT9	BSC126
+salias	IOR9	BSC125
+salias	ION9	BSC124
+salias	ION10	BSC123
+salias	IOT11	BSC122
+salias	IOR11	BSC121
+salias	IOP11	BSC120
+salias	IOL9	BSC119
+salias	IOL10	BSC118
+salias	IOR10	BSC117
+salias	IOT10	BSC116
+salias	IOK11	BSC115
+salias	IOK10	BSC114
+salias	ION11	BSC113
+salias	IOP12	BSC112
+salias	IOP13	BSC111
+salias	IOT12	BSC110
+salias	IOR12	BSC109
+#		BSC108	# unused pad
+salias	IOT13	BSC107
+salias	IOR13	BSC106
+salias	IOT14	BSC105
+salias	IOR14	BSC104
+salias	IOM11	BSC103
+salias	IOL11	BSC102
+salias	ION12	BSC101
+salias	IOM12	BSC100
+salias	IOL12	BSC099
+salias	IOK13	BSC098
+salias	ION13	BSC097
+salias	ION14	BSC096
+salias	IOP15	BSC095
+salias	IOP16	BSC094
+salias	ION15	BSC093
+salias	ION16	BSC092
+salias	IOP14	BSC091
+#		BSC090	# unused pad
+#		BSC089	# unused pad
+salias	IOM14	BSC088
+salias	IOM15	BSC087
+salias	IOM16	BSC086
+#		BSC085	# unused pad
+salias	IOL14	BSC084
+salias	IOL15	BSC083
+salias	IOL16	BSC082
+#	nSTATUS	BSC081	# untestable Family-specific pin M13
+#	CONF_DONE	BSC080	# untestable Family-specific pin L13
+salias	MSEL1	BSC079	# Family-specific input pin K12
+salias	MSEL0	BSC078	# Family-specific input pin J13
+salias	IOK16	BSC077
+salias	IOK15	BSC076
+salias	CLK7	BSC075	# Family-specific input pin J16
+salias	CLK6	BSC074	# Family-specific input pin J15
+salias	CLK5	BSC073	# Family-specific input pin H15
+salias	CLK4	BSC072	# Family-specific input pin H16
+salias	IOH12	BSC071
+salias	IOJ12	BSC070
+salias	IOG16	BSC069
+salias	IOG15	BSC068
+salias	IOF15	BSC067
+salias	IOF16	BSC066
+salias	IOJ11	BSC065
+salias	IOH11	BSC064
+salias	IOG12	BSC063
+salias	IOG13	BSC062
+salias	IOE13	BSC061
+salias	IOF13	BSC060
+salias	IOH13	BSC059
+salias	IOD15	BSC058
+salias	IOD16	BSC057
+salias	IOE15	BSC056
+salias	IOE16	BSC055
+salias	IOF14	BSC054
+salias	IOC15	BSC053
+salias	IOC16	BSC052
+salias	IOC14	BSC051
+salias	IOD13	BSC050
+salias	IOE14	BSC049
+salias	IOD14	BSC048
+salias	IOB14	BSC047
+salias	IOA14	BSC046
+salias	IOC13	BSC045
+salias	IOC12	BSC044
+salias	IOB13	BSC043
+salias	IOA13	BSC042
+salias	IOB12	BSC041
+salias	IOA12	BSC040
+salias	IOC11	BSC039
+salias	IOB11	BSC038
+salias	IOA11	BSC037
+salias	IOG10	BSC036
+salias	IOG11	BSC035
+salias	IOB10	BSC034
+salias	IOA10	BSC033
+salias	IOF10	BSC032
+salias	IOF9	BSC031
+salias	IOD9	BSC030
+salias	IOD11	BSC029
+salias	IOD10	BSC028
+salias	IOA9	BSC027
+salias	IOB9	BSC026
+salias	IOA8	BSC025
+salias	IOB8	BSC024
+salias	IOA7	BSC023
+salias	IOB7	BSC022
+salias	IOF7	BSC021
+salias	IOF8	BSC020
+#		BSC019	# unused pad
+#		BSC018	# unused pad
+salias	IOD8	BSC017
+salias	IOB6	BSC016
+salias	IOA6	BSC015
+salias	IOG6	BSC014
+salias	IOG7	BSC013
+salias	IOD7	BSC012
+salias	IOD6	BSC011
+salias	IOC6	BSC010
+salias	IOC5	BSC009
+salias	IOC4	BSC008
+salias	IOB5	BSC007
+salias	IOA5	BSC006
+salias	IOB4	BSC005
+salias	IOA4	BSC004
+salias	IOA3	BSC003
+salias	IOB3	BSC002
+salias	IOE6	BSC001
+salias	IOF6	BSC000

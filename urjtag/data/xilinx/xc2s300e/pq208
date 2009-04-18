@@ -1,0 +1,174 @@
+#
+# $Id$
+#
+# JTAG package script for XC2S300E-PQ240
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Arnim Laeuger <arniml@users.sourceforge.net>
+#
+
+salias	CCLK_P155	CCLK_PAD437
+salias	DONE_P104	DONE_PAD313
+salias	GCK0_P80	GCK0_PAD254
+salias	GCK1_P77	GCK1_PAD250
+salias	GCK2_P182	GCK2_PAD500
+salias	GCK3_P185	GCK3_PAD2
+salias	INIT_P107	INIT_PAD317
+salias	IO_P100		IO_PAD302
+salias	IO_P101		IO_PAD309
+salias	IO_P102		IO_PAD310
+salias	IO_P108		IO_PAD318
+salias	IO_P109		IO_PAD324
+salias	IO_P10		IO_PAD89
+salias	IO_P110		IO_PAD330
+salias	IO_P111		IO_PAD333
+salias	IO_P112		IO_PAD334
+salias	IO_P113		IO_PAD339
+salias	IO_P114		IO_PAD341
+salias	IO_P115		IO_PAD342
+salias	IO_P116		IO_PAD343
+salias	IO_P11		IO_PAD90
+salias	IO_P120		IO_PAD348
+salias	IO_P121		IO_PAD349
+salias	IO_P122		IO_PAD354
+salias	IO_P123		IO_PAD355
+salias	IO_P125		IO_PAD363
+salias	IO_P126		IO_PAD364
+salias	IO_P127		IO_PAD370
+salias	IO_P129		IO_PAD375
+salias	IO_P132		IO_PAD379
+salias	IO_P133		IO_PAD380
+salias	IO_P134		IO_PAD383
+salias	IO_P135		IO_PAD388
+salias	IO_P136		IO_PAD389
+salias	IO_P138		IO_PAD394
+salias	IO_P139		IO_PAD395
+salias	IO_P140		IO_PAD403
+salias	IO_P141		IO_PAD404
+salias	IO_P145		IO_PAD409
+salias	IO_P146		IO_PAD410
+salias	IO_P147		IO_PAD411
+salias	IO_P148		IO_PAD413
+salias	IO_P149		IO_PAD418
+salias	IO_P150		IO_PAD419
+salias	IO_P151		IO_PAD422
+salias	IO_P152		IO_PAD428
+salias	IO_P153		IO_PAD435
+salias	IO_P154		IO_PAD436
+salias	IO_P15		IO_PAD95
+salias	IO_P160		IO_PAD444
+salias	IO_P161		IO_PAD445
+salias	IO_P162		IO_PAD451
+salias	IO_P163		IO_PAD456
+salias	IO_P164		IO_PAD459
+salias	IO_P165		IO_PAD460
+salias	IO_P166		IO_PAD465
+salias	IO_P167		IO_PAD467
+salias	IO_P168		IO_PAD468
+salias	IO_P169		IO_PAD469
+salias	IO_P16		IO_PAD96
+salias	IO_P173		IO_PAD474
+salias	IO_P174		IO_PAD475
+salias	IO_P175		IO_PAD483
+salias	IO_P176		IO_PAD484
+salias	IO_P178		IO_PAD489
+salias	IO_P179		IO_PAD490
+salias	IO_P17		IO_PAD104
+salias	IO_P180		IO_PAD496
+salias	IO_P181		IO_PAD499
+salias	IO_P187		IO_PAD5
+salias	IO_P188		IO_PAD12
+salias	IO_P189		IO_PAD13
+salias	IO_P18		IO_PAD105
+salias	IO_P191		IO_PAD18
+salias	IO_P192		IO_PAD19
+salias	IO_P193		IO_PAD27
+salias	IO_P194		IO_PAD28
+salias	IO_P198		IO_PAD33
+salias	IO_P199		IO_PAD34
+salias	IO_P200		IO_PAD35
+salias	IO_P201		IO_PAD37
+salias	IO_P202		IO_PAD42
+salias	IO_P203		IO_PAD43
+salias	IO_P204		IO_PAD46
+salias	IO_P205		IO_PAD51
+salias	IO_P206		IO_PAD58
+salias	IO_P20		IO_PAD110
+salias	IO_P21		IO_PAD111
+salias	IO_P22		IO_PAD117
+salias	IO_P23		IO_PAD120
+salias	IO_P24		IO_PAD121
+salias	IO_P27		IO_PAD125
+salias	IO_P29		IO_PAD130
+salias	IO_P30		IO_PAD135
+salias	IO_P31		IO_PAD136
+salias	IO_P33		IO_PAD144
+salias	IO_P34		IO_PAD145
+salias	IO_P35		IO_PAD150
+salias	IO_P36		IO_PAD151
+salias	IO_P3		IO_PAD65
+salias	IO_P40		IO_PAD156
+salias	IO_P41		IO_PAD157
+salias	IO_P42		IO_PAD158
+salias	IO_P43		IO_PAD160
+salias	IO_P44		IO_PAD165
+salias	IO_P45		IO_PAD166
+salias	IO_P46		IO_PAD169
+salias	IO_P47		IO_PAD175
+salias	IO_P48		IO_PAD182
+salias	IO_P49		IO_PAD183
+salias	IO_P4		IO_PAD71
+salias	IO_P55		IO_PAD193
+salias	IO_P56		IO_PAD194
+salias	IO_P57		IO_PAD200
+salias	IO_P58		IO_PAD205
+salias	IO_P59		IO_PAD208
+salias	IO_P5		IO_PAD77
+salias	IO_P60		IO_PAD209
+salias	IO_P61		IO_PAD214
+salias	IO_P62		IO_PAD215
+salias	IO_P63		IO_PAD217
+salias	IO_P64		IO_PAD218
+salias	IO_P68		IO_PAD223
+salias	IO_P69		IO_PAD224
+salias	IO_P6		IO_PAD80
+salias	IO_P70		IO_PAD232
+salias	IO_P71		IO_PAD233
+salias	IO_P73		IO_PAD238
+salias	IO_P74		IO_PAD239
+salias	IO_P75		IO_PAD247
+salias	IO_P7		IO_PAD81
+salias	IO_P81		IO_PAD255
+salias	IO_P82		IO_PAD258
+salias	IO_P83		IO_PAD263
+salias	IO_P84		IO_PAD264
+salias	IO_P86		IO_PAD269
+salias	IO_P87		IO_PAD270
+salias	IO_P88		IO_PAD278
+salias	IO_P89		IO_PAD279
+salias	IO_P8		IO_PAD86
+salias	IO_P93		IO_PAD284
+salias	IO_P94		IO_PAD285
+salias	IO_P95		IO_PAD286
+salias	IO_P96		IO_PAD288
+salias	IO_P97		IO_PAD293
+salias	IO_P98		IO_PAD294
+salias	IO_P99		IO_PAD297
+salias	IO_P9		IO_PAD88
+salias	M0_P52		M0_PAD187
+salias	M1_P50		M1_PAD184
+salias	M2_P54		M2_PAD190

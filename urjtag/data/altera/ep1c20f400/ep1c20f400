@@ -1,0 +1,1272 @@
+#
+# $Id$
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Rojhalat Ibrahim <ibrahim@schenk.isar.de>
+#
+
+signal TDI
+signal TDO
+signal TMS
+signal TCK
+signal DATA0
+signal DCLK
+signal CONF_DONE
+signal CLK0
+signal CLK1
+signal CLK2
+signal CLK3
+signal IOC3
+signal IOC2
+signal IOD3
+signal IOD2
+signal IOD4
+signal IOD1
+signal IOE4
+signal IOE5
+signal IOF3
+signal IOE3
+signal IOE2
+signal IOF4 
+signal IOF5
+signal IOF2
+signal IOF1
+signal IOF6
+signal IOG5
+signal IOG1
+signal IOG2
+signal IOG6
+signal IOG7
+signal IOG3
+signal IOG4
+signal IOH7
+signal IOH1
+signal IOH2
+signal IOH3
+signal IOH4
+signal IOJ1
+signal IOJ2
+signal IOH5
+signal IOH6
+signal IOJ3
+signal IOJ4
+signal IOJ5
+signal IOJ6
+signal IOJ7
+signal IOJ8
+signal IOK2
+signal IOL4
+signal IOL8
+signal IOM8
+signal IOM2
+signal IOM1
+signal IOM5
+signal IOM6
+signal IOM4
+signal IOM3
+signal IOM7
+signal ION6
+signal ION1
+signal ION2
+signal ION4
+signal ION3
+signal ION5
+signal ION7
+signal IOP7
+signal IOP2
+signal IOP1
+signal IOP6
+signal IOP5
+signal IOP3
+signal IOP4
+signal IOR1
+signal IOR2
+signal IOR6
+signal IOR5
+signal IOR3
+signal IOR4
+signal IOT4
+signal IOT2
+signal IOT3
+signal IOU1
+signal IOU4
+signal IOU2
+signal IOU3
+signal IOV2
+signal IOV3
+signal IOW3
+signal IOY4
+signal IOV4
+signal IOW4
+signal IOT5
+signal IOU5
+signal IOV5
+signal IOW5
+signal IOT6
+signal IOT7
+signal IOW6
+signal IOY6
+signal IOU6
+signal IOV6 
+signal IOW7
+signal IOY7
+signal IOR7
+signal IOT8
+signal IOV7 
+signal IOU7 
+signal IOV8
+signal IOU8
+signal IOW8
+signal IOY8
+signal IOU9
+signal IOV9
+signal IOT9
+signal IOR9
+signal IOY9
+signal IOW9
+signal IOT10
+signal IOU10
+signal IOV10
+signal IOW10
+signal IOY10
+signal IOV11
+signal IOU11
+signal IOW11
+signal IOY11
+signal IOR11
+signal IOY12
+signal IOW12
+signal IOT11
+signal IOT12
+signal IOU12
+signal IOV12
+signal IOT13
+signal IOR13
+signal IOY13
+signal IOW13
+signal IOU13
+signal IOV13
+signal IOR14
+signal IOT14
+signal IOW14
+signal IOY14
+signal IOU14
+signal IOV14
+signal IOV15
+signal IOU15
+signal IOY15
+signal IOW15
+signal IOT15
+signal IOT16
+signal IOW16
+signal IOV16
+signal IOV17
+signal IOU16
+signal IOY17
+signal IOW17
+signal IOW18
+signal IOV18
+signal IOV19
+signal IOU20
+signal IOU18
+signal IOU19
+signal IOU17
+signal IOT18
+signal IOT19
+signal IOT17
+signal IOR16
+signal IOR19
+signal IOR20
+signal IOR17
+signal IOR18
+signal IOR15
+signal IOP14
+signal IOP18
+signal IOP17
+signal IOP16
+signal IOP15
+signal IOP19
+signal IOP20
+signal ION14
+signal ION18
+signal ION17
+signal ION19
+signal ION20
+signal ION16
+signal ION15
+signal IOM18
+signal IOM17
+signal IOM15
+signal IOM16
+signal IOM20
+signal IOM19
+signal IOM14
+signal IOM13
+signal IOL13
+signal IOK19
+signal IOJ13
+signal IOK16
+signal IOK15
+signal IOJ18
+signal IOJ17
+signal IOJ14
+signal IOH14
+signal IOJ20
+signal IOJ19
+signal IOJ15
+signal IOJ16
+signal IOH20
+signal IOH19
+signal IOH17
+signal IOH18
+signal IOH16
+signal IOG17
+signal IOG18
+signal IOH15
+signal IOG14
+signal IOG19
+signal IOG20
+signal IOG15
+signal IOG16
+signal IOF20
+signal IOF19
+signal IOF15
+signal IOF16
+signal IOE19
+signal IOE18
+signal IOF18
+signal IOF17
+signal IOE17
+signal IOD20
+signal IOD17
+signal IOD19
+signal IOD18
+signal IOC19
+signal IOC18
+signal IOC17
+signal IOB18
+signal IOB17
+signal IOA17
+signal IOC16
+signal IOB16
+signal IOD16
+signal IOE16
+signal IOC15
+signal IOD15
+signal IOB15
+signal IOA15
+signal IOE15
+signal IOF14
+signal IOA14
+signal IOB14
+signal IOE14
+signal IOE13
+signal IOC14
+signal IOD14
+signal IOA13
+signal IOB13
+signal IOC13
+signal IOD13
+signal IOE12
+signal IOF12
+signal IOA12
+signal IOB12
+signal IOD12
+signal IOC12
+signal IOE11
+signal IOA11
+signal IOB11
+signal IOD11
+signal IOC11
+signal IOD10
+signal IOC10
+signal IOF10
+signal IOA10
+signal IOB10
+signal IOE10
+signal IOE9
+signal IOC9
+signal IOD9
+signal IOA9
+signal IOB9
+signal IOC8
+signal IOD8
+signal IOA8
+signal IOB8
+signal IOE8
+signal IOF8
+signal IOC7
+signal IOD7
+signal IOA7
+signal IOB7
+signal IOE7
+signal IOF7
+signal IOA6
+signal IOB6
+signal IOE6
+signal IOC6
+signal IOB5
+signal IOC5
+signal IOD6
+signal IOD5
+signal IOA4
+signal IOB4
+signal IOB3
+signal IOC4
+
+
+register	BSR	930
+register	BR	1
+register	DIR	32
+
+instruction length 10
+
+instruction BYPASS 1111111111 BR
+instruction EXTEST 0000000000 BSR
+instruction SAMPLE/PRELOAD 0000000101 BSR
+instruction IDCODE 0000000110 DIR
+
+bit 929 O 1 IOC3 928 1 Z
+bit 928 C 1 *
+bit 927 I 1 IOC3
+bit 926 O 1 IOC2 925 1 Z
+bit 925 C 1 *
+bit 924 I 1 IOC2
+bit 923 O 1 IOD3 922 1 Z
+bit 922 C 1 *
+bit 921 I 1 IOD3
+bit 920 O 1 IOD2 919 1 Z
+bit 919 C 1 *
+bit 918 I 1 IOD2
+bit 917 O 1 IOD4 916 1 Z
+bit 916 C 1 *
+bit 915 I 1 IOD4
+bit 914 O 1 IOD1 913 1 Z
+bit 913 C 1 *
+bit 912 I 1 IOD1
+bit 911 O 1 IOE4 910 1 Z
+bit 910 C 1 *
+bit 909 I 1 IOE4
+bit 908 O 1 IOE5 907 1 Z
+bit 907 C 1 *
+bit 906 I 1 IOE5
+bit 905 O 1 IOF3 904 1 Z
+bit 904 C 1 *
+bit 903 I 1 IOF3
+bit 902 O 1 IOE3 901 1 Z
+bit 901 C 1 *
+bit 900 I 1 IOE3
+bit 899 O 1 IOE2 898 1 Z
+bit 898 C 1 *
+bit 897 I 1 IOE2
+bit 896 O 1 IOF4 895 1 Z
+bit 895 C 1 *
+bit 894 I 1 IOF4
+bit 893 O 1 IOF5 892 1 Z
+bit 892 C 1 *
+bit 891 I 1 IOF5
+bit 890 O 1 IOF2 889 1 Z
+bit 889 C 1 *
+bit 888 I 1 IOF2
+bit 887 O 1 IOF1 886 1 Z
+bit 886 C 1 *
+bit 885 I 1 IOF1
+bit 884 O 1 IOF6 883 1 Z
+bit 883 C 1 *
+bit 882 I 1 IOF6
+bit 881 O 1 IOG5 880 1 Z
+bit 880 C 1 *
+bit 879 I 1 IOG5
+bit 878 O 1 IOG1 877 1 Z
+bit 877 C 1 *
+bit 876 I 1 IOG1
+bit 875 O 1 IOG2 874 1 Z
+bit 874 C 1 *
+bit 873 I 1 IOG2
+bit 872 O 1 IOG6 871 1 Z
+bit 871 C 1 *
+bit 870 I 1 IOG6
+bit 869 O 1 IOG7 868 1 Z
+bit 868 C 1 *
+bit 867 I 1 IOG7
+bit 866 O 1 IOG3 865 1 Z
+bit 865 C 1 *
+bit 864 I 1 IOG3
+bit 863 O 1 IOG4 862 1 Z
+bit 862 C 1 *
+bit 861 I 1 IOG4
+bit 860 O 1 IOH7 859 1 Z
+bit 859 C 1 *
+bit 858 I 1 IOH7
+bit 857 O 1 IOH1 856 1 Z
+bit 856 C 1 *
+bit 855 I 1 IOH1
+bit 854 O 1 IOH2 853 1 Z
+bit 853 C 1 *
+bit 852 I 1 IOH2
+bit 851 O 1 IOH3 850 1 Z
+bit 850 C 1 *
+bit 849 I 1 IOH3
+bit 848 O 1 IOH4 847 1 Z
+bit 847 C 1 *
+bit 846 I 1 IOH4
+bit 845 O 1 IOJ1 844 1 Z
+bit 844 C 1 *
+bit 843 I 1 IOJ1
+bit 842 O 1 IOJ2 841 1 Z
+bit 841 C 1 *
+bit 840 I 1 IOJ2
+bit 839 O 1 IOH5 838 1 Z
+bit 838 C 1 *
+bit 837 I 1 IOH5
+bit 836 O 1 IOH6 835 1 Z
+bit 835 C 1 *
+bit 834 I 1 IOH6
+bit 833 O 1 IOJ3 832 1 Z
+bit 832 C 1 *
+bit 831 I 1 IOJ3
+bit 830 O 1 IOJ4 829 1 Z
+bit 829 C 1 *
+bit 828 I 1 IOJ4
+bit 827 O 1 IOJ5 826 1 Z
+bit 826 C 1 *
+bit 825 I 1 IOJ5
+bit 824 O 1 IOJ6 823 1 Z
+bit 823 C 1 *
+bit 822 I 1 IOJ6
+bit 821 O 1 IOJ7 820 1 Z
+bit 820 C 1 *
+bit 819 I 1 IOJ7
+bit 818 O 1 IOJ8 817 1 Z
+bit 817 C 1 *
+bit 816 I 1 IOJ8
+bit 815 O 1 IOK2 814 1 Z
+bit 814 C 1 *
+bit 813 I 1 IOK2
+bit 812 O 1 *
+bit 811 O 1 *
+bit 810 I 1 DATA0
+bit 809 O 1 *
+bit 808 O 1 *
+bit 807 O 1 *
+bit 806 O 1 *
+bit 805 O 1 *
+bit 804 I 1 CLK0
+bit 803 O 1 *
+bit 802 O 1 *
+bit 801 I 1 CLK1
+bit 800 O 1 *
+bit 799 O 1 *
+bit 798 O 1 *
+bit 797 O 1 *
+bit 796 O 1 *
+bit 795 O 1 *
+bit 794 O 1 *
+bit 793 O 1 *
+bit 792 I 1 MSEL0
+bit 791 O 1 *
+bit 790 O 1 *
+bit 789 I 1 MSEL1
+bit 788 O 1 DCLK 787 1 Z
+bit 787 C 1 *
+bit 786 I 1 DCLK
+bit 785 O 1 IOL4 784 1 Z
+bit 784 C 1 *
+bit 783 I 1 IOL4
+bit 782 O 1 IOL8 781 1 Z
+bit 781 C 1 *
+bit 780 I 1 IOL8
+bit 779 O 1 IOM8 778 1 Z
+bit 778 C 1 *
+bit 777 I 1 IOM8
+bit 776 O 1 IOM2 775 1 Z
+bit 775 C 1 *
+bit 774 I 1 IOM2
+bit 773 O 1 IOM1 772 1 Z
+bit 772 C 1 *
+bit 771 I 1 IOM1
+bit 770 O 1 IOM5 769 1 Z
+bit 769 C 1 *
+bit 768 I 1 IOM5
+bit 767 O 1 IOM6 766 1 Z
+bit 766 C 1 *
+bit 765 I 1 IOM6
+bit 764 O 1 IOM4 763 1 Z
+bit 763 C 1 *
+bit 762 I 1 IOM4
+bit 761 O 1 IOM3 760 1 Z
+bit 760 C 1 *
+bit 759 I 1 IOM3
+bit 758 O 1 IOM7 757 1 Z
+bit 757 C 1 *
+bit 756 I 1 IOM7
+bit 755 O 1 ION6 754 1 Z
+bit 754 C 1 *
+bit 753 I 1 ION6
+bit 752 O 1 ION1 751 1 Z
+bit 751 C 1 *
+bit 750 I 1 ION1
+bit 749 O 1 ION2 748 1 Z
+bit 748 C 1 *
+bit 747 I 1 ION2
+bit 746 O 1 ION4 745 1 Z
+bit 745 C 1 *
+bit 744 I 1 ION4
+bit 743 O 1 ION3 742 1 Z
+bit 742 C 1 *
+bit 741 I 1 ION3
+bit 740 O 1 ION5 739 1 Z
+bit 739 C 1 *
+bit 738 I 1 ION5
+bit 737 O 1 ION7 736 1 Z
+bit 736 C 1 *
+bit 735 I 1 ION7
+bit 734 O 1 IOP7 733 1 Z
+bit 733 C 1 *
+bit 732 I 1 IOP7
+bit 731 O 1 IOP2 730 1 Z
+bit 730 C 1 *
+bit 729 I 1 IOP2
+bit 728 O 1 IOP1 727 1 Z
+bit 727 C 1 *
+bit 726 I 1 IOP1
+bit 725 O 1 IOP6 724 1 Z
+bit 724 C 1 *
+bit 723 I 1 IOP6
+bit 722 O 1 IOP5 721 1 Z
+bit 721 C 1 *
+bit 720 I 1 IOP5
+bit 719 O 1 IOP3 718 1 Z
+bit 718 C 1 *
+bit 717 I 1 IOP3
+bit 716 O 1 IOP4 715 1 Z
+bit 715 C 1 *
+bit 714 I 1 IOP4
+bit 713 O 1 IOR1 712 1 Z
+bit 712 C 1 *
+bit 711 I 1 IOR1
+bit 710 O 1 IOR2 709 1 Z
+bit 709 C 1 *
+bit 708 I 1 IOR2
+bit 707 O 1 IOR6 706 1 Z
+bit 706 C 1 *
+bit 705 I 1 IOR6
+bit 704 O 1 IOR5 703 1 Z
+bit 703 C 1 *
+bit 702 I 1 IOR5
+bit 701 O 1 IOR3 700 1 Z
+bit 700 C 1 *
+bit 699 I 1 IOR3
+bit 698 O 1 IOR4 697 1 Z
+bit 697 C 1 *
+bit 696 I 1 IOR4
+bit 695 O 1 IOT4 694 1 Z
+bit 694 C 1 *
+bit 693 I 1 IOT4
+bit 692 O 1 IOT2 691 1 Z
+bit 691 C 1 *
+bit 690 I 1 IOT2
+bit 689 O 1 IOT3 688 1 Z
+bit 688 C 1 *
+bit 687 I 1 IOT3
+bit 686 O 1 IOU1 685 1 Z
+bit 685 C 1 *
+bit 684 I 1 IOU1
+bit 683 O 1 IOU4 682 1 Z
+bit 682 C 1 *
+bit 681 I 1 IOU4
+bit 680 O 1 IOU2 679 1 Z
+bit 679 C 1 *
+bit 678 I 1 IOU2
+bit 677 O 1 IOU3 676 1 Z
+bit 676 C 1 *
+bit 675 I 1 IOU3
+bit 674 O 1 IOV2 673 1 Z
+bit 673 C 1 *
+bit 672 I 1 IOV2
+bit 671 O 1 IOV3 670 1 Z
+bit 670 C 1 *
+bit 669 I 1 IOV3
+bit 668 O 1 IOW3 667 1 Z
+bit 667 C 1 *
+bit 666 I 1 IOW3
+bit 665 O 1 IOY4 664 1 Z
+bit 664 C 1 *
+bit 663 I 1 IOY4
+bit 662 O 1 IOV4 661 1 Z
+bit 661 C 1 *
+bit 660 I 1 IOV4
+bit 659 O 1 IOW4 658 1 Z
+bit 658 C 1 *
+bit 657 I 1 IOW4
+bit 656 O 1 IOT5 655 1 Z
+bit 655 C 1 *
+bit 654 I 1 IOT5
+bit 653 O 1 IOU5 652 1 Z
+bit 652 C 1 *
+bit 651 I 1 IOU5
+bit 650 O 1 IOV5 649 1 Z
+bit 649 C 1 *
+bit 648 I 1 IOV5
+bit 647 O 1 IOW5 646 1 Z
+bit 646 C 1 *
+bit 645 I 1 IOW5
+bit 644 O 1 IOT6 643 1 Z
+bit 643 C 1 *
+bit 642 I 1 IOT6
+bit 641 O 1 IOT7 640 1 Z
+bit 640 C 1 *
+bit 639 I 1 IOT7
+bit 638 O 1 IOW6 637 1 Z
+bit 637 C 1 *
+bit 636 I 1 IOW6
+bit 635 O 1 IOY6 634 1 Z
+bit 634 C 1 *
+bit 633 I 1 IOY6
+bit 632 O 1 IOU6 631 1 Z
+bit 631 C 1 *
+bit 630 I 1 IOU6
+bit 629 O 1 IOV6 628 1 Z
+bit 628 C 1 *
+bit 627 I 1 IOV6
+bit 626 O 1 IOW7 625 1 Z
+bit 625 C 1 *
+bit 624 I 1 IOW7
+bit 623 O 1 IOY7 622 1 Z
+bit 622 C 1 *
+bit 621 I 1 IOY7
+bit 620 O 1 IOR7 619 1 Z
+bit 619 C 1 *
+bit 618 I 1 IOR7
+bit 617 O 1 IOT8 616 1 Z
+bit 616 C 1 *
+bit 615 I 1 IOT8
+bit 614 O 1 IOV7 613 1 Z
+bit 613 C 1 *
+bit 612 I 1 IOV7
+bit 611 O 1 IOU7 610 1 Z
+bit 610 C 1 *
+bit 609 I 1 IOU7
+bit 608 O 1 IOV8 607 1 Z
+bit 607 C 1 *
+bit 606 I 1 IOV8
+bit 605 O 1 IOU8 604 1 Z
+bit 604 C 1 *
+bit 603 I 1 IOU8
+bit 602 O 1 IOW8 601 1 Z
+bit 601 C 1 *
+bit 600 I 1 IOW8
+bit 599 O 1 IOY8 598 1 Z
+bit 598 C 1 *
+bit 597 I 1 IOY8
+bit 596 O 1 IOU9 595 1 Z
+bit 595 C 1 *
+bit 594 I 1 IOU9
+bit 593 O 1 IOV9 592 1 Z
+bit 592 C 1 *
+bit 591 I 1 IOV9
+bit 590 O 1 IOT9 589 1 Z
+bit 589 C 1 *
+bit 588 I 1 IOT9
+bit 587 O 1 IOR9 586 1 Z
+bit 586 C 1 *
+bit 585 I 1 IOR9
+bit 584 O 1 IOY9 583 1 Z
+bit 583 C 1 *
+bit 582 I 1 IOY9
+bit 581 O 1 IOW9 580 1 Z
+bit 580 C 1 *
+bit 579 I 1 IOW9
+bit 578 O 1 IOT10 577 1 Z
+bit 577 C 1 *
+bit 576 I 1 IOT10
+bit 575 O 1 IOU10 574 1 Z
+bit 574 C 1 *
+bit 573 I 1 IOU10
+bit 572 O 1 IOV10 571 1 Z
+bit 571 C 1 *
+bit 570 I 1 IOV10
+bit 569 O 1 IOW10 568 1 Z
+bit 568 C 1 *
+bit 567 I 1 IOW10
+bit 566 O 1 IOY10 565 1 Z
+bit 565 C 1 *
+bit 564 I 1 IOY10
+bit 563 O 1 IOV11 562 1 Z
+bit 562 C 1 *
+bit 561 I 1 IOV11
+bit 560 O 1 IOU11 559 1 Z
+bit 559 C 1 *
+bit 558 I 1 IOU11
+bit 557 O 1 IOW11 556 1 Z
+bit 556 C 1 *
+bit 555 I 1 IOW11
+bit 554 O 1 IOY11 553 1 Z
+bit 553 C 1 *
+bit 552 I 1 IOY11
+bit 551 O 1 IOR11 550 1 Z
+bit 550 C 1 *
+bit 549 I 1 IOR11
+bit 548 O 1 IOY12 547 1 Z
+bit 547 C 1 *
+bit 546 I 1 IOY12
+bit 545 O 1 IOW12 544 1 Z
+bit 544 C 1 *
+bit 543 I 1 IOW12
+bit 542 O 1 IOT11 541 1 Z
+bit 541 C 1 *
+bit 540 I 1 IOT11
+bit 539 O 1 IOT12 538 1 Z
+bit 538 C 1 *
+bit 537 I 1 IOT12
+bit 536 O 1 IOU12 535 1 Z
+bit 535 C 1 *
+bit 534 I 1 IOU12
+bit 533 O 1 IOV12 532 1 Z
+bit 532 C 1 *
+bit 531 I 1 IOV12
+bit 530 O 1 IOT13 529 1 Z
+bit 529 C 1 *
+bit 528 I 1 IOT13
+bit 527 O 1 IOR13 526 1 Z
+bit 526 C 1 *
+bit 525 I 1 IOR13
+bit 524 O 1 IOY13 523 1 Z
+bit 523 C 1 *
+bit 522 I 1 IOY13
+bit 521 O 1 IOW13 520 1 Z
+bit 520 C 1 *
+bit 519 I 1 IOW13
+bit 518 O 1 IOU13 517 1 Z
+bit 517 C 1 *
+bit 516 I 1 IOU13
+bit 515 O 1 IOV13 514 1 Z
+bit 514 C 1 *
+bit 513 I 1 IOV13
+bit 512 O 1 IOR14 511 1 Z
+bit 511 C 1 *
+bit 510 I 1 IOR14
+bit 509 O 1 IOT14 508 1 Z
+bit 508 C 1 *
+bit 507 I 1 IOT14
+bit 506 O 1 IOW14 505 1 Z
+bit 505 C 1 *
+bit 504 I 1 IOW14
+bit 503 O 1 IOY14 502 1 Z
+bit 502 C 1 *
+bit 501 I 1 IOY14
+bit 500 O 1 IOU14 499 1 Z
+bit 499 C 1 *
+bit 498 I 1 IOU14
+bit 497 O 1 IOV14 496 1 Z
+bit 496 C 1 *
+bit 495 I 1 IOV14
+bit 494 O 1 IOV15 493 1 Z
+bit 493 C 1 *
+bit 492 I 1 IOV15
+bit 491 O 1 IOU15 490 1 Z
+bit 490 C 1 *
+bit 489 I 1 IOU15
+bit 488 O 1 IOY15 487 1 Z
+bit 487 C 1 *
+bit 486 I 1 IOY15
+bit 485 O 1 IOW15 484 1 Z
+bit 484 C 1 *
+bit 483 I 1 IOW15
+bit 482 O 1 IOT15 481 1 Z
+bit 481 C 1 *
+bit 480 I 1 IOT15
+bit 479 O 1 IOT16 478 1 Z
+bit 478 C 1 *
+bit 477 I 1 IOT16
+bit 476 O 1 IOW16 475 1 Z
+bit 475 C 1 *
+bit 474 I 1 IOW16
+bit 473 O 1 IOV16 472 1 Z
+bit 472 C 1 *
+bit 471 I 1 IOV16
+bit 470 O 1 IOV17 469 1 Z
+bit 469 C 1 *
+bit 468 I 1 IOV17
+bit 467 O 1 IOU16 466 1 Z
+bit 466 C 1 *
+bit 465 I 1 IOU16
+bit 464 O 1 IOY17 463 1 Z
+bit 463 C 1 *
+bit 462 I 1 IOY17
+bit 461 O 1 IOW17 460 1 Z
+bit 460 C 1 *
+bit 459 I 1 IOW17
+bit 458 O 1 IOW18 457 1 Z
+bit 457 C 1 *
+bit 456 I 1 IOW18
+bit 455 O 1 IOV18 454 1 Z
+bit 454 C 1 *
+bit 453 I 1 IOV18
+bit 452 O 1 IOV19 451 1 Z
+bit 451 C 1 *
+bit 450 I 1 IOV19
+bit 449 O 1 IOU20 448 1 Z
+bit 448 C 1 *
+bit 447 I 1 IOU20
+bit 446 O 1 IOU18 445 1 Z
+bit 445 C 1 *
+bit 444 I 1 IOU18
+bit 443 O 1 IOU19 442 1 Z
+bit 442 C 1 *
+bit 441 I 1 IOU19
+bit 440 O 1 IOU17 439 1 Z
+bit 439 C 1 *
+bit 438 I 1 IOU17
+bit 437 O 1 IOT18 436 1 Z
+bit 436 C 1 *
+bit 435 I 1 IOT18
+bit 434 O 1 IOT19 433 1 Z
+bit 433 C 1 *
+bit 432 I 1 IOT19
+bit 431 O 1 IOT17 430 1 Z
+bit 430 C 1 *
+bit 429 I 1 IOT17
+bit 428 O 1 IOR16 427 1 Z
+bit 427 C 1 *
+bit 426 I 1 IOR16
+bit 425 O 1 IOR19 424 1 Z
+bit 424 C 1 *
+bit 423 I 1 IOR19
+bit 422 O 1 IOR20 421 1 Z
+bit 421 C 1 *
+bit 420 I 1 IOR20
+bit 419 O 1 IOR17 418 1 Z
+bit 418 C 1 *
+bit 417 I 1 IOR17
+bit 416 O 1 IOR18 415 1 Z
+bit 415 C 1 *
+bit 414 I 1 IOR18
+bit 413 O 1 IOR15 412 1 Z
+bit 412 C 1 *
+bit 411 I 1 IOR15
+bit 410 O 1 IOP14 409 1 Z
+bit 409 C 1 *
+bit 408 I 1 IOP14
+bit 407 O 1 IOP18 406 1 Z
+bit 406 C 1 *
+bit 405 I 1 IOP18
+bit 404 O 1 IOP17 403 1 Z
+bit 403 C 1 *
+bit 402 I 1 IOP17
+bit 401 O 1 IOP16 400 1 Z
+bit 400 C 1 *
+bit 399 I 1 IOP16
+bit 398 O 1 IOP15 397 1 Z
+bit 397 C 1 *
+bit 396 I 1 IOP15
+bit 395 O 1 IOP19 394 1 Z
+bit 394 C 1 *
+bit 393 I 1 IOP19
+bit 392 O 1 IOP20 391 1 Z
+bit 391 C 1 *
+bit 390 I 1 IOP20
+bit 389 O 1 ION14 388 1 Z
+bit 388 C 1 *
+bit 387 I 1 ION14
+bit 386 O 1 ION18 385 1 Z
+bit 385 C 1 *
+bit 384 I 1 ION18
+bit 383 O 1 ION17 382 1 Z
+bit 382 C 1 *
+bit 381 I 1 ION17
+bit 380 O 1 ION19 379 1 Z
+bit 379 C 1 *
+bit 378 I 1 ION19
+bit 377 O 1 ION20 376 1 Z
+bit 376 C 1 *
+bit 375 I 1 ION20
+bit 374 O 1 ION16 373 1 Z
+bit 373 C 1 *
+bit 372 I 1 ION16
+bit 371 O 1 ION15 370 1 Z
+bit 370 C 1 *
+bit 369 I 1 ION15
+bit 368 O 1 IOM18 367 1 Z
+bit 367 C 1 *
+bit 366 I 1 IOM18
+bit 365 O 1 IOM17 364 1 Z
+bit 364 C 1 *
+bit 363 I 1 IOM17
+bit 362 O 1 IOM15 361 1 Z
+bit 361 C 1 *
+bit 360 I 1 IOM15
+bit 359 O 1 IOM16 358 1 Z
+bit 358 C 1 *
+bit 357 I 1 IOM16
+bit 356 O 1 IOM20 355 1 Z
+bit 355 C 1 *
+bit 354 I 1 IOM20
+bit 353 O 1 IOM19 352 1 Z
+bit 352 C 1 *
+bit 351 I 1 IOM19
+bit 350 O 1 IOM14 349 1 Z
+bit 349 C 1 *
+bit 348 I 1 IOM14
+bit 347 O 1 IOM13 346 1 Z
+bit 346 C 1 *
+bit 345 I 1 IOM13
+bit 344 O 1 IOL13 343 1 Z
+bit 343 C 1 *
+bit 342 I 1 IOL13
+bit 341 O 1 *
+bit 340 O 1 *
+bit 339 O 1 *
+bit 338 O 1 *
+bit 337 O 1 *
+bit 336 O 1 *
+bit 335 O 1 *
+bit 334 O 1 *
+bit 333 I 1 CLK3
+bit 332 O 1 *
+bit 331 O 1 *
+bit 330 I 1 CLK2
+bit 329 O 1 IOK19 328 1 Z
+bit 328 C 1 *
+bit 327 I 1 IOK19
+bit 326 O 1 IOJ13 325 1 Z
+bit 325 C 1 *
+bit 324 I 1 IOJ13
+bit 323 O 1 IOK16 322 1 Z
+bit 322 C 1 *
+bit 321 I 1 IOK16
+bit 320 O 1 IOK15 319 1 Z
+bit 319 C 1 *
+bit 318 I 1 IOK15
+bit 317 O 1 IOJ18 316 1 Z
+bit 316 C 1 *
+bit 315 I 1 IOJ18
+bit 314 O 1 IOJ17 313 1 Z
+bit 313 C 1 *
+bit 312 I 1 IOJ17
+bit 311 O 1 IOJ14 310 1 Z
+bit 310 C 1 *
+bit 309 I 1 IOJ14
+bit 308 O 1 IOH14 307 1 Z
+bit 307 C 1 *
+bit 306 I 1 IOH14
+bit 305 O 1 IOJ20 304 1 Z
+bit 304 C 1 *
+bit 303 I 1 IOJ20
+bit 302 O 1 IOJ19 301 1 Z
+bit 301 C 1 *
+bit 300 I 1 IOJ19
+bit 299 O 1 IOJ15 298 1 Z
+bit 298 C 1 *
+bit 297 I 1 IOJ15
+bit 296 O 1 IOJ16 295 1 Z
+bit 295 C 1 *
+bit 294 I 1 IOJ16
+bit 293 O 1 IOH20 292 1 Z
+bit 292 C 1 *
+bit 291 I 1 IOH20
+bit 290 O 1 IOH19 289 1 Z
+bit 289 C 1 *
+bit 288 I 1 IOH19
+bit 287 O 1 IOH17 286 1 Z
+bit 286 C 1 *
+bit 285 I 1 IOH17
+bit 284 O 1 IOH18 283 1 Z
+bit 283 C 1 *
+bit 282 I 1 IOH18
+bit 281 O 1 IOH16 280 1 Z
+bit 280 C 1 *
+bit 279 I 1 IOH16
+bit 278 O 1 IOG17 277 1 Z
+bit 277 C 1 *
+bit 276 I 1 IOG17
+bit 275 O 1 IOG18 274 1 Z
+bit 274 C 1 *
+bit 273 I 1 IOG18
+bit 272 O 1 IOH15 271 1 Z
+bit 271 C 1 *
+bit 270 I 1 IOH15
+bit 269 O 1 IOG14 268 1 Z
+bit 268 C 1 *
+bit 267 I 1 IOG14
+bit 266 O 1 IOG19 265 1 Z
+bit 265 C 1 *
+bit 264 I 1 IOG19
+bit 263 O 1 IOG20 262 1 Z
+bit 262 C 1 *
+bit 261 I 1 IOG20
+bit 260 O 1 IOG15 259 1 Z
+bit 259 C 1 *
+bit 258 I 1 IOG15
+bit 257 O 1 IOG16 256 1 Z
+bit 256 C 1 *
+bit 255 I 1 IOG16
+bit 254 O 1 IOF20 253 1 Z
+bit 253 C 1 *
+bit 252 I 1 IOF20
+bit 251 O 1 IOF19 250 1 Z
+bit 250 C 1 *
+bit 249 I 1 IOF19
+bit 248 O 1 IOF15 247 1 Z
+bit 247 C 1 *
+bit 246 I 1 IOF15
+bit 245 O 1 IOF16 244 1 Z
+bit 244 C 1 *
+bit 243 I 1 IOF16
+bit 242 O 1 IOE19 241 1 Z
+bit 241 C 1 *
+bit 240 I 1 IOE19
+bit 239 O 1 IOE18 238 1 Z
+bit 238 C 1 *
+bit 237 I 1 IOE18
+bit 236 O 1 IOF18 235 1 Z
+bit 235 C 1 *
+bit 234 I 1 IOF18
+bit 233 O 1 IOF17 232 1 Z
+bit 232 C 1 *
+bit 231 I 1 IOF17
+bit 230 O 1 IOE17 229 1 Z
+bit 229 C 1 *
+bit 228 I 1 IOE17
+bit 227 O 1 IOD20 226 1 Z
+bit 226 C 1 *
+bit 225 I 1 IOD20
+bit 224 O 1 IOD17 223 1 Z
+bit 223 C 1 *
+bit 222 I 1 IOD17
+bit 221 O 1 IOD19 220 1 Z
+bit 220 C 1 *
+bit 219 I 1 IOD19
+bit 218 O 1 IOD18 217 1 Z
+bit 217 C 1 *
+bit 216 I 1 IOD18
+bit 215 O 1 IOC19 214 1 Z
+bit 214 C 1 *
+bit 213 I 1 IOC19
+bit 212 O 1 IOC18 211 1 Z
+bit 211 C 1 *
+bit 210 I 1 IOC18
+bit 209 O 1 IOC17 208 1 Z
+bit 208 C 1 *
+bit 207 I 1 IOC17
+bit 206 O 1 IOB18 205 1 Z
+bit 205 C 1 *
+bit 204 I 1 IOB18
+bit 203 O 1 IOB17 202 1 Z
+bit 202 C 1 *
+bit 201 I 1 IOB17
+bit 200 O 1 IOA17 199 1 Z
+bit 199 C 1 *
+bit 198 I 1 IOA17
+bit 197 O 1 IOC16 196 1 Z
+bit 196 C 1 *
+bit 195 I 1 IOC16
+bit 194 O 1 IOB16 193 1 Z
+bit 193 C 1 *
+bit 192 I 1 IOB16
+bit 191 O 1 IOD16 190 1 Z
+bit 190 C 1 *
+bit 189 I 1 IOD16
+bit 188 O 1 IOE16 187 1 Z
+bit 187 C 1 *
+bit 186 I 1 IOE16
+bit 185 O 1 IOC15 184 1 Z
+bit 184 C 1 *
+bit 183 I 1 IOC15
+bit 182 O 1 IOD15 181 1 Z
+bit 181 C 1 *
+bit 180 I 1 IOD15
+bit 179 O 1 IOB15 178 1 Z
+bit 178 C 1 *
+bit 177 I 1 IOB15
+bit 176 O 1 IOA15 175 1 Z
+bit 175 C 1 *
+bit 174 I 1 IOA15
+bit 173 O 1 IOE15 172 1 Z
+bit 172 C 1 *
+bit 171 I 1 IOE15
+bit 170 O 1 IOF14 169 1 Z
+bit 169 C 1 *
+bit 168 I 1 IOF14
+bit 167 O 1 IOA14 166 1 Z
+bit 166 C 1 *
+bit 165 I 1 IOA14
+bit 164 O 1 IOB14 163 1 Z
+bit 163 C 1 *
+bit 162 I 1 IOB14
+bit 161 O 1 IOE14 160 1 Z
+bit 160 C 1 *
+bit 159 I 1 IOE14
+bit 158 O 1 IOE13 157 1 Z
+bit 157 C 1 *
+bit 156 I 1 IOE13
+bit 155 O 1 IOC14 154 1 Z
+bit 154 C 1 *
+bit 153 I 1 IOC14
+bit 152 O 1 IOD14 151 1 Z
+bit 151 C 1 *
+bit 150 I 1 IOD14
+bit 149 O 1 IOA13 148 1 Z
+bit 148 C 1 *
+bit 147 I 1 IOA13
+bit 146 O 1 IOB13 145 1 Z
+bit 145 C 1 *
+bit 144 I 1 IOB13
+bit 143 O 1 IOC13 142 1 Z
+bit 142 C 1 *
+bit 141 I 1 IOC13
+bit 140 O 1 IOD13 139 1 Z
+bit 139 C 1 *
+bit 138 I 1 IOD13
+bit 137 O 1 IOE12 136 1 Z
+bit 136 C 1 *
+bit 135 I 1 IOE12
+bit 134 O 1 IOF12 133 1 Z
+bit 133 C 1 *
+bit 132 I 1 IOF12
+bit 131 O 1 IOA12 130 1 Z
+bit 130 C 1 *
+bit 129 I 1 IOA12
+bit 128 O 1 IOB12 127 1 Z
+bit 127 C 1 *
+bit 126 I 1 IOB12
+bit 125 O 1 IOD12 124 1 Z
+bit 124 C 1 *
+bit 123 I 1 IOD12
+bit 122 O 1 IOC12 121 1 Z
+bit 121 C 1 *
+bit 120 I 1 IOC12
+bit 119 O 1 IOE11 118 1 Z
+bit 118 C 1 *
+bit 117 I 1 IOE11
+bit 116 O 1 IOA11 115 1 Z
+bit 115 C 1 *
+bit 114 I 1 IOA11
+bit 113 O 1 IOB11 112 1 Z
+bit 112 C 1 *
+bit 111 I 1 IOB11
+bit 110 O 1 IOD11 109 1 Z
+bit 109 C 1 *
+bit 108 I 1 IOD11
+bit 107 O 1 IOC11 106 1 Z
+bit 106 C 1 *
+bit 105 I 1 IOC11
+bit 104 O 1 IOD10 103 1 Z
+bit 103 C 1 *
+bit 102 I 1 IOD10
+bit 101 O 1 IOC10 100 1 Z
+bit 100 C 1 *
+bit 99 I 1 IOC10
+bit 98 O 1 IOF10 97 1 Z
+bit 97 C 1 *
+bit 96 I 1 IOF10
+bit 95 O 1 IOA10 94 1 Z
+bit 94 C 1 *
+bit 93 I 1 IOA10
+bit 92 O 1 IOB10 91 1 Z
+bit 91 C 1 *
+bit 90 I 1 IOB10
+bit 89 O 1 IOE10 88 1 Z
+bit 88 C 1 *
+bit 87 I 1 IOE10
+bit 86 O 1 IOE9 85 1 Z
+bit 85 C 1 *
+bit 84 I 1 IOE9
+bit 83 O 1 IOC9 82 1 Z
+bit 82 C 1 *
+bit 81 I 1 IOC9
+bit 80 O 1 IOD9 79 1 Z
+bit 79 C 1 *
+bit 78 I 1 IOD9
+bit 77 O 1 IOA9 76 1 Z
+bit 76 C 1 *
+bit 75 I 1 IOA9
+bit 74 O 1 IOB9 73 1 Z
+bit 73 C 1 *
+bit 72 I 1 IOB9
+bit 71 O 1 IOC8 70 1 Z
+bit 70 C 1 *
+bit 69 I 1 IOC8
+bit 68 O 1 IOD8 67 1 Z
+bit 67 C 1 *
+bit 66 I 1 IOD8
+bit 65 O 1 IOA8 64 1 Z
+bit 64 C 1 *
+bit 63 I 1 IOA8
+bit 62 O 1 IOB8 61 1 Z
+bit 61 C 1 *
+bit 60 I 1 IOB8
+bit 59 O 1 IOE8 58 1 Z
+bit 58 C 1 *
+bit 57 I 1 IOE8
+bit 56 O 1 IOF8 55 1 Z
+bit 55 C 1 *
+bit 54 I 1 IOF8
+bit 53 O 1 IOC7 52 1 Z
+bit 52 C 1 *
+bit 51 I 1 IOC7
+bit 50 O 1 IOD7 49 1 Z
+bit 49 C 1 *
+bit 48 I 1 IOD7
+bit 47 O 1 IOA7 46 1 Z
+bit 46 C 1 *
+bit 45 I 1 IOA7
+bit 44 O 1 IOB7 43 1 Z
+bit 43 C 1 *
+bit 42 I 1 IOB7
+bit 41 O 1 IOE7 40 1 Z
+bit 40 C 1 *
+bit 39 I 1 IOE7
+bit 38 O 1 IOF7 37 1 Z
+bit 37 C 1 *
+bit 36 I 1 IOF7
+bit 35 O 1 IOA6 34 1 Z
+bit 34 C 1 *
+bit 33 I 1 IOA6
+bit 32 O 1 IOB6 31 1 Z
+bit 31 C 1 *
+bit 30 I 1 IOB6
+bit 29 O 1 IOE6 28 1 Z
+bit 28 C 1 *
+bit 27 I 1 IOE6
+bit 26 O 1 IOC6 25 1 Z
+bit 25 C 1 *
+bit 24 I 1 IOC6
+bit 23 O 1 IOB5 22 1 Z
+bit 22 C 1 *
+bit 21 I 1 IOB5
+bit 20 O 1 IOC5 19 1 Z
+bit 19 C 1 *
+bit 18 I 1 IOC5
+bit 17 O 1 IOD6 16 1 Z
+bit 16 C 1 *
+bit 15 I 1 IOD6
+bit 14 O 1 IOD5 13 1 Z
+bit 13 C 1 *
+bit 12 I 1 IOD5
+bit 11 O 1 IOA4 10 1 Z
+bit 10 C 1 *
+bit 9 I 1 IOA4
+bit 8 O 1 IOB4 7 1 Z
+bit 7 C 1 *
+bit 6 I 1 IOB4
+bit 5 O 1 IOB3 4 1 Z
+bit 4 C 1 *
+bit 3 I 1 IOB3
+bit 2 O 1 IOC4 1 1 Z
+bit 1 C 1 *
+bit 0 I 1 IOC4

@@ -1,0 +1,14 @@
+# This directory contains source code that simulates various aspects of
+# a target. It is mainly thought to assist in testing and debugging the rest of
+# UrJTAG. The connection between UrJTAG and the code here currently is by means
+# of a special "cable" named "jim", which can access a virtual chain of
+# devices. The only device yet is "some_cpu", which is automatically put in
+# the chain when you type "cable jim". 
+
+cable jim
+bsdl path .
+detect
+initbus prototype amsb=A(31) alsb=A(0) dmsb=D(15) dlsb=D(0) cs=CS oe=OE we=WE amode=x16
+detectflash 0
+# eraseflash 0 1
+

@@ -1,0 +1,454 @@
+signal ADDR1
+signal ADDR2
+signal ADDR3
+signal ADDR4
+signal ADDR5
+signal ADDR6
+signal ADDR7
+signal ADDR8
+signal ADDR9
+signal ADDR10
+signal ADDR11
+signal ADDR12
+signal ADDR13
+signal ADDR14
+signal ADDR15
+signal ADDR16
+signal ADDR17
+signal ADDR18
+signal ADDR19
+signal AMS_B0
+signal AMS_B1
+signal AMS_B2
+signal AMS_B3
+signal AOE_B
+signal ARDY
+signal ARE_B
+signal AWE_B
+signal ABE_B0
+signal ABE_B1
+signal BG_B
+signal BGH_B
+signal BMODE0
+signal BMODE1
+signal BMODE2
+signal BR_B
+signal DATA0
+signal DATA1
+signal DATA2
+signal DATA3
+signal DATA4
+signal DATA5
+signal DATA6
+signal DATA7
+signal DATA8
+signal DATA9
+signal DATA10
+signal DATA11
+signal DATA12
+signal DATA13
+signal DATA14
+signal DATA15
+signal NMI
+signal PF0
+signal PF1
+signal PF2
+signal PF3
+signal PF4
+signal PF5
+signal PF6
+signal PF7
+signal PF8
+signal PF9
+signal PF10
+signal PF11
+signal PF12
+signal PF13
+signal PF14
+signal PF15
+signal PG0
+signal PG1
+signal PG2
+signal PG3
+signal PG4
+signal PG5
+signal PG6
+signal PG7
+signal PG8
+signal PG9
+signal PG10
+signal PG11
+signal PG12
+signal PG13
+signal PG14
+signal PG15
+signal PH0
+signal PH1
+signal PH2
+signal PH3
+signal PH4
+signal PH5
+signal PH6
+signal PH7
+signal PH8
+signal PH9
+signal PH10
+signal PH11
+signal PH12
+signal PH13
+signal PH14
+signal PH15
+signal PJ0
+signal PJ1
+signal PJ2
+signal PJ3
+signal PJ4
+signal PJ5
+signal PJ6
+signal PJ7
+signal PJ8
+signal PJ9
+signal PJ10
+signal PJ11
+signal RESET_B
+signal CLKOUT
+signal SA10
+signal SCAS_B
+signal SCKE
+signal SMS_B
+signal SRAS_B
+signal SWE_B
+signal TDI
+signal TDO
+signal TCK
+signal TMS
+signal TRST_B
+signal TEST
+signal EMU_B
+signal RTXI
+signal RTXO
+signal VDD_INT0
+signal VDD_INT1
+signal VDD_INT2
+signal VDD_INT3
+signal VDD_INT4
+signal VDD_INT5
+signal VDD_INT6
+signal VDD_EXT0
+signal VDD_EXT1
+signal VDD_EXT2
+signal VDD_EXT3
+signal VDD_EXT4
+signal VDD_EXT5
+signal VDD_EXT6
+signal VDD_EXT7
+signal VDD_EXT8
+signal VDD_EXT9
+signal VDD_EXT10
+signal VDD_EXT11
+signal VDD_EXT12
+signal VDD_EXT13
+signal VDD_EXT14
+signal VDD_EXT15
+signal GND0
+signal GND1
+signal GND2
+signal GND3
+signal GND4
+signal GND5
+signal GND6
+signal GND7
+signal GND8
+signal GND9
+signal GND10
+signal GND11
+signal GND12
+signal GND13
+signal GND14
+signal GND15
+signal GND16
+signal GND17
+signal GND18
+signal GND19
+signal GND20
+signal GND21
+signal GND22
+signal GND23
+signal VDD_RTC
+signal CLKIN
+signal XTAL
+signal CLKBUF
+signal VROUT0
+
+register	BSR	261
+register	BR	1
+register	DIR	32
+
+instruction length 5
+
+instruction BYPASS 11111 BR
+instruction EXTEST 00000 BSR
+instruction SAMPLE/PRELOAD 10000 BSR
+instruction IDCODE 00010 DIR
+
+bit 260 C 0 *
+bit 259 O 1 DATA0 260 0 Z
+bit 258 I 1 DATA0
+bit 257 O 1 DATA1 260 0 Z
+bit 256 I 1 DATA1
+bit 255 O 1 DATA2 260 0 Z
+bit 254 I 1 DATA2
+bit 253 O 1 DATA3 260 0 Z
+bit 252 I 1 DATA3
+bit 251 O 1 DATA4 260 0 Z
+bit 250 I 1 DATA4
+bit 249 O 1 DATA5 260 0 Z
+bit 248 I 1 DATA5
+bit 247 O 1 DATA6 260 0 Z
+bit 246 I 1 DATA6
+bit 245 O 1 DATA7 260 0 Z
+bit 244 I 1 DATA7
+bit 243 O 1 DATA8 260 0 Z
+bit 242 I 1 DATA8
+bit 241 O 1 DATA9 260 0 Z
+bit 240 I 1 DATA9
+bit 239 O 1 DATA10 260 0 Z
+bit 238 I 1 DATA10
+bit 237 O 1 DATA11 260 0 Z
+bit 236 I 1 DATA11
+bit 235 O 1 DATA12 260 0 Z
+bit 234 I 1 DATA12
+bit 233 O 1 DATA13 260 0 Z
+bit 232 I 1 DATA13
+bit 231 O 1 DATA14 260 0 Z
+bit 230 I 1 DATA14
+bit 229 O 1 DATA15 260 0 Z
+bit 228 I 1 DATA15
+bit 227 I 1 TEST
+bit 226 I 1 BMODE0
+bit 225 I 1 BMODE1
+bit 224 I 1 BMODE2
+bit 223 C 0 *
+bit 222 O 1 PF0 223 0 Z
+bit 221 I 1 PF0
+bit 220 C 0 *
+bit 219 O 1 PF1 220 0 Z
+bit 218 I 1 PF1
+bit 217 C 0 *
+bit 216 O 1 PF2 217 0 Z
+bit 215 I 1 PF2
+bit 214 C 0 *
+bit 213 O 1 PF3 214 0 Z
+bit 212 I 1 PF3
+bit 211 C 0 *
+bit 210 O 1 PF4 211 0 Z
+bit 209 I 1 PF4
+bit 208 C 0 *
+bit 207 O 1 PF5 208 0 Z
+bit 206 I 1 PF5
+bit 205 C 0 *
+bit 204 O 1 PF6 205 0 Z
+bit 203 I 1 PF6
+bit 202 C 0 *
+bit 201 O 1 PF7 202 0 Z
+bit 200 I 1 PF7
+bit 199 C 0 *
+bit 198 O 1 PF8 199 0 Z
+bit 197 I 1 PF8
+bit 196 C 0 *
+bit 195 O 1 PF9 196 0 Z
+bit 194 I 1 PF9
+bit 193 C 0 *
+bit 192 O 1 PF10 193 0 Z
+bit 191 I 1 PF10
+bit 190 C 0 *
+bit 189 O 1 PF11 190 0 Z
+bit 188 I 1 PF11
+bit 187 C 0 *
+bit 186 O 1 PF12 187 0 Z
+bit 185 I 1 PF12
+bit 184 C 0 *
+bit 183 O 1 PF13 184 0 Z
+bit 182 I 1 PF13
+bit 181 C 0 *
+bit 180 O 1 PF14 181 0 Z
+bit 179 I 1 PF14
+bit 178 C 0 *
+bit 177 O 1 PF15 178 0 Z
+bit 176 I 1 PF15
+bit 175 C 0 *
+bit 174 O 1 PG0 175 0 Z
+bit 173 I 1 PG0
+bit 172 C 0 *
+bit 171 O 1 PG1 172 0 Z
+bit 170 I 1 PG1
+bit 169 C 0 *
+bit 168 O 1 PG2 169 0 Z
+bit 167 I 1 PG2
+bit 166 C 0 *
+bit 165 O 1 PG3 166 0 Z
+bit 164 I 1 PG3
+bit 163 C 0 *
+bit 162 O 1 PG4 163 0 Z
+bit 161 I 1 PG4
+bit 160 C 0 *
+bit 159 O 1 PG5 160 0 Z
+bit 158 I 1 PG5
+bit 157 C 0 *
+bit 156 O 1 PG6 157 0 Z
+bit 155 I 1 PG6
+bit 154 C 0 *
+bit 153 O 1 PG7 154 0 Z
+bit 152 I 1 PG7
+bit 151 C 0 *
+bit 150 O 1 PG10 151 0 Z
+bit 149 I 1 PG10
+bit 148 C 0 *
+bit 147 O 1 PG11 148 0 Z
+bit 146 I 1 PG11
+bit 145 C 0 *
+bit 144 O 1 PG12 145 0 Z
+bit 143 I 1 PG12
+bit 142 C 0 *
+bit 141 O 1 PG8 142 0 Z
+bit 140 I 1 PG8
+bit 139 C 0 *
+bit 138 O 1 PG9 139 0 Z
+bit 137 I 1 PG9
+bit 136 C 0 *
+bit 135 O 1 PG13 136 0 Z
+bit 134 I 1 PG13
+bit 133 C 0 *
+bit 132 O 1 PG14 133 0 Z
+bit 131 I 1 PG14
+bit 130 C 0 *
+bit 129 O 1 PG15 130 0 Z
+bit 128 I 1 PG15
+bit 127 C 0 *
+bit 126 O 1 PH0 127 0 Z
+bit 125 I 1 PH0
+bit 124 C 0 *
+bit 123 O 1 PH1 124 0 Z
+bit 122 I 1 PH1
+bit 121 C 0 *
+bit 120 O 1 PH2 121 0 Z
+bit 119 I 1 PH2
+bit 118 C 0 *
+bit 117 O 1 PH3 118 0 Z
+bit 116 I 1 PH3
+bit 115 C 0 *
+bit 114 O 1 PH4 115 0 Z
+bit 113 I 1 PH4
+bit 112 C 0 *
+bit 111 O 1 PH5 112 0 Z
+bit 110 I 1 PH5
+bit 109 C 0 *
+bit 108 O 1 PH6 109 0 Z
+bit 107 I 1 PH6
+bit 106 C 0 *
+bit 105 O 1 PH7 106 0 Z
+bit 104 I 1 PH7
+bit 103 C 0 *
+bit 102 O 1 PH8 103 0 Z
+bit 101 I 1 PH8
+bit 100 C 0 *
+bit 99 O 1 PH9 100 0 Z
+bit 98 I 1 PH9
+bit 97 C 0 *
+bit 96 O 1 PH10 97 0 Z
+bit 95 I 1 PH10
+bit 94 C 0 *
+bit 93 O 1 PH11 94 0 Z
+bit 92 I 1 PH11
+bit 91 C 0 *
+bit 90 O 1 PH12 91 0 Z
+bit 89 I 1 PH12
+bit 88 C 0 *
+bit 87 O 1 PH13 88 0 Z
+bit 86 I 1 PH13
+bit 85 C 0 *
+bit 84 O 1 PH14 85 0 Z
+bit 83 I 1 PH14
+bit 82 C 0 *
+bit 81 O 1 PH15 82 0 Z
+bit 80 I 1 PH15
+bit 79 C 0 *
+bit 78 O 1 PJ0 79 0 Z
+bit 77 I 1 PJ0
+bit 76 C 0 *
+bit 75 O 1 PJ1 76 0 Z
+bit 74 I 1 PJ1
+bit 73 C 0 *
+bit 72 O 1 PJ6 73 0 Z
+bit 71 I 1 PJ6
+bit 70 C 0 *
+bit 69 O 1 PJ7 70 0 Z
+bit 68 I 1 PJ7
+bit 67 C 0 *
+bit 66 O 1 PJ8 67 0 Z
+bit 65 I 1 PJ8
+bit 64 C 0 *
+bit 63 O 1 PJ4 64 0 Z
+bit 62 I 1 PJ4
+bit 61 C 0 *
+bit 60 O 1 PJ5 61 0 Z
+bit 59 I 1 PJ5
+bit 58 C 0 *
+bit 57 O 1 PJ9 58 0 Z
+bit 56 I 1 PJ9
+bit 55 C 0 *
+bit 54 O 1 PJ10 55 0 Z
+bit 53 I 1 PJ10
+bit 52 C 0 *
+bit 51 O 1 PJ11 52 0 Z
+bit 50 I 1 PJ11
+bit 49 C 0 *
+bit 48 O 1 PJ2 49 0 Z
+bit 47 I 1 PJ2
+bit 46 C 0 *
+bit 45 O 1 PJ3 46 0 Z
+bit 44 I 1 PJ3
+bit 43 I 1 NMI
+bit 42 I 1 RESET_B
+bit 41 O 1 SCKE 39 0 Z
+bit 40 O 1 SMS_B 39 0 Z
+bit 39 C 0 *
+bit 38 O 1 CLKOUT 39 0 Z
+bit 37 O 1 SRAS_B 39 0 Z
+bit 36 O 1 SCAS_B 39 0 Z
+bit 35 O 1 SWE_B 39 0 Z
+bit 34 O 1 SA10 39 0 Z
+bit 33 I 1 BR_B
+bit 32 I 1 ARDY
+bit 31 O 1 AMS_B0 27 0 Z
+bit 30 O 1 AMS_B1 27 0 Z
+bit 29 O 1 AMS_B2 27 0 Z
+bit 28 O 1 AMS_B3 27 0 Z
+bit 27 C 0 *
+bit 26 O 1 AOE_B 27 0 Z
+bit 25 O 1 ARE_B 27 0 Z
+bit 24 O 1 AWE_B 27 0 Z
+bit 23 O 1 ABE_B0 17 0 Z
+bit 22 O 1 ABE_B1 17 0 Z
+bit 21 O 1 ADDR1 17 0 Z
+bit 20 O 1 ADDR2 17 0 Z
+bit 19 O 1 ADDR3 17 0 Z
+bit 18 O 1 ADDR4 17 0 Z
+bit 17 C 0 *
+bit 16 O 1 ADDR5 17 0 Z
+bit 15 O 1 ADDR6 17 0 Z
+bit 14 O 1 ADDR7 17 0 Z
+bit 13 O 1 ADDR8 17 0 Z
+bit 12 O 1 ADDR9 17 0 Z
+bit 11 O 1 ADDR10 17 0 Z
+bit 10 O 1 ADDR11 17 0 Z
+bit 9 O 1 ADDR12 17 0 Z
+bit 8 O 1 ADDR13 17 0 Z
+bit 7 O 1 ADDR14 17 0 Z
+bit 6 O 1 ADDR15 17 0 Z
+bit 5 O 1 ADDR16 17 0 Z
+bit 4 O 1 ADDR17 17 0 Z
+bit 3 O 1 ADDR18 17 0 Z
+bit 2 O 1 ADDR19 17 0 Z
+bit 1 O 1 BGH_B
+bit 0 O 1 BG_B

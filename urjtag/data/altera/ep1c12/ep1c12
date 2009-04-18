@@ -1,0 +1,1074 @@
+#
+# $Id$
+#
+# JTAG declarations for EP1C12
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Arnim Laeuger <arniml@users.sourceforge.net>
+#
+# Note:
+#   The signals defined in this file are generic for any EP1C12.
+#   Signalnames according to Altera's package tables are set in the
+#   package specific scripts.
+#
+#                  **Testing Differential Pin Pairs**
+#   Refer to the note in the original bsd-files for issues related to
+#   testing differential pin pairs!
+#
+
+register	BYPASS		1
+register	BSR		774
+register	IOCSR		4454
+register	DEVICE_ID	32
+register	USERCODE	32
+
+instruction length 10
+instruction	BYPASS		1111111111	BYPASS
+instruction	IDCODE		0000000110	DEVICE_ID
+instruction	USERCODE	0000000111	USERCODE
+instruction	CLAMP		0000001010	BYPASS
+instruction	SAMPLE/PRELOAD	0000000101	BSR
+instruction	EXTEST		0000000000	BSR
+instruction	CONFIG_IO	0000001101	IOCSR
+instruction	HIGHZ		0000001011	BYPASS
+
+signal	BSC0
+signal	BSC1
+signal	BSC10
+signal	BSC100
+signal	BSC101
+signal	BSC102
+signal	BSC103
+signal	BSC104
+signal	BSC105
+signal	BSC106
+signal	BSC107
+signal	BSC108
+signal	BSC109
+signal	BSC11
+signal	BSC110
+signal	BSC111
+signal	BSC112
+signal	BSC113
+signal	BSC114
+signal	BSC115
+signal	BSC116
+signal	BSC117
+signal	BSC118
+signal	BSC119
+signal	BSC12
+signal	BSC120
+signal	BSC121
+signal	BSC122
+signal	BSC123
+signal	BSC124
+signal	BSC125
+signal	BSC126
+signal	BSC127
+signal	BSC128
+signal	BSC129
+signal	BSC13
+signal	BSC130
+signal	BSC131
+signal	BSC132
+signal	BSC133
+signal	BSC134
+signal	BSC135
+signal	BSC136
+signal	BSC137
+signal	BSC138
+signal	BSC139
+signal	BSC14
+signal	BSC140
+signal	BSC141
+signal	BSC142
+signal	BSC143
+signal	BSC144
+signal	BSC145
+signal	BSC146
+signal	BSC147
+signal	BSC148
+signal	BSC149
+signal	BSC15
+signal	BSC150
+signal	BSC151
+signal	BSC152
+signal	BSC153
+signal	BSC154
+signal	BSC155
+signal	BSC156
+signal	BSC157
+signal	BSC158
+signal	BSC159
+signal	BSC16
+signal	BSC160
+signal	BSC161
+signal	BSC162
+signal	BSC163
+signal	BSC164
+signal	BSC165
+signal	BSC166
+signal	BSC167
+signal	BSC168
+signal	BSC169
+signal	BSC17
+signal	BSC170
+signal	BSC171
+signal	BSC172
+signal	BSC173
+signal	BSC174
+signal	BSC175
+signal	BSC176
+signal	BSC177
+signal	BSC178
+signal	BSC179
+signal	BSC18
+signal	BSC180
+signal	BSC181
+signal	BSC182
+signal	BSC183
+signal	BSC184
+signal	BSC185
+signal	BSC186
+signal	BSC187
+signal	BSC188
+signal	BSC189
+signal	BSC19
+signal	BSC190
+signal	BSC191
+signal	BSC192
+signal	BSC193
+signal	BSC194
+signal	BSC195
+signal	BSC196
+signal	BSC197
+signal	BSC198
+signal	BSC199
+signal	BSC2
+signal	BSC20
+signal	BSC200
+signal	BSC201
+signal	BSC202
+signal	BSC203
+signal	BSC204
+signal	BSC205
+signal	BSC206
+signal	BSC207
+signal	BSC208
+signal	BSC209
+signal	BSC21
+signal	BSC210
+signal	BSC211
+signal	BSC212
+signal	BSC213
+signal	BSC214
+signal	BSC215
+signal	BSC216
+signal	BSC217
+signal	BSC218
+signal	BSC22
+signal	BSC228
+signal	BSC229
+signal	BSC23
+signal	BSC230
+signal	BSC231
+signal	BSC232
+signal	BSC233
+signal	BSC234
+signal	BSC235
+signal	BSC236
+signal	BSC237
+signal	BSC238
+signal	BSC239
+signal	BSC24
+signal	BSC240
+signal	BSC241
+signal	BSC242
+signal	BSC243
+signal	BSC244
+signal	BSC245
+signal	BSC246
+signal	BSC247
+signal	BSC248
+signal	BSC249
+signal	BSC25
+signal	BSC250
+signal	BSC251
+signal	BSC252
+signal	BSC253
+signal	BSC254
+signal	BSC255
+signal	BSC256
+signal	BSC257
+signal	BSC26
+signal	BSC27
+signal	BSC28
+signal	BSC29
+signal	BSC3
+signal	BSC30
+signal	BSC31
+signal	BSC32
+signal	BSC33
+signal	BSC34
+signal	BSC35
+signal	BSC36
+signal	BSC37
+signal	BSC38
+signal	BSC39
+signal	BSC4
+signal	BSC40
+signal	BSC41
+signal	BSC42
+signal	BSC43
+signal	BSC44
+signal	BSC45
+signal	BSC46
+signal	BSC47
+signal	BSC48
+signal	BSC49
+signal	BSC5
+signal	BSC50
+signal	BSC51
+signal	BSC52
+signal	BSC53
+signal	BSC54
+signal	BSC55
+signal	BSC56
+signal	BSC57
+signal	BSC58
+signal	BSC59
+signal	BSC6
+signal	BSC60
+signal	BSC61
+signal	BSC62
+signal	BSC63
+signal	BSC64
+signal	BSC65
+signal	BSC66
+signal	BSC67
+signal	BSC68
+signal	BSC69
+signal	BSC7
+signal	BSC70
+signal	BSC71
+signal	BSC72
+signal	BSC73
+signal	BSC74
+signal	BSC75
+signal	BSC76
+signal	BSC77
+signal	BSC78
+signal	BSC79
+signal	BSC8
+signal	BSC80
+signal	BSC81
+signal	BSC82
+signal	BSC83
+signal	BSC84
+signal	BSC85
+signal	BSC86
+signal	BSC87
+signal	BSC88
+signal	BSC89
+signal	BSC9
+signal	BSC90
+signal	BSC91
+signal	BSC96
+signal	BSC97
+signal	BSC98
+signal	BSC99
+signal	CLK0
+signal	CLK2
+signal	DATA0
+signal	DCLK
+signal	MSEL0
+signal	MSEL1
+
+bit  0 I ? BSC0
+bit  1 C 1 *
+bit  2 O ? BSC0 1 1 Z
+bit  3 I ? BSC1
+bit  4 C 1 *
+bit  5 O ? BSC1 4 1 Z
+bit  6 I ? BSC2
+bit  7 C 1 *
+bit  8 O ? BSC2 7 1 Z
+bit  9 I ? BSC3
+bit 10 C 1 *
+bit 11 O ? BSC3 10 1 Z
+bit 12 I ? BSC4
+bit 13 C 1 *
+bit 14 O ? BSC4 13 1 Z
+bit 15 I ? BSC5
+bit 16 C 1 *
+bit 17 O ? BSC5 16 1 Z
+bit 18 I ? BSC6
+bit 19 C 1 *
+bit 20 O ? BSC6 19 1 Z
+bit 21 I ? BSC7
+bit 22 C 1 *
+bit 23 O ? BSC7 22 1 Z
+bit 24 I ? BSC8
+bit 25 C 1 *
+bit 26 O ? BSC8 25 1 Z
+bit 27 I ? BSC9
+bit 28 C 1 *
+bit 29 O ? BSC9 28 1 Z
+bit 30 I ? BSC10
+bit 31 C 1 *
+bit 32 O ? BSC10 31 1 Z
+bit 33 I ? BSC11
+bit 34 C 1 *
+bit 35 O ? BSC11 34 1 Z
+bit 36 I ? BSC12
+bit 37 C 1 *
+bit 38 O ? BSC12 37 1 Z
+bit 39 I ? BSC13
+bit 40 C 1 *
+bit 41 O ? BSC13 40 1 Z
+bit 42 I ? BSC14
+bit 43 C 1 *
+bit 44 O ? BSC14 43 1 Z
+bit 45 I ? BSC15
+bit 46 C 1 *
+bit 47 O ? BSC15 46 1 Z
+bit 48 I ? BSC16
+bit 49 C 1 *
+bit 50 O ? BSC16 49 1 Z
+bit 51 I ? BSC17
+bit 52 C 1 *
+bit 53 O ? BSC17 52 1 Z
+bit 54 I ? BSC18
+bit 55 C 1 *
+bit 56 O ? BSC18 55 1 Z
+bit 57 I ? BSC19
+bit 58 C 1 *
+bit 59 O ? BSC19 58 1 Z
+bit 60 I ? BSC20
+bit 61 C 1 *
+bit 62 O ? BSC20 61 1 Z
+bit 63 I ? BSC21
+bit 64 C 1 *
+bit 65 O ? BSC21 64 1 Z
+bit 66 I ? BSC22
+bit 67 C 1 *
+bit 68 O ? BSC22 67 1 Z
+bit 69 I ? BSC23
+bit 70 C 1 *
+bit 71 O ? BSC23 70 1 Z
+bit 72 I ? BSC24
+bit 73 C 1 *
+bit 74 O ? BSC24 73 1 Z
+bit 75 I ? BSC25
+bit 76 C 1 *
+bit 77 O ? BSC25 76 1 Z
+bit 78 I ? BSC26
+bit 79 C 1 *
+bit 80 O ? BSC26 79 1 Z
+bit 81 I ? BSC27
+bit 82 C 1 *
+bit 83 O ? BSC27 82 1 Z
+bit 84 I ? BSC28
+bit 85 C 1 *
+bit 86 O ? BSC28 85 1 Z
+bit 87 I ? BSC29
+bit 88 C 1 *
+bit 89 O ? BSC29 88 1 Z
+bit 90 I ? BSC30
+bit 91 C 1 *
+bit 92 O ? BSC30 91 1 Z
+bit 93 I ? BSC31
+bit 94 C 1 *
+bit 95 O ? BSC31 94 1 Z
+bit 96 I ? BSC32
+bit 97 C 1 *
+bit 98 O ? BSC32 97 1 Z
+bit 99 I ? BSC33
+bit 100 C 1 *
+bit 101 O ? BSC33 100 1 Z
+bit 102 I ? BSC34
+bit 103 C 1 *
+bit 104 O ? BSC34 103 1 Z
+bit 105 I ? BSC35
+bit 106 C 1 *
+bit 107 O ? BSC35 106 1 Z
+bit 108 I ? BSC36
+bit 109 C 1 *
+bit 110 O ? BSC36 109 1 Z
+bit 111 I ? BSC37
+bit 112 C 1 *
+bit 113 O ? BSC37 112 1 Z
+bit 114 I ? BSC38
+bit 115 C 1 *
+bit 116 O ? BSC38 115 1 Z
+bit 117 I ? BSC39
+bit 118 C 1 *
+bit 119 O ? BSC39 118 1 Z
+bit 120 I ? BSC40
+bit 121 C 1 *
+bit 122 O ? BSC40 121 1 Z
+bit 123 I ? BSC41
+bit 124 C 1 *
+bit 125 O ? BSC41 124 1 Z
+bit 126 I ? BSC42
+bit 127 C 1 *
+bit 128 O ? BSC42 127 1 Z
+bit 129 I ? BSC43
+bit 130 C 1 *
+bit 131 O ? BSC43 130 1 Z
+bit 132 I ? BSC44
+bit 133 C 1 *
+bit 134 O ? BSC44 133 1 Z
+bit 135 I ? BSC45
+bit 136 C 1 *
+bit 137 O ? BSC45 136 1 Z
+bit 138 I ? BSC46
+bit 139 C 1 *
+bit 140 O ? BSC46 139 1 Z
+bit 141 I ? BSC47
+bit 142 C 1 *
+bit 143 O ? BSC47 142 1 Z
+bit 144 I ? BSC48
+bit 145 C 1 *
+bit 146 O ? BSC48 145 1 Z
+bit 147 I ? BSC49
+bit 148 C 1 *
+bit 149 O ? BSC49 148 1 Z
+bit 150 I ? BSC50
+bit 151 C 1 *
+bit 152 O ? BSC50 151 1 Z
+bit 153 I ? BSC51
+bit 154 C 1 *
+bit 155 O ? BSC51 154 1 Z
+bit 156 I ? BSC52
+bit 157 C 1 *
+bit 158 O ? BSC52 157 1 Z
+bit 159 I ? BSC53
+bit 160 C 1 *
+bit 161 O ? BSC53 160 1 Z
+bit 162 I ? BSC54
+bit 163 C 1 *
+bit 164 O ? BSC54 163 1 Z
+bit 165 I ? BSC55
+bit 166 C 1 *
+bit 167 O ? BSC55 166 1 Z
+bit 168 I ? BSC56
+bit 169 C 1 *
+bit 170 O ? BSC56 169 1 Z
+bit 171 I ? BSC57
+bit 172 C 1 *
+bit 173 O ? BSC57 172 1 Z
+bit 174 I ? BSC58
+bit 175 C 1 *
+bit 176 O ? BSC58 175 1 Z
+bit 177 I ? BSC59
+bit 178 C 1 *
+bit 179 O ? BSC59 178 1 Z
+bit 180 I ? BSC60
+bit 181 C 1 *
+bit 182 O ? BSC60 181 1 Z
+bit 183 I ? BSC61
+bit 184 C 1 *
+bit 185 O ? BSC61 184 1 Z
+bit 186 I ? BSC62
+bit 187 C 1 *
+bit 188 O ? BSC62 187 1 Z
+bit 189 I ? BSC63
+bit 190 C 1 *
+bit 191 O ? BSC63 190 1 Z
+bit 192 I ? BSC64
+bit 193 C 1 *
+bit 194 O ? BSC64 193 1 Z
+bit 195 I ? BSC65
+bit 196 C 1 *
+bit 197 O ? BSC65 196 1 Z
+bit 198 I ? BSC66
+bit 199 C 1 *
+bit 200 O ? BSC66 199 1 Z
+bit 201 I ? BSC67
+bit 202 C 1 *
+bit 203 O ? BSC67 202 1 Z
+bit 204 I ? BSC68
+bit 205 C 1 *
+bit 206 O ? BSC68 205 1 Z
+bit 207 I ? BSC69
+bit 208 C 1 *
+bit 209 O ? BSC69 208 1 Z
+bit 210 I ? BSC70
+bit 211 C 1 *
+bit 212 O ? BSC70 211 1 Z
+bit 213 I ? BSC71
+bit 214 C 1 *
+bit 215 O ? BSC71 214 1 Z
+bit 216 I ? BSC72
+bit 217 C 1 *
+bit 218 O ? BSC72 217 1 Z
+bit 219 I ? BSC73
+bit 220 C 1 *
+bit 221 O ? BSC73 220 1 Z
+bit 222 I ? BSC74
+bit 223 C 1 *
+bit 224 O ? BSC74 223 1 Z
+bit 225 I ? BSC75
+bit 226 C 1 *
+bit 227 O ? BSC75 226 1 Z
+bit 228 I ? BSC76
+bit 229 C 1 *
+bit 230 O ? BSC76 229 1 Z
+bit 231 I ? BSC77
+bit 232 C 1 *
+bit 233 O ? BSC77 232 1 Z
+bit 234 I ? BSC78
+bit 235 C 1 *
+bit 236 O ? BSC78 235 1 Z
+bit 237 I ? BSC79
+bit 238 C 1 *
+bit 239 O ? BSC79 238 1 Z
+bit 240 I ? BSC80
+bit 241 C 1 *
+bit 242 O ? BSC80 241 1 Z
+bit 243 I ? BSC81
+bit 244 C 1 *
+bit 245 O ? BSC81 244 1 Z
+bit 246 I ? BSC82
+bit 247 C 1 *
+bit 248 O ? BSC82 247 1 Z
+bit 249 I ? BSC83
+bit 250 C 1 *
+bit 251 O ? BSC83 250 1 Z
+bit 252 I ? BSC84
+bit 253 C 1 *
+bit 254 O ? BSC84 253 1 Z
+bit 255 I ? BSC85
+bit 256 C 1 *
+bit 257 O ? BSC85 256 1 Z
+bit 258 I ? BSC86
+bit 259 C 1 *
+bit 260 O ? BSC86 259 1 Z
+bit 261 I ? BSC87
+bit 262 C 1 *
+bit 263 O ? BSC87 262 1 Z
+bit 264 I ? BSC88
+bit 265 C 1 *
+bit 266 O ? BSC88 265 1 Z
+bit 267 I ? BSC89
+bit 268 C 1 *
+bit 269 O ? BSC89 268 1 Z
+bit 270 I ? BSC90
+bit 271 C 1 *
+bit 272 O ? BSC90 271 1 Z
+bit 273 I ? BSC91
+bit 274 C 1 *
+bit 275 O ? BSC91 274 1 Z
+bit 276 I ? CLK2
+bit 277 X ? *
+bit 278 X ? *
+bit 279 X ? *
+bit 280 X 1 *
+bit 281 X ? *
+bit 282 X ? *
+bit 283 X 1 *
+bit 284 X ? *
+bit 285 X ? *
+bit 286 X 1 *
+bit 287 X ? *
+bit 288 I ? BSC96
+bit 289 C 1 *
+bit 290 O ? BSC96 289 1 Z
+bit 291 I ? BSC97
+bit 292 C 1 *
+bit 293 O ? BSC97 292 1 Z
+bit 294 I ? BSC98
+bit 295 C 1 *
+bit 296 O ? BSC98 295 1 Z
+bit 297 I ? BSC99
+bit 298 C 1 *
+bit 299 O ? BSC99 298 1 Z
+bit 300 I ? BSC100
+bit 301 C 1 *
+bit 302 O ? BSC100 301 1 Z
+bit 303 I ? BSC101
+bit 304 C 1 *
+bit 305 O ? BSC101 304 1 Z
+bit 306 I ? BSC102
+bit 307 C 1 *
+bit 308 O ? BSC102 307 1 Z
+bit 309 I ? BSC103
+bit 310 C 1 *
+bit 311 O ? BSC103 310 1 Z
+bit 312 I ? BSC104
+bit 313 C 1 *
+bit 314 O ? BSC104 313 1 Z
+bit 315 I ? BSC105
+bit 316 C 1 *
+bit 317 O ? BSC105 316 1 Z
+bit 318 I ? BSC106
+bit 319 C 1 *
+bit 320 O ? BSC106 319 1 Z
+bit 321 I ? BSC107
+bit 322 C 1 *
+bit 323 O ? BSC107 322 1 Z
+bit 324 I ? BSC108
+bit 325 C 1 *
+bit 326 O ? BSC108 325 1 Z
+bit 327 I ? BSC109
+bit 328 C 1 *
+bit 329 O ? BSC109 328 1 Z
+bit 330 I ? BSC110
+bit 331 C 1 *
+bit 332 O ? BSC110 331 1 Z
+bit 333 I ? BSC111
+bit 334 C 1 *
+bit 335 O ? BSC111 334 1 Z
+bit 336 I ? BSC112
+bit 337 C 1 *
+bit 338 O ? BSC112 337 1 Z
+bit 339 I ? BSC113
+bit 340 C 1 *
+bit 341 O ? BSC113 340 1 Z
+bit 342 I ? BSC114
+bit 343 C 1 *
+bit 344 O ? BSC114 343 1 Z
+bit 345 I ? BSC115
+bit 346 C 1 *
+bit 347 O ? BSC115 346 1 Z
+bit 348 I ? BSC116
+bit 349 C 1 *
+bit 350 O ? BSC116 349 1 Z
+bit 351 I ? BSC117
+bit 352 C 1 *
+bit 353 O ? BSC117 352 1 Z
+bit 354 I ? BSC118
+bit 355 C 1 *
+bit 356 O ? BSC118 355 1 Z
+bit 357 I ? BSC119
+bit 358 C 1 *
+bit 359 O ? BSC119 358 1 Z
+bit 360 I ? BSC120
+bit 361 C 1 *
+bit 362 O ? BSC120 361 1 Z
+bit 363 I ? BSC121
+bit 364 C 1 *
+bit 365 O ? BSC121 364 1 Z
+bit 366 I ? BSC122
+bit 367 C 1 *
+bit 368 O ? BSC122 367 1 Z
+bit 369 I ? BSC123
+bit 370 C 1 *
+bit 371 O ? BSC123 370 1 Z
+bit 372 I ? BSC124
+bit 373 C 1 *
+bit 374 O ? BSC124 373 1 Z
+bit 375 I ? BSC125
+bit 376 C 1 *
+bit 377 O ? BSC125 376 1 Z
+bit 378 I ? BSC126
+bit 379 C 1 *
+bit 380 O ? BSC126 379 1 Z
+bit 381 I ? BSC127
+bit 382 C 1 *
+bit 383 O ? BSC127 382 1 Z
+bit 384 I ? BSC128
+bit 385 C 1 *
+bit 386 O ? BSC128 385 1 Z
+bit 387 I ? BSC129
+bit 388 C 1 *
+bit 389 O ? BSC129 388 1 Z
+bit 390 I ? BSC130
+bit 391 C 1 *
+bit 392 O ? BSC130 391 1 Z
+bit 393 I ? BSC131
+bit 394 C 1 *
+bit 395 O ? BSC131 394 1 Z
+bit 396 I ? BSC132
+bit 397 C 1 *
+bit 398 O ? BSC132 397 1 Z
+bit 399 I ? BSC133
+bit 400 C 1 *
+bit 401 O ? BSC133 400 1 Z
+bit 402 I ? BSC134
+bit 403 C 1 *
+bit 404 O ? BSC134 403 1 Z
+bit 405 I ? BSC135
+bit 406 C 1 *
+bit 407 O ? BSC135 406 1 Z
+bit 408 I ? BSC136
+bit 409 C 1 *
+bit 410 O ? BSC136 409 1 Z
+bit 411 I ? BSC137
+bit 412 C 1 *
+bit 413 O ? BSC137 412 1 Z
+bit 414 I ? BSC138
+bit 415 C 1 *
+bit 416 O ? BSC138 415 1 Z
+bit 417 I ? BSC139
+bit 418 C 1 *
+bit 419 O ? BSC139 418 1 Z
+bit 420 I ? BSC140
+bit 421 C 1 *
+bit 422 O ? BSC140 421 1 Z
+bit 423 I ? BSC141
+bit 424 C 1 *
+bit 425 O ? BSC141 424 1 Z
+bit 426 I ? BSC142
+bit 427 C 1 *
+bit 428 O ? BSC142 427 1 Z
+bit 429 I ? BSC143
+bit 430 C 1 *
+bit 431 O ? BSC143 430 1 Z
+bit 432 I ? BSC144
+bit 433 C 1 *
+bit 434 O ? BSC144 433 1 Z
+bit 435 I ? BSC145
+bit 436 C 1 *
+bit 437 O ? BSC145 436 1 Z
+bit 438 I ? BSC146
+bit 439 C 1 *
+bit 440 O ? BSC146 439 1 Z
+bit 441 I ? BSC147
+bit 442 C 1 *
+bit 443 O ? BSC147 442 1 Z
+bit 444 I ? BSC148
+bit 445 C 1 *
+bit 446 O ? BSC148 445 1 Z
+bit 447 I ? BSC149
+bit 448 C 1 *
+bit 449 O ? BSC149 448 1 Z
+bit 450 I ? BSC150
+bit 451 C 1 *
+bit 452 O ? BSC150 451 1 Z
+bit 453 I ? BSC151
+bit 454 C 1 *
+bit 455 O ? BSC151 454 1 Z
+bit 456 I ? BSC152
+bit 457 C 1 *
+bit 458 O ? BSC152 457 1 Z
+bit 459 I ? BSC153
+bit 460 C 1 *
+bit 461 O ? BSC153 460 1 Z
+bit 462 I ? BSC154
+bit 463 C 1 *
+bit 464 O ? BSC154 463 1 Z
+bit 465 I ? BSC155
+bit 466 C 1 *
+bit 467 O ? BSC155 466 1 Z
+bit 468 I ? BSC156
+bit 469 C 1 *
+bit 470 O ? BSC156 469 1 Z
+bit 471 I ? BSC157
+bit 472 C 1 *
+bit 473 O ? BSC157 472 1 Z
+bit 474 I ? BSC158
+bit 475 C 1 *
+bit 476 O ? BSC158 475 1 Z
+bit 477 I ? BSC159
+bit 478 C 1 *
+bit 479 O ? BSC159 478 1 Z
+bit 480 I ? BSC160
+bit 481 C 1 *
+bit 482 O ? BSC160 481 1 Z
+bit 483 I ? BSC161
+bit 484 C 1 *
+bit 485 O ? BSC161 484 1 Z
+bit 486 I ? BSC162
+bit 487 C 1 *
+bit 488 O ? BSC162 487 1 Z
+bit 489 I ? BSC163
+bit 490 C 1 *
+bit 491 O ? BSC163 490 1 Z
+bit 492 I ? BSC164
+bit 493 C 1 *
+bit 494 O ? BSC164 493 1 Z
+bit 495 I ? BSC165
+bit 496 C 1 *
+bit 497 O ? BSC165 496 1 Z
+bit 498 I ? BSC166
+bit 499 C 1 *
+bit 500 O ? BSC166 499 1 Z
+bit 501 I ? BSC167
+bit 502 C 1 *
+bit 503 O ? BSC167 502 1 Z
+bit 504 I ? BSC168
+bit 505 C 1 *
+bit 506 O ? BSC168 505 1 Z
+bit 507 I ? BSC169
+bit 508 C 1 *
+bit 509 O ? BSC169 508 1 Z
+bit 510 I ? BSC170
+bit 511 C 1 *
+bit 512 O ? BSC170 511 1 Z
+bit 513 I ? BSC171
+bit 514 C 1 *
+bit 515 O ? BSC171 514 1 Z
+bit 516 I ? BSC172
+bit 517 C 1 *
+bit 518 O ? BSC172 517 1 Z
+bit 519 I ? BSC173
+bit 520 C 1 *
+bit 521 O ? BSC173 520 1 Z
+bit 522 I ? BSC174
+bit 523 C 1 *
+bit 524 O ? BSC174 523 1 Z
+bit 525 I ? BSC175
+bit 526 C 1 *
+bit 527 O ? BSC175 526 1 Z
+bit 528 I ? BSC176
+bit 529 C 1 *
+bit 530 O ? BSC176 529 1 Z
+bit 531 I ? BSC177
+bit 532 C 1 *
+bit 533 O ? BSC177 532 1 Z
+bit 534 I ? BSC178
+bit 535 C 1 *
+bit 536 O ? BSC178 535 1 Z
+bit 537 I ? BSC179
+bit 538 C 1 *
+bit 539 O ? BSC179 538 1 Z
+bit 540 I ? BSC180
+bit 541 C 1 *
+bit 542 O ? BSC180 541 1 Z
+bit 543 I ? BSC181
+bit 544 C 1 *
+bit 545 O ? BSC181 544 1 Z
+bit 546 I ? BSC182
+bit 547 C 1 *
+bit 548 O ? BSC182 547 1 Z
+bit 549 I ? BSC183
+bit 550 C 1 *
+bit 551 O ? BSC183 550 1 Z
+bit 552 I ? BSC184
+bit 553 C 1 *
+bit 554 O ? BSC184 553 1 Z
+bit 555 I ? BSC185
+bit 556 C 1 *
+bit 557 O ? BSC185 556 1 Z
+bit 558 I ? BSC186
+bit 559 C 1 *
+bit 560 O ? BSC186 559 1 Z
+bit 561 I ? BSC187
+bit 562 C 1 *
+bit 563 O ? BSC187 562 1 Z
+bit 564 I ? BSC188
+bit 565 C 1 *
+bit 566 O ? BSC188 565 1 Z
+bit 567 I ? BSC189
+bit 568 C 1 *
+bit 569 O ? BSC189 568 1 Z
+bit 570 I ? BSC190
+bit 571 C 1 *
+bit 572 O ? BSC190 571 1 Z
+bit 573 I ? BSC191
+bit 574 C 1 *
+bit 575 O ? BSC191 574 1 Z
+bit 576 I ? BSC192
+bit 577 C 1 *
+bit 578 O ? BSC192 577 1 Z
+bit 579 I ? BSC193
+bit 580 C 1 *
+bit 581 O ? BSC193 580 1 Z
+bit 582 I ? BSC194
+bit 583 C 1 *
+bit 584 O ? BSC194 583 1 Z
+bit 585 I ? BSC195
+bit 586 C 1 *
+bit 587 O ? BSC195 586 1 Z
+bit 588 I ? BSC196
+bit 589 C 1 *
+bit 590 O ? BSC196 589 1 Z
+bit 591 I ? BSC197
+bit 592 C 1 *
+bit 593 O ? BSC197 592 1 Z
+bit 594 I ? BSC198
+bit 595 C 1 *
+bit 596 O ? BSC198 595 1 Z
+bit 597 I ? BSC199
+bit 598 C 1 *
+bit 599 O ? BSC199 598 1 Z
+bit 600 I ? BSC200
+bit 601 C 1 *
+bit 602 O ? BSC200 601 1 Z
+bit 603 I ? BSC201
+bit 604 C 1 *
+bit 605 O ? BSC201 604 1 Z
+bit 606 I ? BSC202
+bit 607 C 1 *
+bit 608 O ? BSC202 607 1 Z
+bit 609 I ? BSC203
+bit 610 C 1 *
+bit 611 O ? BSC203 610 1 Z
+bit 612 I ? BSC204
+bit 613 C 1 *
+bit 614 O ? BSC204 613 1 Z
+bit 615 I ? BSC205
+bit 616 C 1 *
+bit 617 O ? BSC205 616 1 Z
+bit 618 I ? BSC206
+bit 619 C 1 *
+bit 620 O ? BSC206 619 1 Z
+bit 621 I ? BSC207
+bit 622 C 1 *
+bit 623 O ? BSC207 622 1 Z
+bit 624 I ? BSC208
+bit 625 C 1 *
+bit 626 O ? BSC208 625 1 Z
+bit 627 I ? BSC209
+bit 628 C 1 *
+bit 629 O ? BSC209 628 1 Z
+bit 630 I ? BSC210
+bit 631 C 1 *
+bit 632 O ? BSC210 631 1 Z
+bit 633 I ? BSC211
+bit 634 C 1 *
+bit 635 O ? BSC211 634 1 Z
+bit 636 I ? BSC212
+bit 637 C 1 *
+bit 638 O ? BSC212 637 1 Z
+bit 639 I ? BSC213
+bit 640 C 1 *
+bit 641 O ? BSC213 640 1 Z
+bit 642 I ? BSC214
+bit 643 C 1 *
+bit 644 O ? BSC214 643 1 Z
+bit 645 I ? BSC215
+bit 646 C 1 *
+bit 647 O ? BSC215 646 1 Z
+bit 648 I ? BSC216
+bit 649 C 1 *
+bit 650 O ? BSC216 649 1 Z
+bit 651 I ? BSC217
+bit 652 C 1 *
+bit 653 O ? BSC217 652 1 Z
+bit 654 I ? BSC218
+bit 655 C 1 *
+bit 656 O ? BSC218 655 1 Z
+bit 657 I ? DCLK
+bit 658 C 1 *
+bit 659 O ? DCLK 658 1 Z
+bit 660 I ? MSEL1
+bit 661 X ? *
+bit 662 X ? *
+bit 663 I ? MSEL0
+bit 664 X ? *
+bit 665 X ? *
+bit 666 X ? *
+bit 667 X 1 *
+bit 668 X ? *
+bit 669 X ? *
+bit 670 X 1 *
+bit 671 X ? *
+bit 672 X ? *
+bit 673 X 1 *
+bit 674 X ? *
+bit 675 I ? CLK0
+bit 676 X ? *
+bit 677 X ? *
+bit 678 X ? *
+bit 679 X 1 *
+bit 680 X ? *
+bit 681 I ? DATA0
+bit 682 X ? *
+bit 683 X ? *
+bit 684 I ? BSC228
+bit 685 C 1 *
+bit 686 O ? BSC228 685 1 Z
+bit 687 I ? BSC229
+bit 688 C 1 *
+bit 689 O ? BSC229 688 1 Z
+bit 690 I ? BSC230
+bit 691 C 1 *
+bit 692 O ? BSC230 691 1 Z
+bit 693 I ? BSC231
+bit 694 C 1 *
+bit 695 O ? BSC231 694 1 Z
+bit 696 I ? BSC232
+bit 697 C 1 *
+bit 698 O ? BSC232 697 1 Z
+bit 699 I ? BSC233
+bit 700 C 1 *
+bit 701 O ? BSC233 700 1 Z
+bit 702 I ? BSC234
+bit 703 C 1 *
+bit 704 O ? BSC234 703 1 Z
+bit 705 I ? BSC235
+bit 706 C 1 *
+bit 707 O ? BSC235 706 1 Z
+bit 708 I ? BSC236
+bit 709 C 1 *
+bit 710 O ? BSC236 709 1 Z
+bit 711 I ? BSC237
+bit 712 C 1 *
+bit 713 O ? BSC237 712 1 Z
+bit 714 I ? BSC238
+bit 715 C 1 *
+bit 716 O ? BSC238 715 1 Z
+bit 717 I ? BSC239
+bit 718 C 1 *
+bit 719 O ? BSC239 718 1 Z
+bit 720 I ? BSC240
+bit 721 C 1 *
+bit 722 O ? BSC240 721 1 Z
+bit 723 I ? BSC241
+bit 724 C 1 *
+bit 725 O ? BSC241 724 1 Z
+bit 726 I ? BSC242
+bit 727 C 1 *
+bit 728 O ? BSC242 727 1 Z
+bit 729 I ? BSC243
+bit 730 C 1 *
+bit 731 O ? BSC243 730 1 Z
+bit 732 I ? BSC244
+bit 733 C 1 *
+bit 734 O ? BSC244 733 1 Z
+bit 735 I ? BSC245
+bit 736 C 1 *
+bit 737 O ? BSC245 736 1 Z
+bit 738 I ? BSC246
+bit 739 C 1 *
+bit 740 O ? BSC246 739 1 Z
+bit 741 I ? BSC247
+bit 742 C 1 *
+bit 743 O ? BSC247 742 1 Z
+bit 744 I ? BSC248
+bit 745 C 1 *
+bit 746 O ? BSC248 745 1 Z
+bit 747 I ? BSC249
+bit 748 C 1 *
+bit 749 O ? BSC249 748 1 Z
+bit 750 I ? BSC250
+bit 751 C 1 *
+bit 752 O ? BSC250 751 1 Z
+bit 753 I ? BSC251
+bit 754 C 1 *
+bit 755 O ? BSC251 754 1 Z
+bit 756 I ? BSC252
+bit 757 C 1 *
+bit 758 O ? BSC252 757 1 Z
+bit 759 I ? BSC253
+bit 760 C 1 *
+bit 761 O ? BSC253 760 1 Z
+bit 762 I ? BSC254
+bit 763 C 1 *
+bit 764 O ? BSC254 763 1 Z
+bit 765 I ? BSC255
+bit 766 C 1 *
+bit 767 O ? BSC255 766 1 Z
+bit 768 I ? BSC256
+bit 769 C 1 *
+bit 770 O ? BSC256 769 1 Z
+bit 771 I ? BSC257
+bit 772 C 1 *
+bit 773 O ? BSC257 772 1 Z

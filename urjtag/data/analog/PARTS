@@ -1,0 +1,33 @@
+#
+# $Id: PARTS,v 1.1.1.1 2005/03/18 15:02:50 klingler Exp $
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Richard Klingler <richard@klingler.net>
+#
+
+# bits 27-12 of the Device Identification Register
+0010011110100111	sharc21065l		SHARC
+0010011111101000	bf518			BF518
+0010011111100100	bf527			BF526
+0010011111100000	bf527			BF527
+0010011110100101	bf533			BF533
+0010011111000110	bf537			BF534
+0010011111001000	bf537			BF537
+0010011111000100	bf538			BF538
+0010011111011110	bf548			BF548
+0010011111101010	bf548			BF548M
+0010011110111011	bf561			BF561

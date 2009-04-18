@@ -1,0 +1,2342 @@
+#
+# $Id$
+#
+# JTAG declarations for BCM1250
+# Copyright (C) 2003 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Matan Ziv-Av <matan@svgalib.org>, 2003.
+#
+
+signal TRST_L
+signal TMS
+signal TDO
+signal TDI
+signal TCK
+signal SPARE2
+signal SPARE3
+signal SPARE4
+signal SPARE5
+signal SDA0
+signal SDA1
+signal SCL0
+signal SCL1
+signal S1_TIN
+signal S1_RTS_TSTROBE
+signal S1_RIN
+signal S1_DOUT
+signal S1_DIN
+signal S1_CTS_TCLKIN
+signal S1_COUT
+signal S1_CIN_RCLKIN
+signal S0_TIN
+signal S0_RTS_TSTROBE
+signal S0_RIN
+signal S0_DOUT
+signal S0_DIN
+signal S0_CTS_TCLKIN
+signal S0_COUT
+signal S0_CIN_RCLKIN
+signal RESET_L
+signal RESETOUT_L
+signal REFCLK2
+signal REFCLK01
+signal P_TRDY_L
+signal P_STOP_L
+signal P_SERR_L
+signal P_RST_L
+signal P_REQ_l0
+signal P_REQ_L1
+signal P_REQ_L2
+signal P_REQ_L3
+signal P_PERR_L
+signal P_PAR
+signal P_IRDY_L
+signal P_INTD_L
+signal P_INTC_L
+signal P_INTB_L
+signal P_INTA_L
+signal P_GNT_l0
+signal P_GNT_L1
+signal P_GNT_L2
+signal P_GNT_L3
+signal P_FRAME_L
+signal P_DEVSEL_L
+signal P_CLK
+signal P_CBE_L0
+signal P_CBE_L1
+signal P_CBE_L2
+signal P_CBE_L3
+signal P_AD0
+signal P_AD1
+signal P_AD2
+signal P_AD3
+signal P_AD4
+signal P_AD5
+signal P_AD6
+signal P_AD7
+signal P_AD8
+signal P_AD9
+signal P_AD10
+signal P_AD11
+signal P_AD12
+signal P_AD13
+signal P_AD14
+signal P_AD15
+signal P_AD16
+signal P_AD17
+signal P_AD18
+signal P_AD19
+signal P_AD20
+signal P_AD21
+signal P_AD22
+signal P_AD23
+signal P_AD24
+signal P_AD25
+signal P_AD26
+signal P_AD27
+signal P_AD28
+signal P_AD29
+signal P_AD30
+signal P_AD31
+signal PLLBYP
+signal PC_ENVPP
+signal PC_ENV5V
+signal PC_ENV3V
+signal M1_WE_L
+signal M1_RAS_L
+signal M1_ECC0
+signal M1_ECC1
+signal M1_ECC2
+signal M1_ECC3
+signal M1_ECC4
+signal M1_ECC5
+signal M1_ECC6
+signal M1_ECC7
+signal M1_DQS0
+signal M1_DQS1
+signal M1_DQS2
+signal M1_DQS3
+signal M1_DQS4
+signal M1_DQS5
+signal M1_DQS6
+signal M1_DQS7
+signal M1_DQS8
+signal M1_DQ0
+signal M1_DQ1
+signal M1_DQ2
+signal M1_DQ3
+signal M1_DQ4
+signal M1_DQ5
+signal M1_DQ6
+signal M1_DQ7
+signal M1_DQ8
+signal M1_DQ9
+signal M1_DQ10
+signal M1_DQ11
+signal M1_DQ12
+signal M1_DQ13
+signal M1_DQ14
+signal M1_DQ15
+signal M1_DQ16
+signal M1_DQ17
+signal M1_DQ18
+signal M1_DQ19
+signal M1_DQ20
+signal M1_DQ21
+signal M1_DQ22
+signal M1_DQ23
+signal M1_DQ24
+signal M1_DQ25
+signal M1_DQ26
+signal M1_DQ27
+signal M1_DQ28
+signal M1_DQ29
+signal M1_DQ30
+signal M1_DQ31
+signal M1_DQ32
+signal M1_DQ33
+signal M1_DQ34
+signal M1_DQ35
+signal M1_DQ36
+signal M1_DQ37
+signal M1_DQ38
+signal M1_DQ39
+signal M1_DQ40
+signal M1_DQ41
+signal M1_DQ42
+signal M1_DQ43
+signal M1_DQ44
+signal M1_DQ45
+signal M1_DQ46
+signal M1_DQ47
+signal M1_DQ48
+signal M1_DQ49
+signal M1_DQ50
+signal M1_DQ51
+signal M1_DQ52
+signal M1_DQ53
+signal M1_DQ54
+signal M1_DQ55
+signal M1_DQ56
+signal M1_DQ57
+signal M1_DQ58
+signal M1_DQ59
+signal M1_DQ60
+signal M1_DQ61
+signal M1_DQ62
+signal M1_DQ63
+signal M1_CS_L0
+signal M1_CS_L1
+signal M1_CS_L2
+signal M1_CS_L3
+signal M1_CLK_L
+signal M1_CLK
+signal M1_CKE
+signal M1_CAS_L
+signal M1_BA0
+signal M1_BA1
+signal M1_A0
+signal M1_A1
+signal M1_A2
+signal M1_A3
+signal M1_A4
+signal M1_A5
+signal M1_A6
+signal M1_A7
+signal M1_A8
+signal M1_A9
+signal M1_A10
+signal M1_A11
+signal M1_A12
+signal M0_WE_L
+signal M0_RAS_L
+signal M0_ECC0
+signal M0_ECC1
+signal M0_ECC2
+signal M0_ECC3
+signal M0_ECC4
+signal M0_ECC5
+signal M0_ECC6
+signal M0_ECC7
+signal M0_DQS0
+signal M0_DQS1
+signal M0_DQS2
+signal M0_DQS3
+signal M0_DQS4
+signal M0_DQS5
+signal M0_DQS6
+signal M0_DQS7
+signal M0_DQS8
+signal M0_DQ0
+signal M0_DQ1
+signal M0_DQ2
+signal M0_DQ3
+signal M0_DQ4
+signal M0_DQ5
+signal M0_DQ6
+signal M0_DQ7
+signal M0_DQ8
+signal M0_DQ9
+signal M0_DQ10
+signal M0_DQ11
+signal M0_DQ12
+signal M0_DQ13
+signal M0_DQ14
+signal M0_DQ15
+signal M0_DQ16
+signal M0_DQ17
+signal M0_DQ18
+signal M0_DQ19
+signal M0_DQ20
+signal M0_DQ21
+signal M0_DQ22
+signal M0_DQ23
+signal M0_DQ24
+signal M0_DQ25
+signal M0_DQ26
+signal M0_DQ27
+signal M0_DQ28
+signal M0_DQ29
+signal M0_DQ30
+signal M0_DQ31
+signal M0_DQ32
+signal M0_DQ33
+signal M0_DQ34
+signal M0_DQ35
+signal M0_DQ36
+signal M0_DQ37
+signal M0_DQ38
+signal M0_DQ39
+signal M0_DQ40
+signal M0_DQ41
+signal M0_DQ42
+signal M0_DQ43
+signal M0_DQ44
+signal M0_DQ45
+signal M0_DQ46
+signal M0_DQ47
+signal M0_DQ48
+signal M0_DQ49
+signal M0_DQ50
+signal M0_DQ51
+signal M0_DQ52
+signal M0_DQ53
+signal M0_DQ54
+signal M0_DQ55
+signal M0_DQ56
+signal M0_DQ57
+signal M0_DQ58
+signal M0_DQ59
+signal M0_DQ60
+signal M0_DQ61
+signal M0_DQ62
+signal M0_DQ63
+signal M0_CS_L0
+signal M0_CS_L1
+signal M0_CS_L2
+signal M0_CS_L3
+signal M0_CLK_L
+signal M0_CLK
+signal M0_CKE
+signal M0_CAS_L
+signal M0_BA0
+signal M0_BA1
+signal M0_A0
+signal M0_A1
+signal M0_A2
+signal M0_A3
+signal M0_A4
+signal M0_A5
+signal M0_A6
+signal M0_A7
+signal M0_A8
+signal M0_A9
+signal M0_A10
+signal M0_A11
+signal M0_A12
+signal LDT_TX_CTLP
+signal LDT_TX_CTLN
+signal LDT_TX_CLKP
+signal LDT_TX_CLKN
+signal LDT_TX_CADP0
+signal LDT_TX_CADP1
+signal LDT_TX_CADP2
+signal LDT_TX_CADP3
+signal LDT_TX_CADP4
+signal LDT_TX_CADP5
+signal LDT_TX_CADP6
+signal LDT_TX_CADP7
+signal LDT_TX_CADN0
+signal LDT_TX_CADN1
+signal LDT_TX_CADN2
+signal LDT_TX_CADN3
+signal LDT_TX_CADN4
+signal LDT_TX_CADN5
+signal LDT_TX_CADN6
+signal LDT_TX_CADN7
+signal LDT_RX_CTLP
+signal LDT_RX_CTLN
+signal LDT_RX_CADP0
+signal LDT_RX_CADP1
+signal LDT_RX_CADP2
+signal LDT_RX_CADP3
+signal LDT_RX_CADP4
+signal LDT_RX_CADP5
+signal LDT_RX_CADP6
+signal LDT_RX_CADP7
+signal LDT_RX_CADN0
+signal LDT_RX_CADN1
+signal LDT_RX_CADN2
+signal LDT_RX_CADN3
+signal LDT_RX_CADN4
+signal LDT_RX_CADN5
+signal LDT_RX_CADN6
+signal LDT_RX_CADN7
+signal LDT_RESET_L
+signal LDT_PWROK
+signal IO_WR_L
+signal IO_RW
+signal IO_RDY
+signal IO_OE_L
+signal IO_CS_L0
+signal IO_CS_L1
+signal IO_CS_L2
+signal IO_CS_L3
+signal IO_CS_L4
+signal IO_CS_L5
+signal IO_CS_L6
+signal IO_CS_L7
+signal IO_CLK100
+signal IO_ALE
+signal IO_AD0
+signal IO_AD1
+signal IO_AD2
+signal IO_AD3
+signal IO_AD4
+signal IO_AD5
+signal IO_AD6
+signal IO_AD7
+signal IO_AD8
+signal IO_AD9
+signal IO_AD10
+signal IO_AD11
+signal IO_AD12
+signal IO_AD13
+signal IO_AD14
+signal IO_AD15
+signal IO_AD16
+signal IO_AD17
+signal IO_AD18
+signal IO_AD19
+signal IO_AD20
+signal IO_AD21
+signal IO_AD22
+signal IO_AD23
+signal IO_AD24
+signal IO_AD25
+signal IO_AD26
+signal IO_AD27
+signal IO_AD28
+signal IO_AD29
+signal IO_AD30
+signal IO_AD31
+signal GPIO0
+signal GPIO1
+signal GPIO2
+signal GPIO3
+signal GPIO4
+signal GPIO5
+signal GPIO6
+signal GPIO7
+signal GPIO8
+signal GPIO9
+signal GPIO10
+signal GPIO11
+signal GPIO12
+signal GPIO13
+signal GPIO14
+signal GPIO15
+signal E2_TXER
+signal E2_TXEN
+signal E2_TXD0
+signal E2_TXD1
+signal E2_TXD2
+signal E2_TXD3
+signal E2_TXD4
+signal E2_TXD5
+signal E2_TXD6
+signal E2_TXD7
+signal E2_TCLKO
+signal E2_TCLKI
+signal E2_RXER
+signal E2_RXDV
+signal E2_RXD0
+signal E2_RXD1
+signal E2_RXD2
+signal E2_RXD3
+signal E2_RXD4
+signal E2_RXD5
+signal E2_RXD6
+signal E2_RXD7
+signal E2_RCLK
+signal E2_MDIO
+signal E2_MDC
+signal E2_GENO
+signal E2_CRS
+signal E2_COL
+signal E1_TXER
+signal E1_TXEN
+signal E1_TXD0
+signal E1_TXD1
+signal E1_TXD2
+signal E1_TXD3
+signal E1_TXD4
+signal E1_TXD5
+signal E1_TXD6
+signal E1_TXD7
+signal E1_TCLKO
+signal E1_TCLKI
+signal E1_RXER
+signal E1_RXDV
+signal E1_RXD0
+signal E1_RXD1
+signal E1_RXD2
+signal E1_RXD3
+signal E1_RXD4
+signal E1_RXD5
+signal E1_RXD6
+signal E1_RXD7
+signal E1_RCLK
+signal E1_MDIO
+signal E1_MDC
+signal E1_GENO
+signal E1_CRS
+signal E1_COL
+signal E0_TXER
+signal E0_TXEN
+signal E0_TXD0
+signal E0_TXD1
+signal E0_TXD2
+signal E0_TXD3
+signal E0_TXD4
+signal E0_TXD5
+signal E0_TXD6
+signal E0_TXD7
+signal E0_TCLKO
+signal E0_TCLKI
+signal E0_RXER
+signal E0_RXDV
+signal E0_RXD0
+signal E0_RXD1
+signal E0_RXD2
+signal E0_RXD3
+signal E0_RXD4
+signal E0_RXD5
+signal E0_RXD6
+signal E0_RXD7
+signal E0_RCLK
+signal E0_MDIO
+signal E0_MDC
+signal E0_GENO
+signal E0_CRS
+signal E0_COL
+signal DEBUG_L
+signal COLDRES_L
+signal CLK100P
+signal CLK100N
+signal GND0
+signal GND1
+signal GND2
+signal GND3
+signal GND4
+signal GND5
+signal GND6
+signal GND7
+signal GND8
+signal GND9
+signal GND10
+signal GND11
+signal GND12
+signal GND13
+signal GND14
+signal GND15
+signal GND16
+signal GND17
+signal GND18
+signal GND19
+signal GND20
+signal GND21
+signal GND22
+signal GND23
+signal GND24
+signal GND25
+signal GND26
+signal GND27
+signal GND28
+signal GND29
+signal GND30
+signal GND31
+signal GND32
+signal GND33
+signal GND34
+signal GND35
+signal GND36
+signal GND37
+signal GND38
+signal GND39
+signal GND40
+signal GND41
+signal GND42
+signal GND43
+signal GND44
+signal GND45
+signal GND46
+signal GND47
+signal GND48
+signal GND49
+signal GND50
+signal GND51
+signal GND52
+signal GND53
+signal GND54
+signal GND55
+signal GND56
+signal GND57
+signal GND58
+signal GND59
+signal GND60
+signal GND61
+signal GND62
+signal GND63
+signal GND64
+signal GND65
+signal GND66
+signal GND67
+signal GND68
+signal GND69
+signal GND70
+signal GND71
+signal GND72
+signal GND73
+signal GND74
+signal GND75
+signal GND76
+signal GND77
+signal GND78
+signal GND79
+signal GND80
+signal GND81
+signal GND82
+signal GND83
+signal GND84
+signal GND85
+signal GND86
+signal GND87
+signal GND88
+signal GND89
+signal GND90
+signal GND91
+signal GND92
+signal GND93
+signal GND94
+signal GND95
+signal GND96
+signal GND97
+signal GND98
+signal GND99
+signal GND100
+signal GND101
+signal GND102
+signal GND103
+signal GND104
+signal GND105
+signal GND106
+signal GND107
+signal GND108
+signal GND109
+signal GND110
+signal GND111
+signal GND112
+signal GND113
+signal GND114
+signal GND115
+signal GND116
+signal GND117
+signal GND118
+signal GND119
+signal GND120
+signal GND121
+signal GND122
+signal GND123
+signal GND124
+signal GND125
+signal GND126
+signal GND127
+signal GND128
+signal GND129
+signal GND130
+signal GND131
+signal GND132
+signal GND133
+signal GND134
+signal GND135
+signal GND136
+signal GND137
+signal GND138
+signal GND139
+signal GND140
+signal GND141
+signal GND142
+signal GND143
+signal GND144
+signal GND145
+signal GND146
+signal GND147
+signal GND148
+signal GND149
+signal GND150
+signal GND151
+signal GND152
+signal GND153
+signal GND154
+signal GND155
+signal GND156
+signal GND157
+signal GND158
+signal GND159
+signal GND160
+signal GND161
+signal GND162
+signal GND163
+signal GND164
+signal GND165
+signal GND166
+signal GND167
+signal GND168
+signal GND169
+signal GND170
+signal GND171
+signal GND172
+signal GND173
+signal GND174
+signal GND175
+signal GND176
+signal GND177
+signal GND178
+signal GND179
+signal GND180
+signal LDT_RX_CAL0
+signal LDT_RX_CAL1
+signal LDT_RX_CLKN
+signal LDT_RX_CLKP
+signal LDT_TX_CAL0
+signal LDT_TX_CAL1
+signal M0_VREF
+signal M1_VREF
+signal TEMPN
+signal TEMPP
+signal VDDCORE0
+signal VDDCORE1
+signal VDDCORE2
+signal VDDCORE3
+signal VDDCORE4
+signal VDDCORE5
+signal VDDCORE6
+signal VDDCORE7
+signal VDDCORE8
+signal VDDCORE9
+signal VDDCORE10
+signal VDDCORE11
+signal VDDCORE12
+signal VDDCORE13
+signal VDDCORE14
+signal VDDCORE15
+signal VDDCORE16
+signal VDDCORE17
+signal VDDCORE18
+signal VDDCORE19
+signal VDDCORE20
+signal VDDCORE21
+signal VDDCORE22
+signal VDDCORE23
+signal VDDCORE24
+signal VDDCORE25
+signal VDDCORE26
+signal VDDCORE27
+signal VDDCORE28
+signal VDDCORE29
+signal VDDCORE30
+signal VDDCORE31
+signal VDDCORE32
+signal VDDCORE33
+signal VDDCORE34
+signal VDDCORE35
+signal VDDCORE36
+signal VDDCORE37
+signal VDDCORE38
+signal VDDCORE39
+signal VDDCORE40
+signal VDDCORE41
+signal VDDCORE42
+signal VDDCORE43
+signal VDDCORE44
+signal VDDCORE45
+signal VDDCORE46
+signal VDDIO0
+signal VDDIO1
+signal VDDIO2
+signal VDDIO3
+signal VDDIO4
+signal VDDIO5
+signal VDDIO6
+signal VDDIO7
+signal VDDIO8
+signal VDDIO9
+signal VDDIO10
+signal VDDIO11
+signal VDDIO12
+signal VDDIO13
+signal VDDIO14
+signal VDDIO15
+signal VDDIO16
+signal VDDIO17
+signal VDDIO18
+signal VDDIO19
+signal VDDIO20
+signal VDDIO21
+signal VDDIO22
+signal VDDIO23
+signal VDDIO24
+signal VDDIO25
+signal VDDIO26
+signal VDDIO27
+signal VDDIO28
+signal VDDIO29
+signal VDDIO30
+signal VDDIO31
+signal VDDIO32
+signal VDDIO33
+signal VDDIO34
+signal VDDIO35
+signal VDDIO36
+signal VDDIO37
+signal VDDIO38
+signal VDDIO39
+signal VDDIO40
+signal VDDIO41
+signal VDDIO42
+signal VDDIO43
+signal VDDIO44
+signal VDDIO45
+signal VDDIO46
+signal VDDIO47
+signal VDDIO48
+signal VDDIO49
+signal VDDIO50
+signal VDDIO51
+signal VDDIO52
+signal VDDIO53
+signal VDDIO54
+signal VDDIO55
+signal VDDLDT0
+signal VDDLDT1
+signal VDDLDT2
+signal VDDLDT3
+signal VDDLDT4
+signal VDDLDT5
+signal VDDLDT6
+signal VDDLDT7
+signal VDDLDT8
+signal VDDLDT9
+signal VDDLDT10
+signal VDDLDT11
+signal VDDLDT12
+signal VDDLDT13
+signal VDDLDT14
+signal VDDLDT15
+signal VDDLDT16
+signal VDDLDT17
+signal VDDLDT18
+signal VDDMEM0
+signal VDDMEM1
+signal VDDMEM2
+signal VDDMEM3
+signal VDDMEM4
+signal VDDMEM5
+signal VDDMEM6
+signal VDDMEM7
+signal VDDMEM8
+signal VDDMEM9
+signal VDDMEM10
+signal VDDMEM11
+signal VDDMEM12
+signal VDDMEM13
+signal VDDMEM14
+signal VDDMEM15
+signal VDDMEM16
+signal VDDMEM17
+signal VDDMEM18
+signal VDDMEM19
+signal VDDMEM20
+signal VDDMEM21
+signal VDDMEM22
+signal VDDMEM23
+signal VDDMEM24
+signal VDDMEM25
+signal VDDMEM26
+signal VDDMEM27
+signal VDDMEM28
+signal VDDMEM29
+signal VDDMEM30
+signal VDDMEM31
+signal VDDMEM32
+signal VDDMEM33
+signal VDDMEM34
+signal VDDMEM35
+signal VDDMEM36
+signal VDDMEM37
+signal VDDMEM38
+signal VDDMEM39
+signal VDDMEM40
+signal VDDMEM41
+signal VDDMEM42
+signal VDDMEM43
+signal VDDMEM44
+signal VDDMEM45
+signal VDDMEM46
+signal VDDMEM47
+signal VDDMEM48
+
+register	BSR	1434
+register	BR	1
+register	DIR	32
+register	CTRL	12
+register	DATAR	277
+register	ADDRR	77
+register	SCD	64
+register	IMP	32
+
+
+instruction length 6
+
+instruction	EXTEST		000000	BSR
+instruction	IDCODE		000001	DIR
+instruction	SAMPLE/PRELOAD	111101	BSR
+instruction	BYPASS		111111	BR
+instruction	CONTROLL	001010	CTRL
+instruction	DATA		001001	DATAR
+instruction	ADDR		001000	ADDRR
+instruction	SCANSCD		110110	SCD
+instruction	IMPCODE		000011	IMP
+
+bit 1433 O 0 *
+bit 1432 O 0 *
+bit 1431 O 0 *
+bit 1430 O 0 *
+bit 1429 O 0 *
+bit 1428 O 0 *
+bit 1427 O 0 *
+bit 1426 O 0 *
+bit 1425 O 0 *
+bit 1424 O 0 *
+bit 1423 O 0 *
+bit 1422 O 0 *
+bit 1421 O 0 *
+bit 1420 O 0 *
+bit 1419 O 0 *
+bit 1418 O 0 *
+bit 1417 C 0 *
+bit 1416 O 0 *
+bit 1415 O 0 *
+bit 1414 I 1 LDT_RX_CTLP
+bit 1413 I 1 LDT_RX_CTLN
+bit 1412 O 1 LDT_TX_CADP0 1417 0 Z
+bit 1411 O 1 LDT_TX_CADN0 1417 0 Z
+bit 1410 I 1 LDT_RX_CADP7
+bit 1409 I 1 LDT_RX_CADN7
+bit 1408 O 1 LDT_TX_CADP1 1417 0 Z
+bit 1407 O 1 LDT_TX_CADN1 1417 0 Z
+bit 1406 I 1 LDT_RX_CADP6
+bit 1405 I 1 LDT_RX_CADN6
+bit 1404 O 1 LDT_TX_CADP2 1417 0 Z
+bit 1403 O 1 LDT_TX_CADN2 1417 0 Z
+bit 1402 I 1 LDT_RX_CADP5
+bit 1401 I 1 LDT_RX_CADN5
+bit 1400 O 1 LDT_TX_CADP3 1417 0 Z
+bit 1399 O 1 LDT_TX_CADN3 1417 0 Z
+bit 1398 I 1 LDT_RX_CADP4
+bit 1397 I 1 LDT_RX_CADN4
+bit 1396 O 1 LDT_TX_CLKP 1417 0 Z
+bit 1395 O 1 LDT_TX_CLKN 1417 0 Z
+bit 1394 O 1 LDT_TX_CADP4 1417 0 Z
+bit 1393 O 1 LDT_TX_CADN4 1417 0 Z
+bit 1392 I 1 LDT_RX_CADP3
+bit 1391 I 1 LDT_RX_CADN3
+bit 1390 O 1 LDT_TX_CADP5 1417 0 Z
+bit 1389 O 1 LDT_TX_CADN5 1417 0 Z
+bit 1388 I 1 LDT_RX_CADP2
+bit 1387 I 1 LDT_RX_CADN2
+bit 1386 O 1 LDT_TX_CADP6 1417 0 Z
+bit 1385 O 1 LDT_TX_CADN6 1417 0 Z
+bit 1384 I 1 LDT_RX_CADP1
+bit 1383 I 1 LDT_RX_CADN1
+bit 1382 O 1 LDT_TX_CADP7 1417 0 Z
+bit 1381 O 1 LDT_TX_CADN7 1417 0 Z
+bit 1380 I 1 LDT_RX_CADP0
+bit 1379 I 1 LDT_RX_CADN0
+bit 1378 O 1 LDT_TX_CTLP 1417 0 Z
+bit 1377 O 1 LDT_TX_CTLN 1417 0 Z
+bit 1376 O 1 LDT_PWROK 1375 0 Z
+bit 1375 C 0 *
+bit 1374 I 1 LDT_PWROK
+bit 1373 O 1 LDT_RESET_L 1372 0 Z
+bit 1372 C 0 *
+bit 1371 I 1 LDT_RESET_L
+bit 1370 O 1 M1_DQ0 1369 0 Z
+bit 1369 C 0 *
+bit 1368 I 1 M1_DQ0
+bit 1367 O 1 M1_DQ1 1366 0 Z
+bit 1366 C 0 *
+bit 1365 I 1 M1_DQ1
+bit 1364 O 1 M1_DQ2 1363 0 Z
+bit 1363 C 0 *
+bit 1362 I 1 M1_DQ2
+bit 1361 O 1 M1_DQ3 1360 0 Z
+bit 1360 C 0 *
+bit 1359 I 1 M1_DQ3
+bit 1358 O 1 M1_DQS0 1357 0 Z
+bit 1357 C 0 *
+bit 1356 I 1 M1_DQS0
+bit 1355 O 1 M1_DQ4 1354 0 Z
+bit 1354 C 0 *
+bit 1353 I 1 M1_DQ4
+bit 1352 O 1 M1_DQ5 1351 0 Z
+bit 1351 C 0 *
+bit 1350 I 1 M1_DQ5
+bit 1349 O 1 M1_DQ6 1348 0 Z
+bit 1348 C 0 *
+bit 1347 I 1 M1_DQ6
+bit 1346 O 1 M1_DQ7 1345 0 Z
+bit 1345 C 0 *
+bit 1344 I 1 M1_DQ7
+bit 1343 O 1 M1_DQ8 1342 0 Z
+bit 1342 C 0 *
+bit 1341 I 1 M1_DQ8
+bit 1340 O 1 M1_DQ9 1339 0 Z
+bit 1339 C 0 *
+bit 1338 I 1 M1_DQ9
+bit 1337 O 1 M1_DQ10 1336 0 Z
+bit 1336 C 0 *
+bit 1335 I 1 M1_DQ10
+bit 1334 O 1 M1_DQ11 1333 0 Z
+bit 1333 C 0 *
+bit 1332 I 1 M1_DQ11
+bit 1331 O 1 M1_DQS1 1330 0 Z
+bit 1330 C 0 *
+bit 1329 I 1 M1_DQS1
+bit 1328 O 1 M1_DQ12 1327 0 Z
+bit 1327 C 0 *
+bit 1326 I 1 M1_DQ12
+bit 1325 O 1 M1_DQ13 1324 0 Z
+bit 1324 C 0 *
+bit 1323 I 1 M1_DQ13
+bit 1322 O 1 M1_DQ14 1321 0 Z
+bit 1321 C 0 *
+bit 1320 I 1 M1_DQ14
+bit 1319 O 1 M1_DQ15 1318 0 Z
+bit 1318 C 0 *
+bit 1317 I 1 M1_DQ15
+bit 1316 O 1 M1_DQ16 1315 0 Z
+bit 1315 C 0 *
+bit 1314 I 1 M1_DQ16
+bit 1313 O 1 M1_DQ17 1312 0 Z
+bit 1312 C 0 *
+bit 1311 I 1 M1_DQ17
+bit 1310 O 1 M1_DQ18 1309 0 Z
+bit 1309 C 0 *
+bit 1308 I 1 M1_DQ18
+bit 1307 O 1 M1_DQ19 1306 0 Z
+bit 1306 C 0 *
+bit 1305 I 1 M1_DQ19
+bit 1304 O 1 M1_DQS2 1303 0 Z
+bit 1303 C 0 *
+bit 1302 I 1 M1_DQS2
+bit 1301 O 1 M1_DQ20 1300 0 Z
+bit 1300 C 0 *
+bit 1299 I 1 M1_DQ20
+bit 1298 O 1 M1_DQ21 1297 0 Z
+bit 1297 C 0 *
+bit 1296 I 1 M1_DQ21
+bit 1295 O 1 M1_DQ22 1294 0 Z
+bit 1294 C 0 *
+bit 1293 I 1 M1_DQ22
+bit 1292 O 1 M1_DQ23 1291 0 Z
+bit 1291 C 0 *
+bit 1290 I 1 M1_DQ23
+bit 1289 O 1 M1_DQ24 1288 0 Z
+bit 1288 C 0 *
+bit 1287 I 1 M1_DQ24
+bit 1286 O 1 M1_DQ25 1285 0 Z
+bit 1285 C 0 *
+bit 1284 I 1 M1_DQ25
+bit 1283 O 1 M1_DQ26 1282 0 Z
+bit 1282 C 0 *
+bit 1281 I 1 M1_DQ26
+bit 1280 O 1 M1_DQ27 1279 0 Z
+bit 1279 C 0 *
+bit 1278 I 1 M1_DQ27
+bit 1277 O 1 M1_DQS3 1276 0 Z
+bit 1276 C 0 *
+bit 1275 I 1 M1_DQS3
+bit 1274 O 1 M1_DQ28 1273 0 Z
+bit 1273 C 0 *
+bit 1272 I 1 M1_DQ28
+bit 1271 O 1 M1_DQ29 1270 0 Z
+bit 1270 C 0 *
+bit 1269 I 1 M1_DQ29
+bit 1268 O 1 M1_DQ30 1267 0 Z
+bit 1267 C 0 *
+bit 1266 I 1 M1_DQ30
+bit 1265 O 1 M1_DQ31 1264 0 Z
+bit 1264 C 0 *
+bit 1263 I 1 M1_DQ31
+bit 1262 O 1 M1_A12 1261 0 Z
+bit 1261 C 0 *
+bit 1260 O 0 *
+bit 1259 O 1 M1_A8 1258 0 Z
+bit 1258 C 0 *
+bit 1257 O 0 *
+bit 1256 O 1 M1_A11 1255 0 Z
+bit 1255 C 0 *
+bit 1254 O 0 *
+bit 1253 O 1 M1_A5 1252 0 Z
+bit 1252 C 0 *
+bit 1251 O 0 *
+bit 1250 O 1 M1_A9 1249 0 Z
+bit 1249 C 0 *
+bit 1248 O 0 *
+bit 1247 O 1 M1_A6 1246 0 Z
+bit 1246 C 0 *
+bit 1245 O 0 *
+bit 1244 O 1 M1_A7 1243 0 Z
+bit 1243 C 0 *
+bit 1242 O 0 *
+bit 1241 O 1 M1_A2 1240 0 Z
+bit 1240 C 0 *
+bit 1239 O 0 *
+bit 1238 O 1 M1_A4 1237 0 Z
+bit 1237 C 0 *
+bit 1236 O 0 *
+bit 1235 O 1 M1_A1 1234 0 Z
+bit 1234 C 0 *
+bit 1233 O 0 *
+bit 1232 O 1 M1_A3 1231 0 Z
+bit 1231 C 0 *
+bit 1230 O 0 *
+bit 1229 O 1 M1_BA1 1228 0 Z
+bit 1228 C 0 *
+bit 1227 O 0 *
+bit 1226 O 1 M1_A0 1225 0 Z
+bit 1225 C 0 *
+bit 1224 O 0 *
+bit 1223 O 1 M1_WE_L 1222 0 Z
+bit 1222 C 0 *
+bit 1221 O 0 *
+bit 1220 O 1 M1_A10 1219 0 Z
+bit 1219 C 0 *
+bit 1218 O 0 *
+bit 1217 O 1 M1_CAS_L 1216 0 Z
+bit 1216 C 0 *
+bit 1215 O 0 *
+bit 1214 O 1 M1_BA0 1213 0 Z
+bit 1213 C 0 *
+bit 1212 O 0 *
+bit 1211 O 1 M1_CS_L1 1210 0 Z
+bit 1210 C 0 *
+bit 1209 O 0 *
+bit 1208 O 1 M1_CS_L0 1207 0 Z
+bit 1207 C 0 *
+bit 1206 O 0 *
+bit 1205 O 1 M1_CS_L2 1204 0 Z
+bit 1204 C 0 *
+bit 1203 O 0 *
+bit 1202 O 1 M1_RAS_L 1201 0 Z
+bit 1201 C 0 *
+bit 1200 O 0 *
+bit 1199 O 1 M1_CS_L3 1198 0 Z
+bit 1198 C 0 *
+bit 1197 O 0 *
+bit 1196 O 1 M1_CLK 1195 0 Z
+bit 1195 C 0 *
+bit 1194 O 0 *
+bit 1193 O 1 M1_CKE 1192 0 Z
+bit 1192 C 0 *
+bit 1191 O 0 *
+bit 1190 O 1 M1_CLK_L 1189 0 Z
+bit 1189 C 0 *
+bit 1188 O 0 *
+bit 1187 O 1 M1_ECC0 1186 0 Z
+bit 1186 C 0 *
+bit 1185 I 1 M1_ECC0
+bit 1184 O 1 M1_ECC1 1183 0 Z
+bit 1183 C 0 *
+bit 1182 I 1 M1_ECC1
+bit 1181 O 1 M1_ECC2 1180 0 Z
+bit 1180 C 0 *
+bit 1179 I 1 M1_ECC2
+bit 1178 O 1 M1_ECC3 1177 0 Z
+bit 1177 C 0 *
+bit 1176 I 1 M1_ECC3
+bit 1175 O 1 M1_DQS8 1174 0 Z
+bit 1174 C 0 *
+bit 1173 I 1 M1_DQS8
+bit 1172 O 1 M1_ECC4 1171 0 Z
+bit 1171 C 0 *
+bit 1170 I 1 M1_ECC4
+bit 1169 O 1 M1_ECC5 1168 0 Z
+bit 1168 C 0 *
+bit 1167 I 1 M1_ECC5
+bit 1166 O 1 M1_ECC6 1165 0 Z
+bit 1165 C 0 *
+bit 1164 I 1 M1_ECC6
+bit 1163 O 1 M1_ECC7 1162 0 Z
+bit 1162 C 0 *
+bit 1161 I 1 M1_ECC7
+bit 1160 O 1 M1_DQ32 1159 0 Z
+bit 1159 C 0 *
+bit 1158 I 1 M1_DQ32
+bit 1157 O 1 M1_DQ33 1156 0 Z
+bit 1156 C 0 *
+bit 1155 I 1 M1_DQ33
+bit 1154 O 1 M1_DQ34 1153 0 Z
+bit 1153 C 0 *
+bit 1152 I 1 M1_DQ34
+bit 1151 O 1 M1_DQ35 1150 0 Z
+bit 1150 C 0 *
+bit 1149 I 1 M1_DQ35
+bit 1148 O 1 M1_DQS4 1147 0 Z
+bit 1147 C 0 *
+bit 1146 I 1 M1_DQS4
+bit 1145 O 1 M1_DQ36 1144 0 Z
+bit 1144 C 0 *
+bit 1143 I 1 M1_DQ36
+bit 1142 O 1 M1_DQ37 1141 0 Z
+bit 1141 C 0 *
+bit 1140 I 1 M1_DQ37
+bit 1139 O 1 M1_DQ38 1138 0 Z
+bit 1138 C 0 *
+bit 1137 I 1 M1_DQ38
+bit 1136 O 1 M1_DQ39 1135 0 Z
+bit 1135 C 0 *
+bit 1134 I 1 M1_DQ39
+bit 1133 O 1 M1_DQ40 1132 0 Z
+bit 1132 C 0 *
+bit 1131 I 1 M1_DQ40
+bit 1130 O 1 M1_DQ41 1129 0 Z
+bit 1129 C 0 *
+bit 1128 I 1 M1_DQ41
+bit 1127 O 1 M1_DQ42 1126 0 Z
+bit 1126 C 0 *
+bit 1125 I 1 M1_DQ42
+bit 1124 O 1 M1_DQ43 1123 0 Z
+bit 1123 C 0 *
+bit 1122 I 1 M1_DQ43
+bit 1121 O 1 M1_DQS5 1120 0 Z
+bit 1120 C 0 *
+bit 1119 I 1 M1_DQS5
+bit 1118 O 1 M1_DQ44 1117 0 Z
+bit 1117 C 0 *
+bit 1116 I 1 M1_DQ44
+bit 1115 O 1 M1_DQ45 1114 0 Z
+bit 1114 C 0 *
+bit 1113 I 1 M1_DQ45
+bit 1112 O 1 M1_DQ46 1111 0 Z
+bit 1111 C 0 *
+bit 1110 I 1 M1_DQ46
+bit 1109 O 1 M1_DQ47 1108 0 Z
+bit 1108 C 0 *
+bit 1107 I 1 M1_DQ47
+bit 1106 O 1 M1_DQ48 1105 0 Z
+bit 1105 C 0 *
+bit 1104 I 1 M1_DQ48
+bit 1103 O 1 M1_DQ49 1102 0 Z
+bit 1102 C 0 *
+bit 1101 I 1 M1_DQ49
+bit 1100 O 1 M1_DQ50 1099 0 Z
+bit 1099 C 0 *
+bit 1098 I 1 M1_DQ50
+bit 1097 O 1 M1_DQ51 1096 0 Z
+bit 1096 C 0 *
+bit 1095 I 1 M1_DQ51
+bit 1094 O 1 M1_DQS6 1093 0 Z
+bit 1093 C 0 *
+bit 1092 I 1 M1_DQS6
+bit 1091 O 1 M1_DQ52 1090 0 Z
+bit 1090 C 0 *
+bit 1089 I 1 M1_DQ52
+bit 1088 O 1 M1_DQ53 1087 0 Z
+bit 1087 C 0 *
+bit 1086 I 1 M1_DQ53
+bit 1085 O 1 M1_DQ54 1084 0 Z
+bit 1084 C 0 *
+bit 1083 I 1 M1_DQ54
+bit 1082 O 1 M1_DQ55 1081 0 Z
+bit 1081 C 0 *
+bit 1080 I 1 M1_DQ55
+bit 1079 O 1 M1_DQ56 1078 0 Z
+bit 1078 C 0 *
+bit 1077 I 1 M1_DQ56
+bit 1076 O 1 M1_DQ57 1075 0 Z
+bit 1075 C 0 *
+bit 1074 I 1 M1_DQ57
+bit 1073 O 1 M1_DQ58 1072 0 Z
+bit 1072 C 0 *
+bit 1071 I 1 M1_DQ58
+bit 1070 O 1 M1_DQ59 1069 0 Z
+bit 1069 C 0 *
+bit 1068 I 1 M1_DQ59
+bit 1067 O 1 M1_DQS7 1066 0 Z
+bit 1066 C 0 *
+bit 1065 I 1 M1_DQS7
+bit 1064 O 1 M1_DQ60 1063 0 Z
+bit 1063 C 0 *
+bit 1062 I 1 M1_DQ60
+bit 1061 O 1 M1_DQ61 1060 0 Z
+bit 1060 C 0 *
+bit 1059 I 1 M1_DQ61
+bit 1058 O 1 M1_DQ62 1057 0 Z
+bit 1057 C 0 *
+bit 1056 I 1 M1_DQ62
+bit 1055 O 1 M1_DQ63 1054 0 Z
+bit 1054 C 0 *
+bit 1053 I 1 M1_DQ63
+bit 1052 O 1 M0_DQ63 1051 0 Z
+bit 1051 C 0 *
+bit 1050 I 1 M0_DQ63
+bit 1049 O 1 M0_DQ62 1048 0 Z
+bit 1048 C 0 *
+bit 1047 I 1 M0_DQ62
+bit 1046 O 1 M0_DQ61 1045 0 Z
+bit 1045 C 0 *
+bit 1044 I 1 M0_DQ61
+bit 1043 O 1 M0_DQ60 1042 0 Z
+bit 1042 C 0 *
+bit 1041 I 1 M0_DQ60
+bit 1040 O 1 M0_DQS7 1039 0 Z
+bit 1039 C 0 *
+bit 1038 I 1 M0_DQS7
+bit 1037 O 1 M0_DQ59 1036 0 Z
+bit 1036 C 0 *
+bit 1035 I 1 M0_DQ59
+bit 1034 O 1 M0_DQ58 1033 0 Z
+bit 1033 C 0 *
+bit 1032 I 1 M0_DQ58
+bit 1031 O 1 M0_DQ57 1030 0 Z
+bit 1030 C 0 *
+bit 1029 I 1 M0_DQ57
+bit 1028 O 1 M0_DQ56 1027 0 Z
+bit 1027 C 0 *
+bit 1026 I 1 M0_DQ56
+bit 1025 O 1 M0_DQ55 1024 0 Z
+bit 1024 C 0 *
+bit 1023 I 1 M0_DQ55
+bit 1022 O 1 M0_DQ54 1021 0 Z
+bit 1021 C 0 *
+bit 1020 I 1 M0_DQ54
+bit 1019 O 1 M0_DQ53 1018 0 Z
+bit 1018 C 0 *
+bit 1017 I 1 M0_DQ53
+bit 1016 O 1 M0_DQ52 1015 0 Z
+bit 1015 C 0 *
+bit 1014 I 1 M0_DQ52
+bit 1013 O 1 M0_DQS6 1012 0 Z
+bit 1012 C 0 *
+bit 1011 I 1 M0_DQS6
+bit 1010 O 1 M0_DQ51 1009 0 Z
+bit 1009 C 0 *
+bit 1008 I 1 M0_DQ51
+bit 1007 O 1 M0_DQ50 1006 0 Z
+bit 1006 C 0 *
+bit 1005 I 1 M0_DQ50
+bit 1004 O 1 M0_DQ49 1003 0 Z
+bit 1003 C 0 *
+bit 1002 I 1 M0_DQ49
+bit 1001 O 1 M0_DQ48 1000 0 Z
+bit 1000 C 0 *
+bit 999 I 1 M0_DQ48
+bit 998 O 1 M0_DQ47 997 0 Z
+bit 997 C 0 *
+bit 996 I 1 M0_DQ47
+bit 995 O 1 M0_DQ46 994 0 Z
+bit 994 C 0 *
+bit 993 I 1 M0_DQ46
+bit 992 O 1 M0_DQ45 991 0 Z
+bit 991 C 0 *
+bit 990 I 1 M0_DQ45
+bit 989 O 1 M0_DQ44 988 0 Z
+bit 988 C 0 *
+bit 987 I 1 M0_DQ44
+bit 986 O 1 M0_DQS5 985 0 Z
+bit 985 C 0 *
+bit 984 I 1 M0_DQS5
+bit 983 O 1 M0_DQ43 982 0 Z
+bit 982 C 0 *
+bit 981 I 1 M0_DQ43
+bit 980 O 1 M0_DQ42 979 0 Z
+bit 979 C 0 *
+bit 978 I 1 M0_DQ42
+bit 977 O 1 M0_DQ41 976 0 Z
+bit 976 C 0 *
+bit 975 I 1 M0_DQ41
+bit 974 O 1 M0_DQ40 973 0 Z
+bit 973 C 0 *
+bit 972 I 1 M0_DQ40
+bit 971 O 1 M0_DQ39 970 0 Z
+bit 970 C 0 *
+bit 969 I 1 M0_DQ39
+bit 968 O 1 M0_DQ38 967 0 Z
+bit 967 C 0 *
+bit 966 I 1 M0_DQ38
+bit 965 O 1 M0_DQ37 964 0 Z
+bit 964 C 0 *
+bit 963 I 1 M0_DQ37
+bit 962 O 1 M0_DQ36 961 0 Z
+bit 961 C 0 *
+bit 960 I 1 M0_DQ36
+bit 959 O 1 M0_DQS4 958 0 Z
+bit 958 C 0 *
+bit 957 I 1 M0_DQS4
+bit 956 O 1 M0_DQ35 955 0 Z
+bit 955 C 0 *
+bit 954 I 1 M0_DQ35
+bit 953 O 1 M0_DQ34 952 0 Z
+bit 952 C 0 *
+bit 951 I 1 M0_DQ34
+bit 950 O 1 M0_DQ33 949 0 Z
+bit 949 C 0 *
+bit 948 I 1 M0_DQ33
+bit 947 O 1 M0_DQ32 946 0 Z
+bit 946 C 0 *
+bit 945 I 1 M0_DQ32
+bit 944 O 1 M0_ECC7 943 0 Z
+bit 943 C 0 *
+bit 942 I 1 M0_ECC7
+bit 941 O 1 M0_ECC6 940 0 Z
+bit 940 C 0 *
+bit 939 I 1 M0_ECC6
+bit 938 O 1 M0_ECC5 937 0 Z
+bit 937 C 0 *
+bit 936 I 1 M0_ECC5
+bit 935 O 1 M0_ECC4 934 0 Z
+bit 934 C 0 *
+bit 933 I 1 M0_ECC4
+bit 932 O 1 M0_DQS8 931 0 Z
+bit 931 C 0 *
+bit 930 I 1 M0_DQS8
+bit 929 O 1 M0_ECC3 928 0 Z
+bit 928 C 0 *
+bit 927 I 1 M0_ECC3
+bit 926 O 1 M0_ECC2 925 0 Z
+bit 925 C 0 *
+bit 924 I 1 M0_ECC2
+bit 923 O 1 M0_ECC1 922 0 Z
+bit 922 C 0 *
+bit 921 I 1 M0_ECC1
+bit 920 O 1 M0_ECC0 919 0 Z
+bit 919 C 0 *
+bit 918 I 1 M0_ECC0
+bit 917 O 1 M0_CS_L3 916 0 Z
+bit 916 C 0 *
+bit 915 O 0 *
+bit 914 O 1 M0_CLK_L 913 0 Z
+bit 913 C 0 *
+bit 912 O 0 *
+bit 911 O 1 M0_CKE 910 0 Z
+bit 910 C 0 *
+bit 909 O 0 *
+bit 908 O 1 M0_CLK 907 0 Z
+bit 907 C 0 *
+bit 906 O 0 *
+bit 905 O 1 M0_CS_L2 904 0 Z
+bit 904 C 0 *
+bit 903 O 0 *
+bit 902 O 1 M0_RAS_L 901 0 Z
+bit 901 C 0 *
+bit 900 O 0 *
+bit 899 O 1 M0_CS_L1 898 0 Z
+bit 898 C 0 *
+bit 897 O 0 *
+bit 896 O 1 M0_CS_L0 895 0 Z
+bit 895 C 0 *
+bit 894 O 0 *
+bit 893 O 1 M0_CAS_L 892 0 Z
+bit 892 C 0 *
+bit 891 O 0 *
+bit 890 O 1 M0_BA0 889 0 Z
+bit 889 C 0 *
+bit 888 O 0 *
+bit 887 O 1 M0_WE_L 886 0 Z
+bit 886 C 0 *
+bit 885 O 0 *
+bit 884 O 1 M0_A10 883 0 Z
+bit 883 C 0 *
+bit 882 O 0 *
+bit 881 O 1 M0_BA1 880 0 Z
+bit 880 C 0 *
+bit 879 O 0 *
+bit 878 O 1 M0_A2 877 0 Z
+bit 877 C 0 *
+bit 876 O 0 *
+bit 875 O 1 M0_A0 874 0 Z
+bit 874 C 0 *
+bit 873 O 0 *
+bit 872 O 1 M0_A4 871 0 Z
+bit 871 C 0 *
+bit 870 O 0 *
+bit 869 O 1 M0_A1 868 0 Z
+bit 868 C 0 *
+bit 867 O 0 *
+bit 866 O 1 M0_A3 865 0 Z
+bit 865 C 0 *
+bit 864 O 0 *
+bit 863 O 1 M0_A9 862 0 Z
+bit 862 C 0 *
+bit 861 O 0 *
+bit 860 O 1 M0_A6 859 0 Z
+bit 859 C 0 *
+bit 858 O 0 *
+bit 857 O 1 M0_A11 856 0 Z
+bit 856 C 0 *
+bit 855 O 0 *
+bit 854 O 1 M0_A5 853 0 Z
+bit 853 C 0 *
+bit 852 O 0 *
+bit 851 O 1 M0_A7 850 0 Z
+bit 850 C 0 *
+bit 849 O 0 *
+bit 848 O 1 M0_A12 847 0 Z
+bit 847 C 0 *
+bit 846 O 0 *
+bit 845 O 1 M0_A8 844 0 Z
+bit 844 C 0 *
+bit 843 O 0 *
+bit 842 O 1 M0_DQ31 841 0 Z
+bit 841 C 0 *
+bit 840 I 1 M0_DQ31
+bit 839 O 1 M0_DQ30 838 0 Z
+bit 838 C 0 *
+bit 837 I 1 M0_DQ30
+bit 836 O 1 M0_DQ29 835 0 Z
+bit 835 C 0 *
+bit 834 I 1 M0_DQ29
+bit 833 O 1 M0_DQ28 832 0 Z
+bit 832 C 0 *
+bit 831 I 1 M0_DQ28
+bit 830 O 1 M0_DQS3 829 0 Z
+bit 829 C 0 *
+bit 828 I 1 M0_DQS3
+bit 827 O 1 M0_DQ27 826 0 Z
+bit 826 C 0 *
+bit 825 I 1 M0_DQ27
+bit 824 O 1 M0_DQ26 823 0 Z
+bit 823 C 0 *
+bit 822 I 1 M0_DQ26
+bit 821 O 1 M0_DQ25 820 0 Z
+bit 820 C 0 *
+bit 819 I 1 M0_DQ25
+bit 818 O 1 M0_DQ24 817 0 Z
+bit 817 C 0 *
+bit 816 I 1 M0_DQ24
+bit 815 O 1 M0_DQ23 814 0 Z
+bit 814 C 0 *
+bit 813 I 1 M0_DQ23
+bit 812 O 1 M0_DQ22 811 0 Z
+bit 811 C 0 *
+bit 810 I 1 M0_DQ22
+bit 809 O 1 M0_DQ21 808 0 Z
+bit 808 C 0 *
+bit 807 I 1 M0_DQ21
+bit 806 O 1 M0_DQ20 805 0 Z
+bit 805 C 0 *
+bit 804 I 1 M0_DQ20
+bit 803 O 1 M0_DQS2 802 0 Z
+bit 802 C 0 *
+bit 801 I 1 M0_DQS2
+bit 800 O 1 M0_DQ19 799 0 Z
+bit 799 C 0 *
+bit 798 I 1 M0_DQ19
+bit 797 O 1 M0_DQ18 796 0 Z
+bit 796 C 0 *
+bit 795 I 1 M0_DQ18
+bit 794 O 1 M0_DQ17 793 0 Z
+bit 793 C 0 *
+bit 792 I 1 M0_DQ17
+bit 791 O 1 M0_DQ16 790 0 Z
+bit 790 C 0 *
+bit 789 I 1 M0_DQ16
+bit 788 O 1 M0_DQ15 787 0 Z
+bit 787 C 0 *
+bit 786 I 1 M0_DQ15
+bit 785 O 1 M0_DQ14 784 0 Z
+bit 784 C 0 *
+bit 783 I 1 M0_DQ14
+bit 782 O 1 M0_DQ13 781 0 Z
+bit 781 C 0 *
+bit 780 I 1 M0_DQ13
+bit 779 O 1 M0_DQ12 778 0 Z
+bit 778 C 0 *
+bit 777 I 1 M0_DQ12
+bit 776 O 1 M0_DQS1 775 0 Z
+bit 775 C 0 *
+bit 774 I 1 M0_DQS1
+bit 773 O 1 M0_DQ11 772 0 Z
+bit 772 C 0 *
+bit 771 I 1 M0_DQ11
+bit 770 O 1 M0_DQ10 769 0 Z
+bit 769 C 0 *
+bit 768 I 1 M0_DQ10
+bit 767 O 1 M0_DQ9 766 0 Z
+bit 766 C 0 *
+bit 765 I 1 M0_DQ9
+bit 764 O 1 M0_DQ8 763 0 Z
+bit 763 C 0 *
+bit 762 I 1 M0_DQ8
+bit 761 O 1 M0_DQ7 760 0 Z
+bit 760 C 0 *
+bit 759 I 1 M0_DQ7
+bit 758 O 1 M0_DQ6 757 0 Z
+bit 757 C 0 *
+bit 756 I 1 M0_DQ6
+bit 755 O 1 M0_DQ5 754 0 Z
+bit 754 C 0 *
+bit 753 I 1 M0_DQ5
+bit 752 O 1 M0_DQ4 751 0 Z
+bit 751 C 0 *
+bit 750 I 1 M0_DQ4
+bit 749 O 1 M0_DQS0 748 0 Z
+bit 748 C 0 *
+bit 747 I 1 M0_DQS0
+bit 746 O 1 M0_DQ3 745 0 Z
+bit 745 C 0 *
+bit 744 I 1 M0_DQ3
+bit 743 O 1 M0_DQ2 742 0 Z
+bit 742 C 0 *
+bit 741 I 1 M0_DQ2
+bit 740 O 1 M0_DQ1 739 0 Z
+bit 739 C 0 *
+bit 738 I 1 M0_DQ1
+bit 737 O 1 M0_DQ0 736 0 Z
+bit 736 C 0 *
+bit 735 I 1 M0_DQ0
+bit 734 O 0 *
+bit 733 O 0 *
+bit 732 I 1 E0_RXDV
+bit 731 O 1 E0_MDIO 730 0 Z
+bit 730 C 0 *
+bit 729 I 1 E0_MDIO
+bit 728 O 0 *
+bit 727 O 0 *
+bit 726 I 1 E0_RXER
+bit 725 O 1 E0_MDC 724 0 Z
+bit 724 C 0 *
+bit 723 O 0 *
+bit 722 O 0 *
+bit 721 O 0 *
+bit 720 I 1 E0_TCLKI
+bit 719 O 1 E0_TXD0 718 0 Z
+bit 718 C 0 *
+bit 717 O 0 *
+bit 716 O 0 *
+bit 715 O 0 *
+bit 714 I 1 E0_RXD7
+bit 713 O 1 E0_TXD1 712 0 Z
+bit 712 C 0 *
+bit 711 O 0 *
+bit 710 O 0 *
+bit 709 O 0 *
+bit 708 I 1 E0_RXD6
+bit 707 O 1 E0_TXD2 706 0 Z
+bit 706 C 0 *
+bit 705 O 0 *
+bit 704 O 0 *
+bit 703 O 0 *
+bit 702 I 1 E0_RXD5
+bit 701 O 1 E0_TXD3 700 0 Z
+bit 700 C 0 *
+bit 699 O 0 *
+bit 698 O 0 *
+bit 697 O 0 *
+bit 696 I 1 E0_RXD4
+bit 695 O 1 E0_TCLKO 694 0 Z
+bit 694 C 0 *
+bit 693 O 0 *
+bit 692 O 0 *
+bit 691 O 0 *
+bit 690 I 1 E0_RXD3
+bit 689 O 1 E0_TXD4 688 0 Z
+bit 688 C 0 *
+bit 687 O 0 *
+bit 686 O 0 *
+bit 685 O 0 *
+bit 684 I 1 E0_RXD2
+bit 683 O 1 E0_TXD5 682 0 Z
+bit 682 C 0 *
+bit 681 O 0 *
+bit 680 O 0 *
+bit 679 O 0 *
+bit 678 I 1 E0_RXD1
+bit 677 O 1 E0_TXD6 676 0 Z
+bit 676 C 0 *
+bit 675 O 0 *
+bit 674 O 0 *
+bit 673 O 0 *
+bit 672 I 1 E0_RXD0
+bit 671 O 1 E0_TXD7 670 0 Z
+bit 670 C 0 *
+bit 669 O 0 *
+bit 668 O 0 *
+bit 667 O 0 *
+bit 666 I 1 E0_RCLK
+bit 665 O 1 E0_TXER 664 0 Z
+bit 664 C 0 *
+bit 663 O 0 *
+bit 662 O 0 *
+bit 661 O 0 *
+bit 660 I 1 E0_CRS
+bit 659 O 1 E0_GENO 658 0 Z
+bit 658 C 0 *
+bit 657 O 0 *
+bit 656 O 0 *
+bit 655 O 0 *
+bit 654 I 1 E0_COL
+bit 653 O 1 E0_TXEN 652 0 Z
+bit 652 C 0 *
+bit 651 O 0 *
+bit 650 O 0 *
+bit 649 O 0 *
+bit 648 I 1 REFCLK01
+bit 647 O 1 E1_MDC 646 0 Z
+bit 646 C 0 *
+bit 645 O 0 *
+bit 644 O 0 *
+bit 643 O 0 *
+bit 642 I 1 E1_RCLK
+bit 641 O 1 E1_MDIO 640 0 Z
+bit 640 C 0 *
+bit 639 I 1 E1_MDIO
+bit 638 O 0 *
+bit 637 O 0 *
+bit 636 I 1 E1_RXER
+bit 635 O 1 E1_TXD0 634 0 Z
+bit 634 C 0 *
+bit 633 O 0 *
+bit 632 O 0 *
+bit 631 O 0 *
+bit 630 I 1 E1_RXDV
+bit 629 O 1 E1_TXD1 628 0 Z
+bit 628 C 0 *
+bit 627 O 0 *
+bit 626 O 0 *
+bit 625 O 0 *
+bit 624 I 1 E1_RXD7
+bit 623 O 1 E1_TXD2 622 0 Z
+bit 622 C 0 *
+bit 621 O 0 *
+bit 620 O 0 *
+bit 619 O 0 *
+bit 618 I 1 E1_RXD6
+bit 617 O 1 E1_TXD3 616 0 Z
+bit 616 C 0 *
+bit 615 O 0 *
+bit 614 O 0 *
+bit 613 O 0 *
+bit 612 I 1 E1_RXD5
+bit 611 O 1 E1_TCLKO 610 0 Z
+bit 610 C 0 *
+bit 609 O 0 *
+bit 608 O 0 *
+bit 607 O 0 *
+bit 606 I 1 E1_RXD4
+bit 605 O 1 E1_TXD4 604 0 Z
+bit 604 C 0 *
+bit 603 O 0 *
+bit 602 O 0 *
+bit 601 O 0 *
+bit 600 I 1 E1_RXD3
+bit 599 O 1 E1_TXD5 598 0 Z
+bit 598 C 0 *
+bit 597 O 0 *
+bit 596 O 0 *
+bit 595 O 0 *
+bit 594 I 1 E1_RXD2
+bit 593 O 1 E1_TXD6 592 0 Z
+bit 592 C 0 *
+bit 591 O 0 *
+bit 590 O 0 *
+bit 589 O 0 *
+bit 588 I 1 E1_RXD1
+bit 587 O 1 E1_TXD7 586 0 Z
+bit 586 C 0 *
+bit 585 O 0 *
+bit 584 O 0 *
+bit 583 O 0 *
+bit 582 I 1 E1_RXD0
+bit 581 O 1 E1_TXEN 580 0 Z
+bit 580 C 0 *
+bit 579 O 0 *
+bit 578 O 0 *
+bit 577 O 0 *
+bit 576 I 1 E1_TCLKI
+bit 575 O 1 E1_TXER 574 0 Z
+bit 574 C 0 *
+bit 573 O 0 *
+bit 572 O 0 *
+bit 571 O 0 *
+bit 570 I 1 E1_CRS
+bit 569 O 1 E1_GENO 568 0 Z
+bit 568 C 0 *
+bit 567 O 0 *
+bit 566 O 0 *
+bit 565 O 0 *
+bit 564 I 1 E1_COL
+bit 563 O 1 E2_MDC 562 0 Z
+bit 562 C 0 *
+bit 561 O 0 *
+bit 560 O 0 *
+bit 559 O 0 *
+bit 558 I 1 E2_RCLK
+bit 557 O 1 E2_MDIO 556 0 Z
+bit 556 C 0 *
+bit 555 I 1 E2_MDIO
+bit 554 O 0 *
+bit 553 O 0 *
+bit 552 I 1 REFCLK2
+bit 551 O 1 E2_TXD0 550 0 Z
+bit 550 C 0 *
+bit 549 O 0 *
+bit 548 O 0 *
+bit 547 O 0 *
+bit 546 I 1 E2_RXDV
+bit 545 O 1 E2_TXD1 544 0 Z
+bit 544 C 0 *
+bit 543 O 0 *
+bit 542 O 0 *
+bit 541 O 0 *
+bit 540 I 1 E2_RXER
+bit 539 O 1 E2_TXD2 538 0 Z
+bit 538 C 0 *
+bit 537 O 0 *
+bit 536 O 0 *
+bit 535 O 0 *
+bit 534 I 1 E2_RXD7
+bit 533 O 1 E2_TXD3 532 0 Z
+bit 532 C 0 *
+bit 531 O 0 *
+bit 530 O 0 *
+bit 529 O 0 *
+bit 528 I 1 E2_RXD6
+bit 527 O 1 E2_TCLKO 526 0 Z
+bit 526 C 0 *
+bit 525 O 0 *
+bit 524 O 0 *
+bit 523 O 0 *
+bit 522 I 1 E2_RXD5
+bit 521 O 1 E2_TXD4 520 0 Z
+bit 520 C 0 *
+bit 519 O 0 *
+bit 518 O 0 *
+bit 517 O 0 *
+bit 516 I 1 E2_RXD4
+bit 515 O 1 E2_TXD5 514 0 Z
+bit 514 C 0 *
+bit 513 O 0 *
+bit 512 O 0 *
+bit 511 O 0 *
+bit 510 I 1 E2_RXD3
+bit 509 O 1 E2_TXD6 508 0 Z
+bit 508 C 0 *
+bit 507 O 0 *
+bit 506 O 0 *
+bit 505 O 0 *
+bit 504 I 1 E2_RXD2
+bit 503 O 1 E2_TXD7 502 0 Z
+bit 502 C 0 *
+bit 501 O 0 *
+bit 500 O 0 *
+bit 499 O 0 *
+bit 498 I 1 E2_RXD1
+bit 497 O 1 E2_TXER 496 0 Z
+bit 496 C 0 *
+bit 495 O 0 *
+bit 494 O 0 *
+bit 493 O 0 *
+bit 492 I 1 E2_RXD0
+bit 491 O 1 E2_TXEN 490 0 Z
+bit 490 C 0 *
+bit 489 O 0 *
+bit 488 O 0 *
+bit 487 O 0 *
+bit 486 I 1 E2_TCLKI
+bit 485 O 1 E2_GENO 484 0 Z
+bit 484 C 0 *
+bit 483 O 0 *
+bit 482 O 0 *
+bit 481 O 0 *
+bit 480 I 1 E2_CRS
+bit 479 O 0 *
+bit 478 O 0 *
+bit 477 I 1 E2_COL
+bit 476 O 1 IO_RW 475 0 Z
+bit 475 C 0 *
+bit 474 O 0 *
+bit 473 O 0 *
+bit 472 O 0 *
+bit 471 I 1 SPARE2
+bit 470 O 0 *
+bit 469 O 0 *
+bit 468 I 1 SPARE4
+bit 467 O 0 *
+bit 466 O 0 *
+bit 465 I 1 SPARE3
+bit 464 O 1 S1_COUT 463 0 Z
+bit 463 C 0 *
+bit 462 O 0 *
+bit 461 O 0 *
+bit 460 O 0 *
+bit 459 I 1 S1_DIN
+bit 458 O 0 *
+bit 457 O 0 *
+bit 456 I 1 S1_RIN
+bit 455 O 0 *
+bit 454 O 0 *
+bit 453 I 1 S1_CIN_RCLKIN
+bit 452 O 1 S1_RTS_TSTROBE 451 0 Z
+bit 451 C 0 *
+bit 450 O 0 *
+bit 449 O 0 *
+bit 448 O 0 *
+bit 447 I 1 S1_TIN
+bit 446 O 0 *
+bit 445 O 0 *
+bit 444 I 1 S1_CTS_TCLKIN
+bit 443 O 1 GPIO1 442 0 Z
+bit 442 C 0 *
+bit 441 I 1 GPIO1
+bit 440 O 1 S1_DOUT 439 0 Z
+bit 439 C 0 *
+bit 438 O 0 *
+bit 437 O 0 *
+bit 436 O 0 *
+bit 435 I 1 S0_DIN
+bit 434 O 1 S0_RTS_TSTROBE 433 0 Z
+bit 433 C 0 *
+bit 432 O 0 *
+bit 431 O 0 *
+bit 430 O 0 *
+bit 429 I 1 S0_RIN
+bit 428 O 1 S0_COUT 427 0 Z
+bit 427 C 0 *
+bit 426 O 0 *
+bit 425 O 0 *
+bit 424 O 0 *
+bit 423 I 1 S0_CIN_RCLKIN
+bit 422 O 0 *
+bit 421 O 0 *
+bit 420 I 1 S0_CTS_TCLKIN
+bit 419 O 0 *
+bit 418 O 0 *
+bit 417 I 1 S0_TIN
+bit 416 O 1 S0_DOUT 415 0 Z
+bit 415 C 0 *
+bit 414 O 0 *
+bit 413 O 1 GPIO5 412 0 Z
+bit 412 C 0 *
+bit 411 I 1 GPIO5
+bit 410 O 1 GPIO0 409 0 Z
+bit 409 C 0 *
+bit 408 I 1 GPIO0
+bit 407 O 1 GPIO4 406 0 Z
+bit 406 C 0 *
+bit 405 I 1 GPIO4
+bit 404 O 1 GPIO3 403 0 Z
+bit 403 C 0 *
+bit 402 I 1 GPIO3
+bit 401 O 1 GPIO2 400 0 Z
+bit 400 C 0 *
+bit 399 I 1 GPIO2
+bit 398 O 0 *
+bit 397 O 0 *
+bit 396 I 1 IO_RDY
+bit 395 O 1 IO_OE_L 394 0 Z
+bit 394 C 0 *
+bit 393 O 0 *
+bit 392 O 1 IO_WR_L 391 0 Z
+bit 391 C 0 *
+bit 390 O 0 *
+bit 389 O 1 IO_ALE 388 0 Z
+bit 388 C 0 *
+bit 387 O 0 *
+bit 386 O 1 IO_CS_L7 385 0 Z
+bit 385 C 0 *
+bit 384 O 0 *
+bit 383 O 1 IO_CS_L6 382 0 Z
+bit 382 C 0 *
+bit 381 O 0 *
+bit 380 O 1 IO_CS_L5 379 0 Z
+bit 379 C 0 *
+bit 378 O 0 *
+bit 377 O 1 IO_CS_L4 376 0 Z
+bit 376 C 0 *
+bit 375 O 0 *
+bit 374 O 1 IO_CS_L3 373 0 Z
+bit 373 C 0 *
+bit 372 O 0 *
+bit 371 O 1 IO_CS_L2 370 0 Z
+bit 370 C 0 *
+bit 369 O 0 *
+bit 368 O 1 IO_CS_L1 367 0 Z
+bit 367 C 0 *
+bit 366 O 0 *
+bit 365 O 1 IO_CS_L0 364 0 Z
+bit 364 C 0 *
+bit 363 O 0 *
+bit 362 O 1 IO_AD31 361 0 Z
+bit 361 C 0 *
+bit 360 I 1 IO_AD31
+bit 359 O 1 IO_AD30 358 0 Z
+bit 358 C 0 *
+bit 357 I 1 IO_AD30
+bit 356 O 1 IO_AD28 355 0 Z
+bit 355 C 0 *
+bit 354 I 1 IO_AD28
+bit 353 O 1 IO_AD29 352 0 Z
+bit 352 C 0 *
+bit 351 I 1 IO_AD29
+bit 350 O 1 IO_AD27 349 0 Z
+bit 349 C 0 *
+bit 348 I 1 IO_AD27
+bit 347 O 1 IO_AD26 346 0 Z
+bit 346 C 0 *
+bit 345 I 1 IO_AD26
+bit 344 O 1 IO_AD25 343 0 Z
+bit 343 C 0 *
+bit 342 I 1 IO_AD25
+bit 341 O 1 IO_AD24 340 0 Z
+bit 340 C 0 *
+bit 339 I 1 IO_AD24
+bit 338 O 1 IO_AD23 337 0 Z
+bit 337 C 0 *
+bit 336 I 1 IO_AD23
+bit 335 O 1 IO_AD22 334 0 Z
+bit 334 C 0 *
+bit 333 I 1 IO_AD22
+bit 332 O 1 IO_AD21 331 0 Z
+bit 331 C 0 *
+bit 330 I 1 IO_AD21
+bit 329 O 1 IO_AD20 328 0 Z
+bit 328 C 0 *
+bit 327 I 1 IO_AD20
+bit 326 O 1 IO_AD19 325 0 Z
+bit 325 C 0 *
+bit 324 I 1 IO_AD19
+bit 323 O 1 IO_AD18 322 0 Z
+bit 322 C 0 *
+bit 321 I 1 IO_AD18
+bit 320 O 1 IO_AD17 319 0 Z
+bit 319 C 0 *
+bit 318 I 1 IO_AD17
+bit 317 O 1 IO_AD15 316 0 Z
+bit 316 C 0 *
+bit 315 I 1 IO_AD15
+bit 314 O 1 IO_AD16 313 0 Z
+bit 313 C 0 *
+bit 312 I 1 IO_AD16
+bit 311 O 1 IO_AD11 310 0 Z
+bit 310 C 0 *
+bit 309 I 1 IO_AD11
+bit 308 O 1 IO_AD14 307 0 Z
+bit 307 C 0 *
+bit 306 I 1 IO_AD14
+bit 305 O 1 IO_AD12 304 0 Z
+bit 304 C 0 *
+bit 303 I 1 IO_AD12
+bit 302 O 1 IO_AD13 301 0 Z
+bit 301 C 0 *
+bit 300 I 1 IO_AD13
+bit 299 O 1 IO_AD10 298 0 Z
+bit 298 C 0 *
+bit 297 I 1 IO_AD10
+bit 296 O 1 IO_AD9 295 0 Z
+bit 295 C 0 *
+bit 294 I 1 IO_AD9
+bit 293 O 0 *
+bit 292 O 0 *
+bit 291 I 1 SPARE5
+bit 290 O 0 *
+bit 289 O 0 *
+bit 288 O 0 *
+bit 287 O 0 *
+bit 286 O 0 *
+bit 285 I 1 CLK100N
+bit 284 O 0 *
+bit 283 O 0 *
+bit 282 I 1 PLLBYP
+bit 281 O 0 *
+bit 280 O 0 *
+bit 279 I 1 CLK100P
+bit 278 O 0 *
+bit 277 O 0 *
+bit 276 O 0 *
+bit 275 O 1 RESETOUT_L 274 0 Z
+bit 274 C 0 *
+bit 273 O 0 *
+bit 272 O 1 IO_AD8 271 0 Z
+bit 271 C 0 *
+bit 270 I 1 IO_AD8
+bit 269 O 1 IO_AD7 268 0 Z
+bit 268 C 0 *
+bit 267 I 1 IO_AD7
+bit 266 O 1 DEBUG_L 265 0 Z
+bit 265 C 0 *
+bit 264 I 1 DEBUG_L
+bit 263 O 1 IO_AD6 262 0 Z
+bit 262 C 0 *
+bit 261 I 1 IO_AD6
+bit 260 O 1 IO_AD5 259 0 Z
+bit 259 C 0 *
+bit 258 I 1 IO_AD5
+bit 257 O 1 IO_AD3 256 0 Z
+bit 256 C 0 *
+bit 255 I 1 IO_AD3
+bit 254 O 1 IO_AD4 253 0 Z
+bit 253 C 0 *
+bit 252 I 1 IO_AD4
+bit 251 O 1 IO_AD2 250 0 Z
+bit 250 C 0 *
+bit 249 I 1 IO_AD2
+bit 248 O 1 IO_AD1 247 0 Z
+bit 247 C 0 *
+bit 246 I 1 IO_AD1
+bit 245 O 1 IO_AD0 244 0 Z
+bit 244 C 0 *
+bit 243 I 1 IO_AD0
+bit 242 O 1 GPIO6 241 0 Z
+bit 241 C 0 *
+bit 240 I 1 GPIO6
+bit 239 O 1 GPIO7 238 0 Z
+bit 238 C 0 *
+bit 237 I 1 GPIO7
+bit 236 O 1 GPIO8 235 0 Z
+bit 235 C 0 *
+bit 234 I 1 GPIO8
+bit 233 O 1 GPIO9 232 0 Z
+bit 232 C 0 *
+bit 231 I 1 GPIO9
+bit 230 O 1 GPIO10 229 0 Z
+bit 229 C 0 *
+bit 228 I 1 GPIO10
+bit 227 O 1 IO_CLK100 226 0 Z
+bit 226 C 0 *
+bit 225 O 0 *
+bit 224 O 1 GPIO11 223 0 Z
+bit 223 C 0 *
+bit 222 I 1 GPIO11
+bit 221 O 1 GPIO12 220 0 Z
+bit 220 C 0 *
+bit 219 I 1 GPIO12
+bit 218 O 1 GPIO13 217 0 Z
+bit 217 C 0 *
+bit 216 I 1 GPIO13
+bit 215 O 1 PC_ENVPP 214 0 Z
+bit 214 C 0 *
+bit 213 O 0 *
+bit 212 O 1 GPIO14 211 0 Z
+bit 211 C 0 *
+bit 210 I 1 GPIO14
+bit 209 O 1 PC_ENV5V 208 0 Z
+bit 208 C 0 *
+bit 207 O 0 *
+bit 206 O 1 GPIO15 205 0 Z
+bit 205 C 0 *
+bit 204 I 1 GPIO15
+bit 203 O 1 SCL1 202 0 Z
+bit 202 C 0 *
+bit 201 I 1 SCL1
+bit 200 O 1 PC_ENV3V 199 0 Z
+bit 199 C 0 *
+bit 198 O 0 *
+bit 197 O 1 P_GNT_L3 196 0 Z
+bit 196 C 0 *
+bit 195 O 0 *
+bit 194 O 1 SDA1 193 0 Z
+bit 193 C 0 *
+bit 192 I 1 SDA1
+bit 191 O 1 SCL0 190 0 Z
+bit 190 C 0 *
+bit 189 I 1 SCL0
+bit 188 O 1 SDA0 187 0 Z
+bit 187 C 0 *
+bit 186 I 1 SDA0
+bit 185 O 1 P_GNT_L2 184 0 Z
+bit 184 C 0 *
+bit 183 O 0 *
+bit 182 O 0 *
+bit 181 O 0 *
+bit 180 I 1 P_CLK
+bit 179 O 1 P_REQ_l0 178 0 Z
+bit 178 C 0 *
+bit 177 I 1 P_REQ_l0
+bit 176 O 0 *
+bit 175 O 0 *
+bit 174 I 1 P_REQ_L3
+bit 173 O 1 P_GNT_L1 172 0 Z
+bit 172 C 0 *
+bit 171 O 0 *
+bit 170 O 0 *
+bit 169 O 0 *
+bit 168 I 1 P_REQ_L1
+bit 167 O 1 P_GNT_l0 166 0 Z
+bit 166 C 0 *
+bit 165 I 1 P_GNT_l0
+bit 164 O 0 *
+bit 163 O 0 *
+bit 162 I 1 P_REQ_L2
+bit 161 O 1 P_IRDY_L 160 0 Z
+bit 160 C 0 *
+bit 159 I 1 P_IRDY_L
+bit 158 O 1 P_FRAME_L 157 0 Z
+bit 157 C 0 *
+bit 156 I 1 P_FRAME_L
+bit 155 O 1 P_TRDY_L 154 0 Z
+bit 154 C 0 *
+bit 153 I 1 P_TRDY_L
+bit 152 O 1 P_DEVSEL_L 151 0 Z
+bit 151 C 0 *
+bit 150 I 1 P_DEVSEL_L
+bit 149 O 1 P_PERR_L 148 0 Z
+bit 148 C 0 *
+bit 147 I 1 P_PERR_L
+bit 146 O 1 P_STOP_L 145 0 Z
+bit 145 C 0 *
+bit 144 I 1 P_STOP_L
+bit 143 O 1 P_PAR 142 0 Z
+bit 142 C 0 *
+bit 141 I 1 P_PAR
+bit 140 O 1 P_SERR_L 139 0 Z
+bit 139 C 0 *
+bit 138 I 1 P_SERR_L
+bit 137 O 1 P_INTA_L 136 0 Z
+bit 136 C 0 *
+bit 135 I 1 P_INTA_L
+bit 134 O 1 P_CBE_L3 133 0 Z
+bit 133 C 0 *
+bit 132 I 1 P_CBE_L3
+bit 131 O 0 *
+bit 130 O 0 *
+bit 129 I 1 P_INTB_L
+bit 128 O 1 P_CBE_L2 127 0 Z
+bit 127 C 0 *
+bit 126 I 1 P_CBE_L2
+bit 125 O 0 *
+bit 124 O 0 *
+bit 123 I 1 P_INTC_L
+bit 122 O 1 P_CBE_L1 121 0 Z
+bit 121 C 0 *
+bit 120 I 1 P_CBE_L1
+bit 119 O 0 *
+bit 118 O 0 *
+bit 117 I 1 P_INTD_L
+bit 116 O 1 P_CBE_L0 115 0 Z
+bit 115 C 0 *
+bit 114 I 1 P_CBE_L0
+bit 113 O 1 P_RST_L 112 0 Z
+bit 112 C 0 *
+bit 111 O 0 *
+bit 110 O 0 *
+bit 109 O 0 *
+bit 108 O 0 *
+bit 107 O 0 *
+bit 106 O 0 *
+bit 105 O 0 *
+bit 104 O 0 *
+bit 103 O 0 *
+bit 102 O 0 *
+bit 101 O 0 *
+bit 100 O 0 *
+bit 99 O 0 *
+bit 98 O 1 P_AD0 97 0 Z
+bit 97 C 0 *
+bit 96 I 1 P_AD0
+bit 95 O 0 *
+bit 94 O 0 *
+bit 93 O 0 *
+bit 92 O 1 P_AD1 91 0 Z
+bit 91 C 0 *
+bit 90 I 1 P_AD1
+bit 89 O 1 P_AD2 88 0 Z
+bit 88 C 0 *
+bit 87 I 1 P_AD2
+bit 86 O 1 P_AD7 85 0 Z
+bit 85 C 0 *
+bit 84 I 1 P_AD7
+bit 83 O 1 P_AD3 82 0 Z
+bit 82 C 0 *
+bit 81 I 1 P_AD3
+bit 80 O 1 P_AD8 79 0 Z
+bit 79 C 0 *
+bit 78 I 1 P_AD8
+bit 77 O 1 P_AD4 76 0 Z
+bit 76 C 0 *
+bit 75 I 1 P_AD4
+bit 74 O 1 P_AD9 73 0 Z
+bit 73 C 0 *
+bit 72 I 1 P_AD9
+bit 71 O 1 P_AD5 70 0 Z
+bit 70 C 0 *
+bit 69 I 1 P_AD5
+bit 68 O 1 P_AD10 67 0 Z
+bit 67 C 0 *
+bit 66 I 1 P_AD10
+bit 65 O 1 P_AD6 64 0 Z
+bit 64 C 0 *
+bit 63 I 1 P_AD6
+bit 62 O 1 P_AD13 61 0 Z
+bit 61 C 0 *
+bit 60 I 1 P_AD13
+bit 59 O 1 P_AD11 58 0 Z
+bit 58 C 0 *
+bit 57 I 1 P_AD11
+bit 56 O 1 P_AD16 55 0 Z
+bit 55 C 0 *
+bit 54 I 1 P_AD16
+bit 53 O 1 P_AD12 52 0 Z
+bit 52 C 0 *
+bit 51 I 1 P_AD12
+bit 50 O 1 P_AD17 49 0 Z
+bit 49 C 0 *
+bit 48 I 1 P_AD17
+bit 47 O 1 P_AD15 46 0 Z
+bit 46 C 0 *
+bit 45 I 1 P_AD15
+bit 44 O 1 P_AD18 43 0 Z
+bit 43 C 0 *
+bit 42 I 1 P_AD18
+bit 41 O 1 P_AD14 40 0 Z
+bit 40 C 0 *
+bit 39 I 1 P_AD14
+bit 38 O 1 P_AD21 37 0 Z
+bit 37 C 0 *
+bit 36 I 1 P_AD21
+bit 35 O 1 P_AD19 34 0 Z
+bit 34 C 0 *
+bit 33 I 1 P_AD19
+bit 32 O 1 P_AD24 31 0 Z
+bit 31 C 0 *
+bit 30 I 1 P_AD24
+bit 29 O 1 P_AD22 28 0 Z
+bit 28 C 0 *
+bit 27 I 1 P_AD22
+bit 26 O 1 P_AD25 25 0 Z
+bit 25 C 0 *
+bit 24 I 1 P_AD25
+bit 23 O 1 P_AD23 22 0 Z
+bit 22 C 0 *
+bit 21 I 1 P_AD23
+bit 20 O 1 P_AD28 19 0 Z
+bit 19 C 0 *
+bit 18 I 1 P_AD28
+bit 17 O 1 P_AD20 16 0 Z
+bit 16 C 0 *
+bit 15 I 1 P_AD20
+bit 14 O 1 P_AD27 13 0 Z
+bit 13 C 0 *
+bit 12 I 1 P_AD27
+bit 11 O 1 P_AD26 10 0 Z
+bit 10 C 0 *
+bit 9 I 1 P_AD26
+bit 8 O 1 P_AD30 7 0 Z
+bit 7 C 0 *
+bit 6 I 1 P_AD30
+bit 5 O 1 P_AD29 4 0 Z
+bit 4 C 0 *
+bit 3 I 1 P_AD29
+bit 2 O 1 P_AD31 1 0 Z
+bit 1 C 0 *
+bit 0 I 1 P_AD31
+
+initbus bcm1250

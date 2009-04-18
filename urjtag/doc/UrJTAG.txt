@@ -1,0 +1,1558 @@
+Universal JTAG library, server and tools
+========================================
+Kolja Waschk (Ed.)
+$Id$
+
+/////////////////////////////////////////////////////////////////////////////
+This document is formatted to be readable for "asciidoc". Before you
+make any changes, please read the use guide at the asciidoc home page
+www.methods.co.nz/asciidoc and try to adapt to the style used here; e.g.
+use the single-line section header style ("== header ==").  Please do not use
+any whitespace other than SPACE (ASCII 0x20) and break lines > 79 chars.
+/////////////////////////////////////////////////////////////////////////////
+
+== Copyright ==
+
+Copyright 2007, 2008 Kolja Waschk and the respective authors.
+
+Permission is granted to copy, distribute and/or modify this document under the
+terms of the GNU Free Documentation License, Version 1.2 or any later version
+published by the Free Software Foundation. A copy of the license is included in
+the section entitled "GNU Free Documentation License".
+
+//=========================================================================
+
+== General ==
+
+=== JTAG ===
+// Contributed by Ralf Engels
+
+JTAG basics can be found all over the Internet. This section should go into
+some more details about working with JTAG. What hardware do you need, what is
+the usage of JTAG, where do I get files. What file formats are available...
+
+==== Introduction ====
+
+JTAG (IEEE 1149.1) is a serial interface for testing devices with
+integrated circuits. The problem that the JTAG interface was designed to solve
+is checking if connections between ICs are OK. Therefore you can set and check
+in- and outputs of ICs. In order to save pins and logic a very simple serial
+design was invented.
+
+* One pin serial input
+* One pin serial output
+* One pin clock
+* One pin control
+
+The control pin (together with clock) allows to switch device states. A state
+machine inside each chip can be controlled, e.g. to reset the device.  This
+control machine also allows to have two internal shift registers in each device
+(although we only have on in- and one output-pin). The registers are called
+instruction register (IR) and data register (DR).  The current UrJTAG tool
+allows you to set the IR and set and get the DR. It doesn't allow you to
+directly control the state machine (yet).
+
+==== Interfaces ====
+
+The simplest interface that you can build is like the Xilinx parallel cable
+(also called DLC5). If your device works with a 5V or 3.3V supply voltage then
+this device can even be built just with passive parts.  (picture missing here)
+UrJTAG also supports a number of other interface adapters.
+
+==== Additions ====
+
+In the meantime the JTAG specification was used as a basis for programming
+flash files and debugging processors.  UrJTAG supports programming a couple of
+different flash devices. It also supports programming of non-flash devices via
+SVF files.  UrJTAG does not support debugging yet. Other open source solutions
+such as OpenOCD allow you to debug ARM processors with gdb.
+
+==== BSDL and UrJTAG data files ====
+
+The BSDL file format describes the JTAG interface for one IC.  It is a VHDL
+syntax with the needed information (like pin-names, register lengths and
+commands) that is usually created by the supplier. e.g. Xilinx BSDL files are
+all included in their free web-pack (using file extension ".bsd").
+
+UrJTAG uses a different file format internally. So in order to add a new device
+to UrJTAG you need to convert those files and produce a directory structure.
+Currently there are at least three tools available to do that; included with
+UrJTAG is "bsdl2jtag". Please ask on the mailing list in case of problems with
+that. Please also send proven working files back to this project. 
+
+Starting with post-0.7 releases, UrJTAG contains a BSDL subsystem that
+retrieves the descriptions for chips in the chain from BSDL files on the
+fly. "bsdl2jtag" is in fact a wrapper that uses the BSDL subsystem to
+convert the BSDL file.
+
+==== SVF files ====
+
+The SVF file format contains a number of high level commands to drive the JTAG
+bus. For example you can shift the IR or DR and even check for the results.
+The Xilinx Impact and Altera QuartusII tools allow you to write this file to
+program devices.
+
+The player has been developed according to the "Serial Vector Format
+Specification", Revision E, 8 March 1999 issued by ASSET InterTech, Inc. The
+full specification can be found at
+http://www.asset-intertech.com/support/svf.pdf[].
+
+UrJTAG features an "SVF player" that can read SVF files and perform the
+described actions on the bus.
+
+SVF parser and lexer are also copyright 2002, CDS at http://www-csd.ijs.si/[].
+They have been reused from the "Experimental Boundary Scan" project at
+http://ebsp.sourceforge.net/[].
+
+==== JAM/STAPL files ====
+
+Another format for describing actions over JTAG interfaces is STAPL, actually
+standardized as JEDEC "JESD-71A". Compared to SVF, it looks more like an
+actual programming language and features looping, conditional execution, and
+more. STAPL is not yet supported by UrJTAG.
+
+//------------------------------------------------------------------------
+
+=== UrJTAG ===
+// Written by K.Waschk
+
+==== Introduction ====
+
+UrJTAG is a software package which enables working with JTAG-aware (IEEE
+1149.1) hardware devices (parts) and boards through a JTAG adapter.
+
+This package has an open and modular architecture with the ability to write
+miscellaneous extensions (like board testers, flash memory programmers, and so
+on).
+
+UrJTAG is free software, covered by the GNU General Public License,
+and you are welcome to change it and/or distribute copies of it under certain
+conditions. There is absolutely no warranty for UrJTAG.  Please read
+the COPYING file for more info.
+
+WARNING: This software may damage your hardware!
+
+Feedback and contributions are welcome.
+
+==== About this document ====
+
+This documentation is far from being complete. You're encouraged to amend and
+supplement it and submit your changes in the Bugs or Enhancements tracker
+at the UrJTAG website.
+
+==== UrJTAG Website ====
+
+The most current version of this documentation and UrJTAG source code
+is always available from the project homepage at http://www.urjtag.org[].
+
+==== The name "UrJTAG" ====
+
+I (Kolja) favour short names, so I thought about adding only a few
+letters to "JTAG". The prefix "Ur" in German means "ancestral", an "Ur-Vater"
+is a forefather. UrJTAG shall become the forefather, the prototype for many
+other JTAG tools. By mere chance the "Ur" is also another name for an aurochs,
+an animal similar to the GNU...
+
+==== Authors, contributors, ... thanks ====
+
+A list of contributors is maintained in the file THANKS in the source
+distribution. Special thanks go to Marcel Telka, who actually "invented" the
+JTAG tools and wrote most of this basis of UrJTAG, and Arnim Laeuger for his
+continuous support and development of SVF and BSDL subsystem and FT2232
+drivers.
+
+==== UrJTAG and openwince JTAG Tools ====
+
+The JTAG Tools originally were developed by Marcel Telka as part of
+the openwince project. Still a large portion of the source code is his work.
+However, the last release of the JTAG tools was version 0.5.1 in 2003. After a
+few years the development completely stalled. Every few months or so on the
+project's mailing list someone asked about continuing, but a critical mass
+wasn't reached before late 2007. A fork of the JTAG tools was created under the
+wings of the UrJTAG project at Sourceforge.
+
+//------------------------------------------------------------------------
+
+=== System requirements ===
+//Copied from original README
+
+==== Supported host operating systems ====
+
+JTAG Tools should run on all Unix like operating systems including MS Windows
+with Cygwin installed. A precompiled version that runs on MS Windows without
+Cygwin is available as a Windows installer executable.
+
+==== Required software for running UrJTAG ====
+
+Required only for MS Windows, unless you use the precompiled version:
+
+ * current Cygwin net installation from http://cygwin.com[]
+ * ioperm package (a part of the standard Cygwin net installation)
+
+It may be necessary to run the command "ioperm -i" to install the IOPERM.SYS
+driver in the system.
+
+If UrJTAG was compiled to use the readline library, it has to be present on
+the system as well. It's probably a standard part of your distribution.
+
+More software is needed if you want to compile UrJTAG (which you probably want
+because currently no pre-compiled binaries are available...).
+See "Installation" below. 
+
+==== Supported JTAG adapters/cables ====
+
+See 'help cable' command for up-to-date info.
+
+Parallel-port cables:
+
+ * Arcom JTAG Cable
+ * Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable
+ * Xilinx DLC5 JTAG Parallel Cable III
+ * ETC EA253 JTAG Cable
+ * ETC EI012 JTAG Cable
+ * Ka-Ro TRITON (PXA255/250) JTAG Cable
+ * Keith &amp; Koep JTAG Cable
+ * Lattice Parallel Port JTAG Cable
+ * Mpcbdm JTAG Cable
+ * Macraigor Wiggler JTAG Cable
+
+FT2232-based USB cables:
+
+ * Amontec JTAGkey
+ * Amontec JTAGkey-Tiny (supported as cable "JTAGkey")
+ * KrisTech UsbScarab2 ARM JTAG http://www.kristech.eu/[]
+ * Olimex ARM-USB-JTAG
+ * Olimex ARM-USB-TINY
+ * OOCDLink-s (experimental) http://www.joernonline.de/dw/doku.php?id=projects:oocdlink:2_oocdlinks[]
+ * Other FT2232-based USB JTAG cables (experimental)
+ * TinCanTools Flyswatter
+ * Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/[]
+ * USB to JTAG Interface (experimental)
+ * http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html[]
+ * Black gnICE http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice[]
+ * Xverve Signalyzer Tool (experimental)
+
+Other USB cables:
+
+ * Altera USB-Blaster and compatible http://www.ixo.de/info/usb_jtag[]
+ * Segger/IAR J-Link / Atmel SAM-ICE (experimental, work in progress)
+ * Xilinx Platform USB Cable / DLC9 (slow, experimental, work in progress - don't use)
+
+Other cables:
+
+ * Technologic Systems TS-7800 SoC GPIO builtin JTAG interface
+ 
+==== JTAG-aware parts (chips) ====
+
+The data/ directory of the UrJTAG installation has some more, but at
+least the following are supported:
+
+ * Altera EP1C20F400
+ * Altera MAX7000 (w/ BSDL)
+ * Altera EPM7128AETC100
+ * Altera Cyclone I & II (w/ BSDL)
+ * Analog Devices Sharc-21065L
+ * Atmel ATmega128 (partial support)
+ * Atmel AT32AP7000 (partial support)
+ * Broadcom BCM1250
+ * Broadcom BCM3310 (partial support)
+ * Broadcom BCM5421S
+ * Broadcom BCM4712 (partial support)
+ * DEC SA1100
+ * Hitachi HD64465
+ * Hitachi SH7727
+ * Hitachi SH7729
+ * IBM PowerPC 440GX
+ * Intel IXP425
+ * Intel SA1110
+ * Intel PXA250/PXA255/PXA260/PXA261/PXA262/PXA263
+ * Lattice LC4032V
+ * Lattice M4A3-64/32
+ * Lattice M4A3-256/192
+ * Motorola MPC8245
+ * Samsung S3C4510B
+ * Sharp LH7A400
+ * Toshiba TX4925/TX4926
+ * Xilinx XC2C256-TQ144
+ * Xilinx XCR3032XL-VQ44
+ * Xilinx XCR3128XL-CS144
+ * Xilinx XCR3128XL-VQ100
+ * Xilinx XCR3256XL-FT256
+ * Xilinx Spartan-IIE
+ * Xilinx Spartan-3/E
+ * Xilinx Spartan-3AN
+
+==== Flash chips ====
+
+NOTE: Not all chips are supported in every possible configuration, there may
+be untested combinations of chip type, bus width, ...
+
+ * Intel 28FxxxJ3A (28F320J3A, 28F640J3A, 28F128J3A)
+ * Intel 28FxxxK3 (28F640K3, 28F128K3, 28F256K3)
+ * Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)
+ * AMD Am29LV64xD (Am29LV640D, Am29LV641D, Am29LV642D)
+ * AMD Am29xx040B (Am29F040B, Am29LV040B)
+
+UrJTAG uses the multi-byte write mode if supported by the particular flash
+device. The flash code will automatically switch to this algorithm if the
+Device Geometry Definition reports that more than one memory location can be
+written in a single step (refer to CFI details shown by 'detectflash'). Since
+multiple locations are written in a burst-like manner with only one polling
+sequence afterwards, the overall flashing performance increases by factor of
+5-17.
+
+In case you encounter any issues with the multi-byte write mode, run configure
+with the '--disable-flash-multi-byte' option and re-compile to disable this
+algorithm.
+
+//------------------------------------------------------------------------
+
+=== Compilation and installation ===
+
+==== Installation of precompiled UrJTAG for Windows ====
+
+By simply running UrJTAG-xxx.exe, the executable and data files will
+be installed in your Windows program folder, usually some place like
+C:\Program Files\UrJTAG. It comes ready with support for JTAG cables that are
+directly attached to a parallel port. However, if you work with Windows Vista
+and want access to the parallel port, a driver for it has to be installed
+separately. It is available from
+
+  http://www.highrez.co.uk/Downloads/InpOut32/
+
+If you want to use UrJTAG with a JTAG cable attached to the USB port, 
+actual cable drivers have to be installed beside UrJTAG itself. Usually,
+the cable vendor will provide the drivers. For example, drivers for
+Altera USB-Blaster come with their Quartus software. For FTDI-based
+cables, you need an INF file describing the cable and FTDIBUS.SYS and
+FTD2XX.DLL from FTDI (CDM drivers). If your cable shows up in the device
+manager without any warning sign, UrJTAG probably is able to talk to it.
+
+Finally, UrJTAG additionally needs libusb-win32 to talk to some USB cables that
+are not based on FTDI chips (Xilinx Platform Cable USB, Segger J-Link). The
+so-called libusb-win32 filter driver is available from the project's download
+page at Sourceforge:
+
+  http://libusb-win32.sourceforge.net/#downloads
+
+==== Required software for compiling UrJTAG ====
+
+To run autogen.sh, you need autoconf and automake, bison, and a recent flex.
+
+The distributed source tarball contains source pregenerated with a current
+flex version; flex therefore is only needed if you want to compile code
+checked out from our Subversion repository.  Flex 2.5.4a as it comes with
+most but the very latest Cygwin release cannot build the scanners for BSDL and
+SVF. Building these files requires Flex 2.5.33 or newer. The configure script
+will compare the available Flex version against these preconditions and enables
+or disables the related features.
+
+Furthermore, libtool should be available, and "devel" versions of the following
+packages:
+
+ * gettext
+ * readline (not needed, but really eases interactive use)
+ * ioperm (needed only for Cygwin)
+
+==== Required libraries for USB support ====
+
+For USB adapter support (including support for parallel port adapters attached
+to USB-to-parallel converters), one or more additional libraries are required.
+
+Many USB JTAG adapters and USB-to-parallel converters are based on chips
+made by FTDI. To support these, either intra.net's "libftdi" or FTDI's 
+"FTD2XX" library can be used.
+
+On many modern Linux distributions, libftdi is available as a precompiled
+package and can be installed using the distribution's package management system
+(e.g. "apt-get libftdi-dev" for Debian and Ubuntu). If it isn't available or
+you don't run Linux, you can get it from
+
+ * http://www.intra2net.com/en/developer/libftdi/[]
+
+Alternatively, you can use the FTD2XX library from the chip manufacturer FTDI.
+It is available for Linux and Windows. There's more information about linking
+to that library in a Cygwin environment below.
+
+All other USB JTAG adapters can be supported only if libusb is installed.
+There is a libusb-win32 variant that can be used in a Cygwin environment:
+
+ * http://libusb.sourceforge.net[] (libusb)
+ * http://libusb-win32.sourceforge.net[] (libusb for Windows)
+
+For specific notes regarding the use of these libraries in a Cygwin
+environment, see below.
+
+==== Installing from source tar.gz ====
+
+The installation follows the standard configure, make, make install scheme:
+
+  tar xzvf urjtag-x.y.tar.gz
+  cd urjtag-x.y
+  ./configure
+  make
+  make install
+
+==== Installing from Subversion repository ====
+
+If you want to try the very newest version of UrJTAG...
+
+  svn co http://urjtag.svn.sourceforge.net/svnroot/urjtag/trunk urjtag
+
+  cd urjtag/jtag
+  ./autogen.sh
+  # ./configure done by autogen.sh; run it here with special options if needed
+  make
+  make install
+
+==== Linking to FTD2XX.DLL in Cygwin environment ====
+
+Before running configure, get the D2XX drivers from FTDI.
+
+ * http://www.ftdichip.com/Drivers/D2XX.htm[] (FTDI FTD2XX library)
+
+Unzip the archive into a directory of your choice (probably a choice
+without spaces in the name is better) and afterwards run configure with the
+"--with-ftd2xx" pointing to that directory, e.g.
+
+  ./configure --with-ftd2xx="/cygdrive/c/temp/ftdi-cdm-drivers"
+
+Configure should now report
+
+  jtag is now configured for
+    ...
+    Detected libftd2xx   : yes
+
+
+==== Using LibUSB-Win32 in Cygwin environment ====
+
+Before running configure, install the LibUSB-Win32 "filter" driver from SF.
+
+ * http://libusb-win32.sourceforge.net[]
+
+Then point configure to the directory where LibUSB-Win32 was installed (it
+might give problems if the path contains spaces, as "Program Files" does!):
+
+  ./configure --with-libusb="/cygdrive/c/Programme/LibUSB-Win32/"
+
+==== Compiling with MinGW ====
+
+UrJTAG may be compiled into a Windows executable using the MinGW compiler
+(http://www.mingw.org[]), or Cygwin GCC with the "-mno-cygwin" compiler flag.
+
+This has the advantage over running in a Cygwin environment that you don't need
+to install anything else but the jtag.exe (plus libraries like FTD2XX.dll or
+InpOut32.DLL that are required for device access under Windows in any case).
+
+However, because support for MinGW is quite new in UrJTAG, it may lack some
+features (e.g. readline support) or run a little slower.
+
+Because it seems to be easier to set up a Cygwin environment, we recommend 
+using the Cygwin GCC with "-mno-cygwin" flag instead of using a MinGW setup:
+
+  CFLAGS="-mno-cygwin -O2" ./configure --with-ftd2xx=/tmp/cdm-drivers --with-inpout32
+
+
+It is even possible to cross-compile and build the executable on a Linux
+host:
+
+  ./configure --host=i586-mingw32msvc --with-ftd2xx=/tmp/cdm-drivers --with-inpout32
+  make
+
+
+The "--with-inpout32" switch tells UrJTAG to use the InpOut32.DLL for access to
+parallel ports, because the Cygwin ioperm isn't available for MinGW. The InpOut32
+library is available from logix4u.net:
+
+  http://logix4u.net/Legacy_Ports/Parallel_Port/Inpout32.dll_for_Windows_98/2000/NT/XP.html
+
+An version updated to work in Windows Vista and 64 bit Windows is available from highrez:
+
+  http://www.highrez.co.uk/Downloads/InpOut32/
+
+==== Driver tailoring ====
+
+The configure script enables all default bus, cable and lowlevel drivers. You
+can include and exclude specific drivers if required. For a list of parameters
+run
+
+  ./configure --help
+
+to figure out the appropriate --enable-bus, --enable-cable, and --enable-lowlevel
+options.
+
+
+==== Building the BSDL subsystem ====
+
+As mentioned above, building the BSDL lexer requires Flex 2.5.33 or newer. If
+the detected Flex version is not recent enough, configure will disable the
+BSDL subsystem. The detection result is summarized at the end of configure:
+
+  jtag is now configured for
+    ...
+    Build BSDL subsystem : yes
+
+Flex is only required when you're working on a check-out of the Subversion
+repository. In this case Flex has to be called to transform bsdl_flex.l to
+bsdl_flex.c. When you're compiling from released sources, the local Flex
+version is not relevant since the output file of Flex is part of the
+tarball. I.e. even if the local Flex fails the check, the BSDL subsystem is
+enabled and will be compiled from the released C files.
+
+//=========================================================================
+
+== Usage ==
+
+=== Quick start ===
+// Contributed by Ralf Engels
+
+==== Run the software ====
+
+Connect your JTAG adapter between your PC and target device and turn
+on your device.
+
+To run UrJTAG type "jtag" and press Enter; jtag should start and
+display some initial information. Output should end with a line like this:
+
+  WARNING: UrJTAG may damage your hardware!
+  Type "quit" to exit, "help" for help.
+
+==== Configure the cable ====
+
+Type "help cable" for a list of supported JTAG cables.
+
+Type the "cable" command followed by the cable name and possibly further
+arguments for cable configuration. Example:
+
+  jtag> cable EA253 parallel 0x378
+  Initializing ETC EA253 JTAG Cable on parallel port at 0x378
+
+See the section about the "cable" command for details and USB support.
+
+==== Detect parts on the JTAG chain ====
+
+Type "detect" at the jtag command prompt:
+
+  jtag> detect
+
+Your output should look like this:
+
+  IR length: 5
+  Chain length: 1
+  Device Id: 01011001001001100100000000010011
+    Manufacturer: Intel
+    Part:         PXA250
+    Stepping:     C0
+    Filename:     /usr/local/share/urjtag/intel/pxa250/pxa250c0
+
+If you get empty output or an error message your JTAG adapter is not connected
+properly, or your target board doesn't work, or it is turned off.
+
+The "detect" command is required before all other commands.
+
+==== Print current JTAG chain status ====
+
+  jtag> print chain
+   No. Manufacturer Part   Stepping Instruction Register
+  ---------------------------------------------------------
+     0 Intel        PXA250 C0       BYPASS      BR
+
+==== Sample device pin status ====
+
+  jtag> instruction SAMPLE/PRELOAD
+  jtag> shift ir
+  jtag> shift dr
+  jtag> dr
+  1000110010000010000110010111111111111111111001101110...
+  jtag> print chain
+   No. Manufacturer Part   Stepping Instruction    Register
+  ------------------------------------------------------------
+     0 Intel        PXA250 C0       SAMPLE/PRELOAD BSR
+  jtag> get signal BOOT_SEL[0]
+  BOOT_SEL[0] = 0
+  jtag>
+
+  Note: BSR is "Boundary Scan Register"
+
+==== Burn flash connected to the part ====
+
+  jtag> flashmem 0 brux.b
+  0x00000000
+  Note: Supported configuration is 2 x 16 bit only
+  BOOT_SEL: Asynchronous 32-bit ROM
+
+  2 x 16 bit CFI devices detected (QRY ok)!
+
+  program:
+  block 0 unlocked
+  erasing block 0: 0
+  addr: 0x00002854
+  verify:
+  addr: 0x00002854
+  Done.
+  jtag>
+
+or:
+
+  jtag> flashmem msbin xboot.bin
+  Note: Supported configuration is 2 x 16 bit only
+  BOOT_SEL: Asynchronous 32-bit ROM
+
+  2 x 16 bit CFI devices detected (QRY ok)!
+
+  block 0 unlocked
+  erasing block 0: 0
+  program:
+  record: start = 0x00000000, len = 0x00000004, checksum = 0x000001EB
+  record: start = 0x00000040, len = 0x00000008, checksum = 0x000001B0
+  record: start = 0x00001000, len = 0x00002B30, checksum = 0x00122CAB
+  record: start = 0x00004000, len = 0x00000160, checksum = 0x0000684B
+  record: start = 0x00005000, len = 0x00000054, checksum = 0x000008EE
+  record: start = 0x00005054, len = 0x00000030, checksum = 0x00000DA9
+  record: start = 0x00000000, len = 0x00001000, checksum = 0x00000000
+
+  verify:
+  record: start = 0x00000000, len = 0x00000004, checksum = 0x000001EB
+  record: start = 0x00000040, len = 0x00000008, checksum = 0x000001B0
+  record: start = 0x00001000, len = 0x00002B30, checksum = 0x00122CAB
+  record: start = 0x00004000, len = 0x00000160, checksum = 0x0000684B
+  record: start = 0x00005000, len = 0x00000054, checksum = 0x000008EE
+  record: start = 0x00005054, len = 0x00000030, checksum = 0x00000DA9
+  record: start = 0x00000000, len = 0x00001000, checksum = 0x00000000
+
+  Done.
+  jtag>
+
+//------------------------------------------------------------------------
+
+=== JTAG commands ===
+// Various authors...
+
+==== Overview ====
+
+Following is a list of commands currently supported by jtag and some
+example usage.
+
+*bit*::         define new BSR bit
+*bus*::         change active bus
+*bsdl*::        manage BSDL files
+*cable*::       select JTAG cable
+*detect*::      detect parts on the JTAG chain
+*detectflash*:: detect parameters of flash chips attached to a part
+*discovery*::   discovery of unknown parts in the JTAG chain
+*dr*::          display or set active data register for a part
+*endian*::      set/print endianess for reading/writing binary files
+*eraseflash*::  erase flash memory by number of blocks
+*flashmem*::    burn flash memory with data from a file
+*frequency*::   setup JTAG frequency
+*get*::         get external signal value
+*help*::        display this help
+*include*::     include command sequence from external file
+*initbus*::     initialize bus driver for active part
+*instruction*:: change active instruction for a part or declare new instruction
+*part*::        change active part for current JTAG chain
+*peek*::        read a single word
+*poke*::        write a single word
+*print*::       display JTAG chain list/status
+*quit*::        exit and terminate this session
+*readmem*::     read content of the memory and write it to file
+*register*::    define new data register for a part
+*scan*::        detect changes on input pins of current part
+*set*::         set external signal value
+*shift*::       shift data/instruction registers through JTAG chain
+*signal*::      define new signal for a part
+*svf*::         execute SVF commands from file
+*writemem*::    write content from file to memory
+
+Some tools derived from the same openwince JTAG Tools code base as UrJTAG 
+know additional commands, which are not supported in UrJTAG. See the section
+about "Unsupported commands", below, about workarounds.
+
+==== Basic commands ====
+
+===== quit =====
+
+This command closes the jtag console.
+
+===== help =====
+
+Without additional parameter it gives an overview of the available commands.
+With a parameter you can get more information about any of the commands.
+Example:
+
+  jtag> help cable
+
+Most cable drivers require some more details about the cable to start properly.
+To learn about the details, use the "cable" command with the name of the cable
+followed by the word "help". Example:
+
+  jtag> cable wiggler help
+
+===== include =====
+
+Run commands from a named script file installed with UrJTAG or applies a BSDL
+file to the active part. The directory prefix is added automatically
+(e.g. /usr/share/urjtag/, depending on your installation), unless the file
+name starts with a dot or slash.
+
+For example, the following startup sequence configures the cable, chain, and
+loads definitions and bus driver for a Samsung S3C4510B CPU to peek its memory
+at 0x0:
+
+  jtag> cable wiggler ppdev /dev/parport0
+  jtag> detect
+  jtag> include samsung/s3c4510b/s3c4510b
+  jtag> peek 0x0000
+
+If the file contains valid BSDL syntax, it will be converted to native
+commands on the fly.
+
+Optionally, a number X may be specified following the file name, to cause
+an X times repetition of the command sequence from the file.
+
+==== Chain management ====
+
+===== cable =====
+
+Sets and initializes the cable driver. This is usually the first command that
+you are executing in a session. Example:
+
+  jtag> cable EA253 parallel 0x378
+  Initializing ETC EA253 JTAG Cable on parallel port at 0x378
+
+For a parallel cable using the ppdev driver you would use this:
+
+  jtag> cable DLC5 ppdev /dev/parport0
+
+If you get an error, it may be that the parallel port kernel driver
+was compiled as a module in your Linux kernel and wasn't loaded automatically.
+Then you should try to load the ppdev driver manually (with root rights outside
+the jtag shell):
+
+  modprobe ppdev
+  modprobe parport
+  modprobe parport_pc
+
+UrJTAG now also supports some USB cables. Unfortunately, there is no standard
+for "JTAG over USB", so this support is limited to a few selected cables only.
+For cables based on the FT2232 chip from FTDI, the cable command has to be
+given cable name and optionally the driver name, USB Vendor, and Product ID of
+the cable:
+
+  jtag> cable ARM-USB-OCD vid=15ba pid=0003 driver=ftdi-mpsse
+
+For all known cables, UrJTAG knows the VID and PID so you can just say
+
+  jtag> cable ARM-USB-OCD
+
+If your cable isn't detected automatically though it's listed as a known and
+supported cable, feel free to report its VID and PID. It might be a different
+revision and should be added to the known & tested list of cables.
+
+As stated above, the driver name is not mandatory for the cable
+command. UrJTAG will select the driver automatically based on UrJTAG's
+configuration.  In case your system provides just one of libftdi or FTD2XX
+the respective driver is selected. If both libraries are available, then
+FTD2XX is selected. That's simply because FTD2XX showed some performance
+advantages over libftdi in the past. You can still force libftdi with the
+respective parameter.
+
+WARNING: There's one quirk to consider when using FTDI's FTD2XX driver. It
+connects to any known FTDI chip, randomly. I.e. if there's more than one FTDI
+device connected to the host, chances are that the driver connects to the
+wrong USB device. This might be an OEM USB-serial converter and you'll be
+banging your head why there's no proper reading from the JTAG chain. Therefore
+it's strongly recommended to specify the desc=xxx parameter for the cable
+command if the ftd2xx driver is to be used. Set xxx to the product or serial
+number descriptor string that are exhibited by the USB device.
+
+===== detect =====
+
+Detects devices on the chain. Example:
+
+  jtag> detect
+  IR length: 5
+  Chain length: 1
+  Device Id: 01011001001001100100000000010011
+    Manufacturer: Intel
+    Part:         PXA250
+    Stepping:     C0
+    Filename:     /usr/local/share/jtag/intel/pxa250/pxa250c0
+
+During "detect", UrJTAG searches through the files in its database (usually in
+/usr/share/urjtag) and optionally in the search path for BSDL files (see bsdl
+command) to find a match for the manufacturer, revision and part number for the
+IDCODE read from the part. However, not all parts identify themselves in a way
+that is useful for "detect". For example, many chips with an ARM processor core
+inside present an IDCODE that may be specific to the the particular core inside
+the chip (e.g. ARM7TDMI), but doesn't tell about the actual manufacturer of
+the chip. In such case, the data for the part has to be included manually. See
+also the documentation for the "include" command.
+
+===== print =====
+
+Print a list of parts in the chain and the currently active instruction per part.
+Further details of bus, signals and instructions can be obtained with dedicated
+command options, see "help print".
+
+===== initbus =====
+
+Selects and initializes a bus of the currently selected part, e.g. the external
+memory bus of a CPU. This is required in order to access chips that aren't
+connected in the JTAG chain, but indirectly accessible through other chips
+(e.g. CPU or programmable logic). 
+
+Type "help initbus" to get a list of supported bus types. 
+If you do not find a bus driver for your specific hardware, you might be lucky
+enough to have EJTAG in your target (most MIPS-based CPUs do) and should try
+the "ejtag" bus driver. In contrast to the method "via BSR", it uploads some
+instructions to the CPU and triggers their execution to access the bus, and
+should work with almost any EJTAG-capable chip (Note: JTAG isn't EJTAG):
+
+  jtag> initbus ejtag
+
+There's another option to support new chips "via BSR", the "prototype" bus
+driver, which can be adapted to support your part with command parameters.
+The only prerequisite for using this driver is knowledge of the names of the
+signals that represent address bus, data bus, and enable signals, and that
+address and data lines are numbered in order. 
+
+For example, assume the signals are named in the BSDL description as follows:
+
+ * Data bus: D0, D1, ... D31
+ * Address bus: ADDR0, ADDR1, ... ADDR22
+ * Output Enable: nOE
+ * Write Enable: nWE 
+ * Chip Select: nRCS0
+
+The enable signals seem to be active low (indicated by the leading "n" in their
+names). Further we assume the interesting connected part, some flash chip, is
+only 16 bits wide even though the data bus width is 32 bits.  With this
+information, you could use the following command (all on a single line!) to
+access the bus:
+
+  initbus prototype amsb=ADDR22 alsb=ADDR0 dmsb=D15 dlsb=D0
+            ncs=nRCS0 nwe=nWE noe=nOE amode=x16
+
+The "prototype" bus driver cannot deal with systems where address and data
+bus are multiplexed on the same pins. If signals aren't numbered in the right
+order or with gaps, you may get along by defining proper names as aliases for
+the actual signals, with commands like "salias ADDR12 BSCGX44".
+
+Most drivers work "via BSR", i.e. they directly access the pins of the device.
+Because it isn't possible to efficiently address only particular pins but only
+all at once, and data for all pins has to be transferred through JTAG for every
+single change, this method isn't the fastest, but usually easiest to implement
+and, well, sometimes it counts whether it works at all.
+
+The "fjmem" (FPGA JTAG memory) bus driver attempts to address this issue by
+moving control and observation away from BSR to a device-internal
+register. For sure this is only possible on FPGAs where the designer can hook
+additional logic to the JTAG chain. A core design plus examples for different
+FPGA families is available in the extra/fjmem directory. Refer to the README
+located there.
+
+Some chips don't allow direct access to their pins via BSR at all. For these,
+writing a new bus driver that utilizes a debug module to upload specific code
+to access the bus is inevitable.
+
+===== bus =====
+
+It's possible to initialize more than one bus for part(s) within a chain. The
+"bus" command allows to select the active bus for readmem, flashmem,
+etc. operation.
+
+==== Part definition commands ====
+
+The following commands are also used in the data files to define a device (IC)
+on the JTAG chain. It is not recommended to use these commands in an interactive
+session. Instead you should produce a device definition file out of a .bsd file
+using one of the supplied tools (or use the new BSDL subsystem, see below).
+
+*bit*::         define new BSR bit
+*instruction*:: change active instruction for a part or declare new instruction
+*register*::    define new data register for a part
+*signal*::      define new signal for a part
+
+==== TAP control ====
+
+The following commands can be used to directly manipulate and display the state
+of the TAP controller(s) and registers in the chain:
+
+*dr*::          display or set active data register for a part
+*instruction*:: change active instruction for a part or declare new instruction
+*get*::         get external signal value
+*pod*::         low level direct access to POD signals like TRST; use with care
+*scan*::        detect changes on input pins of current part
+*set*::         set external signal value
+*shift*::       shift data/instruction registers through JTAG chain
+
+==== RAM/Flash access ====
+
+These commands can be used if a part in the chain has memory connected to it
+(or integrated). Before they can be used, a bus driver has to be selected and
+initialized (see initbus command).
+
+*detectflash*:: detect parameters of flash chips attached to a part
+*endian*::      set/print endianess for reading/writing binary files
+*eraseflash*::  erase flash memory by number of blocks
+*flashmem*::    burn flash memory with data from a file
+*peek*::        read a single word
+*poke*::        write a single word
+*readmem*::     read content of the memory and write it to file
+*writemem*::    write content from file to memory
+
+==== Highlevel commands ====
+
+===== svf =====
+
+The SVF player operates on a single part in the scan chain. Therefore, you
+have to bring up the JTAG software, specify a cable and detect the scan
+chain beforehand.
+
+The player will establish a new instruction called "SIR" and a new register
+called "SDR". They are used internally by the respective SVF commands and are
+reassigned with new values as the player advances through the file. It is not
+recommended to use them outside of the SVF player as their content is dynamic.
+
+An example session:
+
+  jtag> cable ppdev /dev/parport0 DLC5
+  Initializing Xilinx DLC5 JTAG Parallel Cable III on ppdev port /dev/parport0
+  jtag> detect
+  IR length: 5
+  Chain length: 1
+  Device Id: 10010000101000100000000010010011
+    Manufacturer: Xilinx
+    Part:         XC2S300E-PQ208
+    Stepping:     9
+    Filename:     /usr/local/share/jtag/xilinx/xc2s300e-pq208/xc2s300e-pq208
+  jtag> part <desired part of the scan chain>
+  jtag> svf <SVF file for selected part>
+  jtag> instruction BYPASS
+  jtag> shift ir
+  jtag> part <next part>
+  jtag> svf <SVF file for selected part>
+  jtag> instruction BYPASS
+  jtag> shift ir
+
+It is recommended to set the part's instruction register to BYPASS although
+most SVF files do this at the end. By setting the instruction explicitely to
+BYPASS the output of the print command will always show meaningful
+information.
+
+The SVF player will issue messages when situations arise that cannot be
+handled. These messages are classified as warnings or errors depending on
+whether the player can continue operation (warning) or not (error).
+In case the TDO parameter of an SDR command leads to a mismatch the player
+issues a warning and continues. If the player should abort in this case then
+specify 'stop' at the svf command.
+
+The absence of error or warning messages indicate that the SVF file was
+executed without problems. To get a progress reporting while the player advances
+through the SVF file, specify 'progress' at the svf command.
+
+.Limitations and Deficiencies
+*****************************
+Several limitations exist for the SVF player.
+
+It has been tested so far with files generated by these tools:
+
+  - Xilinx ISE WebPack 6.3.02i - 9.1.02i
+  - Altera Quartus II 4.1sp1 - 7.0
+
+Configuration for these devices has been tested so far:
+
+  - Altera EPC1C12Q240
+  - Altera MAX3032, EPM3032ALC44
+  - Altera MAX3064, EPM3064ALC44
+  - Altera MAX7032, EPM7032SLC44
+  - Altera MAX7064, EPM7064SLC44, EPM7064STC44
+  - Xilinx Spartan-IIE, XC2S300E-PQ208
+  - Xilinx Spartan-3, XC3S1000-FG456, XC3S5000-FG900
+
+The implementation of some SVF commands has deficiencies.
+
+  - HIR, HDR commands not supported. +
+    Their functionality should be covered by the part concept of UrJTAG.
+  - PIO command not supported.
+  - PIOMAP command not supported.
+  - RUNTEST SCK not supported. +
+    The maximum time constraint is not guaranteed.
+  - TRST +
+    Parameters Z and ABSENT are not supported.
+  - TIR, TDR commands not supported. +
+    Their functionality should be covered by the part concept of UrJTAG.
+
+SVF files for programming flash-based devices might or might not work for a given
+setup. This has been observed for Actel IGLOO devices where success and failure
+depends on the actual clocking rate of the chosen cable.
+
+The ref_freq=<...> option to the svf command allows to tweak the calculation
+of 'RUNTEST xxx SEC' commands. For these commands, the SVF player needs to
+calculate the equivalent number of clocks and per default it will use the
+current cable clock frequency. This can be overridden with the ref_freq option
+that specifies a fixed reference frequency for such calculations.
+*****************************
+
+===== bsdl =====
+
+The 'bsdl' command is used to set up and test the underlying BSDL subsystem of
+UrJTAG.
+
+Whenever 'detect' encounters a new part, a configuration process is
+started. This involves matching the retrieved IDCODE against the part
+descriptions in /usr/share/urjtag as described above. However, before this
+database is searched for a suitable description, the BSDL subsystem is started
+and searches for a BSDL file that matches this device. If it finds a matching
+file, traversal of the /usr/share/urjtag database is skipped. If not, then
+this standard process follows.
+
+To tell the BSDL subsytem where to look for BSDL files, the 'bsdl path
+pathlist' command has to be issued prior to 'detect'. The contents of
+'pathlist' must be a semicolon-separated list of directories where BSDL files
+are located. This list is stored by 'bsdl path' and is used later on when
+'detect' calls the BSDL subsystem.
+
+IMPORTANT: The BSDL subsystem applies the first BSDL file that parses without
+errors and that contains the correct IDCODE. Scanning the specified
+directories happens in exactly the given order. Inside a directory however,
+the order depends largely on your filesystem's behavior.
+
+Further details of the 'bsdl' command:
+
+  - bsdl path <path1>[;<path2>[;<pathN>]] +
+    set paths for locating BSDL files
+  - bsdl debug on|off +
+    switches debug messages on or off
+  - bsdl test [file] +
+    reads file (if specified) or all files found via 'bsdl path' and
+    prints a short status, an active part is not required
+  - bsdl dump [file] +
+    reads file (if specified) or all files found via 'bsdl path' and
+    prints all configuration commands, an active part is not required
+
+TIP: The 'bsdl dump file' command implements the same functionality as
+bsdl2jtag.
+
+==== Unsupported commands ====
+
+===== script =====
+
+Although it's still there, its functionality has been merged into the include
+command. Please use "include" instead.
+
+===== setdevice =====
+
+This command was only there to support the SHARC 21065L processor,
+which has no IDCODE and therefore can't be initialized correctly by
+just running "detect". However, the proper initialization can be done
+after "detect" by loading the proper declarations and bus driver manually:
+
+  jtag> include analog/sharc21065l/sharc21065l
+
+===== spiflashmem =====
+
+The commands "spidetectflash", "spiflashmem", "spireadflash" and
+"spieraseflash" only exist in a version of the JTAG tools copyrighted by
+Intratrade Ltd., we just know about them from a posting on the net.
+
+//========================================================================
+
+== Internals ==
+
+This section is only a placeholder for the information that will
+be added soon...
+
+=== Files ===
+
+==== Source code Overview ====
+
+doc/:: Documentation
+
+data/:: Part descriptions (data files)
+
+include/:: C header files
+
+src/:: C source code
+
+src/bsdl::  BSDL subsystem
+src/bus::   Bus driver for various CPUs and other parts
+src/cmd::   Implementation of the commands for the "jtag" shell
+src/flash:: Flash detection and programming algorithms
+src/jim::   JIM, the JTAG target simulator
+src/lib::   Utility functions
+src/part::  Functions for accessing specific parts in a chain
+src/svf::   SVF player
+src/tap::   Functions for accessing the chain in general
+
+//------------------------------------------------------------------------
+
+=== Drivers ===
+
+ * Cable drivers
+ * Link drivers
+ * TAP drivers
+ * Chain drivers
+ * Bus drivers
+ * Flash drivers
+ * Commands
+
+==== Cable-specific drivers (src/tap/cable) ====
+
+Cable-specific drivers are those which are visible to the user through
+the "jtag" command shell. They're listed in response to the "help cable"
+command. Each driver has to provide the following functions:
+
+ * connect(), init() - Initialization 
+ * done(), cable_free(), disconnect() - Cleaning up
+ * set_frequency() - set bitrate for shifting data through the chain
+ * clock(), get_tdo(), transfer() - immediate JTAG activities
+ * flush() - internally used to actually perform JTAG activities
+ * help() - a help text to be displayed by the jtag command shell
+
+=====  Initialization =====
+
+After allocating a "cable_t" structure, a pointer to it and further
+parameters (as strings) have to be passed first  to the selected cable's
+connect() function. 
+
+Following that, the init() function is called via cable_init(). If cable_init()
+returns a zero value, all is fine and the cable is ready for use.
+
+===== Cleaning up =====
+
+There are two functions for actual cleanup:
+
+ * done() is responsible for driving the hardware to a safe and consistent state.
+ * cable_free() then can be used to clean up eventually extra allocated memory etc.
+
+Both are usually called from chain_disconnect(). 
+
+An additional mechanism allows to clean up if a disconnection was detected by
+the low level driver (e.g. USB or parallel port driver). A cable has to provide
+a disconnect() function for this purpose:
+
+ 1. Low level (e.g. parport) driver calls cable driver->disconnect()
+ 2. cable driver->disconnect() calls chain_disconnect()
+ 3. chain_disconnect() calls cable driver->done()
+ 4. chain_disconnect() then calls cable driver->cable_free()
+
+After return from chain_disconnect() to cable driver->disconnect(), the cable_t
+structure has been freed and must not be accessed anymore.
+
+===== JTAG Activities =====
+
+Currently the API provides five different functions for performing operations
+at the JTAG interface on the low level signal level (using the four signals
+TMS, TCK, TDI, and TDO).
+
+ * clock(tms,tdi,n) takes values for TMS and TDI output as its parameters, ensures that actual cable signals are set accordingly, and does a 0-1 transition on TCK (n times)
+ * get_tdo() returns the current value at the TDO input.
+ * set_trst(x) sets the TRST signal and returns the current value.
+ * get_trst() returns the current value of the TRST signal.
+
+For many JTAG adapters, there's almost no delay when doing alternating clock()
+and get_tdo(). Writing and reading happens immediately and the result is
+available immediately as well. This is the case with most parallel port
+adapters (but not when attached to USB-to-parallel adapters or USB docking
+stations) and memory mapped IO (e.g. general purpose I/O pins of
+microcontrollers).
+
+But there are adapters, especially USB and Ethernet based adapters, which
+exhibit a rather long delay between the initiation of reading a bit and the
+delivery of the value of the bit. It is at least 1 millisecond with USB,
+which would limit the transfer rate to 1 kHz.  One way to workaround this
+is to transmit bits compacted into bytes and chunks of bytes, which is 
+possible with the transfer() function.
+
+ * transfer(in, out)
+
+The transfer() function does a series of TCK pulses, with data for TDI read as
+bytes from memory. The bytes are automatically serialized. TMS is set to zero
+during transfer()s. Optionally, prior to each bit shifted out to the interface,
+TDO input can be read into memory (deserialized into a byte array of the same
+size as the input array).
+
+It still doesn't yield much improvement if the operation consists of many read
+and write transitions (e.g. repeatedly writing an instruction and some data
+register values, then reading from the data register, as it is necessary for
+memory access). For that reason, the above functions are also available in
+variants that don't cause immediate activity, but rather schedule it for later.
+In the API, they're visible as
+
+ * cable_defer_clock()
+ * cable_defer_get_tdo()
+ * cable_defer_set_trst()
+ * cable_defer_get_trst()
+ * cable_defer_transfer()
+
+These functions aren't implemented in the cable driver (but currently in
+src/tap/cable.c).  The cable driver just has to provide a flush() function to
+actually execute the queued activity in some cable-specific optimal way, and
+to store the results of get_tdo() and transfer() activity. The caller later
+can pick up the results using these functions (implemented in cable.c):
+
+ * cable_get_tdo_late()
+ * cable_get_trst_late()
+ * cable_transfer_late()
+
+As an example, consider the following sequence of activities:
+
+ 1. clock()
+ 2. get_tdo()
+ 3. clock()
+ 4. get_tdo()
+
+If the result of the first get_tdo() isn't absolutely required before the
+second clock(), the sequence can be optimized into the following sequence (if
+
+ 1. defer_clock()
+ 2. defer_clock()
+ 3. flush()
+ 4. get_tdo_late()
+ 5. get_tdo_late()
+
+The next sections explain the queueing mechanism and its limits in detail.
+
+===== When flushing occurs =====
+
+The cable_flush() function is used to flush the queue towards the cable. It
+takes one additional argument, "how_much", which may be one of
+
+ * OPTIONALLY: The cable driver may flush if it's reasonable (e.g. if the
+   queue has been filled so that some buffer limit for the cable interface
+   is reached). It would be wise to flush early to keep the queue small, if
+   there is no point in queueing up more items because the transfer to the
+   cable would have to be split into smaller chunks anyway. This is used by
+   UrJTAG immediately after adding items to the queue.
+
+ * TO_OUTPUT: The cable driver should at least flush as much so that one 
+   output becomes available in the output queue. If there's already something
+   in the output queue, this should be interpreted similar to OPTIONALLY. This
+   is used by UrJTAG immediately before it wants to use that output.
+
+ * COMPLETELY: The cable driver has to flush the queue completely. This is
+   used by UrJTAG immediately before actions that circumvent the queueing 
+   such as calls to the legacy clock/get_tdo functions. It could also be
+   used by application code to ensure that some action is actually done in
+   time.
+
+===== JTAG activity queueing =====
+
+The source in src/tap/cable.c provides to important functions to access the
+two queues "todo" (with activity to be done) and "done" (with results):
+
+ * cable_add_queue_item
+ * cable_get_queue_item
+
+In src/tap/cable/generic.c you'll find two implementations of dequeueing 
+algorithms, i.e. implementations of the flush() function. These could be used
+by any new cable driver unless it provides a more sophisticated algorithm
+itself:
+
+ * generic_flush_one_by_one() simply calls the "classic" functions one after
+   another. The performance of the cable driver using this implementation will
+   be the same whether the immediate or defer variants of the functions are used.
+ * generic_flush_using_transfer() tries to optimize as many clock() and
+   get_tdo() by transforming them into calls to transfer() instead. This can
+   give a slight advantage.
+
+The generic implementations also serve as a template for new cable-specific
+implementations. 
+
+===== Generic implementations =====
+
+As a reference and in many cases completely sufficient for new cables, take a
+look at the code in src/tap/cable/generic.c, which contains generic routines,
+suitable for parallel port based cables (and some for other types of cables as
+well).
+
+==== Link drivers ====
+
+Link drivers like the "parport" driver collection provide the basis for
+communication between cable driver and actual JTAG adapter. The openwince JTAG
+tools supported only parallel port links with the "parport" drivers. UrJTAG
+introduced support for USB links, but in the early releases the drivers for
+these just mimic the parallel port links.
+
+The basic functions provided by all link drivers are
+
+ * connect(), to called from cable driver connect()
+ * open(), to actually connect to the device during cable driver init()
+ * close(), to disconnect from the device during cable driver done()
+ * free(), to free all resources, called from cable driver free()
+
+===== parport =====
+
+Currently there are parport drivers for direct access to the parallel port on a
+PC using I/O addresses (direct.c), and for using ppdev on Linux or ppi on FreeBSD.
+
+In addition, there are "ftdi" and "ftd2xx" parport drivers that actually are for
+communication with USB cables based on FTDI chips. They cannot be used for
+connecting old parallel port cables through parallel to USB adapters with FTDI
+chips, and probably soon will be rewritten as "usbconn" drivers instead.
+
+All parport drivers present a common API for setting and reading signals.
+
+===== usbconn =====
+
+The usbconn drivers provide a common API to search for and connect with USB
+devices. At the moment, there are drivers for libusd, libftdi and FTD2XX
+(e.g. to communicate with FTDI chip based cables through libftdi and/or
+FTD2XX, to communicate with Cypress FX2 using EZUSB.SYS or CyUSB.sys, and
+more).
+
+/////////////////////////////////////////////////////////////////////////////
+arniml, 18-may-2008: Obsolete?
+In contrast to the parport API, the usbconn drivers provide only the functions
+for connecting, disconnecting, and for releasing ressources. The actual
+communication must be implemented using the underlying library's functions,
+e.g. usb_write from libusb, or ftdi_write from libftdi. Therefore, each driver
+using usbconn usually only works together with one particular usbconn driver.
+/////////////////////////////////////////////////////////////////////////////
+
+==== Bus drivers ====
+
+Bus drivers translate read and write operations on a bus into JTAG commands
+and methods. A bus in this context is neither restricted to a processor bus,
+nor to memory. Any system component that can be read from and written to could
+be seen as attached to a bus. I.e. external or internal memory (RAM, ROM,
+Flash) and peripherals connected to a processor or simply an FPGA with 1:1
+connections.
+
+The available bus drivers are listed in response to "help initbus". Each
+driver has to provide the following functions:
+
+ * bus_new() - Initialization
+ * bus_free() - Cleaning up
+ * bus_printinfo() - Short description
+ * bus_prepare() - Preparation
+ * bus_area() - Description of the bus geometry
+ * bus_read_start() - Initiate reading
+ * bus_read_next() - Read access
+ * bus_read_end() - Finish reading
+ * bus_read() - Atomic reading
+ * bus_write() - Write access
+
+IMPORTANT: Address parameters to the functions listed above specify always
+byte locations, independent of the actual data width. The bus driver has to
+adjust the address on its own if required.
+
+===== Creation =====
+
+Upon calling of its bus_new() function, the driver allocates a "bus_t"
+structure and performs all required internal initializations.
+
+===== Initialization =====
+
+After creation of the new "bus_t" structure, the bus_init() function will
+be called to give the driver the possibility to initialize it's internal
+states or BSR bits as required. Such functionality has been split from
+bus_new() since some drivers require to re-initialize during runtime.
+
+===== Cleaning up =====
+
+The driver is supposed to free all allocated memory (including its "bus_t"
+structure). Additionally, it should set the device into a state that doesn't
+prevent it from normal operation.
+
+===== Short description =====
+
+Prints a message describing the driver. This function is called by the "print"
+command before it lists the areas covered by this bus driver.
+
+===== Preparation =====
+
+This function is called whenever a bus operation is initiated. The
+driver should perform the required preparation steps so that
+subsequent calls to the bus_read_* and bus_write functions can perform
+their tasks properly.
+
+E.g. a BSR bus driver would put the device into EXTEST mode to activate the
+boundary scan register on the device pins.
+
+===== Description of the bus geometry =====
+
+At certain stages, the bus driver's bus_area() function is called by other
+commands to query the bus geometry for a given address. The bus driver must
+fill in the fields of a "bus_area_t" structure describing the geometry of the
+area in which the specified address is located:
+
+ * a short textual description of the area
+ * start address of area
+ * length of area in bytes
+ * data width in bits
+
+Queries with an address out of range must result in an area length of
+
+  UINT64_C(0x100000000)
+
+===== Initiate reading =====
+
+Since the JTAG state machine defines a capture-shift-update sequence, it is
+required to shift the address for a read prior to capturing the read
+data. Therefore, the bus_read_start() function is called with the very first
+address to read from. This enables the driver to shift the address into the
+device before it can actually retrieve the read data for this address.
+
+===== Read access =====
+
+The bus_read_next() function fetches the read data from the device that has
+been addressed by a previous call to bus_read_start() or
+bus_read_next(). Again, this is due to the capture-shift-update sequence of
+JTAG:
+
+ 1. capture read data from device pins
+ 2. shift new address
+ 3. update new address to device pins
+
+IMPORTANT: The address parameter specifies the location of the 'following'
+read access. It is not the address of the data returned by this function call.
+
+===== Finish reading =====
+
+Function "bus_read_end()" is called at the end of a read sequence. I.e. when
+the higher level command determines that the last data portion is to be read
+from the device. There is no new address and the function driver is supposed
+to return the read data that was addressed previously.
+
+===== Atomic reading =====
+
+For ease of use, a bus driver has to supply a "bus_read()" function that
+encapsulates reading data from a single address in an atomic operation. Bus
+drivers typically build this function from "bus_read_start()" and a subsequent
+"bus_read_end()".
+
+===== Write access =====
+
+This function writes one data element at the specified address. Since this
+translates to a single JTAG operation (capture ignored, shift and update
+address & data), there is no splitting as with the read functions.
+
+=== Data file format ===
+// By Marcel Telka
+
+JTAG declarations files are located in directory "data". The files contains
+common part specific JTAG information in parseable form, e.g.  list of the JTAG
+commands, boundary scan register, list of JTAG registers, etc.
+
+Syntax of the JTAG declaration file is defined in the following subsections.
+
+==== General rules ====
+
+JTAG declaration file is text file which consists of lines. Empty lines are
+ignored. Text after first "#" on the line to the end of line is ignored. This
+is useful for comments.  All other lines are significant.
+
+Each significant line consists of tokens separated by whitespace. Whitespace
+could be spaces and/or tabs.
+
+==== Signal Definition ====
+
+Signal definition line consists of word "signal" followed by whitespace and
+signal name (without spaces in the name). Rest of the line should contain
+whitespace separated list of pins of the part. This list is currently not used
+for any purpose in JTAG Tools. It is intended for future use.  
+
+
+//------------------------------------------------------------------------
+
+=== Development ===
+
+==== Future Plans ====
+
+- C API and library package
+- Bindings for Python, Perl, ...
+- TCP/IP access
+- New cable drivers
+- ...
+
+==== How to contribute ====
+
+ * Using Subversion
+ * Create and submit a patch
+ * Use SourceForge trackers
+
+//========================================================================
+
+== F.A.Q. ==
+
+For a list of known problems in current versions, please also check the "Bugs"
+tracker at the UrJTAG website!
+
+Q. The documentation is incomplete. Where can I get more information?::
+  A. Please ask in the "Using UrJTAG" Forum on http://urjtag.org[]
+
+Q. My flash isn't detected or can't be programmed. What can I do?::
+  A. Please record the output of the "detect" and "detectflash" commands and ask in the Forum. If possible, re-compile UrJTAG before with "--enable-jedec-exp" to get extra information.
+
+Q. My CPU/FPGA/etc. chip isn't detected. What can I do?::
+  A. First try to get hold of a "BSDL" description of the chip from the vendor, and specify where to find this file to UrJTAG using "bsdl path" before you "detect". Second, a bus driver has to be selected. Maybe "ejtag" or "prototype" work.
+
+Q. When I type "cable parallel 0x378 DLC5" (in a Cygwin environment) I get "Unknown port driver: parallel"?::
+  A. Please install the Cygwin ioperm package, and re-configure/compile.
+
+Q. When I type "cable parallel 0x378 DLC5" (in a Cygwin environment) I get "Error: Cable initialization failed!".::
+  A. Please install ioperm.sys driver using `ioperm -i` command.
+
+Q. When running autogen.sh, I get "Can't exec "autopoint": No such file or directory"::
+  A. You need the headers for gettext (e.g. Debian package "gettext-devel").
+
+Q. When running autogen.sh, it complains about missing CVS::
+  A. The easiest solution is to actually install CVS for this step, just to get around this error message.
+
+Q. During compilation, I get "svf_bison.y: No such file or directory"::
+  A. You need "bison".
+
+Q. During compilation, I get "flex: can't open ... src/svf/svf_flex.l"::
+  A. You need "flex"
+
+Q. During compilation, I get "src/svf/svf_flex.l", line 27: unrecognized %option: bison-locations"::
+  A. You need a newer version of flex. It should be 2.5.31 or newer;
+    Unfortunately, Cygwin comes with only 2.5.4a. You may try to compile and
+    install a newer version of flex from source to solve this. The distributed
+    source tarball contains source pregenerated with a current flex version,
+    you need flex yourself only to compile from fresh SVN checkouts.
+
+Q. When running "make install", I get "Permission denied" errors::
+  A. If you want to install into a system directory (the default /usr/local is one), you'll have to run "make install" as the  superuser, e.g. do "sudo make install".
+
+Q. My BSDL file defines the bus DAT as bit_vector(15 downto 0), how should I access single elements?::
+  A. BSDL syntax is an extension of the VHDL language. Array elements are indexed with
+    parentheses: DAT(4) selects index number 4 of the DAT vector. Also refer to the "print
+    signals" command.
+
+Q. My board requires certain signals to be set to dedicated values before external memories can be accessed.::
+  A. Most (if not all) BSR-based bus drivers allow for static configurations of
+    pins that are controlled by BSR bits. Apply the required "set" commands before
+    issueing the "initbus ..." command. These settings are preserved by all bus
+    related commands if they don't collide with the signals required for bus operation.
+
+Q. My USB pod seems slow.::
+  A. USB-based JTAG pods suffer from a couple of intrinsic issues. Consider the
+    following to get maximum performance:
+    * Run UrJTAG on native linux. Cygwin and VMWare are reportedly slower.
+    * Connect the pod via a high speed USB hub to a high speed USB host port.
+      Even though the pod is a full speed device, it benefits from the shorter
+      turn-around times between host and hub.
+
+//========================================================================
+
+== Licensing ==
+
+=== Overview ===
+
+Various licenses are used for the UrJTAG project. The GPL is used for most
+of the code except for some include files, JIM, and cable driver source, where
+a BSD or MIT license is used; this is noted in the file headers.
+
+=== GNU Free Documentation License (FDL) ===
+.........................................
+include::fdl.txt[]
+.........................................
+=== GNU General Public License (GPL) ===
+.........................................
+include::gpl.txt[]
+.........................................
+

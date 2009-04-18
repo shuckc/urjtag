@@ -1,0 +1,457 @@
+#
+# $Id$
+#
+# JTAG declarations for Samsung S3C4510B
+# Copyright (C) 2003 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Jiun-Shian Ho <asky@syncom.com.tw>, 2003.
+#
+# Documentation:
+# [1] Samsung Electronics Co., Ltd., "S3C4510B 32-Bit RISC Microcontroller
+#     User's Manual", Revision 1, August 2000,
+#     Order Number: 21-S3-C4510B-082000
+#
+
+# see Table A-2 or BSDL file (Page: A-13 ~ A-15) in [1]
+signal     nUADTR1         3
+signal     UATXD1          4
+signal     nUADSR1         5
+signal     nDTRA           6
+signal     RXDA            7
+signal     nRTSA           8
+signal     TXDA            9
+signal     nCTSA           10
+signal     nDCDA           13
+signal     RXCA            14
+signal     nSYNCA          15
+signal     TXCA            16
+signal     nDTRB           17
+signal     RXDB            18
+signal     nRTSB           19
+signal     TXDB            20
+signal     nCTSB           23
+signal     nDCDB           24
+signal     RXCB            25
+signal     nSYNCB          26
+signal     TXCB            27
+signal     CRS_CRS_10M     28
+signal     RX_DV_LINK10    29
+signal     RXD0_RXD_10M    30
+signal     RXD1            33
+signal     RXD2            34
+signal     RXD3            35
+signal     RX_ERR          36
+signal     RX_CLK_RXCLK_10M        37
+signal     COL_COL_10M     38
+signal     TXD0_TXD_10M    39
+signal     TXD1_LOOP10     40
+signal     TXD2            43
+signal     TXD3            44
+signal     TX_ERR_PCOMP_10M        45
+signal     TX_CLK_TXCLK_10M        46
+signal     TX_EN_TXEN_10M  47
+signal     MDIO            48
+signal     LITTLE          49
+signal     MDC             50
+signal     TCK             58
+signal     TMS             59
+signal     TDI             60
+signal     TDO             61
+signal     nTRST           62
+signal     TMODE           63
+signal     UCLK            64
+signal     nECS0           67
+signal     nECS1           68
+signal     nECS2           69
+signal     nECS3           70
+signal     nEWAIT          71
+signal     nOE             72
+signal     B0SIZE0         73
+signal     B0SIZE1         74
+signal     CLKOEN          76
+signal     MCLK            80
+signal     nRESET          82
+signal     CLKSEL          83      # PCLKSEL vs. CLKSEL ?
+signal     nRCS0           75
+signal     nRCS1           84
+signal     nRCS2           85
+signal     nRCS3           86
+signal     nRCS4           87
+signal     nRCS5           88
+signal     nRAS0           89
+signal     nRAS1           90
+signal     nRAS2           91
+signal     nRAS3           94
+signal     nCAS0           95
+signal     nCAS1           96
+signal     nCAS2           97
+signal     nCAS3           98
+signal     nDWE            99
+signal     nWBE0           100
+signal     nWBE1           101
+signal     nWBE2           102
+signal     nWBE3           107
+signal     ExtMREQ         108
+signal     ExtMACK         109
+signal     ADDR0           110
+signal     ADDR1           111
+signal     ADDR2           112
+signal     ADDR3           113
+signal     ADDR4           114
+signal     ADDR5           115
+signal     ADDR6           116
+signal     ADDR7           117
+signal     ADDR8           120
+signal     ADDR9           121
+signal     ADDR10          122
+signal     ADDR11          123
+signal     ADDR12          124
+signal     ADDR13          125
+signal     ADDR14          126
+signal     ADDR15          127
+signal     ADDR16          128
+signal     ADDR17          129
+signal     ADDR18          132
+signal     ADDR19          133
+signal     ADDR20          134
+signal     ADDR21          135
+signal     XDATA0          136
+signal     XDATA1          137
+signal     XDATA2          138
+signal     XDATA3          139
+signal     XDATA4          140
+signal     XDATA5          141
+signal     XDATA6          144
+signal     XDATA7          145
+signal     XDATA8          146
+signal     XDATA9          147
+signal     XDATA10         148
+signal     XDATA11         149
+signal     XDATA12         150
+signal     XDATA13         151
+signal     XDATA14         152
+signal     XDATA15         153
+signal     XDATA16         154
+signal     XDATA17         159
+signal     XDATA18         160
+signal     XDATA19         161
+signal     XDATA20         162
+signal     XDATA21         163
+signal     XDATA22         164
+signal     XDATA23         165
+signal     XDATA24         166
+signal     XDATA25         169
+signal     XDATA26         170
+signal     XDATA27         171
+signal     XDATA28         172
+signal     XDATA29         173
+signal     XDATA30         174
+signal     XDATA31         175
+signal     P0              176
+signal     P1              179
+signal     P2              180
+signal     P3              181
+signal     P4              182
+signal     P5              183
+signal     P6              184
+signal     P7              185
+signal     P8              186
+signal     P9              189
+signal     P10             190
+signal     P11             191
+signal     P12             192
+signal     P13             193
+signal     P14             194
+signal     P15             195
+signal     P16             196
+signal     P17             199
+signal     SCL             200
+signal     SDA             201
+signal     UARXD0          202
+signal     nUADTR0         203
+signal     UATXD0          204
+signal     nUADSR0         205
+signal     UARXD1          206
+signal     VDDP            1 21 41 53 78 103 118 142 157 177 197
+signal     VDDI            11 31 51 65 92 105 130 155 167 187 207
+signal     VSSP            2 22 42 54 79 93 106 131 156 168 188 208
+signal     VSSI            12 32 52 66 81 104 119 143 158 178 198
+
+# mandatory data registers
+register        BSR     233     # Boundary Scan Register (see Appendix-A (Page A-16) in [1])
+register        BR      1       # Bypass Register
+# optional data registers
+register        DIR     32      # Device Identification Register
+
+register	SCAN	4	# Select scan channel for ARM
+
+# Appendix-A (Page A-16) in [1]
+instruction length 4
+
+# see Table A-6 in [1]
+# mandatory instructions
+instruction EXTEST              0000    BSR
+instruction SAMPLE/PRELOAD      0011    BSR
+instruction BYPASS              1111    BR
+
+# optional instructions
+instruction HIGHZ               0111    BR
+instruction IDCODE              1110    DIR
+instruction INTEST		1100	BSR
+instruction CLAMP		0101	BR
+
+instruction CLAMPZ		1001	BR
+instruction RESTART		0100	BR
+instruction SCAN_N		0010	SCAN
+
+# see Table A-2 or BSDL file (Page: A-16 ~ A-23) in [1]
+bit 232 I ? nUADTR1
+bit 231 O ? UATXD1
+bit 230 O ? nUADSR1
+bit 229 O ? nDTRA
+bit 228 I ? RXDA
+bit 227 O ? nRTSA
+bit 226 O ? TXDA
+bit 225 I ? nCTSA
+bit 224 I ? nDCDA
+bit 223 I ? RXCA
+bit 222 O ? nSYNCA
+bit 221 I ? TXCA
+bit 220 O ? TXCA 219 1 Z
+bit 219 C 1 TXCA
+bit 218 O ? nDTRB
+bit 217 I ? RXDB
+bit 216 O ? nRTSB
+bit 215 O ? TXDB
+bit 214 I ? nCTSB
+bit 213 I ? nDCDB
+bit 212 I ? RXCB
+bit 211 O ? nSYNCB
+bit 210 I ? TXCB
+bit 209 O ? TXCB 208 1 Z
+bit 208 C 1 TXCB
+bit 207 I ? CRS_CRS_10M
+bit 206 I ? RX_DV_LINK10
+bit 205 I ? RXD0_RXD_10M
+bit 204 I ? RXD1
+bit 203 I ? RXD2
+bit 202 I ? RXD3
+bit 201 I ? RX_ERR
+bit 200 I ? RX_CLK_RXCLK_10M
+bit 199 I ? COL_COL_10M
+bit 198 O ? TXD0_TXD_10M
+bit 197 O ? TXD1_LOOP10
+bit 196 O ? TXD2
+bit 195 O ? TXD3
+bit 194 O ? TX_ERR_PCOMP_10M
+bit 193 I ? TX_CLK_TXCLK_10M
+bit 192 O ? TX_EN_TXEN_10M
+bit 191 I ? MDIO
+bit 190 O ? MDIO 189 1 Z
+bit 189 C 1 MDIO
+bit 188 I ? LITTLE
+bit 187 O ? MDC
+bit 186 I ? TMODE
+bit 185 I ? UCLK
+bit 184 C 1 .
+bit 183 O ? nECS0 184 1 Z
+bit 182 O ? nECS1 184 1 Z
+bit 181 O ? nECS2 184 1 Z
+bit 180 O ? nECS3 184 1 Z
+bit 179 I ? nEWAIT
+bit 178 O ? nOE 184 1 Z
+bit 177 I ? B0SIZE0
+bit 176 I ? B0SIZE1
+bit 175 O ? nRCS0 184 1 Z
+bit 174 I ? CLKOEN
+bit 173 O ? MCLKO
+bit 172 I ? MCLK
+bit 171 I ? nRESET
+bit 170 I ? CLKSEL
+bit 169 O ? nRCS1 184 1 Z
+bit 168 O ? nRCS2 184 1 Z
+bit 167 O ? nRCS3 184 1 Z
+bit 166 O ? nRCS4 184 1 Z
+bit 165 O ? nRCS5 184 1 Z
+bit 164 O ? nRAS0 184 1 Z
+bit 163 O ? nRAS1 184 1 Z
+bit 162 O ? nRAS2 184 1 Z
+bit 161 O ? nRAS3 184 1 Z
+bit 160 O ? nCAS0 184 1 Z
+bit 159 O ? nCAS1 184 1 Z
+bit 158 O ? nCAS2 184 1 Z
+bit 157 O ? nCAS3 184 1 Z
+bit 156 O ? nDWE 184 1 Z
+bit 155 O ? nWBE0 184 1 Z
+bit 154 O ? nWBE1 184 1 Z
+bit 153 O ? nWBE2 184 1 Z
+bit 152 O ? nWBE3 184 1 Z
+bit 151 I ? ExtMREQ
+bit 150 O ? ExtMACK
+bit 149 O ? ADDR0 184 1 Z
+bit 148 O ? ADDR1 184 1 Z
+bit 147 O ? ADDR2 184 1 Z
+bit 146 O ? ADDR3 184 1 Z
+bit 145 O ? ADDR4 184 1 Z
+bit 144 O ? ADDR5 184 1 Z
+bit 143 O ? ADDR6 184 1 Z
+bit 142 O ? ADDR7 184 1 Z
+bit 141 O ? ADDR8 184 1 Z
+bit 140 O ? ADDR9 184 1 Z
+bit 139 O ? ADDR10 184 1 Z
+bit 138 O ? ADDR11 184 1 Z
+bit 137 O ? ADDR12 184 1 Z
+bit 136 O ? ADDR13 184 1 Z
+bit 135 O ? ADDR14 184 1 Z
+bit 134 O ? ADDR15 184 1 Z
+bit 133 O ? ADDR16 184 1 Z
+bit 132 O ? ADDR17 184 1 Z
+bit 131 O ? ADDR18 184 1 Z
+bit 130 O ? ADDR19 184 1 Z
+bit 129 O ? ADDR20 184 1 Z
+bit 128 O ? ADDR21 184 1 Z
+bit 127 C 1 .
+bit 126 I ? XDATA0
+bit 125 O ? XDATA0 127 1 Z
+bit 124 I ? XDATA1
+bit 123 O ? XDATA1 127 1 Z
+bit 122 I ? XDATA2
+bit 121 O ? XDATA2 127 1 Z
+bit 120 I ? XDATA3
+bit 119 O ? XDATA3 127 1 Z
+bit 118 I ? XDATA4
+bit 117 O ? XDATA4 127 1 Z
+bit 116 I ? XDATA5
+bit 115 O ? XDATA5 127 1 Z
+bit 114 I ? XDATA6
+bit 113 O ? XDATA6 127 1 Z
+bit 112 I ? XDATA7
+bit 111 O ? XDATA7 127 1 Z
+bit 110 I ? XDATA8
+bit 109 O ? XDATA8 127 1 Z
+bit 108 I ? XDATA9
+bit 107 O ? XDATA9 127 1 Z
+bit 106 I ? XDATA10
+bit 105 O ? XDATA10 127 1 Z
+bit 104 I ? XDATA11
+bit 103 O ? XDATA11 127 1 Z
+bit 102 I ? XDATA12
+bit 101 O ? XDATA12 127 1 Z
+bit 100 I ? XDATA13
+bit  99 O ? XDATA13 127 1 Z
+bit  98 I ? XDATA14
+bit  97 O ? XDATA14 127 1 Z
+bit  96 I ? XDATA15
+bit  95 O ? XDATA15 127 1 Z
+bit  94 I ? XDATA16
+bit  93 O ? XDATA16 127 1 Z
+bit  92 I ? XDATA17
+bit  91 O ? XDATA17 127 1 Z
+bit  90 I ? XDATA18
+bit  89 O ? XDATA18 127 1 Z
+bit  88 I ? XDATA19
+bit  87 O ? XDATA19 127 1 Z
+bit  86 I ? XDATA20
+bit  85 O ? XDATA20 127 1 Z
+bit  84 I ? XDATA21
+bit  83 O ? XDATA21 127 1 Z
+bit  82 I ? XDATA22
+bit  81 O ? XDATA22 127 1 Z
+bit  80 I ? XDATA23
+bit  79 O ? XDATA23 127 1 Z
+bit  78 I ? XDATA24
+bit  77 O ? XDATA24 127 1 Z
+bit  76 I ? XDATA25
+bit  75 O ? XDATA25 127 1 Z
+bit  74 I ? XDATA26
+bit  73 O ? XDATA26 127 1 Z
+bit  72 I ? XDATA27
+bit  71 O ? XDATA27 127 1 Z
+bit  70 I ? XDATA28
+bit  69 O ? XDATA28 127 1 Z
+bit  68 I ? XDATA29
+bit  67 O ? XDATA29 127 1 Z
+bit  66 I ? XDATA30
+bit  65 O ? XDATA30 127 1 Z
+bit  64 I ? XDATA31
+bit  63 O ? XDATA31 127 1 Z
+bit  62 I ? P0
+bit  61 O ? P0 60 1 Z
+bit  60 C 1 P0
+bit  59 I ? P1
+bit  58 O ? P1 57 1 Z
+bit  57 C 1 P1
+bit  56 I ? P2
+bit  55 O ? P2 54 1 Z
+bit  54 C 1 P2
+bit  53 I ? P3
+bit  52 O ? P3 51 1 Z
+bit  51 C 1 P3
+bit  50 I ? P4
+bit  49 O ? P4 48 1 Z
+bit  48 C 1 P4
+bit  47 I ? P5
+bit  46 O ? P5 45 1 Z
+bit  45 C 1 P5
+bit  44 I ? P6
+bit  43 O ? P6 42 1 Z
+bit  42 C 1 P6
+bit  41 I ? P7
+bit  40 O ? P7 39 1 Z
+bit  39 C 1 P7
+bit  38 I ? P8
+bit  37 O ? P8 36 1 Z
+bit  36 C 1 P8
+bit  35 I ? P9
+bit  34 O ? P9 33 1 Z
+bit  33 C 1 P9
+bit  32 I ? P10
+bit  31 O ? P10 30 1 Z
+bit  30 C 1 P10
+bit  29 I ? P11
+bit  28 O ? P11 27 1 Z
+bit  27 C 1 P11
+bit  26 I ? P12
+bit  25 O ? P12 24 1 Z
+bit  24 C 1 P12
+bit  23 I ? P13
+bit  22 O ? P13 21 1 Z
+bit  21 C 1 P13
+bit  20 I ? P14
+bit  19 O ? P14 18 1 Z
+bit  18 C 1 P14
+bit  17 I ? P15
+bit  16 O ? P15 15 1 Z
+bit  15 C 1 P15
+bit  14 I ? P16
+bit  13 O ? P16 12 1 Z
+bit  12 C 1 P16
+bit  11 I ? P17
+bit  10 O ? P17 9 1 Z
+bit   9 C 1 P17
+bit   8 I 0 SCL
+bit   7 O 1 SCL 7 1 Z
+bit   6 I ? SDA
+bit   5 O 1 SDA 5 1 Z
+bit   4 I ? UARXD0
+bit   3 I ? nUADTR0
+bit   2 O ? UATXD0
+bit   1 O ? nUADSR0
+bit   0 I ? UARXD1
+
+initbus s3c4510x

@@ -1,0 +1,892 @@
+#
+# $Id$
+#
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Asier Llano <a.llano@usyscom.com>, 2004.
+#
+# Documentation:
+# [1] Freescale, "Freescale MPC5200 Users Guide", Rev. 2, 08/2004
+#     Order Number: MPC5200UG
+# [2] Freescale, "MPC5200BSDL", Rev. 1.2,
+#     Order Number: MPC5200BSDL
+#
+
+# see Table 2-1 in [1]
+signal TEST_MODE_0 B02
+signal TEST_MODE_1 A01
+signal TEST_SEL_0 B01
+signal TEST_SEL_1 C03
+signal RTC_XTAL_IN C02
+signal RTC_XTAL_OUT C01
+signal TIMER_2 D03
+signal TIMER_3 D02
+signal TIMER_4 D01
+signal TIMER_5 E03
+signal TIMER_6 E02
+signal TIMER_7 E01
+signal USB_9 F03
+signal USB_8 F02
+signal USB_7 F01
+signal USB_6 G04
+signal USB_5 G03
+signal USB_4 G02
+signal USB_3 G01
+signal USB_2 H03
+signal USB_1 H02
+signal USB_0 H01
+signal ETH_17 J04
+signal ETH_10 J03
+signal ETH_4 J02
+signal ETH_3 J01
+signal ETH_2 K03
+signal ETH_1 K02
+signal ETH_0 K01
+signal ETH_11 L04
+signal ETH_5 L03
+signal ETH_16 L02
+signal ETH_9 L01
+signal ETH_8 M03
+signal ETH_12 M02
+signal ETH_13 M01
+signal ETH_14 N04
+signal ETH_15 N03
+signal ETH_6 N02
+signal ETH_7 N01
+signal IRQ0 P03
+signal IRQ2 P02
+signal IRQ1 P01
+signal PCI_GNT_B R04
+signal EXT_AD_30 R03
+signal PCI_RESET_B R02
+signal IRQ3 R01
+signal EXT_AD_28 T03
+signal EXT_AD_26 T02
+signal PCI_CLOCK T01
+signal EXT_AD_24 U03
+signal PCI_IDSEL U02
+signal PCI_REQ_B U01
+signal EXT_AD_20 V02
+signal EXT_AD_31 V01
+signal EXT_AD_29 W01
+signal EXT_AD_27 Y01
+signal EXT_AD_25 W02
+signal PCI_CBE_3_B Y02
+signal EXT_AD_22 V03
+signal EXT_AD_23 W03
+signal EXT_AD_21 Y03
+signal EXT_AD_18 V04
+signal EXT_AD_16 W04
+signal EXT_AD_19 Y04
+signal PCI_FRAME_B V05
+signal PCI_TRDY_B W05
+signal EXT_AD_17 Y05
+signal PCI_STOP_B V06
+signal PCI_CBE_2_B W06
+signal PCI_IRDY_B Y06
+signal PCI_PAR V07
+signal PCI_DEVSEL_B W07
+signal PCI_PERR_B Y07
+signal EXT_AD_15 U08
+signal EXT_AD_13 V08
+signal PCI_SERR_B W08
+signal PCI_CBE_1_B Y08
+signal EXT_AD_11 V09
+signal EXT_AD_14 W09
+signal EXT_AD_12 Y09
+signal EXT_AD_9 V10
+signal PCI_CBE_0_B W10
+signal EXT_AD_10 Y10
+signal EXT_AD_6 U11
+signal EXT_AD_4 V11
+signal EXT_AD_8 W11
+signal EXT_AD_7 Y11
+signal EXT_AD_2 V12
+signal EXT_AD_5 W12
+signal EXT_AD_3 Y12
+signal EXT_AD_0 V13
+signal EXT_AD_1 W13
+signal LP_TS_B Y13
+signal LP_ACK U14
+signal LP_ALE_B V14
+signal LP_CS0_B W14
+signal LP_CS1_B Y14
+signal LP_CS2_B V15
+signal LP_CS3_B W15
+signal LP_CS4_B Y15
+signal LP_CS5_B V16
+signal LP_RW W16
+signal ATA_ISOLATION Y16
+signal ATA_DRQ V17
+signal ATA_IOW_B W17
+signal ATA_IOR_B Y17
+signal ATA_IOCHRDY W18
+signal ATA_DACK_B Y18
+signal ATA_INTRQ Y19
+signal TIMER_0 Y20
+signal I2C_1 W19
+signal I2C_3 W20
+signal TIMER_1 V18
+signal I2C_0 V19
+signal I2C_2 V20
+signal MEM_MDQ_31 U18
+signal MEM_MDQ_1 U19
+signal MEM_MDQ_0 U20
+signal MEM_MDQ_30 T18
+signal MEM_MDQ_3 T19
+signal MEM_MDQ_2 T20
+signal MEM_MDQ_28 R17
+signal MEM_MDQ_29 R18
+signal MEM_MDQ_5 R19
+signal MEM_MDQ_4 R20
+signal MEM_MDQ_27 P18
+signal MEM_MDQ_7 P19
+signal MEM_MDQ_6 P20
+signal MEM_MDQ_25 N17
+signal MEM_MDQ_26 N18
+signal MEM_DQM_0 N19
+signal MEM_MDQS_0 N20
+signal MEM_MDQ_24 M18
+signal MEM_MDQ_14 M19
+signal MEM_MDQ_15 M20
+signal MEM_DQM_3 L17
+signal MEM_MDQS_3 L18
+signal MEM_MDQ_12 L19
+signal MEM_MDQ_13 L20
+signal MEM_MDQ_23 K18
+signal MEM_MDQ_10 K19
+signal MEM_MDQ_11 K20
+signal MEM_MDQ_22 J17
+signal MEM_MDQ_21 J18
+signal MEM_MDQ_8 J19
+signal MEM_MDQ_9 J20
+signal MEM_MDQ_20 H18
+signal MEM_DQM_1 H19
+signal MEM_MDQS_1 H20
+signal MEM_MDQ_18 G17
+signal MEM_MDQ_19 G18
+signal MEM_CLK G19
+signal MEM_CLK_B G20 G19
+signal MEM_MDQ_17 F18
+signal MEM_MA_12 F19
+signal MEM_CLK_EN F20
+signal MEM_MDQ_16 E18
+signal MEM_MA_9 E19
+signal MEM_MA_11 E20
+signal MEM_MDQS_2 D18
+signal MEM_MA_7 D19
+signal MEM_MA_8 D20
+signal MEM_MA_6 C20
+signal MEM_MA_5 C19
+signal MEM_MA_4 B20
+signal MEM_DQM_2 A20
+signal MEM_CAS_B B19
+signal MEM_WE_B A19
+signal MEM_MBA_0 C18
+signal MEM_CS_0_B B18
+signal MEM_RAS_B A18
+signal MEM_MA_0 C17
+signal MEM_MA_10 B17
+signal MEM_MBA_1 A17
+signal MEM_MA_3 C16
+signal MEM_MA_2 B16
+signal MEM_MA_1 A16
+signal GPIO_WKUP_6 C15
+signal SYS_PLL_TPA B15
+signal SYS_XTAL_IN A15
+signal SYS_XTAL_OUT D14
+signal SYS_PLL_AVSS C14
+signal SYS_PLL_AVDD B14
+signal SRESET_B A14
+signal PSC6_3 C13
+signal HRESET_B B13
+signal PORRESET_B A13
+signal GPIO_WKUP_7 C12
+signal PSC6_0 B12
+signal PSC6_2 A12
+signal PSC6_1 C11
+signal PSC1_0 B11
+signal PSC1_1 A11
+signal PSC1_2 C10
+signal PSC1_3 B10
+signal PSC1_4 A10
+signal PSC2_0 C09
+signal PSC2_1 B09
+signal PSC2_2 A09
+signal LP_OE D08
+signal CORE_PLL_AVDD C08
+signal PSC2_3 B08
+signal PSC2_4 A08
+signal PSC3_0 C07
+signal PSC3_1 B07
+signal PSC3_2 A07
+signal PSC3_3 C06
+signal PSC3_4 B06
+signal PSC3_5 A06
+signal PSC3_6 C05
+signal PSC3_7 B05
+signal PSC3_8 A05
+signal PSC3_9 C04
+signal JTAG_TCK B04
+signal JTAG_TMS A04
+signal JTAG_TDI A03
+signal JTAG_TRST_B B03
+signal JTAG_TDO A02
+signal VDD_MEM_IO P17 M17 T17 K17 F17 E17 H17 D17 D15 D13 D12
+signal VDD_IO U16 U13 U10 U09 U06 U05 T04 F04 E04 H04 D09 D06
+signal VDD_CORE U15 U12 U07 P04 K04 M04 D10 D07 D05 D11
+signal VSS_IO_CORE D16
+
+
+register	BSR	615
+register	BR	1
+register	DIR	32
+
+instruction length 6
+
+# see Table 21-2 in [1]
+
+# Mandatory instructions
+instruction IDCODE 011101 DIR
+instruction BYPASS 111111 BR
+instruction SAMPLE/PRELOAD 100000 BSR
+instruction EXTEST 000000 BSR
+
+# Optional instructions
+instruction CLAMP 100001 BR
+instruction HIGHZ 011111 BR
+
+
+# see [2]
+bit 614 I 1 PSC3_9
+bit 613 O 1 PSC3_9 612 1 Z
+bit 612 C 1 *
+bit 611 I 1 PSC3_8
+bit 610 O 1 PSC3_8 609 1 Z
+bit 609 C 1 *
+bit 608 I 1 PSC3_7
+bit 607 O 1 PSC3_7 606 1 Z
+bit 606 C 1 *
+bit 605 I 1 PSC3_6
+bit 604 O 1 PSC3_6 603 1 Z
+bit 603 C 1 *
+bit 602 I 1 PSC3_5
+bit 601 O 1 PSC3_5 600 1 Z
+bit 600 C 1 *
+bit 599 I 1 PSC3_4
+bit 598 O 1 PSC3_4 597 1 Z
+bit 597 C 1 *
+bit 596 I 1 PSC3_3
+bit 595 O 1 PSC3_3 594 1 Z
+bit 594 C 1 *
+bit 593 I 1 PSC3_2
+bit 592 O 1 PSC3_2 591 1 Z
+bit 591 C 1 *
+bit 590 I 1 PSC3_1
+bit 589 O 1 PSC3_1 588 1 Z
+bit 588 C 1 *
+bit 587 I 1 PSC3_0
+bit 586 O 1 PSC3_0 585 1 Z
+bit 585 C 1 *
+bit 584 I 1 PSC2_4
+bit 583 O 1 PSC2_4 582 1 Z
+bit 582 C 1 *
+bit 581 I 1 PSC2_3
+bit 580 O 1 PSC2_3 579 1 Z
+bit 579 C 1 *
+bit 578 I 1 LP_OE
+bit 577 O 1 LP_OE 576 1 Z
+bit 576 C 1 *
+bit 575 I 1 PSC2_2
+bit 574 O 1 PSC2_2 573 1 Z
+bit 573 C 1 *
+bit 572 I 1 PSC2_1
+bit 571 O 1 PSC2_1 570 1 Z
+bit 570 C 1 *
+bit 569 I 1 PSC2_0
+bit 568 O 1 PSC2_0 567 1 Z
+bit 567 C 1 *
+bit 566 I 1 PSC1_4
+bit 565 O 1 PSC1_4 564 1 Z
+bit 564 C 1 *
+bit 563 I 1 PSC1_3
+bit 562 O 1 PSC1_3 561 1 Z
+bit 561 C 1 *
+bit 560 I 1 PSC1_2
+bit 559 O 1 PSC1_2 558 1 Z
+bit 558 C 1 *
+bit 557 I 1 PSC1_1
+bit 556 O 1 PSC1_1 555 1 Z
+bit 555 C 1 *
+bit 554 I 1 PSC1_0
+bit 553 O 1 PSC1_0 552 1 Z
+bit 552 C 1 *
+bit 551 I 1 PSC6_1
+bit 550 O 1 PSC6_1 549 1 Z
+bit 549 C 1 *
+bit 548 I 1 PSC6_2
+bit 547 O 1 PSC6_2 546 1 Z
+bit 546 C 1 *
+bit 545 I 1 PSC6_0
+bit 544 O 1 PSC6_0 543 1 Z
+bit 543 C 1 *
+bit 542 I 1 GPIO_WKUP_7
+bit 541 O 1 GPIO_WKUP_7 540 1 Z
+bit 540 C 1 *
+bit 539 I 1 PORRESET_B
+bit 538 O 0 *
+bit 537 O 0 *
+bit 536 I 1 HRESET_B
+bit 535 O 1 HRESET_B 534 1 Z
+bit 534 C 1 *
+bit 533 I 1 PSC6_3
+bit 532 O 1 PSC6_3 531 1 Z
+bit 531 C 1 *
+bit 530 I 1 SRESET_B
+bit 529 O 1 SRESET_B 528 1 Z
+bit 528 C 1 *
+bit 527 I 1 SYS_PLL_TPA
+bit 526 O 1 SYS_PLL_TPA 525 1 Z
+bit 525 C 1 *
+bit 524 I 1 GPIO_WKUP_6
+bit 523 O 1 GPIO_WKUP_6 522 1 Z
+bit 522 C 1 *
+bit 521 I 1 MEM_MA_1
+bit 520 O 1 MEM_MA_1 519 1 Z
+bit 519 C 1 *
+bit 518 I 1 MEM_MA_2
+bit 517 O 1 MEM_MA_2 516 1 Z
+bit 516 C 1 *
+bit 515 I 1 MEM_MA_3
+bit 514 O 1 MEM_MA_3 513 1 Z
+bit 513 C 1 *
+bit 512 I 1 MEM_MBA_1
+bit 511 O 1 MEM_MBA_1 510 1 Z
+bit 510 C 1 *
+bit 509 I 1 MEM_MA_10
+bit 508 O 1 MEM_MA_10 507 1 Z
+bit 507 C 1 *
+bit 506 I 1 MEM_MA_0
+bit 505 O 1 MEM_MA_0 504 1 Z
+bit 504 C 1 *
+bit 503 I 1 MEM_RAS_B
+bit 502 O 1 MEM_RAS_B 501 1 Z
+bit 501 C 1 *
+bit 500 I 1 MEM_CS_0_B
+bit 499 O 1 MEM_CS_0_B 498 1 Z
+bit 498 C 1 *
+bit 497 I 1 MEM_MBA_0
+bit 496 O 1 MEM_MBA_0 495 1 Z
+bit 495 C 1 *
+bit 494 I 1 MEM_WE_B
+bit 493 O 1 MEM_WE_B 492 1 Z
+bit 492 C 1 *
+bit 491 I 1 MEM_CAS_B
+bit 490 O 1 MEM_CAS_B 489 1 Z
+bit 489 C 1 *
+bit 488 I 1 MEM_DQM_2
+bit 487 O 1 MEM_DQM_2 486 1 Z
+bit 486 C 1 *
+bit 485 I 1 MEM_MA_4
+bit 484 O 1 MEM_MA_4 483 1 Z
+bit 483 C 1 *
+bit 482 I 1 MEM_MA_5
+bit 481 O 1 MEM_MA_5 480 1 Z
+bit 480 C 1 *
+bit 479 I 1 MEM_MA_6
+bit 478 O 1 MEM_MA_6 477 1 Z
+bit 477 C 1 *
+bit 476 I 1 MEM_MA_8
+bit 475 O 1 MEM_MA_8 474 1 Z
+bit 474 C 1 *
+bit 473 I 1 MEM_MA_7
+bit 472 O 1 MEM_MA_7 471 1 Z
+bit 471 C 1 *
+bit 470 I 1 MEM_MDQS_2
+bit 469 O 1 MEM_MDQS_2 468 1 Z
+bit 468 C 1 *
+bit 467 I 1 MEM_MA_11
+bit 466 O 1 MEM_MA_11 465 1 Z
+bit 465 C 1 *
+bit 464 I 1 MEM_MA_9
+bit 463 O 1 MEM_MA_9 462 1 Z
+bit 462 C 1 *
+bit 461 I 1 MEM_MDQ_16
+bit 460 O 1 MEM_MDQ_16 459 1 Z
+bit 459 C 1 *
+bit 458 I 1 MEM_CLK_EN
+bit 457 O 1 MEM_CLK_EN 456 1 Z
+bit 456 C 1 *
+bit 455 I 1 MEM_MA_12
+bit 454 O 1 MEM_MA_12 453 1 Z
+bit 453 C 1 *
+bit 452 I 1 MEM_MDQ_17
+bit 451 O 1 MEM_MDQ_17 450 1 Z
+bit 450 C 1 *
+bit 449 I 1 MEM_CLK_B
+bit 448 O 1 MEM_CLK_B 447 1 Z
+bit 447 C 1 *
+bit 446 I 1 MEM_CLK
+bit 445 O 1 MEM_CLK 444 1 Z
+bit 444 C 1 *
+bit 443 I 1 MEM_MDQ_19
+bit 442 O 1 MEM_MDQ_19 441 1 Z
+bit 441 C 1 *
+bit 440 I 1 MEM_MDQ_18
+bit 439 O 1 MEM_MDQ_18 438 1 Z
+bit 438 C 1 *
+bit 437 I 1 MEM_MDQS_1
+bit 436 O 1 MEM_MDQS_1 435 1 Z
+bit 435 C 1 *
+bit 434 I 1 MEM_DQM_1
+bit 433 O 1 MEM_DQM_1 432 1 Z
+bit 432 C 1 *
+bit 431 I 1 MEM_MDQ_20
+bit 430 O 1 MEM_MDQ_20 429 1 Z
+bit 429 C 1 *
+bit 428 I 1 MEM_MDQ_9
+bit 427 O 1 MEM_MDQ_9 426 1 Z
+bit 426 C 1 *
+bit 425 I 1 MEM_MDQ_8
+bit 424 O 1 MEM_MDQ_8 423 1 Z
+bit 423 C 1 *
+bit 422 I 1 MEM_MDQ_21
+bit 421 O 1 MEM_MDQ_21 420 1 Z
+bit 420 C 1 *
+bit 419 I 1 MEM_MDQ_22
+bit 418 O 1 MEM_MDQ_22 417 1 Z
+bit 417 C 1 *
+bit 416 I 1 MEM_MDQ_11
+bit 415 O 1 MEM_MDQ_11 414 1 Z
+bit 414 C 1 *
+bit 413 I 1 MEM_MDQ_10
+bit 412 O 1 MEM_MDQ_10 411 1 Z
+bit 411 C 1 *
+bit 410 I 1 MEM_MDQ_23
+bit 409 O 1 MEM_MDQ_23 408 1 Z
+bit 408 C 1 *
+bit 407 I 1 MEM_MDQ_13
+bit 406 O 1 MEM_MDQ_13 405 1 Z
+bit 405 C 1 *
+bit 404 I 1 MEM_MDQ_12
+bit 403 O 1 MEM_MDQ_12 402 1 Z
+bit 402 C 1 *
+bit 401 I 1 MEM_MDQS_3
+bit 400 O 1 MEM_MDQS_3 399 1 Z
+bit 399 C 1 *
+bit 398 I 1 MEM_DQM_3
+bit 397 O 1 MEM_DQM_3 396 1 Z
+bit 396 C 1 *
+bit 395 I 1 MEM_MDQ_15
+bit 394 O 1 MEM_MDQ_15 393 1 Z
+bit 393 C 1 *
+bit 392 I 1 MEM_MDQ_14
+bit 391 O 1 MEM_MDQ_14 390 1 Z
+bit 390 C 1 *
+bit 389 I 1 MEM_MDQ_24
+bit 388 O 1 MEM_MDQ_24 387 1 Z
+bit 387 C 1 *
+bit 386 I 1 MEM_MDQS_0
+bit 385 O 1 MEM_MDQS_0 384 1 Z
+bit 384 C 1 *
+bit 383 I 1 MEM_DQM_0
+bit 382 O 1 MEM_DQM_0 381 1 Z
+bit 381 C 1 *
+bit 380 I 1 MEM_MDQ_26
+bit 379 O 1 MEM_MDQ_26 378 1 Z
+bit 378 C 1 *
+bit 377 I 1 MEM_MDQ_25
+bit 376 O 1 MEM_MDQ_25 375 1 Z
+bit 375 C 1 *
+bit 374 I 1 MEM_MDQ_6
+bit 373 O 1 MEM_MDQ_6 372 1 Z
+bit 372 C 1 *
+bit 371 I 1 MEM_MDQ_7
+bit 370 O 1 MEM_MDQ_7 369 1 Z
+bit 369 C 1 *
+bit 368 I 1 MEM_MDQ_27
+bit 367 O 1 MEM_MDQ_27 366 1 Z
+bit 366 C 1 *
+bit 365 I 1 MEM_MDQ_4
+bit 364 O 1 MEM_MDQ_4 363 1 Z
+bit 363 C 1 *
+bit 362 I 1 MEM_MDQ_5
+bit 361 O 1 MEM_MDQ_5 360 1 Z
+bit 360 C 1 *
+bit 359 I 1 MEM_MDQ_29
+bit 358 O 1 MEM_MDQ_29 357 1 Z
+bit 357 C 1 *
+bit 356 I 1 MEM_MDQ_28
+bit 355 O 1 MEM_MDQ_28 354 1 Z
+bit 354 C 1 *
+bit 353 I 1 MEM_MDQ_2
+bit 352 O 1 MEM_MDQ_2 351 1 Z
+bit 351 C 1 *
+bit 350 I 1 MEM_MDQ_3
+bit 349 O 1 MEM_MDQ_3 348 1 Z
+bit 348 C 1 *
+bit 347 I 1 MEM_MDQ_30
+bit 346 O 1 MEM_MDQ_30 345 1 Z
+bit 345 C 1 *
+bit 344 I 1 MEM_MDQ_0
+bit 343 O 1 MEM_MDQ_0 342 1 Z
+bit 342 C 1 *
+bit 341 I 1 MEM_MDQ_1
+bit 340 O 1 MEM_MDQ_1 339 1 Z
+bit 339 C 1 *
+bit 338 I 1 MEM_MDQ_31
+bit 337 O 1 MEM_MDQ_31 336 1 Z
+bit 336 C 1 *
+bit 335 I 1 I2C_2
+bit 334 O 1 I2C_2 333 1 Z
+bit 333 C 1 *
+bit 332 I 1 I2C_0
+bit 331 O 1 I2C_0 330 1 Z
+bit 330 C 1 *
+bit 329 I 1 TIMER_1
+bit 328 O 1 TIMER_1 327 1 Z
+bit 327 C 1 *
+bit 326 I 1 I2C_3
+bit 325 O 1 I2C_3 324 1 Z
+bit 324 C 1 *
+bit 323 I 1 I2C_1
+bit 322 O 1 I2C_1 321 1 Z
+bit 321 C 1 *
+bit 320 I 1 TIMER_0
+bit 319 O 1 TIMER_0 318 1 Z
+bit 318 C 1 *
+bit 317 I 1 ATA_INTRQ
+bit 316 O 1 ATA_INTRQ 315 1 Z
+bit 315 C 1 *
+bit 314 I 1 ATA_DACK_B
+bit 313 O 1 ATA_DACK_B 312 1 Z
+bit 312 C 1 *
+bit 311 I 1 ATA_IOCHRDY
+bit 310 O 1 ATA_IOCHRDY 309 1 Z
+bit 309 C 1 *
+bit 308 I 1 ATA_IOR_B
+bit 307 O 1 ATA_IOR_B 306 1 Z
+bit 306 C 1 *
+bit 305 I 1 ATA_IOW_B
+bit 304 O 1 ATA_IOW_B 303 1 Z
+bit 303 C 1 *
+bit 302 I 1 ATA_DRQ
+bit 301 O 1 ATA_DRQ 300 1 Z
+bit 300 C 1 *
+bit 299 I 1 ATA_ISOLATION
+bit 298 O 1 ATA_ISOLATION 297 1 Z
+bit 297 C 1 *
+bit 296 I 1 LP_RW
+bit 295 O 1 LP_RW 294 1 Z
+bit 294 C 1 *
+bit 293 I 1 LP_CS5_B
+bit 292 O 1 LP_CS5_B 291 1 Z
+bit 291 C 1 *
+bit 290 I 1 LP_CS4_B
+bit 289 O 1 LP_CS4_B 288 1 Z
+bit 288 C 1 *
+bit 287 I 1 LP_CS3_B
+bit 286 O 1 LP_CS3_B 285 1 Z
+bit 285 C 1 *
+bit 284 I 1 LP_CS2_B
+bit 283 O 1 LP_CS2_B 282 1 Z
+bit 282 C 1 *
+bit 281 I 1 LP_CS1_B
+bit 280 O 1 LP_CS1_B 279 1 Z
+bit 279 C 1 *
+bit 278 I 1 LP_CS0_B
+bit 277 O 1 LP_CS0_B 276 1 Z
+bit 276 C 1 *
+bit 275 I 1 LP_ALE_B
+bit 274 O 1 LP_ALE_B 273 1 Z
+bit 273 C 1 *
+bit 272 I 1 LP_ACK
+bit 271 O 1 LP_ACK 270 1 Z
+bit 270 C 1 *
+bit 269 I 1 LP_TS_B
+bit 268 O 1 LP_TS_B 267 1 Z
+bit 267 C 1 *
+bit 266 I 1 EXT_AD_1
+bit 265 O 1 EXT_AD_1 264 1 Z
+bit 264 C 1 *
+bit 263 I 1 EXT_AD_0
+bit 262 O 1 EXT_AD_0 261 1 Z
+bit 261 C 1 *
+bit 260 I 1 EXT_AD_3
+bit 259 O 1 EXT_AD_3 258 1 Z
+bit 258 C 1 *
+bit 257 I 1 EXT_AD_5
+bit 256 O 1 EXT_AD_5 255 1 Z
+bit 255 C 1 *
+bit 254 I 1 EXT_AD_2
+bit 253 O 1 EXT_AD_2 252 1 Z
+bit 252 C 1 *
+bit 251 I 1 EXT_AD_7
+bit 250 O 1 EXT_AD_7 249 1 Z
+bit 249 C 1 *
+bit 248 I 1 EXT_AD_8
+bit 247 O 1 EXT_AD_8 246 1 Z
+bit 246 C 1 *
+bit 245 I 1 EXT_AD_4
+bit 244 O 1 EXT_AD_4 243 1 Z
+bit 243 C 1 *
+bit 242 I 1 EXT_AD_6
+bit 241 O 1 EXT_AD_6 240 1 Z
+bit 240 C 1 *
+bit 239 I 1 EXT_AD_10
+bit 238 O 1 EXT_AD_10 237 1 Z
+bit 237 C 1 *
+bit 236 I 1 PCI_CBE_0_B
+bit 235 O 1 PCI_CBE_0_B 234 1 Z
+bit 234 C 1 *
+bit 233 I 1 EXT_AD_9
+bit 232 O 1 EXT_AD_9 231 1 Z
+bit 231 C 1 *
+bit 230 I 1 EXT_AD_12
+bit 229 O 1 EXT_AD_12 228 1 Z
+bit 228 C 1 *
+bit 227 I 1 EXT_AD_14
+bit 226 O 1 EXT_AD_14 225 1 Z
+bit 225 C 1 *
+bit 224 I 1 EXT_AD_11
+bit 223 O 1 EXT_AD_11 222 1 Z
+bit 222 C 1 *
+bit 221 I 1 PCI_CBE_1_B
+bit 220 O 1 PCI_CBE_1_B 219 1 Z
+bit 219 C 1 *
+bit 218 I 1 PCI_SERR_B
+bit 217 O 1 PCI_SERR_B 216 1 Z
+bit 216 C 1 *
+bit 215 I 1 EXT_AD_13
+bit 214 O 1 EXT_AD_13 213 1 Z
+bit 213 C 1 *
+bit 212 I 1 EXT_AD_15
+bit 211 O 1 EXT_AD_15 210 1 Z
+bit 210 C 1 *
+bit 209 I 1 PCI_PERR_B
+bit 208 O 1 PCI_PERR_B 207 1 Z
+bit 207 C 1 *
+bit 206 I 1 PCI_DEVSEL_B
+bit 205 O 1 PCI_DEVSEL_B 204 1 Z
+bit 204 C 1 *
+bit 203 I 1 PCI_PAR
+bit 202 O 1 PCI_PAR 201 1 Z
+bit 201 C 1 *
+bit 200 I 1 PCI_IRDY_B
+bit 199 O 1 PCI_IRDY_B 198 1 Z
+bit 198 C 1 *
+bit 197 I 1 PCI_CBE_2_B
+bit 196 O 1 PCI_CBE_2_B 195 1 Z
+bit 195 C 1 *
+bit 194 I 1 PCI_STOP_B
+bit 193 O 1 PCI_STOP_B 192 1 Z
+bit 192 C 1 *
+bit 191 I 1 EXT_AD_17
+bit 190 O 1 EXT_AD_17 189 1 Z
+bit 189 C 1 *
+bit 188 I 1 PCI_TRDY_B
+bit 187 O 1 PCI_TRDY_B 186 1 Z
+bit 186 C 1 *
+bit 185 I 1 PCI_FRAME_B
+bit 184 O 1 PCI_FRAME_B 183 1 Z
+bit 183 C 1 *
+bit 182 I 1 EXT_AD_19
+bit 181 O 1 EXT_AD_19 180 1 Z
+bit 180 C 1 *
+bit 179 I 1 EXT_AD_16
+bit 178 O 1 EXT_AD_16 177 1 Z
+bit 177 C 1 *
+bit 176 I 1 EXT_AD_18
+bit 175 O 1 EXT_AD_18 174 1 Z
+bit 174 C 1 *
+bit 173 I 1 EXT_AD_21
+bit 172 O 1 EXT_AD_21 171 1 Z
+bit 171 C 1 *
+bit 170 I 1 EXT_AD_23
+bit 169 O 1 EXT_AD_23 168 1 Z
+bit 168 C 1 *
+bit 167 I 1 EXT_AD_22
+bit 166 O 1 EXT_AD_22 165 1 Z
+bit 165 C 1 *
+bit 164 I 1 PCI_CBE_3_B
+bit 163 O 1 PCI_CBE_3_B 162 1 Z
+bit 162 C 1 *
+bit 161 I 1 EXT_AD_25
+bit 160 O 1 EXT_AD_25 159 1 Z
+bit 159 C 1 *
+bit 158 I 1 EXT_AD_27
+bit 157 O 1 EXT_AD_27 156 1 Z
+bit 156 C 1 *
+bit 155 I 1 EXT_AD_29
+bit 154 O 1 EXT_AD_29 153 1 Z
+bit 153 C 1 *
+bit 152 I 1 EXT_AD_31
+bit 151 O 1 EXT_AD_31 150 1 Z
+bit 150 C 1 *
+bit 149 I 1 EXT_AD_20
+bit 148 O 1 EXT_AD_20 147 1 Z
+bit 147 C 1 *
+bit 146 I 1 PCI_REQ_B
+bit 145 O 1 PCI_REQ_B 144 1 Z
+bit 144 C 1 *
+bit 143 I 1 PCI_IDSEL
+bit 142 O 1 PCI_IDSEL 141 1 Z
+bit 141 C 1 *
+bit 140 I 1 EXT_AD_24
+bit 139 O 1 EXT_AD_24 138 1 Z
+bit 138 C 1 *
+bit 137 I 1 PCI_CLOCK
+bit 136 O 1 PCI_CLOCK 135 1 Z
+bit 135 C 1 *
+bit 134 I 1 EXT_AD_26
+bit 133 O 1 EXT_AD_26 132 1 Z
+bit 132 C 1 *
+bit 131 I 1 EXT_AD_28
+bit 130 O 1 EXT_AD_28 129 1 Z
+bit 129 C 1 *
+bit 128 I 1 IRQ3
+bit 127 O 1 IRQ3 126 1 Z
+bit 126 C 1 *
+bit 125 I 1 PCI_RESET_B
+bit 124 O 1 PCI_RESET_B 123 1 Z
+bit 123 C 1 *
+bit 122 I 1 EXT_AD_30
+bit 121 O 1 EXT_AD_30 120 1 Z
+bit 120 C 1 *
+bit 119 I 1 PCI_GNT_B
+bit 118 O 1 PCI_GNT_B 117 1 Z
+bit 117 C 1 *
+bit 116 I 1 IRQ1
+bit 115 O 1 IRQ1 114 1 Z
+bit 114 C 1 *
+bit 113 I 1 IRQ2
+bit 112 O 1 IRQ2 111 1 Z
+bit 111 C 1 *
+bit 110 I 1 IRQ0
+bit 109 O 1 IRQ0 108 1 Z
+bit 108 C 1 *
+bit 107 I 1 ETH_7
+bit 106 O 1 ETH_7 105 1 Z
+bit 105 C 1 *
+bit 104 I 1 ETH_6
+bit 103 O 1 ETH_6 102 1 Z
+bit 102 C 1 *
+bit 101 I 1 ETH_15
+bit 100 O 1 ETH_15 99 1 Z
+bit 99 C 1 *
+bit 98 I 1 ETH_14
+bit 97 O 1 ETH_14 96 1 Z
+bit 96 C 1 *
+bit 95 I 1 ETH_13
+bit 94 O 1 ETH_13 93 1 Z
+bit 93 C 1 *
+bit 92 I 1 ETH_12
+bit 91 O 1 ETH_12 90 1 Z
+bit 90 C 1 *
+bit 89 I 1 ETH_8
+bit 88 O 1 ETH_8 87 1 Z
+bit 87 C 1 *
+bit 86 I 1 ETH_9
+bit 85 O 1 ETH_9 84 1 Z
+bit 84 C 1 *
+bit 83 I 1 ETH_16
+bit 82 O 1 ETH_16 81 1 Z
+bit 81 C 1 *
+bit 80 I 1 ETH_5
+bit 79 O 1 ETH_5 78 1 Z
+bit 78 C 1 *
+bit 77 I 1 ETH_11
+bit 76 O 1 ETH_11 75 1 Z
+bit 75 C 1 *
+bit 74 I 1 ETH_0
+bit 73 O 1 ETH_0 72 1 Z
+bit 72 C 1 *
+bit 71 I 1 ETH_1
+bit 70 O 1 ETH_1 69 1 Z
+bit 69 C 1 *
+bit 68 I 1 ETH_2
+bit 67 O 1 ETH_2 66 1 Z
+bit 66 C 1 *
+bit 65 I 1 ETH_3
+bit 64 O 1 ETH_3 63 1 Z
+bit 63 C 1 *
+bit 62 I 1 ETH_4
+bit 61 O 1 ETH_4 60 1 Z
+bit 60 C 1 *
+bit 59 I 1 ETH_10
+bit 58 O 1 ETH_10 57 1 Z
+bit 57 C 1 *
+bit 56 I 1 ETH_17
+bit 55 O 1 ETH_17 54 1 Z
+bit 54 C 1 *
+bit 53 I 1 USB_0
+bit 52 O 1 USB_0 51 1 Z
+bit 51 C 1 *
+bit 50 I 1 USB_1
+bit 49 O 1 USB_1 48 1 Z
+bit 48 C 1 *
+bit 47 I 1 USB_2
+bit 46 O 1 USB_2 45 1 Z
+bit 45 C 1 *
+bit 44 I 1 USB_3
+bit 43 O 1 USB_3 42 1 Z
+bit 42 C 1 *
+bit 41 I 1 USB_4
+bit 40 O 1 USB_4 39 1 Z
+bit 39 C 1 *
+bit 38 I 1 USB_5
+bit 37 O 1 USB_5 36 1 Z
+bit 36 C 1 *
+bit 35 I 1 USB_6
+bit 34 O 1 USB_6 33 1 Z
+bit 33 C 1 *
+bit 32 I 1 USB_7
+bit 31 O 1 USB_7 30 1 Z
+bit 30 C 1 *
+bit 29 I 1 USB_8
+bit 28 O 1 USB_8 27 1 Z
+bit 27 C 1 *
+bit 26 I 1 USB_9
+bit 25 O 1 USB_9 24 1 Z
+bit 24 C 1 *
+bit 23 I 1 TIMER_7
+bit 22 O 1 TIMER_7 21 1 Z
+bit 21 C 1 *
+bit 20 I 1 TIMER_6
+bit 19 O 1 TIMER_6 18 1 Z
+bit 18 C 1 *
+bit 17 I 1 TIMER_5
+bit 16 O 1 TIMER_5 15 1 Z
+bit 15 C 1 *
+bit 14 I 1 TIMER_4
+bit 13 O 1 TIMER_4 12 1 Z
+bit 12 C 1 *
+bit 11 I 1 TIMER_3
+bit 10 O 1 TIMER_3 9 1 Z
+bit 9 C 1 *
+bit 8 I 1 TIMER_2
+bit 7 O 1 TIMER_2 6 1 Z
+bit 6 C 1 *
+bit 5 I 1 TEST_SEL_1
+bit 4 O 1 TEST_SEL_1 3 1 Z
+bit 3 C 1 *
+bit 2 I 1 TEST_SEL_0
+bit 1 O 1 TEST_SEL_0 0 1 Z
+bit 0 C 1 *
+
+initbus mpc5200

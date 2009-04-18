@@ -1,0 +1,187 @@
+#
+# $Id$
+#
+# JTAG declarations for Lattice M4A3-64/32 (48-pin TQFP)
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
+#
+
+signal IOA0 44
+signal IOA1 45
+signal IOA2 46
+signal IOA3 47
+signal IOA4 48
+signal IOA5  1
+signal IOA6  2
+signal IOA7  3
+signal IOB0  9
+signal IOB1 10
+signal IOB2 11
+signal IOB3 12
+signal IOB4 13
+signal IOB5 14
+signal IOB6 15
+signal IOB7 16
+signal IOC0 20
+signal IOC1 21
+signal IOC2 22
+signal IOC3 23
+signal IOC4 24
+signal IOC5 25
+signal IOC6 26
+signal IOC7 27
+signal IOD0 33
+signal IOD1 34
+signal IOD2 35
+signal IOD3 36
+signal IOD4 37
+signal IOD5 38
+signal IOD6 39
+signal IOD7 40
+signal CLK0  5
+signal CLK1 29
+signal TDI   4
+signal TCK   8
+signal TMS  28
+signal TDO  32
+signal GND   7 19 31 43
+signal NC    6 18 30 42
+signal VCC   17 41
+
+# mandatory data registers
+register    BSR  98 # Boundary Scan Register
+register    BR    1 # Bypass Register
+
+# optional data registers
+register    DIR	 32 # Device Identification Register
+
+instruction length 6
+
+# mandatory instructions
+instruction EXTEST         000000	BSR
+instruction SAMPLE/PRELOAD 000100	BSR
+instruction BYPASS         111111 BR
+
+# optional instructions
+instruction IDCODE   000001 DIR
+instruction USERCODE 010000 DIR
+instruction HIGHZ    010001 BR
+instruction CLAMP    100000 BR
+
+
+# Boundary Scan Register bit definition
+
+bit 97 I ? IOA0
+bit 96 O ? IOA0 95 0 Z
+bit 95 C 0 IOA0
+bit 94 I ? IOA1
+bit 93 O ? IOA1 92 0 Z
+bit 92 C 0 IOA1
+bit 91 I ? IOA2
+bit 90 O ? IOA2 89 0 Z
+bit 89 C 0 IOA2
+bit 88 I ? IOA3
+bit 87 O ? IOA3 86 0 Z
+bit 86 C 0 IOA3
+bit 85 I ? IOA4
+bit 84 O ? IOA4 83 0 Z
+bit 83 C 0 IOA4
+bit 82 I ? IOA5
+bit 81 O ? IOA5 80 0 Z
+bit 80 C 0 IOA5
+bit 79 I ? IOA6
+bit 78 O ? IOA6 77 0 Z
+bit 77 C 0 IOA6
+bit 76 I ? IOA7
+bit 75 O ? IOA7 74 0 Z
+bit 74 C 0 IOA7
+bit 73 I ? CLK0
+bit 72 I ? IOB0
+bit 71 O ? IOB0 70 0 Z
+bit 70 C 0 IOB0
+bit 69 I ? IOB1
+bit 68 O ? IOB1 67 0 Z
+bit 67 C 0 IOB1
+bit 66 I ? IOB2
+bit 65 O ? IOB2 64 0 Z
+bit 64 C 0 IOB2
+bit 63 I ? IOB3
+bit 62 O ? IOB3 61 0 Z
+bit 61 C 0 IOB3
+bit 60 I ? IOB4
+bit 59 O ? IOB4 58 0 Z
+bit 58 C 0 IOB4
+bit 57 I ? IOB5
+bit 56 O ? IOB5 55 0 Z
+bit 55 C 0 IOB5
+bit 54 I ? IOB6
+bit 53 O ? IOB6  52 0 Z
+bit 52 C 0 IOB6
+bit 51 I ? IOB7
+bit 50 O ? IOB7  49 0 Z
+bit 49 C 0 IOB7
+bit 48 I ? IOC0
+bit 47 O ? IOC0 46 0 Z
+bit 46 C 0 IOC0
+bit 45 I ? IOC1
+bit 44 O ? IOC1 43 0 Z
+bit 43 C 0 IOC1
+bit 42 I ? IOC2
+bit 41 O ? IOC2 40 0 Z
+bit 40 C 0 IOC2
+bit 39 I ? IOC3
+bit 38 O ? IOC3 37 0 Z
+bit 37 C 0 IOC3
+bit 36 I ? IOC4
+bit 35 O ? IOC4 34 0 Z
+bit 34 C 0 IOC4
+bit 33 I ? IOC5
+bit 32 O ? IOC5 31 0 Z
+bit 31 C 0 IOC5
+bit 30 I ? IOC6
+bit 29 O ? IOC6 28 0 Z
+bit 28 C 0 IOC6
+bit 27 I ? IOC7
+bit 26 O ? IOC7 25 0 Z
+bit 25 C 0 IOC7
+bit 24 I ? CLK1
+bit 23 I ? IOD0
+bit 22 O ? IOD0 21 0 Z
+bit 21 C 0 IOD0
+bit 20 I ? IOD1
+bit 19 O ? IOD1 18 0 Z
+bit 18 C 0 IOD1
+bit 17 I ? IOD2
+bit 16 O ? IOD2 15 0 Z
+bit 15 C 0 IOD2
+bit 14 I ? IOD3
+bit 13 O ? IOD3 12 0 Z
+bit 12 C 0 IOD3
+bit 11 I ? IOD4
+bit 10 O ? IOD4 9 0 Z
+bit  9 C 0 IOD4
+bit  8 I ? IOD5
+bit  7 O ? IOD5 6 0 Z
+bit  6 C 0 IOD5
+bit  5 I ? IOD6
+bit  4 O ? IOD6 3 0 Z
+bit  3 C 0 IOD6
+bit  2 I ? IOD7
+bit  1 O ? IOD7 0 0 Z
+bit  0 C 0 IOD7

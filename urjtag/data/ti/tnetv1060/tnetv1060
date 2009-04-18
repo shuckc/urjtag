@@ -1,0 +1,276 @@
+#
+# $Id$
+#
+# JTAG declarations for TNETV1060
+# Copyright (C) 2009 aSmig (sf.net)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+#
+# Documentation:
+# [1] Texas Instruments, "TNETV1060 Communications Processor
+#     for VoIP Gateway Applications Data Manual", June 2004,
+#     Literature Number SPRS255
+# [2] MIPS Technologies, "MIPS32 4KETM Processor Core Family
+#     Software User’s Manual", January 2004, Document Number:
+#     MD00103
+# [3] MIPS Technologies, "MIPS® EJTAG Specification", November
+#     2008, Document Number: MD00047
+#
+
+# see Table 3-2 in [1]
+signal	AIC_CLK_I	R1
+signal	AIC_CLK_O	T1
+signal	ALT_CLK_I	P21
+signal	EJTAG_DINT	E3
+signal	EJTAG_SYSRST	E2
+signal	EJTAG_TCK	F2
+signal	EJTAG_TDI	G3
+signal	EJTAG_TDO	F1
+signal	EJTAG_TMS	G2
+signal	EJTAG_TRST0	F3
+signal	EJTAG_TRST1	E1
+signal	EM_A0		J21
+signal	EM_A1		J20
+signal	EM_A2		H22
+signal	EM_A3		H21
+signal	EM_A4		H20
+signal	EM_A5		G22
+signal	EM_A6		G21
+signal	EM_A7		G20
+signal	EM_A8		F22
+signal	EM_A9		F21
+signal	EM_A10		F20
+signal	EM_A11		F19
+signal	EM_A12		E22
+signal	EM_A13		E21
+signal	EM_A14		E20
+signal	EM_A15		E19
+signal	EM_A16		D22
+signal	EM_A17		D21
+signal	EM_A18		D20
+signal	EM_A19		C22
+signal	EM_A20		C21
+signal	EM_A21		C19
+signal	EM_A22		B20
+signal	EM_A23		A20
+signal	EM_CAS		A5
+signal	EM_CKE		D5
+signal	EM_CLK		D6
+signal	EM_CS0		C8
+signal	EM_CS1		B8
+signal	EM_CS2		A8
+signal	EM_CS3		C7
+signal	EM_CS4		B7
+signal	EM_CS5		A7
+signal	EM_D0		B10
+signal	EM_D1		A10
+signal	EM_D2		B11
+signal	EM_D3		A11
+signal	EM_D4		C11
+signal	EM_D5		D11
+signal	EM_D6		B12
+signal	EM_D7		A12
+signal	EM_D8		C12
+signal	EM_D9		D12
+signal	EM_D10		B13
+signal	EM_D11		A13
+signal	EM_D12		C13
+signal	EM_D13		B14
+signal	EM_D14		A14
+signal	EM_D15		C14
+signal	EM_D16		B15
+signal	EM_D17		A15
+signal	EM_D18		C15
+signal	EM_D19		B16
+signal	EM_D20		A16
+signal	EM_D21		C16
+signal	EM_D22		B17
+signal	EM_D23		A17
+signal	EM_D24		C17
+signal	EM_D25		D17
+signal	EM_D26		B18
+signal	EM_D27		A18
+signal	EM_D28		C18
+signal	EM_D29		D18
+signal	EM_D30		A19
+signal	EM_D31		B19
+signal	EM_HIZ		C6
+signal	EM_OE		B5
+signal	EM_RAS		A6
+signal	EM_RW		C5
+signal	EM_WAIT		B6
+signal	EM_WE_DQM0	C10
+signal	EM_WE_DQM1	C9
+signal	EM_WE_DQM2	B9
+signal	EM_WE_DQM3	A9
+signal	EM_WE		A4
+signal	GPIO0		R3
+signal	GPIO1		T3
+signal	GPIO2		U3
+signal	GPIO3		T2
+signal	GPIO4		U2
+signal	GPIO5		V2
+signal	GPIO6		U1
+signal	GPIO7		V1
+signal	JTAG_EMU0	H3
+signal	JTAG_EMU1	G1
+signal	JTAG_TCK	J3
+signal	JTAG_TDI	H1
+signal	JTAG_TDO	J2
+signal	JTAG_TMS	J1
+signal	JTAG_TRST	H2
+signal	KEYPAD0		AB7
+signal	KEYPAD1		AA7
+signal	KEYPAD2		AB8
+signal	KEYPAD3		AA8
+signal	KEYPAD4		Y8
+signal	KEYPAD5		AB9
+signal	KEYPAD6		AA9
+signal	KEYPAD7		Y9
+signal	KEYPAD8		AB10
+signal	KEYPAD9		AA10
+signal	KEYPAD10	Y10
+signal	KEYPAD11	AB11
+signal	KEYPAD12	AA11
+signal	KEYPAD13	W11
+signal	KEYPAD14	Y11
+signal	KEYPAD15	AB12
+signal	LCD_BIAS_E0	AA12
+signal	LCD_D0		Y13
+signal	LCD_D1		AB14
+signal	LCD_D2		AA14
+signal	LCD_D3		Y14
+signal	LCD_D4		AB15
+signal	LCD_D5		AA15
+signal	LCD_D6		Y15
+signal	LCD_D7		AB16
+signal	LCD_D8		AA16
+signal	LCD_D9		Y16
+signal	LCD_D10		AB17
+signal	LCD_D11		AA17
+signal	LCD_D12		Y17
+signal	LCD_D13		W17
+signal	LCD_D14		AB18
+signal	LCD_D15		AA18	
+signal	LCD_E1		AB13
+signal	LCD_HSYNC_W	W12
+signal	LCD_PIXEL_STRB	Y12
+signal	LCD_VSYNC_A	AA13
+signal	McBSP_CLK_RX	M3
+signal	McBSP_CLK_TX	N2
+signal	McBSP_D_RX	N3
+signal	McBSP_D_TX	P1
+signal	McBSP_FS_RX	P2
+signal	McBSP_FS_TX	P3
+signal	P0_100MB	AB19
+signal	P0_ACTIVITY	AB20
+signal	P0_FDUPLEX	AA20
+signal	P0_LINK		AA19
+signal	P0_RX_M		W19
+signal	P0_RX_P		Y19
+signal	P0_TX_M		V22
+signal	P0_TX_P		W22
+signal	P1_100MB	AB21
+signal	P1_ACTIVITY	AB22
+signal	P1_FDUPLEX	AA22
+signal	P1_LINK		AA21
+signal	P1_RX_M		R19
+signal	P1_RX_P		P19
+signal	P1_TX_M		T22
+signal	P1_TX_P		R22
+signal	PHY_REF		W18
+signal	PHY_REF_RTN	Y18
+signal	PHY_TEST	Y21
+signal	REF_CLK_I	P22
+signal	REF_CLK_O	N22
+signal	RESET_I		C1
+signal	RESET_O		C0
+signal	SSP0		D3
+signal	SSP1		D1
+signal	SSP2		D2
+signal	SSP3		E4
+signal	TELE_CLK_I	L19
+signal	TELE_CLK_O	J22
+signal	TELE_CS		K20
+signal	TELE_DCLK	M19
+signal	TELE_DI		N20
+signal	TELE_DO		M20
+signal	TELE_FS		L20
+signal	TELE_INT	K21
+signal	TELE_RESET	K22
+signal	TELE_RINGIN1	M21
+signal	TELE_RINGIN2	M22
+signal	TELE_RINGIN3	L21
+signal	TELE_RINGIN4	L22
+signal	TEST		F4
+signal	UART_CTS	B3
+signal	UART_RTS	A3
+signal	UART_RX		B4
+signal	UART_TX		C4
+signal	VLYNQ5_CLK	K3
+signal	VLYNQ5_RX_D0	K2
+signal	VLYNQ5_RX_D1	K1
+signal	VLYNQ5_TX_D0	L2
+signal	VLYNQ5_TX_D1	L1
+signal	VR_BASE1	AB6
+signal	VR_BASE2	R2
+signal	VR_BASE3	Y22
+signal	VR_ENBL		AA6
+signal	VDD		J10 J11 J12 J13 K9 K14 L9 L14 M9 M14 N9 N14 P10 P11 P12 P13
+signal	VDDS		D7 D8 D9 D10 D13 D14 D15 D16 G4 G19 H4 H19 J4 J19 K4 K19 N4 P4 W9 W10 W13 W14 W15 W16
+signal	VDDA		N19 P20 R4 T4 U19 U20 U21 U22 W7 W8 Y20
+signal	VSS		A1 A2 A21 A22 B1 B2 B21 B22 C3 C20 D4 D19 J9 J14 K10 K11
+# VSS line was too long
+signal	VSS2		K12 K13 L10 L11 L12 L13 M10 M11 M12 M13 N10 N11 N12 N13
+signal	VSS_AIC		AA1 AA2 AB1 AB2 P9 N21 P14 R20 R21 T19 T20 T21 V19 V20 V21 W4 W20 W21
+signal	NC		A3 AA4 AA5 AB3 AB4 AB5 L3 L4 M1 M2 M4 N1 U4 V3 V4 W1 W2 W3 W5 W6 Y1 Y2 Y4 Y5 Y6 Y7
+
+# see [2] 9.3.3.2 - 9.3.3.7
+# see also discovery output
+register	BSR		1
+register	BR		1
+register	DIR		32
+register	EJIMPCODE	32
+register	EJADDRESS	32
+register	EJDATA		32
+register	EJCONTROL	32
+register	EJALL		96
+register	EJFASTDATA	33
+
+# see [2] 9.3.3 Test Access Port (TAP) Instructions
+# see also discovery output
+instruction length 5
+
+# see [2] Table 9-20 Implemented EJTAG Instructions
+# see also [3] Table 7.1 TAP Instruction Overview
+instruction BYPASS		11111	BR
+instruction SAMPLE/PRELOAD	00010	BSR	# not in datasheets
+instruction IDCODE		00001	DIR
+instruction EJTAG_IMPCODE	00011	EJIMPCODE
+instruction EJTAG_ADDRESS	01000	EJADDRESS
+instruction EJTAG_DATA		01001	EJDATA
+instruction EJTAG_CONTROL	01010	EJCONTROL
+instruction EJTAG_ALL		01011	EJALL
+instruction EJTAGBOOT		01100	BR
+instruction NORMALBOOT		01101	BR
+instruction EJTAG_FASTDATA	01110	EJFASTDATA
+instruction TCBCONTROLA		10000	BR
+instruction TCBCONTROLB		10001	BR
+instruction TCBDATA		10010	BR
+
+initbus ejtag
+endian little

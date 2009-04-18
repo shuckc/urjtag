@@ -1,0 +1,45 @@
+#
+# $Id$
+#
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Modified by Stefan Pledl <stefan.pledl@mesutronic.de>, 2007.
+#
+# Documentation:
+# [1] Atmel Corporation, "ATmega128(L) - 8-bit AVR Microcontroller with
+#     128K Bytes In-System Programmable Flash", 2002, Rev. 2467E-AVR-05/02
+#
+# [2] Atmel Corporation,  1504BSDL.ZIP - BSDL files for ATF1504AS/ASL and
+#     ATF1504ASV/ASVL
+#
+# [3] Atmel Corporation, "AT32AP7000 - High Performance, Low Power
+#     AVR(R)32 32-Bit Microcontroller", Rev. 32003K-AVR32-10/07
+#
+
+# bits 27-12 of the Device Identification Register
+1001011100000010	atmega128	ATmega128	# see Table 100 in [1]
+0101101100000110	at91sam7s64	AT91SAM7S64
+0101101100000111	at91sam7s32	AT91SAM7S32
+0101101100001001	at91sam7s256	AT91SAM7S256
+0101101100001010	at91sam7s128	AT91SAM7S128
+0101101100001100	at91sam7s321	AT91SAM7S321
+0001010100010100	atf15xx		ATF1504ASV	# see 1504ASV_J44.bsd
+							# in [2]
+0001111010000010	at32ap7000	AT32AP7000	# see Table 38-11 in [3]
+

@@ -1,0 +1,53 @@
+.TH jtag 1 "April 7, 2009" UrJTAG
+.SH NAME
+jtag \- UrJTAG command shell
+.SH SYNOPSIS
+.B jtag 
+[\-hinqv]
+.I file
+.B ...
+.SH DESCRIPTION
+UrJTAG is a software package which enables working with JTAG-aware (IEEE
+1149.1) hardware devices (parts) and boards through JTAG adapter.
+.SH OPTIONS
+.TP
+.I \-h, \-\-help
+Display a short help text and exit.
+.TP
+.I \-i, \-\-interactive
+Enter interactive mode after executing commands from files (this is the default if no files are named on the command line).
+.TP
+.I \-n, \-\-norc
+Disable reading ~/.jtag/rc on startup.
+.TP
+.I \-q, \-\-quiet
+Do not print help on startup.
+.TP
+.I \-v, \-\-version
+Display version information and exit.
+.SH ARGUMENTS
+If arguments remain after option processing, they are taken as names of files
+containing JTAG commands, one per line. Unless the
+.I \-\-interactive
+option was specified, the program will exit after processing the commands from
+the file[s].
+.SH FILES
+.PP
+.I ~/.jtag/rc
+.IP
+A per-user text file containing JTAG commands to execute at startup.
+.PP
+.I /usr/share/urjtag
+.IP
+Data files about various CPUs, flash chips etc.
+.SH BUGS
+Bugs are tracked at the project homepage, http://www.urjtag.org.
+.SH "SEE ALSO"
+.BR bsdl2jtag (1)
+.SH AUTHORS
+Authors and contributors are listed in the AUTHORS and THANKS files in
+the source documentation.
+.SH HISTORY
+JTAG Tools originally have been developed as part of the openwince project by
+Marcel Telka. They became an independent project named UrJTAG in late 2007.
+

@@ -1,0 +1,634 @@
+#
+# $Id$
+#
+# JTAG declarations for IXP425
+# Copyright (C) 2002 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Christian Pellegrin <chri@ascensit.com>, 2003.
+#
+
+signal	EX_CS[0]	K26
+signal	EX_CS[1]	L24
+signal	EX_CS[2]	M22
+signal	EX_CS[3]	J26
+signal	EX_CS[4]	K24
+signal	EX_CS[5]	J25
+signal	EX_CS[6]	H26
+signal	EX_CS[7]	K23
+signal	EX_WR		F22
+signal	EX_RD		A23
+signal	EX_RDY[0]	V26
+signal	EX_RDY[1]	U24
+signal	EX_RDY[2]	U23
+signal	EX_RDY[3]	T22
+signal	EX_IOWAIT	B23
+signal	EX_CLK		M23
+signal	EX_ALE		D22
+signal	EX_ADDR[0]		G1
+signal	EX_ADDR[1]		H2
+signal	EX_ADDR[2]		H1
+signal	EX_ADDR[3]		H6
+signal	EX_ADDR[4]		J6
+signal	EX_ADDR[5]		J5
+signal	EX_ADDR[6]		J3
+signal	EX_ADDR[7]		J1
+signal	EX_ADDR[8]		K1
+signal	EX_ADDR[9]		K2
+signal	EX_ADDR[10]		K5
+signal	EX_ADDR[11]		K6
+signal	EX_ADDR[12]		L1
+signal	EX_ADDR[13]		L3
+signal	EX_ADDR[14]		M1
+signal	EX_ADDR[15]		M3
+signal	EX_ADDR[16]		N3
+signal	EX_ADDR[17]		P1
+signal	EX_ADDR[18]		R1
+signal	EX_ADDR[19]		P2
+signal	EX_ADDR[20]		R3
+signal	EX_ADDR[21]		T4
+signal	EX_ADDR[22]		R5
+signal	EX_ADDR[23]		P5
+signal	EX_ADDR[24]		T5
+signal	EX_ADDR[25]		P4
+signal	EX_DATA[0]		N4
+signal	EX_DATA[1]		M5
+signal	EX_DATA[2]		L5
+signal	EX_DATA[3]		T6
+signal	EX_DATA[4]		N6
+signal	EX_DATA[5]		T7
+signal	EX_DATA[6]		M6
+signal	EX_DATA[7]		M7
+signal	EX_DATA[8]		M9
+signal	EX_DATA[9]		T10
+signal	EX_DATA[10]		R9
+signal	EX_DATA[11]		T11
+signal	EX_DATA[12]		P11
+signal	EX_DATA[13]		N10
+signal	EX_DATA[14]		T12
+signal	EX_DATA[15]		M10
+signal	EX_DATA[16]		H3
+signal	EX_DATA[17]		H5
+signal	EX_DATA[18]		J4
+signal	EX_DATA[19]		K3
+signal	EX_DATA[20]		L4
+signal	EX_DATA[21]		M2
+signal	EX_DATA[22]		N1
+signal	EX_DATA[23]		T3
+signal	EX_DATA[24]		P6
+signal	EX_DATA[25]		R7
+signal	EX_DATA[26]		P7
+signal	EX_DATA[27]		P8
+signal	EX_DATA[28]		L8
+signal	EX_DATA[29]		P10
+signal	EX_DATA[30]		R11
+signal	EX_DATA[31]		P12
+signal	GPIO[0]		U25
+signal	GPIO[1]		U22
+signal	GPIO[2]		V24
+signal	GPIO[3]		W26
+signal	GPIO[4]		W25
+signal	GPIO[5]		Y26
+signal	GPIO[6]		V22
+signal	GPIO[7]		W23
+signal	GPIO[8]		AA26
+signal	GPIO[9]		V21
+signal	GPIO[10]	Y24
+signal	GPIO[11]	AB26
+signal	GPIO[12]	AA24
+signal	GPIO[13]	AC26
+signal	GPIO[14]	W21
+signal	GPIO[15]	Y22
+
+# mandatory data registers
+register	BSR		498	# Boundary Scan Register
+register	BR		1	# Bypass Register
+# optional data registers
+register	DIR		32	# Device Identification Register
+
+instruction length 7
+# mandatory instructions
+instruction EXTEST		0000000	BSR
+instruction SAMPLE/PRELOAD	0000001	BSR
+instruction BYPASS		1111111	BR
+# optional instructions
+instruction CLAMP		1001001	BR
+instruction HIGHZ		1001010	BR
+instruction IDCODE		1111110	DIR
+
+# boundary scan register
+
+bit 497 C ? .
+bit 496 C ? .
+bit 495 C ? .
+bit 494 C ? .
+bit 493 C ? .
+bit 492 C ? .
+bit 491 C ? .
+bit 490 C ? .
+bit 489 C ? .
+bit 488 C ? .
+bit 487 C ? .
+bit 486 C ? .
+bit 485 C ? .
+bit 484 C ? .
+bit 483 C ? .
+bit 482 C ? .
+bit 481 C ? .
+bit 480 C ? .
+bit 479 C ? .
+bit 478 C ? .
+bit 477 C ? .
+bit 476 C ? .
+bit 475 C ? .
+bit 474 C ? .
+bit 473 C ? .
+bit 472 C ? .
+bit 471 C ? .
+bit 470 C ? .
+bit 469 C ? .
+bit 468 C ? .
+bit 467 C ? .
+bit 466 C ? .
+bit 465 C ? .
+bit 464 C ? .
+bit 463 C ? .
+bit 462 C ? .
+bit 461 C ? .
+bit 460 C ? .
+bit 459 C ? .
+bit 458 C ? .
+bit 457 C ? .
+bit 456 C ? .
+bit 455 C ? .
+bit 454 C ? .
+bit 453 C ? .
+bit 452 C ? .
+bit 451 C ? .
+bit 450 C ? .
+bit 449 C ? .
+bit 448 C ? .
+bit 447 C ? .
+bit 446 C ? .
+bit 445 C ? .
+bit 444 C ? .
+bit 443 C ? .
+bit 442 C ? .
+bit 441 C ? .
+bit 440 C ? .
+bit 439 C ? .
+bit 438 C ? .
+bit 437 C ? .
+bit 436 C ? .
+bit 435 C ? .
+bit 434 C ? .
+bit 433 C ? .
+bit 432 C ? .
+bit 431 C ? .
+bit 430 C ? .
+bit 429 C ? .
+bit 428 C ? .
+bit 427 C ? .
+bit 426 C ? .
+bit 425 C ? .
+bit 424 C ? .
+bit 423 C ? .
+bit 422 C ? .
+bit 421 C ? .
+bit 420 C ? .
+bit 419 C ? .
+bit 418 C ? .
+bit 417 C ? .
+bit 416 C ? .
+bit 415 C ? .
+bit 414 C ? .
+bit 413 C ? .
+bit 412 C ? .
+bit 411 C ? .
+bit 410 C ? .
+bit 409 C ? .
+bit 408 C ? .
+bit 407 C ? .
+bit 406 C ? .
+bit 405 C ? .
+bit 404 C ? .
+bit 403 C ? .
+bit 402 C ? .
+bit 401 C ? .
+bit 400 C ? .
+bit 399 C ? .
+bit 398 C ? .
+bit 397 C ? .
+bit 396 C ? .
+bit 395 C ? .
+bit 394 C ? .
+bit 393 C ? .
+bit 392 C ? .
+bit 391 C ? .
+bit 390 C ? .
+bit 389 C ? .
+bit 388 C ? .
+bit 387 C ? .
+bit 386 C ? .
+bit 385 C ? .
+bit 384 B ? GPIO[1] 369 1 Z
+bit 383 B ? GPIO[2] 368 1 Z
+bit 382 B ? GPIO[3] 367 1 Z
+bit 381 B ? GPIO[4] 366 1 Z
+bit 380 B ? GPIO[5] 365 1 Z
+bit 379 B ? GPIO[6] 364 1 Z
+bit 378 B ? GPIO[7] 363 1 Z
+bit 377 B ? GPIO[8] 362 1 Z
+bit 376 B ? GPIO[9] 361 1 Z
+bit 375 B ? GPIO[10] 360 1 Z
+bit 374 B ? GPIO[11] 359 1 Z
+bit 373 B ? GPIO[12] 358 1 Z
+bit 372 B ? GPIO[13] 357 1 Z
+bit 371 B ? GPIO[14] 356 1 Z
+bit 370 B ? GPIO[15] 355 1 Z
+bit 369 C ? .
+bit 368 C ? .
+bit 367 C ? .
+bit 366 C ? .
+bit 365 C ? .
+bit 364 C ? .
+bit 363 C ? .
+bit 362 C ? .
+bit 361 C ? .
+bit 360 C ? .
+bit 359 C ? .
+bit 358 C ? .
+bit 357 C ? .
+bit 356 C ? .
+bit 355 C ? .
+bit 354 I ? EX_IOWAIT
+bit 353 I ? EX_CLK 
+bit 352 O ? EX_ALE 297 1 Z
+bit 351 O ? EX_ADDR[0] 296 1 Z
+bit 350 O ? EX_ADDR[1] 295 1 Z
+bit 349 O ? EX_ADDR[2] 294 1 Z
+bit 348 O ? EX_ADDR[3] 293 1 Z
+bit 347 O ? EX_ADDR[4] 292 1 Z
+bit 346 O ? EX_ADDR[5] 291 1 Z
+bit 345 O ? EX_ADDR[6] 290 1 Z
+bit 344 O ? EX_ADDR[7] 289 1 Z
+bit 343 O ? EX_ADDR[8] 288 1 Z
+bit 342 O ? EX_ADDR[9] 287 1 Z
+bit 341 O ? EX_ADDR[10] 286 1 Z
+bit 340 O ? EX_ADDR[11] 285 1 Z
+bit 339 O ? EX_ADDR[12] 284 1 Z
+bit 338 O ? EX_ADDR[13] 283 1 Z
+bit 337 O ? EX_ADDR[14] 282 1 Z
+bit 336 O ? EX_ADDR[15] 281 1 Z
+bit 335 O ? EX_ADDR[16] 280 1 Z
+bit 334 O ? EX_ADDR[17] 279 1 Z
+bit 333 O ? EX_ADDR[18] 278 1 Z
+bit 332 O ? EX_ADDR[19] 277 1 Z
+bit 331 O ? EX_ADDR[20] 276 1 Z
+bit 330 O ? EX_ADDR[21] 275 1 Z
+bit 329 O ? EX_ADDR[22] 274 1 Z
+bit 328 O ? EX_ADDR[23] 273 1 Z
+bit 327 O ? EX_WR 272 1 Z
+bit 326 O ? EX_RD 271 1 Z
+bit 325 O ? EX_CS[0] 270 1 Z
+bit 324 O ? EX_CS[1] 269 1 Z
+bit 323 O ? EX_CS[2] 268 1 Z
+bit 322 O ? EX_CS[3] 267 1 Z
+bit 321 O ? EX_CS[4] 266 1 Z
+bit 320 O ? EX_CS[5] 265 1 Z
+bit 319 O ? EX_CS[6] 264 1 Z
+bit 318 O ? EX_CS[7] 263 1 Z
+bit 317 B ? EX_DATA[0] 262 1 Z
+bit 316 B ? EX_DATA[1] 261 1 Z
+bit 315 B ? EX_DATA[2] 260 1 Z
+bit 314 B ? EX_DATA[3] 259 1 Z
+bit 313 B ? EX_DATA[4] 258 1 Z
+bit 312 B ? EX_DATA[5] 257 1 Z
+bit 311 B ? EX_DATA[6] 256 1 Z
+bit 310 B ? EX_DATA[7] 255 1 Z
+bit 309 B ? EX_DATA[8] 254 1 Z
+bit 308 B ? EX_DATA[9] 253 1 Z
+bit 307 B ? EX_DATA[10] 252 1 Z
+bit 306 B ? EX_DATA[11] 251 1 Z
+bit 305 B ? EX_DATA[12] 250 1 Z
+bit 304 B ? EX_DATA[13] 249 1 Z
+bit 303 B ? EX_DATA[14] 248 1 Z
+bit 302 B ? EX_DATA[15] 247 1 Z
+bit 301 I ? EX_RDY[0]
+bit 300 I ? EX_RDY[1]
+bit 299 I ? EX_RDY[2]
+bit 298 I ? EX_RDY[3]
+bit 297 C ? .
+bit 296 C ? .
+bit 295 C ? .
+bit 294 C ? .
+bit 293 C ? .
+bit 292 C ? .
+bit 291 C ? .
+bit 290 C ? .
+bit 289 C ? .
+bit 288 C ? .
+bit 287 C ? .
+bit 286 C ? .
+bit 285 C ? .
+bit 284 C ? .
+bit 283 C ? .
+bit 282 C ? .
+bit 281 C ? .
+bit 280 C ? .
+bit 279 C ? .
+bit 278 C ? .
+bit 277 C ? .
+bit 276 C ? .
+bit 275 C ? .
+bit 274 C ? .
+bit 273 C ? .
+bit 272 C ? .
+bit 271 C ? .
+bit 270 C ? .
+bit 269 C ? .
+bit 268 C ? .
+bit 267 C ? .
+bit 266 C ? .
+bit 265 C ? .
+bit 264 C ? .
+bit 263 C ? .
+bit 262 C ? .
+bit 261 C ? .
+bit 260 C ? .
+bit 259 C ? .
+bit 258 C ? .
+bit 257 C ? .
+bit 256 C ? .
+bit 255 C ? .
+bit 254 C ? .
+bit 253 C ? .
+bit 252 C ? .
+bit 251 C ? .
+bit 250 C ? .
+bit 249 C ? .
+bit 248 C ? .
+bit 247 C ? .
+bit 246 C ? .
+bit 245 C ? .
+bit 244 C ? .
+bit 243 C ? .
+bit 242 C ? .
+bit 241 C ? .
+bit 240 C ? .
+bit 239 C ? .
+bit 238 C ? .
+bit 237 C ? .
+bit 236 C ? .
+bit 235 C ? .
+bit 234 C ? .
+bit 233 C ? .
+bit 232 C ? .
+bit 231 C ? .
+bit 230 C ? .
+bit 229 C ? .
+bit 228 C ? .
+bit 227 C ? .
+bit 226 C ? .
+bit 225 C ? .
+bit 224 C ? .
+bit 223 C ? .
+bit 222 C ? .
+bit 221 C ? .
+bit 220 C ? .
+bit 219 C ? .
+bit 218 C ? .
+bit 217 C ? .
+bit 216 C ? .
+bit 215 C ? .
+bit 214 C ? .
+bit 213 C ? .
+bit 212 C ? .
+bit 211 C ? .
+bit 210 C ? .
+bit 209 C ? .
+bit 208 C ? .
+bit 207 C ? .
+bit 206 C ? .
+bit 205 C ? .
+bit 204 C ? .
+bit 203 C ? .
+bit 202 C ? .
+bit 201 C ? .
+bit 200 C ? .
+bit 199 C ? .
+bit 198 C ? .
+bit 197 C ? .
+bit 196 C ? .
+bit 195 C ? .
+bit 194 C ? .
+bit 193 C ? .
+bit 192 C ? .
+bit 191 C ? .
+bit 190 C ? .
+bit 189 C ? .
+bit 188 C ? .
+bit 187 C ? .
+bit 186 C ? .
+bit 185 C ? .
+bit 184 C ? .
+bit 183 C ? .
+bit 182 C ? .
+bit 181 C ? .
+bit 180 C ? .
+bit 179 C ? .
+bit 178 C ? .
+bit 177 C ? .
+bit 176 C ? .
+bit 175 C ? .
+bit 174 C ? .
+bit 173 C ? .
+bit 172 C ? .
+bit 171 C ? .
+bit 170 C ? .
+bit 169 C ? .
+bit 168 C ? .
+bit 167 C ? .
+bit 166 C ? .
+bit 165 C ? .
+bit 164 C ? .
+bit 163 C ? .
+bit 162 C ? .
+bit 161 C ? .
+bit 160 C ? .
+bit 159 C ? .
+bit 158 C ? .
+bit 157 C ? .
+bit 156 C ? .
+bit 155 C ? .
+bit 154 C ? .
+bit 153 C ? .
+bit 152 C ? .
+bit 151 C ? .
+bit 150 C ? .
+bit 149 C ? .
+bit 148 C ? .
+bit 147 C ? .
+bit 146 C ? .
+bit 145 C ? .
+bit 144 C ? .
+bit 143 C ? .
+bit 142 C ? .
+bit 141 C ? .
+bit 140 C ? .
+bit 139 C ? .
+bit 138 C ? .
+bit 137 C ? .
+bit 136 C ? .
+bit 135 C ? .
+bit 134 C ? .
+bit 133 C ? .
+bit 132 C ? .
+bit 131 C ? .
+bit 130 C ? .
+bit 129 C ? .
+bit 128 C ? .
+bit 127 C ? .
+bit 126 C ? .
+bit 125 C ? .
+bit 124 C ? .
+bit 123 C ? .
+bit 122 C ? .
+bit 121 C ? .
+bit 120 C ? .
+bit 119 C ? .
+bit 118 C ? .
+bit 117 C ? .
+bit 116 C ? .
+bit 115 C ? .
+bit 114 C ? .
+bit 113 C ? .
+bit 112 C ? .
+bit 111 C ? .
+bit 110 C ? .
+bit 109 C ? .
+bit 108 C ? .
+bit 107 C ? .
+bit 106 C ? .
+bit 105 C ? .
+bit 104 C ? .
+bit 103 C ? .
+bit 102 C ? .
+bit 101 C ? .
+bit 100 C ? .
+bit 99 C ? .
+bit 98 C ? .
+bit 97 C ? .
+bit 96 C ? .
+bit 95 C ? .
+bit 94 C ? .
+bit 93 C ? .
+bit 92 C ? .
+bit 91 C ? .
+bit 90 C ? .
+bit 89 C ? .
+bit 88 C ? .
+bit 87 C ? .
+bit 86 C ? .
+bit 85 C ? .
+bit 84 C ? .
+bit 83 C ? .
+bit 82 C ? .
+bit 81 C ? .
+bit 80 C ? .
+bit 79 C ? .
+bit 78 C ? .
+bit 77 C ? .
+bit 76 C ? .
+bit 75 C ? .
+bit 74 C ? .
+bit 73 C ? .
+bit 72 C ? .
+bit 71 C ? .
+bit 70 C ? .
+bit 69 C ? .
+bit 68 C ? .
+bit 67 C ? .
+bit 66 C ? .
+bit 65 C ? .
+bit 64 C ? .
+bit 63 C ? .
+bit 62 C ? .
+bit 61 C ? .
+bit 60 C ? .
+bit 59 C ? .
+bit 58 C ? .
+bit 57 C ? .
+bit 56 C ? .
+bit 55 C ? .
+bit 54 C ? .
+bit 53 C ? .
+bit 52 C ? .
+bit 51 C ? .
+bit 50 C ? .
+bit 49 C ? .
+bit 48 C ? .
+bit 47 C ? .
+bit 46 C ? .
+bit 45 C ? .
+bit 44 C ? .
+bit 43 C ? .
+bit 42 C ? .
+bit 41 C ? .
+bit 40 C ? .
+bit 39 C ? .
+bit 38 C ? .
+bit 37 C ? .
+bit 36 C ? .
+bit 35 C ? .
+bit 34 C ? .
+bit 33 C ? .
+bit 32 C ? .
+bit 31 C ? .
+bit 30 C ? .
+bit 29 C ? .
+bit 28 C ? .
+bit 27 C ? .
+bit 26 C ? .
+bit 25 C ? .
+bit 24 C ? .
+bit 23 C ? .
+bit 22 C ? .
+bit 21 C ? .
+bit 20 C ? .
+bit 19 C ? .
+bit 18 C ? .
+bit 17 C ? .
+bit 16 C ? .
+bit 15 C ? .
+bit 14 C ? .
+bit 13 C ? .
+bit 12 C ? .
+bit 11 C ? .
+bit 10 C ? .
+bit 9 C ? .
+bit 8 C ? .
+bit 7 C ? .
+bit 6 C ? .
+bit 5 C ? .
+bit 4 C ? .
+bit 3 C ? .
+bit 2 C ? .
+bit 1 C ? .
+bit 0 C ? .
+
+initbus ixp425

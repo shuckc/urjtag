@@ -1,0 +1,328 @@
+#
+# $Id$
+#
+# JTAG declarations for BCM5421S
+# Copyright (C) 2003 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Matan Ziv-Av <matan@svgalib.org>, 2003.
+#
+
+signal PAD_gtx_clk
+signal PAD_txd10
+signal PAD_txd11
+signal PAD_txd12
+signal PAD_txd13
+signal PAD_txd14
+signal PAD_txd15
+signal PAD_txd16
+signal PAD_txd17
+signal PAD_tx_en
+signal PAD_tx_er
+signal PAD_clk125
+signal PAD_col
+signal PAD_crs
+signal PAD_rbc0
+signal PAD_rbc1
+signal PAD_rxc
+signal PAD_rxd10
+signal PAD_rxd11
+signal PAD_rxd12
+signal PAD_rxd13
+signal PAD_rxd14
+signal PAD_rxd15
+signal PAD_rxd16
+signal PAD_rxd17
+signal PAD_rx_dv
+signal PAD_rx_er
+signal PAD_txc
+signal PAD_bcm5421s_en
+signal PAD_edgerate
+signal PAD_mdc
+signal PAD_ovdd_2_5v_enPAD_reset_n
+signal PAD_reset_n
+signal PAD_tck
+signal PAD_tdi
+signal PAD_test0
+signal PAD_test1
+signal PAD_tms
+signal PAD_tpin0
+signal PAD_tpin1
+signal PAD_tpin2
+signal PAD_tpin3
+signal PAD_tpin4
+signal PAD_tpin5
+signal PAD_tpin6
+signal PAD_tpin7
+signal PAD_tpin8
+signal PAD_trstb
+signal PAD_en10b
+signal PAD_f1000
+signal PAD_fdxled_n
+signal PAD_intr_n
+signal PAD_link_n1
+signal PAD_link_n2
+signal PAD_mdio
+signal PAD_phya0
+signal PAD_phya1
+signal PAD_phya2
+signal PAD_phya3
+signal PAD_phya4
+signal PAD_rcvled_n
+signal PAD_slave_n
+signal PAD_spd0
+signal PAD_xmtled_n
+signal PAD_tdo
+signal PAD_srxdn
+signal PAD_srxdp
+signal PAD_stxdn
+signal PAD_stxdp
+signal PAD_stxcn
+signal PAD_stxcp
+signal PAD_sergnd
+signal PAD_serpllavdd
+signal PAD_serpllavss
+signal PAD_serplldvdd
+signal PAD_serplldvss
+signal PAD_servdd11
+signal PAD_servdd25
+signal PAD_reg_cntl0
+signal PAD_reg_cntl1
+signal PAD_reg_sense1
+signal PAD_reg_sense2
+signal PAD_reg_supply1
+signal PAD_reg_supply2
+signal PAD_trimdac10
+signal PAD_trimdac11
+signal PAD_trimdac12
+signal PAD_trimdac13
+signal PAD_trimhyb10
+signal PAD_trimhyb11
+signal PAD_trimhyb12
+signal PAD_trimhyb13
+signal PAD_trimhpf10
+signal PAD_trimhpf11
+signal PAD_xtali
+signal PAD_xtali2
+signal PAD_xtalo
+signal PAD_xtalo2
+signal PAD_xtalgnd1
+signal PAD_xtalgnd2
+signal PAD_xtalvdd1
+signal PAD_xtalvdd2
+signal PAD_xtalvdd3
+signal PAD_xtalvdd2
+signal PAD_plldgnd
+signal PAD_plldvdd
+signal PAD_pllgnd
+signal PAD_pllvdd
+signal PAD_tvcoi
+signal CORE_VDD
+signal CORE_VSS
+signal OVDD
+signal OGND
+signal PVDD
+signal PAD_rdac1
+signal PAD_extvref1
+signal PAD_bagnd_0
+signal PAD_bavdd_0
+signal PAD_bavdd_1
+signal PAD_rxavdd0_0
+signal PAD_rxavdd1_0
+signal PAD_rxavdd2_0
+signal PAD_rxavdd3_0
+signal PAD_txavdd0_0
+signal PAD_txavdd1_0
+signal PAD_txavdd2_0
+signal PAD_txavdd3_0
+signal PAD_rxagnd0_0
+signal PAD_rxagnd1_0
+signal PAD_rxagnd2_0
+signal PAD_rxagnd3_0
+signal PAD_txagnd0_0
+signal PAD_txagnd1_0
+signal PAD_txagnd2_0
+signal PAD_txagnd3_0
+signal PAD_tdp1_0
+signal PAD_tdn1_0
+signal PAD_tdn1_1
+signal PAD_tdp1_1
+signal PAD_tdp1_2
+signal PAD_tdn1_2
+signal PAD_tdn1_3
+
+register	BSR	150
+register	BR	1
+register	DIR	32
+
+instruction length 3
+
+instruction BYPASS 111 BR
+instruction EXTEST 000 BSR
+instruction SAMPLE/PRELOAD 010 BSR
+instruction IDCODE 101 DIR
+
+bit 149 I 1 PAD_rxd13
+bit 148 O 1 PAD_rxd13 147 1 Z
+bit 147 C 1 *
+bit 146 I 1 PAD_rxd12
+bit 145 O 1 PAD_rxd12 144 1 Z
+bit 144 C 1 *
+bit 143 I 1 PAD_rxd11
+bit 142 O 1 PAD_rxd11 141 1 Z
+bit 141 C 1 *
+bit 140 I 1 PAD_rxd10
+bit 139 O 1 PAD_rxd10 138 1 Z
+bit 138 C 1 *
+bit 137 I 1 PAD_col
+bit 136 O 1 PAD_col 135 1 Z
+bit 135 C 1 *
+bit 134 I 1 PAD_crs
+bit 133 O 1 PAD_crs 132 1 Z
+bit 132 C 1 *
+bit 131 I 1 PAD_clk125
+bit 130 O 1 PAD_clk125 129 1 Z
+bit 129 C 1 *
+bit 128 I 1 PAD_reset_n
+bit 127 I 1 PAD_mdc
+bit 126 I 1 PAD_mdio
+bit 125 O 1 PAD_mdio 124 1 Z
+bit 124 C 1 *
+bit 123 I 1 PAD_tpin8
+bit 122 I 1 PAD_en10b
+bit 121 O 1 PAD_en10b 120 1 Z
+bit 120 C 1 *
+bit 119 I 1 PAD_f1000
+bit 118 O 1 PAD_f1000 117 1 Z
+bit 117 C 1 *
+bit 116 I 1 PAD_spd0
+bit 115 O 1 PAD_spd0 114 1 Z
+bit 114 C 1 *
+bit 113 O 1 *
+bit 112 O 1 *
+bit 111 I 1 PAD_phya4
+bit 110 O 1 PAD_phya4 109 1 Z
+bit 109 C 1 *
+bit 108 I 1 PAD_phya3
+bit 107 O 1 PAD_phya3 106 1 Z
+bit 106 C 1 *
+bit 105 I 1 PAD_phya2
+bit 104 O 1 PAD_phya2 103 1 Z
+bit 103 C 1 *
+bit 102 I 1 PAD_phya1
+bit 101 O 1 PAD_phya1 100 1 Z
+bit 100 C 1 *
+bit 99 I 1 PAD_phya0
+bit 98 O 1 PAD_phya0 97 1 Z
+bit 97 C 1 *
+bit 96 I 1 PAD_test1
+bit 95 I 1 PAD_test0
+bit 94 I 1 PAD_xmtled_n
+bit 93 O 1 PAD_xmtled_n 92 1 Z
+bit 92 C 1 *
+bit 91 I 1 PAD_rcvled_n
+bit 90 O 1 PAD_rcvled_n 89 1 Z
+bit 89 C 1 *
+bit 88 I 1 PAD_link_n2
+bit 87 O 1 PAD_link_n2 86 1 Z
+bit 86 C 1 *
+bit 85 I 1 PAD_link_n1
+bit 84 O 1 PAD_link_n1 83 1 Z
+bit 83 C 1 *
+bit 82 I 1 PAD_fdxled_n
+bit 81 O 1 PAD_fdxled_n 80 1 Z
+bit 80 C 1 *
+bit 79 I 1 PAD_slave_n
+bit 78 O 1 PAD_slave_n 77 1 Z
+bit 77 C 1 *
+bit 76 I 1 PAD_intr_n
+bit 75 O 1 PAD_intr_n 74 1 Z
+bit 74 C 1 *
+bit 73 I 1 PAD_tpin0
+bit 72 I 1 PAD_tpin1
+bit 71 I 1 PAD_tpin2
+bit 70 I 1 PAD_tpin3
+bit 69 I 1 PAD_tpin4
+bit 68 I 1 PAD_tpin5
+bit 67 O 1 PAD_tpin5 66 1 Z
+bit 66 C 1 *
+bit 65 I 1 PAD_tpin6
+bit 64 I 1 PAD_tpin7
+bit 63 I 1 PAD_txc
+bit 62 O 1 PAD_txc 61 1 Z
+bit 61 C 1 *
+bit 60 I 1 PAD_txd10
+bit 59 O 1 *
+bit 58 C 1 *
+bit 57 I 1 PAD_txd11
+bit 56 O 1 *
+bit 55 C 1 *
+bit 54 I 1 PAD_txd12
+bit 53 O 1 *
+bit 52 C 1 *
+bit 51 I 1 PAD_txd13
+bit 50 O 1 *
+bit 49 C 1 *
+bit 48 I 1 PAD_txd14
+bit 47 O 1 *
+bit 46 C 1 *
+bit 45 I 1 PAD_txd15
+bit 44 O 1 *
+bit 43 C 1 *
+bit 42 I 1 PAD_txd16
+bit 41 O 1 *
+bit 40 C 1 *
+bit 39 I 1 PAD_txd17
+bit 38 O 1 *
+bit 37 C 1 *
+bit 36 I 1 PAD_tx_er
+bit 35 O 1 *
+bit 34 C 1 *
+bit 33 I 1 PAD_tx_en
+bit 32 O 1 *
+bit 31 C 1 *
+bit 30 I 1 PAD_gtx_clk
+bit 29 O 1 *
+bit 28 C 1 *
+bit 27 I 1 PAD_rbc0
+bit 26 O 1 PAD_rbc0 25 1 Z
+bit 25 C 1 *
+bit 24 I 1 PAD_rbc1
+bit 23 O 1 PAD_rbc1 22 1 Z
+bit 22 C 1 *
+bit 21 I 1 PAD_rxc
+bit 20 O 1 PAD_rxc 19 1 Z
+bit 19 C 1 *
+bit 18 I 1 PAD_rx_er
+bit 17 O 1 PAD_rx_er 16 1 Z
+bit 16 C 1 *
+bit 15 I 1 PAD_rx_dv
+bit 14 O 1 PAD_rx_dv 13 1 Z
+bit 13 C 1 *
+bit 12 I 1 PAD_rxd17
+bit 11 O 1 PAD_rxd17 10 1 Z
+bit 10 C 1 *
+bit 9 I 1 PAD_rxd16
+bit 8 O 1 PAD_rxd16 7 1 Z
+bit 7 C 1 *
+bit 6 I 1 PAD_rxd15
+bit 5 O 1 PAD_rxd15 4 1 Z
+bit 4 C 1 *
+bit 3 I 1 PAD_edgerate
+bit 2 I 1 PAD_rxd14
+bit 1 O 1 PAD_rxd14 0 1 Z
+bit 0 C 1 *

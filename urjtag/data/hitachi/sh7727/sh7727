@@ -1,0 +1,673 @@
+#
+# $Id$
+#
+# JTAG declarations for SH7727
+# Copyright (C) 2003 ETC s.r.o.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Matan Ziv-Av <matan@svgalib.org>, 2003.
+#
+# Documentation:
+# [1] Hitachi, Ltd., "Hitachi SuperH RISC Engine SH7727 Hardware Manual",
+#     2003-01-31, ADE-602-209C Rev. 4.0
+#
+
+signal VCC1
+signal XTAL2
+signal EXTAL2
+signal VSS1
+signal MD1
+signal MD2
+signal NMI
+signal IRQ0
+signal IRQ1
+signal IRQ2
+signal IRQ3
+signal IRQ4
+signal VEPWC
+signal VCPWC
+signal MD5
+signal BREQ
+signal BACK
+signal VSS2
+signal CKIO2
+signal VCC2
+signal D31
+signal D30
+signal D29
+signal D28
+signal D27
+signal D26
+signal D25
+signal D24
+signal VSS3
+signal D23
+signal VCC3
+signal D22
+signal D21
+signal D20
+signal VSS4
+signal D19
+signal VCC4
+signal D18
+signal D17
+signal D16
+signal D15
+signal VSS5
+signal D14
+signal VCC5
+signal D13
+signal D12
+signal D11
+signal D10
+signal D9
+signal D8
+signal D7
+signal D6
+signal VSS6
+signal D5
+signal VCC6
+signal D4
+signal D3
+signal D2
+signal D1
+signal D0
+signal A0
+signal A1
+signal A2
+signal VSS7
+signal A3
+signal VCC7
+signal A4
+signal A5
+signal A6
+signal A7
+signal A8
+signal A9
+signal A10
+signal A11
+signal VSS8
+signal A12
+signal VCC8
+signal A13
+signal A14
+signal A15
+signal A16
+signal A17
+signal A18
+signal A19
+signal A20
+signal VSS9
+signal A21
+signal VCC9
+signal A22
+signal A23
+signal VSS10
+signal A24
+signal VCC10
+signal A25
+signal BS
+signal RD
+signal WE0
+signal WE1
+signal WE2
+signal VSS11
+signal WE3
+signal VCC11
+signal RDWR
+signal PTE7
+signal CS0
+signal CS2
+signal CS3
+signal CS4
+signal CS5
+signal CS6
+signal CE2A
+signal CE2B
+signal AFE_HC1
+signal AFE_RLYCNT
+signal VSS12
+signal AFE_SCLK
+signal VCC12
+signal AFE_FS
+signal AFE_RXIN
+signal AFE_TXOUT
+signal AFE_RDET
+signal USB1D_SUSPEND
+signal USB1_OVR_CRNT
+signal USB2_OVR_CRNT
+signal RTS2
+signal USB1_PWR_EN
+signal USB2_PWR_EN
+signal CKE
+signal RAS
+signal PTJ1
+signal CAS
+signal VSS13
+signal PTJ3
+signal VCC13
+signal PTJ4
+signal PTJ5
+signal VSS14
+signal CL1
+signal VCC14
+signal DON
+signal M_DISP
+signal FLM
+signal TDO
+signal DRAK0
+signal DACK0
+signal WAPIN
+signal RESETM
+signal ADTRG
+signal IOIS16
+signal ASEMDO
+signal PTG5
+signal PTG4
+signal PTG3
+signal PTG2
+signal VSS15
+signal PTG1
+signal VCC15
+signal PTG0
+signal VSS16
+signal TRST
+signal VCC16
+signal TMS
+signal TDI
+signal TCK
+signal PTF3
+signal PTF2
+signal PTF1
+signal PTF0
+signal MD0
+signal VCC17
+signal CAP1
+signal VSS17
+signal VSS18
+signal CAP2
+signal VCC18
+signal PTH6
+signal VSS19
+signal VCC19
+signal XTAL
+signal EXTAL
+signal LCD15
+signal LCD14
+signal LCD13
+signal LCD12
+signal STATUS0
+signal STATUS1
+signal CL2
+signal VSS20
+signal CKIO
+signal VCC20
+signal TXD0
+signal SCK0
+signal TXD_SIO
+signal SIOMCLK
+signal TXD2
+signal SCK_SIO
+signal SIOFSYNC
+signal RXD0
+signal RXD_SIO
+signal VSS21
+signal RXD2
+signal VCC21
+signal CTS2
+signal LCD11
+signal LCD10
+signal LCD9
+signal VSS22
+signal LCD8
+signal VCC22
+signal LCD7
+signal LCD6
+signal LCD5
+signal LCD4
+signal LCD3
+signal LCD2
+signal LCD1
+signal LCD0
+signal DREQ0
+signal LCK
+signal RESETP
+signal CA
+signal MD3
+signal MD4
+signal VCC23
+signal AVCC1
+signal USB1_P
+signal USB1_M
+signal AVSS1
+signal USB2_P
+signal USB2_M
+signal AVCC2
+signal AVSS2
+signal AN2
+signal AN3
+signal AN4
+signal AN5
+signal AVCC3
+signal AN6
+signal AN7
+
+register	BSR	392
+register	BR	1
+register	DIR	32
+
+instruction length 16
+
+instruction	EXTEST		0000111111111111	BSR
+instruction	SAMPLE/PRELOAD	0100111111111111	BSR
+instruction	IDCODE		1110111111111111	DIR
+instruction	BYPASS		1111111111111111	BR
+
+bit 391 I 1 D31
+bit 390 I 1 D30
+bit 389 I 1 D29
+bit 388 I 1 D28
+bit 387 I 1 D27
+bit 386 I 1 D26
+bit 385 I 1 D25
+bit 384 I 1 D24
+bit 383 I 1 D23
+bit 382 I 1 D22
+bit 381 I 1 D21
+bit 380 I 1 D20
+bit 379 I 1 D19
+bit 378 I 1 D18
+bit 377 I 1 D17
+bit 376 I 1 D16
+bit 375 I 1 D15
+bit 374 I 1 D14
+bit 373 I 1 D13
+bit 372 I 1 D12
+bit 371 I 1 D11
+bit 370 I 1 D10
+bit 369 I 1 D9
+bit 368 I 1 D8
+bit 367 I 1 D7
+bit 366 I 1 D6
+bit 365 I 1 D5
+bit 364 I 1 D4
+bit 363 I 1 D3
+bit 362 I 1 D2
+bit 361 I 1 D1
+bit 360 I 1 D0
+bit 359 I 1 MD1
+bit 358 I 1 MD2
+bit 357 I 1 NMI
+bit 356 I 1 IRQ0
+bit 355 I 1 IRQ1
+bit 354 I 1 IRQ2
+bit 353 I 1 IRQ3
+bit 352 I 1 IRQ4
+bit 351 I 1 MD5
+bit 350 I 1 BREQ
+bit 349 O 1 VEPWC 314 1 Z
+bit 348 O 1 VCPWC 313 1 Z
+bit 347 O 1 BACK 312 1 Z
+bit 346 O 1 D31 311 1 Z
+bit 345 O 1 D30 310 1 Z
+bit 344 O 1 D29 309 1 Z
+bit 343 O 1 D28 308 1 Z
+bit 342 O 1 D27 307 1 Z
+bit 341 O 1 D26 306 1 Z
+bit 340 O 1 D25 305 1 Z
+bit 339 O 1 D24 304 1 Z
+bit 338 O 1 D23 303 1 Z
+bit 337 O 1 D22 302 1 Z
+bit 336 O 1 D21 301 1 Z
+bit 335 O 1 D20 300 1 Z
+bit 334 O 1 D19 299 1 Z
+bit 333 O 1 D18 298 1 Z
+bit 332 O 1 D17 297 1 Z
+bit 331 O 1 D16 296 1 Z
+bit 330 O 1 D15 295 1 Z
+bit 329 O 1 D14 294 1 Z
+bit 328 O 1 D13 293 1 Z
+bit 327 O 1 D12 292 1 Z
+bit 326 O 1 D11 291 1 Z
+bit 325 O 1 D10 290 1 Z
+bit 324 O 1 D9 289 1 Z
+bit 323 O 1 D8 288 1 Z
+bit 322 O 1 D7 287 1 Z
+bit 321 O 1 D6 286 1 Z
+bit 320 O 1 D5 285 1 Z
+bit 319 O 1 D4 284 1 Z
+bit 318 O 1 D3 283 1 Z
+bit 317 O 1 D2 282 1 Z
+bit 316 O 1 D1 281 1 Z
+bit 315 O 1 D0 280 1 Z
+bit 314 C 1 *
+bit 313 C 1 *
+bit 312 C 1 *
+bit 311 C 1 *
+bit 310 C 1 *
+bit 309 C 1 *
+bit 308 C 1 *
+bit 307 C 1 *
+bit 306 C 1 *
+bit 305 C 1 *
+bit 304 C 1 *
+bit 303 C 1 *
+bit 302 C 1 *
+bit 301 C 1 *
+bit 300 C 1 *
+bit 299 C 1 *
+bit 298 C 1 *
+bit 297 C 1 *
+bit 296 C 1 *
+bit 295 C 1 *
+bit 294 C 1 *
+bit 293 C 1 *
+bit 292 C 1 *
+bit 291 C 1 *
+bit 290 C 1 *
+bit 289 C 1 *
+bit 288 C 1 *
+bit 287 C 1 *
+bit 286 C 1 *
+bit 285 C 1 *
+bit 284 C 1 *
+bit 283 C 1 *
+bit 282 C 1 *
+bit 281 C 1 *
+bit 280 C 1 *
+bit 279 I 1 BS
+bit 278 I 1 WE2
+bit 277 I 1 WE3
+bit 276 I 1 PTE7
+bit 275 I 1 CS4
+bit 274 I 1 CS5
+bit 273 I 1 CE2A
+bit 272 I 1 CE2B
+bit 271 I 1 AFE_HC1
+bit 270 I 1 AFE_RLYCNT
+bit 269 I 1 AFE_SCLK
+bit 268 I 1 AFE_FS
+bit 267 I 1 AFE_RXIN
+bit 266 I 1 AFE_TXOUT
+bit 265 O 1 A0 217 1 Z
+bit 264 O 1 A1 216 1 Z
+bit 263 O 1 A2 215 1 Z
+bit 262 O 1 A3 214 1 Z
+bit 261 O 1 A4 213 1 Z
+bit 260 O 1 A5 212 1 Z
+bit 259 O 1 A6 211 1 Z
+bit 258 O 1 A7 210 1 Z
+bit 257 O 1 A8 209 1 Z
+bit 256 O 1 A9 208 1 Z
+bit 255 O 1 A10 207 1 Z
+bit 254 O 1 A11 206 1 Z
+bit 253 O 1 A12 205 1 Z
+bit 252 O 1 A13 204 1 Z
+bit 251 O 1 A14 203 1 Z
+bit 250 O 1 A15 202 1 Z
+bit 249 O 1 A16 201 1 Z
+bit 248 O 1 A17 200 1 Z
+bit 247 O 1 A18 199 1 Z
+bit 246 O 1 A19 198 1 Z
+bit 245 O 1 A20 197 1 Z
+bit 244 O 1 A21 196 1 Z
+bit 243 O 1 A22 195 1 Z
+bit 242 O 1 A23 194 1 Z
+bit 241 O 1 A24 193 1 Z
+bit 240 O 1 A25 192 1 Z
+bit 239 O 1 BS 191 1 Z
+bit 238 O 1 RD 190 1 Z
+bit 237 O 1 WE0 189 1 Z
+bit 236 O 1 WE1 188 1 Z
+bit 235 O 1 WE2 187 1 Z
+bit 234 O 1 WE3 186 1 Z
+bit 233 O 1 RDWR 185 1 Z
+bit 232 O 1 PTE7 184 1 Z
+bit 231 O 1 CS0 183 1 Z
+bit 230 O 1 CS2 182 1 Z
+bit 229 O 1 CS3 181 1 Z
+bit 228 O 1 CS4 180 1 Z
+bit 227 O 1 CS5 179 1 Z
+bit 226 O 1 CS6 178 1 Z
+bit 225 O 1 CE2A 177 1 Z
+bit 224 O 1 CE2B 176 1 Z
+bit 223 O 1 AFE_HC1 175 1 Z
+bit 222 O 1 AFE_RLYCNT 174 1 Z
+bit 221 O 1 AFE_SCLK 173 1 Z
+bit 220 O 1 AFE_FS 172 1 Z
+bit 219 O 1 AFE_RXIN 171 1 Z
+bit 218 O 1 AFE_TXOUT 170 1 Z
+bit 217 C 1 *
+bit 216 C 1 *
+bit 215 C 1 *
+bit 214 C 1 *
+bit 213 C 1 *
+bit 212 C 1 *
+bit 211 C 1 *
+bit 210 C 1 *
+bit 209 C 1 *
+bit 208 C 1 *
+bit 207 C 1 *
+bit 206 C 1 *
+bit 205 C 1 *
+bit 204 C 1 *
+bit 203 C 1 *
+bit 202 C 1 *
+bit 201 C 1 *
+bit 200 C 1 *
+bit 199 C 1 *
+bit 198 C 1 *
+bit 197 C 1 *
+bit 196 C 1 *
+bit 195 C 1 *
+bit 194 C 1 *
+bit 193 C 1 *
+bit 192 C 1 *
+bit 191 C 1 *
+bit 190 C 1 *
+bit 189 C 1 *
+bit 188 C 1 *
+bit 187 C 1 *
+bit 186 C 1 *
+bit 185 C 1 *
+bit 184 C 1 *
+bit 183 C 1 *
+bit 182 C 1 *
+bit 181 C 1 *
+bit 180 C 1 *
+bit 179 C 1 *
+bit 178 C 1 *
+bit 177 C 1 *
+bit 176 C 1 *
+bit 175 C 1 *
+bit 174 C 1 *
+bit 173 C 1 *
+bit 172 C 1 *
+bit 171 C 1 *
+bit 170 C 1 *
+bit 169 I 1 AFE_RDET
+bit 168 I 1 USB1D_SUSPEND
+bit 167 I 1 USB1_OVR_CRNT
+bit 166 I 1 USB2_OVR_CRNT
+bit 165 I 1 RTS2
+bit 164 I 1 USB1_PWR_EN
+bit 163 I 1 USB2_PWR_EN
+bit 162 I 1 CKE
+bit 161 I 1 RAS
+bit 160 I 1 PTJ1
+bit 159 I 1 CAS
+bit 158 I 1 PTJ0
+bit 157 I 1 PTJ4
+bit 156 I 1 PTJ5
+bit 155 I 1 CL1
+bit 154 I 1 DON
+bit 153 I 1 M_DISP
+bit 152 I 1 FLM
+bit 151 I 1 WAPIN
+bit 150 I 1 PTH6
+bit 149 I 1 IOIS16
+bit 148 I 1 PTG5
+bit 147 I 1 PTG4
+bit 146 I 1 PTG3
+bit 145 I 1 PTG2
+bit 144 I 1 PTG1
+bit 143 I 1 PTG0
+bit 142 I 1 ADTRG
+bit 141 I 1 PTF3
+bit 140 I 1 PTF2
+bit 139 I 1 PTF1
+bit 138 I 1 PTF0
+bit 137 I 1 MD0
+bit 136 O 1 AFE_RDET 109 1 Z
+bit 135 O 1 USB1D_SUSPEND 108 1 Z
+bit 134 O 1 RTS2 107 1 Z
+bit 133 O 1 USB1_PWR_EN 106 1 Z
+bit 132 O 1 USB2_PWR_EN 105 1 Z
+bit 131 O 1 CKE 104 1 Z
+bit 130 O 1 RAS 103 1 Z
+bit 129 O 1 PTJ1 102 1 Z
+bit 128 O 1 CAS 101 1 Z
+bit 127 O 1 PTJ3 100 1 Z
+bit 126 O 1 PTJ4 99 1 Z
+bit 125 O 1 PTJ5 98 1 Z
+bit 124 O 1 CL1 97 1 Z
+bit 123 O 1 DON 96 1 Z
+bit 122 O 1 M_DISP 95 1 Z
+bit 121 O 1 FLM 94 1 Z
+bit 120 O 1 DRAK0 93 1 Z
+bit 119 O 1 DACK0 92 1 Z
+bit 118 O 1 PTG5 91 1 Z
+bit 117 O 1 PTG3 90 1 Z
+bit 116 O 1 PTG2 89 1 Z
+bit 115 O 1 PTG1 88 1 Z
+bit 114 O 1 PTG0 87 1 Z
+bit 113 O 1 PTF3 86 1 Z
+bit 112 O 1 PTF2 85 1 Z
+bit 111 O 1 PTF1 84 1 Z
+bit 110 O 1 PTF0 83 1 Z
+bit 109 C 1 *
+bit 108 C 1 *
+bit 107 C 1 *
+bit 106 C 1 *
+bit 105 C 1 *
+bit 104 C 1 *
+bit 103 C 1 *
+bit 102 C 1 *
+bit 101 C 1 *
+bit 100 C 1 *
+bit 99 C 1 *
+bit 98 C 1 *
+bit 97 C 1 *
+bit 96 C 1 *
+bit 95 C 1 *
+bit 94 C 1 *
+bit 93 C 1 *
+bit 92 C 1 *
+bit 91 C 1 *
+bit 90 C 1 *
+bit 89 C 1 *
+bit 88 C 1 *
+bit 87 C 1 *
+bit 86 C 1 *
+bit 85 C 1 *
+bit 84 C 1 *
+bit 83 C 1 *
+bit 82 I 1 LCD15
+bit 81 I 1 LCD14
+bit 80 I 1 LCD13
+bit 79 I 1 LCD12
+bit 78 I 1 STATUS0
+bit 77 I 1 STATUS1
+bit 76 I 1 CL2
+bit 75 I 1 SCK0
+bit 74 I 1 SIOMCLK
+bit 73 I 1 SCK_SIO
+bit 72 I 1 SIOFSYNC
+bit 71 I 1 RXD0
+bit 70 I 1 RXD2
+bit 69 I 1 LCD7
+bit 68 I 1 LCD6
+bit 67 I 1 LCD1
+bit 66 I 1 LCD0
+bit 65 I 1 DREQ0
+bit 64 I 1 LCK
+bit 63 I 1 RXD_SIO
+bit 62 I 1 CTS2
+bit 61 I 1 LCD11
+bit 60 I 1 LCD10
+bit 59 I 1 LCD9
+bit 58 I 1 LCD8
+bit 57 I 1 LCD5
+bit 56 I 1 LCD4
+bit 55 I 1 LCD3
+bit 54 I 1 LCD2
+bit 53 I 1 MD3
+bit 52 I 1 MD4
+bit 51 O 1 LCD15 25 1 Z
+bit 50 O 1 LCD14 24 1 Z
+bit 49 O 1 LCD13 23 1 Z
+bit 48 O 1 LCD12 22 1 Z
+bit 47 O 1 STATUS0 21 1 Z
+bit 46 O 1 STATUS1 20 1 Z
+bit 45 O 1 CL2 19 1 Z
+bit 44 O 1 TXD0 18 1 Z
+bit 43 O 1 SCK0 17 1 Z
+bit 42 O 1 TXD_SIO 16 1 Z
+bit 41 O 1 SIOMCLK 15 1 Z
+bit 40 O 1 TXD2 14 1 Z
+bit 39 O 1 SCK_SIO 13 1 Z
+bit 38 O 1 SIOFSYNC 12 1 Z
+bit 37 O 1 LCD11 11 1 Z
+bit 36 O 1 LCD10 10 1 Z
+bit 35 O 1 LCD9 9 1 Z
+bit 34 O 1 LCD8 8 1 Z
+bit 33 O 1 LCD7 7 1 Z
+bit 32 O 1 LCD6 6 1 Z
+bit 31 O 1 LCD5 5 1 Z
+bit 30 O 1 LCD4 4 1 Z
+bit 29 O 1 LCD3 3 1 Z
+bit 28 O 1 LCD2 2 1 Z
+bit 27 O 1 LCD1 1 1 Z
+bit 26 O 1 LCD0 0 1 Z
+bit 25 C 1 *
+bit 24 C 1 *
+bit 23 C 1 *
+bit 22 C 1 *
+bit 21 C 1 *
+bit 20 C 1 *
+bit 19 C 1 *
+bit 18 C 1 *
+bit 17 C 1 *
+bit 16 C 1 *
+bit 15 C 1 *
+bit 14 C 1 *
+bit 13 C 1 *
+bit 12 C 1 *
+bit 11 C 1 *
+bit 10 C 1 *
+bit 9 C 1 *
+bit 8 C 1 *
+bit 7 C 1 *
+bit 6 C 1 *
+bit 5 C 1 *
+bit 4 C 1 *
+bit 3 C 1 *
+bit 2 C 1 *
+bit 1 C 1 *
+bit 0 C 1 *
+
+initbus sh7727
