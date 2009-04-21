@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include "chain.h"
-#include "state.h"
+#include "tap_state.h"
 #include "tap.h"
 
 #include "bsdl.h"

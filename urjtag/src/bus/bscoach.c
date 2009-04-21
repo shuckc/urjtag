@@ -37,7 +37,7 @@
 #include "jtag.h"
 #include "buses.h"
 #include "generic_bus.h"
-#include "state.h"
+#include "tap_state.h"
 
 
 typedef struct

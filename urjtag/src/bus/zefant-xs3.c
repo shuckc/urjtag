@@ -67,7 +67,7 @@
 #include "jtag.h"
 #include "buses.h"
 #include "generic_bus.h"
-#include "state.h"
+#include "tap_state.h"
 
 /* EEPROM commands */
 #define EEPROM_CMD_WREN  0x06

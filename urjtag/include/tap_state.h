@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef	STATE_H
-#define	STATE_H
+#ifndef	TAP_STATE_H
+#define	TAP_STATE_H
 
 #include <bitmask.h>
 
@@ -63,4 +63,4 @@ int tap_state_reset (chain_t * chain);
 int tap_state_set_trst (chain_t * chain, int old_trst, int new_trst);
 int tap_state_clock (chain_t * chain, int tms);
 
-#endif /* STATE_H */
+#endif /* TAP_STATE_H */

@@ -42,7 +42,7 @@
 #include "jtag.h"
 #include "buses.h"
 #include "generic_bus.h"
-#include "state.h"
+#include "tap_state.h"
 
 #include "pxa2x0_mc.h"
 

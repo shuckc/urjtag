@@ -44,7 +44,7 @@ noinst_HEADERS = \
 	part.h \
 	register.h \
 	bssignal.h \
-	state.h \
+	tap_state.h \
 	jtag.h \
 	tap.h \
 	fclock.h \

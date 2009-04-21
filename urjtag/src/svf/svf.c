@@ -43,7 +43,7 @@
 
 #include <jtag.h>
 #include <tap.h>
-#include <state.h>
+#include <tap_state.h>
 
 #include <cmd.h>
 

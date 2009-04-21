@@ -67,7 +67,7 @@
 #include "jtag.h"
 #include "buses.h"
 #include "generic_bus.h"
-#include "state.h"
+#include "tap_state.h"
 
 #define RAM_ADDR_WIDTH 18
 #define RAM_DATA_WIDTH 16
