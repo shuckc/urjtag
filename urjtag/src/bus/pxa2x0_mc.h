@@ -64,33 +64,34 @@
 #define	MC_BASE		0x48000000
 
 #ifndef __ASSEMBLY__
-typedef volatile struct MC_registers {
-	uint32_t mdcnfg;
-	uint32_t mdrefr;
-	uint32_t msc0;
-	uint32_t msc1;
-	uint32_t msc2;
-	uint32_t mecr;
-	uint32_t __reserved1;
-	uint32_t sxcnfg;
-	uint32_t __reserved2;
-	uint32_t sxmrs;
-	uint32_t mcmem0;
-	uint32_t mcmem1;
-	uint32_t mcatt0;
-	uint32_t mcatt1;
-	uint32_t mcio0;
-	uint32_t mcio1;
-	uint32_t mdmrs;
-	uint32_t boot_def;
+typedef volatile struct MC_registers
+{
+    uint32_t mdcnfg;
+    uint32_t mdrefr;
+    uint32_t msc0;
+    uint32_t msc1;
+    uint32_t msc2;
+    uint32_t mecr;
+    uint32_t __reserved1;
+    uint32_t sxcnfg;
+    uint32_t __reserved2;
+    uint32_t sxmrs;
+    uint32_t mcmem0;
+    uint32_t mcmem1;
+    uint32_t mcatt0;
+    uint32_t mcatt1;
+    uint32_t mcio0;
+    uint32_t mcio1;
+    uint32_t mdmrs;
+    uint32_t boot_def;
 #if !defined(PXA2X0_NOPXA255)
-	uint32_t __reserved3[4];
-	uint32_t mdmrslp;
-#endif /* PXA255 and above only */
+    uint32_t __reserved3[4];
+    uint32_t mdmrslp;
+#endif                          /* PXA255 and above only */
 #if !defined(PXA2X0_NOPXA260)
-	uint32_t __reserved4[2];
-	uint32_t sa1111cr;
-#endif /* PXA260 and above only */
+    uint32_t __reserved4[2];
+    uint32_t sa1111cr;
+#endif                          /* PXA260 and above only */
 } MC_registers_t;
 
 #ifdef PXA2X0_UNMAPPED

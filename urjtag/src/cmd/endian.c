@@ -32,44 +32,46 @@
 #include "cmd.h"
 
 static int
-cmd_endian_run( chain_t *chain, char *params[] )
+cmd_endian_run (chain_t * chain, char *params[])
 {
-	if (cmd_params( params ) > 2)
-		return -1;
+    if (cmd_params (params) > 2)
+        return -1;
 
-	if (!params[1]) {
-		if (big_endian)
-			printf( _("Endianess for external files: big\n") );
-		else
-			printf( _("Endianess for external files: little\n") );
-		return 1;
-	}
+    if (!params[1])
+    {
+        if (big_endian)
+            printf (_("Endianess for external files: big\n"));
+        else
+            printf (_("Endianess for external files: little\n"));
+        return 1;
+    }
 
 
-	if (strcasecmp( params[1], "little" ) == 0) {
-		big_endian = 0;
-		return 1;
-	}
-	if (strcasecmp( params[1], "big" ) == 0) {
-		big_endian = 1;
-		return 1;
-	}
+    if (strcasecmp (params[1], "little") == 0)
+    {
+        big_endian = 0;
+        return 1;
+    }
+    if (strcasecmp (params[1], "big") == 0)
+    {
+        big_endian = 1;
+        return 1;
+    }
 
-	return -1;
+    return -1;
 }
 
 static void
-cmd_endian_help( void )
+cmd_endian_help (void)
 {
-	printf( _(
-		"Usage: %s\n"
-		"Set or print endianess for external files.\n"
-	), "endian [little|big]" );
+    printf (_("Usage: %s\n"
+              "Set or print endianess for external files.\n"),
+            "endian [little|big]");
 }
 
 cmd_t cmd_endian = {
-	"endian",
-	N_("set/print endianess"),
-	cmd_endian_help,
-	cmd_endian_run
+    "endian",
+    N_("set/print endianess"),
+    cmd_endian_help,
+    cmd_endian_run
 };

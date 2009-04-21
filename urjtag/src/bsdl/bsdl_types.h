@@ -32,9 +32,9 @@
    handled internally in bsdl_flex.l as yyextra */
 struct scan_extra
 {
-  int proc_mode;
-  int Compile_Errors;
-  int Base;
+    int proc_mode;
+    int Compile_Errors;
+    int Base;
 };
 typedef struct scan_extra scan_extra_t;
 
@@ -42,9 +42,9 @@ typedef struct scan_extra scan_extra_t;
    the instruction name and its opcode (optional) is stored here */
 struct instr_elem
 {
-  struct instr_elem *next;
-  char *instr;
-  char *opcode;
+    struct instr_elem *next;
+    char *instr;
+    char *opcode;
 };
 typedef struct instr_elem instr_elem_t;
 
@@ -57,10 +57,10 @@ typedef struct instr_elem instr_elem_t;
  */
 struct ainfo_elem
 {
-  struct ainfo_elem *next;
-  char *reg;
-  int   reg_len;
-  instr_elem_t *instr_list;
+    struct ainfo_elem *next;
+    char *reg;
+    int reg_len;
+    instr_elem_t *instr_list;
 };
 typedef struct ainfo_elem ainfo_elem_t;
 
@@ -70,23 +70,23 @@ typedef struct ainfo_elem ainfo_elem_t;
    respective 'bit' command */
 struct cell_info
 {
-  struct cell_info *next;
-  /* basic cell spec entries */
-  int   bit_num;
-  char *port_name;
-  int   cell_function;
-  char *basic_safe_value;
-  /* the disable spec entries */
-  int   ctrl_bit_num;
-  int   disable_safe_value;
+    struct cell_info *next;
+    /* basic cell spec entries */
+    int bit_num;
+    char *port_name;
+    int cell_function;
+    char *basic_safe_value;
+    /* the disable spec entries */
+    int ctrl_bit_num;
+    int disable_safe_value;
 };
 typedef struct cell_info cell_info_t;
 
 /* structure string_elem enables to build lists of strings */
 struct string_elem
 {
-  struct string_elem *next;
-  char *string;
+    struct string_elem *next;
+    char *string;
 };
 typedef struct string_elem string_elem_t;
 
@@ -97,61 +97,61 @@ typedef struct string_elem string_elem_t;
    - low and high indice if it's a vector */
 struct port_desc
 {
-  string_elem_t *names_list;
-  struct port_desc *next;
-  int is_vector;
-  int low_idx;
-  int high_idx;
+    string_elem_t *names_list;
+    struct port_desc *next;
+    int is_vector;
+    int low_idx;
+    int high_idx;
 };
 typedef struct port_desc port_desc_t;
 
 typedef enum
 {
-  VET_CONSTANT,
-  VET_ATTRIBUTE_STRING,
-  VET_ATTRIBUTE_DECIMAL,
-  VET_UNKNOWN
+    VET_CONSTANT,
+    VET_ATTRIBUTE_STRING,
+    VET_ATTRIBUTE_DECIMAL,
+    VET_UNKNOWN
 } vhdl_elem_type_t;
 
 struct vhdl_elem
 {
-  struct vhdl_elem *next;
-  vhdl_elem_type_t type;
-  char *name;
-  char *payload;
-  int line;
+    struct vhdl_elem *next;
+    vhdl_elem_type_t type;
+    char *name;
+    char *payload;
+    int line;
 };
 typedef struct vhdl_elem vhdl_elem_t;
 
 typedef enum
 {
-  CONF_1990,
-  CONF_1993,
-  CONF_2001,
-  CONF_UNKNOWN
+    CONF_1990,
+    CONF_1993,
+    CONF_2001,
+    CONF_UNKNOWN
 } bsdl_conformance_t;
 
 /* structure jtag_ctrl collects all elements that are required to interface
    with jtag internals */
 struct jtag_ctrl
 {
-  int      proc_mode;
-  chain_t *chain;
-  part_t  *part;
-  /* collected by VHDL parser */
-  port_desc_t *port_desc;
-  vhdl_elem_t *vhdl_elem_first;
-  vhdl_elem_t *vhdl_elem_last;
-  /* collected by BSDL parser */
-  char *idcode;       /* IDCODE string */
-  char *usercode;     /* USERCODE string */
-  int   instr_len;
-  int   bsr_len;
-  bsdl_conformance_t conformance;
-  instr_elem_t *instr_list;
-  ainfo_elem_t *ainfo_list;
-  cell_info_t  *cell_info_first;
-  cell_info_t  *cell_info_last;
+    int proc_mode;
+    chain_t *chain;
+    part_t *part;
+    /* collected by VHDL parser */
+    port_desc_t *port_desc;
+    vhdl_elem_t *vhdl_elem_first;
+    vhdl_elem_t *vhdl_elem_last;
+    /* collected by BSDL parser */
+    char *idcode;               /* IDCODE string */
+    char *usercode;             /* USERCODE string */
+    int instr_len;
+    int bsr_len;
+    bsdl_conformance_t conformance;
+    instr_elem_t *instr_list;
+    ainfo_elem_t *ainfo_list;
+    cell_info_t *cell_info_first;
+    cell_info_t *cell_info_last;
 };
 typedef struct jtag_ctrl jtag_ctrl_t;
 
@@ -159,13 +159,13 @@ typedef struct jtag_ctrl jtag_ctrl_t;
    used to store variables the would end up as globals otherwise */
 struct vhdl_parser_priv
 {
-  char         Package_File_Name[100];
-  int          Reading_Package;
-  char        *buffer;
-  size_t       len_buffer;
-  void        *scanner;
-  jtag_ctrl_t *jtag_ctrl;
-  port_desc_t  tmp_port_desc;
+    char Package_File_Name[100];
+    int Reading_Package;
+    char *buffer;
+    size_t len_buffer;
+    void *scanner;
+    jtag_ctrl_t *jtag_ctrl;
+    port_desc_t tmp_port_desc;
 };
 typedef struct vhdl_parser_priv vhdl_parser_priv_t;
 
@@ -173,12 +173,12 @@ typedef struct vhdl_parser_priv vhdl_parser_priv_t;
    used to store variables the would end up as globals otherwise */
 struct bsdl_parser_priv
 {
-  void         *scanner;
-  jtag_ctrl_t  *jtag_ctrl;
-  int           lineno;
-  ainfo_elem_t  ainfo;
-  cell_info_t   tmp_cell_info;
-  port_desc_t   tmp_port_desc;
+    void *scanner;
+    jtag_ctrl_t *jtag_ctrl;
+    int lineno;
+    ainfo_elem_t ainfo;
+    cell_info_t tmp_cell_info;
+    port_desc_t tmp_port_desc;
 };
 typedef struct bsdl_parser_priv bsdl_parser_priv_t;
 

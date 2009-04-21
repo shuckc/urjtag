@@ -39,38 +39,42 @@
 
 #include "chain.h"
 
-typedef struct {
-	const char *description;
-	uint32_t start;
-	uint64_t length;
-	unsigned int width;
+typedef struct
+{
+    const char *description;
+    uint32_t start;
+    uint64_t length;
+    unsigned int width;
 } bus_area_t;
 
 typedef struct bus bus_t;
 typedef struct bus_driver bus_driver_t;
 
-struct bus_driver {
-	const char *name;
-	const char *description;
-	bus_t *(*new_bus)( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] );
-	void (*free_bus)( bus_t *bus );
-	void (*printinfo)( bus_t *bus );
-	void (*prepare)( bus_t *bus );
-	int (*area)( bus_t *bus, uint32_t adr, bus_area_t *area );
-	void (*read_start)( bus_t *bus, uint32_t adr );
-	uint32_t (*read_next)( bus_t *bus, uint32_t adr );
-	uint32_t (*read_end)( bus_t *bus );
-	uint32_t (*read)( bus_t *bus, uint32_t adr );
-	void (*write)( bus_t *bus, uint32_t adr, uint32_t data );
-	int (*init) (bus_t *bus);
+struct bus_driver
+{
+    const char *name;
+    const char *description;
+    bus_t *(*new_bus) (chain_t * chain, const bus_driver_t * driver,
+                       char *cmd_params[]);
+    void (*free_bus) (bus_t * bus);
+    void (*printinfo) (bus_t * bus);
+    void (*prepare) (bus_t * bus);
+    int (*area) (bus_t * bus, uint32_t adr, bus_area_t * area);
+    void (*read_start) (bus_t * bus, uint32_t adr);
+      uint32_t (*read_next) (bus_t * bus, uint32_t adr);
+      uint32_t (*read_end) (bus_t * bus);
+      uint32_t (*read) (bus_t * bus, uint32_t adr);
+    void (*write) (bus_t * bus, uint32_t adr, uint32_t data);
+    int (*init) (bus_t * bus);
 };
 
-struct bus {
-	chain_t *chain;
-	part_t *part;
-	void *params;
-	int initialized;
-	const bus_driver_t *driver;
+struct bus
+{
+    chain_t *chain;
+    part_t *part;
+    void *params;
+    int initialized;
+    const bus_driver_t *driver;
 };
 
 extern bus_t *bus;

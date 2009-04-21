@@ -33,74 +33,80 @@
 #include "cmd.h"
 
 static int
-cmd_part_run( chain_t *chain, char *params[] )
+cmd_part_run (chain_t * chain, char *params[])
 {
-	unsigned int n;
+    unsigned int n;
 
 /* part alias U1 (3 params) */
-	if(cmd_params( params ) == 3) {
-	  if(strcasecmp(params[1],"alias") == 0) {
-part_t *part;
-	    part = chain->parts->parts[chain->active_part];
-	    part->alias = malloc(strlen(params[2])+1);
-	    strcpy(part->alias,params[2]);
-	    return 1;
-	  }
-	}
+    if (cmd_params (params) == 3)
+    {
+        if (strcasecmp (params[1], "alias") == 0)
+        {
+            part_t *part;
+            part = chain->parts->parts[chain->active_part];
+            part->alias = malloc (strlen (params[2]) + 1);
+            strcpy (part->alias, params[2]);
+            return 1;
+        }
+    }
 
 
-	if (cmd_params( params ) != 2)
-		return -1;
+    if (cmd_params (params) != 2)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
 /* Search for alias too djf */
-	if (cmd_get_number( params[1], &n )) {
+    if (cmd_get_number (params[1], &n))
+    {
 
-		/* Search all parts to check their aliases */
-		int i;
-		char *a;
+        /* Search all parts to check their aliases */
+        int i;
+        char *a;
 
-		for(i=0;i<chain->parts->len;i++) {
-			a = chain->parts->parts[i]->alias;
-			if(a && strcasecmp(a,params[1]) == 0)break;
-		}
-		if(i < chain->parts->len)n = i;
+        for (i = 0; i < chain->parts->len; i++)
+        {
+            a = chain->parts->parts[i]->alias;
+            if (a && strcasecmp (a, params[1]) == 0)
+                break;
+        }
+        if (i < chain->parts->len)
+            n = i;
 
 
-		else return -1;
-	}
+        else
+            return -1;
+    }
 
-	if (n >= chain->parts->len) {
-		printf( _("%s: invalid part number\n"), "part" );
-		return 1;
-	}
+    if (n >= chain->parts->len)
+    {
+        printf (_("%s: invalid part number\n"), "part");
+        return 1;
+    }
 
-	chain->active_part = n;
+    chain->active_part = n;
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_part_help( void )
+cmd_part_help (void)
 {
-	printf( _(
-		"Usage: %s PART\n"
-		"Change active part for current JTAG chain.\n"
-		"\n"
-		"PART          part number | alias\n"
-	), "part" );
+    printf (_("Usage: %s PART\n"
+              "Change active part for current JTAG chain.\n"
+              "\n" "PART          part number | alias\n"), "part");
 }
 
 cmd_t cmd_part = {
-	"part",
-	N_("change active part for current JTAG chain"),
-	cmd_part_help,
-	cmd_part_run
+    "part",
+    N_("change active part for current JTAG chain"),
+    cmd_part_help,
+    cmd_part_run
 };

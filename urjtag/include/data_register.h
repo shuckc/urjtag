@@ -31,14 +31,15 @@
 
 typedef struct data_register data_register;
 
-struct data_register {
-	char name[MAXLEN_DATA_REGISTER + 1];	/* (public) register name */
-	tap_register *in;			/* (public) register value clocked in */
-	tap_register *out;			/* (public) register value clocked out */
-	data_register *next;
+struct data_register
+{
+    char name[MAXLEN_DATA_REGISTER + 1];        /* (public) register name */
+    tap_register *in;           /* (public) register value clocked in */
+    tap_register *out;          /* (public) register value clocked out */
+    data_register *next;
 };
 
-data_register *data_register_alloc( const char *name, int len );
-void data_register_free( data_register *dr );
+data_register *data_register_alloc (const char *name, int len);
+void data_register_free (data_register * dr);
 
 #endif /* DATA_REGISTER_H */

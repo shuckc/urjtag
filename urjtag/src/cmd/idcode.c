@@ -30,42 +30,42 @@
 #include "cmd.h"
 
 static int
-cmd_idcode_run( chain_t *chain, char *params[] )
+cmd_idcode_run (chain_t * chain, char *params[])
 {
-        unsigned int bytes=0;
+    unsigned int bytes = 0;
 
-        if (cmd_params( params ) == 1) {
-                bytes = 0;
-        }
+    if (cmd_params (params) == 1)
+    {
+        bytes = 0;
+    }
 
-        else if (cmd_params( params ) >2)
-                return -1;
+    else if (cmd_params (params) > 2)
+        return -1;
 
-        else if (cmd_get_number( params[1], &bytes ))
-                return -1;
+    else if (cmd_get_number (params[1], &bytes))
+        return -1;
 
-        if (!cmd_test_cable( chain ))
-                return 1;
-
-        printf( _("Reading %d bytes if idcode\n"), bytes );
-	idcode( chain , bytes);
+    if (!cmd_test_cable (chain))
         return 1;
+
+    printf (_("Reading %d bytes if idcode\n"), bytes);
+    idcode (chain, bytes);
+    return 1;
 }
 
 static void
-cmd_idcode_help( void )
+cmd_idcode_help (void)
 {
-        printf( _(
-                "Usage: %s [BYTES]\n"
-                "Read [BYTES]|all IDCODEs of all parts in a JTAG chain.\n"
-                "\n"
-                "BYTES must be an unsigned integer, Use 0 for BYTES to read all bytes\n"
-        ), "idcode" );
+    printf (_("Usage: %s [BYTES]\n"
+              "Read [BYTES]|all IDCODEs of all parts in a JTAG chain.\n"
+              "\n"
+              "BYTES must be an unsigned integer, Use 0 for BYTES to read all bytes\n"),
+            "idcode");
 }
 
 cmd_t cmd_idcode = {
-  "idcode",
-  N_("Read IDCODEs of all parts in a JTAG chain"),
-  cmd_idcode_help,
-  cmd_idcode_run
+    "idcode",
+    N_("Read IDCODEs of all parts in a JTAG chain"),
+    cmd_idcode_help,
+    cmd_idcode_run
 };

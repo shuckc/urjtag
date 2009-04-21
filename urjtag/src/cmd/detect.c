@@ -34,63 +34,63 @@
 #include "cmd.h"
 
 static int
-cmd_detect_run( chain_t *chain, char *params[] )
+cmd_detect_run (chain_t * chain, char *params[])
 {
-	int i;
-	bus_t * abus;
-	
-	if (cmd_params( params ) != 1)
-		return -1;
+    int i;
+    bus_t *abus;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (cmd_params (params) != 1)
+        return -1;
 
-	buses_free();
-	parts_free( chain->parts );
-	chain->parts = NULL;
-	detect_parts( chain, jtag_get_data_dir() );
-	if (!chain->parts)
-		return 1;
-	if (!chain->parts->len) {
-		parts_free( chain->parts );
-		chain->parts = NULL;
-		return 1;
-	}
-	parts_set_instruction( chain->parts, "SAMPLE/PRELOAD" );
-	chain_shift_instructions( chain );
-	chain_shift_data_registers( chain, 1 );
-	parts_set_instruction( chain->parts, "BYPASS" );
-	chain_shift_instructions( chain );
-	
-	// Initialize all the buses
-	for (i = 0; i < buses.len; i++)
-	{
-		abus = buses.buses[i];
-		if(abus->driver->init)
-		{
-			if(abus->driver->init(abus) != URJTAG_STATUS_OK)
-				return -1;
-		}
-	}
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	return 1;
+    buses_free ();
+    parts_free (chain->parts);
+    chain->parts = NULL;
+    detect_parts (chain, jtag_get_data_dir ());
+    if (!chain->parts)
+        return 1;
+    if (!chain->parts->len)
+    {
+        parts_free (chain->parts);
+        chain->parts = NULL;
+        return 1;
+    }
+    parts_set_instruction (chain->parts, "SAMPLE/PRELOAD");
+    chain_shift_instructions (chain);
+    chain_shift_data_registers (chain, 1);
+    parts_set_instruction (chain->parts, "BYPASS");
+    chain_shift_instructions (chain);
+
+    // Initialize all the buses
+    for (i = 0; i < buses.len; i++)
+    {
+        abus = buses.buses[i];
+        if (abus->driver->init)
+        {
+            if (abus->driver->init (abus) != URJTAG_STATUS_OK)
+                return -1;
+        }
+    }
+
+    return 1;
 }
 
 static void
-cmd_detect_help( void )
+cmd_detect_help (void)
 {
-	printf( _(
-		"Usage: %s\n"
-		"Detect parts on the JTAG chain.\n"
-		"\n"
-		"Output from this command is a list of the detected parts.\n"
-		"If no parts are detected other commands may not work properly.\n"
-	), "detect" );
+    printf (_("Usage: %s\n"
+              "Detect parts on the JTAG chain.\n"
+              "\n"
+              "Output from this command is a list of the detected parts.\n"
+              "If no parts are detected other commands may not work properly.\n"),
+            "detect");
 }
 
 cmd_t cmd_detect = {
-	"detect",
-	N_("detect parts on the JTAG chain"),
-	cmd_detect_help,
-	cmd_detect_run
+    "detect",
+    N_("detect parts on the JTAG chain"),
+    cmd_detect_help,
+    cmd_detect_run
 };

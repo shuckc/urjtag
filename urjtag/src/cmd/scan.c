@@ -33,106 +33,110 @@
 #include "cmd.h"
 
 static int
-cmd_scan_run( chain_t *chain, char *params[] )
+cmd_scan_run (chain_t * chain, char *params[])
 {
-	part_t *part;
+    part_t *part;
     data_register *bsr;
-	tap_register *obsr;
-	int i;
+    tap_register *obsr;
+    int i;
 
-	if ((i = cmd_params( params )) < 1)
-		return -1;
+    if ((i = cmd_params (params)) < 1)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "scan" );
-		return 1;
-	}
+    if (chain->active_part >= chain->parts->len)
+    {
+        printf (_("%s: no active part\n"), "scan");
+        return 1;
+    }
 
-	part = chain->parts->parts[chain->active_part];
+    part = chain->parts->parts[chain->active_part];
 
-	/* search for Boundary Scan Register */
-	bsr = part_find_data_register( part, "BSR" );
-	if (!bsr) {
-		printf( _("%s(%s:%d) Boundary Scan Register (BSR) not found\n"), __FUNCTION__, __FILE__, __LINE__ );
-		return 1;
-	}
+    /* search for Boundary Scan Register */
+    bsr = part_find_data_register (part, "BSR");
+    if (!bsr)
+    {
+        printf (_("%s(%s:%d) Boundary Scan Register (BSR) not found\n"),
+                __FUNCTION__, __FILE__, __LINE__);
+        return 1;
+    }
 
-	if(part_find_instruction( part, "SAMPLE"))
-	{
-		part_set_instruction( part, "SAMPLE");
-	}
-	else if(part_find_instruction( part, "SAMPLE/PRELOAD"))
-	{
-		part_set_instruction( part, "SAMPLE/PRELOAD");
-	}
-	else
-	{
-		printf( _("%s(%s:%d) Part can't SAMPLE\n"), __FUNCTION__, __FILE__, __LINE__ );
-		return 1;
-	}
+    if (part_find_instruction (part, "SAMPLE"))
+    {
+        part_set_instruction (part, "SAMPLE");
+    }
+    else if (part_find_instruction (part, "SAMPLE/PRELOAD"))
+    {
+        part_set_instruction (part, "SAMPLE/PRELOAD");
+    }
+    else
+    {
+        printf (_("%s(%s:%d) Part can't SAMPLE\n"), __FUNCTION__, __FILE__,
+                __LINE__);
+        return 1;
+    }
 
-	chain_shift_instructions( chain );
+    chain_shift_instructions (chain);
 
-	obsr = register_alloc( bsr->out->len );
+    obsr = register_alloc (bsr->out->len);
 
-	if(!obsr)
-	{
-		printf( _("Out of memory\n") );
-		return 1;
-	}
+    if (!obsr)
+    {
+        printf (_("Out of memory\n"));
+        return 1;
+    }
 
-	{
-		signal_t *s;
+    {
+        signal_t *s;
 
-		register_init( obsr, register_get_string( bsr->out )); // copy
+        register_init (obsr, register_get_string (bsr->out));   // copy
 
-		chain_shift_data_registers( chain, 1 );
+        chain_shift_data_registers (chain, 1);
 
-		for(s=part->signals; s; s=s->next)
-		{
-			if(s->input != NULL)
-			{
-				int old = obsr->data[s->input->bit];
-				int new = bsr->out->data[s->input->bit];
-				if( old != new ) 
-				{
-					salias_t *a;
-					printf("%s", s->name);
-					for(a = part->saliases; a; a=a->next)
-					{
-						if(a->signal == s) printf(",%s", a->name);
-					}
-					printf( _(": %d > %d\n"), old, new);
-				}
-			}
-		}
-	}
+        for (s = part->signals; s; s = s->next)
+        {
+            if (s->input != NULL)
+            {
+                int old = obsr->data[s->input->bit];
+                int new = bsr->out->data[s->input->bit];
+                if (old != new)
+                {
+                    salias_t *a;
+                    printf ("%s", s->name);
+                    for (a = part->saliases; a; a = a->next)
+                    {
+                        if (a->signal == s)
+                            printf (",%s", a->name);
+                    }
+                    printf (_(": %d > %d\n"), old, new);
+                }
+            }
+        }
+    }
 
-	register_free( obsr );
+    register_free (obsr);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_scan_help( void )
+cmd_scan_help (void)
 {
-	printf( _(
-		"Usage: %s [SIGNAL]* \n"
-		"Read BSR and show changes since last scan.\n"
-	), "scan" );
+    printf (_("Usage: %s [SIGNAL]* \n"
+              "Read BSR and show changes since last scan.\n"), "scan");
 }
 
 cmd_t cmd_scan = {
-	"scan",
-	N_("read BSR and show changes since last scan"),
-	cmd_scan_help,
-	cmd_scan_run
+    "scan",
+    N_("read BSR and show changes since last scan"),
+    cmd_scan_help,
+    cmd_scan_run
 };

@@ -35,133 +35,144 @@
 #include "cmd.h"
 #include "jtag.h"
 
-#define MAXINPUTLINE 100    /* Maximum input line length */
+#define MAXINPUTLINE 100        /* Maximum input line length */
 
 
 
 int
-jtag_parse_line( chain_t *chain, char *line )
+jtag_parse_line (chain_t * chain, char *line)
 {
-	int l, i, r, tcnt;
-	char **a;
-	char *c, *d;
-	char *sline;
-	
-	if (line == NULL)
-		return 1;
-	l = strlen(line);
-	if (l == 0)
-		return 1;
+    int l, i, r, tcnt;
+    char **a;
+    char *c, *d;
+    char *sline;
 
-	/* allocate as many chars as in the input line; this will be enough in all cases */
-	sline = malloc((l+1) * sizeof(char));
-	if (sline == NULL) {
-		printf( _("Out of memory\n") );
-		return 1;
-	}
+    if (line == NULL)
+        return 1;
+    l = strlen (line);
+    if (l == 0)
+        return 1;
 
-	/* count and copy the tokens */
-	c = line;
-	d = sline;
-	tcnt = 0;
-	while (1) {
-		/* eat up leading spaces */
-		while (isspace(*c))
-			c++;
-			
-		/* if the command ends here (either by NUL or comment) */
-		if (*c == '\0' || *c == '#')
-			break;
-			
-		/* copy the meat (non-space, non-NUL) */
-		while (!isspace(*c) && *c != '\0') {
-			*d++ = *c++;
-		}
-		/* mark the end to the destination string */
-		*d++ = '\0';
-		tcnt++;
-	}
-	
-	if (tcnt == 0) {
-		free(sline);
-		return 1;
-	}
-		
-	/* allocate the token pointer table */
-	a = malloc((tcnt + 1) * sizeof(char *));
-	if (a == NULL) {
-		fprintf(stderr, _("Out of memory\n"));
-		return 1;
-	}
+    /* allocate as many chars as in the input line; this will be enough in all cases */
+    sline = malloc ((l + 1) * sizeof (char));
+    if (sline == NULL)
+    {
+        printf (_("Out of memory\n"));
+        return 1;
+    }
 
-	/* find the starting points for the tokens */
-	d = sline;
-	for (i = 0; i < tcnt; i++)
-		{
-		a[i] = d;
-		while (*d++ != '\0')
-			;	
-		}
-	a[tcnt] = NULL;
+    /* count and copy the tokens */
+    c = line;
+    d = sline;
+    tcnt = 0;
+    while (1)
+    {
+        /* eat up leading spaces */
+        while (isspace (*c))
+            c++;
 
-	r = cmd_run( chain, a );
-	if(debug_mode & 1)printf("Return in jtag_parse_line r=%d\n",r);
-	free( a );
-	free(sline);
-	return r;
+        /* if the command ends here (either by NUL or comment) */
+        if (*c == '\0' || *c == '#')
+            break;
+
+        /* copy the meat (non-space, non-NUL) */
+        while (!isspace (*c) && *c != '\0')
+        {
+            *d++ = *c++;
+        }
+        /* mark the end to the destination string */
+        *d++ = '\0';
+        tcnt++;
+    }
+
+    if (tcnt == 0)
+    {
+        free (sline);
+        return 1;
+    }
+
+    /* allocate the token pointer table */
+    a = malloc ((tcnt + 1) * sizeof (char *));
+    if (a == NULL)
+    {
+        fprintf (stderr, _("Out of memory\n"));
+        return 1;
+    }
+
+    /* find the starting points for the tokens */
+    d = sline;
+    for (i = 0; i < tcnt; i++)
+    {
+        a[i] = d;
+        while (*d++ != '\0')
+            ;
+    }
+    a[tcnt] = NULL;
+
+    r = cmd_run (chain, a);
+    if (debug_mode & 1)
+        printf ("Return in jtag_parse_line r=%d\n", r);
+    free (a);
+    free (sline);
+    return r;
 }
 
 
 int
-jtag_parse_stream( chain_t *chain, FILE *f )
+jtag_parse_stream (chain_t * chain, FILE * f)
 {
-	char inputline[MAXINPUTLINE + 1];
-	int go = 1, i, c, lnr, clip, found_comment;
+    char inputline[MAXINPUTLINE + 1];
+    int go = 1, i, c, lnr, clip, found_comment;
 
-	/* read the stream line-by-line until EOF or "quit" */
-	lnr = 0;
-	do {
-		i = 0;
-		clip = 0;
-		found_comment = 0;
-		
-		/* read stream until '\n' or EOF, copy at most MAXINPUTLINE-1 chars */
-		while (1) {
-			c = fgetc(f);
-			if (c == EOF || c == '\n')
-				break;
-			if (c == '#')
-				found_comment = 1;
-			if (i < sizeof(inputline) - 1)
-				inputline[i++] = c;
-			else 
-				clip = 1;
-			}
-		inputline[i] = '\0';
-		lnr++;
-		if (clip && !found_comment)
-			fprintf(stdout, "Warning: line %d exceeds %d characters, clipped\n", lnr, (int)sizeof(inputline) - 1);  
-		go = jtag_parse_line(chain, inputline);
-		chain_flush( chain );
-	}
-	while (go && c != EOF);
-	
-	return go;
+    /* read the stream line-by-line until EOF or "quit" */
+    lnr = 0;
+    do
+    {
+        i = 0;
+        clip = 0;
+        found_comment = 0;
+
+        /* read stream until '\n' or EOF, copy at most MAXINPUTLINE-1 chars */
+        while (1)
+        {
+            c = fgetc (f);
+            if (c == EOF || c == '\n')
+                break;
+            if (c == '#')
+                found_comment = 1;
+            if (i < sizeof (inputline) - 1)
+                inputline[i++] = c;
+            else
+                clip = 1;
+        }
+        inputline[i] = '\0';
+        lnr++;
+        if (clip && !found_comment)
+            fprintf (stdout,
+                     "Warning: line %d exceeds %d characters, clipped\n", lnr,
+                     (int) sizeof (inputline) - 1);
+        go = jtag_parse_line (chain, inputline);
+        chain_flush (chain);
+    }
+    while (go && c != EOF);
+
+    return go;
 }
 
 int
-jtag_parse_file( chain_t *chain, const char *filename )
+jtag_parse_file (chain_t * chain, const char *filename)
 {
-	FILE *f;
-	int go;
+    FILE *f;
+    int go;
 
-	f = fopen( filename, "r" );
-	if (!f)
-		return -1;
+    f = fopen (filename, "r");
+    if (!f)
+        return -1;
 
-	go = jtag_parse_stream( chain, f );
+    go = jtag_parse_stream (chain, f);
 
-	fclose(f);
-	if(debug_mode & 1)printf("File Closed gp=%d\n",go);
-	return go;
+    fclose (f);
+    if (debug_mode & 1)
+        printf ("File Closed gp=%d\n", go);
+    return go;
 }

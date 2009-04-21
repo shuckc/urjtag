@@ -32,51 +32,50 @@
 #include "cmd.h"
 
 static int
-cmd_addpart_run( chain_t *chain, char *params[] )
+cmd_addpart_run (chain_t * chain, char *params[])
 {
-	unsigned int len;
-	
-	if (cmd_params( params ) != 2)
-		return -1;
+    unsigned int len;
 
-	if (cmd_get_number( params[1], &len ))
-		return -1;
+    if (cmd_params (params) != 2)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (cmd_get_number (params[1], &len))
+        return -1;
 
-	manual_add( chain, len );
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (chain->parts == NULL)
-		return 1;
+    manual_add (chain, len);
 
-	if (chain->parts->len == 0) {
-		parts_free( chain->parts );
-		chain->parts = NULL;
-	}
+    if (chain->parts == NULL)
+        return 1;
 
-	parts_set_instruction(chain->parts, "BYPASS");
-	chain_shift_instructions(chain);
+    if (chain->parts->len == 0)
+    {
+        parts_free (chain->parts);
+        chain->parts = NULL;
+    }
 
-	return 1;
+    parts_set_instruction (chain->parts, "BYPASS");
+    chain_shift_instructions (chain);
+
+    return 1;
 }
 
 
 static void
-cmd_addpart_help( void )
+cmd_addpart_help (void)
 {
-	printf( _(
-		"Usage: %s IRLENGTH\n"
-		"Manually add a part to the end of the chain.\n"
-		"\n"
-		"IRLENGTH           instruction register length\n"
-	), "addpart" );
+    printf (_("Usage: %s IRLENGTH\n"
+              "Manually add a part to the end of the chain.\n"
+              "\n"
+              "IRLENGTH           instruction register length\n"), "addpart");
 }
 
 
 cmd_t cmd_addpart = {
-	"addpart",
-	N_("manually adds parts on the JTAG chain"),
-	cmd_addpart_help,
-	cmd_addpart_run
+    "addpart",
+    N_("manually adds parts on the JTAG chain"),
+    cmd_addpart_help,
+    cmd_addpart_run
 };

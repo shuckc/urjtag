@@ -66,237 +66,247 @@
 #define GPIO_OUTPUT_MASK	ts7800_TDO
 #define GPIO_BITMASK		(~((ts7800_TDO)|(ts7800_TDI)|(ts7800_TMS)|(ts7800_TCK)))
 
-typedef struct {
-	int		fd_dev_mem;
-	void		*map_base;
-	size_t		map_size;
-	uint32_t	*gpio_base;
-	int		signals;
-	uint32_t	lastout;
+typedef struct
+{
+    int fd_dev_mem;
+    void *map_base;
+    size_t map_size;
+    uint32_t *gpio_base;
+    int signals;
+    uint32_t lastout;
 } ts7800_params_t;
 
 static int
-ts7800_gpio_open( cable_t *cable )
+ts7800_gpio_open (cable_t * cable)
 {
-	ts7800_params_t *p = cable->params;
-	off_t map_mask;
+    ts7800_params_t *p = cable->params;
+    off_t map_mask;
 
-	/* Open the memory device so we can access the hardware registers */
-	p->fd_dev_mem = open("/dev/mem", O_RDWR | O_SYNC);
-	if (p->fd_dev_mem == -1) {
-		printf( _("Error: unable to open /dev/mem\n") );
-		return -1;
-	}
+    /* Open the memory device so we can access the hardware registers */
+    p->fd_dev_mem = open ("/dev/mem", O_RDWR | O_SYNC);
+    if (p->fd_dev_mem == -1)
+    {
+        printf (_("Error: unable to open /dev/mem\n"));
+        return -1;
+    }
 
-	p->map_size = getpagesize();
-	map_mask = p->map_size - 1;
+    p->map_size = getpagesize ();
+    map_mask = p->map_size - 1;
 
-	/* Map the GPIO registers */
-	p->map_base = mmap(0, p->map_size, PROT_READ | PROT_WRITE, MAP_SHARED, p->fd_dev_mem, GPIO_BASE & ~map_mask);
-	if (p->map_base == MAP_FAILED) {
-		printf( _("Error: unable to mmap the GPIO registers\n") );
-		close (p->fd_dev_mem);
-		return -1;
-	}
+    /* Map the GPIO registers */
+    p->map_base =
+        mmap (0, p->map_size, PROT_READ | PROT_WRITE, MAP_SHARED,
+              p->fd_dev_mem, GPIO_BASE & ~map_mask);
+    if (p->map_base == MAP_FAILED)
+    {
+        printf (_("Error: unable to mmap the GPIO registers\n"));
+        close (p->fd_dev_mem);
+        return -1;
+    }
 
-	/* Create the pointers to access the GPIO registers */
-	p->gpio_base = (uint32_t*)p->map_base;
+    /* Create the pointers to access the GPIO registers */
+    p->gpio_base = (uint32_t *) p->map_base;
 
-	/* Set the GPIO pins as inputs/outputs as needed for the JTAG interface */
-	p->gpio_base[GPIO_DIR] = ( p->gpio_base[GPIO_DIR] & GPIO_BITMASK ) | GPIO_OUTPUT_MASK;
+    /* Set the GPIO pins as inputs/outputs as needed for the JTAG interface */
+    p->gpio_base[GPIO_DIR] =
+        (p->gpio_base[GPIO_DIR] & GPIO_BITMASK) | GPIO_OUTPUT_MASK;
 
-	p->lastout=p->gpio_base[GPIO_OUT];
+    p->lastout = p->gpio_base[GPIO_OUT];
 
-	return 0;
+    return 0;
 }
 
 static int
-ts7800_gpio_close( cable_t *cable )
+ts7800_gpio_close (cable_t * cable)
 {
-	ts7800_params_t *p = cable->params;
+    ts7800_params_t *p = cable->params;
 
-	/* Unmap the GPIO registers */
-	if (munmap(p->map_base, p->map_size) == -1) {
-		printf( _("Error: unable to munmap the GPIO registers\n"));
-	}
-	close(p->fd_dev_mem);
-	return 0;
+    /* Unmap the GPIO registers */
+    if (munmap (p->map_base, p->map_size) == -1)
+    {
+        printf (_("Error: unable to munmap the GPIO registers\n"));
+    }
+    close (p->fd_dev_mem);
+    return 0;
 }
 
 static int
-ts7800_gpio_write( cable_t *cable, uint8_t data )
+ts7800_gpio_write (cable_t * cable, uint8_t data)
 {
-	int sigs;
-	ts7800_params_t *p = cable->params;
+    int sigs;
+    ts7800_params_t *p = cable->params;
 
-	p->gpio_base[GPIO_OUT] = p->lastout = (p->lastout & GPIO_BITMASK) | data;
-	cable_wait(cable);
+    p->gpio_base[GPIO_OUT] = p->lastout = (p->lastout & GPIO_BITMASK) | data;
+    cable_wait (cable);
 
-	return 0;
+    return 0;
 }
 
 static int
-ts7800_gpio_read( cable_t *cable )
+ts7800_gpio_read (cable_t * cable)
 {
-	ts7800_params_t *p = cable->params;
+    ts7800_params_t *p = cable->params;
 
-	return p->gpio_base[GPIO_IN];
+    return p->gpio_base[GPIO_IN];
 }
 
 static int
-ts7800_connect( char *params[], cable_t *cable )
+ts7800_connect (char *params[], cable_t * cable)
 {
-	ts7800_params_t *cable_params;
+    ts7800_params_t *cable_params;
 
-	if ( cmd_params( params ) != 1) {
-	  printf( _("Error: This cable type does not accept parameters!\n") );
-	  return 1;
-	}
+    if (cmd_params (params) != 1)
+    {
+        printf (_("Error: This cable type does not accept parameters!\n"));
+        return 1;
+    }
 
-	printf( _("Initializing TS-7800 Built-in JTAG Chain\n") );
+    printf (_("Initializing TS-7800 Built-in JTAG Chain\n"));
 
-	cable_params = malloc( sizeof *cable_params );
-	if (!cable_params) {
-		printf( _("%s(%d) Out of memory\n"), __FILE__, __LINE__ );
-		free( cable );
-		return 4;
-	}
+    cable_params = malloc (sizeof *cable_params);
+    if (!cable_params)
+    {
+        printf (_("%s(%d) Out of memory\n"), __FILE__, __LINE__);
+        free (cable);
+        return 4;
+    }
 
-	cable->params = cable_params;
-	cable->chain = NULL;
-	cable->delay = 1000;
+    cable->params = cable_params;
+    cable->chain = NULL;
+    cable->delay = 1000;
 
-	return 0;
+    return 0;
 }
 
 static void
-ts7800_disconnect( cable_t *cable )
+ts7800_disconnect (cable_t * cable)
 {
-	ts7800_gpio_close( cable );
-	chain_disconnect( cable->chain );
+    ts7800_gpio_close (cable);
+    chain_disconnect (cable->chain);
 }
 
 static void
-ts7800_cable_free( cable_t *cable )
+ts7800_cable_free (cable_t * cable)
 {
-	free( cable->params );
-	free( cable );
+    free (cable->params);
+    free (cable);
 }
 
 static int
-ts7800_init( cable_t *cable )
+ts7800_init (cable_t * cable)
 {
-	ts7800_params_t *p = cable->params;
+    ts7800_params_t *p = cable->params;
 
-	if (ts7800_gpio_open( cable ))
-		return -1;
+    if (ts7800_gpio_open (cable))
+        return -1;
 
-	p->signals = CS_TRST;
+    p->signals = CS_TRST;
 
-	return 0;
+    return 0;
 }
 
 static void
-ts7800_done( cable_t *cable )
+ts7800_done (cable_t * cable)
 {
-	ts7800_gpio_close( cable );
+    ts7800_gpio_close (cable);
 }
 
 static void
-ts7800_clock( cable_t *cable, int tms, int tdi, int n )
+ts7800_clock (cable_t * cable, int tms, int tdi, int n)
 {
-	int bit_mask;
-	int i;
+    int bit_mask;
+    int i;
 
-	tms = tms ? 1 : 0;
-	tdi = tdi ? 1 : 0;
+    tms = tms ? 1 : 0;
+    tdi = tdi ? 1 : 0;
 
-	bit_mask = (tms << TMS) | (tdi << TDI);
+    bit_mask = (tms << TMS) | (tdi << TDI);
 
-	for (i = 0; i < n; i++) {
-		ts7800_gpio_write( cable, (0 << TCK) | bit_mask );
-		ts7800_gpio_write( cable, (1 << TCK) | bit_mask );
-		ts7800_gpio_write( cable, (0 << TCK) | bit_mask );
-	}
+    for (i = 0; i < n; i++)
+    {
+        ts7800_gpio_write (cable, (0 << TCK) | bit_mask);
+        ts7800_gpio_write (cable, (1 << TCK) | bit_mask);
+        ts7800_gpio_write (cable, (0 << TCK) | bit_mask);
+    }
 }
 
 /**
  * NOTE: This also lowers the TDI and TMS lines; is this intended?
  */
 static int
-ts7800_get_tdo( cable_t *cable )
+ts7800_get_tdo (cable_t * cable)
 {
-	ts7800_params_t *p = cable->params;
-	ts7800_gpio_write( cable, p->lastout & ~(0 << TCK) );
+    ts7800_params_t *p = cable->params;
+    ts7800_gpio_write (cable, p->lastout & ~(0 << TCK));
 
-	return (ts7800_gpio_read( cable ) >> TDO) & 1;
+    return (ts7800_gpio_read (cable) >> TDO) & 1;
 }
 
 static int
-ts7800_current_signals( cable_t *cable )
+ts7800_current_signals (cable_t * cable)
 {
-	ts7800_params_t *p = cable->params;
+    ts7800_params_t *p = cable->params;
 
-	int sigs = p->signals & ~(CS_TMS | CS_TDI | CS_TCK);
-	if (p->lastout & (1 << TCK)) sigs |= CS_TCK;
-	if (p->lastout & (1 << TDI)) sigs |= CS_TDI;
-	if (p->lastout & (1 << TMS)) sigs |= CS_TMS;
+    int sigs = p->signals & ~(CS_TMS | CS_TDI | CS_TCK);
+    if (p->lastout & (1 << TCK))
+        sigs |= CS_TCK;
+    if (p->lastout & (1 << TDI))
+        sigs |= CS_TDI;
+    if (p->lastout & (1 << TMS))
+        sigs |= CS_TMS;
 
-	return sigs;
+    return sigs;
 }
 
 static int
-ts7800_set_signal( cable_t *cable, int mask, int val )
+ts7800_set_signal (cable_t * cable, int mask, int val)
 {
-	ts7800_params_t *p = cable->params;
+    ts7800_params_t *p = cable->params;
 
-	int prev_sigs = current_signals( cable );
+    int prev_sigs = current_signals (cable);
 
-	mask &= (CS_TDI | CS_TCK | CS_TMS); // only these can be modified
+    mask &= (CS_TDI | CS_TCK | CS_TMS); // only these can be modified
 
-	if (mask != 0)
-	{
-		sigs = (prev_sigs & ~mask) | (val & mask);
-		tms = (sigs & CS_TMS) ? (1 << TMS) : 0;
-		tdi = (sigs & CS_TDI) ? (1 << TDI) : 0;
-		tck = (sigs & CS_TCK) ? (1 << TCK) : 0;
-		ts7800_gpio_write( cable, tms | tdi | tck );
-	}
+    if (mask != 0)
+    {
+        sigs = (prev_sigs & ~mask) | (val & mask);
+        tms = (sigs & CS_TMS) ? (1 << TMS) : 0;
+        tdi = (sigs & CS_TDI) ? (1 << TDI) : 0;
+        tck = (sigs & CS_TCK) ? (1 << TCK) : 0;
+        ts7800_gpio_write (cable, tms | tdi | tck);
+    }
 
-	return prev_sigs;
+    return prev_sigs;
 }
 
 static int
-ts7800_get_signal( cable_t *cable, pod_sigsel_t sig )
+ts7800_get_signal (cable_t * cable, pod_sigsel_t sig)
 {
-	ts7800_params_t *p = cable->params;
+    ts7800_params_t *p = cable->params;
 
-	return (current_signals( cable ) & sig) ? 1 : 0;
+    return (current_signals (cable) & sig) ? 1 : 0;
 }
 
 static void
-ts7800_help( const char *cablename )
+ts7800_help (const char *cablename)
 {
-	printf( _(
-		"Usage: cable %s\n"
-		"\n"
-	), cablename );
+    printf (_("Usage: cable %s\n" "\n"), cablename);
 }
 
 cable_driver_t ts7800_cable_driver = {
-	"ts7800",
-	N_("TS-7800 Built-in JTAG Chain"),
-	ts7800_connect,
-	ts7800_disconnect,
-	ts7800_cable_free,
-	ts7800_init,
-	ts7800_done,
-	generic_set_frequency,
-	ts7800_clock,
-	ts7800_get_tdo,
-	generic_transfer,
-	ts7800_set_signal,
-	ts7800_get_signal,
-	generic_flush_one_by_one,
-	ts7800_help
+    "ts7800",
+    N_("TS-7800 Built-in JTAG Chain"),
+    ts7800_connect,
+    ts7800_disconnect,
+    ts7800_cable_free,
+    ts7800_init,
+    ts7800_done,
+    generic_set_frequency,
+    ts7800_clock,
+    ts7800_get_tdo,
+    generic_transfer,
+    ts7800_set_signal,
+    ts7800_get_signal,
+    generic_flush_one_by_one,
+    ts7800_help
 };

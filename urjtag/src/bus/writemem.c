@@ -34,90 +34,102 @@
 #include "jtag.h"
 
 void
-writemem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
+writemem (bus_t * bus, FILE * f, uint32_t addr, uint32_t len)
 {
-	uint32_t step;
-	uint32_t a;
-	int bc = 0;
-	int bidx = 0;
+    uint32_t step;
+    uint32_t a;
+    int bc = 0;
+    int bidx = 0;
 #define BSIZE 4096
-	uint8_t b[BSIZE];
-	bus_area_t area;
-	uint64_t end;
+    uint8_t b[BSIZE];
+    bus_area_t area;
+    uint64_t end;
 
-	if (!bus) {
-		printf( _("Error: Missing bus driver!\n") );
-		return;
-	}
+    if (!bus)
+    {
+        printf (_("Error: Missing bus driver!\n"));
+        return;
+    }
 
-	bus_prepare( bus );
+    bus_prepare (bus);
 
-	if (bus_area( bus, addr, &area ) != URJTAG_STATUS_OK) {
-		printf( _("Error: Bus width detection failed\n") );
-		return;
-	}
-	step = area.width / 8;
+    if (bus_area (bus, addr, &area) != URJTAG_STATUS_OK)
+    {
+        printf (_("Error: Bus width detection failed\n"));
+        return;
+    }
+    step = area.width / 8;
 
-	if (step == 0) {
-		printf( _("Unknown bus width!\n") );
-		return;
-	}
+    if (step == 0)
+    {
+        printf (_("Unknown bus width!\n"));
+        return;
+    }
 
-	addr = addr & (~(step - 1));
-	len = (len + step - 1) & (~(step - 1));
+    addr = addr & (~(step - 1));
+    len = (len + step - 1) & (~(step - 1));
 
-	printf( _("address: 0x%08X\n"), addr );
-	printf( _("length:  0x%08X\n"), len );
+    printf (_("address: 0x%08X\n"), addr);
+    printf (_("length:  0x%08X\n"), len);
 
-	if (len == 0) {
-		printf( _("length is 0.\n") );
-		return;
-	}
+    if (len == 0)
+    {
+        printf (_("length is 0.\n"));
+        return;
+    }
 
-	a = addr;
-	end = a + len;
-	printf( _("writing:\n") );
+    a = addr;
+    end = a + len;
+    printf (_("writing:\n"));
 
-	for (; a < end; a += step) {
-		uint32_t data;
-		int j;
+    for (; a < end; a += step)
+    {
+        uint32_t data;
+        int j;
 
-		/* Read one block of data */
-		if ( bc < step ) {
-			printf( _("addr: 0x%08X"), a );
-			printf( "\r" );
-			fflush( stdout );
-			if (bc != 0)
-			  printf( _("Data not on word boundary, NOT SUPPORTED!"));
-			if (feof(f)) {
-			  printf( _("Unexpected end of file!\n"));
-			  printf( _("Addr: 0x%08X\n"), a);
-			  break;
-			}
-			bc = fread( b, 1, BSIZE, f );
-			if (!bc) {
-			  printf( _("Short read: bc=0x%X\n"), bc);
-			}
-			bidx = 0;
+        /* Read one block of data */
+        if (bc < step)
+        {
+            printf (_("addr: 0x%08X"), a);
+            printf ("\r");
+            fflush (stdout);
+            if (bc != 0)
+                printf (_("Data not on word boundary, NOT SUPPORTED!"));
+            if (feof (f))
+            {
+                printf (_("Unexpected end of file!\n"));
+                printf (_("Addr: 0x%08X\n"), a);
+                break;
+            }
+            bc = fread (b, 1, BSIZE, f);
+            if (!bc)
+            {
+                printf (_("Short read: bc=0x%X\n"), bc);
+            }
+            bidx = 0;
 
-		}
+        }
 
-		/* Write a word at  time */
-		data = 0;
-		for (j = step; j > 0; j--) {
-			if (big_endian) {
-			        data |= b[bidx++];
-				data <<= 8;
-				bc--;
-			} else {
-			        data |= (b[bidx++] << ((step - j) * 8));
-				bc--;
-			}
-		}
+        /* Write a word at  time */
+        data = 0;
+        for (j = step; j > 0; j--)
+        {
+            if (big_endian)
+            {
+                data |= b[bidx++];
+                data <<= 8;
+                bc--;
+            }
+            else
+            {
+                data |= (b[bidx++] << ((step - j) * 8));
+                bc--;
+            }
+        }
 
-		bus_write( bus, a, data );
-	  
-	}
+        bus_write (bus, a, data);
 
-	printf( _("\nDone.\n") );
+    }
+
+    printf (_("\nDone.\n"));
 }

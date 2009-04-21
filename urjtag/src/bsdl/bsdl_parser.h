@@ -28,22 +28,22 @@
 #include "bsdl_types.h"
 
 /* VHDL lexer declarations */
-void *bsdl_flex_init( int );
-void  bsdl_flex_deinit( void * );
-void  bsdl_flex_set_bin_x( void * );
-void  bsdl_flex_set_hex( void * );
-void  bsdl_flex_set_decimal( void * );
-int   bsdl_flex_get_compile_errors( void * );
-int   bsdl_flex_postinc_compile_errors( void * );
-void  bsdl_flex_switch_buffer( void *, const char *, int );
-void  bsdl_flex_stop_buffer( void * );
+void *bsdl_flex_init (int);
+void bsdl_flex_deinit (void *);
+void bsdl_flex_set_bin_x (void *);
+void bsdl_flex_set_hex (void *);
+void bsdl_flex_set_decimal (void *);
+int bsdl_flex_get_compile_errors (void *);
+int bsdl_flex_postinc_compile_errors (void *);
+void bsdl_flex_switch_buffer (void *, const char *, int);
+void bsdl_flex_stop_buffer (void *);
 
 /* BSDL parser declarations */
-bsdl_parser_priv_t *bsdl_parser_init( jtag_ctrl_t * );
-void bsdl_parser_deinit( bsdl_parser_priv_t * );
-int bsdlparse( bsdl_parser_priv_t * );
+bsdl_parser_priv_t *bsdl_parser_init (jtag_ctrl_t *);
+void bsdl_parser_deinit (bsdl_parser_priv_t *);
+int bsdlparse (bsdl_parser_priv_t *);
 
 /* BSDL semantic functions */
-int bsdl_process_elements( jtag_ctrl_t *, const char * );
+int bsdl_process_elements (jtag_ctrl_t *, const char *);
 
 #endif /* BSDL_PARSER_H */

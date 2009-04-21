@@ -73,17 +73,18 @@
 #endif
 
 /** @brief  Bus driver for Samsung S3C4510X */
-typedef struct {
-        signal_t *a[22];      /**< Only 22-bits addressing */
-        signal_t *d[32];      /**< Data bus */
-        signal_t *nrcs[6];    /**< not ROM/SRAM/Flash Chip Select;
+typedef struct
+{
+    signal_t *a[22];          /**< Only 22-bits addressing */
+    signal_t *d[32];          /**< Data bus */
+    signal_t *nrcs[6];        /**< not ROM/SRAM/Flash Chip Select;
                               ** Only using nRCS0. */
-        signal_t *necs[4];
-        signal_t *nsdcs[4];
+    signal_t *necs[4];
+    signal_t *nsdcs[4];
 
-        signal_t *nwbe[4];    /**< not Write Byte Enable */
-        signal_t *noe;        /**< not Output Enable */
-	int	 dbuswidth;
+    signal_t *nwbe[4];        /**< not Write Byte Enable */
+    signal_t *noe;            /**< not Output Enable */
+    int dbuswidth;
 } bus_params_t;
 
 #define A       ((bus_params_t *) bus->params)->a
@@ -102,69 +103,78 @@ typedef struct {
  *
  */
 static bus_t *
-s3c4510_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] )
+s3c4510_bus_new (chain_t * chain, const bus_driver_t * driver,
+                 char *cmd_params[])
 {
-        bus_t *bus;
-        part_t *part;
-        char buff[10];
-        int i;
-        int failed = 0;
+    bus_t *bus;
+    part_t *part;
+    char buff[10];
+    int i;
+    int failed = 0;
 
-        bus = calloc( 1, sizeof (bus_t) );
-        if (!bus)
-                return NULL;
+    bus = calloc (1, sizeof (bus_t));
+    if (!bus)
+        return NULL;
 
-	bus->driver = driver;
-	bus->params = calloc( 1, sizeof (bus_params_t) );
-        if (!bus->params) {
-                free( bus );
-                return NULL;
-        }
+    bus->driver = driver;
+    bus->params = calloc (1, sizeof (bus_params_t));
+    if (!bus->params)
+    {
+        free (bus);
+        return NULL;
+    }
 
 
-	dbus_width = 16;
-        CHAIN = chain;
-	PART = part = chain->parts->parts[chain->active_part];
+    dbus_width = 16;
+    CHAIN = chain;
+    PART = part = chain->parts->parts[chain->active_part];
 
-        for (i = 0; i < 22; i++) {
-                sprintf( buff, "ADDR%d", i );
-		failed |= generic_bus_attach_sig( part, &(A[i]), buff );
-        }
+    for (i = 0; i < 22; i++)
+    {
+        sprintf (buff, "ADDR%d", i);
+        failed |= generic_bus_attach_sig (part, &(A[i]), buff);
+    }
 
-        for (i = 0; i < 32; i++) {
-                sprintf( buff, "XDATA%d", i );
-		failed |= generic_bus_attach_sig( part, &(D[i]), buff );
-        }
+    for (i = 0; i < 32; i++)
+    {
+        sprintf (buff, "XDATA%d", i);
+        failed |= generic_bus_attach_sig (part, &(D[i]), buff);
+    }
 
-        for (i = 0; i < 6; i++) {
-                sprintf( buff, "nRCS%d", i );
-		failed |= generic_bus_attach_sig( part, &(nRCS[i]), buff );
-        }
+    for (i = 0; i < 6; i++)
+    {
+        sprintf (buff, "nRCS%d", i);
+        failed |= generic_bus_attach_sig (part, &(nRCS[i]), buff);
+    }
 
-	for (i = 0; i < 4; i++) {
-                sprintf( buff, "nECS%d", i );
-		failed |= generic_bus_attach_sig( part, &(nECS[i]), buff );
-        }
+    for (i = 0; i < 4; i++)
+    {
+        sprintf (buff, "nECS%d", i);
+        failed |= generic_bus_attach_sig (part, &(nECS[i]), buff);
+    }
 
-	for (i = 0; i < 4; i++) {
-                sprintf( buff, "nRAS%d", i );  /* those are nSDCS for SDRAMs only */
-		failed |= generic_bus_attach_sig( part, &(nSDCS[i]), buff );
-        }
+    for (i = 0; i < 4; i++)
+    {
+        sprintf (buff, "nRAS%d", i);    /* those are nSDCS for SDRAMs only */
+        failed |= generic_bus_attach_sig (part, &(nSDCS[i]), buff);
+    }
 
-        for (i = 0; i < 4; i++) {
-                sprintf( buff, "nWBE%d", i );
-		failed |= generic_bus_attach_sig( part, &(nWBE[i]), buff );
-        }
+    for (i = 0; i < 4; i++)
+    {
+        sprintf (buff, "nWBE%d", i);
+        failed |= generic_bus_attach_sig (part, &(nWBE[i]), buff);
+    }
 
-	failed |= generic_bus_attach_sig( part, &(nOE), "nOE" );
+    failed |= generic_bus_attach_sig (part, &(nOE), "nOE");
 
-        if (failed) {
-                free( bus->params );
-                free( bus );
-                return NULL;
-        }
+    if (failed)
+    {
+        free (bus->params);
+        free (bus);
+        return NULL;
+    }
 
-        return bus;
+    return bus;
 }
 
 /**
@@ -172,14 +182,16 @@ s3c4510_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] 
  *
  */
 static void
-s3c4510_bus_printinfo( bus_t *bus )
+s3c4510_bus_printinfo (bus_t * bus)
 {
-        int i;
+    int i;
 
-        for (i = 0; i < CHAIN->parts->len; i++)
-                if (PART == CHAIN->parts->parts[i])
-                        break;
-	printf( _("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%ubit\n"), i ,dbus_width );
+    for (i = 0; i < CHAIN->parts->len; i++)
+        if (PART == CHAIN->parts->parts[i])
+            break;
+    printf (_
+            ("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%ubit\n"),
+            i, dbus_width);
 }
 
 /**
@@ -187,26 +199,27 @@ s3c4510_bus_printinfo( bus_t *bus )
  *
  */
 static int
-s3c4510_bus_init( bus_t *bus )
+s3c4510_bus_init (bus_t * bus)
 {
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
+    part_t *p = PART;
+    chain_t *chain = CHAIN;
 
-	if (tap_state(chain) != Run_Test_Idle) {
-		/* silently skip initialization if TAP isn't in RUNTEST/IDLE state
-		   this is required to avoid interfering with detect when initbus
-		   is contained in the part description file
-		   bus_init() will be called latest by bus_prepare() */
-		return URJTAG_STATUS_OK;
-	}
+    if (tap_state (chain) != Run_Test_Idle)
+    {
+        /* silently skip initialization if TAP isn't in RUNTEST/IDLE state
+           this is required to avoid interfering with detect when initbus
+           is contained in the part description file
+           bus_init() will be called latest by bus_prepare() */
+        return URJTAG_STATUS_OK;
+    }
 
-        part_set_instruction( p, "SAMPLE/PRELOAD" );
-        chain_shift_instructions( chain );
-        chain_shift_data_registers( chain, 0 );
+    part_set_instruction (p, "SAMPLE/PRELOAD");
+    chain_shift_instructions (chain);
+    chain_shift_data_registers (chain, 0);
 
-	INITIALIZED = 1;
+    INITIALIZED = 1;
 
-	return URJTAG_STATUS_OK;
+    return URJTAG_STATUS_OK;
 }
 
 /**
@@ -214,93 +227,101 @@ s3c4510_bus_init( bus_t *bus )
  *
  */
 static int
-s3c4510_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+s3c4510_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 {
-        int b0size0, b0size1; // , endian;
+    int b0size0, b0size1;       // , endian;
 
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x100000000);
+    area->description = NULL;
+    area->start = UINT32_C (0x00000000);
+    area->length = UINT64_C (0x100000000);
 
-	// endian = part_get_signal( PART, part_find_signal( PART, "LITTLE" ));
-	b0size0 = part_get_signal( PART, part_find_signal( PART, "B0SIZE0" ));
-	b0size1 = part_get_signal( PART, part_find_signal( PART, "B0SIZE1" ));
+    // endian = part_get_signal( PART, part_find_signal( PART, "LITTLE" ));
+    b0size0 = part_get_signal (PART, part_find_signal (PART, "B0SIZE0"));
+    b0size1 = part_get_signal (PART, part_find_signal (PART, "B0SIZE1"));
 
-        switch ((b0size1 << 1) | b0size0) {
-                case 1:
-			area->width = dbus_width = 8;
-			return URJTAG_STATUS_OK;
-                case 2:
-			area->width = dbus_width = 16;
-			return URJTAG_STATUS_OK;
-                case 3:
-			area->width = dbus_width = 32;
-			return URJTAG_STATUS_OK;
-                default:
-                        printf( "B0SIZE[1:0]: Unknown\n" );
-			area->width = 0;
-			return URJTAG_STATUS_FAIL;
-        }
-}
-
-static void s3c4510_bus_setup_ctrl( bus_t *bus, int mode )
-{
-  int k;
-  part_t *p = PART;
-
-  for (k = 0; k < 6; k++)
-	part_set_signal( p, nRCS[k], 1, (mode & (1 << k)) ? 1 : 0 );
-
-  for (k = 0; k < 4; k++)
-	part_set_signal( p, nECS[k], 1, 1 );
-
-  for (k = 0; k < 4; k++)
-	part_set_signal( p, nSDCS[k], 1, 1 );
-
-  for (k = 0; k < 4; k++)
-	part_set_signal( p, nWBE[k], 1, (mode & (1 << (k + 8))) ? 1 : 0 );
-
-  part_set_signal( p, nOE, 1, (mode & (1 << 16)) ? 1 : 0 );
+    switch ((b0size1 << 1) | b0size0)
+    {
+    case 1:
+        area->width = dbus_width = 8;
+        return URJTAG_STATUS_OK;
+    case 2:
+        area->width = dbus_width = 16;
+        return URJTAG_STATUS_OK;
+    case 3:
+        area->width = dbus_width = 32;
+        return URJTAG_STATUS_OK;
+    default:
+        printf ("B0SIZE[1:0]: Unknown\n");
+        area->width = 0;
+        return URJTAG_STATUS_FAIL;
+    }
 }
 
 static void
-setup_address( bus_t *bus, uint32_t a )
+s3c4510_bus_setup_ctrl (bus_t * bus, int mode)
 {
-        int i,so;
-        part_t *p = PART;
+    int k;
+    part_t *p = PART;
 
-		switch(dbus_width)
-		{
-			case 32: so=2; break;
-			case 16: so=1; break;
-			default: so=0; break;
-		}
+    for (k = 0; k < 6; k++)
+        part_set_signal (p, nRCS[k], 1, (mode & (1 << k)) ? 1 : 0);
 
-        for (i = 0; i < 22; i++)
-                part_set_signal( p, A[i], 1, (a >> (i+so)) & 1 );
+    for (k = 0; k < 4; k++)
+        part_set_signal (p, nECS[k], 1, 1);
+
+    for (k = 0; k < 4; k++)
+        part_set_signal (p, nSDCS[k], 1, 1);
+
+    for (k = 0; k < 4; k++)
+        part_set_signal (p, nWBE[k], 1, (mode & (1 << (k + 8))) ? 1 : 0);
+
+    part_set_signal (p, nOE, 1, (mode & (1 << 16)) ? 1 : 0);
 }
 
 static void
-set_data_in( bus_t *bus )
+setup_address (bus_t * bus, uint32_t a)
 {
-        int i;
-        part_t *p = PART;
+    int i, so;
+    part_t *p = PART;
 
-        for (i = 0; i < dbus_width; i++)
-                part_set_signal( p, D[i], 0, 0 );
+    switch (dbus_width)
+    {
+    case 32:
+        so = 2;
+        break;
+    case 16:
+        so = 1;
+        break;
+    default:
+        so = 0;
+        break;
+    }
+
+    for (i = 0; i < 22; i++)
+        part_set_signal (p, A[i], 1, (a >> (i + so)) & 1);
 }
 
 static void
-setup_data( bus_t *bus, uint32_t d )
+set_data_in (bus_t * bus)
 {
-        int i;
-        part_t *p = PART;
+    int i;
+    part_t *p = PART;
 
-        for (i = 0; i < dbus_width; i++)
-                part_set_signal( p, D[i], 1, (d >> i) & 1 );
-        /* Set other bits as 0 */
-        for (i = dbus_width; i < 32; i++)
-                part_set_signal( p, D[i], 1, 0 );
+    for (i = 0; i < dbus_width; i++)
+        part_set_signal (p, D[i], 0, 0);
+}
+
+static void
+setup_data (bus_t * bus, uint32_t d)
+{
+    int i;
+    part_t *p = PART;
+
+    for (i = 0; i < dbus_width; i++)
+        part_set_signal (p, D[i], 1, (d >> i) & 1);
+    /* Set other bits as 0 */
+    for (i = dbus_width; i < 32; i++)
+        part_set_signal (p, D[i], 1, 0);
 }
 
 /**
@@ -308,15 +329,15 @@ setup_data( bus_t *bus, uint32_t d )
  *
  */
 static void
-s3c4510_bus_read_start( bus_t *bus, uint32_t adr )
+s3c4510_bus_read_start (bus_t * bus, uint32_t adr)
 {
-        /* see Figure 4-19 in [1] */
-        chain_t *chain = CHAIN;
+    /* see Figure 4-19 in [1] */
+    chain_t *chain = CHAIN;
 
-	s3c4510_bus_setup_ctrl( bus, 0x00fffe);  /* nOE=0, nRCS0 =0 */
-        setup_address( bus, adr );
-        set_data_in( bus );
-        chain_shift_data_registers( chain, 0 );
+    s3c4510_bus_setup_ctrl (bus, 0x00fffe);     /* nOE=0, nRCS0 =0 */
+    setup_address (bus, adr);
+    set_data_in (bus);
+    chain_shift_data_registers (chain, 0);
 }
 
 /**
@@ -324,23 +345,23 @@ s3c4510_bus_read_start( bus_t *bus, uint32_t adr )
  *
  */
 static uint32_t
-s3c4510_bus_read_next( bus_t *bus, uint32_t adr )
+s3c4510_bus_read_next (bus_t * bus, uint32_t adr)
 {
-        /* see Figure 4-20 in [1] */
-        part_t *p = PART;
-        chain_t *chain = CHAIN;
-        int i;
-        uint32_t d = 0;
+    /* see Figure 4-20 in [1] */
+    part_t *p = PART;
+    chain_t *chain = CHAIN;
+    int i;
+    uint32_t d = 0;
 
-	s3c4510_bus_setup_ctrl( bus, 0x00fffe);  /* nOE=0, nRCS0 =0 */
-        setup_address( bus, adr );
-	set_data_in( bus );
-        chain_shift_data_registers( chain, 1 );
+    s3c4510_bus_setup_ctrl (bus, 0x00fffe);     /* nOE=0, nRCS0 =0 */
+    setup_address (bus, adr);
+    set_data_in (bus);
+    chain_shift_data_registers (chain, 1);
 
-        for (i = 0; i < dbus_width; i++)
-                d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+    for (i = 0; i < dbus_width; i++)
+        d |= (uint32_t) (part_get_signal (p, D[i]) << i);
 
-        return d;
+    return d;
 }
 
 /**
@@ -348,21 +369,21 @@ s3c4510_bus_read_next( bus_t *bus, uint32_t adr )
  *
  */
 static uint32_t
-s3c4510_bus_read_end( bus_t *bus )
+s3c4510_bus_read_end (bus_t * bus)
 {
-        /* see Figure 4-19 in [1] */
-        part_t *p = PART;
-        chain_t *chain = CHAIN;
-        int i;
-        uint32_t d = 0;
+    /* see Figure 4-19 in [1] */
+    part_t *p = PART;
+    chain_t *chain = CHAIN;
+    int i;
+    uint32_t d = 0;
 
-	s3c4510_bus_setup_ctrl( bus, 0x01ffff);  /* nOE=1, nRCS0 =1 */
-        chain_shift_data_registers( chain, 1 );
+    s3c4510_bus_setup_ctrl (bus, 0x01ffff);     /* nOE=1, nRCS0 =1 */
+    chain_shift_data_registers (chain, 1);
 
-        for (i = 0; i < dbus_width; i++)
-                d |= (uint32_t) (part_get_signal( p, D[i] ) << i);
+    for (i = 0; i < dbus_width; i++)
+        d |= (uint32_t) (part_get_signal (p, D[i]) << i);
 
-        return d;
+    return d;
 }
 
 /**
@@ -372,57 +393,57 @@ s3c4510_bus_read_end( bus_t *bus )
  *    ROM/SRAM/FlashPage Write Access Timing
  */
 static void
-s3c4510_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+s3c4510_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
 {
-        /* see Figure 4-21 in [1] */
-        chain_t *chain = CHAIN;
+    /* see Figure 4-21 in [1] */
+    chain_t *chain = CHAIN;
 
-	s3c4510_bus_setup_ctrl( bus, 0x01fffe);  /* nOE=1, nRCS0 =0 */
-        setup_address( bus, adr );
-        setup_data( bus, data );
+    s3c4510_bus_setup_ctrl (bus, 0x01fffe);     /* nOE=1, nRCS0 =0 */
+    setup_address (bus, adr);
+    setup_data (bus, data);
 
-        chain_shift_data_registers( chain, 0 );
+    chain_shift_data_registers (chain, 0);
 
-	switch (dbus_width)
-	{
-	    default:
-	    case 8:
-		    s3c4510_bus_setup_ctrl( bus, 0x01fefe);  /* nOE=1, nRCS0 =0, nWBE0=0 */
-		    break;
-	    case 16:
-		    s3c4510_bus_setup_ctrl( bus, 0x01fcfe);  /* nOE=1, nRCS0 =0, nWBE0-1=0 */
-		    break;
+    switch (dbus_width)
+    {
+    default:
+    case 8:
+        s3c4510_bus_setup_ctrl (bus, 0x01fefe); /* nOE=1, nRCS0 =0, nWBE0=0 */
+        break;
+    case 16:
+        s3c4510_bus_setup_ctrl (bus, 0x01fcfe); /* nOE=1, nRCS0 =0, nWBE0-1=0 */
+        break;
 
-	    case 32:
-		    s3c4510_bus_setup_ctrl( bus, 0x01f0fe);  /* nOE=1, nRCS0 =0, nWBE0-3=0 */
-		    break;
-	}
+    case 32:
+        s3c4510_bus_setup_ctrl (bus, 0x01f0fe); /* nOE=1, nRCS0 =0, nWBE0-3=0 */
+        break;
+    }
 
-        setup_address( bus, adr );
-        setup_data( bus, data );
+    setup_address (bus, adr);
+    setup_data (bus, data);
 
-        chain_shift_data_registers( chain, 0 );
+    chain_shift_data_registers (chain, 0);
 
-	s3c4510_bus_setup_ctrl( bus, 0x01ffff);  /* nOE=1, nRCS0 =1 */
-        chain_shift_data_registers( chain, 0 );
+    s3c4510_bus_setup_ctrl (bus, 0x01ffff);     /* nOE=1, nRCS0 =1 */
+    chain_shift_data_registers (chain, 0);
 
-	DEBUG_LVL2( printf("bus_write %08x @ %08x\n", data, adr); )
-}
+    DEBUG_LVL2 (printf ("bus_write %08x @ %08x\n", data, adr);
+)}
 
 const bus_driver_t s3c4510_bus = {
-	"s3c4510x",
-	N_("Samsung S3C4510B compatible bus driver via BSR"),
-	s3c4510_bus_new,
-	generic_bus_free,
-        s3c4510_bus_printinfo,
-        generic_bus_prepare_extest,
-        s3c4510_bus_area,
-        s3c4510_bus_read_start,
-        s3c4510_bus_read_next,
-        s3c4510_bus_read_end,
-        generic_bus_read,
-	s3c4510_bus_write,
-	s3c4510_bus_init
+    "s3c4510x",
+    N_("Samsung S3C4510B compatible bus driver via BSR"),
+    s3c4510_bus_new,
+    generic_bus_free,
+    s3c4510_bus_printinfo,
+    generic_bus_prepare_extest,
+    s3c4510_bus_area,
+    s3c4510_bus_read_start,
+    s3c4510_bus_read_next,
+    s3c4510_bus_read_end,
+    generic_bus_read,
+    s3c4510_bus_write,
+    s3c4510_bus_init
 };
 
 

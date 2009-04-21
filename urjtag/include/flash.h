@@ -43,33 +43,37 @@
 
 #include <flash/cfi.h>
 
-typedef struct {
-	int width;		/* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
-	cfi_query_structure_t cfi;
+typedef struct
+{
+    int width;                  /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
+    cfi_query_structure_t cfi;
 } cfi_chip_t;
 
-typedef struct {
-	bus_t *bus;
-	uint32_t address;
-	int bus_width;		/* in cfi_chips, e.g. 4 for 32 bits */
-	cfi_chip_t **cfi_chips;
+typedef struct
+{
+    bus_t *bus;
+    uint32_t address;
+    int bus_width;              /* in cfi_chips, e.g. 4 for 32 bits */
+    cfi_chip_t **cfi_chips;
 } cfi_array_t;
 
-void cfi_array_free( cfi_array_t *cfi_array );
-int cfi_detect( bus_t *bus, uint32_t adr, cfi_array_t **cfi_array );
+void cfi_array_free (cfi_array_t * cfi_array);
+int cfi_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array);
 
 /* End of brux/cfi.h */
 
-typedef struct {
-	unsigned int bus_width;		/* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
-	const char *name;
-	const char *description;
-	int (*autodetect)( cfi_array_t *cfi_array );
-	void (*print_info)( cfi_array_t *cfi_array );
-	int (*erase_block)( cfi_array_t *cfi_array, uint32_t adr );
-	int (*unlock_block)( cfi_array_t *cfi_array, uint32_t adr );
-	int (*program)( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int count );
-	void (*readarray)( cfi_array_t *cfi_array );
+typedef struct
+{
+    unsigned int bus_width;     /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
+    const char *name;
+    const char *description;
+    int (*autodetect) (cfi_array_t * cfi_array);
+    void (*print_info) (cfi_array_t * cfi_array);
+    int (*erase_block) (cfi_array_t * cfi_array, uint32_t adr);
+    int (*unlock_block) (cfi_array_t * cfi_array, uint32_t adr);
+    int (*program) (cfi_array_t * cfi_array, uint32_t adr, uint32_t * buffer,
+                    int count);
+    void (*readarray) (cfi_array_t * cfi_array);
 } flash_driver_t;
 
 #define	FLASH_ERROR_NOERROR			0
@@ -78,14 +82,13 @@ typedef struct {
 #define	FLASH_ERROR_BLOCK_LOCKED		3
 #define	FLASH_ERROR_UNKNOWN			99
 
-void detectflash( bus_t *bus, uint32_t adr );
+void detectflash (bus_t * bus, uint32_t adr);
 
-void flashmem( bus_t *bus, FILE *f, uint32_t addr, int );
-void flashmsbin( bus_t *bus, FILE *f, int );
+void flashmem (bus_t * bus, FILE * f, uint32_t addr, int);
+void flashmsbin (bus_t * bus, FILE * f, int);
 
 /* end of original brux/flash.h */
 
 extern flash_driver_t *flash_drivers[];
 
 #endif /* FLASH_H */
-

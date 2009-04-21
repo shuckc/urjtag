@@ -33,83 +33,89 @@
 #include "cmd.h"
 
 static int
-cmd_signal_run( chain_t *chain, char *params[] )
+cmd_signal_run (chain_t * chain, char *params[])
 {
-	part_t *part;
-	signal_t *s;
-	int i;
+    part_t *part;
+    signal_t *s;
+    int i;
 
-	if ((i = cmd_params( params )) < 2)
-		return -1;
+    if ((i = cmd_params (params)) < 2)
+        return -1;
 
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "signal" );
-		return 1;
-	}
+    if (chain->active_part >= chain->parts->len)
+    {
+        printf (_("%s: no active part\n"), "signal");
+        return 1;
+    }
 
-	part = chain->parts->parts[chain->active_part];
-	if ((s = part_find_signal( part, params[1] )) != NULL) {
-		if(i == 3) {
-			printf("Defining pin for signal %s\n",s->name);
+    part = chain->parts->parts[chain->active_part];
+    if ((s = part_find_signal (part, params[1])) != NULL)
+    {
+        if (i == 3)
+        {
+            printf ("Defining pin for signal %s\n", s->name);
 
-			if(s->pin)free(s->pin); /* erase old */
+            if (s->pin)
+                free (s->pin);  /* erase old */
 
-	                /* Allocate the space for the pin number & copy it */
-        	        s->pin = malloc(strlen(params[2])+1);
-                	strcpy(s->pin,params[2]);
+            /* Allocate the space for the pin number & copy it */
+            s->pin = malloc (strlen (params[2]) + 1);
+            strcpy (s->pin, params[2]);
 
-			return 1;
-		}
-		else {
-			printf( _("Signal '%s' already defined\n"), params[1] );
-			return 1;
-		}
-	}
+            return 1;
+        }
+        else
+        {
+            printf (_("Signal '%s' already defined\n"), params[1]);
+            return 1;
+        }
+    }
 
-	s = signal_alloc( params[1]);
+    s = signal_alloc (params[1]);
 
-	if(i == 3) {	/* Add pin number */
-		/* Allocate the space for the pin number & copy it */
-		s->pin = malloc(strlen(params[2])+1);
-		strcpy(s->pin,params[2]);
+    if (i == 3)
+    {                           /* Add pin number */
+        /* Allocate the space for the pin number & copy it */
+        s->pin = malloc (strlen (params[2]) + 1);
+        strcpy (s->pin, params[2]);
 
-	}
+    }
 
-	if (!s) {
-		printf( _("out of memory\n") );
-		return 1;
-	}
+    if (!s)
+    {
+        printf (_("out of memory\n"));
+        return 1;
+    }
 
-	s->next = part->signals;
-	part->signals = s;
+    s->next = part->signals;
+    part->signals = s;
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_signal_help( void )
+cmd_signal_help (void)
 {
-	printf( _(
-		"Usage: %s SIGNAL [PIN#]\n"
-		"Define new signal with name SIGNAL for a part.\n"
-		"\n"
-		"SIGNAL		New signal name\n"
-		"PIN#   	List of pin # for a signal\n"
-	), "signal" );
+    printf (_("Usage: %s SIGNAL [PIN#]\n"
+              "Define new signal with name SIGNAL for a part.\n"
+              "\n"
+              "SIGNAL		New signal name\n"
+              "PIN#   	List of pin # for a signal\n"), "signal");
 }
 
 cmd_t cmd_signal = {
-	"signal",
-	N_("define new signal for a part"),
-	cmd_signal_help,
-	cmd_signal_run
+    "signal",
+    N_("define new signal for a part"),
+    cmd_signal_help,
+    cmd_signal_run
 };

@@ -43,21 +43,21 @@ extern bus_t *bus;
 extern int big_endian;
 extern int debug_mode;
 
-const char *jtag_get_data_dir( void );
+const char *jtag_get_data_dir (void);
 
-int jtag_parse_file( chain_t *chain, const char *filename );
-int jtag_parse_line( chain_t *chain, char *line );
-int jtag_parse_stream( chain_t *chain, FILE *f );
+int jtag_parse_file (chain_t * chain, const char *filename);
+int jtag_parse_line (chain_t * chain, char *line);
+int jtag_parse_stream (chain_t * chain, FILE * f);
 
-int detect_parts( chain_t *chain, const char *db_path );
-int manual_add( chain_t *chain, int instr_len );
-int detect_register_size( chain_t *chain );
-void discovery( chain_t *chain );
-void idcode( chain_t *chain , unsigned int bytes);
+int detect_parts (chain_t * chain, const char *db_path);
+int manual_add (chain_t * chain, int instr_len);
+int detect_register_size (chain_t * chain);
+void discovery (chain_t * chain);
+void idcode (chain_t * chain, unsigned int bytes);
 
-void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
-void writemem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
+void readmem (bus_t * bus, FILE * f, uint32_t addr, uint32_t len);
+void writemem (bus_t * bus, FILE * f, uint32_t addr, uint32_t len);
 
-void flasherase( bus_t *bus, uint32_t addr, int number );
+void flasherase (bus_t * bus, uint32_t addr, int number);
 
 #endif /* JTAG_H */

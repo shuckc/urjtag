@@ -38,33 +38,37 @@ typedef struct chain_t chain_t;
 #define EXITMODE_EXIT1 2
 #define EXITMODE_UPDATE 3
 
-struct chain_t {
-	int state;
-	parts_t *parts;
-	int total_instr_len;
-	int active_part;
-	cable_t *cable;
-	bsdl_globs_t bsdl;
+struct chain_t
+{
+    int state;
+    parts_t *parts;
+    int total_instr_len;
+    int active_part;
+    cable_t *cable;
+    bsdl_globs_t bsdl;
 };
 
-chain_t *chain_alloc( void );
-void chain_free( chain_t *chain );
-void chain_disconnect( chain_t *chain );
-void chain_clock( chain_t *chain, int tms, int tdi, int n );
-void chain_defer_clock( chain_t *chain, int tms, int tdi, int n );
-int chain_set_trst( chain_t *chain, int trst );
-int chain_get_trst( chain_t *chain );
-void chain_shift_instructions( chain_t *chain );
-void chain_shift_instructions_mode( chain_t *chain, int capture_output, int capture, int chain_exit );
-void chain_shift_data_registers( chain_t *chain, int capture_output );
-void chain_shift_data_registers_mode( chain_t *chain, int capture_output, int capture, int chain_exit );
-void chain_flush( chain_t *chain );
-int chain_set_pod_signal( chain_t *chain, int mask, int val );
-int chain_get_pod_signal( chain_t *chain, pod_sigsel_t sig  );
+chain_t *chain_alloc (void);
+void chain_free (chain_t * chain);
+void chain_disconnect (chain_t * chain);
+void chain_clock (chain_t * chain, int tms, int tdi, int n);
+void chain_defer_clock (chain_t * chain, int tms, int tdi, int n);
+int chain_set_trst (chain_t * chain, int trst);
+int chain_get_trst (chain_t * chain);
+void chain_shift_instructions (chain_t * chain);
+void chain_shift_instructions_mode (chain_t * chain, int capture_output,
+                                    int capture, int chain_exit);
+void chain_shift_data_registers (chain_t * chain, int capture_output);
+void chain_shift_data_registers_mode (chain_t * chain, int capture_output,
+                                      int capture, int chain_exit);
+void chain_flush (chain_t * chain);
+int chain_set_pod_signal (chain_t * chain, int mask, int val);
+int chain_get_pod_signal (chain_t * chain, pod_sigsel_t sig);
 
-typedef struct {
-	chain_t **chains;
-	int size;			/* allocated chains array size */
+typedef struct
+{
+    chain_t **chains;
+    int size;                   /* allocated chains array size */
 } chains_t;
 
 #endif /* CHAIN_H */

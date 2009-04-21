@@ -28,9 +28,9 @@
 #include "cable.h"
 #include "parport.h"
 
-int generic_parport_connect( char *params[], cable_t *cable );
-void generic_parport_free( cable_t *cable );
-void generic_parport_done( cable_t *cable );
-void generic_parport_help( const char *name );
+int generic_parport_connect (char *params[], cable_t * cable);
+void generic_parport_free (cable_t * cable);
+void generic_parport_done (cable_t * cable);
+void generic_parport_help (const char *name);
 
 #endif /* GENERIC_H */

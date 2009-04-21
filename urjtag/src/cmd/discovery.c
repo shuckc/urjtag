@@ -31,39 +31,37 @@
 #include "cmd.h"
 
 static int
-cmd_discovery_run( chain_t *chain, char *params[] )
+cmd_discovery_run (chain_t * chain, char *params[])
 {
-	if (cmd_params( params ) != 1)
-		return -1;
+    if (cmd_params (params) != 1)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	discovery( chain );
+    discovery (chain);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_discovery_help( void )
+cmd_discovery_help (void)
 {
-	printf( _(
-		"Usage: %s\n"
-		"Discovery of unknown parts in the JTAG chain.\n"
-		"\n"
-		"'%s' attempts to detect these parameters of an unknown JTAG\n"
-		"chain:\n"
-		" 1. IR (instruction register) length\n"
-		" 2. DR (data register) length for all possible instructions\n"
-		"\n"
-		"Warning: This may be dangerous for some parts (especially if the\n"
-		"part doesn't have TRST signal).\n"
-	), "discovery", "discovery" );
+    printf (_("Usage: %s\n"
+              "Discovery of unknown parts in the JTAG chain.\n"
+              "\n"
+              "'%s' attempts to detect these parameters of an unknown JTAG\n"
+              "chain:\n"
+              " 1. IR (instruction register) length\n"
+              " 2. DR (data register) length for all possible instructions\n"
+              "\n"
+              "Warning: This may be dangerous for some parts (especially if the\n"
+              "part doesn't have TRST signal).\n"), "discovery", "discovery");
 }
 
 cmd_t cmd_discovery = {
-	"discovery",
-	N_("discovery of unknown parts in the JTAG chain"),
-	cmd_discovery_help,
-	cmd_discovery_run
+    "discovery",
+    N_("discovery of unknown parts in the JTAG chain"),
+    cmd_discovery_help,
+    cmd_discovery_run
 };

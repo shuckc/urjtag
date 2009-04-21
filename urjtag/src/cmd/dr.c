@@ -33,86 +33,98 @@
 #include "cmd.h"
 
 static int
-cmd_dr_run( chain_t *chain, char *params[] )
+cmd_dr_run (chain_t * chain, char *params[])
 {
-	int dir = 1;
-	tap_register *r;
+    int dir = 1;
+    tap_register *r;
 
-	if (cmd_params( params ) < 1 || cmd_params( params ) > 2)
-		return -1;
+    if (cmd_params (params) < 1 || cmd_params (params) > 2)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "dr" );
-		return 1;
-	}
+    if (chain->active_part >= chain->parts->len)
+    {
+        printf (_("%s: no active part\n"), "dr");
+        return 1;
+    }
 
-	if (chain->parts->parts[chain->active_part]->active_instruction == NULL) {
-		printf( _("%s: part without active instruction\n"), "dr" );
-		return 1;
-	}
-	if (chain->parts->parts[chain->active_part]->active_instruction->data_register == NULL) {
-		printf( _("%s: part without active data register\n"), "dr" );
-		return 1;
-	}
+    if (chain->parts->parts[chain->active_part]->active_instruction == NULL)
+    {
+        printf (_("%s: part without active instruction\n"), "dr");
+        return 1;
+    }
+    if (chain->parts->parts[chain->active_part]->active_instruction->
+        data_register == NULL)
+    {
+        printf (_("%s: part without active data register\n"), "dr");
+        return 1;
+    }
 
-	if (params[1]) {
-		if (strcasecmp( params[1], "in" ) == 0)
-			dir = 0;
-		else if (strcasecmp( params[1], "out" ) == 0)
-			dir = 1;
-		else {
-			unsigned int bit;
-			if (strspn(params[1], "01") != strlen(params[1])) {
-				return -1;
-			}
-			
-			r = chain->parts->parts[chain->active_part]->active_instruction->data_register->in;
-			if (r->len != strlen(params[1])) {
-				printf( _("%s: register length mismatch\n"), "dr" );
-				return 1;
-			}
-			for (bit = 0; params[1][bit]; bit++) {
-				r->data[r->len - 1 - bit] = (params[1][bit] == '1');
-			}
-			
-			dir = 0;
-		}
-	}
+    if (params[1])
+    {
+        if (strcasecmp (params[1], "in") == 0)
+            dir = 0;
+        else if (strcasecmp (params[1], "out") == 0)
+            dir = 1;
+        else
+        {
+            unsigned int bit;
+            if (strspn (params[1], "01") != strlen (params[1]))
+            {
+                return -1;
+            }
 
-	if (dir)
-		r = chain->parts->parts[chain->active_part]->active_instruction->data_register->out;
-	else
-		r = chain->parts->parts[chain->active_part]->active_instruction->data_register->in;
-	printf( _("%s\n"), register_get_string( r ) );
+            r = chain->parts->parts[chain->active_part]->active_instruction->
+                data_register->in;
+            if (r->len != strlen (params[1]))
+            {
+                printf (_("%s: register length mismatch\n"), "dr");
+                return 1;
+            }
+            for (bit = 0; params[1][bit]; bit++)
+            {
+                r->data[r->len - 1 - bit] = (params[1][bit] == '1');
+            }
 
-	return 1;
+            dir = 0;
+        }
+    }
+
+    if (dir)
+        r = chain->parts->parts[chain->active_part]->active_instruction->
+            data_register->out;
+    else
+        r = chain->parts->parts[chain->active_part]->active_instruction->
+            data_register->in;
+    printf (_("%s\n"), register_get_string (r));
+
+    return 1;
 }
 
 static void
-cmd_dr_help( void )
+cmd_dr_help (void)
 {
-	printf( _(
-		"Usage: %s [DIR]\n"
-		"Usage: %s BITSTRING\n"
-		"Display input or output data register content or set current register.\n"
-		"\n"
-		"DIR           requested data register; possible values: 'in' for\n"
-		"              input and 'out' for output; default is 'out'\n"
-		"BITSTRING     set current data register with BITSTRING (e.g. 01010)\n"
-	), "dr", "dr" );
+    printf (_("Usage: %s [DIR]\n"
+              "Usage: %s BITSTRING\n"
+              "Display input or output data register content or set current register.\n"
+              "\n"
+              "DIR           requested data register; possible values: 'in' for\n"
+              "              input and 'out' for output; default is 'out'\n"
+              "BITSTRING     set current data register with BITSTRING (e.g. 01010)\n"),
+            "dr", "dr");
 }
 
 cmd_t cmd_dr = {
-	"dr",
-	N_("display active data register for a part"),
-	cmd_dr_help,
-	cmd_dr_run
+    "dr",
+    N_("display active data register for a part"),
+    cmd_dr_help,
+    cmd_dr_run
 };

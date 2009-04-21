@@ -1,5 +1,18 @@
 $Id$
 
+The subdirectory urjtag/ or the UrJTAG package contains a branch that is used
+for the conversion of UrJTAG to a library plus a separate command shell.
+Changes and commits to this branch will be frequent, and will affect nearly
+every aspect of the source tree, like file names, file locations, code layout,
+and identifier names.
+
+Until further notice this branch should be considered completely unstable, to
+the extent that execution or even compilation may be broken. If you want to
+use UrJTAG, please use the version contained in directory ../jtag/. It
+contains the version released as 0.10 plus bug fixes.
+
+================================================================================
+
 UrJTAG package is free software, covered by the GNU General Public License, and
 you are welcome to change it and/or distribute copies of it under certain
 conditions. There is absolutely no warranty for UrJTAG.  Please read COPYING

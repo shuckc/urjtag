@@ -1,3 +1,21 @@
+2009-04-21  Rutger Hofman <rfhh>
+
+  Run indent over the code base: all '*.[ch]' files except evidently imported
+  ones, like the libiberty imports in lib.
+  * xargs indent -npro -nut -bli0 -i4 < indent-files
+    where indent-files is `find . -name '*.[ch]' -print` except:
+  	src/lib/ansidecl.h
+	src/lib/filenames.h
+	src/lib/lbasename.c
+	src/lib/libiberty.h
+	src/lib/lrealpath.c
+	src/lib/make-relative-prefix.c
+	src/lib/safe-ctype.c
+	src/lib/safe-ctype.h
+	include/gettext.h
+  * README: add a warning as to the status of the urjtag/ branch AKA the
+    Librarification branch
+
 2009-04-17  Kolja Waschk <kawk>
 
   * Makefile.am: Distribute UrJTAG.nsi in source tarball next time

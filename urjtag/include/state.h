@@ -31,12 +31,12 @@
 
 #define	TAPSTAT_DR	bit(0)
 #define	TAPSTAT_IR	bit(1)
-#define	TAPSTAT_SHIFT	bit(2)		/* register shift with TMS = 0 */
-#define	TAPSTAT_IDLE	bit(3)		/* to Run-Test/Idle with TMS = 0 */
-#define	TAPSTAT_CAPTURE	bit(4)		/* Capture state */
-#define	TAPSTAT_UPDATE	bit(5)		/* to Update with TMS = 1 */
-#define	TAPSTAT_PAUSE	bit(6)		/* to Pause with TMS = 0 */
-#define	TAPSTAT_RESET	bit(7)		/* Test-Logic-Reset or unknown state */
+#define	TAPSTAT_SHIFT	bit(2)  /* register shift with TMS = 0 */
+#define	TAPSTAT_IDLE	bit(3)  /* to Run-Test/Idle with TMS = 0 */
+#define	TAPSTAT_CAPTURE	bit(4)  /* Capture state */
+#define	TAPSTAT_UPDATE	bit(5)  /* to Update with TMS = 1 */
+#define	TAPSTAT_PAUSE	bit(6)  /* to Pause with TMS = 0 */
+#define	TAPSTAT_RESET	bit(7)  /* Test-Logic-Reset or unknown state */
 
 #define	Unknown_State		TAPSTAT_RESET
 #define	Test_Logic_Reset	(TAPSTAT_RESET | TAPSTAT_IDLE)
@@ -56,11 +56,11 @@
 #define	Exit2_IR		(TAPSTAT_IR | TAPSTAT_SHIFT | TAPSTAT_UPDATE)
 #define	Update_IR		(TAPSTAT_IR | TAPSTAT_IDLE)
 
-int tap_state( chain_t *chain );
-int tap_state_init( chain_t *chain );
-int tap_state_done( chain_t *chain );
-int tap_state_reset( chain_t *chain );
-int tap_state_set_trst( chain_t *chain, int old_trst, int new_trst );
-int tap_state_clock( chain_t *chain, int tms );
+int tap_state (chain_t * chain);
+int tap_state_init (chain_t * chain);
+int tap_state_done (chain_t * chain);
+int tap_state_reset (chain_t * chain);
+int tap_state_set_trst (chain_t * chain, int old_trst, int new_trst);
+int tap_state_clock (chain_t * chain, int tms);
 
 #endif /* STATE_H */

@@ -30,26 +30,28 @@ typedef struct signal signal_t;
 
 #include "bsbit.h"
 
-struct signal {
-	char *name;
-	char *pin;	/* djf hack pin number from bsdl */
-	signal_t *next;
-	bsbit_t *input;
-	bsbit_t *output;
+struct signal
+{
+    char *name;
+    char *pin;                  /* djf hack pin number from bsdl */
+    signal_t *next;
+    bsbit_t *input;
+    bsbit_t *output;
 };
 
 typedef struct salias salias_t;
 
-struct salias {
-	char *name;
-	salias_t *next;
-	signal_t *signal;
+struct salias
+{
+    char *name;
+    salias_t *next;
+    signal_t *signal;
 };
 
-signal_t *signal_alloc( const char *name );
-void signal_free( signal_t *s );
+signal_t *signal_alloc (const char *name);
+void signal_free (signal_t * s);
 
-salias_t *salias_alloc( const char *name, const signal_t *signal );
-void salias_free( salias_t *salias );
+salias_t *salias_alloc (const char *name, const signal_t * signal);
+void salias_free (salias_t * salias);
 
 #endif /* SIGNAL_H */

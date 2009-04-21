@@ -41,14 +41,15 @@
 #include "data_register.h"
 #include "tap.h"
 
-typedef struct {
-  unsigned int mode;
+typedef struct
+{
+    unsigned int mode;
 
-  unsigned int slave;
-  uint32_t addr_mask;
+    unsigned int slave;
+    uint32_t addr_mask;
 
-  uint32_t rwcs_rd;
-  uint32_t rwcs_wr;
+    uint32_t rwcs_rd;
+    uint32_t rwcs_wr;
 } bus_params_t;
 
 #define BUS_MODE_OCD	0
@@ -131,46 +132,47 @@ typedef struct {
 static inline void
 register_set_bit (tap_register * tr, unsigned int bitno, unsigned int val)
 {
-  tr->data[bitno] = (val) ? 1 : 0;
+    tr->data[bitno] = (val) ? 1 : 0;
 }
 
 static inline int
 register_get_bit (tap_register * tr, unsigned int bitno)
 {
-  return (tr->data[bitno] & 1) ? 1 : 0;
+    return (tr->data[bitno] & 1) ? 1 : 0;
 }
 
 static inline void
 shift_instr (bus_t * bus, unsigned int bit)
 {
-  tap_register *r = PART->active_instruction->out;
+    tap_register *r = PART->active_instruction->out;
 
-  do
-  {
-    DBG (DBG_SHIFT, _("%s: instr=%s\n"), __FUNCTION__,
-         register_get_string (PART->active_instruction->value));
-    chain_shift_instructions_mode (CHAIN, 1, 1, EXITMODE_IDLE);
-    DBG (DBG_SHIFT, _("%s: ret=%s\n"), __FUNCTION__, register_get_string (r));
-    /* TODO: add timeout checking */
-  }
-  while (register_get_bit (r, bit));
+    do
+    {
+        DBG (DBG_SHIFT, _("%s: instr=%s\n"), __FUNCTION__,
+             register_get_string (PART->active_instruction->value));
+        chain_shift_instructions_mode (CHAIN, 1, 1, EXITMODE_IDLE);
+        DBG (DBG_SHIFT, _("%s: ret=%s\n"), __FUNCTION__,
+             register_get_string (r));
+        /* TODO: add timeout checking */
+    }
+    while (register_get_bit (r, bit));
 }
 
 static inline void
 shift_data (bus_t * bus, unsigned int bit)
 {
-  data_register *dr = PART->active_instruction->data_register;
+    data_register *dr = PART->active_instruction->data_register;
 
-  do
-  {
-    DBG (DBG_SHIFT, _("%s: data=%s\n"), __FUNCTION__,
-         register_get_string (dr->in));
-    chain_shift_data_registers (CHAIN, 1);
-    DBG (DBG_SHIFT, _("%s: data out=%s\n"), __FUNCTION__,
-         register_get_string (dr->out));
-    /* TODO: add timeout checking */
-  }
-  while (register_get_bit (dr->out, bit));
+    do
+    {
+        DBG (DBG_SHIFT, _("%s: data=%s\n"), __FUNCTION__,
+             register_get_string (dr->in));
+        chain_shift_data_registers (CHAIN, 1);
+        DBG (DBG_SHIFT, _("%s: data out=%s\n"), __FUNCTION__,
+             register_get_string (dr->out));
+        /* TODO: add timeout checking */
+    }
+    while (register_get_bit (dr->out, bit));
 }
 
 /* ------------------------------------------------------------------------- */
@@ -178,85 +180,85 @@ shift_data (bus_t * bus, unsigned int bit)
 static void
 mwa_scan_in_instr (bus_t * bus)
 {
-  shift_instr (bus, 2);
+    shift_instr (bus, 2);
 }
 
 static void
 mwa_scan_in_addr (bus_t * bus, unsigned int slave, uint32_t addr, int mode)
 {
-  tap_register *r = PART->active_instruction->data_register->in;
-  int i;
+    tap_register *r = PART->active_instruction->data_register->in;
+    int i;
 
-  DBG (DBG_BASIC, _("%s: slave=%01x, addr=%08x, %s\n"),
-       __FUNCTION__, slave, addr,
-       (mode == ACCESS_MODE_READ) ? "READ" : "WRITE");
+    DBG (DBG_BASIC, _("%s: slave=%01x, addr=%08x, %s\n"),
+         __FUNCTION__, slave, addr,
+         (mode == ACCESS_MODE_READ) ? "READ" : "WRITE");
 
-  /* set slave bits */
-  for (i = 0; i < 4; i++)
-    register_set_bit (r, 31 + i, slave & (1 << i));
+    /* set slave bits */
+    for (i = 0; i < 4; i++)
+        register_set_bit (r, 31 + i, slave & (1 << i));
 
-  /* set address bits */
-  addr >>= 2;
-  for (i = 0; i < 30; i++)
-    register_set_bit (r, 1 + i, addr & (1 << i));
+    /* set address bits */
+    addr >>= 2;
+    for (i = 0; i < 30; i++)
+        register_set_bit (r, 1 + i, addr & (1 << i));
 
-  /* set access mode */
-  register_set_bit (r, 0, mode);
+    /* set access mode */
+    register_set_bit (r, 0, mode);
 
-  shift_data (bus, 32);
+    shift_data (bus, 32);
 }
 
 static void
 mwa_scan_in_data (bus_t * bus, uint32_t data)
 {
-  tap_register *r = PART->active_instruction->data_register->in;
-  int i;
+    tap_register *r = PART->active_instruction->data_register->in;
+    int i;
 
-  DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
+    DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
 
-  register_set_bit (r, 0, 0);
-  register_set_bit (r, 1, 0);
-  register_set_bit (r, 2, 0);
+    register_set_bit (r, 0, 0);
+    register_set_bit (r, 1, 0);
+    register_set_bit (r, 2, 0);
 
-  for (i = 0; i < 32; i++)
-    register_set_bit (r, 3 + i, data & (1 << i));
+    for (i = 0; i < 32; i++)
+        register_set_bit (r, 3 + i, data & (1 << i));
 
-  shift_data (bus, 0);
+    shift_data (bus, 0);
 }
 
 static void
 mwa_scan_out_data (bus_t * bus, uint32_t * pdata)
 {
-  tap_register *r = PART->active_instruction->data_register->out;
-  uint32_t data;
-  int i;
+    tap_register *r = PART->active_instruction->data_register->out;
+    uint32_t data;
+    int i;
 
-  shift_data (bus, 32);
+    shift_data (bus, 32);
 
-  data = 0;
-  for (i = 0; i < 32; i++)
-    data |= register_get_bit (r, i) << i;
+    data = 0;
+    for (i = 0; i < 32; i++)
+        data |= register_get_bit (r, i) << i;
 
-  DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
+    DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
 
-  *pdata = data;
+    *pdata = data;
 }
 
 static inline void
 mwa_read_word (bus_t * bus, unsigned int slave, uint32_t addr,
                uint32_t * data)
 {
-  mwa_scan_in_instr (bus);
-  mwa_scan_in_addr (bus, slave, addr, ACCESS_MODE_READ);
-  mwa_scan_out_data (bus, data);
+    mwa_scan_in_instr (bus);
+    mwa_scan_in_addr (bus, slave, addr, ACCESS_MODE_READ);
+    mwa_scan_out_data (bus, data);
 }
 
 static inline void
 mwa_write_word (bus_t * bus, unsigned int slave, uint32_t addr, uint32_t data)
 {
-  mwa_scan_in_instr (bus);
-  mwa_scan_in_addr (bus, slave, addr, ACCESS_MODE_WRITE);
-  mwa_scan_in_data (bus, data);
+    mwa_scan_in_instr (bus);
+    mwa_scan_in_addr (bus, slave, addr, ACCESS_MODE_WRITE);
+    mwa_scan_in_data (bus, data);
 }
 
 /* ------------------------------------------------------------------------- */
@@ -264,84 +266,84 @@ mwa_write_word (bus_t * bus, unsigned int slave, uint32_t addr, uint32_t data)
 static void
 nexus_access_start (bus_t * bus)
 {
-  shift_instr (bus, 2);
+    shift_instr (bus, 2);
 }
 
 static void
 nexus_access_end (bus_t * bus)
 {
-  tap_reset_bypass (CHAIN);
+    tap_reset_bypass (CHAIN);
 }
 
 static void
 nexus_access_set_addr (bus_t * bus, uint32_t addr, int mode)
 {
-  tap_register *r = PART->active_instruction->data_register->in;
-  int i;
+    tap_register *r = PART->active_instruction->data_register->in;
+    int i;
 
-  DBG (DBG_BASIC, _("%s: addr=%08x, mode=%s\n"), __FUNCTION__, addr,
-       (mode == ACCESS_MODE_READ) ? "READ" : "WRITE");
+    DBG (DBG_BASIC, _("%s: addr=%08x, mode=%s\n"), __FUNCTION__, addr,
+         (mode == ACCESS_MODE_READ) ? "READ" : "WRITE");
 
-  register_fill (r, 0);
+    register_fill (r, 0);
 
-  /* set address bits */
-  addr >>= 2;
-  for (i = 0; i < 7; i++)
-    register_set_bit (r, 27 + i, addr & (1 << i));
+    /* set address bits */
+    addr >>= 2;
+    for (i = 0; i < 7; i++)
+        register_set_bit (r, 27 + i, addr & (1 << i));
 
-  /* set access mode */
-  register_set_bit (r, 26, mode);
+    /* set access mode */
+    register_set_bit (r, 26, mode);
 
-  shift_data (bus, 32);
+    shift_data (bus, 32);
 }
 
 static void
 nexus_access_read_data (bus_t * bus, uint32_t * pdata)
 {
-  tap_register *r = PART->active_instruction->data_register->out;
-  uint32_t data;
-  int i;
+    tap_register *r = PART->active_instruction->data_register->out;
+    uint32_t data;
+    int i;
 
-  shift_data (bus, 32);
+    shift_data (bus, 32);
 
-  data = 0;
-  for (i = 0; i < 32; i++)
-    data |= register_get_bit (r, i) << i;
+    data = 0;
+    for (i = 0; i < 32; i++)
+        data |= register_get_bit (r, i) << i;
 
-  DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
+    DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
 
-  *pdata = data;
+    *pdata = data;
 }
 
 static void
 nexus_access_write_data (bus_t * bus, uint32_t data)
 {
-  tap_register *r = PART->active_instruction->data_register->in;
-  int i;
+    tap_register *r = PART->active_instruction->data_register->in;
+    int i;
 
-  DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
+    DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
 
-  register_set_bit (r, 0, 0);
-  register_set_bit (r, 1, 0);
+    register_set_bit (r, 0, 0);
+    register_set_bit (r, 1, 0);
 
-  for (i = 0; i < 32; i++)
-    register_set_bit (r, 2 + i, data & (1 << i));
+    for (i = 0; i < 32; i++)
+        register_set_bit (r, 2 + i, data & (1 << i));
 
-  shift_data (bus, 0);
+    shift_data (bus, 0);
 }
 
 static inline void
 nexus_reg_read (bus_t * bus, uint32_t reg, uint32_t * data)
 {
-  nexus_access_set_addr (bus, reg, ACCESS_MODE_READ);
-  nexus_access_read_data (bus, data);
+    nexus_access_set_addr (bus, reg, ACCESS_MODE_READ);
+    nexus_access_read_data (bus, data);
 }
 
 static inline void
 nexus_reg_write (bus_t * bus, uint32_t reg, uint32_t data)
 {
-  nexus_access_set_addr (bus, reg, ACCESS_MODE_WRITE);
-  nexus_access_write_data (bus, data);
+    nexus_access_set_addr (bus, reg, ACCESS_MODE_WRITE);
+    nexus_access_write_data (bus, data);
 }
 
 /* ------------------------------------------------------------------------- */
@@ -349,65 +351,65 @@ nexus_reg_write (bus_t * bus, uint32_t reg, uint32_t data)
 static void
 nexus_memacc_set_addr (bus_t * bus, uint32_t addr, uint32_t rwcs)
 {
-  nexus_reg_write (bus, OCD_REG_RWA, addr);
-  nexus_reg_write (bus, OCD_REG_RWCS, rwcs);
+    nexus_reg_write (bus, OCD_REG_RWA, addr);
+    nexus_reg_write (bus, OCD_REG_RWCS, rwcs);
 }
 
 static int
 nexus_memacc_read (bus_t * bus, uint32_t * data)
 {
-  uint32_t status;
-  int ret;
+    uint32_t status;
+    int ret;
 
-  do
-  {
-    nexus_reg_read (bus, OCD_REG_RWCS, &status);
-    status &= (OCD_RWCS_ERR | OCD_RWCS_DV);
-    /* TODO: add timeout checking */
-  }
-  while (status == 0);
+    do
+    {
+        nexus_reg_read (bus, OCD_REG_RWCS, &status);
+        status &= (OCD_RWCS_ERR | OCD_RWCS_DV);
+        /* TODO: add timeout checking */
+    }
+    while (status == 0);
 
-  DBG (DBG_BASIC, _("%s: read status %08x\n"), __FUNCTION__, status);
+    DBG (DBG_BASIC, _("%s: read status %08x\n"), __FUNCTION__, status);
 
-  ret = ACCESS_STATUS_OK;
-  switch (status)
-  {
-  case 1:
-    nexus_reg_read (bus, OCD_REG_RWD, data);
-    break;
-  default:
-    ERR ("read failed, status=%d\n", status);
-    *data = 0xffffffff;
-    ret = ACCESS_STATUS_ERR;
-    break;
-  }
+    ret = ACCESS_STATUS_OK;
+    switch (status)
+    {
+    case 1:
+        nexus_reg_read (bus, OCD_REG_RWD, data);
+        break;
+    default:
+        ERR ("read failed, status=%d\n", status);
+        *data = 0xffffffff;
+        ret = ACCESS_STATUS_ERR;
+        break;
+    }
 
-  return ret;
+    return ret;
 }
 
 static int
 nexus_memacc_write (bus_t * bus, uint32_t addr, uint32_t data, uint32_t rwcs)
 {
-  uint32_t status;
-  int ret;
+    uint32_t status;
+    int ret;
 
-  nexus_reg_write (bus, OCD_REG_RWA, addr);
-  nexus_reg_write (bus, OCD_REG_RWCS, rwcs);
-  nexus_reg_write (bus, OCD_REG_RWD, data);
+    nexus_reg_write (bus, OCD_REG_RWA, addr);
+    nexus_reg_write (bus, OCD_REG_RWCS, rwcs);
+    nexus_reg_write (bus, OCD_REG_RWD, data);
 
-  nexus_reg_read (bus, OCD_REG_RWCS, &status);
-  status &= (OCD_RWCS_ERR | OCD_RWCS_DV);
+    nexus_reg_read (bus, OCD_REG_RWCS, &status);
+    status &= (OCD_RWCS_ERR | OCD_RWCS_DV);
 
-  DBG (DBG_BASIC, _("%s: status=%08x\n"), __FUNCTION__, status);
+    DBG (DBG_BASIC, _("%s: status=%08x\n"), __FUNCTION__, status);
 
-  ret = ACCESS_STATUS_OK;
-  if (status)
-  {
-    ERR ("write failed, status=%d\n", status);
-    ret = ACCESS_STATUS_ERR;
-  }
+    ret = ACCESS_STATUS_OK;
+    if (status)
+    {
+        ERR ("write failed, status=%d\n", status);
+        ret = ACCESS_STATUS_ERR;
+    }
 
-  return ret;
+    return ret;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -416,57 +418,57 @@ static void
 avr32_bus_setup (bus_t * bus, chain_t * chain, part_t * part,
                  unsigned int mode)
 {
-  CHAIN = chain;
-  PART = part;
-  MODE = mode;
+    CHAIN = chain;
+    PART = part;
+    MODE = mode;
 
-  switch (mode)
-  {
-  case BUS_MODE_OCD:
-    SLAVE = SAB_SLAVE_OCD;
-    ADDR_MASK = SAB_OCD_ADDR_MASK & ~(3);
-    break;
+    switch (mode)
+    {
+    case BUS_MODE_OCD:
+        SLAVE = SAB_SLAVE_OCD;
+        ADDR_MASK = SAB_OCD_ADDR_MASK & ~(3);
+        break;
 
-  case BUS_MODE_HSBC:
-    SLAVE = SAB_SLAVE_HSB_CACHED;
-    ADDR_MASK = SAB_HSB_ADDR_MASK & ~(3);
-    break;
+    case BUS_MODE_HSBC:
+        SLAVE = SAB_SLAVE_HSB_CACHED;
+        ADDR_MASK = SAB_HSB_ADDR_MASK & ~(3);
+        break;
 
-  case BUS_MODE_HSBU:
-    SLAVE = SAB_SLAVE_HSB_UNCACHED;
-    ADDR_MASK = SAB_HSB_ADDR_MASK & ~(3);
-    break;
+    case BUS_MODE_HSBU:
+        SLAVE = SAB_SLAVE_HSB_UNCACHED;
+        ADDR_MASK = SAB_HSB_ADDR_MASK & ~(3);
+        break;
 
-  case BUS_MODE_x8:
-    ADDR_MASK = SAB_HSB_ADDR_MASK;
-    RWCS_RD = OCD_RWCS_READ8;
-    RWCS_WR = OCD_RWCS_WRITE8;
-    break;
+    case BUS_MODE_x8:
+        ADDR_MASK = SAB_HSB_ADDR_MASK;
+        RWCS_RD = OCD_RWCS_READ8;
+        RWCS_WR = OCD_RWCS_WRITE8;
+        break;
 
-  case BUS_MODE_x16:
-    ADDR_MASK = SAB_HSB_ADDR_MASK & ~(1);
-    RWCS_RD = OCD_RWCS_READ16;
-    RWCS_WR = OCD_RWCS_WRITE16;
-    break;
+    case BUS_MODE_x16:
+        ADDR_MASK = SAB_HSB_ADDR_MASK & ~(1);
+        RWCS_RD = OCD_RWCS_READ16;
+        RWCS_WR = OCD_RWCS_WRITE16;
+        break;
 
-  case BUS_MODE_x32:
-    ADDR_MASK = SAB_HSB_ADDR_MASK & ~(3);
-    RWCS_RD = OCD_RWCS_READ32;
-    RWCS_WR = OCD_RWCS_WRITE32;
-    break;
-  }
+    case BUS_MODE_x32:
+        ADDR_MASK = SAB_HSB_ADDR_MASK & ~(3);
+        RWCS_RD = OCD_RWCS_READ32;
+        RWCS_WR = OCD_RWCS_WRITE32;
+        break;
+    }
 }
 
 static int
 check_instruction (part_t * part, const char *instr)
 {
-  int ret;
+    int ret;
 
-  ret = (part_find_instruction (part, instr) == NULL);
-  if (ret)
-    ERR ("instruction %s not found\n", instr);
+    ret = (part_find_instruction (part, instr) == NULL);
+    if (ret)
+        ERR ("instruction %s not found\n", instr);
 
-  return ret;
+    return ret;
 }
 
 /**
@@ -474,83 +476,84 @@ check_instruction (part_t * part, const char *instr)
  *
  */
 static bus_t *
-avr32_bus_new (chain_t * chain, const bus_driver_t *driver, char *cmd_params[])
+avr32_bus_new (chain_t * chain, const bus_driver_t * driver,
+               char *cmd_params[])
 {
-  bus_t *bus;
-  part_t *part;
-  char *param;
-  unsigned int mode;
+    bus_t *bus;
+    part_t *part;
+    char *param;
+    unsigned int mode;
 
-  part = chain->parts->parts[chain->active_part];
+    part = chain->parts->parts[chain->active_part];
 
-  param = cmd_params[2];
-  if (!param)
-  {
-    ERR ("no bus mode specified\n");
-    return NULL;
-  }
+    param = cmd_params[2];
+    if (!param)
+    {
+        ERR ("no bus mode specified\n");
+        return NULL;
+    }
 
-  if (!strcasecmp ("OCD", param))
-  {
-    mode = BUS_MODE_OCD;
-  }
-  else if (!strcasecmp ("HSBC", param))
-  {
-    mode = BUS_MODE_HSBC;
-  }
-  else if (!strcasecmp ("HSBU", param))
-  {
-    mode = BUS_MODE_HSBU;
-  }
-  else if (!strcasecmp ("x8", param))
-  {
-    mode = BUS_MODE_x8;
-  }
-  else if (!strcasecmp ("x16", param))
-  {
-    mode = BUS_MODE_x16;
-  }
-  else if (!strcasecmp ("x32", param))
-  {
-    mode = BUS_MODE_x32;
-  }
-  else
-  {
-    ERR ("invalid bus mode: %s\n", param);
-    return NULL;
-  }
+    if (!strcasecmp ("OCD", param))
+    {
+        mode = BUS_MODE_OCD;
+    }
+    else if (!strcasecmp ("HSBC", param))
+    {
+        mode = BUS_MODE_HSBC;
+    }
+    else if (!strcasecmp ("HSBU", param))
+    {
+        mode = BUS_MODE_HSBU;
+    }
+    else if (!strcasecmp ("x8", param))
+    {
+        mode = BUS_MODE_x8;
+    }
+    else if (!strcasecmp ("x16", param))
+    {
+        mode = BUS_MODE_x16;
+    }
+    else if (!strcasecmp ("x32", param))
+    {
+        mode = BUS_MODE_x32;
+    }
+    else
+    {
+        ERR ("invalid bus mode: %s\n", param);
+        return NULL;
+    }
 
-  switch (mode)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    if (check_instruction (part, "MEMORY_WORD_ACCESS"))
-      return NULL;
-    break;
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    if (check_instruction (part, "NEXUS_ACCESS"))
-      return NULL;
-    break;
-  }
+    switch (mode)
+    {
+    case BUS_MODE_OCD:
+    case BUS_MODE_HSBC:
+    case BUS_MODE_HSBU:
+        if (check_instruction (part, "MEMORY_WORD_ACCESS"))
+            return NULL;
+        break;
+    case BUS_MODE_x8:
+    case BUS_MODE_x16:
+    case BUS_MODE_x32:
+        if (check_instruction (part, "NEXUS_ACCESS"))
+            return NULL;
+        break;
+    }
 
-  bus = calloc( 1, sizeof (bus_t) );
-  if (!bus)
-    return NULL;
+    bus = calloc (1, sizeof (bus_t));
+    if (!bus)
+        return NULL;
 
-  bus->driver = driver;
-  bus->params = calloc( 1, sizeof (bus_params_t) );
-  if (!bus->params)
-  {
-    free (bus);
-    return NULL;
-  }
+    bus->driver = driver;
+    bus->params = calloc (1, sizeof (bus_params_t));
+    if (!bus->params)
+    {
+        free (bus);
+        return NULL;
+    }
 
-  avr32_bus_setup (bus, chain, part, mode);
+    avr32_bus_setup (bus, chain, part, mode);
 
-  return bus;
+    return bus;
 }
 
 /**
@@ -560,13 +563,13 @@ avr32_bus_new (chain_t * chain, const bus_driver_t *driver, char *cmd_params[])
 static void
 avr32_bus_printinfo (bus_t * bus)
 {
-  int i;
+    int i;
 
-  for (i = 0; i < CHAIN->parts->len; i++)
-    if (PART == CHAIN->parts->parts[i])
-      break;
+    for (i = 0; i < CHAIN->parts->len; i++)
+        if (PART == CHAIN->parts->parts[i])
+            break;
 
-  printf (_("AVR32 multi-mode bus driver (JTAG part No. %d)\n"), i);
+    printf (_("AVR32 multi-mode bus driver (JTAG part No. %d)\n"), i);
 }
 
 /**
@@ -576,8 +579,8 @@ avr32_bus_printinfo (bus_t * bus)
 static void
 avr32_bus_prepare (bus_t * bus)
 {
-	if (!INITIALIZED)
-		bus_init( bus );
+    if (!INITIALIZED)
+        bus_init (bus);
 }
 
 /**
@@ -587,56 +590,56 @@ avr32_bus_prepare (bus_t * bus)
 static int
 avr32_bus_area (bus_t * bus, uint32_t addr, bus_area_t * area)
 {
-  switch (MODE)
-  {
-  case BUS_MODE_HSBC:
-    area->description = "HSB memory space, cached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 32;
-    break;
-  case BUS_MODE_HSBU:
-    area->description = "HSB memory space, uncached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 32;
-    break;
-  case BUS_MODE_x8:
-    area->description = "HSB memory space, uncached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 8;
-    break;
-  case BUS_MODE_x16:
-    area->description = "HSB memory space, uncached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 16;
-    break;
-  case BUS_MODE_x32:
-    area->description = "HSB memory space, uncached";
-    area->start = UINT32_C (0x00000000);
-    area->length = SAB_HSB_AREA_SIZE;
-    area->width = 32;
-    break;
-  case BUS_MODE_OCD:
-    if (addr < SAB_OCD_AREA_SIZE)
+    switch (MODE)
     {
-      area->description = "OCD registers";
-      area->start = UINT32_C (0x00000000);
-      area->length = SAB_OCD_AREA_SIZE;
-      area->width = 32;
-      break;
+    case BUS_MODE_HSBC:
+        area->description = "HSB memory space, cached";
+        area->start = UINT32_C (0x00000000);
+        area->length = SAB_HSB_AREA_SIZE;
+        area->width = 32;
+        break;
+    case BUS_MODE_HSBU:
+        area->description = "HSB memory space, uncached";
+        area->start = UINT32_C (0x00000000);
+        area->length = SAB_HSB_AREA_SIZE;
+        area->width = 32;
+        break;
+    case BUS_MODE_x8:
+        area->description = "HSB memory space, uncached";
+        area->start = UINT32_C (0x00000000);
+        area->length = SAB_HSB_AREA_SIZE;
+        area->width = 8;
+        break;
+    case BUS_MODE_x16:
+        area->description = "HSB memory space, uncached";
+        area->start = UINT32_C (0x00000000);
+        area->length = SAB_HSB_AREA_SIZE;
+        area->width = 16;
+        break;
+    case BUS_MODE_x32:
+        area->description = "HSB memory space, uncached";
+        area->start = UINT32_C (0x00000000);
+        area->length = SAB_HSB_AREA_SIZE;
+        area->width = 32;
+        break;
+    case BUS_MODE_OCD:
+        if (addr < SAB_OCD_AREA_SIZE)
+        {
+            area->description = "OCD registers";
+            area->start = UINT32_C (0x00000000);
+            area->length = SAB_OCD_AREA_SIZE;
+            area->width = 32;
+            break;
+        }
+        /* fallthrough */
+    default:
+        area->description = NULL;
+        area->length = UINT64_C (0x100000000);
+        area->width = 0;
+        break;
     }
-    /* fallthrough */
-  default:
-    area->description = NULL;
-    area->length = UINT64_C (0x100000000);
-    area->width = 0;
-    break;
-  }
 
-  return URJTAG_STATUS_OK;
+    return URJTAG_STATUS_OK;
 }
 
 /**
@@ -646,28 +649,28 @@ avr32_bus_area (bus_t * bus, uint32_t addr, bus_area_t * area)
 static void
 avr32_bus_read_start (bus_t * bus, uint32_t addr)
 {
-  addr &= ADDR_MASK;
+    addr &= ADDR_MASK;
 
-  DBG (DBG_BASIC, _("%s:addr=%08x\n"), __FUNCTION__, addr);
+    DBG (DBG_BASIC, _("%s:addr=%08x\n"), __FUNCTION__, addr);
 
-  switch (MODE)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    part_set_instruction (PART, "MEMORY_WORD_ACCESS");
-    mwa_scan_in_instr (bus);
-    mwa_scan_in_addr (bus, SLAVE, addr, ACCESS_MODE_READ);
-    break;
+    switch (MODE)
+    {
+    case BUS_MODE_OCD:
+    case BUS_MODE_HSBC:
+    case BUS_MODE_HSBU:
+        part_set_instruction (PART, "MEMORY_WORD_ACCESS");
+        mwa_scan_in_instr (bus);
+        mwa_scan_in_addr (bus, SLAVE, addr, ACCESS_MODE_READ);
+        break;
 
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    part_set_instruction (PART, "NEXUS_ACCESS");
-    nexus_access_start (bus);
-    nexus_memacc_set_addr (bus, addr, RWCS_RD);
-    break;
-  }
+    case BUS_MODE_x8:
+    case BUS_MODE_x16:
+    case BUS_MODE_x32:
+        part_set_instruction (PART, "NEXUS_ACCESS");
+        nexus_access_start (bus);
+        nexus_memacc_set_addr (bus, addr, RWCS_RD);
+        break;
+    }
 }
 
 /**
@@ -677,24 +680,24 @@ avr32_bus_read_start (bus_t * bus, uint32_t addr)
 static uint32_t
 avr32_bus_read_end (bus_t * bus)
 {
-  uint32_t data;
+    uint32_t data;
 
-  switch (MODE)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    mwa_scan_out_data (bus, &data);
-    break;
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    nexus_memacc_read (bus, &data);
-    nexus_access_end (bus);
-    break;
-  }
+    switch (MODE)
+    {
+    case BUS_MODE_OCD:
+    case BUS_MODE_HSBC:
+    case BUS_MODE_HSBU:
+        mwa_scan_out_data (bus, &data);
+        break;
+    case BUS_MODE_x8:
+    case BUS_MODE_x16:
+    case BUS_MODE_x32:
+        nexus_memacc_read (bus, &data);
+        nexus_access_end (bus);
+        break;
+    }
 
-  return data;
+    return data;
 }
 
 /**
@@ -704,27 +707,27 @@ avr32_bus_read_end (bus_t * bus)
 static uint32_t
 avr32_bus_read_next (bus_t * bus, uint32_t addr)
 {
-  uint32_t data;
+    uint32_t data;
 
-  addr &= ADDR_MASK;
+    addr &= ADDR_MASK;
 
-  switch (MODE)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    data = avr32_bus_read_end (bus);
-    avr32_bus_read_start (bus, addr);
-    break;
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    nexus_memacc_read (bus, &data);
-    nexus_memacc_set_addr (bus, addr, RWCS_RD);
-    break;
-  }
+    switch (MODE)
+    {
+    case BUS_MODE_OCD:
+    case BUS_MODE_HSBC:
+    case BUS_MODE_HSBU:
+        data = avr32_bus_read_end (bus);
+        avr32_bus_read_start (bus, addr);
+        break;
+    case BUS_MODE_x8:
+    case BUS_MODE_x16:
+    case BUS_MODE_x32:
+        nexus_memacc_read (bus, &data);
+        nexus_memacc_set_addr (bus, addr, RWCS_RD);
+        break;
+    }
 
-  return data;
+    return data;
 }
 
 /**
@@ -734,46 +737,46 @@ avr32_bus_read_next (bus_t * bus, uint32_t addr)
 static void
 avr32_bus_write (bus_t * bus, uint32_t addr, uint32_t data)
 {
-  addr &= ADDR_MASK;
+    addr &= ADDR_MASK;
 
-  switch (MODE)
-  {
-  case BUS_MODE_OCD:
-  case BUS_MODE_HSBC:
-  case BUS_MODE_HSBU:
-    part_set_instruction (PART, "MEMORY_WORD_ACCESS");
-    mwa_write_word (bus, SLAVE, addr, data);
-    break;
-  case BUS_MODE_x8:
-  case BUS_MODE_x16:
-  case BUS_MODE_x32:
-    part_set_instruction (PART, "NEXUS_ACCESS");
-    nexus_access_start (bus);
-    nexus_memacc_write (bus, addr, data, RWCS_WR);
-    nexus_access_end (bus);
-    break;
-  }
+    switch (MODE)
+    {
+    case BUS_MODE_OCD:
+    case BUS_MODE_HSBC:
+    case BUS_MODE_HSBU:
+        part_set_instruction (PART, "MEMORY_WORD_ACCESS");
+        mwa_write_word (bus, SLAVE, addr, data);
+        break;
+    case BUS_MODE_x8:
+    case BUS_MODE_x16:
+    case BUS_MODE_x32:
+        part_set_instruction (PART, "NEXUS_ACCESS");
+        nexus_access_start (bus);
+        nexus_memacc_write (bus, addr, data, RWCS_WR);
+        nexus_access_end (bus);
+        break;
+    }
 }
 
 const bus_driver_t avr32_bus_driver = {
-  "avr32",
-  N_("Atmel AVR32 multi-mode bus driver, requires <mode> parameter\n"
-     "           valid <mode> parameters:\n"
-     "               x8:   8 bit bus for the uncached HSB area, via OCD registers\n"
-     "               x16:  16 bit bus for the uncached HSB area, via OCD registers\n"
-     "               x32:  32 bit bus for the uncached HSB area, via OCD registers\n"
-     "               OCD : 32 bit bus for the OCD registers\n"
-     "               HSBC: 32 bit bus for the cached HSB area, via SAB\n"
-     "               HSBU: 32 bit bus for the uncached HSB area, via SAB"),
-  avr32_bus_new,
-  generic_bus_free,
-  avr32_bus_printinfo,
-  avr32_bus_prepare,
-  avr32_bus_area,
-  avr32_bus_read_start,
-  avr32_bus_read_next,
-  avr32_bus_read_end,
-  generic_bus_read,
-  avr32_bus_write,
-  generic_bus_no_init
+    "avr32",
+    N_("Atmel AVR32 multi-mode bus driver, requires <mode> parameter\n"
+       "           valid <mode> parameters:\n"
+       "               x8:   8 bit bus for the uncached HSB area, via OCD registers\n"
+       "               x16:  16 bit bus for the uncached HSB area, via OCD registers\n"
+       "               x32:  32 bit bus for the uncached HSB area, via OCD registers\n"
+       "               OCD : 32 bit bus for the OCD registers\n"
+       "               HSBC: 32 bit bus for the cached HSB area, via SAB\n"
+       "               HSBU: 32 bit bus for the uncached HSB area, via SAB"),
+    avr32_bus_new,
+    generic_bus_free,
+    avr32_bus_printinfo,
+    avr32_bus_prepare,
+    avr32_bus_area,
+    avr32_bus_read_start,
+    avr32_bus_read_next,
+    avr32_bus_read_end,
+    generic_bus_read,
+    avr32_bus_write,
+    generic_bus_no_init
 };

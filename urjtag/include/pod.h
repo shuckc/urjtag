@@ -26,15 +26,15 @@
 
 typedef enum
 {
-   CS_NONE   = 0,      // no/invalid signal
-   CS_TDI    = (1<<0), // out: JTAG/SPI data in
-   CS_TCK    = (1<<1), // out: JTAG/SPI clock
-   CS_TMS    = (1<<2), // out: JTAG test mode select/SPI slave select
-   CS_TRST   = (1<<3), // out: JTAG TAP reset
-   CS_RESET  = (1<<4), // out: system reset
-   CS_SCK    = (1<<5), // out: I2C clock (not yet used)
-   CS_SDA    = (1<<6), // inout: I2C data (not yet used)
-   CS_SS     = (1<<7), // out: SPI slave select (not yet used)
+    CS_NONE = 0,                // no/invalid signal
+    CS_TDI = (1 << 0),          // out: JTAG/SPI data in
+    CS_TCK = (1 << 1),          // out: JTAG/SPI clock
+    CS_TMS = (1 << 2),          // out: JTAG test mode select/SPI slave select
+    CS_TRST = (1 << 3),         // out: JTAG TAP reset
+    CS_RESET = (1 << 4),        // out: system reset
+    CS_SCK = (1 << 5),          // out: I2C clock (not yet used)
+    CS_SDA = (1 << 6),          // inout: I2C data (not yet used)
+    CS_SS = (1 << 7),           // out: SPI slave select (not yet used)
 }
 pod_sigsel_t;
 

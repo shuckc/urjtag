@@ -33,33 +33,31 @@
 #include "cmd.h"
 
 static int
-cmd_usleep_run( chain_t *chain, char *params[] )
+cmd_usleep_run (chain_t * chain, char *params[])
 {
-	unsigned int usecs;
-	
-	if (cmd_params( params ) != 2)
-		return -1;
+    unsigned int usecs;
 
-	if (cmd_get_number( params[1], &usecs ))
-		return -1;
+    if (cmd_params (params) != 2)
+        return -1;
 
-	usleep(usecs);
-	
-	return 1;
+    if (cmd_get_number (params[1], &usecs))
+        return -1;
+
+    usleep (usecs);
+
+    return 1;
 }
 
 static void
-cmd_usleep_help( void )
+cmd_usleep_help (void)
 {
-	printf( _(
-		"Usage: %s USECS\n"
-		"Sleep some number of microseconds.\n"
-	), "usleep" );
+    printf (_("Usage: %s USECS\n"
+              "Sleep some number of microseconds.\n"), "usleep");
 }
 
 cmd_t cmd_usleep = {
-	"usleep",
-	N_("Sleep some number of microseconds"),
-	cmd_usleep_help,
-	cmd_usleep_run
+    "usleep",
+    N_("Sleep some number of microseconds"),
+    cmd_usleep_help,
+    cmd_usleep_run
 };

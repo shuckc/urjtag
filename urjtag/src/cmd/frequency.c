@@ -32,50 +32,50 @@
 #include "cmd.h"
 
 static int
-cmd_frequency_run( chain_t *chain, char *params[] )
+cmd_frequency_run (chain_t * chain, char *params[])
 {
-	unsigned int freq;
+    unsigned int freq;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (cmd_params( params ) == 1) {
-		printf( _("Current TCK frequency is %u Hz\n"), cable_get_frequency(chain->cable) );
-		return 1;
-	}
+    if (cmd_params (params) == 1)
+    {
+        printf (_("Current TCK frequency is %u Hz\n"),
+                cable_get_frequency (chain->cable));
+        return 1;
+    }
 
-	if (cmd_params( params ) != 2)
-		return -1;
+    if (cmd_params (params) != 2)
+        return -1;
 
-	if (cmd_get_number( params[1], &freq ))
-		return -1;
+    if (cmd_get_number (params[1], &freq))
+        return -1;
 
-	printf( _("Setting TCK frequency to %u Hz\n"), freq );
-	cable_set_frequency(chain->cable, freq);
+    printf (_("Setting TCK frequency to %u Hz\n"), freq);
+    cable_set_frequency (chain->cable, freq);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_frequency_help( void )
+cmd_frequency_help (void)
 {
-	printf( _(
-		"Usage: %s [FREQ]\n"
-		"Change TCK frequency to FREQ or print current TCK frequency.\n"
-		"\n"
-		"FREQ is in hertz. It's a maximum TCK frequency for JTAG interface.\n"
-		"In some cases the TCK frequency is less than FREQ, but the frequency\n"
-		"is never more than FREQ. Maximum supported frequency depends on JTAG\n"
-		"adapter.\n"
-		"\n"
-		"FREQ must be an unsigned integer. Minimum allowed frequency is 1 Hz.\n"
-		"Use 0 for FREQ to disable frequency limit.\n"
-	), "frequency" );
+    printf (_("Usage: %s [FREQ]\n"
+              "Change TCK frequency to FREQ or print current TCK frequency.\n"
+              "\n"
+              "FREQ is in hertz. It's a maximum TCK frequency for JTAG interface.\n"
+              "In some cases the TCK frequency is less than FREQ, but the frequency\n"
+              "is never more than FREQ. Maximum supported frequency depends on JTAG\n"
+              "adapter.\n"
+              "\n"
+              "FREQ must be an unsigned integer. Minimum allowed frequency is 1 Hz.\n"
+              "Use 0 for FREQ to disable frequency limit.\n"), "frequency");
 }
 
 cmd_t cmd_frequency = {
-	"frequency",
-	N_("setup JTAG frequency"),
-	cmd_frequency_help,
-	cmd_frequency_run
+    "frequency",
+    N_("setup JTAG frequency"),
+    cmd_frequency_help,
+    cmd_frequency_run
 };

@@ -26,16 +26,17 @@
 
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
-    
+
 
 /* return real time in seconds starting at some arbitrary point in
    time*/
-long double frealtime();
+    long double frealtime ();
 
 /* return the CPU time used by this process (seconds) */
-long double fcputime();
+    long double fcputime ();
 
 
 #ifdef __cplusplus
@@ -44,4 +45,3 @@ long double fcputime();
 
 
 #endif
-

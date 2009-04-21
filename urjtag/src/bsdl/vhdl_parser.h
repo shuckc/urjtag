@@ -28,16 +28,16 @@
 #include "bsdl_types.h"
 
 /* VHDL lexer declarations */
-void *vhdl_flex_init( FILE *, int );
-void  vhdl_flex_deinit( void * );
-void  vhdl_flex_switch_file( void *, char * );
-int   vhdl_flex_get_compile_errors( void * );
-int   vhdl_flex_postinc_compile_errors( void * );
-int   vhdl_flex_get_lineno( void * );
+void *vhdl_flex_init (FILE *, int);
+void vhdl_flex_deinit (void *);
+void vhdl_flex_switch_file (void *, char *);
+int vhdl_flex_get_compile_errors (void *);
+int vhdl_flex_postinc_compile_errors (void *);
+int vhdl_flex_get_lineno (void *);
 
 /* VHDL parser declarations */
-vhdl_parser_priv_t *vhdl_parser_init( FILE *, jtag_ctrl_t * );
-void vhdl_parser_deinit( vhdl_parser_priv_t * );
-int vhdlparse( vhdl_parser_priv_t * );
+vhdl_parser_priv_t *vhdl_parser_init (FILE *, jtag_ctrl_t *);
+void vhdl_parser_deinit (vhdl_parser_priv_t *);
+int vhdlparse (vhdl_parser_priv_t *);
 
 #endif /* VHDL_PARSER_H */

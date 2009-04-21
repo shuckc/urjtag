@@ -37,18 +37,20 @@ typedef struct bsbit bsbit_t;
 
 #define	BSBIT_STATE_Z	(-1)
 
-struct bsbit {
-	int bit;
-	char *name;
-	int type;
-	signal_t *signal;
-	int safe;		/* safe value */
-	int control;		/* -1 for none */
-	int control_value;
-	int control_state;
+struct bsbit
+{
+    int bit;
+    char *name;
+    int type;
+    signal_t *signal;
+    int safe;                   /* safe value */
+    int control;                /* -1 for none */
+    int control_value;
+    int control_state;
 };
 
-bsbit_t *bsbit_alloc( int bit, const char *name, int type, signal_t *signal, int safe );
-void bsbit_free( bsbit_t *b );
+bsbit_t *bsbit_alloc (int bit, const char *name, int type, signal_t * signal,
+                      int safe);
+void bsbit_free (bsbit_t * b);
 
 #endif /* BSBIT_H */

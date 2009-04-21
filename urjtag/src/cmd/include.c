@@ -35,123 +35,125 @@
 #include "bsdl.h"
 
 static int
-cmd_include_or_script_run( chain_t *chain, int is_include, char *params[] )
+cmd_include_or_script_run (chain_t * chain, int is_include, char *params[])
 {
-	int go = 0, i, j = 1;
-	char *path;
-	int len;
+    int go = 0, i, j = 1;
+    char *path;
+    int len;
 
-	if (cmd_params( params ) < 2)
-		return -1;
+    if (cmd_params (params) < 2)
+        return -1;
 
-	if( ! is_include )
-	{
-		printf(_("Please use the 'include' command instead of 'script'\n") );
-	}
+    if (!is_include)
+    {
+        printf (_("Please use the 'include' command instead of 'script'\n"));
+    }
 
-	/* If "params[1]" begins with a slash, or dots followed by a slash,
-	 * assume that user wants to ignore the search path */
+    /* If "params[1]" begins with a slash, or dots followed by a slash,
+     * assume that user wants to ignore the search path */
 
-	path = params[1];
+    path = params[1];
 #ifdef __MINGW32__
-	if (isalpha(*path) && path[1] == ':') path += 2;
+    if (isalpha (*path) && path[1] == ':')
+        path += 2;
 #endif
-	while( *path == '.' ) path++; 
-	if(*path == '/' || *path == '\\' || ! is_include)
-	{
-		path = strdup(params[1]);
-	}
-	else
-	{
-		const char *jtag_data_dir = jtag_get_data_dir();
-		path = malloc(len = strlen( jtag_data_dir ) + strlen( params[1] ) + 2);
-		if(path != NULL)
-		{
-			snprintf( path, len, "%s/%s", jtag_data_dir, params[1] );
-		}
-	}
-	if (path == NULL) {
-		printf( _("Out of memory\n") );
-		return 1;
-	}
+    while (*path == '.')
+        path++;
+    if (*path == '/' || *path == '\\' || !is_include)
+    {
+        path = strdup (params[1]);
+    }
+    else
+    {
+        const char *jtag_data_dir = jtag_get_data_dir ();
+        path = malloc (len = strlen (jtag_data_dir) + strlen (params[1]) + 2);
+        if (path != NULL)
+        {
+            snprintf (path, len, "%s/%s", jtag_data_dir, params[1]);
+        }
+    }
+    if (path == NULL)
+    {
+        printf (_("Out of memory\n"));
+        return 1;
+    }
 
 #ifdef ENABLE_BSDL
-	/* perform a test read to check for BSDL syntax */
-	if (bsdl_read_file( chain, path, BSDL_MODE_INCLUDE1, NULL ) >= 0)
-	{
-		/* it seems to be a proper BSDL file, so re-read and execute */
-		go = bsdl_read_file( chain, path, BSDL_MODE_INCLUDE2, NULL );
+    /* perform a test read to check for BSDL syntax */
+    if (bsdl_read_file (chain, path, BSDL_MODE_INCLUDE1, NULL) >= 0)
+    {
+        /* it seems to be a proper BSDL file, so re-read and execute */
+        go = bsdl_read_file (chain, path, BSDL_MODE_INCLUDE2, NULL);
 
-		free( path );
-		return 1;
-	}
+        free (path);
+        return 1;
+    }
 #endif
 
-	if (cmd_params( params ) > 2) {
-		sscanf(params[2],"%d",&j);	/* loop n times option */
-	}
+    if (cmd_params (params) > 2)
+    {
+        sscanf (params[2], "%d", &j);   /* loop n times option */
+    }
 
-	for(i = 0; i < j ;i++) {
-		go = jtag_parse_file( chain, path );
+    for (i = 0; i < j; i++)
+    {
+        go = jtag_parse_file (chain, path);
 
-		if (go < 0) {
-			if (go != -99)
-				printf( _("Unable to open file `%s go=%d'!\n"), path, go );
-			break;
-		}
-	}
+        if (go < 0)
+        {
+            if (go != -99)
+                printf (_("Unable to open file `%s go=%d'!\n"), path, go);
+            break;
+        }
+    }
 
-	free( path );
+    free (path);
 
-	return go ? 1 : 0;
+    return go ? 1 : 0;
 }
 
 static void
-cmd_include_or_script_help( char *cmd )
+cmd_include_or_script_help (char *cmd)
 {
-	printf( _(
-		"Usage: %s FILENAME [n] \n"
-		"Run command sequence n times from external FILENAME.\n"
-		"\n"
-		"FILENAME      Name of the file with commands\n"
-	), cmd );
+    printf (_("Usage: %s FILENAME [n] \n"
+              "Run command sequence n times from external FILENAME.\n"
+              "\n" "FILENAME      Name of the file with commands\n"), cmd);
 }
 
 static int
-cmd_include_run( chain_t *chain, char *params[] )
+cmd_include_run (chain_t * chain, char *params[])
 {
-	return cmd_include_or_script_run( chain, 1, params );
+    return cmd_include_or_script_run (chain, 1, params);
 }
 
 static void
-cmd_include_help( void )
+cmd_include_help (void)
 {
-	cmd_include_or_script_help( "include" );
+    cmd_include_or_script_help ("include");
 }
 
 cmd_t cmd_include = {
-	"include",
-	N_("include command sequence from external repository"),
-	cmd_include_help,
-	cmd_include_run
+    "include",
+    N_("include command sequence from external repository"),
+    cmd_include_help,
+    cmd_include_run
 };
 
 static int
-cmd_script_run( chain_t *chain, char *params[] )
+cmd_script_run (chain_t * chain, char *params[])
 {
-	return cmd_include_or_script_run( chain, 0, params );
+    return cmd_include_or_script_run (chain, 0, params);
 }
 
 static void
-cmd_script_help( void )
+cmd_script_help (void)
 {
-	cmd_include_or_script_help( "script" );
+    cmd_include_or_script_help ("script");
 }
 
 cmd_t cmd_script = {
-	"script",
-	N_("run command sequence from external file"),
-	cmd_script_help,
-	cmd_script_run
+    "script",
+    N_("run command sequence from external file"),
+    cmd_script_help,
+    cmd_script_run
 };
-

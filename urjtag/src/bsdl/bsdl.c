@@ -62,39 +62,40 @@
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_msg( int proc_mode, int type, const char *format, ... )
+void
+bsdl_msg (int proc_mode, int type, const char *format, ...)
 {
-  va_list lst;
+    va_list lst;
 
-  va_start( lst, format );
-  switch (type)
-  {
+    va_start (lst, format);
+    switch (type)
+    {
     case BSDL_MSG_NOTE:
-      if (!(proc_mode & BSDL_MODE_MSG_NOTE))
-        return;
-      printf( "-N- " );
-      break;
+        if (!(proc_mode & BSDL_MODE_MSG_NOTE))
+            return;
+        printf ("-N- ");
+        break;
     case BSDL_MSG_WARN:
-      if (!(proc_mode & BSDL_MODE_MSG_WARN))
-        return;
-      printf( "-W- " );
-      break;
+        if (!(proc_mode & BSDL_MODE_MSG_WARN))
+            return;
+        printf ("-W- ");
+        break;
     case BSDL_MSG_ERR:
-      if (!(proc_mode & BSDL_MODE_MSG_ERR))
-        return;
-      printf( "-E- " );
-      break;
+        if (!(proc_mode & BSDL_MODE_MSG_ERR))
+            return;
+        printf ("-E- ");
+        break;
     case BSDL_MSG_FATAL:
-      if (!(proc_mode & BSDL_MODE_MSG_FATAL))
-        return;
-      printf( "-F- " );
-      break;
+        if (!(proc_mode & BSDL_MODE_MSG_FATAL))
+            return;
+        printf ("-F- ");
+        break;
     default:
-      printf( "-?- " );
-      break;
-  }
-  vprintf( format, lst );
-  va_end( lst );
+        printf ("-?- ");
+        break;
+    }
+    vprintf (format, lst);
+    va_end (lst);
 }
 
 
@@ -115,89 +116,100 @@ void bsdl_msg( int proc_mode, int type, const char *format, ... )
  *   > 0 : No errors, idcode checked and matched
  *
  ****************************************************************************/
-int bsdl_read_file( chain_t *chain, const char *BSDL_File_Name, int proc_mode,
-                    const char *idcode )
+int
+bsdl_read_file (chain_t * chain, const char *BSDL_File_Name, int proc_mode,
+                const char *idcode)
 {
-  bsdl_globs_t *globs = &(chain->bsdl);
-  FILE *BSDL_File;
-  vhdl_parser_priv_t *vhdl_parser_priv;
-  jtag_ctrl_t jtag_ctrl;
-  int Compile_Errors = 1;
-  int result;
+    bsdl_globs_t *globs = &(chain->bsdl);
+    FILE *BSDL_File;
+    vhdl_parser_priv_t *vhdl_parser_priv;
+    jtag_ctrl_t jtag_ctrl;
+    int Compile_Errors = 1;
+    int result;
 
-  if (globs->debug)
-    proc_mode |= BSDL_MODE_MSG_ALL;
+    if (globs->debug)
+        proc_mode |= BSDL_MODE_MSG_ALL;
 
-  jtag_ctrl.proc_mode = proc_mode;
+    jtag_ctrl.proc_mode = proc_mode;
 
-  /* perform some basic checks */
-  if (proc_mode & BSDL_MODE_INSTR_EXEC)
-  {
-    if (chain == NULL)
+    /* perform some basic checks */
+    if (proc_mode & BSDL_MODE_INSTR_EXEC)
     {
-      bsdl_msg( proc_mode, BSDL_MSG_ERR, _("No JTAG chain available\n") );
-      return -1;
-    }
-    if (chain->parts == NULL)
-    {
-      bsdl_msg( proc_mode, BSDL_MSG_ERR, _("Chain without any parts\n") );
-      return -1;
-    }
-    if (!(chain && chain->parts))
-      return -1;
+        if (chain == NULL)
+        {
+            bsdl_msg (proc_mode, BSDL_MSG_ERR,
+                      _("No JTAG chain available\n"));
+            return -1;
+        }
+        if (chain->parts == NULL)
+        {
+            bsdl_msg (proc_mode, BSDL_MSG_ERR,
+                      _("Chain without any parts\n"));
+            return -1;
+        }
+        if (!(chain && chain->parts))
+            return -1;
 
-    jtag_ctrl.chain = chain;
-    jtag_ctrl.part = chain->parts->parts[chain->active_part];
-  }
-  else
-  {
-    jtag_ctrl.chain = NULL;
-    jtag_ctrl.part = NULL;
-  }
-
-  BSDL_File = fopen( BSDL_File_Name, "r" );
-
-  bsdl_msg( proc_mode, BSDL_MSG_NOTE, _("Reading file '%s'\n"), BSDL_File_Name );
-
-  if (BSDL_File == NULL) {
-    bsdl_msg( proc_mode,
-              BSDL_MSG_ERR, _("Unable to open BSDL file '%s'\n"), BSDL_File_Name );
-    return -1;
-  }
-
-  if ((vhdl_parser_priv = vhdl_parser_init( BSDL_File, &jtag_ctrl )))
-  {
-    vhdl_parser_priv->jtag_ctrl->idcode = NULL;
-
-    vhdlparse( vhdl_parser_priv );
-
-    Compile_Errors = vhdl_flex_get_compile_errors( vhdl_parser_priv->scanner );
-    if (Compile_Errors == 0)
-    {
-      bsdl_msg( proc_mode,
-                BSDL_MSG_NOTE, _("BSDL file '%s' passed VHDL stage correctly\n"),
-                BSDL_File_Name );
-
-      result = bsdl_process_elements( &jtag_ctrl, idcode );
-
-      if (result >= 0)
-        bsdl_msg( proc_mode,
-                  BSDL_MSG_NOTE, _("BSDL file '%s' passed BSDL stage correctly\n"),
-                  BSDL_File_Name );
-
+        jtag_ctrl.chain = chain;
+        jtag_ctrl.part = chain->parts->parts[chain->active_part];
     }
     else
     {
-      bsdl_msg( proc_mode,
-                BSDL_MSG_ERR, _("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
-                BSDL_File_Name );
+        jtag_ctrl.chain = NULL;
+        jtag_ctrl.part = NULL;
     }
 
+    BSDL_File = fopen (BSDL_File_Name, "r");
 
-    vhdl_parser_deinit( vhdl_parser_priv );
-  }
+    bsdl_msg (proc_mode, BSDL_MSG_NOTE, _("Reading file '%s'\n"),
+              BSDL_File_Name);
 
-  return Compile_Errors == 0 ? result : -1;
+    if (BSDL_File == NULL)
+    {
+        bsdl_msg (proc_mode,
+                  BSDL_MSG_ERR, _("Unable to open BSDL file '%s'\n"),
+                  BSDL_File_Name);
+        return -1;
+    }
+
+    if ((vhdl_parser_priv = vhdl_parser_init (BSDL_File, &jtag_ctrl)))
+    {
+        vhdl_parser_priv->jtag_ctrl->idcode = NULL;
+
+        vhdlparse (vhdl_parser_priv);
+
+        Compile_Errors =
+            vhdl_flex_get_compile_errors (vhdl_parser_priv->scanner);
+        if (Compile_Errors == 0)
+        {
+            bsdl_msg (proc_mode,
+                      BSDL_MSG_NOTE,
+                      _("BSDL file '%s' passed VHDL stage correctly\n"),
+                      BSDL_File_Name);
+
+            result = bsdl_process_elements (&jtag_ctrl, idcode);
+
+            if (result >= 0)
+                bsdl_msg (proc_mode,
+                          BSDL_MSG_NOTE,
+                          _("BSDL file '%s' passed BSDL stage correctly\n"),
+                          BSDL_File_Name);
+
+        }
+        else
+        {
+            bsdl_msg (proc_mode,
+                      BSDL_MSG_ERR,
+                      _
+                      ("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
+                      BSDL_File_Name);
+        }
+
+
+        vhdl_parser_deinit (vhdl_parser_priv);
+    }
+
+    return Compile_Errors == 0 ? result : -1;
 }
 
 
@@ -215,52 +227,55 @@ int bsdl_read_file( chain_t *chain, const char *BSDL_File_Name, int proc_mode,
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_set_path( chain_t *chain, const char *pathlist )
+void
+bsdl_set_path (chain_t * chain, const char *pathlist)
 {
-  bsdl_globs_t *globs = &(chain->bsdl);
-  char  *delim;
-  char  *elem;
-  char  *pathelem;
-  int    num;
-  size_t len;
+    bsdl_globs_t *globs = &(chain->bsdl);
+    char *delim;
+    char *elem;
+    char *pathelem;
+    int num;
+    size_t len;
 
-  /* free memory of current path list */
-  if (globs->path_list)
-  {
-    for (num = 0; globs->path_list[num]; num++)
-      if (globs->path_list[num])
-        free( globs->path_list[num] );
-    free( globs->path_list );
-    globs->path_list = NULL;
-  }
-
-  /* run through path list and determine number of elements */
-  for (num = 0, elem = (char *)pathlist; strlen(elem) > 0; )
-  {
-    delim = strchr( elem, ';' );
-    if ((delim - elem > 0) || (delim == NULL))
+    /* free memory of current path list */
+    if (globs->path_list)
     {
-      num++;
-      /* extend path list array */
-      globs->path_list = (char **)realloc( globs->path_list, (num+1) * sizeof(char *) );
-      /* enter path element up to the delimeter */
-      if (delim == NULL)
-        len = strlen( elem );
-      else
-        len = delim-elem;
-      pathelem = malloc( len + 1 );
-      memcpy( pathelem, elem, len );
-      pathelem[len] = '\0';
-      globs->path_list[num-1] = pathelem;
-      globs->path_list[num] = NULL;
+        for (num = 0; globs->path_list[num]; num++)
+            if (globs->path_list[num])
+                free (globs->path_list[num]);
+        free (globs->path_list);
+        globs->path_list = NULL;
     }
-    elem = delim ? delim + 1 : elem + strlen( elem );
-  }
 
-  if (globs->debug)
-    for (num = 0; globs->path_list[num] != NULL; num++)
-      bsdl_msg( BSDL_MODE_MSG_ALL,
-                BSDL_MSG_NOTE, "%s\n", globs->path_list[num] );
+    /* run through path list and determine number of elements */
+    for (num = 0, elem = (char *) pathlist; strlen (elem) > 0;)
+    {
+        delim = strchr (elem, ';');
+        if ((delim - elem > 0) || (delim == NULL))
+        {
+            num++;
+            /* extend path list array */
+            globs->path_list =
+                (char **) realloc (globs->path_list,
+                                   (num + 1) * sizeof (char *));
+            /* enter path element up to the delimeter */
+            if (delim == NULL)
+                len = strlen (elem);
+            else
+                len = delim - elem;
+            pathelem = malloc (len + 1);
+            memcpy (pathelem, elem, len);
+            pathelem[len] = '\0';
+            globs->path_list[num - 1] = pathelem;
+            globs->path_list[num] = NULL;
+        }
+        elem = delim ? delim + 1 : elem + strlen (elem);
+    }
+
+    if (globs->debug)
+        for (num = 0; globs->path_list[num] != NULL; num++)
+            bsdl_msg (BSDL_MODE_MSG_ALL,
+                      BSDL_MSG_NOTE, "%s\n", globs->path_list[num]);
 }
 
 
@@ -284,63 +299,67 @@ void bsdl_set_path( chain_t *chain, const char *pathlist )
  *   > 0 : No errors, idcode checked and matched
  *
  ****************************************************************************/
-int bsdl_scan_files( chain_t *chain, const char *idcode, int proc_mode )
+int
+bsdl_scan_files (chain_t * chain, const char *idcode, int proc_mode)
 {
-  bsdl_globs_t *globs = &(chain->bsdl);
-  int idx = 0;
-  int result = 0;
+    bsdl_globs_t *globs = &(chain->bsdl);
+    int idx = 0;
+    int result = 0;
 
-  /* abort if no path list was specified */
-  if (globs->path_list == NULL)
-    return 0;
+    /* abort if no path list was specified */
+    if (globs->path_list == NULL)
+        return 0;
 
-  while (globs->path_list[idx] && (result <= 0))
-  {
-    DIR *dir;
-
-    if ((dir = opendir( globs->path_list[idx] )))
+    while (globs->path_list[idx] && (result <= 0))
     {
-      struct dirent *elem;
+        DIR *dir;
 
-      /* run through all elements in the current directory */
-      while ((elem = readdir( dir )) && (result <= 0))
-      {
-        char *name;
-
-        name = (char *)malloc( strlen( globs->path_list[idx] )
-                               + strlen( elem->d_name ) + 1 + 1 );
-        if (name)
+        if ((dir = opendir (globs->path_list[idx])))
         {
-          struct stat buf;
+            struct dirent *elem;
 
-          strcpy( name, globs->path_list[idx] );
-          strcat( name, "/" );
-          strcat( name, elem->d_name );
-
-          if (stat( name, &buf ) == 0)
-          {
-            if (buf.st_mode & S_IFREG)
+            /* run through all elements in the current directory */
+            while ((elem = readdir (dir)) && (result <= 0))
             {
-              result = bsdl_read_file( chain, name, proc_mode, idcode );
-              if (result == 1)
-                printf( _("  Filename:     %s\n"), name );
+                char *name;
+
+                name = (char *) malloc (strlen (globs->path_list[idx])
+                                        + strlen (elem->d_name) + 1 + 1);
+                if (name)
+                {
+                    struct stat buf;
+
+                    strcpy (name, globs->path_list[idx]);
+                    strcat (name, "/");
+                    strcat (name, elem->d_name);
+
+                    if (stat (name, &buf) == 0)
+                    {
+                        if (buf.st_mode & S_IFREG)
+                        {
+                            result =
+                                bsdl_read_file (chain, name, proc_mode,
+                                                idcode);
+                            if (result == 1)
+                                printf (_("  Filename:     %s\n"), name);
+                        }
+                    }
+
+                    free (name);
+                }
             }
-          }
 
-          free( name );
+            closedir (dir);
         }
-      }
+        else
+            bsdl_msg (proc_mode,
+                      BSDL_MSG_WARN, _("Cannot open directory %s\n"),
+                      globs->path_list[idx]);
 
-      closedir( dir );
+        idx++;
     }
-    else
-      bsdl_msg( proc_mode,
-                BSDL_MSG_WARN, _("Cannot open directory %s\n"), globs->path_list[idx] );
 
-    idx++;
-  }
-
-  return result;
+    return result;
 }
 
 

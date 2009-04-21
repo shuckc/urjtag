@@ -46,8 +46,9 @@
 #include "cable.h"
 #include "usbconn.h"
 
-typedef struct {
-	struct usb_device *dev;
+typedef struct
+{
+    struct usb_device *dev;
     struct usb_dev_handle *handle;
 } libusb_param_t;
 
@@ -56,190 +57,200 @@ usbconn_driver_t usbconn_libusb_driver;
 /* ---------------------------------------------------------------------- */
 
 static int
-libusb_match_desc(struct usb_device *dev, char *desc)
+libusb_match_desc (struct usb_device *dev, char *desc)
 {
-	int r = 0;
-	char buf[256];
-	usb_dev_handle *handle;
+    int r = 0;
+    char buf[256];
+    usb_dev_handle *handle;
 
-	if(desc == NULL) return 1;
+    if (desc == NULL)
+        return 1;
 
-	handle = usb_open(dev);
-	if(handle == NULL)
-	{
-		perror("libusb: usb_open() failed");
-		return 0;
-	}
-	if(dev->descriptor.iManufacturer)
-	{
-		r = usb_get_string_simple(handle, dev->descriptor.iManufacturer, buf, sizeof(buf));
-		if(r > 0)
-		{
-			if(strstr(buf, desc) == NULL) r = 0;
-		}
-	}
-	if(r <= 0 && dev->descriptor.iProduct)
-	{
-		r = usb_get_string_simple(handle, dev->descriptor.iProduct, buf, sizeof(buf));
-		if(r > 0)
-		{
-			if(strstr(buf, desc) == NULL) r = 0;
-		}
-	}
-	if(r <= 0 && dev->descriptor.iSerialNumber)
-	{
-		r = usb_get_string_simple(handle, dev->descriptor.iSerialNumber, buf, sizeof(buf));
-		if(r > 0)
-		{
-			if(strstr(buf, desc) == NULL) r = 0;
-		}
-	}
-	usb_close(handle);
-	return r > 0 ? 1 : 0;
+    handle = usb_open (dev);
+    if (handle == NULL)
+    {
+        perror ("libusb: usb_open() failed");
+        return 0;
+    }
+    if (dev->descriptor.iManufacturer)
+    {
+        r = usb_get_string_simple (handle, dev->descriptor.iManufacturer, buf,
+                                   sizeof (buf));
+        if (r > 0)
+        {
+            if (strstr (buf, desc) == NULL)
+                r = 0;
+        }
+    }
+    if (r <= 0 && dev->descriptor.iProduct)
+    {
+        r = usb_get_string_simple (handle, dev->descriptor.iProduct, buf,
+                                   sizeof (buf));
+        if (r > 0)
+        {
+            if (strstr (buf, desc) == NULL)
+                r = 0;
+        }
+    }
+    if (r <= 0 && dev->descriptor.iSerialNumber)
+    {
+        r = usb_get_string_simple (handle, dev->descriptor.iSerialNumber, buf,
+                                   sizeof (buf));
+        if (r > 0)
+        {
+            if (strstr (buf, desc) == NULL)
+                r = 0;
+        }
+    }
+    usb_close (handle);
+    return r > 0 ? 1 : 0;
 }
 
 
 /* ---------------------------------------------------------------------- */
 
 usbconn_t *
-usbconn_libusb_connect( const char **param, int paramc, usbconn_cable_t *template )
+usbconn_libusb_connect (const char **param, int paramc,
+                        usbconn_cable_t * template)
 {
-	struct usb_bus *bus;
-	struct usb_device *found_dev = NULL;
-	usbconn_t *libusb_conn;
-	libusb_param_t *libusb_params;
+    struct usb_bus *bus;
+    struct usb_device *found_dev = NULL;
+    usbconn_t *libusb_conn;
+    libusb_param_t *libusb_params;
 
-	usb_init();
-	if(usb_find_busses()<0)
-	{
-		perror("libusb: usb_find_busses failed");
-		return NULL;
-	}
-	if(usb_find_devices()<0)
-	{
-		perror("libusb: usb_find_devices failed");
-		return NULL;
-	}
+    usb_init ();
+    if (usb_find_busses () < 0)
+    {
+        perror ("libusb: usb_find_busses failed");
+        return NULL;
+    }
+    if (usb_find_devices () < 0)
+    {
+        perror ("libusb: usb_find_devices failed");
+        return NULL;
+    }
 
-	for (bus = usb_get_busses(); bus && !found_dev; bus = bus->next)
-	{
-		struct usb_device *dev;
-	
-		for (dev = bus->devices; dev && !found_dev; dev = dev->next)
-		{
-			if(((template->vid<0)||(dev->descriptor.idVendor == template->vid))
-				&&((template->pid<0)||(dev->descriptor.idProduct == template->pid)))
-			{
-				if(libusb_match_desc(dev, template->desc))
-				{
-					found_dev = dev;
-				}
-			}
-		}
-	}
+    for (bus = usb_get_busses (); bus && !found_dev; bus = bus->next)
+    {
+        struct usb_device *dev;
 
-	if(!found_dev)
-	{
-		return NULL;
-	}
+        for (dev = bus->devices; dev && !found_dev; dev = dev->next)
+        {
+            if (((template->vid < 0)
+                 || (dev->descriptor.idVendor == template->vid))
+                && ((template->pid < 0)
+                    || (dev->descriptor.idProduct == template->pid)))
+            {
+                if (libusb_match_desc (dev, template->desc))
+                {
+                    found_dev = dev;
+                }
+            }
+        }
+    }
 
-	libusb_conn = malloc( sizeof(usbconn_t) );
-	libusb_params = malloc(sizeof(libusb_param_t));
-	if(libusb_params == NULL || libusb_conn == NULL)
-	{
-		printf(_("Out of memory\n"));
-		if (libusb_params)
-			free(libusb_params);
-		if (libusb_conn)
-			free(libusb_conn);
-		return NULL;
-	}
+    if (!found_dev)
+    {
+        return NULL;
+    }
 
-	libusb_params->dev = found_dev;
-	libusb_params->handle = NULL;
-	libusb_conn->params = libusb_params;
-	libusb_conn->driver = &usbconn_libusb_driver;
-	libusb_conn->cable = NULL;
+    libusb_conn = malloc (sizeof (usbconn_t));
+    libusb_params = malloc (sizeof (libusb_param_t));
+    if (libusb_params == NULL || libusb_conn == NULL)
+    {
+        printf (_("Out of memory\n"));
+        if (libusb_params)
+            free (libusb_params);
+        if (libusb_conn)
+            free (libusb_conn);
+        return NULL;
+    }
 
-	return libusb_conn;
+    libusb_params->dev = found_dev;
+    libusb_params->handle = NULL;
+    libusb_conn->params = libusb_params;
+    libusb_conn->driver = &usbconn_libusb_driver;
+    libusb_conn->cable = NULL;
+
+    return libusb_conn;
 }
 
 
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_libusb_open( usbconn_t *conn )
+usbconn_libusb_open (usbconn_t * conn)
 {
-	libusb_param_t *p = conn->params;
+    libusb_param_t *p = conn->params;
 
-	p->handle = usb_open(p->dev);
-	if(p->handle == NULL)
-	{
-		perror("libusb: usb_open() failed");
-	}
-	else
-	{
+    p->handle = usb_open (p->dev);
+    if (p->handle == NULL)
+    {
+        perror ("libusb: usb_open() failed");
+    }
+    else
+    {
 #if 1
-		usb_set_configuration(p->handle,
-			p->dev->config[0].bConfigurationValue);
+        usb_set_configuration (p->handle,
+                               p->dev->config[0].bConfigurationValue);
 #endif
-		if(usb_claim_interface(p->handle, 0) != 0)
-		{
-			perror("libusb: usb_claim_interface failed");
-			usb_close(p->handle);
-			p->handle = NULL;
-		}
+        if (usb_claim_interface (p->handle, 0) != 0)
+        {
+            perror ("libusb: usb_claim_interface failed");
+            usb_close (p->handle);
+            p->handle = NULL;
+        }
 #if 1
-		else
-		{
-			usb_set_altinterface(p->handle, 0);
-		}
+        else
+        {
+            usb_set_altinterface (p->handle, 0);
+        }
 #endif
-	}
+    }
 
-	if(p->handle == NULL)
-	{
-		/* TODO: disconnect? */
-		return -1;
-	}
+    if (p->handle == NULL)
+    {
+        /* TODO: disconnect? */
+        return -1;
+    }
 
-	return 0;
+    return 0;
 }
 
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_libusb_close( usbconn_t *conn )
+usbconn_libusb_close (usbconn_t * conn)
 {
-	libusb_param_t *p = conn->params;
-	if(p->handle != NULL)
-	{
-		usb_release_interface(p->handle, 0);
-		usb_close(p->handle);
-	}
-	p->handle = NULL;
-	return 0;
+    libusb_param_t *p = conn->params;
+    if (p->handle != NULL)
+    {
+        usb_release_interface (p->handle, 0);
+        usb_close (p->handle);
+    }
+    p->handle = NULL;
+    return 0;
 }
 
 /* ---------------------------------------------------------------------- */
 
 static void
-usbconn_libusb_free( usbconn_t *conn )
+usbconn_libusb_free (usbconn_t * conn)
 {
-	free( conn->params );
-	free( conn );
+    free (conn->params);
+    free (conn);
 }
 
 /* ---------------------------------------------------------------------- */
 
 usbconn_driver_t usbconn_libusb_driver = {
-	"libusb",
-	usbconn_libusb_connect,
-	usbconn_libusb_free,
-	usbconn_libusb_open,
-	usbconn_libusb_close,
-	NULL,
-	NULL
+    "libusb",
+    usbconn_libusb_connect,
+    usbconn_libusb_free,
+    usbconn_libusb_open,
+    usbconn_libusb_close,
+    NULL,
+    NULL
 };
 
 #endif /* HAVE_LIBUSB */

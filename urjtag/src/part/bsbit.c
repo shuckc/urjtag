@@ -28,49 +28,52 @@
 #include "bsbit.h"
 
 bsbit_t *
-bsbit_alloc( int bit, const char *name, int type, signal_t *signal, int safe )
+bsbit_alloc (int bit, const char *name, int type, signal_t * signal, int safe)
 {
-	bsbit_t *b = malloc( sizeof *b );
-	if (!b)
-		return NULL;
+    bsbit_t *b = malloc (sizeof *b);
+    if (!b)
+        return NULL;
 
-	b->name = strdup( name );
-	if (!b->name) {
-		free( b );
-		return NULL;
-	}
+    b->name = strdup (name);
+    if (!b->name)
+    {
+        free (b);
+        return NULL;
+    }
 
-	b->bit = bit;
-	b->type = type;
-	b->signal = NULL;
-	b->safe = safe;
-	b->control = -1;
+    b->bit = bit;
+    b->type = type;
+    b->signal = NULL;
+    b->safe = safe;
+    b->control = -1;
 
-	if (signal != NULL) {
-		b->signal = signal;
-		switch (type) {
-			case BSBIT_INPUT:
-				signal->input = b;
-				break;
-			case BSBIT_OUTPUT:
-				signal->output = b;
-				break;
-			case BSBIT_BIDIR:
-				signal->input = b;
-				signal->output = b;
-				break;
-		}
-	}
+    if (signal != NULL)
+    {
+        b->signal = signal;
+        switch (type)
+        {
+        case BSBIT_INPUT:
+            signal->input = b;
+            break;
+        case BSBIT_OUTPUT:
+            signal->output = b;
+            break;
+        case BSBIT_BIDIR:
+            signal->input = b;
+            signal->output = b;
+            break;
+        }
+    }
 
-	return b;
+    return b;
 }
 
 void
-bsbit_free( bsbit_t *b )
+bsbit_free (bsbit_t * b)
 {
-	if (!b)
-		return;
+    if (!b)
+        return;
 
-	free( b->name );
-	free( b );
+    free (b->name);
+    free (b);
 }

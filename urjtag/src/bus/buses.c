@@ -31,171 +31,176 @@
 
 const bus_driver_t *bus_drivers[] = {
 #ifdef ENABLE_BUS_AU1500
-	&au1500_bus,
+    &au1500_bus,
 #endif
 #ifdef ENABLE_BUS_AVR32
-	&avr32_bus_driver,
+    &avr32_bus_driver,
 #endif
 #ifdef ENABLE_BUS_BCM1250
-	&bcm1250_bus,
+    &bcm1250_bus,
 #endif
 #ifdef ENABLE_BUS_BF526_EZKIT
-	&bf526_ezkit_bus,
+    &bf526_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF527_EZKIT
-	&bf527_ezkit_bus,
+    &bf527_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF533_STAMP
-	&bf533_stamp_bus,
+    &bf533_stamp_bus,
 #endif
 #ifdef ENABLE_BUS_BF533_EZKIT
-	&bf533_ezkit_bus,
+    &bf533_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF537_STAMP
-	&bf537_stamp_bus,
+    &bf537_stamp_bus,
 #endif
 #ifdef ENABLE_BUS_BF537_EZKIT
-	&bf537_ezkit_bus,
+    &bf537_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF538F_EZKIT
-	&bf538f_ezkit_bus,
+    &bf538f_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF548_EZKIT
-	&bf548_ezkit_bus,
+    &bf548_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF561_EZKIT
-	&bf561_ezkit_bus,
+    &bf561_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BSCOACH
-	&bscoach_bus,
+    &bscoach_bus,
 #endif
 #ifdef ENABLE_BUS_EJTAG
-	&ejtag_bus,
-	&ejtag_dma_bus,
+    &ejtag_bus,
+    &ejtag_dma_bus,
 #endif
 #ifdef ENABLE_BUS_FJMEM
-	&fjmem_bus,
+    &fjmem_bus,
 #endif
 #ifdef ENABLE_BUS_IXP425
-	&ixp425_bus,
+    &ixp425_bus,
 #endif
 #ifdef ENABLE_BUS_JOPCYC
-	&jopcyc_bus,
+    &jopcyc_bus,
 #endif
 #ifdef ENABLE_BUS_H7202
-	&h7202_bus,
+    &h7202_bus,
 #endif
 #ifdef ENABLE_BUS_LH7A400
-	&lh7a400_bus,
+    &lh7a400_bus,
 #endif
 #ifdef ENABLE_BUS_MPC5200
-	&mpc5200_bus,
+    &mpc5200_bus,
 #endif
 #ifdef ENABLE_BUS_MPC824X
-	&mpc824x_bus,
+    &mpc824x_bus,
 #endif
 #ifdef ENABLE_BUS_PPC405EP
-	&ppc405ep_bus,
+    &ppc405ep_bus,
 #endif
 #ifdef ENABLE_BUS_PPC440GX_EBC8
-	&ppc440gx_ebc8_bus,
+    &ppc440gx_ebc8_bus,
 #endif
 #ifdef ENABLE_BUS_PROTOTYPE
-	&prototype_bus,
+    &prototype_bus,
 #endif
 #ifdef ENABLE_BUS_PXA2X0
-	&pxa2x0_bus,
+    &pxa2x0_bus,
 #endif
 #ifdef ENABLE_BUS_PXA27X
-	&pxa27x_bus,
+    &pxa27x_bus,
 #endif
 #ifdef ENABLE_BUS_S3C4510
-	&s3c4510_bus,
+    &s3c4510_bus,
 #endif
 #ifdef ENABLE_BUS_SA1110
-	&sa1110_bus,
+    &sa1110_bus,
 #endif
 #ifdef ENABLE_BUS_SH7727
-	&sh7727_bus,
+    &sh7727_bus,
 #endif
 #ifdef ENABLE_BUS_SH7750R
-	&sh7750r_bus,
+    &sh7750r_bus,
 #endif
 #ifdef ENABLE_BUS_SH7751R
-	&sh7751r_bus,
+    &sh7751r_bus,
 #endif
 #ifdef ENABLE_BUS_SHARC_21065L
-	&sharc_21065L_bus,
+    &sharc_21065L_bus,
 #endif
 #ifdef ENABLE_BUS_SLSUP3
-	&slsup3_bus,
+    &slsup3_bus,
 #endif
 #ifdef ENABLE_BUS_TX4925
-	&tx4925_bus,
+    &tx4925_bus,
 #endif
 #ifdef ENABLE_BUS_ZEFANT_XS3
-	&zefant_xs3_bus,
+    &zefant_xs3_bus,
 #endif
-	NULL			/* last must be NULL */
+    NULL                        /* last must be NULL */
 };
 
 bus_t *bus = NULL;
-buses_t buses = {0, NULL};
+buses_t buses = { 0, NULL };
 
-void buses_free( void )
+void
+buses_free (void)
 {
-	int i;
+    int i;
 
-	for (i = 0; i < buses.len; i++)
-		bus_free( buses.buses[i] );
+    for (i = 0; i < buses.len; i++)
+        bus_free (buses.buses[i]);
 
-	free( buses.buses );
-	buses.len = 0;
-	buses.buses = NULL;
-	bus = NULL;
+    free (buses.buses);
+    buses.len = 0;
+    buses.buses = NULL;
+    bus = NULL;
 }
 
-void buses_add( bus_t *abus )
+void
+buses_add (bus_t * abus)
 {
-	bus_t **b;
+    bus_t **b;
 
-	if (abus == NULL)
-		return;
+    if (abus == NULL)
+        return;
 
-	b = realloc( buses.buses, (buses.len + 1) * sizeof (bus_t *) );
-	if (b == NULL) {
-		printf( _("Out of memory\n") );
-		return;
-	}
-	buses.buses = b;
-	buses.buses[buses.len++] = abus;
-	if (bus == NULL)
-		bus = abus;
+    b = realloc (buses.buses, (buses.len + 1) * sizeof (bus_t *));
+    if (b == NULL)
+    {
+        printf (_("Out of memory\n"));
+        return;
+    }
+    buses.buses = b;
+    buses.buses[buses.len++] = abus;
+    if (bus == NULL)
+        bus = abus;
 }
 
-void buses_delete( bus_t *abus )
+void
+buses_delete (bus_t * abus)
 {
-	int i;
-	bus_t **b;
+    int i;
+    bus_t **b;
 
-	for (i = 0; i < buses.len; i++)
-		if (abus == buses.buses[i])
-			break;
-	if (i >= buses.len)
-		return;
+    for (i = 0; i < buses.len; i++)
+        if (abus == buses.buses[i])
+            break;
+    if (i >= buses.len)
+        return;
 
-	while (i + 1 < buses.len) {
-		buses.buses[i] = buses.buses[i + 1];
-		i++;
-	}
-	buses.len--;
-	b = realloc( buses.buses, buses.len * sizeof (bus_t *) );
-	if ((b != NULL) || (buses.len == 0))
-		buses.buses = b;
+    while (i + 1 < buses.len)
+    {
+        buses.buses[i] = buses.buses[i + 1];
+        i++;
+    }
+    buses.len--;
+    b = realloc (buses.buses, buses.len * sizeof (bus_t *));
+    if ((b != NULL) || (buses.len == 0))
+        buses.buses = b;
 
-	if (bus != abus)
-		return;
+    if (bus != abus)
+        return;
 
-	if (buses.len > 0)
-		bus = buses.buses[0];
+    if (buses.len > 0)
+        bus = buses.buses[0];
 }

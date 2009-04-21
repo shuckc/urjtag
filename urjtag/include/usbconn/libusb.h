@@ -29,11 +29,11 @@
 
 #include <usb.h>
 
-typedef struct {
-	struct usb_device *dev;
-	struct usb_dev_handle *handle;
-	void *data;
+typedef struct
+{
+    struct usb_device *dev;
+    struct usb_dev_handle *handle;
+    void *data;
 } libusb_param_t;
 
 #endif
-

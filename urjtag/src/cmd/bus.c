@@ -32,48 +32,47 @@
 #include "cmd.h"
 
 static int
-cmd_bus_run( chain_t *chain, char *params[] )
+cmd_bus_run (chain_t * chain, char *params[])
 {
-	unsigned int n;
+    unsigned int n;
 
-	if (cmd_params( params ) != 2)
-		return -1;
+    if (cmd_params (params) != 2)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (cmd_get_number( params[1], &n ))
-		return -1;
+    if (cmd_get_number (params[1], &n))
+        return -1;
 
-	if (n >= buses.len) {
-		printf( _("%s: invalid bus number\n"), "bus" );
-		return 1;
-	}
+    if (n >= buses.len)
+    {
+        printf (_("%s: invalid bus number\n"), "bus");
+        return 1;
+    }
 
-	bus = buses.buses[n];
+    bus = buses.buses[n];
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_bus_help( void )
+cmd_bus_help (void)
 {
-	printf( _(
-		"Usage: %s BUS\n"
-		"Change active bus.\n"
-		"\n"
-		"BUS           bus number\n"
-	), "bus" );
+    printf (_("Usage: %s BUS\n"
+              "Change active bus.\n"
+              "\n" "BUS           bus number\n"), "bus");
 }
 
 cmd_t cmd_bus = {
-	"bus",
-	N_("change active bus"),
-	cmd_bus_help,
-	cmd_bus_run
+    "bus",
+    N_("change active bus"),
+    cmd_bus_help,
+    cmd_bus_run
 };

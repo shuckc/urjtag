@@ -28,236 +28,248 @@
 #include "register.h"
 
 tap_register *
-register_alloc( int len )
+register_alloc (int len)
 {
-	tap_register *tr;
+    tap_register *tr;
 
-	if (len < 1)
-		return NULL;
+    if (len < 1)
+        return NULL;
 
-	tr = malloc( sizeof (tap_register) );
-	if (!tr)
-		return NULL;
-	
-	tr->data = malloc( len );
-	if (!tr->data) {
-		free( tr );
-		return NULL;
-	}
+    tr = malloc (sizeof (tap_register));
+    if (!tr)
+        return NULL;
 
-	memset(tr->data, 0, len);
+    tr->data = malloc (len);
+    if (!tr->data)
+    {
+        free (tr);
+        return NULL;
+    }
 
-	tr->string = malloc( len + 1 );
-	if (!tr->string) {
-		free( tr->data );
-		free( tr );
-		return NULL;
-	}
+    memset (tr->data, 0, len);
 
-	tr->len = len;
-	tr->string[len] = '\0';
+    tr->string = malloc (len + 1);
+    if (!tr->string)
+    {
+        free (tr->data);
+        free (tr);
+        return NULL;
+    }
 
-	return tr;
+    tr->len = len;
+    tr->string[len] = '\0';
+
+    return tr;
 }
 
 tap_register *
-register_duplicate( const tap_register *tr )
+register_duplicate (const tap_register * tr)
 {
- 	if (!tr)
-		return	NULL;
+    if (!tr)
+        return NULL;
 
-	return register_init( register_alloc( tr->len ), register_get_string( tr ) );
+    return register_init (register_alloc (tr->len), register_get_string (tr));
 }
 
 void
-register_free( tap_register *tr )
+register_free (tap_register * tr)
 {
-	if (tr) {
-		free( tr->data );
-		free( tr->string );
-	}
-	free( tr );
+    if (tr)
+    {
+        free (tr->data);
+        free (tr->string);
+    }
+    free (tr);
 }
 
 tap_register *
-register_fill( tap_register *tr, int val )
+register_fill (tap_register * tr, int val)
 {
-	if (tr)
-		memset( tr->data, val & 1, tr->len );
+    if (tr)
+        memset (tr->data, val & 1, tr->len);
 
-	return tr;
+    return tr;
 }
 
 const char *
-register_get_string( const tap_register *tr )
+register_get_string (const tap_register * tr)
 {
-	int i;
+    int i;
 
-	if (!tr)
-		return NULL;
+    if (!tr)
+        return NULL;
 
-	for (i = 0; i < tr->len; i++)
-		tr->string[tr->len - 1 - i] = (tr->data[i] & 1) ? '1' : '0';
+    for (i = 0; i < tr->len; i++)
+        tr->string[tr->len - 1 - i] = (tr->data[i] & 1) ? '1' : '0';
 
-	return tr->string;
+    return tr->string;
 }
 
 int
-register_all_bits_same_value ( const tap_register *tr )
+register_all_bits_same_value (const tap_register * tr)
 {
-	int i, value;
-	if (!tr) return -1;
-	if (tr->len < 0) return -1;
+    int i, value;
+    if (!tr)
+        return -1;
+    if (tr->len < 0)
+        return -1;
 
-	/* Return -1 if any of the bits in the register
-	 * differs from the others; the value otherwise. */
+    /* Return -1 if any of the bits in the register
+     * differs from the others; the value otherwise. */
 
-	value = tr->data[0] & 1;
+    value = tr->data[0] & 1;
 
-	for(i=1; i<tr->len; i++)
-	{
-		if((tr->data[i] & 1) != value) return -1;
-	}
-	return value;
+    for (i = 1; i < tr->len; i++)
+    {
+        if ((tr->data[i] & 1) != value)
+            return -1;
+    }
+    return value;
 }
 
 tap_register *
-register_init( tap_register *tr, const char *value )
+register_init (tap_register * tr, const char *value)
 {
-	int i;
+    int i;
 
-	const char *p;
+    const char *p;
 
-	if (!value || !tr)
-		return tr;
+    if (!value || !tr)
+        return tr;
 
-	p = strchr( value, '\0' );
+    p = strchr (value, '\0');
 
-	for (i = 0; i < tr->len; i++) {
-		if (p == value)
-			tr->data[i] = 0;
-		else {
-			p--;
-			tr->data[i] = (*p == '0') ? 0 : 1;
-		}
-	}
+    for (i = 0; i < tr->len; i++)
+    {
+        if (p == value)
+            tr->data[i] = 0;
+        else
+        {
+            p--;
+            tr->data[i] = (*p == '0') ? 0 : 1;
+        }
+    }
 
-	return tr;
+    return tr;
 }
 
 int
-register_compare( const tap_register *tr, const tap_register *tr2 )
+register_compare (const tap_register * tr, const tap_register * tr2)
 {
-	int i;
+    int i;
 
-	if (!tr && !tr2)
-		return 0;
-	
-	if (!tr || !tr2)
-		return 1;
+    if (!tr && !tr2)
+        return 0;
 
-	if (tr->len != tr2->len)
-		return 1;
+    if (!tr || !tr2)
+        return 1;
 
-	for (i = 0; i < tr->len; i++)
-		if (tr->data[i] != tr2->data[i])
-			return 1;
+    if (tr->len != tr2->len)
+        return 1;
 
-	return 0;
+    for (i = 0; i < tr->len; i++)
+        if (tr->data[i] != tr2->data[i])
+            return 1;
+
+    return 0;
 }
 
 int
-register_match( const tap_register *tr, const char *expr )
+register_match (const tap_register * tr, const char *expr)
 {
-	int i;
-	const char *s;
+    int i;
+    const char *s;
 
-	if (!tr || !expr || (tr->len != strlen( expr )))
-		return 0;
+    if (!tr || !expr || (tr->len != strlen (expr)))
+        return 0;
 
-	s = register_get_string( tr );
+    s = register_get_string (tr);
 
-	for (i = 0; i < tr->len; i++)
-		if ((expr[i] != '?') && (expr[i] != s[i]))
-			return 0;
+    for (i = 0; i < tr->len; i++)
+        if ((expr[i] != '?') && (expr[i] != s[i]))
+            return 0;
 
-	return 1;
+    return 1;
 }
 
 tap_register *
-register_inc( tap_register *tr )
+register_inc (tap_register * tr)
 {
-	int i;
+    int i;
 
-	if (!tr)
-		return NULL;
+    if (!tr)
+        return NULL;
 
-	for (i = 0; i < tr->len; i++) {
-		tr->data[i] ^= 1;
-		
-		if (tr->data[i] == 1)
-			break;
-	}
+    for (i = 0; i < tr->len; i++)
+    {
+        tr->data[i] ^= 1;
 
-	return tr;
+        if (tr->data[i] == 1)
+            break;
+    }
+
+    return tr;
 }
 
 tap_register *
-register_dec( tap_register *tr )
+register_dec (tap_register * tr)
 {
-	int i;
+    int i;
 
-	if (!tr)
-		return NULL;
+    if (!tr)
+        return NULL;
 
-	for (i = 0; i < tr->len; i++) {
-		tr->data[i] ^= 1;
-		
-		if (tr->data[i] == 0)
-			break;
-	}
+    for (i = 0; i < tr->len; i++)
+    {
+        tr->data[i] ^= 1;
 
-	return tr;
+        if (tr->data[i] == 0)
+            break;
+    }
+
+    return tr;
 }
 
 tap_register *
-register_shift_right( tap_register *tr, int shift )
+register_shift_right (tap_register * tr, int shift)
 {
-	int i;
+    int i;
 
-	if (!tr)
-		return NULL;
+    if (!tr)
+        return NULL;
 
-	if (shift < 1)
-		return tr;
+    if (shift < 1)
+        return tr;
 
-	for (i = 0; i < tr->len; i++) {
-		if (i + shift < tr->len)
-			tr->data[i] = tr->data[i + shift];
-		else
-			tr->data[i] = 0;
-	}
+    for (i = 0; i < tr->len; i++)
+    {
+        if (i + shift < tr->len)
+            tr->data[i] = tr->data[i + shift];
+        else
+            tr->data[i] = 0;
+    }
 
-	return tr;
+    return tr;
 }
 
 tap_register *
-register_shift_left( tap_register *tr, int shift )
+register_shift_left (tap_register * tr, int shift)
 {
-	int i;
+    int i;
 
-	if (!tr)
-		return NULL;
+    if (!tr)
+        return NULL;
 
-	if (shift < 1)
-		return tr;
+    if (shift < 1)
+        return tr;
 
-	for (i = tr->len - 1; i >= 0; i--) {
-		if (i - shift >= 0)
-			tr->data[i] = tr->data[i - shift];
-		else
-			tr->data[i] = 0;
-	}
+    for (i = tr->len - 1; i >= 0; i--)
+    {
+        if (i - shift >= 0)
+            tr->data[i] = tr->data[i - shift];
+        else
+            tr->data[i] = 0;
+    }
 
-	return tr;
+    return tr;
 }

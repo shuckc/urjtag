@@ -48,11 +48,11 @@
  *
  * data D[7:0] (pins 9:2)
  */
-#define	nTRST	4	/* nTRST is not inverted in the cable */
+#define	nTRST	4               /* nTRST is not inverted in the cable */
 #define	TDI	3
 #define	TCK	2
 #define	TMS	1
-#define	nSRESET 0	/* sRESET is inverted in the cable */
+#define	nSRESET 0               /* sRESET is inverted in the cable */
 
 /*
  * 7 - BUSY (pin 11)
@@ -61,33 +61,37 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO 	7	
+#define	TDO 	7
 
 
 /* macros used to stringify the defines above */
 #define xstr(s) str(s)
 #define str(s) #s
-static const
-char *std_wgl_map = xstr(TDO)   ","
-                    xstr(nTRST) ","
-                    xstr(TDI)   ","
-                    xstr(TCK)   ","
-                    xstr(TMS)   ","
-                    "#" xstr(nSRESET);
+static const char *std_wgl_map = xstr (TDO) ","
+    xstr (nTRST)
+    ","
+    xstr (TDI)
+    ","
+    xstr (TCK)
+    ","
+    xstr (TMS)
+    "," "#"
+    xstr (nSRESET);
 
 
 /* private parameters of this cable driver */
-typedef struct {
-	int signals;
-	int trst_lvl;
-	int srst_act, srst_inact;
-	int tms_act, tms_inact;
-	int tck_act, tck_inact;
-	int tdi_act, tdi_inact;
-	int tdo_act, tdo_inact;
-	int trst_act, trst_inact;
-	int unused_bits;
-} wiggler_params_t;
+     typedef struct
+     {
+         int signals;
+         int trst_lvl;
+         int srst_act, srst_inact;
+         int tms_act, tms_inact;
+         int tck_act, tck_inact;
+         int tdi_act, tdi_inact;
+         int tdo_act, tdo_inact;
+         int trst_act, trst_inact;
+         int unused_bits;
+     } wiggler_params_t;
 
 
 /* access macros for the parameters */
@@ -109,284 +113,315 @@ typedef struct {
 
 
 
-static int
-map_pin( char *pin, int *act, int *inact )
+     static int map_pin (char *pin, int *act, int *inact)
 {
-	int bitnum;
-	int inverted = 0;
+    int bitnum;
+    int inverted = 0;
 
-	if ( *pin == '#' ) {
-		inverted = 1;
-		pin++;
-	}
+    if (*pin == '#')
+    {
+        inverted = 1;
+        pin++;
+    }
 
-	if ( !isdigit( *pin ) )
-		return -1;
+    if (!isdigit (*pin))
+        return -1;
 
-	bitnum = atoi( pin ) % 8;
+    bitnum = atoi (pin) % 8;
 
-	bitnum = 1 << bitnum;
+    bitnum = 1 << bitnum;
 
-	*act   = inverted ? 0 : bitnum;
-	*inact = inverted ? bitnum : 0;
+    *act = inverted ? 0 : bitnum;
+    *inact = inverted ? bitnum : 0;
 
-	return 0;
+    return 0;
 }
 
 
 static int
-set_mapping( char *bitmap, cable_t *cable )
+set_mapping (char *bitmap, cable_t * cable)
 {
-	const char delim = ',';
-	int syntax = 0;
-	char *tdo, *trst, *tdi, *tck, *tms, *srst;
+    const char delim = ',';
+    int syntax = 0;
+    char *tdo, *trst, *tdi, *tck, *tms, *srst;
 
-	/* assign mappings for each pin */
-	if ( ( tdo = bitmap ) )
-		if ( ( trst = strchr( tdo,  delim ) ) ) {
-			trst++;
-			if ( ( tdi = strchr( trst, delim ) ) ) {
-				tdi++;
-				if ( ( tck = strchr( tdi,  delim ) ) ) {
-					tck++;
-					if ( ( tms = strchr( tck,  delim ) ) ) {
-						tms++;
-						if ( ( srst = strchr( tms,  delim ) ) ) {
-							srst++;
-							syntax = 1;
-						} } } } }
+    /* assign mappings for each pin */
+    if ((tdo = bitmap))
+        if ((trst = strchr (tdo, delim)))
+        {
+            trst++;
+            if ((tdi = strchr (trst, delim)))
+            {
+                tdi++;
+                if ((tck = strchr (tdi, delim)))
+                {
+                    tck++;
+                    if ((tms = strchr (tck, delim)))
+                    {
+                        tms++;
+                        if ((srst = strchr (tms, delim)))
+                        {
+                            srst++;
+                            syntax = 1;
+                        }
+                    }
+                }
+            }
+        }
 
-	if ( !syntax )
-		return -1;
+    if (!syntax)
+        return -1;
 
-	if ( map_pin( tdo,  &(PRM_TDO_ACT(cable)),  &(PRM_TDO_INACT(cable))  ) != 0 ) return -1;
-	if ( map_pin( trst, &(PRM_TRST_ACT(cable)), &(PRM_TRST_INACT(cable)) ) != 0 ) return -1;
-	if ( map_pin( tdi,  &(PRM_TDI_ACT(cable)),  &(PRM_TDI_INACT(cable))  ) != 0 ) return -1;
-	if ( map_pin( tck,  &(PRM_TCK_ACT(cable)),  &(PRM_TCK_INACT(cable))  ) != 0 ) return -1;
-	if ( map_pin( tms,  &(PRM_TMS_ACT(cable)),  &(PRM_TMS_INACT(cable))  ) != 0 ) return -1;
-	if ( map_pin( srst, &(PRM_SRST_ACT(cable)), &(PRM_SRST_INACT(cable)) ) != 0 ) return -1;
+    if (map_pin (tdo, &(PRM_TDO_ACT (cable)), &(PRM_TDO_INACT (cable))) != 0)
+        return -1;
+    if (map_pin (trst, &(PRM_TRST_ACT (cable)), &(PRM_TRST_INACT (cable))) !=
+        0)
+        return -1;
+    if (map_pin (tdi, &(PRM_TDI_ACT (cable)), &(PRM_TDI_INACT (cable))) != 0)
+        return -1;
+    if (map_pin (tck, &(PRM_TCK_ACT (cable)), &(PRM_TCK_INACT (cable))) != 0)
+        return -1;
+    if (map_pin (tms, &(PRM_TMS_ACT (cable)), &(PRM_TMS_INACT (cable))) != 0)
+        return -1;
+    if (map_pin (srst, &(PRM_SRST_ACT (cable)), &(PRM_SRST_INACT (cable))) !=
+        0)
+        return -1;
 
-	return 0;
+    return 0;
 }
 
 
 static int
-wiggler_connect( char *params[], cable_t *cable )
+wiggler_connect (char *params[], cable_t * cable)
 {
-	int result;
-	char *param_bitmap = NULL;
-	wiggler_params_t *wiggler_params;
+    int result;
+    char *param_bitmap = NULL;
+    wiggler_params_t *wiggler_params;
 
-	if ( cmd_params ( params ) == 4 ) {
-		/* acquire optional parameter for bit<->pin mapping */
-		param_bitmap = params[3];
-		/* generic_parport_connect() shouldn't see this parameter */
-		params[3] = NULL;
-	}
+    if (cmd_params (params) == 4)
+    {
+        /* acquire optional parameter for bit<->pin mapping */
+        param_bitmap = params[3];
+        /* generic_parport_connect() shouldn't see this parameter */
+        params[3] = NULL;
+    }
 
-	if ( ( result = generic_parport_connect( params, cable ) ) != 0)
-		return result;
+    if ((result = generic_parport_connect (params, cable)) != 0)
+        return result;
 
-	if ( param_bitmap )
-		params[3] = param_bitmap;
+    if (param_bitmap)
+        params[3] = param_bitmap;
 
-	wiggler_params = malloc( sizeof *wiggler_params );
-	if (!wiggler_params) {
-		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
-		/* NOTE:
-		 * Call the underlying parport driver (*free) routine directly
-		 * not generic_parconn_free() since it also free's cable->params
-		 * (which is not established) and cable (which the caller will do)
-		 */
-		cable->link.port->driver->parport_free( cable->link.port );
-		return 4;
-	}
+    wiggler_params = malloc (sizeof *wiggler_params);
+    if (!wiggler_params)
+    {
+        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+        /* NOTE:
+         * Call the underlying parport driver (*free) routine directly
+         * not generic_parconn_free() since it also free's cable->params
+         * (which is not established) and cable (which the caller will do)
+         */
+        cable->link.port->driver->parport_free (cable->link.port);
+        return 4;
+    }
 
-	/* set new wiggler-specific params */
-	free(cable->params);
-	cable->params = wiggler_params;
+    /* set new wiggler-specific params */
+    free (cable->params);
+    cable->params = wiggler_params;
 
-	if ( ! param_bitmap )
-		param_bitmap = (char *)std_wgl_map;
+    if (!param_bitmap)
+        param_bitmap = (char *) std_wgl_map;
 
-	if ( ( result = set_mapping( param_bitmap, cable ) ) != 0 ) {
-		printf( _("Pin mapping failed\n") );
-		/* NOTE:
-		 * Call the underlying parport driver (*free) routine directly
-		 * not generic_parconn_free() since it also free'scable (which
-		 * the caller will do)
-		 */
-		cable->link.port->driver->parport_free( cable->link.port );
-		free( cable->params );
-		return result;
-	}
+    if ((result = set_mapping (param_bitmap, cable)) != 0)
+    {
+        printf (_("Pin mapping failed\n"));
+        /* NOTE:
+         * Call the underlying parport driver (*free) routine directly
+         * not generic_parconn_free() since it also free'scable (which
+         * the caller will do)
+         */
+        cable->link.port->driver->parport_free (cable->link.port);
+        free (cable->params);
+        return result;
+    }
 
-	/* Certain Macraigor Wigglers appear to use one of the unused data lines as a
-	   power line so set all unused bits high. */
-	PRM_UNUSED_BITS(cable) = ~( PRM_SRST_ACT(cable) | PRM_SRST_INACT(cable) |
-				 PRM_TMS_ACT(cable)  | PRM_TMS_INACT(cable) |
-				 PRM_TCK_ACT(cable)  | PRM_TCK_INACT(cable) |
-				 PRM_TDI_ACT(cable)  | PRM_TDI_INACT(cable) |
-				 PRM_TRST_ACT(cable) | PRM_TRST_INACT(cable) ) & 0xff;
+    /* Certain Macraigor Wigglers appear to use one of the unused data lines as a
+       power line so set all unused bits high. */
+    PRM_UNUSED_BITS (cable) =
+        ~(PRM_SRST_ACT (cable) | PRM_SRST_INACT (cable) | PRM_TMS_ACT (cable)
+          | PRM_TMS_INACT (cable) | PRM_TCK_ACT (cable) |
+          PRM_TCK_INACT (cable) | PRM_TDI_ACT (cable) | PRM_TDI_INACT (cable)
+          | PRM_TRST_ACT (cable) | PRM_TRST_INACT (cable)) & 0xff;
 
-	return 0;
+    return 0;
 }
 
 static int
-wiggler_init( cable_t *cable )
+wiggler_init (cable_t * cable)
 {
-	int data;
+    int data;
 
-	if (parport_open( cable->link.port ))
-		return -1;
+    if (parport_open (cable->link.port))
+        return -1;
 
-	if ((data = parport_get_data( cable->link.port )) < 0) {
-		if (parport_set_data( cable->link.port, (PRM_TRST_ACT(cable) | PRM_TRST_INACT(cable)) | PRM_UNUSED_BITS(cable)))
-			return -1;
-		PRM_TRST_LVL(cable) = PRM_TRST_ACT(cable) | PRM_TRST_INACT(cable);
-	} else
-		PRM_TRST_LVL(cable) = data & (PRM_TRST_ACT(cable) | PRM_TRST_INACT(cable));
+    if ((data = parport_get_data (cable->link.port)) < 0)
+    {
+        if (parport_set_data
+            (cable->link.port,
+             (PRM_TRST_ACT (cable) | PRM_TRST_INACT (cable)) |
+             PRM_UNUSED_BITS (cable)))
+            return -1;
+        PRM_TRST_LVL (cable) = PRM_TRST_ACT (cable) | PRM_TRST_INACT (cable);
+    }
+    else
+        PRM_TRST_LVL (cable) =
+            data & (PRM_TRST_ACT (cable) | PRM_TRST_INACT (cable));
 
-	PRM_SIGNALS (cable) = (PRM_TRST_LVL(cable) == PRM_TRST_ACT(cable)) ? CS_TRST : 0;
+    PRM_SIGNALS (cable) =
+        (PRM_TRST_LVL (cable) == PRM_TRST_ACT (cable)) ? CS_TRST : 0;
 
-	return 0;
+    return 0;
 }
 
 static void
-wiggler_clock( cable_t *cable, int tms, int tdi, int n )
+wiggler_clock (cable_t * cable, int tms, int tdi, int n)
 {
-	int i;
+    int i;
 
-	tms = tms ? 1 : 0;
-	tdi = tdi ? 1 : 0;
+    tms = tms ? 1 : 0;
+    tdi = tdi ? 1 : 0;
 
-	for (i = 0; i < n; i++) {
-		parport_set_data( cable->link.port, PRM_TRST_LVL(cable) |
-				PRM_TCK_INACT(cable) |
-				(tms ? PRM_TMS_ACT(cable) : PRM_TMS_INACT(cable)) |
-				(tdi ? PRM_TDI_ACT(cable) : PRM_TDI_INACT(cable)) |
-				PRM_UNUSED_BITS(cable) );
-		cable_wait( cable );
-		parport_set_data( cable->link.port, PRM_TRST_LVL(cable) |
-				PRM_TCK_ACT(cable) |
-				(tms ? PRM_TMS_ACT(cable) : PRM_TMS_INACT(cable)) |
-				(tdi ? PRM_TDI_ACT(cable) : PRM_TDI_INACT(cable)) |
-				PRM_UNUSED_BITS(cable) );
-		cable_wait( cable );
-	}
+    for (i = 0; i < n; i++)
+    {
+        parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
+                          PRM_TCK_INACT (cable) |
+                          (tms ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable))
+                          | (tdi ? PRM_TDI_ACT (cable) :
+                             PRM_TDI_INACT (cable)) |
+                          PRM_UNUSED_BITS (cable));
+        cable_wait (cable);
+        parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
+                          PRM_TCK_ACT (cable) |
+                          (tms ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable))
+                          | (tdi ? PRM_TDI_ACT (cable) :
+                             PRM_TDI_INACT (cable)) |
+                          PRM_UNUSED_BITS (cable));
+        cable_wait (cable);
+    }
 
-	PRM_SIGNALS (cable) &= ~(CS_TDI | CS_TMS);
-	if (tms) PRM_SIGNALS(cable) |= CS_TMS;
-	if (tdi) PRM_SIGNALS(cable) |= CS_TDI;
+    PRM_SIGNALS (cable) &= ~(CS_TDI | CS_TMS);
+    if (tms)
+        PRM_SIGNALS (cable) |= CS_TMS;
+    if (tdi)
+        PRM_SIGNALS (cable) |= CS_TDI;
 }
 
 static int
-wiggler_get_tdo( cable_t *cable )
+wiggler_get_tdo (cable_t * cable)
 {
-	parport_set_data( cable->link.port, PRM_TRST_LVL(cable) |
-			PRM_TCK_INACT(cable) |
-			PRM_UNUSED_BITS(cable) );
-	cable_wait( cable );
+    parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
+                      PRM_TCK_INACT (cable) | PRM_UNUSED_BITS (cable));
+    cable_wait (cable);
 
-	return (parport_get_status( cable->link.port ) & (PRM_TDO_ACT(cable) | PRM_TDO_INACT(cable))) ^
-				PRM_TDO_ACT(cable) ? 0 : 1;
+    return (parport_get_status (cable->link.port) &
+            (PRM_TDO_ACT (cable) | PRM_TDO_INACT (cable))) ^
+        PRM_TDO_ACT (cable) ? 0 : 1;
 }
 
 static int
-wiggler_set_signal( cable_t *cable, int mask, int val )
+wiggler_set_signal (cable_t * cable, int mask, int val)
 {
-	int prev_sigs = PRM_SIGNALS(cable);
+    int prev_sigs = PRM_SIGNALS (cable);
 
-	mask &= (CS_TMS | CS_TDI | CS_TCK | CS_TRST); // Only these can be modified
+    mask &= (CS_TMS | CS_TDI | CS_TCK | CS_TRST);       // Only these can be modified
 
-	if (mask != 0)
-	{
-		int sigs = (prev_sigs & ~mask) | (val & mask);
-		PRM_TRST_LVL(cable) = ((sigs & CS_TRST) ? PRM_TRST_ACT(cable) : PRM_TRST_INACT(cable));
-		int data = PRM_UNUSED_BITS(cable) | PRM_TRST_LVL(cable);
-		data |= ((sigs & CS_TCK) ? PRM_TCK_ACT(cable) : PRM_TCK_INACT(cable));
-		data |= ((sigs & CS_TMS) ? PRM_TMS_ACT(cable) : PRM_TMS_INACT(cable));
-		data |= ((sigs & CS_TDI) ? PRM_TDI_ACT(cable) : PRM_TDI_INACT(cable));
-		parport_set_data( cable->link.port, data );
-		PRM_SIGNALS(cable) = sigs;
-	}
+    if (mask != 0)
+    {
+        int sigs = (prev_sigs & ~mask) | (val & mask);
+        PRM_TRST_LVL (cable) =
+            ((sigs & CS_TRST) ? PRM_TRST_ACT (cable) :
+             PRM_TRST_INACT (cable));
+        int data = PRM_UNUSED_BITS (cable) | PRM_TRST_LVL (cable);
+        data |=
+            ((sigs & CS_TCK) ? PRM_TCK_ACT (cable) : PRM_TCK_INACT (cable));
+        data |=
+            ((sigs & CS_TMS) ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable));
+        data |=
+            ((sigs & CS_TDI) ? PRM_TDI_ACT (cable) : PRM_TDI_INACT (cable));
+        parport_set_data (cable->link.port, data);
+        PRM_SIGNALS (cable) = sigs;
+    }
 
-	return prev_sigs;
+    return prev_sigs;
 }
 
 static int
-wiggler_get_signal( cable_t *cable, pod_sigsel_t sig )
+wiggler_get_signal (cable_t * cable, pod_sigsel_t sig)
 {
-	return (PRM_SIGNALS(cable) & sig) ? 1 : 0;
+    return (PRM_SIGNALS (cable) & sig) ? 1 : 0;
 }
 
 static void
-wiggler_help( const char *cablename )
+wiggler_help (const char *cablename)
 {
-	printf( _(
-		"Usage: cable %s parallel PORTADDR [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+    printf (_
+            ("Usage: cable %s parallel PORTADDR [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
 #if ENABLE_LOWLEVEL_PPDEV
-		"   or: cable %s ppdev PPDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+             "   or: cable %s ppdev PPDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-		"   or: cable %s ppi PPIDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
+             "   or: cable %s ppi PPIDEV [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
 #endif
-		"\n"
-		"PORTADDR   parallel port address (e.g. 0x378)\n"
+             "\n" "PORTADDR   parallel port address (e.g. 0x378)\n"
 #if ENABLE_LOWLEVEL_PPDEV
-		"PPDEV      ppdev device (e.g. /dev/parport0)\n"
+             "PPDEV      ppdev device (e.g. /dev/parport0)\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-		"PPIDEF     ppi device (e.g. /dev/ppi0)\n"
+             "PPIDEF     ppi device (e.g. /dev/ppi0)\n"
 #endif
-		"TDO, ...   parallel port bit number, prepend '#' for inversion\n"
-		"           default is '%s'\n"
-		"\n"
-	),
+             "TDO, ...   parallel port bit number, prepend '#' for inversion\n"
+             "           default is '%s'\n" "\n"),
 #if ENABLE_LOWLEVEL_PPDEV
-    cablename,
+cablename,
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-    cablename,
+cablename,
 #endif
-    cablename,
-    std_wgl_map
-    );
+cablename, std_wgl_map);
 }
 
 cable_driver_t wiggler_cable_driver = {
-	"WIGGLER",
-	N_("Macraigor Wiggler JTAG Cable"),
-	wiggler_connect,
-	generic_disconnect,
-	generic_parport_free,
-	wiggler_init,
-	generic_parport_done,
-	generic_set_frequency,
-	wiggler_clock,
-	wiggler_get_tdo,
-	generic_transfer,
-	wiggler_set_signal,
-	wiggler_get_signal,
-	generic_flush_one_by_one,
-	wiggler_help
+    "WIGGLER",
+    N_("Macraigor Wiggler JTAG Cable"),
+    wiggler_connect,
+    generic_disconnect,
+    generic_parport_free,
+    wiggler_init,
+    generic_parport_done,
+    generic_set_frequency,
+    wiggler_clock,
+    wiggler_get_tdo,
+    generic_transfer,
+    wiggler_set_signal,
+    wiggler_get_signal,
+    generic_flush_one_by_one,
+    wiggler_help
 };
 
 cable_driver_t igloo_cable_driver = {
-	"IGLOO",
-	N_("Excelpoint IGLOO JTAG Cable"),
-	wiggler_connect,
-	generic_disconnect,
-	generic_parport_free,
-	wiggler_init,
-	generic_parport_done,
-	generic_set_frequency,
-	wiggler_clock,
-	wiggler_get_tdo,
-	generic_transfer,
-	wiggler_set_signal,
-	wiggler_get_signal,
-	generic_flush_one_by_one,
-	wiggler_help
+    "IGLOO",
+    N_("Excelpoint IGLOO JTAG Cable"),
+    wiggler_connect,
+    generic_disconnect,
+    generic_parport_free,
+    wiggler_init,
+    generic_parport_done,
+    generic_set_frequency,
+    wiggler_clock,
+    wiggler_get_tdo,
+    generic_transfer,
+    wiggler_set_signal,
+    wiggler_get_signal,
+    generic_flush_one_by_one,
+    wiggler_help
 };
-

@@ -30,16 +30,17 @@
 
 #include <bus_driver.h>
 
-typedef struct {
-	int len;
-	bus_t **buses;
+typedef struct
+{
+    int len;
+    bus_t **buses;
 } buses_t;
 
 extern buses_t buses;
 extern const bus_driver_t *bus_drivers[];
 
-void buses_free( void );
-void buses_add( bus_t *abus );
-void buses_delete( bus_t *abus );
+void buses_free (void);
+void buses_add (bus_t * abus);
+void buses_delete (bus_t * abus);
 
 #endif /* BUS_H */

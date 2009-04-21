@@ -40,99 +40,99 @@
 
 #ifdef VERBOSE
 void
-print_vector(int len, char *vec)
+print_vector (int len, char *vec)
 {
-	int i;
-	for(i=0;i<len;i++) printf("%c",vec[i]?'1':'0');
+    int i;
+    for (i = 0; i < len; i++)
+        printf ("%c", vec[i] ? '1' : '0');
 }
 #endif
 
 int
-generic_parport_connect( char *params[], cable_t *cable )
+generic_parport_connect (char *params[], cable_t * cable)
 {
-	generic_params_t *cable_params;
-	parport_t *port;
-	int i;
+    generic_params_t *cable_params;
+    parport_t *port;
+    int i;
 
-	if ( cmd_params( params ) < 3 ) {
-	  printf( _("not enough arguments!\n") );
-	  return 1;
-	}
-	  
-	/* search parport driver list */
-	for (i = 0; parport_drivers[i]; i++)
-		if (strcasecmp( params[1], parport_drivers[i]->type ) == 0)
-			break;
-	if (!parport_drivers[i]) {
-		printf( _("Unknown port driver: %s\n"), params[1] );
-		return 2;
-	}
+    if (cmd_params (params) < 3)
+    {
+        printf (_("not enough arguments!\n"));
+        return 1;
+    }
 
-	/* set up parport driver */
-	port = parport_drivers[i]->connect( (const char **) &params[2],
-					    cmd_params( params ) - 2 );
+    /* search parport driver list */
+    for (i = 0; parport_drivers[i]; i++)
+        if (strcasecmp (params[1], parport_drivers[i]->type) == 0)
+            break;
+    if (!parport_drivers[i])
+    {
+        printf (_("Unknown port driver: %s\n"), params[1]);
+        return 2;
+    }
 
-	if (port == NULL) {
-		printf( _("Error: Cable connection failed!\n") );
-		return 3;
-	}
+    /* set up parport driver */
+    port = parport_drivers[i]->connect ((const char **) &params[2],
+                                        cmd_params (params) - 2);
 
-	cable_params = malloc( sizeof *cable_params );
-	if (!cable_params) {
-		printf( _("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
-		parport_drivers[i]->parport_free( port );
-		return 4;
-	}
+    if (port == NULL)
+    {
+        printf (_("Error: Cable connection failed!\n"));
+        return 3;
+    }
 
-	cable->link.port = port;
-	cable->params = cable_params;
-	cable->chain = NULL;
+    cable_params = malloc (sizeof *cable_params);
+    if (!cable_params)
+    {
+        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+        parport_drivers[i]->parport_free (port);
+        return 4;
+    }
 
-	return 0;
+    cable->link.port = port;
+    cable->params = cable_params;
+    cable->chain = NULL;
+
+    return 0;
 }
 
 void
-generic_parport_free( cable_t *cable )
+generic_parport_free (cable_t * cable)
 {
-	cable->link.port->driver->parport_free( cable->link.port );
-	free( cable->params );
-	free( cable );
+    cable->link.port->driver->parport_free (cable->link.port);
+    free (cable->params);
+    free (cable);
 }
 
 void
-generic_parport_done( cable_t *cable )
+generic_parport_done (cable_t * cable)
 {
-	parport_close( cable->link.port );
+    parport_close (cable->link.port);
 }
 
 void
-generic_parport_help( const char *cablename )
+generic_parport_help (const char *cablename)
 {
-	printf( _(
-		"Usage: cable %s parallel PORTADDR\n"
+    printf (_("Usage: cable %s parallel PORTADDR\n"
 #if ENABLE_LOWLEVEL_PPDEV
-		"   or: cable %s ppdev PPDEV\n"
+              "   or: cable %s ppdev PPDEV\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-		"   or: cable %s ppi PPIDEV\n"
+              "   or: cable %s ppi PPIDEV\n"
 #endif
-		"\n"
-		"PORTADDR   parallel port address (e.g. 0x378)\n"
+              "\n" "PORTADDR   parallel port address (e.g. 0x378)\n"
 #if ENABLE_LOWLEVEL_PPDEV
-		"PPDEV      ppdev device (e.g. /dev/parport0)\n"
+              "PPDEV      ppdev device (e.g. /dev/parport0)\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-		"PPIDEF     ppi device (e.g. /dev/ppi0)\n"
+              "PPIDEF     ppi device (e.g. /dev/ppi0)\n"
 #endif
-		"\n"
-	),
+              "\n"),
 #if ENABLE_LOWLEVEL_PPDEV
-    cablename,
+            cablename,
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-    cablename,
+            cablename,
 #endif
-    cablename 
-    );
+            cablename);
 }
-

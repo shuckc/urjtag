@@ -33,103 +33,114 @@
 #include "cmd.h"
 
 static int
-cmd_instruction_run( chain_t *chain, char *params[] )
+cmd_instruction_run (chain_t * chain, char *params[])
 {
-	part_t *part;
+    part_t *part;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "instruction" );
-		return 1;
-	}
+    if (chain->active_part >= chain->parts->len)
+    {
+        printf (_("%s: no active part\n"), "instruction");
+        return 1;
+    }
 
-	part = chain->parts->parts[chain->active_part];
+    part = chain->parts->parts[chain->active_part];
 
-	if (cmd_params( params ) == 2) {
-		part_set_instruction( part, params[1] );
-		if (part->active_instruction == NULL)
-			printf( _("%s: unknown instruction '%s'\n"), "instruction", params[1] );
-		return 1;
-	}
-	
-	if (cmd_params( params ) == 3) {
-		unsigned int len;
+    if (cmd_params (params) == 2)
+    {
+        part_set_instruction (part, params[1]);
+        if (part->active_instruction == NULL)
+            printf (_("%s: unknown instruction '%s'\n"), "instruction",
+                    params[1]);
+        return 1;
+    }
 
-		if (strcasecmp( params[1], "length" ) != 0)
-			return -1;
+    if (cmd_params (params) == 3)
+    {
+        unsigned int len;
 
-		if (part->instructions != NULL) {
-			printf( _("instruction length is already set and used\n") );
-			return 1;
-		}
+        if (strcasecmp (params[1], "length") != 0)
+            return -1;
 
-		if (cmd_get_number( params[2], &len ))
-			return -1;
+        if (part->instructions != NULL)
+        {
+            printf (_("instruction length is already set and used\n"));
+            return 1;
+        }
 
-		part->instruction_length = len;
-		return 1;
-	}
+        if (cmd_get_number (params[2], &len))
+            return -1;
 
-	if (cmd_params( params ) == 4) {
-		instruction *i;
+        part->instruction_length = len;
+        return 1;
+    }
 
-		if (strlen( params[2] ) != part->instruction_length) {
-			printf( _("invalid instruction length\n") );
-			return 1;
-		}
+    if (cmd_params (params) == 4)
+    {
+        instruction *i;
 
-		if (part_find_instruction( part, params[1] ) != NULL) {
-			printf( _("Instruction '%s' already defined\n"), params[1] );
-			return 1;
-		}
+        if (strlen (params[2]) != part->instruction_length)
+        {
+            printf (_("invalid instruction length\n"));
+            return 1;
+        }
 
-		i = instruction_alloc( params[1], part->instruction_length, params[2] );
-		if (!i) {
-			printf( _("out of memory\n") );
-			return 1;
-		}
+        if (part_find_instruction (part, params[1]) != NULL)
+        {
+            printf (_("Instruction '%s' already defined\n"), params[1]);
+            return 1;
+        }
 
-		i->next = part->instructions;
-		part->instructions = i;
+        i = instruction_alloc (params[1], part->instruction_length,
+                               params[2]);
+        if (!i)
+        {
+            printf (_("out of memory\n"));
+            return 1;
+        }
 
-		i->data_register = part_find_data_register( part, params[3] );
-		if (i->data_register == NULL) {
-			printf( _("unknown data register '%s'\n"), params[3] );
-			return 1;
-		}
+        i->next = part->instructions;
+        part->instructions = i;
 
-		return 1;
-	}
+        i->data_register = part_find_data_register (part, params[3]);
+        if (i->data_register == NULL)
+        {
+            printf (_("unknown data register '%s'\n"), params[3]);
+            return 1;
+        }
 
-	return -1;
+        return 1;
+    }
+
+    return -1;
 }
 
 static void
-cmd_instruction_help( void )
+cmd_instruction_help (void)
 {
-	printf( _(
-		"Usage: %s INSTRUCTION\n"
-		"Usage: %s length LENGTH\n"
-		"Usage: %s INSTRUCTION CODE REGISTER\n"
-		"Change active INSTRUCTION for a part or declare new instruction.\n"
-		"\n"
-		"INSTRUCTION   instruction name (e.g. BYPASS)\n"
-		"LENGTH        common instruction length\n"
-		"CODE          instruction code (e.g. 11111)\n"
-		"REGISTER      default data register for instruction (e.g. BR)\n"
-	), "instruction", "instruction", "instruction" );
+    printf (_("Usage: %s INSTRUCTION\n"
+              "Usage: %s length LENGTH\n"
+              "Usage: %s INSTRUCTION CODE REGISTER\n"
+              "Change active INSTRUCTION for a part or declare new instruction.\n"
+              "\n"
+              "INSTRUCTION   instruction name (e.g. BYPASS)\n"
+              "LENGTH        common instruction length\n"
+              "CODE          instruction code (e.g. 11111)\n"
+              "REGISTER      default data register for instruction (e.g. BR)\n"),
+            "instruction", "instruction", "instruction");
 }
 
 cmd_t cmd_instruction = {
-	"instruction",
-	N_("change active instruction for a part or declare new instruction"),
-	cmd_instruction_help,
-	cmd_instruction_run
+    "instruction",
+    N_("change active instruction for a part or declare new instruction"),
+    cmd_instruction_help,
+    cmd_instruction_run
 };

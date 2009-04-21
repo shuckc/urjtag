@@ -80,168 +80,183 @@ extern cmd_t cmd_bsdl;
 extern cmd_t cmd_debug;
 
 const cmd_t *cmds[] = {
-	&cmd_quit,
-	&cmd_help,
-	&cmd_frequency,
-	&cmd_cable,
-	&cmd_reset,
-	&cmd_discovery,
-	&cmd_idcode,
-	&cmd_detect,
-	&cmd_signal,
-	&cmd_scan,
-	&cmd_salias,
-	&cmd_bit,
-	&cmd_register,
-	&cmd_initbus,
-	&cmd_print,
-	&cmd_part,
-	&cmd_bus,
-	&cmd_instruction,
-	&cmd_shift,
-	&cmd_dr,
-	&cmd_get,
-	&cmd_test,
-	&cmd_shell,
-	&cmd_set,
-	&cmd_endian,
-	&cmd_peek,
-	&cmd_poke,
-	&cmd_pod,
-	&cmd_readmem,
-	&cmd_writemem,
-	&cmd_detectflash,
-	&cmd_flashmem,
-	&cmd_eraseflash,
-	&cmd_script,
-	&cmd_include,
-	&cmd_addpart,
-	&cmd_usleep,
+    &cmd_quit,
+    &cmd_help,
+    &cmd_frequency,
+    &cmd_cable,
+    &cmd_reset,
+    &cmd_discovery,
+    &cmd_idcode,
+    &cmd_detect,
+    &cmd_signal,
+    &cmd_scan,
+    &cmd_salias,
+    &cmd_bit,
+    &cmd_register,
+    &cmd_initbus,
+    &cmd_print,
+    &cmd_part,
+    &cmd_bus,
+    &cmd_instruction,
+    &cmd_shift,
+    &cmd_dr,
+    &cmd_get,
+    &cmd_test,
+    &cmd_shell,
+    &cmd_set,
+    &cmd_endian,
+    &cmd_peek,
+    &cmd_poke,
+    &cmd_pod,
+    &cmd_readmem,
+    &cmd_writemem,
+    &cmd_detectflash,
+    &cmd_flashmem,
+    &cmd_eraseflash,
+    &cmd_script,
+    &cmd_include,
+    &cmd_addpart,
+    &cmd_usleep,
 #ifdef ENABLE_SVF
-	&cmd_svf,
+    &cmd_svf,
 #endif
 #ifdef ENABLE_BSDL
-	&cmd_bsdl,
+    &cmd_bsdl,
 #endif
-	&cmd_debug,
-	NULL			/* last must be NULL */
+    &cmd_debug,
+    NULL                        /* last must be NULL */
 };
 
 #ifdef HAVE_LIBREADLINE
 static char *
-cmd_find_next( const char *text, int state )
+cmd_find_next (const char *text, int state)
 {
-	static size_t cmd_idx, len;
+    static size_t cmd_idx, len;
 
-	if (!state) {
-		cmd_idx = 0;
-		len = strlen(text);
-	}
+    if (!state)
+    {
+        cmd_idx = 0;
+        len = strlen (text);
+    }
 
-	while (cmds[cmd_idx]) {
-		char *name = cmds[cmd_idx++]->name;
-		if (!strncmp(name, text, len))
-			return strdup(name);
-	}
+    while (cmds[cmd_idx])
+    {
+        char *name = cmds[cmd_idx++]->name;
+        if (!strncmp (name, text, len))
+            return strdup (name);
+    }
 
-	return NULL;
+    return NULL;
 }
 
 #ifdef HAVE_READLINE_COMPLETION
 char **
-cmd_completion( const char *text, int start, int end )
+cmd_completion (const char *text, int start, int end)
 {
-	char **ret = NULL;
+    char **ret = NULL;
 
-	if (start == 0)
-		ret = rl_completion_matches(text, cmd_find_next);
+    if (start == 0)
+        ret = rl_completion_matches (text, cmd_find_next);
 
-	return ret;
+    return ret;
 }
 #endif
 #endif
 
 int
-cmd_test_cable( chain_t *chain )
+cmd_test_cable (chain_t * chain)
 {
-	if (chain->cable)
-		return 1;
+    if (chain->cable)
+        return 1;
 
-	printf( _("Error: Cable not configured. Please use '%s' command first!\n"), "cable" );
-	return 0;
+    printf (_
+            ("Error: Cable not configured. Please use '%s' command first!\n"),
+            "cable");
+    return 0;
 }
 
 /* Remainder copied from libbrux/cmd/cmd.c */
 
 int
-cmd_run( chain_t *chain, char *params[] )
+cmd_run (chain_t * chain, char *params[])
 {
-	int i, pidx;
-	size_t len;
+    int i, pidx;
+    size_t len;
 
-	if (!params[0])
-		return 1;
+    if (!params[0])
+        return 1;
 
-	pidx = -1;
-	len = strlen(params[0]);
+    pidx = -1;
+    len = strlen (params[0]);
 
-	for (i = 0; cmds[i]; ++i) {
-		if (strcasecmp( cmds[i]->name, params[0] ) == 0) {
-			int r;
- run_cmd:
-			r = cmds[i]->run( chain, params );
-			if (r < 0)
-				printf( _("%s: syntax error!\n"), params[0] );
-			return r;
-		} else if (strncasecmp( cmds[i]->name, params[0], len ) == 0) {
-			if (pidx == -1)
-				pidx = i;
-			else
-				pidx = -2;
-		}
-	}
+    for (i = 0; cmds[i]; ++i)
+    {
+        if (strcasecmp (cmds[i]->name, params[0]) == 0)
+        {
+            int r;
+          run_cmd:
+            r = cmds[i]->run (chain, params);
+            if (r < 0)
+                printf (_("%s: syntax error!\n"), params[0]);
+            return r;
+        }
+        else if (strncasecmp (cmds[i]->name, params[0], len) == 0)
+        {
+            if (pidx == -1)
+                pidx = i;
+            else
+                pidx = -2;
+        }
+    }
 
-	switch (pidx) {
-		case -2: printf( _("%s: Ambiguous command\n"), params[0] ); break;
-		case -1: printf( _("%s: unknown command\n"), params[0] ); break;
-		default: i = pidx; goto run_cmd;
-	}
+    switch (pidx)
+    {
+    case -2:
+        printf (_("%s: Ambiguous command\n"), params[0]);
+        break;
+    case -1:
+        printf (_("%s: unknown command\n"), params[0]);
+        break;
+    default:
+        i = pidx;
+        goto run_cmd;
+    }
 
-	return 1;
+    return 1;
 }
 
 int
-cmd_params( char *params[] )
+cmd_params (char *params[])
 {
-	int i = 0;
+    int i = 0;
 
-	while (params[i])
-		i++;
+    while (params[i])
+        i++;
 
-	return i;
+    return i;
 }
 
 int
-cmd_get_number( char *s, unsigned int *i )
+cmd_get_number (char *s, unsigned int *i)
 {
-	int n;
-	int r;
-	size_t l;
+    int n;
+    int r;
+    size_t l;
 
-	if (!s || !i)
-		return -1;
+    if (!s || !i)
+        return -1;
 
-	l = strlen( s );
+    l = strlen (s);
 
-	n = -1;
-	r = sscanf( s, "0x%x%n", i, &n);
-	if (r == 1 && n == l)
-		return 0;
+    n = -1;
+    r = sscanf (s, "0x%x%n", i, &n);
+    if (r == 1 && n == l)
+        return 0;
 
-	n = -1;
-	r = sscanf( s, "%u%n", i, &n );
-	if (r == 1 && n == l)
-		return 0;
+    n = -1;
+    r = sscanf (s, "%u%n", i, &n);
+    if (r == 1 && n == l)
+        return 0;
 
-	return -1;
+    return -1;
 }

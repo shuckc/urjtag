@@ -41,74 +41,81 @@
 #include "jtag.h"
 
 void
-readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len )
+readmem (bus_t * bus, FILE * f, uint32_t addr, uint32_t len)
 {
-	uint32_t step;
-	uint32_t a;
-	int bc = 0;
+    uint32_t step;
+    uint32_t a;
+    int bc = 0;
 #define BSIZE 4096
-	uint8_t b[BSIZE];
-	bus_area_t area;
-	uint64_t end;
+    uint8_t b[BSIZE];
+    bus_area_t area;
+    uint64_t end;
 
-	if (!bus) {
-		printf( _("Error: Missing bus driver!\n") );
-		return;
-	}
+    if (!bus)
+    {
+        printf (_("Error: Missing bus driver!\n"));
+        return;
+    }
 
-	bus_prepare( bus );
+    bus_prepare (bus);
 
-	if (bus_area( bus, addr, &area ) != URJTAG_STATUS_OK) {
-		printf( _("Error: Bus width detection failed\n") );
-		return;
-	}
-	step = area.width / 8;
+    if (bus_area (bus, addr, &area) != URJTAG_STATUS_OK)
+    {
+        printf (_("Error: Bus width detection failed\n"));
+        return;
+    }
+    step = area.width / 8;
 
-	if (step == 0) {
-		printf( _("Unknown bus width!\n") );
-		return;
-	}
+    if (step == 0)
+    {
+        printf (_("Unknown bus width!\n"));
+        return;
+    }
 
-	addr = addr & (~(step - 1));
-	len = (len + step - 1) & (~(step - 1));
+    addr = addr & (~(step - 1));
+    len = (len + step - 1) & (~(step - 1));
 
-	printf( _("address: 0x%08X\n"), addr );
-	printf( _("length:  0x%08X\n"), len );
+    printf (_("address: 0x%08X\n"), addr);
+    printf (_("length:  0x%08X\n"), len);
 
-	if (len == 0) {
-		printf( _("length is 0.\n") );
-		return;
-	}
+    if (len == 0)
+    {
+        printf (_("length is 0.\n"));
+        return;
+    }
 
-	a = addr;
-	end = a + len;
-	printf( _("reading:\n") );
-	bus_read_start( bus, addr );
-	for (a += step; a <= end; a += step) {
-		uint32_t data;
-		int j;
+    a = addr;
+    end = a + len;
+    printf (_("reading:\n"));
+    bus_read_start (bus, addr);
+    for (a += step; a <= end; a += step)
+    {
+        uint32_t data;
+        int j;
 
-		if (a < addr + len)
-			data = bus_read_next( bus, a );
-		else
-			data = bus_read_end( bus );
+        if (a < addr + len)
+            data = bus_read_next (bus, a);
+        else
+            data = bus_read_end (bus);
 
-		for (j = step; j > 0; j--)
-			if (big_endian)
-				b[bc++] = (data >> ((j - 1) * 8)) & 0xFF;
-			else {
-				b[bc++] = data & 0xFF;
-				data >>= 8;
-			}
+        for (j = step; j > 0; j--)
+            if (big_endian)
+                b[bc++] = (data >> ((j - 1) * 8)) & 0xFF;
+            else
+            {
+                b[bc++] = data & 0xFF;
+                data >>= 8;
+            }
 
-		if ((bc >= BSIZE) || (a >= end) ) {
-			printf( _("addr: 0x%08X"), a );
-			printf( "\r" );
-			fflush( stdout );
-			fwrite( b, bc, 1, f );
-			bc = 0;
-		}
-	}
+        if ((bc >= BSIZE) || (a >= end))
+        {
+            printf (_("addr: 0x%08X"), a);
+            printf ("\r");
+            fflush (stdout);
+            fwrite (b, bc, 1, f);
+            bc = 0;
+        }
+    }
 
-	printf( _("\nDone.\n") );
+    printf (_("\nDone.\n"));
 }

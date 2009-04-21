@@ -52,391 +52,463 @@ extern flash_driver_t amd_8_flash_driver;
 extern flash_driver_t intel_32_flash_driver;
 extern flash_driver_t intel_16_flash_driver;
 extern flash_driver_t intel_8_flash_driver;
-extern flash_driver_t amd_29xx040_flash_driver;	//20/09/2006
+extern flash_driver_t amd_29xx040_flash_driver; //20/09/2006
 
 flash_driver_t *flash_drivers[] = {
-	&amd_32_flash_driver,
-	&amd_16_flash_driver,
-	&amd_8_flash_driver,
-	&intel_32_flash_driver,
-	&intel_16_flash_driver,
-	&intel_8_flash_driver,
-	&amd_29xx040_flash_driver,	//20/09/2006
-	NULL
+    &amd_32_flash_driver,
+    &amd_16_flash_driver,
+    &amd_8_flash_driver,
+    &intel_32_flash_driver,
+    &intel_16_flash_driver,
+    &intel_8_flash_driver,
+    &amd_29xx040_flash_driver,  //20/09/2006
+    NULL
 };
 
 extern cfi_array_t *cfi_array;
 static flash_driver_t *flash_driver = NULL;
 
 static void
-set_flash_driver( void )
+set_flash_driver (void)
 {
-	int i;
-	cfi_query_structure_t *cfi;
+    int i;
+    cfi_query_structure_t *cfi;
 
-	flash_driver = NULL;
-	if (cfi_array == NULL)
-		return;
-	cfi = &cfi_array->cfi_chips[0]->cfi;
+    flash_driver = NULL;
+    if (cfi_array == NULL)
+        return;
+    cfi = &cfi_array->cfi_chips[0]->cfi;
 
-	for (i = 0; flash_drivers[i] != NULL; i++)
-		if (flash_drivers[i]->autodetect( cfi_array )) {
-			flash_driver = flash_drivers[i];
-			flash_driver->print_info( cfi_array );
-			return;
-		}
+    for (i = 0; flash_drivers[i] != NULL; i++)
+        if (flash_drivers[i]->autodetect (cfi_array))
+        {
+            flash_driver = flash_drivers[i];
+            flash_driver->print_info (cfi_array);
+            return;
+        }
 
-	printf( _("unknown flash - vendor id: %d (0x%04x)\n"),
-		cfi->identification_string.pri_id_code,
-		cfi->identification_string.pri_id_code );
+    printf (_("unknown flash - vendor id: %d (0x%04x)\n"),
+            cfi->identification_string.pri_id_code,
+            cfi->identification_string.pri_id_code);
 
-	printf( _("Flash not supported!\n") );
+    printf (_("Flash not supported!\n"));
 }
 
 void
-flashmsbin( bus_t *bus, FILE *f, int noverify )
+flashmsbin (bus_t * bus, FILE * f, int noverify)
 {
-	uint32_t adr;
-	cfi_query_structure_t *cfi;
+    uint32_t adr;
+    cfi_query_structure_t *cfi;
 
-	set_flash_driver();
-	if (!cfi_array || !flash_driver) {
-		printf( _("no flash driver found\n") );
-		return;
-	}
-	cfi = &cfi_array->cfi_chips[0]->cfi;
+    set_flash_driver ();
+    if (!cfi_array || !flash_driver)
+    {
+        printf (_("no flash driver found\n"));
+        return;
+    }
+    cfi = &cfi_array->cfi_chips[0]->cfi;
 
-	/* test sync bytes */
-	{
-		char sync[8];
-		fread( &sync, sizeof (char), 7, f );
-		sync[7] = '\0';
-		if (strcmp( "B000FF\n", sync ) != 0) {
-			printf( _("Invalid sync sequence!\n") );
-			return;
-		}
-	}
+    /* test sync bytes */
+    {
+        char sync[8];
+        fread (&sync, sizeof (char), 7, f);
+        sync[7] = '\0';
+        if (strcmp ("B000FF\n", sync) != 0)
+        {
+            printf (_("Invalid sync sequence!\n"));
+            return;
+        }
+    }
 
-	/* erase memory blocks */
-	{
-		uint32_t start;
-		uint32_t len;
-		int first, last;
+    /* erase memory blocks */
+    {
+        uint32_t start;
+        uint32_t len;
+        int first, last;
 
-		fread( &start, sizeof start, 1, f );
-		fread( &len, sizeof len, 1, f );
-		first = start / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
-		last = (start + len - 1) / (cfi->device_geometry.erase_block_regions[0].erase_block_size * 2);
-		for (; first <= last; first++) {
-			adr = first * cfi->device_geometry.erase_block_regions[0].erase_block_size * 2;
-			flash_driver->unlock_block( cfi_array, adr );
-			printf( _("block %d unlocked\n"), first );
-			printf( _("erasing block %d: %d\n"), first, flash_driver->erase_block( cfi_array, adr ) );
-		}
-	}
+        fread (&start, sizeof start, 1, f);
+        fread (&len, sizeof len, 1, f);
+        first =
+            start /
+            (cfi->device_geometry.erase_block_regions[0].erase_block_size *
+             2);
+        last =
+            (start + len -
+             1) /
+            (cfi->device_geometry.erase_block_regions[0].erase_block_size *
+             2);
+        for (; first <= last; first++)
+        {
+            adr =
+                first *
+                cfi->device_geometry.erase_block_regions[0].erase_block_size *
+                2;
+            flash_driver->unlock_block (cfi_array, adr);
+            printf (_("block %d unlocked\n"), first);
+            printf (_("erasing block %d: %d\n"), first,
+                    flash_driver->erase_block (cfi_array, adr));
+        }
+    }
 
-	printf( _("program:\n") );
-	for (;;) {
-		uint32_t a, l, c;
+    printf (_("program:\n"));
+    for (;;)
+    {
+        uint32_t a, l, c;
 
-		fread( &a, sizeof a, 1, f );
-		fread( &l, sizeof l, 1, f );
-		fread( &c, sizeof c, 1, f );
-		if (feof( f )) {
-			printf( _("Error: premature end of file\n") );
-			return;
-		}
-		printf( _("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"), a, l, c );
-		if ((a == 0) && (c == 0))
-			break;
-		if (l & 3) {
-			printf( _("Error: Invalid record length!\n") );
-			return;
-		}
+        fread (&a, sizeof a, 1, f);
+        fread (&l, sizeof l, 1, f);
+        fread (&c, sizeof c, 1, f);
+        if (feof (f))
+        {
+            printf (_("Error: premature end of file\n"));
+            return;
+        }
+        printf (_
+                ("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
+                a, l, c);
+        if ((a == 0) && (c == 0))
+            break;
+        if (l & 3)
+        {
+            printf (_("Error: Invalid record length!\n"));
+            return;
+        }
 
-		while (l) {
-			uint32_t data;
+        while (l)
+        {
+            uint32_t data;
 
-			printf( _("addr: 0x%08X"), a );
-			printf( "\r" );
-			fflush(stdout);
-			fread( &data, sizeof data, 1, f );
-			if (flash_driver->program( cfi_array, a, &data, 1 )) {
-				printf( _("\nflash error\n") );
-				return;
-			}
-			a += 4;
-			l -= 4;
-		}
-	}
-	printf( "\n" );
+            printf (_("addr: 0x%08X"), a);
+            printf ("\r");
+            fflush (stdout);
+            fread (&data, sizeof data, 1, f);
+            if (flash_driver->program (cfi_array, a, &data, 1))
+            {
+                printf (_("\nflash error\n"));
+                return;
+            }
+            a += 4;
+            l -= 4;
+        }
+    }
+    printf ("\n");
 
-	flash_driver->readarray( cfi_array );
+    flash_driver->readarray (cfi_array);
 
-	if (noverify) {
-		printf( _("verify skipped\n") );
-		return;
-	}
+    if (noverify)
+    {
+        printf (_("verify skipped\n"));
+        return;
+    }
 
-	fseek( f, 15, SEEK_SET );
-	printf( _("verify:\n") );
+    fseek (f, 15, SEEK_SET);
+    printf (_("verify:\n"));
 
-	for (;;) {
-		uint32_t a, l, c;
+    for (;;)
+    {
+        uint32_t a, l, c;
 
-		fread( &a, sizeof a, 1, f );
-		fread( &l, sizeof l, 1, f );
-		fread( &c, sizeof c, 1, f );
-		if (feof( f )) {
-			printf( _("Error: premature end of file\n") );
-			return;
-		}
-		printf( _("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"), a, l, c );
-		if ((a == 0) && (c == 0))
-			break;
-		if (l & 3) {
-			printf( _("Error: Invalid record length!\n") );
-			return;
-		}
+        fread (&a, sizeof a, 1, f);
+        fread (&l, sizeof l, 1, f);
+        fread (&c, sizeof c, 1, f);
+        if (feof (f))
+        {
+            printf (_("Error: premature end of file\n"));
+            return;
+        }
+        printf (_
+                ("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
+                a, l, c);
+        if ((a == 0) && (c == 0))
+            break;
+        if (l & 3)
+        {
+            printf (_("Error: Invalid record length!\n"));
+            return;
+        }
 
-		while (l) {
-			uint32_t data, readed;
+        while (l)
+        {
+            uint32_t data, readed;
 
-			printf( _("addr: 0x%08X"), a );
-			printf( "\r" );
-			fflush( stdout );
-			fread( &data, sizeof data, 1, f );
-			readed = bus_read( bus, a );
-			if (data != readed) {
-				printf( _("\nverify error: 0x%08X vs. 0x%08X at addr %08X\n"),
-					readed, data, a );
-				return;
-			}
-			a += 4;
-			l -= 4;
-		}
-	}
+            printf (_("addr: 0x%08X"), a);
+            printf ("\r");
+            fflush (stdout);
+            fread (&data, sizeof data, 1, f);
+            readed = bus_read (bus, a);
+            if (data != readed)
+            {
+                printf (_("\nverify error: 0x%08X vs. 0x%08X at addr %08X\n"),
+                        readed, data, a);
+                return;
+            }
+            a += 4;
+            l -= 4;
+        }
+    }
 
-	printf( _("\nDone.\n") );
+    printf (_("\nDone.\n"));
 }
 
 static int
-find_block( cfi_query_structure_t *cfi, int adr, int bus_width, int chip_width, int *bytes_until_next_block )
+find_block (cfi_query_structure_t * cfi, int adr, int bus_width,
+            int chip_width, int *bytes_until_next_block)
 {
-	int i;
-	int b = 0;
-	int bb = 0;
+    int i;
+    int b = 0;
+    int bb = 0;
 
-	for (i = 0; i < cfi->device_geometry.number_of_erase_regions; i++) {
-		const int region_blocks = cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
-		const int flash_block_size = cfi->device_geometry.erase_block_regions[i].erase_block_size;
-		const int region_block_size = (bus_width / chip_width) * flash_block_size;
-		const int region_size = region_blocks * region_block_size;
+    for (i = 0; i < cfi->device_geometry.number_of_erase_regions; i++)
+    {
+        const int region_blocks =
+            cfi->device_geometry.erase_block_regions[i].
+            number_of_erase_blocks;
+        const int flash_block_size =
+            cfi->device_geometry.erase_block_regions[i].erase_block_size;
+        const int region_block_size =
+            (bus_width / chip_width) * flash_block_size;
+        const int region_size = region_blocks * region_block_size;
 
-		if (adr < (bb + region_size))
-		{
-			int bir = (adr - bb) / region_block_size;
-			*bytes_until_next_block = bb + (bir + 1) * region_block_size - adr;
-			return b + bir;
-		}
-		b += region_blocks;
-		bb += region_size;
-	}
-	return -1;
+        if (adr < (bb + region_size))
+        {
+            int bir = (adr - bb) / region_block_size;
+            *bytes_until_next_block =
+                bb + (bir + 1) * region_block_size - adr;
+            return b + bir;
+        }
+        b += region_blocks;
+        bb += region_size;
+    }
+    return -1;
 }
 
 void
-flashmem( bus_t *bus, FILE *f, uint32_t addr, int noverify )
+flashmem (bus_t * bus, FILE * f, uint32_t addr, int noverify)
 {
-	uint32_t adr;
-	cfi_query_structure_t *cfi;
-	int *erased;
-	int i;
-	int neb;
-	int bus_width;
-	int chip_width;
+    uint32_t adr;
+    cfi_query_structure_t *cfi;
+    int *erased;
+    int i;
+    int neb;
+    int bus_width;
+    int chip_width;
 #define BSIZE (1 << 12)
-	uint32_t write_buffer[BSIZE];
-	int write_buffer_count;
-	uint32_t write_buffer_adr;
+    uint32_t write_buffer[BSIZE];
+    int write_buffer_count;
+    uint32_t write_buffer_adr;
 
-	set_flash_driver();
-	if (!cfi_array || !flash_driver) {
-		printf( _("no flash driver found\n") );
-		return;
-	}
-	cfi = &cfi_array->cfi_chips[0]->cfi;
+    set_flash_driver ();
+    if (!cfi_array || !flash_driver)
+    {
+        printf (_("no flash driver found\n"));
+        return;
+    }
+    cfi = &cfi_array->cfi_chips[0]->cfi;
 
-	bus_width = cfi_array->bus_width;
-	chip_width = cfi_array->cfi_chips[0]->width;
+    bus_width = cfi_array->bus_width;
+    chip_width = cfi_array->cfi_chips[0]->width;
 
-	for (i = 0, neb = 0; i < cfi->device_geometry.number_of_erase_regions; i++)
-		neb += cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
+    for (i = 0, neb = 0; i < cfi->device_geometry.number_of_erase_regions;
+         i++)
+        neb +=
+            cfi->device_geometry.erase_block_regions[i].
+            number_of_erase_blocks;
 
-	erased = malloc( neb * sizeof *erased );
-	if (!erased) {
-		printf( _("Out of memory!\n") );
-		return;
-	}
-	for (i = 0; i < neb; i++)
-		erased[i] = 0;
+    erased = malloc (neb * sizeof *erased);
+    if (!erased)
+    {
+        printf (_("Out of memory!\n"));
+        return;
+    }
+    for (i = 0; i < neb; i++)
+        erased[i] = 0;
 
-	printf( _("program:\n") );
-	adr = addr;
-	while (!feof( f )) {
-		uint32_t data;
-		uint8_t b[BSIZE];
-		int bc = 0, bn = 0, btr = BSIZE;
-		int block_no = find_block( cfi, adr - cfi_array->address, bus_width, chip_width, &btr );
+    printf (_("program:\n"));
+    adr = addr;
+    while (!feof (f))
+    {
+        uint32_t data;
+        uint8_t b[BSIZE];
+        int bc = 0, bn = 0, btr = BSIZE;
+        int block_no =
+            find_block (cfi, adr - cfi_array->address, bus_width, chip_width,
+                        &btr);
 
-		write_buffer_count = 0;
-		write_buffer_adr = adr;
+        write_buffer_count = 0;
+        write_buffer_adr = adr;
 
-		if(btr > BSIZE) btr = BSIZE;
-		bn = fread( b, 1, btr, f );
+        if (btr > BSIZE)
+            btr = BSIZE;
+        bn = fread (b, 1, btr, f);
 
-		if (bn > 0 && !erased[block_no]) {
-			flash_driver->unlock_block( cfi_array, adr );
-			printf( _("\nblock %d unlocked\n"), block_no );
-			printf( _("erasing block %d: %d\n"), block_no, flash_driver->erase_block( cfi_array, adr ) );
-			erased[block_no] = 1;
-		}
+        if (bn > 0 && !erased[block_no])
+        {
+            flash_driver->unlock_block (cfi_array, adr);
+            printf (_("\nblock %d unlocked\n"), block_no);
+            printf (_("erasing block %d: %d\n"), block_no,
+                    flash_driver->erase_block (cfi_array, adr));
+            erased[block_no] = 1;
+        }
 
-		for (bc = 0; bc < bn; bc += flash_driver->bus_width) {
-			int j;
-			if ((adr & (BSIZE-1)) == 0) {
-				printf( _("addr: 0x%08X"), adr );
-				printf( "\r" );
-				fflush( stdout );
-			}
+        for (bc = 0; bc < bn; bc += flash_driver->bus_width)
+        {
+            int j;
+            if ((adr & (BSIZE - 1)) == 0)
+            {
+                printf (_("addr: 0x%08X"), adr);
+                printf ("\r");
+                fflush (stdout);
+            }
 
-			data = 0;
-			for (j = 0; j < flash_driver->bus_width; j++)
-				if (big_endian)
-					data = (data << 8) | b[bc + j];
-				else
-					data |= b[bc + j] << (j * 8);
+            data = 0;
+            for (j = 0; j < flash_driver->bus_width; j++)
+                if (big_endian)
+                    data = (data << 8) | b[bc + j];
+                else
+                    data |= b[bc + j] << (j * 8);
 
-			/* store data in write buffer, will be programmed to flash later */
-			write_buffer[write_buffer_count++] = data;
+            /* store data in write buffer, will be programmed to flash later */
+            write_buffer[write_buffer_count++] = data;
 
-			adr += flash_driver->bus_width;
-		}
+            adr += flash_driver->bus_width;
+        }
 
-		if (write_buffer_count > 0)
-			if (flash_driver->program( cfi_array, write_buffer_adr, write_buffer, write_buffer_count )) {
-				printf( _("\nflash error\n") );
-				return;
-			}
-		
-	}
-	free( erased );
-
-	printf( _("addr: 0x%08X\n"), adr - flash_driver->bus_width);
-
-	flash_driver->readarray( cfi_array );
-
-	if (noverify) {
-		printf( _("verify skipped\n") );
+        if (write_buffer_count > 0)
+            if (flash_driver->
+                program (cfi_array, write_buffer_adr, write_buffer,
+                         write_buffer_count))
+            {
+                printf (_("\nflash error\n"));
                 return;
-	}
+            }
 
-	fseek( f, 0, SEEK_SET );
-	printf( _("verify:\n") );
-	fflush( stdout );
-	adr = addr;
-	while (!feof( f )) {
-		uint32_t data, readed;
-		uint8_t b[BSIZE];
-		int bc = 0, bn = 0, btr = BSIZE;
+    }
+    free (erased);
 
-		bn = fread( b, 1, btr, f );
+    printf (_("addr: 0x%08X\n"), adr - flash_driver->bus_width);
 
-		for (bc = 0; bc < bn; bc += flash_driver->bus_width) {
-			int j;
-			if ((adr & 0xFF) == 0) {
-				printf( _("addr: 0x%08X"), adr );
-				printf( "\r" );
-				fflush( stdout );
-			}
+    flash_driver->readarray (cfi_array);
 
-			data = 0;
-			for (j = 0; j < flash_driver->bus_width; j++)
-				if (big_endian)
-					data = (data << 8) | b[bc + j];
-				else
-					data |= b[bc + j] << (j * 8);
+    if (noverify)
+    {
+        printf (_("verify skipped\n"));
+        return;
+    }
 
-			readed = bus_read( bus, adr );
-			if (data != readed) {
-				printf( _("addr: 0x%08X\n"), adr );
-				printf( _("verify error:\nread: 0x%08X\nexpected: 0x%08X\n"), readed, data );
-				return;
-			}
-			adr += flash_driver->bus_width;
-		}
-	}
-	printf( _("addr: 0x%08X\nDone.\n"), adr - flash_driver->bus_width);
+    fseek (f, 0, SEEK_SET);
+    printf (_("verify:\n"));
+    fflush (stdout);
+    adr = addr;
+    while (!feof (f))
+    {
+        uint32_t data, readed;
+        uint8_t b[BSIZE];
+        int bc = 0, bn = 0, btr = BSIZE;
+
+        bn = fread (b, 1, btr, f);
+
+        for (bc = 0; bc < bn; bc += flash_driver->bus_width)
+        {
+            int j;
+            if ((adr & 0xFF) == 0)
+            {
+                printf (_("addr: 0x%08X"), adr);
+                printf ("\r");
+                fflush (stdout);
+            }
+
+            data = 0;
+            for (j = 0; j < flash_driver->bus_width; j++)
+                if (big_endian)
+                    data = (data << 8) | b[bc + j];
+                else
+                    data |= b[bc + j] << (j * 8);
+
+            readed = bus_read (bus, adr);
+            if (data != readed)
+            {
+                printf (_("addr: 0x%08X\n"), adr);
+                printf (_("verify error:\nread: 0x%08X\nexpected: 0x%08X\n"),
+                        readed, data);
+                return;
+            }
+            adr += flash_driver->bus_width;
+        }
+    }
+    printf (_("addr: 0x%08X\nDone.\n"), adr - flash_driver->bus_width);
 }
 
 void
-flasherase( bus_t *bus, uint32_t addr, int number )
+flasherase (bus_t * bus, uint32_t addr, int number)
 {
-	cfi_query_structure_t *cfi;
-	int i;
-	int status = 0;
-	int bus_width;
-	int chip_width;
+    cfi_query_structure_t *cfi;
+    int i;
+    int status = 0;
+    int bus_width;
+    int chip_width;
 
-	set_flash_driver();
-	if (!cfi_array || !flash_driver) {
-		printf( _("no flash driver found\n") );
-		return;
-	}
-	cfi = &cfi_array->cfi_chips[0]->cfi;
+    set_flash_driver ();
+    if (!cfi_array || !flash_driver)
+    {
+        printf (_("no flash driver found\n"));
+        return;
+    }
+    cfi = &cfi_array->cfi_chips[0]->cfi;
 
-	bus_width = cfi_array->bus_width;
-	chip_width = cfi_array->cfi_chips[0]->width;
+    bus_width = cfi_array->bus_width;
+    chip_width = cfi_array->cfi_chips[0]->width;
 
-	printf( _("\nErasing %d Flash block%s from address 0x%x\n"), number, number > 1 ? "s" : "", addr );
+    printf (_("\nErasing %d Flash block%s from address 0x%x\n"), number,
+            number > 1 ? "s" : "", addr);
 
-	for (i = 1; i <= number; i++) {
-		int btr = 0;
-		int block_no = find_block( cfi, addr - cfi_array->address, bus_width, chip_width, &btr );
+    for (i = 1; i <= number; i++)
+    {
+        int btr = 0;
+        int block_no =
+            find_block (cfi, addr - cfi_array->address, bus_width, chip_width,
+                        &btr);
 
-		if (block_no < 0) {
-			status = FLASH_ERROR_UNKNOWN;
-			break;
-		}
+        if (block_no < 0)
+        {
+            status = FLASH_ERROR_UNKNOWN;
+            break;
+        }
 
-		printf( _("(%d%% Completed) FLASH Block %d : Unlocking ... "), i*100/number, block_no );
-		fflush(stdout);
-		flash_driver->unlock_block( cfi_array, addr );
-		printf( _("Erasing ... ") );
-		fflush(stdout);
-		status = flash_driver->erase_block( cfi_array, addr );
-		if (status == 0) {
-			if (i == number) {
-				printf( "\r" );
-				printf( _("(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"), block_no );
-			} else {
-				printf( _("Ok.") );
-				printf( "\r" );
-				printf( _("%78s"), "" );
-				printf( "\r" );
-			}
-		}
-		else
-			printf( _("ERROR.\n") );
-		addr += btr;
-	}
+        printf (_("(%d%% Completed) FLASH Block %d : Unlocking ... "),
+                i * 100 / number, block_no);
+        fflush (stdout);
+        flash_driver->unlock_block (cfi_array, addr);
+        printf (_("Erasing ... "));
+        fflush (stdout);
+        status = flash_driver->erase_block (cfi_array, addr);
+        if (status == 0)
+        {
+            if (i == number)
+            {
+                printf ("\r");
+                printf (_
+                        ("(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"),
+                        block_no);
+            }
+            else
+            {
+                printf (_("Ok."));
+                printf ("\r");
+                printf (_("%78s"), "");
+                printf ("\r");
+            }
+        }
+        else
+            printf (_("ERROR.\n"));
+        addr += btr;
+    }
 
-	if (status == 0)
-		printf( _("\nErasing Completed.\n") );
-	else
-		printf( _("\nErasing Failed.\n") );
+    if (status == 0)
+        printf (_("\nErasing Completed.\n"));
+    else
+        printf (_("\nErasing Failed.\n"));
 
-	/* BYPASS */
-	//       parts_set_instruction( ps, "BYPASS" );
-	//       chain_shift_instructions( chain );
+    /* BYPASS */
+    //       parts_set_instruction( ps, "BYPASS" );
+    //       chain_shift_instructions( chain );
 }

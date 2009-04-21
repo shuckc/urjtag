@@ -34,56 +34,58 @@
 #include "cmd.h"
 
 static int
-cmd_get_run( chain_t *chain, char *params[] )
+cmd_get_run (chain_t * chain, char *params[])
 {
-	int data;
-	signal_t *s;
+    int data;
+    signal_t *s;
 
-	if (cmd_params( params ) != 3)
-		return -1;
+    if (cmd_params (params) != 3)
+        return -1;
 
-	if (strcasecmp( params[1], "signal") != 0)
-		return -1;
+    if (strcasecmp (params[1], "signal") != 0)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "get" );
-		return 1;
-	}
+    if (chain->active_part >= chain->parts->len)
+    {
+        printf (_("%s: no active part\n"), "get");
+        return 1;
+    }
 
-	s = part_find_signal( chain->parts->parts[chain->active_part], params[2] );
-	if (!s) {
-		printf( _("signal '%s' not found\n"), params[2] );
-		return 1;
-	}
-	data = part_get_signal( chain->parts->parts[chain->active_part], s );
-	if (data != -1)
-		printf( _("%s = %d\n"), params[2], data );
+    s = part_find_signal (chain->parts->parts[chain->active_part], params[2]);
+    if (!s)
+    {
+        printf (_("signal '%s' not found\n"), params[2]);
+        return 1;
+    }
+    data = part_get_signal (chain->parts->parts[chain->active_part], s);
+    if (data != -1)
+        printf (_("%s = %d\n"), params[2], data);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_get_help( void )
+cmd_get_help (void)
 {
-	printf( _(
-		"Usage: %s SIGNAL\n"
-		"Get signal state from output BSR (Boundary Scan Register).\n"
-		"\n"
-		"SIGNAL        signal name (from JTAG declaration file)\n"
-	), "get signal" );
+    printf (_("Usage: %s SIGNAL\n"
+              "Get signal state from output BSR (Boundary Scan Register).\n"
+              "\n"
+              "SIGNAL        signal name (from JTAG declaration file)\n"),
+            "get signal");
 }
 
 cmd_t cmd_get = {
-	"get",
-	N_("get external signal value"),
-	cmd_get_help,
-	cmd_get_run
+    "get",
+    N_("get external signal value"),
+    cmd_get_help,
+    cmd_get_run
 };

@@ -33,31 +33,28 @@
 #include "cmd.h"
 
 static int
-cmd_reset_run( chain_t *chain, char *params[] )
+cmd_reset_run (chain_t * chain, char *params[])
 {
-	if (cmd_params( params ) > 1)
-		return -1;
+    if (cmd_params (params) > 1)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	tap_reset_bypass( chain );
+    tap_reset_bypass (chain);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_reset_help( void )
+cmd_reset_help (void)
 {
-	printf( _(
-		"Usage: %s\n"
-		"Reset current JTAG chain.\n"
-	), "reset" );
+    printf (_("Usage: %s\n" "Reset current JTAG chain.\n"), "reset");
 }
 
 cmd_t cmd_reset = {
-	"reset",
-	N_("reset JTAG chain"),
-	cmd_reset_help,
-	cmd_reset_run
+    "reset",
+    N_("reset JTAG chain"),
+    cmd_reset_help,
+    cmd_reset_run
 };

@@ -38,44 +38,46 @@
 
 typedef struct part part_t;
 
-struct part {
-	tap_register *id;
-	char *alias; /* djf refdes */
-	char manufacturer[MAXLEN_MANUFACTURER + 1];
-	char part[MAXLEN_PART + 1];
-	char stepping[MAXLEN_STEPPING + 1];
-	signal_t *signals;
-	salias_t *saliases;
-	int instruction_length;
-	instruction *instructions;
-	instruction *active_instruction;
-	data_register *data_registers;
-	int boundary_length;
-	bsbit_t **bsbits;
+struct part
+{
+    tap_register *id;
+    char *alias;                /* djf refdes */
+    char manufacturer[MAXLEN_MANUFACTURER + 1];
+    char part[MAXLEN_PART + 1];
+    char stepping[MAXLEN_STEPPING + 1];
+    signal_t *signals;
+    salias_t *saliases;
+    int instruction_length;
+    instruction *instructions;
+    instruction *active_instruction;
+    data_register *data_registers;
+    int boundary_length;
+    bsbit_t **bsbits;
 };
 
-part_t *part_alloc( const tap_register *id );
-void part_free( part_t *p );
-part_t *read_part( FILE *f, tap_register_t *idr );
-instruction *part_find_instruction( part_t *p, const char *iname );
-data_register *part_find_data_register( part_t *p, const char *drname );
-signal_t *part_find_signal( part_t *p, const char *signalname );
-void part_set_instruction( part_t *p, const char *iname );
-void part_set_signal( part_t *p, signal_t *s, int out, int val );
-int part_get_signal( part_t *p, signal_t *s );
-void part_print( part_t *p );
+part_t *part_alloc (const tap_register * id);
+void part_free (part_t * p);
+part_t *read_part (FILE * f, tap_register_t * idr);
+instruction *part_find_instruction (part_t * p, const char *iname);
+data_register *part_find_data_register (part_t * p, const char *drname);
+signal_t *part_find_signal (part_t * p, const char *signalname);
+void part_set_instruction (part_t * p, const char *iname);
+void part_set_signal (part_t * p, signal_t * s, int out, int val);
+int part_get_signal (part_t * p, signal_t * s);
+void part_print (part_t * p);
 
 typedef struct parts parts_t;
 
-struct parts {
-	int len;
-	part_t **parts;
+struct parts
+{
+    int len;
+    part_t **parts;
 };
 
-parts_t *parts_alloc( void );
-void parts_free( parts_t *ps );
-int parts_add_part( parts_t *ps, part_t *p );
-void parts_set_instruction( parts_t *ps, const char *iname );
-void parts_print( parts_t *ps );
+parts_t *parts_alloc (void);
+void parts_free (parts_t * ps);
+int parts_add_part (parts_t * ps, part_t * p);
+void parts_set_instruction (parts_t * ps, const char *iname);
+void parts_print (parts_t * ps);
 
 #endif /* PART_H */

@@ -28,56 +28,59 @@
 #include "bssignal.h"
 
 signal_t *
-signal_alloc( const char *name )
+signal_alloc (const char *name)
 {
-	signal_t *s = malloc( sizeof *s );
-	if (!s)
-		return NULL;
+    signal_t *s = malloc (sizeof *s);
+    if (!s)
+        return NULL;
 
-	s->name = strdup( name );
-	if (!s->name) {
-		free( s );
-		return NULL;
-	}
-	s->pin = NULL; /* djf hack pin number */
-	s->next = NULL;
-	s->input = NULL;
-	s->output = NULL;
+    s->name = strdup (name);
+    if (!s->name)
+    {
+        free (s);
+        return NULL;
+    }
+    s->pin = NULL;              /* djf hack pin number */
+    s->next = NULL;
+    s->input = NULL;
+    s->output = NULL;
 
-	return s;
+    return s;
 }
 
 void
-signal_free( signal_t *s )
+signal_free (signal_t * s)
 {
-	if (!s)
-		return;
-	free( s->name );
-	free( s );
+    if (!s)
+        return;
+    free (s->name);
+    free (s);
 }
 
 salias_t *
-salias_alloc( const char *name, const signal_t *signal )
+salias_alloc (const char *name, const signal_t * signal)
 {
-	salias_t *sa = malloc( sizeof *sa );
-	if (sa == NULL)
-		return NULL;
+    salias_t *sa = malloc (sizeof *sa);
+    if (sa == NULL)
+        return NULL;
 
-	sa->name = strdup( name );
-	if (sa->name == NULL) {
-		free( sa );
-		return NULL;
-	}
-	sa->next = NULL;
-	sa->signal = (signal_t *)signal;
+    sa->name = strdup (name);
+    if (sa->name == NULL)
+    {
+        free (sa);
+        return NULL;
+    }
+    sa->next = NULL;
+    sa->signal = (signal_t *) signal;
 
-	return sa;
+    return sa;
 }
 
-void salias_free( salias_t *salias )
+void
+salias_free (salias_t * salias)
 {
-	if (salias == NULL)
-		return;
-	free( salias->name );
-	free( salias );
+    if (salias == NULL)
+        return;
+    free (salias->name);
+    free (salias);
 }

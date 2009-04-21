@@ -33,79 +33,96 @@
 #include "cmd.h"
 
 static int
-cmd_bsdl_run( chain_t *chain, char *params[] )
+cmd_bsdl_run (chain_t * chain, char *params[])
 {
-	int num_params, result = -1;
-	bsdl_globs_t *globs = &(chain->bsdl);
+    int num_params, result = -1;
+    bsdl_globs_t *globs = &(chain->bsdl);
 
-	num_params = cmd_params(params);
-	if (num_params >= 2) {
-		if (strcmp(params[1], "test") == 0) {
-			int debug_save;
+    num_params = cmd_params (params);
+    if (num_params >= 2)
+    {
+        if (strcmp (params[1], "test") == 0)
+        {
+            int debug_save;
 
-			debug_save = globs->debug;
-			globs->debug = 1;
-			if (num_params == 3) {
-				result = bsdl_read_file(chain, params[2], BSDL_MODE_TEST, NULL) >= 0 ? 1 : -1;
-			} else if (num_params == 2) {
-				bsdl_scan_files(chain, NULL, BSDL_MODE_TEST);
-				result = 1;
-			}
-			globs->debug = debug_save;
-		}
+            debug_save = globs->debug;
+            globs->debug = 1;
+            if (num_params == 3)
+            {
+                result =
+                    bsdl_read_file (chain, params[2], BSDL_MODE_TEST,
+                                    NULL) >= 0 ? 1 : -1;
+            }
+            else if (num_params == 2)
+            {
+                bsdl_scan_files (chain, NULL, BSDL_MODE_TEST);
+                result = 1;
+            }
+            globs->debug = debug_save;
+        }
 
-		if (strcmp(params[1], "dump") == 0) {
-			if (num_params == 3) {
-				result = bsdl_read_file(chain, params[2], BSDL_MODE_DUMP, NULL) >= 0 ? 1 : -1;
-			} else if (num_params == 2) {
-				bsdl_scan_files(chain, NULL, BSDL_MODE_DUMP);
-				result = 1;
-			}
-		}
+        if (strcmp (params[1], "dump") == 0)
+        {
+            if (num_params == 3)
+            {
+                result =
+                    bsdl_read_file (chain, params[2], BSDL_MODE_DUMP,
+                                    NULL) >= 0 ? 1 : -1;
+            }
+            else if (num_params == 2)
+            {
+                bsdl_scan_files (chain, NULL, BSDL_MODE_DUMP);
+                result = 1;
+            }
+        }
 
-		if (num_params == 3) {
-			if (strcmp(params[1], "path") == 0) {
-				bsdl_set_path(chain, params[2]);
-				result = 1;
-			}
+        if (num_params == 3)
+        {
+            if (strcmp (params[1], "path") == 0)
+            {
+                bsdl_set_path (chain, params[2]);
+                result = 1;
+            }
 
-			if (strcmp(params[1], "debug") == 0) {
-				if (strcmp(params[2], "on") == 0) {
-					globs->debug = 1;
-					result = 1;
-				}
-				if (strcmp(params[2], "off") == 0) {
-					globs->debug = 0;
-					result = 1;
-				}
-			}
-		}
-	}
+            if (strcmp (params[1], "debug") == 0)
+            {
+                if (strcmp (params[2], "on") == 0)
+                {
+                    globs->debug = 1;
+                    result = 1;
+                }
+                if (strcmp (params[2], "off") == 0)
+                {
+                    globs->debug = 0;
+                    result = 1;
+                }
+            }
+        }
+    }
 
-	return result;
+    return result;
 }
 
 
 static void
-cmd_bsdl_help( void )
+cmd_bsdl_help (void)
 {
-	printf( _(
-		"Usage: %s path PATHLIST\n"
-		"Usage: %s test [FILE]\n"
-		"Usage: %s dump [FILE]\n"
-		"Usage: %s debug on|off\n"
-		"Manage BSDL files\n"
-		"\n"
-		"PATHLIST semicolon separated list of directory paths to search for BSDL files\n"
-		"FILE file containing part description in BSDL format\n"
-	), "bsdl", "bsdl", "bsdl", "bsdl" );
+    printf (_("Usage: %s path PATHLIST\n"
+              "Usage: %s test [FILE]\n"
+              "Usage: %s dump [FILE]\n"
+              "Usage: %s debug on|off\n"
+              "Manage BSDL files\n"
+              "\n"
+              "PATHLIST semicolon separated list of directory paths to search for BSDL files\n"
+              "FILE file containing part description in BSDL format\n"),
+            "bsdl", "bsdl", "bsdl", "bsdl");
 }
 
 cmd_t cmd_bsdl = {
-	"bsdl",
-	N_("manage BSDL files"),
-	cmd_bsdl_help,
-	cmd_bsdl_run
+    "bsdl",
+    N_("manage BSDL files"),
+    cmd_bsdl_help,
+    cmd_bsdl_run
 };
 
 

@@ -35,68 +35,71 @@
 #include "cmd.h"
 
 static int
-cmd_test_run( chain_t *chain, char *params[] )
+cmd_test_run (chain_t * chain, char *params[])
 {
-	int data;
-	unsigned int i;
-	signal_t *s;
+    int data;
+    unsigned int i;
+    signal_t *s;
 
-	if (cmd_params( params ) != 4)
-		return -1;
+    if (cmd_params (params) != 4)
+        return -1;
 
-	if (strcasecmp( params[1], "signal") != 0)
-		return -1;
+    if (strcasecmp (params[1], "signal") != 0)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "get" );
-		return 1;
-	}
+    if (chain->active_part >= chain->parts->len)
+    {
+        printf (_("%s: no active part\n"), "get");
+        return 1;
+    }
 
-	s = part_find_signal( chain->parts->parts[chain->active_part], params[2] );
-	if (!s) {
-		printf( _("signal '%s' not found\n"), params[2] );
-		return 1;
-	}
+    s = part_find_signal (chain->parts->parts[chain->active_part], params[2]);
+    if (!s)
+    {
+        printf (_("signal '%s' not found\n"), params[2]);
+        return 1;
+    }
 
-	/* values 0,1,X since X is not a number, the following failure exits clean
-	* and doesnt test anything, as it should.
-	*/
-	if (cmd_get_number( params[3], &i ))
-                return 1;
+    /* values 0,1,X since X is not a number, the following failure exits clean
+     * and doesnt test anything, as it should.
+     */
+    if (cmd_get_number (params[3], &i))
+        return 1;
 
-	data = part_get_signal( chain->parts->parts[chain->active_part], s );
-	if (data != -1) {
-		if(data != i) {
-			printf( _("<FAIL>%s = %d\n"), params[2], data );
-			return -99;
-		}
-	}
-	return 1;
+    data = part_get_signal (chain->parts->parts[chain->active_part], s);
+    if (data != -1)
+    {
+        if (data != i)
+        {
+            printf (_("<FAIL>%s = %d\n"), params[2], data);
+            return -99;
+        }
+    }
+    return 1;
 }
 
 static void
-cmd_test_help( void )
+cmd_test_help (void)
 {
-	printf( _(
-		"Usage: %s SIGNAL 0/1\n"
-		"Test signal state from output BSR (Boundary Scan Register).\n"
-		"\n"
-		"SIGNAL        signal name (from JTAG declaration file)\n"
-	), "get signal" );
+    printf (_("Usage: %s SIGNAL 0/1\n"
+              "Test signal state from output BSR (Boundary Scan Register).\n"
+              "\n"
+              "SIGNAL        signal name (from JTAG declaration file)\n"),
+            "get signal");
 }
 
 cmd_t cmd_test = {
-	"test",
-	N_("test external signal value"),
-	cmd_test_help,
-	cmd_test_run
+    "test",
+    N_("test external signal value"),
+    cmd_test_help,
+    cmd_test_run
 };
-

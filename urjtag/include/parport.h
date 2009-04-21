@@ -32,30 +32,32 @@ typedef struct parport_t parport_t;
 
 #include "cable.h"
 
-typedef struct {
-	const char *type;
-        parport_t *(*connect)( const char **, int );
-	void (*parport_free)( parport_t * );
-	int (*open)( parport_t * );
-	int (*close)( parport_t * );
-	int (*set_data)( parport_t *, uint8_t );
-	int (*get_data)( parport_t * );
-	int (*get_status)( parport_t * );
-	int (*set_control)( parport_t *, uint8_t );
+typedef struct
+{
+    const char *type;
+    parport_t *(*connect) (const char **, int);
+    void (*parport_free) (parport_t *);
+    int (*open) (parport_t *);
+    int (*close) (parport_t *);
+    int (*set_data) (parport_t *, uint8_t);
+    int (*get_data) (parport_t *);
+    int (*get_status) (parport_t *);
+    int (*set_control) (parport_t *, uint8_t);
 } parport_driver_t;
 
-struct parport_t {
-	parport_driver_t *driver;
-	void *params;
-	cable_t *cable;
+struct parport_t
+{
+    parport_driver_t *driver;
+    void *params;
+    cable_t *cable;
 };
 
-int parport_open( parport_t *port );
-int parport_close( parport_t *port );
-int parport_set_data( parport_t *port, uint8_t data );
-int parport_get_data( parport_t *port );
-int parport_get_status( parport_t *port );
-int parport_set_control( parport_t *port, uint8_t data );
+int parport_open (parport_t * port);
+int parport_close (parport_t * port);
+int parport_set_data (parport_t * port, uint8_t data);
+int parport_get_data (parport_t * port);
+int parport_get_status (parport_t * port);
+int parport_set_control (parport_t * port, uint8_t data);
 
 extern parport_driver_t *parport_drivers[];
 

@@ -37,60 +37,58 @@
 #include "cmd.h"
 
 static int
-cmd_shell_run( chain_t *chain, char *params[] )
+cmd_shell_run (chain_t * chain, char *params[])
 {
-	int i, len, n = cmd_params(params);
-	char *shell_cmd;
+    int i, len, n = cmd_params (params);
+    char *shell_cmd;
 
-	if((n=cmd_params( params )) == 1)
-		return -1;
+    if ((n = cmd_params (params)) == 1)
+        return -1;
 
-	/* I must apologize to everyone who knows what they are doing for
-	* the following. If you can pass a shell argument past strtok the
-	* please fix this.
-	*/
-	/* The problem is the parser which splits commands into params[]
-	* and doesn't allow quoting. So we concatenate the params[] here
-	* with single spaces, although the original might have different
-	* whitespace (more than one space, tabs, ...) - kawk */
+    /* I must apologize to everyone who knows what they are doing for
+     * the following. If you can pass a shell argument past strtok the
+     * please fix this.
+     */
+    /* The problem is the parser which splits commands into params[]
+     * and doesn't allow quoting. So we concatenate the params[] here
+     * with single spaces, although the original might have different
+     * whitespace (more than one space, tabs, ...) - kawk */
 
-	for(i=1,len=0; i<n; i++) len += (1 + strlen(params[i]));
+    for (i = 1, len = 0; i < n; i++)
+        len += (1 + strlen (params[i]));
 
-	shell_cmd = malloc(len);
-	if(shell_cmd == NULL)
-	{
-		printf( _("Out of memory\n") );
-		return -1;
-	}
+    shell_cmd = malloc (len);
+    if (shell_cmd == NULL)
+    {
+        printf (_("Out of memory\n"));
+        return -1;
+    }
 
-	strcpy(shell_cmd, params[1]);
-	for(i=2; i<n; i++)
-	{
-		strcat(shell_cmd, " ");
-		strcat(shell_cmd, params[i]);
-	}
-	printf("Executing '%s'\n", shell_cmd);
+    strcpy (shell_cmd, params[1]);
+    for (i = 2; i < n; i++)
+    {
+        strcat (shell_cmd, " ");
+        strcat (shell_cmd, params[i]);
+    }
+    printf ("Executing '%s'\n", shell_cmd);
 
-	system(shell_cmd);
-	free(shell_cmd);
+    system (shell_cmd);
+    free (shell_cmd);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_shell_help( void )
+cmd_shell_help (void)
 {
-	printf( _(
-		"Usage: %s cmmd\n"
-		"Shell out to os for a command.\n"
-		"\n"
-		"CMMD OS Shell Command\n"
-	), "shell cmmd" );
+    printf (_("Usage: %s cmmd\n"
+              "Shell out to os for a command.\n"
+              "\n" "CMMD OS Shell Command\n"), "shell cmmd");
 }
 
 cmd_t cmd_shell = {
-	"shell",
-	N_("shell cmmd"),
-	cmd_shell_help,
-	cmd_shell_run
+    "shell",
+    N_("shell cmmd"),
+    cmd_shell_help,
+    cmd_shell_run
 };

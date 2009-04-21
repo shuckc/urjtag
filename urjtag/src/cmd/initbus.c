@@ -32,73 +32,78 @@
 #include "jtag.h"
 
 static int
-cmd_initbus_run( chain_t *chain, char *params[] )
+cmd_initbus_run (chain_t * chain, char *params[])
 {
-	int i;
+    int i;
 
-	if (cmd_params( params ) < 2)
-		return -1;
+    if (cmd_params (params) < 2)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (chain->active_part >= chain->parts->len || chain->active_part < 0) {
-		printf( _("%s: no active part\n"), "initbus" );
-		return 1;
-	}
+    if (chain->active_part >= chain->parts->len || chain->active_part < 0)
+    {
+        printf (_("%s: no active part\n"), "initbus");
+        return 1;
+    }
 
-	for (i = 0; bus_drivers[i] != NULL; i++) {
-		if (strcasecmp( bus_drivers[i]->name, params[1] ) == 0) {
-			bus_t *abus = bus_drivers[i]->new_bus( chain, bus_drivers[i], params );
-			if (abus == NULL) {
-				printf( _("bus alloc/attach failed!\n") );
-				return 1;
-			}
-			buses_add( abus );
-			if (bus_init( abus ) != URJTAG_STATUS_OK)
-				printf( _("bus initialization failed!\n") );
+    for (i = 0; bus_drivers[i] != NULL; i++)
+    {
+        if (strcasecmp (bus_drivers[i]->name, params[1]) == 0)
+        {
+            bus_t *abus =
+                bus_drivers[i]->new_bus (chain, bus_drivers[i], params);
+            if (abus == NULL)
+            {
+                printf (_("bus alloc/attach failed!\n"));
+                return 1;
+            }
+            buses_add (abus);
+            if (bus_init (abus) != URJTAG_STATUS_OK)
+                printf (_("bus initialization failed!\n"));
 
-			for (i = 0; i < buses.len; i++)
-				if (buses.buses[i] == bus)
-					break;
-			if (i != buses.len - 1)
-				printf( _("Initialized bus %d, active bus %d\n"), buses.len - 1, i );
+            for (i = 0; i < buses.len; i++)
+                if (buses.buses[i] == bus)
+                    break;
+            if (i != buses.len - 1)
+                printf (_("Initialized bus %d, active bus %d\n"),
+                        buses.len - 1, i);
 
-			return 1;
-		}
-	}
+            return 1;
+        }
+    }
 
-	printf( _("Unknown bus: %s\n"), params[1] );
+    printf (_("Unknown bus: %s\n"), params[1]);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_initbus_help( void )
+cmd_initbus_help (void)
 {
-	int i;
+    int i;
 
-	printf( _(
-		"Usage: %s BUSNAME\n"
-		"Initialize new bus driver for active part.\n"
-		"\n"
-		"BUSNAME       Name of the bus\n"
-		"\n"
-		"List of available buses:\n"
-	), "initbus" );
+    printf (_("Usage: %s BUSNAME\n"
+              "Initialize new bus driver for active part.\n"
+              "\n"
+              "BUSNAME       Name of the bus\n"
+              "\n" "List of available buses:\n"), "initbus");
 
-	for (i = 0; bus_drivers[i] != NULL; i++)
-		printf( _("%-10s %s\n"), bus_drivers[i]->name, bus_drivers[i]->description );
+    for (i = 0; bus_drivers[i] != NULL; i++)
+        printf (_("%-10s %s\n"), bus_drivers[i]->name,
+                bus_drivers[i]->description);
 }
 
 const cmd_t cmd_initbus = {
-	"initbus",
-	N_("initialize bus driver for active part"),
-	cmd_initbus_help,
-	cmd_initbus_run
+    "initbus",
+    N_("initialize bus driver for active part"),
+    cmd_initbus_help,
+    cmd_initbus_run
 };

@@ -47,17 +47,17 @@
  *
  ****************************************************************************/
 static int
-extend_cmd_buffer( cx_cmd_t *cmd )
+extend_cmd_buffer (cx_cmd_t * cmd)
 {
-  /* check size of cmd buffer and increase it if not sufficient */
-  if (cmd->buf_pos >= cmd->buf_len)
-  {
-    cmd->buf_len *= 2;
-    if (cmd->buf)
-      cmd->buf = (uint8_t *)realloc( cmd->buf, cmd->buf_len );
-  }
+    /* check size of cmd buffer and increase it if not sufficient */
+    if (cmd->buf_pos >= cmd->buf_len)
+    {
+        cmd->buf_len *= 2;
+        if (cmd->buf)
+            cmd->buf = (uint8_t *) realloc (cmd->buf, cmd->buf_len);
+    }
 
-  return cmd->buf ? 1 : 0;
+    return cmd->buf ? 1 : 0;
 }
 
 
@@ -77,19 +77,19 @@ extend_cmd_buffer( cx_cmd_t *cmd )
  *
  ****************************************************************************/
 int
-cx_cmd_space( cx_cmd_root_t *cmd_root, int max_len )
+cx_cmd_space (cx_cmd_root_t * cmd_root, int max_len)
 {
-  int n;
-  cx_cmd_t *cmd = cmd_root->last;
+    int n;
+    cx_cmd_t *cmd = cmd_root->last;
 
-  if (!cmd)
-    return max_len;
+    if (!cmd)
+        return max_len;
 
-  n = max_len - cmd->buf_pos;
-  if (n < 0)
-    return 0;
+    n = max_len - cmd->buf_pos;
+    if (n < 0)
+        return 0;
 
-  return n;
+    return n;
 }
 
 
@@ -107,19 +107,19 @@ cx_cmd_space( cx_cmd_root_t *cmd_root, int max_len )
  *
  ****************************************************************************/
 int
-cx_cmd_push( cx_cmd_root_t *cmd_root, uint8_t d )
+cx_cmd_push (cx_cmd_root_t * cmd_root, uint8_t d)
 {
-  cx_cmd_t *cmd = cmd_root->last;
+    cx_cmd_t *cmd = cmd_root->last;
 
-  if (!cmd)
-    return 0;
+    if (!cmd)
+        return 0;
 
-  if (!extend_cmd_buffer( cmd ))
-    return 0;
+    if (!extend_cmd_buffer (cmd))
+        return 0;
 
-  cmd->buf[cmd->buf_pos++] = d;
+    cmd->buf[cmd->buf_pos++] = d;
 
-  return 1;
+    return 1;
 }
 
 
@@ -136,18 +136,18 @@ cx_cmd_push( cx_cmd_root_t *cmd_root, uint8_t d )
  *
  ****************************************************************************/
 cx_cmd_t *
-cx_cmd_dequeue( cx_cmd_root_t *cmd_root )
+cx_cmd_dequeue (cx_cmd_root_t * cmd_root)
 {
-  cx_cmd_t *cmd = cmd_root->first;
+    cx_cmd_t *cmd = cmd_root->first;
 
-  if (cmd)
-  {
-    if ((cmd_root->first = cmd->next) == NULL)
-      cmd_root->last = NULL;
-    cmd->next = NULL;
-  }
+    if (cmd)
+    {
+        if ((cmd_root->first = cmd->next) == NULL)
+            cmd_root->last = NULL;
+        cmd->next = NULL;
+    }
 
-  return cmd;
+    return cmd;
 }
 
 
@@ -163,14 +163,14 @@ cx_cmd_dequeue( cx_cmd_root_t *cmd_root )
  *
  ****************************************************************************/
 void
-cx_cmd_free( cx_cmd_t *cmd )
+cx_cmd_free (cx_cmd_t * cmd)
 {
-  if (cmd)
-  {
-    if (cmd->buf)
-      free( cmd->buf );
-    free( cmd );
-  }
+    if (cmd)
+    {
+        if (cmd->buf)
+            free (cmd->buf);
+        free (cmd);
+    }
 }
 
 
@@ -190,32 +190,32 @@ cx_cmd_free( cx_cmd_t *cmd )
  *
  ****************************************************************************/
 cx_cmd_t *
-cx_cmd_queue( cx_cmd_root_t *cmd_root, uint32_t to_recv )
+cx_cmd_queue (cx_cmd_root_t * cmd_root, uint32_t to_recv)
 {
-  cx_cmd_t *cmd = (cx_cmd_t *)malloc( sizeof( cx_cmd_t ) );
+    cx_cmd_t *cmd = (cx_cmd_t *) malloc (sizeof (cx_cmd_t));
 
-  if (cmd)
-  {
-    cmd->buf_len = 64;
-    if ((cmd->buf = (uint8_t *)malloc( cmd->buf_len )) == NULL)
+    if (cmd)
     {
-      free( cmd );
-      cmd = NULL;
+        cmd->buf_len = 64;
+        if ((cmd->buf = (uint8_t *) malloc (cmd->buf_len)) == NULL)
+        {
+            free (cmd);
+            cmd = NULL;
+        }
+        else
+        {
+            cmd->buf_pos = 0;
+            cmd->to_recv = to_recv;
+            cmd->next = NULL;
+            if (!cmd_root->first)
+                cmd_root->first = cmd;
+            if (cmd_root->last)
+                cmd_root->last->next = cmd;
+            cmd_root->last = cmd;
+        }
     }
-    else
-    {
-      cmd->buf_pos = 0;
-      cmd->to_recv = to_recv;
-      cmd->next    = NULL;
-      if (!cmd_root->first)
-        cmd_root->first = cmd;
-      if (cmd_root->last)
-        cmd_root->last->next = cmd;
-      cmd_root->last = cmd;
-    }
-  }
 
-  return cmd;
+    return cmd;
 }
 
 
@@ -231,10 +231,10 @@ cx_cmd_queue( cx_cmd_root_t *cmd_root, uint32_t to_recv )
  *
  ****************************************************************************/
 void
-cx_cmd_init( cx_cmd_root_t *cmd_root )
+cx_cmd_init (cx_cmd_root_t * cmd_root)
 {
-  cmd_root->first = NULL;
-  cmd_root->last  = NULL;
+    cmd_root->first = NULL;
+    cmd_root->last = NULL;
 }
 
 
@@ -250,14 +250,14 @@ cx_cmd_init( cx_cmd_root_t *cmd_root )
  *
  ****************************************************************************/
 void
-cx_cmd_deinit( cx_cmd_root_t *cmd_root )
+cx_cmd_deinit (cx_cmd_root_t * cmd_root)
 {
-  cx_cmd_t *cmd;
-  while (cmd_root->first)
-  {
-    cmd = cx_cmd_dequeue( cmd_root );
-    cx_cmd_free( cmd );
-  }
+    cx_cmd_t *cmd;
+    while (cmd_root->first)
+    {
+        cmd = cx_cmd_dequeue (cmd_root);
+        cx_cmd_free (cmd);
+    }
 }
 
 
@@ -283,41 +283,42 @@ cx_cmd_deinit( cx_cmd_root_t *cmd_root )
  *
  ****************************************************************************/
 void
-cx_xfer( cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
-         cable_t *cable, cable_flush_amount_t how_much )
+cx_xfer (cx_cmd_root_t * cmd_root, const cx_cmd_t * out_cmd,
+         cable_t * cable, cable_flush_amount_t how_much)
 {
-  cx_cmd_t *cmd = cx_cmd_dequeue( cmd_root );
-  uint32_t  bytes_to_recv;
-
-  bytes_to_recv = 0;
-
-  while (cmd)
-  {
-    /* Step 1: copy command bytes buffered for sending them later
-               through the usbconn driver */
-    bytes_to_recv += cmd->to_recv;
-    /* write command data (buffered) */
-    usbconn_write( cable->link.usb, cmd->buf, cmd->buf_pos, cmd->to_recv );
-    cx_cmd_free( cmd );
-    cmd = cx_cmd_dequeue( cmd_root );
-  }
-
-  /* it's possible for the caller to define an extra command that is
-     appended right before sending commands to the device in case output
-     data is expected */
-  if (bytes_to_recv && out_cmd)
-  {
-    usbconn_write( cable->link.usb, out_cmd->buf, out_cmd->buf_pos, out_cmd->to_recv );
-    bytes_to_recv += out_cmd->to_recv;
-  }
-
-  if (bytes_to_recv || (how_much != TO_OUTPUT))
-  {
-    /* Step 2: flush scheduled bytes */
-    usbconn_read( cable->link.usb, NULL, 0 );
+    cx_cmd_t *cmd = cx_cmd_dequeue (cmd_root);
+    uint32_t bytes_to_recv;
 
     bytes_to_recv = 0;
-  }
+
+    while (cmd)
+    {
+        /* Step 1: copy command bytes buffered for sending them later
+           through the usbconn driver */
+        bytes_to_recv += cmd->to_recv;
+        /* write command data (buffered) */
+        usbconn_write (cable->link.usb, cmd->buf, cmd->buf_pos, cmd->to_recv);
+        cx_cmd_free (cmd);
+        cmd = cx_cmd_dequeue (cmd_root);
+    }
+
+    /* it's possible for the caller to define an extra command that is
+       appended right before sending commands to the device in case output
+       data is expected */
+    if (bytes_to_recv && out_cmd)
+    {
+        usbconn_write (cable->link.usb, out_cmd->buf, out_cmd->buf_pos,
+                       out_cmd->to_recv);
+        bytes_to_recv += out_cmd->to_recv;
+    }
+
+    if (bytes_to_recv || (how_much != TO_OUTPUT))
+    {
+        /* Step 2: flush scheduled bytes */
+        usbconn_read (cable->link.usb, NULL, 0);
+
+        bytes_to_recv = 0;
+    }
 }
 
 
@@ -333,16 +334,16 @@ cx_xfer( cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
  *
  ****************************************************************************/
 uint8_t
-cx_xfer_recv( cable_t *cable )
+cx_xfer_recv (cable_t * cable)
 {
-  uint8_t buf;
+    uint8_t buf;
 
-  if (usbconn_read( cable->link.usb, &buf, 1 ) == 1)
-  {
-    return buf;
-  }
-  else
-    return 0;
+    if (usbconn_read (cable->link.usb, &buf, 1) == 1)
+    {
+        return buf;
+    }
+    else
+        return 0;
 }
 
 

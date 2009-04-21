@@ -31,52 +31,53 @@
 #include "data_register.h"
 
 data_register *
-data_register_alloc( const char *name, int len )
+data_register_alloc (const char *name, int len)
 {
-	data_register *dr;
+    data_register *dr;
 
-	if (!name)
-		return NULL;
+    if (!name)
+        return NULL;
 
-	dr = malloc( sizeof *dr );
-	if (!dr)
-		return NULL;
+    dr = malloc (sizeof *dr);
+    if (!dr)
+        return NULL;
 
-	if (strlen( name ) > MAXLEN_DATA_REGISTER)
-		printf( _("Warning: Data register name too long\n") );
-	strncpy( dr->name, name, MAXLEN_DATA_REGISTER );
-	dr->name[MAXLEN_DATA_REGISTER] = '\0';
+    if (strlen (name) > MAXLEN_DATA_REGISTER)
+        printf (_("Warning: Data register name too long\n"));
+    strncpy (dr->name, name, MAXLEN_DATA_REGISTER);
+    dr->name[MAXLEN_DATA_REGISTER] = '\0';
 
-	if (len>0)
-	{
-		dr->in = register_alloc( len );
-		dr->out = register_alloc( len );
-	}
-	else
-	{
-		dr->in = register_alloc( 1 );
-		dr->out = register_alloc( 1 );
-	}
-	if (!dr->in || !dr->out) {
-		free( dr->in );
-		free( dr->out );
-		free( dr->name );
-		free( dr );
-		return NULL;
-	}
+    if (len > 0)
+    {
+        dr->in = register_alloc (len);
+        dr->out = register_alloc (len);
+    }
+    else
+    {
+        dr->in = register_alloc (1);
+        dr->out = register_alloc (1);
+    }
+    if (!dr->in || !dr->out)
+    {
+        free (dr->in);
+        free (dr->out);
+        free (dr->name);
+        free (dr);
+        return NULL;
+    }
 
-	dr->next = NULL;
+    dr->next = NULL;
 
-	return dr;
+    return dr;
 }
 
 void
-data_register_free( data_register *dr )
+data_register_free (data_register * dr)
 {
-	if (!dr)
-		return;
+    if (!dr)
+        return;
 
-	register_free( dr->in );
-	register_free( dr->out );
-	free( dr );
+    register_free (dr->in);
+    register_free (dr->out);
+    free (dr);
 }

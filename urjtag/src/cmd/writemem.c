@@ -30,53 +30,54 @@
 #include "cmd.h"
 
 static int
-cmd_writemem_run( chain_t *chain, char *params[] )
+cmd_writemem_run (chain_t * chain, char *params[])
 {
-	uint32_t adr;
-	uint32_t len;
-	FILE *f;
+    uint32_t adr;
+    uint32_t len;
+    FILE *f;
 
-	if (cmd_params( params ) != 4)
-		return -1;
+    if (cmd_params (params) != 4)
+        return -1;
 
-	if (!bus) {
-		printf( _("Error: Bus driver missing.\n") );
-		return 1;
-	}
+    if (!bus)
+    {
+        printf (_("Error: Bus driver missing.\n"));
+        return 1;
+    }
 
-	if (cmd_get_number( params[1], &adr) || cmd_get_number( params[2], &len))
-		return -1;
+    if (cmd_get_number (params[1], &adr) || cmd_get_number (params[2], &len))
+        return -1;
 
-	f = fopen( params[3], "r" );
-	if (!f) {
-		printf( _("Unable to open file `%s'!\n"), params[3] );
-		return 1;
-	}
-	writemem( bus, f, adr, len );
-	fclose( f );
+    f = fopen (params[3], "r");
+    if (!f)
+    {
+        printf (_("Unable to open file `%s'!\n"), params[3]);
+        return 1;
+    }
+    writemem (bus, f, adr, len);
+    fclose (f);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_writemem_help( void )
+cmd_writemem_help (void)
 {
-	printf( _(
-		"Usage: %s ADDR LEN FILENAME\n"
-		"Write to device memory starting at ADDR the FILENAME file.\n"
-		"\n"
-		"ADDR       start address of the written memory area\n"
-		"LEN        written memory length\n"
-		"FILENAME   name of the input file\n"
-		"\n"
-		"ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-		"NOTE: This is NOT useful for FLASH programming!\n"
-	), "writemem" );
+    printf (_("Usage: %s ADDR LEN FILENAME\n"
+              "Write to device memory starting at ADDR the FILENAME file.\n"
+              "\n"
+              "ADDR       start address of the written memory area\n"
+              "LEN        written memory length\n"
+              "FILENAME   name of the input file\n"
+              "\n"
+              "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+              "NOTE: This is NOT useful for FLASH programming!\n"),
+            "writemem");
 }
 
 cmd_t cmd_writemem = {
-	"writemem",
-	N_("write content of file to the memory"),
-	cmd_writemem_help,
-	cmd_writemem_run
+    "writemem",
+    N_("write content of file to the memory"),
+    cmd_writemem_help,
+    cmd_writemem_run
 };

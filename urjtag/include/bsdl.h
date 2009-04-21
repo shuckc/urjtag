@@ -27,9 +27,10 @@
 
 #include <bsdl_mode.h>
 
-typedef struct {
+typedef struct
+{
     char **path_list;
-    int    debug;
+    int debug;
 } bsdl_globs_t;
 
 #define BSDL_GLOBS_INIT(bsdl) {\
@@ -39,8 +40,8 @@ typedef struct {
 
 #include "chain.h"
 
-int bsdl_read_file(chain_t *, const char *, int, const char *);
-void bsdl_set_path(chain_t *, const char *);
-int bsdl_scan_files(chain_t *, const char *, int);
+int bsdl_read_file (chain_t *, const char *, int, const char *);
+void bsdl_set_path (chain_t *, const char *);
+int bsdl_scan_files (chain_t *, const char *, int);
 
 #endif /* BSDL_H */

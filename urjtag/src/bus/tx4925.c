@@ -42,7 +42,8 @@
 //  should be okay because pin isn't implemented
 //  on 29LV200 we use now.
 
-typedef struct {
+typedef struct
+{
     signal_t *oe;
     signal_t *swe;
     signal_t *romce[4];
@@ -70,59 +71,66 @@ typedef struct {
  *
  */
 static bus_t *
-tx4925_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] )
+tx4925_bus_new (chain_t * chain, const bus_driver_t * driver,
+                char *cmd_params[])
 {
-	bus_t *bus;
-	part_t *part;
-	char buff[15];
-	int i;
-	int failed = 0;
+    bus_t *bus;
+    part_t *part;
+    char buff[15];
+    int i;
+    int failed = 0;
 
-	bus = calloc( 1, sizeof (bus_t) );
-	if (!bus)
-		return NULL;
+    bus = calloc (1, sizeof (bus_t));
+    if (!bus)
+        return NULL;
 
-	bus->driver = driver;
-	bus->params = calloc( 1, sizeof (bus_params_t) );
-	if (!bus->params) {
-		free( bus );
-		return NULL;
-	}
+    bus->driver = driver;
+    bus->params = calloc (1, sizeof (bus_params_t));
+    if (!bus->params)
+    {
+        free (bus);
+        return NULL;
+    }
 
-	CHAIN = chain;
-	PART = part = chain->parts->parts[chain->active_part];
+    CHAIN = chain;
+    PART = part = chain->parts->parts[chain->active_part];
 
-	failed |= generic_bus_attach_sig( part, &(OE),  "OE"  );
+    failed |= generic_bus_attach_sig (part, &(OE), "OE");
 
-	failed |= generic_bus_attach_sig( part, &(SWE), "SWE" );
+    failed |= generic_bus_attach_sig (part, &(SWE), "SWE");
 
-	for (i = 0; i < 4; i++) {
-		sprintf( buff, "ROMCE_%d", i );
-		failed |= generic_bus_attach_sig( part, &(ROMCE[i]), buff );
-	}
+    for (i = 0; i < 4; i++)
+    {
+        sprintf (buff, "ROMCE_%d", i);
+        failed |= generic_bus_attach_sig (part, &(ROMCE[i]), buff);
+    }
 
-	for (i = 0; i < 4; i++) {
-		sprintf( buff, "SDCS_%d", i );
-		failed |= generic_bus_attach_sig( part, &(SDCS[i]), buff );
-	}
+    for (i = 0; i < 4; i++)
+    {
+        sprintf (buff, "SDCS_%d", i);
+        failed |= generic_bus_attach_sig (part, &(SDCS[i]), buff);
+    }
 
-	for (i = 0; i < 20; i++) {
-		sprintf( buff, "ADDR_%d", i );
-		failed |= generic_bus_attach_sig( part, &(ADDR[i]), buff );
-	}
+    for (i = 0; i < 20; i++)
+    {
+        sprintf (buff, "ADDR_%d", i);
+        failed |= generic_bus_attach_sig (part, &(ADDR[i]), buff);
+    }
 
-	for (i = 0; i < 16; i++) {
-		sprintf( buff, "DATA_%d", i );
-		failed |= generic_bus_attach_sig( part, &(DATA[i]), buff );
-	}
+    for (i = 0; i < 16; i++)
+    {
+        sprintf (buff, "DATA_%d", i);
+        failed |= generic_bus_attach_sig (part, &(DATA[i]), buff);
+    }
 
-	if (failed) {
-		free( bus->params );
-		free( bus );
-		return NULL;
-	}
+    if (failed)
+    {
+        free (bus->params);
+        free (bus);
+        return NULL;
+    }
 
-	return bus;
+    return bus;
 }
 
 /**
@@ -130,14 +138,16 @@ tx4925_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_params[] )
  *
  */
 static void
-tx4925_bus_printinfo( bus_t *bus )
+tx4925_bus_printinfo (bus_t * bus)
 {
-	int i;
+    int i;
 
-	for (i = 0; i < CHAIN->parts->len; i++)
-		if (PART == CHAIN->parts->parts[i])
-			break;
-	printf( _("Toshiba TX4925 compatible bus driver via BSR (JTAG part No. %d)\n"), i );
+    for (i = 0; i < CHAIN->parts->len; i++)
+        if (PART == CHAIN->parts->parts[i])
+            break;
+    printf (_
+            ("Toshiba TX4925 compatible bus driver via BSR (JTAG part No. %d)\n"),
+            i);
 }
 
 /**
@@ -145,75 +155,75 @@ tx4925_bus_printinfo( bus_t *bus )
  *
  */
 static int
-tx4925_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
+tx4925_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 {
-	area->description = NULL;
-	area->start = UINT32_C(0x00000000);
-	area->length = UINT64_C(0x100000000);
-	area->width = 16;
+    area->description = NULL;
+    area->start = UINT32_C (0x00000000);
+    area->length = UINT64_C (0x100000000);
+    area->width = 16;
 
-	return URJTAG_STATUS_OK;
+    return URJTAG_STATUS_OK;
 }
 
 static void
-select_flash( bus_t *bus )
+select_flash (bus_t * bus)
 {
-	part_t *p = PART;
+    part_t *p = PART;
 
-	part_set_signal( p, ROMCE[0], 1, 0 );
-	part_set_signal( p, ROMCE[1], 1, 1 );
-	part_set_signal( p, ROMCE[2], 1, 1 );
-	part_set_signal( p, ROMCE[3], 1, 1 );
-	part_set_signal( p, SDCS[0],  1, 1 );
-	part_set_signal( p, SDCS[1],  1, 1 );
-	part_set_signal( p, SDCS[2],  1, 1 );
-	part_set_signal( p, SDCS[3],  1, 1 );
+    part_set_signal (p, ROMCE[0], 1, 0);
+    part_set_signal (p, ROMCE[1], 1, 1);
+    part_set_signal (p, ROMCE[2], 1, 1);
+    part_set_signal (p, ROMCE[3], 1, 1);
+    part_set_signal (p, SDCS[0], 1, 1);
+    part_set_signal (p, SDCS[1], 1, 1);
+    part_set_signal (p, SDCS[2], 1, 1);
+    part_set_signal (p, SDCS[3], 1, 1);
 }
 
 static void
-unselect_flash( bus_t *bus )
+unselect_flash (bus_t * bus)
 {
-	part_t *p = PART;
+    part_t *p = PART;
 
-	part_set_signal( p, ROMCE[0], 1, 1 );
-	part_set_signal( p, ROMCE[1], 1, 1 );
-	part_set_signal( p, ROMCE[2], 1, 1 );
-	part_set_signal( p, ROMCE[3], 1, 1 );
-	part_set_signal( p, SDCS[0],  1, 1 );
-	part_set_signal( p, SDCS[1],  1, 1 );
-	part_set_signal( p, SDCS[2],  1, 1 );
-	part_set_signal( p, SDCS[3],  1, 1 );
+    part_set_signal (p, ROMCE[0], 1, 1);
+    part_set_signal (p, ROMCE[1], 1, 1);
+    part_set_signal (p, ROMCE[2], 1, 1);
+    part_set_signal (p, ROMCE[3], 1, 1);
+    part_set_signal (p, SDCS[0], 1, 1);
+    part_set_signal (p, SDCS[1], 1, 1);
+    part_set_signal (p, SDCS[2], 1, 1);
+    part_set_signal (p, SDCS[3], 1, 1);
 }
 
 static void
-setup_address( bus_t *bus, uint32_t a )
+setup_address (bus_t * bus, uint32_t a)
 {
-	int i;
-	part_t *p = PART;
-	int addr_shift = (TX4925_FLASH_CS_WIDTH / 2);
+    int i;
+    part_t *p = PART;
+    int addr_shift = (TX4925_FLASH_CS_WIDTH / 2);
 
-	for (i = 0; i < 20; i++)
-	  part_set_signal( p, ADDR[i], 1, (a >> (i+addr_shift)) & 1 );
+    for (i = 0; i < 20; i++)
+        part_set_signal (p, ADDR[i], 1, (a >> (i + addr_shift)) & 1);
 }
 
 static void
-set_data_in( bus_t *bus )
+set_data_in (bus_t * bus)
 {
-	int i;
-	part_t *p = PART;
+    int i;
+    part_t *p = PART;
 
-	for (i = 0; i < 16; i++)
-		part_set_signal( p, DATA[i], 0, 0 );
+    for (i = 0; i < 16; i++)
+        part_set_signal (p, DATA[i], 0, 0);
 }
 
 static void
-setup_data( bus_t *bus, uint32_t d )
+setup_data (bus_t * bus, uint32_t d)
 {
-	int i;
-	part_t *p = PART;
+    int i;
+    part_t *p = PART;
 
-	for (i = 0; i < 16; i++)
-		part_set_signal( p, DATA[i], 1, (d >> i) & 1 );
+    for (i = 0; i < 16; i++)
+        part_set_signal (p, DATA[i], 1, (d >> i) & 1);
 }
 
 /**
@@ -221,19 +231,19 @@ setup_data( bus_t *bus, uint32_t d )
  *
  */
 static void
-tx4925_bus_read_start( bus_t *bus, uint32_t adr )
+tx4925_bus_read_start (bus_t * bus, uint32_t adr)
 {
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
+    part_t *p = PART;
+    chain_t *chain = CHAIN;
 
-	select_flash( bus );
-	setup_address( bus, adr );
-	part_set_signal( p, OE, 1, 0 );
-	part_set_signal( p, SWE, 1, 1 );
+    select_flash (bus);
+    setup_address (bus, adr);
+    part_set_signal (p, OE, 1, 0);
+    part_set_signal (p, SWE, 1, 1);
 
-	set_data_in( bus );
+    set_data_in (bus);
 
-	chain_shift_data_registers( chain, 0 );
+    chain_shift_data_registers (chain, 0);
 }
 
 /**
@@ -241,20 +251,20 @@ tx4925_bus_read_start( bus_t *bus, uint32_t adr )
  *
  */
 static uint32_t
-tx4925_bus_read_next( bus_t *bus, uint32_t adr )
+tx4925_bus_read_next (bus_t * bus, uint32_t adr)
 {
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
+    part_t *p = PART;
+    chain_t *chain = CHAIN;
+    int i;
+    uint32_t d = 0;
 
-	setup_address( bus, adr );
-	chain_shift_data_registers( chain, 1 );
+    setup_address (bus, adr);
+    chain_shift_data_registers (chain, 1);
 
-	for (i = 0; i < 16; i++)
-		d |= (uint32_t) (part_get_signal( p, DATA[i] ) << i);
+    for (i = 0; i < 16; i++)
+        d |= (uint32_t) (part_get_signal (p, DATA[i]) << i);
 
-	return d;
+    return d;
 }
 
 /**
@@ -262,23 +272,23 @@ tx4925_bus_read_next( bus_t *bus, uint32_t adr )
  *
  */
 static uint32_t
-tx4925_bus_read_end( bus_t *bus )
+tx4925_bus_read_end (bus_t * bus)
 {
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
-	int i;
-	uint32_t d = 0;
+    part_t *p = PART;
+    chain_t *chain = CHAIN;
+    int i;
+    uint32_t d = 0;
 
-	unselect_flash( bus );
-	part_set_signal( p, OE, 1, 1 );
-	part_set_signal( p, SWE, 1, 1 );
+    unselect_flash (bus);
+    part_set_signal (p, OE, 1, 1);
+    part_set_signal (p, SWE, 1, 1);
 
-	chain_shift_data_registers( chain, 1 );
+    chain_shift_data_registers (chain, 1);
 
-	for (i = 0; i < 16; i++)
-		d |= (uint32_t) (part_get_signal( p, DATA[i] ) << i);
+    for (i = 0; i < 16; i++)
+        d |= (uint32_t) (part_get_signal (p, DATA[i]) << i);
 
-	return d;
+    return d;
 }
 
 /**
@@ -286,38 +296,38 @@ tx4925_bus_read_end( bus_t *bus )
  *
  */
 static void
-tx4925_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
+tx4925_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
 {
-	part_t *p = PART;
-	chain_t *chain = CHAIN;
+    part_t *p = PART;
+    chain_t *chain = CHAIN;
 
-	select_flash( bus );
-	part_set_signal( p, OE, 1, 1 );
+    select_flash (bus);
+    part_set_signal (p, OE, 1, 1);
 
-	setup_address( bus, adr );
-	setup_data( bus, data );
+    setup_address (bus, adr);
+    setup_data (bus, data);
 
-	chain_shift_data_registers( chain, 0 );
+    chain_shift_data_registers (chain, 0);
 
-	part_set_signal( p, SWE, 1, 0 );
-	chain_shift_data_registers( chain, 0 );
-	part_set_signal( p, SWE, 1, 1 );
-	unselect_flash( bus );
-	chain_shift_data_registers( chain, 0 );
+    part_set_signal (p, SWE, 1, 0);
+    chain_shift_data_registers (chain, 0);
+    part_set_signal (p, SWE, 1, 1);
+    unselect_flash (bus);
+    chain_shift_data_registers (chain, 0);
 }
 
 const bus_driver_t tx4925_bus = {
-	"tx4925",
-	N_("Toshiba TX4925 compatible bus driver via BSR"),
-	tx4925_bus_new,
-	generic_bus_free,
-	tx4925_bus_printinfo,
-	generic_bus_prepare_extest,
-	tx4925_bus_area,
-	tx4925_bus_read_start,
-	tx4925_bus_read_next,
-	tx4925_bus_read_end,
-	generic_bus_read,
-	tx4925_bus_write,
-	generic_bus_no_init
+    "tx4925",
+    N_("Toshiba TX4925 compatible bus driver via BSR"),
+    tx4925_bus_new,
+    generic_bus_free,
+    tx4925_bus_printinfo,
+    generic_bus_prepare_extest,
+    tx4925_bus_area,
+    tx4925_bus_read_start,
+    tx4925_bus_read_next,
+    tx4925_bus_read_end,
+    generic_bus_read,
+    tx4925_bus_write,
+    generic_bus_no_init
 };

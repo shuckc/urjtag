@@ -33,61 +33,64 @@
 #include <cmd.h>
 
 static int
-cmd_svf_run( chain_t *chain, char *params[] )
+cmd_svf_run (chain_t * chain, char *params[])
 {
-	FILE    *SVF_FILE;
-	int      num_params, i, result = -1;
-	int      stop = 0;
-	int      print_progress = 0;
-	uint32_t ref_freq = 0;
+    FILE *SVF_FILE;
+    int num_params, i, result = -1;
+    int stop = 0;
+    int print_progress = 0;
+    uint32_t ref_freq = 0;
 
-	num_params = cmd_params( params );
-	if (num_params > 1) {
-		for (i = 2; i < num_params; i++) {
-			if (strcasecmp(params[i], "stop") == 0)
-				stop = 1;
-			else if (strcasecmp(params[i], "progress") == 0)
-				print_progress = 1;
-			else if (strncasecmp(params[i], "ref_freq=", 9) == 0)
-				ref_freq = strtol(params[i]+9, NULL, 10);
-			else
-				return -1;
-		}
+    num_params = cmd_params (params);
+    if (num_params > 1)
+    {
+        for (i = 2; i < num_params; i++)
+        {
+            if (strcasecmp (params[i], "stop") == 0)
+                stop = 1;
+            else if (strcasecmp (params[i], "progress") == 0)
+                print_progress = 1;
+            else if (strncasecmp (params[i], "ref_freq=", 9) == 0)
+                ref_freq = strtol (params[i] + 9, NULL, 10);
+            else
+                return -1;
+        }
 
-		if ((SVF_FILE = fopen(params[1], "r")) != NULL) {
-			svf_run(chain, SVF_FILE, stop, print_progress, ref_freq);
-			result = 1;
+        if ((SVF_FILE = fopen (params[1], "r")) != NULL)
+        {
+            svf_run (chain, SVF_FILE, stop, print_progress, ref_freq);
+            result = 1;
 
-			fclose(SVF_FILE);
-		} else {
-			printf( _("%s: cannot open file '%s' for reading\n"), "svf", params[1] );
-		}
+            fclose (SVF_FILE);
+        }
+        else
+        {
+            printf (_("%s: cannot open file '%s' for reading\n"), "svf",
+                    params[1]);
+        }
 
-	}
+    }
 
-	return result;
+    return result;
 }
 
 
 static void
-cmd_svf_help( void )
+cmd_svf_help (void)
 {
-	printf( _(
-		"Usage: %s FILE [stop] [progress] [ref_freq=<frequency>]\n"
-		"Execute svf commands from FILE.\n"
-		"stop     : Command execution stops upon TDO mismatch.\n"
-		"progress : Continually displays progress status.\n"
-		"ref_freq : Use <frequency> as the reference for 'RUNTEST xxx SEC' commands\n"
-		"\n"
-		"FILE file containing SVF commands\n"
-	), "svf" );
+    printf (_("Usage: %s FILE [stop] [progress] [ref_freq=<frequency>]\n"
+              "Execute svf commands from FILE.\n"
+              "stop     : Command execution stops upon TDO mismatch.\n"
+              "progress : Continually displays progress status.\n"
+              "ref_freq : Use <frequency> as the reference for 'RUNTEST xxx SEC' commands\n"
+              "\n" "FILE file containing SVF commands\n"), "svf");
 }
 
 cmd_t cmd_svf = {
-	"svf",
-	N_("execute svf commands from file"),
-	cmd_svf_help,
-	cmd_svf_run
+    "svf",
+    N_("execute svf commands from file"),
+    cmd_svf_help,
+    cmd_svf_run
 };
 
 

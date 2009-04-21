@@ -30,40 +30,39 @@
 #include <cmd.h>
 
 static int
-cmd_detectflash_run( chain_t *chain, char *params[] )
+cmd_detectflash_run (chain_t * chain, char *params[])
 {
-	uint32_t adr;
+    uint32_t adr;
 
-	if (cmd_params( params ) != 2)
-		return -1;
+    if (cmd_params (params) != 2)
+        return -1;
 
-	if (!bus) {
-		printf( _("Error: Bus driver missing.\n") );
-		return 1;
-	}
+    if (!bus)
+    {
+        printf (_("Error: Bus driver missing.\n"));
+        return 1;
+    }
 
-	if (cmd_get_number( params[1], &adr ))
-		return -1;
+    if (cmd_get_number (params[1], &adr))
+        return -1;
 
-	detectflash( bus, adr );
+    detectflash (bus, adr);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_detectflash_help( void )
+cmd_detectflash_help (void)
 {
-	printf( _(
-		"Usage: %s ADDRESS\n"
-		"Detect flash memory type connected to a part.\n"
-		"\n"
-		"ADDRESS    Base address for memory region\n"
-	), "detectflash" );
+    printf (_("Usage: %s ADDRESS\n"
+              "Detect flash memory type connected to a part.\n"
+              "\n"
+              "ADDRESS    Base address for memory region\n"), "detectflash");
 }
 
 cmd_t cmd_detectflash = {
-	"detectflash",
-	N_("detect parameters of flash chips attached to a part"),
-	cmd_detectflash_help,
-	cmd_detectflash_run
+    "detectflash",
+    N_("detect parameters of flash chips attached to a part"),
+    cmd_detectflash_help,
+    cmd_detectflash_run
 };

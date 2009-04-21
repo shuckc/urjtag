@@ -28,9 +28,9 @@
 #include "cable.h"
 #include "usbconn.h"
 
-int generic_usbconn_connect( char *params[], cable_t *cable );
-void generic_usbconn_done( cable_t *cable );
-void generic_usbconn_help( const char *name );
-void generic_usbconn_free( cable_t *cable );
+int generic_usbconn_connect (char *params[], cable_t * cable);
+void generic_usbconn_done (cable_t * cable);
+void generic_usbconn_help (const char *name);
+void generic_usbconn_free (cable_t * cable);
 
 #endif /* GENERIC_H */

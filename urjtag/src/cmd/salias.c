@@ -33,67 +33,70 @@
 #include "cmd.h"
 
 static int
-cmd_salias_run( chain_t *chain, char *params[] )
+cmd_salias_run (chain_t * chain, char *params[])
 {
-	part_t *part;
-	signal_t *s;
-	salias_t *sa;
+    part_t *part;
+    signal_t *s;
+    salias_t *sa;
 
-	if (cmd_params( params ) != 3)
-		return -1;
+    if (cmd_params (params) != 3)
+        return -1;
 
-	if (!cmd_test_cable( chain ))
-		return 1;
+    if (!cmd_test_cable (chain))
+        return 1;
 
-	if (!chain->parts) {
-		printf( _("Run \"detect\" first.\n") );
-		return 1;
-	}
+    if (!chain->parts)
+    {
+        printf (_("Run \"detect\" first.\n"));
+        return 1;
+    }
 
-	if (chain->active_part >= chain->parts->len) {
-		printf( _("%s: no active part\n"), "signal" );
-		return 1;
-	}
+    if (chain->active_part >= chain->parts->len)
+    {
+        printf (_("%s: no active part\n"), "signal");
+        return 1;
+    }
 
-	part = chain->parts->parts[chain->active_part];
-	if (part_find_signal( part, params[1] ) != NULL) {
-		printf( _("Signal '%s' already defined\n"), params[1] );
-		return 1;
-	}
+    part = chain->parts->parts[chain->active_part];
+    if (part_find_signal (part, params[1]) != NULL)
+    {
+        printf (_("Signal '%s' already defined\n"), params[1]);
+        return 1;
+    }
 
-	s = part_find_signal( part, params[2] );
-	if (s == NULL) {
-		printf( _("Signal '%s' not found\n"), params[2] );
-		return 1;
-	}
+    s = part_find_signal (part, params[2]);
+    if (s == NULL)
+    {
+        printf (_("Signal '%s' not found\n"), params[2]);
+        return 1;
+    }
 
-	sa = salias_alloc( params[1], s );
-	if (!sa) {
-		printf( _("out of memory\n") );
-		return 1;
-	}
+    sa = salias_alloc (params[1], s);
+    if (!sa)
+    {
+        printf (_("out of memory\n"));
+        return 1;
+    }
 
-	sa->next = part->saliases;
-	part->saliases = sa;
+    sa->next = part->saliases;
+    part->saliases = sa;
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_salias_help( void )
+cmd_salias_help (void)
 {
-	printf( _(
-		"Usage: %s ALIAS SIGNAL\n"
-		"Define new signal ALIAS as alias for existing SIGNAL.\n"
-		"\n"
-		"ALIAS         New signal alias name\n"
-		"SIGNAL        Existing signal name\n"
-	), "signal" );
+    printf (_("Usage: %s ALIAS SIGNAL\n"
+              "Define new signal ALIAS as alias for existing SIGNAL.\n"
+              "\n"
+              "ALIAS         New signal alias name\n"
+              "SIGNAL        Existing signal name\n"), "signal");
 }
 
 const cmd_t cmd_salias = {
-	"salias",
-	N_("define an alias for a signal"),
-	cmd_salias_help,
-	cmd_salias_run
+    "salias",
+    N_("define an alias for a signal"),
+    cmd_salias_help,
+    cmd_salias_run
 };

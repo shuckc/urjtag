@@ -33,30 +33,32 @@
    the buffer can contain one or more commands if receive count
    is zero for all of them */
 typedef struct cx_cmd cx_cmd_t;
-struct cx_cmd {
-  cx_cmd_t *next;
-  uint32_t  buf_len;
-  uint32_t  buf_pos;
-  uint8_t  *buf;
-  uint32_t  to_recv;
+struct cx_cmd
+{
+    cx_cmd_t *next;
+    uint32_t buf_len;
+    uint32_t buf_pos;
+    uint8_t *buf;
+    uint32_t to_recv;
 };
 
-struct cx_cmd_root {
-  cx_cmd_t *first;
-  cx_cmd_t *last;
+struct cx_cmd_root
+{
+    cx_cmd_t *first;
+    cx_cmd_t *last;
 };
 typedef struct cx_cmd_root cx_cmd_root_t;
 
-int cx_cmd_space( cx_cmd_root_t *cmd_root, int max_len );
-int cx_cmd_push( cx_cmd_root_t *cmd_root, uint8_t d);
-cx_cmd_t *cx_cmd_dequeue( cx_cmd_root_t *cmd_root );
-void cx_cmd_free( cx_cmd_t *cmd );
-cx_cmd_t *cx_cmd_queue( cx_cmd_root_t *cmd_root, uint32_t to_recv );
-void cx_cmd_init( cx_cmd_root_t *cmd_root );
-void cx_cmd_deinit( cx_cmd_root_t *cmd_root );
+int cx_cmd_space (cx_cmd_root_t * cmd_root, int max_len);
+int cx_cmd_push (cx_cmd_root_t * cmd_root, uint8_t d);
+cx_cmd_t *cx_cmd_dequeue (cx_cmd_root_t * cmd_root);
+void cx_cmd_free (cx_cmd_t * cmd);
+cx_cmd_t *cx_cmd_queue (cx_cmd_root_t * cmd_root, uint32_t to_recv);
+void cx_cmd_init (cx_cmd_root_t * cmd_root);
+void cx_cmd_deinit (cx_cmd_root_t * cmd_root);
 
-void cx_xfer( cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
-              cable_t *cable, cable_flush_amount_t how_much );
-uint8_t cx_xfer_recv( cable_t *cable );
+void cx_xfer (cx_cmd_root_t * cmd_root, const cx_cmd_t * out_cmd,
+              cable_t * cable, cable_flush_amount_t how_much);
+uint8_t cx_xfer_recv (cable_t * cable);
 
 #endif /* CMD_XFER_H */

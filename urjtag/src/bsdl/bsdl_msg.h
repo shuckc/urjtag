@@ -33,6 +33,6 @@
 #define BSDL_MSG_ERR   2
 #define BSDL_MSG_FATAL 3
 
-void bsdl_msg( int, int, const char *, ... );
+void bsdl_msg (int, int, const char *, ...);
 
 #endif /* BSDL_MSG_H */

@@ -32,52 +32,53 @@
 #include "cmd.h"
 
 static int
-cmd_readmem_run( chain_t *chain, char *params[] )
+cmd_readmem_run (chain_t * chain, char *params[])
 {
-	uint32_t adr;
-	uint32_t len;
-	FILE *f;
+    uint32_t adr;
+    uint32_t len;
+    FILE *f;
 
-	if (cmd_params( params ) != 4)
-		return -1;
+    if (cmd_params (params) != 4)
+        return -1;
 
-	if (!bus) {
-		printf( _("Error: Bus driver missing.\n") );
-		return 1;
-	}
+    if (!bus)
+    {
+        printf (_("Error: Bus driver missing.\n"));
+        return 1;
+    }
 
-	if (cmd_get_number( params[1], &adr) || cmd_get_number( params[2], &len))
-		return -1;
+    if (cmd_get_number (params[1], &adr) || cmd_get_number (params[2], &len))
+        return -1;
 
-	f = fopen( params[3], "w" );
-	if (!f) {
-		printf( _("Unable to create file `%s'!\n"), params[3] );
-		return 1;
-	}
-	readmem( bus, f, adr, len );
-	fclose( f );
+    f = fopen (params[3], "w");
+    if (!f)
+    {
+        printf (_("Unable to create file `%s'!\n"), params[3]);
+        return 1;
+    }
+    readmem (bus, f, adr, len);
+    fclose (f);
 
-	return 1;
+    return 1;
 }
 
 static void
-cmd_readmem_help( void )
+cmd_readmem_help (void)
 {
-	printf( _(
-		"Usage: %s ADDR LEN FILENAME\n"
-		"Copy device memory content starting with ADDR to FILENAME file.\n"
-		"\n"
-		"ADDR       start address of the copied memory area\n"
-		"LEN        copied memory length\n"
-		"FILENAME   name of the output file\n"
-		"\n"
-		"ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-	), "readmem" );
+    printf (_("Usage: %s ADDR LEN FILENAME\n"
+              "Copy device memory content starting with ADDR to FILENAME file.\n"
+              "\n"
+              "ADDR       start address of the copied memory area\n"
+              "LEN        copied memory length\n"
+              "FILENAME   name of the output file\n"
+              "\n"
+              "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"),
+            "readmem");
 }
 
 cmd_t cmd_readmem = {
-	"readmem",
-	N_("read content of the memory and write it to file"),
-	cmd_readmem_help,
-	cmd_readmem_run
+    "readmem",
+    N_("read content of the memory and write it to file"),
+    cmd_readmem_help,
+    cmd_readmem_run
 };

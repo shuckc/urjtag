@@ -65,11 +65,12 @@
 #define	ALT_VENDOR_TABLE_ADR_OFFSET	0x19
 
 #ifndef __ASSEMBLY__
-typedef struct cfi_query_identification_string {
-	uint16_t pri_id_code;
-	void *pri_vendor_tbl;
-	uint16_t alt_id_code;
-	void *alt_vendor_tbl;
+typedef struct cfi_query_identification_string
+{
+    uint16_t pri_id_code;
+    void *pri_vendor_tbl;
+    uint16_t alt_id_code;
+    void *alt_vendor_tbl;
 } cfi_query_identification_string_t;
 #endif /* __ASSEMBLY__ */
 
@@ -86,58 +87,61 @@ typedef struct cfi_query_identification_string {
 
 /* Query system interface information - see 4.3.3 in [1] */
 
-#define	VCC_MIN_WEV_OFFSET		0x1B		/* Vcc Logic Supply Minimum Write/Erase voltage */
-#define	VCC_MAX_WEV_OFFSET		0x1C		/* Vcc Logic Supply Maximum Write/Erase voltage */
-#define	VPP_MIN_WEV_OFFSET		0x1D		/* Vpp [Programming] Supply Minimum Write/Erase voltage */
-#define	VPP_MAX_WEV_OFFSET		0x1E		/* Vpp [Programming] Supply Maximum Write/Erase voltage */
-#define	TYP_SINGLE_WRITE_TIMEOUT_OFFSET	0x1F		/* Typical timeout per single byte/word write */
-#define	TYP_BUFFER_WRITE_TIMEOUT_OFFSET	0x20		/* Typical timeout for minimum-size buffer write */
-#define	TYP_BLOCK_ERASE_TIMEOUT_OFFSET	0x21		/* Typical timeout per individual block erase */
-#define	TYP_CHIP_ERASE_TIMEOUT_OFFSET	0x22		/* Typical timeout for full chip erase */
-#define	MAX_SINGLE_WRITE_TIMEOUT_OFFSET	0x23		/* Maximum timeout for byte/word write */
-#define	MAX_BUFFER_WRITE_TIMEOUT_OFFSET	0x24		/* Maximum timeout for buffer write */
-#define	MAX_BLOCK_ERASE_TIMEOUT_OFFSET	0x25		/* Maximum timeout per individual block erase */
-#define	MAX_CHIP_ERASE_TIMEOUT_OFFSET	0x26		/* Maximum timeout for chip erase */
+#define	VCC_MIN_WEV_OFFSET		0x1B    /* Vcc Logic Supply Minimum Write/Erase voltage */
+#define	VCC_MAX_WEV_OFFSET		0x1C    /* Vcc Logic Supply Maximum Write/Erase voltage */
+#define	VPP_MIN_WEV_OFFSET		0x1D    /* Vpp [Programming] Supply Minimum Write/Erase voltage */
+#define	VPP_MAX_WEV_OFFSET		0x1E    /* Vpp [Programming] Supply Maximum Write/Erase voltage */
+#define	TYP_SINGLE_WRITE_TIMEOUT_OFFSET	0x1F    /* Typical timeout per single byte/word write */
+#define	TYP_BUFFER_WRITE_TIMEOUT_OFFSET	0x20    /* Typical timeout for minimum-size buffer write */
+#define	TYP_BLOCK_ERASE_TIMEOUT_OFFSET	0x21    /* Typical timeout per individual block erase */
+#define	TYP_CHIP_ERASE_TIMEOUT_OFFSET	0x22    /* Typical timeout for full chip erase */
+#define	MAX_SINGLE_WRITE_TIMEOUT_OFFSET	0x23    /* Maximum timeout for byte/word write */
+#define	MAX_BUFFER_WRITE_TIMEOUT_OFFSET	0x24    /* Maximum timeout for buffer write */
+#define	MAX_BLOCK_ERASE_TIMEOUT_OFFSET	0x25    /* Maximum timeout per individual block erase */
+#define	MAX_CHIP_ERASE_TIMEOUT_OFFSET	0x26    /* Maximum timeout for chip erase */
 
 #ifndef __ASSEMBLY__
-typedef struct cfi_query_system_interface_information {
-	uint16_t vcc_min_wev;				/* in mV */
-	uint16_t vcc_max_wev;				/* in mV */
-	uint16_t vpp_min_wev;				/* in mV, 0 - no Vpp pin is present */
-	uint16_t vpp_max_wev;				/* in mV, 0 - no Vpp pin is present */
-	uint32_t typ_single_write_timeout;		/* in us, 0 - not supported */
-	uint32_t typ_buffer_write_timeout;		/* in us, 0 - not supported */
-	uint32_t typ_block_erase_timeout;		/* in ms, 0 - not supported */
-	uint32_t typ_chip_erase_timeout;		/* in ms, 0 - not supported */
-	uint32_t max_single_write_timeout;		/* in us, 0 - not supported */
-	uint32_t max_buffer_write_timeout;		/* in us, 0 - not supported */
-	uint32_t max_block_erase_timeout;		/* in ms, 0 - not supported */
-	uint32_t max_chip_erase_timeout;		/* in ms, 0 - not supported */
+typedef struct cfi_query_system_interface_information
+{
+    uint16_t vcc_min_wev;       /* in mV */
+    uint16_t vcc_max_wev;       /* in mV */
+    uint16_t vpp_min_wev;       /* in mV, 0 - no Vpp pin is present */
+    uint16_t vpp_max_wev;       /* in mV, 0 - no Vpp pin is present */
+    uint32_t typ_single_write_timeout;  /* in us, 0 - not supported */
+    uint32_t typ_buffer_write_timeout;  /* in us, 0 - not supported */
+    uint32_t typ_block_erase_timeout;   /* in ms, 0 - not supported */
+    uint32_t typ_chip_erase_timeout;    /* in ms, 0 - not supported */
+    uint32_t max_single_write_timeout;  /* in us, 0 - not supported */
+    uint32_t max_buffer_write_timeout;  /* in us, 0 - not supported */
+    uint32_t max_block_erase_timeout;   /* in ms, 0 - not supported */
+    uint32_t max_chip_erase_timeout;    /* in ms, 0 - not supported */
 } cfi_query_system_interface_information_t;
 #endif /* __ASSEMBLY__ */
 
 /* Device geometry definition - see 4.3.4 in [1] */
 
-#define	DEVICE_SIZE_OFFSET		0x27		/* Device Size */
-#define	FLASH_DEVICE_INTERFACE_OFFSET	0x28		/* Flash Device Interface description */
-#define	MAX_BYTES_WRITE_OFFSET		0x2A		/* Maximum number of bytes in multi-byte write */
-#define	NUMBER_OF_ERASE_REGIONS_OFFSET	0x2C		/* Number of Erase Block Regions */
-#define	ERASE_BLOCK_REGION_OFFSET	0x2D		/* Erase Block Region Information */
+#define	DEVICE_SIZE_OFFSET		0x27    /* Device Size */
+#define	FLASH_DEVICE_INTERFACE_OFFSET	0x28    /* Flash Device Interface description */
+#define	MAX_BYTES_WRITE_OFFSET		0x2A    /* Maximum number of bytes in multi-byte write */
+#define	NUMBER_OF_ERASE_REGIONS_OFFSET	0x2C    /* Number of Erase Block Regions */
+#define	ERASE_BLOCK_REGION_OFFSET	0x2D    /* Erase Block Region Information */
 
 #ifndef __ASSEMBLY__
 typedef struct cfi_erase_block_region cfi_erase_block_region_t;
 
-typedef struct cfi_device_geometry {
-	uint32_t device_size;				/* in B */
-	uint16_t device_interface;			/* see Table 2 in [2] */
-	uint32_t max_bytes_write;			/* in B */
-	uint8_t number_of_erase_regions;
-	cfi_erase_block_region_t *erase_block_regions;
+typedef struct cfi_device_geometry
+{
+    uint32_t device_size;       /* in B */
+    uint16_t device_interface;  /* see Table 2 in [2] */
+    uint32_t max_bytes_write;   /* in B */
+    uint8_t number_of_erase_regions;
+    cfi_erase_block_region_t *erase_block_regions;
 } cfi_device_geometry_t;
 
-struct cfi_erase_block_region {
-	uint32_t erase_block_size;			/* in B */
-	uint32_t number_of_erase_blocks;
+struct cfi_erase_block_region
+{
+    uint32_t erase_block_size;  /* in B */
+    uint32_t number_of_erase_blocks;
 };
 #endif /* __ASSEMBLY__ */
 
@@ -152,10 +156,11 @@ struct cfi_erase_block_region {
 /* CFI Query structure - see 4.3.1 in [1] */
 
 #ifndef __ASSEMBLY__
-typedef struct cfi_query_structure {
-	cfi_query_identification_string_t identification_string;
-	cfi_query_system_interface_information_t system_interface_info;
-	cfi_device_geometry_t device_geometry;
+typedef struct cfi_query_structure
+{
+    cfi_query_identification_string_t identification_string;
+    cfi_query_system_interface_information_t system_interface_info;
+    cfi_device_geometry_t device_geometry;
 } cfi_query_structure_t;
 #endif /* __ASSEMBLY__ */
 
@@ -184,29 +189,30 @@ typedef struct cfi_query_structure {
 #define BANK_REGION_INFO_OFFSET			0X18
 
 #ifndef __ASSEMBLY__
-typedef struct amd_pri_extened_query_structure {
-	uint8_t major_version;
-	uint8_t minor_version;
-	uint8_t address_sensitive_unlock;
-	uint8_t erase_suspend;
-	uint8_t sector_protect;
-	uint8_t sector_temporary_unprotect;
-	uint8_t sector_protect_scheme;
-	uint8_t simultaneous_operation;
-	uint8_t burst_mode_type;
-	uint8_t page_mode_type;
-	uint16_t acc_min;			/* in mV */
-	uint16_t acc_max;			/* in mV */
-	uint8_t top_bottom_sector_flag;
-	uint8_t program_suspend;
-	uint8_t unlock_bypass;
-	uint8_t secsi_sector_size;
-	uint8_t embedded_hwrst_timeout_max;
-	uint8_t non_embedded_hwrst_timeout_max;	/* in ns */
-	uint8_t erase_suspend_timeout_max;	/* in ns */
-	uint8_t program_suspend_timeout_max;	/* in us */
-	uint8_t bank_organization;		/* in us */
-	uint8_t bank_region_info[0];
+typedef struct amd_pri_extened_query_structure
+{
+    uint8_t major_version;
+    uint8_t minor_version;
+    uint8_t address_sensitive_unlock;
+    uint8_t erase_suspend;
+    uint8_t sector_protect;
+    uint8_t sector_temporary_unprotect;
+    uint8_t sector_protect_scheme;
+    uint8_t simultaneous_operation;
+    uint8_t burst_mode_type;
+    uint8_t page_mode_type;
+    uint16_t acc_min;           /* in mV */
+    uint16_t acc_max;           /* in mV */
+    uint8_t top_bottom_sector_flag;
+    uint8_t program_suspend;
+    uint8_t unlock_bypass;
+    uint8_t secsi_sector_size;
+    uint8_t embedded_hwrst_timeout_max;
+    uint8_t non_embedded_hwrst_timeout_max;     /* in ns */
+    uint8_t erase_suspend_timeout_max;  /* in ns */
+    uint8_t program_suspend_timeout_max;        /* in us */
+    uint8_t bank_organization;  /* in us */
+    uint8_t bank_region_info[0];
 } amd_pri_extened_query_structure_t;
 #endif /* __ASSEMBLY__ */
 

@@ -35,35 +35,31 @@
 #include "cmd.h"
 
 static int
-cmd_debug_run( chain_t *chain, char *params[] )
+cmd_debug_run (chain_t * chain, char *params[])
 {
-	unsigned int i;
+    unsigned int i;
 
-	if (cmd_params( params ) != 2)
-		return -1;
+    if (cmd_params (params) != 2)
+        return -1;
 
-	if (cmd_get_number( params[1], &i ))
-                return 1;
+    if (cmd_get_number (params[1], &i))
+        return 1;
 
-	debug_mode = i;
-	return 1;
+    debug_mode = i;
+    return 1;
 }
 
 static void
-cmd_debug_help( void )
+cmd_debug_help (void)
 {
-	printf( _(
-		"Usage: %s  n\n"
-		"Enabled debugging.\n"
-		"\n"
-		"n =1 fileio, 2=tap commands, 4 =?\n"
-	), "debug n" );
+    printf (_("Usage: %s  n\n"
+              "Enabled debugging.\n"
+              "\n" "n =1 fileio, 2=tap commands, 4 =?\n"), "debug n");
 }
 
 cmd_t cmd_debug = {
-	"debug",
-	N_("debug jtag program"),
-	cmd_debug_help,
-	cmd_debug_run
+    "debug",
+    N_("debug jtag program"),
+    cmd_debug_help,
+    cmd_debug_run
 };
-

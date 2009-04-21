@@ -36,19 +36,20 @@
 
 #include "chain.h"
 
-typedef struct {
-	char *name;
-	char *desc;
-	void (*help)( void );
-	int (*run)( chain_t *chain, char *params[] );
+typedef struct
+{
+    char *name;
+    char *desc;
+    void (*help) (void);
+    int (*run) (chain_t * chain, char *params[]);
 } cmd_t;
 
 extern const cmd_t *cmds[];
 
-char **cmd_completion( const char *text, int start, int end );
-int cmd_run( chain_t *chain, char *params[] );
-int cmd_params( char *params[] );
-int cmd_get_number( char *s, unsigned int *i );
-int cmd_test_cable( chain_t *chain );
+char **cmd_completion (const char *text, int start, int end);
+int cmd_run (chain_t * chain, char *params[]);
+int cmd_params (char *params[]);
+int cmd_get_number (char *s, unsigned int *i);
+int cmd_test_cable (chain_t * chain);
 
 #endif /* CMD_H */
