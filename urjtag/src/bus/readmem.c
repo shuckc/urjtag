@@ -32,9 +32,11 @@
 
 #include <stdint.h>
 #include <string.h>
+#ifdef UNUSED           /* RFHH */
 #include <flash/cfi.h>
 #include <flash/intel.h>
 #include <flash/mic.h>
+#endif
 
 #include "bus.h"
 #include "flash.h"

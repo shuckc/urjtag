@@ -110,7 +110,7 @@ jedec_exp_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
             {
                 int det_addroffset;
                 uint32_t dmask =
-                    bits (det_dataoffset, det_datawidth + det_dataoffset - 1);
+                    URJ_BITS (det_dataoffset, det_datawidth + det_dataoffset - 1);
                 uint32_t pata = ~dmask | (0xAA << det_dataoffset);
                 uint32_t patb = ~dmask | (0x55 << det_dataoffset);
                 uint32_t dcmd = ~dmask | (0x90 << det_dataoffset);

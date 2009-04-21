@@ -64,14 +64,14 @@
 
 /* Intel CFI Status Register bits - see Table 6. in [1] and Table 7. in [2] */
 
-#define	CFI_INTEL_SR_READY			bit(7)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
-#define	CFI_INTEL_SR_ERASE_SUSPEND		bit(6)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
-#define	CFI_INTEL_SR_ERASE_ERROR		bit(5)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
-#define	CFI_INTEL_SR_PROGRAM_ERROR		bit(4)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
-#define	CFI_INTEL_SR_VPEN_ERROR			bit(3)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
-#define	CFI_INTEL_SR_PROGRAM_SUSPEND		bit(2)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
-#define	CFI_INTEL_SR_BLOCK_LOCKED		bit(1)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
-#define	CFI_INTEL_SR_BEFP			bit(0)  /* 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_SR_READY			URJ_BIT (7)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_SR_ERASE_SUSPEND		URJ_BIT (6)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_SR_ERASE_ERROR		URJ_BIT (5)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_SR_PROGRAM_ERROR		URJ_BIT (4)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_SR_VPEN_ERROR			URJ_BIT (3)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_SR_PROGRAM_SUSPEND		URJ_BIT (2)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_SR_BLOCK_LOCKED		URJ_BIT (1)  /* 28FxxxJ3A, 28FxxxK3, 28FxxxK18 */
+#define	CFI_INTEL_SR_BEFP			URJ_BIT (0)  /* 28FxxxK3, 28FxxxK18 */
 
 /* Intel flash device ID codes for 28FxxxJ3A - see Table 5. in [1] */
 

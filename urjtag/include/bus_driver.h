@@ -83,15 +83,15 @@ extern bus_t *bus;
 #define PART			bus->part
 #define INITIALIZED		bus->initialized
 
-#define	bus_printinfo(bus)	bus->driver->printinfo(bus)
-#define	bus_prepare(bus)	bus->driver->prepare(bus)
-#define	bus_area(bus,adr,a)	bus->driver->area(bus,adr,a)
-#define	bus_read_start(bus,adr)	bus->driver->read_start(bus,adr)
-#define	bus_read_next(bus,adr)	bus->driver->read_next(bus,adr)
-#define	bus_read_end(bus)	bus->driver->read_end(bus)
-#define	bus_read(bus,adr)	bus->driver->read(bus,adr)
-#define	bus_write(bus,adr,data)	bus->driver->write(bus,adr,data)
-#define	bus_free(bus)		bus->driver->free_bus(bus)
-#define	bus_init(bus)		bus->driver->init(bus)
+#define	bus_printinfo(bus)	(bus)->driver->printinfo(bus)
+#define	bus_prepare(bus)	(bus)->driver->prepare(bus)
+#define	bus_area(bus,adr,a)	(bus)->driver->area(bus,adr,a)
+#define	bus_read_start(bus,adr)	(bus)->driver->read_start(bus,adr)
+#define	bus_read_next(bus,adr)	(bus)->driver->read_next(bus,adr)
+#define	bus_read_end(bus)	(bus)->driver->read_end(bus)
+#define	bus_read(bus,adr)	(bus)->driver->read(bus,adr)
+#define	bus_write(bus,adr,data)	(bus)->driver->write(bus,adr,data)
+#define	bus_free(bus)		(bus)->driver->free_bus(bus)
+#define	bus_init(bus)		(bus)->driver->init(bus)
 
 #endif /* BRUX_BUS_H */
