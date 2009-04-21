@@ -51,7 +51,7 @@ chain_alloc (void)
 }
 
 void
-chain_free (chain_t * chain)
+chain_free (chain_t *chain)
 {
     if (!chain)
         return;
@@ -63,7 +63,7 @@ chain_free (chain_t * chain)
 }
 
 void
-chain_disconnect (chain_t * chain)
+chain_disconnect (chain_t *chain)
 {
     if (!chain->cable)
         return;
@@ -75,7 +75,7 @@ chain_disconnect (chain_t * chain)
 }
 
 void
-chain_clock (chain_t * chain, int tms, int tdi, int n)
+chain_clock (chain_t *chain, int tms, int tdi, int n)
 {
     int i;
 
@@ -89,7 +89,7 @@ chain_clock (chain_t * chain, int tms, int tdi, int n)
 }
 
 void
-chain_defer_clock (chain_t * chain, int tms, int tdi, int n)
+chain_defer_clock (chain_t *chain, int tms, int tdi, int n)
 {
     int i;
 
@@ -103,7 +103,7 @@ chain_defer_clock (chain_t * chain, int tms, int tdi, int n)
 }
 
 int
-chain_set_trst (chain_t * chain, int trst)
+chain_set_trst (chain_t *chain, int trst)
 {
     int old_val =
         cable_set_signal (chain->cable, CS_TRST, trst ? CS_TRST : 0);
@@ -113,13 +113,13 @@ chain_set_trst (chain_t * chain, int trst)
 }
 
 int
-chain_get_trst (chain_t * chain)
+chain_get_trst (chain_t *chain)
 {
     return (cable_get_signal (chain->cable, CS_TRST));
 }
 
 int
-chain_set_pod_signal (chain_t * chain, int mask, int val)
+chain_set_pod_signal (chain_t *chain, int mask, int val)
 {
     int old_val = cable_set_signal (chain->cable, mask, val);
     int old_trst = (old_val & CS_TRST) ? 1 : 0;
@@ -129,13 +129,13 @@ chain_set_pod_signal (chain_t * chain, int mask, int val)
 }
 
 int
-chain_get_pod_signal (chain_t * chain, pod_sigsel_t sig)
+chain_get_pod_signal (chain_t *chain, pod_sigsel_t sig)
 {
     return (cable_get_signal (chain->cable, sig));
 }
 
 void
-chain_shift_instructions_mode (chain_t * chain, int capture_output,
+chain_shift_instructions_mode (chain_t *chain, int capture_output,
                                int capture, int chain_exit)
 {
     int i;
@@ -192,13 +192,13 @@ chain_shift_instructions_mode (chain_t * chain, int capture_output,
 }
 
 void
-chain_shift_instructions (chain_t * chain)
+chain_shift_instructions (chain_t *chain)
 {
     chain_shift_instructions_mode (chain, 0, 1, EXITMODE_IDLE);
 }
 
 void
-chain_shift_data_registers_mode (chain_t * chain, int capture_output,
+chain_shift_data_registers_mode (chain_t *chain, int capture_output,
                                  int capture, int chain_exit)
 {
     int i;
@@ -264,13 +264,13 @@ chain_shift_data_registers_mode (chain_t * chain, int capture_output,
 }
 
 void
-chain_shift_data_registers (chain_t * chain, int capture_output)
+chain_shift_data_registers (chain_t *chain, int capture_output)
 {
     chain_shift_data_registers_mode (chain, capture_output, 1, EXITMODE_IDLE);
 }
 
 void
-chain_flush (chain_t * chain)
+chain_flush (chain_t *chain)
 {
     if (chain->cable != NULL)
         cable_flush (chain->cable, COMPLETELY);

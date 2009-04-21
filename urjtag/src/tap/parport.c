@@ -47,37 +47,37 @@ parport_driver_t *parport_drivers[] = {
 
 
 int
-parport_open (parport_t * port)
+parport_open (parport_t *port)
 {
     return port->driver->open (port);
 }
 
 int
-parport_close (parport_t * port)
+parport_close (parport_t *port)
 {
     return port->driver->close (port);
 }
 
 int
-parport_set_data (parport_t * port, uint8_t data)
+parport_set_data (parport_t *port, uint8_t data)
 {
     return port->driver->set_data (port, data);
 }
 
 int
-parport_get_data (parport_t * port)
+parport_get_data (parport_t *port)
 {
     return port->driver->get_data (port);
 }
 
 int
-parport_get_status (parport_t * port)
+parport_get_status (parport_t *port)
 {
     return port->driver->get_status (port);
 }
 
 int
-parport_set_control (parport_t * port, uint8_t data)
+parport_set_control (parport_t *port, uint8_t data)
 {
     return port->driver->set_control (port, data);
 }

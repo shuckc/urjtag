@@ -89,7 +89,7 @@ ppi_parport_alloc (const char *port)
 }
 
 static void
-ppi_parport_free (parport_t * port)
+ppi_parport_free (parport_t *port)
 {
     port_node_t **prev;
 
@@ -143,7 +143,7 @@ ppi_connect (const char **par, int parnum)
 }
 
 static int
-ppi_open (parport_t * parport)
+ppi_open (parport_t *parport)
 {
     ppi_params_t *p = parport->params;
 
@@ -155,7 +155,7 @@ ppi_open (parport_t * parport)
 }
 
 static int
-ppi_close (parport_t * parport)
+ppi_close (parport_t *parport)
 {
     int r = 0;
     ppi_params_t *p = parport->params;
@@ -168,7 +168,7 @@ ppi_close (parport_t * parport)
 }
 
 static int
-ppi_set_data (parport_t * parport, uint8_t data)
+ppi_set_data (parport_t *parport, uint8_t data)
 {
     ppi_params_t *p = parport->params;
 
@@ -179,7 +179,7 @@ ppi_set_data (parport_t * parport, uint8_t data)
 }
 
 static int
-ppi_get_data (parport_t * parport)
+ppi_get_data (parport_t *parport)
 {
     unsigned char d;
     ppi_params_t *p = parport->params;
@@ -191,7 +191,7 @@ ppi_get_data (parport_t * parport)
 }
 
 static int
-ppi_get_status (parport_t * parport)
+ppi_get_status (parport_t *parport)
 {
     unsigned char d;
     ppi_params_t *p = parport->params;
@@ -203,7 +203,7 @@ ppi_get_status (parport_t * parport)
 }
 
 static int
-ppi_set_control (parport_t * parport, uint8_t data)
+ppi_set_control (parport_t *parport, uint8_t data)
 {
     ppi_params_t *p = parport->params;
 

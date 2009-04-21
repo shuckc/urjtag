@@ -32,7 +32,7 @@
 #include "cmd.h"
 
 static int
-cmd_addpart_run (chain_t * chain, char *params[])
+cmd_addpart_run (chain_t *chain, char *params[])
 {
     unsigned int len;
 

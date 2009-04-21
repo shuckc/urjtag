@@ -64,7 +64,7 @@
 #define	TRST	0
 
 static int
-keithkoep_init (cable_t * cable)
+keithkoep_init (cable_t *cable)
 {
     if (parport_open (cable->link.port))
         return -1;
@@ -76,7 +76,7 @@ keithkoep_init (cable_t * cable)
 }
 
 static void
-keithkoep_clock (cable_t * cable, int tms, int tdi, int n)
+keithkoep_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
 
@@ -100,7 +100,7 @@ keithkoep_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-keithkoep_get_tdo (cable_t * cable)
+keithkoep_get_tdo (cable_t *cable)
 {
     parport_set_data (cable->link.port, 0 << TCK);
     PARAM_SIGNALS (cable) &= ~(CS_TDI | CS_TCK | CS_TMS);
@@ -111,7 +111,7 @@ keithkoep_get_tdo (cable_t * cable)
 }
 
 static int
-keithkoep_set_signal (cable_t * cable, int mask, int val)
+keithkoep_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

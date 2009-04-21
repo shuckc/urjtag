@@ -34,7 +34,7 @@
 #include "cmd.h"
 
 static int
-cmd_eraseflash_run (chain_t * chain, char *params[])
+cmd_eraseflash_run (chain_t *chain, char *params[])
 {
     uint32_t adr = 0;
     unsigned int number = 0;

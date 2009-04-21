@@ -39,7 +39,7 @@
 #include <bus.h>
 
 void
-cfi_array_free (cfi_array_t * cfi_array)
+cfi_array_free (cfi_array_t *cfi_array)
 {
     if (!cfi_array)
         return;
@@ -68,7 +68,7 @@ cfi_array_free (cfi_array_t * cfi_array)
 }
 
 int
-cfi_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array)
+cfi_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
 {
     unsigned int bw;            /* bus width */
     unsigned int d;             /* data offset */

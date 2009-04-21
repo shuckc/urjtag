@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_part_run (chain_t * chain, char *params[])
+cmd_part_run (chain_t *chain, char *params[])
 {
     unsigned int n;
 

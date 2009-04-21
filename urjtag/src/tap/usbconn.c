@@ -56,19 +56,19 @@ usbconn_driver_t *usbconn_drivers[] = {
 };
 
 int
-usbconn_open (usbconn_t * conn)
+usbconn_open (usbconn_t *conn)
 {
     return conn->driver->open (conn);
 }
 
 int
-usbconn_close (usbconn_t * conn)
+usbconn_close (usbconn_t *conn)
 {
     return conn->driver->close (conn);
 }
 
 int
-usbconn_read (usbconn_t * conn, uint8_t * buf, int len)
+usbconn_read (usbconn_t *conn, uint8_t *buf, int len)
 {
     if (conn->driver->read)
         return conn->driver->read (conn, buf, len);
@@ -77,7 +77,7 @@ usbconn_read (usbconn_t * conn, uint8_t * buf, int len)
 }
 
 int
-usbconn_write (usbconn_t * conn, uint8_t * buf, int len, int recv)
+usbconn_write (usbconn_t *conn, uint8_t *buf, int len, int recv)
 {
     if (conn->driver->write)
         return conn->driver->write (conn, buf, len, recv);

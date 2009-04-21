@@ -111,7 +111,7 @@ libusb_match_desc (struct usb_device *dev, char *desc)
 
 usbconn_t *
 usbconn_libusb_connect (const char **param, int paramc,
-                        usbconn_cable_t * template)
+                        usbconn_cable_t *template)
 {
     struct usb_bus *bus;
     struct usb_device *found_dev = NULL;
@@ -179,7 +179,7 @@ usbconn_libusb_connect (const char **param, int paramc,
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_libusb_open (usbconn_t * conn)
+usbconn_libusb_open (usbconn_t *conn)
 {
     libusb_param_t *p = conn->params;
 
@@ -220,7 +220,7 @@ usbconn_libusb_open (usbconn_t * conn)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_libusb_close (usbconn_t * conn)
+usbconn_libusb_close (usbconn_t *conn)
 {
     libusb_param_t *p = conn->params;
     if (p->handle != NULL)
@@ -235,7 +235,7 @@ usbconn_libusb_close (usbconn_t * conn)
 /* ---------------------------------------------------------------------- */
 
 static void
-usbconn_libusb_free (usbconn_t * conn)
+usbconn_libusb_free (usbconn_t *conn)
 {
     free (conn->params);
     free (conn);

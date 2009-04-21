@@ -44,7 +44,7 @@ typedef char wchar_t;
 #include "cmd.h"
 
 static int
-cmd_print_run (chain_t * chain, char *params[])
+cmd_print_run (chain_t *chain, char *params[])
 {
     char format[128];
 #if HAVE_SWPRINTF

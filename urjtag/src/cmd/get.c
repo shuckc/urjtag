@@ -34,7 +34,7 @@
 #include "cmd.h"
 
 static int
-cmd_get_run (chain_t * chain, char *params[])
+cmd_get_run (chain_t *chain, char *params[])
 {
     int data;
     signal_t *s;

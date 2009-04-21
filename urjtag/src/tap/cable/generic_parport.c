@@ -49,7 +49,7 @@ print_vector (int len, char *vec)
 #endif
 
 int
-generic_parport_connect (char *params[], cable_t * cable)
+generic_parport_connect (char *params[], cable_t *cable)
 {
     generic_params_t *cable_params;
     parport_t *port;
@@ -97,7 +97,7 @@ generic_parport_connect (char *params[], cable_t * cable)
 }
 
 void
-generic_parport_free (cable_t * cable)
+generic_parport_free (cable_t *cable)
 {
     cable->link.port->driver->parport_free (cable->link.port);
     free (cable->params);
@@ -105,7 +105,7 @@ generic_parport_free (cable_t * cable)
 }
 
 void
-generic_parport_done (cable_t * cable)
+generic_parport_done (cable_t *cable)
 {
     parport_close (cable->link.port);
 }

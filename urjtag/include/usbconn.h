@@ -61,11 +61,11 @@ struct usbconn_t
 };
 
 usbconn_t *usbconn_connect (const char **, int, usbconn_cable_t *);
-int usbconn_free (usbconn_t * conn);
-int usbconn_open (usbconn_t * conn);
-int usbconn_close (usbconn_t * conn);
-int usbconn_read (usbconn_t * conn, uint8_t * buf, int len);
-int usbconn_write (usbconn_t * conn, uint8_t * buf, int len, int recv);
+int usbconn_free (usbconn_t *conn);
+int usbconn_open (usbconn_t *conn);
+int usbconn_close (usbconn_t *conn);
+int usbconn_read (usbconn_t *conn, uint8_t *buf, int len);
+int usbconn_write (usbconn_t *conn, uint8_t *buf, int len, int recv);
 extern usbconn_driver_t *usbconn_drivers[];
 
 #endif /* USBCONN_H */

@@ -103,7 +103,7 @@ typedef struct
  *
  */
 static bus_t *
-s3c4510_bus_new (chain_t * chain, const bus_driver_t * driver,
+s3c4510_bus_new (chain_t *chain, const bus_driver_t *driver,
                  char *cmd_params[])
 {
     bus_t *bus;
@@ -182,7 +182,7 @@ s3c4510_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-s3c4510_bus_printinfo (bus_t * bus)
+s3c4510_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -199,7 +199,7 @@ s3c4510_bus_printinfo (bus_t * bus)
  *
  */
 static int
-s3c4510_bus_init (bus_t * bus)
+s3c4510_bus_init (bus_t *bus)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -227,7 +227,7 @@ s3c4510_bus_init (bus_t * bus)
  *
  */
 static int
-s3c4510_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+s3c4510_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     int b0size0, b0size1;       // , endian;
 
@@ -258,7 +258,7 @@ s3c4510_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static void
-s3c4510_bus_setup_ctrl (bus_t * bus, int mode)
+s3c4510_bus_setup_ctrl (bus_t *bus, int mode)
 {
     int k;
     part_t *p = PART;
@@ -279,7 +279,7 @@ s3c4510_bus_setup_ctrl (bus_t * bus, int mode)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a)
+setup_address (bus_t *bus, uint32_t a)
 {
     int i, so;
     part_t *p = PART;
@@ -302,7 +302,7 @@ setup_address (bus_t * bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t * bus)
+set_data_in (bus_t *bus)
 {
     int i;
     part_t *p = PART;
@@ -312,7 +312,7 @@ set_data_in (bus_t * bus)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t d)
+setup_data (bus_t *bus, uint32_t d)
 {
     int i;
     part_t *p = PART;
@@ -329,7 +329,7 @@ setup_data (bus_t * bus, uint32_t d)
  *
  */
 static void
-s3c4510_bus_read_start (bus_t * bus, uint32_t adr)
+s3c4510_bus_read_start (bus_t *bus, uint32_t adr)
 {
     /* see Figure 4-19 in [1] */
     chain_t *chain = CHAIN;
@@ -345,7 +345,7 @@ s3c4510_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-s3c4510_bus_read_next (bus_t * bus, uint32_t adr)
+s3c4510_bus_read_next (bus_t *bus, uint32_t adr)
 {
     /* see Figure 4-20 in [1] */
     part_t *p = PART;
@@ -369,7 +369,7 @@ s3c4510_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-s3c4510_bus_read_end (bus_t * bus)
+s3c4510_bus_read_end (bus_t *bus)
 {
     /* see Figure 4-19 in [1] */
     part_t *p = PART;
@@ -393,7 +393,7 @@ s3c4510_bus_read_end (bus_t * bus)
  *    ROM/SRAM/FlashPage Write Access Timing
  */
 static void
-s3c4510_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+s3c4510_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     /* see Figure 4-21 in [1] */
     chain_t *chain = CHAIN;

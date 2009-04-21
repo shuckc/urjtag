@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_usleep_run (chain_t * chain, char *params[])
+cmd_usleep_run (chain_t *chain, char *params[])
 {
     unsigned int usecs;
 

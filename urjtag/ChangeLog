@@ -2,7 +2,7 @@
 
   Run indent over the code base: all '*.[ch]' files except evidently imported
   ones, like the libiberty imports in lib.
-  * xargs indent -npro -nut -bli0 -i4 < indent-files
+  * xargs indent -npro -nut -bli0 -i4 {-T typedef}* < indent-files
     where indent-files is `find . -name '*.[ch]' -print` except:
   	src/lib/ansidecl.h
 	src/lib/filenames.h

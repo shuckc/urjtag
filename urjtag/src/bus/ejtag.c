@@ -114,8 +114,7 @@ typedef struct
  *
  */
 static bus_t *
-ejtag_bus_new (chain_t * chain, const bus_driver_t * driver,
-               char *cmd_params[])
+ejtag_bus_new (chain_t *chain, const bus_driver_t *driver, char *cmd_params[])
 {
     bus_t *bus;
 
@@ -142,7 +141,7 @@ ejtag_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-ejtag_bus_printinfo (bus_t * bus)
+ejtag_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -154,7 +153,7 @@ ejtag_bus_printinfo (bus_t * bus)
 }
 
 static uint32_t
-reg_value (tap_register * reg)
+reg_value (tap_register *reg)
 {
     uint32_t retval = 0;
     int i;
@@ -168,7 +167,7 @@ reg_value (tap_register * reg)
 }
 
 static uint32_t
-ejtag_run_pracc (bus_t * bus, const uint32_t * code, unsigned int len)
+ejtag_run_pracc (bus_t *bus, const uint32_t *code, unsigned int len)
 {
     data_register *ejaddr, *ejdata, *ejctrl;
     int i, pass;
@@ -280,7 +279,7 @@ ejtag_run_pracc (bus_t * bus, const uint32_t * code, unsigned int len)
 }
 
 static int
-ejtag_bus_init (bus_t * bus)
+ejtag_bus_init (bus_t *bus)
 {
     data_register *ejctrl, *ejimpl, *ejaddr, *ejdata, *ejall;
     uint32_t code[4] = {
@@ -543,7 +542,7 @@ ejtag_bus_init (bus_t * bus)
  *
  */
 static void
-ejtag_bus_prepare (bus_t * bus)
+ejtag_bus_prepare (bus_t *bus)
 {
     if (!INITIALIZED)
         bus_init (bus);
@@ -554,7 +553,7 @@ ejtag_bus_prepare (bus_t * bus)
  *
  */
 static int
-ejtag_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+ejtag_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     if (adr < UINT32_C (0x20000000))
     {
@@ -588,7 +587,7 @@ ejtag_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static int
-ejtag_gen_read (uint32_t * code, uint32_t adr)
+ejtag_gen_read (uint32_t *code, uint32_t adr)
 {
     uint16_t adr_hi, adr_lo;
     uint32_t *p = code;
@@ -630,7 +629,7 @@ ejtag_gen_read (uint32_t * code, uint32_t adr)
  *
  */
 static void
-ejtag_bus_read_start (bus_t * bus, uint32_t adr)
+ejtag_bus_read_start (bus_t *bus, uint32_t adr)
 {
     uint32_t code[3];
 
@@ -643,7 +642,7 @@ ejtag_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-ejtag_bus_read_next (bus_t * bus, uint32_t adr)
+ejtag_bus_read_next (bus_t *bus, uint32_t adr)
 {
     uint32_t d;
     uint32_t code[4], *p = code;
@@ -662,7 +661,7 @@ ejtag_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-ejtag_bus_read_end (bus_t * bus)
+ejtag_bus_read_end (bus_t *bus)
 {
     uint32_t d;
     static const uint32_t code[2] = {
@@ -681,7 +680,7 @@ ejtag_bus_read_end (bus_t * bus)
  *
  */
 static void
-ejtag_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+ejtag_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     uint16_t adr_hi, adr_lo;
     uint32_t code[5], *p = code;

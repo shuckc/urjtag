@@ -33,7 +33,7 @@
 #include <cmd.h>
 
 static int
-cmd_svf_run (chain_t * chain, char *params[])
+cmd_svf_run (chain_t *chain, char *params[])
 {
     FILE *SVF_FILE;
     int num_params, i, result = -1;

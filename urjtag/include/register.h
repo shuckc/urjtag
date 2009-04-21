@@ -34,17 +34,17 @@ typedef struct tap_register
 } tap_register_t;
 
 tap_register *register_alloc (int len);
-tap_register *register_duplicate (const tap_register_t * tr);
-void register_free (tap_register_t * tr);
-tap_register *register_fill (tap_register_t * tr, int val);
-const char *register_get_string (const tap_register_t * tr);
-int register_all_bits_same_value (const tap_register_t * tr);
-tap_register *register_init (tap_register_t * tr, const char *value);
-int register_compare (const tap_register_t * tr, const tap_register_t * tr2);
-int register_match (const tap_register_t * tr, const char *expr);
-tap_register *register_inc (tap_register_t * tr);
-tap_register *register_dec (tap_register_t * tr);
-tap_register *register_shift_right (tap_register_t * tr, int shift);
-tap_register *register_shift_left (tap_register_t * tr, int shift);
+tap_register *register_duplicate (const tap_register_t *tr);
+void register_free (tap_register_t *tr);
+tap_register *register_fill (tap_register_t *tr, int val);
+const char *register_get_string (const tap_register_t *tr);
+int register_all_bits_same_value (const tap_register_t *tr);
+tap_register *register_init (tap_register_t *tr, const char *value);
+int register_compare (const tap_register_t *tr, const tap_register_t *tr2);
+int register_match (const tap_register_t *tr, const char *expr);
+tap_register *register_inc (tap_register_t *tr);
+tap_register *register_dec (tap_register_t *tr);
+tap_register *register_shift_right (tap_register_t *tr, int shift);
+tap_register *register_shift_left (tap_register_t *tr, int shift);
 
 #endif /* REGISTER_H */

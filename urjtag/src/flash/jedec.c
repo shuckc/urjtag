@@ -706,7 +706,7 @@ static const struct amd_flash_info table[] = {
 };
 
 int
-jedec_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array)
+jedec_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
 {
     /* Temporary containers for manufacturer and device id while
        probing with different Autoselect methods. */

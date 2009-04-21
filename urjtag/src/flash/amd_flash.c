@@ -74,21 +74,20 @@ struct
 }
 var_forced_detection;
 
-int amd_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array);
-static int amd_29xx040_autodetect (cfi_array_t * cfi_array);
-static int amd_29xx040_status (bus_t * bus, uint32_t adr,
-                               unsigned short data);
-static void amd_29xx040_print_info (cfi_array_t * cfi_array);
-static void amd_29xx040_read_array (cfi_array_t * cfi_array);
-static int amd_29xx040_erase_block (cfi_array_t * cfi_array, uint32_t adr);
-static int amd_29xx040_program_single (cfi_array_t * cfi_array, uint32_t adr,
+int amd_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
+static int amd_29xx040_autodetect (cfi_array_t *cfi_array);
+static int amd_29xx040_status (bus_t *bus, uint32_t adr, unsigned short data);
+static void amd_29xx040_print_info (cfi_array_t *cfi_array);
+static void amd_29xx040_read_array (cfi_array_t *cfi_array);
+static int amd_29xx040_erase_block (cfi_array_t *cfi_array, uint32_t adr);
+static int amd_29xx040_program_single (cfi_array_t *cfi_array, uint32_t adr,
                                        uint32_t data);
-static int amd_29xx040_program (cfi_array_t * cfi_array, uint32_t adr,
-                                uint32_t * buffer, int count);
-static int amd_29xx040_unlock_block (cfi_array_t * cfi_array, uint32_t adr);
+static int amd_29xx040_program (cfi_array_t *cfi_array, uint32_t adr,
+                                uint32_t *buffer, int count);
+static int amd_29xx040_unlock_block (cfi_array_t *cfi_array, uint32_t adr);
 
 int
-amd_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array)
+amd_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
 {
     int mid;
     int did;
@@ -173,13 +172,13 @@ amd_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array)
 
 
 static int
-amd_29xx040_autodetect (cfi_array_t * cfi_array)
+amd_29xx040_autodetect (cfi_array_t *cfi_array)
 {
     return (var_forced_detection.flash == AMD_29xx040B);        //Non-CFI Am29xx040B flash
 }
 
 static int
-amd_29xx040_status (bus_t * bus, uint32_t adr, unsigned short data)
+amd_29xx040_status (bus_t *bus, uint32_t adr, unsigned short data)
 {
     short timeout;
     unsigned short dq7bit, dq7mask, dq5mask;
@@ -216,7 +215,7 @@ amd_29xx040_status (bus_t * bus, uint32_t adr, unsigned short data)
 
 
 static void
-amd_29xx040_print_info (cfi_array_t * cfi_array)
+amd_29xx040_print_info (cfi_array_t *cfi_array)
 {
     int mid, did, prot;
     bus_t *bus = cfi_array->bus;
@@ -262,7 +261,7 @@ amd_29xx040_print_info (cfi_array_t * cfi_array)
 }
 
 static void
-amd_29xx040_read_array (cfi_array_t * cfi_array)
+amd_29xx040_read_array (cfi_array_t *cfi_array)
 {
     /* Read Array */
     if (var_forced_detection.unlock_bypass == AMD_BYPASS_UNLOCK_MODE)
@@ -278,7 +277,7 @@ amd_29xx040_read_array (cfi_array_t * cfi_array)
 
 
 static int
-amd_29xx040_erase_block (cfi_array_t * cfi_array, uint32_t adr)
+amd_29xx040_erase_block (cfi_array_t *cfi_array, uint32_t adr)
 {
     bus_t *bus = cfi_array->bus;
 
@@ -318,7 +317,7 @@ amd_29xx040_erase_block (cfi_array_t * cfi_array, uint32_t adr)
 }
 
 static int
-amd_29xx040_program_single (cfi_array_t * cfi_array, uint32_t adr,
+amd_29xx040_program_single (cfi_array_t *cfi_array, uint32_t adr,
                             uint32_t data)
 {
     int status;
@@ -352,7 +351,7 @@ amd_29xx040_program_single (cfi_array_t * cfi_array, uint32_t adr,
 }
 
 static int
-amd_29xx040_program (cfi_array_t * cfi_array, uint32_t adr, uint32_t * buffer,
+amd_29xx040_program (cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer,
                      int count)
 {
     int idx;
@@ -370,7 +369,7 @@ amd_29xx040_program (cfi_array_t * cfi_array, uint32_t adr, uint32_t * buffer,
 }
 
 static int
-amd_29xx040_unlock_block (cfi_array_t * cfi_array, uint32_t adr)
+amd_29xx040_unlock_block (cfi_array_t *cfi_array, uint32_t adr)
 {
     printf ("flash_unlock_block 0x%08X IGNORE\n", adr);
     return 0;

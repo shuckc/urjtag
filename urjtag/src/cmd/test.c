@@ -35,7 +35,7 @@
 #include "cmd.h"
 
 static int
-cmd_test_run (chain_t * chain, char *params[])
+cmd_test_run (chain_t *chain, char *params[])
 {
     int data;
     unsigned int i;

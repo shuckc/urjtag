@@ -41,14 +41,14 @@
 
 cfi_array_t *cfi_array = NULL;
 
-extern int jedec_exp_detect (bus_t * bus, uint32_t adr,
-                             cfi_array_t ** cfi_array);
-extern int jedec_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array);
+extern int jedec_exp_detect (bus_t *bus, uint32_t adr,
+                             cfi_array_t **cfi_array);
+extern int jedec_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
 
-extern int amd_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array);    //Ajith
+extern int amd_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);      //Ajith
 
 void
-detectflash (bus_t * bus, uint32_t adr)
+detectflash (bus_t *bus, uint32_t adr)
 {
     cfi_query_structure_t *cfi;
     const char *s;
@@ -266,11 +266,11 @@ detectflash (bus_t * bus, uint32_t adr)
         };
         const char *process_technology[6] = {
             N_("170-nm Floating Gate technology"),
-                N_("230-nm MirrorBit(tm) technology"),
+            N_("230-nm MirrorBit(tm) technology"),
             N_("130-nm Floating Gate technology"),
-                N_("110-nm MirrorBit(tm) technology"),
+            N_("110-nm MirrorBit(tm) technology"),
             N_("90-nm Floating Gate technology"),
-                N_("90-nm MirrorBit(tm) technology")
+            N_("90-nm MirrorBit(tm) technology")
         };
         const char *process_technology_13[3] = {
             N_("CS49"), N_("CS59"), N_("CS99")
@@ -281,19 +281,19 @@ detectflash (bus_t * bus, uint32_t adr)
         const char *sector_protect_scheme[8] = {
             N_("29F040 mode"), N_("29F016 mode"), N_("29F400 mode"),
             N_("29LV800 mode"),
-                N_("29BDS640 mode (Software Command Locking)"),
+            N_("29BDS640 mode (Software Command Locking)"),
             N_("29BDD160 mode (New Sector Protect)"),
             N_("29PDL128 mode (New Sector Protect + 29LV800)"),
             N_("Advanced Sector Protect")
         };
         const char *page_mode_type[4] = {
             N_("Not supported"), N_("4 word Page"), N_("8 word Page"),
-                N_("16 word Page")
+            N_("16 word Page")
         };
 
         const char *top_bottom[6] = {
             N_("No boot"),
-                N_("8x8kb sectors at top and bottom with WP control"),
+            N_("8x8kb sectors at top and bottom with WP control"),
             N_("Bottom boot device"), N_("Top boot device"),
             N_("Uniform bottom boot device"), N_("Uniform top boot device")
         };

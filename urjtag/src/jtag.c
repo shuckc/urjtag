@@ -52,7 +52,7 @@
 #include "jtag.h"
 
 #ifndef HAVE_GETLINE
-ssize_t getline (char **lineptr, size_t * n, FILE * stream);
+ssize_t getline (char **lineptr, size_t * n, FILE *stream);
 #endif
 
 int debug_mode = 0;
@@ -148,7 +148,7 @@ jtag_save_history (void)
 #endif
 
 static int
-jtag_readline_multiple_commands_support (chain_t * chain, char *line)   /* multiple commands should be separated with '::' */
+jtag_readline_multiple_commands_support (chain_t *chain, char *line)    /* multiple commands should be separated with '::' */
 {
     int r;
     char *nextcmd = line;
@@ -181,7 +181,7 @@ jtag_readline_multiple_commands_support (chain_t * chain, char *line)   /* multi
 }
 
 static void
-jtag_readline_loop (chain_t * chain, const char *prompt)
+jtag_readline_loop (chain_t *chain, const char *prompt)
 {
 #ifdef HAVE_LIBREADLINE
     char *line = NULL;
@@ -245,7 +245,7 @@ jtag_readline_loop (chain_t * chain, const char *prompt)
 }
 
 static int
-jtag_parse_rc (chain_t * chain)
+jtag_parse_rc (chain_t *chain)
 {
     char *home = getenv ("HOME");
     char *file;
@@ -272,7 +272,7 @@ jtag_parse_rc (chain_t * chain)
 }
 
 static void
-cleanup (chain_t * chain)
+cleanup (chain_t *chain)
 {
     cfi_array_free (cfi_array);
     cfi_array = NULL;

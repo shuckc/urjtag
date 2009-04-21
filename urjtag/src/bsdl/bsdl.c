@@ -117,7 +117,7 @@ bsdl_msg (int proc_mode, int type, const char *format, ...)
  *
  ****************************************************************************/
 int
-bsdl_read_file (chain_t * chain, const char *BSDL_File_Name, int proc_mode,
+bsdl_read_file (chain_t *chain, const char *BSDL_File_Name, int proc_mode,
                 const char *idcode)
 {
     bsdl_globs_t *globs = &(chain->bsdl);
@@ -228,7 +228,7 @@ bsdl_read_file (chain_t * chain, const char *BSDL_File_Name, int proc_mode,
  *   void
  ****************************************************************************/
 void
-bsdl_set_path (chain_t * chain, const char *pathlist)
+bsdl_set_path (chain_t *chain, const char *pathlist)
 {
     bsdl_globs_t *globs = &(chain->bsdl);
     char *delim;
@@ -300,7 +300,7 @@ bsdl_set_path (chain_t * chain, const char *pathlist)
  *
  ****************************************************************************/
 int
-bsdl_scan_files (chain_t * chain, const char *idcode, int proc_mode)
+bsdl_scan_files (chain_t *chain, const char *idcode, int proc_mode)
 {
     bsdl_globs_t *globs = &(chain->bsdl);
     int idx = 0;

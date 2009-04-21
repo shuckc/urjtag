@@ -41,7 +41,7 @@
 #include "jtag.h"
 
 void
-readmem (bus_t * bus, FILE * f, uint32_t addr, uint32_t len)
+readmem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
     uint32_t step;
     uint32_t a;

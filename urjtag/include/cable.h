@@ -49,9 +49,9 @@ struct cable_driver_t
 {
     const char *name;
     const char *description;
-    int (*connect) (char *params[], cable_t * cable);
-    void (*disconnect) (cable_t * cable);
-    void (*cable_free) (cable_t * cable);
+    int (*connect) (char *params[], cable_t *cable);
+    void (*disconnect) (cable_t *cable);
+    void (*cable_free) (cable_t *cable);
     int (*init) (cable_t *);
     void (*done) (cable_t *);
     void (*set_frequency) (cable_t *, uint32_t freq);
@@ -132,30 +132,30 @@ struct cable_t
     uint32_t frequency;
 };
 
-void cable_free (cable_t * cable);
-int cable_init (cable_t * cable);
-void cable_done (cable_t * cable);
-void cable_flush (cable_t * cable, cable_flush_amount_t);
-void cable_clock (cable_t * cable, int tms, int tdi, int n);
-int cable_defer_clock (cable_t * cable, int tms, int tdi, int n);
-int cable_get_tdo (cable_t * cable);
-int cable_get_tdo_late (cable_t * cable);
-int cable_defer_get_tdo (cable_t * cable);
-int cable_set_signal (cable_t * cable, int mask, int val);
-int cable_defer_set_signal (cable_t * cable, int mask, int val);
-int cable_get_signal (cable_t * cable, pod_sigsel_t sig);
-int cable_get_signal_late (cable_t * cable, pod_sigsel_t sig);
-int cable_defer_get_signal (cable_t * cable, pod_sigsel_t sig);
-int cable_transfer (cable_t * cable, int len, char *in, char *out);
-int cable_transfer_late (cable_t * cable, char *out);
-int cable_defer_transfer (cable_t * cable, int len, char *in, char *out);
+void cable_free (cable_t *cable);
+int cable_init (cable_t *cable);
+void cable_done (cable_t *cable);
+void cable_flush (cable_t *cable, cable_flush_amount_t);
+void cable_clock (cable_t *cable, int tms, int tdi, int n);
+int cable_defer_clock (cable_t *cable, int tms, int tdi, int n);
+int cable_get_tdo (cable_t *cable);
+int cable_get_tdo_late (cable_t *cable);
+int cable_defer_get_tdo (cable_t *cable);
+int cable_set_signal (cable_t *cable, int mask, int val);
+int cable_defer_set_signal (cable_t *cable, int mask, int val);
+int cable_get_signal (cable_t *cable, pod_sigsel_t sig);
+int cable_get_signal_late (cable_t *cable, pod_sigsel_t sig);
+int cable_defer_get_signal (cable_t *cable, pod_sigsel_t sig);
+int cable_transfer (cable_t *cable, int len, char *in, char *out);
+int cable_transfer_late (cable_t *cable, char *out);
+int cable_defer_transfer (cable_t *cable, int len, char *in, char *out);
 
-void cable_set_frequency (cable_t * cable, uint32_t frequency);
-uint32_t cable_get_frequency (cable_t * cable);
-void cable_wait (cable_t * cable);
-void cable_purge_queue (cable_queue_info_t * q, int io);
-int cable_add_queue_item (cable_t * cable, cable_queue_info_t * q);
-int cable_get_queue_item (cable_t * cable, cable_queue_info_t * q);
+void cable_set_frequency (cable_t *cable, uint32_t frequency);
+uint32_t cable_get_frequency (cable_t *cable);
+void cable_wait (cable_t *cable);
+void cable_purge_queue (cable_queue_info_t *q, int io);
+int cable_add_queue_item (cable_t *cable, cable_queue_info_t *q);
+int cable_get_queue_item (cable_t *cable, cable_queue_info_t *q);
 
 extern cable_driver_t *cable_drivers[];
 

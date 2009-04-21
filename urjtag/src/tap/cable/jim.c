@@ -45,7 +45,7 @@ typedef struct
 jim_cable_params_t;
 
 int
-jim_cable_connect (char *params[], cable_t * cable)
+jim_cable_connect (char *params[], cable_t *cable)
 {
     jim_cable_params_t *cable_params;
     jim_state_t *s;
@@ -81,14 +81,14 @@ jim_cable_connect (char *params[], cable_t * cable)
 }
 
 void
-jim_cable_disconnect (cable_t * cable)
+jim_cable_disconnect (cable_t *cable)
 {
     cable_done (cable);
     chain_disconnect (cable->chain);
 }
 
 void
-jim_cable_free (cable_t * cable)
+jim_cable_free (cable_t *cable)
 {
     if (cable->params != NULL)
     {
@@ -99,18 +99,18 @@ jim_cable_free (cable_t * cable)
 }
 
 void
-jim_cable_done (cable_t * cable)
+jim_cable_done (cable_t *cable)
 {
 }
 
 static int
-jim_cable_init (cable_t * cable)
+jim_cable_init (cable_t *cable)
 {
     return 0;
 }
 
 static void
-jim_cable_clock (cable_t * cable, int tms, int tdi, int n)
+jim_cable_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
@@ -123,7 +123,7 @@ jim_cable_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-jim_cable_get_tdo (cable_t * cable)
+jim_cable_get_tdo (cable_t *cable)
 {
     jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
 
@@ -131,7 +131,7 @@ jim_cable_get_tdo (cable_t * cable)
 }
 
 static int
-jim_cable_get_trst (cable_t * cable)
+jim_cable_get_trst (cable_t *cable)
 {
     jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
 
@@ -139,7 +139,7 @@ jim_cable_get_trst (cable_t * cable)
 }
 
 static int
-jim_cable_set_trst (cable_t * cable, int trst)
+jim_cable_set_trst (cable_t *cable, int trst)
 {
     jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
 

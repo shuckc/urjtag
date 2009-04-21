@@ -34,7 +34,7 @@
 #include "jtag.h"
 
 void
-writemem (bus_t * bus, FILE * f, uint32_t addr, uint32_t len)
+writemem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
     uint32_t step;
     uint32_t a;

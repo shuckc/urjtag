@@ -34,7 +34,7 @@
 #include "cmd.h"
 
 static int
-cmd_set_run (chain_t * chain, char *params[])
+cmd_set_run (chain_t *chain, char *params[])
 {
     int dir;
     unsigned int data = 0;

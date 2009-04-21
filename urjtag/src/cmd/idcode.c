@@ -30,7 +30,7 @@
 #include "cmd.h"
 
 static int
-cmd_idcode_run (chain_t * chain, char *params[])
+cmd_idcode_run (chain_t *chain, char *params[])
 {
     unsigned int bytes = 0;
 

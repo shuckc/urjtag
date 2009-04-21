@@ -147,13 +147,13 @@ cable_driver_t *cable_drivers[] = {
 };
 
 void
-cable_free (cable_t * cable)
+cable_free (cable_t *cable)
 {
     cable->driver->cable_free (cable);
 }
 
 int
-cable_init (cable_t * cable)
+cable_init (cable_t *cable)
 {
     cable->delay = 0;
     cable->frequency = 0;
@@ -186,13 +186,13 @@ cable_init (cable_t * cable)
 }
 
 void
-cable_flush (cable_t * cable, cable_flush_amount_t how_much)
+cable_flush (cable_t *cable, cable_flush_amount_t how_much)
 {
     cable->driver->flush (cable, how_much);
 }
 
 void
-cable_done (cable_t * cable)
+cable_done (cable_t *cable)
 {
     cable_flush (cable, COMPLETELY);
     if (cable->todo.data != NULL)
@@ -204,7 +204,7 @@ cable_done (cable_t * cable)
 }
 
 int
-cable_add_queue_item (cable_t * cable, cable_queue_info_t * q)
+cable_add_queue_item (cable_t *cable, cable_queue_info_t *q)
 {
     int i, j;
     if (q->num_items >= q->max_items)   /* queue full? */
@@ -333,7 +333,7 @@ cable_add_queue_item (cable_t * cable, cable_queue_info_t * q)
 }
 
 int
-cable_get_queue_item (cable_t * cable, cable_queue_info_t * q)
+cable_get_queue_item (cable_t *cable, cable_queue_info_t *q)
 {
     if (q->num_items > 0)
     {
@@ -352,7 +352,7 @@ cable_get_queue_item (cable_t * cable, cable_queue_info_t * q)
 }
 
 void
-cable_purge_queue (cable_queue_info_t * q, int io)
+cable_purge_queue (cable_queue_info_t *q, int io)
 {
     while (q->num_items > 0)
     {
@@ -385,14 +385,14 @@ cable_purge_queue (cable_queue_info_t * q, int io)
 }
 
 void
-cable_clock (cable_t * cable, int tms, int tdi, int n)
+cable_clock (cable_t *cable, int tms, int tdi, int n)
 {
     cable_flush (cable, COMPLETELY);
     cable->driver->clock (cable, tms, tdi, n);
 }
 
 int
-cable_defer_clock (cable_t * cable, int tms, int tdi, int n)
+cable_defer_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i = cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
@@ -406,14 +406,14 @@ cable_defer_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 int
-cable_get_tdo (cable_t * cable)
+cable_get_tdo (cable_t *cable)
 {
     cable_flush (cable, COMPLETELY);
     return cable->driver->get_tdo (cable);
 }
 
 int
-cable_get_tdo_late (cable_t * cable)
+cable_get_tdo_late (cable_t *cable)
 {
     int i;
     cable_flush (cable, TO_OUTPUT);
@@ -436,7 +436,7 @@ cable_get_tdo_late (cable_t * cable)
 }
 
 int
-cable_defer_get_tdo (cable_t * cable)
+cable_defer_get_tdo (cable_t *cable)
 {
     int i = cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
@@ -447,14 +447,14 @@ cable_defer_get_tdo (cable_t * cable)
 }
 
 int
-cable_set_signal (cable_t * cable, int mask, int val)
+cable_set_signal (cable_t *cable, int mask, int val)
 {
     cable_flush (cable, COMPLETELY);
     return cable->driver->set_signal (cable, mask, val);
 }
 
 int
-cable_defer_set_signal (cable_t * cable, int mask, int val)
+cable_defer_set_signal (cable_t *cable, int mask, int val)
 {
     int i = cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
@@ -467,14 +467,14 @@ cable_defer_set_signal (cable_t * cable, int mask, int val)
 }
 
 int
-cable_get_signal (cable_t * cable, pod_sigsel_t sig)
+cable_get_signal (cable_t *cable, pod_sigsel_t sig)
 {
     cable_flush (cable, COMPLETELY);
     return cable->driver->get_signal (cable, sig);
 }
 
 int
-cable_get_signal_late (cable_t * cable, pod_sigsel_t sig)
+cable_get_signal_late (cable_t *cable, pod_sigsel_t sig)
 {
     int i;
     cable_flush (cable, TO_OUTPUT);
@@ -504,7 +504,7 @@ cable_get_signal_late (cable_t * cable, pod_sigsel_t sig)
 }
 
 int
-cable_defer_get_signal (cable_t * cable, pod_sigsel_t sig)
+cable_defer_get_signal (cable_t *cable, pod_sigsel_t sig)
 {
     int i = cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
@@ -516,14 +516,14 @@ cable_defer_get_signal (cable_t * cable, pod_sigsel_t sig)
 }
 
 int
-cable_transfer (cable_t * cable, int len, char *in, char *out)
+cable_transfer (cable_t *cable, int len, char *in, char *out)
 {
     cable_flush (cable, COMPLETELY);
     return cable->driver->transfer (cable, len, in, out);
 }
 
 int
-cable_transfer_late (cable_t * cable, char *out)
+cable_transfer_late (cable_t *cable, char *out)
 {
     int i;
     cable_flush (cable, TO_OUTPUT);
@@ -561,7 +561,7 @@ cable_transfer_late (cable_t * cable, char *out)
 }
 
 int
-cable_defer_transfer (cable_t * cable, int len, char *in, char *out)
+cable_defer_transfer (cable_t *cable, int len, char *in, char *out)
 {
     char *ibuf, *obuf = NULL;
     int i;
@@ -600,20 +600,20 @@ cable_defer_transfer (cable_t * cable, int len, char *in, char *out)
 }
 
 void
-cable_set_frequency (cable_t * cable, uint32_t new_frequency)
+cable_set_frequency (cable_t *cable, uint32_t new_frequency)
 {
     cable_flush (cable, COMPLETELY);
     cable->driver->set_frequency (cable, new_frequency);
 }
 
 uint32_t
-cable_get_frequency (cable_t * cable)
+cable_get_frequency (cable_t *cable)
 {
     return cable->frequency;
 }
 
 void
-cable_wait (cable_t * cable)
+cable_wait (cable_t *cable)
 {
     int i;
     volatile int j;

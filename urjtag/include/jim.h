@@ -70,8 +70,8 @@ typedef struct jim_device
 
     tap_state_t tap_state;
     void (*tck_rise) (struct jim_device * dev, int tms, int tdi,
-                      uint8_t * shmem, size_t shmem_size);
-    void (*tck_fall) (struct jim_device * dev, uint8_t * shmem,
+                      uint8_t *shmem, size_t shmem_size);
+    void (*tck_fall) (struct jim_device * dev, uint8_t *shmem,
                       size_t shmem_size);
     void (*dev_free) (struct jim_device * dev);
     void *state;
@@ -98,12 +98,12 @@ typedef struct jim_bus_device
     int size;                   /* words (each <width> bytes) */
     void *state;                /* device-dependent */
     void (*init) (struct jim_bus_device * x);
-      uint32_t (*capture) (struct jim_bus_device * x,
-                           uint32_t address, uint32_t control,
-                           uint8_t * shmem, size_t shmem_size);
+    uint32_t (*capture) (struct jim_bus_device * x,
+                         uint32_t address, uint32_t control,
+                         uint8_t *shmem, size_t shmem_size);
     void (*update) (struct jim_bus_device * x,
                     uint32_t address, uint32_t data, uint32_t control,
-                    uint8_t * shmem, size_t shmem_size);
+                    uint8_t *shmem, size_t shmem_size);
     void (*free) (struct jim_bus_device * x);
 }
 jim_bus_device_t;
@@ -117,15 +117,15 @@ typedef struct
 }
 jim_attached_part_t;
 
-void jim_set_trst (jim_state_t * s, int trst);
-int jim_get_trst (jim_state_t * s);
-int jim_get_tdo (jim_state_t * s);
-void jim_tck_rise (jim_state_t * s, int tms, int tdi);
-void jim_tck_fall (jim_state_t * s);
+void jim_set_trst (jim_state_t *s, int trst);
+int jim_get_trst (jim_state_t *s);
+int jim_get_tdo (jim_state_t *s);
+void jim_tck_rise (jim_state_t *s, int tms, int tdi);
+void jim_tck_fall (jim_state_t *s);
 jim_device_t *jim_alloc_device (int num_sregs, const int reg_size[]);
 jim_state_t *jim_init (void);
-void jim_free (jim_state_t * s);
-void jim_print_sreg (shift_reg_t * r);
-void jim_print_tap_state (char *rof, jim_device_t * dev);
+void jim_free (jim_state_t *s);
+void jim_print_sreg (shift_reg_t *r);
+void jim_print_tap_state (char *rof, jim_device_t *dev);
 
 #endif

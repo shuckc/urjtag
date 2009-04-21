@@ -27,31 +27,31 @@
 #include "chain.h"
 
 int
-tap_state (chain_t * chain)
+tap_state (chain_t *chain)
 {
     return chain->state;
 }
 
 int
-tap_state_init (chain_t * chain)
+tap_state_init (chain_t *chain)
 {
     return chain->state = Unknown_State;
 }
 
 int
-tap_state_done (chain_t * chain)
+tap_state_done (chain_t *chain)
 {
     return chain->state = Unknown_State;
 }
 
 int
-tap_state_reset (chain_t * chain)
+tap_state_reset (chain_t *chain)
 {
     return chain->state = Test_Logic_Reset;
 }
 
 int
-tap_state_set_trst (chain_t * chain, int old_trst, int new_trst)
+tap_state_set_trst (chain_t *chain, int old_trst, int new_trst)
 {
     old_trst = old_trst ? 1 : 0;
     new_trst = new_trst ? 1 : 0;
@@ -68,7 +68,7 @@ tap_state_set_trst (chain_t * chain, int old_trst, int new_trst)
 }
 
 int
-tap_state_clock (chain_t * chain, int tms)
+tap_state_clock (chain_t *chain, int tms)
 {
     if (tms)
     {

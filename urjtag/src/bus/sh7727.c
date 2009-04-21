@@ -63,7 +63,7 @@ typedef struct
  *
  */
 static bus_t *
-sh7727_bus_new (chain_t * chain, const bus_driver_t * driver,
+sh7727_bus_new (chain_t *chain, const bus_driver_t *driver,
                 char *cmd_params[])
 {
     bus_t *bus;
@@ -136,7 +136,7 @@ sh7727_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-sh7727_bus_printinfo (bus_t * bus)
+sh7727_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -153,7 +153,7 @@ sh7727_bus_printinfo (bus_t * bus)
  *
  */
 static int
-sh7727_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+sh7727_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     part_t *p = PART;
 
@@ -180,7 +180,7 @@ sh7727_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a)
+setup_address (bus_t *bus, uint32_t a)
 {
     int i;
     part_t *p = PART;
@@ -190,7 +190,7 @@ setup_address (bus_t * bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t * bus)
+set_data_in (bus_t *bus)
 {
     int i;
     part_t *p = PART;
@@ -203,7 +203,7 @@ set_data_in (bus_t * bus)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t d)
+setup_data (bus_t *bus, uint32_t d)
 {
     int i;
     part_t *p = PART;
@@ -220,7 +220,7 @@ setup_data (bus_t * bus, uint32_t d)
  *
  */
 static void
-sh7727_bus_read_start (bus_t * bus, uint32_t adr)
+sh7727_bus_read_start (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     int cs[8];
@@ -254,7 +254,7 @@ sh7727_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-sh7727_bus_read_next (bus_t * bus, uint32_t adr)
+sh7727_bus_read_next (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     int i;
@@ -277,7 +277,7 @@ sh7727_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-sh7727_bus_read_end (bus_t * bus)
+sh7727_bus_read_end (bus_t *bus)
 {
     part_t *p = PART;
     int i;
@@ -307,7 +307,7 @@ sh7727_bus_read_end (bus_t * bus)
  *
  */
 static void
-sh7727_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+sh7727_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     chain_t *chain = CHAIN;
     part_t *p = PART;

@@ -52,12 +52,12 @@ struct parport_t
     cable_t *cable;
 };
 
-int parport_open (parport_t * port);
-int parport_close (parport_t * port);
-int parport_set_data (parport_t * port, uint8_t data);
-int parport_get_data (parport_t * port);
-int parport_get_status (parport_t * port);
-int parport_set_control (parport_t * port, uint8_t data);
+int parport_open (parport_t *port);
+int parport_close (parport_t *port);
+int parport_set_data (parport_t *port, uint8_t data);
+int parport_get_data (parport_t *port);
+int parport_get_status (parport_t *port);
+int parport_set_control (parport_t *port, uint8_t data);
 
 extern parport_driver_t *parport_drivers[];
 

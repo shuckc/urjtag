@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_scan_run (chain_t * chain, char *params[])
+cmd_scan_run (chain_t *chain, char *params[])
 {
     part_t *part;
     data_register *bsr;

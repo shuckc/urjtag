@@ -52,7 +52,7 @@
 #define	TDO	7
 
 static int
-ei012_init (cable_t * cable)
+ei012_init (cable_t *cable)
 {
     int data;
 
@@ -72,7 +72,7 @@ ei012_init (cable_t * cable)
 }
 
 static void
-ei012_clock (cable_t * cable, int tms, int tdi, int n)
+ei012_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
@@ -99,7 +99,7 @@ ei012_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-ei012_get_tdo (cable_t * cable)
+ei012_get_tdo (cable_t *cable)
 {
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
 
@@ -112,7 +112,7 @@ ei012_get_tdo (cable_t * cable)
 }
 
 static int
-ei012_set_signal (cable_t * cable, int mask, int val)
+ei012_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

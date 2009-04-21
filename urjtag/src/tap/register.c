@@ -63,7 +63,7 @@ register_alloc (int len)
 }
 
 tap_register *
-register_duplicate (const tap_register * tr)
+register_duplicate (const tap_register *tr)
 {
     if (!tr)
         return NULL;
@@ -72,7 +72,7 @@ register_duplicate (const tap_register * tr)
 }
 
 void
-register_free (tap_register * tr)
+register_free (tap_register *tr)
 {
     if (tr)
     {
@@ -83,7 +83,7 @@ register_free (tap_register * tr)
 }
 
 tap_register *
-register_fill (tap_register * tr, int val)
+register_fill (tap_register *tr, int val)
 {
     if (tr)
         memset (tr->data, val & 1, tr->len);
@@ -92,7 +92,7 @@ register_fill (tap_register * tr, int val)
 }
 
 const char *
-register_get_string (const tap_register * tr)
+register_get_string (const tap_register *tr)
 {
     int i;
 
@@ -106,7 +106,7 @@ register_get_string (const tap_register * tr)
 }
 
 int
-register_all_bits_same_value (const tap_register * tr)
+register_all_bits_same_value (const tap_register *tr)
 {
     int i, value;
     if (!tr)
@@ -128,7 +128,7 @@ register_all_bits_same_value (const tap_register * tr)
 }
 
 tap_register *
-register_init (tap_register * tr, const char *value)
+register_init (tap_register *tr, const char *value)
 {
     int i;
 
@@ -154,7 +154,7 @@ register_init (tap_register * tr, const char *value)
 }
 
 int
-register_compare (const tap_register * tr, const tap_register * tr2)
+register_compare (const tap_register *tr, const tap_register *tr2)
 {
     int i;
 
@@ -175,7 +175,7 @@ register_compare (const tap_register * tr, const tap_register * tr2)
 }
 
 int
-register_match (const tap_register * tr, const char *expr)
+register_match (const tap_register *tr, const char *expr)
 {
     int i;
     const char *s;
@@ -193,7 +193,7 @@ register_match (const tap_register * tr, const char *expr)
 }
 
 tap_register *
-register_inc (tap_register * tr)
+register_inc (tap_register *tr)
 {
     int i;
 
@@ -212,7 +212,7 @@ register_inc (tap_register * tr)
 }
 
 tap_register *
-register_dec (tap_register * tr)
+register_dec (tap_register *tr)
 {
     int i;
 
@@ -231,7 +231,7 @@ register_dec (tap_register * tr)
 }
 
 tap_register *
-register_shift_right (tap_register * tr, int shift)
+register_shift_right (tap_register *tr, int shift)
 {
     int i;
 
@@ -253,7 +253,7 @@ register_shift_right (tap_register * tr, int shift)
 }
 
 tap_register *
-register_shift_left (tap_register * tr, int shift)
+register_shift_left (tap_register *tr, int shift)
 {
     int i;
 

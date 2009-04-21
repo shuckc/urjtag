@@ -141,7 +141,7 @@ usbconn_cable_t *usbconn_cables[] = {
 };
 
 int
-generic_usbconn_connect (char *params[], cable_t * cable)
+generic_usbconn_connect (char *params[], cable_t *cable)
 {
     usbconn_cable_t user_specified = {
         NULL,                   /* no name */
@@ -244,7 +244,7 @@ generic_usbconn_connect (char *params[], cable_t * cable)
 }
 
 void
-generic_usbconn_free (cable_t * cable)
+generic_usbconn_free (cable_t *cable)
 {
     cable->link.usb->driver->free (cable->link.usb);
     free (cable->params);
@@ -252,7 +252,7 @@ generic_usbconn_free (cable_t * cable)
 }
 
 void
-generic_usbconn_done (cable_t * cable)
+generic_usbconn_done (cable_t *cable)
 {
     usbconn_close (cable->link.usb);
 }

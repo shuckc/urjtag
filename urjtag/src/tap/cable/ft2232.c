@@ -226,7 +226,7 @@ static const cx_cmd_t imm_cmd = { NULL, 1, 1, (uint8_t *) imm_buf, 0 };
 
 
 static void
-ft2232_set_frequency (cable_t * cable, uint32_t new_frequency)
+ft2232_set_frequency (cable_t *cable, uint32_t new_frequency)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -267,7 +267,7 @@ ft2232_set_frequency (cable_t * cable, uint32_t new_frequency)
 
 
 static int
-ft2232_generic_init (cable_t * cable)
+ft2232_generic_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -308,7 +308,7 @@ ft2232_generic_init (cable_t * cable)
 }
 
 static int
-ft2232_jtagkey_init (cable_t * cable)
+ft2232_jtagkey_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -361,7 +361,7 @@ ft2232_jtagkey_init (cable_t * cable)
 
 
 static int
-ft2232_armusbocd_init (cable_t * cable)
+ft2232_armusbocd_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -414,7 +414,7 @@ ft2232_armusbocd_init (cable_t * cable)
 
 
 static int
-ft2232_gnice_init (cable_t * cable)
+ft2232_gnice_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -458,7 +458,7 @@ ft2232_gnice_init (cable_t * cable)
 
 
 static int
-ft2232_oocdlinks_init (cable_t * cable)
+ft2232_oocdlinks_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -510,7 +510,7 @@ ft2232_oocdlinks_init (cable_t * cable)
 
 
 static int
-ft2232_turtelizer2_init (cable_t * cable)
+ft2232_turtelizer2_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -558,7 +558,7 @@ ft2232_turtelizer2_init (cable_t * cable)
 
 
 static int
-ft2232_usbtojtagif_init (cable_t * cable)
+ft2232_usbtojtagif_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -610,7 +610,7 @@ ft2232_usbtojtagif_init (cable_t * cable)
 
 
 static int
-ft2232_signalyzer_init (cable_t * cable)
+ft2232_signalyzer_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -654,7 +654,7 @@ ft2232_signalyzer_init (cable_t * cable)
 
 
 static int
-ft2232_flyswatter_init (cable_t * cable)
+ft2232_flyswatter_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -699,7 +699,7 @@ ft2232_flyswatter_init (cable_t * cable)
 }
 
 static int
-ft2232_usbscarab2_init (cable_t * cable)
+ft2232_usbscarab2_init (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -755,7 +755,7 @@ ft2232_usbscarab2_init (cable_t * cable)
 
 
 static void
-ft2232_generic_done (cable_t * cable)
+ft2232_generic_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -779,7 +779,7 @@ ft2232_generic_done (cable_t * cable)
 
 
 static void
-ft2232_jtagkey_done (cable_t * cable)
+ft2232_jtagkey_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -824,7 +824,7 @@ ft2232_jtagkey_done (cable_t * cable)
 
 
 static void
-ft2232_armusbocd_done (cable_t * cable)
+ft2232_armusbocd_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -866,7 +866,7 @@ ft2232_armusbocd_done (cable_t * cable)
 }
 
 static void
-ft2232_gnice_done (cable_t * cable)
+ft2232_gnice_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -895,7 +895,7 @@ ft2232_gnice_done (cable_t * cable)
 }
 
 static void
-ft2232_oocdlinks_done (cable_t * cable)
+ft2232_oocdlinks_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -934,7 +934,7 @@ ft2232_oocdlinks_done (cable_t * cable)
 
 
 static void
-ft2232_turtelizer2_done (cable_t * cable)
+ft2232_turtelizer2_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -972,7 +972,7 @@ ft2232_turtelizer2_done (cable_t * cable)
 
 
 static void
-ft2232_usbtojtagif_done (cable_t * cable)
+ft2232_usbtojtagif_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1006,7 +1006,7 @@ ft2232_usbtojtagif_done (cable_t * cable)
 
 
 static void
-ft2232_signalyzer_done (cable_t * cable)
+ft2232_signalyzer_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1039,7 +1039,7 @@ ft2232_signalyzer_done (cable_t * cable)
 
 
 static void
-ft2232_flyswatter_done (cable_t * cable)
+ft2232_flyswatter_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1068,7 +1068,7 @@ ft2232_flyswatter_done (cable_t * cable)
 }
 
 static void
-ft2232_usbscarab2_done (cable_t * cable)
+ft2232_usbscarab2_done (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1093,7 +1093,7 @@ ft2232_usbscarab2_done (cable_t * cable)
 
 
 static void
-ft2232_clock_schedule (cable_t * cable, int tms, int tdi, int n)
+ft2232_clock_schedule (cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1139,7 +1139,7 @@ ft2232_clock_schedule (cable_t * cable, int tms, int tdi, int n)
 
 
 static void
-ft2232_clock (cable_t * cable, int tms, int tdi, int n)
+ft2232_clock (cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -1150,7 +1150,7 @@ ft2232_clock (cable_t * cable, int tms, int tdi, int n)
 
 
 static void
-ft2232_get_tdo_schedule (cable_t * cable)
+ft2232_get_tdo_schedule (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1162,7 +1162,7 @@ ft2232_get_tdo_schedule (cable_t * cable)
 
 
 static int
-ft2232_get_tdo_finish (cable_t * cable)
+ft2232_get_tdo_finish (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     int value;
@@ -1177,7 +1177,7 @@ ft2232_get_tdo_finish (cable_t * cable)
 
 
 static int
-ft2232_get_tdo (cable_t * cable)
+ft2232_get_tdo (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -1188,7 +1188,7 @@ ft2232_get_tdo (cable_t * cable)
 
 
 static void
-ft2232_set_signal_schedule (params_t * params, int mask, int val,
+ft2232_set_signal_schedule (params_t *params, int mask, int val,
                             int set_low, int set_high)
 {
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1262,7 +1262,7 @@ ft2232_set_signal_schedule (params_t * params, int mask, int val,
 
 
 static int
-ft2232_set_signal (cable_t * cable, int mask, int val)
+ft2232_set_signal (cable_t *cable, int mask, int val)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -1277,7 +1277,7 @@ ft2232_set_signal (cable_t * cable, int mask, int val)
 
 
 static void
-ft2232_transfer_schedule (cable_t * cable, int len, char *in, char *out)
+ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1406,7 +1406,7 @@ ft2232_transfer_schedule (cable_t * cable, int len, char *in, char *out)
 
 
 static int
-ft2232_transfer_finish (cable_t * cable, int len, char *out)
+ft2232_transfer_finish (cable_t *cable, int len, char *out)
 {
     params_t *params = (params_t *) cable->params;
     int bitwise_len;
@@ -1466,7 +1466,7 @@ ft2232_transfer_finish (cable_t * cable, int len, char *out)
 
 
 static int
-ft2232_transfer (cable_t * cable, int len, char *in, char *out)
+ft2232_transfer (cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -1477,7 +1477,7 @@ ft2232_transfer (cable_t * cable, int len, char *in, char *out)
 
 
 static void
-ft2232_flush (cable_t * cable, cable_flush_amount_t how_much)
+ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -1638,7 +1638,7 @@ ft2232_flush (cable_t * cable, cable_flush_amount_t how_much)
 
 
 static int
-ft2232_connect (char *params[], cable_t * cable)
+ft2232_connect (char *params[], cable_t *cable)
 {
     params_t *cable_params;
     int result;
@@ -1674,7 +1674,7 @@ ft2232_connect (char *params[], cable_t * cable)
 
 
 static void
-ft2232_cable_free (cable_t * cable)
+ft2232_cable_free (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
 

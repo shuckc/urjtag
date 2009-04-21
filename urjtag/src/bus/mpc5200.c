@@ -72,7 +72,7 @@ typedef struct
  *
  */
 static bus_t *
-mpc5200_bus_new (chain_t * chain, const bus_driver_t * driver,
+mpc5200_bus_new (chain_t *chain, const bus_driver_t *driver,
                  char *cmd_params[])
 {
     bus_t *bus;
@@ -145,7 +145,7 @@ mpc5200_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-mpc5200_bus_printinfo (bus_t * bus)
+mpc5200_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -162,7 +162,7 @@ mpc5200_bus_printinfo (bus_t * bus)
  *
  */
 static int
-mpc5200_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+mpc5200_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
 
@@ -183,7 +183,7 @@ mpc5200_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a)
+setup_address (bus_t *bus, uint32_t a)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     part_t *p = PART;
@@ -194,7 +194,7 @@ setup_address (bus_t * bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t * bus, uint32_t adr)
+set_data_in (bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     part_t *p = PART;
@@ -210,7 +210,7 @@ set_data_in (bus_t * bus, uint32_t adr)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t adr, uint32_t d)
+setup_data (bus_t *bus, uint32_t adr, uint32_t d)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     part_t *p = PART;
@@ -227,7 +227,7 @@ setup_data (bus_t * bus, uint32_t adr, uint32_t d)
 }
 
 static uint32_t
-get_data (bus_t * bus, uint32_t adr)
+get_data (bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     bus_area_t area;
@@ -252,7 +252,7 @@ get_data (bus_t * bus, uint32_t adr)
  *
  */
 static void
-mpc5200_bus_read_start (bus_t * bus, uint32_t adr)
+mpc5200_bus_read_start (bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     part_t *p = PART;
@@ -290,7 +290,7 @@ mpc5200_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-mpc5200_bus_read_next (bus_t * bus, uint32_t adr)
+mpc5200_bus_read_next (bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     part_t *p = PART;
@@ -328,7 +328,7 @@ mpc5200_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-mpc5200_bus_read_end (bus_t * bus)
+mpc5200_bus_read_end (bus_t *bus)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     part_t *p = PART;
@@ -355,7 +355,7 @@ mpc5200_bus_read_end (bus_t * bus)
  *
  */
 static void
-mpc5200_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+mpc5200_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     /* see Figure 6-47 in [1] */

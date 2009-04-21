@@ -30,7 +30,7 @@
 #include <cmd.h>
 
 static int
-cmd_help_run (chain_t * chain, char *params[])
+cmd_help_run (chain_t *chain, char *params[])
 {
     int i;
 

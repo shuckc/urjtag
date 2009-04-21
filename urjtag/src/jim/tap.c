@@ -52,7 +52,7 @@ const tap_state_t next_tap_state[16][2] = {
 };
 
 void
-jim_print_sreg (shift_reg_t * r)
+jim_print_sreg (shift_reg_t *r)
 {
     int i;
     for (i = (r->len + 31) / 32; i >= 0; i--)
@@ -60,7 +60,7 @@ jim_print_sreg (shift_reg_t * r)
 }
 
 void
-jim_print_tap_state (char *rof, jim_device_t * dev)
+jim_print_tap_state (char *rof, jim_device_t *dev)
 {
     printf (" tck %s, state=", rof);
     switch (dev->tap_state & 7)
@@ -112,19 +112,19 @@ jim_print_tap_state (char *rof, jim_device_t * dev)
 
 
 void
-jim_set_trst (jim_state_t * s, int trst)
+jim_set_trst (jim_state_t *s, int trst)
 {
     s->trst = trst;
 }
 
 int
-jim_get_trst (jim_state_t * s)
+jim_get_trst (jim_state_t *s)
 {
     return s->trst;
 }
 
 int
-jim_get_tdo (jim_state_t * s)
+jim_get_tdo (jim_state_t *s)
 {
     if (s->last_device_in_chain == NULL)
         return 0;
@@ -132,7 +132,7 @@ jim_get_tdo (jim_state_t * s)
 }
 
 void
-jim_tck_rise (jim_state_t * s, int tms, int tdi)
+jim_tck_rise (jim_state_t *s, int tms, int tdi)
 {
     jim_device_t *dev;
 
@@ -209,7 +209,7 @@ jim_tck_rise (jim_state_t * s, int tms, int tdi)
 }
 
 void
-jim_tck_fall (jim_state_t * s)
+jim_tck_fall (jim_state_t *s)
 {
     jim_device_t *dev;
 
@@ -326,7 +326,7 @@ jim_init (void)
 }
 
 void
-jim_free (jim_state_t * s)
+jim_free (jim_state_t *s)
 {
     jim_device_t *dev, *pre;
 

@@ -41,10 +41,12 @@
 
 int databusio[16] =
     { 94, 96, 98, 100, 102, 104, 106, 113, 95, 97, 99, 101, 103, 105, 107,
-114 };
+    114
+};
 int addrbusio[20] =
     { 93, 88, 87, 86, 85, 84, 83, 63, 64, 65, 66, 67, 68, 74, 75, 76, 77, 82,
-81, 78 };
+    81, 78
+};
 
 typedef struct
 {
@@ -94,7 +96,7 @@ typedef struct
  *
  */
 static bus_t *
-slsup3_bus_new (chain_t * chain, const bus_driver_t * driver,
+slsup3_bus_new (chain_t *chain, const bus_driver_t *driver,
                 char *cmd_params[])
 {
     bus_t *bus;
@@ -167,7 +169,7 @@ slsup3_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-slsup3_bus_printinfo (bus_t * bus)
+slsup3_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -182,7 +184,7 @@ slsup3_bus_printinfo (bus_t * bus)
  *
  */
 static int
-slsup3_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+slsup3_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     if ((adr >= FLASHSTART) && (adr < (FLASHSTART + FLASHSIZE)))
     {
@@ -223,7 +225,7 @@ slsup3_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a)
+setup_address (bus_t *bus, uint32_t a)
 {
     int i;
     part_t *p = PART;
@@ -261,7 +263,7 @@ setup_address (bus_t * bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t * bus, uint32_t adr)
+set_data_in (bus_t *bus, uint32_t adr)
 {
     int i;
     part_t *p = PART;
@@ -276,7 +278,7 @@ set_data_in (bus_t * bus, uint32_t adr)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t adr, uint32_t d)
+setup_data (bus_t *bus, uint32_t adr, uint32_t d)
 {
     int i;
     part_t *p = PART;
@@ -291,7 +293,7 @@ setup_data (bus_t * bus, uint32_t adr, uint32_t d)
 }
 
 static uint32_t
-get_data (bus_t * bus, uint32_t adr)
+get_data (bus_t *bus, uint32_t adr)
 {
     bus_area_t area;
     int i;
@@ -313,7 +315,7 @@ get_data (bus_t * bus, uint32_t adr)
  *
  */
 static void
-slsup3_bus_read_start (bus_t * bus, uint32_t adr)
+slsup3_bus_read_start (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
 
@@ -349,7 +351,7 @@ slsup3_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-slsup3_bus_read_next (bus_t * bus, uint32_t adr)
+slsup3_bus_read_next (bus_t *bus, uint32_t adr)
 {
     uint32_t d;
 
@@ -378,7 +380,7 @@ slsup3_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-slsup3_bus_read_end (bus_t * bus)
+slsup3_bus_read_end (bus_t *bus)
 {
     part_t *p = PART;
     uint32_t d;
@@ -404,7 +406,7 @@ slsup3_bus_read_end (bus_t * bus)
  *
  */
 static void
-slsup3_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+slsup3_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;

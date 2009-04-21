@@ -49,7 +49,7 @@ signal_alloc (const char *name)
 }
 
 void
-signal_free (signal_t * s)
+signal_free (signal_t *s)
 {
     if (!s)
         return;
@@ -58,7 +58,7 @@ signal_free (signal_t * s)
 }
 
 salias_t *
-salias_alloc (const char *name, const signal_t * signal)
+salias_alloc (const char *name, const signal_t *signal)
 {
     salias_t *sa = malloc (sizeof *sa);
     if (sa == NULL)
@@ -77,7 +77,7 @@ salias_alloc (const char *name, const signal_t * signal)
 }
 
 void
-salias_free (salias_t * salias)
+salias_free (salias_t *salias)
 {
     if (salias == NULL)
         return;

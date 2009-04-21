@@ -62,7 +62,7 @@
 #define	TDO 	5
 
 static int
-mpcbdm_init (cable_t * cable)
+mpcbdm_init (cable_t *cable)
 {
     if (parport_open (cable->link.port))
         return -1;
@@ -74,7 +74,7 @@ mpcbdm_init (cable_t * cable)
 }
 
 static void
-mpcbdm_clock (cable_t * cable, int tms, int tdi, int n)
+mpcbdm_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
 
@@ -98,7 +98,7 @@ mpcbdm_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-mpcbdm_get_tdo (cable_t * cable)
+mpcbdm_get_tdo (cable_t *cable)
 {
     parport_set_data (cable->link.port, 0 << TCK);
     PARAM_SIGNALS (cable) &= ~(CS_TDI | CS_TCK | CS_TMS);
@@ -109,7 +109,7 @@ mpcbdm_get_tdo (cable_t * cable)
 }
 
 static int
-mpcbdm_set_signal (cable_t * cable, int mask, int val)
+mpcbdm_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

@@ -35,7 +35,7 @@
 #include "bsdl.h"
 
 static int
-cmd_include_or_script_run (chain_t * chain, int is_include, char *params[])
+cmd_include_or_script_run (chain_t *chain, int is_include, char *params[])
 {
     int go = 0, i, j = 1;
     char *path;
@@ -121,7 +121,7 @@ cmd_include_or_script_help (char *cmd)
 }
 
 static int
-cmd_include_run (chain_t * chain, char *params[])
+cmd_include_run (chain_t *chain, char *params[])
 {
     return cmd_include_or_script_run (chain, 1, params);
 }
@@ -140,7 +140,7 @@ cmd_t cmd_include = {
 };
 
 static int
-cmd_script_run (chain_t * chain, char *params[])
+cmd_script_run (chain_t *chain, char *params[])
 {
     return cmd_include_or_script_run (chain, 0, params);
 }

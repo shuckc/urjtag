@@ -49,9 +49,9 @@ struct salias
 };
 
 signal_t *signal_alloc (const char *name);
-void signal_free (signal_t * s);
+void signal_free (signal_t *s);
 
-salias_t *salias_alloc (const char *name, const signal_t * signal);
-void salias_free (salias_t * salias);
+salias_t *salias_alloc (const char *name, const signal_t *signal);
+void salias_free (salias_t *salias);
 
 #endif /* SIGNAL_H */

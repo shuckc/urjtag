@@ -65,7 +65,7 @@ typedef struct
 } params_t;
 
 static int
-usbblaster_connect (char *params[], cable_t * cable)
+usbblaster_connect (char *params[], cable_t *cable)
 {
     params_t *cable_params;
     int result;
@@ -97,7 +97,7 @@ usbblaster_connect (char *params[], cable_t * cable)
 }
 
 void
-usbblaster_set_frequency (cable_t * cable, uint32_t new_frequency)
+usbblaster_set_frequency (cable_t *cable, uint32_t new_frequency)
 {
     if (new_frequency != FIXED_FREQUENCY)
         printf (_("Warning: USB-Blaster frequency is fixed to %ld Hz\n"),
@@ -107,7 +107,7 @@ usbblaster_set_frequency (cable_t * cable, uint32_t new_frequency)
 }
 
 static int
-usbblaster_init (cable_t * cable)
+usbblaster_init (cable_t *cable)
 {
     int i;
     params_t *params = (params_t *) cable->params;
@@ -128,7 +128,7 @@ usbblaster_init (cable_t * cable)
 }
 
 static void
-usbblaster_cable_free (cable_t * cable)
+usbblaster_cable_free (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -138,7 +138,7 @@ usbblaster_cable_free (cable_t * cable)
 }
 
 static void
-usbblaster_clock_schedule (cable_t * cable, int tms, int tdi, int n)
+usbblaster_clock_schedule (cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -192,7 +192,7 @@ usbblaster_clock_schedule (cable_t * cable, int tms, int tdi, int n)
 }
 
 static void
-usbblaster_clock (cable_t * cable, int tms, int tdi, int n)
+usbblaster_clock (cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -201,7 +201,7 @@ usbblaster_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static void
-usbblaster_get_tdo_schedule (cable_t * cable)
+usbblaster_get_tdo_schedule (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -212,7 +212,7 @@ usbblaster_get_tdo_schedule (cable_t * cable)
 }
 
 static int
-usbblaster_get_tdo_finish (cable_t * cable)
+usbblaster_get_tdo_finish (cable_t *cable)
 {
 #if 0
     char x = (cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
@@ -224,7 +224,7 @@ usbblaster_get_tdo_finish (cable_t * cable)
 }
 
 static int
-usbblaster_get_tdo (cable_t * cable)
+usbblaster_get_tdo (cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -234,13 +234,13 @@ usbblaster_get_tdo (cable_t * cable)
 }
 
 static int
-usbblaster_set_signal (cable_t * cable, int mask, int val)
+usbblaster_set_signal (cable_t *cable, int mask, int val)
 {
     return 1;
 }
 
 static void
-usbblaster_transfer_schedule (cable_t * cable, int len, char *in, char *out)
+usbblaster_transfer_schedule (cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -301,7 +301,7 @@ usbblaster_transfer_schedule (cable_t * cable, int len, char *in, char *out)
 }
 
 static int
-usbblaster_transfer_finish (cable_t * cable, int len, char *out)
+usbblaster_transfer_finish (cable_t *cable, int len, char *out)
 {
     params_t *params = (params_t *) cable->params;
     cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -352,7 +352,7 @@ usbblaster_transfer_finish (cable_t * cable, int len, char *out)
 }
 
 static int
-usbblaster_transfer (cable_t * cable, int len, char *in, char *out)
+usbblaster_transfer (cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -362,7 +362,7 @@ usbblaster_transfer (cable_t * cable, int len, char *in, char *out)
 }
 
 static void
-usbblaster_flush (cable_t * cable, cable_flush_amount_t how_much)
+usbblaster_flush (cable_t *cable, cable_flush_amount_t how_much)
 {
     params_t *params = (params_t *) cable->params;
 

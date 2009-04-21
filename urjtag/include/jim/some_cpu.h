@@ -24,5 +24,5 @@
 
 #include <jim.h>
 
-void some_cpu_tck_rise (jim_device_t * dev);
+void some_cpu_tck_rise (jim_device_t *dev);
 jim_device_t *some_cpu (void);

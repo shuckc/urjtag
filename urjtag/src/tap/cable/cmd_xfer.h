@@ -49,16 +49,16 @@ struct cx_cmd_root
 };
 typedef struct cx_cmd_root cx_cmd_root_t;
 
-int cx_cmd_space (cx_cmd_root_t * cmd_root, int max_len);
-int cx_cmd_push (cx_cmd_root_t * cmd_root, uint8_t d);
-cx_cmd_t *cx_cmd_dequeue (cx_cmd_root_t * cmd_root);
-void cx_cmd_free (cx_cmd_t * cmd);
-cx_cmd_t *cx_cmd_queue (cx_cmd_root_t * cmd_root, uint32_t to_recv);
-void cx_cmd_init (cx_cmd_root_t * cmd_root);
-void cx_cmd_deinit (cx_cmd_root_t * cmd_root);
+int cx_cmd_space (cx_cmd_root_t *cmd_root, int max_len);
+int cx_cmd_push (cx_cmd_root_t *cmd_root, uint8_t d);
+cx_cmd_t *cx_cmd_dequeue (cx_cmd_root_t *cmd_root);
+void cx_cmd_free (cx_cmd_t *cmd);
+cx_cmd_t *cx_cmd_queue (cx_cmd_root_t *cmd_root, uint32_t to_recv);
+void cx_cmd_init (cx_cmd_root_t *cmd_root);
+void cx_cmd_deinit (cx_cmd_root_t *cmd_root);
 
-void cx_xfer (cx_cmd_root_t * cmd_root, const cx_cmd_t * out_cmd,
-              cable_t * cable, cable_flush_amount_t how_much);
-uint8_t cx_xfer_recv (cable_t * cable);
+void cx_xfer (cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
+              cable_t *cable, cable_flush_amount_t how_much);
+uint8_t cx_xfer_recv (cable_t *cable);
 
 #endif /* CMD_XFER_H */

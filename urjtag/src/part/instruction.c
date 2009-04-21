@@ -69,7 +69,7 @@ instruction_alloc (const char *name, int len, const char *val)
 }
 
 void
-instruction_free (instruction * i)
+instruction_free (instruction *i)
 {
     if (!i)
         return;

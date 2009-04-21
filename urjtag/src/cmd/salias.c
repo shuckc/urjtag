@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_salias_run (chain_t * chain, char *params[])
+cmd_salias_run (chain_t *chain, char *params[])
 {
     part_t *part;
     signal_t *s;

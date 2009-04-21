@@ -68,7 +68,7 @@
 #define	BB_ENABLE	0xC
 
 static int
-byteblaster_init (cable_t * cable)
+byteblaster_init (cable_t *cable)
 {
     int BB_II = 0;
 
@@ -97,7 +97,7 @@ byteblaster_init (cable_t * cable)
 }
 
 static void
-byteblaster_clock (cable_t * cable, int tms, int tdi, int n)
+byteblaster_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
 
@@ -121,7 +121,7 @@ byteblaster_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-byteblaster_get_tdo (cable_t * cable)
+byteblaster_get_tdo (cable_t *cable)
 {
     parport_set_data (cable->link.port, 0 << TCK);
     PARAM_SIGNALS (cable) &= ~(CS_TDI | CS_TCK | CS_TMS);
@@ -132,7 +132,7 @@ byteblaster_get_tdo (cable_t * cable)
 }
 
 static int
-byteblaster_set_signal (cable_t * cable, int mask, int val)
+byteblaster_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

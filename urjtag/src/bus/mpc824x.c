@@ -72,7 +72,7 @@ char dbgData = 0;
  *
  */
 static bus_t *
-mpc824x_bus_new (chain_t * chain, const bus_driver_t * driver,
+mpc824x_bus_new (chain_t *chain, const bus_driver_t *driver,
                  char *cmd_params[])
 {
     bus_t *bus;
@@ -246,7 +246,7 @@ mpc824x_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-mpc824x_bus_printinfo (bus_t * bus)
+mpc824x_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -263,7 +263,7 @@ mpc824x_bus_printinfo (bus_t * bus)
  *
  */
 static int
-mpc824x_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+mpc824x_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
 
     if (adr < UINT32_C (0xFF000000))
@@ -316,7 +316,7 @@ mpc824x_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a)
+setup_address (bus_t *bus, uint32_t a)
 {
     int i;
     part_t *p = PART;
@@ -375,7 +375,7 @@ setup_address (bus_t * bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t * bus, uint32_t adr)
+set_data_in (bus_t *bus, uint32_t adr)
 {
     int i;
     part_t *p = PART;
@@ -390,7 +390,7 @@ set_data_in (bus_t * bus, uint32_t adr)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t adr, uint32_t d)
+setup_data (bus_t *bus, uint32_t adr, uint32_t d)
 {
     int i;
     part_t *p = PART;
@@ -432,7 +432,7 @@ setup_data (bus_t * bus, uint32_t adr, uint32_t d)
 }
 
 static uint32_t
-get_data (bus_t * bus, uint32_t adr)
+get_data (bus_t *bus, uint32_t adr)
 {
     bus_area_t area;
     int i;
@@ -480,7 +480,7 @@ get_data (bus_t * bus, uint32_t adr)
  *
  */
 static void
-mpc824x_bus_read_start (bus_t * bus, uint32_t adr)
+mpc824x_bus_read_start (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
 
@@ -502,7 +502,7 @@ mpc824x_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-mpc824x_bus_read_next (bus_t * bus, uint32_t adr)
+mpc824x_bus_read_next (bus_t *bus, uint32_t adr)
 {
     uint32_t d;
 
@@ -519,7 +519,7 @@ mpc824x_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-mpc824x_bus_read_end (bus_t * bus)
+mpc824x_bus_read_end (bus_t *bus)
 {
     part_t *p = PART;
 
@@ -536,7 +536,7 @@ mpc824x_bus_read_end (bus_t * bus)
  *
  */
 static void
-mpc824x_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+mpc824x_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     part_t *p = PART;
 

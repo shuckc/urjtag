@@ -41,7 +41,7 @@
 #undef VERY_LOW_LEVEL_DEBUG
 
 int
-detect_register_size (chain_t * chain)
+detect_register_size (chain_t *chain)
 {
     int len;
     tap_register *rz;
@@ -120,7 +120,7 @@ detect_register_size (chain_t * chain)
 }
 
 void
-jtag_reset (chain_t * chain)
+jtag_reset (chain_t *chain)
 {
     chain_set_trst (chain, 0);
     chain_set_trst (chain, 1);
@@ -129,7 +129,7 @@ jtag_reset (chain_t * chain)
 }
 
 void
-discovery (chain_t * chain)
+discovery (chain_t *chain)
 {
     int irlen;
     tap_register *ir;

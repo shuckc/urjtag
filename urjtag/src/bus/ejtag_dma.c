@@ -87,7 +87,7 @@ typedef struct
  *
  */
 static bus_t *
-ejtag_dma_bus_new (chain_t * chain, const bus_driver_t * driver,
+ejtag_dma_bus_new (chain_t *chain, const bus_driver_t *driver,
                    char *cmd_params[])
 {
     bus_t *bus;
@@ -115,7 +115,7 @@ ejtag_dma_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-ejtag_dma_bus_printinfo (bus_t * bus)
+ejtag_dma_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -130,7 +130,7 @@ ejtag_dma_bus_printinfo (bus_t * bus)
  *
  */
 static uint32_t
-reg_value (tap_register * reg)
+reg_value (tap_register *reg)
 {
     uint32_t retval = 0;
     int i;
@@ -363,7 +363,7 @@ ejtag_dma_read (unsigned int addr, int sz)
  *
  */
 int
-ejtag_dma_bus_init (bus_t * bus)
+ejtag_dma_bus_init (bus_t *bus)
 {
     data_register *ejctrl = NULL, *ejimpl = NULL, *ejaddr = NULL, *ejdata =
         NULL;
@@ -517,7 +517,7 @@ ejtag_dma_bus_init (bus_t * bus)
  *
  */
 void
-ejtag_dma_bus_prepare (bus_t * bus)
+ejtag_dma_bus_prepare (bus_t *bus)
 {
     if (!INITIALIZED)
         bus_init (bus);
@@ -528,7 +528,7 @@ ejtag_dma_bus_prepare (bus_t * bus)
  *
  */
 int
-ejtag_dma_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+ejtag_dma_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
 
     /* from MIPS.org datasheets */
@@ -612,7 +612,7 @@ get_sz (uint32_t adr)
  *
  */
 void
-ejtag_dma_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+ejtag_dma_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     //printf("%s:adr=0x%x,data=0x%x\n",__FUNCTION__,adr,data);
     ejtag_dma_write (adr, data, get_sz (adr));
@@ -623,7 +623,7 @@ ejtag_dma_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
  *
  */
 unsigned int
-ejtag_dma_bus_read (bus_t * bus, uint32_t adr)
+ejtag_dma_bus_read (bus_t *bus, uint32_t adr)
 {
     int data = ejtag_dma_read (adr, get_sz (adr));
     //printf("%s:adr=0x%x,got=0x%x\n",__FUNCTION__,adr,data);
@@ -636,7 +636,7 @@ static unsigned int _data_read;
  *
  */
 void
-ejtag_dma_bus_read_start (bus_t * bus, uint32_t adr)
+ejtag_dma_bus_read_start (bus_t *bus, uint32_t adr)
 {
     _data_read = ejtag_dma_read (adr, get_sz (adr));
     //printf("%s:adr=0x%x, got=0x%x\n",__FUNCTION__,adr,_data_read);
@@ -648,7 +648,7 @@ ejtag_dma_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 unsigned int
-ejtag_dma_bus_read_next (bus_t * bus, uint32_t adr)
+ejtag_dma_bus_read_next (bus_t *bus, uint32_t adr)
 {
     unsigned int tmp_value = _data_read;
     _data_read = ejtag_dma_read (adr, get_sz (adr));
@@ -661,7 +661,7 @@ ejtag_dma_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 unsigned int
-ejtag_dma_bus_read_end (bus_t * bus)
+ejtag_dma_bus_read_end (bus_t *bus)
 {
     return _data_read;
 }

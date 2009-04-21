@@ -156,7 +156,7 @@ typedef struct
  *
  */
 static bus_t *
-zefant_xs3_bus_new (chain_t * chain, const bus_driver_t * driver,
+zefant_xs3_bus_new (chain_t *chain, const bus_driver_t *driver,
                     char *cmd_params[])
 {
     bus_t *bus;
@@ -420,7 +420,7 @@ zefant_xs3_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-zefant_xs3_bus_printinfo (bus_t * bus)
+zefant_xs3_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -433,7 +433,7 @@ zefant_xs3_bus_printinfo (bus_t * bus)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a, component_t * comp)
+setup_address (bus_t *bus, uint32_t a, component_t *comp)
 {
     int i;
     part_t *p = PART;
@@ -468,7 +468,7 @@ setup_address (bus_t * bus, uint32_t a, component_t * comp)
 }
 
 static int
-detect_data_width (component_t * comp)
+detect_data_width (component_t *comp)
 {
     int width;
 
@@ -493,7 +493,7 @@ detect_data_width (component_t * comp)
 }
 
 static void
-set_data_in (bus_t * bus, component_t * comp)
+set_data_in (bus_t *bus, component_t *comp)
 {
     int i;
     part_t *p = PART;
@@ -506,7 +506,7 @@ set_data_in (bus_t * bus, component_t * comp)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t d, component_t * comp)
+setup_data (bus_t *bus, uint32_t d, component_t *comp)
 {
     int i;
     part_t *p = PART;
@@ -519,8 +519,7 @@ setup_data (bus_t * bus, uint32_t d, component_t * comp)
 }
 
 static uint8_t
-eeprom_shift_byte (chain_t * chain, part_t * p, component_t * comp,
-                   uint8_t byte)
+eeprom_shift_byte (chain_t *chain, part_t *p, component_t *comp, uint8_t byte)
 {
     int pos;
     uint8_t so_data = 0x00;
@@ -547,7 +546,7 @@ eeprom_shift_byte (chain_t * chain, part_t * p, component_t * comp,
 }
 
 static void
-eeprom_disable_device (chain_t * chain, part_t * p, component_t * comp)
+eeprom_disable_device (chain_t *chain, part_t *p, component_t *comp)
 {
     /* ensure that SCK is low before disabling device */
     part_set_signal (p, SCK, 1, 0);
@@ -563,7 +562,7 @@ eeprom_disable_device (chain_t * chain, part_t * p, component_t * comp)
  *
  */
 static int
-zefant_xs3_bus_init (bus_t * bus)
+zefant_xs3_bus_init (bus_t *bus)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -633,8 +632,7 @@ zefant_xs3_bus_init (bus_t * bus)
 }
 
 static int
-comp_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area,
-               component_t ** comp)
+comp_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp)
 {
     if (adr < RAM0_START)
     {
@@ -693,7 +691,7 @@ comp_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area,
  *
  */
 static int
-zefant_xs3_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+zefant_xs3_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     component_t *comp;
 
@@ -705,7 +703,7 @@ zefant_xs3_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
  *
  */
 static void
-zefant_xs3_bus_read_start (bus_t * bus, uint32_t adr)
+zefant_xs3_bus_read_start (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -775,7 +773,7 @@ zefant_xs3_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-zefant_xs3_bus_read_next (bus_t * bus, uint32_t adr)
+zefant_xs3_bus_read_next (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -824,7 +822,7 @@ zefant_xs3_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-zefant_xs3_bus_read_end (bus_t * bus)
+zefant_xs3_bus_read_end (bus_t *bus)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -881,7 +879,7 @@ zefant_xs3_bus_read_end (bus_t * bus)
  *
  */
 static void
-zefant_xs3_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+zefant_xs3_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;

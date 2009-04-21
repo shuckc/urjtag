@@ -64,13 +64,13 @@ typedef struct
 usbconn_driver_t usbconn_ftdi_driver;
 usbconn_driver_t usbconn_ftdi_mpsse_driver;
 
-static int usbconn_ftdi_common_open (usbconn_t * conn, int printerr);
-static void usbconn_ftdi_free (usbconn_t * conn);
+static int usbconn_ftdi_common_open (usbconn_t *conn, int printerr);
+static void usbconn_ftdi_free (usbconn_t *conn);
 
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_flush (ftdi_param_t * p)
+usbconn_ftdi_flush (ftdi_param_t *p)
 {
     int xferred;
     int recvd = 0;
@@ -135,7 +135,7 @@ usbconn_ftdi_flush (ftdi_param_t * p)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_read (usbconn_t * conn, uint8_t * buf, int len)
+usbconn_ftdi_read (usbconn_t *conn, uint8_t *buf, int len)
 {
     ftdi_param_t *p = conn->params;
     int cpy_len;
@@ -181,7 +181,7 @@ usbconn_ftdi_read (usbconn_t * conn, uint8_t * buf, int len)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_write (usbconn_t * conn, uint8_t * buf, int len, int recv)
+usbconn_ftdi_write (usbconn_t *conn, uint8_t *buf, int len, int recv)
 {
     ftdi_param_t *p = conn->params;
     int xferred = 0;
@@ -236,7 +236,7 @@ usbconn_ftdi_write (usbconn_t * conn, uint8_t * buf, int len, int recv)
 
 usbconn_t *
 usbconn_ftdi_connect (const char **param, int paramc,
-                      usbconn_cable_t * template)
+                      usbconn_cable_t *template)
 {
     usbconn_t *c = malloc (sizeof (usbconn_t));
     ftdi_param_t *p = malloc (sizeof (ftdi_param_t));
@@ -298,7 +298,7 @@ usbconn_ftdi_connect (const char **param, int paramc,
 
 usbconn_t *
 usbconn_ftdi_mpsse_connect (const char **param, int paramc,
-                            usbconn_cable_t * template)
+                            usbconn_cable_t *template)
 {
     usbconn_t *conn = usbconn_ftdi_connect (param, paramc, template);
 
@@ -312,7 +312,7 @@ usbconn_ftdi_mpsse_connect (const char **param, int paramc,
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_common_open (usbconn_t * conn, int printerr)
+usbconn_ftdi_common_open (usbconn_t *conn, int printerr)
 {
     ftdi_param_t *p = conn->params;
     struct ftdi_context *fc = p->fc;
@@ -412,7 +412,7 @@ seq_reset (struct ftdi_context *fc)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_open (usbconn_t * conn)
+usbconn_ftdi_open (usbconn_t *conn)
 {
     ftdi_param_t *p = conn->params;
     struct ftdi_context *fc = p->fc;
@@ -461,7 +461,7 @@ usbconn_ftdi_open (usbconn_t * conn)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_mpsse_open (usbconn_t * conn)
+usbconn_ftdi_mpsse_open (usbconn_t *conn)
 {
     ftdi_param_t *p = conn->params;
     struct ftdi_context *fc = p->fc;
@@ -550,7 +550,7 @@ usbconn_ftdi_mpsse_open (usbconn_t * conn)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_close (usbconn_t * conn)
+usbconn_ftdi_close (usbconn_t *conn)
 {
     ftdi_param_t *p = conn->params;
 
@@ -567,7 +567,7 @@ usbconn_ftdi_close (usbconn_t * conn)
 /* ---------------------------------------------------------------------- */
 
 static void
-usbconn_ftdi_free (usbconn_t * conn)
+usbconn_ftdi_free (usbconn_t *conn)
 {
     ftdi_param_t *p = conn->params;
 

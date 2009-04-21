@@ -67,7 +67,7 @@
 #define	TDO 	7
 
 static int
-triton_init (cable_t * cable)
+triton_init (cable_t *cable)
 {
     if (parport_open (cable->link.port))
         return -1;
@@ -79,7 +79,7 @@ triton_init (cable_t * cable)
 }
 
 static void
-triton_clock (cable_t * cable, int tms, int tdi, int n)
+triton_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
@@ -107,7 +107,7 @@ triton_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-triton_get_tdo (cable_t * cable)
+triton_get_tdo (cable_t *cable)
 {
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
     int sreset = (PARAM_SIGNALS (cable) & CS_RESET) ? 1 : 0;
@@ -122,7 +122,7 @@ triton_get_tdo (cable_t * cable)
 }
 
 static int
-triton_set_signal (cable_t * cable, int mask, int val)
+triton_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

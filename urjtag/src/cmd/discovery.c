@@ -31,7 +31,7 @@
 #include "cmd.h"
 
 static int
-cmd_discovery_run (chain_t * chain, char *params[])
+cmd_discovery_run (chain_t *chain, char *params[])
 {
     if (cmd_params (params) != 1)
         return -1;

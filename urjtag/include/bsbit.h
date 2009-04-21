@@ -49,8 +49,8 @@ struct bsbit
     int control_state;
 };
 
-bsbit_t *bsbit_alloc (int bit, const char *name, int type, signal_t * signal,
+bsbit_t *bsbit_alloc (int bit, const char *name, int type, signal_t *signal,
                       int safe);
-void bsbit_free (bsbit_t * b);
+void bsbit_free (bsbit_t *b);
 
 #endif /* BSBIT_H */

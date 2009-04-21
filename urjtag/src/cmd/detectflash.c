@@ -30,7 +30,7 @@
 #include <cmd.h>
 
 static int
-cmd_detectflash_run (chain_t * chain, char *params[])
+cmd_detectflash_run (chain_t *chain, char *params[])
 {
     uint32_t adr;
 

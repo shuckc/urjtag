@@ -62,7 +62,7 @@ typedef struct
  *
  */
 static bus_t *
-bf548_ezkit_bus_new (chain_t * chain, const bus_driver_t * driver,
+bf548_ezkit_bus_new (chain_t *chain, const bus_driver_t *driver,
                      char *cmd_params[])
 {
     bus_t *bus;
@@ -141,7 +141,7 @@ bf548_ezkit_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-bf548_ezkit_bus_printinfo (bus_t * bus)
+bf548_ezkit_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -158,7 +158,7 @@ bf548_ezkit_bus_printinfo (bus_t * bus)
  *
  */
 static int
-bf548_ezkit_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+bf548_ezkit_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     area->description = NULL;
     area->start = UINT32_C (0x00000000);
@@ -169,7 +169,7 @@ bf548_ezkit_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static void
-select_flash (bus_t * bus)
+select_flash (bus_t *bus)
 {
     part_t *p = PART;
 
@@ -182,7 +182,7 @@ select_flash (bus_t * bus)
 }
 
 static void
-unselect_flash (bus_t * bus)
+unselect_flash (bus_t *bus)
 {
     part_t *p = PART;
 
@@ -195,7 +195,7 @@ unselect_flash (bus_t * bus)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a)
+setup_address (bus_t *bus, uint32_t a)
 {
     int i;
     part_t *p = PART;
@@ -205,7 +205,7 @@ setup_address (bus_t * bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t * bus)
+set_data_in (bus_t *bus)
 {
     int i;
     part_t *p = PART;
@@ -215,7 +215,7 @@ set_data_in (bus_t * bus)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t d)
+setup_data (bus_t *bus, uint32_t d)
 {
     int i;
     part_t *p = PART;
@@ -230,7 +230,7 @@ setup_data (bus_t * bus, uint32_t d)
  *
  */
 static void
-bf548_ezkit_bus_read_start (bus_t * bus, uint32_t adr)
+bf548_ezkit_bus_read_start (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -251,7 +251,7 @@ bf548_ezkit_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-bf548_ezkit_bus_read_next (bus_t * bus, uint32_t adr)
+bf548_ezkit_bus_read_next (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -272,7 +272,7 @@ bf548_ezkit_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-bf548_ezkit_bus_read_end (bus_t * bus)
+bf548_ezkit_bus_read_end (bus_t *bus)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -297,7 +297,7 @@ bf548_ezkit_bus_read_end (bus_t * bus)
  *
  */
 static void
-bf548_ezkit_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+bf548_ezkit_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;

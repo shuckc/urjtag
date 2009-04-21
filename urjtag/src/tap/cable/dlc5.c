@@ -57,7 +57,7 @@
 #define	TDO	4
 
 static int
-dlc5_init (cable_t * cable)
+dlc5_init (cable_t *cable)
 {
     if (parport_open (cable->link.port))
         return -1;
@@ -68,7 +68,7 @@ dlc5_init (cable_t * cable)
 }
 
 static void
-dlc5_clock (cable_t * cable, int tms, int tdi, int n)
+dlc5_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
 
@@ -94,7 +94,7 @@ dlc5_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-dlc5_get_tdo (cable_t * cable)
+dlc5_get_tdo (cable_t *cable)
 {
     parport_set_data (cable->link.port, (1 << PROG) | (0 << TCK));
     PARAM_SIGNALS (cable) &= ~(CS_TDI | CS_TCK | CS_TMS);
@@ -105,7 +105,7 @@ dlc5_get_tdo (cable_t * cable)
 }
 
 static int
-dlc5_set_signal (cable_t * cable, int mask, int val)
+dlc5_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

@@ -72,13 +72,13 @@ typedef struct
 usbconn_driver_t usbconn_ftd2xx_driver;
 usbconn_driver_t usbconn_ftd2xx_mpsse_driver;
 
-static int usbconn_ftd2xx_common_open (usbconn_t * conn, int printerr);
-static void usbconn_ftd2xx_free (usbconn_t * conn);
+static int usbconn_ftd2xx_common_open (usbconn_t *conn, int printerr);
+static void usbconn_ftd2xx_free (usbconn_t *conn);
 
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_flush (ftd2xx_param_t * p)
+usbconn_ftd2xx_flush (ftd2xx_param_t *p)
 {
     FT_STATUS status;
     DWORD xferred;
@@ -155,7 +155,7 @@ usbconn_ftd2xx_flush (ftd2xx_param_t * p)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_read (usbconn_t * conn, uint8_t * buf, int len)
+usbconn_ftd2xx_read (usbconn_t *conn, uint8_t *buf, int len)
 {
     ftd2xx_param_t *p = conn->params;
     int cpy_len;
@@ -211,7 +211,7 @@ usbconn_ftd2xx_read (usbconn_t * conn, uint8_t * buf, int len)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_write (usbconn_t * conn, uint8_t * buf, int len, int recv)
+usbconn_ftd2xx_write (usbconn_t *conn, uint8_t *buf, int len, int recv)
 {
     ftd2xx_param_t *p = conn->params;
     int xferred = 0;
@@ -273,7 +273,7 @@ usbconn_ftd2xx_write (usbconn_t * conn, uint8_t * buf, int len, int recv)
 
 usbconn_t *
 usbconn_ftd2xx_connect (const char **param, int paramc,
-                        usbconn_cable_t * template)
+                        usbconn_cable_t *template)
 {
     usbconn_t *c = malloc (sizeof (usbconn_t));
     ftd2xx_param_t *p = malloc (sizeof (ftd2xx_param_t));
@@ -331,7 +331,7 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
 
 usbconn_t *
 usbconn_ftd2xx_mpsse_connect (const char **param, int paramc,
-                              usbconn_cable_t * template)
+                              usbconn_cable_t *template)
 {
     usbconn_t *conn = usbconn_ftd2xx_connect (param, paramc, template);
 
@@ -345,7 +345,7 @@ usbconn_ftd2xx_mpsse_connect (const char **param, int paramc,
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_common_open (usbconn_t * conn, int printerr)
+usbconn_ftd2xx_common_open (usbconn_t *conn, int printerr)
 {
     ftd2xx_param_t *p = conn->params;
     FT_STATUS status;
@@ -387,7 +387,7 @@ usbconn_ftd2xx_common_open (usbconn_t * conn, int printerr)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_open (usbconn_t * conn)
+usbconn_ftd2xx_open (usbconn_t *conn)
 {
     ftd2xx_param_t *p = conn->params;
     FT_HANDLE fc;
@@ -425,7 +425,7 @@ usbconn_ftd2xx_open (usbconn_t * conn)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_mpsse_open (usbconn_t * conn)
+usbconn_ftd2xx_mpsse_open (usbconn_t *conn)
 {
     ftd2xx_param_t *p = conn->params;
     FT_HANDLE fc;
@@ -514,7 +514,7 @@ usbconn_ftd2xx_mpsse_open (usbconn_t * conn)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_close (usbconn_t * conn)
+usbconn_ftd2xx_close (usbconn_t *conn)
 {
     ftd2xx_param_t *p = conn->params;
 
@@ -530,7 +530,7 @@ usbconn_ftd2xx_close (usbconn_t * conn)
 /* ---------------------------------------------------------------------- */
 
 static void
-usbconn_ftd2xx_free (usbconn_t * conn)
+usbconn_ftd2xx_free (usbconn_t *conn)
 {
     ftd2xx_param_t *p = conn->params;
 

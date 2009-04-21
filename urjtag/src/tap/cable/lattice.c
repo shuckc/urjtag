@@ -52,7 +52,7 @@
 
 
 static int
-lattice_init (cable_t * cable)
+lattice_init (cable_t *cable)
 {
     int data;
 
@@ -72,7 +72,7 @@ lattice_init (cable_t * cable)
 }
 
 static void
-lattice_clock (cable_t * cable, int tms, int tdi, int n)
+lattice_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
@@ -99,7 +99,7 @@ lattice_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-lattice_get_tdo (cable_t * cable)
+lattice_get_tdo (cable_t *cable)
 {
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
 
@@ -112,7 +112,7 @@ lattice_get_tdo (cable_t * cable)
 }
 
 static int
-lattice_set_signal (cable_t * cable, int mask, int val)
+lattice_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

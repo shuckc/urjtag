@@ -42,6 +42,6 @@ struct instruction
 };
 
 instruction *instruction_alloc (const char *name, int len, const char *val);
-void instruction_free (instruction * i);
+void instruction_free (instruction *i);
 
 #endif /* INSTRUCTION_H */

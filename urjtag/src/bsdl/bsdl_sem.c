@@ -84,7 +84,7 @@ print_cmd (char **cmd)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_set_instruction_length (jtag_ctrl_t * jc)
+bsdl_set_instruction_length (jtag_ctrl_t *jc)
 {
     char lenstring[6];
     char *cmd[] = { "instruction",
@@ -124,7 +124,7 @@ bsdl_set_instruction_length (jtag_ctrl_t * jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_emit_ports (jtag_ctrl_t * jc)
+bsdl_emit_ports (jtag_ctrl_t *jc)
 {
     port_desc_t *pd = jc->port_desc;
     struct string_elem *name;
@@ -203,7 +203,7 @@ bsdl_emit_ports (jtag_ctrl_t * jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-create_register (jtag_ctrl_t * jc, char *reg_name, size_t len)
+create_register (jtag_ctrl_t *jc, char *reg_name, size_t len)
 {
     const size_t str_len = 10;
     char len_str[str_len + 1];
@@ -241,7 +241,7 @@ create_register (jtag_ctrl_t * jc, char *reg_name, size_t len)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_process_idcode (jtag_ctrl_t * jc)
+bsdl_process_idcode (jtag_ctrl_t *jc)
 {
     if (jc->idcode)
         create_register (jc, "DIR", strlen (jc->idcode));
@@ -267,7 +267,7 @@ bsdl_process_idcode (jtag_ctrl_t * jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_process_usercode (jtag_ctrl_t * jc)
+bsdl_process_usercode (jtag_ctrl_t *jc)
 {
     if (jc->usercode)
         create_register (jc, "USERCODE", strlen (jc->usercode));
@@ -291,7 +291,7 @@ bsdl_process_usercode (jtag_ctrl_t * jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_set_bsr_length (jtag_ctrl_t * jc)
+bsdl_set_bsr_length (jtag_ctrl_t *jc)
 {
     create_register (jc, "BSR", jc->bsr_len);
 
@@ -314,7 +314,7 @@ bsdl_set_bsr_length (jtag_ctrl_t * jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_process_cell_info (jtag_ctrl_t * jc)
+bsdl_process_cell_info (jtag_ctrl_t *jc)
 {
     cell_info_t *ci = jc->cell_info_first;
     const size_t str_len = 10;
@@ -427,7 +427,7 @@ bsdl_process_cell_info (jtag_ctrl_t * jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_process_register_access (jtag_ctrl_t * jc)
+bsdl_process_register_access (jtag_ctrl_t *jc)
 {
     ainfo_elem_t *ai;
     instr_elem_t *cinst;
@@ -564,7 +564,7 @@ bsdl_process_register_access (jtag_ctrl_t * jc)
  *   0                   -> error occured
  ****************************************************************************/
 static int
-parse_vhdl_elem (bsdl_parser_priv_t * priv, vhdl_elem_t * elem)
+parse_vhdl_elem (bsdl_parser_priv_t *priv, vhdl_elem_t *elem)
 {
     char *buf;
     size_t buf_len;
@@ -622,7 +622,7 @@ parse_vhdl_elem (bsdl_parser_priv_t * priv, vhdl_elem_t * elem)
  *   telling if INSTR_EXEC or INSTR_PRINT succeeded
  ****************************************************************************/
 static int
-build_commands (bsdl_parser_priv_t * priv)
+build_commands (bsdl_parser_priv_t *priv)
 {
     jtag_ctrl_t *jc = priv->jtag_ctrl;
     int result = 1;
@@ -659,7 +659,7 @@ build_commands (bsdl_parser_priv_t * priv)
  *   0 -> idcodes don't match
  ****************************************************************************/
 static int
-compare_idcode (jtag_ctrl_t * jc, const char *idcode)
+compare_idcode (jtag_ctrl_t *jc, const char *idcode)
 {
     int idcode_match = 0;
 
@@ -709,7 +709,7 @@ compare_idcode (jtag_ctrl_t * jc, const char *idcode)
  *
  ****************************************************************************/
 int
-bsdl_process_elements (jtag_ctrl_t * jc, const char *idcode)
+bsdl_process_elements (jtag_ctrl_t *jc, const char *idcode)
 {
     bsdl_parser_priv_t *priv;
     vhdl_elem_t *el = jc->vhdl_elem_first;

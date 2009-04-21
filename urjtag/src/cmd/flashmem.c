@@ -34,7 +34,7 @@
 #include "cmd.h"
 
 static int
-cmd_flashmem_run (chain_t * chain, char *params[])
+cmd_flashmem_run (chain_t *chain, char *params[])
 {
     int msbin;
     int noverify = 0;

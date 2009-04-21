@@ -79,7 +79,7 @@ typedef struct
 } ep9307_params_t;
 
 static int
-ep9307_gpio_open (cable_t * cable)
+ep9307_gpio_open (cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
     off_t map_mask;
@@ -156,7 +156,7 @@ ep9307_gpio_open (cable_t * cable)
 }
 
 static int
-ep9307_gpio_close (cable_t * cable)
+ep9307_gpio_close (cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
@@ -170,7 +170,7 @@ ep9307_gpio_close (cable_t * cable)
 }
 
 static int
-ep9307_gpio_write (cable_t * cable, uint8_t data)
+ep9307_gpio_write (cable_t *cable, uint8_t data)
 {
     ep9307_params_t *p = cable->params;
     uint32_t tmp;
@@ -185,7 +185,7 @@ ep9307_gpio_write (cable_t * cable, uint8_t data)
 }
 
 static int
-ep9307_gpio_read (cable_t * cable)
+ep9307_gpio_read (cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
     uint32_t tmp;
@@ -196,7 +196,7 @@ ep9307_gpio_read (cable_t * cable)
 }
 
 static int
-ep9307_connect (char *params[], cable_t * cable)
+ep9307_connect (char *params[], cable_t *cable)
 {
     ep9307_params_t *cable_params;
 
@@ -223,14 +223,14 @@ ep9307_connect (char *params[], cable_t * cable)
 }
 
 static void
-ep9307_cable_free (cable_t * cable)
+ep9307_cable_free (cable_t *cable)
 {
     free (cable->params);
     free (cable);
 }
 
 static int
-ep9307_init (cable_t * cable)
+ep9307_init (cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
@@ -245,13 +245,13 @@ ep9307_init (cable_t * cable)
 }
 
 static void
-ep9307_done (cable_t * cable)
+ep9307_done (cable_t *cable)
 {
     ep9307_gpio_close (cable);
 }
 
 static void
-ep9307_clock (cable_t * cable, int tms, int tdi, int n)
+ep9307_clock (cable_t *cable, int tms, int tdi, int n)
 {
     ep9307_params_t *p = cable->params;
     int bit_mask;
@@ -275,7 +275,7 @@ ep9307_clock (cable_t * cable, int tms, int tdi, int n)
  * NOTE: This also lowers the TDI and TMS lines; is this intended?
  */
 static int
-ep9307_get_tdo (cable_t * cable)
+ep9307_get_tdo (cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
@@ -286,7 +286,7 @@ ep9307_get_tdo (cable_t * cable)
 }
 
 static int
-ep9307_current_signals (cable_t * cable)
+ep9307_current_signals (cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
@@ -304,7 +304,7 @@ ep9307_current_signals (cable_t * cable)
 }
 
 static int
-ep9307_set_signal (cable_t * cable, int mask, int val)
+ep9307_set_signal (cable_t *cable, int mask, int val)
 {
     ep9307_params_t *p = cable->params;
 
@@ -326,7 +326,7 @@ ep9307_set_signal (cable_t * cable, int mask, int val)
 }
 
 static int
-ep9307_get_signal (cable_t * cable, pod_sigsel_t sig)
+ep9307_get_signal (cable_t *cable, pod_sigsel_t sig)
 {
     return (ep9307_current_signals (cable) & sig) ? 1 : 0;
 }

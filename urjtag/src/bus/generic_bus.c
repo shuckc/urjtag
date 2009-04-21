@@ -31,7 +31,7 @@
 #include "generic_bus.h"
 
 int
-generic_bus_attach_sig (part_t * part, signal_t ** sig, char *id)
+generic_bus_attach_sig (part_t *part, signal_t **sig, char *id)
 {
     int failed = URJTAG_STATUS_OK;
 
@@ -50,7 +50,7 @@ generic_bus_attach_sig (part_t * part, signal_t ** sig, char *id)
  *
  */
 void
-generic_bus_free (bus_t * bus)
+generic_bus_free (bus_t *bus)
 {
     free (bus->params);
     free (bus);
@@ -61,7 +61,7 @@ generic_bus_free (bus_t * bus)
  *
  */
 int
-generic_bus_no_init (bus_t * bus)
+generic_bus_no_init (bus_t *bus)
 {
     INITIALIZED = 1;
 
@@ -73,7 +73,7 @@ generic_bus_no_init (bus_t * bus)
  *
  */
 void
-generic_bus_prepare_extest (bus_t * bus)
+generic_bus_prepare_extest (bus_t *bus)
 {
     if (!INITIALIZED)
         bus_init (bus);
@@ -87,7 +87,7 @@ generic_bus_prepare_extest (bus_t * bus)
  *
  */
 uint32_t
-generic_bus_read (bus_t * bus, uint32_t adr)
+generic_bus_read (bus_t *bus, uint32_t adr)
 {
     bus_read_start (bus, adr);
     return bus_read_end (bus);

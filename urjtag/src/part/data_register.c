@@ -72,7 +72,7 @@ data_register_alloc (const char *name, int len)
 }
 
 void
-data_register_free (data_register * dr)
+data_register_free (data_register *dr)
 {
     if (!dr)
         return;

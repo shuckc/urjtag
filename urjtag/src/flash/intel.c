@@ -48,24 +48,24 @@
 #include <flash.h>
 #include <bus.h>
 
-static int intel_flash_erase_block (cfi_array_t * cfi_array, uint32_t adr);
-static int intel_flash_unlock_block (cfi_array_t * cfi_array, uint32_t adr);
-static int intel_flash_program_single (cfi_array_t * cfi_array, uint32_t adr,
+static int intel_flash_erase_block (cfi_array_t *cfi_array, uint32_t adr);
+static int intel_flash_unlock_block (cfi_array_t *cfi_array, uint32_t adr);
+static int intel_flash_program_single (cfi_array_t *cfi_array, uint32_t adr,
                                        uint32_t data);
-static int intel_flash_program_buffer (cfi_array_t * cfi_array, uint32_t adr,
-                                       uint32_t * buffer, int count);
-static int intel_flash_program (cfi_array_t * cfi_array, uint32_t adr,
-                                uint32_t * buffer, int count);
-static int intel_flash_erase_block32 (cfi_array_t * cfi_array, uint32_t adr);
-static int intel_flash_unlock_block32 (cfi_array_t * cfi_array, uint32_t adr);
-static int intel_flash_program32_single (cfi_array_t * cfi_array,
+static int intel_flash_program_buffer (cfi_array_t *cfi_array, uint32_t adr,
+                                       uint32_t *buffer, int count);
+static int intel_flash_program (cfi_array_t *cfi_array, uint32_t adr,
+                                uint32_t *buffer, int count);
+static int intel_flash_erase_block32 (cfi_array_t *cfi_array, uint32_t adr);
+static int intel_flash_unlock_block32 (cfi_array_t *cfi_array, uint32_t adr);
+static int intel_flash_program32_single (cfi_array_t *cfi_array,
                                          uint32_t adr, uint32_t data);
-static int intel_flash_program32 (cfi_array_t * cfi_array, uint32_t adr,
-                                  uint32_t * buffer, int count);
+static int intel_flash_program32 (cfi_array_t *cfi_array, uint32_t adr,
+                                  uint32_t *buffer, int count);
 
 /* autodetect, we can handle this chip */
 static int
-intel_flash_autodetect32 (cfi_array_t * cfi_array)
+intel_flash_autodetect32 (cfi_array_t *cfi_array)
 {
     bus_area_t area;
 
@@ -84,7 +84,7 @@ intel_flash_autodetect32 (cfi_array_t * cfi_array)
 }
 
 static int
-intel_flash_autodetect (cfi_array_t * cfi_array)
+intel_flash_autodetect (cfi_array_t *cfi_array)
 {
     bus_area_t area;
 
@@ -103,7 +103,7 @@ intel_flash_autodetect (cfi_array_t * cfi_array)
 }
 
 static int
-intel_flash_autodetect8 (cfi_array_t * cfi_array)
+intel_flash_autodetect8 (cfi_array_t *cfi_array)
 {
     bus_area_t area;
 
@@ -122,7 +122,7 @@ intel_flash_autodetect8 (cfi_array_t * cfi_array)
 }
 
 static void
-_intel_flash_print_info (cfi_array_t * cfi_array, int o)
+_intel_flash_print_info (cfi_array_t *cfi_array, int o)
 {
     uint32_t mid, cid;
     bus_t *bus = cfi_array->bus;
@@ -206,7 +206,7 @@ _intel_flash_print_info (cfi_array_t * cfi_array, int o)
 }
 
 static void
-intel_flash_print_info (cfi_array_t * cfi_array)
+intel_flash_print_info (cfi_array_t *cfi_array)
 {
     int o = 1;
     bus_t *bus = cfi_array->bus;
@@ -224,7 +224,7 @@ intel_flash_print_info (cfi_array_t * cfi_array)
 }
 
 static void
-intel_flash_print_info32 (cfi_array_t * cfi_array)
+intel_flash_print_info32 (cfi_array_t *cfi_array)
 {
     int o = 2;
     bus_t *bus = cfi_array->bus;
@@ -241,7 +241,7 @@ intel_flash_print_info32 (cfi_array_t * cfi_array)
 }
 
 static int
-intel_flash_erase_block (cfi_array_t * cfi_array, uint32_t adr)
+intel_flash_erase_block (cfi_array_t *cfi_array, uint32_t adr)
 {
     uint16_t sr;
     bus_t *bus = cfi_array->bus;
@@ -273,7 +273,7 @@ intel_flash_erase_block (cfi_array_t * cfi_array, uint32_t adr)
 }
 
 static int
-intel_flash_unlock_block (cfi_array_t * cfi_array, uint32_t adr)
+intel_flash_unlock_block (cfi_array_t *cfi_array, uint32_t adr)
 {
     uint16_t sr;
     bus_t *bus = cfi_array->bus;
@@ -294,7 +294,7 @@ intel_flash_unlock_block (cfi_array_t * cfi_array, uint32_t adr)
 }
 
 static int
-intel_flash_program_single (cfi_array_t * cfi_array, uint32_t adr,
+intel_flash_program_single (cfi_array_t *cfi_array, uint32_t adr,
                             uint32_t data)
 {
     uint16_t sr;
@@ -316,8 +316,8 @@ intel_flash_program_single (cfi_array_t * cfi_array, uint32_t adr,
 }
 
 static int
-intel_flash_program_buffer (cfi_array_t * cfi_array, uint32_t adr,
-                            uint32_t * buffer, int count)
+intel_flash_program_buffer (cfi_array_t *cfi_array, uint32_t adr,
+                            uint32_t *buffer, int count)
 {
     /* NOTE: Write-to-buffer programming operation according to [5], Figure 9 */
     uint16_t sr;
@@ -374,7 +374,7 @@ intel_flash_program_buffer (cfi_array_t * cfi_array, uint32_t adr,
 }
 
 static int
-intel_flash_program (cfi_array_t * cfi_array, uint32_t adr, uint32_t * buffer,
+intel_flash_program (cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer,
                      int count)
 {
     cfi_query_structure_t *cfi = &(cfi_array->cfi_chips[0]->cfi);
@@ -407,7 +407,7 @@ intel_flash_program (cfi_array_t * cfi_array, uint32_t adr, uint32_t * buffer,
 }
 
 static int
-intel_flash_erase_block32 (cfi_array_t * cfi_array, uint32_t adr)
+intel_flash_erase_block32 (cfi_array_t *cfi_array, uint32_t adr)
 {
     uint32_t sr;
     bus_t *bus = cfi_array->bus;
@@ -432,7 +432,7 @@ intel_flash_erase_block32 (cfi_array_t * cfi_array, uint32_t adr)
 }
 
 static int
-intel_flash_unlock_block32 (cfi_array_t * cfi_array, uint32_t adr)
+intel_flash_unlock_block32 (cfi_array_t *cfi_array, uint32_t adr)
 {
     uint32_t sr;
     bus_t *bus = cfi_array->bus;
@@ -458,7 +458,7 @@ intel_flash_unlock_block32 (cfi_array_t * cfi_array, uint32_t adr)
 }
 
 static int
-intel_flash_program32_single (cfi_array_t * cfi_array, uint32_t adr,
+intel_flash_program32_single (cfi_array_t *cfi_array, uint32_t adr,
                               uint32_t data)
 {
     uint32_t sr;
@@ -483,8 +483,8 @@ intel_flash_program32_single (cfi_array_t * cfi_array, uint32_t adr,
 }
 
 static int
-intel_flash_program32 (cfi_array_t * cfi_array, uint32_t adr,
-                       uint32_t * buffer, int count)
+intel_flash_program32 (cfi_array_t *cfi_array, uint32_t adr,
+                       uint32_t *buffer, int count)
 {
     /* Single byte programming is forced for 32 bit (2x16) flash configuration.
        a) lack of testing capbilities for 2x16 multi-byte write operation
@@ -506,14 +506,14 @@ intel_flash_program32 (cfi_array_t * cfi_array, uint32_t adr,
 }
 
 static void
-intel_flash_readarray32 (cfi_array_t * cfi_array)
+intel_flash_readarray32 (cfi_array_t *cfi_array)
 {
     /* Read Array */
     bus_write (cfi_array->bus, cfi_array->address, 0x00FF00FF);
 }
 
 static void
-intel_flash_readarray (cfi_array_t * cfi_array)
+intel_flash_readarray (cfi_array_t *cfi_array)
 {
     /* Read Array */
     bus_write (cfi_array->bus, cfi_array->address, 0x00FF00FF);

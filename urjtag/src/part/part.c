@@ -32,7 +32,7 @@
 /* part */
 
 part_t *
-part_alloc (const tap_register * id)
+part_alloc (const tap_register *id)
 {
     part_t *p = malloc (sizeof *p);
     if (!p)
@@ -55,7 +55,7 @@ part_alloc (const tap_register * id)
 }
 
 void
-part_free (part_t * p)
+part_free (part_t *p)
 {
     int i;
 
@@ -109,7 +109,7 @@ part_free (part_t * p)
 }
 
 instruction *
-part_find_instruction (part_t * p, const char *iname)
+part_find_instruction (part_t *p, const char *iname)
 {
     instruction *i;
 
@@ -128,7 +128,7 @@ part_find_instruction (part_t * p, const char *iname)
 }
 
 data_register *
-part_find_data_register (part_t * p, const char *drname)
+part_find_data_register (part_t *p, const char *drname)
 {
     data_register *dr;
 
@@ -147,7 +147,7 @@ part_find_data_register (part_t * p, const char *drname)
 }
 
 signal_t *
-part_find_signal (part_t * p, const char *signalname)
+part_find_signal (part_t *p, const char *signalname)
 {
     signal_t *s;
     salias_t *sa;
@@ -175,14 +175,14 @@ part_find_signal (part_t * p, const char *signalname)
 }
 
 void
-part_set_instruction (part_t * p, const char *iname)
+part_set_instruction (part_t *p, const char *iname)
 {
     if (p)
         p->active_instruction = part_find_instruction (p, iname);
 }
 
 void
-part_set_signal (part_t * p, signal_t * s, int out, int val)
+part_set_signal (part_t *p, signal_t *s, int out, int val)
 {
     data_register *bsr;
 
@@ -228,7 +228,7 @@ part_set_signal (part_t * p, signal_t * s, int out, int val)
 }
 
 int
-part_get_signal (part_t * p, signal_t * s)
+part_get_signal (part_t *p, signal_t *s)
 {
     data_register *bsr;
 
@@ -254,7 +254,7 @@ part_get_signal (part_t * p, signal_t * s)
 }
 
 void
-part_print (part_t * p)
+part_print (part_t *p)
 {
     const char *instruction = NULL;
     const char *dr = NULL;
@@ -270,7 +270,7 @@ part_print (part_t * p)
     if (p->active_instruction)
     {
         instruction = p->active_instruction->name;
-        if (p->active_instruction->data_register != NULL)
+        if (p->active_instruction->data_register !=NULL)
             dr = p->active_instruction->data_register->name;
     }
     if (instruction == NULL)
@@ -296,7 +296,7 @@ parts_alloc (void)
 }
 
 void
-parts_free (parts_t * ps)
+parts_free (parts_t *ps)
 {
     int i;
 
@@ -311,7 +311,7 @@ parts_free (parts_t * ps)
 }
 
 int
-parts_add_part (parts_t * ps, part_t * p)
+parts_add_part (parts_t *ps, part_t *p)
 {
     part_t **np = realloc (ps->parts, (ps->len + 1) * sizeof *ps->parts);
 
@@ -325,7 +325,7 @@ parts_add_part (parts_t * ps, part_t * p)
 }
 
 void
-parts_set_instruction (parts_t * ps, const char *iname)
+parts_set_instruction (parts_t *ps, const char *iname)
 {
     int i;
 
@@ -338,7 +338,7 @@ parts_set_instruction (parts_t * ps, const char *iname)
 }
 
 void
-parts_print (parts_t * ps)
+parts_print (parts_t *ps)
 {
     int i;
 

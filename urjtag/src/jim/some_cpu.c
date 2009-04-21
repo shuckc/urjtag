@@ -46,7 +46,7 @@ jim_attached_part_t some_cpu_attached[] = {
 #define BSR_LEN 202
 
 void
-some_cpu_report_idcode (jim_device_t * dev)
+some_cpu_report_idcode (jim_device_t *dev)
 {
     dev->sreg[0].reg[0] = 0x1;  /* IDCODE instruction b0001 */
     dev->sreg[1].reg[0] = 0x87654321;   /* Load IDR (fake) */
@@ -54,8 +54,8 @@ some_cpu_report_idcode (jim_device_t * dev)
 }
 
 void
-some_cpu_tck_rise (jim_device_t * dev,
-                   int tms, int tdi, uint8_t * shmem, size_t shmem_size)
+some_cpu_tck_rise (jim_device_t *dev,
+                   int tms, int tdi, uint8_t *shmem, size_t shmem_size)
 {
     int i;
 
@@ -143,7 +143,7 @@ some_cpu_tck_rise (jim_device_t * dev,
 }
 
 void
-some_cpu_tck_fall (jim_device_t * dev, uint8_t * shmem, size_t shmem_size)
+some_cpu_tck_fall (jim_device_t *dev, uint8_t *shmem, size_t shmem_size)
 {
     int i;
 
@@ -187,7 +187,7 @@ some_cpu_tck_fall (jim_device_t * dev, uint8_t * shmem, size_t shmem_size)
 }
 
 void
-some_cpu_free (jim_device_t * dev)
+some_cpu_free (jim_device_t *dev)
 {
     int i;
 

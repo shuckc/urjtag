@@ -157,7 +157,7 @@ buses_free (void)
 }
 
 void
-buses_add (bus_t * abus)
+buses_add (bus_t *abus)
 {
     bus_t **b;
 
@@ -177,7 +177,7 @@ buses_add (bus_t * abus)
 }
 
 void
-buses_delete (bus_t * abus)
+buses_delete (bus_t *abus)
 {
     int i;
     bus_t **b;

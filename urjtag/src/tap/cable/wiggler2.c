@@ -66,7 +66,7 @@
 #define	TDO 	7
 
 static int
-wiggler2_init (cable_t * cable)
+wiggler2_init (cable_t *cable)
 {
     int data;
 
@@ -89,7 +89,7 @@ wiggler2_init (cable_t * cable)
 }
 
 static void
-wiggler2_clock (cable_t * cable, int tms, int tdi, int n)
+wiggler2_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
@@ -118,7 +118,7 @@ wiggler2_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-wiggler2_get_tdo (cable_t * cable)
+wiggler2_get_tdo (cable_t *cable)
 {
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
 
@@ -132,7 +132,7 @@ wiggler2_get_tdo (cable_t * cable)
 }
 
 static int
-wiggler2_set_signal (cable_t * cable, int mask, int val)
+wiggler2_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

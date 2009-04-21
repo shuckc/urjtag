@@ -93,7 +93,7 @@ ppdev_parport_alloc (const char *port)
 }
 
 static void
-ppdev_parport_free (parport_t * port)
+ppdev_parport_free (parport_t *port)
 {
     port_node_t **prev;
 
@@ -147,7 +147,7 @@ ppdev_connect (const char **par, int parnum)
 }
 
 static int
-ppdev_open (parport_t * parport)
+ppdev_open (parport_t *parport)
 {
     ppdev_params_t *p = parport->params;
 
@@ -159,8 +159,8 @@ ppdev_open (parport_t * parport)
         return -1;
     }
 
-    if ( /*(ioctl( p->fd, PPEXCL ) == -1) || */
-        (ioctl (p->fd, PPCLAIM) == -1))
+    if (                        /*(ioctl( p->fd, PPEXCL ) == -1) || */
+           (ioctl (p->fd, PPCLAIM) == -1))
     {
         printf (_("Could not claim ppdev device: %s\n"), strerror (errno));
         close (p->fd);
@@ -172,7 +172,7 @@ ppdev_open (parport_t * parport)
 }
 
 static int
-ppdev_close (parport_t * parport)
+ppdev_close (parport_t *parport)
 {
     int r = 0;
     ppdev_params_t *p = parport->params;
@@ -188,7 +188,7 @@ ppdev_close (parport_t * parport)
 }
 
 static int
-ppdev_set_data (parport_t * parport, uint8_t data)
+ppdev_set_data (parport_t *parport, uint8_t data)
 {
     ppdev_params_t *p = parport->params;
 
@@ -199,7 +199,7 @@ ppdev_set_data (parport_t * parport, uint8_t data)
 }
 
 static int
-ppdev_get_data (parport_t * parport)
+ppdev_get_data (parport_t *parport)
 {
     unsigned char d;
     ppdev_params_t *p = parport->params;
@@ -211,7 +211,7 @@ ppdev_get_data (parport_t * parport)
 }
 
 static int
-ppdev_get_status (parport_t * parport)
+ppdev_get_status (parport_t *parport)
 {
     unsigned char d;
     ppdev_params_t *p = parport->params;
@@ -223,7 +223,7 @@ ppdev_get_status (parport_t * parport)
 }
 
 static int
-ppdev_set_control (parport_t * parport, uint8_t data)
+ppdev_set_control (parport_t *parport, uint8_t data)
 {
     ppdev_params_t *p = parport->params;
 

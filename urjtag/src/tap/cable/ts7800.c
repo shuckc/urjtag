@@ -77,7 +77,7 @@ typedef struct
 } ts7800_params_t;
 
 static int
-ts7800_gpio_open (cable_t * cable)
+ts7800_gpio_open (cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
     off_t map_mask;
@@ -117,7 +117,7 @@ ts7800_gpio_open (cable_t * cable)
 }
 
 static int
-ts7800_gpio_close (cable_t * cable)
+ts7800_gpio_close (cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
 
@@ -131,7 +131,7 @@ ts7800_gpio_close (cable_t * cable)
 }
 
 static int
-ts7800_gpio_write (cable_t * cable, uint8_t data)
+ts7800_gpio_write (cable_t *cable, uint8_t data)
 {
     int sigs;
     ts7800_params_t *p = cable->params;
@@ -143,7 +143,7 @@ ts7800_gpio_write (cable_t * cable, uint8_t data)
 }
 
 static int
-ts7800_gpio_read (cable_t * cable)
+ts7800_gpio_read (cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
 
@@ -151,7 +151,7 @@ ts7800_gpio_read (cable_t * cable)
 }
 
 static int
-ts7800_connect (char *params[], cable_t * cable)
+ts7800_connect (char *params[], cable_t *cable)
 {
     ts7800_params_t *cable_params;
 
@@ -179,21 +179,21 @@ ts7800_connect (char *params[], cable_t * cable)
 }
 
 static void
-ts7800_disconnect (cable_t * cable)
+ts7800_disconnect (cable_t *cable)
 {
     ts7800_gpio_close (cable);
     chain_disconnect (cable->chain);
 }
 
 static void
-ts7800_cable_free (cable_t * cable)
+ts7800_cable_free (cable_t *cable)
 {
     free (cable->params);
     free (cable);
 }
 
 static int
-ts7800_init (cable_t * cable)
+ts7800_init (cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
 
@@ -206,13 +206,13 @@ ts7800_init (cable_t * cable)
 }
 
 static void
-ts7800_done (cable_t * cable)
+ts7800_done (cable_t *cable)
 {
     ts7800_gpio_close (cable);
 }
 
 static void
-ts7800_clock (cable_t * cable, int tms, int tdi, int n)
+ts7800_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int bit_mask;
     int i;
@@ -234,7 +234,7 @@ ts7800_clock (cable_t * cable, int tms, int tdi, int n)
  * NOTE: This also lowers the TDI and TMS lines; is this intended?
  */
 static int
-ts7800_get_tdo (cable_t * cable)
+ts7800_get_tdo (cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
     ts7800_gpio_write (cable, p->lastout & ~(0 << TCK));
@@ -243,7 +243,7 @@ ts7800_get_tdo (cable_t * cable)
 }
 
 static int
-ts7800_current_signals (cable_t * cable)
+ts7800_current_signals (cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
 
@@ -259,7 +259,7 @@ ts7800_current_signals (cable_t * cable)
 }
 
 static int
-ts7800_set_signal (cable_t * cable, int mask, int val)
+ts7800_set_signal (cable_t *cable, int mask, int val)
 {
     ts7800_params_t *p = cable->params;
 
@@ -280,7 +280,7 @@ ts7800_set_signal (cable_t * cable, int mask, int val)
 }
 
 static int
-ts7800_get_signal (cable_t * cable, pod_sigsel_t sig)
+ts7800_get_signal (cable_t *cable, pod_sigsel_t sig)
 {
     ts7800_params_t *p = cable->params;
 

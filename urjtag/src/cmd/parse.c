@@ -40,7 +40,7 @@
 
 
 int
-jtag_parse_line (chain_t * chain, char *line)
+jtag_parse_line (chain_t *chain, char *line)
 {
     int l, i, r, tcnt;
     char **a;
@@ -119,7 +119,7 @@ jtag_parse_line (chain_t * chain, char *line)
 
 
 int
-jtag_parse_stream (chain_t * chain, FILE * f)
+jtag_parse_stream (chain_t *chain, FILE *f)
 {
     char inputline[MAXINPUTLINE + 1];
     int go = 1, i, c, lnr, clip, found_comment;
@@ -160,7 +160,7 @@ jtag_parse_stream (chain_t * chain, FILE * f)
 }
 
 int
-jtag_parse_file (chain_t * chain, const char *filename)
+jtag_parse_file (chain_t *chain, const char *filename)
 {
     FILE *f;
     int go;

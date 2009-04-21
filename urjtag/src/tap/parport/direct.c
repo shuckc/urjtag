@@ -174,7 +174,7 @@ direct_parport_alloc (unsigned int port)
 }
 
 static void
-direct_parport_free (parport_t * port)
+direct_parport_free (parport_t *port)
 {
     port_node_t **prev;
 
@@ -250,7 +250,7 @@ direct_connect (const char **par, int parnum)
 }
 
 static int
-direct_open (parport_t * parport)
+direct_open (parport_t *parport)
 {
 #ifdef HAVE_INPOUTXX
     return 0;
@@ -262,7 +262,7 @@ direct_open (parport_t * parport)
 }
 
 static int
-direct_close (parport_t * parport)
+direct_close (parport_t *parport)
 {
 #if defined(HAVE_INPOUTXX)
     return 0;
@@ -273,7 +273,7 @@ direct_close (parport_t * parport)
 }
 
 static int
-direct_set_data (parport_t * parport, uint8_t data)
+direct_set_data (parport_t *parport, uint8_t data)
 {
     unsigned int port = ((direct_params_t *) parport->params)->port;
     outb (data, port);
@@ -281,21 +281,21 @@ direct_set_data (parport_t * parport, uint8_t data)
 }
 
 static int
-direct_get_data (parport_t * parport)
+direct_get_data (parport_t *parport)
 {
     unsigned int port = ((direct_params_t *) parport->params)->port;
     return inb (port);
 }
 
 static int
-direct_get_status (parport_t * parport)
+direct_get_status (parport_t *parport)
 {
     unsigned int port = ((direct_params_t *) parport->params)->port;
     return inb (port + 1) ^ 0x80;       /* BUSY is inverted */
 }
 
 static int
-direct_set_control (parport_t * parport, uint8_t data)
+direct_set_control (parport_t *parport, uint8_t data)
 {
     unsigned int port = ((direct_params_t *) parport->params)->port;
     outb (data ^ 0x0B, port + 2);       /* SELECT, AUTOFD, and STROBE are inverted */

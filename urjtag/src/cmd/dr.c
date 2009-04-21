@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_dr_run (chain_t * chain, char *params[])
+cmd_dr_run (chain_t *chain, char *params[])
 {
     int dir = 1;
     tap_register *r;

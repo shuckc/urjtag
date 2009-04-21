@@ -36,7 +36,7 @@
 #include <bitmask.h>
 
 void
-jedec_exp_read_id (bus_t * bus, uint32_t adr, uint32_t dmask,
+jedec_exp_read_id (bus_t *bus, uint32_t adr, uint32_t dmask,
                    uint32_t pata, uint32_t patb, uint32_t dcmd,
                    int det_addroffset, int det_dataoffset,
                    uint32_t det_addrpat)
@@ -60,7 +60,7 @@ jedec_exp_read_id (bus_t * bus, uint32_t adr, uint32_t dmask,
 }
 
 int
-jedec_exp_detect (bus_t * bus, uint32_t adr, cfi_array_t ** cfi_array)
+jedec_exp_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
 {
     /* Temporary containers for manufacturer and device id while
        probing with different Autoselect methods. */

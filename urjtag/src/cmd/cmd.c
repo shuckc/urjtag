@@ -164,7 +164,7 @@ cmd_completion (const char *text, int start, int end)
 #endif
 
 int
-cmd_test_cable (chain_t * chain)
+cmd_test_cable (chain_t *chain)
 {
     if (chain->cable)
         return 1;
@@ -178,7 +178,7 @@ cmd_test_cable (chain_t * chain)
 /* Remainder copied from libbrux/cmd/cmd.c */
 
 int
-cmd_run (chain_t * chain, char *params[])
+cmd_run (chain_t *chain, char *params[])
 {
     int i, pidx;
     size_t len;

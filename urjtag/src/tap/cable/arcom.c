@@ -50,7 +50,7 @@
 #define	TDO 	7
 
 static int
-arcom_init (cable_t * cable)
+arcom_init (cable_t *cable)
 {
     int data;
 
@@ -70,7 +70,7 @@ arcom_init (cable_t * cable)
 }
 
 static void
-arcom_clock (cable_t * cable, int tms, int tdi, int n)
+arcom_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
@@ -97,7 +97,7 @@ arcom_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-arcom_get_tdo (cable_t * cable)
+arcom_get_tdo (cable_t *cable)
 {
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
 
@@ -110,7 +110,7 @@ arcom_get_tdo (cable_t * cable)
 }
 
 static int
-arcom_set_signal (cable_t * cable, int mask, int val)
+arcom_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 

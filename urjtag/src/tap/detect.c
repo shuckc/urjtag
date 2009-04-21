@@ -49,7 +49,7 @@ struct id_record
 };
 
 static int
-find_record (char *filename, tap_register * key, struct id_record *idr)
+find_record (char *filename, tap_register *key, struct id_record *idr)
 {
     FILE *file;
     tap_register *tr;
@@ -168,7 +168,7 @@ find_record (char *filename, tap_register * key, struct id_record *idr)
 }
 
 uint64_t
-bits_to_uint64 (tap_register * t)
+bits_to_uint64 (tap_register *t)
 {
     int i;
     uint64_t l, b;
@@ -186,7 +186,7 @@ bits_to_uint64 (tap_register * t)
 
 
 int
-detect_parts (chain_t * chain, const char *db_path)
+detect_parts (chain_t *chain, const char *db_path)
 {
     int irlen;
     tap_register *ir;
@@ -419,7 +419,7 @@ detect_parts (chain_t * chain, const char *db_path)
 /* In case we do not want to detect, we can add parts manually */
 
 int
-manual_add (chain_t * chain, int instr_len)
+manual_add (chain_t *chain, int instr_len)
 {
     tap_register *id;
     part_t *part;

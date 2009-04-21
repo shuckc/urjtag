@@ -32,7 +32,7 @@
 #include "cmd.h"
 
 static int
-cmd_peek_run (chain_t * chain, char *params[])
+cmd_peek_run (chain_t *chain, char *params[])
 {
     uint32_t adr, val;
     int pars, j = 1;
@@ -96,7 +96,7 @@ cmd_t cmd_peek = {
 };
 
 static int
-cmd_poke_run (chain_t * chain, char *params[])
+cmd_poke_run (chain_t *chain, char *params[])
 {
     uint32_t adr, val;
     bus_area_t area;

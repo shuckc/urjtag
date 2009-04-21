@@ -36,7 +36,7 @@
 #include "cmd.h"
 
 static int
-cmd_pod_run (chain_t * chain, char *params[])
+cmd_pod_run (chain_t *chain, char *params[])
 {
     int i, j;
     int mask = 0;

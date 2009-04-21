@@ -30,11 +30,11 @@
 #ifndef HAVE_GETLINE
 
 #ifndef HAVE_GETDELIM
-ssize_t getdelim (char **lineptr, size_t * n, int delimiter, FILE * stream);
+ssize_t getdelim (char **lineptr, size_t * n, int delimiter, FILE *stream);
 #endif /* HAVE_GETDELIM */
 
 ssize_t
-getline (char **lineptr, size_t * n, FILE * stream)
+getline (char **lineptr, size_t * n, FILE *stream)
 {
     return getdelim (lineptr, n, '\n', stream);
 }

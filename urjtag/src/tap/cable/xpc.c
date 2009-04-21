@@ -92,7 +92,7 @@ xpcu_output_enable (struct usb_dev_handle *xpcu, int enable)
 
 int
 xpcu_bit_reverse (struct usb_dev_handle *xpcu, uint8_t bits_in,
-                  uint8_t * bits_out)
+                  uint8_t *bits_out)
 {
     if (usb_control_msg
         (xpcu, 0xC0, 0xB0, 0x0020, bits_in, (char *) bits_out, 1, 1000) < 0)
@@ -137,7 +137,7 @@ xpcu_write_gpio (struct usb_dev_handle *xpcu, uint8_t bits)
 /* ---------------------------------------------------------------------- */
 
 int
-xpcu_read_gpio (struct usb_dev_handle *xpcu, uint8_t * bits)
+xpcu_read_gpio (struct usb_dev_handle *xpcu, uint8_t *bits)
 {
     if (usb_control_msg (xpcu, 0xC0, 0xB0, 0x0038, 0, (char *) bits, 1, 1000)
         < 0)
@@ -153,7 +153,7 @@ xpcu_read_gpio (struct usb_dev_handle *xpcu, uint8_t * bits)
 
 
 int
-xpcu_read_cpld_version (struct usb_dev_handle *xpcu, uint16_t * buf)
+xpcu_read_cpld_version (struct usb_dev_handle *xpcu, uint16_t *buf)
 {
     if (usb_control_msg
         (xpcu, 0xC0, 0xB0, 0x0050, 0x0001, (char *) buf, 2, 1000) < 0)
@@ -167,7 +167,7 @@ xpcu_read_cpld_version (struct usb_dev_handle *xpcu, uint16_t * buf)
 /* ---------------------------------------------------------------------- */
 
 int
-xpcu_read_firmware_version (struct usb_dev_handle *xpcu, uint16_t * buf)
+xpcu_read_firmware_version (struct usb_dev_handle *xpcu, uint16_t *buf)
 {
     if (usb_control_msg
         (xpcu, 0xC0, 0xB0, 0x0050, 0x0000, (char *) buf, 2, 1000) < 0)
@@ -239,7 +239,7 @@ xpcu_select_gpio (struct usb_dev_handle *xpcu, int int_or_ext)
 
 static int
 xpcu_shift (struct usb_dev_handle *xpcu, int reqno, int bits, int in_len,
-            uint8_t * in, int out_len, uint8_t * out)
+            uint8_t *in, int out_len, uint8_t *out)
 {
     if (usb_control_msg (xpcu, 0x40, 0xB0, reqno, bits, NULL, 0, 1000) < 0)
     {
@@ -294,7 +294,7 @@ xpcu_shift (struct usb_dev_handle *xpcu, int reqno, int bits, int in_len,
 /* ---------------------------------------------------------------------- */
 
 static int
-xpcu_common_init (cable_t * cable)
+xpcu_common_init (cable_t *cable)
 {
     int r;
     uint16_t buf;
@@ -342,7 +342,7 @@ xpcu_common_init (cable_t * cable)
 }
 
 static int
-xpc_int_init (cable_t * cable)
+xpc_int_init (cable_t *cable)
 {
     struct usb_dev_handle *xpcu;
 
@@ -357,7 +357,7 @@ xpc_int_init (cable_t * cable)
 }
 
 static int
-xpc_ext_init (cable_t * cable)
+xpc_ext_init (cable_t *cable)
 {
     struct usb_dev_handle *xpcu;
     uint8_t zero[2] = { 0, 0 };
@@ -400,7 +400,7 @@ xpc_ext_init (cable_t * cable)
 /* ---------------------------------------------------------------------- */
 
 static void
-xpc_ext_done (cable_t * cable)
+xpc_ext_done (cable_t *cable)
 {
     struct usb_dev_handle *xpcu;
     xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
@@ -411,7 +411,7 @@ xpc_ext_done (cable_t * cable)
 /* ---------------------------------------------------------------------- */
 
 static void
-xpc_ext_free (cable_t * cable)
+xpc_ext_free (cable_t *cable)
 {
     if (cable->params)
     {
@@ -430,7 +430,7 @@ xpc_ext_free (cable_t * cable)
 #define	TDO	0
 
 static void
-xpc_clock (cable_t * cable, int tms, int tdi, int n)
+xpc_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     struct usb_dev_handle *xpcu;
@@ -455,7 +455,7 @@ xpc_clock (cable_t * cable, int tms, int tdi, int n)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_get_tdo (cable_t * cable)
+xpc_get_tdo (cable_t *cable)
 {
     unsigned char d;
     struct usb_dev_handle *xpcu;
@@ -468,7 +468,7 @@ xpc_get_tdo (cable_t * cable)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_set_signal (cable_t * cable, int mask, int val)
+xpc_set_signal (cable_t *cable, int mask, int val)
 {
     return 1;
 }
@@ -476,7 +476,7 @@ xpc_set_signal (cable_t * cable, int mask, int val)
 /* ---------------------------------------------------------------------- */
 
 static void
-xpc_ext_clock (cable_t * cable, int tms, int tdi, int n)
+xpc_ext_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     uint8_t tdo[2];
@@ -498,7 +498,7 @@ xpc_ext_clock (cable_t * cable, int tms, int tdi, int n)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_ext_get_tdo (cable_t * cable)
+xpc_ext_get_tdo (cable_t *cable)
 {
     return last_tdo;
     // return ((xpc_cable_params_t*)(cable->params))->last_tdo;
@@ -524,7 +524,7 @@ xpc_ext_transfer_state_t;
 /* ---------------------------------------------------------------------- */
 
 static int
-xpcu_do_ext_transfer (xpc_ext_transfer_state_t * xts)
+xpcu_do_ext_transfer (xpc_ext_transfer_state_t *xts)
 {
     int r;
     int in_len, out_len;
@@ -588,7 +588,7 @@ xpcu_do_ext_transfer (xpc_ext_transfer_state_t * xts)
 /* ---------------------------------------------------------------------- */
 
 static void
-xpcu_add_bit_for_ext_transfer (xpc_ext_transfer_state_t * xts, char in,
+xpcu_add_bit_for_ext_transfer (xpc_ext_transfer_state_t *xts, char in,
                                char is_real)
 {
     int bit_idx = (xts->in_bits & 3);
@@ -622,7 +622,7 @@ xpcu_add_bit_for_ext_transfer (xpc_ext_transfer_state_t * xts, char in,
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_ext_transfer (cable_t * cable, int len, char *in, char *out)
+xpc_ext_transfer (cable_t *cable, int len, char *in, char *out)
 {
     int i, j;
     xpc_ext_transfer_state_t xts;

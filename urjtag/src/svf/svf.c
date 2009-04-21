@@ -59,7 +59,7 @@
 #undef DEBUG
 
 
-int svfparse (parser_priv_t * priv_data, chain_t * chain);
+int svfparse (parser_priv_t *priv_data, chain_t *chain);
 
 
 /*
@@ -68,7 +68,7 @@ int svfparse (parser_priv_t * priv_data, chain_t * chain);
  * Puts TAP controller into reset state by clocking 5 times with TMS = 1.
  */
 static void
-svf_force_reset_state (chain_t * chain)
+svf_force_reset_state (chain_t *chain)
 {
     chain_clock (chain, 1, 0, 5);
     tap_state_reset (chain);
@@ -88,7 +88,7 @@ svf_force_reset_state (chain_t * chain)
  *   state : new TAP controller state
  */
 static void
-svf_goto_state (chain_t * chain, int new_state)
+svf_goto_state (chain_t *chain, int new_state)
 {
     int current_state;
 
@@ -400,7 +400,7 @@ svf_build_bit_string (char *hex_string, int len)
  *   0 : error occurred
  */
 static int
-svf_copy_hex_to_register (char *hex_string, tap_register * reg)
+svf_copy_hex_to_register (char *hex_string, tap_register *reg)
 {
     char *bit_string;
 
@@ -435,8 +435,8 @@ svf_copy_hex_to_register (char *hex_string, tap_register * reg)
  *   0 : tdo and reg do not match or error occurred
  */
 static int
-svf_compare_tdo (parser_priv_t * priv, char *tdo, char *mask,
-                 tap_register * reg, YYLTYPE * loc)
+svf_compare_tdo (parser_priv_t *priv, char *tdo, char *mask,
+                 tap_register *reg, YYLTYPE * loc)
 {
     char *tdo_bit, *mask_bit;
     int pos, mismatch, result = 1;
@@ -566,7 +566,7 @@ svf_all_care (char **string, double number)
  *   state : required end state (SVF parser encoding)
  * ***************************************************************************/
 void
-svf_endxr (parser_priv_t * priv, enum generic_irdr_coding ir_dr, int state)
+svf_endxr (parser_priv_t *priv, enum generic_irdr_coding ir_dr, int state)
 {
     switch (ir_dr)
     {
@@ -589,7 +589,7 @@ svf_endxr (parser_priv_t * priv, enum generic_irdr_coding ir_dr, int state)
  *   freq : frequency in HZ
  * ***************************************************************************/
 void
-svf_frequency (chain_t * chain, double freq)
+svf_frequency (chain_t *chain, double freq)
 {
     cable_set_frequency (chain->cable, freq);
 }
@@ -643,7 +643,7 @@ sigalrm_handler (int signal)
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_runtest (chain_t * chain, parser_priv_t * priv, struct runtest *params)
+svf_runtest (chain_t *chain, parser_priv_t *priv, struct runtest *params)
 {
     uint32_t run_count, frequency;
 
@@ -792,7 +792,7 @@ svf_runtest (chain_t * chain, parser_priv_t * priv, struct runtest *params)
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_state (chain_t * chain, parser_priv_t * priv,
+svf_state (chain_t *chain, parser_priv_t *priv,
            struct path_states *path_states, int stable_state)
 {
     int i;
@@ -823,7 +823,7 @@ svf_state (chain_t * chain, parser_priv_t * priv,
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_sxr (chain_t * chain, parser_priv_t * priv,
+svf_sxr (chain_t *chain, parser_priv_t *priv,
          enum generic_irdr_coding ir_dr, struct ths_params *params,
          YYLTYPE * loc)
 {
@@ -992,7 +992,7 @@ svf_sxr (chain_t * chain, parser_priv_t * priv,
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_trst (chain_t * chain, parser_priv_t * priv, int trst_mode)
+svf_trst (chain_t *chain, parser_priv_t *priv, int trst_mode)
 {
     int trst_cable = -1;
     char *unimplemented_mode;
@@ -1100,7 +1100,7 @@ svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
  *   0 : error occurred
  * ***************************************************************************/
 void
-svf_run (chain_t * chain, FILE * SVF_FILE, int stop_on_mismatch,
+svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
          int print_progress, uint32_t ref_freq)
 {
     const sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},

@@ -95,7 +95,7 @@ set_flash_driver (void)
 }
 
 void
-flashmsbin (bus_t * bus, FILE * f, int noverify)
+flashmsbin (bus_t *bus, FILE *f, int noverify)
 {
     uint32_t adr;
     cfi_query_structure_t *cfi;
@@ -251,7 +251,7 @@ flashmsbin (bus_t * bus, FILE * f, int noverify)
 }
 
 static int
-find_block (cfi_query_structure_t * cfi, int adr, int bus_width,
+find_block (cfi_query_structure_t *cfi, int adr, int bus_width,
             int chip_width, int *bytes_until_next_block)
 {
     int i;
@@ -283,7 +283,7 @@ find_block (cfi_query_structure_t * cfi, int adr, int bus_width,
 }
 
 void
-flashmem (bus_t * bus, FILE * f, uint32_t addr, int noverify)
+flashmem (bus_t *bus, FILE *f, uint32_t addr, int noverify)
 {
     uint32_t adr;
     cfi_query_structure_t *cfi;
@@ -439,7 +439,7 @@ flashmem (bus_t * bus, FILE * f, uint32_t addr, int noverify)
 }
 
 void
-flasherase (bus_t * bus, uint32_t addr, int number)
+flasherase (bus_t *bus, uint32_t addr, int number)
 {
     cfi_query_structure_t *cfi;
     int i;

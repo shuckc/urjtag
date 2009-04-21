@@ -59,14 +59,14 @@ print_vector (int len, char *vec)
 #endif
 
 void
-generic_disconnect (cable_t * cable)
+generic_disconnect (cable_t *cable)
 {
     cable_done (cable);
     chain_disconnect (cable->chain);
 }
 
 int
-generic_transfer (cable_t * cable, int len, char *in, char *out)
+generic_transfer (cable_t *cable, int len, char *in, char *out)
 {
     int i;
 
@@ -86,13 +86,13 @@ generic_transfer (cable_t * cable, int len, char *in, char *out)
 }
 
 int
-generic_get_signal (cable_t * cable, pod_sigsel_t sig)
+generic_get_signal (cable_t *cable, pod_sigsel_t sig)
 {
     return (((PARAM_SIGNALS (cable)) & sig) != 0) ? 1 : 0;
 }
 
 int
-do_one_queued_action (cable_t * cable)
+do_one_queued_action (cable_t *cable)
 {
     int i;
 
@@ -193,7 +193,7 @@ do_one_queued_action (cable_t * cable)
 }
 
 void
-generic_flush_one_by_one (cable_t * cable, cable_flush_amount_t how_much)
+generic_flush_one_by_one (cable_t *cable, cable_flush_amount_t how_much)
 {
     /* This will flush always, even if how_much == OPTIONALLY,
      * because there is no reason to let the queue grow */
@@ -202,7 +202,7 @@ generic_flush_one_by_one (cable_t * cable, cable_flush_amount_t how_much)
 }
 
 void
-generic_flush_using_transfer (cable_t * cable, cable_flush_amount_t how_much)
+generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
 {
     int i, j, n;
     char *in, *out;
@@ -392,7 +392,7 @@ generic_flush_using_transfer (cable_t * cable, cable_flush_amount_t how_much)
 }
 
 void
-generic_set_frequency (cable_t * cable, uint32_t new_frequency)
+generic_set_frequency (cable_t *cable, uint32_t new_frequency)
 {
     if (new_frequency == 0)
     {

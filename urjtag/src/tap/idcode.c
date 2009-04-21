@@ -33,7 +33,7 @@
 #include "jtag.h"
 
 void
-idcode (chain_t * chain, unsigned int bytes)
+idcode (chain_t *chain, unsigned int bytes)
 {
     int i;
     int hit = 0;

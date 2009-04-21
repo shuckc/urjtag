@@ -96,31 +96,31 @@ jlink_usbconn_data_t;
 #define JLINK_MAX_SPEED 12000
 
 /* Queue command functions */
-static void jlink_reset (libusb_param_t * params, int trst, int srst);
-static void jlink_simple_command (libusb_param_t * params, uint8_t command);
+static void jlink_reset (libusb_param_t *params, int trst, int srst);
+static void jlink_simple_command (libusb_param_t *params, uint8_t command);
 
 
 /* J-Link tap buffer functions */
-static void jlink_tap_init (jlink_usbconn_data_t * data);
-static int jlink_tap_execute (libusb_param_t * params);
-static void jlink_tap_append_step (jlink_usbconn_data_t * data, int, int);
+static void jlink_tap_init (jlink_usbconn_data_t *data);
+static int jlink_tap_execute (libusb_param_t *params);
+static void jlink_tap_append_step (jlink_usbconn_data_t *data, int, int);
 
 /* Jlink lowlevel functions */
-static int jlink_usb_message (libusb_param_t * params, int, int);
-static int jlink_usb_write (libusb_param_t * params, unsigned int);
-static int jlink_usb_read (libusb_param_t * params);
+static int jlink_usb_message (libusb_param_t *params, int, int);
+static int jlink_usb_write (libusb_param_t *params, unsigned int);
+static int jlink_usb_read (libusb_param_t *params);
 
 static void jlink_debug_buffer (char *buffer, int length);
 
 /* API functions */
 
-void jlink_set_frequency (cable_t * cable, uint32_t frequency);
+void jlink_set_frequency (cable_t *cable, uint32_t frequency);
 
 /***************************************************************************/
 /* J-Link tap functions */
 
 void
-jlink_reset (libusb_param_t * params, int trst, int srst)
+jlink_reset (libusb_param_t *params, int trst, int srst)
 {
     DEBUG ("trst: %i, srst: %i\n", trst, srst);
 
@@ -146,7 +146,7 @@ jlink_reset (libusb_param_t * params, int trst, int srst)
 
 
 static void
-jlink_simple_command (libusb_param_t * params, uint8_t command)
+jlink_simple_command (libusb_param_t *params, uint8_t command)
 {
     int result;
     jlink_usbconn_data_t *data = params->data;
@@ -163,7 +163,7 @@ jlink_simple_command (libusb_param_t * params, uint8_t command)
 }
 
 static int
-jlink_get_status (libusb_param_t * params)
+jlink_get_status (libusb_param_t *params)
 {
     int result;
     jlink_usbconn_data_t *data = params->data;
@@ -201,13 +201,13 @@ jlink_get_status (libusb_param_t * params)
 /***************************************************************************/
 
 static void
-jlink_tap_init (jlink_usbconn_data_t * data)
+jlink_tap_init (jlink_usbconn_data_t *data)
 {
     data->tap_length = 0;
 }
 
 static void
-jlink_tap_append_step (jlink_usbconn_data_t * data, int tms, int tdi)
+jlink_tap_append_step (jlink_usbconn_data_t *data, int tms, int tdi)
 {
     int index = data->tap_length >> 3;
 
@@ -238,7 +238,7 @@ jlink_tap_append_step (jlink_usbconn_data_t * data, int tms, int tdi)
 /* Send a tap sequence to the device, and receive the answer */
 
 static int
-jlink_tap_execute (libusb_param_t * params)
+jlink_tap_execute (libusb_param_t *params)
 {
     jlink_usbconn_data_t *data = params->data;
     int byte_length;
@@ -293,7 +293,7 @@ jlink_tap_execute (libusb_param_t * params)
 
 /* Send a message and receive the reply. */
 static int
-jlink_usb_message (libusb_param_t * params, int out_length, int in_length)
+jlink_usb_message (libusb_param_t *params, int out_length, int in_length)
 {
     int result;
 
@@ -326,7 +326,7 @@ jlink_usb_message (libusb_param_t * params, int out_length, int in_length)
 
 /* Write data from out_buffer to USB. */
 static int
-jlink_usb_write (libusb_param_t * params, unsigned int out_length)
+jlink_usb_write (libusb_param_t *params, unsigned int out_length)
 {
     int result;
     jlink_usbconn_data_t *data;
@@ -356,7 +356,7 @@ jlink_usb_write (libusb_param_t * params, unsigned int out_length)
 
 /* Read data from USB into in_buffer. */
 static int
-jlink_usb_read (libusb_param_t * params)
+jlink_usb_read (libusb_param_t *params)
 {
     jlink_usbconn_data_t *data = params->data;
 
@@ -399,7 +399,7 @@ jlink_debug_buffer (char *buffer, int length)
 /* ---------------------------------------------------------------------- */
 
 static int
-jlink_init (cable_t * cable)
+jlink_init (cable_t *cable)
 {
     int result;
     libusb_param_t *params;
@@ -447,7 +447,7 @@ jlink_init (cable_t * cable)
 /* ---------------------------------------------------------------------- */
 
 static void
-jlink_free (cable_t * cable)
+jlink_free (cable_t *cable)
 {
     jlink_usbconn_data_t *data;
     data = ((libusb_param_t *) (cable->link.usb->params))->data;
@@ -459,7 +459,7 @@ jlink_free (cable_t * cable)
 /* ---------------------------------------------------------------------- */
 
 void
-jlink_set_frequency (cable_t * cable, uint32_t frequency)
+jlink_set_frequency (cable_t *cable, uint32_t frequency)
 {
     int result;
     int speed = frequency / 1E3;
@@ -490,7 +490,7 @@ jlink_set_frequency (cable_t * cable, uint32_t frequency)
 /* ---------------------------------------------------------------------- */
 
 static void
-jlink_clock (cable_t * cable, int tms, int tdi, int n)
+jlink_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     libusb_param_t *params = cable->link.usb->params;
@@ -506,7 +506,7 @@ jlink_clock (cable_t * cable, int tms, int tdi, int n)
 /* ---------------------------------------------------------------------- */
 
 static int
-jlink_get_tdo (cable_t * cable)
+jlink_get_tdo (cable_t *cable)
 {
     libusb_param_t *params = cable->link.usb->params;
     jlink_usbconn_data_t *data = params->data;
@@ -520,7 +520,7 @@ jlink_get_tdo (cable_t * cable)
 /* ---------------------------------------------------------------------- */
 
 void
-jlink_copy_out_data (jlink_usbconn_data_t * data, int len, int offset,
+jlink_copy_out_data (jlink_usbconn_data_t *data, int len, int offset,
                      char *buf)
 {
     int i;
@@ -533,7 +533,7 @@ jlink_copy_out_data (jlink_usbconn_data_t * data, int len, int offset,
 }
 
 int
-jlink_transfer (cable_t * cable, int len, char *in, char *out)
+jlink_transfer (cable_t *cable, int len, char *in, char *out)
 {
     int i, j;
     libusb_param_t *params = cable->link.usb->params;
@@ -564,7 +564,7 @@ jlink_transfer (cable_t * cable, int len, char *in, char *out)
 /* ---------------------------------------------------------------------- */
 
 static int
-jlink_set_signal (cable_t * cable, int mask, int val)
+jlink_set_signal (cable_t *cable, int mask, int val)
 {
     return 1;
 }

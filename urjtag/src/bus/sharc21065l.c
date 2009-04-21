@@ -64,7 +64,7 @@ typedef struct
  *
  */
 static bus_t *
-sharc_21065L_bus_new (chain_t * chain, const bus_driver_t * driver,
+sharc_21065L_bus_new (chain_t *chain, const bus_driver_t *driver,
                       char *cmd_params[])
 {
     bus_t *bus;
@@ -121,7 +121,7 @@ sharc_21065L_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-sharc_21065L_bus_printinfo (bus_t * bus)
+sharc_21065L_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -138,7 +138,7 @@ sharc_21065L_bus_printinfo (bus_t * bus)
  *
  */
 static int
-sharc_21065L_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+sharc_21065L_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     /* BMS  (512 KB) */
     if (adr < UINT32_C (0x080000))
@@ -159,7 +159,7 @@ sharc_21065L_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a)
+setup_address (bus_t *bus, uint32_t a)
 {
     int i;
     part_t *p = PART;
@@ -169,7 +169,7 @@ setup_address (bus_t * bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t * bus, uint32_t adr)
+set_data_in (bus_t *bus, uint32_t adr)
 {
     int i;
     part_t *p = PART;
@@ -183,7 +183,7 @@ set_data_in (bus_t * bus, uint32_t adr)
 
 
 static void
-setup_data (bus_t * bus, uint32_t adr, uint32_t d)
+setup_data (bus_t *bus, uint32_t adr, uint32_t d)
 {
     int i;
     part_t *p = PART;
@@ -200,7 +200,7 @@ setup_data (bus_t * bus, uint32_t adr, uint32_t d)
  *
  */
 static void
-sharc_21065L_bus_read_start (bus_t * bus, uint32_t adr)
+sharc_21065L_bus_read_start (bus_t *bus, uint32_t adr)
 {
     chain_t *chain = CHAIN;
     part_t *p = PART;
@@ -225,7 +225,7 @@ sharc_21065L_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-sharc_21065L_bus_read_next (bus_t * bus, uint32_t adr)
+sharc_21065L_bus_read_next (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -259,7 +259,7 @@ sharc_21065L_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-sharc_21065L_bus_read_end (bus_t * bus)
+sharc_21065L_bus_read_end (bus_t *bus)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -293,7 +293,7 @@ sharc_21065L_bus_read_end (bus_t * bus)
  *
  */
 static void
-sharc_21065L_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+sharc_21065L_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;

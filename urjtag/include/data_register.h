@@ -40,6 +40,6 @@ struct data_register
 };
 
 data_register *data_register_alloc (const char *name, int len);
-void data_register_free (data_register * dr);
+void data_register_free (data_register *dr);
 
 #endif /* DATA_REGISTER_H */

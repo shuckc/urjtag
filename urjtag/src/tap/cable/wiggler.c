@@ -139,7 +139,7 @@ static const char *std_wgl_map = xstr (TDO) ","
 
 
 static int
-set_mapping (char *bitmap, cable_t * cable)
+set_mapping (char *bitmap, cable_t *cable)
 {
     const char delim = ',';
     int syntax = 0;
@@ -192,7 +192,7 @@ set_mapping (char *bitmap, cable_t * cable)
 
 
 static int
-wiggler_connect (char *params[], cable_t * cable)
+wiggler_connect (char *params[], cable_t *cable)
 {
     int result;
     char *param_bitmap = NULL;
@@ -257,7 +257,7 @@ wiggler_connect (char *params[], cable_t * cable)
 }
 
 static int
-wiggler_init (cable_t * cable)
+wiggler_init (cable_t *cable)
 {
     int data;
 
@@ -284,7 +284,7 @@ wiggler_init (cable_t * cable)
 }
 
 static void
-wiggler_clock (cable_t * cable, int tms, int tdi, int n)
+wiggler_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
 
@@ -317,7 +317,7 @@ wiggler_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-wiggler_get_tdo (cable_t * cable)
+wiggler_get_tdo (cable_t *cable)
 {
     parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
                       PRM_TCK_INACT (cable) | PRM_UNUSED_BITS (cable));
@@ -329,7 +329,7 @@ wiggler_get_tdo (cable_t * cable)
 }
 
 static int
-wiggler_set_signal (cable_t * cable, int mask, int val)
+wiggler_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PRM_SIGNALS (cable);
 
@@ -356,7 +356,7 @@ wiggler_set_signal (cable_t * cable, int mask, int val)
 }
 
 static int
-wiggler_get_signal (cable_t * cable, pod_sigsel_t sig)
+wiggler_get_signal (cable_t *cable, pod_sigsel_t sig)
 {
     return (PRM_SIGNALS (cable) & sig) ? 1 : 0;
 }

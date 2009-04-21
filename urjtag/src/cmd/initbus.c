@@ -32,7 +32,7 @@
 #include "jtag.h"
 
 static int
-cmd_initbus_run (chain_t * chain, char *params[])
+cmd_initbus_run (chain_t *chain, char *params[])
 {
     int i;
 

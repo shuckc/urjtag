@@ -81,7 +81,7 @@ typedef struct
 #define BLOCK_DESC ((bus_params_t *) bus->params)->block_desc
 
 static int
-fjmem_detect_reg_len (chain_t * chain, part_t * part, char *opcode, int len)
+fjmem_detect_reg_len (chain_t *chain, part_t *part, char *opcode, int len)
 {
     data_register *dr;
     instruction *i;
@@ -171,7 +171,7 @@ fjmem_detect_reg_len (chain_t * chain, part_t * part, char *opcode, int len)
 }
 
 static int
-fjmem_detect_fields (chain_t * chain, part_t * part, bus_t * bus)
+fjmem_detect_fields (chain_t *chain, part_t *part, bus_t *bus)
 {
     block_desc_t *bd = &(BLOCK_DESC);
     data_register *dr = FJMEM_REG;
@@ -251,7 +251,7 @@ fjmem_detect_fields (chain_t * chain, part_t * part, bus_t * bus)
 }
 
 static int
-fjmem_query_blocks (chain_t * chain, part_t * part, bus_t * bus)
+fjmem_query_blocks (chain_t *chain, part_t *part, bus_t *bus)
 {
     block_desc_t *bd = &(BLOCK_DESC);
     data_register *dr = FJMEM_REG;
@@ -368,7 +368,7 @@ fjmem_query_blocks (chain_t * chain, part_t * part, bus_t * bus)
  *
  */
 static bus_t *
-fjmem_bus_new (chain_t * chain, const bus_driver_t * driver, char *params[])
+fjmem_bus_new (chain_t *chain, const bus_driver_t *driver, char *params[])
 {
     bus_t *bus = NULL;
     int failed = 0;
@@ -460,7 +460,7 @@ fjmem_bus_new (chain_t * chain, const bus_driver_t * driver, char *params[])
 }
 
 static void
-fjmem_free_blocks (block_param_t * bl)
+fjmem_free_blocks (block_param_t *bl)
 {
     if (bl)
     {
@@ -474,7 +474,7 @@ fjmem_free_blocks (block_param_t * bl)
  *
  */
 static void
-fjmem_bus_free (bus_t * bus)
+fjmem_bus_free (bus_t *bus)
 {
     data_register *dr = FJMEM_REG;
 
@@ -497,7 +497,7 @@ fjmem_bus_free (bus_t * bus)
  *
  */
 static void
-fjmem_bus_printinfo (bus_t * bus)
+fjmem_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -513,7 +513,7 @@ fjmem_bus_printinfo (bus_t * bus)
  *
  */
 static void
-fjmem_bus_prepare (bus_t * bus)
+fjmem_bus_prepare (bus_t *bus)
 {
     if (!INITIALIZED)
         bus_init (bus);
@@ -524,8 +524,8 @@ fjmem_bus_prepare (bus_t * bus)
 }
 
 static int
-block_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area,
-                block_param_t ** bl_match)
+block_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area,
+                block_param_t **bl_match)
 {
     block_param_t *bl = BLOCK_DESC.blocks;
     uint32_t prev_start;
@@ -573,7 +573,7 @@ block_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area,
  *
  */
 static int
-fjmem_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
+fjmem_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
     block_param_t *bl;
 
@@ -581,7 +581,7 @@ fjmem_bus_area (bus_t * bus, uint32_t adr, bus_area_t * area)
 }
 
 static void
-setup_address (bus_t * bus, uint32_t a, block_param_t * block)
+setup_address (bus_t *bus, uint32_t a, block_param_t *block)
 {
     data_register *dr = FJMEM_REG;
     block_desc_t *bd = &(BLOCK_DESC);
@@ -609,7 +609,7 @@ setup_address (bus_t * bus, uint32_t a, block_param_t * block)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t d, block_param_t * block)
+setup_data (bus_t *bus, uint32_t d, block_param_t *block)
 {
     data_register *dr = FJMEM_REG;
     block_desc_t *bd = &(BLOCK_DESC);
@@ -628,7 +628,7 @@ setup_data (bus_t * bus, uint32_t d, block_param_t * block)
  *
  */
 static void
-fjmem_bus_read_start (bus_t * bus, uint32_t adr)
+fjmem_bus_read_start (bus_t *bus, uint32_t adr)
 {
     chain_t *chain = CHAIN;
     block_desc_t *bd = &(BLOCK_DESC);
@@ -659,7 +659,7 @@ fjmem_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-fjmem_bus_read_next (bus_t * bus, uint32_t adr)
+fjmem_bus_read_next (bus_t *bus, uint32_t adr)
 {
     chain_t *chain = CHAIN;
     block_desc_t *bd = &(BLOCK_DESC);
@@ -694,7 +694,7 @@ fjmem_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-fjmem_bus_read_end (bus_t * bus)
+fjmem_bus_read_end (bus_t *bus)
 {
     chain_t *chain = CHAIN;
     block_desc_t *bd = &(BLOCK_DESC);
@@ -732,7 +732,7 @@ fjmem_bus_read_end (bus_t * bus)
  *
  */
 static void
-fjmem_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+fjmem_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     chain_t *chain = CHAIN;
     block_desc_t *bd = &(BLOCK_DESC);

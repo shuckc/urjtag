@@ -59,7 +59,7 @@ typedef struct
  *
  */
 static bus_t *
-bcm1250_bus_new (chain_t * chain, const bus_driver_t * driver,
+bcm1250_bus_new (chain_t *chain, const bus_driver_t *driver,
                  char *cmd_params[])
 {
     bus_t *bus;
@@ -116,7 +116,7 @@ bcm1250_bus_new (chain_t * chain, const bus_driver_t * driver,
  *
  */
 static void
-bcm1250_bus_printinfo (bus_t * bus)
+bcm1250_bus_printinfo (bus_t *bus)
 {
     int i;
 
@@ -133,7 +133,7 @@ bcm1250_bus_printinfo (bus_t * bus)
  *
  */
 static int
-bcm1250_bus_area (bus_t * bus, uint32_t addr, bus_area_t * area)
+bcm1250_bus_area (bus_t *bus, uint32_t addr, bus_area_t *area)
 {
     area->description = NULL;
     area->start = UINT32_C (0x00000000);
@@ -146,7 +146,7 @@ bcm1250_bus_area (bus_t * bus, uint32_t addr, bus_area_t * area)
 #ifndef USE_BCM_EJTAG
 
 static void
-setup_address (bus_t * bus, uint32_t a)
+setup_address (bus_t *bus, uint32_t a)
 {
     int i;
     part_t *p = PART;
@@ -158,7 +158,7 @@ setup_address (bus_t * bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t * bus)
+set_data_in (bus_t *bus)
 {
     int i;
     part_t *p = PART;
@@ -170,7 +170,7 @@ set_data_in (bus_t * bus)
 }
 
 static void
-setup_data (bus_t * bus, uint32_t d)
+setup_data (bus_t *bus, uint32_t d)
 {
     int i;
     part_t *p = PART;
@@ -186,7 +186,7 @@ setup_data (bus_t * bus, uint32_t d)
  *
  */
 static void
-bcm1250_bus_read_start (bus_t * bus, uint32_t adr)
+bcm1250_bus_read_start (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -214,7 +214,7 @@ bcm1250_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-bcm1250_bus_read_next (bus_t * bus, uint32_t adr)
+bcm1250_bus_read_next (bus_t *bus, uint32_t adr)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -240,7 +240,7 @@ bcm1250_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-bcm1250_bus_read_end (bus_t * bus)
+bcm1250_bus_read_end (bus_t *bus)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -267,7 +267,7 @@ bcm1250_bus_read_end (bus_t * bus)
  *
  */
 static void
-bcm1250_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+bcm1250_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     part_t *p = PART;
     chain_t *chain = CHAIN;
@@ -302,7 +302,7 @@ int addr;
 uint64_t base = 0x1fc00000;
 
 static int
-bcm1250_ejtag_do (bus_t * bus, uint64_t ad, uint64_t da, int read, int type,
+bcm1250_ejtag_do (bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
                   unsigned char *buf, int verbose)
 {
 
@@ -438,7 +438,7 @@ bcm1250_ejtag_do (bus_t * bus, uint64_t ad, uint64_t da, int read, int type,
         chain_shift_data_registers (chain, 1);
 
         while ((p->active_instruction->data_register->out->data[276 - 17] ==
-                0) && to--)
+                0) &&to--)
         {
             chain_shift_data_registers (chain, 1);
         }
@@ -482,7 +482,7 @@ bcm1250_ejtag_do (bus_t * bus, uint64_t ad, uint64_t da, int read, int type,
  *
  */
 static void
-bcm1250_bus_read_start (bus_t * bus, uint32_t adr)
+bcm1250_bus_read_start (bus_t *bus, uint32_t adr)
 {
     addr = adr;
 }
@@ -492,7 +492,7 @@ bcm1250_bus_read_start (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-bcm1250_bus_read (bus_t * bus, uint32_t adr)
+bcm1250_bus_read (bus_t *bus, uint32_t adr)
 {
     unsigned char buf[32];
     bcm1250_ejtag_do (bus, adr + base, 0, 1, 0, buf, 0);
@@ -505,7 +505,7 @@ bcm1250_bus_read (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-bcm1250_bus_read_next (bus_t * bus, uint32_t adr)
+bcm1250_bus_read_next (bus_t *bus, uint32_t adr)
 {
     uint32_t t;
     t = bcm1250_bus_read (bus, addr);
@@ -518,7 +518,7 @@ bcm1250_bus_read_next (bus_t * bus, uint32_t adr)
  *
  */
 static uint32_t
-bcm1250_bus_read_end (bus_t * bus)
+bcm1250_bus_read_end (bus_t *bus)
 {
     return bcm1250_bus_read (bus, addr);
 }
@@ -528,7 +528,7 @@ bcm1250_bus_read_end (bus_t * bus)
  *
  */
 static void
-bcm1250_bus_write (bus_t * bus, uint32_t adr, uint32_t data)
+bcm1250_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     unsigned char buf[32];
     bcm1250_ejtag_do (bus, adr + base, data, 0, 0, buf, 0);

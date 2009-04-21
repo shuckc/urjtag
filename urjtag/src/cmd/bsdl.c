@@ -33,7 +33,7 @@
 #include "cmd.h"
 
 static int
-cmd_bsdl_run (chain_t * chain, char *params[])
+cmd_bsdl_run (chain_t *chain, char *params[])
 {
     int num_params, result = -1;
     bsdl_globs_t *globs = &(chain->bsdl);

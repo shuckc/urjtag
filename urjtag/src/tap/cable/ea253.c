@@ -50,7 +50,7 @@
 #define	TDO	4
 
 static int
-ea253_init (cable_t * cable)
+ea253_init (cable_t *cable)
 {
     int data;
 
@@ -70,7 +70,7 @@ ea253_init (cable_t * cable)
 }
 
 static void
-ea253_clock (cable_t * cable, int tms, int tdi, int n)
+ea253_clock (cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
@@ -97,7 +97,7 @@ ea253_clock (cable_t * cable, int tms, int tdi, int n)
 }
 
 static int
-ea253_get_tdo (cable_t * cable)
+ea253_get_tdo (cable_t *cable)
 {
     int trst = (PARAM_SIGNALS (cable) & CS_TRST) ? 1 : 0;
 
@@ -110,7 +110,7 @@ ea253_get_tdo (cable_t * cable)
 }
 
 static int
-ea253_set_signal (cable_t * cable, int mask, int val)
+ea253_set_signal (cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 
