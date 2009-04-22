@@ -61,10 +61,10 @@ typedef struct
 #define	nFOE		((bus_params_t *) bus->params)->nfoe
 #define	D		((bus_params_t *) bus->params)->d
 
-int BUS_WIDTH = 8;
-char REVBITS = 0;
-char dbgAddr = 0;
-char dbgData = 0;
+static int BUS_WIDTH = 8;
+static char REVBITS = 0;
+static char dbgAddr = 0;
+static char dbgData = 0;
 
 
 /**

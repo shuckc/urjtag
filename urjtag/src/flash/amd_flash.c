@@ -66,7 +66,7 @@
 #define AMD_BYPASS_UNLOCK_MODE			1
 #define AMD_STANDARD_MODE			0
 
-struct
+static struct
 {
     unsigned long flash;
     unsigned short algorithm;

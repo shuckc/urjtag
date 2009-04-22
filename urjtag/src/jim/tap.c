@@ -32,7 +32,7 @@
 
 #undef VERBOSE
 
-const tap_state_t next_tap_state[16][2] = {
+static const tap_state_t next_tap_state[16][2] = {
     /* RESET       */ {IDLE, RESET},
     /* SELECT_DR   */ {CAPTURE_DR, SELECT_IR},
     /* CAPTURE_DR  */ {SHIFT_DR, EXIT1_DR},

@@ -56,7 +56,7 @@ typedef enum
 }
 intel_f28xxxb3_op_state_t;
 
-const char *intel_28fxxx_opstate_name[16] = {
+static const char *intel_28fxxx_opstate_name[16] = {
     "READ_ARRAY",
     "READ_STATUS",
     "READ_ID",

@@ -32,7 +32,7 @@
 
 extern jim_bus_device_t intel_28f800b3b;
 
-jim_attached_part_t some_cpu_attached[] = {
+static jim_attached_part_t some_cpu_attached[] = {
     /* 1. Address offset: base offset [bytes]
      * 2. Address shift: Distance between address LSB of device and CPU
      * 3. Data shift: Distance between D0 of device and CPU e.g. 0, 8, 16 or 24 bits

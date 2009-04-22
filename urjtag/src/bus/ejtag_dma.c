@@ -145,7 +145,7 @@ reg_value (tap_register *reg)
 
 #ifdef PRINT_DATA_DEBUG
 /* Small debug helper */
-char
+static char
 siz_ (int sz)
 {
     switch (sz)

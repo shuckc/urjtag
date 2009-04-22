@@ -1,3 +1,18 @@
+
+2009-04-22  Rutger Hofman <rfhh>
+
+  Check suspicious-looking public symbols whether they shouldn't be in fact
+  static:
+  * src/jim/tap.c: make some variables static
+  * src/jim/intel_28f800b3.c: make some variables static
+  * src/jim/some_cpu.c
+  * src/tap/parport/direct.c
+  * src/bus/ejtag_dma.c
+  * src/bus/mpc824x.c
+  * src/bus/bcm1250.c
+  * src/bus/slsup3.c
+  * src/flash/amd_flash.c
+
 2009-04-21  Rutger Hofman <rfhh>
 
   Run indent over the code base: all '*.[ch]' files except evidently imported

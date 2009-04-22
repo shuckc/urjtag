@@ -36,13 +36,13 @@
 
 #if defined(HAVE_INPOUTXX)
 
-HINSTANCE inpout32_dll_handle = NULL;
+static HINSTANCE inpout32_dll_handle = NULL;
 
 typedef short _stdcall (*inpfuncPtr) (short p);
 typedef void _stdcall (*outfuncPtr) (short p, short d);
 
-inpfuncPtr Inp32;
-outfuncPtr Out32;
+static inpfuncPtr Inp32;
+static outfuncPtr Out32;
 
 #define inb(p) (Inp32)(p)
 #define outb(d,p) (Out32)(p,d)

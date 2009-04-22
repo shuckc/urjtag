@@ -39,11 +39,11 @@
 #include "buses.h"
 #include "generic_bus.h"
 
-int databusio[16] =
+static int databusio[16] =
     { 94, 96, 98, 100, 102, 104, 106, 113, 95, 97, 99, 101, 103, 105, 107,
     114
 };
-int addrbusio[20] =
+static int addrbusio[20] =
     { 93, 88, 87, 86, 85, 84, 83, 63, 64, 65, 66, 67, 68, 74, 75, 76, 77, 82,
     81, 78
 };

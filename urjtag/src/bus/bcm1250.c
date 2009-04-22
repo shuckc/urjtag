@@ -298,8 +298,8 @@ bcm1250_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 
 #else /* #ifndef USE_BCM_EJTAG */
 
-int addr;
-uint64_t base = 0x1fc00000;
+static int addr;
+static uint64_t base = 0x1fc00000;
 
 static int
 bcm1250_ejtag_do (bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
