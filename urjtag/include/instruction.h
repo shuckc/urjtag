@@ -30,7 +30,7 @@
 
 #define	MAXLEN_INSTRUCTION	20
 
-typedef struct instruction instruction;
+typedef struct instruction instruction_t;
 
 struct instruction
 {
