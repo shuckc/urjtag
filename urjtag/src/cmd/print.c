@@ -1,4 +1,4 @@
-/src*
+/*
  * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
