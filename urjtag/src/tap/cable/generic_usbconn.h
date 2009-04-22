@@ -22,15 +22,15 @@
  *
  */
 
-#ifndef GENERIC_USBCONN_H
-#define	GENERIC_USBCONN_H
+#ifndef URJ_TAP_CABLE_GENERIC_USBCONN_H
+#define	URJ_TAP_CABLE_GENERIC_USBCONN_H
 
 #include "cable.h"
 #include "usbconn.h"
 
-int generic_usbconn_connect (char *params[], cable_t *cable);
-void generic_usbconn_done (cable_t *cable);
-void generic_usbconn_help (const char *name);
-void generic_usbconn_free (cable_t *cable);
+int urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable);
+void urj_tap_cable_generic_usbconn_done (urj_cable_t *cable);
+void urj_tap_cable_generic_usbconn_help (const char *name);
+void urj_tap_cable_generic_usbconn_free (urj_cable_t *cable);
 
-#endif /* GENERIC_H */
+#endif /* URJ_TAP_CABLE_GENERIC_H */

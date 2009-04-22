@@ -71,7 +71,7 @@ print_cmd (char **cmd)
 
 
 /*****************************************************************************
- * int bsdl_set_instruction_length( jtag_ctrl_t *jc )
+ * int urj_bsdl_set_instruction_length( urj_bsdl_jtag_ctrl_t *jc )
  *
  * Sets the specified length of the instruction register via shell command
  *   instruction length <len>
@@ -84,7 +84,7 @@ print_cmd (char **cmd)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_set_instruction_length (jtag_ctrl_t *jc)
+urj_bsdl_set_instruction_length (urj_bsdl_jtag_ctrl_t *jc)
 {
     char lenstring[6];
     char *cmd[] = { "instruction",
@@ -96,9 +96,9 @@ bsdl_set_instruction_length (jtag_ctrl_t *jc)
     snprintf (lenstring, 6, "%i", jc->instr_len);
     lenstring[5] = '\0';
 
-    if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
-        cmd_run (jc->chain, cmd);
-    if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+    if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
+        urj_cmd_run (jc->chain, cmd);
+    if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
         print_cmd (cmd);
 
     return 1;
@@ -106,7 +106,7 @@ bsdl_set_instruction_length (jtag_ctrl_t *jc)
 
 
 /*****************************************************************************
- * int bsdl_emit_ports( jtag_ctrl_t *jc )
+ * int urj_bsdl_emit_ports( urj_bsdl_jtag_ctrl_t *jc )
  *
  * Adds the specified port name as a signal via shell command
  *   signal <pin>
@@ -124,9 +124,9 @@ bsdl_set_instruction_length (jtag_ctrl_t *jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_emit_ports (jtag_ctrl_t *jc)
+urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
 {
-    port_desc_t *pd = jc->port_desc;
+    urj_bsdl_port_desc_t *pd = jc->port_desc;
     struct string_elem *name;
     size_t str_len, name_len;
     char *port_string;
@@ -163,9 +163,9 @@ bsdl_emit_ports (jtag_ctrl_t *jc)
                         strncpy (port_string, name->string, str_len - 1);
                     port_string[str_len - 1] = '\0';
 
-                    if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
-                        cmd_run (jc->chain, cmd);
-                    if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+                    if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
+                        urj_cmd_run (jc->chain, cmd);
+                    if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                         print_cmd (cmd);
                 }
 
@@ -173,7 +173,7 @@ bsdl_emit_ports (jtag_ctrl_t *jc)
                 result = 1;
             }
             else
-                bsdl_msg (jc->proc_mode,
+                urj_bsdl_msg (jc->proc_mode,
                           BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
                           __FILE__, __LINE__);
 
@@ -188,7 +188,7 @@ bsdl_emit_ports (jtag_ctrl_t *jc)
 
 
 /*****************************************************************************
- * int create_register( jtag_ctrl_t *jc, char *reg_name, size_t len )
+ * int create_register( urj_bsdl_jtag_ctrl_t *jc, char *reg_name, size_t len )
  *
  * Generic function to create a jtag register via shell command
  *   register <reg_name> <len>
@@ -203,7 +203,7 @@ bsdl_emit_ports (jtag_ctrl_t *jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-create_register (jtag_ctrl_t *jc, char *reg_name, size_t len)
+create_register (urj_bsdl_jtag_ctrl_t *jc, char *reg_name, size_t len)
 {
     const size_t str_len = 10;
     char len_str[str_len + 1];
@@ -213,15 +213,15 @@ create_register (jtag_ctrl_t *jc, char *reg_name, size_t len)
         NULL
     };
 
-    if (part_find_data_register (jc->part, reg_name))
+    if (urj_part_find_data_register (jc->part, reg_name))
         return 1;
 
     /* convert length information to string */
     snprintf (len_str, str_len, "%zu", len);
 
-    if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
-        cmd_run (jc->chain, cmd);
-    if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+    if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
+        urj_cmd_run (jc->chain, cmd);
+    if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
         print_cmd (cmd);
 
     return 1;
@@ -229,7 +229,7 @@ create_register (jtag_ctrl_t *jc, char *reg_name, size_t len)
 
 
 /*****************************************************************************
- * int bsdl_process_idcode( jtag_ctrl_t *jc )
+ * int urj_bsdl_process_idcode( urj_bsdl_jtag_ctrl_t *jc )
  *
  * Creates the DIR register based on the extracted idcode.
  *
@@ -241,12 +241,12 @@ create_register (jtag_ctrl_t *jc, char *reg_name, size_t len)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_process_idcode (jtag_ctrl_t *jc)
+urj_bsdl_process_idcode (urj_bsdl_jtag_ctrl_t *jc)
 {
     if (jc->idcode)
         create_register (jc, "DIR", strlen (jc->idcode));
     else
-        bsdl_msg (jc->proc_mode,
+        urj_bsdl_msg (jc->proc_mode,
                   BSDL_MSG_WARN, _("No IDCODE specification found.\n"));
 
     return 1;
@@ -254,7 +254,7 @@ bsdl_process_idcode (jtag_ctrl_t *jc)
 
 
 /*****************************************************************************
- * int bsdl_process_usercode( jtag_ctrl_t *jc )
+ * int urj_bsdl_process_usercode( urj_bsdl_jtag_ctrl_t *jc )
  *
  * Creates the USERCODE register, the contents of the usercode string is
  * ignored.
@@ -267,7 +267,7 @@ bsdl_process_idcode (jtag_ctrl_t *jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_process_usercode (jtag_ctrl_t *jc)
+urj_bsdl_process_usercode (urj_bsdl_jtag_ctrl_t *jc)
 {
     if (jc->usercode)
         create_register (jc, "USERCODE", strlen (jc->usercode));
@@ -279,7 +279,7 @@ bsdl_process_usercode (jtag_ctrl_t *jc)
 
 
 /*****************************************************************************
- * int bsdl_set_bsr_length( jtag_ctrl_t *jc )
+ * int urj_bsdl_set_bsr_length( urj_bsdl_jtag_ctrl_t *jc )
  *
  * Creates the BSR register based on the specified length.
  *
@@ -291,7 +291,7 @@ bsdl_process_usercode (jtag_ctrl_t *jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_set_bsr_length (jtag_ctrl_t *jc)
+urj_bsdl_set_bsr_length (urj_bsdl_jtag_ctrl_t *jc)
 {
     create_register (jc, "BSR", jc->bsr_len);
 
@@ -300,7 +300,7 @@ bsdl_set_bsr_length (jtag_ctrl_t *jc)
 
 
 /*****************************************************************************
- * int bsdl_process_cell_info( jtag_ctrl_t *jc )
+ * int urj_bsdl_process_cell_info( urj_bsdl_jtag_ctrl_t *jc )
  * Cell Info management function
  *
  * Creates a BSR cell from the temporary storage variables via shell command
@@ -314,9 +314,9 @@ bsdl_set_bsr_length (jtag_ctrl_t *jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_process_cell_info (jtag_ctrl_t *jc)
+urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
 {
-    cell_info_t *ci = jc->cell_info_first;
+    urj_bsdl_cell_info_t *ci = jc->cell_info_first;
     const size_t str_len = 10;
     char bit_num_str[str_len + 1];
     char ctrl_bit_num_str[str_len + 1];
@@ -390,9 +390,9 @@ bsdl_process_cell_info (jtag_ctrl_t *jc)
             /* stop command procssing here */
             cmd[5] = NULL;
 
-        if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
-            cmd_run (jc->chain, cmd);
-        if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+        if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
+            urj_cmd_run (jc->chain, cmd);
+        if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
             print_cmd (cmd);
 
         ci = ci->next;
@@ -403,7 +403,7 @@ bsdl_process_cell_info (jtag_ctrl_t *jc)
 
 
 /*****************************************************************************
- * int bsdl_process_register_access( jtag_ctrl_t *jc )
+ * int urj_bsdl_process_register_access( urj_bsdl_jtag_ctrl_t *jc )
  * Register Access management function
  *
  * Runs through the main instruction list and builds the instruction/register
@@ -427,10 +427,10 @@ bsdl_process_cell_info (jtag_ctrl_t *jc)
  *   0 -> error occured
  ****************************************************************************/
 static int
-bsdl_process_register_access (jtag_ctrl_t *jc)
+urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
 {
-    ainfo_elem_t *ai;
-    instr_elem_t *cinst;
+    urj_bsdl_types_ainfo_elem_t *ai;
+    urj_bsdl_instr_elem_t *cinst;
 
     /* ensure that all mandatory registers are created prior to
        handling the instruction/register associations
@@ -475,7 +475,7 @@ bsdl_process_register_access (jtag_ctrl_t *jc)
         ai = jc->ainfo_list;
         while (ai && (reg_name == NULL))
         {
-            instr_elem_t *tinst = ai->instr_list;
+            urj_bsdl_instr_elem_t *tinst = ai->instr_list;
 
             while (tinst && (reg_name == NULL))
             {
@@ -537,9 +537,9 @@ bsdl_process_register_access (jtag_ctrl_t *jc)
                 NULL
             };
 
-            if (jc->proc_mode & BSDL_MODE_INSTR_EXEC)
-                cmd_run (jc->chain, cmd);
-            if (jc->proc_mode & BSDL_MODE_INSTR_PRINT)
+            if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
+                urj_cmd_run (jc->chain, cmd);
+            if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                 print_cmd (cmd);
         }
 
@@ -551,7 +551,7 @@ bsdl_process_register_access (jtag_ctrl_t *jc)
 
 
 /*****************************************************************************
- * int parse_vhdl_elem( bsdl_parser_priv_t *priv, vhdl_elem_t *elem )
+ * int parse_vhdl_elem( urj_bsdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *elem )
  *
  * Runs the specified vhdl element through the BSDl parser.
  *
@@ -560,11 +560,11 @@ bsdl_process_register_access (jtag_ctrl_t *jc)
  *   elem : vhdl element to be parsed
  *
  * Returns
- *   BSDL_MODE_SYN_CHECK -> parsing successful
+ *   URJ_BSDL_MODE_SYN_CHECK -> parsing successful
  *   0                   -> error occured
  ****************************************************************************/
 static int
-parse_vhdl_elem (bsdl_parser_priv_t *priv, vhdl_elem_t *elem)
+parse_vhdl_elem (urj_bsdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *elem)
 {
     char *buf;
     size_t buf_len;
@@ -579,7 +579,7 @@ parse_vhdl_elem (bsdl_parser_priv_t *priv, vhdl_elem_t *elem)
     buf = (char *) malloc (buf_len);
     if (!buf)
     {
-        bsdl_msg (priv->jtag_ctrl->proc_mode,
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
                   BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__,
                   __LINE__);
         return -1;
@@ -598,18 +598,18 @@ parse_vhdl_elem (bsdl_parser_priv_t *priv, vhdl_elem_t *elem)
     priv->lineno = elem->line;
 
     /* buffer is prepared for string parsing */
-    bsdl_flex_switch_buffer (priv->scanner, buf, elem->line);
-    bsdlparse (priv);
+    urj_bsdl_flex_switch_buffer (priv->scanner, buf, elem->line);
+    urj_bsdl_parse (priv);
 
     free (buf);
 
-    return bsdl_flex_get_compile_errors (priv->scanner) ==
-        0 ? BSDL_MODE_SYN_CHECK : 0;
+    return urj_bsdl_flex_get_compile_errors (priv->scanner) ==
+        0 ? URJ_BSDL_MODE_SYN_CHECK : 0;
 }
 
 
 /*****************************************************************************
- * int build_commands( bsdl_parser_priv_t *priv )
+ * int build_commands( urj_bsdl_parser_priv_t *priv )
  *
  * Calls the various functions that execute or print the information extracted
  * from the BSDL/vhdl elements.
@@ -622,31 +622,31 @@ parse_vhdl_elem (bsdl_parser_priv_t *priv, vhdl_elem_t *elem)
  *   telling if INSTR_EXEC or INSTR_PRINT succeeded
  ****************************************************************************/
 static int
-build_commands (bsdl_parser_priv_t *priv)
+build_commands (urj_bsdl_parser_priv_t *priv)
 {
-    jtag_ctrl_t *jc = priv->jtag_ctrl;
+    urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
     int result = 1;
 
-    result &= bsdl_emit_ports (jc);
+    result &= urj_bsdl_emit_ports (jc);
 
-    result &= bsdl_set_instruction_length (jc);
+    result &= urj_bsdl_set_instruction_length (jc);
 
-    result &= bsdl_process_idcode (jc);
+    result &= urj_bsdl_process_idcode (jc);
 
-    result &= bsdl_process_usercode (jc);
+    result &= urj_bsdl_process_usercode (jc);
 
-    result &= bsdl_set_bsr_length (jc);
+    result &= urj_bsdl_set_bsr_length (jc);
 
-    result &= bsdl_process_register_access (jc);
+    result &= urj_bsdl_process_register_access (jc);
 
-    result &= bsdl_process_cell_info (jc);
+    result &= urj_bsdl_process_cell_info (jc);
 
-    return result ? BSDL_MODE_INSTR_EXEC | BSDL_MODE_INSTR_PRINT : 0;
+    return result ? URJ_BSDL_MODE_INSTR_EXEC | URJ_BSDL_MODE_INSTR_PRINT : 0;
 }
 
 
 /*****************************************************************************
- * int compare_idcode( jtag_ctrl_t *jc, const char *idcode )
+ * int compare_idcode( urj_bsdl_jtag_ctrl_t *jc, const char *idcode )
  *
  * Compares idcode versus jtag_ctrl->idcode.
  *
@@ -659,7 +659,7 @@ build_commands (bsdl_parser_priv_t *priv)
  *   0 -> idcodes don't match
  ****************************************************************************/
 static int
-compare_idcode (jtag_ctrl_t *jc, const char *idcode)
+compare_idcode (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
 {
     int idcode_match = 0;
 
@@ -671,17 +671,17 @@ compare_idcode (jtag_ctrl_t *jc, const char *idcode)
             int idx;
 
             /* compare given idcode with idcode from BSDL file */
-            idcode_match = BSDL_MODE_IDCODE_CHECK;
+            idcode_match = URJ_BSDL_MODE_IDCODE_CHECK;
             for (idx = 0; idx < strlen (idcode); idx++)
                 if (jc->idcode[idx] != 'X')
                     if (idcode[idx] != jc->idcode[idx])
                         idcode_match = 0;
 
             if (idcode_match)
-                bsdl_msg (jc->proc_mode,
+                urj_bsdl_msg (jc->proc_mode,
                           BSDL_MSG_NOTE, _("IDCODE matched\n"));
             else
-                bsdl_msg (jc->proc_mode,
+                urj_bsdl_msg (jc->proc_mode,
                           BSDL_MSG_NOTE, _("IDCODE mismatch\n"));
         }
     }
@@ -691,7 +691,7 @@ compare_idcode (jtag_ctrl_t *jc, const char *idcode)
 
 
 /*****************************************************************************
- * int bsdl_process_elements( jtag_ctrl_t *jc, const char *idcode )
+ * int urj_bsdl_process_elements( urj_bsdl_jtag_ctrl_t *jc, const char *idcode )
  *
  * If enabled, runs through the list of vhdl elements in jtag ctrl and parser
  * them as BSDL statements.
@@ -709,57 +709,57 @@ compare_idcode (jtag_ctrl_t *jc, const char *idcode)
  *
  ****************************************************************************/
 int
-bsdl_process_elements (jtag_ctrl_t *jc, const char *idcode)
+urj_bsdl_process_elements (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
 {
-    bsdl_parser_priv_t *priv;
-    vhdl_elem_t *el = jc->vhdl_elem_first;
-    int result = BSDL_MODE_SYN_CHECK;
+    urj_bsdl_parser_priv_t *priv;
+    urj_bsdl_vhdl_elem_t *el = jc->vhdl_elem_first;
+    int result = URJ_BSDL_MODE_SYN_CHECK;
 
-    if ((priv = bsdl_parser_init (jc)) == NULL)
+    if ((priv = urj_bsdl_parser_init (jc)) == NULL)
         return -1;
 
-    if (jc->proc_mode & BSDL_MODE_SYN_CHECK)
+    if (jc->proc_mode & URJ_BSDL_MODE_SYN_CHECK)
     {
-        while (el && (result & BSDL_MODE_SYN_CHECK))
+        while (el && (result & URJ_BSDL_MODE_SYN_CHECK))
         {
             result = parse_vhdl_elem (priv, el);
 
             el = el->next;
         }
 
-        if (!(result & BSDL_MODE_SYN_CHECK))
+        if (!(result & URJ_BSDL_MODE_SYN_CHECK))
         {
-            bsdl_msg (jc->proc_mode,
+            urj_bsdl_msg (jc->proc_mode,
                       BSDL_MSG_ERR,
                       _("BSDL stage reported errors, aborting.\n"));
-            bsdl_parser_deinit (priv);
+            urj_bsdl_parser_deinit (priv);
             return -1;
         }
     }
 
     if (jc->idcode)
-        bsdl_msg (jc->proc_mode,
+        urj_bsdl_msg (jc->proc_mode,
                   BSDL_MSG_NOTE, _("Got IDCODE: %s\n"), jc->idcode);
 
-    if (jc->proc_mode & BSDL_MODE_IDCODE_CHECK)
+    if (jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK)
         result |= compare_idcode (jc, idcode);
 
-    if (jc->proc_mode & (BSDL_MODE_INSTR_EXEC | BSDL_MODE_INSTR_PRINT))
+    if (jc->proc_mode & (URJ_BSDL_MODE_INSTR_EXEC | URJ_BSDL_MODE_INSTR_PRINT))
         /* IDCODE check positive if requested? */
-        if (((jc->proc_mode & BSDL_MODE_IDCODE_CHECK) &&
-             (result & BSDL_MODE_IDCODE_CHECK))
-            || (!(jc->proc_mode & BSDL_MODE_IDCODE_CHECK)))
+        if (((jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK) &&
+             (result & URJ_BSDL_MODE_IDCODE_CHECK))
+            || (!(jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK)))
             result |= build_commands (priv);
 
-    if ((result & jc->proc_mode) == (jc->proc_mode & BSDL_MODE_ACTION_ALL))
-        if (jc->proc_mode & BSDL_MODE_IDCODE_CHECK)
+    if ((result & jc->proc_mode) == (jc->proc_mode & URJ_BSDL_MODE_ACTION_ALL))
+        if (jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK)
             result = 1;
         else
             result = 0;
     else
         result = -1;
 
-    bsdl_parser_deinit (priv);
+    urj_bsdl_parser_deinit (priv);
 
     return result;
 }

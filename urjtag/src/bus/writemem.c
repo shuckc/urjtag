@@ -36,7 +36,7 @@
 #include "jtag.h"
 
 void
-writemem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
+urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
     uint32_t step;
     uint32_t a;
@@ -44,7 +44,7 @@ writemem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
     int bidx = 0;
 #define BSIZE 4096
     uint8_t b[BSIZE];
-    bus_area_t area;
+    urj_bus_area_t area;
     uint64_t end;
 
     if (!bus)
@@ -53,9 +53,9 @@ writemem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
         return;
     }
 
-    bus_prepare (bus);
+    URJ_BUS_PREPARE (bus);
 
-    if (bus_area (bus, addr, &area) != URJTAG_STATUS_OK)
+    if (URJ_BUS_AREA (bus, addr, &area) != URJ_STATUS_OK)
     {
         printf (_("Error: Bus width detection failed\n"));
         return;
@@ -129,7 +129,7 @@ writemem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
             }
         }
 
-        bus_write (bus, a, data);
+        URJ_BUS_WRITE (bus, a, data);
 
     }
 

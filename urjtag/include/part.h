@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef PART_H
-#define	PART_H
+#ifndef URJ_PART_H
+#define	URJ_PART_H
 
 #include <stdio.h>
 
@@ -32,52 +32,52 @@
 #include "data_register.h"
 #include "bsbit.h"
 
-#define	MAXLEN_MANUFACTURER	25
-#define	MAXLEN_PART		20
-#define	MAXLEN_STEPPING		8
+#define	URJ_PART_MANUFACTURER_MAXLEN	25
+#define	URJ_PART_PART_MAXLEN		20
+#define	URJ_PART_STEPPING_MAXLEN		8
 
-typedef struct part part_t;
+typedef struct urj_part urj_part_t;
 
-struct part
+struct urj_part
 {
-    tap_register_t *id;
+    urj_tap_register_t *id;
     char *alias;                /* djf refdes */
-    char manufacturer[MAXLEN_MANUFACTURER + 1];
-    char part[MAXLEN_PART + 1];
-    char stepping[MAXLEN_STEPPING + 1];
-    signal_t *signals;
-    salias_t *saliases;
+    char manufacturer[URJ_PART_MANUFACTURER_MAXLEN + 1];
+    char part[URJ_PART_PART_MAXLEN + 1];
+    char stepping[URJ_PART_STEPPING_MAXLEN + 1];
+    urj_part_signal_t *signals;
+    urj_part_salias_t *saliases;
     int instruction_length;
-    instruction_t *instructions;
-    instruction_t *active_instruction;
-    data_register_t *data_registers;
+    urj_instruction_t *instructions;
+    urj_instruction_t *active_instruction;
+    urj_data_register_t *data_registers;
     int boundary_length;
-    bsbit_t **bsbits;
+    urj_bsbit_t **bsbits;
 };
 
-part_t *part_alloc (const tap_register_t *id);
-void part_free (part_t *p);
-part_t *read_part (FILE *f, tap_register_t *idr);
-instruction_t *part_find_instruction (part_t *p, const char *iname);
-data_register_t *part_find_data_register (part_t *p, const char *drname);
-signal_t *part_find_signal (part_t *p, const char *signalname);
-void part_set_instruction (part_t *p, const char *iname);
-void part_set_signal (part_t *p, signal_t *s, int out, int val);
-int part_get_signal (part_t *p, signal_t *s);
-void part_print (part_t *p);
+urj_part_t *urj_part_alloc (const urj_tap_register_t *id);
+void urj_part_free (urj_part_t *p);
+urj_part_t *read_part (FILE *f, urj_tap_register_t *idr);
+urj_instruction_t *urj_part_find_instruction (urj_part_t *p, const char *iname);
+urj_data_register_t *urj_part_find_data_register (urj_part_t *p, const char *drname);
+urj_part_signal_t *urj_part_find_signal (urj_part_t *p, const char *signalname);
+void urj_part_set_instruction (urj_part_t *p, const char *iname);
+void urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val);
+int urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s);
+void urj_part_print (urj_part_t *p);
 
-typedef struct parts parts_t;
+typedef struct urj_parts urj_parts_t;
 
-struct parts
+struct urj_parts
 {
     int len;
-    part_t **parts;
+    urj_part_t **parts;
 };
 
-parts_t *parts_alloc (void);
-void parts_free (parts_t *ps);
-int parts_add_part (parts_t *ps, part_t *p);
-void parts_set_instruction (parts_t *ps, const char *iname);
-void parts_print (parts_t *ps);
+urj_parts_t *urj_part_parts_alloc (void);
+void urj_part_parts_free (urj_parts_t *ps);
+int urj_part_parts_add_part (urj_parts_t *ps, urj_part_t *p);
+void urj_part_parts_set_instruction (urj_parts_t *ps, const char *iname);
+void urj_part_parts_print (urj_parts_t *ps);
 
-#endif /* PART_H */
+#endif /* URJ_PART_H */

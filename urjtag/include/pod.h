@@ -21,21 +21,21 @@
  *
  */
 
-#ifndef POD_H
-#define	POD_H
+#ifndef URJ_POD_H
+#define	URJ_POD_H
 
 typedef enum
 {
-    CS_NONE = 0,                // no/invalid signal
-    CS_TDI = (1 << 0),          // out: JTAG/SPI data in
-    CS_TCK = (1 << 1),          // out: JTAG/SPI clock
-    CS_TMS = (1 << 2),          // out: JTAG test mode select/SPI slave select
-    CS_TRST = (1 << 3),         // out: JTAG TAP reset
-    CS_RESET = (1 << 4),        // out: system reset
-    CS_SCK = (1 << 5),          // out: I2C clock (not yet used)
-    CS_SDA = (1 << 6),          // inout: I2C data (not yet used)
-    CS_SS = (1 << 7),           // out: SPI slave select (not yet used)
+    URJ_POD_CS_NONE = 0,                // no/invalid signal
+    URJ_POD_CS_TDI = (1 << 0),          // out: JTAG/SPI data in
+    URJ_POD_CS_TCK = (1 << 1),          // out: JTAG/SPI clock
+    URJ_POD_CS_TMS = (1 << 2),          // out: JTAG test mode select/SPI slave select
+    URJ_POD_CS_TRST = (1 << 3),         // out: JTAG TAP reset
+    URJ_POD_CS_RESET = (1 << 4),        // out: system reset
+    URJ_POD_CS_SCK = (1 << 5),          // out: I2C clock (not yet used)
+    URJ_POD_CS_SDA = (1 << 6),          // inout: I2C data (not yet used)
+    URJ_POD_CS_SS = (1 << 7),           // out: SPI slave select (not yet used)
 }
-pod_sigsel_t;
+urj_pod_sigsel_t;
 
-#endif /* POD_H */
+#endif /* URJ_POD_H */

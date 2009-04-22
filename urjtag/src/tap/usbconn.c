@@ -29,18 +29,18 @@
 #include "usbconn.h"
 
 #ifdef HAVE_LIBUSB
-extern usbconn_driver_t usbconn_libusb_driver;
+extern urj_usbconn_driver_t usbconn_libusb_driver;
 #endif /* HAVE_LIBUSB */
 #ifdef ENABLE_LOWLEVEL_FTD2XX
-extern usbconn_driver_t usbconn_ftd2xx_driver;
-extern usbconn_driver_t usbconn_ftd2xx_mpsse_driver;
+extern urj_usbconn_driver_t usbconn_ftd2xx_driver;
+extern urj_usbconn_driver_t usbconn_ftd2xx_mpsse_driver;
 #endif /* ENABLE_LOWLEVEL_FTD2XX */
 #ifdef ENABLE_LOWLEVEL_FTDI
-extern usbconn_driver_t usbconn_ftdi_driver;
-extern usbconn_driver_t usbconn_ftdi_mpsse_driver;
+extern urj_usbconn_driver_t usbconn_ftdi_driver;
+extern urj_usbconn_driver_t usbconn_ftdi_mpsse_driver;
 #endif /* ENABLE_LOWLEVEL_FTDI */
 
-usbconn_driver_t *usbconn_drivers[] = {
+urj_usbconn_driver_t *usbconn_drivers[] = {
 #ifdef HAVE_LIBUSB
     &usbconn_libusb_driver,
 #endif /* HAVE_LIBUSB */
@@ -56,19 +56,19 @@ usbconn_driver_t *usbconn_drivers[] = {
 };
 
 int
-usbconn_open (usbconn_t *conn)
+urj_tap_usbconn_open (urj_usbconn_t *conn)
 {
     return conn->driver->open (conn);
 }
 
 int
-usbconn_close (usbconn_t *conn)
+urj_tap_usbconn_close (urj_usbconn_t *conn)
 {
     return conn->driver->close (conn);
 }
 
 int
-usbconn_read (usbconn_t *conn, uint8_t *buf, int len)
+urj_tap_usbconn_read (urj_usbconn_t *conn, uint8_t *buf, int len)
 {
     if (conn->driver->read)
         return conn->driver->read (conn, buf, len);
@@ -77,7 +77,7 @@ usbconn_read (usbconn_t *conn, uint8_t *buf, int len)
 }
 
 int
-usbconn_write (usbconn_t *conn, uint8_t *buf, int len, int recv)
+urj_tap_usbconn_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
 {
     if (conn->driver->write)
         return conn->driver->write (conn, buf, len, recv);

@@ -26,7 +26,7 @@
 
 %option bison-bridge
 %option reentrant
-%option prefix="svf"
+%option prefix="urj_svf_"
 %option outfile="lex.yy.c"
 %option bison-locations
 
@@ -43,7 +43,7 @@
 #include "svf.h"
 #include "svf_bison.h"
 
-#define YY_EXTRA_TYPE scanner_extra_t *
+#define YY_EXTRA_TYPE urj_svf_scanner_extra_t *
 
 static int map_keyw_ident(YYSTYPE *, char *);
 static void align_string(char *);
@@ -236,7 +236,7 @@ static struct rwtable
   {"HDR",       HDR},
   {"HIR",       HIR},
   {"HZ",        HZ},
-  {"IDLE",      IDLE},
+  {"URJ_JIM_IDLE",      URJ_JIM_IDLE},
   {"IN",        IN},
   {"INOUT",     INOUT},
   {"IRCAPTURE", IRCAPTURE},
@@ -254,7 +254,7 @@ static struct rwtable
   {"OUT",       OUT},
   {"PIO",       PIO},
   {"PIOMAP",    PIOMAP},
-  {"RESET",     RESET},
+  {"URJ_JIM_RESET",     URJ_JIM_RESET},
   {"RUNTEST",   RUNTEST},
   {"SCK",       SCK},
   {"SDR",       SDR},
@@ -354,7 +354,7 @@ progress_nl(YYLTYPE * mylloc, YY_EXTRA_TYPE extra)
 }
 
 
-void *svf_flex_init(FILE *f, int num_lines, int print_progress)
+void *urj_svf_flex_init(FILE *f, int num_lines, int print_progress)
 {
   YY_EXTRA_TYPE extra;
   yyscan_t scanner;
@@ -365,7 +365,7 @@ void *svf_flex_init(FILE *f, int num_lines, int print_progress)
 
   yyset_in(f, scanner);
 
-  if (!(extra = (scanner_extra_t *)malloc(sizeof(scanner_extra_t)))) {
+  if (!(extra = (urj_svf_scanner_extra_t *)malloc(sizeof(urj_svf_scanner_extra_t)))) {
     printf( _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     yylex_destroy(scanner);
     return NULL;
@@ -389,7 +389,7 @@ void *svf_flex_init(FILE *f, int num_lines, int print_progress)
 }
 
 
-void svf_flex_deinit(void *scanner)
+void urj_svf_flex_deinit(void *scanner)
 {
   YY_EXTRA_TYPE extra = yyget_extra(scanner);
   if (extra->print_progress)

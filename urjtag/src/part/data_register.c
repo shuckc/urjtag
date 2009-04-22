@@ -30,10 +30,10 @@
 
 #include "data_register.h"
 
-data_register_t *
-data_register_alloc (const char *name, int len)
+urj_data_register_t *
+urj_part_data_register_alloc (const char *name, int len)
 {
-    data_register_t *dr;
+    urj_data_register_t *dr;
 
     if (!name)
         return NULL;
@@ -42,20 +42,20 @@ data_register_alloc (const char *name, int len)
     if (!dr)
         return NULL;
 
-    if (strlen (name) > MAXLEN_DATA_REGISTER)
+    if (strlen (name) > URJ_DATA_REGISTER_MAXLEN)
         printf (_("Warning: Data register name too long\n"));
-    strncpy (dr->name, name, MAXLEN_DATA_REGISTER);
-    dr->name[MAXLEN_DATA_REGISTER] = '\0';
+    strncpy (dr->name, name, URJ_DATA_REGISTER_MAXLEN);
+    dr->name[URJ_DATA_REGISTER_MAXLEN] = '\0';
 
     if (len > 0)
     {
-        dr->in = register_alloc (len);
-        dr->out = register_alloc (len);
+        dr->in = urj_tap_register_alloc (len);
+        dr->out = urj_tap_register_alloc (len);
     }
     else
     {
-        dr->in = register_alloc (1);
-        dr->out = register_alloc (1);
+        dr->in = urj_tap_register_alloc (1);
+        dr->out = urj_tap_register_alloc (1);
     }
     if (!dr->in || !dr->out)
     {
@@ -72,12 +72,12 @@ data_register_alloc (const char *name, int len)
 }
 
 void
-data_register_free (data_register_t *dr)
+urj_part_data_register_free (urj_data_register_t *dr)
 {
     if (!dr)
         return;
 
-    register_free (dr->in);
-    register_free (dr->out);
+    urj_tap_register_free (dr->in);
+    urj_tap_register_free (dr->out);
     free (dr);
 }

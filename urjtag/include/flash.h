@@ -31,8 +31,8 @@
  *
  */
 
-#ifndef FLASH_H
-#define FLASH_H
+#ifndef URJ_FLASH_H
+#define URJ_FLASH_H
 
 #include <stdio.h>
 #include <stdint.h>
@@ -46,19 +46,19 @@
 typedef struct
 {
     int width;                  /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
-    cfi_query_structure_t cfi;
-} cfi_chip_t;
+    urj_flash_cfi_query_structure_t cfi;
+} urj_flash_cfi_chip_t;
 
 typedef struct
 {
-    bus_t *bus;
+    urj_bus_t *bus;
     uint32_t address;
     int bus_width;              /* in cfi_chips, e.g. 4 for 32 bits */
-    cfi_chip_t **cfi_chips;
-} cfi_array_t;
+    urj_flash_cfi_chip_t **cfi_chips;
+} urj_flash_cfi_array_t;
 
-void cfi_array_free (cfi_array_t *cfi_array);
-int cfi_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
+void urj_flash_cfi_array_free (urj_flash_cfi_array_t *cfi_array);
+int urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array);
 
 /* End of brux/cfi.h */
 
@@ -67,28 +67,28 @@ typedef struct
     unsigned int bus_width;     /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
     const char *name;
     const char *description;
-    int (*autodetect) (cfi_array_t *cfi_array);
-    void (*print_info) (cfi_array_t *cfi_array);
-    int (*erase_block) (cfi_array_t *cfi_array, uint32_t adr);
-    int (*unlock_block) (cfi_array_t *cfi_array, uint32_t adr);
-    int (*program) (cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer,
+    int (*autodetect) (urj_flash_cfi_array_t *cfi_array);
+    void (*print_info) (urj_flash_cfi_array_t *cfi_array);
+    int (*erase_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
+    int (*unlock_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
+    int (*program) (urj_flash_cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer,
                     int count);
-    void (*readarray) (cfi_array_t *cfi_array);
-} flash_driver_t;
+    void (*readarray) (urj_flash_cfi_array_t *cfi_array);
+} urj_flash_driver_t;
 
-#define	FLASH_ERROR_NOERROR			0
-#define	FLASH_ERROR_INVALID_COMMAND_SEQUENCE	1
-#define	FLASH_ERROR_LOW_VPEN			2
-#define	FLASH_ERROR_BLOCK_LOCKED		3
-#define	FLASH_ERROR_UNKNOWN			99
+#define	URJ_FLASH_ERROR_NOERROR			0
+#define	URJ_FLASH_ERROR_INVALID_COMMAND_SEQUENCE	1
+#define	URJ_FLASH_ERROR_LOW_VPEN			2
+#define	URJ_FLASH_ERROR_BLOCK_LOCKED		3
+#define	URJ_FLASH_ERROR_UNKNOWN			99
 
-void detectflash (bus_t *bus, uint32_t adr);
+void urj_flash_detectflash (urj_bus_t *bus, uint32_t adr);
 
-void flashmem (bus_t *bus, FILE *f, uint32_t addr, int);
-void flashmsbin (bus_t *bus, FILE *f, int);
+void urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int);
+void urj_flashmsbin (urj_bus_t *bus, FILE *f, int);
 
 /* end of original brux/flash.h */
 
-extern flash_driver_t *flash_drivers[];
+extern urj_flash_driver_t *flash_drivers[];
 
-#endif /* FLASH_H */
+#endif /* URJ_FLASH_H */

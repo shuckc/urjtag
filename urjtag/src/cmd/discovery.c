@@ -31,15 +31,15 @@
 #include "cmd.h"
 
 static int
-cmd_discovery_run (chain_t *chain, char *params[])
+cmd_discovery_run (urj_chain_t *chain, char *params[])
 {
-    if (cmd_params (params) != 1)
+    if (urj_cmd_params (params) != 1)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
-    discovery (chain);
+    urj_tap_discovery (chain);
 
     return 1;
 }
@@ -56,12 +56,12 @@ cmd_discovery_help (void)
               " 2. DR (data register) length for all possible instructions\n"
               "\n"
               "Warning: This may be dangerous for some parts (especially if the\n"
-              "part doesn't have TRST signal).\n"), "discovery", "discovery");
+              "part doesn't have TRST signal).\n"), "urj_tap_discovery", "urj_tap_discovery");
 }
 
-cmd_t cmd_discovery = {
-    "discovery",
-    N_("discovery of unknown parts in the JTAG chain"),
+urj_cmd_t cmd_discovery = {
+    "urj_tap_discovery",
+    N_("urj_tap_discovery of unknown parts in the JTAG chain"),
     cmd_discovery_help,
     cmd_discovery_run
 };

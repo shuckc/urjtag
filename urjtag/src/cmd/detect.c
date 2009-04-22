@@ -34,34 +34,34 @@
 #include "cmd.h"
 
 static int
-cmd_detect_run (chain_t *chain, char *params[])
+cmd_detect_run (urj_chain_t *chain, char *params[])
 {
     int i;
-    bus_t *abus;
+    urj_bus_t *abus;
 
-    if (cmd_params (params) != 1)
+    if (urj_cmd_params (params) != 1)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
-    buses_free ();
-    parts_free (chain->parts);
+    urj_bus_buses_free ();
+    urj_part_parts_free (chain->parts);
     chain->parts = NULL;
-    detect_parts (chain, jtag_get_data_dir ());
+    urj_tap_detect_parts (chain, urj_cmd_jtag_get_data_dir ());
     if (!chain->parts)
         return 1;
     if (!chain->parts->len)
     {
-        parts_free (chain->parts);
+        urj_part_parts_free (chain->parts);
         chain->parts = NULL;
         return 1;
     }
-    parts_set_instruction (chain->parts, "SAMPLE/PRELOAD");
-    chain_shift_instructions (chain);
-    chain_shift_data_registers (chain, 1);
-    parts_set_instruction (chain->parts, "BYPASS");
-    chain_shift_instructions (chain);
+    urj_part_parts_set_instruction (chain->parts, "SAMPLE/PRELOAD");
+    urj_tap_chain_shift_instructions (chain);
+    urj_tap_chain_shift_data_registers (chain, 1);
+    urj_part_parts_set_instruction (chain->parts, "BYPASS");
+    urj_tap_chain_shift_instructions (chain);
 
     // Initialize all the buses
     for (i = 0; i < buses.len; i++)
@@ -69,7 +69,7 @@ cmd_detect_run (chain_t *chain, char *params[])
         abus = buses.buses[i];
         if (abus->driver->init)
         {
-            if (abus->driver->init (abus) != URJTAG_STATUS_OK)
+            if (abus->driver->init (abus) != URJ_STATUS_OK)
                 return -1;
         }
     }
@@ -88,7 +88,7 @@ cmd_detect_help (void)
             "detect");
 }
 
-cmd_t cmd_detect = {
+urj_cmd_t cmd_detect = {
     "detect",
     N_("detect parts on the JTAG chain"),
     cmd_detect_help,

@@ -27,31 +27,31 @@
 #include "chain.h"
 
 int
-tap_state (chain_t *chain)
+urj_tap_state (urj_chain_t *chain)
 {
     return chain->state;
 }
 
 int
-tap_state_init (chain_t *chain)
+urj_tap_state_init (urj_chain_t *chain)
 {
-    return chain->state = Unknown_State;
+    return chain->state = URJ_TAP_STATE_UNKNOWN_STATE;
 }
 
 int
-tap_state_done (chain_t *chain)
+urj_tap_state_done (urj_chain_t *chain)
 {
-    return chain->state = Unknown_State;
+    return chain->state = URJ_TAP_STATE_UNKNOWN_STATE;
 }
 
 int
-tap_state_reset (chain_t *chain)
+urj_tap_state_reset (urj_chain_t *chain)
 {
-    return chain->state = Test_Logic_Reset;
+    return chain->state = URJ_TAP_STATE_TEST_LOGIC_RESET;
 }
 
 int
-tap_state_set_trst (chain_t *chain, int old_trst, int new_trst)
+urj_tap_state_set_trst (urj_chain_t *chain, int old_trst, int new_trst)
 {
     old_trst = old_trst ? 1 : 0;
     new_trst = new_trst ? 1 : 0;
@@ -59,58 +59,58 @@ tap_state_set_trst (chain_t *chain, int old_trst, int new_trst)
     if (old_trst != new_trst)
     {
         if (new_trst)
-            chain->state = Test_Logic_Reset;
+            chain->state = URJ_TAP_STATE_TEST_LOGIC_RESET;
         else
-            chain->state = Unknown_State;
+            chain->state = URJ_TAP_STATE_UNKNOWN_STATE;
     }
 
     return chain->state;
 }
 
 int
-tap_state_clock (chain_t *chain, int tms)
+urj_tap_state_clock (urj_chain_t *chain, int tms)
 {
     if (tms)
     {
         switch (chain->state)
         {
-        case Test_Logic_Reset:
+        case URJ_TAP_STATE_TEST_LOGIC_RESET:
             break;
-        case Run_Test_Idle:
-        case Update_DR:
-        case Update_IR:
-            chain->state = Select_DR_Scan;
+        case URJ_TAP_STATE_RUN_TEST_IDLE:
+        case URJ_TAP_STATE_UPDATE_DR:
+        case URJ_TAP_STATE_UPDATE_IR:
+            chain->state = URJ_TAP_STATE_SELECT_DR_SCAN;
             break;
-        case Select_DR_Scan:
-            chain->state = Select_IR_Scan;
+        case URJ_TAP_STATE_SELECT_DR_SCAN:
+            chain->state = URJ_TAP_STATE_SELECT_IR_SCAN;
             break;
-        case Capture_DR:
-        case Shift_DR:
-            chain->state = Exit1_DR;
+        case URJ_TAP_STATE_CAPTURE_DR:
+        case URJ_TAP_STATE_SHIFT_DR:
+            chain->state = URJ_TAP_STATE_EXIT1_DR;
             break;
-        case Exit1_DR:
-        case Exit2_DR:
-            chain->state = Update_DR;
+        case URJ_TAP_STATE_EXIT1_DR:
+        case URJ_TAP_STATE_EXIT2_DR:
+            chain->state = URJ_TAP_STATE_UPDATE_DR;
             break;
-        case Pause_DR:
-            chain->state = Exit2_DR;
+        case URJ_TAP_STATE_PAUSE_DR:
+            chain->state = URJ_TAP_STATE_EXIT2_DR;
             break;
-        case Select_IR_Scan:
-            chain->state = Test_Logic_Reset;
+        case URJ_TAP_STATE_SELECT_IR_SCAN:
+            chain->state = URJ_TAP_STATE_TEST_LOGIC_RESET;
             break;
-        case Capture_IR:
-        case Shift_IR:
-            chain->state = Exit1_IR;
+        case URJ_TAP_STATE_CAPTURE_IR:
+        case URJ_TAP_STATE_SHIFT_IR:
+            chain->state = URJ_TAP_STATE_EXIT1_IR;
             break;
-        case Exit1_IR:
-        case Exit2_IR:
-            chain->state = Update_IR;
+        case URJ_TAP_STATE_EXIT1_IR:
+        case URJ_TAP_STATE_EXIT2_IR:
+            chain->state = URJ_TAP_STATE_UPDATE_IR;
             break;
-        case Pause_IR:
-            chain->state = Exit2_IR;
+        case URJ_TAP_STATE_PAUSE_IR:
+            chain->state = URJ_TAP_STATE_EXIT2_IR;
             break;
         default:
-            chain->state = Unknown_State;
+            chain->state = URJ_TAP_STATE_UNKNOWN_STATE;
             break;
         }
     }
@@ -118,38 +118,38 @@ tap_state_clock (chain_t *chain, int tms)
     {
         switch (chain->state)
         {
-        case Test_Logic_Reset:
-        case Run_Test_Idle:
-        case Update_DR:
-        case Update_IR:
-            chain->state = Run_Test_Idle;
+        case URJ_TAP_STATE_TEST_LOGIC_RESET:
+        case URJ_TAP_STATE_RUN_TEST_IDLE:
+        case URJ_TAP_STATE_UPDATE_DR:
+        case URJ_TAP_STATE_UPDATE_IR:
+            chain->state = URJ_TAP_STATE_RUN_TEST_IDLE;
             break;
-        case Select_DR_Scan:
-            chain->state = Capture_DR;
+        case URJ_TAP_STATE_SELECT_DR_SCAN:
+            chain->state = URJ_TAP_STATE_CAPTURE_DR;
             break;
-        case Capture_DR:
-        case Shift_DR:
-        case Exit2_DR:
-            chain->state = Shift_DR;
+        case URJ_TAP_STATE_CAPTURE_DR:
+        case URJ_TAP_STATE_SHIFT_DR:
+        case URJ_TAP_STATE_EXIT2_DR:
+            chain->state = URJ_TAP_STATE_SHIFT_DR;
             break;
-        case Exit1_DR:
-        case Pause_DR:
-            chain->state = Pause_DR;
+        case URJ_TAP_STATE_EXIT1_DR:
+        case URJ_TAP_STATE_PAUSE_DR:
+            chain->state = URJ_TAP_STATE_PAUSE_DR;
             break;
-        case Select_IR_Scan:
-            chain->state = Capture_IR;
+        case URJ_TAP_STATE_SELECT_IR_SCAN:
+            chain->state = URJ_TAP_STATE_CAPTURE_IR;
             break;
-        case Capture_IR:
-        case Shift_IR:
-        case Exit2_IR:
-            chain->state = Shift_IR;
+        case URJ_TAP_STATE_CAPTURE_IR:
+        case URJ_TAP_STATE_SHIFT_IR:
+        case URJ_TAP_STATE_EXIT2_IR:
+            chain->state = URJ_TAP_STATE_SHIFT_IR;
             break;
-        case Exit1_IR:
-        case Pause_IR:
-            chain->state = Pause_IR;
+        case URJ_TAP_STATE_EXIT1_IR:
+        case URJ_TAP_STATE_PAUSE_IR:
+            chain->state = URJ_TAP_STATE_PAUSE_IR;
             break;
         default:
-            chain->state = Unknown_State;
+            chain->state = URJ_TAP_STATE_UNKNOWN_STATE;
             break;
         }
     }

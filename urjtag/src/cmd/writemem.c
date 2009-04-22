@@ -30,13 +30,13 @@
 #include "cmd.h"
 
 static int
-cmd_writemem_run (chain_t *chain, char *params[])
+cmd_writemem_run (urj_chain_t *chain, char *params[])
 {
     uint32_t adr;
     uint32_t len;
     FILE *f;
 
-    if (cmd_params (params) != 4)
+    if (urj_cmd_params (params) != 4)
         return -1;
 
     if (!bus)
@@ -45,7 +45,7 @@ cmd_writemem_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    if (cmd_get_number (params[1], &adr) || cmd_get_number (params[2], &len))
+    if (urj_cmd_get_number (params[1], &adr) || urj_cmd_get_number (params[2], &len))
         return -1;
 
     f = fopen (params[3], "r");
@@ -54,7 +54,7 @@ cmd_writemem_run (chain_t *chain, char *params[])
         printf (_("Unable to open file `%s'!\n"), params[3]);
         return 1;
     }
-    writemem (bus, f, adr, len);
+    urj_bus_writemem (bus, f, adr, len);
     fclose (f);
 
     return 1;
@@ -72,11 +72,11 @@ cmd_writemem_help (void)
               "\n"
               "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
               "NOTE: This is NOT useful for FLASH programming!\n"),
-            "writemem");
+            "urj_bus_writemem");
 }
 
-cmd_t cmd_writemem = {
-    "writemem",
+urj_cmd_t cmd_writemem = {
+    "urj_bus_writemem",
     N_("write content of file to the memory"),
     cmd_writemem_help,
     cmd_writemem_run

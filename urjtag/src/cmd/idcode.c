@@ -30,26 +30,26 @@
 #include "cmd.h"
 
 static int
-cmd_idcode_run (chain_t *chain, char *params[])
+cmd_idcode_run (urj_chain_t *chain, char *params[])
 {
     unsigned int bytes = 0;
 
-    if (cmd_params (params) == 1)
+    if (urj_cmd_params (params) == 1)
     {
         bytes = 0;
     }
 
-    else if (cmd_params (params) > 2)
+    else if (urj_cmd_params (params) > 2)
         return -1;
 
-    else if (cmd_get_number (params[1], &bytes))
+    else if (urj_cmd_get_number (params[1], &bytes))
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     printf (_("Reading %d bytes if idcode\n"), bytes);
-    urj_tap_idcode (chain, bytes);
+    urj_tap_urj_tap_idcode (chain, bytes);
     return 1;
 }
 
@@ -63,7 +63,7 @@ cmd_idcode_help (void)
             "idcode");
 }
 
-cmd_t cmd_idcode = {
+urj_cmd_t cmd_idcode = {
     "idcode",
     N_("Read IDCODEs of all parts in a JTAG chain"),
     cmd_idcode_help,

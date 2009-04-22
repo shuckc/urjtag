@@ -49,7 +49,7 @@
 
 
 /*****************************************************************************
- * bsdl_msg( proc_mode, type, format, ... )
+ * urj_bsdl_msg( proc_mode, type, format, ... )
  *
  * Main printing function for the BSDL subsystem.
  *
@@ -63,7 +63,7 @@
  *   void
  ****************************************************************************/
 void
-bsdl_msg (int proc_mode, int type, const char *format, ...)
+urj_bsdl_msg (int proc_mode, int type, const char *format, ...)
 {
     va_list lst;
 
@@ -71,22 +71,22 @@ bsdl_msg (int proc_mode, int type, const char *format, ...)
     switch (type)
     {
     case BSDL_MSG_NOTE:
-        if (!(proc_mode & BSDL_MODE_MSG_NOTE))
+        if (!(proc_mode & URJ_BSDL_MODE_MSG_NOTE))
             return;
         printf ("-N- ");
         break;
     case BSDL_MSG_WARN:
-        if (!(proc_mode & BSDL_MODE_MSG_WARN))
+        if (!(proc_mode & URJ_BSDL_MODE_MSG_WARN))
             return;
         printf ("-W- ");
         break;
     case BSDL_MSG_ERR:
-        if (!(proc_mode & BSDL_MODE_MSG_ERR))
+        if (!(proc_mode & URJ_BSDL_MODE_MSG_ERR))
             return;
         printf ("-E- ");
         break;
     case BSDL_MSG_FATAL:
-        if (!(proc_mode & BSDL_MODE_MSG_FATAL))
+        if (!(proc_mode & URJ_BSDL_MODE_MSG_FATAL))
             return;
         printf ("-F- ");
         break;
@@ -100,7 +100,7 @@ bsdl_msg (int proc_mode, int type, const char *format, ...)
 
 
 /*****************************************************************************
- * bsdl_read_file( chain, BSDL_File_Name, proc_mode, idcode )
+ * urj_bsdl_read_file( chain, BSDL_File_Name, proc_mode, idcode )
  *
  * Read, parse and optionally apply contents of BSDL file.
  *
@@ -117,33 +117,33 @@ bsdl_msg (int proc_mode, int type, const char *format, ...)
  *
  ****************************************************************************/
 int
-bsdl_read_file (chain_t *chain, const char *BSDL_File_Name, int proc_mode,
+urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name, int proc_mode,
                 const char *idcode)
 {
-    bsdl_globs_t *globs = &(chain->bsdl);
+    urj_bsdl_globs_t *globs = &(chain->bsdl);
     FILE *BSDL_File;
-    vhdl_parser_priv_t *vhdl_parser_priv;
-    jtag_ctrl_t jtag_ctrl;
+    urj_bsdl_vhdl_parser_priv_t *vhdl_parser_priv;
+    urj_bsdl_jtag_ctrl_t jtag_ctrl;
     int Compile_Errors = 1;
     int result;
 
     if (globs->debug)
-        proc_mode |= BSDL_MODE_MSG_ALL;
+        proc_mode |= URJ_BSDL_MODE_MSG_ALL;
 
     jtag_ctrl.proc_mode = proc_mode;
 
     /* perform some basic checks */
-    if (proc_mode & BSDL_MODE_INSTR_EXEC)
+    if (proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
     {
         if (chain == NULL)
         {
-            bsdl_msg (proc_mode, BSDL_MSG_ERR,
+            urj_bsdl_msg (proc_mode, BSDL_MSG_ERR,
                       _("No JTAG chain available\n"));
             return -1;
         }
         if (chain->parts == NULL)
         {
-            bsdl_msg (proc_mode, BSDL_MSG_ERR,
+            urj_bsdl_msg (proc_mode, BSDL_MSG_ERR,
                       _("Chain without any parts\n"));
             return -1;
         }
@@ -161,36 +161,36 @@ bsdl_read_file (chain_t *chain, const char *BSDL_File_Name, int proc_mode,
 
     BSDL_File = fopen (BSDL_File_Name, "r");
 
-    bsdl_msg (proc_mode, BSDL_MSG_NOTE, _("Reading file '%s'\n"),
+    urj_bsdl_msg (proc_mode, BSDL_MSG_NOTE, _("Reading file '%s'\n"),
               BSDL_File_Name);
 
     if (BSDL_File == NULL)
     {
-        bsdl_msg (proc_mode,
+        urj_bsdl_msg (proc_mode,
                   BSDL_MSG_ERR, _("Unable to open BSDL file '%s'\n"),
                   BSDL_File_Name);
         return -1;
     }
 
-    if ((vhdl_parser_priv = vhdl_parser_init (BSDL_File, &jtag_ctrl)))
+    if ((vhdl_parser_priv = urj_vhdl_parser_init (BSDL_File, &jtag_ctrl)))
     {
         vhdl_parser_priv->jtag_ctrl->idcode = NULL;
 
-        vhdlparse (vhdl_parser_priv);
+        urj_vhdl_parse (vhdl_parser_priv);
 
         Compile_Errors =
-            vhdl_flex_get_compile_errors (vhdl_parser_priv->scanner);
+            urj_vhdl_flex_get_compile_errors (vhdl_parser_priv->scanner);
         if (Compile_Errors == 0)
         {
-            bsdl_msg (proc_mode,
+            urj_bsdl_msg (proc_mode,
                       BSDL_MSG_NOTE,
                       _("BSDL file '%s' passed VHDL stage correctly\n"),
                       BSDL_File_Name);
 
-            result = bsdl_process_elements (&jtag_ctrl, idcode);
+            result = urj_bsdl_process_elements (&jtag_ctrl, idcode);
 
             if (result >= 0)
-                bsdl_msg (proc_mode,
+                urj_bsdl_msg (proc_mode,
                           BSDL_MSG_NOTE,
                           _("BSDL file '%s' passed BSDL stage correctly\n"),
                           BSDL_File_Name);
@@ -198,7 +198,7 @@ bsdl_read_file (chain_t *chain, const char *BSDL_File_Name, int proc_mode,
         }
         else
         {
-            bsdl_msg (proc_mode,
+            urj_bsdl_msg (proc_mode,
                       BSDL_MSG_ERR,
                       _
                       ("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
@@ -206,7 +206,7 @@ bsdl_read_file (chain_t *chain, const char *BSDL_File_Name, int proc_mode,
         }
 
 
-        vhdl_parser_deinit (vhdl_parser_priv);
+        urj_vhdl_parser_deinit (vhdl_parser_priv);
     }
 
     return Compile_Errors == 0 ? result : -1;
@@ -214,7 +214,7 @@ bsdl_read_file (chain_t *chain, const char *BSDL_File_Name, int proc_mode,
 
 
 /*****************************************************************************
- * void bsdl_set_path( chain, pathlist )
+ * void urj_bsdl_set_path( chain, pathlist )
  *
  * Dissects pathlist and enters its elements to the global variable
  * bsdl.path_list.
@@ -228,9 +228,9 @@ bsdl_read_file (chain_t *chain, const char *BSDL_File_Name, int proc_mode,
  *   void
  ****************************************************************************/
 void
-bsdl_set_path (chain_t *chain, const char *pathlist)
+urj_bsdl_set_path (urj_chain_t *chain, const char *pathlist)
 {
-    bsdl_globs_t *globs = &(chain->bsdl);
+    urj_bsdl_globs_t *globs = &(chain->bsdl);
     char *delim;
     char *elem;
     char *pathelem;
@@ -274,13 +274,13 @@ bsdl_set_path (chain_t *chain, const char *pathlist)
 
     if (globs->debug)
         for (num = 0; globs->path_list[num] != NULL; num++)
-            bsdl_msg (BSDL_MODE_MSG_ALL,
+            urj_bsdl_msg (URJ_BSDL_MODE_MSG_ALL,
                       BSDL_MSG_NOTE, "%s\n", globs->path_list[num]);
 }
 
 
 /*****************************************************************************
- * bsdl_scan_files( chain, idcode, proc_mode )
+ * urj_bsdl_scan_files( chain, idcode, proc_mode )
  *
  * Scans through all files found via the elements in bsdl_path_list
  * and does a test read on each of them.
@@ -300,9 +300,9 @@ bsdl_set_path (chain_t *chain, const char *pathlist)
  *
  ****************************************************************************/
 int
-bsdl_scan_files (chain_t *chain, const char *idcode, int proc_mode)
+urj_bsdl_scan_files (urj_chain_t *chain, const char *idcode, int proc_mode)
 {
-    bsdl_globs_t *globs = &(chain->bsdl);
+    urj_bsdl_globs_t *globs = &(chain->bsdl);
     int idx = 0;
     int result = 0;
 
@@ -338,7 +338,7 @@ bsdl_scan_files (chain_t *chain, const char *idcode, int proc_mode)
                         if (buf.st_mode & S_IFREG)
                         {
                             result =
-                                bsdl_read_file (chain, name, proc_mode,
+                                urj_bsdl_read_file (chain, name, proc_mode,
                                                 idcode);
                             if (result == 1)
                                 printf (_("  Filename:     %s\n"), name);
@@ -352,7 +352,7 @@ bsdl_scan_files (chain_t *chain, const char *idcode, int proc_mode)
             closedir (dir);
         }
         else
-            bsdl_msg (proc_mode,
+            urj_bsdl_msg (proc_mode,
                       BSDL_MSG_WARN, _("Cannot open directory %s\n"),
                       globs->path_list[idx]);
 

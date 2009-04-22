@@ -35,13 +35,13 @@
 #include "bsdl.h"
 
 static int
-cmd_include_or_script_run (chain_t *chain, int is_include, char *params[])
+cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
 {
     int go = 0, i, j = 1;
     char *path;
     int len;
 
-    if (cmd_params (params) < 2)
+    if (urj_cmd_params (params) < 2)
         return -1;
 
     if (!is_include)
@@ -65,7 +65,7 @@ cmd_include_or_script_run (chain_t *chain, int is_include, char *params[])
     }
     else
     {
-        const char *jtag_data_dir = jtag_get_data_dir ();
+        const char *jtag_data_dir = urj_cmd_jtag_get_data_dir ();
         path = malloc (len = strlen (jtag_data_dir) + strlen (params[1]) + 2);
         if (path != NULL)
         {
@@ -80,24 +80,24 @@ cmd_include_or_script_run (chain_t *chain, int is_include, char *params[])
 
 #ifdef ENABLE_BSDL
     /* perform a test read to check for BSDL syntax */
-    if (bsdl_read_file (chain, path, BSDL_MODE_INCLUDE1, NULL) >= 0)
+    if (urj_bsdl_read_file (chain, path, URJ_BSDL_MODE_INCLUDE1, NULL) >= 0)
     {
         /* it seems to be a proper BSDL file, so re-read and execute */
-        go = bsdl_read_file (chain, path, BSDL_MODE_INCLUDE2, NULL);
+        go = urj_bsdl_read_file (chain, path, URJ_BSDL_MODE_INCLUDE2, NULL);
 
         free (path);
         return 1;
     }
 #endif
 
-    if (cmd_params (params) > 2)
+    if (urj_cmd_params (params) > 2)
     {
         sscanf (params[2], "%d", &j);   /* loop n times option */
     }
 
     for (i = 0; i < j; i++)
     {
-        go = jtag_parse_file (chain, path);
+        go = urj_cmd_jtag_parse_file (chain, path);
 
         if (go < 0)
         {
@@ -121,7 +121,7 @@ cmd_include_or_script_help (char *cmd)
 }
 
 static int
-cmd_include_run (chain_t *chain, char *params[])
+cmd_include_run (urj_chain_t *chain, char *params[])
 {
     return cmd_include_or_script_run (chain, 1, params);
 }
@@ -132,7 +132,7 @@ cmd_include_help (void)
     cmd_include_or_script_help ("include");
 }
 
-cmd_t cmd_include = {
+urj_cmd_t cmd_include = {
     "include",
     N_("include command sequence from external repository"),
     cmd_include_help,
@@ -140,7 +140,7 @@ cmd_t cmd_include = {
 };
 
 static int
-cmd_script_run (chain_t *chain, char *params[])
+cmd_script_run (urj_chain_t *chain, char *params[])
 {
     return cmd_include_or_script_run (chain, 0, params);
 }
@@ -151,7 +151,7 @@ cmd_script_help (void)
     cmd_include_or_script_help ("script");
 }
 
-cmd_t cmd_script = {
+urj_cmd_t cmd_script = {
     "script",
     N_("run command sequence from external file"),
     cmd_script_help,

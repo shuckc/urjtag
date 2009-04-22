@@ -31,15 +31,15 @@
 #include "generic_bus.h"
 
 int
-generic_bus_attach_sig (part_t *part, signal_t **sig, char *id)
+urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig, char *id)
 {
-    int failed = URJTAG_STATUS_OK;
+    int failed = URJ_STATUS_OK;
 
-    *sig = part_find_signal (part, id);
+    *sig = urj_part_find_signal (part, id);
     if (!*sig)
     {
         printf (_("signal '%s' not found\n"), id);
-        failed = URJTAG_STATUS_FAIL;
+        failed = URJ_STATUS_FAIL;
     }
 
     return failed;
@@ -50,7 +50,7 @@ generic_bus_attach_sig (part_t *part, signal_t **sig, char *id)
  *
  */
 void
-generic_bus_free (bus_t *bus)
+urj_bus_generic_free (urj_bus_t *bus)
 {
     free (bus->params);
     free (bus);
@@ -61,11 +61,11 @@ generic_bus_free (bus_t *bus)
  *
  */
 int
-generic_bus_no_init (bus_t *bus)
+urj_bus_generic_no_init (urj_bus_t *bus)
 {
-    INITIALIZED = 1;
+    bus->initialized = 1;
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -73,13 +73,13 @@ generic_bus_no_init (bus_t *bus)
  *
  */
 void
-generic_bus_prepare_extest (bus_t *bus)
+urj_bus_generic_prepare_extest (urj_bus_t *bus)
 {
-    if (!INITIALIZED)
-        bus_init (bus);
+    if (!bus->initialized)
+        URJ_BUS_INIT (bus);
 
-    part_set_instruction (PART, "EXTEST");
-    chain_shift_instructions (CHAIN);
+    urj_part_set_instruction (bus->part, "EXTEST");
+    urj_tap_chain_shift_instructions (bus->chain);
 }
 
 /**
@@ -87,8 +87,8 @@ generic_bus_prepare_extest (bus_t *bus)
  *
  */
 uint32_t
-generic_bus_read (bus_t *bus, uint32_t adr)
+urj_bus_generic_read (urj_bus_t *bus, uint32_t adr)
 {
-    bus_read_start (bus, adr);
-    return bus_read_end (bus);
+    URJ_BUS_READ_START (bus, adr);
+    return URJ_BUS_READ_END (bus);
 }

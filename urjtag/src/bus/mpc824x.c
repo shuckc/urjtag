@@ -45,11 +45,11 @@ typedef struct
     int boot_nfoe;
     int boot_sdma1;
     uint32_t last_adr;
-    signal_t *ar[23];
-    signal_t *nrcs0;
-    signal_t *nwe;
-    signal_t *nfoe;
-    signal_t *d[32];
+    urj_part_signal_t *ar[23];
+    urj_part_signal_t *nrcs0;
+    urj_part_signal_t *nwe;
+    urj_part_signal_t *nfoe;
+    urj_part_signal_t *d[32];
 } bus_params_t;
 
 #define	boot_nFOE	((bus_params_t *) bus->params)->boot_nfoe
@@ -71,17 +71,17 @@ static char dbgData = 0;
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-mpc824x_bus_new (chain_t *chain, const bus_driver_t *driver,
+static urj_bus_t *
+mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                  char *cmd_params[])
 {
-    bus_t *bus;
-    part_t *part;
+    urj_bus_t *bus;
+    urj_part_t *part;
     char buff[10];
     int i;
     int failed = 0;
-    signal_t *s_nfoe;
-    signal_t *s_sdma1;
+    urj_part_signal_t *s_nfoe;
+    urj_part_signal_t *s_sdma1;
 
     char param[16], value[16];
 
@@ -157,7 +157,7 @@ mpc824x_bus_new (chain_t *chain, const bus_driver_t *driver,
 
     //      REVBITS = 0;
 
-    bus = calloc (1, sizeof (bus_t));
+    bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
         return NULL;
 
@@ -169,50 +169,50 @@ mpc824x_bus_new (chain_t *chain, const bus_driver_t *driver,
         return NULL;
     }
 
-    CHAIN = chain;
-    PART = part = chain->parts->parts[chain->active_part];
+    bus->chain = chain;
+    bus->part = part = chain->parts->parts[chain->active_part];
 
-    s_nfoe = part_find_signal (part, "nFOE");
-    s_sdma1 = part_find_signal (part, "SDMA1");
-    part_set_signal (part, s_nfoe, 0, 0);
-    part_set_signal (part, s_sdma1, 0, 0);
+    s_nfoe = urj_part_find_signal (part, "nFOE");
+    s_sdma1 = urj_part_find_signal (part, "SDMA1");
+    urj_part_set_signal (part, s_nfoe, 0, 0);
+    urj_part_set_signal (part, s_sdma1, 0, 0);
 
-    part_set_instruction (part, "SAMPLE/PRELOAD");
-    chain_shift_instructions (chain);
-    chain_shift_data_registers (chain, 0);
-    part_set_instruction (part, "EXTEST");
-    chain_shift_instructions (chain);
-    chain_shift_data_registers (chain, 1);
+    urj_part_set_instruction (part, "SAMPLE/PRELOAD");
+    urj_tap_chain_shift_instructions (chain);
+    urj_tap_chain_shift_data_registers (chain, 0);
+    urj_part_set_instruction (part, "EXTEST");
+    urj_tap_chain_shift_instructions (chain);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
-    boot_nFOE = part_get_signal (part, s_nfoe);
-    boot_SDMA1 = part_get_signal (part, s_sdma1);
+    boot_nFOE = urj_part_get_signal (part, s_nfoe);
+    boot_SDMA1 = urj_part_get_signal (part, s_sdma1);
 
 
     for (i = 0; i <= 10; i++)
     {
         sprintf (buff, "SDMA%d", i);
-        failed |= generic_bus_attach_sig (part, &(AR[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(AR[i]), buff);
     }
 
-    failed |= generic_bus_attach_sig (part, &(AR[11]), "SDBA0");
+    failed |= urj_bus_generic_attach_sig (part, &(AR[11]), "SDBA0");
 
     for (i = 0; i < 8; i++)
     {
         sprintf (buff, "PAR%d", i);
-        failed |= generic_bus_attach_sig (part, &(AR[19 - i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(AR[19 - i]), buff);
     }
 
-    failed |= generic_bus_attach_sig (part, &(AR[20]), "SDBA1");
+    failed |= urj_bus_generic_attach_sig (part, &(AR[20]), "SDBA1");
 
-    failed |= generic_bus_attach_sig (part, &(AR[21]), "SDMA11");
+    failed |= urj_bus_generic_attach_sig (part, &(AR[21]), "SDMA11");
 
-    failed |= generic_bus_attach_sig (part, &(AR[22]), "SDMA12");
+    failed |= urj_bus_generic_attach_sig (part, &(AR[22]), "SDMA12");
 
-    failed |= generic_bus_attach_sig (part, &(nRCS0), "nRCS0");
+    failed |= urj_bus_generic_attach_sig (part, &(nRCS0), "nRCS0");
 
-    failed |= generic_bus_attach_sig (part, &(nWE), "nWE");
+    failed |= urj_bus_generic_attach_sig (part, &(nWE), "nWE");
 
-    failed |= generic_bus_attach_sig (part, &(nFOE), "nFOE");
+    failed |= urj_bus_generic_attach_sig (part, &(nFOE), "nFOE");
 
     /*
        Freescale MPC824x uses inversed bit order ([1], p. 2-18):
@@ -228,7 +228,7 @@ mpc824x_bus_new (chain_t *chain, const bus_driver_t *driver,
     for (i = 0; i < 32; i++)
     {                           /* Needs to be fixed for 64-bit bus width */
         sprintf (buff, "MDH%d", 31 - i);
-        failed |= generic_bus_attach_sig (part, &(D[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(D[i]), buff);
     }
 
     if (failed)
@@ -246,12 +246,12 @@ mpc824x_bus_new (chain_t *chain, const bus_driver_t *driver,
  *
  */
 static void
-mpc824x_bus_printinfo (bus_t *bus)
+mpc824x_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
     printf (_
             ("Motorola MPC824x compatible bus driver via BSR (JTAG part No. %d)\n"),
@@ -263,7 +263,7 @@ mpc824x_bus_printinfo (bus_t *bus)
  *
  */
 static int
-mpc824x_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
+mpc824x_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
 
     if (adr < UINT32_C (0xFF000000))
@@ -273,7 +273,7 @@ mpc824x_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
         area->length = UINT64_C (0xFF000000);
         area->width = 0;
 
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     }
 
     if (adr < UINT32_C (0xFF800000))
@@ -283,7 +283,7 @@ mpc824x_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
         area->length = UINT64_C (0x00800000);
         area->width = 0;
 
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     }
 
     if (boot_SDMA1 == 0)
@@ -293,7 +293,7 @@ mpc824x_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
         area->length = UINT64_C (0x00800000);
         area->width = BUS_WIDTH;
 
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     }
 
     /* extended addresing mode is disabled (SDMA1 is 1) */
@@ -304,7 +304,7 @@ mpc824x_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
         area->length = UINT64_C (0x00400000);
         area->width = BUS_WIDTH;
 
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     }
 
     area->description = N_("Base ROM Interface (Bank 0)");
@@ -312,28 +312,28 @@ mpc824x_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
     area->length = UINT64_C (0x00400000);
     area->width = BUS_WIDTH;
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 static void
-setup_address (bus_t *bus, uint32_t a)
+setup_address (urj_bus_t *bus, uint32_t a)
 {
     int i;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     switch (BUS_WIDTH)
     {
     case 8:                    /* 8-bit data bus */
         for (i = 0; i < 23; i++)
-            part_set_signal (p, AR[i], 1, (a >> i) & 1);
+            urj_part_set_signal (p, AR[i], 1, (a >> i) & 1);
         break;
     case 32:                   /* 32-bit data bus */
         for (i = 0; i < 21; i++)
-            part_set_signal (p, AR[i], 1, (a >> (i + 2)) & 1);
+            urj_part_set_signal (p, AR[i], 1, (a >> (i + 2)) & 1);
         break;
     case 64:
         for (i = 0; i < 20; i++)
-            part_set_signal (p, AR[i], 1, (a >> (i + 3)) & 1);
+            urj_part_set_signal (p, AR[i], 1, (a >> (i + 3)) & 1);
         break;
     default:
         printf (_("Warning: unhandled bus width: %i\n"), BUS_WIDTH);
@@ -375,33 +375,33 @@ setup_address (bus_t *bus, uint32_t a)
 }
 
 static void
-set_data_in (bus_t *bus, uint32_t adr)
+set_data_in (urj_bus_t *bus, uint32_t adr)
 {
     int i;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     mpc824x_bus_area (bus, adr, &area);
     if (area.width > 64)
         return;
 
     for (i = 0; i < area.width; i++)
-        part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal (p, D[i], 0, 0);
 }
 
 static void
-setup_data (bus_t *bus, uint32_t adr, uint32_t d)
+setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
 {
     int i;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     mpc824x_bus_area (bus, adr, &area);
     if (area.width > 64)
         return;
 
     for (i = 0; i < area.width; i++)
-        part_set_signal (p, D[i], 1,
+        urj_part_set_signal (p, D[i], 1,
                          (d >> ((REVBITS == 1) ? BUS_WIDTH - 1 - i : i)) & 1);
 
     /* Just for debugging */
@@ -432,19 +432,19 @@ setup_data (bus_t *bus, uint32_t adr, uint32_t d)
 }
 
 static uint32_t
-get_data (bus_t *bus, uint32_t adr)
+get_data (urj_bus_t *bus, uint32_t adr)
 {
-    bus_area_t area;
+    urj_bus_area_t area;
     int i;
     uint32_t d = 0;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     mpc824x_bus_area (bus, adr, &area);
     if (area.width > 64)
         return 0;
 
     for (i = 0; i < area.width; i++)
-        d |= (uint32_t) (part_get_signal (p, D[i]) <<
+        d |= (uint32_t) (urj_part_get_signal (p, D[i]) <<
                          ((REVBITS == 1) ? BUS_WIDTH - 1 - i : i));
 
     /* Just for debugging */
@@ -480,21 +480,21 @@ get_data (bus_t *bus, uint32_t adr)
  *
  */
 static void
-mpc824x_bus_read_start (bus_t *bus, uint32_t adr)
+mpc824x_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     LAST_ADR = adr;
 
     /* see Figure 6-45 in [1] */
-    part_set_signal (p, nRCS0, 1, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nFOE, 1, 0);
+    urj_part_set_signal (p, nRCS0, 1, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nFOE, 1, 0);
 
     setup_address (bus, adr);
     set_data_in (bus, adr);
 
-    chain_shift_data_registers (CHAIN, 0);
+    urj_tap_chain_shift_data_registers (bus->chain, 0);
 }
 
 /**
@@ -502,12 +502,12 @@ mpc824x_bus_read_start (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-mpc824x_bus_read_next (bus_t *bus, uint32_t adr)
+mpc824x_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
     uint32_t d;
 
     setup_address (bus, adr);
-    chain_shift_data_registers (CHAIN, 1);
+    urj_tap_chain_shift_data_registers (bus->chain, 1);
 
     d = get_data (bus, LAST_ADR);
     LAST_ADR = adr;
@@ -519,14 +519,14 @@ mpc824x_bus_read_next (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-mpc824x_bus_read_end (bus_t *bus)
+mpc824x_bus_read_end (urj_bus_t *bus)
 {
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
-    part_set_signal (p, nRCS0, 1, 1);
-    part_set_signal (p, nFOE, 1, 1);
+    urj_part_set_signal (p, nRCS0, 1, 1);
+    urj_part_set_signal (p, nFOE, 1, 1);
 
-    chain_shift_data_registers (CHAIN, 1);
+    urj_tap_chain_shift_data_registers (bus->chain, 1);
 
     return get_data (bus, LAST_ADR);
 }
@@ -536,46 +536,46 @@ mpc824x_bus_read_end (bus_t *bus)
  *
  */
 static void
-mpc824x_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
+mpc824x_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     LAST_ADR = adr;
 
 
     /* see Figure 6-47 in [1] */
-    part_set_signal (p, nRCS0, 1, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nFOE, 1, 1);
+    urj_part_set_signal (p, nRCS0, 1, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nFOE, 1, 1);
 
     setup_address (bus, adr);
 
     setup_data (bus, adr, data);
 
-    chain_shift_data_registers (CHAIN, 0);
+    urj_tap_chain_shift_data_registers (bus->chain, 0);
 
-    part_set_signal (p, nWE, 1, 0);
-    chain_shift_data_registers (CHAIN, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nRCS0, 1, 1);
-    chain_shift_data_registers (CHAIN, 0);
+    urj_part_set_signal (p, nWE, 1, 0);
+    urj_tap_chain_shift_data_registers (bus->chain, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nRCS0, 1, 1);
+    urj_tap_chain_shift_data_registers (bus->chain, 0);
 
 
 
 }
 
-const bus_driver_t mpc824x_bus = {
+const urj_bus_driver_t mpc824x_bus = {
     "mpc824x",
     N_("Motorola MPC824x compatible bus driver via BSR"),
     mpc824x_bus_new,
-    generic_bus_free,
+    urj_bus_generic_free,
     mpc824x_bus_printinfo,
-    generic_bus_prepare_extest,
+    urj_bus_generic_prepare_extest,
     mpc824x_bus_area,
     mpc824x_bus_read_start,
     mpc824x_bus_read_next,
     mpc824x_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     mpc824x_bus_write,
-    generic_bus_no_init
+    urj_bus_generic_no_init
 };

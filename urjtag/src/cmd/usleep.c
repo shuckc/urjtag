@@ -33,14 +33,14 @@
 #include "cmd.h"
 
 static int
-cmd_usleep_run (chain_t *chain, char *params[])
+cmd_usleep_run (urj_chain_t *chain, char *params[])
 {
     unsigned int usecs;
 
-    if (cmd_params (params) != 2)
+    if (urj_cmd_params (params) != 2)
         return -1;
 
-    if (cmd_get_number (params[1], &usecs))
+    if (urj_cmd_get_number (params[1], &usecs))
         return -1;
 
     usleep (usecs);
@@ -55,7 +55,7 @@ cmd_usleep_help (void)
               "Sleep some number of microseconds.\n"), "usleep");
 }
 
-cmd_t cmd_usleep = {
+urj_cmd_t cmd_usleep = {
     "usleep",
     N_("Sleep some number of microseconds"),
     cmd_usleep_help,

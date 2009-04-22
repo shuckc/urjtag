@@ -22,28 +22,28 @@
  *
  */
 
-#ifndef REGISTER_H
-#define	REGISTER_H
+#ifndef URJ_REGISTER_H
+#define	URJ_REGISTER_H
 
-typedef struct tap_register
+typedef struct urj_tap_register
 {
     char *data;                 /* (public, r/w) register data */
     int len;                    /* (public, r/o) register length */
     char *string;               /* (private) string representation of register data */
-} tap_register_t;
+} urj_tap_register_t;
 
-tap_register_t *register_alloc (int len);
-tap_register_t *register_duplicate (const tap_register_t *tr);
-void register_free (tap_register_t *tr);
-tap_register_t *register_fill (tap_register_t *tr, int val);
-const char *register_get_string (const tap_register_t *tr);
-int register_all_bits_same_value (const tap_register_t *tr);
-tap_register_t *register_init (tap_register_t *tr, const char *value);
-int register_compare (const tap_register_t *tr, const tap_register_t *tr2);
-int register_match (const tap_register_t *tr, const char *expr);
-tap_register_t *register_inc (tap_register_t *tr);
-tap_register_t *register_dec (tap_register_t *tr);
-tap_register_t *register_shift_right (tap_register_t *tr, int shift);
-tap_register_t *register_shift_left (tap_register_t *tr, int shift);
+urj_tap_register_t *urj_tap_register_alloc (int len);
+urj_tap_register_t *urj_tap_register_duplicate (const urj_tap_register_t *tr);
+void urj_tap_register_free (urj_tap_register_t *tr);
+urj_tap_register_t *urj_tap_register_fill (urj_tap_register_t *tr, int val);
+const char *urj_tap_register_get_string (const urj_tap_register_t *tr);
+int urj_tap_register_all_bits_same_value (const urj_tap_register_t *tr);
+urj_tap_register_t *urj_tap_register_init (urj_tap_register_t *tr, const char *value);
+int urj_tap_register_compare (const urj_tap_register_t *tr, const urj_tap_register_t *tr2);
+int urj_tap_register_match (const urj_tap_register_t *tr, const char *expr);
+urj_tap_register_t *urj_tap_register_inc (urj_tap_register_t *tr);
+urj_tap_register_t *urj_tap_register_dec (urj_tap_register_t *tr);
+urj_tap_register_t *urj_tap_register_shift_right (urj_tap_register_t *tr, int shift);
+urj_tap_register_t *urj_tap_register_shift_left (urj_tap_register_t *tr, int shift);
 
-#endif /* REGISTER_H */
+#endif /* URJ_REGISTER_H */

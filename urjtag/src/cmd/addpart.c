@@ -32,32 +32,32 @@
 #include "cmd.h"
 
 static int
-cmd_addpart_run (chain_t *chain, char *params[])
+cmd_addpart_run (urj_chain_t *chain, char *params[])
 {
     unsigned int len;
 
-    if (cmd_params (params) != 2)
+    if (urj_cmd_params (params) != 2)
         return -1;
 
-    if (cmd_get_number (params[1], &len))
+    if (urj_cmd_get_number (params[1], &len))
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
-    manual_add (chain, len);
+    urj_tap_manual_add (chain, len);
 
     if (chain->parts == NULL)
         return 1;
 
     if (chain->parts->len == 0)
     {
-        parts_free (chain->parts);
+        urj_part_parts_free (chain->parts);
         chain->parts = NULL;
     }
 
-    parts_set_instruction (chain->parts, "BYPASS");
-    chain_shift_instructions (chain);
+    urj_part_parts_set_instruction (chain->parts, "BYPASS");
+    urj_tap_chain_shift_instructions (chain);
 
     return 1;
 }
@@ -73,7 +73,7 @@ cmd_addpart_help (void)
 }
 
 
-cmd_t cmd_addpart = {
+urj_cmd_t cmd_addpart = {
     "addpart",
     N_("manually adds parts on the JTAG chain"),
     cmd_addpart_help,

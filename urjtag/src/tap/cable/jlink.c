@@ -96,31 +96,31 @@ jlink_usbconn_data_t;
 #define JLINK_MAX_SPEED 12000
 
 /* Queue command functions */
-static void jlink_reset (libusb_param_t *params, int trst, int srst);
-static void jlink_simple_command (libusb_param_t *params, uint8_t command);
+static void urj_tap_cable_jlink_reset (urj_usbconn_libusb_param_t *params, int trst, int srst);
+static void jlink_simple_command (urj_usbconn_libusb_param_t *params, uint8_t command);
 
 
 /* J-Link tap buffer functions */
 static void jlink_tap_init (jlink_usbconn_data_t *data);
-static int jlink_tap_execute (libusb_param_t *params);
+static int jlink_tap_execute (urj_usbconn_libusb_param_t *params);
 static void jlink_tap_append_step (jlink_usbconn_data_t *data, int, int);
 
 /* Jlink lowlevel functions */
-static int jlink_usb_message (libusb_param_t *params, int, int);
-static int jlink_usb_write (libusb_param_t *params, unsigned int);
-static int jlink_usb_read (libusb_param_t *params);
+static int jlink_usb_message (urj_usbconn_libusb_param_t *params, int, int);
+static int jlink_usb_write (urj_usbconn_libusb_param_t *params, unsigned int);
+static int jlink_usb_read (urj_usbconn_libusb_param_t *params);
 
 static void jlink_debug_buffer (char *buffer, int length);
 
 /* API functions */
 
-void jlink_set_frequency (cable_t *cable, uint32_t frequency);
+void urj_tap_cable_jlink_set_frequency (urj_cable_t *cable, uint32_t frequency);
 
 /***************************************************************************/
 /* J-Link tap functions */
 
 void
-jlink_reset (libusb_param_t *params, int trst, int srst)
+urj_tap_cable_jlink_reset (urj_usbconn_libusb_param_t *params, int trst, int srst)
 {
     DEBUG ("trst: %i, srst: %i\n", trst, srst);
 
@@ -146,7 +146,7 @@ jlink_reset (libusb_param_t *params, int trst, int srst)
 
 
 static void
-jlink_simple_command (libusb_param_t *params, uint8_t command)
+jlink_simple_command (urj_usbconn_libusb_param_t *params, uint8_t command)
 {
     int result;
     jlink_usbconn_data_t *data = params->data;
@@ -163,7 +163,7 @@ jlink_simple_command (libusb_param_t *params, uint8_t command)
 }
 
 static int
-jlink_get_status (libusb_param_t *params)
+jlink_get_status (urj_usbconn_libusb_param_t *params)
 {
     int result;
     jlink_usbconn_data_t *data = params->data;
@@ -238,7 +238,7 @@ jlink_tap_append_step (jlink_usbconn_data_t *data, int tms, int tdi)
 /* Send a tap sequence to the device, and receive the answer */
 
 static int
-jlink_tap_execute (libusb_param_t *params)
+jlink_tap_execute (urj_usbconn_libusb_param_t *params)
 {
     jlink_usbconn_data_t *data = params->data;
     int byte_length;
@@ -293,7 +293,7 @@ jlink_tap_execute (libusb_param_t *params)
 
 /* Send a message and receive the reply. */
 static int
-jlink_usb_message (libusb_param_t *params, int out_length, int in_length)
+jlink_usb_message (urj_usbconn_libusb_param_t *params, int out_length, int in_length)
 {
     int result;
 
@@ -326,7 +326,7 @@ jlink_usb_message (libusb_param_t *params, int out_length, int in_length)
 
 /* Write data from out_buffer to USB. */
 static int
-jlink_usb_write (libusb_param_t *params, unsigned int out_length)
+jlink_usb_write (urj_usbconn_libusb_param_t *params, unsigned int out_length)
 {
     int result;
     jlink_usbconn_data_t *data;
@@ -356,7 +356,7 @@ jlink_usb_write (libusb_param_t *params, unsigned int out_length)
 
 /* Read data from USB into in_buffer. */
 static int
-jlink_usb_read (libusb_param_t *params)
+jlink_usb_read (urj_usbconn_libusb_param_t *params)
 {
     jlink_usbconn_data_t *data = params->data;
 
@@ -399,10 +399,10 @@ jlink_debug_buffer (char *buffer, int length)
 /* ---------------------------------------------------------------------- */
 
 static int
-jlink_init (cable_t *cable)
+jlink_init (urj_cable_t *cable)
 {
     int result;
-    libusb_param_t *params;
+    urj_usbconn_libusb_param_t *params;
     jlink_usbconn_data_t *data;
 
     params = cable->link.usb->params;
@@ -413,7 +413,7 @@ jlink_init (cable_t *cable)
     }
     data = params->data;
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     jlink_tap_init (data);
@@ -437,9 +437,9 @@ jlink_init (cable_t *cable)
 
     INFO ("J-Link JTAG Interface ready\n");
 
-    jlink_set_frequency (cable, 4E6);
+    urj_tap_cable_jlink_set_frequency (cable, 4E6);
 
-    jlink_reset (params, 0, 0);
+    urj_tap_cable_jlink_reset (params, 0, 0);
 
     return 0;
 }
@@ -447,23 +447,23 @@ jlink_init (cable_t *cable)
 /* ---------------------------------------------------------------------- */
 
 static void
-jlink_free (cable_t *cable)
+jlink_free (urj_cable_t *cable)
 {
     jlink_usbconn_data_t *data;
-    data = ((libusb_param_t *) (cable->link.usb->params))->data;
+    data = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->data;
     free (data);
 
-    generic_usbconn_free (cable);
+    urj_tap_cable_generic_usbconn_free (cable);
 }
 
 /* ---------------------------------------------------------------------- */
 
 void
-jlink_set_frequency (cable_t *cable, uint32_t frequency)
+urj_tap_cable_jlink_set_frequency (urj_cable_t *cable, uint32_t frequency)
 {
     int result;
     int speed = frequency / 1E3;
-    libusb_param_t *params = cable->link.usb->params;
+    urj_usbconn_libusb_param_t *params = cable->link.usb->params;
     jlink_usbconn_data_t *data = params->data;
 
     if (1 <= speed && speed <= JLINK_MAX_SPEED)
@@ -490,10 +490,10 @@ jlink_set_frequency (cable_t *cable, uint32_t frequency)
 /* ---------------------------------------------------------------------- */
 
 static void
-jlink_clock (cable_t *cable, int tms, int tdi, int n)
+jlink_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i;
-    libusb_param_t *params = cable->link.usb->params;
+    urj_usbconn_libusb_param_t *params = cable->link.usb->params;
     jlink_usbconn_data_t *data = params->data;
 
     for (i = 0; i < n; i++)
@@ -506,9 +506,9 @@ jlink_clock (cable_t *cable, int tms, int tdi, int n)
 /* ---------------------------------------------------------------------- */
 
 static int
-jlink_get_tdo (cable_t *cable)
+jlink_get_tdo (urj_cable_t *cable)
 {
-    libusb_param_t *params = cable->link.usb->params;
+    urj_usbconn_libusb_param_t *params = cable->link.usb->params;
     jlink_usbconn_data_t *data = params->data;
 
     // TODO: This is the TDO _before_ last clock occured
@@ -533,10 +533,10 @@ jlink_copy_out_data (jlink_usbconn_data_t *data, int len, int offset,
 }
 
 static int
-jlink_transfer (cable_t *cable, int len, char *in, char *out)
+jlink_transfer (urj_cable_t *cable, int len, char *in, char *out)
 {
     int i, j;
-    libusb_param_t *params = cable->link.usb->params;
+    urj_usbconn_libusb_param_t *params = cable->link.usb->params;
     jlink_usbconn_data_t *data = params->data;
 
     for (j = 0, i = 0; i < len; i++)
@@ -564,30 +564,30 @@ jlink_transfer (cable_t *cable, int len, char *in, char *out)
 /* ---------------------------------------------------------------------- */
 
 static int
-jlink_set_signal (cable_t *cable, int mask, int val)
+jlink_set_signal (urj_cable_t *cable, int mask, int val)
 {
     return 1;
 }
 
-cable_driver_t jlink_cable_driver = {
+urj_cable_driver_t jlink_cable_driver = {
     "jlink",
     N_("Segger/IAR J-Link, Atmel SAM-ICE and others."),
-    generic_usbconn_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_usbconn_connect,
+    urj_tap_cable_generic_disconnect,
     jlink_free,
     jlink_init,
-    generic_usbconn_done,
-    jlink_set_frequency,
+    urj_tap_cable_generic_usbconn_done,
+    urj_tap_cable_jlink_set_frequency,
     jlink_clock,
     jlink_get_tdo,
     jlink_transfer,
     jlink_set_signal,
-    generic_get_signal,
-    generic_flush_using_transfer,
-    generic_usbconn_help
+    urj_tap_cable_generic_get_signal,
+    urj_tap_cable_generic_flush_using_transfer,
+    urj_tap_cable_generic_usbconn_help
 };
 
-usbconn_cable_t usbconn_cable_jlink = {
+urj_usbconn_cable_t usbconn_cable_jlink = {
     "jlink",                    /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */

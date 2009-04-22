@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef GENERIC_H
-#define	GENERIC_H
+#ifndef URJ_TAP_CABLE_GENERIC_H
+#define	URJ_TAP_CABLE_GENERIC_H
 
 #include "cable.h"
 #include "parport.h"
@@ -31,15 +31,15 @@
 typedef struct
 {
     int signals;
-} generic_params_t;
+} urj_tap_cable_generic_params_t;
 
-#define	PARAM_SIGNALS(cable)	((generic_params_t *) cable->params)->signals
+#define	PARAM_SIGNALS(cable)	((urj_tap_cable_generic_params_t *) cable->params)->signals
 
-void generic_disconnect (cable_t *cable);
-void generic_set_frequency (cable_t *cable, uint32_t new_freq);
-int generic_transfer (cable_t *cable, int len, char *in, char *out);
-int generic_get_signal (cable_t *cable, pod_sigsel_t sig);
-void generic_flush_one_by_one (cable_t *cable, cable_flush_amount_t hm);
-void generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t hm);
+void urj_tap_cable_generic_disconnect (urj_cable_t *cable);
+void urj_tap_cable_generic_set_frequency (urj_cable_t *cable, uint32_t new_freq);
+int urj_tap_cable_generic_transfer (urj_cable_t *cable, int len, char *in, char *out);
+int urj_tap_cable_generic_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig);
+void urj_tap_cable_generic_flush_one_by_one (urj_cable_t *cable, urj_cable_flush_amount_t hm);
+void urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable, urj_cable_flush_amount_t hm);
 
-#endif /* GENERIC_H */
+#endif /* URJ_TAP_CABLE_GENERIC_H */

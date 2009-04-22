@@ -33,16 +33,16 @@
 #include "cmd.h"
 
 static int
-cmd_salias_run (chain_t *chain, char *params[])
+cmd_salias_run (urj_chain_t *chain, char *params[])
 {
-    part_t *part;
-    signal_t *s;
-    salias_t *sa;
+    urj_part_t *part;
+    urj_part_signal_t *s;
+    urj_part_salias_t *sa;
 
-    if (cmd_params (params) != 3)
+    if (urj_cmd_params (params) != 3)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -58,20 +58,20 @@ cmd_salias_run (chain_t *chain, char *params[])
     }
 
     part = chain->parts->parts[chain->active_part];
-    if (part_find_signal (part, params[1]) != NULL)
+    if (urj_part_find_signal (part, params[1]) != NULL)
     {
         printf (_("Signal '%s' already defined\n"), params[1]);
         return 1;
     }
 
-    s = part_find_signal (part, params[2]);
+    s = urj_part_find_signal (part, params[2]);
     if (s == NULL)
     {
         printf (_("Signal '%s' not found\n"), params[2]);
         return 1;
     }
 
-    sa = salias_alloc (params[1], s);
+    sa = urj_part_salias_alloc (params[1], s);
     if (!sa)
     {
         printf (_("out of memory\n"));
@@ -94,7 +94,7 @@ cmd_salias_help (void)
               "SIGNAL        Existing signal name\n"), "signal");
 }
 
-const cmd_t cmd_salias = {
+const urj_cmd_t cmd_salias = {
     "salias",
     N_("define an alias for a signal"),
     cmd_salias_help,

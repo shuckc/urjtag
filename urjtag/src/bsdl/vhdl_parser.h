@@ -22,22 +22,22 @@
  *
  */
 
-#ifndef VHDL_PARSER_H
-#define VHDL_PARSER_H
+#ifndef URJ_VHDL_PARSER_H
+#define URJ_VHDL_PARSER_H
 
 #include "bsdl_types.h"
 
 /* VHDL lexer declarations */
-void *vhdl_flex_init (FILE *, int);
-void vhdl_flex_deinit (void *);
-void vhdl_flex_switch_file (void *, char *);
-int vhdl_flex_get_compile_errors (void *);
-int vhdl_flex_postinc_compile_errors (void *);
-int vhdl_flex_get_lineno (void *);
+void *urj_vhdl_flex_init (FILE *, int);
+void urj_vhdl_flex_deinit (void *);
+void urj_vhdl_flex_switch_file (void *, char *);
+int urj_vhdl_flex_get_compile_errors (void *);
+int urj_vhdl_flex_postinc_compile_errors (void *);
+int urj_vhdl_flex_get_lineno (void *);
 
 /* VHDL parser declarations */
-vhdl_parser_priv_t *vhdl_parser_init (FILE *, jtag_ctrl_t *);
-void vhdl_parser_deinit (vhdl_parser_priv_t *);
-int vhdlparse (vhdl_parser_priv_t *);
+urj_bsdl_vhdl_parser_priv_t *urj_vhdl_parser_init (FILE *, urj_bsdl_jtag_ctrl_t *);
+void urj_vhdl_parser_deinit (urj_bsdl_vhdl_parser_priv_t *);
+int urj_vhdl_parse (urj_bsdl_vhdl_parser_priv_t *);
 
-#endif /* VHDL_PARSER_H */
+#endif /* URJ_VHDL_PARSER_H */

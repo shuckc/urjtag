@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef BSDL_TYPES_H
-#define BSDL_TYPES_H
+#ifndef URJ_BSDL_TYPES_H
+#define URJ_BSDL_TYPES_H
 
 #include <jtag.h>
 #include <bsdl_mode.h>
@@ -36,7 +36,7 @@ struct scan_extra
     int Compile_Errors;
     int Base;
 };
-typedef struct scan_extra scan_extra_t;
+typedef struct scan_extra urj_bsdl_scan_extra_t;
 
 /* list of instructions
    the instruction name and its opcode (optional) is stored here */
@@ -46,7 +46,7 @@ struct instr_elem
     char *instr;
     char *opcode;
 };
-typedef struct instr_elem instr_elem_t;
+typedef struct instr_elem urj_bsdl_instr_elem_t;
 
 /* register access information
  * derived from the entries of the REGISTER_ACCESS attribute
@@ -60,9 +60,9 @@ struct ainfo_elem
     struct ainfo_elem *next;
     char *reg;
     int reg_len;
-    instr_elem_t *instr_list;
+    urj_bsdl_instr_elem_t *instr_list;
 };
-typedef struct ainfo_elem ainfo_elem_t;
+typedef struct ainfo_elem urj_bsdl_types_ainfo_elem_t;
 
 /* structure cell_info collects bit/cell information from the
    BOUNDARY_REGISTER attribute
@@ -80,7 +80,7 @@ struct cell_info
     int ctrl_bit_num;
     int disable_safe_value;
 };
-typedef struct cell_info cell_info_t;
+typedef struct cell_info urj_bsdl_cell_info_t;
 
 /* structure string_elem enables to build lists of strings */
 struct string_elem
@@ -88,7 +88,7 @@ struct string_elem
     struct string_elem *next;
     char *string;
 };
-typedef struct string_elem string_elem_t;
+typedef struct string_elem urj_bsdl_string_elem_t;
 
 /* structure port_desc contains all descriptive information for a port
    definition:
@@ -97,63 +97,63 @@ typedef struct string_elem string_elem_t;
    - low and high indice if it's a vector */
 struct port_desc
 {
-    string_elem_t *names_list;
+    urj_bsdl_string_elem_t *names_list;
     struct port_desc *next;
     int is_vector;
     int low_idx;
     int high_idx;
 };
-typedef struct port_desc port_desc_t;
+typedef struct port_desc urj_bsdl_port_desc_t;
 
 typedef enum
 {
-    VET_CONSTANT,
-    VET_ATTRIBUTE_STRING,
-    VET_ATTRIBUTE_DECIMAL,
-    VET_UNKNOWN
-} vhdl_elem_type_t;
+    URJ_BSDL_VET_CONSTANT,
+    URJ_BSDL_VET_ATTRIBUTE_STRING,
+    URJ_BSDL_VET_ATTRIBUTE_DECIMAL,
+    URJ_BSDL_VET_UNKNOWN
+} urj_bsdl_vhdl_elem_type_t;
 
 struct vhdl_elem
 {
     struct vhdl_elem *next;
-    vhdl_elem_type_t type;
+    urj_bsdl_vhdl_elem_type_t type;
     char *name;
     char *payload;
     int line;
 };
-typedef struct vhdl_elem vhdl_elem_t;
+typedef struct vhdl_elem urj_bsdl_vhdl_elem_t;
 
 typedef enum
 {
-    CONF_1990,
-    CONF_1993,
-    CONF_2001,
-    CONF_UNKNOWN
-} bsdl_conformance_t;
+    URJ_BSDL_CONF_1990,
+    URJ_BSDL_CONF_1993,
+    URJ_BSDL_CONF_2001,
+    URJ_BSDL_CONF_UNKNOWN
+} urj_bsdl_conformance_t;
 
 /* structure jtag_ctrl collects all elements that are required to interface
    with jtag internals */
 struct jtag_ctrl
 {
     int proc_mode;
-    chain_t *chain;
-    part_t *part;
+    urj_chain_t *chain;
+    urj_part_t *part;
     /* collected by VHDL parser */
-    port_desc_t *port_desc;
-    vhdl_elem_t *vhdl_elem_first;
-    vhdl_elem_t *vhdl_elem_last;
+    urj_bsdl_port_desc_t *port_desc;
+    urj_bsdl_vhdl_elem_t *vhdl_elem_first;
+    urj_bsdl_vhdl_elem_t *vhdl_elem_last;
     /* collected by BSDL parser */
     char *idcode;               /* IDCODE string */
     char *usercode;             /* USERCODE string */
     int instr_len;
     int bsr_len;
-    bsdl_conformance_t conformance;
-    instr_elem_t *instr_list;
-    ainfo_elem_t *ainfo_list;
-    cell_info_t *cell_info_first;
-    cell_info_t *cell_info_last;
+    urj_bsdl_conformance_t conformance;
+    urj_bsdl_instr_elem_t *instr_list;
+    urj_bsdl_types_ainfo_elem_t *ainfo_list;
+    urj_bsdl_cell_info_t *cell_info_first;
+    urj_bsdl_cell_info_t *cell_info_last;
 };
-typedef struct jtag_ctrl jtag_ctrl_t;
+typedef struct jtag_ctrl urj_bsdl_jtag_ctrl_t;
 
 /* private data of the VHDL bison parser
    used to store variables the would end up as globals otherwise */
@@ -164,25 +164,25 @@ struct vhdl_parser_priv
     char *buffer;
     size_t len_buffer;
     void *scanner;
-    jtag_ctrl_t *jtag_ctrl;
-    port_desc_t tmp_port_desc;
+    urj_bsdl_jtag_ctrl_t *jtag_ctrl;
+    urj_bsdl_port_desc_t tmp_port_desc;
 };
-typedef struct vhdl_parser_priv vhdl_parser_priv_t;
+typedef struct vhdl_parser_priv urj_bsdl_vhdl_parser_priv_t;
 
 /* private data of the BSDL bison parser
    used to store variables the would end up as globals otherwise */
 struct bsdl_parser_priv
 {
     void *scanner;
-    jtag_ctrl_t *jtag_ctrl;
+    urj_bsdl_jtag_ctrl_t *jtag_ctrl;
     int lineno;
-    ainfo_elem_t ainfo;
-    cell_info_t tmp_cell_info;
-    port_desc_t tmp_port_desc;
+    urj_bsdl_types_ainfo_elem_t ainfo;
+    urj_bsdl_cell_info_t tmp_cell_info;
+    urj_bsdl_port_desc_t tmp_port_desc;
 };
-typedef struct bsdl_parser_priv bsdl_parser_priv_t;
+typedef struct bsdl_parser_priv urj_bsdl_parser_priv_t;
 
-#endif /* BSDL_TYPES_H */
+#endif /* URJ_BSDL_TYPES_H */
 
 
 /*

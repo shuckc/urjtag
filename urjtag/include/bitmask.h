@@ -32,9 +32,10 @@
  *
  */
 
-#ifndef	COMMON_H
-#define	COMMON_H
+#ifndef	URJ_BITMASK_H
+#define	URJ_BITMASK_H
 
+#ifdef UNUSED           /* RFHH */
 #ifndef LANGUAGE
 #	ifdef __ASSEMBLY__
 #		define LANGUAGE ASM
@@ -50,14 +51,15 @@
 #ifndef C
 #define	C	1
 #endif
+#endif  /* def UNUSED */
 
-#define	MAX_BITS_ABS_VAL	1024
-#define	BITS_ABS(a)		(((((a) + MAX_BITS_ABS_VAL) / MAX_BITS_ABS_VAL) * 2 - 1) * (a))
-#define	BITS_MIN(a,b)		(((a) + (b) - BITS_ABS((a) - (b))) / 2)
+#define	URJ_MAX_BITS_ABS_VAL	1024
+#define	URJ_BITS_ABS(a)		(((((a) + URJ_MAX_BITS_ABS_VAL) / URJ_MAX_BITS_ABS_VAL) * 2 - 1) * (a))
+#define	URJ_BITS_MIN(a,b)		(((a) + (b) - URJ_BITS_ABS((a) - (b))) / 2)
 
 #define	URJ_BIT(b)			(1 << (b))
-#define	URJ_BITS(b1,b2)		(((2 << BITS_ABS((b1) - (b2))) - 1) << BITS_MIN(b1,b2))
-#define	URJ_BITS_VAL(b1,b2,v)	(((v) << BITS_MIN(b1,b2)) & URJ_BITS (b1,b2))
-#define	URJ_BITS_GET(b1,b2,v)	(((v) & URJ_BITS (b1,b2)) >> BITS_MIN(b1,b2))
+#define	URJ_BITS(b1,b2)		(((2 << URJ_BITS_ABS((b1) - (b2))) - 1) << URJ_BITS_MIN(b1,b2))
+#define	URJ_BITS_VAL(b1,b2,v)	(((v) << URJ_BITS_MIN(b1,b2)) & URJ_BITS (b1,b2))
+#define	URJ_BITS_GET(b1,b2,v)	(((v) & URJ_BITS (b1,b2)) >> URJ_BITS_MIN(b1,b2))
 
-#endif /* COMMON_H */
+#endif /* URJ_BITMASK_H */

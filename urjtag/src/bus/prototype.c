@@ -39,11 +39,11 @@
 
 typedef struct
 {
-    signal_t *a[32];
-    signal_t *d[32];
-    signal_t *cs;
-    signal_t *we;
-    signal_t *oe;
+    urj_part_signal_t *a[32];
+    urj_part_signal_t *d[32];
+    urj_part_signal_t *cs;
+    urj_part_signal_t *we;
+    urj_part_signal_t *oe;
     int alsbi, amsbi, ai, aw, dlsbi, dmsbi, di, dw, csa, wea, oea;
     int ashift;
 } bus_params_t;
@@ -90,18 +90,18 @@ prototype_bus_signal_parse (char *str, char *fmt, int *inst)
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-prototype_bus_new (chain_t *chain, const bus_driver_t *driver,
+static urj_bus_t *
+prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                    char *cmd_params[])
 {
-    bus_t *bus;
-    signal_t *sig;
+    urj_bus_t *bus;
+    urj_part_signal_t *sig;
     char buff[16], fmt[16], afmt[16], dfmt[16], param[16], value[16];
     int i, j, inst, max, min;
     int failed = 0;
     int ashift = -1;
 
-    bus = calloc (1, sizeof (bus_t));
+    bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
         return NULL;
 
@@ -113,8 +113,8 @@ prototype_bus_new (chain_t *chain, const bus_driver_t *driver,
         return NULL;
     }
 
-    CHAIN = chain;
-    PART = chain->parts->parts[chain->active_part];
+    bus->chain = chain;
+    bus->part = chain->parts->parts[chain->active_part];
 
     CS = OE = WE = NULL;
     ALSBI = AMSBI = DLSBI = DMSBI = -1;
@@ -142,7 +142,7 @@ prototype_bus_new (chain_t *chain, const bus_driver_t *driver,
         if (inst > 31)
             continue;
 
-        sig = part_find_signal (PART, value);
+        sig = urj_part_find_signal (bus->part, value);
         if (!sig)
         {
             printf (_("signal '%s' is not found\n"), value);
@@ -201,14 +201,14 @@ prototype_bus_new (chain_t *chain, const bus_driver_t *driver,
             for (min = 0; min <= 31; min++)
             {
                 sprintf (buff, afmt, min);
-                A[min] = part_find_signal (PART, buff);
+                A[min] = urj_part_find_signal (bus->part, buff);
                 if (A[min])
                     break;
             }
             for (max = 31; max >= 0; max--)
             {
                 sprintf (buff, afmt, max);
-                A[max] = part_find_signal (PART, buff);
+                A[max] = urj_part_find_signal (bus->part, buff);
                 if (A[max])
                     break;
             }
@@ -222,7 +222,7 @@ prototype_bus_new (chain_t *chain, const bus_driver_t *driver,
         for (i = 0, j = ALSBI; i < AW; i++, j += AI)
         {
             sprintf (buff, afmt, j);
-            A[j] = part_find_signal (PART, buff);
+            A[j] = urj_part_find_signal (bus->part, buff);
         }
     }
     else
@@ -239,14 +239,14 @@ prototype_bus_new (chain_t *chain, const bus_driver_t *driver,
             for (min = 0; min <= 31; min++)
             {
                 sprintf (buff, dfmt, min);
-                D[min] = part_find_signal (PART, buff);
+                D[min] = urj_part_find_signal (bus->part, buff);
                 if (D[min])
                     break;
             }
             for (max = 31; max >= 0; max--)
             {
                 sprintf (buff, dfmt, max);
-                D[max] = part_find_signal (PART, buff);
+                D[max] = urj_part_find_signal (bus->part, buff);
                 if (D[max])
                     break;
             }
@@ -260,7 +260,7 @@ prototype_bus_new (chain_t *chain, const bus_driver_t *driver,
         for (i = 0, j = DLSBI; i < DW; i++, j += DI)
         {
             sprintf (buff, dfmt, j);
-            D[j] = part_find_signal (PART, buff);
+            D[j] = urj_part_find_signal (bus->part, buff);
         }
 
         /* bus drivers are called with a byte address
@@ -325,12 +325,12 @@ prototype_bus_new (chain_t *chain, const bus_driver_t *driver,
  *
  */
 static void
-prototype_bus_printinfo (bus_t *bus)
+prototype_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
     printf (_
             ("Configurable prototype bus driver via BSR (JTAG part No. %d)\n"),
@@ -342,52 +342,52 @@ prototype_bus_printinfo (bus_t *bus)
  *
  */
 static int
-prototype_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
+prototype_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
     area->description = NULL;
     area->start = UINT32_C (0x00000000);
     area->length = UINT64_C (0x100000000);
     area->width = DW;
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 static void
-setup_address (bus_t *bus, uint32_t a)
+setup_address (urj_bus_t *bus, uint32_t a)
 {
     int i, j;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     a >>= ASHIFT;
 
     for (i = 0, j = ALSBI; i < AW; i++, j += AI)
-        part_set_signal (p, A[j], 1, (a >> i) & 1);
+        urj_part_set_signal (p, A[j], 1, (a >> i) & 1);
 }
 
 static void
-set_data_in (bus_t *bus)
+set_data_in (urj_bus_t *bus)
 {
     int i, j;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     prototype_bus_area (bus, 0, &area);
 
     for (i = 0, j = DLSBI; i < DW; i++, j += DI)
-        part_set_signal (p, D[j], 0, 0);
+        urj_part_set_signal (p, D[j], 0, 0);
 }
 
 static void
-setup_data (bus_t *bus, uint32_t d)
+setup_data (urj_bus_t *bus, uint32_t d)
 {
     int i, j;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     prototype_bus_area (bus, 0, &area);
 
     for (i = 0, j = DLSBI; i < DW; i++, j += DI)
-        part_set_signal (p, D[j], 1, (d >> i) & 1);
+        urj_part_set_signal (p, D[j], 1, (d >> i) & 1);
 }
 
 /**
@@ -395,19 +395,19 @@ setup_data (bus_t *bus, uint32_t d)
  *
  */
 static void
-prototype_bus_read_start (bus_t *bus, uint32_t adr)
+prototype_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
 
-    part_set_signal (p, CS, 1, CSA);
-    part_set_signal (p, WE, 1, WEA ? 0 : 1);
-    part_set_signal (p, OE, 1, OEA);
+    urj_part_set_signal (p, CS, 1, CSA);
+    urj_part_set_signal (p, WE, 1, WEA ? 0 : 1);
+    urj_part_set_signal (p, OE, 1, OEA);
 
     setup_address (bus, adr);
     set_data_in (bus);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
 /**
@@ -415,21 +415,21 @@ prototype_bus_read_start (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-prototype_bus_read_next (bus_t *bus, uint32_t adr)
+prototype_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     int i, j;
     uint32_t d = 0;
-    bus_area_t area;
+    urj_bus_area_t area;
 
     prototype_bus_area (bus, adr, &area);
 
     setup_address (bus, adr);
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0, j = DLSBI; i < DW; i++, j += DI)
-        d |= (uint32_t) (part_get_signal (p, D[j]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, D[j]) << i);
 
     return d;
 }
@@ -439,22 +439,22 @@ prototype_bus_read_next (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-prototype_bus_read_end (bus_t *bus)
+prototype_bus_read_end (urj_bus_t *bus)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     int i, j;
     uint32_t d = 0;
-    bus_area_t area;
+    urj_bus_area_t area;
 
     prototype_bus_area (bus, 0, &area);
 
-    part_set_signal (p, CS, 1, CSA ? 0 : 1);
-    part_set_signal (p, OE, 1, OEA ? 0 : 1);
-    chain_shift_data_registers (chain, 1);
+    urj_part_set_signal (p, CS, 1, CSA ? 0 : 1);
+    urj_part_set_signal (p, OE, 1, OEA ? 0 : 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0, j = DLSBI; i < DW; i++, j += DI)
-        d |= (uint32_t) (part_get_signal (p, D[j]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, D[j]) << i);
 
     return d;
 }
@@ -464,41 +464,41 @@ prototype_bus_read_end (bus_t *bus)
  *
  */
 static void
-prototype_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
+prototype_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
 
-    part_set_signal (p, CS, 1, CSA);
-    part_set_signal (p, WE, 1, WEA ? 0 : 1);
-    part_set_signal (p, OE, 1, OEA ? 0 : 1);
+    urj_part_set_signal (p, CS, 1, CSA);
+    urj_part_set_signal (p, WE, 1, WEA ? 0 : 1);
+    urj_part_set_signal (p, OE, 1, OEA ? 0 : 1);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
-    part_set_signal (p, WE, 1, WEA);
-    chain_shift_data_registers (chain, 0);
-    part_set_signal (p, WE, 1, WEA ? 0 : 1);
-    part_set_signal (p, CS, 1, CSA ? 0 : 1);
-    chain_shift_data_registers (chain, 0);
+    urj_part_set_signal (p, WE, 1, WEA);
+    urj_tap_chain_shift_data_registers (chain, 0);
+    urj_part_set_signal (p, WE, 1, WEA ? 0 : 1);
+    urj_part_set_signal (p, CS, 1, CSA ? 0 : 1);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const bus_driver_t prototype_bus = {
+const urj_bus_driver_t prototype_bus = {
     "prototype",
     N_("Configurable prototype bus driver via BSR, requires parameters:\n"
        "           amsb=<addr MSB> alsb=<addr LSB> dmsb=<data MSB> dlsb=<data LSB>\n"
        "           ncs=<CS#>|cs=<CS> noe=<OE#>|oe=<OE> nwe=<WE#>|we=<WE> [amode=auto|x8|x16|x32]"),
     prototype_bus_new,
-    generic_bus_free,
+    urj_bus_generic_free,
     prototype_bus_printinfo,
-    generic_bus_prepare_extest,
+    urj_bus_generic_prepare_extest,
     prototype_bus_area,
     prototype_bus_read_start,
     prototype_bus_read_next,
     prototype_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     prototype_bus_write,
-    generic_bus_no_init
+    urj_bus_generic_no_init
 };

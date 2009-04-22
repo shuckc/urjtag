@@ -35,19 +35,19 @@
 #include "cmd.h"
 
 static int
-cmd_test_run (chain_t *chain, char *params[])
+cmd_test_run (urj_chain_t *chain, char *params[])
 {
     int data;
     unsigned int i;
-    signal_t *s;
+    urj_part_signal_t *s;
 
-    if (cmd_params (params) != 4)
+    if (urj_cmd_params (params) != 4)
         return -1;
 
     if (strcasecmp (params[1], "signal") != 0)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -62,7 +62,7 @@ cmd_test_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    s = part_find_signal (chain->parts->parts[chain->active_part], params[2]);
+    s = urj_part_find_signal (chain->parts->parts[chain->active_part], params[2]);
     if (!s)
     {
         printf (_("signal '%s' not found\n"), params[2]);
@@ -72,10 +72,10 @@ cmd_test_run (chain_t *chain, char *params[])
     /* values 0,1,X since X is not a number, the following failure exits clean
      * and doesnt test anything, as it should.
      */
-    if (cmd_get_number (params[3], &i))
+    if (urj_cmd_get_number (params[3], &i))
         return 1;
 
-    data = part_get_signal (chain->parts->parts[chain->active_part], s);
+    data = urj_part_get_signal (chain->parts->parts[chain->active_part], s);
     if (data != -1)
     {
         if (data != i)
@@ -97,7 +97,7 @@ cmd_test_help (void)
             "get signal");
 }
 
-cmd_t cmd_test = {
+urj_cmd_t cmd_test = {
     "test",
     N_("test external signal value"),
     cmd_test_help,

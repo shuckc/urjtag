@@ -20,18 +20,18 @@
  *
  */
 
-#ifndef _USBCONN_LIBFTDX_H
-#define _USBCONN_LIBFTDX_H 1
+#ifndef URJ_USBCONN_LIBFTDX_H
+#define URJ_USBCONN_LIBFTDX_H 1
 
-#define FTDX_MAXSEND 4096
-#define FTDX_MAXSEND_MPSSE (64 * 1024)
+#define URJ_USBCONN_FTDX_MAXSEND 4096
+#define URJ_USBCONN_FTDX_MAXSEND_MPSSE (64 * 1024)
 
 /* Maximum chunk to receive from ftdi/ftd2xx driver.
    Larger values might speed up comm, but there's an upper limit
    when too many bytes are sent and the underlying libftdi or libftd2xx
    don't fetch the returned data in time -> deadlock */
-#define FTDI_MAXRECV   ( 4 * 64)
-#define FTD2XX_MAXRECV (63 * 64)
-#define FTDX_MAXRECV   (FTD2XX_MAXRECV < FTDI_MAXRECV ? FTD2XX_MAXRECV : FTDI_MAXRECV)
+#define URJ_USBCONN_FTDI_MAXRECV   ( 4 * 64)
+#define URJ_USBCONN_FTD2XX_MAXRECV (63 * 64)
+#define URJ_USBCONN_FTDX_MAXRECV   (URJ_USBCONN_FTD2XX_MAXRECV < URJ_USBCONN_FTDI_MAXRECV ? URJ_USBCONN_FTD2XX_MAXRECV : URJ_USBCONN_FTDI_MAXRECV)
 
 #endif

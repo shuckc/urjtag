@@ -44,7 +44,7 @@ typedef char wchar_t;
 #include "cmd.h"
 
 static int
-cmd_print_run (chain_t *chain, char *params[])
+cmd_print_run (urj_chain_t *chain, char *params[])
 {
     char format[128];
 #if HAVE_SWPRINTF
@@ -55,10 +55,10 @@ cmd_print_run (chain_t *chain, char *params[])
     int i;
     int noheader = 0;
 
-    if (cmd_params (params) > 2)
+    if (urj_cmd_params (params) > 2)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -67,7 +67,7 @@ cmd_print_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    if (cmd_params (params) == 2)
+    if (urj_cmd_params (params) == 2)
     {
         if (strcasecmp (params[1], "bus") == 0)
             noheader = 1;
@@ -76,12 +76,12 @@ cmd_print_run (chain_t *chain, char *params[])
         {
 
             printf ("Signals:\n");
-            part_t *part;
-            signal_t *s;
+            urj_part_t *part;
+            urj_part_signal_t *s;
             part = chain->parts->parts[chain->active_part];
             for (s = part->signals; s != NULL; s = s->next)
             {
-                salias_t *sa;
+                urj_part_salias_t *sa;
                 if (s->pin)
                     printf ("%s %s", s->name, s->pin);
                 else
@@ -103,11 +103,11 @@ cmd_print_run (chain_t *chain, char *params[])
 
         if (strcasecmp (params[1], "instructions") == 0)
         {
-            part_t *part;
-            instruction_t *inst;
+            urj_part_t *part;
+            urj_instruction_t *inst;
 
             snprintf (format, 128, _(" Active %%-%ds %%-%ds"),
-                      MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER);
+                      URJ_INSTRUCTION_MAXLEN_INSTRUCTION, URJ_DATA_REGISTER_MAXLEN);
 #if HAVE_SWPRINTF
             if (mbstowcs (wformat, format, 128) == -1)
                 printf (_("(%d) String conversion failed!\n"), __LINE__);
@@ -126,7 +126,7 @@ cmd_print_run (chain_t *chain, char *params[])
             putchar ('\n');
 
             snprintf (format, 128, _("   %%c    %%-%ds %%-%ds\n"),
-                      MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER);
+                      URJ_INSTRUCTION_MAXLEN_INSTRUCTION, URJ_DATA_REGISTER_MAXLEN);
 
             part = chain->parts->parts[chain->active_part];
             for (inst = part->instructions; inst != NULL; inst = inst->next)
@@ -142,8 +142,8 @@ cmd_print_run (chain_t *chain, char *params[])
     if (noheader == 0)
     {
         snprintf (format, 128, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds"),
-                  MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
-                  MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER);
+                  URJ_PART_MANUFACTURER_MAXLEN, URJ_PART_PART_MAXLEN, URJ_PART_STEPPING_MAXLEN,
+                  URJ_INSTRUCTION_MAXLEN_INSTRUCTION, URJ_DATA_REGISTER_MAXLEN);
 #if HAVE_SWPRINTF
         if (mbstowcs (wformat, format, 128) == -1)
             printf (_("(%d) String conversion failed!\n"), __LINE__);
@@ -164,7 +164,7 @@ cmd_print_run (chain_t *chain, char *params[])
         putchar ('\n');
     }
 
-    if (cmd_params (params) == 1)
+    if (urj_cmd_params (params) == 1)
     {
         if (chain->parts->len > chain->active_part)
         {
@@ -174,26 +174,26 @@ cmd_print_run (chain_t *chain, char *params[])
             else
                 printf (_(" %3d "), chain->active_part);
 
-            part_print (chain->parts->parts[chain->active_part]);
+            urj_part_print (chain->parts->parts[chain->active_part]);
         }
         if (bus != NULL)
         {
             int i;
             uint64_t a;
-            bus_area_t area;
+            urj_bus_area_t area;
 
             for (i = 0; i < buses.len; i++)
                 if (buses.buses[i] == bus)
                     break;
             printf (_("\nActive bus:\n*%d: "), i);
-            bus_printinfo (bus);
+            URJ_BUS_PRINTINFO (bus);
 
             for (a = 0; a < UINT64_C (0x100000000);
                  a = area.start + area.length)
             {
-                if (bus_area (bus, a, &area) != URJTAG_STATUS_OK)
+                if (URJ_BUS_AREA (bus, a, &area) != URJ_STATUS_OK)
                 {
-                    printf (_("Error in bus area discovery at 0x%08llX\n"),
+                    printf (_("Error in bus area urj_tap_discovery at 0x%08llX\n"),
                             (long long unsigned int) a);
                     break;
                 }
@@ -220,7 +220,7 @@ cmd_print_run (chain_t *chain, char *params[])
 
     if (strcasecmp (params[1], "chain") == 0)
     {
-        parts_print (chain->parts);
+        urj_part_parts_print (chain->parts);
         return 1;
     }
 
@@ -230,7 +230,7 @@ cmd_print_run (chain_t *chain, char *params[])
             printf (_("*%d: "), i);
         else
             printf (_("%d: "), i);
-        bus_printinfo (buses.buses[i]);
+        URJ_BUS_PRINTINFO (buses.buses[i]);
     }
 
     return 1;
@@ -247,7 +247,7 @@ cmd_print_help (void)
             "print");
 }
 
-cmd_t cmd_print = {
+urj_cmd_t cmd_print = {
     "print",
     N_("display JTAG chain list/status"),
     cmd_print_help,

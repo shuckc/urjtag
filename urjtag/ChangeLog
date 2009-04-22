@@ -1,5 +1,31 @@
+2009-04-23  Rutger Hofman <rfhh>
+
+  Mechanically replace all global function/variable names w/ a prefix
+  urj_(<module>_)*. Investigated with
+      ctags -R -x --c-kinds=f --file-scope=no  | grep function
+      ctags -R -x --c-kinds=v --file-scope=no  | grep variable
+      ctags -R -x --c-kinds=t --file-scope=no | grep typedef
+      ctags -R -x --c-kinds=e --file-scope=no | grep enum
+  then (sed-wise or manually) repair what doesn't fit automatically:
+    - imported files from src/lib
+    - duplicate modules like urj_cmd_cmd_detect that becomes urj_cmd_detect
+    - stuff where prefix escalation has a mismatch w/ existing name escalation
+      because of different order:
+        usbconn_cable_usbblaster_ftdi
+      becomes
+        urj_tap_cable_usbconn_usbblaster_ftdi
+      not
+        urj_tap_cable_usbconn_cable_usbblaster_ftdi
+    - typedefs only (or mostly) under include. Typedefs under src/ are left
+      unmodified, since they will be invisible outside liburjtag.
+  and then some.
+  The identifier names in .y and .l files have been changed by hand.
+  Some type names happen to be identical to variable/parameter names. These
+  were changed too by the automatic replace. Undo a number of them by hand.
+  * affects the complete code base.
 
 2009-04-22  Rutger Hofman <rfhh>
+
   A very few typedef'ed types do NOT have an _t prefix. Orthogonize this by
   adding _t to typedefs: instruction, data_register, tap_register.
   * include/part.h, include/data_register.h, include/instruction.h,

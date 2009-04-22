@@ -34,25 +34,25 @@
 #include "cmd.h"
 
 static int
-cmd_eraseflash_run (chain_t *chain, char *params[])
+cmd_eraseflash_run (urj_chain_t *chain, char *params[])
 {
     uint32_t adr = 0;
     unsigned int number = 0;
 
-    if (cmd_params (params) != 3)
+    if (urj_cmd_params (params) != 3)
         return -1;
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
     if (!bus)
     {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
     }
-    if (cmd_get_number (params[1], &adr))
+    if (urj_cmd_get_number (params[1], &adr))
         return -1;
-    if (cmd_get_number (params[2], &number))
+    if (urj_cmd_get_number (params[2], &number))
         return -1;
-    flasherase (bus, adr, number);
+    urj_flasherase (bus, adr, number);
 
     return 1;
 }
@@ -76,7 +76,7 @@ cmd_eraseflash_help (void)
                 _(flash_drivers[i]->description));
 }
 
-cmd_t cmd_eraseflash = {
+urj_cmd_t cmd_eraseflash = {
     "eraseflash",
     N_("erase flash memory by number of blocks"),
     cmd_eraseflash_help,

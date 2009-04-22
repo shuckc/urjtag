@@ -36,16 +36,16 @@
 #include "cmd.h"
 
 static int
-cmd_pod_run (chain_t *chain, char *params[])
+cmd_pod_run (urj_chain_t *chain, char *params[])
 {
     int i, j;
     int mask = 0;
     int val = 0;
 
-    if ((i = cmd_params (params)) < 2)
+    if ((i = urj_cmd_params (params)) < 2)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return -1;
 
     for (j = 1; j < i; j++)
@@ -53,26 +53,26 @@ cmd_pod_run (chain_t *chain, char *params[])
         char *eq = strrchr (params[j], '=');
         if (!eq)
             return -1;
-        pod_sigsel_t it = CS_NONE;
+        urj_pod_sigsel_t it = URJ_POD_CS_NONE;
         int n = strlen (params[j]);
         if (n > 4 && (strncasecmp (params[j], "tck", 3) == 0))
-            it = CS_TCK;
+            it = URJ_POD_CS_TCK;
         else if (n > 4 && (strncasecmp (params[j], "tms", 3) == 0))
-            it = CS_TMS;
+            it = URJ_POD_CS_TMS;
         else if (n > 4 && (strncasecmp (params[j], "tdi", 3) == 0))
-            it = CS_TDI;
+            it = URJ_POD_CS_TDI;
         else if (n > 5 && (strncasecmp (params[j], "trst", 3) == 0))
-            it = CS_TRST;
+            it = URJ_POD_CS_TRST;
         else if (n > 6 && (strncasecmp (params[j], "reset", 3) == 0))
-            it = CS_RESET;
-        if (it == CS_NONE)
+            it = URJ_POD_CS_RESET;
+        if (it == URJ_POD_CS_NONE)
             return -1;
         mask |= it;
         if (atoi (eq + 1) != 0)
             val |= it;
     }
 
-    chain_set_pod_signal (chain, mask, val);
+    urj_tap_chain_set_pod_signal (chain, mask, val);
 
     return 1;
 }
@@ -83,11 +83,11 @@ cmd_pod_help (void)
     printf (_("Usage: %s SIGNAL=# [SIGNAL=# ...]\n"
               "Set state of POD signal(s) to 0 or 1.\n"
               "\n"
-              "SIGNAL	    TCK,TMS, TDI, TRST, or RESET\n"
+              "SIGNAL	    TCK,TMS, TDI, TRST, or URJ_JIM_RESET\n"
               "#          0 or 1\n"), "pod");
 }
 
-cmd_t cmd_pod = {
+urj_cmd_t cmd_pod = {
     "pod",
     N_("Set state of POD signal(s)"),
     cmd_pod_help,

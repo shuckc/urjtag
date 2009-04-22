@@ -33,10 +33,10 @@
 
 #include "bsdl.h"
 
-chain_t *
-chain_alloc (void)
+urj_chain_t *
+urj_tap_chain_alloc (void)
 {
-    chain_t *chain = malloc (sizeof (chain_t));
+    urj_chain_t *chain = malloc (sizeof (urj_chain_t));
     if (!chain)
         return NULL;
 
@@ -44,102 +44,102 @@ chain_alloc (void)
     chain->parts = NULL;
     chain->total_instr_len = 0;
     chain->active_part = 0;
-    BSDL_GLOBS_INIT (chain->bsdl);
-    tap_state_init (chain);
+    URJ_BSDL_GLOBS_INIT (chain->bsdl);
+    urj_tap_state_init (chain);
 
     return chain;
 }
 
 void
-chain_free (chain_t *chain)
+urj_tap_chain_free (urj_chain_t *chain)
 {
     if (!chain)
         return;
 
-    chain_disconnect (chain);
+    urj_tap_chain_disconnect (chain);
 
-    parts_free (chain->parts);
+    urj_part_parts_free (chain->parts);
     free (chain);
 }
 
 void
-chain_disconnect (chain_t *chain)
+urj_tap_chain_disconnect (urj_chain_t *chain)
 {
     if (!chain->cable)
         return;
 
-    tap_state_done (chain);
-    cable_done (chain->cable);
-    cable_free (chain->cable);
+    urj_tap_state_done (chain);
+    urj_tap_cable_done (chain->cable);
+    urj_tap_cable_free (chain->cable);
     chain->cable = NULL;
 }
 
 void
-chain_clock (chain_t *chain, int tms, int tdi, int n)
+urj_tap_chain_clock (urj_chain_t *chain, int tms, int tdi, int n)
 {
     int i;
 
     if (!chain || !chain->cable)
         return;
 
-    cable_clock (chain->cable, tms, tdi, n);
+    urj_tap_cable_clock (chain->cable, tms, tdi, n);
 
     for (i = 0; i < n; i++)
-        tap_state_clock (chain, tms);
+        urj_tap_state_clock (chain, tms);
 }
 
 void
-chain_defer_clock (chain_t *chain, int tms, int tdi, int n)
+urj_tap_chain_defer_clock (urj_chain_t *chain, int tms, int tdi, int n)
 {
     int i;
 
     if (!chain || !chain->cable)
         return;
 
-    cable_defer_clock (chain->cable, tms, tdi, n);
+    urj_tap_cable_defer_clock (chain->cable, tms, tdi, n);
 
     for (i = 0; i < n; i++)
-        tap_state_clock (chain, tms);
+        urj_tap_state_clock (chain, tms);
 }
 
 int
-chain_set_trst (chain_t *chain, int trst)
+urj_tap_chain_set_trst (urj_chain_t *chain, int trst)
 {
     int old_val =
-        cable_set_signal (chain->cable, CS_TRST, trst ? CS_TRST : 0);
-    int old_trst = (old_val & CS_TRST) ? 1 : 0;
-    tap_state_set_trst (chain, old_trst, trst);
+        urj_tap_cable_set_signal (chain->cable, URJ_POD_CS_TRST, trst ? URJ_POD_CS_TRST : 0);
+    int old_trst = (old_val & URJ_POD_CS_TRST) ? 1 : 0;
+    urj_tap_state_set_trst (chain, old_trst, trst);
     return trst;
 }
 
 int
-chain_get_trst (chain_t *chain)
+urj_tap_chain_get_trst (urj_chain_t *chain)
 {
-    return (cable_get_signal (chain->cable, CS_TRST));
+    return (urj_tap_cable_get_signal (chain->cable, URJ_POD_CS_TRST));
 }
 
 int
-chain_set_pod_signal (chain_t *chain, int mask, int val)
+urj_tap_chain_set_pod_signal (urj_chain_t *chain, int mask, int val)
 {
-    int old_val = cable_set_signal (chain->cable, mask, val);
-    int old_trst = (old_val & CS_TRST) ? 1 : 0;
-    int new_trst = (((old_val & ~mask) | (val & mask)) & CS_TRST) ? 1 : 0;
-    tap_state_set_trst (chain, old_trst, new_trst);
+    int old_val = urj_tap_cable_set_signal (chain->cable, mask, val);
+    int old_trst = (old_val & URJ_POD_CS_TRST) ? 1 : 0;
+    int new_trst = (((old_val & ~mask) | (val & mask)) & URJ_POD_CS_TRST) ? 1 : 0;
+    urj_tap_state_set_trst (chain, old_trst, new_trst);
     return old_val;
 }
 
 int
-chain_get_pod_signal (chain_t *chain, pod_sigsel_t sig)
+urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig)
 {
-    return (cable_get_signal (chain->cable, sig));
+    return (urj_tap_cable_get_signal (chain->cable, sig));
 }
 
 void
-chain_shift_instructions_mode (chain_t *chain, int capture_output,
+urj_tap_chain_shift_instructions_mode (urj_chain_t *chain, int capture_output,
                                int capture, int chain_exit)
 {
     int i;
-    parts_t *ps;
+    urj_parts_t *ps;
 
     if (!chain || !chain->parts)
         return;
@@ -157,52 +157,52 @@ chain_shift_instructions_mode (chain_t *chain, int capture_output,
     }
 
     if (capture)
-        tap_capture_ir (chain);
+        urj_tap_capture_ir (chain);
 
     /* new implementation: split into defer + retrieve part
        shift the data register of each part in the chain one by one */
 
     for (i = 0; i < ps->len; i++)
     {
-        tap_defer_shift_register (chain,
+        urj_tap_defer_shift_register (chain,
                                   ps->parts[i]->active_instruction->value,
                                   capture_output ? ps->parts[i]->
                                   active_instruction->out : NULL,
                                   (i + 1) ==
-                                  ps->len ? chain_exit : EXITMODE_SHIFT);
+                                  ps->len ? chain_exit : URJ_CHAIN_EXITMODE_SHIFT);
     }
 
     if (capture_output)
     {
         for (i = 0; i < ps->len; i++)
         {
-            tap_shift_register_output (chain,
+            urj_tap_shift_register_output (chain,
                                        ps->parts[i]->active_instruction->
                                        value,
                                        ps->parts[i]->active_instruction->out,
                                        (i + 1) ==
-                                       ps->len ? chain_exit : EXITMODE_SHIFT);
+                                       ps->len ? chain_exit : URJ_CHAIN_EXITMODE_SHIFT);
         }
     }
     else
     {
         /* give the cable driver a chance to flush if it's considered useful */
-        cable_flush (chain->cable, TO_OUTPUT);
+        urj_tap_cable_flush (chain->cable, URJ_TAP_CABLE_TO_OUTPUT);
     }
 }
 
 void
-chain_shift_instructions (chain_t *chain)
+urj_tap_chain_shift_instructions (urj_chain_t *chain)
 {
-    chain_shift_instructions_mode (chain, 0, 1, EXITMODE_IDLE);
+    urj_tap_chain_shift_instructions_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_IDLE);
 }
 
 void
-chain_shift_data_registers_mode (chain_t *chain, int capture_output,
+urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain, int capture_output,
                                  int capture, int chain_exit)
 {
     int i;
-    parts_t *ps;
+    urj_parts_t *ps;
 
     if (!chain || !chain->parts)
         return;
@@ -226,52 +226,52 @@ chain_shift_data_registers_mode (chain_t *chain, int capture_output,
     }
 
     if (capture)
-        tap_capture_dr (chain);
+        urj_tap_capture_dr (chain);
 
     /* new implementation: split into defer + retrieve part
        shift the data register of each part in the chain one by one */
 
     for (i = 0; i < ps->len; i++)
     {
-        tap_defer_shift_register (chain,
+        urj_tap_defer_shift_register (chain,
                                   ps->parts[i]->active_instruction->
                                   data_register->in,
                                   capture_output ? ps->parts[i]->
                                   active_instruction->data_register->
                                   out : NULL,
                                   (i + 1) ==
-                                  ps->len ? chain_exit : EXITMODE_SHIFT);
+                                  ps->len ? chain_exit : URJ_CHAIN_EXITMODE_SHIFT);
     }
 
     if (capture_output)
     {
         for (i = 0; i < ps->len; i++)
         {
-            tap_shift_register_output (chain,
+            urj_tap_shift_register_output (chain,
                                        ps->parts[i]->active_instruction->
                                        data_register->in,
                                        ps->parts[i]->active_instruction->
                                        data_register->out,
                                        (i + 1) ==
-                                       ps->len ? chain_exit : EXITMODE_SHIFT);
+                                       ps->len ? chain_exit : URJ_CHAIN_EXITMODE_SHIFT);
         }
     }
     else
     {
         /* give the cable driver a chance to flush if it's considered useful */
-        cable_flush (chain->cable, TO_OUTPUT);
+        urj_tap_cable_flush (chain->cable, URJ_TAP_CABLE_TO_OUTPUT);
     }
 }
 
 void
-chain_shift_data_registers (chain_t *chain, int capture_output)
+urj_tap_chain_shift_data_registers (urj_chain_t *chain, int capture_output)
 {
-    chain_shift_data_registers_mode (chain, capture_output, 1, EXITMODE_IDLE);
+    urj_tap_chain_shift_data_registers_mode (chain, capture_output, 1, URJ_CHAIN_EXITMODE_IDLE);
 }
 
 void
-chain_flush (chain_t *chain)
+urj_tap_chain_flush (urj_chain_t *chain)
 {
     if (chain->cable != NULL)
-        cable_flush (chain->cable, COMPLETELY);
+        urj_tap_cable_flush (chain->cable, URJ_TAP_CABLE_COMPLETELY);
 }

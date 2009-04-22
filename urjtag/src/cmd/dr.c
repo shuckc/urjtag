@@ -33,15 +33,15 @@
 #include "cmd.h"
 
 static int
-cmd_dr_run (chain_t *chain, char *params[])
+cmd_dr_run (urj_chain_t *chain, char *params[])
 {
     int dir = 1;
-    tap_register_t *r;
+    urj_tap_register_t *r;
 
-    if (cmd_params (params) < 1 || cmd_params (params) > 2)
+    if (urj_cmd_params (params) < 1 || urj_cmd_params (params) > 2)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -104,7 +104,7 @@ cmd_dr_run (chain_t *chain, char *params[])
     else
         r = chain->parts->parts[chain->active_part]->active_instruction->
             data_register->in;
-    printf (_("%s\n"), register_get_string (r));
+    printf (_("%s\n"), urj_tap_register_get_string (r));
 
     return 1;
 }
@@ -122,7 +122,7 @@ cmd_dr_help (void)
             "dr", "dr");
 }
 
-cmd_t cmd_dr = {
+urj_cmd_t cmd_dr = {
     "dr",
     N_("display active data register for a part"),
     cmd_dr_help,

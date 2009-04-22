@@ -35,14 +35,14 @@
 #include "cmd.h"
 
 static int
-cmd_debug_run (chain_t *chain, char *params[])
+cmd_debug_run (urj_chain_t *chain, char *params[])
 {
     unsigned int i;
 
-    if (cmd_params (params) != 2)
+    if (urj_cmd_params (params) != 2)
         return -1;
 
-    if (cmd_get_number (params[1], &i))
+    if (urj_cmd_get_number (params[1], &i))
         return 1;
 
     debug_mode = i;
@@ -57,7 +57,7 @@ cmd_debug_help (void)
               "\n" "n =1 fileio, 2=tap commands, 4 =?\n"), "debug n");
 }
 
-cmd_t cmd_debug = {
+urj_cmd_t cmd_debug = {
     "debug",
     N_("debug jtag program"),
     cmd_debug_help,

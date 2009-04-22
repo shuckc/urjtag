@@ -23,13 +23,13 @@
  *
  */
 
-#ifndef USBCONN_H
-#define	USBCONN_H
+#ifndef URJ_USBCONN_H
+#define	URJ_USBCONN_H
 
 #include <stdint.h>
 #include <stddef.h>
 
-typedef struct usbconn_t usbconn_t;
+typedef struct urj_usbconn urj_usbconn_t;
 
 #include "cable.h"
 
@@ -40,32 +40,32 @@ typedef struct
     char *driver;
     int32_t vid;
     int32_t pid;
-} usbconn_cable_t;
+} urj_usbconn_cable_t;
 
 typedef struct
 {
     const char *type;
-    usbconn_t *(*connect) (const char **, int, usbconn_cable_t *);
-    void (*free) (usbconn_t *);
-    int (*open) (usbconn_t *);
-    int (*close) (usbconn_t *);
-    int (*read) (usbconn_t *, uint8_t *, int);
-    int (*write) (usbconn_t *, uint8_t *, int, int);
-} usbconn_driver_t;
+    urj_usbconn_t *(*connect) (const char **, int, urj_usbconn_cable_t *);
+    void (*free) (urj_usbconn_t *);
+    int (*open) (urj_usbconn_t *);
+    int (*close) (urj_usbconn_t *);
+    int (*read) (urj_usbconn_t *, uint8_t *, int);
+    int (*write) (urj_usbconn_t *, uint8_t *, int, int);
+} urj_usbconn_driver_t;
 
-struct usbconn_t
+struct urj_usbconn
 {
-    usbconn_driver_t *driver;
+    urj_usbconn_driver_t *driver;
     void *params;
-    cable_t *cable;
+    urj_cable_t *cable;
 };
 
-usbconn_t *usbconn_connect (const char **, int, usbconn_cable_t *);
-int usbconn_free (usbconn_t *conn);
-int usbconn_open (usbconn_t *conn);
-int usbconn_close (usbconn_t *conn);
-int usbconn_read (usbconn_t *conn, uint8_t *buf, int len);
-int usbconn_write (usbconn_t *conn, uint8_t *buf, int len, int recv);
-extern usbconn_driver_t *usbconn_drivers[];
+urj_usbconn_t *usbconn_connect (const char **, int, urj_usbconn_cable_t *);
+int usbconn_free (urj_usbconn_t *conn);
+int urj_tap_usbconn_open (urj_usbconn_t *conn);
+int urj_tap_usbconn_close (urj_usbconn_t *conn);
+int urj_tap_usbconn_read (urj_usbconn_t *conn, uint8_t *buf, int len);
+int urj_tap_usbconn_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv);
+extern urj_usbconn_driver_t *usbconn_drivers[];
 
-#endif /* USBCONN_H */
+#endif /* URJ_USBCONN_H */

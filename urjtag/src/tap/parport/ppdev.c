@@ -42,13 +42,13 @@
 #include "parport.h"
 #include "cable.h"
 
-parport_driver_t ppdev_parport_driver;
+urj_parport_driver_t ppdev_parport_driver;
 
 typedef struct port_node_t port_node_t;
 
 struct port_node_t
 {
-    parport_t *port;
+    urj_parport_t *port;
     port_node_t *next;
 };
 
@@ -60,12 +60,12 @@ typedef struct
     int fd;
 } ppdev_params_t;
 
-static parport_t *
+static urj_parport_t *
 ppdev_parport_alloc (const char *port)
 {
     ppdev_params_t *params = malloc (sizeof *params);
     char *portname = strdup (port);
-    parport_t *parport = malloc (sizeof *parport);
+    urj_parport_t *parport = malloc (sizeof *parport);
     port_node_t *node = malloc (sizeof *node);
 
     if (!node || !parport || !params || !portname)
@@ -93,7 +93,7 @@ ppdev_parport_alloc (const char *port)
 }
 
 static void
-ppdev_parport_free (parport_t *port)
+ppdev_parport_free (urj_parport_t *port)
 {
     port_node_t **prev;
 
@@ -113,11 +113,11 @@ ppdev_parport_free (parport_t *port)
     free (port);
 }
 
-static parport_t *
+static urj_parport_t *
 ppdev_connect (const char **par, int parnum)
 {
     port_node_t *pn;
-    parport_t *parport;
+    urj_parport_t *parport;
 
     if (parnum != 1)
     {
@@ -147,7 +147,7 @@ ppdev_connect (const char **par, int parnum)
 }
 
 static int
-ppdev_open (parport_t *parport)
+ppdev_open (urj_parport_t *parport)
 {
     ppdev_params_t *p = parport->params;
 
@@ -172,7 +172,7 @@ ppdev_open (parport_t *parport)
 }
 
 static int
-ppdev_close (parport_t *parport)
+ppdev_close (urj_parport_t *parport)
 {
     int r = 0;
     ppdev_params_t *p = parport->params;
@@ -188,7 +188,7 @@ ppdev_close (parport_t *parport)
 }
 
 static int
-ppdev_set_data (parport_t *parport, uint8_t data)
+ppdev_set_data (urj_parport_t *parport, uint8_t data)
 {
     ppdev_params_t *p = parport->params;
 
@@ -199,7 +199,7 @@ ppdev_set_data (parport_t *parport, uint8_t data)
 }
 
 static int
-ppdev_get_data (parport_t *parport)
+ppdev_get_data (urj_parport_t *parport)
 {
     unsigned char d;
     ppdev_params_t *p = parport->params;
@@ -211,7 +211,7 @@ ppdev_get_data (parport_t *parport)
 }
 
 static int
-ppdev_get_status (parport_t *parport)
+ppdev_get_status (urj_parport_t *parport)
 {
     unsigned char d;
     ppdev_params_t *p = parport->params;
@@ -223,7 +223,7 @@ ppdev_get_status (parport_t *parport)
 }
 
 static int
-ppdev_set_control (parport_t *parport, uint8_t data)
+ppdev_set_control (urj_parport_t *parport, uint8_t data)
 {
     ppdev_params_t *p = parport->params;
 
@@ -235,7 +235,7 @@ ppdev_set_control (parport_t *parport, uint8_t data)
     return 0;
 }
 
-parport_driver_t ppdev_parport_driver = {
+urj_parport_driver_t ppdev_parport_driver = {
     "ppdev",
     ppdev_connect,
     ppdev_parport_free,

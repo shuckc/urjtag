@@ -23,35 +23,35 @@
  *
  */
 
-#ifndef SIGNAL_H
-#define	SIGNAL_H
+#ifndef URJ_BSSIGNAL_H
+#define	URJ_BSSIGNAL_H
 
-typedef struct signal signal_t;
+typedef struct urj_part_signal urj_part_signal_t;
 
 #include "bsbit.h"
 
-struct signal
+struct urj_part_signal
 {
     char *name;
     char *pin;                  /* djf hack pin number from bsdl */
-    signal_t *next;
-    bsbit_t *input;
-    bsbit_t *output;
+    urj_part_signal_t *next;
+    urj_bsbit_t *input;
+    urj_bsbit_t *output;
 };
 
-typedef struct salias salias_t;
+typedef struct urj_part_salias urj_part_salias_t;
 
-struct salias
+struct urj_part_salias
 {
     char *name;
-    salias_t *next;
-    signal_t *signal;
+    urj_part_salias_t *next;
+    urj_part_signal_t *signal;
 };
 
-signal_t *signal_alloc (const char *name);
-void signal_free (signal_t *s);
+urj_part_signal_t *urj_part_signal_alloc (const char *name);
+void urj_part_signal_free (urj_part_signal_t *s);
 
-salias_t *salias_alloc (const char *name, const signal_t *signal);
-void salias_free (salias_t *salias);
+urj_part_salias_t *urj_part_salias_alloc (const char *name, const urj_part_signal_t *signal);
+void urj_part_salias_free (urj_part_salias_t *salias);
 
-#endif /* SIGNAL_H */
+#endif /* URJ_BSSIGNAL_H */

@@ -34,52 +34,52 @@
 
 #include "cmd.h"
 
-extern cmd_t cmd_quit;
-extern cmd_t cmd_help;
-extern cmd_t cmd_frequency;
-extern cmd_t cmd_cable;
-extern cmd_t cmd_reset;
-extern cmd_t cmd_discovery;
-extern cmd_t cmd_idcode;
-extern cmd_t cmd_detect;
-extern cmd_t cmd_signal;
-extern cmd_t cmd_scan;
-extern const cmd_t cmd_salias;
-extern cmd_t cmd_bit;
-extern cmd_t cmd_register;
-extern const cmd_t cmd_initbus;
-extern cmd_t cmd_print;
-extern cmd_t cmd_part;
-extern cmd_t cmd_bus;
-extern cmd_t cmd_instruction;
-extern cmd_t cmd_shift;
-extern cmd_t cmd_dr;
-extern cmd_t cmd_get;
-extern cmd_t cmd_test;
-extern cmd_t cmd_shell;
-extern cmd_t cmd_set;
-extern cmd_t cmd_endian;
-extern cmd_t cmd_peek;
-extern cmd_t cmd_poke;
-extern cmd_t cmd_pod;
-extern cmd_t cmd_readmem;
-extern cmd_t cmd_writemem;
-extern cmd_t cmd_detectflash;
-extern cmd_t cmd_flashmem;
-extern cmd_t cmd_eraseflash;
-extern cmd_t cmd_script;
-extern cmd_t cmd_include;
-extern cmd_t cmd_addpart;
-extern cmd_t cmd_usleep;
+extern urj_cmd_t cmd_quit;
+extern urj_cmd_t cmd_help;
+extern urj_cmd_t cmd_frequency;
+extern urj_cmd_t cmd_cable;
+extern urj_cmd_t cmd_reset;
+extern urj_cmd_t cmd_discovery;
+extern urj_cmd_t cmd_idcode;
+extern urj_cmd_t cmd_detect;
+extern urj_cmd_t cmd_signal;
+extern urj_cmd_t cmd_scan;
+extern const urj_cmd_t cmd_salias;
+extern urj_cmd_t cmd_bit;
+extern urj_cmd_t cmd_register;
+extern const urj_cmd_t cmd_initbus;
+extern urj_cmd_t cmd_print;
+extern urj_cmd_t cmd_part;
+extern urj_cmd_t cmd_bus;
+extern urj_cmd_t cmd_instruction;
+extern urj_cmd_t cmd_shift;
+extern urj_cmd_t cmd_dr;
+extern urj_cmd_t cmd_get;
+extern urj_cmd_t cmd_test;
+extern urj_cmd_t cmd_shell;
+extern urj_cmd_t cmd_set;
+extern urj_cmd_t cmd_endian;
+extern urj_cmd_t cmd_peek;
+extern urj_cmd_t cmd_poke;
+extern urj_cmd_t cmd_pod;
+extern urj_cmd_t cmd_readmem;
+extern urj_cmd_t cmd_writemem;
+extern urj_cmd_t cmd_detectflash;
+extern urj_cmd_t cmd_flashmem;
+extern urj_cmd_t cmd_eraseflash;
+extern urj_cmd_t cmd_script;
+extern urj_cmd_t cmd_include;
+extern urj_cmd_t cmd_addpart;
+extern urj_cmd_t cmd_usleep;
 #ifdef ENABLE_SVF
-extern cmd_t cmd_svf;
+extern urj_cmd_t cmd_svf;
 #endif
 #ifdef ENABLE_BSDL
-extern cmd_t cmd_bsdl;
+extern urj_cmd_t cmd_bsdl;
 #endif
-extern cmd_t cmd_debug;
+extern urj_cmd_t cmd_debug;
 
-const cmd_t *cmds[] = {
+const urj_cmd_t *cmds[] = {
     &cmd_quit,
     &cmd_help,
     &cmd_frequency,
@@ -151,7 +151,7 @@ cmd_find_next (const char *text, int state)
 
 #ifdef HAVE_READLINE_COMPLETION
 char **
-cmd_completion (const char *text, int start, int end)
+urj_cmd_completion (const char *text, int start, int end)
 {
     char **ret = NULL;
 
@@ -164,7 +164,7 @@ cmd_completion (const char *text, int start, int end)
 #endif
 
 int
-cmd_test_cable (chain_t *chain)
+urj_cmd_test_cable (urj_chain_t *chain)
 {
     if (chain->cable)
         return 1;
@@ -178,7 +178,7 @@ cmd_test_cable (chain_t *chain)
 /* Remainder copied from libbrux/cmd/cmd.c */
 
 int
-cmd_run (chain_t *chain, char *params[])
+urj_cmd_run (urj_chain_t *chain, char *params[])
 {
     int i, pidx;
     size_t len;
@@ -226,7 +226,7 @@ cmd_run (chain_t *chain, char *params[])
 }
 
 int
-cmd_params (char *params[])
+urj_cmd_params (char *params[])
 {
     int i = 0;
 
@@ -237,7 +237,7 @@ cmd_params (char *params[])
 }
 
 int
-cmd_get_number (char *s, unsigned int *i)
+urj_cmd_get_number (char *s, unsigned int *i)
 {
     int n;
     int r;

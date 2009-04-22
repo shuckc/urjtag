@@ -61,17 +61,17 @@
 
 typedef struct
 {
-    cx_cmd_root_t cmd_root;
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t cmd_root;
 } params_t;
 
 static int
-usbblaster_connect (char *params[], cable_t *cable)
+usbblaster_connect (char *params[], urj_cable_t *cable)
 {
     params_t *cable_params;
     int result;
 
-    /* perform generic_usbconn_connect */
-    if ((result = generic_usbconn_connect (params, cable)) != 0)
+    /* perform urj_tap_cable_generic_usbconn_connect */
+    if ((result = urj_tap_cable_generic_usbconn_connect (params, cable)) != 0)
         return result;
 
     cable_params = (params_t *) malloc (sizeof (params_t));
@@ -80,14 +80,14 @@ usbblaster_connect (char *params[], cable_t *cable)
         printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
         /* NOTE:
          * Call the underlying usbport driver (*free) routine directly
-         * not generic_usbconn_free() since it also free's cable->params
+         * not urj_tap_cable_generic_usbconn_free() since it also free's cable->params
          * (which is not established) and cable (which the caller will do)
          */
         cable->link.usb->driver->free (cable->link.usb);
         return 4;
     }
 
-    cx_cmd_init (&(cable_params->cmd_root));
+    urj_tap_cable_cx_cmd_init (&(cable_params->cmd_root));
 
     /* exchange generic cable parameters with our private parameter set */
     free (cable->params);
@@ -97,7 +97,7 @@ usbblaster_connect (char *params[], cable_t *cable)
 }
 
 static void
-usbblaster_set_frequency (cable_t *cable, uint32_t new_frequency)
+usbblaster_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
     if (new_frequency != FIXED_FREQUENCY)
         printf (_("Warning: USB-Blaster frequency is fixed to %ld Hz\n"),
@@ -107,20 +107,20 @@ usbblaster_set_frequency (cable_t *cable, uint32_t new_frequency)
 }
 
 static int
-usbblaster_init (cable_t *cable)
+usbblaster_init (urj_cable_t *cable)
 {
     int i;
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
-    cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     for (i = 0; i < 64; i++)
-        cx_cmd_push (cmd_root, 0);
+        urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
-    cx_xfer (cmd_root, NULL, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, NULL, cable, URJ_TAP_CABLE_COMPLETELY);
 
     usbblaster_set_frequency (cable, FIXED_FREQUENCY);
 
@@ -128,20 +128,20 @@ usbblaster_init (cable_t *cable)
 }
 
 static void
-usbblaster_cable_free (cable_t *cable)
+usbblaster_cable_free (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
 
-    cx_cmd_deinit (&(params->cmd_root));
+    urj_tap_cable_cx_cmd_deinit (&(params->cmd_root));
 
-    generic_usbconn_free (cable);
+    urj_tap_cable_generic_usbconn_free (cable);
 }
 
 static void
-usbblaster_clock_schedule (cable_t *cable, int tms, int tdi, int n)
+usbblaster_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int i, m;
 
     tms = tms ? (1 << TMS) : 0;
@@ -154,7 +154,7 @@ usbblaster_clock_schedule (cable_t *cable, int tms, int tdi, int n)
     {
         unsigned char tdis = tdi ? 0xFF : 0;
 
-        cx_cmd_queue (cmd_root, 0);
+        urj_tap_cable_cx_cmd_queue (cmd_root, 0);
         while (m >= 8)
         {
             int i;
@@ -162,21 +162,21 @@ usbblaster_clock_schedule (cable_t *cable, int tms, int tdi, int n)
             if (chunkbytes > 63)
                 chunkbytes = 63;
 
-            if (cx_cmd_space (cmd_root, FTDX_MAXSEND) < chunkbytes + 1)
+            if (urj_tap_cable_cx_cmd_space (cmd_root, URJ_USBCONN_FTDX_MAXSEND) < chunkbytes + 1)
             {
                 /* no space left for next clocking command
                    transfer queued commands to device and read receive data
                    to internal buffer */
-                cx_xfer (cmd_root, NULL, cable, COMPLETELY);
-                cx_cmd_queue (cmd_root, 0);
+                urj_tap_cable_cx_xfer (cmd_root, NULL, cable, URJ_TAP_CABLE_COMPLETELY);
+                urj_tap_cable_cx_cmd_queue (cmd_root, 0);
             }
 
 
-            cx_cmd_push (cmd_root, (1 << SHMODE) | (0 << READ) | chunkbytes);
+            urj_tap_cable_cx_cmd_push (cmd_root, (1 << SHMODE) | (0 << READ) | chunkbytes);
 
             for (i = 0; i < chunkbytes; i++)
             {
-                cx_cmd_push (cmd_root, tdis);
+                urj_tap_cable_cx_cmd_push (cmd_root, tdis);
             }
 
             m -= (chunkbytes << 3);
@@ -185,69 +185,69 @@ usbblaster_clock_schedule (cable_t *cable, int tms, int tdi, int n)
 
     for (i = 0; i < m; i++)
     {
-        cx_cmd_queue (cmd_root, 0);
-        cx_cmd_push (cmd_root, OTHERS | (0 << TCK) | tms | tdi);
-        cx_cmd_push (cmd_root, OTHERS | (1 << TCK) | tms | tdi);
+        urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+        urj_tap_cable_cx_cmd_push (cmd_root, OTHERS | (0 << TCK) | tms | tdi);
+        urj_tap_cable_cx_cmd_push (cmd_root, OTHERS | (1 << TCK) | tms | tdi);
     }
 }
 
 static void
-usbblaster_clock (cable_t *cable, int tms, int tdi, int n)
+usbblaster_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
 
     usbblaster_clock_schedule (cable, tms, tdi, n);
-    cx_xfer (&(params->cmd_root), NULL, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, URJ_TAP_CABLE_COMPLETELY);
 }
 
 static void
-usbblaster_get_tdo_schedule (cable_t *cable)
+usbblaster_get_tdo_schedule (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    cx_cmd_queue (cmd_root, 1);
-    cx_cmd_push (cmd_root, OTHERS);     /* TCK low */
-    cx_cmd_push (cmd_root, OTHERS | (1 << READ));       /* TCK low */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 1);
+    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS);     /* TCK low */
+    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS | (1 << READ));       /* TCK low */
 }
 
 static int
-usbblaster_get_tdo_finish (cable_t *cable)
+usbblaster_get_tdo_finish (urj_cable_t *cable)
 {
 #if 0
-    char x = (cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
+    char x = (urj_tap_cable_cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
     printf ("GetTDO %d\n", x);
     return x;
 #else
-    return (cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
+    return (urj_tap_cable_cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
 #endif
 }
 
 static int
-usbblaster_get_tdo (cable_t *cable)
+usbblaster_get_tdo (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
 
     usbblaster_get_tdo_schedule (cable);
-    cx_xfer (&(params->cmd_root), NULL, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, URJ_TAP_CABLE_COMPLETELY);
     return usbblaster_get_tdo_finish (cable);
 }
 
 static int
-usbblaster_set_signal (cable_t *cable, int mask, int val)
+usbblaster_set_signal (urj_cable_t *cable, int mask, int val)
 {
     return 1;
 }
 
 static void
-usbblaster_transfer_schedule (cable_t *cable, int len, char *in, char *out)
+usbblaster_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int in_offset = 0;
 
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, OTHERS);     /* TCK low */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS);     /* TCK low */
 
 #if 0
     {
@@ -268,13 +268,13 @@ usbblaster_transfer_schedule (cable_t *cable, int len, char *in, char *out)
 
         if (out)
         {
-            cx_cmd_queue (cmd_root, chunkbytes);
-            cx_cmd_push (cmd_root, (1 << SHMODE) | (1 << READ) | chunkbytes);
+            urj_tap_cable_cx_cmd_queue (cmd_root, chunkbytes);
+            urj_tap_cable_cx_cmd_push (cmd_root, (1 << SHMODE) | (1 << READ) | chunkbytes);
         }
         else
         {
-            cx_cmd_queue (cmd_root, 0);
-            cx_cmd_push (cmd_root, (1 << SHMODE) | (0 << READ) | chunkbytes);
+            urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+            urj_tap_cable_cx_cmd_push (cmd_root, (1 << SHMODE) | (0 << READ) | chunkbytes);
         }
 
         for (i = 0; i < chunkbytes; i++)
@@ -284,7 +284,7 @@ usbblaster_transfer_schedule (cable_t *cable, int len, char *in, char *out)
             for (j = 1; j < 256; j <<= 1)
                 if (in[in_offset++])
                     b |= j;
-            cx_cmd_push (cmd_root, b);
+            urj_tap_cable_cx_cmd_push (cmd_root, b);
         }
     }
 
@@ -292,19 +292,19 @@ usbblaster_transfer_schedule (cable_t *cable, int len, char *in, char *out)
     {
         char tdi = in[in_offset++] ? 1 : 0;
 
-        cx_cmd_queue (cmd_root, out ? 1 : 0);
-        cx_cmd_push (cmd_root, OTHERS | (tdi << TDI));  /* TCK low */
-        cx_cmd_push (cmd_root,
+        urj_tap_cable_cx_cmd_queue (cmd_root, out ? 1 : 0);
+        urj_tap_cable_cx_cmd_push (cmd_root, OTHERS | (tdi << TDI));  /* TCK low */
+        urj_tap_cable_cx_cmd_push (cmd_root,
                      OTHERS | ((out) ? (1 << READ) : 0) | (1 << TCK) | (tdi <<
                                                                         TDI));
     }
 }
 
 static int
-usbblaster_transfer_finish (cable_t *cable, int len, char *out)
+usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int out_offset = 0;
 
     if (out == NULL)
@@ -319,12 +319,12 @@ usbblaster_transfer_finish (cable_t *cable, int len, char *out)
 
         if (out)
         {
-            cx_xfer (cmd_root, NULL, cable, COMPLETELY);
+            urj_tap_cable_cx_xfer (cmd_root, NULL, cable, URJ_TAP_CABLE_COMPLETELY);
 
             for (i = 0; i < chunkbytes; i++)
             {
                 int j;
-                unsigned char b = cx_xfer_recv (cable);
+                unsigned char b = urj_tap_cable_cx_xfer_recv (cable);
 #if 0
                 printf ("read byte: %02X\n", b);
 #endif
@@ -336,7 +336,7 @@ usbblaster_transfer_finish (cable_t *cable, int len, char *out)
     }
 
     while (len > out_offset)
-        out[out_offset++] = (cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
+        out[out_offset++] = (urj_tap_cable_cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
 
 #if 0
     {
@@ -352,25 +352,25 @@ usbblaster_transfer_finish (cable_t *cable, int len, char *out)
 }
 
 static int
-usbblaster_transfer (cable_t *cable, int len, char *in, char *out)
+usbblaster_transfer (urj_cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
 
     usbblaster_transfer_schedule (cable, len, in, out);
-    cx_xfer (&(params->cmd_root), NULL, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, URJ_TAP_CABLE_COMPLETELY);
     return usbblaster_transfer_finish (cable, len, out);
 }
 
 static void
-usbblaster_flush (cable_t *cable, cable_flush_amount_t how_much)
+usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
     params_t *params = (params_t *) cable->params;
 
-    if (how_much == OPTIONALLY)
+    if (how_much == URJ_TAP_CABLE_OPTIONALLY)
         return;
 
     if (cable->todo.num_items == 0)
-        cx_xfer (&(params->cmd_root), NULL, cable, how_much);
+        urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, how_much);
 
     while (cable->todo.num_items > 0)
     {
@@ -382,18 +382,18 @@ usbblaster_flush (cable_t *cable, cable_flush_amount_t how_much)
 
             switch (cable->todo.data[i].action)
             {
-            case CABLE_CLOCK:
+            case URJ_TAP_CABLE_CLOCK:
                 usbblaster_clock_schedule (cable,
                                            cable->todo.data[i].arg.clock.tms,
                                            cable->todo.data[i].arg.clock.tdi,
                                            cable->todo.data[i].arg.clock.n);
                 break;
 
-            case CABLE_GET_TDO:
+            case URJ_TAP_CABLE_GET_TDO:
                 usbblaster_get_tdo_schedule (cable);
                 break;
 
-            case CABLE_TRANSFER:
+            case URJ_TAP_CABLE_TRANSFER:
                 usbblaster_transfer_schedule (cable,
                                               cable->todo.data[i].arg.
                                               transfer.len,
@@ -412,34 +412,34 @@ usbblaster_flush (cable_t *cable, cable_flush_amount_t how_much)
                 i = 0;
         }
 
-        cx_xfer (&(params->cmd_root), NULL, cable, how_much);
+        urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, how_much);
 
         while (j != i)
         {
             switch (cable->todo.data[j].action)
             {
-            case CABLE_GET_TDO:
+            case URJ_TAP_CABLE_GET_TDO:
                 {
                     int m;
-                    m = cable_add_queue_item (cable, &(cable->done));
-                    cable->done.data[m].action = CABLE_GET_TDO;
+                    m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    cable->done.data[m].action = URJ_TAP_CABLE_GET_TDO;
                     cable->done.data[m].arg.value.val =
                         usbblaster_get_tdo_finish (cable);
                     break;
                 }
-            case CABLE_GET_SIGNAL:
+            case URJ_TAP_CABLE_GET_SIGNAL:
                 {
-                    int m = cable_add_queue_item (cable, &(cable->done));
-                    cable->done.data[m].action = CABLE_GET_SIGNAL;
+                    int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    cable->done.data[m].action = URJ_TAP_CABLE_GET_SIGNAL;
                     cable->done.data[m].arg.value.sig =
                         cable->todo.data[j].arg.value.sig;
-                    if (cable->todo.data[j].arg.value.sig == CS_TRST)
+                    if (cable->todo.data[j].arg.value.sig == URJ_POD_CS_TRST)
                         cable->done.data[m].arg.value.val = 1;
                     else
                         cable->done.data[m].arg.value.val = -1; // not supported yet
                     break;
                 }
-            case CABLE_TRANSFER:
+            case URJ_TAP_CABLE_TRANSFER:
                 {
                     int r = usbblaster_transfer_finish (cable,
                                                         cable->todo.data[j].
@@ -449,10 +449,10 @@ usbblaster_flush (cable_t *cable, cable_flush_amount_t how_much)
                     free (cable->todo.data[j].arg.transfer.in);
                     if (cable->todo.data[j].arg.transfer.out)
                     {
-                        int m = cable_add_queue_item (cable, &(cable->done));
+                        int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
                         if (m < 0)
                             printf ("out of memory!\n");
-                        cable->done.data[m].action = CABLE_TRANSFER;
+                        cable->done.data[m].action = URJ_TAP_CABLE_TRANSFER;
                         cable->done.data[m].arg.xferred.len =
                             cable->todo.data[j].arg.transfer.len;
                         cable->done.data[m].arg.xferred.res = r;
@@ -487,75 +487,75 @@ usbblaster_help (const char *cablename)
             DEFAULT_DRIVER);
 }
 
-cable_driver_t usbblaster_cable_driver = {
+urj_cable_driver_t usbblaster_cable_driver = {
     "UsbBlaster",
     N_("Altera USB-Blaster Cable"),
     usbblaster_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     usbblaster_cable_free,
     usbblaster_init,
-    generic_usbconn_done,
+    urj_tap_cable_generic_usbconn_done,
     usbblaster_set_frequency,
     usbblaster_clock,
     usbblaster_get_tdo,
     usbblaster_transfer,
     usbblaster_set_signal,
-    generic_get_signal,
-//      generic_flush_one_by_one,
-//      generic_flush_using_transfer,
+    urj_tap_cable_generic_get_signal,
+//      urj_tap_cable_generic_flush_one_by_one,
+//      urj_tap_cable_generic_flush_using_transfer,
     usbblaster_flush,
     usbblaster_help,
 };
-usbconn_cable_t usbconn_cable_usbblaster_ftdi = {
+urj_usbconn_cable_t usbconn_cable_usbblaster_ftdi = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6001                      /* PID */
 };
-usbconn_cable_t usbconn_cable_cubic_cyclonium_ftdi = {
+urj_usbconn_cable_t usbconn_cable_cubic_cyclonium_ftdi = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6002                      /* PID */
 };
-usbconn_cable_t usbconn_cable_nios_eval_ftdi = {
+urj_usbconn_cable_t usbconn_cable_nios_eval_ftdi = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6003                      /* PID */
 };
-usbconn_cable_t usbconn_cable_usb_jtag_ftdi = {
+urj_usbconn_cable_t usbconn_cable_usb_jtag_ftdi = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x16C0,                     /* VID */
     0x06AD                      /* PID */
 };
-usbconn_cable_t usbconn_cable_usbblaster_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_usbblaster_ftd2xx = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx",                   /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6001                      /* PID */
 };
-usbconn_cable_t usbconn_cable_cubic_cyclonium_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_cubic_cyclonium_ftd2xx = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx",                   /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6002                      /* PID */
 };
-usbconn_cable_t usbconn_cable_nios_eval_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_nios_eval_ftd2xx = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6003                      /* PID */
 };
-usbconn_cable_t usbconn_cable_usb_jtag_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_usb_jtag_ftd2xx = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx",                   /* default usbconn driver */

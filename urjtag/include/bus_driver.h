@@ -32,8 +32,8 @@
  *
  */
 
-#ifndef BRUX_BUS_H
-#define	BRUX_BUS_H
+#ifndef URJ_BUS_DRIVER_BRUX_BUS_H
+#define	URJ_BUS_DRIVER_BRUX_BUS_H
 
 #include <stdint.h>
 
@@ -45,53 +45,49 @@ typedef struct
     uint32_t start;
     uint64_t length;
     unsigned int width;
-} bus_area_t;
+} urj_bus_area_t;
 
-typedef struct bus bus_t;
-typedef struct bus_driver bus_driver_t;
+typedef struct urj_bus urj_bus_t;
+typedef struct urj_bus_driver urj_bus_driver_t;
 
-struct bus_driver
+struct urj_bus_driver
 {
     const char *name;
     const char *description;
-    bus_t *(*new_bus) (chain_t *chain, const bus_driver_t *driver,
+    urj_bus_t *(*new_bus) (urj_chain_t *chain, const urj_bus_driver_t *driver,
                        char *cmd_params[]);
-    void (*free_bus) (bus_t *bus);
-    void (*printinfo) (bus_t *bus);
-    void (*prepare) (bus_t *bus);
-    int (*area) (bus_t *bus, uint32_t adr, bus_area_t *area);
-    void (*read_start) (bus_t *bus, uint32_t adr);
-    uint32_t (*read_next) (bus_t *bus, uint32_t adr);
-    uint32_t (*read_end) (bus_t *bus);
-    uint32_t (*read) (bus_t *bus, uint32_t adr);
-    void (*write) (bus_t *bus, uint32_t adr, uint32_t data);
-    int (*init) (bus_t *bus);
+    void (*free_bus) (urj_bus_t *bus);
+    void (*printinfo) (urj_bus_t *bus);
+    void (*prepare) (urj_bus_t *bus);
+    int (*area) (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area);
+    void (*read_start) (urj_bus_t *bus, uint32_t adr);
+    uint32_t (*read_next) (urj_bus_t *bus, uint32_t adr);
+    uint32_t (*read_end) (urj_bus_t *bus);
+    uint32_t (*read) (urj_bus_t *bus, uint32_t adr);
+    void (*write) (urj_bus_t *bus, uint32_t adr, uint32_t data);
+    int (*init) (urj_bus_t *bus);
 };
 
-struct bus
+struct urj_bus
 {
-    chain_t *chain;
-    part_t *part;
+    urj_chain_t *chain;
+    urj_part_t *part;
     void *params;
     int initialized;
-    const bus_driver_t *driver;
+    const urj_bus_driver_t *driver;
 };
 
-extern bus_t *bus;
+extern urj_bus_t *bus;
 
-#define CHAIN			bus->chain
-#define PART			bus->part
-#define INITIALIZED		bus->initialized
+#define	URJ_BUS_PRINTINFO(bus)	(bus)->driver->printinfo(bus)
+#define	URJ_BUS_PREPARE(bus)	(bus)->driver->prepare(bus)
+#define	URJ_BUS_AREA(bus,adr,a)	(bus)->driver->area(bus,adr,a)
+#define	URJ_BUS_READ_START(bus,adr)	(bus)->driver->read_start(bus,adr)
+#define	URJ_BUS_READ_NEXT(bus,adr)	(bus)->driver->read_next(bus,adr)
+#define	URJ_BUS_READ_END(bus)	(bus)->driver->read_end(bus)
+#define	URJ_BUS_READ(bus,adr)	(bus)->driver->read(bus,adr)
+#define	URJ_BUS_WRITE(bus,adr,data)	(bus)->driver->write(bus,adr,data)
+#define	URJ_BUS_FREE(bus)		(bus)->driver->free_bus(bus)
+#define	URJ_BUS_INIT(bus)		(bus)->driver->init(bus)
 
-#define	bus_printinfo(bus)	(bus)->driver->printinfo(bus)
-#define	bus_prepare(bus)	(bus)->driver->prepare(bus)
-#define	bus_area(bus,adr,a)	(bus)->driver->area(bus,adr,a)
-#define	bus_read_start(bus,adr)	(bus)->driver->read_start(bus,adr)
-#define	bus_read_next(bus,adr)	(bus)->driver->read_next(bus,adr)
-#define	bus_read_end(bus)	(bus)->driver->read_end(bus)
-#define	bus_read(bus,adr)	(bus)->driver->read(bus,adr)
-#define	bus_write(bus,adr,data)	(bus)->driver->write(bus,adr,data)
-#define	bus_free(bus)		(bus)->driver->free_bus(bus)
-#define	bus_init(bus)		(bus)->driver->init(bus)
-
-#endif /* BRUX_BUS_H */
+#endif /* URJ_BUS_DRIVER_BRUX_BUS_H */

@@ -34,19 +34,19 @@
 #include "cmd.h"
 
 static int
-cmd_set_run (chain_t *chain, char *params[])
+cmd_set_run (urj_chain_t *chain, char *params[])
 {
     int dir;
     unsigned int data = 0;
-    signal_t *s;
+    urj_part_signal_t *s;
 
-    if (cmd_params (params) < 4 || cmd_params (params) > 5)
+    if (urj_cmd_params (params) < 4 || urj_cmd_params (params) > 5)
         return -1;
 
     if (strcasecmp (params[1], "signal") != 0)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -70,19 +70,19 @@ cmd_set_run (chain_t *chain, char *params[])
 
     if (dir)
     {
-        if (cmd_get_number (params[4], &data))
+        if (urj_cmd_get_number (params[4], &data))
             return -1;
         if (data > 1)
             return -1;
     }
 
-    s = part_find_signal (chain->parts->parts[chain->active_part], params[2]);
+    s = urj_part_find_signal (chain->parts->parts[chain->active_part], params[2]);
     if (!s)
     {
         printf (_("signal '%s' not found\n"), params[2]);
         return 1;
     }
-    part_set_signal (chain->parts->parts[chain->active_part], s, dir, data);
+    urj_part_set_signal (chain->parts->parts[chain->active_part], s, dir, data);
 
     return 1;
 }
@@ -99,7 +99,7 @@ cmd_set_help (void)
               "                is 'out'\n"), "set signal");
 }
 
-cmd_t cmd_set = {
+urj_cmd_t cmd_set = {
     "set",
     N_("set external signal value"),
     cmd_set_help,

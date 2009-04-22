@@ -36,11 +36,11 @@
 
 typedef struct
 {
-    signal_t *a[32];
-    signal_t *d[16];
-    signal_t *ncs;
-    signal_t *nwe;
-    signal_t *noe;
+    urj_part_signal_t *a[32];
+    urj_part_signal_t *d[16];
+    urj_part_signal_t *ncs;
+    urj_part_signal_t *nwe;
+    urj_part_signal_t *noe;
 } bus_params_t;
 
 #define	A	((bus_params_t *) bus->params)->a
@@ -54,17 +54,17 @@ typedef struct
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-ppc405ep_bus_new (chain_t *chain, const bus_driver_t *driver,
+static urj_bus_t *
+ppc405ep_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                   char *cmd_params[])
 {
-    bus_t *bus;
-    part_t *part;
+    urj_bus_t *bus;
+    urj_part_t *part;
     char buff[10];
     int i;
     int failed = 0;
 
-    bus = calloc (1, sizeof (bus_t));
+    bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
         return NULL;
 
@@ -76,26 +76,26 @@ ppc405ep_bus_new (chain_t *chain, const bus_driver_t *driver,
         return NULL;
     }
 
-    CHAIN = chain;
-    PART = part = chain->parts->parts[chain->active_part];
+    bus->chain = chain;
+    bus->part = part = chain->parts->parts[chain->active_part];
 
     for (i = 6; i < 32; i++)
     {
         sprintf (buff, "PerAddr%d", i);
-        failed |= generic_bus_attach_sig (part, &(A[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(A[i]), buff);
     }
 
     for (i = 0; i < 16; i++)
     {
         sprintf (buff, "PerData%d", i);
-        failed |= generic_bus_attach_sig (part, &(D[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(D[i]), buff);
     }
 
-    failed |= generic_bus_attach_sig (part, &(nCS), "PerCS0");
+    failed |= urj_bus_generic_attach_sig (part, &(nCS), "PerCS0");
 
-    failed |= generic_bus_attach_sig (part, &(nWE), "PerWBE1");
+    failed |= urj_bus_generic_attach_sig (part, &(nWE), "PerWBE1");
 
-    failed |= generic_bus_attach_sig (part, &(nOE), "PerOE");
+    failed |= urj_bus_generic_attach_sig (part, &(nOE), "PerOE");
 
     if (failed)
     {
@@ -112,12 +112,12 @@ ppc405ep_bus_new (chain_t *chain, const bus_driver_t *driver,
  *
  */
 static void
-ppc405ep_bus_printinfo (bus_t *bus)
+ppc405ep_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
     printf (_
             ("IBM PowerPC 405EP compatible bus driver via BSR (JTAG part No. %d)\n"),
@@ -129,50 +129,50 @@ ppc405ep_bus_printinfo (bus_t *bus)
  *
  */
 static int
-ppc405ep_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
+ppc405ep_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
     area->description = NULL;
     area->start = UINT32_C (0x00000000);
     area->length = UINT64_C (0x100000000);
     area->width = 16;
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 static void
-setup_address (bus_t *bus, uint32_t a)
+setup_address (urj_bus_t *bus, uint32_t a)
 {
     int i;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     for (i = 6; i < 32; i++)
-        part_set_signal (p, A[i], 1, (a >> (31 - i)) & 1);
+        urj_part_set_signal (p, A[i], 1, (a >> (31 - i)) & 1);
 }
 
 static void
-set_data_in (bus_t *bus)
+set_data_in (urj_bus_t *bus)
 {
     int i;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     ppc405ep_bus_area (bus, 0, &area);
 
     for (i = 0; i < area.width; i++)
-        part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal (p, D[i], 0, 0);
 }
 
 static void
-setup_data (bus_t *bus, uint32_t d)
+setup_data (urj_bus_t *bus, uint32_t d)
 {
     int i;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     ppc405ep_bus_area (bus, 0, &area);
 
     for (i = 0; i < area.width; i++)
-        part_set_signal (p, D[15 - i], 1, (d >> i) & 1);
+        urj_part_set_signal (p, D[15 - i], 1, (d >> i) & 1);
 }
 
 /**
@@ -180,19 +180,19 @@ setup_data (bus_t *bus, uint32_t d)
  *
  */
 static void
-ppc405ep_bus_read_start (bus_t *bus, uint32_t adr)
+ppc405ep_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
 
-    part_set_signal (p, nCS, 1, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 0);
+    urj_part_set_signal (p, nCS, 1, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 0);
 
     setup_address (bus, adr);
     set_data_in (bus);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
 /**
@@ -200,21 +200,21 @@ ppc405ep_bus_read_start (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-ppc405ep_bus_read_next (bus_t *bus, uint32_t adr)
+ppc405ep_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     int i;
     uint32_t d = 0;
-    bus_area_t area;
+    urj_bus_area_t area;
 
     ppc405ep_bus_area (bus, adr, &area);
 
     setup_address (bus, adr);
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < area.width; i++)
-        d |= (uint32_t) (part_get_signal (p, D[15 - i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, D[15 - i]) << i);
 
     return d;
 }
@@ -224,22 +224,22 @@ ppc405ep_bus_read_next (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-ppc405ep_bus_read_end (bus_t *bus)
+ppc405ep_bus_read_end (urj_bus_t *bus)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     int i;
     uint32_t d = 0;
-    bus_area_t area;
+    urj_bus_area_t area;
 
     ppc405ep_bus_area (bus, 0, &area);
 
-    part_set_signal (p, nCS, 1, 1);
-    part_set_signal (p, nOE, 1, 1);
-    chain_shift_data_registers (chain, 1);
+    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < area.width; i++)
-        d |= (uint32_t) (part_get_signal (p, D[15 - i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, D[15 - i]) << i);
 
     return d;
 }
@@ -249,39 +249,39 @@ ppc405ep_bus_read_end (bus_t *bus)
  *
  */
 static void
-ppc405ep_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
+ppc405ep_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
 
-    part_set_signal (p, nCS, 1, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nCS, 1, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
-    part_set_signal (p, nWE, 1, 0);
-    chain_shift_data_registers (chain, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nCS, 1, 1);
-    chain_shift_data_registers (chain, 0);
+    urj_part_set_signal (p, nWE, 1, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nCS, 1, 1);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const bus_driver_t ppc405ep_bus = {
+const urj_bus_driver_t ppc405ep_bus = {
     "ppc405ep",
     N_("IBM PowerPC 405EP compatible bus driver via BSR"),
     ppc405ep_bus_new,
-    generic_bus_free,
+    urj_bus_generic_free,
     ppc405ep_bus_printinfo,
-    generic_bus_prepare_extest,
+    urj_bus_generic_prepare_extest,
     ppc405ep_bus_area,
     ppc405ep_bus_read_start,
     ppc405ep_bus_read_next,
     ppc405ep_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     ppc405ep_bus_write,
-    generic_bus_no_init
+    urj_bus_generic_no_init
 };

@@ -40,17 +40,17 @@
 /* private parameters of this cable driver */
 typedef struct
 {
-    jim_state_t *s;
+    urj_jim_state_t *s;
 }
 jim_cable_params_t;
 
 int
-jim_cable_connect (char *params[], cable_t *cable)
+urj_tap_cable_jim_cable_connect (char *params[], urj_cable_t *cable)
 {
     jim_cable_params_t *cable_params;
-    jim_state_t *s;
+    urj_jim_state_t *s;
 
-    if (cmd_params (params) < 1)
+    if (urj_cmd_params (params) < 1)
     {
         printf (_("not enough arguments!\n"));
         return 1;
@@ -58,7 +58,7 @@ jim_cable_connect (char *params[], cable_t *cable)
 
     printf (_("JTAG target simulator JIM - work in progress!\n"));
 
-    s = jim_init ();
+    s = urj_jim_init ();
     if (!s)
     {
         printf (_("Initialization failed.\n"));
@@ -69,7 +69,7 @@ jim_cable_connect (char *params[], cable_t *cable)
     if (!cable_params)
     {
         printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
-        jim_free (s);
+        urj_jim_free (s);
         return 4;
     }
 
@@ -81,70 +81,70 @@ jim_cable_connect (char *params[], cable_t *cable)
 }
 
 void
-jim_cable_disconnect (cable_t *cable)
+urj_tap_cable_jim_cable_disconnect (urj_cable_t *cable)
 {
-    cable_done (cable);
-    chain_disconnect (cable->chain);
+    urj_tap_cable_done (cable);
+    urj_tap_chain_disconnect (cable->chain);
 }
 
 void
-jim_cable_free (cable_t *cable)
+urj_tap_cable_jim_cable_free (urj_cable_t *cable)
 {
     if (cable->params != NULL)
     {
-        jim_free (((jim_cable_params_t *) (cable->params))->s);
+        urj_jim_free (((jim_cable_params_t *) (cable->params))->s);
         free (cable->params);
     }
     free (cable);
 }
 
 void
-jim_cable_done (cable_t *cable)
+urj_tap_cable_jim_cable_done (urj_cable_t *cable)
 {
 }
 
 static int
-jim_cable_init (cable_t *cable)
+jim_cable_init (urj_cable_t *cable)
 {
     return 0;
 }
 
 static void
-jim_cable_clock (cable_t *cable, int tms, int tdi, int n)
+jim_cable_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
 
     for (i = 0; i < n; i++)
     {
-        jim_tck_rise (jcp->s, tms, tdi);
-        jim_tck_fall (jcp->s);
+        urj_jim_tck_rise (jcp->s, tms, tdi);
+        urj_jim_tck_fall (jcp->s);
     }
 }
 
 static int
-jim_cable_get_tdo (cable_t *cable)
+jim_cable_get_tdo (urj_cable_t *cable)
 {
     jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
 
-    return jim_get_tdo (jcp->s);
+    return urj_jim_get_tdo (jcp->s);
 }
 
 static int
-jim_cable_get_trst (cable_t *cable)
+jim_cable_get_trst (urj_cable_t *cable)
 {
     jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
 
-    return jim_get_trst (jcp->s);
+    return urj_jim_get_trst (jcp->s);
 }
 
 static int
-jim_cable_set_trst (cable_t *cable, int trst)
+jim_cable_set_trst (urj_cable_t *cable, int trst)
 {
     jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
 
-    jim_set_trst (jcp->s, trst);
-    return jim_get_trst (jcp->s);
+    urj_jim_set_trst (jcp->s, trst);
+    return urj_jim_get_trst (jcp->s);
 }
 
 static void
@@ -153,20 +153,20 @@ jim_cable_help (const char *cablename)
     printf (_("Usage: cable %s\n"), cablename);
 }
 
-cable_driver_t jim_cable_driver = {
+urj_cable_driver_t jim_cable_driver = {
     "JIM",
     N_("JTAG target simulator JIM"),
-    jim_cable_connect,
-    jim_cable_disconnect,
-    jim_cable_free,
+    urj_tap_cable_jim_cable_connect,
+    urj_tap_cable_jim_cable_disconnect,
+    urj_tap_cable_jim_cable_free,
     jim_cable_init,
-    jim_cable_done,
-    generic_set_frequency,
+    urj_tap_cable_jim_cable_done,
+    urj_tap_cable_generic_set_frequency,
     jim_cable_clock,
     jim_cable_get_tdo,
-    generic_transfer,
+    urj_tap_cable_generic_transfer,
     jim_cable_set_trst,
     jim_cable_get_trst,
-    generic_flush_using_transfer,
+    urj_tap_cable_generic_flush_using_transfer,
     jim_cable_help
 };

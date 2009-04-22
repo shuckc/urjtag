@@ -61,11 +61,11 @@ typedef struct
     uint8_t *recv_buf;
 } ftdi_param_t;
 
-usbconn_driver_t usbconn_ftdi_driver;
-usbconn_driver_t usbconn_ftdi_mpsse_driver;
+urj_usbconn_driver_t usbconn_ftdi_driver;
+urj_usbconn_driver_t usbconn_ftdi_mpsse_driver;
 
-static int usbconn_ftdi_common_open (usbconn_t *conn, int printerr);
-static void usbconn_ftdi_free (usbconn_t *conn);
+static int usbconn_ftdi_common_open (urj_usbconn_t *conn, int printerr);
+static void usbconn_ftdi_free (urj_usbconn_t *conn);
 
 /* ---------------------------------------------------------------------- */
 
@@ -135,7 +135,7 @@ usbconn_ftdi_flush (ftdi_param_t *p)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_read (usbconn_t *conn, uint8_t *buf, int len)
+usbconn_ftdi_read (urj_usbconn_t *conn, uint8_t *buf, int len)
 {
     ftdi_param_t *p = conn->params;
     int cpy_len;
@@ -181,7 +181,7 @@ usbconn_ftdi_read (usbconn_t *conn, uint8_t *buf, int len)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_write (usbconn_t *conn, uint8_t *buf, int len, int recv)
+usbconn_ftdi_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
 {
     ftdi_param_t *p = conn->params;
     int xferred = 0;
@@ -195,8 +195,8 @@ usbconn_ftdi_write (usbconn_t *conn, uint8_t *buf, int len, int recv)
     /* Case A: max number of scheduled receive bytes will be exceeded
        with this write
        Case B: max number of scheduled send bytes has been reached */
-    if ((p->to_recv + recv > FTDI_MAXRECV)
-        || ((p->send_buffered > FTDX_MAXSEND) && (p->to_recv == 0)))
+    if ((p->to_recv + recv > URJ_USBCONN_FTDI_MAXRECV)
+        || ((p->send_buffered > URJ_USBCONN_FTDX_MAXSEND) && (p->to_recv == 0)))
         xferred = usbconn_ftdi_flush (p);
 
     if (xferred < 0)
@@ -234,20 +234,20 @@ usbconn_ftdi_write (usbconn_t *conn, uint8_t *buf, int len, int recv)
 
 /* ---------------------------------------------------------------------- */
 
-static usbconn_t *
+static urj_usbconn_t *
 usbconn_ftdi_connect (const char **param, int paramc,
-                      usbconn_cable_t *template)
+                      urj_usbconn_cable_t *template)
 {
-    usbconn_t *c = malloc (sizeof (usbconn_t));
+    urj_usbconn_t *c = malloc (sizeof (urj_usbconn_t));
     ftdi_param_t *p = malloc (sizeof (ftdi_param_t));
     struct ftdi_context *fc = malloc (sizeof (struct ftdi_context));
 
     if (p)
     {
-        p->send_buf_len = FTDX_MAXSEND;
+        p->send_buf_len = URJ_USBCONN_FTDX_MAXSEND;
         p->send_buffered = 0;
         p->send_buf = (uint8_t *) malloc (p->send_buf_len);
-        p->recv_buf_len = FTDI_MAXRECV;
+        p->recv_buf_len = URJ_USBCONN_FTDI_MAXRECV;
         p->to_recv = 0;
         p->recv_write_idx = 0;
         p->recv_read_idx = 0;
@@ -296,11 +296,11 @@ usbconn_ftdi_connect (const char **param, int paramc,
 }
 
 
-static usbconn_t *
+static urj_usbconn_t *
 usbconn_ftdi_mpsse_connect (const char **param, int paramc,
-                            usbconn_cable_t *template)
+                            urj_usbconn_cable_t *template)
 {
-    usbconn_t *conn = usbconn_ftdi_connect (param, paramc, template);
+    urj_usbconn_t *conn = usbconn_ftdi_connect (param, paramc, template);
 
     if (conn)
         conn->driver = &usbconn_ftdi_mpsse_driver;
@@ -312,7 +312,7 @@ usbconn_ftdi_mpsse_connect (const char **param, int paramc,
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_common_open (usbconn_t *conn, int printerr)
+usbconn_ftdi_common_open (urj_usbconn_t *conn, int printerr)
 {
     ftdi_param_t *p = conn->params;
     struct ftdi_context *fc = p->fc;
@@ -412,7 +412,7 @@ seq_reset (struct ftdi_context *fc)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_open (usbconn_t *conn)
+usbconn_ftdi_open (urj_usbconn_t *conn)
 {
     ftdi_param_t *p = conn->params;
     struct ftdi_context *fc = p->fc;
@@ -461,7 +461,7 @@ usbconn_ftdi_open (usbconn_t *conn)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_mpsse_open (usbconn_t *conn)
+usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
 {
     ftdi_param_t *p = conn->params;
     struct ftdi_context *fc = p->fc;
@@ -479,10 +479,10 @@ usbconn_ftdi_mpsse_open (usbconn_t *conn)
         r = seq_purge (fc, 1, 0);
 
     if (r >= 0)
-        if ((r = ftdi_write_data_set_chunksize (fc, FTDX_MAXSEND_MPSSE)) < 0)
+        if ((r = ftdi_write_data_set_chunksize (fc, URJ_USBCONN_FTDX_MAXSEND_MPSSE)) < 0)
             puts (ftdi_get_error_string (fc));
     if (r >= 0)
-        if ((r = ftdi_read_data_set_chunksize (fc, FTDX_MAXSEND_MPSSE)) < 0)
+        if ((r = ftdi_read_data_set_chunksize (fc, URJ_USBCONN_FTDX_MAXSEND_MPSSE)) < 0)
             puts (ftdi_get_error_string (fc));
 
 #ifdef LIBFTDI_UNIMPLEMENTED
@@ -550,7 +550,7 @@ usbconn_ftdi_mpsse_open (usbconn_t *conn)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_close (usbconn_t *conn)
+usbconn_ftdi_close (urj_usbconn_t *conn)
 {
     ftdi_param_t *p = conn->params;
 
@@ -567,7 +567,7 @@ usbconn_ftdi_close (usbconn_t *conn)
 /* ---------------------------------------------------------------------- */
 
 static void
-usbconn_ftdi_free (usbconn_t *conn)
+usbconn_ftdi_free (urj_usbconn_t *conn)
 {
     ftdi_param_t *p = conn->params;
 
@@ -586,7 +586,7 @@ usbconn_ftdi_free (usbconn_t *conn)
 
 /* ---------------------------------------------------------------------- */
 
-usbconn_driver_t usbconn_ftdi_driver = {
+urj_usbconn_driver_t usbconn_ftdi_driver = {
     "ftdi",
     usbconn_ftdi_connect,
     usbconn_ftdi_free,
@@ -596,7 +596,7 @@ usbconn_driver_t usbconn_ftdi_driver = {
     usbconn_ftdi_write
 };
 
-usbconn_driver_t usbconn_ftdi_mpsse_driver = {
+urj_usbconn_driver_t usbconn_ftdi_mpsse_driver = {
     "ftdi-mpsse",
     usbconn_ftdi_mpsse_connect,
     usbconn_ftdi_free,

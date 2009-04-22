@@ -24,8 +24,8 @@
  *
  */
 
-#ifndef _USBCONN_LIBUSB_H
-#define _USBCONN_LIBUSB_H 1
+#ifndef URJ_USBCONN_LIBUSB_H
+#define URJ_USBCONN_LIBUSB_H 1
 
 #include <usb.h>
 
@@ -34,6 +34,6 @@ typedef struct
     struct usb_device *dev;
     struct usb_dev_handle *handle;
     void *data;
-} libusb_param_t;
+} urj_usbconn_libusb_param_t;
 
 #endif

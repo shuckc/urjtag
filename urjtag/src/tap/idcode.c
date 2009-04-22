@@ -33,24 +33,24 @@
 #include "jtag.h"
 
 void
-urj_tap_idcode (chain_t *chain, unsigned int bytes)
+urj_tap_urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
 {
     int i;
     int hit = 0;
-    tap_register_t *rz;
-    tap_register_t *rout;
-    tap_register_t *rnull;
+    urj_tap_register_t *rz;
+    urj_tap_register_t *rout;
+    urj_tap_register_t *rnull;
 
-    chain_set_trst (chain, 0);
-    chain_set_trst (chain, 1);
+    urj_tap_chain_set_trst (chain, 0);
+    urj_tap_chain_set_trst (chain, 1);
 
-    tap_reset (chain);
-    tap_capture_dr (chain);
+    urj_tap_reset (chain);
+    urj_tap_capture_dr (chain);
 
     /* read in chunks of 8 bytes */
-    rz = register_fill (register_alloc (8), 0);
-    rnull = register_fill (register_alloc (8), 0);
-    rout = register_alloc (8);
+    rz = urj_tap_register_fill (urj_tap_register_alloc (8), 0);
+    rnull = urj_tap_register_fill (urj_tap_register_alloc (8), 0);
+    rout = urj_tap_register_alloc (8);
 
     if (!rz || !rout || !rnull)
     {
@@ -59,12 +59,12 @@ urj_tap_idcode (chain_t *chain, unsigned int bytes)
     printf (_("Read"));
     for (i = 0; i < ((bytes) ? bytes : 1000); i++)
     {
-        tap_shift_register (chain, rz, rout, 0);
-        printf (_(" %s"), register_get_string (rout));
+        urj_tap_shift_register (chain, rz, rout, 0);
+        printf (_(" %s"), urj_tap_register_get_string (rout));
         if (!bytes)
         {
             /* Abort Reading when a null IDCODE has been read */
-            if (!register_compare (rout, rnull))
+            if (!urj_tap_register_compare (rout, rnull))
                 hit++;
             else
                 hit = 0;
@@ -72,8 +72,8 @@ urj_tap_idcode (chain_t *chain, unsigned int bytes)
                 break;
         }
     }
-    register_free (rz);
-    register_free (rnull);
-    register_free (rout);
+    urj_tap_register_free (rz);
+    urj_tap_register_free (rnull);
+    urj_tap_register_free (rout);
     printf (_("\n"));
 }

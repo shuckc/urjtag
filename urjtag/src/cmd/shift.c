@@ -33,22 +33,22 @@
 #include "cmd.h"
 
 static int
-cmd_shift_run (chain_t *chain, char *params[])
+cmd_shift_run (urj_chain_t *chain, char *params[])
 {
-    if (cmd_params (params) != 2)
+    if (urj_cmd_params (params) != 2)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (strcasecmp (params[1], "ir") == 0)
     {
-        chain_shift_instructions (chain);
+        urj_tap_chain_shift_instructions (chain);
         return 1;
     }
     if (strcasecmp (params[1], "dr") == 0)
     {
-        chain_shift_data_registers (chain, 1);
+        urj_tap_chain_shift_data_registers (chain, 1);
         return 1;
     }
 
@@ -64,7 +64,7 @@ cmd_shift_help (void)
             "shift ir", "shift dr");
 }
 
-cmd_t cmd_shift = {
+urj_cmd_t cmd_shift = {
     "shift",
     N_("shift data/instruction registers through JTAG chain"),
     cmd_shift_help,

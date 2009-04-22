@@ -22,21 +22,21 @@
  *
  */
 
-#ifndef TAP_H
-#define	TAP_H
+#ifndef URJ_TAP_H
+#define	URJ_TAP_H
 
 #include "register.h"
 #include "chain.h"
 
-void tap_reset (chain_t *chain);
-void tap_reset_bypass (chain_t *chain);
-void tap_capture_dr (chain_t *chain);
-void tap_capture_ir (chain_t *chain);
-void tap_defer_shift_register (chain_t *chain, const tap_register_t *in,
-                               tap_register_t *out, int tap_exit);
-void tap_shift_register_output (chain_t *chain, const tap_register_t *in,
-                                tap_register_t *out, int tap_exit);
-void tap_shift_register (chain_t *chain, const tap_register_t *in,
-                         tap_register_t *out, int tap_exit);
+void urj_tap_reset (urj_chain_t *chain);
+void urj_tap_reset_bypass (urj_chain_t *chain);
+void urj_tap_capture_dr (urj_chain_t *chain);
+void urj_tap_capture_ir (urj_chain_t *chain);
+void urj_tap_defer_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
+                               urj_tap_register_t *out, int tap_exit);
+void urj_tap_shift_register_output (urj_chain_t *chain, const urj_tap_register_t *in,
+                                urj_tap_register_t *out, int tap_exit);
+void urj_tap_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
+                         urj_tap_register_t *out, int tap_exit);
 
-#endif /* TAP_H */
+#endif /* URJ_TAP_H */

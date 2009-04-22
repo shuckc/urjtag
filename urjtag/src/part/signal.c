@@ -27,10 +27,10 @@
 
 #include "bssignal.h"
 
-signal_t *
-signal_alloc (const char *name)
+urj_part_signal_t *
+urj_part_signal_alloc (const char *name)
 {
-    signal_t *s = malloc (sizeof *s);
+    urj_part_signal_t *s = malloc (sizeof *s);
     if (!s)
         return NULL;
 
@@ -49,7 +49,7 @@ signal_alloc (const char *name)
 }
 
 void
-signal_free (signal_t *s)
+urj_part_signal_free (urj_part_signal_t *s)
 {
     if (!s)
         return;
@@ -57,10 +57,10 @@ signal_free (signal_t *s)
     free (s);
 }
 
-salias_t *
-salias_alloc (const char *name, const signal_t *signal)
+urj_part_salias_t *
+urj_part_salias_alloc (const char *name, const urj_part_signal_t *signal)
 {
-    salias_t *sa = malloc (sizeof *sa);
+    urj_part_salias_t *sa = malloc (sizeof *sa);
     if (sa == NULL)
         return NULL;
 
@@ -71,13 +71,13 @@ salias_alloc (const char *name, const signal_t *signal)
         return NULL;
     }
     sa->next = NULL;
-    sa->signal = (signal_t *) signal;
+    sa->signal = (urj_part_signal_t *) signal;
 
     return sa;
 }
 
 void
-salias_free (salias_t *salias)
+urj_part_salias_free (urj_part_salias_t *salias)
 {
     if (salias == NULL)
         return;

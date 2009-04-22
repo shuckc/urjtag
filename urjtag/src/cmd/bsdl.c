@@ -33,12 +33,12 @@
 #include "cmd.h"
 
 static int
-cmd_bsdl_run (chain_t *chain, char *params[])
+cmd_bsdl_run (urj_chain_t *chain, char *params[])
 {
     int num_params, result = -1;
-    bsdl_globs_t *globs = &(chain->bsdl);
+    urj_bsdl_globs_t *globs = &(chain->bsdl);
 
-    num_params = cmd_params (params);
+    num_params = urj_cmd_params (params);
     if (num_params >= 2)
     {
         if (strcmp (params[1], "test") == 0)
@@ -50,12 +50,12 @@ cmd_bsdl_run (chain_t *chain, char *params[])
             if (num_params == 3)
             {
                 result =
-                    bsdl_read_file (chain, params[2], BSDL_MODE_TEST,
+                    urj_bsdl_read_file (chain, params[2], URJ_BSDL_MODE_TEST,
                                     NULL) >= 0 ? 1 : -1;
             }
             else if (num_params == 2)
             {
-                bsdl_scan_files (chain, NULL, BSDL_MODE_TEST);
+                urj_bsdl_scan_files (chain, NULL, URJ_BSDL_MODE_TEST);
                 result = 1;
             }
             globs->debug = debug_save;
@@ -66,12 +66,12 @@ cmd_bsdl_run (chain_t *chain, char *params[])
             if (num_params == 3)
             {
                 result =
-                    bsdl_read_file (chain, params[2], BSDL_MODE_DUMP,
+                    urj_bsdl_read_file (chain, params[2], URJ_BSDL_MODE_DUMP,
                                     NULL) >= 0 ? 1 : -1;
             }
             else if (num_params == 2)
             {
-                bsdl_scan_files (chain, NULL, BSDL_MODE_DUMP);
+                urj_bsdl_scan_files (chain, NULL, URJ_BSDL_MODE_DUMP);
                 result = 1;
             }
         }
@@ -80,7 +80,7 @@ cmd_bsdl_run (chain_t *chain, char *params[])
         {
             if (strcmp (params[1], "path") == 0)
             {
-                bsdl_set_path (chain, params[2]);
+                urj_bsdl_set_path (chain, params[2]);
                 result = 1;
             }
 
@@ -118,7 +118,7 @@ cmd_bsdl_help (void)
             "bsdl", "bsdl", "bsdl", "bsdl");
 }
 
-cmd_t cmd_bsdl = {
+urj_cmd_t cmd_bsdl = {
     "bsdl",
     N_("manage BSDL files"),
     cmd_bsdl_help,

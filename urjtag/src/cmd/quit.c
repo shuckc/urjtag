@@ -29,7 +29,7 @@
 #include <cmd.h>
 
 static int
-cmd_quit_run (chain_t *chain, char *params[])
+cmd_quit_run (urj_chain_t *chain, char *params[])
 {
     if (params[1])
         return -1;
@@ -43,7 +43,7 @@ cmd_quit_help (void)
     printf (_("Usage: %s\n" "Exit from %s.\n"), "quit", PACKAGE);
 }
 
-cmd_t cmd_quit = {
+urj_cmd_t cmd_quit = {
     "quit",
     N_("exit and terminate this session"),
     cmd_quit_help,

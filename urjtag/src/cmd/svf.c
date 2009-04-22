@@ -33,7 +33,7 @@
 #include <cmd.h>
 
 static int
-cmd_svf_run (chain_t *chain, char *params[])
+cmd_svf_run (urj_chain_t *chain, char *params[])
 {
     FILE *SVF_FILE;
     int num_params, i, result = -1;
@@ -41,7 +41,7 @@ cmd_svf_run (chain_t *chain, char *params[])
     int print_progress = 0;
     uint32_t ref_freq = 0;
 
-    num_params = cmd_params (params);
+    num_params = urj_cmd_params (params);
     if (num_params > 1)
     {
         for (i = 2; i < num_params; i++)
@@ -58,7 +58,7 @@ cmd_svf_run (chain_t *chain, char *params[])
 
         if ((SVF_FILE = fopen (params[1], "r")) != NULL)
         {
-            svf_run (chain, SVF_FILE, stop, print_progress, ref_freq);
+            urj_svf_run (chain, SVF_FILE, stop, print_progress, ref_freq);
             result = 1;
 
             fclose (SVF_FILE);
@@ -86,7 +86,7 @@ cmd_svf_help (void)
               "\n" "FILE file containing SVF commands\n"), "svf");
 }
 
-cmd_t cmd_svf = {
+urj_cmd_t cmd_svf = {
     "svf",
     N_("execute svf commands from file"),
     cmd_svf_help,

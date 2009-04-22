@@ -71,7 +71,7 @@ typedef struct cfi_query_identification_string
     void *pri_vendor_tbl;
     uint16_t alt_id_code;
     void *alt_vendor_tbl;
-} cfi_query_identification_string_t;
+} urj_flash_cfi_query_identification_string_t;
 #endif /* __ASSEMBLY__ */
 
 /* Algorithm command set & control interface ID codes - see Table 1 in [2] */
@@ -115,7 +115,7 @@ typedef struct cfi_query_system_interface_information
     uint32_t max_buffer_write_timeout;  /* in us, 0 - not supported */
     uint32_t max_block_erase_timeout;   /* in ms, 0 - not supported */
     uint32_t max_chip_erase_timeout;    /* in ms, 0 - not supported */
-} cfi_query_system_interface_information_t;
+} urj_flash_cfi_query_system_interface_information_t;
 #endif /* __ASSEMBLY__ */
 
 /* Device geometry definition - see 4.3.4 in [1] */
@@ -127,7 +127,7 @@ typedef struct cfi_query_system_interface_information
 #define	ERASE_BLOCK_REGION_OFFSET	0x2D    /* Erase Block Region Information */
 
 #ifndef __ASSEMBLY__
-typedef struct cfi_erase_block_region cfi_erase_block_region_t;
+typedef struct cfi_erase_block_region urj_flash_cfi_erase_block_region_t;
 
 typedef struct cfi_device_geometry
 {
@@ -135,8 +135,8 @@ typedef struct cfi_device_geometry
     uint16_t device_interface;  /* see Table 2 in [2] */
     uint32_t max_bytes_write;   /* in B */
     uint8_t number_of_erase_regions;
-    cfi_erase_block_region_t *erase_block_regions;
-} cfi_device_geometry_t;
+    urj_flash_cfi_erase_block_region_t *erase_block_regions;
+} urj_flash_cfi_device_geometry_t;
 
 struct cfi_erase_block_region
 {
@@ -158,10 +158,10 @@ struct cfi_erase_block_region
 #ifndef __ASSEMBLY__
 typedef struct cfi_query_structure
 {
-    cfi_query_identification_string_t identification_string;
-    cfi_query_system_interface_information_t system_interface_info;
-    cfi_device_geometry_t device_geometry;
-} cfi_query_structure_t;
+    urj_flash_cfi_query_identification_string_t identification_string;
+    urj_flash_cfi_query_system_interface_information_t system_interface_info;
+    urj_flash_cfi_device_geometry_t device_geometry;
+} urj_flash_cfi_query_structure_t;
 #endif /* __ASSEMBLY__ */
 
 /* AMD primary vendor-specific extended query structure - see [3] and [4] */
@@ -213,7 +213,7 @@ typedef struct amd_pri_extened_query_structure
     uint8_t program_suspend_timeout_max;        /* in us */
     uint8_t bank_organization;  /* in us */
     uint8_t bank_region_info[0];
-} amd_pri_extened_query_structure_t;
+} urj_flash_cfi_amd_pri_extened_query_structure_t;
 #endif /* __ASSEMBLY__ */
 
 #endif /* FLASH_CFI_H */

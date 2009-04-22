@@ -31,14 +31,14 @@
 
 /* part */
 
-part_t *
-part_alloc (const tap_register_t *id)
+urj_part_t *
+urj_part_alloc (const urj_tap_register_t *id)
 {
-    part_t *p = malloc (sizeof *p);
+    urj_part_t *p = malloc (sizeof *p);
     if (!p)
         return NULL;
     p->alias = NULL;            /* djf */
-    p->id = register_duplicate (id);
+    p->id = urj_tap_register_duplicate (id);
     p->manufacturer[0] = '\0';
     p->part[0] = '\0';
     p->stepping[0] = '\0';
@@ -55,7 +55,7 @@ part_alloc (const tap_register_t *id)
 }
 
 void
-part_free (part_t *p)
+urj_part_free (urj_part_t *p)
 {
     int i;
 
@@ -71,47 +71,47 @@ part_free (part_t *p)
     /* signals */
     while (p->signals)
     {
-        signal_t *s = p->signals;
+        urj_part_signal_t *s = p->signals;
         p->signals = s->next;
-        signal_free (s);
+        urj_part_signal_free (s);
     }
 
     /* saliases */
     while (p->saliases)
     {
-        salias_t *sa = p->saliases;
+        urj_part_salias_t *sa = p->saliases;
         p->saliases = sa->next;
-        salias_free (sa);
+        urj_part_salias_free (sa);
     }
 
     /* instructions */
     while (p->instructions)
     {
-        instruction_t *i = p->instructions;
+        urj_instruction_t *i = p->instructions;
         p->instructions = i->next;
-        instruction_free (i);
+        urj_part_instruction_free (i);
     }
 
     /* data registers */
     while (p->data_registers)
     {
-        data_register_t *dr = p->data_registers;
+        urj_data_register_t *dr = p->data_registers;
         p->data_registers = dr->next;
-        data_register_free (dr);
+        urj_part_data_register_free (dr);
     }
 
     /* bsbits */
     for (i = 0; i < p->boundary_length; i++)
-        bsbit_free (p->bsbits[i]);
+        urj_part_bsbit_free (p->bsbits[i]);
     free (p->bsbits);
 
     free (p);
 }
 
-instruction_t *
-part_find_instruction (part_t *p, const char *iname)
+urj_instruction_t *
+urj_part_find_instruction (urj_part_t *p, const char *iname)
 {
-    instruction_t *i;
+    urj_instruction_t *i;
 
     if (!p || !iname)
         return NULL;
@@ -127,10 +127,10 @@ part_find_instruction (part_t *p, const char *iname)
     return i;
 }
 
-data_register_t *
-part_find_data_register (part_t *p, const char *drname)
+urj_data_register_t *
+urj_part_find_data_register (urj_part_t *p, const char *drname)
 {
-    data_register_t *dr;
+    urj_data_register_t *dr;
 
     if (!p || !drname)
         return NULL;
@@ -146,11 +146,11 @@ part_find_data_register (part_t *p, const char *drname)
     return dr;
 }
 
-signal_t *
-part_find_signal (part_t *p, const char *signalname)
+urj_part_signal_t *
+urj_part_find_signal (urj_part_t *p, const char *signalname)
 {
-    signal_t *s;
-    salias_t *sa;
+    urj_part_signal_t *s;
+    urj_part_salias_t *sa;
 
     if (!p || !signalname)
         return NULL;
@@ -175,22 +175,22 @@ part_find_signal (part_t *p, const char *signalname)
 }
 
 void
-part_set_instruction (part_t *p, const char *iname)
+urj_part_set_instruction (urj_part_t *p, const char *iname)
 {
     if (p)
-        p->active_instruction = part_find_instruction (p, iname);
+        p->active_instruction = urj_part_find_instruction (p, iname);
 }
 
 void
-part_set_signal (part_t *p, signal_t *s, int out, int val)
+urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
 {
-    data_register_t *bsr;
+    urj_data_register_t *bsr;
 
     if (!p || !s)
         return;
 
     /* search for Boundary Scan Register */
-    bsr = part_find_data_register (p, "BSR");
+    bsr = urj_part_find_data_register (p, "BSR");
     if (!bsr)
     {
         printf (_("%s(%s:%d) Boundary Scan Register (BSR) not found\n"),
@@ -228,15 +228,15 @@ part_set_signal (part_t *p, signal_t *s, int out, int val)
 }
 
 int
-part_get_signal (part_t *p, signal_t *s)
+urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s)
 {
-    data_register_t *bsr;
+    urj_data_register_t *bsr;
 
     if (!p || !s)
         return -1;
 
     /* search for Boundary Scan Register */
-    bsr = part_find_data_register (p, "BSR");
+    bsr = urj_part_find_data_register (p, "BSR");
     if (!bsr)
     {
         printf (_("%s(%s:%d) Boundary Scan Register (BSR) not found\n"),
@@ -254,7 +254,7 @@ part_get_signal (part_t *p, signal_t *s)
 }
 
 void
-part_print (part_t *p)
+urj_part_print (urj_part_t *p)
 {
     const char *instruction = NULL;
     const char *dr = NULL;
@@ -264,8 +264,8 @@ part_print (part_t *p)
         return;
 
     snprintf (format, 100, _("%%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"),
-              MAXLEN_MANUFACTURER, MAXLEN_PART, MAXLEN_STEPPING,
-              MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER);
+              URJ_PART_MANUFACTURER_MAXLEN, URJ_PART_PART_MAXLEN, URJ_PART_STEPPING_MAXLEN,
+              URJ_INSTRUCTION_MAXLEN_INSTRUCTION, URJ_DATA_REGISTER_MAXLEN);
 
     if (p->active_instruction)
     {
@@ -282,10 +282,10 @@ part_print (part_t *p)
 
 /* parts */
 
-parts_t *
-parts_alloc (void)
+urj_parts_t *
+urj_part_parts_alloc (void)
 {
-    parts_t *ps = malloc (sizeof *ps);
+    urj_parts_t *ps = malloc (sizeof *ps);
     if (!ps)
         return NULL;
 
@@ -296,7 +296,7 @@ parts_alloc (void)
 }
 
 void
-parts_free (parts_t *ps)
+urj_part_parts_free (urj_parts_t *ps)
 {
     int i;
 
@@ -304,16 +304,16 @@ parts_free (parts_t *ps)
         return;
 
     for (i = 0; i < ps->len; i++)
-        part_free (ps->parts[i]);
+        urj_part_free (ps->parts[i]);
 
     free (ps->parts);
     free (ps);
 }
 
 int
-parts_add_part (parts_t *ps, part_t *p)
+urj_part_parts_add_part (urj_parts_t *ps, urj_part_t *p)
 {
-    part_t **np = realloc (ps->parts, (ps->len + 1) * sizeof *ps->parts);
+    urj_part_t **np = realloc (ps->parts, (ps->len + 1) * sizeof *ps->parts);
 
     if (!np)
         return 0;
@@ -325,7 +325,7 @@ parts_add_part (parts_t *ps, part_t *p)
 }
 
 void
-parts_set_instruction (parts_t *ps, const char *iname)
+urj_part_parts_set_instruction (urj_parts_t *ps, const char *iname)
 {
     int i;
 
@@ -334,11 +334,11 @@ parts_set_instruction (parts_t *ps, const char *iname)
 
     for (i = 0; i < ps->len; i++)
         ps->parts[i]->active_instruction =
-            part_find_instruction (ps->parts[i], iname);
+            urj_part_find_instruction (ps->parts[i], iname);
 }
 
 void
-parts_print (parts_t *ps)
+urj_part_parts_print (urj_parts_t *ps)
 {
     int i;
 
@@ -347,12 +347,12 @@ parts_print (parts_t *ps)
 
     for (i = 0; i < ps->len; i++)
     {
-        part_t *p = ps->parts[i];
+        urj_part_t *p = ps->parts[i];
 
         if (!p)
             continue;
 
         printf (_(" %3d "), i);
-        part_print (p);
+        urj_part_print (p);
     }
 }

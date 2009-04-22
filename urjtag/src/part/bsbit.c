@@ -27,10 +27,10 @@
 
 #include "bsbit.h"
 
-bsbit_t *
-bsbit_alloc (int bit, const char *name, int type, signal_t *signal, int safe)
+urj_bsbit_t *
+urj_part_bsbit_alloc (int bit, const char *name, int type, urj_part_signal_t *signal, int safe)
 {
-    bsbit_t *b = malloc (sizeof *b);
+    urj_bsbit_t *b = malloc (sizeof *b);
     if (!b)
         return NULL;
 
@@ -52,13 +52,13 @@ bsbit_alloc (int bit, const char *name, int type, signal_t *signal, int safe)
         b->signal = signal;
         switch (type)
         {
-        case BSBIT_INPUT:
+        case URJ_BSBIT_INPUT:
             signal->input = b;
             break;
-        case BSBIT_OUTPUT:
+        case URJ_BSBIT_OUTPUT:
             signal->output = b;
             break;
-        case BSBIT_BIDIR:
+        case URJ_BSBIT_BIDIR:
             signal->input = b;
             signal->output = b;
             break;
@@ -69,7 +69,7 @@ bsbit_alloc (int bit, const char *name, int type, signal_t *signal, int safe)
 }
 
 void
-bsbit_free (bsbit_t *b)
+urj_part_bsbit_free (urj_bsbit_t *b)
 {
     if (!b)
         return;

@@ -708,7 +708,7 @@ static const struct amd_flash_info table[] = {
 };
 
 int
-jedec_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
+urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array)
 {
     /* Temporary containers for manufacturer and device id while
        probing with different Autoselect methods. */
@@ -716,49 +716,49 @@ jedec_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
     int manid = 0, devid = 0;
     int ba, bw;
     int i, j;
-    cfi_query_structure_t *cfi;
-    bus_area_t area;
+    urj_flash_cfi_query_structure_t *cfi;
+    urj_bus_area_t area;
 
-    *cfi_array = calloc (1, sizeof (cfi_array_t));
+    *cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
     if (!*cfi_array)
         return -2;              /* out of memory */
 
     (*cfi_array)->bus = bus;
     (*cfi_array)->address = adr;
-    if (bus_area (bus, adr, &area) != URJTAG_STATUS_OK)
+    if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
         return -8;              /* bus width detection failed */
     bw = area.width;
     if (bw != 8 && bw != 16 && bw != 32)
         return -3;              /* invalid bus width */
     (*cfi_array)->bus_width = ba = bw / 8;
 
-    (*cfi_array)->cfi_chips = calloc (1, sizeof (cfi_chip_t *) * ba);
+    (*cfi_array)->cfi_chips = calloc (1, sizeof (urj_flash_cfi_chip_t *) * ba);
     if (!(*cfi_array)->cfi_chips)
         return -2;              /* out of memory */
 
-    (*cfi_array)->cfi_chips[0] = calloc (1, sizeof (cfi_chip_t));
+    (*cfi_array)->cfi_chips[0] = calloc (1, sizeof (urj_flash_cfi_chip_t));
     if (!(*cfi_array)->cfi_chips[0])
         return -2;              /* out of memory */
 
     /* probe device with Autoselect method 1 */
-    bus_write (bus, adr, 0xf0);
-    bus_write (bus, adr + 0xaaa, 0xaa);
-    bus_write (bus, adr + 0x555, 0x55);
-    bus_write (bus, adr + 0xaaa, 0x90);
+    URJ_BUS_WRITE (bus, adr, 0xf0);
+    URJ_BUS_WRITE (bus, adr + 0xaaa, 0xaa);
+    URJ_BUS_WRITE (bus, adr + 0x555, 0x55);
+    URJ_BUS_WRITE (bus, adr + 0xaaa, 0x90);
 
-    manid_as[AUTOSELECT_M1] = bus_read (bus, adr + 0);
-    devid_as[AUTOSELECT_M1] = bus_read (bus, adr + 2);
-    bus_write (bus, adr, 0xf0);
+    manid_as[AUTOSELECT_M1] = URJ_BUS_READ (bus, adr + 0);
+    devid_as[AUTOSELECT_M1] = URJ_BUS_READ (bus, adr + 2);
+    URJ_BUS_WRITE (bus, adr, 0xf0);
 
     /* probe device with Autoselect method 2 */
-    bus_write (bus, adr, 0xf0);
-    bus_write (bus, adr + 0x555, 0xaa);
-    bus_write (bus, adr + 0x2aa, 0x55);
-    bus_write (bus, adr + 0x555, 0x90);
+    URJ_BUS_WRITE (bus, adr, 0xf0);
+    URJ_BUS_WRITE (bus, adr + 0x555, 0xaa);
+    URJ_BUS_WRITE (bus, adr + 0x2aa, 0x55);
+    URJ_BUS_WRITE (bus, adr + 0x555, 0x90);
 
-    manid_as[AUTOSELECT_M2] = bus_read (bus, adr + 0);
-    devid_as[AUTOSELECT_M2] = bus_read (bus, adr + 1);
-    bus_write (bus, adr, 0xf0);
+    manid_as[AUTOSELECT_M2] = URJ_BUS_READ (bus, adr + 0);
+    devid_as[AUTOSELECT_M2] = URJ_BUS_READ (bus, adr + 1);
+    URJ_BUS_WRITE (bus, adr, 0xf0);
 
     for (i = 0; i < sizeof (table) / sizeof (struct amd_flash_info); i++)
     {
@@ -824,7 +824,7 @@ jedec_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
 
     cfi->device_geometry.erase_block_regions =
         malloc (cfi->device_geometry.number_of_erase_regions *
-                sizeof (cfi_erase_block_region_t));
+                sizeof (urj_flash_cfi_erase_block_region_t));
     if (!cfi->device_geometry.erase_block_regions)
         return -2;              /* out of memory */
 

@@ -32,14 +32,14 @@
 #include "cmd.h"
 
 static int
-cmd_bus_run (chain_t *chain, char *params[])
+cmd_bus_run (urj_chain_t *chain, char *params[])
 {
     unsigned int n;
 
-    if (cmd_params (params) != 2)
+    if (urj_cmd_params (params) != 2)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -48,7 +48,7 @@ cmd_bus_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    if (cmd_get_number (params[1], &n))
+    if (urj_cmd_get_number (params[1], &n))
         return -1;
 
     if (n >= buses.len)
@@ -70,7 +70,7 @@ cmd_bus_help (void)
               "\n" "BUS           bus number\n"), "bus");
 }
 
-cmd_t cmd_bus = {
+urj_cmd_t cmd_bus = {
     "bus",
     N_("change active bus"),
     cmd_bus_help,

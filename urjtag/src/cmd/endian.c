@@ -32,9 +32,9 @@
 #include "cmd.h"
 
 static int
-cmd_endian_run (chain_t *chain, char *params[])
+cmd_endian_run (urj_chain_t *chain, char *params[])
 {
-    if (cmd_params (params) > 2)
+    if (urj_cmd_params (params) > 2)
         return -1;
 
     if (!params[1])
@@ -69,7 +69,7 @@ cmd_endian_help (void)
             "endian [little|big]");
 }
 
-cmd_t cmd_endian = {
+urj_cmd_t cmd_endian = {
     "endian",
     N_("set/print endianess"),
     cmd_endian_help,

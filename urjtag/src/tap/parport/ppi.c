@@ -38,13 +38,13 @@
 #include "parport.h"
 #include "cable.h"
 
-parport_driver_t ppi_parport_driver;
+urj_parport_driver_t ppi_parport_driver;
 
 typedef struct port_node_t port_node_t;
 
 struct port_node_t
 {
-    parport_t *port;
+    urj_parport_t *port;
     port_node_t *next;
 };
 
@@ -56,12 +56,12 @@ typedef struct
     int fd;
 } ppi_params_t;
 
-static parport_t *
+static urj_parport_t *
 ppi_parport_alloc (const char *port)
 {
     ppi_params_t *params = malloc (sizeof *params);
     char *portname = strdup (port);
-    parport_t *parport = malloc (sizeof *parport);
+    urj_parport_t *parport = malloc (sizeof *parport);
     port_node_t *node = malloc (sizeof *node);
 
     if (!node || !parport || !params || !portname)
@@ -89,7 +89,7 @@ ppi_parport_alloc (const char *port)
 }
 
 static void
-ppi_parport_free (parport_t *port)
+ppi_parport_free (urj_parport_t *port)
 {
     port_node_t **prev;
 
@@ -109,11 +109,11 @@ ppi_parport_free (parport_t *port)
     free (port);
 }
 
-static cable_t *
+static urj_cable_t *
 ppi_connect (const char **par, int parnum)
 {
     port_node_t *pn;
-    parport_t *parport;
+    urj_parport_t *parport;
 
     if (parnum != 1)
     {
@@ -143,7 +143,7 @@ ppi_connect (const char **par, int parnum)
 }
 
 static int
-ppi_open (parport_t *parport)
+ppi_open (urj_parport_t *parport)
 {
     ppi_params_t *p = parport->params;
 
@@ -155,7 +155,7 @@ ppi_open (parport_t *parport)
 }
 
 static int
-ppi_close (parport_t *parport)
+ppi_close (urj_parport_t *parport)
 {
     int r = 0;
     ppi_params_t *p = parport->params;
@@ -168,7 +168,7 @@ ppi_close (parport_t *parport)
 }
 
 static int
-ppi_set_data (parport_t *parport, uint8_t data)
+ppi_set_data (urj_parport_t *parport, uint8_t data)
 {
     ppi_params_t *p = parport->params;
 
@@ -179,7 +179,7 @@ ppi_set_data (parport_t *parport, uint8_t data)
 }
 
 static int
-ppi_get_data (parport_t *parport)
+ppi_get_data (urj_parport_t *parport)
 {
     unsigned char d;
     ppi_params_t *p = parport->params;
@@ -191,7 +191,7 @@ ppi_get_data (parport_t *parport)
 }
 
 static int
-ppi_get_status (parport_t *parport)
+ppi_get_status (urj_parport_t *parport)
 {
     unsigned char d;
     ppi_params_t *p = parport->params;
@@ -203,7 +203,7 @@ ppi_get_status (parport_t *parport)
 }
 
 static int
-ppi_set_control (parport_t *parport, uint8_t data)
+ppi_set_control (urj_parport_t *parport, uint8_t data)
 {
     ppi_params_t *p = parport->params;
 
@@ -215,7 +215,7 @@ ppi_set_control (parport_t *parport, uint8_t data)
     return 0;
 }
 
-parport_driver_t ppi_parport_driver = {
+urj_parport_driver_t ppi_parport_driver = {
     "ppi",
     ppi_connect,
     ppi_parport_free,

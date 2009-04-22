@@ -22,35 +22,35 @@
  *
  */
 
-#ifndef BSBIT_H
-#define	BSBIT_H
+#ifndef URJ_BSBIT_BSBIT_H
+#define	URJ_BSBIT_BSBIT_H
 
-typedef struct bsbit bsbit_t;
+typedef struct urj_bsbit urj_bsbit_t;
 
 #include "bssignal.h"
 
-#define	BSBIT_INPUT	1
-#define	BSBIT_OUTPUT	2
-#define	BSBIT_CONTROL	3
-#define	BSBIT_INTERNAL	4
-#define	BSBIT_BIDIR	5
+#define	URJ_BSBIT_INPUT	1
+#define	URJ_BSBIT_OUTPUT	2
+#define	URJ_BSBIT_CONTROL	3
+#define	URJ_BSBIT_INTERNAL	4
+#define	URJ_BSBIT_BIDIR	5
 
-#define	BSBIT_STATE_Z	(-1)
+#define	URJ_BSBIT_STATE_Z	(-1)
 
-struct bsbit
+struct urj_bsbit
 {
     int bit;
     char *name;
     int type;
-    signal_t *signal;
+    urj_part_signal_t *signal;
     int safe;                   /* safe value */
     int control;                /* -1 for none */
     int control_value;
     int control_state;
 };
 
-bsbit_t *bsbit_alloc (int bit, const char *name, int type, signal_t *signal,
+urj_bsbit_t *urj_part_bsbit_alloc (int bit, const char *name, int type, urj_part_signal_t *signal,
                       int safe);
-void bsbit_free (bsbit_t *b);
+void urj_part_bsbit_free (urj_bsbit_t *b);
 
-#endif /* BSBIT_H */
+#endif /* URJ_BSBIT_BSBIT_H */

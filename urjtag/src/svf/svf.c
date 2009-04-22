@@ -66,24 +66,24 @@
 #undef DEBUG
 
 
-int svfparse (parser_priv_t *priv_data, chain_t *chain);
+int urj_svf_parse (urj_svf_parser_priv_t *priv_data, urj_chain_t *chain);
 
 
 /*
- * svf_force_reset_state()
+ * urj_svf_force_reset_state()
  *
  * Puts TAP controller into reset state by clocking 5 times with TMS = 1.
  */
 static void
-svf_force_reset_state (chain_t *chain)
+urj_svf_force_reset_state (urj_chain_t *chain)
 {
-    chain_clock (chain, 1, 0, 5);
-    tap_state_reset (chain);
+    urj_tap_chain_clock (chain, 1, 0, 5);
+    urj_tap_state_reset (chain);
 }
 
 
 /*
- * svf_goto_state(state)
+ * urj_svf_goto_state(state)
  *
  * Moves from any TAP state to the specified state.
  * The state traversal is done according to the SVF specification.
@@ -95,15 +95,15 @@ svf_force_reset_state (chain_t *chain)
  *   state : new TAP controller state
  */
 static void
-svf_goto_state (chain_t *chain, int new_state)
+urj_svf_goto_state (urj_chain_t *chain, int new_state)
 {
     int current_state;
 
-    current_state = tap_state (chain);
+    current_state = urj_tap_state (chain);
 
     /* handle unknown state */
-    if (new_state == Unknown_State)
-        new_state = Test_Logic_Reset;
+    if (new_state == URJ_TAP_STATE_UNKNOWN_STATE)
+        new_state = URJ_TAP_STATE_TEST_LOGIC_RESET;
 
     /* abort if new_state already reached */
     if (current_state == new_state)
@@ -111,115 +111,115 @@ svf_goto_state (chain_t *chain, int new_state)
 
     switch (current_state)
     {
-    case Test_Logic_Reset:
-        chain_clock (chain, 0, 0, 1);
+    case URJ_TAP_STATE_TEST_LOGIC_RESET:
+        urj_tap_chain_clock (chain, 0, 0, 1);
         break;
 
-    case Run_Test_Idle:
-        chain_clock (chain, 1, 0, 1);
+    case URJ_TAP_STATE_RUN_TEST_IDLE:
+        urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Select_DR_Scan:
-    case Select_IR_Scan:
-        if (new_state == Test_Logic_Reset ||
-            new_state == Run_Test_Idle ||
-            (current_state & TAPSTAT_DR && new_state & TAPSTAT_IR) ||
-            (current_state & TAPSTAT_IR && new_state & TAPSTAT_DR))
+    case URJ_TAP_STATE_SELECT_DR_SCAN:
+    case URJ_TAP_STATE_SELECT_IR_SCAN:
+        if (new_state == URJ_TAP_STATE_TEST_LOGIC_RESET ||
+            new_state == URJ_TAP_STATE_RUN_TEST_IDLE ||
+            (current_state & URJ_TAP_STATE_DR && new_state & URJ_TAP_STATE_IR) ||
+            (current_state & URJ_TAP_STATE_IR && new_state & URJ_TAP_STATE_DR))
             /* progress in select-idle/reset loop */
-            chain_clock (chain, 1, 0, 1);
+            urj_tap_chain_clock (chain, 1, 0, 1);
         else
             /* enter DR/IR branch */
-            chain_clock (chain, 0, 0, 1);
+            urj_tap_chain_clock (chain, 0, 0, 1);
         break;
 
-    case Capture_DR:
-        if (new_state == Shift_DR)
-            /* enter Shift_DR state */
-            chain_clock (chain, 0, 0, 1);
+    case URJ_TAP_STATE_CAPTURE_DR:
+        if (new_state == URJ_TAP_STATE_SHIFT_DR)
+            /* enter URJ_TAP_STATE_SHIFT_DR state */
+            urj_tap_chain_clock (chain, 0, 0, 1);
         else
-            /* bypass Shift_DR */
-            chain_clock (chain, 1, 0, 1);
+            /* bypass URJ_TAP_STATE_SHIFT_DR */
+            urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Capture_IR:
-        if (new_state == Shift_IR)
-            /* enter Shift_IR state */
-            chain_clock (chain, 0, 0, 1);
+    case URJ_TAP_STATE_CAPTURE_IR:
+        if (new_state == URJ_TAP_STATE_SHIFT_IR)
+            /* enter URJ_TAP_STATE_SHIFT_IR state */
+            urj_tap_chain_clock (chain, 0, 0, 1);
         else
-            /* bypass Shift_IR */
-            chain_clock (chain, 1, 0, 1);
+            /* bypass URJ_TAP_STATE_SHIFT_IR */
+            urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Shift_DR:
-    case Shift_IR:
-        /* progress to Exit1_DR/IR */
-        chain_clock (chain, 1, 0, 1);
+    case URJ_TAP_STATE_SHIFT_DR:
+    case URJ_TAP_STATE_SHIFT_IR:
+        /* progress to URJ_TAP_STATE_EXIT1_DR/IR */
+        urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Exit1_DR:
-        if (new_state == Pause_DR)
-            /* enter Pause_DR state */
-            chain_clock (chain, 0, 0, 1);
+    case URJ_TAP_STATE_EXIT1_DR:
+        if (new_state == URJ_TAP_STATE_PAUSE_DR)
+            /* enter URJ_TAP_STATE_PAUSE_DR state */
+            urj_tap_chain_clock (chain, 0, 0, 1);
         else
-            /* bypass Pause_DR */
-            chain_clock (chain, 1, 0, 1);
+            /* bypass URJ_TAP_STATE_PAUSE_DR */
+            urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Exit1_IR:
-        if (new_state == Pause_IR)
-            /* enter Pause_IR state */
-            chain_clock (chain, 0, 0, 1);
+    case URJ_TAP_STATE_EXIT1_IR:
+        if (new_state == URJ_TAP_STATE_PAUSE_IR)
+            /* enter URJ_TAP_STATE_PAUSE_IR state */
+            urj_tap_chain_clock (chain, 0, 0, 1);
         else
-            /* bypass Pause_IR */
-            chain_clock (chain, 1, 0, 1);
+            /* bypass URJ_TAP_STATE_PAUSE_IR */
+            urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Pause_DR:
-    case Pause_IR:
-        /* progress to Exit2_DR/IR */
-        chain_clock (chain, 1, 0, 1);
+    case URJ_TAP_STATE_PAUSE_DR:
+    case URJ_TAP_STATE_PAUSE_IR:
+        /* progress to URJ_TAP_STATE_EXIT2_DR/IR */
+        urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Exit2_DR:
-        if (new_state == Shift_DR)
-            /* enter Shift_DR state */
-            chain_clock (chain, 0, 0, 1);
+    case URJ_TAP_STATE_EXIT2_DR:
+        if (new_state == URJ_TAP_STATE_SHIFT_DR)
+            /* enter URJ_TAP_STATE_SHIFT_DR state */
+            urj_tap_chain_clock (chain, 0, 0, 1);
         else
-            /* progress to Update_DR */
-            chain_clock (chain, 1, 0, 1);
+            /* progress to URJ_TAP_STATE_UPDATE_DR */
+            urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Exit2_IR:
-        if (new_state == Shift_IR)
-            /* enter Shift_IR state */
-            chain_clock (chain, 0, 0, 1);
+    case URJ_TAP_STATE_EXIT2_IR:
+        if (new_state == URJ_TAP_STATE_SHIFT_IR)
+            /* enter URJ_TAP_STATE_SHIFT_IR state */
+            urj_tap_chain_clock (chain, 0, 0, 1);
         else
-            /* progress to Update_IR */
-            chain_clock (chain, 1, 0, 1);
+            /* progress to URJ_TAP_STATE_UPDATE_IR */
+            urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
-    case Update_DR:
-    case Update_IR:
-        if (new_state == Run_Test_Idle)
-            /* enter Run_Test_Idle */
-            chain_clock (chain, 0, 0, 1);
+    case URJ_TAP_STATE_UPDATE_DR:
+    case URJ_TAP_STATE_UPDATE_IR:
+        if (new_state == URJ_TAP_STATE_RUN_TEST_IDLE)
+            /* enter URJ_TAP_STATE_RUN_TEST_IDLE */
+            urj_tap_chain_clock (chain, 0, 0, 1);
         else
             /* progress to Select_DR/IR */
-            chain_clock (chain, 1, 0, 1);
+            urj_tap_chain_clock (chain, 1, 0, 1);
         break;
 
     default:
-        svf_force_reset_state (chain);
+        urj_svf_force_reset_state (chain);
         break;
     }
 
     /* continue state changes */
-    svf_goto_state (chain, new_state);
+    urj_svf_goto_state (chain, new_state);
 }
 
 
 /*
- * svf_map_state(state)
+ * urj_svf_map_state(state)
  *
  * Maps the state encoding of the SVF parser to the
  * state encoding of the jtag suite.
@@ -231,64 +231,64 @@ svf_goto_state (chain_t *chain, int new_state)
  *   state encoded for jtag tools
  */
 static int
-svf_map_state (int state)
+urj_svf_map_state (int state)
 {
     int jtag_state;
 
     switch (state)
     {
-    case RESET:
-        jtag_state = Test_Logic_Reset;
+    case URJ_JIM_RESET:
+        jtag_state = URJ_TAP_STATE_TEST_LOGIC_RESET;
         break;
-    case IDLE:
-        jtag_state = Run_Test_Idle;
+    case URJ_JIM_IDLE:
+        jtag_state = URJ_TAP_STATE_RUN_TEST_IDLE;
         break;
     case DRSELECT:
-        jtag_state = Select_DR_Scan;
+        jtag_state = URJ_TAP_STATE_SELECT_DR_SCAN;
         break;
     case DRCAPTURE:
-        jtag_state = Capture_DR;
+        jtag_state = URJ_TAP_STATE_CAPTURE_DR;
         break;
     case DRSHIFT:
-        jtag_state = Shift_DR;
+        jtag_state = URJ_TAP_STATE_SHIFT_DR;
         break;
     case DREXIT1:
-        jtag_state = Exit1_DR;
+        jtag_state = URJ_TAP_STATE_EXIT1_DR;
         break;
     case DRPAUSE:
-        jtag_state = Pause_DR;
+        jtag_state = URJ_TAP_STATE_PAUSE_DR;
         break;
     case DREXIT2:
-        jtag_state = Exit2_DR;
+        jtag_state = URJ_TAP_STATE_EXIT2_DR;
         break;
     case DRUPDATE:
-        jtag_state = Update_DR;
+        jtag_state = URJ_TAP_STATE_UPDATE_DR;
         break;
 
     case IRSELECT:
-        jtag_state = Select_IR_Scan;
+        jtag_state = URJ_TAP_STATE_SELECT_IR_SCAN;
         break;
     case IRCAPTURE:
-        jtag_state = Capture_IR;
+        jtag_state = URJ_TAP_STATE_CAPTURE_IR;
         break;
     case IRSHIFT:
-        jtag_state = Shift_IR;
+        jtag_state = URJ_TAP_STATE_SHIFT_IR;
         break;
     case IREXIT1:
-        jtag_state = Exit1_IR;
+        jtag_state = URJ_TAP_STATE_EXIT1_IR;
         break;
     case IRPAUSE:
-        jtag_state = Pause_IR;
+        jtag_state = URJ_TAP_STATE_PAUSE_IR;
         break;
     case IREXIT2:
-        jtag_state = Exit2_IR;
+        jtag_state = URJ_TAP_STATE_EXIT2_IR;
         break;
     case IRUPDATE:
-        jtag_state = Update_IR;
+        jtag_state = URJ_TAP_STATE_UPDATE_IR;
         break;
 
     default:
-        jtag_state = Unknown_State;
+        jtag_state = URJ_TAP_STATE_UNKNOWN_STATE;
         break;
     }
 
@@ -297,7 +297,7 @@ svf_map_state (int state)
 
 
 /*
- * svf_hex2dec(nibble)
+ * urj_svf_hex2dec(nibble)
  *
  * Converts a hexadecimal nibble (4 bits) to its decimal value.
  *
@@ -308,7 +308,7 @@ svf_map_state (int state)
  *   decimal value of nibble or 0 if nibble is not a hexadecimal character
  */
 static int
-svf_hex2dec (char nibble)
+urj_svf_hex2dec (char nibble)
 {
     int lower;
 
@@ -324,7 +324,7 @@ svf_hex2dec (char nibble)
 
 
 /*
- * svf_build_bit_string(hex_string, len)
+ * urj_svf_build_bit_string(hex_string, len)
  *
  * Converts the hexadecimal string hex_string into a string of single bits
  * with len elements (bits).
@@ -349,7 +349,7 @@ svf_hex2dec (char nibble)
  *   NULL upon error
  */
 static char *
-svf_build_bit_string (char *hex_string, int len)
+urj_svf_build_bit_string (char *hex_string, int len)
 {
     char *bit_string, *bit_string_pos;
     int nibble;
@@ -380,7 +380,7 @@ svf_build_bit_string (char *hex_string, int len)
             nibble++;
 
         *bit_string_pos =
-            svf_hex2dec (hex_string_idx >=
+            urj_svf_hex2dec (hex_string_idx >=
                          0 ? *hex_string_pos : '0') & (1 << nibble) ? '1' :
             '0';
     }
@@ -393,7 +393,7 @@ svf_build_bit_string (char *hex_string, int len)
 
 
 /*
- * svf_copy_hex_to_register(hex_string, reg, len)
+ * urj_svf_copy_hex_to_register(hex_string, reg, len)
  *
  * Copies the contents of the hexadecimal string hex_string into the given
  * tap register.
@@ -407,14 +407,14 @@ svf_build_bit_string (char *hex_string, int len)
  *   0 : error occurred
  */
 static int
-svf_copy_hex_to_register (char *hex_string, tap_register_t *reg)
+urj_svf_copy_hex_to_register (char *hex_string, urj_tap_register_t *reg)
 {
     char *bit_string;
 
-    if (!(bit_string = svf_build_bit_string (hex_string, reg->len)))
+    if (!(bit_string = urj_svf_build_bit_string (hex_string, reg->len)))
         return (0);
 
-    register_init (reg, bit_string);
+    urj_tap_register_init (reg, bit_string);
 
     /* free memory as we do not need the intermediate bit_string anymore */
     free (bit_string);
@@ -424,7 +424,7 @@ svf_copy_hex_to_register (char *hex_string, tap_register_t *reg)
 
 
 /*
- * svf_compare_tdo(tdo, mask, reg)
+ * urj_svf_compare_tdo(tdo, mask, reg)
  *
  * Compares the captured device output in tap register reg with the expected
  * hex_string tdo (specified in SVF command SDR/SDI.
@@ -442,22 +442,22 @@ svf_copy_hex_to_register (char *hex_string, tap_register_t *reg)
  *   0 : tdo and reg do not match or error occurred
  */
 static int
-svf_compare_tdo (parser_priv_t *priv, char *tdo, char *mask,
-                 tap_register_t *reg, YYLTYPE * loc)
+urj_svf_compare_tdo (urj_svf_parser_priv_t *priv, char *tdo, char *mask,
+                 urj_tap_register_t *reg, YYLTYPE * loc)
 {
     char *tdo_bit, *mask_bit;
     int pos, mismatch, result = 1;
 
-    if (!(tdo_bit = svf_build_bit_string (tdo, reg->len)))
+    if (!(tdo_bit = urj_svf_build_bit_string (tdo, reg->len)))
         return (0);
-    if (!(mask_bit = svf_build_bit_string (mask, reg->len)))
+    if (!(mask_bit = urj_svf_build_bit_string (mask, reg->len)))
     {
         free (tdo_bit);
         return (0);
     }
 
     /* retrieve string representation */
-    register_get_string (reg);
+    urj_tap_register_get_string (reg);
 
     mismatch = -1;
     for (pos = 0; pos < reg->len; pos++)
@@ -494,7 +494,7 @@ svf_compare_tdo (parser_priv_t *priv, char *tdo, char *mask,
 
 
 /*
- * svf_remember_param(rem, new)
+ * urj_svf_remember_param(rem, new)
  *
  * Assigns the contents of the string new to the string rem.
  * By doing so, the responsability to free the memory occupied by new
@@ -508,7 +508,7 @@ svf_compare_tdo (parser_priv_t *priv, char *tdo, char *mask,
  *         memory of the string is free'd
  */
 static void
-svf_remember_param (char **rem, char *new)
+urj_svf_remember_param (char **rem, char *new)
 {
     if (new)
     {
@@ -521,7 +521,7 @@ svf_remember_param (char **rem, char *new)
 
 
 /*
- * svf_all_care(string, number)
+ * urj_svf_all_care(string, number)
  *
  * Allocates a hex string of given length (number gives number of bits)
  * and sets it to all 'F'.
@@ -536,7 +536,7 @@ svf_remember_param (char **rem, char *new)
  *   0 : error occurred
  */
 static int
-svf_all_care (char **string, double number)
+urj_svf_all_care (char **string, double number)
 {
     char *ptr;
     int num, result;
@@ -555,7 +555,7 @@ svf_all_care (char **string, double number)
     memset (ptr, 'F', num);
     ptr[num] = '\0';
 
-    svf_remember_param (string, ptr);
+    urj_svf_remember_param (string, ptr);
     /* responsability for free'ing ptr is now at the code that
        operates on *string */
 
@@ -564,7 +564,7 @@ svf_all_care (char **string, double number)
 
 
 /* ***************************************************************************
- * svf_endxr(ir_dr, state)
+ * urj_svf_endxr(ir_dr, state)
  *
  * Register end states for shifting IR and DR.
  *
@@ -573,22 +573,22 @@ svf_all_care (char **string, double number)
  *   state : required end state (SVF parser encoding)
  * ***************************************************************************/
 void
-svf_endxr (parser_priv_t *priv, enum generic_irdr_coding ir_dr, int state)
+urj_svf_endxr (urj_svf_parser_priv_t *priv, enum URJ_SVF_generic_irdr_coding ir_dr, int state)
 {
     switch (ir_dr)
     {
-    case generic_ir:
-        priv->endir = svf_map_state (state);
+    case URJ_SVF_generic_ir:
+        priv->endir = urj_svf_map_state (state);
         break;
-    case generic_dr:
-        priv->enddr = svf_map_state (state);
+    case URJ_SVF_generic_dr:
+        priv->enddr = urj_svf_map_state (state);
         break;
     }
 }
 
 
 /* ***************************************************************************
- * svf_frequency(chain, freq)
+ * urj_svf_frequency(chain, freq)
  *
  * Implements the FREQUENCY command.
  *
@@ -596,14 +596,14 @@ svf_endxr (parser_priv_t *priv, enum generic_irdr_coding ir_dr, int state)
  *   freq : frequency in HZ
  * ***************************************************************************/
 void
-svf_frequency (chain_t *chain, double freq)
+urj_svf_frequency (urj_chain_t *chain, double freq)
 {
-    cable_set_frequency (chain->cable, freq);
+    urj_tap_cable_set_frequency (chain->cable, freq);
 }
 
 
 /* ***************************************************************************
- * svf_hxr(ir_dr, params)
+ * urj_svf_hxr(ir_dr, params)
  *
  * Handles HIR, HDR.
  *
@@ -619,11 +619,11 @@ svf_frequency (chain_t *chain, double freq)
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_hxr (enum generic_irdr_coding ir_dr, struct ths_params *params)
+urj_svf_hxr (enum URJ_SVF_generic_irdr_coding ir_dr, struct ths_params *params)
 {
     if (params->number != 0.0)
         printf (_("Warning %s: command %s not implemented\n"), "svf",
-                ir_dr == generic_ir ? "HIR" : "HDR");
+                ir_dr == URJ_SVF_generic_ir ? "HIR" : "HDR");
 
     return (1);
 }
@@ -638,7 +638,7 @@ sigalrm_handler (int signal)
 
 
 /* ***************************************************************************
- * svf_runtest(params)
+ * urj_svf_runtest(params)
  *
  * Implements the RUNTEST command.
  *
@@ -650,7 +650,7 @@ sigalrm_handler (int signal)
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_runtest (chain_t *chain, parser_priv_t *priv, struct runtest *params)
+urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv, struct runtest *params)
 {
     uint32_t run_count, frequency;
 
@@ -680,13 +680,13 @@ svf_runtest (chain_t *chain, parser_priv_t *priv, struct runtest *params)
     /* update default values for run_state and end_state */
     if (params->run_state != 0)
     {
-        priv->runtest_run_state = svf_map_state (params->run_state);
+        priv->runtest_run_state = urj_svf_map_state (params->run_state);
 
         if (params->end_state == 0)
-            priv->runtest_end_state = svf_map_state (params->run_state);
+            priv->runtest_end_state = urj_svf_map_state (params->run_state);
     }
     if (params->end_state != 0)
-        priv->runtest_end_state = svf_map_state (params->end_state);
+        priv->runtest_end_state = urj_svf_map_state (params->end_state);
 
     /* compute run_count */
     run_count = params->run_count;
@@ -694,7 +694,7 @@ svf_runtest (chain_t *chain, parser_priv_t *priv, struct runtest *params)
     {
         frequency =
             priv->ref_freq >
-            0 ? priv->ref_freq : cable_get_frequency (chain->cable);
+            0 ? priv->ref_freq : urj_tap_cable_get_frequency (chain->cable);
         if (frequency > 0)
         {
             uint32_t min_time_run_count = ceil (params->min_time * frequency);
@@ -713,22 +713,22 @@ svf_runtest (chain_t *chain, parser_priv_t *priv, struct runtest *params)
         }
     }
 
-    svf_goto_state (chain, priv->runtest_run_state);
+    urj_svf_goto_state (chain, priv->runtest_run_state);
 
 #ifdef __MINGW32__
     if (params->max_time > 0.0)
     {
-        double maxt = frealtime () + params->max_time;
+        double maxt = urj_lib_frealtime () + params->max_time;
 
-        while (run_count-- > 0 && frealtime () < maxt)
+        while (run_count-- > 0 && urj_lib_frealtime () < maxt)
         {
-            chain_clock (chain, 0, 0, 1);
+            urj_tap_chain_clock (chain, 0, 0, 1);
         }
     }
     else
-        chain_clock (chain, 0, 0, run_count);
+        urj_tap_chain_clock (chain, 0, 0, run_count);
 
-    svf_goto_state (chain, priv->runtest_end_state);
+    urj_svf_goto_state (chain, priv->runtest_end_state);
 
 #else
     /* set up the timer for max_time */
@@ -757,12 +757,12 @@ svf_runtest (chain_t *chain, parser_priv_t *priv, struct runtest *params)
     if (params->max_time > 0.0)
         while (run_count-- > 0 && !max_time_reached)
         {
-            chain_clock (chain, 0, 0, 1);
+            urj_tap_chain_clock (chain, 0, 0, 1);
         }
     else
-        chain_clock (chain, 0, 0, run_count);
+        urj_tap_chain_clock (chain, 0, 0, run_count);
 
-    svf_goto_state (chain, priv->runtest_end_state);
+    urj_svf_goto_state (chain, priv->runtest_end_state);
 
     /* stop the timer */
     if (params->max_time > 0.0)
@@ -784,7 +784,7 @@ svf_runtest (chain_t *chain, parser_priv_t *priv, struct runtest *params)
 
 
 /* ***************************************************************************
- * svf_state(path_states, stable_state)
+ * urj_svf_state(path_states, stable_state)
  *
  * Implements the STATE command.
  *
@@ -799,7 +799,7 @@ svf_runtest (chain_t *chain, parser_priv_t *priv, struct runtest *params)
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_state (chain_t *chain, parser_priv_t *priv,
+urj_svf_state (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
            struct path_states *path_states, int stable_state)
 {
     int i;
@@ -807,17 +807,17 @@ svf_state (chain_t *chain, parser_priv_t *priv,
     priv->svf_state_executed = 1;
 
     for (i = 0; i < path_states->num_states; i++)
-        svf_goto_state (chain, svf_map_state (path_states->states[i]));
+        urj_svf_goto_state (chain, urj_svf_map_state (path_states->states[i]));
 
     if (stable_state)
-        svf_goto_state (chain, svf_map_state (stable_state));
+        urj_svf_goto_state (chain, urj_svf_map_state (stable_state));
 
     return (1);
 }
 
 
 /* ***************************************************************************
- * svf_sxr(ir_dr, params)
+ * urj_svf_sxr(ir_dr, params)
  *
  * Implements the SIR and SDR commands.
  *
@@ -830,24 +830,24 @@ svf_state (chain_t *chain, parser_priv_t *priv,
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_sxr (chain_t *chain, parser_priv_t *priv,
-         enum generic_irdr_coding ir_dr, struct ths_params *params,
+urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
+         enum URJ_SVF_generic_irdr_coding ir_dr, struct ths_params *params,
          YYLTYPE * loc)
 {
-    sxr_t *sxr_params;
+    urj_svf_sxr_t *sxr_params;
     int len, result = 1;
 
     sxr_params =
-        ir_dr == generic_ir ? &(priv->sir_params) : &(priv->sdr_params);
+        ir_dr == URJ_SVF_generic_ir ? &(priv->sir_params) : &(priv->sdr_params);
 
     /* remember parameters */
-    svf_remember_param (&sxr_params->params.tdi, params->tdi);
+    urj_svf_remember_param (&sxr_params->params.tdi, params->tdi);
 
     sxr_params->params.tdo = params->tdo;       /* tdo is not "remembered" */
 
-    svf_remember_param (&sxr_params->params.mask, params->mask);
+    urj_svf_remember_param (&sxr_params->params.mask, params->mask);
 
-    svf_remember_param (&sxr_params->params.smask, params->smask);
+    urj_svf_remember_param (&sxr_params->params.smask, params->smask);
 
 
     /* handle length change for MASK and SMASK */
@@ -857,10 +857,10 @@ svf_sxr (chain_t *chain, parser_priv_t *priv,
         sxr_params->no_tdo = 1;
 
         if (!params->mask)
-            if (!svf_all_care (&sxr_params->params.mask, params->number))
+            if (!urj_svf_all_care (&sxr_params->params.mask, params->number))
                 result = 0;
         if (!params->smask)
-            if (!svf_all_care (&sxr_params->params.smask, params->number))
+            if (!urj_svf_all_care (&sxr_params->params.smask, params->number))
                 result = 0;
     }
 
@@ -873,7 +873,7 @@ svf_sxr (chain_t *chain, parser_priv_t *priv,
         {
             printf (_
                     ("Error %s: first %s command after length change must have a TDI value.\n"),
-                    "svf", ir_dr == generic_ir ? "SIR" : "SDR");
+                    "svf", ir_dr == URJ_SVF_generic_ir ? "SIR" : "SDR");
             result = 0;
         }
         sxr_params->no_tdi = 0;
@@ -895,7 +895,7 @@ svf_sxr (chain_t *chain, parser_priv_t *priv,
     len = (int) sxr_params->params.number;
     switch (ir_dr)
     {
-    case generic_ir:
+    case URJ_SVF_generic_ir:
         /* is SIR large enough? */
         if (priv->ir->value->len != len)
         {
@@ -911,22 +911,22 @@ svf_sxr (chain_t *chain, parser_priv_t *priv,
         }
         break;
 
-    case generic_dr:
+    case URJ_SVF_generic_dr:
         /* check data register SDR */
         if (priv->dr->in->len != len)
         {
             /* length does not match, so install proper registers */
-            register_free (priv->dr->in);
+            urj_tap_register_free (priv->dr->in);
             priv->dr->in = NULL;
-            register_free (priv->dr->out);
+            urj_tap_register_free (priv->dr->out);
             priv->dr->out = NULL;
 
-            if (!(priv->dr->in = register_alloc (len)))
+            if (!(priv->dr->in = urj_tap_register_alloc (len)))
             {
                 printf (_("out of memory"));
                 return (0);
             }
-            if (!(priv->dr->out = register_alloc (len)))
+            if (!(priv->dr->out = urj_tap_register_alloc (len)))
             {
                 printf (_("out of memory"));
                 return (0);
@@ -937,8 +937,8 @@ svf_sxr (chain_t *chain, parser_priv_t *priv,
     }
 
     /* fill register with value of TDI parameter */
-    if (!svf_copy_hex_to_register (sxr_params->params.tdi,
-                                   ir_dr == generic_ir ? priv->ir->value :
+    if (!urj_svf_copy_hex_to_register (sxr_params->params.tdi,
+                                   ir_dr == URJ_SVF_generic_ir ? priv->ir->value :
                                    priv->dr->in))
         return (0);
 
@@ -946,29 +946,29 @@ svf_sxr (chain_t *chain, parser_priv_t *priv,
     /* shift selected instruction/register */
     switch (ir_dr)
     {
-    case generic_ir:
-        svf_goto_state (chain, Shift_IR);
-        chain_shift_instructions_mode (chain,
+    case URJ_SVF_generic_ir:
+        urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_IR);
+        urj_tap_chain_shift_instructions_mode (chain,
                                        sxr_params->params.tdo ? 1 : 0,
-                                       0, EXITMODE_EXIT1);
-        svf_goto_state (chain, priv->endir);
+                                       0, URJ_CHAIN_EXITMODE_EXIT1);
+        urj_svf_goto_state (chain, priv->endir);
 
         if (sxr_params->params.tdo)
             result =
-                svf_compare_tdo (priv, sxr_params->params.tdo,
+                urj_svf_compare_tdo (priv, sxr_params->params.tdo,
                                  sxr_params->params.mask, priv->ir->out, loc);
         break;
 
-    case generic_dr:
-        svf_goto_state (chain, Shift_DR);
-        chain_shift_data_registers_mode (chain,
+    case URJ_SVF_generic_dr:
+        urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_DR);
+        urj_tap_chain_shift_data_registers_mode (chain,
                                          sxr_params->params.tdo ? 1 : 0,
-                                         0, EXITMODE_EXIT1);
-        svf_goto_state (chain, priv->enddr);
+                                         0, URJ_CHAIN_EXITMODE_EXIT1);
+        urj_svf_goto_state (chain, priv->enddr);
 
         if (sxr_params->params.tdo)
             result =
-                svf_compare_tdo (priv, sxr_params->params.tdo,
+                urj_svf_compare_tdo (priv, sxr_params->params.tdo,
                                  sxr_params->params.mask, priv->dr->out, loc);
         break;
     }
@@ -983,7 +983,7 @@ svf_sxr (chain_t *chain, parser_priv_t *priv,
 
 
 /* ***************************************************************************
- * svf_trst(int trst_mode)
+ * urj_svf_trst(int trst_mode)
  *
  * Sets TRST pin according to trst_mode.
  * TRST modes are encoded via defines in svf.h.
@@ -999,7 +999,7 @@ svf_sxr (chain_t *chain, parser_priv_t *priv,
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_trst (chain_t *chain, parser_priv_t *priv, int trst_mode)
+urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
 {
     int trst_cable = -1;
     char *unimplemented_mode;
@@ -1051,14 +1051,14 @@ svf_trst (chain_t *chain, parser_priv_t *priv, int trst_mode)
         printf (_("Warning %s: unimplemented mode '%s' for TRST\n"), "svf",
                 unimplemented_mode);
     else
-        cable_set_signal (chain->cable, CS_TRST, trst_cable ? CS_TRST : 0);
+        urj_tap_cable_set_signal (chain->cable, URJ_POD_CS_TRST, trst_cable ? URJ_POD_CS_TRST : 0);
 
     return (1);
 }
 
 
 /* ***************************************************************************
- * svf_txr(ir_dr, params)
+ * urj_svf_txr(ir_dr, params)
  *
  * Handles TIR, TDR.
  *
@@ -1074,18 +1074,18 @@ svf_trst (chain_t *chain, parser_priv_t *priv, int trst_mode)
  *   0 : error occurred
  * ***************************************************************************/
 int
-svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
+urj_svf_txr (enum URJ_SVF_generic_irdr_coding ir_dr, struct ths_params *params)
 {
     if (params->number != 0.0)
         printf (_("Warning %s: command %s not implemented\n"), "svf",
-                ir_dr == generic_ir ? "TIR" : "TDR");
+                ir_dr == URJ_SVF_generic_ir ? "TIR" : "TDR");
 
     return (1);
 }
 
 
 /* ***************************************************************************
- * svf_run(chain, SVF_FILE, stop_on_mismatch, ref_freq)
+ * urj_svf_run(chain, SVF_FILE, stop_on_mismatch, ref_freq)
  *
  * Main entry point for the 'svf' command. Calls the svf parser.
  *
@@ -1107,16 +1107,16 @@ svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
  *   0 : error occurred
  * ***************************************************************************/
 void
-svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
+urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
          int print_progress, uint32_t ref_freq)
 {
-    const sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},
+    const urj_svf_sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},
     1, 1
     };
-    parser_priv_t priv;
+    urj_svf_parser_priv_t priv;
     int c = ~EOF;
     int num_lines;
-    uint32_t old_frequency = cable_get_frequency (chain->cable);
+    uint32_t old_frequency = urj_tap_cable_get_frequency (chain->cable);
 
     /* get number of lines in svf file so we can give user some feedback on long
        files or slow cables */
@@ -1150,7 +1150,7 @@ svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     priv.part = chain->parts->parts[chain->active_part];
 
     /* setup register SDR if not already existing */
-    if (!(priv.dr = part_find_data_register (priv.part, "SDR")))
+    if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))
     {
         char *register_cmd[] = { "register",
             "SDR",
@@ -1158,10 +1158,10 @@ svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
             NULL
         };
 
-        if (cmd_run (chain, register_cmd) < 1)
+        if (urj_cmd_run (chain, register_cmd) < 1)
             return;
 
-        if (!(priv.dr = part_find_data_register (priv.part, "SDR")))
+        if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))
         {
             printf (_("Error %s: could not establish SDR register\n"), "svf");
             return;
@@ -1169,7 +1169,7 @@ svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     }
 
     /* setup instruction SIR if not already existing */
-    if (!(priv.ir = part_find_instruction (priv.part, "SIR")))
+    if (!(priv.ir = urj_part_find_instruction (priv.part, "SIR")))
     {
         char *instruction_cmd[] = { "instruction",
             "SIR",
@@ -1190,7 +1190,7 @@ svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
                 instruction_string[len] = '\0';
                 instruction_cmd[2] = instruction_string;
 
-                result = cmd_run (chain, instruction_cmd);
+                result = urj_cmd_run (chain, instruction_cmd);
 
                 free (instruction_string);
 
@@ -1199,7 +1199,7 @@ svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
             }
         }
 
-        if (!(priv.ir = part_find_instruction (priv.part, "SIR")))
+        if (!(priv.ir = urj_part_find_instruction (priv.part, "SIR")))
         {
             printf (_("Error %s: could not establish SIR instruction\n"),
                     "svf");
@@ -1212,9 +1212,9 @@ svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
 
     priv.sir_params = priv.sdr_params = sxr_default;
 
-    priv.endir = priv.enddr = Run_Test_Idle;
+    priv.endir = priv.enddr = URJ_TAP_STATE_RUN_TEST_IDLE;
 
-    priv.runtest_run_state = priv.runtest_end_state = Run_Test_Idle;
+    priv.runtest_run_state = priv.runtest_end_state = URJ_TAP_STATE_RUN_TEST_IDLE;
 
     priv.svf_trst_absent = 0;
     priv.svf_state_executed = 0;
@@ -1227,12 +1227,12 @@ svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     priv.ref_freq = ref_freq;
 
     /* select SIR instruction */
-    part_set_instruction (priv.part, "SIR");
+    urj_part_set_instruction (priv.part, "SIR");
 
-    if (svf_bison_init (&priv, SVF_FILE, num_lines, print_progress))
+    if (urj_svf_bison_init (&priv, SVF_FILE, num_lines, print_progress))
     {
-        svfparse (&priv, chain);
-        svf_bison_deinit (&priv);
+        urj_svf_parse (&priv, chain);
+        urj_svf_bison_deinit (&priv);
     }
 
     if (print_progress)
@@ -1262,6 +1262,6 @@ svf_run (chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
         free (priv.sdr_params.params.smask);
 
     /* restore previous frequency setting, required by SVF spec */
-    if (old_frequency != cable_get_frequency (chain->cable))
-        cable_set_frequency (chain->cable, old_frequency);
+    if (old_frequency != urj_tap_cable_get_frequency (chain->cable))
+        urj_tap_cable_set_frequency (chain->cable, old_frequency);
 }

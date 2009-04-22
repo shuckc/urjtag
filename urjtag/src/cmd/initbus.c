@@ -32,14 +32,14 @@
 #include "jtag.h"
 
 static int
-cmd_initbus_run (chain_t *chain, char *params[])
+cmd_initbus_run (urj_chain_t *chain, char *params[])
 {
     int i;
 
-    if (cmd_params (params) < 2)
+    if (urj_cmd_params (params) < 2)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -58,15 +58,15 @@ cmd_initbus_run (chain_t *chain, char *params[])
     {
         if (strcasecmp (bus_drivers[i]->name, params[1]) == 0)
         {
-            bus_t *abus =
+            urj_bus_t *abus =
                 bus_drivers[i]->new_bus (chain, bus_drivers[i], params);
             if (abus == NULL)
             {
                 printf (_("bus alloc/attach failed!\n"));
                 return 1;
             }
-            buses_add (abus);
-            if (bus_init (abus) != URJTAG_STATUS_OK)
+            urj_bus_buses_add (abus);
+            if (URJ_BUS_INIT (abus) != URJ_STATUS_OK)
                 printf (_("bus initialization failed!\n"));
 
             for (i = 0; i < buses.len; i++)
@@ -101,7 +101,7 @@ cmd_initbus_help (void)
                 bus_drivers[i]->description);
 }
 
-const cmd_t cmd_initbus = {
+const urj_cmd_t cmd_initbus = {
     "initbus",
     N_("initialize bus driver for active part"),
     cmd_initbus_help,

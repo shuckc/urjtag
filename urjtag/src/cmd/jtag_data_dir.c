@@ -21,7 +21,7 @@ extern const char *jtag_argv0;
 static char *jtag_data_dir = NULL;
 
 const char *
-jtag_get_data_dir (void)
+urj_cmd_jtag_get_data_dir (void)
 {
     if (jtag_data_dir)
         return jtag_data_dir;
@@ -37,7 +37,7 @@ jtag_get_data_dir (void)
 #else
 
 const char *
-jtag_get_data_dir (void)
+urj_cmd_jtag_get_data_dir (void)
 {
     return JTAG_DATA_DIR;
 }

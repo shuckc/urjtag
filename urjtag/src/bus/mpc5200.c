@@ -48,12 +48,12 @@
 typedef struct
 {
     uint32_t last_adr;
-    signal_t *ad[LPC_NUM_AD];
-    signal_t *ncs[LPC_NUM_CS];
-    signal_t *nwe;
-    signal_t *noe;
-    signal_t *ata_iso;
-    signal_t *nale;
+    urj_part_signal_t *ad[LPC_NUM_AD];
+    urj_part_signal_t *ncs[LPC_NUM_CS];
+    urj_part_signal_t *nwe;
+    urj_part_signal_t *noe;
+    urj_part_signal_t *ata_iso;
+    urj_part_signal_t *nale;
     int muxed;
     int lpc_num_ad;
     int lpc_num_d;
@@ -71,18 +71,18 @@ typedef struct
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-mpc5200_bus_new (chain_t *chain, const bus_driver_t *driver,
+static urj_bus_t *
+mpc5200_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                  char *cmd_params[])
 {
-    bus_t *bus;
+    urj_bus_t *bus;
     bus_params_t *bp;
-    part_t *part;
+    urj_part_t *part;
     char buff[10];
     int i;
     int failed = 0;
 
-    bus = calloc (1, sizeof (bus_t));
+    bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
         return NULL;
 
@@ -106,29 +106,29 @@ mpc5200_bus_new (chain_t *chain, const bus_driver_t *driver,
     printf ("%sMUXed %db address, %db data bus\n", (bp->muxed ? "" : "Non-"),
             bp->lpc_num_ad, bp->lpc_num_d);
 
-    CHAIN = chain;
-    PART = part = chain->parts->parts[chain->active_part];
+    bus->chain = chain;
+    bus->part = part = chain->parts->parts[chain->active_part];
 
     /* Get the signals */
     for (i = 0; i < LPC_NUM_AD; i++)
     {
         sprintf (buff, "EXT_AD_%d", i);
-        failed |= generic_bus_attach_sig (part, &(AD[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(AD[i]), buff);
     }
 
     for (i = 0; i < LPC_NUM_CS; i++)
     {
         sprintf (buff, "LP_CS%d_B", i);
-        failed |= generic_bus_attach_sig (part, &(nCS[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(nCS[i]), buff);
     }
 
-    failed |= generic_bus_attach_sig (part, &(nWE), "LP_RW");
+    failed |= urj_bus_generic_attach_sig (part, &(nWE), "LP_RW");
 
-    failed |= generic_bus_attach_sig (part, &(nOE), "LP_OE");
+    failed |= urj_bus_generic_attach_sig (part, &(nOE), "LP_OE");
 
-    failed |= generic_bus_attach_sig (part, &(nALE), "LP_ALE_B");
+    failed |= urj_bus_generic_attach_sig (part, &(nALE), "LP_ALE_B");
 
-    failed |= generic_bus_attach_sig (part, &(ATA_ISO), "ATA_ISOLATION");
+    failed |= urj_bus_generic_attach_sig (part, &(ATA_ISO), "ATA_ISOLATION");
 
     if (failed)
     {
@@ -145,12 +145,12 @@ mpc5200_bus_new (chain_t *chain, const bus_driver_t *driver,
  *
  */
 static void
-mpc5200_bus_printinfo (bus_t *bus)
+mpc5200_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
     printf (_
             ("Freescale MPC5200 compatible bus driver via BSR (JTAG part No. %d)\n"),
@@ -162,7 +162,7 @@ mpc5200_bus_printinfo (bus_t *bus)
  *
  */
 static int
-mpc5200_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
+mpc5200_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
 
@@ -172,33 +172,33 @@ mpc5200_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
         area->start = UINT32_C (0x00000000);
         area->length = LPC_ADDR_SIZE;
         area->width = bp->lpc_num_d;
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     }
 
     area->description = NULL;
     area->start = LPC_ADDR_SIZE;
     area->length = UINT64_C (0x100000000) - LPC_ADDR_SIZE;
     area->width = 0;
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 static void
-setup_address (bus_t *bus, uint32_t a)
+setup_address (urj_bus_t *bus, uint32_t a)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     int i;
 
     for (i = 0; i < bp->lpc_num_ad; i++)
-        part_set_signal (p, AD[i], 1, (a >> i) & 1);
+        urj_part_set_signal (p, AD[i], 1, (a >> i) & 1);
 }
 
 static void
-set_data_in (bus_t *bus, uint32_t adr)
+set_data_in (urj_bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
     int i;
 
     mpc5200_bus_area (bus, adr, &area);
@@ -206,15 +206,15 @@ set_data_in (bus_t *bus, uint32_t adr)
         return;
 
     for (i = 0; i < area.width; i++)
-        part_set_signal (p, AD[i + (LPC_NUM_AD - bp->lpc_num_d)], 0, 0);
+        urj_part_set_signal (p, AD[i + (LPC_NUM_AD - bp->lpc_num_d)], 0, 0);
 }
 
 static void
-setup_data (bus_t *bus, uint32_t adr, uint32_t d)
+setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
     int i;
 
     mpc5200_bus_area (bus, adr, &area);
@@ -222,17 +222,17 @@ setup_data (bus_t *bus, uint32_t adr, uint32_t d)
         return;
 
     for (i = 0; i < area.width; i++)
-        part_set_signal (p, AD[i + (LPC_NUM_AD - bp->lpc_num_d)], 1,
+        urj_part_set_signal (p, AD[i + (LPC_NUM_AD - bp->lpc_num_d)], 1,
                          (d >> i) & 1);
 }
 
 static uint32_t
-get_data (bus_t *bus, uint32_t adr)
+get_data (urj_bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
-    bus_area_t area;
+    urj_bus_area_t area;
     uint32_t d = 0;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     int i;
 
     mpc5200_bus_area (bus, adr, &area);
@@ -241,7 +241,7 @@ get_data (bus_t *bus, uint32_t adr)
 
     for (i = 0; i < area.width; i++)
     {
-        d |= (uint32_t) (part_get_signal
+        d |= (uint32_t) (urj_part_get_signal
                          (p, AD[i + (LPC_NUM_AD - bp->lpc_num_d)]) << i);
     }
     return d;
@@ -252,10 +252,10 @@ get_data (bus_t *bus, uint32_t adr)
  *
  */
 static void
-mpc5200_bus_read_start (bus_t *bus, uint32_t adr)
+mpc5200_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     uint8_t cs = LPC_ADDR_TO_CS (adr);
     int i;
 
@@ -265,12 +265,12 @@ mpc5200_bus_read_start (bus_t *bus, uint32_t adr)
 
     for (i = 0; i < LPC_NUM_CS; i++)
     {
-        part_set_signal (p, nCS[i], 1, !(cs == i));
+        urj_part_set_signal (p, nCS[i], 1, !(cs == i));
     }
 
-    part_set_signal (p, ATA_ISO, 1, 1);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 0);
+    urj_part_set_signal (p, ATA_ISO, 1, 1);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 0);
 
     setup_address (bus, adr);
 
@@ -278,11 +278,11 @@ mpc5200_bus_read_start (bus_t *bus, uint32_t adr)
         set_data_in (bus, adr);
     else
     {
-        part_set_signal (p, nALE, 1, 0);
-        chain_shift_data_registers (CHAIN, 0);
-        part_set_signal (p, nALE, 1, 1);
+        urj_part_set_signal (p, nALE, 1, 0);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
+        urj_part_set_signal (p, nALE, 1, 1);
     }
-    chain_shift_data_registers (CHAIN, 0);
+    urj_tap_chain_shift_data_registers (bus->chain, 0);
 }
 
 /**
@@ -290,33 +290,33 @@ mpc5200_bus_read_start (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-mpc5200_bus_read_next (bus_t *bus, uint32_t adr)
+mpc5200_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     uint32_t d;
 
     if (!bp->muxed)
     {
         setup_address (bus, adr);
-        chain_shift_data_registers (CHAIN, 1);
+        urj_tap_chain_shift_data_registers (bus->chain, 1);
         d = get_data (bus, LAST_ADR);
     }
     else
     {
         set_data_in (bus, adr);
-        chain_shift_data_registers (CHAIN, 0);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
 
-        chain_shift_data_registers (CHAIN, 1);
+        urj_tap_chain_shift_data_registers (bus->chain, 1);
         d = get_data (bus, LAST_ADR);
 
         setup_address (bus, adr);
         LAST_ADR = adr;
 
-        part_set_signal (p, nALE, 1, 0);
-        chain_shift_data_registers (CHAIN, 0);
-        part_set_signal (p, nALE, 1, 1);
-        chain_shift_data_registers (CHAIN, 0);
+        urj_part_set_signal (p, nALE, 1, 0);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
+        urj_part_set_signal (p, nALE, 1, 1);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
     }
 
     LAST_ADR = adr;
@@ -328,24 +328,24 @@ mpc5200_bus_read_next (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-mpc5200_bus_read_end (bus_t *bus)
+mpc5200_bus_read_end (urj_bus_t *bus)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     int i;
 
     if (bp->muxed)
     {
         set_data_in (bus, LAST_ADR);
-        chain_shift_data_registers (CHAIN, 0);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
     }
     for (i = 0; i < LPC_NUM_CS; i++)
     {
-        part_set_signal (p, nCS[i], 1, 1);
+        urj_part_set_signal (p, nCS[i], 1, 1);
     }
-    part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
 
-    chain_shift_data_registers (CHAIN, 1);
+    urj_tap_chain_shift_data_registers (bus->chain, 1);
 
     return get_data (bus, LAST_ADR);
 }
@@ -355,56 +355,56 @@ mpc5200_bus_read_end (bus_t *bus)
  *
  */
 static void
-mpc5200_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
+mpc5200_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
     /* see Figure 6-47 in [1] */
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     uint8_t cs = LPC_ADDR_TO_CS (adr);
     int i;
 
     if (bp->muxed)
     {
         setup_address (bus, adr);
-        part_set_signal (p, nALE, 1, 0);
-        chain_shift_data_registers (chain, 0);
-        part_set_signal (p, nALE, 1, 1);
-        chain_shift_data_registers (chain, 0);
+        urj_part_set_signal (p, nALE, 1, 0);
+        urj_tap_chain_shift_data_registers (chain, 0);
+        urj_part_set_signal (p, nALE, 1, 1);
+        urj_tap_chain_shift_data_registers (chain, 0);
     }
 
     for (i = 0; i < LPC_NUM_CS; i++)
     {
-        part_set_signal (p, nCS[i], 1, !(cs == i));
+        urj_part_set_signal (p, nCS[i], 1, !(cs == i));
     }
-    part_set_signal (p, ATA_ISO, 1, 1);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, ATA_ISO, 1, 1);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
 
     if (!bp->muxed)
         setup_address (bus, adr);
     setup_data (bus, adr, data);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
-    part_set_signal (p, nWE, 1, 0);
-    chain_shift_data_registers (chain, 0);
-    part_set_signal (p, nWE, 1, 1);
-    chain_shift_data_registers (chain, 0);
+    urj_part_set_signal (p, nWE, 1, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const bus_driver_t mpc5200_bus = {
+const urj_bus_driver_t mpc5200_bus = {
     "mpc5200",
     N_("Freescale MPC5200 compatible bus driver via BSR, parameter: [mux]"),
     mpc5200_bus_new,
-    generic_bus_free,
+    urj_bus_generic_free,
     mpc5200_bus_printinfo,
-    generic_bus_prepare_extest,
+    urj_bus_generic_prepare_extest,
     mpc5200_bus_area,
     mpc5200_bus_read_start,
     mpc5200_bus_read_next,
     mpc5200_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     mpc5200_bus_write,
-    generic_bus_no_init
+    urj_bus_generic_no_init
 };

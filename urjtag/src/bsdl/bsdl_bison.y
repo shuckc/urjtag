@@ -118,9 +118,9 @@ LEGAL NOTICES:
 
 
 %pure-parser
-%parse-param {bsdl_parser_priv_t *priv_data}
+%parse-param {urj_bsdl_parser_priv_t *priv_data}
 %defines
-%name-prefix="bsdl"
+%name-prefix="urj_bsdl_"
 
 %{
 #include <stdlib.h>
@@ -146,30 +146,30 @@ int yylex (YYSTYPE *, void *);
 
 #if 1
 #define ERROR_LIMIT 0
-#define BUMP_ERROR if (bsdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
+#define BUMP_ERROR if (urj_bsdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
                           {Give_Up_And_Quit( priv_data ); YYABORT;}
 #else
 #define BUMP_ERROR {Give_Up_And_Quit( priv_data );YYABORT;}
 #endif
 
-static void Print_Error( bsdl_parser_priv_t *, const char * );
-static void Print_Warning( bsdl_parser_priv_t *, const char * );
-static void Give_Up_And_Quit( bsdl_parser_priv_t * );
+static void Print_Error( urj_bsdl_parser_priv_t *, const char * );
+static void Print_Warning( urj_bsdl_parser_priv_t *, const char * );
+static void Give_Up_And_Quit( urj_bsdl_parser_priv_t * );
 
 /* semantic functions */
-static void add_instruction( bsdl_parser_priv_t *, char *, char * );
-static void ac_set_register( bsdl_parser_priv_t *, char *, int );
-static void ac_add_instruction( bsdl_parser_priv_t *, char * );
-static void ac_apply_assoc( bsdl_parser_priv_t * );
-static void prt_add_name( bsdl_parser_priv_t *, char * );
-static void prt_add_bit( bsdl_parser_priv_t * );
-static void prt_add_range( bsdl_parser_priv_t *, int, int );
-static void ci_no_disable( bsdl_parser_priv_t * );
-static void ci_set_cell_spec_disable( bsdl_parser_priv_t *, int, int, int );
-static void ci_set_cell_spec( bsdl_parser_priv_t *, int, char * );
-static void ci_append_cell_info( bsdl_parser_priv_t *, int );
+static void add_instruction( urj_bsdl_parser_priv_t *, char *, char * );
+static void ac_set_register( urj_bsdl_parser_priv_t *, char *, int );
+static void ac_add_instruction( urj_bsdl_parser_priv_t *, char * );
+static void ac_apply_assoc( urj_bsdl_parser_priv_t * );
+static void prt_add_name( urj_bsdl_parser_priv_t *, char * );
+static void prt_add_bit( urj_bsdl_parser_priv_t * );
+static void prt_add_range( urj_bsdl_parser_priv_t *, int, int );
+static void ci_no_disable( urj_bsdl_parser_priv_t * );
+static void ci_set_cell_spec_disable( urj_bsdl_parser_priv_t *, int, int, int );
+static void ci_set_cell_spec( urj_bsdl_parser_priv_t *, int, char * );
+static void ci_append_cell_info( urj_bsdl_parser_priv_t *, int );
 
-void yyerror( bsdl_parser_priv_t *, const char * );
+void yyerror( urj_bsdl_parser_priv_t *, const char * );
 %}
 
 %union {
@@ -531,7 +531,7 @@ Disable_Value   : Z
 BSDL_Compliance_Patterns : COMPLIANCE_PATTERNS BSDL_Compliance_Pattern
 ;
 BSDL_Compliance_Pattern : LPAREN Physical_Pin_List RPAREN
-                          { bsdl_flex_set_bin_x( priv_data->scanner ); }
+                          { urj_bsdl_flex_set_bin_x( priv_data->scanner ); }
                           LPAREN Bin_X_Pattern_List RPAREN
 ;
 Bin_X_Pattern_List : BIN_X_PATTERN
@@ -542,11 +542,11 @@ Bin_X_Pattern_List : BIN_X_PATTERN
 
 /****************************************************************************/
 BSDL_Component_Conformance : COMPONENT_CONFORMANCE STD_1149_1_1990
-                             { priv_data->jtag_ctrl->conformance = CONF_1990; }
+                             { priv_data->jtag_ctrl->conformance = URJ_BSDL_CONF_1990; }
                            | COMPONENT_CONFORMANCE STD_1149_1_1993
-                             { priv_data->jtag_ctrl->conformance = CONF_1993; }
+                             { priv_data->jtag_ctrl->conformance = URJ_BSDL_CONF_1993; }
                            | COMPONENT_CONFORMANCE STD_1149_1_2001
-                             { priv_data->jtag_ctrl->conformance = CONF_2001; }
+                             { priv_data->jtag_ctrl->conformance = URJ_BSDL_CONF_2001; }
 ;
 /****************************************************************************/
 ISC_Extension : ISC_Conformance
@@ -706,9 +706,9 @@ Update_Field_List      : Update_Field
 ;
 Update_Field           : DECIMAL_NUMBER
                        | DECIMAL_NUMBER COLON 
-                         { bsdl_flex_set_hex( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_hex( priv_data->scanner ); }
                          Data_Expression
-                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
 ;
 Data_Expression        : HEX_STRING
                          { free( $1 ); }
@@ -720,11 +720,11 @@ Variable_Expression    : Variable
                        | Variable_Update
 ;
 Variable_Assignment    : Variable EQUAL
-                         { bsdl_flex_set_hex( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_hex( priv_data->scanner ); }
                          HEX_STRING
                          {
                            free( $4 );
-                           bsdl_flex_set_decimal( priv_data->scanner );
+                           urj_bsdl_flex_set_decimal( priv_data->scanner );
                          }
                        | Variable Input_Specifier
 ;
@@ -738,9 +738,9 @@ Capture_Field_List     : Capture_Field
                        | Capture_Field_List COMMA Capture_Field
 ;
 Capture_Field          : DECIMAL_NUMBER COLON
-                         { bsdl_flex_set_hex( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_hex( priv_data->scanner ); }
                          Capture_Field_Rest
-                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
 ;
 Capture_Field_Rest     : Capture_Specification
                        | Capture_Specification CRC_Tag
@@ -776,13 +776,13 @@ Variable               : DOLLAR IDENTIFIER
                          { free( $2 ); }
 ;
 Binary_Operator        : PLUS
-                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
                        | MINUS
-                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
                        | SH_RIGHT
-                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
                        | SH_LEFT
-                         { bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
 ;
 Complement_Operator    : TILDE
 ;
@@ -869,35 +869,35 @@ Exit_Instruction_List : IDENTIFIER
 ;
 %%  /* End rules, begin programs  */
 /*----------------------------------------------------------------------*/
-static void Print_Error( bsdl_parser_priv_t *priv_data, const char *Errmess )
+static void Print_Error( urj_bsdl_parser_priv_t *priv_data, const char *Errmess )
 {
-  bsdl_msg( priv_data->jtag_ctrl->proc_mode,
+  urj_bsdl_msg( priv_data->jtag_ctrl->proc_mode,
             BSDL_MSG_ERR, _("Line %d, %s.\n"),
             priv_data->lineno,
             Errmess );
 }
 /*----------------------------------------------------------------------*/
-static void Print_Warning( bsdl_parser_priv_t *priv_data, const char *Warnmess )
+static void Print_Warning( urj_bsdl_parser_priv_t *priv_data, const char *Warnmess )
 {
-  bsdl_msg( priv_data->jtag_ctrl->proc_mode,
+  urj_bsdl_msg( priv_data->jtag_ctrl->proc_mode,
             BSDL_MSG_WARN, _("Line %d, %s.\n"),
             priv_data->lineno,
             Warnmess );
 }
 /*----------------------------------------------------------------------*/
-static void Give_Up_And_Quit( bsdl_parser_priv_t *priv_data )
+static void Give_Up_And_Quit( urj_bsdl_parser_priv_t *priv_data )
 {
   //Print_Error( priv_data, "Too many errors" );
-  bsdl_flex_stop_buffer( priv_data->scanner );
+  urj_bsdl_flex_stop_buffer( priv_data->scanner );
 }
 /*----------------------------------------------------------------------*/
-void yyerror( bsdl_parser_priv_t *priv_data, const char *error_string )
+void yyerror( urj_bsdl_parser_priv_t *priv_data, const char *error_string )
 {
 }
 
 
 /*****************************************************************************
- * void bsdl_sem_init( bsdl_parser_priv_t *priv )
+ * void urj_bsdl_sem_init( urj_bsdl_parser_priv_t *priv )
  *
  * Initializes storage elements in the private parser and jtag control
  * structures that are used for semantic purposes.
@@ -908,13 +908,13 @@ void yyerror( bsdl_parser_priv_t *priv_data, const char *error_string )
  * Returns
  *   void
  ****************************************************************************/
-static void bsdl_sem_init( bsdl_parser_priv_t *priv )
+static void urj_bsdl_sem_init( urj_bsdl_parser_priv_t *priv )
 {
-  jtag_ctrl_t *jc = priv->jtag_ctrl;
+  urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
 
   jc->instr_len   = -1;
   jc->bsr_len     = -1;
-  jc->conformance = CONF_UNKNOWN;
+  jc->conformance = URJ_BSDL_CONF_UNKNOWN;
   jc->idcode      = NULL;
   jc->usercode    = NULL;
 
@@ -947,7 +947,7 @@ static void bsdl_sem_init( bsdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void free_instr_list( instr_elem_t *il )
+static void free_instr_list( urj_bsdl_instr_elem_t *il )
 {
   if (il)
   {
@@ -962,7 +962,7 @@ static void free_instr_list( instr_elem_t *il )
 
 
 /*****************************************************************************
- * void free_ainfo_list( ainfo_elem_t *ai, int free_me )
+ * void free_ainfo_list( urj_bsdl_types_ainfo_elem_t *ai, int free_me )
  *
  * Deallocates the given list of ainfo_elem.
  *
@@ -973,7 +973,7 @@ static void free_instr_list( instr_elem_t *il )
  * Returns
  *  void
  ****************************************************************************/
-static void free_ainfo_list( ainfo_elem_t *ai, int free_me )
+static void free_ainfo_list( urj_bsdl_types_ainfo_elem_t *ai, int free_me )
 {
   if (ai)
   {
@@ -990,7 +990,7 @@ static void free_ainfo_list( ainfo_elem_t *ai, int free_me )
 
 
 /*****************************************************************************
- * void free_string_list( string_elem_t *sl )
+ * void free_string_list( urj_bsdl_string_elem_t *sl )
  *
  * Deallocates the given list of string_elem items.
  *
@@ -1000,7 +1000,7 @@ static void free_ainfo_list( ainfo_elem_t *ai, int free_me )
  * Returns
  *  void
  ****************************************************************************/
-static void free_string_list( string_elem_t *sl) 
+static void free_string_list( urj_bsdl_string_elem_t *sl) 
 {
   if (sl)
   {
@@ -1013,7 +1013,7 @@ static void free_string_list( string_elem_t *sl)
 
 
 /*****************************************************************************
- * void free_c_list( cell_info_t *ci, int free_me )
+ * void free_c_list( urj_bsdl_cell_info_t *ci, int free_me )
  *
  * Deallocates the given list of cell_info items.
  *
@@ -1025,7 +1025,7 @@ static void free_string_list( string_elem_t *sl)
  * Returns
  *  void
  ****************************************************************************/
-static void free_ci_list( cell_info_t *ci, int free_me )
+static void free_ci_list( urj_bsdl_cell_info_t *ci, int free_me )
 {
   if (ci)
   {
@@ -1044,7 +1044,7 @@ static void free_ci_list( cell_info_t *ci, int free_me )
 
 
 /*****************************************************************************
- * void bsdl_sem_deinit( bsdl_parser_priv_t *priv )
+ * void urj_bsdl_sem_deinit( urj_bsdl_parser_priv_t *priv )
  *
  * Frees and deinitializes storage elements in the private parser and
  * jtag control structures that were filled by semantic rules.
@@ -1055,9 +1055,9 @@ static void free_ci_list( cell_info_t *ci, int free_me )
  * Returns
  *   void
  ****************************************************************************/
-static void bsdl_sem_deinit( bsdl_parser_priv_t *priv )
+static void urj_bsdl_sem_deinit( urj_bsdl_parser_priv_t *priv )
 {
-  jtag_ctrl_t *jc = priv->jtag_ctrl;
+  urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
 
   if (jc->idcode)
   {
@@ -1092,7 +1092,7 @@ static void bsdl_sem_deinit( bsdl_parser_priv_t *priv )
 
 
 /*****************************************************************************
- * bsdl_parser_priv_t *bsdl_parser_init( jtag_ctrl_t *jtag_ctrl )
+ * urj_bsdl_parser_priv_t *urj_bsdl_parser_init( urj_bsdl_jtag_ctrl_t *jtag_ctrl )
  *
  * Initializes storage elements in the private parser structure that are
  * used for parser maintenance purposes.
@@ -1105,31 +1105,31 @@ static void bsdl_sem_deinit( bsdl_parser_priv_t *priv )
  * Returns
  *   pointer to private parser structure
  ****************************************************************************/
-bsdl_parser_priv_t *bsdl_parser_init( jtag_ctrl_t *jtag_ctrl )
+urj_bsdl_parser_priv_t *urj_bsdl_parser_init( urj_bsdl_jtag_ctrl_t *jtag_ctrl )
 {
-  bsdl_parser_priv_t *new_priv;
+  urj_bsdl_parser_priv_t *new_priv;
 
-  if (!(new_priv = (bsdl_parser_priv_t *)malloc( sizeof( bsdl_parser_priv_t ) ))) {
-    bsdl_msg( jtag_ctrl->proc_mode,
+  if (!(new_priv = (urj_bsdl_parser_priv_t *)malloc( sizeof( urj_bsdl_parser_priv_t ) ))) {
+    urj_bsdl_msg( jtag_ctrl->proc_mode,
               BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     return NULL;
   }
 
   new_priv->jtag_ctrl = jtag_ctrl;
 
-  if (!(new_priv->scanner = bsdl_flex_init( jtag_ctrl->proc_mode ))) {
+  if (!(new_priv->scanner = urj_bsdl_flex_init( jtag_ctrl->proc_mode ))) {
     free(new_priv);
     new_priv = NULL;
   }
 
-  bsdl_sem_init( new_priv );
+  urj_bsdl_sem_init( new_priv );
 
   return new_priv;
 }
 
 
 /*****************************************************************************
- * void bsdl_parser_deinit( bsdl_parser_priv_t *priv )
+ * void urj_bsdl_parser_deinit( urj_bsdl_parser_priv_t *priv )
  *
  * Frees storage elements in the private parser structure that are
  * used for parser maintenance purposes.
@@ -1142,16 +1142,16 @@ bsdl_parser_priv_t *bsdl_parser_init( jtag_ctrl_t *jtag_ctrl )
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_parser_deinit( bsdl_parser_priv_t *priv_data )
+void urj_bsdl_parser_deinit( urj_bsdl_parser_priv_t *priv_data )
 {
-  bsdl_sem_deinit( priv_data );
-  bsdl_flex_deinit( priv_data->scanner );
+  urj_bsdl_sem_deinit( priv_data );
+  urj_bsdl_flex_deinit( priv_data->scanner );
   free( priv_data );
 }
 
 
 /*****************************************************************************
- * void add_instruction( bsdl_parser_priv_t *priv, char *instr, char *opcode )
+ * void add_instruction( urj_bsdl_parser_priv_t *priv, char *instr, char *opcode )
  *
  * Converts the instruction specification into a member of the main
  * list of instructions at priv->jtag_ctrl->instr_list.
@@ -1164,11 +1164,11 @@ void bsdl_parser_deinit( bsdl_parser_priv_t *priv_data )
  * Returns
  *   void
  ****************************************************************************/
-static void add_instruction( bsdl_parser_priv_t *priv, char *instr, char *opcode )
+static void add_instruction( urj_bsdl_parser_priv_t *priv, char *instr, char *opcode )
 {
-  instr_elem_t *new_instr;
+  urj_bsdl_instr_elem_t *new_instr;
 
-  new_instr = (instr_elem_t *)malloc( sizeof( instr_elem_t ) );
+  new_instr = (urj_bsdl_instr_elem_t *)malloc( sizeof( urj_bsdl_instr_elem_t ) );
   if (new_instr)
   {
     new_instr->next   = priv->jtag_ctrl->instr_list;
@@ -1178,13 +1178,13 @@ static void add_instruction( bsdl_parser_priv_t *priv, char *instr, char *opcode
     priv->jtag_ctrl->instr_list = new_instr;
   }
   else
-    bsdl_msg( priv->jtag_ctrl->proc_mode,
+    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 
 /*****************************************************************************
- * void ac_set_register( bsdl_parser_priv_t *priv, char *reg, int reg_len )
+ * void ac_set_register( urj_bsdl_parser_priv_t *priv, char *reg, int reg_len )
  * Register Access management function
  *
  * Stores the register specification values for the current register access
@@ -1198,9 +1198,9 @@ static void add_instruction( bsdl_parser_priv_t *priv, char *instr, char *opcode
  * Returns
  *   void
  ****************************************************************************/
-static void ac_set_register( bsdl_parser_priv_t *priv, char *reg, int reg_len )
+static void ac_set_register( urj_bsdl_parser_priv_t *priv, char *reg, int reg_len )
 {
-  ainfo_elem_t *tmp_ai = &(priv->ainfo);
+  urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
 
   tmp_ai->reg     = reg;
   tmp_ai->reg_len = reg_len;
@@ -1208,7 +1208,7 @@ static void ac_set_register( bsdl_parser_priv_t *priv, char *reg, int reg_len )
 
 
 /*****************************************************************************
- * void ac_add_instruction( bsdl_parser_priv_t *priv, char *instr )
+ * void ac_add_instruction( urj_bsdl_parser_priv_t *priv, char *instr )
  * Register Access management function
  *
  * Appends the specified instruction to the list of instructions for the
@@ -1222,12 +1222,12 @@ static void ac_set_register( bsdl_parser_priv_t *priv, char *reg, int reg_len )
  * Returns
  *   void
  ****************************************************************************/
-static void ac_add_instruction( bsdl_parser_priv_t *priv, char *instr )
+static void ac_add_instruction( urj_bsdl_parser_priv_t *priv, char *instr )
 {
-  ainfo_elem_t *tmp_ai = &(priv->ainfo);
-  instr_elem_t *new_instr;
+  urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
+  urj_bsdl_instr_elem_t *new_instr;
 
-  new_instr = (instr_elem_t *)malloc( sizeof( instr_elem_t ) );
+  new_instr = (urj_bsdl_instr_elem_t *)malloc( sizeof( urj_bsdl_instr_elem_t ) );
   if (new_instr)
   {
     new_instr->next   = tmp_ai->instr_list;
@@ -1237,13 +1237,13 @@ static void ac_add_instruction( bsdl_parser_priv_t *priv, char *instr )
     tmp_ai->instr_list = new_instr;
   }
   else
-    bsdl_msg( priv->jtag_ctrl->proc_mode,
+    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 
 /*****************************************************************************
- * void ac_apply_assoc( bsdl_parser_priv_t *priv )
+ * void ac_apply_assoc( urj_bsdl_parser_priv_t *priv )
  * Register Access management function
  *
  * Appends the collected register access specification from the temporary
@@ -1255,13 +1255,13 @@ static void ac_add_instruction( bsdl_parser_priv_t *priv, char *instr )
  * Returns
  *   void
  ****************************************************************************/
-static void ac_apply_assoc( bsdl_parser_priv_t *priv )
+static void ac_apply_assoc( urj_bsdl_parser_priv_t *priv )
 {
-  jtag_ctrl_t  *jc = priv->jtag_ctrl;
-  ainfo_elem_t *tmp_ai = &(priv->ainfo);
-  ainfo_elem_t *new_ai;
+  urj_bsdl_jtag_ctrl_t  *jc = priv->jtag_ctrl;
+  urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
+  urj_bsdl_types_ainfo_elem_t *new_ai;
 
-  new_ai = (ainfo_elem_t *)malloc( sizeof( ainfo_elem_t ) );
+  new_ai = (urj_bsdl_types_ainfo_elem_t *)malloc( sizeof( urj_bsdl_types_ainfo_elem_t ) );
   if (new_ai)
   {
     new_ai->next       = jc->ainfo_list;
@@ -1272,7 +1272,7 @@ static void ac_apply_assoc( bsdl_parser_priv_t *priv )
     jc->ainfo_list = new_ai;
   }
   else
-    bsdl_msg( jc->proc_mode,
+    urj_bsdl_msg( jc->proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 
   /* clean up obsolete temporary entries */
@@ -1283,7 +1283,7 @@ static void ac_apply_assoc( bsdl_parser_priv_t *priv )
 
 
 /*****************************************************************************
- * void prt_add_name( bsdl_parser_priv_t *priv, char *name )
+ * void prt_add_name( urj_bsdl_parser_priv_t *priv, char *name )
  * Port name management function
  *
  * Sets the name field of the temporary storage area for port description
@@ -1296,12 +1296,12 @@ static void ac_apply_assoc( bsdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void prt_add_name( bsdl_parser_priv_t *priv, char *name )
+static void prt_add_name( urj_bsdl_parser_priv_t *priv, char *name )
 {
-  port_desc_t *pd = &(priv->tmp_port_desc);
-  string_elem_t *new_string;
+  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
+  urj_bsdl_string_elem_t *new_string;
 
-  new_string = (string_elem_t *)malloc( sizeof( string_elem_t ) );
+  new_string = (urj_bsdl_string_elem_t *)malloc( sizeof( urj_bsdl_string_elem_t ) );
   if (new_string)
   {
     new_string->next   = pd->names_list;
@@ -1310,13 +1310,13 @@ static void prt_add_name( bsdl_parser_priv_t *priv, char *name )
     pd->names_list = new_string;
   }
   else
-    bsdl_msg( priv->jtag_ctrl->proc_mode,
+    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 
 
 /*****************************************************************************
- * void prt_add_bit( bsdl_parser_priv_t *priv )
+ * void prt_add_bit( urj_bsdl_parser_priv_t *priv )
  * Port name management function
  *
  * Sets the vector and index fields of the temporary storage area for port
@@ -1329,9 +1329,9 @@ static void prt_add_name( bsdl_parser_priv_t *priv, char *name )
  * Returns
  *   void
  ****************************************************************************/
-static void prt_add_bit( bsdl_parser_priv_t *priv )
+static void prt_add_bit( urj_bsdl_parser_priv_t *priv )
 {
-  port_desc_t *pd = &(priv->tmp_port_desc);
+  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
 
   pd->is_vector = 0;
   pd->low_idx   = 0;
@@ -1340,7 +1340,7 @@ static void prt_add_bit( bsdl_parser_priv_t *priv )
 
 
 /*****************************************************************************
- * void prt_add_range( bsdl_parser_priv_t *priv, int low, int high )
+ * void prt_add_range( urj_bsdl_parser_priv_t *priv, int low, int high )
  * Port name management function
  *
  * Sets the vector and index fields of the temporary storage area for port
@@ -1354,9 +1354,9 @@ static void prt_add_bit( bsdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void prt_add_range( bsdl_parser_priv_t *priv, int low, int high )
+static void prt_add_range( urj_bsdl_parser_priv_t *priv, int low, int high )
 {
-  port_desc_t *pd = &(priv->tmp_port_desc);
+  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
 
   pd->is_vector = 1;
   pd->low_idx   = low;
@@ -1365,7 +1365,7 @@ static void prt_add_range( bsdl_parser_priv_t *priv, int low, int high )
 
 
 /*****************************************************************************
- * void ci_no_disable( bsdl_parser_priv_t *priv )
+ * void ci_no_disable( urj_bsdl_parser_priv_t *priv )
  * Cell Info management function
  *
  * Tracks that there is no disable term for the current cell info.
@@ -1376,14 +1376,14 @@ static void prt_add_range( bsdl_parser_priv_t *priv, int low, int high )
  * Returns
  *   void
  ****************************************************************************/
-static void ci_no_disable( bsdl_parser_priv_t *priv )
+static void ci_no_disable( urj_bsdl_parser_priv_t *priv )
 {
   priv->tmp_cell_info.ctrl_bit_num = -1;
 }
 
 
 /*****************************************************************************
- * void ci_set_cell_spec_disable( bsdl_parser_priv_t *priv, int ctrl_bit_num,
+ * void ci_set_cell_spec_disable( urj_bsdl_parser_priv_t *priv, int ctrl_bit_num,
  *                                int safe_value, int disable_value )
  * Cell Info management function
  *
@@ -1399,10 +1399,10 @@ static void ci_no_disable( bsdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void ci_set_cell_spec_disable( bsdl_parser_priv_t *priv, int ctrl_bit_num,
+static void ci_set_cell_spec_disable( urj_bsdl_parser_priv_t *priv, int ctrl_bit_num,
                                       int safe_value, int disable_value )
 {
-  cell_info_t *ci = &(priv->tmp_cell_info);
+  urj_bsdl_cell_info_t *ci = &(priv->tmp_cell_info);
 
   ci->ctrl_bit_num       = ctrl_bit_num;
   ci->disable_safe_value = safe_value;
@@ -1411,7 +1411,7 @@ static void ci_set_cell_spec_disable( bsdl_parser_priv_t *priv, int ctrl_bit_num
 
 
 /*****************************************************************************
- * void ci_set_cell_spec( bsdl_parser_priv_t *priv,
+ * void ci_set_cell_spec( urj_bsdl_parser_priv_t *priv,
  *                        int function, char *safe_value )
  * Cell Info management function
  *
@@ -1428,12 +1428,12 @@ static void ci_set_cell_spec_disable( bsdl_parser_priv_t *priv, int ctrl_bit_num
  * Returns
  *   void
  ****************************************************************************/
-static void ci_set_cell_spec( bsdl_parser_priv_t *priv,
+static void ci_set_cell_spec( urj_bsdl_parser_priv_t *priv,
                               int function, char *safe_value )
 {
-  cell_info_t *ci     = &(priv->tmp_cell_info);
-  port_desc_t *pd     = &(priv->tmp_port_desc);
-  string_elem_t *name = priv->tmp_port_desc.names_list;
+  urj_bsdl_cell_info_t *ci     = &(priv->tmp_cell_info);
+  urj_bsdl_port_desc_t *pd     = &(priv->tmp_port_desc);
+  urj_bsdl_string_elem_t *name = priv->tmp_port_desc.names_list;
   char   *port_string;
   size_t  str_len, name_len;
 
@@ -1460,7 +1460,7 @@ static void ci_set_cell_spec( bsdl_parser_priv_t *priv,
   }
   else
   {
-    bsdl_msg( priv->jtag_ctrl->proc_mode,
+    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     ci->port_name = NULL;
   }
@@ -1471,7 +1471,7 @@ static void ci_set_cell_spec( bsdl_parser_priv_t *priv,
 
 
 /*****************************************************************************
- * void ci_append_cell_info( bsdl_parser_priv_t *priv, int bit_num )
+ * void ci_append_cell_info( urj_bsdl_parser_priv_t *priv, int bit_num )
  * Cell Info management function
  *
  * Appends the temporary cell info to the global list of cell infos.
@@ -1483,13 +1483,13 @@ static void ci_set_cell_spec( bsdl_parser_priv_t *priv,
  * Returns
  *   void
  ****************************************************************************/
-static void ci_append_cell_info( bsdl_parser_priv_t *priv, int bit_num )
+static void ci_append_cell_info( urj_bsdl_parser_priv_t *priv, int bit_num )
 {
-  cell_info_t *tmp_ci = &(priv->tmp_cell_info);
-  cell_info_t *ci;
-  jtag_ctrl_t *jc     = priv->jtag_ctrl;
+  urj_bsdl_cell_info_t *tmp_ci = &(priv->tmp_cell_info);
+  urj_bsdl_cell_info_t *ci;
+  urj_bsdl_jtag_ctrl_t *jc     = priv->jtag_ctrl;
 
-  ci = (cell_info_t *)malloc( sizeof( cell_info_t ) );
+  ci = (urj_bsdl_cell_info_t *)malloc( sizeof( urj_bsdl_cell_info_t ) );
   if (ci)
   {
     ci->next = NULL;
@@ -1510,7 +1510,7 @@ static void ci_append_cell_info( bsdl_parser_priv_t *priv, int bit_num )
     tmp_ci->basic_safe_value = NULL;
   }
   else
-    bsdl_msg( jc->proc_mode,
+    urj_bsdl_msg( jc->proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 }
 

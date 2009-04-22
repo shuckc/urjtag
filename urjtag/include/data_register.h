@@ -22,24 +22,24 @@
  *
  */
 
-#ifndef DATA_REGISTER_H
-#define	DATA_REGISTER_H
+#ifndef URJ_DATA_REGISTER_H
+#define	URJ_DATA_REGISTER_H
 
 #include "register.h"
 
-#define	MAXLEN_DATA_REGISTER	32
+#define	URJ_DATA_REGISTER_MAXLEN	32
 
-typedef struct data_register data_register_t;
+typedef struct urj_data_register urj_data_register_t;
 
-struct data_register
+struct urj_data_register
 {
-    char name[MAXLEN_DATA_REGISTER + 1];        /* (public) register name */
-    tap_register_t *in;           /* (public) register value clocked in */
-    tap_register_t *out;          /* (public) register value clocked out */
-    data_register_t *next;
+    char name[URJ_DATA_REGISTER_MAXLEN + 1];        /* (public) register name */
+    urj_tap_register_t *in;           /* (public) register value clocked in */
+    urj_tap_register_t *out;          /* (public) register value clocked out */
+    urj_data_register_t *next;
 };
 
-data_register_t *data_register_alloc (const char *name, int len);
-void data_register_free (data_register_t *dr);
+urj_data_register_t *urj_part_data_register_alloc (const char *name, int len);
+void urj_part_data_register_free (urj_data_register_t *dr);
 
-#endif /* DATA_REGISTER_H */
+#endif /* URJ_DATA_REGISTER_H */

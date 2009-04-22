@@ -34,13 +34,13 @@
 #include "cmd.h"
 
 static int
-cmd_flashmem_run (chain_t *chain, char *params[])
+cmd_flashmem_run (urj_chain_t *chain, char *params[])
 {
     int msbin;
     int noverify = 0;
     uint32_t adr = 0;
     FILE *f;
-    int paramc = cmd_params (params);
+    int paramc = urj_cmd_params (params);
 
     if (paramc < 3)
         return -1;
@@ -52,7 +52,7 @@ cmd_flashmem_run (chain_t *chain, char *params[])
     }
 
     msbin = strcasecmp ("msbin", params[1]) == 0;
-    if (!msbin && cmd_get_number (params[1], &adr))
+    if (!msbin && urj_cmd_get_number (params[1], &adr))
         return -1;
 
     if (paramc > 3)
@@ -67,9 +67,9 @@ cmd_flashmem_run (chain_t *chain, char *params[])
         return 1;
     }
     if (msbin)
-        flashmsbin (bus, f, noverify);
+        urj_flashmsbin (bus, f, noverify);
     else
-        flashmem (bus, f, adr, noverify);
+        urj_flashmem (bus, f, adr, noverify);
     fclose (f);
 
     return 1;
@@ -91,7 +91,7 @@ cmd_flashmem_help (void)
               "\n"
               "ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
               "\n"
-              "Supported Flash Memories:\n"), "flashmem", "flashmem msbin",
+              "Supported Flash Memories:\n"), "urj_flashmem", "urj_flashmem msbin",
             "msbin", "noverify");
 
     for (i = 0; flash_drivers[i]; i++)
@@ -99,8 +99,8 @@ cmd_flashmem_help (void)
                 _(flash_drivers[i]->description));
 }
 
-cmd_t cmd_flashmem = {
-    "flashmem",
+urj_cmd_t cmd_flashmem = {
+    "urj_flashmem",
     N_("burn flash memory with data from a file"),
     cmd_flashmem_help,
     cmd_flashmem_run

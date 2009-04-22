@@ -22,53 +22,53 @@
  *
  */
 
-#ifndef CHAIN_H
-#define	CHAIN_H
+#ifndef URJ_CHAIN_H
+#define	URJ_CHAIN_H
 
 #include "part.h"
 #include "pod.h"
 
-typedef struct chain_t chain_t;
+typedef struct urj_chain urj_chain_t;
 
 #include "cable.h"
 #include "bsdl.h"
 
-#define EXITMODE_SHIFT 0
-#define EXITMODE_IDLE  1
-#define EXITMODE_EXIT1 2
-#define EXITMODE_UPDATE 3
+#define URJ_CHAIN_EXITMODE_SHIFT 0
+#define URJ_CHAIN_EXITMODE_IDLE  1
+#define URJ_CHAIN_EXITMODE_EXIT1 2
+#define URJ_CHAIN_EXITMODE_UPDATE 3
 
-struct chain_t
+struct urj_chain
 {
     int state;
-    parts_t *parts;
+    urj_parts_t *parts;
     int total_instr_len;
     int active_part;
-    cable_t *cable;
-    bsdl_globs_t bsdl;
+    urj_cable_t *cable;
+    urj_bsdl_globs_t bsdl;
 };
 
-chain_t *chain_alloc (void);
-void chain_free (chain_t *chain);
-void chain_disconnect (chain_t *chain);
-void chain_clock (chain_t *chain, int tms, int tdi, int n);
-void chain_defer_clock (chain_t *chain, int tms, int tdi, int n);
-int chain_set_trst (chain_t *chain, int trst);
-int chain_get_trst (chain_t *chain);
-void chain_shift_instructions (chain_t *chain);
-void chain_shift_instructions_mode (chain_t *chain, int capture_output,
+urj_chain_t *urj_tap_chain_alloc (void);
+void urj_tap_chain_free (urj_chain_t *chain);
+void urj_tap_chain_disconnect (urj_chain_t *chain);
+void urj_tap_chain_clock (urj_chain_t *chain, int tms, int tdi, int n);
+void urj_tap_chain_defer_clock (urj_chain_t *chain, int tms, int tdi, int n);
+int urj_tap_chain_set_trst (urj_chain_t *chain, int trst);
+int urj_tap_chain_get_trst (urj_chain_t *chain);
+void urj_tap_chain_shift_instructions (urj_chain_t *chain);
+void urj_tap_chain_shift_instructions_mode (urj_chain_t *chain, int capture_output,
                                     int capture, int chain_exit);
-void chain_shift_data_registers (chain_t *chain, int capture_output);
-void chain_shift_data_registers_mode (chain_t *chain, int capture_output,
+void urj_tap_chain_shift_data_registers (urj_chain_t *chain, int capture_output);
+void urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain, int capture_output,
                                       int capture, int chain_exit);
-void chain_flush (chain_t *chain);
-int chain_set_pod_signal (chain_t *chain, int mask, int val);
-int chain_get_pod_signal (chain_t *chain, pod_sigsel_t sig);
+void urj_tap_chain_flush (urj_chain_t *chain);
+int urj_tap_chain_set_pod_signal (urj_chain_t *chain, int mask, int val);
+int urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig);
 
 typedef struct
 {
-    chain_t **chains;
+    urj_chain_t **chains;
     int size;                   /* allocated chains array size */
-} chains_t;
+} urj_chains_t;
 
-#endif /* CHAIN_H */
+#endif /* URJ_CHAIN_H */

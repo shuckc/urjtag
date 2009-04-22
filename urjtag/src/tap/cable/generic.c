@@ -59,14 +59,14 @@ print_vector (int len, char *vec)
 #endif
 
 void
-generic_disconnect (cable_t *cable)
+urj_tap_cable_generic_disconnect (urj_cable_t *cable)
 {
-    cable_done (cable);
-    chain_disconnect (cable->chain);
+    urj_tap_cable_done (cable);
+    urj_tap_chain_disconnect (cable->chain);
 }
 
 int
-generic_transfer (cable_t *cable, int len, char *in, char *out)
+urj_tap_cable_generic_transfer (urj_cable_t *cable, int len, char *in, char *out)
 {
     int i;
 
@@ -86,13 +86,13 @@ generic_transfer (cable_t *cable, int len, char *in, char *out)
 }
 
 int
-generic_get_signal (cable_t *cable, pod_sigsel_t sig)
+urj_tap_cable_generic_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
     return (((PARAM_SIGNALS (cable)) & sig) != 0) ? 1 : 0;
 }
 
 static int
-do_one_queued_action (cable_t *cable)
+do_one_queued_action (urj_cable_t *cable)
 {
     int i;
 
@@ -100,35 +100,35 @@ do_one_queued_action (cable_t *cable)
     printf ("do_one_queued\n");
 #endif
 
-    if ((i = cable_get_queue_item (cable, &(cable->todo))) >= 0)
+    if ((i = urj_tap_cable_get_queue_item (cable, &(cable->todo))) >= 0)
     {
         int j;
 
         if (cable->done.num_items >= cable->done.max_items)
         {
-            if (cable->todo.data[i].action == CABLE_GET_TDO
-                || cable->todo.data[i].action == CABLE_GET_SIGNAL
-                || cable->todo.data[i].action == CABLE_TRANSFER)
+            if (cable->todo.data[i].action == URJ_TAP_CABLE_GET_TDO
+                || cable->todo.data[i].action == URJ_TAP_CABLE_GET_SIGNAL
+                || cable->todo.data[i].action == URJ_TAP_CABLE_TRANSFER)
             {
                 printf (_("No space in cable activity results queue.\n"));
-                cable_purge_queue (&(cable->done), 1);
+                urj_tap_cable_purge_queue (&(cable->done), 1);
             }
         }
 
         switch (cable->todo.data[i].action)
         {
-        case CABLE_CLOCK:
+        case URJ_TAP_CABLE_CLOCK:
             cable->driver->clock (cable,
                                   cable->todo.data[i].arg.clock.tms,
                                   cable->todo.data[i].arg.clock.tdi,
                                   cable->todo.data[i].arg.clock.n);
             break;
-        case CABLE_SET_SIGNAL:
-            cable_set_signal (cable,
+        case URJ_TAP_CABLE_SET_SIGNAL:
+            urj_tap_cable_set_signal (cable,
                               cable->todo.data[i].arg.value.sig,
                               cable->todo.data[i].arg.value.val);
             break;
-        case CABLE_TRANSFER:
+        case URJ_TAP_CABLE_TRANSFER:
             {
                 int r = cable->driver->transfer (cable,
                                                  cable->todo.data[i].arg.
@@ -141,13 +141,13 @@ do_one_queued_action (cable_t *cable)
                 free (cable->todo.data[i].arg.transfer.in);
                 if (cable->todo.data[i].arg.transfer.out != NULL)
                 {
-                    j = cable_add_queue_item (cable, &(cable->done));
+                    j = urj_tap_cable_add_queue_item (cable, &(cable->done));
 #ifdef VERBOSE
                     printf ("add result from transfer to %p.%d (out=%p)\n",
                             &(cable->done), j,
                             cable->todo.data[i].arg.transfer.out);
 #endif
-                    cable->done.data[j].action = CABLE_TRANSFER;
+                    cable->done.data[j].action = URJ_TAP_CABLE_TRANSFER;
                     cable->done.data[j].arg.xferred.len =
                         cable->todo.data[i].arg.transfer.len;
                     cable->done.data[j].arg.xferred.res = r;
@@ -156,22 +156,22 @@ do_one_queued_action (cable_t *cable)
                 }
                 break;
             }
-        case CABLE_GET_TDO:
-            j = cable_add_queue_item (cable, &(cable->done));
+        case URJ_TAP_CABLE_GET_TDO:
+            j = urj_tap_cable_add_queue_item (cable, &(cable->done));
 #ifdef VERBOSE
             printf ("add result from get_tdo to %p.%d\n", &(cable->done), j);
 #endif
-            cable->done.data[j].action = CABLE_GET_TDO;
+            cable->done.data[j].action = URJ_TAP_CABLE_GET_TDO;
             cable->done.data[j].arg.value.val =
                 cable->driver->get_tdo (cable);
             break;
-        case CABLE_GET_SIGNAL:
-            j = cable_add_queue_item (cable, &(cable->done));
+        case URJ_TAP_CABLE_GET_SIGNAL:
+            j = urj_tap_cable_add_queue_item (cable, &(cable->done));
 #ifdef VERBOSE
             printf ("add result from get_signal to %p.%d\n", &(cable->done),
                     j);
 #endif
-            cable->done.data[j].action = CABLE_GET_SIGNAL;
+            cable->done.data[j].action = URJ_TAP_CABLE_GET_SIGNAL;
             cable->done.data[j].arg.value.sig =
                 cable->todo.data[i].arg.value.sig;
             cable->done.data[j].arg.value.val =
@@ -193,21 +193,21 @@ do_one_queued_action (cable_t *cable)
 }
 
 void
-generic_flush_one_by_one (cable_t *cable, cable_flush_amount_t how_much)
+urj_tap_cable_generic_flush_one_by_one (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
-    /* This will flush always, even if how_much == OPTIONALLY,
+    /* This will flush always, even if how_much == URJ_TAP_CABLE_OPTIONALLY,
      * because there is no reason to let the queue grow */
 
     while (do_one_queued_action (cable));
 }
 
 void
-generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
+urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
     int i, j, n;
     char *in, *out;
 
-    if (how_much == OPTIONALLY)
+    if (how_much == URJ_TAP_CABLE_OPTIONALLY)
         return;
 
     if (cable->todo.num_items == 0)
@@ -227,9 +227,9 @@ generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
 
         for (i = cable->todo.next_item, n = 0; n < cable->todo.num_items; n++)
         {
-            if (cable->todo.data[i].action != CABLE_CLOCK
-                && cable->todo.data[i].action != CABLE_TRANSFER
-                && cable->todo.data[i].action != CABLE_GET_TDO)
+            if (cable->todo.data[i].action != URJ_TAP_CABLE_CLOCK
+                && cable->todo.data[i].action != URJ_TAP_CABLE_TRANSFER
+                && cable->todo.data[i].action != URJ_TAP_CABLE_GET_TDO)
             {
 #ifdef VERBOSE
                 printf
@@ -238,7 +238,7 @@ generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
 #endif
                 break;
             }
-            if (cable->todo.data[i].action == CABLE_CLOCK
+            if (cable->todo.data[i].action == URJ_TAP_CABLE_CLOCK
                 && cable->todo.data[i].arg.clock.tms != 0)
             {
 #ifdef VERBOSE
@@ -248,7 +248,7 @@ generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
 #endif
                 break;
             }
-            if (cable->todo.data[i].action == CABLE_CLOCK)
+            if (cable->todo.data[i].action == URJ_TAP_CABLE_CLOCK)
             {
                 int k = cable->todo.data[i].arg.clock.n;
 #ifdef VERBOSE
@@ -256,7 +256,7 @@ generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
 #endif
                 bits += k;
             }
-            else if (cable->todo.data[i].action == CABLE_TRANSFER)
+            else if (cable->todo.data[i].action == URJ_TAP_CABLE_TRANSFER)
             {
                 int k = cable->todo.data[i].arg.transfer.len;
 #ifdef VERBOSE
@@ -290,19 +290,19 @@ generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
                     free (in);
                 if (out != NULL)
                     free (out);
-                generic_flush_one_by_one (cable, how_much);
+                urj_tap_cable_generic_flush_one_by_one (cable, how_much);
                 break;
             }
 
             for (j = 0, bits = 0, i = cable->todo.next_item; j < n; j++)
             {
-                if (cable->todo.data[i].action == CABLE_CLOCK)
+                if (cable->todo.data[i].action == URJ_TAP_CABLE_CLOCK)
                 {
                     int k;
                     for (k = 0; k < cable->todo.data[i].arg.clock.n; k++)
                         in[bits++] = cable->todo.data[i].arg.clock.tdi;
                 }
-                else if (cable->todo.data[i].action == CABLE_TRANSFER)
+                else if (cable->todo.data[i].action == URJ_TAP_CABLE_TRANSFER)
                 {
                     int len = cable->todo.data[i].arg.transfer.len;
                     if (len > 0)
@@ -336,35 +336,35 @@ generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
 
             for (j = 0, bits = 0, i = cable->todo.next_item; j < n; j++)
             {
-                if (cable->todo.data[i].action == CABLE_CLOCK)
+                if (cable->todo.data[i].action == URJ_TAP_CABLE_CLOCK)
                 {
                     int k;
                     for (k = 0; k < cable->todo.data[i].arg.clock.n; k++)
                         tdo = out[bits++];
                 }
-                else if (cable->todo.data[i].action == CABLE_GET_TDO)
+                else if (cable->todo.data[i].action == URJ_TAP_CABLE_GET_TDO)
                 {
-                    int c = cable_add_queue_item (cable, &(cable->done));
+                    int c = urj_tap_cable_add_queue_item (cable, &(cable->done));
 #ifdef VERBOSE
                     printf ("add result from transfer to %p.%d\n",
                             &(cable->done), c);
 #endif
-                    cable->done.data[c].action = CABLE_GET_TDO;
+                    cable->done.data[c].action = URJ_TAP_CABLE_GET_TDO;
                     cable->done.data[c].arg.value.val = tdo;
                 }
-                else if (cable->todo.data[i].action == CABLE_TRANSFER)
+                else if (cable->todo.data[i].action == URJ_TAP_CABLE_TRANSFER)
                 {
                     char *p = cable->todo.data[i].arg.transfer.out;
                     int len = cable->todo.data[i].arg.transfer.len;
                     free (cable->todo.data[i].arg.transfer.in);
                     if (p != NULL)
                     {
-                        int c = cable_add_queue_item (cable, &(cable->done));
+                        int c = urj_tap_cable_add_queue_item (cable, &(cable->done));
 #ifdef VERBOSE
                         printf ("add result from transfer to %p.%d\n",
                                 &(cable->done), c);
 #endif
-                        cable->done.data[c].action = CABLE_TRANSFER;
+                        cable->done.data[c].action = URJ_TAP_CABLE_TRANSFER;
                         cable->done.data[c].arg.xferred.len = len;
                         cable->done.data[c].arg.xferred.res = r;
                         cable->done.data[c].arg.xferred.out = p;
@@ -392,7 +392,7 @@ generic_flush_using_transfer (cable_t *cable, cable_flush_amount_t how_much)
 }
 
 void
-generic_set_frequency (cable_t *cable, uint32_t new_frequency)
+urj_tap_cable_generic_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
     if (new_frequency == 0)
     {
@@ -419,12 +419,12 @@ generic_set_frequency (cable_t *cable, uint32_t new_frequency)
             long double start, end, real_frequency;
 
             cable->delay = delay;
-            start = frealtime ();
+            start = urj_lib_frealtime ();
             for (i = 0; i < loops; ++i)
             {
                 cable->driver->clock (cable, 0, 0, 1);
             }
-            end = frealtime ();
+            end = urj_lib_frealtime ();
 
             if (end < start)
             {

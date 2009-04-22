@@ -22,7 +22,12 @@
  * THE SOFTWARE.
  */
 
+#ifndef URJ_JIM_SOME_CPU_H
+#define URJ_JIM_SOME_CPU_H
+
 #include <jim.h>
 
-void some_cpu_tck_rise (jim_device_t *dev);
-jim_device_t *some_cpu (void);
+void urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev);
+urj_jim_device_t *urj_jim_some_cpu (void);
+
+#endif  /* ndef URJ_JIM_SOME_CPU_H */

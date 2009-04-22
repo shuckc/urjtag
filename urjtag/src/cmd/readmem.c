@@ -32,13 +32,13 @@
 #include "cmd.h"
 
 static int
-cmd_readmem_run (chain_t *chain, char *params[])
+cmd_readmem_run (urj_chain_t *chain, char *params[])
 {
     uint32_t adr;
     uint32_t len;
     FILE *f;
 
-    if (cmd_params (params) != 4)
+    if (urj_cmd_params (params) != 4)
         return -1;
 
     if (!bus)
@@ -47,7 +47,7 @@ cmd_readmem_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    if (cmd_get_number (params[1], &adr) || cmd_get_number (params[2], &len))
+    if (urj_cmd_get_number (params[1], &adr) || urj_cmd_get_number (params[2], &len))
         return -1;
 
     f = fopen (params[3], "w");
@@ -56,7 +56,7 @@ cmd_readmem_run (chain_t *chain, char *params[])
         printf (_("Unable to create file `%s'!\n"), params[3]);
         return 1;
     }
-    readmem (bus, f, adr, len);
+    urj_bus_readmem (bus, f, adr, len);
     fclose (f);
 
     return 1;
@@ -73,11 +73,11 @@ cmd_readmem_help (void)
               "FILENAME   name of the output file\n"
               "\n"
               "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"),
-            "readmem");
+            "urj_bus_readmem");
 }
 
-cmd_t cmd_readmem = {
-    "readmem",
+urj_cmd_t cmd_readmem = {
+    "urj_bus_readmem",
     N_("read content of the memory and write it to file"),
     cmd_readmem_help,
     cmd_readmem_run

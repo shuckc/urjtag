@@ -49,13 +49,13 @@ print_vector (int len, char *vec)
 #endif
 
 int
-generic_parport_connect (char *params[], cable_t *cable)
+urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable)
 {
-    generic_params_t *cable_params;
-    parport_t *port;
+    urj_tap_cable_generic_params_t *cable_params;
+    urj_parport_t *port;
     int i;
 
-    if (cmd_params (params) < 3)
+    if (urj_cmd_params (params) < 3)
     {
         printf (_("not enough arguments!\n"));
         return 1;
@@ -73,7 +73,7 @@ generic_parport_connect (char *params[], cable_t *cable)
 
     /* set up parport driver */
     port = parport_drivers[i]->connect ((const char **) &params[2],
-                                        cmd_params (params) - 2);
+                                        urj_cmd_params (params) - 2);
 
     if (port == NULL)
     {
@@ -97,7 +97,7 @@ generic_parport_connect (char *params[], cable_t *cable)
 }
 
 void
-generic_parport_free (cable_t *cable)
+urj_tap_cable_generic_parport_free (urj_cable_t *cable)
 {
     cable->link.port->driver->parport_free (cable->link.port);
     free (cable->params);
@@ -105,13 +105,13 @@ generic_parport_free (cable_t *cable)
 }
 
 void
-generic_parport_done (cable_t *cable)
+urj_tap_cable_generic_parport_done (urj_cable_t *cable)
 {
-    parport_close (cable->link.port);
+    urj_tap_parport_close (cable->link.port);
 }
 
 void
-generic_parport_help (const char *cablename)
+urj_tap_cable_generic_parport_help (const char *cablename)
 {
     printf (_("Usage: cable %s parallel PORTADDR\n"
 #if ENABLE_LOWLEVEL_PPDEV

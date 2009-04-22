@@ -46,15 +46,15 @@
 #include "flash.h"
 #include "jtag.h"
 
-extern flash_driver_t amd_32_flash_driver;
-extern flash_driver_t amd_16_flash_driver;
-extern flash_driver_t amd_8_flash_driver;
-extern flash_driver_t intel_32_flash_driver;
-extern flash_driver_t intel_16_flash_driver;
-extern flash_driver_t intel_8_flash_driver;
-extern flash_driver_t amd_29xx040_flash_driver; //20/09/2006
+extern urj_flash_driver_t amd_32_flash_driver;
+extern urj_flash_driver_t amd_16_flash_driver;
+extern urj_flash_driver_t amd_8_flash_driver;
+extern urj_flash_driver_t intel_32_flash_driver;
+extern urj_flash_driver_t intel_16_flash_driver;
+extern urj_flash_driver_t intel_8_flash_driver;
+extern urj_flash_driver_t amd_29xx040_flash_driver; //20/09/2006
 
-flash_driver_t *flash_drivers[] = {
+urj_flash_driver_t *flash_drivers[] = {
     &amd_32_flash_driver,
     &amd_16_flash_driver,
     &amd_8_flash_driver,
@@ -65,14 +65,14 @@ flash_driver_t *flash_drivers[] = {
     NULL
 };
 
-extern cfi_array_t *cfi_array;
-static flash_driver_t *flash_driver = NULL;
+extern urj_flash_cfi_array_t *cfi_array;
+static urj_flash_driver_t *flash_driver = NULL;
 
 static void
 set_flash_driver (void)
 {
     int i;
-    cfi_query_structure_t *cfi;
+    urj_flash_cfi_query_structure_t *cfi;
 
     flash_driver = NULL;
     if (cfi_array == NULL)
@@ -95,10 +95,10 @@ set_flash_driver (void)
 }
 
 void
-flashmsbin (bus_t *bus, FILE *f, int noverify)
+urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
 {
     uint32_t adr;
-    cfi_query_structure_t *cfi;
+    urj_flash_cfi_query_structure_t *cfi;
 
     set_flash_driver ();
     if (!cfi_array || !flash_driver)
@@ -235,7 +235,7 @@ flashmsbin (bus_t *bus, FILE *f, int noverify)
             printf ("\r");
             fflush (stdout);
             fread (&data, sizeof data, 1, f);
-            readed = bus_read (bus, a);
+            readed = URJ_BUS_READ (bus, a);
             if (data != readed)
             {
                 printf (_("\nverify error: 0x%08X vs. 0x%08X at addr %08X\n"),
@@ -251,7 +251,7 @@ flashmsbin (bus_t *bus, FILE *f, int noverify)
 }
 
 static int
-find_block (cfi_query_structure_t *cfi, int adr, int bus_width,
+find_block (urj_flash_cfi_query_structure_t *cfi, int adr, int bus_width,
             int chip_width, int *bytes_until_next_block)
 {
     int i;
@@ -283,10 +283,10 @@ find_block (cfi_query_structure_t *cfi, int adr, int bus_width,
 }
 
 void
-flashmem (bus_t *bus, FILE *f, uint32_t addr, int noverify)
+urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
 {
     uint32_t adr;
-    cfi_query_structure_t *cfi;
+    urj_flash_cfi_query_structure_t *cfi;
     int *erased;
     int i;
     int neb;
@@ -424,7 +424,7 @@ flashmem (bus_t *bus, FILE *f, uint32_t addr, int noverify)
                 else
                     data |= b[bc + j] << (j * 8);
 
-            readed = bus_read (bus, adr);
+            readed = URJ_BUS_READ (bus, adr);
             if (data != readed)
             {
                 printf (_("addr: 0x%08X\n"), adr);
@@ -439,9 +439,9 @@ flashmem (bus_t *bus, FILE *f, uint32_t addr, int noverify)
 }
 
 void
-flasherase (bus_t *bus, uint32_t addr, int number)
+urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
 {
-    cfi_query_structure_t *cfi;
+    urj_flash_cfi_query_structure_t *cfi;
     int i;
     int status = 0;
     int bus_width;
@@ -470,7 +470,7 @@ flasherase (bus_t *bus, uint32_t addr, int number)
 
         if (block_no < 0)
         {
-            status = FLASH_ERROR_UNKNOWN;
+            status = URJ_FLASH_ERROR_UNKNOWN;
             break;
         }
 
@@ -509,6 +509,6 @@ flasherase (bus_t *bus, uint32_t addr, int number)
         printf (_("\nErasing Failed.\n"));
 
     /* BYPASS */
-    //       parts_set_instruction( ps, "BYPASS" );
-    //       chain_shift_instructions( chain );
+    //       urj_part_parts_set_instruction( ps, "BYPASS" );
+    //       urj_tap_chain_shift_instructions( chain );
 }

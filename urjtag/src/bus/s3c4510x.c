@@ -26,7 +26,7 @@
 **
 **    Krzysztof Blaszkowski <info@sysmikro.com.pl>
 **    - fixed bug with driving nWBE, nECS, nSDCS (for SDRAM),
-**    - fixed bug with preparing bus state after each chain_shift_data_registers().
+**    - fixed bug with preparing bus state after each urj_tap_chain_shift_data_registers().
 **	tested on "peek" command only (2003/10/07).
 **
 **  @brief
@@ -47,7 +47,7 @@
 **    - ROM/Flash is selected by nRCS[5:0], now suppose only nRCS0.
 **      So is nWBE[4:0], now suppose only nWBE0
 **    - Unfortunately, B0SIZE isn't known before first SCAN/PRELOAD.
-**      Is bus driver allowed to do JTAG activity during bus_area or bus_new?
+**      Is bus driver allowed to do JTAG activity during URJ_BUS_AREA or bus_new?
 **
 =============================================================================*/
 
@@ -75,15 +75,15 @@
 /** @brief  Bus driver for Samsung S3C4510X */
 typedef struct
 {
-    signal_t *a[22];          /**< Only 22-bits addressing */
-    signal_t *d[32];          /**< Data bus */
-    signal_t *nrcs[6];        /**< not ROM/SRAM/Flash Chip Select;
+    urj_part_signal_t *a[22];          /**< Only 22-bits addressing */
+    urj_part_signal_t *d[32];          /**< Data bus */
+    urj_part_signal_t *nrcs[6];        /**< not ROM/SRAM/Flash Chip Select;
                               ** Only using nRCS0. */
-    signal_t *necs[4];
-    signal_t *nsdcs[4];
+    urj_part_signal_t *necs[4];
+    urj_part_signal_t *nsdcs[4];
 
-    signal_t *nwbe[4];        /**< not Write Byte Enable */
-    signal_t *noe;            /**< not Output Enable */
+    urj_part_signal_t *nwbe[4];        /**< not Write Byte Enable */
+    urj_part_signal_t *noe;            /**< not Output Enable */
     int dbuswidth;
 } bus_params_t;
 
@@ -102,17 +102,17 @@ typedef struct
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-s3c4510_bus_new (chain_t *chain, const bus_driver_t *driver,
+static urj_bus_t *
+s3c4510_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                  char *cmd_params[])
 {
-    bus_t *bus;
-    part_t *part;
+    urj_bus_t *bus;
+    urj_part_t *part;
     char buff[10];
     int i;
     int failed = 0;
 
-    bus = calloc (1, sizeof (bus_t));
+    bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
         return NULL;
 
@@ -126,46 +126,46 @@ s3c4510_bus_new (chain_t *chain, const bus_driver_t *driver,
 
 
     dbus_width = 16;
-    CHAIN = chain;
-    PART = part = chain->parts->parts[chain->active_part];
+    bus->chain = chain;
+    bus->part = part = chain->parts->parts[chain->active_part];
 
     for (i = 0; i < 22; i++)
     {
         sprintf (buff, "ADDR%d", i);
-        failed |= generic_bus_attach_sig (part, &(A[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(A[i]), buff);
     }
 
     for (i = 0; i < 32; i++)
     {
         sprintf (buff, "XDATA%d", i);
-        failed |= generic_bus_attach_sig (part, &(D[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(D[i]), buff);
     }
 
     for (i = 0; i < 6; i++)
     {
         sprintf (buff, "nRCS%d", i);
-        failed |= generic_bus_attach_sig (part, &(nRCS[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(nRCS[i]), buff);
     }
 
     for (i = 0; i < 4; i++)
     {
         sprintf (buff, "nECS%d", i);
-        failed |= generic_bus_attach_sig (part, &(nECS[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(nECS[i]), buff);
     }
 
     for (i = 0; i < 4; i++)
     {
         sprintf (buff, "nRAS%d", i);    /* those are nSDCS for SDRAMs only */
-        failed |= generic_bus_attach_sig (part, &(nSDCS[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(nSDCS[i]), buff);
     }
 
     for (i = 0; i < 4; i++)
     {
         sprintf (buff, "nWBE%d", i);
-        failed |= generic_bus_attach_sig (part, &(nWBE[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(nWBE[i]), buff);
     }
 
-    failed |= generic_bus_attach_sig (part, &(nOE), "nOE");
+    failed |= urj_bus_generic_attach_sig (part, &(nOE), "nOE");
 
     if (failed)
     {
@@ -182,12 +182,12 @@ s3c4510_bus_new (chain_t *chain, const bus_driver_t *driver,
  *
  */
 static void
-s3c4510_bus_printinfo (bus_t *bus)
+s3c4510_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
     printf (_
             ("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%ubit\n"),
@@ -199,27 +199,27 @@ s3c4510_bus_printinfo (bus_t *bus)
  *
  */
 static int
-s3c4510_bus_init (bus_t *bus)
+s3c4510_bus_init (urj_bus_t *bus)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
 
-    if (tap_state (chain) != Run_Test_Idle)
+    if (urj_tap_state (chain) != URJ_TAP_STATE_RUN_TEST_IDLE)
     {
-        /* silently skip initialization if TAP isn't in RUNTEST/IDLE state
+        /* silently skip initialization if TAP isn't in RUNTEST/URJ_JIM_IDLE state
            this is required to avoid interfering with detect when initbus
            is contained in the part description file
-           bus_init() will be called latest by bus_prepare() */
-        return URJTAG_STATUS_OK;
+           URJ_BUS_INIT() will be called latest by URJ_BUS_PREPARE() */
+        return URJ_STATUS_OK;
     }
 
-    part_set_instruction (p, "SAMPLE/PRELOAD");
-    chain_shift_instructions (chain);
-    chain_shift_data_registers (chain, 0);
+    urj_part_set_instruction (p, "SAMPLE/PRELOAD");
+    urj_tap_chain_shift_instructions (chain);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
-    INITIALIZED = 1;
+    bus->initialized = 1;
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -227,7 +227,7 @@ s3c4510_bus_init (bus_t *bus)
  *
  */
 static int
-s3c4510_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
+s3c4510_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
     int b0size0, b0size1;       // , endian;
 
@@ -235,54 +235,54 @@ s3c4510_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
     area->start = UINT32_C (0x00000000);
     area->length = UINT64_C (0x100000000);
 
-    // endian = part_get_signal( PART, part_find_signal( PART, "LITTLE" ));
-    b0size0 = part_get_signal (PART, part_find_signal (PART, "B0SIZE0"));
-    b0size1 = part_get_signal (PART, part_find_signal (PART, "B0SIZE1"));
+    // endian = urj_part_get_signal( bus->part, urj_part_find_signal( bus->part, "LITTLE" ));
+    b0size0 = urj_part_get_signal (bus->part, urj_part_find_signal (bus->part, "B0SIZE0"));
+    b0size1 = urj_part_get_signal (bus->part, urj_part_find_signal (bus->part, "B0SIZE1"));
 
     switch ((b0size1 << 1) | b0size0)
     {
     case 1:
         area->width = dbus_width = 8;
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     case 2:
         area->width = dbus_width = 16;
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     case 3:
         area->width = dbus_width = 32;
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     default:
         printf ("B0SIZE[1:0]: Unknown\n");
         area->width = 0;
-        return URJTAG_STATUS_FAIL;
+        return URJ_STATUS_FAIL;
     }
 }
 
 static void
-s3c4510_bus_setup_ctrl (bus_t *bus, int mode)
+s3c4510_bus_setup_ctrl (urj_bus_t *bus, int mode)
 {
     int k;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     for (k = 0; k < 6; k++)
-        part_set_signal (p, nRCS[k], 1, (mode & (1 << k)) ? 1 : 0);
+        urj_part_set_signal (p, nRCS[k], 1, (mode & (1 << k)) ? 1 : 0);
 
     for (k = 0; k < 4; k++)
-        part_set_signal (p, nECS[k], 1, 1);
+        urj_part_set_signal (p, nECS[k], 1, 1);
 
     for (k = 0; k < 4; k++)
-        part_set_signal (p, nSDCS[k], 1, 1);
+        urj_part_set_signal (p, nSDCS[k], 1, 1);
 
     for (k = 0; k < 4; k++)
-        part_set_signal (p, nWBE[k], 1, (mode & (1 << (k + 8))) ? 1 : 0);
+        urj_part_set_signal (p, nWBE[k], 1, (mode & (1 << (k + 8))) ? 1 : 0);
 
-    part_set_signal (p, nOE, 1, (mode & (1 << 16)) ? 1 : 0);
+    urj_part_set_signal (p, nOE, 1, (mode & (1 << 16)) ? 1 : 0);
 }
 
 static void
-setup_address (bus_t *bus, uint32_t a)
+setup_address (urj_bus_t *bus, uint32_t a)
 {
     int i, so;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     switch (dbus_width)
     {
@@ -298,30 +298,30 @@ setup_address (bus_t *bus, uint32_t a)
     }
 
     for (i = 0; i < 22; i++)
-        part_set_signal (p, A[i], 1, (a >> (i + so)) & 1);
+        urj_part_set_signal (p, A[i], 1, (a >> (i + so)) & 1);
 }
 
 static void
-set_data_in (bus_t *bus)
+set_data_in (urj_bus_t *bus)
 {
     int i;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     for (i = 0; i < dbus_width; i++)
-        part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal (p, D[i], 0, 0);
 }
 
 static void
-setup_data (bus_t *bus, uint32_t d)
+setup_data (urj_bus_t *bus, uint32_t d)
 {
     int i;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     for (i = 0; i < dbus_width; i++)
-        part_set_signal (p, D[i], 1, (d >> i) & 1);
+        urj_part_set_signal (p, D[i], 1, (d >> i) & 1);
     /* Set other bits as 0 */
     for (i = dbus_width; i < 32; i++)
-        part_set_signal (p, D[i], 1, 0);
+        urj_part_set_signal (p, D[i], 1, 0);
 }
 
 /**
@@ -329,15 +329,15 @@ setup_data (bus_t *bus, uint32_t d)
  *
  */
 static void
-s3c4510_bus_read_start (bus_t *bus, uint32_t adr)
+s3c4510_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     /* see Figure 4-19 in [1] */
-    chain_t *chain = CHAIN;
+    urj_chain_t *chain = bus->chain;
 
     s3c4510_bus_setup_ctrl (bus, 0x00fffe);     /* nOE=0, nRCS0 =0 */
     setup_address (bus, adr);
     set_data_in (bus);
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
 /**
@@ -345,21 +345,21 @@ s3c4510_bus_read_start (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-s3c4510_bus_read_next (bus_t *bus, uint32_t adr)
+s3c4510_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
     /* see Figure 4-20 in [1] */
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     int i;
     uint32_t d = 0;
 
     s3c4510_bus_setup_ctrl (bus, 0x00fffe);     /* nOE=0, nRCS0 =0 */
     setup_address (bus, adr);
     set_data_in (bus);
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < dbus_width; i++)
-        d |= (uint32_t) (part_get_signal (p, D[i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, D[i]) << i);
 
     return d;
 }
@@ -369,19 +369,19 @@ s3c4510_bus_read_next (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-s3c4510_bus_read_end (bus_t *bus)
+s3c4510_bus_read_end (urj_bus_t *bus)
 {
     /* see Figure 4-19 in [1] */
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     int i;
     uint32_t d = 0;
 
     s3c4510_bus_setup_ctrl (bus, 0x01ffff);     /* nOE=1, nRCS0 =1 */
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < dbus_width; i++)
-        d |= (uint32_t) (part_get_signal (p, D[i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, D[i]) << i);
 
     return d;
 }
@@ -393,16 +393,16 @@ s3c4510_bus_read_end (bus_t *bus)
  *    ROM/SRAM/FlashPage Write Access Timing
  */
 static void
-s3c4510_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
+s3c4510_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
     /* see Figure 4-21 in [1] */
-    chain_t *chain = CHAIN;
+    urj_chain_t *chain = bus->chain;
 
     s3c4510_bus_setup_ctrl (bus, 0x01fffe);     /* nOE=1, nRCS0 =0 */
     setup_address (bus, adr);
     setup_data (bus, data);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
     switch (dbus_width)
     {
@@ -422,26 +422,26 @@ s3c4510_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
     setup_address (bus, adr);
     setup_data (bus, data);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
     s3c4510_bus_setup_ctrl (bus, 0x01ffff);     /* nOE=1, nRCS0 =1 */
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
-    DEBUG_LVL2 (printf ("bus_write %08x @ %08x\n", data, adr);
+    DEBUG_LVL2 (printf ("URJ_BUS_WRITE %08x @ %08x\n", data, adr);
 )}
 
-const bus_driver_t s3c4510_bus = {
+const urj_bus_driver_t s3c4510_bus = {
     "s3c4510x",
     N_("Samsung S3C4510B compatible bus driver via BSR"),
     s3c4510_bus_new,
-    generic_bus_free,
+    urj_bus_generic_free,
     s3c4510_bus_printinfo,
-    generic_bus_prepare_extest,
+    urj_bus_generic_prepare_extest,
     s3c4510_bus_area,
     s3c4510_bus_read_start,
     s3c4510_bus_read_next,
     s3c4510_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     s3c4510_bus_write,
     s3c4510_bus_init
 };
@@ -476,40 +476,40 @@ const bus_driver_t s3c4510_bus = {
 **  	* src/bus/Makefile.am (libbus_a_SOURCES): Added buses.h.
 **
 **  	* src/bus/bcm1250.c (bcm1250_bus_printinfo): Added new function parameter 'bus'.
-**  	(bcm1250_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(bcm1250_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **  	(new_bcm1250_bus): Function renamed ...
 **  	(bcm1250_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **  	* src/bus/ixp425.c (ixp425_bus_printinfo): Added new function parameter 'bus'.
-**  	(ixp425_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(ixp425_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **  	(new_ixp425_bus): Function renamed ...
 **  	(ixp425_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **  	* src/bus/pxa2x0.c (pxa2x0_bus_printinfo): Added new function parameter 'bus'.
 **  	(pxa250_bus): Structure transformed ...
-**  	(pxa2x0_bus): ... to this constant (changed type to bus_driver_t, changed members).
+**  	(pxa2x0_bus): ... to this constant (changed type to urj_bus_driver_t, changed members).
 **  	(new_pxa250_bus): Function renamed ...
 **  	(pxa2x0_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **  	* src/bus/s3c4510x.c (s3c4510_bus_printinfo): Added new function parameter 'bus'.
-**  	(s3c4510_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(s3c4510_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **  	(new_s3c4510_bus): Function renamed ...
 **  	(s3c4510_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **  	* src/bus/sa1110.c (sa1110_bus_printinfo): Added new function parameter 'bus'.
-**  	(sa1110_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(sa1110_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **  	(new_sa1110_bus): Function renamed ...
 **  	(sa1110_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **  	* src/bus/sh7727.c (sh7727_bus_printinfo): Added new function parameter 'bus'.
-**  	(sh7727_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(sh7727_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **  	(new_sh7727_bus): Function renamed ...
 **  	(sh7727_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **  	* src/bus/sh7750r.c (sh7750r_bus_printinfo): Added new function parameter 'bus'.
-**  	(sh7750r_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(sh7750r_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **  	(new_sh7750r_bus): Function renamed ...
 **  	(sh7750r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **  	* src/bus/sh7751r.c (sh7751r_bus_printinfo): Added new function parameter 'bus'.
-**  	(sh7751r_bus): Changed structure type to bus_driver_t. Changed members.
+**  	(sh7751r_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **  	(new_sh7751r_bus): Function renamed ...
 **  	(sh7751r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **
-**  	* src/cmd/cable.c (cmd_cable_run): Replaced bus->free() call with bus_free().
+**  	* src/cmd/cable.c (cmd_cable_run): Replaced bus->free() call with URJ_BUS_FREE().
 **  	* src/jtag.c (main): Ditto.
 **
 **  	* src/cmd/cmd.c (cmds): Added cmd_initbus.
@@ -528,7 +528,7 @@ const bus_driver_t s3c4510_bus = {
 **  Revision 1.3  2003/08/28 07:26:02  telka
 **  2003-08-28  Marcel Telka  <marcel@telka.sk>
 **
-**  	* src/readmem.c (readmem): Replaced bus_width macro with new bus_area.
+**  	* src/urj_bus_readmem.c (urj_bus_readmem): Replaced bus_width macro with new URJ_BUS_AREA.
 **  	* src/bus/bcm1250.c (bcm1250_bus_width): Function removed.
 **  	(bcm1250_bus_area): New function.
 **  	* src/bus/ixp425.c (ixp425_bus_width): Function removed.

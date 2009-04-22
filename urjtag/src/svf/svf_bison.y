@@ -25,9 +25,9 @@
  */
 
 %pure-parser
-%parse-param {parser_priv_t *priv_data}
-%parse-param {chain_t *chain}
-%name-prefix="svf"
+%parse-param {urj_svf_parser_priv_t *priv_data}
+%parse-param {urj_chain_t *chain}
+%name-prefix="urj_svf_"
 %locations
 
 %{
@@ -44,9 +44,9 @@ int yylex (YYSTYPE *, YYLTYPE *, void *);
 #define YYERROR_VERBOSE
 
 
-void yyerror(YYLTYPE *, parser_priv_t *priv_data, chain_t *, const char *);
+void yyerror(YYLTYPE *, urj_svf_parser_priv_t *priv_data, urj_chain_t *, const char *);
 
-static void svf_free_ths_params(struct ths_params *);
+static void urj_svf_free_ths_params(struct ths_params *);
 %}
 
 %union {
@@ -64,7 +64,7 @@ static void svf_free_ths_params(struct ths_params *);
 %token EMPTY
 %token ENDDR ENDIR 
 %token FREQUENCY HZ
-%token STATE RESET IDLE 
+%token STATE URJ_JIM_RESET URJ_JIM_IDLE 
 %token TDI TDO MASK SMASK
 %token TRST ON OFF Z ABSENT
 %token HDR HIR SDR SIR TDR TIR
@@ -98,22 +98,22 @@ line
 svf_statement
     : ENDIR stable_state ';'
     {
-      svf_endxr(priv_data, generic_ir, $<token>2);
+      urj_svf_endxr(priv_data, URJ_SVF_generic_ir, $<token>2);
     }
 
     | ENDDR stable_state ';'
     {
-      svf_endxr(priv_data, generic_dr, $<token>2);
+      urj_svf_endxr(priv_data, URJ_SVF_generic_dr, $<token>2);
     }
 
     | FREQUENCY ';'
       {
-        svf_frequency(chain, 0.0);
+        urj_svf_frequency(chain, 0.0);
       }
 
     | FREQUENCY NUMBER HZ ';'
       {
-        svf_frequency(chain, $2);
+        urj_svf_frequency(chain, $2);
       }
 
     | HDR NUMBER ths_param_list ';'
@@ -121,8 +121,8 @@ svf_statement
         struct ths_params *p = &(priv_data->parser_params.ths_params);
 
         p->number = $2;
-        svf_hxr(generic_dr, p);
-        svf_free_ths_params(p);
+        urj_svf_hxr(URJ_SVF_generic_dr, p);
+        urj_svf_free_ths_params(p);
       }
 
     | HIR NUMBER ths_param_list ';'
@@ -130,8 +130,8 @@ svf_statement
         struct ths_params *p = &(priv_data->parser_params.ths_params);
 
         p->number = $2;
-        svf_hxr(generic_ir, p);
-        svf_free_ths_params(p);
+        urj_svf_hxr(URJ_SVF_generic_ir, p);
+        urj_svf_free_ths_params(p);
       }
 
     | PIOMAP '(' direction IDENTIFIER piomap_rec ')' ';'
@@ -158,7 +158,7 @@ svf_statement
         rt->run_clk   = $3.token;
         rt->end_state = $5;
 
-        if (!svf_runtest(chain, priv_data, rt)) {
+        if (!urj_svf_runtest(chain, priv_data, rt)) {
           yyerror(&@$, priv_data, chain, "RUNTEST");
           YYERROR;
         }
@@ -173,7 +173,7 @@ svf_statement
         rt->run_clk   = 0;
         rt->end_state = $4;
 
-        if (!svf_runtest(chain, priv_data, rt)) {
+        if (!urj_svf_runtest(chain, priv_data, rt)) {
           yyerror(&@$, priv_data, chain, "RUNTEST");
           YYERROR;
         }
@@ -185,8 +185,8 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = svf_sxr(chain, priv_data, generic_dr, p, &@$);
-        svf_free_ths_params(p);
+        result = urj_svf_sxr(chain, priv_data, URJ_SVF_generic_dr, p, &@$);
+        urj_svf_free_ths_params(p);
 
         if (!result) {
           yyerror(&@$, priv_data, chain, "SDR");
@@ -200,8 +200,8 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = svf_sxr(chain, priv_data, generic_ir, p, &@$);
-        svf_free_ths_params(p);
+        result = urj_svf_sxr(chain, priv_data, URJ_SVF_generic_ir, p, &@$);
+        urj_svf_free_ths_params(p);
 
         if (!result) {
           yyerror(&@$, priv_data, chain, "SIR");
@@ -211,7 +211,7 @@ svf_statement
 
     | STATE path_states stable_state ';'
       {
-        if (!svf_state(chain, priv_data, &(priv_data->parser_params.path_states), $<token>3)) {
+        if (!urj_svf_state(chain, priv_data, &(priv_data->parser_params.path_states), $<token>3)) {
           yyerror(&@$, priv_data, chain, "STATE");
           YYERROR;
         }
@@ -223,8 +223,8 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = svf_txr(generic_dr, p);
-        svf_free_ths_params(p);
+        result = urj_svf_txr(URJ_SVF_generic_dr, p);
+        urj_svf_free_ths_params(p);
 
         if (!result) {
           yyerror(&@$, priv_data, chain, "TDR");
@@ -238,8 +238,8 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = svf_txr(generic_ir, p);
-        svf_free_ths_params(p);
+        result = urj_svf_txr(URJ_SVF_generic_ir, p);
+        urj_svf_free_ths_params(p);
 
         if (!result) {
           yyerror(&@$, priv_data, chain, "TIR");
@@ -249,7 +249,7 @@ svf_statement
 
     | TRST trst_mode ';'
     {
-      if (!svf_trst(chain, priv_data, $<token>2)) {
+      if (!urj_svf_trst(chain, priv_data, $<token>2)) {
         yyerror(&@$, priv_data, chain, "TRST");
         YYERROR;
       }
@@ -285,8 +285,8 @@ ths_opt_param
 ;
 
 stable_state
-            : RESET 
-            | IDLE
+            : URJ_JIM_RESET 
+            | URJ_JIM_IDLE
             | DRPAUSE
             | IRPAUSE
 ;
@@ -364,8 +364,8 @@ all_states
             | IRUPDATE
             | IRPAUSE
             | DRPAUSE
-            | RESET
-            | IDLE 
+            | URJ_JIM_RESET
+            | URJ_JIM_IDLE 
 ;
 
 path_states
@@ -409,14 +409,14 @@ direction
 
 
 void
-yyerror(YYLTYPE *locp, parser_priv_t *priv_data, chain_t *chain, const char *error_string)
+yyerror(YYLTYPE *locp, urj_svf_parser_priv_t *priv_data, urj_chain_t *chain, const char *error_string)
 {
   printf("Error occurred for SVF command %s.\n", error_string);
 }
 
 
 static void
-svf_free_ths_params(struct ths_params *params)
+urj_svf_free_ths_params(struct ths_params *params)
 {
   params->number = 0.0;
 
@@ -440,7 +440,7 @@ svf_free_ths_params(struct ths_params *params)
 
 
 int
-svf_bison_init(parser_priv_t *priv_data, FILE *f, int num_lines, int print_progress)
+urj_svf_bison_init(urj_svf_parser_priv_t *priv_data, FILE *f, int num_lines, int print_progress)
 {
   const struct svf_parser_params params = {
     {0.0, NULL, NULL, NULL, NULL},
@@ -450,7 +450,7 @@ svf_bison_init(parser_priv_t *priv_data, FILE *f, int num_lines, int print_progr
 
   priv_data->parser_params = params;
 
-  if ((priv_data->scanner = svf_flex_init(f, num_lines, print_progress)) == NULL)
+  if ((priv_data->scanner = urj_svf_flex_init(f, num_lines, print_progress)) == NULL)
     return 0;
   else
     return 1;
@@ -458,7 +458,7 @@ svf_bison_init(parser_priv_t *priv_data, FILE *f, int num_lines, int print_progr
 
 
 void
-svf_bison_deinit(parser_priv_t *priv_data)
+urj_svf_bison_deinit(urj_svf_parser_priv_t *priv_data)
 {
-  svf_flex_deinit(priv_data->scanner);
+  urj_svf_flex_deinit(priv_data->scanner);
 }

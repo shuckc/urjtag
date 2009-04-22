@@ -37,12 +37,12 @@
 #include "cmd.h"
 
 static int
-cmd_shell_run (chain_t *chain, char *params[])
+cmd_shell_run (urj_chain_t *chain, char *params[])
 {
-    int i, len, n = cmd_params (params);
+    int i, len, n = urj_cmd_params (params);
     char *shell_cmd;
 
-    if ((n = cmd_params (params)) == 1)
+    if ((n = urj_cmd_params (params)) == 1)
         return -1;
 
     /* I must apologize to everyone who knows what they are doing for
@@ -86,7 +86,7 @@ cmd_shell_help (void)
               "\n" "CMMD OS Shell Command\n"), "shell cmmd");
 }
 
-cmd_t cmd_shell = {
+urj_cmd_t cmd_shell = {
     "shell",
     N_("shell cmmd"),
     cmd_shell_help,

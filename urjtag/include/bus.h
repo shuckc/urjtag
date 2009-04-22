@@ -23,8 +23,8 @@
  *
  */
 
-#ifndef BUS_H
-#define	BUS_H
+#ifndef URJ_BUS_H
+#define	URJ_BUS_H
 
 #include <stdint.h>
 
@@ -33,14 +33,14 @@
 typedef struct
 {
     int len;
-    bus_t **buses;
-} buses_t;
+    urj_bus_t **buses;
+} urj_buses_t;
 
-extern buses_t buses;
-extern const bus_driver_t *bus_drivers[];
+extern urj_buses_t buses;
+extern const urj_bus_driver_t *bus_drivers[];
 
-void buses_free (void);
-void buses_add (bus_t *abus);
-void buses_delete (bus_t *abus);
+void urj_bus_buses_free (void);
+void urj_bus_buses_add (urj_bus_t *abus);
+void urj_bus_buses_delete (urj_bus_t *abus);
 
-#endif /* BUS_H */
+#endif /* URJ_BUS_H */

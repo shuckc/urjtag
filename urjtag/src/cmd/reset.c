@@ -33,15 +33,15 @@
 #include "cmd.h"
 
 static int
-cmd_reset_run (chain_t *chain, char *params[])
+cmd_reset_run (urj_chain_t *chain, char *params[])
 {
-    if (cmd_params (params) > 1)
+    if (urj_cmd_params (params) > 1)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
-    tap_reset_bypass (chain);
+    urj_tap_reset_bypass (chain);
 
     return 1;
 }
@@ -52,7 +52,7 @@ cmd_reset_help (void)
     printf (_("Usage: %s\n" "Reset current JTAG chain.\n"), "reset");
 }
 
-cmd_t cmd_reset = {
+urj_cmd_t cmd_reset = {
     "reset",
     N_("reset JTAG chain"),
     cmd_reset_help,

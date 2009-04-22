@@ -38,11 +38,11 @@
 #include "cmd.h"
 
 static int
-cmd_cable_run (chain_t *chain, char *params[])
+cmd_cable_run (urj_chain_t *chain, char *params[])
 {
-    cable_t *cable;
+    urj_cable_t *cable;
     int i;
-    int paramc = cmd_params (params);
+    int paramc = urj_cmd_params (params);
 
     /* we need at least one parameter for 'cable' command */
     if (paramc < 2)
@@ -91,13 +91,13 @@ cmd_cable_run (chain_t *chain, char *params[])
 
     if (bus)
     {
-        bus_free (bus);
+        URJ_BUS_FREE (bus);
         bus = NULL;
     }
 
-    chain_disconnect (chain);
+    urj_tap_chain_disconnect (chain);
 
-    cable = calloc (1, sizeof (cable_t));
+    cable = calloc (1, sizeof (urj_cable_t));
     if (!cable)
     {
         printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
@@ -115,15 +115,15 @@ cmd_cable_run (chain_t *chain, char *params[])
 
     chain->cable = cable;
 
-    if (cable_init (chain->cable))
+    if (urj_tap_cable_init (chain->cable))
     {
         printf (_("Error: Cable initialization failed!\n"));
-        chain_disconnect (chain);
+        urj_tap_chain_disconnect (chain);
         return 1;
     }
-    chain_set_trst (chain, 0);
-    chain_set_trst (chain, 1);
-    tap_reset (chain);
+    urj_tap_chain_set_trst (chain, 0);
+    urj_tap_chain_set_trst (chain, 1);
+    urj_tap_reset (chain);
 
     return 1;
 }
@@ -147,7 +147,7 @@ cmd_cable_help (void)
                 _(cable_drivers[i]->description));
 }
 
-cmd_t cmd_cable = {
+urj_cmd_t cmd_cable = {
     "cable",
     N_("select JTAG cable"),
     cmd_cable_help,

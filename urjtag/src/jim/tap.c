@@ -28,31 +28,31 @@
 #include <stdint.h>
 #include <jim.h>
 
-#include <jim/some_cpu.h>
+#include <jim/urj_jim_some_cpu.h>
 
 #undef VERBOSE
 
-static const tap_state_t next_tap_state[16][2] = {
-    /* RESET       */ {IDLE, RESET},
-    /* SELECT_DR   */ {CAPTURE_DR, SELECT_IR},
-    /* CAPTURE_DR  */ {SHIFT_DR, EXIT1_DR},
-    /* SHIFT_DR    */ {SHIFT_DR, EXIT1_DR},
-    /* EXIT1_DR    */ {PAUSE_DR, UPDATE_DR},
-    /* PAUSE_DR    */ {PAUSE_DR, EXIT2_DR},
-    /* EXIT2_DR    */ {SHIFT_DR, UPDATE_DR},
-    /* UPDATE_DR   */ {IDLE, SELECT_DR},
-    /* IDLE        */ {IDLE, SELECT_DR},
-    /* SELECT_IR   */ {CAPTURE_IR, RESET},
-    /* CAPTURE_IR  */ {SHIFT_IR, EXIT1_IR},
-    /* SHIFT_IR    */ {SHIFT_IR, EXIT1_IR},
-    /* EXIT1_IR    */ {PAUSE_IR, UPDATE_IR},
-    /* PAUSE_IR    */ {EXIT2_IR, EXIT2_IR},
-    /* EXIT2_IR    */ {SHIFT_IR, UPDATE_IR},
-    /* UPDATE_IR   */ {IDLE, SELECT_DR}
+static const urj_jim_tap_state_t next_tap_state[16][2] = {
+    /* URJ_JIM_RESET       */ {URJ_JIM_IDLE, URJ_JIM_RESET},
+    /* URJ_JIM_SELECT_DR   */ {URJ_JIM_CAPTURE_DR, URJ_JIM_SELECT_IR},
+    /* URJ_JIM_CAPTURE_DR  */ {URJ_JIM_SHIFT_DR, URJ_JIM_EXIT1_DR},
+    /* URJ_JIM_SHIFT_DR    */ {URJ_JIM_SHIFT_DR, URJ_JIM_EXIT1_DR},
+    /* URJ_JIM_EXIT1_DR    */ {URJ_JIM_PAUSE_DR, URJ_JIM_UPDATE_DR},
+    /* URJ_JIM_PAUSE_DR    */ {URJ_JIM_PAUSE_DR, URJ_JIM_EXIT2_DR},
+    /* URJ_JIM_EXIT2_DR    */ {URJ_JIM_SHIFT_DR, URJ_JIM_UPDATE_DR},
+    /* URJ_JIM_UPDATE_DR   */ {URJ_JIM_IDLE, URJ_JIM_SELECT_DR},
+    /* URJ_JIM_IDLE        */ {URJ_JIM_IDLE, URJ_JIM_SELECT_DR},
+    /* URJ_JIM_SELECT_IR   */ {URJ_JIM_CAPTURE_IR, URJ_JIM_RESET},
+    /* URJ_JIM_CAPTURE_IR  */ {URJ_JIM_SHIFT_IR, URJ_JIM_EXIT1_IR},
+    /* URJ_JIM_SHIFT_IR    */ {URJ_JIM_SHIFT_IR, URJ_JIM_EXIT1_IR},
+    /* URJ_JIM_EXIT1_IR    */ {URJ_JIM_PAUSE_IR, URJ_JIM_UPDATE_IR},
+    /* URJ_JIM_PAUSE_IR    */ {URJ_JIM_EXIT2_IR, URJ_JIM_EXIT2_IR},
+    /* URJ_JIM_EXIT2_IR    */ {URJ_JIM_SHIFT_IR, URJ_JIM_UPDATE_IR},
+    /* URJ_JIM_UPDATE_IR   */ {URJ_JIM_IDLE, URJ_JIM_SELECT_DR}
 };
 
 void
-jim_print_sreg (shift_reg_t *r)
+urj_jim_print_sreg (urj_jim_shift_reg_t *r)
 {
     int i;
     for (i = (r->len + 31) / 32; i >= 0; i--)
@@ -60,13 +60,13 @@ jim_print_sreg (shift_reg_t *r)
 }
 
 void
-jim_print_tap_state (char *rof, jim_device_t *dev)
+urj_jim_print_tap_state (char *rof, urj_jim_device_t *dev)
 {
     printf (" tck %s, state=", rof);
     switch (dev->tap_state & 7)
     {
     case 0:
-        printf ((dev->tap_state == RESET) ? "RESET" : "IDLE");
+        printf ((dev->tap_state == URJ_JIM_RESET) ? "URJ_JIM_RESET" : "URJ_JIM_IDLE");
         break;
     case 1:
         printf ("SELECT");
@@ -95,7 +95,7 @@ jim_print_tap_state (char *rof, jim_device_t *dev)
         if (dev->tap_state & 8)
         {
             printf ("_IR=");
-            jim_print_sreg (&dev->sreg[0]);
+            urj_jim_print_sreg (&dev->sreg[0]);
         }
         else
         {
@@ -103,7 +103,7 @@ jim_print_tap_state (char *rof, jim_device_t *dev)
             if (dev->current_dr != 0)
             {
                 printf ("(%d)=", dev->current_dr);
-                jim_print_sreg (&dev->sreg[dev->current_dr]);
+                urj_jim_print_sreg (&dev->sreg[dev->current_dr]);
             }
         }
     }
@@ -112,19 +112,19 @@ jim_print_tap_state (char *rof, jim_device_t *dev)
 
 
 void
-jim_set_trst (jim_state_t *s, int trst)
+urj_jim_set_trst (urj_jim_state_t *s, int trst)
 {
     s->trst = trst;
 }
 
 int
-jim_get_trst (jim_state_t *s)
+urj_jim_get_trst (urj_jim_state_t *s)
 {
     return s->trst;
 }
 
 int
-jim_get_tdo (jim_state_t *s)
+urj_jim_get_tdo (urj_jim_state_t *s)
 {
     if (s->last_device_in_chain == NULL)
         return 0;
@@ -132,20 +132,20 @@ jim_get_tdo (jim_state_t *s)
 }
 
 void
-jim_tck_rise (jim_state_t *s, int tms, int tdi)
+urj_jim_tck_rise (urj_jim_state_t *s, int tms, int tdi)
 {
-    jim_device_t *dev;
+    urj_jim_device_t *dev;
 
 
     for (dev = s->last_device_in_chain; dev; dev = dev->prev)
     {
         int dev_tdi;
         int i, n;
-        shift_reg_t *sr;
+        urj_jim_shift_reg_t *sr;
         uint32_t *reg;
 
 #ifdef VERBOSE
-        jim_print_tap_state ("rise", dev);
+        urj_jim_print_tap_state ("rise", dev);
 #endif
 
         dev_tdi = (dev->prev != NULL) ? dev->prev->tdo : tdi;
@@ -177,7 +177,7 @@ jim_tck_rise (jim_state_t *s, int tms, int tdi)
         {
             reg = sr->reg;
 
-            if (dev->tap_state == SHIFT_IR || dev->tap_state == SHIFT_DR)
+            if (dev->tap_state == URJ_JIM_SHIFT_IR || dev->tap_state == URJ_JIM_SHIFT_DR)
             {
                 /* Start with LSW of shift register at index 0 */
 
@@ -209,16 +209,16 @@ jim_tck_rise (jim_state_t *s, int tms, int tdi)
 }
 
 void
-jim_tck_fall (jim_state_t *s)
+urj_jim_tck_fall (urj_jim_state_t *s)
 {
-    jim_device_t *dev;
+    urj_jim_device_t *dev;
 
     for (dev = s->last_device_in_chain; dev; dev = dev->prev)
     {
         dev->tdo = dev->tdo_buffer;
 
 #ifdef VERBOSE
-        jim_print_tap_state ("fall", dev);
+        urj_jim_print_tap_state ("fall", dev);
 #endif
 
         if (dev->tck_fall != NULL)
@@ -226,12 +226,12 @@ jim_tck_fall (jim_state_t *s)
     }
 }
 
-jim_device_t *
-jim_alloc_device (int num_sregs, const int reg_size[])
+urj_jim_device_t *
+urj_jim_alloc_device (int num_sregs, const int reg_size[])
 {
     int i, r;
 
-    jim_device_t *dev = (jim_device_t *) malloc (sizeof (jim_device_t));
+    urj_jim_device_t *dev = (urj_jim_device_t *) malloc (sizeof (urj_jim_device_t));
 
     if (dev == NULL)
     {
@@ -239,7 +239,7 @@ jim_alloc_device (int num_sregs, const int reg_size[])
         return NULL;
     }
 
-    dev->sreg = (shift_reg_t *) malloc (num_sregs * sizeof (shift_reg_t));
+    dev->sreg = (urj_jim_shift_reg_t *) malloc (num_sregs * sizeof (urj_jim_shift_reg_t));
 
     if (dev->sreg == NULL)
     {
@@ -274,18 +274,18 @@ jim_alloc_device (int num_sregs, const int reg_size[])
     dev->tck_rise = NULL;
     dev->tck_fall = NULL;
     dev->dev_free = NULL;
-    dev->tap_state = RESET;
+    dev->tap_state = URJ_JIM_RESET;
     dev->tdo = dev->tdo_buffer = 1;
 
     return dev;
 }
 
-jim_state_t *
-jim_init (void)
+urj_jim_state_t *
+urj_jim_init (void)
 {
-    jim_state_t *s;
+    urj_jim_state_t *s;
 
-    s = (jim_state_t *) malloc (sizeof (jim_state_t));
+    s = (urj_jim_state_t *) malloc (sizeof (urj_jim_state_t));
     if (s == NULL)
     {
         printf ("Out of memory!\n");
@@ -309,7 +309,7 @@ jim_init (void)
     }
 
     s->trst = 0;
-    s->last_device_in_chain = some_cpu ();
+    s->last_device_in_chain = urj_jim_some_cpu ();
 
     if (s->last_device_in_chain != NULL)
     {
@@ -326,9 +326,9 @@ jim_init (void)
 }
 
 void
-jim_free (jim_state_t *s)
+urj_jim_free (urj_jim_state_t *s)
 {
-    jim_device_t *dev, *pre;
+    urj_jim_device_t *dev, *pre;
 
     if (s == NULL)
         return;

@@ -30,9 +30,9 @@
 
 #undef VERBOSE
 
-extern jim_bus_device_t intel_28f800b3b;
+extern urj_jim_bus_device_t intel_28f800b3b;
 
-static jim_attached_part_t some_cpu_attached[] = {
+static urj_jim_attached_part_t some_cpu_attached[] = {
     /* 1. Address offset: base offset [bytes]
      * 2. Address shift: Distance between address LSB of device and CPU
      * 3. Data shift: Distance between D0 of device and CPU e.g. 0, 8, 16 or 24 bits
@@ -46,7 +46,7 @@ static jim_attached_part_t some_cpu_attached[] = {
 #define BSR_LEN 202
 
 void
-some_cpu_report_idcode (jim_device_t *dev)
+urj_jim_some_cpu_report_idcode (urj_jim_device_t *dev)
 {
     dev->sreg[0].reg[0] = 0x1;  /* IDCODE instruction b0001 */
     dev->sreg[1].reg[0] = 0x87654321;   /* Load IDR (fake) */
@@ -54,19 +54,19 @@ some_cpu_report_idcode (jim_device_t *dev)
 }
 
 void
-some_cpu_tck_rise (jim_device_t *dev,
+urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev,
                    int tms, int tdi, uint8_t *shmem, size_t shmem_size)
 {
     int i;
 
     switch (dev->tap_state)
     {
-    case RESET:
+    case URJ_JIM_RESET:
 
-        some_cpu_report_idcode (dev);
+        urj_jim_some_cpu_report_idcode (dev);
         break;
 
-    case CAPTURE_DR:
+    case URJ_JIM_CAPTURE_DR:
 
         if (dev->current_dr == 2)       // if(dev->sreg[0].reg[0] == 0 && dev->current_dr == 2) /* EXTEST */
         {
@@ -75,14 +75,14 @@ some_cpu_tck_rise (jim_device_t *dev,
             uint32_t c = dev->sreg[2].reg[3];
 
 #ifdef VERBOSE
-            printf ("CAPTURE_DR/EXTEST\n");
+            printf ("URJ_JIM_CAPTURE_DR/EXTEST\n");
 #endif
 
             for (i = 0; some_cpu_attached[i].part; i++)
             {
-                jim_attached_part_t *tp =
-                    &(((jim_attached_part_t *) (dev->state))[i]);
-                jim_bus_device_t *b = tp->part;
+                urj_jim_attached_part_t *tp =
+                    &(((urj_jim_attached_part_t *) (dev->state))[i]);
+                urj_jim_bus_device_t *b = tp->part;
 
                 /* Address decoder */
                 if (tp->offset <= a)
@@ -101,10 +101,10 @@ some_cpu_tck_rise (jim_device_t *dev,
         }
         break;
 
-    case UPDATE_IR:
+    case URJ_JIM_UPDATE_IR:
 
 #ifdef VERBOSE
-        printf ("UPDATE_IR/");
+        printf ("URJ_JIM_UPDATE_IR/");
 #endif
 
         switch (dev->sreg[0].reg[0])
@@ -119,7 +119,7 @@ some_cpu_tck_rise (jim_device_t *dev,
 #ifdef VERBOSE
             printf ("IDCODE\n");
 #endif
-            some_cpu_report_idcode (dev);
+            urj_jim_some_cpu_report_idcode (dev);
             break;
         case 0x2:              /* SAMPLE */
 #ifdef VERBOSE
@@ -143,13 +143,13 @@ some_cpu_tck_rise (jim_device_t *dev,
 }
 
 void
-some_cpu_tck_fall (jim_device_t *dev, uint8_t *shmem, size_t shmem_size)
+urj_jim_some_cpu_tck_fall (urj_jim_device_t *dev, uint8_t *shmem, size_t shmem_size)
 {
     int i;
 
     switch (dev->tap_state)
     {
-    case UPDATE_DR:
+    case URJ_JIM_UPDATE_DR:
 
         if (dev->sreg[0].reg[0] == 0 && dev->current_dr == 2)   /* EXTEST */
         {
@@ -158,14 +158,14 @@ some_cpu_tck_fall (jim_device_t *dev, uint8_t *shmem, size_t shmem_size)
             uint32_t c = dev->sreg[2].reg[3];
 
 #ifdef VERBOSE
-            printf ("UPDATE_DR/EXTEST\n");
+            printf ("URJ_JIM_UPDATE_DR/EXTEST\n");
 #endif
 
             for (i = 0; some_cpu_attached[i].part; i++)
             {
-                jim_attached_part_t *tp =
-                    &(((jim_attached_part_t *) (dev->state))[i]);
-                jim_bus_device_t *b = tp->part;
+                urj_jim_attached_part_t *tp =
+                    &(((urj_jim_attached_part_t *) (dev->state))[i]);
+                urj_jim_bus_device_t *b = tp->part;
 
                 /* Address decoder */
                 if (tp->offset <= a)
@@ -187,7 +187,7 @@ some_cpu_tck_fall (jim_device_t *dev, uint8_t *shmem, size_t shmem_size)
 }
 
 void
-some_cpu_free (jim_device_t *dev)
+urj_jim_some_cpu_free (urj_jim_device_t *dev)
 {
     int i;
 
@@ -198,7 +198,7 @@ some_cpu_free (jim_device_t *dev)
 
     for (i = 0; some_cpu_attached[i].part; i++)
     {
-        jim_bus_device_t *b = ((jim_attached_part_t *) (dev->state))[i].part;
+        urj_jim_bus_device_t *b = ((urj_jim_attached_part_t *) (dev->state))[i].part;
         if (b->free != NULL)
             b->free (b);
         free (b);
@@ -206,14 +206,14 @@ some_cpu_free (jim_device_t *dev)
     free (dev->state);
 }
 
-jim_device_t *
-some_cpu (void)
+urj_jim_device_t *
+urj_jim_some_cpu (void)
 {
-    jim_device_t *dev;
+    urj_jim_device_t *dev;
     const int reg_size[3] =
         { 2 /* IR */ , 32 /* IDR */ , BSR_LEN /* BSR */  };
 
-    dev = jim_alloc_device (3, reg_size);
+    dev = urj_jim_alloc_device (3, reg_size);
 
     if (dev)
     {
@@ -229,28 +229,28 @@ some_cpu (void)
         else
         {
             int i;
-            dev->tck_rise = some_cpu_tck_rise;
-            dev->tck_fall = some_cpu_tck_fall;
-            dev->dev_free = some_cpu_free;
+            dev->tck_rise = urj_jim_some_cpu_tck_rise;
+            dev->tck_fall = urj_jim_some_cpu_tck_fall;
+            dev->dev_free = urj_jim_some_cpu_free;
             memcpy (dev->state, some_cpu_attached,
                     sizeof (some_cpu_attached));
 
             for (i = 0; some_cpu_attached[i].part; i++)
             {
-                jim_bus_device_t **b =
-                    &(((jim_attached_part_t *) (dev->state))[i].part);
-                *b = malloc (sizeof (jim_bus_device_t));
+                urj_jim_bus_device_t **b =
+                    &(((urj_jim_attached_part_t *) (dev->state))[i].part);
+                *b = malloc (sizeof (urj_jim_bus_device_t));
                 if (*b == NULL)
                     break;
                 memcpy (*b, some_cpu_attached[i].part,
-                        sizeof (jim_bus_device_t));
+                        sizeof (urj_jim_bus_device_t));
                 (*b)->init (*b);
             }
 
             if (some_cpu_attached[i].part)      /* loop broken; failed to malloc all parts */
             {
                 for (i--; i >= 0; i--)
-                    free (((jim_attached_part_t *) (dev->state))[i].part);
+                    free (((urj_jim_attached_part_t *) (dev->state))[i].part);
                 free (dev->state);
                 free (dev);
                 dev = NULL;

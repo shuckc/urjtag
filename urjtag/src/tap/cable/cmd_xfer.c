@@ -39,7 +39,7 @@
  * Extends the buffer of the given command if a new byte wouldn't fit into
  * the current buffer size.
  *
- * cmd : pointer to cx_cmd_t
+ * cmd : pointer to urj_tap_cable_cmd_xfer_cx_cmd_t
  *
  * Return value:
  * 0 : Error occured, not enough memory
@@ -47,7 +47,7 @@
  *
  ****************************************************************************/
 static int
-extend_cmd_buffer (cx_cmd_t *cmd)
+extend_cmd_buffer (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
 {
     /* check size of cmd buffer and increase it if not sufficient */
     if (cmd->buf_pos >= cmd->buf_len)
@@ -62,13 +62,13 @@ extend_cmd_buffer (cx_cmd_t *cmd)
 
 
 /*****************************************************************************
- * cx_cmd_space( cmd, max_len )
+ * urj_tap_cable_cx_cmd_space( cmd, max_len )
  *
  * Return the difference between actually allocated bytes in the buffer of
  * the current last command and max_len.  If there are already more bytes
  * allocated than max_len, this function will return zero.
  *
- * cmd      : pointer to cx_cmd_t struct
+ * cmd      : pointer to urj_tap_cable_cmd_xfer_cx_cmd_t struct
  * max_len  : upper limit for the space to allocate
  *
  * Return value:
@@ -77,10 +77,10 @@ extend_cmd_buffer (cx_cmd_t *cmd)
  *
  ****************************************************************************/
 int
-cx_cmd_space (cx_cmd_root_t *cmd_root, int max_len)
+urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, int max_len)
 {
     int n;
-    cx_cmd_t *cmd = cmd_root->last;
+    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = cmd_root->last;
 
     if (!cmd)
         return max_len;
@@ -94,11 +94,11 @@ cx_cmd_space (cx_cmd_root_t *cmd_root, int max_len)
 
 
 /*****************************************************************************
- * cx_cmd_push( cmd, d )
+ * urj_tap_cable_cx_cmd_push( cmd, d )
  *
  * Pushes the byte value d to the buffer of the current last command.
  *
- * cmd_root : pointer to cx_cmd_root_t struct
+ * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t struct
  * d        : new value to be pushed
  *
  * Return value:
@@ -107,9 +107,9 @@ cx_cmd_space (cx_cmd_root_t *cmd_root, int max_len)
  *
  ****************************************************************************/
 int
-cx_cmd_push (cx_cmd_root_t *cmd_root, uint8_t d)
+urj_tap_cable_cx_cmd_push (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, uint8_t d)
 {
-    cx_cmd_t *cmd = cmd_root->last;
+    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = cmd_root->last;
 
     if (!cmd)
         return 0;
@@ -124,21 +124,21 @@ cx_cmd_push (cx_cmd_root_t *cmd_root, uint8_t d)
 
 
 /*****************************************************************************
- * cx_cmd_dequeue( cmd_root )
+ * urj_tap_cable_cx_cmd_dequeue( cmd_root )
  *
  * Dequeues the first command.
  *
- * cmd_root : pointer to cx_cmd_root_t parameter struct
+ * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t parameter struct
  *
  * Return value:
  * NULL   : Error occured
- * <>NULL : All ok, pointer to dequeued cx_cmd_t
+ * <>NULL : All ok, pointer to dequeued urj_tap_cable_cmd_xfer_cx_cmd_t
  *
  ****************************************************************************/
-cx_cmd_t *
-cx_cmd_dequeue (cx_cmd_root_t *cmd_root)
+urj_tap_cable_cmd_xfer_cx_cmd_t *
+urj_tap_cable_cx_cmd_dequeue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
 {
-    cx_cmd_t *cmd = cmd_root->first;
+    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = cmd_root->first;
 
     if (cmd)
     {
@@ -152,18 +152,18 @@ cx_cmd_dequeue (cx_cmd_root_t *cmd_root)
 
 
 /*****************************************************************************
- * cx_cmd_free( cmd )
+ * urj_tap_cable_cx_cmd_free( cmd )
  *
  * Frees allocated memory of specified cmd structure.
  *
- * cmd : pointer to cx_cmd_t
+ * cmd : pointer to urj_tap_cable_cmd_xfer_cx_cmd_t
  *
  * Return value:
  * none
  *
  ****************************************************************************/
 void
-cx_cmd_free (cx_cmd_t *cmd)
+urj_tap_cable_cx_cmd_free (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
 {
     if (cmd)
     {
@@ -175,24 +175,24 @@ cx_cmd_free (cx_cmd_t *cmd)
 
 
 /*****************************************************************************
- * cx_cmd_queue( cmd_root, to_recv )
+ * urj_tap_cable_cx_cmd_queue( cmd_root, to_recv )
  *
- * Allocates a new cx_cmd_t and queues it at the end of the command
+ * Allocates a new urj_tap_cable_cmd_xfer_cx_cmd_t and queues it at the end of the command
  * queue. The value of to_recv will be stored in the new cmd element,
  * set to 0 if this command will not generate receive bytes.
  *
- * cmd_root : pointer to cx_cmd_root_t parameter struct
+ * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t parameter struct
  * to_recv  : number of receive bytes that this command will generate
  *
  * Return value:
  * NULL   : Error occured
- * <>NULL : All ok, pointer to allocated cx_cmd_t
+ * <>NULL : All ok, pointer to allocated urj_tap_cable_cmd_xfer_cx_cmd_t
  *
  ****************************************************************************/
-cx_cmd_t *
-cx_cmd_queue (cx_cmd_root_t *cmd_root, uint32_t to_recv)
+urj_tap_cable_cmd_xfer_cx_cmd_t *
+urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, uint32_t to_recv)
 {
-    cx_cmd_t *cmd = (cx_cmd_t *) malloc (sizeof (cx_cmd_t));
+    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = (urj_tap_cable_cmd_xfer_cx_cmd_t *) malloc (sizeof (urj_tap_cable_cmd_xfer_cx_cmd_t));
 
     if (cmd)
     {
@@ -220,18 +220,18 @@ cx_cmd_queue (cx_cmd_root_t *cmd_root, uint32_t to_recv)
 
 
 /*****************************************************************************
- * cx_cmd_init( cmd_root )
+ * urj_tap_cable_cx_cmd_init( cmd_root )
  *
  * Initializes the command root structure.
  *
- * cmd_root : pointer to cx_cmd_root_t
+ * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t
  *
  * Return value:
  * none
  *
  ****************************************************************************/
 void
-cx_cmd_init (cx_cmd_root_t *cmd_root)
+urj_tap_cable_cx_cmd_init (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
 {
     cmd_root->first = NULL;
     cmd_root->last = NULL;
@@ -239,54 +239,54 @@ cx_cmd_init (cx_cmd_root_t *cmd_root)
 
 
 /*****************************************************************************
- * cx_cmd_deinit( cmd_root )
+ * urj_tap_cable_cx_cmd_deinit( cmd_root )
  *
  * Deinitialzes and frees all elements from the command root structure.
  *
- * cmd_root : pointer to cx_cmd_root_t
+ * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t
  *
  * Return value:
  * none
  *
  ****************************************************************************/
 void
-cx_cmd_deinit (cx_cmd_root_t *cmd_root)
+urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
 {
-    cx_cmd_t *cmd;
+    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd;
     while (cmd_root->first)
     {
-        cmd = cx_cmd_dequeue (cmd_root);
-        cx_cmd_free (cmd);
+        cmd = urj_tap_cable_cx_cmd_dequeue (cmd_root);
+        urj_tap_cable_cx_cmd_free (cmd);
     }
 }
 
 
 /*****************************************************************************
- * cx_xfer( cmd_root, out_cmd, cable, how_much )
+ * urj_tap_cable_cx_xfer( cmd_root, out_cmd, cable, how_much )
  *
  * Unrolls the queued commands and posts their payload to the usbconn driver.
- * NB: usbconn_write will buffer the accumulated payload until usbconn_read
+ * NB: urj_tap_usbconn_write will buffer the accumulated payload until urj_tap_usbconn_read
  *     is called.
  *
  * Flushing of the posted payload bytes is triggered when how_much
  * requests to do so or if receive bytes are expected.
  *
- * cmd_root : pointer to cx_cmd_root_t struct
- * out_cmd  : pointer to cx_cmd_t for an optional command that is appended
+ * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t struct
+ * out_cmd  : pointer to urj_tap_cable_cmd_xfer_cx_cmd_t for an optional command that is appended
  *            to send buffer in case commands have been scheduled that
  *            yield return/receive data from the device
- * cable    : current cable_t
- * how_much : cable_flush_amount_t value specifying the flush strategy
+ * cable    : current urj_cable_t
+ * how_much : urj_cable_flush_amount_t value specifying the flush strategy
  *
  * Return value:
  * none
  *
  ****************************************************************************/
 void
-cx_xfer (cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
-         cable_t *cable, cable_flush_amount_t how_much)
+urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, const urj_tap_cable_cmd_xfer_cx_cmd_t *out_cmd,
+         urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
-    cx_cmd_t *cmd = cx_cmd_dequeue (cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = urj_tap_cable_cx_cmd_dequeue (cmd_root);
     uint32_t bytes_to_recv;
 
     bytes_to_recv = 0;
@@ -297,9 +297,9 @@ cx_xfer (cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
            through the usbconn driver */
         bytes_to_recv += cmd->to_recv;
         /* write command data (buffered) */
-        usbconn_write (cable->link.usb, cmd->buf, cmd->buf_pos, cmd->to_recv);
-        cx_cmd_free (cmd);
-        cmd = cx_cmd_dequeue (cmd_root);
+        urj_tap_usbconn_write (cable->link.usb, cmd->buf, cmd->buf_pos, cmd->to_recv);
+        urj_tap_cable_cx_cmd_free (cmd);
+        cmd = urj_tap_cable_cx_cmd_dequeue (cmd_root);
     }
 
     /* it's possible for the caller to define an extra command that is
@@ -307,15 +307,15 @@ cx_xfer (cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
        data is expected */
     if (bytes_to_recv && out_cmd)
     {
-        usbconn_write (cable->link.usb, out_cmd->buf, out_cmd->buf_pos,
+        urj_tap_usbconn_write (cable->link.usb, out_cmd->buf, out_cmd->buf_pos,
                        out_cmd->to_recv);
         bytes_to_recv += out_cmd->to_recv;
     }
 
-    if (bytes_to_recv || (how_much != TO_OUTPUT))
+    if (bytes_to_recv || (how_much != URJ_TAP_CABLE_TO_OUTPUT))
     {
         /* Step 2: flush scheduled bytes */
-        usbconn_read (cable->link.usb, NULL, 0);
+        urj_tap_usbconn_read (cable->link.usb, NULL, 0);
 
         bytes_to_recv = 0;
     }
@@ -323,7 +323,7 @@ cx_xfer (cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
 
 
 /*****************************************************************************
- * cx_xfer_recv( cable )
+ * urj_tap_cable_cx_xfer_recv( cable )
  *
  * Extracts the byte at the current position from the receive buffer.
  *
@@ -334,11 +334,11 @@ cx_xfer (cx_cmd_root_t *cmd_root, const cx_cmd_t *out_cmd,
  *
  ****************************************************************************/
 uint8_t
-cx_xfer_recv (cable_t *cable)
+urj_tap_cable_cx_xfer_recv (urj_cable_t *cable)
 {
     uint8_t buf;
 
-    if (usbconn_read (cable->link.usb, &buf, 1) == 1)
+    if (urj_tap_usbconn_read (cable->link.usb, &buf, 1) == 1)
     {
         return buf;
     }

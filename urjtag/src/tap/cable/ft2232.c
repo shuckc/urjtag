@@ -201,7 +201,7 @@ typedef struct
     uint8_t high_byte_value;
     uint8_t high_byte_dir;
 
-    /* the following variables store the bit position of TRST and RESET (SRST)
+    /* the following variables store the bit position of TRST and URJ_JIM_RESET (SRST)
        for XOR'ing with the default values of low_byte_value and high_byte_value
        allowed values:
        <  0 : feature not used
@@ -217,19 +217,19 @@ typedef struct
     unsigned int last_tdo;
     int signals;
 
-    cx_cmd_root_t cmd_root;
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t cmd_root;
 } params_t;
 
 
 static const uint8_t imm_buf[1] = { SEND_IMMEDIATE };
-static const cx_cmd_t imm_cmd = { NULL, 1, 1, (uint8_t *) imm_buf, 0 };
+static const urj_tap_cable_cmd_xfer_cx_cmd_t imm_cmd = { NULL, 1, 1, (uint8_t *) imm_buf, 0 };
 
 
 static void
-ft2232_set_frequency (cable_t *cable, uint32_t new_frequency)
+ft2232_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (!new_frequency || new_frequency > FT2232_MAX_TCK_FREQ)
         new_frequency = FT2232_MAX_TCK_FREQ;
@@ -253,12 +253,12 @@ ft2232_set_frequency (cable_t *cable, uint32_t new_frequency)
 
         /* send new divisor to device */
         div -= 1;
-        cx_cmd_queue (cmd_root, 0);
-        cx_cmd_push (cmd_root, TCK_DIVISOR);
-        cx_cmd_push (cmd_root, div & 0xff);
-        cx_cmd_push (cmd_root, (div >> 8) & 0xff);
+        urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+        urj_tap_cable_cx_cmd_push (cmd_root, TCK_DIVISOR);
+        urj_tap_cable_cx_cmd_push (cmd_root, div & 0xff);
+        urj_tap_cable_cx_cmd_push (cmd_root, (div >> 8) & 0xff);
 
-        cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+        urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
         params->mpsse_frequency = FT2232_MAX_TCK_FREQ / (div + 1);
         cable->frequency = params->mpsse_frequency;
@@ -267,12 +267,12 @@ ft2232_set_frequency (cable_t *cable, uint32_t new_frequency)
 
 
 static int
-ft2232_generic_init (cable_t *cable)
+ft2232_generic_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* safe default values */
@@ -281,10 +281,10 @@ ft2232_generic_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
@@ -292,9 +292,9 @@ ft2232_generic_init (cable_t *cable)
     params->high_byte_value = 0;
     params->high_byte_value = 0;
     params->high_byte_dir = 0;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -308,12 +308,12 @@ ft2232_generic_init (cable_t *cable)
 }
 
 static int
-ft2232_jtagkey_init (cable_t *cable)
+ft2232_jtagkey_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* static low byte value and direction:
@@ -323,10 +323,10 @@ ft2232_jtagkey_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
@@ -341,12 +341,12 @@ ft2232_jtagkey_init (cable_t *cable)
     params->high_byte_dir =
         BITMASK_JTAGKEY_TRST_N_OUT | BITMASK_JTAGKEY_TRST_N_OE_N |
         BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -354,19 +354,19 @@ ft2232_jtagkey_init (cable_t *cable)
     params->bit_reset = BIT_JTAGKEY_SRST_N_OUT + 8;     /* member of HIGH byte */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_TRST | CS_RESET;
+    params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
     return 0;
 }
 
 
 static int
-ft2232_armusbocd_init (cable_t *cable)
+ft2232_armusbocd_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* static low byte value and direction:
@@ -376,10 +376,10 @@ ft2232_armusbocd_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
@@ -394,12 +394,12 @@ ft2232_armusbocd_init (cable_t *cable)
     params->high_byte_dir = BITMASK_ARMUSBOCD_nTRST
         | BITMASK_ARMUSBOCD_nTRST_nOE
         | BITMASK_ARMUSBOCD_nTSRST | BITMASK_ARMUSBOCD_RED_LED;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -407,19 +407,19 @@ ft2232_armusbocd_init (cable_t *cable)
     params->bit_reset = BIT_ARMUSBOCD_nTSRST + 8;       /* member of HIGH byte */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_TRST | CS_RESET;
+    params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
     return 0;
 }
 
 
 static int
-ft2232_gnice_init (cable_t *cable)
+ft2232_gnice_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* safe default values */
@@ -428,22 +428,22 @@ ft2232_gnice_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     params->high_byte_value = BITMASK_GNICE_nTRST;
     params->high_byte_dir = BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -451,19 +451,19 @@ ft2232_gnice_init (cable_t *cable)
     params->bit_reset = -1;     /* not used */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_TRST;
+    params->signals = URJ_POD_CS_TRST;
 
     return 0;
 }
 
 
 static int
-ft2232_oocdlinks_init (cable_t *cable)
+ft2232_oocdlinks_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* static low byte value and direction */
@@ -472,10 +472,10 @@ ft2232_oocdlinks_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
@@ -490,12 +490,12 @@ ft2232_oocdlinks_init (cable_t *cable)
     params->high_byte_dir = BITMASK_OOCDLINKS_nTRST
         | BITMASK_OOCDLINKS_nTRST_nOE
         | BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -503,19 +503,19 @@ ft2232_oocdlinks_init (cable_t *cable)
     params->bit_reset = BIT_OOCDLINKS_nSRST + 8;        /* member of HIGH byte */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_TRST | CS_RESET;
+    params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
     return 0;
 }
 
 
 static int
-ft2232_turtelizer2_init (cable_t *cable)
+ft2232_turtelizer2_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* static low byte value and direction:
@@ -527,10 +527,10 @@ ft2232_turtelizer2_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
@@ -541,9 +541,9 @@ ft2232_turtelizer2_init (cable_t *cable)
     params->high_byte_value = 0;
     params->high_byte_dir =
         BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -551,19 +551,19 @@ ft2232_turtelizer2_init (cable_t *cable)
     params->bit_reset = BIT_TURTELIZER2_RST;    /* member of LOW byte */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_RESET;
+    params->signals = URJ_POD_CS_RESET;
 
     return 0;
 }
 
 
 static int
-ft2232_usbtojtagif_init (cable_t *cable)
+ft2232_usbtojtagif_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* static low byte value and direction:
@@ -576,10 +576,10 @@ ft2232_usbtojtagif_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
@@ -591,9 +591,9 @@ ft2232_usbtojtagif_init (cable_t *cable)
     params->high_byte_value = 0;
     params->high_byte_dir =
         BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     /* I-couplers can only work up to 3 MHz
        ref. http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html */
@@ -603,19 +603,19 @@ ft2232_usbtojtagif_init (cable_t *cable)
     params->bit_reset = BIT_USBTOJTAGIF_RST;    /* member of LOW byte */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_TRST | CS_RESET;
+    params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
     return 0;
 }
 
 
 static int
-ft2232_signalyzer_init (cable_t *cable)
+ft2232_signalyzer_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* static low byte value and direction:
@@ -627,19 +627,19 @@ ft2232_signalyzer_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     params->high_byte_value = 0;
     params->high_byte_dir = 0;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -647,19 +647,19 @@ ft2232_signalyzer_init (cable_t *cable)
     params->bit_reset = BIT_SIGNALYZER_nSRST;   /* member of LOW byte */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_TRST | CS_RESET;
+    params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
     return 0;
 }
 
 
 static int
-ft2232_flyswatter_init (cable_t *cable)
+ft2232_flyswatter_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* static low byte value and direction:
@@ -671,10 +671,10 @@ ft2232_flyswatter_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
@@ -682,9 +682,9 @@ ft2232_flyswatter_init (cable_t *cable)
     /* Turn LED2 on */
     params->high_byte_value = 0;
     params->high_byte_dir = BITMASK_FLYSWATTER_nLED2;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -692,26 +692,26 @@ ft2232_flyswatter_init (cable_t *cable)
     params->bit_reset = BIT_FLYSWATTER_nSRST;   /* member of LOW byte */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_TRST | CS_RESET;
+    params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
 
     return 0;
 }
 
 static int
-ft2232_usbscarab2_init (cable_t *cable)
+ft2232_usbscarab2_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
     /* Check if cable is connected to the target and the target is powered on */
-    cx_cmd_queue (cmd_root, 1);
-    cx_cmd_push (cmd_root, GET_BITS_LOW);
-    cx_xfer (&(params->cmd_root), &imm_cmd, cable, COMPLETELY);
-    if ((cx_xfer_recv (cable) & BITMASK_USBSCARAB2_nCONNECTED) != 0)
+    urj_tap_cable_cx_cmd_queue (cmd_root, 1);
+    urj_tap_cable_cx_cmd_push (cmd_root, GET_BITS_LOW);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    if ((urj_tap_cable_cx_xfer_recv (cable) & BITMASK_USBSCARAB2_nCONNECTED) != 0)
     {
         printf (_
                 ("Error: Please power on the TARGET board and connect VCC signal!\n"));
@@ -724,10 +724,10 @@ ft2232_usbscarab2_init (cable_t *cable)
 
     /* Set Data Bits Low Byte
        TCK = 0, TMS = 1, TDI = 0 */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  params->
                  low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
 
@@ -737,9 +737,9 @@ ft2232_usbscarab2_init (cable_t *cable)
     params->high_byte_dir =
         0 | BITMASK_USBSCARAB2_LED | BITMASK_USBSCARAB2_TRST |
         BITMASK_USBSCARAB2_nSRST;
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, params->high_byte_value);
-    cx_cmd_push (cmd_root, params->high_byte_dir);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
@@ -747,7 +747,7 @@ ft2232_usbscarab2_init (cable_t *cable)
     params->bit_reset = BIT_USBSCARAB2_nSRST + 8;       /* member of HIGH byte */
 
     params->last_tdo_valid = 0;
-    params->signals = CS_TRST | CS_RESET;
+    params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
     printf ("Cable initialization OK!\n");
     return 0;
@@ -755,419 +755,419 @@ ft2232_usbscarab2_init (cable_t *cable)
 
 
 static void
-ft2232_generic_done (cable_t *cable)
+ft2232_generic_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 
 static void
-ft2232_jtagkey_done (cable_t *cable)
+ft2232_jtagkey_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, BITMASK_JTAGKEY_nOE);
-    cx_cmd_push (cmd_root, BITMASK_JTAGKEY_nOE);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_JTAGKEY_nOE);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_JTAGKEY_nOE);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, BITMASK_JTAGKEY_nOE);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_JTAGKEY_nOE);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        disable output drivers */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_JTAGKEY_TRST_N_OUT
                  | BITMASK_JTAGKEY_TRST_N_OE_N
                  | BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_JTAGKEY_TRST_N_OUT
                  | BITMASK_JTAGKEY_TRST_N_OE_N
                  | BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_JTAGKEY_TRST_N_OUT
                  | BITMASK_JTAGKEY_TRST_N_OE_N
                  | BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 
 static void
-ft2232_armusbocd_done (cable_t *cable)
+ft2232_armusbocd_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, BITMASK_ARMUSBOCD_nOE);
-    cx_cmd_push (cmd_root, BITMASK_ARMUSBOCD_nOE);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_ARMUSBOCD_nOE);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_ARMUSBOCD_nOE);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, BITMASK_ARMUSBOCD_nOE);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_ARMUSBOCD_nOE);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        disable output drivers */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_ARMUSBOCD_nTRST
                  | BITMASK_ARMUSBOCD_nTRST_nOE | BITMASK_ARMUSBOCD_nTSRST);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_ARMUSBOCD_nTRST
                  | BITMASK_ARMUSBOCD_nTRST_nOE
                  | BITMASK_ARMUSBOCD_nTSRST | BITMASK_ARMUSBOCD_RED_LED);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_ARMUSBOCD_nTRST
                  | BITMASK_ARMUSBOCD_nTRST_nOE | BITMASK_ARMUSBOCD_nTSRST);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 static void
-ft2232_gnice_done (cable_t *cable)
+ft2232_gnice_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        disable output drivers */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST);
-    cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 static void
-ft2232_oocdlinks_done (cable_t *cable)
+ft2232_oocdlinks_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        disable output drivers */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_OOCDLINKS_nTRST
                  | BITMASK_OOCDLINKS_nTRST_nOE
                  | BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_OOCDLINKS_nTRST
                  | BITMASK_OOCDLINKS_nTRST_nOE
                  | BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_OOCDLINKS_nTRST
                  | BITMASK_OOCDLINKS_nTRST_nOE
                  | BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 
 static void
-ft2232_turtelizer2_done (cable_t *cable)
+ft2232_turtelizer2_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, BITMASK_TURTELIZER2_nJTAGOE);
-    cx_cmd_push (cmd_root, BITMASK_TURTELIZER2_nJTAGOE);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_TURTELIZER2_nJTAGOE);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_TURTELIZER2_nJTAGOE);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, BITMASK_TURTELIZER2_nJTAGOE);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_TURTELIZER2_nJTAGOE);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        switch off LEDs */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 
 static void
-ft2232_usbtojtagif_done (cable_t *cable)
+ft2232_usbtojtagif_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_USBTOJTAGIF_nTRST | BITMASK_USBTOJTAGIF_RST);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        disable output drivers */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 
 static void
-ft2232_signalyzer_done (cable_t *cable)
+ft2232_signalyzer_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        disable output drivers */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST);
-    cx_cmd_push (cmd_root,
+    urj_tap_cable_cx_cmd_push (cmd_root,
                  BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 
 static void
-ft2232_flyswatter_done (cable_t *cable)
+ft2232_flyswatter_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
-    cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        set all to input */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nLED2);
-    cx_cmd_push (cmd_root, 0);
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nLED2);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 static void
-ft2232_usbscarab2_done (cable_t *cable)
+ft2232_usbscarab2_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
-    cx_cmd_queue (cmd_root, 0);
-    cx_cmd_push (cmd_root, SET_BITS_LOW);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        deassert RST signals and blank LED */
-    cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    cx_cmd_push (cmd_root, 0);
-    cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
-    cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
 
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 
 static void
-ft2232_clock_schedule (cable_t *cable, int tms, int tdi, int n)
+ft2232_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     tms = tms ? 0x7f : 0;
     tdi = tdi ? 1 << 7 : 0;
 
-    cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     while (n > 0)
     {
-        if (cx_cmd_space (cmd_root, FTDX_MAXSEND_MPSSE) < 4)
+        if (urj_tap_cable_cx_cmd_space (cmd_root, URJ_USBCONN_FTDX_MAXSEND_MPSSE) < 4)
         {
             /* no space left for Clock Data plus Send Immediate
                transfer queued commands to device and read receive data
                to internal buffer */
-            cx_xfer (cmd_root, &imm_cmd, cable, COMPLETELY);
-            cx_cmd_queue (cmd_root, 0);
+            urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+            urj_tap_cable_cx_cmd_queue (cmd_root, 0);
         }
 
         /* Clock Data to TMS/CS Pin (no Read) */
-        cx_cmd_push (cmd_root, MPSSE_WRITE_TMS |
+        urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_WRITE_TMS |
                      MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG);
         if (n <= 7)
         {
-            cx_cmd_push (cmd_root, n - 1);
+            urj_tap_cable_cx_cmd_push (cmd_root, n - 1);
             n = 0;
         }
         else
         {
-            cx_cmd_push (cmd_root, 7 - 1);
+            urj_tap_cable_cx_cmd_push (cmd_root, 7 - 1);
             n -= 7;
         }
-        cx_cmd_push (cmd_root, tdi | tms);
+        urj_tap_cable_cx_cmd_push (cmd_root, tdi | tms);
     }
 
-    params->signals &= ~(CS_TMS | CS_TDI | CS_TCK);
+    params->signals &= ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK);
     if (tms)
-        params->signals |= CS_TMS;
+        params->signals |= URJ_POD_CS_TMS;
     if (tdi)
-        params->signals |= CS_TDI;
-    // if (tck) params->signals |= CS_TCK;
+        params->signals |= URJ_POD_CS_TDI;
+    // if (tck) params->signals |= URJ_POD_CS_TCK;
 }
 
 
 static void
-ft2232_clock (cable_t *cable, int tms, int tdi, int n)
+ft2232_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
 
     ft2232_clock_schedule (cable, tms, tdi, n);
-    cx_xfer (&(params->cmd_root), &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
     params->last_tdo_valid = 0;
 }
 
 
 static void
-ft2232_get_tdo_schedule (cable_t *cable)
+ft2232_get_tdo_schedule (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Read Data Bits Low Byte */
-    cx_cmd_queue (cmd_root, 1);
-    cx_cmd_push (cmd_root, GET_BITS_LOW);
+    urj_tap_cable_cx_cmd_queue (cmd_root, 1);
+    urj_tap_cable_cx_cmd_push (cmd_root, GET_BITS_LOW);
 }
 
 
 static int
-ft2232_get_tdo_finish (cable_t *cable)
+ft2232_get_tdo_finish (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
     int value;
 
-    value = (cx_xfer_recv (cable) & BITMASK_TDO) ? 1 : 0;
+    value = (urj_tap_cable_cx_xfer_recv (cable) & BITMASK_TDO) ? 1 : 0;
 
     params->last_tdo = value;
     params->last_tdo_valid = 1;
@@ -1177,12 +1177,12 @@ ft2232_get_tdo_finish (cable_t *cable)
 
 
 static int
-ft2232_get_tdo (cable_t *cable)
+ft2232_get_tdo (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
 
     ft2232_get_tdo_schedule (cable);
-    cx_xfer (&(params->cmd_root), &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
     return ft2232_get_tdo_finish (cable);
 }
 
@@ -1191,10 +1191,10 @@ static void
 ft2232_set_signal_schedule (params_t *params, int mask, int val,
                             int set_low, int set_high)
 {
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* filter for supported signals */
-    mask &= CS_TCK | CS_TDI | CS_TMS | CS_TRST | CS_RESET;
+    mask &= URJ_POD_CS_TCK | URJ_POD_CS_TDI | URJ_POD_CS_TMS | URJ_POD_CS_TRST | URJ_POD_CS_RESET;
     if (mask != 0)
     {
         int sigs = (params->signals & ~mask) | (val & mask);
@@ -1203,15 +1203,15 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
         uint8_t high_xor = 0;
 
         /* prepare low and high byte */
-        if (sigs & CS_TCK)
+        if (sigs & URJ_POD_CS_TCK)
             low_or |= BITMASK_TCK;
-        if (sigs & CS_TDI)
+        if (sigs & URJ_POD_CS_TDI)
             low_or |= BITMASK_TDI;
-        if (sigs & CS_TMS)
+        if (sigs & URJ_POD_CS_TMS)
             low_or |= BITMASK_TMS;
-        /* TRST and RESET (SRST) are XOR'ed to the default value since
+        /* TRST and URJ_JIM_RESET (SRST) are XOR'ed to the default value since
            the right value depends on the external circuitry (inverter or not) */
-        if ((sigs & CS_TRST) == 0)
+        if ((sigs & URJ_POD_CS_TRST) == 0)
             if (params->bit_trst >= 0)
             {
                 if (params->bit_trst < 8)
@@ -1223,7 +1223,7 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
                     high_xor |= 1 << (params->bit_trst - 8);
                 }
             }
-        if ((sigs & CS_RESET) == 0)
+        if ((sigs & URJ_POD_CS_RESET) == 0)
             if (params->bit_reset >= 0)
             {
                 if (params->bit_reset < 8)
@@ -1238,11 +1238,11 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
 
         if (set_low)
         {
-            cx_cmd_queue (cmd_root, 0);
-            cx_cmd_push (cmd_root, SET_BITS_LOW);
-            cx_cmd_push (cmd_root,
+            urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+            urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+            urj_tap_cable_cx_cmd_push (cmd_root,
                          (params->low_byte_value | low_or) ^ low_xor);
-            cx_cmd_push (cmd_root,
+            urj_tap_cable_cx_cmd_push (cmd_root,
                          params->
                          low_byte_dir | BITMASK_TCK | BITMASK_TDI |
                          BITMASK_TMS);
@@ -1250,10 +1250,10 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
 
         if (set_high)
         {
-            cx_cmd_queue (cmd_root, 0);
-            cx_cmd_push (cmd_root, SET_BITS_HIGH);
-            cx_cmd_push (cmd_root, params->high_byte_value ^ high_xor);
-            cx_cmd_push (cmd_root, params->high_byte_dir);
+            urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+            urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+            urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value ^ high_xor);
+            urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
         }
 
         params->signals = sigs;
@@ -1262,14 +1262,14 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
 
 
 static int
-ft2232_set_signal (cable_t *cable, int mask, int val)
+ft2232_set_signal (urj_cable_t *cable, int mask, int val)
 {
     params_t *params = (params_t *) cable->params;
 
     int prev_sigs = params->signals;
 
     ft2232_set_signal_schedule (params, mask, val, 1, 1);
-    cx_xfer (&(params->cmd_root), &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
     params->last_tdo_valid = 0;
 
     return prev_sigs;
@@ -1277,17 +1277,17 @@ ft2232_set_signal (cable_t *cable, int mask, int val)
 
 
 static void
-ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
+ft2232_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
-    cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int in_offset = 0;
     int bitwise_len;
     int chunkbytes;
 
     /* lower TMS for transfer
        also lower TCK to ensure correct clocking */
-    ft2232_set_signal_schedule (params, CS_TCK | CS_TMS, 0, 1, 0);
+    ft2232_set_signal_schedule (params, URJ_POD_CS_TCK | URJ_POD_CS_TMS, 0, 1, 0);
 
     chunkbytes = len >> 3;
     while (chunkbytes > 0)
@@ -1295,12 +1295,12 @@ ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
         int byte_idx;
 
         /* reduce chunkbytes to the maximum amount we can receive in one step */
-        if (out && chunkbytes > FTDX_MAXRECV)
-            chunkbytes = FTDX_MAXRECV;
+        if (out && chunkbytes > URJ_USBCONN_FTDX_MAXRECV)
+            chunkbytes = URJ_USBCONN_FTDX_MAXRECV;
         /* reduce chunkbytes to the maximum amount that fits into one buffer
            for performance reasons */
-        if (chunkbytes > FTDX_MAXSEND_MPSSE - 4)
-            chunkbytes = FTDX_MAXSEND_MPSSE - 4;
+        if (chunkbytes > URJ_USBCONN_FTDX_MAXSEND_MPSSE - 4)
+            chunkbytes = URJ_USBCONN_FTDX_MAXSEND_MPSSE - 4;
         /* restrict chunkbytes to the maximum amount that can be transferred
            for one single operation */
         if (chunkbytes > (1 << 16))
@@ -1313,22 +1313,22 @@ ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
      ***********************************************************************/
         if (out)
         {
-            cx_cmd_queue (cmd_root, chunkbytes);
+            urj_tap_cable_cx_cmd_queue (cmd_root, chunkbytes);
             /* Clock Data Bytes In and Out LSB First
                out on negative edge, in on positive edge */
-            cx_cmd_push (cmd_root, MPSSE_DO_READ | MPSSE_DO_WRITE |
+            urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_DO_READ | MPSSE_DO_WRITE |
                          MPSSE_LSB | MPSSE_WRITE_NEG);
         }
         else
         {
-            cx_cmd_queue (cmd_root, 0);
+            urj_tap_cable_cx_cmd_queue (cmd_root, 0);
             /* Clock Data Bytes Out on -ve Clock Edge LSB First (no Read) */
-            cx_cmd_push (cmd_root, MPSSE_DO_WRITE |
+            urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_DO_WRITE |
                          MPSSE_LSB | MPSSE_WRITE_NEG);
         }
         /* set byte count */
-        cx_cmd_push (cmd_root, (chunkbytes - 1) & 0xff);
-        cx_cmd_push (cmd_root, ((chunkbytes - 1) >> 8) & 0xff);
+        urj_tap_cable_cx_cmd_push (cmd_root, (chunkbytes - 1) & 0xff);
+        urj_tap_cable_cx_cmd_push (cmd_root, ((chunkbytes - 1) >> 8) & 0xff);
 
     /*********************************************************************
      * Step 2:
@@ -1342,7 +1342,7 @@ ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
             for (bit_idx = 1; bit_idx < 256; bit_idx <<= 1)
                 if (in[in_offset++])
                     b |= bit_idx;
-            cx_cmd_push (cmd_root, b);
+            urj_tap_cable_cx_cmd_push (cmd_root, b);
         }
 
         /* recalc chunkbytes for next round */
@@ -1360,21 +1360,21 @@ ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
      ***********************************************************************/
         if (out)
         {
-            cx_cmd_queue (cmd_root, 1);
+            urj_tap_cable_cx_cmd_queue (cmd_root, 1);
             /* Clock Data Bytes In and Out LSB First
                out on negative edge, in on positive edge */
-            cx_cmd_push (cmd_root, MPSSE_DO_READ | MPSSE_DO_WRITE |
+            urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_DO_READ | MPSSE_DO_WRITE |
                          MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG);
         }
         else
         {
-            cx_cmd_queue (cmd_root, 0);
+            urj_tap_cable_cx_cmd_queue (cmd_root, 0);
             /* Clock Data Bytes Out on -ve Clock Edge LSB First (no Read) */
-            cx_cmd_push (cmd_root, MPSSE_DO_WRITE |
+            urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_DO_WRITE |
                          MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG);
         }
         /* determine bit count */
-        cx_cmd_push (cmd_root, bitwise_len - 1);
+        urj_tap_cable_cx_cmd_push (cmd_root, bitwise_len - 1);
 
     /***********************************************************************
      * Step 4:
@@ -1388,7 +1388,7 @@ ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
                 if (in[in_offset++])
                     b |= bit_idx;
             }
-            cx_cmd_push (cmd_root, b);
+            urj_tap_cable_cx_cmd_push (cmd_root, b);
         }
     }
 
@@ -1396,8 +1396,8 @@ ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
     {
         /* Read Data Bits Low Byte to get current TDO,
            Do this only if we'll read out data nonetheless */
-        cx_cmd_queue (cmd_root, 1);
-        cx_cmd_push (cmd_root, GET_BITS_LOW);
+        urj_tap_cable_cx_cmd_queue (cmd_root, 1);
+        urj_tap_cable_cx_cmd_push (cmd_root, GET_BITS_LOW);
         params->last_tdo_valid = 1;
     }
     else
@@ -1406,7 +1406,7 @@ ft2232_transfer_schedule (cable_t *cable, int len, char *in, char *out)
 
 
 static int
-ft2232_transfer_finish (cable_t *cable, int len, char *out)
+ft2232_transfer_finish (urj_cable_t *cable, int len, char *out)
 {
     params_t *params = (params_t *) cable->params;
     int bitwise_len;
@@ -1432,7 +1432,7 @@ ft2232_transfer_finish (cable_t *cable, int len, char *out)
                 int bit_idx;
                 unsigned char b;
 
-                b = cx_xfer_recv (cable);
+                b = urj_tap_cable_cx_xfer_recv (cable);
                 for (bit_idx = 1; bit_idx < 256; bit_idx <<= 1)
                     out[out_offset++] = (b & bit_idx) ? 1 : 0;
             }
@@ -1447,7 +1447,7 @@ ft2232_transfer_finish (cable_t *cable, int len, char *out)
             int bit_idx;
             unsigned char b;
 
-            b = cx_xfer_recv (cable);
+            b = urj_tap_cable_cx_xfer_recv (cable);
 
             for (bit_idx = (1 << (8 - bitwise_len)); bit_idx < 256;
                  bit_idx <<= 1)
@@ -1455,7 +1455,7 @@ ft2232_transfer_finish (cable_t *cable, int len, char *out)
         }
 
         /* gather current TDO */
-        params->last_tdo = (cx_xfer_recv (cable) & BITMASK_TDO) ? 1 : 0;
+        params->last_tdo = (urj_tap_cable_cx_xfer_recv (cable) & BITMASK_TDO) ? 1 : 0;
         params->last_tdo_valid = 1;
     }
     else
@@ -1466,26 +1466,26 @@ ft2232_transfer_finish (cable_t *cable, int len, char *out)
 
 
 static int
-ft2232_transfer (cable_t *cable, int len, char *in, char *out)
+ft2232_transfer (urj_cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
 
     ft2232_transfer_schedule (cable, len, in, out);
-    cx_xfer (&(params->cmd_root), &imm_cmd, cable, COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
     return ft2232_transfer_finish (cable, len, out);
 }
 
 
 static void
-ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
+ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
     params_t *params = (params_t *) cable->params;
 
-    if (how_much == OPTIONALLY)
+    if (how_much == URJ_TAP_CABLE_OPTIONALLY)
         return;
 
     if (cable->todo.num_items == 0)
-        cx_xfer (&(params->cmd_root), &imm_cmd, cable, how_much);
+        urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, how_much);
 
     while (cable->todo.num_items > 0)
     {
@@ -1500,7 +1500,7 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
 
             switch (cable->todo.data[i].action)
             {
-            case CABLE_CLOCK:
+            case URJ_TAP_CABLE_CLOCK:
                 ft2232_clock_schedule (cable,
                                        cable->todo.data[i].arg.clock.tms,
                                        cable->todo.data[i].arg.clock.tdi,
@@ -1508,7 +1508,7 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
                 last_tdo_valid_schedule = 0;
                 break;
 
-            case CABLE_GET_TDO:
+            case URJ_TAP_CABLE_GET_TDO:
                 if (!last_tdo_valid_schedule)
                 {
                     ft2232_get_tdo_schedule (cable);
@@ -1516,7 +1516,7 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
                 }
                 break;
 
-            case CABLE_SET_SIGNAL:
+            case URJ_TAP_CABLE_SET_SIGNAL:
                 ft2232_set_signal_schedule (params,
                                             cable->todo.data[i].arg.value.
                                             mask,
@@ -1525,7 +1525,7 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
                 last_tdo_valid_schedule = 0;
                 break;
 
-            case CABLE_TRANSFER:
+            case URJ_TAP_CABLE_TRANSFER:
                 ft2232_transfer_schedule (cable,
                                           cable->todo.data[i].arg.transfer.
                                           len,
@@ -1544,23 +1544,23 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
                 i = 0;
         }
 
-        cx_xfer (&(params->cmd_root), &imm_cmd, cable, how_much);
+        urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, how_much);
 
         while (j != i)
         {
             switch (cable->todo.data[j].action)
             {
-            case CABLE_CLOCK:
+            case URJ_TAP_CABLE_CLOCK:
                 {
-                    post_signals &= ~(CS_TCK | CS_TDI | CS_TMS);
+                    post_signals &= ~(URJ_POD_CS_TCK | URJ_POD_CS_TDI | URJ_POD_CS_TMS);
                     post_signals |=
-                        (cable->todo.data[j].arg.clock.tms ? CS_TMS : 0);
+                        (cable->todo.data[j].arg.clock.tms ? URJ_POD_CS_TMS : 0);
                     post_signals |=
-                        (cable->todo.data[j].arg.clock.tdi ? CS_TDI : 0);
+                        (cable->todo.data[j].arg.clock.tdi ? URJ_POD_CS_TDI : 0);
                     params->last_tdo_valid = last_tdo_valid_finish = 0;
                     break;
                 }
-            case CABLE_GET_TDO:
+            case URJ_TAP_CABLE_GET_TDO:
                 {
                     int tdo;
                     int m;
@@ -1569,30 +1569,30 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
                     else
                         tdo = ft2232_get_tdo_finish (cable);
                     last_tdo_valid_finish = params->last_tdo_valid;
-                    m = cable_add_queue_item (cable, &(cable->done));
-                    cable->done.data[m].action = CABLE_GET_TDO;
+                    m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    cable->done.data[m].action = URJ_TAP_CABLE_GET_TDO;
                     cable->done.data[m].arg.value.val = tdo;
                     break;
                 }
-            case CABLE_SET_SIGNAL:
+            case URJ_TAP_CABLE_SET_SIGNAL:
                 {
-                    int m = cable_add_queue_item (cable, &(cable->done));
-                    cable->done.data[m].action = CABLE_SET_SIGNAL;
+                    int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    cable->done.data[m].action = URJ_TAP_CABLE_SET_SIGNAL;
                     cable->done.data[m].arg.value.mask =
                         cable->todo.data[j].arg.value.mask;
                     cable->done.data[m].arg.value.val = post_signals;
                     int mask =
                         cable->todo.data[j].arg.value.
-                        mask & ~(CS_TCK | CS_TDI | CS_TMS | CS_TRST |
-                                 CS_RESET);
+                        mask & ~(URJ_POD_CS_TCK | URJ_POD_CS_TDI | URJ_POD_CS_TMS | URJ_POD_CS_TRST |
+                                 URJ_POD_CS_RESET);
                     post_signals =
                         (post_signals & ~mask) | (cable->todo.data[j].arg.
                                                   value.val & mask);
                 }
-            case CABLE_GET_SIGNAL:
+            case URJ_TAP_CABLE_GET_SIGNAL:
                 {
-                    int m = cable_add_queue_item (cable, &(cable->done));
-                    cable->done.data[m].action = CABLE_GET_SIGNAL;
+                    int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    cable->done.data[m].action = URJ_TAP_CABLE_GET_SIGNAL;
                     cable->done.data[m].arg.value.sig =
                         cable->todo.data[j].arg.value.sig;
                     cable->done.data[m].arg.value.val =
@@ -1600,7 +1600,7 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
                          sig) ? 1 : 0;
                     break;
                 }
-            case CABLE_TRANSFER:
+            case URJ_TAP_CABLE_TRANSFER:
                 {
                     int r = ft2232_transfer_finish (cable,
                                                     cable->todo.data[j].arg.
@@ -1611,10 +1611,10 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
                     free (cable->todo.data[j].arg.transfer.in);
                     if (cable->todo.data[j].arg.transfer.out)
                     {
-                        int m = cable_add_queue_item (cable, &(cable->done));
+                        int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
                         if (m < 0)
                             printf ("out of memory!\n");
-                        cable->done.data[m].action = CABLE_TRANSFER;
+                        cable->done.data[m].action = URJ_TAP_CABLE_TRANSFER;
                         cable->done.data[m].arg.xferred.len =
                             cable->todo.data[j].arg.transfer.len;
                         cable->done.data[m].arg.xferred.res = r;
@@ -1638,13 +1638,13 @@ ft2232_flush (cable_t *cable, cable_flush_amount_t how_much)
 
 
 static int
-ft2232_connect (char *params[], cable_t *cable)
+ft2232_connect (char *params[], urj_cable_t *cable)
 {
     params_t *cable_params;
     int result;
 
-    /* perform generic_usbconn_connect */
-    if ((result = generic_usbconn_connect (params, cable)) != 0)
+    /* perform urj_tap_cable_generic_usbconn_connect */
+    if ((result = urj_tap_cable_generic_usbconn_connect (params, cable)) != 0)
         return result;
 
     cable_params = (params_t *) malloc (sizeof (params_t));
@@ -1653,7 +1653,7 @@ ft2232_connect (char *params[], cable_t *cable)
         printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
         /* NOTE:
          * Call the underlying usbport driver (*free) routine directly
-         * not generic_usbconn_free() since it also free's cable->params
+         * not urj_tap_cable_generic_usbconn_free() since it also free's cable->params
          * (which is not established) and cable (which the caller will do)
          */
         cable->link.usb->driver->free (cable->link.usb);
@@ -1663,7 +1663,7 @@ ft2232_connect (char *params[], cable_t *cable)
     cable_params->mpsse_frequency = 0;
     cable_params->last_tdo_valid = 0;
 
-    cx_cmd_init (&(cable_params->cmd_root));
+    urj_tap_cable_cx_cmd_init (&(cable_params->cmd_root));
 
     /* exchange generic cable parameters with our private parameter set */
     free (cable->params);
@@ -1674,32 +1674,32 @@ ft2232_connect (char *params[], cable_t *cable)
 
 
 static void
-ft2232_cable_free (cable_t *cable)
+ft2232_cable_free (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
 
-    cx_cmd_deinit (&(params->cmd_root));
+    urj_tap_cable_cx_cmd_deinit (&(params->cmd_root));
 
-    generic_usbconn_free (cable);
+    urj_tap_cable_generic_usbconn_free (cable);
 }
 
 
-usbconn_cable_t usbconn_cable_ft2232_ftdi;
-usbconn_cable_t usbconn_cable_armusbocd_ftdi;
-usbconn_cable_t usbconn_cable_gnice_ftdi;
-usbconn_cable_t usbconn_cable_jtagkey_ftdi;
-usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
-usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
-usbconn_cable_t usbconn_cable_usbtojtagif_ftdi;
-usbconn_cable_t usbconn_cable_signalyzer_ftdi;
-usbconn_cable_t usbconn_cable_flyswatter_ftdi;
-usbconn_cable_t usbconn_cable_usbscarab2_ftdi;
+urj_usbconn_cable_t usbconn_cable_ft2232_ftdi;
+urj_usbconn_cable_t usbconn_cable_armusbocd_ftdi;
+urj_usbconn_cable_t usbconn_cable_gnice_ftdi;
+urj_usbconn_cable_t usbconn_cable_jtagkey_ftdi;
+urj_usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
+urj_usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
+urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftdi;
+urj_usbconn_cable_t usbconn_cable_signalyzer_ftdi;
+urj_usbconn_cable_t usbconn_cable_flyswatter_ftdi;
+urj_usbconn_cable_t usbconn_cable_usbscarab2_ftdi;
 
 
 static void
 ft2232_usbcable_help (const char *cablename)
 {
-    usbconn_cable_t *conn;
+    urj_usbconn_cable_t *conn;
 
     conn = &usbconn_cable_armusbocd_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
@@ -1742,11 +1742,11 @@ ft2232_usbcable_help (const char *cablename)
 }
 
 
-cable_driver_t ft2232_cable_driver = {
+urj_cable_driver_t ft2232_cable_driver = {
     "FT2232",
     N_("Generic FTDI FT2232 Cable"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_generic_init,
     ft2232_generic_done,
@@ -1755,18 +1755,18 @@ cable_driver_t ft2232_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_ft2232_ftdi = {
+urj_usbconn_cable_t usbconn_cable_ft2232_ftdi = {
     "FT2232",                   /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0000,                     /* VID */
     0x0000                      /* PID */
 };
-usbconn_cable_t usbconn_cable_ft2232_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_ft2232_ftd2xx = {
     "FT2232",                   /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1774,11 +1774,11 @@ usbconn_cable_t usbconn_cable_ft2232_ftd2xx = {
     0x0000                      /* PID */
 };
 
-cable_driver_t ft2232_armusbocd_cable_driver = {
+urj_cable_driver_t ft2232_armusbocd_cable_driver = {
     "ARM-USB-OCD",
     N_("Olimex ARM-USB-OCD[-TINY] (FT2232) Cable"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_armusbocd_init,
     ft2232_armusbocd_done,
@@ -1787,32 +1787,32 @@ cable_driver_t ft2232_armusbocd_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_armusbocd_ftdi = {
+urj_usbconn_cable_t usbconn_cable_armusbocd_ftdi = {
     "ARM-USB-OCD",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x15BA,                     /* VID */
     0x0003                      /* PID */
 };
-usbconn_cable_t usbconn_cable_armusbocd_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_armusbocd_ftd2xx = {
     "ARM-USB-OCD",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
     0x15BA,                     /* VID */
     0x0003                      /* PID */
 };
-usbconn_cable_t usbconn_cable_armusbocdtiny_ftdi = {
+urj_usbconn_cable_t usbconn_cable_armusbocdtiny_ftdi = {
     "ARM-USB-OCD",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x15BA,                     /* VID */
     0x0004                      /* PID */
 };
-usbconn_cable_t usbconn_cable_armusbocdtiny_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_armusbocdtiny_ftd2xx = {
     "ARM-USB-OCD",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1820,11 +1820,11 @@ usbconn_cable_t usbconn_cable_armusbocdtiny_ftd2xx = {
     0x0004                      /* PID */
 };
 
-cable_driver_t ft2232_gnice_cable_driver = {
+urj_cable_driver_t ft2232_gnice_cable_driver = {
     "gnICE",
     N_("Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_gnice_init,
     ft2232_gnice_done,
@@ -1833,18 +1833,18 @@ cable_driver_t ft2232_gnice_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_gnice_ftdi = {
+urj_usbconn_cable_t usbconn_cable_gnice_ftdi = {
     "gnICE",                    /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0456,                     /* VID */
     0xF000                      /* PID */
 };
-usbconn_cable_t usbconn_cable_gnice_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_gnice_ftd2xx = {
     "gnICE",                    /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1852,11 +1852,11 @@ usbconn_cable_t usbconn_cable_gnice_ftd2xx = {
     0xF000                      /* PID */
 };
 
-cable_driver_t ft2232_jtagkey_cable_driver = {
+urj_cable_driver_t ft2232_jtagkey_cable_driver = {
     "JTAGkey",
     N_("Amontec JTAGkey (FT2232) Cable"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_jtagkey_init,
     ft2232_jtagkey_done,
@@ -1865,18 +1865,18 @@ cable_driver_t ft2232_jtagkey_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_jtagkey_ftdi = {
+urj_usbconn_cable_t usbconn_cable_jtagkey_ftdi = {
     "JTAGkey",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0xCFF8                      /* PID */
 };
-usbconn_cable_t usbconn_cable_jtagkey_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_jtagkey_ftd2xx = {
     "JTAGkey",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1884,11 +1884,11 @@ usbconn_cable_t usbconn_cable_jtagkey_ftd2xx = {
     0xCFF8                      /* PID */
 };
 
-cable_driver_t ft2232_oocdlinks_cable_driver = {
+urj_cable_driver_t ft2232_oocdlinks_cable_driver = {
     "OOCDLink-s",
     N_("OOCDLink-s (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_oocdlinks_init,
     ft2232_oocdlinks_done,
@@ -1897,18 +1897,18 @@ cable_driver_t ft2232_oocdlinks_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_oocdlinks_ftdi = {
+urj_usbconn_cable_t usbconn_cable_oocdlinks_ftdi = {
     "OOCDLink-s",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0xbaf8                      /* PID */
 };
-usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx = {
     "OOCDLink-s",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1916,11 +1916,11 @@ usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx = {
     0xbaf8                      /* PID */
 };
 
-cable_driver_t ft2232_turtelizer2_cable_driver = {
+urj_cable_driver_t ft2232_turtelizer2_cable_driver = {
     "Turtelizer2",
     N_("Turtelizer 2 Rev. B (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_turtelizer2_init,
     ft2232_turtelizer2_done,
@@ -1929,18 +1929,18 @@ cable_driver_t ft2232_turtelizer2_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_turtelizer2_ftdi = {
+urj_usbconn_cable_t usbconn_cable_turtelizer2_ftdi = {
     "Turtelizer2",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0xBDC8                      /* PID */
 };
-usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx = {
     "Turtelizer2",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1948,11 +1948,11 @@ usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx = {
     0xBDC8                      /* PID */
 };
 
-cable_driver_t ft2232_usbtojtagif_cable_driver = {
+urj_cable_driver_t ft2232_usbtojtagif_cable_driver = {
     "USB-to-JTAG-IF",
     N_("USB to JTAG Interface (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_usbtojtagif_init,
     ft2232_usbtojtagif_done,
@@ -1961,18 +1961,18 @@ cable_driver_t ft2232_usbtojtagif_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_usbtojtagif_ftdi = {
+urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftdi = {
     "USB-to-JTAG-IF",           /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0000,                     /* VID */
     0x0000                      /* PID */
 };
-usbconn_cable_t usbconn_cable_usbtojtagif_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftd2xx = {
     "USB-to-JTAG-IF",           /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1980,11 +1980,11 @@ usbconn_cable_t usbconn_cable_usbtojtagif_ftd2xx = {
     0x0000                      /* PID */
 };
 
-cable_driver_t ft2232_signalyzer_cable_driver = {
+urj_cable_driver_t ft2232_signalyzer_cable_driver = {
     "Signalyzer",
     N_("Xverve DT-USB-ST Signalyzer Tool (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_signalyzer_init,
     ft2232_signalyzer_done,
@@ -1993,18 +1993,18 @@ cable_driver_t ft2232_signalyzer_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_signalyzer_ftdi = {
+urj_usbconn_cable_t usbconn_cable_signalyzer_ftdi = {
     "Signalyzer",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0000,                     /* VID */
     0x0000                      /* PID */
 };
-usbconn_cable_t usbconn_cable_signalyzer_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_signalyzer_ftd2xx = {
     "Signalyzer",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -2012,11 +2012,11 @@ usbconn_cable_t usbconn_cable_signalyzer_ftd2xx = {
     0x0000                      /* PID */
 };
 
-cable_driver_t ft2232_flyswatter_cable_driver = {
+urj_cable_driver_t ft2232_flyswatter_cable_driver = {
     "Flyswatter",
     N_("TinCanTools Flyswatter (FT2232) Cable"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_flyswatter_init,
     ft2232_flyswatter_done,
@@ -2025,18 +2025,18 @@ cable_driver_t ft2232_flyswatter_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_flyswatter_ftdi = {
+urj_usbconn_cable_t usbconn_cable_flyswatter_ftdi = {
     "Flyswatter",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0x6010                      /* PID */
 };
-usbconn_cable_t usbconn_cable_flyswatter_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_flyswatter_ftd2xx = {
     "Flyswatter",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -2044,11 +2044,11 @@ usbconn_cable_t usbconn_cable_flyswatter_ftd2xx = {
     0x6010                      /* PID */
 };
 
-cable_driver_t ft2232_usbscarab2_cable_driver = {
+urj_cable_driver_t ft2232_usbscarab2_cable_driver = {
     "usbScarab2",
     N_("KrisTech usbScarabeus2 (FT2232) Cable"),
     ft2232_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_usbscarab2_init,
     ft2232_usbscarab2_done,
@@ -2057,18 +2057,18 @@ cable_driver_t ft2232_usbscarab2_cable_driver = {
     ft2232_get_tdo,
     ft2232_transfer,
     ft2232_set_signal,
-    generic_get_signal,
+    urj_tap_cable_generic_get_signal,
     ft2232_flush,
     ft2232_usbcable_help
 };
-usbconn_cable_t usbconn_cable_usbscarab2_ftdi = {
+urj_usbconn_cable_t usbconn_cable_usbscarab2_ftdi = {
     "usbScarab2",               /* cable name */
     "usbScarab2",               /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0xbbe0                      /* PID */
 };
-usbconn_cable_t usbconn_cable_usbscarab2_ftd2xx = {
+urj_usbconn_cable_t usbconn_cable_usbscarab2_ftd2xx = {
     "usbScarab2",               /* cable name */
     "usbScarab2",               /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */

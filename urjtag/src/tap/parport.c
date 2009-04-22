@@ -26,11 +26,11 @@
 
 #include "parport.h"
 
-extern parport_driver_t direct_parport_driver;
-extern parport_driver_t ppdev_parport_driver;
-extern parport_driver_t ppi_parport_driver;
+extern urj_parport_driver_t direct_parport_driver;
+extern urj_parport_driver_t ppdev_parport_driver;
+extern urj_parport_driver_t ppi_parport_driver;
 
-parport_driver_t *parport_drivers[] = {
+urj_parport_driver_t *parport_drivers[] = {
 #ifdef ENABLE_LOWLEVEL_DIRECT
     &direct_parport_driver,
 #endif /* ENABLE_LOWLEVEL_DIRECT */
@@ -47,37 +47,37 @@ parport_driver_t *parport_drivers[] = {
 
 
 int
-parport_open (parport_t *port)
+urj_tap_parport_open (urj_parport_t *port)
 {
     return port->driver->open (port);
 }
 
 int
-parport_close (parport_t *port)
+urj_tap_parport_close (urj_parport_t *port)
 {
     return port->driver->close (port);
 }
 
 int
-parport_set_data (parport_t *port, uint8_t data)
+urj_tap_parport_set_data (urj_parport_t *port, uint8_t data)
 {
     return port->driver->set_data (port, data);
 }
 
 int
-parport_get_data (parport_t *port)
+urj_tap_parport_get_data (urj_parport_t *port)
 {
     return port->driver->get_data (port);
 }
 
 int
-parport_get_status (parport_t *port)
+urj_tap_parport_get_status (urj_parport_t *port)
 {
     return port->driver->get_status (port);
 }
 
 int
-parport_set_control (parport_t *port, uint8_t data)
+urj_tap_parport_set_control (urj_parport_t *port, uint8_t data)
 {
     return port->driver->set_control (port, data);
 }

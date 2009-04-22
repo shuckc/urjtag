@@ -32,15 +32,15 @@
 #include "cmd.h"
 
 static int
-cmd_peek_run (chain_t *chain, char *params[])
+cmd_peek_run (urj_chain_t *chain, char *params[])
 {
     uint32_t adr, val;
     int pars, j = 1;
-    bus_area_t area;
+    urj_bus_area_t area;
 
-    /* bus_t * bus = part_get_active_bus(chain); */
+    /* urj_bus_t * bus = part_get_active_bus(chain); */
 
-    if ((pars = cmd_params (params)) < 2)
+    if ((pars = urj_cmd_params (params)) < 2)
         return -1;
 
     if (!bus)
@@ -50,25 +50,25 @@ cmd_peek_run (chain_t *chain, char *params[])
     }
     do
     {
-        if (cmd_get_number (params[j], &adr))
+        if (urj_cmd_get_number (params[j], &adr))
             return -1;
 
-        bus_prepare (bus);
-        bus_area (bus, adr, &area);
-        val = bus_read (bus, adr);
+        URJ_BUS_PREPARE (bus);
+        URJ_BUS_AREA (bus, adr, &area);
+        val = URJ_BUS_READ (bus, adr);
 
         switch (area.width)
         {
         case 8:
             val &= 0xff;
-            printf (_("bus_read(0x%08x) = 0x%02X (%i)\n"), adr, val, val);
+            printf (_("URJ_BUS_READ(0x%08x) = 0x%02X (%i)\n"), adr, val, val);
             break;
         case 16:
             val &= 0xffff;
-            printf (_("bus_read(0x%08x) = 0x%04X (%i)\n"), adr, val, val);
+            printf (_("URJ_BUS_READ(0x%08x) = 0x%04X (%i)\n"), adr, val, val);
             break;
         default:
-            printf (_("bus_read(0x%08x) = 0x%08X (%i)\n"), adr, val, val);
+            printf (_("URJ_BUS_READ(0x%08x) = 0x%08X (%i)\n"), adr, val, val);
         }
     }
     while (++j != pars);
@@ -88,7 +88,7 @@ cmd_peek_help (void)
               "\n"), "peek");
 }
 
-cmd_t cmd_peek = {
+urj_cmd_t cmd_peek = {
     "peek",
     N_("read a single word"),
     cmd_peek_help,
@@ -96,12 +96,12 @@ cmd_t cmd_peek = {
 };
 
 static int
-cmd_poke_run (chain_t *chain, char *params[])
+cmd_poke_run (urj_chain_t *chain, char *params[])
 {
     uint32_t adr, val;
-    bus_area_t area;
-    /*bus_t * bus = part_get_active_bus(chain); */
-    int k = 1, pars = cmd_params (params);
+    urj_bus_area_t area;
+    /*urj_bus_t * bus = part_get_active_bus(chain); */
+    int k = 1, pars = urj_cmd_params (params);
 
     if (pars < 3 || !(pars & 1))
         return -1;
@@ -113,15 +113,15 @@ cmd_poke_run (chain_t *chain, char *params[])
     }
 
 
-    bus_prepare (bus);
+    URJ_BUS_PREPARE (bus);
 
     while (k < pars)
     {
-        if (cmd_get_number (params[k], &adr)
-            || cmd_get_number (params[k + 1], &val))
+        if (urj_cmd_get_number (params[k], &adr)
+            || urj_cmd_get_number (params[k + 1], &val))
             return -1;
-        bus_area (bus, adr, &area);
-        bus_write (bus, adr, val);
+        URJ_BUS_AREA (bus, adr, &area);
+        URJ_BUS_WRITE (bus, adr, val);
         k += 2;
     }
 
@@ -141,7 +141,7 @@ cmd_poke_help (void)
               "\n"), "poke");
 }
 
-cmd_t cmd_poke = {
+urj_cmd_t cmd_poke = {
     "poke",
     N_("write a single word"),
     cmd_poke_help,

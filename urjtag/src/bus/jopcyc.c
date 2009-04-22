@@ -42,7 +42,7 @@
  *
  *   JTAG Tool generates byte addresses when accessing memories. Thus
  *   this driver discards the LSB when the RAM ranges are addressed.
- *   readmem and writemem care for proper address increment based on
+ *   urj_bus_readmem and urj_bus_writemem care for proper address increment based on
  *   the bus width.
  *   On the other hand, this driver reads and writes always one word
  *   (= 2 bytes) from/to the RAMs. It does not use the byte-enables.
@@ -90,15 +90,15 @@ typedef struct
 {
     ctype_t ctype;
     char *cname;
-    signal_t *a[FLASH_ADDR_WIDTH];
-    signal_t *d[RAM_DATA_WIDTH];
-    signal_t *ncs;
-    signal_t *noe;
-    signal_t *nwe;
-    signal_t *nlb;
-    signal_t *nub;
-    signal_t *ncs2;
-    signal_t *nrdy;
+    urj_part_signal_t *a[FLASH_ADDR_WIDTH];
+    urj_part_signal_t *d[RAM_DATA_WIDTH];
+    urj_part_signal_t *ncs;
+    urj_part_signal_t *noe;
+    urj_part_signal_t *nwe;
+    urj_part_signal_t *nlb;
+    urj_part_signal_t *nub;
+    urj_part_signal_t *ncs2;
+    urj_part_signal_t *nrdy;
 } component_t;
 
 typedef struct
@@ -107,10 +107,10 @@ typedef struct
     component_t rama;
     component_t ramb;
     component_t flash;
-    signal_t *ser_txd;
-    signal_t *ser_nrts;
-    signal_t *ser_rxd;
-    signal_t *ser_ncts;
+    urj_part_signal_t *ser_txd;
+    urj_part_signal_t *ser_nrts;
+    urj_part_signal_t *ser_rxd;
+    urj_part_signal_t *ser_ncts;
 } bus_params_t;
 
 #define LAST_ADDR ((bus_params_t *) bus->params)->last_addr
@@ -137,16 +137,16 @@ typedef struct
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-jopcyc_bus_new (chain_t *chain, const bus_driver_t *driver,
+static urj_bus_t *
+jopcyc_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                 char *cmd_params[])
 {
-    bus_t *bus;
-    part_t *part;
+    urj_bus_t *bus;
+    urj_part_t *part;
     int failed = 0;
     component_t *comp;
 
-    bus = calloc (1, sizeof (bus_t));
+    bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
         return NULL;
 
@@ -158,8 +158,8 @@ jopcyc_bus_new (chain_t *chain, const bus_driver_t *driver,
         return NULL;
     }
 
-    CHAIN = chain;
-    PART = part = chain->parts->parts[chain->active_part];
+    bus->chain = chain;
+    bus->part = part = chain->parts->parts[chain->active_part];
 
     /*
      * Setup RAMA
@@ -168,48 +168,48 @@ jopcyc_bus_new (chain_t *chain, const bus_driver_t *driver,
     comp->ctype = RAM;
     comp->cname = "RAMA";
 
-    failed |= generic_bus_attach_sig (part, &(A[0]), "IO64");
-    failed |= generic_bus_attach_sig (part, &(A[1]), "IO66");
-    failed |= generic_bus_attach_sig (part, &(A[2]), "IO68");
-    failed |= generic_bus_attach_sig (part, &(A[3]), "IO74");
-    failed |= generic_bus_attach_sig (part, &(A[4]), "IO76");
-    failed |= generic_bus_attach_sig (part, &(A[5]), "IO107");
-    failed |= generic_bus_attach_sig (part, &(A[6]), "IO113");
-    failed |= generic_bus_attach_sig (part, &(A[7]), "IO115");
-    failed |= generic_bus_attach_sig (part, &(A[8]), "IO117");
-    failed |= generic_bus_attach_sig (part, &(A[9]), "IO119");
-    failed |= generic_bus_attach_sig (part, &(A[10]), "IO118");
-    failed |= generic_bus_attach_sig (part, &(A[11]), "IO116");
-    failed |= generic_bus_attach_sig (part, &(A[12]), "IO114");
-    failed |= generic_bus_attach_sig (part, &(A[13]), "IO108");
-    failed |= generic_bus_attach_sig (part, &(A[14]), "IO106");
-    failed |= generic_bus_attach_sig (part, &(A[15]), "IO67");
-    failed |= generic_bus_attach_sig (part, &(A[16]), "IO65");
-    failed |= generic_bus_attach_sig (part, &(A[17]), "IO63");
+    failed |= urj_bus_generic_attach_sig (part, &(A[0]), "IO64");
+    failed |= urj_bus_generic_attach_sig (part, &(A[1]), "IO66");
+    failed |= urj_bus_generic_attach_sig (part, &(A[2]), "IO68");
+    failed |= urj_bus_generic_attach_sig (part, &(A[3]), "IO74");
+    failed |= urj_bus_generic_attach_sig (part, &(A[4]), "IO76");
+    failed |= urj_bus_generic_attach_sig (part, &(A[5]), "IO107");
+    failed |= urj_bus_generic_attach_sig (part, &(A[6]), "IO113");
+    failed |= urj_bus_generic_attach_sig (part, &(A[7]), "IO115");
+    failed |= urj_bus_generic_attach_sig (part, &(A[8]), "IO117");
+    failed |= urj_bus_generic_attach_sig (part, &(A[9]), "IO119");
+    failed |= urj_bus_generic_attach_sig (part, &(A[10]), "IO118");
+    failed |= urj_bus_generic_attach_sig (part, &(A[11]), "IO116");
+    failed |= urj_bus_generic_attach_sig (part, &(A[12]), "IO114");
+    failed |= urj_bus_generic_attach_sig (part, &(A[13]), "IO108");
+    failed |= urj_bus_generic_attach_sig (part, &(A[14]), "IO106");
+    failed |= urj_bus_generic_attach_sig (part, &(A[15]), "IO67");
+    failed |= urj_bus_generic_attach_sig (part, &(A[16]), "IO65");
+    failed |= urj_bus_generic_attach_sig (part, &(A[17]), "IO63");
     A[18] = NULL;
 
-    failed |= generic_bus_attach_sig (part, &(D[0]), "IO82");
-    failed |= generic_bus_attach_sig (part, &(D[1]), "IO84");
-    failed |= generic_bus_attach_sig (part, &(D[2]), "IO86");
-    failed |= generic_bus_attach_sig (part, &(D[3]), "IO88");
-    failed |= generic_bus_attach_sig (part, &(D[4]), "IO94");
-    failed |= generic_bus_attach_sig (part, &(D[5]), "IO98");
-    failed |= generic_bus_attach_sig (part, &(D[6]), "IO100");
-    failed |= generic_bus_attach_sig (part, &(D[7]), "IO104");
-    failed |= generic_bus_attach_sig (part, &(D[8]), "IO101");
-    failed |= generic_bus_attach_sig (part, &(D[9]), "IO99");
-    failed |= generic_bus_attach_sig (part, &(D[10]), "IO95");
-    failed |= generic_bus_attach_sig (part, &(D[11]), "IO93");
-    failed |= generic_bus_attach_sig (part, &(D[12]), "IO87");
-    failed |= generic_bus_attach_sig (part, &(D[13]), "IO85");
-    failed |= generic_bus_attach_sig (part, &(D[14]), "IO83");
-    failed |= generic_bus_attach_sig (part, &(D[15]), "IO79");
+    failed |= urj_bus_generic_attach_sig (part, &(D[0]), "IO82");
+    failed |= urj_bus_generic_attach_sig (part, &(D[1]), "IO84");
+    failed |= urj_bus_generic_attach_sig (part, &(D[2]), "IO86");
+    failed |= urj_bus_generic_attach_sig (part, &(D[3]), "IO88");
+    failed |= urj_bus_generic_attach_sig (part, &(D[4]), "IO94");
+    failed |= urj_bus_generic_attach_sig (part, &(D[5]), "IO98");
+    failed |= urj_bus_generic_attach_sig (part, &(D[6]), "IO100");
+    failed |= urj_bus_generic_attach_sig (part, &(D[7]), "IO104");
+    failed |= urj_bus_generic_attach_sig (part, &(D[8]), "IO101");
+    failed |= urj_bus_generic_attach_sig (part, &(D[9]), "IO99");
+    failed |= urj_bus_generic_attach_sig (part, &(D[10]), "IO95");
+    failed |= urj_bus_generic_attach_sig (part, &(D[11]), "IO93");
+    failed |= urj_bus_generic_attach_sig (part, &(D[12]), "IO87");
+    failed |= urj_bus_generic_attach_sig (part, &(D[13]), "IO85");
+    failed |= urj_bus_generic_attach_sig (part, &(D[14]), "IO83");
+    failed |= urj_bus_generic_attach_sig (part, &(D[15]), "IO79");
 
-    failed |= generic_bus_attach_sig (part, &(nCS), "IO78");
-    failed |= generic_bus_attach_sig (part, &(nOE), "IO73");
-    failed |= generic_bus_attach_sig (part, &(nWE), "IO105");
-    failed |= generic_bus_attach_sig (part, &(nLB), "IO77");
-    failed |= generic_bus_attach_sig (part, &(nUB), "IO75");
+    failed |= urj_bus_generic_attach_sig (part, &(nCS), "IO78");
+    failed |= urj_bus_generic_attach_sig (part, &(nOE), "IO73");
+    failed |= urj_bus_generic_attach_sig (part, &(nWE), "IO105");
+    failed |= urj_bus_generic_attach_sig (part, &(nLB), "IO77");
+    failed |= urj_bus_generic_attach_sig (part, &(nUB), "IO75");
     nCS2 = NULL;
     nRDY = NULL;
 
@@ -220,48 +220,48 @@ jopcyc_bus_new (chain_t *chain, const bus_driver_t *driver,
     comp->ctype = RAM;
     comp->cname = "RAMB";
 
-    failed |= generic_bus_attach_sig (part, &(A[0]), "IO237");
-    failed |= generic_bus_attach_sig (part, &(A[1]), "IO235");
-    failed |= generic_bus_attach_sig (part, &(A[2]), "IO233");
-    failed |= generic_bus_attach_sig (part, &(A[3]), "IO227");
-    failed |= generic_bus_attach_sig (part, &(A[4]), "IO225");
-    failed |= generic_bus_attach_sig (part, &(A[5]), "IO194");
-    failed |= generic_bus_attach_sig (part, &(A[6]), "IO188");
-    failed |= generic_bus_attach_sig (part, &(A[7]), "IO186");
-    failed |= generic_bus_attach_sig (part, &(A[8]), "IO184");
-    failed |= generic_bus_attach_sig (part, &(A[9]), "IO182");
-    failed |= generic_bus_attach_sig (part, &(A[10]), "IO183");
-    failed |= generic_bus_attach_sig (part, &(A[11]), "IO185");
-    failed |= generic_bus_attach_sig (part, &(A[12]), "IO187");
-    failed |= generic_bus_attach_sig (part, &(A[13]), "IO193");
-    failed |= generic_bus_attach_sig (part, &(A[14]), "IO195");
-    failed |= generic_bus_attach_sig (part, &(A[15]), "IO234");
-    failed |= generic_bus_attach_sig (part, &(A[16]), "IO236");
-    failed |= generic_bus_attach_sig (part, &(A[17]), "IO238");
+    failed |= urj_bus_generic_attach_sig (part, &(A[0]), "IO237");
+    failed |= urj_bus_generic_attach_sig (part, &(A[1]), "IO235");
+    failed |= urj_bus_generic_attach_sig (part, &(A[2]), "IO233");
+    failed |= urj_bus_generic_attach_sig (part, &(A[3]), "IO227");
+    failed |= urj_bus_generic_attach_sig (part, &(A[4]), "IO225");
+    failed |= urj_bus_generic_attach_sig (part, &(A[5]), "IO194");
+    failed |= urj_bus_generic_attach_sig (part, &(A[6]), "IO188");
+    failed |= urj_bus_generic_attach_sig (part, &(A[7]), "IO186");
+    failed |= urj_bus_generic_attach_sig (part, &(A[8]), "IO184");
+    failed |= urj_bus_generic_attach_sig (part, &(A[9]), "IO182");
+    failed |= urj_bus_generic_attach_sig (part, &(A[10]), "IO183");
+    failed |= urj_bus_generic_attach_sig (part, &(A[11]), "IO185");
+    failed |= urj_bus_generic_attach_sig (part, &(A[12]), "IO187");
+    failed |= urj_bus_generic_attach_sig (part, &(A[13]), "IO193");
+    failed |= urj_bus_generic_attach_sig (part, &(A[14]), "IO195");
+    failed |= urj_bus_generic_attach_sig (part, &(A[15]), "IO234");
+    failed |= urj_bus_generic_attach_sig (part, &(A[16]), "IO236");
+    failed |= urj_bus_generic_attach_sig (part, &(A[17]), "IO238");
     A[18] = NULL;
 
-    failed |= generic_bus_attach_sig (part, &(D[0]), "IO219");
-    failed |= generic_bus_attach_sig (part, &(D[1]), "IO217");
-    failed |= generic_bus_attach_sig (part, &(D[2]), "IO215");
-    failed |= generic_bus_attach_sig (part, &(D[3]), "IO213");
-    failed |= generic_bus_attach_sig (part, &(D[4]), "IO207");
-    failed |= generic_bus_attach_sig (part, &(D[5]), "IO203");
-    failed |= generic_bus_attach_sig (part, &(D[6]), "IO201");
-    failed |= generic_bus_attach_sig (part, &(D[7]), "IO197");
-    failed |= generic_bus_attach_sig (part, &(D[8]), "IO200");
-    failed |= generic_bus_attach_sig (part, &(D[9]), "IO202");
-    failed |= generic_bus_attach_sig (part, &(D[10]), "IO206");
-    failed |= generic_bus_attach_sig (part, &(D[11]), "IO208");
-    failed |= generic_bus_attach_sig (part, &(D[12]), "IO214");
-    failed |= generic_bus_attach_sig (part, &(D[13]), "IO216");
-    failed |= generic_bus_attach_sig (part, &(D[14]), "IO218");
-    failed |= generic_bus_attach_sig (part, &(D[15]), "IO222");
+    failed |= urj_bus_generic_attach_sig (part, &(D[0]), "IO219");
+    failed |= urj_bus_generic_attach_sig (part, &(D[1]), "IO217");
+    failed |= urj_bus_generic_attach_sig (part, &(D[2]), "IO215");
+    failed |= urj_bus_generic_attach_sig (part, &(D[3]), "IO213");
+    failed |= urj_bus_generic_attach_sig (part, &(D[4]), "IO207");
+    failed |= urj_bus_generic_attach_sig (part, &(D[5]), "IO203");
+    failed |= urj_bus_generic_attach_sig (part, &(D[6]), "IO201");
+    failed |= urj_bus_generic_attach_sig (part, &(D[7]), "IO197");
+    failed |= urj_bus_generic_attach_sig (part, &(D[8]), "IO200");
+    failed |= urj_bus_generic_attach_sig (part, &(D[9]), "IO202");
+    failed |= urj_bus_generic_attach_sig (part, &(D[10]), "IO206");
+    failed |= urj_bus_generic_attach_sig (part, &(D[11]), "IO208");
+    failed |= urj_bus_generic_attach_sig (part, &(D[12]), "IO214");
+    failed |= urj_bus_generic_attach_sig (part, &(D[13]), "IO216");
+    failed |= urj_bus_generic_attach_sig (part, &(D[14]), "IO218");
+    failed |= urj_bus_generic_attach_sig (part, &(D[15]), "IO222");
 
-    failed |= generic_bus_attach_sig (part, &(nCS), "IO223");
-    failed |= generic_bus_attach_sig (part, &(nOE), "IO228");
-    failed |= generic_bus_attach_sig (part, &(nWE), "IO196");
-    failed |= generic_bus_attach_sig (part, &(nLB), "IO224");
-    failed |= generic_bus_attach_sig (part, &(nUB), "IO226");
+    failed |= urj_bus_generic_attach_sig (part, &(nCS), "IO223");
+    failed |= urj_bus_generic_attach_sig (part, &(nOE), "IO228");
+    failed |= urj_bus_generic_attach_sig (part, &(nWE), "IO196");
+    failed |= urj_bus_generic_attach_sig (part, &(nLB), "IO224");
+    failed |= urj_bus_generic_attach_sig (part, &(nUB), "IO226");
     nCS2 = NULL;
     nRDY = NULL;
 
@@ -272,34 +272,34 @@ jopcyc_bus_new (chain_t *chain, const bus_driver_t *driver,
     comp->ctype = FLASH;
     comp->cname = "FLASH";
 
-    failed |= generic_bus_attach_sig (part, &(A[0]), "IO47");
-    failed |= generic_bus_attach_sig (part, &(A[1]), "IO48");
-    failed |= generic_bus_attach_sig (part, &(A[2]), "IO49");
-    failed |= generic_bus_attach_sig (part, &(A[3]), "IO50");
-    failed |= generic_bus_attach_sig (part, &(A[4]), "IO125");
-    failed |= generic_bus_attach_sig (part, &(A[5]), "IO127");
-    failed |= generic_bus_attach_sig (part, &(A[6]), "IO131");
-    failed |= generic_bus_attach_sig (part, &(A[7]), "IO133");
-    failed |= generic_bus_attach_sig (part, &(A[8]), "IO158");
-    failed |= generic_bus_attach_sig (part, &(A[9]), "IO16");
-    failed |= generic_bus_attach_sig (part, &(A[10]), "IO20");
-    failed |= generic_bus_attach_sig (part, &(A[11]), "IO14");
-    failed |= generic_bus_attach_sig (part, &(A[12]), "IO135");
-    failed |= generic_bus_attach_sig (part, &(A[13]), "IO156");
-    failed |= generic_bus_attach_sig (part, &(A[14]), "IO144");
-    failed |= generic_bus_attach_sig (part, &(A[15]), "IO137");
-    failed |= generic_bus_attach_sig (part, &(A[16]), "IO139");
-    failed |= generic_bus_attach_sig (part, &(A[17]), "IO143");
-    failed |= generic_bus_attach_sig (part, &(A[18]), "IO141");
+    failed |= urj_bus_generic_attach_sig (part, &(A[0]), "IO47");
+    failed |= urj_bus_generic_attach_sig (part, &(A[1]), "IO48");
+    failed |= urj_bus_generic_attach_sig (part, &(A[2]), "IO49");
+    failed |= urj_bus_generic_attach_sig (part, &(A[3]), "IO50");
+    failed |= urj_bus_generic_attach_sig (part, &(A[4]), "IO125");
+    failed |= urj_bus_generic_attach_sig (part, &(A[5]), "IO127");
+    failed |= urj_bus_generic_attach_sig (part, &(A[6]), "IO131");
+    failed |= urj_bus_generic_attach_sig (part, &(A[7]), "IO133");
+    failed |= urj_bus_generic_attach_sig (part, &(A[8]), "IO158");
+    failed |= urj_bus_generic_attach_sig (part, &(A[9]), "IO16");
+    failed |= urj_bus_generic_attach_sig (part, &(A[10]), "IO20");
+    failed |= urj_bus_generic_attach_sig (part, &(A[11]), "IO14");
+    failed |= urj_bus_generic_attach_sig (part, &(A[12]), "IO135");
+    failed |= urj_bus_generic_attach_sig (part, &(A[13]), "IO156");
+    failed |= urj_bus_generic_attach_sig (part, &(A[14]), "IO144");
+    failed |= urj_bus_generic_attach_sig (part, &(A[15]), "IO137");
+    failed |= urj_bus_generic_attach_sig (part, &(A[16]), "IO139");
+    failed |= urj_bus_generic_attach_sig (part, &(A[17]), "IO143");
+    failed |= urj_bus_generic_attach_sig (part, &(A[18]), "IO141");
 
-    failed |= generic_bus_attach_sig (part, &(D[0]), "IO46");
-    failed |= generic_bus_attach_sig (part, &(D[1]), "IO45");
-    failed |= generic_bus_attach_sig (part, &(D[2]), "IO44");
-    failed |= generic_bus_attach_sig (part, &(D[3]), "IO165");
-    failed |= generic_bus_attach_sig (part, &(D[4]), "IO164");
-    failed |= generic_bus_attach_sig (part, &(D[5]), "IO17");
-    failed |= generic_bus_attach_sig (part, &(D[6]), "IO18");
-    failed |= generic_bus_attach_sig (part, &(D[7]), "IO19");
+    failed |= urj_bus_generic_attach_sig (part, &(D[0]), "IO46");
+    failed |= urj_bus_generic_attach_sig (part, &(D[1]), "IO45");
+    failed |= urj_bus_generic_attach_sig (part, &(D[2]), "IO44");
+    failed |= urj_bus_generic_attach_sig (part, &(D[3]), "IO165");
+    failed |= urj_bus_generic_attach_sig (part, &(D[4]), "IO164");
+    failed |= urj_bus_generic_attach_sig (part, &(D[5]), "IO17");
+    failed |= urj_bus_generic_attach_sig (part, &(D[6]), "IO18");
+    failed |= urj_bus_generic_attach_sig (part, &(D[7]), "IO19");
     D[8] = NULL;
     D[9] = NULL;
     D[10] = NULL;
@@ -309,13 +309,13 @@ jopcyc_bus_new (chain_t *chain, const bus_driver_t *driver,
     D[14] = NULL;
     D[15] = NULL;
 
-    failed |= generic_bus_attach_sig (part, &(nWE), "IO15");
-    failed |= generic_bus_attach_sig (part, &(nOE), "IO24");
-    failed |= generic_bus_attach_sig (part, &(nCS), "IO37");
-    failed |= generic_bus_attach_sig (part, &(nCS2), "IO23");
+    failed |= urj_bus_generic_attach_sig (part, &(nWE), "IO15");
+    failed |= urj_bus_generic_attach_sig (part, &(nOE), "IO24");
+    failed |= urj_bus_generic_attach_sig (part, &(nCS), "IO37");
+    failed |= urj_bus_generic_attach_sig (part, &(nCS2), "IO23");
 
     /* CLK1 is not observable :-(
-       failed |= generic_bus_attach_sig( part, &(nRDY),  "CLK1"  );
+       failed |= urj_bus_generic_attach_sig( part, &(nRDY),  "CLK1"  );
      */
     nRDY = NULL;
 
@@ -325,10 +325,10 @@ jopcyc_bus_new (chain_t *chain, const bus_driver_t *driver,
     /*
      * Setup Serial Port
      */
-    failed |= generic_bus_attach_sig (part, &(SER_RXD), "CLK2");
-    failed |= generic_bus_attach_sig (part, &(SER_NRTS), "IO177");
-    failed |= generic_bus_attach_sig (part, &(SER_TXD), "IO178");
-    failed |= generic_bus_attach_sig (part, &(SER_NCTS), "CLK0");
+    failed |= urj_bus_generic_attach_sig (part, &(SER_RXD), "CLK2");
+    failed |= urj_bus_generic_attach_sig (part, &(SER_NRTS), "IO177");
+    failed |= urj_bus_generic_attach_sig (part, &(SER_TXD), "IO178");
+    failed |= urj_bus_generic_attach_sig (part, &(SER_NCTS), "CLK0");
 
     if (failed)
     {
@@ -345,12 +345,12 @@ jopcyc_bus_new (chain_t *chain, const bus_driver_t *driver,
  *
  */
 static void
-jopcyc_bus_printinfo (bus_t *bus)
+jopcyc_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
     printf (_
             ("JOP.design Cyclone Board compatible bus driver via BSR (JTAG part No. %d)\n"),
@@ -358,10 +358,10 @@ jopcyc_bus_printinfo (bus_t *bus)
 }
 
 static void
-setup_address (bus_t *bus, uint32_t a, component_t *comp)
+setup_address (urj_bus_t *bus, uint32_t a, component_t *comp)
 {
     int i;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     int addr_width;
 
     LAST_ADDR = a;
@@ -383,7 +383,7 @@ setup_address (bus_t *bus, uint32_t a, component_t *comp)
     }
 
     for (i = 0; i < addr_width; i++)
-        part_set_signal (p, A[i], 1, (a >> i) & 1);
+        urj_part_set_signal (p, A[i], 1, (a >> i) & 1);
 }
 
 static int
@@ -408,29 +408,29 @@ detect_data_width (component_t *comp)
 }
 
 static void
-set_data_in (bus_t *bus, component_t *comp)
+set_data_in (urj_bus_t *bus, component_t *comp)
 {
     int i;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     int width;
 
     width = detect_data_width (comp);
 
     for (i = 0; i < width; i++)
-        part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal (p, D[i], 0, 0);
 }
 
 static void
-setup_data (bus_t *bus, uint32_t d, component_t *comp)
+setup_data (urj_bus_t *bus, uint32_t d, component_t *comp)
 {
     int i;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     int width;
 
     width = detect_data_width (comp);
 
     for (i = 0; i < width; i++)
-        part_set_signal (p, D[i], 1, (d >> i) & 1);
+        urj_part_set_signal (p, D[i], 1, (d >> i) & 1);
 }
 
 /**
@@ -438,69 +438,69 @@ setup_data (bus_t *bus, uint32_t d, component_t *comp)
  *
  */
 static int
-jopcyc_bus_init (bus_t *bus)
+jopcyc_bus_init (urj_bus_t *bus)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     component_t *comp;
 
-    if (tap_state (chain) != Run_Test_Idle)
+    if (urj_tap_state (chain) != URJ_TAP_STATE_RUN_TEST_IDLE)
     {
-        /* silently skip initialization if TAP isn't in RUNTEST/IDLE state
+        /* silently skip initialization if TAP isn't in RUNTEST/URJ_JIM_IDLE state
            this is required to avoid interfering with detect when initbus
            is contained in the part description file
-           bus_init() will be called latest by bus_prepare() */
-        return URJTAG_STATUS_OK;
+           URJ_BUS_INIT() will be called latest by URJ_BUS_PREPARE() */
+        return URJ_STATUS_OK;
     }
 
     /* Preload update registers
        See AN039, "Guidelines for IEEE Std. 1149.1 Boundary Scan Testing */
 
-    part_set_instruction (p, "SAMPLE/PRELOAD");
-    chain_shift_instructions (chain);
+    urj_part_set_instruction (p, "SAMPLE/PRELOAD");
+    urj_tap_chain_shift_instructions (chain);
 
     /* RAMA */
     comp = COMP_RAMA;
     set_data_in (bus, comp);
-    part_set_signal (p, nCS, 1, 1);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 1);
-    part_set_signal (p, nLB, 1, 1);
-    part_set_signal (p, nUB, 1, 1);
+    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nLB, 1, 1);
+    urj_part_set_signal (p, nUB, 1, 1);
 
     /* RAMB */
     comp = COMP_RAMB;
     set_data_in (bus, comp);
-    part_set_signal (p, nCS, 1, 1);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 1);
-    part_set_signal (p, nLB, 1, 1);
-    part_set_signal (p, nUB, 1, 1);
+    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nLB, 1, 1);
+    urj_part_set_signal (p, nUB, 1, 1);
 
     /* FLASH */
     comp = COMP_FLASH;
     set_data_in (bus, comp);
-    part_set_signal (p, nCS, 1, 1);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 1);
-    part_set_signal (p, nCS2, 1, 1);
-    part_set_signal (p, nRDY, 0, 0);
+    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nCS2, 1, 1);
+    urj_part_set_signal (p, nRDY, 0, 0);
 
     /* Serial Port */
-    part_set_signal (p, SER_RXD, 0, 0);
-    part_set_signal (p, SER_NRTS, 1, 1);
-    part_set_signal (p, SER_TXD, 1, 1);
-    part_set_signal (p, SER_NCTS, 0, 0);
+    urj_part_set_signal (p, SER_RXD, 0, 0);
+    urj_part_set_signal (p, SER_NRTS, 1, 1);
+    urj_part_set_signal (p, SER_TXD, 1, 1);
+    urj_part_set_signal (p, SER_NCTS, 0, 0);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
-    INITIALIZED = 1;
+    bus->initialized = 1;
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 static int
-comp_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp)
+comp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area, component_t **comp)
 {
     if (adr < RAMB_START)
     {
@@ -535,7 +535,7 @@ comp_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp)
         *comp = NULL;
     }
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -543,7 +543,7 @@ comp_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area, component_t **comp)
  *
  */
 static int
-jopcyc_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
+jopcyc_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
     component_t *comp;
 
@@ -555,11 +555,11 @@ jopcyc_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
  *
  */
 static void
-jopcyc_bus_read_start (bus_t *bus, uint32_t adr)
+jopcyc_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
+    urj_bus_area_t area;
     component_t *comp;
 
     comp_bus_area (bus, adr, &area, &comp);
@@ -570,19 +570,19 @@ jopcyc_bus_read_start (bus_t *bus, uint32_t adr)
         return;
     }
 
-    part_set_signal (p, nCS, 1, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 0);
+    urj_part_set_signal (p, nCS, 1, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 0);
     if (comp->ctype == RAM)
     {
-        part_set_signal (p, nLB, 1, 0);
-        part_set_signal (p, nUB, 1, 0);
+        urj_part_set_signal (p, nLB, 1, 0);
+        urj_part_set_signal (p, nUB, 1, 0);
     }
 
     setup_address (bus, adr, comp);
     set_data_in (bus, comp);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
 /**
@@ -590,13 +590,13 @@ jopcyc_bus_read_start (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-jopcyc_bus_read_next (bus_t *bus, uint32_t adr)
+jopcyc_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     int i;
     uint32_t d = 0;
-    bus_area_t area;
+    urj_bus_area_t area;
     component_t *comp;
 
     comp_bus_area (bus, adr, &area, &comp);
@@ -608,10 +608,10 @@ jopcyc_bus_read_next (bus_t *bus, uint32_t adr)
     }
 
     setup_address (bus, adr, comp);
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < area.width; i++)
-        d |= (uint32_t) (part_get_signal (p, D[i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, D[i]) << i);
 
     return d;
 }
@@ -621,13 +621,13 @@ jopcyc_bus_read_next (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-jopcyc_bus_read_end (bus_t *bus)
+jopcyc_bus_read_end (urj_bus_t *bus)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
     int i;
     uint32_t d = 0;
-    bus_area_t area;
+    urj_bus_area_t area;
     component_t *comp;
 
     /* use last address of access to determine component */
@@ -638,17 +638,17 @@ jopcyc_bus_read_end (bus_t *bus)
         return 0;
     }
 
-    part_set_signal (p, nCS, 1, 1);
-    part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
     if (comp->ctype == RAM)
     {
-        part_set_signal (p, nLB, 1, 1);
-        part_set_signal (p, nUB, 1, 1);
+        urj_part_set_signal (p, nLB, 1, 1);
+        urj_part_set_signal (p, nUB, 1, 1);
     }
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < area.width; i++)
-        d |= (uint32_t) (part_get_signal (p, D[i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, D[i]) << i);
 
     return d;
 }
@@ -658,11 +658,11 @@ jopcyc_bus_read_end (bus_t *bus)
  *
  */
 static void
-jopcyc_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
+jopcyc_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
+    urj_bus_area_t area;
     component_t *comp;
 
     comp_bus_area (bus, adr, &area, &comp);
@@ -672,44 +672,44 @@ jopcyc_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
         return;
     }
 
-    part_set_signal (p, nCS, 1, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nCS, 1, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
     if (comp->ctype == RAM)
     {
-        part_set_signal (p, nLB, 1, 0);
-        part_set_signal (p, nUB, 1, 0);
+        urj_part_set_signal (p, nLB, 1, 0);
+        urj_part_set_signal (p, nUB, 1, 0);
     }
 
     setup_address (bus, adr, comp);
     setup_data (bus, data, comp);
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 
-    part_set_signal (p, nWE, 1, 0);
-    chain_shift_data_registers (chain, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal (p, nWE, 1, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, nCS, 1, 1);
     if (comp->ctype == RAM)
     {
-        part_set_signal (p, nLB, 1, 1);
-        part_set_signal (p, nUB, 1, 1);
+        urj_part_set_signal (p, nLB, 1, 1);
+        urj_part_set_signal (p, nUB, 1, 1);
     }
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const bus_driver_t jopcyc_bus = {
+const urj_bus_driver_t jopcyc_bus = {
     "jopcyc",
     N_("JOP.design Cyclone Board compatible bus driver via BSR"),
     jopcyc_bus_new,
-    generic_bus_free,
+    urj_bus_generic_free,
     jopcyc_bus_printinfo,
-    generic_bus_prepare_extest,
+    urj_bus_generic_prepare_extest,
     jopcyc_bus_area,
     jopcyc_bus_read_start,
     jopcyc_bus_read_next,
     jopcyc_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     jopcyc_bus_write,
     jopcyc_bus_init
 };

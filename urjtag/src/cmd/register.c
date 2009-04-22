@@ -33,17 +33,17 @@
 #include "cmd.h"
 
 static int
-cmd_register_run (chain_t *chain, char *params[])
+cmd_register_run (urj_chain_t *chain, char *params[])
 {
-    part_t *part;
+    urj_part_t *part;
     unsigned int len;
-    data_register_t *dr;
+    urj_data_register_t *dr;
 
-    if (cmd_params (params) != 3)
+    if (urj_cmd_params (params) != 3)
         return -1;
 
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -58,18 +58,18 @@ cmd_register_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    if (cmd_get_number (params[2], &len))
+    if (urj_cmd_get_number (params[2], &len))
         return -1;
 
     part = chain->parts->parts[chain->active_part];
 
-    if (part_find_data_register (part, params[1]) != NULL)
+    if (urj_part_find_data_register (part, params[1]) != NULL)
     {
         printf (_("Data register '%s' already defined\n"), params[1]);
         return 1;
     }
 
-    dr = data_register_alloc (params[1], len);
+    dr = urj_part_data_register_alloc (params[1], len);
     if (!dr)
     {
         printf (_("out of memory\n"));
@@ -97,7 +97,7 @@ cmd_register_run (chain_t *chain, char *params[])
 
     /* Device Identification Register */
     if (strcasecmp (dr->name, "DIR") == 0)
-        register_init (dr->out, register_get_string (part->id));
+        urj_tap_register_init (dr->out, urj_tap_register_get_string (part->id));
 
     return 1;
 }
@@ -112,7 +112,7 @@ cmd_register_help (void)
               "LENGTH        Data register length\n"), "register");
 }
 
-cmd_t cmd_register = {
+urj_cmd_t cmd_register = {
     "register",
     N_("define new data register for a part"),
     cmd_register_help,

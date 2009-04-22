@@ -33,17 +33,17 @@
 #include "cmd.h"
 
 static int
-cmd_scan_run (chain_t *chain, char *params[])
+cmd_scan_run (urj_chain_t *chain, char *params[])
 {
-    part_t *part;
-    data_register_t *bsr;
-    tap_register_t *obsr;
+    urj_part_t *part;
+    urj_data_register_t *bsr;
+    urj_tap_register_t *obsr;
     int i;
 
-    if ((i = cmd_params (params)) < 1)
+    if ((i = urj_cmd_params (params)) < 1)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -61,7 +61,7 @@ cmd_scan_run (chain_t *chain, char *params[])
     part = chain->parts->parts[chain->active_part];
 
     /* search for Boundary Scan Register */
-    bsr = part_find_data_register (part, "BSR");
+    bsr = urj_part_find_data_register (part, "BSR");
     if (!bsr)
     {
         printf (_("%s(%s:%d) Boundary Scan Register (BSR) not found\n"),
@@ -69,13 +69,13 @@ cmd_scan_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    if (part_find_instruction (part, "SAMPLE"))
+    if (urj_part_find_instruction (part, "SAMPLE"))
     {
-        part_set_instruction (part, "SAMPLE");
+        urj_part_set_instruction (part, "SAMPLE");
     }
-    else if (part_find_instruction (part, "SAMPLE/PRELOAD"))
+    else if (urj_part_find_instruction (part, "SAMPLE/PRELOAD"))
     {
-        part_set_instruction (part, "SAMPLE/PRELOAD");
+        urj_part_set_instruction (part, "SAMPLE/PRELOAD");
     }
     else
     {
@@ -84,9 +84,9 @@ cmd_scan_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    chain_shift_instructions (chain);
+    urj_tap_chain_shift_instructions (chain);
 
-    obsr = register_alloc (bsr->out->len);
+    obsr = urj_tap_register_alloc (bsr->out->len);
 
     if (!obsr)
     {
@@ -95,11 +95,11 @@ cmd_scan_run (chain_t *chain, char *params[])
     }
 
     {
-        signal_t *s;
+        urj_part_signal_t *s;
 
-        register_init (obsr, register_get_string (bsr->out));   // copy
+        urj_tap_register_init (obsr, urj_tap_register_get_string (bsr->out));   // copy
 
-        chain_shift_data_registers (chain, 1);
+        urj_tap_chain_shift_data_registers (chain, 1);
 
         for (s = part->signals; s; s = s->next)
         {
@@ -109,7 +109,7 @@ cmd_scan_run (chain_t *chain, char *params[])
                 int new = bsr->out->data[s->input->bit];
                 if (old != new)
                 {
-                    salias_t *a;
+                    urj_part_salias_t *a;
                     printf ("%s", s->name);
                     for (a = part->saliases; a; a = a->next)
                     {
@@ -122,7 +122,7 @@ cmd_scan_run (chain_t *chain, char *params[])
         }
     }
 
-    register_free (obsr);
+    urj_tap_register_free (obsr);
 
     return 1;
 }
@@ -134,7 +134,7 @@ cmd_scan_help (void)
               "Read BSR and show changes since last scan.\n"), "scan");
 }
 
-cmd_t cmd_scan = {
+urj_cmd_t cmd_scan = {
     "scan",
     N_("read BSR and show changes since last scan"),
     cmd_scan_help,

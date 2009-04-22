@@ -72,7 +72,7 @@ typedef struct block_desc block_desc_t;
 typedef struct
 {
     uint32_t last_addr;
-    data_register_t *fjmem_reg;
+    urj_data_register_t *fjmem_reg;
     block_desc_t block_desc;
 } bus_params_t;
 
@@ -81,15 +81,15 @@ typedef struct
 #define BLOCK_DESC ((bus_params_t *) bus->params)->block_desc
 
 static int
-fjmem_detect_reg_len (chain_t *chain, part_t *part, char *opcode, int len)
+fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode, int len)
 {
-    data_register_t *dr;
-    instruction_t *i;
+    urj_data_register_t *dr;
+    urj_instruction_t *i;
     int l, fjmem_reg_len;
     char *tdo_bit;
 
     /* build register FJMEM_REG with length of 1 bit */
-    dr = data_register_alloc (FJMEM_REG_NAME, 1);
+    dr = urj_part_data_register_alloc (FJMEM_REG_NAME, 1);
     if (!dr)
     {
         printf (_("out of memory\n"));
@@ -106,7 +106,7 @@ fjmem_detect_reg_len (chain_t *chain, part_t *part, char *opcode, int len)
         printf (_("invalid instruction length\n"));
         return 0;
     }
-    i = instruction_alloc (FJMEM_INST_NAME, part->instruction_length, opcode);
+    i = urj_part_instruction_alloc (FJMEM_INST_NAME, part->instruction_length, opcode);
     if (!i)
     {
         printf (_("out of memory\n"));
@@ -118,21 +118,21 @@ fjmem_detect_reg_len (chain_t *chain, part_t *part, char *opcode, int len)
 
     /* force jtag reset on all parts of the chain
        -> they're in BYPASS mode now */
-    chain_set_trst (chain, 0);
-    chain_set_trst (chain, 1);
-    tap_reset_bypass (chain);
+    urj_tap_chain_set_trst (chain, 0);
+    urj_tap_chain_set_trst (chain, 1);
+    urj_tap_reset_bypass (chain);
 
     /* flood all BYPASS registers with 0 for the following detection */
-    register_fill (dr->in, 0);
-    tap_capture_dr (chain);
+    urj_tap_register_fill (dr->in, 0);
+    urj_tap_capture_dr (chain);
     for (l = 0; l < chain->parts->len; l++)
-        tap_shift_register (chain, dr->in, NULL, EXITMODE_SHIFT);
+        urj_tap_shift_register (chain, dr->in, NULL, URJ_CHAIN_EXITMODE_SHIFT);
     /* shift once more and return to idle state */
-    tap_shift_register (chain, dr->in, NULL, EXITMODE_IDLE);
+    urj_tap_shift_register (chain, dr->in, NULL, URJ_CHAIN_EXITMODE_IDLE);
 
     /* set the FJMEM_INST instruction and activate it */
-    part_set_instruction (part, FJMEM_INST_NAME);
-    chain_shift_instructions (chain);
+    urj_part_set_instruction (part, FJMEM_INST_NAME);
+    urj_tap_chain_shift_instructions (chain);
 
     /* skip autodetect if register length was already specified */
     if (len)
@@ -144,25 +144,25 @@ fjmem_detect_reg_len (chain_t *chain, part_t *part, char *opcode, int len)
        registers of all other parts in the chain. They're set to
        BYPASS hopefully. */
     fjmem_reg_len = 0;
-    register_fill (dr->in, 1);
-    register_fill (dr->out, 0);
+    urj_tap_register_fill (dr->in, 1);
+    urj_tap_register_fill (dr->out, 0);
     tdo_bit = dr->out->data;
 
-    tap_capture_dr (chain);
+    urj_tap_capture_dr (chain);
     /* read current TDO and then shift once */
-    tap_shift_register (chain, dr->in, dr->out, EXITMODE_SHIFT);
-    register_get_string (dr->out);
+    urj_tap_shift_register (chain, dr->in, dr->out, URJ_CHAIN_EXITMODE_SHIFT);
+    urj_tap_register_get_string (dr->out);
     while ((tdo_bit[0] == 0) && (fjmem_reg_len < FJMEM_MAX_REG_LEN))
     {
         /* read current TDO and then shift once */
-        tap_shift_register (chain, dr->in, dr->out, EXITMODE_SHIFT);
+        urj_tap_shift_register (chain, dr->in, dr->out, URJ_CHAIN_EXITMODE_SHIFT);
         tdo_bit = dr->out->data;
         fjmem_reg_len++;
     }
     /* consider BYPASS register of other parts in the chain */
     fjmem_reg_len -= chain->parts->len - 1;
     /* shift once more and return to idle state */
-    tap_shift_register (chain, dr->in, NULL, EXITMODE_IDLE);
+    urj_tap_shift_register (chain, dr->in, NULL, URJ_CHAIN_EXITMODE_IDLE);
 #ifdef DEBUG
     printf ("FJMEM data register length: %d\n", fjmem_reg_len);
 #endif
@@ -171,10 +171,10 @@ fjmem_detect_reg_len (chain_t *chain, part_t *part, char *opcode, int len)
 }
 
 static int
-fjmem_detect_fields (chain_t *chain, part_t *part, bus_t *bus)
+fjmem_detect_fields (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
 {
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register_t *dr = FJMEM_REG;
+    urj_data_register_t *dr = FJMEM_REG;
     int idx;
 #ifdef DEBUG
     const char *reg_string;
@@ -190,36 +190,36 @@ fjmem_detect_fields (chain_t *chain, part_t *part, bus_t *bus)
     /* extend FJMEM_REG to finally detected size */
     if (dr->in)
         free (dr->in);
-    if ((dr->in = register_alloc (bd->reg_len)) == NULL)
+    if ((dr->in = urj_tap_register_alloc (bd->reg_len)) == NULL)
     {
         printf (_("out of memory\n"));
         return 0;
     }
     if (dr->out)
         free (dr->out);
-    if ((dr->out = register_alloc (bd->reg_len)) == NULL)
+    if ((dr->out = urj_tap_register_alloc (bd->reg_len)) == NULL)
     {
         printf (_("out of memory\n"));
         return 0;
     }
 
     /* Shift the detect instruction (all-1) into FJMEM_REG. */
-    register_fill (dr->in, 1);
-    chain_shift_data_registers (chain, 1);
+    urj_tap_register_fill (dr->in, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     /* With the next shift we will read the field marker pattern.
        Shift in the query for block 0, will be used lateron. */
-    register_fill (dr->in, 0);
+    urj_tap_register_fill (dr->in, 0);
     /* enter query instruction: 110 */
     dr->in->data[bd->instr_pos + 1] = 1;
     dr->in->data[bd->instr_pos + 2] = 1;
 
     /* shift register */
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     /* and examine output from field detect */
 #ifdef DEBUG
-    reg_string = register_get_string (dr->out);
+    reg_string = urj_tap_register_get_string (dr->out);
     printf ("captured: %s\n", reg_string);
 #endif
     /* scan block field */
@@ -251,10 +251,10 @@ fjmem_detect_fields (chain_t *chain, part_t *part, bus_t *bus)
 }
 
 static int
-fjmem_query_blocks (chain_t *chain, part_t *part, bus_t *bus)
+fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
 {
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register_t *dr = FJMEM_REG;
+    urj_data_register_t *dr = FJMEM_REG;
     int max_block_num, block_num;
     int failed = 0;
 #ifdef DEBUG
@@ -276,11 +276,11 @@ fjmem_query_blocks (chain_t *chain, part_t *part, bus_t *bus)
             dr->in->data[bd->block_pos + idx] = next_block_num & 1;
             next_block_num >>= 1;
         }
-        chain_shift_data_registers (chain, 1);
+        urj_tap_chain_shift_data_registers (chain, 1);
 
         /* and examine output from block query */
 #ifdef DEBUG
-        reg_string = register_get_string (dr->out);
+        reg_string = urj_tap_register_get_string (dr->out);
         printf ("captured: %s\n", reg_string);
 #endif
 
@@ -367,12 +367,12 @@ fjmem_query_blocks (chain_t *chain, part_t *part, bus_t *bus)
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-fjmem_bus_new (chain_t *chain, const bus_driver_t *driver, char *params[])
+static urj_bus_t *
+fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver, char *params[])
 {
-    bus_t *bus = NULL;
+    urj_bus_t *bus = NULL;
     int failed = 0;
-    part_t *part;
+    urj_part_t *part;
     char *opcode = NULL;
     int fjmem_reg_len = 0;
     int idx;
@@ -380,7 +380,7 @@ fjmem_bus_new (chain_t *chain, const bus_driver_t *driver, char *params[])
     part = chain->parts->parts[chain->active_part];
 
     /* parse parameters */
-    for (idx = 2; idx < cmd_params (params); idx++)
+    for (idx = 2; idx < urj_cmd_params (params); idx++)
     {
         char *comma, *value;
 
@@ -400,7 +400,7 @@ fjmem_bus_new (chain_t *chain, const bus_driver_t *driver, char *params[])
         if (strcasecmp (params[idx], "len") == 0)
         {
             unsigned int tmp;
-            cmd_get_number (value, &tmp);
+            urj_cmd_get_number (value, &tmp);
             fjmem_reg_len = (int) tmp;
         }
     }
@@ -414,7 +414,7 @@ fjmem_bus_new (chain_t *chain, const bus_driver_t *driver, char *params[])
         if (fjmem_reg_len <= 0)
             return NULL;
 
-        bus = calloc (1, sizeof (bus_t));
+        bus = calloc (1, sizeof (urj_bus_t));
         if (!bus)
             return NULL;
 
@@ -426,9 +426,9 @@ fjmem_bus_new (chain_t *chain, const bus_driver_t *driver, char *params[])
             return NULL;
         }
 
-        CHAIN = chain;
-        PART = chain->parts->parts[chain->active_part];
-        FJMEM_REG = part_find_data_register (PART, FJMEM_REG_NAME);
+        bus->chain = chain;
+        bus->part = chain->parts->parts[chain->active_part];
+        FJMEM_REG = urj_part_find_data_register (bus->part, FJMEM_REG_NAME);
         bd = &(BLOCK_DESC);
         bd->blocks = NULL;
         bd->reg_len = fjmem_reg_len;
@@ -474,22 +474,22 @@ fjmem_free_blocks (block_param_t *bl)
  *
  */
 static void
-fjmem_bus_free (bus_t *bus)
+fjmem_bus_free (urj_bus_t *bus)
 {
-    data_register_t *dr = FJMEM_REG;
+    urj_data_register_t *dr = FJMEM_REG;
 
     /* fill all fields with '0'
        -> prepare idle instruction for next startup/detect */
-    part_set_instruction (PART, FJMEM_INST_NAME);
-    chain_shift_instructions (CHAIN);
+    urj_part_set_instruction (bus->part, FJMEM_INST_NAME);
+    urj_tap_chain_shift_instructions (bus->chain);
 
-    register_fill (dr->in, 0);
-    chain_shift_data_registers (CHAIN, 0);
+    urj_tap_register_fill (dr->in, 0);
+    urj_tap_chain_shift_data_registers (bus->chain, 0);
 
     fjmem_free_blocks (BLOCK_DESC.blocks);
     BLOCK_DESC.blocks = NULL;
 
-    generic_bus_free (bus);
+    urj_bus_generic_free (bus);
 }
 
 /**
@@ -497,12 +497,12 @@ fjmem_bus_free (bus_t *bus)
  *
  */
 static void
-fjmem_bus_printinfo (bus_t *bus)
+fjmem_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
     printf (_("fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"),
             i);
@@ -513,18 +513,18 @@ fjmem_bus_printinfo (bus_t *bus)
  *
  */
 static void
-fjmem_bus_prepare (bus_t *bus)
+fjmem_bus_prepare (urj_bus_t *bus)
 {
-    if (!INITIALIZED)
-        bus_init (bus);
+    if (!bus->initialized)
+        URJ_BUS_INIT (bus);
 
     /* ensure FJMEM_INST is active */
-    part_set_instruction (PART, FJMEM_INST_NAME);
-    chain_shift_instructions (CHAIN);
+    urj_part_set_instruction (bus->part, FJMEM_INST_NAME);
+    urj_tap_chain_shift_instructions (bus->chain);
 }
 
 static int
-block_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area,
+block_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area,
                 block_param_t **bl_match)
 {
     block_param_t *bl = BLOCK_DESC.blocks;
@@ -565,7 +565,7 @@ block_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area,
         bl = bl->next;
     }
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -573,7 +573,7 @@ block_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area,
  *
  */
 static int
-fjmem_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
+fjmem_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
     block_param_t *bl;
 
@@ -581,9 +581,9 @@ fjmem_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 }
 
 static void
-setup_address (bus_t *bus, uint32_t a, block_param_t *block)
+setup_address (urj_bus_t *bus, uint32_t a, block_param_t *block)
 {
-    data_register_t *dr = FJMEM_REG;
+    urj_data_register_t *dr = FJMEM_REG;
     block_desc_t *bd = &(BLOCK_DESC);
     int idx;
     uint16_t num = block->num;
@@ -609,9 +609,9 @@ setup_address (bus_t *bus, uint32_t a, block_param_t *block)
 }
 
 static void
-setup_data (bus_t *bus, uint32_t d, block_param_t *block)
+setup_data (urj_bus_t *bus, uint32_t d, block_param_t *block)
 {
-    data_register_t *dr = FJMEM_REG;
+    urj_data_register_t *dr = FJMEM_REG;
     block_desc_t *bd = &(BLOCK_DESC);
     int idx;
 
@@ -628,12 +628,12 @@ setup_data (bus_t *bus, uint32_t d, block_param_t *block)
  *
  */
 static void
-fjmem_bus_read_start (bus_t *bus, uint32_t adr)
+fjmem_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
-    chain_t *chain = CHAIN;
+    urj_chain_t *chain = bus->chain;
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register_t *dr = FJMEM_REG;
-    bus_area_t area;
+    urj_data_register_t *dr = FJMEM_REG;
+    urj_bus_area_t area;
     block_param_t *block;
 
     block_bus_area (bus, adr, &area, &block);
@@ -651,7 +651,7 @@ fjmem_bus_read_start (bus_t *bus, uint32_t adr)
     dr->in->data[bd->instr_pos + 1] = 0;
     dr->in->data[bd->instr_pos + 2] = 0;
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
 /**
@@ -659,13 +659,13 @@ fjmem_bus_read_start (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-fjmem_bus_read_next (bus_t *bus, uint32_t adr)
+fjmem_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
-    chain_t *chain = CHAIN;
+    urj_chain_t *chain = bus->chain;
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register_t *dr = FJMEM_REG;
+    urj_data_register_t *dr = FJMEM_REG;
     uint32_t d;
-    bus_area_t area;
+    urj_bus_area_t area;
     block_param_t *block;
     int idx;
 
@@ -678,7 +678,7 @@ fjmem_bus_read_next (bus_t *bus, uint32_t adr)
     }
 
     setup_address (bus, adr, block);
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     /* extract data from TDO stream */
     d = 0;
@@ -694,13 +694,13 @@ fjmem_bus_read_next (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-fjmem_bus_read_end (bus_t *bus)
+fjmem_bus_read_end (urj_bus_t *bus)
 {
-    chain_t *chain = CHAIN;
+    urj_chain_t *chain = bus->chain;
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register_t *dr = FJMEM_REG;
+    urj_data_register_t *dr = FJMEM_REG;
     uint32_t d;
-    bus_area_t area;
+    urj_bus_area_t area;
     block_param_t *block;
     int idx;
 
@@ -716,7 +716,7 @@ fjmem_bus_read_end (bus_t *bus)
     dr->in->data[bd->instr_pos + 1] = 0;
     dr->in->data[bd->instr_pos + 2] = 0;
 
-    chain_shift_data_registers (chain, 1);
+    urj_tap_chain_shift_data_registers (chain, 1);
 
     /* extract data from TDO stream */
     d = 0;
@@ -732,12 +732,12 @@ fjmem_bus_read_end (bus_t *bus)
  *
  */
 static void
-fjmem_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
+fjmem_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
-    chain_t *chain = CHAIN;
+    urj_chain_t *chain = bus->chain;
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register_t *dr = FJMEM_REG;
-    bus_area_t area;
+    urj_data_register_t *dr = FJMEM_REG;
+    urj_bus_area_t area;
     block_param_t *block;
 
     block_bus_area (bus, adr, &area, &block);
@@ -755,10 +755,10 @@ fjmem_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
     dr->in->data[bd->instr_pos + 1] = 1;
     dr->in->data[bd->instr_pos + 2] = 0;
 
-    chain_shift_data_registers (chain, 0);
+    urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const bus_driver_t fjmem_bus = {
+const urj_bus_driver_t fjmem_bus = {
     "fjmem",
     N_("FPGA JTAG memory bus driver via USER register, requires parameters:\n"
        "           opcode=<USERx OPCODE> [len=<FJMEM REG LEN>]"),
@@ -770,9 +770,9 @@ const bus_driver_t fjmem_bus = {
     fjmem_bus_read_start,
     fjmem_bus_read_next,
     fjmem_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     fjmem_bus_write,
-    generic_bus_no_init
+    urj_bus_generic_no_init
 };
 
 

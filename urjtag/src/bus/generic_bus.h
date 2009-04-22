@@ -22,16 +22,16 @@
  *
  */
 
-#ifndef GENERIC_BUS_H
-#define GENERIC_BUS_H
+#ifndef URJ_BUS_GENERIC_BUS_H
+#define URJ_BUS_GENERIC_BUS_H
 
 #include "bus.h"
 
-int generic_bus_attach_sig (part_t *part, signal_t **sig, char *id);
+int urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig, char *id);
 
-void generic_bus_free (bus_t *bus);
-int generic_bus_no_init (bus_t *bus);
-void generic_bus_prepare_extest (bus_t *bus);
-uint32_t generic_bus_read (bus_t *bus, uint32_t adr);
+void urj_bus_generic_free (urj_bus_t *bus);
+int urj_bus_generic_no_init (urj_bus_t *bus);
+void urj_bus_generic_prepare_extest (urj_bus_t *bus);
+uint32_t urj_bus_generic_read (urj_bus_t *bus, uint32_t adr);
 
-#endif /* GENERIC_BUS_H */
+#endif /* URJ_BUS_GENERIC_BUS_H */

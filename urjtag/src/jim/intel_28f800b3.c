@@ -106,7 +106,7 @@ typedef struct
 intel_f28xxxb3_state_t;
 
 void
-intel_28fxxxb3_init (jim_bus_device_t *d, uint16_t id, b3_boot_type_t bt)
+urj_jim_intel_28fxxxb3_init (urj_jim_bus_device_t *d, uint16_t id, b3_boot_type_t bt)
 {
     d->state = malloc (sizeof (intel_f28xxxb3_state_t));
     if (d->state != NULL)
@@ -122,20 +122,20 @@ intel_28fxxxb3_init (jim_bus_device_t *d, uint16_t id, b3_boot_type_t bt)
 }
 
 void
-intel_28f800b3b_init (jim_bus_device_t *d)
+urj_jim_intel_28f800b3b_init (urj_jim_bus_device_t *d)
 {
-    intel_28fxxxb3_init (d, 0x8893, BOTTOM);
+    urj_jim_intel_28fxxxb3_init (d, 0x8893, BOTTOM);
 }
 
 void
-intel_28fxxxb3_free (jim_bus_device_t *d)
+urj_jim_intel_28fxxxb3_free (urj_jim_bus_device_t *d)
 {
     if (d->state != NULL)
         free (d->state);
 }
 
 uint32_t
-intel_28fxxxb3_capture (jim_bus_device_t *d,
+urj_jim_intel_28fxxxb3_capture (urj_jim_bus_device_t *d,
                         uint32_t address, uint32_t control,
                         uint8_t *shmem, size_t shmem_size)
 {
@@ -191,7 +191,7 @@ intel_28fxxxb3_capture (jim_bus_device_t *d,
 }
 
 void
-intel_28fxxxb3_update (jim_bus_device_t *d,
+urj_jim_intel_28fxxxb3_update (urj_jim_bus_device_t *d,
                        uint32_t address, uint32_t data, uint32_t control,
                        uint8_t *shmem, size_t shmem_size)
 {
@@ -409,12 +409,12 @@ intel_28fxxxb3_update (jim_bus_device_t *d,
     }
 }
 
-jim_bus_device_t intel_28f800b3b = {
+urj_jim_bus_device_t intel_28f800b3b = {
     2,                          /* width [bytes] */
     0x80000,                    /* size [words, each <width> bytes] */
     NULL,                       /* state */
-    intel_28f800b3b_init,       /* init() */
-    intel_28fxxxb3_capture,     /* access() */
-    intel_28fxxxb3_update,      /* access() */
-    intel_28fxxxb3_free         /* free() */
+    urj_jim_intel_28f800b3b_init,       /* init() */
+    urj_jim_intel_28fxxxb3_capture,     /* access() */
+    urj_jim_intel_28fxxxb3_update,      /* access() */
+    urj_jim_intel_28fxxxb3_free         /* free() */
 };

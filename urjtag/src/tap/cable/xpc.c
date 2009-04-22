@@ -296,16 +296,16 @@ xpcu_shift (struct usb_dev_handle *xpcu, int reqno, int bits, int in_len,
 /* ---------------------------------------------------------------------- */
 
 static int
-xpcu_common_init (cable_t *cable)
+xpcu_common_init (urj_cable_t *cable)
 {
     int r;
     uint16_t buf;
     struct usb_dev_handle *xpcu;
 
-    if (usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
 
-    xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
+    xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     r = xpcu_request_28 (xpcu, 0x11);
     if (r >= 0)
@@ -344,14 +344,14 @@ xpcu_common_init (cable_t *cable)
 }
 
 static int
-xpc_int_init (cable_t *cable)
+xpc_int_init (urj_cable_t *cable)
 {
     struct usb_dev_handle *xpcu;
 
     if (xpcu_common_init (cable) < 0)
         return -1;
 
-    xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
+    xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
     if (xpcu_select_gpio (xpcu, 0) < 0)
         return -1;
 
@@ -359,7 +359,7 @@ xpc_int_init (cable_t *cable)
 }
 
 static int
-xpc_ext_init (cable_t *cable)
+xpc_ext_init (urj_cable_t *cable)
 {
     struct usb_dev_handle *xpcu;
     uint8_t zero[2] = { 0, 0 };
@@ -377,7 +377,7 @@ xpc_ext_init (cable_t *cable)
     if (cable->params == NULL)
         r = -1;
 
-    xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
+    xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     if (r >= 0)
         r = xpcu_request_28 (xpcu, 0x11);
@@ -402,25 +402,25 @@ xpc_ext_init (cable_t *cable)
 /* ---------------------------------------------------------------------- */
 
 static void
-xpc_ext_done (cable_t *cable)
+xpc_ext_done (urj_cable_t *cable)
 {
     struct usb_dev_handle *xpcu;
-    xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
+    xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
     xpcu_output_enable (xpcu, 0);
-    generic_usbconn_done (cable);
+    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 /* ---------------------------------------------------------------------- */
 
 static void
-xpc_ext_free (cable_t *cable)
+xpc_ext_free (urj_cable_t *cable)
 {
     if (cable->params)
     {
         free (cable->params);
         cable->params = NULL;
     }
-    generic_usbconn_free (cable);
+    urj_tap_cable_generic_usbconn_free (cable);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -432,24 +432,24 @@ xpc_ext_free (cable_t *cable)
 #define	TDO	0
 
 static void
-xpc_clock (cable_t *cable, int tms, int tdi, int n)
+xpc_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     struct usb_dev_handle *xpcu;
-    xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
+    xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     tms = tms ? (1 << TMS) : 0;
     tdi = tdi ? (1 << TDI) : 0;
 
     if (xpcu_write_gpio (xpcu, (1 << PROG) | (0 << TCK) | tms | tdi) >= 0)
     {
-        cable_wait (cable);
+        urj_tap_cable_wait (cable);
         for (i = 0; i < n; i++)
         {
             xpcu_write_gpio (xpcu, (1 << PROG) | (1 << TCK) | tms | tdi);
-            cable_wait (cable);
+            urj_tap_cable_wait (cable);
             xpcu_write_gpio (xpcu, (1 << PROG) | (0 << TCK) | tms | tdi);
-            cable_wait (cable);
+            urj_tap_cable_wait (cable);
         }
     }
 }
@@ -457,11 +457,11 @@ xpc_clock (cable_t *cable, int tms, int tdi, int n)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_get_tdo (cable_t *cable)
+xpc_get_tdo (urj_cable_t *cable)
 {
     unsigned char d;
     struct usb_dev_handle *xpcu;
-    xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
+    xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     xpcu_read_gpio (xpcu, &d);
     return (d & (1 << TDO)) ? 1 : 0;
@@ -470,7 +470,7 @@ xpc_get_tdo (cable_t *cable)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_set_signal (cable_t *cable, int mask, int val)
+xpc_set_signal (urj_cable_t *cable, int mask, int val)
 {
     return 1;
 }
@@ -478,7 +478,7 @@ xpc_set_signal (cable_t *cable, int mask, int val)
 /* ---------------------------------------------------------------------- */
 
 static void
-xpc_ext_clock (cable_t *cable, int tms, int tdi, int n)
+xpc_ext_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i;
     uint8_t tdo[2];
@@ -488,7 +488,7 @@ xpc_ext_clock (cable_t *cable, int tms, int tdi, int n)
     clock[0] = (tms ? 0x10 : 0) | (tdi ? 0x01 : 0);
     clock[1] = 0x11;            /* clock'n read */
 
-    xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
+    xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     for (i = 0; i < n; i++)
         xpcu_shift (xpcu, 0xA6, 1, 2, clock, 2, tdo);
@@ -500,7 +500,7 @@ xpc_ext_clock (cable_t *cable, int tms, int tdi, int n)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_ext_get_tdo (cable_t *cable)
+xpc_ext_get_tdo (urj_cable_t *cable)
 {
     return last_tdo;
     // return ((xpc_cable_params_t*)(cable->params))->last_tdo;
@@ -513,7 +513,7 @@ xpc_ext_get_tdo (cable_t *cable)
 
 typedef struct
 {
-    cable_t *cable;
+    urj_cable_t *cable;
     struct usb_dev_handle *xpcu;
     int in_bits;
     int out_bits;
@@ -624,7 +624,7 @@ xpcu_add_bit_for_ext_transfer (xpc_ext_transfer_state_t *xts, char in,
 /* ---------------------------------------------------------------------- */
 
 static int
-xpc_ext_transfer (cable_t *cable, int len, char *in, char *out)
+xpc_ext_transfer (urj_cable_t *cable, int len, char *in, char *out)
 {
     int i, j;
     xpc_ext_transfer_state_t xts;
@@ -639,7 +639,7 @@ xpc_ext_transfer (cable_t *cable, int len, char *in, char *out)
     printf ("\n");
 #endif
 
-    xts.xpcu = ((libusb_param_t *) (cable->link.usb->params))->handle;
+    xts.xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
     xts.out = (uint8_t *) out;
     xts.in_bits = 0;
     xts.out_bits = 0;
@@ -671,25 +671,25 @@ xpc_ext_transfer (cable_t *cable, int len, char *in, char *out)
 /* ---------------------------------------------------------------------- */
 
 
-cable_driver_t xpc_int_cable_driver = {
+urj_cable_driver_t xpc_int_cable_driver = {
     "xpc_int",
     N_("Xilinx Platform Cable USB internal chain"),
-    generic_usbconn_connect,
-    generic_disconnect,
-    generic_usbconn_free,
+    urj_tap_cable_generic_usbconn_connect,
+    urj_tap_cable_generic_disconnect,
+    urj_tap_cable_generic_usbconn_free,
     xpc_int_init,
-    generic_usbconn_done,
-    generic_set_frequency,
+    urj_tap_cable_generic_usbconn_done,
+    urj_tap_cable_generic_set_frequency,
     xpc_clock,
     xpc_get_tdo,
-    generic_transfer,
+    urj_tap_cable_generic_transfer,
     xpc_set_signal,
-    generic_get_signal,
-    generic_flush_using_transfer,
-    generic_usbconn_help
+    urj_tap_cable_generic_get_signal,
+    urj_tap_cable_generic_flush_using_transfer,
+    urj_tap_cable_generic_usbconn_help
 };
 
-usbconn_cable_t usbconn_cable_xpc_int = {
+urj_usbconn_cable_t usbconn_cable_xpc_int = {
     "xpc_int",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */
@@ -697,25 +697,25 @@ usbconn_cable_t usbconn_cable_xpc_int = {
     0x0008                      /* PID (8) */
 };
 
-cable_driver_t xpc_ext_cable_driver = {
+urj_cable_driver_t xpc_ext_cable_driver = {
     "xpc_ext",
     N_("Xilinx Platform Cable USB external chain"),
-    generic_usbconn_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_usbconn_connect,
+    urj_tap_cable_generic_disconnect,
     xpc_ext_free,
     xpc_ext_init,
     xpc_ext_done,
-    generic_set_frequency,
+    urj_tap_cable_generic_set_frequency,
     xpc_ext_clock,
     xpc_ext_get_tdo,
     xpc_ext_transfer,
     xpc_set_signal,
-    generic_get_signal,
-    generic_flush_using_transfer,
-    generic_usbconn_help
+    urj_tap_cable_generic_get_signal,
+    urj_tap_cable_generic_flush_using_transfer,
+    urj_tap_cable_generic_usbconn_help
 };
 
-usbconn_cable_t usbconn_cable_xpc_ext = {
+urj_usbconn_cable_t usbconn_cable_xpc_ext = {
     "xpc_ext",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */

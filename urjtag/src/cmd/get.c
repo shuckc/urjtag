@@ -34,18 +34,18 @@
 #include "cmd.h"
 
 static int
-cmd_get_run (chain_t *chain, char *params[])
+cmd_get_run (urj_chain_t *chain, char *params[])
 {
     int data;
-    signal_t *s;
+    urj_part_signal_t *s;
 
-    if (cmd_params (params) != 3)
+    if (urj_cmd_params (params) != 3)
         return -1;
 
     if (strcasecmp (params[1], "signal") != 0)
         return -1;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -60,13 +60,13 @@ cmd_get_run (chain_t *chain, char *params[])
         return 1;
     }
 
-    s = part_find_signal (chain->parts->parts[chain->active_part], params[2]);
+    s = urj_part_find_signal (chain->parts->parts[chain->active_part], params[2]);
     if (!s)
     {
         printf (_("signal '%s' not found\n"), params[2]);
         return 1;
     }
-    data = part_get_signal (chain->parts->parts[chain->active_part], s);
+    data = urj_part_get_signal (chain->parts->parts[chain->active_part], s);
     if (data != -1)
         printf (_("%s = %d\n"), params[2], data);
 
@@ -83,7 +83,7 @@ cmd_get_help (void)
             "get signal");
 }
 
-cmd_t cmd_get = {
+urj_cmd_t cmd_get = {
     "get",
     N_("get external signal value"),
     cmd_get_help,

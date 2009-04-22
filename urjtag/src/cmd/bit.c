@@ -45,15 +45,15 @@ cmd_bit_print_params (char *params[], unsigned int parameters, char *command)
 }
 
 static int
-cmd_bit_run (chain_t *chain, char *params[])
+cmd_bit_run (urj_chain_t *chain, char *params[])
 {
-    part_t *part;
-    data_register_t *bsr;
+    urj_part_t *part;
+    urj_data_register_t *bsr;
     unsigned int bit;
     int type;
     int safe;
     unsigned int control;
-    unsigned int parameters = cmd_params (params);
+    unsigned int parameters = urj_cmd_params (params);
     char command[1024];
 
     cmd_bit_print_params (params, parameters, command);
@@ -65,7 +65,7 @@ cmd_bit_run (chain_t *chain, char *params[])
         return -1;
     }
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
     {
         printf (_("%s: cable test failed for command '%s'\n"), "bit",
                 command);
@@ -85,7 +85,7 @@ cmd_bit_run (chain_t *chain, char *params[])
     }
 
     part = chain->parts->parts[chain->active_part];
-    bsr = part_find_data_register (part, "BSR");
+    bsr = urj_part_find_data_register (part, "BSR");
     if (bsr == NULL)
     {
         printf (_
@@ -95,7 +95,7 @@ cmd_bit_run (chain_t *chain, char *params[])
     }
 
     /* bit number */
-    if (cmd_get_number (params[1], &bit))
+    if (urj_cmd_get_number (params[1], &bit))
     {
         printf (_("%s: unable to get boundary bit number for command '%s'\n"),
                 "bit", command);
@@ -126,23 +126,23 @@ cmd_bit_run (chain_t *chain, char *params[])
     {
     case 'I':
     case 'i':
-        type = BSBIT_INPUT;
+        type = URJ_BSBIT_INPUT;
         break;
     case 'O':
     case 'o':
-        type = BSBIT_OUTPUT;
+        type = URJ_BSBIT_OUTPUT;
         break;
     case 'B':
     case 'b':
-        type = BSBIT_BIDIR;
+        type = URJ_BSBIT_BIDIR;
         break;
     case 'C':
     case 'c':
-        type = BSBIT_CONTROL;
+        type = URJ_BSBIT_CONTROL;
         break;
     case 'X':
     case 'x':
-        type = BSBIT_INTERNAL;
+        type = URJ_BSBIT_INTERNAL;
         break;
     default:
         printf (_("%s: invalid bit type for command '%s'\n"), "bit", command);
@@ -162,7 +162,7 @@ cmd_bit_run (chain_t *chain, char *params[])
 
     /* allocate bsbit */
     part->bsbits[bit] =
-        bsbit_alloc (bit, params[4], type, part_find_signal (part, params[4]),
+        urj_part_bsbit_alloc (bit, params[4], type, urj_part_find_signal (part, params[4]),
                      safe);
     if (part->bsbits[bit] == NULL)
     {
@@ -171,11 +171,11 @@ cmd_bit_run (chain_t *chain, char *params[])
     }
 
     /* test for control bit */
-    if (cmd_params (params) == 5)
+    if (urj_cmd_params (params) == 5)
         return 1;
 
     /* control bit number */
-    if (cmd_get_number (params[5], &control))
+    if (urj_cmd_get_number (params[5], &control))
     {
         printf (_("%s: unable to get control bit number for command '%s'\n"),
                 "bit", command);
@@ -202,7 +202,7 @@ cmd_bit_run (chain_t *chain, char *params[])
     if (strcasecmp (params[7], "Z"))
         return -1;
 
-    part->bsbits[bit]->control_state = BSBIT_STATE_Z;
+    part->bsbits[bit]->control_state = URJ_BSBIT_STATE_Z;
 
     return 1;
 }
@@ -223,7 +223,7 @@ cmd_bit_help (void)
               "CSTATE        Control state, valid state is only Z\n"), "bit");
 }
 
-cmd_t cmd_bit = {
+urj_cmd_t cmd_bit = {
     "bit",
     N_("define new BSR bit"),
     cmd_bit_help,

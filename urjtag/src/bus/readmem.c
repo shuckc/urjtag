@@ -43,14 +43,14 @@
 #include "jtag.h"
 
 void
-readmem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
+urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
     uint32_t step;
     uint32_t a;
     int bc = 0;
 #define BSIZE 4096
     uint8_t b[BSIZE];
-    bus_area_t area;
+    urj_bus_area_t area;
     uint64_t end;
 
     if (!bus)
@@ -59,9 +59,9 @@ readmem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
         return;
     }
 
-    bus_prepare (bus);
+    URJ_BUS_PREPARE (bus);
 
-    if (bus_area (bus, addr, &area) != URJTAG_STATUS_OK)
+    if (URJ_BUS_AREA (bus, addr, &area) != URJ_STATUS_OK)
     {
         printf (_("Error: Bus width detection failed\n"));
         return;
@@ -89,16 +89,16 @@ readmem (bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
     a = addr;
     end = a + len;
     printf (_("reading:\n"));
-    bus_read_start (bus, addr);
+    URJ_BUS_READ_START (bus, addr);
     for (a += step; a <= end; a += step)
     {
         uint32_t data;
         int j;
 
         if (a < addr + len)
-            data = bus_read_next (bus, a);
+            data = URJ_BUS_READ_NEXT (bus, a);
         else
-            data = bus_read_end (bus);
+            data = URJ_BUS_READ_END (bus);
 
         for (j = step; j > 0; j--)
             if (big_endian)

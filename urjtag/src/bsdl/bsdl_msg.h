@@ -22,17 +22,17 @@
  *
  */
 
-#ifndef BSDL_MSG_H
-#define BSDL_MSG_H
+#ifndef URJ_BSDL_MSG_H
+#define URJ_BSDL_MSG_H
 
 #include "bsdl_types.h"
 
-/* message types for bsdl_msg() */
+/* message types for urj_bsdl_msg() */
 #define BSDL_MSG_NOTE  0
 #define BSDL_MSG_WARN  1
 #define BSDL_MSG_ERR   2
 #define BSDL_MSG_FATAL 3
 
-void bsdl_msg (int, int, const char *, ...);
+void urj_bsdl_msg (int, int, const char *, ...);
 
-#endif /* BSDL_MSG_H */
+#endif /* URJ_BSDL_MSG_H */

@@ -33,17 +33,17 @@
 #include "cmd.h"
 
 static int
-cmd_signal_run (chain_t *chain, char *params[])
+cmd_signal_run (urj_chain_t *chain, char *params[])
 {
-    part_t *part;
-    signal_t *s;
+    urj_part_t *part;
+    urj_part_signal_t *s;
     int i;
 
-    if ((i = cmd_params (params)) < 2)
+    if ((i = urj_cmd_params (params)) < 2)
         return -1;
 
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -59,7 +59,7 @@ cmd_signal_run (chain_t *chain, char *params[])
     }
 
     part = chain->parts->parts[chain->active_part];
-    if ((s = part_find_signal (part, params[1])) != NULL)
+    if ((s = urj_part_find_signal (part, params[1])) != NULL)
     {
         if (i == 3)
         {
@@ -81,7 +81,7 @@ cmd_signal_run (chain_t *chain, char *params[])
         }
     }
 
-    s = signal_alloc (params[1]);
+    s = urj_part_signal_alloc (params[1]);
 
     if (i == 3)
     {                           /* Add pin number */
@@ -113,7 +113,7 @@ cmd_signal_help (void)
               "PIN#   	List of pin # for a signal\n"), "signal");
 }
 
-cmd_t cmd_signal = {
+urj_cmd_t cmd_signal = {
     "signal",
     N_("define new signal for a part"),
     cmd_signal_help,

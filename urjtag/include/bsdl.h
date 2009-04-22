@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef BSDL_H
-#define BSDL_H
+#ifndef URJ_BSDL_BSDL_H
+#define URJ_BSDL_BSDL_H
 
 #include <bsdl_mode.h>
 
@@ -31,17 +31,18 @@ typedef struct
 {
     char **path_list;
     int debug;
-} bsdl_globs_t;
+} urj_bsdl_globs_t;
 
-#define BSDL_GLOBS_INIT(bsdl) {\
-  bsdl.path_list = NULL;\
-  bsdl.debug = 0;\
-}
+#define URJ_BSDL_GLOBS_INIT(bsdl) \
+    do { \
+        bsdl.path_list = NULL; \
+        bsdl.debug = 0; \
+    } while (0)
 
 #include "chain.h"
 
-int bsdl_read_file (chain_t *, const char *, int, const char *);
-void bsdl_set_path (chain_t *, const char *);
-int bsdl_scan_files (chain_t *, const char *, int);
+int urj_bsdl_read_file (urj_chain_t *, const char *, int, const char *);
+void urj_bsdl_set_path (urj_chain_t *, const char *);
+int urj_bsdl_scan_files (urj_chain_t *, const char *, int);
 
-#endif /* BSDL_H */
+#endif /* URJ_BSDL_BSDL_H */

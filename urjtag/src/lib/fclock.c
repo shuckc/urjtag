@@ -42,7 +42,7 @@
 #include "fclock.h"
 
 long double
-frealtime (void)
+urj_lib_frealtime (void)
 {
     long double result;
     static uint64_t start_mat;
@@ -75,14 +75,14 @@ frealtime (void)
 #ifdef _POSIX_TIMERS
 
 long double
-frealtime (void)
+urj_lib_frealtime (void)
 {
     long double result;
 
     struct timespec t;
     if (clock_gettime (CLOCK_REALTIME, &t) == -1)
     {
-        perror ("frealtime (clock_gettime)");
+        perror ("urj_lib_frealtime (clock_gettime)");
         exit (EXIT_FAILURE);
     }
     result =
@@ -102,7 +102,7 @@ frealtime (void)
 #include <sys/timeb.h>
 
 long double
-frealtime (void)
+urj_lib_frealtime (void)
 {
     long double result;
 
@@ -139,7 +139,7 @@ set_clk_tck (void)
 #endif
 
 long double
-frealtime (void)
+urj_lib_frealtime (void)
 {
     long double result;
 
@@ -148,7 +148,7 @@ frealtime (void)
     clock_t c = times (&t);
     if (c == (clock_t) - 1)
     {
-        perror ("frealtime (times)");
+        perror ("urj_lib_frealtime (times)");
         exit (EXIT_FAILURE);
     }
     result = (long double) c / CLK_TCK;

@@ -30,10 +30,10 @@
 
 #include "instruction.h"
 
-instruction_t *
-instruction_alloc (const char *name, int len, const char *val)
+urj_instruction_t *
+urj_part_instruction_alloc (const char *name, int len, const char *val)
 {
-    instruction_t *i;
+    urj_instruction_t *i;
 
     if (!name || !val)
         return NULL;
@@ -42,18 +42,18 @@ instruction_alloc (const char *name, int len, const char *val)
     if (!i)
         return NULL;
 
-    if (strlen (name) > MAXLEN_INSTRUCTION)
+    if (strlen (name) > URJ_INSTRUCTION_MAXLEN_INSTRUCTION)
         printf (_("Warning: Instruction name too long\n"));
-    strncpy (i->name, name, MAXLEN_INSTRUCTION);
-    i->name[MAXLEN_INSTRUCTION] = '\0';
+    strncpy (i->name, name, URJ_INSTRUCTION_MAXLEN_INSTRUCTION);
+    i->name[URJ_INSTRUCTION_MAXLEN_INSTRUCTION] = '\0';
 
-    i->value = register_alloc (len);
+    i->value = urj_tap_register_alloc (len);
     if (!i->value)
     {
         free (i);
         return NULL;
     }
-    i->out = register_alloc (len);
+    i->out = urj_tap_register_alloc (len);
     if (!i->out)
     {
         free (i->value);
@@ -61,7 +61,7 @@ instruction_alloc (const char *name, int len, const char *val)
         return NULL;
     }
 
-    register_init (i->value, val);
+    urj_tap_register_init (i->value, val);
     i->data_register = NULL;
     i->next = NULL;
 
@@ -69,14 +69,14 @@ instruction_alloc (const char *name, int len, const char *val)
 }
 
 void
-instruction_free (instruction_t *i)
+urj_part_instruction_free (urj_instruction_t *i)
 {
     if (!i)
         return;
 
     if (i->value)
-        register_free (i->value);
+        urj_tap_register_free (i->value);
     if (i->out)
-        register_free (i->out);
+        urj_tap_register_free (i->out);
     free (i);
 }

@@ -52,13 +52,13 @@
 #include "jtag.h"
 
 #ifndef HAVE_GETLINE
-ssize_t getline (char **lineptr, size_t * n, FILE *stream);
+ssize_t urj_lib_getline (char **lineptr, size_t * n, FILE *stream);
 #endif
 
 int debug_mode = 0;
 int big_endian = 0;
 int interactive = 0;
-extern cfi_array_t *cfi_array;
+extern urj_flash_cfi_array_t *cfi_array;
 
 #define	JTAGDIR		".jtag"
 #define	HISTORYFILE	"history"
@@ -148,7 +148,7 @@ jtag_save_history (void)
 #endif
 
 static int
-jtag_readline_multiple_commands_support (chain_t *chain, char *line)    /* multiple commands should be separated with '::' */
+jtag_readline_multiple_commands_support (urj_chain_t *chain, char *line)    /* multiple commands should be separated with '::' */
 {
     int r;
     char *nextcmd = line;
@@ -170,9 +170,9 @@ jtag_readline_multiple_commands_support (chain_t *chain, char *line)    /* multi
                 ++line;
         }
 
-        r = jtag_parse_line (chain, line);
+        r = urj_cmd_jtag_parse_line (chain, line);
 
-        chain_flush (chain);
+        urj_tap_chain_flush (chain);
 
     }
     while (nextcmd && r);
@@ -181,7 +181,7 @@ jtag_readline_multiple_commands_support (chain_t *chain, char *line)    /* multi
 }
 
 static void
-jtag_readline_loop (chain_t *chain, const char *prompt)
+jtag_readline_loop (urj_chain_t *chain, const char *prompt)
 {
 #ifdef HAVE_LIBREADLINE
     char *line = NULL;
@@ -245,7 +245,7 @@ jtag_readline_loop (chain_t *chain, const char *prompt)
 }
 
 static int
-jtag_parse_rc (chain_t *chain)
+jtag_parse_rc (urj_chain_t *chain)
 {
     char *home = getenv ("HOME");
     char *file;
@@ -264,7 +264,7 @@ jtag_parse_rc (chain_t *chain)
     strcat (file, "/");
     strcat (file, RCFILE);
 
-    go = jtag_parse_file (chain, file);
+    go = urj_cmd_jtag_parse_file (chain, file);
 
     free (file);
 
@@ -272,17 +272,17 @@ jtag_parse_rc (chain_t *chain)
 }
 
 static void
-cleanup (chain_t *chain)
+cleanup (urj_chain_t *chain)
 {
-    cfi_array_free (cfi_array);
+    urj_flash_cfi_array_free (cfi_array);
     cfi_array = NULL;
 
     if (bus)
     {
-        bus_free (bus);
+        URJ_BUS_FREE (bus);
         bus = NULL;
     }
-    chain_free (chain);
+    urj_tap_chain_free (chain);
     chain = NULL;
 }
 
@@ -297,7 +297,7 @@ main (int argc, char *const argv[])
     int help = 0;
     int version = 0;
     int quiet = 0;
-    chain_t *chain = NULL;
+    urj_chain_t *chain = NULL;
 
     jtag_argv0 = argv[0];
 
@@ -417,14 +417,14 @@ main (int argc, char *const argv[])
     {
         for (i = optind; i < argc; i++)
         {
-            chain = chain_alloc ();
+            chain = urj_tap_chain_alloc ();
             if (!chain)
             {
                 printf (_("Out of memory\n"));
                 return -1;
             }
 
-            go = jtag_parse_file (chain, argv[i]);
+            go = urj_cmd_jtag_parse_file (chain, argv[i]);
             cleanup (chain);
             if (go < 0)
             {
@@ -440,13 +440,13 @@ main (int argc, char *const argv[])
     /* input from stdin */
     if (!isatty (0))
     {
-        chain = chain_alloc ();
+        chain = urj_tap_chain_alloc ();
         if (!chain)
         {
             printf (_("Out of memory\n"));
             return -1;
         }
-        jtag_parse_stream (chain, stdin);
+        urj_cmd_jtag_parse_stream (chain, stdin);
 
         cleanup (chain);
 
@@ -463,7 +463,7 @@ main (int argc, char *const argv[])
                   "There is absolutely no warranty for %s.\n\n"),
                 PACKAGE_STRING, SVN_REVISION, PACKAGE_NAME, PACKAGE_NAME);
 
-    chain = chain_alloc ();
+    chain = urj_tap_chain_alloc ();
     if (!chain)
     {
         printf (_("Out of memory\n"));
@@ -484,7 +484,7 @@ main (int argc, char *const argv[])
 
 #ifdef HAVE_LIBREADLINE
 #ifdef HAVE_READLINE_COMPLETION
-    rl_attempted_completion_function = cmd_completion;
+    rl_attempted_completion_function = urj_cmd_completion;
 #endif
 #endif
 

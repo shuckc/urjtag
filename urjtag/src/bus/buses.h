@@ -22,43 +22,43 @@
  *
  */
 
-#ifndef BUSES_H
-#define	BUSES_H
+#ifndef URJ_BUS_BUSES_H
+#define	URJ_BUS_BUSES_H
 
-extern const bus_driver_t au1500_bus;
-extern const bus_driver_t avr32_bus_driver;
-extern const bus_driver_t bcm1250_bus;
-extern const bus_driver_t bf526_ezkit_bus;
-extern const bus_driver_t bf527_ezkit_bus;
-extern const bus_driver_t bf533_stamp_bus;
-extern const bus_driver_t bf533_ezkit_bus;
-extern const bus_driver_t bf537_stamp_bus;
-extern const bus_driver_t bf537_ezkit_bus;
-extern const bus_driver_t bf538f_ezkit_bus;
-extern const bus_driver_t bf548_ezkit_bus;
-extern const bus_driver_t bf561_ezkit_bus;
-extern const bus_driver_t bscoach_bus;
-extern const bus_driver_t ejtag_bus;
-extern const bus_driver_t fjmem_bus;
-extern const bus_driver_t h7202_bus;
-extern const bus_driver_t ixp425_bus;
-extern const bus_driver_t jopcyc_bus;
-extern const bus_driver_t lh7a400_bus;
-extern const bus_driver_t mpc5200_bus;
-extern const bus_driver_t mpc824x_bus;
-extern const bus_driver_t ppc405ep_bus;
-extern const bus_driver_t ppc440gx_ebc8_bus;
-extern const bus_driver_t prototype_bus;
-extern const bus_driver_t pxa2x0_bus;
-extern const bus_driver_t pxa27x_bus;
-extern const bus_driver_t s3c4510_bus;
-extern const bus_driver_t sa1110_bus;
-extern const bus_driver_t sh7727_bus;
-extern const bus_driver_t sh7750r_bus;
-extern const bus_driver_t sh7751r_bus;
-extern const bus_driver_t sharc_21065L_bus;
-extern const bus_driver_t slsup3_bus;
-extern const bus_driver_t tx4925_bus;
-extern const bus_driver_t zefant_xs3_bus;
-extern const bus_driver_t ejtag_dma_bus;
-#endif /* BUSES_H */
+extern const urj_bus_driver_t au1500_bus;
+extern const urj_bus_driver_t avr32_bus_driver;
+extern const urj_bus_driver_t bcm1250_bus;
+extern const urj_bus_driver_t bf526_ezkit_bus;
+extern const urj_bus_driver_t bf527_ezkit_bus;
+extern const urj_bus_driver_t bf533_stamp_bus;
+extern const urj_bus_driver_t bf533_ezkit_bus;
+extern const urj_bus_driver_t bf537_stamp_bus;
+extern const urj_bus_driver_t bf537_ezkit_bus;
+extern const urj_bus_driver_t bf538f_ezkit_bus;
+extern const urj_bus_driver_t bf548_ezkit_bus;
+extern const urj_bus_driver_t bf561_ezkit_bus;
+extern const urj_bus_driver_t bscoach_bus;
+extern const urj_bus_driver_t ejtag_bus;
+extern const urj_bus_driver_t fjmem_bus;
+extern const urj_bus_driver_t h7202_bus;
+extern const urj_bus_driver_t ixp425_bus;
+extern const urj_bus_driver_t jopcyc_bus;
+extern const urj_bus_driver_t lh7a400_bus;
+extern const urj_bus_driver_t mpc5200_bus;
+extern const urj_bus_driver_t mpc824x_bus;
+extern const urj_bus_driver_t ppc405ep_bus;
+extern const urj_bus_driver_t ppc440gx_ebc8_bus;
+extern const urj_bus_driver_t prototype_bus;
+extern const urj_bus_driver_t pxa2x0_bus;
+extern const urj_bus_driver_t pxa27x_bus;
+extern const urj_bus_driver_t s3c4510_bus;
+extern const urj_bus_driver_t sa1110_bus;
+extern const urj_bus_driver_t sh7727_bus;
+extern const urj_bus_driver_t sh7750r_bus;
+extern const urj_bus_driver_t sh7751r_bus;
+extern const urj_bus_driver_t sharc_21065L_bus;
+extern const urj_bus_driver_t slsup3_bus;
+extern const urj_bus_driver_t tx4925_bus;
+extern const urj_bus_driver_t zefant_xs3_bus;
+extern const urj_bus_driver_t ejtag_dma_bus;
+#endif /* URJ_BUS_BUSES_H */

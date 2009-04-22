@@ -29,7 +29,7 @@
 #include "bus.h"
 #include "buses.h"
 
-const bus_driver_t *bus_drivers[] = {
+const urj_bus_driver_t *bus_drivers[] = {
 #ifdef ENABLE_BUS_AU1500
     &au1500_bus,
 #endif
@@ -139,16 +139,16 @@ const bus_driver_t *bus_drivers[] = {
     NULL                        /* last must be NULL */
 };
 
-bus_t *bus = NULL;
-buses_t buses = { 0, NULL };
+urj_bus_t *bus = NULL;
+urj_buses_t buses = { 0, NULL };
 
 void
-buses_free (void)
+urj_bus_buses_free (void)
 {
     int i;
 
     for (i = 0; i < buses.len; i++)
-        bus_free (buses.buses[i]);
+        URJ_BUS_FREE (buses.buses[i]);
 
     free (buses.buses);
     buses.len = 0;
@@ -157,14 +157,14 @@ buses_free (void)
 }
 
 void
-buses_add (bus_t *abus)
+urj_bus_buses_add (urj_bus_t *abus)
 {
-    bus_t **b;
+    urj_bus_t **b;
 
     if (abus == NULL)
         return;
 
-    b = realloc (buses.buses, (buses.len + 1) * sizeof (bus_t *));
+    b = realloc (buses.buses, (buses.len + 1) * sizeof (urj_bus_t *));
     if (b == NULL)
     {
         printf (_("Out of memory\n"));
@@ -177,10 +177,10 @@ buses_add (bus_t *abus)
 }
 
 void
-buses_delete (bus_t *abus)
+urj_bus_buses_delete (urj_bus_t *abus)
 {
     int i;
-    bus_t **b;
+    urj_bus_t **b;
 
     for (i = 0; i < buses.len; i++)
         if (abus == buses.buses[i])
@@ -194,7 +194,7 @@ buses_delete (bus_t *abus)
         i++;
     }
     buses.len--;
-    b = realloc (buses.buses, buses.len * sizeof (bus_t *));
+    b = realloc (buses.buses, buses.len * sizeof (urj_bus_t *));
     if ((b != NULL) || (buses.len == 0))
         buses.buses = b;
 

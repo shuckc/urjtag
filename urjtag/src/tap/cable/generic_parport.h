@@ -22,15 +22,15 @@
  *
  */
 
-#ifndef GENERIC_PARPORT_H
-#define	GENERIC_PARPORT_H
+#ifndef URJ_TAP_CABLE_GENERIC_PARPORT_H
+#define	URJ_TAP_CABLE_GENERIC_PARPORT_H
 
 #include "cable.h"
 #include "parport.h"
 
-int generic_parport_connect (char *params[], cable_t *cable);
-void generic_parport_free (cable_t *cable);
-void generic_parport_done (cable_t *cable);
-void generic_parport_help (const char *name);
+int urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable);
+void urj_tap_cable_generic_parport_free (urj_cable_t *cable);
+void urj_tap_cable_generic_parport_done (urj_cable_t *cable);
+void urj_tap_cable_generic_parport_help (const char *name);
 
-#endif /* GENERIC_H */
+#endif /* URJ_TAP_CABLE_GENERIC_H */

@@ -22,11 +22,11 @@
  *
  */
 
-#ifndef SVF_H
-#define SVF_H
+#ifndef URJ_SVF_H
+#define URJ_SVF_H
 
 #include "chain.h"
 
-void svf_run (chain_t *chain, FILE *, int, int, uint32_t);
+void urj_svf_run (urj_chain_t *chain, FILE *, int, int, uint32_t);
 
-#endif /* SVF_H */
+#endif /* URJ_SVF_H */

@@ -23,42 +23,42 @@
  *
  */
 
-#ifndef PARPORT_H
-#define	PARPORT_H
+#ifndef URJ_PARPORT_H
+#define	URJ_PARPORT_H
 
 #include <stdint.h>
 
-typedef struct parport_t parport_t;
+typedef struct urj_parport urj_parport_t;
 
 #include "cable.h"
 
 typedef struct
 {
     const char *type;
-    parport_t *(*connect) (const char **, int);
-    void (*parport_free) (parport_t *);
-    int (*open) (parport_t *);
-    int (*close) (parport_t *);
-    int (*set_data) (parport_t *, uint8_t);
-    int (*get_data) (parport_t *);
-    int (*get_status) (parport_t *);
-    int (*set_control) (parport_t *, uint8_t);
-} parport_driver_t;
+    urj_parport_t *(*connect) (const char **, int);
+    void (*parport_free) (urj_parport_t *);
+    int (*open) (urj_parport_t *);
+    int (*close) (urj_parport_t *);
+    int (*set_data) (urj_parport_t *, uint8_t);
+    int (*get_data) (urj_parport_t *);
+    int (*get_status) (urj_parport_t *);
+    int (*set_control) (urj_parport_t *, uint8_t);
+} urj_parport_driver_t;
 
-struct parport_t
+struct urj_parport
 {
-    parport_driver_t *driver;
+    urj_parport_driver_t *driver;
     void *params;
-    cable_t *cable;
+    urj_cable_t *cable;
 };
 
-int parport_open (parport_t *port);
-int parport_close (parport_t *port);
-int parport_set_data (parport_t *port, uint8_t data);
-int parport_get_data (parport_t *port);
-int parport_get_status (parport_t *port);
-int parport_set_control (parport_t *port, uint8_t data);
+int urj_tap_parport_open (urj_parport_t *port);
+int urj_tap_parport_close (urj_parport_t *port);
+int urj_tap_parport_set_data (urj_parport_t *port, uint8_t data);
+int urj_tap_parport_get_data (urj_parport_t *port);
+int urj_tap_parport_get_status (urj_parport_t *port);
+int urj_tap_parport_set_control (urj_parport_t *port, uint8_t data);
 
-extern parport_driver_t *parport_drivers[];
+extern urj_parport_driver_t *parport_drivers[];
 
-#endif /* PARPORT_H */
+#endif /* URJ_PARPORT_H */

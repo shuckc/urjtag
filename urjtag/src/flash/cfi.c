@@ -39,7 +39,7 @@
 #include <bus.h>
 
 void
-cfi_array_free (cfi_array_t *cfi_array)
+urj_flash_cfi_array_free (urj_flash_cfi_array_t *cfi_array)
 {
     if (!cfi_array)
         return;
@@ -68,30 +68,30 @@ cfi_array_free (cfi_array_t *cfi_array)
 }
 
 int
-cfi_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
+urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array)
 {
     unsigned int bw;            /* bus width */
     unsigned int d;             /* data offset */
     int ba;                     /* bus width address multiplier */
     int ma;                     /* flash mode address multiplier */
-    bus_area_t area;
+    urj_bus_area_t area;
 
     if (!cfi_array || !bus)
         return -1;              /* invalid parameters */
 
-    *cfi_array = calloc (1, sizeof (cfi_array_t));
+    *cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
     if (!*cfi_array)
         return -2;              /* out of memory */
 
     (*cfi_array)->bus = bus;
     (*cfi_array)->address = adr;
-    if (bus_area (bus, adr, &area) != URJTAG_STATUS_OK)
+    if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
         return -8;              /* bus width detection failed */
     bw = area.width;
     if (bw != 8 && bw != 16 && bw != 32)
         return -3;              /* invalid bus width */
     (*cfi_array)->bus_width = ba = bw / 8;
-    (*cfi_array)->cfi_chips = calloc (ba, sizeof (cfi_chip_t *));
+    (*cfi_array)->cfi_chips = calloc (ba, sizeof (urj_flash_cfi_chip_t *));
     if (!(*cfi_array)->cfi_chips)
         return -2;              /* out of memory */
 
@@ -100,11 +100,11 @@ cfi_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
 #define	A(off)			(adr + (off) * ba * ma)
 #define	D(data)			((data) << d)
 #define	gD(data)		(((data) >> d) & 0xFF)
-#define	read1(off)		gD(bus_read( bus, A(off) ))
-#define	read2(off)		(bus_read_start( bus, A(off) ), gD(bus_read_next( bus, A((off) + 1) )) | gD(bus_read_end( bus )) << 8)
-#define	write1(off,data)	bus_write( bus, A(off), D(data) )
+#define	read1(off)		gD(URJ_BUS_READ( bus, A(off) ))
+#define	read2(off)		(URJ_BUS_READ_START( bus, A(off) ), gD(URJ_BUS_READ_NEXT( bus, A((off) + 1) )) | gD(URJ_BUS_READ_END( bus )) << 8)
+#define	write1(off,data)	URJ_BUS_WRITE( bus, A(off), D(data) )
 
-        cfi_query_structure_t *cfi;
+        urj_flash_cfi_query_structure_t *cfi;
         uint32_t tmp;
         int ret = -4;           /* CFI not detected (Q) */
         uint16_t pri_vendor_tbl_adr;
@@ -133,7 +133,7 @@ cfi_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
             return -6;          /* CFI not detected (Y) */
         }
 
-        (*cfi_array)->cfi_chips[d / 8] = calloc (1, sizeof (cfi_chip_t));
+        (*cfi_array)->cfi_chips[d / 8] = calloc (1, sizeof (urj_flash_cfi_chip_t));
         if (!(*cfi_array)->cfi_chips[d / 8])
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
@@ -213,7 +213,7 @@ cfi_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
             read1 (NUMBER_OF_ERASE_REGIONS_OFFSET);
 
         cfi->device_geometry.erase_block_regions =
-            malloc (tmp * sizeof (cfi_erase_block_region_t));
+            malloc (tmp * sizeof (urj_flash_cfi_erase_block_region_t));
         if (!cfi->device_geometry.erase_block_regions)
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
@@ -243,7 +243,7 @@ cfi_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
         if (cfi->identification_string.pri_id_code == CFI_VENDOR_AMD_SCS
             && pri_vendor_tbl_adr != 0)
         {
-            amd_pri_extened_query_structure_t *pri_vendor_tbl;
+            urj_flash_cfi_amd_pri_extened_query_structure_t *pri_vendor_tbl;
             uint8_t major_version;
             uint8_t minor_version;
             uint8_t num_of_banks;
@@ -264,8 +264,8 @@ cfi_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array)
                 num_of_banks = read1 (BANK_ORGANIZATION_OFFSET);
             else
                 num_of_banks = 0;
-            pri_vendor_tbl = (amd_pri_extened_query_structure_t *)
-                calloc (1, sizeof (amd_pri_extened_query_structure_t)
+            pri_vendor_tbl = (urj_flash_cfi_amd_pri_extened_query_structure_t *)
+                calloc (1, sizeof (urj_flash_cfi_amd_pri_extened_query_structure_t)
                         + num_of_banks * sizeof (uint8_t));
             if (!pri_vendor_tbl)
             {

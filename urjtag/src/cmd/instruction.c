@@ -33,11 +33,11 @@
 #include "cmd.h"
 
 static int
-cmd_instruction_run (chain_t *chain, char *params[])
+cmd_instruction_run (urj_chain_t *chain, char *params[])
 {
-    part_t *part;
+    urj_part_t *part;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
     if (!chain->parts)
@@ -54,16 +54,16 @@ cmd_instruction_run (chain_t *chain, char *params[])
 
     part = chain->parts->parts[chain->active_part];
 
-    if (cmd_params (params) == 2)
+    if (urj_cmd_params (params) == 2)
     {
-        part_set_instruction (part, params[1]);
+        urj_part_set_instruction (part, params[1]);
         if (part->active_instruction == NULL)
             printf (_("%s: unknown instruction '%s'\n"), "instruction",
                     params[1]);
         return 1;
     }
 
-    if (cmd_params (params) == 3)
+    if (urj_cmd_params (params) == 3)
     {
         unsigned int len;
 
@@ -76,16 +76,16 @@ cmd_instruction_run (chain_t *chain, char *params[])
             return 1;
         }
 
-        if (cmd_get_number (params[2], &len))
+        if (urj_cmd_get_number (params[2], &len))
             return -1;
 
         part->instruction_length = len;
         return 1;
     }
 
-    if (cmd_params (params) == 4)
+    if (urj_cmd_params (params) == 4)
     {
-        instruction_t *i;
+        urj_instruction_t *i;
 
         if (strlen (params[2]) != part->instruction_length)
         {
@@ -93,13 +93,13 @@ cmd_instruction_run (chain_t *chain, char *params[])
             return 1;
         }
 
-        if (part_find_instruction (part, params[1]) != NULL)
+        if (urj_part_find_instruction (part, params[1]) != NULL)
         {
             printf (_("Instruction '%s' already defined\n"), params[1]);
             return 1;
         }
 
-        i = instruction_alloc (params[1], part->instruction_length,
+        i = urj_part_instruction_alloc (params[1], part->instruction_length,
                                params[2]);
         if (!i)
         {
@@ -110,7 +110,7 @@ cmd_instruction_run (chain_t *chain, char *params[])
         i->next = part->instructions;
         part->instructions = i;
 
-        i->data_register = part_find_data_register (part, params[3]);
+        i->data_register = urj_part_find_data_register (part, params[3]);
         if (i->data_register == NULL)
         {
             printf (_("unknown data register '%s'\n"), params[3]);
@@ -138,7 +138,7 @@ cmd_instruction_help (void)
             "instruction", "instruction", "instruction");
 }
 
-cmd_t cmd_instruction = {
+urj_cmd_t cmd_instruction = {
     "instruction",
     N_("change active instruction for a part or declare new instruction"),
     cmd_instruction_help,

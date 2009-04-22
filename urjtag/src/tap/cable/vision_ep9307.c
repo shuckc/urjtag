@@ -79,7 +79,7 @@ typedef struct
 } ep9307_params_t;
 
 static int
-ep9307_gpio_open (cable_t *cable)
+ep9307_gpio_open (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
     off_t map_mask;
@@ -156,7 +156,7 @@ ep9307_gpio_open (cable_t *cable)
 }
 
 static int
-ep9307_gpio_close (cable_t *cable)
+ep9307_gpio_close (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
@@ -170,7 +170,7 @@ ep9307_gpio_close (cable_t *cable)
 }
 
 static int
-ep9307_gpio_write (cable_t *cable, uint8_t data)
+ep9307_gpio_write (urj_cable_t *cable, uint8_t data)
 {
     ep9307_params_t *p = cable->params;
     uint32_t tmp;
@@ -185,7 +185,7 @@ ep9307_gpio_write (cable_t *cable, uint8_t data)
 }
 
 static int
-ep9307_gpio_read (cable_t *cable)
+ep9307_gpio_read (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
     uint32_t tmp;
@@ -196,11 +196,11 @@ ep9307_gpio_read (cable_t *cable)
 }
 
 static int
-ep9307_connect (char *params[], cable_t *cable)
+ep9307_connect (char *params[], urj_cable_t *cable)
 {
     ep9307_params_t *cable_params;
 
-    if (cmd_params (params) != 1)
+    if (urj_cmd_params (params) != 1)
     {
         printf (_("Error: This cable type does not accept parameters!\n"));
         return 1;
@@ -223,14 +223,14 @@ ep9307_connect (char *params[], cable_t *cable)
 }
 
 static void
-ep9307_cable_free (cable_t *cable)
+ep9307_cable_free (urj_cable_t *cable)
 {
     free (cable->params);
     free (cable);
 }
 
 static int
-ep9307_init (cable_t *cable)
+ep9307_init (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
@@ -238,20 +238,20 @@ ep9307_init (cable_t *cable)
         return -1;
 
     ep9307_gpio_write (cable, 1 << TRST);
-    cable_wait (cable);
-    p->signals = CS_TRST;
+    urj_tap_cable_wait (cable);
+    p->signals = URJ_POD_CS_TRST;
 
     return 0;
 }
 
 static void
-ep9307_done (cable_t *cable)
+ep9307_done (urj_cable_t *cable)
 {
     ep9307_gpio_close (cable);
 }
 
 static void
-ep9307_clock (cable_t *cable, int tms, int tdi, int n)
+ep9307_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     ep9307_params_t *p = cable->params;
     int bit_mask;
@@ -265,9 +265,9 @@ ep9307_clock (cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         ep9307_gpio_write (cable, (0 << TCK) | bit_mask);
-        cable_wait (cable);
+        urj_tap_cable_wait (cable);
         ep9307_gpio_write (cable, (1 << TCK) | bit_mask);
-        cable_wait (cable);
+        urj_tap_cable_wait (cable);
     }
 }
 
@@ -275,50 +275,50 @@ ep9307_clock (cable_t *cable, int tms, int tdi, int n)
  * NOTE: This also lowers the TDI and TMS lines; is this intended?
  */
 static int
-ep9307_get_tdo (cable_t *cable)
+ep9307_get_tdo (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
     ep9307_gpio_write (cable, (0 << TCK) | (p->trst << TRST));
-    cable_wait (cable);
+    urj_tap_cable_wait (cable);
 
     return (ep9307_gpio_read (cable) >> TDO) & 1;
 }
 
 static int
-ep9307_current_signals (cable_t *cable)
+ep9307_current_signals (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
-    int sigs = p->signals & ~(CS_TMS | CS_TDI | CS_TCK | CS_TRST);
+    int sigs = p->signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TRST);
     if (p->lastout & (1 << TCK))
-        sigs |= CS_TCK;
+        sigs |= URJ_POD_CS_TCK;
     if (p->lastout & (1 << TDI))
-        sigs |= CS_TDI;
+        sigs |= URJ_POD_CS_TDI;
     if (p->lastout & (1 << TMS))
-        sigs |= CS_TMS;
+        sigs |= URJ_POD_CS_TMS;
     if (p->lastout & (1 << TRST))
-        sigs |= CS_TRST;
+        sigs |= URJ_POD_CS_TRST;
 
     return sigs;
 }
 
 static int
-ep9307_set_signal (cable_t *cable, int mask, int val)
+ep9307_set_signal (urj_cable_t *cable, int mask, int val)
 {
     ep9307_params_t *p = cable->params;
 
     int prev_sigs = ep9307_current_signals (cable);
 
-    int mask &= (CS_TMS | CS_TDI | CS_TCK | CS_TRST);   // only these can be modified
+    int mask &= (URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TRST);   // only these can be modified
 
     if (mask != 0)
     {
         int sigs = (prev_sigs & ~mask) | (val & mask);
-        int tms = (sigs & CS_TMS) ? (1 << TMS) : 0;
-        int tdi = (sigs & CS_TDI) ? (1 << TDI) : 0;
-        int tck = (sigs & CS_TCK) ? (1 << TCK) : 0;
-        int trst = (sigs & CS_TRST) ? (1 << TRST) : 0;
+        int tms = (sigs & URJ_POD_CS_TMS) ? (1 << TMS) : 0;
+        int tdi = (sigs & URJ_POD_CS_TDI) ? (1 << TDI) : 0;
+        int tck = (sigs & URJ_POD_CS_TCK) ? (1 << TCK) : 0;
+        int trst = (sigs & URJ_POD_CS_TRST) ? (1 << TRST) : 0;
         ep9307_gpio_write (cable, tms | tdi | tck | trst);
     }
 
@@ -326,7 +326,7 @@ ep9307_set_signal (cable_t *cable, int mask, int val)
 }
 
 static int
-ep9307_get_signal (cable_t *cable, pod_sigsel_t sig)
+ep9307_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
     return (ep9307_current_signals (cable) & sig) ? 1 : 0;
 }
@@ -337,20 +337,20 @@ ep9307_help (const char *cablename)
     printf (_("Usage: cable %s\n" "\n"), cablename);
 }
 
-cable_driver_t ep9307_cable_driver = {
+urj_cable_driver_t ep9307_cable_driver = {
     "EP9307",
     N_("Vision EP9307 SoM GPIO JTAG Cable"),
     ep9307_connect,
-    generic_disconnect,
+    urj_tap_cable_generic_disconnect,
     ep9307_cable_free,
     ep9307_init,
     ep9307_done,
-    generic_set_frequency,
+    urj_tap_cable_generic_set_frequency,
     ep9307_clock,
     ep9307_get_tdo,
-    generic_transfer,
+    urj_tap_cable_generic_transfer,
     ep9307_set_trst,
     ep9307_get_trst,
-    generic_flush_one_by_one,
+    urj_tap_cable_generic_flush_one_by_one,
     ep9307_help
 };

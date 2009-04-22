@@ -32,52 +32,52 @@
 #include "chain.h"
 
 void
-tap_reset (chain_t *chain)
+urj_tap_reset (urj_chain_t *chain)
 {
-    tap_state_reset (chain);
+    urj_tap_state_reset (chain);
 
-    chain_clock (chain, 1, 0, 5);       /* Test-Logic-Reset */
-    chain_clock (chain, 0, 0, 1);       /* Run-Test/Idle */
+    urj_tap_chain_clock (chain, 1, 0, 5);       /* Test-Logic-Reset */
+    urj_tap_chain_clock (chain, 0, 0, 1);       /* Run-Test/Idle */
 }
 
 void
-tap_reset_bypass (chain_t *chain)
+urj_tap_reset_bypass (urj_chain_t *chain)
 {
-    tap_reset (chain);
+    urj_tap_reset (chain);
 
     /* set all parts in the chain to BYPASS instruction if the total
        instruction register length of the chain is already known */
     if (chain->total_instr_len > 0)
     {
-        tap_register_t *ir =
-            register_fill (register_alloc (chain->total_instr_len), 1);
+        urj_tap_register_t *ir =
+            urj_tap_register_fill (urj_tap_register_alloc (chain->total_instr_len), 1);
         if (!ir)
         {
             printf (_("out of memory\n"));
             return;
         }
 
-        tap_capture_ir (chain);
-        tap_shift_register (chain, ir, NULL, EXITMODE_IDLE);
-        register_free (ir);
+        urj_tap_capture_ir (chain);
+        urj_tap_shift_register (chain, ir, NULL, URJ_CHAIN_EXITMODE_IDLE);
+        urj_tap_register_free (ir);
 
-        parts_set_instruction (chain->parts, "BYPASS");
+        urj_part_parts_set_instruction (chain->parts, "BYPASS");
     }
 }
 
 void
-tap_defer_shift_register (chain_t *chain, const tap_register_t *in,
-                          tap_register_t *out, int tap_exit)
+urj_tap_defer_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
+                          urj_tap_register_t *out, int tap_exit)
 {
     int i;
 
-    if (!(tap_state (chain) & TAPSTAT_SHIFT))
-        printf (_("%s: Invalid state: %2X\n"), "tap_shift_register",
-                tap_state (chain));
+    if (!(urj_tap_state (chain) & URJ_TAP_STATE_SHIFT))
+        printf (_("%s: Invalid state: %2X\n"), "urj_tap_shift_register",
+                urj_tap_state (chain));
 
     /* Capture-DR, Capture-IR, Shift-DR, Shift-IR, Exit2-DR or Exit2-IR state */
-    if (tap_state (chain) & TAPSTAT_CAPTURE)
-        chain_defer_clock (chain, 0, 0, 1);     /* save last TDO bit :-) */
+    if (urj_tap_state (chain) & URJ_TAP_STATE_CAPTURE)
+        urj_tap_chain_defer_clock (chain, 0, 0, 1);     /* save last TDO bit :-) */
 
     i = in->len;
     if (tap_exit)
@@ -86,30 +86,30 @@ tap_defer_shift_register (chain_t *chain, const tap_register_t *in,
         i = out->len;
 
     if (out)
-        cable_defer_transfer (chain->cable, i, in->data, out->data);
+        urj_tap_cable_defer_transfer (chain->cable, i, in->data, out->data);
     else
-        cable_defer_transfer (chain->cable, i, in->data, NULL);
+        urj_tap_cable_defer_transfer (chain->cable, i, in->data, NULL);
 
     for (; i < in->len; i++)
     {
         if (out != NULL && (i < out->len))
-            out->data[i] = cable_defer_get_tdo (chain->cable);
-        chain_defer_clock (chain, (tap_exit != EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i], 1);        /* Shift (& Exit1) */
+            out->data[i] = urj_tap_cable_defer_get_tdo (chain->cable);
+        urj_tap_chain_defer_clock (chain, (tap_exit != URJ_CHAIN_EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i], 1);        /* Shift (& Exit1) */
     }
 
     /* Shift-DR, Shift-IR, Exit1-DR or Exit1-IR state */
-    if (tap_exit == EXITMODE_IDLE)
+    if (tap_exit == URJ_CHAIN_EXITMODE_IDLE)
     {
-        chain_defer_clock (chain, 1, 0, 1);     /* Update-DR or Update-IR */
-        chain_defer_clock (chain, 0, 0, 1);     /* Run-Test/Idle */
+        urj_tap_chain_defer_clock (chain, 1, 0, 1);     /* Update-DR or Update-IR */
+        urj_tap_chain_defer_clock (chain, 0, 0, 1);     /* Run-Test/Idle */
     }
-    else if (tap_exit == EXITMODE_UPDATE)
-        chain_defer_clock (chain, 1, 0, 1);     /* Update-DR or Update-IR */
+    else if (tap_exit == URJ_CHAIN_EXITMODE_UPDATE)
+        urj_tap_chain_defer_clock (chain, 1, 0, 1);     /* Update-DR or Update-IR */
 }
 
 void
-tap_shift_register_output (chain_t *chain, const tap_register_t *in,
-                           tap_register_t *out, int tap_exit)
+urj_tap_shift_register_output (urj_chain_t *chain, const urj_tap_register_t *in,
+                           urj_tap_register_t *out, int tap_exit)
 {
     if (out != NULL)
     {
@@ -124,40 +124,40 @@ tap_shift_register_output (chain_t *chain, const tap_register_t *in,
         /* Asking for the result of the cable transfer
          * actually flushes the queue */
 
-        (void) cable_transfer_late (chain->cable, out->data);
+        (void) urj_tap_cable_transfer_late (chain->cable, out->data);
         for (; j < in->len && j < out->len; j++)
-            out->data[j] = cable_get_tdo_late (chain->cable);
+            out->data[j] = urj_tap_cable_get_tdo_late (chain->cable);
     }
 }
 
 void
-tap_shift_register (chain_t *chain, const tap_register_t *in,
-                    tap_register_t *out, int tap_exit)
+urj_tap_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
+                    urj_tap_register_t *out, int tap_exit)
 {
-    tap_defer_shift_register (chain, in, out, tap_exit);
-    tap_shift_register_output (chain, in, out, tap_exit);
+    urj_tap_defer_shift_register (chain, in, out, tap_exit);
+    urj_tap_shift_register_output (chain, in, out, tap_exit);
 }
 
 void
-tap_capture_dr (chain_t *chain)
+urj_tap_capture_dr (urj_chain_t *chain)
 {
-    if ((tap_state (chain) & (TAPSTAT_RESET | TAPSTAT_IDLE)) != TAPSTAT_IDLE)
-        printf (_("%s: Invalid state: %2X\n"), "tap_capture_dr",
-                tap_state (chain));
+    if ((urj_tap_state (chain) & (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE)) != URJ_TAP_STATE_IDLE)
+        printf (_("%s: Invalid state: %2X\n"), "urj_tap_capture_dr",
+                urj_tap_state (chain));
 
     /* Run-Test/Idle or Update-DR or Update-IR state */
-    chain_defer_clock (chain, 1, 0, 1); /* Select-DR-Scan */
-    chain_defer_clock (chain, 0, 0, 1); /* Capture-DR */
+    urj_tap_chain_defer_clock (chain, 1, 0, 1); /* Select-DR-Scan */
+    urj_tap_chain_defer_clock (chain, 0, 0, 1); /* Capture-DR */
 }
 
 void
-tap_capture_ir (chain_t *chain)
+urj_tap_capture_ir (urj_chain_t *chain)
 {
-    if ((tap_state (chain) & (TAPSTAT_RESET | TAPSTAT_IDLE)) != TAPSTAT_IDLE)
-        printf (_("%s: Invalid state: %2X\n"), "tap_capture_ir",
-                tap_state (chain));
+    if ((urj_tap_state (chain) & (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE)) != URJ_TAP_STATE_IDLE)
+        printf (_("%s: Invalid state: %2X\n"), "urj_tap_capture_ir",
+                urj_tap_state (chain));
 
     /* Run-Test/Idle or Update-DR or Update-IR state */
-    chain_defer_clock (chain, 1, 0, 2); /* Select-DR-Scan, then Select-IR-Scan */
-    chain_defer_clock (chain, 0, 0, 1); /* Capture-IR */
+    urj_tap_chain_defer_clock (chain, 1, 0, 2); /* Select-DR-Scan, then Select-IR-Scan */
+    urj_tap_chain_defer_clock (chain, 0, 0, 1); /* Capture-IR */
 }

@@ -23,58 +23,58 @@
  *
  */
 
-#ifndef CABLE_H
-#define	CABLE_H
+#ifndef URJ_CABLE_H
+#define	URJ_CABLE_H
 
 #include <stdint.h>
 
-typedef struct cable_t cable_t;
+typedef struct urj_cable urj_cable_t;
 
 #include "usbconn.h"
 #include "parport.h"
 #include "chain.h"
 #include "pod.h"
 
-typedef struct cable_driver_t cable_driver_t;
+typedef struct urj_cable_driver urj_cable_driver_t;
 
 typedef enum
 {
-    OPTIONALLY,
-    TO_OUTPUT,
-    COMPLETELY
+    URJ_TAP_CABLE_OPTIONALLY,
+    URJ_TAP_CABLE_TO_OUTPUT,
+    URJ_TAP_CABLE_COMPLETELY
 }
-cable_flush_amount_t;
+urj_cable_flush_amount_t;
 
-struct cable_driver_t
+struct urj_cable_driver
 {
     const char *name;
     const char *description;
-    int (*connect) (char *params[], cable_t *cable);
-    void (*disconnect) (cable_t *cable);
-    void (*cable_free) (cable_t *cable);
-    int (*init) (cable_t *);
-    void (*done) (cable_t *);
-    void (*set_frequency) (cable_t *, uint32_t freq);
-    void (*clock) (cable_t *, int, int, int);
-    int (*get_tdo) (cable_t *);
-    int (*transfer) (cable_t *, int, char *, char *);
-    int (*set_signal) (cable_t *, int, int);
-    int (*get_signal) (cable_t *, pod_sigsel_t);
-    void (*flush) (cable_t *, cable_flush_amount_t);
+    int (*connect) (char *params[], urj_cable_t *cable);
+    void (*disconnect) (urj_cable_t *cable);
+    void (*cable_free) (urj_cable_t *cable);
+    int (*init) (urj_cable_t *);
+    void (*done) (urj_cable_t *);
+    void (*set_frequency) (urj_cable_t *, uint32_t freq);
+    void (*clock) (urj_cable_t *, int, int, int);
+    int (*get_tdo) (urj_cable_t *);
+    int (*transfer) (urj_cable_t *, int, char *, char *);
+    int (*set_signal) (urj_cable_t *, int, int);
+    int (*get_signal) (urj_cable_t *, urj_pod_sigsel_t);
+    void (*flush) (urj_cable_t *, urj_cable_flush_amount_t);
     void (*help) (const char *);
 };
 
-typedef struct cable_queue_t cable_queue_t;
+typedef struct urj_cable_queue urj_cable_queue_t;
 
-struct cable_queue_t
+struct urj_cable_queue
 {
     enum
     {
-        CABLE_CLOCK,
-        CABLE_GET_TDO,
-        CABLE_TRANSFER,
-        CABLE_SET_SIGNAL,
-        CABLE_GET_SIGNAL
+        URJ_TAP_CABLE_CLOCK,
+        URJ_TAP_CABLE_GET_TDO,
+        URJ_TAP_CABLE_TRANSFER,
+        URJ_TAP_CABLE_SET_SIGNAL,
+        URJ_TAP_CABLE_GET_SIGNAL
     } action;
     union
     {
@@ -86,7 +86,7 @@ struct cable_queue_t
         } clock;
         struct
         {
-            pod_sigsel_t sig;
+            urj_pod_sigsel_t sig;
             int mask;
             int val;
         } value;
@@ -105,58 +105,58 @@ struct cable_queue_t
     } arg;
 };
 
-typedef struct cable_queue_info_t cable_queue_info_t;
+typedef struct urj_cable_queue_info urj_cable_queue_info_t;
 
-struct cable_queue_info_t
+struct urj_cable_queue_info
 {
-    cable_queue_t *data;
+    urj_cable_queue_t *data;
     int max_items;
     int num_items;
     int next_item;
     int next_free;
 };
 
-struct cable_t
+struct urj_cable
 {
-    cable_driver_t *driver;
+    urj_cable_driver_t *driver;
     union
     {
-        usbconn_t *usb;
-        parport_t *port;
+        urj_usbconn_t *usb;
+        urj_parport_t *port;
     } link;
     void *params;
-    chain_t *chain;
-    cable_queue_info_t todo;
-    cable_queue_info_t done;
+    urj_chain_t *chain;
+    urj_cable_queue_info_t todo;
+    urj_cable_queue_info_t done;
     uint32_t delay;
     uint32_t frequency;
 };
 
-void cable_free (cable_t *cable);
-int cable_init (cable_t *cable);
-void cable_done (cable_t *cable);
-void cable_flush (cable_t *cable, cable_flush_amount_t);
-void cable_clock (cable_t *cable, int tms, int tdi, int n);
-int cable_defer_clock (cable_t *cable, int tms, int tdi, int n);
-int cable_get_tdo (cable_t *cable);
-int cable_get_tdo_late (cable_t *cable);
-int cable_defer_get_tdo (cable_t *cable);
-int cable_set_signal (cable_t *cable, int mask, int val);
-int cable_defer_set_signal (cable_t *cable, int mask, int val);
-int cable_get_signal (cable_t *cable, pod_sigsel_t sig);
-int cable_get_signal_late (cable_t *cable, pod_sigsel_t sig);
-int cable_defer_get_signal (cable_t *cable, pod_sigsel_t sig);
-int cable_transfer (cable_t *cable, int len, char *in, char *out);
-int cable_transfer_late (cable_t *cable, char *out);
-int cable_defer_transfer (cable_t *cable, int len, char *in, char *out);
+void urj_tap_cable_free (urj_cable_t *cable);
+int urj_tap_cable_init (urj_cable_t *cable);
+void urj_tap_cable_done (urj_cable_t *cable);
+void urj_tap_cable_flush (urj_cable_t *cable, urj_cable_flush_amount_t);
+void urj_tap_cable_clock (urj_cable_t *cable, int tms, int tdi, int n);
+int urj_tap_cable_defer_clock (urj_cable_t *cable, int tms, int tdi, int n);
+int urj_tap_cable_get_tdo (urj_cable_t *cable);
+int urj_tap_cable_get_tdo_late (urj_cable_t *cable);
+int urj_tap_cable_defer_get_tdo (urj_cable_t *cable);
+int urj_tap_cable_set_signal (urj_cable_t *cable, int mask, int val);
+int urj_tap_cable_defer_set_signal (urj_cable_t *cable, int mask, int val);
+int urj_tap_cable_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig);
+int urj_tap_cable_get_signal_late (urj_cable_t *cable, urj_pod_sigsel_t sig);
+int urj_tap_cable_defer_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig);
+int urj_tap_cable_transfer (urj_cable_t *cable, int len, char *in, char *out);
+int urj_tap_cable_transfer_late (urj_cable_t *cable, char *out);
+int urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in, char *out);
 
-void cable_set_frequency (cable_t *cable, uint32_t frequency);
-uint32_t cable_get_frequency (cable_t *cable);
-void cable_wait (cable_t *cable);
-void cable_purge_queue (cable_queue_info_t *q, int io);
-int cable_add_queue_item (cable_t *cable, cable_queue_info_t *q);
-int cable_get_queue_item (cable_t *cable, cable_queue_info_t *q);
+void urj_tap_cable_set_frequency (urj_cable_t *cable, uint32_t frequency);
+uint32_t urj_tap_cable_get_frequency (urj_cable_t *cable);
+void urj_tap_cable_wait (urj_cable_t *cable);
+void urj_tap_cable_purge_queue (urj_cable_queue_info_t *q, int io);
+int urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q);
+int urj_tap_cable_get_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q);
 
-extern cable_driver_t *cable_drivers[];
+extern urj_cable_driver_t *cable_drivers[];
 
-#endif /* CABLE_H */
+#endif /* URJ_CABLE_H */

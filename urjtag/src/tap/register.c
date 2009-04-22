@@ -27,15 +27,15 @@
 
 #include "register.h"
 
-tap_register_t *
-register_alloc (int len)
+urj_tap_register_t *
+urj_tap_register_alloc (int len)
 {
-    tap_register_t *tr;
+    urj_tap_register_t *tr;
 
     if (len < 1)
         return NULL;
 
-    tr = malloc (sizeof (tap_register_t));
+    tr = malloc (sizeof (urj_tap_register_t));
     if (!tr)
         return NULL;
 
@@ -62,17 +62,17 @@ register_alloc (int len)
     return tr;
 }
 
-tap_register_t *
-register_duplicate (const tap_register_t *tr)
+urj_tap_register_t *
+urj_tap_register_duplicate (const urj_tap_register_t *tr)
 {
     if (!tr)
         return NULL;
 
-    return register_init (register_alloc (tr->len), register_get_string (tr));
+    return urj_tap_register_init (urj_tap_register_alloc (tr->len), urj_tap_register_get_string (tr));
 }
 
 void
-register_free (tap_register_t *tr)
+urj_tap_register_free (urj_tap_register_t *tr)
 {
     if (tr)
     {
@@ -82,8 +82,8 @@ register_free (tap_register_t *tr)
     free (tr);
 }
 
-tap_register_t *
-register_fill (tap_register_t *tr, int val)
+urj_tap_register_t *
+urj_tap_register_fill (urj_tap_register_t *tr, int val)
 {
     if (tr)
         memset (tr->data, val & 1, tr->len);
@@ -92,7 +92,7 @@ register_fill (tap_register_t *tr, int val)
 }
 
 const char *
-register_get_string (const tap_register_t *tr)
+urj_tap_register_get_string (const urj_tap_register_t *tr)
 {
     int i;
 
@@ -106,7 +106,7 @@ register_get_string (const tap_register_t *tr)
 }
 
 int
-register_all_bits_same_value (const tap_register_t *tr)
+urj_tap_register_all_bits_same_value (const urj_tap_register_t *tr)
 {
     int i, value;
     if (!tr)
@@ -127,8 +127,8 @@ register_all_bits_same_value (const tap_register_t *tr)
     return value;
 }
 
-tap_register_t *
-register_init (tap_register_t *tr, const char *value)
+urj_tap_register_t *
+urj_tap_register_init (urj_tap_register_t *tr, const char *value)
 {
     int i;
 
@@ -154,7 +154,7 @@ register_init (tap_register_t *tr, const char *value)
 }
 
 int
-register_compare (const tap_register_t *tr, const tap_register_t *tr2)
+urj_tap_register_compare (const urj_tap_register_t *tr, const urj_tap_register_t *tr2)
 {
     int i;
 
@@ -175,7 +175,7 @@ register_compare (const tap_register_t *tr, const tap_register_t *tr2)
 }
 
 int
-register_match (const tap_register_t *tr, const char *expr)
+urj_tap_register_match (const urj_tap_register_t *tr, const char *expr)
 {
     int i;
     const char *s;
@@ -183,7 +183,7 @@ register_match (const tap_register_t *tr, const char *expr)
     if (!tr || !expr || (tr->len != strlen (expr)))
         return 0;
 
-    s = register_get_string (tr);
+    s = urj_tap_register_get_string (tr);
 
     for (i = 0; i < tr->len; i++)
         if ((expr[i] != '?') && (expr[i] != s[i]))
@@ -192,8 +192,8 @@ register_match (const tap_register_t *tr, const char *expr)
     return 1;
 }
 
-tap_register_t *
-register_inc (tap_register_t *tr)
+urj_tap_register_t *
+urj_tap_register_inc (urj_tap_register_t *tr)
 {
     int i;
 
@@ -211,8 +211,8 @@ register_inc (tap_register_t *tr)
     return tr;
 }
 
-tap_register_t *
-register_dec (tap_register_t *tr)
+urj_tap_register_t *
+urj_tap_register_dec (urj_tap_register_t *tr)
 {
     int i;
 
@@ -230,8 +230,8 @@ register_dec (tap_register_t *tr)
     return tr;
 }
 
-tap_register_t *
-register_shift_right (tap_register_t *tr, int shift)
+urj_tap_register_t *
+urj_tap_register_shift_right (urj_tap_register_t *tr, int shift)
 {
     int i;
 
@@ -252,8 +252,8 @@ register_shift_right (tap_register_t *tr, int shift)
     return tr;
 }
 
-tap_register_t *
-register_shift_left (tap_register_t *tr, int shift)
+urj_tap_register_t *
+urj_tap_register_shift_left (urj_tap_register_t *tr, int shift)
 {
     int i;
 

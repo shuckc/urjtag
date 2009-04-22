@@ -50,9 +50,9 @@ typedef struct
 {
     struct usb_device *dev;
     struct usb_dev_handle *handle;
-} libusb_param_t;
+} urj_usbconn_libusb_param_t;
 
-usbconn_driver_t usbconn_libusb_driver;
+urj_usbconn_driver_t usbconn_libusb_driver;
 
 /* ---------------------------------------------------------------------- */
 
@@ -109,14 +109,14 @@ libusb_match_desc (struct usb_device *dev, char *desc)
 
 /* ---------------------------------------------------------------------- */
 
-static usbconn_t *
+static urj_usbconn_t *
 usbconn_libusb_connect (const char **param, int paramc,
-                        usbconn_cable_t *template)
+                        urj_usbconn_cable_t *template)
 {
     struct usb_bus *bus;
     struct usb_device *found_dev = NULL;
-    usbconn_t *libusb_conn;
-    libusb_param_t *libusb_params;
+    urj_usbconn_t *libusb_conn;
+    urj_usbconn_libusb_param_t *libusb_params;
 
     usb_init ();
     if (usb_find_busses () < 0)
@@ -154,8 +154,8 @@ usbconn_libusb_connect (const char **param, int paramc,
         return NULL;
     }
 
-    libusb_conn = malloc (sizeof (usbconn_t));
-    libusb_params = malloc (sizeof (libusb_param_t));
+    libusb_conn = malloc (sizeof (urj_usbconn_t));
+    libusb_params = malloc (sizeof (urj_usbconn_libusb_param_t));
     if (libusb_params == NULL || libusb_conn == NULL)
     {
         printf (_("Out of memory\n"));
@@ -179,9 +179,9 @@ usbconn_libusb_connect (const char **param, int paramc,
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_libusb_open (usbconn_t *conn)
+usbconn_libusb_open (urj_usbconn_t *conn)
 {
-    libusb_param_t *p = conn->params;
+    urj_usbconn_libusb_param_t *p = conn->params;
 
     p->handle = usb_open (p->dev);
     if (p->handle == NULL)
@@ -220,9 +220,9 @@ usbconn_libusb_open (usbconn_t *conn)
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_libusb_close (usbconn_t *conn)
+usbconn_libusb_close (urj_usbconn_t *conn)
 {
-    libusb_param_t *p = conn->params;
+    urj_usbconn_libusb_param_t *p = conn->params;
     if (p->handle != NULL)
     {
         usb_release_interface (p->handle, 0);
@@ -235,7 +235,7 @@ usbconn_libusb_close (usbconn_t *conn)
 /* ---------------------------------------------------------------------- */
 
 static void
-usbconn_libusb_free (usbconn_t *conn)
+usbconn_libusb_free (urj_usbconn_t *conn)
 {
     free (conn->params);
     free (conn);
@@ -243,7 +243,7 @@ usbconn_libusb_free (usbconn_t *conn)
 
 /* ---------------------------------------------------------------------- */
 
-usbconn_driver_t usbconn_libusb_driver = {
+urj_usbconn_driver_t usbconn_libusb_driver = {
     "libusb",
     usbconn_libusb_connect,
     usbconn_libusb_free,

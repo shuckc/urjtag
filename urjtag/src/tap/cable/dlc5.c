@@ -57,18 +57,18 @@
 #define	TDO	4
 
 static int
-dlc5_init (cable_t *cable)
+dlc5_init (urj_cable_t *cable)
 {
-    if (parport_open (cable->link.port))
+    if (urj_tap_parport_open (cable->link.port))
         return -1;
 
-    PARAM_SIGNALS (cable) = CS_TRST;
+    PARAM_SIGNALS (cable) = URJ_POD_CS_TRST;
 
     return 0;
 }
 
 static void
-dlc5_clock (cable_t *cable, int tms, int tdi, int n)
+dlc5_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i;
 
@@ -77,68 +77,68 @@ dlc5_clock (cable_t *cable, int tms, int tdi, int n)
 
     for (i = 0; i < n; i++)
     {
-        parport_set_data (cable->link.port,
+        urj_tap_parport_set_data (cable->link.port,
                           (1 << PROG) | (0 << TCK) | (tms << TMS) | (tdi <<
                                                                      TDI));
-        cable_wait (cable);
-        parport_set_data (cable->link.port,
+        urj_tap_cable_wait (cable);
+        urj_tap_parport_set_data (cable->link.port,
                           (1 << PROG) | (1 << TCK) | (tms << TMS) | (tdi <<
                                                                      TDI));
-        cable_wait (cable);
+        urj_tap_cable_wait (cable);
     }
 
-    PARAM_SIGNALS (cable) &= CS_TRST;
-    PARAM_SIGNALS (cable) |= CS_TCK;
-    PARAM_SIGNALS (cable) |= tms ? CS_TMS : 0;
-    PARAM_SIGNALS (cable) |= tdi ? CS_TDI : 0;
+    PARAM_SIGNALS (cable) &= URJ_POD_CS_TRST;
+    PARAM_SIGNALS (cable) |= URJ_POD_CS_TCK;
+    PARAM_SIGNALS (cable) |= tms ? URJ_POD_CS_TMS : 0;
+    PARAM_SIGNALS (cable) |= tdi ? URJ_POD_CS_TDI : 0;
 }
 
 static int
-dlc5_get_tdo (cable_t *cable)
+dlc5_get_tdo (urj_cable_t *cable)
 {
-    parport_set_data (cable->link.port, (1 << PROG) | (0 << TCK));
-    PARAM_SIGNALS (cable) &= ~(CS_TDI | CS_TCK | CS_TMS);
+    urj_tap_parport_set_data (cable->link.port, (1 << PROG) | (0 << TCK));
+    PARAM_SIGNALS (cable) &= ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 
-    cable_wait (cable);
+    urj_tap_cable_wait (cable);
 
-    return (parport_get_status (cable->link.port) >> TDO) & 1;
+    return (urj_tap_parport_get_status (cable->link.port) >> TDO) & 1;
 }
 
 static int
-dlc5_set_signal (cable_t *cable, int mask, int val)
+dlc5_set_signal (urj_cable_t *cable, int mask, int val)
 {
     int prev_sigs = PARAM_SIGNALS (cable);
 
-    mask &= (CS_TDI | CS_TCK | CS_TMS); // only these can be modified
+    mask &= (URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS); // only these can be modified
 
     if (mask != 0)
     {
         int data = 0;
         int sigs = (prev_sigs & ~mask) | (val & mask);
-        data |= (sigs & CS_TDI) ? (1 << TDI) : 0;
-        data |= (sigs & CS_TCK) ? (1 << TCK) : 0;
-        data |= (sigs & CS_TMS) ? (1 << TMS) : 0;
-        parport_set_data (cable->link.port, (1 << PROG) | data);
+        data |= (sigs & URJ_POD_CS_TDI) ? (1 << TDI) : 0;
+        data |= (sigs & URJ_POD_CS_TCK) ? (1 << TCK) : 0;
+        data |= (sigs & URJ_POD_CS_TMS) ? (1 << TMS) : 0;
+        urj_tap_parport_set_data (cable->link.port, (1 << PROG) | data);
         PARAM_SIGNALS (cable) = sigs;
     }
 
     return prev_sigs;
 }
 
-cable_driver_t dlc5_cable_driver = {
+urj_cable_driver_t dlc5_cable_driver = {
     "DLC5",
     N_("Xilinx DLC5 JTAG Parallel Cable III"),
-    generic_parport_connect,
-    generic_disconnect,
-    generic_parport_free,
+    urj_tap_cable_generic_parport_connect,
+    urj_tap_cable_generic_disconnect,
+    urj_tap_cable_generic_parport_free,
     dlc5_init,
-    generic_parport_done,
-    generic_set_frequency,
+    urj_tap_cable_generic_parport_done,
+    urj_tap_cable_generic_set_frequency,
     dlc5_clock,
     dlc5_get_tdo,
-    generic_transfer,
+    urj_tap_cable_generic_transfer,
     dlc5_set_signal,
-    generic_get_signal,
-    generic_flush_one_by_one,
-    generic_parport_help
+    urj_tap_cable_generic_get_signal,
+    urj_tap_cable_generic_flush_one_by_one,
+    urj_tap_cable_generic_parport_help
 };

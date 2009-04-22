@@ -139,7 +139,7 @@ static const char *std_wgl_map = xstr (TDO) ","
 
 
 static int
-set_mapping (char *bitmap, cable_t *cable)
+set_mapping (char *bitmap, urj_cable_t *cable)
 {
     const char delim = ',';
     int syntax = 0;
@@ -192,21 +192,21 @@ set_mapping (char *bitmap, cable_t *cable)
 
 
 static int
-wiggler_connect (char *params[], cable_t *cable)
+wiggler_connect (char *params[], urj_cable_t *cable)
 {
     int result;
     char *param_bitmap = NULL;
     wiggler_params_t *wiggler_params;
 
-    if (cmd_params (params) == 4)
+    if (urj_cmd_params (params) == 4)
     {
         /* acquire optional parameter for bit<->pin mapping */
         param_bitmap = params[3];
-        /* generic_parport_connect() shouldn't see this parameter */
+        /* urj_tap_cable_generic_parport_connect() shouldn't see this parameter */
         params[3] = NULL;
     }
 
-    if ((result = generic_parport_connect (params, cable)) != 0)
+    if ((result = urj_tap_cable_generic_parport_connect (params, cable)) != 0)
         return result;
 
     if (param_bitmap)
@@ -257,16 +257,16 @@ wiggler_connect (char *params[], cable_t *cable)
 }
 
 static int
-wiggler_init (cable_t *cable)
+wiggler_init (urj_cable_t *cable)
 {
     int data;
 
-    if (parport_open (cable->link.port))
+    if (urj_tap_parport_open (cable->link.port))
         return -1;
 
-    if ((data = parport_get_data (cable->link.port)) < 0)
+    if ((data = urj_tap_parport_get_data (cable->link.port)) < 0)
     {
-        if (parport_set_data
+        if (urj_tap_parport_set_data
             (cable->link.port,
              (PRM_TRST_ACT (cable) | PRM_TRST_INACT (cable)) |
              PRM_UNUSED_BITS (cable)))
@@ -278,13 +278,13 @@ wiggler_init (cable_t *cable)
             data & (PRM_TRST_ACT (cable) | PRM_TRST_INACT (cable));
 
     PRM_SIGNALS (cable) =
-        (PRM_TRST_LVL (cable) == PRM_TRST_ACT (cable)) ? CS_TRST : 0;
+        (PRM_TRST_LVL (cable) == PRM_TRST_ACT (cable)) ? URJ_POD_CS_TRST : 0;
 
     return 0;
 }
 
 static void
-wiggler_clock (cable_t *cable, int tms, int tdi, int n)
+wiggler_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i;
 
@@ -293,62 +293,62 @@ wiggler_clock (cable_t *cable, int tms, int tdi, int n)
 
     for (i = 0; i < n; i++)
     {
-        parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
+        urj_tap_parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
                           PRM_TCK_INACT (cable) |
                           (tms ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable))
                           | (tdi ? PRM_TDI_ACT (cable) :
                              PRM_TDI_INACT (cable)) |
                           PRM_UNUSED_BITS (cable));
-        cable_wait (cable);
-        parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
+        urj_tap_cable_wait (cable);
+        urj_tap_parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
                           PRM_TCK_ACT (cable) |
                           (tms ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable))
                           | (tdi ? PRM_TDI_ACT (cable) :
                              PRM_TDI_INACT (cable)) |
                           PRM_UNUSED_BITS (cable));
-        cable_wait (cable);
+        urj_tap_cable_wait (cable);
     }
 
-    PRM_SIGNALS (cable) &= ~(CS_TDI | CS_TMS);
+    PRM_SIGNALS (cable) &= ~(URJ_POD_CS_TDI | URJ_POD_CS_TMS);
     if (tms)
-        PRM_SIGNALS (cable) |= CS_TMS;
+        PRM_SIGNALS (cable) |= URJ_POD_CS_TMS;
     if (tdi)
-        PRM_SIGNALS (cable) |= CS_TDI;
+        PRM_SIGNALS (cable) |= URJ_POD_CS_TDI;
 }
 
 static int
-wiggler_get_tdo (cable_t *cable)
+wiggler_get_tdo (urj_cable_t *cable)
 {
-    parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
+    urj_tap_parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
                       PRM_TCK_INACT (cable) | PRM_UNUSED_BITS (cable));
-    cable_wait (cable);
+    urj_tap_cable_wait (cable);
 
-    return (parport_get_status (cable->link.port) &
+    return (urj_tap_parport_get_status (cable->link.port) &
             (PRM_TDO_ACT (cable) | PRM_TDO_INACT (cable))) ^
         PRM_TDO_ACT (cable) ? 0 : 1;
 }
 
 static int
-wiggler_set_signal (cable_t *cable, int mask, int val)
+wiggler_set_signal (urj_cable_t *cable, int mask, int val)
 {
     int prev_sigs = PRM_SIGNALS (cable);
 
-    mask &= (CS_TMS | CS_TDI | CS_TCK | CS_TRST);       // Only these can be modified
+    mask &= (URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TRST);       // Only these can be modified
 
     if (mask != 0)
     {
         int sigs = (prev_sigs & ~mask) | (val & mask);
         PRM_TRST_LVL (cable) =
-            ((sigs & CS_TRST) ? PRM_TRST_ACT (cable) :
+            ((sigs & URJ_POD_CS_TRST) ? PRM_TRST_ACT (cable) :
              PRM_TRST_INACT (cable));
         int data = PRM_UNUSED_BITS (cable) | PRM_TRST_LVL (cable);
         data |=
-            ((sigs & CS_TCK) ? PRM_TCK_ACT (cable) : PRM_TCK_INACT (cable));
+            ((sigs & URJ_POD_CS_TCK) ? PRM_TCK_ACT (cable) : PRM_TCK_INACT (cable));
         data |=
-            ((sigs & CS_TMS) ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable));
+            ((sigs & URJ_POD_CS_TMS) ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable));
         data |=
-            ((sigs & CS_TDI) ? PRM_TDI_ACT (cable) : PRM_TDI_INACT (cable));
-        parport_set_data (cable->link.port, data);
+            ((sigs & URJ_POD_CS_TDI) ? PRM_TDI_ACT (cable) : PRM_TDI_INACT (cable));
+        urj_tap_parport_set_data (cable->link.port, data);
         PRM_SIGNALS (cable) = sigs;
     }
 
@@ -356,7 +356,7 @@ wiggler_set_signal (cable_t *cable, int mask, int val)
 }
 
 static int
-wiggler_get_signal (cable_t *cable, pod_sigsel_t sig)
+wiggler_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
     return (PRM_SIGNALS (cable) & sig) ? 1 : 0;
 }
@@ -390,38 +390,38 @@ cablename,
 cablename, std_wgl_map);
 }
 
-cable_driver_t wiggler_cable_driver = {
+urj_cable_driver_t wiggler_cable_driver = {
     "WIGGLER",
     N_("Macraigor Wiggler JTAG Cable"),
     wiggler_connect,
-    generic_disconnect,
-    generic_parport_free,
+    urj_tap_cable_generic_disconnect,
+    urj_tap_cable_generic_parport_free,
     wiggler_init,
-    generic_parport_done,
-    generic_set_frequency,
+    urj_tap_cable_generic_parport_done,
+    urj_tap_cable_generic_set_frequency,
     wiggler_clock,
     wiggler_get_tdo,
-    generic_transfer,
+    urj_tap_cable_generic_transfer,
     wiggler_set_signal,
     wiggler_get_signal,
-    generic_flush_one_by_one,
+    urj_tap_cable_generic_flush_one_by_one,
     wiggler_help
 };
 
-cable_driver_t igloo_cable_driver = {
+urj_cable_driver_t igloo_cable_driver = {
     "IGLOO",
     N_("Excelpoint IGLOO JTAG Cable"),
     wiggler_connect,
-    generic_disconnect,
-    generic_parport_free,
+    urj_tap_cable_generic_disconnect,
+    urj_tap_cable_generic_parport_free,
     wiggler_init,
-    generic_parport_done,
-    generic_set_frequency,
+    urj_tap_cable_generic_parport_done,
+    urj_tap_cable_generic_set_frequency,
     wiggler_clock,
     wiggler_get_tdo,
-    generic_transfer,
+    urj_tap_cable_generic_transfer,
     wiggler_set_signal,
     wiggler_get_signal,
-    generic_flush_one_by_one,
+    urj_tap_cable_generic_flush_one_by_one,
     wiggler_help
 };

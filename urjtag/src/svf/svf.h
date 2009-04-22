@@ -30,8 +30,8 @@
 #define MAX_PATH_STATES 64
 
 /* Coding for commands referring either to IR or DR */
-enum generic_irdr_coding
-{ generic_ir, generic_dr };
+enum URJ_SVF_generic_irdr_coding
+{ URJ_SVF_generic_ir, URJ_SVF_generic_dr };
 
 
 struct tdval
@@ -77,7 +77,7 @@ typedef struct
     struct ths_params params;
     int no_tdi;
     int no_tdo;
-} sxr_t;
+} urj_svf_sxr_t;
 
 
 struct svf_parser_params
@@ -94,11 +94,11 @@ struct parser_priv
 {
     struct svf_parser_params parser_params;
     void *scanner;
-    part_t *part;
-    instruction_t *ir;
-    data_register_t *dr;
-    sxr_t sir_params;
-    sxr_t sdr_params;
+    urj_part_t *part;
+    urj_instruction_t *ir;
+    urj_data_register_t *dr;
+    urj_svf_sxr_t sir_params;
+    urj_svf_sxr_t sdr_params;
     int endir;
     int enddr;
     int runtest_run_state;
@@ -111,7 +111,7 @@ struct parser_priv
     /* protocol issued warnings */
     int issued_runtest_maxtime;
 };
-typedef struct parser_priv parser_priv_t;
+typedef struct parser_priv urj_svf_parser_priv_t;
 
 struct scanner_extra
 {
@@ -120,22 +120,22 @@ struct scanner_extra
     int planb;
     char decimal_point;
 };
-typedef struct scanner_extra scanner_extra_t;
+typedef struct scanner_extra urj_svf_scanner_extra_t;
 
 struct YYLTYPE;
 
-void *svf_flex_init (FILE *, int, int);
-void svf_flex_deinit (void *);
+void *urj_svf_flex_init (FILE *, int, int);
+void urj_svf_flex_deinit (void *);
 
-int svf_bison_init (parser_priv_t *, FILE *, int, int);
-void svf_bison_deinit (parser_priv_t *);
+int urj_svf_bison_init (urj_svf_parser_priv_t *, FILE *, int, int);
+void urj_svf_bison_deinit (urj_svf_parser_priv_t *);
 
-void svf_endxr (parser_priv_t *, enum generic_irdr_coding, int);
-void svf_frequency (chain_t *, double);
-int svf_hxr (enum generic_irdr_coding, struct ths_params *);
-int svf_runtest (chain_t *, parser_priv_t *, struct runtest *);
-int svf_state (chain_t *, parser_priv_t *, struct path_states *, int);
-int svf_sxr (chain_t *, parser_priv_t *, enum generic_irdr_coding,
+void urj_svf_endxr (urj_svf_parser_priv_t *, enum URJ_SVF_generic_irdr_coding, int);
+void urj_svf_frequency (urj_chain_t *, double);
+int urj_svf_hxr (enum URJ_SVF_generic_irdr_coding, struct ths_params *);
+int urj_svf_runtest (urj_chain_t *, urj_svf_parser_priv_t *, struct runtest *);
+int urj_svf_state (urj_chain_t *, urj_svf_parser_priv_t *, struct path_states *, int);
+int urj_svf_sxr (urj_chain_t *, urj_svf_parser_priv_t *, enum URJ_SVF_generic_irdr_coding,
              struct ths_params *, struct YYLTYPE *);
-int svf_trst (chain_t *, parser_priv_t *, int);
-int svf_txr (enum generic_irdr_coding, struct ths_params *);
+int urj_svf_trst (urj_chain_t *, urj_svf_parser_priv_t *, int);
+int urj_svf_txr (enum URJ_SVF_generic_irdr_coding, struct ths_params *);

@@ -21,8 +21,8 @@
  */
 
 
-#ifndef FCLOCK_H
-#define FCLOCK_H
+#ifndef URJ_FCLOCK_FCLOCK_H
+#define URJ_FCLOCK_FCLOCK_H
 
 
 #ifdef __cplusplus
@@ -40,11 +40,11 @@ extern "C"
 
 
 /* return real time in seconds starting at some arbitrary point in
-   time*/
-    long double frealtime (CVOID);
+time*/
+long double urj_lib_frealtime (CVOID);
 
 /* return the CPU time used by this process (seconds) */
-    long double fcputime (CVOID);
+long double fcputime (CVOID);
 
 
 #ifdef __cplusplus

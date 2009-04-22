@@ -118,7 +118,7 @@ LEGAL NOTICES:
 
 %option bison-bridge
 %option reentrant
-%option prefix="bsdl"
+%option prefix="urj_bsdl_"
 %option outfile="lex.yy.c"
 
 %{
@@ -138,9 +138,9 @@ LEGAL NOTICES:
 #include "dmalloc.h"
 #endif
 
-#define YY_EXTRA_TYPE scan_extra_t *
+#define YY_EXTRA_TYPE urj_bsdl_scan_extra_t *
 
-static char *new_string( scan_extra_t *, const char * );
+static char *new_string( urj_bsdl_scan_extra_t *, const char * );
 
 #define BINARY 0
 #define DECIMAL 1
@@ -400,7 +400,7 @@ ISC_Illegal_Exit      ISC_ILLEGAL_EXIT
                          return( DECIMAL_NUMBER );}
 {Real_Number}           {yylval->str = new_string( yyextra, yytext );
                          return( REAL_NUMBER );}
-{Illegal}               {bsdl_msg( yyextra->proc_mode,
+{Illegal}               {urj_bsdl_msg( yyextra->proc_mode,
                                    BSDL_MSG_ERR,
                                    _("Illegal character %c (/%03o) at line %d:\n"),
                                    (char)yytext[yyleng-1], (int)yytext[yyleng-1],
@@ -414,7 +414,7 @@ ISC_Illegal_Exit      ISC_ILLEGAL_EXIT
 }
 %%
 /*****************************************************************************
- * void *bsdl_flex_init( int proc_mode )
+ * void *urj_bsdl_flex_init( int proc_mode )
  *
  * Initializes the scanner and storage elements extra data structure.
  *
@@ -424,21 +424,21 @@ ISC_Illegal_Exit      ISC_ILLEGAL_EXIT
  * Returns
  *   pointer to newly initialized scanner structure
  ****************************************************************************/
-void *bsdl_flex_init( int proc_mode )
+void *urj_bsdl_flex_init( int proc_mode )
 {
-  scan_extra_t *extra;
+  urj_bsdl_scan_extra_t *extra;
   yyscan_t scanner;
 
   /* get our scanner structure */
   if (yylex_init(&scanner) != 0)
   {
-    bsdl_msg( proc_mode,
+    urj_bsdl_msg( proc_mode,
               BSDL_MSG_FATAL, _("Scanner could not be initialized\n") );
     return NULL;
   }
 
-  if (!(extra = (scan_extra_t *)malloc( sizeof( scan_extra_t ) ))) {
-    bsdl_msg( proc_mode,
+  if (!(extra = (urj_bsdl_scan_extra_t *)malloc( sizeof( urj_bsdl_scan_extra_t ) ))) {
+    urj_bsdl_msg( proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     yylex_destroy( scanner );
     return NULL;
@@ -455,7 +455,7 @@ void *bsdl_flex_init( int proc_mode )
 
 
 /*****************************************************************************
- * void bsdl_flex_deinit( void *scanner )
+ * void urj_bsdl_flex_deinit( void *scanner )
  *
  * Deinitializes the scanner and closes the input file.
  *
@@ -465,7 +465,7 @@ void *bsdl_flex_init( int proc_mode )
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_flex_deinit( void *scanner )
+void urj_bsdl_flex_deinit( void *scanner )
 {
   if (yyget_in( scanner ))
   {
@@ -501,7 +501,7 @@ int yywrap( yyscan_t scanner )
 
 
 /*****************************************************************************
- * char *new_string( scan_extra_t *extra, const char *str )
+ * char *new_string( urj_bsdl_scan_extra_t *extra, const char *str )
  *
  * Allocates memory for a string and copies the contents of *str.
  *
@@ -512,7 +512,7 @@ int yywrap( yyscan_t scanner )
  * Returns
  *   pointer to allocated and initialized string memory
  ****************************************************************************/
-static char *new_string( scan_extra_t *extra, const char *str )
+static char *new_string( urj_bsdl_scan_extra_t *extra, const char *str )
 {
   char   *n_str;
   size_t  n_str_size;
@@ -524,7 +524,7 @@ static char *new_string( scan_extra_t *extra, const char *str )
     n_str[n_str_size-1] = '\0';  /* set very last element to EOS */
   }
   else
-    bsdl_msg( extra->proc_mode,
+    urj_bsdl_msg( extra->proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
 
   return(n_str);
@@ -532,7 +532,7 @@ static char *new_string( scan_extra_t *extra, const char *str )
 
 
 /*****************************************************************************
- * void bsdl_flex_switch_buffer( yyscan_t scanner, const char *buffer, int lineno )
+ * void urj_bsdl_flex_switch_buffer( yyscan_t scanner, const char *buffer, int lineno )
  *
  * Selects the specified string buffer for further scanning.
  *
@@ -544,7 +544,7 @@ static char *new_string( scan_extra_t *extra, const char *str )
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_flex_switch_buffer( yyscan_t scanner, const char *buffer, int lineno )
+void urj_bsdl_flex_switch_buffer( yyscan_t scanner, const char *buffer, int lineno )
 {
   /* ugly, ulgy, ugly
      prepare yyg for later use of YY_CURRENT_BUFFER */
@@ -563,7 +563,7 @@ void bsdl_flex_switch_buffer( yyscan_t scanner, const char *buffer, int lineno )
 
 
 /*****************************************************************************
- * void bsdl_flex_stop_buffer( yyscan_t scanner )
+ * void urj_bsdl_flex_stop_buffer( yyscan_t scanner )
  *
  * Removes the current buffer from the scanner stack.
  *
@@ -573,7 +573,7 @@ void bsdl_flex_switch_buffer( yyscan_t scanner, const char *buffer, int lineno )
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_flex_stop_buffer( yyscan_t scanner )
+void urj_bsdl_flex_stop_buffer( yyscan_t scanner )
 {
   yypop_buffer_state( scanner );
 //  if ( !YY_CURRENT_BUFFER )
@@ -582,7 +582,7 @@ void bsdl_flex_stop_buffer( yyscan_t scanner )
 
 
 /*****************************************************************************
- * int bsdl_flex_get_compile_errors( yyscan_t scanner )
+ * int urj_bsdl_flex_get_compile_errors( yyscan_t scanner )
  *
  * Retrieves the accumulated number of compile errors encountered so far.
  *
@@ -592,15 +592,15 @@ void bsdl_flex_stop_buffer( yyscan_t scanner )
  * Returns
  *   number of compile errors
  ****************************************************************************/
-int bsdl_flex_get_compile_errors( yyscan_t scanner )
+int urj_bsdl_flex_get_compile_errors( yyscan_t scanner )
 {
-  scan_extra_t *extra = yyget_extra( scanner );
+  urj_bsdl_scan_extra_t *extra = yyget_extra( scanner );
   return extra->Compile_Errors;
 }
 
 
 /*****************************************************************************
- * void bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
+ * void urj_bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
  *
  * Sets the number of compile errors to n.
  *
@@ -611,15 +611,15 @@ int bsdl_flex_get_compile_errors( yyscan_t scanner )
  * Returns
  *   void
  ****************************************************************************/
-static void bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
+static void urj_bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
 {
-  scan_extra_t *extra = yyget_extra( scanner );
+  urj_bsdl_scan_extra_t *extra = yyget_extra( scanner );
   extra->Compile_Errors = n;
 }
 
 
 /*****************************************************************************
- * int bsdl_flex_postinc_compile_errors( yyscan_t scanner )
+ * int urj_bsdl_flex_postinc_compile_errors( yyscan_t scanner )
  *
  * Increments the number of compile errors.
  *
@@ -629,17 +629,17 @@ static void bsdl_flex_set_compile_errors( int n, yyscan_t scanner )
  * Returns
  *   number of compile errors before increment
  ****************************************************************************/
-int bsdl_flex_postinc_compile_errors( yyscan_t scanner )
+int urj_bsdl_flex_postinc_compile_errors( yyscan_t scanner )
 {
-  int errors = bsdl_flex_get_compile_errors( scanner );
+  int errors = urj_bsdl_flex_get_compile_errors( scanner );
 
-  bsdl_flex_set_compile_errors( errors+1, scanner );
+  urj_bsdl_flex_set_compile_errors( errors+1, scanner );
   return errors;
 }
 
 
 /*****************************************************************************
- * void bsdl_flex_set_bin_x( yyscan_t scanner )
+ * void urj_bsdl_flex_set_bin_x( yyscan_t scanner )
  *
  * Selects BIN_X mode for pattern matching.
  *
@@ -649,15 +649,15 @@ int bsdl_flex_postinc_compile_errors( yyscan_t scanner )
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_flex_set_bin_x( yyscan_t scanner )
+void urj_bsdl_flex_set_bin_x( yyscan_t scanner )
 {
-  scan_extra_t *extra = yyget_extra( scanner );
+  urj_bsdl_scan_extra_t *extra = yyget_extra( scanner );
   extra->Base = BIN_X;
 }
 
 
 /*****************************************************************************
- * void bsdl_flex_set_hex( yyscan_t scanner )
+ * void urj_bsdl_flex_set_hex( yyscan_t scanner )
  *
  * Selects HEX mode for pattern matching.
  *
@@ -667,15 +667,15 @@ void bsdl_flex_set_bin_x( yyscan_t scanner )
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_flex_set_hex( yyscan_t scanner )
+void urj_bsdl_flex_set_hex( yyscan_t scanner )
 {
-  scan_extra_t *extra = yyget_extra( scanner );
+  urj_bsdl_scan_extra_t *extra = yyget_extra( scanner );
   extra->Base = HEX;
 }
 
 
 /*****************************************************************************
- * void bsdl_flex_set_decimal( yyscan_t scanner )
+ * void urj_bsdl_flex_set_decimal( yyscan_t scanner )
  *
  * Selects DECIMAL mode for pattern matching.
  *
@@ -685,9 +685,9 @@ void bsdl_flex_set_hex( yyscan_t scanner )
  * Returns
  *   void
  ****************************************************************************/
-void bsdl_flex_set_decimal( yyscan_t scanner )
+void urj_bsdl_flex_set_decimal( yyscan_t scanner )
 {
-  scan_extra_t *extra = yyget_extra( scanner );
+  urj_bsdl_scan_extra_t *extra = yyget_extra( scanner );
   extra->Base = DECIMAL;
 }
 

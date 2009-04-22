@@ -130,46 +130,46 @@ typedef struct
 /* ------------------------------------------------------------------------- */
 
 static inline void
-register_set_bit (tap_register_t *tr, unsigned int bitno, unsigned int val)
+register_set_bit (urj_tap_register_t *tr, unsigned int bitno, unsigned int val)
 {
     tr->data[bitno] = (val) ? 1 : 0;
 }
 
 static inline int
-register_get_bit (tap_register_t *tr, unsigned int bitno)
+register_get_bit (urj_tap_register_t *tr, unsigned int bitno)
 {
     return (tr->data[bitno] & 1) ? 1 : 0;
 }
 
 static inline void
-shift_instr (bus_t *bus, unsigned int bit)
+shift_instr (urj_bus_t *bus, unsigned int bit)
 {
-    tap_register_t *r = PART->active_instruction->out;
+    urj_tap_register_t *r = bus->part->active_instruction->out;
 
     do
     {
         DBG (DBG_SHIFT, _("%s: instr=%s\n"), __FUNCTION__,
-             register_get_string (PART->active_instruction->value));
-        chain_shift_instructions_mode (CHAIN, 1, 1, EXITMODE_IDLE);
+             urj_tap_register_get_string (bus->part->active_instruction->value));
+        urj_tap_chain_shift_instructions_mode (bus->chain, 1, 1, URJ_CHAIN_EXITMODE_IDLE);
         DBG (DBG_SHIFT, _("%s: ret=%s\n"), __FUNCTION__,
-             register_get_string (r));
+             urj_tap_register_get_string (r));
         /* TODO: add timeout checking */
     }
     while (register_get_bit (r, bit));
 }
 
 static inline void
-shift_data (bus_t *bus, unsigned int bit)
+shift_data (urj_bus_t *bus, unsigned int bit)
 {
-    data_register_t *dr = PART->active_instruction->data_register;
+    urj_data_register_t *dr = bus->part->active_instruction->data_register;
 
     do
     {
         DBG (DBG_SHIFT, _("%s: data=%s\n"), __FUNCTION__,
-             register_get_string (dr->in));
-        chain_shift_data_registers (CHAIN, 1);
+             urj_tap_register_get_string (dr->in));
+        urj_tap_chain_shift_data_registers (bus->chain, 1);
         DBG (DBG_SHIFT, _("%s: data out=%s\n"), __FUNCTION__,
-             register_get_string (dr->out));
+             urj_tap_register_get_string (dr->out));
         /* TODO: add timeout checking */
     }
     while (register_get_bit (dr->out, bit));
@@ -178,15 +178,15 @@ shift_data (bus_t *bus, unsigned int bit)
 /* ------------------------------------------------------------------------- */
 
 static void
-mwa_scan_in_instr (bus_t *bus)
+mwa_scan_in_instr (urj_bus_t *bus)
 {
     shift_instr (bus, 2);
 }
 
 static void
-mwa_scan_in_addr (bus_t *bus, unsigned int slave, uint32_t addr, int mode)
+mwa_scan_in_addr (urj_bus_t *bus, unsigned int slave, uint32_t addr, int mode)
 {
-    tap_register_t *r = PART->active_instruction->data_register->in;
+    urj_tap_register_t *r = bus->part->active_instruction->data_register->in;
     int i;
 
     DBG (DBG_BASIC, _("%s: slave=%01x, addr=%08x, %s\n"),
@@ -209,9 +209,9 @@ mwa_scan_in_addr (bus_t *bus, unsigned int slave, uint32_t addr, int mode)
 }
 
 static void
-mwa_scan_in_data (bus_t *bus, uint32_t data)
+mwa_scan_in_data (urj_bus_t *bus, uint32_t data)
 {
-    tap_register_t *r = PART->active_instruction->data_register->in;
+    urj_tap_register_t *r = bus->part->active_instruction->data_register->in;
     int i;
 
     DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
@@ -227,9 +227,9 @@ mwa_scan_in_data (bus_t *bus, uint32_t data)
 }
 
 static void
-mwa_scan_out_data (bus_t *bus, uint32_t *pdata)
+mwa_scan_out_data (urj_bus_t *bus, uint32_t *pdata)
 {
-    tap_register_t *r = PART->active_instruction->data_register->out;
+    urj_tap_register_t *r = bus->part->active_instruction->data_register->out;
     uint32_t data;
     int i;
 
@@ -245,7 +245,7 @@ mwa_scan_out_data (bus_t *bus, uint32_t *pdata)
 }
 
 static inline void
-mwa_read_word (bus_t *bus, unsigned int slave, uint32_t addr, uint32_t *data)
+mwa_read_word (urj_bus_t *bus, unsigned int slave, uint32_t addr, uint32_t *data)
 {
     mwa_scan_in_instr (bus);
     mwa_scan_in_addr (bus, slave, addr, ACCESS_MODE_READ);
@@ -253,7 +253,7 @@ mwa_read_word (bus_t *bus, unsigned int slave, uint32_t addr, uint32_t *data)
 }
 
 static inline void
-mwa_write_word (bus_t *bus, unsigned int slave, uint32_t addr, uint32_t data)
+mwa_write_word (urj_bus_t *bus, unsigned int slave, uint32_t addr, uint32_t data)
 {
     mwa_scan_in_instr (bus);
     mwa_scan_in_addr (bus, slave, addr, ACCESS_MODE_WRITE);
@@ -263,27 +263,27 @@ mwa_write_word (bus_t *bus, unsigned int slave, uint32_t addr, uint32_t data)
 /* ------------------------------------------------------------------------- */
 
 static void
-nexus_access_start (bus_t *bus)
+nexus_access_start (urj_bus_t *bus)
 {
     shift_instr (bus, 2);
 }
 
 static void
-nexus_access_end (bus_t *bus)
+nexus_access_end (urj_bus_t *bus)
 {
-    tap_reset_bypass (CHAIN);
+    urj_tap_reset_bypass (bus->chain);
 }
 
 static void
-nexus_access_set_addr (bus_t *bus, uint32_t addr, int mode)
+nexus_access_set_addr (urj_bus_t *bus, uint32_t addr, int mode)
 {
-    tap_register_t *r = PART->active_instruction->data_register->in;
+    urj_tap_register_t *r = bus->part->active_instruction->data_register->in;
     int i;
 
     DBG (DBG_BASIC, _("%s: addr=%08x, mode=%s\n"), __FUNCTION__, addr,
          (mode == ACCESS_MODE_READ) ? "READ" : "WRITE");
 
-    register_fill (r, 0);
+    urj_tap_register_fill (r, 0);
 
     /* set address bits */
     addr >>= 2;
@@ -297,9 +297,9 @@ nexus_access_set_addr (bus_t *bus, uint32_t addr, int mode)
 }
 
 static void
-nexus_access_read_data (bus_t *bus, uint32_t *pdata)
+nexus_access_read_data (urj_bus_t *bus, uint32_t *pdata)
 {
-    tap_register_t *r = PART->active_instruction->data_register->out;
+    urj_tap_register_t *r = bus->part->active_instruction->data_register->out;
     uint32_t data;
     int i;
 
@@ -315,9 +315,9 @@ nexus_access_read_data (bus_t *bus, uint32_t *pdata)
 }
 
 static void
-nexus_access_write_data (bus_t *bus, uint32_t data)
+nexus_access_write_data (urj_bus_t *bus, uint32_t data)
 {
-    tap_register_t *r = PART->active_instruction->data_register->in;
+    urj_tap_register_t *r = bus->part->active_instruction->data_register->in;
     int i;
 
     DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
@@ -332,14 +332,14 @@ nexus_access_write_data (bus_t *bus, uint32_t data)
 }
 
 static inline void
-nexus_reg_read (bus_t *bus, uint32_t reg, uint32_t *data)
+nexus_reg_read (urj_bus_t *bus, uint32_t reg, uint32_t *data)
 {
     nexus_access_set_addr (bus, reg, ACCESS_MODE_READ);
     nexus_access_read_data (bus, data);
 }
 
 static inline void
-nexus_reg_write (bus_t *bus, uint32_t reg, uint32_t data)
+nexus_reg_write (urj_bus_t *bus, uint32_t reg, uint32_t data)
 {
     nexus_access_set_addr (bus, reg, ACCESS_MODE_WRITE);
     nexus_access_write_data (bus, data);
@@ -348,14 +348,14 @@ nexus_reg_write (bus_t *bus, uint32_t reg, uint32_t data)
 /* ------------------------------------------------------------------------- */
 
 static void
-nexus_memacc_set_addr (bus_t *bus, uint32_t addr, uint32_t rwcs)
+nexus_memacc_set_addr (urj_bus_t *bus, uint32_t addr, uint32_t rwcs)
 {
     nexus_reg_write (bus, OCD_REG_RWA, addr);
     nexus_reg_write (bus, OCD_REG_RWCS, rwcs);
 }
 
 static int
-nexus_memacc_read (bus_t *bus, uint32_t *data)
+nexus_memacc_read (urj_bus_t *bus, uint32_t *data)
 {
     uint32_t status;
     int ret;
@@ -387,7 +387,7 @@ nexus_memacc_read (bus_t *bus, uint32_t *data)
 }
 
 static int
-nexus_memacc_write (bus_t *bus, uint32_t addr, uint32_t data, uint32_t rwcs)
+nexus_memacc_write (urj_bus_t *bus, uint32_t addr, uint32_t data, uint32_t rwcs)
 {
     uint32_t status;
     int ret;
@@ -414,10 +414,10 @@ nexus_memacc_write (bus_t *bus, uint32_t addr, uint32_t data, uint32_t rwcs)
 /* ------------------------------------------------------------------------- */
 
 static void
-avr32_bus_setup (bus_t *bus, chain_t *chain, part_t *part, unsigned int mode)
+avr32_bus_setup (urj_bus_t *bus, urj_chain_t *chain, urj_part_t *part, unsigned int mode)
 {
-    CHAIN = chain;
-    PART = part;
+    bus->chain = chain;
+    bus->part = part;
     MODE = mode;
 
     switch (mode)
@@ -458,11 +458,11 @@ avr32_bus_setup (bus_t *bus, chain_t *chain, part_t *part, unsigned int mode)
 }
 
 static int
-check_instruction (part_t *part, const char *instr)
+check_instruction (urj_part_t *part, const char *instr)
 {
     int ret;
 
-    ret = (part_find_instruction (part, instr) == NULL);
+    ret = (urj_part_find_instruction (part, instr) == NULL);
     if (ret)
         ERR ("instruction %s not found\n", instr);
 
@@ -473,11 +473,11 @@ check_instruction (part_t *part, const char *instr)
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-avr32_bus_new (chain_t *chain, const bus_driver_t *driver, char *cmd_params[])
+static urj_bus_t *
+avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver, char *cmd_params[])
 {
-    bus_t *bus;
-    part_t *part;
+    urj_bus_t *bus;
+    urj_part_t *part;
     char *param;
     unsigned int mode;
 
@@ -536,7 +536,7 @@ avr32_bus_new (chain_t *chain, const bus_driver_t *driver, char *cmd_params[])
         break;
     }
 
-    bus = calloc (1, sizeof (bus_t));
+    bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
         return NULL;
 
@@ -558,12 +558,12 @@ avr32_bus_new (chain_t *chain, const bus_driver_t *driver, char *cmd_params[])
  *
  */
 static void
-avr32_bus_printinfo (bus_t *bus)
+avr32_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
 
     printf (_("AVR32 multi-mode bus driver (JTAG part No. %d)\n"), i);
@@ -574,10 +574,10 @@ avr32_bus_printinfo (bus_t *bus)
  *
  */
 static void
-avr32_bus_prepare (bus_t *bus)
+avr32_bus_prepare (urj_bus_t *bus)
 {
-    if (!INITIALIZED)
-        bus_init (bus);
+    if (!bus->initialized)
+        URJ_BUS_INIT (bus);
 }
 
 /**
@@ -585,7 +585,7 @@ avr32_bus_prepare (bus_t *bus)
  *
  */
 static int
-avr32_bus_area (bus_t *bus, uint32_t addr, bus_area_t *area)
+avr32_bus_area (urj_bus_t *bus, uint32_t addr, urj_bus_area_t *area)
 {
     switch (MODE)
     {
@@ -636,7 +636,7 @@ avr32_bus_area (bus_t *bus, uint32_t addr, bus_area_t *area)
         break;
     }
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -644,7 +644,7 @@ avr32_bus_area (bus_t *bus, uint32_t addr, bus_area_t *area)
  *
  */
 static void
-avr32_bus_read_start (bus_t *bus, uint32_t addr)
+avr32_bus_read_start (urj_bus_t *bus, uint32_t addr)
 {
     addr &= ADDR_MASK;
 
@@ -655,7 +655,7 @@ avr32_bus_read_start (bus_t *bus, uint32_t addr)
     case BUS_MODE_OCD:
     case BUS_MODE_HSBC:
     case BUS_MODE_HSBU:
-        part_set_instruction (PART, "MEMORY_WORD_ACCESS");
+        urj_part_set_instruction (bus->part, "MEMORY_WORD_ACCESS");
         mwa_scan_in_instr (bus);
         mwa_scan_in_addr (bus, SLAVE, addr, ACCESS_MODE_READ);
         break;
@@ -663,7 +663,7 @@ avr32_bus_read_start (bus_t *bus, uint32_t addr)
     case BUS_MODE_x8:
     case BUS_MODE_x16:
     case BUS_MODE_x32:
-        part_set_instruction (PART, "NEXUS_ACCESS");
+        urj_part_set_instruction (bus->part, "NEXUS_ACCESS");
         nexus_access_start (bus);
         nexus_memacc_set_addr (bus, addr, RWCS_RD);
         break;
@@ -675,7 +675,7 @@ avr32_bus_read_start (bus_t *bus, uint32_t addr)
  *
  */
 static uint32_t
-avr32_bus_read_end (bus_t *bus)
+avr32_bus_read_end (urj_bus_t *bus)
 {
     uint32_t data;
 
@@ -702,7 +702,7 @@ avr32_bus_read_end (bus_t *bus)
  *
  */
 static uint32_t
-avr32_bus_read_next (bus_t *bus, uint32_t addr)
+avr32_bus_read_next (urj_bus_t *bus, uint32_t addr)
 {
     uint32_t data;
 
@@ -732,7 +732,7 @@ avr32_bus_read_next (bus_t *bus, uint32_t addr)
  *
  */
 static void
-avr32_bus_write (bus_t *bus, uint32_t addr, uint32_t data)
+avr32_bus_write (urj_bus_t *bus, uint32_t addr, uint32_t data)
 {
     addr &= ADDR_MASK;
 
@@ -741,13 +741,13 @@ avr32_bus_write (bus_t *bus, uint32_t addr, uint32_t data)
     case BUS_MODE_OCD:
     case BUS_MODE_HSBC:
     case BUS_MODE_HSBU:
-        part_set_instruction (PART, "MEMORY_WORD_ACCESS");
+        urj_part_set_instruction (bus->part, "MEMORY_WORD_ACCESS");
         mwa_write_word (bus, SLAVE, addr, data);
         break;
     case BUS_MODE_x8:
     case BUS_MODE_x16:
     case BUS_MODE_x32:
-        part_set_instruction (PART, "NEXUS_ACCESS");
+        urj_part_set_instruction (bus->part, "NEXUS_ACCESS");
         nexus_access_start (bus);
         nexus_memacc_write (bus, addr, data, RWCS_WR);
         nexus_access_end (bus);
@@ -755,7 +755,7 @@ avr32_bus_write (bus_t *bus, uint32_t addr, uint32_t data)
     }
 }
 
-const bus_driver_t avr32_bus_driver = {
+const urj_bus_driver_t avr32_bus_driver = {
     "avr32",
     N_("Atmel AVR32 multi-mode bus driver, requires <mode> parameter\n"
        "           valid <mode> parameters:\n"
@@ -766,14 +766,14 @@ const bus_driver_t avr32_bus_driver = {
        "               HSBC: 32 bit bus for the cached HSB area, via SAB\n"
        "               HSBU: 32 bit bus for the uncached HSB area, via SAB"),
     avr32_bus_new,
-    generic_bus_free,
+    urj_bus_generic_free,
     avr32_bus_printinfo,
     avr32_bus_prepare,
     avr32_bus_area,
     avr32_bus_read_start,
     avr32_bus_read_next,
     avr32_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     avr32_bus_write,
-    generic_bus_no_init
+    urj_bus_generic_no_init
 };

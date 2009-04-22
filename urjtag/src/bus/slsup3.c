@@ -51,19 +51,19 @@ static int addrbusio[20] =
 typedef struct
 {
     uint32_t last_adr;
-    signal_t *ad[20];
-    signal_t *dq[16];
-    signal_t *nsdce;
-    signal_t *sdclk;
-    signal_t *noe;
-    signal_t *nsrce;
-    signal_t *nflce;
-    signal_t *nflbyte;
-    signal_t *nflby;
-    signal_t *nwe;
-    signal_t *lcde;
-    signal_t *lcdrs;
-    signal_t *lcdrw;
+    urj_part_signal_t *ad[20];
+    urj_part_signal_t *dq[16];
+    urj_part_signal_t *nsdce;
+    urj_part_signal_t *sdclk;
+    urj_part_signal_t *noe;
+    urj_part_signal_t *nsrce;
+    urj_part_signal_t *nflce;
+    urj_part_signal_t *nflbyte;
+    urj_part_signal_t *nflby;
+    urj_part_signal_t *nwe;
+    urj_part_signal_t *lcde;
+    urj_part_signal_t *lcdrs;
+    urj_part_signal_t *lcdrw;
 } bus_params_t;
 
 #define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
@@ -95,17 +95,17 @@ typedef struct
  * bus->driver->(*new_bus)
  *
  */
-static bus_t *
-slsup3_bus_new (chain_t *chain, const bus_driver_t *driver,
+static urj_bus_t *
+slsup3_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                 char *cmd_params[])
 {
-    bus_t *bus;
-    part_t *part;
+    urj_bus_t *bus;
+    urj_part_t *part;
     char buff[10];
     int i;
     int failed = 0;
 
-    bus = calloc (1, sizeof (bus_t));
+    bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
         return NULL;
 
@@ -117,42 +117,42 @@ slsup3_bus_new (chain_t *chain, const bus_driver_t *driver,
         return NULL;
     }
 
-    CHAIN = chain;
-    PART = part = chain->parts->parts[chain->active_part];
+    bus->chain = chain;
+    bus->part = part = chain->parts->parts[chain->active_part];
 
     for (i = 0; i < 20; i++)
     {
         sprintf (buff, "IO%d", addrbusio[i]);
-        failed |= generic_bus_attach_sig (part, &(AD[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(AD[i]), buff);
     }
 
     for (i = 0; i < 16; i++)
     {
         sprintf (buff, "IO%d", databusio[i]);
-        failed |= generic_bus_attach_sig (part, &(DQ[i]), buff);
+        failed |= urj_bus_generic_attach_sig (part, &(DQ[i]), buff);
     }
 
-    failed |= generic_bus_attach_sig (part, &(nOE), "IO118");
+    failed |= urj_bus_generic_attach_sig (part, &(nOE), "IO118");
 
-    failed |= generic_bus_attach_sig (part, &(nSRce), "IO116");
+    failed |= urj_bus_generic_attach_sig (part, &(nSRce), "IO116");
 
-    failed |= generic_bus_attach_sig (part, &(nSDce), "IO119");
+    failed |= urj_bus_generic_attach_sig (part, &(nSDce), "IO119");
 
-    failed |= generic_bus_attach_sig (part, &(nFLce), "IO117");
+    failed |= urj_bus_generic_attach_sig (part, &(nFLce), "IO117");
 
-    failed |= generic_bus_attach_sig (part, &(nFLbyte), "IO115");
+    failed |= urj_bus_generic_attach_sig (part, &(nFLbyte), "IO115");
 
-    failed |= generic_bus_attach_sig (part, &(nFLby), "IO80");
+    failed |= urj_bus_generic_attach_sig (part, &(nFLby), "IO80");
 
-    failed |= generic_bus_attach_sig (part, &(nWE), "IO79");
+    failed |= urj_bus_generic_attach_sig (part, &(nWE), "IO79");
 
-    failed |= generic_bus_attach_sig (part, &(SDclk), "IO11");
+    failed |= urj_bus_generic_attach_sig (part, &(SDclk), "IO11");
 
-    failed |= generic_bus_attach_sig (part, &(LCDe), "IO50");
+    failed |= urj_bus_generic_attach_sig (part, &(LCDe), "IO50");
 
-    failed |= generic_bus_attach_sig (part, &(LCDrs), "IO108");
+    failed |= urj_bus_generic_attach_sig (part, &(LCDrs), "IO108");
 
-    failed |= generic_bus_attach_sig (part, &(LCDrw), "IO73");
+    failed |= urj_bus_generic_attach_sig (part, &(LCDrw), "IO73");
 
     if (failed)
     {
@@ -169,12 +169,12 @@ slsup3_bus_new (chain_t *chain, const bus_driver_t *driver,
  *
  */
 static void
-slsup3_bus_printinfo (bus_t *bus)
+slsup3_bus_printinfo (urj_bus_t *bus)
 {
     int i;
 
-    for (i = 0; i < CHAIN->parts->len; i++)
-        if (PART == CHAIN->parts->parts[i])
+    for (i = 0; i < bus->chain->parts->len; i++)
+        if (bus->part == bus->chain->parts->parts[i])
             break;
     printf (_("SLS UP3 bus driver via BSR (JTAG part No. %d)\n"), i);
 }
@@ -184,7 +184,7 @@ slsup3_bus_printinfo (bus_t *bus)
  *
  */
 static int
-slsup3_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
+slsup3_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
     if ((adr >= FLASHSTART) && (adr < (FLASHSTART + FLASHSIZE)))
     {
@@ -193,7 +193,7 @@ slsup3_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
         area->length = FLASHSIZE;
         area->width = 8;        /* 16 */
 
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     }
 
     if ((adr >= SRAMSTART) && (adr < (SRAMSTART + SRAMSIZE)))
@@ -203,7 +203,7 @@ slsup3_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
         area->length = SRAMSIZE;
         area->width = 16;
 
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     }
 
     if ((adr >= LCDSTART) && (adr < (LCDSTART + LCDSIZE)))
@@ -213,7 +213,7 @@ slsup3_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
         area->length = LCDSIZE;
         area->width = 8;
 
-        return URJTAG_STATUS_OK;
+        return URJ_STATUS_OK;
     }
 
     area->description = NULL;
@@ -221,91 +221,91 @@ slsup3_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
     area->length = UINT64_C (0xFFC00000);
     area->width = 0;
 
-    return URJTAG_STATUS_OK;
+    return URJ_STATUS_OK;
 }
 
 static void
-setup_address (bus_t *bus, uint32_t a)
+setup_address (urj_bus_t *bus, uint32_t a)
 {
     int i;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     slsup3_bus_area (bus, a, &area);
     if (area.width > 16)
         return;
 
-    part_set_signal (p, LCDrs, 1, a & 1);
+    urj_part_set_signal (p, LCDrs, 1, a & 1);
 
     /* FLASH memory address setup. Use DQ15 to select byte */
     if ((a >= (FLASHSTART)) && (a < (FLASHSTART + FLASHSIZE)))
     {
         for (i = 0; i < 20; i++)
-            part_set_signal (p, AD[i], 1, (a >> (i + 1)) & 1);
-        part_set_signal (p, nFLce, 1, 0);
-        part_set_signal (p, DQ[15], 1, (a & 1));
+            urj_part_set_signal (p, AD[i], 1, (a >> (i + 1)) & 1);
+        urj_part_set_signal (p, nFLce, 1, 0);
+        urj_part_set_signal (p, DQ[15], 1, (a & 1));
     }
     else
-        part_set_signal (p, nFLce, 1, 1);
+        urj_part_set_signal (p, nFLce, 1, 1);
 
     /* SRAM memory address setup */
     if ((a >= SRAMSTART) && (a < (SRAMSTART + SRAMSIZE)))
     {
-        part_set_signal (p, nSRce, 1, 0);
+        urj_part_set_signal (p, nSRce, 1, 0);
         for (i = 0; i < 20; i++)
-            part_set_signal (p, AD[i], 1,
+            urj_part_set_signal (p, AD[i], 1,
                              (a >> (i + (area.width / 8) - 1)) & 1);
     }
     else
-        part_set_signal (p, nSRce, 1, 1);
+        urj_part_set_signal (p, nSRce, 1, 1);
 
 
 }
 
 static void
-set_data_in (bus_t *bus, uint32_t adr)
+set_data_in (urj_bus_t *bus, uint32_t adr)
 {
     int i;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     slsup3_bus_area (bus, adr, &area);
     if (area.width > 16)
         return;
 
     for (i = 0; i < area.width; i++)
-        part_set_signal (p, DQ[i], 0, 0);
+        urj_part_set_signal (p, DQ[i], 0, 0);
 }
 
 static void
-setup_data (bus_t *bus, uint32_t adr, uint32_t d)
+setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
 {
     int i;
-    part_t *p = PART;
-    bus_area_t area;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
     slsup3_bus_area (bus, adr, &area);
     if (area.width > 16)
         return;
 
     for (i = 0; i < area.width; i++)
-        part_set_signal (p, DQ[i], 1, (d >> i) & 1);
+        urj_part_set_signal (p, DQ[i], 1, (d >> i) & 1);
 }
 
 static uint32_t
-get_data (bus_t *bus, uint32_t adr)
+get_data (urj_bus_t *bus, uint32_t adr)
 {
-    bus_area_t area;
+    urj_bus_area_t area;
     int i;
     uint32_t d = 0;
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     slsup3_bus_area (bus, adr, &area);
     if (area.width > 16)
         return 0;
 
     for (i = 0; i < area.width; i++)
-        d |= (uint32_t) (part_get_signal (p, DQ[i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, DQ[i]) << i);
 
     return d;
 }
@@ -315,34 +315,34 @@ get_data (bus_t *bus, uint32_t adr)
  *
  */
 static void
-slsup3_bus_read_start (bus_t *bus, uint32_t adr)
+slsup3_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     LAST_ADR = adr;
 
-    part_set_signal (p, nSDce, 1, 1);   /* Inihibit SDRAM */
-    part_set_signal (p, nOE, 1, 0);
-    part_set_signal (p, nSRce, 1, 1);
-    part_set_signal (p, nFLce, 1, 1);
-    part_set_signal (p, nFLbyte, 1, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, SDclk, 1, 0);
-    part_set_signal (p, LCDe, 1, 0);
-    part_set_signal (p, LCDrw, 1, 1);
+    urj_part_set_signal (p, nSDce, 1, 1);   /* Inihibit SDRAM */
+    urj_part_set_signal (p, nOE, 1, 0);
+    urj_part_set_signal (p, nSRce, 1, 1);
+    urj_part_set_signal (p, nFLce, 1, 1);
+    urj_part_set_signal (p, nFLbyte, 1, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, SDclk, 1, 0);
+    urj_part_set_signal (p, LCDe, 1, 0);
+    urj_part_set_signal (p, LCDrw, 1, 1);
 
     setup_address (bus, adr);
 
     if ((adr >= LCDSTART) && (adr < (LCDSTART + LCDSIZE)))
     {
-        part_set_signal (p, LCDe, 1, 1);
-        chain_shift_data_registers (CHAIN, 0);
-        part_set_signal (p, LCDe, 1, 0);
+        urj_part_set_signal (p, LCDe, 1, 1);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
+        urj_part_set_signal (p, LCDe, 1, 0);
     }
 
     set_data_in (bus, adr);
 
-    chain_shift_data_registers (CHAIN, 0);
+    urj_tap_chain_shift_data_registers (bus->chain, 0);
 
 }
 
@@ -351,22 +351,22 @@ slsup3_bus_read_start (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-slsup3_bus_read_next (bus_t *bus, uint32_t adr)
+slsup3_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
     uint32_t d;
 
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
 
     setup_address (bus, adr);
 
     if ((adr >= LCDSTART) && (adr < (LCDSTART + LCDSIZE)))
     {
-        part_set_signal (p, LCDe, 1, 1);
-        chain_shift_data_registers (CHAIN, 0);
-        part_set_signal (p, LCDe, 1, 0);
+        urj_part_set_signal (p, LCDe, 1, 1);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
+        urj_part_set_signal (p, LCDe, 1, 0);
     }
 
-    chain_shift_data_registers (CHAIN, 1);
+    urj_tap_chain_shift_data_registers (bus->chain, 1);
 
     d = get_data (bus, LAST_ADR);
 
@@ -380,21 +380,21 @@ slsup3_bus_read_next (bus_t *bus, uint32_t adr)
  *
  */
 static uint32_t
-slsup3_bus_read_end (bus_t *bus)
+slsup3_bus_read_end (urj_bus_t *bus)
 {
-    part_t *p = PART;
+    urj_part_t *p = bus->part;
     uint32_t d;
 
     if ((LAST_ADR >= LCDSTART) && (LAST_ADR < (LCDSTART + LCDSIZE)))
     {
-        part_set_signal (p, LCDe, 1, 1);
-        chain_shift_data_registers (CHAIN, 0);
-        part_set_signal (p, LCDe, 1, 0);
+        urj_part_set_signal (p, LCDe, 1, 1);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
+        urj_part_set_signal (p, LCDe, 1, 0);
     }
 
-    part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nOE, 1, 1);
 
-    chain_shift_data_registers (CHAIN, 1);
+    urj_tap_chain_shift_data_registers (bus->chain, 1);
 
     d = get_data (bus, LAST_ADR);
 
@@ -406,56 +406,56 @@ slsup3_bus_read_end (bus_t *bus)
  *
  */
 static void
-slsup3_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
+slsup3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
-    part_t *p = PART;
-    chain_t *chain = CHAIN;
+    urj_part_t *p = bus->part;
+    urj_chain_t *chain = bus->chain;
 
-    part_set_signal (p, nSDce, 1, 1);   /* Inihibit SDRAM */
-    part_set_signal (p, nOE, 1, 1);
-    part_set_signal (p, nSRce, 1, 1);
-    part_set_signal (p, nFLce, 1, 1);
-    part_set_signal (p, nFLbyte, 1, 0);
-    part_set_signal (p, nWE, 1, 1);
-    part_set_signal (p, SDclk, 1, 0);
-    part_set_signal (p, LCDe, 1, 0);
-    part_set_signal (p, LCDrw, 1, 0);
+    urj_part_set_signal (p, nSDce, 1, 1);   /* Inihibit SDRAM */
+    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal (p, nSRce, 1, 1);
+    urj_part_set_signal (p, nFLce, 1, 1);
+    urj_part_set_signal (p, nFLbyte, 1, 0);
+    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal (p, SDclk, 1, 0);
+    urj_part_set_signal (p, LCDe, 1, 0);
+    urj_part_set_signal (p, LCDrw, 1, 0);
 
     setup_address (bus, adr);
     setup_data (bus, adr, data);
 
     if ((adr >= LCDSTART) && (adr < (LCDSTART + LCDSIZE)))
     {
-        chain_shift_data_registers (chain, 0);
-        part_set_signal (p, LCDe, 1, 1);
-        chain_shift_data_registers (CHAIN, 0);
-        part_set_signal (p, LCDe, 1, 0);
-        chain_shift_data_registers (CHAIN, 0);
+        urj_tap_chain_shift_data_registers (chain, 0);
+        urj_part_set_signal (p, LCDe, 1, 1);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
+        urj_part_set_signal (p, LCDe, 1, 0);
+        urj_tap_chain_shift_data_registers (bus->chain, 0);
     }
     else
     {
 
-        chain_shift_data_registers (chain, 0);
+        urj_tap_chain_shift_data_registers (chain, 0);
 
-        part_set_signal (p, nWE, 1, 0);
-        chain_shift_data_registers (chain, 0);
-        part_set_signal (p, nWE, 1, 1);
-        chain_shift_data_registers (chain, 0);
+        urj_part_set_signal (p, nWE, 1, 0);
+        urj_tap_chain_shift_data_registers (chain, 0);
+        urj_part_set_signal (p, nWE, 1, 1);
+        urj_tap_chain_shift_data_registers (chain, 0);
     }
 }
 
-const bus_driver_t slsup3_bus = {
+const urj_bus_driver_t slsup3_bus = {
     "slsup3",
     N_("SLS UP3 compatible bus driver via BSR"),
     slsup3_bus_new,
-    generic_bus_free,
+    urj_bus_generic_free,
     slsup3_bus_printinfo,
-    generic_bus_prepare_extest,
+    urj_bus_generic_prepare_extest,
     slsup3_bus_area,
     slsup3_bus_read_start,
     slsup3_bus_read_next,
     slsup3_bus_read_end,
-    generic_bus_read,
+    urj_bus_generic_read,
     slsup3_bus_write,
-    generic_bus_no_init
+    urj_bus_generic_no_init
 };

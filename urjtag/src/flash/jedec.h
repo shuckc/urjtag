@@ -22,16 +22,16 @@
  *
  */
 
-#ifndef URJ_SRC_FLASH_JEDEC_H
-#define URJ_SRC_FLASH_JEDEC_H
+#ifndef URJ_FLASH_JEDEC_H
+#define URJ_FLASH_JEDEC_H
 
 #include <bus_driver.h>
 #include <flash.h>
 
-int jedec_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
+int urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array);
 #ifdef JEDEC_EXP
-int jedec_exp_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
+int urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array);
 #endif
-int amd_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
+int urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array);
 
-#endif  /* ndef URJ_SRC_FLASH_JEDEC_H */
+#endif  /* ndef URJ_FLASH_JEDEC_H */

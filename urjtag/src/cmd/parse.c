@@ -40,7 +40,7 @@
 
 
 int
-jtag_parse_line (chain_t *chain, char *line)
+urj_cmd_jtag_parse_line (urj_chain_t *chain, char *line)
 {
     int l, i, r, tcnt;
     char **a;
@@ -109,9 +109,9 @@ jtag_parse_line (chain_t *chain, char *line)
     }
     a[tcnt] = NULL;
 
-    r = cmd_run (chain, a);
+    r = urj_cmd_run (chain, a);
     if (debug_mode & 1)
-        printf ("Return in jtag_parse_line r=%d\n", r);
+        printf ("Return in urj_cmd_jtag_parse_line r=%d\n", r);
     free (a);
     free (sline);
     return r;
@@ -119,7 +119,7 @@ jtag_parse_line (chain_t *chain, char *line)
 
 
 int
-jtag_parse_stream (chain_t *chain, FILE *f)
+urj_cmd_jtag_parse_stream (urj_chain_t *chain, FILE *f)
 {
     char inputline[MAXINPUTLINE + 1];
     int go = 1, i, c, lnr, clip, found_comment;
@@ -151,8 +151,8 @@ jtag_parse_stream (chain_t *chain, FILE *f)
             fprintf (stdout,
                      "Warning: line %d exceeds %d characters, clipped\n", lnr,
                      (int) sizeof (inputline) - 1);
-        go = jtag_parse_line (chain, inputline);
-        chain_flush (chain);
+        go = urj_cmd_jtag_parse_line (chain, inputline);
+        urj_tap_chain_flush (chain);
     }
     while (go && c != EOF);
 
@@ -160,7 +160,7 @@ jtag_parse_stream (chain_t *chain, FILE *f)
 }
 
 int
-jtag_parse_file (chain_t *chain, const char *filename)
+urj_cmd_jtag_parse_file (urj_chain_t *chain, const char *filename)
 {
     FILE *f;
     int go;
@@ -169,7 +169,7 @@ jtag_parse_file (chain_t *chain, const char *filename)
     if (!f)
         return -1;
 
-    go = jtag_parse_stream (chain, f);
+    go = urj_cmd_jtag_parse_stream (chain, f);
 
     fclose (f);
     if (debug_mode & 1)

@@ -39,38 +39,38 @@
 
 #undef VERBOSE
 
-extern cable_driver_t arcom_cable_driver;
-extern cable_driver_t byteblaster_cable_driver;
-extern cable_driver_t usbblaster_cable_driver;
-extern cable_driver_t ft2232_cable_driver;
-extern cable_driver_t ft2232_jtagkey_cable_driver;
-extern cable_driver_t ft2232_armusbocd_cable_driver;
-extern cable_driver_t ft2232_gnice_cable_driver;
-extern cable_driver_t ft2232_oocdlinks_cable_driver;
-extern cable_driver_t ft2232_signalyzer_cable_driver;
-extern cable_driver_t ft2232_turtelizer2_cable_driver;
-extern cable_driver_t ft2232_usbtojtagif_cable_driver;
-extern cable_driver_t ft2232_flyswatter_cable_driver;
-extern cable_driver_t ft2232_usbscarab2_cable_driver;
-extern cable_driver_t dlc5_cable_driver;
-extern cable_driver_t ea253_cable_driver;
-extern cable_driver_t ei012_cable_driver;
-extern cable_driver_t igloo_cable_driver;
-extern cable_driver_t keithkoep_cable_driver;
-extern cable_driver_t lattice_cable_driver;
-extern cable_driver_t mpcbdm_cable_driver;
-extern cable_driver_t triton_cable_driver;
-extern cable_driver_t jim_cable_driver;
-extern cable_driver_t wiggler_cable_driver;
-extern cable_driver_t wiggler2_cable_driver;
-extern cable_driver_t wiggler_cable_driver;
-extern cable_driver_t xpc_int_cable_driver;
-extern cable_driver_t xpc_ext_cable_driver;
-extern cable_driver_t jlink_cable_driver;
-extern cable_driver_t ep9307_cable_driver;
-extern cable_driver_t ts7800_cable_driver;
+extern urj_cable_driver_t arcom_cable_driver;
+extern urj_cable_driver_t byteblaster_cable_driver;
+extern urj_cable_driver_t usbblaster_cable_driver;
+extern urj_cable_driver_t ft2232_cable_driver;
+extern urj_cable_driver_t ft2232_jtagkey_cable_driver;
+extern urj_cable_driver_t ft2232_armusbocd_cable_driver;
+extern urj_cable_driver_t ft2232_gnice_cable_driver;
+extern urj_cable_driver_t ft2232_oocdlinks_cable_driver;
+extern urj_cable_driver_t ft2232_signalyzer_cable_driver;
+extern urj_cable_driver_t ft2232_turtelizer2_cable_driver;
+extern urj_cable_driver_t ft2232_usbtojtagif_cable_driver;
+extern urj_cable_driver_t ft2232_flyswatter_cable_driver;
+extern urj_cable_driver_t ft2232_usbscarab2_cable_driver;
+extern urj_cable_driver_t dlc5_cable_driver;
+extern urj_cable_driver_t ea253_cable_driver;
+extern urj_cable_driver_t ei012_cable_driver;
+extern urj_cable_driver_t igloo_cable_driver;
+extern urj_cable_driver_t keithkoep_cable_driver;
+extern urj_cable_driver_t lattice_cable_driver;
+extern urj_cable_driver_t mpcbdm_cable_driver;
+extern urj_cable_driver_t triton_cable_driver;
+extern urj_cable_driver_t jim_cable_driver;
+extern urj_cable_driver_t wiggler_cable_driver;
+extern urj_cable_driver_t wiggler2_cable_driver;
+extern urj_cable_driver_t wiggler_cable_driver;
+extern urj_cable_driver_t xpc_int_cable_driver;
+extern urj_cable_driver_t xpc_ext_cable_driver;
+extern urj_cable_driver_t jlink_cable_driver;
+extern urj_cable_driver_t ep9307_cable_driver;
+extern urj_cable_driver_t ts7800_cable_driver;
 
-cable_driver_t *cable_drivers[] = {
+urj_cable_driver_t *cable_drivers[] = {
 #ifdef ENABLE_CABLE_ARCOM
     &arcom_cable_driver,
 #endif
@@ -147,13 +147,13 @@ cable_driver_t *cable_drivers[] = {
 };
 
 void
-cable_free (cable_t *cable)
+urj_tap_cable_free (urj_cable_t *cable)
 {
     cable->driver->cable_free (cable);
 }
 
 int
-cable_init (cable_t *cable)
+urj_tap_cable_init (urj_cable_t *cable)
 {
     cable->delay = 0;
     cable->frequency = 0;
@@ -163,14 +163,14 @@ cable_init (cable_t *cable)
     cable->todo.next_item = 0;
     cable->todo.next_free = 0;
     cable->todo.data =
-        malloc (cable->todo.max_items * sizeof (cable_queue_t));
+        malloc (cable->todo.max_items * sizeof (urj_cable_queue_t));
 
     cable->done.max_items = 128;
     cable->done.num_items = 0;
     cable->done.next_item = 0;
     cable->done.next_free = 0;
     cable->done.data =
-        malloc (cable->done.max_items * sizeof (cable_queue_t));
+        malloc (cable->done.max_items * sizeof (urj_cable_queue_t));
 
     if (cable->todo.data == NULL || cable->done.data == NULL)
     {
@@ -186,15 +186,15 @@ cable_init (cable_t *cable)
 }
 
 void
-cable_flush (cable_t *cable, cable_flush_amount_t how_much)
+urj_tap_cable_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
     cable->driver->flush (cable, how_much);
 }
 
 void
-cable_done (cable_t *cable)
+urj_tap_cable_done (urj_cable_t *cable)
 {
-    cable_flush (cable, COMPLETELY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_COMPLETELY);
     if (cable->todo.data != NULL)
     {
         free (cable->todo.data);
@@ -204,13 +204,13 @@ cable_done (cable_t *cable)
 }
 
 int
-cable_add_queue_item (cable_t *cable, cable_queue_info_t *q)
+urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
 {
     int i, j;
     if (q->num_items >= q->max_items)   /* queue full? */
     {
         int new_max_items;
-        cable_queue_t *resized;
+        urj_cable_queue_t *resized;
 
 #ifdef VERBOSE
         printf
@@ -219,7 +219,7 @@ cable_add_queue_item (cable_t *cable, cable_queue_info_t *q)
 #endif
 
         new_max_items = q->max_items + 128;
-        resized = realloc (q->data, new_max_items * sizeof (cable_queue_t));
+        resized = realloc (q->data, new_max_items * sizeof (urj_cable_queue_t));
         if (resized == NULL)
         {
             printf (_
@@ -259,7 +259,7 @@ cable_add_queue_item (cable_t *cable, cable_queue_info_t *q)
                      num_to_move, q->next_item, dest);
 #endif
                 memmove (&(q->data[dest]), &(q->data[q->next_item]),
-                         num_to_move * sizeof (cable_queue_t));
+                         num_to_move * sizeof (urj_cable_queue_t));
 
                 q->next_item = dest;
             }
@@ -276,7 +276,7 @@ cable_add_queue_item (cable_t *cable, cable_queue_info_t *q)
                             q->next_free);
 #endif
                     memcpy (&(q->data[q->max_items]), &(q->data[0]),
-                            q->next_free * sizeof (cable_queue_t));
+                            q->next_free * sizeof (urj_cable_queue_t));
 
                 }
                 else
@@ -292,7 +292,7 @@ cable_add_queue_item (cable_t *cable, cable_queue_info_t *q)
 #endif
 
                     memcpy (&(q->data[q->max_items]), &(q->data[0]),
-                            added_space * sizeof (cable_queue_t));
+                            added_space * sizeof (urj_cable_queue_t));
 
                     /* Step 2: __612345 -> 6__12345 */
 
@@ -304,7 +304,7 @@ cable_add_queue_item (cable_t *cable, cable_queue_info_t *q)
 
                     memmove (&(q->data[0]), &(q->data[added_space]),
                              (q->next_free -
-                              added_space) * sizeof (cable_queue_t));
+                              added_space) * sizeof (urj_cable_queue_t));
                 }
             }
 #endif
@@ -333,7 +333,7 @@ cable_add_queue_item (cable_t *cable, cable_queue_info_t *q)
 }
 
 int
-cable_get_queue_item (cable_t *cable, cable_queue_info_t *q)
+urj_tap_cable_get_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
 {
     if (q->num_items > 0)
     {
@@ -352,12 +352,12 @@ cable_get_queue_item (cable_t *cable, cable_queue_info_t *q)
 }
 
 void
-cable_purge_queue (cable_queue_info_t *q, int io)
+urj_tap_cable_purge_queue (urj_cable_queue_info_t *q, int io)
 {
     while (q->num_items > 0)
     {
         int i = q->next_item;
-        if (q->data[i].action == CABLE_TRANSFER)
+        if (q->data[i].action == URJ_TAP_CABLE_TRANSFER)
         {
             if (io == 0)        /* todo queue */
             {
@@ -385,47 +385,47 @@ cable_purge_queue (cable_queue_info_t *q, int io)
 }
 
 void
-cable_clock (cable_t *cable, int tms, int tdi, int n)
+urj_tap_cable_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
-    cable_flush (cable, COMPLETELY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_COMPLETELY);
     cable->driver->clock (cable, tms, tdi, n);
 }
 
 int
-cable_defer_clock (cable_t *cable, int tms, int tdi, int n)
+urj_tap_cable_defer_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
-    int i = cable_add_queue_item (cable, &(cable->todo));
+    int i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
         return 1;               /* report failure */
-    cable->todo.data[i].action = CABLE_CLOCK;
+    cable->todo.data[i].action = URJ_TAP_CABLE_CLOCK;
     cable->todo.data[i].arg.clock.tms = tms;
     cable->todo.data[i].arg.clock.tdi = tdi;
     cable->todo.data[i].arg.clock.n = n;
-    cable_flush (cable, OPTIONALLY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
     return 0;                   /* success */
 }
 
 int
-cable_get_tdo (cable_t *cable)
+urj_tap_cable_get_tdo (urj_cable_t *cable)
 {
-    cable_flush (cable, COMPLETELY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_COMPLETELY);
     return cable->driver->get_tdo (cable);
 }
 
 int
-cable_get_tdo_late (cable_t *cable)
+urj_tap_cable_get_tdo_late (urj_cable_t *cable)
 {
     int i;
-    cable_flush (cable, TO_OUTPUT);
-    i = cable_get_queue_item (cable, &(cable->done));
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_TO_OUTPUT);
+    i = urj_tap_cable_get_queue_item (cable, &(cable->done));
     if (i >= 0)
     {
-        if (cable->done.data[i].action != CABLE_GET_TDO)
+        if (cable->done.data[i].action != URJ_TAP_CABLE_GET_TDO)
         {
             printf (_
                     ("Internal error: Got wrong type of result from queue (%d? %p.%d)\n"),
                     cable->done.data[i].action, &(cable->done), i);
-            cable_purge_queue (&(cable->done), 1);
+            urj_tap_cable_purge_queue (&(cable->done), 1);
         }
         else
         {
@@ -436,64 +436,64 @@ cable_get_tdo_late (cable_t *cable)
 }
 
 int
-cable_defer_get_tdo (cable_t *cable)
+urj_tap_cable_defer_get_tdo (urj_cable_t *cable)
 {
-    int i = cable_add_queue_item (cable, &(cable->todo));
+    int i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
         return 1;               /* report failure */
-    cable->todo.data[i].action = CABLE_GET_TDO;
-    cable_flush (cable, OPTIONALLY);
+    cable->todo.data[i].action = URJ_TAP_CABLE_GET_TDO;
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
     return 0;                   /* success */
 }
 
 int
-cable_set_signal (cable_t *cable, int mask, int val)
+urj_tap_cable_set_signal (urj_cable_t *cable, int mask, int val)
 {
-    cable_flush (cable, COMPLETELY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_COMPLETELY);
     return cable->driver->set_signal (cable, mask, val);
 }
 
 int
-cable_defer_set_signal (cable_t *cable, int mask, int val)
+urj_tap_cable_defer_set_signal (urj_cable_t *cable, int mask, int val)
 {
-    int i = cable_add_queue_item (cable, &(cable->todo));
+    int i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
         return 1;               /* report failure */
-    cable->todo.data[i].action = CABLE_SET_SIGNAL;
+    cable->todo.data[i].action = URJ_TAP_CABLE_SET_SIGNAL;
     cable->todo.data[i].arg.value.mask = mask;
     cable->todo.data[i].arg.value.val = val;
-    cable_flush (cable, OPTIONALLY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
     return 0;                   /* success */
 }
 
 int
-cable_get_signal (cable_t *cable, pod_sigsel_t sig)
+urj_tap_cable_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
-    cable_flush (cable, COMPLETELY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_COMPLETELY);
     return cable->driver->get_signal (cable, sig);
 }
 
 int
-cable_get_signal_late (cable_t *cable, pod_sigsel_t sig)
+urj_tap_cable_get_signal_late (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
     int i;
-    cable_flush (cable, TO_OUTPUT);
-    i = cable_get_queue_item (cable, &(cable->done));
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_TO_OUTPUT);
+    i = urj_tap_cable_get_queue_item (cable, &(cable->done));
     if (i >= 0)
     {
-        if (cable->done.data[i].action != CABLE_GET_SIGNAL)
+        if (cable->done.data[i].action != URJ_TAP_CABLE_GET_SIGNAL)
         {
             printf (_
                     ("Internal error: Got wrong type of result from queue (%d? %p.%d)\n"),
                     cable->done.data[i].action, &(cable->done), i);
-            cable_purge_queue (&(cable->done), 1);
+            urj_tap_cable_purge_queue (&(cable->done), 1);
         }
         else if (cable->done.data[i].arg.value.sig != sig)
         {
             printf (_
                     ("Internal error: Got wrong signal's value from queue (%d? %p.%d)\n"),
                     cable->done.data[i].action, &(cable->done), i);
-            cable_purge_queue (&(cable->done), 1);
+            urj_tap_cable_purge_queue (&(cable->done), 1);
         }
         else
         {
@@ -504,32 +504,32 @@ cable_get_signal_late (cable_t *cable, pod_sigsel_t sig)
 }
 
 int
-cable_defer_get_signal (cable_t *cable, pod_sigsel_t sig)
+urj_tap_cable_defer_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
-    int i = cable_add_queue_item (cable, &(cable->todo));
+    int i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
         return 1;               /* report failure */
-    cable->todo.data[i].action = CABLE_GET_SIGNAL;
+    cable->todo.data[i].action = URJ_TAP_CABLE_GET_SIGNAL;
     cable->todo.data[i].arg.value.sig = sig;
-    cable_flush (cable, OPTIONALLY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
     return 0;                   /* success */
 }
 
 int
-cable_transfer (cable_t *cable, int len, char *in, char *out)
+urj_tap_cable_transfer (urj_cable_t *cable, int len, char *in, char *out)
 {
-    cable_flush (cable, COMPLETELY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_COMPLETELY);
     return cable->driver->transfer (cable, len, in, out);
 }
 
 int
-cable_transfer_late (cable_t *cable, char *out)
+urj_tap_cable_transfer_late (urj_cable_t *cable, char *out)
 {
     int i;
-    cable_flush (cable, TO_OUTPUT);
-    i = cable_get_queue_item (cable, &(cable->done));
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_TO_OUTPUT);
+    i = urj_tap_cable_get_queue_item (cable, &(cable->done));
 
-    if (i >= 0 && cable->done.data[i].action == CABLE_TRANSFER)
+    if (i >= 0 && cable->done.data[i].action == URJ_TAP_CABLE_TRANSFER)
     {
 #if 0
         printf ("Got queue item (%p.%d) len=%d out=%p\n",
@@ -545,12 +545,12 @@ cable_transfer_late (cable_t *cable, char *out)
         return cable->done.data[i].arg.xferred.res;
     }
 
-    if (cable->done.data[i].action != CABLE_TRANSFER)
+    if (cable->done.data[i].action != URJ_TAP_CABLE_TRANSFER)
     {
         printf (_
                 ("Internal error: Got wrong type of result from queue (#%d %p.%d)\n"),
                 cable->done.data[i].action, &(cable->done), i);
-        cable_purge_queue (&(cable->done), 1);
+        urj_tap_cable_purge_queue (&(cable->done), 1);
     }
     else
     {
@@ -561,7 +561,7 @@ cable_transfer_late (cable_t *cable, char *out)
 }
 
 int
-cable_defer_transfer (cable_t *cable, int len, char *in, char *out)
+urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in, char *out)
 {
     char *ibuf, *obuf = NULL;
     int i;
@@ -580,7 +580,7 @@ cable_defer_transfer (cable_t *cable, int len, char *in, char *out)
         }
     }
 
-    i = cable_add_queue_item (cable, &(cable->todo));
+    i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
     {
         free (ibuf);
@@ -589,31 +589,31 @@ cable_defer_transfer (cable_t *cable, int len, char *in, char *out)
         return 1;               /* report failure */
     }
 
-    cable->todo.data[i].action = CABLE_TRANSFER;
+    cable->todo.data[i].action = URJ_TAP_CABLE_TRANSFER;
     cable->todo.data[i].arg.transfer.len = len;
     if (in)
         memcpy (ibuf, in, len);
     cable->todo.data[i].arg.transfer.in = ibuf;
     cable->todo.data[i].arg.transfer.out = obuf;
-    cable_flush (cable, OPTIONALLY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
     return 0;                   /* success */
 }
 
 void
-cable_set_frequency (cable_t *cable, uint32_t new_frequency)
+urj_tap_cable_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
-    cable_flush (cable, COMPLETELY);
+    urj_tap_cable_flush (cable, URJ_TAP_CABLE_COMPLETELY);
     cable->driver->set_frequency (cable, new_frequency);
 }
 
 uint32_t
-cable_get_frequency (cable_t *cable)
+urj_tap_cable_get_frequency (urj_cable_t *cable)
 {
     return cable->frequency;
 }
 
 void
-cable_wait (cable_t *cable)
+urj_tap_cable_wait (urj_cable_t *cable)
 {
     int i;
     volatile int j;

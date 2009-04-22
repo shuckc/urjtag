@@ -32,28 +32,28 @@
 #include "cmd.h"
 
 static int
-cmd_frequency_run (chain_t *chain, char *params[])
+cmd_frequency_run (urj_chain_t *chain, char *params[])
 {
     unsigned int freq;
 
-    if (!cmd_test_cable (chain))
+    if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (cmd_params (params) == 1)
+    if (urj_cmd_params (params) == 1)
     {
         printf (_("Current TCK frequency is %u Hz\n"),
-                cable_get_frequency (chain->cable));
+                urj_tap_cable_get_frequency (chain->cable));
         return 1;
     }
 
-    if (cmd_params (params) != 2)
+    if (urj_cmd_params (params) != 2)
         return -1;
 
-    if (cmd_get_number (params[1], &freq))
+    if (urj_cmd_get_number (params[1], &freq))
         return -1;
 
     printf (_("Setting TCK frequency to %u Hz\n"), freq);
-    cable_set_frequency (chain->cable, freq);
+    urj_tap_cable_set_frequency (chain->cable, freq);
 
     return 1;
 }
@@ -73,7 +73,7 @@ cmd_frequency_help (void)
               "Use 0 for FREQ to disable frequency limit.\n"), "frequency");
 }
 
-cmd_t cmd_frequency = {
+urj_cmd_t cmd_frequency = {
     "frequency",
     N_("setup JTAG frequency"),
     cmd_frequency_help,

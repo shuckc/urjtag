@@ -41,12 +41,12 @@
 
 #include "jedec.h"
 
-cfi_array_t *cfi_array = NULL;
+urj_flash_cfi_array_t *cfi_array = NULL;
 
 void
-detectflash (bus_t *bus, uint32_t adr)
+urj_flash_detectflash (urj_bus_t *bus, uint32_t adr)
 {
-    cfi_query_structure_t *cfi;
+    urj_flash_cfi_query_structure_t *cfi;
     const char *s;
 
     if (!bus)
@@ -55,27 +55,27 @@ detectflash (bus_t *bus, uint32_t adr)
         return;
     }
 
-    cfi_array_free (cfi_array);
+    urj_flash_cfi_array_free (cfi_array);
     cfi_array = NULL;
 
-    bus_prepare (bus);
+    URJ_BUS_PREPARE (bus);
 
-    if (cfi_detect (bus, adr, &cfi_array))
+    if (urj_flash_cfi_detect (bus, adr, &cfi_array))
     {
-        cfi_array_free (cfi_array);
+        urj_flash_cfi_array_free (cfi_array);
         cfi_array = NULL;
-        if (jedec_detect (bus, adr, &cfi_array) != 0)
+        if (urj_flash_jedec_detect (bus, adr, &cfi_array) != 0)
         {
-            cfi_array_free (cfi_array);
+            urj_flash_cfi_array_free (cfi_array);
             cfi_array = NULL;
-            if (amd_detect (bus, adr, &cfi_array) != 0)
+            if (urj_flash_amd_detect (bus, adr, &cfi_array) != 0)
             {
-                cfi_array_free (cfi_array);
+                urj_flash_cfi_array_free (cfi_array);
                 cfi_array = NULL;
 #ifdef JEDEC_EXP
-                if (jedec_exp_detect (bus, adr, &cfi_array))
+                if (urj_flash_jedec_exp_detect (bus, adr, &cfi_array))
                 {
-                    cfi_array_free (cfi_array);
+                    urj_flash_cfi_array_free (cfi_array);
                     cfi_array = NULL;
                 }
 #endif
@@ -250,7 +250,7 @@ detectflash (bus_t *bus, uint32_t adr)
     if (cfi->identification_string.pri_id_code == CFI_VENDOR_AMD_SCS
         && cfi->identification_string.pri_vendor_tbl != NULL)
     {
-        amd_pri_extened_query_structure_t *pri_vendor_tbl;
+        urj_flash_cfi_amd_pri_extened_query_structure_t *pri_vendor_tbl;
         uint8_t major_version;
         uint8_t minor_version;
         int i;
