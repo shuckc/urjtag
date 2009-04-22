@@ -49,7 +49,7 @@ cmd_idcode_run (chain_t *chain, char *params[])
         return 1;
 
     printf (_("Reading %d bytes if idcode\n"), bytes);
-    idcode (chain, bytes);
+    urj_tap_idcode (chain, bytes);
     return 1;
 }
 
