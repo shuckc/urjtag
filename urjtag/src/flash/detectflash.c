@@ -39,13 +39,9 @@
 #include <flash.h>
 #include <bus.h>
 
+#include "jedec.h"
+
 cfi_array_t *cfi_array = NULL;
-
-extern int jedec_exp_detect (bus_t *bus, uint32_t adr,
-                             cfi_array_t **cfi_array);
-extern int jedec_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
-
-extern int amd_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);      //Ajith
 
 void
 detectflash (bus_t *bus, uint32_t adr)

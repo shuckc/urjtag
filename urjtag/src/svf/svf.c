@@ -45,6 +45,13 @@
 #include <tap.h>
 #include <tap_state.h>
 
+#if 0
+#include <urjtag/svf.h> /* two include files w/ the same name
+                         * this will be resolved when we will have
+                         * include/urjtag/svf.h
+                         *                              RFHH */
+#endif
+
 #include <cmd.h>
 
 #include "svf.h"

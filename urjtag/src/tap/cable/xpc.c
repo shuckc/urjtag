@@ -75,7 +75,7 @@ static int last_tdo;
 
 /* ---------------------------------------------------------------------- */
 
-int
+static int
 xpcu_output_enable (struct usb_dev_handle *xpcu, int enable)
 {
     if (usb_control_msg
@@ -90,7 +90,8 @@ xpcu_output_enable (struct usb_dev_handle *xpcu, int enable)
 
 /* ---------------------------------------------------------------------- */
 
-int
+#ifdef UNUSED   /* RFHH */
+static int
 xpcu_bit_reverse (struct usb_dev_handle *xpcu, uint8_t bits_in,
                   uint8_t *bits_out)
 {
@@ -103,10 +104,11 @@ xpcu_bit_reverse (struct usb_dev_handle *xpcu, uint8_t bits_in,
 
     return 0;
 }
+#endif
 
 /* ----------------------------------------------------------------- */
 
-int
+static int
 xpcu_request_28 (struct usb_dev_handle *xpcu, int value)
 {
     /* Typical values seen during autodetection of chain configuration: 0x11, 0x12 */
@@ -122,7 +124,7 @@ xpcu_request_28 (struct usb_dev_handle *xpcu, int value)
 
 /* ---------------------------------------------------------------------- */
 
-int
+static int
 xpcu_write_gpio (struct usb_dev_handle *xpcu, uint8_t bits)
 {
     if (usb_control_msg (xpcu, 0x40, 0xB0, 0x0030, bits, NULL, 0, 1000) < 0)
@@ -136,7 +138,7 @@ xpcu_write_gpio (struct usb_dev_handle *xpcu, uint8_t bits)
 
 /* ---------------------------------------------------------------------- */
 
-int
+static int
 xpcu_read_gpio (struct usb_dev_handle *xpcu, uint8_t *bits)
 {
     if (usb_control_msg (xpcu, 0xC0, 0xB0, 0x0038, 0, (char *) bits, 1, 1000)
@@ -152,7 +154,7 @@ xpcu_read_gpio (struct usb_dev_handle *xpcu, uint8_t *bits)
 /* ---------------------------------------------------------------------- */
 
 
-int
+static int
 xpcu_read_cpld_version (struct usb_dev_handle *xpcu, uint16_t *buf)
 {
     if (usb_control_msg
@@ -166,7 +168,7 @@ xpcu_read_cpld_version (struct usb_dev_handle *xpcu, uint16_t *buf)
 
 /* ---------------------------------------------------------------------- */
 
-int
+static int
 xpcu_read_firmware_version (struct usb_dev_handle *xpcu, uint16_t *buf)
 {
     if (usb_control_msg
@@ -181,7 +183,7 @@ xpcu_read_firmware_version (struct usb_dev_handle *xpcu, uint16_t *buf)
 
 /* ----------------------------------------------------------------- */
 
-int
+static int
 xpcu_select_gpio (struct usb_dev_handle *xpcu, int int_or_ext)
 {
     if (usb_control_msg (xpcu, 0x40, 0xB0, 0x0052, int_or_ext, NULL, 0, 1000)

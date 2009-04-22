@@ -52,6 +52,7 @@ static void fix_yylloc(YYLTYPE *, char *);
 static void fix_yylloc_nl(YYLTYPE *, char *, YY_EXTRA_TYPE);
 static void progress_nl(YYLTYPE *, YY_EXTRA_TYPE);
 
+int yywrap(yyscan_t scanner);
 int yywrap(yyscan_t scanner)
 {
   return(1);

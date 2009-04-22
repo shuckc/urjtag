@@ -39,8 +39,10 @@
 #include <sys/types.h>
 #include <sys/time.h>
 
+#include "fclock.h"
+
 long double
-frealtime ()
+frealtime (void)
 {
     long double result;
     static uint64_t start_mat;
@@ -73,7 +75,7 @@ frealtime ()
 #ifdef _POSIX_TIMERS
 
 long double
-frealtime ()
+frealtime (void)
 {
     long double result;
 
@@ -100,7 +102,7 @@ frealtime ()
 #include <sys/timeb.h>
 
 long double
-frealtime ()
+frealtime (void)
 {
     long double result;
 
@@ -137,7 +139,7 @@ set_clk_tck (void)
 #endif
 
 long double
-frealtime ()
+frealtime (void)
 {
     long double result;
 

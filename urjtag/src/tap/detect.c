@@ -167,7 +167,7 @@ find_record (char *filename, tap_register *key, struct id_record *idr)
     return r;
 }
 
-uint64_t
+static uint64_t
 bits_to_uint64 (tap_register *t)
 {
     int i;

@@ -39,7 +39,7 @@
 #undef VERBOSE
 
 #ifdef VERBOSE
-void
+static void
 print_vector (int len, char *vec)
 {
     int i;

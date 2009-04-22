@@ -113,7 +113,7 @@ ppdev_parport_free (parport_t *port)
     free (port);
 }
 
-parport_t *
+static parport_t *
 ppdev_connect (const char **par, int parnum)
 {
     port_node_t *pn;

@@ -271,7 +271,7 @@ usbconn_ftd2xx_write (usbconn_t *conn, uint8_t *buf, int len, int recv)
 
 /* ---------------------------------------------------------------------- */
 
-usbconn_t *
+static usbconn_t *
 usbconn_ftd2xx_connect (const char **param, int paramc,
                         usbconn_cable_t *template)
 {
@@ -329,7 +329,7 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
 }
 
 
-usbconn_t *
+static usbconn_t *
 usbconn_ftd2xx_mpsse_connect (const char **param, int paramc,
                               usbconn_cable_t *template)
 {

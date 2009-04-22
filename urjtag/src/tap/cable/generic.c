@@ -49,7 +49,7 @@
 #undef VERBOSE
 
 #ifdef VERBOSE
-void
+static void
 print_vector (int len, char *vec)
 {
     int i;
@@ -91,7 +91,7 @@ generic_get_signal (cable_t *cable, pod_sigsel_t sig)
     return (((PARAM_SIGNALS (cable)) & sig) != 0) ? 1 : 0;
 }
 
-int
+static int
 do_one_queued_action (cable_t *cable)
 {
     int i;

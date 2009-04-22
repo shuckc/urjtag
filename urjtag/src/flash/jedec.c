@@ -34,6 +34,8 @@
 #include <flash.h>
 #include <bus.h>
 
+#include "jedec.h"
+
 /* Manufacturers */
 #define MANUFACTURER_AMD	0x0001
 #define MANUFACTURER_ATMEL	0x001F

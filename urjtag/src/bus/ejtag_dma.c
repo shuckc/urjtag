@@ -362,7 +362,7 @@ ejtag_dma_read (unsigned int addr, int sz)
  * bus->driver->(*initbus)
  *
  */
-int
+static int
 ejtag_dma_bus_init (bus_t *bus)
 {
     data_register *ejctrl = NULL, *ejimpl = NULL, *ejaddr = NULL, *ejdata =
@@ -516,7 +516,7 @@ ejtag_dma_bus_init (bus_t *bus)
  * bus->driver->(*prepare)
  *
  */
-void
+static void
 ejtag_dma_bus_prepare (bus_t *bus)
 {
     if (!INITIALIZED)
@@ -527,7 +527,7 @@ ejtag_dma_bus_prepare (bus_t *bus)
  * bus->driver->(*area)
  *
  */
-int
+static int
 ejtag_dma_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 {
 
@@ -584,7 +584,7 @@ ejtag_dma_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
     return URJTAG_STATUS_OK;
 }
 
-int
+static int
 get_sz (uint32_t adr)
 {
     static bus_area_t area;
@@ -611,7 +611,7 @@ get_sz (uint32_t adr)
  * bus->driver->(*write)
  *
  */
-void
+static void
 ejtag_dma_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     //printf("%s:adr=0x%x,data=0x%x\n",__FUNCTION__,adr,data);
@@ -622,7 +622,7 @@ ejtag_dma_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
  * bus->driver->(*read)
  *
  */
-unsigned int
+static unsigned int
 ejtag_dma_bus_read (bus_t *bus, uint32_t adr)
 {
     int data = ejtag_dma_read (adr, get_sz (adr));
@@ -635,7 +635,7 @@ static unsigned int _data_read;
  * bus->driver->(*read_start)
  *
  */
-void
+static void
 ejtag_dma_bus_read_start (bus_t *bus, uint32_t adr)
 {
     _data_read = ejtag_dma_read (adr, get_sz (adr));
@@ -647,7 +647,7 @@ ejtag_dma_bus_read_start (bus_t *bus, uint32_t adr)
  * bus->driver->(*read_next)
  *
  */
-unsigned int
+static unsigned int
 ejtag_dma_bus_read_next (bus_t *bus, uint32_t adr)
 {
     unsigned int tmp_value = _data_read;
@@ -660,7 +660,7 @@ ejtag_dma_bus_read_next (bus_t *bus, uint32_t adr)
  * bus->driver->(*read_end)
  *
  */
-unsigned int
+static unsigned int
 ejtag_dma_bus_read_end (bus_t *bus)
 {
     return _data_read;

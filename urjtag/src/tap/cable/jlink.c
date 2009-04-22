@@ -519,7 +519,7 @@ jlink_get_tdo (cable_t *cable)
 
 /* ---------------------------------------------------------------------- */
 
-void
+static void
 jlink_copy_out_data (jlink_usbconn_data_t *data, int len, int offset,
                      char *buf)
 {
@@ -532,7 +532,7 @@ jlink_copy_out_data (jlink_usbconn_data_t *data, int len, int offset,
     }
 }
 
-int
+static int
 jlink_transfer (cable_t *cable, int len, char *in, char *out)
 {
     int i, j;

@@ -96,7 +96,7 @@ usbblaster_connect (char *params[], cable_t *cable)
     return 0;
 }
 
-void
+static void
 usbblaster_set_frequency (cable_t *cable, uint32_t new_frequency)
 {
     if (new_frequency != FIXED_FREQUENCY)
@@ -474,7 +474,7 @@ usbblaster_flush (cable_t *cable, cable_flush_amount_t how_much)
     }
 }
 
-void
+static void
 usbblaster_help (const char *cablename)
 {
     printf (_

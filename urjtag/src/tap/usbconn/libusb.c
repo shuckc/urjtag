@@ -109,7 +109,7 @@ libusb_match_desc (struct usb_device *dev, char *desc)
 
 /* ---------------------------------------------------------------------- */
 
-usbconn_t *
+static usbconn_t *
 usbconn_libusb_connect (const char **param, int paramc,
                         usbconn_cable_t *template)
 {

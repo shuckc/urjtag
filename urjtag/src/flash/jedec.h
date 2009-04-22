@@ -1,7 +1,7 @@
 /*
- * fclock.h
+ * $Id: jedec.h 1510 2009-04-21 17:29:52Z rfhh $
  *
- * Copyright (C) 2005 Hein Roehrig
+ * Copyright (C) 2003 Matan Ziv-Av
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,38 +18,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
+ * Written by Matan Ziv-Av, 2003.
+ *
  */
 
+#ifndef URJ_SRC_FLASH_JEDEC_H
+#define URJ_SRC_FLASH_JEDEC_H
 
-#ifndef FCLOCK_H
-#define FCLOCK_H
+#include <bus_driver.h>
+#include <flash.h>
 
-
-#ifdef __cplusplus
-extern "C"
-{
-
-#  ifndef CVOID
-#    define CVOID
-#  endif
-#else           /* def __cplusplus */
-#  ifndef CVOID
-#    define CVOID void
-#  endif
-#endif          /* def __cplusplus */
-
-
-/* return real time in seconds starting at some arbitrary point in
-   time*/
-    long double frealtime (CVOID);
-
-/* return the CPU time used by this process (seconds) */
-    long double fcputime (CVOID);
-
-
-#ifdef __cplusplus
-}
+int jedec_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
+#ifdef JEDEC_EXP
+int jedec_exp_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
 #endif
+int amd_detect (bus_t *bus, uint32_t adr, cfi_array_t **cfi_array);
 
-
-#endif
+#endif  /* ndef URJ_SRC_FLASH_JEDEC_H */

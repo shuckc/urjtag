@@ -198,7 +198,7 @@ direct_parport_free (parport_t *port)
 #endif
 }
 
-parport_t *
+static parport_t *
 direct_connect (const char **par, int parnum)
 {
     long int port_scan_val;
