@@ -130,7 +130,7 @@ ejtag_dma_bus_printinfo (bus_t *bus)
  *
  */
 static uint32_t
-reg_value (tap_register *reg)
+reg_value (tap_register_t *reg)
 {
     uint32_t retval = 0;
     int i;
@@ -170,9 +170,9 @@ siz_ (int sz)
 static void
 ejtag_dma_write (unsigned int addr, unsigned int data, int sz)
 {
-    static data_register *ejctrl = NULL;
-    static data_register *ejaddr = NULL;
-    static data_register *ejdata = NULL;
+    static data_register_t *ejctrl = NULL;
+    static data_register_t *ejaddr = NULL;
+    static data_register_t *ejdata = NULL;
     int i = 0;
     int timeout = 5;
 
@@ -263,9 +263,9 @@ ejtag_dma_write (unsigned int addr, unsigned int data, int sz)
 static unsigned int
 ejtag_dma_read (unsigned int addr, int sz)
 {
-    static data_register *ejctrl = NULL;
-    static data_register *ejaddr = NULL;
-    static data_register *ejdata = NULL;
+    static data_register_t *ejctrl = NULL;
+    static data_register_t *ejaddr = NULL;
+    static data_register_t *ejdata = NULL;
     int i = 0;
     int timeout = 5;
     unsigned int ret;
@@ -365,7 +365,7 @@ ejtag_dma_read (unsigned int addr, int sz)
 static int
 ejtag_dma_bus_init (bus_t *bus)
 {
-    data_register *ejctrl = NULL, *ejimpl = NULL, *ejaddr = NULL, *ejdata =
+    data_register_t *ejctrl = NULL, *ejimpl = NULL, *ejaddr = NULL, *ejdata =
         NULL;
     int timeout = 100;
 

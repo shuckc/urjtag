@@ -72,7 +72,7 @@ typedef struct block_desc block_desc_t;
 typedef struct
 {
     uint32_t last_addr;
-    data_register *fjmem_reg;
+    data_register_t *fjmem_reg;
     block_desc_t block_desc;
 } bus_params_t;
 
@@ -83,8 +83,8 @@ typedef struct
 static int
 fjmem_detect_reg_len (chain_t *chain, part_t *part, char *opcode, int len)
 {
-    data_register *dr;
-    instruction *i;
+    data_register_t *dr;
+    instruction_t *i;
     int l, fjmem_reg_len;
     char *tdo_bit;
 
@@ -174,7 +174,7 @@ static int
 fjmem_detect_fields (chain_t *chain, part_t *part, bus_t *bus)
 {
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
     int idx;
 #ifdef DEBUG
     const char *reg_string;
@@ -254,7 +254,7 @@ static int
 fjmem_query_blocks (chain_t *chain, part_t *part, bus_t *bus)
 {
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
     int max_block_num, block_num;
     int failed = 0;
 #ifdef DEBUG
@@ -476,7 +476,7 @@ fjmem_free_blocks (block_param_t *bl)
 static void
 fjmem_bus_free (bus_t *bus)
 {
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
 
     /* fill all fields with '0'
        -> prepare idle instruction for next startup/detect */
@@ -583,7 +583,7 @@ fjmem_bus_area (bus_t *bus, uint32_t adr, bus_area_t *area)
 static void
 setup_address (bus_t *bus, uint32_t a, block_param_t *block)
 {
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
     block_desc_t *bd = &(BLOCK_DESC);
     int idx;
     uint16_t num = block->num;
@@ -611,7 +611,7 @@ setup_address (bus_t *bus, uint32_t a, block_param_t *block)
 static void
 setup_data (bus_t *bus, uint32_t d, block_param_t *block)
 {
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
     block_desc_t *bd = &(BLOCK_DESC);
     int idx;
 
@@ -632,7 +632,7 @@ fjmem_bus_read_start (bus_t *bus, uint32_t adr)
 {
     chain_t *chain = CHAIN;
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
     bus_area_t area;
     block_param_t *block;
 
@@ -663,7 +663,7 @@ fjmem_bus_read_next (bus_t *bus, uint32_t adr)
 {
     chain_t *chain = CHAIN;
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
     uint32_t d;
     bus_area_t area;
     block_param_t *block;
@@ -698,7 +698,7 @@ fjmem_bus_read_end (bus_t *bus)
 {
     chain_t *chain = CHAIN;
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
     uint32_t d;
     bus_area_t area;
     block_param_t *block;
@@ -736,7 +736,7 @@ fjmem_bus_write (bus_t *bus, uint32_t adr, uint32_t data)
 {
     chain_t *chain = CHAIN;
     block_desc_t *bd = &(BLOCK_DESC);
-    data_register *dr = FJMEM_REG;
+    data_register_t *dr = FJMEM_REG;
     bus_area_t area;
     block_param_t *block;
 

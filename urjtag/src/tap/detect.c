@@ -49,10 +49,10 @@ struct id_record
 };
 
 static int
-find_record (char *filename, tap_register *key, struct id_record *idr)
+find_record (char *filename, tap_register_t *key, struct id_record *idr)
 {
     FILE *file;
-    tap_register *tr;
+    tap_register_t *tr;
     int r = 0;
 
     file = fopen (filename, "r");
@@ -168,7 +168,7 @@ find_record (char *filename, tap_register *key, struct id_record *idr)
 }
 
 static uint64_t
-bits_to_uint64 (tap_register *t)
+bits_to_uint64 (tap_register_t *t)
 {
     int i;
     uint64_t l, b;
@@ -189,12 +189,12 @@ int
 detect_parts (chain_t *chain, const char *db_path)
 {
     int irlen;
-    tap_register *ir;
+    tap_register_t *ir;
     int chlen;
-    tap_register *one;
-    tap_register *ones;
-    tap_register *br;
-    tap_register *id;
+    tap_register_t *one;
+    tap_register_t *ones;
+    tap_register_t *br;
+    tap_register_t *id;
     parts_t *ps;
     int i;
 
@@ -262,8 +262,8 @@ detect_parts (chain_t *chain, const char *db_path)
     for (i = 0; i < chlen; i++)
     {
         part_t *part;
-        tap_register *did = br; /* detected id (length is 1 or 32) */
-        tap_register *key;
+        tap_register_t *did = br; /* detected id (length is 1 or 32) */
+        tap_register_t *key;
         struct id_record idr;
         char *p;
 
@@ -421,7 +421,7 @@ detect_parts (chain_t *chain, const char *db_path)
 int
 manual_add (chain_t *chain, int instr_len)
 {
-    tap_register *id;
+    tap_register_t *id;
     part_t *part;
     char *cmd[] = { NULL, NULL, NULL, NULL, NULL };
     char *str;

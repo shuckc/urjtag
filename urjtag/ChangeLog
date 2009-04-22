@@ -1,5 +1,16 @@
 
 2009-04-22  Rutger Hofman <rfhh>
+  A very few typedef'ed types do NOT have an _t prefix. Orthogonize this by
+  adding _t to typedefs: instruction, data_register, tap_register.
+  * include/part.h, include/data_register.h, include/instruction.h,
+  include/register.h, include/tap.h, src/cmd/instruction.c,
+  src/cmd/register.c, src/cmd/dr.c, src/cmd/bit.c, src/cmd/scan.c,
+  src/cmd/print.c, src/tap/discovery.c, src/tap/detect.c, src/tap/register.c,
+  src/tap/tap.c, src/tap/idcode.c, src/part/instruction.c, src/part/part.c,
+  src/part/data_register.c, src/bus/fjmem.c, src/bus/ejtag_dma.c,
+  src/bus/avr32.c, src/bus/ejtag.c, src/svf/svf.c, src/svf/svf.h
+
+2009-04-22  Rutger Hofman <rfhh>
 
   Check suspicious-looking public symbols whether they shouldn't be in fact
   static:

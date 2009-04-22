@@ -130,13 +130,13 @@ typedef struct
 /* ------------------------------------------------------------------------- */
 
 static inline void
-register_set_bit (tap_register *tr, unsigned int bitno, unsigned int val)
+register_set_bit (tap_register_t *tr, unsigned int bitno, unsigned int val)
 {
     tr->data[bitno] = (val) ? 1 : 0;
 }
 
 static inline int
-register_get_bit (tap_register *tr, unsigned int bitno)
+register_get_bit (tap_register_t *tr, unsigned int bitno)
 {
     return (tr->data[bitno] & 1) ? 1 : 0;
 }
@@ -144,7 +144,7 @@ register_get_bit (tap_register *tr, unsigned int bitno)
 static inline void
 shift_instr (bus_t *bus, unsigned int bit)
 {
-    tap_register *r = PART->active_instruction->out;
+    tap_register_t *r = PART->active_instruction->out;
 
     do
     {
@@ -161,7 +161,7 @@ shift_instr (bus_t *bus, unsigned int bit)
 static inline void
 shift_data (bus_t *bus, unsigned int bit)
 {
-    data_register *dr = PART->active_instruction->data_register;
+    data_register_t *dr = PART->active_instruction->data_register;
 
     do
     {
@@ -186,7 +186,7 @@ mwa_scan_in_instr (bus_t *bus)
 static void
 mwa_scan_in_addr (bus_t *bus, unsigned int slave, uint32_t addr, int mode)
 {
-    tap_register *r = PART->active_instruction->data_register->in;
+    tap_register_t *r = PART->active_instruction->data_register->in;
     int i;
 
     DBG (DBG_BASIC, _("%s: slave=%01x, addr=%08x, %s\n"),
@@ -211,7 +211,7 @@ mwa_scan_in_addr (bus_t *bus, unsigned int slave, uint32_t addr, int mode)
 static void
 mwa_scan_in_data (bus_t *bus, uint32_t data)
 {
-    tap_register *r = PART->active_instruction->data_register->in;
+    tap_register_t *r = PART->active_instruction->data_register->in;
     int i;
 
     DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
@@ -229,7 +229,7 @@ mwa_scan_in_data (bus_t *bus, uint32_t data)
 static void
 mwa_scan_out_data (bus_t *bus, uint32_t *pdata)
 {
-    tap_register *r = PART->active_instruction->data_register->out;
+    tap_register_t *r = PART->active_instruction->data_register->out;
     uint32_t data;
     int i;
 
@@ -277,7 +277,7 @@ nexus_access_end (bus_t *bus)
 static void
 nexus_access_set_addr (bus_t *bus, uint32_t addr, int mode)
 {
-    tap_register *r = PART->active_instruction->data_register->in;
+    tap_register_t *r = PART->active_instruction->data_register->in;
     int i;
 
     DBG (DBG_BASIC, _("%s: addr=%08x, mode=%s\n"), __FUNCTION__, addr,
@@ -299,7 +299,7 @@ nexus_access_set_addr (bus_t *bus, uint32_t addr, int mode)
 static void
 nexus_access_read_data (bus_t *bus, uint32_t *pdata)
 {
-    tap_register *r = PART->active_instruction->data_register->out;
+    tap_register_t *r = PART->active_instruction->data_register->out;
     uint32_t data;
     int i;
 
@@ -317,7 +317,7 @@ nexus_access_read_data (bus_t *bus, uint32_t *pdata)
 static void
 nexus_access_write_data (bus_t *bus, uint32_t data)
 {
-    tap_register *r = PART->active_instruction->data_register->in;
+    tap_register_t *r = PART->active_instruction->data_register->in;
     int i;
 
     DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);

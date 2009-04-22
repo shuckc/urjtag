@@ -30,10 +30,10 @@
 
 #include "data_register.h"
 
-data_register *
+data_register_t *
 data_register_alloc (const char *name, int len)
 {
-    data_register *dr;
+    data_register_t *dr;
 
     if (!name)
         return NULL;
@@ -72,7 +72,7 @@ data_register_alloc (const char *name, int len)
 }
 
 void
-data_register_free (data_register *dr)
+data_register_free (data_register_t *dr)
 {
     if (!dr)
         return;

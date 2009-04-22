@@ -44,9 +44,9 @@ int
 detect_register_size (chain_t *chain)
 {
     int len;
-    tap_register *rz;
-    tap_register *rout;
-    tap_register *rpat;
+    tap_register_t *rz;
+    tap_register_t *rout;
+    tap_register_t *rpat;
 
     /* This seems to be a good place to check if TDO changes at all */
     int tdo, tdo_stuck = -2;
@@ -132,8 +132,8 @@ void
 discovery (chain_t *chain)
 {
     int irlen;
-    tap_register *ir;
-    tap_register *irz;
+    tap_register_t *ir;
+    tap_register_t *irz;
 
     /* detecting IR size */
     jtag_reset (chain);

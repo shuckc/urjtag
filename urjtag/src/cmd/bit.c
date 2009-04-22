@@ -48,7 +48,7 @@ static int
 cmd_bit_run (chain_t *chain, char *params[])
 {
     part_t *part;
-    data_register *bsr;
+    data_register_t *bsr;
     unsigned int bit;
     int type;
     int safe;

@@ -37,9 +37,9 @@ urj_tap_idcode (chain_t *chain, unsigned int bytes)
 {
     int i;
     int hit = 0;
-    tap_register *rz;
-    tap_register *rout;
-    tap_register *rnull;
+    tap_register_t *rz;
+    tap_register_t *rout;
+    tap_register_t *rnull;
 
     chain_set_trst (chain, 0);
     chain_set_trst (chain, 1);

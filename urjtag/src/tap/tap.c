@@ -49,7 +49,7 @@ tap_reset_bypass (chain_t *chain)
        instruction register length of the chain is already known */
     if (chain->total_instr_len > 0)
     {
-        tap_register *ir =
+        tap_register_t *ir =
             register_fill (register_alloc (chain->total_instr_len), 1);
         if (!ir)
         {
@@ -66,8 +66,8 @@ tap_reset_bypass (chain_t *chain)
 }
 
 void
-tap_defer_shift_register (chain_t *chain, const tap_register *in,
-                          tap_register *out, int tap_exit)
+tap_defer_shift_register (chain_t *chain, const tap_register_t *in,
+                          tap_register_t *out, int tap_exit)
 {
     int i;
 
@@ -108,8 +108,8 @@ tap_defer_shift_register (chain_t *chain, const tap_register *in,
 }
 
 void
-tap_shift_register_output (chain_t *chain, const tap_register *in,
-                           tap_register *out, int tap_exit)
+tap_shift_register_output (chain_t *chain, const tap_register_t *in,
+                           tap_register_t *out, int tap_exit)
 {
     if (out != NULL)
     {
@@ -131,8 +131,8 @@ tap_shift_register_output (chain_t *chain, const tap_register *in,
 }
 
 void
-tap_shift_register (chain_t *chain, const tap_register *in,
-                    tap_register *out, int tap_exit)
+tap_shift_register (chain_t *chain, const tap_register_t *in,
+                    tap_register_t *out, int tap_exit)
 {
     tap_defer_shift_register (chain, in, out, tap_exit);
     tap_shift_register_output (chain, in, out, tap_exit);

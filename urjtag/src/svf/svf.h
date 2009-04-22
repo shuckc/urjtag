@@ -95,8 +95,8 @@ struct parser_priv
     struct svf_parser_params parser_params;
     void *scanner;
     part_t *part;
-    instruction *ir;
-    data_register *dr;
+    instruction_t *ir;
+    data_register_t *dr;
     sxr_t sir_params;
     sxr_t sdr_params;
     int endir;

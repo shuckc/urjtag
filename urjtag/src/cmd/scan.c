@@ -36,8 +36,8 @@ static int
 cmd_scan_run (chain_t *chain, char *params[])
 {
     part_t *part;
-    data_register *bsr;
-    tap_register *obsr;
+    data_register_t *bsr;
+    tap_register_t *obsr;
     int i;
 
     if ((i = cmd_params (params)) < 1)

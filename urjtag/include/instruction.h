@@ -35,13 +35,13 @@ typedef struct instruction instruction;
 struct instruction
 {
     char name[MAXLEN_INSTRUCTION + 1];
-    tap_register *value;
-    tap_register *out;
-    data_register *data_register;
-    instruction *next;
+    tap_register_t *value;
+    tap_register_t *out;
+    data_register_t *data_register;
+    instruction_t *next;
 };
 
-instruction *instruction_alloc (const char *name, int len, const char *val);
-void instruction_free (instruction *i);
+instruction_t *instruction_alloc (const char *name, int len, const char *val);
+void instruction_free (instruction_t *i);
 
 #endif /* INSTRUCTION_H */

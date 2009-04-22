@@ -30,10 +30,10 @@
 
 #include "instruction.h"
 
-instruction *
+instruction_t *
 instruction_alloc (const char *name, int len, const char *val)
 {
-    instruction *i;
+    instruction_t *i;
 
     if (!name || !val)
         return NULL;
@@ -69,7 +69,7 @@ instruction_alloc (const char *name, int len, const char *val)
 }
 
 void
-instruction_free (instruction *i)
+instruction_free (instruction_t *i)
 {
     if (!i)
         return;

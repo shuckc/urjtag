@@ -85,7 +85,7 @@ cmd_instruction_run (chain_t *chain, char *params[])
 
     if (cmd_params (params) == 4)
     {
-        instruction *i;
+        instruction_t *i;
 
         if (strlen (params[2]) != part->instruction_length)
         {

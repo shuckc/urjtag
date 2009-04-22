@@ -1,4 +1,4 @@
-/*
+/src*
  * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
@@ -104,7 +104,7 @@ cmd_print_run (chain_t *chain, char *params[])
         if (strcasecmp (params[1], "instructions") == 0)
         {
             part_t *part;
-            instruction *inst;
+            instruction_t *inst;
 
             snprintf (format, 128, _(" Active %%-%ds %%-%ds"),
                       MAXLEN_INSTRUCTION, MAXLEN_DATA_REGISTER);

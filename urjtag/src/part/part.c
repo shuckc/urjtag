@@ -32,7 +32,7 @@
 /* part */
 
 part_t *
-part_alloc (const tap_register *id)
+part_alloc (const tap_register_t *id)
 {
     part_t *p = malloc (sizeof *p);
     if (!p)
@@ -87,7 +87,7 @@ part_free (part_t *p)
     /* instructions */
     while (p->instructions)
     {
-        instruction *i = p->instructions;
+        instruction_t *i = p->instructions;
         p->instructions = i->next;
         instruction_free (i);
     }
@@ -95,7 +95,7 @@ part_free (part_t *p)
     /* data registers */
     while (p->data_registers)
     {
-        data_register *dr = p->data_registers;
+        data_register_t *dr = p->data_registers;
         p->data_registers = dr->next;
         data_register_free (dr);
     }
@@ -108,10 +108,10 @@ part_free (part_t *p)
     free (p);
 }
 
-instruction *
+instruction_t *
 part_find_instruction (part_t *p, const char *iname)
 {
-    instruction *i;
+    instruction_t *i;
 
     if (!p || !iname)
         return NULL;
@@ -127,10 +127,10 @@ part_find_instruction (part_t *p, const char *iname)
     return i;
 }
 
-data_register *
+data_register_t *
 part_find_data_register (part_t *p, const char *drname)
 {
-    data_register *dr;
+    data_register_t *dr;
 
     if (!p || !drname)
         return NULL;
@@ -184,7 +184,7 @@ part_set_instruction (part_t *p, const char *iname)
 void
 part_set_signal (part_t *p, signal_t *s, int out, int val)
 {
-    data_register *bsr;
+    data_register_t *bsr;
 
     if (!p || !s)
         return;
@@ -230,7 +230,7 @@ part_set_signal (part_t *p, signal_t *s, int out, int val)
 int
 part_get_signal (part_t *p, signal_t *s)
 {
-    data_register *bsr;
+    data_register_t *bsr;
 
     if (!p || !s)
         return -1;

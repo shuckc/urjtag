@@ -153,7 +153,7 @@ ejtag_bus_printinfo (bus_t *bus)
 }
 
 static uint32_t
-reg_value (tap_register *reg)
+reg_value (tap_register_t *reg)
 {
     uint32_t retval = 0;
     int i;
@@ -169,7 +169,7 @@ reg_value (tap_register *reg)
 static uint32_t
 ejtag_run_pracc (bus_t *bus, const uint32_t *code, unsigned int len)
 {
-    data_register *ejaddr, *ejdata, *ejctrl;
+    data_register_t *ejaddr, *ejdata, *ejctrl;
     int i, pass;
     uint32_t addr, data, retval;
 
@@ -281,7 +281,7 @@ ejtag_run_pracc (bus_t *bus, const uint32_t *code, unsigned int len)
 static int
 ejtag_bus_init (bus_t *bus)
 {
-    data_register *ejctrl, *ejimpl, *ejaddr, *ejdata, *ejall;
+    data_register_t *ejctrl, *ejimpl, *ejaddr, *ejdata, *ejall;
     uint32_t code[4] = {
         0x3c04ff20,             // lui $4,0xff20
         0x349f0200,             // ori $31,$4,0x0200

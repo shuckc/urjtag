@@ -37,7 +37,7 @@ cmd_register_run (chain_t *chain, char *params[])
 {
     part_t *part;
     unsigned int len;
-    data_register *dr;
+    data_register_t *dr;
 
     if (cmd_params (params) != 3)
         return -1;

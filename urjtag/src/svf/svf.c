@@ -407,7 +407,7 @@ svf_build_bit_string (char *hex_string, int len)
  *   0 : error occurred
  */
 static int
-svf_copy_hex_to_register (char *hex_string, tap_register *reg)
+svf_copy_hex_to_register (char *hex_string, tap_register_t *reg)
 {
     char *bit_string;
 
@@ -443,7 +443,7 @@ svf_copy_hex_to_register (char *hex_string, tap_register *reg)
  */
 static int
 svf_compare_tdo (parser_priv_t *priv, char *tdo, char *mask,
-                 tap_register *reg, YYLTYPE * loc)
+                 tap_register_t *reg, YYLTYPE * loc)
 {
     char *tdo_bit, *mask_bit;
     int pos, mismatch, result = 1;
