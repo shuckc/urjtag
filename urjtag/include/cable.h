@@ -37,7 +37,7 @@ typedef struct urj_cable urj_cable_t;
 
 typedef struct urj_cable_driver urj_cable_driver_t;
 
-typedef enum
+typedef enum urj_cable_flush_amount
 {
     URJ_TAP_CABLE_OPTIONALLY,
     URJ_TAP_CABLE_TO_OUTPUT,

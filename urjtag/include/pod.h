@@ -24,7 +24,7 @@
 #ifndef URJ_POD_H
 #define URJ_POD_H
 
-typedef enum
+typedef enum urj_pod_sigsel
 {
     URJ_POD_CS_NONE = 0,        // no/invalid signal
     URJ_POD_CS_TDI = (1 << 0),  // out: JTAG/SPI data in

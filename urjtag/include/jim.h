@@ -37,24 +37,24 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef enum
+typedef enum jim_tap_state
 {
-    URJ_JIM_RESET = 0,
-    URJ_JIM_SELECT_DR = 0 + 1,
-    URJ_JIM_CAPTURE_DR = 0 + 2,
-    URJ_JIM_SHIFT_DR = 0 + 3,
-    URJ_JIM_EXIT1_DR = 0 + 4,
-    URJ_JIM_PAUSE_DR = 0 + 5,
-    URJ_JIM_EXIT2_DR = 0 + 6,
-    URJ_JIM_UPDATE_DR = 0 + 7,
-    URJ_JIM_IDLE = 8,
-    URJ_JIM_SELECT_IR = 8 + 1,
-    URJ_JIM_CAPTURE_IR = 8 + 2,
-    URJ_JIM_SHIFT_IR = 8 + 3,
-    URJ_JIM_EXIT1_IR = 8 + 4,
-    URJ_JIM_PAUSE_IR = 8 + 5,
-    URJ_JIM_EXIT2_IR = 8 + 6,
-    URJ_JIM_UPDATE_IR = 8 + 7,
+    URJ_JIM_RESET       = 0,
+    URJ_JIM_SELECT_DR   = 0 + 1,
+    URJ_JIM_CAPTURE_DR  = 0 + 2,
+    URJ_JIM_SHIFT_DR    = 0 + 3,
+    URJ_JIM_EXIT1_DR    = 0 + 4,
+    URJ_JIM_PAUSE_DR    = 0 + 5,
+    URJ_JIM_EXIT2_DR    = 0 + 6,
+    URJ_JIM_UPDATE_DR   = 0 + 7,
+    URJ_JIM_IDLE        = 8,
+    URJ_JIM_SELECT_IR   = 8 + 1,
+    URJ_JIM_CAPTURE_IR  = 8 + 2,
+    URJ_JIM_SHIFT_IR    = 8 + 3,
+    URJ_JIM_EXIT1_IR    = 8 + 4,
+    URJ_JIM_PAUSE_IR    = 8 + 5,
+    URJ_JIM_EXIT2_IR    = 8 + 6,
+    URJ_JIM_UPDATE_IR   = 8 + 7,
 }
 urj_jim_tap_state_t;
 
