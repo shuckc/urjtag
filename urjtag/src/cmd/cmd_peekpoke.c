@@ -43,7 +43,7 @@ cmd_peek_run (urj_chain_t *chain, char *params[])
     if ((pars = urj_cmd_params (params)) < 2)
         return -1;
 
-    if (!bus)
+    if (!urj_bus)
     {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
@@ -53,9 +53,9 @@ cmd_peek_run (urj_chain_t *chain, char *params[])
         if (urj_cmd_get_number (params[j], &adr))
             return -1;
 
-        URJ_BUS_PREPARE (bus);
-        URJ_BUS_AREA (bus, adr, &area);
-        val = URJ_BUS_READ (bus, adr);
+        URJ_BUS_PREPARE (urj_bus);
+        URJ_BUS_AREA (urj_bus, adr, &area);
+        val = URJ_BUS_READ (urj_bus, adr);
 
         switch (area.width)
         {
@@ -106,22 +106,22 @@ cmd_poke_run (urj_chain_t *chain, char *params[])
     if (pars < 3 || !(pars & 1))
         return -1;
 
-    if (!bus)
+    if (!urj_bus)
     {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
     }
 
 
-    URJ_BUS_PREPARE (bus);
+    URJ_BUS_PREPARE (urj_bus);
 
     while (k < pars)
     {
         if (urj_cmd_get_number (params[k], &adr)
             || urj_cmd_get_number (params[k + 1], &val))
             return -1;
-        URJ_BUS_AREA (bus, adr, &area);
-        URJ_BUS_WRITE (bus, adr, val);
+        URJ_BUS_AREA (urj_bus, adr, &area);
+        URJ_BUS_WRITE (urj_bus, adr, val);
         k += 2;
     }
 

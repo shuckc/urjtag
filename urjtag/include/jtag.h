@@ -39,7 +39,7 @@
 #define URJ_STATUS_SYNTAX_ERROR (-1)
 
 
-extern urj_bus_t *bus;
+extern urj_bus_t *urj_bus;
 extern int big_endian;
 extern int debug_mode;
 

@@ -64,9 +64,9 @@ cmd_detect_run (urj_chain_t *chain, char *params[])
     urj_tap_chain_shift_instructions (chain);
 
     // Initialize all the buses
-    for (i = 0; i < buses.len; i++)
+    for (i = 0; i < urj_buses.len; i++)
     {
-        abus = buses.buses[i];
+        abus = urj_buses.buses[i];
         if (abus->driver->init)
         {
             if (abus->driver->init (abus) != URJ_STATUS_OK)

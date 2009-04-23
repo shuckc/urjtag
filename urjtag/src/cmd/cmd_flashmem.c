@@ -45,7 +45,7 @@ cmd_flashmem_run (urj_chain_t *chain, char *params[])
     if (paramc < 3)
         return -1;
 
-    if (!bus)
+    if (!urj_bus)
     {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
@@ -67,9 +67,9 @@ cmd_flashmem_run (urj_chain_t *chain, char *params[])
         return 1;
     }
     if (msbin)
-        urj_flashmsbin (bus, f, noverify);
+        urj_flashmsbin (urj_bus, f, noverify);
     else
-        urj_flashmem (bus, f, adr, noverify);
+        urj_flashmem (urj_bus, f, adr, noverify);
     fclose (f);
 
     return 1;

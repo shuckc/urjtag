@@ -180,22 +180,22 @@ cmd_print_run (urj_chain_t *chain, char *params[])
 
             urj_part_print (chain->parts->parts[chain->active_part]);
         }
-        if (bus != NULL)
+        if (urj_bus != NULL)
         {
             int i;
             uint64_t a;
             urj_bus_area_t area;
 
-            for (i = 0; i < buses.len; i++)
-                if (buses.buses[i] == bus)
+            for (i = 0; i < urj_buses.len; i++)
+                if (urj_buses.buses[i] == urj_bus)
                     break;
             printf (_("\nActive bus:\n*%d: "), i);
-            URJ_BUS_PRINTINFO (bus);
+            URJ_BUS_PRINTINFO (urj_bus);
 
             for (a = 0; a < UINT64_C (0x100000000);
                  a = area.start + area.length)
             {
-                if (URJ_BUS_AREA (bus, a, &area) != URJ_STATUS_OK)
+                if (URJ_BUS_AREA (urj_bus, a, &area) != URJ_STATUS_OK)
                 {
                     printf (_
                             ("Error in bus area urj_tap_discovery at 0x%08llX\n"),
@@ -229,13 +229,13 @@ cmd_print_run (urj_chain_t *chain, char *params[])
         return 1;
     }
 
-    for (i = 0; i < buses.len; i++)
+    for (i = 0; i < urj_buses.len; i++)
     {
-        if (buses.buses[i] == bus)
+        if (urj_buses.buses[i] == urj_bus)
             printf (_("*%d: "), i);
         else
             printf (_("%d: "), i);
-        URJ_BUS_PRINTINFO (buses.buses[i]);
+        URJ_BUS_PRINTINFO (urj_buses.buses[i]);
     }
 
     return 1;

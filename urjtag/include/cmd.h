@@ -44,7 +44,7 @@ typedef struct
     int (*run) (urj_chain_t *chain, char *params[]);
 } urj_cmd_t;
 
-extern const urj_cmd_t *cmds[];
+extern const urj_cmd_t *urj_cmds[];
 
 char **urj_cmd_completion (const char *text, int start, int end);
 int urj_cmd_run (urj_chain_t *chain, char *params[]);

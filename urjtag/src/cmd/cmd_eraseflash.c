@@ -43,7 +43,7 @@ cmd_eraseflash_run (urj_chain_t *chain, char *params[])
         return -1;
     if (!urj_cmd_test_cable (chain))
         return 1;
-    if (!bus)
+    if (!urj_bus)
     {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
@@ -52,7 +52,7 @@ cmd_eraseflash_run (urj_chain_t *chain, char *params[])
         return -1;
     if (urj_cmd_get_number (params[2], &number))
         return -1;
-    urj_flasherase (bus, adr, number);
+    urj_flasherase (urj_bus, adr, number);
 
     return 1;
 }

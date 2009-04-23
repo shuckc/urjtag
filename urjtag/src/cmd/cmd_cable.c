@@ -89,10 +89,10 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
         }
     }
 
-    if (bus)
+    if (urj_bus)
     {
-        URJ_BUS_FREE (bus);
-        bus = NULL;
+        URJ_BUS_FREE (urj_bus);
+        urj_bus = NULL;
     }
 
     urj_tap_chain_disconnect (chain);

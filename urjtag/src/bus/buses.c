@@ -139,21 +139,21 @@ const urj_bus_driver_t *bus_drivers[] = {
     NULL                        /* last must be NULL */
 };
 
-urj_bus_t *bus = NULL;
-urj_buses_t buses = { 0, NULL };
+urj_bus_t *urj_bus = NULL;
+urj_buses_t urj_buses = { 0, NULL };
 
 void
 urj_bus_buses_free (void)
 {
     int i;
 
-    for (i = 0; i < buses.len; i++)
-        URJ_BUS_FREE (buses.buses[i]);
+    for (i = 0; i < urj_buses.len; i++)
+        URJ_BUS_FREE (urj_buses.buses[i]);
 
-    free (buses.buses);
-    buses.len = 0;
-    buses.buses = NULL;
-    bus = NULL;
+    free (urj_buses.buses);
+    urj_buses.len = 0;
+    urj_buses.buses = NULL;
+    urj_bus = NULL;
 }
 
 void
@@ -164,16 +164,16 @@ urj_bus_buses_add (urj_bus_t *abus)
     if (abus == NULL)
         return;
 
-    b = realloc (buses.buses, (buses.len + 1) * sizeof (urj_bus_t *));
+    b = realloc (urj_buses.buses, (urj_buses.len + 1) * sizeof (urj_bus_t *));
     if (b == NULL)
     {
         printf (_("Out of memory\n"));
         return;
     }
-    buses.buses = b;
-    buses.buses[buses.len++] = abus;
-    if (bus == NULL)
-        bus = abus;
+    urj_buses.buses = b;
+    urj_buses.buses[urj_buses.len++] = abus;
+    if (urj_bus == NULL)
+        urj_bus = abus;
 }
 
 void
@@ -182,25 +182,25 @@ urj_bus_buses_delete (urj_bus_t *abus)
     int i;
     urj_bus_t **b;
 
-    for (i = 0; i < buses.len; i++)
-        if (abus == buses.buses[i])
+    for (i = 0; i < urj_buses.len; i++)
+        if (abus == urj_buses.buses[i])
             break;
-    if (i >= buses.len)
+    if (i >= urj_buses.len)
         return;
 
-    while (i + 1 < buses.len)
+    while (i + 1 < urj_buses.len)
     {
-        buses.buses[i] = buses.buses[i + 1];
+        urj_buses.buses[i] = urj_buses.buses[i + 1];
         i++;
     }
-    buses.len--;
-    b = realloc (buses.buses, buses.len * sizeof (urj_bus_t *));
-    if ((b != NULL) || (buses.len == 0))
-        buses.buses = b;
+    urj_buses.len--;
+    b = realloc (urj_buses.buses, urj_buses.len * sizeof (urj_bus_t *));
+    if ((b != NULL) || (urj_buses.len == 0))
+        urj_buses.buses = b;
 
-    if (bus != abus)
+    if (urj_bus != abus)
         return;
 
-    if (buses.len > 0)
-        bus = buses.buses[0];
+    if (urj_buses.len > 0)
+        urj_bus = urj_buses.buses[0];
 }

@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 
+#include <jtag.h>
 #include <flash.h>
 #include <cmd.h>
 
@@ -37,7 +38,7 @@ cmd_detectflash_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_params (params) != 2)
         return -1;
 
-    if (!bus)
+    if (!urj_bus)
     {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
@@ -46,7 +47,7 @@ cmd_detectflash_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[1], &adr))
         return -1;
 
-    urj_flash_detectflash (bus, adr);
+    urj_flash_detectflash (urj_bus, adr);
 
     return 1;
 }

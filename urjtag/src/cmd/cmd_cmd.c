@@ -79,7 +79,7 @@ extern urj_cmd_t cmd_bsdl;
 #endif
 extern urj_cmd_t cmd_debug;
 
-const urj_cmd_t *cmds[] = {
+const urj_cmd_t *urj_cmds[] = {
     &cmd_quit,
     &cmd_help,
     &cmd_frequency,
@@ -139,9 +139,9 @@ cmd_find_next (const char *text, int state)
         len = strlen (text);
     }
 
-    while (cmds[cmd_idx])
+    while (urj_cmds[cmd_idx])
     {
-        char *name = cmds[cmd_idx++]->name;
+        char *name = urj_cmds[cmd_idx++]->name;
         if (!strncmp (name, text, len))
             return strdup (name);
     }
@@ -189,18 +189,18 @@ urj_cmd_run (urj_chain_t *chain, char *params[])
     pidx = -1;
     len = strlen (params[0]);
 
-    for (i = 0; cmds[i]; ++i)
+    for (i = 0; urj_cmds[i]; ++i)
     {
-        if (strcasecmp (cmds[i]->name, params[0]) == 0)
+        if (strcasecmp (urj_cmds[i]->name, params[0]) == 0)
         {
             int r;
           run_cmd:
-            r = cmds[i]->run (chain, params);
+            r = urj_cmds[i]->run (chain, params);
             if (r < 0)
                 printf (_("%s: syntax error!\n"), params[0]);
             return r;
         }
-        else if (strncasecmp (cmds[i]->name, params[0], len) == 0)
+        else if (strncasecmp (urj_cmds[i]->name, params[0], len) == 0)
         {
             if (pidx == -1)
                 pidx = i;

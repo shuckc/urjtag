@@ -3,6 +3,8 @@
   Expand tabs also in #defines -- indent skips them.
   Run indent again. Since many identifiers have changed, line wraps have to
   be redone.
+  Public typedefs of enums follow the same naming scheme as structs:
+  typedef enum urj_bla { ... } urj_bla_t;
   * affects the complete code base.
 
 2009-04-23  Rutger Hofman <rfhh>

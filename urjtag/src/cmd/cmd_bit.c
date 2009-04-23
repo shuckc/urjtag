@@ -24,6 +24,7 @@
 
 #include "sysdep.h"
 
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -32,15 +33,17 @@
 #include "cmd.h"
 
 static void
-cmd_bit_print_params (char *params[], unsigned int parameters, char *command)
+cmd_bit_print_params (char *params[], unsigned int parameters, char *command,
+                      size_t command_size)
 {
     unsigned int i;
 
-    strcpy (command, params[0]);
+    command[0] = '\0';
+    strncat (command, params[0], command_size);
     for (i = 1; i < parameters; i++)
     {
-        strcat (command, " ");
-        strcat (command, params[i]);
+        strncat (command, " ", command_size);
+        strncat (command, params[i], command_size);
     }
 }
 
@@ -56,7 +59,7 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
     unsigned int parameters = urj_cmd_params (params);
     char command[1024];
 
-    cmd_bit_print_params (params, parameters, command);
+    cmd_bit_print_params (params, parameters, command, sizeof command);
 
     if ((parameters != 5) && (parameters != 8))
     {
@@ -157,7 +160,7 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
         return -1;
     }
 
-    safe = (params[3][0] == '1') ? 1 : 0;
+    safe = (params[3][0] == '1');
     bsr->in->data[bit] = safe;
 
     /* allocate bsbit */

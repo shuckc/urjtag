@@ -277,10 +277,10 @@ cleanup (urj_chain_t *chain)
     urj_flash_cfi_array_free (cfi_array);
     cfi_array = NULL;
 
-    if (bus)
+    if (urj_bus)
     {
-        URJ_BUS_FREE (bus);
-        bus = NULL;
+        URJ_BUS_FREE (urj_bus);
+        urj_bus = NULL;
     }
     urj_tap_chain_free (chain);
     chain = NULL;

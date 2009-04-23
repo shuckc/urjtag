@@ -78,8 +78,6 @@ struct urj_bus
     const urj_bus_driver_t *driver;
 };
 
-extern urj_bus_t *bus;
-
 #define URJ_BUS_PRINTINFO(bus)          (bus)->driver->printinfo(bus)
 #define URJ_BUS_PREPARE(bus)            (bus)->driver->prepare(bus)
 #define URJ_BUS_AREA(bus,adr,a)         (bus)->driver->area(bus,adr,a)

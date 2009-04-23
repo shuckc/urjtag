@@ -36,7 +36,7 @@ typedef struct
     urj_bus_t **buses;
 } urj_buses_t;
 
-extern urj_buses_t buses;
+extern urj_buses_t urj_buses;
 extern const urj_bus_driver_t *bus_drivers[];
 
 void urj_bus_buses_free (void);

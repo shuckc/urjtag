@@ -38,10 +38,9 @@ cmd_help_run (urj_chain_t *chain, char *params[])
     if (!params[1])
     {
         printf (_("Command list:\n\n"));
-        for (i = 0; cmds[i]; i++)
-            printf (_("%-13s %s\n"), cmds[i]->name,
-                    cmds[i]->desc ? _(cmds[i]->
-                                      desc) :
+        for (i = 0; urj_cmds[i]; i++)
+            printf (_("%-13s %s\n"), urj_cmds[i]->name,
+                    urj_cmds[i]->desc ? _(urj_cmds[i]->desc) :
                     _("(no description available)"));
         printf (_
                 ("\nType \"help COMMAND\" for details about a particular command.\n"));
@@ -52,11 +51,11 @@ cmd_help_run (urj_chain_t *chain, char *params[])
         return -1;
 
     /* search and print help for a particular command */
-    for (i = 0; cmds[i]; i++)
-        if (strcasecmp (cmds[i]->name, params[1]) == 0)
+    for (i = 0; urj_cmds[i]; i++)
+        if (strcasecmp (urj_cmds[i]->name, params[1]) == 0)
         {
-            if (cmds[i]->help)
-                cmds[i]->help ();
+            if (urj_cmds[i]->help)
+                urj_cmds[i]->help ();
             return 1;
         }
 

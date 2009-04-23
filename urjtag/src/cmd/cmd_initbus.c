@@ -69,12 +69,12 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
             if (URJ_BUS_INIT (abus) != URJ_STATUS_OK)
                 printf (_("bus initialization failed!\n"));
 
-            for (i = 0; i < buses.len; i++)
-                if (buses.buses[i] == bus)
+            for (i = 0; i < urj_buses.len; i++)
+                if (urj_buses.buses[i] == urj_bus)
                     break;
-            if (i != buses.len - 1)
+            if (i != urj_buses.len - 1)
                 printf (_("Initialized bus %d, active bus %d\n"),
-                        buses.len - 1, i);
+                        urj_buses.len - 1, i);
 
             return 1;
         }

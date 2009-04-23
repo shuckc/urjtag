@@ -39,7 +39,7 @@ cmd_writemem_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_params (params) != 4)
         return -1;
 
-    if (!bus)
+    if (!urj_bus)
     {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
@@ -55,7 +55,7 @@ cmd_writemem_run (urj_chain_t *chain, char *params[])
         printf (_("Unable to open file `%s'!\n"), params[3]);
         return 1;
     }
-    urj_bus_writemem (bus, f, adr, len);
+    urj_bus_writemem (urj_bus, f, adr, len);
     fclose (f);
 
     return 1;
