@@ -86,7 +86,7 @@ cmd_svf_help (void)
               "\n" "FILE file containing SVF commands\n"), "svf");
 }
 
-urj_cmd_t cmd_svf = {
+urj_cmd_t urj_cmd_svf = {
     "svf",
     N_("execute svf commands from file"),
     cmd_svf_help,

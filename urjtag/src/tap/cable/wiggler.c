@@ -400,7 +400,7 @@ cablename,
 cablename, std_wgl_map);
 }
 
-urj_cable_driver_t wiggler_cable_driver = {
+urj_cable_driver_t urj_tap_cable_wiggler_driver = {
     "WIGGLER",
     N_("Macraigor Wiggler JTAG Cable"),
     wiggler_connect,
@@ -418,7 +418,7 @@ urj_cable_driver_t wiggler_cable_driver = {
     wiggler_help
 };
 
-urj_cable_driver_t igloo_cable_driver = {
+urj_cable_driver_t urj_tap_cable_igloo_driver = {
     "IGLOO",
     N_("Excelpoint IGLOO JTAG Cable"),
     wiggler_connect,

@@ -46,26 +46,26 @@
 #include "flash.h"
 #include "jtag.h"
 
-extern urj_flash_driver_t amd_32_flash_driver;
-extern urj_flash_driver_t amd_16_flash_driver;
-extern urj_flash_driver_t amd_8_flash_driver;
-extern urj_flash_driver_t intel_32_flash_driver;
-extern urj_flash_driver_t intel_16_flash_driver;
-extern urj_flash_driver_t intel_8_flash_driver;
-extern urj_flash_driver_t amd_29xx040_flash_driver;     //20/09/2006
+extern urj_flash_driver_t urj_flash_amd_32_flash_driver;
+extern urj_flash_driver_t urj_flash_amd_16_flash_driver;
+extern urj_flash_driver_t urj_flash_amd_8_flash_driver;
+extern urj_flash_driver_t urj_flash_intel_32_flash_driver;
+extern urj_flash_driver_t urj_flash_intel_16_flash_driver;
+extern urj_flash_driver_t urj_flash_intel_8_flash_driver;
+extern urj_flash_driver_t urj_flash_amd_29xx040_flash_driver;   //20/09/2006
 
-urj_flash_driver_t *flash_drivers[] = {
-    &amd_32_flash_driver,
-    &amd_16_flash_driver,
-    &amd_8_flash_driver,
-    &intel_32_flash_driver,
-    &intel_16_flash_driver,
-    &intel_8_flash_driver,
-    &amd_29xx040_flash_driver,  //20/09/2006
+urj_flash_driver_t *urj_flash_flash_drivers[] = {
+    &urj_flash_amd_32_flash_driver,
+    &urj_flash_amd_16_flash_driver,
+    &urj_flash_amd_8_flash_driver,
+    &urj_flash_intel_32_flash_driver,
+    &urj_flash_intel_16_flash_driver,
+    &urj_flash_intel_8_flash_driver,
+    &urj_flash_amd_29xx040_flash_driver,        //20/09/2006
     NULL
 };
 
-extern urj_flash_cfi_array_t *cfi_array;
+extern urj_flash_cfi_array_t *urj_flash_cfi_array;
 static urj_flash_driver_t *flash_driver = NULL;
 
 static void
@@ -75,15 +75,15 @@ set_flash_driver (void)
     urj_flash_cfi_query_structure_t *cfi;
 
     flash_driver = NULL;
-    if (cfi_array == NULL)
+    if (urj_flash_cfi_array == NULL)
         return;
-    cfi = &cfi_array->cfi_chips[0]->cfi;
+    cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
-    for (i = 0; flash_drivers[i] != NULL; i++)
-        if (flash_drivers[i]->autodetect (cfi_array))
+    for (i = 0; urj_flash_flash_drivers[i] != NULL; i++)
+        if (urj_flash_flash_drivers[i]->autodetect (urj_flash_cfi_array))
         {
-            flash_driver = flash_drivers[i];
-            flash_driver->print_info (cfi_array);
+            flash_driver = urj_flash_flash_drivers[i];
+            flash_driver->print_info (urj_flash_cfi_array);
             return;
         }
 
@@ -101,12 +101,12 @@ urj_flashmsbin (urj_bus_t *bus, FILE * f, int noverify)
     urj_flash_cfi_query_structure_t *cfi;
 
     set_flash_driver ();
-    if (!cfi_array || !flash_driver)
+    if (!urj_flash_cfi_array || !flash_driver)
     {
         printf (_("no flash driver found\n"));
         return;
     }
-    cfi = &cfi_array->cfi_chips[0]->cfi;
+    cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
     /* test sync bytes */
     {
@@ -143,10 +143,10 @@ urj_flashmsbin (urj_bus_t *bus, FILE * f, int noverify)
                 first *
                 cfi->device_geometry.erase_block_regions[0].erase_block_size *
                 2;
-            flash_driver->unlock_block (cfi_array, adr);
+            flash_driver->unlock_block (urj_flash_cfi_array, adr);
             printf (_("block %d unlocked\n"), first);
             printf (_("erasing block %d: %d\n"), first,
-                    flash_driver->erase_block (cfi_array, adr));
+                    flash_driver->erase_block (urj_flash_cfi_array, adr));
         }
     }
 
@@ -182,7 +182,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE * f, int noverify)
             printf ("\r");
             fflush (stdout);
             fread (&data, sizeof data, 1, f);
-            if (flash_driver->program (cfi_array, a, &data, 1))
+            if (flash_driver->program (urj_flash_cfi_array, a, &data, 1))
             {
                 printf (_("\nflash error\n"));
                 return;
@@ -193,7 +193,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE * f, int noverify)
     }
     printf ("\n");
 
-    flash_driver->readarray (cfi_array);
+    flash_driver->readarray (urj_flash_cfi_array);
 
     if (noverify)
     {
@@ -298,15 +298,15 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
     uint32_t write_buffer_adr;
 
     set_flash_driver ();
-    if (!cfi_array || !flash_driver)
+    if (!urj_flash_cfi_array || !flash_driver)
     {
         printf (_("no flash driver found\n"));
         return;
     }
-    cfi = &cfi_array->cfi_chips[0]->cfi;
+    cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
-    bus_width = cfi_array->bus_width;
-    chip_width = cfi_array->cfi_chips[0]->width;
+    bus_width = urj_flash_cfi_array->bus_width;
+    chip_width = urj_flash_cfi_array->cfi_chips[0]->width;
 
     for (i = 0, neb = 0; i < cfi->device_geometry.number_of_erase_regions;
          i++)
@@ -331,7 +331,8 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
         uint8_t b[BSIZE];
         int bc = 0, bn = 0, btr = BSIZE;
         int block_no =
-            find_block (cfi, adr - cfi_array->address, bus_width, chip_width,
+            find_block (cfi, adr - urj_flash_cfi_array->address, bus_width,
+                        chip_width,
                         &btr);
 
         write_buffer_count = 0;
@@ -343,10 +344,10 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
 
         if (bn > 0 && !erased[block_no])
         {
-            flash_driver->unlock_block (cfi_array, adr);
+            flash_driver->unlock_block (urj_flash_cfi_array, adr);
             printf (_("\nblock %d unlocked\n"), block_no);
             printf (_("erasing block %d: %d\n"), block_no,
-                    flash_driver->erase_block (cfi_array, adr));
+                    flash_driver->erase_block (urj_flash_cfi_array, adr));
             erased[block_no] = 1;
         }
 
@@ -375,7 +376,7 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
 
         if (write_buffer_count > 0)
             if (flash_driver->
-                program (cfi_array, write_buffer_adr, write_buffer,
+                program (urj_flash_cfi_array, write_buffer_adr, write_buffer,
                          write_buffer_count))
             {
                 printf (_("\nflash error\n"));
@@ -387,7 +388,7 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
 
     printf (_("addr: 0x%08X\n"), adr - flash_driver->bus_width);
 
-    flash_driver->readarray (cfi_array);
+    flash_driver->readarray (urj_flash_cfi_array);
 
     if (noverify)
     {
@@ -448,15 +449,15 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
     int chip_width;
 
     set_flash_driver ();
-    if (!cfi_array || !flash_driver)
+    if (!urj_flash_cfi_array || !flash_driver)
     {
         printf (_("no flash driver found\n"));
         return;
     }
-    cfi = &cfi_array->cfi_chips[0]->cfi;
+    cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
-    bus_width = cfi_array->bus_width;
-    chip_width = cfi_array->cfi_chips[0]->width;
+    bus_width = urj_flash_cfi_array->bus_width;
+    chip_width = urj_flash_cfi_array->cfi_chips[0]->width;
 
     printf (_("\nErasing %d Flash block%s from address 0x%x\n"), number,
             number > 1 ? "s" : "", addr);
@@ -465,7 +466,8 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
     {
         int btr = 0;
         int block_no =
-            find_block (cfi, addr - cfi_array->address, bus_width, chip_width,
+            find_block (cfi, addr - urj_flash_cfi_array->address, bus_width,
+                        chip_width,
                         &btr);
 
         if (block_no < 0)
@@ -477,10 +479,10 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
         printf (_("(%d%% Completed) FLASH Block %d : Unlocking ... "),
                 i * 100 / number, block_no);
         fflush (stdout);
-        flash_driver->unlock_block (cfi_array, addr);
+        flash_driver->unlock_block (urj_flash_cfi_array, addr);
         printf (_("Erasing ... "));
         fflush (stdout);
-        status = flash_driver->erase_block (cfi_array, addr);
+        status = flash_driver->erase_block (urj_flash_cfi_array, addr);
         if (status == 0)
         {
             if (i == number)

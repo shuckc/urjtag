@@ -134,7 +134,7 @@ cmd_scan_help (void)
               "Read BSR and show changes since last scan.\n"), "scan");
 }
 
-urj_cmd_t cmd_scan = {
+urj_cmd_t urj_cmd_scan = {
     "scan",
     N_("read BSR and show changes since last scan"),
     cmd_scan_help,

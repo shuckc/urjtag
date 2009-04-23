@@ -141,7 +141,7 @@ mpcbdm_set_signal (urj_cable_t *cable, int mask, int val)
     return prev_sigs;
 }
 
-urj_cable_driver_t mpcbdm_cable_driver = {
+urj_cable_driver_t urj_tap_cable_mpcbdm_driver = {
     "MPCBDM",
     N_("Mpcbdm JTAG cable"),
     urj_tap_cable_generic_parport_connect,

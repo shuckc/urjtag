@@ -39,109 +39,109 @@
 
 #undef VERBOSE
 
-extern urj_cable_driver_t arcom_cable_driver;
-extern urj_cable_driver_t byteblaster_cable_driver;
-extern urj_cable_driver_t usbblaster_cable_driver;
-extern urj_cable_driver_t ft2232_cable_driver;
-extern urj_cable_driver_t ft2232_jtagkey_cable_driver;
-extern urj_cable_driver_t ft2232_armusbocd_cable_driver;
-extern urj_cable_driver_t ft2232_gnice_cable_driver;
-extern urj_cable_driver_t ft2232_oocdlinks_cable_driver;
-extern urj_cable_driver_t ft2232_signalyzer_cable_driver;
-extern urj_cable_driver_t ft2232_turtelizer2_cable_driver;
-extern urj_cable_driver_t ft2232_usbtojtagif_cable_driver;
-extern urj_cable_driver_t ft2232_flyswatter_cable_driver;
-extern urj_cable_driver_t ft2232_usbscarab2_cable_driver;
-extern urj_cable_driver_t dlc5_cable_driver;
-extern urj_cable_driver_t ea253_cable_driver;
-extern urj_cable_driver_t ei012_cable_driver;
-extern urj_cable_driver_t igloo_cable_driver;
-extern urj_cable_driver_t keithkoep_cable_driver;
-extern urj_cable_driver_t lattice_cable_driver;
-extern urj_cable_driver_t mpcbdm_cable_driver;
-extern urj_cable_driver_t triton_cable_driver;
-extern urj_cable_driver_t jim_cable_driver;
-extern urj_cable_driver_t wiggler_cable_driver;
-extern urj_cable_driver_t wiggler2_cable_driver;
-extern urj_cable_driver_t wiggler_cable_driver;
-extern urj_cable_driver_t xpc_int_cable_driver;
-extern urj_cable_driver_t xpc_ext_cable_driver;
-extern urj_cable_driver_t jlink_cable_driver;
-extern urj_cable_driver_t ep9307_cable_driver;
-extern urj_cable_driver_t ts7800_cable_driver;
+extern urj_cable_driver_t urj_tap_cable_arcom_driver;
+extern urj_cable_driver_t urj_tap_cable_byteblaster_driver;
+extern urj_cable_driver_t urj_tap_cable_usbblaster_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_oocdlinks_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_signalyzer_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_flyswatter_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver;
+extern urj_cable_driver_t urj_tap_cable_dlc5_driver;
+extern urj_cable_driver_t urj_tap_cable_ea253_driver;
+extern urj_cable_driver_t urj_tap_cable_ei012_driver;
+extern urj_cable_driver_t urj_tap_cable_igloo_driver;
+extern urj_cable_driver_t urj_tap_cable_keithkoep_driver;
+extern urj_cable_driver_t urj_tap_cable_lattice_driver;
+extern urj_cable_driver_t urj_tap_cable_mpcbdm_driver;
+extern urj_cable_driver_t urj_tap_cable_triton_driver;
+extern urj_cable_driver_t urj_tap_cable_jim_driver;
+extern urj_cable_driver_t urj_tap_cable_wiggler_driver;
+extern urj_cable_driver_t urj_tap_cable_wiggler2_driver;
+extern urj_cable_driver_t urj_tap_cable_wiggler_driver;
+extern urj_cable_driver_t urj_tap_cable_xpc_int_driver;
+extern urj_cable_driver_t urj_tap_cable_xpc_ext_driver;
+extern urj_cable_driver_t urj_tap_cable_jlink_driver;
+extern urj_cable_driver_t urj_tap_cable_ep9307_driver;
+extern urj_cable_driver_t urj_tap_cable_ts7800_driver;
 
-urj_cable_driver_t *cable_drivers[] = {
+urj_cable_driver_t *urj_tap_cable_drivers[] = {
 #ifdef ENABLE_CABLE_ARCOM
-    &arcom_cable_driver,
+    &urj_tap_cable_arcom_driver,
 #endif
 #ifdef ENABLE_CABLE_BYTEBLASTER
-    &byteblaster_cable_driver,
+    &urj_tap_cable_byteblaster_driver,
 #endif
 
 #ifdef ENABLE_CABLE_USBBLASTER
-    &usbblaster_cable_driver,
+    &urj_tap_cable_usbblaster_driver,
 #endif
 
 #ifdef ENABLE_CABLE_FT2232
-    &ft2232_cable_driver,
-    &ft2232_jtagkey_cable_driver,
-    &ft2232_armusbocd_cable_driver,
-    &ft2232_gnice_cable_driver,
-    &ft2232_oocdlinks_cable_driver,
-    &ft2232_signalyzer_cable_driver,
-    &ft2232_turtelizer2_cable_driver,
-    &ft2232_usbtojtagif_cable_driver,
-    &ft2232_flyswatter_cable_driver,
-    &ft2232_usbscarab2_cable_driver,
+    &urj_tap_cable_ft2232_driver,
+    &urj_tap_cable_ft2232_jtagkey_driver,
+    &urj_tap_cable_ft2232_armusbocd_driver,
+    &urj_tap_cable_ft2232_gnice_driver,
+    &urj_tap_cable_ft2232_oocdlinks_driver,
+    &urj_tap_cable_ft2232_signalyzer_driver,
+    &urj_tap_cable_ft2232_turtelizer2_driver,
+    &urj_tap_cable_ft2232_usbtojtagif_driver,
+    &urj_tap_cable_ft2232_flyswatter_driver,
+    &urj_tap_cable_ft2232_usbscarab2_driver,
 #endif
 
 #ifdef ENABLE_CABLE_DLC5
-    &dlc5_cable_driver,
+    &urj_tap_cable_dlc5_driver,
 #endif
 #ifdef ENABLE_CABLE_EA253
-    &ea253_cable_driver,
+    &urj_tap_cable_ea253_driver,
 #endif
 #ifdef ENABLE_CABLE_EI012
-    &ei012_cable_driver,
+    &urj_tap_cable_ei012_driver,
 #endif
 #ifdef ENABLE_CABLE_IGLOO
-    &igloo_cable_driver,
+    &urj_tap_cable_igloo_driver,
 #endif
 #ifdef ENABLE_CABLE_KEITHKOEP
-    &keithkoep_cable_driver,
+    &urj_tap_cable_keithkoep_driver,
 #endif
 #ifdef ENABLE_CABLE_LATTICE
-    &lattice_cable_driver,
+    &urj_tap_cable_lattice_driver,
 #endif
 #ifdef ENABLE_CABLE_MPCBDM
-    &mpcbdm_cable_driver,
+    &urj_tap_cable_mpcbdm_driver,
 #endif
 #ifdef ENABLE_CABLE_TRITON
-    &triton_cable_driver,
+    &urj_tap_cable_triton_driver,
 #endif
 #ifdef ENABLE_JIM
-    &jim_cable_driver,
+    &urj_tap_cable_jim_driver,
 #endif
 #ifdef ENABLE_CABLE_WIGGLER
-    &wiggler_cable_driver,
-    &wiggler2_cable_driver,
+    &urj_tap_cable_wiggler_driver,
+    &urj_tap_cable_wiggler2_driver,
 #endif
 
 #ifdef ENABLE_CABLE_XPC
-    &xpc_int_cable_driver,
-    &xpc_ext_cable_driver,
+    &urj_tap_cable_xpc_int_driver,
+    &urj_tap_cable_xpc_ext_driver,
 #endif
 
 #ifdef ENABLE_CABLE_JLINK
-    &jlink_cable_driver,
+    &urj_tap_cable_jlink_driver,
 #endif
 
 #ifdef ENABLE_CABLE_EP9307
-    &ep9307_cable_driver,
+    &urj_tap_cable_ep9307_driver,
 #endif
 
 #ifdef ENABLE_CABLE_TS7800
-    &ts7800_cable_driver,
+    &urj_tap_cable_ts7800_driver,
 #endif
     NULL                        /* last must be NULL */
 };

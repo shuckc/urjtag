@@ -88,7 +88,7 @@ cmd_detect_help (void)
             "detect");
 }
 
-urj_cmd_t cmd_detect = {
+urj_cmd_t urj_cmd_detect = {
     "detect",
     N_("detect parts on the JTAG chain"),
     cmd_detect_help,

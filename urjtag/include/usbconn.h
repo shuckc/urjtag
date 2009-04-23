@@ -67,6 +67,6 @@ int urj_tap_usbconn_close (urj_usbconn_t *conn);
 int urj_tap_usbconn_read (urj_usbconn_t *conn, uint8_t *buf, int len);
 int urj_tap_usbconn_write (urj_usbconn_t *conn, uint8_t *buf, int len,
                            int recv);
-extern urj_usbconn_driver_t *usbconn_drivers[];
+extern urj_usbconn_driver_t *urj_tap_usbconn_drivers[];
 
 #endif /* URJ_USBCONN_H */

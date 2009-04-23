@@ -699,7 +699,7 @@ jopcyc_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t jopcyc_bus = {
+const urj_bus_driver_t urj_bus_jopcyc_bus = {
     "jopcyc",
     N_("JOP.design Cyclone Board compatible bus driver via BSR"),
     jopcyc_bus_new,

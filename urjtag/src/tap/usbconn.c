@@ -29,28 +29,28 @@
 #include "usbconn.h"
 
 #ifdef HAVE_LIBUSB
-extern urj_usbconn_driver_t usbconn_libusb_driver;
+extern urj_usbconn_driver_t urj_tap_usbconn_libusb_driver;
 #endif /* HAVE_LIBUSB */
 #ifdef ENABLE_LOWLEVEL_FTD2XX
-extern urj_usbconn_driver_t usbconn_ftd2xx_driver;
-extern urj_usbconn_driver_t usbconn_ftd2xx_mpsse_driver;
+extern urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver;
+extern urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver;
 #endif /* ENABLE_LOWLEVEL_FTD2XX */
 #ifdef ENABLE_LOWLEVEL_FTDI
-extern urj_usbconn_driver_t usbconn_ftdi_driver;
-extern urj_usbconn_driver_t usbconn_ftdi_mpsse_driver;
+extern urj_usbconn_driver_t urj_tap_usbconn_ftdi_driver;
+extern urj_usbconn_driver_t urj_tap_usbconn_ftdi_mpsse_driver;
 #endif /* ENABLE_LOWLEVEL_FTDI */
 
-urj_usbconn_driver_t *usbconn_drivers[] = {
+urj_usbconn_driver_t *urj_tap_usbconn_drivers[] = {
 #ifdef HAVE_LIBUSB
-    &usbconn_libusb_driver,
+    &urj_tap_usbconn_libusb_driver,
 #endif /* HAVE_LIBUSB */
 #ifdef ENABLE_LOWLEVEL_FTD2XX
-    &usbconn_ftd2xx_driver,
-    &usbconn_ftd2xx_mpsse_driver,
+    &urj_tap_usbconn_ftd2xx_driver,
+    &urj_tap_usbconn_ftd2xx_mpsse_driver,
 #endif /* ENABLE_LOWLEVEL_FTD2XX */
 #ifdef ENABLE_LOWLEVEL_FTDI
-    &usbconn_ftdi_driver,
-    &usbconn_ftdi_mpsse_driver,
+    &urj_tap_usbconn_ftdi_driver,
+    &urj_tap_usbconn_ftdi_mpsse_driver,
 #endif /* ENABLE_LOWLEVEL_FTDI */
     NULL                        /* last must be NULL */
 };

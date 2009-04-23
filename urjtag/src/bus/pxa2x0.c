@@ -748,7 +748,7 @@ pxa2xx_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t pxa2x0_bus = {
+const urj_bus_driver_t urj_bus_pxa2x0_bus = {
     "pxa2x0",
     N_("Intel PXA2x0 compatible bus driver via BSR"),
     pxa2xx_bus_new,
@@ -764,7 +764,7 @@ const urj_bus_driver_t pxa2x0_bus = {
     pxa2xx_bus_init
 };
 
-const urj_bus_driver_t pxa27x_bus = {
+const urj_bus_driver_t urj_bus_pxa27x_bus = {
     "pxa27x",
     N_("Intel PXA27x compatible bus driver via BSR"),
     pxa2xx_bus_new,

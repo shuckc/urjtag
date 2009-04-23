@@ -276,7 +276,7 @@ ppc440gx_ebc8_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t ppc440gx_ebc8_bus = {
+const urj_bus_driver_t urj_bus_ppc440gx_ebc8_bus = {
     "ppc440gx_ebc8",
     N_("IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"),
     ppc440gx_ebc8_bus_new,

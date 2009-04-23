@@ -38,7 +38,7 @@
 #include "parport.h"
 #include "cable.h"
 
-urj_parport_driver_t ppi_parport_driver;
+urj_parport_driver_t urj_tap_parport_ppi_parport_driver;
 
 typedef struct port_node_t port_node_t;
 
@@ -77,7 +77,7 @@ ppi_parport_alloc (const char *port)
     params->fd = -1;
 
     parport->params = params;
-    parport->driver = &ppi_parport_driver;
+    parport->driver = &urj_tap_parport_ppi_parport_driver;
     parport->cable = NULL;
 
     node->port = parport;
@@ -215,7 +215,7 @@ ppi_set_control (urj_parport_t *parport, uint8_t data)
     return 0;
 }
 
-urj_parport_driver_t ppi_parport_driver = {
+urj_parport_driver_t urj_tap_parport_ppi_parport_driver = {
     "ppi",
     ppi_connect,
     ppi_parport_free,

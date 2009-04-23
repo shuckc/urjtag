@@ -153,7 +153,7 @@ wiggler2_set_signal (urj_cable_t *cable, int mask, int val)
     return prev_sigs;
 }
 
-urj_cable_driver_t wiggler2_cable_driver = {
+urj_cable_driver_t urj_tap_cable_wiggler2_driver = {
     "WIGGLER2",
     N_("Modified (with CPU Reset) WIGGLER JTAG Cable"),
     urj_tap_cable_generic_parport_connect,

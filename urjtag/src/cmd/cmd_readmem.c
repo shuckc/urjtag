@@ -77,7 +77,7 @@ cmd_readmem_help (void)
             "urj_bus_readmem");
 }
 
-urj_cmd_t cmd_readmem = {
+urj_cmd_t urj_cmd_readmem = {
     "urj_bus_readmem",
     N_("read content of the memory and write it to file"),
     cmd_readmem_help,

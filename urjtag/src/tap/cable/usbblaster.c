@@ -504,7 +504,7 @@ usbblaster_help (const char *cablename)
             DEFAULT_DRIVER);
 }
 
-urj_cable_driver_t usbblaster_cable_driver = {
+urj_cable_driver_t urj_tap_cable_usbblaster_driver = {
     "UsbBlaster",
     N_("Altera USB-Blaster Cable"),
     usbblaster_connect,
@@ -523,56 +523,56 @@ urj_cable_driver_t usbblaster_cable_driver = {
     usbblaster_flush,
     usbblaster_help,
 };
-urj_usbconn_cable_t usbconn_cable_usbblaster_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_usbblaster_ftdi = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6001                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_cubic_cyclonium_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_cubic_cyclonium_ftdi = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6002                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_nios_eval_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_nios_eval_ftdi = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6003                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_usb_jtag_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_usb_jtag_ftdi = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x16C0,                     /* VID */
     0x06AD                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_usbblaster_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_usbblaster_ftd2xx = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx",                   /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6001                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_cubic_cyclonium_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_cubic_cyclonium_ftd2xx = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx",                   /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6002                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_nios_eval_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_nios_eval_ftd2xx = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi",                     /* default usbconn driver */
     0x09FB,                     /* VID */
     0x6003                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_usb_jtag_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_usb_jtag_ftd2xx = {
     "UsbBlaster",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx",                   /* default usbconn driver */

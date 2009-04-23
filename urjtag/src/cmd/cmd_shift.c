@@ -64,7 +64,7 @@ cmd_shift_help (void)
             "shift ir", "shift dr");
 }
 
-urj_cmd_t cmd_shift = {
+urj_cmd_t urj_cmd_shift = {
     "shift",
     N_("shift data/instruction registers through JTAG chain"),
     cmd_shift_help,

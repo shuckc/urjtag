@@ -709,7 +709,7 @@ static const struct amd_flash_info table[] = {
 
 int
 urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
-                        urj_flash_cfi_array_t **cfi_array)
+                        urj_flash_cfi_array_t **urj_flash_cfi_array)
 {
     /* Temporary containers for manufacturer and device id while
        probing with different Autoselect methods. */
@@ -720,26 +720,27 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
     urj_flash_cfi_query_structure_t *cfi;
     urj_bus_area_t area;
 
-    *cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
-    if (!*cfi_array)
+    *urj_flash_cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
+    if (!*urj_flash_cfi_array)
         return -2;              /* out of memory */
 
-    (*cfi_array)->bus = bus;
-    (*cfi_array)->address = adr;
+    (*urj_flash_cfi_array)->bus = bus;
+    (*urj_flash_cfi_array)->address = adr;
     if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
         return -8;              /* bus width detection failed */
     bw = area.width;
     if (bw != 8 && bw != 16 && bw != 32)
         return -3;              /* invalid bus width */
-    (*cfi_array)->bus_width = ba = bw / 8;
+    (*urj_flash_cfi_array)->bus_width = ba = bw / 8;
 
-    (*cfi_array)->cfi_chips =
+    (*urj_flash_cfi_array)->cfi_chips =
         calloc (1, sizeof (urj_flash_cfi_chip_t *) * ba);
-    if (!(*cfi_array)->cfi_chips)
+    if (!(*urj_flash_cfi_array)->cfi_chips)
         return -2;              /* out of memory */
 
-    (*cfi_array)->cfi_chips[0] = calloc (1, sizeof (urj_flash_cfi_chip_t));
-    if (!(*cfi_array)->cfi_chips[0])
+    (*urj_flash_cfi_array)->cfi_chips[0] =
+        calloc (1, sizeof (urj_flash_cfi_chip_t));
+    if (!(*urj_flash_cfi_array)->cfi_chips[0])
         return -2;              /* out of memory */
 
     /* probe device with Autoselect method 1 */
@@ -776,7 +777,7 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
     if (i == sizeof (table) / sizeof (struct amd_flash_info))
         return -4;
 
-    cfi = &(*cfi_array)->cfi_chips[0]->cfi;
+    cfi = &(*urj_flash_cfi_array)->cfi_chips[0]->cfi;
 
     cfi->identification_string.pri_id_code = CFI_VENDOR_AMD_SCS;
     cfi->identification_string.pri_vendor_tbl = NULL;
@@ -789,26 +790,26 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
     switch (table[i].interface_width)
     {
     case CFI_INTERFACE_X8:
-        (*cfi_array)->cfi_chips[0]->width = 1;
+        (*urj_flash_cfi_array)->cfi_chips[0]->width = 1;
         break;
     case CFI_INTERFACE_X16:
-        (*cfi_array)->cfi_chips[0]->width = 2;
+        (*urj_flash_cfi_array)->cfi_chips[0]->width = 2;
         break;
     case CFI_INTERFACE_X8_X16:
         fprintf (stderr,
                  "Warning: Unsupported interface geometry %s, falling back to %s\n",
                  "CFI_INTERFACE_X8_X16", "CFI_INTERFACE_X16");
-        (*cfi_array)->cfi_chips[0]->width = 2;
+        (*urj_flash_cfi_array)->cfi_chips[0]->width = 2;
         cfi->device_geometry.device_interface = CFI_INTERFACE_X16;
         break;
     case CFI_INTERFACE_X32:
-        (*cfi_array)->cfi_chips[0]->width = 4;
+        (*urj_flash_cfi_array)->cfi_chips[0]->width = 4;
         break;
     case CFI_INTERFACE_X16_X32:
         fprintf (stderr,
                  "Warning: Unsupported interface geometry %s, falling back to %s\n",
                  "CFI_INTERFACE_X16_X32", "CFI_INTERFACE_X32");
-        (*cfi_array)->cfi_chips[0]->width = 4;
+        (*urj_flash_cfi_array)->cfi_chips[0]->width = 4;
         cfi->device_geometry.device_interface = CFI_INTERFACE_X32;
         break;
     default:
@@ -816,7 +817,7 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
         fprintf (stderr,
                  "Error: Unsupported interface geometry %d, bailing out\n",
                  table[i].interface_width);
-        (*cfi_array)->cfi_chips[0]->width = 1;
+        (*urj_flash_cfi_array)->cfi_chips[0]->width = 1;
         cfi->device_geometry.device_interface = CFI_INTERFACE_X8;
         return -5;
         break;

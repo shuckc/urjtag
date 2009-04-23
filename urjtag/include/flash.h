@@ -57,9 +57,9 @@ typedef struct
     urj_flash_cfi_chip_t **cfi_chips;
 } urj_flash_cfi_array_t;
 
-void urj_flash_cfi_array_free (urj_flash_cfi_array_t *cfi_array);
+void urj_flash_cfi_array_free (urj_flash_cfi_array_t *urj_flash_cfi_array);
 int urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
-                          urj_flash_cfi_array_t **cfi_array);
+                          urj_flash_cfi_array_t **urj_flash_cfi_array);
 
 /* End of brux/cfi.h */
 
@@ -68,13 +68,15 @@ typedef struct
     unsigned int bus_width;     /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
     const char *name;
     const char *description;
-    int (*autodetect) (urj_flash_cfi_array_t *cfi_array);
-    void (*print_info) (urj_flash_cfi_array_t *cfi_array);
-    int (*erase_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
-    int (*unlock_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
-    int (*program) (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
+    int (*autodetect) (urj_flash_cfi_array_t *urj_flash_cfi_array);
+    void (*print_info) (urj_flash_cfi_array_t *urj_flash_cfi_array);
+    int (*erase_block) (urj_flash_cfi_array_t *urj_flash_cfi_array,
+                        uint32_t adr);
+    int (*unlock_block) (urj_flash_cfi_array_t *urj_flash_cfi_array,
+                         uint32_t adr);
+    int (*program) (urj_flash_cfi_array_t *urj_flash_cfi_array, uint32_t adr,
                     uint32_t *buffer, int count);
-    void (*readarray) (urj_flash_cfi_array_t *cfi_array);
+    void (*readarray) (urj_flash_cfi_array_t *urj_flash_cfi_array);
 } urj_flash_driver_t;
 
 #define URJ_FLASH_ERROR_NOERROR                         0
@@ -90,6 +92,6 @@ void urj_flashmsbin (urj_bus_t *bus, FILE * f, int);
 
 /* end of original brux/flash.h */
 
-extern urj_flash_driver_t *flash_drivers[];
+extern urj_flash_driver_t *urj_flash_flash_drivers[];
 
 #endif /* URJ_FLASH_H */

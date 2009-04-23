@@ -87,7 +87,7 @@ cmd_pod_help (void)
               "#          0 or 1\n"), "pod");
 }
 
-urj_cmd_t cmd_pod = {
+urj_cmd_t urj_cmd_pod = {
     "pod",
     N_("Set state of POD signal(s)"),
     cmd_pod_help,

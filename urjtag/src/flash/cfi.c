@@ -39,37 +39,37 @@
 #include <bus.h>
 
 void
-urj_flash_cfi_array_free (urj_flash_cfi_array_t *cfi_array)
+urj_flash_cfi_array_free (urj_flash_cfi_array_t *urj_flash_cfi_array)
 {
-    if (!cfi_array)
+    if (!urj_flash_cfi_array)
         return;
 
-    if (cfi_array->cfi_chips)
+    if (urj_flash_cfi_array->cfi_chips)
     {
         int i;
 
-        for (i = 0; i < cfi_array->bus_width; i++)
+        for (i = 0; i < urj_flash_cfi_array->bus_width; i++)
         {
-            if (!cfi_array->cfi_chips[i])
+            if (!urj_flash_cfi_array->cfi_chips[i])
                 continue;
 
-            free (cfi_array->cfi_chips[i]->cfi.device_geometry.
+            free (urj_flash_cfi_array->cfi_chips[i]->cfi.device_geometry.
                   erase_block_regions);
-            if (cfi_array->cfi_chips[i]->cfi.identification_string.
+            if (urj_flash_cfi_array->cfi_chips[i]->cfi.identification_string.
                 pri_vendor_tbl)
-                free (cfi_array->cfi_chips[i]->cfi.identification_string.
-                      pri_vendor_tbl);
-            free (cfi_array->cfi_chips[i]);
+                free (urj_flash_cfi_array->cfi_chips[i]->cfi.
+                      identification_string.pri_vendor_tbl);
+            free (urj_flash_cfi_array->cfi_chips[i]);
         }
-        free (cfi_array->cfi_chips);
+        free (urj_flash_cfi_array->cfi_chips);
     }
 
-    free (cfi_array);
+    free (urj_flash_cfi_array);
 }
 
 int
 urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
-                      urj_flash_cfi_array_t **cfi_array)
+                      urj_flash_cfi_array_t **urj_flash_cfi_array)
 {
     unsigned int bw;            /* bus width */
     unsigned int d;             /* data offset */
@@ -77,23 +77,24 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
     int ma;                     /* flash mode address multiplier */
     urj_bus_area_t area;
 
-    if (!cfi_array || !bus)
+    if (!urj_flash_cfi_array || !bus)
         return -1;              /* invalid parameters */
 
-    *cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
-    if (!*cfi_array)
+    *urj_flash_cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
+    if (!*urj_flash_cfi_array)
         return -2;              /* out of memory */
 
-    (*cfi_array)->bus = bus;
-    (*cfi_array)->address = adr;
+    (*urj_flash_cfi_array)->bus = bus;
+    (*urj_flash_cfi_array)->address = adr;
     if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
         return -8;              /* bus width detection failed */
     bw = area.width;
     if (bw != 8 && bw != 16 && bw != 32)
         return -3;              /* invalid bus width */
-    (*cfi_array)->bus_width = ba = bw / 8;
-    (*cfi_array)->cfi_chips = calloc (ba, sizeof (urj_flash_cfi_chip_t *));
-    if (!(*cfi_array)->cfi_chips)
+    (*urj_flash_cfi_array)->bus_width = ba = bw / 8;
+    (*urj_flash_cfi_array)->cfi_chips =
+        calloc (ba, sizeof (urj_flash_cfi_chip_t *));
+    if (!(*urj_flash_cfi_array)->cfi_chips)
         return -2;              /* out of memory */
 
     for (d = 0; d < bw; d += 8)
@@ -134,14 +135,14 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
             return -6;          /* CFI not detected (Y) */
         }
 
-        (*cfi_array)->cfi_chips[d / 8] =
+        (*urj_flash_cfi_array)->cfi_chips[d / 8] =
             calloc (1, sizeof (urj_flash_cfi_chip_t));
-        if (!(*cfi_array)->cfi_chips[d / 8])
+        if (!(*urj_flash_cfi_array)->cfi_chips[d / 8])
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
             return -2;          /* out of memory */
         }
-        cfi = &(*cfi_array)->cfi_chips[d / 8]->cfi;
+        cfi = &(*urj_flash_cfi_array)->cfi_chips[d / 8]->cfi;
 
         /* Identification string - see Table 6 in [1] */
         cfi->identification_string.pri_id_code = read2 (PRI_VENDOR_ID_OFFSET);
@@ -408,31 +409,31 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
         case CFI_INTERFACE_X8:
             if (ma != 1)
                 return -7;      /* error in device detection */
-            (*cfi_array)->cfi_chips[d / 8]->width = 1;
+            (*urj_flash_cfi_array)->cfi_chips[d / 8]->width = 1;
             break;
         case CFI_INTERFACE_X16:
             if (ma != 1)
                 return -7;      /* error in device detection */
-            (*cfi_array)->cfi_chips[d / 8]->width = 2;
+            (*urj_flash_cfi_array)->cfi_chips[d / 8]->width = 2;
             d += 8;
             break;
         case CFI_INTERFACE_X8_X16:
             if (ma != 1 && ma != 2)
                 return -7;      /* error in device detection */
-            (*cfi_array)->cfi_chips[d / 8]->width = 2 / ma;
+            (*urj_flash_cfi_array)->cfi_chips[d / 8]->width = 2 / ma;
             if (ma == 1)
                 d += 8;
             break;
         case CFI_INTERFACE_X32:
             if (ma != 1)
                 return -7;      /* error in device detection */
-            (*cfi_array)->cfi_chips[d / 8]->width = 4;
+            (*urj_flash_cfi_array)->cfi_chips[d / 8]->width = 4;
             d += 24;
             break;
         case CFI_INTERFACE_X16_X32:
             if (ma != 1 && ma != 2)
                 return -7;      /* error in device detection */
-            (*cfi_array)->cfi_chips[d / 8]->width = 4 / ma;
+            (*urj_flash_cfi_array)->cfi_chips[d / 8]->width = 4 / ma;
             if (ma == 1)
                 d += 24;
             else

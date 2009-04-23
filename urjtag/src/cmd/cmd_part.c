@@ -104,7 +104,7 @@ cmd_part_help (void)
               "\n" "bus->part          part number | alias\n"), "part");
 }
 
-urj_cmd_t cmd_part = {
+urj_cmd_t urj_cmd_part = {
     "part",
     N_("change active part for current JTAG chain"),
     cmd_part_help,

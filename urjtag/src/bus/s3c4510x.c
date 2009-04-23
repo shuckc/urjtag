@@ -433,7 +433,7 @@ s3c4510_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
 DEBUG_LVL2 (printf ("URJ_BUS_WRITE %08x @ %08x\n", data, adr);)}
 
-const urj_bus_driver_t s3c4510_bus = {
+const urj_bus_driver_t urj_bus_s3c4510_bus = {
     "s3c4510x",
     N_("Samsung S3C4510B compatible bus driver via BSR"),
     s3c4510_bus_new,
@@ -458,64 +458,64 @@ const urj_bus_driver_t s3c4510_bus = {
 **  Revision 1.5  2003/09/10 12:38:01  telka
 **  2003-09-10  Marcel Telka  <marcel@telka.sk>
 **
-**      * src/bus/bcm1250.c (bcm1250_bus_printinfo, bcm1250_bus): Fixed typo (compatibile->compatible) in
+**      * src/bus/bcm1250.c (bcm1250_bus_printinfo, urj_bus_bcm1250_bus): Fixed typo (compatibile->compatible) in
 **              output message (thanks to Andreas Mohr).
-**      * src/bus/ixp425.c (ixp425_bus_printinfo, ixp425_bus): Ditto.
-**      * src/bus/pxa2x0.c (pxa2x0_bus_printinfo, pxa2x0_bus): Ditto.
-**      * src/bus/s3c4510x.c (s3c4510_bus_printinfo, s3c4510_bus): Ditto.
-**      * src/bus/sa1110.c (sa1110_bus_printinfo, sa1110_bus): Ditto.
-**      * src/bus/sh7727.c (sh7727_bus_printinfo, sh7727_bus): Ditto.
-**      * src/bus/sh7750r.c (sh7750r_bus_printinfo, sh7750r_bus): Ditto.
-**      * src/bus/sh7751r.c (sh7751r_bus_printinfo, sh7751r_bus): Ditto.
+**      * src/bus/ixp425.c (ixp425_bus_printinfo, urj_bus_ixp425_bus): Ditto.
+**      * src/bus/pxa2x0.c (pxa2x0_bus_printinfo, urj_bus_pxa2x0_bus): Ditto.
+**      * src/bus/s3c4510x.c (s3c4510_bus_printinfo, urj_bus_s3c4510_bus): Ditto.
+**      * src/bus/sa1110.c (sa1110_bus_printinfo, urj_bus_sa1110_bus): Ditto.
+**      * src/bus/sh7727.c (sh7727_bus_printinfo, urj_bus_sh7727_bus): Ditto.
+**      * src/bus/sh7750r.c (sh7750r_bus_printinfo, urj_bus_sh7750r_bus): Ditto.
+**      * src/bus/sh7751r.c (sh7751r_bus_printinfo, urj_bus_sh7751r_bus): Ditto.
 **
 **  Revision 1.4  2003/09/05 21:09:14  telka
 **  2003-09-05  Marcel Telka  <marcel@telka.sk>
 **
-**      * include/bus.h (bus_drivers): Added constant declaration.
+**      * include/bus.h (urj_bus_drivers): Added constant declaration.
 **      (new_sa1110_bus, new_pxa250_bus, new_ixp425_bus, new_sh7727_bus, new_sh7750r_bus, new_sh7751r_bus)
 **      (new_bcm1250_bus): Function declarations removed.
-**      * src/bus/buses.c (bus_drivers): New constant definition.
+**      * src/bus/buses.c (urj_bus_drivers): New constant definition.
 **      * src/bus/buses.h: New file.
 **      * src/bus/Makefile.am (libbus_a_SOURCES): Added buses.h.
 **
 **      * src/bus/bcm1250.c (bcm1250_bus_printinfo): Added new function parameter 'bus'.
-**      (bcm1250_bus): Changed structure type to urj_bus_driver_t. Changed members.
+**      (urj_bus_bcm1250_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **      (new_bcm1250_bus): Function renamed ...
 **      (bcm1250_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **      * src/bus/ixp425.c (ixp425_bus_printinfo): Added new function parameter 'bus'.
-**      (ixp425_bus): Changed structure type to urj_bus_driver_t. Changed members.
+**      (urj_bus_ixp425_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **      (new_ixp425_bus): Function renamed ...
 **      (ixp425_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **      * src/bus/pxa2x0.c (pxa2x0_bus_printinfo): Added new function parameter 'bus'.
 **      (pxa250_bus): Structure transformed ...
-**      (pxa2x0_bus): ... to this constant (changed type to urj_bus_driver_t, changed members).
+**      (urj_bus_pxa2x0_bus): ... to this constant (changed type to urj_bus_driver_t, changed members).
 **      (new_pxa250_bus): Function renamed ...
 **      (pxa2x0_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **      * src/bus/s3c4510x.c (s3c4510_bus_printinfo): Added new function parameter 'bus'.
-**      (s3c4510_bus): Changed structure type to urj_bus_driver_t. Changed members.
+**      (urj_bus_s3c4510_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **      (new_s3c4510_bus): Function renamed ...
 **      (s3c4510_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **      * src/bus/sa1110.c (sa1110_bus_printinfo): Added new function parameter 'bus'.
-**      (sa1110_bus): Changed structure type to urj_bus_driver_t. Changed members.
+**      (urj_bus_sa1110_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **      (new_sa1110_bus): Function renamed ...
 **      (sa1110_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **      * src/bus/sh7727.c (sh7727_bus_printinfo): Added new function parameter 'bus'.
-**      (sh7727_bus): Changed structure type to urj_bus_driver_t. Changed members.
+**      (urj_bus_sh7727_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **      (new_sh7727_bus): Function renamed ...
 **      (sh7727_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **      * src/bus/sh7750r.c (sh7750r_bus_printinfo): Added new function parameter 'bus'.
-**      (sh7750r_bus): Changed structure type to urj_bus_driver_t. Changed members.
+**      (urj_bus_sh7750r_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **      (new_sh7750r_bus): Function renamed ...
 **      (sh7750r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **      * src/bus/sh7751r.c (sh7751r_bus_printinfo): Added new function parameter 'bus'.
-**      (sh7751r_bus): Changed structure type to urj_bus_driver_t. Changed members.
+**      (urj_bus_sh7751r_bus): Changed structure type to urj_bus_driver_t. Changed members.
 **      (new_sh7751r_bus): Function renamed ...
 **      (sh7751r_bus_new): ... to this one. Changed parameter list to void (and function body updated).
 **
 **      * src/cmd/cable.c (cmd_cable_run): Replaced bus->free() call with URJ_BUS_FREE().
 **      * src/jtag.c (main): Ditto.
 **
-**      * src/cmd/cmd.c (cmds): Added cmd_initbus.
+**      * src/cmd/cmd.c (cmds): Added urj_cmd_initbus.
 **      * src/cmd/detect.c (cmd_detect_run): Removed explicit bus driver detection.
 **      * src/cmd/initbus.c: New file.
 **      * src/cmd/Makefile.am (libcmd_a_SOURCES): Added initbus.c.

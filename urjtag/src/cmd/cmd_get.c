@@ -84,7 +84,7 @@ cmd_get_help (void)
             "get signal");
 }
 
-urj_cmd_t cmd_get = {
+urj_cmd_t urj_cmd_get = {
     "get",
     N_("get external signal value"),
     cmd_get_help,

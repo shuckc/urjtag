@@ -226,7 +226,7 @@ cmd_bit_help (void)
               "CSTATE        Control state, valid state is only Z\n"), "bit");
 }
 
-urj_cmd_t cmd_bit = {
+urj_cmd_t urj_cmd_bit = {
     "bit",
     N_("define new BSR bit"),
     cmd_bit_help,

@@ -41,7 +41,7 @@
 
 #include "jedec.h"
 
-urj_flash_cfi_array_t *cfi_array = NULL;
+urj_flash_cfi_array_t *urj_flash_cfi_array = NULL;
 
 void
 urj_flash_detectflash (urj_bus_t *bus, uint32_t adr)
@@ -55,41 +55,42 @@ urj_flash_detectflash (urj_bus_t *bus, uint32_t adr)
         return;
     }
 
-    urj_flash_cfi_array_free (cfi_array);
-    cfi_array = NULL;
+    urj_flash_cfi_array_free (urj_flash_cfi_array);
+    urj_flash_cfi_array = NULL;
 
     URJ_BUS_PREPARE (bus);
 
-    if (urj_flash_cfi_detect (bus, adr, &cfi_array))
+    if (urj_flash_cfi_detect (bus, adr, &urj_flash_cfi_array))
     {
-        urj_flash_cfi_array_free (cfi_array);
-        cfi_array = NULL;
-        if (urj_flash_jedec_detect (bus, adr, &cfi_array) != 0)
+        urj_flash_cfi_array_free (urj_flash_cfi_array);
+        urj_flash_cfi_array = NULL;
+        if (urj_flash_jedec_detect (bus, adr, &urj_flash_cfi_array) != 0)
         {
-            urj_flash_cfi_array_free (cfi_array);
-            cfi_array = NULL;
-            if (urj_flash_amd_detect (bus, adr, &cfi_array) != 0)
+            urj_flash_cfi_array_free (urj_flash_cfi_array);
+            urj_flash_cfi_array = NULL;
+            if (urj_flash_amd_detect (bus, adr, &urj_flash_cfi_array) != 0)
             {
-                urj_flash_cfi_array_free (cfi_array);
-                cfi_array = NULL;
+                urj_flash_cfi_array_free (urj_flash_cfi_array);
+                urj_flash_cfi_array = NULL;
 #ifdef JEDEC_EXP
-                if (urj_flash_jedec_exp_detect (bus, adr, &cfi_array))
+                if (urj_flash_jedec_exp_detect
+                    (bus, adr, &urj_flash_cfi_array))
                 {
-                    urj_flash_cfi_array_free (cfi_array);
-                    cfi_array = NULL;
+                    urj_flash_cfi_array_free (urj_flash_cfi_array);
+                    urj_flash_cfi_array = NULL;
                 }
 #endif
             }
         }
     }
 
-    if (cfi_array == NULL)
+    if (urj_flash_cfi_array == NULL)
     {
         printf (_("Flash not found!\n"));
         return;
     }
 
-    cfi = &cfi_array->cfi_chips[0]->cfi;
+    cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
     /* detect CFI capable devices */
     /* TODO: Low chip only */

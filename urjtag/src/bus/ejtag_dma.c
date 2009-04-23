@@ -672,7 +672,7 @@ ejtag_dma_bus_read_end (urj_bus_t *bus)
     return _data_read;
 }
 
-const urj_bus_driver_t ejtag_dma_bus = {
+const urj_bus_driver_t urj_bus_ejtag_dma_bus = {
     "ejtag_dma",
     N_("EJTAG compatible bus driver via DMA"),
     ejtag_dma_bus_new,

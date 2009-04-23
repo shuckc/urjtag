@@ -38,103 +38,103 @@
 #undef VERBOSE
 
 #ifdef ENABLE_CABLE_XPC
-extern urj_usbconn_cable_t usbconn_cable_xpc_int;
-extern urj_usbconn_cable_t usbconn_cable_xpc_ext;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_int;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_ext;
 #endif
 #ifdef ENABLE_CABLE_JLINK
-extern urj_usbconn_cable_t usbconn_cable_jlink;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_jlink;
 #endif
 #ifdef ENABLE_CABLE_FT2232
 #ifdef ENABLE_LOWLEVEL_FTD2XX
-extern urj_usbconn_cable_t usbconn_cable_ft2232_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_armusbocd_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_armusbocdtiny_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_gnice_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_jtagkey_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_signalyzer_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_flyswatter_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_usbscarab2_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_usbtojtagif_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_flyswatter_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_usbscarab2_ftd2xx;
 #endif
 #ifdef ENABLE_LOWLEVEL_FTDI
-extern urj_usbconn_cable_t usbconn_cable_ft2232_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_armusbocd_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_armusbocdtiny_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_gnice_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_jtagkey_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_signalyzer_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_flyswatter_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_usbscarab2_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_usbtojtagif_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_flyswatter_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_usbscarab2_ftdi;
 #endif
 #endif
 #ifdef ENABLE_CABLE_USBBLASTER
 #ifdef ENABLE_LOWLEVEL_FTD2XX
-extern urj_usbconn_cable_t usbconn_cable_usbblaster_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_cubic_cyclonium_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_nios_eval_ftd2xx;
-extern urj_usbconn_cable_t usbconn_cable_usb_jtag_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_usbblaster_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_cubic_cyclonium_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_nios_eval_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_usb_jtag_ftd2xx;
 #endif
 #ifdef ENABLE_LOWLEVEL_FTDI
-extern urj_usbconn_cable_t usbconn_cable_usbblaster_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_cubic_cyclonium_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_nios_eval_ftdi;
-extern urj_usbconn_cable_t usbconn_cable_usb_jtag_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_usbblaster_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_cubic_cyclonium_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_nios_eval_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_usb_jtag_ftdi;
 #endif
 #endif
 
-urj_usbconn_cable_t *usbconn_cables[] = {
+urj_usbconn_cable_t *urj_tap_cable_usbconn_cables[] = {
 #ifdef ENABLE_CABLE_XPC
-    &usbconn_cable_xpc_int,
-    &usbconn_cable_xpc_ext,
+    &urj_tap_cable_usbconn_xpc_int,
+    &urj_tap_cable_usbconn_xpc_ext,
 #endif
 #ifdef ENABLE_CABLE_JLINK
-    &usbconn_cable_jlink,
+    &urj_tap_cable_usbconn_jlink,
 #endif
 #ifdef ENABLE_CABLE_FT2232
 #ifdef ENABLE_LOWLEVEL_FTD2XX
-    &usbconn_cable_ft2232_ftd2xx,
-    &usbconn_cable_armusbocd_ftd2xx,
-    &usbconn_cable_armusbocdtiny_ftd2xx,
-    &usbconn_cable_gnice_ftd2xx,
-    &usbconn_cable_jtagkey_ftd2xx,
-    &usbconn_cable_oocdlinks_ftd2xx,
-    &usbconn_cable_turtelizer2_ftd2xx,
-    &usbconn_cable_usbtojtagif_ftd2xx,
-    &usbconn_cable_signalyzer_ftd2xx,
-    &usbconn_cable_flyswatter_ftd2xx,
-    &usbconn_cable_usbscarab2_ftd2xx,
+    &urj_tap_cable_usbconn_ft2232_ftd2xx,
+    &urj_tap_cable_usbconn_armusbocd_ftd2xx,
+    &urj_tap_cable_usbconn_armusbocdtiny_ftd2xx,
+    &urj_tap_cable_usbconn_gnice_ftd2xx,
+    &urj_tap_cable_usbconn_jtagkey_ftd2xx,
+    &urj_tap_cable_usbconn_oocdlinks_ftd2xx,
+    &urj_tap_cable_usbconn_turtelizer2_ftd2xx,
+    &urj_tap_cable_usbconn_usbtojtagif_ftd2xx,
+    &urj_tap_cable_usbconn_signalyzer_ftd2xx,
+    &urj_tap_cable_usbconn_flyswatter_ftd2xx,
+    &urj_tap_cable_usbconn_usbscarab2_ftd2xx,
 #endif
 #ifdef ENABLE_LOWLEVEL_FTDI
-    &usbconn_cable_ft2232_ftdi,
-    &usbconn_cable_armusbocd_ftdi,
-    &usbconn_cable_armusbocdtiny_ftdi,
-    &usbconn_cable_gnice_ftdi,
-    &usbconn_cable_jtagkey_ftdi,
-    &usbconn_cable_oocdlinks_ftdi,
-    &usbconn_cable_turtelizer2_ftdi,
-    &usbconn_cable_usbtojtagif_ftdi,
-    &usbconn_cable_signalyzer_ftdi,
-    &usbconn_cable_flyswatter_ftdi,
-    &usbconn_cable_usbscarab2_ftdi,
+    &urj_tap_cable_usbconn_ft2232_ftdi,
+    &urj_tap_cable_usbconn_armusbocd_ftdi,
+    &urj_tap_cable_usbconn_armusbocdtiny_ftdi,
+    &urj_tap_cable_usbconn_gnice_ftdi,
+    &urj_tap_cable_usbconn_jtagkey_ftdi,
+    &urj_tap_cable_usbconn_oocdlinks_ftdi,
+    &urj_tap_cable_usbconn_turtelizer2_ftdi,
+    &urj_tap_cable_usbconn_usbtojtagif_ftdi,
+    &urj_tap_cable_usbconn_signalyzer_ftdi,
+    &urj_tap_cable_usbconn_flyswatter_ftdi,
+    &urj_tap_cable_usbconn_usbscarab2_ftdi,
 #endif
 #endif
 #ifdef ENABLE_CABLE_USBBLASTER
 #ifdef ENABLE_LOWLEVEL_FTD2XX
-    &usbconn_cable_usbblaster_ftd2xx,
-    &usbconn_cable_cubic_cyclonium_ftd2xx,
-    &usbconn_cable_nios_eval_ftd2xx,
-    &usbconn_cable_usb_jtag_ftd2xx,
+    &urj_tap_cable_usbconn_usbblaster_ftd2xx,
+    &urj_tap_cable_usbconn_cubic_cyclonium_ftd2xx,
+    &urj_tap_cable_usbconn_nios_eval_ftd2xx,
+    &urj_tap_cable_usbconn_usb_jtag_ftd2xx,
 #endif
 #ifdef ENABLE_LOWLEVEL_FTDI
-    &usbconn_cable_usbblaster_ftdi,
-    &usbconn_cable_cubic_cyclonium_ftdi,
-    &usbconn_cable_nios_eval_ftdi,
-    &usbconn_cable_usb_jtag_ftdi,
+    &urj_tap_cable_usbconn_usbblaster_ftdi,
+    &urj_tap_cable_usbconn_cubic_cyclonium_ftdi,
+    &urj_tap_cable_usbconn_nios_eval_ftdi,
+    &urj_tap_cable_usbconn_usb_jtag_ftdi,
 #endif
 #endif
     NULL
@@ -183,27 +183,30 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
     }
 
     /* search usbconn driver list */
-    for (i = 0; usbconn_drivers[i] && !conn; i++)
+    for (i = 0; urj_tap_usbconn_drivers[i] && !conn; i++)
     {
         if ((user_specified.driver == NULL)
-            || (strcasecmp (user_specified.driver, usbconn_drivers[i]->type)
-                == 0))
+            ||
+            (strcasecmp
+             (user_specified.driver, urj_tap_usbconn_drivers[i]->type) == 0))
         {
             int j;
 
             /* search cable list */
-            for (j = 0; usbconn_cables[j] && !conn; j++)
+            for (j = 0; urj_tap_cable_usbconn_cables[j] && !conn; j++)
             {
                 if ((user_specified.name == NULL)
                     ||
-                    (strcasecmp (user_specified.name, usbconn_cables[j]->name)
-                     == 0))
+                    (strcasecmp
+                     (user_specified.name,
+                      urj_tap_cable_usbconn_cables[j]->name) == 0))
                 {
                     if (strcasecmp
-                        (usbconn_cables[j]->driver,
-                         usbconn_drivers[i]->type) == 0)
+                        (urj_tap_cable_usbconn_cables[j]->driver,
+                         urj_tap_usbconn_drivers[i]->type) == 0)
                     {
-                        urj_usbconn_cable_t cable_try = *(usbconn_cables[j]);
+                        urj_usbconn_cable_t cable_try =
+                            *(urj_tap_cable_usbconn_cables[j]);
 
                         if (user_specified.vid >= 0)
                             cable_try.vid = user_specified.vid;
@@ -213,7 +216,7 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
                             cable_try.desc = user_specified.desc;
 
                         conn =
-                            usbconn_drivers[i]->
+                            urj_tap_usbconn_drivers[i]->
                             connect ((const char **) &params[1], paramc - 1,
                                      &cable_try);
                     }
@@ -232,7 +235,7 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
     if (!cable_params)
     {
         printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
-        usbconn_drivers[i]->free (conn);
+        urj_tap_usbconn_drivers[i]->free (conn);
         return 4;
     }
 

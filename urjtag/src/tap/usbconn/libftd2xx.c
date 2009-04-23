@@ -69,8 +69,8 @@ typedef struct
     uint8_t *recv_buf;
 } ftd2xx_param_t;
 
-urj_usbconn_driver_t usbconn_ftd2xx_driver;
-urj_usbconn_driver_t usbconn_ftd2xx_mpsse_driver;
+urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver;
+urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver;
 
 static int usbconn_ftd2xx_common_open (urj_usbconn_t *conn, int printerr);
 static void usbconn_ftd2xx_free (urj_usbconn_t *conn);
@@ -311,7 +311,7 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
     p->serial = template->desc ? strdup (template->desc) : NULL;
 
     c->params = p;
-    c->driver = &usbconn_ftd2xx_driver;
+    c->driver = &urj_tap_usbconn_ftd2xx_driver;
     c->cable = NULL;
 
     /* do a test open with the specified cable paramters,
@@ -337,7 +337,7 @@ usbconn_ftd2xx_mpsse_connect (const char **param, int paramc,
     urj_usbconn_t *conn = usbconn_ftd2xx_connect (param, paramc, template);
 
     if (conn)
-        conn->driver = &usbconn_ftd2xx_mpsse_driver;
+        conn->driver = &urj_tap_usbconn_ftd2xx_mpsse_driver;
 
     return conn;
 }
@@ -548,7 +548,7 @@ usbconn_ftd2xx_free (urj_usbconn_t *conn)
 
 /* ---------------------------------------------------------------------- */
 
-urj_usbconn_driver_t usbconn_ftd2xx_driver = {
+urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver = {
     "ftd2xx",
     usbconn_ftd2xx_connect,
     usbconn_ftd2xx_free,
@@ -558,7 +558,7 @@ urj_usbconn_driver_t usbconn_ftd2xx_driver = {
     usbconn_ftd2xx_write
 };
 
-urj_usbconn_driver_t usbconn_ftd2xx_mpsse_driver = {
+urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver = {
     "ftd2xx-mpsse",
     usbconn_ftd2xx_mpsse_connect,
     usbconn_ftd2xx_free,

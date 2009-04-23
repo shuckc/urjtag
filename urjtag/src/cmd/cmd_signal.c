@@ -113,7 +113,7 @@ cmd_signal_help (void)
               "PIN#     List of pin # for a signal\n"), "signal");
 }
 
-urj_cmd_t cmd_signal = {
+urj_cmd_t urj_cmd_signal = {
     "signal",
     N_("define new signal for a part"),
     cmd_signal_help,

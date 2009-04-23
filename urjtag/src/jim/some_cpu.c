@@ -30,7 +30,7 @@
 
 #undef VERBOSE
 
-extern urj_jim_bus_device_t intel_28f800b3b;
+extern urj_jim_bus_device_t urj_jim_intel_28f800b3b;
 
 static urj_jim_attached_part_t some_cpu_attached[] = {
     /* 1. Address offset: base offset [bytes]
@@ -38,7 +38,7 @@ static urj_jim_attached_part_t some_cpu_attached[] = {
      * 3. Data shift: Distance between D0 of device and CPU e.g. 0, 8, 16 or 24 bits
      * 4. Part: Pointer to part structure */
 
-    {0x00000000, 1, 0, &intel_28f800b3b},
+    {0x00000000, 1, 0, &urj_jim_intel_28f800b3b},
 
     {0xFFFFFFFF, 0, 0, NULL}    /* Always end list with part == NULL */
 };

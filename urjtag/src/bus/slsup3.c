@@ -444,7 +444,7 @@ slsup3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     }
 }
 
-const urj_bus_driver_t slsup3_bus = {
+const urj_bus_driver_t urj_bus_slsup3_bus = {
     "slsup3",
     N_("SLS UP3 compatible bus driver via BSR"),
     slsup3_bus_new,

@@ -726,7 +726,7 @@ ejtag_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     // printf("URJ_BUS_WRITE: adr=0x%08x data=0x%08x\n", adr, data);
 }
 
-const urj_bus_driver_t ejtag_bus = {
+const urj_bus_driver_t urj_bus_ejtag_bus = {
     "ejtag",
     N_("EJTAG compatible bus driver via PrAcc"),
     ejtag_bus_new,

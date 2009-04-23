@@ -88,7 +88,7 @@ cmd_peek_help (void)
               "\n"), "peek");
 }
 
-urj_cmd_t cmd_peek = {
+urj_cmd_t urj_cmd_peek = {
     "peek",
     N_("read a single word"),
     cmd_peek_help,
@@ -141,7 +141,7 @@ cmd_poke_help (void)
               "\n"), "poke");
 }
 
-urj_cmd_t cmd_poke = {
+urj_cmd_t urj_cmd_poke = {
     "poke",
     N_("write a single word"),
     cmd_poke_help,

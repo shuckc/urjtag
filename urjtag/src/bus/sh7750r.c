@@ -333,7 +333,7 @@ sh7750r_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t sh7750r_bus = {
+const urj_bus_driver_t urj_bus_sh7750r_bus = {
     "sh7750r",
     N_("Hitachi SH7750R compatible bus driver via BSR"),
     sh7750r_bus_new,

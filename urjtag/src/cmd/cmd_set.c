@@ -101,7 +101,7 @@ cmd_set_help (void)
               "                is 'out'\n"), "set signal");
 }
 
-urj_cmd_t cmd_set = {
+urj_cmd_t urj_cmd_set = {
     "set",
     N_("set external signal value"),
     cmd_set_help,

@@ -672,7 +672,7 @@ xpc_ext_transfer (urj_cable_t *cable, int len, char *in, char *out)
 /* ---------------------------------------------------------------------- */
 
 
-urj_cable_driver_t xpc_int_cable_driver = {
+urj_cable_driver_t urj_tap_cable_xpc_int_driver = {
     "xpc_int",
     N_("Xilinx Platform Cable USB internal chain"),
     urj_tap_cable_generic_usbconn_connect,
@@ -690,7 +690,7 @@ urj_cable_driver_t xpc_int_cable_driver = {
     urj_tap_cable_generic_usbconn_help
 };
 
-urj_usbconn_cable_t usbconn_cable_xpc_int = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_int = {
     "xpc_int",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */
@@ -698,7 +698,7 @@ urj_usbconn_cable_t usbconn_cable_xpc_int = {
     0x0008                      /* PID (8) */
 };
 
-urj_cable_driver_t xpc_ext_cable_driver = {
+urj_cable_driver_t urj_tap_cable_xpc_ext_driver = {
     "xpc_ext",
     N_("Xilinx Platform Cable USB external chain"),
     urj_tap_cable_generic_usbconn_connect,
@@ -716,7 +716,7 @@ urj_cable_driver_t xpc_ext_cable_driver = {
     urj_tap_cable_generic_usbconn_help
 };
 
-urj_usbconn_cable_t usbconn_cable_xpc_ext = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_ext = {
     "xpc_ext",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */

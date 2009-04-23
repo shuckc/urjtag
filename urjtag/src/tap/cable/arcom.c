@@ -132,7 +132,7 @@ arcom_set_signal (urj_cable_t *cable, int mask, int val)
     return prev_sigs;
 }
 
-urj_cable_driver_t arcom_cable_driver = {
+urj_cable_driver_t urj_tap_cable_arcom_driver = {
     "ARCOM",
     N_("Arcom JTAG Cable"),
     urj_tap_cable_generic_parport_connect,

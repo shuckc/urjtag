@@ -536,7 +536,7 @@ bcm1250_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
 #endif /* #else #ifndef USE_BCM_EJTAG */
 
-const urj_bus_driver_t bcm1250_bus = {
+const urj_bus_driver_t urj_bus_bcm1250_bus = {
     "bcm1250",
     N_("Broadcom BCM1250 compatible bus driver via BSR"),
     bcm1250_bus_new,

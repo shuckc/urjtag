@@ -73,7 +73,7 @@ cmd_frequency_help (void)
               "Use 0 for FREQ to disable frequency limit.\n"), "frequency");
 }
 
-urj_cmd_t cmd_frequency = {
+urj_cmd_t urj_cmd_frequency = {
     "frequency",
     N_("setup JTAG frequency"),
     cmd_frequency_help,

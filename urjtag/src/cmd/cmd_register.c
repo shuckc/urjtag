@@ -113,7 +113,7 @@ cmd_register_help (void)
               "LENGTH        Data register length\n"), "register");
 }
 
-urj_cmd_t cmd_register = {
+urj_cmd_t urj_cmd_register = {
     "register",
     N_("define new data register for a part"),
     cmd_register_help,

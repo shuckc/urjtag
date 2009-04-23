@@ -86,7 +86,7 @@ cmd_shell_help (void)
               "\n" "CMMD OS Shell Command\n"), "shell cmmd");
 }
 
-urj_cmd_t cmd_shell = {
+urj_cmd_t urj_cmd_shell = {
     "shell",
     N_("shell cmmd"),
     cmd_shell_help,

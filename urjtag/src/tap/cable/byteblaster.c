@@ -154,7 +154,7 @@ byteblaster_set_signal (urj_cable_t *cable, int mask, int val)
     return prev_sigs;
 }
 
-urj_cable_driver_t byteblaster_cable_driver = {
+urj_cable_driver_t urj_tap_cable_byteblaster_driver = {
     "ByteBlaster",
     N_("Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable"),
     urj_tap_cable_generic_parport_connect,

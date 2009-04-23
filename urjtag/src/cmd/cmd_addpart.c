@@ -73,7 +73,7 @@ cmd_addpart_help (void)
 }
 
 
-urj_cmd_t cmd_addpart = {
+urj_cmd_t urj_cmd_addpart = {
     "addpart",
     N_("manually adds parts on the JTAG chain"),
     cmd_addpart_help,

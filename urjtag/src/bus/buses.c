@@ -29,112 +29,112 @@
 #include "bus.h"
 #include "buses.h"
 
-const urj_bus_driver_t *bus_drivers[] = {
+const urj_bus_driver_t *urj_bus_drivers[] = {
 #ifdef ENABLE_BUS_AU1500
-    &au1500_bus,
+    &urj_bus_au1500_bus,
 #endif
 #ifdef ENABLE_BUS_AVR32
-    &avr32_bus_driver,
+    &urj_bus_avr32_bus_driver,
 #endif
 #ifdef ENABLE_BUS_BCM1250
-    &bcm1250_bus,
+    &urj_bus_bcm1250_bus,
 #endif
 #ifdef ENABLE_BUS_BF526_EZKIT
-    &bf526_ezkit_bus,
+    &urj_bus_bf526_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF527_EZKIT
-    &bf527_ezkit_bus,
+    &urj_bus_bf527_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF533_STAMP
-    &bf533_stamp_bus,
+    &urj_bus_bf533_stamp_bus,
 #endif
 #ifdef ENABLE_BUS_BF533_EZKIT
-    &bf533_ezkit_bus,
+    &urj_bus_bf533_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF537_STAMP
-    &bf537_stamp_bus,
+    &urj_bus_bf537_stamp_bus,
 #endif
 #ifdef ENABLE_BUS_BF537_EZKIT
-    &bf537_ezkit_bus,
+    &urj_bus_bf537_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF538F_EZKIT
-    &bf538f_ezkit_bus,
+    &urj_bus_bf538f_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF548_EZKIT
-    &bf548_ezkit_bus,
+    &urj_bus_bf548_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BF561_EZKIT
-    &bf561_ezkit_bus,
+    &urj_bus_bf561_ezkit_bus,
 #endif
 #ifdef ENABLE_BUS_BSCOACH
-    &bscoach_bus,
+    &urj_bus_bscoach_bus,
 #endif
 #ifdef ENABLE_BUS_EJTAG
-    &ejtag_bus,
-    &ejtag_dma_bus,
+    &urj_bus_ejtag_bus,
+    &urj_bus_ejtag_dma_bus,
 #endif
 #ifdef ENABLE_BUS_FJMEM
-    &fjmem_bus,
+    &urj_bus_fjmem_bus,
 #endif
 #ifdef ENABLE_BUS_IXP425
-    &ixp425_bus,
+    &urj_bus_ixp425_bus,
 #endif
 #ifdef ENABLE_BUS_JOPCYC
-    &jopcyc_bus,
+    &urj_bus_jopcyc_bus,
 #endif
 #ifdef ENABLE_BUS_H7202
-    &h7202_bus,
+    &urj_bus_h7202_bus,
 #endif
 #ifdef ENABLE_BUS_LH7A400
-    &lh7a400_bus,
+    &urj_bus_lh7a400_bus,
 #endif
 #ifdef ENABLE_BUS_MPC5200
-    &mpc5200_bus,
+    &urj_bus_mpc5200_bus,
 #endif
 #ifdef ENABLE_BUS_MPC824X
-    &mpc824x_bus,
+    &urj_bus_mpc824x_bus,
 #endif
 #ifdef ENABLE_BUS_PPC405EP
-    &ppc405ep_bus,
+    &urj_bus_ppc405ep_bus,
 #endif
 #ifdef ENABLE_BUS_PPC440GX_EBC8
-    &ppc440gx_ebc8_bus,
+    &urj_bus_ppc440gx_ebc8_bus,
 #endif
 #ifdef ENABLE_BUS_PROTOTYPE
-    &prototype_bus,
+    &urj_bus_prototype_bus,
 #endif
 #ifdef ENABLE_BUS_PXA2X0
-    &pxa2x0_bus,
+    &urj_bus_pxa2x0_bus,
 #endif
 #ifdef ENABLE_BUS_PXA27X
-    &pxa27x_bus,
+    &urj_bus_pxa27x_bus,
 #endif
 #ifdef ENABLE_BUS_S3C4510
-    &s3c4510_bus,
+    &urj_bus_s3c4510_bus,
 #endif
 #ifdef ENABLE_BUS_SA1110
-    &sa1110_bus,
+    &urj_bus_sa1110_bus,
 #endif
 #ifdef ENABLE_BUS_SH7727
-    &sh7727_bus,
+    &urj_bus_sh7727_bus,
 #endif
 #ifdef ENABLE_BUS_SH7750R
-    &sh7750r_bus,
+    &urj_bus_sh7750r_bus,
 #endif
 #ifdef ENABLE_BUS_SH7751R
-    &sh7751r_bus,
+    &urj_bus_sh7751r_bus,
 #endif
 #ifdef ENABLE_BUS_SHARC_21065L
-    &sharc_21065L_bus,
+    &urj_bus_sharc_21065L_bus,
 #endif
 #ifdef ENABLE_BUS_SLSUP3
-    &slsup3_bus,
+    &urj_bus_slsup3_bus,
 #endif
 #ifdef ENABLE_BUS_TX4925
-    &tx4925_bus,
+    &urj_bus_tx4925_bus,
 #endif
 #ifdef ENABLE_BUS_ZEFANT_XS3
-    &zefant_xs3_bus,
+    &urj_bus_zefant_xs3_bus,
 #endif
     NULL                        /* last must be NULL */
 };

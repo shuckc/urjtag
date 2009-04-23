@@ -330,7 +330,7 @@ bf533_stamp_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t bf533_stamp_bus = {
+const urj_bus_driver_t urj_bus_bf533_stamp_bus = {
     "bf533_stamp",
     N_("Blackfin BF533 Stamp board bus driver"),
     bf533_stamp_bus_new,

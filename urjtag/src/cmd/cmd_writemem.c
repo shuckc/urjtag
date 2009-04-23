@@ -76,7 +76,7 @@ cmd_writemem_help (void)
             "urj_bus_writemem");
 }
 
-urj_cmd_t cmd_writemem = {
+urj_cmd_t urj_cmd_writemem = {
     "urj_bus_writemem",
     N_("write content of file to the memory"),
     cmd_writemem_help,

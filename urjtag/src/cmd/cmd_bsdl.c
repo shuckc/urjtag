@@ -118,7 +118,7 @@ cmd_bsdl_help (void)
             "bsdl", "bsdl", "bsdl", "bsdl");
 }
 
-urj_cmd_t cmd_bsdl = {
+urj_cmd_t urj_cmd_bsdl = {
     "bsdl",
     N_("manage BSDL files"),
     cmd_bsdl_help,

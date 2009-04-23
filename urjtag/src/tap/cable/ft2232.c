@@ -1769,16 +1769,16 @@ ft2232_cable_free (urj_cable_t *cable)
 }
 
 
-urj_usbconn_cable_t usbconn_cable_ft2232_ftdi;
-urj_usbconn_cable_t usbconn_cable_armusbocd_ftdi;
-urj_usbconn_cable_t usbconn_cable_gnice_ftdi;
-urj_usbconn_cable_t usbconn_cable_jtagkey_ftdi;
-urj_usbconn_cable_t usbconn_cable_oocdlinks_ftdi;
-urj_usbconn_cable_t usbconn_cable_turtelizer2_ftdi;
-urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftdi;
-urj_usbconn_cable_t usbconn_cable_signalyzer_ftdi;
-urj_usbconn_cable_t usbconn_cable_flyswatter_ftdi;
-urj_usbconn_cable_t usbconn_cable_usbscarab2_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_usbtojtagif_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_flyswatter_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_usbscarab2_ftdi;
 
 
 static void
@@ -1786,34 +1786,34 @@ ft2232_usbcable_help (const char *cablename)
 {
     urj_usbconn_cable_t *conn;
 
-    conn = &usbconn_cable_armusbocd_ftdi;
+    conn = &urj_tap_cable_usbconn_armusbocd_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_gnice_ftdi;
+    conn = &urj_tap_cable_usbconn_gnice_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_jtagkey_ftdi;
+    conn = &urj_tap_cable_usbconn_jtagkey_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_oocdlinks_ftdi;
+    conn = &urj_tap_cable_usbconn_oocdlinks_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_turtelizer2_ftdi;
+    conn = &urj_tap_cable_usbconn_turtelizer2_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_usbtojtagif_ftdi;
+    conn = &urj_tap_cable_usbconn_usbtojtagif_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_signalyzer_ftdi;
+    conn = &urj_tap_cable_usbconn_signalyzer_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_flyswatter_ftdi;
+    conn = &urj_tap_cable_usbconn_flyswatter_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_usbscarab2_ftdi;
+    conn = &urj_tap_cable_usbconn_usbscarab2_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
-    conn = &usbconn_cable_ft2232_ftdi;
+    conn = &urj_tap_cable_usbconn_ft2232_ftdi;
   found:
 
     printf (_
@@ -1827,7 +1827,7 @@ ft2232_usbcable_help (const char *cablename)
 }
 
 
-urj_cable_driver_t ft2232_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_driver = {
     "FT2232",
     N_("Generic FTDI FT2232 Cable"),
     ft2232_connect,
@@ -1844,14 +1844,14 @@ urj_cable_driver_t ft2232_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_ft2232_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftdi = {
     "FT2232",                   /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0000,                     /* VID */
     0x0000                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_ft2232_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftd2xx = {
     "FT2232",                   /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1859,7 +1859,7 @@ urj_usbconn_cable_t usbconn_cable_ft2232_ftd2xx = {
     0x0000                      /* PID */
 };
 
-urj_cable_driver_t ft2232_armusbocd_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver = {
     "ARM-USB-OCD",
     N_("Olimex ARM-USB-OCD[-TINY] (FT2232) Cable"),
     ft2232_connect,
@@ -1876,28 +1876,28 @@ urj_cable_driver_t ft2232_armusbocd_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_armusbocd_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftdi = {
     "ARM-USB-OCD",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x15BA,                     /* VID */
     0x0003                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_armusbocd_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftd2xx = {
     "ARM-USB-OCD",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
     0x15BA,                     /* VID */
     0x0003                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_armusbocdtiny_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftdi = {
     "ARM-USB-OCD",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x15BA,                     /* VID */
     0x0004                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_armusbocdtiny_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftd2xx = {
     "ARM-USB-OCD",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1905,7 +1905,7 @@ urj_usbconn_cable_t usbconn_cable_armusbocdtiny_ftd2xx = {
     0x0004                      /* PID */
 };
 
-urj_cable_driver_t ft2232_gnice_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver = {
     "gnICE",
     N_("Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
@@ -1922,14 +1922,14 @@ urj_cable_driver_t ft2232_gnice_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_gnice_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftdi = {
     "gnICE",                    /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0456,                     /* VID */
     0xF000                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_gnice_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftd2xx = {
     "gnICE",                    /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1937,7 +1937,7 @@ urj_usbconn_cable_t usbconn_cable_gnice_ftd2xx = {
     0xF000                      /* PID */
 };
 
-urj_cable_driver_t ft2232_jtagkey_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver = {
     "JTAGkey",
     N_("Amontec JTAGkey (FT2232) Cable"),
     ft2232_connect,
@@ -1954,14 +1954,14 @@ urj_cable_driver_t ft2232_jtagkey_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_jtagkey_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftdi = {
     "JTAGkey",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0xCFF8                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_jtagkey_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftd2xx = {
     "JTAGkey",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -1969,7 +1969,7 @@ urj_usbconn_cable_t usbconn_cable_jtagkey_ftd2xx = {
     0xCFF8                      /* PID */
 };
 
-urj_cable_driver_t ft2232_oocdlinks_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_oocdlinks_driver = {
     "OOCDLink-s",
     N_("OOCDLink-s (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
@@ -1986,14 +1986,14 @@ urj_cable_driver_t ft2232_oocdlinks_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_oocdlinks_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftdi = {
     "OOCDLink-s",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0xbaf8                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftd2xx = {
     "OOCDLink-s",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -2001,7 +2001,7 @@ urj_usbconn_cable_t usbconn_cable_oocdlinks_ftd2xx = {
     0xbaf8                      /* PID */
 };
 
-urj_cable_driver_t ft2232_turtelizer2_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver = {
     "Turtelizer2",
     N_("Turtelizer 2 Rev. B (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
@@ -2018,14 +2018,14 @@ urj_cable_driver_t ft2232_turtelizer2_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_turtelizer2_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftdi = {
     "Turtelizer2",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0xBDC8                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftd2xx = {
     "Turtelizer2",              /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -2033,7 +2033,7 @@ urj_usbconn_cable_t usbconn_cable_turtelizer2_ftd2xx = {
     0xBDC8                      /* PID */
 };
 
-urj_cable_driver_t ft2232_usbtojtagif_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver = {
     "USB-to-JTAG-IF",
     N_("USB to JTAG Interface (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
@@ -2050,14 +2050,14 @@ urj_cable_driver_t ft2232_usbtojtagif_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_usbtojtagif_ftdi = {
     "USB-to-JTAG-IF",           /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0000,                     /* VID */
     0x0000                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_usbtojtagif_ftd2xx = {
     "USB-to-JTAG-IF",           /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -2065,7 +2065,7 @@ urj_usbconn_cable_t usbconn_cable_usbtojtagif_ftd2xx = {
     0x0000                      /* PID */
 };
 
-urj_cable_driver_t ft2232_signalyzer_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_signalyzer_driver = {
     "Signalyzer",
     N_("Xverve DT-USB-ST Signalyzer Tool (FT2232) Cable (EXPERIMENTAL)"),
     ft2232_connect,
@@ -2082,14 +2082,14 @@ urj_cable_driver_t ft2232_signalyzer_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_signalyzer_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftdi = {
     "Signalyzer",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0000,                     /* VID */
     0x0000                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_signalyzer_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftd2xx = {
     "Signalyzer",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -2097,7 +2097,7 @@ urj_usbconn_cable_t usbconn_cable_signalyzer_ftd2xx = {
     0x0000                      /* PID */
 };
 
-urj_cable_driver_t ft2232_flyswatter_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_flyswatter_driver = {
     "Flyswatter",
     N_("TinCanTools Flyswatter (FT2232) Cable"),
     ft2232_connect,
@@ -2114,14 +2114,14 @@ urj_cable_driver_t ft2232_flyswatter_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_flyswatter_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_flyswatter_ftdi = {
     "Flyswatter",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0x6010                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_flyswatter_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_flyswatter_ftd2xx = {
     "Flyswatter",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
@@ -2129,7 +2129,7 @@ urj_usbconn_cable_t usbconn_cable_flyswatter_ftd2xx = {
     0x6010                      /* PID */
 };
 
-urj_cable_driver_t ft2232_usbscarab2_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver = {
     "usbScarab2",
     N_("KrisTech usbScarabeus2 (FT2232) Cable"),
     ft2232_connect,
@@ -2146,14 +2146,14 @@ urj_cable_driver_t ft2232_usbscarab2_cable_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
-urj_usbconn_cable_t usbconn_cable_usbscarab2_ftdi = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_usbscarab2_ftdi = {
     "usbScarab2",               /* cable name */
     "usbScarab2",               /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
     0x0403,                     /* VID */
     0xbbe0                      /* PID */
 };
-urj_usbconn_cable_t usbconn_cable_usbscarab2_ftd2xx = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_usbscarab2_ftd2xx = {
     "usbScarab2",               /* cable name */
     "usbScarab2",               /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */

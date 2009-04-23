@@ -990,7 +990,7 @@ zefant_xs3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     }
 }
 
-const urj_bus_driver_t zefant_xs3_bus = {
+const urj_bus_driver_t urj_bus_zefant_xs3_bus = {
     "zefant-xs3",
     N_("Simple Solutions Zefant-XS3 Board compatible bus driver via BSR"),
     zefant_xs3_bus_new,

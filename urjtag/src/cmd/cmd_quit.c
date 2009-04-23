@@ -43,7 +43,7 @@ cmd_quit_help (void)
     printf (_("Usage: %s\n" "Exit from %s.\n"), "quit", PACKAGE);
 }
 
-urj_cmd_t cmd_quit = {
+urj_cmd_t urj_cmd_quit = {
     "quit",
     N_("exit and terminate this session"),
     cmd_quit_help,

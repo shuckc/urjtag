@@ -134,7 +134,7 @@ lattice_set_signal (urj_cable_t *cable, int mask, int val)
     return prev_sigs;
 }
 
-urj_cable_driver_t lattice_cable_driver = {
+urj_cable_driver_t urj_tap_cable_lattice_driver = {
     "Lattice",
     N_("Lattice Parallel Port JTAG Cable"),
     urj_tap_cable_generic_parport_connect,

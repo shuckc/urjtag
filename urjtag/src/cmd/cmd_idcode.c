@@ -63,7 +63,7 @@ cmd_idcode_help (void)
             "idcode");
 }
 
-urj_cmd_t cmd_idcode = {
+urj_cmd_t urj_cmd_idcode = {
     "idcode",
     N_("Read IDCODEs of all parts in a JTAG chain"),
     cmd_idcode_help,

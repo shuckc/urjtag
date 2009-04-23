@@ -59,6 +59,6 @@ int urj_tap_parport_get_data (urj_parport_t *port);
 int urj_tap_parport_get_status (urj_parport_t *port);
 int urj_tap_parport_set_control (urj_parport_t *port, uint8_t data);
 
-extern urj_parport_driver_t *parport_drivers[];
+extern urj_parport_driver_t *urj_tap_parport_drivers[];
 
 #endif /* URJ_PARPORT_H */

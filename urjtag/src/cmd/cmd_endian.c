@@ -69,7 +69,7 @@ cmd_endian_help (void)
             "endian [little|big]");
 }
 
-urj_cmd_t cmd_endian = {
+urj_cmd_t urj_cmd_endian = {
     "endian",
     N_("set/print endianess"),
     cmd_endian_help,

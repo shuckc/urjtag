@@ -61,7 +61,7 @@ urj_flash_jedec_exp_read_id (urj_bus_t *bus, uint32_t adr, uint32_t dmask,
 
 int
 urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
-                            urj_flash_cfi_array_t **cfi_array)
+                            urj_flash_cfi_array_t **urj_flash_cfi_array)
 {
     /* Temporary containers for manufacturer and device id while
        probing with different Autoselect methods. */
@@ -69,12 +69,12 @@ urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
     int det_buswidth;
     urj_bus_area_t area;
 
-    *cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
-    if (!*cfi_array)
+    *urj_flash_cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
+    if (!*urj_flash_cfi_array)
         return -2;              /* out of memory */
 
-    (*cfi_array)->bus = bus;
-    (*cfi_array)->address = adr;
+    (*urj_flash_cfi_array)->bus = bus;
+    (*urj_flash_cfi_array)->address = adr;
     if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
         return -8;              /* bus width detection failed */
     bw = area.width;
@@ -84,14 +84,16 @@ urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
 
     if (bw != 8 && bw != 16 && bw != 32)
         return -3;              /* invalid bus width */
-    (*cfi_array)->bus_width = ba = bw / 8;
+    (*urj_flash_cfi_array)->bus_width = ba = bw / 8;
 
-    (*cfi_array)->cfi_chips = calloc (1, sizeof (urj_flash_cfi_chip_t *));
-    if (!(*cfi_array)->cfi_chips)
+    (*urj_flash_cfi_array)->cfi_chips =
+        calloc (1, sizeof (urj_flash_cfi_chip_t *));
+    if (!(*urj_flash_cfi_array)->cfi_chips)
         return -2;              /* out of memory */
 
-    (*cfi_array)->cfi_chips[0] = calloc (1, sizeof (urj_flash_cfi_chip_t));
-    if (!(*cfi_array)->cfi_chips[0])
+    (*urj_flash_cfi_array)->cfi_chips[0] =
+        calloc (1, sizeof (urj_flash_cfi_chip_t));
+    if (!(*urj_flash_cfi_array)->cfi_chips[0])
         return -2;              /* out of memory */
 
     printf

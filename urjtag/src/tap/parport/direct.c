@@ -107,7 +107,7 @@ outb (unsigned char value, unsigned short int port)
 }
 #endif /* HAVE_I386_SET_IOPERM */
 
-urj_parport_driver_t direct_parport_driver;
+urj_parport_driver_t urj_tap_parport_direct_parport_driver;
 
 typedef struct port_node_t port_node_t;
 
@@ -162,7 +162,7 @@ direct_parport_alloc (unsigned int port)
     params->port = port;
 
     parport->params = params;
-    parport->driver = &direct_parport_driver;
+    parport->driver = &urj_tap_parport_direct_parport_driver;
     parport->cable = NULL;
 
     node->port = parport;
@@ -302,7 +302,7 @@ direct_set_control (urj_parport_t *parport, uint8_t data)
     return 0;
 }
 
-urj_parport_driver_t direct_parport_driver = {
+urj_parport_driver_t urj_tap_parport_direct_parport_driver = {
     "parallel",
     direct_connect,
     direct_parport_free,

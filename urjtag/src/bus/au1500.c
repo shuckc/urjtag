@@ -304,7 +304,7 @@ au1500_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t au1500_bus = {
+const urj_bus_driver_t urj_bus_au1500_bus = {
     "au1500",
     N_("AU1500 BUS Driver via BSR"),
     au1500_bus_new,

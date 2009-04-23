@@ -763,7 +763,7 @@ fjmem_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t fjmem_bus = {
+const urj_bus_driver_t urj_bus_fjmem_bus = {
     "fjmem",
     N_("FPGA JTAG memory bus driver via USER register, requires parameters:\n"
        "           opcode=<USERx OPCODE> [len=<FJMEM REG LEN>]"),

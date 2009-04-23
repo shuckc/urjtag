@@ -60,7 +60,7 @@ cmd_discovery_help (void)
             "urj_tap_discovery");
 }
 
-urj_cmd_t cmd_discovery = {
+urj_cmd_t urj_cmd_discovery = {
     "urj_tap_discovery",
     N_("urj_tap_discovery of unknown parts in the JTAG chain"),
     cmd_discovery_help,

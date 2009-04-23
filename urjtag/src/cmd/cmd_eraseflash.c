@@ -71,12 +71,12 @@ cmd_eraseflash_help (void)
               "ADDR and BLOCKS could be in decimal or hexadecimal (prefixed with 0x) form.\n"
               "\n" "Supported Flash Memories:\n"), "eraseflash");
 
-    for (i = 0; flash_drivers[i]; i++)
-        printf (_("%s\n     %s\n"), _(flash_drivers[i]->name),
-                _(flash_drivers[i]->description));
+    for (i = 0; urj_flash_flash_drivers[i]; i++)
+        printf (_("%s\n     %s\n"), _(urj_flash_flash_drivers[i]->name),
+                _(urj_flash_flash_drivers[i]->description));
 }
 
-urj_cmd_t cmd_eraseflash = {
+urj_cmd_t urj_cmd_eraseflash = {
     "eraseflash",
     N_("erase flash memory by number of blocks"),
     cmd_eraseflash_help,

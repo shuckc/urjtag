@@ -316,7 +316,7 @@ tx4925_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t tx4925_bus = {
+const urj_bus_driver_t urj_bus_tx4925_bus = {
     "tx4925",
     N_("Toshiba TX4925 compatible bus driver via BSR"),
     tx4925_bus_new,

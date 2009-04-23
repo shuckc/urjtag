@@ -70,7 +70,7 @@ cmd_bus_help (void)
               "\n" "BUS           bus number\n"), "bus");
 }
 
-urj_cmd_t cmd_bus = {
+urj_cmd_t urj_cmd_bus = {
     "bus",
     N_("change active bus"),
     cmd_bus_help,

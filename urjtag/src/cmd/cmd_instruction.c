@@ -138,7 +138,7 @@ cmd_instruction_help (void)
             "instruction", "instruction", "instruction");
 }
 
-urj_cmd_t cmd_instruction = {
+urj_cmd_t urj_cmd_instruction = {
     "instruction",
     N_("change active instruction for a part or declare new instruction"),
     cmd_instruction_help,

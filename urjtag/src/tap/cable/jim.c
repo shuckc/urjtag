@@ -153,7 +153,7 @@ jim_cable_help (const char *cablename)
     printf (_("Usage: cable %s\n"), cablename);
 }
 
-urj_cable_driver_t jim_cable_driver = {
+urj_cable_driver_t urj_tap_cable_jim_driver = {
     "JIM",
     N_("JTAG target simulator JIM"),
     urj_tap_cable_jim_cable_connect,

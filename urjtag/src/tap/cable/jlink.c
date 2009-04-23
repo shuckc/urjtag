@@ -574,7 +574,7 @@ jlink_set_signal (urj_cable_t *cable, int mask, int val)
     return 1;
 }
 
-urj_cable_driver_t jlink_cable_driver = {
+urj_cable_driver_t urj_tap_cable_jlink_driver = {
     "jlink",
     N_("Segger/IAR J-Link, Atmel SAM-ICE and others."),
     urj_tap_cable_generic_usbconn_connect,
@@ -592,7 +592,7 @@ urj_cable_driver_t jlink_cable_driver = {
     urj_tap_cable_generic_usbconn_help
 };
 
-urj_usbconn_cable_t usbconn_cable_jlink = {
+urj_usbconn_cable_t urj_tap_cable_usbconn_jlink = {
     "jlink",                    /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */

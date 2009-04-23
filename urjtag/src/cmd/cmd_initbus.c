@@ -54,12 +54,13 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
         return 1;
     }
 
-    for (i = 0; bus_drivers[i] != NULL; i++)
+    for (i = 0; urj_bus_drivers[i] != NULL; i++)
     {
-        if (strcasecmp (bus_drivers[i]->name, params[1]) == 0)
+        if (strcasecmp (urj_bus_drivers[i]->name, params[1]) == 0)
         {
-            urj_bus_t *abus =
-                bus_drivers[i]->new_bus (chain, bus_drivers[i], params);
+            urj_bus_t *abus = urj_bus_drivers[i]->new_bus (chain,
+                                                           urj_bus_drivers[i],
+                                                           params);
             if (abus == NULL)
             {
                 printf (_("bus alloc/attach failed!\n"));
@@ -96,12 +97,12 @@ cmd_initbus_help (void)
               "BUSNAME       Name of the bus\n"
               "\n" "List of available buses:\n"), "initbus");
 
-    for (i = 0; bus_drivers[i] != NULL; i++)
-        printf (_("%-10s %s\n"), bus_drivers[i]->name,
-                bus_drivers[i]->description);
+    for (i = 0; urj_bus_drivers[i] != NULL; i++)
+        printf (_("%-10s %s\n"), urj_bus_drivers[i]->name,
+                urj_bus_drivers[i]->description);
 }
 
-const urj_cmd_t cmd_initbus = {
+const urj_cmd_t urj_cmd_initbus = {
     "initbus",
     N_("initialize bus driver for active part"),
     cmd_initbus_help,

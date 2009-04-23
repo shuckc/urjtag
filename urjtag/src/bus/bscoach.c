@@ -386,7 +386,7 @@ flashbscoach_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t bscoach_bus = {
+const urj_bus_driver_t urj_bus_bscoach_bus = {
     "flashbscoach",
     N_("Goepel Boundary Scan Coach compatible bus driver for flash programming via BSR"),
     flashbscoach_bus_new,

@@ -143,7 +143,7 @@ keithkoep_set_signal (urj_cable_t *cable, int mask, int val)
     return prev_sigs;
 }
 
-urj_cable_driver_t keithkoep_cable_driver = {
+urj_cable_driver_t urj_tap_cable_keithkoep_driver = {
     "KeithKoep",
     N_("Keith & Koep JTAG cable"),
     urj_tap_cable_generic_parport_connect,

@@ -62,7 +62,7 @@ cmd_detectflash_help (void)
             "urj_flash_detectflash");
 }
 
-urj_cmd_t cmd_detectflash = {
+urj_cmd_t urj_cmd_detectflash = {
     "urj_flash_detectflash",
     N_("detect parameters of flash chips attached to a part"),
     cmd_detectflash_help,

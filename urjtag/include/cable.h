@@ -160,6 +160,6 @@ int urj_tap_cable_add_queue_item (urj_cable_t *cable,
 int urj_tap_cable_get_queue_item (urj_cable_t *cable,
                                   urj_cable_queue_info_t *q);
 
-extern urj_cable_driver_t *cable_drivers[];
+extern urj_cable_driver_t *urj_tap_cable_drivers[];
 
 #endif /* URJ_CABLE_H */

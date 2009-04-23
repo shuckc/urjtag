@@ -58,7 +58,7 @@ ssize_t urj_lib_getline (char **lineptr, size_t *n, FILE * stream);
 int debug_mode = 0;
 int big_endian = 0;
 int interactive = 0;
-extern urj_flash_cfi_array_t *cfi_array;
+extern urj_flash_cfi_array_t *urj_flash_cfi_array;
 
 #define JTAGDIR         ".jtag"
 #define HISTORYFILE     "history"
@@ -274,8 +274,8 @@ jtag_parse_rc (urj_chain_t *chain)
 static void
 cleanup (urj_chain_t *chain)
 {
-    urj_flash_cfi_array_free (cfi_array);
-    cfi_array = NULL;
+    urj_flash_cfi_array_free (urj_flash_cfi_array);
+    urj_flash_cfi_array = NULL;
 
     if (urj_bus)
     {

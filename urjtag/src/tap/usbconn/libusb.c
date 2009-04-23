@@ -52,7 +52,7 @@ typedef struct
     struct usb_dev_handle *handle;
 } urj_usbconn_libusb_param_t;
 
-urj_usbconn_driver_t usbconn_libusb_driver;
+urj_usbconn_driver_t urj_tap_usbconn_libusb_driver;
 
 /* ---------------------------------------------------------------------- */
 
@@ -169,7 +169,7 @@ usbconn_libusb_connect (const char **param, int paramc,
     libusb_params->dev = found_dev;
     libusb_params->handle = NULL;
     libusb_conn->params = libusb_params;
-    libusb_conn->driver = &usbconn_libusb_driver;
+    libusb_conn->driver = &urj_tap_usbconn_libusb_driver;
     libusb_conn->cable = NULL;
 
     return libusb_conn;
@@ -243,7 +243,7 @@ usbconn_libusb_free (urj_usbconn_t *conn)
 
 /* ---------------------------------------------------------------------- */
 
-urj_usbconn_driver_t usbconn_libusb_driver = {
+urj_usbconn_driver_t urj_tap_usbconn_libusb_driver = {
     "libusb",
     usbconn_libusb_connect,
     usbconn_libusb_free,

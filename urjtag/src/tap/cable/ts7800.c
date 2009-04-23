@@ -294,7 +294,7 @@ ts7800_help (const char *cablename)
     printf (_("Usage: cable %s\n" "\n"), cablename);
 }
 
-urj_cable_driver_t ts7800_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ts7800_driver = {
     "ts7800",
     N_("TS-7800 Built-in JTAG Chain"),
     ts7800_connect,

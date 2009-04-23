@@ -34,96 +34,96 @@
 
 #include "cmd.h"
 
-extern urj_cmd_t cmd_quit;
-extern urj_cmd_t cmd_help;
-extern urj_cmd_t cmd_frequency;
-extern urj_cmd_t cmd_cable;
-extern urj_cmd_t cmd_reset;
-extern urj_cmd_t cmd_discovery;
-extern urj_cmd_t cmd_idcode;
-extern urj_cmd_t cmd_detect;
-extern urj_cmd_t cmd_signal;
-extern urj_cmd_t cmd_scan;
-extern const urj_cmd_t cmd_salias;
-extern urj_cmd_t cmd_bit;
-extern urj_cmd_t cmd_register;
-extern const urj_cmd_t cmd_initbus;
-extern urj_cmd_t cmd_print;
-extern urj_cmd_t cmd_part;
-extern urj_cmd_t cmd_bus;
-extern urj_cmd_t cmd_instruction;
-extern urj_cmd_t cmd_shift;
-extern urj_cmd_t cmd_dr;
-extern urj_cmd_t cmd_get;
-extern urj_cmd_t cmd_test;
-extern urj_cmd_t cmd_shell;
-extern urj_cmd_t cmd_set;
-extern urj_cmd_t cmd_endian;
-extern urj_cmd_t cmd_peek;
-extern urj_cmd_t cmd_poke;
-extern urj_cmd_t cmd_pod;
-extern urj_cmd_t cmd_readmem;
-extern urj_cmd_t cmd_writemem;
-extern urj_cmd_t cmd_detectflash;
-extern urj_cmd_t cmd_flashmem;
-extern urj_cmd_t cmd_eraseflash;
-extern urj_cmd_t cmd_script;
-extern urj_cmd_t cmd_include;
-extern urj_cmd_t cmd_addpart;
-extern urj_cmd_t cmd_usleep;
+extern urj_cmd_t urj_cmd_quit;
+extern urj_cmd_t urj_cmd_help;
+extern urj_cmd_t urj_cmd_frequency;
+extern urj_cmd_t urj_cmd_cable;
+extern urj_cmd_t urj_cmd_reset;
+extern urj_cmd_t urj_cmd_discovery;
+extern urj_cmd_t urj_cmd_idcode;
+extern urj_cmd_t urj_cmd_detect;
+extern urj_cmd_t urj_cmd_signal;
+extern urj_cmd_t urj_cmd_scan;
+extern const urj_cmd_t urj_cmd_salias;
+extern urj_cmd_t urj_cmd_bit;
+extern urj_cmd_t urj_cmd_register;
+extern const urj_cmd_t urj_cmd_initbus;
+extern urj_cmd_t urj_cmd_print;
+extern urj_cmd_t urj_cmd_part;
+extern urj_cmd_t urj_cmd_bus;
+extern urj_cmd_t urj_cmd_instruction;
+extern urj_cmd_t urj_cmd_shift;
+extern urj_cmd_t urj_cmd_dr;
+extern urj_cmd_t urj_cmd_get;
+extern urj_cmd_t urj_cmd_test;
+extern urj_cmd_t urj_cmd_shell;
+extern urj_cmd_t urj_cmd_set;
+extern urj_cmd_t urj_cmd_endian;
+extern urj_cmd_t urj_cmd_peek;
+extern urj_cmd_t urj_cmd_poke;
+extern urj_cmd_t urj_cmd_pod;
+extern urj_cmd_t urj_cmd_readmem;
+extern urj_cmd_t urj_cmd_writemem;
+extern urj_cmd_t urj_cmd_detectflash;
+extern urj_cmd_t urj_cmd_flashmem;
+extern urj_cmd_t urj_cmd_eraseflash;
+extern urj_cmd_t urj_cmd_script;
+extern urj_cmd_t urj_cmd_include;
+extern urj_cmd_t urj_cmd_addpart;
+extern urj_cmd_t urj_cmd_usleep;
 #ifdef ENABLE_SVF
-extern urj_cmd_t cmd_svf;
+extern urj_cmd_t urj_cmd_svf;
 #endif
 #ifdef ENABLE_BSDL
-extern urj_cmd_t cmd_bsdl;
+extern urj_cmd_t urj_cmd_bsdl;
 #endif
-extern urj_cmd_t cmd_debug;
+extern urj_cmd_t urj_cmd_debug;
 
 const urj_cmd_t *urj_cmds[] = {
-    &cmd_quit,
-    &cmd_help,
-    &cmd_frequency,
-    &cmd_cable,
-    &cmd_reset,
-    &cmd_discovery,
-    &cmd_idcode,
-    &cmd_detect,
-    &cmd_signal,
-    &cmd_scan,
-    &cmd_salias,
-    &cmd_bit,
-    &cmd_register,
-    &cmd_initbus,
-    &cmd_print,
-    &cmd_part,
-    &cmd_bus,
-    &cmd_instruction,
-    &cmd_shift,
-    &cmd_dr,
-    &cmd_get,
-    &cmd_test,
-    &cmd_shell,
-    &cmd_set,
-    &cmd_endian,
-    &cmd_peek,
-    &cmd_poke,
-    &cmd_pod,
-    &cmd_readmem,
-    &cmd_writemem,
-    &cmd_detectflash,
-    &cmd_flashmem,
-    &cmd_eraseflash,
-    &cmd_script,
-    &cmd_include,
-    &cmd_addpart,
-    &cmd_usleep,
+    &urj_cmd_quit,
+    &urj_cmd_help,
+    &urj_cmd_frequency,
+    &urj_cmd_cable,
+    &urj_cmd_reset,
+    &urj_cmd_discovery,
+    &urj_cmd_idcode,
+    &urj_cmd_detect,
+    &urj_cmd_signal,
+    &urj_cmd_scan,
+    &urj_cmd_salias,
+    &urj_cmd_bit,
+    &urj_cmd_register,
+    &urj_cmd_initbus,
+    &urj_cmd_print,
+    &urj_cmd_part,
+    &urj_cmd_bus,
+    &urj_cmd_instruction,
+    &urj_cmd_shift,
+    &urj_cmd_dr,
+    &urj_cmd_get,
+    &urj_cmd_test,
+    &urj_cmd_shell,
+    &urj_cmd_set,
+    &urj_cmd_endian,
+    &urj_cmd_peek,
+    &urj_cmd_poke,
+    &urj_cmd_pod,
+    &urj_cmd_readmem,
+    &urj_cmd_writemem,
+    &urj_cmd_detectflash,
+    &urj_cmd_flashmem,
+    &urj_cmd_eraseflash,
+    &urj_cmd_script,
+    &urj_cmd_include,
+    &urj_cmd_addpart,
+    &urj_cmd_usleep,
 #ifdef ENABLE_SVF
-    &cmd_svf,
+    &urj_cmd_svf,
 #endif
 #ifdef ENABLE_BSDL
-    &cmd_bsdl,
+    &urj_cmd_bsdl,
 #endif
-    &cmd_debug,
+    &urj_cmd_debug,
     NULL                        /* last must be NULL */
 };
 

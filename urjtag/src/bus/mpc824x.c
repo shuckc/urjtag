@@ -565,7 +565,7 @@ mpc824x_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
 }
 
-const urj_bus_driver_t mpc824x_bus = {
+const urj_bus_driver_t urj_bus_mpc824x_bus = {
     "mpc824x",
     N_("Motorola MPC824x compatible bus driver via BSR"),
     mpc824x_bus_new,

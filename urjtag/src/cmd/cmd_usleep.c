@@ -55,7 +55,7 @@ cmd_usleep_help (void)
               "Sleep some number of microseconds.\n"), "usleep");
 }
 
-urj_cmd_t cmd_usleep = {
+urj_cmd_t urj_cmd_usleep = {
     "usleep",
     N_("Sleep some number of microseconds"),
     cmd_usleep_help,

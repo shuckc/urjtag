@@ -340,7 +340,7 @@ ep9307_help (const char *cablename)
     printf (_("Usage: cable %s\n" "\n"), cablename);
 }
 
-urj_cable_driver_t ep9307_cable_driver = {
+urj_cable_driver_t urj_tap_cable_ep9307_driver = {
     "EP9307",
     N_("Vision EP9307 SoM GPIO JTAG Cable"),
     ep9307_connect,

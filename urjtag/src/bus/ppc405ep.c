@@ -270,7 +270,7 @@ ppc405ep_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
-const urj_bus_driver_t ppc405ep_bus = {
+const urj_bus_driver_t urj_bus_ppc405ep_bus = {
     "ppc405ep",
     N_("IBM PowerPC 405EP compatible bus driver via BSR"),
     ppc405ep_bus_new,

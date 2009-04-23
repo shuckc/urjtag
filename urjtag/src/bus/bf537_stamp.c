@@ -339,7 +339,7 @@ bf537_stamp_bus_printinfo (urj_bus_t *bus)
 
 #ifdef ENABLE_BUS_BF537_STAMP
 
-const urj_bus_driver_t bf537_stamp_bus = {
+const urj_bus_driver_t urj_bus_bf537_stamp_bus = {
     "bf537_stamp",
     N_("Blackfin BF537 Stamp board bus driver via BSR"),
     BF537_STAMP_BUS_FUNCTIONS
@@ -349,7 +349,7 @@ const urj_bus_driver_t bf537_stamp_bus = {
 
 #ifdef ENABLE_BUS_BF537_EZKIT
 
-const urj_bus_driver_t bf537_ezkit_bus = {
+const urj_bus_driver_t urj_bus_bf537_ezkit_bus = {
     "bf537_ezkit",
     N_("Blackfin BF537 EZ-KIT board bus driver via BSR"),
     BF537_STAMP_BUS_FUNCTIONS
@@ -359,7 +359,7 @@ const urj_bus_driver_t bf537_ezkit_bus = {
 
 #ifdef ENABLE_BUS_BF527_EZKIT
 
-const urj_bus_driver_t bf527_ezkit_bus = {
+const urj_bus_driver_t urj_bus_bf527_ezkit_bus = {
     "bf527_ezkit",
     N_("Blackfin BF527 EZ-KIT board bus driver via BSR"),
     BF537_STAMP_BUS_FUNCTIONS
@@ -369,7 +369,7 @@ const urj_bus_driver_t bf527_ezkit_bus = {
 
 #ifdef ENABLE_BUS_BF538F_EZKIT
 
-const urj_bus_driver_t bf538f_ezkit_bus = {
+const urj_bus_driver_t urj_bus_bf538f_ezkit_bus = {
     "bf538f_ezkit",
     N_("Blackfin BF538F EZ-KIT board bus driver"),
     BF537_STAMP_BUS_FUNCTIONS
@@ -379,7 +379,7 @@ const urj_bus_driver_t bf538f_ezkit_bus = {
 
 #ifdef ENABLE_BUS_BF526_EZKIT
 
-const urj_bus_driver_t bf526_ezkit_bus = {
+const urj_bus_driver_t urj_bus_bf526_ezkit_bus = {
     "bf526_ezkit",
     N_("Blackfin BF526 EZ-KIT board bus driver"),
     BF537_STAMP_BUS_FUNCTIONS

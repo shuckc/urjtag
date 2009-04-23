@@ -122,7 +122,7 @@ cmd_dr_help (void)
             "dr", "dr");
 }
 
-urj_cmd_t cmd_dr = {
+urj_cmd_t urj_cmd_dr = {
     "dr",
     N_("display active data register for a part"),
     cmd_dr_help,

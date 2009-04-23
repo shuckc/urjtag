@@ -62,18 +62,18 @@ urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable)
     }
 
     /* search parport driver list */
-    for (i = 0; parport_drivers[i]; i++)
-        if (strcasecmp (params[1], parport_drivers[i]->type) == 0)
+    for (i = 0; urj_tap_parport_drivers[i]; i++)
+        if (strcasecmp (params[1], urj_tap_parport_drivers[i]->type) == 0)
             break;
-    if (!parport_drivers[i])
+    if (!urj_tap_parport_drivers[i])
     {
         printf (_("Unknown port driver: %s\n"), params[1]);
         return 2;
     }
 
     /* set up parport driver */
-    port = parport_drivers[i]->connect ((const char **) &params[2],
-                                        urj_cmd_params (params) - 2);
+    port = urj_tap_parport_drivers[i]->connect ((const char **) &params[2],
+                                                urj_cmd_params (params) - 2);
 
     if (port == NULL)
     {
@@ -85,7 +85,7 @@ urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable)
     if (!cable_params)
     {
         printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
-        parport_drivers[i]->parport_free (port);
+        urj_tap_parport_drivers[i]->parport_free (port);
         return 4;
     }
 

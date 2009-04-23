@@ -94,7 +94,7 @@ cmd_salias_help (void)
               "SIGNAL        Existing signal name\n"), "signal");
 }
 
-const urj_cmd_t cmd_salias = {
+const urj_cmd_t urj_cmd_salias = {
     "salias",
     N_("define an alias for a signal"),
     cmd_salias_help,

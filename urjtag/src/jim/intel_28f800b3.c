@@ -411,7 +411,7 @@ urj_jim_intel_28fxxxb3_update (urj_jim_bus_device_t *d,
     }
 }
 
-urj_jim_bus_device_t intel_28f800b3b = {
+urj_jim_bus_device_t urj_jim_intel_28f800b3b = {
     2,                          /* width [bytes] */
     0x80000,                    /* size [words, each <width> bytes] */
     NULL,                       /* state */

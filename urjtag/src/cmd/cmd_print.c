@@ -252,7 +252,7 @@ cmd_print_help (void)
             "print");
 }
 
-urj_cmd_t cmd_print = {
+urj_cmd_t urj_cmd_print = {
     "print",
     N_("display JTAG chain list/status"),
     cmd_print_help,

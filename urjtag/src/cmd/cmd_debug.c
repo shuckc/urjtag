@@ -57,7 +57,7 @@ cmd_debug_help (void)
               "\n" "n =1 fileio, 2=tap commands, 4 =?\n"), "debug n");
 }
 
-urj_cmd_t cmd_debug = {
+urj_cmd_t urj_cmd_debug = {
     "debug",
     N_("debug jtag program"),
     cmd_debug_help,

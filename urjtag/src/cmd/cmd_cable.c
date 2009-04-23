@@ -49,11 +49,11 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
         return -1;
 
     /* maybe old syntax was used?  search connection type driver */
-    for (i = 0; parport_drivers[i]; i++)
-        if (strcasecmp (params[1], parport_drivers[i]->type) == 0)
+    for (i = 0; urj_tap_parport_drivers[i]; i++)
+        if (strcasecmp (params[1], urj_tap_parport_drivers[i]->type) == 0)
             break;
 
-    if (parport_drivers[i] != 0)
+    if (urj_tap_parport_drivers[i] != 0)
     {
         /* Old syntax was used. Swap params. */
         printf (_
@@ -71,10 +71,10 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
     }
 
     /* search cable driver list */
-    for (i = 0; cable_drivers[i]; i++)
-        if (strcasecmp (params[1], cable_drivers[i]->name) == 0)
+    for (i = 0; urj_tap_cable_drivers[i]; i++)
+        if (strcasecmp (params[1], urj_tap_cable_drivers[i]->name) == 0)
             break;
-    if (!cable_drivers[i])
+    if (!urj_tap_cable_drivers[i])
     {
         printf (_("Unknown cable type: %s\n"), params[1]);
         return 1;
@@ -84,7 +84,7 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
     {
         if (strcasecmp (params[2], "help") == 0)
         {
-            cable_drivers[i]->help (cable_drivers[i]->name);
+            urj_tap_cable_drivers[i]->help (urj_tap_cable_drivers[i]->name);
             return 1;
         }
     }
@@ -104,7 +104,7 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
         return 1;
     }
 
-    cable->driver = cable_drivers[i];
+    cable->driver = urj_tap_cable_drivers[i];
 
     if (cable->driver->connect (++params, cable))
     {
@@ -142,12 +142,12 @@ cmd_cable_help (void)
               "Type \"cable DRIVER help\" for info about options for cable DRIVER.\n"
               "\n" "List of supported cables:\n"), "cable");
 
-    for (i = 0; cable_drivers[i]; i++)
-        printf (_("%-13s %s\n"), cable_drivers[i]->name,
-                _(cable_drivers[i]->description));
+    for (i = 0; urj_tap_cable_drivers[i]; i++)
+        printf (_("%-13s %s\n"), urj_tap_cable_drivers[i]->name,
+                _(urj_tap_cable_drivers[i]->description));
 }
 
-urj_cmd_t cmd_cable = {
+urj_cmd_t urj_cmd_cable = {
     "cable",
     N_("select JTAG cable"),
     cmd_cable_help,

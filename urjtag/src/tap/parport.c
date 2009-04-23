@@ -26,21 +26,21 @@
 
 #include "parport.h"
 
-extern urj_parport_driver_t direct_parport_driver;
-extern urj_parport_driver_t ppdev_parport_driver;
-extern urj_parport_driver_t ppi_parport_driver;
+extern urj_parport_driver_t urj_tap_parport_direct_parport_driver;
+extern urj_parport_driver_t urj_tap_parport_ppdev_parport_driver;
+extern urj_parport_driver_t urj_tap_parport_ppi_parport_driver;
 
-urj_parport_driver_t *parport_drivers[] = {
+urj_parport_driver_t *urj_tap_parport_drivers[] = {
 #ifdef ENABLE_LOWLEVEL_DIRECT
-    &direct_parport_driver,
+    &urj_tap_parport_direct_parport_driver,
 #endif /* ENABLE_LOWLEVEL_DIRECT */
 
 #ifdef ENABLE_LOWLEVEL_PPDEV
-    &ppdev_parport_driver,
+    &urj_tap_parport_ppdev_parport_driver,
 #endif /* ENABLE_LOWLEVEL_PPDEV */
 
 #ifdef ENABLE_LOWLEVEL_PPI
-    &ppi_parport_driver,
+    &urj_tap_parport_ppi_parport_driver,
 #endif /* ENABLE_LOWLEVEL_PPI */
     NULL                        /* last must be NULL */
 };

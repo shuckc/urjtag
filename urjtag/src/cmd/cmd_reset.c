@@ -52,7 +52,7 @@ cmd_reset_help (void)
     printf (_("Usage: %s\n" "Reset current JTAG chain.\n"), "reset");
 }
 
-urj_cmd_t cmd_reset = {
+urj_cmd_t urj_cmd_reset = {
     "reset",
     N_("reset JTAG chain"),
     cmd_reset_help,

@@ -94,12 +94,12 @@ cmd_flashmem_help (void)
               "Supported Flash Memories:\n"), "urj_flashmem",
             "urj_flashmem msbin", "msbin", "noverify");
 
-    for (i = 0; flash_drivers[i]; i++)
-        printf (_("%s\n     %s\n"), _(flash_drivers[i]->name),
-                _(flash_drivers[i]->description));
+    for (i = 0; urj_flash_flash_drivers[i]; i++)
+        printf (_("%s\n     %s\n"), _(urj_flash_flash_drivers[i]->name),
+                _(urj_flash_flash_drivers[i]->description));
 }
 
-urj_cmd_t cmd_flashmem = {
+urj_cmd_t urj_cmd_flashmem = {
     "urj_flashmem",
     N_("burn flash memory with data from a file"),
     cmd_flashmem_help,
