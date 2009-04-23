@@ -86,10 +86,10 @@ keithkoep_clock (urj_cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         urj_tap_parport_set_data (cable->link.port,
-                          (0 << TCK) | (tms << TMS) | (tdi << TDI));
+                                  (0 << TCK) | (tms << TMS) | (tdi << TDI));
         urj_tap_cable_wait (cable);
         urj_tap_parport_set_data (cable->link.port,
-                          (1 << TCK) | (tms << TMS) | (tdi << TDI));
+                                  (1 << TCK) | (tms << TMS) | (tdi << TDI));
         urj_tap_cable_wait (cable);
     }
 
@@ -103,7 +103,8 @@ static int
 keithkoep_get_tdo (urj_cable_t *cable)
 {
     urj_tap_parport_set_data (cable->link.port, 0 << TCK);
-    PARAM_SIGNALS (cable) &= ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
+    PARAM_SIGNALS (cable) &=
+        ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 
     urj_tap_cable_wait (cable);
 
@@ -132,7 +133,9 @@ keithkoep_set_signal (urj_cable_t *cable, int mask, int val)
         if ((mask & URJ_POD_CS_TRST) != 0)
         {
             urj_tap_parport_set_control (cable->link.port,
-                                 (sigs & URJ_POD_CS_TRST) ? (1 << TRST) : 0);
+                                         (sigs & URJ_POD_CS_TRST) ? (1 <<
+                                                                     TRST) :
+                                         0);
         }
         PARAM_SIGNALS (cable) = sigs;
     }

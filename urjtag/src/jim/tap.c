@@ -66,7 +66,8 @@ urj_jim_print_tap_state (char *rof, urj_jim_device_t *dev)
     switch (dev->tap_state & 7)
     {
     case 0:
-        printf ((dev->tap_state == URJ_JIM_RESET) ? "URJ_JIM_RESET" : "URJ_JIM_IDLE");
+        printf ((dev->tap_state ==
+                 URJ_JIM_RESET) ? "URJ_JIM_RESET" : "URJ_JIM_IDLE");
         break;
     case 1:
         printf ("SELECT");
@@ -177,7 +178,8 @@ urj_jim_tck_rise (urj_jim_state_t *s, int tms, int tdi)
         {
             reg = sr->reg;
 
-            if (dev->tap_state == URJ_JIM_SHIFT_IR || dev->tap_state == URJ_JIM_SHIFT_DR)
+            if (dev->tap_state == URJ_JIM_SHIFT_IR
+                || dev->tap_state == URJ_JIM_SHIFT_DR)
             {
                 /* Start with LSW of shift register at index 0 */
 
@@ -231,7 +233,8 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
 {
     int i, r;
 
-    urj_jim_device_t *dev = (urj_jim_device_t *) malloc (sizeof (urj_jim_device_t));
+    urj_jim_device_t *dev =
+        (urj_jim_device_t *) malloc (sizeof (urj_jim_device_t));
 
     if (dev == NULL)
     {
@@ -239,7 +242,9 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
         return NULL;
     }
 
-    dev->sreg = (urj_jim_shift_reg_t *) malloc (num_sregs * sizeof (urj_jim_shift_reg_t));
+    dev->sreg =
+        (urj_jim_shift_reg_t *) malloc (num_sregs *
+                                        sizeof (urj_jim_shift_reg_t));
 
     if (dev->sreg == NULL)
     {

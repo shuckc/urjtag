@@ -402,7 +402,8 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
 
     for (i = 0; i < area.width; i++)
         urj_part_set_signal (p, D[i], 1,
-                         (d >> ((REVBITS == 1) ? BUS_WIDTH - 1 - i : i)) & 1);
+                             (d >> ((REVBITS == 1) ? BUS_WIDTH - 1 - i : i)) &
+                             1);
 
     /* Just for debugging */
     if (dbgData)

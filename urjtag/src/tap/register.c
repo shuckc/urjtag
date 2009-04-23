@@ -68,7 +68,8 @@ urj_tap_register_duplicate (const urj_tap_register_t *tr)
     if (!tr)
         return NULL;
 
-    return urj_tap_register_init (urj_tap_register_alloc (tr->len), urj_tap_register_get_string (tr));
+    return urj_tap_register_init (urj_tap_register_alloc (tr->len),
+                                  urj_tap_register_get_string (tr));
 }
 
 void
@@ -154,7 +155,8 @@ urj_tap_register_init (urj_tap_register_t *tr, const char *value)
 }
 
 int
-urj_tap_register_compare (const urj_tap_register_t *tr, const urj_tap_register_t *tr2)
+urj_tap_register_compare (const urj_tap_register_t *tr,
+                          const urj_tap_register_t *tr2)
 {
     int i;
 

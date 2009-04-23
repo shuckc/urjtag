@@ -51,7 +51,8 @@ struct urj_part_salias
 urj_part_signal_t *urj_part_signal_alloc (const char *name);
 void urj_part_signal_free (urj_part_signal_t *s);
 
-urj_part_salias_t *urj_part_salias_alloc (const char *name, const urj_part_signal_t *signal);
+urj_part_salias_t *urj_part_salias_alloc (const char *name,
+                                          const urj_part_signal_t *signal);
 void urj_part_salias_free (urj_part_salias_t *salias);
 
 #endif /* URJ_BSSIGNAL_H */

@@ -166,8 +166,12 @@ lh7a400_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     area->length = UINT64_C (0x10000000);
 
     /* we determine the size of the flash that was booted from [1] table 3.1 */
-    width = urj_part_get_signal (bus->part, urj_part_find_signal (bus->part, "WIDTH0"));
-    width |= urj_part_get_signal (bus->part, urj_part_find_signal (bus->part, "WIDTH1")) << 1;
+    width =
+        urj_part_get_signal (bus->part,
+                             urj_part_find_signal (bus->part, "WIDTH0"));
+    width |=
+        urj_part_get_signal (bus->part,
+                             urj_part_find_signal (bus->part, "WIDTH1")) << 1;
 
     if (width < 0)
         return URJ_STATUS_FAIL;

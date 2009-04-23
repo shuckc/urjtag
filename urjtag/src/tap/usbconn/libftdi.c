@@ -196,7 +196,8 @@ usbconn_ftdi_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
        with this write
        Case B: max number of scheduled send bytes has been reached */
     if ((p->to_recv + recv > URJ_USBCONN_FTDI_MAXRECV)
-        || ((p->send_buffered > URJ_USBCONN_FTDX_MAXSEND) && (p->to_recv == 0)))
+        || ((p->send_buffered > URJ_USBCONN_FTDX_MAXSEND)
+            && (p->to_recv == 0)))
         xferred = usbconn_ftdi_flush (p);
 
     if (xferred < 0)
@@ -479,10 +480,16 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
         r = seq_purge (fc, 1, 0);
 
     if (r >= 0)
-        if ((r = ftdi_write_data_set_chunksize (fc, URJ_USBCONN_FTDX_MAXSEND_MPSSE)) < 0)
+        if ((r =
+             ftdi_write_data_set_chunksize (fc,
+                                            URJ_USBCONN_FTDX_MAXSEND_MPSSE)) <
+            0)
             puts (ftdi_get_error_string (fc));
     if (r >= 0)
-        if ((r = ftdi_read_data_set_chunksize (fc, URJ_USBCONN_FTDX_MAXSEND_MPSSE)) < 0)
+        if ((r =
+             ftdi_read_data_set_chunksize (fc,
+                                           URJ_USBCONN_FTDX_MAXSEND_MPSSE)) <
+            0)
             puts (ftdi_get_error_string (fc));
 
 #ifdef LIBFTDI_UNIMPLEMENTED

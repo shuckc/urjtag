@@ -247,7 +247,8 @@ ts7800_current_signals (urj_cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
 
-    int sigs = p->signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK);
+    int sigs =
+        p->signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK);
     if (p->lastout & (1 << TCK))
         sigs |= URJ_POD_CS_TCK;
     if (p->lastout & (1 << TDI))

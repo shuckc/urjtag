@@ -148,7 +148,9 @@ sa1110_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     area->start = UINT32_C (0x00000000);
     area->length = UINT64_C (0x100000000);
     area->width =
-        urj_part_get_signal (bus->part, urj_part_find_signal (bus->part, "ROM_SEL")) ? 32 : 16;
+        urj_part_get_signal (bus->part,
+                             urj_part_find_signal (bus->part,
+                                                   "ROM_SEL")) ? 32 : 16;
 
     return URJ_STATUS_OK;
 }

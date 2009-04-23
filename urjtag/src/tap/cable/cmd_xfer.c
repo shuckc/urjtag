@@ -77,7 +77,8 @@ extend_cmd_buffer (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
  *
  ****************************************************************************/
 int
-urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, int max_len)
+urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+                            int max_len)
 {
     int n;
     urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = cmd_root->last;
@@ -107,7 +108,8 @@ urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, int 
  *
  ****************************************************************************/
 int
-urj_tap_cable_cx_cmd_push (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, uint8_t d)
+urj_tap_cable_cx_cmd_push (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+                           uint8_t d)
 {
     urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = cmd_root->last;
 
@@ -190,9 +192,12 @@ urj_tap_cable_cx_cmd_free (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
  *
  ****************************************************************************/
 urj_tap_cable_cmd_xfer_cx_cmd_t *
-urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, uint32_t to_recv)
+urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+                            uint32_t to_recv)
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = (urj_tap_cable_cmd_xfer_cx_cmd_t *) malloc (sizeof (urj_tap_cable_cmd_xfer_cx_cmd_t));
+    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd =
+        (urj_tap_cable_cmd_xfer_cx_cmd_t *)
+        malloc (sizeof (urj_tap_cable_cmd_xfer_cx_cmd_t));
 
     if (cmd)
     {
@@ -283,10 +288,12 @@ urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
  *
  ****************************************************************************/
 void
-urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, const urj_tap_cable_cmd_xfer_cx_cmd_t *out_cmd,
-         urj_cable_t *cable, urj_cable_flush_amount_t how_much)
+urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+                       const urj_tap_cable_cmd_xfer_cx_cmd_t *out_cmd,
+                       urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = urj_tap_cable_cx_cmd_dequeue (cmd_root);
+    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd =
+        urj_tap_cable_cx_cmd_dequeue (cmd_root);
     uint32_t bytes_to_recv;
 
     bytes_to_recv = 0;
@@ -297,7 +304,8 @@ urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, const urj
            through the usbconn driver */
         bytes_to_recv += cmd->to_recv;
         /* write command data (buffered) */
-        urj_tap_usbconn_write (cable->link.usb, cmd->buf, cmd->buf_pos, cmd->to_recv);
+        urj_tap_usbconn_write (cable->link.usb, cmd->buf, cmd->buf_pos,
+                               cmd->to_recv);
         urj_tap_cable_cx_cmd_free (cmd);
         cmd = urj_tap_cable_cx_cmd_dequeue (cmd_root);
     }
@@ -307,8 +315,8 @@ urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, const urj
        data is expected */
     if (bytes_to_recv && out_cmd)
     {
-        urj_tap_usbconn_write (cable->link.usb, out_cmd->buf, out_cmd->buf_pos,
-                       out_cmd->to_recv);
+        urj_tap_usbconn_write (cable->link.usb, out_cmd->buf,
+                               out_cmd->buf_pos, out_cmd->to_recv);
         bytes_to_recv += out_cmd->to_recv;
     }
 

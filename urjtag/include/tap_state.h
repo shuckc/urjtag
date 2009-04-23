@@ -31,12 +31,12 @@
 
 #define URJ_TAP_STATE_DR        URJ_BIT (0)
 #define URJ_TAP_STATE_IR        URJ_BIT (1)
-#define URJ_TAP_STATE_SHIFT     URJ_BIT (2)  /* register shift with TMS = 0 */
-#define URJ_TAP_STATE_IDLE      URJ_BIT (3)  /* to Run-Test/Idle with TMS = 0 */
-#define URJ_TAP_STATE_CAPTURE   URJ_BIT (4)  /* Capture state */
-#define URJ_TAP_STATE_UPDATE    URJ_BIT (5)  /* to Update with TMS = 1 */
-#define URJ_TAP_STATE_PAUSE     URJ_BIT (6)  /* to Pause with TMS = 0 */
-#define URJ_TAP_STATE_RESET     URJ_BIT (7)  /* Test-Logic-Reset or unknown state */
+#define URJ_TAP_STATE_SHIFT     URJ_BIT (2)     /* register shift with TMS = 0 */
+#define URJ_TAP_STATE_IDLE      URJ_BIT (3)     /* to Run-Test/Idle with TMS = 0 */
+#define URJ_TAP_STATE_CAPTURE   URJ_BIT (4)     /* Capture state */
+#define URJ_TAP_STATE_UPDATE    URJ_BIT (5)     /* to Update with TMS = 1 */
+#define URJ_TAP_STATE_PAUSE     URJ_BIT (6)     /* to Pause with TMS = 0 */
+#define URJ_TAP_STATE_RESET     URJ_BIT (7)     /* Test-Logic-Reset or unknown state */
 
 #define URJ_TAP_STATE_UNKNOWN_STATE     URJ_TAP_STATE_RESET
 #define URJ_TAP_STATE_TEST_LOGIC_RESET  (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE)

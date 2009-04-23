@@ -106,7 +106,8 @@ typedef struct
 intel_f28xxxb3_state_t;
 
 void
-urj_jim_intel_28fxxxb3_init (urj_jim_bus_device_t *d, uint16_t id, b3_boot_type_t bt)
+urj_jim_intel_28fxxxb3_init (urj_jim_bus_device_t *d, uint16_t id,
+                             b3_boot_type_t bt)
 {
     d->state = malloc (sizeof (intel_f28xxxb3_state_t));
     if (d->state != NULL)
@@ -136,8 +137,8 @@ urj_jim_intel_28fxxxb3_free (urj_jim_bus_device_t *d)
 
 uint32_t
 urj_jim_intel_28fxxxb3_capture (urj_jim_bus_device_t *d,
-                        uint32_t address, uint32_t control,
-                        uint8_t *shmem, size_t shmem_size)
+                                uint32_t address, uint32_t control,
+                                uint8_t *shmem, size_t shmem_size)
 {
     uint32_t data = 0;
 
@@ -192,8 +193,9 @@ urj_jim_intel_28fxxxb3_capture (urj_jim_bus_device_t *d,
 
 void
 urj_jim_intel_28fxxxb3_update (urj_jim_bus_device_t *d,
-                       uint32_t address, uint32_t data, uint32_t control,
-                       uint8_t *shmem, size_t shmem_size)
+                               uint32_t address, uint32_t data,
+                               uint32_t control, uint8_t *shmem,
+                               size_t shmem_size)
 {
 #if 0
     printf ("update  A=%08X, D=%08X%s%s%s\n", address, data,
@@ -416,5 +418,5 @@ urj_jim_bus_device_t intel_28f800b3b = {
     urj_jim_intel_28f800b3b_init,       /* init() */
     urj_jim_intel_28fxxxb3_capture,     /* access() */
     urj_jim_intel_28fxxxb3_update,      /* access() */
-    urj_jim_intel_28fxxxb3_free         /* free() */
+    urj_jim_intel_28fxxxb3_free /* free() */
 };

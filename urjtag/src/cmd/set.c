@@ -76,13 +76,15 @@ cmd_set_run (urj_chain_t *chain, char *params[])
             return -1;
     }
 
-    s = urj_part_find_signal (chain->parts->parts[chain->active_part], params[2]);
+    s = urj_part_find_signal (chain->parts->parts[chain->active_part],
+                              params[2]);
     if (!s)
     {
         printf (_("signal '%s' not found\n"), params[2]);
         return 1;
     }
-    urj_part_set_signal (chain->parts->parts[chain->active_part], s, dir, data);
+    urj_part_set_signal (chain->parts->parts[chain->active_part], s, dir,
+                         data);
 
     return 1;
 }

@@ -78,12 +78,12 @@ dlc5_clock (urj_cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         urj_tap_parport_set_data (cable->link.port,
-                          (1 << PROG) | (0 << TCK) | (tms << TMS) | (tdi <<
-                                                                     TDI));
+                                  (1 << PROG) | (0 << TCK) | (tms << TMS) |
+                                  (tdi << TDI));
         urj_tap_cable_wait (cable);
         urj_tap_parport_set_data (cable->link.port,
-                          (1 << PROG) | (1 << TCK) | (tms << TMS) | (tdi <<
-                                                                     TDI));
+                                  (1 << PROG) | (1 << TCK) | (tms << TMS) |
+                                  (tdi << TDI));
         urj_tap_cable_wait (cable);
     }
 
@@ -97,7 +97,8 @@ static int
 dlc5_get_tdo (urj_cable_t *cable)
 {
     urj_tap_parport_set_data (cable->link.port, (1 << PROG) | (0 << TCK));
-    PARAM_SIGNALS (cable) &= ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
+    PARAM_SIGNALS (cable) &=
+        ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 
     urj_tap_cable_wait (cable);
 

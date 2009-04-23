@@ -117,8 +117,8 @@ urj_bsdl_msg (int proc_mode, int type, const char *format, ...)
  *
  ****************************************************************************/
 int
-urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name, int proc_mode,
-                const char *idcode)
+urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
+                    int proc_mode, const char *idcode)
 {
     urj_bsdl_globs_t *globs = &(chain->bsdl);
     FILE *BSDL_File;
@@ -138,13 +138,13 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name, int proc_mod
         if (chain == NULL)
         {
             urj_bsdl_msg (proc_mode, BSDL_MSG_ERR,
-                      _("No JTAG chain available\n"));
+                          _("No JTAG chain available\n"));
             return -1;
         }
         if (chain->parts == NULL)
         {
             urj_bsdl_msg (proc_mode, BSDL_MSG_ERR,
-                      _("Chain without any parts\n"));
+                          _("Chain without any parts\n"));
             return -1;
         }
         if (!(chain && chain->parts))
@@ -162,13 +162,13 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name, int proc_mod
     BSDL_File = fopen (BSDL_File_Name, "r");
 
     urj_bsdl_msg (proc_mode, BSDL_MSG_NOTE, _("Reading file '%s'\n"),
-              BSDL_File_Name);
+                  BSDL_File_Name);
 
     if (BSDL_File == NULL)
     {
         urj_bsdl_msg (proc_mode,
-                  BSDL_MSG_ERR, _("Unable to open BSDL file '%s'\n"),
-                  BSDL_File_Name);
+                      BSDL_MSG_ERR, _("Unable to open BSDL file '%s'\n"),
+                      BSDL_File_Name);
         return -1;
     }
 
@@ -183,26 +183,27 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name, int proc_mod
         if (Compile_Errors == 0)
         {
             urj_bsdl_msg (proc_mode,
-                      BSDL_MSG_NOTE,
-                      _("BSDL file '%s' passed VHDL stage correctly\n"),
-                      BSDL_File_Name);
+                          BSDL_MSG_NOTE,
+                          _("BSDL file '%s' passed VHDL stage correctly\n"),
+                          BSDL_File_Name);
 
             result = urj_bsdl_process_elements (&jtag_ctrl, idcode);
 
             if (result >= 0)
                 urj_bsdl_msg (proc_mode,
-                          BSDL_MSG_NOTE,
-                          _("BSDL file '%s' passed BSDL stage correctly\n"),
-                          BSDL_File_Name);
+                              BSDL_MSG_NOTE,
+                              _
+                              ("BSDL file '%s' passed BSDL stage correctly\n"),
+                              BSDL_File_Name);
 
         }
         else
         {
             urj_bsdl_msg (proc_mode,
-                      BSDL_MSG_ERR,
-                      _
-                      ("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
-                      BSDL_File_Name);
+                          BSDL_MSG_ERR,
+                          _
+                          ("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
+                          BSDL_File_Name);
         }
 
 
@@ -275,7 +276,7 @@ urj_bsdl_set_path (urj_chain_t *chain, const char *pathlist)
     if (globs->debug)
         for (num = 0; globs->path_list[num] != NULL; num++)
             urj_bsdl_msg (URJ_BSDL_MODE_MSG_ALL,
-                      BSDL_MSG_NOTE, "%s\n", globs->path_list[num]);
+                          BSDL_MSG_NOTE, "%s\n", globs->path_list[num]);
 }
 
 
@@ -339,7 +340,7 @@ urj_bsdl_scan_files (urj_chain_t *chain, const char *idcode, int proc_mode)
                         {
                             result =
                                 urj_bsdl_read_file (chain, name, proc_mode,
-                                                idcode);
+                                                    idcode);
                             if (result == 1)
                                 printf (_("  Filename:     %s\n"), name);
                         }
@@ -353,8 +354,8 @@ urj_bsdl_scan_files (urj_chain_t *chain, const char *idcode, int proc_mode)
         }
         else
             urj_bsdl_msg (proc_mode,
-                      BSDL_MSG_WARN, _("Cannot open directory %s\n"),
-                      globs->path_list[idx]);
+                          BSDL_MSG_WARN, _("Cannot open directory %s\n"),
+                          globs->path_list[idx]);
 
         idx++;
     }

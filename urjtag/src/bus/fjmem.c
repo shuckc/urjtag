@@ -81,7 +81,8 @@ typedef struct
 #define BLOCK_DESC ((bus_params_t *) bus->params)->block_desc
 
 static int
-fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode, int len)
+fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode,
+                      int len)
 {
     urj_data_register_t *dr;
     urj_instruction_t *i;
@@ -106,7 +107,8 @@ fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode, int le
         printf (_("invalid instruction length\n"));
         return 0;
     }
-    i = urj_part_instruction_alloc (FJMEM_INST_NAME, part->instruction_length, opcode);
+    i = urj_part_instruction_alloc (FJMEM_INST_NAME, part->instruction_length,
+                                    opcode);
     if (!i)
     {
         printf (_("out of memory\n"));
@@ -126,7 +128,8 @@ fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode, int le
     urj_tap_register_fill (dr->in, 0);
     urj_tap_capture_dr (chain);
     for (l = 0; l < chain->parts->len; l++)
-        urj_tap_shift_register (chain, dr->in, NULL, URJ_CHAIN_EXITMODE_SHIFT);
+        urj_tap_shift_register (chain, dr->in, NULL,
+                                URJ_CHAIN_EXITMODE_SHIFT);
     /* shift once more and return to idle state */
     urj_tap_shift_register (chain, dr->in, NULL, URJ_CHAIN_EXITMODE_IDLE);
 
@@ -155,7 +158,8 @@ fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode, int le
     while ((tdo_bit[0] == 0) && (fjmem_reg_len < FJMEM_MAX_REG_LEN))
     {
         /* read current TDO and then shift once */
-        urj_tap_shift_register (chain, dr->in, dr->out, URJ_CHAIN_EXITMODE_SHIFT);
+        urj_tap_shift_register (chain, dr->in, dr->out,
+                                URJ_CHAIN_EXITMODE_SHIFT);
         tdo_bit = dr->out->data;
         fjmem_reg_len++;
     }
@@ -368,7 +372,8 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
  *
  */
 static urj_bus_t *
-fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver, char *params[])
+fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
+               char *params[])
 {
     urj_bus_t *bus = NULL;
     int failed = 0;

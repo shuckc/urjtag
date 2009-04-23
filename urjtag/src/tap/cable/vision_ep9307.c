@@ -290,7 +290,10 @@ ep9307_current_signals (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
-    int sigs = p->signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TRST);
+    int sigs =
+        p->
+        signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK |
+                    URJ_POD_CS_TRST);
     if (p->lastout & (1 << TCK))
         sigs |= URJ_POD_CS_TCK;
     if (p->lastout & (1 << TDI))

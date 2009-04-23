@@ -264,13 +264,14 @@ urj_part_print (urj_part_t *p)
         return;
 
     snprintf (format, 100, _("%%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"),
-              URJ_PART_MANUFACTURER_MAXLEN, URJ_PART_PART_MAXLEN, URJ_PART_STEPPING_MAXLEN,
-              URJ_INSTRUCTION_MAXLEN_INSTRUCTION, URJ_DATA_REGISTER_MAXLEN);
+              URJ_PART_MANUFACTURER_MAXLEN, URJ_PART_PART_MAXLEN,
+              URJ_PART_STEPPING_MAXLEN, URJ_INSTRUCTION_MAXLEN_INSTRUCTION,
+              URJ_DATA_REGISTER_MAXLEN);
 
     if (p->active_instruction)
     {
         instruction = p->active_instruction->name;
-        if (p->active_instruction->data_register !=NULL)
+        if (p->active_instruction->data_register != NULL)
             dr = p->active_instruction->data_register->name;
     }
     if (instruction == NULL)

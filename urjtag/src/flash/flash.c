@@ -52,7 +52,7 @@ extern urj_flash_driver_t amd_8_flash_driver;
 extern urj_flash_driver_t intel_32_flash_driver;
 extern urj_flash_driver_t intel_16_flash_driver;
 extern urj_flash_driver_t intel_8_flash_driver;
-extern urj_flash_driver_t amd_29xx040_flash_driver; //20/09/2006
+extern urj_flash_driver_t amd_29xx040_flash_driver;     //20/09/2006
 
 urj_flash_driver_t *flash_drivers[] = {
     &amd_32_flash_driver,
@@ -95,7 +95,7 @@ set_flash_driver (void)
 }
 
 void
-urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
+urj_flashmsbin (urj_bus_t *bus, FILE * f, int noverify)
 {
     uint32_t adr;
     urj_flash_cfi_query_structure_t *cfi;
@@ -283,7 +283,7 @@ find_block (urj_flash_cfi_query_structure_t *cfi, int adr, int bus_width,
 }
 
 void
-urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
+urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
 {
     uint32_t adr;
     urj_flash_cfi_query_structure_t *cfi;

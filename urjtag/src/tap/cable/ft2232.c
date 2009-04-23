@@ -222,7 +222,8 @@ typedef struct
 
 
 static const uint8_t imm_buf[1] = { SEND_IMMEDIATE };
-static const urj_tap_cable_cmd_xfer_cx_cmd_t imm_cmd = { NULL, 1, 1, (uint8_t *) imm_buf, 0 };
+static const urj_tap_cable_cmd_xfer_cx_cmd_t imm_cmd =
+    { NULL, 1, 1, (uint8_t *) imm_buf, 0 };
 
 
 static void
@@ -258,7 +259,8 @@ ft2232_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
         urj_tap_cable_cx_cmd_push (cmd_root, div & 0xff);
         urj_tap_cable_cx_cmd_push (cmd_root, (div >> 8) & 0xff);
 
-        urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+        urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                               URJ_TAP_CABLE_COMPLETELY);
 
         params->mpsse_frequency = FT2232_MAX_TCK_FREQ / (div + 1);
         cable->frequency = params->mpsse_frequency;
@@ -283,10 +285,12 @@ ft2232_generic_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     params->high_byte_value = 0;
@@ -325,10 +329,12 @@ ft2232_jtagkey_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -378,10 +384,12 @@ ft2232_armusbocd_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0, nOE = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -430,10 +438,12 @@ ft2232_gnice_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     params->high_byte_value = BITMASK_GNICE_nTRST;
@@ -474,10 +484,12 @@ ft2232_oocdlinks_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -529,10 +541,12 @@ ft2232_turtelizer2_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -578,10 +592,12 @@ ft2232_usbtojtagif_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -629,10 +645,12 @@ ft2232_signalyzer_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     params->high_byte_value = 0;
@@ -673,10 +691,12 @@ ft2232_flyswatter_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     /* Turn LED2 on */
@@ -710,8 +730,10 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
     /* Check if cable is connected to the target and the target is powered on */
     urj_tap_cable_cx_cmd_queue (cmd_root, 1);
     urj_tap_cable_cx_cmd_push (cmd_root, GET_BITS_LOW);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
-    if ((urj_tap_cable_cx_xfer_recv (cable) & BITMASK_USBSCARAB2_nCONNECTED) != 0)
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
+    if ((urj_tap_cable_cx_xfer_recv (cable) & BITMASK_USBSCARAB2_nCONNECTED)
+        != 0)
     {
         printf (_
                 ("Error: Please power on the TARGET board and connect VCC signal!\n"));
@@ -726,10 +748,12 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
        TCK = 0, TMS = 1, TDI = 0 */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 params->
-                 low_byte_dir | BITMASK_TCK | BITMASK_TDI | BITMASK_TMS);
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->
+                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
+                               BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     /* nLED=0 */
@@ -772,7 +796,8 @@ ft2232_generic_done (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -801,23 +826,27 @@ ft2232_jtagkey_done (urj_cable_t *cable)
        disable output drivers */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_JTAGKEY_TRST_N_OUT
-                 | BITMASK_JTAGKEY_TRST_N_OE_N
-                 | BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N);
+                               BITMASK_JTAGKEY_TRST_N_OUT
+                               | BITMASK_JTAGKEY_TRST_N_OE_N
+                               | BITMASK_JTAGKEY_SRST_N_OUT |
+                               BITMASK_JTAGKEY_SRST_N_OE_N);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_JTAGKEY_TRST_N_OUT
-                 | BITMASK_JTAGKEY_TRST_N_OE_N
-                 | BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N);
+                               BITMASK_JTAGKEY_TRST_N_OUT |
+                               BITMASK_JTAGKEY_TRST_N_OE_N |
+                               BITMASK_JTAGKEY_SRST_N_OUT |
+                               BITMASK_JTAGKEY_SRST_N_OE_N);
 
     /* Set Data Bits High Byte
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_JTAGKEY_TRST_N_OUT
-                 | BITMASK_JTAGKEY_TRST_N_OE_N
-                 | BITMASK_JTAGKEY_SRST_N_OUT | BITMASK_JTAGKEY_SRST_N_OE_N);
+                               BITMASK_JTAGKEY_TRST_N_OUT
+                               | BITMASK_JTAGKEY_TRST_N_OE_N
+                               | BITMASK_JTAGKEY_SRST_N_OUT |
+                               BITMASK_JTAGKEY_SRST_N_OE_N);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -846,21 +875,25 @@ ft2232_armusbocd_done (urj_cable_t *cable)
        disable output drivers */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_ARMUSBOCD_nTRST
-                 | BITMASK_ARMUSBOCD_nTRST_nOE | BITMASK_ARMUSBOCD_nTSRST);
+                               BITMASK_ARMUSBOCD_nTRST
+                               | BITMASK_ARMUSBOCD_nTRST_nOE |
+                               BITMASK_ARMUSBOCD_nTSRST);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_ARMUSBOCD_nTRST
-                 | BITMASK_ARMUSBOCD_nTRST_nOE
-                 | BITMASK_ARMUSBOCD_nTSRST | BITMASK_ARMUSBOCD_RED_LED);
+                               BITMASK_ARMUSBOCD_nTRST |
+                               BITMASK_ARMUSBOCD_nTRST_nOE |
+                               BITMASK_ARMUSBOCD_nTSRST |
+                               BITMASK_ARMUSBOCD_RED_LED);
 
     /* Set Data Bits High Byte
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_ARMUSBOCD_nTRST
-                 | BITMASK_ARMUSBOCD_nTRST_nOE | BITMASK_ARMUSBOCD_nTSRST);
+                               BITMASK_ARMUSBOCD_nTRST
+                               | BITMASK_ARMUSBOCD_nTRST_nOE |
+                               BITMASK_ARMUSBOCD_nTSRST);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -882,14 +915,16 @@ ft2232_gnice_done (urj_cable_t *cable)
        disable output drivers */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST);
-    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED);
 
     /* Set Data Bits High Byte
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -911,23 +946,27 @@ ft2232_oocdlinks_done (urj_cable_t *cable)
        disable output drivers */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_OOCDLINKS_nTRST
-                 | BITMASK_OOCDLINKS_nTRST_nOE
-                 | BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE);
+                               BITMASK_OOCDLINKS_nTRST
+                               | BITMASK_OOCDLINKS_nTRST_nOE
+                               | BITMASK_OOCDLINKS_nSRST |
+                               BITMASK_OOCDLINKS_nSRST_nOE);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_OOCDLINKS_nTRST
-                 | BITMASK_OOCDLINKS_nTRST_nOE
-                 | BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE);
+                               BITMASK_OOCDLINKS_nTRST |
+                               BITMASK_OOCDLINKS_nTRST_nOE |
+                               BITMASK_OOCDLINKS_nSRST |
+                               BITMASK_OOCDLINKS_nSRST_nOE);
 
     /* Set Data Bits High Byte
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_OOCDLINKS_nTRST
-                 | BITMASK_OOCDLINKS_nTRST_nOE
-                 | BITMASK_OOCDLINKS_nSRST | BITMASK_OOCDLINKS_nSRST_nOE);
+                               BITMASK_OOCDLINKS_nTRST
+                               | BITMASK_OOCDLINKS_nTRST_nOE
+                               | BITMASK_OOCDLINKS_nSRST |
+                               BITMASK_OOCDLINKS_nSRST_nOE);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -956,16 +995,19 @@ ft2232_turtelizer2_done (urj_cable_t *cable)
        switch off LEDs */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED);
+                               BITMASK_TURTELIZER2_nTX1LED |
+                               BITMASK_TURTELIZER2_nRX1LED);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_TURTELIZER2_nTX1LED | BITMASK_TURTELIZER2_nRX1LED);
+                               BITMASK_TURTELIZER2_nTX1LED |
+                               BITMASK_TURTELIZER2_nRX1LED);
 
     /* Set Data Bits High Byte
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -982,24 +1024,29 @@ ft2232_usbtojtagif_done (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_USBTOJTAGIF_nTRST | BITMASK_USBTOJTAGIF_RST);
+                               BITMASK_USBTOJTAGIF_nTRST |
+                               BITMASK_USBTOJTAGIF_RST);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        disable output drivers */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED);
+                               BITMASK_USBTOJTAGIF_nRxLED |
+                               BITMASK_USBTOJTAGIF_nTxLED);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED);
+                               BITMASK_USBTOJTAGIF_nRxLED |
+                               BITMASK_USBTOJTAGIF_nTxLED);
 
     /* Set Data Bits High Byte
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_USBTOJTAGIF_nRxLED | BITMASK_USBTOJTAGIF_nTxLED);
+                               BITMASK_USBTOJTAGIF_nRxLED |
+                               BITMASK_USBTOJTAGIF_nTxLED);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -1016,23 +1063,27 @@ ft2232_signalyzer_done (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST);
+                               BITMASK_SIGNALYZER_nTRST |
+                               BITMASK_SIGNALYZER_nSRST);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
        disable output drivers */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST);
+                               BITMASK_SIGNALYZER_nTRST |
+                               BITMASK_SIGNALYZER_nSRST);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                 BITMASK_SIGNALYZER_nTRST | BITMASK_SIGNALYZER_nSRST);
+                               BITMASK_SIGNALYZER_nTRST |
+                               BITMASK_SIGNALYZER_nSRST);
 
     /* Set Data Bits High Byte
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -1048,13 +1099,19 @@ ft2232_flyswatter_done (urj_cable_t *cable)
        disable output drivers */
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
-    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               BITMASK_FLYSWATTER_nOE1 |
+                               BITMASK_FLYSWATTER_nOE2);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               BITMASK_FLYSWATTER_nOE1 |
+                               BITMASK_FLYSWATTER_nOE2);
 
     /* Set Data Bits Low Byte
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
-    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nOE1 | BITMASK_FLYSWATTER_nOE2);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               BITMASK_FLYSWATTER_nOE1 |
+                               BITMASK_FLYSWATTER_nOE2);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
     /* Set Data Bits High Byte
@@ -1062,7 +1119,8 @@ ft2232_flyswatter_done (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_FLYSWATTER_nLED2);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -1086,7 +1144,8 @@ ft2232_usbscarab2_done (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
 
-    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 
     urj_tap_cable_generic_usbconn_done (cable);
 }
@@ -1104,18 +1163,21 @@ ft2232_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     while (n > 0)
     {
-        if (urj_tap_cable_cx_cmd_space (cmd_root, URJ_USBCONN_FTDX_MAXSEND_MPSSE) < 4)
+        if (urj_tap_cable_cx_cmd_space
+            (cmd_root, URJ_USBCONN_FTDX_MAXSEND_MPSSE) < 4)
         {
             /* no space left for Clock Data plus Send Immediate
                transfer queued commands to device and read receive data
                to internal buffer */
-            urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+            urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                                   URJ_TAP_CABLE_COMPLETELY);
             urj_tap_cable_cx_cmd_queue (cmd_root, 0);
         }
 
         /* Clock Data to TMS/CS Pin (no Read) */
         urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_WRITE_TMS |
-                     MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG);
+                                   MPSSE_LSB | MPSSE_BITMODE |
+                                   MPSSE_WRITE_NEG);
         if (n <= 7)
         {
             urj_tap_cable_cx_cmd_push (cmd_root, n - 1);
@@ -1144,7 +1206,8 @@ ft2232_clock (urj_cable_t *cable, int tms, int tdi, int n)
     params_t *params = (params_t *) cable->params;
 
     ft2232_clock_schedule (cable, tms, tdi, n);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
     params->last_tdo_valid = 0;
 }
 
@@ -1182,7 +1245,8 @@ ft2232_get_tdo (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
 
     ft2232_get_tdo_schedule (cable);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
     return ft2232_get_tdo_finish (cable);
 }
 
@@ -1194,7 +1258,9 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
     urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* filter for supported signals */
-    mask &= URJ_POD_CS_TCK | URJ_POD_CS_TDI | URJ_POD_CS_TMS | URJ_POD_CS_TRST | URJ_POD_CS_RESET;
+    mask &=
+        URJ_POD_CS_TCK | URJ_POD_CS_TDI | URJ_POD_CS_TMS | URJ_POD_CS_TRST |
+        URJ_POD_CS_RESET;
     if (mask != 0)
     {
         int sigs = (params->signals & ~mask) | (val & mask);
@@ -1241,18 +1307,20 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
             urj_tap_cable_cx_cmd_queue (cmd_root, 0);
             urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
             urj_tap_cable_cx_cmd_push (cmd_root,
-                         (params->low_byte_value | low_or) ^ low_xor);
+                                       (params->
+                                        low_byte_value | low_or) ^ low_xor);
             urj_tap_cable_cx_cmd_push (cmd_root,
-                         params->
-                         low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                         BITMASK_TMS);
+                                       params->
+                                       low_byte_dir | BITMASK_TCK |
+                                       BITMASK_TDI | BITMASK_TMS);
         }
 
         if (set_high)
         {
             urj_tap_cable_cx_cmd_queue (cmd_root, 0);
             urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
-            urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value ^ high_xor);
+            urj_tap_cable_cx_cmd_push (cmd_root,
+                                       params->high_byte_value ^ high_xor);
             urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
         }
 
@@ -1269,7 +1337,8 @@ ft2232_set_signal (urj_cable_t *cable, int mask, int val)
     int prev_sigs = params->signals;
 
     ft2232_set_signal_schedule (params, mask, val, 1, 1);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
     params->last_tdo_valid = 0;
 
     return prev_sigs;
@@ -1287,7 +1356,8 @@ ft2232_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
 
     /* lower TMS for transfer
        also lower TCK to ensure correct clocking */
-    ft2232_set_signal_schedule (params, URJ_POD_CS_TCK | URJ_POD_CS_TMS, 0, 1, 0);
+    ft2232_set_signal_schedule (params, URJ_POD_CS_TCK | URJ_POD_CS_TMS, 0, 1,
+                                0);
 
     chunkbytes = len >> 3;
     while (chunkbytes > 0)
@@ -1316,15 +1386,16 @@ ft2232_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
             urj_tap_cable_cx_cmd_queue (cmd_root, chunkbytes);
             /* Clock Data Bytes In and Out LSB First
                out on negative edge, in on positive edge */
-            urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_DO_READ | MPSSE_DO_WRITE |
-                         MPSSE_LSB | MPSSE_WRITE_NEG);
+            urj_tap_cable_cx_cmd_push (cmd_root,
+                                       MPSSE_DO_READ | MPSSE_DO_WRITE |
+                                       MPSSE_LSB | MPSSE_WRITE_NEG);
         }
         else
         {
             urj_tap_cable_cx_cmd_queue (cmd_root, 0);
             /* Clock Data Bytes Out on -ve Clock Edge LSB First (no Read) */
             urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_DO_WRITE |
-                         MPSSE_LSB | MPSSE_WRITE_NEG);
+                                       MPSSE_LSB | MPSSE_WRITE_NEG);
         }
         /* set byte count */
         urj_tap_cable_cx_cmd_push (cmd_root, (chunkbytes - 1) & 0xff);
@@ -1363,15 +1434,18 @@ ft2232_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
             urj_tap_cable_cx_cmd_queue (cmd_root, 1);
             /* Clock Data Bytes In and Out LSB First
                out on negative edge, in on positive edge */
-            urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_DO_READ | MPSSE_DO_WRITE |
-                         MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG);
+            urj_tap_cable_cx_cmd_push (cmd_root,
+                                       MPSSE_DO_READ | MPSSE_DO_WRITE |
+                                       MPSSE_LSB | MPSSE_BITMODE |
+                                       MPSSE_WRITE_NEG);
         }
         else
         {
             urj_tap_cable_cx_cmd_queue (cmd_root, 0);
             /* Clock Data Bytes Out on -ve Clock Edge LSB First (no Read) */
             urj_tap_cable_cx_cmd_push (cmd_root, MPSSE_DO_WRITE |
-                         MPSSE_LSB | MPSSE_BITMODE | MPSSE_WRITE_NEG);
+                                       MPSSE_LSB | MPSSE_BITMODE |
+                                       MPSSE_WRITE_NEG);
         }
         /* determine bit count */
         urj_tap_cable_cx_cmd_push (cmd_root, bitwise_len - 1);
@@ -1455,7 +1529,8 @@ ft2232_transfer_finish (urj_cable_t *cable, int len, char *out)
         }
 
         /* gather current TDO */
-        params->last_tdo = (urj_tap_cable_cx_xfer_recv (cable) & BITMASK_TDO) ? 1 : 0;
+        params->last_tdo =
+            (urj_tap_cable_cx_xfer_recv (cable) & BITMASK_TDO) ? 1 : 0;
         params->last_tdo_valid = 1;
     }
     else
@@ -1471,7 +1546,8 @@ ft2232_transfer (urj_cable_t *cable, int len, char *in, char *out)
     params_t *params = (params_t *) cable->params;
 
     ft2232_transfer_schedule (cable, len, in, out);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
     return ft2232_transfer_finish (cable, len, out);
 }
 
@@ -1485,7 +1561,8 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
         return;
 
     if (cable->todo.num_items == 0)
-        urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, how_much);
+        urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+                               how_much);
 
     while (cable->todo.num_items > 0)
     {
@@ -1544,7 +1621,8 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                 i = 0;
         }
 
-        urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable, how_much);
+        urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+                               how_much);
 
         while (j != i)
         {
@@ -1552,11 +1630,14 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
             {
             case URJ_TAP_CABLE_CLOCK:
                 {
-                    post_signals &= ~(URJ_POD_CS_TCK | URJ_POD_CS_TDI | URJ_POD_CS_TMS);
+                    post_signals &=
+                        ~(URJ_POD_CS_TCK | URJ_POD_CS_TDI | URJ_POD_CS_TMS);
                     post_signals |=
-                        (cable->todo.data[j].arg.clock.tms ? URJ_POD_CS_TMS : 0);
+                        (cable->todo.data[j].arg.clock.
+                         tms ? URJ_POD_CS_TMS : 0);
                     post_signals |=
-                        (cable->todo.data[j].arg.clock.tdi ? URJ_POD_CS_TDI : 0);
+                        (cable->todo.data[j].arg.clock.
+                         tdi ? URJ_POD_CS_TDI : 0);
                     params->last_tdo_valid = last_tdo_valid_finish = 0;
                     break;
                 }
@@ -1576,14 +1657,16 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                 }
             case URJ_TAP_CABLE_SET_SIGNAL:
                 {
-                    int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    int m =
+                        urj_tap_cable_add_queue_item (cable, &(cable->done));
                     cable->done.data[m].action = URJ_TAP_CABLE_SET_SIGNAL;
                     cable->done.data[m].arg.value.mask =
                         cable->todo.data[j].arg.value.mask;
                     cable->done.data[m].arg.value.val = post_signals;
                     int mask =
                         cable->todo.data[j].arg.value.
-                        mask & ~(URJ_POD_CS_TCK | URJ_POD_CS_TDI | URJ_POD_CS_TMS | URJ_POD_CS_TRST |
+                        mask & ~(URJ_POD_CS_TCK | URJ_POD_CS_TDI |
+                                 URJ_POD_CS_TMS | URJ_POD_CS_TRST |
                                  URJ_POD_CS_RESET);
                     post_signals =
                         (post_signals & ~mask) | (cable->todo.data[j].arg.
@@ -1591,7 +1674,8 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                 }
             case URJ_TAP_CABLE_GET_SIGNAL:
                 {
-                    int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    int m =
+                        urj_tap_cable_add_queue_item (cable, &(cable->done));
                     cable->done.data[m].action = URJ_TAP_CABLE_GET_SIGNAL;
                     cable->done.data[m].arg.value.sig =
                         cable->todo.data[j].arg.value.sig;
@@ -1611,7 +1695,8 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                     free (cable->todo.data[j].arg.transfer.in);
                     if (cable->todo.data[j].arg.transfer.out)
                     {
-                        int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                        int m = urj_tap_cable_add_queue_item (cable,
+                                                              &(cable->done));
                         if (m < 0)
                             printf ("out of memory!\n");
                         cable->done.data[m].action = URJ_TAP_CABLE_TRANSFER;

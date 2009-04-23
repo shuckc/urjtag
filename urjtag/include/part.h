@@ -57,12 +57,16 @@ struct urj_part
 
 urj_part_t *urj_part_alloc (const urj_tap_register_t *id);
 void urj_part_free (urj_part_t *p);
-urj_part_t *read_part (FILE *f, urj_tap_register_t *idr);
-urj_instruction_t *urj_part_find_instruction (urj_part_t *p, const char *iname);
-urj_data_register_t *urj_part_find_data_register (urj_part_t *p, const char *drname);
-urj_part_signal_t *urj_part_find_signal (urj_part_t *p, const char *signalname);
+urj_part_t *read_part (FILE * f, urj_tap_register_t *idr);
+urj_instruction_t *urj_part_find_instruction (urj_part_t *p,
+                                              const char *iname);
+urj_data_register_t *urj_part_find_data_register (urj_part_t *p,
+                                                  const char *drname);
+urj_part_signal_t *urj_part_find_signal (urj_part_t *p,
+                                         const char *signalname);
 void urj_part_set_instruction (urj_part_t *p, const char *iname);
-void urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val);
+void urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out,
+                          int val);
 int urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s);
 void urj_part_print (urj_part_t *p);
 

@@ -236,8 +236,12 @@ s3c4510_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     area->length = UINT64_C (0x100000000);
 
     // endian = urj_part_get_signal( bus->part, urj_part_find_signal( bus->part, "LITTLE" ));
-    b0size0 = urj_part_get_signal (bus->part, urj_part_find_signal (bus->part, "B0SIZE0"));
-    b0size1 = urj_part_get_signal (bus->part, urj_part_find_signal (bus->part, "B0SIZE1"));
+    b0size0 =
+        urj_part_get_signal (bus->part,
+                             urj_part_find_signal (bus->part, "B0SIZE0"));
+    b0size1 =
+        urj_part_get_signal (bus->part,
+                             urj_part_find_signal (bus->part, "B0SIZE1"));
 
     switch ((b0size1 << 1) | b0size0)
     {
@@ -427,8 +431,7 @@ s3c4510_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     s3c4510_bus_setup_ctrl (bus, 0x01ffff);     /* nOE=1, nRCS0 =1 */
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    DEBUG_LVL2 (printf ("URJ_BUS_WRITE %08x @ %08x\n", data, adr);
-)}
+DEBUG_LVL2 (printf ("URJ_BUS_WRITE %08x @ %08x\n", data, adr);)}
 
 const urj_bus_driver_t s3c4510_bus = {
     "s3c4510x",

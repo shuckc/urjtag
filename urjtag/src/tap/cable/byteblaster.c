@@ -87,7 +87,8 @@ byteblaster_init (urj_cable_t *cable)
 
     /* check if the power supply is ok (only for ByteBlaster II) */
     /* if no ByteBlaster at all is connected this check will fail, too */
-    if ((BB_II) && ((urj_tap_parport_get_status (cable->link.port) >> VCC_OK_N) & 1))
+    if ((BB_II)
+        && ((urj_tap_parport_get_status (cable->link.port) >> VCC_OK_N) & 1))
         return -1;
 
     /* Enable ByteBlaster */
@@ -107,10 +108,10 @@ byteblaster_clock (urj_cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         urj_tap_parport_set_data (cable->link.port,
-                          (0 << TCK) | (tms << TMS) | (tdi << TDI));
+                                  (0 << TCK) | (tms << TMS) | (tdi << TDI));
         urj_tap_cable_wait (cable);
         urj_tap_parport_set_data (cable->link.port,
-                          (1 << TCK) | (tms << TMS) | (tdi << TDI));
+                                  (1 << TCK) | (tms << TMS) | (tdi << TDI));
         urj_tap_cable_wait (cable);
     }
 
@@ -124,7 +125,8 @@ static int
 byteblaster_get_tdo (urj_cable_t *cable)
 {
     urj_tap_parport_set_data (cable->link.port, 0 << TCK);
-    PARAM_SIGNALS (cable) &= ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
+    PARAM_SIGNALS (cable) &=
+        ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 
     urj_tap_cable_wait (cable);
 

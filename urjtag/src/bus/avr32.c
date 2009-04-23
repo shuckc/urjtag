@@ -130,7 +130,8 @@ typedef struct
 /* ------------------------------------------------------------------------- */
 
 static inline void
-register_set_bit (urj_tap_register_t *tr, unsigned int bitno, unsigned int val)
+register_set_bit (urj_tap_register_t *tr, unsigned int bitno,
+                  unsigned int val)
 {
     tr->data[bitno] = (val) ? 1 : 0;
 }
@@ -149,8 +150,10 @@ shift_instr (urj_bus_t *bus, unsigned int bit)
     do
     {
         DBG (DBG_SHIFT, _("%s: instr=%s\n"), __FUNCTION__,
-             urj_tap_register_get_string (bus->part->active_instruction->value));
-        urj_tap_chain_shift_instructions_mode (bus->chain, 1, 1, URJ_CHAIN_EXITMODE_IDLE);
+             urj_tap_register_get_string (bus->part->active_instruction->
+                                          value));
+        urj_tap_chain_shift_instructions_mode (bus->chain, 1, 1,
+                                               URJ_CHAIN_EXITMODE_IDLE);
         DBG (DBG_SHIFT, _("%s: ret=%s\n"), __FUNCTION__,
              urj_tap_register_get_string (r));
         /* TODO: add timeout checking */
@@ -245,7 +248,8 @@ mwa_scan_out_data (urj_bus_t *bus, uint32_t *pdata)
 }
 
 static inline void
-mwa_read_word (urj_bus_t *bus, unsigned int slave, uint32_t addr, uint32_t *data)
+mwa_read_word (urj_bus_t *bus, unsigned int slave, uint32_t addr,
+               uint32_t *data)
 {
     mwa_scan_in_instr (bus);
     mwa_scan_in_addr (bus, slave, addr, ACCESS_MODE_READ);
@@ -253,7 +257,8 @@ mwa_read_word (urj_bus_t *bus, unsigned int slave, uint32_t addr, uint32_t *data
 }
 
 static inline void
-mwa_write_word (urj_bus_t *bus, unsigned int slave, uint32_t addr, uint32_t data)
+mwa_write_word (urj_bus_t *bus, unsigned int slave, uint32_t addr,
+                uint32_t data)
 {
     mwa_scan_in_instr (bus);
     mwa_scan_in_addr (bus, slave, addr, ACCESS_MODE_WRITE);
@@ -387,7 +392,8 @@ nexus_memacc_read (urj_bus_t *bus, uint32_t *data)
 }
 
 static int
-nexus_memacc_write (urj_bus_t *bus, uint32_t addr, uint32_t data, uint32_t rwcs)
+nexus_memacc_write (urj_bus_t *bus, uint32_t addr, uint32_t data,
+                    uint32_t rwcs)
 {
     uint32_t status;
     int ret;
@@ -414,7 +420,8 @@ nexus_memacc_write (urj_bus_t *bus, uint32_t addr, uint32_t data, uint32_t rwcs)
 /* ------------------------------------------------------------------------- */
 
 static void
-avr32_bus_setup (urj_bus_t *bus, urj_chain_t *chain, urj_part_t *part, unsigned int mode)
+avr32_bus_setup (urj_bus_t *bus, urj_chain_t *chain, urj_part_t *part,
+                 unsigned int mode)
 {
     bus->chain = chain;
     bus->part = part;
@@ -474,7 +481,8 @@ check_instruction (urj_part_t *part, const char *instr)
  *
  */
 static urj_bus_t *
-avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver, char *cmd_params[])
+avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
+               char *cmd_params[])
 {
     urj_bus_t *bus;
     urj_part_t *part;

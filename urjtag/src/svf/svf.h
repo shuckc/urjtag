@@ -130,12 +130,16 @@ void urj_svf_flex_deinit (void *);
 int urj_svf_bison_init (urj_svf_parser_priv_t *, FILE *, int, int);
 void urj_svf_bison_deinit (urj_svf_parser_priv_t *);
 
-void urj_svf_endxr (urj_svf_parser_priv_t *, enum URJ_SVF_generic_irdr_coding, int);
+void urj_svf_endxr (urj_svf_parser_priv_t *, enum URJ_SVF_generic_irdr_coding,
+                    int);
 void urj_svf_frequency (urj_chain_t *, double);
 int urj_svf_hxr (enum URJ_SVF_generic_irdr_coding, struct ths_params *);
-int urj_svf_runtest (urj_chain_t *, urj_svf_parser_priv_t *, struct runtest *);
-int urj_svf_state (urj_chain_t *, urj_svf_parser_priv_t *, struct path_states *, int);
-int urj_svf_sxr (urj_chain_t *, urj_svf_parser_priv_t *, enum URJ_SVF_generic_irdr_coding,
-             struct ths_params *, struct YYLTYPE *);
+int urj_svf_runtest (urj_chain_t *, urj_svf_parser_priv_t *,
+                     struct runtest *);
+int urj_svf_state (urj_chain_t *, urj_svf_parser_priv_t *,
+                   struct path_states *, int);
+int urj_svf_sxr (urj_chain_t *, urj_svf_parser_priv_t *,
+                 enum URJ_SVF_generic_irdr_coding, struct ths_params *,
+                 struct YYLTYPE *);
 int urj_svf_trst (urj_chain_t *, urj_svf_parser_priv_t *, int);
 int urj_svf_txr (enum URJ_SVF_generic_irdr_coding, struct ths_params *);

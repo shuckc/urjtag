@@ -47,7 +47,8 @@ cmd_readmem_run (urj_chain_t *chain, char *params[])
         return 1;
     }
 
-    if (urj_cmd_get_number (params[1], &adr) || urj_cmd_get_number (params[2], &len))
+    if (urj_cmd_get_number (params[1], &adr)
+        || urj_cmd_get_number (params[2], &len))
         return -1;
 
     f = fopen (params[3], "w");

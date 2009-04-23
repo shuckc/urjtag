@@ -219,7 +219,8 @@ urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
 #endif
 
         new_max_items = q->max_items + 128;
-        resized = realloc (q->data, new_max_items * sizeof (urj_cable_queue_t));
+        resized =
+            realloc (q->data, new_max_items * sizeof (urj_cable_queue_t));
         if (resized == NULL)
         {
             printf (_
@@ -561,7 +562,8 @@ urj_tap_cable_transfer_late (urj_cable_t *cable, char *out)
 }
 
 int
-urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in, char *out)
+urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
+                              char *out)
 {
     char *ibuf, *obuf = NULL;
     int i;

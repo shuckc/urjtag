@@ -211,7 +211,8 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         if (ncs_map[i].enabled > 0)
         {
             failed |=
-                urj_bus_generic_attach_sig (part, &(nCS[i]), ncs_map[i].sig_name);
+                urj_bus_generic_attach_sig (part, &(nCS[i]),
+                                            ncs_map[i].sig_name);
         }
         else                    // disabled - this GPIO pin is unused or used for some other function
         {
@@ -287,13 +288,14 @@ pxa2xx_bus_init (urj_bus_t *bus)
             BOOT_DEF_BOOT_SEL (urj_part_get_signal
                                (p,
                                 urj_part_find_signal (p,
-                                                  "BOOT_SEL[2]")) << 2 |
+                                                      "BOOT_SEL[2]")) << 2 |
                                urj_part_get_signal (p,
-                                                urj_part_find_signal (p,
-                                                                  "BOOT_SEL[1]"))
+                                                    urj_part_find_signal (p,
+                                                                          "BOOT_SEL[1]"))
                                << 1 | urj_part_get_signal (p,
-                                                       urj_part_find_signal (p,
-                                                                         "BOOT_SEL[0]")));
+                                                           urj_part_find_signal
+                                                           (p,
+                                                            "BOOT_SEL[0]")));
     }
     else if (PROC == PROC_PXA27x)
     {

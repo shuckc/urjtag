@@ -51,7 +51,7 @@ cmd_bsdl_run (urj_chain_t *chain, char *params[])
             {
                 result =
                     urj_bsdl_read_file (chain, params[2], URJ_BSDL_MODE_TEST,
-                                    NULL) >= 0 ? 1 : -1;
+                                        NULL) >= 0 ? 1 : -1;
             }
             else if (num_params == 2)
             {
@@ -67,7 +67,7 @@ cmd_bsdl_run (urj_chain_t *chain, char *params[])
             {
                 result =
                     urj_bsdl_read_file (chain, params[2], URJ_BSDL_MODE_DUMP,
-                                    NULL) >= 0 ? 1 : -1;
+                                        NULL) >= 0 ? 1 : -1;
             }
             else if (num_params == 2)
             {

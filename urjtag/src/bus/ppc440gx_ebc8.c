@@ -149,7 +149,7 @@ setup_address (urj_bus_t *bus, uint32_t a)
 
     for (i = 0; i < PPC440GX_ADDR_LINES; i++)
         urj_part_set_signal (p, A[i], 1,
-                         (a >> (PPC440GX_ADDR_LINES - 1 - i)) & 1);
+                             (a >> (PPC440GX_ADDR_LINES - 1 - i)) & 1);
 }
 
 static void
@@ -175,7 +175,8 @@ setup_data (urj_bus_t *bus, uint32_t d)
     ppc440gx_ebc8_bus_area (bus, 0, &area);
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, D[PPC440GX_DATA_LINES - 1 - i], 1, (d >> i) & 1);
+        urj_part_set_signal (p, D[PPC440GX_DATA_LINES - 1 - i], 1,
+                             (d >> i) & 1);
 }
 
 /**
@@ -217,8 +218,8 @@ ppc440gx_ebc8_bus_read_next (urj_bus_t *bus, uint32_t adr)
     urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < area.width; i++)
-        d |= (uint32_t) (urj_part_get_signal (p, D[PPC440GX_DATA_LINES - 1 - i])
-                         << i);
+        d |= (uint32_t) (urj_part_get_signal
+                         (p, D[PPC440GX_DATA_LINES - 1 - i]) << i);
 
     return d;
 }
@@ -243,8 +244,8 @@ ppc440gx_ebc8_bus_read_end (urj_bus_t *bus)
     urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < area.width; i++)
-        d |= (uint32_t) (urj_part_get_signal (p, D[PPC440GX_DATA_LINES - 1 - i])
-                         << i);
+        d |= (uint32_t) (urj_part_get_signal
+                         (p, D[PPC440GX_DATA_LINES - 1 - i]) << i);
 
     return d;
 }

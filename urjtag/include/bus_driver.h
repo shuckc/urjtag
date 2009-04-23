@@ -54,8 +54,9 @@ struct urj_bus_driver
 {
     const char *name;
     const char *description;
-    urj_bus_t *(*new_bus) (urj_chain_t *chain, const urj_bus_driver_t *driver,
-                       char *cmd_params[]);
+    urj_bus_t *(*new_bus) (urj_chain_t *chain,
+                           const urj_bus_driver_t *driver,
+                           char *cmd_params[]);
     void (*free_bus) (urj_bus_t *bus);
     void (*printinfo) (urj_bus_t *bus);
     void (*prepare) (urj_bus_t *bus);

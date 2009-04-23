@@ -90,7 +90,7 @@ xpcu_output_enable (struct usb_dev_handle *xpcu, int enable)
 
 /* ---------------------------------------------------------------------- */
 
-#ifdef UNUSED   /* RFHH */
+#ifdef UNUSED                   /* RFHH */
 static int
 xpcu_bit_reverse (struct usb_dev_handle *xpcu, uint8_t bits_in,
                   uint8_t *bits_out)
@@ -639,7 +639,8 @@ xpc_ext_transfer (urj_cable_t *cable, int len, char *in, char *out)
     printf ("\n");
 #endif
 
-    xts.xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
+    xts.xpcu =
+        ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
     xts.out = (uint8_t *) out;
     xts.in_bits = 0;
     xts.out_bits = 0;

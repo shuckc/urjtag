@@ -57,7 +57,8 @@ typedef struct
  *
  */
 static urj_bus_t *
-h7202_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver, char *cmd_params[])
+h7202_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
+               char *cmd_params[])
 {
     urj_bus_t *bus;
     urj_part_t *part;

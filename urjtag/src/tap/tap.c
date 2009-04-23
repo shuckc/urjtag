@@ -50,7 +50,8 @@ urj_tap_reset_bypass (urj_chain_t *chain)
     if (chain->total_instr_len > 0)
     {
         urj_tap_register_t *ir =
-            urj_tap_register_fill (urj_tap_register_alloc (chain->total_instr_len), 1);
+            urj_tap_register_fill (urj_tap_register_alloc
+                                   (chain->total_instr_len), 1);
         if (!ir)
         {
             printf (_("out of memory\n"));
@@ -66,8 +67,9 @@ urj_tap_reset_bypass (urj_chain_t *chain)
 }
 
 void
-urj_tap_defer_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
-                          urj_tap_register_t *out, int tap_exit)
+urj_tap_defer_shift_register (urj_chain_t *chain,
+                              const urj_tap_register_t *in,
+                              urj_tap_register_t *out, int tap_exit)
 {
     int i;
 
@@ -94,7 +96,7 @@ urj_tap_defer_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
     {
         if (out != NULL && (i < out->len))
             out->data[i] = urj_tap_cable_defer_get_tdo (chain->cable);
-        urj_tap_chain_defer_clock (chain, (tap_exit != URJ_CHAIN_EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i], 1);        /* Shift (& Exit1) */
+        urj_tap_chain_defer_clock (chain, (tap_exit != URJ_CHAIN_EXITMODE_SHIFT && ((i + 1) == in->len)) ? 1 : 0, in->data[i], 1);      /* Shift (& Exit1) */
     }
 
     /* Shift-DR, Shift-IR, Exit1-DR or Exit1-IR state */
@@ -108,8 +110,9 @@ urj_tap_defer_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
 }
 
 void
-urj_tap_shift_register_output (urj_chain_t *chain, const urj_tap_register_t *in,
-                           urj_tap_register_t *out, int tap_exit)
+urj_tap_shift_register_output (urj_chain_t *chain,
+                               const urj_tap_register_t *in,
+                               urj_tap_register_t *out, int tap_exit)
 {
     if (out != NULL)
     {
@@ -132,7 +135,7 @@ urj_tap_shift_register_output (urj_chain_t *chain, const urj_tap_register_t *in,
 
 void
 urj_tap_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
-                    urj_tap_register_t *out, int tap_exit)
+                        urj_tap_register_t *out, int tap_exit)
 {
     urj_tap_defer_shift_register (chain, in, out, tap_exit);
     urj_tap_shift_register_output (chain, in, out, tap_exit);
@@ -141,7 +144,8 @@ urj_tap_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
 void
 urj_tap_capture_dr (urj_chain_t *chain)
 {
-    if ((urj_tap_state (chain) & (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE)) != URJ_TAP_STATE_IDLE)
+    if ((urj_tap_state (chain) & (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE))
+        != URJ_TAP_STATE_IDLE)
         printf (_("%s: Invalid state: %2X\n"), "urj_tap_capture_dr",
                 urj_tap_state (chain));
 
@@ -153,7 +157,8 @@ urj_tap_capture_dr (urj_chain_t *chain)
 void
 urj_tap_capture_ir (urj_chain_t *chain)
 {
-    if ((urj_tap_state (chain) & (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE)) != URJ_TAP_STATE_IDLE)
+    if ((urj_tap_state (chain) & (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE))
+        != URJ_TAP_STATE_IDLE)
         printf (_("%s: Invalid state: %2X\n"), "urj_tap_capture_ir",
                 urj_tap_state (chain));
 

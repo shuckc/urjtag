@@ -33,9 +33,9 @@ typedef struct urj_data_register urj_data_register_t;
 
 struct urj_data_register
 {
-    char name[URJ_DATA_REGISTER_MAXLEN + 1];        /* (public) register name */
-    urj_tap_register_t *in;           /* (public) register value clocked in */
-    urj_tap_register_t *out;          /* (public) register value clocked out */
+    char name[URJ_DATA_REGISTER_MAXLEN + 1];    /* (public) register name */
+    urj_tap_register_t *in;     /* (public) register value clocked in */
+    urj_tap_register_t *out;    /* (public) register value clocked out */
     urj_data_register_t *next;
 };
 

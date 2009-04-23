@@ -46,10 +46,10 @@
 #include <tap_state.h>
 
 #if 0
-#include <urjtag/svf.h> /* two include files w/ the same name
-                         * this will be resolved when we will have
-                         * include/urjtag/svf.h
-                         *                              RFHH */
+#include <urjtag/svf.h>         /* two include files w/ the same name
+                                 * this will be resolved when we will have
+                                 * include/urjtag/svf.h
+                                 *                              RFHH */
 #endif
 
 #include <cmd.h>
@@ -123,8 +123,9 @@ urj_svf_goto_state (urj_chain_t *chain, int new_state)
     case URJ_TAP_STATE_SELECT_IR_SCAN:
         if (new_state == URJ_TAP_STATE_TEST_LOGIC_RESET ||
             new_state == URJ_TAP_STATE_RUN_TEST_IDLE ||
-            (current_state & URJ_TAP_STATE_DR && new_state & URJ_TAP_STATE_IR) ||
-            (current_state & URJ_TAP_STATE_IR && new_state & URJ_TAP_STATE_DR))
+            (current_state & URJ_TAP_STATE_DR && new_state & URJ_TAP_STATE_IR)
+            || (current_state & URJ_TAP_STATE_IR
+                && new_state & URJ_TAP_STATE_DR))
             /* progress in select-idle/reset loop */
             urj_tap_chain_clock (chain, 1, 0, 1);
         else
@@ -381,8 +382,8 @@ urj_svf_build_bit_string (char *hex_string, int len)
 
         *bit_string_pos =
             urj_svf_hex2dec (hex_string_idx >=
-                         0 ? *hex_string_pos : '0') & (1 << nibble) ? '1' :
-            '0';
+                             0 ? *hex_string_pos : '0') & (1 << nibble) ? '1'
+            : '0';
     }
     while (bit_string_pos != bit_string);
 
@@ -443,7 +444,7 @@ urj_svf_copy_hex_to_register (char *hex_string, urj_tap_register_t *reg)
  */
 static int
 urj_svf_compare_tdo (urj_svf_parser_priv_t *priv, char *tdo, char *mask,
-                 urj_tap_register_t *reg, YYLTYPE * loc)
+                     urj_tap_register_t *reg, YYLTYPE *loc)
 {
     char *tdo_bit, *mask_bit;
     int pos, mismatch, result = 1;
@@ -573,7 +574,8 @@ urj_svf_all_care (char **string, double number)
  *   state : required end state (SVF parser encoding)
  * ***************************************************************************/
 void
-urj_svf_endxr (urj_svf_parser_priv_t *priv, enum URJ_SVF_generic_irdr_coding ir_dr, int state)
+urj_svf_endxr (urj_svf_parser_priv_t *priv,
+               enum URJ_SVF_generic_irdr_coding ir_dr, int state)
 {
     switch (ir_dr)
     {
@@ -619,7 +621,8 @@ urj_svf_frequency (urj_chain_t *chain, double freq)
  *   0 : error occurred
  * ***************************************************************************/
 int
-urj_svf_hxr (enum URJ_SVF_generic_irdr_coding ir_dr, struct ths_params *params)
+urj_svf_hxr (enum URJ_SVF_generic_irdr_coding ir_dr,
+             struct ths_params *params)
 {
     if (params->number != 0.0)
         printf (_("Warning %s: command %s not implemented\n"), "svf",
@@ -650,7 +653,8 @@ sigalrm_handler (int signal)
  *   0 : error occurred
  * ***************************************************************************/
 int
-urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv, struct runtest *params)
+urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
+                 struct runtest *params)
 {
     uint32_t run_count, frequency;
 
@@ -800,14 +804,15 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv, struct runtest
  * ***************************************************************************/
 int
 urj_svf_state (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
-           struct path_states *path_states, int stable_state)
+               struct path_states *path_states, int stable_state)
 {
     int i;
 
     priv->svf_state_executed = 1;
 
     for (i = 0; i < path_states->num_states; i++)
-        urj_svf_goto_state (chain, urj_svf_map_state (path_states->states[i]));
+        urj_svf_goto_state (chain,
+                            urj_svf_map_state (path_states->states[i]));
 
     if (stable_state)
         urj_svf_goto_state (chain, urj_svf_map_state (stable_state));
@@ -831,14 +836,15 @@ urj_svf_state (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
  * ***************************************************************************/
 int
 urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
-         enum URJ_SVF_generic_irdr_coding ir_dr, struct ths_params *params,
-         YYLTYPE * loc)
+             enum URJ_SVF_generic_irdr_coding ir_dr,
+             struct ths_params *params, YYLTYPE *loc)
 {
     urj_svf_sxr_t *sxr_params;
     int len, result = 1;
 
     sxr_params =
-        ir_dr == URJ_SVF_generic_ir ? &(priv->sir_params) : &(priv->sdr_params);
+        ir_dr ==
+        URJ_SVF_generic_ir ? &(priv->sir_params) : &(priv->sdr_params);
 
     /* remember parameters */
     urj_svf_remember_param (&sxr_params->params.tdi, params->tdi);
@@ -938,8 +944,9 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
 
     /* fill register with value of TDI parameter */
     if (!urj_svf_copy_hex_to_register (sxr_params->params.tdi,
-                                   ir_dr == URJ_SVF_generic_ir ? priv->ir->value :
-                                   priv->dr->in))
+                                       ir_dr ==
+                                       URJ_SVF_generic_ir ? priv->ir->
+                                       value : priv->dr->in))
         return (0);
 
 
@@ -949,27 +956,30 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     case URJ_SVF_generic_ir:
         urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_IR);
         urj_tap_chain_shift_instructions_mode (chain,
-                                       sxr_params->params.tdo ? 1 : 0,
-                                       0, URJ_CHAIN_EXITMODE_EXIT1);
+                                               sxr_params->params.tdo ? 1 : 0,
+                                               0, URJ_CHAIN_EXITMODE_EXIT1);
         urj_svf_goto_state (chain, priv->endir);
 
         if (sxr_params->params.tdo)
             result =
                 urj_svf_compare_tdo (priv, sxr_params->params.tdo,
-                                 sxr_params->params.mask, priv->ir->out, loc);
+                                     sxr_params->params.mask, priv->ir->out,
+                                     loc);
         break;
 
     case URJ_SVF_generic_dr:
         urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_DR);
         urj_tap_chain_shift_data_registers_mode (chain,
-                                         sxr_params->params.tdo ? 1 : 0,
-                                         0, URJ_CHAIN_EXITMODE_EXIT1);
+                                                 sxr_params->params.
+                                                 tdo ? 1 : 0, 0,
+                                                 URJ_CHAIN_EXITMODE_EXIT1);
         urj_svf_goto_state (chain, priv->enddr);
 
         if (sxr_params->params.tdo)
             result =
                 urj_svf_compare_tdo (priv, sxr_params->params.tdo,
-                                 sxr_params->params.mask, priv->dr->out, loc);
+                                     sxr_params->params.mask, priv->dr->out,
+                                     loc);
         break;
     }
 
@@ -1051,7 +1061,8 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
         printf (_("Warning %s: unimplemented mode '%s' for TRST\n"), "svf",
                 unimplemented_mode);
     else
-        urj_tap_cable_set_signal (chain->cable, URJ_POD_CS_TRST, trst_cable ? URJ_POD_CS_TRST : 0);
+        urj_tap_cable_set_signal (chain->cable, URJ_POD_CS_TRST,
+                                  trst_cable ? URJ_POD_CS_TRST : 0);
 
     return (1);
 }
@@ -1074,7 +1085,8 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
  *   0 : error occurred
  * ***************************************************************************/
 int
-urj_svf_txr (enum URJ_SVF_generic_irdr_coding ir_dr, struct ths_params *params)
+urj_svf_txr (enum URJ_SVF_generic_irdr_coding ir_dr,
+             struct ths_params *params)
 {
     if (params->number != 0.0)
         printf (_("Warning %s: command %s not implemented\n"), "svf",
@@ -1107,8 +1119,8 @@ urj_svf_txr (enum URJ_SVF_generic_irdr_coding ir_dr, struct ths_params *params)
  *   0 : error occurred
  * ***************************************************************************/
 void
-urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
-         int print_progress, uint32_t ref_freq)
+urj_svf_run (urj_chain_t *chain, FILE * SVF_FILE, int stop_on_mismatch,
+             int print_progress, uint32_t ref_freq)
 {
     const urj_svf_sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},
     1, 1
@@ -1214,7 +1226,8 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
 
     priv.endir = priv.enddr = URJ_TAP_STATE_RUN_TEST_IDLE;
 
-    priv.runtest_run_state = priv.runtest_end_state = URJ_TAP_STATE_RUN_TEST_IDLE;
+    priv.runtest_run_state = priv.runtest_end_state =
+        URJ_TAP_STATE_RUN_TEST_IDLE;
 
     priv.svf_trst_absent = 0;
     priv.svf_state_executed = 0;

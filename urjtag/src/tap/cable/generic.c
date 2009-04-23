@@ -66,7 +66,8 @@ urj_tap_cable_generic_disconnect (urj_cable_t *cable)
 }
 
 int
-urj_tap_cable_generic_transfer (urj_cable_t *cable, int len, char *in, char *out)
+urj_tap_cable_generic_transfer (urj_cable_t *cable, int len, char *in,
+                                char *out)
 {
     int i;
 
@@ -125,8 +126,8 @@ do_one_queued_action (urj_cable_t *cable)
             break;
         case URJ_TAP_CABLE_SET_SIGNAL:
             urj_tap_cable_set_signal (cable,
-                              cable->todo.data[i].arg.value.sig,
-                              cable->todo.data[i].arg.value.val);
+                                      cable->todo.data[i].arg.value.sig,
+                                      cable->todo.data[i].arg.value.val);
             break;
         case URJ_TAP_CABLE_TRANSFER:
             {
@@ -193,7 +194,8 @@ do_one_queued_action (urj_cable_t *cable)
 }
 
 void
-urj_tap_cable_generic_flush_one_by_one (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
+urj_tap_cable_generic_flush_one_by_one (urj_cable_t *cable,
+                                        urj_cable_flush_amount_t how_much)
 {
     /* This will flush always, even if how_much == URJ_TAP_CABLE_OPTIONALLY,
      * because there is no reason to let the queue grow */
@@ -202,7 +204,8 @@ urj_tap_cable_generic_flush_one_by_one (urj_cable_t *cable, urj_cable_flush_amou
 }
 
 void
-urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
+urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
+                                            urj_cable_flush_amount_t how_much)
 {
     int i, j, n;
     char *in, *out;
@@ -344,7 +347,8 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable, urj_cable_flush_
                 }
                 else if (cable->todo.data[i].action == URJ_TAP_CABLE_GET_TDO)
                 {
-                    int c = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    int c =
+                        urj_tap_cable_add_queue_item (cable, &(cable->done));
 #ifdef VERBOSE
                     printf ("add result from transfer to %p.%d\n",
                             &(cable->done), c);
@@ -359,7 +363,8 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable, urj_cable_flush_
                     free (cable->todo.data[i].arg.transfer.in);
                     if (p != NULL)
                     {
-                        int c = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                        int c = urj_tap_cable_add_queue_item (cable,
+                                                              &(cable->done));
 #ifdef VERBOSE
                         printf ("add result from transfer to %p.%d\n",
                                 &(cable->done), c);
@@ -392,7 +397,8 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable, urj_cable_flush_
 }
 
 void
-urj_tap_cable_generic_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
+urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
+                                     uint32_t new_frequency)
 {
     if (new_frequency == 0)
     {

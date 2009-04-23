@@ -74,20 +74,25 @@ static struct
 }
 var_forced_detection;
 
-int urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array);
+int urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
+                          urj_flash_cfi_array_t **cfi_array);
 static int amd_29xx040_autodetect (urj_flash_cfi_array_t *cfi_array);
-static int amd_29xx040_status (urj_bus_t *bus, uint32_t adr, unsigned short data);
+static int amd_29xx040_status (urj_bus_t *bus, uint32_t adr,
+                               unsigned short data);
 static void amd_29xx040_print_info (urj_flash_cfi_array_t *cfi_array);
 static void amd_29xx040_read_array (urj_flash_cfi_array_t *cfi_array);
-static int amd_29xx040_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
-static int amd_29xx040_program_single (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
-                                       uint32_t data);
-static int amd_29xx040_program (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
-                                uint32_t *buffer, int count);
-static int amd_29xx040_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
+static int amd_29xx040_erase_block (urj_flash_cfi_array_t *cfi_array,
+                                    uint32_t adr);
+static int amd_29xx040_program_single (urj_flash_cfi_array_t *cfi_array,
+                                       uint32_t adr, uint32_t data);
+static int amd_29xx040_program (urj_flash_cfi_array_t *cfi_array,
+                                uint32_t adr, uint32_t *buffer, int count);
+static int amd_29xx040_unlock_block (urj_flash_cfi_array_t *cfi_array,
+                                     uint32_t adr);
 
 int
-urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array)
+urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
+                      urj_flash_cfi_array_t **cfi_array)
 {
     int mid;
     int did;
@@ -140,7 +145,8 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_
         return -2;
     for (i = 0; i < ba; i++)
     {
-        (*cfi_array)->cfi_chips[i] = calloc (1, sizeof (urj_flash_cfi_chip_t));
+        (*cfi_array)->cfi_chips[i] =
+            calloc (1, sizeof (urj_flash_cfi_chip_t));
         if (!(*cfi_array)->cfi_chips[i])
             return -2;          /* out of memory */
         (*cfi_array)->cfi_chips[i]->width = 1;  //ba;           
@@ -271,7 +277,7 @@ amd_29xx040_read_array (urj_flash_cfi_array_t *cfi_array)
         usleep (100);
         var_forced_detection.unlock_bypass = AMD_STANDARD_MODE;
     }
-    URJ_BUS_WRITE (cfi_array->bus, cfi_array->address + 0x0, 0x0F0);        /* AMD reset */
+    URJ_BUS_WRITE (cfi_array->bus, cfi_array->address + 0x0, 0x0F0);    /* AMD reset */
 }
 
 
@@ -300,7 +306,7 @@ amd_29xx040_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
     URJ_BUS_WRITE (bus, cfi_array->address + 0x555, 0xaa);
     URJ_BUS_WRITE (bus, cfi_array->address + 0x2AA, 0x55);
 //      URJ_BUS_WRITE( bus, cfi_array->address + 0x555, 0x10 );     //Chip Erase
-    URJ_BUS_WRITE (bus, adr, 0x30); //Sector erase
+    URJ_BUS_WRITE (bus, adr, 0x30);     //Sector erase
 
 
     if (amd_29xx040_status (bus, adr, 0xff))
@@ -351,8 +357,8 @@ amd_29xx040_program_single (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
 }
 
 static int
-amd_29xx040_program (urj_flash_cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer,
-                     int count)
+amd_29xx040_program (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
+                     uint32_t *buffer, int count)
 {
     int idx;
 

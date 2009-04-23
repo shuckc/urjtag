@@ -500,7 +500,8 @@ jopcyc_bus_init (urj_bus_t *bus)
 }
 
 static int
-comp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area, component_t **comp)
+comp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area,
+               component_t **comp)
 {
     if (adr < RAMB_START)
     {

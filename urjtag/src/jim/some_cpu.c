@@ -55,7 +55,8 @@ urj_jim_some_cpu_report_idcode (urj_jim_device_t *dev)
 
 void
 urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev,
-                   int tms, int tdi, uint8_t *shmem, size_t shmem_size)
+                           int tms, int tdi, uint8_t *shmem,
+                           size_t shmem_size)
 {
     int i;
 
@@ -143,7 +144,8 @@ urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev,
 }
 
 void
-urj_jim_some_cpu_tck_fall (urj_jim_device_t *dev, uint8_t *shmem, size_t shmem_size)
+urj_jim_some_cpu_tck_fall (urj_jim_device_t *dev, uint8_t *shmem,
+                           size_t shmem_size)
 {
     int i;
 
@@ -198,7 +200,8 @@ urj_jim_some_cpu_free (urj_jim_device_t *dev)
 
     for (i = 0; some_cpu_attached[i].part; i++)
     {
-        urj_jim_bus_device_t *b = ((urj_jim_attached_part_t *) (dev->state))[i].part;
+        urj_jim_bus_device_t *b =
+            ((urj_jim_attached_part_t *) (dev->state))[i].part;
         if (b->free != NULL)
             b->free (b);
         free (b);

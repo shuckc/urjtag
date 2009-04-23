@@ -32,11 +32,14 @@ void urj_tap_reset (urj_chain_t *chain);
 void urj_tap_reset_bypass (urj_chain_t *chain);
 void urj_tap_capture_dr (urj_chain_t *chain);
 void urj_tap_capture_ir (urj_chain_t *chain);
-void urj_tap_defer_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
-                               urj_tap_register_t *out, int tap_exit);
-void urj_tap_shift_register_output (urj_chain_t *chain, const urj_tap_register_t *in,
-                                urj_tap_register_t *out, int tap_exit);
-void urj_tap_shift_register (urj_chain_t *chain, const urj_tap_register_t *in,
-                         urj_tap_register_t *out, int tap_exit);
+void urj_tap_defer_shift_register (urj_chain_t *chain,
+                                   const urj_tap_register_t *in,
+                                   urj_tap_register_t *out, int tap_exit);
+void urj_tap_shift_register_output (urj_chain_t *chain,
+                                    const urj_tap_register_t *in,
+                                    urj_tap_register_t *out, int tap_exit);
+void urj_tap_shift_register (urj_chain_t *chain,
+                             const urj_tap_register_t *in,
+                             urj_tap_register_t *out, int tap_exit);
 
 #endif /* URJ_TAP_H */

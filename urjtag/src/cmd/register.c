@@ -97,7 +97,8 @@ cmd_register_run (urj_chain_t *chain, char *params[])
 
     /* Device Identification Register */
     if (strcasecmp (dr->name, "DIR") == 0)
-        urj_tap_register_init (dr->out, urj_tap_register_get_string (part->id));
+        urj_tap_register_init (dr->out,
+                               urj_tap_register_get_string (part->id));
 
     return 1;
 }

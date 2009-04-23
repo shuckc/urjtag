@@ -41,7 +41,8 @@ struct urj_instruction
     urj_instruction_t *next;
 };
 
-urj_instruction_t *urj_part_instruction_alloc (const char *name, int len, const char *val);
+urj_instruction_t *urj_part_instruction_alloc (const char *name, int len,
+                                               const char *val);
 void urj_part_instruction_free (urj_instruction_t *i);
 
 #endif /* URJ_INSTRUCTION_H */

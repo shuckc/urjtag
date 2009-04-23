@@ -37,9 +37,9 @@
 
 void
 urj_flash_jedec_exp_read_id (urj_bus_t *bus, uint32_t adr, uint32_t dmask,
-                   uint32_t pata, uint32_t patb, uint32_t dcmd,
-                   int det_addroffset, int det_dataoffset,
-                   uint32_t det_addrpat)
+                             uint32_t pata, uint32_t patb, uint32_t dcmd,
+                             int det_addroffset, int det_dataoffset,
+                             uint32_t det_addrpat)
 {
     int locofs;
 
@@ -52,15 +52,16 @@ urj_flash_jedec_exp_read_id (urj_bus_t *bus, uint32_t adr, uint32_t dmask,
     for (locofs = 0; locofs <= 2; locofs++)
     {
         printf (" %08x",
-                (dmask & URJ_BUS_READ (bus, adr + (locofs << det_addroffset))) >>
-                det_dataoffset);
+                (dmask & URJ_BUS_READ (bus, adr + (locofs << det_addroffset)))
+                >> det_dataoffset);
     }
 
     printf ("\n");
 }
 
 int
-urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array)
+urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
+                            urj_flash_cfi_array_t **cfi_array)
 {
     /* Temporary containers for manufacturer and device id while
        probing with different Autoselect methods. */
@@ -109,8 +110,9 @@ urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t 
                  det_dataoffset += 8)
             {
                 int det_addroffset;
-                uint32_t dmask =
-                    URJ_BITS (det_dataoffset, det_datawidth + det_dataoffset - 1);
+                uint32_t dmask = URJ_BITS (det_dataoffset,
+                                           det_datawidth + det_dataoffset -
+                                           1);
                 uint32_t pata = ~dmask | (0xAA << det_dataoffset);
                 uint32_t patb = ~dmask | (0x55 << det_dataoffset);
                 uint32_t dcmd = ~dmask | (0x90 << det_dataoffset);
@@ -122,12 +124,12 @@ urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t 
                 for (det_addroffset = 0; det_addroffset <= 2;
                      det_addroffset++)
                 {
-                    urj_flash_jedec_exp_read_id (bus, adr, dmask, pata, patb, dcmd,
-                                       det_addroffset, det_dataoffset,
-                                       0x5555);
-                    urj_flash_jedec_exp_read_id (bus, adr, dmask, pata, patb, dcmd,
-                                       det_addroffset, det_dataoffset,
-                                       0x0555);
+                    urj_flash_jedec_exp_read_id (bus, adr, dmask, pata, patb,
+                                                 dcmd, det_addroffset,
+                                                 det_dataoffset, 0x5555);
+                    urj_flash_jedec_exp_read_id (bus, adr, dmask, pata, patb,
+                                                 dcmd, det_addroffset,
+                                                 det_dataoffset, 0x0555);
                 }
             }
         }

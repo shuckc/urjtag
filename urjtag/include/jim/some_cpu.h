@@ -30,4 +30,4 @@
 void urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev);
 urj_jim_device_t *urj_jim_some_cpu (void);
 
-#endif  /* ndef URJ_JIM_SOME_CPU_H */
+#endif /* ndef URJ_JIM_SOME_CPU_H */

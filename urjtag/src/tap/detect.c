@@ -262,7 +262,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
     for (i = 0; i < chlen; i++)
     {
         urj_part_t *part;
-        urj_tap_register_t *did = br; /* detected id (length is 1 or 32) */
+        urj_tap_register_t *did = br;   /* detected id (length is 1 or 32) */
         urj_tap_register_t *key;
         struct id_record idr;
         char *p;
@@ -271,7 +271,8 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
         if (urj_tap_register_compare (one, br) == 0)
         {
             /* part with id */
-            urj_tap_shift_register (chain, ones, id, URJ_CHAIN_EXITMODE_SHIFT);
+            urj_tap_shift_register (chain, ones, id,
+                                    URJ_CHAIN_EXITMODE_SHIFT);
             urj_tap_register_shift_left (id, 1);
             id->data[0] = 1;
             did = id;
@@ -295,7 +296,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 
 #ifdef ENABLE_BSDL
         if (urj_bsdl_scan_files (chain, urj_tap_register_get_string (did),
-                             URJ_BSDL_MODE_DETECT) <= 0)
+                                 URJ_BSDL_MODE_DETECT) <= 0)
         {
 #endif
 
@@ -319,7 +320,8 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             printf (_("  Manufacturer: %s\n"), idr.fullname);
             if (strlen (idr.fullname) > URJ_PART_MANUFACTURER_MAXLEN)
                 printf (_("Warning: Manufacturer too long\n"));
-            strncpy (manufacturer, idr.fullname, URJ_PART_MANUFACTURER_MAXLEN);
+            strncpy (manufacturer, idr.fullname,
+                     URJ_PART_MANUFACTURER_MAXLEN);
             manufacturer[URJ_PART_MANUFACTURER_MAXLEN] = '\0';
 
             /* parts */
@@ -393,7 +395,8 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 #endif
 
         if (part->active_instruction == NULL)
-            part->active_instruction = urj_part_find_instruction (part, "IDCODE");
+            part->active_instruction =
+                urj_part_find_instruction (part, "IDCODE");
     }
 
     for (i = 0; i < 32; i++)

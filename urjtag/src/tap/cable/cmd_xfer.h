@@ -49,16 +49,26 @@ struct cx_cmd_root
 };
 typedef struct cx_cmd_root urj_tap_cable_cmd_xfer_cx_cmd_root_t;
 
-int urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, int max_len);
-int urj_tap_cable_cx_cmd_push (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, uint8_t d);
-urj_tap_cable_cmd_xfer_cx_cmd_t *urj_tap_cable_cx_cmd_dequeue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root);
+int urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t
+                                *cmd_root, int max_len);
+int urj_tap_cable_cx_cmd_push (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+                               uint8_t d);
+urj_tap_cable_cmd_xfer_cx_cmd_t
+    *urj_tap_cable_cx_cmd_dequeue (urj_tap_cable_cmd_xfer_cx_cmd_root_t
+                                   *cmd_root);
 void urj_tap_cable_cx_cmd_free (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd);
-urj_tap_cable_cmd_xfer_cx_cmd_t *urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, uint32_t to_recv);
-void urj_tap_cable_cx_cmd_init (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root);
-void urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root);
+urj_tap_cable_cmd_xfer_cx_cmd_t
+    *urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t
+                                 *cmd_root, uint32_t to_recv);
+void urj_tap_cable_cx_cmd_init (urj_tap_cable_cmd_xfer_cx_cmd_root_t
+                                *cmd_root);
+void urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cmd_xfer_cx_cmd_root_t
+                                  *cmd_root);
 
-void urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root, const urj_tap_cable_cmd_xfer_cx_cmd_t *out_cmd,
-              urj_cable_t *cable, urj_cable_flush_amount_t how_much);
+void urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+                            const urj_tap_cable_cmd_xfer_cx_cmd_t *out_cmd,
+                            urj_cable_t *cable,
+                            urj_cable_flush_amount_t how_much);
 uint8_t urj_tap_cable_cx_xfer_recv (urj_cable_t *cable);
 
 #endif /* URJ_TAP_CABLE_CMD_XFER_H */

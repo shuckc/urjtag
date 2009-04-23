@@ -254,7 +254,7 @@ setup_address (urj_bus_t *bus, uint32_t a)
         urj_part_set_signal (p, nSRce, 1, 0);
         for (i = 0; i < 20; i++)
             urj_part_set_signal (p, AD[i], 1,
-                             (a >> (i + (area.width / 8) - 1)) & 1);
+                                 (a >> (i + (area.width / 8) - 1)) & 1);
     }
     else
         urj_part_set_signal (p, nSRce, 1, 1);
@@ -321,7 +321,7 @@ slsup3_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     LAST_ADR = adr;
 
-    urj_part_set_signal (p, nSDce, 1, 1);   /* Inihibit SDRAM */
+    urj_part_set_signal (p, nSDce, 1, 1);       /* Inihibit SDRAM */
     urj_part_set_signal (p, nOE, 1, 0);
     urj_part_set_signal (p, nSRce, 1, 1);
     urj_part_set_signal (p, nFLce, 1, 1);
@@ -411,7 +411,7 @@ slsup3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, nSDce, 1, 1);   /* Inihibit SDRAM */
+    urj_part_set_signal (p, nSDce, 1, 1);       /* Inihibit SDRAM */
     urj_part_set_signal (p, nOE, 1, 1);
     urj_part_set_signal (p, nSRce, 1, 1);
     urj_part_set_signal (p, nFLce, 1, 1);

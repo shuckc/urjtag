@@ -68,7 +68,8 @@ urj_flash_cfi_array_free (urj_flash_cfi_array_t *cfi_array)
 }
 
 int
-urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array)
+urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
+                      urj_flash_cfi_array_t **cfi_array)
 {
     unsigned int bw;            /* bus width */
     unsigned int d;             /* data offset */
@@ -133,7 +134,8 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_
             return -6;          /* CFI not detected (Y) */
         }
 
-        (*cfi_array)->cfi_chips[d / 8] = calloc (1, sizeof (urj_flash_cfi_chip_t));
+        (*cfi_array)->cfi_chips[d / 8] =
+            calloc (1, sizeof (urj_flash_cfi_chip_t));
         if (!(*cfi_array)->cfi_chips[d / 8])
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
@@ -264,9 +266,15 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_
                 num_of_banks = read1 (BANK_ORGANIZATION_OFFSET);
             else
                 num_of_banks = 0;
-            pri_vendor_tbl = (urj_flash_cfi_amd_pri_extened_query_structure_t *)
-                calloc (1, sizeof (urj_flash_cfi_amd_pri_extened_query_structure_t)
-                        + num_of_banks * sizeof (uint8_t));
+            pri_vendor_tbl =
+                (urj_flash_cfi_amd_pri_extened_query_structure_t *) calloc (1,
+                                                                            sizeof
+                                                                            (urj_flash_cfi_amd_pri_extened_query_structure_t)
+                                                                            +
+                                                                            num_of_banks
+                                                                            *
+                                                                            sizeof
+                                                                            (uint8_t));
             if (!pri_vendor_tbl)
             {
                 write1 (0, CFI_CMD_READ_ARRAY1);

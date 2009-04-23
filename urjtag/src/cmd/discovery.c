@@ -56,7 +56,8 @@ cmd_discovery_help (void)
               " 2. DR (data register) length for all possible instructions\n"
               "\n"
               "Warning: This may be dangerous for some parts (especially if the\n"
-              "part doesn't have TRST signal).\n"), "urj_tap_discovery", "urj_tap_discovery");
+              "part doesn't have TRST signal).\n"), "urj_tap_discovery",
+            "urj_tap_discovery");
 }
 
 urj_cmd_t cmd_discovery = {

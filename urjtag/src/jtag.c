@@ -52,7 +52,7 @@
 #include "jtag.h"
 
 #ifndef HAVE_GETLINE
-ssize_t urj_lib_getline (char **lineptr, size_t * n, FILE *stream);
+ssize_t urj_lib_getline (char **lineptr, size_t *n, FILE * stream);
 #endif
 
 int debug_mode = 0;
@@ -148,7 +148,7 @@ jtag_save_history (void)
 #endif
 
 static int
-jtag_readline_multiple_commands_support (urj_chain_t *chain, char *line)    /* multiple commands should be separated with '::' */
+jtag_readline_multiple_commands_support (urj_chain_t *chain, char *line)        /* multiple commands should be separated with '::' */
 {
     int r;
     char *nextcmd = line;

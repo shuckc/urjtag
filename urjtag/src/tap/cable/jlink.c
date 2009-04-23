@@ -96,8 +96,10 @@ jlink_usbconn_data_t;
 #define JLINK_MAX_SPEED 12000
 
 /* Queue command functions */
-static void urj_tap_cable_jlink_reset (urj_usbconn_libusb_param_t *params, int trst, int srst);
-static void jlink_simple_command (urj_usbconn_libusb_param_t *params, uint8_t command);
+static void urj_tap_cable_jlink_reset (urj_usbconn_libusb_param_t *params,
+                                       int trst, int srst);
+static void jlink_simple_command (urj_usbconn_libusb_param_t *params,
+                                  uint8_t command);
 
 
 /* J-Link tap buffer functions */
@@ -114,13 +116,15 @@ static void jlink_debug_buffer (char *buffer, int length);
 
 /* API functions */
 
-void urj_tap_cable_jlink_set_frequency (urj_cable_t *cable, uint32_t frequency);
+void urj_tap_cable_jlink_set_frequency (urj_cable_t *cable,
+                                        uint32_t frequency);
 
 /***************************************************************************/
 /* J-Link tap functions */
 
 void
-urj_tap_cable_jlink_reset (urj_usbconn_libusb_param_t *params, int trst, int srst)
+urj_tap_cable_jlink_reset (urj_usbconn_libusb_param_t *params, int trst,
+                           int srst)
 {
     DEBUG ("trst: %i, srst: %i\n", trst, srst);
 
@@ -293,7 +297,8 @@ jlink_tap_execute (urj_usbconn_libusb_param_t *params)
 
 /* Send a message and receive the reply. */
 static int
-jlink_usb_message (urj_usbconn_libusb_param_t *params, int out_length, int in_length)
+jlink_usb_message (urj_usbconn_libusb_param_t *params, int out_length,
+                   int in_length)
 {
     int result;
 

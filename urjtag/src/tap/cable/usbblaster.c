@@ -162,17 +162,21 @@ usbblaster_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
             if (chunkbytes > 63)
                 chunkbytes = 63;
 
-            if (urj_tap_cable_cx_cmd_space (cmd_root, URJ_USBCONN_FTDX_MAXSEND) < chunkbytes + 1)
+            if (urj_tap_cable_cx_cmd_space
+                (cmd_root, URJ_USBCONN_FTDX_MAXSEND) < chunkbytes + 1)
             {
                 /* no space left for next clocking command
                    transfer queued commands to device and read receive data
                    to internal buffer */
-                urj_tap_cable_cx_xfer (cmd_root, NULL, cable, URJ_TAP_CABLE_COMPLETELY);
+                urj_tap_cable_cx_xfer (cmd_root, NULL, cable,
+                                       URJ_TAP_CABLE_COMPLETELY);
                 urj_tap_cable_cx_cmd_queue (cmd_root, 0);
             }
 
 
-            urj_tap_cable_cx_cmd_push (cmd_root, (1 << SHMODE) | (0 << READ) | chunkbytes);
+            urj_tap_cable_cx_cmd_push (cmd_root,
+                                       (1 << SHMODE) | (0 << READ) |
+                                       chunkbytes);
 
             for (i = 0; i < chunkbytes; i++)
             {
@@ -197,7 +201,8 @@ usbblaster_clock (urj_cable_t *cable, int tms, int tdi, int n)
     params_t *params = (params_t *) cable->params;
 
     usbblaster_clock_schedule (cable, tms, tdi, n);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
 }
 
 static void
@@ -207,8 +212,8 @@ usbblaster_get_tdo_schedule (urj_cable_t *cable)
     urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 1);
-    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS);     /* TCK low */
-    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS | (1 << READ));       /* TCK low */
+    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS);       /* TCK low */
+    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS | (1 << READ)); /* TCK low */
 }
 
 static int
@@ -229,7 +234,8 @@ usbblaster_get_tdo (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
 
     usbblaster_get_tdo_schedule (cable);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
     return usbblaster_get_tdo_finish (cable);
 }
 
@@ -240,14 +246,15 @@ usbblaster_set_signal (urj_cable_t *cable, int mask, int val)
 }
 
 static void
-usbblaster_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
+usbblaster_transfer_schedule (urj_cable_t *cable, int len, char *in,
+                              char *out)
 {
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int in_offset = 0;
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
-    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS);     /* TCK low */
+    urj_tap_cable_cx_cmd_push (cmd_root, OTHERS);       /* TCK low */
 
 #if 0
     {
@@ -269,12 +276,16 @@ usbblaster_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
         if (out)
         {
             urj_tap_cable_cx_cmd_queue (cmd_root, chunkbytes);
-            urj_tap_cable_cx_cmd_push (cmd_root, (1 << SHMODE) | (1 << READ) | chunkbytes);
+            urj_tap_cable_cx_cmd_push (cmd_root,
+                                       (1 << SHMODE) | (1 << READ) |
+                                       chunkbytes);
         }
         else
         {
             urj_tap_cable_cx_cmd_queue (cmd_root, 0);
-            urj_tap_cable_cx_cmd_push (cmd_root, (1 << SHMODE) | (0 << READ) | chunkbytes);
+            urj_tap_cable_cx_cmd_push (cmd_root,
+                                       (1 << SHMODE) | (0 << READ) |
+                                       chunkbytes);
         }
 
         for (i = 0; i < chunkbytes; i++)
@@ -293,10 +304,11 @@ usbblaster_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
         char tdi = in[in_offset++] ? 1 : 0;
 
         urj_tap_cable_cx_cmd_queue (cmd_root, out ? 1 : 0);
-        urj_tap_cable_cx_cmd_push (cmd_root, OTHERS | (tdi << TDI));  /* TCK low */
+        urj_tap_cable_cx_cmd_push (cmd_root, OTHERS | (tdi << TDI));    /* TCK low */
         urj_tap_cable_cx_cmd_push (cmd_root,
-                     OTHERS | ((out) ? (1 << READ) : 0) | (1 << TCK) | (tdi <<
-                                                                        TDI));
+                                   OTHERS | ((out) ? (1 << READ) : 0) | (1 <<
+                                                                         TCK)
+                                   | (tdi << TDI));
     }
 }
 
@@ -319,7 +331,8 @@ usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
 
         if (out)
         {
-            urj_tap_cable_cx_xfer (cmd_root, NULL, cable, URJ_TAP_CABLE_COMPLETELY);
+            urj_tap_cable_cx_xfer (cmd_root, NULL, cable,
+                                   URJ_TAP_CABLE_COMPLETELY);
 
             for (i = 0; i < chunkbytes; i++)
             {
@@ -336,7 +349,8 @@ usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
     }
 
     while (len > out_offset)
-        out[out_offset++] = (urj_tap_cable_cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
+        out[out_offset++] =
+            (urj_tap_cable_cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
 
 #if 0
     {
@@ -357,7 +371,8 @@ usbblaster_transfer (urj_cable_t *cable, int len, char *in, char *out)
     params_t *params = (params_t *) cable->params;
 
     usbblaster_transfer_schedule (cable, len, in, out);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, URJ_TAP_CABLE_COMPLETELY);
+    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
     return usbblaster_transfer_finish (cable, len, out);
 }
 
@@ -429,7 +444,8 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                 }
             case URJ_TAP_CABLE_GET_SIGNAL:
                 {
-                    int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    int m =
+                        urj_tap_cable_add_queue_item (cable, &(cable->done));
                     cable->done.data[m].action = URJ_TAP_CABLE_GET_SIGNAL;
                     cable->done.data[m].arg.value.sig =
                         cable->todo.data[j].arg.value.sig;
@@ -449,7 +465,8 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                     free (cable->todo.data[j].arg.transfer.in);
                     if (cable->todo.data[j].arg.transfer.out)
                     {
-                        int m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                        int m = urj_tap_cable_add_queue_item (cable,
+                                                              &(cable->done));
                         if (m < 0)
                             printf ("out of memory!\n");
                         cable->done.data[m].action = URJ_TAP_CABLE_TRANSFER;

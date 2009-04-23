@@ -114,7 +114,8 @@ typedef struct
  *
  */
 static urj_bus_t *
-ejtag_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver, char *cmd_params[])
+ejtag_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
+               char *cmd_params[])
 {
     urj_bus_t *bus;
 
@@ -201,14 +202,16 @@ ejtag_run_pracc (urj_bus_t *bus, const uint32_t *code, unsigned int len)
         if (ejctrl->out->data[Rocc])
         {
             printf (_("%s(%d) Reset occurred, ctrl=%s\n"),
-                    __FILE__, __LINE__, urj_tap_register_get_string (ejctrl->out));
+                    __FILE__, __LINE__,
+                    urj_tap_register_get_string (ejctrl->out));
             bus->initialized = 0;
             break;
         }
         if (!ejctrl->out->data[PrAcc])
         {
             printf (_("%s(%d) No processor access, ctrl=%s\n"),
-                    __FILE__, __LINE__, urj_tap_register_get_string (ejctrl->out));
+                    __FILE__, __LINE__,
+                    urj_tap_register_get_string (ejctrl->out));
             bus->initialized = 0;
             break;
         }
@@ -312,8 +315,8 @@ ejtag_bus_init (urj_bus_t *bus)
 
     urj_part_set_instruction (bus->part, "EJTAG_IMPCODE");
     urj_tap_chain_shift_instructions (bus->chain);
-    urj_tap_chain_shift_data_registers (bus->chain, 0);      //Write
-    urj_tap_chain_shift_data_registers (bus->chain, 1);      //Read
+    urj_tap_chain_shift_data_registers (bus->chain, 0); //Write
+    urj_tap_chain_shift_data_registers (bus->chain, 1); //Read
     printf ("ImpCode=%s %08X\n", urj_tap_register_get_string (ejimpl->out),
             reg_value (ejimpl->out));
     BP->impcode = reg_value (ejimpl->out);
@@ -355,10 +358,10 @@ ejtag_bus_init (urj_bus_t *bus)
     urj_tap_register_fill (ejctrl->in, 0);
     ejctrl->in->data[PrRst] = 1;
     ejctrl->in->data[PerRst] = 1;
-    urj_tap_chain_shift_data_registers (bus->chain, 0);      //Write
+    urj_tap_chain_shift_data_registers (bus->chain, 0); //Write
     ejctrl->in->data[PrRst] = 0;
     ejctrl->in->data[PerRst] = 0;
-    urj_tap_chain_shift_data_registers (bus->chain, 0);      //Write
+    urj_tap_chain_shift_data_registers (bus->chain, 0); //Write
 //
     if (EJTAG_VER == EJTAG_20)
     {
@@ -370,9 +373,10 @@ ejtag_bus_init (urj_bus_t *bus)
         urj_part_set_instruction (bus->part, "EJTAG_ADDRESS");
         urj_tap_chain_shift_instructions (bus->chain);
         //Set to Debug Control Register Address, 0xFF300000
-        urj_tap_register_init (ejaddr->in, "11111111001100000000000000000000");
+        urj_tap_register_init (ejaddr->in,
+                               "11111111001100000000000000000000");
 //              printf("Write to ejaddr->in     =%s %08X\n",urj_tap_register_get_string( ejaddr->in),reg_value( ejaddr->in ) );
-        urj_tap_chain_shift_data_registers (bus->chain, 0);  //Write
+        urj_tap_chain_shift_data_registers (bus->chain, 0);     //Write
 //              printf("Select EJTAG CONTROL Register\n");
         urj_part_set_instruction (bus->part, "EJTAG_CONTROL");
         urj_tap_chain_shift_instructions (bus->chain);
@@ -384,7 +388,7 @@ ejtag_bus_init (urj_bus_t *bus)
         ejctrl->in->data[DStrt] = 1;    // 11------|
         ejctrl->in->data[DrWn] = 1;     // 9-------|
         ejctrl->in->data[Dsz1] = 1;     // 8-------| DMA_WORD = 0x00000100 = Bit8
-        urj_tap_chain_shift_data_registers (bus->chain, 1);  //WriteRead
+        urj_tap_chain_shift_data_registers (bus->chain, 1);     //WriteRead
 //              printf("Write To ejctrl->in     =%s %08X\n",urj_tap_register_get_string( ejctrl->in), reg_value( ejctrl->in ) );
 //              printf("Read From ejctrl->out   =%s %08X\n",urj_tap_register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
         do
@@ -397,7 +401,7 @@ ejtag_bus_init (urj_bus_t *bus)
             ejctrl->in->data[PrAcc] = 1;        // 18----||
             ejctrl->in->data[DmaAcc] = 1;       // 17----||
             ejctrl->in->data[ProbEn] = 1;       // 15-----|
-            urj_tap_chain_shift_data_registers (bus->chain, 1);      //WriteRead
+            urj_tap_chain_shift_data_registers (bus->chain, 1); //WriteRead
 //                      printf("Write To ejctrl->in     =%s %08X\n",urj_tap_register_get_string( ejctrl->in), reg_value( ejctrl->in ) );
 //                      printf("Read From ejctrl->out   =%s %08X\n",urj_tap_register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
         }
@@ -406,7 +410,7 @@ ejtag_bus_init (urj_bus_t *bus)
         urj_part_set_instruction (bus->part, "EJTAG_DATA");
         urj_tap_chain_shift_instructions (bus->chain);
         urj_tap_register_fill (ejdata->in, 0);  // Clear Register
-        urj_tap_chain_shift_data_registers (bus->chain, 1);  //WriteRead
+        urj_tap_chain_shift_data_registers (bus->chain, 1);     //WriteRead
 //              printf( "Write To ejdata->in    =%s %08X\n", urj_tap_register_get_string( ejdata->in), reg_value( ejdata->in ) );
 //              printf( "Read From ejdata->out  =%s %08X\n", urj_tap_register_get_string( ejdata->out),reg_value( ejdata->out ) );
 //              printf("Select EJTAG CONTROL Register\n");
@@ -416,7 +420,7 @@ ejtag_bus_init (urj_bus_t *bus)
         //Set some bits in CONTROL Register 0x00048000
         ejctrl->in->data[PrAcc] = 1;    // 18----||
         ejctrl->in->data[ProbEn] = 1;   // 15-----|
-        urj_tap_chain_shift_data_registers (bus->chain, 1);  //WriteRead
+        urj_tap_chain_shift_data_registers (bus->chain, 1);     //WriteRead
 //              printf("Write To ejctrl->in     =%s %08X\n",urj_tap_register_get_string( ejctrl->in), reg_value( ejctrl->in ) );
 //              printf("Read From ejctrl->out   =%s %08X\n",urj_tap_register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
         if (ejctrl->out->data[DeRR] == 1)
@@ -424,7 +428,8 @@ ejtag_bus_init (urj_bus_t *bus)
             printf ("DMA READ ERROR\n");
         }
         //Now have data from DCR, need to reset the MP Bit (2) and write it back out
-        urj_tap_register_init (ejdata->in, urj_tap_register_get_string (ejdata->out));
+        urj_tap_register_init (ejdata->in,
+                               urj_tap_register_get_string (ejdata->out));
         ejdata->in->data[MemProt] = 0;
 //              printf( "Need to Write ejdata-> =%s %08X\n", urj_tap_register_get_string( ejdata->in),reg_value( ejdata->in ) );
 
@@ -433,16 +438,17 @@ ejtag_bus_init (urj_bus_t *bus)
 //              printf("Select EJTAG ADDRESS Register\n");
         urj_part_set_instruction (bus->part, "EJTAG_ADDRESS");
         urj_tap_chain_shift_instructions (bus->chain);
-        urj_tap_register_init (ejaddr->in, "11111111001100000000000000000000");
+        urj_tap_register_init (ejaddr->in,
+                               "11111111001100000000000000000000");
 //              printf("Write to ejaddr->in     =%s %08X\n",urj_tap_register_get_string( ejaddr->in), reg_value( ejaddr->in ) );
         //This appears to be a write with NO Read
-        urj_tap_chain_shift_data_registers (bus->chain, 0);  //Write
+        urj_tap_chain_shift_data_registers (bus->chain, 0);     //Write
 //              printf("Select EJTAG DATA Register\n");
         urj_part_set_instruction (bus->part, "EJTAG_DATA");
         urj_tap_chain_shift_instructions (bus->chain);
         //The value is already in ejdata->in, so write it
 //              printf("Write To ejdata->in     =%s %08X\n", urj_tap_register_get_string( ejdata->in),reg_value( ejdata->in ) );
-        urj_tap_chain_shift_data_registers (bus->chain, 0);  //Write
+        urj_tap_chain_shift_data_registers (bus->chain, 0);     //Write
 //              printf("Select EJTAG CONTROL Register\n");
         urj_part_set_instruction (bus->part, "EJTAG_CONTROL");
         urj_tap_chain_shift_instructions (bus->chain);
@@ -454,7 +460,7 @@ ejtag_bus_init (urj_bus_t *bus)
         ejctrl->in->data[DStrt] = 1;    // 11
         ejctrl->in->data[ProbEn] = 1;   // 15
         ejctrl->in->data[PrAcc] = 1;    // 18
-        urj_tap_chain_shift_data_registers (bus->chain, 1);  //Write/Read
+        urj_tap_chain_shift_data_registers (bus->chain, 1);     //Write/Read
 //              printf("Write to ejctrl->in     =%s %08X\n",urj_tap_register_get_string( ejctrl->in),  reg_value( ejctrl->in ) );
 //              printf("Read from ejctrl->out   =%s %08X\n",urj_tap_register_get_string( ejctrl->out), reg_value( ejctrl->out ) );
         do
@@ -466,7 +472,7 @@ ejtag_bus_init (urj_bus_t *bus)
             ejctrl->in->data[DmaAcc] = 1;       // 17
             ejctrl->in->data[ProbEn] = 1;       // 15
             ejctrl->in->data[PrAcc] = 1;        // 18
-            urj_tap_chain_shift_data_registers (bus->chain, 1);      //Write/Read
+            urj_tap_chain_shift_data_registers (bus->chain, 1); //Write/Read
 //                  printf("Write to ejctrl->in     =%s %08X\n",urj_tap_register_get_string( ejctrl->in),  reg_value( ejctrl->in ) );
 //                  printf("Read from ejctrl->out   =%s %08X\n",urj_tap_register_get_string( ejctrl->out), reg_value( ejctrl->out ) );
         }
@@ -478,7 +484,7 @@ ejtag_bus_init (urj_bus_t *bus)
         //Set some bits in CONTROL Register 0x00048000
         ejctrl->in->data[PrAcc] = 1;    // 18----||
         ejctrl->in->data[ProbEn] = 1;   // 15-----|
-        urj_tap_chain_shift_data_registers (bus->chain, 1);  //Write/Read
+        urj_tap_chain_shift_data_registers (bus->chain, 1);     //Write/Read
 //              printf("Write To ejctrl->in     =%s %08X\n",urj_tap_register_get_string( ejctrl->in),reg_value( ejctrl->in ) );
 //              printf("Read From ejctrl->out   =%s %08X\n",urj_tap_register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
         if (ejctrl->out->data[DeRR] == 1)
@@ -513,7 +519,8 @@ ejtag_bus_init (urj_bus_t *bus)
     if (!ejctrl->out->data[BrkSt])
     {
         printf (_("%s(%d) Failed to enter debug mode, ctrl=%s\n"),
-                __FILE__, __LINE__, urj_tap_register_get_string (ejctrl->out));
+                __FILE__, __LINE__,
+                urj_tap_register_get_string (ejctrl->out));
         return URJ_STATUS_FAIL;
     }
     else

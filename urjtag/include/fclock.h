@@ -32,11 +32,11 @@ extern "C"
 #  ifndef CVOID
 #    define CVOID
 #  endif
-#else           /* def __cplusplus */
+#else /* def __cplusplus */
 #  ifndef CVOID
 #    define CVOID void
 #  endif
-#endif          /* def __cplusplus */
+#endif /* def __cplusplus */
 
 
 /* return real time in seconds starting at some arbitrary point in

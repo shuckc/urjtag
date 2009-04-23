@@ -174,8 +174,9 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
             }
             else
                 urj_bsdl_msg (jc->proc_mode,
-                          BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                          __FILE__, __LINE__);
+                              BSDL_MSG_FATAL,
+                              _("Out of memory, %s line %i\n"), __FILE__,
+                              __LINE__);
 
             name = name->next;
         }
@@ -247,7 +248,7 @@ urj_bsdl_process_idcode (urj_bsdl_jtag_ctrl_t *jc)
         create_register (jc, "DIR", strlen (jc->idcode));
     else
         urj_bsdl_msg (jc->proc_mode,
-                  BSDL_MSG_WARN, _("No IDCODE specification found.\n"));
+                      BSDL_MSG_WARN, _("No IDCODE specification found.\n"));
 
     return 1;
 }
@@ -580,8 +581,8 @@ parse_vhdl_elem (urj_bsdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *elem)
     if (!buf)
     {
         urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
-                  BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__,
-                  __LINE__);
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
         return -1;
     }
     buf[0] = '\0';
@@ -679,10 +680,10 @@ compare_idcode (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
 
             if (idcode_match)
                 urj_bsdl_msg (jc->proc_mode,
-                          BSDL_MSG_NOTE, _("IDCODE matched\n"));
+                              BSDL_MSG_NOTE, _("IDCODE matched\n"));
             else
                 urj_bsdl_msg (jc->proc_mode,
-                          BSDL_MSG_NOTE, _("IDCODE mismatch\n"));
+                              BSDL_MSG_NOTE, _("IDCODE mismatch\n"));
         }
     }
 
@@ -730,8 +731,8 @@ urj_bsdl_process_elements (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
         if (!(result & URJ_BSDL_MODE_SYN_CHECK))
         {
             urj_bsdl_msg (jc->proc_mode,
-                      BSDL_MSG_ERR,
-                      _("BSDL stage reported errors, aborting.\n"));
+                          BSDL_MSG_ERR,
+                          _("BSDL stage reported errors, aborting.\n"));
             urj_bsdl_parser_deinit (priv);
             return -1;
         }
@@ -739,19 +740,21 @@ urj_bsdl_process_elements (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
 
     if (jc->idcode)
         urj_bsdl_msg (jc->proc_mode,
-                  BSDL_MSG_NOTE, _("Got IDCODE: %s\n"), jc->idcode);
+                      BSDL_MSG_NOTE, _("Got IDCODE: %s\n"), jc->idcode);
 
     if (jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK)
         result |= compare_idcode (jc, idcode);
 
-    if (jc->proc_mode & (URJ_BSDL_MODE_INSTR_EXEC | URJ_BSDL_MODE_INSTR_PRINT))
+    if (jc->
+        proc_mode & (URJ_BSDL_MODE_INSTR_EXEC | URJ_BSDL_MODE_INSTR_PRINT))
         /* IDCODE check positive if requested? */
         if (((jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK) &&
              (result & URJ_BSDL_MODE_IDCODE_CHECK))
             || (!(jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK)))
             result |= build_commands (priv);
 
-    if ((result & jc->proc_mode) == (jc->proc_mode & URJ_BSDL_MODE_ACTION_ALL))
+    if ((result & jc->proc_mode) ==
+        (jc->proc_mode & URJ_BSDL_MODE_ACTION_ALL))
         if (jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK)
             result = 1;
         else

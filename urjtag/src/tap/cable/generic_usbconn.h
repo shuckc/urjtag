@@ -28,7 +28,8 @@
 #include "cable.h"
 #include "usbconn.h"
 
-int urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable);
+int urj_tap_cable_generic_usbconn_connect (char *params[],
+                                           urj_cable_t *cable);
 void urj_tap_cable_generic_usbconn_done (urj_cable_t *cable);
 void urj_tap_cable_generic_usbconn_help (const char *name);
 void urj_tap_cable_generic_usbconn_free (urj_cable_t *cable);

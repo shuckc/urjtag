@@ -45,9 +45,9 @@
 typedef struct
 {
     uint32_t last_adr;
-    urj_part_signal_t *ma[19];           //19 - 512K flash address are used
-    urj_part_signal_t *md[8];            //8 bit data bus connected to Flash are used
-    urj_part_signal_t *bms;              //boot memory select
+    urj_part_signal_t *ma[19];  //19 - 512K flash address are used
+    urj_part_signal_t *md[8];   //8 bit data bus connected to Flash are used
+    urj_part_signal_t *bms;     //boot memory select
     urj_part_signal_t *nwe;
     urj_part_signal_t *noe;
 } bus_params_t;

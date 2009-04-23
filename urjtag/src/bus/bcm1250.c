@@ -302,8 +302,8 @@ static int addr;
 static uint64_t base = 0x1fc00000;
 
 static int
-bcm1250_ejtag_do (urj_bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
-                  unsigned char *buf, int verbose)
+bcm1250_ejtag_do (urj_bus_t *bus, uint64_t ad, uint64_t da, int read,
+                  int type, unsigned char *buf, int verbose)
 {
 
     urj_part_t *p = bus->part;
@@ -438,7 +438,7 @@ bcm1250_ejtag_do (urj_bus_t *bus, uint64_t ad, uint64_t da, int read, int type,
         urj_tap_chain_shift_data_registers (chain, 1);
 
         while ((p->active_instruction->data_register->out->data[276 - 17] ==
-                0) &&to--)
+                0) && to--)
         {
             urj_tap_chain_shift_data_registers (chain, 1);
         }

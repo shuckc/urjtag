@@ -708,7 +708,8 @@ static const struct amd_flash_info table[] = {
 };
 
 int
-urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array)
+urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
+                        urj_flash_cfi_array_t **cfi_array)
 {
     /* Temporary containers for manufacturer and device id while
        probing with different Autoselect methods. */
@@ -732,7 +733,8 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cf
         return -3;              /* invalid bus width */
     (*cfi_array)->bus_width = ba = bw / 8;
 
-    (*cfi_array)->cfi_chips = calloc (1, sizeof (urj_flash_cfi_chip_t *) * ba);
+    (*cfi_array)->cfi_chips =
+        calloc (1, sizeof (urj_flash_cfi_chip_t *) * ba);
     if (!(*cfi_array)->cfi_chips)
         return -2;              /* out of memory */
 

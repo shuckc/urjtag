@@ -57,7 +57,8 @@ cmd_detectflash_help (void)
     printf (_("Usage: %s ADDRESS\n"
               "Detect flash memory type connected to a part.\n"
               "\n"
-              "ADDRESS    Base address for memory region\n"), "urj_flash_detectflash");
+              "ADDRESS    Base address for memory region\n"),
+            "urj_flash_detectflash");
 }
 
 urj_cmd_t cmd_detectflash = {

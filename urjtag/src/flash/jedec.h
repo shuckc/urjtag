@@ -28,10 +28,13 @@
 #include <bus_driver.h>
 #include <flash.h>
 
-int urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array);
+int urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
+                            urj_flash_cfi_array_t **cfi_array);
 #ifdef JEDEC_EXP
-int urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array);
+int urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
+                                urj_flash_cfi_array_t **cfi_array);
 #endif
-int urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr, urj_flash_cfi_array_t **cfi_array);
+int urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
+                          urj_flash_cfi_array_t **cfi_array);
 
-#endif  /* ndef URJ_FLASH_JEDEC_H */
+#endif /* ndef URJ_FLASH_JEDEC_H */

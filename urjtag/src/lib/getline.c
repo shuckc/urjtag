@@ -30,11 +30,12 @@
 #ifndef HAVE_GETLINE
 
 #ifndef HAVE_GETDELIM
-ssize_t urj_lib_getdelim (char **lineptr, size_t * n, int delimiter, FILE *stream);
+ssize_t urj_lib_getdelim (char **lineptr, size_t *n, int delimiter,
+                          FILE * stream);
 #endif /* HAVE_GETDELIM */
 
 ssize_t
-urj_lib_getline (char **lineptr, size_t * n, FILE *stream)
+urj_lib_getline (char **lineptr, size_t *n, FILE * stream)
 {
     return urj_lib_getdelim (lineptr, n, '\n', stream);
 }

@@ -27,7 +27,8 @@
 
 #include "bus.h"
 
-int urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig, char *id);
+int urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig,
+                                char *id);
 
 void urj_bus_generic_free (urj_bus_t *bus);
 int urj_bus_generic_no_init (urj_bus_t *bus);

@@ -60,7 +60,8 @@ urj_tap_detect_register_size (urj_chain_t *chain)
         rout = urj_tap_register_alloc (DETECT_PATTERN_SIZE + len);
         rpat =
             urj_tap_register_inc (urj_tap_register_fill
-                          (urj_tap_register_alloc (DETECT_PATTERN_SIZE + len), 0));
+                                  (urj_tap_register_alloc
+                                   (DETECT_PATTERN_SIZE + len), 0));
 
         for (p = 1; p < (1 << DETECT_PATTERN_SIZE); p++)
         {
@@ -91,7 +92,8 @@ urj_tap_detect_register_size (urj_chain_t *chain)
                 if (urj_tap_register_compare (rpat, rout) == 0)
                     ok++;
 #ifdef VERY_LOW_LEVEL_DEBUG
-                printf ("  = %s => %d\n", urj_tap_register_get_string (rout), ok);
+                printf ("  = %s => %d\n", urj_tap_register_get_string (rout),
+                        ok);
 #endif
             }
             if (100 * ok / TEST_COUNT < TEST_THRESHOLD)

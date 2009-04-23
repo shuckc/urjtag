@@ -185,8 +185,8 @@ flashbscoach_bus_init (urj_bus_t *bus)
     urj_part_set_signal (p, DECA, 1, 1);
     urj_part_set_signal (p, DECB, 1, 1);
     urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 1);    //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);    //WE_F low aktiv
+    urj_part_set_signal (p, OE_F, 1, 1);        //OE_F low aktiv
+    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
 
     for (i = 0; i < 15; i++)
         urj_part_set_signal (p, ADR[i], 1, 1);
@@ -300,8 +300,8 @@ flashbscoach_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_part_set_signal (p, DECA, 1, 0);
     urj_part_set_signal (p, DECB, 1, 1);
     urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 0);    //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);    //WE_F low aktiv
+    urj_part_set_signal (p, OE_F, 1, 0);        //OE_F low aktiv
+    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
 
     setup_address (bus, adr);
     set_data_in (bus);
@@ -345,8 +345,8 @@ flashbscoach_bus_read_end (urj_bus_t *bus)
     urj_part_set_signal (p, DECA, 1, 1);
     urj_part_set_signal (p, DECB, 1, 1);
     urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 1);    //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);    //WE_F low aktiv
+    urj_part_set_signal (p, OE_F, 1, 1);        //OE_F low aktiv
+    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -366,8 +366,8 @@ flashbscoach_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_set_signal (p, DECA, 1, 0);
     urj_part_set_signal (p, DECB, 1, 1);
     urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 1);    //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);    //WE_F low aktiv
+    urj_part_set_signal (p, OE_F, 1, 1);        //OE_F low aktiv
+    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
 
     setup_address (bus, adr);
     setup_data (bus, data);
@@ -380,8 +380,8 @@ flashbscoach_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_set_signal (p, DECA, 1, 1);
     urj_part_set_signal (p, DECB, 1, 1);
     urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 1);    //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);    //WE_F low aktiv
+    urj_part_set_signal (p, OE_F, 1, 1);        //OE_F low aktiv
+    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
 
     urj_tap_chain_shift_data_registers (chain, 0);
 }

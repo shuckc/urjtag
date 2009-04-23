@@ -36,7 +36,8 @@ int urj_vhdl_flex_postinc_compile_errors (void *);
 int urj_vhdl_flex_get_lineno (void *);
 
 /* VHDL parser declarations */
-urj_bsdl_vhdl_parser_priv_t *urj_vhdl_parser_init (FILE *, urj_bsdl_jtag_ctrl_t *);
+urj_bsdl_vhdl_parser_priv_t *urj_vhdl_parser_init (FILE *,
+                                                   urj_bsdl_jtag_ctrl_t *);
 void urj_vhdl_parser_deinit (urj_bsdl_vhdl_parser_priv_t *);
 int urj_vhdl_parse (urj_bsdl_vhdl_parser_priv_t *);
 

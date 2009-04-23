@@ -107,7 +107,8 @@ cmd_print_run (urj_chain_t *chain, char *params[])
             urj_instruction_t *inst;
 
             snprintf (format, 128, _(" Active %%-%ds %%-%ds"),
-                      URJ_INSTRUCTION_MAXLEN_INSTRUCTION, URJ_DATA_REGISTER_MAXLEN);
+                      URJ_INSTRUCTION_MAXLEN_INSTRUCTION,
+                      URJ_DATA_REGISTER_MAXLEN);
 #if HAVE_SWPRINTF
             if (mbstowcs (wformat, format, 128) == -1)
                 printf (_("(%d) String conversion failed!\n"), __LINE__);
@@ -126,7 +127,8 @@ cmd_print_run (urj_chain_t *chain, char *params[])
             putchar ('\n');
 
             snprintf (format, 128, _("   %%c    %%-%ds %%-%ds\n"),
-                      URJ_INSTRUCTION_MAXLEN_INSTRUCTION, URJ_DATA_REGISTER_MAXLEN);
+                      URJ_INSTRUCTION_MAXLEN_INSTRUCTION,
+                      URJ_DATA_REGISTER_MAXLEN);
 
             part = chain->parts->parts[chain->active_part];
             for (inst = part->instructions; inst != NULL; inst = inst->next)
@@ -142,8 +144,10 @@ cmd_print_run (urj_chain_t *chain, char *params[])
     if (noheader == 0)
     {
         snprintf (format, 128, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds"),
-                  URJ_PART_MANUFACTURER_MAXLEN, URJ_PART_PART_MAXLEN, URJ_PART_STEPPING_MAXLEN,
-                  URJ_INSTRUCTION_MAXLEN_INSTRUCTION, URJ_DATA_REGISTER_MAXLEN);
+                  URJ_PART_MANUFACTURER_MAXLEN, URJ_PART_PART_MAXLEN,
+                  URJ_PART_STEPPING_MAXLEN,
+                  URJ_INSTRUCTION_MAXLEN_INSTRUCTION,
+                  URJ_DATA_REGISTER_MAXLEN);
 #if HAVE_SWPRINTF
         if (mbstowcs (wformat, format, 128) == -1)
             printf (_("(%d) String conversion failed!\n"), __LINE__);
@@ -193,7 +197,8 @@ cmd_print_run (urj_chain_t *chain, char *params[])
             {
                 if (URJ_BUS_AREA (bus, a, &area) != URJ_STATUS_OK)
                 {
-                    printf (_("Error in bus area urj_tap_discovery at 0x%08llX\n"),
+                    printf (_
+                            ("Error in bus area urj_tap_discovery at 0x%08llX\n"),
                             (long long unsigned int) a);
                     break;
                 }

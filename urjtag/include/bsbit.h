@@ -49,8 +49,8 @@ struct urj_bsbit
     int control_state;
 };
 
-urj_bsbit_t *urj_part_bsbit_alloc (int bit, const char *name, int type, urj_part_signal_t *signal,
-                      int safe);
+urj_bsbit_t *urj_part_bsbit_alloc (int bit, const char *name, int type,
+                                   urj_part_signal_t *signal, int safe);
 void urj_part_bsbit_free (urj_bsbit_t *b);
 
 #endif /* URJ_BSBIT_BSBIT_H */

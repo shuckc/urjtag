@@ -147,7 +147,9 @@ au1500_bus_area (urj_bus_t *bus, uint32_t addr, urj_bus_area_t *area)
     area->length = UINT64_C (0x00100000000);
 //      area->width = 16;
     area->width =
-        urj_part_get_signal (bus->part, urj_part_find_signal (bus->part, "ROMSIZ")) ? 16 : 32;
+        urj_part_get_signal (bus->part,
+                             urj_part_find_signal (bus->part,
+                                                   "ROMSIZ")) ? 16 : 32;
 
 
     return URJ_STATUS_OK;

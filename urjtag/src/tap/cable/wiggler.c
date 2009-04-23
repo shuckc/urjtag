@@ -68,26 +68,30 @@
 #define xstr(s) str(s)
 #define str(s) #s
 static const char *std_wgl_map = xstr (TDO) ","
-                                 xstr (nTRST) ","
-                                 xstr (TDI) ","
-                                 xstr (TCK) ","
-                                 xstr (TMS) "," "#"
-                                 xstr (nSRESET);
+    xstr (nTRST)
+    ","
+    xstr (TDI)
+    ","
+    xstr (TCK)
+    ","
+    xstr (TMS)
+    "," "#"
+    xstr (nSRESET);
 
 
 /* private parameters of this cable driver */
-typedef struct
-{
-    int signals;
-    int trst_lvl;
-    int srst_act, srst_inact;
-    int tms_act, tms_inact;
-    int tck_act, tck_inact;
-    int tdi_act, tdi_inact;
-    int tdo_act, tdo_inact;
-    int trst_act, trst_inact;
-    int unused_bits;
-} wiggler_params_t;
+     typedef struct
+     {
+         int signals;
+         int trst_lvl;
+         int srst_act, srst_inact;
+         int tms_act, tms_inact;
+         int tck_act, tck_inact;
+         int tdi_act, tdi_inact;
+         int tdo_act, tdo_inact;
+         int trst_act, trst_inact;
+         int unused_bits;
+     } wiggler_params_t;
 
 
 /* access macros for the parameters */
@@ -109,7 +113,7 @@ typedef struct
 
 
 
-static int map_pin (char *pin, int *act, int *inact)
+     static int map_pin (char *pin, int *act, int *inact)
 {
     int bitnum;
     int inverted = 0;
@@ -290,18 +294,24 @@ wiggler_clock (urj_cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         urj_tap_parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
-                          PRM_TCK_INACT (cable) |
-                          (tms ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable))
-                          | (tdi ? PRM_TDI_ACT (cable) :
-                             PRM_TDI_INACT (cable)) |
-                          PRM_UNUSED_BITS (cable));
+                                  PRM_TCK_INACT (cable) |
+                                  (tms ? PRM_TMS_ACT (cable) :
+                                   PRM_TMS_INACT (cable)) | (tdi ?
+                                                             PRM_TDI_ACT
+                                                             (cable) :
+                                                             PRM_TDI_INACT
+                                                             (cable)) |
+                                  PRM_UNUSED_BITS (cable));
         urj_tap_cable_wait (cable);
         urj_tap_parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
-                          PRM_TCK_ACT (cable) |
-                          (tms ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable))
-                          | (tdi ? PRM_TDI_ACT (cable) :
-                             PRM_TDI_INACT (cable)) |
-                          PRM_UNUSED_BITS (cable));
+                                  PRM_TCK_ACT (cable) |
+                                  (tms ? PRM_TMS_ACT (cable) :
+                                   PRM_TMS_INACT (cable)) | (tdi ?
+                                                             PRM_TDI_ACT
+                                                             (cable) :
+                                                             PRM_TDI_INACT
+                                                             (cable)) |
+                                  PRM_UNUSED_BITS (cable));
         urj_tap_cable_wait (cable);
     }
 
@@ -316,7 +326,8 @@ static int
 wiggler_get_tdo (urj_cable_t *cable)
 {
     urj_tap_parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
-                      PRM_TCK_INACT (cable) | PRM_UNUSED_BITS (cable));
+                              PRM_TCK_INACT (cable) |
+                              PRM_UNUSED_BITS (cable));
     urj_tap_cable_wait (cable);
 
     return (urj_tap_parport_get_status (cable->link.port) &
@@ -339,11 +350,14 @@ wiggler_set_signal (urj_cable_t *cable, int mask, int val)
              PRM_TRST_INACT (cable));
         int data = PRM_UNUSED_BITS (cable) | PRM_TRST_LVL (cable);
         data |=
-            ((sigs & URJ_POD_CS_TCK) ? PRM_TCK_ACT (cable) : PRM_TCK_INACT (cable));
+            ((sigs & URJ_POD_CS_TCK) ? PRM_TCK_ACT (cable) :
+             PRM_TCK_INACT (cable));
         data |=
-            ((sigs & URJ_POD_CS_TMS) ? PRM_TMS_ACT (cable) : PRM_TMS_INACT (cable));
+            ((sigs & URJ_POD_CS_TMS) ? PRM_TMS_ACT (cable) :
+             PRM_TMS_INACT (cable));
         data |=
-            ((sigs & URJ_POD_CS_TDI) ? PRM_TDI_ACT (cable) : PRM_TDI_INACT (cable));
+            ((sigs & URJ_POD_CS_TDI) ? PRM_TDI_ACT (cable) :
+             PRM_TDI_INACT (cable));
         urj_tap_parport_set_data (cable->link.port, data);
         PRM_SIGNALS (cable) = sigs;
     }

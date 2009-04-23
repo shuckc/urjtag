@@ -35,7 +35,7 @@
 #ifndef URJ_BITMASK_H
 #define URJ_BITMASK_H
 
-#ifdef UNUSED           /* RFHH */
+#ifdef UNUSED                   /* RFHH */
 #ifndef LANGUAGE
 #       ifdef __ASSEMBLY__
 #               define LANGUAGE ASM
@@ -51,7 +51,7 @@
 #ifndef C
 #define C       1
 #endif
-#endif  /* def UNUSED */
+#endif /* def UNUSED */
 
 #define URJ_MAX_BITS_ABS_VAL    1024
 #define URJ_BITS_ABS(a)         (((((a) + URJ_MAX_BITS_ABS_VAL) / URJ_MAX_BITS_ABS_VAL) * 2 - 1) * (a))

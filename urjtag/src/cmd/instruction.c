@@ -100,7 +100,7 @@ cmd_instruction_run (urj_chain_t *chain, char *params[])
         }
 
         i = urj_part_instruction_alloc (params[1], part->instruction_length,
-                               params[2]);
+                                        params[2]);
         if (!i)
         {
             printf (_("out of memory\n"));

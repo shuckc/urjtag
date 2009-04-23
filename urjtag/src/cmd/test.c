@@ -62,7 +62,8 @@ cmd_test_run (urj_chain_t *chain, char *params[])
         return 1;
     }
 
-    s = urj_part_find_signal (chain->parts->parts[chain->active_part], params[2]);
+    s = urj_part_find_signal (chain->parts->parts[chain->active_part],
+                              params[2]);
     if (!s)
     {
         printf (_("signal '%s' not found\n"), params[2]);

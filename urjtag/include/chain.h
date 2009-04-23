@@ -56,11 +56,14 @@ void urj_tap_chain_defer_clock (urj_chain_t *chain, int tms, int tdi, int n);
 int urj_tap_chain_set_trst (urj_chain_t *chain, int trst);
 int urj_tap_chain_get_trst (urj_chain_t *chain);
 void urj_tap_chain_shift_instructions (urj_chain_t *chain);
-void urj_tap_chain_shift_instructions_mode (urj_chain_t *chain, int capture_output,
-                                    int capture, int chain_exit);
-void urj_tap_chain_shift_data_registers (urj_chain_t *chain, int capture_output);
-void urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain, int capture_output,
-                                      int capture, int chain_exit);
+void urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
+                                            int capture_output, int capture,
+                                            int chain_exit);
+void urj_tap_chain_shift_data_registers (urj_chain_t *chain,
+                                         int capture_output);
+void urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
+                                              int capture_output, int capture,
+                                              int chain_exit);
 void urj_tap_chain_flush (urj_chain_t *chain);
 int urj_tap_chain_set_pod_signal (urj_chain_t *chain, int mask, int val);
 int urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig);

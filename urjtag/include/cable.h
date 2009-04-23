@@ -148,14 +148,17 @@ int urj_tap_cable_get_signal_late (urj_cable_t *cable, urj_pod_sigsel_t sig);
 int urj_tap_cable_defer_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig);
 int urj_tap_cable_transfer (urj_cable_t *cable, int len, char *in, char *out);
 int urj_tap_cable_transfer_late (urj_cable_t *cable, char *out);
-int urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in, char *out);
+int urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
+                                  char *out);
 
 void urj_tap_cable_set_frequency (urj_cable_t *cable, uint32_t frequency);
 uint32_t urj_tap_cable_get_frequency (urj_cable_t *cable);
 void urj_tap_cable_wait (urj_cable_t *cable);
 void urj_tap_cable_purge_queue (urj_cable_queue_info_t *q, int io);
-int urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q);
-int urj_tap_cable_get_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q);
+int urj_tap_cable_add_queue_item (urj_cable_t *cable,
+                                  urj_cable_queue_info_t *q);
+int urj_tap_cable_get_queue_item (urj_cable_t *cable,
+                                  urj_cable_queue_info_t *q);
 
 extern urj_cable_driver_t *cable_drivers[];
 

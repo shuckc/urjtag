@@ -28,7 +28,8 @@
 #include "bsbit.h"
 
 urj_bsbit_t *
-urj_part_bsbit_alloc (int bit, const char *name, int type, urj_part_signal_t *signal, int safe)
+urj_part_bsbit_alloc (int bit, const char *name, int type,
+                      urj_part_signal_t *signal, int safe)
 {
     urj_bsbit_t *b = malloc (sizeof *b);
     if (!b)

@@ -78,7 +78,8 @@ wiggler2_init (urj_cable_t *cable)
 
     if ((data = urj_tap_parport_get_data (cable->link.port)) < 0)
     {
-        if (urj_tap_parport_set_data (cable->link.port, (1 << TRST) | UNUSED_BITS))
+        if (urj_tap_parport_set_data
+            (cable->link.port, (1 << TRST) | UNUSED_BITS))
             return -1;
         PARAM_SIGNALS (cable) = URJ_POD_CS_TRST;
     }
@@ -100,14 +101,12 @@ wiggler2_clock (urj_cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         urj_tap_parport_set_data (cable->link.port,
-                          (trst << TRST) | (0 << TCK) | (tms << TMS) | (tdi <<
-                                                                        TDI) |
-                          UNUSED_BITS);
+                                  (trst << TRST) | (0 << TCK) | (tms << TMS) |
+                                  (tdi << TDI) | UNUSED_BITS);
         urj_tap_cable_wait (cable);
         urj_tap_parport_set_data (cable->link.port,
-                          (trst << TRST) | (1 << TCK) | (tms << TMS) | (tdi <<
-                                                                        TDI) |
-                          UNUSED_BITS);
+                                  (trst << TRST) | (1 << TCK) | (tms << TMS) |
+                                  (tdi << TDI) | UNUSED_BITS);
         urj_tap_cable_wait (cable);
     }
 
@@ -123,8 +122,9 @@ wiggler2_get_tdo (urj_cable_t *cable)
     int trst = (PARAM_SIGNALS (cable) & URJ_POD_CS_TRST) ? 1 : 0;
 
     urj_tap_parport_set_data (cable->link.port,
-                      (trst << TRST) | (0 << TCK) | UNUSED_BITS);
-    PARAM_SIGNALS (cable) &= ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
+                              (trst << TRST) | (0 << TCK) | UNUSED_BITS);
+    PARAM_SIGNALS (cable) &=
+        ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 
     urj_tap_cable_wait (cable);
 

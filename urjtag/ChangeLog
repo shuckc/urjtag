@@ -1,5 +1,12 @@
 2009-04-23  Rutger Hofman <rfhh>
 
+  Expand tabs also in #defines -- indent skips them.
+  Run indent again. Since many identifiers have changed, line wraps have to
+  be redone.
+  * affects the complete code base.
+
+2009-04-23  Rutger Hofman <rfhh>
+
   Mechanically replace all global function/variable names w/ a prefix
   urj_(<module>_)*. Investigated with
       ctags -R -x --c-kinds=f --file-scope=no  | grep function

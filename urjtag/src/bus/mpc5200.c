@@ -223,7 +223,7 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
 
     for (i = 0; i < area.width; i++)
         urj_part_set_signal (p, AD[i + (LPC_NUM_AD - bp->lpc_num_d)], 1,
-                         (d >> i) & 1);
+                             (d >> i) & 1);
 }
 
 static uint32_t

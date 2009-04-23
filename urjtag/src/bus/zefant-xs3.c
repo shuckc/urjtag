@@ -519,7 +519,8 @@ setup_data (urj_bus_t *bus, uint32_t d, component_t *comp)
 }
 
 static uint8_t
-eeprom_shift_byte (urj_chain_t *chain, urj_part_t *p, component_t *comp, uint8_t byte)
+eeprom_shift_byte (urj_chain_t *chain, urj_part_t *p, component_t *comp,
+                   uint8_t byte)
 {
     int pos;
     uint8_t so_data = 0x00;
@@ -632,7 +633,8 @@ zefant_xs3_bus_init (urj_bus_t *bus)
 }
 
 static int
-comp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area, component_t **comp)
+comp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area,
+               component_t **comp)
 {
     if (adr < RAM0_START)
     {

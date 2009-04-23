@@ -32,7 +32,7 @@
 
 #include <stdint.h>
 #include <string.h>
-#ifdef UNUSED           /* RFHH */
+#ifdef UNUSED                   /* RFHH */
 #include <flash/cfi.h>
 #include <flash/intel.h>
 #include <flash/mic.h>
@@ -43,7 +43,7 @@
 #include "jtag.h"
 
 void
-urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
+urj_bus_readmem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len)
 {
     uint32_t step;
     uint32_t a;

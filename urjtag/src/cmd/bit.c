@@ -162,8 +162,8 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
 
     /* allocate bsbit */
     part->bsbits[bit] =
-        urj_part_bsbit_alloc (bit, params[4], type, urj_part_find_signal (part, params[4]),
-                     safe);
+        urj_part_bsbit_alloc (bit, params[4], type,
+                              urj_part_find_signal (part, params[4]), safe);
     if (part->bsbits[bit] == NULL)
     {
         printf (_("%s: out of memory for command '%s'\n"), "bit", command);
