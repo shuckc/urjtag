@@ -25,53 +25,53 @@ include $(top_srcdir)/Makefile.rules
 
 noinst_LIBRARIES = libcmd.a
 
-libcmd_a_SOURCES = \
-	frequency.c \
-	cable.c \
-	reset.c \
-	discovery.c \
-	idcode.c \
-	detect.c \
-	detectflash.c \
-	help.c \
-	quit.c \
-	scan.c \
-	signal.c \
-	salias.c \
-	bit.c \
-	register.c \
-	initbus.c \
-	print.c \
-	part.c \
-	bus.c \
-	instruction.c \
-	shift.c \
-	dr.c \
-	get.c \
-	test.c \
-	debug.c \
-	shell.c \
-	set.c \
-	endian.c \
-	parse.c \
-	peekpoke.c \
-	pod.c \
-	readmem.c \
-	writemem.c \
-	flashmem.c \
-	eraseflash.c \
-	include.c \
-	addpart.c \
-	cmd.c \
-	usleep.c \
-	jtag_data_dir.c
+libcmd_a_SOURCES =
+libcmd_a_SOURCES += cmd_frequency.c
+libcmd_a_SOURCES += cmd_cable.c
+libcmd_a_SOURCES += cmd_reset.c
+libcmd_a_SOURCES += cmd_discovery.c
+libcmd_a_SOURCES += cmd_idcode.c
+libcmd_a_SOURCES += cmd_detect.c
+libcmd_a_SOURCES += cmd_detectflash.c
+libcmd_a_SOURCES += cmd_help.c
+libcmd_a_SOURCES += cmd_quit.c
+libcmd_a_SOURCES += cmd_scan.c
+libcmd_a_SOURCES += cmd_signal.c
+libcmd_a_SOURCES += cmd_salias.c
+libcmd_a_SOURCES += cmd_bit.c
+libcmd_a_SOURCES += cmd_register.c
+libcmd_a_SOURCES += cmd_initbus.c
+libcmd_a_SOURCES += cmd_print.c
+libcmd_a_SOURCES += cmd_part.c
+libcmd_a_SOURCES += cmd_bus.c
+libcmd_a_SOURCES += cmd_instruction.c
+libcmd_a_SOURCES += cmd_shift.c
+libcmd_a_SOURCES += cmd_dr.c
+libcmd_a_SOURCES += cmd_get.c
+libcmd_a_SOURCES += cmd_test.c
+libcmd_a_SOURCES += cmd_debug.c
+libcmd_a_SOURCES += cmd_shell.c
+libcmd_a_SOURCES += cmd_set.c
+libcmd_a_SOURCES += cmd_endian.c
+libcmd_a_SOURCES += cmd_parse.c
+libcmd_a_SOURCES += cmd_peekpoke.c
+libcmd_a_SOURCES += cmd_pod.c
+libcmd_a_SOURCES += cmd_readmem.c
+libcmd_a_SOURCES += cmd_writemem.c
+libcmd_a_SOURCES += cmd_flashmem.c
+libcmd_a_SOURCES += cmd_eraseflash.c
+libcmd_a_SOURCES += cmd_include.c
+libcmd_a_SOURCES += cmd_addpart.c
+libcmd_a_SOURCES += cmd_cmd.c
+libcmd_a_SOURCES += cmd_usleep.c
+libcmd_a_SOURCES += cmd_jtag_data_dir.c
 
 if ENABLE_SVF
-libcmd_a_SOURCES += svf.c
+libcmd_a_SOURCES += cmd_svf.c
 endif
 
 if ENABLE_BSDL
-libcmd_a_SOURCES += bsdl.c
+libcmd_a_SOURCES += cmd_bsdl.c
 endif
 
 AM_CPPFLAGS = -DJTAG_BIN_DIR=\"$(bindir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
