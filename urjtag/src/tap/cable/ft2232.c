@@ -66,65 +66,65 @@
 #define MPSSE_WRITE_TMS 0x40    /* Write TMS/CS */
 
 /* FTDI MPSSE commands */
-#define SET_BITS_LOW   0x80
+#define SET_BITS_LOW    0x80
 /*BYTE DATA*/
 /*BYTE Direction*/
-#define SET_BITS_HIGH  0x82
+#define SET_BITS_HIGH   0x82
 /*BYTE DATA*/
 /*BYTE Direction*/
-#define GET_BITS_LOW   0x81
-#define GET_BITS_HIGH  0x83
-#define LOOPBACK_START 0x84
-#define LOOPBACK_END   0x85
-#define TCK_DIVISOR    0x86
-#define SEND_IMMEDIATE 0x87
+#define GET_BITS_LOW    0x81
+#define GET_BITS_HIGH   0x83
+#define LOOPBACK_START  0x84
+#define LOOPBACK_END    0x85
+#define TCK_DIVISOR     0x86
+#define SEND_IMMEDIATE  0x87
 
 
 /* bit and bitmask definitions for GPIO commands */
-#define BIT_TCK 0
-#define BIT_TDI 1
-#define BIT_TDO 2
-#define BIT_TMS 3
-#define BITMASK_TDO (1 << BIT_TDO)
-#define BITMASK_TDI (1 << BIT_TDI)
-#define BITMASK_TCK (1 << BIT_TCK)
-#define BITMASK_TMS (1 << BIT_TMS)
+#define BIT_TCK         0
+#define BIT_TDI         1
+#define BIT_TDO         2
+#define BIT_TMS         3
+#define BITMASK_TDO     (1 << BIT_TDO)
+#define BITMASK_TDI     (1 << BIT_TDI)
+#define BITMASK_TCK     (1 << BIT_TCK)
+#define BITMASK_TMS     (1 << BIT_TMS)
 
 /* bit and bitmask definitions for Amontec JTAGkey */
-#define BIT_JTAGKEY_nOE 4
-#define BIT_JTAGKEY_TRST_N_OUT 0
-#define BIT_JTAGKEY_SRST_N_OUT 1
+#define BIT_JTAGKEY_nOE         4
+#define BIT_JTAGKEY_TRST_N_OUT  0
+#define BIT_JTAGKEY_SRST_N_OUT  1
 #define BIT_JTAGKEY_TRST_N_OE_N 2
 #define BIT_JTAGKEY_SRST_N_OE_N 3
-#define BITMASK_JTAGKEY_nOE (1 << BIT_JTAGKEY_nOE)
+#define BITMASK_JTAGKEY_nOE     (1 << BIT_JTAGKEY_nOE)
 #define BITMASK_JTAGKEY_TRST_N_OUT (1 << BIT_JTAGKEY_TRST_N_OUT)
 #define BITMASK_JTAGKEY_SRST_N_OUT (1 << BIT_JTAGKEY_SRST_N_OUT)
 #define BITMASK_JTAGKEY_TRST_N_OE_N (1 << BIT_JTAGKEY_TRST_N_OE_N)
 #define BITMASK_JTAGKEY_SRST_N_OE_N (1 << BIT_JTAGKEY_SRST_N_OE_N)
 
 /* bit and bitmask definitions for Olimex ARM-USB-OCD */
-#define BIT_ARMUSBOCD_nOE 4
-#define BIT_ARMUSBOCD_nTRST 0
-#define BIT_ARMUSBOCD_nTSRST 1
+#define BIT_ARMUSBOCD_nOE       4
+#define BIT_ARMUSBOCD_nTRST     0
+#define BIT_ARMUSBOCD_nTSRST    1
 #define BIT_ARMUSBOCD_nTRST_nOE 2
-#define BIT_ARMUSBOCD_RED_LED 3
-#define BITMASK_ARMUSBOCD_nOE (1 << BIT_ARMUSBOCD_nOE)
+#define BIT_ARMUSBOCD_RED_LED   3
+#define BITMASK_ARMUSBOCD_nOE   (1 << BIT_ARMUSBOCD_nOE)
 #define BITMASK_ARMUSBOCD_nTRST (1 << BIT_ARMUSBOCD_nTRST)
 #define BITMASK_ARMUSBOCD_nTSRST (1 << BIT_ARMUSBOCD_nTSRST)
 #define BITMASK_ARMUSBOCD_nTRST_nOE (1 << BIT_ARMUSBOCD_nTRST_nOE)
 #define BITMASK_ARMUSBOCD_RED_LED (1 << BIT_ARMUSBOCD_RED_LED)
 
 /* bit and bitmask definitions for Blackfin gnICE */
-#define BIT_GNICE_nTRST 1
-#define BIT_GNICE_nLED 3
-#define BITMASK_GNICE_nTRST (1 << BIT_GNICE_nTRST)
-#define BITMASK_GNICE_nLED (1 << BIT_GNICE_nLED)
+#define BIT_GNICE_nTRST         1
+#define BIT_GNICE_nLED          3
+#define BITMASK_GNICE_nTRST     (1 << BIT_GNICE_nTRST)
+#define BITMASK_GNICE_nLED      (1 << BIT_GNICE_nLED)
 
 /* bit and bitmask definitions for OOCDLink-s */
 #define BIT_OOCDLINKS_nTRST_nOE 0
-#define BIT_OOCDLINKS_nTRST 1
+#define BIT_OOCDLINKS_nTRST     1
 #define BIT_OOCDLINKS_nSRST_nOE 2
-#define BIT_OOCDLINKS_nSRST 3
+#define BIT_OOCDLINKS_nSRST     3
 #define BITMASK_OOCDLINKS_nTRST_nOE (1 << BIT_OOCDLINKS_nTRST_nOE)
 #define BITMASK_OOCDLINKS_nTRST (1 << BIT_OOCDLINKS_nTRST)
 #define BITMASK_OOCDLINKS_nSRST_nOE (1 << BIT_OOCDLINKS_nSRST_nOE)
@@ -132,7 +132,7 @@
 
 /* bit and bitmask definitions for Turtelizer 2 */
 #define BIT_TURTELIZER2_nJTAGOE 4
-#define BIT_TURTELIZER2_RST 6
+#define BIT_TURTELIZER2_RST     6
 #define BIT_TURTELIZER2_nTX1LED 2
 #define BIT_TURTELIZER2_nRX1LED 3
 #define BITMASK_TURTELIZER2_nJTAGOE (1 << BIT_TURTELIZER2_nJTAGOE)
@@ -141,11 +141,11 @@
 #define BITMASK_TURTELIZER2_nRX1LED (1 << BIT_TURTELIZER2_nRX1LED)
 
 /* bit and bitmask definitions for USB to JTAG Interface */
-#define BIT_USBTOJTAGIF_nTRST 4
-#define BIT_USBTOJTAGIF_RST 6
-#define BIT_USBTOJTAGIF_DBGRQ 7
-#define BIT_USBTOJTAGIF_nRxLED 2
-#define BIT_USBTOJTAGIF_nTxLED 3
+#define BIT_USBTOJTAGIF_nTRST   4
+#define BIT_USBTOJTAGIF_RST     6
+#define BIT_USBTOJTAGIF_DBGRQ   7
+#define BIT_USBTOJTAGIF_nRxLED  2
+#define BIT_USBTOJTAGIF_nTxLED  3
 #define BITMASK_USBTOJTAGIF_nTRST (1 << BIT_USBTOJTAGIF_nTRST)
 #define BITMASK_USBTOJTAGIF_RST (1 << BIT_USBTOJTAGIF_RST)
 #define BITMASK_USBTOJTAGIF_DBGRQ (1 << BIT_USBTOJTAGIF_DBGRQ)
@@ -153,17 +153,17 @@
 #define BITMASK_USBTOJTAGIF_nTxLED (1 << BIT_USBTOJTAGIF_nTxLED)
 
 /* bit and bitmask definitions for Xverve DT-USB-ST Signalyzer Tool */
-#define BIT_SIGNALYZER_nTRST 4
-#define BIT_SIGNALYZER_nSRST 5
+#define BIT_SIGNALYZER_nTRST    4
+#define BIT_SIGNALYZER_nSRST    5
 #define BITMASK_SIGNALYZER_nTRST (1 << BIT_SIGNALYZER_nTRST)
 #define BITMASK_SIGNALYZER_nSRST (1 << BIT_SIGNALYZER_nSRST)
 
 /* bit and bitmask definitions for TinCanTools Flyswatter board*/
-#define BIT_FLYSWATTER_nLED2 3
-#define BIT_FLYSWATTER_nTRST 4
-#define BIT_FLYSWATTER_nSRST 5
-#define BIT_FLYSWATTER_nOE1  6
-#define BIT_FLYSWATTER_nOE2  7
+#define BIT_FLYSWATTER_nLED2    3
+#define BIT_FLYSWATTER_nTRST    4
+#define BIT_FLYSWATTER_nSRST    5
+#define BIT_FLYSWATTER_nOE1     6
+#define BIT_FLYSWATTER_nOE2     7
 #define BITMASK_FLYSWATTER_nLED2 (1 << BIT_FLYSWATTER_nLED2)
 #define BITMASK_FLYSWATTER_nTRST (1 << BIT_FLYSWATTER_nTRST)
 #define BITMASK_FLYSWATTER_nSRST (1 << BIT_FLYSWATTER_nSRST)
@@ -174,11 +174,11 @@
 /* usbScarabeus2 is a design of Krzysztof Kajstura ( http://www.kristech.eu ). */
 /* UrJTAG support added by Tomek Cedro ( http://www.tomek.cedro.info ) */
 /* as a part of work for TP R&D (Polish Telecom, FT/Orange Group) http://www.tp.pl */
-#define BIT_USBSCARAB2_nCONNECTED 5     //ADBUS
-#define BIT_USBSCARAB2_TRST 0   //ACBUS
-#define BIT_USBSCARAB2_nSRST 1  //ACBUS
-#define BIT_USBSCARAB2_LED 3    //ACBUS
-#define BITMASK_USBSCARAB2_LED (1 << BIT_USBSCARAB2_LED)
+#define BIT_USBSCARAB2_nCONNECTED 5     // ADBUS
+#define BIT_USBSCARAB2_TRST     0       // ACBUS
+#define BIT_USBSCARAB2_nSRST    1       // ACBUS
+#define BIT_USBSCARAB2_LED      3       // ACBUS
+#define BITMASK_USBSCARAB2_LED  (1 << BIT_USBSCARAB2_LED)
 #define BITMASK_USBSCARAB2_TRST (1 << BIT_USBSCARAB2_TRST)
 #define BITMASK_USBSCARAB2_nSRST (1 << BIT_USBSCARAB2_nSRST)
 #define BITMASK_USBSCARAB2_nCONNECTED (1 << BIT_USBSCARAB2_nCONNECTED)

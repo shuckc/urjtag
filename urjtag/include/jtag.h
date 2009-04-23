@@ -34,9 +34,9 @@
 #include "bus.h"
 #include "part.h"
 
-#define URJ_STATUS_OK            0
-#define URJ_STATUS_FAIL          1
-#define URJ_STATUS_SYNTAX_ERROR -1
+#define URJ_STATUS_OK             0
+#define URJ_STATUS_FAIL           1
+#define URJ_STATUS_SYNTAX_ERROR (-1)
 
 
 extern urj_bus_t *bus;

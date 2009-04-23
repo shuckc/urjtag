@@ -52,12 +52,12 @@ typedef struct
     urj_part_signal_t *noe;
 } bus_params_t;
 
-#define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
-#define	MA		((bus_params_t *) bus->params)->ma
-#define	MD		((bus_params_t *) bus->params)->md
-#define	BMS		((bus_params_t *) bus->params)->bms
-#define	nWE		((bus_params_t *) bus->params)->nwe
-#define	nOE		((bus_params_t *) bus->params)->noe
+#define LAST_ADR        ((bus_params_t *) bus->params)->last_adr
+#define MA              ((bus_params_t *) bus->params)->ma
+#define MD              ((bus_params_t *) bus->params)->md
+#define BMS             ((bus_params_t *) bus->params)->bms
+#define nWE             ((bus_params_t *) bus->params)->nwe
+#define nOE             ((bus_params_t *) bus->params)->noe
 
 /**
  * bus->driver->(*new_bus)

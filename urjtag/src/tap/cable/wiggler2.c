@@ -46,11 +46,11 @@
 /*
  * data D[7:0] (pins 9:2)
  */
-#define	TDI		3
-#define	TCK		2
-#define	TMS		1
-#define	TRST		4
-#define CPU_RESET 	0
+#define TDI             3
+#define TCK             2
+#define TMS             1
+#define TRST            4
+#define CPU_RESET       0
 
 /* Certain Macraigor Wigglers appear to use one of the unused data lines as a
    power line so set all unused bits high. */
@@ -63,7 +63,7 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO 	7
+#define TDO     7
 
 static int
 wiggler2_init (urj_cable_t *cable)

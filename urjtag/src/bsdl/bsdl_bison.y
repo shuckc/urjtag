@@ -146,10 +146,20 @@ int yylex (YYSTYPE *, void *);
 
 #if 1
 #define ERROR_LIMIT 0
-#define BUMP_ERROR if (urj_bsdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
-                          {Give_Up_And_Quit( priv_data ); YYABORT;}
+#define BUMP_ERROR \
+    do { \
+        if (urj_bsdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
+        { \
+            Give_Up_And_Quit( priv_data ); \
+            YYABORT; \
+        } \
+    } while (0)
 #else
-#define BUMP_ERROR {Give_Up_And_Quit( priv_data );YYABORT;}
+#define BUMP_ERROR \
+    do { \
+        Give_Up_And_Quit( priv_data ); \
+        YYABORT; \
+    } while (0)
 #endif
 
 static void Print_Error( urj_bsdl_parser_priv_t *, const char * );
@@ -506,7 +516,7 @@ Safe_Value      : IDENTIFIER
                     char *tmp;
                     tmp = (char *)malloc( 2 );
                     snprintf( tmp, 2, "%i", $1 );
-	            tmp[1] = '\0';
+                    tmp[1] = '\0';
                     $$ = tmp;
                   }
 ;

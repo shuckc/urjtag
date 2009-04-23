@@ -13,7 +13,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -43,28 +43,28 @@
 
 #include <cmd.h>
 
-#define GPIO_BASE		0xF1010000
-#define GPIO_OUT		(0x0100/4)
-#define GPIO_DIR		(0x0104/4)
-#define GPIO_INPOL		(0x010C/4)
-#define GPIO_IN			(0x0110/4)
-#define GPIO_INTEDGE		(0x0118/4)
-#define GPIO_INTLEV		(0x011C/4)
+#define GPIO_BASE               0xF1010000
+#define GPIO_OUT                (0x0100/4)
+#define GPIO_DIR                (0x0104/4)
+#define GPIO_INPOL              (0x010C/4)
+#define GPIO_IN                 (0x0110/4)
+#define GPIO_INTEDGE            (0x0118/4)
+#define GPIO_INTLEV             (0x011C/4)
 
-#define TDO			4
-#define TDI			2
-#define TMS			5
-#define TCK			1
+#define TDO                     4
+#define TDI                     2
+#define TMS                     5
+#define TCK                     1
 
-#define HGPIO(b)		(1 << (b))
-#define ts7800_TDO		HGPIO(TDO)
-#define ts7800_TDI		HGPIO(TDI)
-#define ts7800_TMS		HGPIO(TMS)
-#define ts7800_TCK		HGPIO(TCK)
+#define HGPIO(b)                (1 << (b))
+#define ts7800_TDO              HGPIO(TDO)
+#define ts7800_TDI              HGPIO(TDI)
+#define ts7800_TMS              HGPIO(TMS)
+#define ts7800_TCK              HGPIO(TCK)
 
-#define GPIO_INPUT_MASK		((ts7800_TCK)|(ts7800_TMS)|(ts7800_TDI))
-#define GPIO_OUTPUT_MASK	ts7800_TDO
-#define GPIO_BITMASK		(~((ts7800_TDO)|(ts7800_TDI)|(ts7800_TMS)|(ts7800_TCK)))
+#define GPIO_INPUT_MASK         ((ts7800_TCK)|(ts7800_TMS)|(ts7800_TDI))
+#define GPIO_OUTPUT_MASK        ts7800_TDO
+#define GPIO_BITMASK            (~((ts7800_TDO)|(ts7800_TDI)|(ts7800_TMS)|(ts7800_TCK)))
 
 typedef struct
 {

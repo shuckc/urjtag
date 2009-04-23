@@ -69,19 +69,19 @@
 #include "generic_bus.h"
 #include "tap_state.h"
 
-#define RAM_ADDR_WIDTH 18
-#define RAM_DATA_WIDTH 16
-#define FLASH_ADDR_WIDTH 19
-#define FLASH_DATA_WIDTH 8
+#define RAM_ADDR_WIDTH          18
+#define RAM_DATA_WIDTH          16
+#define FLASH_ADDR_WIDTH        19
+#define FLASH_DATA_WIDTH        8
 
 /* length is in number of bytes
    the full address width is taken to build the power of 2 */
-#define RAM_LENGTH (1 << (RAM_ADDR_WIDTH+1))
-#define FLASH_LENGTH (1 << FLASH_ADDR_WIDTH)
+#define RAM_LENGTH              (1 << (RAM_ADDR_WIDTH + 1))
+#define FLASH_LENGTH            (1 << FLASH_ADDR_WIDTH)
 
-#define RAMA_START 0
-#define RAMB_START RAM_LENGTH
-#define FLASH_START 2*RAM_LENGTH
+#define RAMA_START              0
+#define RAMB_START              RAM_LENGTH
+#define FLASH_START             (2 * RAM_LENGTH)
 
 typedef enum
 { RAM, FLASH, NAND } ctype_t;

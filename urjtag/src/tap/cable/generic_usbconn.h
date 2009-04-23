@@ -23,7 +23,7 @@
  */
 
 #ifndef URJ_TAP_CABLE_GENERIC_USBCONN_H
-#define	URJ_TAP_CABLE_GENERIC_USBCONN_H
+#define URJ_TAP_CABLE_GENERIC_USBCONN_H
 
 #include "cable.h"
 #include "usbconn.h"

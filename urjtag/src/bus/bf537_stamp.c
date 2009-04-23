@@ -51,16 +51,16 @@ typedef struct
     urj_part_signal_t *swe;
 } bus_params_t;
 
-#define	AMS	((bus_params_t *) bus->params)->ams
-#define	ADDR	((bus_params_t *) bus->params)->addr
-#define	DATA	((bus_params_t *) bus->params)->data
-#define	AWE	((bus_params_t *) bus->params)->awe
-#define	ARE	((bus_params_t *) bus->params)->are
-#define	ABE	((bus_params_t *) bus->params)->abe
-#define	SRAS	((bus_params_t *) bus->params)->sras
-#define	SCAS	((bus_params_t *) bus->params)->scas
-#define	SMS	((bus_params_t *) bus->params)->sms
-#define	SWE	((bus_params_t *) bus->params)->swe
+#define AMS     ((bus_params_t *) bus->params)->ams
+#define ADDR    ((bus_params_t *) bus->params)->addr
+#define DATA    ((bus_params_t *) bus->params)->data
+#define AWE     ((bus_params_t *) bus->params)->awe
+#define ARE     ((bus_params_t *) bus->params)->are
+#define ABE     ((bus_params_t *) bus->params)->abe
+#define SRAS    ((bus_params_t *) bus->params)->sras
+#define SCAS    ((bus_params_t *) bus->params)->scas
+#define SMS     ((bus_params_t *) bus->params)->sms
+#define SWE     ((bus_params_t *) bus->params)->swe
 
 /*
  * bus->driver->(*new_bus)
@@ -325,17 +325,17 @@ bf537_stamp_bus_printinfo (urj_bus_t *bus)
 }
 
 #define BF537_STAMP_BUS_FUNCTIONS \
-	bf537_stamp_bus_new, \
-	urj_bus_generic_free, \
-	bf537_stamp_bus_printinfo, \
-	urj_bus_generic_prepare_extest, \
-	bf537_stamp_bus_area, \
-	bf537_stamp_bus_read_start, \
-	bf537_stamp_bus_read_next, \
-	bf537_stamp_bus_read_end, \
-	urj_bus_generic_read, \
-	bf537_stamp_bus_write, \
-	urj_bus_generic_no_init
+        bf537_stamp_bus_new, \
+        urj_bus_generic_free, \
+        bf537_stamp_bus_printinfo, \
+        urj_bus_generic_prepare_extest, \
+        bf537_stamp_bus_area, \
+        bf537_stamp_bus_read_start, \
+        bf537_stamp_bus_read_next, \
+        bf537_stamp_bus_read_end, \
+        urj_bus_generic_read, \
+        bf537_stamp_bus_write, \
+        urj_bus_generic_no_init
 
 #ifdef ENABLE_BUS_BF537_STAMP
 

@@ -33,7 +33,7 @@
  */
 
 #ifndef URJ_BUS_DRIVER_BRUX_BUS_H
-#define	URJ_BUS_DRIVER_BRUX_BUS_H
+#define URJ_BUS_DRIVER_BRUX_BUS_H
 
 #include <stdint.h>
 
@@ -79,15 +79,15 @@ struct urj_bus
 
 extern urj_bus_t *bus;
 
-#define	URJ_BUS_PRINTINFO(bus)	(bus)->driver->printinfo(bus)
-#define	URJ_BUS_PREPARE(bus)	(bus)->driver->prepare(bus)
-#define	URJ_BUS_AREA(bus,adr,a)	(bus)->driver->area(bus,adr,a)
-#define	URJ_BUS_READ_START(bus,adr)	(bus)->driver->read_start(bus,adr)
-#define	URJ_BUS_READ_NEXT(bus,adr)	(bus)->driver->read_next(bus,adr)
-#define	URJ_BUS_READ_END(bus)	(bus)->driver->read_end(bus)
-#define	URJ_BUS_READ(bus,adr)	(bus)->driver->read(bus,adr)
-#define	URJ_BUS_WRITE(bus,adr,data)	(bus)->driver->write(bus,adr,data)
-#define	URJ_BUS_FREE(bus)		(bus)->driver->free_bus(bus)
-#define	URJ_BUS_INIT(bus)		(bus)->driver->init(bus)
+#define URJ_BUS_PRINTINFO(bus)          (bus)->driver->printinfo(bus)
+#define URJ_BUS_PREPARE(bus)            (bus)->driver->prepare(bus)
+#define URJ_BUS_AREA(bus,adr,a)         (bus)->driver->area(bus,adr,a)
+#define URJ_BUS_READ_START(bus,adr)     (bus)->driver->read_start(bus,adr)
+#define URJ_BUS_READ_NEXT(bus,adr)      (bus)->driver->read_next(bus,adr)
+#define URJ_BUS_READ_END(bus)           (bus)->driver->read_end(bus)
+#define URJ_BUS_READ(bus,adr)           (bus)->driver->read(bus,adr)
+#define URJ_BUS_WRITE(bus,adr,data)     (bus)->driver->write(bus,adr,data)
+#define URJ_BUS_FREE(bus)               (bus)->driver->free_bus(bus)
+#define URJ_BUS_INIT(bus)               (bus)->driver->init(bus)
 
 #endif /* URJ_BUS_DRIVER_BRUX_BUS_H */

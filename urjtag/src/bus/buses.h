@@ -23,7 +23,7 @@
  */
 
 #ifndef URJ_BUS_BUSES_H
-#define	URJ_BUS_BUSES_H
+#define URJ_BUS_BUSES_H
 
 extern const urj_bus_driver_t au1500_bus;
 extern const urj_bus_driver_t avr32_bus_driver;

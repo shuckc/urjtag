@@ -146,10 +146,20 @@ int yylex (YYSTYPE *, void *);
 
 #if 1
 #define ERROR_LIMIT 15
-#define BUMP_ERROR if (urj_vhdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
-                          {Give_Up_And_Quit( priv_data );YYABORT;}
+#define BUMP_ERROR \
+    do { \
+        if (urj_vhdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
+        { \
+            Give_Up_And_Quit( priv_data ); \
+            YYABORT; \
+        } \
+    } while (0)
 #else
-#define BUMP_ERROR {Give_Up_And_Quit( priv_data );YYABORT;}
+#define BUMP_ERROR \
+    do { \
+        Give_Up_And_Quit( priv_data ); \
+        YYABORT; \
+    } while (0)
 #endif
 
 static void Init_Text( urj_bsdl_vhdl_parser_priv_t * );
@@ -487,7 +497,7 @@ VHDL_Constant      : CONSTANT VHDL_Constant_Part
 ;
 VHDL_Constant_Part : IDENTIFIER COLON PIN_MAP_STRING COLON_EQUAL
                      Quoted_String SEMICOLON
-		     // { set_attr_const( priv_data, $1, strdup( "PIN_MAP_STRING" ) ); }
+                     // { set_attr_const( priv_data, $1, strdup( "PIN_MAP_STRING" ) ); }
                      { free( $1 ); }
 ;
 VHDL_Attribute     : ATTRIBUTE VHDL_Attribute_Types
@@ -509,7 +519,7 @@ VHDL_Attr_Boolean  : IDENTIFIER OF IDENTIFIER COLON SIGNAL IS Boolean SEMICOLON
                        //free( $3 );
                        /* skip boolean attributes for the time being */
                        free( $1 ); free( $3 );
-		     }
+                     }
 ;
 Boolean            : TRUE
                      { $$ = 1; }
@@ -520,23 +530,23 @@ VHDL_Attr_Decimal : IDENTIFIER OF IDENTIFIER COLON ENTITY IS DECIMAL_NUMBER SEMI
                     {
                       set_attr_decimal( priv_data, $1, $7 );
                       free( $3 );
-		    }
+                    }
 ;
 VHDL_Attr_Real   : IDENTIFIER OF IDENTIFIER COLON SIGNAL IS LPAREN REAL_NUMBER COMMA Stop RPAREN SEMICOLON
                    {
-		     //set_attr_real( priv_data, $1, $8 );
-		     //free( $3 );
+                     //set_attr_real( priv_data, $1, $8 );
+                     //free( $3 );
                      /* skip real attributes for the time being */
                      free( $1 ); free( $3 ); free( $8 );
-		   }
+                   }
 ;
 Stop             : LOW | BOTH
 ;
 VHDL_Attr_String : IDENTIFIER OF IDENTIFIER COLON ENTITY IS Quoted_String SEMICOLON
                    {
-		     set_attr_string( priv_data, $1, strdup( priv_data->buffer ) );
-		     free( $3 );
-		   }
+                     set_attr_string( priv_data, $1, strdup( priv_data->buffer ) );
+                     free( $3 );
+                   }
 ;
 VHDL_Attr_PhysicalPinMap : IDENTIFIER OF IDENTIFIER COLON ENTITY IS PHYSICAL_PIN_MAP SEMICOLON
                            { free( $1 ); free( $3 ); }

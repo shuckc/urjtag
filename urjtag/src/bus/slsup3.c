@@ -66,14 +66,14 @@ typedef struct
     urj_part_signal_t *lcdrw;
 } bus_params_t;
 
-#define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
-#define	AD		((bus_params_t *) bus->params)->ad
+#define LAST_ADR        ((bus_params_t *) bus->params)->last_adr
+#define AD              ((bus_params_t *) bus->params)->ad
 #define DQ              ((bus_params_t *) bus->params)->dq
-#define	nSDce		((bus_params_t *) bus->params)->nsdce
-#define	nOE		((bus_params_t *) bus->params)->noe
+#define nSDce           ((bus_params_t *) bus->params)->nsdce
+#define nOE             ((bus_params_t *) bus->params)->noe
 #define nSRce           ((bus_params_t *) bus->params)->nsrce
-#define	nFLce		((bus_params_t *) bus->params)->nflce
-#define	nFLbyte		((bus_params_t *) bus->params)->nflbyte
+#define nFLce           ((bus_params_t *) bus->params)->nflce
+#define nFLbyte         ((bus_params_t *) bus->params)->nflbyte
 #define nFLby           ((bus_params_t *) bus->params)->nflby
 #define nWE             ((bus_params_t *) bus->params)->nwe
 #define SDclk           ((bus_params_t *) bus->params)->sdclk

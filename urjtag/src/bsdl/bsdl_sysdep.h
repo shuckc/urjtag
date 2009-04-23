@@ -23,23 +23,23 @@
  */
 
 #ifndef BSDL_SYSDEP_H
-#define	BSDL_SYSDEP_H
+#define BSDL_SYSDEP_H
 
 
 #include "bsdl_config.h"
 
 #include "gettext.h"
-#define	_(s)		gettext(s)
-#define	N_(s)		gettext_noop(s)
-#define	P_(s,p,n)	ngettext(s,p,n)
+#define _(s)            gettext(s)
+#define N_(s)           gettext_noop(s)
+#define P_(s,p,n)       ngettext(s,p,n)
 
 #ifdef S_SPLINT_S
-#undef gettext
-#define	gettext(s)	s
-#undef gettext_noop
-#define	gettext_noop(s)	s
-#undef ngettext
-#define	ngettext(s,p,n)	s
+#  undef gettext
+#  define gettext(s)      s
+#  undef gettext_noop
+#  define gettext_noop(s) s
+#  undef ngettext
+#  define ngettext(s,p,n) s
 #endif
 
 #endif /* BSDL_SYSDEP_H */

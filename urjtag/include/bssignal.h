@@ -24,7 +24,7 @@
  */
 
 #ifndef URJ_BSSIGNAL_H
-#define	URJ_BSSIGNAL_H
+#define URJ_BSSIGNAL_H
 
 typedef struct urj_part_signal urj_part_signal_t;
 

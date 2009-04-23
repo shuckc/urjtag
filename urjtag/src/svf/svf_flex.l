@@ -58,9 +58,10 @@ int yywrap(yyscan_t scanner)
   return(1);
 }
 
-#define YY_USER_INIT { \
-  yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 0; \
-}
+#define YY_USER_INIT \
+    do { \
+        yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 0; \
+    } while (0)
 
 %}
 

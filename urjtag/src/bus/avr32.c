@@ -52,80 +52,80 @@ typedef struct
     uint32_t rwcs_wr;
 } bus_params_t;
 
-#define BUS_MODE_OCD	0
-#define BUS_MODE_HSBC	1
-#define BUS_MODE_HSBU	2
-#define BUS_MODE_x8	3
-#define BUS_MODE_x16	4
-#define BUS_MODE_x32	5
+#define BUS_MODE_OCD    0
+#define BUS_MODE_HSBC   1
+#define BUS_MODE_HSBU   2
+#define BUS_MODE_x8     3
+#define BUS_MODE_x16    4
+#define BUS_MODE_x32    5
 
-#define BP (( bus_params_t *) bus->params)
-#define SLAVE		(BP->slave)
-#define MODE		(BP->mode)
-#define ADDR_MASK	(BP->addr_mask)
-#define RWCS_RD		(BP->rwcs_rd)
-#define RWCS_WR		(BP->rwcs_wr)
+#define BP              ((bus_params_t *) bus->params)
+#define SLAVE           (BP->slave)
+#define MODE            (BP->mode)
+#define ADDR_MASK       (BP->addr_mask)
+#define RWCS_RD         (BP->rwcs_rd)
+#define RWCS_WR         (BP->rwcs_wr)
 
 /* ------------------------------------------------------------------------- */
-#define SAB_SLAVE_OCD		1
-#define SAB_SLAVE_HSB_CACHED	4
-#define SAB_SLAVE_HSB_UNCACHED	5
+#define SAB_SLAVE_OCD           1
+#define SAB_SLAVE_HSB_CACHED    4
+#define SAB_SLAVE_HSB_UNCACHED  5
 
-#define ACCESS_MODE_WRITE	0
-#define ACCESS_MODE_READ	1
+#define ACCESS_MODE_WRITE       0
+#define ACCESS_MODE_READ        1
 
-#define ACCESS_STATUS_OK	0
-#define ACCESS_STATUS_ERR	-1
+#define ACCESS_STATUS_OK        0
+#define ACCESS_STATUS_ERR       -1
 
-#define SAB_OCD_AREA_SIZE	UINT64_C(0x1000)
-#define SAB_OCD_ADDR_MASK	0xfff
-#define SAB_HSB_AREA_SIZE	UINT64_C(0x100000000)
-#define SAB_HSB_ADDR_MASK	0xffffffff
+#define SAB_OCD_AREA_SIZE       UINT64_C(0x1000)
+#define SAB_OCD_ADDR_MASK       0xfff
+#define SAB_HSB_AREA_SIZE       UINT64_C(0x100000000)
+#define SAB_HSB_ADDR_MASK       0xffffffff
 
 /* OCD register addresses */
-#define OCD_REG_RWCS		0x1c
-#define OCD_REG_RWA		0x24
-#define OCD_REG_RWD		0x28
+#define OCD_REG_RWCS            0x1c
+#define OCD_REG_RWA             0x24
+#define OCD_REG_RWD             0x28
 
 /* OCD RWCS register definitions */
-#define OCD_RWCS_AC		0x80000000      /* start access */
-#define OCD_RWCS_SZ32		0x10000000      /* word access */
-#define OCD_RWCS_SZ16		0x08000000      /* half-word access */
-#define OCD_RWCS_SZ8		0x00000000      /* byte access */
-#define OCD_RWCS_RW		0x40000000      /* access mode 0:read, 1: write */
-#define OCD_RWCS_CNT_S		2
-#define OCD_RWCS_ERR		0x00000002      /* last access generated and error */
-#define OCD_RWCS_DV		0x00000001      /* data is valid */
+#define OCD_RWCS_AC             0x80000000      /* start access */
+#define OCD_RWCS_SZ32           0x10000000      /* word access */
+#define OCD_RWCS_SZ16           0x08000000      /* half-word access */
+#define OCD_RWCS_SZ8            0x00000000      /* byte access */
+#define OCD_RWCS_RW             0x40000000      /* access mode 0:read, 1: write */
+#define OCD_RWCS_CNT_S          2
+#define OCD_RWCS_ERR            0x00000002      /* last access generated and error */
+#define OCD_RWCS_DV             0x00000001      /* data is valid */
 
 /* shorthands */
-#define OCD_RWCS_READONE	(OCD_RWCS_AC | (1 << OCD_RWCS_CNT_S))
-#define OCD_RWCS_WRITEONE	(OCD_RWCS_READONE | OCD_RWCS_RW)
-#define OCD_RWCS_READ8		(OCD_RWCS_READONE | OCD_RWCS_SZ8)
-#define OCD_RWCS_WRITE8		(OCD_RWCS_WRITEONE | OCD_RWCS_SZ8)
-#define OCD_RWCS_READ16		(OCD_RWCS_READONE | OCD_RWCS_SZ16)
-#define OCD_RWCS_WRITE16	(OCD_RWCS_WRITEONE | OCD_RWCS_SZ16)
-#define OCD_RWCS_READ32		(OCD_RWCS_READONE | OCD_RWCS_SZ32)
-#define OCD_RWCS_WRITE32	(OCD_RWCS_WRITEONE | OCD_RWCS_SZ32)
+#define OCD_RWCS_READONE        (OCD_RWCS_AC | (1 << OCD_RWCS_CNT_S))
+#define OCD_RWCS_WRITEONE       (OCD_RWCS_READONE | OCD_RWCS_RW)
+#define OCD_RWCS_READ8          (OCD_RWCS_READONE | OCD_RWCS_SZ8)
+#define OCD_RWCS_WRITE8         (OCD_RWCS_WRITEONE | OCD_RWCS_SZ8)
+#define OCD_RWCS_READ16         (OCD_RWCS_READONE | OCD_RWCS_SZ16)
+#define OCD_RWCS_WRITE16        (OCD_RWCS_WRITEONE | OCD_RWCS_SZ16)
+#define OCD_RWCS_READ32         (OCD_RWCS_READONE | OCD_RWCS_SZ32)
+#define OCD_RWCS_WRITE32        (OCD_RWCS_WRITEONE | OCD_RWCS_SZ32)
 
-#define DBG_BASIC	0x0001
-#define DBG_SHIFT	0x0002
-#define DBG_TRACE	0x8000
+#define DBG_BASIC       0x0001
+#define DBG_SHIFT       0x0002
+#define DBG_TRACE       0x8000
 
-#define DBG_ALL		0xffff
+#define DBG_ALL         0xffff
 
-#define DBG_LEVEL	0
+#define DBG_LEVEL       0
 
-#define DBG(t, f, ...)						\
-	do {							\
-		if (DBG_LEVEL & (t))				\
-			printf( f, ## __VA_ARGS__ );		\
-	} while (0)
+#define DBG(t, f, ...)                                          \
+        do {                                                    \
+                if (DBG_LEVEL & (t))                            \
+                        printf( f, ## __VA_ARGS__ );            \
+        } while (0)
 
-#define TRACE_ENTER()	DBG(DBG_TRACE, ">>> %s", __FUNCTION__ )
-#define TRACE_EXIT()	DBG(DBG_TRACE, "<<< %s", __FUNCTION__ )
+#define TRACE_ENTER()   DBG(DBG_TRACE, ">>> %s", __FUNCTION__ )
+#define TRACE_EXIT()    DBG(DBG_TRACE, "<<< %s", __FUNCTION__ )
 
-#define ERR(f, ...)	\
-	printf( _("%s(%d): error, " f), __FILE__, __LINE__, ## __VA_ARGS__ )
+#define ERR(f, ...)     \
+        printf( _("%s(%d): error, " f), __FILE__, __LINE__, ## __VA_ARGS__ )
 
 /* ------------------------------------------------------------------------- */
 

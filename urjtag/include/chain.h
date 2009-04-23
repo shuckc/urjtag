@@ -23,7 +23,7 @@
  */
 
 #ifndef URJ_CHAIN_H
-#define	URJ_CHAIN_H
+#define URJ_CHAIN_H
 
 #include "part.h"
 #include "pod.h"
@@ -33,10 +33,10 @@ typedef struct urj_chain urj_chain_t;
 #include "cable.h"
 #include "bsdl.h"
 
-#define URJ_CHAIN_EXITMODE_SHIFT 0
-#define URJ_CHAIN_EXITMODE_IDLE  1
-#define URJ_CHAIN_EXITMODE_EXIT1 2
-#define URJ_CHAIN_EXITMODE_UPDATE 3
+#define URJ_CHAIN_EXITMODE_SHIFT        0
+#define URJ_CHAIN_EXITMODE_IDLE         1
+#define URJ_CHAIN_EXITMODE_EXIT1        2
+#define URJ_CHAIN_EXITMODE_UPDATE       3
 
 struct urj_chain
 {

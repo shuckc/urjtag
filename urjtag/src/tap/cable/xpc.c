@@ -425,11 +425,11 @@ xpc_ext_free (urj_cable_t *cable)
 
 /* ---------------------------------------------------------------------- */
 
-#define	PROG 3
-#define	TCK	2
-#define TMS 1
-#define	TDI	0
-#define	TDO	0
+#define PROG    3
+#define TCK     2
+#define TMS     1
+#define TDI     0
+#define TDO     0
 
 static void
 xpc_clock (urj_cable_t *cable, int tms, int tdi, int n)

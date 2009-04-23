@@ -52,14 +52,14 @@ typedef struct
     urj_part_signal_t *d[32];
 } bus_params_t;
 
-#define	boot_nFOE	((bus_params_t *) bus->params)->boot_nfoe
-#define	boot_SDMA1	((bus_params_t *) bus->params)->boot_sdma1
-#define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
-#define	AR		((bus_params_t *) bus->params)->ar
-#define	nRCS0		((bus_params_t *) bus->params)->nrcs0
-#define	nWE		((bus_params_t *) bus->params)->nwe
-#define	nFOE		((bus_params_t *) bus->params)->nfoe
-#define	D		((bus_params_t *) bus->params)->d
+#define boot_nFOE       ((bus_params_t *) bus->params)->boot_nfoe
+#define boot_SDMA1      ((bus_params_t *) bus->params)->boot_sdma1
+#define LAST_ADR        ((bus_params_t *) bus->params)->last_adr
+#define AR              ((bus_params_t *) bus->params)->ar
+#define nRCS0           ((bus_params_t *) bus->params)->nrcs0
+#define nWE             ((bus_params_t *) bus->params)->nwe
+#define nFOE            ((bus_params_t *) bus->params)->nfoe
+#define D               ((bus_params_t *) bus->params)->d
 
 static int BUS_WIDTH = 8;
 static char REVBITS = 0;

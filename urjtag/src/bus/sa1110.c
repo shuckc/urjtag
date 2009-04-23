@@ -50,12 +50,12 @@ typedef struct
     urj_part_signal_t *noe;
 } bus_params_t;
 
-#define	A	((bus_params_t *) bus->params)->a
-#define	D	((bus_params_t *) bus->params)->d
-#define	nCS	((bus_params_t *) bus->params)->ncs
-#define	RD_nWR	((bus_params_t *) bus->params)->rd_nwr
-#define	nWE	((bus_params_t *) bus->params)->nwe
-#define	nOE	((bus_params_t *) bus->params)->noe
+#define A       ((bus_params_t *) bus->params)->a
+#define D       ((bus_params_t *) bus->params)->d
+#define nCS     ((bus_params_t *) bus->params)->ncs
+#define RD_nWR  ((bus_params_t *) bus->params)->rd_nwr
+#define nWE     ((bus_params_t *) bus->params)->nwe
+#define nOE     ((bus_params_t *) bus->params)->noe
 
 /**
  * bus->driver->(*new_bus)

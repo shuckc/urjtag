@@ -24,7 +24,7 @@
  */
 
 #ifndef URJ_PARPORT_H
-#define	URJ_PARPORT_H
+#define URJ_PARPORT_H
 
 #include <stdint.h>
 

@@ -48,9 +48,9 @@ typedef struct
     urj_part_signal_t *io_oe_l;
 } bus_params_t;
 
-#define IO_AD ((bus_params_t *) bus->params)->io_ad
+#define IO_AD   ((bus_params_t *) bus->params)->io_ad
 #define IO_CS_L ((bus_params_t *) bus->params)->io_cs_l
-#define IO_RW ((bus_params_t *) bus->params)->io_rw
+#define IO_RW   ((bus_params_t *) bus->params)->io_rw
 #define IO_WR_L ((bus_params_t *) bus->params)->io_wr_l
 #define IO_OE_L ((bus_params_t *) bus->params)->io_oe_l
 

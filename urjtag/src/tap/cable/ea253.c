@@ -35,10 +35,10 @@
 /*
  * data D[7:0] (pins 9:2)
  */
-#define	TDI	0
-#define	TCK	1
-#define	TMS	2
-#define	TRST	4
+#define TDI     0
+#define TCK     1
+#define TMS     2
+#define TRST    4
 
 /*
  * 7 - BUSY (pin 11)
@@ -47,7 +47,7 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO	4
+#define TDO     4
 
 static int
 ea253_init (urj_cable_t *cable)

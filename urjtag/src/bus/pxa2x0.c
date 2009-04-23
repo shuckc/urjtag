@@ -53,8 +53,8 @@
  * below
  */
 
-#define PROC_PXA25x	1       // including px26x series
-#define PROC_PXA27x	2
+#define PROC_PXA25x     1       // including px26x series
+#define PROC_PXA27x     2
 
 
 #define nCS_TOTAL 6
@@ -121,20 +121,20 @@ typedef struct
     int proc;
 } bus_params_t;
 
-#define PROC	((bus_params_t *) bus->params)->proc
-#define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
-#define	MA		((bus_params_t *) bus->params)->ma
-#define	MD		((bus_params_t *) bus->params)->md
-#define	nCS		((bus_params_t *) bus->params)->ncs
-#define	DQM		((bus_params_t *) bus->params)->dqm
-#define	RDnWR		((bus_params_t *) bus->params)->rdnwr
-#define	nWE		((bus_params_t *) bus->params)->nwe
-#define	nOE		((bus_params_t *) bus->params)->noe
-#define	nSDCAS		((bus_params_t *) bus->params)->nsdcas
+#define PROC            ((bus_params_t *) bus->params)->proc
+#define LAST_ADR        ((bus_params_t *) bus->params)->last_adr
+#define MA              ((bus_params_t *) bus->params)->ma
+#define MD              ((bus_params_t *) bus->params)->md
+#define nCS             ((bus_params_t *) bus->params)->ncs
+#define DQM             ((bus_params_t *) bus->params)->dqm
+#define RDnWR           ((bus_params_t *) bus->params)->rdnwr
+#define nWE             ((bus_params_t *) bus->params)->nwe
+#define nOE             ((bus_params_t *) bus->params)->noe
+#define nSDCAS          ((bus_params_t *) bus->params)->nsdcas
 
-#define	MC_pointer	(&((bus_params_t *) bus->params)->MC_registers)
+#define MC_pointer      (&((bus_params_t *) bus->params)->MC_registers)
 
-#define	INITED		((bus_params_t *) bus->params)->inited
+#define INITED          ((bus_params_t *) bus->params)->inited
 
 /**
  * bus->driver->(*new_bus)

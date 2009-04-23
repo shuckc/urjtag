@@ -43,10 +43,10 @@
 /*
  * data D[7:0] (pins 9:2)
  */
-#define	TDI	6
-#define	TCK	0
-#define	TMS	1
-#define	BB_CHECK	5
+#define TDI             6
+#define TCK             0
+#define TMS             1
+#define BB_CHECK        5
 
 /*
  * 7 - BUSY (pin 11)
@@ -55,9 +55,9 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO	7
-#define	BB_PRESENT	6
-#define	VCC_OK_N	3
+#define TDO             7
+#define BB_PRESENT      6
+#define VCC_OK_N        3
 
 /*
  * 0 - STROBE (pin 1)
@@ -65,7 +65,7 @@
  * 2 - INIT (pin 16)
  * 3 - SELECT (pin 17)
 */
-#define	BB_ENABLE	0xC
+#define BB_ENABLE       0xC
 
 static int
 byteblaster_init (urj_cable_t *cable)

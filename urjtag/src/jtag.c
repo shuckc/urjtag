@@ -60,9 +60,9 @@ int big_endian = 0;
 int interactive = 0;
 extern urj_flash_cfi_array_t *cfi_array;
 
-#define	JTAGDIR		".jtag"
-#define	HISTORYFILE	"history"
-#define	RCFILE		"rc"
+#define JTAGDIR         ".jtag"
+#define HISTORYFILE     "history"
+#define RCFILE          "rc"
 
 static void
 jtag_create_jtagdir (void)

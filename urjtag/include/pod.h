@@ -22,7 +22,7 @@
  */
 
 #ifndef URJ_POD_H
-#define	URJ_POD_H
+#define URJ_POD_H
 
 typedef enum
 {

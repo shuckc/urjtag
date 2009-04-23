@@ -44,11 +44,11 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDI	0
-#define	TCK	1
-#define	TMS	2
-#define	TRST	4
-#define	TDO	6
+#define TDI     0
+#define TCK     1
+#define TMS     2
+#define TRST    4
+#define TDO     6
 
 
 static int

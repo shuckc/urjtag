@@ -23,7 +23,7 @@
  */
 
 #ifndef URJ_TAP_CABLE_GENERIC_PARPORT_H
-#define	URJ_TAP_CABLE_GENERIC_PARPORT_H
+#define URJ_TAP_CABLE_GENERIC_PARPORT_H
 
 #include "cable.h"
 #include "parport.h"

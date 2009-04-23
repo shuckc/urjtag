@@ -48,23 +48,23 @@ typedef struct
     int ashift;
 } bus_params_t;
 
-#define	A	((bus_params_t *) bus->params)->a
-#define	D	((bus_params_t *) bus->params)->d
-#define	CS	((bus_params_t *) bus->params)->cs
-#define	WE	((bus_params_t *) bus->params)->we
-#define	OE	((bus_params_t *) bus->params)->oe
+#define A       ((bus_params_t *) bus->params)->a
+#define D       ((bus_params_t *) bus->params)->d
+#define CS      ((bus_params_t *) bus->params)->cs
+#define WE      ((bus_params_t *) bus->params)->we
+#define OE      ((bus_params_t *) bus->params)->oe
 
-#define	ALSBI	((bus_params_t *) bus->params)->alsbi
-#define	AMSBI	((bus_params_t *) bus->params)->amsbi
-#define	AI	((bus_params_t *) bus->params)->ai
-#define	AW	((bus_params_t *) bus->params)->aw
-#define	DLSBI	((bus_params_t *) bus->params)->dlsbi
-#define	DMSBI	((bus_params_t *) bus->params)->dmsbi
-#define	DI	((bus_params_t *) bus->params)->di
-#define	DW	((bus_params_t *) bus->params)->dw
-#define	CSA	((bus_params_t *) bus->params)->csa
-#define	WEA	((bus_params_t *) bus->params)->wea
-#define	OEA	((bus_params_t *) bus->params)->oea
+#define ALSBI   ((bus_params_t *) bus->params)->alsbi
+#define AMSBI   ((bus_params_t *) bus->params)->amsbi
+#define AI      ((bus_params_t *) bus->params)->ai
+#define AW      ((bus_params_t *) bus->params)->aw
+#define DLSBI   ((bus_params_t *) bus->params)->dlsbi
+#define DMSBI   ((bus_params_t *) bus->params)->dmsbi
+#define DI      ((bus_params_t *) bus->params)->di
+#define DW      ((bus_params_t *) bus->params)->dw
+#define CSA     ((bus_params_t *) bus->params)->csa
+#define WEA     ((bus_params_t *) bus->params)->wea
+#define OEA     ((bus_params_t *) bus->params)->oea
 
 #define ASHIFT ((bus_params_t *) bus->params)->ashift
 

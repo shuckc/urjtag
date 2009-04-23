@@ -76,11 +76,11 @@ typedef struct
     void (*readarray) (urj_flash_cfi_array_t *cfi_array);
 } urj_flash_driver_t;
 
-#define	URJ_FLASH_ERROR_NOERROR			0
-#define	URJ_FLASH_ERROR_INVALID_COMMAND_SEQUENCE	1
-#define	URJ_FLASH_ERROR_LOW_VPEN			2
-#define	URJ_FLASH_ERROR_BLOCK_LOCKED		3
-#define	URJ_FLASH_ERROR_UNKNOWN			99
+#define URJ_FLASH_ERROR_NOERROR                         0
+#define URJ_FLASH_ERROR_INVALID_COMMAND_SEQUENCE        1
+#define URJ_FLASH_ERROR_LOW_VPEN                        2
+#define URJ_FLASH_ERROR_BLOCK_LOCKED                    3
+#define URJ_FLASH_ERROR_UNKNOWN                         99
 
 void urj_flash_detectflash (urj_bus_t *bus, uint32_t adr);
 

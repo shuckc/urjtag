@@ -48,14 +48,14 @@ typedef struct
     urj_part_signal_t *nce;
 } bus_params_t;
 
-#define	AMS	((bus_params_t *) bus->params)->ams
-#define	ADDR	((bus_params_t *) bus->params)->addr
-#define	DATA	((bus_params_t *) bus->params)->data
-#define AOE	((bus_params_t *) bus->params)->aoe
-#define	AWE	((bus_params_t *) bus->params)->awe
-#define	ARE	((bus_params_t *) bus->params)->are
-#define	DCS0	((bus_params_t *) bus->params)->dcs0
-#define NCE	((bus_params_t *) bus->params)->nce
+#define AMS     ((bus_params_t *) bus->params)->ams
+#define ADDR    ((bus_params_t *) bus->params)->addr
+#define DATA    ((bus_params_t *) bus->params)->data
+#define AOE     ((bus_params_t *) bus->params)->aoe
+#define AWE     ((bus_params_t *) bus->params)->awe
+#define ARE     ((bus_params_t *) bus->params)->are
+#define DCS0    ((bus_params_t *) bus->params)->dcs0
+#define NCE     ((bus_params_t *) bus->params)->nce
 
 /**
  * bus->driver->(*new_bus)

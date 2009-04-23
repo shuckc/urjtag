@@ -48,12 +48,12 @@
 /*
  * data D[7:0] (pins 9:2)
  */
-#define	TDI	1
-#define	TCK	0
-#define	TMS	2
-#define	TRST	3
-#define SRESET	4
-#define ENAB	5               /* not programmed, since it's always 0 */
+#define TDI     1
+#define TCK     0
+#define TMS     2
+#define TRST    3
+#define SRESET  4
+#define ENAB    5               /* not programmed, since it's always 0 */
 
 /*
  * status
@@ -64,7 +64,7 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO 	7
+#define TDO     7
 
 static int
 triton_init (urj_cable_t *cable)

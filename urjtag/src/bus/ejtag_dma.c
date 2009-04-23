@@ -54,33 +54,33 @@ typedef struct
     uint32_t impcode;           /* EJTAG Implementation Register */
 } bus_params_t;
 
-#define BP ((bus_params_t *) bus->params)
+#define BP              ((bus_params_t *) bus->params)
 
-#define EJTAG_VER ((BP->impcode >> 29) & 7)
-#define EJTAG_20	0
-#define EJTAG_25	1
-#define EJTAG_26	2
+#define EJTAG_VER       ((BP->impcode >> 29) & 7)
+#define EJTAG_20        0
+#define EJTAG_25        1
+#define EJTAG_26        2
 
 /* EJTAG control register bits */
-#define PerRst		20
-#define PRnW		19
-#define PrAcc		18
-#define PrRst		16
-#define ProbEn		15
-#define JtagBrk		12
-#define BrkSt		 3
-#define Rocc		31
-#define ProbTrap	14
+#define PerRst          20
+#define PRnW            19
+#define PrAcc           18
+#define PrRst           16
+#define ProbEn          15
+#define JtagBrk         12
+#define BrkSt            3
+#define Rocc            31
+#define ProbTrap        14
 
 /* DMA */
-#define DmaAcc      17
-#define DstRt       11
-#define DmaRwn       9
-#define Derr      10
+#define DmaAcc          17
+#define DstRt           11
+#define DmaRwn           9
+#define Derr            10
 // default : DMA tranfser size BYTE
-#define DMA_HALFWORD 7
-#define DMA_WORD     8
-#define DMA_BYTE     0
+#define DMA_HALFWORD     7
+#define DMA_WORD         8
+#define DMA_BYTE         0
 
 /**
  * bus->driver->(*new_bus)

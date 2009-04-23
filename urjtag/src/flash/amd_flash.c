@@ -56,15 +56,15 @@
 #define AMD_EMBEDDED_PROGRAM_ALGORITHM
 #define AMD_UNDEFINED_MODE
 
-#define FLASH_ERASE_ERROR			-5
-#define ERASE_FLASH_SUCCESS			1
+#define FLASH_ERASE_ERROR                       (-5)
+#define ERASE_FLASH_SUCCESS                     1
 
-#define AMD_29xx040B	1
+#define AMD_29xx040B    1
 
-#define AMD_BYPASS_UNLOCK_ALGORITHM		1
-#define AMD_STANDARD_WRITE_ALGORITHM		0
-#define AMD_BYPASS_UNLOCK_MODE			1
-#define AMD_STANDARD_MODE			0
+#define AMD_BYPASS_UNLOCK_ALGORITHM             1
+#define AMD_STANDARD_WRITE_ALGORITHM            0
+#define AMD_BYPASS_UNLOCK_MODE                  1
+#define AMD_STANDARD_MODE                       0
 
 static struct
 {

@@ -23,7 +23,7 @@
  */
 
 #ifndef URJ_TAP_H
-#define	URJ_TAP_H
+#define URJ_TAP_H
 
 #include "register.h"
 #include "chain.h"

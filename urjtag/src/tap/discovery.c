@@ -33,10 +33,10 @@
 
 #include "jtag.h"
 
-#define	DETECT_PATTERN_SIZE	8
-#define	MAX_REGISTER_LENGTH	1024
-#define	TEST_COUNT		1
-#define	TEST_THRESHOLD		100     /* in % */
+#define DETECT_PATTERN_SIZE     8
+#define MAX_REGISTER_LENGTH     1024
+#define TEST_COUNT              1
+#define TEST_THRESHOLD          100     /* in % */
 
 #undef VERY_LOW_LEVEL_DEBUG
 

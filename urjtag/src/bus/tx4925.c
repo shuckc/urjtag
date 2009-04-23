@@ -52,12 +52,12 @@ typedef struct
     urj_part_signal_t *data[16];
 } bus_params_t;
 
-#define	OE	    ((bus_params_t *) bus->params)->oe
-#define	SWE  	((bus_params_t *) bus->params)->swe
-#define	ROMCE	((bus_params_t *) bus->params)->romce
+#define OE      ((bus_params_t *) bus->params)->oe
+#define SWE     ((bus_params_t *) bus->params)->swe
+#define ROMCE   ((bus_params_t *) bus->params)->romce
 #define SDCS    ((bus_params_t *) bus->params)->sdcs
-#define	ADDR	((bus_params_t *) bus->params)->addr
-#define	DATA	((bus_params_t *) bus->params)->data
+#define ADDR    ((bus_params_t *) bus->params)->addr
+#define DATA    ((bus_params_t *) bus->params)->data
 
 // the number of bytes wide that the TX4925
 // CS0 signal is set to by the external

@@ -23,7 +23,7 @@
  */
 
 #ifndef URJ_PART_H
-#define	URJ_PART_H
+#define URJ_PART_H
 
 #include <stdio.h>
 
@@ -32,9 +32,9 @@
 #include "data_register.h"
 #include "bsbit.h"
 
-#define	URJ_PART_MANUFACTURER_MAXLEN	25
-#define	URJ_PART_PART_MAXLEN		20
-#define	URJ_PART_STEPPING_MAXLEN		8
+#define URJ_PART_MANUFACTURER_MAXLEN    25
+#define URJ_PART_PART_MAXLEN            20
+#define URJ_PART_STEPPING_MAXLEN                8
 
 typedef struct urj_part urj_part_t;
 

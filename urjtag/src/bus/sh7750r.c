@@ -49,14 +49,14 @@ typedef struct
     urj_part_signal_t *rd2;
 } bus_params_t;
 
-#define	A	((bus_params_t *) bus->params)->a
-#define	D	((bus_params_t *) bus->params)->d
-#define	CS	((bus_params_t *) bus->params)->cs
-#define	WE	((bus_params_t *) bus->params)->we
-#define	RDWR	((bus_params_t *) bus->params)->rdwr
-#define	RD	((bus_params_t *) bus->params)->rd
-#define	RDWR2	((bus_params_t *) bus->params)->rdwr2
-#define	RD2	((bus_params_t *) bus->params)->rd2
+#define A       ((bus_params_t *) bus->params)->a
+#define D       ((bus_params_t *) bus->params)->d
+#define CS      ((bus_params_t *) bus->params)->cs
+#define WE      ((bus_params_t *) bus->params)->we
+#define RDWR    ((bus_params_t *) bus->params)->rdwr
+#define RD      ((bus_params_t *) bus->params)->rd
+#define RDWR2   ((bus_params_t *) bus->params)->rdwr2
+#define RD2     ((bus_params_t *) bus->params)->rd2
 
 /**
  * bus->driver->(*new_bus)

@@ -35,10 +35,10 @@
 /*
  * data D[7:0] (pins 9:2)
  */
-#define	TCK	0
-#define	TDI	1
-#define	TMS	2
-#define	TRST	4
+#define TCK     0
+#define TDI     1
+#define TMS     2
+#define TRST    4
 
 /*
  * status
@@ -49,7 +49,7 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO	7
+#define TDO     7
 
 static int
 ei012_init (urj_cable_t *cable)

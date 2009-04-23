@@ -82,14 +82,14 @@ typedef enum
 }
 b3_boot_type_t;
 
-#define I28F_WSM_READY         0x80
-#define I28F_ERASE_SUSPENDED   0x40
-#define I28F_ERASE_ERROR       0x20
-#define I28F_PROG_ERROR     0x10
-#define I28F_VPP_LOW           0x08
-#define I28F_PROG_SUSPENDED 0x04
-#define I28F_BLOCK_LOCKED      0x02
-#define I28F_RESERVED          0x01
+#define I28F_WSM_READY          0x80
+#define I28F_ERASE_SUSPENDED    0x40
+#define I28F_ERASE_ERROR        0x20
+#define I28F_PROG_ERROR         0x10
+#define I28F_VPP_LOW            0x08
+#define I28F_PROG_SUSPENDED     0x04
+#define I28F_BLOCK_LOCKED       0x02
+#define I28F_RESERVED           0x01
 
 
 typedef struct

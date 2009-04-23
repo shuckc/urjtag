@@ -24,7 +24,7 @@
  */
 
 #ifndef URJ_BUS_H
-#define	URJ_BUS_H
+#define URJ_BUS_H
 
 #include <stdint.h>
 

@@ -41,32 +41,32 @@
 
 #include <cmd.h>
 
-#define SYSCON_BASE		0x80930000
-#define SYSCON_DEVICE_CONFIG	0x80
-#define SYSCON_SWLOCK		0xC0
+#define SYSCON_BASE             0x80930000
+#define SYSCON_DEVICE_CONFIG    0x80
+#define SYSCON_SWLOCK           0xC0
 
-#define SYSCON_DEVCFG_HonIDE	(1 << 11)
+#define SYSCON_DEVCFG_HonIDE    (1 << 11)
 
-#define GPIO_BASE		0x80840000
-#define GPIO_PHDR		0x40
-#define GPIO_PHDDR		0x44
+#define GPIO_BASE               0x80840000
+#define GPIO_PHDR               0x40
+#define GPIO_PHDDR              0x44
 
-#define TDO			4
-#define TDI			6
-#define TMS			5
-#define TCK			7
-#define TRST			3
+#define TDO                     4
+#define TDI                     6
+#define TMS                     5
+#define TCK                     7
+#define TRST                    3
 
-#define HGPIO(b)		(1 << (b))
-#define EP9307_TDO		HGPIO(TDO)
-#define EP9307_TDI		HGPIO(TDI)
-#define EP9307_TMS		HGPIO(TMS)
-#define EP9307_TCK		HGPIO(TCK)
-#define EP9307_TRST		HGPIO(TRST)
+#define HGPIO(b)                (1 << (b))
+#define EP9307_TDO              HGPIO(TDO)
+#define EP9307_TDI              HGPIO(TDI)
+#define EP9307_TMS              HGPIO(TMS)
+#define EP9307_TCK              HGPIO(TCK)
+#define EP9307_TRST             HGPIO(TRST)
 
-#define GPIO_INPUT_MASK		((EP9307_TCK)|(EP9307_TMS)|(EP9307_TDI)|(EP9307_TRST))
-#define GPIO_OUTPUT_MASK	(~(EP9307_TDO))
-#define GPIO_BITMASK		(~((EP9307_TDO)|(EP9307_TDI)|(EP9307_TMS)|(EP9307_TCK)|(EP9307_TRST)))
+#define GPIO_INPUT_MASK         ((EP9307_TCK)|(EP9307_TMS)|(EP9307_TDI)|(EP9307_TRST))
+#define GPIO_OUTPUT_MASK        (~(EP9307_TDO))
+#define GPIO_BITMASK            (~((EP9307_TDO)|(EP9307_TDI)|(EP9307_TMS)|(EP9307_TCK)|(EP9307_TRST)))
 
 typedef struct
 {

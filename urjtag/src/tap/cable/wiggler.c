@@ -48,11 +48,11 @@
  *
  * data D[7:0] (pins 9:2)
  */
-#define	nTRST	4               /* nTRST is not inverted in the cable */
-#define	TDI	3
-#define	TCK	2
-#define	TMS	1
-#define	nSRESET 0               /* sRESET is inverted in the cable */
+#define nTRST   4               /* nTRST is not inverted in the cable */
+#define TDI     3
+#define TCK     2
+#define TMS     1
+#define nSRESET 0               /* sRESET is inverted in the cable */
 
 /*
  * 7 - BUSY (pin 11)
@@ -61,59 +61,55 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO 	7
+#define TDO     7
 
 
 /* macros used to stringify the defines above */
 #define xstr(s) str(s)
 #define str(s) #s
 static const char *std_wgl_map = xstr (TDO) ","
-    xstr (nTRST)
-    ","
-    xstr (TDI)
-    ","
-    xstr (TCK)
-    ","
-    xstr (TMS)
-    "," "#"
-    xstr (nSRESET);
+                                 xstr (nTRST) ","
+                                 xstr (TDI) ","
+                                 xstr (TCK) ","
+                                 xstr (TMS) "," "#"
+                                 xstr (nSRESET);
 
 
 /* private parameters of this cable driver */
-     typedef struct
-     {
-         int signals;
-         int trst_lvl;
-         int srst_act, srst_inact;
-         int tms_act, tms_inact;
-         int tck_act, tck_inact;
-         int tdi_act, tdi_inact;
-         int tdo_act, tdo_inact;
-         int trst_act, trst_inact;
-         int unused_bits;
-     } wiggler_params_t;
+typedef struct
+{
+    int signals;
+    int trst_lvl;
+    int srst_act, srst_inact;
+    int tms_act, tms_inact;
+    int tck_act, tck_inact;
+    int tdi_act, tdi_inact;
+    int tdo_act, tdo_inact;
+    int trst_act, trst_inact;
+    int unused_bits;
+} wiggler_params_t;
 
 
 /* access macros for the parameters */
-#define	PRM_SIGNALS(cable)     ((wiggler_params_t *) cable->params)->signals
-#define	PRM_TRST_LVL(cable)    ((wiggler_params_t *) cable->params)->trst_lvl
-#define	PRM_SRST_ACT(cable)    ((wiggler_params_t *) cable->params)->srst_act
-#define	PRM_SRST_INACT(cable)  ((wiggler_params_t *) cable->params)->srst_inact
-#define	PRM_TMS_ACT(cable)     ((wiggler_params_t *) cable->params)->tms_act
-#define	PRM_TMS_INACT(cable)   ((wiggler_params_t *) cable->params)->tms_inact
-#define	PRM_TCK_ACT(cable)     ((wiggler_params_t *) cable->params)->tck_act
-#define	PRM_TCK_INACT(cable)   ((wiggler_params_t *) cable->params)->tck_inact
-#define	PRM_TDI_ACT(cable)     ((wiggler_params_t *) cable->params)->tdi_act
-#define	PRM_TDI_INACT(cable)   ((wiggler_params_t *) cable->params)->tdi_inact
-#define	PRM_TDO_ACT(cable)     ((wiggler_params_t *) cable->params)->tdo_act
-#define	PRM_TDO_INACT(cable)   ((wiggler_params_t *) cable->params)->tdo_inact
-#define	PRM_TRST_ACT(cable)    ((wiggler_params_t *) cable->params)->trst_act
-#define	PRM_TRST_INACT(cable)  ((wiggler_params_t *) cable->params)->trst_inact
-#define	PRM_UNUSED_BITS(cable) ((wiggler_params_t *) cable->params)->unused_bits
+#define PRM_SIGNALS(cable)     ((wiggler_params_t *) cable->params)->signals
+#define PRM_TRST_LVL(cable)    ((wiggler_params_t *) cable->params)->trst_lvl
+#define PRM_SRST_ACT(cable)    ((wiggler_params_t *) cable->params)->srst_act
+#define PRM_SRST_INACT(cable)  ((wiggler_params_t *) cable->params)->srst_inact
+#define PRM_TMS_ACT(cable)     ((wiggler_params_t *) cable->params)->tms_act
+#define PRM_TMS_INACT(cable)   ((wiggler_params_t *) cable->params)->tms_inact
+#define PRM_TCK_ACT(cable)     ((wiggler_params_t *) cable->params)->tck_act
+#define PRM_TCK_INACT(cable)   ((wiggler_params_t *) cable->params)->tck_inact
+#define PRM_TDI_ACT(cable)     ((wiggler_params_t *) cable->params)->tdi_act
+#define PRM_TDI_INACT(cable)   ((wiggler_params_t *) cable->params)->tdi_inact
+#define PRM_TDO_ACT(cable)     ((wiggler_params_t *) cable->params)->tdo_act
+#define PRM_TDO_INACT(cable)   ((wiggler_params_t *) cable->params)->tdo_inact
+#define PRM_TRST_ACT(cable)    ((wiggler_params_t *) cable->params)->trst_act
+#define PRM_TRST_INACT(cable)  ((wiggler_params_t *) cable->params)->trst_inact
+#define PRM_UNUSED_BITS(cable) ((wiggler_params_t *) cable->params)->unused_bits
 
 
 
-     static int map_pin (char *pin, int *act, int *inact)
+static int map_pin (char *pin, int *act, int *inact)
 {
     int bitnum;
     int inverted = 0;

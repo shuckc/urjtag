@@ -24,7 +24,7 @@
  */
 
 #ifndef URJ_USBCONN_H
-#define	URJ_USBCONN_H
+#define URJ_USBCONN_H
 
 #include <stdint.h>
 #include <stddef.h>

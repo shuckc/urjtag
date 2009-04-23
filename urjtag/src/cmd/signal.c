@@ -109,8 +109,8 @@ cmd_signal_help (void)
     printf (_("Usage: %s SIGNAL [PIN#]\n"
               "Define new signal with name SIGNAL for a part.\n"
               "\n"
-              "SIGNAL		New signal name\n"
-              "PIN#   	List of pin # for a signal\n"), "signal");
+              "SIGNAL           New signal name\n"
+              "PIN#     List of pin # for a signal\n"), "signal");
 }
 
 urj_cmd_t cmd_signal = {

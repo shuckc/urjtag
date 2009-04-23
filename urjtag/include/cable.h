@@ -24,7 +24,7 @@
  */
 
 #ifndef URJ_CABLE_H
-#define	URJ_CABLE_H
+#define URJ_CABLE_H
 
 #include <stdint.h>
 

@@ -70,33 +70,33 @@
 #include "tap_state.h"
 
 /* EEPROM commands */
-#define EEPROM_CMD_WREN  0x06
-#define EEPROM_CMD_WRDI  0x04
-#define EEPROM_CMD_RDSR  0x05
-#define EEPROM_CMD_WRSR  0x01
-#define EEPROM_CMD_READ  0x03
-#define EEPROM_CMD_WRITE 0x02
+#define EEPROM_CMD_WREN         0x06
+#define EEPROM_CMD_WRDI         0x04
+#define EEPROM_CMD_RDSR         0x05
+#define EEPROM_CMD_WRSR         0x01
+#define EEPROM_CMD_READ         0x03
+#define EEPROM_CMD_WRITE        0x02
 
-#define RAM_ADDR_WIDTH 18
-#define RAM_DATA_WIDTH 16
-#define FLASH_ADDR_WIDTH 25
-#define FLASH_DATA_WIDTH 16
-#define EEPROM_ADDR_WIDTH 16
-#define EEPROM_DATA_WIDTH 8
+#define RAM_ADDR_WIDTH          18
+#define RAM_DATA_WIDTH          16
+#define FLASH_ADDR_WIDTH        25
+#define FLASH_DATA_WIDTH        16
+#define EEPROM_ADDR_WIDTH       16
+#define EEPROM_DATA_WIDTH        8
 
 /* length is in number of bytes
    the full address width is taken to build the power of 2 */
-#define RAM_LENGTH (1 << (RAM_ADDR_WIDTH+1))
+#define RAM_LENGTH              (1 << (RAM_ADDR_WIDTH + 1))
 /* the flash component ignores A0, so address is not doubled here */
-#define FLASH_LENGTH (1 << FLASH_ADDR_WIDTH)
-#define EEPROM_LENGTH (1 << EEPROM_ADDR_WIDTH)
-#define EEPROM_STATUS_LENGTH EEPROM_LENGTH
+#define FLASH_LENGTH            (1 << FLASH_ADDR_WIDTH)
+#define EEPROM_LENGTH           (1 << EEPROM_ADDR_WIDTH)
+#define EEPROM_STATUS_LENGTH    EEPROM_LENGTH
 
-#define FLASH_START 0
-#define RAM0_START FLASH_LENGTH
-#define RAM1_START (RAM0_START + RAM_LENGTH)
-#define EEPROM_START (RAM1_START + RAM_LENGTH)
-#define EEPROM_STATUS_START (EEPROM_START + EEPROM_LENGTH)
+#define FLASH_START             0
+#define RAM0_START              FLASH_LENGTH
+#define RAM1_START              (RAM0_START + RAM_LENGTH)
+#define EEPROM_START            (RAM1_START + RAM_LENGTH)
+#define EEPROM_STATUS_START     (EEPROM_START + EEPROM_LENGTH)
 
 typedef enum
 { RAM, FLASH, EEPROM, EEPROM_STATUS } ctype_t;

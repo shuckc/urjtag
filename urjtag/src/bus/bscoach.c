@@ -52,14 +52,14 @@ typedef struct
     urj_part_signal_t *oe_f;
 } bus_params_t;
 
-#define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
-#define ADR ((bus_params_t *) bus->params)->adr
-#define D ((bus_params_t *) bus->params)->d
-#define DECA ((bus_params_t *) bus->params)->deca
-#define DECB ((bus_params_t *) bus->params)->decb
-#define DECC ((bus_params_t *) bus->params)->decc
-#define WE_F ((bus_params_t *) bus->params)->we_f
-#define OE_F ((bus_params_t *) bus->params)->oe_f
+#define LAST_ADR        ((bus_params_t *) bus->params)->last_adr
+#define ADR             ((bus_params_t *) bus->params)->adr
+#define D               ((bus_params_t *) bus->params)->d
+#define DECA            ((bus_params_t *) bus->params)->deca
+#define DECB            ((bus_params_t *) bus->params)->decb
+#define DECC            ((bus_params_t *) bus->params)->decc
+#define WE_F            ((bus_params_t *) bus->params)->we_f
+#define OE_F            ((bus_params_t *) bus->params)->oe_f
 
 
 /**

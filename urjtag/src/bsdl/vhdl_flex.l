@@ -142,9 +142,9 @@ LEGAL NOTICES:
 
 static char *new_string( urj_bsdl_scan_extra_t *, const char * );
 
-#define BINARY 0
+#define BINARY  0
 #define DECIMAL 1
-#define BIN_X 2
+#define BIN_X   2
 
 %}
 %a  2800

@@ -40,10 +40,10 @@
 #include "buses.h"
 #include "generic_bus.h"
 
-#define LPC_NUM_CS	6
-#define LPC_NUM_AD	32
-#define LPC_ADDR_TO_CS(a) (a >> bp->lpc_num_ad)
-#define LPC_ADDR_SIZE ( ( (unsigned long long)1 << bp->lpc_num_ad ) * LPC_NUM_CS )
+#define LPC_NUM_CS      6
+#define LPC_NUM_AD      32
+#define LPC_ADDR_TO_CS(a) ((a) >> bp->lpc_num_ad)
+#define LPC_ADDR_SIZE   (((unsigned long long) 1 << bp->lpc_num_ad) * LPC_NUM_CS)
 
 typedef struct
 {
@@ -59,13 +59,13 @@ typedef struct
     int lpc_num_d;
 } bus_params_t;
 
-#define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
-#define	AD		((bus_params_t *) bus->params)->ad
-#define	nCS		((bus_params_t *) bus->params)->ncs
-#define	nWE		((bus_params_t *) bus->params)->nwe
-#define	nOE		((bus_params_t *) bus->params)->noe
-#define	nALE		((bus_params_t *) bus->params)->nale
-#define ATA_ISO		((bus_params_t *) bus->params)->ata_iso
+#define LAST_ADR        ((bus_params_t *) bus->params)->last_adr
+#define AD              ((bus_params_t *) bus->params)->ad
+#define nCS             ((bus_params_t *) bus->params)->ncs
+#define nWE             ((bus_params_t *) bus->params)->nwe
+#define nOE             ((bus_params_t *) bus->params)->noe
+#define nALE            ((bus_params_t *) bus->params)->nale
+#define ATA_ISO         ((bus_params_t *) bus->params)->ata_iso
 
 /**
  * bus->driver->(*new_bus)

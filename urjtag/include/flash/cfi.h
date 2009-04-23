@@ -42,8 +42,8 @@
  *
  */
 
-#ifndef	FLASH_CFI_H
-#define	FLASH_CFI_H
+#ifndef FLASH_CFI_H
+#define FLASH_CFI_H
 
 #ifndef __ASSEMBLY__
 #include <stdint.h>
@@ -51,18 +51,18 @@
 
 /* CFI commands - see Table 1 in [1] */
 
-#define	CFI_CMD_READ_ARRAY1		0xFF
-#define	CFI_CMD_READ_ARRAY2		0xF0
-#define	CFI_CMD_QUERY			0x98
-#define	CFI_CMD_QUERY_OFFSET		0x55
+#define CFI_CMD_READ_ARRAY1             0xFF
+#define CFI_CMD_READ_ARRAY2             0xF0
+#define CFI_CMD_QUERY                   0x98
+#define CFI_CMD_QUERY_OFFSET            0x55
 
 /* Query identification string - see 4.3.2 in [1] */
 
-#define	CFI_QUERY_ID_OFFSET		0x10
-#define	PRI_VENDOR_ID_OFFSET		0x13
-#define	PRI_VENDOR_TABLE_ADR_OFFSET	0x15
-#define	ALT_VENDOR_ID_OFFSET		0x17
-#define	ALT_VENDOR_TABLE_ADR_OFFSET	0x19
+#define CFI_QUERY_ID_OFFSET             0x10
+#define PRI_VENDOR_ID_OFFSET            0x13
+#define PRI_VENDOR_TABLE_ADR_OFFSET     0x15
+#define ALT_VENDOR_ID_OFFSET            0x17
+#define ALT_VENDOR_TABLE_ADR_OFFSET     0x19
 
 #ifndef __ASSEMBLY__
 typedef struct cfi_query_identification_string
@@ -76,29 +76,29 @@ typedef struct cfi_query_identification_string
 
 /* Algorithm command set & control interface ID codes - see Table 1 in [2] */
 
-#define	CFI_VENDOR_NULL			0x0000
-#define	CFI_VENDOR_INTEL_ECS		0x0001
-#define	CFI_VENDOR_AMD_SCS		0x0002
-#define	CFI_VENDOR_INTEL_SCS		0x0003
-#define	CFI_VENDOR_AMD_ECS		0x0004
-#define	CFI_VENDOR_MITSUBISHI_SCS	0x0100
-#define	CFI_VENDOR_MITSUBISHI_ECS	0x0101
-#define	CFI_VENDOR_SST_PWCS		0x0102
+#define CFI_VENDOR_NULL                 0x0000
+#define CFI_VENDOR_INTEL_ECS            0x0001
+#define CFI_VENDOR_AMD_SCS              0x0002
+#define CFI_VENDOR_INTEL_SCS            0x0003
+#define CFI_VENDOR_AMD_ECS              0x0004
+#define CFI_VENDOR_MITSUBISHI_SCS       0x0100
+#define CFI_VENDOR_MITSUBISHI_ECS       0x0101
+#define CFI_VENDOR_SST_PWCS             0x0102
 
 /* Query system interface information - see 4.3.3 in [1] */
 
-#define	VCC_MIN_WEV_OFFSET		0x1B    /* Vcc Logic Supply Minimum Write/Erase voltage */
-#define	VCC_MAX_WEV_OFFSET		0x1C    /* Vcc Logic Supply Maximum Write/Erase voltage */
-#define	VPP_MIN_WEV_OFFSET		0x1D    /* Vpp [Programming] Supply Minimum Write/Erase voltage */
-#define	VPP_MAX_WEV_OFFSET		0x1E    /* Vpp [Programming] Supply Maximum Write/Erase voltage */
-#define	TYP_SINGLE_WRITE_TIMEOUT_OFFSET	0x1F    /* Typical timeout per single byte/word write */
-#define	TYP_BUFFER_WRITE_TIMEOUT_OFFSET	0x20    /* Typical timeout for minimum-size buffer write */
-#define	TYP_BLOCK_ERASE_TIMEOUT_OFFSET	0x21    /* Typical timeout per individual block erase */
-#define	TYP_CHIP_ERASE_TIMEOUT_OFFSET	0x22    /* Typical timeout for full chip erase */
-#define	MAX_SINGLE_WRITE_TIMEOUT_OFFSET	0x23    /* Maximum timeout for byte/word write */
-#define	MAX_BUFFER_WRITE_TIMEOUT_OFFSET	0x24    /* Maximum timeout for buffer write */
-#define	MAX_BLOCK_ERASE_TIMEOUT_OFFSET	0x25    /* Maximum timeout per individual block erase */
-#define	MAX_CHIP_ERASE_TIMEOUT_OFFSET	0x26    /* Maximum timeout for chip erase */
+#define VCC_MIN_WEV_OFFSET              0x1B    /* Vcc Logic Supply Minimum Write/Erase voltage */
+#define VCC_MAX_WEV_OFFSET              0x1C    /* Vcc Logic Supply Maximum Write/Erase voltage */
+#define VPP_MIN_WEV_OFFSET              0x1D    /* Vpp [Programming] Supply Minimum Write/Erase voltage */
+#define VPP_MAX_WEV_OFFSET              0x1E    /* Vpp [Programming] Supply Maximum Write/Erase voltage */
+#define TYP_SINGLE_WRITE_TIMEOUT_OFFSET 0x1F    /* Typical timeout per single byte/word write */
+#define TYP_BUFFER_WRITE_TIMEOUT_OFFSET 0x20    /* Typical timeout for minimum-size buffer write */
+#define TYP_BLOCK_ERASE_TIMEOUT_OFFSET  0x21    /* Typical timeout per individual block erase */
+#define TYP_CHIP_ERASE_TIMEOUT_OFFSET   0x22    /* Typical timeout for full chip erase */
+#define MAX_SINGLE_WRITE_TIMEOUT_OFFSET 0x23    /* Maximum timeout for byte/word write */
+#define MAX_BUFFER_WRITE_TIMEOUT_OFFSET 0x24    /* Maximum timeout for buffer write */
+#define MAX_BLOCK_ERASE_TIMEOUT_OFFSET  0x25    /* Maximum timeout per individual block erase */
+#define MAX_CHIP_ERASE_TIMEOUT_OFFSET   0x26    /* Maximum timeout for chip erase */
 
 #ifndef __ASSEMBLY__
 typedef struct cfi_query_system_interface_information
@@ -120,11 +120,11 @@ typedef struct cfi_query_system_interface_information
 
 /* Device geometry definition - see 4.3.4 in [1] */
 
-#define	DEVICE_SIZE_OFFSET		0x27    /* Device Size */
-#define	FLASH_DEVICE_INTERFACE_OFFSET	0x28    /* Flash Device Interface description */
-#define	MAX_BYTES_WRITE_OFFSET		0x2A    /* Maximum number of bytes in multi-byte write */
-#define	NUMBER_OF_ERASE_REGIONS_OFFSET	0x2C    /* Number of Erase Block Regions */
-#define	ERASE_BLOCK_REGION_OFFSET	0x2D    /* Erase Block Region Information */
+#define DEVICE_SIZE_OFFSET              0x27    /* Device Size */
+#define FLASH_DEVICE_INTERFACE_OFFSET   0x28    /* Flash Device Interface description */
+#define MAX_BYTES_WRITE_OFFSET          0x2A    /* Maximum number of bytes in multi-byte write */
+#define NUMBER_OF_ERASE_REGIONS_OFFSET  0x2C    /* Number of Erase Block Regions */
+#define ERASE_BLOCK_REGION_OFFSET       0x2D    /* Erase Block Region Information */
 
 #ifndef __ASSEMBLY__
 typedef struct cfi_erase_block_region urj_flash_cfi_erase_block_region_t;
@@ -147,11 +147,11 @@ struct cfi_erase_block_region
 
 /* Device interface code assignments (for cfi_device_geometry.device_interface) - see Table 2 in [2] */
 
-#define	CFI_INTERFACE_X8		0
-#define CFI_INTERFACE_X16		1
-#define	CFI_INTERFACE_X8_X16		2
-#define	CFI_INTERFACE_X32		3
-#define	CFI_INTERFACE_X16_X32		4
+#define CFI_INTERFACE_X8                0
+#define CFI_INTERFACE_X16               1
+#define CFI_INTERFACE_X8_X16            2
+#define CFI_INTERFACE_X32               3
+#define CFI_INTERFACE_X16_X32           4
 
 /* CFI Query structure - see 4.3.1 in [1] */
 
@@ -165,28 +165,28 @@ typedef struct cfi_query_structure
 #endif /* __ASSEMBLY__ */
 
 /* AMD primary vendor-specific extended query structure - see [3] and [4] */
-#define MAJOR_VERSION_OFFSET			0x03
-#define MINOR_VERSION_OFFSET			0x04
-#define ADDRESS_SENSITIVE_UNLOCK_OFFSET		0x05
-#define ERASE_SUSPEND_OFFSET			0x06
-#define SECTOR_PROTECT_OFFSET			0x07
-#define SECTOR_TEMPORARY_UNPROTECT_OFFSET	0x08
-#define SECTOR_PROTECT_SCHEME_OFFSET		0x09
-#define SIMULTANEOUS_OPERATION_OFFSET		0x0A
-#define BURST_MODE_TYPE_OFFSET			0x0B
-#define PAGE_MODE_TYPE_OFFSET			0x0C
-#define ACC_MIN_OFFSET				0x0D
-#define ACC_MAX_OFFSET				0x0E
-#define TOP_BOTTOM_SECTOR_FLAG_OFFSET		0x0F
-#define PROGRAM_SUSPEND_OFFSET			0x10
-#define UNLOCK_BYPASS_OFFSET			0x11
-#define SECSI_SECTOR_SIZE_OFFSET		0x12
-#define EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET	0x13
-#define NON_EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET	0x14
-#define ERASE_SUSPEND_TIMEOUT_MAX_OFFSET	0x15
-#define PROGRAM_SUSPEND_TIMEOUT_MAX_OFFSET	0x16
-#define BANK_ORGANIZATION_OFFSET		0x17
-#define BANK_REGION_INFO_OFFSET			0X18
+#define MAJOR_VERSION_OFFSET                    0x03
+#define MINOR_VERSION_OFFSET                    0x04
+#define ADDRESS_SENSITIVE_UNLOCK_OFFSET         0x05
+#define ERASE_SUSPEND_OFFSET                    0x06
+#define SECTOR_PROTECT_OFFSET                   0x07
+#define SECTOR_TEMPORARY_UNPROTECT_OFFSET       0x08
+#define SECTOR_PROTECT_SCHEME_OFFSET            0x09
+#define SIMULTANEOUS_OPERATION_OFFSET           0x0A
+#define BURST_MODE_TYPE_OFFSET                  0x0B
+#define PAGE_MODE_TYPE_OFFSET                   0x0C
+#define ACC_MIN_OFFSET                          0x0D
+#define ACC_MAX_OFFSET                          0x0E
+#define TOP_BOTTOM_SECTOR_FLAG_OFFSET           0x0F
+#define PROGRAM_SUSPEND_OFFSET                  0x10
+#define UNLOCK_BYPASS_OFFSET                    0x11
+#define SECSI_SECTOR_SIZE_OFFSET                0x12
+#define EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET       0x13
+#define NON_EMBEDDED_HWRST_TIMEOUT_MAX_OFFSET   0x14
+#define ERASE_SUSPEND_TIMEOUT_MAX_OFFSET        0x15
+#define PROGRAM_SUSPEND_TIMEOUT_MAX_OFFSET      0x16
+#define BANK_ORGANIZATION_OFFSET                0x17
+#define BANK_REGION_INFO_OFFSET                 0X18
 
 #ifndef __ASSEMBLY__
 typedef struct amd_pri_extened_query_structure

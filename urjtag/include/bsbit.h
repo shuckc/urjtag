@@ -23,19 +23,19 @@
  */
 
 #ifndef URJ_BSBIT_BSBIT_H
-#define	URJ_BSBIT_BSBIT_H
+#define URJ_BSBIT_BSBIT_H
 
 typedef struct urj_bsbit urj_bsbit_t;
 
 #include "bssignal.h"
 
-#define	URJ_BSBIT_INPUT	1
-#define	URJ_BSBIT_OUTPUT	2
-#define	URJ_BSBIT_CONTROL	3
-#define	URJ_BSBIT_INTERNAL	4
-#define	URJ_BSBIT_BIDIR	5
+#define URJ_BSBIT_INPUT         1
+#define URJ_BSBIT_OUTPUT        2
+#define URJ_BSBIT_CONTROL       3
+#define URJ_BSBIT_INTERNAL      4
+#define URJ_BSBIT_BIDIR         5
 
-#define	URJ_BSBIT_STATE_Z	(-1)
+#define URJ_BSBIT_STATE_Z       (-1)
 
 struct urj_bsbit
 {

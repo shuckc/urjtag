@@ -48,66 +48,66 @@ typedef struct
     uint16_t adr_hi;            /* cached high bits of $3 */
 } bus_params_t;
 
-#define BP ((bus_params_t *) bus->params)
+#define BP              ((bus_params_t *) bus->params)
 
-#define EJTAG_VER ((BP->impcode >> 29) & 7)
+#define EJTAG_VER       ((BP->impcode >> 29) & 7)
 
-#define EJTAG_20	0
-#define EJTAG_25	1
-#define EJTAG_26	2
-#define EJTAG_31	3
+#define EJTAG_20        0
+#define EJTAG_25        1
+#define EJTAG_26        2
+#define EJTAG_31        3
 
 /* EJTAG 3.1 Control Register Bits */
-#define VPED		23      /* R    */
+#define VPED            23      /* R    */
 /* EJTAG 2.6 Control Register Bits */
-#define Rocc		31      /* R/W0 */
-#define Psz1		30      /* R    */
-#define Psz0		29      /* R    */
-#define Doze		22      /* R    */
-#define ProbTrap	14      /* R/W  */
-#define DebugMode	 3      /* R    */
+#define Rocc            31      /* R/W0 */
+#define Psz1            30      /* R    */
+#define Psz0            29      /* R    */
+#define Doze            22      /* R    */
+#define ProbTrap        14      /* R/W  */
+#define DebugMode        3      /* R    */
 /* EJTAG 1.5.3 Control Register Bits */
-#define Dnm		28      /* */
-#define Sync		23      /* R/W  */
-#define Run		21      /* R    */
-#define PerRst		20      /* R/W  */
-#define PRnW		19      /* R    0 = Read, 1 = Write */
-#define PrAcc		18      /* R/W0 */
-#define DmaAcc		17      /* R/W  */
-#define PrRst		16      /* R/W  */
-#define ProbEn		15      /* R/W  */
-#define SetDev		14      /* R    */
-#define JtagBrk		12      /* R/W1 */
-#define DStrt		11      /* R/W1 */
-#define DeRR		10      /* R    */
-#define DrWn		 9      /* R/W  */
-#define Dsz1		 8      /* R/W  */
-#define Dsz0		 7      /* R/W  */
-#define DLock		 5      /* R/W  */
-#define BrkSt		 3      /* R    */
-#define TIF		 2      /* W0/R */
-#define TOF		 1      /* W0/R */
-#define ClkEn		 0      /* R/W  */
+#define Dnm             28      /* */
+#define Sync            23      /* R/W  */
+#define Run             21      /* R    */
+#define PerRst          20      /* R/W  */
+#define PRnW            19      /* R    0 = Read, 1 = Write */
+#define PrAcc           18      /* R/W0 */
+#define DmaAcc          17      /* R/W  */
+#define PrRst           16      /* R/W  */
+#define ProbEn          15      /* R/W  */
+#define SetDev          14      /* R    */
+#define JtagBrk         12      /* R/W1 */
+#define DStrt           11      /* R/W1 */
+#define DeRR            10      /* R    */
+#define DrWn             9      /* R/W  */
+#define Dsz1             8      /* R/W  */
+#define Dsz0             7      /* R/W  */
+#define DLock            5      /* R/W  */
+#define BrkSt            3      /* R    */
+#define TIF              2      /* W0/R */
+#define TOF              1      /* W0/R */
+#define ClkEn            0      /* R/W  */
 
 /* EJTAG 3.1 Debug Control Register at drseg 0xFF300000 */
-#define PCS			 9      /* R    */
-#define PCR2		 8      /* R/W  */
-#define PCR1		 7      /* R/W  */
-#define PCR0		 6      /* R/W  */
+#define PCS              9      /* R    */
+#define PCR2             8      /* R/W  */
+#define PCR1             7      /* R/W  */
+#define PCR0             6      /* R/W  */
 /* EJTAG 2.X Debug Control Register at drseg 0xFF300000 */
-#define	DataBrk		17      /* R    */
-#define	InstBrk		16      /* R    */
-#define	NMIPend		 2      /* R    */
-#define	SRstE		 1      /* R/W  */
-#define	DCRProbeEn	 0      /* R    */
+#define DataBrk         17      /* R    */
+#define InstBrk         16      /* R    */
+#define NMIPend          2      /* R    */
+#define SRstE            1      /* R/W  */
+#define DCRProbeEn       0      /* R    */
 /* EJTAG 1.5.3 Debug Control Register at drseg 0xFF300000*/
-#define HIS			30      /* R    */
-#define ENM			29      /* R 0=Little End,1=Big Endian */
-#define MIntE		4       /* R/W  */
-#define MNmiE		3       /* R/W  */
-#define MemProt		2       /* R/W 0=WriteOK,1=Protected */
-#define MRst		1       /* R/W  */
-#define TraceMode	0       /* R/W  */
+#define HIS             30      /* R    */
+#define ENM             29      /* R 0=Little End,1=Big Endian */
+#define MIntE            4      /* R/W  */
+#define MNmiE            3      /* R/W  */
+#define MemProt          2      /* R/W 0=WriteOK,1=Protected */
+#define MRst             1      /* R/W  */
+#define TraceMode        0      /* R/W  */
 
 /**
  * bus->driver->(*new_bus)

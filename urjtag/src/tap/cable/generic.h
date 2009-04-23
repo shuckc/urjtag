@@ -23,7 +23,7 @@
  */
 
 #ifndef URJ_TAP_CABLE_GENERIC_H
-#define	URJ_TAP_CABLE_GENERIC_H
+#define URJ_TAP_CABLE_GENERIC_H
 
 #include "cable.h"
 #include "parport.h"
@@ -33,7 +33,7 @@ typedef struct
     int signals;
 } urj_tap_cable_generic_params_t;
 
-#define	PARAM_SIGNALS(cable)	((urj_tap_cable_generic_params_t *) cable->params)->signals
+#define PARAM_SIGNALS(cable)    ((urj_tap_cable_generic_params_t *) (cable)->params)->signals
 
 void urj_tap_cable_generic_disconnect (urj_cable_t *cable);
 void urj_tap_cable_generic_set_frequency (urj_cable_t *cable, uint32_t new_freq);

@@ -38,9 +38,9 @@
 /*
  * data D[7:0] (pins 9:2)
  */
-#define	TDI	0
-#define	TCK	1
-#define	TMS	2
+#define TDI     0
+#define TCK     1
+#define TMS     2
 
 /*
  * status
@@ -51,7 +51,7 @@
  * 4 - SEL (pin 13)
  * 3 - ERROR (pin 15)
  */
-#define	TDO	5
+#define TDO     5
 
 /* 
  * control
@@ -61,7 +61,7 @@
  * 2 - INIT (pin 16)
  * 3 - SELIN (pin 17)
  */
-#define	TRST	0
+#define TRST    0
 
 static int
 keithkoep_init (urj_cable_t *cable)

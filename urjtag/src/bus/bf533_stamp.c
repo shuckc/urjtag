@@ -51,16 +51,16 @@ typedef struct
     urj_part_signal_t *swe;
 } bus_params_t;
 
-#define	AMS		((bus_params_t *) bus->params)->ams
-#define	ADDR	((bus_params_t *) bus->params)->addr
-#define	DATA	((bus_params_t *) bus->params)->data
-#define	PF		((bus_params_t *) bus->params)->pf
-#define	AWE		((bus_params_t *) bus->params)->awe
-#define	AOE		((bus_params_t *) bus->params)->aoe
-#define	SRAS	((bus_params_t *) bus->params)->sras
-#define	SCAS	((bus_params_t *) bus->params)->scas
-#define	SMS		((bus_params_t *) bus->params)->sms
-#define	SWE		((bus_params_t *) bus->params)->swe
+#define AMS     ((bus_params_t *) bus->params)->ams
+#define ADDR    ((bus_params_t *) bus->params)->addr
+#define DATA    ((bus_params_t *) bus->params)->data
+#define PF      ((bus_params_t *) bus->params)->pf
+#define AWE     ((bus_params_t *) bus->params)->awe
+#define AOE     ((bus_params_t *) bus->params)->aoe
+#define SRAS    ((bus_params_t *) bus->params)->sras
+#define SCAS    ((bus_params_t *) bus->params)->scas
+#define SMS     ((bus_params_t *) bus->params)->sms
+#define SWE     ((bus_params_t *) bus->params)->swe
 
 /**
  * bus->driver->(*new_bus)

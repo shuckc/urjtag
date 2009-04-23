@@ -23,12 +23,12 @@
  */
 
 #ifndef URJ_INSTRUCTION_H
-#define	URJ_INSTRUCTION_H
+#define URJ_INSTRUCTION_H
 
 #include "register.h"
 #include "data_register.h"
 
-#define	URJ_INSTRUCTION_MAXLEN_INSTRUCTION	20
+#define URJ_INSTRUCTION_MAXLEN_INSTRUCTION      20
 
 typedef struct urj_instruction urj_instruction_t;
 

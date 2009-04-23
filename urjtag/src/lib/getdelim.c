@@ -30,7 +30,7 @@
 
 #ifndef HAVE_GETDELIM
 
-#define	GETDELIM_BUFFER	128
+#define GETDELIM_BUFFER 128
 
 ssize_t
 urj_lib_getdelim (char **lineptr, size_t * n, int delimiter, FILE *stream)
