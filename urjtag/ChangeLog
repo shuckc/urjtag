@@ -1,3 +1,7 @@
+2009-04-24  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/analog/bf518/bf518: Update with public BSDL file.
+
 2009-04-23  Rutger Hofman <rfhh>
 
   Use the changes by Przemyslaw Iskra, published as
