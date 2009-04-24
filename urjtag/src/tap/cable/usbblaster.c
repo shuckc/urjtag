@@ -74,7 +74,7 @@ usbblaster_connect (char *params[], urj_cable_t *cable)
     if ((result = urj_tap_cable_generic_usbconn_connect (params, cable)) != 0)
         return result;
 
-    cable_params = (params_t *) malloc (sizeof (params_t));
+    cable_params = malloc (sizeof (params_t));
     if (!cable_params)
     {
         printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);

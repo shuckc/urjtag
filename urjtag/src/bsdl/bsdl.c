@@ -256,14 +256,14 @@ urj_bsdl_set_path (urj_chain_t *chain, const char *pathlist)
         {
             num++;
             /* extend path list array */
-            globs->path_list =
-                (char **) realloc (globs->path_list,
-                                   (num + 1) * sizeof (char *));
+            globs->path_list = realloc (globs->path_list,
+                                        (num + 1) * sizeof (char *));
             /* enter path element up to the delimeter */
             if (delim == NULL)
                 len = strlen (elem);
             else
                 len = delim - elem;
+            /* @@@@ ToDo check malloc result RFHH */
             pathelem = malloc (len + 1);
             memcpy (pathelem, elem, len);
             pathelem[len] = '\0';
@@ -324,8 +324,9 @@ urj_bsdl_scan_files (urj_chain_t *chain, const char *idcode, int proc_mode)
             {
                 char *name;
 
-                name = (char *) malloc (strlen (globs->path_list[idx])
-                                        + strlen (elem->d_name) + 1 + 1);
+                /* @@@@ ToDo handle malloc error result RFHH */
+                name = malloc (strlen (globs->path_list[idx])
+                               + strlen (elem->d_name) + 1 + 1);
                 if (name)
                 {
                     struct stat buf;

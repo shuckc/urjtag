@@ -289,6 +289,7 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
 
             if (in == NULL || out == NULL)
             {
+                /* @@@@ RFHH free(NULL) is correct */
                 if (in != NULL)
                     free (in);
                 if (out != NULL)

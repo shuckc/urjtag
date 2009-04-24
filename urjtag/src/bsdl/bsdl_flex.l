@@ -437,7 +437,7 @@ void *urj_bsdl_flex_init( int proc_mode )
     return NULL;
   }
 
-  if (!(extra = (urj_bsdl_scan_extra_t *)malloc( sizeof( urj_bsdl_scan_extra_t ) ))) {
+  if (!(extra = malloc( sizeof( urj_bsdl_scan_extra_t ) ))) {
     urj_bsdl_msg( proc_mode,
               BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     yylex_destroy( scanner );
@@ -518,7 +518,7 @@ static char *new_string( urj_bsdl_scan_extra_t *extra, const char *str )
   size_t  n_str_size;
 
   n_str_size = strlen( str ) + 1;
-  if ((n_str = (char *)malloc( n_str_size )))
+  if ((n_str = malloc( n_str_size )))
   {
     strncpy( n_str, str, n_str_size-1 );
     n_str[n_str_size-1] = '\0';  /* set very last element to EOS */

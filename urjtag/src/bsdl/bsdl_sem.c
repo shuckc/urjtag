@@ -150,7 +150,7 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
              */
             name_len = strlen (name->string);
             str_len = name_len + 1 + 10 + 1 + 1;
-            if ((port_string = (char *) malloc (str_len)) != NULL)
+            if ((port_string = malloc (str_len)) != NULL)
             {
                 cmd[1] = port_string;
 
@@ -577,7 +577,7 @@ parse_vhdl_elem (urj_bsdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *elem)
 
     /* allocate enough memory for total buffer */
     buf_len = name_string_len + 1 + elem_string_len + 1;
-    buf = (char *) malloc (buf_len);
+    buf = malloc (buf_len);
     if (!buf)
     {
         urj_bsdl_msg (priv->jtag_ctrl->proc_mode,

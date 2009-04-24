@@ -44,6 +44,7 @@ cmd_part_run (urj_chain_t *chain, char *params[])
         {
             urj_part_t *part;
             part = chain->parts->parts[chain->active_part];
+            /* @@@@ ToDo RFHH check malloc result */
             part->alias = malloc (strlen (params[2]) + 1);
             strcpy (part->alias, params[2]);
             return 1;

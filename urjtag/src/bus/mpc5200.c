@@ -87,7 +87,7 @@ mpc5200_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         return NULL;
 
     bus->driver = driver;
-    bus->params = bp = (bus_params_t *) calloc (1, sizeof (bus_params_t));
+    bus->params = bp = calloc (1, sizeof (bus_params_t));
     if (!bus->params)
     {
         free (bus);

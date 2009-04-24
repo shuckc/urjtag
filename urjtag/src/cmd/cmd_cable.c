@@ -100,7 +100,7 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
     cable = calloc (1, sizeof (urj_cable_t));
     if (!cable)
     {
-        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+        printf (_("%s(%d) calloc failed!\n"), __FILE__, __LINE__);
         return 1;
     }
 

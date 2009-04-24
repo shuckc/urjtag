@@ -267,15 +267,9 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
                 num_of_banks = read1 (BANK_ORGANIZATION_OFFSET);
             else
                 num_of_banks = 0;
-            pri_vendor_tbl =
-                (urj_flash_cfi_amd_pri_extened_query_structure_t *) calloc (1,
-                                                                            sizeof
-                                                                            (urj_flash_cfi_amd_pri_extened_query_structure_t)
-                                                                            +
-                                                                            num_of_banks
-                                                                            *
-                                                                            sizeof
-                                                                            (uint8_t));
+            pri_vendor_tbl = calloc (1,
+                    sizeof (urj_flash_cfi_amd_pri_extened_query_structure_t)
+                            + num_of_banks * sizeof (uint8_t));
             if (!pri_vendor_tbl)
             {
                 write1 (0, CFI_CMD_READ_ARRAY1);

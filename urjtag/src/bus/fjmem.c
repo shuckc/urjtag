@@ -305,9 +305,7 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
             block_param_t *bl;
             int nbytes;
 
-            if ((bl =
-                 (block_param_t *) calloc (1,
-                                           sizeof (block_param_t))) == NULL)
+            if ((bl = calloc (1, sizeof (block_param_t))) == NULL)
             {
                 printf (_("out of memory\n"));
                 failed |= 1;

@@ -477,7 +477,7 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
     cmd[1] = "BYPASS";
     cmd[3] = "BR";
     cmd[4] = NULL;
-    str = (char *) calloc (instr_len + 1, sizeof (char));
+    str = calloc (instr_len + 1, sizeof (char));
     if (str == NULL)
     {
         printf (_("Out of memory!\n"));

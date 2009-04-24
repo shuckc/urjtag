@@ -612,7 +612,8 @@ static void Init_Text( urj_bsdl_vhdl_parser_priv_t *priv )
 {
   if (priv->len_buffer == 0)
   {
-    priv->buffer = (char *)malloc( 160 );
+    /* @@@@ ToDo check malloc result RFHH */
+    priv->buffer = malloc( 160 );
     priv->len_buffer = 160;
   }
   priv->buffer[0] = '\0';
@@ -646,7 +647,8 @@ static void Store_Text( urj_bsdl_vhdl_parser_priv_t *priv, char *Source )
   req_len = strlen( priv->buffer ) + strlen( Source ) + 1;
   if (req_len > priv->len_buffer)
   {
-    priv->buffer = (char *)realloc( priv->buffer, req_len );
+    /* @@@@ ToDo check realloc result RFHH */
+    priv->buffer = realloc( priv->buffer, req_len );
     priv->len_buffer = req_len;
   }
   strcat( priv->buffer, Source );
@@ -825,7 +827,7 @@ urj_bsdl_vhdl_parser_priv_t *urj_vhdl_parser_init( FILE *f, urj_bsdl_jtag_ctrl_t
 {
   urj_bsdl_vhdl_parser_priv_t *new_priv;
 
-  if (!(new_priv = (urj_bsdl_vhdl_parser_priv_t *)malloc( sizeof( urj_bsdl_vhdl_parser_priv_t ) )))
+  if (!(new_priv = malloc( sizeof( urj_bsdl_vhdl_parser_priv_t ) )))
   {
     urj_bsdl_msg( jtag_ctrl->proc_mode,
               BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
@@ -919,7 +921,7 @@ static void urj_vhdl_port_add_name( urj_bsdl_vhdl_parser_priv_t *priv, char *nam
   urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
   urj_bsdl_string_elem_t *new_string;
 
-  new_string = (urj_bsdl_string_elem_t *)malloc( sizeof( urj_bsdl_string_elem_t ) );
+  new_string = malloc( sizeof( urj_bsdl_string_elem_t ) );
   if (new_string)
   {
     new_string->next   = pd->names_list;
@@ -997,7 +999,7 @@ static void urj_vhdl_port_add_range( urj_bsdl_vhdl_parser_priv_t *priv, int low,
 static void urj_vhdl_port_apply_port( urj_bsdl_vhdl_parser_priv_t *priv )
 {
   urj_bsdl_port_desc_t *tmp_pd = &(priv->tmp_port_desc);
-  urj_bsdl_port_desc_t *pd = (urj_bsdl_port_desc_t *)malloc( sizeof( urj_bsdl_port_desc_t ) );
+  urj_bsdl_port_desc_t *pd = malloc( sizeof( urj_bsdl_port_desc_t ) );
 
   if (pd)
   {
@@ -1038,7 +1040,7 @@ static void add_elem( urj_bsdl_vhdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *e
 #if 0
 static void set_attr_bool( urj_bsdl_vhdl_parser_priv_t *priv, char *name, int value )
 {
-  urj_bsdl_vhdl_elem_t *el = (urj_bsdl_vhdl_elem_t *)malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
 
   if (el)
   {
@@ -1055,8 +1057,8 @@ static void set_attr_bool( urj_bsdl_vhdl_parser_priv_t *priv, char *name, int va
 
 static void set_attr_decimal( urj_bsdl_vhdl_parser_priv_t *priv, char *name, int value )
 {
-  urj_bsdl_vhdl_elem_t *el = (urj_bsdl_vhdl_elem_t *)malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
-  char *string = (char *)malloc( 10 );
+  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+  char *string = malloc( 10 );
 
   if (el && string)
   {
@@ -1074,7 +1076,7 @@ static void set_attr_decimal( urj_bsdl_vhdl_parser_priv_t *priv, char *name, int
 
 static void set_attr_string( urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string )
 {
-  urj_bsdl_vhdl_elem_t *el = (urj_bsdl_vhdl_elem_t *)malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
 
   /* skip certain attributes */
   if (   (strcasecmp( name, "DESIGN_WARNING" ) == 0)
@@ -1105,7 +1107,7 @@ static void set_attr_string( urj_bsdl_vhdl_parser_priv_t *priv, char *name, char
 #if 0
 static void set_attr_real( urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string )
 {
-  urj_bsdl_vhdl_elem_t *el = (urj_bsdl_vhdl_elem_t *)malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
 
   if (el)
   {
@@ -1123,7 +1125,7 @@ static void set_attr_real( urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *
 #if 0
 static void set_attr_const( urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string )
 {
-  urj_bsdl_vhdl_elem_t *el = (urj_bsdl_vhdl_elem_t *)malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
 
   if (el)
   {

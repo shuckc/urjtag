@@ -120,8 +120,7 @@ usbconn_ftd2xx_flush (ftd2xx_param_t *p)
             /* extend receive buffer */
             p->recv_buf_len = p->recv_write_idx + p->to_recv;
             if (p->recv_buf)
-                p->recv_buf =
-                    (uint8_t *) realloc (p->recv_buf, p->recv_buf_len);
+                p->recv_buf = realloc (p->recv_buf, p->recv_buf_len);
         }
 
         if (!p->recv_buf)
@@ -242,7 +241,7 @@ usbconn_ftd2xx_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
     {
         p->send_buf_len = p->send_buffered + len;
         if (p->send_buf)
-            p->send_buf = (uint8_t *) realloc (p->send_buf, p->send_buf_len);
+            p->send_buf = realloc (p->send_buf, p->send_buf_len);
     }
 
     if (p->send_buf)
@@ -283,12 +282,12 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
     {
         p->send_buf_len = URJ_USBCONN_FTDX_MAXSEND;
         p->send_buffered = 0;
-        p->send_buf = (uint8_t *) malloc (p->send_buf_len);
+        p->send_buf = malloc (p->send_buf_len);
         p->recv_buf_len = URJ_USBCONN_FTD2XX_MAXRECV;
         p->to_recv = 0;
         p->recv_write_idx = 0;
         p->recv_read_idx = 0;
-        p->recv_buf = (uint8_t *) malloc (p->recv_buf_len);
+        p->recv_buf = malloc (p->recv_buf_len);
     }
 
     if (!p || !c || !p->send_buf || !p->recv_buf)

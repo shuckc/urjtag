@@ -54,7 +54,7 @@ extend_cmd_buffer (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
     {
         cmd->buf_len *= 2;
         if (cmd->buf)
-            cmd->buf = (uint8_t *) realloc (cmd->buf, cmd->buf_len);
+            cmd->buf = realloc (cmd->buf, cmd->buf_len);
     }
 
     return cmd->buf ? 1 : 0;
@@ -196,13 +196,12 @@ urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
                             uint32_t to_recv)
 {
     urj_tap_cable_cmd_xfer_cx_cmd_t *cmd =
-        (urj_tap_cable_cmd_xfer_cx_cmd_t *)
         malloc (sizeof (urj_tap_cable_cmd_xfer_cx_cmd_t));
 
     if (cmd)
     {
         cmd->buf_len = 64;
-        if ((cmd->buf = (uint8_t *) malloc (cmd->buf_len)) == NULL)
+        if ((cmd->buf = malloc (cmd->buf_len)) == NULL)
         {
             free (cmd);
             cmd = NULL;

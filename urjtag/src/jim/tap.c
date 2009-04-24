@@ -233,8 +233,7 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
 {
     int i, r;
 
-    urj_jim_device_t *dev =
-        (urj_jim_device_t *) malloc (sizeof (urj_jim_device_t));
+    urj_jim_device_t *dev = malloc (sizeof (urj_jim_device_t));
 
     if (dev == NULL)
     {
@@ -242,10 +241,7 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
         return NULL;
     }
 
-    dev->sreg =
-        (urj_jim_shift_reg_t *) malloc (num_sregs *
-                                        sizeof (urj_jim_shift_reg_t));
-
+    dev->sreg = malloc (num_sregs * sizeof (urj_jim_shift_reg_t));
     if (dev->sreg == NULL)
     {
         free (dev);
@@ -256,9 +252,8 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
     for (r = 0, i = 0; i < num_sregs; i++)
     {
         dev->sreg[i].len = reg_size[i];
-        dev->sreg[i].reg =
-            (uint32_t *) calloc (((reg_size[i] + 31) / 32),
-                                 sizeof (uint32_t));
+        dev->sreg[i].reg = calloc (((reg_size[i] + 31) / 32),
+                                   sizeof (uint32_t));
         if (dev->sreg[i].reg == NULL)
             r++;
     }
@@ -290,7 +285,7 @@ urj_jim_init (void)
 {
     urj_jim_state_t *s;
 
-    s = (urj_jim_state_t *) malloc (sizeof (urj_jim_state_t));
+    s = malloc (sizeof (urj_jim_state_t));
     if (s == NULL)
     {
         printf ("Out of memory!\n");

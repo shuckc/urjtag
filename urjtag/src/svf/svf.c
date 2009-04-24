@@ -357,7 +357,7 @@ urj_svf_build_bit_string (char *hex_string, int len)
     char *hex_string_pos;
     int hex_string_idx;
 
-    if (!(bit_string = (char *) calloc (len + 1, sizeof (char))))
+    if (!(bit_string = calloc (len + 1, sizeof (char))))
     {
         printf (_("out of memory"));
         return (NULL);
@@ -548,7 +548,7 @@ urj_svf_all_care (char **string, double number)
     num = num % 4 == 0 ? num / 4 : num / 4 + 1;
 
     /* build string with all cares */
-    if (!(ptr = (char *) calloc (num + 1, sizeof (char))))
+    if (!(ptr = calloc (num + 1, sizeof (char))))
     {
         printf (_("out of memory"));
         return (0);
@@ -1195,8 +1195,7 @@ urj_svf_run (urj_chain_t *chain, FILE * SVF_FILE, int stop_on_mismatch,
         len = priv.part->instruction_length;
         if (len > 0)
         {
-            if ((instruction_string =
-                 (char *) calloc (len + 1, sizeof (char))) != NULL)
+            if ((instruction_string = calloc (len + 1, sizeof (char))) != NULL)
             {
                 memset (instruction_string, '1', len);
                 instruction_string[len] = '\0';

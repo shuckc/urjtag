@@ -366,7 +366,7 @@ void *urj_svf_flex_init(FILE *f, int num_lines, int print_progress)
 
   yyset_in(f, scanner);
 
-  if (!(extra = (urj_svf_scanner_extra_t *)malloc(sizeof(urj_svf_scanner_extra_t)))) {
+  if (!(extra = malloc(sizeof(urj_svf_scanner_extra_t)))) {
     printf( _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
     yylex_destroy(scanner);
     return NULL;
