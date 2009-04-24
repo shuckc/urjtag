@@ -255,8 +255,8 @@ static void amd_29xx040_read_array( cfi_array_t *cfi_array )
 	/* Read Array */
 	if(var_forced_detection.unlock_bypass == AMD_BYPASS_UNLOCK_MODE)
 	{
-		bus_write( bus, cfi_array->address + 0x555, 0x90 );
-		bus_write( bus, cfi_array->address + 0x2AA, 0x00 );
+		bus_write( cfi_array->bus, cfi_array->address + 0x555, 0x90 );
+		bus_write( cfi_array->bus, cfi_array->address + 0x2AA, 0x00 );
 		usleep(100);
 		var_forced_detection.unlock_bypass = AMD_STANDARD_MODE;
 	}

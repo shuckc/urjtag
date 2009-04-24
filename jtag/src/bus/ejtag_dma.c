@@ -157,7 +157,7 @@ char siz_(int sz)
  * low-level dma write
  *
  */
-static void ejtag_dma_write(unsigned int addr, unsigned int data,int sz)
+static void ejtag_dma_write(bus_t *bus, unsigned int addr, unsigned int data,int sz)
 {
 	static data_register *ejctrl = NULL;
 	static data_register *ejaddr = NULL;
@@ -240,7 +240,7 @@ static void ejtag_dma_write(unsigned int addr, unsigned int data,int sz)
  * low level dma read operation
  *
  */
-static unsigned int ejtag_dma_read(unsigned int addr,int sz)
+static unsigned int ejtag_dma_read(bus_t *bus, unsigned int addr,int sz)
 {
 	static data_register *ejctrl = NULL;
 	static data_register *ejaddr = NULL;
@@ -444,15 +444,15 @@ int ejtag_dma_bus_init( bus_t *bus )
 	
 	// Clear Memory Protection Bit in DCR
 	printf( _("Clear memory protection bit in DCR\n"));
-	unsigned int val = ejtag_dma_read(0xff300000,DMA_WORD);
-	ejtag_dma_write(0xff300000, val & ~(1<<2), DMA_WORD );
+	unsigned int val = ejtag_dma_read(bus, 0xff300000,DMA_WORD);
+	ejtag_dma_write(bus, 0xff300000, val & ~(1<<2), DMA_WORD );
 	
 	// Clear watchdog, if any
 	printf( _("Clear Watchdog\n"));
-	ejtag_dma_write(0xb8000080,0,DMA_WORD);
+	ejtag_dma_write(bus, 0xb8000080,0,DMA_WORD);
 
 	printf( _("Potential flash base address: [0x%x], [0x%x]\n"),
-		ejtag_dma_read(0xfffe2000,DMA_WORD), ejtag_dma_read(0xfffe1000,DMA_WORD));
+		ejtag_dma_read(bus, 0xfffe2000,DMA_WORD), ejtag_dma_read(bus, 0xfffe1000,DMA_WORD));
 	
 	printf( _("Processor successfully switched in debug mode.\n"));
 	
@@ -542,7 +542,7 @@ int get_sz(uint32_t adr)
 void ejtag_dma_bus_write(bus_t *bus, uint32_t adr, uint32_t data)
 {
 	//printf("%s:adr=0x%x,data=0x%x\n",__FUNCTION__,adr,data);
-	ejtag_dma_write(adr,data, get_sz(adr));
+	ejtag_dma_write(bus, adr,data, get_sz(adr));
 }
 /**
  * bus->driver->(*read)
@@ -550,7 +550,7 @@ void ejtag_dma_bus_write(bus_t *bus, uint32_t adr, uint32_t data)
  */
 unsigned int ejtag_dma_bus_read(bus_t *bus, uint32_t adr)
 {
-	int data = ejtag_dma_read(adr, get_sz(adr));
+	int data = ejtag_dma_read(bus, adr, get_sz(adr));
 	//printf("%s:adr=0x%x,got=0x%x\n",__FUNCTION__,adr,data);
 	return data;
 }
@@ -562,7 +562,7 @@ static unsigned int _data_read;
  */
 void ejtag_dma_bus_read_start(bus_t *bus, uint32_t adr)
 {
-	_data_read = ejtag_dma_read(adr,get_sz(adr));
+	_data_read = ejtag_dma_read(bus, adr,get_sz(adr));
 	//printf("%s:adr=0x%x, got=0x%x\n",__FUNCTION__,adr,_data_read);
 	return;
 }
@@ -573,7 +573,7 @@ void ejtag_dma_bus_read_start(bus_t *bus, uint32_t adr)
 unsigned int ejtag_dma_bus_read_next(bus_t *bus, uint32_t adr)
 {
 	unsigned int tmp_value = _data_read;
-	_data_read = ejtag_dma_read(adr,get_sz(adr));
+	_data_read = ejtag_dma_read(bus, adr,get_sz(adr));
 	//printf("%s:adr=0x%x, got=0x%x\n",__FUNCTION__,adr,_data_read);
 	return tmp_value;
 }

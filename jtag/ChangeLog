@@ -1,3 +1,7 @@
+2009-04-24  Rutger Hofman <rfhh>
+  * src/flash/amd_flash.c, src/bus/ejtag.c, src/bus/ejtag_dma.c: fix erroneous 
+  reference to global variable 'bus' to be to a local variable/parameter.
+
 2009-04-17  Kolja Waschk <kawk>
 
   * Makefile.am: Distribute UrJTAG.nsi in source tarball next time

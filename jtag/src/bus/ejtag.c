@@ -546,7 +546,7 @@ ejtag_bus_area( bus_t *bus, uint32_t adr, bus_area_t *area )
 }
 
 static int
-ejtag_gen_read( uint32_t *code, uint32_t adr )
+ejtag_gen_read( bus_t *bus, uint32_t *code, uint32_t adr )
 {
 	uint16_t adr_hi, adr_lo;
 	uint32_t *p = code;
@@ -590,7 +590,7 @@ ejtag_bus_read_start( bus_t *bus, uint32_t adr )
 {
 	uint32_t code[3];
 
-	ejtag_run_pracc( bus, code, ejtag_gen_read( code, adr ));
+	ejtag_run_pracc( bus, code, ejtag_gen_read( bus, code, adr ));
 	// printf("bus_read_start: adr=0x%08x\n", adr);
 }
 
@@ -605,7 +605,7 @@ ejtag_bus_read_next( bus_t *bus, uint32_t adr )
 	uint32_t code[4], *p = code;
 
 	*p++ = 0xac820000;				// sw $2,0($4)
-	p += ejtag_gen_read( p, adr );
+	p += ejtag_gen_read( bus, p, adr );
 
 	d = ejtag_run_pracc( bus, code, p - code );
 
