@@ -2,6 +2,10 @@
 
   * data/analog/bf518/bf518: Update with public BSDL file.
 
+  * data/analog/bf527/bf527, data/analog/bf533/bf533, data/analog/bf537/bf537,
+    data/analog/bf538/bf538, data/analog/bf548/bf548, data/analog/bf561/bf561:
+    Add more register/instruction JTAG encodings.
+
 2009-04-23  Rutger Hofman <rfhh>
 
   Use the changes by Przemyslaw Iskra, published as
