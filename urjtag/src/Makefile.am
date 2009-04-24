@@ -39,6 +39,10 @@ if ENABLE_BSDL
 SUBDIRS += bsdl
 endif
 
+if ENABLE_JIM
+SUBDIRS += jim
+endif
+
 bin_PROGRAMS = \
 	jtag
 
@@ -48,52 +52,41 @@ dist_bin_SCRIPTS = \
 jtag_SOURCES = \
 	jtag.c
 
-jtag_DEPENDENCIES = \
-	flash/libflash.a \
-	lib/libjtaglib.a \
-	tap/libtap.a \
-	part/libpart.a \
-	bus/libbus.a \
-	cmd/libcmd.a
+lib_LTLIBRARIES = liburjtag.la
+liburjtag_la_LDFLAGS = -version-info 0:0:0
 
-if ENABLE_SVF
-jtag_DEPENDENCIES += svf/libsvf.a
-endif
+liburjtag_la_SOURCES =
 
-if ENABLE_BSDL
-jtag_DEPENDENCIES +=  bsdl/libbsdl.a
-endif
-
-jtag_LDADD = \
-	-Lcmd -lcmd \
-	-Ltap -ltap \
-	-Lpart -lpart \
-	-Llib -ljtaglib \
-	-Lflash -lflash \
-	-Ltap -ltap \
-	-Lflash -lflash \
-	-Lbus -lbus \
+liburjtag_la_LIBADD = \
+	tap/libtap.la \
+	part/libpart.la \
+	lib/libjtaglib.la \
+	flash/libflash.la \
+	bus/libbus.la \
+	cmd/libcmd.la \
 	-lm \
 	@FTD2XXLIB@ \
 	@LIBINTL@
 
 if ENABLE_SVF
-jtag_LDADD += -Lsvf -lsvf
+liburjtag_la_LIBADD += svf/libsvf.la
 endif
 
 if ENABLE_BSDL
-jtag_LDADD += -Lbsdl -lbsdl
+liburjtag_la_LIBADD +=  bsdl/libbsdl.la
 endif
 
 if ENABLE_JIM
-SUBDIRS += jim
-jtag_LDADD += -Ljim -ljim
-jtag_DEPENDENCIES += jim/libjim.a
+liburjtag_la_LIBADD += jim/libjim.la
 endif
 
 if DMALLOC
-jtag_LDADD += -ldmalloc
+liburjtag_la_LIBADD += -ldmalloc
 endif
+
+jtag_LDADD = \
+	liburjtag.la \
+	@LIBINTL@
 
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"

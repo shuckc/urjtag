@@ -23,55 +23,55 @@
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libcmd.a
+noinst_LTLIBRARIES = libcmd.la
 
-libcmd_a_SOURCES =
-libcmd_a_SOURCES += cmd_frequency.c
-libcmd_a_SOURCES += cmd_cable.c
-libcmd_a_SOURCES += cmd_reset.c
-libcmd_a_SOURCES += cmd_discovery.c
-libcmd_a_SOURCES += cmd_idcode.c
-libcmd_a_SOURCES += cmd_detect.c
-libcmd_a_SOURCES += cmd_detectflash.c
-libcmd_a_SOURCES += cmd_help.c
-libcmd_a_SOURCES += cmd_quit.c
-libcmd_a_SOURCES += cmd_scan.c
-libcmd_a_SOURCES += cmd_signal.c
-libcmd_a_SOURCES += cmd_salias.c
-libcmd_a_SOURCES += cmd_bit.c
-libcmd_a_SOURCES += cmd_register.c
-libcmd_a_SOURCES += cmd_initbus.c
-libcmd_a_SOURCES += cmd_print.c
-libcmd_a_SOURCES += cmd_part.c
-libcmd_a_SOURCES += cmd_bus.c
-libcmd_a_SOURCES += cmd_instruction.c
-libcmd_a_SOURCES += cmd_shift.c
-libcmd_a_SOURCES += cmd_dr.c
-libcmd_a_SOURCES += cmd_get.c
-libcmd_a_SOURCES += cmd_test.c
-libcmd_a_SOURCES += cmd_debug.c
-libcmd_a_SOURCES += cmd_shell.c
-libcmd_a_SOURCES += cmd_set.c
-libcmd_a_SOURCES += cmd_endian.c
-libcmd_a_SOURCES += cmd_parse.c
-libcmd_a_SOURCES += cmd_peekpoke.c
-libcmd_a_SOURCES += cmd_pod.c
-libcmd_a_SOURCES += cmd_readmem.c
-libcmd_a_SOURCES += cmd_writemem.c
-libcmd_a_SOURCES += cmd_flashmem.c
-libcmd_a_SOURCES += cmd_eraseflash.c
-libcmd_a_SOURCES += cmd_include.c
-libcmd_a_SOURCES += cmd_addpart.c
-libcmd_a_SOURCES += cmd_cmd.c
-libcmd_a_SOURCES += cmd_usleep.c
-libcmd_a_SOURCES += cmd_jtag_data_dir.c
+libcmd_la_SOURCES = \
+	cmd_frequency.c \
+	cmd_cable.c \
+	cmd_reset.c \
+	cmd_discovery.c \
+	cmd_idcode.c \
+	cmd_detect.c \
+	cmd_detectflash.c \
+	cmd_help.c \
+	cmd_quit.c \
+	cmd_scan.c \
+	cmd_signal.c \
+	cmd_salias.c \
+	cmd_bit.c \
+	cmd_register.c \
+	cmd_initbus.c \
+	cmd_print.c \
+	cmd_part.c \
+	cmd_bus.c \
+	cmd_instruction.c \
+	cmd_shift.c \
+	cmd_dr.c \
+	cmd_get.c \
+	cmd_test.c \
+	cmd_debug.c \
+	cmd_shell.c \
+	cmd_set.c \
+	cmd_endian.c \
+	cmd_parse.c \
+	cmd_peekpoke.c \
+	cmd_pod.c \
+	cmd_readmem.c \
+	cmd_writemem.c \
+	cmd_flashmem.c \
+	cmd_eraseflash.c \
+	cmd_include.c \
+	cmd_addpart.c \
+	cmd_cmd.c \
+	cmd_usleep.c \
+	cmd_jtag_data_dir.c
 
 if ENABLE_SVF
-libcmd_a_SOURCES += cmd_svf.c
+libcmd_la_SOURCES += cmd_svf.c
 endif
 
 if ENABLE_BSDL
-libcmd_a_SOURCES += cmd_bsdl.c
+libcmd_la_SOURCES += cmd_bsdl.c
 endif
 
 AM_CPPFLAGS = -DJTAG_BIN_DIR=\"$(bindir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

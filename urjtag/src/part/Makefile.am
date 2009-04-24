@@ -23,9 +23,9 @@
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libpart.a
+noinst_LTLIBRARIES = libpart.la
 
-libpart_a_SOURCES = \
+libpart_la_SOURCES = \
 	signal.c \
 	instruction.c \
 	data_register.c \

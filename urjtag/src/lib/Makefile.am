@@ -23,7 +23,7 @@
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libjtaglib.a
+noinst_LTLIBRARIES = libjtaglib.la
 
 if JTAG_RELOCATABLE
 libiberty_sources = \
@@ -39,7 +39,7 @@ else
 libiberty_sources =
 endif
 
-libjtaglib_a_SOURCES = \
+libjtaglib_la_SOURCES = \
 	getdelim.c \
 	getline.c \
 	fclock.c \

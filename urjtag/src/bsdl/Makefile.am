@@ -21,9 +21,10 @@
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libbsdl.a
+OBJEXT = lo
+noinst_LTLIBRARIES = libbsdl.la
 
-libbsdl_a_SOURCES =  \
+libbsdl_la_SOURCES =  \
 	vhdl_bison.y \
 	vhdl_flex.l  \
 	bsdl_bison.y \

@@ -23,9 +23,9 @@
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libtap.a
+noinst_LTLIBRARIES = libtap.la
 
-libtap_a_SOURCES = \
+libtap_la_SOURCES = \
 	tap.c \
 	register.c \
 	state.c \
@@ -46,119 +46,119 @@ libtap_a_SOURCES = \
 	cable/cmd_xfer.c
 
 if ENABLE_CABLE_ARCOM
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/arcom.c
 endif
 
 if ENABLE_CABLE_BYTEBLASTER
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/byteblaster.c
 endif
 
 if ENABLE_CABLE_DLC5
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/dlc5.c
 endif
 
 if ENABLE_CABLE_EA253
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/ea253.c
 endif
 
 if ENABLE_CABLE_EI012
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/ei012.c
 endif
 
 if ENABLE_CABLE_KEITHKOEP
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/keithkoep.c
 endif
 
 if ENABLE_CABLE_LATTICE
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/lattice.c
 endif
 
 if ENABLE_CABLE_MPCBDM
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/mpcbdm.c
 endif
 
 if ENABLE_CABLE_TRITON
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/triton.c
 endif
 
 if ENABLE_CABLE_WIGGLER
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/wiggler.c \
 	cable/wiggler2.c
 endif
 
 if ENABLE_CABLE_JLINK
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/jlink.c
 endif
 
 if ENABLE_CABLE_XPC
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/xpc.c
 endif
 
 if ENABLE_CABLE_USBBLASTER
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/usbblaster.c
 endif
 
 if ENABLE_CABLE_FT2232
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/ft2232.c
 endif
 
 if ENABLE_CABLE_TS7800
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/ts7800.c
 endif
 
 
 if HAVE_LIBUSB
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	usbconn/libusb.c
 endif
 
 
 if ENABLE_JIM
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/jim.c
 endif
 
 if ENABLE_LOWLEVEL_FTDI
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	usbconn/libftdi.c
 endif
 
 if ENABLE_LOWLEVEL_FTD2XX
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	usbconn/libftd2xx.c
 endif
 
 if ENABLE_LOWLEVEL_DIRECT
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	parport/direct.c
 endif
 
 if ENABLE_LOWLEVEL_PPDEV
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	parport/ppdev.c
 endif
 
 if ENABLE_LOWLEVEL_PPI
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	parport/ppi.c
 endif
 
 if ENABLE_CABLE_EP9307
-libtap_a_SOURCES += \
+libtap_la_SOURCES += \
 	cable/vision_ep9307.c
 endif

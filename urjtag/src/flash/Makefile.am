@@ -23,9 +23,9 @@
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libflash.a
+noinst_LTLIBRARIES = libflash.la
 
-libflash_a_SOURCES = \
+libflash_la_SOURCES = \
 	amd.c \
 	amd_flash.c \
 	cfi.c \
@@ -35,7 +35,7 @@ libflash_a_SOURCES = \
 	jedec.c
 
 if JEDEC_EXP
-libflash_a_SOURCES += \
+libflash_la_SOURCES += \
 	jedec_exp.c
 endif
 

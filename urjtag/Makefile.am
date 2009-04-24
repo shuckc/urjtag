@@ -38,7 +38,8 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
 	Makefile.rules \
-	UrJTAG.nsi
+	UrJTAG.nsi \
+	tools/config.rpath
 
 ACLOCAL_AMFLAGS = -I m4
 

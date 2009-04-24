@@ -23,9 +23,10 @@ include $(top_srcdir)/Makefile.rules
 
 AM_YFLAGS = -d
 
-noinst_LIBRARIES = libsvf.a
+OBJEXT = lo
+noinst_LTLIBRARIES = libsvf.la
 
-libsvf_a_SOURCES = \
+libsvf_la_SOURCES = \
 	svf_bison.y \
 	svf_flex.l \
 	svf.h \

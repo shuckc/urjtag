@@ -23,9 +23,9 @@
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_LIBRARIES = libjim.a
+noinst_LTLIBRARIES = libjim.la
 
-libjim_a_SOURCES = \
+libjim_la_SOURCES = \
 	tap.c \
 	some_cpu.c \
 	intel_28f800b3.c

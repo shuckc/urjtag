@@ -1,5 +1,12 @@
 2009-04-23  Rutger Hofman <rfhh>
 
+  Use the changes by Przemyslaw Iskra, published as
+  $ svn co http://labserver.uv.es/svn_FPGA/trunk/source/urjtag urjtag-lib
+  to use libtool from now on. He based on r1427.
+  * configure.ac, **/Makefile.am: use libtool to create one shared liburjtag.la
+
+2009-04-23  Rutger Hofman <rfhh>
+
   Expand tabs also in #defines -- indent skips them.
   Run indent again. Since many identifiers have changed, line wraps have to
   be redone.
