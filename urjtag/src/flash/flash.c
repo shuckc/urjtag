@@ -65,7 +65,6 @@ urj_flash_driver_t *urj_flash_flash_drivers[] = {
     NULL
 };
 
-extern urj_flash_cfi_array_t *urj_flash_cfi_array;
 static urj_flash_driver_t *flash_driver = NULL;
 
 static void
@@ -363,7 +362,7 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
 
             data = 0;
             for (j = 0; j < flash_driver->bus_width; j++)
-                if (big_endian)
+                if (urj_big_endian)
                     data = (data << 8) | b[bc + j];
                 else
                     data |= b[bc + j] << (j * 8);
@@ -420,7 +419,7 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
 
             data = 0;
             for (j = 0; j < flash_driver->bus_width; j++)
-                if (big_endian)
+                if (urj_big_endian)
                     data = (data << 8) | b[bc + j];
                 else
                     data |= b[bc + j] << (j * 8);

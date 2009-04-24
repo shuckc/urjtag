@@ -28,7 +28,7 @@
 #include <stdio.h>
 
 #include "bssignal.h"
-#include "instruction.h"
+#include "part_instruction.h"
 #include "data_register.h"
 #include "bsbit.h"
 
@@ -48,8 +48,8 @@ struct urj_part
     urj_part_signal_t *signals;
     urj_part_salias_t *saliases;
     int instruction_length;
-    urj_instruction_t *instructions;
-    urj_instruction_t *active_instruction;
+    urj_part_instruction_t *instructions;
+    urj_part_instruction_t *active_instruction;
     urj_data_register_t *data_registers;
     int boundary_length;
     urj_bsbit_t **bsbits;
@@ -58,8 +58,8 @@ struct urj_part
 urj_part_t *urj_part_alloc (const urj_tap_register_t *id);
 void urj_part_free (urj_part_t *p);
 urj_part_t *read_part (FILE * f, urj_tap_register_t *idr);
-urj_instruction_t *urj_part_find_instruction (urj_part_t *p,
-                                              const char *iname);
+urj_part_instruction_t *urj_part_find_instruction (urj_part_t *p,
+                                                   const char *iname);
 urj_data_register_t *urj_part_find_data_register (urj_part_t *p,
                                                   const char *drname);
 urj_part_signal_t *urj_part_find_signal (urj_part_t *p,

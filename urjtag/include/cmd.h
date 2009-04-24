@@ -46,7 +46,6 @@ typedef struct
 
 extern const urj_cmd_t *urj_cmds[];
 
-char **urj_cmd_completion (const char *text, int start, int end);
 int urj_cmd_run (urj_chain_t *chain, char *params[]);
 int urj_cmd_params (char *params[]);
 int urj_cmd_get_number (char *s, unsigned int *i);

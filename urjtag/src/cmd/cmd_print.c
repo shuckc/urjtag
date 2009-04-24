@@ -104,7 +104,7 @@ cmd_print_run (urj_chain_t *chain, char *params[])
         if (strcasecmp (params[1], "instructions") == 0)
         {
             urj_part_t *part;
-            urj_instruction_t *inst;
+            urj_part_instruction_t *inst;
 
             snprintf (format, 128, _(" Active %%-%ds %%-%ds"),
                       URJ_INSTRUCTION_MAXLEN_INSTRUCTION,

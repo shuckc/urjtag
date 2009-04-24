@@ -34,7 +34,7 @@
 
 #include <bsdl.h>
 
-#include "register.h"
+#include "tap_register.h"
 #include "tap.h"
 #include "cable.h"
 #include "part.h"

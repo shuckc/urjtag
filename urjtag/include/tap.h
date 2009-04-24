@@ -25,7 +25,7 @@
 #ifndef URJ_TAP_H
 #define URJ_TAP_H
 
-#include "register.h"
+#include "tap_register.h"
 #include "chain.h"
 
 void urj_tap_reset (urj_chain_t *chain);

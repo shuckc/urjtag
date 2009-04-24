@@ -40,8 +40,8 @@
 
 
 extern urj_bus_t *urj_bus;
-extern int big_endian;
-extern int debug_mode;
+extern int urj_big_endian;
+extern int urj_debug_mode;
 
 const char *urj_cmd_jtag_get_data_dir (void);
 

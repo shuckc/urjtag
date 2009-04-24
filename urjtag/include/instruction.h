@@ -22,27 +22,27 @@
  *
  */
 
-#ifndef URJ_INSTRUCTION_H
-#define URJ_INSTRUCTION_H
+#ifndef URJ_PART_INSTRUCTION_H
+#define URJ_PART_INSTRUCTION_H
 
-#include "register.h"
+#include "tap_register.h"
 #include "data_register.h"
 
 #define URJ_INSTRUCTION_MAXLEN_INSTRUCTION      20
 
-typedef struct urj_instruction urj_instruction_t;
+typedef struct urj_part_instruction urj_part_instruction_t;
 
-struct urj_instruction
+struct urj_part_instruction
 {
     char name[URJ_INSTRUCTION_MAXLEN_INSTRUCTION + 1];
     urj_tap_register_t *value;
     urj_tap_register_t *out;
     urj_data_register_t *data_register;
-    urj_instruction_t *next;
+    urj_part_instruction_t *next;
 };
 
-urj_instruction_t *urj_part_instruction_alloc (const char *name, int len,
-                                               const char *val);
-void urj_part_instruction_free (urj_instruction_t *i);
+urj_part_instruction_t *urj_part_instruction_alloc (const char *name, int len,
+                                                    const char *val);
+void urj_part_instruction_free (urj_part_instruction_t *i);
 
 #endif /* URJ_INSTRUCTION_H */

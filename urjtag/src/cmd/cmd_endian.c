@@ -39,7 +39,7 @@ cmd_endian_run (urj_chain_t *chain, char *params[])
 
     if (!params[1])
     {
-        if (big_endian)
+        if (urj_big_endian)
             printf (_("Endianess for external files: big\n"));
         else
             printf (_("Endianess for external files: little\n"));
@@ -49,12 +49,12 @@ cmd_endian_run (urj_chain_t *chain, char *params[])
 
     if (strcasecmp (params[1], "little") == 0)
     {
-        big_endian = 0;
+        urj_big_endian = 0;
         return 1;
     }
     if (strcasecmp (params[1], "big") == 0)
     {
-        big_endian = 1;
+        urj_big_endian = 1;
         return 1;
     }
 

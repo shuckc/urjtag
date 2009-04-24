@@ -50,15 +50,15 @@
 #include "bus.h"
 #include "cmd.h"
 #include "jtag.h"
+#include "flash.h"
 
 #ifndef HAVE_GETLINE
 ssize_t urj_lib_getline (char **lineptr, size_t *n, FILE * stream);
 #endif
 
-int debug_mode = 0;
-int big_endian = 0;
-int interactive = 0;
-extern urj_flash_cfi_array_t *urj_flash_cfi_array;
+int urj_debug_mode = 0;
+int urj_big_endian = 0;
+static int urj_interactive = 0;
 
 #define JTAGDIR         ".jtag"
 #define HISTORYFILE     "history"
@@ -92,6 +92,41 @@ jtag_create_jtagdir (void)
 }
 
 #ifdef HAVE_LIBREADLINE
+
+static char *
+cmd_find_next (const char *text, int state)
+{
+    static size_t cmd_idx, len;
+
+    if (!state)
+    {
+        cmd_idx = 0;
+        len = strlen (text);
+    }
+
+    while (urj_cmds[cmd_idx])
+    {
+        char *name = urj_cmds[cmd_idx++]->name;
+        if (!strncmp (name, text, len))
+            return strdup (name);
+    }
+
+    return NULL;
+}
+
+#ifdef HAVE_READLINE_COMPLETION
+static char **
+urj_cmd_completion (const char *text, int start, int end)
+{
+    char **ret = NULL;
+
+    if (start == 0)
+        ret = rl_completion_matches (text, cmd_find_next);
+
+    return ret;
+}
+#endif /* def HAVE_READLINE_COMPLETION */
+
 #ifdef HAVE_READLINE_HISTORY
 
 static void
@@ -145,7 +180,8 @@ jtag_save_history (void)
 }
 
 #endif /* HAVE_READLINE_HISTORY */
-#endif
+
+#endif /* HAVE_READLINE */
 
 static int
 jtag_readline_multiple_commands_support (urj_chain_t *chain, char *line)        /* multiple commands should be separated with '::' */
@@ -345,7 +381,7 @@ main (int argc, char *const argv[])
             break;
 
         case 'i':
-            interactive = 1;
+            urj_interactive = 1;
             break;
 
         case 'h':
@@ -433,7 +469,7 @@ main (int argc, char *const argv[])
             }
         }
 
-        if (!interactive)
+        if (!urj_interactive)
             return 0;
     }
 

@@ -87,7 +87,7 @@ urj_part_free (urj_part_t *p)
     /* instructions */
     while (p->instructions)
     {
-        urj_instruction_t *i = p->instructions;
+        urj_part_instruction_t *i = p->instructions;
         p->instructions = i->next;
         urj_part_instruction_free (i);
     }
@@ -108,10 +108,10 @@ urj_part_free (urj_part_t *p)
     free (p);
 }
 
-urj_instruction_t *
+urj_part_instruction_t *
 urj_part_find_instruction (urj_part_t *p, const char *iname)
 {
-    urj_instruction_t *i;
+    urj_part_instruction_t *i;
 
     if (!p || !iname)
         return NULL;

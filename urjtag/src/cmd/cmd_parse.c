@@ -110,7 +110,7 @@ urj_cmd_jtag_parse_line (urj_chain_t *chain, char *line)
     a[tcnt] = NULL;
 
     r = urj_cmd_run (chain, a);
-    if (debug_mode & 1)
+    if (urj_debug_mode & 1)
         printf ("Return in urj_cmd_jtag_parse_line r=%d\n", r);
     free (a);
     free (sline);
@@ -172,7 +172,7 @@ urj_cmd_jtag_parse_file (urj_chain_t *chain, const char *filename)
     go = urj_cmd_jtag_parse_stream (chain, f);
 
     fclose (f);
-    if (debug_mode & 1)
+    if (urj_debug_mode & 1)
         printf ("File Closed gp=%d\n", go);
     return go;
 }

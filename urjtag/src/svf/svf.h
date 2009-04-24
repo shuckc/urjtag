@@ -95,7 +95,7 @@ struct parser_priv
     struct svf_parser_params parser_params;
     void *scanner;
     urj_part_t *part;
-    urj_instruction_t *ir;
+    urj_part_instruction_t *ir;
     urj_data_register_t *dr;
     urj_svf_sxr_t sir_params;
     urj_svf_sxr_t sdr_params;

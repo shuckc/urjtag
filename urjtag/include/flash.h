@@ -85,6 +85,8 @@ typedef struct
 #define URJ_FLASH_ERROR_BLOCK_LOCKED                    3
 #define URJ_FLASH_ERROR_UNKNOWN                         99
 
+extern urj_flash_cfi_array_t *urj_flash_cfi_array;
+
 void urj_flash_detectflash (urj_bus_t *bus, uint32_t adr);
 
 void urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int);

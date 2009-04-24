@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "register.h"
+#include "tap_register.h"
 
 urj_tap_register_t *
 urj_tap_register_alloc (int len)

@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "register.h"
+#include "tap_register.h"
 #include "jtag.h"
 
 #include "cmd.h"

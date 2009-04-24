@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef URJ_REGISTER_H
-#define URJ_REGISTER_H
+#ifndef URJ_TAP_REGISTER_H
+#define URJ_TAP_REGISTER_H
 
 typedef struct urj_tap_register
 {

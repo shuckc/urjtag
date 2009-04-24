@@ -28,12 +28,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "instruction.h"
+#include "part_instruction.h"
 
-urj_instruction_t *
+urj_part_instruction_t *
 urj_part_instruction_alloc (const char *name, int len, const char *val)
 {
-    urj_instruction_t *i;
+    urj_part_instruction_t *i;
 
     if (!name || !val)
         return NULL;
@@ -69,7 +69,7 @@ urj_part_instruction_alloc (const char *name, int len, const char *val)
 }
 
 void
-urj_part_instruction_free (urj_instruction_t *i)
+urj_part_instruction_free (urj_part_instruction_t *i)
 {
     if (!i)
         return;

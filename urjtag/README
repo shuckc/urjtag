@@ -1,6 +1,6 @@
 $Id$
 
-The subdirectory urjtag/ or the UrJTAG package contains a branch that is used
+The subdirectory urjtag/ of the UrJTAG package contains a branch that is used
 for the conversion of UrJTAG to a library plus a separate command shell.
 Changes and commits to this branch will be frequent, and will affect nearly
 every aspect of the source tree, like file names, file locations, code layout,

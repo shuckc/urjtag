@@ -26,9 +26,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#ifdef HAVE_LIBREADLINE
-#include <readline/readline.h>
-#endif
 
 #include "jtag.h"
 
@@ -126,42 +123,6 @@ const urj_cmd_t *urj_cmds[] = {
     &urj_cmd_debug,
     NULL                        /* last must be NULL */
 };
-
-#ifdef HAVE_LIBREADLINE
-static char *
-cmd_find_next (const char *text, int state)
-{
-    static size_t cmd_idx, len;
-
-    if (!state)
-    {
-        cmd_idx = 0;
-        len = strlen (text);
-    }
-
-    while (urj_cmds[cmd_idx])
-    {
-        char *name = urj_cmds[cmd_idx++]->name;
-        if (!strncmp (name, text, len))
-            return strdup (name);
-    }
-
-    return NULL;
-}
-
-#ifdef HAVE_READLINE_COMPLETION
-char **
-urj_cmd_completion (const char *text, int start, int end)
-{
-    char **ret = NULL;
-
-    if (start == 0)
-        ret = rl_completion_matches (text, cmd_find_next);
-
-    return ret;
-}
-#endif
-#endif
 
 int
 urj_cmd_test_cable (urj_chain_t *chain)

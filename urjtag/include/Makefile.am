@@ -39,10 +39,10 @@ noinst_HEADERS = \
 	flash/mic.h \
 	flash/intel.h \
 	gettext.h \
-	instruction.h \
+	part_instruction.h \
 	parport.h \
 	part.h \
-	register.h \
+	tap_register.h \
 	bssignal.h \
 	tap_state.h \
 	jtag.h \

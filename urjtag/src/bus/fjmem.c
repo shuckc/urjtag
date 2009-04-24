@@ -85,7 +85,7 @@ fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode,
                       int len)
 {
     urj_data_register_t *dr;
-    urj_instruction_t *i;
+    urj_part_instruction_t *i;
     int l, fjmem_reg_len;
     char *tdo_bit;
 

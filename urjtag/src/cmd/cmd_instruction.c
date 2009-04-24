@@ -85,7 +85,7 @@ cmd_instruction_run (urj_chain_t *chain, char *params[])
 
     if (urj_cmd_params (params) == 4)
     {
-        urj_instruction_t *i;
+        urj_part_instruction_t *i;
 
         if (strlen (params[2]) != part->instruction_length)
         {

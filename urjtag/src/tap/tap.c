@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 
-#include "register.h"
+#include "tap_register.h"
 #include "tap.h"
 #include "tap_state.h"
 #include "chain.h"
