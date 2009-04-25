@@ -322,7 +322,6 @@ cleanup (urj_chain_t *chain)
     chain = NULL;
 }
 
-const char *jtag_argv0;
 int
 main (int argc, char *const argv[])
 {
@@ -335,7 +334,7 @@ main (int argc, char *const argv[])
     int quiet = 0;
     urj_chain_t *chain = NULL;
 
-    jtag_argv0 = argv[0];
+    urj_cmd_jtag_set_argv0(argv[0]);
 
     if (geteuid () == 0 && getuid () != 0)
     {

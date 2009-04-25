@@ -8,6 +8,14 @@
 #include <config.h>
 #include "jtag.h"
 
+static const char *jtag_argv0;
+
+void
+urj_cmd_jtag_set_argv0(const char *argv0)
+{
+    jtag_argv0 = argv0;
+}
+
 #ifdef JTAG_RELOCATABLE
 
 #include <stdlib.h>
@@ -17,7 +25,6 @@ extern char *make_relative_prefix (const char *progname,
                                    const char *bin_prefix,
                                    const char *prefix);
 
-extern const char *jtag_argv0;
 static char *jtag_data_dir = NULL;
 
 const char *

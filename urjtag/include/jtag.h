@@ -43,6 +43,10 @@ extern urj_bus_t *urj_bus;
 extern int urj_big_endian;
 extern int urj_debug_mode;
 
+/** Register the application name with cmd_jtag.
+ * @param argv0 is remembered as a pointer, it is not strdup()'ed.
+ */
+void urj_cmd_jtag_set_argv0(const char *argv0);
 const char *urj_cmd_jtag_get_data_dir (void);
 
 int urj_cmd_jtag_parse_file (urj_chain_t *chain, const char *filename);
