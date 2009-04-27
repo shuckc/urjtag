@@ -35,9 +35,6 @@ noinst_HEADERS = \
 	data_register.h \
 	cmd.h \
 	flash.h \
-	flash/cfi.h \
-	flash/mic.h \
-	flash/intel.h \
 	gettext.h \
 	part_instruction.h \
 	parport.h \

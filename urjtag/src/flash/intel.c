@@ -48,97 +48,92 @@
 #include <flash.h>
 #include <bus.h>
 
-static int intel_flash_erase_block (urj_flash_cfi_array_t
-                                    *urj_flash_cfi_array, uint32_t adr);
-static int intel_flash_unlock_block (urj_flash_cfi_array_t
-                                     *urj_flash_cfi_array, uint32_t adr);
-static int intel_flash_program_single (urj_flash_cfi_array_t
-                                       *urj_flash_cfi_array, uint32_t adr,
-                                       uint32_t data);
-static int intel_flash_program_buffer (urj_flash_cfi_array_t
-                                       *urj_flash_cfi_array, uint32_t adr,
-                                       uint32_t *buffer, int count);
-static int intel_flash_program (urj_flash_cfi_array_t *urj_flash_cfi_array,
+static int intel_flash_erase_block (urj_flash_cfi_array_t *cfi_array,
+                                    uint32_t adr);
+static int intel_flash_unlock_block (urj_flash_cfi_array_t *cfi_array,
+                                     uint32_t adr);
+static int intel_flash_program_single (urj_flash_cfi_array_t *cfi_array,
+                                       uint32_t adr, uint32_t data);
+static int intel_flash_program_buffer (urj_flash_cfi_array_t *cfi_array,
+                                       uint32_t adr, uint32_t *buffer,
+                                       int count);
+static int intel_flash_program (urj_flash_cfi_array_t *cfi_array,
                                 uint32_t adr, uint32_t *buffer, int count);
-static int intel_flash_erase_block32 (urj_flash_cfi_array_t
-                                      *urj_flash_cfi_array, uint32_t adr);
-static int intel_flash_unlock_block32 (urj_flash_cfi_array_t
-                                       *urj_flash_cfi_array, uint32_t adr);
-static int intel_flash_program32_single (urj_flash_cfi_array_t
-                                         *urj_flash_cfi_array, uint32_t adr,
-                                         uint32_t data);
-static int intel_flash_program32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
+static int intel_flash_erase_block32 (urj_flash_cfi_array_t *cfi_array,
+                                      uint32_t adr);
+static int intel_flash_unlock_block32 (urj_flash_cfi_array_t *cfi_array,
+                                       uint32_t adr);
+static int intel_flash_program32_single (urj_flash_cfi_array_t *cfi_array,
+                                         uint32_t adr, uint32_t data);
+static int intel_flash_program32 (urj_flash_cfi_array_t *cfi_array,
                                   uint32_t adr, uint32_t *buffer, int count);
 
 /* autodetect, we can handle this chip */
 static int
-intel_flash_autodetect32 (urj_flash_cfi_array_t *urj_flash_cfi_array)
+intel_flash_autodetect32 (urj_flash_cfi_array_t *cfi_array)
 {
     urj_bus_area_t area;
 
-    if (URJ_BUS_AREA
-        (urj_flash_cfi_array->bus, urj_flash_cfi_array->address,
-         &area) != URJ_STATUS_OK)
+    if (URJ_BUS_AREA (cfi_array->bus, cfi_array->address,
+                      &area) != URJ_STATUS_OK)
         return 0;
 
-    return ((urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+    return ((cfi_array->cfi_chips[0]->cfi.identification_string.
              pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_INTEL_ECS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_INTEL_SCS)) && (area.width == 32);
 }
 
 static int
-intel_flash_autodetect (urj_flash_cfi_array_t *urj_flash_cfi_array)
+intel_flash_autodetect (urj_flash_cfi_array_t *cfi_array)
 {
     urj_bus_area_t area;
 
-    if (URJ_BUS_AREA
-        (urj_flash_cfi_array->bus, urj_flash_cfi_array->address,
-         &area) != URJ_STATUS_OK)
+    if (URJ_BUS_AREA (cfi_array->bus, cfi_array->address,
+                      &area) != URJ_STATUS_OK)
         return 0;
 
-    return ((urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+    return ((cfi_array->cfi_chips[0]->cfi.identification_string.
              pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_INTEL_ECS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_INTEL_SCS)) && (area.width == 16);
 }
 
 static int
-intel_flash_autodetect8 (urj_flash_cfi_array_t *urj_flash_cfi_array)
+intel_flash_autodetect8 (urj_flash_cfi_array_t *cfi_array)
 {
     urj_bus_area_t area;
 
-    if (URJ_BUS_AREA
-        (urj_flash_cfi_array->bus, urj_flash_cfi_array->address,
-         &area) != URJ_STATUS_OK)
+    if (URJ_BUS_AREA (cfi_array->bus, cfi_array->address,
+                      &area) != URJ_STATUS_OK)
         return 0;
 
-    return ((urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+    return ((cfi_array->cfi_chips[0]->cfi.identification_string.
              pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_INTEL_ECS)
-            || (urj_flash_cfi_array->cfi_chips[0]->cfi.identification_string.
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.
                 pri_id_code == CFI_VENDOR_INTEL_SCS)) && (area.width == 8);
 }
 
 static void
-_intel_flash_print_info (urj_flash_cfi_array_t *urj_flash_cfi_array, int o)
+_intel_flash_print_info (urj_flash_cfi_array_t *cfi_array, int o)
 {
     uint32_t mid, cid;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
 
     mid =
-        (URJ_BUS_READ (bus, urj_flash_cfi_array->address + (0x00 << o)) &
+        (URJ_BUS_READ (bus, cfi_array->address + (0x00 << o)) &
          0xFF);
     switch (mid)
     {
@@ -158,7 +153,7 @@ _intel_flash_print_info (urj_flash_cfi_array_t *urj_flash_cfi_array, int o)
 
     printf (_("Chip: "));
     cid =
-        (URJ_BUS_READ (bus, urj_flash_cfi_array->address + (0x01 << o)) &
+        (URJ_BUS_READ (bus, cfi_array->address + (0x01 << o)) &
          0xFFFF);
     switch (cid)
     {
@@ -216,57 +211,56 @@ _intel_flash_print_info (urj_flash_cfi_array_t *urj_flash_cfi_array, int o)
     }
 
     /* Read Array */
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address + (0 << o), 0x00FF00FF);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0 << o), 0x00FF00FF);
 }
 
 static void
-intel_flash_print_info (urj_flash_cfi_array_t *urj_flash_cfi_array)
+intel_flash_print_info (urj_flash_cfi_array_t *cfi_array)
 {
     int o = 1;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
 
     /* Intel Primary Algorithm Extended Query Table - see Table 5. in [3] */
     /* TODO */
 
     /* Clear Status Register */
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address + (0 << o), 0x0050);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0 << o), 0x0050);
 
     /* Read Identifier Command */
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address + (0 << 0), 0x0090);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0 << 0), 0x0090);
 
-    _intel_flash_print_info (urj_flash_cfi_array, o);
+    _intel_flash_print_info (cfi_array, o);
 }
 
 static void
-intel_flash_print_info32 (urj_flash_cfi_array_t *urj_flash_cfi_array)
+intel_flash_print_info32 (urj_flash_cfi_array_t *cfi_array)
 {
     int o = 2;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
     /* Intel Primary Algorithm Extended Query Table - see Table 5. in [3] */
     /* TODO */
 
     /* Clear Status Register */
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address + (0 << o), 0x00500050);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0 << o), 0x00500050);
 
     /* Read Identifier Command */
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address + (0 << 0), 0x00900090);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0 << 0), 0x00900090);
 
-    _intel_flash_print_info (urj_flash_cfi_array, o);
+    _intel_flash_print_info (cfi_array, o);
 }
 
 static int
-intel_flash_erase_block (urj_flash_cfi_array_t *urj_flash_cfi_array,
-                         uint32_t adr)
+intel_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 {
     uint16_t sr;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
 
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address,
+    URJ_BUS_WRITE (bus, cfi_array->address,
                    CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
     URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_BLOCK_ERASE);
     URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_CONFIRM);
 
-    while (!((sr = URJ_BUS_READ (bus, urj_flash_cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
+    while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
 
     switch (sr & ~CFI_INTEL_SR_READY)
     {
@@ -289,18 +283,17 @@ intel_flash_erase_block (urj_flash_cfi_array_t *urj_flash_cfi_array,
 }
 
 static int
-intel_flash_unlock_block (urj_flash_cfi_array_t *urj_flash_cfi_array,
-                          uint32_t adr)
+intel_flash_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 {
     uint16_t sr;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
 
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address,
+    URJ_BUS_WRITE (bus, cfi_array->address,
                    CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
     URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_LOCK_SETUP);
     URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_UNLOCK_BLOCK);
 
-    while (!((sr = URJ_BUS_READ (bus, urj_flash_cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
+    while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
 
     if (sr != CFI_INTEL_SR_READY)
     {
@@ -312,18 +305,18 @@ intel_flash_unlock_block (urj_flash_cfi_array_t *urj_flash_cfi_array,
 }
 
 static int
-intel_flash_program_single (urj_flash_cfi_array_t *urj_flash_cfi_array,
+intel_flash_program_single (urj_flash_cfi_array_t *cfi_array,
                             uint32_t adr, uint32_t data)
 {
     uint16_t sr;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
 
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address,
+    URJ_BUS_WRITE (bus, cfi_array->address,
                    CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
     URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_PROGRAM1);
     URJ_BUS_WRITE (bus, adr, data);
 
-    while (!((sr = URJ_BUS_READ (bus, urj_flash_cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
+    while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
 
     if (sr != CFI_INTEL_SR_READY)
     {
@@ -335,13 +328,13 @@ intel_flash_program_single (urj_flash_cfi_array_t *urj_flash_cfi_array,
 }
 
 static int
-intel_flash_program_buffer (urj_flash_cfi_array_t *urj_flash_cfi_array,
+intel_flash_program_buffer (urj_flash_cfi_array_t *cfi_array,
                             uint32_t adr, uint32_t *buffer, int count)
 {
     /* NOTE: Write-to-buffer programming operation according to [5], Figure 9 */
     uint16_t sr;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
-    urj_flash_cfi_chip_t *cfi_chip = urj_flash_cfi_array->cfi_chips[0];
+    urj_bus_t *bus = cfi_array->bus;
+    urj_flash_cfi_chip_t *cfi_chip = cfi_array->cfi_chips[0];
     int wb_bytes = cfi_chip->cfi.device_geometry.max_bytes_write;
     int chip_width = cfi_chip->width;
     int offset = 0;
@@ -358,11 +351,11 @@ intel_flash_program_buffer (urj_flash_cfi_array_t *urj_flash_cfi_array,
             wcount = count;
 
         /* issue command WRITE_TO_BUFFER */
-        URJ_BUS_WRITE (bus, urj_flash_cfi_array->address,
+        URJ_BUS_WRITE (bus, cfi_array->address,
                        CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
         URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_WRITE_TO_BUFFER);
         /* poll XSR7 == 1 */
-        while (!((sr = URJ_BUS_READ (bus, urj_flash_cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY)); /* TODO: add timeout */
+        while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY)); /* TODO: add timeout */
 
         /* write count value (number of upcoming writes - 1) */
         URJ_BUS_WRITE (bus, adr, wcount - 1);
@@ -371,7 +364,7 @@ intel_flash_program_buffer (urj_flash_cfi_array_t *urj_flash_cfi_array,
         for (idx = 0; idx < wcount; idx++)
         {
             URJ_BUS_WRITE (bus, adr, buffer[offset + idx]);
-            adr += urj_flash_cfi_array->bus_width;
+            adr += cfi_array->bus_width;
         }
         offset += wcount;
 
@@ -382,7 +375,7 @@ intel_flash_program_buffer (urj_flash_cfi_array_t *urj_flash_cfi_array,
     }
 
     /* poll SR7 == 1 */
-    while (!((sr = URJ_BUS_READ (bus, urj_flash_cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
+    while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
     if (sr != CFI_INTEL_SR_READY)
     {
         printf (_("flash: unknown error while programming\n"));
@@ -393,11 +386,10 @@ intel_flash_program_buffer (urj_flash_cfi_array_t *urj_flash_cfi_array,
 }
 
 static int
-intel_flash_program (urj_flash_cfi_array_t *urj_flash_cfi_array,
+intel_flash_program (urj_flash_cfi_array_t *cfi_array,
                      uint32_t adr, uint32_t *buffer, int count)
 {
-    urj_flash_cfi_query_structure_t *cfi =
-        &(urj_flash_cfi_array->cfi_chips[0]->cfi);
+    urj_flash_cfi_query_structure_t *cfi = &(cfi_array->cfi_chips[0]->cfi);
     int max_bytes_write = cfi->device_geometry.max_bytes_write;
 
 #ifndef FLASH_MULTI_BYTE
@@ -406,8 +398,7 @@ intel_flash_program (urj_flash_cfi_array_t *urj_flash_cfi_array,
 
     /* multi-byte writes supported? */
     if (max_bytes_write > 1)
-        return intel_flash_program_buffer (urj_flash_cfi_array, adr, buffer,
-                                           count);
+        return intel_flash_program_buffer (cfi_array, adr, buffer, count);
 
     else
     {
@@ -416,11 +407,11 @@ intel_flash_program (urj_flash_cfi_array_t *urj_flash_cfi_array,
 
         for (idx = 0; idx < count; idx++)
         {
-            int status = intel_flash_program_single (urj_flash_cfi_array, adr,
+            int status = intel_flash_program_single (cfi_array, adr,
                                                      buffer[idx]);
             if (status)
                 return status;
-            adr += urj_flash_cfi_array->bus_width;
+            adr += cfi_array->bus_width;
         }
     }
 
@@ -428,13 +419,12 @@ intel_flash_program (urj_flash_cfi_array_t *urj_flash_cfi_array,
 }
 
 static int
-intel_flash_erase_block32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
-                           uint32_t adr)
+intel_flash_erase_block32 (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 {
     uint32_t sr;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
 
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address,
+    URJ_BUS_WRITE (bus, cfi_array->address,
                    (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) |
                    CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
     URJ_BUS_WRITE (bus, adr,
@@ -443,7 +433,7 @@ intel_flash_erase_block32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
     URJ_BUS_WRITE (bus, adr,
                    (CFI_INTEL_CMD_CONFIRM << 16) | CFI_INTEL_CMD_CONFIRM);
 
-    while (((sr = URJ_BUS_READ (bus, urj_flash_cfi_array->address) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY));    /* TODO: add timeout */
+    while (((sr = URJ_BUS_READ (bus, cfi_array->address) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY));    /* TODO: add timeout */
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
@@ -455,13 +445,13 @@ intel_flash_erase_block32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
 }
 
 static int
-intel_flash_unlock_block32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
+intel_flash_unlock_block32 (urj_flash_cfi_array_t *cfi_array,
                             uint32_t adr)
 {
     uint32_t sr;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
 
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address,
+    URJ_BUS_WRITE (bus, cfi_array->address,
                    (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) |
                    CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
     URJ_BUS_WRITE (bus, adr,
@@ -471,7 +461,7 @@ intel_flash_unlock_block32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
                    (CFI_INTEL_CMD_UNLOCK_BLOCK << 16) |
                    CFI_INTEL_CMD_UNLOCK_BLOCK);
 
-    while (((sr = URJ_BUS_READ (bus, urj_flash_cfi_array->address) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY));    /* TODO: add timeout */
+    while (((sr = URJ_BUS_READ (bus, cfi_array->address) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY));    /* TODO: add timeout */
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
@@ -483,20 +473,20 @@ intel_flash_unlock_block32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
 }
 
 static int
-intel_flash_program32_single (urj_flash_cfi_array_t *urj_flash_cfi_array,
+intel_flash_program32_single (urj_flash_cfi_array_t *cfi_array,
                               uint32_t adr, uint32_t data)
 {
     uint32_t sr;
-    urj_bus_t *bus = urj_flash_cfi_array->bus;
+    urj_bus_t *bus = cfi_array->bus;
 
-    URJ_BUS_WRITE (bus, urj_flash_cfi_array->address,
+    URJ_BUS_WRITE (bus, cfi_array->address,
                    (CFI_INTEL_CMD_CLEAR_STATUS_REGISTER << 16) |
                    CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
     URJ_BUS_WRITE (bus, adr,
                    (CFI_INTEL_CMD_PROGRAM1 << 16) | CFI_INTEL_CMD_PROGRAM1);
     URJ_BUS_WRITE (bus, adr, data);
 
-    while (((sr = URJ_BUS_READ (bus, urj_flash_cfi_array->address) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY));    /* TODO: add timeout */
+    while (((sr = URJ_BUS_READ (bus, cfi_array->address) & 0x00FE00FE) & ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY)) != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY));    /* TODO: add timeout */
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
@@ -508,7 +498,7 @@ intel_flash_program32_single (urj_flash_cfi_array_t *urj_flash_cfi_array,
 }
 
 static int
-intel_flash_program32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
+intel_flash_program32 (urj_flash_cfi_array_t *cfi_array,
                        uint32_t adr, uint32_t *buffer, int count)
 {
     /* Single byte programming is forced for 32 bit (2x16) flash configuration.
@@ -520,30 +510,27 @@ intel_flash_program32 (urj_flash_cfi_array_t *urj_flash_cfi_array,
     /* unroll buffer to single writes */
     for (idx = 0; idx < count; idx++)
     {
-        int status = intel_flash_program32_single (urj_flash_cfi_array, adr,
-                                                   buffer[idx]);
+        int status = intel_flash_program32_single (cfi_array, adr, buffer[idx]);
         if (status)
             return status;
-        adr += urj_flash_cfi_array->bus_width;
+        adr += cfi_array->bus_width;
     }
 
     return 0;
 }
 
 static void
-intel_flash_readarray32 (urj_flash_cfi_array_t *urj_flash_cfi_array)
+intel_flash_readarray32 (urj_flash_cfi_array_t *cfi_array)
 {
     /* Read Array */
-    URJ_BUS_WRITE (urj_flash_cfi_array->bus, urj_flash_cfi_array->address,
-                   0x00FF00FF);
+    URJ_BUS_WRITE (cfi_array->bus, cfi_array->address, 0x00FF00FF);
 }
 
 static void
-intel_flash_readarray (urj_flash_cfi_array_t *urj_flash_cfi_array)
+intel_flash_readarray (urj_flash_cfi_array_t *cfi_array)
 {
     /* Read Array */
-    URJ_BUS_WRITE (urj_flash_cfi_array->bus, urj_flash_cfi_array->address,
-                   0x00FF00FF);
+    URJ_BUS_WRITE (cfi_array->bus, cfi_array->address, 0x00FF00FF);
 }
 
 urj_flash_driver_t urj_flash_intel_32_flash_driver = {
