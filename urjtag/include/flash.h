@@ -39,6 +39,7 @@
 
 #include <bus_driver.h>
 
+#if 0
 /* Following moved here from brux/cfi.h */
 
 #include <flash/cfi.h>
@@ -48,6 +49,9 @@ typedef struct
     int width;                  /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
     urj_flash_cfi_query_structure_t cfi;
 } urj_flash_cfi_chip_t;
+#endif
+
+typedef struct urj_flash_cfi_chip urj_flash_cfi_chip_t;
 
 typedef struct
 {
