@@ -42,7 +42,7 @@
  *
  *   JTAG Tool generates byte addresses when accessing memories. Thus
  *   this driver discards the LSB when the RAM and flash ranges are
- *   addressed. urj_bus_readmem and urj_bus_writemem care for proper address increment
+ *   addressed. readmem and writemem care for proper address increment
  *   based on the bus width.
  *   On the other hand, this driver reads and writes always one word
  *   (= 2 bytes) from/to the RAMs. It does not use the byte-enables.

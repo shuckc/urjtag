@@ -91,8 +91,8 @@ cmd_flashmem_help (void)
               "\n"
               "ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
               "\n"
-              "Supported Flash Memories:\n"), "urj_flashmem",
-            "urj_flashmem msbin", "msbin", "noverify");
+              "Supported Flash Memories:\n"), "flashmem",
+            "flashmem msbin", "msbin", "noverify");
 
     for (i = 0; urj_flash_flash_drivers[i]; i++)
         printf (_("%s\n     %s\n"), _(urj_flash_flash_drivers[i]->name),
@@ -100,7 +100,7 @@ cmd_flashmem_help (void)
 }
 
 urj_cmd_t urj_cmd_flashmem = {
-    "urj_flashmem",
+    "flashmem",
     N_("burn flash memory with data from a file"),
     cmd_flashmem_help,
     cmd_flashmem_run

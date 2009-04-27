@@ -74,11 +74,11 @@ cmd_readmem_help (void)
               "FILENAME   name of the output file\n"
               "\n"
               "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"),
-            "urj_bus_readmem");
+            "readmem");
 }
 
 urj_cmd_t urj_cmd_readmem = {
-    "urj_bus_readmem",
+    "readmem",
     N_("read content of the memory and write it to file"),
     cmd_readmem_help,
     cmd_readmem_run

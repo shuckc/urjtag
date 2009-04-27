@@ -531,7 +531,7 @@ const urj_bus_driver_t urj_bus_s3c4510_bus = {
 **  Revision 1.3  2003/08/28 07:26:02  telka
 **  2003-08-28  Marcel Telka  <marcel@telka.sk>
 **
-**      * src/urj_bus_readmem.c (urj_bus_readmem): Replaced bus_width macro with new URJ_BUS_AREA.
+**      * src/readmem.c (readmem): Replaced bus_width macro with new URJ_BUS_AREA.
 **      * src/bus/bcm1250.c (bcm1250_bus_width): Function removed.
 **      (bcm1250_bus_area): New function.
 **      * src/bus/ixp425.c (ixp425_bus_width): Function removed.

@@ -73,11 +73,11 @@ cmd_writemem_help (void)
               "\n"
               "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
               "NOTE: This is NOT useful for FLASH programming!\n"),
-            "urj_bus_writemem");
+            "writemem");
 }
 
 urj_cmd_t urj_cmd_writemem = {
-    "urj_bus_writemem",
+    "writemem",
     N_("write content of file to the memory"),
     cmd_writemem_help,
     cmd_writemem_run

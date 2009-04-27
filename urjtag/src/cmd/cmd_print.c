@@ -198,7 +198,7 @@ cmd_print_run (urj_chain_t *chain, char *params[])
                 if (URJ_BUS_AREA (urj_bus, a, &area) != URJ_STATUS_OK)
                 {
                     printf (_
-                            ("Error in bus area urj_tap_discovery at 0x%08llX\n"),
+                            ("Error in bus area discovery at 0x%08llX\n"),
                             (long long unsigned int) a);
                     break;
                 }
