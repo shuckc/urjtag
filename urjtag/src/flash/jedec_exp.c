@@ -26,14 +26,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <flash/cfi.h>
-#include <flash/intel.h>
 #include <unistd.h>
 
 #include <jtag.h>
 #include <flash.h>
 #include <bus.h>
 #include <bitmask.h>
+
+#include "jedec.h"
+#include "cfi.h"
+#include "intel.h"
 
 void
 urj_flash_jedec_exp_read_id (urj_bus_t *bus, uint32_t adr, uint32_t dmask,

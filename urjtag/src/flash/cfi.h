@@ -162,6 +162,12 @@ typedef struct cfi_query_structure
     urj_flash_cfi_query_system_interface_information_t system_interface_info;
     urj_flash_cfi_device_geometry_t device_geometry;
 } urj_flash_cfi_query_structure_t;
+
+struct urj_flash_cfi_chip
+{
+    int width;                  /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
+    urj_flash_cfi_query_structure_t cfi;
+};
 #endif /* __ASSEMBLY__ */
 
 /* AMD primary vendor-specific extended query structure - see [3] and [4] */

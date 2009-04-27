@@ -32,8 +32,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <flash/cfi.h>
-#include <flash/intel.h>
 #include <unistd.h>
 
 #include <jtag.h>
@@ -41,6 +39,8 @@
 #include <bus.h>
 
 #include "jedec.h"
+#include "cfi.h"
+#include "intel.h"
 
 //write specific
 #define AMD_SECTOR_PROTECTED

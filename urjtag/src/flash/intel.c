@@ -40,13 +40,14 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <flash/cfi.h>
-#include <flash/intel.h>
-#include <flash/mic.h>
 
 #include <jtag.h>
 #include <flash.h>
 #include <bus.h>
+
+#include "cfi.h"
+#include "intel.h"
+#include "mic.h"
 
 static int intel_flash_erase_block (urj_flash_cfi_array_t *cfi_array,
                                     uint32_t adr);

@@ -32,14 +32,14 @@
 
 #include <stdint.h>
 #include <string.h>
-#include <flash/cfi.h>
-#include <flash/intel.h>
-#include <flash/mic.h>
 
 #include <flash.h>
 #include <bus.h>
 
 #include "jedec.h"
+#include "cfi.h"
+#include "intel.h"
+#include "mic.h"
 
 urj_flash_cfi_array_t *urj_flash_cfi_array = NULL;
 

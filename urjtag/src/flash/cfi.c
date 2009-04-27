@@ -32,11 +32,12 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <flash/cfi.h>
 
 #include <jtag.h>
 #include <flash.h>
 #include <bus.h>
+
+#include "cfi.h"
 
 void
 urj_flash_cfi_array_free (urj_flash_cfi_array_t *cfi_array)

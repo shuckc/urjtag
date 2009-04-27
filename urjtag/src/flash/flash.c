@@ -39,8 +39,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <flash/cfi.h>
-#include <flash/intel.h>
+#include <cfi.h>
+#include <intel.h>
 
 #include "bus.h"
 #include "flash.h"

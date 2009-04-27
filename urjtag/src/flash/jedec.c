@@ -26,14 +26,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <flash/cfi.h>
-#include <flash/intel.h>
 #include <unistd.h>
 
 #include <jtag.h>
 #include <flash.h>
 #include <bus.h>
 
+#include "cfi.h"
+#include "intel.h"
 #include "jedec.h"
 
 /* Manufacturers */
