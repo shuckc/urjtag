@@ -1,4 +1,8 @@
-2009-04-23  Rutger Hofman <rfhh>
+2009-05-01  Rutger Hofman <rfhh>
+  Global variables for liburjtag should not reside in the shell app
+  * src/jtag.c: split into src/global/urjtag.c and src/apps/jtag/jtag.c
+
+2009-05-01  Rutger Hofman <rfhh>
 
   Move all include/* to include/urjtag/* to lower collision chance on #include.
   Start lifting commands from cmd/ into the library modules. Begun work on:

@@ -56,9 +56,6 @@
 ssize_t urj_lib_getline (char **lineptr, size_t *n, FILE * stream);
 #endif
 
-urj_error_state_t urj_error_state;
-int urj_debug_mode = 0;
-int urj_big_endian = 0;
 static int urj_interactive = 0;
 
 #define JTAGDIR         ".jtag"

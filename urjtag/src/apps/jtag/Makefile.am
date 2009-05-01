@@ -1,5 +1,5 @@
 #
-# $Id$
+# $Id: Makefile.am 1531 2009-04-24 15:28:59Z rfhh $
 #
 # Copyright (C) 2002 ETC s.r.o.
 #
@@ -23,59 +23,15 @@
 
 include $(top_srcdir)/Makefile.rules
 
-SUBDIRS = \
-	flash \
-	lib \
-	tap \
-	part \
-	bus \
-	cmd \
-	global \
-	apps/jtag
+bin_PROGRAMS = \
+	jtag
 
-if ENABLE_SVF
-SUBDIRS += svf
-endif
+jtag_SOURCES = \
+	jtag.c
 
-if ENABLE_BSDL
-SUBDIRS += bsdl
-endif
-
-if ENABLE_JIM
-SUBDIRS += jim
-endif
-
-dist_bin_SCRIPTS = \
-	bsdl2jtag
-
-lib_LTLIBRARIES = liburjtag.la
-liburjtag_la_LDFLAGS = -version-info 0:0:0
-
-liburjtag_la_SOURCES =
-
-liburjtag_la_LIBADD = \
-	tap/libtap.la \
-	part/libpart.la \
-	lib/libjtaglib.la \
-	flash/libflash.la \
-	bus/libbus.la \
-	cmd/libcmd.la \
-	global/libglobal.la \
-	-lm \
-	@FTD2XXLIB@ \
+jtag_LDADD = \
+	$(top_srcdir)/src/liburjtag.la \
 	@LIBINTL@
-
-if ENABLE_SVF
-liburjtag_la_LIBADD += svf/libsvf.la
-endif
-
-if ENABLE_BSDL
-liburjtag_la_LIBADD +=  bsdl/libbsdl.la
-endif
-
-if ENABLE_JIM
-liburjtag_la_LIBADD += jim/libjim.la
-endif
 
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"
