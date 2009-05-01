@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: jtag.h 1534 2009-04-25 15:17:16Z rfhh $
  *
  * Copyright (C) 2003 ETC s.r.o.
  *
@@ -28,16 +28,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include <flash.h>
-
-#include "chain.h"
-#include "bus.h"
-#include "part.h"
-
-#define URJ_STATUS_OK             0
-#define URJ_STATUS_FAIL           1
-#define URJ_STATUS_SYNTAX_ERROR (-1)
-
+#include "types.h"
 
 extern urj_bus_t *urj_bus;
 extern int urj_big_endian;
@@ -53,6 +44,7 @@ int urj_cmd_jtag_parse_file (urj_chain_t *chain, const char *filename);
 int urj_cmd_jtag_parse_line (urj_chain_t *chain, char *line);
 int urj_cmd_jtag_parse_stream (urj_chain_t *chain, FILE * f);
 
+/* @@@@ RFHH shouldn't these be in their module's .h file? */
 int urj_tap_detect_parts (urj_chain_t *chain, const char *db_path);
 int urj_tap_manual_add (urj_chain_t *chain, int instr_len);
 int urj_tap_detect_register_size (urj_chain_t *chain);
@@ -61,7 +53,5 @@ void urj_tap_urj_tap_idcode (urj_chain_t *chain, unsigned int bytes);
 
 void urj_bus_readmem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len);
 void urj_bus_writemem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len);
-
-void urj_flasherase (urj_bus_t *bus, uint32_t addr, int number);
 
 #endif /* URJ_JTAG_H */

@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: bus_driver.h 1524 2009-04-23 15:29:33Z rfhh $
  *
  * Bus driver interface
  * Copyright (C) 2002, 2003 ETC s.r.o.
@@ -37,7 +37,7 @@
 
 #include <stdint.h>
 
-#include "chain.h"
+#include "types.h"
 
 typedef struct
 {
@@ -46,9 +46,6 @@ typedef struct
     uint64_t length;
     unsigned int width;
 } urj_bus_area_t;
-
-typedef struct urj_bus urj_bus_t;
-typedef struct urj_bus_driver urj_bus_driver_t;
 
 struct urj_bus_driver
 {

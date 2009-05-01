@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: bsdl_mode.h 1520 2009-04-23 13:14:08Z rfhh $
  *
  * Copyright (C) 2008, Arnim Laeuger
  *

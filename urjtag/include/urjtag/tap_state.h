@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: tap_state.h 1521 2009-04-23 13:33:47Z rfhh $
  *
  * Copyright (C) 2002 ETC s.r.o.
  *
@@ -25,9 +25,9 @@
 #ifndef URJ_TAP_STATE_H
 #define URJ_TAP_STATE_H
 
-#include <bitmask.h>
+#include "bitmask.h"
 
-#include "chain.h"
+#include "types.h"
 
 #define URJ_TAP_STATE_DR        URJ_BIT (0)
 #define URJ_TAP_STATE_IR        URJ_BIT (1)

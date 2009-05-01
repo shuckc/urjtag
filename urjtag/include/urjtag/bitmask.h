@@ -1,7 +1,8 @@
 /*
- * $Id$
+ * $Id: bitmask.h 1521 2009-04-23 13:33:47Z rfhh $
  *
- * Copyright (C) 2003 ETC s.r.o.
+ * Common header file
+ * Copyright (C) 2002 ETC s.r.o.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,28 +28,41 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Written by Marcel Telka <marcel@telka.sk>, 2003.
+ * Written by Marcel Telka <marcel@telka.sk>, 2002.
  *
  */
 
-#ifndef URJ_CMD_H
-#define URJ_CMD_H
+#ifndef URJ_BITMASK_H
+#define URJ_BITMASK_H
 
-#include "chain.h"
+#ifdef UNUSED                   /* RFHH */
+/* @@@@ RFHH remove? */
+#ifndef LANGUAGE
+#       ifdef __ASSEMBLY__
+#               define LANGUAGE ASM
+#       else
+#               define LANGUAGE C
+#       endif
+#endif
 
-typedef struct
-{
-    char *name;
-    char *desc;
-    void (*help) (void);
-    int (*run) (urj_chain_t *chain, char *params[]);
-} urj_cmd_t;
+/* @@@@ RFHH remove? */
+#ifndef ASM
+#define ASM     0
+#endif
 
-extern const urj_cmd_t *urj_cmds[];
+/* @@@@ RFHH remove? */
+#ifndef C
+#define C       1
+#endif
+#endif /* def UNUSED */
 
-int urj_cmd_run (urj_chain_t *chain, char *params[]);
-int urj_cmd_params (char *params[]);
-int urj_cmd_get_number (char *s, unsigned int *i);
-int urj_cmd_test_cable (urj_chain_t *chain);
+#define URJ_MAX_BITS_ABS_VAL    1024
+#define URJ_BITS_ABS(a)         (((((a) + URJ_MAX_BITS_ABS_VAL) / URJ_MAX_BITS_ABS_VAL) * 2 - 1) * (a))
+#define URJ_BITS_MIN(a,b)       (((a) + (b) - URJ_BITS_ABS((a) - (b))) / 2)
 
-#endif /* URJ_CMD_H */
+#define URJ_BIT(b)              (1 << (b))
+#define URJ_BITS(b1,b2)         (((2 << URJ_BITS_ABS((b1) - (b2))) - 1) << URJ_BITS_MIN(b1,b2))
+#define URJ_BITS_VAL(b1,b2,v)   (((v) << URJ_BITS_MIN(b1,b2)) & URJ_BITS (b1,b2))
+#define URJ_BITS_GET(b1,b2,v)   (((v) & URJ_BITS (b1,b2)) >> URJ_BITS_MIN(b1,b2))
+
+#endif /* URJ_BITMASK_H */

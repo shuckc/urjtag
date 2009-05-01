@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: cable.h 1525 2009-04-23 15:56:49Z rfhh $
  *
  * Cable driver interface
  * Copyright (C) 2003 ETC s.r.o.
@@ -28,11 +28,8 @@
 
 #include <stdint.h>
 
-typedef struct urj_cable urj_cable_t;
+#include "types.h"
 
-#include "usbconn.h"
-#include "parport.h"
-#include "chain.h"
 #include "pod.h"
 
 typedef struct urj_cable_driver urj_cable_driver_t;
@@ -135,7 +132,8 @@ struct urj_cable
 void urj_tap_cable_free (urj_cable_t *cable);
 int urj_tap_cable_init (urj_cable_t *cable);
 void urj_tap_cable_done (urj_cable_t *cable);
-void urj_tap_cable_flush (urj_cable_t *cable, urj_cable_flush_amount_t);
+void urj_tap_cable_flush (urj_cable_t *cable,
+                          urj_cable_flush_amount_t);
 void urj_tap_cable_clock (urj_cable_t *cable, int tms, int tdi, int n);
 int urj_tap_cable_defer_clock (urj_cable_t *cable, int tms, int tdi, int n);
 int urj_tap_cable_get_tdo (urj_cable_t *cable);

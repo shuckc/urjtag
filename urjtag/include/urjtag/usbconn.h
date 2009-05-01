@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: usbconn.h 1525 2009-04-23 15:56:49Z rfhh $
  *
  * USB Device Connection Driver Interface
  * Copyright (C) 2008 K. Waschk
@@ -27,11 +27,8 @@
 #define URJ_USBCONN_H
 
 #include <stdint.h>
-#include <stddef.h>
 
-typedef struct urj_usbconn urj_usbconn_t;
-
-#include "cable.h"
+#include "types.h"
 
 typedef struct
 {

@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: part.h 1528 2009-04-24 12:34:24Z rfhh $
  *
  * Copyright (C) 2002 ETC s.r.o.
  *
@@ -27,16 +27,11 @@
 
 #include <stdio.h>
 
-#include "bssignal.h"
-#include "part_instruction.h"
-#include "data_register.h"
-#include "bsbit.h"
+#include "types.h"
 
 #define URJ_PART_MANUFACTURER_MAXLEN    25
 #define URJ_PART_PART_MAXLEN            20
-#define URJ_PART_STEPPING_MAXLEN                8
-
-typedef struct urj_part urj_part_t;
+#define URJ_PART_STEPPING_MAXLEN         8
 
 struct urj_part
 {
@@ -69,8 +64,24 @@ void urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out,
                           int val);
 int urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s);
 void urj_part_print (urj_part_t *p);
-
-typedef struct urj_parts urj_parts_t;
+/**
+ * Set the length of the instructions of a part
+ */
+int urj_part_instruction_length_set (urj_part_t *part, int length);
+/**
+ * Create a new instruction for a part.
+ * @param part
+ * @param instruction name for the new instruction
+ * @param code string that contains the bit pattern for the default instruction
+ * @param data_register default data register for instruction (e.g. BR)
+ */
+urj_part_instruction_t *urj_part_instruction_define (urj_part_t *part, 
+                                                     const char *instruction,
+                                                     const char *code,
+                                                     const char *data_register);
+/**
+ * parts
+ */
 
 struct urj_parts
 {

@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: xpcu.h 1519 2009-04-22 23:12:44Z rfhh $
  *
  * Xilinx Platform Cable USB functions
  * Copyright (C) 2008 K. Waschk

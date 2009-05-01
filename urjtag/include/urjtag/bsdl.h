@@ -1,8 +1,7 @@
 /*
- * $Id$
+ * $Id: bsdl.h 1519 2009-04-22 23:12:44Z rfhh $
  *
- * Pod signal names
- * Copyright (C) 2008 K. Waschk
+ * Copyright (C) 2007, Arnim Laeuger
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,23 +18,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
+ * Written by Arnim Laeuger <arniml@users.sourceforge.net>, 2007.
+ *
  */
 
-#ifndef URJ_POD_H
-#define URJ_POD_H
+#ifndef URJ_BSDL_BSDL_H
+#define URJ_BSDL_BSDL_H
 
-typedef enum urj_pod_sigsel
+#include "types.h"
+
+#include "bsdl_mode.h"
+
+typedef struct
 {
-    URJ_POD_CS_NONE = 0,        // no/invalid signal
-    URJ_POD_CS_TDI = (1 << 0),  // out: JTAG/SPI data in
-    URJ_POD_CS_TCK = (1 << 1),  // out: JTAG/SPI clock
-    URJ_POD_CS_TMS = (1 << 2),  // out: JTAG test mode select/SPI slave select
-    URJ_POD_CS_TRST = (1 << 3), // out: JTAG TAP reset
-    URJ_POD_CS_RESET = (1 << 4),        // out: system reset
-    URJ_POD_CS_SCK = (1 << 5),  // out: I2C clock (not yet used)
-    URJ_POD_CS_SDA = (1 << 6),  // inout: I2C data (not yet used)
-    URJ_POD_CS_SS = (1 << 7),   // out: SPI slave select (not yet used)
-}
-urj_pod_sigsel_t;
+    char **path_list;
+    int debug;
+} urj_bsdl_globs_t;
 
-#endif /* URJ_POD_H */
+#define URJ_BSDL_GLOBS_INIT(bsdl) \
+    do { \
+        bsdl.path_list = NULL; \
+        bsdl.debug = 0; \
+    } while (0)
+
+int urj_bsdl_read_file (urj_chain_t *, const char *, int, const char *);
+void urj_bsdl_set_path (urj_chain_t *, const char *);
+int urj_bsdl_scan_files (urj_chain_t *, const char *, int);
+
+#endif /* URJ_BSDL_BSDL_H */

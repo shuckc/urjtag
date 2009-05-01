@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: parport.h 1525 2009-04-23 15:56:49Z rfhh $
  *
  * Parallel Port Connection Driver Interface
  * Copyright (C) 2003 ETC s.r.o.
@@ -28,9 +28,7 @@
 
 #include <stdint.h>
 
-typedef struct urj_parport urj_parport_t;
-
-#include "cable.h"
+#include "types.h"
 
 typedef struct
 {

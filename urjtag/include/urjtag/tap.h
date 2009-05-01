@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: tap.h 1528 2009-04-24 12:34:24Z rfhh $
  *
  * Copyright (C) 2002 ETC s.r.o.
  *
@@ -25,8 +25,9 @@
 #ifndef URJ_TAP_H
 #define URJ_TAP_H
 
+#include "types.h"
+
 #include "tap_register.h"
-#include "chain.h"
 
 void urj_tap_reset (urj_chain_t *chain);
 void urj_tap_reset_bypass (urj_chain_t *chain);

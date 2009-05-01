@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: flash.h 1537 2009-04-27 12:59:18Z rfhh $
  *
  * Copyright (C) 2003 ETC s.r.o.
  * All rights reserved.
@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include <bus_driver.h>
+#include "types.h"
 
 #if 0
 /* Following moved here from brux/cfi.h */
@@ -95,6 +95,8 @@ void urj_flash_detectflash (urj_bus_t *bus, uint32_t adr);
 
 void urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int);
 void urj_flashmsbin (urj_bus_t *bus, FILE * f, int);
+
+void urj_flasherase (urj_bus_t *bus, uint32_t addr, int number);
 
 /* end of original brux/flash.h */
 

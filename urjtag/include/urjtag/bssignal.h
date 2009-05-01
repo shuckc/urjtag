@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: bssignal.h 1521 2009-04-23 13:33:47Z rfhh $
  *
  * Copyright (C) 2002 ETC s.r.o.
  * Copyright (C) 2003 Marcel Telka
@@ -26,9 +26,7 @@
 #ifndef URJ_BSSIGNAL_H
 #define URJ_BSSIGNAL_H
 
-typedef struct urj_part_signal urj_part_signal_t;
-
-#include "bsbit.h"
+#include "types.h"
 
 struct urj_part_signal
 {
@@ -38,8 +36,6 @@ struct urj_part_signal
     urj_bsbit_t *input;
     urj_bsbit_t *output;
 };
-
-typedef struct urj_part_salias urj_part_salias_t;
 
 struct urj_part_salias
 {
@@ -54,5 +50,29 @@ void urj_part_signal_free (urj_part_signal_t *s);
 urj_part_salias_t *urj_part_salias_alloc (const char *name,
                                           const urj_part_signal_t *signal);
 void urj_part_salias_free (urj_part_salias_t *salias);
+
+/**
+ * Define a signal and its associated pin (name)
+ */
+urj_part_signal_t *urj_part_signal_define_pin (urj_chain_t *chain,
+                                               const char *signal_name,
+                                               const char *pin_name);
+/**
+ * Define a signal without pin (name)
+ */
+urj_part_signal_t *urj_part_signal_define (urj_chain_t *chain,
+                                           const char *signal_name);
+/**
+ * Redefine the pin name for a signal
+ */
+int urj_part_signal_redefine_pin (urj_chain_t *chain, urj_part_signal_t *s,
+                                  const char *pin_name);
+
+/**
+ * Check whether a chain has an active part
+ *
+ * @return if error, NULL, and sets urj_error.
+ */
+urj_part_t *urj_part_active_part(urj_chain_t *chain);
 
 #endif /* URJ_BSSIGNAL_H */
