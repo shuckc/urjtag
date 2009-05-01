@@ -25,12 +25,9 @@
 #ifndef URJ_PART_INSTRUCTION_H
 #define URJ_PART_INSTRUCTION_H
 
-#include "tap_register.h"
-#include "data_register.h"
+#include "types.h"
 
 #define URJ_INSTRUCTION_MAXLEN_INSTRUCTION      20
-
-typedef struct urj_part_instruction urj_part_instruction_t;
 
 struct urj_part_instruction
 {

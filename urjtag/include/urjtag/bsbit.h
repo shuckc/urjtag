@@ -25,9 +25,7 @@
 #ifndef URJ_BSBIT_BSBIT_H
 #define URJ_BSBIT_BSBIT_H
 
-typedef struct urj_bsbit urj_bsbit_t;
-
-#include "bssignal.h"
+#include "types.h"
 
 #define URJ_BSBIT_INPUT         1
 #define URJ_BSBIT_OUTPUT        2
@@ -49,8 +47,35 @@ struct urj_bsbit
     int control_state;
 };
 
-urj_bsbit_t *urj_part_bsbit_alloc (int bit, const char *name, int type,
-                                   urj_part_signal_t *signal, int safe);
+/**
+ * Define new BSR (Boundary Scan Register) bit for signal <code>name</code>.
+ *
+ * @param chain
+ * @param bit
+ * @param name associated signal name
+ * @param type URJ_BSBIT_{INPUT|OUTPUT|BIDIR|CONTROL|INTERNAL}
+ * @param safe default (safe) value (0|1)
+ */
+urj_bsbit_t *urj_part_bsbit_alloc (urj_chain_t *chain, int bit,
+                                   const char *name, int type, int safe);
+/**
+ * Define new BSR (Boundary Scan Register) bit for signal <code>name</code>.
+ * Additionally, define control bit.
+ *
+ * @param chain
+ * @param bit
+ * @param name associated signal name
+ * @param type URJ_BSBIT_{INPUT|OUTPUT|BIDIR|CONTROL|INTERNAL}
+ * @param safe default (safe) value (0|1)
+ * @param ctrl_num control bit number
+ * @param ctrl_val control value
+ * @param ctrl_state control state; valid statis is only URJ_BSBIT_STATE_Z
+ */
+urj_bsbit_t *urj_part_bsbit_alloc_control (urj_chain_t *chain, int bit,
+                                           const char *name, int type, int safe,
+                                           int ctrl_num, int ctrl_val,
+                                           int ctrl_state);
+
 void urj_part_bsbit_free (urj_bsbit_t *b);
 
 #endif /* URJ_BSBIT_BSBIT_H */

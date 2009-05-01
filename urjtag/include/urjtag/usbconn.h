@@ -27,11 +27,8 @@
 #define URJ_USBCONN_H
 
 #include <stdint.h>
-#include <stddef.h>
 
-typedef struct urj_usbconn urj_usbconn_t;
-
-#include "cable.h"
+#include "types.h"
 
 typedef struct
 {

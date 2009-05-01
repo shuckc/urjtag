@@ -36,6 +36,7 @@
 #define URJ_BITMASK_H
 
 #ifdef UNUSED                   /* RFHH */
+/* @@@@ RFHH remove? */
 #ifndef LANGUAGE
 #       ifdef __ASSEMBLY__
 #               define LANGUAGE ASM
@@ -44,10 +45,12 @@
 #       endif
 #endif
 
+/* @@@@ RFHH remove? */
 #ifndef ASM
 #define ASM     0
 #endif
 
+/* @@@@ RFHH remove? */
 #ifndef C
 #define C       1
 #endif

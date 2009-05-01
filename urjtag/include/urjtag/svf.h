@@ -25,7 +25,12 @@
 #ifndef URJ_SVF_H
 #define URJ_SVF_H
 
-#include "chain.h"
+#include "sysdep.h"
+
+#include <stdint.h>
+#include <stdio.h>
+
+#include "types.h"
 
 void urj_svf_run (urj_chain_t *chain, FILE *, int, int, uint32_t);
 

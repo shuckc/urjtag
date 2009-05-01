@@ -25,11 +25,9 @@
 #ifndef URJ_DATA_REGISTER_H
 #define URJ_DATA_REGISTER_H
 
-#include "tap_register.h"
+#include "types.h"
 
 #define URJ_DATA_REGISTER_MAXLEN        32
-
-typedef struct urj_data_register urj_data_register_t;
 
 struct urj_data_register
 {

@@ -25,9 +25,9 @@
 #ifndef URJ_TAP_STATE_H
 #define URJ_TAP_STATE_H
 
-#include <bitmask.h>
+#include "bitmask.h"
 
-#include "chain.h"
+#include "types.h"
 
 #define URJ_TAP_STATE_DR        URJ_BIT (0)
 #define URJ_TAP_STATE_IR        URJ_BIT (1)

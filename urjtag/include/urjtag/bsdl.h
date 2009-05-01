@@ -25,7 +25,9 @@
 #ifndef URJ_BSDL_BSDL_H
 #define URJ_BSDL_BSDL_H
 
-#include <bsdl_mode.h>
+#include "types.h"
+
+#include "bsdl_mode.h"
 
 typedef struct
 {
@@ -38,8 +40,6 @@ typedef struct
         bsdl.path_list = NULL; \
         bsdl.debug = 0; \
     } while (0)
-
-#include "chain.h"
 
 int urj_bsdl_read_file (urj_chain_t *, const char *, int, const char *);
 void urj_bsdl_set_path (urj_chain_t *, const char *);

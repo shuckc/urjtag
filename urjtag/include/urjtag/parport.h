@@ -28,9 +28,7 @@
 
 #include <stdint.h>
 
-typedef struct urj_parport urj_parport_t;
-
-#include "cable.h"
+#include "types.h"
 
 typedef struct
 {

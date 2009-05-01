@@ -24,6 +24,8 @@
 #ifndef URJ_FCLOCK_FCLOCK_H
 #define URJ_FCLOCK_FCLOCK_H
 
+/* @@@@ this had better be an internal include file RFHH */
+
 
 #ifdef __cplusplus
 extern "C"

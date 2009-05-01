@@ -25,12 +25,14 @@
 #ifndef URJ_TAP_REGISTER_H
 #define URJ_TAP_REGISTER_H
 
-typedef struct urj_tap_register
+#include "types.h"
+
+struct urj_tap_register
 {
     char *data;                 /* (public, r/w) register data */
     int len;                    /* (public, r/o) register length */
     char *string;               /* (private) string representation of register data */
-} urj_tap_register_t;
+};
 
 urj_tap_register_t *urj_tap_register_alloc (int len);
 urj_tap_register_t *urj_tap_register_duplicate (const urj_tap_register_t *tr);

@@ -25,13 +25,11 @@
 #ifndef URJ_CHAIN_H
 #define URJ_CHAIN_H
 
-#include "part.h"
+#include "types.h"
+
 #include "pod.h"
-
-typedef struct urj_chain urj_chain_t;
-
-#include "cable.h"
 #include "bsdl.h"
+#include "error.h"
 
 #define URJ_CHAIN_EXITMODE_SHIFT        0
 #define URJ_CHAIN_EXITMODE_IDLE         1
