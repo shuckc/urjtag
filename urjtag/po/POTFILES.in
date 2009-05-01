@@ -1,4 +1,5 @@
 # $Id$
+src/apps/jtag/jtag.c
 src/bsdl/bsdl_bison.c
 src/bsdl/bsdl.c
 src/bsdl/bsdl_flex.c
@@ -86,10 +87,10 @@ src/flash/flash.c
 src/flash/intel.c
 src/flash/jedec.c
 src/flash/jedec_exp.c
+src/global/urjtag.c
 src/jim/intel_28f800b3.c
 src/jim/some_cpu.c
 src/jim/tap.c
-src/jtag.c
 src/lib/fclock.c
 src/lib/getdelim.c
 src/lib/getline.c
