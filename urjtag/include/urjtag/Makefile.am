@@ -53,3 +53,4 @@ noinst_HEADERS = \
 	usbconn/libftdx.h \
 	usbconn/libusb.h \
 	xpcu.h
+

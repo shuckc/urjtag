@@ -28,12 +28,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cable.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/chain.h>
 #include "generic.h"
 #include "generic_usbconn.h"
 
-#include <cmd.h>
+#include <urjtag/cmd.h>
 
 #undef VERBOSE
 

@@ -28,15 +28,17 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "part.h"
-#include "bus.h"
-#include "chain.h"
-#include "jtag.h"
+#include <urjtag/part.h>
+#include <urjtag/bus.h>
+#include <urjtag/chain.h>
+#include <urjtag/jtag.h>
+#include <urjtag/cmd.h>
+#include <urjtag/tap.h>
+#include <urjtag/data_register.h>
+#include <urjtag/part_instruction.h>
+
 #include "buses.h"
 #include "generic_bus.h"
-#include "cmd.h"
-#include "tap.h"
-
 
 #undef DEBUG
 

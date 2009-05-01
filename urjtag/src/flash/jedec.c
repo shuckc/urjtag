@@ -28,9 +28,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <jtag.h>
-#include <flash.h>
-#include <bus.h>
+#include <urjtag/jtag.h>
+#include <urjtag/flash.h>
+#include <urjtag/bus.h>
 
 #include "cfi.h"
 #include "intel.h"

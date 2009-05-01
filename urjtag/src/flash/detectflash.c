@@ -33,8 +33,8 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <flash.h>
-#include <bus.h>
+#include <urjtag/flash.h>
+#include <urjtag/bus.h>
 
 #include "jedec.h"
 #include "cfi.h"

@@ -24,7 +24,7 @@
 
 #include "sysdep.h"
 
-#include "parport.h"
+#include <urjtag/parport.h>
 
 extern urj_parport_driver_t urj_tap_parport_direct_parport_driver;
 extern urj_parport_driver_t urj_tap_parport_ppdev_parport_driver;

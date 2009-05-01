@@ -42,9 +42,9 @@
 #include <unistd.h>
 #include <usb.h>
 
-#include "parport.h"
-#include "cable.h"
-#include "usbconn.h"
+#include <urjtag/parport.h>
+#include <urjtag/cable.h>
+#include <urjtag/usbconn.h>
 
 typedef struct
 {

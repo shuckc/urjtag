@@ -28,11 +28,12 @@
 
 #ifdef ENABLE_LOWLEVEL_DIRECT
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "parport.h"
-#include "cable.h"
+#include <urjtag/parport.h>
+#include <urjtag/cable.h>
 
 #if defined(HAVE_INPOUTXX)
 

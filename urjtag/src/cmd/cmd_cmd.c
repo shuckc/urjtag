@@ -27,9 +27,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "jtag.h"
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 extern urj_cmd_t urj_cmd_quit;
 extern urj_cmd_t urj_cmd_help;
@@ -155,6 +155,7 @@ urj_cmd_run (urj_chain_t *chain, char *params[])
         if (strcasecmp (urj_cmds[i]->name, params[0]) == 0)
         {
             int r;
+
           run_cmd:
             r = urj_cmds[i]->run (chain, params);
             if (r < 0)

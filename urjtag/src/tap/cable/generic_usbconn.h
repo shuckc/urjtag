@@ -25,8 +25,8 @@
 #ifndef URJ_TAP_CABLE_GENERIC_USBCONN_H
 #define URJ_TAP_CABLE_GENERIC_USBCONN_H
 
-#include "cable.h"
-#include "usbconn.h"
+#include <urjtag/cable.h>
+#include <urjtag/usbconn.h>
 
 int urj_tap_cable_generic_usbconn_connect (char *params[],
                                            urj_cable_t *cable);

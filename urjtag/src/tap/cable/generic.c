@@ -30,14 +30,14 @@
 #include <assert.h>
 #include <math.h>
 
-#include "cable.h"
-#include "parport.h"
-#include "chain.h"
-#include "fclock.h"
+#include <urjtag/cable.h>
+#include <urjtag/parport.h>
+#include <urjtag/chain.h>
+#include <urjtag/fclock.h>
 
 #include "generic.h"
 
-#include <cmd.h>
+#include <urjtag/cmd.h>
 
 
 #ifndef HAVE_FMAX

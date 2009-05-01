@@ -28,7 +28,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "data_register.h"
+#include <urjtag/tap_register.h>
+#include <urjtag/data_register.h>
 
 urj_data_register_t *
 urj_part_data_register_alloc (const char *name, int len)

@@ -29,8 +29,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <jtag.h>
-#include <cmd.h>
+#include <urjtag/jtag.h>
+#include <urjtag/cmd.h>
 
 #include "bsdl_sysdep.h"
 

@@ -26,9 +26,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-#include <jim.h>
 
-#include <jim/urj_jim_some_cpu.h>
+#include <urjtag/jim.h>
+
+#include <urjtag/jim/some_cpu.h>
 
 #undef VERBOSE
 

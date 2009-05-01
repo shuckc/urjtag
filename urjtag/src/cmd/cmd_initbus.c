@@ -28,8 +28,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cmd.h"
-#include "jtag.h"
+#include <urjtag/chain.h>
+#include <urjtag/part.h>
+#include <urjtag/bus.h>
+#include <urjtag/cmd.h>
+#include <urjtag/jtag.h>
 
 static int
 cmd_initbus_run (urj_chain_t *chain, char *params[])

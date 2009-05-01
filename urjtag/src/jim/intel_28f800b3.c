@@ -26,12 +26,13 @@
  * Order Number 290580, Revision: 020, 18 Aug 2005.
  */
 
-#include <jim.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <time.h>
+
+#include <urjtag/jim.h>
 
 #undef VERBOSE
 

@@ -23,8 +23,8 @@
  *
  */
 
-#include "tap_state.h"
-#include "chain.h"
+#include <urjtag/tap_state.h>
+#include <urjtag/chain.h>
 
 int
 urj_tap_state (urj_chain_t *chain)

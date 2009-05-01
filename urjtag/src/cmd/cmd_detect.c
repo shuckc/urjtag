@@ -27,11 +27,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "jtag.h"
-#include "chain.h"
-#include "bus.h"
+#include <urjtag/jtag.h>
+#include <urjtag/chain.h>
+#include <urjtag/part.h>
+#include <urjtag/bus.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_detect_run (urj_chain_t *chain, char *params[])

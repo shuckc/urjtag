@@ -27,7 +27,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "part.h"
+#include <urjtag/error.h>
+#include <urjtag/part.h>
+#include <urjtag/bssignal.h>
+#include <urjtag/tap_register.h>
+#include <urjtag/part_instruction.h>
+#include <urjtag/data_register.h>
+#include <urjtag/bsbit.h>
 
 /* part */
 
@@ -280,6 +286,69 @@ urj_part_print (urj_part_t *p)
         dr = _("(none)");
     printf (format, p->manufacturer, p->part, p->stepping, instruction, dr);
 }
+
+
+int
+urj_part_instruction_length_set (urj_part_t *part, int length)
+{
+    if (part->instructions != NULL)
+    {
+        urj_error_set (URJ_ERROR_ALREADY,
+                       _("instruction length is already set and used\n"));
+        return URJ_STATUS_FAIL;
+    }
+
+    part->instruction_length = length;
+
+    return URJ_STATUS_OK;
+}
+
+
+urj_part_instruction_t *
+urj_part_instruction_define (urj_part_t *part, const char *instruction,
+                             const char *code, const char *data_register)
+{
+    urj_part_instruction_t *i;
+    urj_data_register_t *dr;
+
+    if (strlen (code) != part->instruction_length)
+    {
+        urj_error_set (URJ_ERROR_INVALID,
+                       _("invalid instruction length\n"));
+        return NULL;
+    }
+
+    if (urj_part_find_instruction (part, instruction) != NULL)
+    {
+        urj_error_set (URJ_ERROR_ALREADY,
+                       _("Instruction '%s' already defined\n"), instruction);
+        return NULL;
+    }
+
+    dr = urj_part_find_data_register (part, data_register);
+    if (dr == NULL)
+    {
+        urj_error_set(URJ_ERROR_NOTFOUND,
+                      _("unknown data register '%s'\n"), data_register);
+        return NULL;
+    }
+
+    i = urj_part_instruction_alloc (instruction, part->instruction_length,
+                                    code);
+    if (!i)
+    {
+        /* retain error state */
+        return NULL;
+    }
+
+    i->next = part->instructions;
+    part->instructions = i;
+
+    i->data_register = dr;
+
+    return i;
+}
+
 
 /* parts */
 

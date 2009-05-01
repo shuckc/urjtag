@@ -27,15 +27,15 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "cable.h"
-#include "parport.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/parport.h>
+#include <urjtag/chain.h>
 
 #include "generic.h"
 
-#include <cmd.h>
+#include <urjtag/cmd.h>
 
-#include <jim.h>
+#include <urjtag/jim.h>
 
 /* private parameters of this cable driver */
 typedef struct

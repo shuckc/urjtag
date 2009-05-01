@@ -27,6 +27,7 @@
 
 #ifdef ENABLE_LOWLEVEL_PPDEV
 
+#include <stdio.h>
 #include <fcntl.h>
 #ifdef HAVE_STROPTS_H
 #include <stropts.h>
@@ -39,8 +40,8 @@
 #include <errno.h>
 #include <string.h>
 
-#include "parport.h"
-#include "cable.h"
+#include <urjtag/parport.h>
+#include <urjtag/cable.h>
 
 urj_parport_driver_t urj_tap_parport_ppdev_parport_driver;
 

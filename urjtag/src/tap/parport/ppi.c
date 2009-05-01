@@ -35,8 +35,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "parport.h"
-#include "cable.h"
+#include <urjtag/parport.h>
+#include <urjtag/cable.h>
 
 urj_parport_driver_t urj_tap_parport_ppi_parport_driver;
 

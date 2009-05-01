@@ -25,8 +25,8 @@
 #ifndef URJ_BSDL_TYPES_H
 #define URJ_BSDL_TYPES_H
 
-#include <jtag.h>
-#include <bsdl_mode.h>
+#include <urjtag/jtag.h>
+#include <urjtag/bsdl_mode.h>
 
 /* private data of the flex scanner
    handled internally in bsdl_flex.l as yyextra */

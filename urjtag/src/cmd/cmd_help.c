@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <cmd.h>
+#include <urjtag/cmd.h>
 
 static int
 cmd_help_run (urj_chain_t *chain, char *params[])

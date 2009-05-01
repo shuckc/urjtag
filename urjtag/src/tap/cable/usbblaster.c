@@ -25,18 +25,19 @@
 
 #include "sysdep.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "cable.h"
-#include "chain.h"
-#include "cmd.h"
+#include <urjtag/cable.h>
+#include <urjtag/chain.h>
+#include <urjtag/cmd.h>
 
 #include "generic.h"
 #include "generic_usbconn.h"
 
-#include "usbconn.h"
-#include "usbconn/libftdx.h"
+#include <urjtag/usbconn.h>
+#include <urjtag/usbconn/libftdx.h>
 
 #include "cmd_xfer.h"
 

@@ -28,9 +28,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "bsdl.h"
-#include "chain.h"
-#include "cmd.h"
+#include <urjtag/bsdl.h>
+#include <urjtag/chain.h>
+#include <urjtag/cmd.h>
 
 static int
 cmd_bsdl_run (urj_chain_t *chain, char *params[])

@@ -32,18 +32,18 @@
 #include "generic.h"
 #include "generic_usbconn.h"
 
-#include "usbconn.h"
-#include "usbconn/libusb.h"
+#include <urjtag/usbconn.h>
+#include <urjtag/usbconn/libusb.h>
 
 /* ---------------------------------------------------------------------- */
 
 
 #include "sysdep.h"
 
-#include "cable.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/chain.h>
 
-#include "jtag.h"
+#include <urjtag/jtag.h>
 
 #include <usb.h>
 #include <string.h>

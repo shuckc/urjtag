@@ -26,7 +26,7 @@
 
 #include <strings.h>
 
-#include "usbconn.h"
+#include <urjtag/usbconn.h>
 
 #ifdef HAVE_LIBUSB
 extern urj_usbconn_driver_t urj_tap_usbconn_libusb_driver;

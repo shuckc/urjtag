@@ -28,9 +28,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "jtag.h"
+#include <urjtag/part.h>
+#include <urjtag/bssignal.h>
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_signal_run (urj_chain_t *chain, char *params[])
@@ -42,37 +44,22 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
     if ((i = urj_cmd_params (params)) < 2)
         return -1;
 
-
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (!chain->parts)
+    part = urj_part_active_part (chain);
+    if (part == NULL)
     {
-        printf (_("Run \"detect\" first.\n"));
         return 1;
     }
 
-    if (chain->active_part >= chain->parts->len)
-    {
-        printf (_("%s: no active part\n"), "signal");
-        return 1;
-    }
-
-    part = chain->parts->parts[chain->active_part];
     if ((s = urj_part_find_signal (part, params[1])) != NULL)
     {
         if (i == 3)
         {
             printf ("Defining pin for signal %s\n", s->name);
 
-            if (s->pin)
-                free (s->pin);  /* erase old */
-
-            /* Allocate the space for the pin number & copy it */
-            s->pin = malloc (strlen (params[2]) + 1);
-            strcpy (s->pin, params[2]);
-
-            return 1;
+            return urj_part_signal_redefine_pin(chain, s, params[2]);
         }
         else
         {
@@ -81,24 +68,17 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
         }
     }
 
-    s = urj_part_signal_alloc (params[1]);
-
     if (i == 3)
     {                           /* Add pin number */
-        /* Allocate the space for the pin number & copy it */
-        s->pin = malloc (strlen (params[2]) + 1);
-        strcpy (s->pin, params[2]);
-
+        s = urj_part_signal_define_pin(chain, params[1], params[2]);
     }
-
-    if (!s)
+    else
     {
-        printf (_("out of memory\n"));
+        s = urj_part_signal_define(chain, params[1]);
+    }
+    if (s == NULL) {
         return 1;
     }
-
-    s->next = part->signals;
-    part->signals = s;
 
     return 1;
 }

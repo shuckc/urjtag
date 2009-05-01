@@ -128,6 +128,8 @@ LEGAL NOTICES:
 #include <stdio.h>
 #include <ctype.h>
 
+#include <urjtag/part.h>
+
 #include "bsdl_sysdep.h"
 
 #include "bsdl_types.h"

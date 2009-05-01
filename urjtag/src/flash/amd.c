@@ -38,12 +38,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <intel.h>
 #include <unistd.h>
 
-#include <flash.h>
-#include <bus.h>
+#include <urjtag/flash.h>
+#include <urjtag/bus.h>
 
+#include "intel.h"
 #include "cfi.h"
 
 static int dbg = 0;

@@ -26,9 +26,9 @@
 
 #include <stdio.h>
 
-#include <jtag.h>
-#include <flash.h>
-#include <cmd.h>
+#include <urjtag/jtag.h>
+#include <urjtag/flash.h>
+#include <urjtag/cmd.h>
 
 static int
 cmd_detectflash_run (urj_chain_t *chain, char *params[])

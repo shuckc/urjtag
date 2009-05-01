@@ -45,7 +45,7 @@
 #ifndef PXA2X0_MC_H
 #define PXA2X0_MC_H
 
-#include <bitmask.h>
+#include <urjtag/bitmask.h>
 
 #ifndef __ASSEMBLY__
 #include <stdint.h>

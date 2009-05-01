@@ -60,7 +60,7 @@ AC_CONFIG_FILES(
 	Makefile
 	doc/Makefile
 	data/Makefile
-	include/Makefile
+	include/urjtag/Makefile
 	src/Makefile
 	src/lib/Makefile
 	src/tap/Makefile

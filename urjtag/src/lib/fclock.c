@@ -32,14 +32,14 @@
 #include <math.h>
 #include <assert.h>
 
+#include <urjtag/fclock.h>
+
 /* ------------------------------------------------------------------ */
 
 #ifdef __APPLE__
 #include <mach/mach_time.h>
 #include <sys/types.h>
 #include <sys/time.h>
-
-#include "fclock.h"
 
 long double
 urj_lib_frealtime (void)

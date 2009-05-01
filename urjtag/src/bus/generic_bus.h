@@ -25,7 +25,7 @@
 #ifndef URJ_BUS_GENERIC_BUS_H
 #define URJ_BUS_GENERIC_BUS_H
 
-#include "bus.h"
+#include <urjtag/bus.h>
 
 int urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig,
                                 char *id);

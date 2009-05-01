@@ -27,9 +27,10 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "jtag.h"
+#include <urjtag/bus.h>
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_peek_run (urj_chain_t *chain, char *params[])

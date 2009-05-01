@@ -30,10 +30,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "jtag.h"
-#include <cable.h>
+#include <urjtag/jtag.h>
+#include <urjtag/cable.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_pod_run (urj_chain_t *chain, char *params[])

@@ -28,14 +28,14 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "parport.h"
-#include "tap.h"
-#include "cable.h"
-#include "chain.h"
-#include "jtag.h"
-#include "bus.h"
+#include <urjtag/parport.h>
+#include <urjtag/tap.h>
+#include <urjtag/cable.h>
+#include <urjtag/chain.h>
+#include <urjtag/jtag.h>
+#include <urjtag/bus.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_cable_run (urj_chain_t *chain, char *params[])

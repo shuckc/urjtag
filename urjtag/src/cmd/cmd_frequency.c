@@ -26,10 +26,10 @@
 
 #include <stdio.h>
 
-#include "cable.h"
-#include "jtag.h"
+#include <urjtag/cable.h>
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_frequency_run (urj_chain_t *chain, char *params[])

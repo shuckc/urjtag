@@ -30,9 +30,9 @@
 //#include <stdlib.h>
 //#include "part.h"
 //#include "bssignal.h"
-#include "jtag.h"
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_debug_run (urj_chain_t *chain, char *params[])

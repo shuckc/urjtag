@@ -29,9 +29,9 @@
 
 #include "sysdep.h"
 
-#include "cable.h"
-#include "parport.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/parport.h>
+#include <urjtag/chain.h>
 
 #include "generic.h"
 #include "generic_parport.h"

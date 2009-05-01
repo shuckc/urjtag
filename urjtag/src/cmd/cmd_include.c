@@ -29,10 +29,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "jtag.h"
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
-#include "bsdl.h"
+#include <urjtag/cmd.h>
+#include <urjtag/bsdl.h>
 
 static int
 cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])

@@ -25,8 +25,8 @@
 #ifndef URJ_TAP_CABLE_GENERIC_H
 #define URJ_TAP_CABLE_GENERIC_H
 
-#include "cable.h"
-#include "parport.h"
+#include <urjtag/cable.h>
+#include <urjtag/parport.h>
 
 typedef struct
 {

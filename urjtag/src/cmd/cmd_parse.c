@@ -31,9 +31,9 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "chain.h"
-#include "cmd.h"
-#include "jtag.h"
+#include <urjtag/chain.h>
+#include <urjtag/cmd.h>
+#include <urjtag/jtag.h>
 
 #define MAXINPUTLINE 100        /* Maximum input line length */
 
@@ -54,7 +54,7 @@ urj_cmd_jtag_parse_line (urj_chain_t *chain, char *line)
         return 1;
 
     /* allocate as many chars as in the input line; this will be enough in all cases */
-    sline = malloc ((l + 1) * sizeof (char));
+    sline = malloc (l + 1);
     if (sline == NULL)
     {
         printf (_("Out of memory\n"));

@@ -27,7 +27,7 @@
 
 #include "sysdep.h"
 
-#include <cable.h>
+#include <urjtag/cable.h>
 
 /* description of a command
    the buffer can contain one or more commands if receive count

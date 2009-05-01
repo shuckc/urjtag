@@ -33,8 +33,10 @@
 
 #include "sysdep.h"
 
-#include "jtag.h"
-#include "cmd.h"
+#include <urjtag/chain.h>
+#include <urjtag/part.h>
+#include <urjtag/jtag.h>
+#include <urjtag/cmd.h>
 
 //#include "bsdl_local.h"
 #include "bsdl_types.h"

@@ -25,7 +25,7 @@
 
 #include <stdint.h>
 
-#include "chain.h"
+#include <urjtag/chain.h>
 
 #define MAX_PATH_STATES 64
 

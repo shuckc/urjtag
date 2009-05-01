@@ -25,8 +25,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <jim.h>
-#include <bitmask.h>
+
+#include <urjtag/jim.h>
+#include <urjtag/bitmask.h>
 
 #undef VERBOSE
 

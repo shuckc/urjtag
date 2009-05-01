@@ -41,9 +41,13 @@
 
 #include "sysdep.h"
 
-#include <jtag.h>
-#include <tap.h>
-#include <tap_state.h>
+#include <urjtag/jtag.h>
+#include <urjtag/cable.h>
+#include <urjtag/part.h>
+#include <urjtag/tap.h>
+#include <urjtag/tap_state.h>
+#include <urjtag/part_instruction.h>
+#include <urjtag/data_register.h>
 
 #if 0
 #include <urjtag/svf.h>         /* two include files w/ the same name
@@ -52,13 +56,16 @@
                                  *                              RFHH */
 #endif
 
-#include <cmd.h>
+#include <urjtag/cmd.h>
+
+#include <urjtag/svf.h>
 
 #include "svf.h"
+
 #include "svf_bison.h"
 
 #ifdef __MINGW32__
-#include "fclock.h"
+#include <urjtag/fclock.h>
 #endif
 
 

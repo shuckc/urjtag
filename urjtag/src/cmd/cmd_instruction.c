@@ -27,10 +27,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "part.h"
-#include "jtag.h"
+#include <urjtag/part.h>
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_instruction_run (urj_chain_t *chain, char *params[])
@@ -70,50 +70,19 @@ cmd_instruction_run (urj_chain_t *chain, char *params[])
         if (strcasecmp (params[1], "length") != 0)
             return -1;
 
-        if (part->instructions != NULL)
-        {
-            printf (_("instruction length is already set and used\n"));
-            return 1;
-        }
-
         if (urj_cmd_get_number (params[2], &len))
             return -1;
 
-        part->instruction_length = len;
-        return 1;
+        return urj_part_instruction_length_set (part, len);
     }
 
     if (urj_cmd_params (params) == 4)
     {
         urj_part_instruction_t *i;
 
-        if (strlen (params[2]) != part->instruction_length)
-        {
-            printf (_("invalid instruction length\n"));
-            return 1;
-        }
-
-        if (urj_part_find_instruction (part, params[1]) != NULL)
-        {
-            printf (_("Instruction '%s' already defined\n"), params[1]);
-            return 1;
-        }
-
-        i = urj_part_instruction_alloc (params[1], part->instruction_length,
-                                        params[2]);
+        i = urj_part_instruction_define (part, params[1], params[2], params[3]);
         if (!i)
         {
-            printf (_("out of memory\n"));
-            return 1;
-        }
-
-        i->next = part->instructions;
-        part->instructions = i;
-
-        i->data_register = urj_part_find_data_register (part, params[3]);
-        if (i->data_register == NULL)
-        {
-            printf (_("unknown data register '%s'\n"), params[3]);
             return 1;
         }
 

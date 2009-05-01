@@ -41,6 +41,7 @@
 #endif
 
 #include "svf.h"
+
 #include "svf_bison.h"
 
 #define YY_EXTRA_TYPE urj_svf_scanner_extra_t *

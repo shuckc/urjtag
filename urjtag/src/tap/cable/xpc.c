@@ -26,14 +26,16 @@
 
 #include "sysdep.h"
 
-#include "cable.h"
-#include "chain.h"
+#include <stdio.h>
+
+#include <urjtag/cable.h>
+#include <urjtag/chain.h>
 
 #include "generic.h"
 #include "generic_usbconn.h"
 
-#include "usbconn.h"
-#include "usbconn/libusb.h"
+#include <urjtag/usbconn.h>
+#include <urjtag/usbconn/libusb.h>
 
 #include <errno.h>
 #include <string.h>

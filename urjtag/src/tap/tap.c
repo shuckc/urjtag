@@ -26,10 +26,12 @@
 
 #include <stdio.h>
 
-#include "tap_register.h"
-#include "tap.h"
-#include "tap_state.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/part.h>
+#include <urjtag/tap_register.h>
+#include <urjtag/tap.h>
+#include <urjtag/tap_state.h>
+#include <urjtag/chain.h>
 
 void
 urj_tap_reset (urj_chain_t *chain)
@@ -49,9 +51,8 @@ urj_tap_reset_bypass (urj_chain_t *chain)
        instruction register length of the chain is already known */
     if (chain->total_instr_len > 0)
     {
-        urj_tap_register_t *ir =
-            urj_tap_register_fill (urj_tap_register_alloc
-                                   (chain->total_instr_len), 1);
+        urj_tap_register_t *ir = urj_tap_register_fill (
+                        urj_tap_register_alloc (chain->total_instr_len), 1);
         if (!ir)
         {
             printf (_("out of memory\n"));

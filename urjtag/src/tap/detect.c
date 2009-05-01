@@ -30,17 +30,17 @@
 #include <ctype.h>
 #include <string.h>
 
-#include <cmd.h>
+#include <urjtag/cmd.h>
 
-#include <bsdl.h>
+#include <urjtag/bsdl.h>
 
-#include "tap_register.h"
-#include "tap.h"
-#include "cable.h"
-#include "part.h"
-#include "chain.h"
+#include <urjtag/tap_register.h>
+#include <urjtag/tap.h>
+#include <urjtag/cable.h>
+#include <urjtag/part.h>
+#include <urjtag/chain.h>
 
-#include "jtag.h"
+#include <urjtag/jtag.h>
 
 struct id_record
 {

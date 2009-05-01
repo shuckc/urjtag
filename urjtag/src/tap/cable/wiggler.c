@@ -29,18 +29,19 @@
 
 #include "sysdep.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-#include "cable.h"
-#include "parport.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/parport.h>
+#include <urjtag/chain.h>
 
 #include "generic.h"
 #include "generic_parport.h"
 
-#include <cmd.h>
+#include <urjtag/cmd.h>
 
 /*
  * Bit <-> pin mapping of an original Wiggler

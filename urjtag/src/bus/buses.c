@@ -24,9 +24,11 @@
 
 #include "sysdep.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
-#include "bus.h"
+#include <urjtag/bus.h>
+
 #include "buses.h"
 
 const urj_bus_driver_t *urj_bus_drivers[] = {

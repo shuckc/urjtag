@@ -25,8 +25,8 @@
 #ifndef URJ_FLASH_JEDEC_H
 #define URJ_FLASH_JEDEC_H
 
-#include <bus_driver.h>
-#include <flash.h>
+#include <urjtag/bus_driver.h>
+#include <urjtag/flash.h>
 
 int urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
                             urj_flash_cfi_array_t **urj_flash_cfi_array);

@@ -28,9 +28,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "jtag.h"
+#include <urjtag/chain.h>
+#include <urjtag/part.h>
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_part_run (urj_chain_t *chain, char *params[])

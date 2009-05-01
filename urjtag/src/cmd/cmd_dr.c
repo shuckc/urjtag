@@ -27,10 +27,14 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "tap_register.h"
-#include "jtag.h"
+#include <urjtag/chain.h>
+#include <urjtag/part.h>
+#include <urjtag/part_instruction.h>
+#include <urjtag/data_register.h>
+#include <urjtag/tap_register.h>
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_dr_run (urj_chain_t *chain, char *params[])

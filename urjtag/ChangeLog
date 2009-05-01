@@ -1,3 +1,11 @@
+2009-04-23  Rutger Hofman <rfhh>
+
+  Move all include/* to include/urjtag/* to lower collision chance on #include.
+  Start lifting commands from cmd/ into the library modules. Begun work on:
+    * src/cmd/cmd_bit.c
+    * src/cmd/cmd_instruction.c
+    * src/cmd/cmd_signal.c
+
 2009-04-24  Mike Frysinger  <vapier@gentoo.org>
 
   * data/analog/bf518/bf518: Update with public BSDL file.

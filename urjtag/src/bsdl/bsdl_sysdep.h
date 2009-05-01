@@ -28,7 +28,7 @@
 
 #include "bsdl_config.h"
 
-#include "gettext.h"
+#include <urjtag/gettext.h>
 #define _(s)            gettext(s)
 #define N_(s)           gettext_noop(s)
 #define P_(s,p,n)       ngettext(s,p,n)

@@ -28,9 +28,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "jtag.h"
+#include "urjtag/chain.h"
+#include "urjtag/part.h"
+#include "urjtag/bssignal.h"
+#include "urjtag/jtag.h"
 
-#include "cmd.h"
+#include "urjtag/cmd.h"
 
 static int
 cmd_salias_run (urj_chain_t *chain, char *params[])

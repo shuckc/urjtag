@@ -28,13 +28,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cable.h"
-#include "chain.h"
-#include "parport.h"
+#include <urjtag/cable.h>
+#include <urjtag/chain.h>
+#include <urjtag/parport.h>
+
+#include <urjtag/cmd.h>
+
 #include "generic.h"
 #include "generic_parport.h"
-
-#include <cmd.h>
 
 #undef VERBOSE
 

@@ -27,11 +27,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "part.h"
-#include "bssignal.h"
-#include "jtag.h"
+#include <urjtag/part.h>
+#include <urjtag/bssignal.h>
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_set_run (urj_chain_t *chain, char *params[])

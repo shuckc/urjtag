@@ -28,7 +28,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "part_instruction.h"
+#include <urjtag/tap_register.h>
+#include <urjtag/part_instruction.h>
 
 urj_part_instruction_t *
 urj_part_instruction_alloc (const char *name, int len, const char *val)

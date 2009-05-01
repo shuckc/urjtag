@@ -26,11 +26,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "cable.h"
-#include "tap.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/tap.h>
+#include <urjtag/chain.h>
 
-#include "jtag.h"
+#include <urjtag/jtag.h>
 
 void
 urj_tap_urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)

@@ -38,10 +38,16 @@ typedef char wchar_t;
 # define wcslen(str) strlen(str)
 #endif
 
-#include "part.h"
-#include "jtag.h"
+#include <urjtag/chain.h>
+#include <urjtag/part.h>
+#include <urjtag/bus.h>
+#include <urjtag/data_register.h>
+#include <urjtag/part_instruction.h>
+#include <urjtag/bssignal.h>
+#include <urjtag/bsbit.h>
+#include <urjtag/jtag.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_print_run (urj_chain_t *chain, char *params[])

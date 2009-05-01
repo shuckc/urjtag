@@ -27,11 +27,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "chain.h"
-#include "tap_state.h"
-#include "tap.h"
+#include <urjtag/cable.h>
+#include <urjtag/part.h>
+#include <urjtag/part_instruction.h>
+#include <urjtag/tap_state.h>
+#include <urjtag/tap.h>
+#include <urjtag/data_register.h>
 
-#include "bsdl.h"
+#include <urjtag/bsdl.h>
+
+#include <urjtag/chain.h>
 
 urj_chain_t *
 urj_tap_chain_alloc (void)
@@ -108,14 +113,16 @@ urj_tap_chain_set_trst (urj_chain_t *chain, int trst)
     int old_val = urj_tap_cable_set_signal (chain->cable, URJ_POD_CS_TRST,
                                             trst ? URJ_POD_CS_TRST : 0);
     int old_trst = (old_val & URJ_POD_CS_TRST) ? 1 : 0;
+
     urj_tap_state_set_trst (chain, old_trst, trst);
+
     return trst;
 }
 
 int
 urj_tap_chain_get_trst (urj_chain_t *chain)
 {
-    return (urj_tap_cable_get_signal (chain->cable, URJ_POD_CS_TRST));
+    return urj_tap_cable_get_signal (chain->cable, URJ_POD_CS_TRST);
 }
 
 int
@@ -125,14 +132,16 @@ urj_tap_chain_set_pod_signal (urj_chain_t *chain, int mask, int val)
     int old_trst = (old_val & URJ_POD_CS_TRST) ? 1 : 0;
     int new_trst =
         (((old_val & ~mask) | (val & mask)) & URJ_POD_CS_TRST) ? 1 : 0;
+
     urj_tap_state_set_trst (chain, old_trst, new_trst);
+
     return old_val;
 }
 
 int
 urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig)
 {
-    return (urj_tap_cable_get_signal (chain->cable, sig));
+    return urj_tap_cable_get_signal (chain->cable, sig);
 }
 
 void
@@ -167,13 +176,10 @@ urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
     for (i = 0; i < ps->len; i++)
     {
         urj_tap_defer_shift_register (chain,
-                                      ps->parts[i]->active_instruction->value,
-                                      capture_output ? ps->parts[i]->
-                                      active_instruction->out : NULL,
-                                      (i + 1) ==
-                                      ps->
-                                      len ? chain_exit :
-                                      URJ_CHAIN_EXITMODE_SHIFT);
+                ps->parts[i]->active_instruction->value,
+                capture_output ? ps->parts[i]->active_instruction->out
+                    : NULL,
+                (i + 1) == ps->len ? chain_exit : URJ_CHAIN_EXITMODE_SHIFT);
     }
 
     if (capture_output)
@@ -181,14 +187,10 @@ urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
         for (i = 0; i < ps->len; i++)
         {
             urj_tap_shift_register_output (chain,
-                                           ps->parts[i]->active_instruction->
-                                           value,
-                                           ps->parts[i]->active_instruction->
-                                           out,
-                                           (i + 1) ==
-                                           ps->
-                                           len ? chain_exit :
-                                           URJ_CHAIN_EXITMODE_SHIFT);
+                    ps->parts[i]->active_instruction->value,
+                    ps->parts[i]->active_instruction->out,
+                    (i + 1) == ps->len ? chain_exit
+                        : URJ_CHAIN_EXITMODE_SHIFT);
         }
     }
     else
@@ -243,15 +245,11 @@ urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
     for (i = 0; i < ps->len; i++)
     {
         urj_tap_defer_shift_register (chain,
-                                      ps->parts[i]->active_instruction->
-                                      data_register->in,
-                                      capture_output ? ps->parts[i]->
-                                      active_instruction->data_register->
-                                      out : NULL,
-                                      (i + 1) ==
-                                      ps->
-                                      len ? chain_exit :
-                                      URJ_CHAIN_EXITMODE_SHIFT);
+                ps->parts[i]->active_instruction->data_register->in,
+                capture_output ?
+                    ps->parts[i]->active_instruction->data_register->out
+                    : NULL,
+                (i + 1) == ps->len ? chain_exit : URJ_CHAIN_EXITMODE_SHIFT);
     }
 
     if (capture_output)
@@ -259,14 +257,9 @@ urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
         for (i = 0; i < ps->len; i++)
         {
             urj_tap_shift_register_output (chain,
-                                           ps->parts[i]->active_instruction->
-                                           data_register->in,
-                                           ps->parts[i]->active_instruction->
-                                           data_register->out,
-                                           (i + 1) ==
-                                           ps->
-                                           len ? chain_exit :
-                                           URJ_CHAIN_EXITMODE_SHIFT);
+                    ps->parts[i]->active_instruction->data_register->in,
+                    ps->parts[i]->active_instruction->data_register->out,
+                    (i + 1) == ps->len ? chain_exit : URJ_CHAIN_EXITMODE_SHIFT);
         }
     }
     else

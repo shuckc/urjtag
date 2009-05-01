@@ -39,9 +39,9 @@
 
 #include <ftdi.h>
 
-#include "cable.h"
-#include "usbconn.h"
-#include "usbconn/libftdx.h"
+#include <urjtag/cable.h>
+#include <urjtag/usbconn.h>
+#include <urjtag/usbconn/libftdx.h>
 
 typedef struct
 {

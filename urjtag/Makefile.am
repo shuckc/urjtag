@@ -25,7 +25,7 @@ include $(top_srcdir)/Makefile.rules
 
 SUBDIRS = \
 	doc \
-	include \
+	include/urjtag \
 	data \
 	src \
 	po

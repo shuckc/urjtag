@@ -25,19 +25,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "bssignal.h"
+#include "sysdep.h"
+
+#include <urjtag/chain.h>
+#include <urjtag/bssignal.h>
+#include <urjtag/part.h>
 
 urj_part_signal_t *
 urj_part_signal_alloc (const char *name)
 {
     urj_part_signal_t *s = malloc (sizeof *s);
     if (!s)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
         return NULL;
+    }
 
     s->name = strdup (name);
     if (!s->name)
     {
         free (s);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
         return NULL;
     }
     s->pin = NULL;              /* djf hack pin number */
@@ -61,13 +69,18 @@ urj_part_salias_t *
 urj_part_salias_alloc (const char *name, const urj_part_signal_t *signal)
 {
     urj_part_salias_t *sa = malloc (sizeof *sa);
+
     if (sa == NULL)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
         return NULL;
+    }
 
     sa->name = strdup (name);
     if (sa->name == NULL)
     {
         free (sa);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
         return NULL;
     }
     sa->next = NULL;
@@ -83,4 +96,84 @@ urj_part_salias_free (urj_part_salias_t *salias)
         return;
     free (salias->name);
     free (salias);
+}
+
+urj_part_t *
+urj_part_active_part(urj_chain_t *chain)
+{
+    if (!chain->parts)
+    {
+        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
+                       _("Run \"detect\" first.\n"));
+        return NULL;
+    }
+    if (chain->active_part >= chain->parts->len)
+    {
+        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
+                       _("%s: no active part\n"), "signal");
+        return NULL;
+    }
+
+    return chain->parts->parts[chain->active_part];
+}
+
+urj_part_signal_t *
+urj_part_signal_define_pin (urj_chain_t *chain, const char *signal_name,
+                            const char *pin_name)
+{
+    urj_part_t *part;
+    urj_part_signal_t *s;
+
+    part = urj_part_active_part (chain);
+
+    if (urj_part_find_signal (part, signal_name) != NULL)
+    {
+        urj_error_set (URJ_ERROR_ALREADY,
+                       _("Signal '%s' already defined\n"), signal_name);
+        return NULL;
+    }
+
+    s = urj_part_signal_alloc (signal_name);
+    if (!s)
+        return NULL;
+
+    if (pin_name != NULL)
+    {                           /* Add pin number */
+        /* Allocate the space for the pin number & copy it */
+        s->pin = strdup (pin_name);
+        if (s->pin == NULL)
+        {
+            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup fails");
+            return NULL;
+        }
+    }
+
+    s->next = part->signals;
+    part->signals = s;
+
+    return s;
+}
+
+urj_part_signal_t *
+urj_part_signal_define (urj_chain_t *chain, const char *signal_name)
+{
+    return urj_part_signal_define_pin(chain, signal_name, NULL);
+}
+
+int
+urj_part_signal_redefine_pin (urj_chain_t *chain, urj_part_signal_t *s,
+                              const char *pin_name)
+{
+    /* @@@@ RFHH Check s != NULL */
+    free(s->pin);
+
+    /* Allocate the space for the pin number & copy it */
+    s->pin = strdup (pin_name);
+    if (s->pin == NULL)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup fails");
+        return URJ_STATUS_FAIL;
+    }
+
+    return URJ_STATUS_OK;
 }

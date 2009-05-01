@@ -34,8 +34,8 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "jtag.h"
-#include "cable.h"
+#include <urjtag/jtag.h>
+#include <urjtag/cable.h>
 
 #undef VERBOSE
 

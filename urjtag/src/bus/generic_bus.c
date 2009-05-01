@@ -26,7 +26,9 @@
 
 #include <stdlib.h>
 
-#include <jtag.h>
+#include <urjtag/part.h>
+#include <urjtag/chain.h>
+#include <urjtag/jtag.h>
 
 #include "generic_bus.h"
 

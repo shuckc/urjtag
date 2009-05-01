@@ -31,15 +31,17 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "part.h"
-#include "bus.h"
-#include "chain.h"
-#include "bssignal.h"
-#include "jtag.h"
+#include <urjtag/part.h>
+#include <urjtag/part_instruction.h>
+#include <urjtag/bus.h>
+#include <urjtag/chain.h>
+#include <urjtag/bssignal.h>
+#include <urjtag/jtag.h>
+#include <urjtag/data_register.h>
+#include <urjtag/tap.h>
+
 #include "buses.h"
 #include "generic_bus.h"
-#include "data_register.h"
-#include "tap.h"
 
 typedef struct
 {

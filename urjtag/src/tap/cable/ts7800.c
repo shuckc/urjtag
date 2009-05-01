@@ -36,10 +36,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "cable.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/chain.h>
 
-#include "generic.h"
+#include <urjtag/generic.h>
 
 #include <cmd.h>
 

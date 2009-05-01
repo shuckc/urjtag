@@ -6,7 +6,7 @@
  */
 
 #include <config.h>
-#include "jtag.h"
+#include <urjtag/jtag.h>
 
 static const char *jtag_argv0;
 

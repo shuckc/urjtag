@@ -39,12 +39,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <cfi.h>
-#include <intel.h>
+#include "cfi.h"
+#include "intel.h"
 
-#include "bus.h"
-#include "flash.h"
-#include "jtag.h"
+#include <urjtag/bus.h>
+#include <urjtag/flash.h>
+#include <urjtag/jtag.h>
 
 extern urj_flash_driver_t urj_flash_amd_32_flash_driver;
 extern urj_flash_driver_t urj_flash_amd_16_flash_driver;

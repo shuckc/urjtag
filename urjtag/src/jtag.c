@@ -46,16 +46,17 @@
 #include <locale.h>
 #endif /* ENABLE_NLS */
 
-#include "chain.h"
-#include "bus.h"
-#include "cmd.h"
-#include "jtag.h"
-#include "flash.h"
+#include <urjtag/chain.h>
+#include <urjtag/bus.h>
+#include <urjtag/cmd.h>
+#include <urjtag/jtag.h>
+#include <urjtag/flash.h>
 
 #ifndef HAVE_GETLINE
 ssize_t urj_lib_getline (char **lineptr, size_t *n, FILE * stream);
 #endif
 
+urj_error_state_t urj_error_state;
 int urj_debug_mode = 0;
 int urj_big_endian = 0;
 static int urj_interactive = 0;
@@ -404,17 +405,13 @@ main (int argc, char *const argv[])
         printf ("\n");
 
         printf (_("  -h, --help          display this help and exit\n"));
-        printf (_
-                ("  -v, --version       display version information and exit\n"));
+        printf (_("  -v, --version       display version information and exit\n"));
         printf ("\n");
-        printf (_
-                ("  -n, --norc          disable reading ~/.jtag/rc on startup\n"));
-        printf (_
-                ("  -i, --interactive   enter interactive mode after reading files\n"));
+        printf (_("  -n, --norc          disable reading ~/.jtag/rc on startup\n"));
+        printf (_("  -i, --interactive   enter interactive mode after reading files\n"));
         printf (_("  -q, --quiet         Do not print help on startup\n"));
         printf ("\n");
-        printf (_
-                ("  [FILE]              file containing commands to execute\n"));
+        printf (_("  [FILE]              file containing commands to execute\n"));
         printf ("\n");
 
         printf (_("  Please report bugs at http://www.urjtag.org\n"));

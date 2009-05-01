@@ -34,12 +34,12 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "cable.h"
-#include "chain.h"
+#include <urjtag/cable.h>
+#include <urjtag/chain.h>
 
-#include "generic.h"
+#include <urjtag/generic.h>
 
-#include <cmd.h>
+#include <urjtag/cmd.h>
 
 #define SYSCON_BASE             0x80930000
 #define SYSCON_DEVICE_CONFIG    0x80

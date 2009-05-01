@@ -28,10 +28,10 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "jtag.h"
-#include "flash.h"
+#include <urjtag/jtag.h>
+#include <urjtag/flash.h>
 
-#include "cmd.h"
+#include <urjtag/cmd.h>
 
 static int
 cmd_flashmem_run (urj_chain_t *chain, char *params[])

@@ -25,12 +25,13 @@
 
 #include "sysdep.h"
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <svf.h>
-#include <cmd.h>
+#include <urjtag/svf.h>
+#include <urjtag/cmd.h>
 
 static int
 cmd_svf_run (urj_chain_t *chain, char *params[])
