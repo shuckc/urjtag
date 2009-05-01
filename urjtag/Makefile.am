@@ -28,6 +28,7 @@ SUBDIRS = \
 	include/urjtag \
 	data \
 	src \
+	src/apps/jtag \
 	po
 
 DIST_SUBDIRS = \

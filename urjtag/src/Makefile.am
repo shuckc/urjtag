@@ -30,8 +30,7 @@ SUBDIRS = \
 	part \
 	bus \
 	cmd \
-	global \
-	apps/jtag
+	global
 
 if ENABLE_SVF
 SUBDIRS += svf
