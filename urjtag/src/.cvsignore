@@ -2,5 +2,4 @@ Makefile.in
 Makefile
 .deps
 .libs
-jtag
 bsdl2jtag
