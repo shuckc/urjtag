@@ -21,7 +21,7 @@
  * Written by Uwe Bonnes <bon@elektron.ikp.physik.tu-darmstadt.de>, 2008.
  *
  */
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdio.h>
 #include <stdlib.h>

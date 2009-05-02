@@ -19,7 +19,7 @@
  * Written by Marcel Telka <marcel@telka.sk>, 2002, 2003.
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>

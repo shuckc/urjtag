@@ -22,7 +22,7 @@
  * shell.c added by djf
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <sys/types.h>
 #include <unistd.h>

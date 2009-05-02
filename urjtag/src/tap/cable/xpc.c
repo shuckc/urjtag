@@ -24,7 +24,7 @@
  *
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdio.h>
 

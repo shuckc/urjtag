@@ -34,9 +34,6 @@ SUBDIRS = \
 DIST_SUBDIRS = \
 	$(SUBDIRS)
 
-noinst_HEADERS = \
-	sysdep.h
-
 EXTRA_DIST = \
 	Makefile.rules \
 	UrJTAG.nsi \

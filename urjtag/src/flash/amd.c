@@ -32,13 +32,13 @@
  *
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <unistd.h>     /* usleep */
 
 #include <urjtag/flash.h>
 #include <urjtag/bus.h>
@@ -47,20 +47,6 @@
 #include "cfi.h"
 
 static int dbg = 0;
-
-static int amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array,
-                                  uint32_t adr);
-static int amd_flash_unlock_block (urj_flash_cfi_array_t *cfi_array,
-                                   uint32_t adr);
-static int amd_flash_program_single (urj_flash_cfi_array_t *cfi_array,
-                                     uint32_t adr, uint32_t data);
-static int amd_flash_program_buffer (urj_flash_cfi_array_t *cfi_array,
-                                     uint32_t adr, uint32_t *buffer, int count);
-static int amd_flash_program (urj_flash_cfi_array_t *cfi_array,
-                              uint32_t adr, uint32_t *buffer, int count);
-static int amd_flash_program32 (urj_flash_cfi_array_t *cfi_array,
-                                uint32_t adr, uint32_t *buffer, int count);
-static void amd_flash_read_array (urj_flash_cfi_array_t *cfi_array);
 
 /* The code below assumes a connection of the flash chip address LSB (A0)
  * to A0, A1 or A2 of the byte-addressed CPU bus dependent on the bus width.
@@ -87,8 +73,7 @@ amd_flash_address_shift (urj_flash_cfi_array_t *cfi_array)
 
     /* else: cfi_array->bus_width is 2 (16 bit) or 1 (8 bit): */
 
-    switch (cfi_array->cfi_chips[0]->cfi.device_geometry.
-            device_interface)
+    switch (cfi_array->cfi_chips[0]->cfi.device_geometry.device_interface)
     {
     case CFI_INTERFACE_X8_X16: /* regardless whether 8 or 16 bit mode */
     case CFI_INTERFACE_X16:    /* native */
@@ -114,8 +99,8 @@ amd_flash_autodetect32 (urj_flash_cfi_array_t *cfi_array)
 {
     if (cfi_array->bus_width != 4)
         return 0;
-    return (cfi_array->cfi_chips[0]->cfi.identification_string.
-            pri_id_code == CFI_VENDOR_AMD_SCS);
+    return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+            == CFI_VENDOR_AMD_SCS);
 }
 
 static int
@@ -123,8 +108,8 @@ amd_flash_autodetect16 (urj_flash_cfi_array_t *cfi_array)
 {
     if (cfi_array->bus_width != 2)
         return 0;
-    return (cfi_array->cfi_chips[0]->cfi.identification_string.
-            pri_id_code == CFI_VENDOR_AMD_SCS);
+    return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+            == CFI_VENDOR_AMD_SCS);
 }
 
 static int
@@ -132,8 +117,8 @@ amd_flash_autodetect8 (urj_flash_cfi_array_t *cfi_array)
 {
     if (cfi_array->bus_width != 1)
         return 0;
-    return (cfi_array->cfi_chips[0]->cfi.identification_string.
-            pri_id_code == CFI_VENDOR_AMD_SCS);
+    return (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+            == CFI_VENDOR_AMD_SCS);
 }
 
 /*
@@ -266,6 +251,13 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
 
 #endif /* 0 */
 
+static void
+amd_flash_read_array (urj_flash_cfi_array_t *cfi_array)
+{
+    /* Read Array */
+    URJ_BUS_WRITE (cfi_array->bus, cfi_array->address, 0x00F000F0); /* AMD reset */
+}
+
 #if 0
 static int
 amdisprotected (parts * ps, urj_flash_cfi_array_t *cfi_array,
@@ -296,14 +288,10 @@ amd_flash_print_info (urj_flash_cfi_array_t *cfi_array)
     int o = amd_flash_address_shift (cfi_array);
 
     URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00aa00aa);      /* autoselect p29 */
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o),
-                   0x00550055);
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o),
-                   0x00900090);
-    mid = URJ_BUS_READ (bus,
-                        cfi_array->address + (0x00 << o)) & 0xFFFF;
-    cid = URJ_BUS_READ (bus,
-                        cfi_array->address + (0x01 << o)) & 0xFFFF;
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o), 0x00550055);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00900090);
+    mid = URJ_BUS_READ (bus, cfi_array->address + (0x00 << o)) & 0xFFFF;
+    cid = URJ_BUS_READ (bus, cfi_array->address + (0x01 << o)) & 0xFFFF;
     prot = URJ_BUS_READ (bus, cfi_array->address + (0x02 << o)) & 0xFF;
     amd_flash_read_array (cfi_array); /* AMD reset */
     printf (_("Chip: AMD Flash\n\tManufacturer: "));
@@ -401,8 +389,7 @@ amd_flash_print_info (urj_flash_cfi_array_t *cfi_array)
 }
 
 static int
-amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array,
-                       uint32_t adr)
+amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 {
     urj_bus_t *bus = cfi_array->bus;
     int o = amd_flash_address_shift (cfi_array);
@@ -412,14 +399,10 @@ amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array,
     /*      printf("protected: %d\n", amdisprotected(ps, cfi_array, adr)); */
 
     URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00aa00aa);      /* autoselect p29, sector erase */
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o),
-                   0x00550055);
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o),
-                   0x00800080);
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o),
-                   0x00aa00aa);
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o),
-                   0x00550055);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o), 0x00550055);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00800080);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00aa00aa);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o), 0x00550055);
     URJ_BUS_WRITE (bus, adr, 0x00300030);
 
     if (amdstatus (cfi_array, adr, 0xffff))
@@ -436,16 +419,15 @@ amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array,
 }
 
 static int
-amd_flash_unlock_block (urj_flash_cfi_array_t *cfi_array,
-                        uint32_t adr)
+amd_flash_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 {
     printf ("flash_unlock_block 0x%08X IGNORE\n", adr);
     return 0;
 }
 
 static int
-amd_flash_program_single (urj_flash_cfi_array_t *cfi_array,
-                          uint32_t adr, uint32_t data)
+amd_flash_program_single (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
+                          uint32_t data)
 {
     int status;
     urj_bus_t *bus = cfi_array->bus;
@@ -455,10 +437,8 @@ amd_flash_program_single (urj_flash_cfi_array_t *cfi_array,
         printf ("\nflash_program 0x%08X = 0x%08X\n", adr, data);
 
     URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00aa00aa);      /* autoselect p29, program */
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o),
-                   0x00550055);
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o),
-                   0x00A000A0);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o), 0x00550055);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00A000A0);
 
     URJ_BUS_WRITE (bus, adr, data);
     status = amdstatus (cfi_array, adr, data);
@@ -468,8 +448,8 @@ amd_flash_program_single (urj_flash_cfi_array_t *cfi_array,
 }
 
 static int
-amd_program_buffer_status (urj_flash_cfi_array_t *cfi_array,
-                           uint32_t adr, uint32_t data)
+amd_program_buffer_status (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
+                           uint32_t data)
 {
     /* NOTE: Status polling according to [3], Figure 1.
        The current method for status polling is not compatible with 32 bit (2x16) configurations
@@ -503,8 +483,8 @@ amd_program_buffer_status (urj_flash_cfi_array_t *cfi_array,
 }
 
 static int
-amd_flash_program_buffer (urj_flash_cfi_array_t *cfi_array,
-                          uint32_t adr, uint32_t *buffer, int count)
+amd_flash_program_buffer (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
+                          uint32_t *buffer, int count)
 {
     /* NOTE: Write buffer programming operation according to [3], Figure 1. */
     int status;
@@ -591,8 +571,8 @@ amd_flash_program (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
 }
 
 static int
-amd_flash_program32 (urj_flash_cfi_array_t *cfi_array,
-                     uint32_t adr, uint32_t *buffer, int count)
+amd_flash_program32 (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
+                     uint32_t *buffer, int count)
 {
     /* Single byte programming is forced for 32 bit (2x16) flash configuration.
        a) lack of testing capbilities for 2x16 multi-byte write operation
@@ -612,13 +592,6 @@ amd_flash_program32 (urj_flash_cfi_array_t *cfi_array,
     }
 
     return 0;
-}
-
-static void
-amd_flash_read_array (urj_flash_cfi_array_t *cfi_array)
-{
-    /* Read Array */
-    URJ_BUS_WRITE (cfi_array->bus, cfi_array->address, 0x00F000F0); /* AMD reset */
 }
 
 urj_flash_driver_t urj_flash_amd_32_flash_driver = {

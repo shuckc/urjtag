@@ -36,7 +36,7 @@
  * interface circuit, so all bets are off).
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <urjtag/cable.h>
 #include <urjtag/parport.h>

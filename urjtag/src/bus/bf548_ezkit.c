@@ -22,7 +22,7 @@
  * Written by Jie Zhang <jie.zhang@analog.com>, 2008.
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>

@@ -31,7 +31,7 @@
  *
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <urjtag/cable.h>
 #include <urjtag/parport.h>

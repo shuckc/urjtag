@@ -22,10 +22,10 @@
  *
  */
 
+#include <urjtag/sysdep.h>
+
 #include <stdlib.h>
 #include <string.h>
-
-#include "sysdep.h"
 
 #include <urjtag/chain.h>
 #include <urjtag/bssignal.h>

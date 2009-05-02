@@ -20,7 +20,7 @@
  * Modified by Wojtek Kaniewski <wojtekka@toxygen.net>, 2004.
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>

@@ -23,7 +23,7 @@
  *
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #ifdef ENABLE_LOWLEVEL_PPDEV
 

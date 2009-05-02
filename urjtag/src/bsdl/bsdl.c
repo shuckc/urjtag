@@ -31,7 +31,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <urjtag/chain.h>
 #include <urjtag/part.h>

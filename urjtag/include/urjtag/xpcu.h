@@ -33,7 +33,7 @@
 #define URJ_XPCU_PID 0x0008
 
 struct usb_device *find_xpcu (void);
-int xpcu_init ();
+int xpcu_init (void);
 int xpcu_close (struct usb_dev_handle *xpcu);
 int xpcu_request_28 (struct usb_dev_handle *xpcu, int value);
 int xpcu_raise_ioa5 (struct usb_dev_handle *xpcu);

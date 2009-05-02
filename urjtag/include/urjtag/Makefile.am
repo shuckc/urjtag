@@ -23,32 +23,36 @@
 
 include $(top_srcdir)/Makefile.rules
 
-noinst_HEADERS = \
+pkginclude_HEADERS = \
+	bitmask.h \
 	bsbit.h \
 	bsdl.h \
 	bsdl_mode.h \
-	bitmask.h \
+	bssignal.h \
 	bus.h \
 	bus_driver.h \
 	cable.h \
 	chain.h \
-	data_register.h \
 	cmd.h \
+	data_register.h \
+	error.h \
+	fclock.h \
 	flash.h \
 	gettext.h \
+	jim.h \
+	jim/some_cpu.h \
+	jtag.h \
 	part_instruction.h \
 	parport.h \
 	part.h \
-	tap_register.h \
-	bssignal.h \
-	tap_state.h \
-	jtag.h \
-	tap.h \
-	fclock.h \
-	jim.h \
-	jim/some_cpu.h \
 	pod.h \
+	tap_register.h \
+	tap_state.h \
+	tap.h \
 	svf.h \
+	sysdep.h \
+	types.h \
+	urjtag.h \
 	usbconn.h \
 	usbconn/libftdx.h \
 	usbconn/libusb.h \

@@ -22,8 +22,12 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2003, 2004.
 #
 
+LINT_FLAGS	=
+LINT_FLAGS	+= -warnposixheaders
+LINT_FLAGS	+= +boolint
+
 lint:
-	-test "$(SOURCES)" && splint $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(SOURCES)
+	-test "$(SOURCES)" && splint $(LINT_FLAGS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(SOURCES)
 	test -z "$(SUBDIRS)" || $(MAKE) RECURSIVE_TARGETS=lint-recursive $(AM_MAKEFLAGS) lint-recursive
 
 lint-am: Makefile @MAINTAINER_MODE_TRUE@ $(top_srcdir)/Makefile.rules

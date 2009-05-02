@@ -33,7 +33,7 @@
  *
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdint.h>
 #include <stdlib.h>

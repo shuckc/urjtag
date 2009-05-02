@@ -26,6 +26,7 @@
  *
  */
 
+#include <urjtag/sysdep.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -38,8 +39,6 @@
 #ifndef SA_ONESHOT
 #define SA_ONESHOT SA_RESETHAND
 #endif
-
-#include "sysdep.h"
 
 #include <urjtag/jtag.h>
 #include <urjtag/cable.h>

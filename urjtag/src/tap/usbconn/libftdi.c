@@ -22,7 +22,7 @@
  *
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <fcntl.h>
 #if __CYGWIN__ || __MINGW32__

@@ -33,4 +33,4 @@ else
 	exit 1
 fi
 
-./configure --enable-maintainer-mode
+./configure --enable-maintainer-mode "$@"

@@ -54,7 +54,7 @@
  *
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>

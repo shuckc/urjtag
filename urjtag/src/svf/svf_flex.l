@@ -34,7 +34,7 @@
 #include <strings.h>
 #include <ctype.h>
 
-#include <sysdep.h>
+#include <urjtag/sysdep.h>
 
 #ifdef ENABLE_NLS
 #include <locale.h>

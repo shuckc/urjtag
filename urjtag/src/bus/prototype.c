@@ -23,7 +23,7 @@
  * Modified from ppc405ep.c by Detrick Martin <jtag@detrickmartin.net>, 2008.
  */
 
-#include "sysdep.h"
+#include <urjtag/sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>
