@@ -43,9 +43,10 @@
 #include "intel.h"
 
 #include <urjtag/bus.h>
-#include <urjtag/flash.h>
 #include <urjtag/jtag.h>
+#include <urjtag/flash.h>
 
+/* @@@@ RFHH Put these into a local .h file, so the implementation can check */
 extern urj_flash_driver_t urj_flash_amd_32_flash_driver;
 extern urj_flash_driver_t urj_flash_amd_16_flash_driver;
 extern urj_flash_driver_t urj_flash_amd_8_flash_driver;
@@ -124,24 +125,16 @@ urj_flashmsbin (urj_bus_t *bus, FILE * f, int noverify)
         uint32_t start;
         uint32_t len;
         int first, last;
+        uint32_t block_size =
+            cfi->device_geometry.erase_block_regions[0].erase_block_size;
 
         fread (&start, sizeof start, 1, f);
         fread (&len, sizeof len, 1, f);
-        first =
-            start /
-            (cfi->device_geometry.erase_block_regions[0].erase_block_size *
-             2);
-        last =
-            (start + len -
-             1) /
-            (cfi->device_geometry.erase_block_regions[0].erase_block_size *
-             2);
+        first = start / (block_size * 2);
+        last = (start + len - 1) / (block_size * 2);
         for (; first <= last; first++)
         {
-            adr =
-                first *
-                cfi->device_geometry.erase_block_regions[0].erase_block_size *
-                2;
+            adr = first * block_size * 2;
             flash_driver->unlock_block (urj_flash_cfi_array, adr);
             printf (_("block %d unlocked\n"), first);
             printf (_("erasing block %d: %d\n"), first,
@@ -260,8 +253,7 @@ find_block (urj_flash_cfi_query_structure_t *cfi, int adr, int bus_width,
     for (i = 0; i < cfi->device_geometry.number_of_erase_regions; i++)
     {
         const int region_blocks =
-            cfi->device_geometry.erase_block_regions[i].
-            number_of_erase_blocks;
+            cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
         const int flash_block_size =
             cfi->device_geometry.erase_block_regions[i].erase_block_size;
         const int region_block_size =
@@ -271,8 +263,7 @@ find_block (urj_flash_cfi_query_structure_t *cfi, int adr, int bus_width,
         if (adr < (bb + region_size))
         {
             int bir = (adr - bb) / region_block_size;
-            *bytes_until_next_block =
-                bb + (bir + 1) * region_block_size - adr;
+            *bytes_until_next_block = bb + (bir + 1) * region_block_size - adr;
             return b + bir;
         }
         b += region_blocks;
@@ -282,7 +273,7 @@ find_block (urj_flash_cfi_query_structure_t *cfi, int adr, int bus_width,
 }
 
 void
-urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
+urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
 {
     uint32_t adr;
     urj_flash_cfi_query_structure_t *cfi;
@@ -310,8 +301,7 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
     for (i = 0, neb = 0; i < cfi->device_geometry.number_of_erase_regions;
          i++)
         neb +=
-            cfi->device_geometry.erase_block_regions[i].
-            number_of_erase_blocks;
+            cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks;
 
     erased = malloc (neb * sizeof *erased);
     if (!erased)
@@ -329,10 +319,8 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
         uint32_t data;
         uint8_t b[BSIZE];
         int bc = 0, bn = 0, btr = BSIZE;
-        int block_no =
-            find_block (cfi, adr - urj_flash_cfi_array->address, bus_width,
-                        chip_width,
-                        &btr);
+        int block_no = find_block (cfi, adr - urj_flash_cfi_array->address,
+                                   bus_width, chip_width, &btr);
 
         write_buffer_count = 0;
         write_buffer_adr = adr;
@@ -374,9 +362,8 @@ urj_flashmem (urj_bus_t *bus, FILE * f, uint32_t addr, int noverify)
         }
 
         if (write_buffer_count > 0)
-            if (flash_driver->
-                program (urj_flash_cfi_array, write_buffer_adr, write_buffer,
-                         write_buffer_count))
+            if (flash_driver->program (urj_flash_cfi_array, write_buffer_adr,
+                                       write_buffer, write_buffer_count))
             {
                 printf (_("\nflash error\n"));
                 return;
@@ -464,10 +451,8 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
     for (i = 1; i <= number; i++)
     {
         int btr = 0;
-        int block_no =
-            find_block (cfi, addr - urj_flash_cfi_array->address, bus_width,
-                        chip_width,
-                        &btr);
+        int block_no = find_block (cfi, addr - urj_flash_cfi_array->address,
+                                   bus_width, chip_width, &btr);
 
         if (block_no < 0)
         {

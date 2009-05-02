@@ -49,8 +49,9 @@
 #include <urjtag/chain.h>
 #include <urjtag/bus.h>
 #include <urjtag/cmd.h>
-#include <urjtag/jtag.h>
 #include <urjtag/flash.h>
+#include <urjtag/parse.h>
+#include <urjtag/jtag.h>
 
 #ifndef HAVE_GETLINE
 ssize_t urj_lib_getline (char **lineptr, size_t *n, FILE * stream);
@@ -204,7 +205,7 @@ jtag_readline_multiple_commands_support (urj_chain_t *chain, char *line)        
                 ++line;
         }
 
-        r = urj_cmd_jtag_parse_line (chain, line);
+        r = urj_parse_line (chain, line);
 
         urj_tap_chain_flush (chain);
 
@@ -298,7 +299,7 @@ jtag_parse_rc (urj_chain_t *chain)
     strcat (file, "/");
     strcat (file, RCFILE);
 
-    go = urj_cmd_jtag_parse_file (chain, file);
+    go = urj_parse_file (chain, file);
 
     free (file);
 
@@ -332,7 +333,7 @@ main (int argc, char *const argv[])
     int quiet = 0;
     urj_chain_t *chain = NULL;
 
-    urj_cmd_jtag_set_argv0(argv[0]);
+    urj_set_argv0(argv[0]);
 
     if (geteuid () == 0 && getuid () != 0)
     {
@@ -453,7 +454,7 @@ main (int argc, char *const argv[])
                 return -1;
             }
 
-            go = urj_cmd_jtag_parse_file (chain, argv[i]);
+            go = urj_parse_file (chain, argv[i]);
             cleanup (chain);
             if (go < 0)
             {
@@ -475,7 +476,7 @@ main (int argc, char *const argv[])
             printf (_("Out of memory\n"));
             return -1;
         }
-        urj_cmd_jtag_parse_stream (chain, stdin);
+        urj_parse_stream (chain, stdin);
 
         cleanup (chain);
 

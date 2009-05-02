@@ -41,33 +41,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <urjtag/jtag.h>
 #include <urjtag/flash.h>
 #include <urjtag/bus.h>
 
 #include "cfi.h"
 #include "intel.h"
 #include "mic.h"
-
-static int intel_flash_erase_block (urj_flash_cfi_array_t *cfi_array,
-                                    uint32_t adr);
-static int intel_flash_unlock_block (urj_flash_cfi_array_t *cfi_array,
-                                     uint32_t adr);
-static int intel_flash_program_single (urj_flash_cfi_array_t *cfi_array,
-                                       uint32_t adr, uint32_t data);
-static int intel_flash_program_buffer (urj_flash_cfi_array_t *cfi_array,
-                                       uint32_t adr, uint32_t *buffer,
-                                       int count);
-static int intel_flash_program (urj_flash_cfi_array_t *cfi_array,
-                                uint32_t adr, uint32_t *buffer, int count);
-static int intel_flash_erase_block32 (urj_flash_cfi_array_t *cfi_array,
-                                      uint32_t adr);
-static int intel_flash_unlock_block32 (urj_flash_cfi_array_t *cfi_array,
-                                       uint32_t adr);
-static int intel_flash_program32_single (urj_flash_cfi_array_t *cfi_array,
-                                         uint32_t adr, uint32_t data);
-static int intel_flash_program32 (urj_flash_cfi_array_t *cfi_array,
-                                  uint32_t adr, uint32_t *buffer, int count);
 
 /* autodetect, we can handle this chip */
 static int
@@ -79,14 +58,15 @@ intel_flash_autodetect32 (urj_flash_cfi_array_t *cfi_array)
                       &area) != URJ_STATUS_OK)
         return 0;
 
-    return ((cfi_array->cfi_chips[0]->cfi.identification_string.
-             pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_INTEL_ECS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_INTEL_SCS)) && (area.width == 32);
+    return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+             == CFI_VENDOR_MITSUBISHI_SCS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_MITSUBISHI_ECS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_INTEL_ECS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_INTEL_SCS))
+           && (area.width == 32);
 }
 
 static int
@@ -98,14 +78,15 @@ intel_flash_autodetect (urj_flash_cfi_array_t *cfi_array)
                       &area) != URJ_STATUS_OK)
         return 0;
 
-    return ((cfi_array->cfi_chips[0]->cfi.identification_string.
-             pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_INTEL_ECS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_INTEL_SCS)) && (area.width == 16);
+    return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+             == CFI_VENDOR_MITSUBISHI_SCS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_MITSUBISHI_ECS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_INTEL_ECS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_INTEL_SCS))
+           && (area.width == 16);
 }
 
 static int
@@ -117,14 +98,15 @@ intel_flash_autodetect8 (urj_flash_cfi_array_t *cfi_array)
                       &area) != URJ_STATUS_OK)
         return 0;
 
-    return ((cfi_array->cfi_chips[0]->cfi.identification_string.
-             pri_id_code == CFI_VENDOR_MITSUBISHI_SCS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_MITSUBISHI_ECS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_INTEL_ECS)
-            || (cfi_array->cfi_chips[0]->cfi.identification_string.
-                pri_id_code == CFI_VENDOR_INTEL_SCS)) && (area.width == 8);
+    return ((cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+             == CFI_VENDOR_MITSUBISHI_SCS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_MITSUBISHI_ECS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_INTEL_ECS)
+            || (cfi_array->cfi_chips[0]->cfi.identification_string.pri_id_code
+                == CFI_VENDOR_INTEL_SCS))
+           && (area.width == 8);
 }
 
 static void
@@ -133,9 +115,7 @@ _intel_flash_print_info (urj_flash_cfi_array_t *cfi_array, int o)
     uint32_t mid, cid;
     urj_bus_t *bus = cfi_array->bus;
 
-    mid =
-        (URJ_BUS_READ (bus, cfi_array->address + (0x00 << o)) &
-         0xFF);
+    mid = (URJ_BUS_READ (bus, cfi_array->address + (0x00 << o)) & 0xFF);
     switch (mid)
     {
     case STD_MIC_INTEL:
@@ -153,9 +133,7 @@ _intel_flash_print_info (urj_flash_cfi_array_t *cfi_array, int o)
     }
 
     printf (_("Chip: "));
-    cid =
-        (URJ_BUS_READ (bus, cfi_array->address + (0x01 << o)) &
-         0xFFFF);
+    cid = (URJ_BUS_READ (bus, cfi_array->address + (0x01 << o)) & 0xFFFF);
     switch (cid)
     {
     case 0x0016:

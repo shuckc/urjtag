@@ -35,6 +35,7 @@ typedef enum urj_error {
     URJ_ERROR_NO_ACTIVE_PART,
     URJ_ERROR_INVALID,
     URJ_ERROR_NOTFOUND,
+    URJ_ERROR_IO,                               /**< I/O error from OS */
 } urj_error_t;
 
 /** Max length of message string that can be recorded. */
@@ -68,7 +69,8 @@ extern urj_error_state_t        urj_error_state;
         urj_error_state.file = __FILE__; \
         urj_error_state.function = __func__; \
         urj_error_state.line = __LINE__; \
-        snprintf(urj_error_state.msg, sizeof urj_error_state.msg, __VA_ARGS__); \
+        snprintf (urj_error_state.msg, sizeof urj_error_state.msg, \
+                  __VA_ARGS__); \
     } while (0)
 
 /**

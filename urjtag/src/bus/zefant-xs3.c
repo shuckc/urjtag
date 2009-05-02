@@ -64,7 +64,6 @@
 #include <urjtag/bus.h>
 #include <urjtag/chain.h>
 #include <urjtag/bssignal.h>
-#include <urjtag/jtag.h>
 #include <urjtag/tap_state.h>
 
 #include "buses.h"

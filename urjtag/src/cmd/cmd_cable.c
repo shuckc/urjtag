@@ -32,7 +32,6 @@
 #include <urjtag/tap.h>
 #include <urjtag/cable.h>
 #include <urjtag/chain.h>
-#include <urjtag/jtag.h>
 #include <urjtag/bus.h>
 
 #include <urjtag/cmd.h>

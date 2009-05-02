@@ -68,11 +68,4 @@ urj_part_signal_t *urj_part_signal_define (urj_chain_t *chain,
 int urj_part_signal_redefine_pin (urj_chain_t *chain, urj_part_signal_t *s,
                                   const char *pin_name);
 
-/**
- * Check whether a chain has an active part
- *
- * @return if error, NULL, and sets urj_error.
- */
-urj_part_t *urj_part_active_part(urj_chain_t *chain);
-
 #endif /* URJ_BSSIGNAL_H */

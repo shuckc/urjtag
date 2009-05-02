@@ -28,7 +28,6 @@
 #include <stdint.h>
 
 #include <urjtag/bus.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 

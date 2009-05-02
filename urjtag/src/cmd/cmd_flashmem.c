@@ -28,7 +28,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <urjtag/jtag.h>
+#include <urjtag/bus.h>
 #include <urjtag/flash.h>
 
 #include <urjtag/cmd.h>

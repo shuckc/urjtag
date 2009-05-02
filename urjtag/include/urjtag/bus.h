@@ -26,11 +26,17 @@
 #ifndef URJ_BUS_H
 #define URJ_BUS_H
 
-/* @@@@ this had better be an internal include file RFHH */
-
 #include <stdint.h>
+#include <stdio.h>
 
 #include "bus_driver.h"
+
+extern urj_bus_t *urj_bus;
+
+void urj_bus_readmem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len);
+void urj_bus_writemem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len);
+
+/* @@@@ this had better be in an internal include file RFHH */
 
 typedef struct
 {

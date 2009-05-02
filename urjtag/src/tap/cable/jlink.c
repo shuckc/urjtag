@@ -43,7 +43,6 @@
 #include <urjtag/cable.h>
 #include <urjtag/chain.h>
 
-#include <urjtag/jtag.h>
 
 #include <usb.h>
 #include <string.h>

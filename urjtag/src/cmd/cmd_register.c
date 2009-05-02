@@ -32,7 +32,6 @@
 #include <urjtag/part.h>
 #include <urjtag/data_register.h>
 #include <urjtag/tap_register.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 
@@ -46,26 +45,15 @@ cmd_register_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_params (params) != 3)
         return -1;
 
-
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (!chain->parts)
-    {
-        printf (_("Run \"detect\" first.\n"));
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
         return 1;
-    }
-
-    if (chain->active_part >= chain->parts->len)
-    {
-        printf (_("%s: no active part\n"), "register");
-        return 1;
-    }
 
     if (urj_cmd_get_number (params[2], &len))
         return -1;
-
-    part = chain->parts->parts[chain->active_part];
 
     if (urj_part_find_data_register (part, params[1]) != NULL)
     {

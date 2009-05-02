@@ -40,11 +40,10 @@
 #define SA_ONESHOT SA_RESETHAND
 #endif
 
-#include <urjtag/jtag.h>
 #include <urjtag/cable.h>
 #include <urjtag/part.h>
-#include <urjtag/tap.h>
 #include <urjtag/tap_state.h>
+#include <urjtag/tap_register.h>
 #include <urjtag/part_instruction.h>
 #include <urjtag/data_register.h>
 
@@ -848,9 +847,8 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     urj_svf_sxr_t *sxr_params;
     int len, result = 1;
 
-    sxr_params =
-        ir_dr ==
-        URJ_SVF_generic_ir ? &(priv->sir_params) : &(priv->sdr_params);
+    sxr_params = (ir_dr == URJ_SVF_generic_ir) ?
+                     &(priv->sir_params) : &(priv->sdr_params);
 
     /* remember parameters */
     urj_svf_remember_param (&sxr_params->params.tdi, params->tdi);

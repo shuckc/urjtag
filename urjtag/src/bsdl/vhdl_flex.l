@@ -127,6 +127,8 @@ LEGAL NOTICES:
 #include <stdlib.h>
 #include <ctype.h>
 
+#include <urjtag/jtag.h>
+
 #include "bsdl_sysdep.h"
 
 #include "bsdl_msg.h"
@@ -495,7 +497,7 @@ void urj_vhdl_flex_switch_file( yyscan_t scanner, char *filename )
   f = fopen( filename, "r" );
   if (!f)
   {
-    const char *db_path = urj_cmd_jtag_get_data_dir();
+    const char *db_path = urj_get_data_dir();
     char *db_file;
 
     if ((db_file = malloc( strlen( db_path ) +

@@ -40,7 +40,6 @@
 #include <urjtag/part.h>
 #include <urjtag/chain.h>
 
-#include <urjtag/jtag.h>
 
 struct id_record
 {

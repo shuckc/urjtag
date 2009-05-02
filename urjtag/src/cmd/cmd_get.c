@@ -28,8 +28,8 @@
 #include <string.h>
 
 #include <urjtag/part.h>
+#include <urjtag/chain.h>
 #include <urjtag/bssignal.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 
@@ -38,6 +38,7 @@ cmd_get_run (urj_chain_t *chain, char *params[])
 {
     int data;
     urj_part_signal_t *s;
+    urj_part_t *part;
 
     if (urj_cmd_params (params) != 3)
         return -1;
@@ -48,26 +49,17 @@ cmd_get_run (urj_chain_t *chain, char *params[])
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (!chain->parts)
-    {
-        printf (_("Run \"detect\" first.\n"));
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
         return 1;
-    }
 
-    if (chain->active_part >= chain->parts->len)
-    {
-        printf (_("%s: no active part\n"), "get");
-        return 1;
-    }
-
-    s = urj_part_find_signal (chain->parts->parts[chain->active_part],
-                              params[2]);
+    s = urj_part_find_signal (part, params[2]);
     if (!s)
     {
         printf (_("signal '%s' not found\n"), params[2]);
         return 1;
     }
-    data = urj_part_get_signal (chain->parts->parts[chain->active_part], s);
+    data = urj_part_get_signal (part, s);
     if (data != -1)
         printf (_("%s = %d\n"), params[2], data);
 

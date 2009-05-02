@@ -29,7 +29,6 @@
 #include <string.h>
 
 #include <urjtag/bsbit.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 

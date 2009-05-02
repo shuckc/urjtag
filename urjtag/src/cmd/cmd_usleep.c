@@ -29,7 +29,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <urjtag/jtag.h>
 #include <urjtag/cmd.h>
 
 static int

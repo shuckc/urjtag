@@ -27,11 +27,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <urjtag/cable.h>
 #include <urjtag/tap.h>
+#include <urjtag/tap_register.h>
 #include <urjtag/chain.h>
 
-#include <urjtag/jtag.h>
 
 #define DETECT_PATTERN_SIZE     8
 #define MAX_REGISTER_LENGTH     1024

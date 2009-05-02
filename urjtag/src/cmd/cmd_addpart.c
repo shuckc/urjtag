@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <urjtag/jtag.h>
+#include <urjtag/tap.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 

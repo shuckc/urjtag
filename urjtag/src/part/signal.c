@@ -98,25 +98,6 @@ urj_part_salias_free (urj_part_salias_t *salias)
     free (salias);
 }
 
-urj_part_t *
-urj_part_active_part(urj_chain_t *chain)
-{
-    if (!chain->parts)
-    {
-        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
-                       _("Run \"detect\" first.\n"));
-        return NULL;
-    }
-    if (chain->active_part >= chain->parts->len)
-    {
-        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
-                       _("%s: no active part\n"), "signal");
-        return NULL;
-    }
-
-    return chain->parts->parts[chain->active_part];
-}
-
 urj_part_signal_t *
 urj_part_signal_define_pin (urj_chain_t *chain, const char *signal_name,
                             const char *pin_name)
@@ -124,7 +105,7 @@ urj_part_signal_define_pin (urj_chain_t *chain, const char *signal_name,
     urj_part_t *part;
     urj_part_signal_t *s;
 
-    part = urj_part_active_part (chain);
+    part = urj_tap_chain_active_part (chain);
 
     if (urj_part_find_signal (part, signal_name) != NULL)
     {

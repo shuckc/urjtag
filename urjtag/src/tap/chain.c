@@ -282,3 +282,22 @@ urj_tap_chain_flush (urj_chain_t *chain)
     if (chain->cable != NULL)
         urj_tap_cable_flush (chain->cable, URJ_TAP_CABLE_COMPLETELY);
 }
+
+urj_part_t *
+urj_tap_chain_active_part (urj_chain_t *chain)
+{
+    if (!chain->parts)
+    {
+        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
+                       _("Run \"detect\" first.\n"));
+        return NULL;
+    }
+    if (chain->active_part >= chain->parts->len)
+    {
+        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
+                       _("%s: no active part\n"), "signal");
+        return NULL;
+    }
+
+    return chain->parts->parts[chain->active_part];
+}

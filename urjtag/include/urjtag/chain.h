@@ -65,6 +65,12 @@ void urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
 void urj_tap_chain_flush (urj_chain_t *chain);
 int urj_tap_chain_set_pod_signal (urj_chain_t *chain, int mask, int val);
 int urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig);
+/**
+ * Check whether a chain has an active part
+ *
+ * @return NULL on error, and sets urj_error.
+ */
+urj_part_t *urj_tap_chain_active_part(urj_chain_t *chain);
 
 typedef struct
 {

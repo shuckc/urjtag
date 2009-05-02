@@ -30,8 +30,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <urjtag/jtag.h>
-#include <urjtag/cable.h>
+#include <urjtag/chain.h>
+#include <urjtag/pod.h>
 
 #include <urjtag/cmd.h>
 

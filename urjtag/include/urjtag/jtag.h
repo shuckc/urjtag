@@ -25,33 +25,15 @@
 #ifndef URJ_JTAG_H
 #define URJ_JTAG_H
 
-#include <stdio.h>
-#include <stdint.h>
-
 #include "types.h"
 
-extern urj_bus_t *urj_bus;
 extern int urj_big_endian;
 extern int urj_debug_mode;
 
 /** Register the application name with cmd_jtag.
  * @param argv0 is remembered as a pointer, it is not strdup()'ed.
  */
-void urj_cmd_jtag_set_argv0(const char *argv0);
-const char *urj_cmd_jtag_get_data_dir (void);
-
-int urj_cmd_jtag_parse_file (urj_chain_t *chain, const char *filename);
-int urj_cmd_jtag_parse_line (urj_chain_t *chain, char *line);
-int urj_cmd_jtag_parse_stream (urj_chain_t *chain, FILE * f);
-
-/* @@@@ RFHH shouldn't these be in their module's .h file? */
-int urj_tap_detect_parts (urj_chain_t *chain, const char *db_path);
-int urj_tap_manual_add (urj_chain_t *chain, int instr_len);
-int urj_tap_detect_register_size (urj_chain_t *chain);
-void urj_tap_discovery (urj_chain_t *chain);
-void urj_tap_urj_tap_idcode (urj_chain_t *chain, unsigned int bytes);
-
-void urj_bus_readmem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len);
-void urj_bus_writemem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len);
+void urj_set_argv0(const char *argv0);
+const char *urj_get_data_dir (void);
 
 #endif /* URJ_JTAG_H */

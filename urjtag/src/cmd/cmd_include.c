@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/parse.h>
 #include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
@@ -65,7 +66,7 @@ cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
     }
     else
     {
-        const char *jtag_data_dir = urj_cmd_jtag_get_data_dir ();
+        const char *jtag_data_dir = urj_get_data_dir ();
         path = malloc (len = strlen (jtag_data_dir) + strlen (params[1]) + 2);
         if (path != NULL)
         {
@@ -97,7 +98,7 @@ cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
 
     for (i = 0; i < j; i++)
     {
-        go = urj_cmd_jtag_parse_file (chain, path);
+        go = urj_parse_file (chain, path);
 
         if (go < 0)
         {

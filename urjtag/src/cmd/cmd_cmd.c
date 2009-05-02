@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <urjtag/jtag.h>
+#include <urjtag/chain.h>
 
 #include <urjtag/cmd.h>
 
@@ -199,7 +199,7 @@ urj_cmd_params (char *params[])
 }
 
 int
-urj_cmd_get_number (char *s, unsigned int *i)
+urj_cmd_get_number (const char *s, unsigned int *i)
 {
     int n;
     int r;

@@ -46,7 +46,6 @@ cmd_endian_run (urj_chain_t *chain, char *params[])
         return 1;
     }
 
-
     if (strcasecmp (params[1], "little") == 0)
     {
         urj_big_endian = 0;

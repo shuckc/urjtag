@@ -28,13 +28,13 @@
 
 #include <urjtag/sysdep.h>
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdint.h>
 #include <string.h>
 
-#include <urjtag/jtag.h>
 #include <urjtag/cable.h>
 
 #undef VERBOSE

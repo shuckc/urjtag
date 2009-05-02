@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 
-#include <urjtag/jtag.h>
+#include <urjtag/tap.h>
 
 #include <urjtag/cmd.h>
 

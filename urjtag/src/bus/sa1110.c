@@ -36,7 +36,6 @@
 #include <urjtag/bus.h>
 #include <urjtag/chain.h>
 #include <urjtag/bssignal.h>
-#include <urjtag/jtag.h>
 
 #include "buses.h"
 #include "generic_bus.h"

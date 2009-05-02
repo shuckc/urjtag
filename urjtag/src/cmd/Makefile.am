@@ -53,7 +53,6 @@ libcmd_la_SOURCES = \
 	cmd_shell.c \
 	cmd_set.c \
 	cmd_endian.c \
-	cmd_parse.c \
 	cmd_peekpoke.c \
 	cmd_pod.c \
 	cmd_readmem.c \
@@ -63,8 +62,7 @@ libcmd_la_SOURCES = \
 	cmd_include.c \
 	cmd_addpart.c \
 	cmd_cmd.c \
-	cmd_usleep.c \
-	cmd_jtag_data_dir.c
+	cmd_usleep.c
 
 if ENABLE_SVF
 libcmd_la_SOURCES += cmd_svf.c
@@ -73,5 +71,3 @@ endif
 if ENABLE_BSDL
 libcmd_la_SOURCES += cmd_bsdl.c
 endif
-
-AM_CPPFLAGS = -DJTAG_BIN_DIR=\"$(bindir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

@@ -52,7 +52,7 @@ struct urj_part
 
 urj_part_t *urj_part_alloc (const urj_tap_register_t *id);
 void urj_part_free (urj_part_t *p);
-urj_part_t *read_part (FILE * f, urj_tap_register_t *idr);
+urj_part_t *read_part (FILE *f, urj_tap_register_t *idr);
 urj_part_instruction_t *urj_part_find_instruction (urj_part_t *p,
                                                    const char *iname);
 urj_data_register_t *urj_part_find_data_register (urj_part_t *p,
@@ -79,6 +79,8 @@ urj_part_instruction_t *urj_part_instruction_define (urj_part_t *part,
                                                      const char *instruction,
                                                      const char *code,
                                                      const char *data_register);
+
+
 /**
  * parts
  */

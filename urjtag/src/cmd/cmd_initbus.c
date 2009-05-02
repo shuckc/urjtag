@@ -32,7 +32,6 @@
 #include <urjtag/part.h>
 #include <urjtag/bus.h>
 #include <urjtag/cmd.h>
-#include <urjtag/jtag.h>
 
 static int
 cmd_initbus_run (urj_chain_t *chain, char *params[])
@@ -45,17 +44,8 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (!chain->parts)
-    {
-        printf (_("Run \"detect\" first.\n"));
+    if (urj_tap_chain_active_part (chain) == NULL)
         return 1;
-    }
-
-    if (chain->active_part >= chain->parts->len || chain->active_part < 0)
-    {
-        printf (_("%s: no active part\n"), "initbus");
-        return 1;
-    }
 
     for (i = 0; urj_bus_drivers[i] != NULL; i++)
     {

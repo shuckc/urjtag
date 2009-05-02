@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 
-#include <urjtag/jtag.h>
+#include <urjtag/tap.h>
 
 #include <urjtag/cmd.h>
 
@@ -49,7 +49,7 @@ cmd_idcode_run (urj_chain_t *chain, char *params[])
         return 1;
 
     printf (_("Reading %d bytes if idcode\n"), bytes);
-    urj_tap_urj_tap_idcode (chain, bytes);
+    urj_tap_idcode (chain, bytes);
     return 1;
 }
 

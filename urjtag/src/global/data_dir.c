@@ -11,7 +11,7 @@
 static const char *jtag_argv0;
 
 void
-urj_cmd_jtag_set_argv0(const char *argv0)
+urj_set_argv0(const char *argv0)
 {
     jtag_argv0 = argv0;
 }
@@ -28,7 +28,7 @@ extern char *make_relative_prefix (const char *progname,
 static char *jtag_data_dir = NULL;
 
 const char *
-urj_cmd_jtag_get_data_dir (void)
+urj_get_data_dir (void)
 {
     if (jtag_data_dir)
         return jtag_data_dir;
@@ -44,7 +44,7 @@ urj_cmd_jtag_get_data_dir (void)
 #else
 
 const char *
-urj_cmd_jtag_get_data_dir (void)
+urj_get_data_dir (void)
 {
     return JTAG_DATA_DIR;
 }

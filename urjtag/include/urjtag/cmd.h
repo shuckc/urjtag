@@ -34,7 +34,7 @@
 #ifndef URJ_CMD_H
 #define URJ_CMD_H
 
-#include "chain.h"
+#include "types.h"
 
 typedef struct
 {
@@ -48,7 +48,7 @@ extern const urj_cmd_t *urj_cmds[];
 
 int urj_cmd_run (urj_chain_t *chain, char *params[]);
 int urj_cmd_params (char *params[]);
-int urj_cmd_get_number (char *s, unsigned int *i);
+int urj_cmd_get_number (const char *s, unsigned int *i);
 int urj_cmd_test_cable (urj_chain_t *chain);
 
 #endif /* URJ_CMD_H */

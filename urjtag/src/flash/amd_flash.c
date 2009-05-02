@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <urjtag/jtag.h>
 #include <urjtag/flash.h>
 #include <urjtag/bus.h>
 

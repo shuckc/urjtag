@@ -28,11 +28,12 @@
 #include <stdio.h>
 #include <string.h>
 //#include <stdlib.h>
-#include "urjtag/part.h"
-#include "urjtag/bssignal.h"
-#include "urjtag/jtag.h"
 
-#include "urjtag/cmd.h"
+#include <urjtag/chain.h>
+#include <urjtag/part.h>
+#include <urjtag/bssignal.h>
+
+#include <urjtag/cmd.h>
 
 static int
 cmd_test_run (urj_chain_t *chain, char *params[])
@@ -40,6 +41,7 @@ cmd_test_run (urj_chain_t *chain, char *params[])
     int data;
     unsigned int i;
     urj_part_signal_t *s;
+    urj_part_t *part;
 
     if (urj_cmd_params (params) != 4)
         return -1;
@@ -50,20 +52,11 @@ cmd_test_run (urj_chain_t *chain, char *params[])
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (!chain->parts)
-    {
-        printf (_("Run \"detect\" first.\n"));
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
         return 1;
-    }
 
-    if (chain->active_part >= chain->parts->len)
-    {
-        printf (_("%s: no active part\n"), "get");
-        return 1;
-    }
-
-    s = urj_part_find_signal (chain->parts->parts[chain->active_part],
-                              params[2]);
+    s = urj_part_find_signal (part, params[2]);
     if (!s)
     {
         printf (_("signal '%s' not found\n"), params[2]);
@@ -76,7 +69,7 @@ cmd_test_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[3], &i))
         return 1;
 
-    data = urj_part_get_signal (chain->parts->parts[chain->active_part], s);
+    data = urj_part_get_signal (part, s);
     if (data != -1)
     {
         if (data != i)

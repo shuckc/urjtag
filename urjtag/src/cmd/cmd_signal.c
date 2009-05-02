@@ -28,9 +28,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/bssignal.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 
@@ -47,11 +47,9 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    part = urj_part_active_part (chain);
+    part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-    {
         return 1;
-    }
 
     if ((s = urj_part_find_signal (part, params[1])) != NULL)
     {

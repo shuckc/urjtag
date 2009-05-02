@@ -30,7 +30,6 @@
 
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 
@@ -44,10 +43,19 @@ cmd_part_run (urj_chain_t *chain, char *params[])
     {
         if (strcasecmp (params[1], "alias") == 0)
         {
-            urj_part_t *part;
-            part = chain->parts->parts[chain->active_part];
-            /* @@@@ ToDo RFHH check malloc result */
+            urj_part_t *part = urj_tap_chain_active_part (chain);
+
+            if (part == NULL)
+                return 1;
+
             part->alias = malloc (strlen (params[2]) + 1);
+            if (part->alias == NULL)
+            {
+                urj_error_set(URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                              strlen (params[2]) + 1);
+                return -1;
+            }
+
             strcpy (part->alias, params[2]);
             return 1;
         }

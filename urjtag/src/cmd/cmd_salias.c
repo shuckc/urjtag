@@ -31,7 +31,6 @@
 #include "urjtag/chain.h"
 #include "urjtag/part.h"
 #include "urjtag/bssignal.h"
-#include "urjtag/jtag.h"
 
 #include "urjtag/cmd.h"
 
@@ -48,19 +47,10 @@ cmd_salias_run (urj_chain_t *chain, char *params[])
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (!chain->parts)
-    {
-        printf (_("Run \"detect\" first.\n"));
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
         return 1;
-    }
 
-    if (chain->active_part >= chain->parts->len)
-    {
-        printf (_("%s: no active part\n"), "signal");
-        return 1;
-    }
-
-    part = chain->parts->parts[chain->active_part];
     if (urj_part_find_signal (part, params[1]) != NULL)
     {
         printf (_("Signal '%s' already defined\n"), params[1]);

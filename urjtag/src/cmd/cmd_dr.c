@@ -32,7 +32,6 @@
 #include <urjtag/part_instruction.h>
 #include <urjtag/data_register.h>
 #include <urjtag/tap_register.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 
@@ -40,7 +39,10 @@ static int
 cmd_dr_run (urj_chain_t *chain, char *params[])
 {
     int dir = 1;
+    urj_part_t *part;
     urj_tap_register_t *r;
+    urj_data_register_t *dr;
+    urj_part_instruction_t *active_ir;
 
     if (urj_cmd_params (params) < 1 || urj_cmd_params (params) > 2)
         return -1;
@@ -48,25 +50,18 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (!chain->parts)
-    {
-        printf (_("Run \"detect\" first.\n"));
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
         return 1;
-    }
 
-    if (chain->active_part >= chain->parts->len)
-    {
-        printf (_("%s: no active part\n"), "dr");
-        return 1;
-    }
-
-    if (chain->parts->parts[chain->active_part]->active_instruction == NULL)
+    active_ir = part->active_instruction;
+    if (active_ir == NULL)
     {
         printf (_("%s: part without active instruction\n"), "dr");
         return 1;
     }
-    if (chain->parts->parts[chain->active_part]->active_instruction->
-        data_register == NULL)
+    dr = active_ir->data_register;
+    if (dr == NULL)
     {
         printf (_("%s: part without active data register\n"), "dr");
         return 1;
@@ -86,8 +81,7 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
                 return -1;
             }
 
-            r = chain->parts->parts[chain->active_part]->active_instruction->
-                data_register->in;
+            r = dr->in;
             if (r->len != strlen (params[1]))
             {
                 printf (_("%s: register length mismatch\n"), "dr");
@@ -103,11 +97,9 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
     }
 
     if (dir)
-        r = chain->parts->parts[chain->active_part]->active_instruction->
-            data_register->out;
+        r = dr->out;
     else
-        r = chain->parts->parts[chain->active_part]->active_instruction->
-            data_register->in;
+        r = dr->in;
     printf (_("%s\n"), urj_tap_register_get_string (r));
 
     return 1;

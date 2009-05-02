@@ -34,7 +34,6 @@
 #include <urjtag/data_register.h>
 #include <urjtag/bssignal.h>
 #include <urjtag/bsbit.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 
@@ -52,19 +51,9 @@ cmd_scan_run (urj_chain_t *chain, char *params[])
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    if (!chain->parts)
-    {
-        printf (_("Run \"detect\" first.\n"));
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
         return 1;
-    }
-
-    if (chain->active_part >= chain->parts->len)
-    {
-        printf (_("%s: no active part\n"), "scan");
-        return 1;
-    }
-
-    part = chain->parts->parts[chain->active_part];
 
     /* search for Boundary Scan Register */
     bsr = urj_part_find_data_register (part, "BSR");

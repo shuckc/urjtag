@@ -26,8 +26,8 @@
 
 #include <stdio.h>
 
+#include <urjtag/chain.h>
 #include <urjtag/cable.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 

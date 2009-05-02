@@ -27,8 +27,6 @@
 
 #include "types.h"
 
-#include "tap_register.h"
-
 void urj_tap_reset (urj_chain_t *chain);
 void urj_tap_reset_bypass (urj_chain_t *chain);
 void urj_tap_capture_dr (urj_chain_t *chain);
@@ -42,5 +40,12 @@ void urj_tap_shift_register_output (urj_chain_t *chain,
 void urj_tap_shift_register (urj_chain_t *chain,
                              const urj_tap_register_t *in,
                              urj_tap_register_t *out, int tap_exit);
+
+/** API functions */
+int urj_tap_detect_parts (urj_chain_t *chain, const char *db_path);
+int urj_tap_manual_add (urj_chain_t *chain, int instr_len);
+int urj_tap_detect_register_size (urj_chain_t *chain);
+void urj_tap_discovery (urj_chain_t *chain);
+void urj_tap_idcode (urj_chain_t *chain, unsigned int bytes);
 
 #endif /* URJ_TAP_H */

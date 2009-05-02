@@ -27,10 +27,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <urjtag/jtag.h>
 #include <urjtag/chain.h>
+#include <urjtag/tap.h>
 #include <urjtag/part.h>
 #include <urjtag/bus.h>
+#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 
@@ -49,7 +50,7 @@ cmd_detect_run (urj_chain_t *chain, char *params[])
     urj_bus_buses_free ();
     urj_part_parts_free (chain->parts);
     chain->parts = NULL;
-    urj_tap_detect_parts (chain, urj_cmd_jtag_get_data_dir ());
+    urj_tap_detect_parts (chain, urj_get_data_dir ());
     if (!chain->parts)
         return 1;
     if (!chain->parts->len)

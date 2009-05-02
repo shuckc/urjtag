@@ -1,4 +1,10 @@
+2009-05-02  Rutger Hofman <rfhh>
+
+  Refactor the autoconf stuff a bit so make install actually creates
+  include/urjtag/*.h
+
 2009-05-01  Rutger Hofman <rfhh>
+
   Global variables for liburjtag should not reside in the shell app
   * src/jtag.c: split into src/global/urjtag.c and src/apps/jtag/jtag.c
 

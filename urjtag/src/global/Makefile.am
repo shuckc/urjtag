@@ -26,4 +26,8 @@ include $(top_srcdir)/Makefile.rules
 noinst_LTLIBRARIES = libglobal.la
 
 libglobal_la_SOURCES = \
-	urjtag.c
+	parse.c \
+	urjtag.c \
+	data_dir.c
+
+AM_CPPFLAGS = -DJTAG_BIN_DIR=\"$(bindir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

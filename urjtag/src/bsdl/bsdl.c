@@ -35,7 +35,6 @@
 
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
-#include <urjtag/jtag.h>
 #include <urjtag/cmd.h>
 
 //#include "bsdl_local.h"
