@@ -60,7 +60,6 @@ src/cmd/cmd_idcode.c
 src/cmd/cmd_include.c
 src/cmd/cmd_initbus.c
 src/cmd/cmd_instruction.c
-src/cmd/cmd_parse.c
 src/cmd/cmd_part.c
 src/cmd/cmd_peekpoke.c
 src/cmd/cmd_pod.c
@@ -88,6 +87,8 @@ src/flash/intel.c
 src/flash/jedec.c
 src/flash/jedec_exp.c
 src/global/urjtag.c
+src/global/parse.c
+src/global/data_dir.c
 src/jim/intel_28f800b3.c
 src/jim/some_cpu.c
 src/jim/tap.c
