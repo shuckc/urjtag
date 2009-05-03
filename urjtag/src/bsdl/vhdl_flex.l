@@ -142,7 +142,7 @@ LEGAL NOTICES:
 
 #define YY_EXTRA_TYPE urj_bsdl_scan_extra_t *
 
-static char *new_string( urj_bsdl_scan_extra_t *, const char * );
+static char *new_string (urj_bsdl_scan_extra_t *, const char *);
 
 #define BINARY  0
 #define DECIMAL 1
@@ -240,109 +240,111 @@ Bsdl_Extension BSDL_EXTENSION
 Std_1532_2001  STD_1532_2001
 Std_1532_2002  STD_1532_2002
 %%
-{Entity}                {return( ENTITY ); }
+{Entity}                {return (ENTITY); }
 {Port}                  {yyextra->Base = DECIMAL;  /* Default number base */
-                         return( PORT ); }
-{Generic}               {yyextra->Base = DECIMAL; return( GENERIC ); }
-{Use}                   {yyextra->Base = DECIMAL; return( USE ); }
-{Attribute}             {yyextra->Base = DECIMAL; return( ATTRIBUTE ); }
-{Is}                    {return( IS ); }
-{Constant}              {yyextra->Base = DECIMAL; return( CONSTANT ); }
-{String}                {return( STRING ); }
+                         return (PORT); }
+{Generic}               {yyextra->Base = DECIMAL; return (GENERIC); }
+{Use}                   {yyextra->Base = DECIMAL; return (USE); }
+{Attribute}             {yyextra->Base = DECIMAL; return (ATTRIBUTE); }
+{Is}                    {return (IS); }
+{Constant}              {yyextra->Base = DECIMAL; return (CONSTANT); }
+{String}                {return (STRING); }
 {End}                   {yyextra->Base = DECIMAL;
                          BEGIN INITIAL; /* Turn off start conditions */
-                         return( END ); }
-{All}                   {return( ALL ); }
-{Of}                    {return( OF ); }
-{Physical_Pin_Map}      {return( PHYSICAL_PIN_MAP ); }
-{Pin_Map_String}        {return( PIN_MAP_STRING ); }
-{True}                  {return( TRUE ); }
-{False}                 {return( FALSE ); }
-{Signal}                {return( SIGNAL ); }
-{Low}                   {return( LOW ); }
-{Both}                  {return( BOTH ); }
-{In}                    {return( IN ); }
-{Out}                   {return( OUT ); }
-{Inout}                 {return( INOUT ); }
-{Buffer}                {return( BUFFER ); }
-{Linkage}               {return( LINKAGE ); }
-{Bit}                   {return( BIT ); }
-{Bit_Vector}            {return( BIT_VECTOR ); }
-{To}                    {return( TO ); }
-{Downto}                {return( DOWNTO ); }
-{Package}               {return( PACKAGE ); }
-{Body}                  {return( BODY ); }
-{Type}                  {return( TYPE ); }
-{Subtype}               {return( SUBTYPE ); }
-{Record}                {return( RECORD ); }
-{Array}                 {yyextra->Base = DECIMAL; return( ARRAY ); }
-{Positive}              {return( POSITIVE ); }
-{Range}                 {return( RANGE ); }
-{Cell_Info}             {BEGIN PAC; return( CELL_INFO ); }
-{Bsdl_Extension}        {return( BSDL_EXTENSION ); }
-{Std_1532_2001}         {return( STD_1532_2001 ); }
-{Std_1532_2002}         {return( STD_1532_2002 ); }
-<BOU,PAC>{Input}        {return( INPUT ); }
-<BOU,PAC>{Output2}      {return( OUTPUT2 ); }
-<BOU,PAC>{Output3}      {return( OUTPUT3 ); }
-<BOU,PAC>{Controlr}     {return( CONTROLR ); }
-<BOU,PAC>{Control}      {return( CONTROL ); }
-<BOU,PAC>{Internal}     {return( INTERNAL ); }
-<BOU,PAC>{Clock}        {return( CLOCK ); }
-<BOU,PAC>{Observe_Only} {return( OBSERVE_ONLY ); }
-<BOU>{Bidir}            {return( BIDIR ); }
-<PAC>{Bidir_In}         {return( BIDIR_IN ); }
-<PAC>{Bidir_Out}        {return( BIDIR_OUT ); }
-<PAC>{Extest}           {return( EXTEST ); }
-<PAC>{Sample}           {return( SAMPLE ); }
-<PAC>{Intest}           {return( INTEST ); }
-<PAC>{Runbist}          {return( RUNBIST ); }
-<PAC>{Pi}               {return( PI ); }
-<PAC>{Po}               {return( PO ); }
-<PAC>{Upd}              {return( UPD ); }
-<PAC>{Cap}              {return( CAP ); }
-<PAC>{X}                {return( X ); }
-<PAC>{Zero}             {return( ZERO ); }
-<PAC>{One}              {return( ONE ); }
-<BOU>{Z}                {return( Z ); }
+                         return (END); }
+{All}                   {return (ALL); }
+{Of}                    {return (OF); }
+{Physical_Pin_Map}      {return (PHYSICAL_PIN_MAP); }
+{Pin_Map_String}        {return (PIN_MAP_STRING); }
+{True}                  {return (TRUE); }
+{False}                 {return (FALSE); }
+{Signal}                {return (SIGNAL); }
+{Low}                   {return (LOW); }
+{Both}                  {return (BOTH); }
+{In}                    {return (IN); }
+{Out}                   {return (OUT); }
+{Inout}                 {return (INOUT); }
+{Buffer}                {return (BUFFER); }
+{Linkage}               {return (LINKAGE); }
+{Bit}                   {return (BIT); }
+{Bit_Vector}            {return (BIT_VECTOR); }
+{To}                    {return (TO); }
+{Downto}                {return (DOWNTO); }
+{Package}               {return (PACKAGE); }
+{Body}                  {return (BODY); }
+{Type}                  {return (TYPE); }
+{Subtype}               {return (SUBTYPE); }
+{Record}                {return (RECORD); }
+{Array}                 {yyextra->Base = DECIMAL; return (ARRAY); }
+{Positive}              {return (POSITIVE); }
+{Range}                 {return (RANGE); }
+{Cell_Info}             {BEGIN PAC; return (CELL_INFO); }
+{Bsdl_Extension}        {return (BSDL_EXTENSION); }
+{Std_1532_2001}         {return (STD_1532_2001); }
+{Std_1532_2002}         {return (STD_1532_2002); }
+<BOU,PAC>{Input}        {return (INPUT); }
+<BOU,PAC>{Output2}      {return (OUTPUT2); }
+<BOU,PAC>{Output3}      {return (OUTPUT3); }
+<BOU,PAC>{Controlr}     {return (CONTROLR); }
+<BOU,PAC>{Control}      {return (CONTROL); }
+<BOU,PAC>{Internal}     {return (INTERNAL); }
+<BOU,PAC>{Clock}        {return (CLOCK); }
+<BOU,PAC>{Observe_Only} {return (OBSERVE_ONLY); }
+<BOU>{Bidir}            {return (BIDIR); }
+<PAC>{Bidir_In}         {return (BIDIR_IN); }
+<PAC>{Bidir_Out}        {return (BIDIR_OUT); }
+<PAC>{Extest}           {return (EXTEST); }
+<PAC>{Sample}           {return (SAMPLE); }
+<PAC>{Intest}           {return (INTEST); }
+<PAC>{Runbist}          {return (RUNBIST); }
+<PAC>{Pi}               {return (PI); }
+<PAC>{Po}               {return (PO); }
+<PAC>{Upd}              {return (UPD); }
+<PAC>{Cap}              {return (CAP); }
+<PAC>{X}                {return (X); }
+<PAC>{Zero}             {return (ZERO); }
+<PAC>{One}              {return (ONE); }
+<BOU>{Z}                {return (Z); }
 {Eol}                   {yylineno++; /* Count lines */}
-{Comma}                 {return( COMMA ); }
-{Lparen}                {return( LPAREN );}
-{Rparen}                {return( RPAREN );}
-{Period}                {return( PERIOD ); }
-{Colon}                 {return( COLON );  }
-{Box}                   {return( BOX );  }
-{Single_Quote}          {yyextra->Base = BIN_X; return( SINGLE_QUOTE ); }
-{Colon_Equal}           {return( COLON_EQUAL ); }
+{Comma}                 {return (COMMA); }
+{Lparen}                {return (LPAREN);}
+{Rparen}                {return (RPAREN);}
+{Period}                {return (PERIOD); }
+{Colon}                 {return (COLON);  }
+{Box}                   {return (BOX);  }
+{Single_Quote}          {yyextra->Base = BIN_X; return (SINGLE_QUOTE); }
+{Colon_Equal}           {return (COLON_EQUAL); }
 {White}                 { /* Do Nothing on White Space */ }
 {VHDL_Comment}          { /* Do Nothing on Comments    */ }
 {Bin_X_Pattern}         {if (yyextra->Base != BIN_X) REJECT;
-                         yylval->str = new_string( yyextra, yytext );
-                         return( BIN_X_PATTERN );}
-{Identifier}            {yylval->str = new_string( yyextra, yytext );
-                         return( IDENTIFIER ); }
-{Quoted_String}         {yylval->str = new_string( yyextra, yytext );
-                         return( QUOTED_STRING ); }
+                         yylval->str = new_string (yyextra, yytext);
+                         return (BIN_X_PATTERN);}
+{Identifier}            {yylval->str = new_string (yyextra, yytext);
+                         return (IDENTIFIER); }
+{Quoted_String}         {yylval->str = new_string (yyextra, yytext);
+                         return (QUOTED_STRING); }
 {Decimal_Number}        {if (yyextra->Base != DECIMAL) REJECT;
-                         yylval->integer = atoi( (char *)yytext );
-                         return( DECIMAL_NUMBER );}
-{Real_Number}           {yylval->str = new_string( yyextra, yytext );
-                         return( REAL_NUMBER );}
-{Concatenate}           {return( CONCATENATE );}
-{Semicolon}             {return( SEMICOLON );}
-{Illegal}               {urj_bsdl_msg( yyextra->proc_mode,
+                         yylval->integer = atoi ((char *)yytext);
+                         return (DECIMAL_NUMBER);}
+{Real_Number}           {yylval->str = new_string (yyextra, yytext);
+                         return (REAL_NUMBER);}
+{Concatenate}           {return (CONCATENATE);}
+{Semicolon}             {return (SEMICOLON);}
+{Illegal}               {urj_bsdl_msg (yyextra->proc_mode,
                                    BSDL_MSG_ERR,
                                    _("Illegal character %c (/%03o) at line %d:\n"),
                                    (char)yytext[yyleng-1], (int)yytext[yyleng-1],
-                                   yylineno );
+                                   yylineno);
                          yyextra->Compile_Errors++;
-                         return( ILLEGAL );  /* Will cause syntax error */}
+                         return (ILLEGAL);  /* Will cause syntax error */}
 <<EOF>> {
-  yypop_buffer_state( yyscanner );
-  if ( !YY_CURRENT_BUFFER )
+  yypop_buffer_state (yyscanner);
+  if (!YY_CURRENT_BUFFER)
     yyterminate();
 }
+
 %%
+
 /*****************************************************************************
  * void *urj_vhdl_flex_init( FILE *f, int mode )
  *
@@ -355,34 +357,37 @@ Std_1532_2002  STD_1532_2002
  * Returns
  *   pointer to newly initialized scanner structure
  ****************************************************************************/
-void *urj_vhdl_flex_init( FILE *f, int proc_mode )
+void *
+urj_vhdl_flex_init (FILE *f, int proc_mode)
 {
-  urj_bsdl_scan_extra_t *extra;
-  yyscan_t scanner;
+    urj_bsdl_scan_extra_t *extra;
+    yyscan_t scanner;
 
-  /* get our scanner structure */
-  if (yylex_init( &scanner ) != 0)
-  {
-    urj_bsdl_msg( proc_mode, BSDL_MSG_FATAL, _("Scanner could not be initialized\n") );
-    return NULL;
-  }
-  yyset_in( f, scanner );
+    /* get our scanner structure */
+    if (yylex_init (&scanner) != 0)
+    {
+        urj_bsdl_msg (proc_mode, BSDL_MSG_FATAL,
+                      _("Scanner could not be initialized\n"));
+        return NULL;
+    }
+    yyset_in (f, scanner);
 
-  if (!(extra = malloc( sizeof( urj_bsdl_scan_extra_t ) )))
-  {
-    urj_bsdl_msg( proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
-    yylex_destroy( scanner );
-    return NULL;
-  }
+    if (!(extra = malloc (sizeof (urj_bsdl_scan_extra_t))))
+    {
+        urj_bsdl_msg (proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
+        yylex_destroy (scanner);
+        return NULL;
+    }
 
-  extra->proc_mode      = proc_mode;
-  extra->Compile_Errors = 0;
-  extra->Base           = DECIMAL;
+    extra->proc_mode = proc_mode;
+    extra->Compile_Errors = 0;
+    extra->Base = DECIMAL;
 
-  yyset_extra( extra, scanner );
+    yyset_extra (extra, scanner);
 
-  return scanner;
+    return scanner;
 }
 
 
@@ -397,17 +402,18 @@ void *urj_vhdl_flex_init( FILE *f, int proc_mode )
  * Returns
  *   void
  ****************************************************************************/
-void urj_vhdl_flex_deinit( void *scanner )
+void
+urj_vhdl_flex_deinit (void *scanner)
 {
-  if (yyget_in( scanner ))
-  {
-    /* file might still be open so close it in any case
-       e.g. when a compile error occured and the parser didn't hit EOF/yywrap() */
-    fclose( yyget_in( scanner ) );
-    yyset_in( NULL, scanner );
-  }
-  free( yyget_extra( scanner ) );
-  yylex_destroy( scanner );
+    if (yyget_in (scanner))
+    {
+        /* file might still be open so close it in any case
+           e.g. when a compile error occured and the parser didn't hit EOF/yywrap() */
+        fclose (yyget_in (scanner));
+        yyset_in (NULL, scanner);
+    }
+    free (yyget_extra (scanner));
+    yylex_destroy (scanner);
 }
 
 
@@ -422,14 +428,15 @@ void urj_vhdl_flex_deinit( void *scanner )
  * Returns
  *   1
  ****************************************************************************/
-int yywrap( yyscan_t scanner )
+int
+yywrap (yyscan_t scanner)
 {
-  if (yyget_in( scanner ))
-  {
-    fclose( yyget_in( scanner ) );
-    yyset_in( NULL, scanner );
-  }
-  return 1;
+    if (yyget_in (scanner))
+    {
+        fclose (yyget_in (scanner));
+        yyset_in (NULL, scanner);
+    }
+    return 1;
 }
 
 
@@ -445,22 +452,24 @@ int yywrap( yyscan_t scanner )
  * Returns
  *   pointer to allocated and initialized string memory
  ****************************************************************************/
-static char *new_string( urj_bsdl_scan_extra_t *extra, const char *str )
+static char *
+new_string (urj_bsdl_scan_extra_t * extra, const char *str)
 {
-  char   *n_str;
-  size_t  n_str_size;
+    char *n_str;
+    size_t n_str_size;
 
-  n_str_size = strlen( str ) + 1;
-  if ((n_str = malloc( n_str_size )))
-  {
-    strncpy( n_str, str, n_str_size-1 );
-    n_str[n_str_size-1] = '\0';  /* set very last element to EOS */
-  }
-  else
-    urj_bsdl_msg( extra->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+    n_str_size = strlen (str) + 1;
+    if ((n_str = malloc (n_str_size)))
+    {
+        strncpy (n_str, str, n_str_size - 1);
+        n_str[n_str_size - 1] = '\0';   /* set very last element to EOS */
+    }
+    else
+        urj_bsdl_msg (extra->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 
-  return n_str;
+    return n_str;
 }
 
 
@@ -476,55 +485,56 @@ static char *new_string( urj_bsdl_scan_extra_t *extra, const char *str )
  * Returns
  *   void
  ****************************************************************************/
-void urj_vhdl_flex_switch_file( yyscan_t scanner, char *filename )
+void
+urj_vhdl_flex_switch_file (yyscan_t scanner, char *filename)
 {
-  urj_bsdl_scan_extra_t *extra;
-  FILE *f;
-  char *s;
+    urj_bsdl_scan_extra_t *extra;
+    FILE *f;
+    char *s;
 
-  /* convert filename to all upper case */
-  s = filename;
-  while (*s)
-  {
-    if (islower( *s ))
-      *s = toupper( *s );
-    s++;
-  }
-
-  extra = yyget_extra( scanner );
-
-  /* file in current directory has precedence */
-  f = fopen( filename, "r" );
-  if (!f)
-  {
-    const char *db_path = urj_get_data_dir();
-    char *db_file;
-
-    if ((db_file = malloc( strlen( db_path ) +
-                           1 +  /* "/"    */
-                           4 +  /* "bsdl" */
-                           1 +  /* "/"    */
-                           strlen( filename ) +
-                           1 )))
+    /* convert filename to all upper case */
+    s = filename;
+    while (*s)
     {
-      strcpy( db_file, db_path );
-      strcat( db_file, "/" );
-      strcat( db_file, "bsdl" );
-      strcat( db_file, "/" );
-      strcat( db_file, filename );
-      f = fopen( db_file, "r" );
-
-      if (!f)
-        urj_bsdl_msg( extra->proc_mode,
-                  BSDL_MSG_FATAL, _("Cannot open file %s or %s.\n"), filename, db_file );
-      free( db_file );
-      if (!f)
-        return;
+        if (islower (*s))
+            *s = toupper (*s);
+        s++;
     }
-  }
 
-  yypush_buffer_state( yy_create_buffer( f, YY_BUF_SIZE, scanner ), scanner );
-  yyset_lineno( 1, scanner );
+    extra = yyget_extra (scanner);
+
+    /* file in current directory has precedence */
+    f = fopen (filename, "r");
+    if (!f)
+    {
+        const char *db_path = urj_get_data_dir ();
+        char *db_file;
+
+        if ((db_file = malloc (strlen (db_path) + 1 +   /* "/"    */
+                               4 +      /* "bsdl" */
+                               1 +      /* "/"    */
+                               strlen (filename) + 1)))
+        {
+            strcpy (db_file, db_path);
+            strcat (db_file, "/");
+            strcat (db_file, "bsdl");
+            strcat (db_file, "/");
+            strcat (db_file, filename);
+            f = fopen (db_file, "r");
+
+            if (!f)
+                urj_bsdl_msg (extra->proc_mode,
+                              BSDL_MSG_FATAL,
+                              _("Cannot open file %s or %s.\n"), filename,
+                              db_file);
+            free (db_file);
+            if (!f)
+                return;
+        }
+    }
+
+    yypush_buffer_state (yy_create_buffer (f, YY_BUF_SIZE, scanner), scanner);
+    yyset_lineno (1, scanner);
 }
 
 
@@ -539,10 +549,11 @@ void urj_vhdl_flex_switch_file( yyscan_t scanner, char *filename )
  * Returns
  *   number of compile errors
  ****************************************************************************/
-int urj_vhdl_flex_get_compile_errors( yyscan_t scanner )
+int
+urj_vhdl_flex_get_compile_errors (yyscan_t scanner)
 {
-  urj_bsdl_scan_extra_t *extra = yyget_extra( scanner );
-  return extra->Compile_Errors;
+    urj_bsdl_scan_extra_t *extra = yyget_extra (scanner);
+    return extra->Compile_Errors;
 }
 
 
@@ -558,10 +569,11 @@ int urj_vhdl_flex_get_compile_errors( yyscan_t scanner )
  * Returns
  *   void
  ****************************************************************************/
-static void urj_vhdl_flex_set_compile_errors( int n, yyscan_t scanner )
+static void
+urj_vhdl_flex_set_compile_errors (int n, yyscan_t scanner)
 {
-  urj_bsdl_scan_extra_t *extra = yyget_extra( scanner );
-  extra->Compile_Errors = n;
+    urj_bsdl_scan_extra_t *extra = yyget_extra (scanner);
+    extra->Compile_Errors = n;
 }
 
 
@@ -576,12 +588,13 @@ static void urj_vhdl_flex_set_compile_errors( int n, yyscan_t scanner )
  * Returns
  *   number of compile errors before increment
  ****************************************************************************/
-int urj_vhdl_flex_postinc_compile_errors( yyscan_t scanner )
+int
+urj_vhdl_flex_postinc_compile_errors (yyscan_t scanner)
 {
-  int errors = urj_vhdl_flex_get_compile_errors( scanner );
+    int errors = urj_vhdl_flex_get_compile_errors (scanner);
 
-  urj_vhdl_flex_set_compile_errors( errors+1, scanner );
-  return errors;
+    urj_vhdl_flex_set_compile_errors (errors + 1, scanner);
+    return errors;
 }
 
 
@@ -596,9 +609,10 @@ int urj_vhdl_flex_postinc_compile_errors( yyscan_t scanner )
  * Returns
  *   current line number
  ****************************************************************************/
-int urj_vhdl_flex_get_lineno( yyscan_t scanner )
+int
+urj_vhdl_flex_get_lineno (yyscan_t scanner)
 {
-  return yyget_lineno( scanner );
+    return yyget_lineno (scanner);
 }
 
 

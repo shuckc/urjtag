@@ -150,39 +150,39 @@ int yylex (YYSTYPE *, void *);
 #define ERROR_LIMIT 15
 #define BUMP_ERROR \
     do { \
-        if (urj_vhdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
+        if (urj_vhdl_flex_postinc_compile_errors (priv_data->scanner) > ERROR_LIMIT) \
         { \
-            Give_Up_And_Quit( priv_data ); \
+            Give_Up_And_Quit (priv_data); \
             YYABORT; \
         } \
     } while (0)
 #else
 #define BUMP_ERROR \
     do { \
-        Give_Up_And_Quit( priv_data ); \
+        Give_Up_And_Quit (priv_data); \
         YYABORT; \
     } while (0)
 #endif
 
-static void Init_Text( urj_bsdl_vhdl_parser_priv_t * );
-static void Store_Text( urj_bsdl_vhdl_parser_priv_t *, char * );
-static void Print_Error( urj_bsdl_vhdl_parser_priv_t *, const char * );
-static void Give_Up_And_Quit( urj_bsdl_vhdl_parser_priv_t * );
+static void Init_Text (urj_bsdl_vhdl_parser_priv_t *);
+static void Store_Text (urj_bsdl_vhdl_parser_priv_t *, char *);
+static void Print_Error (urj_bsdl_vhdl_parser_priv_t *, const char *);
+static void Give_Up_And_Quit (urj_bsdl_vhdl_parser_priv_t *);
 
 /* VHDL semantic action interface */
-static void urj_vhdl_set_entity( urj_bsdl_vhdl_parser_priv_t *, char * );
-static void urj_vhdl_port_add_name( urj_bsdl_vhdl_parser_priv_t *, char * );
-static void urj_vhdl_port_add_bit( urj_bsdl_vhdl_parser_priv_t * );
-static void urj_vhdl_port_add_range( urj_bsdl_vhdl_parser_priv_t *, int, int );
-static void urj_vhdl_port_apply_port( urj_bsdl_vhdl_parser_priv_t * );
+static void urj_vhdl_set_entity (urj_bsdl_vhdl_parser_priv_t *, char *);
+static void urj_vhdl_port_add_name (urj_bsdl_vhdl_parser_priv_t *, char *);
+static void urj_vhdl_port_add_bit (urj_bsdl_vhdl_parser_priv_t *);
+static void urj_vhdl_port_add_range (urj_bsdl_vhdl_parser_priv_t *, int, int);
+static void urj_vhdl_port_apply_port (urj_bsdl_vhdl_parser_priv_t *);
 
-//static void set_attr_bool( urj_bsdl_vhdl_parser_priv_t *, char *, int );
-static void set_attr_decimal( urj_bsdl_vhdl_parser_priv_t *, char *, int );
-static void set_attr_string( urj_bsdl_vhdl_parser_priv_t *, char *, char * );
-//static void set_attr_real( urj_bsdl_vhdl_parser_priv_t *, char *, char * );
-//static void set_attr_const( urj_bsdl_vhdl_parser_priv_t *, char *, char * );
+//static void set_attr_bool (urj_bsdl_vhdl_parser_priv_t *, char *, int);
+static void set_attr_decimal (urj_bsdl_vhdl_parser_priv_t *, char *, int);
+static void set_attr_string (urj_bsdl_vhdl_parser_priv_t *, char *, char *);
+//static void set_attr_real (urj_bsdl_vhdl_parser_priv_t *, char *, char *);
+//static void set_attr_const (urj_bsdl_vhdl_parser_priv_t *, char *, char *);
 
-void yyerror( urj_bsdl_vhdl_parser_priv_t *, const char * );
+void yyerror (urj_bsdl_vhdl_parser_priv_t *, const char *);
 %}
 
 %union
@@ -225,12 +225,12 @@ void yyerror( urj_bsdl_vhdl_parser_priv_t *, const char * );
 BSDL_Program : Begin_BSDL BSDL_Body End_BSDL
 ;
 Begin_BSDL : ENTITY IDENTIFIER IS
-             { urj_vhdl_set_entity( priv_data, $2 ); }
+             { urj_vhdl_set_entity (priv_data, $2); }
            | error
              {
-               Print_Error( priv_data, _("Improper Entity declaration") );
-               Print_Error( priv_data, _("Check if source file is BSDL") );
-               BUMP_ERROR; YYABORT; /* Probably not a BSDL source file */
+               Print_Error (priv_data, _("Improper Entity declaration"));
+               Print_Error (priv_data, _("Check if source file is BSDL"));
+               BUMP_ERROR; YYABORT;     /* Probably not a BSDL source file */
              }
 ;
 BSDL_Body : VHDL_Generic
@@ -239,15 +239,15 @@ BSDL_Body : VHDL_Generic
             VHDL_Elements
           | error
             {
-              Print_Error( priv_data, _("Syntax Error") );
+              Print_Error (priv_data, _("Syntax Error"));
               BUMP_ERROR; YYABORT;
             }
 ;
 End_BSDL : END IDENTIFIER SEMICOLON
-           { free( $2 ); }
+           { free ($2); }
          | error
            {
-             Print_Error( priv_data, _("Syntax Error") );
+             Print_Error (priv_data, _("Syntax Error"));
              BUMP_ERROR; YYABORT;
            }
 ;
@@ -257,7 +257,7 @@ VHDL_Generic        : GENERIC LPAREN PHYSICAL_PIN_MAP COLON STRING COLON_EQUAL
 VHDL_Port           : PORT LPAREN Port_Specifier_List RPAREN SEMICOLON
                     | error
                       {
-                        Print_Error( priv_data, _("Improper Port declaration") );
+                        Print_Error (priv_data, _("Improper Port declaration"));
                         BUMP_ERROR; YYABORT;
                       }
 ;
@@ -265,23 +265,23 @@ Port_Specifier_List : Port_Specifier
                     | Port_Specifier_List SEMICOLON Port_Specifier
 ;
 Port_Specifier      : Port_List COLON Function Scaler_Or_Vector
-                      { urj_vhdl_port_apply_port( priv_data ); }
+                      { urj_vhdl_port_apply_port (priv_data); }
 ;
 Port_List           : IDENTIFIER
-                      { urj_vhdl_port_add_name( priv_data, $1 ); }
+                      { urj_vhdl_port_add_name (priv_data, $1); }
                     | Port_List COMMA IDENTIFIER
-                      { urj_vhdl_port_add_name( priv_data, $3 ); }
+                      { urj_vhdl_port_add_name (priv_data, $3); }
 ;
 Function            : IN | OUT | INOUT | BUFFER | LINKAGE
 ;
 Scaler_Or_Vector    : BIT
-                      { urj_vhdl_port_add_bit( priv_data ); }
+                      { urj_vhdl_port_add_bit (priv_data); }
                     | BIT_VECTOR LPAREN Vector_Range RPAREN
 ;
 Vector_Range        : DECIMAL_NUMBER TO DECIMAL_NUMBER
-                      { urj_vhdl_port_add_range( priv_data, $1, $3 ); }
+                      { urj_vhdl_port_add_range (priv_data, $1, $3); }
                     | DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER
-                      { urj_vhdl_port_add_range( priv_data, $3, $1 ); }
+                      { urj_vhdl_port_add_range (priv_data, $3, $1); }
 ;
 VHDL_Use_Part : ISC_Use
               | Standard_Use
@@ -289,20 +289,20 @@ VHDL_Use_Part : ISC_Use
               | Standard_Use VHDL_Use_List
               | error
                 {
-                  Print_Error( priv_data, _("Error in Package declaration(s)") );
+                  Print_Error (priv_data, _("Error in Package declaration(s)"));
                   BUMP_ERROR; YYABORT;
                 }
 ;
 Standard_Use  : USE IDENTIFIER
                 {/* Parse Standard 1149.1 Package */
-                  strcpy( priv_data->Package_File_Name, $2 );
-                  free( $2 );
+                  strcpy (priv_data->Package_File_Name, $2);
+                  free ($2);
                 }
                 PERIOD ALL SEMICOLON
                 {
                   priv_data->Reading_Package = 1;
-                  urj_vhdl_flex_switch_file( priv_data->scanner,
-                                         priv_data->Package_File_Name );
+                  urj_vhdl_flex_switch_file (priv_data->scanner,
+                                             priv_data->Package_File_Name);
                 }
                 Standard_Package
                 {
@@ -311,10 +311,10 @@ Standard_Use  : USE IDENTIFIER
 ;
 Standard_Package : PACKAGE IDENTIFIER IS Standard_Decls Defered_Constants
                    Standard_Decls END IDENTIFIER SEMICOLON Package_Body
-                   { free( $2 ); free( $8 ); }
+                   { free ($2); free ($8); }
                  | error
                    {
-                     Print_Error( priv_data, _("Error in Standard Package") );
+                     Print_Error (priv_data, _("Error in Standard Package"));
                      BUMP_ERROR; YYABORT;
                    }
 ;
@@ -322,28 +322,28 @@ Standard_Decls : Standard_Decl
                | Standard_Decls Standard_Decl
 ;
 Standard_Decl  : ATTRIBUTE IDENTIFIER COLON Attribute_Type SEMICOLON
-                 { free( $2 ); }
+                 { free ($2); }
                | TYPE IDENTIFIER IS Type_Body SEMICOLON
-                 { free( $2 ); }
+                 { free ($2); }
                | TYPE CELL_INFO IS ARRAY LPAREN POSITIVE RANGE BOX RPAREN
                  OF IDENTIFIER SEMICOLON
-                 { free( $11 ); }
+                 { free ($11); }
                | SUBTYPE PIN_MAP_STRING IS STRING SEMICOLON
                | SUBTYPE BSDL_EXTENSION IS STRING SEMICOLON
                | error
                  {
-                   Print_Error( priv_data, _("Error in Standard Declarations") );
+                   Print_Error (priv_data, _("Error in Standard Declarations"));
                    BUMP_ERROR; YYABORT;
                  }
 ;
 Attribute_Type : IDENTIFIER
-                 { free( $1 ); }
+                 { free ($1); }
                | STRING
                | DECIMAL_NUMBER
                | BSDL_EXTENSION
                | error
                  {
-                   Print_Error( priv_data, _("Error in Attribute type identification") );
+                   Print_Error (priv_data, _("Error in Attribute type identification"));
                    BUMP_ERROR; YYABORT;
                  }
 ;
@@ -352,14 +352,14 @@ Type_Body      : LPAREN ID_Bits RPAREN
                | LPAREN LOW COMMA BOTH RPAREN
                | ARRAY LPAREN DECIMAL_NUMBER TO DECIMAL_NUMBER RPAREN
                  OF IDENTIFIER
-                 { free( $8 ); }
+                 { free ($8); }
                | ARRAY LPAREN DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER RPAREN
                  OF IDENTIFIER
-                 { free( $8 ); }
+                 { free ($8); }
                | RECORD Record_Body END RECORD
                | error
                  {
-                   Print_Error( priv_data, _("Error in Type definition") );
+                   Print_Error (priv_data, _("Error in Type definition"));
                    BUMP_ERROR; YYABORT;
                  }
 ;
@@ -367,15 +367,15 @@ ID_Bits        : ID_Bit
                | ID_Bits COMMA ID_Bit
 ;
 ID_List        : IDENTIFIER
-                 { free( $1 ); }
+                 { free ($1); }
                | ID_List COMMA IDENTIFIER
-                 { free( $3 ); }
+                 { free ($3); }
 ;
 ID_Bit         : SINGLE_QUOTE BIN_X_PATTERN SINGLE_QUOTE
-                 { free( $2 ); }
+                 { free ($2); }
                | error
                  {
-                   Print_Error( priv_data, _("Error in Bit definition") );
+                   Print_Error (priv_data, _("Error in Bit definition"));
                    BUMP_ERROR; YYABORT;
                  }
 ;
@@ -383,10 +383,10 @@ Record_Body    : Record_Element
                | Record_Body Record_Element
 ;
 Record_Element : IDENTIFIER COLON IDENTIFIER SEMICOLON
-                 { free( $1 ); free( $3 ); }
+                 { free ($1); free ($3); }
                | error
                  {
-                   Print_Error( priv_data, _("Error in Record Definition") );
+                   Print_Error (priv_data, _("Error in Record Definition"));
                    BUMP_ERROR; YYABORT;
                  }
 ;
@@ -396,10 +396,10 @@ Defered_Constants : Defered_Constant
 Defered_Constant  : CONSTANT Constant_Body
 ;
 Constant_Body     : IDENTIFIER COLON CELL_INFO SEMICOLON
-                    { free( $1 ); }
+                    { free ($1); }
                   | error
                     {
-                      Print_Error( priv_data, _("Error in defered constant") );
+                      Print_Error (priv_data, _("Error in defered constant"));
                       BUMP_ERROR; YYABORT;
                     }
 ;
@@ -407,11 +407,11 @@ VHDL_Use_List   : VHDL_Use
                 | VHDL_Use_List VHDL_Use
 ;
 Package_Body    : PACKAGE BODY IDENTIFIER IS Constant_List END IDENTIFIER
-                  { free( $3 ); free( $7 ); }
+                  { free ($3); free ($7); }
                   SEMICOLON
                 | error
                   {
-                    Print_Error( priv_data, _("Error in Package Body definition") );
+                    Print_Error (priv_data, _("Error in Package Body definition"));
                     BUMP_ERROR; YYABORT;
                   }
 ;
@@ -420,10 +420,10 @@ Constant_List   : Cell_Constant
 ;
 Cell_Constant   : CONSTANT IDENTIFIER COLON CELL_INFO COLON_EQUAL
                   LPAREN Triples_List RPAREN SEMICOLON
-                  { free( $2 ); }
+                  { free ($2); }
                 | error
                   {
-                    Print_Error( priv_data, _("Error in Cell Constant definition") );
+                    Print_Error (priv_data, _("Error in Cell Constant definition"));
                     BUMP_ERROR; YYABORT;
                   }
 ;
@@ -434,7 +434,7 @@ Triple          : LPAREN Triple_Function COMMA Triple_Inst COMMA CAP_Data
                   RPAREN
                 | error
                   {
-                    Print_Error( priv_data, _("Error in Cell Data Record") );
+                    Print_Error (priv_data, _("Error in Cell Data Record"));
                     BUMP_ERROR; YYABORT;
                   }
 ;
@@ -443,21 +443,21 @@ Triple_Function : INPUT | OUTPUT2 | OUTPUT3 | INTERNAL | CONTROL
                 | OBSERVE_ONLY
                 | error
                   {
-                    Print_Error( priv_data, _("Error in Cell_Type Function field") );
+                    Print_Error (priv_data, _("Error in Cell_Type Function field"));
                     BUMP_ERROR; YYABORT;
                   }
 ;
 Triple_Inst     : EXTEST | SAMPLE | INTEST | RUNBIST
                 | error
                   {
-                    Print_Error( priv_data, _("Error in BScan_Inst Instruction field") );
+                    Print_Error (priv_data, _("Error in BScan_Inst Instruction field"));
                     BUMP_ERROR; YYABORT;
                   }
 ;
 CAP_Data        : PI | PO | UPD | CAP | X | ZERO | ONE
                 | error
                   {
-                    Print_Error( priv_data, _("Error in Constant CAP data source field") );
+                    Print_Error (priv_data, _("Error in Constant CAP data source field"));
                     BUMP_ERROR; YYABORT;
                   }
 ;
@@ -469,8 +469,8 @@ VHDL_Use         : USE IDENTIFIER
                    PERIOD ALL SEMICOLON
                    {
                      priv_data->Reading_Package = 1;
-                     urj_vhdl_flex_switch_file(priv_data->scanner,
-                                           priv_data->Package_File_Name);
+                     urj_vhdl_flex_switch_file (priv_data->scanner,
+                                                priv_data->Package_File_Name);
                    }
                    User_Package
                    {
@@ -488,7 +488,7 @@ VHDL_Elements : VHDL_Element
               | VHDL_Elements VHDL_Element
               | error
                 {
-                  Print_Error( priv_data, _("Unknown VHDL statement") );
+                  Print_Error (priv_data, _("Unknown VHDL statement"));
                   BUMP_ERROR; YYABORT;
                 }
 ;
@@ -499,8 +499,8 @@ VHDL_Constant      : CONSTANT VHDL_Constant_Part
 ;
 VHDL_Constant_Part : IDENTIFIER COLON PIN_MAP_STRING COLON_EQUAL
                      Quoted_String SEMICOLON
-                     // { set_attr_const( priv_data, $1, strdup( "PIN_MAP_STRING" ) ); }
-                     { free( $1 ); }
+                     // { set_attr_const (priv_data, $1, strdup ("PIN_MAP_STRING")); }
+                     { free ($1); }
 ;
 VHDL_Attribute     : ATTRIBUTE VHDL_Attribute_Types
 ;
@@ -511,16 +511,16 @@ VHDL_Attribute_Types : VHDL_Attr_Boolean
                      | VHDL_Attr_PhysicalPinMap
                      | error
                        {
-                         Print_Error( priv_data, _("Error in Attribute specification") );
+                         Print_Error (priv_data, _("Error in Attribute specification"));
                          BUMP_ERROR; YYABORT;
                        }
 ;
 VHDL_Attr_Boolean  : IDENTIFIER OF IDENTIFIER COLON SIGNAL IS Boolean SEMICOLON
                      { 
-                       //set_attr_bool( priv_data, $1, $7 );
-                       //free( $3 );
+                       //set_attr_bool (priv_data, $1, $7);
+                       //free ($3);
                        /* skip boolean attributes for the time being */
-                       free( $1 ); free( $3 );
+                       free ($1); free ($3);
                      }
 ;
 Boolean            : TRUE
@@ -530,46 +530,46 @@ Boolean            : TRUE
 ;
 VHDL_Attr_Decimal : IDENTIFIER OF IDENTIFIER COLON ENTITY IS DECIMAL_NUMBER SEMICOLON
                     {
-                      set_attr_decimal( priv_data, $1, $7 );
-                      free( $3 );
+                      set_attr_decimal (priv_data, $1, $7);
+                      free ($3);
                     }
 ;
 VHDL_Attr_Real   : IDENTIFIER OF IDENTIFIER COLON SIGNAL IS LPAREN REAL_NUMBER COMMA Stop RPAREN SEMICOLON
                    {
-                     //set_attr_real( priv_data, $1, $8 );
-                     //free( $3 );
+                     //set_attr_real (priv_data, $1, $8);
+                     //free ($3);
                      /* skip real attributes for the time being */
-                     free( $1 ); free( $3 ); free( $8 );
+                     free ($1); free ($3); free ($8);
                    }
 ;
 Stop             : LOW | BOTH
 ;
 VHDL_Attr_String : IDENTIFIER OF IDENTIFIER COLON ENTITY IS Quoted_String SEMICOLON
                    {
-                     set_attr_string( priv_data, $1, strdup( priv_data->buffer ) );
-                     free( $3 );
+                     set_attr_string (priv_data, $1, strdup (priv_data->buffer));
+                     free ($3);
                    }
 ;
 VHDL_Attr_PhysicalPinMap : IDENTIFIER OF IDENTIFIER COLON ENTITY IS PHYSICAL_PIN_MAP SEMICOLON
-                           { free( $1 ); free( $3 ); }
+                           { free ($1); free ($3); }
 ;
 Quoted_String    : QUOTED_STRING
                    {
-                     Init_Text( priv_data );
-                     Store_Text( priv_data, $1 );
-                     free( $1 );
+                     Init_Text (priv_data);
+                     Store_Text (priv_data, $1);
+                     free ($1);
                    }
                  | Quoted_String CONCATENATE QUOTED_STRING
                    {
-                     Store_Text( priv_data, $3 );
-                     free( $3 );
+                     Store_Text (priv_data, $3);
+                     free ($3);
                    }
 ;
 ISC_Use      : USE ISC_Packages PERIOD ALL SEMICOLON
              {
                priv_data->Reading_Package = 1;
-               urj_vhdl_flex_switch_file( priv_data->scanner,
-                                      priv_data->Package_File_Name );
+               urj_vhdl_flex_switch_file (priv_data->scanner,
+                                          priv_data->Package_File_Name);
              }
              ISC_Package
              {
@@ -578,11 +578,11 @@ ISC_Use      : USE ISC_Packages PERIOD ALL SEMICOLON
 ;
 ISC_Packages : STD_1532_2001
                {
-                 strcpy( priv_data->Package_File_Name, "STD_1532_2001" );
+                 strcpy (priv_data->Package_File_Name, "STD_1532_2001");
                }
              | STD_1532_2002
                {
-                 strcpy( priv_data->Package_File_Name, "STD_1532_2002" );
+                 strcpy (priv_data->Package_File_Name, "STD_1532_2002");
                }
 ;
 ISC_Package : ISC_Package_Header ISC_Package_Body
@@ -610,15 +610,16 @@ ISC_Package_Body   : PACKAGE BODY ISC_Packages IS
  * Returns
  *   void
  ****************************************************************************/
-static void Init_Text( urj_bsdl_vhdl_parser_priv_t *priv )
+static void
+Init_Text (urj_bsdl_vhdl_parser_priv_t *priv)
 {
-  if (priv->len_buffer == 0)
-  {
-    /* @@@@ ToDo check malloc result RFHH */
-    priv->buffer = malloc( 160 );
-    priv->len_buffer = 160;
-  }
-  priv->buffer[0] = '\0';
+    if (priv->len_buffer == 0)
+    {
+        /* @@@@ ToDo check malloc result RFHH */
+        priv->buffer = malloc (160);
+        priv->len_buffer = 160;
+    }
+    priv->buffer[0] = '\0';
 }
 
 
@@ -635,50 +636,55 @@ static void Init_Text( urj_bsdl_vhdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void Store_Text( urj_bsdl_vhdl_parser_priv_t *priv, char *Source )
-{ /* Save characters from VHDL string in local string buffer.           */
-  size_t req_len;
-  char   *SourceEnd;
+static void
+Store_Text (urj_bsdl_vhdl_parser_priv_t *priv, char *Source)
+{                               /* Save characters from VHDL string in local string buffer.           */
+    size_t req_len;
+    char *SourceEnd;
 
-  SourceEnd = ++Source;   /* skip leading '"' */
-  while (*SourceEnd && (*SourceEnd != '"') && (*SourceEnd != '\n'))
-    SourceEnd++;
-  /* terminate Source string with NUL character */
-  *SourceEnd = '\0';
+    SourceEnd = ++Source;       /* skip leading '"' */
+    while (*SourceEnd && (*SourceEnd != '"') && (*SourceEnd != '\n'))
+        SourceEnd++;
+    /* terminate Source string with NUL character */
+    *SourceEnd = '\0';
 
-  req_len = strlen( priv->buffer ) + strlen( Source ) + 1;
-  if (req_len > priv->len_buffer)
-  {
-    /* @@@@ ToDo check realloc result RFHH */
-    priv->buffer = realloc( priv->buffer, req_len );
-    priv->len_buffer = req_len;
-  }
-  strcat( priv->buffer, Source );
+    req_len = strlen (priv->buffer) + strlen (Source) + 1;
+    if (req_len > priv->len_buffer)
+    {
+        /* @@@@ ToDo check realloc result RFHH */
+        priv->buffer = realloc (priv->buffer, req_len);
+        priv->len_buffer = req_len;
+    }
+    strcat (priv->buffer, Source);
 }
+
 /*----------------------------------------------------------------------*/
-static void Print_Error( urj_bsdl_vhdl_parser_priv_t *priv_data, const char *Errmess )
+static void
+Print_Error (urj_bsdl_vhdl_parser_priv_t *priv_data, const char *Errmess)
 {
-  urj_bsdl_jtag_ctrl_t *jc = priv_data->jtag_ctrl;
+    urj_bsdl_jtag_ctrl_t *jc = priv_data->jtag_ctrl;
 
-  if (priv_data->Reading_Package)
-    urj_bsdl_msg( jc->proc_mode,
-              BSDL_MSG_ERR, _("In Package %s, Line %d, %s.\n"),
-              priv_data->Package_File_Name,
-              urj_vhdl_flex_get_lineno( priv_data->scanner ),
-              Errmess );
-  else
-    urj_bsdl_msg( jc->proc_mode,
-              BSDL_MSG_ERR, _("Line %d, %s.\n"),
-              urj_vhdl_flex_get_lineno( priv_data->scanner ),
-              Errmess );
+    if (priv_data->Reading_Package)
+        urj_bsdl_msg (jc->proc_mode,
+                      BSDL_MSG_ERR, _("In Package %s, Line %d, %s.\n"),
+                      priv_data->Package_File_Name,
+                      urj_vhdl_flex_get_lineno (priv_data->scanner), Errmess);
+    else
+        urj_bsdl_msg (jc->proc_mode,
+                      BSDL_MSG_ERR, _("Line %d, %s.\n"),
+                      urj_vhdl_flex_get_lineno (priv_data->scanner), Errmess);
 }
+
 /*----------------------------------------------------------------------*/
-static void Give_Up_And_Quit( urj_bsdl_vhdl_parser_priv_t *priv_data )
+static void
+Give_Up_And_Quit (urj_bsdl_vhdl_parser_priv_t *priv_data)
 {
-  Print_Error( priv_data, _("Too many errors") );
+    Print_Error (priv_data, _("Too many errors"));
 }
+
 /*----------------------------------------------------------------------*/
-void yyerror( urj_bsdl_vhdl_parser_priv_t *priv_data, const char *error_string )
+void
+yyerror (urj_bsdl_vhdl_parser_priv_t *priv_data, const char *error_string)
 {
 }
 
@@ -695,15 +701,16 @@ void yyerror( urj_bsdl_vhdl_parser_priv_t *priv_data, const char *error_string )
  * Returns
  *   void
  ****************************************************************************/
-static void urj_vhdl_sem_init( urj_bsdl_vhdl_parser_priv_t *priv )
+static void
+urj_vhdl_sem_init (urj_bsdl_vhdl_parser_priv_t *priv)
 {
-  priv->tmp_port_desc.names_list = NULL;
-  priv->tmp_port_desc.next       = NULL;
+    priv->tmp_port_desc.names_list = NULL;
+    priv->tmp_port_desc.next = NULL;
 
-  priv->jtag_ctrl->port_desc = NULL;
+    priv->jtag_ctrl->port_desc = NULL;
 
-  priv->jtag_ctrl->vhdl_elem_first = NULL;
-  priv->jtag_ctrl->vhdl_elem_last  = NULL;
+    priv->jtag_ctrl->vhdl_elem_first = NULL;
+    priv->jtag_ctrl->vhdl_elem_last = NULL;
 }
 
 
@@ -718,15 +725,16 @@ static void urj_vhdl_sem_init( urj_bsdl_vhdl_parser_priv_t *priv )
  * Returns
  *  void
  ****************************************************************************/
-static void free_string_list( urj_bsdl_string_elem_t *sl )
+static void
+free_string_list (urj_bsdl_string_elem_t *sl)
 {
-  if (sl)
-  {
-    if (sl->string)
-      free( sl->string );
-    free_string_list( sl->next );
-    free( sl );
-  }
+    if (sl)
+    {
+        if (sl->string)
+            free (sl->string);
+        free_string_list (sl->next);
+        free (sl);
+    }
 }
 
 
@@ -742,16 +750,17 @@ static void free_string_list( urj_bsdl_string_elem_t *sl )
  * Returns
  *  void
  ****************************************************************************/
-static void free_port_list( urj_bsdl_port_desc_t *pl, int free_me )
+static void
+free_port_list (urj_bsdl_port_desc_t *pl, int free_me)
 {
-  if (pl)
-  {
-    free_string_list( pl->names_list );
-    free_port_list( pl->next, 1 );
+    if (pl)
+    {
+        free_string_list (pl->names_list);
+        free_port_list (pl->next, 1);
 
-    if (free_me)
-      free( pl );
-  }
+        if (free_me)
+            free (pl);
+    }
 }
 
 
@@ -766,19 +775,20 @@ static void free_port_list( urj_bsdl_port_desc_t *pl, int free_me )
  * Returns
  *  void
  ****************************************************************************/
-static void free_elem_list( urj_bsdl_vhdl_elem_t *el )
+static void
+free_elem_list (urj_bsdl_vhdl_elem_t *el)
 {
-  if (el)
-  {
-    free_elem_list( el->next );
+    if (el)
+    {
+        free_elem_list (el->next);
 
-    if (el->name)
-      free( el->name );
+        if (el->name)
+            free (el->name);
 
-    if (el->payload)
-      free( el->payload );
-    free( el );
-  }
+        if (el->payload)
+            free (el->payload);
+        free (el);
+    }
 }
 
 
@@ -794,19 +804,20 @@ static void free_elem_list( urj_bsdl_vhdl_elem_t *el )
  * Returns
  *   void
  ****************************************************************************/
-static void urj_vhdl_sem_deinit( urj_bsdl_vhdl_parser_priv_t *priv_data )
+static void
+urj_vhdl_sem_deinit (urj_bsdl_vhdl_parser_priv_t *priv_data)
 {
-  urj_bsdl_port_desc_t *pd = priv_data->jtag_ctrl->port_desc;
-  urj_bsdl_vhdl_elem_t *el = priv_data->jtag_ctrl->vhdl_elem_first;
+    urj_bsdl_port_desc_t *pd = priv_data->jtag_ctrl->port_desc;
+    urj_bsdl_vhdl_elem_t *el = priv_data->jtag_ctrl->vhdl_elem_first;
 
-  /* free port_desc list */
-  free_port_list( pd, 1 );
-  free_port_list( &(priv_data->tmp_port_desc), 0 );
+    /* free port_desc list */
+    free_port_list (pd, 1);
+    free_port_list (&(priv_data->tmp_port_desc), 0);
 
-  /* free VHDL element list */
-  free_elem_list( el );
+    /* free VHDL element list */
+    free_elem_list (el);
 
-  priv_data->jtag_ctrl = NULL;
+    priv_data->jtag_ctrl = NULL;
 }
 
 
@@ -825,32 +836,34 @@ static void urj_vhdl_sem_deinit( urj_bsdl_vhdl_parser_priv_t *priv_data )
  * Returns
  *   pointer to private parser structure
  ****************************************************************************/
-urj_bsdl_vhdl_parser_priv_t *urj_vhdl_parser_init( FILE *f, urj_bsdl_jtag_ctrl_t *jtag_ctrl )
+urj_bsdl_vhdl_parser_priv_t *
+urj_vhdl_parser_init (FILE *f, urj_bsdl_jtag_ctrl_t *jtag_ctrl)
 {
-  urj_bsdl_vhdl_parser_priv_t *new_priv;
+    urj_bsdl_vhdl_parser_priv_t *new_priv;
 
-  if (!(new_priv = malloc( sizeof( urj_bsdl_vhdl_parser_priv_t ) )))
-  {
-    urj_bsdl_msg( jtag_ctrl->proc_mode,
-              BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
-    return NULL;
-  }
+    if (!(new_priv = malloc (sizeof (urj_bsdl_vhdl_parser_priv_t))))
+    {
+        urj_bsdl_msg (jtag_ctrl->proc_mode,
+                      BSDL_MSG_ERR, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
+        return NULL;
+    }
 
-  new_priv->jtag_ctrl = jtag_ctrl;
+    new_priv->jtag_ctrl = jtag_ctrl;
 
-  new_priv->Reading_Package = 0;
-  new_priv->buffer          = NULL;
-  new_priv->len_buffer      = 0;
+    new_priv->Reading_Package = 0;
+    new_priv->buffer = NULL;
+    new_priv->len_buffer = 0;
 
-  if (!(new_priv->scanner = urj_vhdl_flex_init( f, jtag_ctrl->proc_mode )))
-  {
-    free( new_priv );
-    new_priv = NULL;
-  }
+    if (!(new_priv->scanner = urj_vhdl_flex_init (f, jtag_ctrl->proc_mode)))
+    {
+        free (new_priv);
+        new_priv = NULL;
+    }
 
-  urj_vhdl_sem_init( new_priv );
+    urj_vhdl_sem_init (new_priv);
 
-  return new_priv;
+    return new_priv;
 }
 
 
@@ -868,17 +881,18 @@ urj_bsdl_vhdl_parser_priv_t *urj_vhdl_parser_init( FILE *f, urj_bsdl_jtag_ctrl_t
  * Returns
  *   void
  ****************************************************************************/
-void urj_vhdl_parser_deinit( urj_bsdl_vhdl_parser_priv_t *priv_data )
+void
+urj_vhdl_parser_deinit (urj_bsdl_vhdl_parser_priv_t *priv_data)
 {
-  if (priv_data->buffer)
-  {
-    free( priv_data->buffer );
-    priv_data->buffer = NULL;
-  }
+    if (priv_data->buffer)
+    {
+        free (priv_data->buffer);
+        priv_data->buffer = NULL;
+    }
 
-  urj_vhdl_sem_deinit( priv_data );
-  urj_vhdl_flex_deinit( priv_data->scanner );
-  free( priv_data );
+    urj_vhdl_sem_deinit (priv_data);
+    urj_vhdl_flex_deinit (priv_data->scanner);
+    free (priv_data);
 }
 
 /*****************************************************************************
@@ -893,15 +907,17 @@ void urj_vhdl_parser_deinit( urj_bsdl_vhdl_parser_priv_t *priv_data )
  * Returns
  *   void
  ****************************************************************************/
-static void urj_vhdl_set_entity( urj_bsdl_vhdl_parser_priv_t *priv, char *entityname )
+static void
+urj_vhdl_set_entity (urj_bsdl_vhdl_parser_priv_t *priv, char *entityname)
 {
-  if (priv->jtag_ctrl->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-  {
-    strncpy( priv->jtag_ctrl->part->part, entityname, URJ_PART_PART_MAXLEN );
-    priv->jtag_ctrl->part->part[URJ_PART_PART_MAXLEN] = '\0';
-  }
+    if (priv->jtag_ctrl->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
+    {
+        strncpy (priv->jtag_ctrl->part->part, entityname,
+                 URJ_PART_PART_MAXLEN);
+        priv->jtag_ctrl->part->part[URJ_PART_PART_MAXLEN] = '\0';
+    }
 
-  free( entityname );
+    free (entityname);
 }
 
 /*****************************************************************************
@@ -918,22 +934,24 @@ static void urj_vhdl_set_entity( urj_bsdl_vhdl_parser_priv_t *priv, char *entity
  * Returns
  *   void
  ****************************************************************************/
-static void urj_vhdl_port_add_name( urj_bsdl_vhdl_parser_priv_t *priv, char *name )
+static void
+urj_vhdl_port_add_name (urj_bsdl_vhdl_parser_priv_t *priv, char *name)
 {
-  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
-  urj_bsdl_string_elem_t *new_string;
+    urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
+    urj_bsdl_string_elem_t *new_string;
 
-  new_string = malloc( sizeof( urj_bsdl_string_elem_t ) );
-  if (new_string)
-  {
-    new_string->next   = pd->names_list;
-    new_string->string = name;
+    new_string = malloc (sizeof (urj_bsdl_string_elem_t));
+    if (new_string)
+    {
+        new_string->next = pd->names_list;
+        new_string->string = name;
 
-    pd->names_list = new_string;
-  }
-  else
-    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        pd->names_list = new_string;
+    }
+    else
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 
 
@@ -951,13 +969,14 @@ static void urj_vhdl_port_add_name( urj_bsdl_vhdl_parser_priv_t *priv, char *nam
  * Returns
  *   void
  ****************************************************************************/
-static void urj_vhdl_port_add_bit( urj_bsdl_vhdl_parser_priv_t *priv )
+static void
+urj_vhdl_port_add_bit (urj_bsdl_vhdl_parser_priv_t *priv)
 {
-  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
+    urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
 
-  pd->is_vector = 0;
-  pd->low_idx   = 0;
-  pd->high_idx  = 0;
+    pd->is_vector = 0;
+    pd->low_idx = 0;
+    pd->high_idx = 0;
 }
 
 
@@ -976,13 +995,15 @@ static void urj_vhdl_port_add_bit( urj_bsdl_vhdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void urj_vhdl_port_add_range( urj_bsdl_vhdl_parser_priv_t *priv, int low, int high )
+static void
+urj_vhdl_port_add_range (urj_bsdl_vhdl_parser_priv_t *priv, int low,
+                         int high)
 {
-  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
+    urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
 
-  pd->is_vector = 1;
-  pd->low_idx   = low;
-  pd->high_idx  = high;
+    pd->is_vector = 1;
+    pd->low_idx = low;
+    pd->high_idx = high;
 }
 
 /*****************************************************************************
@@ -998,147 +1019,160 @@ static void urj_vhdl_port_add_range( urj_bsdl_vhdl_parser_priv_t *priv, int low,
  * Returns
  *   void
  ****************************************************************************/
-static void urj_vhdl_port_apply_port( urj_bsdl_vhdl_parser_priv_t *priv )
+static void
+urj_vhdl_port_apply_port (urj_bsdl_vhdl_parser_priv_t *priv)
 {
-  urj_bsdl_port_desc_t *tmp_pd = &(priv->tmp_port_desc);
-  urj_bsdl_port_desc_t *pd = malloc( sizeof( urj_bsdl_port_desc_t ) );
+    urj_bsdl_port_desc_t *tmp_pd = &(priv->tmp_port_desc);
+    urj_bsdl_port_desc_t *pd = malloc (sizeof (urj_bsdl_port_desc_t));
 
-  if (pd)
-  {
-    /* insert at top of list */
-    pd->next = priv->jtag_ctrl->port_desc;
-    priv->jtag_ctrl->port_desc = pd;
+    if (pd)
+    {
+        /* insert at top of list */
+        pd->next = priv->jtag_ctrl->port_desc;
+        priv->jtag_ctrl->port_desc = pd;
 
-    /* copy information from temporary port descriptor */
-    pd->names_list = tmp_pd->names_list;
-    pd->is_vector  = tmp_pd->is_vector;
-    pd->low_idx    = tmp_pd->low_idx;
-    pd->high_idx   = tmp_pd->high_idx;
+        /* copy information from temporary port descriptor */
+        pd->names_list = tmp_pd->names_list;
+        pd->is_vector = tmp_pd->is_vector;
+        pd->low_idx = tmp_pd->low_idx;
+        pd->high_idx = tmp_pd->high_idx;
 
-    /* and reset temporary port descriptor */
-    tmp_pd->names_list = NULL;
-    tmp_pd->next       = NULL;
-  }
-  else
-    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        /* and reset temporary port descriptor */
+        tmp_pd->names_list = NULL;
+        tmp_pd->next = NULL;
+    }
+    else
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 
-static void add_elem( urj_bsdl_vhdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *el )
+static void
+add_elem (urj_bsdl_vhdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *el)
 {
-  urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
+    urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
 
-  el->next = NULL;
-  if (jc->vhdl_elem_last)
-    jc->vhdl_elem_last->next = el;
-  jc->vhdl_elem_last = el;
+    el->next = NULL;
+    if (jc->vhdl_elem_last)
+        jc->vhdl_elem_last->next = el;
+    jc->vhdl_elem_last = el;
 
-  if (!jc->vhdl_elem_first)
-    jc->vhdl_elem_first = el;
+    if (!jc->vhdl_elem_first)
+        jc->vhdl_elem_first = el;
 
-  el->line = urj_vhdl_flex_get_lineno( priv->scanner );
+    el->line = urj_vhdl_flex_get_lineno (priv->scanner);
 }
 
 #if 0
-static void set_attr_bool( urj_bsdl_vhdl_parser_priv_t *priv, char *name, int value )
+static void
+set_attr_bool (urj_bsdl_vhdl_parser_priv_t *priv, char *name, int value)
 {
-  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+    urj_bsdl_vhdl_elem_t *el = malloc (sizeof (urj_bsdl_vhdl_elem_t));
 
-  if (el)
-  {
-    el->type = VET_ATTRIBUTE_BOOL;
-    el->name = name;
-    el->payload.bool = value;
+    if (el)
+    {
+        el->type = VET_ATTRIBUTE_BOOL;
+        el->name = name;
+        el->payload.bool = value;
 
-    add_elem( priv, el );
-  }
-  else
-    urj_bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        add_elem (priv, el);
+    }
+    else
+        urj_bsdl_msg (BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 #endif
 
-static void set_attr_decimal( urj_bsdl_vhdl_parser_priv_t *priv, char *name, int value )
+static void
+set_attr_decimal (urj_bsdl_vhdl_parser_priv_t *priv, char *name, int value)
 {
-  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
-  char *string = malloc( 10 );
+    urj_bsdl_vhdl_elem_t *el = malloc (sizeof (urj_bsdl_vhdl_elem_t));
+    char *string = malloc (10);
 
-  if (el && string)
-  {
-    el->type = URJ_BSDL_VET_ATTRIBUTE_DECIMAL;
-    el->name = name;
-    snprintf( string, 10, "%d", value );
-    el->payload = string;
+    if (el && string)
+    {
+        el->type = URJ_BSDL_VET_ATTRIBUTE_DECIMAL;
+        el->name = name;
+        snprintf (string, 10, "%d", value);
+        el->payload = string;
 
-    add_elem( priv, el );
-  }
-  else
-    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        add_elem (priv, el);
+    }
+    else
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 
-static void set_attr_string( urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string )
+static void
+set_attr_string (urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string)
 {
-  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+    urj_bsdl_vhdl_elem_t *el = malloc (sizeof (urj_bsdl_vhdl_elem_t));
 
-  /* skip certain attributes */
-  if (   (strcasecmp( name, "DESIGN_WARNING" ) == 0)
-      || (strcasecmp( name, "BOUNDARY_CELLS" ) == 0)
-      || (strcasecmp( name, "INSTRUCTION_SEQUENCE" ) == 0)
-      || (strcasecmp( name, "INSTRUCTION_USAGE" ) == 0)
-      || (strcasecmp( name, "ISC_DESIGN_WARNING" ) == 0))
-  {
-    free( name );
-    free( string );
-    free( el );
-    return;
-  }
+    /* skip certain attributes */
+    if ((strcasecmp (name, "DESIGN_WARNING") == 0)
+        || (strcasecmp (name, "BOUNDARY_CELLS") == 0)
+        || (strcasecmp (name, "INSTRUCTION_SEQUENCE") == 0)
+        || (strcasecmp (name, "INSTRUCTION_USAGE") == 0)
+        || (strcasecmp (name, "ISC_DESIGN_WARNING") == 0))
+    {
+        free (name);
+        free (string);
+        free (el);
+        return;
+    }
 
-  if (el)
-  {
-    el->type    = URJ_BSDL_VET_ATTRIBUTE_STRING;
-    el->name    = name;
-    el->payload = string;
+    if (el)
+    {
+        el->type = URJ_BSDL_VET_ATTRIBUTE_STRING;
+        el->name = name;
+        el->payload = string;
 
-    add_elem(priv, el);
-  }
-  else
-    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        add_elem (priv, el);
+    }
+    else
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 
 #if 0
-static void set_attr_real( urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string )
+static void
+set_attr_real (urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string)
 {
-  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+    urj_bsdl_vhdl_elem_t *el = malloc (sizeof (urj_bsdl_vhdl_elem_t));
 
-  if (el)
-  {
-    el->type = VET_ATTRIBUTE_REAL;
-    el->name = name;
-    el->payload.real = string;
+    if (el)
+    {
+        el->type = VET_ATTRIBUTE_REAL;
+        el->name = name;
+        el->payload.real = string;
 
-    add_elem( priv, el );
-  }
-  else
-    urj_bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        add_elem (priv, el);
+    }
+    else
+        urj_bsdl_msg (BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 #endif
 
 #if 0
-static void set_attr_const( urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string )
+static void
+set_attr_const (urj_bsdl_vhdl_parser_priv_t *priv, char *name, char *string)
 {
-  urj_bsdl_vhdl_elem_t *el = malloc( sizeof( urj_bsdl_vhdl_elem_t ) );
+    urj_bsdl_vhdl_elem_t *el = malloc (sizeof (urj_bsdl_vhdl_elem_t));
 
-  if (el)
-  {
-    el->type    = URJ_BSDL_VET_CONSTANT;
-    el->name    = name;
-    el->payload = string;
+    if (el)
+    {
+        el->type = URJ_BSDL_VET_CONSTANT;
+        el->name = name;
+        el->payload = string;
 
-    add_elem( priv, el );
-  }
-  else
-    urj_bsdl_msg( BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        add_elem (priv, el);
+    }
+    else
+        urj_bsdl_msg (BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 #endif
 

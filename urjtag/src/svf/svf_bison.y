@@ -405,60 +405,64 @@ direction
             | INOUT
 ;
 
-%%
-
-
-void
-yyerror(YYLTYPE *locp, urj_svf_parser_priv_t *priv_data, urj_chain_t *chain, const char *error_string)
+%% void
+yyerror (YYLTYPE *locp, urj_svf_parser_priv_t *priv_data, urj_chain_t *chain,
+         const char *error_string)
 {
-  printf("Error occurred for SVF command %s.\n", error_string);
+    printf ("Error occurred for SVF command %s.\n", error_string);
 }
 
 
 static void
-urj_svf_free_ths_params(struct ths_params *params)
+urj_svf_free_ths_params (struct ths_params *params)
 {
-  params->number = 0.0;
+    params->number = 0.0;
 
-  if (params->tdi) {
-    free(params->tdi);
-    params->tdi = NULL;
-  }
-  if (params->tdo) {
-    free(params->tdo);
-    params->tdo = NULL;
-  }
-  if (params->mask) {
-    free(params->mask);
-    params->mask = NULL;
-  }
-  if (params->smask) {
-    free(params->smask);
-    params->smask = NULL;
-  }
+    if (params->tdi)
+    {
+        free (params->tdi);
+        params->tdi = NULL;
+    }
+    if (params->tdo)
+    {
+        free (params->tdo);
+        params->tdo = NULL;
+    }
+    if (params->mask)
+    {
+        free (params->mask);
+        params->mask = NULL;
+    }
+    if (params->smask)
+    {
+        free (params->smask);
+        params->smask = NULL;
+    }
 }
 
 
 int
-urj_svf_bison_init(urj_svf_parser_priv_t *priv_data, FILE *f, int num_lines, int print_progress)
+urj_svf_bison_init (urj_svf_parser_priv_t *priv_data, FILE *f, int num_lines,
+                    int print_progress)
 {
-  const struct svf_parser_params params = {
-    {0.0, NULL, NULL, NULL, NULL},
-    {{}, 0},
-    {0, 0.0, 0, 0, 0, 0}
-  };
+    const struct svf_parser_params params = {
+        {0.0, NULL, NULL, NULL, NULL},
+        {{}, 0},
+        {0, 0.0, 0, 0, 0, 0}
+    };
 
-  priv_data->parser_params = params;
+    priv_data->parser_params = params;
 
-  if ((priv_data->scanner = urj_svf_flex_init(f, num_lines, print_progress)) == NULL)
-    return 0;
-  else
-    return 1;
+    if ((priv_data->scanner =
+         urj_svf_flex_init (f, num_lines, print_progress)) == NULL)
+        return 0;
+    else
+        return 1;
 }
 
 
 void
-urj_svf_bison_deinit(urj_svf_parser_priv_t *priv_data)
+urj_svf_bison_deinit (urj_svf_parser_priv_t *priv_data)
 {
-  urj_svf_flex_deinit(priv_data->scanner);
+    urj_svf_flex_deinit (priv_data->scanner);
 }

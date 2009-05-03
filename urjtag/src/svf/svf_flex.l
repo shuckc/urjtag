@@ -217,185 +217,198 @@ COMMENT         (!.*)|("//".*)[^\n]
  *===========================================================================*/
 static struct rwtable
 {
-  char *rw_name;
-  int rw_yylex;
-} rwtable[] = { 
-  {"ABSENT",    ABSENT},
-  {"D",         D},
-  {"DRCAPTURE", DRCAPTURE},
-  {"DREXIT1",   DREXIT1},
-  {"DREXIT2",   DREXIT2},
-  {"DRPAUSE",   DRPAUSE},
-  {"DRSELECT",  DRSELECT},
-  {"DRSHIFT",   DRSHIFT},
-  {"DRUPDATE",  DRUPDATE},
-  {"EMPTY",     EMPTY},
-  {"ENDDR",     ENDDR},
-  {"ENDIR",     ENDIR},
-  {"ENDSTATE",  ENDSTATE},
-  {"FREQUENCY", FREQUENCY},
-  {"H",         H},
-  {"HDR",       HDR},
-  {"HIR",       HIR},
-  {"HZ",        HZ},
-  {"URJ_JIM_IDLE",      URJ_JIM_IDLE},
-  {"IN",        IN},
-  {"INOUT",     INOUT},
-  {"IRCAPTURE", IRCAPTURE},
-  {"IREXIT1",   IREXIT1},
-  {"IREXIT2",   IREXIT2},
-  {"IRPAUSE",   IRPAUSE},
-  {"IRSELECT",  IRSELECT},
-  {"IRSHIFT",   IRSHIFT},
-  {"IRUPDATE",  IRUPDATE},
-  {"L",         L},
-  {"MASK",      MASK},
-  {"MAXIMUM",   MAXIMUM},
-  {"OFF",       OFF},
-  {"ON",        ON},
-  {"OUT",       OUT},
-  {"PIO",       PIO},
-  {"PIOMAP",    PIOMAP},
-  {"URJ_JIM_RESET",     URJ_JIM_RESET},
-  {"RUNTEST",   RUNTEST},
-  {"SCK",       SCK},
-  {"SDR",       SDR},
-  {"SEC",       SEC},
-  {"SIR",       SIR},
-  {"SMASK",     SMASK},
-  {"STATE",     STATE},
-  {"TCK",       TCK},
-  {"TDI",       TDI},
-  {"TDO",       TDO},
-  {"TDR",       TDR},
-  {"TIR",       TIR},
-  {"TRST",      TRST},
-  {"U",         U},
-  {"X",         X},
-  {"Z",         Z}
-};//end of rwtable struct
+    char *rw_name;
+    int rw_yylex;
+} rwtable[] =
+{
+    { "ABSENT",         ABSENT },
+    { "D",              D },
+    { "DRCAPTURE",      DRCAPTURE },
+    { "DREXIT1",        DREXIT1 },
+    { "DREXIT2",        DREXIT2 },
+    { "DRPAUSE",        DRPAUSE },
+    { "DRSELECT",       DRSELECT },
+    { "DRSHIFT",        DRSHIFT },
+    { "DRUPDATE",       DRUPDATE },
+    { "EMPTY",          EMPTY },
+    { "ENDDR",          ENDDR },
+    { "ENDIR",          ENDIR },
+    { "ENDSTATE",       ENDSTATE },
+    { "FREQUENCY",      FREQUENCY },
+    { "H",              H },
+    { "HDR",            HDR },
+    { "HIR",            HIR },
+    { "HZ",             HZ },
+    { "URJ_JIM_IDLE",   URJ_JIM_IDLE },
+    { "IN",             IN },
+    { "INOUT",          INOUT },
+    { "IRCAPTURE",      IRCAPTURE },
+    { "IREXIT1",        IREXIT1 },
+    { "IREXIT2",        IREXIT2 },
+    { "IRPAUSE",        IRPAUSE },
+    { "IRSELECT",       IRSELECT },
+    { "IRSHIFT",        IRSHIFT },
+    { "IRUPDATE",       IRUPDATE },
+    { "L",              L },
+    { "MASK",           MASK },
+    { "MAXIMUM",        MAXIMUM },
+    { "OFF",            OFF },
+    { "ON",             ON },
+    { "OUT",            OUT },
+    { "PIO",            PIO },
+    { "PIOMAP",         PIOMAP },
+    { "URJ_JIM_RESET",  URJ_JIM_RESET },
+    { "RUNTEST",        RUNTEST },
+    { "SCK",            SCK },
+    { "SDR",            SDR },
+    { "SEC",            SEC },
+    { "SIR",            SIR },
+    { "SMASK",          SMASK },
+    { "STATE",          STATE },
+    { "TCK",            TCK },
+    { "TDI",            TDI },
+    { "TDO",            TDO },
+    { "TDR",            TDR },
+    { "TIR",            TIR },
+    { "TRST",           TRST },
+    { "U",              U },
+    { "X",              X },
+    { "Z",              Z }
+};                              //end of rwtable struct
 
-#define END(v) (sizeof(v) / sizeof(v[0]) - 1)
+#define END(v) (sizeof(v) / sizeof((v)[0]) - 1)
 
 static int
-map_keyw_ident(YYSTYPE * mylval, char *str)
+map_keyw_ident (YYSTYPE *mylval, char *str)
 {
-  int idx;
-  int rw = IDENTIFIER;
+    int idx;
+    int rw = IDENTIFIER;
 
-  mylval->cvalue = str;
+    mylval->cvalue = str;
 
-  for (idx = 0; idx <= END(rwtable); idx++) {
-    if (strcasecmp(rwtable[idx].rw_name, str) == 0) {
-      /* always return terminal value as semantic value */
-      rw = rwtable[idx].rw_yylex;
-      mylval->token = rw;
+    for (idx = 0; idx <= END (rwtable); idx++)
+    {
+        if (strcasecmp (rwtable[idx].rw_name, str) == 0)
+        {
+            /* always return terminal value as semantic value */
+            rw = rwtable[idx].rw_yylex;
+            mylval->token = rw;
+        }
     }
-  }
 
-  return(rw);
+    return (rw);
 }
 
 
 static void
-align_string(char *str)
+align_string (char *str)
 {
-  int src, dst, len;
+    int src, dst, len;
 
-  dst = 0;
-  len = strlen(str);
+    dst = 0;
+    len = strlen (str);
 
-  for (src = 0; src < len; src++) {
-    if (isxdigit(str[src]))
-      str[dst++] = str[src];
-  }
-  str[dst] = '\0';
-}
-
-
-static void
-fix_yylloc(YYLTYPE * mylloc, char *str)
-{
-  mylloc->first_line = mylloc->last_line;
-  mylloc->first_column = mylloc->last_column;
-  mylloc->last_column += strlen(str);
-}
-
-
-static void
-fix_yylloc_nl(YYLTYPE * mylloc, char *str, YY_EXTRA_TYPE extra)
-{
-  char *p;
-
-  mylloc->first_line = mylloc->last_line;
-  mylloc->first_column = mylloc->last_column;
-  for (p = str; *p; ++p) {
-    if (*p == '\n') {
-      mylloc->last_column = 0;
-      ++mylloc->last_line;
-      progress_nl(mylloc, extra);
-    } else {
-      ++mylloc->last_column;
+    for (src = 0; src < len; src++)
+    {
+        if (isxdigit (str[src]))
+            str[dst++] = str[src];
     }
-  }
+    str[dst] = '\0';
 }
 
 
 static void
-progress_nl(YYLTYPE * mylloc, YY_EXTRA_TYPE extra)
+fix_yylloc (YYLTYPE *mylloc, char *str)
 {
-  int percent;
-
-  if ((extra->print_progress) && (mylloc->last_line % 10==0)) {
-    percent = ((mylloc->last_line * 100) + 1) / extra->num_lines;
-    if (percent <= 1) return; // dont bother printing < 1 %
-    printf( "\r" );
-    printf( _("Parsing %6d/%d (%3.0d%%)"),
-            mylloc->last_line, extra->num_lines, percent);
-  }
+    mylloc->first_line = mylloc->last_line;
+    mylloc->first_column = mylloc->last_column;
+    mylloc->last_column += strlen (str);
 }
 
 
-void *urj_svf_flex_init(FILE *f, int num_lines, int print_progress)
+static void
+fix_yylloc_nl (YYLTYPE *mylloc, char *str, YY_EXTRA_TYPE extra)
 {
-  YY_EXTRA_TYPE extra;
-  yyscan_t scanner;
+    char *p;
 
-  /* get our scanner structure */
-  if (yylex_init(&scanner) != 0)
-    return NULL;
+    mylloc->first_line = mylloc->last_line;
+    mylloc->first_column = mylloc->last_column;
+    for (p = str; *p; ++p)
+    {
+        if (*p == '\n')
+        {
+            mylloc->last_column = 0;
+            ++mylloc->last_line;
+            progress_nl (mylloc, extra);
+        }
+        else
+        {
+            ++mylloc->last_column;
+        }
+    }
+}
 
-  yyset_in(f, scanner);
 
-  if (!(extra = malloc(sizeof(urj_svf_scanner_extra_t)))) {
-    printf( _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
-    yylex_destroy(scanner);
-    return NULL;
-  }
+static void
+progress_nl (YYLTYPE *mylloc, YY_EXTRA_TYPE extra)
+{
+    int percent;
 
-  extra->num_lines = num_lines;
-  extra->print_progress = print_progress;
+    if ((extra->print_progress) && (mylloc->last_line % 10 == 0))
+    {
+        percent = ((mylloc->last_line * 100) + 1) / extra->num_lines;
+        if (percent <= 1)
+            return;             // dont bother printing < 1 %
+        printf ("\r");
+        printf (_("Parsing %6d/%d (%3.0d%%)"),
+                mylloc->last_line, extra->num_lines, percent);
+    }
+}
+
+
+void *
+urj_svf_flex_init (FILE *f, int num_lines, int print_progress)
+{
+    YY_EXTRA_TYPE extra;
+    yyscan_t scanner;
+
+    /* get our scanner structure */
+    if (yylex_init (&scanner) != 0)
+        return NULL;
+
+    yyset_in (f, scanner);
+
+    if (!(extra = malloc (sizeof (urj_svf_scanner_extra_t))))
+    {
+        printf (_("Out of memory, %s line %i\n"), __FILE__, __LINE__);
+        yylex_destroy (scanner);
+        return NULL;
+    }
+
+    extra->num_lines = num_lines;
+    extra->print_progress = print_progress;
 
 #ifdef ENABLE_NLS
- {
-   struct lconv *lc = localeconv();
-   extra->decimal_point = lc->decimal_point[0];
- }
+    {
+        struct lconv *lc = localeconv ();
+        extra->decimal_point = lc->decimal_point[0];
+    }
 #else
-  extra->decimal_point = '.';
+    extra->decimal_point = '.';
 #endif
 
-  yyset_extra(extra, scanner);
+    yyset_extra (extra, scanner);
 
-  return scanner;
+    return scanner;
 }
 
 
-void urj_svf_flex_deinit(void *scanner)
+void
+urj_svf_flex_deinit (void *scanner)
 {
-  YY_EXTRA_TYPE extra = yyget_extra(scanner);
-  if (extra->print_progress)
-    printf("\n");
-  free(extra);
-  yylex_destroy(scanner);
+    YY_EXTRA_TYPE extra = yyget_extra (scanner);
+    if (extra->print_progress)
+        printf ("\n");
+    free (extra);
+    yylex_destroy (scanner);
 }

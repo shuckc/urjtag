@@ -1123,7 +1123,7 @@ urj_svf_txr (enum URJ_SVF_generic_irdr_coding ir_dr,
  *   0 : error occurred
  * ***************************************************************************/
 void
-urj_svf_run (urj_chain_t *chain, FILE * SVF_FILE, int stop_on_mismatch,
+urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
              int print_progress, uint32_t ref_freq)
 {
     const urj_svf_sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},

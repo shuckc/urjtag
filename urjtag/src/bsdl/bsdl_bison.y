@@ -148,38 +148,39 @@ int yylex (YYSTYPE *, void *);
 #define ERROR_LIMIT 0
 #define BUMP_ERROR \
     do { \
-        if (urj_bsdl_flex_postinc_compile_errors( priv_data->scanner ) > ERROR_LIMIT) \
+        if (urj_bsdl_flex_postinc_compile_errors (priv_data->scanner) > ERROR_LIMIT) \
         { \
-            Give_Up_And_Quit( priv_data ); \
+            Give_Up_And_Quit (priv_data); \
             YYABORT; \
         } \
     } while (0)
 #else
 #define BUMP_ERROR \
     do { \
-        Give_Up_And_Quit( priv_data ); \
+        Give_Up_And_Quit (priv_data); \
         YYABORT; \
     } while (0)
 #endif
 
-static void Print_Error( urj_bsdl_parser_priv_t *, const char * );
-static void Print_Warning( urj_bsdl_parser_priv_t *, const char * );
-static void Give_Up_And_Quit( urj_bsdl_parser_priv_t * );
+static void Print_Error (urj_bsdl_parser_priv_t *, const char *);
+static void Print_Warning (urj_bsdl_parser_priv_t *, const char *);
+static void Give_Up_And_Quit (urj_bsdl_parser_priv_t *);
 
 /* semantic functions */
-static void add_instruction( urj_bsdl_parser_priv_t *, char *, char * );
-static void ac_set_register( urj_bsdl_parser_priv_t *, char *, int );
-static void ac_add_instruction( urj_bsdl_parser_priv_t *, char * );
-static void ac_apply_assoc( urj_bsdl_parser_priv_t * );
-static void prt_add_name( urj_bsdl_parser_priv_t *, char * );
-static void prt_add_bit( urj_bsdl_parser_priv_t * );
-static void prt_add_range( urj_bsdl_parser_priv_t *, int, int );
-static void ci_no_disable( urj_bsdl_parser_priv_t * );
-static void ci_set_cell_spec_disable( urj_bsdl_parser_priv_t *, int, int, int );
-static void ci_set_cell_spec( urj_bsdl_parser_priv_t *, int, char * );
-static void ci_append_cell_info( urj_bsdl_parser_priv_t *, int );
+static void add_instruction (urj_bsdl_parser_priv_t *, char *, char *);
+static void ac_set_register (urj_bsdl_parser_priv_t *, char *, int);
+static void ac_add_instruction (urj_bsdl_parser_priv_t *, char *);
+static void ac_apply_assoc (urj_bsdl_parser_priv_t *);
+static void prt_add_name (urj_bsdl_parser_priv_t *, char *);
+static void prt_add_bit (urj_bsdl_parser_priv_t *);
+static void prt_add_range (urj_bsdl_parser_priv_t *, int, int);
+static void ci_no_disable (urj_bsdl_parser_priv_t *);
+static void ci_set_cell_spec_disable (urj_bsdl_parser_priv_t *, int, int,
+                                      int);
+static void ci_set_cell_spec (urj_bsdl_parser_priv_t *, int, char *);
+static void ci_append_cell_info (urj_bsdl_parser_priv_t *, int);
 
-void yyerror( urj_bsdl_parser_priv_t *, const char * );
+void yyerror (urj_bsdl_parser_priv_t *, const char *);
 %}
 
 %union {
@@ -264,7 +265,7 @@ BSDL_Statement   : BSDL_Pin_Map
                  | ISC_Extension
                  | error
                    {
-                     Print_Error( priv_data, _("Unsupported BSDL construct found") );
+                     Print_Error (priv_data, _("Unsupported BSDL construct found"));
                      BUMP_ERROR;
                      YYABORT;
                    }
@@ -279,7 +280,7 @@ BSDL_Map_String   : PIN_MAP_STRING Pin_Mapping
                   | BSDL_Map_String COMMA Pin_Mapping
 ;
 Pin_Mapping       : IDENTIFIER COLON Physical_Pin_Desc
-                    { free( $1 ); }
+                    { free ($1); }
 ;
 Physical_Pin_Desc : Physical_Pin
                   | LPAREN Physical_Pin_List RPAREN
@@ -288,9 +289,9 @@ Physical_Pin_List : Physical_Pin
                   | Physical_Pin_List COMMA Physical_Pin
 ;
 Physical_Pin      : IDENTIFIER
-                    { free( $1 ); }
+                    { free ($1); }
                   | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
-                    { free( $1 ); }
+                    { free ($1); }
                   | DECIMAL_NUMBER
 ;
 
@@ -326,23 +327,23 @@ BSDL_Opcode_Table   : Opcode_Desc
                     | BSDL_Opcode_Table COMMA Opcode_Desc
                     | error
                       {
-                        Print_Error( priv_data,
-                                     _("Error in Instruction_Opcode attribute statement") );
+                        Print_Error (priv_data,
+                                     _("Error in Instruction_Opcode attribute statement"));
                         BUMP_ERROR;
                         YYABORT;
                       }
 ;
 Opcode_Desc         : IDENTIFIER LPAREN Binary_Pattern_List RPAREN
-                      { add_instruction( priv_data, $1, $3 ); }
+                      { add_instruction (priv_data, $1, $3); }
 ;
 Binary_Pattern_List : Binary_Pattern
                       { $$ = $1; }
                     | Binary_Pattern_List COMMA Binary_Pattern
                       {
-                        Print_Warning( priv_data,
-                                       _("Multiple opcode patterns are not supported, first pattern will be used") );
+                        Print_Warning (priv_data,
+                                       _("Multiple opcode patterns are not supported, first pattern will be used"));
                         $$ = $1;
-                        free( $3 );
+                        free ($3);
                       }
 ;
 Binary_Pattern      : BINARY_PATTERN
@@ -351,17 +352,17 @@ Binary_Pattern      : BINARY_PATTERN
 
 /****************************************************************************/
 BSDL_Inst_Capture : INSTRUCTION_CAPTURE BIN_X_PATTERN
-                    { free( $2 ); }
+                    { free ($2); }
 ;
 
 /****************************************************************************/
 BSDL_Inst_Disable : INSTRUCTION_DISABLE IDENTIFIER
-                    { free( $2 ); }
+                    { free ($2); }
 ;
 
 /****************************************************************************/
 BSDL_Inst_Guard : INSTRUCTION_GUARD IDENTIFIER
-                  { free( $2 ); }
+                  { free ($2); }
 ;
 
 /****************************************************************************/
@@ -371,13 +372,13 @@ Private_Opcode_List : Private_Opcode
                     | Private_Opcode_List COMMA Private_Opcode
                     | error
                       {
-                        Print_Error( priv_data, _("Error in Opcode List") );
+                        Print_Error (priv_data, _("Error in Opcode List"));
                         BUMP_ERROR;
                         YYABORT;
                       }
 ;
 Private_Opcode      : IDENTIFIER
-                      { free( $1 ); }
+                      { free ($1); }
 ;
 
 /****************************************************************************/
@@ -397,52 +398,52 @@ Register_String      : Register_Assoc
                      | Register_String COMMA Register_Assoc
 ;
 Register_Assoc       : Register_Decl LPAREN Reg_Opcode_List RPAREN
-                       { ac_apply_assoc( priv_data ); }
+                       { ac_apply_assoc (priv_data); }
 ;
 Register_Decl        : Standard_Reg
-                       { ac_set_register( priv_data, $1, 0 ); }
+                       { ac_set_register (priv_data, $1, 0); }
                      | IDENTIFIER LBRACKET DECIMAL_NUMBER RBRACKET
-                       { ac_set_register( priv_data, $1, $3 ); }
+                       { ac_set_register (priv_data, $1, $3); }
 ;
 Standard_Reg         : BOUNDARY
-                       { $$ = strdup( "BOUNDARY" ); }
+                       { $$ = strdup ("BOUNDARY"); }
                      | BYPASS
-                       { $$ = strdup( "BYPASS" ); }
+                       { $$ = strdup ("BYPASS"); }
                      | IDCODE
-                       { $$ = strdup( "IDCODE" ); }
+                       { $$ = strdup ("IDCODE"); }
                      | USERCODE
-                       { $$ = strdup( "USERCODE" ); }
+                       { $$ = strdup ("USERCODE"); }
                      | DEVICE_ID
-                       { $$ = strdup( "DEVICE_ID" ); }
+                       { $$ = strdup ("DEVICE_ID"); }
 ;
 Reg_Opcode_List      : Reg_Opcode
                      | Reg_Opcode_List COMMA Reg_Opcode
 ;
 Instruction_Name     : BYPASS
-                       { $$ = strdup( "BYPASS" ); }
+                       { $$ = strdup ("BYPASS"); }
                      | CLAMP
-                       { $$ = strdup( "CLAMP" ); }
+                       { $$ = strdup ("CLAMP"); }
                      | EXTEST
-                       { $$ = strdup( "EXTEST" ); }
+                       { $$ = strdup ("EXTEST"); }
                      | HIGHZ
-                       { $$ = strdup( "HIGHZ" ); }
+                       { $$ = strdup ("HIGHZ"); }
                      | IDCODE
-                       { $$ = strdup( "IDCODE" ); }
+                       { $$ = strdup ("IDCODE"); }
                      | INTEST
-                       { $$ = strdup( "INTEST" ); }
+                       { $$ = strdup ("INTEST"); }
                      | PRELOAD
-                       { $$ = strdup( "PRELOAD" ); }
+                       { $$ = strdup ("PRELOAD"); }
                      | RUNBIST
-                       { $$ = strdup( "RUNBIST" ); }
+                       { $$ = strdup ("RUNBIST"); }
                      | SAMPLE
-                       { $$ = strdup( "SAMPLE" ); }
+                       { $$ = strdup ("SAMPLE"); }
                      | USERCODE
-                       { $$ = strdup( "USERCODE" ); }
+                       { $$ = strdup ("USERCODE"); }
                      | IDENTIFIER
                        { $$ = $1; }
 ;
 Reg_Opcode           : Instruction_Name
-                       { ac_add_instruction( priv_data, $1 ); }
+                       { ac_add_instruction (priv_data, $1); }
 ;
 
 
@@ -457,37 +458,37 @@ BSDL_Boundary_Register : BOUNDARY_REGISTER BSDL_Cell_Table
 BSDL_Cell_Table : Cell_Entry
                 | BSDL_Cell_Table COMMA Cell_Entry
                 | error
-                  {Print_Error( priv_data, _("Error in Boundary Cell description") );
+                  {Print_Error (priv_data, _("Error in Boundary Cell description"));
                    BUMP_ERROR; YYABORT; }
 ;
 Cell_Entry      : DECIMAL_NUMBER LPAREN Cell_Info RPAREN
-                  { ci_append_cell_info( priv_data, $1 ); }
+                  { ci_append_cell_info (priv_data, $1); }
 ;
 Cell_Info       : Cell_Spec
-                  { ci_no_disable( priv_data ); }
+                  { ci_no_disable (priv_data); }
                 | Cell_Spec COMMA Disable_Spec
 ;
 Cell_Spec       : IDENTIFIER COMMA Port_Name COMMA Cell_Function
                   COMMA Safe_Value
                   {
-                    free( $1 );
-                    ci_set_cell_spec( priv_data, $5, $7 );
+                    free ($1);
+                    ci_set_cell_spec (priv_data, $5, $7);
                   }
 ;
 Port_Name       : IDENTIFIER
                   {
-                    prt_add_name( priv_data, $1 );
-                    prt_add_bit( priv_data );
+                    prt_add_name (priv_data, $1);
+                    prt_add_bit (priv_data);
                   }
                 | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
                   {
-                    prt_add_name( priv_data, $1 );
-                    prt_add_range( priv_data, $3, $3 );
+                    prt_add_name (priv_data, $1);
+                    prt_add_range (priv_data, $3, $3);
                   }
                 | ASTERISK
                   {
-                    prt_add_name( priv_data, strdup( "*" ) );
-                    prt_add_bit( priv_data );
+                    prt_add_name (priv_data, strdup ("*"));
+                    prt_add_bit (priv_data);
                   }
 ;
 Cell_Function   : INPUT
@@ -515,14 +516,14 @@ Safe_Value      : IDENTIFIER
                   {
                     char *tmp;
                     /* @@@@ ToDo check malloc result RFHH */
-                    tmp = malloc( 2 );
-                    snprintf( tmp, 2, "%i", $1 );
+                    tmp = malloc (2);
+                    snprintf (tmp, 2, "%i", $1);
                     tmp[1] = '\0';
                     $$ = tmp;
                   }
 ;
 Disable_Spec    : DECIMAL_NUMBER COMMA DECIMAL_NUMBER COMMA Disable_Value
-                  { ci_set_cell_spec_disable( priv_data, $1, $3, $5 ); }
+                  { ci_set_cell_spec_disable (priv_data, $1, $3, $5); }
 ;
 Disable_Value   : Z
                   { $$ = Z; }
@@ -542,13 +543,13 @@ Disable_Value   : Z
 BSDL_Compliance_Patterns : COMPLIANCE_PATTERNS BSDL_Compliance_Pattern
 ;
 BSDL_Compliance_Pattern : LPAREN Physical_Pin_List RPAREN
-                          { urj_bsdl_flex_set_bin_x( priv_data->scanner ); }
+                          { urj_bsdl_flex_set_bin_x (priv_data->scanner); }
                           LPAREN Bin_X_Pattern_List RPAREN
 ;
 Bin_X_Pattern_List : BIN_X_PATTERN
-                     { free( $1 ); }
+                     { free ($1); }
                    | Bin_X_Pattern_List COMMA BIN_X_PATTERN
-                     { free( $3 ); }
+                     { free ($3); }
 ;
 
 /****************************************************************************/
@@ -582,7 +583,7 @@ Pin_Behavior_Option : HIGHZ
                     | CLAMP
                     | error
                       {
-                        Print_Error( priv_data, _("Error in ISC_Pin_Behavior Definition") );
+                        Print_Error (priv_data, _("Error in ISC_Pin_Behavior Definition"));
                         BUMP_ERROR;
                         YYABORT;
                       }
@@ -594,26 +595,26 @@ Fixed_Pin_List        : Port_Id
                       | Fixed_Pin_List COMMA Port_Id
                       | error
                         {
-                          Print_Error( priv_data, _("Error in ISC_Fixed_System_Pins Definition") );
+                          Print_Error (priv_data, _("Error in ISC_Fixed_System_Pins Definition"));
                           BUMP_ERROR;
                           YYABORT;
                         }
 ;
 Port_Id               : IDENTIFIER
-                        { free( $1 ); }
+                        { free ($1); }
                       | IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN
-                        { free( $1 ); }
+                        { free ($1); }
 ;
 /****************************************************************************/
 ISC_Status      : ISC_STATUS Status_Modifier IMPLEMENTED
 ;
 Status_Modifier : /* empty */
                 | IDENTIFIER
-                  { free( $1 ); }
+                  { free ($1); }
 ;
 /****************************************************************************/
 ISC_Blank_Usercode : ISC_BLANK_USERCODE BIN_X_PATTERN
-                     { free( $2 ); }
+                     { free ($2); }
 ;
 /****************************************************************************/
 ISC_Security : ISC_SECURITY Protection_Spec
@@ -621,7 +622,7 @@ ISC_Security : ISC_SECURITY Protection_Spec
 Protection_Spec : Read_Spec COMMA Program_Spec COMMA Erase_Spec COMMA Key_Spec
                 | error
                   {
-                    Print_Error( priv_data, _("Error in ISC_Security Definition") );
+                    Print_Error (priv_data, _("Error in ISC_Security Definition"));
                     BUMP_ERROR;
                     YYABORT;
                   }
@@ -655,29 +656,29 @@ Flow_Definition        : Flow_Descriptor
                        | Flow_Descriptor Terminate_Block
                        | error
                          {
-                           Print_Error( priv_data, _("Error in ISC_Flow Definition") );
+                           Print_Error (priv_data, _("Error in ISC_Flow Definition"));
                            BUMP_ERROR;
                            YYABORT;
                          }
 ;
 Flow_Descriptor        : IDENTIFIER
-                         { free( $1 ); }
+                         { free ($1); }
                        | IDENTIFIER Data_Name
-                         { free( $1 ); }
+                         { free ($1); }
                        | IDENTIFIER Data_Name UNPROCESSED
-                         { free( $1 ); }
+                         { free ($1); }
                        | IDENTIFIER Data_Name UNPROCESSED EXIT_ON_ERROR
-                         { free( $1 ); }
+                         { free ($1); }
                        | IDENTIFIER UNPROCESSED
-                         { free( $1 ); }
+                         { free ($1); }
                        | IDENTIFIER UNPROCESSED EXIT_ON_ERROR
-                         { free( $1 ); }
+                         { free ($1); }
                        | IDENTIFIER EXIT_ON_ERROR
-                         { free( $1 ); }
+                         { free ($1); }
 ;
 Data_Name              : LPAREN Standard_Data_Name RPAREN
                        | LPAREN IDENTIFIER RPAREN
-                         { free( $2 ); }
+                         { free ($2); }
 ;
 Standard_Data_Name     : ARRAY | USERCODE | SECURITY | IDCODE | PRELOAD
 ;
@@ -704,25 +705,25 @@ Loop_Activity_List     : Activity
                        | Loop_Activity_List Activity
 ;
 Activity               : LPAREN Instruction_Name Wait_Specification RPAREN
-                         { free( $2 ); }
+                         { free ($2); }
                        | LPAREN Instruction_Name Update_Field_List Wait_Specification RPAREN
-                         { free( $2 ); }
+                         { free ($2); }
                        | LPAREN Instruction_Name Wait_Specification Capture_Field_List RPAREN
-                         { free( $2 ); }
+                         { free ($2); }
                        | LPAREN Instruction_Name Update_Field_List Wait_Specification Capture_Field_List RPAREN
-                         { free( $2 ); }
+                         { free ($2); }
 ;
 Update_Field_List      : Update_Field
                        | Update_Field_List COMMA Update_Field
 ;
 Update_Field           : DECIMAL_NUMBER
                        | DECIMAL_NUMBER COLON 
-                         { urj_bsdl_flex_set_hex( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_hex (priv_data->scanner); }
                          Data_Expression
-                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal (priv_data->scanner); }
 ;
 Data_Expression        : HEX_STRING
-                         { free( $1 ); }
+                         { free ($1); }
                        | Input_Specifier
                        | Variable_Expression
 ;
@@ -731,11 +732,11 @@ Variable_Expression    : Variable
                        | Variable_Update
 ;
 Variable_Assignment    : Variable EQUAL
-                         { urj_bsdl_flex_set_hex( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_hex (priv_data->scanner); }
                          HEX_STRING
                          {
-                           free( $4 );
-                           urj_bsdl_flex_set_decimal( priv_data->scanner );
+                           free ($4);
+                           urj_bsdl_flex_set_decimal (priv_data->scanner);
                          }
                        | Variable Input_Specifier
 ;
@@ -749,9 +750,9 @@ Capture_Field_List     : Capture_Field
                        | Capture_Field_List COMMA Capture_Field
 ;
 Capture_Field          : DECIMAL_NUMBER COLON
-                         { urj_bsdl_flex_set_hex( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_hex (priv_data->scanner); }
                          Capture_Field_Rest
-                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal (priv_data->scanner); }
 ;
 Capture_Field_Rest     : Capture_Specification
                        | Capture_Specification CRC_Tag
@@ -777,23 +778,23 @@ Wait_Specification     : WAIT Duration_Specification
 ;
 Duration_Specification : Clock_Cycles
                        | REAL_NUMBER
-                         { free( $1 ); }
+                         { free ($1); }
                        | Clock_Cycles COMMA REAL_NUMBER
-                         { free( $3 ); }
+                         { free ($3); }
 ;
 Clock_Cycles           : Port_Id DECIMAL_NUMBER
 ;
 Variable               : DOLLAR IDENTIFIER
-                         { free( $2 ); }
+                         { free ($2); }
 ;
 Binary_Operator        : PLUS
-                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal (priv_data->scanner); }
                        | MINUS
-                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal (priv_data->scanner); }
                        | SH_RIGHT
-                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal (priv_data->scanner); }
                        | SH_LEFT
-                         { urj_bsdl_flex_set_decimal( priv_data->scanner ); }
+                         { urj_bsdl_flex_set_decimal (priv_data->scanner); }
 ;
 Complement_Operator    : TILDE
 ;
@@ -814,12 +815,12 @@ Procedure_List       : Procedure
                      | Procedure_List COMMA Procedure
 ;
 Procedure            : IDENTIFIER EQUAL LPAREN Flow_Descriptor_List RPAREN
-                       { free( $1 ); }
+                       { free ($1); }
                      | IDENTIFIER Data_Name EQUAL LPAREN Flow_Descriptor_List RPAREN
-                       { free( $1 ); }
+                       { free ($1); }
                      | error
                        {
-                         Print_Error( priv_data, _("Error in ISC_Procedure Definition") );
+                         Print_Error (priv_data, _("Error in ISC_Procedure Definition"));
                          BUMP_ERROR;
                          YYABORT;
                        }
@@ -834,16 +835,16 @@ Action_List               : Action
                           | Action_List COMMA Action
 ;
 Action                    : IDENTIFIER EQUAL LPAREN Action_Specification_List RPAREN
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER Data_Name EQUAL LPAREN Action_Specification_List RPAREN
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER PROPRIETARY EQUAL LPAREN Action_Specification_List RPAREN
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER Data_Name PROPRIETARY EQUAL LPAREN Action_Specification_List RPAREN
-                            { free( $1 ); }
+                            { free ($1); }
                           | error
                             {
-                              Print_Error( priv_data, _("Error in ISC_Action Definition") );
+                              Print_Error (priv_data, _("Error in ISC_Action Definition"));
                               BUMP_ERROR;
                               YYABORT;
                             }
@@ -852,21 +853,21 @@ Action_Specification_List : Action_Specification
                           | Action_Specification_List COMMA Action_Specification
 ;
 Action_Specification      : IDENTIFIER
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER Data_Name
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER Data_Name PROPRIETARY
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER Data_Name Option_Specification
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER Data_Name PROPRIETARY Option_Specification
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER PROPRIETARY
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER PROPRIETARY Option_Specification
-                            { free( $1 ); }
+                            { free ($1); }
                           | IDENTIFIER Option_Specification
-                            { free( $1 ); }
+                            { free ($1); }
 ;
 Option_Specification      : OPTIONAL | RECOMMENDED
 ;
@@ -874,35 +875,42 @@ Option_Specification      : OPTIONAL | RECOMMENDED
 ISC_Illegal_Exit : ISC_ILLEGAL_EXIT Exit_Instruction_List
 ;
 Exit_Instruction_List : IDENTIFIER
-                        { free( $1 ); }
+                        { free ($1); }
                       | Exit_Instruction_List COMMA IDENTIFIER
-                        { free( $3 ); }
+                        { free ($3); }
 ;
+
 %%  /* End rules, begin programs  */
+
 /*----------------------------------------------------------------------*/
-static void Print_Error( urj_bsdl_parser_priv_t *priv_data, const char *Errmess )
+static void
+Print_Error (urj_bsdl_parser_priv_t *priv_data, const char *Errmess)
 {
-  urj_bsdl_msg( priv_data->jtag_ctrl->proc_mode,
-            BSDL_MSG_ERR, _("Line %d, %s.\n"),
-            priv_data->lineno,
-            Errmess );
+    urj_bsdl_msg (priv_data->jtag_ctrl->proc_mode,
+                  BSDL_MSG_ERR, _("Line %d, %s.\n"),
+                  priv_data->lineno, Errmess);
 }
+
 /*----------------------------------------------------------------------*/
-static void Print_Warning( urj_bsdl_parser_priv_t *priv_data, const char *Warnmess )
+static void
+Print_Warning (urj_bsdl_parser_priv_t *priv_data, const char *Warnmess)
 {
-  urj_bsdl_msg( priv_data->jtag_ctrl->proc_mode,
-            BSDL_MSG_WARN, _("Line %d, %s.\n"),
-            priv_data->lineno,
-            Warnmess );
+    urj_bsdl_msg (priv_data->jtag_ctrl->proc_mode,
+                  BSDL_MSG_WARN, _("Line %d, %s.\n"),
+                  priv_data->lineno, Warnmess);
 }
+
 /*----------------------------------------------------------------------*/
-static void Give_Up_And_Quit( urj_bsdl_parser_priv_t *priv_data )
+static void
+Give_Up_And_Quit (urj_bsdl_parser_priv_t *priv_data)
 {
-  //Print_Error( priv_data, "Too many errors" );
-  urj_bsdl_flex_stop_buffer( priv_data->scanner );
+    //Print_Error( priv_data, "Too many errors" );
+    urj_bsdl_flex_stop_buffer (priv_data->scanner);
 }
+
 /*----------------------------------------------------------------------*/
-void yyerror( urj_bsdl_parser_priv_t *priv_data, const char *error_string )
+void
+yyerror (urj_bsdl_parser_priv_t *priv_data, const char *error_string)
 {
 }
 
@@ -919,31 +927,32 @@ void yyerror( urj_bsdl_parser_priv_t *priv_data, const char *error_string )
  * Returns
  *   void
  ****************************************************************************/
-static void urj_bsdl_sem_init( urj_bsdl_parser_priv_t *priv )
+static void
+urj_bsdl_sem_init (urj_bsdl_parser_priv_t *priv)
 {
-  urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
+    urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
 
-  jc->instr_len   = -1;
-  jc->bsr_len     = -1;
-  jc->conformance = URJ_BSDL_CONF_UNKNOWN;
-  jc->idcode      = NULL;
-  jc->usercode    = NULL;
+    jc->instr_len = -1;
+    jc->bsr_len = -1;
+    jc->conformance = URJ_BSDL_CONF_UNKNOWN;
+    jc->idcode = NULL;
+    jc->usercode = NULL;
 
-  jc->instr_list = NULL;
+    jc->instr_list = NULL;
 
-  priv->ainfo.next       = NULL;
-  priv->ainfo.reg        = NULL;
-  priv->ainfo.instr_list = NULL;
-  jc->ainfo_list         = NULL;
+    priv->ainfo.next = NULL;
+    priv->ainfo.reg = NULL;
+    priv->ainfo.instr_list = NULL;
+    jc->ainfo_list = NULL;
 
-  priv->tmp_cell_info.next             = NULL;
-  priv->tmp_cell_info.port_name        = NULL;
-  priv->tmp_cell_info.basic_safe_value = NULL;
-  jc->cell_info_first                  = NULL;
-  jc->cell_info_last                   = NULL;
+    priv->tmp_cell_info.next = NULL;
+    priv->tmp_cell_info.port_name = NULL;
+    priv->tmp_cell_info.basic_safe_value = NULL;
+    jc->cell_info_first = NULL;
+    jc->cell_info_last = NULL;
 
-  priv->tmp_port_desc.names_list = NULL;
-  priv->tmp_port_desc.next       = NULL;
+    priv->tmp_port_desc.names_list = NULL;
+    priv->tmp_port_desc.next = NULL;
 }
 
 
@@ -958,17 +967,18 @@ static void urj_bsdl_sem_init( urj_bsdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void free_instr_list( urj_bsdl_instr_elem_t *il )
+static void
+free_instr_list (urj_bsdl_instr_elem_t *il)
 {
-  if (il)
-  {
-    if (il->instr)
-      free( il->instr );
-    if (il->opcode)
-      free( il->opcode );
-    free_instr_list( il->next );
-    free( il );
-  }
+    if (il)
+    {
+        if (il->instr)
+            free (il->instr);
+        if (il->opcode)
+            free (il->opcode);
+        free_instr_list (il->next);
+        free (il);
+    }
 }
 
 
@@ -984,19 +994,20 @@ static void free_instr_list( urj_bsdl_instr_elem_t *il )
  * Returns
  *  void
  ****************************************************************************/
-static void free_ainfo_list( urj_bsdl_types_ainfo_elem_t *ai, int free_me )
+static void
+free_ainfo_list (urj_bsdl_types_ainfo_elem_t *ai, int free_me)
 {
-  if (ai)
-  {
-    if (ai->reg)
-      free( ai->reg );
+    if (ai)
+    {
+        if (ai->reg)
+            free (ai->reg);
 
-    free_instr_list( ai->instr_list );
-    free_ainfo_list( ai->next, 1 );
+        free_instr_list (ai->instr_list);
+        free_ainfo_list (ai->next, 1);
 
-    if (free_me)
-      free( ai );
-  }
+        if (free_me)
+            free (ai);
+    }
 }
 
 
@@ -1011,15 +1022,16 @@ static void free_ainfo_list( urj_bsdl_types_ainfo_elem_t *ai, int free_me )
  * Returns
  *  void
  ****************************************************************************/
-static void free_string_list( urj_bsdl_string_elem_t *sl) 
+static void
+free_string_list (urj_bsdl_string_elem_t *sl)
 {
-  if (sl)
-  {
-    if (sl->string)
-      free( sl->string );
-    free_string_list( sl->next );
-    free( sl );
-  }
+    if (sl)
+    {
+        if (sl->string)
+            free (sl->string);
+        free_string_list (sl->next);
+        free (sl);
+    }
 }
 
 
@@ -1036,21 +1048,22 @@ static void free_string_list( urj_bsdl_string_elem_t *sl)
  * Returns
  *  void
  ****************************************************************************/
-static void free_ci_list( urj_bsdl_cell_info_t *ci, int free_me )
+static void
+free_ci_list (urj_bsdl_cell_info_t *ci, int free_me)
 {
-  if (ci)
-  {
-    free_ci_list( ci->next, 1 );
+    if (ci)
+    {
+        free_ci_list (ci->next, 1);
 
-    if (ci->port_name)
-      free( ci->port_name );
+        if (ci->port_name)
+            free (ci->port_name);
 
-    if (ci->basic_safe_value)
-      free( ci->basic_safe_value );
+        if (ci->basic_safe_value)
+            free (ci->basic_safe_value);
 
-    if (free_me)
-      free( ci );
-  }
+        if (free_me)
+            free (ci);
+    }
 }
 
 
@@ -1066,39 +1079,40 @@ static void free_ci_list( urj_bsdl_cell_info_t *ci, int free_me )
  * Returns
  *   void
  ****************************************************************************/
-static void urj_bsdl_sem_deinit( urj_bsdl_parser_priv_t *priv )
+static void
+urj_bsdl_sem_deinit (urj_bsdl_parser_priv_t *priv)
 {
-  urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
+    urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
 
-  if (jc->idcode)
-  {
-    free( jc->idcode );
-    jc->idcode = NULL;
-  }
+    if (jc->idcode)
+    {
+        free (jc->idcode);
+        jc->idcode = NULL;
+    }
 
-  if (jc->usercode)
-  {
-    free( jc->usercode );
-    jc->usercode = NULL;
-  }
+    if (jc->usercode)
+    {
+        free (jc->usercode);
+        jc->usercode = NULL;
+    }
 
-  /* free cell_info list */
-  free_ci_list( jc->cell_info_first, 1 );
-  jc->cell_info_first = jc->cell_info_last = NULL;
-  free_ci_list( &(priv->tmp_cell_info), 0 );
+    /* free cell_info list */
+    free_ci_list (jc->cell_info_first, 1);
+    jc->cell_info_first = jc->cell_info_last = NULL;
+    free_ci_list (&(priv->tmp_cell_info), 0);
 
-  /* free instr_list */
-  free_instr_list( jc->instr_list );
-  jc->instr_list = NULL;
+    /* free instr_list */
+    free_instr_list (jc->instr_list);
+    jc->instr_list = NULL;
 
-  /* free ainfo_list */
-  free_ainfo_list( jc->ainfo_list, 1 );
-  jc->ainfo_list = NULL;
-  free_ainfo_list( &(priv->ainfo), 0 );
+    /* free ainfo_list */
+    free_ainfo_list (jc->ainfo_list, 1);
+    jc->ainfo_list = NULL;
+    free_ainfo_list (&(priv->ainfo), 0);
 
-  /* free string list in temporary port descritor */
-  free_string_list( priv->tmp_port_desc.names_list );
-  priv->tmp_port_desc.names_list = NULL;
+    /* free string list in temporary port descritor */
+    free_string_list (priv->tmp_port_desc.names_list);
+    priv->tmp_port_desc.names_list = NULL;
 }
 
 
@@ -1116,26 +1130,32 @@ static void urj_bsdl_sem_deinit( urj_bsdl_parser_priv_t *priv )
  * Returns
  *   pointer to private parser structure
  ****************************************************************************/
-urj_bsdl_parser_priv_t *urj_bsdl_parser_init( urj_bsdl_jtag_ctrl_t *jtag_ctrl )
+urj_bsdl_parser_priv_t *
+urj_bsdl_parser_init (urj_bsdl_jtag_ctrl_t *jtag_ctrl)
 {
-  urj_bsdl_parser_priv_t *new_priv;
+    urj_bsdl_parser_priv_t *new_priv;
 
-  if (!(new_priv = (urj_bsdl_parser_priv_t *)malloc( sizeof( urj_bsdl_parser_priv_t ) ))) {
-    urj_bsdl_msg( jtag_ctrl->proc_mode,
-              BSDL_MSG_ERR, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
-    return NULL;
-  }
+    if (!
+        (new_priv =
+         (urj_bsdl_parser_priv_t *) malloc (sizeof (urj_bsdl_parser_priv_t))))
+    {
+        urj_bsdl_msg (jtag_ctrl->proc_mode,
+                      BSDL_MSG_ERR, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
+        return NULL;
+    }
 
-  new_priv->jtag_ctrl = jtag_ctrl;
+    new_priv->jtag_ctrl = jtag_ctrl;
 
-  if (!(new_priv->scanner = urj_bsdl_flex_init( jtag_ctrl->proc_mode ))) {
-    free(new_priv);
-    new_priv = NULL;
-  }
+    if (!(new_priv->scanner = urj_bsdl_flex_init (jtag_ctrl->proc_mode)))
+    {
+        free (new_priv);
+        new_priv = NULL;
+    }
 
-  urj_bsdl_sem_init( new_priv );
+    urj_bsdl_sem_init (new_priv);
 
-  return new_priv;
+    return new_priv;
 }
 
 
@@ -1153,11 +1173,12 @@ urj_bsdl_parser_priv_t *urj_bsdl_parser_init( urj_bsdl_jtag_ctrl_t *jtag_ctrl )
  * Returns
  *   void
  ****************************************************************************/
-void urj_bsdl_parser_deinit( urj_bsdl_parser_priv_t *priv_data )
+void
+urj_bsdl_parser_deinit (urj_bsdl_parser_priv_t *priv_data)
 {
-  urj_bsdl_sem_deinit( priv_data );
-  urj_bsdl_flex_deinit( priv_data->scanner );
-  free( priv_data );
+    urj_bsdl_sem_deinit (priv_data);
+    urj_bsdl_flex_deinit (priv_data->scanner);
+    free (priv_data);
 }
 
 
@@ -1175,22 +1196,25 @@ void urj_bsdl_parser_deinit( urj_bsdl_parser_priv_t *priv_data )
  * Returns
  *   void
  ****************************************************************************/
-static void add_instruction( urj_bsdl_parser_priv_t *priv, char *instr, char *opcode )
+static void
+add_instruction (urj_bsdl_parser_priv_t *priv, char *instr, char *opcode)
 {
-  urj_bsdl_instr_elem_t *new_instr;
+    urj_bsdl_instr_elem_t *new_instr;
 
-  new_instr = (urj_bsdl_instr_elem_t *)malloc( sizeof( urj_bsdl_instr_elem_t ) );
-  if (new_instr)
-  {
-    new_instr->next   = priv->jtag_ctrl->instr_list;
-    new_instr->instr  = instr;
-    new_instr->opcode = opcode;
+    new_instr =
+        (urj_bsdl_instr_elem_t *) malloc (sizeof (urj_bsdl_instr_elem_t));
+    if (new_instr)
+    {
+        new_instr->next = priv->jtag_ctrl->instr_list;
+        new_instr->instr = instr;
+        new_instr->opcode = opcode;
 
-    priv->jtag_ctrl->instr_list = new_instr;
-  }
-  else
-    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        priv->jtag_ctrl->instr_list = new_instr;
+    }
+    else
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 
 
@@ -1209,12 +1233,13 @@ static void add_instruction( urj_bsdl_parser_priv_t *priv, char *instr, char *op
  * Returns
  *   void
  ****************************************************************************/
-static void ac_set_register( urj_bsdl_parser_priv_t *priv, char *reg, int reg_len )
+static void
+ac_set_register (urj_bsdl_parser_priv_t *priv, char *reg, int reg_len)
 {
-  urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
+    urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
 
-  tmp_ai->reg     = reg;
-  tmp_ai->reg_len = reg_len;
+    tmp_ai->reg = reg;
+    tmp_ai->reg_len = reg_len;
 }
 
 
@@ -1233,23 +1258,26 @@ static void ac_set_register( urj_bsdl_parser_priv_t *priv, char *reg, int reg_le
  * Returns
  *   void
  ****************************************************************************/
-static void ac_add_instruction( urj_bsdl_parser_priv_t *priv, char *instr )
+static void
+ac_add_instruction (urj_bsdl_parser_priv_t *priv, char *instr)
 {
-  urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
-  urj_bsdl_instr_elem_t *new_instr;
+    urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
+    urj_bsdl_instr_elem_t *new_instr;
 
-  new_instr = (urj_bsdl_instr_elem_t *)malloc( sizeof( urj_bsdl_instr_elem_t ) );
-  if (new_instr)
-  {
-    new_instr->next   = tmp_ai->instr_list;
-    new_instr->instr  = instr;
-    new_instr->opcode = NULL;
+    new_instr =
+        (urj_bsdl_instr_elem_t *) malloc (sizeof (urj_bsdl_instr_elem_t));
+    if (new_instr)
+    {
+        new_instr->next = tmp_ai->instr_list;
+        new_instr->instr = instr;
+        new_instr->opcode = NULL;
 
-    tmp_ai->instr_list = new_instr;
-  }
-  else
-    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        tmp_ai->instr_list = new_instr;
+    }
+    else
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 
 
@@ -1266,30 +1294,34 @@ static void ac_add_instruction( urj_bsdl_parser_priv_t *priv, char *instr )
  * Returns
  *   void
  ****************************************************************************/
-static void ac_apply_assoc( urj_bsdl_parser_priv_t *priv )
+static void
+ac_apply_assoc (urj_bsdl_parser_priv_t *priv)
 {
-  urj_bsdl_jtag_ctrl_t  *jc = priv->jtag_ctrl;
-  urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
-  urj_bsdl_types_ainfo_elem_t *new_ai;
+    urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
+    urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
+    urj_bsdl_types_ainfo_elem_t *new_ai;
 
-  new_ai = (urj_bsdl_types_ainfo_elem_t *)malloc( sizeof( urj_bsdl_types_ainfo_elem_t ) );
-  if (new_ai)
-  {
-    new_ai->next       = jc->ainfo_list;
-    new_ai->reg        = tmp_ai->reg;
-    new_ai->reg_len    = tmp_ai->reg_len;
-    new_ai->instr_list = tmp_ai->instr_list;
+    new_ai =
+        (urj_bsdl_types_ainfo_elem_t *)
+        malloc (sizeof (urj_bsdl_types_ainfo_elem_t));
+    if (new_ai)
+    {
+        new_ai->next = jc->ainfo_list;
+        new_ai->reg = tmp_ai->reg;
+        new_ai->reg_len = tmp_ai->reg_len;
+        new_ai->instr_list = tmp_ai->instr_list;
 
-    jc->ainfo_list = new_ai;
-  }
-  else
-    urj_bsdl_msg( jc->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        jc->ainfo_list = new_ai;
+    }
+    else
+        urj_bsdl_msg (jc->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 
-  /* clean up obsolete temporary entries */
-  tmp_ai->reg        = NULL;
-  tmp_ai->reg_len    = 0;
-  tmp_ai->instr_list = NULL;
+    /* clean up obsolete temporary entries */
+    tmp_ai->reg = NULL;
+    tmp_ai->reg_len = 0;
+    tmp_ai->instr_list = NULL;
 }
 
 
@@ -1307,22 +1339,25 @@ static void ac_apply_assoc( urj_bsdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void prt_add_name( urj_bsdl_parser_priv_t *priv, char *name )
+static void
+prt_add_name (urj_bsdl_parser_priv_t *priv, char *name)
 {
-  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
-  urj_bsdl_string_elem_t *new_string;
+    urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
+    urj_bsdl_string_elem_t *new_string;
 
-  new_string = (urj_bsdl_string_elem_t *)malloc( sizeof( urj_bsdl_string_elem_t ) );
-  if (new_string)
-  {
-    new_string->next   = pd->names_list;
-    new_string->string = name;
+    new_string =
+        (urj_bsdl_string_elem_t *) malloc (sizeof (urj_bsdl_string_elem_t));
+    if (new_string)
+    {
+        new_string->next = pd->names_list;
+        new_string->string = name;
 
-    pd->names_list = new_string;
-  }
-  else
-    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        pd->names_list = new_string;
+    }
+    else
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 
 
@@ -1340,13 +1375,14 @@ static void prt_add_name( urj_bsdl_parser_priv_t *priv, char *name )
  * Returns
  *   void
  ****************************************************************************/
-static void prt_add_bit( urj_bsdl_parser_priv_t *priv )
+static void
+prt_add_bit (urj_bsdl_parser_priv_t *priv)
 {
-  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
+    urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
 
-  pd->is_vector = 0;
-  pd->low_idx   = 0;
-  pd->high_idx  = 0;
+    pd->is_vector = 0;
+    pd->low_idx = 0;
+    pd->high_idx = 0;
 }
 
 
@@ -1365,13 +1401,14 @@ static void prt_add_bit( urj_bsdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void prt_add_range( urj_bsdl_parser_priv_t *priv, int low, int high )
+static void
+prt_add_range (urj_bsdl_parser_priv_t *priv, int low, int high)
 {
-  urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
+    urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
 
-  pd->is_vector = 1;
-  pd->low_idx   = low;
-  pd->high_idx  = high;
+    pd->is_vector = 1;
+    pd->low_idx = low;
+    pd->high_idx = high;
 }
 
 
@@ -1387,9 +1424,10 @@ static void prt_add_range( urj_bsdl_parser_priv_t *priv, int low, int high )
  * Returns
  *   void
  ****************************************************************************/
-static void ci_no_disable( urj_bsdl_parser_priv_t *priv )
+static void
+ci_no_disable (urj_bsdl_parser_priv_t *priv)
 {
-  priv->tmp_cell_info.ctrl_bit_num = -1;
+    priv->tmp_cell_info.ctrl_bit_num = -1;
 }
 
 
@@ -1410,14 +1448,15 @@ static void ci_no_disable( urj_bsdl_parser_priv_t *priv )
  * Returns
  *   void
  ****************************************************************************/
-static void ci_set_cell_spec_disable( urj_bsdl_parser_priv_t *priv, int ctrl_bit_num,
-                                      int safe_value, int disable_value )
+static void
+ci_set_cell_spec_disable (urj_bsdl_parser_priv_t *priv, int ctrl_bit_num,
+                          int safe_value, int disable_value)
 {
-  urj_bsdl_cell_info_t *ci = &(priv->tmp_cell_info);
+    urj_bsdl_cell_info_t *ci = &(priv->tmp_cell_info);
 
-  ci->ctrl_bit_num       = ctrl_bit_num;
-  ci->disable_safe_value = safe_value;
-  /* disable value is ignored at the moment */
+    ci->ctrl_bit_num = ctrl_bit_num;
+    ci->disable_safe_value = safe_value;
+    /* disable value is ignored at the moment */
 }
 
 
@@ -1439,45 +1478,48 @@ static void ci_set_cell_spec_disable( urj_bsdl_parser_priv_t *priv, int ctrl_bit
  * Returns
  *   void
  ****************************************************************************/
-static void ci_set_cell_spec( urj_bsdl_parser_priv_t *priv,
-                              int function, char *safe_value )
+static void
+ci_set_cell_spec (urj_bsdl_parser_priv_t *priv,
+                  int function, char *safe_value)
 {
-  urj_bsdl_cell_info_t *ci     = &(priv->tmp_cell_info);
-  urj_bsdl_port_desc_t *pd     = &(priv->tmp_port_desc);
-  urj_bsdl_string_elem_t *name = priv->tmp_port_desc.names_list;
-  char   *port_string;
-  size_t  str_len, name_len;
+    urj_bsdl_cell_info_t *ci = &(priv->tmp_cell_info);
+    urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
+    urj_bsdl_string_elem_t *name = priv->tmp_port_desc.names_list;
+    char *port_string;
+    size_t str_len, name_len;
 
-  ci->cell_function    = function;
-  ci->basic_safe_value = safe_value;
+    ci->cell_function = function;
+    ci->basic_safe_value = safe_value;
 
-  /* handle indexed port name:
-   - names of scalar ports are simply copied from the port_desc structure
-     to the final string that goes into ci
-   - names of vectored ports are expanded with their decimal index as
-     collected earlier earlier in rule Port_Name
-  */
-  name_len = strlen( name->string );
-  str_len = name_len + 1 + 10 + 1 + 1;
-  if ((port_string = (char *)malloc( str_len )) != NULL)
-  {
-    if (pd->is_vector)
-      snprintf( port_string, str_len-1, "%s(%d)", name->string, pd->low_idx );
+    /* handle indexed port name:
+       - names of scalar ports are simply copied from the port_desc structure
+       to the final string that goes into ci
+       - names of vectored ports are expanded with their decimal index as
+       collected earlier earlier in rule Port_Name
+     */
+    name_len = strlen (name->string);
+    str_len = name_len + 1 + 10 + 1 + 1;
+    if ((port_string = (char *) malloc (str_len)) != NULL)
+    {
+        if (pd->is_vector)
+            snprintf (port_string, str_len - 1, "%s(%d)", name->string,
+                      pd->low_idx);
+        else
+            strncpy (port_string, name->string, str_len - 1);
+        port_string[str_len - 1] = '\0';
+
+        ci->port_name = port_string;
+    }
     else
-      strncpy( port_string, name->string, str_len-1 );
-    port_string[str_len-1] = '\0';
+    {
+        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
+        ci->port_name = NULL;
+    }
 
-    ci->port_name = port_string;
-  }
-  else
-  {
-    urj_bsdl_msg( priv->jtag_ctrl->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
-    ci->port_name = NULL;
-  }
-
-  free_string_list( priv->tmp_port_desc.names_list );
-  priv->tmp_port_desc.names_list = NULL;
+    free_string_list (priv->tmp_port_desc.names_list);
+    priv->tmp_port_desc.names_list = NULL;
 }
 
 
@@ -1494,35 +1536,37 @@ static void ci_set_cell_spec( urj_bsdl_parser_priv_t *priv,
  * Returns
  *   void
  ****************************************************************************/
-static void ci_append_cell_info( urj_bsdl_parser_priv_t *priv, int bit_num )
+static void
+ci_append_cell_info (urj_bsdl_parser_priv_t *priv, int bit_num)
 {
-  urj_bsdl_cell_info_t *tmp_ci = &(priv->tmp_cell_info);
-  urj_bsdl_cell_info_t *ci;
-  urj_bsdl_jtag_ctrl_t *jc     = priv->jtag_ctrl;
+    urj_bsdl_cell_info_t *tmp_ci = &(priv->tmp_cell_info);
+    urj_bsdl_cell_info_t *ci;
+    urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
 
-  ci = (urj_bsdl_cell_info_t *)malloc( sizeof( urj_bsdl_cell_info_t ) );
-  if (ci)
-  {
-    ci->next = NULL;
-    if (jc->cell_info_last)
-      jc->cell_info_last->next = ci;
+    ci = (urj_bsdl_cell_info_t *) malloc (sizeof (urj_bsdl_cell_info_t));
+    if (ci)
+    {
+        ci->next = NULL;
+        if (jc->cell_info_last)
+            jc->cell_info_last->next = ci;
+        else
+            jc->cell_info_first = ci;
+        jc->cell_info_last = ci;
+
+        ci->bit_num = bit_num;
+        ci->port_name = tmp_ci->port_name;
+        ci->cell_function = tmp_ci->cell_function;
+        ci->basic_safe_value = tmp_ci->basic_safe_value;
+        ci->ctrl_bit_num = tmp_ci->ctrl_bit_num;
+        ci->disable_safe_value = tmp_ci->disable_safe_value;
+
+        tmp_ci->port_name = NULL;
+        tmp_ci->basic_safe_value = NULL;
+    }
     else
-      jc->cell_info_first = ci;
-    jc->cell_info_last = ci;
-
-    ci->bit_num            = bit_num;
-    ci->port_name          = tmp_ci->port_name;
-    ci->cell_function      = tmp_ci->cell_function;
-    ci->basic_safe_value   = tmp_ci->basic_safe_value;
-    ci->ctrl_bit_num       = tmp_ci->ctrl_bit_num;
-    ci->disable_safe_value = tmp_ci->disable_safe_value;
-
-    tmp_ci->port_name        = NULL;
-    tmp_ci->basic_safe_value = NULL;
-  }
-  else
-    urj_bsdl_msg( jc->proc_mode,
-              BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"), __FILE__, __LINE__ );
+        urj_bsdl_msg (jc->proc_mode,
+                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
+                      __FILE__, __LINE__);
 }
 
 
