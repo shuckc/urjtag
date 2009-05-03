@@ -32,41 +32,38 @@
 /* description of a command
    the buffer can contain one or more commands if receive count
    is zero for all of them */
-typedef struct cx_cmd urj_tap_cable_cmd_xfer_cx_cmd_t;
-struct cx_cmd
+typedef struct urj_tap_cable_cx_cmd urj_tap_cable_cx_cmd_t;
+struct urj_tap_cable_cx_cmd
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *next;
+    urj_tap_cable_cx_cmd_t *next;
     uint32_t buf_len;
     uint32_t buf_pos;
     uint8_t *buf;
     uint32_t to_recv;
 };
 
-struct cx_cmd_root
+struct urj_tap_cable_cx_cmd_root
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *first;
-    urj_tap_cable_cmd_xfer_cx_cmd_t *last;
+    urj_tap_cable_cx_cmd_t *first;
+    urj_tap_cable_cx_cmd_t *last;
 };
-typedef struct cx_cmd_root urj_tap_cable_cmd_xfer_cx_cmd_root_t;
+typedef struct urj_tap_cable_cx_cmd_root urj_tap_cable_cx_cmd_root_t;
 
-int urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t
-                                *cmd_root, int max_len);
-int urj_tap_cable_cx_cmd_push (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+int urj_tap_cable_cx_cmd_space (urj_tap_cable_cx_cmd_root_t *cmd_root,
+                                int max_len);
+int urj_tap_cable_cx_cmd_push (urj_tap_cable_cx_cmd_root_t *cmd_root,
                                uint8_t d);
-urj_tap_cable_cmd_xfer_cx_cmd_t
-    *urj_tap_cable_cx_cmd_dequeue (urj_tap_cable_cmd_xfer_cx_cmd_root_t
-                                   *cmd_root);
-void urj_tap_cable_cx_cmd_free (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd);
-urj_tap_cable_cmd_xfer_cx_cmd_t
-    *urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t
-                                 *cmd_root, uint32_t to_recv);
-void urj_tap_cable_cx_cmd_init (urj_tap_cable_cmd_xfer_cx_cmd_root_t
-                                *cmd_root);
-void urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cmd_xfer_cx_cmd_root_t
-                                  *cmd_root);
+urj_tap_cable_cx_cmd_t
+    *urj_tap_cable_cx_cmd_dequeue (urj_tap_cable_cx_cmd_root_t *cmd_root);
+void urj_tap_cable_cx_cmd_free (urj_tap_cable_cx_cmd_t *cmd);
+urj_tap_cable_cx_cmd_t
+    *urj_tap_cable_cx_cmd_queue (urj_tap_cable_cx_cmd_root_t *cmd_root,
+                                 uint32_t to_recv);
+void urj_tap_cable_cx_cmd_init (urj_tap_cable_cx_cmd_root_t *cmd_root);
+void urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cx_cmd_root_t *cmd_root);
 
-void urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
-                            const urj_tap_cable_cmd_xfer_cx_cmd_t *out_cmd,
+void urj_tap_cable_cx_xfer (urj_tap_cable_cx_cmd_root_t *cmd_root,
+                            const urj_tap_cable_cx_cmd_t *out_cmd,
                             urj_cable_t *cable,
                             urj_cable_flush_amount_t how_much);
 uint8_t urj_tap_cable_cx_xfer_recv (urj_cable_t *cable);

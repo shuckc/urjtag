@@ -39,7 +39,7 @@
  * Extends the buffer of the given command if a new byte wouldn't fit into
  * the current buffer size.
  *
- * cmd : pointer to urj_tap_cable_cmd_xfer_cx_cmd_t
+ * cmd : pointer to urj_tap_cable_cx_cmd_t
  *
  * Return value:
  * 0 : Error occured, not enough memory
@@ -47,7 +47,7 @@
  *
  ****************************************************************************/
 static int
-extend_cmd_buffer (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
+extend_cmd_buffer (urj_tap_cable_cx_cmd_t *cmd)
 {
     /* check size of cmd buffer and increase it if not sufficient */
     if (cmd->buf_pos >= cmd->buf_len)
@@ -68,7 +68,7 @@ extend_cmd_buffer (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
  * the current last command and max_len.  If there are already more bytes
  * allocated than max_len, this function will return zero.
  *
- * cmd      : pointer to urj_tap_cable_cmd_xfer_cx_cmd_t struct
+ * cmd      : pointer to urj_tap_cable_cx_cmd_t struct
  * max_len  : upper limit for the space to allocate
  *
  * Return value:
@@ -77,11 +77,11 @@ extend_cmd_buffer (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
  *
  ****************************************************************************/
 int
-urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+urj_tap_cable_cx_cmd_space (urj_tap_cable_cx_cmd_root_t *cmd_root,
                             int max_len)
 {
     int n;
-    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = cmd_root->last;
+    urj_tap_cable_cx_cmd_t *cmd = cmd_root->last;
 
     if (!cmd)
         return max_len;
@@ -99,7 +99,7 @@ urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
  *
  * Pushes the byte value d to the buffer of the current last command.
  *
- * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t struct
+ * cmd_root : pointer to urj_tap_cable_cx_cmd_root_t struct
  * d        : new value to be pushed
  *
  * Return value:
@@ -108,10 +108,9 @@ urj_tap_cable_cx_cmd_space (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
  *
  ****************************************************************************/
 int
-urj_tap_cable_cx_cmd_push (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
-                           uint8_t d)
+urj_tap_cable_cx_cmd_push (urj_tap_cable_cx_cmd_root_t *cmd_root, uint8_t d)
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = cmd_root->last;
+    urj_tap_cable_cx_cmd_t *cmd = cmd_root->last;
 
     if (!cmd)
         return 0;
@@ -130,17 +129,17 @@ urj_tap_cable_cx_cmd_push (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
  *
  * Dequeues the first command.
  *
- * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t parameter struct
+ * cmd_root : pointer to urj_tap_cable_cx_cmd_root_t parameter struct
  *
  * Return value:
  * NULL   : Error occured
- * <>NULL : All ok, pointer to dequeued urj_tap_cable_cmd_xfer_cx_cmd_t
+ * <>NULL : All ok, pointer to dequeued urj_tap_cable_cx_cmd_t
  *
  ****************************************************************************/
-urj_tap_cable_cmd_xfer_cx_cmd_t *
-urj_tap_cable_cx_cmd_dequeue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
+urj_tap_cable_cx_cmd_t *
+urj_tap_cable_cx_cmd_dequeue (urj_tap_cable_cx_cmd_root_t *cmd_root)
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd = cmd_root->first;
+    urj_tap_cable_cx_cmd_t *cmd = cmd_root->first;
 
     if (cmd)
     {
@@ -158,14 +157,14 @@ urj_tap_cable_cx_cmd_dequeue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
  *
  * Frees allocated memory of specified cmd structure.
  *
- * cmd : pointer to urj_tap_cable_cmd_xfer_cx_cmd_t
+ * cmd : pointer to urj_tap_cable_cx_cmd_t
  *
  * Return value:
  * none
  *
  ****************************************************************************/
 void
-urj_tap_cable_cx_cmd_free (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
+urj_tap_cable_cx_cmd_free (urj_tap_cable_cx_cmd_t *cmd)
 {
     if (cmd)
     {
@@ -179,24 +178,23 @@ urj_tap_cable_cx_cmd_free (urj_tap_cable_cmd_xfer_cx_cmd_t *cmd)
 /*****************************************************************************
  * urj_tap_cable_cx_cmd_queue( cmd_root, to_recv )
  *
- * Allocates a new urj_tap_cable_cmd_xfer_cx_cmd_t and queues it at the end of the command
+ * Allocates a new urj_tap_cable_cx_cmd_t and queues it at the end of the command
  * queue. The value of to_recv will be stored in the new cmd element,
  * set to 0 if this command will not generate receive bytes.
  *
- * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t parameter struct
+ * cmd_root : pointer to urj_tap_cable_cx_cmd_root_t parameter struct
  * to_recv  : number of receive bytes that this command will generate
  *
  * Return value:
  * NULL   : Error occured
- * <>NULL : All ok, pointer to allocated urj_tap_cable_cmd_xfer_cx_cmd_t
+ * <>NULL : All ok, pointer to allocated urj_tap_cable_cx_cmd_t
  *
  ****************************************************************************/
-urj_tap_cable_cmd_xfer_cx_cmd_t *
-urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
+urj_tap_cable_cx_cmd_t *
+urj_tap_cable_cx_cmd_queue (urj_tap_cable_cx_cmd_root_t *cmd_root,
                             uint32_t to_recv)
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd =
-        malloc (sizeof (urj_tap_cable_cmd_xfer_cx_cmd_t));
+    urj_tap_cable_cx_cmd_t *cmd = malloc (sizeof (urj_tap_cable_cx_cmd_t));
 
     if (cmd)
     {
@@ -228,14 +226,14 @@ urj_tap_cable_cx_cmd_queue (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
  *
  * Initializes the command root structure.
  *
- * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t
+ * cmd_root : pointer to urj_tap_cable_cx_cmd_root_t
  *
  * Return value:
  * none
  *
  ****************************************************************************/
 void
-urj_tap_cable_cx_cmd_init (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
+urj_tap_cable_cx_cmd_init (urj_tap_cable_cx_cmd_root_t *cmd_root)
 {
     cmd_root->first = NULL;
     cmd_root->last = NULL;
@@ -247,16 +245,16 @@ urj_tap_cable_cx_cmd_init (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
  *
  * Deinitialzes and frees all elements from the command root structure.
  *
- * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t
+ * cmd_root : pointer to urj_tap_cable_cx_cmd_root_t
  *
  * Return value:
  * none
  *
  ****************************************************************************/
 void
-urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
+urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cx_cmd_root_t *cmd_root)
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd;
+    urj_tap_cable_cx_cmd_t *cmd;
     while (cmd_root->first)
     {
         cmd = urj_tap_cable_cx_cmd_dequeue (cmd_root);
@@ -275,8 +273,8 @@ urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
  * Flushing of the posted payload bytes is triggered when how_much
  * requests to do so or if receive bytes are expected.
  *
- * cmd_root : pointer to urj_tap_cable_cmd_xfer_cx_cmd_root_t struct
- * out_cmd  : pointer to urj_tap_cable_cmd_xfer_cx_cmd_t for an optional command that is appended
+ * cmd_root : pointer to urj_tap_cable_cx_cmd_root_t struct
+ * out_cmd  : pointer to urj_tap_cable_cx_cmd_t for an optional command that is appended
  *            to send buffer in case commands have been scheduled that
  *            yield return/receive data from the device
  * cable    : current urj_cable_t
@@ -287,12 +285,11 @@ urj_tap_cable_cx_cmd_deinit (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root)
  *
  ****************************************************************************/
 void
-urj_tap_cable_cx_xfer (urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root,
-                       const urj_tap_cable_cmd_xfer_cx_cmd_t *out_cmd,
+urj_tap_cable_cx_xfer (urj_tap_cable_cx_cmd_root_t *cmd_root,
+                       const urj_tap_cable_cx_cmd_t *out_cmd,
                        urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_t *cmd =
-        urj_tap_cable_cx_cmd_dequeue (cmd_root);
+    urj_tap_cable_cx_cmd_t *cmd = urj_tap_cable_cx_cmd_dequeue (cmd_root);
     uint32_t bytes_to_recv;
 
     bytes_to_recv = 0;

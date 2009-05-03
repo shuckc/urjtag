@@ -218,12 +218,12 @@ typedef struct
     unsigned int last_tdo;
     int signals;
 
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t cmd_root;
+    urj_tap_cable_cx_cmd_root_t cmd_root;
 } params_t;
 
 
 static const uint8_t imm_buf[1] = { SEND_IMMEDIATE };
-static const urj_tap_cable_cmd_xfer_cx_cmd_t imm_cmd =
+static const urj_tap_cable_cx_cmd_t imm_cmd =
     { NULL, 1, 1, (uint8_t *) imm_buf, 0 };
 
 
@@ -231,7 +231,7 @@ static void
 ft2232_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (!new_frequency || new_frequency > FT2232_MAX_TCK_FREQ)
         new_frequency = FT2232_MAX_TCK_FREQ;
@@ -273,7 +273,7 @@ static int
 ft2232_generic_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -316,7 +316,7 @@ static int
 ft2232_jtagkey_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -371,7 +371,7 @@ static int
 ft2232_armusbocd_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -426,7 +426,7 @@ static int
 ft2232_gnice_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -472,7 +472,7 @@ static int
 ft2232_oocdlinks_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -526,7 +526,7 @@ static int
 ft2232_turtelizer2_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -576,7 +576,7 @@ static int
 ft2232_usbtojtagif_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -630,7 +630,7 @@ static int
 ft2232_signalyzer_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -676,7 +676,7 @@ static int
 ft2232_flyswatter_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -723,7 +723,7 @@ static int
 ft2232_usbscarab2_init (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -783,7 +783,7 @@ static void
 ft2232_generic_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -808,7 +808,7 @@ static void
 ft2232_jtagkey_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -857,7 +857,7 @@ static void
 ft2232_armusbocd_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -903,7 +903,7 @@ static void
 ft2232_gnice_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -934,7 +934,7 @@ static void
 ft2232_oocdlinks_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -977,7 +977,7 @@ static void
 ft2232_turtelizer2_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -1018,7 +1018,7 @@ static void
 ft2232_usbtojtagif_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -1057,7 +1057,7 @@ static void
 ft2232_signalyzer_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -1094,7 +1094,7 @@ static void
 ft2232_flyswatter_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -1130,7 +1130,7 @@ static void
 ft2232_usbscarab2_done (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -1156,7 +1156,7 @@ static void
 ft2232_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     tms = tms ? 0x7f : 0;
     tdi = tdi ? 1 << 7 : 0;
@@ -1217,7 +1217,7 @@ static void
 ft2232_get_tdo_schedule (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* Read Data Bits Low Byte */
     urj_tap_cable_cx_cmd_queue (cmd_root, 1);
@@ -1256,7 +1256,7 @@ static void
 ft2232_set_signal_schedule (params_t *params, int mask, int val,
                             int set_low, int set_high)
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     /* filter for supported signals */
     mask &=
@@ -1350,7 +1350,7 @@ static void
 ft2232_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int in_offset = 0;
     int bitwise_len;
     int chunkbytes;

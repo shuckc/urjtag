@@ -62,7 +62,7 @@
 
 typedef struct
 {
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t cmd_root;
+    urj_tap_cable_cx_cmd_root_t cmd_root;
 } params_t;
 
 static int
@@ -112,7 +112,7 @@ usbblaster_init (urj_cable_t *cable)
 {
     int i;
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
         return -1;
@@ -142,7 +142,7 @@ static void
 usbblaster_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int i, m;
 
     tms = tms ? (1 << TMS) : 0;
@@ -163,8 +163,9 @@ usbblaster_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
             if (chunkbytes > 63)
                 chunkbytes = 63;
 
-            if (urj_tap_cable_cx_cmd_space
-                (cmd_root, URJ_USBCONN_FTDX_MAXSEND) < chunkbytes + 1)
+            if (urj_tap_cable_cx_cmd_space (cmd_root,
+                                            URJ_USBCONN_FTDX_MAXSEND)
+                < chunkbytes + 1)
             {
                 /* no space left for next clocking command
                    transfer queued commands to device and read receive data
@@ -210,7 +211,7 @@ static void
 usbblaster_get_tdo_schedule (urj_cable_t *cable)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 1);
     urj_tap_cable_cx_cmd_push (cmd_root, OTHERS);       /* TCK low */
@@ -251,7 +252,7 @@ usbblaster_transfer_schedule (urj_cable_t *cable, int len, char *in,
                               char *out)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int in_offset = 0;
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
@@ -317,7 +318,7 @@ static int
 usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
 {
     params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cmd_xfer_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
     int out_offset = 0;
 
     if (out == NULL)
