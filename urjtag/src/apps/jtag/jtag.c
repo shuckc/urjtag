@@ -54,7 +54,7 @@
 #include <urjtag/jtag.h>
 
 #ifndef HAVE_GETLINE
-ssize_t urj_lib_getline (char **lineptr, size_t *n, FILE * stream);
+ssize_t urj_lib_getline (char **lineptr, size_t *n, FILE *stream);
 #endif
 
 static int urj_interactive = 0;

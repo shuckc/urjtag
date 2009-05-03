@@ -33,7 +33,7 @@
 #define GETDELIM_BUFFER 128
 
 ssize_t
-urj_lib_getdelim (char **lineptr, size_t *n, int delimiter, FILE * stream)
+urj_lib_getdelim (char **lineptr, size_t *n, int delimiter, FILE *stream)
 {
     char *p;
     int c;

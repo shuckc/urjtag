@@ -95,7 +95,7 @@ set_flash_driver (void)
 }
 
 void
-urj_flashmsbin (urj_bus_t *bus, FILE * f, int noverify)
+urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
 {
     uint32_t adr;
     urj_flash_cfi_query_structure_t *cfi;

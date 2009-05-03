@@ -453,7 +453,7 @@ yywrap (yyscan_t scanner)
  *   pointer to allocated and initialized string memory
  ****************************************************************************/
 static char *
-new_string (urj_bsdl_scan_extra_t * extra, const char *str)
+new_string (urj_bsdl_scan_extra_t *extra, const char *str)
 {
     char *n_str;
     size_t n_str_size;

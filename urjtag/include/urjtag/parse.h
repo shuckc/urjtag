@@ -31,7 +31,7 @@
 
 int urj_parse_file (urj_chain_t *chain, const char *filename);
 int urj_parse_line (urj_chain_t *chain, char *line);
-int urj_parse_stream (urj_chain_t *chain, FILE * f);
+int urj_parse_stream (urj_chain_t *chain, FILE *f);
 
 #endif /* URJ_PARSE_H */
 

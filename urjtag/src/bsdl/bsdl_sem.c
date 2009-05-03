@@ -552,7 +552,7 @@ urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
 
 
 /*****************************************************************************
- * int parse_vhdl_elem( urj_bsdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *elem )
+ * int parse_vhdl_elem( urj_bsdl_parser_priv_t *priv, urj_vhdl_elem_t *elem )
  *
  * Runs the specified vhdl element through the BSDl parser.
  *
@@ -565,7 +565,7 @@ urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
  *   0                   -> error occured
  ****************************************************************************/
 static int
-parse_vhdl_elem (urj_bsdl_parser_priv_t *priv, urj_bsdl_vhdl_elem_t *elem)
+parse_vhdl_elem (urj_bsdl_parser_priv_t *priv, urj_vhdl_elem_t *elem)
 {
     char *buf;
     size_t buf_len;
@@ -713,7 +713,7 @@ int
 urj_bsdl_process_elements (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
 {
     urj_bsdl_parser_priv_t *priv;
-    urj_bsdl_vhdl_elem_t *el = jc->vhdl_elem_first;
+    urj_vhdl_elem_t *el = jc->vhdl_elem_first;
     int result = URJ_BSDL_MODE_SYN_CHECK;
 
     if ((priv = urj_bsdl_parser_init (jc)) == NULL)

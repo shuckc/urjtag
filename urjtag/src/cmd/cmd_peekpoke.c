@@ -38,7 +38,7 @@ cmd_peek_run (urj_chain_t *chain, char *params[])
     int pars, j = 1;
     urj_bus_area_t area;
 
-    /* urj_bus_t * bus = part_get_active_bus(chain); */
+    /* urj_bus_t *bus = part_get_active_bus(chain); */
 
     if ((pars = urj_cmd_params (params)) < 2)
         return -1;
@@ -100,7 +100,7 @@ cmd_poke_run (urj_chain_t *chain, char *params[])
 {
     uint32_t adr, val;
     urj_bus_area_t area;
-    /*urj_bus_t * bus = part_get_active_bus(chain); */
+    /*urj_bus_t *bus = part_get_active_bus(chain); */
     int k = 1, pars = urj_cmd_params (params);
 
     if (pars < 3 || !(pars & 1))

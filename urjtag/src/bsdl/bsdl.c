@@ -123,7 +123,7 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
 {
     urj_bsdl_globs_t *globs = &(chain->bsdl);
     FILE *BSDL_File;
-    urj_bsdl_vhdl_parser_priv_t *vhdl_parser_priv;
+    urj_vhdl_parser_priv_t *vhdl_parser_priv;
     urj_bsdl_jtag_ctrl_t jtag_ctrl;
     int Compile_Errors = 1;
     int result;
@@ -257,6 +257,7 @@ urj_bsdl_set_path (urj_chain_t *chain, const char *pathlist)
         {
             num++;
             /* extend path list array */
+            /* @@@@ RFHH check realloc result */
             globs->path_list = realloc (globs->path_list,
                                         (num + 1) * sizeof (char *));
             /* enter path element up to the delimeter */

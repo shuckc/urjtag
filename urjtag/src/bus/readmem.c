@@ -38,7 +38,7 @@
 #include <urjtag/jtag.h>
 
 void
-urj_bus_readmem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len)
+urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
     uint32_t step;
     uint32_t a;

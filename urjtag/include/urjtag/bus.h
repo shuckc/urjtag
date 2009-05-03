@@ -33,8 +33,8 @@
 
 extern urj_bus_t *urj_bus;
 
-void urj_bus_readmem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len);
-void urj_bus_writemem (urj_bus_t *bus, FILE * f, uint32_t addr, uint32_t len);
+void urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
+void urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
 
 /* @@@@ this had better be in an internal include file RFHH */
 

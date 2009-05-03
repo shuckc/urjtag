@@ -111,17 +111,17 @@ typedef enum
     URJ_BSDL_VET_ATTRIBUTE_STRING,
     URJ_BSDL_VET_ATTRIBUTE_DECIMAL,
     URJ_BSDL_VET_UNKNOWN
-} urj_bsdl_vhdl_elem_type_t;
+} urj_vhdl_elem_type_t;
 
 struct vhdl_elem
 {
     struct vhdl_elem *next;
-    urj_bsdl_vhdl_elem_type_t type;
+    urj_vhdl_elem_type_t type;
     char *name;
     char *payload;
     int line;
 };
-typedef struct vhdl_elem urj_bsdl_vhdl_elem_t;
+typedef struct vhdl_elem urj_vhdl_elem_t;
 
 typedef enum
 {
@@ -140,8 +140,8 @@ struct jtag_ctrl
     urj_part_t *part;
     /* collected by VHDL parser */
     urj_bsdl_port_desc_t *port_desc;
-    urj_bsdl_vhdl_elem_t *vhdl_elem_first;
-    urj_bsdl_vhdl_elem_t *vhdl_elem_last;
+    urj_vhdl_elem_t *vhdl_elem_first;
+    urj_vhdl_elem_t *vhdl_elem_last;
     /* collected by BSDL parser */
     char *idcode;               /* IDCODE string */
     char *usercode;             /* USERCODE string */
@@ -167,7 +167,7 @@ struct vhdl_parser_priv
     urj_bsdl_jtag_ctrl_t *jtag_ctrl;
     urj_bsdl_port_desc_t tmp_port_desc;
 };
-typedef struct vhdl_parser_priv urj_bsdl_vhdl_parser_priv_t;
+typedef struct vhdl_parser_priv urj_vhdl_parser_priv_t;
 
 /* private data of the BSDL bison parser
    used to store variables the would end up as globals otherwise */

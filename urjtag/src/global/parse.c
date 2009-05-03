@@ -121,7 +121,7 @@ urj_parse_line (urj_chain_t *chain, char *line)
 
 
 int
-urj_parse_stream (urj_chain_t *chain, FILE * f)
+urj_parse_stream (urj_chain_t *chain, FILE *f)
 {
     char inputline[MAXINPUTLINE + 1];
     int go = 1, i, c, lnr, clip, found_comment;

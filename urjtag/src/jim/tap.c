@@ -138,7 +138,6 @@ urj_jim_tck_rise (urj_jim_state_t *s, int tms, int tdi)
 {
     urj_jim_device_t *dev;
 
-
     for (dev = s->last_device_in_chain; dev; dev = dev->prev)
     {
         int dev_tdi;

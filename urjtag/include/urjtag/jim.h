@@ -64,24 +64,25 @@ typedef struct
     int len;
 } urj_jim_shift_reg_t;
 
-typedef struct urj_jim_device
+typedef struct urj_jim_device urj_jim_device_t;
+
+struct urj_jim_device
 {
-    struct urj_jim_device *prev;
+    urj_jim_device_t *prev;
 
     urj_jim_tap_state_t tap_state;
-    void (*tck_rise) (struct urj_jim_device * dev, int tms, int tdi,
+    void (*tck_rise) (urj_jim_device_t *dev, int tms, int tdi,
                       uint8_t *shmem, size_t shmem_size);
-    void (*tck_fall) (struct urj_jim_device * dev, uint8_t *shmem,
+    void (*tck_fall) (urj_jim_device_t *dev, uint8_t *shmem,
                       size_t shmem_size);
-    void (*dev_free) (struct urj_jim_device * dev);
+    void (*dev_free) (urj_jim_device_t *dev);
     void *state;
     int num_sregs;
     int current_dr;
     urj_jim_shift_reg_t *sreg;
     int tdo;
     int tdo_buffer;
-}
-urj_jim_device_t;
+};
 
 typedef struct urj_jim_state
 {
@@ -92,21 +93,22 @@ typedef struct urj_jim_state
 }
 urj_jim_state_t;
 
-typedef struct urj_jim_bus_device
+typedef struct urj_jim_bus_device urj_jim_bus_device_t;
+
+struct urj_jim_bus_device
 {
     int width;                  /* bytes */
     int size;                   /* words (each <width> bytes) */
     void *state;                /* device-dependent */
-    void (*init) (struct urj_jim_bus_device * x);
-    uint32_t (*capture) (struct urj_jim_bus_device * x,
+    void (*init) (urj_jim_bus_device_t *x);
+    uint32_t (*capture) (urj_jim_bus_device_t *x,
                          uint32_t address, uint32_t control,
                          uint8_t *shmem, size_t shmem_size);
-    void (*update) (struct urj_jim_bus_device * x,
+    void (*update) (urj_jim_bus_device_t *x,
                     uint32_t address, uint32_t data, uint32_t control,
                     uint8_t *shmem, size_t shmem_size);
-    void (*free) (struct urj_jim_bus_device * x);
-}
-urj_jim_bus_device_t;
+    void (*free) (urj_jim_bus_device_t *x);
+};
 
 typedef struct
 {
