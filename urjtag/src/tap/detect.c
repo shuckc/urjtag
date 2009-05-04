@@ -39,7 +39,9 @@
 #include <urjtag/cable.h>
 #include <urjtag/part.h>
 #include <urjtag/chain.h>
-
+#include <urjtag/part.h>
+#include <urjtag/bus.h>
+#include <urjtag/jtag.h>
 
 struct id_record
 {
@@ -499,4 +501,47 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
     chain->total_instr_len += instr_len;
 
     return chain->parts->len;
+}
+
+int
+urj_tap_detect (urj_chain_t *chain)
+{
+    int i;
+    urj_bus_t *abus;
+
+    urj_bus_buses_free ();
+    urj_part_parts_free (chain->parts);
+    chain->parts = NULL;
+    urj_tap_detect_parts (chain, urj_get_data_dir ());
+    if (!chain->parts)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "chain has no parts");
+        return URJ_STATUS_FAIL;
+    }
+    if (!chain->parts->len)
+    {
+        urj_part_parts_free (chain->parts);
+        chain->parts = NULL;
+        urj_error_set (URJ_ERROR_INVALID, "chain has empty parts list");
+        return URJ_STATUS_FAIL;
+    }
+    urj_part_parts_set_instruction (chain->parts, "SAMPLE/PRELOAD");
+    urj_tap_chain_shift_instructions (chain);
+    urj_tap_chain_shift_data_registers (chain, 1);
+    urj_part_parts_set_instruction (chain->parts, "BYPASS");
+    urj_tap_chain_shift_instructions (chain);
+
+    // Initialize all the buses
+    for (i = 0; i < urj_buses.len; i++)
+    {
+        abus = urj_buses.buses[i];
+        if (abus->driver->init)
+        {
+            if (abus->driver->init (abus) != URJ_STATUS_OK)
+                // retain error state
+                return URJ_STATUS_FAIL;
+        }
+    }
+
+    return URJ_STATUS_OK;
 }

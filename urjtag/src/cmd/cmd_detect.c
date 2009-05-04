@@ -27,11 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <urjtag/chain.h>
 #include <urjtag/tap.h>
-#include <urjtag/part.h>
-#include <urjtag/bus.h>
-#include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
 
@@ -40,42 +36,15 @@
 static int
 cmd_detect_run (urj_chain_t *chain, char *params[])
 {
-    int i;
-    urj_bus_t *abus;
-
     if (urj_cmd_params (params) != 1)
         return -1;
 
     if (!urj_cmd_test_cable (chain))
         return 1;
 
-    urj_bus_buses_free ();
-    urj_part_parts_free (chain->parts);
-    chain->parts = NULL;
-    urj_tap_detect_parts (chain, urj_get_data_dir ());
-    if (!chain->parts)
-        return 1;
-    if (!chain->parts->len)
+    if (urj_tap_detect (chain) != URJ_STATUS_OK)
     {
-        urj_part_parts_free (chain->parts);
-        chain->parts = NULL;
-        return 1;
-    }
-    urj_part_parts_set_instruction (chain->parts, "SAMPLE/PRELOAD");
-    urj_tap_chain_shift_instructions (chain);
-    urj_tap_chain_shift_data_registers (chain, 1);
-    urj_part_parts_set_instruction (chain->parts, "BYPASS");
-    urj_tap_chain_shift_instructions (chain);
-
-    // Initialize all the buses
-    for (i = 0; i < urj_buses.len; i++)
-    {
-        abus = urj_buses.buses[i];
-        if (abus->driver->init)
-        {
-            if (abus->driver->init (abus) != URJ_STATUS_OK)
-                return -1;
-        }
+        return -1;
     }
 
     return 1;

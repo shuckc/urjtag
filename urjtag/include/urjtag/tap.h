@@ -47,5 +47,12 @@ int urj_tap_manual_add (urj_chain_t *chain, int instr_len);
 int urj_tap_detect_register_size (urj_chain_t *chain);
 void urj_tap_discovery (urj_chain_t *chain);
 void urj_tap_idcode (urj_chain_t *chain, unsigned int bytes);
+/**
+ * Convenience function that detects the parts, initialises them to BYPASS,
+ * and initialises the bus drivers.
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAILURE on error
+ */
+int urj_tap_detect (urj_chain_t *chain);
 
 #endif /* URJ_TAP_H */

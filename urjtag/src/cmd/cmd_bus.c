@@ -54,13 +54,7 @@ cmd_bus_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[1], &n))
         return -1;
 
-    if (n >= urj_buses.len)
-    {
-        printf (_("%s: invalid bus number\n"), "bus");
-        return 1;
-    }
-
-    urj_bus = urj_buses.buses[n];
+    (void)urj_bus_buses_set(n);
 
     return 1;
 }

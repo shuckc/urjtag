@@ -36,8 +36,6 @@ extern urj_bus_t *urj_bus;
 void urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
 void urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
 
-/* @@@@ this had better be in an internal include file RFHH */
-
 typedef struct
 {
     int len;
@@ -50,5 +48,11 @@ extern const urj_bus_driver_t *urj_bus_drivers[];
 void urj_bus_buses_free (void);
 void urj_bus_buses_add (urj_bus_t *abus);
 void urj_bus_buses_delete (urj_bus_t *abus);
+
+/** set active bus
+ * @param n choose n'th bus in #urj_buses as the active bus
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
+ */
+int urj_bus_buses_set (int n);
 
 #endif /* URJ_BUS_H */

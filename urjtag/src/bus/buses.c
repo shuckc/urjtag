@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <urjtag/error.h>
 #include <urjtag/bus.h>
 
 #include "buses.h"
@@ -205,4 +206,18 @@ urj_bus_buses_delete (urj_bus_t *abus)
 
     if (urj_buses.len > 0)
         urj_bus = urj_buses.buses[0];
+}
+
+int
+urj_bus_buses_set (int n)
+{
+    if (n >= urj_buses.len)
+    {
+        urj_error_set(URJ_ERROR_INVALID, _("invalid bus number"));
+        return URJ_STATUS_FAIL;
+    }
+
+    urj_bus = urj_buses.buses[n];
+
+    return URJ_STATUS_OK;
 }

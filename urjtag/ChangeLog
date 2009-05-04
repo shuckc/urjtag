@@ -1,3 +1,10 @@
+2009-05-04  Rutger Hofman <rfhh>
+
+  * src/cmd/cmd_bus.c, src/bus/buses.c, include/urjtag/bus.h: transform the
+    bus cmd implementation into an API call
+  * src/cmd/cmd_detect.c, src/tap/detect.c, include/urjtag/tap.h: transform the
+    detect cmd implementation into an API call
+
 2009-05-02  Rutger Hofman <rfhh>
 
   Refactor the autoconf stuff a bit so make install actually creates
