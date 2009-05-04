@@ -30,6 +30,8 @@
 #include <urjtag/flash.h>
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_detectflash_run (urj_chain_t *chain, char *params[])
 {
@@ -62,7 +64,7 @@ cmd_detectflash_help (void)
             "detectflash");
 }
 
-urj_cmd_t urj_cmd_detectflash = {
+const urj_cmd_t urj_cmd_detectflash = {
     "detectflash",
     N_("detect parameters of flash chips attached to a part"),
     cmd_detectflash_help,

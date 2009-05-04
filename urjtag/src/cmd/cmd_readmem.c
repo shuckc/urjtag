@@ -31,6 +31,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_readmem_run (urj_chain_t *chain, char *params[])
 {
@@ -77,7 +79,7 @@ cmd_readmem_help (void)
             "readmem");
 }
 
-urj_cmd_t urj_cmd_readmem = {
+const urj_cmd_t urj_cmd_readmem = {
     "readmem",
     N_("read content of the memory and write it to file"),
     cmd_readmem_help,

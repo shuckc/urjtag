@@ -32,6 +32,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_debug_run (urj_chain_t *chain, char *params[])
 {
@@ -55,7 +57,7 @@ cmd_debug_help (void)
               "\n" "n =1 fileio, 2=tap commands, 4 =?\n"), "debug n");
 }
 
-urj_cmd_t urj_cmd_debug = {
+const urj_cmd_t urj_cmd_debug = {
     "debug",
     N_("debug jtag program"),
     cmd_debug_help,

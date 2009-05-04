@@ -33,6 +33,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_flashmem_run (urj_chain_t *chain, char *params[])
 {
@@ -99,7 +101,7 @@ cmd_flashmem_help (void)
                 _(urj_flash_flash_drivers[i]->description));
 }
 
-urj_cmd_t urj_cmd_flashmem = {
+const urj_cmd_t urj_cmd_flashmem = {
     "flashmem",
     N_("burn flash memory with data from a file"),
     cmd_flashmem_help,

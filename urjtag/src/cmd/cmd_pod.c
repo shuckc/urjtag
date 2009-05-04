@@ -35,6 +35,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_pod_run (urj_chain_t *chain, char *params[])
 {
@@ -87,7 +89,7 @@ cmd_pod_help (void)
               "#          0 or 1\n"), "pod");
 }
 
-urj_cmd_t urj_cmd_pod = {
+const urj_cmd_t urj_cmd_pod = {
     "pod",
     N_("Set state of POD signal(s)"),
     cmd_pod_help,

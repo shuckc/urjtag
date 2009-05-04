@@ -35,6 +35,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_detect_run (urj_chain_t *chain, char *params[])
 {
@@ -90,7 +92,7 @@ cmd_detect_help (void)
             "detect");
 }
 
-urj_cmd_t urj_cmd_detect = {
+const urj_cmd_t urj_cmd_detect = {
     "detect",
     N_("detect parts on the JTAG chain"),
     cmd_detect_help,

@@ -31,6 +31,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_endian_run (urj_chain_t *chain, char *params[])
 {
@@ -68,7 +70,7 @@ cmd_endian_help (void)
             "endian [little|big]");
 }
 
-urj_cmd_t urj_cmd_endian = {
+const urj_cmd_t urj_cmd_endian = {
     "endian",
     N_("set/print endianess"),
     cmd_endian_help,

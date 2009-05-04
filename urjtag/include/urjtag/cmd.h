@@ -36,19 +36,11 @@
 
 #include "types.h"
 
-typedef struct
-{
-    char *name;
-    char *desc;
-    void (*help) (void);
-    int (*run) (urj_chain_t *chain, char *params[]);
-} urj_cmd_t;
-
-extern const urj_cmd_t *urj_cmds[];
-
 int urj_cmd_run (urj_chain_t *chain, char *params[]);
+char *urj_cmd_find_next (const char *text, int state);
+/* @@@@ RFHH candidate to become local in src/cmd/: */
 int urj_cmd_params (char *params[]);
+/* @@@@ RFHH candidate to become local in src/cmd/: */
 int urj_cmd_get_number (const char *s, unsigned int *i);
-int urj_cmd_test_cable (urj_chain_t *chain);
 
 #endif /* URJ_CMD_H */

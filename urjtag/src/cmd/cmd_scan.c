@@ -37,6 +37,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_scan_run (urj_chain_t *chain, char *params[])
 {
@@ -129,7 +131,7 @@ cmd_scan_help (void)
               "Read BSR and show changes since last scan.\n"), "scan");
 }
 
-urj_cmd_t urj_cmd_scan = {
+const urj_cmd_t urj_cmd_scan = {
     "scan",
     N_("read BSR and show changes since last scan"),
     cmd_scan_help,

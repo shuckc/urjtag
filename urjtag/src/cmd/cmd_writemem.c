@@ -29,6 +29,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_writemem_run (urj_chain_t *chain, char *params[])
 {
@@ -76,7 +78,7 @@ cmd_writemem_help (void)
             "writemem");
 }
 
-urj_cmd_t urj_cmd_writemem = {
+const urj_cmd_t urj_cmd_writemem = {
     "writemem",
     N_("write content of file to the memory"),
     cmd_writemem_help,

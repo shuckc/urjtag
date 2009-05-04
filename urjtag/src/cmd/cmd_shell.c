@@ -33,6 +33,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_shell_run (urj_chain_t *chain, char *params[])
 {
@@ -83,7 +85,7 @@ cmd_shell_help (void)
               "\n" "CMMD OS Shell Command\n"), "shell cmmd");
 }
 
-urj_cmd_t urj_cmd_shell = {
+const urj_cmd_t urj_cmd_shell = {
     "shell",
     N_("shell cmmd"),
     cmd_shell_help,

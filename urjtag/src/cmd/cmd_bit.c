@@ -32,6 +32,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static void
 cmd_bit_print_params (char *params[], unsigned int parameters, char *command,
                       size_t command_size)
@@ -187,7 +189,7 @@ cmd_bit_help (void)
               "CSTATE        Control state, valid state is only Z\n"), "bit");
 }
 
-urj_cmd_t urj_cmd_bit = {
+const urj_cmd_t urj_cmd_bit = {
     "bit",
     N_("define new BSR bit"),
     cmd_bit_help,

@@ -33,6 +33,8 @@
 #include <urjtag/svf.h>
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_svf_run (urj_chain_t *chain, char *params[])
 {
@@ -87,7 +89,7 @@ cmd_svf_help (void)
               "\n" "FILE file containing SVF commands\n"), "svf");
 }
 
-urj_cmd_t urj_cmd_svf = {
+const urj_cmd_t urj_cmd_svf = {
     "svf",
     N_("execute svf commands from file"),
     cmd_svf_help,

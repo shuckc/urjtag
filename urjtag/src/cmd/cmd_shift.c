@@ -31,6 +31,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_shift_run (urj_chain_t *chain, char *params[])
 {
@@ -63,7 +65,7 @@ cmd_shift_help (void)
             "shift ir", "shift dr");
 }
 
-urj_cmd_t urj_cmd_shift = {
+const urj_cmd_t urj_cmd_shift = {
     "shift",
     N_("shift data/instruction registers through JTAG chain"),
     cmd_shift_help,

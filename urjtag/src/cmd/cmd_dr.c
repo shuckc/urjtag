@@ -35,6 +35,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_dr_run (urj_chain_t *chain, char *params[])
 {
@@ -118,7 +120,7 @@ cmd_dr_help (void)
             "dr", "dr");
 }
 
-urj_cmd_t urj_cmd_dr = {
+const urj_cmd_t urj_cmd_dr = {
     "dr",
     N_("display active data register for a part"),
     cmd_dr_help,

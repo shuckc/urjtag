@@ -30,6 +30,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_discovery_run (urj_chain_t *chain, char *params[])
 {
@@ -60,7 +62,7 @@ cmd_discovery_help (void)
             "discovery");
 }
 
-urj_cmd_t urj_cmd_discovery = {
+const urj_cmd_t urj_cmd_discovery = {
     "discovery",
     N_("discovery of unknown parts in the JTAG chain"),
     cmd_discovery_help,

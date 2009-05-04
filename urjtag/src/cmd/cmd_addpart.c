@@ -31,6 +31,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_addpart_run (urj_chain_t *chain, char *params[])
 {
@@ -73,7 +75,7 @@ cmd_addpart_help (void)
 }
 
 
-urj_cmd_t urj_cmd_addpart = {
+const urj_cmd_t urj_cmd_addpart = {
     "addpart",
     N_("manually adds parts on the JTAG chain"),
     cmd_addpart_help,

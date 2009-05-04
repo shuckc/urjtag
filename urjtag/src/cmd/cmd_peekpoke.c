@@ -31,6 +31,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_peek_run (urj_chain_t *chain, char *params[])
 {
@@ -88,7 +90,7 @@ cmd_peek_help (void)
               "\n"), "peek");
 }
 
-urj_cmd_t urj_cmd_peek = {
+const urj_cmd_t urj_cmd_peek = {
     "peek",
     N_("read a single word"),
     cmd_peek_help,
@@ -141,7 +143,7 @@ cmd_poke_help (void)
               "\n"), "poke");
 }
 
-urj_cmd_t urj_cmd_poke = {
+const urj_cmd_t urj_cmd_poke = {
     "poke",
     N_("write a single word"),
     cmd_poke_help,

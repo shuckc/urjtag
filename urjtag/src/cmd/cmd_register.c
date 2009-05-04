@@ -35,6 +35,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_register_run (urj_chain_t *chain, char *params[])
 {
@@ -105,7 +107,7 @@ cmd_register_help (void)
               "LENGTH        Data register length\n"), "register");
 }
 
-urj_cmd_t urj_cmd_register = {
+const urj_cmd_t urj_cmd_register = {
     "register",
     N_("define new data register for a part"),
     cmd_register_help,

@@ -32,6 +32,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_bus_run (urj_chain_t *chain, char *params[])
 {
@@ -71,7 +73,7 @@ cmd_bus_help (void)
               "\n" "BUS           bus number\n"), "bus");
 }
 
-urj_cmd_t urj_cmd_bus = {
+const urj_cmd_t urj_cmd_bus = {
     "bus",
     N_("change active bus"),
     cmd_bus_help,

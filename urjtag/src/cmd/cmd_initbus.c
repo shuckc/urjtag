@@ -33,6 +33,8 @@
 #include <urjtag/bus.h>
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_initbus_run (urj_chain_t *chain, char *params[])
 {
@@ -95,7 +97,7 @@ cmd_initbus_help (void)
                 urj_bus_drivers[i]->description);
 }
 
-const urj_cmd_t urj_cmd_initbus = {
+const const urj_cmd_t urj_cmd_initbus = {
     "initbus",
     N_("initialize bus driver for active part"),
     cmd_initbus_help,

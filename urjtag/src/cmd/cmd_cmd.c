@@ -31,50 +31,7 @@
 
 #include <urjtag/cmd.h>
 
-extern urj_cmd_t urj_cmd_quit;
-extern urj_cmd_t urj_cmd_help;
-extern urj_cmd_t urj_cmd_frequency;
-extern urj_cmd_t urj_cmd_cable;
-extern urj_cmd_t urj_cmd_reset;
-extern urj_cmd_t urj_cmd_discovery;
-extern urj_cmd_t urj_cmd_idcode;
-extern urj_cmd_t urj_cmd_detect;
-extern urj_cmd_t urj_cmd_signal;
-extern urj_cmd_t urj_cmd_scan;
-extern const urj_cmd_t urj_cmd_salias;
-extern urj_cmd_t urj_cmd_bit;
-extern urj_cmd_t urj_cmd_register;
-extern const urj_cmd_t urj_cmd_initbus;
-extern urj_cmd_t urj_cmd_print;
-extern urj_cmd_t urj_cmd_part;
-extern urj_cmd_t urj_cmd_bus;
-extern urj_cmd_t urj_cmd_instruction;
-extern urj_cmd_t urj_cmd_shift;
-extern urj_cmd_t urj_cmd_dr;
-extern urj_cmd_t urj_cmd_get;
-extern urj_cmd_t urj_cmd_test;
-extern urj_cmd_t urj_cmd_shell;
-extern urj_cmd_t urj_cmd_set;
-extern urj_cmd_t urj_cmd_endian;
-extern urj_cmd_t urj_cmd_peek;
-extern urj_cmd_t urj_cmd_poke;
-extern urj_cmd_t urj_cmd_pod;
-extern urj_cmd_t urj_cmd_readmem;
-extern urj_cmd_t urj_cmd_writemem;
-extern urj_cmd_t urj_cmd_detectflash;
-extern urj_cmd_t urj_cmd_flashmem;
-extern urj_cmd_t urj_cmd_eraseflash;
-extern urj_cmd_t urj_cmd_script;
-extern urj_cmd_t urj_cmd_include;
-extern urj_cmd_t urj_cmd_addpart;
-extern urj_cmd_t urj_cmd_usleep;
-#ifdef ENABLE_SVF
-extern urj_cmd_t urj_cmd_svf;
-#endif
-#ifdef ENABLE_BSDL
-extern urj_cmd_t urj_cmd_bsdl;
-#endif
-extern urj_cmd_t urj_cmd_debug;
+#include "cmd.h"
 
 const urj_cmd_t *urj_cmds[] = {
     &urj_cmd_quit,
@@ -123,6 +80,27 @@ const urj_cmd_t *urj_cmds[] = {
     &urj_cmd_debug,
     NULL                        /* last must be NULL */
 };
+
+char *
+urj_cmd_find_next (const char *text, int state)
+{
+    static size_t cmd_idx, len;
+
+    if (!state)
+    {
+        cmd_idx = 0;
+        len = strlen (text);
+    }
+
+    while (urj_cmds[cmd_idx])
+    {
+        char *name = urj_cmds[cmd_idx++]->name;
+        if (!strncmp (name, text, len))
+            return strdup (name);
+    }
+
+    return NULL;
+}
 
 int
 urj_cmd_test_cable (urj_chain_t *chain)

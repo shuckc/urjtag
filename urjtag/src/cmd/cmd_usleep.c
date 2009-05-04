@@ -31,6 +31,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_usleep_run (urj_chain_t *chain, char *params[])
 {
@@ -54,7 +56,7 @@ cmd_usleep_help (void)
               "Sleep some number of microseconds.\n"), "usleep");
 }
 
-urj_cmd_t urj_cmd_usleep = {
+const urj_cmd_t urj_cmd_usleep = {
     "usleep",
     N_("Sleep some number of microseconds"),
     cmd_usleep_help,

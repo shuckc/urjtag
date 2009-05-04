@@ -33,6 +33,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_eraseflash_run (urj_chain_t *chain, char *params[])
 {
@@ -76,7 +78,7 @@ cmd_eraseflash_help (void)
                 _(urj_flash_flash_drivers[i]->description));
 }
 
-urj_cmd_t urj_cmd_eraseflash = {
+const urj_cmd_t urj_cmd_eraseflash = {
     "eraseflash",
     N_("erase flash memory by number of blocks"),
     cmd_eraseflash_help,

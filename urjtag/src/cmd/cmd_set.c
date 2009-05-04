@@ -33,6 +33,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_set_run (urj_chain_t *chain, char *params[])
 {
@@ -92,7 +94,7 @@ cmd_set_help (void)
               "                is 'out'\n"), "set signal");
 }
 
-urj_cmd_t urj_cmd_set = {
+const urj_cmd_t urj_cmd_set = {
     "set",
     N_("set external signal value"),
     cmd_set_help,

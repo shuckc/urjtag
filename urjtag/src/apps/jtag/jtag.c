@@ -92,27 +92,6 @@ jtag_create_jtagdir (void)
 
 #ifdef HAVE_LIBREADLINE
 
-static char *
-cmd_find_next (const char *text, int state)
-{
-    static size_t cmd_idx, len;
-
-    if (!state)
-    {
-        cmd_idx = 0;
-        len = strlen (text);
-    }
-
-    while (urj_cmds[cmd_idx])
-    {
-        char *name = urj_cmds[cmd_idx++]->name;
-        if (!strncmp (name, text, len))
-            return strdup (name);
-    }
-
-    return NULL;
-}
-
 #ifdef HAVE_READLINE_COMPLETION
 static char **
 urj_cmd_completion (const char *text, int start, int end)
@@ -120,7 +99,7 @@ urj_cmd_completion (const char *text, int start, int end)
     char **ret = NULL;
 
     if (start == 0)
-        ret = rl_completion_matches (text, cmd_find_next);
+        ret = rl_completion_matches (text, urj_cmd_find_next);
 
     return ret;
 }

@@ -29,6 +29,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_idcode_run (urj_chain_t *chain, char *params[])
 {
@@ -63,7 +65,7 @@ cmd_idcode_help (void)
             "idcode");
 }
 
-urj_cmd_t urj_cmd_idcode = {
+const urj_cmd_t urj_cmd_idcode = {
     "idcode",
     N_("Read IDCODEs of all parts in a JTAG chain"),
     cmd_idcode_help,

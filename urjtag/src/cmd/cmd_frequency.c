@@ -31,6 +31,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_frequency_run (urj_chain_t *chain, char *params[])
 {
@@ -73,7 +75,7 @@ cmd_frequency_help (void)
               "Use 0 for FREQ to disable frequency limit.\n"), "frequency");
 }
 
-urj_cmd_t urj_cmd_frequency = {
+const urj_cmd_t urj_cmd_frequency = {
     "frequency",
     N_("setup JTAG frequency"),
     cmd_frequency_help,

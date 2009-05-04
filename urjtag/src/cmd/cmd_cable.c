@@ -36,6 +36,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_cable_run (urj_chain_t *chain, char *params[])
 {
@@ -146,7 +148,7 @@ cmd_cable_help (void)
                 _(urj_tap_cable_drivers[i]->description));
 }
 
-urj_cmd_t urj_cmd_cable = {
+const urj_cmd_t urj_cmd_cable = {
     "cable",
     N_("select JTAG cable"),
     cmd_cable_help,

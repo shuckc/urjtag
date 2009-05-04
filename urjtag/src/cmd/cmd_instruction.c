@@ -32,6 +32,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_instruction_run (urj_chain_t *chain, char *params[])
 {
@@ -97,7 +99,7 @@ cmd_instruction_help (void)
             "instruction", "instruction", "instruction");
 }
 
-urj_cmd_t urj_cmd_instruction = {
+const urj_cmd_t urj_cmd_instruction = {
     "instruction",
     N_("change active instruction for a part or declare new instruction"),
     cmd_instruction_help,

@@ -33,6 +33,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_get_run (urj_chain_t *chain, char *params[])
 {
@@ -76,7 +78,7 @@ cmd_get_help (void)
             "get signal");
 }
 
-urj_cmd_t urj_cmd_get = {
+const urj_cmd_t urj_cmd_get = {
     "get",
     N_("get external signal value"),
     cmd_get_help,

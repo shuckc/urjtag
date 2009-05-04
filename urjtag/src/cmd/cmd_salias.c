@@ -34,6 +34,8 @@
 
 #include "urjtag/cmd.h"
 
+#include "cmd.h"
+
 static int
 cmd_salias_run (urj_chain_t *chain, char *params[])
 {

@@ -49,6 +49,8 @@ typedef char wchar_t;
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_print_run (urj_chain_t *chain, char *params[])
 {
@@ -258,7 +260,7 @@ cmd_print_help (void)
             "print");
 }
 
-urj_cmd_t urj_cmd_print = {
+const urj_cmd_t urj_cmd_print = {
     "print",
     N_("display JTAG chain list/status"),
     cmd_print_help,

@@ -34,6 +34,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_signal_run (urj_chain_t *chain, char *params[])
 {
@@ -91,7 +93,7 @@ cmd_signal_help (void)
               "PIN#     List of pin # for a signal\n"), "signal");
 }
 
-urj_cmd_t urj_cmd_signal = {
+const urj_cmd_t urj_cmd_signal = {
     "signal",
     N_("define new signal for a part"),
     cmd_signal_help,

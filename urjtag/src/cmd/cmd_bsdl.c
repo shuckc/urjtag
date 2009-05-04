@@ -32,6 +32,8 @@
 #include <urjtag/chain.h>
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_bsdl_run (urj_chain_t *chain, char *params[])
 {
@@ -118,7 +120,7 @@ cmd_bsdl_help (void)
             "bsdl", "bsdl", "bsdl", "bsdl");
 }
 
-urj_cmd_t urj_cmd_bsdl = {
+const urj_cmd_t urj_cmd_bsdl = {
     "bsdl",
     N_("manage BSDL files"),
     cmd_bsdl_help,

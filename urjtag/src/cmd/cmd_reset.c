@@ -31,6 +31,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_reset_run (urj_chain_t *chain, char *params[])
 {
@@ -51,7 +53,7 @@ cmd_reset_help (void)
     printf (_("Usage: %s\n" "Reset current JTAG chain.\n"), "reset");
 }
 
-urj_cmd_t urj_cmd_reset = {
+const urj_cmd_t urj_cmd_reset = {
     "reset",
     N_("reset JTAG chain"),
     cmd_reset_help,

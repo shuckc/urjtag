@@ -29,6 +29,8 @@
 
 #include <urjtag/cmd.h>
 
+#include "cmd.h"
+
 static int
 cmd_help_run (urj_chain_t *chain, char *params[])
 {
@@ -72,7 +74,7 @@ cmd_help_help (void)
             "help");
 }
 
-urj_cmd_t urj_cmd_help = {
+const urj_cmd_t urj_cmd_help = {
     "help",
     N_("display this help"),
     cmd_help_help,

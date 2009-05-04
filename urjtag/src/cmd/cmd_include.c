@@ -35,6 +35,8 @@
 #include <urjtag/cmd.h>
 #include <urjtag/bsdl.h>
 
+#include "cmd.h"
+
 static int
 cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
 {
@@ -133,7 +135,7 @@ cmd_include_help (void)
     cmd_include_or_script_help ("include");
 }
 
-urj_cmd_t urj_cmd_include = {
+const urj_cmd_t urj_cmd_include = {
     "include",
     N_("include command sequence from external repository"),
     cmd_include_help,
@@ -152,7 +154,7 @@ cmd_script_help (void)
     cmd_include_or_script_help ("script");
 }
 
-urj_cmd_t urj_cmd_script = {
+const urj_cmd_t urj_cmd_script = {
     "script",
     N_("run command sequence from external file"),
     cmd_script_help,
