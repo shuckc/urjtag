@@ -294,7 +294,7 @@ urj_part_instruction_length_set (urj_part_t *part, int length)
     if (part->instructions != NULL)
     {
         urj_error_set (URJ_ERROR_ALREADY,
-                       _("instruction length is already set and used\n"));
+                       _("instruction length is already set and used"));
         return URJ_STATUS_FAIL;
     }
 
@@ -314,14 +314,14 @@ urj_part_instruction_define (urj_part_t *part, const char *instruction,
     if (strlen (code) != part->instruction_length)
     {
         urj_error_set (URJ_ERROR_INVALID,
-                       _("invalid instruction length\n"));
+                       _("invalid instruction length"));
         return NULL;
     }
 
     if (urj_part_find_instruction (part, instruction) != NULL)
     {
         urj_error_set (URJ_ERROR_ALREADY,
-                       _("Instruction '%s' already defined\n"), instruction);
+                       _("Instruction '%s' already defined"), instruction);
         return NULL;
     }
 
@@ -329,7 +329,7 @@ urj_part_instruction_define (urj_part_t *part, const char *instruction,
     if (dr == NULL)
     {
         urj_error_set(URJ_ERROR_NOTFOUND,
-                      _("unknown data register '%s'\n"), data_register);
+                      _("unknown data register '%s'"), data_register);
         return NULL;
     }
 

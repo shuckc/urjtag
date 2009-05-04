@@ -25,6 +25,7 @@
 #include <urjtag/sysdep.h>
 
 #include <strings.h>
+#include <stddef.h>
 
 #include <urjtag/usbconn.h>
 

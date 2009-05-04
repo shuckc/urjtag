@@ -35,28 +35,14 @@
 #include <urjtag/bsbit.h>
 
 urj_bsbit_t *
-urj_part_bsbit_alloc_control (urj_chain_t *chain, int bit, const char *name,
+urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
                               int type, int safe,
                               int ctrl_num, int ctrl_val, int ctrl_state)
 {
     urj_bsbit_t *b;
-    urj_part_t *part;
     urj_data_register_t *bsr;
     urj_part_signal_t *signal;
 
-    if (!chain->parts)
-    {
-        urj_error_set (URJ_ERROR_NO_ACTIVE_PART, _("Run \"detect\" first.\n"));
-        return NULL;
-    }
-    if (chain->active_part >= chain->parts->len)
-    {
-        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
-                       _("%s: no active part\n"), "signal");
-        return NULL;
-    }
-
-    part = chain->parts->parts[chain->active_part];
     bsr = urj_part_find_data_register (part, "BSR");
     if (bsr == NULL)
     {
@@ -125,21 +111,21 @@ urj_part_bsbit_alloc_control (urj_chain_t *chain, int bit, const char *name,
             urj_error_set(URJ_ERROR_INVALID, _("invalid control bit number\n"));
             return NULL;
         }
-        part->bsbits[bit]->control = ctrl_num;
-        part->bsbits[bit]->control_value = ctrl_val;
-        part->bsbits[bit]->control_state = URJ_BSBIT_STATE_Z;
+        b->control = ctrl_num;
+        b->control_value = ctrl_val;
+        b->control_state = URJ_BSBIT_STATE_Z;
     }
 
     return b;
 }
 
 urj_bsbit_t *
-urj_part_bsbit_alloc (urj_chain_t *chain, int bit, const char *name, int type,
+urj_part_bsbit_alloc (urj_part_t *part, int bit, const char *name, int type,
                       int safe)
 {
     urj_bsbit_t *b;
 
-    b = urj_part_bsbit_alloc_control (chain, bit, name, type, safe, -1, -1, -1);
+    b = urj_part_bsbit_alloc_control (part, bit, name, type, safe, -1, -1, -1);
 
     return b;
 }

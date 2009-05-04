@@ -28,7 +28,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/bsbit.h>
+#include <urjtag/part.h>
+#include <urjtag/chain.h>
 
 #include <urjtag/cmd.h>
 
@@ -52,12 +55,12 @@ cmd_bit_print_params (char *params[], unsigned int parameters, char *command,
 static int
 cmd_bit_run (urj_chain_t *chain, char *params[])
 {
+    urj_part_t *part;
     unsigned int bit;
     int type;
     int safe;
     unsigned int control;
     unsigned int parameters = urj_cmd_params (params);
-    urj_bsbit_t *bsbit;
     char command[1024];
 
     cmd_bit_print_params (params, parameters, command, sizeof command);
@@ -73,6 +76,12 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
     {
         printf (_("%s: cable test failed for command '%s'\n"), "bit",
                 command);
+        return 1;
+    }
+
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
+    {
         return 1;
     }
 
@@ -129,10 +138,13 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
 
     /* test for control bit */
     if (urj_cmd_params (params) == 5) {
-        bsbit = urj_part_bsbit_alloc (chain, bit, params[4], type, safe);
-        if (bsbit == NULL)
+        part->bsbits[bit] = urj_part_bsbit_alloc (part, bit, params[4], type,
+                                                  safe);
+        if (part->bsbits[bit] == NULL)
         {
-            return -1;
+            printf ("%s for command '%s'\n", urj_error_describe(), command);
+            urj_error_get_reset();
+            return 1;
         }
 
     } else {
@@ -161,12 +173,15 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
 
         control_state = URJ_BSBIT_STATE_Z;
 
-        bsbit = urj_part_bsbit_alloc_control (chain, bit, params[4], type, safe,
-                                              control, control_value,
-                                              control_state);
-        if (bsbit == NULL)
+        part->bsbits[bit] = urj_part_bsbit_alloc_control (part, bit, params[4],
+                                                          type, safe, control,
+                                                          control_value,
+                                                          control_state);
+        if (part->bsbits[bit] == NULL)
         {
-            return -1;
+            printf ("%s for command '%s'\n", urj_error_describe(), command);
+            urj_error_get_reset();
+            return 1;
         }
     }
 

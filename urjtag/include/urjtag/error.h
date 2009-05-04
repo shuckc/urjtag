@@ -76,12 +76,12 @@ extern urj_error_state_t        urj_error_state;
 /**
  * The top of the error stack. The caller must not modify the returned struct.
  */
-const urj_error_state_t *urj_error_get(void);
+const urj_error_state_t *urj_error_get (void);
 /**
  * Pop the top off the error stack.
  * @return #URJ_ERROR_OK if the bottom of the error stack is reached
  */
-urj_error_t urj_error_get_reset(void);
+urj_error_t urj_error_get_reset (void);
 /**
  * The top of the error state in human-readable form.
  *
@@ -89,6 +89,6 @@ urj_error_t urj_error_get_reset(void);
  *
  * @return a pointer to a static area.
  */
-const char *urj_error_describe(void);
+const char *urj_error_describe (void);
 
 #endif /* URJ_ERROR_H */

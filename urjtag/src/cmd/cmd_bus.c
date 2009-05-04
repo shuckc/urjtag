@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/bus.h>
 
@@ -54,7 +55,11 @@ cmd_bus_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[1], &n))
         return -1;
 
-    (void)urj_bus_buses_set(n);
+    if (urj_bus_buses_set (n) != URJ_STATUS_OK)
+    {
+        printf ("%s\n", urj_error_describe());
+        urj_error_get_reset();
+    }
 
     return 1;
 }

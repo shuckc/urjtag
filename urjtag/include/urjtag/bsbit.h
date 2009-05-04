@@ -50,19 +50,19 @@ struct urj_bsbit
 /**
  * Define new BSR (Boundary Scan Register) bit for signal <code>name</code>.
  *
- * @param chain
+ * @param part
  * @param bit
  * @param name associated signal name
  * @param type URJ_BSBIT_{INPUT|OUTPUT|BIDIR|CONTROL|INTERNAL}
  * @param safe default (safe) value (0|1)
  */
-urj_bsbit_t *urj_part_bsbit_alloc (urj_chain_t *chain, int bit,
+urj_bsbit_t *urj_part_bsbit_alloc (urj_part_t *part, int bit,
                                    const char *name, int type, int safe);
 /**
  * Define new BSR (Boundary Scan Register) bit for signal <code>name</code>.
  * Additionally, define control bit.
  *
- * @param chain
+ * @param part
  * @param bit
  * @param name associated signal name
  * @param type URJ_BSBIT_{INPUT|OUTPUT|BIDIR|CONTROL|INTERNAL}
@@ -71,7 +71,7 @@ urj_bsbit_t *urj_part_bsbit_alloc (urj_chain_t *chain, int bit,
  * @param ctrl_val control value
  * @param ctrl_state control state; valid statis is only URJ_BSBIT_STATE_Z
  */
-urj_bsbit_t *urj_part_bsbit_alloc_control (urj_chain_t *chain, int bit,
+urj_bsbit_t *urj_part_bsbit_alloc_control (urj_part_t *part, int bit,
                                            const char *name, int type, int safe,
                                            int ctrl_num, int ctrl_val,
                                            int ctrl_state);

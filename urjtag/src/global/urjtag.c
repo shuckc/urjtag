@@ -29,3 +29,33 @@
 urj_error_state_t urj_error_state;
 int urj_debug_mode = 0;
 int urj_big_endian = 0;
+
+const urj_error_state_t *
+urj_error_get (void)
+{
+    return &urj_error_state;
+}
+
+urj_error_t
+urj_error_get_reset (void)
+{
+    urj_error_t e = urj_error_state.errnum;
+
+    urj_error_state.errnum = URJ_ERROR_OK;
+
+    return e;
+}
+
+const char *
+urj_error_describe (void)
+{
+    static char msg[URJ_ERROR_MSG_LEN + 1024 + 256 + 20];
+
+    snprintf (msg, sizeof msg, "%s:%d %s(): %s", urj_error_state.file,
+              urj_error_state.line, urj_error_state.function,
+              urj_error_state.msg);
+
+    return msg;
+}
+
+

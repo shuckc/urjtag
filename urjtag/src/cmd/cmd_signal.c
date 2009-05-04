@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/bssignal.h>
@@ -59,7 +60,12 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
         {
             printf ("Defining pin for signal %s\n", s->name);
 
-            return urj_part_signal_redefine_pin(chain, s, params[2]);
+            if (urj_part_signal_redefine_pin(chain, s, params[2]) != URJ_STATUS_OK)
+            {
+                printf ("%s\n", urj_error_describe());
+                urj_error_get_reset();
+            }
+            return 1;
         }
         else
         {
@@ -77,6 +83,8 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
         s = urj_part_signal_define(chain, params[1]);
     }
     if (s == NULL) {
+        printf ("%s\n", urj_error_describe());
+        urj_error_get_reset();
         return 1;
     }
 
