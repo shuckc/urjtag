@@ -272,7 +272,7 @@ pxa2xx_bus_init (urj_bus_t *bus)
 
     if (urj_tap_state (chain) != URJ_TAP_STATE_RUN_TEST_IDLE)
     {
-        /* silently skip initialization if TAP isn't in RUNTEST/URJ_JIM_IDLE state
+        /* silently skip initialization if TAP isn't in RUNTEST/IDLE state
            this is required to avoid interfering with detect when initbus
            is contained in the part description file
            URJ_BUS_INIT() will be called latest by URJ_BUS_PREPARE() */

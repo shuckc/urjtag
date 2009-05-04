@@ -67,8 +67,8 @@ urj_jim_print_tap_state (char *rof, urj_jim_device_t *dev)
     switch (dev->tap_state & 7)
     {
     case 0:
-        printf ((dev->tap_state ==
-                 URJ_JIM_RESET) ? "URJ_JIM_RESET" : "URJ_JIM_IDLE");
+        printf ((dev->tap_state == URJ_JIM_RESET) ? "URJ_JIM_RESET"
+                                                  : "URJ_JIM_IDLE");
         break;
     case 1:
         printf ("SELECT");

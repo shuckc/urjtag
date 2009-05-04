@@ -47,9 +47,15 @@ cmd_peek_run (urj_chain_t *chain, char *params[])
 
     if (!urj_bus)
     {
+        printf (_("Error: Bus missing.\n"));
+        return 1;
+    }
+    if (!urj_bus->driver)
+    {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
     }
+
     do
     {
         if (urj_cmd_get_number (params[j], &adr))
@@ -110,10 +116,14 @@ cmd_poke_run (urj_chain_t *chain, char *params[])
 
     if (!urj_bus)
     {
+        printf (_("Error: Bus missing.\n"));
+        return 1;
+    }
+    if (!urj_bus->driver)
+    {
         printf (_("Error: Bus driver missing.\n"));
         return 1;
     }
-
 
     URJ_BUS_PREPARE (urj_bus);
 

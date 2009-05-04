@@ -64,7 +64,7 @@ static void urj_svf_free_ths_params(struct ths_params *);
 %token EMPTY
 %token ENDDR ENDIR 
 %token FREQUENCY HZ
-%token STATE URJ_JIM_RESET URJ_JIM_IDLE 
+%token STATE RESET IDLE 
 %token TDI TDO MASK SMASK
 %token TRST ON OFF Z ABSENT
 %token HDR HIR SDR SIR TDR TIR
@@ -98,12 +98,12 @@ line
 svf_statement
     : ENDIR stable_state ';'
     {
-      urj_svf_endxr(priv_data, URJ_SVF_generic_ir, $<token>2);
+      urj_svf_endxr(priv_data, generic_ir, $<token>2);
     }
 
     | ENDDR stable_state ';'
     {
-      urj_svf_endxr(priv_data, URJ_SVF_generic_dr, $<token>2);
+      urj_svf_endxr(priv_data, generic_dr, $<token>2);
     }
 
     | FREQUENCY ';'
@@ -121,7 +121,7 @@ svf_statement
         struct ths_params *p = &(priv_data->parser_params.ths_params);
 
         p->number = $2;
-        urj_svf_hxr(URJ_SVF_generic_dr, p);
+        urj_svf_hxr(generic_dr, p);
         urj_svf_free_ths_params(p);
       }
 
@@ -130,7 +130,7 @@ svf_statement
         struct ths_params *p = &(priv_data->parser_params.ths_params);
 
         p->number = $2;
-        urj_svf_hxr(URJ_SVF_generic_ir, p);
+        urj_svf_hxr(generic_ir, p);
         urj_svf_free_ths_params(p);
       }
 
@@ -185,7 +185,7 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = urj_svf_sxr(chain, priv_data, URJ_SVF_generic_dr, p, &@$);
+        result = urj_svf_sxr(chain, priv_data, generic_dr, p, &@$);
         urj_svf_free_ths_params(p);
 
         if (!result) {
@@ -200,7 +200,7 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = urj_svf_sxr(chain, priv_data, URJ_SVF_generic_ir, p, &@$);
+        result = urj_svf_sxr(chain, priv_data, generic_ir, p, &@$);
         urj_svf_free_ths_params(p);
 
         if (!result) {
@@ -223,7 +223,7 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = urj_svf_txr(URJ_SVF_generic_dr, p);
+        result = urj_svf_txr(generic_dr, p);
         urj_svf_free_ths_params(p);
 
         if (!result) {
@@ -238,7 +238,7 @@ svf_statement
         int result;
 
         p->number = $2;
-        result = urj_svf_txr(URJ_SVF_generic_ir, p);
+        result = urj_svf_txr(generic_ir, p);
         urj_svf_free_ths_params(p);
 
         if (!result) {
@@ -285,8 +285,8 @@ ths_opt_param
 ;
 
 stable_state
-            : URJ_JIM_RESET 
-            | URJ_JIM_IDLE
+            : RESET 
+            | IDLE
             | DRPAUSE
             | IRPAUSE
 ;
@@ -364,8 +364,8 @@ all_states
             | IRUPDATE
             | IRPAUSE
             | DRPAUSE
-            | URJ_JIM_RESET
-            | URJ_JIM_IDLE 
+            | RESET
+            | IDLE 
 ;
 
 path_states

@@ -202,7 +202,7 @@ typedef struct
     uint8_t high_byte_value;
     uint8_t high_byte_dir;
 
-    /* the following variables store the bit position of TRST and URJ_JIM_RESET (SRST)
+    /* the following variables store the bit position of TRST and RESET (SRST)
        for XOR'ing with the default values of low_byte_value and high_byte_value
        allowed values:
        <  0 : feature not used
@@ -1276,7 +1276,7 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
             low_or |= BITMASK_TDI;
         if (sigs & URJ_POD_CS_TMS)
             low_or |= BITMASK_TMS;
-        /* TRST and URJ_JIM_RESET (SRST) are XOR'ed to the default value since
+        /* TRST and RESET (SRST) are XOR'ed to the default value since
            the right value depends on the external circuitry (inverter or not) */
         if ((sigs & URJ_POD_CS_TRST) == 0)
             if (params->bit_trst >= 0)

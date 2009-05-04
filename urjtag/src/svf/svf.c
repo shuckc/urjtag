@@ -243,10 +243,10 @@ urj_svf_map_state (int state)
 
     switch (state)
     {
-    case URJ_JIM_RESET:
+    case RESET:
         jtag_state = URJ_TAP_STATE_TEST_LOGIC_RESET;
         break;
-    case URJ_JIM_IDLE:
+    case IDLE:
         jtag_state = URJ_TAP_STATE_RUN_TEST_IDLE;
         break;
     case DRSELECT:
@@ -579,15 +579,15 @@ urj_svf_all_care (char **string, double number)
  *   state : required end state (SVF parser encoding)
  * ***************************************************************************/
 void
-urj_svf_endxr (urj_svf_parser_priv_t *priv,
-               enum URJ_SVF_generic_irdr_coding ir_dr, int state)
+urj_svf_endxr (urj_svf_parser_priv_t *priv, enum generic_irdr_coding ir_dr,
+               int state)
 {
     switch (ir_dr)
     {
-    case URJ_SVF_generic_ir:
+    case generic_ir:
         priv->endir = urj_svf_map_state (state);
         break;
-    case URJ_SVF_generic_dr:
+    case generic_dr:
         priv->enddr = urj_svf_map_state (state);
         break;
     }
@@ -626,12 +626,11 @@ urj_svf_frequency (urj_chain_t *chain, double freq)
  *   0 : error occurred
  * ***************************************************************************/
 int
-urj_svf_hxr (enum URJ_SVF_generic_irdr_coding ir_dr,
-             struct ths_params *params)
+urj_svf_hxr (enum generic_irdr_coding ir_dr, struct ths_params *params)
 {
     if (params->number != 0.0)
         printf (_("Warning %s: command %s not implemented\n"), "svf",
-                ir_dr == URJ_SVF_generic_ir ? "HIR" : "HDR");
+                ir_dr == generic_ir ? "HIR" : "HDR");
 
     return (1);
 }
@@ -841,13 +840,13 @@ urj_svf_state (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
  * ***************************************************************************/
 int
 urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
-             enum URJ_SVF_generic_irdr_coding ir_dr,
-             struct ths_params *params, YYLTYPE *loc)
+             enum generic_irdr_coding ir_dr, struct ths_params *params,
+             YYLTYPE *loc)
 {
     urj_svf_sxr_t *sxr_params;
     int len, result = 1;
 
-    sxr_params = (ir_dr == URJ_SVF_generic_ir) ?
+    sxr_params = (ir_dr == generic_ir) ?
                      &(priv->sir_params) : &(priv->sdr_params);
 
     /* remember parameters */
@@ -883,7 +882,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         {
             printf (_
                     ("Error %s: first %s command after length change must have a TDI value.\n"),
-                    "svf", ir_dr == URJ_SVF_generic_ir ? "SIR" : "SDR");
+                    "svf", ir_dr == generic_ir ? "SIR" : "SDR");
             result = 0;
         }
         sxr_params->no_tdi = 0;
@@ -905,7 +904,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     len = (int) sxr_params->params.number;
     switch (ir_dr)
     {
-    case URJ_SVF_generic_ir:
+    case generic_ir:
         /* is SIR large enough? */
         if (priv->ir->value->len != len)
         {
@@ -921,7 +920,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         }
         break;
 
-    case URJ_SVF_generic_dr:
+    case generic_dr:
         /* check data register SDR */
         if (priv->dr->in->len != len)
         {
@@ -948,16 +947,15 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
 
     /* fill register with value of TDI parameter */
     if (!urj_svf_copy_hex_to_register (sxr_params->params.tdi,
-                                       ir_dr ==
-                                       URJ_SVF_generic_ir ? priv->ir->
-                                       value : priv->dr->in))
+                                       ir_dr == generic_ir ? priv->ir->value
+                                                           : priv->dr->in))
         return (0);
 
 
     /* shift selected instruction/register */
     switch (ir_dr)
     {
-    case URJ_SVF_generic_ir:
+    case generic_ir:
         urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_IR);
         urj_tap_chain_shift_instructions_mode (chain,
                                                sxr_params->params.tdo ? 1 : 0,
@@ -971,7 +969,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
                                      loc);
         break;
 
-    case URJ_SVF_generic_dr:
+    case generic_dr:
         urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_DR);
         urj_tap_chain_shift_data_registers_mode (chain,
                                                  sxr_params->params.
@@ -1089,12 +1087,11 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
  *   0 : error occurred
  * ***************************************************************************/
 int
-urj_svf_txr (enum URJ_SVF_generic_irdr_coding ir_dr,
-             struct ths_params *params)
+urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
 {
     if (params->number != 0.0)
         printf (_("Warning %s: command %s not implemented\n"), "svf",
-                ir_dr == URJ_SVF_generic_ir ? "TIR" : "TDR");
+                ir_dr == generic_ir ? "TIR" : "TDR");
 
     return (1);
 }

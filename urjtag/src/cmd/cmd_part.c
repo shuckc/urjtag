@@ -48,17 +48,17 @@ cmd_part_run (urj_chain_t *chain, char *params[])
             urj_part_t *part = urj_tap_chain_active_part (chain);
 
             if (part == NULL)
+                // retain error state
                 return 1;
 
-            part->alias = malloc (strlen (params[2]) + 1);
+            part->alias = strdup (params[2]);
             if (part->alias == NULL)
             {
-                urj_error_set(URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                              strlen (params[2]) + 1);
+                urj_error_set(URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails",
+                              params[2]);
                 return -1;
             }
 
-            strcpy (part->alias, params[2]);
             return 1;
         }
     }
@@ -92,8 +92,6 @@ cmd_part_run (urj_chain_t *chain, char *params[])
         }
         if (i < chain->parts->len)
             n = i;
-
-
         else
             return -1;
     }
