@@ -110,9 +110,9 @@ cmd_part_run (urj_chain_t *chain, char *params[])
 static void
 cmd_part_help (void)
 {
-    printf (_("Usage: %s bus->part\n"
+    printf (_("Usage: %s PART\n"
               "Change active part for current JTAG chain.\n"
-              "\n" "bus->part          part number | alias\n"), "part");
+              "\n" "PART          part number | alias\n"), "part");
 }
 
 const urj_cmd_t urj_cmd_part = {
