@@ -26,10 +26,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/types.h>
+#include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/jim.h>
 #include <urjtag/bitmask.h>
-
-#undef VERBOSE
 
 extern urj_jim_bus_device_t urj_jim_intel_28f800b3b;
 
@@ -46,7 +47,7 @@ static urj_jim_attached_part_t some_cpu_attached[] = {
 
 #define BSR_LEN 202
 
-void
+static void
 urj_jim_some_cpu_report_idcode (urj_jim_device_t *dev)
 {
     dev->sreg[0].reg[0] = 0x1;  /* IDCODE instruction b0001 */
@@ -54,10 +55,9 @@ urj_jim_some_cpu_report_idcode (urj_jim_device_t *dev)
     dev->current_dr = 1;        /* IDR */
 }
 
-void
-urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev,
-                           int tms, int tdi, uint8_t *shmem,
-                           size_t shmem_size)
+static void
+urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev, int tms, int tdi,
+                           uint8_t *shmem, size_t shmem_size)
 {
     int i;
 
@@ -76,9 +76,7 @@ urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev,
             uint32_t d = 0;
             uint32_t c = dev->sreg[2].reg[3];
 
-#ifdef VERBOSE
-            printf ("URJ_JIM_CAPTURE_DR/EXTEST\n");
-#endif
+            urj_log (URJ_LOG_LEVEL_DETAIL, "URJ_JIM_CAPTURE_DR/EXTEST\n");
 
             for (i = 0; some_cpu_attached[i].part; i++)
             {
@@ -105,35 +103,25 @@ urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev,
 
     case URJ_JIM_UPDATE_IR:
 
-#ifdef VERBOSE
-        printf ("URJ_JIM_UPDATE_IR/");
-#endif
+        urj_log (URJ_LOG_LEVEL_DETAIL, "URJ_JIM_UPDATE_IR/");
 
         switch (dev->sreg[0].reg[0])
         {
         case 0x0:              /* EXTEST */
-#ifdef VERBOSE
-            printf ("EXTEST\n");
-#endif
+            urj_log (URJ_LOG_LEVEL_DETAIL, "EXTEST\n");
             dev->current_dr = 2;
             break;
         case 0x1:              /* IDCODE */
-#ifdef VERBOSE
-            printf ("IDCODE\n");
-#endif
+            urj_log (URJ_LOG_LEVEL_DETAIL, "IDCODE\n");
             urj_jim_some_cpu_report_idcode (dev);
             break;
         case 0x2:              /* SAMPLE */
-#ifdef VERBOSE
-            printf ("SAMPLE\n");
-#endif
+            urj_log (URJ_LOG_LEVEL_DETAIL, "SAMPLE\n");
             dev->current_dr = 2;
             break;
         case 0x3:              /* BYPASS */
-#ifdef VERBOSE
-            printf ("BYPASS\n");
-#endif
         default:
+            urj_log (URJ_LOG_LEVEL_DETAIL, "BYPASS\n");
             dev->current_dr = 0;        /* BYPASS */
             break;
         }
@@ -144,7 +132,7 @@ urj_jim_some_cpu_tck_rise (urj_jim_device_t *dev,
     }
 }
 
-void
+static void
 urj_jim_some_cpu_tck_fall (urj_jim_device_t *dev, uint8_t *shmem,
                            size_t shmem_size)
 {
@@ -160,9 +148,7 @@ urj_jim_some_cpu_tck_fall (urj_jim_device_t *dev, uint8_t *shmem,
             uint32_t d = dev->sreg[2].reg[1];
             uint32_t c = dev->sreg[2].reg[3];
 
-#ifdef VERBOSE
-            printf ("URJ_JIM_UPDATE_DR/EXTEST\n");
-#endif
+            urj_log (URJ_LOG_LEVEL_DETAIL, "URJ_JIM_UPDATE_DR/EXTEST\n");
 
             for (i = 0; some_cpu_attached[i].part; i++)
             {
@@ -189,7 +175,7 @@ urj_jim_some_cpu_tck_fall (urj_jim_device_t *dev, uint8_t *shmem,
     }
 }
 
-void
+static void
 urj_jim_some_cpu_free (urj_jim_device_t *dev)
 {
     int i;
@@ -228,6 +214,8 @@ urj_jim_some_cpu (void)
         if (!dev->state)
         {
             free (dev);
+            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                           sizeof (some_cpu_attached));
             dev = NULL;
         }
         else
@@ -245,13 +233,23 @@ urj_jim_some_cpu (void)
                     &(((urj_jim_attached_part_t *) (dev->state))[i].part);
                 *b = malloc (sizeof (urj_jim_bus_device_t));
                 if (*b == NULL)
+                {
+                    urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                                   sizeof (urj_jim_bus_device_t));
                     break;
+                }
                 memcpy (*b, some_cpu_attached[i].part,
                         sizeof (urj_jim_bus_device_t));
-                (*b)->init (*b);
+                if ((*b)->init (*b) != URJ_STATUS_OK)
+                {
+                    free (*b);
+                    *b = NULL;
+                    // retain error state
+                    break;
+                }
             }
 
-            if (some_cpu_attached[i].part)      /* loop broken; failed to malloc all parts */
+            if (! some_cpu_attached[i].part)      /* loop broken; failed to malloc all parts */
             {
                 for (i--; i >= 0; i--)
                     free (((urj_jim_attached_part_t *) (dev->state))[i].part);

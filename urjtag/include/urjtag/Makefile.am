@@ -40,7 +40,6 @@ pkginclude_HEADERS = \
 	flash.h \
 	gettext.h \
 	jim.h \
-	jim/some_cpu.h \
 	jtag.h \
 	part_instruction.h \
 	parport.h \

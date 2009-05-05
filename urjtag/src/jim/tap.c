@@ -27,89 +27,87 @@
 #include <string.h>
 #include <stdint.h>
 
+#include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/jim.h>
 
-#include <urjtag/jim/some_cpu.h>
-
-#undef VERBOSE
-
 static const urj_jim_tap_state_t next_tap_state[16][2] = {
-    /* URJ_JIM_RESET       */ {URJ_JIM_IDLE, URJ_JIM_RESET},
-    /* URJ_JIM_SELECT_DR   */ {URJ_JIM_CAPTURE_DR, URJ_JIM_SELECT_IR},
-    /* URJ_JIM_CAPTURE_DR  */ {URJ_JIM_SHIFT_DR, URJ_JIM_EXIT1_DR},
-    /* URJ_JIM_SHIFT_DR    */ {URJ_JIM_SHIFT_DR, URJ_JIM_EXIT1_DR},
-    /* URJ_JIM_EXIT1_DR    */ {URJ_JIM_PAUSE_DR, URJ_JIM_UPDATE_DR},
-    /* URJ_JIM_PAUSE_DR    */ {URJ_JIM_PAUSE_DR, URJ_JIM_EXIT2_DR},
-    /* URJ_JIM_EXIT2_DR    */ {URJ_JIM_SHIFT_DR, URJ_JIM_UPDATE_DR},
-    /* URJ_JIM_UPDATE_DR   */ {URJ_JIM_IDLE, URJ_JIM_SELECT_DR},
-    /* URJ_JIM_IDLE        */ {URJ_JIM_IDLE, URJ_JIM_SELECT_DR},
-    /* URJ_JIM_SELECT_IR   */ {URJ_JIM_CAPTURE_IR, URJ_JIM_RESET},
-    /* URJ_JIM_CAPTURE_IR  */ {URJ_JIM_SHIFT_IR, URJ_JIM_EXIT1_IR},
-    /* URJ_JIM_SHIFT_IR    */ {URJ_JIM_SHIFT_IR, URJ_JIM_EXIT1_IR},
-    /* URJ_JIM_EXIT1_IR    */ {URJ_JIM_PAUSE_IR, URJ_JIM_UPDATE_IR},
-    /* URJ_JIM_PAUSE_IR    */ {URJ_JIM_EXIT2_IR, URJ_JIM_EXIT2_IR},
-    /* URJ_JIM_EXIT2_IR    */ {URJ_JIM_SHIFT_IR, URJ_JIM_UPDATE_IR},
-    /* URJ_JIM_UPDATE_IR   */ {URJ_JIM_IDLE, URJ_JIM_SELECT_DR}
+    /* URJ_JIM_RESET       */ {URJ_JIM_IDLE,            URJ_JIM_RESET},
+    /* URJ_JIM_SELECT_DR   */ {URJ_JIM_CAPTURE_DR,      URJ_JIM_SELECT_IR},
+    /* URJ_JIM_CAPTURE_DR  */ {URJ_JIM_SHIFT_DR,        URJ_JIM_EXIT1_DR},
+    /* URJ_JIM_SHIFT_DR    */ {URJ_JIM_SHIFT_DR,        URJ_JIM_EXIT1_DR},
+    /* URJ_JIM_EXIT1_DR    */ {URJ_JIM_PAUSE_DR,        URJ_JIM_UPDATE_DR},
+    /* URJ_JIM_PAUSE_DR    */ {URJ_JIM_PAUSE_DR,        URJ_JIM_EXIT2_DR},
+    /* URJ_JIM_EXIT2_DR    */ {URJ_JIM_SHIFT_DR,        URJ_JIM_UPDATE_DR},
+    /* URJ_JIM_UPDATE_DR   */ {URJ_JIM_IDLE,            URJ_JIM_SELECT_DR},
+    /* URJ_JIM_IDLE        */ {URJ_JIM_IDLE,            URJ_JIM_SELECT_DR},
+    /* URJ_JIM_SELECT_IR   */ {URJ_JIM_CAPTURE_IR,      URJ_JIM_RESET},
+    /* URJ_JIM_CAPTURE_IR  */ {URJ_JIM_SHIFT_IR,        URJ_JIM_EXIT1_IR},
+    /* URJ_JIM_SHIFT_IR    */ {URJ_JIM_SHIFT_IR,        URJ_JIM_EXIT1_IR},
+    /* URJ_JIM_EXIT1_IR    */ {URJ_JIM_PAUSE_IR,        URJ_JIM_UPDATE_IR},
+    /* URJ_JIM_PAUSE_IR    */ {URJ_JIM_EXIT2_IR,        URJ_JIM_EXIT2_IR},
+    /* URJ_JIM_EXIT2_IR    */ {URJ_JIM_SHIFT_IR,        URJ_JIM_UPDATE_IR},
+    /* URJ_JIM_UPDATE_IR   */ {URJ_JIM_IDLE,            URJ_JIM_SELECT_DR}
 };
 
-void
-urj_jim_print_sreg (urj_jim_shift_reg_t *r)
+static void
+urj_jim_print_sreg (urj_log_level_t ll, urj_jim_shift_reg_t *r)
 {
     int i;
     for (i = (r->len + 31) / 32; i >= 0; i--)
-        printf (" %08X", r->reg[i]);
+        urj_log (ll, " %08X", r->reg[i]);
 }
 
-void
-urj_jim_print_tap_state (char *rof, urj_jim_device_t *dev)
+static void
+urj_jim_print_tap_state (urj_log_level_t ll, char *rof, urj_jim_device_t *dev)
 {
-    printf (" tck %s, state=", rof);
+    urj_log (ll, " tck %s, state=", rof);
     switch (dev->tap_state & 7)
     {
     case 0:
-        printf ((dev->tap_state == URJ_JIM_RESET) ? "URJ_JIM_RESET"
-                                                  : "URJ_JIM_IDLE");
+        urj_log (ll, (dev->tap_state == URJ_JIM_RESET) ? "URJ_JIM_RESET"
+                                                       : "URJ_JIM_IDLE");
         break;
     case 1:
-        printf ("SELECT");
+        urj_log (ll, "SELECT");
         break;
     case 2:
-        printf ("CAPTURE");
+        urj_log (ll, "CAPTURE");
         break;
     case 3:
-        printf ("SHIFT");
+        urj_log (ll, "SHIFT");
         break;
     case 4:
-        printf ("EXIT1");
+        urj_log (ll, "EXIT1");
         break;
     case 5:
-        printf ("PAUSE");
+        urj_log (ll, "PAUSE");
         break;
     case 6:
-        printf ("EXIT2");
+        urj_log (ll, "EXIT2");
         break;
     default:
-        printf ("UPDATE");
+        urj_log (ll, "UPDATE");
         break;
     }
     if (dev->tap_state & 7)
     {
         if (dev->tap_state & 8)
         {
-            printf ("_IR=");
-            urj_jim_print_sreg (&dev->sreg[0]);
+            urj_log (ll, "_IR=");
+            urj_jim_print_sreg (ll, &dev->sreg[0]);
         }
         else
         {
-            printf ("_DR");
+            urj_log (ll, "_DR");
             if (dev->current_dr != 0)
             {
-                printf ("(%d)=", dev->current_dr);
-                urj_jim_print_sreg (&dev->sreg[dev->current_dr]);
+                urj_log (ll, "(%d)=", dev->current_dr);
+                urj_jim_print_sreg (ll, &dev->sreg[dev->current_dr]);
             }
         }
     }
-    printf ("\n");
+    urj_log (ll, "\n");
 }
 
 
@@ -145,9 +143,7 @@ urj_jim_tck_rise (urj_jim_state_t *s, int tms, int tdi)
         urj_jim_shift_reg_t *sr;
         uint32_t *reg;
 
-#ifdef VERBOSE
-        urj_jim_print_tap_state ("rise", dev);
-#endif
+        urj_jim_print_tap_state (URJ_LOG_LEVEL_DETAIL, "rise", dev);
 
         dev_tdi = (dev->prev != NULL) ? dev->prev->tdo : tdi;
 
@@ -219,9 +215,7 @@ urj_jim_tck_fall (urj_jim_state_t *s)
     {
         dev->tdo = dev->tdo_buffer;
 
-#ifdef VERBOSE
-        urj_jim_print_tap_state ("fall", dev);
-#endif
+        urj_jim_print_tap_state (URJ_LOG_LEVEL_DETAIL, "fall", dev);
 
         if (dev->tck_fall != NULL)
             dev->tck_fall (dev, s->shmem, s->shmem_size);
@@ -237,7 +231,8 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
 
     if (dev == NULL)
     {
-        printf ("Out of memory\n");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (urj_jim_device_t));
         return NULL;
     }
 
@@ -245,7 +240,8 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
     if (dev->sreg == NULL)
     {
         free (dev);
-        printf ("Out of memory\n");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (urj_jim_shift_reg_t));
         return NULL;
     }
 
@@ -260,7 +256,7 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
 
     if (r > 0)
     {
-        printf ("Out of memory\n");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc() fails");
         for (i = 0; i < num_sregs; i++)
             if (dev->sreg[i].reg != NULL)
                 free (dev->sreg[i].reg);
@@ -288,7 +284,8 @@ urj_jim_init (void)
     s = malloc (sizeof (urj_jim_state_t));
     if (s == NULL)
     {
-        printf ("Out of memory!\n");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (urj_jim_state_t));
         return NULL;
     }
 
@@ -298,13 +295,15 @@ urj_jim_init (void)
     if (s->shmem != NULL)
     {
         memset (s->shmem, 0xFF, s->shmem_size);
-        printf ("Allocated %zd bytes for device memory simulation.\n",
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 "Allocated %zd bytes for device memory simulation.\n",
                 s->shmem_size);
     }
     else
     {
         free (s);
-        printf ("Out of memory!\n");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (s->shmem_size));
         return NULL;
     }
 
@@ -317,9 +316,9 @@ urj_jim_init (void)
     }
     else
     {
-        printf ("Out of memory!\n");
         free (s->shmem);
         free (s);
+        // retain error state
         return NULL;
     }
     return s;

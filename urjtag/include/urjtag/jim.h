@@ -100,7 +100,7 @@ struct urj_jim_bus_device
     int width;                  /* bytes */
     int size;                   /* words (each <width> bytes) */
     void *state;                /* device-dependent */
-    void (*init) (urj_jim_bus_device_t *x);
+    int (*init) (urj_jim_bus_device_t *x);
     uint32_t (*capture) (urj_jim_bus_device_t *x,
                          uint32_t address, uint32_t control,
                          uint8_t *shmem, size_t shmem_size);
@@ -127,7 +127,6 @@ void urj_jim_tck_fall (urj_jim_state_t *s);
 urj_jim_device_t *urj_jim_alloc_device (int num_sregs, const int reg_size[]);
 urj_jim_state_t *urj_jim_init (void);
 void urj_jim_free (urj_jim_state_t *s);
-void urj_jim_print_sreg (urj_jim_shift_reg_t *r);
-void urj_jim_print_tap_state (char *rof, urj_jim_device_t *dev);
+urj_jim_device_t *urj_jim_some_cpu (void);
 
 #endif

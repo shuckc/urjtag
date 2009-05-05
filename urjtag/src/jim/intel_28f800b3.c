@@ -32,9 +32,10 @@
 #include <sys/time.h>
 #include <time.h>
 
+#include <urjtag/types.h>
+#include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/jim.h>
-
-#undef VERBOSE
 
 typedef enum
 {
@@ -106,37 +107,43 @@ typedef struct
 }
 intel_f28xxxb3_state_t;
 
-void
+static int
 urj_jim_intel_28fxxxb3_init (urj_jim_bus_device_t *d, uint16_t id,
                              b3_boot_type_t bt)
 {
     d->state = malloc (sizeof (intel_f28xxxb3_state_t));
-    if (d->state != NULL)
+    if (d->state == NULL)
     {
-        intel_f28xxxb3_state_t *is = d->state;
-        is->opstate = READ_ARRAY;
-        is->identifier = id;
-        is->boot_type = bt;
-        is->status = 0x00;
-        is->status_buffer = 0x00;
-        is->control_buffer = 0x00000000;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (intel_f28xxxb3_state_t));
+        return URJ_STATUS_FAIL;
     }
+
+    intel_f28xxxb3_state_t *is = d->state;
+    is->opstate = READ_ARRAY;
+    is->identifier = id;
+    is->boot_type = bt;
+    is->status = 0x00;
+    is->status_buffer = 0x00;
+    is->control_buffer = 0x00000000;
+
+    return URJ_STATUS_OK;
 }
 
-void
+static int
 urj_jim_intel_28f800b3b_init (urj_jim_bus_device_t *d)
 {
-    urj_jim_intel_28fxxxb3_init (d, 0x8893, BOTTOM);
+    return urj_jim_intel_28fxxxb3_init (d, 0x8893, BOTTOM);
 }
 
-void
+static void
 urj_jim_intel_28fxxxb3_free (urj_jim_bus_device_t *d)
 {
     if (d->state != NULL)
         free (d->state);
 }
 
-uint32_t
+static uint32_t
 urj_jim_intel_28fxxxb3_capture (urj_jim_bus_device_t *d,
                                 uint32_t address, uint32_t control,
                                 uint8_t *shmem, size_t shmem_size)
@@ -176,33 +183,28 @@ urj_jim_intel_28fxxxb3_capture (urj_jim_bus_device_t *d,
         default:
             break;
         }
-#ifdef VERBOSE
-        printf ("i28fxxxb3: read %04X from %08X (in %s)\n",
-                data & 0xFFFF, address,
-                intel_28fxxx_opstate_name[is->opstate]);
-#endif
+        urj_log (URJ_LOG_LEVEL_DETAIL,
+                 "i28fxxxb3: read %04X from %08X (in %s)\n",
+                 data & 0xFFFF, address,
+                 intel_28fxxx_opstate_name[is->opstate]);
     }
 
-#if 0
-    printf ("capture A=%08X, D=%08X%s%s%s\n", address, data,
-            (control & 1) ? ", OE" : "",
-            (control & 2) ? ", WE" : "", (control & 4) ? ", CS" : "");
-#endif
+    urj_log (URJ_LOG_LEVEL_COMM, "capture A=%08X, D=%08X%s%s%s\n",
+             address, data, (control & 1) ? ", OE" : "",
+             (control & 2) ? ", WE" : "", (control & 4) ? ", CS" : "");
 
     return data;
 }
 
-void
+static void
 urj_jim_intel_28fxxxb3_update (urj_jim_bus_device_t *d,
                                uint32_t address, uint32_t data,
                                uint32_t control, uint8_t *shmem,
                                size_t shmem_size)
 {
-#if 0
-    printf ("update  A=%08X, D=%08X%s%s%s\n", address, data,
-            (control & 1) ? ", OE" : "",
-            (control & 2) ? ", WE" : "", (control & 4) ? ", CS" : "");
-#endif
+    urj_log (URJ_LOG_LEVEL_COMM, "update  A=%08X, D=%08X%s%s%s\n",
+             address, data, (control & 1) ? ", OE" : "",
+             (control & 2) ? ", WE" : "", (control & 4) ? ", CS" : "");
 
     if (d->state != NULL)
     {
@@ -254,11 +256,10 @@ urj_jim_intel_28fxxxb3_update (urj_jim_bus_device_t *d,
             intel_f28xxxb3_state_t *is = d->state;
             uint8_t dl = data & 0xFF;
 
-#ifdef VERBOSE
-            printf ("i28fxxxb3: write %04X to %08X (in %s)\n",
-                    data & 0xFFFF, address,
-                    intel_28fxxx_opstate_name[is->opstate]);
-#endif
+            urj_log (URJ_LOG_LEVEL_DETAIL,
+                     "i28fxxxb3: write %04X to %08X (in %s)\n",
+                     data & 0xFFFF, address,
+                     intel_28fxxx_opstate_name[is->opstate]);
 
             if (dl == 0x50)
             {
