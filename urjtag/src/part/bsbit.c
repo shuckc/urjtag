@@ -61,6 +61,11 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
         urj_error_set(URJ_ERROR_ALREADY, _("duplicate bit declaration"));
         return URJ_STATUS_FAIL;
     }
+    if (ctrl_num != -1 && ctrl_num >= bsr->in->len)
+    {
+        urj_error_set(URJ_ERROR_INVALID, _("invalid control bit number\n"));
+        return URJ_STATUS_FAIL;
+    }
 
     signal = urj_part_find_signal (part, name);
 
@@ -108,11 +113,6 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
 
     if (ctrl_num != -1)
     {
-        if (ctrl_num >= bsr->in->len)
-        {
-            urj_error_set(URJ_ERROR_INVALID, _("invalid control bit number\n"));
-            return URJ_STATUS_FAIL;
-        }
         b->control = ctrl_num;
         b->control_value = ctrl_val;
         b->control_state = URJ_BSBIT_STATE_Z;
