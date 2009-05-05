@@ -89,7 +89,7 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     b->bit = bit;
     b->type = type;
     b->signal = signal;
-    b->safe = safe;
+    b->safe = (safe == 1);
     b->control = -1;
 
     part->bsbits[bit] = b;
@@ -115,7 +115,7 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     {
         b->control = ctrl_num;
         b->control_value = ctrl_val;
-        b->control_state = URJ_BSBIT_STATE_Z;
+        b->control_state = ctrl_state;
     }
 
     return URJ_STATUS_OK;

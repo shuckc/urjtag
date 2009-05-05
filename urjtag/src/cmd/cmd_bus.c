@@ -57,7 +57,6 @@ cmd_bus_run (urj_chain_t *chain, char *params[])
 
     if (urj_bus_buses_set (n) != URJ_STATUS_OK)
     {
-        printf ("%s\n", urj_error_describe());
         urj_error_reset();
     }
 

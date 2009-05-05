@@ -515,7 +515,7 @@ Safe_Value      : IDENTIFIER
                 | DECIMAL_NUMBER
                   {
                     char *tmp;
-                    /* @@@@ ToDo check malloc result RFHH */
+                    /* @@@@ RFHH check malloc result */
                     tmp = malloc (2);
                     snprintf (tmp, 2, "%i", $1);
                     tmp[1] = '\0';

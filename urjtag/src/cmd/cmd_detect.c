@@ -45,9 +45,8 @@ cmd_detect_run (urj_chain_t *chain, char *params[])
 
     if (urj_tap_detect (chain) != URJ_STATUS_OK)
     {
-        printf ("%s\n", urj_error_describe());
         urj_error_reset();
-        return -1;
+        return 1;
     }
 
     return 1;

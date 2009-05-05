@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/tap_register.h>
 #include <urjtag/part_instruction.h>
 
@@ -41,10 +42,14 @@ urj_part_instruction_alloc (const char *name, int len, const char *val)
 
     i = malloc (sizeof *i);
     if (!i)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", sizeof *i);
         return NULL;
+    }
 
     if (strlen (name) > URJ_INSTRUCTION_MAXLEN_INSTRUCTION)
-        printf (_("Warning: Instruction name too long\n"));
+        urj_log (URJ_LOG_LEVEL_WARNINGS,
+                 _("Warning: Instruction name too long\n"));
     strncpy (i->name, name, URJ_INSTRUCTION_MAXLEN_INSTRUCTION);
     i->name[URJ_INSTRUCTION_MAXLEN_INSTRUCTION] = '\0';
 

@@ -37,7 +37,7 @@ urj_part_signal_alloc (const char *name)
     urj_part_signal_t *s = malloc (sizeof *s);
     if (!s)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", sizeof *s);
         return NULL;
     }
 
@@ -45,7 +45,7 @@ urj_part_signal_alloc (const char *name)
     if (!s->name)
     {
         free (s);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails", name);
         return NULL;
     }
     s->pin = NULL;              /* djf hack pin number */
@@ -72,7 +72,8 @@ urj_part_salias_alloc (const char *name, const urj_part_signal_t *signal)
 
     if (sa == NULL)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof *sa);
         return NULL;
     }
 
@@ -80,7 +81,7 @@ urj_part_salias_alloc (const char *name, const urj_part_signal_t *signal)
     if (sa->name == NULL)
     {
         free (sa);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails", name);
         return NULL;
     }
     sa->next = NULL;
@@ -124,7 +125,9 @@ urj_part_signal_define_pin (urj_chain_t *chain, const char *signal_name,
         s->pin = strdup (pin_name);
         if (s->pin == NULL)
         {
-            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup fails");
+            urj_part_signal_free (s);
+            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails",
+                           pin_name);
             return NULL;
         }
     }

@@ -42,7 +42,11 @@ urj_part_alloc (const urj_tap_register_t *id)
 {
     urj_part_t *p = malloc (sizeof *p);
     if (!p)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", sizeof *p);
         return NULL;
+    }
+
     p->alias = NULL;            /* djf */
     p->id = urj_tap_register_duplicate (id);
     p->manufacturer[0] = '\0';
@@ -187,21 +191,24 @@ urj_part_set_instruction (urj_part_t *p, const char *iname)
         p->active_instruction = urj_part_find_instruction (p, iname);
 }
 
-void
+int
 urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
 {
     urj_data_register_t *bsr;
 
     if (!p || !s)
-        return;
+    {
+        urj_error_set (URJ_ERROR_INVALID, "part or signal is NULL");
+        return URJ_STATUS_FAIL;
+    }
 
     /* search for Boundary Scan Register */
     bsr = urj_part_find_data_register (p, "BSR");
     if (!bsr)
     {
-        printf (_("%s(%s:%d) Boundary Scan Register (BSR) not found\n"),
-                __FUNCTION__, __FILE__, __LINE__);
-        return;
+        urj_error_set (URJ_ERROR_NOTFOUND,
+                       _("Boundary Scan Register (BSR) not found\n"));
+        return URJ_STATUS_FAIL;
     }
 
     /* setup signal */
@@ -210,8 +217,9 @@ urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
         int control;
         if (!s->output)
         {
-            printf (_("signal '%s' cannot be set as output\n"), s->name);
-            return;
+            urj_error_set (URJ_ERROR_INVALID,
+                           _("signal '%s' cannot be set as output\n"), s->name);
+            return URJ_STATUS_FAIL;
         }
         bsr->in->data[s->output->bit] = val & 1;
 
@@ -224,13 +232,16 @@ urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
     {
         if (!s->input)
         {
-            printf (_("signal '%s' cannot be set as input\n"), s->name);
-            return;
+            urj_error_set (URJ_ERROR_INVALID,
+                           _("signal '%s' cannot be set as input\n"), s->name);
+            return URJ_STATUS_FAIL;
         }
         if (s->output)
             bsr->in->data[s->output->control] =
                 p->bsbits[s->output->bit]->control_value;
     }
+
+    return URJ_STATUS_OK;
 }
 
 int
@@ -239,20 +250,24 @@ urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s)
     urj_data_register_t *bsr;
 
     if (!p || !s)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "part or signal is NULL");
         return -1;
+    }
 
     /* search for Boundary Scan Register */
     bsr = urj_part_find_data_register (p, "BSR");
     if (!bsr)
     {
-        printf (_("%s(%s:%d) Boundary Scan Register (BSR) not found\n"),
-                __FUNCTION__, __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_NOTFOUND,
+                       _("Boundary Scan Register (BSR) not found\n"));
         return -1;
     }
 
     if (!s->input)
     {
-        printf (_("signal '%s' is not input signal\n"), s->name);
+        urj_error_set (URJ_ERROR_INVALID,
+                       _("signal '%s' is not input signal\n"), s->name);
         return -1;
     }
 
@@ -284,7 +299,8 @@ urj_part_print (urj_part_t *p)
         instruction = _("(none)");
     if (dr == NULL)
         dr = _("(none)");
-    printf (format, p->manufacturer, p->part, p->stepping, instruction, dr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, format, p->manufacturer, p->part,
+             p->stepping, instruction, dr);
 }
 
 
@@ -422,7 +438,7 @@ urj_part_parts_print (urj_parts_t *ps)
         if (!p)
             continue;
 
-        printf (_(" %3d "), i);
+        urj_log (URJ_LOG_LEVEL_NORMAL, _(" %3d "), i);
         urj_part_print (p);
     }
 }

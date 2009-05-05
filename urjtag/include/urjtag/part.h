@@ -60,8 +60,13 @@ urj_data_register_t *urj_part_find_data_register (urj_part_t *p,
 urj_part_signal_t *urj_part_find_signal (urj_part_t *p,
                                          const char *signalname);
 void urj_part_set_instruction (urj_part_t *p, const char *iname);
-void urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out,
-                          int val);
+/**
+ * @return URJ_STATUS_FAIL on error; URJ_STATUS_OK on success
+ */
+int urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val);
+/**
+ * @return -1 on error; >= 0 for success
+ */
 int urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s);
 void urj_part_print (urj_part_t *p);
 /**
