@@ -57,42 +57,7 @@ cmd_register_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[2], &len))
         return -1;
 
-    if (urj_part_find_data_register (part, params[1]) != NULL)
-    {
-        printf (_("Data register '%s' already defined\n"), params[1]);
-        return 1;
-    }
-
-    dr = urj_part_data_register_alloc (params[1], len);
-    if (!dr)
-    {
-        printf (_("out of memory\n"));
-        return 1;
-    }
-
-    dr->next = part->data_registers;
-    part->data_registers = dr;
-
-    /* Boundary Scan Register */
-    if (strcasecmp (dr->name, "BSR") == 0)
-    {
-        int i;
-
-        part->boundary_length = len;
-        part->bsbits = malloc (part->boundary_length * sizeof *part->bsbits);
-        if (!part->bsbits)
-        {
-            printf (_("out of memory\n"));
-            return 1;
-        }
-        for (i = 0; i < part->boundary_length; i++)
-            part->bsbits[i] = NULL;
-    }
-
-    /* Device Identification Register */
-    if (strcasecmp (dr->name, "DIR") == 0)
-        urj_tap_register_init (dr->out,
-                               urj_tap_register_get_string (part->id));
+    (void) urj_part_data_register_define (part, params[1], len);
 
     return 1;
 }

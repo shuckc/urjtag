@@ -28,8 +28,10 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <urjtag/part.h>
 #include <urjtag/tap_register.h>
 #include <urjtag/data_register.h>
+#include <urjtag/error.h>
 
 urj_data_register_t *
 urj_part_data_register_alloc (const char *name, int len)
@@ -41,10 +43,15 @@ urj_part_data_register_alloc (const char *name, int len)
 
     dr = malloc (sizeof *dr);
     if (!dr)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof *dr);
         return NULL;
+    }
 
     if (strlen (name) > URJ_DATA_REGISTER_MAXLEN)
-        printf (_("Warning: Data register name too long\n"));
+        urj_log (URJ_LOG_LEVEL_WARNINGS, 
+                 _("Warning: Data register name too long\n"));
     strncpy (dr->name, name, URJ_DATA_REGISTER_MAXLEN);
     dr->name[URJ_DATA_REGISTER_MAXLEN] = '\0';
 
@@ -60,6 +67,7 @@ urj_part_data_register_alloc (const char *name, int len)
     }
     if (!dr->in || !dr->out)
     {
+        // retain error state
         free (dr->in);
         free (dr->out);
         free (dr->name);
@@ -81,4 +89,48 @@ urj_part_data_register_free (urj_data_register_t *dr)
     urj_tap_register_free (dr->in);
     urj_tap_register_free (dr->out);
     free (dr);
+}
+
+int
+urj_part_data_register_define (urj_part_t *part, const char *name, int len)
+{
+    urj_data_register_t *dr;
+
+    if (urj_part_find_data_register (part, name) != NULL)
+    {
+        urj_error_set (URJ_ERROR_ALREADY,
+                       _("Data register '%s' already defined"), name);
+        return URJ_STATUS_FAIL;
+    }
+
+    dr = urj_part_data_register_alloc (name, len);
+    if (!dr)
+        // retain error state
+        return URJ_STATUS_FAIL;
+
+    dr->next = part->data_registers;
+    part->data_registers = dr;
+
+    /* Boundary Scan Register */
+    if (strcasecmp (dr->name, "BSR") == 0)
+    {
+        int i;
+
+        part->boundary_length = len;
+        part->bsbits = malloc (part->boundary_length * sizeof *part->bsbits);
+        if (!part->bsbits)
+        {
+            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                           part->boundary_length * sizeof *part->bsbits);
+            return URJ_STATUS_FAIL;
+        }
+        for (i = 0; i < part->boundary_length; i++)
+            part->bsbits[i] = NULL;
+    }
+
+    /* Device Identification Register */
+    else if (strcasecmp (dr->name, "DIR") == 0)
+        urj_tap_register_init (dr->out, urj_tap_register_get_string (part->id));
+
+    return URJ_STATUS_OK;
 }

@@ -23,6 +23,9 @@
 
 #include <urjtag/sysdep.h>
 
+#include <stdarg.h>
+
+#include <urjtag/log.h>
 #include <urjtag/error.h>
 #include <urjtag/jtag.h>
 
@@ -30,20 +33,44 @@ urj_error_state_t urj_error_state;
 int urj_debug_mode = 0;
 int urj_big_endian = 0;
 
-const urj_error_state_t *
-urj_error_get (void)
+static int stderr_vprintf (const char *fmt, va_list ap);
+
+urj_log_state_t urj_log_state =
+    {
+        .level = URJ_LOG_LEVEL_NORMAL,
+        .out_vprintf = vprintf,
+        .err_vprintf = stderr_vprintf,
+    };
+
+static int
+stderr_vprintf(const char *fmt, va_list ap)
 {
-    return &urj_error_state;
+    return vfprintf (stderr, fmt, ap);
 }
 
-urj_error_t
-urj_error_get_reset (void)
+int
+urj_log (urj_log_level_t level, const char *fmt, ...)
 {
-    urj_error_t e = urj_error_state.errnum;
+    va_list ap;
+    int r;
 
+    if (level < urj_log_state.level)
+        return 0;
+
+    va_start (ap, fmt);
+    if (level < URJ_LOG_LEVEL_WARNINGS)
+        r = urj_log_state.out_vprintf (fmt, ap);
+    else
+        r = urj_log_state.err_vprintf (fmt, ap);
+    va_end (ap);
+
+    return r;
+}
+
+void
+urj_error_reset (void)
+{
     urj_error_state.errnum = URJ_ERROR_OK;
-
-    return e;
 }
 
 const char *
@@ -58,4 +85,19 @@ urj_error_describe (void)
     return msg;
 }
 
-
+const char *
+urj_error_string (urj_error_t err)
+{
+    switch (err)
+    {
+    case URJ_ERROR_OK:                  return "no error";
+    case URJ_ERROR_ALREADY:             return "already defined";
+    case URJ_ERROR_OUT_OF_MEMORY:       return "out of memory";
+    case URJ_ERROR_NO_ACTIVE_PART:      return "no active part";
+    case URJ_ERROR_INVALID:             return "invalid parameter";
+    case URJ_ERROR_NOTFOUND:            return "not found";
+    case URJ_ERROR_IO:                  return "I/O error from OS";
+    case URJ_ERROR_NO_BUS_DRIVER:       return "no bus driver";
+    case URJ_ERROR_BUFFER_EXHAUSTED:    return "buffer exhausted";
+    }
+}

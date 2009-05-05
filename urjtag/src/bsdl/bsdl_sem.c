@@ -31,6 +31,9 @@
 
 #include <urjtag/cmd.h>
 #include <urjtag/part.h>
+#include <urjtag/bsbit.h>
+#include <urjtag/data_register.h>
+#include <urjtag/bssignal.h>
 
 #include "bsdl_sysdep.h"
 
@@ -43,31 +46,6 @@
 #ifdef DMALLOC
 #include "dmalloc.h"
 #endif
-
-/*****************************************************************************
- * void print_cmd(char **cmd)
- *
- * Prints the strings in array cmd until NULL is encountered.
- *
- * Parameters
- *   cmd : array of strings to print, terminated by NULL
- *
- * Returns
- *   void
- ****************************************************************************/
-static void
-print_cmd (char **cmd)
-{
-    int idx = 0;
-    char *elem;
-
-    while ((elem = cmd[idx]))
-    {
-        printf ("%s%s", idx > 0 ? " " : "", elem);
-        idx++;
-    }
-    printf ("\n");
-}
 
 
 /*****************************************************************************
@@ -86,20 +64,11 @@ print_cmd (char **cmd)
 static int
 urj_bsdl_set_instruction_length (urj_bsdl_jtag_ctrl_t *jc)
 {
-    char lenstring[6];
-    char *cmd[] = { "instruction",
-        "length",
-        lenstring,
-        NULL
-    };
-
-    snprintf (lenstring, 6, "%i", jc->instr_len);
-    lenstring[5] = '\0';
-
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-        urj_cmd_run (jc->chain, cmd);
+        // @@@@ RFHH check result
+        (void) urj_part_instruction_length_set (jc->part, jc->instr_len);
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-        print_cmd (cmd);
+        printf ("instruction %i\n", jc->instr_len);
 
     return 1;
 }
@@ -132,10 +101,6 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
     char *port_string;
     int idx;
     int result = 0;
-    char *cmd[] = { "signal",
-        NULL,
-        NULL
-    };
 
     while (pd)
     {
@@ -152,8 +117,6 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
             str_len = name_len + 1 + 10 + 1 + 1;
             if ((port_string = malloc (str_len)) != NULL)
             {
-                cmd[1] = port_string;
-
                 for (idx = pd->low_idx; idx <= pd->high_idx; idx++)
                 {
                     if (pd->is_vector)
@@ -164,9 +127,10 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
                     port_string[str_len - 1] = '\0';
 
                     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-                        urj_cmd_run (jc->chain, cmd);
+                        // @@@@ RFHH check result
+                        (void) urj_part_signal_define (jc->chain, port_string);
                     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-                        print_cmd (cmd);
+                        printf ("signal %s\n", port_string);
                 }
 
                 free (port_string);
@@ -206,24 +170,14 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
 static int
 create_register (urj_bsdl_jtag_ctrl_t *jc, char *reg_name, size_t len)
 {
-    const size_t str_len = 10;
-    char len_str[str_len + 1];
-    char *cmd[] = { "register",
-        reg_name,
-        len_str,
-        NULL
-    };
 
     if (urj_part_find_data_register (jc->part, reg_name))
         return 1;
 
-    /* convert length information to string */
-    snprintf (len_str, str_len, "%zu", len);
-
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-        urj_cmd_run (jc->chain, cmd);
+        urj_part_data_register_define (jc->part, reg_name, len);
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-        print_cmd (cmd);
+        printf ("register %s %zd\n", reg_name, len);
 
     return 1;
 }
@@ -300,6 +254,27 @@ urj_bsdl_set_bsr_length (urj_bsdl_jtag_ctrl_t *jc)
 }
 
 
+static char
+bsbit_type_char (int type)
+{
+    switch (type)
+    {
+    case URJ_BSBIT_INPUT:
+        return 'I';
+    case URJ_BSBIT_OUTPUT:
+        return 'O';
+    case URJ_BSBIT_CONTROL:
+        return 'C';
+    case URJ_BSBIT_INTERNAL:
+        return 'X';
+    case URJ_BSBIT_BIDIR:
+        return 'B';
+    default:
+        return '?';
+    }
+}
+
+
 /*****************************************************************************
  * int urj_bsdl_process_cell_info( urj_bsdl_jtag_ctrl_t *jc )
  * Cell Info management function
@@ -318,26 +293,11 @@ static int
 urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
 {
     urj_bsdl_cell_info_t *ci = jc->cell_info_first;
-    const size_t str_len = 10;
-    char bit_num_str[str_len + 1];
-    char ctrl_bit_num_str[str_len + 1];
-    char disable_safe_value_str[str_len + 1];
-    char *cmd[] = { "bit",
-        bit_num_str,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        disable_safe_value_str,
-        "Z",
-        NULL
-    };
+    int type;
+    int safe;
 
     while (ci)
     {
-        /* convert bit number to string */
-        snprintf (bit_num_str, str_len, "%i", ci->bit_num);
-        bit_num_str[str_len] = '\0';
         /* convert cell function from BSDL token to jtag syntax */
         switch (ci->cell_function)
         {
@@ -346,55 +306,57 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
         case OUTPUT2:
             /* fall through */
         case OUTPUT3:
-            cmd[2] = "O";
+            type = URJ_BSBIT_OUTPUT;
             break;
         case OBSERVE_ONLY:
             /* fall through */
         case INPUT:
             /* fall through */
         case CLOCK:
-            cmd[2] = "I";
+            type = URJ_BSBIT_INPUT;
             break;
         case CONTROL:
             /* fall through */
         case CONTROLR:
-            cmd[2] = "C";
+            type = URJ_BSBIT_CONTROL;
             break;
         case BIDIR:
-            cmd[2] = "B";
+            type = URJ_BSBIT_BIDIR;
             break;
         default:
             /* spoil command */
-            cmd[2] = "?";
+            type = -1;
             break;
         }
         /* convert basic safe value */
-        cmd[3] =
-            strcasecmp (ci->basic_safe_value,
-                        "x") == 0 ? "?" : ci->basic_safe_value;
-        /* apply port name */
-        cmd[4] = ci->port_name;
+        safe = strcasecmp (ci->basic_safe_value, "x") == 0 ? URJ_BSBIT_DONTCARE
+                   : (ci->basic_safe_value[0] - '0');
 
-        /* add disable spec if present */
         if (ci->ctrl_bit_num >= 0)
         {
-            /* convert bit number to string */
-            snprintf (ctrl_bit_num_str, str_len, "%i", ci->ctrl_bit_num);
-            ctrl_bit_num_str[str_len] = '\0';
-            /* convert disable safe value to string */
-            snprintf (disable_safe_value_str, str_len, "%i",
-                      ci->disable_safe_value);
-            disable_safe_value_str[str_len] = '\0';
-            cmd[5] = ctrl_bit_num_str;
+            if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
+                // @@@@ RFHH check result
+                (void)urj_part_bsbit_alloc_control (jc->chain, ci->bit_num,
+                                                    ci->port_name, type, safe,
+                                                    ci->ctrl_bit_num,
+                                                    ci->disable_safe_value,
+                                                    URJ_BSBIT_STATE_Z);
+            if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
+                printf ("bit %d %s %c %d %d %d %c\n", ci->bit_num,
+                        ci->port_name, bsbit_type_char (type), safe,
+                        ci->ctrl_bit_num, ci->disable_safe_value,
+                        'Z');
         }
         else
-            /* stop command procssing here */
-            cmd[5] = NULL;
-
-        if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-            urj_cmd_run (jc->chain, cmd);
-        if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-            print_cmd (cmd);
+        {
+            if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
+                // @@@@ RFHH check result
+                (void)urj_part_bsbit_alloc (jc->chain, ci->bit_num,
+                                            ci->port_name, type, safe);
+            if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
+                printf ("bit %d %s %c %d\n", ci->bit_num, ci->port_name,
+                        bsbit_type_char (type), safe);
+        }
 
         ci = ci->next;
     }
@@ -531,17 +493,14 @@ urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
 
         if (reg_name)
         {
-            char *cmd[] = { "instruction",
-                instr_name,
-                cinst->opcode,
-                reg_name,
-                NULL
-            };
-
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-                urj_cmd_run (jc->chain, cmd);
+                // @@@@ RFHH check result
+                // @@@@ RFHH check if jc->part equals chain_active_part
+                (void) urj_part_instruction_define (jc->part, instr_name,
+                                                    cinst->opcode, reg_name);
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-                print_cmd (cmd);
+                printf ("instruction %s %s %s\n", instr_name, cinst->opcode,
+                        reg_name);
         }
 
         cinst = cinst->next;

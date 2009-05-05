@@ -32,6 +32,7 @@
 
 %{
 #include <strings.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 #include <urjtag/sysdep.h>

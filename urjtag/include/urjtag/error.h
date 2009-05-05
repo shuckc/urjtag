@@ -25,6 +25,8 @@
 
 #include <stdio.h>
 
+#include "log.h"
+
 /**
  * Error types
  */
@@ -36,6 +38,8 @@ typedef enum urj_error {
     URJ_ERROR_INVALID,
     URJ_ERROR_NOTFOUND,
     URJ_ERROR_IO,                               /**< I/O error from OS */
+    URJ_ERROR_NO_BUS_DRIVER,
+    URJ_ERROR_BUFFER_EXHAUSTED,
 } urj_error_t;
 
 /** Max length of message string that can be recorded. */
@@ -55,9 +59,12 @@ typedef struct urj_error_state {
 extern urj_error_state_t        urj_error_state;
 
 /**
- * Set error state. The macro interface allows for a stack of errors, where
- * this macro would push an error. The implementation is free to maintain
- * a stack of depth one.
+ * Descriptive string for error type
+ */
+extern const char *urj_error_string(urj_error_t error);
+
+/**
+ * Set error state. If the logging level is not SILENT, also logs the error.
  *
  * @param e urj_error_t value
  * @param ... consists of a printf argument set. It needs to start with a
@@ -71,19 +78,21 @@ extern urj_error_state_t        urj_error_state;
         urj_error_state.line = __LINE__; \
         snprintf (urj_error_state.msg, sizeof urj_error_state.msg, \
                   __VA_ARGS__); \
+        if (urj_log_state.level < URJ_LOG_LEVEL_SILENT) \
+        { \
+            urj_log(URJ_LOG_LEVEL_ERRORS, "%s:%d %s() %s: ", __FILE__, \
+                    __LINE__, __func__, urj_error_string(e)); \
+            urj_log(URJ_LOG_LEVEL_ERRORS, __VA_ARGS__); \
+            urj_log(URJ_LOG_LEVEL_ERRORS, "\n"); \
+        } \
     } while (0)
 
 /**
- * The top of the error stack. The caller must not modify the returned struct.
+ * Reset the error state.
  */
-const urj_error_state_t *urj_error_get (void);
+void urj_error_reset (void);
 /**
- * Pop the top off the error stack.
- * @return #URJ_ERROR_OK if the bottom of the error stack is reached
- */
-urj_error_t urj_error_get_reset (void);
-/**
- * The top of the error state in human-readable form.
+ * The error state in human-readable form.
  *
  * This function is not reentrant.
  *

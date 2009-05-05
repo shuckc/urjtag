@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stddef.h>
 
 #include <urjtag/error.h>
 #include <urjtag/part.h>
@@ -68,8 +69,7 @@ cmd_instruction_run (urj_chain_t *chain, char *params[])
 
         if (urj_part_instruction_length_set (part, len) != URJ_STATUS_OK)
         {
-            printf ("%s\n", urj_error_describe());
-            urj_error_get_reset();
+            urj_error_reset();
         }
         return 1;
     }
@@ -81,8 +81,7 @@ cmd_instruction_run (urj_chain_t *chain, char *params[])
         i = urj_part_instruction_define (part, params[1], params[2], params[3]);
         if (!i)
         {
-            printf ("%s\n", urj_error_describe());
-            urj_error_get_reset();
+            urj_error_reset();
             return 1;
         }
 

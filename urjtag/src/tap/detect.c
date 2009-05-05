@@ -41,6 +41,7 @@
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/bus.h>
+#include <urjtag/data_register.h>
 #include <urjtag/jtag.h>
 
 struct id_record
@@ -463,11 +464,7 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
     chain->active_part = chain->parts->len - 1;
 
     /* make the BR register available */
-    cmd[0] = "register";
-    cmd[1] = "BR";
-    cmd[2] = "1";
-    cmd[3] = NULL;
-    if (urj_cmd_run (chain, cmd) < 1)
+    if (urj_part_data_register_define (part, "BR", 1) != URJ_STATUS_OK)
     {
         printf (_("Error: could not set BR register"));
         return 0;

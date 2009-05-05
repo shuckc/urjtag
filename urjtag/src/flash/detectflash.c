@@ -32,6 +32,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stddef.h>
 
 #include <urjtag/flash.h>
 #include <urjtag/bus.h>

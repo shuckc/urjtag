@@ -1165,13 +1165,7 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     /* setup register SDR if not already existing */
     if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))
     {
-        char *register_cmd[] = { "register",
-            "SDR",
-            "32",
-            NULL
-        };
-
-        if (urj_cmd_run (chain, register_cmd) < 1)
+        if (urj_part_data_register_define(priv.part, "SDR", 32) != URJ_STATUS_OK)
             return;
 
         if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))

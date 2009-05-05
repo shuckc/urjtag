@@ -40,4 +40,11 @@ struct urj_data_register
 urj_data_register_t *urj_part_data_register_alloc (const char *name, int len);
 void urj_part_data_register_free (urj_data_register_t *dr);
 
+/**
+ * allocate a data register and initialize the relevant <code>part</code> parts
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
+ */
+int urj_part_data_register_define (urj_part_t *part, const char *name, int len);
+
 #endif /* URJ_DATA_REGISTER_H */
