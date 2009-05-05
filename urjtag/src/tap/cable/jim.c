@@ -44,8 +44,8 @@ typedef struct
 }
 jim_cable_params_t;
 
-int
-urj_tap_cable_jim_cable_connect (char *params[], urj_cable_t *cable)
+static int
+jim_cable_connect (char *params[], urj_cable_t *cable)
 {
     jim_cable_params_t *cable_params;
     urj_jim_state_t *s;
@@ -80,15 +80,15 @@ urj_tap_cable_jim_cable_connect (char *params[], urj_cable_t *cable)
     return 0;
 }
 
-void
-urj_tap_cable_jim_cable_disconnect (urj_cable_t *cable)
+static void
+jim_cable_disconnect (urj_cable_t *cable)
 {
     urj_tap_cable_done (cable);
     urj_tap_chain_disconnect (cable->chain);
 }
 
-void
-urj_tap_cable_jim_cable_free (urj_cable_t *cable)
+static void
+jim_cable_free (urj_cable_t *cable)
 {
     if (cable->params != NULL)
     {
@@ -98,8 +98,8 @@ urj_tap_cable_jim_cable_free (urj_cable_t *cable)
     free (cable);
 }
 
-void
-urj_tap_cable_jim_cable_done (urj_cable_t *cable)
+static void
+jim_cable_done (urj_cable_t *cable)
 {
 }
 
@@ -156,11 +156,11 @@ jim_cable_help (const char *cablename)
 urj_cable_driver_t urj_tap_cable_jim_driver = {
     "JIM",
     N_("JTAG target simulator JIM"),
-    urj_tap_cable_jim_cable_connect,
-    urj_tap_cable_jim_cable_disconnect,
-    urj_tap_cable_jim_cable_free,
+    jim_cable_connect,
+    jim_cable_disconnect,
+    jim_cable_free,
     jim_cable_init,
-    urj_tap_cable_jim_cable_done,
+    jim_cable_done,
     urj_tap_cable_generic_set_frequency,
     jim_cable_clock,
     jim_cable_get_tdo,

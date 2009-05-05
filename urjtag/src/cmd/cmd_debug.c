@@ -43,7 +43,7 @@ cmd_debug_run (urj_chain_t *chain, char *params[])
         return -1;
 
     if (urj_cmd_get_number (params[1], &i))
-        return 1;
+        return -1;
 
     urj_debug_mode = i;
     return 1;

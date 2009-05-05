@@ -40,7 +40,5 @@ libiberty_sources =
 endif
 
 libjtaglib_la_SOURCES = \
-	getdelim.c \
-	getline.c \
 	fclock.c \
 	$(libiberty_sources)

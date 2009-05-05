@@ -32,6 +32,8 @@
 #include <ctype.h>
 #include <errno.h>
 
+#include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/parse.h>
 #include <urjtag/cmd.h>
@@ -59,7 +61,7 @@ urj_parse_line (urj_chain_t *chain, char *line)
     sline = malloc (l + 1);
     if (sline == NULL)
     {
-        printf (_("Out of memory\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%d) fails", l + 1);
         return 1;
     }
 
@@ -97,7 +99,8 @@ urj_parse_line (urj_chain_t *chain, char *line)
     a = malloc ((tcnt + 1) * sizeof (char *));
     if (a == NULL)
     {
-        fprintf (stderr, _("Out of memory\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       (tcnt + 1) * sizeof (char *));
         return 1;
     }
 
@@ -112,10 +115,10 @@ urj_parse_line (urj_chain_t *chain, char *line)
     a[tcnt] = NULL;
 
     r = urj_cmd_run (chain, a);
-    if (urj_debug_mode & 1)
-        printf ("Return in urj_parse_line r=%d\n", r);
+    urj_log (URJ_LOG_LEVEL_DEBUG, "Return in urj_parse_line r=%d\n", r);
     free (a);
     free (sline);
+
     return r;
 }
 
@@ -150,9 +153,9 @@ urj_parse_stream (urj_chain_t *chain, FILE *f)
         inputline[i] = '\0';
         lnr++;
         if (clip && !found_comment)
-            fprintf (stdout,
-                     "Warning: line %d exceeds %d characters, clipped\n", lnr,
-                     (int) sizeof (inputline) - 1);
+            urj_log (URJ_LOG_LEVEL_WARNINGS,
+                     "line %d exceeds %zd characters, clipped\n", lnr,
+                     sizeof (inputline) - 1);
         go = urj_parse_line (chain, inputline);
         urj_tap_chain_flush (chain);
     }
@@ -178,7 +181,7 @@ urj_parse_file (urj_chain_t *chain, const char *filename)
     go = urj_parse_stream (chain, f);
 
     fclose (f);
-    if (urj_debug_mode & 1)
-        printf ("File Closed gp=%d\n", go);
+    urj_log (URJ_LOG_LEVEL_DEBUG, "File Closed go=%d\n", go);
+
     return go;
 }

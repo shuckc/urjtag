@@ -36,7 +36,21 @@
 
 #include "types.h"
 
+/**
+ * @return:
+ *      1 on unrecognized command
+ *      otherwise: result from command implementation
+ *              1 success or library function error
+ *              0 
+ *              -1 command syntax error: wrong number of arguments,
+ *                       illegal arguments
+ */
 int urj_cmd_run (urj_chain_t *chain, char *params[]);
+/**
+ * @return
+ *      malloc'ed value. The caller is responsible for freeing it.
+ *      NULL for malloc failure or end of command list.
+ */
 char *urj_cmd_find_next (const char *text, int state);
 /* @@@@ RFHH candidate to become local in src/cmd/: */
 int urj_cmd_params (char *params[]);

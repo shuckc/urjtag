@@ -104,7 +104,6 @@ else
 	fi
 fi
 
-AC_CHECK_FUNCS(getline getdelim)
 AC_CHECK_FUNCS(swprintf)
 
 AC_CHECK_FUNC(clock_gettime, [], [ AC_CHECK_LIB(rt, clock_gettime) ])
