@@ -55,9 +55,11 @@ struct urj_bsbit
  * @param name associated signal name
  * @param type URJ_BSBIT_{INPUT|OUTPUT|BIDIR|CONTROL|INTERNAL}
  * @param safe default (safe) value (0|1)
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
  */
-urj_bsbit_t *urj_part_bsbit_alloc (urj_part_t *part, int bit,
-                                   const char *name, int type, int safe);
+int urj_part_bsbit_alloc (urj_part_t *part, int bit, const char *name,
+                          int type, int safe);
 /**
  * Define new BSR (Boundary Scan Register) bit for signal <code>name</code>.
  * Additionally, define control bit.
@@ -70,11 +72,12 @@ urj_bsbit_t *urj_part_bsbit_alloc (urj_part_t *part, int bit,
  * @param ctrl_num control bit number
  * @param ctrl_val control value
  * @param ctrl_state control state; valid statis is only URJ_BSBIT_STATE_Z
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
  */
-urj_bsbit_t *urj_part_bsbit_alloc_control (urj_part_t *part, int bit,
-                                           const char *name, int type, int safe,
-                                           int ctrl_num, int ctrl_val,
-                                           int ctrl_state);
+int urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
+                                  int type, int safe, int ctrl_num,
+                                  int ctrl_val, int ctrl_state);
 
 void urj_part_bsbit_free (urj_bsbit_t *b);
 

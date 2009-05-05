@@ -34,7 +34,7 @@
 #include <urjtag/bssignal.h>
 #include <urjtag/bsbit.h>
 
-urj_bsbit_t *
+int
 urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
                               int type, int safe,
                               int ctrl_num, int ctrl_val, int ctrl_state)
@@ -48,18 +48,18 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     {
         urj_error_set(URJ_ERROR_NOTFOUND,
                       _("missing Boundary Scan Register (BSR)"));
-        return NULL;
+        return URJ_STATUS_FAIL;
     }
 
     if (bit >= bsr->in->len)
     {
         urj_error_set(URJ_ERROR_INVALID, _("invalid boundary bit number"));
-        return NULL;
+        return URJ_STATUS_FAIL;
     }
     if (part->bsbits[bit] != NULL)
     {
         urj_error_set(URJ_ERROR_ALREADY, _("duplicate bit declaration"));
-        return NULL;
+        return URJ_STATUS_FAIL;
     }
 
     signal = urj_part_find_signal (part, name);
@@ -70,7 +70,7 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     if (!b)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
-        return NULL;
+        return URJ_STATUS_FAIL;
     }
 
     b->name = strdup (name);
@@ -78,7 +78,7 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     {
         free (b);
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup fails");
-        return NULL;
+        return URJ_STATUS_FAIL;
     }
 
     b->bit = bit;
@@ -86,6 +86,8 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     b->signal = signal;
     b->safe = safe;
     b->control = -1;
+
+    part->bsbits[bit] = b;
 
     if (signal != NULL)
     {
@@ -109,25 +111,22 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
         if (ctrl_num >= bsr->in->len)
         {
             urj_error_set(URJ_ERROR_INVALID, _("invalid control bit number\n"));
-            return NULL;
+            return URJ_STATUS_FAIL;
         }
         b->control = ctrl_num;
         b->control_value = ctrl_val;
         b->control_state = URJ_BSBIT_STATE_Z;
     }
 
-    return b;
+    return URJ_STATUS_OK;
 }
 
-urj_bsbit_t *
+int
 urj_part_bsbit_alloc (urj_part_t *part, int bit, const char *name, int type,
                       int safe)
 {
-    urj_bsbit_t *b;
-
-    b = urj_part_bsbit_alloc_control (part, bit, name, type, safe, -1, -1, -1);
-
-    return b;
+    return urj_part_bsbit_alloc_control (part, bit, name, type, safe,
+                                         -1, -1, -1);
 }
 
 void

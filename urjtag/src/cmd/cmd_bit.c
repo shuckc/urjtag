@@ -138,9 +138,8 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
 
     /* test for control bit */
     if (urj_cmd_params (params) == 5) {
-        part->bsbits[bit] = urj_part_bsbit_alloc (part, bit, params[4], type,
-                                                  safe);
-        if (part->bsbits[bit] == NULL)
+        if (urj_part_bsbit_alloc (part, bit, params[4], type,
+                                  safe) != URJ_STATUS_OK)
         {
             printf ("%s for command '%s'\n", urj_error_describe(), command);
             urj_error_get_reset();
@@ -173,11 +172,9 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
 
         control_state = URJ_BSBIT_STATE_Z;
 
-        part->bsbits[bit] = urj_part_bsbit_alloc_control (part, bit, params[4],
-                                                          type, safe, control,
-                                                          control_value,
-                                                          control_state);
-        if (part->bsbits[bit] == NULL)
+        if (urj_part_bsbit_alloc_control (part, bit, params[4], type, safe,
+                                          control, control_value,
+                                          control_state) != URJ_STATUS_OK)
         {
             printf ("%s for command '%s'\n", urj_error_describe(), command);
             urj_error_get_reset();
