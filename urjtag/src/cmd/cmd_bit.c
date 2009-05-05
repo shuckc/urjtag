@@ -134,15 +134,28 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
                 "bit", command);
         return -1;
     }
-    safe = (params[3][0] == '1');
+    switch (params[3][0])
+    {
+    case '0':
+    case '1':
+        safe = params[3][0] - '0';
+        break;
+    case '?':
+        safe = URJ_BSBIT_DONTCARE;
+        break;
+    default:
+        printf (_("%s: invalid default value for command '%s'\n"),
+                "bit", command);
+        return -1;
+    }
 
     /* test for control bit */
     if (urj_cmd_params (params) == 5) {
         if (urj_part_bsbit_alloc (part, bit, params[4], type,
                                   safe) != URJ_STATUS_OK)
         {
-            printf ("%s for command '%s'\n", urj_error_describe(), command);
-            urj_error_get_reset();
+            printf ("in command '%s'\n", command);
+            urj_error_reset();
             return 1;
         }
 
@@ -176,8 +189,8 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
                                           control, control_value,
                                           control_state) != URJ_STATUS_OK)
         {
-            printf ("%s for command '%s'\n", urj_error_describe(), command);
-            urj_error_get_reset();
+            printf ("in command '%s'\n", command);
+            urj_error_reset();
             return 1;
         }
     }

@@ -35,6 +35,8 @@
 
 #define URJ_BSBIT_STATE_Z       (-1)
 
+#define URJ_BSBIT_DONTCARE      '?'
+
 struct urj_bsbit
 {
     int bit;
@@ -54,7 +56,7 @@ struct urj_bsbit
  * @param bit
  * @param name associated signal name
  * @param type URJ_BSBIT_{INPUT|OUTPUT|BIDIR|CONTROL|INTERNAL}
- * @param safe default (safe) value (0|1)
+ * @param safe default (safe) value (0|1|URJ_BSBIT_DONTCARE)
  *
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
  */
@@ -68,7 +70,7 @@ int urj_part_bsbit_alloc (urj_part_t *part, int bit, const char *name,
  * @param bit
  * @param name associated signal name
  * @param type URJ_BSBIT_{INPUT|OUTPUT|BIDIR|CONTROL|INTERNAL}
- * @param safe default (safe) value (0|1)
+ * @param safe default (safe) value (0|1|URJ_BSBIT_DONTCARE)
  * @param ctrl_num control bit number
  * @param ctrl_val control value
  * @param ctrl_state control state; valid statis is only URJ_BSBIT_STATE_Z
