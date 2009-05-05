@@ -1,5 +1,9 @@
 2009-05-05  Rutger Hofman <rfhh>
 
+  * include/urjtag/jim.h, include/urjtag/jim/some_cpu.h, src/jim/tap.c,
+    src/jim/jim_tap.c, src/jim/some_cpu.c, src/jim/intel_28f800b3.c: replace
+    calls to printf() with calls to urj_log() and urj_error_set()
+
   * include/urjtag/part.h, src/cmd/cmd_bus.c, src/cmd/cmd_detect.c,
     src/cmd/cmd_signal.c, src/bsdl/bsdl_bison.y, src/part/instruction.c,
     src/part/bsbit.c, src/part/part.c, src/part/signal.c: start replacing

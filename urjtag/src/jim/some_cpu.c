@@ -249,7 +249,7 @@ urj_jim_some_cpu (void)
                 }
             }
 
-            if (! some_cpu_attached[i].part)      /* loop broken; failed to malloc all parts */
+            if (some_cpu_attached[i].part)      /* loop broken; failed to malloc all parts */
             {
                 for (i--; i >= 0; i--)
                     free (((urj_jim_attached_part_t *) (dev->state))[i].part);
