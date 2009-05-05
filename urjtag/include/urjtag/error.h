@@ -34,12 +34,15 @@ typedef enum urj_error {
     URJ_ERROR_OK        = 0,
     URJ_ERROR_ALREADY,
     URJ_ERROR_OUT_OF_MEMORY,
+    URJ_ERROR_NO_CHAIN,
     URJ_ERROR_NO_ACTIVE_PART,
     URJ_ERROR_INVALID,
     URJ_ERROR_NOTFOUND,
     URJ_ERROR_IO,                               /**< I/O error from OS */
     URJ_ERROR_NO_BUS_DRIVER,
     URJ_ERROR_BUFFER_EXHAUSTED,
+    URJ_ERROR_ILLEGAL_STATE,
+    URJ_ERROR_OUT_OF_BOUNDS,
 } urj_error_t;
 
 /** Max length of message string that can be recorded. */

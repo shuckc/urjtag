@@ -32,6 +32,30 @@
 
 #include "types.h"
 
-void urj_svf_run (urj_chain_t *chain, FILE *, int, int, uint32_t);
+/**
+ * ***************************************************************************
+ * urj_svf_run(chain, SVF_FILE, stop_on_mismatch, ref_freq)
+ *
+ * Main entry point for the 'svf' command. Calls the svf parser.
+ *
+ * Checks the jtag-environment (availability of SIR instruction and SDR
+ * register). Initializes all svf-global variables and performs clean-up
+ * afterwards.
+ * 
+ * @param chain            pointer to global chain
+ * @param SVF_FILE         file handle of SVF file
+ * @param stop_on_mismatch 1 = stop upon tdo mismatch
+ *                         0 = continue upon mismatch
+ * @param print_progress   1 = continually print progress status
+ *                         0 = don't print
+ * @param ref_freq         reference frequency for RUNTEST
+ *
+ * @return
+ *   1 : all ok
+ *   0 : error occurred
+ * ***************************************************************************/
+
+int urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
+                 int print_progress, uint32_t ref_freq);
 
 #endif /* URJ_SVF_H */

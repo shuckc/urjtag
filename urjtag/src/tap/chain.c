@@ -286,6 +286,12 @@ urj_tap_chain_flush (urj_chain_t *chain)
 urj_part_t *
 urj_tap_chain_active_part (urj_chain_t *chain)
 {
+    if (chain == NULL)
+    {
+        urj_error_set (URJ_ERROR_NO_CHAIN, "no JTAG chain");
+        return NULL;
+    }
+
     if (!chain->parts)
     {
         urj_error_set (URJ_ERROR_NO_ACTIVE_PART,

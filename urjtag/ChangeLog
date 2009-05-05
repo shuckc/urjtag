@@ -1,5 +1,8 @@
 2009-05-05  Rutger Hofman <rfhh>
 
+  * src/svf/svf.c, src/svf/svf_bison.y, src/svf/svf_flex.y: replace calls to
+    printf() with calls to urj_log() and urj_error_set()
+
   * src/lib/getline.c, src/lib/getdelim.c: remove because unused
 
   * src/global/parse.c: replace calls to printf() with calls to urj_log() and

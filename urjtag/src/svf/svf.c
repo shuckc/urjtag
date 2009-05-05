@@ -40,6 +40,7 @@
 #define SA_ONESHOT SA_RESETHAND
 #endif
 
+#include <urjtag/error.h>
 #include <urjtag/cable.h>
 #include <urjtag/part.h>
 #include <urjtag/tap_state.h>
@@ -364,7 +365,8 @@ urj_svf_build_bit_string (char *hex_string, int len)
 
     if (!(bit_string = calloc (len + 1, sizeof (char))))
     {
-        printf (_("out of memory"));
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       len + 1, sizeof (char));
         return (NULL);
     }
 
@@ -386,9 +388,8 @@ urj_svf_build_bit_string (char *hex_string, int len)
             nibble++;
 
         *bit_string_pos =
-            urj_svf_hex2dec (hex_string_idx >=
-                             0 ? *hex_string_pos : '0') & (1 << nibble) ? '1'
-            : '0';
+            urj_svf_hex2dec (hex_string_idx >= 0 ? *hex_string_pos : '0')
+            & (1 << nibble) ? '1' : '0';
     }
     while (bit_string_pos != bit_string);
 
@@ -472,21 +473,20 @@ urj_svf_compare_tdo (urj_svf_parser_priv_t *priv, char *tdo, char *mask,
 
     if (mismatch >= 0)
     {
-        printf (_("Error %s: mismatch at position %d for TDO\n"), "svf",
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("Error %s: mismatch at position %d for TDO\n"), "svf",
                 mismatch);
         if (loc != NULL)
         {
-            printf
-                (" in input file between line %d col %d and line %d col %d\n",
-                 loc->first_line + 1, loc->first_column + 1,
-                 loc->last_line + 1, loc->last_column + 1);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                " in input file between line %d col %d and line %d col %d\n",
+                loc->first_line + 1, loc->first_column + 1,
+                loc->last_line + 1, loc->last_column + 1);
         }
 
-#ifdef DEBUG
-        printf ("Expected : %s\n", tdo_bit);
-        printf ("Mask     : %s\n", mask_bit);
-        printf ("TDO data : %s\n", reg->string);
-#endif
+        urj_log (URJ_LOG_LEVEL_DEBUG, "Expected : %s\n", tdo_bit);
+        urj_log (URJ_LOG_LEVEL_DEBUG, "Mask     : %s\n", mask_bit);
+        urj_log (URJ_LOG_LEVEL_DEBUG, "TDO data : %s\n", reg->string);
 
         if (priv->svf_stop_on_mismatch)
             result = 0;
@@ -555,7 +555,8 @@ urj_svf_all_care (char **string, double number)
     /* build string with all cares */
     if (!(ptr = calloc (num + 1, sizeof (char))))
     {
-        printf (_("out of memory"));
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("calloc(%zd,%zd) fails"),
+                       num + 1, sizeof (char));
         return (0);
     }
     memset (ptr, 'F', num);
@@ -629,8 +630,9 @@ int
 urj_svf_hxr (enum generic_irdr_coding ir_dr, struct ths_params *params)
 {
     if (params->number != 0.0)
-        printf (_("Warning %s: command %s not implemented\n"), "svf",
-                ir_dr == generic_ir ? "HIR" : "HDR");
+        urj_log (URJ_LOG_LEVEL_WARNINGS,
+                 _("Warning %s: command %s not implemented\n"), "svf",
+                 ir_dr == generic_ir ? "HIR" : "HDR");
 
     return (1);
 }
@@ -665,23 +667,26 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     /* check for restrictions */
     if (params->run_count > 0 && params->run_clk != TCK)
     {
-        printf (_("Error %s: only TCK is supported for RUNTEST.\n"), "svf");
+        urj_error_set (URJ_ERROR_INVALID,
+                       _("Error %s: only TCK is supported for RUNTEST.\n"),
+                       "svf");
         return (0);
     }
     if (params->max_time > 0.0 && params->max_time < params->min_time)
     {
-        printf (_
-                ("Error %s: maximum time must be larger or equal to minimum time.\n"),
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
+                _("Error %s: maximum time must be larger or equal to minimum time.\n"),
                 "svf");
         return (0);
     }
     if (params->max_time > 0.0)
         if (!priv->issued_runtest_maxtime)
         {
-            printf (_
-                    ("Warning %s: maximum time for RUNTEST not guaranteed.\n"),
+            urj_log (URJ_LOG_LEVEL_WARNINGS,
+                    _("Warning %s: maximum time for RUNTEST not guaranteed.\n"),
                     "svf");
-            printf (_(" This message is only displayed once.\n"));
+            urj_log (URJ_LOG_LEVEL_WARNINGS,
+                     _(" This message is only displayed once.\n"));
             priv->issued_runtest_maxtime = 1;
         }
 
@@ -713,10 +718,11 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         }
         else
         {
-            printf (_
-                    ("Error %s: Maximum cable clock frequency required for RUNTEST.\n"),
-                    "svf");
-            printf (_("  Set the cable frequency with 'FREQUENCY <Hz>'.\n"));
+            urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
+                           _("Error %s: Maximum cable clock frequency required for RUNTEST.\n"),
+                           "svf");
+            urj_log (URJ_LOG_LEVEL_ERRORS,
+                     _("  Set the cable frequency with 'FREQUENCY <Hz>'.\n"));
             return 0;
         }
     }
@@ -880,8 +886,8 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     {
         if (!params->tdi)
         {
-            printf (_
-                    ("Error %s: first %s command after length change must have a TDI value.\n"),
+            urj_log (URJ_LOG_LEVEL_ERRORS,
+                     _("Error %s: first %s command after length change must have a TDI value.\n"),
                     "svf", ir_dr == generic_ir ? "SIR" : "SDR");
             result = 0;
         }
@@ -908,11 +914,12 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         /* is SIR large enough? */
         if (priv->ir->value->len != len)
         {
-            printf (_("Error %s: SIR command length inconsistent.\n"), "svf");
+            urj_log (URJ_LOG_LEVEL_ERRORS,
+                     _("Error %s: SIR command length inconsistent.\n"), "svf");
             if (loc != NULL)
             {
-                printf
-                    (" in input file between line %d col %d and line %d col %d\n",
+                urj_log (URJ_LOG_LEVEL_ERRORS,
+                     _(" in input file between line %d col %d and line %d col %d\n"),
                      loc->first_line + 1, loc->first_column + 1,
                      loc->last_line + 1, loc->last_column + 1);
             }
@@ -931,15 +938,11 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
             priv->dr->out = NULL;
 
             if (!(priv->dr->in = urj_tap_register_alloc (len)))
-            {
-                printf (_("out of memory"));
+                // retain error state
                 return (0);
-            }
             if (!(priv->dr->out = urj_tap_register_alloc (len)))
-            {
-                printf (_("out of memory"));
+                // retain error state
                 return (0);
-            }
         }
         break;
 
@@ -1018,9 +1021,9 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
 
     if (priv->svf_trst_absent)
     {
-        printf (_
-                ("Error %s: no further TRST command allowed after mode ABSENT\n"),
-                "svf");
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+            _("Error %s: no further TRST command allowed after mode ABSENT\n"),
+            "svf");
         return (0);
     }
 
@@ -1041,17 +1044,17 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
 
         if (priv->svf_state_executed)
         {
-            printf (_
-                    ("Error %s: TRST ABSENT must not be issued after a STATE command\n"),
-                    "svf");
+            urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                _("Error %s: TRST ABSENT must not be issued after a STATE command\n"),
+                "svf");
             return (0);
         }
         if (priv->sir_params.params.number > 0.0 ||
             priv->sdr_params.params.number > 0.0)
         {
-            printf (_
-                    ("Error %s: TRST ABSENT must not be issued after an SIR or SDR command\n"),
-                    "svf");
+            urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                _("Error %s: TRST ABSENT must not be issued after an SIR or SDR command\n"),
+                "svf");
         }
         break;
     default:
@@ -1060,8 +1063,9 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
     }
 
     if (trst_cable < 0)
-        printf (_("Warning %s: unimplemented mode '%s' for TRST\n"), "svf",
-                unimplemented_mode);
+        urj_log (URJ_LOG_LEVEL_WARNINGS,
+                 _("Warning %s: unimplemented mode '%s' for TRST\n"), "svf",
+                 unimplemented_mode);
     else
         urj_tap_cable_set_signal (chain->cable, URJ_POD_CS_TRST,
                                   trst_cable ? URJ_POD_CS_TRST : 0);
@@ -1090,7 +1094,8 @@ int
 urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
 {
     if (params->number != 0.0)
-        printf (_("Warning %s: command %s not implemented\n"), "svf",
+        urj_log (URJ_LOG_LEVEL_WARNINGS,
+                 _("Warning %s: command %s not implemented\n"), "svf",
                 ir_dr == generic_ir ? "TIR" : "TDR");
 
     return (1);
@@ -1119,7 +1124,7 @@ urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
  *   1 : all ok
  *   0 : error occurred
  * ***************************************************************************/
-void
+int
 urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
              int print_progress, uint32_t ref_freq)
 {
@@ -1152,13 +1157,15 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
        - data register */
     if (chain == NULL)
     {
-        printf (_("Error %s: no JTAG chain available\n"), "svf");
-        return;
+        urj_error_set (URJ_ERROR_NO_CHAIN, _("%s: no JTAG chain available\n"),
+                       "svf");
+        return 0;
     }
     if (chain->parts == NULL)
     {
-        printf (_("Error %s: chain without any parts\n"), "svf");
-        return;
+        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
+                       _("%s: chain without any parts\n"), "svf");
+        return 0;
     }
     priv.part = chain->parts->parts[chain->active_part];
 
@@ -1166,12 +1173,14 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))
     {
         if (urj_part_data_register_define(priv.part, "SDR", 32) != URJ_STATUS_OK)
-            return;
+            return 0;
 
         if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))
         {
-            printf (_("Error %s: could not establish SDR register\n"), "svf");
-            return;
+            urj_error_set (URJ_ERROR_NOTFOUND,
+                           _("%s: could not establish SDR register\n"),
+                           "svf");
+            return 0;
         }
     }
 
@@ -1201,15 +1210,16 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
                 free (instruction_string);
 
                 if (result < 1)
-                    return;
+                    return 0;
             }
         }
 
         if (!(priv.ir = urj_part_find_instruction (priv.part, "SIR")))
         {
-            printf (_("Error %s: could not establish SIR instruction\n"),
-                    "svf");
-            return;
+            urj_error_set (URJ_ERROR_NOTFOUND,
+                           _("%s: could not establish SIR instruction\n"),
+                           "svf");
+            return 0;
         }
     }
 
@@ -1245,11 +1255,11 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     if (print_progress)
     {
         if (priv.mismatch_occurred > 0)
-            printf (_
-                    ("Mismatches occurred between scanned device output and expected TDO values.\n"));
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("Mismatches occurred between scanned device output and expected TDO values.\n"));
         else
-            printf (_
-                    ("Scanned device output matched expected TDO values.\n"));
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("Scanned device output matched expected TDO values.\n"));
     }
 
     /* clean up */
@@ -1271,4 +1281,6 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     /* restore previous frequency setting, required by SVF spec */
     if (old_frequency != urj_tap_cable_get_frequency (chain->cable))
         urj_tap_cable_set_frequency (chain->cable, old_frequency);
+
+    return 1;
 }

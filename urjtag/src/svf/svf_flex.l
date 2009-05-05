@@ -36,6 +36,7 @@
 #include <ctype.h>
 
 #include <urjtag/sysdep.h>
+#include <urjtag/log.h>
 
 #ifdef ENABLE_NLS
 #include <locale.h>
@@ -206,7 +207,8 @@ COMMENT         (!.*)|("//".*)[^\n]
 . {
   /* print token if interactive parsing enabled and yyin != stdin */
 
-  fprintf(stderr, "Error: \"%s\" is not a legal SVF language token\n", yytext);
+  urj_log (URJ_LOG_LEVEL_ERRORS,
+           "Error: \"%s\" is not a legal SVF language token\n", yytext);
 
 } /* end of any other character */
 
@@ -360,8 +362,8 @@ progress_nl (YYLTYPE *mylloc, YY_EXTRA_TYPE extra)
         percent = ((mylloc->last_line * 100) + 1) / extra->num_lines;
         if (percent <= 1)
             return;             // dont bother printing < 1 %
-        printf ("\r");
-        printf (_("Parsing %6d/%d (%3.0d%%)"),
+        urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Parsing %6d/%d (%3.0d%%)"),
                 mylloc->last_line, extra->num_lines, percent);
     }
 }
@@ -381,7 +383,8 @@ urj_svf_flex_init (FILE *f, int num_lines, int print_progress)
 
     if (!(extra = malloc (sizeof (urj_svf_scanner_extra_t))))
     {
-        printf (_("Out of memory, %s line %i\n"), __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
+                       sizeof (urj_svf_scanner_extra_t));
         yylex_destroy (scanner);
         return NULL;
     }
@@ -409,7 +412,7 @@ urj_svf_flex_deinit (void *scanner)
 {
     YY_EXTRA_TYPE extra = yyget_extra (scanner);
     if (extra->print_progress)
-        printf ("\n");
+        urj_log (URJ_LOG_LEVEL_NORMAL, "\n");
     free (extra);
     yylex_destroy (scanner);
 }

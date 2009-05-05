@@ -34,6 +34,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <urjtag/log.h>
+
 #include "svf.h"
 
 /* interface to flex */
@@ -136,7 +138,7 @@ svf_statement
 
     | PIOMAP '(' direction IDENTIFIER piomap_rec ')' ';'
       {
-        printf("PIOMAP not implemented\n");
+        urj_log (URJ_LOG_LEVEL_ERRORS, "PIOMAP not implemented\n");
         yyerror(&@$, priv_data, chain, "PIOMAP");
         YYERROR;
       }
@@ -144,7 +146,7 @@ svf_statement
     | PIO VECTOR_STRING ';'
       {
         free($<cvalue>2);
-        printf("PIO not implemented\n");
+        urj_log (URJ_LOG_LEVEL_ERRORS, "PIO not implemented\n");
         yyerror(&@$, priv_data, chain, "PIO");
         YYERROR;
       }
@@ -382,7 +384,7 @@ path_states
                   ps->states[ps->num_states] = $<token>2;
                   ps->num_states++;
                 } else
-                  printf("Error %s: maximum number of %d path states reached.\n",
+                  urj_log (URJ_LOG_LEVEL_ERRORS, "Error %s: maximum number of %d path states reached.\n",
                         "svf", MAX_PATH_STATES);
               }
 ;
@@ -409,7 +411,8 @@ direction
 yyerror (YYLTYPE *locp, urj_svf_parser_priv_t *priv_data, urj_chain_t *chain,
          const char *error_string)
 {
-    printf ("Error occurred for SVF command %s.\n", error_string);
+    urj_log (URJ_LOG_LEVEL_ERRORS, "Error occurred for SVF command %s.\n",
+             error_string);
 }
 
 
