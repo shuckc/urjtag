@@ -63,7 +63,7 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
             if (urj_part_signal_redefine_pin(chain, s, params[2]) != URJ_STATUS_OK)
             {
                 printf ("%s\n", urj_error_describe());
-                urj_error_get_reset();
+                urj_error_reset();
             }
             return 1;
         }
@@ -84,7 +84,7 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
     }
     if (s == NULL) {
         printf ("%s\n", urj_error_describe());
-        urj_error_get_reset();
+        urj_error_reset();
         return 1;
     }
 
