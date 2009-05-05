@@ -100,4 +100,6 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_NO_BUS_DRIVER:       return "no bus driver";
     case URJ_ERROR_BUFFER_EXHAUSTED:    return "buffer exhausted";
     }
+
+    return "UNDEFINED ERROR";
 }

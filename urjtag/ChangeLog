@@ -1,3 +1,19 @@
+2009-05-05  Rutger Hofman <rfhh>
+
+  * include/urjtag/part.h, src/cmd/cmd_bus.c, src/cmd/cmd_detect.c,
+    src/cmd/cmd_signal.c, src/bsdl/bsdl_bison.y, src/part/instruction.c,
+    src/part/bsbit.c, src/part/part.c, src/part/signal.c: start replacing
+    calls to printf() with calls to urj_log(), for starters with src/part.
+    Sometimes that means fixing a function to return an error status where
+    it previously printed and returned void
+
+  * include/urjtag/data_register.h, include/urjtag/error.h,
+    include/urjtag/log.h, src/global/*.c, src/cmd/cmd_register.c,
+    src/cmd/cmd_instruction.c, src/bsdl/bsdl_sem.c, src/tap/detect.c,
+    src/part/data_register.c, src/svf/svf_flex.l, src/svf/svf.c,
+    src/flash/detectflash.c: transform a number of urj_cmd_run() calls into
+    API calls
+
 2009-05-04  Rutger Hofman <rfhh>
 
   * src/cmd/cmd_bus.c, src/bus/buses.c, include/urjtag/bus.h: transform the

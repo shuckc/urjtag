@@ -336,7 +336,7 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
         {
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
                 // @@@@ RFHH check result
-                (void)urj_part_bsbit_alloc_control (jc->chain, ci->bit_num,
+                (void)urj_part_bsbit_alloc_control (jc->part, ci->bit_num,
                                                     ci->port_name, type, safe,
                                                     ci->ctrl_bit_num,
                                                     ci->disable_safe_value,
@@ -351,7 +351,7 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
         {
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
                 // @@@@ RFHH check result
-                (void)urj_part_bsbit_alloc (jc->chain, ci->bit_num,
+                (void)urj_part_bsbit_alloc (jc->part, ci->bit_num,
                                             ci->port_name, type, safe);
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                 printf ("bit %d %s %c %d\n", ci->bit_num, ci->port_name,
