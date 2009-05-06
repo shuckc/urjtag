@@ -1,6 +1,6 @@
 2009-05-06  Arnim Laeuger  <arniml>
 
-  * src/flash/amd.c: fix typo in S29GLxxxN
+  * src/flash/amd.c: fix typo in S29GLxxxN, twice
 
 2009-05-05  Rutger Hofman <rfhh>
 
