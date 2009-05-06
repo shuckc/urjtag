@@ -319,7 +319,7 @@ amd_flash_print_info (urj_flash_cfi_array_t *cfi_array)
             break;
         case 0x227E:           /* 16-bit mode */
         case 0x007E:           /* 8-bit mode */
-            printf ("S92GLxxxN");
+            printf ("S29GLxxxN");
             break;
         default:
             printf (_("Unknown (ID 0x%04x)"), cid);
