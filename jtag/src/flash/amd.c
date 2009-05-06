@@ -299,7 +299,7 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			break;
 			case 0x227E:  /* 16-bit mode */
 			case 0x007E:  /* 8-bit mode */
-			printf( "S92GLxxxN" );
+			printf( "S29GLxxxN" );
 			break;
 			default:
 			printf ( _("Unknown (ID 0x%04x)"), cid );
@@ -576,7 +576,7 @@ flash_driver_t amd_32_flash_driver = {
 flash_driver_t amd_16_flash_driver = {
 	2, /* buswidth */
 	N_("AMD/Fujitsu Standard Command Set"),
-	N_("supported: AMD 29LV800B, S92GLxxxN; MX29LV640B; 1x16 Bit"),
+	N_("supported: AMD 29LV800B, S29GLxxxN; MX29LV640B; 1x16 Bit"),
 	amd_flash_autodetect16,
 	amd_flash_print_info,
 	amd_flash_erase_block,
@@ -588,7 +588,7 @@ flash_driver_t amd_16_flash_driver = {
 flash_driver_t amd_8_flash_driver = {
 	1, /* buswidth */
 	N_("AMD/Fujitsu Standard Command Set"),
-	N_("supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S92GLxxxN; 1x8 Bit"),
+	N_("supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S29GLxxxN; 1x8 Bit"),
 	amd_flash_autodetect8,
 	amd_flash_print_info,
 	amd_flash_erase_block,
