@@ -110,7 +110,7 @@ wiggler2_clock (urj_cable_t *cable, int tms, int tdi, int n)
         urj_tap_cable_wait (cable);
     }
 
-    PARAM_SIGNALS (cable) &= URJ_POD_CS_TRST;
+    PARAM_SIGNALS (cable) &= ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI);
     PARAM_SIGNALS (cable) |= URJ_POD_CS_TCK;
     PARAM_SIGNALS (cable) |= tms ? URJ_POD_CS_TMS : 0;
     PARAM_SIGNALS (cable) |= tdi ? URJ_POD_CS_TDI : 0;

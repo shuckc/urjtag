@@ -1,5 +1,8 @@
 2009-05-07  Arnim Laeuger  <arniml>
 
+  * src/tap/cable/wiggler2.c: [ 2782581 ] TRST, TMS and TDI incorrectly marked
+    in wiggler2 cable
+
   * po/POTFILES.in: src/jim/tap.c renamed to jim_tap.c, removed getdelim.c
     and getline.c 
 

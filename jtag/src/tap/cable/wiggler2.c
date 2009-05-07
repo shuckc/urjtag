@@ -102,7 +102,7 @@ wiggler2_clock( cable_t *cable, int tms, int tdi, int n )
 		cable_wait( cable );
 	}
 
-	PARAM_SIGNALS(cable) &= CS_TRST;
+	PARAM_SIGNALS(cable) &= ~(CS_TMS | CS_TDI);
 	PARAM_SIGNALS(cable) |= CS_TCK;
 	PARAM_SIGNALS(cable) |= tms ? CS_TMS : 0;
 	PARAM_SIGNALS(cable) |= tdi ? CS_TDI : 0;
