@@ -1,3 +1,7 @@
+2009-05-07  Arnim Laeuger  <arniml>
+
+  * src/cmd/cmd_test.c: [ 2776954 ] typo? on 'help test'
+
 2009-05-06  Arnim Laeuger  <arniml>
 
   * src/flash/amd.c: fix typo in S29GLxxxN, twice
