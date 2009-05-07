@@ -91,7 +91,7 @@ src/global/parse.c
 src/global/data_dir.c
 src/jim/intel_28f800b3.c
 src/jim/some_cpu.c
-src/jim/tap.c
+src/jim/jim_tap.c
 src/lib/fclock.c
 src/lib/getdelim.c
 src/lib/getline.c
