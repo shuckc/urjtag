@@ -1,6 +1,7 @@
 2009-05-07  Arnim Laeuger  <arniml>
 
-  * po/POTFILES.in: src/jim/tap.c renamed to jim_tap.c
+  * po/POTFILES.in: src/jim/tap.c renamed to jim_tap.c, removed getdelim.c
+    and getline.c 
 
   * src/cmd/cmd_test.c: [ 2776954 ] typo? on 'help test'
 
