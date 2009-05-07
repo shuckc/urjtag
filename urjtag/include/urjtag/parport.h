@@ -35,11 +35,17 @@ typedef struct
     const char *type;
     urj_parport_t *(*connect) (const char **, int);
     void (*parport_free) (urj_parport_t *);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*open) (urj_parport_t *);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*close) (urj_parport_t *);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*set_data) (urj_parport_t *, uint8_t);
+    /** @return data on success; -1 on error */
     int (*get_data) (urj_parport_t *);
+    /** @return status on success; -1 on error */
     int (*get_status) (urj_parport_t *);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*set_control) (urj_parport_t *, uint8_t);
 } urj_parport_driver_t;
 

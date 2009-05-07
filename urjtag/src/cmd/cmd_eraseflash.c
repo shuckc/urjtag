@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/bus.h>
 #include <urjtag/flash.h>
 
@@ -54,7 +55,11 @@ cmd_eraseflash_run (urj_chain_t *chain, char *params[])
         return -1;
     if (urj_cmd_get_number (params[2], &number))
         return -1;
-    urj_flasherase (urj_bus, adr, number);
+    if (urj_flasherase (urj_bus, adr, number) != URJ_STATUS_OK)
+    {
+        printf ("error: %s\n", urj_error_describe());
+        urj_error_reset();
+    }
 
     return 1;
 }

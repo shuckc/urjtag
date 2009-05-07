@@ -153,9 +153,8 @@ urj_parse_stream (urj_chain_t *chain, FILE *f)
         inputline[i] = '\0';
         lnr++;
         if (clip && !found_comment)
-            urj_log (URJ_LOG_LEVEL_WARNINGS,
-                     "line %d exceeds %zd characters, clipped\n", lnr,
-                     sizeof (inputline) - 1);
+            urj_warning ("line %d exceeds %zd characters, clipped\n", lnr,
+                         sizeof (inputline) - 1);
         go = urj_parse_line (chain, inputline);
         urj_tap_chain_flush (chain);
     }

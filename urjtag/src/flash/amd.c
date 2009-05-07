@@ -40,13 +40,15 @@
 #include <stdio.h>
 #include <unistd.h>     /* usleep */
 
+#include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/flash.h>
 #include <urjtag/bus.h>
 
-#include "intel.h"
+#include "flash.h"
 #include "cfi.h"
+#include "amd.h"
 
-static int dbg = 0;
 
 /* The code below assumes a connection of the flash chip address LSB (A0)
  * to A0, A1 or A2 of the byte-addressed CPU bus dependent on the bus width.
@@ -123,8 +125,8 @@ amd_flash_autodetect8 (urj_flash_cfi_array_t *cfi_array)
 
 /*
  * check device status
- *   1/true   PASS
- *   0/false  FAIL
+ *   URJ_STATUS_OK   PASS
+ *   URJ_STATUS_FAIL FAIL
  */
 /*
  * first implementation: see [1], page 29
@@ -146,11 +148,10 @@ amdstatus29 (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     {
         data1 = URJ_BUS_READ (bus, adr << o);
         data1 = URJ_BUS_READ (bus, adr << o);
-        if (dbg)
-            printf ("amdstatus %d: %04X (%04X) = %04X\n", timeout, data1,
-                    (data1 & dq7mask), bit7);
+        urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04X (%04X) = %04X\n",
+                 timeout, data1, (data1 & dq7mask), bit7);
         if (((data1 & dq7mask) == dq7mask) == bit7)     /* FIXME: This looks non-portable */
-            return 1;
+            return URJ_STATUS_OK;
 
         if ((data1 & dq5mask) == dq5mask)
             break;
@@ -159,9 +160,10 @@ amdstatus29 (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
 
     data1 = URJ_BUS_READ (bus, adr << o);
     if (((data1 & dq7mask) == dq7mask) == bit7) /* FIXME: This looks non-portable */
-        return 1;
+        return URJ_STATUS_OK;
 
-    return 0;
+    urj_error_set (URJ_ERROR_FLASH, "hardware failure");
+    return URJ_STATUS_FAIL;
 }
 #endif /* 0 */
 
@@ -184,18 +186,21 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
         uint32_t data1 = URJ_BUS_READ (bus, adr);
         uint32_t data2 = URJ_BUS_READ (bus, adr);
 
-        /*printf("amdstatus %d: %04X/%04X   %04X/%04X \n", */
-        /*         timeout, data1, data2, (data1 & togglemask), (data2 & togglemask)); */
+        urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04X/%04X   %04X/%04X \n",
+                 timeout, data1, data2, (data1 & togglemask),
+                 (data2 & togglemask));
         if ((data1 & togglemask) == (data2 & togglemask))
-            return 1;
+            return URJ_STATUS_OK;
 
         /*    if ( (data1 & dq5mask) != 0 )   TODO */
-        /*      return 0; */
-        if (dbg)
-            printf ("amdstatus %d: %04X/%04X\n", timeout, data1, data2);
+        /*      return URJ_STATUS_OK; */
+        urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04X/%04X\n",
+                 timeout, data1, data2);
         usleep (100);
     }
-    return 0;
+
+    urj_error_set (URJ_ERROR_FLASH, "hardware failure");
+    return URJ_STATUS_FAIL;
 }
 
 #else /* 1 */
@@ -223,8 +228,10 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
         data2 = URJ_BUS_READ (bus, adr);
 
 
-        /*printf("amdstatus %d: %04X/%04X   %04X/%04X \n", */
-        /*         timeout, data1, data2, (data1 & togglemask), (data2 & togglemask)); */
+        urj_log (URJ_LOG_LEVEL_DEBUG,
+                 "amdstatus %d: %04X/%04X   %04X/%04X \n",
+                 timeout, data1, data2, (data1 & togglemask),
+                 (data2 & togglemask));
         /* Work around an issue with RTL8181: toggle bits don't
            toggle when reading the same flash address repeatedly
            without any other memory access in between.  Other
@@ -235,18 +242,21 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
            So, check for the correct data read twice instead.  */
         /*if ( (data1 & togglemask) == (data2 & togglemask)) */
         if ((data1 == data) && (data2 == data))
-            return 1;
+            return URJ_STATUS_OK;
 
         /*    if ( (data1 & dq5mask) != 0 )   TODO */
-        /*      return 0; */
-        if (dbg)
-            printf ("amdstatus %d: %04X/%04X\n", timeout, data1, data2);
+        /*      return URJ_STATUS_OK; */
+        if (urj_log_status.level <= URJ_LOG_LEVEL_DEBUG)
+            urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04X/%04X\n",
+                     timeout, data1, data2);
         else
-            printf (".");
+            urj_log (URJ_LOG_LEVEL_NORMAL, ".");
         usleep (100);
         data1 = data2;
     }
-    return 0;
+
+    urj_error_set (URJ_ERROR_FLASH, "hardware failure");
+    return URJ_STATUS_FAIL;
 }
 
 #endif /* 0 */
@@ -281,7 +291,7 @@ amdisprotected (parts * ps, urj_flash_cfi_array_t *cfi_array,
 #endif /* 0 */
 
 static void
-amd_flash_print_info (urj_flash_cfi_array_t *cfi_array)
+amd_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
 {
     int mid, cid, prot;
     urj_bus_t *bus = cfi_array->bus;
@@ -294,95 +304,95 @@ amd_flash_print_info (urj_flash_cfi_array_t *cfi_array)
     cid = URJ_BUS_READ (bus, cfi_array->address + (0x01 << o)) & 0xFFFF;
     prot = URJ_BUS_READ (bus, cfi_array->address + (0x02 << o)) & 0xFF;
     amd_flash_read_array (cfi_array); /* AMD reset */
-    printf (_("Chip: AMD Flash\n\tManufacturer: "));
+    urj_log (ll, _("Chip: AMD Flash\n\tManufacturer: "));
     switch (mid)
     {
     case 0x0001:
-        printf ("AMD");
-        printf (_("\n\tChip: "));
+        urj_log (ll, "AMD");
+        urj_log (ll, _("\n\tChip: "));
         switch (cid)
         {
         case 0x0049:
-            printf ("AM29LV160DB");
+            urj_log (ll, "AM29LV160DB");
             break;
         case 0x0093:
-            printf ("Am29LV065D");
+            urj_log (ll, "Am29LV065D");
             break;
         case 0x004F:
-            printf ("Am29LV040B");
+            urj_log (ll, "Am29LV040B");
             break;
         case 0x22D7:
-            printf ("Am29LV640D/Am29LV641D/Am29LV642D");
+            urj_log (ll, "Am29LV640D/Am29LV641D/Am29LV642D");
             break;
         case 0x225B:
-            printf ("Am29LV800B");
+            urj_log (ll, "Am29LV800B");
             break;
         case 0x227E:           /* 16-bit mode */
         case 0x007E:           /* 8-bit mode */
-            printf ("S29GLxxxN");
+            urj_log (ll, "S92GLxxxN");
             break;
         default:
-            printf (_("Unknown (ID 0x%04x)"), cid);
+            urj_log (ll, _("Unknown (ID 0x%04x)"), cid);
             break;
         }
         break;
     case 0x001f:
-        printf ("Atmel");
-        printf (_("\n\tChip: "));
+        urj_log (ll, "Atmel");
+        urj_log (ll, _("\n\tChip: "));
         switch (cid)
         {
         case 0x01d2:
-            printf ("AT49BW642DT");
+            urj_log (ll, "AT49BW642DT");
             break;
         case 0x01d6:
-            printf ("AT49BW642D");
+            urj_log (ll, "AT49BW642D");
             break;
         default:
-            printf (_("Unknown (ID 0x%04x)"), cid);
+            urj_log (ll, _("Unknown (ID 0x%04x)"), cid);
             break;
         }
         break;
     case 0x0020:
-        printf ("ST/Samsung");
-        printf (_("\n\tChip: "));
+        urj_log (ll, "ST/Samsung");
+        urj_log (ll, _("\n\tChip: "));
         switch (cid)
         {
         case 0x00ca:
-            printf ("M29W320DT");
+            urj_log (ll, "M29W320DT");
             break;
         case 0x00cb:
-            printf ("M29W320DB");
+            urj_log (ll, "M29W320DB");
             break;
         case 0x22ed:
-            printf ("M29W640DT");
+            urj_log (ll, "M29W640DT");
             break;
         default:
-            printf (_("Unknown (ID 0x%04x)"), cid);
+            urj_log (ll, _("Unknown (ID 0x%04x)"), cid);
             break;
         }
         break;
     case 0x00C2:
-        printf ("Macronix");
-        printf (_("\n\tChip: "));
+        urj_log (ll, "Macronix");
+        urj_log (ll, _("\n\tChip: "));
         switch (cid)
         {
         case 0x2249:
-            printf ("MX29LV160B");
+            urj_log (ll, "MX29LV160B");
             break;
         case 0x22CB:
-            printf ("MX29LV640B");
+            urj_log (ll, "MX29LV640B");
             break;
         default:
-            printf (_("Unknown (ID 0x%04x)"), cid);
+            urj_log (ll, _("Unknown (ID 0x%04x)"), cid);
             break;
         }
         break;
     default:
-        printf (_("Unknown manufacturer (ID 0x%04x) Chip (ID 0x%04x)"), mid,
-                cid);
+        urj_log (ll, _("Unknown manufacturer (ID 0x%04x) Chip (ID 0x%04x)"),
+                 mid, cid);
         break;
     }
-    printf (_("\n\tProtected: %04x\n"), prot);
+    urj_log (ll, _("\n\tProtected: %04x\n"), prot);
 
     /* Read Array */
     URJ_BUS_WRITE (bus, cfi_array->address + (0x0000 << o), 0x00ff00ff);
@@ -394,9 +404,9 @@ amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
     urj_bus_t *bus = cfi_array->bus;
     int o = amd_flash_address_shift (cfi_array);
 
-    printf ("flash_erase_block 0x%08X\n", adr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X\n", adr);
 
-    /*      printf("protected: %d\n", amdisprotected(ps, cfi_array, adr)); */
+    /*      urj_log (URJ_LOG_LEVEL_NORMAL, "protected: %d\n", amdisprotected(ps, cfi_array, adr)); */
 
     URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00aa00aa);      /* autoselect p29, sector erase */
     URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o), 0x00550055);
@@ -405,24 +415,25 @@ amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
     URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o), 0x00550055);
     URJ_BUS_WRITE (bus, adr, 0x00300030);
 
-    if (amdstatus (cfi_array, adr, 0xffff))
+    if (amdstatus (cfi_array, adr, 0xffff) == URJ_STATUS_OK)
     {
-        printf ("flash_erase_block 0x%08X DONE\n", adr);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X DONE\n", adr);
         amd_flash_read_array (cfi_array);     /* AMD reset */
-        return 0;
+        return URJ_STATUS_OK;
     }
-    printf ("flash_erase_block 0x%08X FAILED\n", adr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X FAILED\n", adr);
     /* Read Array */
     amd_flash_read_array (cfi_array); /* AMD reset */
 
-    return URJ_FLASH_ERROR_UNKNOWN;
+    urj_error_set (URJ_ERROR_FLASH_ERASE, "unknown erase error");
+    return URJ_STATUS_FAIL;
 }
 
 static int
 amd_flash_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 {
-    printf ("flash_unlock_block 0x%08X IGNORE\n", adr);
-    return 0;
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_unlock_block 0x%08X IGNORE\n", adr);
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -433,8 +444,8 @@ amd_flash_program_single (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     urj_bus_t *bus = cfi_array->bus;
     int o = amd_flash_address_shift (cfi_array);
 
-    if (dbg)
-        printf ("\nflash_program 0x%08X = 0x%08X\n", adr, data);
+    urj_log (URJ_LOG_LEVEL_DEBUG, "\nflash_program 0x%08X = 0x%08X\n",
+             adr, data);
 
     URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00aa00aa);      /* autoselect p29, program */
     URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o), 0x00550055);
@@ -444,7 +455,7 @@ amd_flash_program_single (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     status = amdstatus (cfi_array, adr, data);
     /*      amd_flash_read_array(ps); */
 
-    return !status;
+    return status;
 }
 
 static int
@@ -464,11 +475,11 @@ amd_program_buffer_status (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     for (timeout = 0; timeout < 7000; timeout++)
     {
         data1 = URJ_BUS_READ (bus, adr);
-        if (dbg)
-            printf ("amd_program_buffer_status %d: %04X (%04X) = %04X\n",
-                    timeout, data1, (data1 & dq7mask), bit7);
+        urj_log (URJ_LOG_LEVEL_DEBUG,
+                 "amd_program_buffer_status %d: %04X (%04X) = %04X\n",
+                 timeout, data1, (data1 & dq7mask), bit7);
         if ((data1 & dq7mask) == bit7)
-            return 1;
+            return URJ_STATUS_OK;
 
         if ((data1 & dq5mask) == dq5mask)
             break;
@@ -477,9 +488,9 @@ amd_program_buffer_status (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
 
     data1 = URJ_BUS_READ (bus, adr);
     if ((data1 & dq7mask) == bit7)
-        return 1;
+        return URJ_STATUS_OK;
 
-    return 0;
+    return URJ_STATUS_FAIL;
 }
 
 static int
@@ -495,8 +506,8 @@ amd_flash_program_buffer (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     int chip_width = cfi_chip->width;
     int offset = 0;
 
-    if (dbg)
-        printf ("\nflash_program_buffer 0x%08X, count 0x%08X\n", adr, count);
+    urj_log (URJ_LOG_LEVEL_DEBUG,
+             "\nflash_program_buffer 0x%08X, count 0x%08X\n", adr, count);
 
     while (count > 0)
     {
@@ -525,17 +536,20 @@ amd_flash_program_buffer (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
         /* program buffer to flash */
         URJ_BUS_WRITE (bus, sa, 0x00290029);
 
-        status =
-            amd_program_buffer_status (cfi_array, adr - cfi_array->bus_width,
-                                       buffer[offset - 1]);
+        status = amd_program_buffer_status (cfi_array,
+                                            adr - cfi_array->bus_width,
+                                            buffer[offset - 1]);
         /*      amd_flash_read_array(ps); */
-        if (status != 1)
-            return 1;
+        if (status != URJ_STATUS_OK)
+        {
+            urj_error_set (URJ_ERROR_FLASH_PROGRAM, "status fails after write");
+            return URJ_STATUS_FAIL;
+        }
 
         count -= wcount;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -561,13 +575,13 @@ amd_flash_program (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
         for (idx = 0; idx < count; idx++)
         {
             int status = amd_flash_program_single (cfi_array, adr, buffer[idx]);
-            if (status)
+            if (status != URJ_STATUS_OK)
                 return status;
             adr += cfi_array->bus_width;
         }
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -584,14 +598,13 @@ amd_flash_program32 (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     /* unroll buffer to single writes */
     for (idx = 0; idx < count; idx++)
     {
-        int status =
-            amd_flash_program_single (cfi_array, adr, buffer[idx]);
-        if (status)
+        int status = amd_flash_program_single (cfi_array, adr, buffer[idx]);
+        if (status != URJ_STATUS_OK)
             return status;
         adr += cfi_array->bus_width;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 urj_flash_driver_t urj_flash_amd_32_flash_driver = {

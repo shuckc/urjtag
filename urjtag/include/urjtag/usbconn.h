@@ -44,9 +44,13 @@ typedef struct
     const char *type;
     urj_usbconn_t *(*connect) (const char **, int, urj_usbconn_cable_t *);
     void (*free) (urj_usbconn_t *);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*open) (urj_usbconn_t *);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*close) (urj_usbconn_t *);
+    /** @return bytes read on success; -1 on error */
     int (*read) (urj_usbconn_t *, uint8_t *, int);
+    /** @return bytes written on success; -1 on error */
     int (*write) (urj_usbconn_t *, uint8_t *, int, int);
 } urj_usbconn_driver_t;
 

@@ -47,6 +47,7 @@ cmd_addpart_run (urj_chain_t *chain, char *params[])
     if (!urj_cmd_test_cable (chain))
         return 1;
 
+    // @@@@ RFHH check result
     urj_tap_manual_add (chain, len);
 
     if (chain->parts == NULL)
@@ -59,6 +60,7 @@ cmd_addpart_run (urj_chain_t *chain, char *params[])
     }
 
     urj_part_parts_set_instruction (chain->parts, "BYPASS");
+    /* @@@@ RFHH check result */
     urj_tap_chain_shift_instructions (chain);
 
     return 1;

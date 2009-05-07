@@ -57,6 +57,7 @@ struct urj_bus_driver
     void (*free_bus) (urj_bus_t *bus);
     void (*printinfo) (urj_bus_t *bus);
     void (*prepare) (urj_bus_t *bus);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*area) (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area);
     void (*read_start) (urj_bus_t *bus, uint32_t adr);
     uint32_t (*read_next) (urj_bus_t *bus, uint32_t adr);

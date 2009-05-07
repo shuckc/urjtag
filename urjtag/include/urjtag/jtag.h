@@ -30,7 +30,7 @@
 extern int urj_big_endian;
 extern int urj_debug_mode;
 
-/** Register the application name with cmd_jtag.
+/** Register the application name with global/data_dir.
  * @param argv0 is remembered as a pointer, it is not strdup()'ed.
  */
 void urj_set_argv0(const char *argv0);

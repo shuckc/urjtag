@@ -40,6 +40,8 @@
 #include <errno.h>
 #include <string.h>
 
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/parport.h>
 #include <urjtag/cable.h>
 
@@ -75,6 +77,9 @@ ppdev_parport_alloc (const char *port)
         free (parport);
         free (params);
         free (portname);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                       "malloc(%zd)/strdup(%s)/malloc(%zd)/malloc(%zd) fails",
+                       sizeof *params, port, sizeof *parport, sizeof *node);
         return NULL;
     }
 
@@ -122,27 +127,25 @@ ppdev_connect (const char **par, int parnum)
 
     if (parnum != 1)
     {
-        printf (_("Syntax error!\n"));
+        urj_error_set (URJ_ERROR_SYNTAX, "#param != 1");
         return NULL;
     }
 
     for (pn = ports; pn; pn = pn->next)
         if (strcmp (pn->port->params, par[0]) == 0)
         {
-            printf (_("Disconnecting %s from ppdev port %s\n"),
-                    _(pn->port->cable->driver->description), par[0]);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("Disconnecting %s from ppdev port %s\n"),
+                     _(pn->port->cable->driver->description), par[0]);
             pn->port->cable->driver->disconnect (pn->port->cable);
             break;
         }
 
-    printf (_("Initializing ppdev port %s\n"), par[0]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Initializing ppdev port %s\n"), par[0]);
 
     parport = ppdev_parport_alloc (par[0]);
     if (!parport)
-    {
-        printf (_("%s(%d) Out of memory.\n"), __FILE__, __LINE__);
         return NULL;
-    }
 
     return parport;
 }
@@ -155,34 +158,47 @@ ppdev_open (urj_parport_t *parport)
     p->fd = open (p->portname, O_RDWR);
     if (p->fd < 0)
     {
-        printf (_("Could not open port %s: %s\n"), p->portname,
-                strerror (errno));
-        return -1;
+        urj_error_set (URJ_ERROR_IO, _("Could not open port %s: %s\n"),
+                       p->portname, strerror (errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
     }
 
     if (                        /*(ioctl( p->fd, PPEXCL ) == -1) || */
            (ioctl (p->fd, PPCLAIM) == -1))
     {
-        printf (_("Could not claim ppdev device: %s\n"), strerror (errno));
+        urj_error_set (URJ_ERROR_IO, _("Could not claim ppdev device: %s\n"),
+                       strerror (errno));
+        errno = 0;
         close (p->fd);
         p->fd = -1;
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
 ppdev_close (urj_parport_t *parport)
 {
-    int r = 0;
+    int r = URJ_STATUS_OK;
     ppdev_params_t *p = parport->params;
 
     if (ioctl (p->fd, PPRELEASE) == -1)
-        r = -1;
+    {
+        urj_error_set (URJ_ERROR_IO, "ioctl(PPRELEASE) fails: %s",
+                       strerror (errno));
+        errno = 0;
+        r = URJ_STATUS_FAIL;
+    }
 
     if (close (p->fd) != 0)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_IO, "Cannot close(%d): %s", p->fd,
+                       strerror (errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
+    }
 
     p->fd = -1;
     return r;
@@ -194,9 +210,14 @@ ppdev_set_data (urj_parport_t *parport, uint8_t data)
     ppdev_params_t *p = parport->params;
 
     if (ioctl (p->fd, PPWDATA, &data) == -1)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_IO, "ioctl(PPWDATA) fails: %s",
+                       strerror (errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
+    }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -206,7 +227,12 @@ ppdev_get_data (urj_parport_t *parport)
     ppdev_params_t *p = parport->params;
 
     if (ioctl (p->fd, PPRDATA, &d) == -1)
+    {
+        urj_error_set (URJ_ERROR_IO, "ioctl(PPRSTATUS) fails: %s",
+                       strerror (errno));
+        errno = 0;
         return -1;
+    }
 
     return d;
 }
@@ -218,7 +244,12 @@ ppdev_get_status (urj_parport_t *parport)
     ppdev_params_t *p = parport->params;
 
     if (ioctl (p->fd, PPRSTATUS, &d) == -1)
+    {
+        urj_error_set (URJ_ERROR_IO, "ioctl(PPRSTATUS) fails: %s",
+                       strerror (errno));
+        errno = 0;
         return -1;
+    }
 
     return d ^ 0x80;            /* BUSY is inverted */
 }
@@ -231,9 +262,14 @@ ppdev_set_control (urj_parport_t *parport, uint8_t data)
     data ^= 0x0B;               /* SELECT, AUTOFD, and STROBE are inverted */
 
     if (ioctl (p->fd, PPWCONTROL, &data) == -1)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_IO, "ioctl(PPWDATA) fails: %s",
+                       strerror (errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
+    }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 urj_parport_driver_t urj_tap_parport_ppdev_parport_driver = {

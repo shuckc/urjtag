@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 
+#include <urjtag/log.h>
 #include <urjtag/cable.h>
 #include <urjtag/part.h>
 #include <urjtag/tap_register.h>
@@ -42,7 +43,7 @@ urj_tap_reset (urj_chain_t *chain)
     urj_tap_chain_clock (chain, 0, 0, 1);       /* Run-Test/Idle */
 }
 
-void
+int
 urj_tap_reset_bypass (urj_chain_t *chain)
 {
     urj_tap_reset (chain);
@@ -54,10 +55,7 @@ urj_tap_reset_bypass (urj_chain_t *chain)
         urj_tap_register_t *ir = urj_tap_register_fill (
                         urj_tap_register_alloc (chain->total_instr_len), 1);
         if (!ir)
-        {
-            printf (_("out of memory\n"));
-            return;
-        }
+            return URJ_STATUS_FAIL;
 
         urj_tap_capture_ir (chain);
         urj_tap_shift_register (chain, ir, NULL, URJ_CHAIN_EXITMODE_IDLE);
@@ -65,6 +63,8 @@ urj_tap_reset_bypass (urj_chain_t *chain)
 
         urj_part_parts_set_instruction (chain->parts, "BYPASS");
     }
+
+    return URJ_STATUS_OK;
 }
 
 void
@@ -75,7 +75,7 @@ urj_tap_defer_shift_register (urj_chain_t *chain,
     int i;
 
     if (!(urj_tap_state (chain) & URJ_TAP_STATE_SHIFT))
-        printf (_("%s: Invalid state: %2X\n"), "urj_tap_shift_register",
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("%s: Invalid state: %2X\n"), __func__,
                 urj_tap_state (chain));
 
     /* Capture-DR, Capture-IR, Shift-DR, Shift-IR, Exit2-DR or Exit2-IR state */
@@ -147,8 +147,8 @@ urj_tap_capture_dr (urj_chain_t *chain)
 {
     if ((urj_tap_state (chain) & (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE))
         != URJ_TAP_STATE_IDLE)
-        printf (_("%s: Invalid state: %2X\n"), "urj_tap_capture_dr",
-                urj_tap_state (chain));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("%s: Invalid state: %2X\n"), __func__,
+                 urj_tap_state (chain));
 
     /* Run-Test/Idle or Update-DR or Update-IR state */
     urj_tap_chain_defer_clock (chain, 1, 0, 1); /* Select-DR-Scan */
@@ -160,8 +160,8 @@ urj_tap_capture_ir (urj_chain_t *chain)
 {
     if ((urj_tap_state (chain) & (URJ_TAP_STATE_RESET | URJ_TAP_STATE_IDLE))
         != URJ_TAP_STATE_IDLE)
-        printf (_("%s: Invalid state: %2X\n"), "urj_tap_capture_ir",
-                urj_tap_state (chain));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("%s: Invalid state: %2X\n"), __func__,
+                 urj_tap_state (chain));
 
     /* Run-Test/Idle or Update-DR or Update-IR state */
     urj_tap_chain_defer_clock (chain, 1, 0, 2); /* Select-DR-Scan, then Select-IR-Scan */

@@ -36,13 +36,24 @@ typedef enum urj_error {
     URJ_ERROR_OUT_OF_MEMORY,
     URJ_ERROR_NO_CHAIN,
     URJ_ERROR_NO_ACTIVE_PART,
+    URJ_ERROR_NO_ACTIVE_INSTRUCTION,
+    URJ_ERROR_NO_DATA_REGISTER,
     URJ_ERROR_INVALID,
     URJ_ERROR_NOTFOUND,
-    URJ_ERROR_IO,                               /**< I/O error from OS */
     URJ_ERROR_NO_BUS_DRIVER,
     URJ_ERROR_BUFFER_EXHAUSTED,
     URJ_ERROR_ILLEGAL_STATE,
     URJ_ERROR_OUT_OF_BOUNDS,
+    URJ_ERROR_UNSUPPORTED,
+    URJ_ERROR_SYNTAX,
+
+    URJ_ERROR_IO,                               /**< I/O error from OS */
+
+    URJ_ERROR_FLASH,
+    URJ_ERROR_FLASH_DETECT,
+    URJ_ERROR_FLASH_PROGRAM,
+    URJ_ERROR_FLASH_ERASE,
+    URJ_ERROR_FLASH_UNLOCK,
 } urj_error_t;
 
 /** Max length of message string that can be recorded. */
@@ -67,7 +78,7 @@ extern urj_error_state_t        urj_error_state;
 extern const char *urj_error_string(urj_error_t error);
 
 /**
- * Set error state. If the logging level is not SILENT, also logs the error.
+ * Set error state.
  *
  * @param e urj_error_t value
  * @param ... consists of a printf argument set. It needs to start with a
@@ -81,12 +92,12 @@ extern const char *urj_error_string(urj_error_t error);
         urj_error_state.line = __LINE__; \
         snprintf (urj_error_state.msg, sizeof urj_error_state.msg, \
                   __VA_ARGS__); \
-        if (urj_log_state.level < URJ_LOG_LEVEL_SILENT) \
+        if (0 && urj_log_state.level < URJ_LOG_LEVEL_SILENT) \
         { \
-            urj_log(URJ_LOG_LEVEL_ERRORS, "%s:%d %s() %s: ", __FILE__, \
+            urj_log(URJ_LOG_LEVEL_ERROR, "%s:%d %s() %s: ", __FILE__, \
                     __LINE__, __func__, urj_error_string(e)); \
-            urj_log(URJ_LOG_LEVEL_ERRORS, __VA_ARGS__); \
-            urj_log(URJ_LOG_LEVEL_ERRORS, "\n"); \
+            urj_log(URJ_LOG_LEVEL_ERROR, __VA_ARGS__); \
+            urj_log(URJ_LOG_LEVEL_ERROR, "\n"); \
         } \
     } while (0)
 

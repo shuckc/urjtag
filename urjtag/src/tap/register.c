@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/tap_register.h>
 
 urj_tap_register_t *
@@ -33,16 +35,25 @@ urj_tap_register_alloc (int len)
     urj_tap_register_t *tr;
 
     if (len < 1)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "len < 1");
         return NULL;
+    }
 
     tr = malloc (sizeof (urj_tap_register_t));
     if (!tr)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (urj_tap_register_t));
         return NULL;
+    }
 
     tr->data = malloc (len);
     if (!tr->data)
     {
         free (tr);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       (size_t) len);
         return NULL;
     }
 
@@ -53,6 +64,8 @@ urj_tap_register_alloc (int len)
     {
         free (tr->data);
         free (tr);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       (size_t) (len + 1));
         return NULL;
     }
 
@@ -66,7 +79,10 @@ urj_tap_register_t *
 urj_tap_register_duplicate (const urj_tap_register_t *tr)
 {
     if (!tr)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "tr == NULL");
         return NULL;
+    }
 
     return urj_tap_register_init (urj_tap_register_alloc (tr->len),
                                   urj_tap_register_get_string (tr));

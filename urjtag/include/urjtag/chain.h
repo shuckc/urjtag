@@ -49,19 +49,27 @@ struct urj_chain
 urj_chain_t *urj_tap_chain_alloc (void);
 void urj_tap_chain_free (urj_chain_t *chain);
 void urj_tap_chain_disconnect (urj_chain_t *chain);
-void urj_tap_chain_clock (urj_chain_t *chain, int tms, int tdi, int n);
-void urj_tap_chain_defer_clock (urj_chain_t *chain, int tms, int tdi, int n);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_chain_clock (urj_chain_t *chain, int tms, int tdi, int n);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_chain_defer_clock (urj_chain_t *chain, int tms, int tdi, int n);
+/** @return trst = 0 or 1 on success; -1 on error */
 int urj_tap_chain_set_trst (urj_chain_t *chain, int trst);
+/** @return 0 or 1 on success; -1 on error */
 int urj_tap_chain_get_trst (urj_chain_t *chain);
-void urj_tap_chain_shift_instructions (urj_chain_t *chain);
-void urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
-                                            int capture_output, int capture,
-                                            int chain_exit);
-void urj_tap_chain_shift_data_registers (urj_chain_t *chain,
-                                         int capture_output);
-void urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
-                                              int capture_output, int capture,
-                                              int chain_exit);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_chain_shift_instructions (urj_chain_t *chain);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
+                                           int capture_output, int capture,
+                                           int chain_exit);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_chain_shift_data_registers (urj_chain_t *chain,
+                                        int capture_output);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
+                                             int capture_output, int capture,
+                                             int chain_exit);
 void urj_tap_chain_flush (urj_chain_t *chain);
 int urj_tap_chain_set_pod_signal (urj_chain_t *chain, int mask, int val);
 int urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig);

@@ -28,9 +28,13 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/flash.h>
 #include <urjtag/bus.h>
 #include <urjtag/bitmask.h>
+
+#include "flash.h"
 
 #include "jedec.h"
 #include "cfi.h"
@@ -45,19 +49,20 @@ urj_flash_jedec_exp_read_id (urj_bus_t *bus, uint32_t adr, uint32_t dmask,
     int locofs;
 
     det_addrpat <<= det_addroffset;
-    printf ("     trying with address pattern base %08x:", det_addrpat);
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             "     trying with address pattern base %08x:", det_addrpat);
     URJ_BUS_WRITE (bus, adr + det_addrpat, pata);
     URJ_BUS_WRITE (bus, adr + (det_addrpat >> 1), patb);
     URJ_BUS_WRITE (bus, adr + det_addrpat, dcmd);
 
     for (locofs = 0; locofs <= 2; locofs++)
     {
-        printf (" %08x",
-                (dmask & URJ_BUS_READ (bus, adr + (locofs << det_addroffset)))
-                >> det_dataoffset);
+        urj_log (URJ_LOG_LEVEL_NORMAL, " %08x",
+                 (dmask & URJ_BUS_READ (bus, adr + (locofs << det_addroffset)))
+                 >> det_dataoffset);
     }
 
-    printf ("\n");
+    urj_log (URJ_LOG_LEVEL_NORMAL, "\n");
 }
 
 int
@@ -72,42 +77,58 @@ urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
 
     *cfi_array = calloc (1, sizeof (urj_flash_cfi_array_t));
     if (!*cfi_array)
-        return -2;              /* out of memory */
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (urj_flash_cfi_array_t));
+        return URJ_STATUS_FAIL;
+    }
 
     (*cfi_array)->bus = bus;
     (*cfi_array)->address = adr;
     if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
-        return -8;              /* bus width detection failed */
+        // retain error state
+        return URJ_STATUS_FAIL;
     bw = area.width;
 
     if (bw == 0)
         bw = 32;                // autodetection!
 
     if (bw != 8 && bw != 16 && bw != 32)
-        return -3;              /* invalid bus width */
+    {
+        urj_error_set (URJ_ERROR_INVALID, "bus width %d", bw);
+        return URJ_STATUS_FAIL;
+    }
     (*cfi_array)->bus_width = ba = bw / 8;
 
-    (*cfi_array)->cfi_chips =
-        calloc (1, sizeof (urj_flash_cfi_chip_t *));
+    (*cfi_array)->cfi_chips = calloc (1, sizeof (urj_flash_cfi_chip_t *));
     if (!(*cfi_array)->cfi_chips)
-        return -2;              /* out of memory */
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (urj_flash_cfi_chip_t *));
+        return URJ_STATUS_FAIL;
+    }
 
-    (*cfi_array)->cfi_chips[0] =
-        calloc (1, sizeof (urj_flash_cfi_chip_t));
+    (*cfi_array)->cfi_chips[0] = calloc (1, sizeof (urj_flash_cfi_chip_t));
     if (!(*cfi_array)->cfi_chips[0])
-        return -2;              /* out of memory */
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (urj_flash_cfi_chip_t));
+        return URJ_STATUS_FAIL;
+    }
 
-    printf
-        ("=== experimental extensive JEDEC brute-force autodetection ===\n");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+        "=== experimental extensive JEDEC brute-force autodetection ===\n");
     for (det_buswidth = bw; det_buswidth >= 8; det_buswidth >>= 1)
     {
         int det_datawidth;
-        printf ("- trying with cpu buswidth %d\n", det_buswidth);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "- trying with cpu buswidth %d\n",
+                 det_buswidth);
         for (det_datawidth = det_buswidth; det_datawidth >= 8;
              det_datawidth >>= 1)
         {
             int det_dataoffset;
-            printf ("-- trying with flash datawidth %d\n", det_datawidth);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     "-- trying with flash datawidth %d\n", det_datawidth);
             for (det_dataoffset = 0;
                  det_dataoffset + det_datawidth <= det_buswidth;
                  det_dataoffset += 8)
@@ -120,9 +141,10 @@ urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
                 uint32_t patb = ~dmask | (0x55 << det_dataoffset);
                 uint32_t dcmd = ~dmask | (0x90 << det_dataoffset);
 
-                printf ("--- trying with flash dataoffset %d",
-                        det_dataoffset);
-                printf (" (using %08X, %08X and %08X)\n", pata, patb, dcmd);
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         "--- trying with flash dataoffset %d", det_dataoffset);
+                urj_log (URJ_LOG_LEVEL_NORMAL, " (using %08X, %08X and %08X)\n",
+                         pata, patb, dcmd);
 
                 for (det_addroffset = 0; det_addroffset <= 2;
                      det_addroffset++)
@@ -137,8 +159,8 @@ urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
             }
         }
     }
-    printf
-        ("=== end of experimental extensive JEDEC brute-force autodetection ===\n");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+        "=== end of experimental extensive JEDEC brute-force autodetection ===\n");
 
-    return 1;
+    return URJ_STATUS_OK;
 }

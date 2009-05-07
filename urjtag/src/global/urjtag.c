@@ -34,11 +34,12 @@ int urj_debug_mode = 0;
 int urj_big_endian = 0;
 
 static int stderr_vprintf (const char *fmt, va_list ap);
+static int stdout_vprintf (const char *fmt, va_list ap);
 
 urj_log_state_t urj_log_state =
     {
         .level = URJ_LOG_LEVEL_NORMAL,
-        .out_vprintf = vprintf,
+        .out_vprintf = stdout_vprintf,
         .err_vprintf = stderr_vprintf,
     };
 
@@ -46,6 +47,16 @@ static int
 stderr_vprintf(const char *fmt, va_list ap)
 {
     return vfprintf (stderr, fmt, ap);
+}
+
+static int
+stdout_vprintf(const char *fmt, va_list ap)
+{
+    int r = vfprintf (stdout, fmt, ap);
+
+    fflush (stdout);
+
+    return r;
 }
 
 int
@@ -58,7 +69,7 @@ urj_log (urj_log_level_t level, const char *fmt, ...)
         return 0;
 
     va_start (ap, fmt);
-    if (level < URJ_LOG_LEVEL_WARNINGS)
+    if (level < URJ_LOG_LEVEL_WARNING)
         r = urj_log_state.out_vprintf (fmt, ap);
     else
         r = urj_log_state.err_vprintf (fmt, ap);
@@ -95,13 +106,24 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_OUT_OF_MEMORY:       return "out of memory";
     case URJ_ERROR_NO_CHAIN:            return "no chain";
     case URJ_ERROR_NO_ACTIVE_PART:      return "no active part";
+    case URJ_ERROR_NO_ACTIVE_INSTRUCTION: return "no active instruction";
+    case URJ_ERROR_NO_DATA_REGISTER:    return "no data register";
     case URJ_ERROR_INVALID:             return "invalid parameter";
     case URJ_ERROR_NOTFOUND:            return "not found";
-    case URJ_ERROR_IO:                  return "I/O error from OS";
     case URJ_ERROR_NO_BUS_DRIVER:       return "no bus driver";
     case URJ_ERROR_BUFFER_EXHAUSTED:    return "buffer exhausted";
     case URJ_ERROR_ILLEGAL_STATE:       return "illegal state transition";
     case URJ_ERROR_OUT_OF_BOUNDS:       return "out of bounds";
+    case URJ_ERROR_UNSUPPORTED:         return "unsupported";
+    case URJ_ERROR_SYNTAX:              return "syntax";
+
+    case URJ_ERROR_IO:                  return "I/O error from OS";
+
+    case URJ_ERROR_FLASH:               return "flash";
+    case URJ_ERROR_FLASH_DETECT:        return "flash detect";
+    case URJ_ERROR_FLASH_PROGRAM:       return "flash program";
+    case URJ_ERROR_FLASH_ERASE:         return "flash erase";
+    case URJ_ERROR_FLASH_UNLOCK:        return "flash unlock";
     }
 
     return "UNDEFINED ERROR";

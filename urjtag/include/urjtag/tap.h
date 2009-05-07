@@ -28,7 +28,8 @@
 #include "types.h"
 
 void urj_tap_reset (urj_chain_t *chain);
-void urj_tap_reset_bypass (urj_chain_t *chain);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_reset_bypass (urj_chain_t *chain);
 void urj_tap_capture_dr (urj_chain_t *chain);
 void urj_tap_capture_ir (urj_chain_t *chain);
 void urj_tap_defer_shift_register (urj_chain_t *chain,
@@ -42,16 +43,21 @@ void urj_tap_shift_register (urj_chain_t *chain,
                              urj_tap_register_t *out, int tap_exit);
 
 /** API functions */
+/** @return number of detected parts on success; -1 on error */
 int urj_tap_detect_parts (urj_chain_t *chain, const char *db_path);
+/** @return chain length on success; -1 on error */
 int urj_tap_manual_add (urj_chain_t *chain, int instr_len);
+/** @return register size on success; -1 on error */
 int urj_tap_detect_register_size (urj_chain_t *chain);
-void urj_tap_discovery (urj_chain_t *chain);
-void urj_tap_idcode (urj_chain_t *chain, unsigned int bytes);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_discovery (urj_chain_t *chain);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_tap_idcode (urj_chain_t *chain, unsigned int bytes);
 /**
  * Convenience function that detects the parts, initialises them to BYPASS,
  * and initialises the bus drivers.
  *
- * @return URJ_STATUS_OK on success; URJ_STATUS_FAILURE on error
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
  */
 int urj_tap_detect (urj_chain_t *chain);
 

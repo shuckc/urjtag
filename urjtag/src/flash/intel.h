@@ -41,6 +41,7 @@
 #define FLASH_INTEL_H
 
 #include <urjtag/bitmask.h>
+#include <urjtag/flash.h>
 
 /* Intel CFI commands - see Table 4. in [1] and Table 3. in [2] */
 
@@ -96,5 +97,9 @@
 #define CFI_CHIPN_INTEL_28F128K18               "28F128K18"
 #define CFI_CHIP_INTEL_28F256K18                0x8807
 #define CFI_CHIPN_INTEL_28F256K18               "28F256K18"
+
+extern urj_flash_driver_t urj_flash_intel_32_flash_driver;
+extern urj_flash_driver_t urj_flash_intel_16_flash_driver;
+extern urj_flash_driver_t urj_flash_intel_8_flash_driver;
 
 #endif /* FLASH_INTEL_H */

@@ -44,11 +44,13 @@ cmd_shift_run (urj_chain_t *chain, char *params[])
 
     if (strcasecmp (params[1], "ir") == 0)
     {
+        /* @@@@ RFHH check result */
         urj_tap_chain_shift_instructions (chain);
         return 1;
     }
     if (strcasecmp (params[1], "dr") == 0)
     {
+        /* @@@@ RFHH check result */
         urj_tap_chain_shift_data_registers (chain, 1);
         return 1;
     }

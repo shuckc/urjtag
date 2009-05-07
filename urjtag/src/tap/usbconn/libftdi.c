@@ -39,7 +39,8 @@
 
 #include <ftdi.h>
 
-#include <urjtag/cable.h>
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/usbconn.h>
 #include <urjtag/usbconn/libftdx.h>
 
@@ -64,11 +65,12 @@ typedef struct
 urj_usbconn_driver_t urj_tap_usbconn_ftdi_driver;
 urj_usbconn_driver_t urj_tap_usbconn_ftdi_mpsse_driver;
 
-static int usbconn_ftdi_common_open (urj_usbconn_t *conn, int printerr);
+static int usbconn_ftdi_common_open (urj_usbconn_t *conn, urj_log_level_t ll);
 static void usbconn_ftdi_free (urj_usbconn_t *conn);
 
 /* ---------------------------------------------------------------------- */
 
+/** @return number of bytes flushed; -1 on error */
 static int
 usbconn_ftdi_flush (ftdi_param_t *p)
 {
@@ -81,15 +83,14 @@ usbconn_ftdi_flush (ftdi_param_t *p)
     if (p->send_buffered == 0)
         return 0;
 
-    if ((xferred =
-         ftdi_write_data (p->fc, p->send_buf, p->send_buffered)) < 0)
-        printf (_("%s(): ftdi_write_data() failed: %s\n"), __FUNCTION__,
-                ftdi_get_error_string (p->fc));
+    if ((xferred = ftdi_write_data (p->fc, p->send_buf, p->send_buffered)) < 0)
+        urj_error_set (URJ_ERROR_IO, _("ftdi_write_data() failed: %s"),
+                       ftdi_get_error_string (p->fc));
 
     if (xferred < p->send_buffered)
     {
-        printf (_("%s(): Written fewer bytes than requested.\n"),
-                __FUNCTION__);
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("Written fewer bytes than requested"));
         return -1;
     }
 
@@ -108,21 +109,23 @@ usbconn_ftdi_flush (ftdi_param_t *p)
 
         if (!p->recv_buf)
         {
-            printf (_("%s(): Receive buffer does not exist.\n"),
-                    __FUNCTION__);
+            urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                           _("Receive buffer does not exist"));
             return -1;
         }
 
         while (recvd == 0)
-            if ((recvd =
-                 ftdi_read_data (p->fc, &(p->recv_buf[p->recv_write_idx]),
-                                 p->to_recv)) < 0)
-                printf (_("%s(): Error from ftdi_read_data(): %s\n"),
-                        __FUNCTION__, ftdi_get_error_string (p->fc));
+            if ((recvd = ftdi_read_data (p->fc,
+                                         &(p->recv_buf[p->recv_write_idx]),
+                                         p->to_recv)) < 0)
+                urj_error_set (URJ_ERROR_IO,
+                               _("Error from ftdi_read_data(): %s"),
+                               ftdi_get_error_string (p->fc));
 
         if (recvd < p->to_recv)
-            printf (_("%s(): Received less bytes than requested.\n"),
-                    __FUNCTION__);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("%s(): Received fewer bytes than requested.\n"),
+                     __func__);
 
         p->to_recv -= recvd;
         p->recv_write_idx += recvd;
@@ -133,6 +136,7 @@ usbconn_ftdi_flush (ftdi_param_t *p)
 
 /* ---------------------------------------------------------------------- */
 
+/** @return number of bytes read; -1 on error */
 static int
 usbconn_ftdi_read (urj_usbconn_t *conn, uint8_t *buf, int len)
 {
@@ -170,8 +174,9 @@ usbconn_ftdi_read (urj_usbconn_t *conn, uint8_t *buf, int len)
         /* need to get more data directly from the device */
         while (recvd == 0)
             if ((recvd = ftdi_read_data (p->fc, &(buf[cpy_len]), len)) < 0)
-                printf (_("%s(): Error from ftdi_read_data(): %s\n"),
-                        __FUNCTION__, ftdi_get_error_string (p->fc));
+                urj_error_set (URJ_ERROR_IO,
+                               _("Error from ftdi_read_data(): %s"),
+                               ftdi_get_error_string (p->fc));
     }
 
     return recvd < 0 ? -1 : cpy_len + len;
@@ -179,6 +184,7 @@ usbconn_ftdi_read (urj_usbconn_t *conn, uint8_t *buf, int len)
 
 /* ---------------------------------------------------------------------- */
 
+/** @return number of bytes written; -1 on error */
 static int
 usbconn_ftdi_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
 {
@@ -227,7 +233,8 @@ usbconn_ftdi_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
     }
     else
     {
-        printf (_("%s(): Send buffer does not exist.\n"), __FUNCTION__);
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("Send buffer does not exist"));
         return -1;
     }
 }
@@ -256,7 +263,6 @@ usbconn_ftdi_connect (const char **param, int paramc,
 
     if (!p || !c || !fc || !p->send_buf || !p->recv_buf)
     {
-        printf (_("Out of memory\n"));
         if (p->send_buf)
             free (p->send_buf);
         if (p->recv_buf)
@@ -267,6 +273,11 @@ usbconn_ftdi_connect (const char **param, int paramc,
             free (c);
         if (fc)
             free (fc);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                       "malloc(%zd)/malloc(%zd)/malloc(%zd)/malloc(%s)/malloc(%s) failed",
+                       sizeof (urj_usbconn_t), sizeof (ftdi_param_t),
+                       sizeof (struct ftdi_context),
+                       "p->send_buf_len", "p->recv_buf_len");
         return NULL;
     }
 
@@ -283,14 +294,14 @@ usbconn_ftdi_connect (const char **param, int paramc,
     /* do a test open with the specified cable paramters,
        alternatively we could use libusb to detect the presence of the
        specified USB device */
-    if (usbconn_ftdi_common_open (c, 0) != 0)
+    if (usbconn_ftdi_common_open (c, URJ_LOG_LEVEL_DETAIL) != 0)
     {
         usbconn_ftdi_free (c);
         return NULL;
     }
     ftdi_usb_close (fc);
 
-    printf (_("Connected to libftdi driver.\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Connected to libftdi driver.\n"));
 
     return c;
 }
@@ -312,7 +323,7 @@ usbconn_ftdi_mpsse_connect (const char **param, int paramc,
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftdi_common_open (urj_usbconn_t *conn, int printerr)
+usbconn_ftdi_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
 {
     ftdi_param_t *p = conn->params;
     struct ftdi_context *fc = p->fc;
@@ -328,18 +339,20 @@ usbconn_ftdi_common_open (urj_usbconn_t *conn, int printerr)
     if (status < 0)
     {
         /* device not found == -3 */
-        if (printerr || (status != -3))
-            printf (_("%s() failed: %s\n"), __FUNCTION__,
-                    ftdi_get_error_string (fc));
+        if (status != -3)
+            urj_log (ll, _("%s(): ftdi_usb_open_desc() failed: %s"),
+                     __func__, ftdi_get_error_string (fc));
+        urj_error_set (URJ_ERROR_IO, _("ftdi_usb_open_desc() failed: %s"),
+                       ftdi_get_error_string (fc));
         ftdi_deinit (fc);
         /* mark ftdi layer as not initialized */
         p->fc = NULL;
 
         /* TODO: disconnect? */
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -354,12 +367,12 @@ seq_purge (struct ftdi_context *fc, int purge_rx, int purge_tx)
 
 #ifndef LIBFTDI_UNIMPLEMENTED
     if ((r = ftdi_usb_purge_buffers (fc)) < 0)
-        printf (_("%s(): ftdi_usb_purge_buffers() failed: %s\n"),
-                __FUNCTION__, ftdi_get_error_string (fc));
+        urj_error_set (URJ_ERROR_IO, _("ftdi_usb_purge_buffers() failed: %s"),
+                       ftdi_get_error_string (fc));
     if (r >= 0)
         if ((r = ftdi_read_data (fc, &buf, 1)) < 0)
-            printf (_("%s(): ftdi_read_data() failed: %s\n"),
-                    __FUNCTION__, ftdi_get_error_string (fc));
+            urj_error_set (URJ_ERROR_IO, _("ftdi_read_data() failed: %s"),
+                           ftdi_get_error_string (fc));
 #else /* not yet available */
     {
         int rx_loop;
@@ -367,24 +380,24 @@ seq_purge (struct ftdi_context *fc, int purge_rx, int purge_tx)
         if (purge_rx)
             for (rx_loop = 0; (rx_loop < 6) && (r >= 0); rx_loop++)
                 if ((r = ftdi_usb_purge_rx_buffer (fc)) < 0)
-                    printf (_
-                            ("%s(): ftdi_usb_purge_rx_buffer() failed: %s\n"),
-                            __FUNCTION__, ftdi_get_error_string (fc));
+                    urj_error_set (URJ_ERROR_IO,
+                                   _("ftdi_usb_purge_rx_buffer() failed: %s"),
+                                   ftdi_get_error_string (fc));
 
         if (purge_tx)
             if (r >= 0)
                 if ((r = ftdi_usb_purge_tx_buffer (fc)) < 0)
-                    printf (_
-                            ("%s(): ftdi_usb_purge_tx_buffer() failed: %s\n"),
-                            __FUNCTION__, ftdi_get_error_string (fc));
+                    urj_error_set (URJ_ERROR_IO,
+                                   _("ftdi_usb_purge_tx_buffer() failed: %s"),
+                                   ftdi_get_error_string (fc));
         if (r >= 0)
             if ((r = ftdi_read_data (fc, &buf, 1)) < 0)
-                printf (_("%s(): ftdi_read_data() failed: %s\n"),
-                        __FUNCTION__, ftdi_get_error_string (fc));
+                urj_error_set (URJ_ERROR_IO, _("ftdi_read_data() failed: %s"),
+                               ftdi_get_error_string (fc));
     }
 #endif
 
-    return r < 0 ? -1 : 0;
+    return r < 0 ? URJ_STATUS_FAIL : URJ_STATUS_OK;
 }
 
 static int
@@ -396,17 +409,17 @@ seq_reset (struct ftdi_context *fc)
     {
         unsigned short status;
         if ((r = ftdi_poll_status (fc, &status)) < 0)
-            printf (_("%s(): ftdi_poll_status() failed: %s\n"),
-                    __FUNCTION__, ftdi_get_error_string (fc));
+            urj_error_set (URJ_ERROR_IO, _("ftdi_poll_status() failed: %s"),
+                           ftdi_get_error_string (fc));
     }
 #endif
     if ((r = ftdi_usb_reset (fc)) < 0)
-        printf (_("%s(): ftdi_usb_reset() failed: %s\n"),
-                __FUNCTION__, ftdi_get_error_string (fc));
+        urj_error_set (URJ_ERROR_IO, _("ftdi_usb_reset() failed: %s"),
+                       ftdi_get_error_string (fc));
 
     if (r >= 0)
         r = seq_purge (fc, 1, 1);
-    return r < 0 ? -1 : 0;
+    return r < 0 ? URJ_STATUS_FAIL : URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -418,8 +431,8 @@ usbconn_ftdi_open (urj_usbconn_t *conn)
     struct ftdi_context *fc = p->fc;
     int r;
 
-    if (usbconn_ftdi_common_open (conn, 1) < 0)
-        return -1;
+    if (usbconn_ftdi_common_open (conn, URJ_LOG_LEVEL_NORMAL) < 0)
+        return URJ_STATUS_FAIL;
 
     r = seq_reset (fc);
     if (r >= 0)
@@ -427,8 +440,9 @@ usbconn_ftdi_open (urj_usbconn_t *conn)
 
     if (r >= 0)
         if ((r = ftdi_set_latency_timer (fc, 2)) < 0)
-            printf (_("%s(): ftdi_set_latency_timer() failed: %s\n"),
-                    __FUNCTION__, ftdi_get_error_string (fc));
+            urj_error_set (URJ_ERROR_IO,
+                           _("ftdi_set_latency_timer() failed: %s"),
+                           ftdi_get_error_string (fc));
 
 #if 0
     /* libftdi 0.6 doesn't allow high baudrates, so we send the control
@@ -437,14 +451,14 @@ usbconn_ftdi_open (urj_usbconn_t *conn)
         if (usb_control_msg
             (fc->usb_dev, 0x40, 3, 1, 0, NULL, 0, fc->usb_write_timeout) != 0)
         {
-            printf ("Can't set max baud rate.\n");
+            urj_error_set (URJ_ERROR_IO, "Can't set max baud rate");
             r = -1;
         }
 #else
     if (r >= 0)
         if ((r = ftdi_set_baudrate (fc, 3E6)) < 0)
-            printf (_("%s(): ftdi_set_baudrate() failed: %s\n"),
-                    __FUNCTION__, ftdi_get_error_string (fc));
+            urj_error_set (URJ_ERROR_IO, _("ftdi_set_baudrate() failed: %s"),
+                           ftdi_get_error_string (fc));
 #endif
 
     if (r < 0)
@@ -455,7 +469,7 @@ usbconn_ftdi_open (urj_usbconn_t *conn)
         p->fc = NULL;
     }
 
-    return r < 0 ? -1 : 0;
+    return r < 0 ? URJ_STATUS_FAIL : URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -467,8 +481,8 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
     struct ftdi_context *fc = p->fc;
     int r;
 
-    if (usbconn_ftdi_common_open (conn, 1) < 0)
-        return -1;
+    if (usbconn_ftdi_common_open (conn, URJ_LOG_LEVEL_NORMAL) < 0)
+        return URJ_STATUS_FAIL;
 
     /* This sequence might seem weird and containing superfluous stuff.
        However, it's built after the description of JTAG_InitDevice
@@ -505,18 +519,19 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
        in short packets (suboptimal performance) */
     if (r >= 0)
         if ((r = ftdi_set_latency_timer (fc, 16)) < 0)
-            printf (_("%s(): ftdi_set_latency_timer() failed: %s\n"),
-                    __FUNCTION__, ftdi_get_error_string (fc));
+            urj_error_set (URJ_ERROR_IO,
+                           _("ftdi_set_latency_timer() failed: %s"),
+                           ftdi_get_error_string (fc));
 
     if (r >= 0)
         if ((r = ftdi_set_bitmode (fc, 0x0b, BITMODE_MPSSE)) < 0)
-            printf (_("%s(): ftdi_set_bitmode() failed: %s\n"),
-                    __FUNCTION__, ftdi_get_error_string (fc));
+            urj_error_set (URJ_ERROR_IO, _("ftdi_set_bitmode() failed: %s"),
+                           ftdi_get_error_string (fc));
 
     if (r >= 0)
         if ((r = ftdi_usb_reset (fc)) < 0)
-            printf (_("%s(): ftdi_usb_reset() failed: %s\n"),
-                    __FUNCTION__, ftdi_get_error_string (fc));
+            urj_error_set (URJ_ERROR_IO, _("ftdi_usb_reset() failed: %s"),
+                           ftdi_get_error_string (fc));
     if (r >= 0)
         r = seq_purge (fc, 1, 0);
 
@@ -537,8 +552,8 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
 
     if (r >= 0)
         if ((r = ftdi_usb_reset (fc)) < 0)
-            printf (_("%s(): ftdi_usb_reset() failed: %s\n"),
-                    __FUNCTION__, ftdi_get_error_string (fc));
+            urj_error_set (URJ_ERROR_IO, _("ftdi_usb_reset() failed: %s"),
+                           ftdi_get_error_string (fc));
     if (r >= 0)
         r = seq_purge (fc, 1, 0);
 
@@ -550,7 +565,7 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
         p->fc = NULL;
     }
 
-    return r < 0 ? -1 : 0;
+    return r < 0 ? URJ_STATUS_FAIL : URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -567,7 +582,7 @@ usbconn_ftdi_close (urj_usbconn_t *conn)
         p->fc = NULL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */

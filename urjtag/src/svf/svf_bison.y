@@ -43,6 +43,8 @@
 #define YYLEX_PARAM priv_data->scanner
 int yylex (YYSTYPE *, YYLTYPE *, void *);
 
+// @@@@ RFHH need to define YYPRINTF in terms of urj_log()
+
 #define YYERROR_VERBOSE
 
 
@@ -138,7 +140,7 @@ svf_statement
 
     | PIOMAP '(' direction IDENTIFIER piomap_rec ')' ';'
       {
-        urj_log (URJ_LOG_LEVEL_ERRORS, "PIOMAP not implemented\n");
+        urj_log (URJ_LOG_LEVEL_ERROR, "PIOMAP not implemented\n");
         yyerror(&@$, priv_data, chain, "PIOMAP");
         YYERROR;
       }
@@ -146,7 +148,7 @@ svf_statement
     | PIO VECTOR_STRING ';'
       {
         free($<cvalue>2);
-        urj_log (URJ_LOG_LEVEL_ERRORS, "PIO not implemented\n");
+        urj_log (URJ_LOG_LEVEL_ERROR, "PIO not implemented\n");
         yyerror(&@$, priv_data, chain, "PIO");
         YYERROR;
       }
@@ -384,7 +386,7 @@ path_states
                   ps->states[ps->num_states] = $<token>2;
                   ps->num_states++;
                 } else
-                  urj_log (URJ_LOG_LEVEL_ERRORS, "Error %s: maximum number of %d path states reached.\n",
+                  urj_log (URJ_LOG_LEVEL_ERROR, "Error %s: maximum number of %d path states reached.\n",
                         "svf", MAX_PATH_STATES);
               }
 ;
@@ -411,7 +413,7 @@ direction
 yyerror (YYLTYPE *locp, urj_svf_parser_priv_t *priv_data, urj_chain_t *chain,
          const char *error_string)
 {
-    urj_log (URJ_LOG_LEVEL_ERRORS, "Error occurred for SVF command %s.\n",
+    urj_log (URJ_LOG_LEVEL_ERROR, "Error occurred for SVF command %s.\n",
              error_string);
 }
 

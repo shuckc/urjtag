@@ -326,7 +326,7 @@ urj_bsdl_scan_files (urj_chain_t *chain, const char *idcode, int proc_mode)
             {
                 char *name;
 
-                /* @@@@ ToDo handle malloc error result RFHH */
+                /* @@@@ RFHH ToDo handle malloc error result */
                 name = malloc (strlen (globs->path_list[idx])
                                + strlen (elem->d_name) + 1 + 1);
                 if (name)
@@ -341,9 +341,8 @@ urj_bsdl_scan_files (urj_chain_t *chain, const char *idcode, int proc_mode)
                     {
                         if (buf.st_mode & S_IFREG)
                         {
-                            result =
-                                urj_bsdl_read_file (chain, name, proc_mode,
-                                                    idcode);
+                            result = urj_bsdl_read_file (chain, name, proc_mode,
+                                                         idcode);
                             if (result == 1)
                                 printf (_("  Filename:     %s\n"), name);
                         }

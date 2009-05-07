@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <errno.h>
 
 #include <urjtag/cmd.h>
 
@@ -60,7 +61,9 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
     file = fopen (filename, "r");
     if (!file)
     {
-        printf (_("Cannot open %s\n"), filename);
+        urj_error_set (URJ_ERROR_IO, "Cannot open '%s': %s", filename,
+                       strerror(errno));
+        errno = 0;
         return 0;
     }
 
@@ -186,7 +189,6 @@ bits_to_uint64 (urj_tap_register_t *t)
     return l;
 }
 
-
 int
 urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 {
@@ -211,18 +213,16 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
     urj_tap_capture_ir (chain);
     irlen = urj_tap_detect_register_size (chain);
     if (irlen < 1)
-        return 0;
+        // retain error state
+        return -1;
 
-    printf (_("IR length: %d\n"), irlen);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("IR length: %d\n"), irlen);
     chain->total_instr_len = irlen;
 
     /* Allocate IR */
     ir = urj_tap_register_fill (urj_tap_register_alloc (irlen), 1);
     if (ir == NULL)
-    {
-        printf (_("out of memory\n"));
-        return 0;
-    }
+        return -1;
 
     urj_tap_shift_register (chain, ir, NULL, URJ_CHAIN_EXITMODE_IDLE);
     urj_tap_register_free (ir);
@@ -232,10 +232,12 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
     chlen = urj_tap_detect_register_size (chain);
     if (chlen < 1)
     {
-        printf (_("Unable to detect JTAG chain length\n"));
-        return 0;
+        // retain error state
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("Unable to detect JTAG chain length\n"));
+        return -1;
     }
-    printf (_("Chain length: %d\n"), chlen);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Chain length: %d\n"), chlen);
 
     /* Allocate registers and parts */
     one = urj_tap_register_fill (urj_tap_register_alloc (1), 1);
@@ -245,14 +247,13 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
     ps = urj_part_parts_alloc ();
     if (!one || !ones || !br || !id || !ps)
     {
-        printf (_("out of memory\n"));
-
         urj_tap_register_free (one);
         urj_tap_register_free (ones);
         urj_tap_register_free (br);
         urj_tap_register_free (id);
         urj_part_parts_free (ps);
-        return 0;
+        // retain error state
+        return -1;
     }
     chain->parts = ps;
     chain->active_part = 0;
@@ -280,15 +281,12 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             did = id;
         }
 
-        printf (_("Device Id: %s (0x%016" PRIX64 ")\n"),
-                urj_tap_register_get_string (did), bits_to_uint64 (did));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: %s (0x%016" PRIX64 ")\n"),
+                 urj_tap_register_get_string (did), bits_to_uint64 (did));
 
         part = urj_part_alloc (did);
         if (part == NULL)
-        {
-            printf (_("Out of memory\n"));
             break;
-        }
         urj_part_parts_add_part (ps, part);
 
         if (did == br)
@@ -313,15 +311,16 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[1], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                printf (_("  Unknown manufacturer!\n"));
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("  Unknown manufacturer!\n"));
                 urj_tap_register_free (key);
                 continue;
             }
             urj_tap_register_free (key);
 
-            printf (_("  Manufacturer: %s\n"), idr.fullname);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("  Manufacturer: %s\n"),
+                     idr.fullname);
             if (strlen (idr.fullname) > URJ_PART_MANUFACTURER_MAXLEN)
-                printf (_("Warning: Manufacturer too long\n"));
+                urj_warning (_("Manufacturer too long\n"));
             strncpy (manufacturer, idr.fullname,
                      URJ_PART_MANUFACTURER_MAXLEN);
             manufacturer[URJ_PART_MANUFACTURER_MAXLEN] = '\0';
@@ -339,16 +338,16 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[12], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                printf (_("  Unknown part!\n"));
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("  Unknown part!\n"));
                 urj_tap_register_free (key);
                 continue;
             }
             urj_tap_register_free (key);
 
-            printf (_("  Part(%d):         %s\n"), chain->active_part,
-                    idr.fullname);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("  Part(%d):         %s\n"),
+                     chain->active_part, idr.fullname);
             if (strlen (idr.fullname) > URJ_PART_PART_MAXLEN)
-                printf (_("Warning: Part too long\n"));
+                urj_warning (_("Part too long\n"));
             strncpy (partname, idr.fullname, URJ_PART_PART_MAXLEN);
             partname[URJ_PART_PART_MAXLEN] = '\0';
 
@@ -365,15 +364,16 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[28], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                printf (_("  Unknown stepping!\n"));
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("  Unknown stepping!\n"));
                 urj_tap_register_free (key);
                 continue;
             }
             urj_tap_register_free (key);
 
-            printf (_("  Stepping:     %s\n"), idr.fullname);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("  Stepping:     %s\n"),
+                     idr.fullname);
             if (strlen (idr.fullname) > URJ_PART_STEPPING_MAXLEN)
-                printf (_("Warning: Stepping too long\n"));
+                urj_warning (_("Stepping too long\n"));
             strncpy (stepping, idr.fullname, URJ_PART_STEPPING_MAXLEN);
             stepping[URJ_PART_STEPPING_MAXLEN] = '\0';
 
@@ -385,7 +385,8 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
                 data_path[0] = '\0';
             strcat (data_path, idr.name);
 
-            printf (_("  Filename:     %s\n"), data_path);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("  Filename:     %s\n"),
+                     data_path);
 
             /* run JTAG declarations */
             strcpy (part->manufacturer, manufacturer);
@@ -406,7 +407,8 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
         urj_tap_shift_register (chain, one, br, URJ_CHAIN_EXITMODE_SHIFT);
         if (urj_tap_register_compare (one, br) != 0)
         {
-            printf (_("Error: Unable to detect JTAG chain end!\n"));
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("Error: Unable to detect JTAG chain end!\n"));
             break;
         }
     }
@@ -434,28 +436,19 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
 
     id = urj_tap_register_alloc (1);
     if (id == NULL)
-    {
-        printf (_("Error: Unable to allocate a register!\n"));
-        return 0;
-    }
+        return -1;
 
     /* if there are no parts, create the parts list */
     if (chain->parts == NULL)
     {
         chain->parts = urj_part_parts_alloc ();
         if (chain->parts == NULL)
-        {
-            printf (_("Error: Unable to allocate space for parts!\n"));
-            return 0;
-        }
+            return -1;
     }
 
     part = urj_part_alloc (id);
     if (part == NULL)
-    {
-        printf (_("Error: Unable to allocate space for a part!\n"));
-        return 0;
-    }
+        return -1;
 
     strncpy (part->part, "unknown", URJ_PART_PART_MAXLEN);
     part->instruction_length = instr_len;
@@ -466,8 +459,8 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
     /* make the BR register available */
     if (urj_part_data_register_define (part, "BR", 1) != URJ_STATUS_OK)
     {
-        printf (_("Error: could not set BR register"));
-        return 0;
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Error: could not set BR register"));
+        return -1;
     }
 
     /* create a string of 1's for BYPASS instruction */
@@ -478,8 +471,9 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
     str = calloc (instr_len + 1, sizeof (char));
     if (str == NULL)
     {
-        printf (_("Out of memory!\n"));
-        return 0;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       instr_len + 1, sizeof (char));
+        return -1;
     }
 
     memset (str, '1', instr_len);
@@ -490,8 +484,9 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
 
     if (result < 1)
     {
-        printf (_("Error: could not set BYPASS instruction"));
-        return 0;
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("Error: could not set BYPASS instruction"));
+        return -1;
     }
 
     /* update total instruction register length of chain */
@@ -509,7 +504,9 @@ urj_tap_detect (urj_chain_t *chain)
     urj_bus_buses_free ();
     urj_part_parts_free (chain->parts);
     chain->parts = NULL;
-    urj_tap_detect_parts (chain, urj_get_data_dir ());
+    if (urj_tap_detect_parts (chain, urj_get_data_dir ()) != URJ_STATUS_OK)
+        // retain error state
+        return URJ_STATUS_FAIL;
     if (!chain->parts)
     {
         urj_error_set (URJ_ERROR_INVALID, "chain has no parts");

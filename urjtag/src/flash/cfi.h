@@ -47,6 +47,9 @@
 
 #ifndef __ASSEMBLY__
 #include <stdint.h>
+
+#include <urjtag/types.h>
+#include <urjtag/flash.h>
 #endif
 
 /* CFI commands - see Table 1 in [1] */
@@ -220,6 +223,11 @@ typedef struct amd_pri_extened_query_structure
     uint8_t bank_organization;  /* in us */
     uint8_t bank_region_info[0];
 } urj_flash_cfi_amd_pri_extened_query_structure_t;
+
+void urj_flash_cfi_array_free (urj_flash_cfi_array_t *cfi_array);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
+                          urj_flash_cfi_array_t **cfi_array);
 #endif /* __ASSEMBLY__ */
 
 #endif /* FLASH_CFI_H */

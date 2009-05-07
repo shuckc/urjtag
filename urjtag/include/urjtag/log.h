@@ -36,8 +36,8 @@ typedef enum urj_log_level {
     URJ_LOG_LEVEL_DEBUG,        /**< more details of interest for developers */
     URJ_LOG_LEVEL_DETAIL,       /**< verbose output */
     URJ_LOG_LEVEL_NORMAL,       /**< just noteworthy info */
-    URJ_LOG_LEVEL_WARNINGS,     /**< unmissable warnings */
-    URJ_LOG_LEVEL_ERRORS,       /**< only fatal errors */
+    URJ_LOG_LEVEL_WARNING,      /**< unmissable warnings */
+    URJ_LOG_LEVEL_ERROR,        /**< only fatal errors */
     URJ_LOG_LEVEL_SILENT,       /**< suppress logging output */
 } urj_log_level_t;
 
@@ -57,5 +57,19 @@ int urj_log (urj_log_level_t level, const char *fmt, ...)
                         __attribute__ ((format (printf, 2, 3)))
 #endif
     ;
+
+/**
+ * Print warning unless logging level is > URJ_LOG_LEVEL_WARNING
+ *
+ * @param e urj_error_t value
+ * @param ... consists of a printf argument set. It needs to start with a
+ *      const char *fmt, followed by arguments used by fmt.
+ */
+#define urj_warning(...) \
+    do { \
+        urj_log (URJ_LOG_LEVEL_WARNING, "%s:%d %s() Warning: ", \
+                 __FILE__, __LINE__, __func__); \
+        urj_log (URJ_LOG_LEVEL_WARNING, __VA_ARGS__); \
+    } while (0)
 
 #endif /* URJ_LOG_H */

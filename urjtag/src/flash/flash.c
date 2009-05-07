@@ -39,21 +39,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cfi.h"
-#include "intel.h"
-
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/bus.h>
 #include <urjtag/jtag.h>
 #include <urjtag/flash.h>
 
-/* @@@@ RFHH Put these into a local .h file, so the implementation can check */
-extern urj_flash_driver_t urj_flash_amd_32_flash_driver;
-extern urj_flash_driver_t urj_flash_amd_16_flash_driver;
-extern urj_flash_driver_t urj_flash_amd_8_flash_driver;
-extern urj_flash_driver_t urj_flash_intel_32_flash_driver;
-extern urj_flash_driver_t urj_flash_intel_16_flash_driver;
-extern urj_flash_driver_t urj_flash_intel_8_flash_driver;
-extern urj_flash_driver_t urj_flash_amd_29xx040_flash_driver;   //20/09/2006
+#include "flash.h"
+#include "cfi.h"
+#include "intel.h"
+#include "amd.h"
 
 urj_flash_driver_t *urj_flash_flash_drivers[] = {
     &urj_flash_amd_32_flash_driver,
@@ -68,7 +63,7 @@ urj_flash_driver_t *urj_flash_flash_drivers[] = {
 
 static urj_flash_driver_t *flash_driver = NULL;
 
-static void
+static int
 set_flash_driver (void)
 {
     int i;
@@ -76,25 +71,33 @@ set_flash_driver (void)
 
     flash_driver = NULL;
     if (urj_flash_cfi_array == NULL)
-        return;
+    {
+        urj_error_set (URJ_ERROR_NOTFOUND, "global cfi_array not set");
+        return URJ_STATUS_FAIL;
+    }
+
     cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
     for (i = 0; urj_flash_flash_drivers[i] != NULL; i++)
         if (urj_flash_flash_drivers[i]->autodetect (urj_flash_cfi_array))
         {
             flash_driver = urj_flash_flash_drivers[i];
-            flash_driver->print_info (urj_flash_cfi_array);
-            return;
+            flash_driver->print_info (URJ_LOG_LEVEL_NORMAL,
+                                      urj_flash_cfi_array);
+            return URJ_STATUS_OK;
         }
 
-    printf (_("unknown flash - vendor id: %d (0x%04x)\n"),
-            cfi->identification_string.pri_id_code,
-            cfi->identification_string.pri_id_code);
+    urj_log (URJ_LOG_LEVEL_ERROR,
+             _("unknown flash - vendor id: %d (0x%04x)\n"),
+             cfi->identification_string.pri_id_code,
+             cfi->identification_string.pri_id_code);
 
-    printf (_("Flash not supported!\n"));
+    urj_error_set (URJ_ERROR_UNSUPPORTED, _("Flash not supported"));
+
+    return URJ_STATUS_FAIL;
 }
 
-void
+int
 urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
 {
     uint32_t adr;
@@ -103,20 +106,22 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
     set_flash_driver ();
     if (!urj_flash_cfi_array || !flash_driver)
     {
-        printf (_("no flash driver found\n"));
-        return;
+        urj_error_set (URJ_ERROR_NOTFOUND, _("no flash driver found\n"));
+        return URJ_STATUS_FAIL;
     }
+
     cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
     /* test sync bytes */
     {
         char sync[8];
+        // @@@@ RFHH check error state?
         fread (&sync, sizeof (char), 7, f);
         sync[7] = '\0';
         if (strcmp ("B000FF\n", sync) != 0)
         {
-            printf (_("Invalid sync sequence!\n"));
-            return;
+            urj_error_set (URJ_ERROR_INVALID, _("Invalid sync sequence!\n"));
+            return URJ_STATUS_FAIL;
         }
     }
 
@@ -128,21 +133,28 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         uint32_t block_size =
             cfi->device_geometry.erase_block_regions[0].erase_block_size;
 
+        // @@@@ RFHH check error state?
         fread (&start, sizeof start, 1, f);
+        // @@@@ RFHH check error state?
         fread (&len, sizeof len, 1, f);
         first = start / (block_size * 2);
         last = (start + len - 1) / (block_size * 2);
         for (; first <= last; first++)
         {
+            int r;
+
             adr = first * block_size * 2;
-            flash_driver->unlock_block (urj_flash_cfi_array, adr);
-            printf (_("block %d unlocked\n"), first);
-            printf (_("erasing block %d: %d\n"), first,
-                    flash_driver->erase_block (urj_flash_cfi_array, adr));
+            // @@@@ RFHH what about returning on error?
+            (void) flash_driver->unlock_block (urj_flash_cfi_array, adr);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("block %d unlocked\n"), first);
+            // @@@@ RFHH what about returning on error?
+            r = flash_driver->erase_block (urj_flash_cfi_array, adr);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("erasing block %d: %d\n"),
+                     first, r);
         }
     }
 
-    printf (_("program:\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("program:\n"));
     for (;;)
     {
         uint32_t a, l, c;
@@ -152,49 +164,48 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         fread (&c, sizeof c, 1, f);
         if (feof (f))
         {
-            printf (_("Error: premature end of file\n"));
-            return;
+            urj_error_set (URJ_ERROR_IO, _("premature end of file"));
+            return URJ_STATUS_FAIL;
         }
-        printf (_
-                ("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
-                a, l, c);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
+                 a, l, c);
         if ((a == 0) && (c == 0))
             break;
         if (l & 3)
         {
-            printf (_("Error: Invalid record length!\n"));
-            return;
+            urj_error_set (URJ_ERROR_INVALID, _("Invalid record length"));
+            return URJ_STATUS_FAIL;
         }
 
         while (l)
         {
             uint32_t data;
 
-            printf (_("addr: 0x%08X"), a);
-            printf ("\r");
-            fflush (stdout);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), a);
+            urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
+            // @@@@ RFHH check error state
             fread (&data, sizeof data, 1, f);
-            if (flash_driver->program (urj_flash_cfi_array, a, &data, 1))
-            {
-                printf (_("\nflash error\n"));
-                return;
-            }
+            if (flash_driver->program (urj_flash_cfi_array, a, &data, 1)
+                != URJ_STATUS_OK)
+                // retain error state
+                return URJ_STATUS_FAIL;
             a += 4;
             l -= 4;
         }
     }
-    printf ("\n");
+    urj_log (URJ_LOG_LEVEL_NORMAL, "\n");
 
     flash_driver->readarray (urj_flash_cfi_array);
 
     if (noverify)
     {
-        printf (_("verify skipped\n"));
-        return;
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("verify skipped\n"));
+        return URJ_STATUS_OK;
     }
 
     fseek (f, 15, SEEK_SET);
-    printf (_("verify:\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("verify:\n"));
 
     for (;;)
     {
@@ -205,41 +216,44 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         fread (&c, sizeof c, 1, f);
         if (feof (f))
         {
-            printf (_("Error: premature end of file\n"));
-            return;
+            urj_error_set (URJ_ERROR_IO, _("premature end of file"));
+            return URJ_STATUS_FAIL;
         }
-        printf (_
+        urj_log (URJ_LOG_LEVEL_NORMAL, _
                 ("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
                 a, l, c);
         if ((a == 0) && (c == 0))
             break;
         if (l & 3)
         {
-            printf (_("Error: Invalid record length!\n"));
-            return;
+            urj_error_set (URJ_ERROR_INVALID, _("Invalid record length!"));
+            return URJ_STATUS_FAIL;
         }
 
         while (l)
         {
             uint32_t data, readed;
 
-            printf (_("addr: 0x%08X"), a);
-            printf ("\r");
-            fflush (stdout);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), a);
+            urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
+            // @@@@ RFHH check error state?
             fread (&data, sizeof data, 1, f);
             readed = URJ_BUS_READ (bus, a);
             if (data != readed)
             {
-                printf (_("\nverify error: 0x%08X vs. 0x%08X at addr %08X\n"),
-                        readed, data, a);
-                return;
+                urj_error_set (URJ_ERROR_FLASH_PROGRAM,
+                               _("\nverify error: 0x%08X vs. 0x%08X at addr %08X\n"),
+                               readed, data, a);
+                return URJ_STATUS_FAIL;
             }
             a += 4;
             l -= 4;
         }
     }
 
-    printf (_("\nDone.\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\nDone.\n"));
+
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -272,7 +286,7 @@ find_block (urj_flash_cfi_query_structure_t *cfi, int adr, int bus_width,
     return -1;
 }
 
-void
+int
 urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
 {
     uint32_t adr;
@@ -290,8 +304,8 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
     set_flash_driver ();
     if (!urj_flash_cfi_array || !flash_driver)
     {
-        printf (_("no flash driver found\n"));
-        return;
+        urj_error_set (URJ_ERROR_NOTFOUND, _("no flash driver found"));
+        return URJ_STATUS_FAIL;
     }
     cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
@@ -306,13 +320,14 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
     erased = malloc (neb * sizeof *erased);
     if (!erased)
     {
-        printf (_("Out of memory!\n"));
-        return;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) failed"),
+                       neb * sizeof *erased);
+        return URJ_STATUS_FAIL;
     }
     for (i = 0; i < neb; i++)
         erased[i] = 0;
 
-    printf (_("program:\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("program:\n"));
     adr = addr;
     while (!feof (f))
     {
@@ -327,14 +342,21 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
 
         if (btr > BSIZE)
             btr = BSIZE;
+        // @@@@ RFHH check error state?
         bn = fread (b, 1, btr, f);
 
         if (bn > 0 && !erased[block_no])
         {
-            flash_driver->unlock_block (urj_flash_cfi_array, adr);
-            printf (_("\nblock %d unlocked\n"), block_no);
-            printf (_("erasing block %d: %d\n"), block_no,
-                    flash_driver->erase_block (urj_flash_cfi_array, adr));
+            int r;
+
+            // @@@@ RFHH what about returning on error?
+            (void) flash_driver->unlock_block (urj_flash_cfi_array, adr);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("\nblock %d unlocked\n"),
+                     block_no);
+            // @@@@ RFHH what about returning on error?
+            r = flash_driver->erase_block (urj_flash_cfi_array, adr);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("erasing block %d: %d\n"),
+                     block_no, r);
             erased[block_no] = 1;
         }
 
@@ -343,9 +365,8 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
             int j;
             if ((adr & (BSIZE - 1)) == 0)
             {
-                printf (_("addr: 0x%08X"), adr);
-                printf ("\r");
-                fflush (stdout);
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), adr);
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             }
 
             data = 0;
@@ -365,26 +386,26 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
             if (flash_driver->program (urj_flash_cfi_array, write_buffer_adr,
                                        write_buffer, write_buffer_count))
             {
-                printf (_("\nflash error\n"));
-                return;
+                // retain error state
+                return URJ_STATUS_FAIL;
             }
 
     }
     free (erased);
 
-    printf (_("addr: 0x%08X\n"), adr - flash_driver->bus_width);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X\n"),
+             adr - flash_driver->bus_width);
 
     flash_driver->readarray (urj_flash_cfi_array);
 
     if (noverify)
     {
-        printf (_("verify skipped\n"));
-        return;
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("verify skipped\n"));
+        return URJ_STATUS_OK;
     }
 
     fseek (f, 0, SEEK_SET);
-    printf (_("verify:\n"));
-    fflush (stdout);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("verify:\n"));
     adr = addr;
     while (!feof (f))
     {
@@ -392,6 +413,7 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
         uint8_t b[BSIZE];
         int bc = 0, bn = 0, btr = BSIZE;
 
+        // @@@@ RFHH check error state?
         bn = fread (b, 1, btr, f);
 
         for (bc = 0; bc < bn; bc += flash_driver->bus_width)
@@ -399,9 +421,8 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
             int j;
             if ((adr & 0xFF) == 0)
             {
-                printf (_("addr: 0x%08X"), adr);
-                printf ("\r");
-                fflush (stdout);
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), adr);
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             }
 
             data = 0;
@@ -414,87 +435,97 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
             readed = URJ_BUS_READ (bus, adr);
             if (data != readed)
             {
-                printf (_("addr: 0x%08X\n"), adr);
-                printf (_("verify error:\nread: 0x%08X\nexpected: 0x%08X\n"),
-                        readed, data);
-                return;
+                urj_error_set (URJ_ERROR_FLASH_PROGRAM,
+                               _("addr: 0x%08X\n verify error:\nread: 0x%08X\nexpected: 0x%08X\n"),
+                                 adr, readed, data);
+                return URJ_STATUS_FAIL;
             }
             adr += flash_driver->bus_width;
         }
     }
-    printf (_("addr: 0x%08X\nDone.\n"), adr - flash_driver->bus_width);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X\nDone.\n"),
+             adr - flash_driver->bus_width);
+
+    return URJ_STATUS_OK;
 }
 
-void
+int
 urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
 {
     urj_flash_cfi_query_structure_t *cfi;
     int i;
-    int status = 0;
+    int status = URJ_STATUS_OK;
     int bus_width;
     int chip_width;
 
     set_flash_driver ();
     if (!urj_flash_cfi_array || !flash_driver)
     {
-        printf (_("no flash driver found\n"));
-        return;
+        urj_error_set (URJ_ERROR_NOTFOUND, _("no flash driver found\n"));
+        return URJ_STATUS_FAIL;
     }
     cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
 
     bus_width = urj_flash_cfi_array->bus_width;
     chip_width = urj_flash_cfi_array->cfi_chips[0]->width;
 
-    printf (_("\nErasing %d Flash block%s from address 0x%x\n"), number,
-            number > 1 ? "s" : "", addr);
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("\nErasing %d Flash block%s from address 0x%x\n"), number,
+             number > 1 ? "s" : "", addr);
 
     for (i = 1; i <= number; i++)
     {
+        int r;
         int btr = 0;
         int block_no = find_block (cfi, addr - urj_flash_cfi_array->address,
                                    bus_width, chip_width, &btr);
 
         if (block_no < 0)
         {
-            status = URJ_FLASH_ERROR_UNKNOWN;
+            urj_error_set (URJ_ERROR_FLASH_ERASE, "Cannot find block");
+            status = URJ_STATUS_FAIL;
             break;
         }
 
-        printf (_("(%d%% Completed) FLASH Block %d : Unlocking ... "),
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("(%d%% Completed) FLASH Block %d : Unlocking ... "),
                 i * 100 / number, block_no);
-        fflush (stdout);
         flash_driver->unlock_block (urj_flash_cfi_array, addr);
-        printf (_("Erasing ... "));
-        fflush (stdout);
-        status = flash_driver->erase_block (urj_flash_cfi_array, addr);
-        if (status == 0)
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Erasing ... "));
+        r = flash_driver->erase_block (urj_flash_cfi_array, addr);
+        if (r == URJ_STATUS_OK)
         {
             if (i == number)
             {
-                printf ("\r");
-                printf (_
-                        ("(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"),
-                        block_no);
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         _("(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"),
+                         block_no);
             }
             else
             {
-                printf (_("Ok."));
-                printf ("\r");
-                printf (_("%78s"), "");
-                printf ("\r");
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("Ok."));
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("%78s"), "");
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             }
         }
         else
-            printf (_("ERROR.\n"));
+        {
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("ERROR.\n"));
+            status = r;
+        }
         addr += btr;
     }
 
-    if (status == 0)
-        printf (_("\nErasing Completed.\n"));
+    if (status == URJ_STATUS_OK)
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("\nErasing Completed.\n"));
     else
-        printf (_("\nErasing Failed.\n"));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("\nErasing (partially) Failed.\n"));
 
     /* BYPASS */
     //       urj_part_parts_set_instruction( ps, "BYPASS" );
     //       urj_tap_chain_shift_instructions( chain );
+
+    return status;
 }

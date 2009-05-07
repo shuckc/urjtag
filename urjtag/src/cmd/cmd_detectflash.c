@@ -26,6 +26,8 @@
 
 #include <stdio.h>
 
+#include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/bus.h>
 #include <urjtag/flash.h>
 #include <urjtag/cmd.h>
@@ -49,7 +51,11 @@ cmd_detectflash_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[1], &adr))
         return -1;
 
-    urj_flash_detectflash (urj_bus, adr);
+    if (urj_flash_detectflash (URJ_LOG_LEVEL_NORMAL, urj_bus, adr) != URJ_STATUS_OK)
+    {
+        printf("detect flash error: %s\n", urj_error_describe());
+        urj_error_reset();
+    }
 
     return 1;
 }

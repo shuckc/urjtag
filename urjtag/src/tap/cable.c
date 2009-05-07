@@ -35,10 +35,13 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/cable.h>
 
 #undef VERBOSE
 
+/* @@@@ RFHH stick these into a (or many) .h files */
 extern urj_cable_driver_t urj_tap_cable_arcom_driver;
 extern urj_cable_driver_t urj_tap_cable_byteblaster_driver;
 extern urj_cable_driver_t urj_tap_cable_usbblaster_driver;
@@ -174,12 +177,15 @@ urj_tap_cable_init (urj_cable_t *cable)
 
     if (cable->todo.data == NULL || cable->done.data == NULL)
     {
-        printf (_("Failed to allocate memory for cable activity queue.\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                       _("malloc(%zd) or malloc(%zd) fails"),
+                       cable->todo.max_items * sizeof (urj_cable_queue_t),
+                       cable->done.max_items * sizeof (urj_cable_queue_t));
         if (cable->todo.data != NULL)
             free (cable->todo.data);
         if (cable->done.data != NULL)
             free (cable->done.data);
-        return 1;
+        return URJ_STATUS_FAIL;
     }
 
     return cable->driver->init (cable);
@@ -200,7 +206,7 @@ urj_tap_cable_done (urj_cable_t *cable)
         free (cable->todo.data);
         free (cable->done.data);
     }
-    return cable->driver->done (cable);
+    cable->driver->done (cable);
 }
 
 int
@@ -212,26 +218,22 @@ urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
         int new_max_items;
         urj_cable_queue_t *resized;
 
-#ifdef VERBOSE
-        printf
-            ("Queue %p needs resizing; n(%d) >= max(%d); free=%d, next=%d\n",
+        urj_log (URJ_LOG_LEVEL_DETAIL,
+            "Queue %p needs resizing; n(%d) >= max(%d); free=%d, next=%d\n",
              q, q->num_items, q->max_items, q->next_free, q->next_item);
-#endif
 
         new_max_items = q->max_items + 128;
-        resized =
-            realloc (q->data, new_max_items * sizeof (urj_cable_queue_t));
+        resized = realloc (q->data, new_max_items * sizeof (urj_cable_queue_t));
         if (resized == NULL)
         {
-            printf (_
-                    ("Out of memory: couldn't resize activity queue to %d\n"),
-                    new_max_items);
+            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "realloc(%s,%zd) fails",
+                           "q->data",
+                           new_max_items * sizeof (urj_cable_queue_t));
             return -1;          /* report failure */
         }
-#ifdef VERBOSE
-        printf (_("(Resized JTAG activity queue to hold max %d items)\n"),
-                new_max_items);
-#endif
+        urj_log (URJ_LOG_LEVEL_DETAIL,
+                 _("(Resized JTAG activity queue to hold max %d items)\n"),
+                 new_max_items);
         q->data = resized;
 
         /* The queue was full. Except for the special case when next_item is 0,
@@ -248,17 +250,15 @@ urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
 
 #ifdef CHOOSE_SMALLEST_AREA_TO_MOVE
             if (num_to_move <= q->next_free)
-#endif
+#endif /* def CHOOSE_SMALLEST_AREA_TO_MOVE */
             {
                 /* Move queue items at end of old array
                  * towards end of new array: 345612__ -> 3456__12 */
 
                 int dest = new_max_items - num_to_move;
-#ifdef VERBOSE
-                printf
-                    ("Resize: Move %d items towards end of queue memory (%d > %d)\n",
-                     num_to_move, q->next_item, dest);
-#endif
+                urj_log (URJ_LOG_LEVEL_DETAIL,
+                    "Resize: Move %d items towards end of queue memory (%d > %d)\n",
+                    num_to_move, q->next_item, dest);
                 memmove (&(q->data[dest]), &(q->data[q->next_item]),
                          num_to_move * sizeof (urj_cable_queue_t));
 
@@ -272,10 +272,9 @@ urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
                     /* Relocate queue items at beginning of old array
                      * to end of new array: 561234__ -> __123456 */
 
-#ifdef VERBOSE
-                    printf ("Resize: Move %d items from start to end\n",
-                            q->next_free);
-#endif
+                    urj_log (URJ_LOG_LEVEL_DETAIL,
+                             "Resize: Move %d items from start to end\n",
+                             q->next_free);
                     memcpy (&(q->data[q->max_items]), &(q->data[0]),
                             q->next_free * sizeof (urj_cable_queue_t));
 
@@ -287,39 +286,34 @@ urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
 
                     /* Step 1: 456123__ -> __612345 */
 
-#ifdef VERBOSE
-                    printf ("Resize.A: Move %d items from start to end\n",
+                    urj_log (URJ_LOG_LEVEL_DETAIL,
+                             "Resize.A: Move %d items from start to end\n",
                             added_space);
-#endif
 
                     memcpy (&(q->data[q->max_items]), &(q->data[0]),
                             added_space * sizeof (urj_cable_queue_t));
 
                     /* Step 2: __612345 -> 6__12345 */
 
-#ifdef VERBOSE
-                    printf
-                        ("Resize.B: Move %d items towards start (offset %d)\n",
+                    urj_log (URJ_LOG_LEVEL_DETAIL,
+                         "Resize.B: Move %d items towards start (offset %d)\n",
                          (q->next_free - added_space), added_space);
-#endif
 
                     memmove (&(q->data[0]), &(q->data[added_space]),
                              (q->next_free -
                               added_space) * sizeof (urj_cable_queue_t));
                 }
             }
-#endif
+#endif /* def CHOOSE_SMALLEST_AREA_TO_MOVE */
         }
         q->max_items = new_max_items;
         q->next_free = q->next_item + q->num_items;
         if (q->next_free >= new_max_items)
             q->next_free -= new_max_items;
 
-#ifdef VERBOSE
-        printf
-            ("Queue %p after resizing; n(%d) >= max(%d); free=%d, next=%d\n",
+        urj_log (URJ_LOG_LEVEL_DETAIL,
+             "Queue %p after resizing; n(%d) >= max(%d); free=%d, next=%d\n",
              q, q->num_items, q->max_items, q->next_free, q->next_item);
-#endif
     }
 
     i = q->next_free;
@@ -329,7 +323,7 @@ urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
     q->next_free = j;
     q->num_items++;
 
-    // printf("add_queue_item to %p: %d\n", q, i);
+    // urj_log (URJ_LOG_LEVEL_DEBUG, "add_queue_item to %p: %d\n", q, i);
     return i;
 }
 
@@ -344,11 +338,12 @@ urj_tap_cable_get_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
             j = 0;
         q->next_item = j;
         q->num_items--;
-        // printf("get_queue_item from %p: %d\n", q, i);
+        // urj_log (URJ_LOG_LEVEL_DEBUG, "get_queue_item from %p: %d\n", q, i);
         return i;
     }
 
-    // printf("get_queue_item from %p: %d\n", q, -1);
+    urj_error_set (URJ_ERROR_NOTFOUND, "queue is empty");
+    // urj_log (URJ_LOG_LEVEL_DEBUG, "get_queue_item from %p: %d\n", q, -1);
     return -1;
 }
 
@@ -397,13 +392,13 @@ urj_tap_cable_defer_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
-        return 1;               /* report failure */
+        return URJ_STATUS_FAIL;               /* report failure */
     cable->todo.data[i].action = URJ_TAP_CABLE_CLOCK;
     cable->todo.data[i].arg.clock.tms = tms;
     cable->todo.data[i].arg.clock.tdi = tdi;
     cable->todo.data[i].arg.clock.n = n;
     urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
-    return 0;                   /* success */
+    return URJ_STATUS_OK;                   /* success */
 }
 
 int
@@ -423,9 +418,9 @@ urj_tap_cable_get_tdo_late (urj_cable_t *cable)
     {
         if (cable->done.data[i].action != URJ_TAP_CABLE_GET_TDO)
         {
-            printf (_
-                    ("Internal error: Got wrong type of result from queue (%d? %p.%d)\n"),
-                    cable->done.data[i].action, &(cable->done), i);
+            urj_warning (
+                 _("Internal error: Got wrong type of result from queue (%d? %p.%d)\n"),
+                 cable->done.data[i].action, &(cable->done), i);
             urj_tap_cable_purge_queue (&(cable->done), 1);
         }
         else
@@ -441,10 +436,10 @@ urj_tap_cable_defer_get_tdo (urj_cable_t *cable)
 {
     int i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
-        return 1;               /* report failure */
+        return URJ_STATUS_FAIL;               /* report failure */
     cable->todo.data[i].action = URJ_TAP_CABLE_GET_TDO;
     urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
-    return 0;                   /* success */
+    return URJ_STATUS_OK;                   /* success */
 }
 
 int
@@ -459,12 +454,12 @@ urj_tap_cable_defer_set_signal (urj_cable_t *cable, int mask, int val)
 {
     int i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
-        return 1;               /* report failure */
+        return URJ_STATUS_FAIL;               /* report failure */
     cable->todo.data[i].action = URJ_TAP_CABLE_SET_SIGNAL;
     cable->todo.data[i].arg.value.mask = mask;
     cable->todo.data[i].arg.value.val = val;
     urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
-    return 0;                   /* success */
+    return URJ_STATUS_OK;                   /* success */
 }
 
 int
@@ -484,16 +479,16 @@ urj_tap_cable_get_signal_late (urj_cable_t *cable, urj_pod_sigsel_t sig)
     {
         if (cable->done.data[i].action != URJ_TAP_CABLE_GET_SIGNAL)
         {
-            printf (_
-                    ("Internal error: Got wrong type of result from queue (%d? %p.%d)\n"),
-                    cable->done.data[i].action, &(cable->done), i);
+            urj_warning (
+                 _("Internal error: Got wrong type of result from queue (%d? %p.%d)\n"),
+                cable->done.data[i].action, &(cable->done), i);
             urj_tap_cable_purge_queue (&(cable->done), 1);
         }
         else if (cable->done.data[i].arg.value.sig != sig)
         {
-            printf (_
-                    ("Internal error: Got wrong signal's value from queue (%d? %p.%d)\n"),
-                    cable->done.data[i].action, &(cable->done), i);
+            urj_warning (
+                 _("Internal error: Got wrong signal's value from queue (%d? %p.%d)\n"),
+                cable->done.data[i].action, &(cable->done), i);
             urj_tap_cable_purge_queue (&(cable->done), 1);
         }
         else
@@ -509,11 +504,11 @@ urj_tap_cable_defer_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
     int i = urj_tap_cable_add_queue_item (cable, &(cable->todo));
     if (i < 0)
-        return 1;               /* report failure */
+        return URJ_STATUS_FAIL;               /* report failure */
     cable->todo.data[i].action = URJ_TAP_CABLE_GET_SIGNAL;
     cable->todo.data[i].arg.value.sig = sig;
     urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
-    return 0;                   /* success */
+    return URJ_STATUS_OK;                   /* success */
 }
 
 int
@@ -533,7 +528,7 @@ urj_tap_cable_transfer_late (urj_cable_t *cable, char *out)
     if (i >= 0 && cable->done.data[i].action == URJ_TAP_CABLE_TRANSFER)
     {
 #if 0
-        printf ("Got queue item (%p.%d) len=%d out=%p\n",
+        urj_log (URJ_LOG_LEVEL_DEBUG, "Got queue item (%p.%d) len=%d out=%p\n",
                 &(cable->done), i,
                 cable->done.data[i].arg.xferred.len,
                 cable->done.data[i].arg.xferred.out);
@@ -548,15 +543,15 @@ urj_tap_cable_transfer_late (urj_cable_t *cable, char *out)
 
     if (cable->done.data[i].action != URJ_TAP_CABLE_TRANSFER)
     {
-        printf (_
-                ("Internal error: Got wrong type of result from queue (#%d %p.%d)\n"),
-                cable->done.data[i].action, &(cable->done), i);
+        urj_warning (
+             _("Internal error: Got wrong type of result from queue (#%d %p.%d)\n"),
+             cable->done.data[i].action, &(cable->done), i);
         urj_tap_cable_purge_queue (&(cable->done), 1);
     }
     else
     {
-        printf (_
-                ("Internal error: Wanted transfer result but none was queued\n"));
+        urj_warning (
+             _("Internal error: Wanted transfer result but none was queued\n"));
     }
     return 0;
 }
@@ -570,7 +565,10 @@ urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
 
     ibuf = malloc (len);
     if (ibuf == NULL)
-        return 1;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", len);
+        return URJ_STATUS_FAIL;
+    }
 
     if (out)
     {
@@ -578,7 +576,8 @@ urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
         if (obuf == NULL)
         {
             free (ibuf);
-            return 1;
+            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", len);
+            return URJ_STATUS_FAIL;
         }
     }
 
@@ -588,7 +587,7 @@ urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
         free (ibuf);
         if (obuf)
             free (obuf);
-        return 1;               /* report failure */
+        return URJ_STATUS_FAIL;               /* report failure */
     }
 
     cable->todo.data[i].action = URJ_TAP_CABLE_TRANSFER;
@@ -598,7 +597,7 @@ urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
     cable->todo.data[i].arg.transfer.in = ibuf;
     cable->todo.data[i].arg.transfer.out = obuf;
     urj_tap_cable_flush (cable, URJ_TAP_CABLE_OPTIONALLY);
-    return 0;                   /* success */
+    return URJ_STATUS_OK;                   /* success */
 }
 
 void

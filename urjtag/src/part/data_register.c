@@ -50,8 +50,7 @@ urj_part_data_register_alloc (const char *name, int len)
     }
 
     if (strlen (name) > URJ_DATA_REGISTER_MAXLEN)
-        urj_log (URJ_LOG_LEVEL_WARNINGS, 
-                 _("Warning: Data register name too long\n"));
+        urj_warning (_("Data register name too long\n"));
     strncpy (dr->name, name, URJ_DATA_REGISTER_MAXLEN);
     dr->name[URJ_DATA_REGISTER_MAXLEN] = '\0';
 

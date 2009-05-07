@@ -81,6 +81,7 @@ cmd_scan_run (urj_chain_t *chain, char *params[])
         return 1;
     }
 
+    /* @@@@ RFHH check result */
     urj_tap_chain_shift_instructions (chain);
 
     obsr = urj_tap_register_alloc (bsr->out->len);
@@ -96,6 +97,7 @@ cmd_scan_run (urj_chain_t *chain, char *params[])
 
         urj_tap_register_init (obsr, urj_tap_register_get_string (bsr->out));   // copy
 
+        /* @@@@ RFHH check result */
         urj_tap_chain_shift_data_registers (chain, 1);
 
         for (s = part->signals; s; s = s->next)

@@ -140,6 +140,21 @@ LEGAL NOTICES:
 
 #define YY_EXTRA_TYPE urj_bsdl_scan_extra_t *
 
+// @@@@ RFHH: take these out after the refactor
+// Prototypes that flex should have added, functions that flex should have
+// called or not declared:
+int urj_bsdl_get_column  (yyscan_t yyscanner);
+void urj_bsdl_set_column (int  column_no , yyscan_t yyscanner);
+
+static void yyunput (int c, register char * yy_bp , yyscan_t yyscanner);
+
+void urj_bsdl_use_yyunput (yyscan_t yyscanner);
+void urj_bsdl_use_yyunput (yyscan_t yyscanner)
+{
+    yyunput (0, NULL, yyscanner);
+}
+// @@@@ RFHH: take these out after the refactor
+
 static char *new_string (urj_bsdl_scan_extra_t *, const char *);
 
 #define BINARY  0

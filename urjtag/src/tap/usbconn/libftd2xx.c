@@ -39,16 +39,14 @@
 
 #include <ftd2xx.h>
 
-#include <urjtag/cable.h>
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/usbconn.h>
 #include <urjtag/usbconn/libftdx.h>
 
 
 /* enables debug output */
-#undef DEBUG
-#ifdef DEBUG
 static const char *module = "usbconn_ftd2xx_";
-#endif
 
 
 typedef struct
@@ -72,11 +70,12 @@ typedef struct
 urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver;
 urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver;
 
-static int usbconn_ftd2xx_common_open (urj_usbconn_t *conn, int printerr);
+static int usbconn_ftd2xx_common_open (urj_usbconn_t *conn, urj_log_level_t ll);
 static void usbconn_ftd2xx_free (urj_usbconn_t *conn);
 
 /* ---------------------------------------------------------------------- */
 
+/** @return number of flushed bytes on success; -1 on error */
 static int
 usbconn_ftd2xx_flush (ftd2xx_param_t *p)
 {
@@ -87,26 +86,25 @@ usbconn_ftd2xx_flush (ftd2xx_param_t *p)
     if (!p->fc)
         return -1;
 
-#ifdef DEBUG
-    printf ("%sflush begin:\n", module);
-    printf ("  send_buf_len %d, send_buffered %d\n", p->send_buf_len,
-            p->send_buffered);
-    printf ("  recv_buf_len %d, to_recv %d\n", p->recv_buf_len, p->to_recv);
-    printf ("  recv_write_idx %d, recv_read_idx %d\n", p->recv_write_idx,
-            p->recv_read_idx);
-#endif
+    urj_log (URJ_LOG_LEVEL_DETAIL, "%sflush begin:\n", module);
+    urj_log (URJ_LOG_LEVEL_DETAIL, "  send_buf_len %d, send_buffered %d\n",
+             p->send_buf_len, p->send_buffered);
+    urj_log (URJ_LOG_LEVEL_DETAIL, "  recv_buf_len %d, to_recv %d\n",
+             p->recv_buf_len, p->to_recv);
+    urj_log (URJ_LOG_LEVEL_DETAIL, "  recv_write_idx %d, recv_read_idx %d\n",
+             p->recv_write_idx, p->recv_read_idx);
 
     if (p->send_buffered == 0)
         return 0;
 
-    if ((status =
-         FT_Write (p->fc, p->send_buf, p->send_buffered, &xferred)) != FT_OK)
-        printf (_("%s(): FT_Write() failed.\n"), __FUNCTION__);
+    if ((status = FT_Write (p->fc, p->send_buf, p->send_buffered,
+                            &xferred)) != FT_OK)
+        urj_error_set (URJ_ERROR_IO, _("FT_Write() failed"));
 
     if (xferred < p->send_buffered)
     {
-        printf (_("%s(): Written fewer bytes than requested.\n"),
-                __FUNCTION__);
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("Written fewer bytes than requested"));
         return -1;
     }
 
@@ -125,29 +123,30 @@ usbconn_ftd2xx_flush (ftd2xx_param_t *p)
 
         if (!p->recv_buf)
         {
-            printf (_("%s(): Receive buffer does not exist.\n"),
-                    __FUNCTION__);
+            urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                           _("Receive buffer does not exist"));
             return -1;
         }
 
         while (recvd == 0)
             if ((status = FT_Read (p->fc, &(p->recv_buf[p->recv_write_idx]),
                                    p->to_recv, &recvd)) != FT_OK)
-                printf (_("%s(): Error from FT_Read(): %d\n"),
-                        __FUNCTION__, (int) status);
+                urj_error_set (URJ_ERROR_IO, _("Error from FT_Read(): %d"),
+                               (int) status);
 
         if (recvd < p->to_recv)
-            printf (_("%s(): Received less bytes than requested.\n"),
-                    __FUNCTION__);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("%s(): Received fewer bytes than requested.\n"),
+                    __func__);
 
         p->to_recv -= recvd;
         p->recv_write_idx += recvd;
     }
 
-#ifdef DEBUG
-    printf ("%sflush end: status %ld, xferred %ld, recvd %ld\n", module,
+    urj_log (URJ_LOG_LEVEL_DETAIL,
+             "%sflush end: status %ld, xferred %ld, recvd %ld\n", module,
             status, xferred, recvd);
-#endif
+
     return status != FT_OK ? -1 : xferred;
 }
 
@@ -161,9 +160,7 @@ usbconn_ftd2xx_read (urj_usbconn_t *conn, uint8_t *buf, int len)
     FT_STATUS status = FT_OK;
     DWORD recvd = 0;
 
-#ifdef DEBUG
-    printf ("%sread begin: len %d\n", module, len);
-#endif
+    urj_log (URJ_LOG_LEVEL_DETAIL, "%sread begin: len %d\n", module, len);
 
     if (!p->fc)
         return -1;
@@ -196,14 +193,13 @@ usbconn_ftd2xx_read (urj_usbconn_t *conn, uint8_t *buf, int len)
         while (recvd == 0)
             if ((status =
                  FT_Read (p->fc, &(buf[cpy_len]), len, &recvd)) != FT_OK)
-                printf (_("%s(): Error from FT_Read(): %d\n"), __FUNCTION__,
-                        (int) status);
+                urj_error_set (URJ_ERROR_IO, _("Error from FT_Read(): %d"),
+                               (int) status);
     }
 
-#ifdef DEBUG
-    printf ("%sread end  : status %ld, length %d\n", module, status,
-            cpy_len + len);
-#endif
+    urj_log (URJ_LOG_LEVEL_DETAIL, "%sread end  : status %ld, length %d\n",
+             module, status, cpy_len + len);
+
     return status != FT_OK ? -1 : cpy_len + len;
 }
 
@@ -218,9 +214,8 @@ usbconn_ftd2xx_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
     if (!p->fc)
         return -1;
 
-#ifdef DEBUG
-    printf ("%swrite begin: len %d, recv %d\n", module, len, recv);
-#endif
+    urj_log (URJ_LOG_LEVEL_DETAIL, "%swrite begin: len %d, recv %d\n", module,
+             len, recv);
 
     /* this write function will try to buffer write data
        buffering will be ceased and a flush triggered in two cases. */
@@ -257,14 +252,15 @@ usbconn_ftd2xx_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
             xferred = usbconn_ftd2xx_flush (p);
         }
 
-#ifdef DEBUG
-        printf ("%swrite end: xferred %d\n", module, xferred);
-#endif
+        urj_log (URJ_LOG_LEVEL_DETAIL, "%swrite end: xferred %d\n", module,
+                 xferred);
+
         return xferred < 0 ? -1 : len;
     }
     else
     {
-        printf (_("%s(): Send buffer does not exist.\n"), __FUNCTION__);
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("Send buffer does not exist"));
         return -1;
     }
 }
@@ -292,7 +288,6 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
 
     if (!p || !c || !p->send_buf || !p->recv_buf)
     {
-        printf (_("Out of memory\n"));
         if (p->send_buf)
             free (p->send_buf);
         if (p->recv_buf)
@@ -301,6 +296,10 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
             free (p);
         if (c)
             free (c);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                       "malloc(%zd)/malloc(%zd)/malloc(%s) failed",
+                       sizeof (urj_usbconn_t), sizeof (ftd2xx_param_t),
+                       "p->send_buf_len");
         return NULL;
     }
 
@@ -316,14 +315,14 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
     /* do a test open with the specified cable paramters,
        there's no other way to detect the presence of the specified
        USB device */
-    if (usbconn_ftd2xx_common_open (c, 0) != 0)
+    if (usbconn_ftd2xx_common_open (c, URJ_LOG_LEVEL_DETAIL) != URJ_STATUS_OK)
     {
         usbconn_ftd2xx_free (c);
         return NULL;
     }
     FT_Close (p->fc);
 
-    printf (_("Connected to libftd2xx driver.\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Connected to libftd2xx driver.\n"));
 
     return c;
 }
@@ -345,7 +344,7 @@ usbconn_ftd2xx_mpsse_connect (const char **param, int paramc,
 /* ---------------------------------------------------------------------- */
 
 static int
-usbconn_ftd2xx_common_open (urj_usbconn_t *conn, int printerr)
+usbconn_ftd2xx_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
 {
     ftd2xx_param_t *p = conn->params;
     FT_STATUS status;
@@ -353,7 +352,7 @@ usbconn_ftd2xx_common_open (urj_usbconn_t *conn, int printerr)
 #if !__CYGWIN__ && !__MINGW32__
     /* Add non-standard Vid/Pid to the linux driver */
     if ((status = FT_SetVIDPID (p->vid, p->pid)) != FT_OK)
-        fprintf (stderr, "Warning: couldn't add %4.4x:%4.4x", p->vid, p->pid);
+        urj_warning ("couldn't add %4.4x:%4.4x", p->vid, p->pid);
 #endif
 
     /* try various methods to open a FTDI device */
@@ -374,14 +373,14 @@ usbconn_ftd2xx_common_open (urj_usbconn_t *conn, int printerr)
 
     if (status != FT_OK)
     {
-        if (printerr)
-            printf ("Unable to open FTDI device.\n");
+        urj_error_set (URJ_ERROR_IO, "Unable to open TFDI device");
+        urj_log (ll, "Unable to open FTDI device.\n");
         /* mark ftd2xx layer as not initialized */
         p->fc = NULL;
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -393,24 +392,25 @@ usbconn_ftd2xx_open (urj_usbconn_t *conn)
     FT_HANDLE fc;
     FT_STATUS status;
 
-    if (usbconn_ftd2xx_common_open (conn, 1) < 0)
-        return -1;
+    if (usbconn_ftd2xx_common_open (conn, URJ_LOG_LEVEL_NORMAL)
+        != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     fc = p->fc;
 
     if ((status = FT_ResetDevice (fc)) != FT_OK)
-        printf (_("%s(): Can't reset device.\n"), __FUNCTION__);
+        urj_error_set (URJ_ERROR_IO, _("Can't reset device"));
     if (status == FT_OK)
         if ((status = FT_Purge (fc, FT_PURGE_RX)) != FT_OK)
-            printf (_("%s(): Can't purge RX buffer.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't purge RX buffer"));
 
     if (status == FT_OK)
         if ((status = FT_SetLatencyTimer (fc, 2)) != FT_OK)
-            printf (_("%s(): Can't set latency timer.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't set latency timer"));
 
     if (status == FT_OK)
         if ((status = FT_SetBaudRate (fc, 3E6)) != FT_OK)
-            printf (_("%s(): Can't set baudrate.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't set baudrate"));
 
     if (status != FT_OK)
     {
@@ -419,7 +419,7 @@ usbconn_ftd2xx_open (urj_usbconn_t *conn)
         p->fc = NULL;
     }
 
-    return status != FT_OK ? -1 : 0;
+    return status != FT_OK ? URJ_STATUS_FAIL : URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -431,8 +431,9 @@ usbconn_ftd2xx_mpsse_open (urj_usbconn_t *conn)
     FT_HANDLE fc;
     FT_STATUS status;
 
-    if (usbconn_ftd2xx_common_open (conn, 1) < 0)
-        return -1;
+    if (usbconn_ftd2xx_common_open (conn, URJ_LOG_LEVEL_NORMAL)
+        != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     fc = p->fc;
 
@@ -441,40 +442,39 @@ usbconn_ftd2xx_mpsse_open (urj_usbconn_t *conn)
        Ref. FTCJTAGPG10.pdf
        Intermittent problems will occur when certain steps are skipped. */
     if ((status = FT_ResetDevice (fc)) != FT_OK)
-        printf (_("%s(): Can't reset device.\n"), __FUNCTION__);
+        urj_error_set (URJ_ERROR_IO, _("Can't reset device"));
     if (status == FT_OK)
         if ((status = FT_Purge (fc, FT_PURGE_RX)) != FT_OK)
-            printf (_("%s(): Can't purge RX buffer.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("s(): Can't purge RX buffer"));
 
     if (status == FT_OK)
         if ((status =
              FT_SetUSBParameters (fc, URJ_USBCONN_FTDX_MAXSEND_MPSSE,
                                   URJ_USBCONN_FTDX_MAXSEND_MPSSE)) != FT_OK)
-            printf (_("%s(): Can't set USB parameters.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't set USB parameters"));
 
     if (status == FT_OK)
         if ((status = FT_SetChars (fc, 0, 0, 0, 0)) != FT_OK)
-            printf (_("%s(): Can't set special characters.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't set special characters"));
 
     /* set a reasonable latency timer value
        if this value is too low then the chip will send intermediate result data
        in short packets (suboptimal performance) */
     if (status == FT_OK)
         if ((status = FT_SetLatencyTimer (fc, 16)) != FT_OK)
-            printf (_("%s(): Can't set target latency timer.\n"),
-                    __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't set target latency timer"));
 
     if (status == FT_OK)
         if ((status =
              FT_SetBitMode (fc, 0x0b, 0x02 /* BITMODE_MPSSE */ )) != FT_OK)
-            printf (_("%s(): Can't set MPSSE bitmode.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't set MPSSE bitmode"));
 
     if (status == FT_OK)
         if ((status = FT_ResetDevice (fc)) != FT_OK)
-            printf (_("%s(): Can't reset device.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't reset device"));
     if (status == FT_OK)
         if ((status = FT_Purge (fc, FT_PURGE_RX)) != FT_OK)
-            printf (_("%s(): Can't purge RX buffer.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't purge RX buffer"));
 
     /* set TCK Divisor */
     if (status == FT_OK)
@@ -496,10 +496,10 @@ usbconn_ftd2xx_mpsse_open (urj_usbconn_t *conn)
 
     if (status == FT_OK)
         if ((status = FT_ResetDevice (fc)) != FT_OK)
-            printf (_("%s(): Can't reset device.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't reset device"));
     if (status == FT_OK)
         if ((status = FT_Purge (fc, FT_PURGE_RX)) != FT_OK)
-            printf (_("%s(): Can't purge RX buffer.\n"), __FUNCTION__);
+            urj_error_set (URJ_ERROR_IO, _("Can't purge RX buffer"));
 
     if (status != FT_OK)
     {
@@ -508,7 +508,7 @@ usbconn_ftd2xx_mpsse_open (urj_usbconn_t *conn)
         p->fc = NULL;
     }
 
-    return status != FT_OK ? -1 : 0;
+    return status != FT_OK ? URJ_STATUS_FAIL : URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -524,7 +524,7 @@ usbconn_ftd2xx_close (urj_usbconn_t *conn)
         p->fc = NULL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */

@@ -28,6 +28,7 @@
 
 #include <urjtag/parport.h>
 
+/* @@@@ RFHH move these to some .h file */
 extern urj_parport_driver_t urj_tap_parport_direct_parport_driver;
 extern urj_parport_driver_t urj_tap_parport_ppdev_parport_driver;
 extern urj_parport_driver_t urj_tap_parport_ppi_parport_driver;

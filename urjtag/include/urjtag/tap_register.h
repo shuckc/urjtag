@@ -39,6 +39,7 @@ urj_tap_register_t *urj_tap_register_duplicate (const urj_tap_register_t *tr);
 void urj_tap_register_free (urj_tap_register_t *tr);
 urj_tap_register_t *urj_tap_register_fill (urj_tap_register_t *tr, int val);
 const char *urj_tap_register_get_string (const urj_tap_register_t *tr);
+/** @return 0 or 1 on success; -1 on error */
 int urj_tap_register_all_bits_same_value (const urj_tap_register_t *tr);
 urj_tap_register_t *urj_tap_register_init (urj_tap_register_t *tr,
                                            const char *value);

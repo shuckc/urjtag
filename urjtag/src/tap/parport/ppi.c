@@ -27,6 +27,7 @@
 
 #ifdef HAVE_DEV_PPBUS_PPI_H
 
+#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <dev/ppbus/ppi.h>
@@ -35,6 +36,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/parport.h>
 #include <urjtag/cable.h>
 
@@ -70,6 +73,9 @@ ppi_parport_alloc (const char *port)
         free (parport);
         free (params);
         free (portname);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                       "malloc(%zd)/strdup(%s)/malloc(%zd)/malloc(%zd) fails",
+                       sizeof *params, port, sizeof *parport, sizeof *node);
         return NULL;
     }
 
@@ -117,7 +123,7 @@ ppi_connect (const char **par, int parnum)
 
     if (parnum != 1)
     {
-        printf (_("Syntax error!\n"));
+        urj_error_set (URJ_ERROR_SYNTAX, "#params != 1");
         return NULL;
     }
 
@@ -135,7 +141,6 @@ ppi_connect (const char **par, int parnum)
     parport = ppi_parport_alloc (par[0]);
     if (!parport)
     {
-        printf (_("%s(%d) Out of memory.\n"), __FILE__, __LINE__);
         return NULL;
     }
 
@@ -149,19 +154,29 @@ ppi_open (urj_parport_t *parport)
 
     p->fd = open (p->portname, O_RDWR);
     if (p->fd < 0)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_IO, "Cannot open(%s): %s", p->portname,
+                       strerror(errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
+    }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
 ppi_close (urj_parport_t *parport)
 {
-    int r = 0;
+    int r = URJ_STATUS_OK;
     ppi_params_t *p = parport->params;
 
     if (close (p->fd) != 0)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_IO, "Cannot close(%d): %s", p->fd,
+                       strerror(errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
+    }
 
     p->fd = -1;
     return r;
@@ -173,9 +188,14 @@ ppi_set_data (urj_parport_t *parport, uint8_t data)
     ppi_params_t *p = parport->params;
 
     if (ioctl (p->fd, PPISDATA, &data) == -1)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_IO, "ioctl(PPISDATA) fails: %s",
+                       strerror (errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
+    }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -185,7 +205,12 @@ ppi_get_data (urj_parport_t *parport)
     ppi_params_t *p = parport->params;
 
     if (ioctl (p->fd, PPIGDATA, &d) == -1)
+    {
+        urj_error_set (URJ_ERROR_IO, "ioctl(PPIGDATA) fails: %s",
+                       strerror (errno));
+        errno = 0;
         return -1;
+    }
 
     return d;
 }
@@ -197,7 +222,12 @@ ppi_get_status (urj_parport_t *parport)
     ppi_params_t *p = parport->params;
 
     if (ioctl (p->fd, PPIGSTATUS, &d) == -1)
+    {
+        urj_error_set (URJ_ERROR_IO, "ioctl(PPIGSTATUS) fails: %s",
+                       strerror (errno));
+        errno = 0;
         return -1;
+    }
 
     return d ^ 0x80;            /* BUSY is inverted */
 }
@@ -210,9 +240,13 @@ ppi_set_control (urj_parport_t *parport, uint8_t data)
     data ^= 0x0B;               /* SELECT, AUTOFD, and STROBE are inverted */
 
     if (ioctl (p->fd, PPIGCTRL, &data) == -1)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (urj_chain_t));
+        return URJ_STATUS_FAIL;
+    }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 urj_parport_driver_t urj_tap_parport_ppi_parport_driver = {

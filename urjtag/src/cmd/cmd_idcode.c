@@ -51,6 +51,7 @@ cmd_idcode_run (urj_chain_t *chain, char *params[])
         return 1;
 
     printf (_("Reading %d bytes if idcode\n"), bytes);
+    // @@@@ RFHH check return value
     urj_tap_idcode (chain, bytes);
     return 1;
 }

@@ -41,8 +41,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/flash.h>
 #include <urjtag/bus.h>
+
+#include "flash.h"
 
 #include "cfi.h"
 #include "intel.h"
@@ -110,7 +114,8 @@ intel_flash_autodetect8 (urj_flash_cfi_array_t *cfi_array)
 }
 
 static void
-_intel_flash_print_info (urj_flash_cfi_array_t *cfi_array, int o)
+_intel_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array,
+                        int o)
 {
     uint32_t mid, cid;
     urj_bus_t *bus = cfi_array->bus;
@@ -119,73 +124,73 @@ _intel_flash_print_info (urj_flash_cfi_array_t *cfi_array, int o)
     switch (mid)
     {
     case STD_MIC_INTEL:
-        printf (_("Manufacturer: %s\n"), STD_MICN_INTEL);
+        urj_log (ll, _("Manufacturer: %s\n"), STD_MICN_INTEL);
         break;
     case STD_MIC_MITSUBISHI:
-        printf (_("Manufacturer: %s\n"), STD_MICN_MITSUBISHI);
+        urj_log (ll, _("Manufacturer: %s\n"), STD_MICN_MITSUBISHI);
         break;
     case STD_MIC_MICRON_TECHNOLOGY:
-        printf (_("Manufacturer: %s\n"), STD_MICN_MICRON_TECHNOLOGY);
+        urj_log (ll, _("Manufacturer: %s\n"), STD_MICN_MICRON_TECHNOLOGY);
         break;
     default:
-        printf (_("Unknown manufacturer (0x%04X)!\n"), mid);
+        urj_log (ll, _("Unknown manufacturer (0x%04X)!\n"), mid);
         break;
     }
 
-    printf (_("Chip: "));
+    urj_log (ll, _("Chip: "));
     cid = (URJ_BUS_READ (bus, cfi_array->address + (0x01 << o)) & 0xFFFF);
     switch (cid)
     {
     case 0x0016:
-        printf ("28F320J3A\n");
+        urj_log (ll, "28F320J3A\n");
         break;
     case 0x0017:
-        printf ("28F640J3A\n");
+        urj_log (ll, "28F640J3A\n");
         break;
     case 0x0018:
-        printf ("28F128J3A\n");
+        urj_log (ll, "28F128J3A\n");
         break;
     case 0x001D:
-        printf ("28F256J3A\n");
+        urj_log (ll, "28F256J3A\n");
         break;
     case 0x8801:
-        printf ("28F640K3\n");
+        urj_log (ll, "28F640K3\n");
         break;
     case 0x8802:
-        printf ("28F128K3\n");
+        urj_log (ll, "28F128K3\n");
         break;
     case 0x8803:
-        printf ("28F256K3\n");
+        urj_log (ll, "28F256K3\n");
         break;
     case 0x8805:
-        printf ("28F640K18\n");
+        urj_log (ll, "28F640K18\n");
         break;
     case 0x8806:
-        printf ("28F128K18\n");
+        urj_log (ll, "28F128K18\n");
         break;
     case 0x8807:
-        printf ("28F256K18\n");
+        urj_log (ll, "28F256K18\n");
         break;
     case 0x880B:
-        printf ("GE28F640L18T\n");
+        urj_log (ll, "GE28F640L18T\n");
         break;
     case 0x880C:
-        printf ("GE28F128L18T\n");
+        urj_log (ll, "GE28F128L18T\n");
         break;
     case 0x880D:
-        printf ("GE28F256L18T\n");
+        urj_log (ll, "GE28F256L18T\n");
         break;
     case 0x880E:
-        printf ("GE28F640L18B\n");
+        urj_log (ll, "GE28F640L18B\n");
         break;
     case 0x880F:
-        printf ("GE28F128L18B\n");
+        urj_log (ll, "GE28F128L18B\n");
         break;
     case 0x8810:
-        printf ("GE28F256L18B\n");
+        urj_log (ll, "GE28F256L18B\n");
         break;
     default:
-        printf (_("Unknown (0x%02X)!\n"), cid);
+        urj_log (ll, _("Unknown (0x%02X)!\n"), cid);
         break;
     }
 
@@ -194,7 +199,7 @@ _intel_flash_print_info (urj_flash_cfi_array_t *cfi_array, int o)
 }
 
 static void
-intel_flash_print_info (urj_flash_cfi_array_t *cfi_array)
+intel_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
 {
     int o = 1;
     urj_bus_t *bus = cfi_array->bus;
@@ -208,11 +213,11 @@ intel_flash_print_info (urj_flash_cfi_array_t *cfi_array)
     /* Read Identifier Command */
     URJ_BUS_WRITE (bus, cfi_array->address + (0 << 0), 0x0090);
 
-    _intel_flash_print_info (cfi_array, o);
+    _intel_flash_print_info (ll, cfi_array, o);
 }
 
 static void
-intel_flash_print_info32 (urj_flash_cfi_array_t *cfi_array)
+intel_flash_print_info32 (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
 {
     int o = 2;
     urj_bus_t *bus = cfi_array->bus;
@@ -225,7 +230,7 @@ intel_flash_print_info32 (urj_flash_cfi_array_t *cfi_array)
     /* Read Identifier Command */
     URJ_BUS_WRITE (bus, cfi_array->address + (0 << 0), 0x00900090);
 
-    _intel_flash_print_info (cfi_array, o);
+    _intel_flash_print_info (ll, cfi_array, o);
 }
 
 static int
@@ -244,21 +249,22 @@ intel_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
     switch (sr & ~CFI_INTEL_SR_READY)
     {
     case 0:
-        return 0;
+        return URJ_STATUS_OK;
     case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_PROGRAM_ERROR:
-        printf (_("flash: invalid command seq\n"));
-        return URJ_FLASH_ERROR_INVALID_COMMAND_SEQUENCE;
+        urj_error_set (URJ_ERROR_FLASH_ERASE, _("invalid command seq\n"));
+        return URJ_STATUS_FAIL;
     case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_VPEN_ERROR:
-        printf (_("flash: low vpen\n"));
-        return URJ_FLASH_ERROR_LOW_VPEN;
+        urj_error_set (URJ_ERROR_FLASH_ERASE, _("low vpen\n"));
+        return URJ_STATUS_FAIL;
     case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_BLOCK_LOCKED:
-        printf (_("flash: block locked\n"));
-        return URJ_FLASH_ERROR_BLOCK_LOCKED;
+        urj_error_set (URJ_ERROR_FLASH_ERASE, _("block locked\n"));
+        return URJ_STATUS_FAIL;
     default:
         break;
     }
 
-    return URJ_FLASH_ERROR_UNKNOWN;
+    urj_error_set (URJ_ERROR_FLASH, "unknown error");
+    return URJ_STATUS_FAIL;
 }
 
 static int
@@ -276,11 +282,12 @@ intel_flash_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 
     if (sr != CFI_INTEL_SR_READY)
     {
-        printf (_("flash: unknown error while unblocking\n"));
-        return URJ_FLASH_ERROR_UNKNOWN;
+        urj_error_set (URJ_ERROR_FLASH_UNLOCK,
+                       _("unknown error while unlocking block\n"));
+        return URJ_STATUS_FAIL;
     }
-    else
-        return 0;
+
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -299,11 +306,12 @@ intel_flash_program_single (urj_flash_cfi_array_t *cfi_array,
 
     if (sr != CFI_INTEL_SR_READY)
     {
-        printf (_("flash: unknown error while programming\n"));
-        return URJ_FLASH_ERROR_UNKNOWN;
+        urj_error_set (URJ_ERROR_FLASH_PROGRAM,
+                       _("unknown error while programming\n"));
+        return URJ_STATUS_FAIL;
     }
-    else
-        return 0;
+
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -357,11 +365,12 @@ intel_flash_program_buffer (urj_flash_cfi_array_t *cfi_array,
     while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
     if (sr != CFI_INTEL_SR_READY)
     {
-        printf (_("flash: unknown error while programming\n"));
-        return URJ_FLASH_ERROR_UNKNOWN;
+        urj_error_set (URJ_ERROR_FLASH_PROGRAM,
+                       _("unknown error while programming\n"));
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -388,13 +397,13 @@ intel_flash_program (urj_flash_cfi_array_t *cfi_array,
         {
             int status = intel_flash_program_single (cfi_array, adr,
                                                      buffer[idx]);
-            if (status)
+            if (status != URJ_STATUS_OK)
                 return status;
             adr += cfi_array->bus_width;
         }
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -416,11 +425,11 @@ intel_flash_erase_block32 (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
-        printf ("\nsr = 0x%08X\n", sr);
-        return URJ_FLASH_ERROR_UNKNOWN;
+        urj_error_set (URJ_ERROR_FLASH_ERASE, "sr = 0x%08X", sr);
+        return URJ_STATUS_FAIL;
     }
-    else
-        return 0;
+
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -444,11 +453,11 @@ intel_flash_unlock_block32 (urj_flash_cfi_array_t *cfi_array,
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
-        printf ("\nsr = 0x%08X\n", sr);
-        return URJ_FLASH_ERROR_UNKNOWN;
+        urj_error_set (URJ_ERROR_FLASH_UNLOCK, "sr = 0x%08X", sr);
+        return URJ_STATUS_FAIL;
     }
-    else
-        return 0;
+
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -469,11 +478,11 @@ intel_flash_program32_single (urj_flash_cfi_array_t *cfi_array,
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
-        printf ("\nsr = 0x%08X\n", sr);
-        return URJ_FLASH_ERROR_UNKNOWN;
+        urj_error_set (URJ_ERROR_FLASH_PROGRAM, "\nsr = 0x%08X\n", sr);
+        return URJ_STATUS_FAIL;
     }
-    else
-        return 0;
+
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -490,12 +499,12 @@ intel_flash_program32 (urj_flash_cfi_array_t *cfi_array,
     for (idx = 0; idx < count; idx++)
     {
         int status = intel_flash_program32_single (cfi_array, adr, buffer[idx]);
-        if (status)
+        if (status != URJ_STATUS_OK)
             return status;
         adr += cfi_array->bus_width;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void

@@ -31,7 +31,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/parport.h>
 #include <urjtag/cable.h>
 
@@ -132,6 +135,17 @@ direct_parport_alloc (unsigned int port)
     urj_parport_t *parport = malloc (sizeof *parport);
     port_node_t *node = malloc (sizeof *node);
 
+    if (!node || !parport || !params)
+    {
+        free (node);
+        free (parport);
+        free (params);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                       "malloc(%zd)/malloc(%zd)/malloc(%zd) fails",
+                       sizeof *params, sizeof *parport, sizeof *node);
+        return NULL;
+    }
+
 #if defined(HAVE_INPOUTXX)
     if (inpout32_dll_handle == NULL)
     {
@@ -139,26 +153,14 @@ direct_parport_alloc (unsigned int port)
     }
     if (inpout32_dll_handle == NULL)
     {
-        fprintf (stderr,
-                 _("Couldn't load InpOut32.dll; maybe not installed?\n"));
-    }
-    else
-    {
-        Inp32 = (inpfuncPtr) GetProcAddress (inpout32_dll_handle, "Inp32");
-        Out32 = (outfuncPtr) GetProcAddress (inpout32_dll_handle, "Out32");
-    }
-
-    if (!node || !parport || !params || !inpout32_dll_handle)
-#else
-    if (!node || !parport || !params)
-#endif
-    {
-
-        free (node);
-        free (parport);
-        free (params);
+        urj_error_set (URJ_ERROR_IO,
+                       _("Couldn't load InpOut32.dll; maybe not installed?\n"));
         return NULL;
     }
+
+    Inp32 = (inpfuncPtr) GetProcAddress (inpout32_dll_handle, "Inp32");
+    Out32 = (outfuncPtr) GetProcAddress (inpout32_dll_handle, "Out32");
+#endif
 
     params->port = port;
 
@@ -209,7 +211,7 @@ direct_connect (const char **par, int parnum)
 
     if (parnum != 1)
     {
-        printf (_("Syntax error!\n"));
+        urj_error_set (URJ_ERROR_SYNTAX, "#params != 1");
         return NULL;
     }
 
@@ -217,7 +219,7 @@ direct_connect (const char **par, int parnum)
 
     if (port_scan_val < 0 || (port_scan_val + 3) > 0xffff)
     {
-        printf (_("Invalid port address!\n"));
+        urj_error_set (URJ_ERROR_INVALID,  _("Invalid port address"));
         return NULL;
     }
 
@@ -231,19 +233,20 @@ direct_connect (const char **par, int parnum)
             aport = ((direct_params_t *) pn->port->params)->port;
             if (abs (aport - port) < 3)
             {
-                printf (_("Disconnecting %s from parallel port at 0x%x\n"),
-                        _(pn->port->cable->driver->description), aport);
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         _("Disconnecting %s from parallel port at 0x%x\n"),
+                         _(pn->port->cable->driver->description), aport);
                 pn->port->cable->driver->disconnect (pn->port->cable);
                 break;
             }
         }
 
-    printf (_("Initializing parallel port at 0x%x\n"), port);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Initializing parallel port at 0x%x\n"),
+             port);
 
     parport = direct_parport_alloc (port);
     if (!parport)
     {
-        printf (_("%s(%d) Out of memory.\n"), __FILE__, __LINE__);
         return NULL;
     }
 
@@ -254,11 +257,17 @@ static int
 direct_open (urj_parport_t *parport)
 {
 #ifdef HAVE_INPOUTXX
-    return 0;
+    return URJ_STATUS_OK;
 #else
     unsigned int port = ((direct_params_t *) parport->params)->port;
-    return ((port + 3 <= 0x400) && ioperm (port, 3, 1)) || ((port + 3 > 0x400)
-                                                            && iopl (3));
+    if (((port + 3 <= 0x400) ? ioperm (port, 3, 1) : iopl (3)) == -1)
+    {
+        urj_error_set (URJ_ERROR_IO, "ioperm(3,1) or iopl(3) fails: %s",
+                       strerror(errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
+    }
+    return URJ_STATUS_OK;
 #endif
 }
 
@@ -266,10 +275,17 @@ static int
 direct_close (urj_parport_t *parport)
 {
 #if defined(HAVE_INPOUTXX)
-    return 0;
+    return URJ_STATUS_OK;
 #else
     unsigned int port = ((direct_params_t *) parport->params)->port;
-    return (port + 3 <= 0x400) ? ioperm (port, 3, 0) : iopl (0);
+    if (((port + 3 <= 0x400) ? ioperm (port, 3, 0) : iopl (0)) == -1)
+    {
+        urj_error_set (URJ_ERROR_IO, "ioperm(3,0) or iopl(0) fails: %s",
+                       strerror(errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
+    }
+    return URJ_STATUS_OK;
 #endif
 }
 
@@ -278,7 +294,7 @@ direct_set_data (urj_parport_t *parport, uint8_t data)
 {
     unsigned int port = ((direct_params_t *) parport->params)->port;
     outb (data, port);
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -300,7 +316,7 @@ direct_set_control (urj_parport_t *parport, uint8_t data)
 {
     unsigned int port = ((direct_params_t *) parport->params)->port;
     outb (data ^ 0x0B, port + 2);       /* SELECT, AUTOFD, and STROBE are inverted */
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 urj_parport_driver_t urj_tap_parport_direct_parport_driver = {

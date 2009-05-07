@@ -630,9 +630,8 @@ int
 urj_svf_hxr (enum generic_irdr_coding ir_dr, struct ths_params *params)
 {
     if (params->number != 0.0)
-        urj_log (URJ_LOG_LEVEL_WARNINGS,
-                 _("Warning %s: command %s not implemented\n"), "svf",
-                 ir_dr == generic_ir ? "HIR" : "HDR");
+        urj_warning ( _("command %s not implemented\n"),
+                     ir_dr == generic_ir ? "HIR" : "HDR");
 
     return (1);
 }
@@ -682,11 +681,9 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     if (params->max_time > 0.0)
         if (!priv->issued_runtest_maxtime)
         {
-            urj_log (URJ_LOG_LEVEL_WARNINGS,
-                    _("Warning %s: maximum time for RUNTEST not guaranteed.\n"),
-                    "svf");
-            urj_log (URJ_LOG_LEVEL_WARNINGS,
-                     _(" This message is only displayed once.\n"));
+            urj_warning ("%s%s",
+                         _("maximum time for RUNTEST not guaranteed.\n"),
+                         _(" This message is only displayed once.\n"));
             priv->issued_runtest_maxtime = 1;
         }
 
@@ -721,7 +718,7 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
             urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
                            _("Error %s: Maximum cable clock frequency required for RUNTEST.\n"),
                            "svf");
-            urj_log (URJ_LOG_LEVEL_ERRORS,
+            urj_log (URJ_LOG_LEVEL_ERROR,
                      _("  Set the cable frequency with 'FREQUENCY <Hz>'.\n"));
             return 0;
         }
@@ -886,7 +883,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     {
         if (!params->tdi)
         {
-            urj_log (URJ_LOG_LEVEL_ERRORS,
+            urj_log (URJ_LOG_LEVEL_ERROR,
                      _("Error %s: first %s command after length change must have a TDI value.\n"),
                     "svf", ir_dr == generic_ir ? "SIR" : "SDR");
             result = 0;
@@ -914,11 +911,11 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         /* is SIR large enough? */
         if (priv->ir->value->len != len)
         {
-            urj_log (URJ_LOG_LEVEL_ERRORS,
+            urj_log (URJ_LOG_LEVEL_ERROR,
                      _("Error %s: SIR command length inconsistent.\n"), "svf");
             if (loc != NULL)
             {
-                urj_log (URJ_LOG_LEVEL_ERRORS,
+                urj_log (URJ_LOG_LEVEL_ERROR,
                      _(" in input file between line %d col %d and line %d col %d\n"),
                      loc->first_line + 1, loc->first_column + 1,
                      loc->last_line + 1, loc->last_column + 1);
@@ -960,20 +957,21 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     {
     case generic_ir:
         urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_IR);
+        /* @@@@ RFHH check result */
         urj_tap_chain_shift_instructions_mode (chain,
                                                sxr_params->params.tdo ? 1 : 0,
                                                0, URJ_CHAIN_EXITMODE_EXIT1);
         urj_svf_goto_state (chain, priv->endir);
 
         if (sxr_params->params.tdo)
-            result =
-                urj_svf_compare_tdo (priv, sxr_params->params.tdo,
-                                     sxr_params->params.mask, priv->ir->out,
-                                     loc);
+            result = urj_svf_compare_tdo (priv, sxr_params->params.tdo,
+                                          sxr_params->params.mask,
+                                          priv->ir->out, loc);
         break;
 
     case generic_dr:
         urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_DR);
+        /* @@@@ RFHH check result */
         urj_tap_chain_shift_data_registers_mode (chain,
                                                  sxr_params->params.
                                                  tdo ? 1 : 0, 0,
@@ -981,10 +979,9 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         urj_svf_goto_state (chain, priv->enddr);
 
         if (sxr_params->params.tdo)
-            result =
-                urj_svf_compare_tdo (priv, sxr_params->params.tdo,
-                                     sxr_params->params.mask, priv->dr->out,
-                                     loc);
+            result = urj_svf_compare_tdo (priv, sxr_params->params.tdo,
+                                          sxr_params->params.mask,
+                                          priv->dr->out, loc);
         break;
     }
 
@@ -1063,9 +1060,8 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
     }
 
     if (trst_cable < 0)
-        urj_log (URJ_LOG_LEVEL_WARNINGS,
-                 _("Warning %s: unimplemented mode '%s' for TRST\n"), "svf",
-                 unimplemented_mode);
+        urj_warning (_("unimplemented mode '%s' for TRST\n"),
+                     unimplemented_mode);
     else
         urj_tap_cable_set_signal (chain->cable, URJ_POD_CS_TRST,
                                   trst_cable ? URJ_POD_CS_TRST : 0);
@@ -1094,9 +1090,8 @@ int
 urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
 {
     if (params->number != 0.0)
-        urj_log (URJ_LOG_LEVEL_WARNINGS,
-                 _("Warning %s: command %s not implemented\n"), "svf",
-                ir_dr == generic_ir ? "TIR" : "TDR");
+        urj_warning (_("command %s not implemented\n"),
+                     ir_dr == generic_ir ? "TIR" : "TDR");
 
     return (1);
 }

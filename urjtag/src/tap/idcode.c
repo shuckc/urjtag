@@ -31,7 +31,7 @@
 #include <urjtag/chain.h>
 
 
-void
+int
 urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
 {
     int i;
@@ -52,14 +52,14 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
     rout = urj_tap_register_alloc (8);
 
     if (!rz || !rout || !rnull)
-    {
-        printf (_("Allocation failed\n"));
-    }
-    printf (_("Read"));
+        return URJ_STATUS_FAIL;
+
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Read"));
     for (i = 0; i < ((bytes) ? bytes : 1000); i++)
     {
         urj_tap_shift_register (chain, rz, rout, 0);
-        printf (_(" %s"), urj_tap_register_get_string (rout));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _(" %s"),
+                 urj_tap_register_get_string (rout));
         if (!bytes)
         {
             /* Abort Reading when a null IDCODE has been read */
@@ -74,5 +74,7 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
     urj_tap_register_free (rz);
     urj_tap_register_free (rnull);
     urj_tap_register_free (rout);
-    printf (_("\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\n"));
+
+    return URJ_STATUS_OK;
 }

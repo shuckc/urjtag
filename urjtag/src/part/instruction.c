@@ -48,8 +48,7 @@ urj_part_instruction_alloc (const char *name, int len, const char *val)
     }
 
     if (strlen (name) > URJ_INSTRUCTION_MAXLEN_INSTRUCTION)
-        urj_log (URJ_LOG_LEVEL_WARNINGS,
-                 _("Warning: Instruction name too long\n"));
+        urj_warning (_("Instruction name too long\n"));
     strncpy (i->name, name, URJ_INSTRUCTION_MAXLEN_INSTRUCTION);
     i->name[URJ_INSTRUCTION_MAXLEN_INSTRUCTION] = '\0';
 

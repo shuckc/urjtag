@@ -284,8 +284,7 @@ jtag_parse_rc (urj_chain_t *chain)
 static void
 cleanup (urj_chain_t *chain)
 {
-    urj_flash_cfi_array_free (urj_flash_cfi_array);
-    urj_flash_cfi_array = NULL;
+    urj_flash_cleanup ();
 
     if (urj_bus)
     {
@@ -477,8 +476,9 @@ main (int argc, char *const argv[])
 
     if (!quiet)
     {
-        printf (_("WARNING: %s may damage your hardware!\n"), PACKAGE_NAME);
-        printf (_("Type \"quit\" to exit, \"help\" for help.\n\n"));
+        urj_warning (_("%s may damage your hardware!\n"), PACKAGE_NAME);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("Type \"quit\" to exit, \"help\" for help.\n\n"));
     }
 
     /* Create ~/.jtag */

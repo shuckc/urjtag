@@ -43,7 +43,11 @@ urj_tap_chain_alloc (void)
 {
     urj_chain_t *chain = malloc (sizeof (urj_chain_t));
     if (!chain)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (urj_chain_t));
         return NULL;
+    }
 
     chain->cable = NULL;
     chain->parts = NULL;
@@ -79,32 +83,42 @@ urj_tap_chain_disconnect (urj_chain_t *chain)
     chain->cable = NULL;
 }
 
-void
+int
 urj_tap_chain_clock (urj_chain_t *chain, int tms, int tdi, int n)
 {
     int i;
 
     if (!chain || !chain->cable)
-        return;
+    {
+        urj_error_set (URJ_ERROR_NO_CHAIN, "no chain or no part");
+        return URJ_STATUS_FAIL;
+    }
 
     urj_tap_cable_clock (chain->cable, tms, tdi, n);
 
     for (i = 0; i < n; i++)
         urj_tap_state_clock (chain, tms);
+
+    return URJ_STATUS_OK;
 }
 
-void
+int
 urj_tap_chain_defer_clock (urj_chain_t *chain, int tms, int tdi, int n)
 {
     int i;
 
     if (!chain || !chain->cable)
-        return;
+    {
+        urj_error_set (URJ_ERROR_NO_CHAIN, "no chain or no part");
+        return URJ_STATUS_FAIL;
+    }
 
     urj_tap_cable_defer_clock (chain->cable, tms, tdi, n);
 
     for (i = 0; i < n; i++)
         urj_tap_state_clock (chain, tms);
+
+    return URJ_STATUS_OK;
 }
 
 int
@@ -144,7 +158,7 @@ urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig)
     return urj_tap_cable_get_signal (chain->cable, sig);
 }
 
-void
+int
 urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
                                        int capture_output, int capture,
                                        int chain_exit)
@@ -153,7 +167,10 @@ urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
     urj_parts_t *ps;
 
     if (!chain || !chain->parts)
-        return;
+    {
+        urj_error_set (URJ_ERROR_NO_CHAIN, "no chain or no part");
+        return URJ_STATUS_FAIL;
+    }
 
     ps = chain->parts;
 
@@ -161,9 +178,9 @@ urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
     {
         if (ps->parts[i]->active_instruction == NULL)
         {
-            printf (_("%s(%d) Part %d without active instruction\n"),
-                    __FILE__, __LINE__, i);
-            return;
+            urj_error_set (URJ_ERROR_NO_ACTIVE_INSTRUCTION,
+                           _("Part %d without active instruction"), i);
+            return URJ_STATUS_FAIL;
         }
     }
 
@@ -198,16 +215,18 @@ urj_tap_chain_shift_instructions_mode (urj_chain_t *chain,
         /* give the cable driver a chance to flush if it's considered useful */
         urj_tap_cable_flush (chain->cable, URJ_TAP_CABLE_TO_OUTPUT);
     }
+
+    return URJ_STATUS_OK;
 }
 
-void
+int
 urj_tap_chain_shift_instructions (urj_chain_t *chain)
 {
-    urj_tap_chain_shift_instructions_mode (chain, 0, 1,
-                                           URJ_CHAIN_EXITMODE_IDLE);
+    return urj_tap_chain_shift_instructions_mode (chain, 0, 1,
+                                                  URJ_CHAIN_EXITMODE_IDLE);
 }
 
-void
+int
 urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
                                          int capture_output, int capture,
                                          int chain_exit)
@@ -216,7 +235,10 @@ urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
     urj_parts_t *ps;
 
     if (!chain || !chain->parts)
-        return;
+    {
+        urj_error_set (URJ_ERROR_NO_CHAIN, "no chain or no part");
+        return URJ_STATUS_FAIL;
+    }
 
     ps = chain->parts;
 
@@ -224,15 +246,15 @@ urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
     {
         if (ps->parts[i]->active_instruction == NULL)
         {
-            printf (_("%s(%d) Part %d without active instruction\n"),
-                    __FILE__, __LINE__, i);
-            return;
+            urj_error_set (URJ_ERROR_NO_ACTIVE_INSTRUCTION,
+                           _("Part %d without active instruction"), i);
+            return URJ_STATUS_FAIL;
         }
         if (ps->parts[i]->active_instruction->data_register == NULL)
         {
-            printf (_("%s(%d) Part %d without data register\n"), __FILE__,
-                    __LINE__, i);
-            return;
+            urj_error_set (URJ_ERROR_NO_DATA_REGISTER,
+                           _("Part %d without data register\n"), i);
+            return URJ_STATUS_FAIL;
         }
     }
 
@@ -267,13 +289,15 @@ urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
         /* give the cable driver a chance to flush if it's considered useful */
         urj_tap_cable_flush (chain->cable, URJ_TAP_CABLE_TO_OUTPUT);
     }
+
+    return URJ_STATUS_OK;
 }
 
-void
+int
 urj_tap_chain_shift_data_registers (urj_chain_t *chain, int capture_output)
 {
-    urj_tap_chain_shift_data_registers_mode (chain, capture_output, 1,
-                                             URJ_CHAIN_EXITMODE_IDLE);
+    return urj_tap_chain_shift_data_registers_mode (chain, capture_output, 1,
+                                                    URJ_CHAIN_EXITMODE_IDLE);
 }
 
 void

@@ -78,8 +78,8 @@ urj_tap_detect_register_size (urj_chain_t *chain)
                 urj_tap_shift_register (chain, rpat, rout, 0);
 
 #ifdef VERY_LOW_LEVEL_DEBUG
-                printf (">>> %s\n", urj_tap_register_get_string (rz));
-                printf ("  + %s\n", urj_tap_register_get_string (rpat));
+                urj_log (URJ_LOG_LEVEL_ALL, ">>> %s\n", urj_tap_register_get_string (rz));
+                urj_log (URJ_LOG_LEVEL_ALL, "  + %s\n", urj_tap_register_get_string (rpat));
 #endif
                 tdo = urj_tap_register_all_bits_same_value (rout);
                 if (tdo_stuck == -2)
@@ -91,7 +91,7 @@ urj_tap_detect_register_size (urj_chain_t *chain)
                 if (urj_tap_register_compare (rpat, rout) == 0)
                     ok++;
 #ifdef VERY_LOW_LEVEL_DEBUG
-                printf ("  = %s => %d\n", urj_tap_register_get_string (rout),
+                urj_log (URJ_LOG_LEVEL_ALL, "  = %s => %d\n", urj_tap_register_get_string (rout),
                         ok);
 #endif
             }
@@ -114,7 +114,7 @@ urj_tap_detect_register_size (urj_chain_t *chain)
 
     if (tdo_stuck >= 0)
     {
-        printf (_("Warning: TDO seems to be stuck at %d\n"), tdo_stuck);
+        urj_warning (_("TDO seems to be stuck at %d\n"), tdo_stuck);
     }
 
     return -1;
@@ -129,7 +129,7 @@ jtag_reset (urj_chain_t *chain)
     urj_tap_reset (chain);
 }
 
-void
+int
 urj_tap_discovery (urj_chain_t *chain)
 {
     int irlen;
@@ -139,18 +139,19 @@ urj_tap_discovery (urj_chain_t *chain)
     /* detecting IR size */
     jtag_reset (chain);
 
-    printf (_("Detecting IR length ... "));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Detecting IR length ... "));
     fflush (stdout);
 
     urj_tap_capture_ir (chain);
     irlen = urj_tap_detect_register_size (chain);
 
-    printf (_("%d\n"), irlen);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("%d\n"), irlen);
 
     if (irlen < 1)
     {
-        printf (_("Error: Invalid IR length!\n"));
-        return;
+        // retain error state
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Error: Invalid IR length!\n"));
+        return URJ_STATUS_FAIL;
     }
 
     /* all 1 is BYPASS in all parts, so DR length gives number of parts */
@@ -161,8 +162,7 @@ urj_tap_discovery (urj_chain_t *chain)
     {
         urj_tap_register_free (ir);
         urj_tap_register_free (irz);
-        printf (_("Error: Out of memory!\n"));
-        return;
+        return URJ_STATUS_FAIL;
     }
 
     for (;;)
@@ -174,14 +174,15 @@ urj_tap_discovery (urj_chain_t *chain)
         urj_tap_capture_ir (chain);
         urj_tap_shift_register (chain, ir, NULL, 1);
 
-        printf (_("Detecting DR length for IR %s ... "),
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Detecting DR length for IR %s ... "),
                 urj_tap_register_get_string (ir));
         fflush (stdout);
 
         urj_tap_capture_dr (chain);
+        // @@@@ RFHH check result
         rs = urj_tap_detect_register_size (chain);
 
-        printf (_("%d\n"), rs);
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("%d\n"), rs);
 
         urj_tap_register_inc (ir);
         if (urj_tap_register_compare (ir, irz) == 0)
@@ -189,4 +190,6 @@ urj_tap_discovery (urj_chain_t *chain)
     }
     urj_tap_register_free (ir);
     urj_tap_register_free (irz);
+
+    return URJ_STATUS_OK;
 }

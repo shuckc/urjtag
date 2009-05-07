@@ -46,16 +46,22 @@ struct urj_cable_driver
 {
     const char *name;
     const char *description;
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
     int (*connect) (char *params[], urj_cable_t *cable);
     void (*disconnect) (urj_cable_t *cable);
     void (*cable_free) (urj_cable_t *cable);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
     int (*init) (urj_cable_t *);
     void (*done) (urj_cable_t *);
     void (*set_frequency) (urj_cable_t *, uint32_t freq);
     void (*clock) (urj_cable_t *, int, int, int);
+    /** @return 0 or 1 on success; -1 on failure */
     int (*get_tdo) (urj_cable_t *);
+    /** @return the number of transferred bits on success; -1 on failure */
     int (*transfer) (urj_cable_t *, int, char *, char *);
+    /** @return 0 or 1 on success; -1 on failure */
     int (*set_signal) (urj_cable_t *, int, int);
+    /** @return 0 or 1 on success; -1 on failure */
     int (*get_signal) (urj_cable_t *, urj_pod_sigsel_t);
     void (*flush) (urj_cable_t *, urj_cable_flush_amount_t);
     void (*help) (const char *);
@@ -130,22 +136,35 @@ struct urj_cable
 };
 
 void urj_tap_cable_free (urj_cable_t *cable);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_init (urj_cable_t *cable);
 void urj_tap_cable_done (urj_cable_t *cable);
 void urj_tap_cable_flush (urj_cable_t *cable,
                           urj_cable_flush_amount_t);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 void urj_tap_cable_clock (urj_cable_t *cable, int tms, int tdi, int n);
 int urj_tap_cable_defer_clock (urj_cable_t *cable, int tms, int tdi, int n);
+/** @return 0 or 1 on success; -1 on failure */
 int urj_tap_cable_get_tdo (urj_cable_t *cable);
+/** @return 0 or 1 on success; -1 on failure */
 int urj_tap_cable_get_tdo_late (urj_cable_t *cable);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_defer_get_tdo (urj_cable_t *cable);
+/** @return @see (*set_signal)() */
 int urj_tap_cable_set_signal (urj_cable_t *cable, int mask, int val);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_defer_set_signal (urj_cable_t *cable, int mask, int val);
+/** @return @see (*get_signal)() */
 int urj_tap_cable_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig);
+/** @return @see (*get_signal)() */
 int urj_tap_cable_get_signal_late (urj_cable_t *cable, urj_pod_sigsel_t sig);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_defer_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig);
+/** @return the number of transferred bits on success; -1 on failure */
 int urj_tap_cable_transfer (urj_cable_t *cable, int len, char *in, char *out);
+/** @return the number of transferred bits on success; -1 on failure */
 int urj_tap_cable_transfer_late (urj_cable_t *cable, char *out);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
                                   char *out);
 
@@ -153,8 +172,10 @@ void urj_tap_cable_set_frequency (urj_cable_t *cable, uint32_t frequency);
 uint32_t urj_tap_cable_get_frequency (urj_cable_t *cable);
 void urj_tap_cable_wait (urj_cable_t *cable);
 void urj_tap_cable_purge_queue (urj_cable_queue_info_t *q, int io);
+/** @return queue item number on success; -1 on failure */
 int urj_tap_cable_add_queue_item (urj_cable_t *cable,
                                   urj_cable_queue_info_t *q);
+/** @return queue item number on success; -1 on failure */
 int urj_tap_cable_get_queue_item (urj_cable_t *cable,
                                   urj_cable_queue_info_t *q);
 

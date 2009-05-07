@@ -40,10 +40,11 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <errno.h>
 #include <usb.h>
 
-#include <urjtag/parport.h>
-#include <urjtag/cable.h>
+#include <urjtag/error.h>
+#include <urjtag/log.h>
 #include <urjtag/usbconn.h>
 
 typedef struct
@@ -69,7 +70,8 @@ libusb_match_desc (struct usb_device *dev, char *desc)
     handle = usb_open (dev);
     if (handle == NULL)
     {
-        perror ("libusb: usb_open() failed");
+        urj_error_set (URJ_ERROR_IO, "usb_open() failed: %s", strerror(errno));
+        errno = 0;
         return 0;
     }
     if (dev->descriptor.iManufacturer)
@@ -121,12 +123,16 @@ usbconn_libusb_connect (const char **param, int paramc,
     usb_init ();
     if (usb_find_busses () < 0)
     {
-        perror ("libusb: usb_find_busses failed");
+        urj_error_set (URJ_ERROR_IO, "usb_find_busses() failed: %s",
+                       strerror(errno));
+        errno = 0;
         return NULL;
     }
     if (usb_find_devices () < 0)
     {
-        perror ("libusb: usb_find_devices failed");
+        urj_error_set (URJ_ERROR_IO, "usb_find_devices() failed: %s",
+                       strerror(errno));
+        errno = 0;
         return NULL;
     }
 
@@ -151,6 +157,7 @@ usbconn_libusb_connect (const char **param, int paramc,
 
     if (!found_dev)
     {
+        urj_error_set (URJ_ERROR_NOTFOUND, "no USB connections");
         return NULL;
     }
 
@@ -158,7 +165,10 @@ usbconn_libusb_connect (const char **param, int paramc,
     libusb_params = malloc (sizeof (urj_usbconn_libusb_param_t));
     if (libusb_params == NULL || libusb_conn == NULL)
     {
-        printf (_("Out of memory\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                       _("malloc(%zd)/malloc(%zd) fails"),
+                       sizeof (urj_usbconn_t),
+                       sizeof (urj_usbconn_libusb_param_t));
         if (libusb_params)
             free (libusb_params);
         if (libusb_conn)
@@ -186,7 +196,8 @@ usbconn_libusb_open (urj_usbconn_t *conn)
     p->handle = usb_open (p->dev);
     if (p->handle == NULL)
     {
-        perror ("libusb: usb_open() failed");
+        urj_error_set (URJ_ERROR_IO, "usb_open() failed: %s", strerror(errno));
+        errno = 0;
     }
     else
     {
@@ -196,8 +207,10 @@ usbconn_libusb_open (urj_usbconn_t *conn)
 #endif
         if (usb_claim_interface (p->handle, 0) != 0)
         {
-            perror ("libusb: usb_claim_interface failed");
             usb_close (p->handle);
+            urj_error_set (URJ_ERROR_IO, "usb_claim_interface failed: %s",
+                           strerror(errno));
+            errno = 0;
             p->handle = NULL;
         }
 #if 1
@@ -211,10 +224,10 @@ usbconn_libusb_open (urj_usbconn_t *conn)
     if (p->handle == NULL)
     {
         /* TODO: disconnect? */
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -229,7 +242,7 @@ usbconn_libusb_close (urj_usbconn_t *conn)
         usb_close (p->handle);
     }
     p->handle = NULL;
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */

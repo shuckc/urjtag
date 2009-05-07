@@ -29,6 +29,7 @@
 
 #include <urjtag/usbconn.h>
 
+/* @@@@ RFHH stick these into a .h file */
 #ifdef HAVE_LIBUSB
 extern urj_usbconn_driver_t urj_tap_usbconn_libusb_driver;
 #endif /* HAVE_LIBUSB */

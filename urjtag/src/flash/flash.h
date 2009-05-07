@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: flash.h 1554 2009-05-03 16:06:22Z rfhh $
  *
  * Copyright (C) 2003 ETC s.r.o.
  * All rights reserved.
@@ -31,49 +31,30 @@
  *
  */
 
-#ifndef URJ_FLASH_H
-#define URJ_FLASH_H
+#ifndef URJ_SRC_FLASH_H
+#define URJ_SRC_FLASH_H
+
+#include <urjtag/sysdep.h>
 
 #include <stdio.h>
 #include <stdint.h>
 
-#include "types.h"
-#include "log.h"
+#include <urjtag/types.h>
+#include <urjtag/log.h>
 
-typedef struct urj_flash_cfi_array urj_flash_cfi_array_t;
+typedef struct urj_flash_cfi_chip urj_flash_cfi_chip_t;
 
-typedef struct
+struct urj_flash_cfi_array
 {
-    unsigned int bus_width;     /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
-    const char *name;
-    const char *description;
-    /** @return 1 if autodetected, 0 otherwise */
-    int (*autodetect) (urj_flash_cfi_array_t *cfi_array);
-    void (*print_info) (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array);
-    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-    int (*erase_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
-    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-    int (*unlock_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
-    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-    int (*program) (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
-                    uint32_t *buffer, int count);
-    void (*readarray) (urj_flash_cfi_array_t *cfi_array);
-} urj_flash_driver_t;
-
-extern urj_flash_driver_t *urj_flash_flash_drivers[];
+    urj_bus_t *bus;
+    uint32_t address;
+    int bus_width;              /* in cfi_chips, e.g. 4 for 32 bits */
+    urj_flash_cfi_chip_t **cfi_chips;
+};
 
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr);
-void urj_flash_cleanup (void);
 
-/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-int urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int);
-/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-int urj_flashmsbin (urj_bus_t *bus, FILE *f, int);
-
-/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-int urj_flasherase (urj_bus_t *bus, uint32_t addr, int number);
-
-/* end of original brux/flash.h */
+extern urj_flash_cfi_array_t *urj_flash_cfi_array;
 
 #endif /* URJ_FLASH_H */

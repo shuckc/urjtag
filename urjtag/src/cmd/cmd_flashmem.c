@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/bus.h>
 #include <urjtag/flash.h>
 
@@ -69,9 +70,21 @@ cmd_flashmem_run (urj_chain_t *chain, char *params[])
         return 1;
     }
     if (msbin)
-        urj_flashmsbin (urj_bus, f, noverify);
+    {
+        if (urj_flashmsbin (urj_bus, f, noverify) != URJ_STATUS_OK)
+        {
+            printf ("error: %s\n", urj_error_describe());
+            urj_error_reset();
+        }
+    }
     else
-        urj_flashmem (urj_bus, f, adr, noverify);
+    {
+        if (urj_flashmem (urj_bus, f, adr, noverify) != URJ_STATUS_OK)
+        {
+            printf ("error: %s\n", urj_error_describe());
+            urj_error_reset();
+        }
+    }
     fclose (f);
 
     return 1;
