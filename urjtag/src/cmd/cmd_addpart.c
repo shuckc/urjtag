@@ -59,6 +59,7 @@ cmd_addpart_run (urj_chain_t *chain, char *params[])
         chain->parts = NULL;
     }
 
+    /* @@@@ RFHH check result */
     urj_part_parts_set_instruction (chain->parts, "BYPASS");
     /* @@@@ RFHH check result */
     urj_tap_chain_shift_instructions (chain);

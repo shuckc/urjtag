@@ -41,6 +41,11 @@ typedef struct
         bsdl.debug = 0; \
     } while (0)
 
+/** @return
+ *   < 0 : Error occured, parse/syntax problems or out of memory
+ *   = 0 : No errors, idcode not checked or mismatching
+ *   > 0 : No errors, idcode checked and matched
+ */
 int urj_bsdl_read_file (urj_chain_t *, const char *, int, const char *);
 void urj_bsdl_set_path (urj_chain_t *, const char *);
 int urj_bsdl_scan_files (urj_chain_t *, const char *, int);

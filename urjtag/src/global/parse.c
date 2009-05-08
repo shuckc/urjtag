@@ -38,6 +38,7 @@
 #include <urjtag/parse.h>
 #include <urjtag/cmd.h>
 #include <urjtag/jtag.h>
+#include <urjtag/bsdl.h>
 
 #define MAXINPUTLINE 100        /* Maximum input line length */
 
@@ -52,10 +53,16 @@ urj_parse_line (urj_chain_t *chain, char *line)
     char *sline;
 
     if (line == NULL)
-        return 1;
+    {
+        urj_error_set (URJ_ERROR_INVALID, "NULL line");
+        return URJ_STATUS_FAIL;
+    }
     l = strlen (line);
     if (l == 0)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "zero-length line");
         return 1;
+    }
 
     /* allocate as many chars as in the input line; this will be enough in all cases */
     sline = malloc (l + 1);
@@ -92,6 +99,7 @@ urj_parse_line (urj_chain_t *chain, char *line)
     if (tcnt == 0)
     {
         free (sline);
+        urj_error_set (URJ_ERROR_INVALID, "empty line");
         return 1;
     }
 
@@ -172,7 +180,8 @@ urj_parse_file (urj_chain_t *chain, const char *filename)
     f = fopen (filename, "r");
     if (!f)
     {
-        urj_error_set(URJ_ERROR_IO, "Cannot open file '%s' to parse: %s", filename, strerror(errno));
+        urj_error_set(URJ_ERROR_IO, "Cannot open file '%s' to parse: %s",
+                      filename, strerror(errno));
         errno = 0;
         return -1;
     }
@@ -184,3 +193,64 @@ urj_parse_file (urj_chain_t *chain, const char *filename)
 
     return go;
 }
+
+int
+urj_parse_include (urj_chain_t *chain, const char *filename, int ignore_path)
+{
+    char *path = NULL;
+    int r = URJ_STATUS_OK;
+
+    if (! ignore_path)
+    {
+        /* If "filename" begins with a slash, or dots followed by a slash,
+         * assume that user wants to ignore the search path after all */
+        const char *slashdots = filename;
+
+#ifdef __MINGW32__
+        if (isalpha (*slashdots) && slashdots[1] == ':')
+            slashdots += 2;
+#endif
+        while (*slashdots == '.')
+            slashdots++;
+        ignore_path = (*slashdots == '/' || *slashdots == '\\');
+    }
+
+    if (! ignore_path)
+    {
+        const char *jtag_data_dir = urj_get_data_dir ();
+        size_t len;
+
+        path = malloc (len = strlen (jtag_data_dir) + strlen (filename) + 2);
+        if (path == NULL)
+        {
+            printf (_("Out of memory\n"));
+            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", len);
+            return URJ_STATUS_FAIL;
+        }
+        snprintf (path, len, "%s/%s", jtag_data_dir, filename);
+
+        filename = path;
+    }
+
+#ifdef ENABLE_BSDL
+    /* perform a test read to check for BSDL syntax */
+    if (urj_bsdl_read_file (chain, filename, URJ_BSDL_MODE_INCLUDE1, NULL) >= 0)
+    {
+        /* it seems to be a proper BSDL file, so re-read and execute */
+        if (urj_bsdl_read_file (chain, filename, URJ_BSDL_MODE_INCLUDE2,
+                                NULL) < 0)
+            // retain errno
+            r = URJ_STATUS_FAIL;
+    }
+    else
+#endif
+    {
+        if (urj_parse_file (chain, filename) == -1)
+            r = URJ_STATUS_FAIL;
+    }
+
+    free (path);
+
+    return r;
+}
+

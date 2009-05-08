@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/parse.h>
 #include <urjtag/jtag.h>
 
@@ -40,9 +41,8 @@
 static int
 cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
 {
-    int go = 0, i, j = 1;
-    char *path;
-    int len;
+    int i;
+    unsigned int j = 1;
 
     if (urj_cmd_params (params) < 2)
         return -1;
@@ -52,67 +52,28 @@ cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
         printf (_("Please use the 'include' command instead of 'script'\n"));
     }
 
-    /* If "params[1]" begins with a slash, or dots followed by a slash,
-     * assume that user wants to ignore the search path */
-
-    path = params[1];
-#ifdef __MINGW32__
-    if (isalpha (*path) && path[1] == ':')
-        path += 2;
-#endif
-    while (*path == '.')
-        path++;
-    if (*path == '/' || *path == '\\' || !is_include)
-    {
-        path = strdup (params[1]);
-    }
-    else
-    {
-        const char *jtag_data_dir = urj_get_data_dir ();
-        path = malloc (len = strlen (jtag_data_dir) + strlen (params[1]) + 2);
-        if (path != NULL)
-        {
-            snprintf (path, len, "%s/%s", jtag_data_dir, params[1]);
-        }
-    }
-    if (path == NULL)
-    {
-        printf (_("Out of memory\n"));
-        return 1;
-    }
-
-#ifdef ENABLE_BSDL
-    /* perform a test read to check for BSDL syntax */
-    if (urj_bsdl_read_file (chain, path, URJ_BSDL_MODE_INCLUDE1, NULL) >= 0)
-    {
-        /* it seems to be a proper BSDL file, so re-read and execute */
-        go = urj_bsdl_read_file (chain, path, URJ_BSDL_MODE_INCLUDE2, NULL);
-
-        free (path);
-        return 1;
-    }
-#endif
-
     if (urj_cmd_params (params) > 2)
     {
-        sscanf (params[2], "%d", &j);   /* loop n times option */
+        /* loop n times option */
+        if (urj_cmd_get_number (params[2], &j))
+        {
+            printf (_("%s: unable to get number from '%s'\n"),
+                    "include/script", params[2]);
+            return -1;
+        }
     }
 
     for (i = 0; i < j; i++)
     {
-        go = urj_parse_file (chain, path);
-
-        if (go < 0)
+        if (urj_parse_include (chain, params[1], ! is_include) != URJ_STATUS_OK)
         {
-            if (go != -99)
-                printf (_("Unable to open file `%s go=%d'!\n"), path, go);
+            printf ("error: %s\n", urj_error_describe ());
+            urj_error_reset ();
             break;
         }
     }
 
-    free (path);
-
-    return go ? 1 : 0;
+    return 1;
 }
 
 static void

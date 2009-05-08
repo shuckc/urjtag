@@ -75,7 +75,7 @@ extern urj_error_state_t        urj_error_state;
 /**
  * Descriptive string for error type
  */
-extern const char *urj_error_string(urj_error_t error);
+extern const char *urj_error_string (urj_error_t error);
 
 /**
  * Set error state.
@@ -94,10 +94,10 @@ extern const char *urj_error_string(urj_error_t error);
                   __VA_ARGS__); \
         if (0 && urj_log_state.level < URJ_LOG_LEVEL_SILENT) \
         { \
-            urj_log(URJ_LOG_LEVEL_ERROR, "%s:%d %s() %s: ", __FILE__, \
-                    __LINE__, __func__, urj_error_string(e)); \
-            urj_log(URJ_LOG_LEVEL_ERROR, __VA_ARGS__); \
-            urj_log(URJ_LOG_LEVEL_ERROR, "\n"); \
+            urj_log (URJ_LOG_LEVEL_ERROR, "%s:%d %s() %s: ", __FILE__, \
+                     __LINE__, __func__, urj_error_string (e)); \
+            urj_log (URJ_LOG_LEVEL_ERROR, __VA_ARGS__); \
+            urj_log (URJ_LOG_LEVEL_ERROR, "\n"); \
         } \
     } while (0)
 

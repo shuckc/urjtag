@@ -524,7 +524,9 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
         urj_log (URJ_LOG_LEVEL_NORMAL, _("\nErasing (partially) Failed.\n"));
 
     /* BYPASS */
+    /* @@@@ RFHH check result */
     //       urj_part_parts_set_instruction( ps, "BYPASS" );
+    /* @@@@ RFHH check result */
     //       urj_tap_chain_shift_instructions( chain );
 
     return status;

@@ -61,6 +61,7 @@ urj_tap_reset_bypass (urj_chain_t *chain)
         urj_tap_shift_register (chain, ir, NULL, URJ_CHAIN_EXITMODE_IDLE);
         urj_tap_register_free (ir);
 
+        /* @@@@ RFHH check result */
         urj_part_parts_set_instruction (chain->parts, "BYPASS");
     }
 

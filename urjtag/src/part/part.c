@@ -48,6 +48,7 @@ urj_part_alloc (const urj_tap_register_t *id)
     }
 
     p->alias = NULL;            /* djf */
+    /* @@@@ RFHH check result */
     p->id = urj_tap_register_duplicate (id);
     p->manufacturer[0] = '\0';
     p->part[0] = '\0';
@@ -124,7 +125,10 @@ urj_part_find_instruction (urj_part_t *p, const char *iname)
     urj_part_instruction_t *i;
 
     if (!p || !iname)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "NULL part or instruction name");
         return NULL;
+    }
 
     i = p->instructions;
     while (i)
@@ -143,7 +147,10 @@ urj_part_find_data_register (urj_part_t *p, const char *drname)
     urj_data_register_t *dr;
 
     if (!p || !drname)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "NULL part or data register name");
         return NULL;
+    }
 
     dr = p->data_registers;
     while (dr)
@@ -163,7 +170,10 @@ urj_part_find_signal (urj_part_t *p, const char *signalname)
     urj_part_salias_t *sa;
 
     if (!p || !signalname)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "NULL part or signal name");
         return NULL;
+    }
 
     s = p->signals;
     while (s)
@@ -198,7 +208,7 @@ urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
 
     if (!p || !s)
     {
-        urj_error_set (URJ_ERROR_INVALID, "part or signal is NULL");
+        urj_error_set (URJ_ERROR_INVALID, "NULL part or signal");
         return URJ_STATUS_FAIL;
     }
 
@@ -251,7 +261,7 @@ urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s)
 
     if (!p || !s)
     {
-        urj_error_set (URJ_ERROR_INVALID, "part or signal is NULL");
+        urj_error_set (URJ_ERROR_INVALID, "NULL part or signal");
         return -1;
     }
 
@@ -274,7 +284,7 @@ urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s)
     return bsr->out->data[s->input->bit];
 }
 
-void
+int
 urj_part_print (urj_part_t *p)
 {
     const char *instruction = NULL;
@@ -282,7 +292,10 @@ urj_part_print (urj_part_t *p)
     char format[100];
 
     if (!p)
-        return;
+    {
+        urj_error_set (URJ_ERROR_INVALID, "NULL part");
+        return URJ_STATUS_FAIL;
+    }
 
     snprintf (format, 100, _("%%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"),
               URJ_PART_MANUFACTURER_MAXLEN, URJ_PART_PART_MAXLEN,
@@ -301,6 +314,8 @@ urj_part_print (urj_part_t *p)
         dr = _("(none)");
     urj_log (URJ_LOG_LEVEL_NORMAL, format, p->manufacturer, p->part,
              p->stepping, instruction, dr);
+
+    return URJ_STATUS_OK;
 }
 
 
@@ -373,7 +388,11 @@ urj_part_parts_alloc (void)
 {
     urj_parts_t *ps = malloc (sizeof *ps);
     if (!ps)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof *ps);
         return NULL;
+    }
 
     ps->len = 0;
     ps->parts = NULL;
@@ -402,34 +421,46 @@ urj_part_parts_add_part (urj_parts_t *ps, urj_part_t *p)
     urj_part_t **np = realloc (ps->parts, (ps->len + 1) * sizeof *ps->parts);
 
     if (!np)
-        return 0;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "realloc(%s,%zd) fails",
+                       "ps->parts", (ps->len + 1) * sizeof *ps->parts);
+        return URJ_STATUS_FAIL;
+    }
 
     ps->parts = np;
     ps->parts[ps->len++] = p;
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
-void
+int
 urj_part_parts_set_instruction (urj_parts_t *ps, const char *iname)
 {
     int i;
 
     if (!ps)
-        return;
+    {
+        urj_error_set (URJ_ERROR_INVALID, "NULL parts");
+        return URJ_STATUS_FAIL;
+    }
 
     for (i = 0; i < ps->len; i++)
         ps->parts[i]->active_instruction =
             urj_part_find_instruction (ps->parts[i], iname);
+
+    return URJ_STATUS_OK;
 }
 
-void
+int
 urj_part_parts_print (urj_parts_t *ps)
 {
     int i;
 
     if (!ps)
-        return;
+    {
+        urj_error_set (URJ_ERROR_INVALID, "NULL parts");
+        return URJ_STATUS_FAIL;
+    }
 
     for (i = 0; i < ps->len; i++)
     {
@@ -441,4 +472,6 @@ urj_part_parts_print (urj_parts_t *ps)
         urj_log (URJ_LOG_LEVEL_NORMAL, _(" %3d "), i);
         urj_part_print (p);
     }
+
+    return URJ_STATUS_OK;
 }

@@ -30,17 +30,30 @@
 #include "types.h"
 
 /**
- * @return -1 on failure; see urj_parse_line() otherwise
+ * @return -1 on error; see urj_parse_line() otherwise
  */
 int urj_parse_file (urj_chain_t *chain, const char *filename);
 /**
- * @return 1 on failure; urj_cmd_run() otherwise
+ * @return URJ_STATUS_FAIL on error; urj_cmd_run() otherwise
  */
 int urj_parse_line (urj_chain_t *chain, char *line);
 /**
  * @return see urj_parse_line()
  */
 int urj_parse_stream (urj_chain_t *chain, FILE *f);
+
+/**
+ * Include a file. Autodetects whether it is a bsdl file or a UrJTAG command
+ * shell script.
+ *
+ * @param filename if begins with a slash, or dots followed by a slash, ignore
+ *      the search path
+ * @param ignore_path ignore the search path anyway
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
+ */
+int urj_parse_include (urj_chain_t *chain, const char *filename,
+                       int ignore_path);
 
 #endif /* URJ_PARSE_H */
 

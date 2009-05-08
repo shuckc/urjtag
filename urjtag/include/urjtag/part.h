@@ -25,8 +25,6 @@
 #ifndef URJ_PART_H
 #define URJ_PART_H
 
-#include <stdio.h>
-
 #include "types.h"
 
 #define URJ_PART_MANUFACTURER_MAXLEN    25
@@ -52,25 +50,28 @@ struct urj_part
 
 urj_part_t *urj_part_alloc (const urj_tap_register_t *id);
 void urj_part_free (urj_part_t *p);
-urj_part_t *read_part (FILE *f, urj_tap_register_t *idr);
+/* @return instruction pointer on success; NULL if not found but does not set
+ * urj_error; NULL on error */
 urj_part_instruction_t *urj_part_find_instruction (urj_part_t *p,
                                                    const char *iname);
+/* @return data register pointer on success; NULL if not found but does not set
+ * urj_error; NULL on error */
 urj_data_register_t *urj_part_find_data_register (urj_part_t *p,
                                                   const char *drname);
+/* @return signal pointer on success; NULL if not found but does not set
+ * urj_error; NULL on error */
 urj_part_signal_t *urj_part_find_signal (urj_part_t *p,
                                          const char *signalname);
 void urj_part_set_instruction (urj_part_t *p, const char *iname);
-/**
- * @return URJ_STATUS_FAIL on error; URJ_STATUS_OK on success
- */
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val);
-/**
- * @return -1 on error; >= 0 for success
- */
+/** @return -1 on error; signal number >= 0 for success */
 int urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s);
-void urj_part_print (urj_part_t *p);
+/* @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_part_print (urj_part_t *p);
 /**
  * Set the length of the instructions of a part
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
  */
 int urj_part_instruction_length_set (urj_part_t *part, int length);
 /**
@@ -98,8 +99,11 @@ struct urj_parts
 
 urj_parts_t *urj_part_parts_alloc (void);
 void urj_part_parts_free (urj_parts_t *ps);
+/* @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_part_parts_add_part (urj_parts_t *ps, urj_part_t *p);
-void urj_part_parts_set_instruction (urj_parts_t *ps, const char *iname);
-void urj_part_parts_print (urj_parts_t *ps);
+/* @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_part_parts_set_instruction (urj_parts_t *ps, const char *iname);
+/* @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_part_parts_print (urj_parts_t *ps);
 
 #endif /* URJ_PART_H */
