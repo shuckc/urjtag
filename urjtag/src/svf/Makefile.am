@@ -32,6 +32,9 @@ libsvf_la_SOURCES = \
 	svf.h \
 	svf.c
 
+# avoid -Werror to bail out because of unused input() function in svf_flex.c
+libsvf_la_CFLAGS = -Wno-error=unused-function
+
 svf_flex.$(OBJEXT) svf.$(OBJEXT): svf_bison.$(OBJEXT)
 
 svf_bison.h: svf_bison.c

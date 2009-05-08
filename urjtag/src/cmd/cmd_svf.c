@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/log.h>
+
 #include <urjtag/svf.h>
 #include <urjtag/cmd.h>
 
@@ -43,6 +45,7 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
     int stop = 0;
     int print_progress = 0;
     uint32_t ref_freq = 0;
+    urj_log_level_t old_log_level = urj_log_state.level;
 
     num_params = urj_cmd_params (params);
     if (num_params > 1)
@@ -59,9 +62,12 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
                 return -1;
         }
 
+        if (print_progress)
+            urj_log_state.level = URJ_LOG_LEVEL_DETAIL;
+
         if ((SVF_FILE = fopen (params[1], "r")) != NULL)
         {
-            urj_svf_run (chain, SVF_FILE, stop, print_progress, ref_freq);
+            urj_svf_run (chain, SVF_FILE, stop, ref_freq);
             result = 1;
 
             fclose (SVF_FILE);
@@ -73,6 +79,8 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
         }
 
     }
+
+    urj_log_state.level = old_log_level;
 
     return result;
 }
@@ -95,11 +103,3 @@ const urj_cmd_t urj_cmd_svf = {
     cmd_svf_help,
     cmd_svf_run
 };
-
-
-/* Emacs specific variables
-;;; Local Variables: ***
-;;; indent-tabs-mode:t ***
-;;; tab-width:2 ***
-;;; End: ***
-*/

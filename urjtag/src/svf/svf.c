@@ -1111,8 +1111,6 @@ urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
  *   SVF_FILE         : file handle of SVF file
  *   stop_on_mismatch : 1 = stop upon tdo mismatch
  *                      0 = continue upon mismatch
- *   print_progress   : 1 = continually print progress status
- *                      0 = don't print
  *   ref_freq         : reference frequency for RUNTEST
  *
  * Return value:
@@ -1121,7 +1119,7 @@ urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
  * ***************************************************************************/
 int
 urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
-             int print_progress, uint32_t ref_freq)
+             uint32_t ref_freq)
 {
     const urj_svf_sxr_t sxr_default = { {0.0, NULL, NULL, NULL, NULL},
     1, 1
@@ -1242,21 +1240,18 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     /* select SIR instruction */
     urj_part_set_instruction (priv.part, "SIR");
 
-    if (urj_svf_bison_init (&priv, SVF_FILE, num_lines, print_progress))
+    if (urj_svf_bison_init (&priv, SVF_FILE, num_lines))
     {
         urj_svf_parse (&priv, chain);
         urj_svf_bison_deinit (&priv);
     }
 
-    if (print_progress)
-    {
-        if (priv.mismatch_occurred > 0)
-            urj_log (URJ_LOG_LEVEL_NORMAL,
-                     _("Mismatches occurred between scanned device output and expected TDO values.\n"));
-        else
-            urj_log (URJ_LOG_LEVEL_NORMAL,
-                     _("Scanned device output matched expected TDO values.\n"));
-    }
+    if (priv.mismatch_occurred > 0)
+        urj_log (URJ_LOG_LEVEL_DETAIL,
+                 _("Mismatches occurred between scanned device output and expected TDO values.\n"));
+    else
+        urj_log (URJ_LOG_LEVEL_DETAIL,
+                 _("Scanned device output matched expected TDO values.\n"));
 
     /* clean up */
     /* SIR */

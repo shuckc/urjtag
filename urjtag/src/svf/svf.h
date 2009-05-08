@@ -119,7 +119,6 @@ typedef struct parser_priv urj_svf_parser_priv_t;
 struct scanner_extra
 {
     int num_lines;
-    int print_progress;
     int planb;
     char decimal_point;
 };
@@ -127,10 +126,10 @@ typedef struct scanner_extra urj_svf_scanner_extra_t;
 
 struct YYLTYPE;
 
-void *urj_svf_flex_init (FILE *, int, int);
+void *urj_svf_flex_init (FILE *, int);
 void urj_svf_flex_deinit (void *);
 
-int urj_svf_bison_init (urj_svf_parser_priv_t *, FILE *, int, int);
+int urj_svf_bison_init (urj_svf_parser_priv_t *, FILE *, int);
 void urj_svf_bison_deinit (urj_svf_parser_priv_t *);
 
 void urj_svf_endxr (urj_svf_parser_priv_t *, enum generic_irdr_coding,

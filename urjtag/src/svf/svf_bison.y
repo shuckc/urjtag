@@ -447,8 +447,7 @@ urj_svf_free_ths_params (struct ths_params *params)
 
 
 int
-urj_svf_bison_init (urj_svf_parser_priv_t *priv_data, FILE *f, int num_lines,
-                    int print_progress)
+urj_svf_bison_init (urj_svf_parser_priv_t *priv_data, FILE *f, int num_lines)
 {
     const struct svf_parser_params params = {
         {0.0, NULL, NULL, NULL, NULL},
@@ -459,7 +458,7 @@ urj_svf_bison_init (urj_svf_parser_priv_t *priv_data, FILE *f, int num_lines,
     priv_data->parser_params = params;
 
     if ((priv_data->scanner =
-         urj_svf_flex_init (f, num_lines, print_progress)) == NULL)
+         urj_svf_flex_init (f, num_lines)) == NULL)
         return 0;
     else
         return 1;

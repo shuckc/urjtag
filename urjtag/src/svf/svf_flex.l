@@ -372,20 +372,20 @@ progress_nl (YYLTYPE *mylloc, YY_EXTRA_TYPE extra)
 {
     int percent;
 
-    if ((extra->print_progress) && (mylloc->last_line % 10 == 0))
+    if (mylloc->last_line % 10 == 0)
     {
         percent = ((mylloc->last_line * 100) + 1) / extra->num_lines;
         if (percent <= 1)
             return;             // dont bother printing < 1 %
-        urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
-        urj_log (URJ_LOG_LEVEL_NORMAL, _("Parsing %6d/%d (%3.0d%%)"),
+        urj_log (URJ_LOG_LEVEL_DETAIL, "\r");
+        urj_log (URJ_LOG_LEVEL_DETAIL, _("Parsing %6d/%d (%3.0d%%)"),
                 mylloc->last_line, extra->num_lines, percent);
     }
 }
 
 
 void *
-urj_svf_flex_init (FILE *f, int num_lines, int print_progress)
+urj_svf_flex_init (FILE *f, int num_lines)
 {
     YY_EXTRA_TYPE extra;
     yyscan_t scanner;
@@ -405,7 +405,6 @@ urj_svf_flex_init (FILE *f, int num_lines, int print_progress)
     }
 
     extra->num_lines = num_lines;
-    extra->print_progress = print_progress;
 
 #ifdef ENABLE_NLS
     {
@@ -426,8 +425,7 @@ void
 urj_svf_flex_deinit (void *scanner)
 {
     YY_EXTRA_TYPE extra = yyget_extra (scanner);
-    if (extra->print_progress)
-        urj_log (URJ_LOG_LEVEL_NORMAL, "\n");
+    urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
     free (extra);
     yylex_destroy (scanner);
 }

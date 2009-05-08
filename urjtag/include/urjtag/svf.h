@@ -46,8 +46,6 @@
  * @param SVF_FILE         file handle of SVF file
  * @param stop_on_mismatch 1 = stop upon tdo mismatch
  *                         0 = continue upon mismatch
- * @param print_progress   1 = continually print progress status
- *                         0 = don't print
  * @param ref_freq         reference frequency for RUNTEST
  *
  * @return
@@ -56,6 +54,6 @@
  * ***************************************************************************/
 
 int urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
-                 int print_progress, uint32_t ref_freq);
+                 uint32_t ref_freq);
 
 #endif /* URJ_SVF_H */

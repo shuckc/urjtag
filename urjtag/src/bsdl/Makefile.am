@@ -42,6 +42,10 @@ noinst_HEADERS = \
 	vhdl_bison.h \
 	vhdl_parser.h
 
+# avoid -Werror to bail out because of unused input() function
+# in vhdl_flex.c and bsdl_flex.c
+libbsdl_la_CFLAGS = -Wno-error=unused-function
+
 # additional dependencies
 # - all files depend on bsdl_config.h which dynamically generated
 # - *_flex files must be processed after their *_bison counterparts
