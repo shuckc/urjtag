@@ -398,8 +398,8 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 #endif
 
         if (part->active_instruction == NULL)
-            part->active_instruction =
-                urj_part_find_instruction (part, "IDCODE");
+            part->active_instruction = urj_part_find_instruction (part,
+                                                                  "IDCODE");
     }
 
     for (i = 0; i < 32; i++)
@@ -430,9 +430,8 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
 {
     urj_tap_register_t *id;
     urj_part_t *part;
-    char *cmd[] = { NULL, NULL, NULL, NULL, NULL };
     char *str;
-    int result;
+    urj_part_instruction_t *bypass;
 
     id = urj_tap_register_alloc (1);
     if (id == NULL)
@@ -464,10 +463,6 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
     }
 
     /* create a string of 1's for BYPASS instruction */
-    cmd[0] = "instruction";
-    cmd[1] = "BYPASS";
-    cmd[3] = "BR";
-    cmd[4] = NULL;
     str = calloc (instr_len + 1, sizeof (char));
     if (str == NULL)
     {
@@ -478,14 +473,14 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
 
     memset (str, '1', instr_len);
     str[instr_len] = '\0';
-    cmd[2] = str;
-    result = urj_cmd_run (chain, cmd);
+    bypass = urj_part_instruction_define (part, "BYPASS", str, "BR");
     free (str);
 
-    if (result < 1)
+    if (bypass == NULL)
     {
         urj_log (URJ_LOG_LEVEL_NORMAL,
                  _("Error: could not set BYPASS instruction"));
+        // retain error state
         return -1;
     }
 
@@ -519,6 +514,8 @@ urj_tap_detect (urj_chain_t *chain)
         urj_error_set (URJ_ERROR_INVALID, "chain has empty parts list");
         return URJ_STATUS_FAIL;
     }
+
+    /* @@@@ RFHH check results? */
     urj_part_parts_set_instruction (chain->parts, "SAMPLE/PRELOAD");
     urj_tap_chain_shift_instructions (chain);
     urj_tap_chain_shift_data_registers (chain, 1);
