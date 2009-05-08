@@ -1182,31 +1182,32 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     /* setup instruction SIR if not already existing */
     if (!(priv.ir = urj_part_find_instruction (priv.part, "SIR")))
     {
-        char *instruction_cmd[] = { "instruction",
-            "SIR",
-            "",
-            "SDR",
-            NULL
-        };
-        char *instruction_string;
-        int len, result;
+        int len;
 
         len = priv.part->instruction_length;
         if (len > 0)
         {
-            if ((instruction_string = calloc (len + 1, sizeof (char))) != NULL)
+            char *instruction_string;
+            urj_part_instruction_t *sir;
+
+            if ((instruction_string = calloc (len + 1, sizeof (char))) == NULL)
             {
-                memset (instruction_string, '1', len);
-                instruction_string[len] = '\0';
-                instruction_cmd[2] = instruction_string;
-
-                result = urj_cmd_run (chain, instruction_cmd);
-
-                free (instruction_string);
-
-                if (result < 1)
-                    return 0;
+                urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                               (size_t)(len + 1), sizeof (char));
+                return 0;
             }
+
+            memset (instruction_string, '1', len);
+            instruction_string[len] = '\0';
+
+            sir = urj_part_instruction_define (priv.part, "SIR",
+                                               instruction_string, "SDR");
+
+            free (instruction_string);
+
+            if (sir == NULL)
+                // retain error state
+                return 0;
         }
 
         if (!(priv.ir = urj_part_find_instruction (priv.part, "SIR")))
