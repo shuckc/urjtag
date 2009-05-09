@@ -31,3 +31,5 @@ libglobal_la_SOURCES = \
 	data_dir.c
 
 AM_CPPFLAGS = -DJTAG_BIN_DIR=\"$(bindir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"
+
+AM_CFLAGS = $(WARNINGCFLAGS)

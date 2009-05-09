@@ -1,3 +1,10 @@
+2009-05-09  Rutger Hofman <rfhh>
+
+  * configure.ac, **/Makefile.am: Add automake magic to have -Werror except
+    in the flex-generated files. See the automake FAQ:
+    http://www.gnu.org/software/automake/manual/html_node/Flag-Variables-Ordering.html#Flag-Variables-Ordering
+    Only setting -Wno-error=unused-function doesn't work for some gcc-s.
+
 2009-05-09  Arnim Laeuger  <arniml>
 
   * src/bsdl/Makefile.am, src/svf/Makefile.am: avoid -Werror to bail out because
@@ -7,7 +14,7 @@
     src/svf/svf_bison.y, src/svf/svf.h, src/svf/svf_flex.l:
     replace print_progress with DETAIL log level
 
-2009-05-05  Rutger Hofman <rfhh>
+2009-05-07  Rutger Hofman <rfhh>
 
   * src/flash/, src/svf/, src/tap/*.c, src/tap/parallel/, src/tap/usbconn:
     replace calls to printf() with calls to urj_log() and urj_error_set()

@@ -31,3 +31,5 @@ libpart_la_SOURCES = \
 	data_register.c \
 	bsbit.c \
 	part.c
+
+AM_CFLAGS = $(WARNINGCFLAGS)

@@ -39,3 +39,4 @@ libflash_la_SOURCES += \
 	jedec_exp.c
 endif
 
+AM_CFLAGS = $(WARNINGCFLAGS)

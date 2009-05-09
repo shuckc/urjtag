@@ -162,3 +162,5 @@ if ENABLE_CABLE_EP9307
 libtap_la_SOURCES += \
 	cable/vision_ep9307.c
 endif
+
+AM_CFLAGS = $(WARNINGCFLAGS)

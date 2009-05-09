@@ -24,18 +24,26 @@ include $(top_srcdir)/Makefile.rules
 AM_YFLAGS = -d
 
 OBJEXT = lo
-noinst_LTLIBRARIES = libsvf.la
+noinst_LTLIBRARIES = \
+	libsvf.la \
+	libsvf_flex.la
 
 libsvf_la_SOURCES = \
 	svf_bison.y \
-	svf_flex.l \
 	svf.h \
 	svf.c
 
-# avoid -Werror to bail out because of unused input() function in svf_flex.c
-libsvf_la_CFLAGS = -Wno-error=unused-function
+libsvf_flex_la_SOURCES = \
+	svf_flex.l 
 
 svf_flex.$(OBJEXT) svf.$(OBJEXT): svf_bison.$(OBJEXT)
+
+AM_CFLAGS = $(WARNINGCFLAGS)
+
+libsvf_flex_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	-Wno-unused-function \
+	-Werror=missing-prototypes -Wno-error=missing-prototypes
 
 svf_bison.h: svf_bison.c
 

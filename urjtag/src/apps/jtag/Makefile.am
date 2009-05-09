@@ -35,3 +35,5 @@ jtag_LDADD = \
 
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"
+
+AM_CFLAGS = $(WARNINGCFLAGS)

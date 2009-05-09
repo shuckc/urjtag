@@ -29,3 +29,5 @@ libjim_la_SOURCES = \
 	jim_tap.c \
 	some_cpu.c \
 	intel_28f800b3.c
+
+AM_CFLAGS = $(WARNINGCFLAGS)

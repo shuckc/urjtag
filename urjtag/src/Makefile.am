@@ -66,10 +66,12 @@ liburjtag_la_LIBADD = \
 
 if ENABLE_SVF
 liburjtag_la_LIBADD += svf/libsvf.la
+liburjtag_la_LIBADD += svf/libsvf_flex.la
 endif
 
 if ENABLE_BSDL
 liburjtag_la_LIBADD +=  bsdl/libbsdl.la
+liburjtag_la_LIBADD +=  bsdl/libbsdl_flex.la
 endif
 
 if ENABLE_JIM
@@ -78,3 +80,5 @@ endif
 
 localedir = $(datadir)/locale
 INCLUDES = -DLOCALEDIR=\"$(localedir)\"
+
+AM_CFLAGS = $(WARNINGCFLAGS)

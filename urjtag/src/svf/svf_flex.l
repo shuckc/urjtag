@@ -55,26 +55,11 @@ static void fix_yylloc(YYLTYPE *, char *);
 static void fix_yylloc_nl(YYLTYPE *, char *, YY_EXTRA_TYPE);
 static void progress_nl(YYLTYPE *, YY_EXTRA_TYPE);
 
-// @@@@ RFHH: take these out after the refactor
-// Prototypes that flex should have added, functions that flex should have
-// called or not declared:
-int urj_svf_get_column  (yyscan_t yyscanner);
-void urj_svf_set_column (int  column_no , yyscan_t yyscanner);
-
-static void yyunput (int c, register char * yy_bp , yyscan_t yyscanner);
-
-void urj_svf_use_yyunput (yyscan_t yyscanner);
-void urj_svf_use_yyunput (yyscan_t yyscanner)
-{
-    yyunput (0, NULL, yyscanner);
-}
-
 int yywrap(yyscan_t scanner);
 int yywrap(yyscan_t scanner)
 {
   return(1);
 }
-// @@@@ RFHH: take these out after the refactor
 
 #define YY_USER_INIT \
     do { \

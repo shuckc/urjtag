@@ -177,3 +177,5 @@ endif
 if ENABLE_BUS_ZEFANT_XS3
 libbus_la_SOURCES += zefant-xs3.c
 endif
+
+AM_CFLAGS = $(WARNINGCFLAGS)

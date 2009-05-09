@@ -266,7 +266,8 @@ AS_IF([test "x$with_inpout32" = xyes], [
 ])
 
 
-CFLAGS="$CFLAGS -Werror -Wall -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith"
+WARNINGCFLAGS="-Werror -Wall -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith"
+AC_SUBST(WARNINGCFLAGS)
 CPPFLAGS="-I\$(top_srcdir) -I\$(top_srcdir)/include $CPPFLAGS"
 
 

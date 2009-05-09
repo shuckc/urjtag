@@ -22,15 +22,19 @@
 include $(top_srcdir)/Makefile.rules
 
 OBJEXT = lo
-noinst_LTLIBRARIES = libbsdl.la
+noinst_LTLIBRARIES = \
+	libbsdl.la \
+	libbsdl_flex.la
 
 libbsdl_la_SOURCES =  \
 	vhdl_bison.y \
-	vhdl_flex.l  \
 	bsdl_bison.y \
-	bsdl_flex.l  \
 	bsdl.c       \
 	bsdl_sem.c
+
+libbsdl_flex_la_SOURCES = \
+	vhdl_flex.l  \
+	bsdl_flex.l
 
 noinst_HEADERS = \
 	bsdl_bison.h \
@@ -42,9 +46,12 @@ noinst_HEADERS = \
 	vhdl_bison.h \
 	vhdl_parser.h
 
-# avoid -Werror to bail out because of unused input() function
-# in vhdl_flex.c and bsdl_flex.c
-libbsdl_la_CFLAGS = -Wno-error=unused-function
+AM_CFLAGS = $(WARNINGCFLAGS)
+
+libbsdl_flex_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	-Wno-unused-function \
+	-Werror=missing-prototypes -Wno-error=missing-prototypes
 
 # additional dependencies
 # - all files depend on bsdl_config.h which dynamically generated

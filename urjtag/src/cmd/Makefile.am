@@ -71,3 +71,5 @@ endif
 if ENABLE_BSDL
 libcmd_la_SOURCES += cmd_bsdl.c
 endif
+
+AM_CFLAGS = $(WARNINGCFLAGS)
