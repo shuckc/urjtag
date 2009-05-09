@@ -1,3 +1,7 @@
+2009-05-10  Arnim Laeuger  <arniml>
+
+  * doc/UrJTAG.txt: hint for non-standard flash commands
+
 2009-05-09  Rutger Hofman <rfhh>
 
   * configure.ac, **/Makefile.am: Add automake magic to have -Werror except
