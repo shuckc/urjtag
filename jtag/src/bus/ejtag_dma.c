@@ -423,7 +423,7 @@ int ejtag_dma_bus_init( bus_t *bus )
 		chain_shift_data_registers( CHAIN, 1 );
 		timeout--;
 		if (!timeout) break; 
-	} while ( ejctrl->out->data[BrkSt] == 1 );
+	} while ( ejctrl->out->data[BrkSt] == 0 );
 	
 	if (timeout == 0)
 	{

@@ -481,7 +481,7 @@ ejtag_dma_bus_init (urj_bus_t *bus)
         if (!timeout)
             break;
     }
-    while (ejctrl->out->data[BrkSt] == 1);
+    while (ejctrl->out->data[BrkSt] == 0);
 
     if (timeout == 0)
     {
