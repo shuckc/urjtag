@@ -23,8 +23,6 @@
 #ifndef URJ_LOG_H
 #define URJ_LOG_H
 
-#include "sysdep.h"
-
 #include <stdarg.h>
 
 /**

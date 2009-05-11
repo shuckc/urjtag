@@ -25,8 +25,6 @@
 #ifndef URJ_SVF_H
 #define URJ_SVF_H
 
-#include "sysdep.h"
-
 #include <stdint.h>
 #include <stdio.h>
 

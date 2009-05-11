@@ -41,6 +41,7 @@ pkginclude_HEADERS = \
 	gettext.h \
 	jim.h \
 	jtag.h \
+	log.h \
 	part_instruction.h \
 	parport.h \
 	part.h \
@@ -49,7 +50,6 @@ pkginclude_HEADERS = \
 	tap_state.h \
 	tap.h \
 	svf.h \
-	sysdep.h \
 	types.h \
 	urjtag.h \
 	usbconn.h \
@@ -57,3 +57,5 @@ pkginclude_HEADERS = \
 	usbconn/libusb.h \
 	xpcu.h
 
+noinst_HEADERS = \
+	sysdep.h
