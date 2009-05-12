@@ -48,7 +48,7 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
     int print_progress = 0;
     uint32_t ref_freq = 0;
     urj_log_level_t old_log_level = urj_log_state.level;
-    int result;
+    int result = URJ_STATUS_OK;
 
     num_params = urj_cmd_params (params);
     if (num_params < 2)
@@ -72,9 +72,7 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
 
         if ((SVF_FILE = fopen (params[1], "r")) != NULL)
         {
-            if (urj_svf_run (chain, SVF_FILE, stop, ref_freq))
-                result = URJ_STATUS_OK;
-            else
+            if (! urj_svf_run (chain, SVF_FILE, stop, ref_freq))
                 result = URJ_STATUS_FAIL;
 
             fclose (SVF_FILE);
