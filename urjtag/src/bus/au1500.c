@@ -124,14 +124,14 @@ au1500_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
  *
  */
 static void
-au1500_bus_printinfo (urj_bus_t *bus)
+au1500_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus)
 {
     int i;
 
     for (i = 0; i < bus->chain->parts->len; i++)
         if (bus->part == bus->chain->parts->parts[i])
             break;
-    printf (_("AU1500 compatible bus driver via BSR (JTAG part No. %d)\n"),
+    urj_log (ll, _("AU1500 compatible bus driver via BSR (JTAG part No. %d)\n"),
             i);
 }
 

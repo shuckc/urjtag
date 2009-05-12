@@ -38,6 +38,7 @@ typedef char wchar_t;
 # define wcslen(str) strlen(str)
 #endif
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/bus.h>
@@ -54,25 +55,31 @@ typedef char wchar_t;
 static int
 cmd_print_run (urj_chain_t *chain, char *params[])
 {
-    char format[128];
+#define FORMAT_LENGTH   128
+    char format[FORMAT_LENGTH];
 #if HAVE_SWPRINTF
-    wchar_t wformat[128];
+    wchar_t wformat[FORMAT_LENGTH];
 #endif /* HAVE_SWPRINTF */
-    wchar_t wheader[128];
-    char header[128];
+    wchar_t wheader[FORMAT_LENGTH];
+    char header[FORMAT_LENGTH];
     int i;
     int noheader = 0;
 
     if (urj_cmd_params (params) > 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be <= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     if (!chain->parts)
     {
-        printf (_("Run \"detect\" first.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, "Run \"detect\" first");
+        return URJ_STATUS_FAIL;
     }
 
     if (urj_cmd_params (params) == 2)
@@ -83,7 +90,7 @@ cmd_print_run (urj_chain_t *chain, char *params[])
         if (strcasecmp (params[1], "signals") == 0)
         {
 
-            printf ("Signals:\n");
+            urj_log (URJ_LOG_LEVEL_NORMAL, "Signals:\n");
             urj_part_t *part;
             urj_part_signal_t *s;
             part = chain->parts->parts[chain->active_part];
@@ -91,22 +98,24 @@ cmd_print_run (urj_chain_t *chain, char *params[])
             {
                 urj_part_salias_t *sa;
                 if (s->pin)
-                    printf ("%s %s", s->name, s->pin);
+                    urj_log (URJ_LOG_LEVEL_NORMAL, "%s %s", s->name, s->pin);
                 else
-                    printf ("%s", s->name);
+                    urj_log (URJ_LOG_LEVEL_NORMAL, "%s", s->name);
                 if (s->input)
-                    printf ("\tinput=%s", s->input->name);
+                    urj_log (URJ_LOG_LEVEL_NORMAL, "\tinput=%s",
+                             s->input->name);
                 if (s->output)
-                    printf ("\toutput=%s", s->output->name);
+                    urj_log (URJ_LOG_LEVEL_NORMAL, "\toutput=%s", 
+                             s->output->name);
 
                 for (sa = part->saliases; sa != NULL; sa = sa->next)
                 {
                     if (s == sa->signal)
-                        printf ("\tsalias=%s", sa->name);
+                        urj_log (URJ_LOG_LEVEL_NORMAL, "\tsalias=%s", sa->name);
                 }
-                printf ("\n");
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\n");
             }
-            return (1);
+            return URJ_STATUS_OK;
         }
 
         if (strcasecmp (params[1], "instructions") == 0)
@@ -114,79 +123,90 @@ cmd_print_run (urj_chain_t *chain, char *params[])
             urj_part_t *part;
             urj_part_instruction_t *inst;
 
-            snprintf (format, 128, _(" Active %%-%ds %%-%ds"),
+            snprintf (format, sizeof format, _(" Active %%-%ds %%-%ds\n"),
                       URJ_INSTRUCTION_MAXLEN_INSTRUCTION,
                       URJ_DATA_REGISTER_MAXLEN);
 #if HAVE_SWPRINTF
-            if (mbstowcs (wformat, format, 128) == -1)
+            if (mbstowcs (wformat, format, sizeof format) == -1)
+                // @@@@ RFHH throw urj_error?
                 printf (_("(%d) String conversion failed!\n"), __LINE__);
-            swprintf (wheader, 128, wformat, _("Instruction"), _("Register"));
-            if (wcstombs (header, wheader, 128) == -1)
+            swprintf (wheader, sizeof format, wformat, _("Instruction"), _("Register"));
+            if (wcstombs (header, wheader, sizeof format) == -1)
+                // @@@@ RFHH throw urj_error?
                 printf (_("(%d) String conversion failed!\n"), __LINE__);
 #else /* HAVE_SWPRINTF */
-            snprintf (header, 128, format, _("Instruction"), _("Register"));
-            if (mbstowcs (wheader, header, 128) == -1)
+            snprintf (header, sizeof format, format, _("Instruction"), _("Register"));
+            if (mbstowcs (wheader, header, sizeof format) == -1)
+                // @@@@ RFHH throw urj_error?
                 printf (_("(%d) String conversion failed!\n"), __LINE__);
 #endif /* HAVE_SWPRINTF */
-            puts (header);
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%s", header);
 
             for (i = 0; i < wcslen (wheader); i++)
-                putchar ('-');
-            putchar ('\n');
+                urj_log (URJ_LOG_LEVEL_NORMAL, "%c", '-');
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%c", '\n');
 
-            snprintf (format, 128, _("   %%c    %%-%ds %%-%ds\n"),
+            snprintf (format, sizeof format, _("   %%c    %%-%ds %%-%ds\n"),
                       URJ_INSTRUCTION_MAXLEN_INSTRUCTION,
                       URJ_DATA_REGISTER_MAXLEN);
 
             part = chain->parts->parts[chain->active_part];
             for (inst = part->instructions; inst != NULL; inst = inst->next)
             {
-                printf (format,
-                        inst == part->active_instruction
-                        ? 'X' : ' ', inst->name, inst->data_register->name);
+                urj_log (URJ_LOG_LEVEL_NORMAL, format,
+                         (inst == part->active_instruction) ? 'X' : ' ',
+                         inst->name, inst->data_register->name);
             }
-            return (1);
+            return URJ_STATUS_OK;
         }
     }
 
     if (noheader == 0)
     {
-        snprintf (format, 128, _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds"),
+        snprintf (format, sizeof format,
+                  _(" No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"),
                   URJ_PART_MANUFACTURER_MAXLEN, URJ_PART_PART_MAXLEN,
                   URJ_PART_STEPPING_MAXLEN,
                   URJ_INSTRUCTION_MAXLEN_INSTRUCTION,
                   URJ_DATA_REGISTER_MAXLEN);
 #if HAVE_SWPRINTF
-        if (mbstowcs (wformat, format, 128) == -1)
+        if (mbstowcs (wformat, format, sizeof format) == -1)
+            // @@@@ RFHH throw urj_error?
             printf (_("(%d) String conversion failed!\n"), __LINE__);
-        swprintf (wheader, 128, wformat, _("Manufacturer"), _("Part"),
+        swprintf (wheader, sizeof format, wformat, _("Manufacturer"), _("Part"),
                   _("Stepping"), _("Instruction"), _("Register"));
-        if (wcstombs (header, wheader, 128) == -1)
+        if (wcstombs (header, wheader, sizeof format) == -1)
+            // @@@@ RFHH throw urj_error?
             printf (_("(%d) String conversion failed!\n"), __LINE__);
 #else /* HAVE_SWPRINTF */
-        snprintf (header, 128, format, _("Manufacturer"), _("Part"),
+        snprintf (header, sizeof format, format, _("Manufacturer"), _("Part"),
                   _("Stepping"), _("Instruction"), _("Register"));
-        if (mbstowcs (wheader, header, 128) == -1)
+        if (mbstowcs (wheader, header, sizeof format) == -1)
+            // @@@@ RFHH throw urj_error?
             printf (_("(%d) String conversion failed!\n"), __LINE__);
 #endif /* HAVE_SWPRINTF */
-        puts (header);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "%s", header);
 
         for (i = 0; i < wcslen (wheader); i++)
-            putchar ('-');
-        putchar ('\n');
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%c", '-');
+        urj_log (URJ_LOG_LEVEL_NORMAL, "%c", '\n');
     }
 
     if (urj_cmd_params (params) == 1)
     {
+        int r = URJ_STATUS_OK;
+
         if (chain->parts->len > chain->active_part)
         {
             if (chain->parts->parts[chain->active_part]->alias)
-                printf (_(" %3d %s "), chain->active_part,
-                        chain->parts->parts[chain->active_part]->alias);
+                urj_log (URJ_LOG_LEVEL_NORMAL, _(" %3d %s "),
+                         chain->active_part,
+                         chain->parts->parts[chain->active_part]->alias);
             else
-                printf (_(" %3d "), chain->active_part);
+                urj_log (URJ_LOG_LEVEL_NORMAL, _(" %3d "), chain->active_part);
 
-            urj_part_print (chain->parts->parts[chain->active_part]);
+            urj_part_print (URJ_LOG_LEVEL_NORMAL,
+                            chain->parts->parts[chain->active_part]);
         }
         if (urj_bus != NULL)
         {
@@ -197,56 +217,57 @@ cmd_print_run (urj_chain_t *chain, char *params[])
             for (i = 0; i < urj_buses.len; i++)
                 if (urj_buses.buses[i] == urj_bus)
                     break;
-            printf (_("\nActive bus:\n*%d: "), i);
-            URJ_BUS_PRINTINFO (urj_bus);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("\nActive bus:\n*%d: "), i);
+            URJ_BUS_PRINTINFO (URJ_LOG_LEVEL_NORMAL, urj_bus);
 
             for (a = 0; a < UINT64_C (0x100000000);
                  a = area.start + area.length)
             {
-                if (URJ_BUS_AREA (urj_bus, a, &area) != URJ_STATUS_OK)
+                r = URJ_BUS_AREA (urj_bus, a, &area);
+                if (r != URJ_STATUS_OK)
                 {
-                    printf (_
-                            ("Error in bus area discovery at 0x%08llX\n"),
-                            (long long unsigned int) a);
+                    urj_log (URJ_LOG_LEVEL_NORMAL,
+                             _("Error in bus area discovery at 0x%08llX\n"),
+                             (long long unsigned int) a);
                     break;
                 }
                 if (area.width != 0)
                 {
                     if (area.description != NULL)
-                        printf (_
-                                ("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"),
-                                area.start,
-                                (long long unsigned int) area.length,
-                                area.width, _(area.description));
+                        urj_log (URJ_LOG_LEVEL_NORMAL,
+                                 _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"),
+                                 area.start,
+                                 (long long unsigned int) area.length,
+                                 area.width, _(area.description));
                     else
-                        printf (_
-                                ("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"),
-                                area.start,
-                                (long long unsigned int) area.length,
-                                area.width);
+                        urj_log (URJ_LOG_LEVEL_NORMAL,
+                                 _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"),
+                                 area.start,
+                                 (long long unsigned int) area.length,
+                                 area.width);
                 }
             }
         }
 
-        return 1;
+        return r;
     }
 
     if (strcasecmp (params[1], "chain") == 0)
     {
-        urj_part_parts_print (chain->parts);
-        return 1;
+        urj_part_parts_print (URJ_LOG_LEVEL_NORMAL, chain->parts);
+        return URJ_STATUS_OK;
     }
 
     for (i = 0; i < urj_buses.len; i++)
     {
         if (urj_buses.buses[i] == urj_bus)
-            printf (_("*%d: "), i);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("*%d: "), i);
         else
-            printf (_("%d: "), i);
-        URJ_BUS_PRINTINFO (urj_buses.buses[i]);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("%d: "), i);
+        URJ_BUS_PRINTINFO (URJ_LOG_LEVEL_NORMAL, urj_buses.buses[i]);
     }
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

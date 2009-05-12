@@ -35,7 +35,6 @@ typedef enum urj_error {
     URJ_ERROR_ALREADY,
     URJ_ERROR_OUT_OF_MEMORY,
     URJ_ERROR_NO_CHAIN,
-    URJ_ERROR_NO_ACTIVE_PART,
     URJ_ERROR_NO_ACTIVE_INSTRUCTION,
     URJ_ERROR_NO_DATA_REGISTER,
     URJ_ERROR_INVALID,
@@ -48,6 +47,8 @@ typedef enum urj_error {
     URJ_ERROR_SYNTAX,
 
     URJ_ERROR_IO,                               /**< I/O error from OS */
+
+    URJ_ERROR_BUS,
 
     URJ_ERROR_FLASH,
     URJ_ERROR_FLASH_DETECT,
@@ -64,6 +65,7 @@ typedef enum urj_error {
  */
 typedef struct urj_error_state {
     urj_error_t         errnum;                 /**< error number */
+    int                 sys_errno;              /**< errno if URJ_ERROR_IO */
     const char         *file;                   /**< file where error is set */
     const char         *function;               /**< function --,,-- */
     int                 line;                   /**< line no --,,-- */
@@ -100,6 +102,38 @@ extern const char *urj_error_string (urj_error_t error);
             urj_log (URJ_LOG_LEVEL_ERROR, "\n"); \
         } \
     } while (0)
+
+#define urj_error_msg_append(...) \
+    do { \
+        if (urj_error_state.errnum == URJ_ERROR_OK) \
+            snprintf (urj_error_state.msg, sizeof urj_error_state.msg, \
+                      __VA_ARGS__); \
+        else \
+            snprintf (urj_error_state.msg + strlen(urj_error_state.msg), \
+                      sizeof urj_error_state.msg \
+                          - strlen(urj_error_state.msg), \
+                      __VA_ARGS__); \
+    } while (0)
+
+/**
+ * Set I/O error state: do as urj_error_set, but also store errno in
+ * #urj_error_state and then reset errno.
+ *
+ * @param e urj_error_t value
+ * @param ... consists of a printf argument set. It needs to start with a
+ *      const char *fmt, followed by arguments used by fmt.
+ */
+#define urj_error_IO_set(e, ...) \
+    do { \
+        urj_error_set (e, __VA_ARGS__); \
+        urj_error_state.sys_errno = errno; \
+        errno = 0; \
+    } while (0)
+
+/**
+ * The error number
+ */
+urj_error_t urj_error_get (void);
 
 /**
  * Reset the error state.

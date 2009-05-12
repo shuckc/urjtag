@@ -41,26 +41,27 @@ cmd_bus_run (urj_chain_t *chain, char *params[])
     unsigned int n;
 
     if (urj_cmd_params (params) != 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     if (!chain->parts)
     {
-        printf (_("Run \"detect\" first.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, "no parts. Run '%s' first",
+                       "detect");
+        return URJ_STATUS_FAIL;
     }
 
-    if (urj_cmd_get_number (params[1], &n))
-        return -1;
+    if (urj_cmd_get_number (params[1], &n) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
-    if (urj_bus_buses_set (n) != URJ_STATUS_OK)
-    {
-        urj_error_reset();
-    }
-
-    return 1;
+    return urj_bus_buses_set (n);
 }
 
 static void

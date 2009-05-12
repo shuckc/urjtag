@@ -25,19 +25,7 @@
 
 #include <stdarg.h>
 
-/**
- * Log levels
- */
-typedef enum urj_log_level {
-    URJ_LOG_LEVEL_ALL,          /**< every single bit as it is transmitted */
-    URJ_LOG_LEVEL_COMM,         /**< low level communication details */
-    URJ_LOG_LEVEL_DEBUG,        /**< more details of interest for developers */
-    URJ_LOG_LEVEL_DETAIL,       /**< verbose output */
-    URJ_LOG_LEVEL_NORMAL,       /**< just noteworthy info */
-    URJ_LOG_LEVEL_WARNING,      /**< unmissable warnings */
-    URJ_LOG_LEVEL_ERROR,        /**< only fatal errors */
-    URJ_LOG_LEVEL_SILENT,       /**< suppress logging output */
-} urj_log_level_t;
+#include "types.h"
 
 /**
  * Log state.

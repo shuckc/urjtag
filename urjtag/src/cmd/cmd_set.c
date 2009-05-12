@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/part.h>
 #include <urjtag/chain.h>
 #include <urjtag/bssignal.h>
@@ -44,42 +45,62 @@ cmd_set_run (urj_chain_t *chain, char *params[])
     urj_part_t *part;
 
     if (urj_cmd_params (params) < 4 || urj_cmd_params (params) > 5)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be 4 or 5, not %d",
+                       params[0], urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (strcasecmp (params[1], "signal") != 0)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: second parameter must be '%s'",
+                       params[0], params[1]);
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
     /* direction */
     if (strcasecmp (params[3], "in") != 0
         && strcasecmp (params[3], "out") != 0)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: DIR parameter must be 'in' or 'out', not '%s'",
+                       params[0], params[3]);
+        return URJ_STATUS_FAIL;
+    }
 
     dir = (strcasecmp (params[3], "in") == 0) ? 0 : 1;
 
     if (dir)
     {
-        if (urj_cmd_get_number (params[4], &data))
-            return -1;
+        if (urj_cmd_get_number (params[4], &data) != URJ_STATUS_OK)
+            return URJ_STATUS_FAIL;
         if (data > 1)
-            return -1;
+        {
+            urj_error_set (URJ_ERROR_SYNTAX,
+                           "%s: DATA parameter must be '0' or '1', not '%s'",
+                           params[0], params[4]);
+            return URJ_STATUS_FAIL;
+        }
     }
 
     s = urj_part_find_signal (part, params[2]);
     if (!s)
     {
-        printf (_("signal '%s' not found\n"), params[2]);
-        return 1;
+        urj_error_set (URJ_ERROR_NOTFOUND, _("signal '%s' not found"),
+                       params[2]);
+        return URJ_STATUS_FAIL;
     }
-    urj_part_set_signal (part, s, dir, data);
-
-    return 1;
+    
+    return urj_part_set_signal (part, s, dir, data);
 }
 
 static void

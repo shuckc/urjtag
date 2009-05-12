@@ -29,6 +29,7 @@
 #include <string.h>
 //#include <stdlib.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/bssignal.h>
@@ -46,41 +47,54 @@ cmd_test_run (urj_chain_t *chain, char *params[])
     urj_part_t *part;
 
     if (urj_cmd_params (params) != 4)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 4, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (strcasecmp (params[1], "signal") != 0)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: parameter[%d] should be '%s', not '%s'",
+                       params[0], 1, "signal", params[1]);
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
     s = urj_part_find_signal (part, params[2]);
     if (!s)
     {
-        printf (_("signal '%s' not found\n"), params[2]);
-        return 1;
+        urj_error_set (URJ_ERROR_NOTFOUND, _("signal '%s' not found"),
+                       params[2]);
+        return URJ_STATUS_FAIL;
     }
 
     /* values 0,1,X since X is not a number, the following failure exits clean
      * and doesnt test anything, as it should.
      */
-    if (urj_cmd_get_number (params[3], &i))
-        return 1;
+    if (urj_cmd_get_number (params[3], &i) != URJ_STATUS_OK)
+        return URJ_STATUS_OK;
 
     data = urj_part_get_signal (part, s);
-    if (data != -1)
+    if (data == -1)
+        return URJ_STATUS_FAIL;
+
+    if (data != i)
     {
-        if (data != i)
-        {
-            printf (_("<FAIL>%s = %d\n"), params[2], data);
-            return -99;
-        }
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("<FAIL>%s = %d"), params[2], data);
+        return URJ_STATUS_FAIL;
     }
-    return 1;
+
+    return URJ_STATUS_OK;
 }
 
 static void

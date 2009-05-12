@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/tap.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
@@ -39,32 +40,39 @@ cmd_addpart_run (urj_chain_t *chain, char *params[])
     unsigned int len;
 
     if (urj_cmd_params (params) != 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (urj_cmd_get_number (params[1], &len))
-        return -1;
+    if (urj_cmd_get_number (params[1], &len) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
-    // @@@@ RFHH check result
-    urj_tap_manual_add (chain, len);
+    if (urj_tap_manual_add (chain, len) == -1)
+        return URJ_STATUS_FAIL;
 
+    // @@@@ RFHH this cannot be
     if (chain->parts == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
+    // @@@@ RFHH this cannot be
     if (chain->parts->len == 0)
     {
         urj_part_parts_free (chain->parts);
         chain->parts = NULL;
+        return URJ_STATUS_FAIL;
     }
 
     /* @@@@ RFHH check result */
     urj_part_parts_set_instruction (chain->parts, "BYPASS");
-    /* @@@@ RFHH check result */
     urj_tap_chain_shift_instructions (chain);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 

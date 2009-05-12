@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 
+#include <urjtag/error.h>
 #include <urjtag/tap.h>
 
 #include <urjtag/cmd.h>
@@ -36,24 +37,23 @@ cmd_idcode_run (urj_chain_t *chain, char *params[])
 {
     unsigned int bytes = 0;
 
-    if (urj_cmd_params (params) == 1)
+    if (urj_cmd_params (params) > 2)
     {
-        bytes = 0;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be <= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
     }
 
-    else if (urj_cmd_params (params) > 2)
-        return -1;
+    if (urj_cmd_params (params) == 2)
+        if (urj_cmd_get_number (params[1], &bytes) != URJ_STATUS_OK)
+            return URJ_STATUS_FAIL;
 
-    else if (urj_cmd_get_number (params[1], &bytes))
-        return -1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
-
-    printf (_("Reading %d bytes if idcode\n"), bytes);
-    // @@@@ RFHH check return value
-    urj_tap_idcode (chain, bytes);
-    return 1;
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Reading %d bytes of idcode\n"), bytes);
+    return urj_tap_idcode (chain, bytes);
 }
 
 static void

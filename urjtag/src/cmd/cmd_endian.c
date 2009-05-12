@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
@@ -37,29 +38,38 @@ static int
 cmd_endian_run (urj_chain_t *chain, char *params[])
 {
     if (urj_cmd_params (params) > 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be <= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (!params[1])
     {
         if (urj_big_endian)
-            printf (_("Endianess for external files: big\n"));
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("Endianess for external files: big\n"));
         else
-            printf (_("Endianess for external files: little\n"));
-        return 1;
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("Endianess for external files: little\n"));
+        return URJ_STATUS_OK;
     }
 
     if (strcasecmp (params[1], "little") == 0)
     {
         urj_big_endian = 0;
-        return 1;
+        return URJ_STATUS_OK;
     }
     if (strcasecmp (params[1], "big") == 0)
     {
         urj_big_endian = 1;
-        return 1;
+        return URJ_STATUS_OK;
     }
 
-    return -1;
+    urj_error_set (URJ_ERROR_SYNTAX,
+                   "endianness must be 'little' or 'big', not '%s'", params[1]);
+    return URJ_STATUS_FAIL;
 }
 
 static void

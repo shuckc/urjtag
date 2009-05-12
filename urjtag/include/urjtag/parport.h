@@ -59,7 +59,9 @@ struct urj_parport
 int urj_tap_parport_open (urj_parport_t *port);
 int urj_tap_parport_close (urj_parport_t *port);
 int urj_tap_parport_set_data (urj_parport_t *port, uint8_t data);
+/** @return data on success; -1 on error */
 int urj_tap_parport_get_data (urj_parport_t *port);
+/** @return status on success; -1 on error */
 int urj_tap_parport_get_status (urj_parport_t *port);
 int urj_tap_parport_set_control (urj_parport_t *port, uint8_t data);
 

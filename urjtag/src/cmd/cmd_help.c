@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/cmd.h>
 
 #include "cmd.h"
@@ -36,21 +37,26 @@ cmd_help_run (urj_chain_t *chain, char *params[])
 {
     int i;
 
-    /* short description generation */
-    if (!params[1])
+    if (urj_cmd_params (params) > 2)
     {
-        printf (_("Command list:\n\n"));
-        for (i = 0; urj_cmds[i]; i++)
-            printf (_("%-13s %s\n"), urj_cmds[i]->name,
-                    urj_cmds[i]->desc ? _(urj_cmds[i]->desc) :
-                    _("(no description available)"));
-        printf (_
-                ("\nType \"help COMMAND\" for details about a particular command.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be <= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
     }
 
-    if (params[2])
-        return -1;
+    /* short description generation */
+    if (urj_cmd_params (params) == 1)
+    {
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Command list:\n\n"));
+        for (i = 0; urj_cmds[i]; i++)
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("%-13s %s\n"), urj_cmds[i]->name,
+                     urj_cmds[i]->desc ? _(urj_cmds[i]->desc) :
+                     _("(no description available)"));
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("\nType \"help COMMAND\" for details about a particular command.\n"));
+        return URJ_STATUS_OK;
+    }
 
     /* search and print help for a particular command */
     for (i = 0; urj_cmds[i]; i++)
@@ -58,12 +64,12 @@ cmd_help_run (urj_chain_t *chain, char *params[])
         {
             if (urj_cmds[i]->help)
                 urj_cmds[i]->help ();
-            return 1;
+            return URJ_STATUS_OK;
         }
 
-    printf (_("%s: unknown command\n"), params[1]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("%s: unknown command\n"), params[1]);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

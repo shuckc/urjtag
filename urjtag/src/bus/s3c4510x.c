@@ -182,15 +182,14 @@ s3c4510_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
  *
  */
 static void
-s3c4510_bus_printinfo (urj_bus_t *bus)
+s3c4510_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus)
 {
     int i;
 
     for (i = 0; i < bus->chain->parts->len; i++)
         if (bus->part == bus->chain->parts->parts[i])
             break;
-    printf (_
-            ("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%ubit\n"),
+    urj_log (ll, _("Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%ubit\n"),
             i, dbus_width);
 }
 
@@ -236,12 +235,10 @@ s3c4510_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     area->length = UINT64_C (0x100000000);
 
     // endian = urj_part_get_signal( bus->part, urj_part_find_signal( bus->part, "LITTLE" ));
-    b0size0 =
-        urj_part_get_signal (bus->part,
-                             urj_part_find_signal (bus->part, "B0SIZE0"));
-    b0size1 =
-        urj_part_get_signal (bus->part,
-                             urj_part_find_signal (bus->part, "B0SIZE1"));
+    b0size0 = urj_part_get_signal (bus->part,
+                                   urj_part_find_signal (bus->part, "B0SIZE0"));
+    b0size1 = urj_part_get_signal (bus->part,
+                                   urj_part_find_signal (bus->part, "B0SIZE1"));
 
     switch ((b0size1 << 1) | b0size0)
     {

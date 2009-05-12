@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/bsdl.h>
 #include <urjtag/chain.h>
 #include <urjtag/cmd.h>
@@ -41,68 +42,71 @@ cmd_bsdl_run (urj_chain_t *chain, char *params[])
     urj_bsdl_globs_t *globs = &(chain->bsdl);
 
     num_params = urj_cmd_params (params);
-    if (num_params >= 2)
+    if (num_params < 2 || num_params > 3)
     {
-        if (strcmp (params[1], "test") == 0)
-        {
-            int debug_save;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d or %d, not %d",
+                       params[0], 2, 3, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-            debug_save = globs->debug;
-            globs->debug = 1;
-            if (num_params == 3)
-            {
-                result =
-                    urj_bsdl_read_file (chain, params[2], URJ_BSDL_MODE_TEST,
-                                        NULL) >= 0 ? 1 : -1;
-            }
-            else if (num_params == 2)
-            {
-                urj_bsdl_scan_files (chain, NULL, URJ_BSDL_MODE_TEST);
-                result = 1;
-            }
-            globs->debug = debug_save;
-        }
+    if (strcmp (params[1], "test") == 0)
+    {
+        int debug_save;
 
-        if (strcmp (params[1], "dump") == 0)
-        {
-            if (num_params == 3)
-            {
-                result =
-                    urj_bsdl_read_file (chain, params[2], URJ_BSDL_MODE_DUMP,
-                                        NULL) >= 0 ? 1 : -1;
-            }
-            else if (num_params == 2)
-            {
-                urj_bsdl_scan_files (chain, NULL, URJ_BSDL_MODE_DUMP);
-                result = 1;
-            }
-        }
-
+        debug_save = globs->debug;
+        globs->debug = 1;
         if (num_params == 3)
         {
-            if (strcmp (params[1], "path") == 0)
+            result = urj_bsdl_read_file (chain, params[2], URJ_BSDL_MODE_TEST,
+                                         NULL) >= 0 ? 1 : -1;
+        }
+        else if (num_params == 2)
+        {
+            urj_bsdl_scan_files (chain, NULL, URJ_BSDL_MODE_TEST);
+            result = 1;
+        }
+        globs->debug = debug_save;
+    }
+
+    if (strcmp (params[1], "dump") == 0)
+    {
+        if (num_params == 3)
+        {
+            result = urj_bsdl_read_file (chain, params[2], URJ_BSDL_MODE_DUMP,
+                                         NULL) >= 0 ? 1 : -1;
+        }
+        else if (num_params == 2)
+        {
+            urj_bsdl_scan_files (chain, NULL, URJ_BSDL_MODE_DUMP);
+            result = 1;
+        }
+    }
+
+    if (num_params == 3)
+    {
+        if (strcmp (params[1], "path") == 0)
+        {
+            urj_bsdl_set_path (chain, params[2]);
+            result = 1;
+        }
+
+        if (strcmp (params[1], "debug") == 0)
+        {
+            if (strcmp (params[2], "on") == 0)
             {
-                urj_bsdl_set_path (chain, params[2]);
+                globs->debug = 1;
                 result = 1;
             }
-
-            if (strcmp (params[1], "debug") == 0)
+            if (strcmp (params[2], "off") == 0)
             {
-                if (strcmp (params[2], "on") == 0)
-                {
-                    globs->debug = 1;
-                    result = 1;
-                }
-                if (strcmp (params[2], "off") == 0)
-                {
-                    globs->debug = 0;
-                    result = 1;
-                }
+                globs->debug = 0;
+                result = 1;
             }
         }
     }
 
-    return result;
+    return (result >= 0) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
 }
 
 

@@ -157,6 +157,8 @@ jtag_save_history (void)
 
 #endif /* HAVE_READLINE */
 
+/** @return URJ_STATUS_QUIT on quit command, URJ_STATUS_OK on success,
+ * URJ_STATUS_ERROR on error */
 static int
 jtag_readline_multiple_commands_support (urj_chain_t *chain, char *line)        /* multiple commands should be separated with '::' */
 {
@@ -181,11 +183,16 @@ jtag_readline_multiple_commands_support (urj_chain_t *chain, char *line)        
         }
 
         r = urj_parse_line (chain, line);
+        if (r == URJ_STATUS_FAIL)
+        {
+            urj_log (URJ_LOG_LEVEL_NORMAL, "Error: %s\n", urj_error_describe());
+            urj_error_reset ();
+        }
 
         urj_tap_chain_flush (chain);
 
     }
-    while (nextcmd && r);
+    while (nextcmd && r != URJ_STATUS_MUST_QUIT);
 
     return r;
 }
@@ -200,7 +207,8 @@ jtag_readline_loop (urj_chain_t *chain, const char *prompt)
 #endif
 
     /* Iterate */
-    while (jtag_readline_multiple_commands_support (chain, line))
+    while (jtag_readline_multiple_commands_support (chain, line)
+           != URJ_STATUS_MUST_QUIT)
     {
         free (line);
 
@@ -245,7 +253,8 @@ jtag_readline_loop (urj_chain_t *chain, const char *prompt)
     line[0] = 0;
     do
     {
-        if (!jtag_readline_multiple_commands_support (chain, line))
+        if (jtag_readline_multiple_commands_support (chain, line)
+            == URJ_STATUS_MUST_QUIT)
             break;
         printf ("%s", prompt);
         fflush (stdout);
@@ -274,7 +283,7 @@ jtag_parse_rc (urj_chain_t *chain)
     strcat (file, "/");
     strcat (file, RCFILE);
 
-    go = urj_parse_file (chain, file);
+    go = urj_parse_file (URJ_LOG_LEVEL_DETAIL, chain, file);
 
     free (file);
 
@@ -298,7 +307,7 @@ cleanup (urj_chain_t *chain)
 int
 main (int argc, char *const argv[])
 {
-    int go = 0;
+    int go = 1;
     int i;
     int c;
     int norc = 0;
@@ -307,7 +316,7 @@ main (int argc, char *const argv[])
     int quiet = 0;
     urj_chain_t *chain = NULL;
 
-    urj_set_argv0(argv[0]);
+    urj_set_argv0 (argv[0]);
 
     if (geteuid () == 0 && getuid () != 0)
     {
@@ -428,7 +437,7 @@ main (int argc, char *const argv[])
                 return -1;
             }
 
-            go = urj_parse_file (chain, argv[i]);
+            go = urj_parse_file (URJ_LOG_LEVEL_NORMAL, chain, argv[i]);
             cleanup (chain);
             if (go < 0)
             {
@@ -450,7 +459,7 @@ main (int argc, char *const argv[])
             printf (_("Out of memory\n"));
             return -1;
         }
-        urj_parse_stream (chain, stdin);
+        urj_parse_stream (URJ_LOG_LEVEL_NORMAL, chain, stdin);
 
         cleanup (chain);
 
@@ -485,7 +494,19 @@ main (int argc, char *const argv[])
     jtag_create_jtagdir ();
 
     /* Parse and execute the RC file */
-    go = norc ? 1 : jtag_parse_rc (chain);
+    if (!norc)
+    {
+        if (jtag_parse_rc (chain) == URJ_STATUS_FAIL)
+        {
+            if (urj_error_get() != URJ_ERROR_IO)
+            {
+                urj_log (URJ_LOG_LEVEL_NORMAL, "Error: %s\n",
+                         urj_error_describe());
+                go = 0;
+            }
+            urj_error_reset();
+        }
+    }
 
 #ifdef HAVE_LIBREADLINE
 #ifdef HAVE_READLINE_COMPLETION

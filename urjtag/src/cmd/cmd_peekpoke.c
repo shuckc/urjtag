@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include <urjtag/error.h>
 #include <urjtag/bus.h>
 
 #include <urjtag/cmd.h>
@@ -43,23 +44,28 @@ cmd_peek_run (urj_chain_t *chain, char *params[])
     /* urj_bus_t *bus = part_get_active_bus(chain); */
 
     if ((pars = urj_cmd_params (params)) < 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (!urj_bus)
     {
-        printf (_("Error: Bus missing.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, _("Bus missing"));
+        return URJ_STATUS_FAIL;
     }
     if (!urj_bus->driver)
     {
-        printf (_("Error: Bus driver missing.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, _("Bus driver missing"));
+        return URJ_STATUS_FAIL;
     }
 
     do
     {
-        if (urj_cmd_get_number (params[j], &adr))
-            return -1;
+        if (urj_cmd_get_number (params[j], &adr) != URJ_STATUS_OK)
+            return URJ_STATUS_FAIL;
 
         URJ_BUS_PREPARE (urj_bus);
         URJ_BUS_AREA (urj_bus, adr, &area);
@@ -69,19 +75,22 @@ cmd_peek_run (urj_chain_t *chain, char *params[])
         {
         case 8:
             val &= 0xff;
-            printf (_("URJ_BUS_READ(0x%08x) = 0x%02X (%i)\n"), adr, val, val);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("URJ_BUS_READ(0x%08x) = 0x%02X (%i)\n"), adr, val, val);
             break;
         case 16:
             val &= 0xffff;
-            printf (_("URJ_BUS_READ(0x%08x) = 0x%04X (%i)\n"), adr, val, val);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("URJ_BUS_READ(0x%08x) = 0x%04X (%i)\n"), adr, val, val);
             break;
         default:
-            printf (_("URJ_BUS_READ(0x%08x) = 0x%08X (%i)\n"), adr, val, val);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("URJ_BUS_READ(0x%08x) = 0x%08X (%i)\n"), adr, val, val);
         }
     }
     while (++j != pars);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -112,32 +121,37 @@ cmd_poke_run (urj_chain_t *chain, char *params[])
     int k = 1, pars = urj_cmd_params (params);
 
     if (pars < 3 || !(pars & 1))
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d and odd-numbered, not %d",
+                       params[0], 3, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (!urj_bus)
     {
-        printf (_("Error: Bus missing.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, _("Bus missing"));
+        return URJ_STATUS_FAIL;
     }
     if (!urj_bus->driver)
     {
-        printf (_("Error: Bus driver missing.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, _("Bus driver missing"));
+        return URJ_STATUS_FAIL;
     }
 
     URJ_BUS_PREPARE (urj_bus);
 
     while (k < pars)
     {
-        if (urj_cmd_get_number (params[k], &adr)
+        if (urj_cmd_get_number (params[k], &adr) != URJ_STATUS_OK
             || urj_cmd_get_number (params[k + 1], &val))
-            return -1;
+            return URJ_STATUS_FAIL;
         URJ_BUS_AREA (urj_bus, adr, &area);
         URJ_BUS_WRITE (urj_bus, adr, val);
         k += 2;
     }
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

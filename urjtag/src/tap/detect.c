@@ -505,7 +505,7 @@ urj_tap_detect (urj_chain_t *chain)
     urj_bus_buses_free ();
     urj_part_parts_free (chain->parts);
     chain->parts = NULL;
-    if (urj_tap_detect_parts (chain, urj_get_data_dir ()) != URJ_STATUS_OK)
+    if (urj_tap_detect_parts (chain, urj_get_data_dir ()) == -1)
         // retain error state
         return URJ_STATUS_FAIL;
     if (!chain->parts)

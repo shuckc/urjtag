@@ -40,24 +40,23 @@ cmd_detectflash_run (urj_chain_t *chain, char *params[])
     uint32_t adr;
 
     if (urj_cmd_params (params) != 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (!urj_bus)
     {
-        printf (_("Error: Bus driver missing.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, _("Bus missing"));
+        return URJ_STATUS_FAIL;
     }
 
-    if (urj_cmd_get_number (params[1], &adr))
-        return -1;
+    if (urj_cmd_get_number (params[1], &adr) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
-    if (urj_flash_detectflash (URJ_LOG_LEVEL_NORMAL, urj_bus, adr) != URJ_STATUS_OK)
-    {
-        printf("detect flash error: %s\n", urj_error_describe());
-        urj_error_reset();
-    }
-
-    return 1;
+    return urj_flash_detectflash (URJ_LOG_LEVEL_NORMAL, urj_bus, adr);
 }
 
 static void

@@ -78,22 +78,16 @@ urj_log (urj_log_level_t level, const char *fmt, ...)
     return r;
 }
 
+urj_error_t
+urj_error_get (void)
+{
+    return urj_error_state.errnum;
+}
+
 void
 urj_error_reset (void)
 {
     urj_error_state.errnum = URJ_ERROR_OK;
-}
-
-const char *
-urj_error_describe (void)
-{
-    static char msg[URJ_ERROR_MSG_LEN + 1024 + 256 + 20];
-
-    snprintf (msg, sizeof msg, "%s:%d %s(): %s", urj_error_state.file,
-              urj_error_state.line, urj_error_state.function,
-              urj_error_state.msg);
-
-    return msg;
 }
 
 const char *
@@ -105,7 +99,6 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_ALREADY:             return "already defined";
     case URJ_ERROR_OUT_OF_MEMORY:       return "out of memory";
     case URJ_ERROR_NO_CHAIN:            return "no chain";
-    case URJ_ERROR_NO_ACTIVE_PART:      return "no active part";
     case URJ_ERROR_NO_ACTIVE_INSTRUCTION: return "no active instruction";
     case URJ_ERROR_NO_DATA_REGISTER:    return "no data register";
     case URJ_ERROR_INVALID:             return "invalid parameter";
@@ -119,6 +112,8 @@ urj_error_string (urj_error_t err)
 
     case URJ_ERROR_IO:                  return "I/O error from OS";
 
+    case URJ_ERROR_BUS:                 return "bus";
+
     case URJ_ERROR_FLASH:               return "flash";
     case URJ_ERROR_FLASH_DETECT:        return "flash detect";
     case URJ_ERROR_FLASH_PROGRAM:       return "flash program";
@@ -127,4 +122,17 @@ urj_error_string (urj_error_t err)
     }
 
     return "UNDEFINED ERROR";
+}
+
+const char *
+urj_error_describe (void)
+{
+    static char msg[URJ_ERROR_MSG_LEN + 1024 + 256 + 20];
+
+    snprintf (msg, sizeof msg, "%s:%d %s() %s: %s",
+              urj_error_state.file, urj_error_state.line,
+              urj_error_state.function,
+              urj_error_string (urj_error_state.errnum), urj_error_state.msg);
+
+    return msg;
 }

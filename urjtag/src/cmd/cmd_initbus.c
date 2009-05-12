@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/bus.h>
@@ -41,13 +42,18 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
     int i;
 
     if (urj_cmd_params (params) < 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     if (urj_tap_chain_active_part (chain) == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
     for (i = 0; urj_bus_drivers[i] != NULL; i++)
     {
@@ -58,27 +64,29 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
                                                            params);
             if (abus == NULL)
             {
-                printf (_("bus alloc/attach failed!\n"));
-                return 1;
+                // @@@@ RFHH need to sanitize the bus module
+                urj_error_set (URJ_ERROR_BUS, _("bus alloc/attach failed"));
+                return URJ_STATUS_FAIL;
             }
             urj_bus_buses_add (abus);
+            // @@@@ RFHH need to bail out on error ?
             if (URJ_BUS_INIT (abus) != URJ_STATUS_OK)
                 printf (_("bus initialization failed!\n"));
 
             for (i = 0; i < urj_buses.len; i++)
                 if (urj_buses.buses[i] == urj_bus)
                     break;
+            // @@@@ RFHH no need to handle the case of bus not found ?
             if (i != urj_buses.len - 1)
                 printf (_("Initialized bus %d, active bus %d\n"),
                         urj_buses.len - 1, i);
 
-            return 1;
+            return URJ_STATUS_OK;
         }
     }
 
-    printf (_("Unknown bus: %s\n"), params[1]);
-
-    return 1;
+    urj_error_set (URJ_ERROR_NOTFOUND, _("Unknown bus: %s"), params[1]);
+    return URJ_STATUS_FAIL;
 }
 
 static void

@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 
@@ -40,6 +41,14 @@ cmd_part_run (urj_chain_t *chain, char *params[])
 {
     unsigned int n;
 
+    if (urj_cmd_params (params) > 3)
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be <= %d, not %d",
+                       params[0], 3, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
+
 /* part alias U1 (3 params) */
     if (urj_cmd_params (params) == 3)
     {
@@ -48,36 +57,39 @@ cmd_part_run (urj_chain_t *chain, char *params[])
             urj_part_t *part = urj_tap_chain_active_part (chain);
 
             if (part == NULL)
-                // retain error state
-                return 1;
+                return URJ_STATUS_FAIL;
 
             part->alias = strdup (params[2]);
             if (part->alias == NULL)
             {
                 urj_error_set(URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails",
                               params[2]);
-                return -1;
+                return URJ_STATUS_FAIL;
             }
 
-            return 1;
+            return URJ_STATUS_OK;
         }
     }
 
-
     if (urj_cmd_params (params) != 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d or %d, not %d",
+                       params[0], 2, 3, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     if (!chain->parts)
     {
-        printf (_("Run \"detect\" first.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, "Run \"detect\" first");
+        return URJ_STATUS_FAIL;
     }
 
 /* Search for alias too djf */
-    if (urj_cmd_get_number (params[1], &n))
+    if (urj_cmd_get_number (params[1], &n) != URJ_STATUS_OK)
     {
 
         /* Search all parts to check their aliases */
@@ -91,25 +103,35 @@ cmd_part_run (urj_chain_t *chain, char *params[])
                 break;
         }
         if (i < chain->parts->len)
+        {
             n = i;
+        }
         else
-            return -1;
+        {
+            urj_error_set (URJ_ERROR_NOTFOUND, "part '%s'", params[1]);
+            return URJ_STATUS_FAIL;
+        }
     }
 
     if (n >= chain->parts->len)
     {
-        printf (_("%s: invalid part number\n"), "part");
-        return 1;
+        urj_error_set (URJ_ERROR_INVALID,
+                       _("%s: invalid part number %d, max %d"), "part",
+                       n, chain->parts->len);
+        return URJ_STATUS_FAIL;
     }
 
     chain->active_part = n;
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void
 cmd_part_help (void)
 {
+    // @@@@ RFHH this doesn't reflect input syntax:
+    // jtag> part PART
+    // jtag> part alias ALIAS
     printf (_("Usage: %s PART\n"
               "Change active part for current JTAG chain.\n"
               "\n" "PART          part number | alias\n"), "part");

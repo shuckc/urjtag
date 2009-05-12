@@ -71,7 +71,9 @@ int urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
                                              int capture_output, int capture,
                                              int chain_exit);
 void urj_tap_chain_flush (urj_chain_t *chain);
+/** @return 0 or 1 on success; -1 on failure */
 int urj_tap_chain_set_pod_signal (urj_chain_t *chain, int mask, int val);
+/** @return 0 or 1 on success; -1 on failure */
 int urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig);
 /**
  * Check whether a chain has an active part

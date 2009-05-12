@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/pod.h>
 
@@ -45,18 +46,30 @@ cmd_pod_run (urj_chain_t *chain, char *params[])
     int val = 0;
 
     if ((i = urj_cmd_params (params)) < 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return -1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     for (j = 1; j < i; j++)
     {
         char *eq = strrchr (params[j], '=');
         if (!eq)
-            return -1;
+        {
+            urj_error_set (URJ_ERROR_SYNTAX,
+                           "parameter format should be 'SIGNAL=#', not '%s'",
+                           params[j]);
+            return URJ_STATUS_FAIL;
+        }
+
         urj_pod_sigsel_t it = URJ_POD_CS_NONE;
         int n = strlen (params[j]);
+
         if (n > 4 && (strncasecmp (params[j], "tck", 3) == 0))
             it = URJ_POD_CS_TCK;
         else if (n > 4 && (strncasecmp (params[j], "tms", 3) == 0))
@@ -68,15 +81,21 @@ cmd_pod_run (urj_chain_t *chain, char *params[])
         else if (n > 6 && (strncasecmp (params[j], "reset", 3) == 0))
             it = URJ_POD_CS_RESET;
         if (it == URJ_POD_CS_NONE)
-            return -1;
+        {
+            urj_error_set (URJ_ERROR_SYNTAX, "illegal signal name in '%s'",
+                           params[j]);
+            return URJ_STATUS_FAIL;
+        }
+
         mask |= it;
         if (atoi (eq + 1) != 0)
             val |= it;
     }
 
-    urj_tap_chain_set_pod_signal (chain, mask, val);
+    if (urj_tap_chain_set_pod_signal (chain, mask, val) == -1)
+        return URJ_STATUS_FAIL;
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

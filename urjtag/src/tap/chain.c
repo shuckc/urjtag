@@ -318,14 +318,14 @@ urj_tap_chain_active_part (urj_chain_t *chain)
 
     if (!chain->parts)
     {
-        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
-                       _("Run \"detect\" first.\n"));
+        urj_error_set (URJ_ERROR_NOTFOUND, _("Run \"detect\" first"));
         return NULL;
     }
     if (chain->active_part >= chain->parts->len)
     {
-        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
-                       _("%s: no active part\n"), "signal");
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("active part no %d exceeds chain length %d"),
+                       chain->active_part, chain->parts->len);
         return NULL;
     }
 

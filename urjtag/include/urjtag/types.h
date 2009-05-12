@@ -41,8 +41,22 @@ typedef struct urj_data_register urj_data_register_t;
 typedef struct urj_bsbit urj_bsbit_t;
 typedef struct urj_tap_register urj_tap_register_t;
 
+/**
+ * Log levels
+ */
+typedef enum urj_log_level {
+    URJ_LOG_LEVEL_ALL,          /**< every single bit as it is transmitted */
+    URJ_LOG_LEVEL_COMM,         /**< low level communication details */
+    URJ_LOG_LEVEL_DEBUG,        /**< more details of interest for developers */
+    URJ_LOG_LEVEL_DETAIL,       /**< verbose output */
+    URJ_LOG_LEVEL_NORMAL,       /**< just noteworthy info */
+    URJ_LOG_LEVEL_WARNING,      /**< unmissable warnings */
+    URJ_LOG_LEVEL_ERROR,        /**< only fatal errors */
+    URJ_LOG_LEVEL_SILENT,       /**< suppress logging output */
+} urj_log_level_t;
+
 #define URJ_STATUS_OK             0
 #define URJ_STATUS_FAIL           1
-#define URJ_STATUS_SYNTAX_ERROR (-1)
+#define URJ_STATUS_MUST_QUIT    (-2)
 
 #endif /* URJ_URJ_TYPES_H */

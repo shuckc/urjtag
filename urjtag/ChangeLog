@@ -1,3 +1,13 @@
+2009-05-12  Rutger Hofman <rfhh>
+
+  * src/cmd/*.c, many more files: have the commands in src/cmd/ return
+    URJ_STATUS_OK on success, URJ_STATUS_FAIL on error, URJ_STATUS_MUST_QUIT
+    at a 'quit' command. The command implementations themselves do not print
+    on error; that is left to the caller, i.e. the application or a file
+    parser.
+    Library commands that produce output (print routines) are equipped with
+    a urj_log_level_t parameter to control their verbosity.
+
 2009-05-11  Arnim Laeuger  <arniml>
 
   * src/bus/ejtag_dma.c (ejtag_dma_bus_init): invert abort condition for break

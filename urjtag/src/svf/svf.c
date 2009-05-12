@@ -1156,11 +1156,13 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     }
     if (chain->parts == NULL)
     {
-        urj_error_set (URJ_ERROR_NO_ACTIVE_PART,
+        urj_error_set (URJ_ERROR_NOTFOUND,
                        _("%s: chain without any parts\n"), "svf");
         return 0;
     }
     priv.part = chain->parts->parts[chain->active_part];
+    // @@@@ RFHH is priv.part allowed to be NULL? if not, we should use
+    // urj_tap_chain_active_part()
 
     /* setup register SDR if not already existing */
     if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))

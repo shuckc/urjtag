@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/part_instruction.h>
@@ -47,26 +48,33 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
     urj_part_instruction_t *active_ir;
 
     if (urj_cmd_params (params) < 1 || urj_cmd_params (params) > 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= 1 and <= 2, not %d",
+                       params[0], urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
     active_ir = part->active_instruction;
     if (active_ir == NULL)
     {
-        printf (_("%s: part without active instruction\n"), "dr");
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("%s: part without active instruction"), "dr");
+        return URJ_STATUS_FAIL;
     }
     dr = active_ir->data_register;
     if (dr == NULL)
     {
-        printf (_("%s: part without active data register\n"), "dr");
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("%s: part without active data register"), "dr");
+        return URJ_STATUS_FAIL;
     }
 
     if (params[1])
@@ -80,14 +88,19 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
             unsigned int bit;
             if (strspn (params[1], "01") != strlen (params[1]))
             {
-                return -1;
+                urj_error_set (URJ_ERROR_SYNTAX,
+                               "bit patterns should be 0s and 1s, not '%s'",
+                               params[1]);
+                return URJ_STATUS_FAIL;
             }
 
             r = dr->in;
             if (r->len != strlen (params[1]))
             {
-                printf (_("%s: register length mismatch\n"), "dr");
-                return 1;
+                urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
+                               _("%s: register length %d mismatch: %d"),
+                               "dr", r->len, strlen (params[1]));
+                return URJ_STATUS_FAIL;
             }
             for (bit = 0; params[1][bit]; bit++)
             {
@@ -102,9 +115,9 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
         r = dr->out;
     else
         r = dr->in;
-    printf (_("%s\n"), urj_tap_register_get_string (r));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("%s\n"), urj_tap_register_get_string (r));
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

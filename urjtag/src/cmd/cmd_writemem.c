@@ -24,7 +24,10 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
+#include <errno.h>
 
+#include <urjtag/error.h>
 #include <urjtag/bus.h>
 
 #include <urjtag/cmd.h>
@@ -39,28 +42,35 @@ cmd_writemem_run (urj_chain_t *chain, char *params[])
     FILE *f;
 
     if (urj_cmd_params (params) != 4)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 4, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (!urj_bus)
     {
-        printf (_("Error: Bus driver missing.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, _("Bus missing"));
+        return URJ_STATUS_FAIL;
     }
 
-    if (urj_cmd_get_number (params[1], &adr)
-        || urj_cmd_get_number (params[2], &len))
-        return -1;
+    if (urj_cmd_get_number (params[1], &adr) != URJ_STATUS_OK
+        || urj_cmd_get_number (params[2], &len) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     f = fopen (params[3], "r");
     if (!f)
     {
-        printf (_("Unable to open file `%s'!\n"), params[3]);
-        return 1;
+        urj_error_set (URJ_ERROR_IO,  _("Unable to open file `%s': %s"),
+                       params[3], strerror(errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
     }
     urj_bus_writemem (urj_bus, f, adr, len);
     fclose (f);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

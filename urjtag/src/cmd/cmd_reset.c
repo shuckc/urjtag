@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/tap.h>
 
 #include <urjtag/cmd.h>
@@ -36,15 +37,18 @@
 static int
 cmd_reset_run (urj_chain_t *chain, char *params[])
 {
-    if (urj_cmd_params (params) > 1)
-        return -1;
+    if (urj_cmd_params (params) != 1)
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 1, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
-    urj_tap_reset_bypass (chain);
-
-    return 1;
+    return urj_tap_reset_bypass (chain);
 }
 
 static void

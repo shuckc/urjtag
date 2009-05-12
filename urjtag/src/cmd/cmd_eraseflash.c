@@ -43,25 +43,26 @@ cmd_eraseflash_run (urj_chain_t *chain, char *params[])
     unsigned int number = 0;
 
     if (urj_cmd_params (params) != 3)
-        return -1;
-    if (!urj_cmd_test_cable (chain))
-        return 1;
-    if (!urj_bus)
     {
-        printf (_("Error: Bus driver missing.\n"));
-        return 1;
-    }
-    if (urj_cmd_get_number (params[1], &adr))
-        return -1;
-    if (urj_cmd_get_number (params[2], &number))
-        return -1;
-    if (urj_flasherase (urj_bus, adr, number) != URJ_STATUS_OK)
-    {
-        printf ("error: %s\n", urj_error_describe());
-        urj_error_reset();
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 3, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
     }
 
-    return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+    if (!urj_bus)
+    {
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, _("Bus driver missing"));
+        return URJ_STATUS_FAIL;
+    }
+    if (urj_cmd_get_number (params[1], &adr) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+    if (urj_cmd_get_number (params[2], &number) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+
+    return urj_flasherase (urj_bus, adr, number);
 }
 
 static void

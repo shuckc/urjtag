@@ -40,55 +40,58 @@ static int
 cmd_instruction_run (urj_chain_t *chain, char *params[])
 {
     urj_part_t *part;
+    unsigned int len;
+    urj_part_instruction_t *i;
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
-    if (urj_cmd_params (params) == 2)
+    switch (urj_cmd_params (params))
     {
+    case 2:
         urj_part_set_instruction (part, params[1]);
         if (part->active_instruction == NULL)
-            printf (_("%s: unknown instruction '%s'\n"), "instruction",
-                    params[1]);
-        return 1;
-    }
-
-    if (urj_cmd_params (params) == 3)
-    {
-        unsigned int len;
-
-        if (strcasecmp (params[1], "length") != 0)
-            return -1;
-
-        if (urj_cmd_get_number (params[2], &len))
-            return -1;
-
-        if (urj_part_instruction_length_set (part, len) != URJ_STATUS_OK)
         {
-            urj_error_reset();
+            urj_error_set (URJ_ERROR_INVALID,
+                           _("%s: unknown instruction '%s'"),
+                           "instruction", params[1]);
+            return URJ_STATUS_FAIL;
         }
-        return 1;
-    }
+        return URJ_STATUS_OK;
 
-    if (urj_cmd_params (params) == 4)
-    {
-        urj_part_instruction_t *i;
+    case 3:
+        if (strcasecmp (params[1], "length") != 0)
+        {
+            urj_error_set (URJ_ERROR_SYNTAX,
+                           "param 1 of 3 must be 'length', not '%s'",
+                           params[1]);
+            return URJ_STATUS_FAIL;
+        }
 
+        if (urj_cmd_get_number (params[2], &len) != URJ_STATUS_OK)
+            return URJ_STATUS_FAIL;
+
+        return urj_part_instruction_length_set (part, len);
+
+    case 4:
         i = urj_part_instruction_define (part, params[1], params[2], params[3]);
         if (!i)
-        {
-            urj_error_reset();
-            return 1;
-        }
+            return URJ_STATUS_FAIL;
 
-        return 1;
+        return URJ_STATUS_OK;
+
+    default:
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be 2, 3, or 4, not %d",
+                       params[0], urj_cmd_params (params));
+        break;
     }
 
-    return -1;
+    return URJ_STATUS_FAIL;
 }
 
 static void

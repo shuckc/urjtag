@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/part.h>
 #include <urjtag/chain.h>
 #include <urjtag/bssignal.h>
@@ -43,35 +44,47 @@ cmd_get_run (urj_chain_t *chain, char *params[])
     urj_part_t *part;
 
     if (urj_cmd_params (params) != 3)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 3, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (strcasecmp (params[1], "signal") != 0)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "params[1] must be 'signal', not '%s'", params[1]);
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
     s = urj_part_find_signal (part, params[2]);
     if (!s)
     {
-        printf (_("signal '%s' not found\n"), params[2]);
-        return 1;
+        urj_error_set (URJ_ERROR_NOTFOUND, _("signal '%s' not found"),
+                       params[2]);
+        return URJ_STATUS_FAIL;
     }
     data = urj_part_get_signal (part, s);
-    if (data != -1)
-        printf (_("%s = %d\n"), params[2], data);
+    if (data == -1)
+        return URJ_STATUS_FAIL;
 
-    return 1;
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("%s = %d\n"), params[2], data);
+
+    return URJ_STATUS_OK;
 }
 
 static void
 cmd_get_help (void)
 {
-    printf (_("Usage: %s SIGNAL\n"
+    printf (_("Usage: %s signal SIGNAL\n"
               "Get signal state from output BSR (Boundary Scan Register).\n"
               "\n"
               "SIGNAL        signal name (from JTAG declaration file)\n"),

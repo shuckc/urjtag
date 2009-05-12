@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 
 #include <urjtag/cmd.h>
@@ -106,12 +107,12 @@ int
 urj_cmd_test_cable (urj_chain_t *chain)
 {
     if (chain->cable)
-        return 1;
+        return URJ_STATUS_OK;
 
-    printf (_
-            ("Error: Cable not configured. Please use '%s' command first!\n"),
-            "cable");
-    return 0;
+    urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                   "Cable not configured. Please use '%s' command first!",
+                   "cable");
+    return URJ_STATUS_FAIL;
 }
 
 /* Remainder copied from libbrux/cmd/cmd.c */
@@ -123,7 +124,7 @@ urj_cmd_run (urj_chain_t *chain, char *params[])
     size_t len;
 
     if (!params[0])
-        return 1;
+        return URJ_STATUS_OK;
 
     pidx = -1;
     len = strlen (params[0]);
@@ -132,13 +133,8 @@ urj_cmd_run (urj_chain_t *chain, char *params[])
     {
         if (strcasecmp (urj_cmds[i]->name, params[0]) == 0)
         {
-            int r;
-
           run_cmd:
-            r = urj_cmds[i]->run (chain, params);
-            if (r < 0)
-                printf (_("%s: syntax error!\n"), params[0]);
-            return r;
+            return urj_cmds[i]->run (chain, params);
         }
         else if (strncasecmp (urj_cmds[i]->name, params[0], len) == 0)
         {
@@ -152,17 +148,17 @@ urj_cmd_run (urj_chain_t *chain, char *params[])
     switch (pidx)
     {
     case -2:
-        printf (_("%s: Ambiguous command\n"), params[0]);
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("%s: Ambiguous command\n"), params[0]);
         break;
     case -1:
-        printf (_("%s: unknown command\n"), params[0]);
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("%s: unknown command\n"), params[0]);
         break;
     default:
         i = pidx;
         goto run_cmd;
     }
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 int
@@ -184,19 +180,24 @@ urj_cmd_get_number (const char *s, unsigned int *i)
     size_t l;
 
     if (!s || !i)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_INVALID, "NULL string or int pointer");
+        return URJ_STATUS_FAIL;
+    }
 
     l = strlen (s);
 
     n = -1;
     r = sscanf (s, "0x%x%n", i, &n);
     if (r == 1 && n == l)
-        return 0;
+        return URJ_STATUS_OK;
 
     n = -1;
     r = sscanf (s, "%u%n", i, &n);
     if (r == 1 && n == l)
-        return 0;
+        return URJ_STATUS_OK;
 
-    return -1;
+    urj_error_set (URJ_ERROR_SYNTAX, "not a number: '%s'", s);
+
+    return URJ_STATUS_FAIL;
 }

@@ -67,38 +67,36 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
 
     if ((parameters != 5) && (parameters != 8))
     {
-        printf (_("%s: invalid number of parameters (%d) for command '%s'\n"),
-                "bit", parameters, command);
-        return -1;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #params should be 5 or 8, not %d",
+                       "bus", parameters);
+        return URJ_STATUS_FAIL;
     }
 
-    if (!urj_cmd_test_cable (chain))
-    {
-        printf (_("%s: cable test failed for command '%s'\n"), "bit",
-                command);
-        return 1;
-    }
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-    {
-        return 1;
-    }
+        return URJ_STATUS_FAIL;
 
     /* bit number */
-    if (urj_cmd_get_number (params[1], &bit))
+    if (urj_cmd_get_number (params[1], &bit) != URJ_STATUS_OK)
     {
-        printf (_("%s: unable to get boundary bit number for command '%s'\n"),
-                "bit", command);
-        return -1;
+        // error state already set
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("%s: unable to get boundary bit number for command '%s'"),
+                 "bus", command);
+        return URJ_STATUS_FAIL;
     }
 
     /* bit type */
     if (strlen (params[2]) != 1)
     {
-        printf (_("%s: invalid bit type length for command '%s'\n"), "bit",
-                command);
-        return -1;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       _("%s: invalid bit type length for command '%s'"),
+                      "bus", command);
+        return URJ_STATUS_FAIL;
     }
     switch (params[2][0])
     {
@@ -123,16 +121,19 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
         type = URJ_BSBIT_INTERNAL;
         break;
     default:
-        printf (_("%s: invalid bit type for command '%s'\n"), "bit", command);
-        return -1;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       _("%s: invalid bit type for command '%s'"),
+                       "bus", command);
+        return URJ_STATUS_FAIL;
     }
 
     /* default (safe) value */
     if (strlen (params[3]) != 1)
     {
-        printf (_("%s: invalid default value length for command '%s'\n"),
-                "bit", command);
-        return -1;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       _("%s: invalid default value length for command '%s'"),
+                       "bus", command);
+        return URJ_STATUS_FAIL;
     }
     switch (params[3][0])
     {
@@ -144,58 +145,52 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
         safe = URJ_BSBIT_DONTCARE;
         break;
     default:
-        printf (_("%s: invalid default value for command '%s'\n"),
-                "bit", command);
-        return -1;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       _("%s: invalid default value '%s' for command '%s'"),
+                       "bus", params[3], command);
+        return URJ_STATUS_FAIL;
     }
 
-    /* test for control bit */
-    if (urj_cmd_params (params) == 5) {
-        if (urj_part_bsbit_alloc (part, bit, params[4], type,
-                                  safe) != URJ_STATUS_OK)
-        {
-            printf ("in command '%s'\n", command);
-            urj_error_reset();
-            return 1;
-        }
+    if (urj_cmd_params (params) == 5)
+        // without control bit
+        return urj_part_bsbit_alloc (part, bit, params[4], type, safe);
 
-    } else {
-        int control_value;
-        int control_state;
+    /* with control bit */
 
-        /* control bit number */
-        if (urj_cmd_get_number (params[5], &control))
-        {
-            printf (_("%s: unable to get control bit number for command '%s'\n"),
-                    "bit", command);
-            return -1;
-        }
-        /* control value */
-        if (strlen (params[6]) != 1)
-        {
-            printf (_("%s: invalid control value length for command '%s'\n"),
-                    "bit", command);
-            return -1;
-        }
-        control_value = (params[6][0] == '1');
+    int control_value;
+    int control_state;
 
-        /* control state */
-        if (strcasecmp (params[7], "Z"))
-            return -1;
+    /* control bit number */
+    if (urj_cmd_get_number (params[5], &control) != URJ_STATUS_OK)
+    {
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("%s: unable to get control bit number for command '%s'"),
+                 "bit", command);
+        return URJ_STATUS_FAIL;
+    }
+    /* control value */
+    if (strlen (params[6]) != 1)
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       _("%s: invalid control value length for command '%s'"),
+                       "bit", command);
+        return URJ_STATUS_FAIL;
+    }
+    control_value = (params[6][0] == '1');
 
-        control_state = URJ_BSBIT_STATE_Z;
-
-        if (urj_part_bsbit_alloc_control (part, bit, params[4], type, safe,
-                                          control, control_value,
-                                          control_state) != URJ_STATUS_OK)
-        {
-            printf ("in command '%s'\n", command);
-            urj_error_reset();
-            return 1;
-        }
+    /* control state */
+    if (strcasecmp (params[7], "Z"))
+    {
+        urj_error_set (URJ_ERROR_SYNTAX, "control state '%s' must be 'Z'",
+                       params[7]);
+        return URJ_STATUS_FAIL;
     }
 
-    return 1;
+    control_state = URJ_BSBIT_STATE_Z;
+
+    return urj_part_bsbit_alloc_control (part, bit, params[4], type, safe,
+                                         control, control_value,
+                                         control_state);
 }
 
 static void

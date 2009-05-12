@@ -45,30 +45,34 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
     int i;
 
     if ((i = urj_cmd_params (params)) < 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
     if ((s = urj_part_find_signal (part, params[1])) != NULL)
     {
         if (i == 3)
         {
-            printf ("Defining pin for signal %s\n", s->name);
+            urj_log (URJ_LOG_LEVEL_NORMAL, "Defining pin for signal %s\n",
+                     s->name);
 
-            if (urj_part_signal_redefine_pin(chain, s,
-                                             params[2]) != URJ_STATUS_OK)
-                urj_error_reset();
-            return 1;
+            return urj_part_signal_redefine_pin(chain, s, params[2]);
         }
         else
         {
-            printf (_("Signal '%s' already defined\n"), params[1]);
-            return 1;
+            urj_error_set (URJ_ERROR_ALREADY, _("Signal '%s' already defined"),
+                           params[1]);
+            return URJ_STATUS_FAIL;
         }
     }
 
@@ -81,11 +85,10 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
         s = urj_part_signal_define(chain, params[1]);
     }
     if (s == NULL) {
-        urj_error_reset();
-        return 1;
+        return URJ_STATUS_FAIL;
     }
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/tap_register.h>
@@ -48,22 +49,27 @@ cmd_scan_run (urj_chain_t *chain, char *params[])
     int i;
 
     if ((i = urj_cmd_params (params)) < 1)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 1, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
-    if (!urj_cmd_test_cable (chain))
-        return 1;
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     part = urj_tap_chain_active_part (chain);
     if (part == NULL)
-        return 1;
+        return URJ_STATUS_FAIL;
 
     /* search for Boundary Scan Register */
     bsr = urj_part_find_data_register (part, "BSR");
     if (!bsr)
     {
-        printf (_("%s(%s:%d) Boundary Scan Register (BSR) not found\n"),
-                __FUNCTION__, __FILE__, __LINE__);
-        return 1;
+        urj_error_set (URJ_ERROR_NOTFOUND,
+                       _("Boundary Scan Register (BSR) not found"));
+        return URJ_STATUS_FAIL;
     }
 
     if (urj_part_find_instruction (part, "SAMPLE"))
@@ -76,54 +82,46 @@ cmd_scan_run (urj_chain_t *chain, char *params[])
     }
     else
     {
-        printf (_("%s(%s:%d) Part can't SAMPLE\n"), __FUNCTION__, __FILE__,
-                __LINE__);
-        return 1;
+        urj_error_set (URJ_ERROR_UNSUPPORTED,_("Part can't SAMPLE"));
+        return URJ_STATUS_FAIL;
     }
 
     /* @@@@ RFHH check result */
     urj_tap_chain_shift_instructions (chain);
 
     obsr = urj_tap_register_alloc (bsr->out->len);
-
     if (!obsr)
+        return URJ_STATUS_FAIL;
+
+    urj_tap_register_init (obsr, urj_tap_register_get_string (bsr->out));   // copy
+
+    /* @@@@ RFHH check result */
+    urj_tap_chain_shift_data_registers (chain, 1);
+
+    urj_part_signal_t *s;
+    for (s = part->signals; s; s = s->next)
     {
-        printf (_("Out of memory\n"));
-        return 1;
-    }
-
-    {
-        urj_part_signal_t *s;
-
-        urj_tap_register_init (obsr, urj_tap_register_get_string (bsr->out));   // copy
-
-        /* @@@@ RFHH check result */
-        urj_tap_chain_shift_data_registers (chain, 1);
-
-        for (s = part->signals; s; s = s->next)
+        if (s->input != NULL)
         {
-            if (s->input != NULL)
+            int old = obsr->data[s->input->bit];
+            int new = bsr->out->data[s->input->bit];
+            if (old != new)
             {
-                int old = obsr->data[s->input->bit];
-                int new = bsr->out->data[s->input->bit];
-                if (old != new)
+                urj_part_salias_t *a;
+                urj_log (URJ_LOG_LEVEL_NORMAL, "%s", s->name);
+                for (a = part->saliases; a; a = a->next)
                 {
-                    urj_part_salias_t *a;
-                    printf ("%s", s->name);
-                    for (a = part->saliases; a; a = a->next)
-                    {
-                        if (a->signal == s)
-                            printf (",%s", a->name);
-                    }
-                    printf (_(": %d > %d\n"), old, new);
+                    if (a->signal == s)
+                        urj_log (URJ_LOG_LEVEL_NORMAL, ",%s", a->name);
                 }
+                urj_log (URJ_LOG_LEVEL_NORMAL, _(": %d > %d\n"), old, new);
             }
         }
     }
 
     urj_tap_register_free (obsr);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

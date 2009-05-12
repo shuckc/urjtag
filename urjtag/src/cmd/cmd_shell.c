@@ -31,6 +31,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <urjtag/error.h>
 #include <urjtag/cmd.h>
 
 #include "cmd.h"
@@ -42,7 +43,12 @@ cmd_shell_run (urj_chain_t *chain, char *params[])
     char *shell_cmd;
 
     if ((n = urj_cmd_params (params)) == 1)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     /* I must apologize to everyone who knows what they are doing for
      * the following. If you can pass a shell argument past strtok the
@@ -59,8 +65,9 @@ cmd_shell_run (urj_chain_t *chain, char *params[])
     shell_cmd = malloc (len);
     if (shell_cmd == NULL)
     {
-        printf (_("Out of memory\n"));
-        return -1;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       (size_t) len);
+        return URJ_STATUS_FAIL;
     }
 
     strcpy (shell_cmd, params[1]);
@@ -69,12 +76,12 @@ cmd_shell_run (urj_chain_t *chain, char *params[])
         strcat (shell_cmd, " ");
         strcat (shell_cmd, params[i]);
     }
-    printf ("Executing '%s'\n", shell_cmd);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "Executing '%s'\n", shell_cmd);
 
     system (shell_cmd);
     free (shell_cmd);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void

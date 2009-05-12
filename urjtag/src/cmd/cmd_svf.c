@@ -29,7 +29,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
+#include <urjtag/error.h>
 #include <urjtag/log.h>
 
 #include <urjtag/svf.h>
@@ -41,43 +43,48 @@ static int
 cmd_svf_run (urj_chain_t *chain, char *params[])
 {
     FILE *SVF_FILE;
-    int num_params, i, result = -1;
+    int num_params, i;
     int stop = 0;
     int print_progress = 0;
     uint32_t ref_freq = 0;
     urj_log_level_t old_log_level = urj_log_state.level;
+    int result;
 
     num_params = urj_cmd_params (params);
-    if (num_params > 1)
+    if (num_params < 2)
     {
-        for (i = 2; i < num_params; i++)
-        {
-            if (strcasecmp (params[i], "stop") == 0)
-                stop = 1;
-            else if (strcasecmp (params[i], "progress") == 0)
-                print_progress = 1;
-            else if (strncasecmp (params[i], "ref_freq=", 9) == 0)
-                ref_freq = strtol (params[i] + 9, NULL, 10);
-            else
-                return -1;
-        }
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
+    for (i = 2; i < num_params; i++)
+    {
+        if (strcasecmp (params[i], "stop") == 0)
+            stop = 1;
+        else if (strcasecmp (params[i], "progress") == 0)
+            print_progress = 1;
+        else if (strncasecmp (params[i], "ref_freq=", 9) == 0)
+            ref_freq = strtol (params[i] + 9, NULL, 10);
         if (print_progress)
             urj_log_state.level = URJ_LOG_LEVEL_DETAIL;
 
         if ((SVF_FILE = fopen (params[1], "r")) != NULL)
         {
-            urj_svf_run (chain, SVF_FILE, stop, ref_freq);
-            result = 1;
+            if (urj_svf_run (chain, SVF_FILE, stop, ref_freq))
+                result = URJ_STATUS_OK;
+            else
+                result = URJ_STATUS_FAIL;
 
             fclose (SVF_FILE);
         }
         else
         {
-            printf (_("%s: cannot open file '%s' for reading\n"), "svf",
-                    params[1]);
+            urj_error_set (URJ_ERROR_SYNTAX, "%s: unknown command '%s'",
+                           params[0], params[i]);
+            result = URJ_STATUS_FAIL;
         }
-
     }
 
     urj_log_state.level = old_log_level;

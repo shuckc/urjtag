@@ -568,7 +568,7 @@ avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
  *
  */
 static void
-avr32_bus_printinfo (urj_bus_t *bus)
+avr32_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus)
 {
     int i;
 
@@ -576,7 +576,7 @@ avr32_bus_printinfo (urj_bus_t *bus)
         if (bus->part == bus->chain->parts->parts[i])
             break;
 
-    printf (_("AVR32 multi-mode bus driver (JTAG part No. %d)\n"), i);
+    urj_log (ll, _("AVR32 multi-mode bus driver (JTAG part No. %d)\n"), i);
 }
 
 /**

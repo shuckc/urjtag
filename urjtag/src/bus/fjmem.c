@@ -502,14 +502,14 @@ fjmem_bus_free (urj_bus_t *bus)
  *
  */
 static void
-fjmem_bus_printinfo (urj_bus_t *bus)
+fjmem_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus)
 {
     int i;
 
     for (i = 0; i < bus->chain->parts->len; i++)
         if (bus->part == bus->chain->parts->parts[i])
             break;
-    printf (_("fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"),
+    urj_log (ll, _("fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"),
             i);
 }
 

@@ -59,17 +59,14 @@ urj_parse_line (urj_chain_t *chain, char *line)
     }
     l = strlen (line);
     if (l == 0)
-    {
-        urj_error_set (URJ_ERROR_INVALID, "zero-length line");
-        return 1;
-    }
+        return URJ_STATUS_OK;
 
     /* allocate as many chars as in the input line; this will be enough in all cases */
     sline = malloc (l + 1);
     if (sline == NULL)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%d) fails", l + 1);
-        return 1;
+        return URJ_STATUS_FAIL;
     }
 
     /* count and copy the tokens */
@@ -99,8 +96,7 @@ urj_parse_line (urj_chain_t *chain, char *line)
     if (tcnt == 0)
     {
         free (sline);
-        urj_error_set (URJ_ERROR_INVALID, "empty line");
-        return 1;
+        return URJ_STATUS_OK;
     }
 
     /* allocate the token pointer table */
@@ -109,7 +105,7 @@ urj_parse_line (urj_chain_t *chain, char *line)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
                        (tcnt + 1) * sizeof (char *));
-        return 1;
+        return URJ_STATUS_FAIL;
     }
 
     /* find the starting points for the tokens */
@@ -132,7 +128,7 @@ urj_parse_line (urj_chain_t *chain, char *line)
 
 
 int
-urj_parse_stream (urj_chain_t *chain, FILE *f)
+urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f)
 {
     char inputline[MAXINPUTLINE + 1];
     int go = 1, i, c, lnr, clip, found_comment;
@@ -164,15 +160,20 @@ urj_parse_stream (urj_chain_t *chain, FILE *f)
             urj_warning ("line %d exceeds %zd characters, clipped\n", lnr,
                          sizeof (inputline) - 1);
         go = urj_parse_line (chain, inputline);
+        if (go == URJ_STATUS_FAIL)
+        {
+            urj_log (ll, "Error: %s; command '%s'\n", urj_error_describe(), inputline);
+            urj_error_reset ();
+        }
         urj_tap_chain_flush (chain);
     }
-    while (go && c != EOF);
+    while (go != URJ_STATUS_MUST_QUIT && c != EOF);
 
     return go;
 }
 
 int
-urj_parse_file (urj_chain_t *chain, const char *filename)
+urj_parse_file (urj_log_level_t ll, urj_chain_t *chain, const char *filename)
 {
     FILE *f;
     int go;
@@ -180,13 +181,13 @@ urj_parse_file (urj_chain_t *chain, const char *filename)
     f = fopen (filename, "r");
     if (!f)
     {
-        urj_error_set(URJ_ERROR_IO, "Cannot open file '%s' to parse: %s",
-                      filename, strerror(errno));
+        urj_error_set (URJ_ERROR_IO, "Cannot open file '%s' to parse: %s",
+                       filename, strerror(errno));
         errno = 0;
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
-    go = urj_parse_stream (chain, f);
+    go = urj_parse_stream (ll, chain, f);
 
     fclose (f);
     urj_log (URJ_LOG_LEVEL_DEBUG, "File Closed go=%d\n", go);
@@ -223,7 +224,6 @@ urj_parse_include (urj_chain_t *chain, const char *filename, int ignore_path)
         path = malloc (len = strlen (jtag_data_dir) + strlen (filename) + 2);
         if (path == NULL)
         {
-            printf (_("Out of memory\n"));
             urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", len);
             return URJ_STATUS_FAIL;
         }
@@ -236,6 +236,7 @@ urj_parse_include (urj_chain_t *chain, const char *filename, int ignore_path)
     /* perform a test read to check for BSDL syntax */
     if (urj_bsdl_read_file (chain, filename, URJ_BSDL_MODE_INCLUDE1, NULL) >= 0)
     {
+        // @@@@ RFHH ToDo: let urj_bsdl_read_file also return URJ_STATUS_...
         /* it seems to be a proper BSDL file, so re-read and execute */
         if (urj_bsdl_read_file (chain, filename, URJ_BSDL_MODE_INCLUDE2,
                                 NULL) < 0)
@@ -245,8 +246,7 @@ urj_parse_include (urj_chain_t *chain, const char *filename, int ignore_path)
     else
 #endif
     {
-        if (urj_parse_file (chain, filename) == -1)
-            r = URJ_STATUS_FAIL;
+        r = urj_parse_file (URJ_LOG_LEVEL_NORMAL, chain, filename);
     }
 
     free (path);

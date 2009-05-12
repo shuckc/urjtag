@@ -150,13 +150,13 @@ int urj_tap_cable_get_tdo (urj_cable_t *cable);
 int urj_tap_cable_get_tdo_late (urj_cable_t *cable);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_defer_get_tdo (urj_cable_t *cable);
-/** @return @see (*set_signal)() */
+/** @return 0 or 1 on success; -1 on failure */
 int urj_tap_cable_set_signal (urj_cable_t *cable, int mask, int val);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_defer_set_signal (urj_cable_t *cable, int mask, int val);
-/** @return @see (*get_signal)() */
+/** @return 0 or 1 on success; -1 on failure */
 int urj_tap_cable_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig);
-/** @return @see (*get_signal)() */
+/** @return 0 or 1 on success; -1 on failure */
 int urj_tap_cable_get_signal_late (urj_cable_t *cable, urj_pod_sigsel_t sig);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_defer_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig);

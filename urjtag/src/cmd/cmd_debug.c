@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <urjtag/error.h>
 #include <urjtag/jtag.h>
 
 #include <urjtag/cmd.h>
@@ -39,14 +40,23 @@ cmd_debug_run (urj_chain_t *chain, char *params[])
 {
     unsigned int i;
 
-    if (urj_cmd_params (params) != 2)
-        return -1;
+    // @@@@ RFHH change this to control the urj_log level
+    // @@@@ RFHH urj_debug_mode isn't used anyway
 
-    if (urj_cmd_get_number (params[1], &i))
-        return -1;
+    if (urj_cmd_params (params) != 2)
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
+
+    if (urj_cmd_get_number (params[1], &i) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     urj_debug_mode = i;
-    return 1;
+
+    return URJ_STATUS_OK;
 }
 
 static void

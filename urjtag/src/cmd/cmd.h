@@ -43,6 +43,8 @@ typedef struct
     char *name;
     char *desc;
     void (*help) (void);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error, both
+     * syntax and library errors */
     int (*run) (urj_chain_t *chain, char *params[]);
 } urj_cmd_t;
 
@@ -93,6 +95,11 @@ extern const urj_cmd_t urj_cmd_debug;
 
 extern const urj_cmd_t *urj_cmds[];
 
+/**
+ * Tests if chain has a cable pointer
+ *
+ * @return URJ_STATUS_OK if success; URJ_STATUS_FAIL on error or failure
+ */
 int urj_cmd_test_cable (urj_chain_t *chain);
 
 #endif /* URJ_CMD_H */

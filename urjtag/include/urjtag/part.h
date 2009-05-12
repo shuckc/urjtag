@@ -66,9 +66,9 @@ void urj_part_set_instruction (urj_part_t *p, const char *iname);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val);
 /** @return -1 on error; signal number >= 0 for success */
-int urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s);
+int urj_part_get_signal (urj_part_t *p, const urj_part_signal_t *s);
 /* @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-int urj_part_print (urj_part_t *p);
+int urj_part_print (urj_log_level_t ll, urj_part_t *p);
 /**
  * Set the length of the instructions of a part
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
@@ -104,6 +104,6 @@ int urj_part_parts_add_part (urj_parts_t *ps, urj_part_t *p);
 /* @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_part_parts_set_instruction (urj_parts_t *ps, const char *iname);
 /* @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-int urj_part_parts_print (urj_parts_t *ps);
+int urj_part_parts_print (urj_log_level_t ll, urj_parts_t *ps);
 
 #endif /* URJ_PART_H */

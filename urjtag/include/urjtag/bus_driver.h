@@ -55,7 +55,7 @@ struct urj_bus_driver
                            const urj_bus_driver_t *driver,
                            char *cmd_params[]);
     void (*free_bus) (urj_bus_t *bus);
-    void (*printinfo) (urj_bus_t *bus);
+    void (*printinfo) (urj_log_level_t ll, urj_bus_t *bus);
     void (*prepare) (urj_bus_t *bus);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*area) (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area);
@@ -76,7 +76,7 @@ struct urj_bus
     const urj_bus_driver_t *driver;
 };
 
-#define URJ_BUS_PRINTINFO(bus)          (bus)->driver->printinfo(bus)
+#define URJ_BUS_PRINTINFO(ll, bus)      (bus)->driver->printinfo(ll, bus)
 #define URJ_BUS_PREPARE(bus)            (bus)->driver->prepare(bus)
 #define URJ_BUS_AREA(bus,adr,a)         (bus)->driver->area(bus,adr,a)
 #define URJ_BUS_READ_START(bus,adr)     (bus)->driver->read_start(bus,adr)

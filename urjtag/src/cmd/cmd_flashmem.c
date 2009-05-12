@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <errno.h>
 
 #include <urjtag/error.h>
 #include <urjtag/bus.h>
@@ -44,19 +45,25 @@ cmd_flashmem_run (urj_chain_t *chain, char *params[])
     uint32_t adr = 0;
     FILE *f;
     int paramc = urj_cmd_params (params);
+    int r;
 
     if (paramc < 3)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 3, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (!urj_bus)
     {
-        printf (_("Error: Bus driver missing.\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, _("Bus driver missing"));
+        return URJ_STATUS_FAIL;
     }
 
     msbin = strcasecmp ("msbin", params[1]) == 0;
-    if (!msbin && urj_cmd_get_number (params[1], &adr))
-        return -1;
+    if (!msbin && urj_cmd_get_number (params[1], &adr) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     if (paramc > 3)
         noverify = strcasecmp ("noverify", params[3]) == 0;
@@ -66,28 +73,20 @@ cmd_flashmem_run (urj_chain_t *chain, char *params[])
     f = fopen (params[2], "rb");
     if (!f)
     {
-        printf (_("Unable to open file `%s'!\n"), params[2]);
-        return 1;
+        urj_error_set (URJ_ERROR_IO, _("Unable to open file `%s': %s"),
+                       params[2], strerror (errno));
+        errno = 0;
+        return URJ_STATUS_FAIL;
     }
+
     if (msbin)
-    {
-        if (urj_flashmsbin (urj_bus, f, noverify) != URJ_STATUS_OK)
-        {
-            printf ("error: %s\n", urj_error_describe());
-            urj_error_reset();
-        }
-    }
+        r = urj_flashmsbin (urj_bus, f, noverify);
     else
-    {
-        if (urj_flashmem (urj_bus, f, adr, noverify) != URJ_STATUS_OK)
-        {
-            printf ("error: %s\n", urj_error_describe());
-            urj_error_reset();
-        }
-    }
+        r = urj_flashmem (urj_bus, f, adr, noverify);
+
     fclose (f);
 
-    return 1;
+    return r;
 }
 
 static void

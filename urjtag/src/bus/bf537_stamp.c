@@ -314,14 +314,14 @@ bf537_stamp_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
  *
  */
 static void
-bf537_stamp_bus_printinfo (urj_bus_t *bus)
+bf537_stamp_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus)
 {
     int i;
 
     for (i = 0; i < bus->chain->parts->len; i++)
         if (bus->part == bus->chain->parts->parts[i])
             break;
-    printf (_("%s (JTAG part No. %d)\n"), bus->driver->description, i);
+    urj_log (ll, _("%s (JTAG part No. %d)\n"), bus->driver->description, i);
 }
 
 #define BF537_STAMP_BUS_FUNCTIONS \

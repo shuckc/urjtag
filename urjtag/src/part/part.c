@@ -255,7 +255,7 @@ urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
 }
 
 int
-urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s)
+urj_part_get_signal (urj_part_t *p, const urj_part_signal_t *s)
 {
     urj_data_register_t *bsr;
 
@@ -285,7 +285,7 @@ urj_part_get_signal (urj_part_t *p, urj_part_signal_t *s)
 }
 
 int
-urj_part_print (urj_part_t *p)
+urj_part_print (urj_log_level_t ll, urj_part_t *p)
 {
     const char *instruction = NULL;
     const char *dr = NULL;
@@ -312,8 +312,8 @@ urj_part_print (urj_part_t *p)
         instruction = _("(none)");
     if (dr == NULL)
         dr = _("(none)");
-    urj_log (URJ_LOG_LEVEL_NORMAL, format, p->manufacturer, p->part,
-             p->stepping, instruction, dr);
+    urj_log (ll, format, p->manufacturer, p->part, p->stepping, instruction,
+             dr);
 
     return URJ_STATUS_OK;
 }
@@ -452,7 +452,7 @@ urj_part_parts_set_instruction (urj_parts_t *ps, const char *iname)
 }
 
 int
-urj_part_parts_print (urj_parts_t *ps)
+urj_part_parts_print (urj_log_level_t ll, urj_parts_t *ps)
 {
     int i;
 
@@ -469,8 +469,8 @@ urj_part_parts_print (urj_parts_t *ps)
         if (!p)
             continue;
 
-        urj_log (URJ_LOG_LEVEL_NORMAL, _(" %3d "), i);
-        urj_part_print (p);
+        urj_log (ll, _(" %3d "), i);
+        urj_part_print (ll, p);
     }
 
     return URJ_STATUS_OK;

@@ -43,37 +43,36 @@ cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
 {
     int i;
     unsigned int j = 1;
+    int r = URJ_STATUS_OK;
 
     if (urj_cmd_params (params) < 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 2, urj_cmd_params (params));
+        return URJ_STATUS_FAIL;
+    }
 
     if (!is_include)
     {
-        printf (_("Please use the 'include' command instead of 'script'\n"));
+        urj_warning (_("Please use the 'include' command instead of 'script'\n"));
     }
 
     if (urj_cmd_params (params) > 2)
     {
         /* loop n times option */
-        if (urj_cmd_get_number (params[2], &j))
-        {
-            printf (_("%s: unable to get number from '%s'\n"),
-                    "include/script", params[2]);
-            return -1;
-        }
+        if (urj_cmd_get_number (params[2], &j) != URJ_STATUS_OK)
+            return URJ_STATUS_FAIL;
     }
 
     for (i = 0; i < j; i++)
     {
-        if (urj_parse_include (chain, params[1], ! is_include) != URJ_STATUS_OK)
-        {
-            printf ("error: %s\n", urj_error_describe ());
-            urj_error_reset ();
+        r = urj_parse_include (chain, params[1], ! is_include);
+        if (r != URJ_STATUS_OK)
             break;
-        }
     }
 
-    return 1;
+    return r;
 }
 
 static void

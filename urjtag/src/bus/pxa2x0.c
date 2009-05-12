@@ -250,14 +250,14 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
  *
  */
 static void
-pxa2xx_bus_printinfo (urj_bus_t *bus)
+pxa2xx_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus)
 {
     int i;
 
     for (i = 0; i < bus->chain->parts->len; i++)
         if (bus->part == bus->chain->parts->parts[i])
             break;
-    printf (_("%s (JTAG part No. %d)\n"), bus->driver->description, i);
+    urj_log (ll, _("%s (JTAG part No. %d)\n"), bus->driver->description, i);
 }
 
 /**
@@ -285,24 +285,21 @@ pxa2xx_bus_init (urj_bus_t *bus)
 
     if (PROC == PROC_PXA25x)
     {
+        const urj_part_signal_t *bs_2 = urj_part_find_signal (p, "BOOT_SEL[2]");
+        const urj_part_signal_t *bs_1 = urj_part_find_signal (p, "BOOT_SEL[1]");
+        const urj_part_signal_t *bs_0 = urj_part_find_signal (p, "BOOT_SEL[0]");
+
         BOOT_DEF = BOOT_DEF_PKG_TYPE |
-            BOOT_DEF_BOOT_SEL (urj_part_get_signal
-                               (p,
-                                urj_part_find_signal (p,
-                                                      "BOOT_SEL[2]")) << 2 |
-                               urj_part_get_signal (p,
-                                                    urj_part_find_signal (p,
-                                                                          "BOOT_SEL[1]"))
-                               << 1 | urj_part_get_signal (p,
-                                                           urj_part_find_signal
-                                                           (p,
-                                                            "BOOT_SEL[0]")));
+            BOOT_DEF_BOOT_SEL (urj_part_get_signal (p, bs_2) << 2
+                               | urj_part_get_signal (p, bs_1) << 1
+                               | urj_part_get_signal (p, bs_0));
     }
     else if (PROC == PROC_PXA27x)
     {
+        const urj_part_signal_t *bs = urj_part_find_signal (p, "BOOT_SEL");
+
         BOOT_DEF = BOOT_DEF_PKG_TYPE |
-            BOOT_DEF_BOOT_SEL (urj_part_get_signal
-                               (p, urj_part_find_signal (p, "BOOT_SEL")));
+            BOOT_DEF_BOOT_SEL (urj_part_get_signal (p, bs));
     }
     else
         printf ("BUG in the code, file %s, line %d.\n", __FILE__, __LINE__);

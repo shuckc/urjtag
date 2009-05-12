@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <urjtag/error.h>
 #include <urjtag/parport.h>
 #include <urjtag/tap.h>
 #include <urjtag/cable.h>
@@ -47,7 +48,12 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
 
     /* we need at least one parameter for 'cable' command */
     if (paramc < 2)
-        return -1;
+    {
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "%s: #parameters should be >= %d, not %d",
+                       params[0], 2, paramc);
+        return URJ_STATUS_FAIL;
+    }
 
     /* maybe old syntax was used?  search connection type driver */
     for (i = 0; urj_tap_parport_drivers[i]; i++)
@@ -57,8 +63,7 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
     if (urj_tap_parport_drivers[i] != 0)
     {
         /* Old syntax was used. Swap params. */
-        printf (_
-                ("Note: the 'cable' command syntax changed, please read the help text\n"));
+        urj_warning ("Note: the 'cable' command syntax changed, please read the help text\n");
         if (paramc >= 4)
         {
             char *tmparam;
@@ -68,7 +73,12 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
             params[1] = tmparam;
         }
         else
-            return -1;
+        {
+            urj_error_set (URJ_ERROR_SYNTAX,
+                           "old syntax requires >= %d params, not %d",
+                           4, paramc);
+            return URJ_STATUS_FAIL;
+        }
     }
 
     /* search cable driver list */
@@ -77,8 +87,9 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
             break;
     if (!urj_tap_cable_drivers[i])
     {
-        printf (_("Unknown cable type: %s\n"), params[1]);
-        return 1;
+        urj_error_set (URJ_ERROR_NOTFOUND, _("Unknown cable type: '%s'"),
+                       params[1]);
+        return URJ_STATUS_FAIL;
     }
 
     if (paramc >= 3)
@@ -86,7 +97,7 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
         if (strcasecmp (params[2], "help") == 0)
         {
             urj_tap_cable_drivers[i]->help (urj_tap_cable_drivers[i]->name);
-            return 1;
+            return URJ_STATUS_OK;
         }
     }
 
@@ -101,32 +112,31 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
     cable = calloc (1, sizeof (urj_cable_t));
     if (!cable)
     {
-        printf (_("%s(%d) calloc failed!\n"), __FILE__, __LINE__);
-        return 1;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (urj_cable_t));
+        return URJ_STATUS_FAIL;
     }
 
     cable->driver = urj_tap_cable_drivers[i];
 
     if (cable->driver->connect (++params, cable))
     {
-        printf (_("Error: Cable connection failed!\n"));
         free (cable);
-        return 1;
+        return URJ_STATUS_FAIL;
     }
 
     chain->cable = cable;
 
     if (urj_tap_cable_init (chain->cable))
     {
-        printf (_("Error: Cable initialization failed!\n"));
         urj_tap_chain_disconnect (chain);
-        return 1;
+        return URJ_STATUS_FAIL;
     }
     urj_tap_chain_set_trst (chain, 0);
     urj_tap_chain_set_trst (chain, 1);
     urj_tap_reset (chain);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 static void
