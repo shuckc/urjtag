@@ -64,9 +64,7 @@ cmd_readmem_run (urj_chain_t *chain, char *params[])
     f = fopen (params[3], "w");
     if (!f)
     {
-        urj_error_set (URJ_ERROR_IO, _("Unable to create file `%s': %s"),
-                       params[3], strerror(errno));
-        errno = 0;
+        urj_error_IO_set (_("Unable to create file `%s'"), params[3]);
         return URJ_STATUS_FAIL;
     }
     urj_bus_readmem (urj_bus, f, adr, len);

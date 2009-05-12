@@ -130,13 +130,14 @@ ppi_connect (const char **par, int parnum)
     for (pn = ports; pn; pn = pn->next)
         if (strcmp (pn->port->params, par[0]) == 0)
         {
-            printf (_("Disconnecting %s from ppi port %s\n"),
-                    _(pn->port->cable->driver->description), par[0]);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("Disconnecting %s from ppi port %s\n"),
+                     _(pn->port->cable->driver->description), par[0]);
             pn->port->cable->driver->disconnect (pn->port->cable);
             break;
         }
 
-    printf (_("Initializing on ppi port %s\n"), par[0]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Initializing on ppi port %s\n"), par[0]);
 
     parport = ppi_parport_alloc (par[0]);
     if (!parport)
@@ -155,9 +156,7 @@ ppi_open (urj_parport_t *parport)
     p->fd = open (p->portname, O_RDWR);
     if (p->fd < 0)
     {
-        urj_error_set (URJ_ERROR_IO, "Cannot open(%s): %s", p->portname,
-                       strerror(errno));
-        errno = 0;
+        urj_error_IO_set ("Cannot open(%s)", p->portname);
         return URJ_STATUS_FAIL;
     }
 
@@ -172,9 +171,7 @@ ppi_close (urj_parport_t *parport)
 
     if (close (p->fd) != 0)
     {
-        urj_error_set (URJ_ERROR_IO, "Cannot close(%d): %s", p->fd,
-                       strerror(errno));
-        errno = 0;
+        urj_error_IO_set ("Cannot close(%d)", p->fd);
         return URJ_STATUS_FAIL;
     }
 
@@ -189,9 +186,7 @@ ppi_set_data (urj_parport_t *parport, uint8_t data)
 
     if (ioctl (p->fd, PPISDATA, &data) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioctl(PPISDATA) fails: %s",
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("ioctl(PPISDATA) fails");
         return URJ_STATUS_FAIL;
     }
 
@@ -206,9 +201,7 @@ ppi_get_data (urj_parport_t *parport)
 
     if (ioctl (p->fd, PPIGDATA, &d) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioctl(PPIGDATA) fails: %s",
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("ioctl(PPIGDATA) fails");
         return -1;
     }
 
@@ -223,9 +216,7 @@ ppi_get_status (urj_parport_t *parport)
 
     if (ioctl (p->fd, PPIGSTATUS, &d) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioctl(PPIGSTATUS) fails: %s",
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("ioctl(PPIGSTATUS) fails");
         return -1;
     }
 

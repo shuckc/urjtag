@@ -47,16 +47,7 @@
 #include <urjtag/tap_register.h>
 #include <urjtag/part_instruction.h>
 #include <urjtag/data_register.h>
-
-#if 0
-#include <urjtag/svf.h>         /* two include files w/ the same name
-                                 * this will be resolved when we will have
-                                 * include/urjtag/svf.h
-                                 *                              RFHH */
-#endif
-
 #include <urjtag/cmd.h>
-
 #include <urjtag/svf.h>
 
 #include "svf.h"
@@ -366,7 +357,7 @@ urj_svf_build_bit_string (char *hex_string, int len)
     if (!(bit_string = calloc (len + 1, sizeof (char))))
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       len + 1, sizeof (char));
+                       (size_t) (len + 1), sizeof (char));
         return (NULL);
     }
 
@@ -1193,7 +1184,7 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
             if ((instruction_string = calloc (len + 1, sizeof (char))) == NULL)
             {
                 urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                               (size_t)(len + 1), sizeof (char));
+                               (size_t) (len + 1), sizeof (char));
                 return 0;
             }
 

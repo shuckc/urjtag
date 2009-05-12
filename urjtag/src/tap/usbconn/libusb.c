@@ -70,7 +70,7 @@ libusb_match_desc (struct usb_device *dev, char *desc)
     handle = usb_open (dev);
     if (handle == NULL)
     {
-        urj_error_set (URJ_ERROR_IO, "usb_open() failed: %s", strerror(errno));
+        urj_error_set (URJ_ERROR_USB, "usb_open() failed: %s", usb_strerror());
         errno = 0;
         return 0;
     }
@@ -123,15 +123,15 @@ usbconn_libusb_connect (const char **param, int paramc,
     usb_init ();
     if (usb_find_busses () < 0)
     {
-        urj_error_set (URJ_ERROR_IO, "usb_find_busses() failed: %s",
-                       strerror(errno));
+        urj_error_set (URJ_ERROR_USB, "usb_find_busses() failed: %s",
+                       usb_strerror());
         errno = 0;
         return NULL;
     }
     if (usb_find_devices () < 0)
     {
-        urj_error_set (URJ_ERROR_IO, "usb_find_devices() failed: %s",
-                       strerror(errno));
+        urj_error_set (URJ_ERROR_USB, "usb_find_devices() failed: %s",
+                       usb_strerror());
         errno = 0;
         return NULL;
     }
@@ -196,7 +196,7 @@ usbconn_libusb_open (urj_usbconn_t *conn)
     p->handle = usb_open (p->dev);
     if (p->handle == NULL)
     {
-        urj_error_set (URJ_ERROR_IO, "usb_open() failed: %s", strerror(errno));
+        urj_error_set (URJ_ERROR_USB, "usb_open() failed: %s", usb_strerror());
         errno = 0;
     }
     else
@@ -208,8 +208,8 @@ usbconn_libusb_open (urj_usbconn_t *conn)
         if (usb_claim_interface (p->handle, 0) != 0)
         {
             usb_close (p->handle);
-            urj_error_set (URJ_ERROR_IO, "usb_claim_interface failed: %s",
-                           strerror(errno));
+            urj_error_set (URJ_ERROR_USB, "usb_claim_interface failed: %s",
+                           usb_strerror());
             errno = 0;
             p->handle = NULL;
         }

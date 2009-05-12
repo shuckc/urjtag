@@ -7,6 +7,9 @@
     parser.
     Library commands that produce output (print routines) are equipped with
     a urj_log_level_t parameter to control their verbosity.
+  * include/urjtag/error.h, many more files: introduce error values
+  URJ_ERROR_FTD, URJ_ERROR_USB. Handle URJ_ERROR_IO specially through macro
+  urj_error_IO_set that handles errno/strerror().
 
 2009-05-11  Arnim Laeuger  <arniml>
 

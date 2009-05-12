@@ -73,6 +73,36 @@ urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver;
 static int usbconn_ftd2xx_common_open (urj_usbconn_t *conn, urj_log_level_t ll);
 static void usbconn_ftd2xx_free (urj_usbconn_t *conn);
 
+static const char *
+ftd2xx_status_string (FT_STATUS status)
+{
+    switch (status)
+    {
+    case FT_OK:                         return "OK";
+    case FT_INVALID_HANDLE:             return "invalid handle";
+    case FT_DEVICE_NOT_FOUND:           return "device not found";
+    case FT_DEVICE_NOT_OPENED:          return "device not opened";
+    case FT_IO_ERROR:                   return "io error";
+    case FT_INSUFFICIENT_RESOURCES:     return "insufficient resources";
+    case FT_INVALID_PARAMETER:          return "invalid parameter";
+    case FT_INVALID_BAUD_RATE:          return "invalid baud rate";
+
+    case FT_DEVICE_NOT_OPENED_FOR_ERASE: return "device not opened for erase";
+    case FT_DEVICE_NOT_OPENED_FOR_WRITE: return "device not opened for write";
+    case FT_FAILED_TO_WRITE_DEVICE:     return "failed to write device";
+    case FT_EEPROM_READ_FAILED:         return "eeprom read failed";
+    case FT_EEPROM_WRITE_FAILED:        return "eeprom write failed";
+    case FT_EEPROM_ERASE_FAILED:        return "eeprom erase failed";
+    case FT_EEPROM_NOT_PRESENT:         return "eeprom not present";
+    case FT_EEPROM_NOT_PROGRAMMED:      return "eeprom not programmed";
+    case FT_INVALID_ARGS:               return "invalid args";
+    case FT_NOT_SUPPORTED:              return "not supported";
+    case FT_OTHER_ERROR:                return "other error";
+    }
+
+    return "undefined FTD2xx error";
+}
+
 /* ---------------------------------------------------------------------- */
 
 /** @return number of flushed bytes on success; -1 on error */
@@ -99,7 +129,11 @@ usbconn_ftd2xx_flush (ftd2xx_param_t *p)
 
     if ((status = FT_Write (p->fc, p->send_buf, p->send_buffered,
                             &xferred)) != FT_OK)
-        urj_error_set (URJ_ERROR_IO, _("FT_Write() failed"));
+    {
+        urj_error_set (URJ_ERROR_FTD, _("FT_Write() failed: %s"),
+                       ftd2xx_status_string(status));
+        return -1;
+    }
 
     if (xferred < p->send_buffered)
     {
@@ -131,8 +165,8 @@ usbconn_ftd2xx_flush (ftd2xx_param_t *p)
         while (recvd == 0)
             if ((status = FT_Read (p->fc, &(p->recv_buf[p->recv_write_idx]),
                                    p->to_recv, &recvd)) != FT_OK)
-                urj_error_set (URJ_ERROR_IO, _("Error from FT_Read(): %d"),
-                               (int) status);
+                urj_error_set (URJ_ERROR_FTD, _("Error from FT_Read(): %s"),
+                               ftd2xx_status_string(status));
 
         if (recvd < p->to_recv)
             urj_log (URJ_LOG_LEVEL_NORMAL,
@@ -193,8 +227,8 @@ usbconn_ftd2xx_read (urj_usbconn_t *conn, uint8_t *buf, int len)
         while (recvd == 0)
             if ((status =
                  FT_Read (p->fc, &(buf[cpy_len]), len, &recvd)) != FT_OK)
-                urj_error_set (URJ_ERROR_IO, _("Error from FT_Read(): %d"),
-                               (int) status);
+                urj_error_set (URJ_ERROR_FTD, _("Error from FT_Read(): %s"),
+                               ftd2xx_status_string(status));
     }
 
     urj_log (URJ_LOG_LEVEL_DETAIL, "%sread end  : status %ld, length %d\n",
@@ -373,8 +407,8 @@ usbconn_ftd2xx_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
 
     if (status != FT_OK)
     {
-        urj_error_set (URJ_ERROR_IO, "Unable to open TFDI device");
-        urj_log (ll, "Unable to open FTDI device.\n");
+        urj_error_set (URJ_ERROR_FTD, "Unable to open TFDI device: %s",
+                       ftd2xx_status_string(status));
         /* mark ftd2xx layer as not initialized */
         p->fc = NULL;
         return URJ_STATUS_FAIL;
@@ -399,18 +433,22 @@ usbconn_ftd2xx_open (urj_usbconn_t *conn)
     fc = p->fc;
 
     if ((status = FT_ResetDevice (fc)) != FT_OK)
-        urj_error_set (URJ_ERROR_IO, _("Can't reset device"));
+        urj_error_set (URJ_ERROR_FTD, _("Can't reset device: %s"),
+                       ftd2xx_status_string(status));
     if (status == FT_OK)
         if ((status = FT_Purge (fc, FT_PURGE_RX)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't purge RX buffer"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't purge RX buffer: %s"),
+                           ftd2xx_status_string(status));
 
     if (status == FT_OK)
         if ((status = FT_SetLatencyTimer (fc, 2)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't set latency timer"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't set latency timer: %s"),
+                           ftd2xx_status_string(status));
 
     if (status == FT_OK)
         if ((status = FT_SetBaudRate (fc, 3E6)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't set baudrate"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't set baudrate: %s"),
+                           ftd2xx_status_string(status));
 
     if (status != FT_OK)
     {
@@ -442,39 +480,47 @@ usbconn_ftd2xx_mpsse_open (urj_usbconn_t *conn)
        Ref. FTCJTAGPG10.pdf
        Intermittent problems will occur when certain steps are skipped. */
     if ((status = FT_ResetDevice (fc)) != FT_OK)
-        urj_error_set (URJ_ERROR_IO, _("Can't reset device"));
+        urj_error_set (URJ_ERROR_FTD, _("Can't reset device: %s"),
+                       ftd2xx_status_string(status));
     if (status == FT_OK)
         if ((status = FT_Purge (fc, FT_PURGE_RX)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("s(): Can't purge RX buffer"));
+            urj_error_set (URJ_ERROR_FTD, _("s(): Can't purge RX buffer: %s"),
+                           ftd2xx_status_string(status));
 
     if (status == FT_OK)
         if ((status =
              FT_SetUSBParameters (fc, URJ_USBCONN_FTDX_MAXSEND_MPSSE,
                                   URJ_USBCONN_FTDX_MAXSEND_MPSSE)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't set USB parameters"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't set USB parameters: %s"),
+                           ftd2xx_status_string(status));
 
     if (status == FT_OK)
         if ((status = FT_SetChars (fc, 0, 0, 0, 0)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't set special characters"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't set special characters: %s"),
+                           ftd2xx_status_string(status));
 
     /* set a reasonable latency timer value
        if this value is too low then the chip will send intermediate result data
        in short packets (suboptimal performance) */
     if (status == FT_OK)
         if ((status = FT_SetLatencyTimer (fc, 16)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't set target latency timer"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't set target latency timer: %s"),
+                           ftd2xx_status_string(status));
 
     if (status == FT_OK)
         if ((status =
              FT_SetBitMode (fc, 0x0b, 0x02 /* BITMODE_MPSSE */ )) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't set MPSSE bitmode"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't set MPSSE bitmode: %s"),
+                           ftd2xx_status_string(status));
 
     if (status == FT_OK)
         if ((status = FT_ResetDevice (fc)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't reset device"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't reset device: %s"),
+                           ftd2xx_status_string(status));
     if (status == FT_OK)
         if ((status = FT_Purge (fc, FT_PURGE_RX)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't purge RX buffer"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't purge RX buffer: %s"),
+                           ftd2xx_status_string(status));
 
     /* set TCK Divisor */
     if (status == FT_OK)
@@ -496,10 +542,12 @@ usbconn_ftd2xx_mpsse_open (urj_usbconn_t *conn)
 
     if (status == FT_OK)
         if ((status = FT_ResetDevice (fc)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't reset device"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't reset device: %s"),
+                           ftd2xx_status_string(status));
     if (status == FT_OK)
         if ((status = FT_Purge (fc, FT_PURGE_RX)) != FT_OK)
-            urj_error_set (URJ_ERROR_IO, _("Can't purge RX buffer"));
+            urj_error_set (URJ_ERROR_FTD, _("Can't purge RX buffer: %s"),
+                           ftd2xx_status_string(status));
 
     if (status != FT_OK)
     {

@@ -155,6 +155,7 @@ direct_parport_alloc (unsigned int port)
     {
         urj_error_set (URJ_ERROR_IO,
                        _("Couldn't load InpOut32.dll; maybe not installed?\n"));
+        urj_error.sys_errno = GetLastError();
         return NULL;
     }
 
@@ -262,9 +263,7 @@ direct_open (urj_parport_t *parport)
     unsigned int port = ((direct_params_t *) parport->params)->port;
     if (((port + 3 <= 0x400) ? ioperm (port, 3, 1) : iopl (3)) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioperm(3,1) or iopl(3) fails: %s",
-                       strerror(errno));
-        errno = 0;
+        urj_error_IO_set ("ioperm(3,1) or iopl(3) fails");
         return URJ_STATUS_FAIL;
     }
     return URJ_STATUS_OK;
@@ -280,9 +279,7 @@ direct_close (urj_parport_t *parport)
     unsigned int port = ((direct_params_t *) parport->params)->port;
     if (((port + 3 <= 0x400) ? ioperm (port, 3, 0) : iopl (0)) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioperm(3,0) or iopl(0) fails: %s",
-                       strerror(errno));
-        errno = 0;
+        urj_error_IO_set ("ioperm(3,0) or iopl(0) fails");
         return URJ_STATUS_FAIL;
     }
     return URJ_STATUS_OK;

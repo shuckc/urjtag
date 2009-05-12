@@ -24,6 +24,8 @@
 #include <urjtag/sysdep.h>
 
 #include <stdarg.h>
+#include <errno.h>
+#include <string.h>
 
 #include <urjtag/log.h>
 #include <urjtag/error.h>
@@ -111,6 +113,8 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_SYNTAX:              return "syntax";
 
     case URJ_ERROR_IO:                  return "I/O error from OS";
+    case URJ_ERROR_FTD:                 return "ftdi/ftd2xx error";
+    case URJ_ERROR_USB:                 return "libusb error";
 
     case URJ_ERROR_BUS:                 return "bus";
 
@@ -129,10 +133,22 @@ urj_error_describe (void)
 {
     static char msg[URJ_ERROR_MSG_LEN + 1024 + 256 + 20];
 
-    snprintf (msg, sizeof msg, "%s:%d %s() %s: %s",
-              urj_error_state.file, urj_error_state.line,
-              urj_error_state.function,
-              urj_error_string (urj_error_state.errnum), urj_error_state.msg);
+    if (urj_error_state.errnum == URJ_ERROR_IO)
+    {
+        snprintf (msg, sizeof msg, "%s:%d %s() %s: %s %s",
+                  urj_error_state.file, urj_error_state.line,
+                  urj_error_state.function,
+                  "System error", strerror(urj_error_state.sys_errno),
+                  urj_error_state.msg);
+    }
+    else
+    {
+        snprintf (msg, sizeof msg, "%s:%d %s() %s: %s",
+                  urj_error_state.file, urj_error_state.line,
+                  urj_error_state.function,
+                  urj_error_string (urj_error_state.errnum),
+                  urj_error_state.msg);
+    }
 
     return msg;
 }

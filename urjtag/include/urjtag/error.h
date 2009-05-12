@@ -47,6 +47,8 @@ typedef enum urj_error {
     URJ_ERROR_SYNTAX,
 
     URJ_ERROR_IO,                               /**< I/O error from OS */
+    URJ_ERROR_FTD,                              /**< error from ftdi/ftd2xx */
+    URJ_ERROR_USB,                              /**< error from libusb */
 
     URJ_ERROR_BUS,
 
@@ -83,8 +85,9 @@ extern const char *urj_error_string (urj_error_t error);
  * Set error state.
  *
  * @param e urj_error_t value
- * @param ... consists of a printf argument set. It needs to start with a
- *      const char *fmt, followed by arguments used by fmt.
+ * @param ... error detail message that consists of a printf argument set.
+ *      It needs to start with a const char *fmt, followed by arguments used
+ *      by fmt.
  */
 #define urj_error_set(e, ...) \
     do { \
@@ -119,13 +122,13 @@ extern const char *urj_error_string (urj_error_t error);
  * Set I/O error state: do as urj_error_set, but also store errno in
  * #urj_error_state and then reset errno.
  *
- * @param e urj_error_t value
- * @param ... consists of a printf argument set. It needs to start with a
- *      const char *fmt, followed by arguments used by fmt.
+ * @param ... error detail message that consists of a printf argument set.
+ *      It needs to start with a const char *fmt, followed by arguments used
+ *      by fmt. The error code (URJ_ERROR_IO) is added by this macro.
  */
-#define urj_error_IO_set(e, ...) \
+#define urj_error_IO_set(...) \
     do { \
-        urj_error_set (e, __VA_ARGS__); \
+        urj_error_set (URJ_ERROR_IO, __VA_ARGS__); \
         urj_error_state.sys_errno = errno; \
         errno = 0; \
     } while (0)

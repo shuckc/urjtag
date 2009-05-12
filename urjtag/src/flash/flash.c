@@ -38,6 +38,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include <urjtag/error.h>
 #include <urjtag/log.h>
@@ -164,7 +165,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         fread (&c, sizeof c, 1, f);
         if (feof (f))
         {
-            urj_error_set (URJ_ERROR_IO, _("premature end of file"));
+            urj_error_IO_set (_("premature end of file"));
             return URJ_STATUS_FAIL;
         }
         urj_log (URJ_LOG_LEVEL_NORMAL,
@@ -216,12 +217,12 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         fread (&c, sizeof c, 1, f);
         if (feof (f))
         {
-            urj_error_set (URJ_ERROR_IO, _("premature end of file"));
+            urj_error_IO_set (_("premature end of file"));
             return URJ_STATUS_FAIL;
         }
-        urj_log (URJ_LOG_LEVEL_NORMAL, _
-                ("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
-                a, l, c);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
+                 a, l, c);
         if ((a == 0) && (c == 0))
             break;
         if (l & 3)
@@ -242,7 +243,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
             if (data != readed)
             {
                 urj_error_set (URJ_ERROR_FLASH_PROGRAM,
-                               _("\nverify error: 0x%08X vs. 0x%08X at addr %08X\n"),
+                               _("verify error: 0x%08X vs. 0x%08X at addr %08X"),
                                readed, data, a);
                 return URJ_STATUS_FAIL;
             }

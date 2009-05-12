@@ -181,9 +181,7 @@ urj_parse_file (urj_log_level_t ll, urj_chain_t *chain, const char *filename)
     f = fopen (filename, "r");
     if (!f)
     {
-        urj_error_set (URJ_ERROR_IO, "Cannot open file '%s' to parse: %s",
-                       filename, strerror(errno));
-        errno = 0;
+        urj_error_IO_set ("Cannot open file '%s' to parse", filename);
         return URJ_STATUS_FAIL;
     }
 

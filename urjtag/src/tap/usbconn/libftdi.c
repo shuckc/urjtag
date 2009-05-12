@@ -84,7 +84,7 @@ usbconn_ftdi_flush (ftdi_param_t *p)
         return 0;
 
     if ((xferred = ftdi_write_data (p->fc, p->send_buf, p->send_buffered)) < 0)
-        urj_error_set (URJ_ERROR_IO, _("ftdi_write_data() failed: %s"),
+        urj_error_set (URJ_ERROR_FTD, _("ftdi_write_data() failed: %s"),
                        ftdi_get_error_string (p->fc));
 
     if (xferred < p->send_buffered)
@@ -118,7 +118,7 @@ usbconn_ftdi_flush (ftdi_param_t *p)
             if ((recvd = ftdi_read_data (p->fc,
                                          &(p->recv_buf[p->recv_write_idx]),
                                          p->to_recv)) < 0)
-                urj_error_set (URJ_ERROR_IO,
+                urj_error_set (URJ_ERROR_FTD,
                                _("Error from ftdi_read_data(): %s"),
                                ftdi_get_error_string (p->fc));
 
@@ -174,7 +174,7 @@ usbconn_ftdi_read (urj_usbconn_t *conn, uint8_t *buf, int len)
         /* need to get more data directly from the device */
         while (recvd == 0)
             if ((recvd = ftdi_read_data (p->fc, &(buf[cpy_len]), len)) < 0)
-                urj_error_set (URJ_ERROR_IO,
+                urj_error_set (URJ_ERROR_FTD,
                                _("Error from ftdi_read_data(): %s"),
                                ftdi_get_error_string (p->fc));
     }
@@ -342,7 +342,7 @@ usbconn_ftdi_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
         if (status != -3)
             urj_log (ll, _("%s(): ftdi_usb_open_desc() failed: %s"),
                      __func__, ftdi_get_error_string (fc));
-        urj_error_set (URJ_ERROR_IO, _("ftdi_usb_open_desc() failed: %s"),
+        urj_error_set (URJ_ERROR_FTD, _("ftdi_usb_open_desc() failed: %s"),
                        ftdi_get_error_string (fc));
         ftdi_deinit (fc);
         /* mark ftdi layer as not initialized */
@@ -367,11 +367,11 @@ seq_purge (struct ftdi_context *fc, int purge_rx, int purge_tx)
 
 #ifndef LIBFTDI_UNIMPLEMENTED
     if ((r = ftdi_usb_purge_buffers (fc)) < 0)
-        urj_error_set (URJ_ERROR_IO, _("ftdi_usb_purge_buffers() failed: %s"),
+        urj_error_set (URJ_ERROR_FTD, _("ftdi_usb_purge_buffers() failed: %s"),
                        ftdi_get_error_string (fc));
     if (r >= 0)
         if ((r = ftdi_read_data (fc, &buf, 1)) < 0)
-            urj_error_set (URJ_ERROR_IO, _("ftdi_read_data() failed: %s"),
+            urj_error_set (URJ_ERROR_FTD, _("ftdi_read_data() failed: %s"),
                            ftdi_get_error_string (fc));
 #else /* not yet available */
     {
@@ -380,19 +380,19 @@ seq_purge (struct ftdi_context *fc, int purge_rx, int purge_tx)
         if (purge_rx)
             for (rx_loop = 0; (rx_loop < 6) && (r >= 0); rx_loop++)
                 if ((r = ftdi_usb_purge_rx_buffer (fc)) < 0)
-                    urj_error_set (URJ_ERROR_IO,
+                    urj_error_set (URJ_ERROR_FTD,
                                    _("ftdi_usb_purge_rx_buffer() failed: %s"),
                                    ftdi_get_error_string (fc));
 
         if (purge_tx)
             if (r >= 0)
                 if ((r = ftdi_usb_purge_tx_buffer (fc)) < 0)
-                    urj_error_set (URJ_ERROR_IO,
+                    urj_error_set (URJ_ERROR_FTD,
                                    _("ftdi_usb_purge_tx_buffer() failed: %s"),
                                    ftdi_get_error_string (fc));
         if (r >= 0)
             if ((r = ftdi_read_data (fc, &buf, 1)) < 0)
-                urj_error_set (URJ_ERROR_IO, _("ftdi_read_data() failed: %s"),
+                urj_error_set (URJ_ERROR_FTD, _("ftdi_read_data() failed: %s"),
                                ftdi_get_error_string (fc));
     }
 #endif
@@ -409,12 +409,12 @@ seq_reset (struct ftdi_context *fc)
     {
         unsigned short status;
         if ((r = ftdi_poll_status (fc, &status)) < 0)
-            urj_error_set (URJ_ERROR_IO, _("ftdi_poll_status() failed: %s"),
+            urj_error_set (URJ_ERROR_FTD, _("ftdi_poll_status() failed: %s"),
                            ftdi_get_error_string (fc));
     }
 #endif
     if ((r = ftdi_usb_reset (fc)) < 0)
-        urj_error_set (URJ_ERROR_IO, _("ftdi_usb_reset() failed: %s"),
+        urj_error_set (URJ_ERROR_FTD, _("ftdi_usb_reset() failed: %s"),
                        ftdi_get_error_string (fc));
 
     if (r >= 0)
@@ -440,7 +440,7 @@ usbconn_ftdi_open (urj_usbconn_t *conn)
 
     if (r >= 0)
         if ((r = ftdi_set_latency_timer (fc, 2)) < 0)
-            urj_error_set (URJ_ERROR_IO,
+            urj_error_set (URJ_ERROR_FTD,
                            _("ftdi_set_latency_timer() failed: %s"),
                            ftdi_get_error_string (fc));
 
@@ -451,13 +451,14 @@ usbconn_ftdi_open (urj_usbconn_t *conn)
         if (usb_control_msg
             (fc->usb_dev, 0x40, 3, 1, 0, NULL, 0, fc->usb_write_timeout) != 0)
         {
-            urj_error_set (URJ_ERROR_IO, "Can't set max baud rate");
+            urj_error_set (URJ_ERROR_FTD, "Can't set max baud rate: %s"
+                           ftdi_get_error_string (fc));
             r = -1;
         }
 #else
     if (r >= 0)
         if ((r = ftdi_set_baudrate (fc, 3E6)) < 0)
-            urj_error_set (URJ_ERROR_IO, _("ftdi_set_baudrate() failed: %s"),
+            urj_error_set (URJ_ERROR_FTD, _("ftdi_set_baudrate() failed: %s"),
                            ftdi_get_error_string (fc));
 #endif
 
@@ -519,18 +520,18 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
        in short packets (suboptimal performance) */
     if (r >= 0)
         if ((r = ftdi_set_latency_timer (fc, 16)) < 0)
-            urj_error_set (URJ_ERROR_IO,
+            urj_error_set (URJ_ERROR_FTD,
                            _("ftdi_set_latency_timer() failed: %s"),
                            ftdi_get_error_string (fc));
 
     if (r >= 0)
         if ((r = ftdi_set_bitmode (fc, 0x0b, BITMODE_MPSSE)) < 0)
-            urj_error_set (URJ_ERROR_IO, _("ftdi_set_bitmode() failed: %s"),
+            urj_error_set (URJ_ERROR_FTD, _("ftdi_set_bitmode() failed: %s"),
                            ftdi_get_error_string (fc));
 
     if (r >= 0)
         if ((r = ftdi_usb_reset (fc)) < 0)
-            urj_error_set (URJ_ERROR_IO, _("ftdi_usb_reset() failed: %s"),
+            urj_error_set (URJ_ERROR_FTD, _("ftdi_usb_reset() failed: %s"),
                            ftdi_get_error_string (fc));
     if (r >= 0)
         r = seq_purge (fc, 1, 0);
@@ -552,7 +553,7 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
 
     if (r >= 0)
         if ((r = ftdi_usb_reset (fc)) < 0)
-            urj_error_set (URJ_ERROR_IO, _("ftdi_usb_reset() failed: %s"),
+            urj_error_set (URJ_ERROR_FTD, _("ftdi_usb_reset() failed: %s"),
                            ftdi_get_error_string (fc));
     if (r >= 0)
         r = seq_purge (fc, 1, 0);

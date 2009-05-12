@@ -158,18 +158,14 @@ ppdev_open (urj_parport_t *parport)
     p->fd = open (p->portname, O_RDWR);
     if (p->fd < 0)
     {
-        urj_error_set (URJ_ERROR_IO, _("Could not open port %s: %s\n"),
-                       p->portname, strerror (errno));
-        errno = 0;
+        urj_error_IO_set (_("Could not open port %s"), p->portname);
         return URJ_STATUS_FAIL;
     }
 
     if (                        /*(ioctl( p->fd, PPEXCL ) == -1) || */
            (ioctl (p->fd, PPCLAIM) == -1))
     {
-        urj_error_set (URJ_ERROR_IO, _("Could not claim ppdev device: %s\n"),
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set (_("Could not claim ppdev device"));
         close (p->fd);
         p->fd = -1;
         return URJ_STATUS_FAIL;
@@ -186,17 +182,13 @@ ppdev_close (urj_parport_t *parport)
 
     if (ioctl (p->fd, PPRELEASE) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioctl(PPRELEASE) fails: %s",
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("ioctl(PPRELEASE) fails");
         r = URJ_STATUS_FAIL;
     }
 
     if (close (p->fd) != 0)
     {
-        urj_error_set (URJ_ERROR_IO, "Cannot close(%d): %s", p->fd,
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("Cannot close(%d)", p->fd);
         return URJ_STATUS_FAIL;
     }
 
@@ -211,9 +203,7 @@ ppdev_set_data (urj_parport_t *parport, uint8_t data)
 
     if (ioctl (p->fd, PPWDATA, &data) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioctl(PPWDATA) fails: %s",
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("ioctl(PPWDATA) fails");
         return URJ_STATUS_FAIL;
     }
 
@@ -228,9 +218,7 @@ ppdev_get_data (urj_parport_t *parport)
 
     if (ioctl (p->fd, PPRDATA, &d) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioctl(PPRSTATUS) fails: %s",
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("ioctl(PPRSTATUS) fails");
         return -1;
     }
 
@@ -245,9 +233,7 @@ ppdev_get_status (urj_parport_t *parport)
 
     if (ioctl (p->fd, PPRSTATUS, &d) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioctl(PPRSTATUS) fails: %s",
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("ioctl(PPRSTATUS) fails");
         return -1;
     }
 
@@ -263,9 +249,7 @@ ppdev_set_control (urj_parport_t *parport, uint8_t data)
 
     if (ioctl (p->fd, PPWCONTROL, &data) == -1)
     {
-        urj_error_set (URJ_ERROR_IO, "ioctl(PPWDATA) fails: %s",
-                       strerror (errno));
-        errno = 0;
+        urj_error_IO_set ("ioctl(PPWDATA) fails");
         return URJ_STATUS_FAIL;
     }
 
