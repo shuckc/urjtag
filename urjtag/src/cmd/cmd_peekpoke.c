@@ -144,7 +144,7 @@ cmd_poke_run (urj_chain_t *chain, char *params[])
     while (k < pars)
     {
         if (urj_cmd_get_number (params[k], &adr) != URJ_STATUS_OK
-            || urj_cmd_get_number (params[k + 1], &val))
+            || urj_cmd_get_number (params[k + 1], &val) != URJ_STATUS_OK)
             return URJ_STATUS_FAIL;
         URJ_BUS_AREA (urj_bus, adr, &area);
         URJ_BUS_WRITE (urj_bus, adr, val);
