@@ -67,22 +67,29 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
             print_progress = 1;
         else if (strncasecmp (params[i], "ref_freq=", 9) == 0)
             ref_freq = strtol (params[i] + 9, NULL, 10);
-        if (print_progress)
-            urj_log_state.level = URJ_LOG_LEVEL_DETAIL;
-
-        if ((SVF_FILE = fopen (params[1], "r")) != NULL)
-        {
-            if (! urj_svf_run (chain, SVF_FILE, stop, ref_freq))
-                result = URJ_STATUS_FAIL;
-
-            fclose (SVF_FILE);
-        }
         else
         {
             urj_error_set (URJ_ERROR_SYNTAX, "%s: unknown command '%s'",
                            params[0], params[i]);
-            result = URJ_STATUS_FAIL;
+            return URJ_STATUS_FAIL;
         }
+    }
+
+    if (print_progress)
+        urj_log_state.level = URJ_LOG_LEVEL_DETAIL;
+
+    if ((SVF_FILE = fopen (params[1], "r")) != NULL)
+    {
+        if (! urj_svf_run (chain, SVF_FILE, stop, ref_freq))
+            result = URJ_STATUS_FAIL;
+
+        fclose (SVF_FILE);
+    }
+    else
+    {
+        urj_error_IO_set ("%s: cannot open file '%s'",
+                          params[0], params[i]);
+        result = URJ_STATUS_FAIL;
     }
 
     urj_log_state.level = old_log_level;
