@@ -46,17 +46,14 @@
 #endif
 
 
-#undef VERBOSE
-
-#ifdef VERBOSE
 static void
-print_vector (int len, char *vec)
+print_vector (urj_log_level_t ll, int len, char *vec)
 {
     int i;
     for (i = 0; i < len; i++)
-        printf ("%c", vec[i] ? '1' : '0');
+        urj_log (ll, "%c", vec[i] ? '1' : '0');
 }
-#endif
+
 
 void
 urj_tap_cable_generic_disconnect (urj_cable_t *cable)
@@ -66,7 +63,7 @@ urj_tap_cable_generic_disconnect (urj_cable_t *cable)
 }
 
 int
-urj_tap_cable_generic_transfer (urj_cable_t *cable, int len, char *in,
+urj_tap_cable_generic_transfer (urj_cable_t *cable, int len, const char *in,
                                 char *out)
 {
     int i;
@@ -97,9 +94,7 @@ do_one_queued_action (urj_cable_t *cable)
 {
     int i;
 
-#ifdef VERBOSE
-    printf ("do_one_queued\n");
-#endif
+    urj_log (URJ_LOG_LEVEL_DETAIL, "do_one_queued\n");
 
     if ((i = urj_tap_cable_get_queue_item (cable, &(cable->todo))) >= 0)
     {
@@ -111,8 +106,10 @@ do_one_queued_action (urj_cable_t *cable)
                 || cable->todo.data[i].action == URJ_TAP_CABLE_GET_SIGNAL
                 || cable->todo.data[i].action == URJ_TAP_CABLE_TRANSFER)
             {
-                printf (_("No space in cable activity results queue.\n"));
+                urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
+                               _("No space in cable activity results queue"));
                 urj_tap_cable_purge_queue (&(cable->done), 1);
+                /* @@@@ RFHH shouldn't we bail out? */
             }
         }
 
@@ -131,6 +128,7 @@ do_one_queued_action (urj_cable_t *cable)
             break;
         case URJ_TAP_CABLE_TRANSFER:
             {
+                /* @@@@ RFHH check result */
                 int r = cable->driver->transfer (cable,
                                                  cable->todo.data[i].arg.
                                                  transfer.len,
@@ -142,12 +140,12 @@ do_one_queued_action (urj_cable_t *cable)
                 free (cable->todo.data[i].arg.transfer.in);
                 if (cable->todo.data[i].arg.transfer.out != NULL)
                 {
+                    /* @@@@ RFHH check result */
                     j = urj_tap_cable_add_queue_item (cable, &(cable->done));
-#ifdef VERBOSE
-                    printf ("add result from transfer to %p.%d (out=%p)\n",
-                            &(cable->done), j,
-                            cable->todo.data[i].arg.transfer.out);
-#endif
+                    urj_log (URJ_LOG_LEVEL_DETAIL,
+                             "add result from transfer to %p.%d (out=%p)\n",
+                             &(cable->done), j,
+                             cable->todo.data[i].arg.transfer.out);
                     cable->done.data[j].action = URJ_TAP_CABLE_TRANSFER;
                     cable->done.data[j].arg.xferred.len =
                         cable->todo.data[i].arg.transfer.len;
@@ -158,20 +156,20 @@ do_one_queued_action (urj_cable_t *cable)
                 break;
             }
         case URJ_TAP_CABLE_GET_TDO:
+            /* @@@@ RFHH check result */
             j = urj_tap_cable_add_queue_item (cable, &(cable->done));
-#ifdef VERBOSE
-            printf ("add result from get_tdo to %p.%d\n", &(cable->done), j);
-#endif
+            urj_log (URJ_LOG_LEVEL_DETAIL,
+                     "add result from get_tdo to %p.%d\n", &(cable->done), j);
             cable->done.data[j].action = URJ_TAP_CABLE_GET_TDO;
             cable->done.data[j].arg.value.val =
                 cable->driver->get_tdo (cable);
             break;
         case URJ_TAP_CABLE_GET_SIGNAL:
+            /* @@@@ RFHH check result */
             j = urj_tap_cable_add_queue_item (cable, &(cable->done));
-#ifdef VERBOSE
-            printf ("add result from get_signal to %p.%d\n", &(cable->done),
-                    j);
-#endif
+            urj_log (URJ_LOG_LEVEL_DETAIL,
+                     "add result from get_signal to %p.%d\n", &(cable->done),
+                     j);
             cable->done.data[j].action = URJ_TAP_CABLE_GET_SIGNAL;
             cable->done.data[j].arg.value.sig =
                 cable->todo.data[i].arg.value.sig;
@@ -180,15 +178,11 @@ do_one_queued_action (urj_cable_t *cable)
                                            cable->todo.data[i].arg.value.sig);
             break;
         }
-#ifdef VERBOSE
-        printf ("do_one_queued done\n");
-#endif
+        urj_log (URJ_LOG_LEVEL_DETAIL, "do_one_queued done\n");
 
         return 1;
     }
-#ifdef VERBOSE
-    printf ("do_one_queued abort\n");
-#endif
+    urj_log (URJ_LOG_LEVEL_DETAIL, "do_one_queued abort\n");
 
     return 0;
 }
@@ -220,9 +214,7 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
     {
         int r, bits = 0, tdo = 0;
 
-#ifdef VERBOSE
-        printf ("flush(%d)\n", cable->todo.num_items);
-#endif
+        urj_log (URJ_LOG_LEVEL_DETAIL, "flush(%d)\n", cable->todo.num_items);
 
         /* Combine as much as possible into transfer() */
 
@@ -234,37 +226,29 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
                 && cable->todo.data[i].action != URJ_TAP_CABLE_TRANSFER
                 && cable->todo.data[i].action != URJ_TAP_CABLE_GET_TDO)
             {
-#ifdef VERBOSE
-                printf
-                    ("cutoff at n=%d because action unsuitable for transfer\n",
-                     n);
-#endif
+                urj_log (URJ_LOG_LEVEL_DETAIL,
+                         "cutoff at n=%d because action unsuitable for transfer\n",
+                         n);
                 break;
             }
             if (cable->todo.data[i].action == URJ_TAP_CABLE_CLOCK
                 && cable->todo.data[i].arg.clock.tms != 0)
             {
-#ifdef VERBOSE
-                printf
-                    ("cutoff at n=%d because clock.tms=1 is unsuitable for transfer\n",
-                     n);
-#endif
+                urj_log (URJ_LOG_LEVEL_DETAIL,
+                         "cutoff at n=%d because clock.tms=1 is unsuitable for transfer\n",
+                         n);
                 break;
             }
             if (cable->todo.data[i].action == URJ_TAP_CABLE_CLOCK)
             {
                 int k = cable->todo.data[i].arg.clock.n;
-#ifdef VERBOSE
-                printf ("%d clock(s)\n", k);
-#endif
+                urj_log (URJ_LOG_LEVEL_DETAIL, "%d clock(s)\n", k);
                 bits += k;
             }
             else if (cable->todo.data[i].action == URJ_TAP_CABLE_TRANSFER)
             {
                 int k = cable->todo.data[i].arg.transfer.len;
-#ifdef VERBOSE
-                printf ("%d transfer\n", k);
-#endif
+                urj_log (URJ_LOG_LEVEL_DETAIL, "%d transfer\n", k);
                 bits += k;
             }
             i++;
@@ -272,9 +256,8 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
                 i = 0;
         }
 
-#ifdef VERBOSE
-        printf ("%d combined into one (%d bits)\n", n, bits);
-#endif
+        urj_log (URJ_LOG_LEVEL_DETAIL, "%d combined into one (%d bits)\n",
+                 n, bits);
 
         if (bits == 0 || n <= 1)
         {
@@ -323,18 +306,17 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
 
             /* Step 3: Do the transfer */
 
+            /* @@@@ RFHH check result */
             r = cable->driver->transfer (cable, bits, in, out);
-#ifdef VERBOSE
-            printf ("in: ");
-            print_vector (bits, in);
-            printf ("\n");
+            urj_log (URJ_LOG_LEVEL_DETAIL, "in: ");
+            print_vector (URJ_LOG_LEVEL_DETAIL, bits, in);
+            urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
             if (out)
             {
-                printf ("out: ");
-                print_vector (bits, out);
-                printf ("\n");
+                urj_log (URJ_LOG_LEVEL_DETAIL, "out: ");
+                print_vector (URJ_LOG_LEVEL_DETAIL, bits, out);
+                urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
             }
-#endif
 
             /* Step 4: Pick results from transfer */
 
@@ -348,12 +330,11 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
                 }
                 else if (cable->todo.data[i].action == URJ_TAP_CABLE_GET_TDO)
                 {
-                    int c =
-                        urj_tap_cable_add_queue_item (cable, &(cable->done));
-#ifdef VERBOSE
-                    printf ("add result from transfer to %p.%d\n",
-                            &(cable->done), c);
-#endif
+                    int c = urj_tap_cable_add_queue_item (cable,
+                                                          &(cable->done));
+                    urj_log (URJ_LOG_LEVEL_DETAIL,
+                             "add result from transfer to %p.%d\n",
+                             &(cable->done), c);
                     cable->done.data[c].action = URJ_TAP_CABLE_GET_TDO;
                     cable->done.data[c].arg.value.val = tdo;
                 }
@@ -366,10 +347,9 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
                     {
                         int c = urj_tap_cable_add_queue_item (cable,
                                                               &(cable->done));
-#ifdef VERBOSE
-                        printf ("add result from transfer to %p.%d\n",
-                                &(cable->done), c);
-#endif
+                        urj_log (URJ_LOG_LEVEL_DETAIL,
+                                 "add result from transfer to %p.%d\n",
+                                 &(cable->done), c);
                         cable->done.data[c].action = URJ_TAP_CABLE_TRANSFER;
                         cable->done.data[c].arg.xferred.len = len;
                         cable->done.data[c].arg.xferred.res = r;
@@ -417,7 +397,8 @@ urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
             new_frequency < (1.0 + tolerance) * frequency)
             return;
 
-        printf ("requested frequency %u, now calibrating delay loop\n",
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 "requested frequency %u, now calibrating delay loop\n",
                 new_frequency);
 
         while (1)
@@ -435,8 +416,8 @@ urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
 
             if (end < start)
             {
-                printf (_
-                        ("calibration error, wall clock is not monotonically increasing\n"));
+                urj_log (URJ_LOG_LEVEL_ERROR,
+                         _("calibration error, wall clock is not monotonically increasing\n"));
                 break;
             }
             if (end == start)
@@ -447,7 +428,7 @@ urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
                 continue;
             }
             real_frequency = (long double) loops / (end - start);
-            printf ("new real frequency %Lg, delay %u\n",
+            urj_log (URJ_LOG_LEVEL_NORMAL, "new real frequency %Lg, delay %u\n",
                     real_frequency, delay);
 
             new_delay = (long double) delay *real_frequency / new_frequency;
@@ -473,7 +454,7 @@ urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
             {
                 if (delay == 0)
                 {
-                    printf ("operating without delay\n");
+                    urj_log (URJ_LOG_LEVEL_NORMAL, "operating without delay\n");
                     frequency = real_frequency;
                     break;
                 }
@@ -490,7 +471,7 @@ urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
             }
         }
 
-        printf ("done\n");
+        urj_log (URJ_LOG_LEVEL_NORMAL, "done\n");
 
         cable->delay = delay;
         cable->frequency = frequency;

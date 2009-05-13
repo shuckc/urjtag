@@ -65,7 +65,8 @@ urj_parse_line (urj_chain_t *chain, char *line)
     sline = malloc (l + 1);
     if (sline == NULL)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%d) fails", l + 1);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       (size_t) (l + 1));
         return URJ_STATUS_FAIL;
     }
 
@@ -104,7 +105,7 @@ urj_parse_line (urj_chain_t *chain, char *line)
     if (a == NULL)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                       (tcnt + 1) * sizeof (char *));
+                       (size_t) ((tcnt + 1) * sizeof (char *)));
         return URJ_STATUS_FAIL;
     }
 

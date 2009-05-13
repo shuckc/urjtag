@@ -107,7 +107,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
     set_flash_driver ();
     if (!urj_flash_cfi_array || !flash_driver)
     {
-        urj_error_set (URJ_ERROR_NOTFOUND, _("no flash driver found\n"));
+        urj_error_set (URJ_ERROR_NOTFOUND, _("no flash driver found"));
         return URJ_STATUS_FAIL;
     }
 
@@ -121,7 +121,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         sync[7] = '\0';
         if (strcmp ("B000FF\n", sync) != 0)
         {
-            urj_error_set (URJ_ERROR_INVALID, _("Invalid sync sequence!\n"));
+            urj_error_set (URJ_ERROR_INVALID, _("Invalid sync sequence"));
             return URJ_STATUS_FAIL;
         }
     }
@@ -227,7 +227,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
             break;
         if (l & 3)
         {
-            urj_error_set (URJ_ERROR_INVALID, _("Invalid record length!"));
+            urj_error_set (URJ_ERROR_INVALID, _("Invalid record length"));
             return URJ_STATUS_FAIL;
         }
 
@@ -462,7 +462,7 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
     set_flash_driver ();
     if (!urj_flash_cfi_array || !flash_driver)
     {
-        urj_error_set (URJ_ERROR_NOTFOUND, _("no flash driver found\n"));
+        urj_error_set (URJ_ERROR_NOTFOUND, _("no flash driver found"));
         return URJ_STATUS_FAIL;
     }
     cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
@@ -525,9 +525,7 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
         urj_log (URJ_LOG_LEVEL_NORMAL, _("\nErasing (partially) Failed.\n"));
 
     /* BYPASS */
-    /* @@@@ RFHH check result */
     //       urj_part_parts_set_instruction( ps, "BYPASS" );
-    /* @@@@ RFHH check result */
     //       urj_tap_chain_shift_instructions( chain );
 
     return status;

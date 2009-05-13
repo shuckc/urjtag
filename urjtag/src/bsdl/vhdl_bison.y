@@ -615,7 +615,7 @@ Init_Text (urj_vhdl_parser_priv_t *priv)
 {
     if (priv->len_buffer == 0)
     {
-        /* @@@@ ToDo check malloc result RFHH */
+        /* @@@@ RFHH check malloc result */
         priv->buffer = malloc (160);
         priv->len_buffer = 160;
     }
@@ -651,7 +651,7 @@ Store_Text (urj_vhdl_parser_priv_t *priv, char *Source)
     req_len = strlen (priv->buffer) + strlen (Source) + 1;
     if (req_len > priv->len_buffer)
     {
-        /* @@@@ ToDo check realloc result RFHH */
+        /* @@@@ RFHH check realloc result */
         priv->buffer = realloc (priv->buffer, req_len);
         priv->len_buffer = req_len;
     }

@@ -178,7 +178,7 @@ urj_tap_cable_init (urj_cable_t *cable)
     if (cable->todo.data == NULL || cable->done.data == NULL)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
-                       _("malloc(%zd) or malloc(%zd) fails"),
+                       _("malloc(%zd)/malloc(%zd) fails"),
                        cable->todo.max_items * sizeof (urj_cable_queue_t),
                        cable->done.max_items * sizeof (urj_cable_queue_t));
         if (cable->todo.data != NULL)

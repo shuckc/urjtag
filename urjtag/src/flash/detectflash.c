@@ -94,7 +94,7 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
 
     if (urj_flash_cfi_array == NULL)
     {
-        urj_error_set (URJ_ERROR_NOTFOUND, _("Flash not found!"));
+        urj_error_set (URJ_ERROR_NOTFOUND, _("Flash not found"));
         return URJ_STATUS_FAIL;
     }
 

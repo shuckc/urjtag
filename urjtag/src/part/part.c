@@ -217,7 +217,7 @@ urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
     if (!bsr)
     {
         urj_error_set (URJ_ERROR_NOTFOUND,
-                       _("Boundary Scan Register (BSR) not found\n"));
+                       _("Boundary Scan Register (BSR) not found"));
         return URJ_STATUS_FAIL;
     }
 
@@ -228,7 +228,7 @@ urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
         if (!s->output)
         {
             urj_error_set (URJ_ERROR_INVALID,
-                           _("signal '%s' cannot be set as output\n"), s->name);
+                           _("signal '%s' cannot be set as output"), s->name);
             return URJ_STATUS_FAIL;
         }
         bsr->in->data[s->output->bit] = val & 1;
@@ -243,7 +243,7 @@ urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val)
         if (!s->input)
         {
             urj_error_set (URJ_ERROR_INVALID,
-                           _("signal '%s' cannot be set as input\n"), s->name);
+                           _("signal '%s' cannot be set as input"), s->name);
             return URJ_STATUS_FAIL;
         }
         if (s->output)
@@ -270,14 +270,14 @@ urj_part_get_signal (urj_part_t *p, const urj_part_signal_t *s)
     if (!bsr)
     {
         urj_error_set (URJ_ERROR_NOTFOUND,
-                       _("Boundary Scan Register (BSR) not found\n"));
+                       _("Boundary Scan Register (BSR) not found"));
         return -1;
     }
 
     if (!s->input)
     {
         urj_error_set (URJ_ERROR_INVALID,
-                       _("signal '%s' is not input signal\n"), s->name);
+                       _("signal '%s' is not input signal"), s->name);
         return -1;
     }
 

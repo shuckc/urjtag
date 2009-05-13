@@ -92,22 +92,21 @@ ep9307_gpio_open (urj_cable_t *cable)
     p->fd_dev_mem = open ("/dev/mem", O_RDWR | O_SYNC);
     if (p->fd_dev_mem == -1)
     {
-        printf (_("Error: unable to open /dev/mem\n"));
-        return -1;
+        urj_error_IO_set (_("unable to open /dev/mem"));
+        return URJ_STATUS_FAIL;
     }
 
     p->map_size = getpagesize ();
     map_mask = p->map_size - 1;
 
     /* Map the System Controller registers */
-    p->map_base =
-        mmap (0, p->map_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-              p->fd_dev_mem, SYSCON_BASE & ~map_mask);
+    p->map_base = mmap (0, p->map_size, PROT_READ | PROT_WRITE, MAP_SHARED,
+                        p->fd_dev_mem, SYSCON_BASE & ~map_mask);
     if (p->map_base == MAP_FAILED)
     {
-        printf (_("Error: unable to mmap the System Control registers\n"));
+        urj_error_IO_set (_("unable to mmap the System Control registers"));
         close (p->fd_dev_mem);
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
     /* Create the pointers to access the DeviceCfg and SysSWLock registers */
@@ -125,10 +124,9 @@ ep9307_gpio_open (urj_cable_t *cable)
     /* Unmap the System Controller registers */
     if (munmap (p->map_base, p->map_size) == -1)
     {
-        printf (_
-                ("Error: unable to munmap the System Controller registers\n"));
+        urj_error_IO_set (_("unable to munmap the System Controller registers"));
         close (p->fd_dev_mem);
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
     /* Map the GPIO registers */
@@ -137,9 +135,9 @@ ep9307_gpio_open (urj_cable_t *cable)
               p->fd_dev_mem, GPIO_BASE & ~map_mask);
     if (p->map_base == MAP_FAILED)
     {
-        printf (_("Error: unable to mmap the GPIO registers\n"));
+        urj_error_IO_set (_("unable to mmap the GPIO registers"));
         close (p->fd_dev_mem);
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
     /* Create the pointers to access the PHDR and PHDDR registers */
@@ -152,7 +150,7 @@ ep9307_gpio_open (urj_cable_t *cable)
     tmp &= GPIO_OUTPUT_MASK;
     *((uint32_t *) gpio_PHDDR) = tmp;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -163,10 +161,10 @@ ep9307_gpio_close (urj_cable_t *cable)
     /* Unmap the GPIO registers */
     if (munmap (p->map_base, p->map_size) == -1)
     {
-        printf (_("Error: unable to munmap the GPIO registers\n"));
+        urj_error_IO_set (_("unable to munmap the GPIO registers"));
     }
     close (p->fd_dev_mem);
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -202,24 +200,27 @@ ep9307_connect (char *params[], urj_cable_t *cable)
 
     if (urj_cmd_params (params) != 1)
     {
-        printf (_("Error: This cable type does not accept parameters!\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       _("This cable type does not accept parameters"));
+        return URJ_STATUS_FAIL;
     }
 
-    printf (_("Initializing Vision EP9307 SoM GPIO JTAG Cable\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Initializing Vision EP9307 SoM GPIO JTAG Cable\n"));
 
     cable_params = malloc (sizeof *cable_params);
     if (!cable_params)
     {
-        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
-        return 4;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
+                       sizeof *cable_params);
+        return URJ_STATUS_FAIL;
     }
 
     cable->link.port = NULL;
     cable->params = cable_params;
     cable->chain = NULL;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -235,13 +236,13 @@ ep9307_init (urj_cable_t *cable)
     ep9307_params_t *p = cable->params;
 
     if (ep9307_gpio_open (cable))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     ep9307_gpio_write (cable, 1 << TRST);
     urj_tap_cable_wait (cable);
     p->signals = URJ_POD_CS_TRST;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -290,10 +291,8 @@ ep9307_current_signals (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
-    int sigs =
-        p->
-        signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK |
-                    URJ_POD_CS_TRST);
+    int sigs = p->signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK
+                              | URJ_POD_CS_TRST);
     if (p->lastout & (1 << TCK))
         sigs |= URJ_POD_CS_TCK;
     if (p->lastout & (1 << TDI))
@@ -335,9 +334,9 @@ ep9307_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 }
 
 static void
-ep9307_help (const char *cablename)
+ep9307_help (urj_log_level_t ll, const char *cablename)
 {
-    printf (_("Usage: cable %s\n" "\n"), cablename);
+    urj_log (ll, _("Usage: cable %s\n" "\n"), cablename);
 }
 
 urj_cable_driver_t urj_tap_cable_ep9307_driver = {

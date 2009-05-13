@@ -232,8 +232,7 @@ ppi_set_control (urj_parport_t *parport, uint8_t data)
 
     if (ioctl (p->fd, PPIGCTRL, &data) == -1)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                       sizeof (urj_chain_t));
+        urj_error_IO_set ("ioctl(PPIGCTRL) fails");
         return URJ_STATUS_FAIL;
     }
 

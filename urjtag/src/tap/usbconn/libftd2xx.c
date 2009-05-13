@@ -340,6 +340,7 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
     p->fc = NULL;
     p->pid = template->pid;
     p->vid = template->vid;
+    /* @@@@ RFHH check strdup result */
     p->serial = template->desc ? strdup (template->desc) : NULL;
 
     c->params = p;

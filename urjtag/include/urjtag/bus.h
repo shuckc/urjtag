@@ -46,7 +46,9 @@ extern urj_buses_t urj_buses;
 extern const urj_bus_driver_t *urj_bus_drivers[];
 
 void urj_bus_buses_free (void);
+/* @@@@ RFHH return status */
 void urj_bus_buses_add (urj_bus_t *abus);
+/* @@@@ RFHH return status? */
 void urj_bus_buses_delete (urj_bus_t *abus);
 
 /** set active bus

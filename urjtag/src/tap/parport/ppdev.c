@@ -218,7 +218,7 @@ ppdev_get_data (urj_parport_t *parport)
 
     if (ioctl (p->fd, PPRDATA, &d) == -1)
     {
-        urj_error_IO_set ("ioctl(PPRSTATUS) fails");
+        urj_error_IO_set ("ioctl(PPRDATA) fails");
         return -1;
     }
 
@@ -249,7 +249,7 @@ ppdev_set_control (urj_parport_t *parport, uint8_t data)
 
     if (ioctl (p->fd, PPWCONTROL, &data) == -1)
     {
-        urj_error_IO_set ("ioctl(PPWDATA) fails");
+        urj_error_IO_set ("ioctl(PPWCONTROL) fails");
         return URJ_STATUS_FAIL;
     }
 

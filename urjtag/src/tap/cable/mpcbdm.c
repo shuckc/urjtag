@@ -65,12 +65,12 @@ static int
 mpcbdm_init (urj_cable_t *cable)
 {
     if (urj_tap_parport_open (cable->link.port))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     urj_tap_parport_set_control (cable->link.port, 0);
     PARAM_SIGNALS (cable) = (URJ_POD_CS_TRST | URJ_POD_CS_RESET);
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void

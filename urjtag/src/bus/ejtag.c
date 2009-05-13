@@ -123,13 +123,19 @@ ejtag_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (urj_bus_t));
         return NULL;
+    }
 
     bus->driver = driver;
     bus->params = calloc (1, sizeof (bus_params_t));
     if (!bus->params)
     {
         free (bus);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (bus_params_t));
         return NULL;
     }
 
@@ -181,9 +187,8 @@ ejtag_run_pracc (urj_bus_t *bus, const uint32_t *code, unsigned int len)
     ejctrl = urj_part_find_data_register (bus->part, "EJCONTROL");
     if (!(ejaddr && ejdata && ejctrl))
     {
-        printf (_
-                ("%s(%d) EJADDRESS, EJDATA or EJCONTROL register not found\n"),
-                __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_NOTFOUND,
+                       _("EJADDRESS, EJDATA or EJCONTROL register not found"));
         return 0;
     }
 
@@ -310,8 +315,8 @@ ejtag_bus_init (urj_bus_t *bus)
     ejall = urj_part_find_data_register (bus->part, "EJALL");
     if (!(ejctrl && ejimpl))
     {
-        printf (_("%s(%d) EJCONTROL or EJIMPCODE register not found\n"),
-                __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_NOTFOUND,
+                       _("EJCONTROL or EJIMPCODE register not found"));
         return URJ_STATUS_FAIL;
     }
 
@@ -520,9 +525,9 @@ ejtag_bus_init (urj_bus_t *bus)
 
     if (!ejctrl->out->data[BrkSt])
     {
-        printf (_("%s(%d) Failed to enter debug mode, ctrl=%s\n"),
-                __FILE__, __LINE__,
-                urj_tap_register_get_string (ejctrl->out));
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("Failed to enter debug mode, ctrl=%s"),
+                       urj_tap_register_get_string (ejctrl->out));
         return URJ_STATUS_FAIL;
     }
     else
@@ -595,8 +600,6 @@ ejtag_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     return URJ_STATUS_OK;
 }
 
-/* @@@@ RFHH Added a parameter bus on the assumption it doesn't really
- * want to access the global urj_bus_t *bus */
 static int
 ejtag_gen_read (urj_bus_t *bus, uint32_t *code, uint32_t adr)
 {

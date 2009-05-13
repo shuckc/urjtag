@@ -1135,9 +1135,7 @@ urj_bsdl_parser_init (urj_bsdl_jtag_ctrl_t *jtag_ctrl)
 {
     urj_bsdl_parser_priv_t *new_priv;
 
-    if (!
-        (new_priv =
-         (urj_bsdl_parser_priv_t *) malloc (sizeof (urj_bsdl_parser_priv_t))))
+    if (!(new_priv = malloc (sizeof (urj_bsdl_parser_priv_t))))
     {
         urj_bsdl_msg (jtag_ctrl->proc_mode,
                       BSDL_MSG_ERR, _("Out of memory, %s line %i\n"),
@@ -1201,8 +1199,7 @@ add_instruction (urj_bsdl_parser_priv_t *priv, char *instr, char *opcode)
 {
     urj_bsdl_instr_elem_t *new_instr;
 
-    new_instr =
-        (urj_bsdl_instr_elem_t *) malloc (sizeof (urj_bsdl_instr_elem_t));
+    new_instr = malloc (sizeof (urj_bsdl_instr_elem_t));
     if (new_instr)
     {
         new_instr->next = priv->jtag_ctrl->instr_list;
@@ -1264,8 +1261,7 @@ ac_add_instruction (urj_bsdl_parser_priv_t *priv, char *instr)
     urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
     urj_bsdl_instr_elem_t *new_instr;
 
-    new_instr =
-        (urj_bsdl_instr_elem_t *) malloc (sizeof (urj_bsdl_instr_elem_t));
+    new_instr = malloc (sizeof (urj_bsdl_instr_elem_t));
     if (new_instr)
     {
         new_instr->next = tmp_ai->instr_list;
@@ -1301,9 +1297,7 @@ ac_apply_assoc (urj_bsdl_parser_priv_t *priv)
     urj_bsdl_types_ainfo_elem_t *tmp_ai = &(priv->ainfo);
     urj_bsdl_types_ainfo_elem_t *new_ai;
 
-    new_ai =
-        (urj_bsdl_types_ainfo_elem_t *)
-        malloc (sizeof (urj_bsdl_types_ainfo_elem_t));
+    new_ai = malloc (sizeof (urj_bsdl_types_ainfo_elem_t));
     if (new_ai)
     {
         new_ai->next = jc->ainfo_list;
@@ -1345,8 +1339,7 @@ prt_add_name (urj_bsdl_parser_priv_t *priv, char *name)
     urj_bsdl_port_desc_t *pd = &(priv->tmp_port_desc);
     urj_bsdl_string_elem_t *new_string;
 
-    new_string =
-        (urj_bsdl_string_elem_t *) malloc (sizeof (urj_bsdl_string_elem_t));
+    new_string = malloc (sizeof (urj_bsdl_string_elem_t));
     if (new_string)
     {
         new_string->next = pd->names_list;
@@ -1499,7 +1492,7 @@ ci_set_cell_spec (urj_bsdl_parser_priv_t *priv,
      */
     name_len = strlen (name->string);
     str_len = name_len + 1 + 10 + 1 + 1;
-    if ((port_string = (char *) malloc (str_len)) != NULL)
+    if ((port_string = malloc (str_len)) != NULL)
     {
         if (pd->is_vector)
             snprintf (port_string, str_len - 1, "%s(%d)", name->string,
@@ -1543,7 +1536,7 @@ ci_append_cell_info (urj_bsdl_parser_priv_t *priv, int bit_num)
     urj_bsdl_cell_info_t *ci;
     urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
 
-    ci = (urj_bsdl_cell_info_t *) malloc (sizeof (urj_bsdl_cell_info_t));
+    ci = malloc (sizeof (urj_bsdl_cell_info_t));
     if (ci)
     {
         ci->next = NULL;

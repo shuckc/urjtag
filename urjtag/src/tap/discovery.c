@@ -179,7 +179,6 @@ urj_tap_discovery (urj_chain_t *chain)
         fflush (stdout);
 
         urj_tap_capture_dr (chain);
-        // @@@@ RFHH check result
         rs = urj_tap_detect_register_size (chain);
 
         urj_log (URJ_LOG_LEVEL_NORMAL, _("%d\n"), rs);

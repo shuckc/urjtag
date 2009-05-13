@@ -251,13 +251,13 @@ intel_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
     case 0:
         return URJ_STATUS_OK;
     case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_PROGRAM_ERROR:
-        urj_error_set (URJ_ERROR_FLASH_ERASE, _("invalid command seq\n"));
+        urj_error_set (URJ_ERROR_FLASH_ERASE, _("invalid command seq"));
         return URJ_STATUS_FAIL;
     case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_VPEN_ERROR:
-        urj_error_set (URJ_ERROR_FLASH_ERASE, _("low vpen\n"));
+        urj_error_set (URJ_ERROR_FLASH_ERASE, _("low vpen"));
         return URJ_STATUS_FAIL;
     case CFI_INTEL_SR_ERASE_ERROR | CFI_INTEL_SR_BLOCK_LOCKED:
-        urj_error_set (URJ_ERROR_FLASH_ERASE, _("block locked\n"));
+        urj_error_set (URJ_ERROR_FLASH_ERASE, _("block locked"));
         return URJ_STATUS_FAIL;
     default:
         break;
@@ -283,7 +283,7 @@ intel_flash_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
     if (sr != CFI_INTEL_SR_READY)
     {
         urj_error_set (URJ_ERROR_FLASH_UNLOCK,
-                       _("unknown error while unlocking block\n"));
+                       _("unknown error while unlocking block"));
         return URJ_STATUS_FAIL;
     }
 
@@ -307,7 +307,7 @@ intel_flash_program_single (urj_flash_cfi_array_t *cfi_array,
     if (sr != CFI_INTEL_SR_READY)
     {
         urj_error_set (URJ_ERROR_FLASH_PROGRAM,
-                       _("unknown error while programming\n"));
+                       _("unknown error while programming"));
         return URJ_STATUS_FAIL;
     }
 
@@ -366,7 +366,7 @@ intel_flash_program_buffer (urj_flash_cfi_array_t *cfi_array,
     if (sr != CFI_INTEL_SR_READY)
     {
         urj_error_set (URJ_ERROR_FLASH_PROGRAM,
-                       _("unknown error while programming\n"));
+                       _("unknown error while programming"));
         return URJ_STATUS_FAIL;
     }
 
@@ -478,7 +478,7 @@ intel_flash_program32_single (urj_flash_cfi_array_t *cfi_array,
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
-        urj_error_set (URJ_ERROR_FLASH_PROGRAM, "\nsr = 0x%08X\n", sr);
+        urj_error_set (URJ_ERROR_FLASH_PROGRAM, "sr = 0x%08X", sr);
         return URJ_STATUS_FAIL;
     }
 

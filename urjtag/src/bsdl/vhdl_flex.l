@@ -510,6 +510,7 @@ urj_vhdl_flex_switch_file (yyscan_t scanner, char *filename)
         const char *db_path = urj_get_data_dir ();
         char *db_file;
 
+        /* @@@@ RFHH handle malloc failure */
         if ((db_file = malloc (strlen (db_path) + 1 +   /* "/"    */
                                4 +      /* "bsdl" */
                                1 +      /* "/"    */

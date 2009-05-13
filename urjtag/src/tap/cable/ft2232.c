@@ -248,9 +248,8 @@ ft2232_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
         if (div >= (1 << 16))
         {
             div = (1 << 16) - 1;
-            printf (_
-                    ("Warning: Setting lowest supported frequency for FT2232: %d\n"),
-                    FT2232_MAX_TCK_FREQ / div);
+            urj_warning (_("Setting lowest supported frequency for FT2232: %d\n"),
+                         FT2232_MAX_TCK_FREQ / div);
         }
 
         /* send new divisor to device */
@@ -276,7 +275,7 @@ ft2232_generic_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* safe default values */
     params->low_byte_value = 0;
@@ -309,7 +308,7 @@ ft2232_generic_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = 0;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -319,7 +318,7 @@ ft2232_jtagkey_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
        set nOE to '0' -> activate output enables */
@@ -363,7 +362,7 @@ ft2232_jtagkey_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 
@@ -374,7 +373,7 @@ ft2232_armusbocd_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
        set nOE to '0' -> activate output enables */
@@ -418,7 +417,7 @@ ft2232_armusbocd_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 
@@ -429,7 +428,7 @@ ft2232_gnice_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* safe default values */
     params->low_byte_value = 0;
@@ -464,7 +463,7 @@ ft2232_gnice_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_TRST;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 
@@ -475,7 +474,7 @@ ft2232_oocdlinks_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* static low byte value and direction */
     params->low_byte_value = 0;
@@ -518,7 +517,7 @@ ft2232_oocdlinks_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 
@@ -529,7 +528,7 @@ ft2232_turtelizer2_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
        set nJTAGOE to '0' -> activate output enables
@@ -568,7 +567,7 @@ ft2232_turtelizer2_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_RESET;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 
@@ -579,7 +578,7 @@ ft2232_usbtojtagif_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
        nTRST = 1, RST = 1, DBGRQ = 0 */
@@ -622,7 +621,7 @@ ft2232_usbtojtagif_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 
@@ -633,7 +632,7 @@ ft2232_signalyzer_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
        nTRST = 1, nSRST = 1 */
@@ -668,7 +667,7 @@ ft2232_signalyzer_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 
@@ -679,7 +678,7 @@ ft2232_flyswatter_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
        nTRST = 1, nSRST = 1 (ADBUS5 inverted),
@@ -716,7 +715,7 @@ ft2232_flyswatter_init (urj_cable_t *cable)
     params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -726,7 +725,7 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     /* Check if cable is connected to the target and the target is powered on */
     urj_tap_cable_cx_cmd_queue (cmd_root, 1);
@@ -736,9 +735,9 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
     if ((urj_tap_cable_cx_xfer_recv (cable) & BITMASK_USBSCARAB2_nCONNECTED)
         != 0)
     {
-        printf (_
-                ("Error: Please power on the TARGET board and connect VCC signal!\n"));
-        return -1;
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("Please power on the TARGET board and connect VCC signal"));
+        return URJ_STATUS_FAIL;
     }
 
     /* These bits will be set by default to: */
@@ -774,8 +773,8 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
-    printf ("Cable initialization OK!\n");
-    return 0;
+    urj_log (URJ_LOG_LEVEL_NORMAL, "Cable initialization OK!\n");
+    return URJ_STATUS_OK;
 }
 
 
@@ -1347,7 +1346,8 @@ ft2232_set_signal (urj_cable_t *cable, int mask, int val)
 
 
 static void
-ft2232_transfer_schedule (urj_cable_t *cable, int len, char *in, char *out)
+ft2232_transfer_schedule (urj_cable_t *cable, int len, const char *in,
+                          char *out)
 {
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -1542,7 +1542,7 @@ ft2232_transfer_finish (urj_cable_t *cable, int len, char *out)
 
 
 static int
-ft2232_transfer (urj_cable_t *cable, int len, char *in, char *out)
+ft2232_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -1699,7 +1699,10 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                         int m = urj_tap_cable_add_queue_item (cable,
                                                               &(cable->done));
                         if (m < 0)
-                            printf ("out of memory!\n");
+                        {
+                            // retain error state
+                            // urj_log (URJ_LOG_LEVEL_NORMAL, "out of memory!\n");
+                        }
                         cable->done.data[m].action = URJ_TAP_CABLE_TRANSFER;
                         cable->done.data[m].arg.xferred.len =
                             cable->todo.data[j].arg.transfer.len;
@@ -1727,23 +1730,23 @@ static int
 ft2232_connect (char *params[], urj_cable_t *cable)
 {
     params_t *cable_params;
-    int result;
 
     /* perform urj_tap_cable_generic_usbconn_connect */
-    if ((result = urj_tap_cable_generic_usbconn_connect (params, cable)) != 0)
-        return result;
+    if (urj_tap_cable_generic_usbconn_connect (params, cable) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     cable_params = malloc (sizeof (params_t));
     if (!cable_params)
     {
-        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
+                       sizeof (params_t));
         /* NOTE:
          * Call the underlying usbport driver (*free) routine directly
          * not urj_tap_cable_generic_usbconn_free() since it also free's cable->params
          * (which is not established) and cable (which the caller will do)
          */
         cable->link.usb->driver->free (cable->link.usb);
-        return 4;
+        return URJ_STATUS_FAIL;
     }
 
     cable_params->mpsse_frequency = 0;
@@ -1755,7 +1758,7 @@ ft2232_connect (char *params[], urj_cable_t *cable)
     free (cable->params);
     cable->params = cable_params;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 
@@ -1783,7 +1786,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_usbscarab2_ftdi;
 
 
 static void
-ft2232_usbcable_help (const char *cablename)
+ft2232_usbcable_help (urj_log_level_t ll, const char *cablename)
 {
     urj_usbconn_cable_t *conn;
 
@@ -1817,14 +1820,14 @@ ft2232_usbcable_help (const char *cablename)
     conn = &urj_tap_cable_usbconn_ft2232_ftdi;
   found:
 
-    printf (_
-            ("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
-             "\n" "VID        vendor ID (hex), defaults to %04X\n"
-             "PID        product ID (hex), defaults to %04X\n"
-             "DESC       Some string to match in description or serial no.\n"
-             "DRIVER     usbconn driver, either ftdi-mpsse or ftd2xx-mpsse\n"
-             "           defaults to %s if not specified\n" "\n"), cablename,
-            conn->vid, conn->pid, DEFAULT_DRIVER);
+    urj_log (ll,
+             _("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
+               "\n" "VID        vendor ID (hex), defaults to %04X\n"
+               "PID        product ID (hex), defaults to %04X\n"
+               "DESC       Some string to match in description or serial no.\n"
+               "DRIVER     usbconn driver, either ftdi-mpsse or ftd2xx-mpsse\n"
+               "           defaults to %s if not specified\n" "\n"), cablename,
+             conn->vid, conn->pid, DEFAULT_DRIVER);
 }
 
 

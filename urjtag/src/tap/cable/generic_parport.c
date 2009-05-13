@@ -37,15 +37,13 @@
 #include "generic.h"
 #include "generic_parport.h"
 
-#undef VERBOSE
-
-#ifdef VERBOSE
+#ifdef UNUSED
 static void
-print_vector (int len, char *vec)
+print_vector (urj_log_level_t ll, int len, char *vec)
 {
     int i;
     for (i = 0; i < len; i++)
-        printf ("%c", vec[i] ? '1' : '0');
+        urj_log (ll, "%c", vec[i] ? '1' : '0');
 }
 #endif
 
@@ -58,8 +56,8 @@ urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable)
 
     if (urj_cmd_params (params) < 3)
     {
-        printf (_("not enough arguments!\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_SYNTAX, _("not enough arguments"));
+        return URJ_STATUS_FAIL;
     }
 
     /* search parport driver list */
@@ -68,8 +66,9 @@ urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable)
             break;
     if (!urj_tap_parport_drivers[i])
     {
-        printf (_("Unknown port driver: %s\n"), params[1]);
-        return 2;
+        urj_error_set (URJ_ERROR_NOTFOUND, _("Unknown port driver: %s"),
+                       params[1]);
+        return URJ_STATUS_FAIL;
     }
 
     /* set up parport driver */
@@ -78,23 +77,25 @@ urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable)
 
     if (port == NULL)
     {
-        printf (_("Error: Cable connection failed!\n"));
-        return 3;
+        // retain error state
+        // printf (_("Error: Cable connection failed!\n"));
+        return URJ_STATUS_FAIL;
     }
 
     cable_params = malloc (sizeof *cable_params);
     if (!cable_params)
     {
-        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
+                       sizeof *cable_params);
         urj_tap_parport_drivers[i]->parport_free (port);
-        return 4;
+        return URJ_STATUS_FAIL;
     }
 
     cable->link.port = port;
     cable->params = cable_params;
     cable->chain = NULL;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 void
@@ -112,28 +113,29 @@ urj_tap_cable_generic_parport_done (urj_cable_t *cable)
 }
 
 void
-urj_tap_cable_generic_parport_help (const char *cablename)
+urj_tap_cable_generic_parport_help (urj_log_level_t ll, const char *cablename)
 {
-    printf (_("Usage: cable %s parallel PORTADDR\n"
+    urj_log (ll,
+             _("Usage: cable %s parallel PORTADDR\n"
 #if ENABLE_LOWLEVEL_PPDEV
-              "   or: cable %s ppdev PPDEV\n"
+               "   or: cable %s ppdev PPDEV\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-              "   or: cable %s ppi PPIDEV\n"
+               "   or: cable %s ppi PPIDEV\n"
 #endif
-              "\n" "PORTADDR   parallel port address (e.g. 0x378)\n"
+               "\n" "PORTADDR   parallel port address (e.g. 0x378)\n"
 #if ENABLE_LOWLEVEL_PPDEV
-              "PPDEV      ppdev device (e.g. /dev/parport0)\n"
+               "PPDEV      ppdev device (e.g. /dev/parport0)\n"
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-              "PPIDEF     ppi device (e.g. /dev/ppi0)\n"
+               "PPIDEF     ppi device (e.g. /dev/ppi0)\n"
 #endif
-              "\n"),
+               "\n"),
 #if ENABLE_LOWLEVEL_PPDEV
-            cablename,
+             cablename,
 #endif
 #if HAVE_DEV_PPBUS_PPI_H
-            cablename,
+             cablename,
 #endif
-            cablename);
+             cablename);
 }

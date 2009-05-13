@@ -87,8 +87,7 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
     }
     else
     {
-        urj_error_IO_set ("%s: cannot open file '%s'",
-                          params[0], params[1]);
+        urj_error_IO_set ("%s: cannot open file '%s'", params[0], params[1]);
         result = URJ_STATUS_FAIL;
     }
 

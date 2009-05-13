@@ -38,7 +38,8 @@ typedef struct
 void urj_tap_cable_generic_disconnect (urj_cable_t *cable);
 void urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
                                           uint32_t new_freq);
-int urj_tap_cable_generic_transfer (urj_cable_t *cable, int len, char *in,
+/** @return number of clocks on success; -1 on error */
+int urj_tap_cable_generic_transfer (urj_cable_t *cable, int len, const char *in,
                                     char *out);
 int urj_tap_cable_generic_get_signal (urj_cable_t *cable,
                                       urj_pod_sigsel_t sig);

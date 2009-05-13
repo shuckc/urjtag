@@ -32,6 +32,6 @@ int urj_tap_cable_generic_parport_connect (char *params[],
                                            urj_cable_t *cable);
 void urj_tap_cable_generic_parport_free (urj_cable_t *cable);
 void urj_tap_cable_generic_parport_done (urj_cable_t *cable);
-void urj_tap_cable_generic_parport_help (const char *name);
+void urj_tap_cable_generic_parport_help (urj_log_level_t ll, const char *name);
 
 #endif /* URJ_TAP_CABLE_GENERIC_H */

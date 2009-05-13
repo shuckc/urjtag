@@ -45,6 +45,7 @@
 #ifdef ENABLE_NLS
 #include <locale.h>
 #endif /* ENABLE_NLS */
+#include <errno.h>
 
 #include <urjtag/chain.h>
 #include <urjtag/bus.h>
@@ -59,18 +60,26 @@ static int urj_interactive = 0;
 #define HISTORYFILE     "history"
 #define RCFILE          "rc"
 
-static void
+static int
 jtag_create_jtagdir (void)
 {
     char *home = getenv ("HOME");
     char *jdir;
+    int r;
 
     if (!home)
-        return;
+    {
+        urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME not set");
+        return URJ_STATUS_FAIL;
+    }
 
     jdir = malloc (strlen (home) + strlen (JTAGDIR) + 2);       /* "/" and trailing \0 */
     if (!jdir)
-        return;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       strlen (home) + strlen (JTAGDIR) + 2);
+        return URJ_STATUS_FAIL;
+    }
 
     strcpy (jdir, home);
     strcat (jdir, "/");
@@ -78,12 +87,26 @@ jtag_create_jtagdir (void)
 
     /* Create the directory if it doesn't exists. */
 #ifdef __MINGW32__
-    mkdir (jdir);
+    r = mkdir (jdir);
 #else
-    mkdir (jdir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    r = mkdir (jdir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 #endif
+    if (r == -1)
+    {
+        if (errno == EEXIST)
+        {
+            /* @@@@ RFHH check if it is a directory */
+            errno = 0;
+        } else {
+            free (jdir);
+            urj_error_IO_set ("cannot mkdir(%s)", jdir);
+            return URJ_STATUS_FAIL;
+        }
+    }
 
     free (jdir);
+
+    return URJ_STATUS_OK;
 }
 
 #ifdef HAVE_LIBREADLINE
@@ -103,7 +126,7 @@ urj_cmd_completion (const char *text, int start, int end)
 
 #ifdef HAVE_READLINE_HISTORY
 
-static void
+static int
 jtag_load_history (void)
 {
     char *home = getenv ("HOME");
@@ -112,11 +135,18 @@ jtag_load_history (void)
     using_history ();
 
     if (!home)
-        return;
+    {
+        urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME not set");
+        return URJ_STATUS_FAIL;
+    }
 
     file = malloc (strlen (home) + strlen (JTAGDIR) + strlen (HISTORYFILE) + 3);        /* 2 x "/" and trailing \0 */
     if (!file)
-        return;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                   strlen (home) + strlen (JTAGDIR) + strlen (HISTORYFILE) + 3);
+        return URJ_STATUS_FAIL;
+    }
 
     strcpy (file, home);
     strcat (file, "/");
@@ -127,20 +157,29 @@ jtag_load_history (void)
     read_history (file);
 
     free (file);
+
+    return URJ_STATUS_OK;
 }
 
-static void
+static int
 jtag_save_history (void)
 {
     char *home = getenv ("HOME");
     char *file;
 
     if (!home)
-        return;
+    {
+        urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME not set");
+        return URJ_STATUS_FAIL;
+    }
 
     file = malloc (strlen (home) + strlen (JTAGDIR) + strlen (HISTORYFILE) + 3);        /* 2 x "/" and trailing \0 */
     if (!file)
-        return;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                   strlen (home) + strlen (JTAGDIR) + strlen (HISTORYFILE) + 3);
+        return URJ_STATUS_FAIL;
+    }
 
     strcpy (file, home);
     strcat (file, "/");
@@ -151,6 +190,8 @@ jtag_save_history (void)
     write_history (file);
 
     free (file);
+
+    return URJ_STATUS_OK;
 }
 
 #endif /* HAVE_READLINE_HISTORY */
@@ -218,6 +259,7 @@ jtag_readline_loop (urj_chain_t *chain, const char *prompt)
         /* We got EOF, bail */
         if (!line)
         {
+            /* @@@@ RFHH check strdup result */
             line = strdup ("quit\n");
             puts ("quit");
             if (!line)
@@ -271,11 +313,18 @@ jtag_parse_rc (urj_chain_t *chain)
     int go;
 
     if (!home)
-        return 1;
+    {
+        urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME not set");
+        return URJ_STATUS_FAIL;
+    }
 
     file = malloc (strlen (home) + strlen (JTAGDIR) + strlen (RCFILE) + 3);     /* 2 x "/" and trailing \0 */
     if (!file)
-        return 1;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       strlen (home) + strlen (JTAGDIR) + strlen (RCFILE) + 3);
+        return URJ_STATUS_FAIL;
+    }
 
     strcpy (file, home);
     strcat (file, "/");
@@ -491,7 +540,11 @@ main (int argc, char *const argv[])
     }
 
     /* Create ~/.jtag */
-    jtag_create_jtagdir ();
+    if (jtag_create_jtagdir () != URJ_STATUS_OK)
+    {
+        urj_warning ("%s\n", urj_error_describe());
+        urj_error_reset();
+    }
 
     /* Parse and execute the RC file */
     if (!norc)

@@ -69,23 +69,23 @@ static int
 usbblaster_connect (char *params[], urj_cable_t *cable)
 {
     params_t *cable_params;
-    int result;
 
     /* perform urj_tap_cable_generic_usbconn_connect */
-    if ((result = urj_tap_cable_generic_usbconn_connect (params, cable)) != 0)
-        return result;
+    if (urj_tap_cable_generic_usbconn_connect (params, cable) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     cable_params = malloc (sizeof (params_t));
     if (!cable_params)
     {
-        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
+                       sizeof (params_t));
         /* NOTE:
          * Call the underlying usbport driver (*free) routine directly
          * not urj_tap_cable_generic_usbconn_free() since it also free's cable->params
          * (which is not established) and cable (which the caller will do)
          */
         cable->link.usb->driver->free (cable->link.usb);
-        return 4;
+        return URJ_STATUS_FAIL;
     }
 
     urj_tap_cable_cx_cmd_init (&(cable_params->cmd_root));
@@ -94,15 +94,15 @@ usbblaster_connect (char *params[], urj_cable_t *cable)
     free (cable->params);
     cable->params = cable_params;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
 usbblaster_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
     if (new_frequency != FIXED_FREQUENCY)
-        printf (_("Warning: USB-Blaster frequency is fixed to %ld Hz\n"),
-                FIXED_FREQUENCY);
+        urj_warning (_("USB-Blaster frequency is fixed to %ld Hz\n"),
+                    FIXED_FREQUENCY);
 
     cable->frequency = FIXED_FREQUENCY;
 }
@@ -115,7 +115,7 @@ usbblaster_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     for (i = 0; i < 64; i++)
@@ -125,7 +125,7 @@ usbblaster_init (urj_cable_t *cable)
 
     usbblaster_set_frequency (cable, FIXED_FREQUENCY);
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -148,7 +148,7 @@ usbblaster_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
     tms = tms ? (1 << TMS) : 0;
     tdi = tdi ? (1 << TDI) : 0;
 
-    // printf("clock: %d %d %d\n", tms, tdi, n);
+    // urj_log (URJ_LOG_LEVEL_COMM, "clock: %d %d %d\n", tms, tdi, n);
 
     m = n;
     if (tms == 0 && m >= 8)
@@ -223,7 +223,7 @@ usbblaster_get_tdo_finish (urj_cable_t *cable)
 {
 #if 0
     char x = (urj_tap_cable_cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
-    printf ("GetTDO %d\n", x);
+    urj_log (URJ_LOG_LEVEL_COMM, "GetTDO %d\n", x);
     return x;
 #else
     return (urj_tap_cable_cx_xfer_recv (cable) & (1 << TDO)) ? 1 : 0;
@@ -248,7 +248,7 @@ usbblaster_set_signal (urj_cable_t *cable, int mask, int val)
 }
 
 static void
-usbblaster_transfer_schedule (urj_cable_t *cable, int len, char *in,
+usbblaster_transfer_schedule (urj_cable_t *cable, int len, const char *in,
                               char *out)
 {
     params_t *params = (params_t *) cable->params;
@@ -261,10 +261,10 @@ usbblaster_transfer_schedule (urj_cable_t *cable, int len, char *in,
 #if 0
     {
         int o;
-        printf ("%d in: ", len);
+        urj_log (URJ_LOG_LEVEL_COMM, "%d in: ", len);
         for (o = 0; o < len; o++)
-            printf ("%c", in[o] ? '1' : '0');
-        printf ("\n");
+            urj_log (URJ_LOG_LEVEL_COMM, "%c", in[o] ? '1' : '0');
+        urj_log (URJ_LOG_LEVEL_COMM, "\n");
     }
 #endif
 
@@ -341,7 +341,7 @@ usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
                 int j;
                 unsigned char b = urj_tap_cable_cx_xfer_recv (cable);
 #if 0
-                printf ("read byte: %02X\n", b);
+                urj_log (URJ_LOG_LEVEL_COMM, "read byte: %02X\n", b);
 #endif
 
                 for (j = 1; j < 256; j <<= 1)
@@ -357,10 +357,10 @@ usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
 #if 0
     {
         int o;
-        printf ("%d out: ", len);
+        urj_log (URJ_LOG_LEVEL_COMM, "%d out: ", len);
         for (o = 0; o < len; o++)
-            printf ("%c", out[o] ? '1' : '0');
-        printf ("\n");
+            urj_log (URJ_LOG_LEVEL_COMM, "%c", out[o] ? '1' : '0');
+        urj_log (URJ_LOG_LEVEL_COMM, "\n");
     }
 #endif
 
@@ -368,7 +368,7 @@ usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
 }
 
 static int
-usbblaster_transfer (urj_cable_t *cable, int len, char *in, char *out)
+usbblaster_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 {
     params_t *params = (params_t *) cable->params;
 
@@ -470,7 +470,10 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                         int m = urj_tap_cable_add_queue_item (cable,
                                                               &(cable->done));
                         if (m < 0)
-                            printf ("out of memory!\n");
+                        {
+                            // retain error state
+                            // urj_log (URJ_LOG_LEVEL_NORMAL, "out of memory!\n");
+                        }
                         cable->done.data[m].action = URJ_TAP_CABLE_TRANSFER;
                         cable->done.data[m].arg.xferred.len =
                             cable->todo.data[j].arg.transfer.len;
@@ -494,16 +497,16 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 }
 
 static void
-usbblaster_help (const char *cablename)
+usbblaster_help (urj_log_level_t ll, const char *cablename)
 {
-    printf (_
-            ("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
-             "\n" "VID        vendor ID (hex, e.g. 0abc)\n"
-             "PID        product ID (hex, e.g. 0abc)\n"
-             "DESC       Some string to match in description or serial no.\n"
-             "DRIVER     usbconn driver, either ftdi or ftd2xx\n"
-             "           defaults to %s if not specified\n" "\n"), cablename,
-            DEFAULT_DRIVER);
+    urj_log (ll,
+             _("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
+               "\n" "VID        vendor ID (hex, e.g. 0abc)\n"
+               "PID        product ID (hex, e.g. 0abc)\n"
+               "DESC       Some string to match in description or serial no.\n"
+               "DRIVER     usbconn driver, either ftdi or ftd2xx\n"
+               "           defaults to %s if not specified\n" "\n"), cablename,
+              DEFAULT_DRIVER);
 }
 
 urj_cable_driver_t urj_tap_cable_usbblaster_driver = {

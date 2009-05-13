@@ -57,14 +57,15 @@ struct urj_cable_driver
     void (*clock) (urj_cable_t *, int, int, int);
     /** @return 0 or 1 on success; -1 on failure */
     int (*get_tdo) (urj_cable_t *);
-    /** @return the number of transferred bits on success; -1 on failure */
-    int (*transfer) (urj_cable_t *, int, char *, char *);
+    /** @return nonnegative number, or the number of transferred bits on
+     * success; -1 on failure */
+    int (*transfer) (urj_cable_t *, int, const char *, char *);
     /** @return 0 or 1 on success; -1 on failure */
     int (*set_signal) (urj_cable_t *, int, int);
     /** @return 0 or 1 on success; -1 on failure */
     int (*get_signal) (urj_cable_t *, urj_pod_sigsel_t);
     void (*flush) (urj_cable_t *, urj_cable_flush_amount_t);
-    void (*help) (const char *);
+    void (*help) (urj_log_level_t ll, const char *);
 };
 
 typedef struct urj_cable_queue urj_cable_queue_t;

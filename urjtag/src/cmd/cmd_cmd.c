@@ -82,10 +82,17 @@ const urj_cmd_t *urj_cmds[] = {
     NULL                        /* last must be NULL */
 };
 
+/*
+ * @param text match commands whose prefix equals <code>text</code>. Rotates
+ *      through the registered commands. The prefix length is set when
+ *      the rotating state is reset.
+ * @@@@ RFHH that is weird behaviour. Why not do the prefix length as strlen(text)?
+ */
 char *
 urj_cmd_find_next (const char *text, int state)
 {
     static size_t cmd_idx, len;
+    char *next = NULL;
 
     if (!state)
     {
@@ -97,10 +104,16 @@ urj_cmd_find_next (const char *text, int state)
     {
         char *name = urj_cmds[cmd_idx++]->name;
         if (!strncmp (name, text, len))
-            return strdup (name);
+        {
+            next = strdup (name);
+            if (next == NULL)
+                urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails",
+                               name);
+            break;
+        }
     }
 
-    return NULL;
+    return next;
 }
 
 int

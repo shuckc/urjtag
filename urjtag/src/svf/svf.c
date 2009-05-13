@@ -658,14 +658,14 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     if (params->run_count > 0 && params->run_clk != TCK)
     {
         urj_error_set (URJ_ERROR_INVALID,
-                       _("Error %s: only TCK is supported for RUNTEST.\n"),
+                       _("Error %s: only TCK is supported for RUNTEST"),
                        "svf");
         return (0);
     }
     if (params->max_time > 0.0 && params->max_time < params->min_time)
     {
         urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-                _("Error %s: maximum time must be larger or equal to minimum time.\n"),
+                _("Error %s: maximum time must be larger or equal to minimum time"),
                 "svf");
         return (0);
     }
@@ -707,7 +707,7 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         else
         {
             urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-                           _("Error %s: Maximum cable clock frequency required for RUNTEST.\n"),
+                           _("Error %s: Maximum cable clock frequency required for RUNTEST"),
                            "svf");
             urj_log (URJ_LOG_LEVEL_ERROR,
                      _("  Set the cable frequency with 'FREQUENCY <Hz>'.\n"));
@@ -948,7 +948,6 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     {
     case generic_ir:
         urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_IR);
-        /* @@@@ RFHH check result */
         urj_tap_chain_shift_instructions_mode (chain,
                                                sxr_params->params.tdo ? 1 : 0,
                                                0, URJ_CHAIN_EXITMODE_EXIT1);
@@ -962,7 +961,6 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
 
     case generic_dr:
         urj_svf_goto_state (chain, URJ_TAP_STATE_SHIFT_DR);
-        /* @@@@ RFHH check result */
         urj_tap_chain_shift_data_registers_mode (chain,
                                                  sxr_params->params.
                                                  tdo ? 1 : 0, 0,
@@ -1010,7 +1008,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
     if (priv->svf_trst_absent)
     {
         urj_error_set (URJ_ERROR_ILLEGAL_STATE,
-            _("Error %s: no further TRST command allowed after mode ABSENT\n"),
+            _("Error %s: no further TRST command allowed after mode ABSENT"),
             "svf");
         return (0);
     }
@@ -1033,7 +1031,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
         if (priv->svf_state_executed)
         {
             urj_error_set (URJ_ERROR_ILLEGAL_STATE,
-                _("Error %s: TRST ABSENT must not be issued after a STATE command\n"),
+                _("Error %s: TRST ABSENT must not be issued after a STATE command"),
                 "svf");
             return (0);
         }
@@ -1041,7 +1039,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
             priv->sdr_params.params.number > 0.0)
         {
             urj_error_set (URJ_ERROR_ILLEGAL_STATE,
-                _("Error %s: TRST ABSENT must not be issued after an SIR or SDR command\n"),
+                _("Error %s: TRST ABSENT must not be issued after an SIR or SDR command"),
                 "svf");
         }
         break;
@@ -1141,14 +1139,14 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
        - data register */
     if (chain == NULL)
     {
-        urj_error_set (URJ_ERROR_NO_CHAIN, _("%s: no JTAG chain available\n"),
+        urj_error_set (URJ_ERROR_NO_CHAIN, _("%s: no JTAG chain available"),
                        "svf");
         return 0;
     }
     if (chain->parts == NULL)
     {
         urj_error_set (URJ_ERROR_NOTFOUND,
-                       _("%s: chain without any parts\n"), "svf");
+                       _("%s: chain without any parts"), "svf");
         return 0;
     }
     priv.part = chain->parts->parts[chain->active_part];
@@ -1164,7 +1162,7 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
         if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))
         {
             urj_error_set (URJ_ERROR_NOTFOUND,
-                           _("%s: could not establish SDR register\n"),
+                           _("%s: could not establish SDR register"),
                            "svf");
             return 0;
         }
@@ -1204,7 +1202,7 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
         if (!(priv.ir = urj_part_find_instruction (priv.part, "SIR")))
         {
             urj_error_set (URJ_ERROR_NOTFOUND,
-                           _("%s: could not establish SIR instruction\n"),
+                           _("%s: could not establish SIR instruction"),
                            "svf");
             return 0;
         }

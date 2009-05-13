@@ -24,7 +24,7 @@
 #ifndef URJ_FCLOCK_FCLOCK_H
 #define URJ_FCLOCK_FCLOCK_H
 
-/* @@@@ this had better be an internal include file RFHH */
+/* @@@@ RFHH this had better be an internal include file */
 
 
 #ifdef __cplusplus
@@ -45,8 +45,10 @@ extern "C"
 time*/
 long double urj_lib_frealtime (CVOID);
 
+#ifdef UNUSED   /* RFHH */
 /* return the CPU time used by this process (seconds) */
 long double fcputime (CVOID);
+#endif
 
 
 #ifdef __cplusplus

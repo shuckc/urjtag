@@ -65,7 +65,6 @@ static int
 urj_bsdl_set_instruction_length (urj_bsdl_jtag_ctrl_t *jc)
 {
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-        // @@@@ RFHH check result
         (void) urj_part_instruction_length_set (jc->part, jc->instr_len);
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
         printf ("instruction %i\n", jc->instr_len);
@@ -127,7 +126,6 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
                     port_string[str_len - 1] = '\0';
 
                     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-                        // @@@@ RFHH check result
                         (void) urj_part_signal_define (jc->chain, port_string);
                     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                         printf ("signal %s\n", port_string);

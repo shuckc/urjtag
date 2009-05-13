@@ -165,11 +165,15 @@ urj_bus_buses_add (urj_bus_t *abus)
     urj_bus_t **b;
 
     if (abus == NULL)
+        /* @@@@ RFHH add status return */
         return;
 
     b = realloc (urj_buses.buses, (urj_buses.len + 1) * sizeof (urj_bus_t *));
     if (b == NULL)
     {
+        /* @@@@ RFHH add status return */
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (urj_bus_t));
         printf (_("Out of memory\n"));
         return;
     }
@@ -189,6 +193,7 @@ urj_bus_buses_delete (urj_bus_t *abus)
         if (abus == urj_buses.buses[i])
             break;
     if (i >= urj_buses.len)
+        /* @@@@ RFHH add status return */
         return;
 
     while (i + 1 < urj_buses.len)
@@ -202,6 +207,7 @@ urj_bus_buses_delete (urj_bus_t *abus)
         urj_buses.buses = b;
 
     if (urj_bus != abus)
+        /* @@@@ RFHH add status return */
         return;
 
     if (urj_buses.len > 0)

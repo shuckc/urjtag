@@ -83,11 +83,11 @@ xpcu_output_enable (struct usb_dev_handle *xpcu, int enable)
     if (usb_control_msg
         (xpcu, 0x40, 0xB0, enable ? 0x18 : 0x10, 0, NULL, 0, 1000) < 0)
     {
-        perror ("usb_control_msg(0x10/0x18)");
-        return -1;
+        urj_error_IO_set ("usb_control_msg(0x10/0x18)");
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -100,11 +100,11 @@ xpcu_bit_reverse (struct usb_dev_handle *xpcu, uint8_t bits_in,
     if (usb_control_msg
         (xpcu, 0xC0, 0xB0, 0x0020, bits_in, (char *) bits_out, 1, 1000) < 0)
     {
-        perror ("usb_control_msg(0x20.x) (bit reverse)");
-        return -1;
+        urj_error_IO_set ("usb_control_msg(0x20.x) (bit reverse)");
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 #endif
 
@@ -117,11 +117,11 @@ xpcu_request_28 (struct usb_dev_handle *xpcu, int value)
 
     if (usb_control_msg (xpcu, 0x40, 0xB0, 0x0028, value, NULL, 0, 1000) < 0)
     {
-        perror ("usb_control_msg(0x28.x)");
-        return -1;
+        urj_error_IO_set ("usb_control_msg(0x28.x)");
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -131,11 +131,11 @@ xpcu_write_gpio (struct usb_dev_handle *xpcu, uint8_t bits)
 {
     if (usb_control_msg (xpcu, 0x40, 0xB0, 0x0030, bits, NULL, 0, 1000) < 0)
     {
-        perror ("usb_control_msg(0x30.0x00) (write port E)");
-        return -1;
+        urj_error_IO_set ("usb_control_msg(0x30.0x00) (write port E)");
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -146,11 +146,11 @@ xpcu_read_gpio (struct usb_dev_handle *xpcu, uint8_t *bits)
     if (usb_control_msg (xpcu, 0xC0, 0xB0, 0x0038, 0, (char *) bits, 1, 1000)
         < 0)
     {
-        perror ("usb_control_msg(0x38.0x00) (read port E)");
-        return -1;
+        urj_error_IO_set ("usb_control_msg(0x38.0x00) (read port E)");
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -162,10 +162,10 @@ xpcu_read_cpld_version (struct usb_dev_handle *xpcu, uint16_t *buf)
     if (usb_control_msg
         (xpcu, 0xC0, 0xB0, 0x0050, 0x0001, (char *) buf, 2, 1000) < 0)
     {
-        perror ("usb_control_msg(0x50.1) (read_cpld_version)");
-        return -1;
+        urj_error_IO_set ("usb_control_msg(0x50.1) (read_cpld_version)");
+        return URJ_STATUS_FAIL;
     }
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -176,11 +176,11 @@ xpcu_read_firmware_version (struct usb_dev_handle *xpcu, uint16_t *buf)
     if (usb_control_msg
         (xpcu, 0xC0, 0xB0, 0x0050, 0x0000, (char *) buf, 2, 1000) < 0)
     {
-        perror ("usb_control_msg(0x50.0) (read_firmware_version)");
-        return -1;
+        urj_error_IO_set ("usb_control_msg(0x50.0) (read_firmware_version)");
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ----------------------------------------------------------------- */
@@ -191,11 +191,11 @@ xpcu_select_gpio (struct usb_dev_handle *xpcu, int int_or_ext)
     if (usb_control_msg (xpcu, 0x40, 0xB0, 0x0052, int_or_ext, NULL, 0, 1000)
         < 0)
     {
-        perror ("usb_control_msg(0x52.x) (select gpio)");
-        return -1;
+        urj_error_IO_set ("usb_control_msg(0x52.x) (select gpio)");
+        return URJ_STATUS_FAIL;
     }
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -241,35 +241,36 @@ xpcu_select_gpio (struct usb_dev_handle *xpcu, int int_or_ext)
  *   and if there's only one TDO bit, it arrives as the MSB of the word.
  */
 
+/** @return 0 on success; -1 on error */
 static int
 xpcu_shift (struct usb_dev_handle *xpcu, int reqno, int bits, int in_len,
             uint8_t *in, int out_len, uint8_t *out)
 {
     if (usb_control_msg (xpcu, 0x40, 0xB0, reqno, bits, NULL, 0, 1000) < 0)
     {
-        perror ("usb_control_msg(x.x) (shift)");
+        urj_error_IO_set ("usb_control_msg(x.x) (shift)");
         return -1;
     }
 
 #if VERBOSE
     {
         int i;
-        printf ("###\n");
-        printf ("reqno = %02X\n", reqno);
-        printf ("bits    = %d\n", bits);
-        printf ("in_len  = %d, in_len*2  = %d\n", in_len, in_len * 2);
-        printf ("out_len = %d, out_len*8 = %d\n", out_len, out_len * 8);
+        urj_log (URJ_LOG_LEVEL_DETAIL, "###\n");
+        urj_log (URJ_LOG_LEVEL_DETAIL, "reqno = %02X\n", reqno);
+        urj_log (URJ_LOG_LEVEL_DETAIL, "bits    = %d\n", bits);
+        urj_log (URJ_LOG_LEVEL_DETAIL, "in_len  = %d, in_len*2  = %d\n", in_len, in_len * 2);
+        urj_log (URJ_LOG_LEVEL_DETAIL, "out_len = %d, out_len*8 = %d\n", out_len, out_len * 8);
 
-        printf ("a6_display(\"%02X\", \"", bits);
+        urj_log (URJ_LOG_LEVEL_DETAIL, "a6_display(\"%02X\", \"", bits);
         for (i = 0; i < in_len; i++)
-            printf ("%02X%s", in[i], (i + 1 < in_len) ? "," : "");
-        printf ("\", ");
+            urj_log (URJ_LOG_LEVEL_DETAIL, "%02X%s", in[i], (i + 1 < in_len) ? "," : "");
+        urj_log (URJ_LOG_LEVEL_DETAIL, "\", ");
     }
 #endif
 
     if (usb_bulk_write (xpcu, 0x02, (char *) in, in_len, 1000) < 0)
     {
-        printf ("\nusb_bulk_write error(shift): %s\n", strerror (errno));
+        urj_error_IO_set ("usb_bulk_write error(shift)");
         return -1;
     }
 
@@ -277,7 +278,7 @@ xpcu_shift (struct usb_dev_handle *xpcu, int reqno, int bits, int in_len,
     {
         if (usb_bulk_read (xpcu, 0x86, (char *) out, out_len, 1000) < 0)
         {
-            printf ("\nusb_bulk_read error(shift): %s\n", strerror (errno));
+            urj_error_IO_set ("usb_bulk_read error(shift)");
             return -1;
         }
     }
@@ -285,10 +286,10 @@ xpcu_shift (struct usb_dev_handle *xpcu, int reqno, int bits, int in_len,
 #if VERBOSE
     {
         int i;
-        printf ("\"");
+        urj_log (URJ_LOG_LEVEL_DETAIL, "\"");
         for (i = 0; i < out_len; i++)
-            printf ("%02X%s", out[i], (i + 1 < out_len) ? "," : "");
-        printf ("\")\n");
+            urj_log (URJ_LOG_LEVEL_DETAIL, "%02X%s", out[i], (i + 1 < out_len) ? "," : "");
+        urj_log (URJ_LOG_LEVEL_DETAIL, "\")\n");
     }
 #endif
 
@@ -305,39 +306,41 @@ xpcu_common_init (urj_cable_t *cable)
     struct usb_dev_handle *xpcu;
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     r = xpcu_request_28 (xpcu, 0x11);
-    if (r >= 0)
+    if (r != URJ_STATUS_FAIL)
         r = xpcu_write_gpio (xpcu, 8);
 
     /* Read firmware version (constant embedded in firmware) */
 
-    if (r >= 0)
+    if (r != URJ_STATUS_FAIL)
         r = xpcu_read_firmware_version (xpcu, &buf);
-    if (r >= 0)
+    if (r != URJ_STATUS_FAIL)
     {
-        printf ("firmware version = 0x%04X (%u)\n", buf, buf);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 "firmware version = 0x%04X (%u)\n", buf, buf);
     }
 
     /* Read CPLD version (via GPIF) */
 
-    if (r >= 0)
-        xpcu_read_cpld_version (xpcu, &buf);
-    if (r >= 0)
+    if (r != URJ_STATUS_FAIL)
+        // @@@@ RFHH added assignment of result to r:
+        r = xpcu_read_cpld_version (xpcu, &buf);
+    if (r != URJ_STATUS_FAIL)
     {
-        printf ("cable CPLD version = 0x%04X (%u)\n", buf, buf);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "cable CPLD version = 0x%04X (%u)\n",
+                 buf, buf);
         if (buf == 0)
         {
-            printf
-                ("Warning: version '0' can't be correct. Please try resetting the cable\n");
-            r = -1;
+            urj_warning ("version '0' can't be correct. Please try resetting the cable\n");
+            r = URJ_STATUS_FAIL;
         }
     }
 
-    if (r < 0)
+    if (r != URJ_STATUS_OK)
     {
         usb_close (xpcu);
     }
@@ -350,14 +353,14 @@ xpc_int_init (urj_cable_t *cable)
 {
     struct usb_dev_handle *xpcu;
 
-    if (xpcu_common_init (cable) < 0)
-        return -1;
+    if (xpcu_common_init (cable) == URJ_STATUS_FAIL)
+        return URJ_STATUS_FAIL;
 
     xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
-    if (xpcu_select_gpio (xpcu, 0) < 0)
-        return -1;
+    if (xpcu_select_gpio (xpcu, 0) == URJ_STATUS_FAIL)
+        return URJ_STATUS_FAIL;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -372,25 +375,30 @@ xpc_ext_init (urj_cable_t *cable)
 
     r = xpcu_common_init (cable);
 
-    if (r < 0)
+    if (r == URJ_STATUS_FAIL)
         return r;
 
     cable->params = malloc (sizeof (xpc_cable_params_t));
     if (cable->params == NULL)
-        r = -1;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (xpc_cable_params_t));
+        r = URJ_STATUS_FAIL;
+    }
 
     xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
-    if (r >= 0)
+    if (r == URJ_STATUS_OK)
         r = xpcu_request_28 (xpcu, 0x11);
-    if (r >= 0)
+    if (r == URJ_STATUS_OK)
         r = xpcu_output_enable (xpcu, 1);
-    if (r >= 0)
-        r = xpcu_shift (xpcu, 0xA6, 2, 2, zero, 0, NULL);
-    if (r >= 0)
+    if (r == URJ_STATUS_OK)
+        r = xpcu_shift (xpcu, 0xA6, 2, 2, zero, 0, NULL) == -1
+            ? URJ_STATUS_FAIL : URJ_STATUS_OK;
+    if (r == URJ_STATUS_OK)
         r = xpcu_request_28 (xpcu, 0x12);
 
-    if (r < 0)
+    if (r != URJ_STATUS_OK)
     {
         usb_close (xpcu);
 
@@ -443,7 +451,8 @@ xpc_clock (urj_cable_t *cable, int tms, int tdi, int n)
     tms = tms ? (1 << TMS) : 0;
     tdi = tdi ? (1 << TDI) : 0;
 
-    if (xpcu_write_gpio (xpcu, (1 << PROG) | (0 << TCK) | tms | tdi) >= 0)
+    if (xpcu_write_gpio (xpcu, (1 << PROG) | (0 << TCK) | tms | tdi)
+        != URJ_STATUS_FAIL)
     {
         urj_tap_cable_wait (cable);
         for (i = 0; i < n; i++)
@@ -527,6 +536,7 @@ xpc_ext_transfer_state_t;
 
 /* ---------------------------------------------------------------------- */
 
+/** @return 0 on success; -1 on error */
 static int
 xpcu_do_ext_transfer (xpc_ext_transfer_state_t *xts)
 {
@@ -553,7 +563,7 @@ xpcu_do_ext_transfer (xpc_ext_transfer_state_t *xts)
                         NULL);
     }
 
-    if (r >= 0 && xts->out_bits > 0)
+    if (r != -1 && xts->out_bits > 0)
     {
         int out_idx = 0;
         int out_rem = xts->out_bits;
@@ -625,20 +635,25 @@ xpcu_add_bit_for_ext_transfer (xpc_ext_transfer_state_t *xts, char in,
 
 /* ---------------------------------------------------------------------- */
 
+// @@@@ RFHH the specx say that it should be
+//      @return: num clocks on success, -1 on error.
+//              Might have to be: return i;
+
+/** @return 0 on success; -1 on error */
 static int
-xpc_ext_transfer (urj_cable_t *cable, int len, char *in, char *out)
+xpc_ext_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 {
     int i, j;
     xpc_ext_transfer_state_t xts;
 
 #if VERBOSE
-    printf ("---\n");
-    printf ("transfer size %d, %s output\n", len,
+    urj_log (URJ_LOG_LEVEL_DETAIL, "---\n");
+    urj_log (URJ_LOG_LEVEL_DETAIL, "transfer size %d, %s output\n", len,
             (out != NULL) ? "with" : "without");
-    printf ("tdi: ");
+    urj_log (URJ_LOG_LEVEL_DETAIL, "tdi: ");
     for (i = 0; i < len; i++)
-        printf ("%c", in[i] ? '1' : '0');
-    printf ("\n");
+        urj_log (URJ_LOG_LEVEL_DETAIL, "%c", in[i] ? '1' : '0');
+    urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
 #endif
 
     xts.xpcu =

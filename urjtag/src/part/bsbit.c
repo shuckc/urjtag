@@ -63,7 +63,7 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     }
     if (ctrl_num != -1 && ctrl_num >= bsr->in->len)
     {
-        urj_error_set(URJ_ERROR_INVALID, _("invalid control bit number\n"));
+        urj_error_set(URJ_ERROR_INVALID, _("invalid control bit number"));
         return URJ_STATUS_FAIL;
     }
 
@@ -74,7 +74,7 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     b = malloc (sizeof *b);
     if (!b)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc fails");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", sizeof *b);
         return URJ_STATUS_FAIL;
     }
 
@@ -82,7 +82,7 @@ urj_part_bsbit_alloc_control (urj_part_t *part, int bit, const char *name,
     if (!b->name)
     {
         free (b);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup fails");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails", name);
         return URJ_STATUS_FAIL;
     }
 

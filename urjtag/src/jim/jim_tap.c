@@ -228,7 +228,6 @@ urj_jim_alloc_device (int num_sregs, const int reg_size[])
     int i, r;
 
     urj_jim_device_t *dev = malloc (sizeof (urj_jim_device_t));
-
     if (dev == NULL)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",

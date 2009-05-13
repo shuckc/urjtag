@@ -57,18 +57,19 @@ lattice_init (urj_cable_t *cable)
     int data;
 
     if (urj_tap_parport_open (cable->link.port))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     if ((data = urj_tap_parport_get_data (cable->link.port)) < 0)
     {
-        if (urj_tap_parport_set_data (cable->link.port, 1 << TRST))
-            return -1;
+        if (urj_tap_parport_set_data (cable->link.port, 1 << TRST)
+            != URJ_STATUS_OK)
+            return URJ_STATUS_FAIL;
         PARAM_SIGNALS (cable) = URJ_POD_CS_TRST;
     }
     else
         PARAM_SIGNALS (cable) = ((data >> TRST) && 1) ? URJ_POD_CS_TRST : 0;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void

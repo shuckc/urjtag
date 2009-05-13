@@ -23,6 +23,7 @@
  */
 
 #include <urjtag/sysdep.h>
+#include <urjtag/error.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -55,6 +56,12 @@ extend_cmd_buffer (urj_tap_cable_cx_cmd_t *cmd)
         cmd->buf_len *= 2;
         if (cmd->buf)
             cmd->buf = realloc (cmd->buf, cmd->buf_len);
+    }
+
+    if (cmd->buf == NULL)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "realloc(%s,%zd) fails",
+                       "cmd->buf", cmd->buf_len);
     }
 
     return cmd->buf ? 1 : 0;
@@ -215,6 +222,12 @@ urj_tap_cable_cx_cmd_queue (urj_tap_cable_cx_cmd_root_t *cmd_root,
                 cmd_root->last->next = cmd;
             cmd_root->last = cmd;
         }
+    }
+
+    if (cmd == NULL)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd)/malloc(%zd) fails",
+                       sizeof (urj_tap_cable_cx_cmd_t), 64);
     }
 
     return cmd;

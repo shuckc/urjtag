@@ -70,12 +70,12 @@ static int
 triton_init (urj_cable_t *cable)
 {
     if (urj_tap_parport_open (cable->link.port))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     PARAM_SIGNALS (cable) = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
     urj_tap_parport_set_data (cable->link.port, (1 << TRST) | (1 << SRESET));
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -91,14 +91,12 @@ triton_clock (urj_cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         urj_tap_parport_set_data (cable->link.port,
-                                  (trst << TRST) | (sreset << SRESET) | (0 <<
-                                                                         TCK)
-                                  | (tms << TMS) | (tdi << TDI));
+                                  (trst << TRST) | (sreset << SRESET)
+                                  | (0 << TCK) | (tms << TMS) | (tdi << TDI));
         urj_tap_cable_wait (cable);
         urj_tap_parport_set_data (cable->link.port,
-                                  (trst << TRST) | (sreset << SRESET) | (1 <<
-                                                                         TCK)
-                                  | (tms << TMS) | (tdi << TDI));
+                                  (trst << TRST) | (sreset << SRESET)
+                                  | (1 << TCK) | (tms << TMS) | (tdi << TDI));
         urj_tap_cable_wait (cable);
     }
 
@@ -115,8 +113,7 @@ triton_get_tdo (urj_cable_t *cable)
     int sreset = (PARAM_SIGNALS (cable) & URJ_POD_CS_RESET) ? 1 : 0;
 
     urj_tap_parport_set_data (cable->link.port,
-                              (trst << TRST) | (sreset << SRESET) | (0 <<
-                                                                     TCK));
+                              (trst << TRST) | (sreset << SRESET) | (0 << TCK));
     PARAM_SIGNALS (cable) &=
         ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 

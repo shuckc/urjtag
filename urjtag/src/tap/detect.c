@@ -519,7 +519,6 @@ urj_tap_detect (urj_chain_t *chain)
         return URJ_STATUS_FAIL;
     }
 
-    /* @@@@ RFHH check results? */
     urj_part_parts_set_instruction (chain->parts, "SAMPLE/PRELOAD");
     urj_tap_chain_shift_instructions (chain);
     urj_tap_chain_shift_data_registers (chain, 1);

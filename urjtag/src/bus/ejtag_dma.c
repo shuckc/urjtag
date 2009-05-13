@@ -96,13 +96,19 @@ ejtag_dma_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     bus = calloc (1, sizeof (urj_bus_t));
     if (!bus)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (urj_bus_t));
         return NULL;
+    }
 
     bus->driver = driver;
     bus->params = calloc (1, sizeof (bus_params_t));
     if (!bus->params)
     {
         free (bus);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       1, sizeof (bus_params_t));
         return NULL;
     }
 
@@ -169,8 +175,6 @@ siz_ (int sz)
  * low-level dma write
  *
  */
-/* @@@@ RFHH Add a parameter bus on the assumption that the code doesn't
- * really want to access the global variable urj_bus_t *bus */
 static void
 ejtag_dma_write (urj_bus_t *bus, unsigned int addr, unsigned int data, int sz)
 {
@@ -264,8 +268,6 @@ ejtag_dma_write (urj_bus_t *bus, unsigned int addr, unsigned int data, int sz)
  * low level dma read operation
  *
  */
-/* @@@@ RFHH Add a parameter bus on the assumption that the code doesn't
- * really want to access the global variable urj_bus_t *bus */
 static unsigned int
 ejtag_dma_read (urj_bus_t *bus, unsigned int addr, int sz)
 {

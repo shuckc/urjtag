@@ -96,7 +96,8 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
     {
         if (strcasecmp (params[2], "help") == 0)
         {
-            urj_tap_cable_drivers[i]->help (urj_tap_cable_drivers[i]->name);
+            urj_tap_cable_drivers[i]->help (URJ_LOG_LEVEL_NORMAL,
+                                            urj_tap_cable_drivers[i]->name);
             return URJ_STATUS_OK;
         }
     }

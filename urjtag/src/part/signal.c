@@ -111,7 +111,7 @@ urj_part_signal_define_pin (urj_chain_t *chain, const char *signal_name,
     if (urj_part_find_signal (part, signal_name) != NULL)
     {
         urj_error_set (URJ_ERROR_ALREADY,
-                       _("Signal '%s' already defined\n"), signal_name);
+                       _("Signal '%s' already defined"), signal_name);
         return NULL;
     }
 
@@ -155,7 +155,7 @@ urj_part_signal_redefine_pin (urj_chain_t *chain, urj_part_signal_t *s,
     s->pin = strdup (pin_name);
     if (s->pin == NULL)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup fails");
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails", pin_name);
         return URJ_STATUS_FAIL;
     }
 

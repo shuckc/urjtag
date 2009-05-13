@@ -52,32 +52,34 @@ jim_cable_connect (char *params[], urj_cable_t *cable)
 
     if (urj_cmd_params (params) < 1)
     {
-        printf (_("not enough arguments!\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_SYNTAX, _("not enough arguments"));
+        return URJ_STATUS_FAIL;
     }
 
-    printf (_("JTAG target simulator JIM - work in progress!\n"));
+    urj_warning (_("JTAG target simulator JIM - work in progress!\n"));
 
     s = urj_jim_init ();
     if (!s)
     {
-        printf (_("Initialization failed.\n"));
-        return 3;
+        // retain error state
+        // printf (_("Initialization failed.\n"));
+        return URJ_STATUS_FAIL;
     }
 
     cable_params = malloc (sizeof (jim_cable_params_t));
     if (!cable_params)
     {
-        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
+                       sizeof (jim_cable_params_t));
         urj_jim_free (s);
-        return 4;
+        return URJ_STATUS_FAIL;
     }
 
     cable->params = cable_params;
     ((jim_cable_params_t *) (cable->params))->s = s;
     cable->chain = NULL;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -106,7 +108,7 @@ jim_cable_done (urj_cable_t *cable)
 static int
 jim_cable_init (urj_cable_t *cable)
 {
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -148,9 +150,9 @@ jim_cable_set_trst (urj_cable_t *cable, int trst)
 }
 
 static void
-jim_cable_help (const char *cablename)
+jim_cable_help (urj_log_level_t ll, const char *cablename)
 {
-    printf (_("Usage: cable %s\n"), cablename);
+    urj_log (ll, _("Usage: cable %s\n"), cablename);
 }
 
 urj_cable_driver_t urj_tap_cable_jim_driver = {

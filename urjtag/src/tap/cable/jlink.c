@@ -47,10 +47,6 @@
 #include <usb.h>
 #include <string.h>
 
-#define INFO(...)   printf(__VA_ARGS__)
-#define ERROR(...)  printf(__VA_ARGS__)
-#define DEBUG(...)
-
 #define JLINK_WRITE_ENDPOINT 0x02
 #define JLINK_READ_ENDPOINT  0x81
 
@@ -108,7 +104,9 @@ static void jlink_tap_append_step (jlink_usbconn_data_t *data, int, int);
 
 /* Jlink lowlevel functions */
 static int jlink_usb_message (urj_usbconn_libusb_param_t *params, int, int);
+/** @return number of bytes written; -1 on error */
 static int jlink_usb_write (urj_usbconn_libusb_param_t *params, unsigned int);
+/** @return number of bytes read; -1 on error */
 static int jlink_usb_read (urj_usbconn_libusb_param_t *params);
 
 static void jlink_debug_buffer (char *buffer, int length);
@@ -125,7 +123,7 @@ void
 urj_tap_cable_jlink_reset (urj_usbconn_libusb_param_t *params, int trst,
                            int srst)
 {
-    DEBUG ("trst: %i, srst: %i\n", trst, srst);
+    urj_log (URJ_LOG_LEVEL_DETAIL, "trst: %i, srst: %i\n", trst, srst);
 
     /* Signals are active low */
     if (trst == 0)
@@ -154,14 +152,15 @@ jlink_simple_command (urj_usbconn_libusb_param_t *params, uint8_t command)
     int result;
     jlink_usbconn_data_t *data = params->data;
 
-    DEBUG ("simple_command: 0x%02x\n", command);
+    urj_log (URJ_LOG_LEVEL_DETAIL, "simple_command: 0x%02x\n", command);
 
     data->usb_out_buffer[0] = command;
     result = jlink_usb_write (params, 1);
 
     if (result != 1)
     {
-        ERROR ("J-Link command 0x%02x failed (%d)\n", command, result);
+        urj_log (URJ_LOG_LEVEL_ERROR, "J-Link command 0x%02x failed (%d)\n",
+                 command, result);
     }
 }
 
@@ -178,23 +177,25 @@ jlink_get_status (urj_usbconn_libusb_param_t *params)
     if (result == 8)
     {
         int vref = data->usb_in_buffer[0] + (data->usb_in_buffer[1] << 8);
-        INFO ("Vref = %d.%d TCK=%d TDI=%d TDO=%d TMS=%d TRES=%d TRST=%d\n",
-              vref / 1000, vref % 1000,
-              data->usb_in_buffer[2],
-              data->usb_in_buffer[3],
-              data->usb_in_buffer[4],
-              data->usb_in_buffer[5],
-              data->usb_in_buffer[6], data->usb_in_buffer[7]);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 "Vref = %d.%d TCK=%d TDI=%d TDO=%d TMS=%d TRES=%d TRST=%d\n",
+                 vref / 1000, vref % 1000,
+                 data->usb_in_buffer[2],
+                 data->usb_in_buffer[3],
+                 data->usb_in_buffer[4],
+                 data->usb_in_buffer[5],
+                 data->usb_in_buffer[6], data->usb_in_buffer[7]);
         if (vref < 1500)
         {
-            ERROR
-                ("Vref too low. Eventually the target isn't powered or disconnected?\n");
+            urj_log (URJ_LOG_LEVEL_ERROR,
+                     "Vref too low. Possibly the target isn't powered or disconnected?\n");
             result = -15;
         }
     }
     else
     {
-        ERROR ("J-Link command 0x07 (get status) failed (%d)\n", result);
+        urj_log (URJ_LOG_LEVEL_ERROR,
+                 "J-Link command 0x07 (get status) failed (%d)\n", result);
     }
 
     return result;
@@ -234,7 +235,7 @@ jlink_tap_append_step (jlink_usbconn_data_t *data, int tms, int tdi)
     }
     else
     {
-        ERROR ("jlink_tap_append_step, overflow\n");
+        urj_log (URJ_LOG_LEVEL_ERROR, "jlink_tap_append_step, overflow\n");
     }
 }
 
@@ -281,8 +282,9 @@ jlink_tap_execute (urj_usbconn_libusb_param_t *params)
         }
         else
         {
-            ERROR ("jlink_tap_execute, wrong result %d, expected %d\n",
-                   result, byte_length);
+            urj_log (URJ_LOG_LEVEL_ERROR,
+                     "jlink_tap_execute, wrong result %d, expected %d\n",
+                     result, byte_length);
 
             return -2;
         }
@@ -311,16 +313,18 @@ jlink_usb_message (urj_usbconn_libusb_param_t *params, int out_length,
         }
         else
         {
-            ERROR ("usb_bulk_read failed (requested=%d, result=%d)\n",
-                   in_length, result);
+            urj_log (URJ_LOG_LEVEL_ERROR,
+                     "usb_bulk_read failed (requested=%d, result=%d)\n",
+                     in_length, result);
 
             return -1;
         }
     }
     else
     {
-        ERROR ("usb_bulk_write failed (requested=%d, result=%d)\n",
-               out_length, result);
+        urj_log (URJ_LOG_LEVEL_ERROR,
+                 "usb_bulk_write failed (requested=%d, result=%d)\n",
+                 out_length, result);
 
         return -1;
     }
@@ -339,8 +343,9 @@ jlink_usb_write (urj_usbconn_libusb_param_t *params, unsigned int out_length)
 
     if (out_length > JLINK_OUT_BUFFER_SIZE)
     {
-        ERROR ("jlink_jtag_write illegal out_length=%d (max=%d)\n",
-               out_length, JLINK_OUT_BUFFER_SIZE);
+        urj_log (URJ_LOG_LEVEL_ERROR,
+                 "jlink_jtag_write illegal out_length=%d (max=%d)\n",
+                 out_length, JLINK_OUT_BUFFER_SIZE);
 
         return -1;
     }
@@ -350,8 +355,9 @@ jlink_usb_write (urj_usbconn_libusb_param_t *params, unsigned int out_length)
                              data->usb_out_buffer,
                              out_length, JLINK_USB_TIMEOUT);
 
-    DEBUG ("jlink_usb_write, out_length = %d, result = %d\n", out_length,
-           result);
+    urj_log (URJ_LOG_LEVEL_DETAIL,
+             "jlink_usb_write, out_length = %d, result = %d\n", out_length,
+             result);
     jlink_debug_buffer (data->usb_out_buffer, out_length);
     return result;
 }
@@ -370,7 +376,7 @@ jlink_usb_read (urj_usbconn_libusb_param_t *params)
                                 JLINK_IN_BUFFER_SIZE,
                                 JLINK_USB_TIMEOUT);
 
-    DEBUG ("jlink_usb_read, result = %d\n", result);
+    urj_log (URJ_LOG_LEVEL_DETAIL, "jlink_usb_read, result = %d\n", result);
     jlink_debug_buffer (data->usb_in_buffer, result);
     return result;
 }
@@ -395,8 +401,8 @@ jlink_debug_buffer (char *buffer, int length)
             snprintf (s, 4, " %02x", buffer[j]);
             strcat (line, s);
         }
-        DEBUG (line);
-        DEBUG ("\n");
+        urj_log (URJ_LOG_LEVEL_DETAIL, line);
+        urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
     }
 }
 
@@ -413,12 +419,14 @@ jlink_init (urj_cable_t *cable)
     params->data = malloc (sizeof (jlink_usbconn_data_t));
     if (params->data == NULL)
     {
-        return -1;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       sizeof (jlink_usbconn_data_t));
+        return URJ_STATUS_FAIL;
     }
     data = params->data;
 
     if (urj_tap_usbconn_open (cable->link.usb))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     jlink_tap_init (data);
 
@@ -427,25 +435,27 @@ jlink_init (urj_cable_t *cable)
     if (result != 2 || data->usb_in_buffer[0] != 0x07
         || data->usb_in_buffer[1] != 0x00)
     {
-        INFO ("J-Link initial read failed, don't worry (result=%d)\n",
-              result);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 "J-Link initial read failed, don't worry (result=%d)\n",
+                 result);
     }
 
     result = jlink_get_status (params);
     if (result < 0)
     {
-        ERROR ("Resetting J-Link. Please retry the cable command.\n");
+        urj_log (URJ_LOG_LEVEL_ERROR,
+                 "Resetting J-Link. Please retry the cable command.\n");
         usb_reset (params->handle);
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
-    INFO ("J-Link JTAG Interface ready\n");
+    urj_log (URJ_LOG_LEVEL_NORMAL, "J-Link JTAG Interface ready\n");
 
     urj_tap_cable_jlink_set_frequency (cable, 4E6);
 
     urj_tap_cable_jlink_reset (params, 0, 0);
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -481,13 +491,15 @@ urj_tap_cable_jlink_set_frequency (urj_cable_t *cable, uint32_t frequency)
 
         if (result != 3)
         {
-            ERROR ("J-Link setting speed failed (%d)\n", result);
+            urj_log (URJ_LOG_LEVEL_ERROR,
+                     "J-Link setting speed failed (%d)\n", result);
         }
     }
     else
     {
-        INFO ("Requested speed %dkHz exceeds maximum of %dkHz, ignored\n",
-              speed, JLINK_MAX_SPEED);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 "Requested speed %dkHz exceeds maximum of %dkHz, ignored\n",
+                 speed, JLINK_MAX_SPEED);
     }
 }
 
@@ -537,7 +549,7 @@ jlink_copy_out_data (jlink_usbconn_data_t *data, int len, int offset,
 }
 
 static int
-jlink_transfer (urj_cable_t *cable, int len, char *in, char *out)
+jlink_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 {
     int i, j;
     urj_usbconn_libusb_param_t *params = cable->link.usb->params;

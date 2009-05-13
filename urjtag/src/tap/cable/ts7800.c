@@ -86,8 +86,8 @@ ts7800_gpio_open (urj_cable_t *cable)
     p->fd_dev_mem = open ("/dev/mem", O_RDWR | O_SYNC);
     if (p->fd_dev_mem == -1)
     {
-        printf (_("Error: unable to open /dev/mem\n"));
-        return -1;
+        urj_error_IO_set (_("unable to open /dev/mem"));
+        return URJ_STATUS_FAIL;
     }
 
     p->map_size = getpagesize ();
@@ -99,9 +99,9 @@ ts7800_gpio_open (urj_cable_t *cable)
               p->fd_dev_mem, GPIO_BASE & ~map_mask);
     if (p->map_base == MAP_FAILED)
     {
-        printf (_("Error: unable to mmap the GPIO registers\n"));
+        urj_error_IO_set (_("unable to mmap the GPIO registers"));
         close (p->fd_dev_mem);
-        return -1;
+        return URJ_STATUS_FAIL;
     }
 
     /* Create the pointers to access the GPIO registers */
@@ -113,7 +113,7 @@ ts7800_gpio_open (urj_cable_t *cable)
 
     p->lastout = p->gpio_base[GPIO_OUT];
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -124,10 +124,10 @@ ts7800_gpio_close (urj_cable_t *cable)
     /* Unmap the GPIO registers */
     if (munmap (p->map_base, p->map_size) == -1)
     {
-        printf (_("Error: unable to munmap the GPIO registers\n"));
+        urj_error_IO_set (_("unable to munmap the GPIO registers"));
     }
     close (p->fd_dev_mem);
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static int
@@ -157,25 +157,28 @@ ts7800_connect (char *params[], urj_cable_t *cable)
 
     if (urj_cmd_params (params) != 1)
     {
-        printf (_("Error: This cable type does not accept parameters!\n"));
-        return 1;
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       _("This cable type does not accept parameters"));
+        return URJ_STATUS_FAIL;
     }
 
-    printf (_("Initializing TS-7800 Built-in JTAG Chain\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Initializing TS-7800 Built-in JTAG Chain\n"));
 
     cable_params = malloc (sizeof *cable_params);
     if (!cable_params)
     {
-        printf (_("%s(%d) Out of memory\n"), __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
+                       sizeof *cable_params);
         free (cable);
-        return 4;
+        return URJ_STATUS_FAIL;
     }
 
     cable->params = cable_params;
     cable->chain = NULL;
     cable->delay = 1000;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -198,11 +201,11 @@ ts7800_init (urj_cable_t *cable)
     ts7800_params_t *p = cable->params;
 
     if (ts7800_gpio_open (cable))
-        return -1;
+        return URJ_STATUS_FAIL;
 
     p->signals = URJ_POD_CS_TRST;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -289,9 +292,10 @@ ts7800_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 }
 
 static void
-ts7800_help (const char *cablename)
+ts7800_help (urj_log_level_t ll, const char *cablename)
 {
-    printf (_("Usage: cable %s\n" "\n"), cablename);
+    urj_log (ll,
+             _("Usage: cable %s\n" "\n"), cablename);
 }
 
 urj_cable_driver_t urj_tap_cable_ts7800_driver = {

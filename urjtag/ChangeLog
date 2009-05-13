@@ -1,3 +1,9 @@
+2009-05-14  Rutger Hofman <rfhh>
+
+  * src/tap/cable/*.c: convert return values, error handling, printfs
+  * src/**: globally remove \n or !\n from error detail msgs; sanitize
+    error prints a tiny bit
+
 2009-05-12  Rutger Hofman <rfhh>
 
   * src/cmd/*.c, many more files: have the commands in src/cmd/ return

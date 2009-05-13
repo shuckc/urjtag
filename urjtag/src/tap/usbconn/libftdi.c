@@ -285,6 +285,7 @@ usbconn_ftdi_connect (const char **param, int paramc,
     p->fc = fc;
     p->pid = template->pid;
     p->vid = template->vid;
+    /* @@@@ RFHH check strdup result */
     p->serial = template->desc ? strdup (template->desc) : NULL;
 
     c->params = p;
@@ -440,8 +441,7 @@ usbconn_ftdi_open (urj_usbconn_t *conn)
 
     if (r >= 0)
         if ((r = ftdi_set_latency_timer (fc, 2)) < 0)
-            urj_error_set (URJ_ERROR_FTD,
-                           _("ftdi_set_latency_timer() failed: %s"),
+            urj_error_set (URJ_ERROR_FTD, _("ftdi_set_latency_timer() failed: %s"),
                            ftdi_get_error_string (fc));
 
 #if 0
@@ -498,21 +498,21 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
              ftdi_write_data_set_chunksize (fc,
                                             URJ_USBCONN_FTDX_MAXSEND_MPSSE)) <
             0)
-            puts (ftdi_get_error_string (fc));
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%s", ftdi_get_error_string (fc));
     if (r >= 0)
         if ((r =
              ftdi_read_data_set_chunksize (fc,
                                            URJ_USBCONN_FTDX_MAXSEND_MPSSE)) <
             0)
-            puts (ftdi_get_error_string (fc));
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%s", ftdi_get_error_string (fc));
 
 #ifdef LIBFTDI_UNIMPLEMENTED
     if (r >= 0)
         if ((r = ftdi_set_event_char (fc, 0, 0)) < 0)
-            puts (ftdi_get_error_string (fc));
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%s", ftdi_get_error_string (fc));
     if (r >= 0)
         if ((r = ftdi_set_error_char (fc, 0, 0)) < 0)
-            puts (ftdi_get_error_string (fc));
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%s", ftdi_get_error_string (fc));
 #endif
 
     /* set a reasonable latency timer value

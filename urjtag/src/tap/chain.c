@@ -253,7 +253,7 @@ urj_tap_chain_shift_data_registers_mode (urj_chain_t *chain,
         if (ps->parts[i]->active_instruction->data_register == NULL)
         {
             urj_error_set (URJ_ERROR_NO_DATA_REGISTER,
-                           _("Part %d without data register\n"), i);
+                           _("Part %d without data register"), i);
             return URJ_STATUS_FAIL;
         }
     }

@@ -160,8 +160,8 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
             return URJ_STATUS_FAIL;
         }
 
-        (*cfi_array)->cfi_chips[d / 8] =
-            calloc (1, sizeof (urj_flash_cfi_chip_t));
+        (*cfi_array)->cfi_chips[d / 8] = calloc (1,
+                                                 sizeof (urj_flash_cfi_chip_t));
         if (!(*cfi_array)->cfi_chips[d / 8])
         {
             write1 (0, CFI_CMD_READ_ARRAY1);

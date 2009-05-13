@@ -35,8 +35,7 @@
 
 #include <urjtag/cmd.h>
 
-#undef VERBOSE
-
+/* @@@@ RFHH put these in a .h file */
 #ifdef ENABLE_CABLE_XPC
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_int;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_ext;
@@ -186,9 +185,8 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
     for (i = 0; urj_tap_usbconn_drivers[i] && !conn; i++)
     {
         if ((user_specified.driver == NULL)
-            ||
-            (strcasecmp
-             (user_specified.driver, urj_tap_usbconn_drivers[i]->type) == 0))
+            || (strcasecmp (user_specified.driver,
+                            urj_tap_usbconn_drivers[i]->type) == 0))
         {
             int j;
 
@@ -196,14 +194,11 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
             for (j = 0; urj_tap_cable_usbconn_cables[j] && !conn; j++)
             {
                 if ((user_specified.name == NULL)
-                    ||
-                    (strcasecmp
-                     (user_specified.name,
-                      urj_tap_cable_usbconn_cables[j]->name) == 0))
+                    || (strcasecmp (user_specified.name,
+                                    urj_tap_cable_usbconn_cables[j]->name) == 0))
                 {
-                    if (strcasecmp
-                        (urj_tap_cable_usbconn_cables[j]->driver,
-                         urj_tap_usbconn_drivers[i]->type) == 0)
+                    if (strcasecmp (urj_tap_cable_usbconn_cables[j]->driver,
+                                    urj_tap_usbconn_drivers[i]->type) == 0)
                     {
                         urj_usbconn_cable_t cable_try =
                             *(urj_tap_cable_usbconn_cables[j]);
@@ -215,6 +210,7 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
                         if (user_specified.desc != 0)
                             cable_try.desc = user_specified.desc;
 
+                        // @@@@ RFHH bail out on failure?
                         conn =
                             urj_tap_usbconn_drivers[i]->
                             connect ((const char **) &params[1], paramc - 1,
@@ -227,23 +223,27 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
 
     if (!conn)
     {
-        printf (_("Couldn't connect to suitable USB device.\n"));
-        return 2;
+        // @@@@ RFHH make this into either the error from drivers->connect,
+        // or urj_error_set (NOT_FOUND)
+        urj_log (URJ_LOG_LEVEL_ERROR,
+                 _("Couldn't connect to suitable USB device.\n"));
+        return URJ_STATUS_FAIL;
     }
 
     cable_params = malloc (sizeof (urj_tap_cable_generic_params_t));
     if (!cable_params)
     {
-        printf (_("%s(%d) malloc failed!\n"), __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
+                       sizeof (urj_tap_cable_generic_params_t));
         urj_tap_usbconn_drivers[i]->free (conn);
-        return 4;
+        return URJ_STATUS_FAIL;
     }
 
     cable->link.usb = conn;
     cable->params = cable_params;
     cable->chain = NULL;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 void
@@ -261,12 +261,13 @@ urj_tap_cable_generic_usbconn_done (urj_cable_t *cable)
 }
 
 void
-urj_tap_cable_generic_usbconn_help (const char *cablename)
+urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *cablename)
 {
-    printf (_("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [...]\n"
-              "\n"
-              "VID        USB Device Vendor ID (hex, e.g. 0abc)\n"
-              "PID        USB Device Product ID (hex, e.g. 0abc)\n"
-              "DESC       Some string to match in description or serial no.\n"
-              "\n"), cablename);
+    urj_log (ll,
+             _("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [...]\n"
+               "\n"
+               "VID        USB Device Vendor ID (hex, e.g. 0abc)\n"
+               "PID        USB Device Product ID (hex, e.g. 0abc)\n"
+               "DESC       Some string to match in description or serial no.\n"
+               "\n"), cablename);
 }
