@@ -47,8 +47,7 @@
  * @param ref_freq         reference frequency for RUNTEST
  *
  * @return
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  * ***************************************************************************/
 
 int urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
