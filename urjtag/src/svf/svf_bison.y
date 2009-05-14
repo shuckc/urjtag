@@ -162,7 +162,7 @@ svf_statement
         rt->run_clk   = $3.token;
         rt->end_state = $5;
 
-        if (!urj_svf_runtest(chain, priv_data, rt)) {
+        if (urj_svf_runtest(chain, priv_data, rt) != URJ_STATUS_OK) {
           yyerror(&@$, priv_data, chain, "RUNTEST");
           YYERROR;
         }
@@ -177,7 +177,7 @@ svf_statement
         rt->run_clk   = 0;
         rt->end_state = $4;
 
-        if (!urj_svf_runtest(chain, priv_data, rt)) {
+        if (urj_svf_runtest(chain, priv_data, rt) != URJ_STATUS_OK) {
           yyerror(&@$, priv_data, chain, "RUNTEST");
           YYERROR;
         }
@@ -192,7 +192,7 @@ svf_statement
         result = urj_svf_sxr(chain, priv_data, generic_dr, p, &@$);
         urj_svf_free_ths_params(p);
 
-        if (!result) {
+        if (result != URJ_STATUS_OK) {
           yyerror(&@$, priv_data, chain, "SDR");
           YYERROR;
         }
@@ -207,7 +207,7 @@ svf_statement
         result = urj_svf_sxr(chain, priv_data, generic_ir, p, &@$);
         urj_svf_free_ths_params(p);
 
-        if (!result) {
+        if (result != URJ_STATUS_OK) {
           yyerror(&@$, priv_data, chain, "SIR");
           YYERROR;
         }
@@ -215,7 +215,7 @@ svf_statement
 
     | STATE path_states stable_state ';'
       {
-        if (!urj_svf_state(chain, priv_data, &(priv_data->parser_params.path_states), $<token>3)) {
+        if (urj_svf_state(chain, priv_data, &(priv_data->parser_params.path_states), $<token>3) != URJ_STATUS_OK) {
           yyerror(&@$, priv_data, chain, "STATE");
           YYERROR;
         }
@@ -230,7 +230,7 @@ svf_statement
         result = urj_svf_txr(generic_dr, p);
         urj_svf_free_ths_params(p);
 
-        if (!result) {
+        if (result != URJ_STATUS_OK) {
           yyerror(&@$, priv_data, chain, "TDR");
           YYERROR;
         }
@@ -245,7 +245,7 @@ svf_statement
         result = urj_svf_txr(generic_ir, p);
         urj_svf_free_ths_params(p);
 
-        if (!result) {
+        if (result != URJ_STATUS_OK) {
           yyerror(&@$, priv_data, chain, "TIR");
           YYERROR;
         }
@@ -253,7 +253,7 @@ svf_statement
 
     | TRST trst_mode ';'
     {
-      if (!urj_svf_trst(chain, priv_data, $<token>2)) {
+      if (urj_svf_trst(chain, priv_data, $<token>2) != URJ_STATUS_OK) {
         yyerror(&@$, priv_data, chain, "TRST");
         YYERROR;
       }

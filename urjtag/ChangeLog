@@ -1,3 +1,8 @@
+2009-05-14  Arnim Laeuger  <arniml>
+
+  * src/svf/svf_bison.y, src/svf/svf.c, src/cmd/cmd_svf.c:
+    implement pass/fail return values with URJ_STATUS_*
+
 2009-05-14  Rutger Hofman <rfhh>
 
   * src/tap/cable/*.c: convert return values, error handling, printfs

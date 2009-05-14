@@ -80,8 +80,7 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
 
     if ((SVF_FILE = fopen (params[1], "r")) != NULL)
     {
-        if (! urj_svf_run (chain, SVF_FILE, stop, ref_freq))
-            result = URJ_STATUS_FAIL;
+        result = urj_svf_run (chain, SVF_FILE, stop, ref_freq);
 
         fclose (SVF_FILE);
     }

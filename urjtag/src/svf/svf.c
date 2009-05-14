@@ -290,7 +290,7 @@ urj_svf_map_state (int state)
         break;
     }
 
-    return (jtag_state);
+    return jtag_state;
 }
 
 
@@ -317,7 +317,7 @@ urj_svf_hex2dec (char nibble)
     if (lower >= 'a' && lower <= 'f')
         return (lower - (int) 'a' + 10);
 
-    return (0);
+    return 0;
 }
 
 
@@ -358,7 +358,7 @@ urj_svf_build_bit_string (char *hex_string, int len)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
                        (size_t) (len + 1), sizeof (char));
-        return (NULL);
+        return NULL;
     }
 
     /* copy reduced hexadecimal string to full bit string */
@@ -386,12 +386,12 @@ urj_svf_build_bit_string (char *hex_string, int len)
 
     bit_string[len] = '\0';
 
-    return (bit_string);
+    return bit_string;
 }
 
 
 /*
- * urj_svf_copy_hex_to_register(hex_string, reg, len)
+ * urj_svf_copy_hex_to_register(hex_string, reg)
  *
  * Copies the contents of the hexadecimal string hex_string into the given
  * tap register.
@@ -401,8 +401,7 @@ urj_svf_build_bit_string (char *hex_string, int len)
  *   reg        : tap register to hold the converted hex string
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  */
 static int
 urj_svf_copy_hex_to_register (char *hex_string, urj_tap_register_t *reg)
@@ -410,14 +409,14 @@ urj_svf_copy_hex_to_register (char *hex_string, urj_tap_register_t *reg)
     char *bit_string;
 
     if (!(bit_string = urj_svf_build_bit_string (hex_string, reg->len)))
-        return (0);
+        return URJ_STATUS_FAIL;
 
     urj_tap_register_init (reg, bit_string);
 
     /* free memory as we do not need the intermediate bit_string anymore */
     free (bit_string);
 
-    return (1);
+    return URJ_STATUS_OK;
 }
 
 
@@ -436,22 +435,22 @@ urj_svf_copy_hex_to_register (char *hex_string, urj_tap_register_t *reg)
  *   reg  : hex string to be compared vs. tdo
  *
  * Return value:
- *   1 : tdo matches reg at all positions where mask is '1'
- *   0 : tdo and reg do not match or error occurred
+ *   URJ_STATUS_OK   : tdo matches reg at all positions where mask is '1'
+ *   URJ_STATUS_FAIL : tdo and reg do not match or error occurred
  */
 static int
 urj_svf_compare_tdo (urj_svf_parser_priv_t *priv, char *tdo, char *mask,
                      urj_tap_register_t *reg, YYLTYPE *loc)
 {
     char *tdo_bit, *mask_bit;
-    int pos, mismatch, result = 1;
+    int pos, mismatch, result = URJ_STATUS_OK;
 
     if (!(tdo_bit = urj_svf_build_bit_string (tdo, reg->len)))
-        return (0);
+        return URJ_STATUS_FAIL;
     if (!(mask_bit = urj_svf_build_bit_string (mask, reg->len)))
     {
         free (tdo_bit);
-        return (0);
+        return URJ_STATUS_FAIL;
     }
 
     /* retrieve string representation */
@@ -480,13 +479,13 @@ urj_svf_compare_tdo (urj_svf_parser_priv_t *priv, char *tdo, char *mask,
         urj_log (URJ_LOG_LEVEL_DEBUG, "TDO data : %s\n", reg->string);
 
         if (priv->svf_stop_on_mismatch)
-            result = 0;
+            result = URJ_STATUS_FAIL;
     }
 
     free (mask_bit);
     free (tdo_bit);
 
-    return (result);
+    return result;
 }
 
 
@@ -529,8 +528,7 @@ urj_svf_remember_param (char **rem, char *new)
  *   number : number of required bits
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  */
 static int
 urj_svf_all_care (char **string, double number)
@@ -548,7 +546,7 @@ urj_svf_all_care (char **string, double number)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("calloc(%zd,%zd) fails"),
                        num + 1, sizeof (char));
-        return (0);
+        return URJ_STATUS_FAIL;
     }
     memset (ptr, 'F', num);
     ptr[num] = '\0';
@@ -557,7 +555,7 @@ urj_svf_all_care (char **string, double number)
     /* responsability for free'ing ptr is now at the code that
        operates on *string */
 
-    return (result);
+    return URJ_STATUS_OK;
 }
 
 
@@ -614,8 +612,7 @@ urj_svf_frequency (urj_chain_t *chain, double freq)
  *   params : paramter set for TXR, HXR and SXR
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  * ***************************************************************************/
 int
 urj_svf_hxr (enum generic_irdr_coding ir_dr, struct ths_params *params)
@@ -624,7 +621,7 @@ urj_svf_hxr (enum generic_irdr_coding ir_dr, struct ths_params *params)
         urj_warning ( _("command %s not implemented\n"),
                      ir_dr == generic_ir ? "HIR" : "HDR");
 
-    return (1);
+    return URJ_STATUS_OK;
 }
 
 
@@ -645,8 +642,7 @@ sigalrm_handler (int signal)
  *   params : paramter set for RUNTEST
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  * ***************************************************************************/
 int
 urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
@@ -660,14 +656,14 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         urj_error_set (URJ_ERROR_INVALID,
                        _("Error %s: only TCK is supported for RUNTEST"),
                        "svf");
-        return (0);
+        return URJ_STATUS_FAIL;
     }
     if (params->max_time > 0.0 && params->max_time < params->min_time)
     {
         urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
                 _("Error %s: maximum time must be larger or equal to minimum time"),
                 "svf");
-        return (0);
+        return URJ_STATUS_FAIL;
     }
     if (params->max_time > 0.0)
         if (!priv->issued_runtest_maxtime)
@@ -711,7 +707,7 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
                            "svf");
             urj_log (URJ_LOG_LEVEL_ERROR,
                      _("  Set the cable frequency with 'FREQUENCY <Hz>'.\n"));
-            return 0;
+            return URJ_STATUS_FAIL;
         }
     }
 
@@ -781,7 +777,7 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     }
 #endif
 
-    return (1);
+    return URJ_STATUS_OK;
 }
 
 
@@ -797,8 +793,7 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
  *                  (SVF parser encoding)
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  * ***************************************************************************/
 int
 urj_svf_state (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
@@ -815,7 +810,7 @@ urj_svf_state (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     if (stable_state)
         urj_svf_goto_state (chain, urj_svf_map_state (stable_state));
 
-    return (1);
+    return URJ_STATUS_OK;
 }
 
 
@@ -829,8 +824,7 @@ urj_svf_state (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
  *   params : paramter set for TXR, HXR and SXR
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  * ***************************************************************************/
 int
 urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
@@ -838,7 +832,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
              YYLTYPE *loc)
 {
     urj_svf_sxr_t *sxr_params;
-    int len, result = 1;
+    int len, result = URJ_STATUS_OK;
 
     sxr_params = (ir_dr == generic_ir) ?
                      &(priv->sir_params) : &(priv->sdr_params);
@@ -860,11 +854,13 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         sxr_params->no_tdo = 1;
 
         if (!params->mask)
-            if (!urj_svf_all_care (&sxr_params->params.mask, params->number))
-                result = 0;
+            if (urj_svf_all_care (&sxr_params->params.mask, params->number)
+                != URJ_STATUS_OK)
+                result = URJ_STATUS_FAIL;
         if (!params->smask)
-            if (!urj_svf_all_care (&sxr_params->params.smask, params->number))
-                result = 0;
+            if (urj_svf_all_care (&sxr_params->params.smask, params->number)
+                != URJ_STATUS_OK)
+                result = URJ_STATUS_FAIL;
     }
 
     sxr_params->params.number = params->number;
@@ -877,7 +873,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
             urj_log (URJ_LOG_LEVEL_ERROR,
                      _("Error %s: first %s command after length change must have a TDI value.\n"),
                     "svf", ir_dr == generic_ir ? "SIR" : "SDR");
-            result = 0;
+            result = URJ_STATUS_FAIL;
         }
         sxr_params->no_tdi = 0;
     }
@@ -888,8 +884,8 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     params->smask = NULL;
 
     /* result of consistency check */
-    if (!result)
-        return (0);
+    if (result != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
 
     /*
@@ -911,7 +907,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
                      loc->first_line + 1, loc->first_column + 1,
                      loc->last_line + 1, loc->last_column + 1);
             }
-            return (0);
+            return URJ_STATUS_FAIL;
         }
         break;
 
@@ -927,20 +923,21 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
 
             if (!(priv->dr->in = urj_tap_register_alloc (len)))
                 // retain error state
-                return (0);
+                return URJ_STATUS_FAIL;
             if (!(priv->dr->out = urj_tap_register_alloc (len)))
                 // retain error state
-                return (0);
+                return URJ_STATUS_FAIL;
         }
         break;
 
     }
 
     /* fill register with value of TDI parameter */
-    if (!urj_svf_copy_hex_to_register (sxr_params->params.tdi,
-                                       ir_dr == generic_ir ? priv->ir->value
-                                                           : priv->dr->in))
-        return (0);
+    if (urj_svf_copy_hex_to_register (sxr_params->params.tdi,
+                                      ir_dr == generic_ir ? priv->ir->value
+                                                          : priv->dr->in)
+        != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
 
     /* shift selected instruction/register */
@@ -975,10 +972,10 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
     }
 
     /* log mismatches */
-    if (result == 0)
+    if (result != URJ_STATUS_OK)
         priv->mismatch_occurred = 1;
 
-    return (result);
+    return result;
 }
 
 
@@ -996,8 +993,7 @@ urj_svf_sxr (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
  *   trst_mode : selected mode for TRST
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  * ***************************************************************************/
 int
 urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
@@ -1010,7 +1006,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
         urj_error_set (URJ_ERROR_ILLEGAL_STATE,
             _("Error %s: no further TRST command allowed after mode ABSENT"),
             "svf");
-        return (0);
+        return URJ_STATUS_FAIL;
     }
 
     switch (trst_mode)
@@ -1033,7 +1029,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
             urj_error_set (URJ_ERROR_ILLEGAL_STATE,
                 _("Error %s: TRST ABSENT must not be issued after a STATE command"),
                 "svf");
-            return (0);
+            return URJ_STATUS_FAIL;
         }
         if (priv->sir_params.params.number > 0.0 ||
             priv->sdr_params.params.number > 0.0)
@@ -1055,7 +1051,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
         urj_tap_cable_set_signal (chain->cable, URJ_POD_CS_TRST,
                                   trst_cable ? URJ_POD_CS_TRST : 0);
 
-    return (1);
+    return URJ_STATUS_OK;
 }
 
 
@@ -1072,8 +1068,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
  *   params : paramter set for TXR, HXR and SXR
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  * ***************************************************************************/
 int
 urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
@@ -1082,7 +1077,7 @@ urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
         urj_warning (_("command %s not implemented\n"),
                      ir_dr == generic_ir ? "TIR" : "TDR");
 
-    return (1);
+    return URJ_STATUS_OK;
 }
 
 
@@ -1103,8 +1098,7 @@ urj_svf_txr (enum generic_irdr_coding ir_dr, struct ths_params *params)
  *   ref_freq         : reference frequency for RUNTEST
  *
  * Return value:
- *   1 : all ok
- *   0 : error occurred
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  * ***************************************************************************/
 int
 urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
@@ -1141,13 +1135,13 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     {
         urj_error_set (URJ_ERROR_NO_CHAIN, _("%s: no JTAG chain available"),
                        "svf");
-        return 0;
+        return URJ_STATUS_FAIL;
     }
     if (chain->parts == NULL)
     {
         urj_error_set (URJ_ERROR_NOTFOUND,
                        _("%s: chain without any parts"), "svf");
-        return 0;
+        return URJ_STATUS_FAIL;
     }
     priv.part = chain->parts->parts[chain->active_part];
     // @@@@ RFHH is priv.part allowed to be NULL? if not, we should use
@@ -1157,14 +1151,14 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))
     {
         if (urj_part_data_register_define(priv.part, "SDR", 32) != URJ_STATUS_OK)
-            return 0;
+            return URJ_STATUS_FAIL;
 
         if (!(priv.dr = urj_part_find_data_register (priv.part, "SDR")))
         {
             urj_error_set (URJ_ERROR_NOTFOUND,
                            _("%s: could not establish SDR register"),
                            "svf");
-            return 0;
+            return URJ_STATUS_FAIL;
         }
     }
 
@@ -1183,7 +1177,7 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
             {
                 urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
                                (size_t) (len + 1), sizeof (char));
-                return 0;
+                return URJ_STATUS_FAIL;
             }
 
             memset (instruction_string, '1', len);
@@ -1196,7 +1190,7 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
 
             if (sir == NULL)
                 // retain error state
-                return 0;
+                return URJ_STATUS_FAIL;
         }
 
         if (!(priv.ir = urj_part_find_instruction (priv.part, "SIR")))
@@ -1204,7 +1198,7 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
             urj_error_set (URJ_ERROR_NOTFOUND,
                            _("%s: could not establish SIR instruction"),
                            "svf");
-            return 0;
+            return URJ_STATUS_FAIL;
         }
     }
 
@@ -1264,5 +1258,5 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     if (old_frequency != urj_tap_cable_get_frequency (chain->cable))
         urj_tap_cable_set_frequency (chain->cable, old_frequency);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
