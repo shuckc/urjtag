@@ -47,7 +47,8 @@ typedef struct
     int (*get_status) (urj_parport_t *);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*set_control) (urj_parport_t *, uint8_t);
-} urj_parport_driver_t;
+}
+urj_parport_driver_t;
 
 struct urj_parport
 {

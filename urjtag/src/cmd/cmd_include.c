@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <ctype.h>
 #include <stdio.h>
@@ -78,9 +78,11 @@ cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
 static void
 cmd_include_or_script_help (char *cmd)
 {
-    printf (_("Usage: %s FILENAME [n] \n"
-              "Run command sequence n times from external FILENAME.\n"
-              "\n" "FILENAME      Name of the file with commands\n"), cmd);
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s FILENAME [n] \n"
+               "Run command sequence n times from external FILENAME.\n"
+               "\n" "FILENAME      Name of the file with commands\n"),
+             cmd);
 }
 
 static int

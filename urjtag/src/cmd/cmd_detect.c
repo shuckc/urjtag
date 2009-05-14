@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -58,11 +58,12 @@ cmd_detect_run (urj_chain_t *chain, char *params[])
 static void
 cmd_detect_help (void)
 {
-    printf (_("Usage: %s\n"
-              "Detect parts on the JTAG chain.\n"
-              "\n"
-              "Output from this command is a list of the detected parts.\n"
-              "If no parts are detected other commands may not work properly.\n"),
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s\n"
+               "Detect parts on the JTAG chain.\n"
+               "\n"
+               "Output from this command is a list of the detected parts.\n"
+               "If no parts are detected other commands may not work properly.\n"),
             "detect");
 }
 

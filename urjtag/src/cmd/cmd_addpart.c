@@ -20,7 +20,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -78,10 +78,12 @@ cmd_addpart_run (urj_chain_t *chain, char *params[])
 static void
 cmd_addpart_help (void)
 {
-    printf (_("Usage: %s IRLENGTH\n"
-              "Manually add a part to the end of the chain.\n"
-              "\n"
-              "IRLENGTH           instruction register length\n"), "addpart");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s IRLENGTH\n"
+               "Manually add a part to the end of the chain.\n"
+               "\n"
+               "IRLENGTH           instruction register length\n"),
+             "addpart");
 }
 
 

@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdint.h>
@@ -96,13 +96,15 @@ cmd_peek_run (urj_chain_t *chain, char *params[])
 static void
 cmd_peek_help (void)
 {
-    printf (_("Usage: %s ADDR\n"
-              "Read a single word (bus width size).\n"
-              "\n"
-              "ADDR       address to read from\n"
-              "\n"
-              "ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-              "\n"), "peek");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ADDR\n"
+               "Read a single word (bus width size).\n"
+               "\n"
+               "ADDR       address to read from\n"
+               "\n"
+               "ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+               "\n"),
+             "peek");
 }
 
 const urj_cmd_t urj_cmd_peek = {
@@ -157,14 +159,16 @@ cmd_poke_run (urj_chain_t *chain, char *params[])
 static void
 cmd_poke_help (void)
 {
-    printf (_("Usage: %s ADDR VAL [ADDR VAL] ... \n"
-              "Write a single word (bus width size).\n"
-              "\n"
-              "ADDR       address to write\n"
-              "VAL        value to write\n"
-              "\n"
-              "ADDR and VAL could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-              "\n"), "poke");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ADDR VAL [ADDR VAL] ... \n"
+               "Write a single word (bus width size).\n"
+               "\n"
+               "ADDR       address to write\n"
+               "VAL        value to write\n"
+               "\n"
+               "ADDR and VAL could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+               "\n"),
+             "poke");
 }
 
 const urj_cmd_t urj_cmd_poke = {

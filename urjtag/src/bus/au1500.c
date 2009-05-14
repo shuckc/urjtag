@@ -27,7 +27,7 @@
  */
 
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <string.h>
 #include <stdint.h>

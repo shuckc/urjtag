@@ -23,7 +23,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #ifdef HAVE_DEV_PPBUS_PPI_H
 

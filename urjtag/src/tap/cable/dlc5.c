@@ -27,7 +27,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <urjtag/cable.h>
 #include <urjtag/parport.h>

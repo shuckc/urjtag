@@ -27,7 +27,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -110,7 +110,8 @@ mpc5200_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         bp->lpc_num_d = 16;
         bp->muxed = 1;
     }
-    printf ("%sMUXed %db address, %db data bus\n", (bp->muxed ? "" : "Non-"),
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             "%sMUXed %db address, %db data bus\n", (bp->muxed ? "" : "Non-"),
             bp->lpc_num_ad, bp->lpc_num_d);
 
     bus->chain = chain;

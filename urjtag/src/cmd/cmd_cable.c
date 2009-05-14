@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -145,17 +145,20 @@ cmd_cable_help (void)
 {
     int i;
 
-    printf (_("Usage: %s DRIVER [DRIVER_OPTS]\n"
-              "Select JTAG cable type.\n"
-              "\n"
-              "DRIVER      name of cable\n"
-              "DRIVER_OPTS options for the selected cable\n"
-              "\n"
-              "Type \"cable DRIVER help\" for info about options for cable DRIVER.\n"
-              "\n" "List of supported cables:\n"), "cable");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s DRIVER [DRIVER_OPTS]\n"
+               "Select JTAG cable type.\n"
+               "\n"
+               "DRIVER      name of cable\n"
+               "DRIVER_OPTS options for the selected cable\n"
+               "\n"
+               "Type \"cable DRIVER help\" for info about options for cable DRIVER.\n"
+               "\n" "List of supported cables:\n"),
+             "cable");
 
     for (i = 0; urj_tap_cable_drivers[i]; i++)
-        printf (_("%-13s %s\n"), urj_tap_cable_drivers[i]->name,
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("%-13s %s\n"), urj_tap_cable_drivers[i]->name,
                 _(urj_tap_cable_drivers[i]->description));
 }
 

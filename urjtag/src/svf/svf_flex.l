@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 #include <urjtag/log.h>
 
 #ifdef ENABLE_NLS

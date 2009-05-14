@@ -23,7 +23,7 @@
  */
 
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -38,7 +38,7 @@
 static int
 cmd_bsdl_run (urj_chain_t *chain, char *params[])
 {
-    int num_params, result = -1;
+    int num_params, result = -2;
     urj_bsdl_globs_t *globs = &(chain->bsdl);
 
     num_params = urj_cmd_params (params);
@@ -106,6 +106,13 @@ cmd_bsdl_run (urj_chain_t *chain, char *params[])
         }
     }
 
+    if (result == -2)
+    {
+        urj_error_set (URJ_ERROR_SYNTAX, "unknown/malformed bsdl command '%s'",
+                       params[1]);
+        return URJ_STATUS_FAIL;
+    }
+
     return (result >= 0) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
 }
 
@@ -113,14 +120,15 @@ cmd_bsdl_run (urj_chain_t *chain, char *params[])
 static void
 cmd_bsdl_help (void)
 {
-    printf (_("Usage: %s path PATHLIST\n"
-              "Usage: %s test [FILE]\n"
-              "Usage: %s dump [FILE]\n"
-              "Usage: %s debug on|off\n"
-              "Manage BSDL files\n"
-              "\n"
-              "PATHLIST semicolon separated list of directory paths to search for BSDL files\n"
-              "FILE file containing part description in BSDL format\n"),
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s path PATHLIST\n"
+               "Usage: %s test [FILE]\n"
+               "Usage: %s dump [FILE]\n"
+               "Usage: %s debug on|off\n"
+               "Manage BSDL files\n"
+               "\n"
+               "PATHLIST semicolon separated list of directory paths to search for BSDL files\n"
+               "FILE file containing part description in BSDL format\n"),
             "bsdl", "bsdl", "bsdl", "bsdl");
 }
 

@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <inttypes.h>
 #include <stdio.h>

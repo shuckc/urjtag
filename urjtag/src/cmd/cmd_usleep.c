@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <unistd.h>
 
@@ -58,8 +58,10 @@ cmd_usleep_run (urj_chain_t *chain, char *params[])
 static void
 cmd_usleep_help (void)
 {
-    printf (_("Usage: %s USECS\n"
-              "Sleep some number of microseconds.\n"), "usleep");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s USECS\n"
+               "Sleep some number of microseconds.\n"),
+             "usleep");
 }
 
 const urj_cmd_t urj_cmd_usleep = {

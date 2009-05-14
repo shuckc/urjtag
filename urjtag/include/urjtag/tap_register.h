@@ -29,9 +29,9 @@
 
 struct urj_tap_register
 {
-    char *data;                 /* (public, r/w) register data */
-    int len;                    /* (public, r/o) register length */
-    char *string;               /* (private) string representation of register data */
+    char *data;         /* (public, r/w) register data */
+    int len;            /* (public, r/o) register length */
+    char *string;       /* (private) string representation of register data */
 };
 
 urj_tap_register_t *urj_tap_register_alloc (int len);

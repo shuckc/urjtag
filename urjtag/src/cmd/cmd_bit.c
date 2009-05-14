@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stddef.h>
 #include <stdio.h>
@@ -196,17 +196,19 @@ cmd_bit_run (urj_chain_t *chain, char *params[])
 static void
 cmd_bit_help (void)
 {
-    printf (_("Usage: %s NUMBER TYPE DEFAULT SIGNAL [CBIT CVAL CSTATE]\n"
-              "Define new BSR (Boundary Scan Register) bit for SIGNAL, with\n"
-              "DEFAULT value.\n"
-              "\n"
-              "NUMBER        Bit number in the BSR\n"
-              "TYPE          Bit type, valid values are I, O, B, C, and X\n"
-              "DEFAULT       Default (safe) bit value, valid values are 1, 0, ?\n"
-              "SIGNAL        Associated signal name\n"
-              "CBIT          Control bit number\n"
-              "CVAL          Control value\n"
-              "CSTATE        Control state, valid state is only Z\n"), "bit");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s NUMBER TYPE DEFAULT SIGNAL [CBIT CVAL CSTATE]\n"
+               "Define new BSR (Boundary Scan Register) bit for SIGNAL, with\n"
+               "DEFAULT value.\n"
+               "\n"
+               "NUMBER        Bit number in the BSR\n"
+               "TYPE          Bit type, valid values are I, O, B, C, and X\n"
+               "DEFAULT       Default (safe) bit value, valid values are 1, 0, ?\n"
+               "SIGNAL        Associated signal name\n"
+               "CBIT          Control bit number\n"
+               "CVAL          Control value\n"
+               "CSTATE        Control state, valid state is only Z\n"),
+             "bit");
 }
 
 const urj_cmd_t urj_cmd_bit = {

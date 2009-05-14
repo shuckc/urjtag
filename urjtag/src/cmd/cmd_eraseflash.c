@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdint.h>
@@ -70,17 +70,20 @@ cmd_eraseflash_help (void)
 {
     int i;
 
-    printf (_("Usage: %s ADDR BLOCKS\n"
-              "Erase flash memory from ADDR.\n"
-              "\n"
-              "ADDR       target addres for erasing block\n"
-              "BLOCKS     number of blocks to erase\n"
-              "\n"
-              "ADDR and BLOCKS could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-              "\n" "Supported Flash Memories:\n"), "eraseflash");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ADDR BLOCKS\n"
+               "Erase flash memory from ADDR.\n"
+               "\n"
+               "ADDR       target addres for erasing block\n"
+               "BLOCKS     number of blocks to erase\n"
+               "\n"
+               "ADDR and BLOCKS could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+               "\n" "Supported Flash Memories:\n"),
+             "eraseflash");
 
     for (i = 0; urj_flash_flash_drivers[i]; i++)
-        printf (_("%s\n     %s\n"), _(urj_flash_flash_drivers[i]->name),
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("%s\n     %s\n"), _(urj_flash_flash_drivers[i]->name),
                 _(urj_flash_flash_drivers[i]->description));
 }
 

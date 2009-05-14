@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -123,14 +123,15 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
 static void
 cmd_dr_help (void)
 {
-    printf (_("Usage: %s [DIR]\n"
-              "Usage: %s BITSTRING\n"
-              "Display input or output data register content or set current register.\n"
-              "\n"
-              "DIR           requested data register; possible values: 'in' for\n"
-              "              input and 'out' for output; default is 'out'\n"
-              "BITSTRING     set current data register with BITSTRING (e.g. 01010)\n"),
-            "dr", "dr");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s [DIR]\n"
+               "Usage: %s BITSTRING\n"
+               "Display input or output data register content or set current register.\n"
+               "\n"
+               "DIR           requested data register; possible values: 'in' for\n"
+               "              input and 'out' for output; default is 'out'\n"
+               "BITSTRING     set current data register with BITSTRING (e.g. 01010)\n"),
+             "dr", "dr");
 }
 
 const urj_cmd_t urj_cmd_dr = {

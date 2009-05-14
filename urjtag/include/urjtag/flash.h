@@ -57,7 +57,8 @@ typedef struct
     int (*program) (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
                     uint32_t *buffer, int count);
     void (*readarray) (urj_flash_cfi_array_t *cfi_array);
-} urj_flash_driver_t;
+}
+urj_flash_driver_t;
 
 extern urj_flash_driver_t *urj_flash_flash_drivers[];
 
@@ -72,7 +73,5 @@ int urj_flashmsbin (urj_bus_t *bus, FILE *f, int);
 
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_flasherase (urj_bus_t *bus, uint32_t addr, int number);
-
-/* end of original brux/flash.h */
 
 #endif /* URJ_FLASH_H */

@@ -23,7 +23,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #ifndef SVN_REVISION
 #define SVN_REVISION "0"

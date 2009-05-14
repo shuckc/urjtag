@@ -34,7 +34,7 @@
 #ifndef URJ_SRC_CMD_H
 #define URJ_SRC_CMD_H
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <urjtag/types.h>
 

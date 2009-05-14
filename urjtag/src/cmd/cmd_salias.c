@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -85,11 +85,13 @@ cmd_salias_run (urj_chain_t *chain, char *params[])
 static void
 cmd_salias_help (void)
 {
-    printf (_("Usage: %s ALIAS SIGNAL\n"
-              "Define new signal ALIAS as alias for existing SIGNAL.\n"
-              "\n"
-              "ALIAS         New signal alias name\n"
-              "SIGNAL        Existing signal name\n"), "signal");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ALIAS SIGNAL\n"
+               "Define new signal ALIAS as alias for existing SIGNAL.\n"
+               "\n"
+               "ALIAS         New signal alias name\n"
+               "SIGNAL        Existing signal name\n"),
+             "signal");
 }
 
 const urj_cmd_t urj_cmd_salias = {

@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdint.h>
@@ -92,23 +92,25 @@ cmd_flashmem_help (void)
 {
     int i;
 
-    printf (_("Usage: %s ADDR FILENAME [noverify]\n"
-              "Usage: %s FILENAME [noverify]\n"
-              "Program FILENAME content to flash memory.\n"
-              "\n"
-              "ADDR       target address for raw binary image\n"
-              "FILENAME   name of the input file\n"
-              "%-10s FILENAME is in MS .bin format (for WinCE)\n"
-              "%-10s if specified, verification is skipped\n"
-              "\n"
-              "ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-              "\n"
-              "Supported Flash Memories:\n"), "flashmem",
-            "flashmem msbin", "msbin", "noverify");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ADDR FILENAME [noverify]\n"
+               "Usage: %s FILENAME [noverify]\n"
+               "Program FILENAME content to flash memory.\n"
+               "\n"
+               "ADDR       target address for raw binary image\n"
+               "FILENAME   name of the input file\n"
+               "%-10s FILENAME is in MS .bin format (for WinCE)\n"
+               "%-10s if specified, verification is skipped\n"
+               "\n"
+               "ADDR could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+               "\n"
+               "Supported Flash Memories:\n"),
+             "flashmem", "flashmem msbin", "msbin", "noverify");
 
     for (i = 0; urj_flash_flash_drivers[i]; i++)
-        printf (_("%s\n     %s\n"), _(urj_flash_flash_drivers[i]->name),
-                _(urj_flash_flash_drivers[i]->description));
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("%s\n     %s\n"), _(urj_flash_flash_drivers[i]->name),
+                 _(urj_flash_flash_drivers[i]->description));
 }
 
 const urj_cmd_t urj_cmd_flashmem = {

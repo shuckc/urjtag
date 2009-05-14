@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -94,15 +94,18 @@ cmd_initbus_help (void)
 {
     int i;
 
-    printf (_("Usage: %s BUSNAME\n"
-              "Initialize new bus driver for active part.\n"
-              "\n"
-              "BUSNAME       Name of the bus\n"
-              "\n" "List of available buses:\n"), "initbus");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s BUSNAME\n"
+               "Initialize new bus driver for active part.\n"
+               "\n"
+               "BUSNAME       Name of the bus\n"
+               "\n" "List of available buses:\n"),
+             "initbus");
 
     for (i = 0; urj_bus_drivers[i] != NULL; i++)
-        printf (_("%-10s %s\n"), urj_bus_drivers[i]->name,
-                urj_bus_drivers[i]->description);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("%-10s %s\n"), urj_bus_drivers[i]->name,
+                 urj_bus_drivers[i]->description);
 }
 
 const const urj_cmd_t urj_cmd_initbus = {

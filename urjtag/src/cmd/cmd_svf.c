@@ -23,7 +23,7 @@
  */
 
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdint.h>
 #include <stdio.h>
@@ -100,12 +100,14 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
 static void
 cmd_svf_help (void)
 {
-    printf (_("Usage: %s FILE [stop] [progress] [ref_freq=<frequency>]\n"
-              "Execute svf commands from FILE.\n"
-              "stop     : Command execution stops upon TDO mismatch.\n"
-              "progress : Continually displays progress status.\n"
-              "ref_freq : Use <frequency> as the reference for 'RUNTEST xxx SEC' commands\n"
-              "\n" "FILE file containing SVF commands\n"), "svf");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s FILE [stop] [progress] [ref_freq=<frequency>]\n"
+               "Execute svf commands from FILE.\n"
+               "stop     : Command execution stops upon TDO mismatch.\n"
+               "progress : Continually displays progress status.\n"
+               "ref_freq : Use <frequency> as the reference for 'RUNTEST xxx SEC' commands\n"
+               "\n" "FILE file containing SVF commands\n"),
+             "svf");
 }
 
 const urj_cmd_t urj_cmd_svf = {

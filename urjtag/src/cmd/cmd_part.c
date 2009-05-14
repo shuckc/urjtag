@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -132,9 +132,11 @@ cmd_part_help (void)
     // @@@@ RFHH this doesn't reflect input syntax:
     // jtag> part PART
     // jtag> part alias ALIAS
-    printf (_("Usage: %s PART\n"
-              "Change active part for current JTAG chain.\n"
-              "\n" "PART          part number | alias\n"), "part");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s PART\n"
+               "Change active part for current JTAG chain.\n"
+               "\n" "PART          part number | alias\n"),
+             "part");
 }
 
 const urj_cmd_t urj_cmd_part = {

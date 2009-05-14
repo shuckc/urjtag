@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -94,11 +94,13 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
 static void
 cmd_signal_help (void)
 {
-    printf (_("Usage: %s SIGNAL [PIN#]\n"
-              "Define new signal with name SIGNAL for a part.\n"
-              "\n"
-              "SIGNAL           New signal name\n"
-              "PIN#     List of pin # for a signal\n"), "signal");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s SIGNAL [PIN#]\n"
+               "Define new signal with name SIGNAL for a part.\n"
+               "\n"
+               "SIGNAL           New signal name\n"
+               "PIN#     List of pin # for a signal\n"),
+             "signal");
 }
 
 const urj_cmd_t urj_cmd_signal = {

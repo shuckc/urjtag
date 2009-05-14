@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -54,7 +54,8 @@ cmd_reset_run (urj_chain_t *chain, char *params[])
 static void
 cmd_reset_help (void)
 {
-    printf (_("Usage: %s\n" "Reset current JTAG chain.\n"), "reset");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s\n" "Reset current JTAG chain.\n"), "reset");
 }
 
 const urj_cmd_t urj_cmd_reset = {

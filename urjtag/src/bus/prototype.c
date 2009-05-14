@@ -23,7 +23,7 @@
  * Modified from ppc405ep.c by Detrick Martin <jtag@detrickmartin.net>, 2008.
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -232,8 +232,7 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
     else
     {
-        printf (_
-                ("parameters alsb=<signal> and/or amsb=<signal> are not defined\n"));
+        printf (_("parameters alsb=<signal> and/or amsb=<signal> are not defined\n"));
         failed = 1;
     }
 
@@ -292,8 +291,7 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
     else
     {
-        printf (_
-                ("parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n"));
+        printf (_("parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n"));
         failed = 1;
     }
 

@@ -26,7 +26,7 @@
  * [2] Spansion, Am29LV040B Data Sheet
 */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdint.h>
 #include <stdlib.h>

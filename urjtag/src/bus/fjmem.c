@@ -22,12 +22,13 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 
+#include <urjtag/log.h>
 #include <urjtag/part.h>
 #include <urjtag/bus.h>
 #include <urjtag/chain.h>

@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 
@@ -53,16 +53,17 @@ cmd_discovery_run (urj_chain_t *chain, char *params[])
 static void
 cmd_discovery_help (void)
 {
-    printf (_("Usage: %s\n"
-              "Discovery of unknown parts in the JTAG chain.\n"
-              "\n"
-              "'%s' attempts to detect these parameters of an unknown JTAG\n"
-              "chain:\n"
-              " 1. IR (instruction register) length\n"
-              " 2. DR (data register) length for all possible instructions\n"
-              "\n"
-              "Warning: This may be dangerous for some parts (especially if the\n"
-              "part doesn't have TRST signal).\n"), "discovery",
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s\n"
+               "Discovery of unknown parts in the JTAG chain.\n"
+               "\n"
+               "'%s' attempts to detect these parameters of an unknown JTAG\n"
+               "chain:\n"
+               " 1. IR (instruction register) length\n"
+               " 2. DR (data register) length for all possible instructions\n"
+               "\n"
+               "Warning: This may be dangerous for some parts (especially if the\n"
+               "part doesn't have TRST signal).\n"), "discovery",
             "discovery");
 }
 

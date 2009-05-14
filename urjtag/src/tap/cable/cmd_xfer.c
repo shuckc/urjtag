@@ -22,11 +22,12 @@
  *
  */
 
-#include <urjtag/sysdep.h>
-#include <urjtag/error.h>
+#include <sysdep.h>
 
 #include <stdlib.h>
 #include <string.h>
+
+#include <urjtag/error.h>
 
 #include "generic.h"
 #include "generic_usbconn.h"

@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -97,16 +97,17 @@ cmd_instruction_run (urj_chain_t *chain, char *params[])
 static void
 cmd_instruction_help (void)
 {
-    printf (_("Usage: %s INSTRUCTION\n"
-              "Usage: %s length LENGTH\n"
-              "Usage: %s INSTRUCTION CODE REGISTER\n"
-              "Change active INSTRUCTION for a part or declare new instruction.\n"
-              "\n"
-              "INSTRUCTION   instruction name (e.g. BYPASS)\n"
-              "LENGTH        common instruction length\n"
-              "CODE          instruction code (e.g. 11111)\n"
-              "REGISTER      default data register for instruction (e.g. BR)\n"),
-            "instruction", "instruction", "instruction");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s INSTRUCTION\n"
+               "Usage: %s length LENGTH\n"
+               "Usage: %s INSTRUCTION CODE REGISTER\n"
+               "Change active INSTRUCTION for a part or declare new instruction.\n"
+               "\n"
+               "INSTRUCTION   instruction name (e.g. BYPASS)\n"
+               "LENGTH        common instruction length\n"
+               "CODE          instruction code (e.g. 11111)\n"
+               "REGISTER      default data register for instruction (e.g. BR)\n"),
+             "instruction", "instruction", "instruction");
 }
 
 const urj_cmd_t urj_cmd_instruction = {

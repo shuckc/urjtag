@@ -34,7 +34,7 @@
 #ifndef URJ_SRC_FLASH_H
 #define URJ_SRC_FLASH_H
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdint.h>

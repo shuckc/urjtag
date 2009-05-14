@@ -23,7 +23,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -100,11 +100,12 @@ cmd_test_run (urj_chain_t *chain, char *params[])
 static void
 cmd_test_help (void)
 {
-    printf (_("Usage: %s SIGNAL 0/1\n"
-              "Test signal state from output BSR (Boundary Scan Register).\n"
-              "\n"
-              "SIGNAL        signal name (from JTAG declaration file)\n"),
-            "test signal");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s SIGNAL 0/1\n"
+               "Test signal state from output BSR (Boundary Scan Register).\n"
+               "\n"
+               "SIGNAL        signal name (from JTAG declaration file)\n"),
+             "test signal");
 }
 
 const urj_cmd_t urj_cmd_test = {

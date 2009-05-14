@@ -33,14 +33,17 @@
 
 extern urj_bus_t *urj_bus;
 
+/* @@@@ RFHH return status */
 void urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
+/* @@@@ RFHH return status */
 void urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
 
 typedef struct
 {
     int len;
     urj_bus_t **buses;
-} urj_buses_t;
+}
+urj_buses_t;
 
 extern urj_buses_t urj_buses;
 extern const urj_bus_driver_t *urj_bus_drivers[];

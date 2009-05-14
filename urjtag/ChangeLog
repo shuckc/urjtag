@@ -3,6 +3,10 @@
   * src/tap/cable/*.c: convert return values, error handling, printfs
   * src/**: globally remove \n or !\n from error detail msgs; sanitize
     error prints a tiny bit
+  * include/urjtag/sysdep.h, include/urjtag/Makefile.am: sysdep.h should most
+    certainly not be in the directory of exported header files. Move it back
+    to the root dir in expectation of an include dir that is private to the
+    src tree
 
 2009-05-12  Rutger Hofman <rfhh>
 
@@ -14,8 +18,8 @@
     Library commands that produce output (print routines) are equipped with
     a urj_log_level_t parameter to control their verbosity.
   * include/urjtag/error.h, many more files: introduce error values
-  URJ_ERROR_FTD, URJ_ERROR_USB. Handle URJ_ERROR_IO specially through macro
-  urj_error_IO_set that handles errno/strerror().
+    URJ_ERROR_FTD, URJ_ERROR_USB. Handle URJ_ERROR_IO specially through macro
+    urj_error_IO_set that handles errno/strerror().
 
 2009-05-11  Arnim Laeuger  <arniml>
 

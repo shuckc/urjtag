@@ -34,7 +34,7 @@
  */
 
 //#define PRINT_DATA_DEBUG 1
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>

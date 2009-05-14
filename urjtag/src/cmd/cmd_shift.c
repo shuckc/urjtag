@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -70,9 +70,10 @@ cmd_shift_run (urj_chain_t *chain, char *params[])
 static void
 cmd_shift_help (void)
 {
-    printf (_("Usage: %s\n"
-              "Usage: %s\n"
-              "Shift instruction or data register through JTAG chain.\n"),
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s\n"
+               "Usage: %s\n"
+               "Shift instruction or data register through JTAG chain.\n"),
             "shift ir", "shift dr");
 }
 

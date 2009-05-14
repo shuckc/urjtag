@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -125,8 +125,10 @@ cmd_scan_run (urj_chain_t *chain, char *params[])
 static void
 cmd_scan_help (void)
 {
-    printf (_("Usage: %s [SIGNAL]* \n"
-              "Read BSR and show changes since last scan.\n"), "scan");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s [SIGNAL]* \n"
+               "Read BSR and show changes since last scan.\n"),
+             "scan");
 }
 
 const urj_cmd_t urj_cmd_scan = {

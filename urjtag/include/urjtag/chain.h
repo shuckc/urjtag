@@ -86,6 +86,7 @@ typedef struct
 {
     urj_chain_t **chains;
     int size;                   /* allocated chains array size */
-} urj_chains_t;
+}
+urj_chains_t;
 
 #endif /* URJ_CHAIN_H */

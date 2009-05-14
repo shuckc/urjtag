@@ -44,7 +44,8 @@ typedef struct urj_tap_register urj_tap_register_t;
 /**
  * Log levels
  */
-typedef enum urj_log_level {
+typedef enum urj_log_level
+{
     URJ_LOG_LEVEL_ALL,          /**< every single bit as it is transmitted */
     URJ_LOG_LEVEL_COMM,         /**< low level communication details */
     URJ_LOG_LEVEL_DEBUG,        /**< more details of interest for developers */
@@ -53,7 +54,8 @@ typedef enum urj_log_level {
     URJ_LOG_LEVEL_WARNING,      /**< unmissable warnings */
     URJ_LOG_LEVEL_ERROR,        /**< only fatal errors */
     URJ_LOG_LEVEL_SILENT,       /**< suppress logging output */
-} urj_log_level_t;
+}
+urj_log_level_t;
 
 #define URJ_STATUS_OK             0
 #define URJ_STATUS_FAIL           1

@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -84,11 +84,12 @@ cmd_get_run (urj_chain_t *chain, char *params[])
 static void
 cmd_get_help (void)
 {
-    printf (_("Usage: %s signal SIGNAL\n"
-              "Get signal state from output BSR (Boundary Scan Register).\n"
-              "\n"
-              "SIGNAL        signal name (from JTAG declaration file)\n"),
-            "get signal");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s signal SIGNAL\n"
+               "Get signal state from output BSR (Boundary Scan Register).\n"
+               "\n"
+               "SIGNAL        signal name (from JTAG declaration file)\n"),
+             "get signal");
 }
 
 const urj_cmd_t urj_cmd_get = {

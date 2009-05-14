@@ -32,7 +32,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdint.h>
 #include <stdlib.h>

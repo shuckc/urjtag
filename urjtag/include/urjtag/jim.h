@@ -35,7 +35,7 @@
 #define URJ_JIM_H 1
 
 #include <stdint.h>
-#include <stdlib.h>
+#include <stddef.h>
 
 typedef enum jim_tap_state
 {
@@ -62,7 +62,8 @@ typedef struct
 {
     uint32_t *reg;
     int len;
-} urj_jim_shift_reg_t;
+}
+urj_jim_shift_reg_t;
 
 typedef struct urj_jim_device urj_jim_device_t;
 

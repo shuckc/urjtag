@@ -45,7 +45,8 @@ typedef struct
     uint32_t start;
     uint64_t length;
     unsigned int width;
-} urj_bus_area_t;
+}
+urj_bus_area_t;
 
 struct urj_bus_driver
 {

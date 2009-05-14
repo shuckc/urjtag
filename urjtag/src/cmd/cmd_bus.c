@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -67,9 +67,11 @@ cmd_bus_run (urj_chain_t *chain, char *params[])
 static void
 cmd_bus_help (void)
 {
-    printf (_("Usage: %s BUS\n"
-              "Change active bus.\n"
-              "\n" "BUS           bus number\n"), "bus");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s BUS\n"
+               "Change active bus.\n"
+               "\n" "BUS           bus number\n"),
+             "bus");
 }
 
 const urj_cmd_t urj_cmd_bus = {

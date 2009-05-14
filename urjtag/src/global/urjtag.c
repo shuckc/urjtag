@@ -21,7 +21,7 @@
  * Written by Rutger Hofman
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdarg.h>
 #include <errno.h>

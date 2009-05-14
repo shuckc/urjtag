@@ -22,7 +22,7 @@
  * shell.c added by djf
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -87,9 +87,11 @@ cmd_shell_run (urj_chain_t *chain, char *params[])
 static void
 cmd_shell_help (void)
 {
-    printf (_("Usage: %s cmmd\n"
-              "Shell out to os for a command.\n"
-              "\n" "CMMD OS Shell Command\n"), "shell cmmd");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s cmmd\n"
+               "Shell out to os for a command.\n"
+               "\n" "CMMD OS Shell Command\n"),
+             "shell cmmd");
 }
 
 const urj_cmd_t urj_cmd_shell = {

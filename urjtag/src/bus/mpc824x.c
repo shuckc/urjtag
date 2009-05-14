@@ -27,7 +27,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -114,14 +114,12 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                 {
                     //              BUS_WIDTH = 64;  // Needs to fix, look at setup_data()
                     BUS_WIDTH = 32;
-                    printf (_
-                            ("   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently\n"));
+                    printf (_("   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently\n"));
                     dfltWidth = 1;
                 }
                 else
                 {
-                    printf (_
-                            ("   Only 8,32 and 64 bus width are supported for Banks 0 and 1\n"));
+                    printf (_("   Only 8,32 and 64 bus width are supported for Banks 0 and 1\n"));
                     return NULL;
                 }
             }
@@ -133,8 +131,7 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
             if (!strcmp ("help", cmd_params[i]))
             {
-                printf (_
-                        ("Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n\n"
+                printf (_("Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n\n"
                          "   WIDTH      data bus width - 8, 32, 64 (default 8)\n"
                          "   revbits    reverse bits in data bus (default - no)\n"
                          "   dbgAddr    display address bus state (default - no)\n"

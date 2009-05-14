@@ -21,7 +21,7 @@
  * Written by Uwe Bonnes <bon@elektron.ikp.physik.tu-darmstadt.de>, 2008.
  *
  */
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 
@@ -59,11 +59,12 @@ cmd_idcode_run (urj_chain_t *chain, char *params[])
 static void
 cmd_idcode_help (void)
 {
-    printf (_("Usage: %s [BYTES]\n"
-              "Read [BYTES]|all IDCODEs of all parts in a JTAG chain.\n"
-              "\n"
-              "BYTES must be an unsigned integer, Use 0 for BYTES to read all bytes\n"),
-            "idcode");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s [BYTES]\n"
+               "Read [BYTES]|all IDCODEs of all parts in a JTAG chain.\n"
+               "\n"
+               "BYTES must be an unsigned integer, Use 0 for BYTES to read all bytes\n"),
+             "idcode");
 }
 
 const urj_cmd_t urj_cmd_idcode = {

@@ -20,7 +20,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdint.h>
@@ -74,16 +74,17 @@ cmd_writemem_run (urj_chain_t *chain, char *params[])
 static void
 cmd_writemem_help (void)
 {
-    printf (_("Usage: %s ADDR LEN FILENAME\n"
-              "Write to device memory starting at ADDR the FILENAME file.\n"
-              "\n"
-              "ADDR       start address of the written memory area\n"
-              "LEN        written memory length\n"
-              "FILENAME   name of the input file\n"
-              "\n"
-              "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
-              "NOTE: This is NOT useful for FLASH programming!\n"),
-            "writemem");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ADDR LEN FILENAME\n"
+               "Write to device memory starting at ADDR the FILENAME file.\n"
+               "\n"
+               "ADDR       start address of the written memory area\n"
+               "LEN        written memory length\n"
+               "FILENAME   name of the input file\n"
+               "\n"
+               "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+               "NOTE: This is NOT useful for FLASH programming!\n"),
+             "writemem");
 }
 
 const urj_cmd_t urj_cmd_writemem = {

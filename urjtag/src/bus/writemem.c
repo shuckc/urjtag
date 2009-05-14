@@ -21,15 +21,17 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdint.h>
 #include <string.h>
 
+#include <urjtag/log.h>
 #include <urjtag/bus.h>
 #include <urjtag/flash.h>
 #include <urjtag/jtag.h>
 
+// @@@@ RFHH return status
 void
 urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
@@ -66,18 +68,18 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
     addr = addr & (~(step - 1));
     len = (len + step - 1) & (~(step - 1));
 
-    printf (_("address: 0x%08X\n"), addr);
-    printf (_("length:  0x%08X\n"), len);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("address: 0x%08X\n"), addr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("length:  0x%08X\n"), len);
 
     if (len == 0)
     {
-        printf (_("length is 0.\n"));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("length is 0.\n"));
         return;
     }
 
     a = addr;
     end = a + len;
-    printf (_("writing:\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("writing:\n"));
 
     for (; a < end; a += step)
     {
@@ -87,8 +89,8 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
         /* Read one block of data */
         if (bc < step)
         {
-            printf (_("addr: 0x%08X"), a);
-            printf ("\r");
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), a);
+            urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             fflush (stdout);
             if (bc != 0)
                 printf (_("Data not on word boundary, NOT SUPPORTED!"));
@@ -128,5 +130,5 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
     }
 
-    printf (_("\nDone.\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\nDone.\n"));
 }

@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdint.h>
@@ -76,15 +76,16 @@ cmd_readmem_run (urj_chain_t *chain, char *params[])
 static void
 cmd_readmem_help (void)
 {
-    printf (_("Usage: %s ADDR LEN FILENAME\n"
-              "Copy device memory content starting with ADDR to FILENAME file.\n"
-              "\n"
-              "ADDR       start address of the copied memory area\n"
-              "LEN        copied memory length\n"
-              "FILENAME   name of the output file\n"
-              "\n"
-              "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"),
-            "readmem");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ADDR LEN FILENAME\n"
+               "Copy device memory content starting with ADDR to FILENAME file.\n"
+               "\n"
+               "ADDR       start address of the copied memory area\n"
+               "LEN        copied memory length\n"
+               "FILENAME   name of the output file\n"
+               "\n"
+               "ADDR and LEN could be in decimal or hexadecimal (prefixed with 0x) form.\n"),
+             "readmem");
 }
 
 const urj_cmd_t urj_cmd_readmem = {

@@ -22,9 +22,7 @@
  *
  */
 
-#include <config.h>
-
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -273,12 +271,13 @@ cmd_print_run (urj_chain_t *chain, char *params[])
 static void
 cmd_print_help (void)
 {
-    printf (_("Usage: %s [chain|bus|signals|instructions]\n"
-              "Display JTAG chain status.\n"
-              "\n"
-              "Display list of the parts connected to the JTAG chain including\n"
-              "part number and current (active) instruction and data register.\n"),
-            "print");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s [chain|bus|signals|instructions]\n"
+               "Display JTAG chain status.\n"
+               "\n"
+               "Display list of the parts connected to the JTAG chain including\n"
+               "part number and current (active) instruction and data register.\n"),
+             "print");
 }
 
 const urj_cmd_t urj_cmd_print = {

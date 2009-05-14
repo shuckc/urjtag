@@ -37,7 +37,8 @@ typedef struct
     char *driver;
     int32_t vid;
     int32_t pid;
-} urj_usbconn_cable_t;
+}
+urj_usbconn_cable_t;
 
 typedef struct
 {
@@ -52,7 +53,8 @@ typedef struct
     int (*read) (urj_usbconn_t *, uint8_t *, int);
     /** @return bytes written on success; -1 on error */
     int (*write) (urj_usbconn_t *, uint8_t *, int, int);
-} urj_usbconn_driver_t;
+}
+urj_usbconn_driver_t;
 
 struct urj_usbconn
 {

@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,11 +68,13 @@ cmd_register_run (urj_chain_t *chain, char *params[])
 static void
 cmd_register_help (void)
 {
-    printf (_("Usage: %s NAME LENGTH\n"
-              "Define new data register with specified NAME and LENGTH.\n"
-              "\n"
-              "NAME          Data register name\n"
-              "LENGTH        Data register length\n"), "register");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s NAME LENGTH\n"
+               "Define new data register with specified NAME and LENGTH.\n"
+               "\n"
+               "NAME          Data register name\n"
+               "LENGTH        Data register length\n"),
+             "register");
 }
 
 const urj_cmd_t urj_cmd_register = {

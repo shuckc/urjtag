@@ -24,13 +24,15 @@
 #define URJ_ERROR_H
 
 #include <stdio.h>
+#include <errno.h>
 
 #include "log.h"
 
 /**
  * Error types
  */
-typedef enum urj_error {
+typedef enum urj_error
+{
     URJ_ERROR_OK        = 0,
     URJ_ERROR_ALREADY,
     URJ_ERROR_OUT_OF_MEMORY,
@@ -57,7 +59,8 @@ typedef enum urj_error {
     URJ_ERROR_FLASH_PROGRAM,
     URJ_ERROR_FLASH_ERASE,
     URJ_ERROR_FLASH_UNLOCK,
-} urj_error_t;
+}
+urj_error_t;
 
 /** Max length of message string that can be recorded. */
 #define URJ_ERROR_MSG_LEN       256
@@ -65,14 +68,16 @@ typedef enum urj_error {
 /**
  * Error state.
  */
-typedef struct urj_error_state {
+typedef struct urj_error_state
+{
     urj_error_t         errnum;                 /**< error number */
     int                 sys_errno;              /**< errno if URJ_ERROR_IO */
     const char         *file;                   /**< file where error is set */
     const char         *function;               /**< function --,,-- */
     int                 line;                   /**< line no --,,-- */
     char                msg[URJ_ERROR_MSG_LEN]; /**< printf-style message */
-} urj_error_state_t;
+}
+urj_error_state_t;
 
 extern urj_error_state_t        urj_error_state;
 
@@ -97,25 +102,6 @@ extern const char *urj_error_string (urj_error_t error);
         urj_error_state.line = __LINE__; \
         snprintf (urj_error_state.msg, sizeof urj_error_state.msg, \
                   __VA_ARGS__); \
-        if (0 && urj_log_state.level < URJ_LOG_LEVEL_SILENT) \
-        { \
-            urj_log (URJ_LOG_LEVEL_ERROR, "%s:%d %s() %s: ", __FILE__, \
-                     __LINE__, __func__, urj_error_string (e)); \
-            urj_log (URJ_LOG_LEVEL_ERROR, __VA_ARGS__); \
-            urj_log (URJ_LOG_LEVEL_ERROR, "\n"); \
-        } \
-    } while (0)
-
-#define urj_error_msg_append(...) \
-    do { \
-        if (urj_error_state.errnum == URJ_ERROR_OK) \
-            snprintf (urj_error_state.msg, sizeof urj_error_state.msg, \
-                      __VA_ARGS__); \
-        else \
-            snprintf (urj_error_state.msg + strlen(urj_error_state.msg), \
-                      sizeof urj_error_state.msg \
-                          - strlen(urj_error_state.msg), \
-                      __VA_ARGS__); \
     } while (0)
 
 /**

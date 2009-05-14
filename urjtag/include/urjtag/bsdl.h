@@ -33,7 +33,8 @@ typedef struct
 {
     char **path_list;
     int debug;
-} urj_bsdl_globs_t;
+}
+urj_bsdl_globs_t;
 
 #define URJ_BSDL_GLOBS_INIT(bsdl) \
     do { \

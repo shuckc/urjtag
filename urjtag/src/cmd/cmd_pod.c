@@ -24,7 +24,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,11 +101,13 @@ cmd_pod_run (urj_chain_t *chain, char *params[])
 static void
 cmd_pod_help (void)
 {
-    printf (_("Usage: %s SIGNAL=# [SIGNAL=# ...]\n"
-              "Set state of POD signal(s) to 0 or 1.\n"
-              "\n"
-              "SIGNAL       TCK,TMS, TDI, TRST, or RESET\n"
-              "#          0 or 1\n"), "pod");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s SIGNAL=# [SIGNAL=# ...]\n"
+               "Set state of POD signal(s) to 0 or 1.\n"
+               "\n"
+               "SIGNAL       TCK,TMS, TDI, TRST, or RESET\n"
+               "#          0 or 1\n"),
+             "pod");
 }
 
 const urj_cmd_t urj_cmd_pod = {

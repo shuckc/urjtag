@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 
@@ -48,7 +48,8 @@ cmd_quit_run (urj_chain_t *chain, char *params[])
 static void
 cmd_quit_help (void)
 {
-    printf (_("Usage: %s\n" "Exit from %s.\n"), "quit", PACKAGE);
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s\n" "Exit from %s.\n"), "quit", PACKAGE);
 }
 
 const urj_cmd_t urj_cmd_quit = {

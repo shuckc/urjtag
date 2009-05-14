@@ -24,7 +24,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #ifdef HAVE_LIBUSB
 

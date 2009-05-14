@@ -23,7 +23,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -62,9 +62,11 @@ cmd_debug_run (urj_chain_t *chain, char *params[])
 static void
 cmd_debug_help (void)
 {
-    printf (_("Usage: %s  n\n"
-              "Enabled debugging.\n"
-              "\n" "n =1 fileio, 2=tap commands, 4 =?\n"), "debug n");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s n\n"
+               "Enabled debugging.\n"
+               "\n" "n =1 fileio, 2=tap commands, 4 =?\n"),
+             "debug");
 }
 
 const urj_cmd_t urj_cmd_debug = {

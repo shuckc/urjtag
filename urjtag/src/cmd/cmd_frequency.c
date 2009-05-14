@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 
@@ -69,16 +69,18 @@ cmd_frequency_run (urj_chain_t *chain, char *params[])
 static void
 cmd_frequency_help (void)
 {
-    printf (_("Usage: %s [FREQ]\n"
-              "Change TCK frequency to FREQ or print current TCK frequency.\n"
-              "\n"
-              "FREQ is in hertz. It's a maximum TCK frequency for JTAG interface.\n"
-              "In some cases the TCK frequency is less than FREQ, but the frequency\n"
-              "is never more than FREQ. Maximum supported frequency depends on JTAG\n"
-              "adapter.\n"
-              "\n"
-              "FREQ must be an unsigned integer. Minimum allowed frequency is 1 Hz.\n"
-              "Use 0 for FREQ to disable frequency limit.\n"), "frequency");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s [FREQ]\n"
+               "Change TCK frequency to FREQ or print current TCK frequency.\n"
+               "\n"
+               "FREQ is in hertz. It's a maximum TCK frequency for JTAG interface.\n"
+               "In some cases the TCK frequency is less than FREQ, but the frequency\n"
+               "is never more than FREQ. Maximum supported frequency depends on JTAG\n"
+               "adapter.\n"
+               "\n"
+               "FREQ must be an unsigned integer. Minimum allowed frequency is 1 Hz.\n"
+               "Use 0 for FREQ to disable frequency limit.\n"),
+             "frequency");
 }
 
 const urj_cmd_t urj_cmd_frequency = {

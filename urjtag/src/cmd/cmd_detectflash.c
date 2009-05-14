@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 
@@ -62,10 +62,11 @@ cmd_detectflash_run (urj_chain_t *chain, char *params[])
 static void
 cmd_detectflash_help (void)
 {
-    printf (_("Usage: %s ADDRESS\n"
-              "Detect flash memory type connected to a part.\n"
-              "\n"
-              "ADDRESS    Base address for memory region\n"),
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ADDRESS\n"
+               "Detect flash memory type connected to a part.\n"
+               "\n"
+               "ADDRESS    Base address for memory region\n"),
             "detectflash");
 }
 

@@ -25,7 +25,7 @@
 #ifndef URJ_TAP_CABLE_CMD_XFER_H
 #define URJ_TAP_CABLE_CMD_XFER_H
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <urjtag/cable.h>
 

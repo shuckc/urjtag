@@ -25,7 +25,7 @@
  *     AVR(R)32 32-Bit Microcontroller", Rev. 32003K-AVR32-10/07
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdlib.h>
 #include <stdint.h>

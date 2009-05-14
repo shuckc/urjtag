@@ -22,16 +22,16 @@
  *
  */
 
+#include <sysdep.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
-#define __USE_GNU
+// #define __USE_GNU       1
 #include <string.h>
 
 #include <dirent.h>
 #include <sys/stat.h>
-
-#include <urjtag/sysdep.h>
 
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
@@ -82,11 +82,13 @@ urj_bsdl_msg (int proc_mode, int type, const char *format, ...)
         printf ("-W- ");
         break;
     case BSDL_MSG_ERR:
+        // @@@@ RFHH set urj_error (but to what?)
         if (!(proc_mode & URJ_BSDL_MODE_MSG_ERR))
             return;
         printf ("-E- ");
         break;
     case BSDL_MSG_FATAL:
+        // @@@@ RFHH set urj_error (but to what?)
         if (!(proc_mode & URJ_BSDL_MODE_MSG_FATAL))
             return;
         printf ("-F- ");

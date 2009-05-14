@@ -29,6 +29,8 @@
  */
 
 
+#include <sysdep.h>
+
 #include "generic.h"
 #include "generic_usbconn.h"
 
@@ -37,8 +39,6 @@
 
 /* ---------------------------------------------------------------------- */
 
-
-#include <urjtag/sysdep.h>
 
 #include <urjtag/cable.h>
 #include <urjtag/chain.h>

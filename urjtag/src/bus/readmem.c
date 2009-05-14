@@ -28,15 +28,17 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdint.h>
 #include <string.h>
 
+#include <urjtag/log.h>
 #include <urjtag/bus.h>
 #include <urjtag/flash.h>
 #include <urjtag/jtag.h>
 
+// @@@@ RFHH return status
 void
 urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
@@ -72,8 +74,8 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
     addr = addr & (~(step - 1));
     len = (len + step - 1) & (~(step - 1));
 
-    printf (_("address: 0x%08X\n"), addr);
-    printf (_("length:  0x%08X\n"), len);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("address: 0x%08X\n"), addr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("length:  0x%08X\n"), len);
 
     if (len == 0)
     {
@@ -83,7 +85,7 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
     a = addr;
     end = a + len;
-    printf (_("reading:\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("reading:\n"));
     URJ_BUS_READ_START (bus, addr);
     for (a += step; a <= end; a += step)
     {
@@ -106,13 +108,12 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
         if ((bc >= BSIZE) || (a >= end))
         {
-            printf (_("addr: 0x%08X"), a);
-            printf ("\r");
-            fflush (stdout);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), a);
+            urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             fwrite (b, bc, 1, f);
             bc = 0;
         }
     }
 
-    printf (_("\nDone.\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\nDone.\n"));
 }

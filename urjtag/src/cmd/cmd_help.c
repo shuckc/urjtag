@@ -22,7 +22,7 @@
  *
  */
 
-#include <urjtag/sysdep.h>
+#include <sysdep.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -75,9 +75,10 @@ cmd_help_run (urj_chain_t *chain, char *params[])
 static void
 cmd_help_help (void)
 {
-    printf (_("Usage: %s [COMMAND]\n"
-              "Print short help for COMMAND, or list of available commands.\n"),
-            "help");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s [COMMAND]\n"
+               "Print short help for COMMAND, or list of available commands.\n"),
+             "help");
 }
 
 const urj_cmd_t urj_cmd_help = {
