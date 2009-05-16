@@ -40,13 +40,13 @@ typedef struct
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*close) (urj_parport_t *);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-    int (*set_data) (urj_parport_t *, uint8_t);
+    int (*set_data) (urj_parport_t *, unsigned char);
     /** @return data on success; -1 on error */
     int (*get_data) (urj_parport_t *);
     /** @return status on success; -1 on error */
     int (*get_status) (urj_parport_t *);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-    int (*set_control) (urj_parport_t *, uint8_t);
+    int (*set_control) (urj_parport_t *, unsigned char);
 }
 urj_parport_driver_t;
 
@@ -59,12 +59,12 @@ struct urj_parport
 
 int urj_tap_parport_open (urj_parport_t *port);
 int urj_tap_parport_close (urj_parport_t *port);
-int urj_tap_parport_set_data (urj_parport_t *port, uint8_t data);
+int urj_tap_parport_set_data (urj_parport_t *port, const unsigned char data);
 /** @return data on success; -1 on error */
 int urj_tap_parport_get_data (urj_parport_t *port);
 /** @return status on success; -1 on error */
 int urj_tap_parport_get_status (urj_parport_t *port);
-int urj_tap_parport_set_control (urj_parport_t *port, uint8_t data);
+int urj_tap_parport_set_control (urj_parport_t *port, const unsigned char data);
 
 extern urj_parport_driver_t *urj_tap_parport_drivers[];
 

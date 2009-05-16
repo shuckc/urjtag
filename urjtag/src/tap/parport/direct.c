@@ -287,9 +287,9 @@ direct_close (urj_parport_t *parport)
 }
 
 static int
-direct_set_data (urj_parport_t *parport, uint8_t data)
+direct_set_data (urj_parport_t *parport, unsigned char data)
 {
-    unsigned int port = ((direct_params_t *) parport->params)->port;
+    unsigned short int port = ((direct_params_t *) parport->params)->port;
     outb (data, port);
     return URJ_STATUS_OK;
 }
@@ -309,9 +309,9 @@ direct_get_status (urj_parport_t *parport)
 }
 
 static int
-direct_set_control (urj_parport_t *parport, uint8_t data)
+direct_set_control (urj_parport_t *parport, unsigned char data)
 {
-    unsigned int port = ((direct_params_t *) parport->params)->port;
+    unsigned short int port = ((direct_params_t *) parport->params)->port;
     outb (data ^ 0x0B, port + 2);       /* SELECT, AUTOFD, and STROBE are inverted */
     return URJ_STATUS_OK;
 }

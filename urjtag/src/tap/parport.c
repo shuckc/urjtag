@@ -62,7 +62,7 @@ urj_tap_parport_close (urj_parport_t *port)
 }
 
 int
-urj_tap_parport_set_data (urj_parport_t *port, uint8_t data)
+urj_tap_parport_set_data (urj_parport_t *port, const unsigned char data)
 {
     return port->driver->set_data (port, data);
 }
@@ -80,7 +80,7 @@ urj_tap_parport_get_status (urj_parport_t *port)
 }
 
 int
-urj_tap_parport_set_control (urj_parport_t *port, uint8_t data)
+urj_tap_parport_set_control (urj_parport_t *port, const unsigned char data)
 {
     return port->driver->set_control (port, data);
 }

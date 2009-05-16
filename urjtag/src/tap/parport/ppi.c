@@ -180,11 +180,13 @@ ppi_close (urj_parport_t *parport)
 }
 
 static int
-ppi_set_data (urj_parport_t *parport, uint8_t data)
+ppi_set_data (urj_parport_t *parport, unsigned char data)
 {
     ppi_params_t *p = parport->params;
 
-    if (ioctl (p->fd, PPISDATA, &data) == -1)
+    uint8_t d = data;
+
+    if (ioctl (p->fd, PPISDATA, &d) == -1)
     {
         urj_error_IO_set ("ioctl(PPISDATA) fails");
         return URJ_STATUS_FAIL;
@@ -224,13 +226,13 @@ ppi_get_status (urj_parport_t *parport)
 }
 
 static int
-ppi_set_control (urj_parport_t *parport, uint8_t data)
+ppi_set_control (urj_parport_t *parport, unsigned char data)
 {
     ppi_params_t *p = parport->params;
 
-    data ^= 0x0B;               /* SELECT, AUTOFD, and STROBE are inverted */
+    uint8_t d = data ^ 0x0B;    /* SELECT, AUTOFD, and STROBE are inverted */
 
-    if (ioctl (p->fd, PPIGCTRL, &data) == -1)
+    if (ioctl (p->fd, PPIGCTRL, &d) == -1)
     {
         urj_error_IO_set ("ioctl(PPIGCTRL) fails");
         return URJ_STATUS_FAIL;

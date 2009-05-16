@@ -197,7 +197,7 @@ ppdev_close (urj_parport_t *parport)
 }
 
 static int
-ppdev_set_data (urj_parport_t *parport, uint8_t data)
+ppdev_set_data (urj_parport_t *parport, unsigned char data)
 {
     ppdev_params_t *p = parport->params;
 
@@ -241,7 +241,7 @@ ppdev_get_status (urj_parport_t *parport)
 }
 
 static int
-ppdev_set_control (urj_parport_t *parport, uint8_t data)
+ppdev_set_control (urj_parport_t *parport, unsigned char data)
 {
     ppdev_params_t *p = parport->params;
 
