@@ -42,6 +42,7 @@ extern const urj_bus_driver_t urj_bus_ejtag_bus;
 extern const urj_bus_driver_t urj_bus_fjmem_bus;
 extern const urj_bus_driver_t urj_bus_h7202_bus;
 extern const urj_bus_driver_t urj_bus_ixp425_bus;
+extern const urj_bus_driver_t urj_bus_ixp435_bus;
 extern const urj_bus_driver_t urj_bus_jopcyc_bus;
 extern const urj_bus_driver_t urj_bus_lh7a400_bus;
 extern const urj_bus_driver_t urj_bus_mpc5200_bus;

@@ -106,6 +106,10 @@ if ENABLE_BUS_IXP425
 libbus_la_SOURCES += ixp425.c
 endif
 
+if ENABLE_BUS_IXP435
+libbus_la_SOURCES += ixp435.c
+endif
+
 if ENABLE_BUS_JOPCYC
 libbus_la_SOURCES += jopcyc.c
 endif
