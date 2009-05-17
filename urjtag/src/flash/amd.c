@@ -305,7 +305,7 @@ amd_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
     prot = URJ_BUS_READ (bus, cfi_array->address + (0x02 << o)) & 0xFF;
     amd_flash_read_array (cfi_array); /* AMD reset */
     urj_log (ll, _("Chip: AMD Flash\n\tManufacturer: "));
-    switch (mid)
+    switch (mid & 0xff)
     {
     case 0x0001:
         urj_log (ll, "AMD");
@@ -381,6 +381,19 @@ amd_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
             break;
         case 0x22CB:
             urj_log (ll, "MX29LV640B");
+            break;
+        default:
+            urj_log (ll, _("Unknown (ID 0x%04x)"), cid);
+            break;
+        }
+        break;
+    case 0x00DA:
+        urj_log (ll, "Winbond");
+        urj_log (ll, _("\n\tChip: "));
+        switch (cid & 0xff)
+        {
+        case 0x007E:
+            urj_log (ll, "W19B320AT/B");
             break;
         default:
             urj_log (ll, _("Unknown (ID 0x%04x)"), cid);
@@ -622,7 +635,7 @@ urj_flash_driver_t urj_flash_amd_32_flash_driver = {
 urj_flash_driver_t urj_flash_amd_16_flash_driver = {
     2,                          /* buswidth */
     N_("AMD/Fujitsu Standard Command Set"),
-    N_("supported: AMD 29LV800B, S29GLxxxN; MX29LV640B; 1x16 Bit"),
+    N_("supported: AMD 29LV800B, S29GLxxxN; MX29LV640B, W19B320AT/B; 1x16 Bit"),
     amd_flash_autodetect16,
     amd_flash_print_info,
     amd_flash_erase_block,
@@ -634,7 +647,7 @@ urj_flash_driver_t urj_flash_amd_16_flash_driver = {
 urj_flash_driver_t urj_flash_amd_8_flash_driver = {
     1,                          /* buswidth */
     N_("AMD/Fujitsu Standard Command Set"),
-    N_("supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S29GLxxxN; 1x8 Bit"),
+    N_("supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S29GLxxxN, W19B320AT/B; 1x8 Bit"),
     amd_flash_autodetect8,
     amd_flash_print_info,
     amd_flash_erase_block,
