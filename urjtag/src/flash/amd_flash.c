@@ -32,8 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-// #include <unistd.h>     /* usleep */
-#include <sys/time.h>           // nanosleep
+#include <unistd.h>     /* usleep */
 
 #include <urjtag/log.h>
 #include <urjtag/error.h>
@@ -228,9 +227,7 @@ amd_29xx040_status (urj_bus_t *bus, uint32_t adr, unsigned short data)
                 return URJ_STATUS_FAIL;
             }
         }
-        // usleep (50);
-        struct timespec req = { 0, 50 * 1000 };
-        nanosleep (&req, NULL);
+        usleep (50);
     }
 
     urj_error_set (URJ_ERROR_FLASH, "hardware failure");
@@ -295,9 +292,7 @@ amd_29xx040_read_array (urj_flash_cfi_array_t *cfi_array)
                        cfi_array->address + 0x555, 0x90);
         URJ_BUS_WRITE (cfi_array->bus,
                        cfi_array->address + 0x2AA, 0x00);
-        // usleep (100);
-        struct timespec req = { 0, 100 * 1000 };
-        nanosleep (&req, NULL);
+        usleep (100);
         var_forced_detection.unlock_bypass = AMD_STANDARD_MODE;
     }
     URJ_BUS_WRITE (cfi_array->bus, cfi_array->address + 0x0, 0x0F0);        /* AMD reset */
@@ -320,9 +315,7 @@ amd_29xx040_erase_block (urj_flash_cfi_array_t *cfi_array,
     {
         URJ_BUS_WRITE (bus, cfi_array->address + 0x555, 0x90);
         URJ_BUS_WRITE (bus, cfi_array->address + 0x2AA, 0x00);
-        // usleep (100);
-        struct timespec req = { 0, 100 * 1000 };
-        nanosleep (&req, NULL);
+        usleep (100);
         var_forced_detection.unlock_bypass = AMD_STANDARD_MODE;
     }
 
@@ -369,9 +362,7 @@ amd_29xx040_program_single (urj_flash_cfi_array_t *cfi_array,
             URJ_BUS_WRITE (bus, cfi_array->address + 0x555, 0xaa);
             URJ_BUS_WRITE (bus, cfi_array->address + 0x2AA, 0x55);
             URJ_BUS_WRITE (bus, cfi_array->address + 0x555, 0x20);
-            // usleep (1000);
-            struct timespec req = { 0, 100 * 1000 };
-            nanosleep (&req, NULL);
+            usleep (1000);
             var_forced_detection.unlock_bypass = AMD_BYPASS_UNLOCK_MODE;
         }
     }

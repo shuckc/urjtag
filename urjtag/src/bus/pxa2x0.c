@@ -359,7 +359,7 @@ pxa2xx_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
             case 6:
             case 7:
                 printf ("TODO - BOOT_SEL: %lu\n",
-                        get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
+                        (long unsigned) get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
                 return URJ_STATUS_FAIL;
             default:
                 printf ("BUG in the code, file %s, line %d.\n", __FILE__,
@@ -458,7 +458,7 @@ pxa27x_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
             case 6:
             case 7:
                 printf ("TODO - BOOT_SEL: %lu\n",
-                        get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
+                        (long unsigned) get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
                 return URJ_STATUS_FAIL;
             default:
                 printf ("BUG in the code, file %s, line %d.\n", __FILE__,

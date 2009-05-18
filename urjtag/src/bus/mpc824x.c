@@ -367,7 +367,8 @@ setup_address (urj_bus_t *bus, uint32_t a)
         {
             for (j = 0; j < 8; j++)
                 if ((i * 8 + j) >= (23 - k))
-                    printf ("%1lu", (a >> (23 - (i * 8 + j))) & 1);
+                    printf ("%1lu",
+                            (long unsigned) ((a >> (23 - (i * 8 + j))) & 1));
                 else
                     printf (" ");
             printf (" ");
@@ -426,9 +427,11 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
         {
             for (j = 0; j < 8; j++)
                 if (REVBITS)
-                    printf ("%1lu", (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
+                    printf ("%1lu", (long unsigned)
+                                    (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
                 else
-                    printf ("%1lu", (d >> ((i * 8 + j))) & 1);
+                    printf ("%1lu", (long unsigned)
+                                    (d >> ((i * 8 + j))) & 1);
             printf (" ");
         }
         printf ("\n");
@@ -470,9 +473,10 @@ get_data (urj_bus_t *bus, uint32_t adr)
         {
             for (j = 0; j < 8; j++)
                 if (REVBITS)
-                    printf ("%1lu", (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
+                    printf ("%1lu", (long unsigned)
+                                    (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
                 else
-                    printf ("%1lu", (d >> ((i * 8 + j))) & 1);
+                    printf ("%1lu", (long unsigned) (d >> ((i * 8 + j))) & 1);
             printf (" ");
         }
         printf ("\n");

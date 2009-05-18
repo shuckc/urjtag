@@ -38,8 +38,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-// #include <unistd.h>     /* usleep */
-#include <sys/time.h>           // nanosleep
+#include <unistd.h>     /* usleep */
 
 #include <urjtag/log.h>
 #include <urjtag/error.h>
@@ -157,9 +156,7 @@ amdstatus29 (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
 
         if ((data1 & dq5mask) == dq5mask)
             break;
-        // usleep (100);
-        struct timespec req = { 0, 100 * 1000 };
-        nanosleep (&req, NULL);
+        usleep (100);
     }
 
     data1 = URJ_BUS_READ (bus, adr << o);
@@ -202,9 +199,7 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
         /*      return URJ_STATUS_OK; */
         urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04lX/%04lX\n",
                  timeout, (long unsigned)data1, (long unsigned)data2);
-        // usleep (100);
-        struct timespec req = { 0, 100 * 1000 };
-        nanosleep (&req, NULL);
+        usleep (100);
     }
 
     urj_error_set (URJ_ERROR_FLASH, "hardware failure");
@@ -260,9 +255,7 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
                      timeout, (long unsigned) data1, (long unsigned) data2);
         else
             urj_log (URJ_LOG_LEVEL_NORMAL, ".");
-        // usleep (100);
-        struct timespec req = { 0, 100 * 1000 };
-        nanosleep (&req, NULL);
+        usleep (100);
         data1 = data2;
     }
 
@@ -512,9 +505,7 @@ amd_program_buffer_status (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
 
         if ((data1 & dq5mask) == dq5mask)
             break;
-        // usleep (100);
-        struct timespec req = { 0, 100 * 1000 };
-        nanosleep (&req, NULL);
+        usleep (100);
     }
 
     data1 = URJ_BUS_READ (bus, adr);

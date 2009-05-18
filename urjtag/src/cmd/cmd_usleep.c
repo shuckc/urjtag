@@ -24,7 +24,7 @@
 
 #include <sysdep.h>
 
-// #include <unistd.h>
+#include <unistd.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -51,9 +51,7 @@ cmd_usleep_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[1], &usecs) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    // usleep (usecs);
-    struct timespec req = { 0, usecs * 1000 };
-    nanosleep (&req, NULL);
+    usleep (usecs);
 
     return URJ_STATUS_OK;
 }
