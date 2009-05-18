@@ -73,7 +73,7 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
     if (dr == NULL)
     {
         urj_error_set (URJ_ERROR_ILLEGAL_STATE,
-                       _("%s: part without active data register"), "dr");
+                       _("%s: instruction without active data register"), "dr");
         return URJ_STATUS_FAIL;
     }
 

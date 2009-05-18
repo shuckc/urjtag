@@ -1,10 +1,15 @@
 2009-05-18  Rutger Hofman <rfhh>
 
+  * src/cmd/cmd_debug.c, include/urjtag/jtag.h, src/global/urjtag.c: change
+    to set log level; remove unused global variable urj_debug_mode
+
+2009-05-18  Rutger Hofman <rfhh>
+
   Make it compile for my eCos BlackFin checkout.
   - numerous casts because "%zd" ever requires a size_t, even for a manifest
     constant; and because a uint32_t should be cast to a long unsigned to be
     printed with "%lu" (long unsigned is at least 32-bit)
-  - include/urjtag/urjtag.h, include/urjtag/urjtag.h.in: rename to only
+  * include/urjtag/urjtag.h, include/urjtag/urjtag.h.in: rename to only
     export .h files for modules actually configured: USB, SVF, BSDL are
     only conditionally exported
 

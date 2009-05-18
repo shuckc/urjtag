@@ -25,11 +25,10 @@
 
 #include <sysdep.h>
 
-#include <stdio.h>
 #include <string.h>
 
 #include <urjtag/error.h>
-#include <urjtag/jtag.h>
+#include <urjtag/log.h>
 
 #include <urjtag/cmd.h>
 
@@ -38,11 +37,6 @@
 static int
 cmd_debug_run (urj_chain_t *chain, char *params[])
 {
-    long unsigned i;
-
-    // @@@@ RFHH change this to control the urj_log level
-    // @@@@ RFHH urj_debug_mode isn't used anyway
-
     if (urj_cmd_params (params) != 2)
     {
         urj_error_set (URJ_ERROR_SYNTAX,
@@ -51,10 +45,29 @@ cmd_debug_run (urj_chain_t *chain, char *params[])
         return URJ_STATUS_FAIL;
     }
 
-    if (urj_cmd_get_number (params[1], &i) != URJ_STATUS_OK)
+    if (0)
+        ;
+    else if (strcasecmp(params[1], "all") == 0)
+        urj_log_state.level = URJ_LOG_LEVEL_ALL;
+    else if (strcasecmp(params[1], "comm") == 0)
+        urj_log_state.level = URJ_LOG_LEVEL_COMM;
+    else if (strcasecmp(params[1], "debug") == 0)
+        urj_log_state.level = URJ_LOG_LEVEL_DEBUG;
+    else if (strcasecmp(params[1], "detail") == 0)
+        urj_log_state.level = URJ_LOG_LEVEL_DETAIL;
+    else if (strcasecmp(params[1], "normal") == 0)
+        urj_log_state.level = URJ_LOG_LEVEL_NORMAL;
+    else if (strcasecmp(params[1], "warning") == 0)
+        urj_log_state.level = URJ_LOG_LEVEL_WARNING;
+    else if (strcasecmp(params[1], "error") == 0)
+        urj_log_state.level = URJ_LOG_LEVEL_ERROR;
+    else if (strcasecmp(params[1], "silent") == 0)
+        urj_log_state.level = URJ_LOG_LEVEL_SILENT;
+    else
+    {
+        urj_error_set (URJ_ERROR_SYNTAX, "unknown log level '%s'", params[1]);
         return URJ_STATUS_FAIL;
-
-    urj_debug_mode = i;
+    }
 
     return URJ_STATUS_OK;
 }
@@ -63,15 +76,23 @@ static void
 cmd_debug_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("Usage: %s n\n"
-               "Enabled debugging.\n"
-               "\n" "n =1 fileio, 2=tap commands, 4 =?\n"),
+             _("Usage: %s LEVEL\n"
+               "Set logging/debugging level.\n"
+               "\n" "LEVEL:\n"
+               "all       every single bit as it is transmitted\n"
+               "comm      low level communication details\n"
+               "debug     more details of interest for developers\n"
+               "detail    verbose output\n"
+               "normal    just noteworthy info\n"
+               "warning   unmissable warnings\n"
+               "error     only fatal errors\n"
+               "silent    suppress logging output\n"),
              "debug");
 }
 
 const urj_cmd_t urj_cmd_debug = {
     "debug",
-    N_("debug jtag program"),
+    N_("set logging/debugging level"),
     cmd_debug_help,
     cmd_debug_run
 };
