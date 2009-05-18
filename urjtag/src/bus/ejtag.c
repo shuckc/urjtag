@@ -344,7 +344,7 @@ ejtag_bus_init (urj_bus_t *bus)
         printf ("EJTAG version: 3.1\n");
         break;
     default:
-        printf ("EJTAG version: unknown (%d)\n", EJTAG_VER);
+        printf ("EJTAG version: unknown (%lu)\n", (long unsigned) EJTAG_VER);
     }
     printf ("EJTAG Implementation flags:%s%s%s%s%s%s%s\n",
             (BP->impcode & (1 << 28)) ? " R3k" : " R4k",
