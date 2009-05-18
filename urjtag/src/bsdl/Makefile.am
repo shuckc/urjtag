@@ -50,8 +50,7 @@ AM_CFLAGS = $(WARNINGCFLAGS)
 
 libbsdl_flex_la_CFLAGS = \
 	$(AM_CFLAGS) \
-	-Wno-unused-function \
-	-Werror=missing-prototypes -Wno-error=missing-prototypes
+	-Wno-error
 
 # additional dependencies
 # - all files depend on bsdl_config.h which dynamically generated

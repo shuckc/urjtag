@@ -49,6 +49,9 @@
 #include <urjtag/data_register.h>
 #include <urjtag/cmd.h>
 #include <urjtag/svf.h>
+#if defined __MINGW32__ || ! defined HAVE_SIGACTION_SA_ONESHOT
+#include <urjtag/fclock.h>
+#endif
 
 #include "svf.h"
 
@@ -545,7 +548,7 @@ urj_svf_all_care (char **string, double number)
     if (!(ptr = calloc (num + 1, sizeof (char))))
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("calloc(%zd,%zd) fails"),
-                       num + 1, sizeof (char));
+                       (size_t) (num + 1), sizeof (char));
         return URJ_STATUS_FAIL;
     }
     memset (ptr, 'F', num);
@@ -624,13 +627,14 @@ urj_svf_hxr (enum generic_irdr_coding ir_dr, struct ths_params *params)
     return URJ_STATUS_OK;
 }
 
-
+#if ! (defined __MINGW32__ || ! defined HAVE_SIGACTION_SA_ONESHOT)
 static int max_time_reached;
 static void
 sigalrm_handler (int signal)
 {
     max_time_reached = 1;
 }
+#endif
 
 
 /* ***************************************************************************
@@ -713,7 +717,7 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
 
     urj_svf_goto_state (chain, priv->runtest_run_state);
 
-#ifdef __MINGW32__
+#if defined __MINGW32__ || ! defined HAVE_SIGACTION_SA_ONESHOT
     if (params->max_time > 0.0)
     {
         double maxt = urj_lib_frealtime () + params->max_time;

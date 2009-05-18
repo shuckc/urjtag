@@ -566,7 +566,8 @@ urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
     ibuf = malloc (len);
     if (ibuf == NULL)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", len);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                       (size_t) len);
         return URJ_STATUS_FAIL;
     }
 
@@ -576,7 +577,8 @@ urj_tap_cable_defer_transfer (urj_cable_t *cable, int len, char *in,
         if (obuf == NULL)
         {
             free (ibuf);
-            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", len);
+            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
+                           (size_t) len);
             return URJ_STATUS_FAIL;
         }
     }

@@ -86,7 +86,7 @@ lh7a400_bus_new (urj_chain_t *chain, const const urj_bus_driver_t *driver,
     if (!bus)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_bus_t));
+                       (size_t) 1, sizeof (urj_bus_t));
         return NULL;
     }
 
@@ -96,7 +96,7 @@ lh7a400_bus_new (urj_chain_t *chain, const const urj_bus_driver_t *driver,
     {
         free (bus);
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (bus_params_t));
+                       (size_t) 1, sizeof (bus_params_t));
         return NULL;
     }
 
@@ -169,6 +169,7 @@ lh7a400_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     area->description = NULL;
     area->start = UINT32_C (0x00000000);
     area->length = UINT64_C (0x10000000);
+    area->width = -1;   // some gcc versions detect uninitialised use
 
     /* we determine the size of the flash that was booted from [1] table 3.1 */
     width =
@@ -214,6 +215,7 @@ set_data_in (urj_bus_t *bus)
     urj_part_t *p = bus->part;
     urj_bus_area_t area;
 
+    // @@@@ RFHH check result
     lh7a400_bus_area (bus, 0, &area);
 
     for (i = 0; i < area.width; i++)

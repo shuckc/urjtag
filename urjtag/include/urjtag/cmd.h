@@ -59,6 +59,6 @@ char *urj_cmd_find_next (const char *text, int state);
 /* @@@@ RFHH candidate to become local in src/cmd/ after cable refactor */
 int urj_cmd_params (char *params[]);
 /* @@@@ RFHH candidate to become local in src/cmd/ after cable refactor */
-int urj_cmd_get_number (const char *s, unsigned int *i);
+int urj_cmd_get_number (const char *s, long unsigned *i);
 
 #endif /* URJ_CMD_H */

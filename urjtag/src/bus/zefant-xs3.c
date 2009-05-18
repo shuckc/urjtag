@@ -169,7 +169,7 @@ zefant_xs3_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     if (!bus)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_bus_t));
+                       (size_t) 1, sizeof (urj_bus_t));
         return NULL;
     }
 
@@ -179,7 +179,7 @@ zefant_xs3_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     {
         free (bus);
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (bus_params_t));
+                       (size_t) 1, sizeof (bus_params_t));
         return NULL;
     }
 

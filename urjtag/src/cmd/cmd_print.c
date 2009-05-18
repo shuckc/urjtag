@@ -233,14 +233,14 @@ cmd_print_run (urj_chain_t *chain, char *params[])
                 {
                     if (area.description != NULL)
                         urj_log (URJ_LOG_LEVEL_NORMAL,
-                                 _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"),
-                                 area.start,
+                                 _("\tstart: 0x%08lX, length: 0x%08llX, data width: %d bit, (%s)\n"),
+                                 (long unsigned) area.start,
                                  (long long unsigned int) area.length,
                                  area.width, _(area.description));
                     else
                         urj_log (URJ_LOG_LEVEL_NORMAL,
-                                 _("\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"),
-                                 area.start,
+                                 _("\tstart: 0x%08lX, length: 0x%08llX, data width: %d bit\n"),
+                                 (long unsigned) area.start,
                                  (long long unsigned int) area.length,
                                  area.width);
                 }

@@ -133,7 +133,8 @@ _intel_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array,
         urj_log (ll, _("Manufacturer: %s\n"), STD_MICN_MICRON_TECHNOLOGY);
         break;
     default:
-        urj_log (ll, _("Unknown manufacturer (0x%04X)!\n"), mid);
+        urj_log (ll, _("Unknown manufacturer (0x%04lX)!\n"),
+                 (long unsigned) mid);
         break;
     }
 
@@ -190,7 +191,7 @@ _intel_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array,
         urj_log (ll, "GE28F256L18B\n");
         break;
     default:
-        urj_log (ll, _("Unknown (0x%02X)!\n"), cid);
+        urj_log (ll, _("Unknown (0x%02lX)!\n"), (long unsigned) cid);
         break;
     }
 
@@ -425,7 +426,8 @@ intel_flash_erase_block32 (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
-        urj_error_set (URJ_ERROR_FLASH_ERASE, "sr = 0x%08X", sr);
+        urj_error_set (URJ_ERROR_FLASH_ERASE, "sr = 0x%08lX",
+                       (long unsigned) sr);
         return URJ_STATUS_FAIL;
     }
 
@@ -453,7 +455,8 @@ intel_flash_unlock_block32 (urj_flash_cfi_array_t *cfi_array,
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
-        urj_error_set (URJ_ERROR_FLASH_UNLOCK, "sr = 0x%08X", sr);
+        urj_error_set (URJ_ERROR_FLASH_UNLOCK, "sr = 0x%08lX",
+                       (long unsigned) sr);
         return URJ_STATUS_FAIL;
     }
 
@@ -478,7 +481,8 @@ intel_flash_program32_single (urj_flash_cfi_array_t *cfi_array,
 
     if (sr != ((CFI_INTEL_SR_READY << 16) | CFI_INTEL_SR_READY))
     {
-        urj_error_set (URJ_ERROR_FLASH_PROGRAM, "sr = 0x%08X", sr);
+        urj_error_set (URJ_ERROR_FLASH_PROGRAM, "sr = 0x%08lX",
+                       (long unsigned) sr);
         return URJ_STATUS_FAIL;
     }
 

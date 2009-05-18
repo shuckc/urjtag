@@ -169,8 +169,8 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
             return URJ_STATUS_FAIL;
         }
         urj_log (URJ_LOG_LEVEL_NORMAL,
-                 _("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
-                 a, l, c);
+                 _("record: start = 0x%08lX, len = 0x%08lX, checksum = 0x%08lX\n"),
+                 (long unsigned) a, (long unsigned) l, (long unsigned) c);
         if ((a == 0) && (c == 0))
             break;
         if (l & 3)
@@ -183,7 +183,8 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         {
             uint32_t data;
 
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), a);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
+                     (long unsigned) a);
             urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             // @@@@ RFHH check error state
             fread (&data, sizeof data, 1, f);
@@ -221,8 +222,8 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
             return URJ_STATUS_FAIL;
         }
         urj_log (URJ_LOG_LEVEL_NORMAL,
-                 _("record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"),
-                 a, l, c);
+                 _("record: start = 0x%08lX, len = 0x%08lX, checksum = 0x%08lX\n"),
+                 (long unsigned) a, (long unsigned) l, (long unsigned) c);
         if ((a == 0) && (c == 0))
             break;
         if (l & 3)
@@ -235,7 +236,8 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         {
             uint32_t data, readed;
 
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), a);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
+                     (long unsigned) a);
             urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             // @@@@ RFHH check error state?
             fread (&data, sizeof data, 1, f);
@@ -243,8 +245,9 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
             if (data != readed)
             {
                 urj_error_set (URJ_ERROR_FLASH_PROGRAM,
-                               _("verify error: 0x%08X vs. 0x%08X at addr %08X"),
-                               readed, data, a);
+                               _("verify error: 0x%08lX vs. 0x%08lX at addr %08lX"),
+                               (long unsigned) readed, (long unsigned) data,
+                               (long unsigned) a);
                 return URJ_STATUS_FAIL;
             }
             a += 4;
@@ -366,7 +369,8 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
             int j;
             if ((adr & (BSIZE - 1)) == 0)
             {
-                urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), adr);
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
+                         (long unsigned) adr);
                 urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             }
 
@@ -394,8 +398,8 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
     }
     free (erased);
 
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X\n"),
-             adr - flash_driver->bus_width);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX\n"),
+             (long unsigned) adr - flash_driver->bus_width);
 
     flash_driver->readarray (urj_flash_cfi_array);
 
@@ -422,7 +426,8 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
             int j;
             if ((adr & 0xFF) == 0)
             {
-                urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), adr);
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
+                         (long unsigned) adr);
                 urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             }
 
@@ -437,15 +442,16 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
             if (data != readed)
             {
                 urj_error_set (URJ_ERROR_FLASH_PROGRAM,
-                               _("addr: 0x%08X\n verify error:\nread: 0x%08X\nexpected: 0x%08X\n"),
-                                 adr, readed, data);
+                               _("addr: 0x%08lX\n verify error:\nread: 0x%08lX\nexpected: 0x%08lX\n"),
+                                 (long unsigned) adr, (long unsigned) readed,
+                                 (long unsigned) data);
                 return URJ_STATUS_FAIL;
             }
             adr += flash_driver->bus_width;
         }
     }
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X\nDone.\n"),
-             adr - flash_driver->bus_width);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX\nDone.\n"),
+             (long unsigned) adr - flash_driver->bus_width);
 
     return URJ_STATUS_OK;
 }
@@ -471,8 +477,8 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
     chip_width = urj_flash_cfi_array->cfi_chips[0]->width;
 
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("\nErasing %d Flash block%s from address 0x%x\n"), number,
-             number > 1 ? "s" : "", addr);
+             _("\nErasing %d Flash block%s from address 0x%lx\n"), number,
+             number > 1 ? "s" : "", (long unsigned) addr);
 
     for (i = 1; i <= number; i++)
     {

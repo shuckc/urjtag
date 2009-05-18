@@ -40,7 +40,7 @@ static int
 cmd_set_run (urj_chain_t *chain, char *params[])
 {
     int dir;
-    unsigned int data = 0;
+    long unsigned data = 0;
     urj_part_signal_t *s;
     urj_part_t *part;
 

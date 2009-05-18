@@ -56,10 +56,10 @@ static int
 cmd_bit_run (urj_chain_t *chain, char *params[])
 {
     urj_part_t *part;
-    unsigned int bit;
+    long unsigned bit;
     int type;
     int safe;
-    unsigned int control;
+    long unsigned control;
     unsigned int parameters = urj_cmd_params (params);
     char command[1024];
 

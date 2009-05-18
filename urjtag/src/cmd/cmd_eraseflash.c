@@ -39,8 +39,8 @@
 static int
 cmd_eraseflash_run (urj_chain_t *chain, char *params[])
 {
-    uint32_t adr = 0;
-    unsigned int number = 0;
+    long unsigned adr = 0;
+    long unsigned number = 0;
 
     if (urj_cmd_params (params) != 3)
     {

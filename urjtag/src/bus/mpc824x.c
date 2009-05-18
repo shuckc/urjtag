@@ -159,7 +159,7 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     if (!bus)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_bus_t));
+                       (size_t) 1, sizeof (urj_bus_t));
         return NULL;
     }
 
@@ -169,7 +169,7 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     {
         free (bus);
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (bus_params_t));
+                       (size_t) 1, sizeof (bus_params_t));
         return NULL;
     }
 
@@ -362,12 +362,12 @@ setup_address (urj_bus_t *bus, uint32_t a)
             return;
         }
 
-        printf (_("Addr    [%2d:0]: %06X   "), k, a);
+        printf (_("Addr    [%2d:0]: %06lX   "), k, (long unsigned) a);
         for (i = 0; i < 3; i++)
         {
             for (j = 0; j < 8; j++)
                 if ((i * 8 + j) >= (23 - k))
-                    printf ("%1d", (a >> (23 - (i * 8 + j))) & 1);
+                    printf ("%1lu", (a >> (23 - (i * 8 + j))) & 1);
                 else
                     printf (" ");
             printf (" ");
@@ -411,7 +411,8 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
     /* Just for debugging */
     if (dbgData)
     {
-        printf (_("Data WR [%d:0]: %08X   "), area.width - 1, d);
+        printf (_("Data WR [%d:0]: %08lX   "), area.width - 1,
+                (long unsigned) d);
         int j;
         int bytes = 0;
         if (BUS_WIDTH == 8)
@@ -425,9 +426,9 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
         {
             for (j = 0; j < 8; j++)
                 if (REVBITS)
-                    printf ("%1d", (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
+                    printf ("%1lu", (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
                 else
-                    printf ("%1d", (d >> ((i * 8 + j))) & 1);
+                    printf ("%1lu", (d >> ((i * 8 + j))) & 1);
             printf (" ");
         }
         printf ("\n");
@@ -454,7 +455,8 @@ get_data (urj_bus_t *bus, uint32_t adr)
     /* Just for debugging */
     if (dbgData)
     {
-        printf (_("Data RD [%d:0]: %08X   "), area.width - 1, d);
+        printf (_("Data RD [%d:0]: %08lX   "), area.width - 1,
+                (long unsigned) d);
         int j;
         int bytes = 0;
         if (BUS_WIDTH == 8)
@@ -468,9 +470,9 @@ get_data (urj_bus_t *bus, uint32_t adr)
         {
             for (j = 0; j < 8; j++)
                 if (REVBITS)
-                    printf ("%1d", (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
+                    printf ("%1lu", (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
                 else
-                    printf ("%1d", (d >> ((i * 8 + j))) & 1);
+                    printf ("%1lu", (d >> ((i * 8 + j))) & 1);
             printf (" ");
         }
         printf ("\n");

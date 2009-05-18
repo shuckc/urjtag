@@ -37,7 +37,7 @@
 static int
 cmd_frequency_run (urj_chain_t *chain, char *params[])
 {
-    unsigned int freq;
+    long unsigned freq;
 
     if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -52,15 +52,16 @@ cmd_frequency_run (urj_chain_t *chain, char *params[])
 
     if (urj_cmd_params (params) == 1)
     {
-        urj_log (URJ_LOG_LEVEL_NORMAL, _("Current TCK frequency is %u Hz\n"),
-                urj_tap_cable_get_frequency (chain->cable));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Current TCK frequency is %lu Hz\n"),
+                 (long unsigned) urj_tap_cable_get_frequency (chain->cable));
         return URJ_STATUS_OK;
     }
 
     if (urj_cmd_get_number (params[1], &freq) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("Setting TCK frequency to %u Hz\n"), freq);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Setting TCK frequency to %lu Hz\n"),
+             freq);
     urj_tap_cable_set_frequency (chain->cable, freq);
 
     return URJ_STATUS_OK;

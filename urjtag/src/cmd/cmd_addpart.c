@@ -37,7 +37,7 @@
 static int
 cmd_addpart_run (urj_chain_t *chain, char *params[])
 {
-    unsigned int len;
+    long unsigned len;
 
     if (urj_cmd_params (params) != 2)
     {

@@ -194,8 +194,9 @@ mwa_scan_in_addr (urj_bus_t *bus, unsigned int slave, uint32_t addr, int mode)
     urj_tap_register_t *r = bus->part->active_instruction->data_register->in;
     int i;
 
-    DBG (DBG_BASIC, _("%s: slave=%01x, addr=%08x, %s\n"),
-         __FUNCTION__, slave, addr,
+    DBG (DBG_BASIC, _("%s: slave=%01x, addr=%08lx, %s\n"),
+         __FUNCTION__, slave,
+         (long unsigned) addr,
          (mode == ACCESS_MODE_READ) ? "READ" : "WRITE");
 
     /* set slave bits */
@@ -219,7 +220,8 @@ mwa_scan_in_data (urj_bus_t *bus, uint32_t data)
     urj_tap_register_t *r = bus->part->active_instruction->data_register->in;
     int i;
 
-    DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
+    DBG (DBG_BASIC, _("%s: data=%08lx\n"), __FUNCTION__,
+         (long unsigned) data);
 
     register_set_bit (r, 0, 0);
     register_set_bit (r, 1, 0);
@@ -244,7 +246,8 @@ mwa_scan_out_data (urj_bus_t *bus, uint32_t *pdata)
     for (i = 0; i < 32; i++)
         data |= register_get_bit (r, i) << i;
 
-    DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
+    DBG (DBG_BASIC, _("%s: data=%08lx\n"), __FUNCTION__,
+         (long unsigned) data);
 
     *pdata = data;
 }
@@ -287,7 +290,8 @@ nexus_access_set_addr (urj_bus_t *bus, uint32_t addr, int mode)
     urj_tap_register_t *r = bus->part->active_instruction->data_register->in;
     int i;
 
-    DBG (DBG_BASIC, _("%s: addr=%08x, mode=%s\n"), __FUNCTION__, addr,
+    DBG (DBG_BASIC, _("%s: addr=%08lx, mode=%s\n"), __FUNCTION__,
+         (long unsigned) addr,
          (mode == ACCESS_MODE_READ) ? "READ" : "WRITE");
 
     urj_tap_register_fill (r, 0);
@@ -316,7 +320,8 @@ nexus_access_read_data (urj_bus_t *bus, uint32_t *pdata)
     for (i = 0; i < 32; i++)
         data |= register_get_bit (r, i) << i;
 
-    DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
+    DBG (DBG_BASIC, _("%s: data=%08lx\n"), __FUNCTION__,
+         (long unsigned) data);
 
     *pdata = data;
 }
@@ -327,7 +332,8 @@ nexus_access_write_data (urj_bus_t *bus, uint32_t data)
     urj_tap_register_t *r = bus->part->active_instruction->data_register->in;
     int i;
 
-    DBG (DBG_BASIC, _("%s: data=%08x\n"), __FUNCTION__, data);
+    DBG (DBG_BASIC, _("%s: data=%08lx\n"), __FUNCTION__,
+         (long unsigned) data);
 
     register_set_bit (r, 0, 0);
     register_set_bit (r, 1, 0);
@@ -375,7 +381,8 @@ nexus_memacc_read (urj_bus_t *bus, uint32_t *data)
     }
     while (status == 0);
 
-    DBG (DBG_BASIC, _("%s: read status %08x\n"), __FUNCTION__, status);
+    DBG (DBG_BASIC, _("%s: read status %08lx\n"), __FUNCTION__,
+         (long unsigned) status);
 
     ret = ACCESS_STATUS_OK;
     switch (status)
@@ -384,7 +391,7 @@ nexus_memacc_read (urj_bus_t *bus, uint32_t *data)
         nexus_reg_read (bus, OCD_REG_RWD, data);
         break;
     default:
-        ERR ("read failed, status=%d\n", status);
+        ERR ("read failed, status=%lu\n", (long unsigned) status);
         *data = 0xffffffff;
         ret = ACCESS_STATUS_ERR;
         break;
@@ -407,12 +414,13 @@ nexus_memacc_write (urj_bus_t *bus, uint32_t addr, uint32_t data,
     nexus_reg_read (bus, OCD_REG_RWCS, &status);
     status &= (OCD_RWCS_ERR | OCD_RWCS_DV);
 
-    DBG (DBG_BASIC, _("%s: status=%08x\n"), __FUNCTION__, status);
+    DBG (DBG_BASIC, _("%s: status=%08lx\n"), __FUNCTION__,
+         (long unsigned) status);
 
     ret = ACCESS_STATUS_OK;
     if (status)
     {
-        ERR ("write failed, status=%d\n", status);
+        ERR ("write failed, status=%lu\n", (long unsigned) status);
         ret = ACCESS_STATUS_ERR;
     }
 
@@ -550,7 +558,7 @@ avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     if (!bus)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_bus_t));
+                       (size_t) 1, sizeof (urj_bus_t));
         return NULL;
     }
 
@@ -560,7 +568,7 @@ avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     {
         free (bus);
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (bus_params_t));
+                       (size_t) 1, sizeof (bus_params_t));
         return NULL;
     }
 
@@ -664,7 +672,7 @@ avr32_bus_read_start (urj_bus_t *bus, uint32_t addr)
 {
     addr &= ADDR_MASK;
 
-    DBG (DBG_BASIC, _("%s:addr=%08x\n"), __FUNCTION__, addr);
+    DBG (DBG_BASIC, _("%s:addr=%08lx\n"), __FUNCTION__, (long unsigned) addr);
 
     switch (MODE)
     {

@@ -398,8 +398,8 @@ urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
             return;
 
         urj_log (URJ_LOG_LEVEL_NORMAL,
-                 "requested frequency %u, now calibrating delay loop\n",
-                new_frequency);
+                 "requested frequency %lu, now calibrating delay loop\n",
+                (long unsigned) new_frequency);
 
         while (1)
         {
@@ -428,8 +428,9 @@ urj_tap_cable_generic_set_frequency (urj_cable_t *cable,
                 continue;
             }
             real_frequency = (long double) loops / (end - start);
-            urj_log (URJ_LOG_LEVEL_NORMAL, "new real frequency %Lg, delay %u\n",
-                    real_frequency, delay);
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     "new real frequency %Lg, delay %lu\n",
+                     real_frequency, (long unsigned) delay);
 
             new_delay = (long double) delay *real_frequency / new_frequency;
 

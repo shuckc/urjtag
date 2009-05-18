@@ -44,7 +44,7 @@
 #define LPC_NUM_CS      6
 #define LPC_NUM_AD      32
 #define LPC_ADDR_TO_CS(a) ((a) >> bp->lpc_num_ad)
-#define LPC_ADDR_SIZE   (((unsigned long long) 1 << bp->lpc_num_ad) * LPC_NUM_CS)
+#define LPC_ADDR_SIZE   (((long unsigned long) 1 << bp->lpc_num_ad) * LPC_NUM_CS)
 
 typedef struct
 {
@@ -87,7 +87,7 @@ mpc5200_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     if (!bus)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_bus_t));
+                       (size_t) 1, sizeof (urj_bus_t));
         return NULL;
     }
 
@@ -97,7 +97,7 @@ mpc5200_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     {
         free (bus);
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (bus_params_t));
+                       (size_t) 1, sizeof (bus_params_t));
         return NULL;
     }
 

@@ -38,7 +38,7 @@
 static int
 cmd_debug_run (urj_chain_t *chain, char *params[])
 {
-    unsigned int i;
+    long unsigned i;
 
     // @@@@ RFHH change this to control the urj_log level
     // @@@@ RFHH urj_debug_mode isn't used anyway

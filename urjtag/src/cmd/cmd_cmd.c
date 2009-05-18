@@ -186,7 +186,7 @@ urj_cmd_params (char *params[])
 }
 
 int
-urj_cmd_get_number (const char *s, unsigned int *i)
+urj_cmd_get_number (const char *s, long unsigned *i)
 {
     int n;
     int r;
@@ -201,12 +201,12 @@ urj_cmd_get_number (const char *s, unsigned int *i)
     l = strlen (s);
 
     n = -1;
-    r = sscanf (s, "0x%x%n", i, &n);
+    r = sscanf (s, "0x%lx%n", i, &n);
     if (r == 1 && n == l)
         return URJ_STATUS_OK;
 
     n = -1;
-    r = sscanf (s, "%u%n", i, &n);
+    r = sscanf (s, "%lu%n", i, &n);
     if (r == 1 && n == l)
         return URJ_STATUS_OK;
 

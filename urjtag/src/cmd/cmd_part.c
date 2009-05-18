@@ -39,7 +39,7 @@
 static int
 cmd_part_run (urj_chain_t *chain, char *params[])
 {
-    unsigned int n;
+    long unsigned n;
 
     if (urj_cmd_params (params) > 3)
     {
@@ -116,7 +116,7 @@ cmd_part_run (urj_chain_t *chain, char *params[])
     if (n >= chain->parts->len)
     {
         urj_error_set (URJ_ERROR_INVALID,
-                       _("%s: invalid part number %d, max %d"), "part",
+                       _("%s: invalid part number %lu, max %d"), "part",
                        n, chain->parts->len);
         return URJ_STATUS_FAIL;
     }

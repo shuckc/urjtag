@@ -228,7 +228,7 @@ urj_tap_cable_cx_cmd_queue (urj_tap_cable_cx_cmd_root_t *cmd_root,
     if (cmd == NULL)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd)/malloc(%zd) fails",
-                       sizeof (urj_tap_cable_cx_cmd_t), 64);
+                       sizeof (urj_tap_cable_cx_cmd_t), (size_t) 64);
     }
 
     return cmd;

@@ -176,7 +176,7 @@ urj_bus_buses_add (urj_bus_t *abus)
     {
         /* @@@@ RFHH add status return */
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_bus_t));
+                       (size_t) 1, sizeof (urj_bus_t));
         printf (_("Out of memory\n"));
         return;
     }

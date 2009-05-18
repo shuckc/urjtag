@@ -32,7 +32,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <unistd.h>
+// #include <unistd.h>     /* usleep */
+#include <sys/time.h>           // nanosleep
 
 #include <urjtag/log.h>
 #include <urjtag/error.h>
@@ -71,7 +72,7 @@
 
 static struct
 {
-    unsigned long flash;
+    long unsigned flash;
     unsigned short algorithm;
     unsigned short unlock_bypass;
 }
@@ -97,7 +98,7 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
     if (!*cfi_array)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) failed",
-                       1, sizeof (urj_flash_cfi_array_t));
+                       (size_t) 1, sizeof (urj_flash_cfi_array_t));
         return URJ_STATUS_FAIL;
     }
 
@@ -147,7 +148,7 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
     if (!(*cfi_array)->cfi_chips)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       ba, sizeof (urj_flash_cfi_chip_t *));
+                       (size_t) ba, sizeof (urj_flash_cfi_chip_t *));
         return URJ_STATUS_FAIL;
     }
     for (i = 0; i < ba; i++)
@@ -156,7 +157,7 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
         if (!(*cfi_array)->cfi_chips[i])
         {
             urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                           1, sizeof (urj_flash_cfi_chip_t));
+                           (size_t) 1, sizeof (urj_flash_cfi_chip_t));
             return URJ_STATUS_FAIL;
         }
         (*cfi_array)->cfi_chips[i]->width = 1;        //ba;           
@@ -227,7 +228,9 @@ amd_29xx040_status (urj_bus_t *bus, uint32_t adr, unsigned short data)
                 return URJ_STATUS_FAIL;
             }
         }
-        usleep (50);
+        // usleep (50);
+        struct timespec req = { 0, 50 * 1000 };
+        nanosleep (&req, NULL);
     }
 
     urj_error_set (URJ_ERROR_FLASH, "hardware failure");
@@ -292,7 +295,9 @@ amd_29xx040_read_array (urj_flash_cfi_array_t *cfi_array)
                        cfi_array->address + 0x555, 0x90);
         URJ_BUS_WRITE (cfi_array->bus,
                        cfi_array->address + 0x2AA, 0x00);
-        usleep (100);
+        // usleep (100);
+        struct timespec req = { 0, 100 * 1000 };
+        nanosleep (&req, NULL);
         var_forced_detection.unlock_bypass = AMD_STANDARD_MODE;
     }
     URJ_BUS_WRITE (cfi_array->bus, cfi_array->address + 0x0, 0x0F0);        /* AMD reset */
@@ -306,7 +311,8 @@ amd_29xx040_erase_block (urj_flash_cfi_array_t *cfi_array,
 {
     urj_bus_t *bus = cfi_array->bus;
 
-    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X\n", adr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08lX\n",
+             (long unsigned) adr);
 
     /*      urj_log (URJ_LOG_LEVEL_NORMAL, "protected: %d\n", amdisprotected(ps, adr)); */
 
@@ -314,7 +320,9 @@ amd_29xx040_erase_block (urj_flash_cfi_array_t *cfi_array,
     {
         URJ_BUS_WRITE (bus, cfi_array->address + 0x555, 0x90);
         URJ_BUS_WRITE (bus, cfi_array->address + 0x2AA, 0x00);
-        usleep (100);
+        // usleep (100);
+        struct timespec req = { 0, 100 * 1000 };
+        nanosleep (&req, NULL);
         var_forced_detection.unlock_bypass = AMD_STANDARD_MODE;
     }
 
@@ -330,11 +338,13 @@ amd_29xx040_erase_block (urj_flash_cfi_array_t *cfi_array,
 
     if (amd_29xx040_status (bus, adr, 0xff) == URJ_STATUS_OK)
     {
-        urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X DONE\n", adr);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08lX DONE\n",
+                 (long unsigned) adr);
         amd_29xx040_read_array (cfi_array);   /* AMD reset */
         return URJ_STATUS_OK;
     }
-    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X FAILED\n", adr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08lX FAILED\n",
+             (long unsigned) adr);
     /* Read Array */
     amd_29xx040_read_array (cfi_array);       /* AMD reset */
 
@@ -349,8 +359,8 @@ amd_29xx040_program_single (urj_flash_cfi_array_t *cfi_array,
     int status;
     urj_bus_t *bus = cfi_array->bus;
 
-    urj_log (URJ_LOG_LEVEL_DETAIL, "\nflash_program 0x%08X = 0x%08X\n",
-             adr, data);
+    urj_log (URJ_LOG_LEVEL_DETAIL, "\nflash_program 0x%08lX = 0x%08lX\n",
+             (long unsigned) adr, (long unsigned) data);
 
     if (var_forced_detection.algorithm == AMD_BYPASS_UNLOCK_ALGORITHM)
     {
@@ -359,7 +369,9 @@ amd_29xx040_program_single (urj_flash_cfi_array_t *cfi_array,
             URJ_BUS_WRITE (bus, cfi_array->address + 0x555, 0xaa);
             URJ_BUS_WRITE (bus, cfi_array->address + 0x2AA, 0x55);
             URJ_BUS_WRITE (bus, cfi_array->address + 0x555, 0x20);
-            usleep (1000);
+            // usleep (1000);
+            struct timespec req = { 0, 100 * 1000 };
+            nanosleep (&req, NULL);
             var_forced_detection.unlock_bypass = AMD_BYPASS_UNLOCK_MODE;
         }
     }
@@ -400,7 +412,8 @@ static int
 amd_29xx040_unlock_block (urj_flash_cfi_array_t *cfi_array,
                           uint32_t adr)
 {
-    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_unlock_block 0x%08X IGNORE\n", adr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_unlock_block 0x%08lX IGNORE\n",
+             (long unsigned) adr);
     return URJ_STATUS_OK;
 }
 

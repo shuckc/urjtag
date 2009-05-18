@@ -37,8 +37,8 @@
 static int
 cmd_writemem_run (urj_chain_t *chain, char *params[])
 {
-    uint32_t adr;
-    uint32_t len;
+    long unsigned adr;
+    long unsigned len;
     FILE *f;
 
     if (urj_cmd_params (params) != 4)

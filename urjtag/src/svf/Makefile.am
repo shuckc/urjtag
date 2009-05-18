@@ -42,8 +42,7 @@ AM_CFLAGS = $(WARNINGCFLAGS)
 
 libsvf_flex_la_CFLAGS = \
 	$(AM_CFLAGS) \
-	-Wno-unused-function \
-	-Werror=missing-prototypes -Wno-error=missing-prototypes
+	-Wno-error
 
 svf_bison.h: svf_bison.c
 

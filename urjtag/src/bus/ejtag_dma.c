@@ -98,7 +98,7 @@ ejtag_dma_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     if (!bus)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_bus_t));
+                       (size_t) 1, sizeof (urj_bus_t));
         return NULL;
     }
 
@@ -108,7 +108,7 @@ ejtag_dma_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     {
         free (bus);
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (bus_params_t));
+                       (size_t) 1, sizeof (bus_params_t));
         return NULL;
     }
 
@@ -425,7 +425,7 @@ ejtag_dma_bus_init (urj_bus_t *bus)
         printf ("EJTAG version: 2.6\n");
         break;
     default:
-        printf ("EJTAG version: unknown (%d)\n", EJTAG_VER);
+        printf ("EJTAG version: unknown (%lu)\n", EJTAG_VER);
     }
     printf ("EJTAG Implementation flags:%s%s%s%s%s%s%s\n",
             (BP->impcode & (1 << 28)) ? " R3k" : " R4k",
@@ -632,7 +632,7 @@ ejtag_dma_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
  * bus->driver->(*read)
  *
  */
-static unsigned int
+static uint32_t
 ejtag_dma_bus_read (urj_bus_t *bus, uint32_t adr)
 {
     int data = ejtag_dma_read (bus, adr, get_sz (adr));
@@ -640,7 +640,7 @@ ejtag_dma_bus_read (urj_bus_t *bus, uint32_t adr)
     return data;
 }
 
-static unsigned int _data_read;
+static uint32_t _data_read;
 /**
  * bus->driver->(*read_start)
  *
@@ -657,10 +657,10 @@ ejtag_dma_bus_read_start (urj_bus_t *bus, uint32_t adr)
  * bus->driver->(*read_next)
  *
  */
-static unsigned int
+static uint32_t
 ejtag_dma_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
-    unsigned int tmp_value = _data_read;
+    uint32_t tmp_value = _data_read;
     _data_read = ejtag_dma_read (bus, adr, get_sz (adr));
     //printf("%s:adr=0x%x, got=0x%x\n",__FUNCTION__,adr,_data_read);
     return tmp_value;
@@ -670,7 +670,7 @@ ejtag_dma_bus_read_next (urj_bus_t *bus, uint32_t adr)
  * bus->driver->(*read_end)
  *
  */
-static unsigned int
+static uint32_t
 ejtag_dma_bus_read_end (urj_bus_t *bus)
 {
     return _data_read;

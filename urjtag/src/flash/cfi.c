@@ -91,7 +91,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
     if (!*cfi_array)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_flash_cfi_array_t));
+                       (size_t) 1, sizeof (urj_flash_cfi_array_t));
         return URJ_STATUS_FAIL;
     }
 
@@ -166,7 +166,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
             urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                           1, sizeof (urj_flash_cfi_chip_t));
+                           (size_t) 1, sizeof (urj_flash_cfi_chip_t));
             return URJ_STATUS_FAIL;
         }
         cfi = &(*cfi_array)->cfi_chips[d / 8]->cfi;
@@ -305,7 +305,8 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
             {
                 write1 (0, CFI_CMD_READ_ARRAY1);
                 urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                               1, sizeof (urj_flash_cfi_amd_pri_extened_query_structure_t)
+                               (size_t) 1,
+                               sizeof (urj_flash_cfi_amd_pri_extened_query_structure_t)
                                    + num_of_banks * sizeof (uint8_t));
                 return URJ_STATUS_FAIL;
             }

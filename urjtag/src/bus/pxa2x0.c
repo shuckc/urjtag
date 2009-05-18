@@ -160,7 +160,7 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     if (!bus)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_bus_t));
+                       (size_t) 1, sizeof (urj_bus_t));
         return NULL;
     }
 
@@ -170,7 +170,7 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     {
         free (bus);
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (bus_params_t));
+                       (size_t) 1, sizeof (bus_params_t));
         return NULL;
     }
 
@@ -358,7 +358,7 @@ pxa2xx_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
             case 5:
             case 6:
             case 7:
-                printf ("TODO - BOOT_SEL: %d\n",
+                printf ("TODO - BOOT_SEL: %lu\n",
                         get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
                 return URJ_STATUS_FAIL;
             default:
@@ -457,7 +457,7 @@ pxa27x_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
             case 5:
             case 6:
             case 7:
-                printf ("TODO - BOOT_SEL: %d\n",
+                printf ("TODO - BOOT_SEL: %lu\n",
                         get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
                 return URJ_STATUS_FAIL;
             default:

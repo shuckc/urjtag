@@ -41,6 +41,7 @@ endif
 
 libjtaglib_la_SOURCES = \
 	fclock.c \
+	usleep.c \
 	$(libiberty_sources)
 
 AM_CFLAGS = $(WARNINGCFLAGS)

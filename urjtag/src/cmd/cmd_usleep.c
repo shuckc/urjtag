@@ -24,10 +24,11 @@
 
 #include <sysdep.h>
 
-#include <unistd.h>
+// #include <unistd.h>
 
 #include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
 
 #include <urjtag/error.h>
 #include <urjtag/cmd.h>
@@ -37,7 +38,7 @@
 static int
 cmd_usleep_run (urj_chain_t *chain, char *params[])
 {
-    unsigned int usecs;
+    long unsigned usecs;
 
     if (urj_cmd_params (params) != 2)
     {
@@ -50,7 +51,9 @@ cmd_usleep_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[1], &usecs) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    usleep (usecs);
+    // usleep (usecs);
+    struct timespec req = { 0, usecs * 1000 };
+    nanosleep (&req, NULL);
 
     return URJ_STATUS_OK;
 }

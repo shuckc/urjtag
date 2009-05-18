@@ -35,7 +35,7 @@
 static int
 cmd_idcode_run (urj_chain_t *chain, char *params[])
 {
-    unsigned int bytes = 0;
+    long unsigned bytes = 0;
 
     if (urj_cmd_params (params) > 2)
     {
@@ -52,7 +52,7 @@ cmd_idcode_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("Reading %d bytes of idcode\n"), bytes);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Reading %lu bytes of idcode\n"), bytes);
     return urj_tap_idcode (chain, bytes);
 }
 

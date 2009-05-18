@@ -31,7 +31,7 @@
 %option bison-locations
 
 %{
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 

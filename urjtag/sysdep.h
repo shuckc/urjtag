@@ -53,4 +53,8 @@
 #define swprintf _snwprintf
 #endif
 
+#ifndef HAVE_USLEEP
+int usleep (long unsigned usec);
+#endif
+
 #endif /* SYSDEP_H */

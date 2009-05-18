@@ -38,7 +38,7 @@
 static int
 cmd_bus_run (urj_chain_t *chain, char *params[])
 {
-    unsigned int n;
+    long unsigned n;
 
     if (urj_cmd_params (params) != 2)
     {

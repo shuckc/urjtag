@@ -42,7 +42,7 @@ static int
 cmd_include_or_script_run (urj_chain_t *chain, int is_include, char *params[])
 {
     int i;
-    unsigned int j = 1;
+    long unsigned j = 1;
     int r = URJ_STATUS_OK;
 
     if (urj_cmd_params (params) < 2)

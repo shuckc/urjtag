@@ -79,6 +79,7 @@ AC_CONFIG_FILES(
 AM_MAINTAINER_MODE
 
 AM_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER(include/urjtag/urjtag.h)
 
 AC_GNU_SOURCE
 
@@ -107,6 +108,19 @@ fi
 AC_CHECK_FUNCS(swprintf)
 
 AC_CHECK_FUNC(clock_gettime, [], [ AC_CHECK_LIB(rt, clock_gettime) ])
+
+AC_CHECK_FUNCS(usleep)
+AC_CHECK_FUNCS(nanosleep)
+
+dnl check for sigaction with SA_ONESHOT or SA_RESETHAND
+AC_TRY_COMPILE([#include <signal.h>], [
+#ifndef SA_ONESHOT
+#  define SA_ONESHOT SA_RESETHAND
+#endif
+int sa_flags = SA_ONESHOT;
+],
+[AC_DEFINE([HAVE_SIGACTION_SA_ONESHOT], [1], [Have a defined SA_ONESHOT])],
+[])
 
 AC_CHECK_HEADERS([linux/ppdev.h], [HAVE_LINUX_PPDEV_H="yes"])
 AC_CHECK_HEADERS([dev/ppbus/ppi.h], [HAVE_DEV_PPBUS_PPI_H="yes"])

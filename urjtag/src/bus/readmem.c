@@ -74,8 +74,10 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
     addr = addr & (~(step - 1));
     len = (len + step - 1) & (~(step - 1));
 
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("address: 0x%08X\n"), addr);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("length:  0x%08X\n"), len);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("address: 0x%08lX\n"),
+             (long unsigned) addr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("length:  0x%08lX\n"),
+             (long unsigned) len);
 
     if (len == 0)
     {
@@ -108,7 +110,8 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
         if ((bc >= BSIZE) || (a >= end))
         {
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08X"), a);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
+                     (long unsigned) a);
             urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
             fwrite (b, bc, 1, f);
             bc = 0;

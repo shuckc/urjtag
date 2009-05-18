@@ -42,7 +42,7 @@ static int
 cmd_register_run (urj_chain_t *chain, char *params[])
 {
     urj_part_t *part;
-    unsigned int len;
+    long unsigned len;
 
     if (urj_cmd_params (params) != 3)
     {

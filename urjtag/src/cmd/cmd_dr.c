@@ -98,7 +98,7 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
             if (r->len != strlen (params[1]))
             {
                 urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-                               _("%s: register length %d mismatch: %d"),
+                               _("%s: register length %d mismatch: %zd"),
                                "dr", r->len, strlen (params[1]));
                 return URJ_STATUS_FAIL;
             }

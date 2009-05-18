@@ -37,7 +37,8 @@
 static int
 cmd_peek_run (urj_chain_t *chain, char *params[])
 {
-    uint32_t adr, val;
+    long unsigned adr;
+    uint32_t val;
     int pars, j = 1;
     urj_bus_area_t area;
 
@@ -76,16 +77,19 @@ cmd_peek_run (urj_chain_t *chain, char *params[])
         case 8:
             val &= 0xff;
             urj_log (URJ_LOG_LEVEL_NORMAL,
-                     _("URJ_BUS_READ(0x%08x) = 0x%02X (%i)\n"), adr, val, val);
+                     _("URJ_BUS_READ(0x%08lx) = 0x%02lX (%li)\n"), adr,
+                     (long unsigned) val, (long unsigned) val);
             break;
         case 16:
             val &= 0xffff;
             urj_log (URJ_LOG_LEVEL_NORMAL,
-                     _("URJ_BUS_READ(0x%08x) = 0x%04X (%i)\n"), adr, val, val);
+                     _("URJ_BUS_READ(0x%08lx) = 0x%04lX (%li)\n"), adr,
+                     (long unsigned) val, (long unsigned) val);
             break;
         default:
             urj_log (URJ_LOG_LEVEL_NORMAL,
-                     _("URJ_BUS_READ(0x%08x) = 0x%08X (%i)\n"), adr, val, val);
+                     _("URJ_BUS_READ(0x%08lx) = 0x%08lX (%li)\n"), adr,
+                     (long unsigned) val, (long unsigned) val);
         }
     }
     while (++j != pars);
@@ -117,7 +121,7 @@ const urj_cmd_t urj_cmd_peek = {
 static int
 cmd_poke_run (urj_chain_t *chain, char *params[])
 {
-    uint32_t adr, val;
+    long unsigned adr, val;
     urj_bus_area_t area;
     /*urj_bus_t *bus = part_get_active_bus(chain); */
     int k = 1, pars = urj_cmd_params (params);

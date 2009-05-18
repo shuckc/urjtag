@@ -311,7 +311,7 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
             if ((bl = calloc (1, sizeof (block_param_t))) == NULL)
             {
                 urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                               1, sizeof (urj_bus_t));
+                               (size_t) 1, sizeof (urj_bus_t));
                 printf (_("out of memory\n"));
                 failed |= 1;
                 break;
@@ -407,7 +407,7 @@ fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
             opcode = value;
         if (strcasecmp (params[idx], "len") == 0)
         {
-            unsigned int tmp;
+            long unsigned tmp;
             urj_cmd_get_number (value, &tmp);
             fjmem_reg_len = (int) tmp;
         }
@@ -426,7 +426,7 @@ fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         if (!bus)
         {
             urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                           1, sizeof (urj_bus_t));
+                           (size_t) 1, sizeof (urj_bus_t));
             return NULL;
         }
 
@@ -436,7 +436,7 @@ fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         {
             free (bus);
             urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                           1, sizeof (bus_params_t));
+                           (size_t) 1, sizeof (bus_params_t));
             return NULL;
         }
 

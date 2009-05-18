@@ -42,7 +42,7 @@ cmd_flashmem_run (urj_chain_t *chain, char *params[])
 {
     int msbin;
     int noverify = 0;
-    uint32_t adr = 0;
+    long unsigned adr = 0;
     FILE *f;
     int paramc = urj_cmd_params (params);
     int r;

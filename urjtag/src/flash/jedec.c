@@ -414,7 +414,7 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
     if (!*cfi_array)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_flash_cfi_array_t));
+                       (size_t) 1, sizeof (urj_flash_cfi_array_t));
         return URJ_STATUS_FAIL;
     }
 
@@ -435,7 +435,7 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
     if (!(*cfi_array)->cfi_chips)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_flash_cfi_chip_t *) * ba);
+                       (size_t) 1, sizeof (urj_flash_cfi_chip_t *) * ba);
         return URJ_STATUS_FAIL;
     }
 
@@ -443,7 +443,7 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
     if (!(*cfi_array)->cfi_chips[0])
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_flash_cfi_chip_t));
+                       (size_t) 1, sizeof (urj_flash_cfi_chip_t));
         return URJ_STATUS_FAIL;
     }
 

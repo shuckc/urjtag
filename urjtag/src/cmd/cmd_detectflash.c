@@ -37,7 +37,7 @@
 static int
 cmd_detectflash_run (urj_chain_t *chain, char *params[])
 {
-    uint32_t adr;
+    long unsigned adr;
 
     if (urj_cmd_params (params) != 2)
     {

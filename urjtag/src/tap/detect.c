@@ -471,7 +471,7 @@ urj_tap_manual_add (urj_chain_t *chain, int instr_len)
     if (str == NULL)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       instr_len + 1, sizeof (char));
+                       (size_t) instr_len + 1, sizeof (char));
         return -1;
     }
 

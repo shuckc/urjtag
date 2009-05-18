@@ -40,7 +40,7 @@ static int
 cmd_instruction_run (urj_chain_t *chain, char *params[])
 {
     urj_part_t *part;
-    unsigned int len;
+    long unsigned len;
     urj_part_instruction_t *i;
 
     if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)

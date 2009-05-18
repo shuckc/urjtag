@@ -181,28 +181,28 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
     urj_log (ll, _("\tVpp [Programming] Supply Maximum Write/Erase voltage: %d mV\n"),
              cfi->system_interface_info.vpp_max_wev);
     urj_log (ll, _("\tTypical timeout per single byte/word program: %d us\n"),
-             cfi->system_interface_info.typ_single_write_timeout);
+             (int) cfi->system_interface_info.typ_single_write_timeout);
     urj_log (ll, _("\tTypical timeout for maximum-size multi-byte program: %d us\n"),
-             cfi->system_interface_info.typ_buffer_write_timeout);
+             (int) cfi->system_interface_info.typ_buffer_write_timeout);
     urj_log (ll, _("\tTypical timeout per individual block erase: %d ms\n"),
-             cfi->system_interface_info.typ_block_erase_timeout);
+             (int) cfi->system_interface_info.typ_block_erase_timeout);
     urj_log (ll, _("\tTypical timeout for full chip erase: %d ms\n"),
-             cfi->system_interface_info.typ_chip_erase_timeout);
+             (int) cfi->system_interface_info.typ_chip_erase_timeout);
     urj_log (ll, _("\tMaximum timeout for byte/word program: %d us\n"),
-             cfi->system_interface_info.max_single_write_timeout);
+             (int) cfi->system_interface_info.max_single_write_timeout);
     urj_log (ll, _("\tMaximum timeout for multi-byte program: %d us\n"),
-             cfi->system_interface_info.max_buffer_write_timeout);
+             (int) cfi->system_interface_info.max_buffer_write_timeout);
     urj_log (ll, _("\tMaximum timeout per individual block erase: %d ms\n"),
-             cfi->system_interface_info.max_block_erase_timeout);
+             (int) cfi->system_interface_info.max_block_erase_timeout);
     urj_log (ll, _("\tMaximum timeout for chip erase: %d ms\n"),
-             cfi->system_interface_info.max_chip_erase_timeout);
+             (int) cfi->system_interface_info.max_chip_erase_timeout);
 
     /* see 4.3.4 in [1] */
     urj_log (ll, _("Device geometry definition:\n"));
     urj_log (ll, _("\tDevice Size: %d B (%d KiB, %d MiB)\n"),
-             cfi->device_geometry.device_size,
-             cfi->device_geometry.device_size / 1024,
-             cfi->device_geometry.device_size / (1024 * 1024));
+             (int) cfi->device_geometry.device_size,
+             (int) (cfi->device_geometry.device_size / 1024),
+             (int) (cfi->device_geometry.device_size / (1024 * 1024)));
     /* see section 4 in [2] */
     switch (cfi->device_geometry.device_interface)
     {
@@ -228,7 +228,7 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
     urj_log (ll, _("\tFlash Device Interface Code description: 0x%04X (%s)\n"),
              cfi->device_geometry.device_interface, _(s));
     urj_log (ll, _("\tMaximum number of bytes in multi-byte program: %d\n"),
-             cfi->device_geometry.max_bytes_write);
+             (int) cfi->device_geometry.max_bytes_write);
     urj_log (ll, _("\tNumber of Erase Block Regions within device: %d\n"),
              cfi->device_geometry.number_of_erase_regions);
     urj_log (ll, _("\tErase Block Region Information:\n"));
@@ -239,12 +239,12 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
         {
             urj_log (ll, _("\t\tRegion %d:\n"), i);
             urj_log (ll, _("\t\t\tErase Block Size: %d B (%d KiB)\n"),
-                     cfi->device_geometry.erase_block_regions[i].
+                     (int) cfi->device_geometry.erase_block_regions[i].
                      erase_block_size,
-                     cfi->device_geometry.erase_block_regions[i].
+                     (int) cfi->device_geometry.erase_block_regions[i].
                      erase_block_size / 1024);
             urj_log (ll, _("\t\t\tNumber of Erase Blocks: %d\n"),
-                     cfi->device_geometry.erase_block_regions[i].
+                     (int) cfi->device_geometry.erase_block_regions[i].
                      number_of_erase_blocks);
         }
     }

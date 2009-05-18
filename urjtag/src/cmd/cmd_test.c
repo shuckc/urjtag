@@ -42,7 +42,7 @@ static int
 cmd_test_run (urj_chain_t *chain, char *params[])
 {
     int data;
-    unsigned int i;
+    long unsigned i;
     urj_part_signal_t *s;
     urj_part_t *part;
 

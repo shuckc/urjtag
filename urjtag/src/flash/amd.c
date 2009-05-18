@@ -38,7 +38,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <unistd.h>     /* usleep */
+// #include <unistd.h>     /* usleep */
+#include <sys/time.h>           // nanosleep
 
 #include <urjtag/log.h>
 #include <urjtag/error.h>
@@ -148,14 +149,17 @@ amdstatus29 (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     {
         data1 = URJ_BUS_READ (bus, adr << o);
         data1 = URJ_BUS_READ (bus, adr << o);
-        urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04X (%04X) = %04X\n",
-                 timeout, data1, (data1 & dq7mask), bit7);
+        urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04lX (%04lX) = %04lX\n",
+                 timeout, (long unsigned) data1,
+                 (long unsigned) (data1 & dq7mask), (long unsigned) bit7);
         if (((data1 & dq7mask) == dq7mask) == bit7)     /* FIXME: This looks non-portable */
             return URJ_STATUS_OK;
 
         if ((data1 & dq5mask) == dq5mask)
             break;
-        usleep (100);
+        // usleep (100);
+        struct timespec req = { 0, 100 * 1000 };
+        nanosleep (&req, NULL);
     }
 
     data1 = URJ_BUS_READ (bus, adr << o);
@@ -186,17 +190,21 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
         uint32_t data1 = URJ_BUS_READ (bus, adr);
         uint32_t data2 = URJ_BUS_READ (bus, adr);
 
-        urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04X/%04X   %04X/%04X \n",
-                 timeout, data1, data2, (data1 & togglemask),
-                 (data2 & togglemask));
+        urj_log (URJ_LOG_LEVEL_DEBUG,
+                 "amdstatus %d: %04lX/%04lX   %04lX/%04lX \n",
+                 timeout, (long unsigned) data1, (long unsigned) data2,
+                 (long unsigned) (data1 & togglemask),
+                 (long unsigned) (data2 & togglemask));
         if ((data1 & togglemask) == (data2 & togglemask))
             return URJ_STATUS_OK;
 
         /*    if ( (data1 & dq5mask) != 0 )   TODO */
         /*      return URJ_STATUS_OK; */
-        urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04X/%04X\n",
-                 timeout, data1, data2);
-        usleep (100);
+        urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04lX/%04lX\n",
+                 timeout, (long unsigned)data1, (long unsigned)data2);
+        // usleep (100);
+        struct timespec req = { 0, 100 * 1000 };
+        nanosleep (&req, NULL);
     }
 
     urj_error_set (URJ_ERROR_FLASH, "hardware failure");
@@ -229,9 +237,10 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
 
 
         urj_log (URJ_LOG_LEVEL_DEBUG,
-                 "amdstatus %d: %04X/%04X   %04X/%04X \n",
-                 timeout, data1, data2, (data1 & togglemask),
-                 (data2 & togglemask));
+                 "amdstatus %d: %04lX/%04lX   %04lX/%04lX \n",
+                 timeout, (long unsigned) data1, (long unsigned) data2,
+                 (long unsigned) (data1 & togglemask),
+                 (long unsigned) (data2 & togglemask));
         /* Work around an issue with RTL8181: toggle bits don't
            toggle when reading the same flash address repeatedly
            without any other memory access in between.  Other
@@ -247,11 +256,13 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
         /*    if ( (data1 & dq5mask) != 0 )   TODO */
         /*      return URJ_STATUS_OK; */
         if (urj_log_status.level <= URJ_LOG_LEVEL_DEBUG)
-            urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04X/%04X\n",
-                     timeout, data1, data2);
+            urj_log (URJ_LOG_LEVEL_DEBUG, "amdstatus %d: %04lX/%04lX\n",
+                     timeout, (long unsigned) data1, (long unsigned) data2);
         else
             urj_log (URJ_LOG_LEVEL_NORMAL, ".");
-        usleep (100);
+        // usleep (100);
+        struct timespec req = { 0, 100 * 1000 };
+        nanosleep (&req, NULL);
         data1 = data2;
     }
 
@@ -417,7 +428,8 @@ amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
     urj_bus_t *bus = cfi_array->bus;
     int o = amd_flash_address_shift (cfi_array);
 
-    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X\n", adr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08lX\n",
+             (long unsigned) adr);
 
     /*      urj_log (URJ_LOG_LEVEL_NORMAL, "protected: %d\n", amdisprotected(ps, cfi_array, adr)); */
 
@@ -430,11 +442,13 @@ amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 
     if (amdstatus (cfi_array, adr, 0xffff) == URJ_STATUS_OK)
     {
-        urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X DONE\n", adr);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08lX DONE\n",
+                 (long unsigned) adr);
         amd_flash_read_array (cfi_array);     /* AMD reset */
         return URJ_STATUS_OK;
     }
-    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08X FAILED\n", adr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_erase_block 0x%08lX FAILED\n",
+             (long unsigned) adr);
     /* Read Array */
     amd_flash_read_array (cfi_array); /* AMD reset */
 
@@ -445,7 +459,8 @@ amd_flash_erase_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 static int
 amd_flash_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 {
-    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_unlock_block 0x%08X IGNORE\n", adr);
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_unlock_block 0x%08lX IGNORE\n",
+             (long unsigned) adr);
     return URJ_STATUS_OK;
 }
 
@@ -457,8 +472,8 @@ amd_flash_program_single (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     urj_bus_t *bus = cfi_array->bus;
     int o = amd_flash_address_shift (cfi_array);
 
-    urj_log (URJ_LOG_LEVEL_DEBUG, "\nflash_program 0x%08X = 0x%08X\n",
-             adr, data);
+    urj_log (URJ_LOG_LEVEL_DEBUG, "\nflash_program 0x%08lX = 0x%08lX\n",
+             (long unsigned) adr, (long unsigned) data);
 
     URJ_BUS_WRITE (bus, cfi_array->address + (0x0555 << o), 0x00aa00aa);      /* autoselect p29, program */
     URJ_BUS_WRITE (bus, cfi_array->address + (0x02aa << o), 0x00550055);
@@ -489,14 +504,17 @@ amd_program_buffer_status (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     {
         data1 = URJ_BUS_READ (bus, adr);
         urj_log (URJ_LOG_LEVEL_DEBUG,
-                 "amd_program_buffer_status %d: %04X (%04X) = %04X\n",
-                 timeout, data1, (data1 & dq7mask), bit7);
+                 "amd_program_buffer_status %d: %04lX (%04lX) = %04lX\n",
+                 timeout, (long unsigned) data1,
+                 (long unsigned) (data1 & dq7mask), (long unsigned) bit7);
         if ((data1 & dq7mask) == bit7)
             return URJ_STATUS_OK;
 
         if ((data1 & dq5mask) == dq5mask)
             break;
-        usleep (100);
+        // usleep (100);
+        struct timespec req = { 0, 100 * 1000 };
+        nanosleep (&req, NULL);
     }
 
     data1 = URJ_BUS_READ (bus, adr);
@@ -520,7 +538,8 @@ amd_flash_program_buffer (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     int offset = 0;
 
     urj_log (URJ_LOG_LEVEL_DEBUG,
-             "\nflash_program_buffer 0x%08X, count 0x%08X\n", adr, count);
+             "\nflash_program_buffer 0x%08lX, count 0x%08X\n",
+             (long unsigned) adr, count);
 
     while (count > 0)
     {

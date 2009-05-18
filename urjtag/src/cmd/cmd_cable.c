@@ -114,7 +114,7 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
     if (!cable)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       1, sizeof (urj_cable_t));
+                       (size_t) 1, sizeof (urj_cable_t));
         return URJ_STATUS_FAIL;
     }
 
