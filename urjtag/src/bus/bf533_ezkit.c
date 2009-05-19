@@ -245,7 +245,7 @@ setup_data (urj_bus_t *bus, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 bf533_ezkit_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -259,6 +259,8 @@ bf533_ezkit_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus);
 
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -316,7 +318,7 @@ bf533_ezkit_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-//      printf("Writing %04X to %08X...\n", data, adr);
+    urj_log (URJ_LOG_LEVEL_COMM, "Writing %04X to %08X...\n", data, adr);
 
     select_flash (bus);
     urj_part_set_signal (p, AOE, 1, 1);

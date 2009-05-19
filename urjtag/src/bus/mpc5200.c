@@ -258,7 +258,7 @@ get_data (urj_bus_t *bus, uint32_t adr)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 mpc5200_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     bus_params_t *bp = (bus_params_t *) bus->params;
@@ -290,6 +290,8 @@ mpc5200_bus_read_start (urj_bus_t *bus, uint32_t adr)
         urj_part_set_signal (p, nALE, 1, 1);
     }
     urj_tap_chain_shift_data_registers (bus->chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**

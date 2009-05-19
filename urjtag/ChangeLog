@@ -1,3 +1,12 @@
+2009-05-19  Rutger Hofman <rfhh>
+
+  * include/urjtag/error.h: make urj_log into a macro. Principal reason: if
+    urj_log won't print, it also won't evaluate the arguments so there is no
+    performance penalty in having gazillion disabled low-level prints
+  * src/bus/*, include/urjtag/bus_driver.h: refactor src/bus to use urj_log
+    i.s.o. printf, set urj_error wherever appropriate, return FAIL/OK state
+    where appropriate. read_start() now returns status.
+
 2009-05-18  Rutger Hofman <rfhh>
 
   * src/cmd/cmd_debug.c, include/urjtag/jtag.h, src/global/urjtag.c: change

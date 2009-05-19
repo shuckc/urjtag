@@ -121,6 +121,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
 #define D(data)                 ((data) << d)
 #define gD(data)                (((data) >> d) & 0xFF)
 #define read1(off)              gD(URJ_BUS_READ( bus, A(off) ))
+        // @@@@ RFHH check status of URJ_BUS_READ_START
 #define read2(off)              (URJ_BUS_READ_START (bus, A(off)), gD (URJ_BUS_READ_NEXT (bus, A((off) + 1))) | gD (URJ_BUS_READ_END (bus)) << 8)
 #define write1(off,data)        URJ_BUS_WRITE( bus, A(off), D(data) )
 

@@ -58,6 +58,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <urjtag/log.h>
 #include <urjtag/part.h>
 #include <urjtag/bus.h>
 #include <urjtag/chain.h>
@@ -68,9 +69,6 @@
 #include "generic_bus.h"
 
 
-#ifndef DEBUG_LVL2
-#define DEBUG_LVL2(x)
-#endif
 
 /** @brief  Bus driver for Samsung S3C4510X */
 typedef struct
@@ -257,7 +255,8 @@ s3c4510_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
         area->width = dbus_width = 32;
         return URJ_STATUS_OK;
     default:
-        printf ("B0SIZE[1:0]: Unknown\n");
+        urj_error_set (URJ_ERROR_INVALID, ("B0SIZE[1:0] 0x%01x: Unknown"),
+                       (b0size1 << 1) | b0size0);
         area->width = 0;
         return URJ_STATUS_FAIL;
     }
@@ -334,7 +333,7 @@ setup_data (urj_bus_t *bus, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 s3c4510_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     /* see Figure 4-19 in [1] */
@@ -344,6 +343,8 @@ s3c4510_bus_read_start (urj_bus_t *bus, uint32_t adr)
     setup_address (bus, adr);
     set_data_in (bus);
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -433,7 +434,7 @@ s3c4510_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     s3c4510_bus_setup_ctrl (bus, 0x01ffff);     /* nOE=1, nRCS0 =1 */
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    DEBUG_LVL2 (printf ("URJ_BUS_WRITE %08x @ %08x\n", data, adr);)
+    urj_log (URJ_LOG_LEVEL_DEBUG, "URJ_BUS_WRITE %08x @ %08x\n", data, adr);
 }
 
 const urj_bus_driver_t urj_bus_s3c4510_bus = {

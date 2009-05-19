@@ -45,6 +45,7 @@ typedef enum urj_error
     URJ_ERROR_BUFFER_EXHAUSTED,
     URJ_ERROR_ILLEGAL_STATE,
     URJ_ERROR_OUT_OF_BOUNDS,
+    URJ_ERROR_TIMEOUT,
     URJ_ERROR_UNSUPPORTED,
     URJ_ERROR_SYNTAX,
 
@@ -53,12 +54,15 @@ typedef enum urj_error
     URJ_ERROR_USB,                              /**< error from libusb */
 
     URJ_ERROR_BUS,
+    URJ_ERROR_BUS_DMA,
 
     URJ_ERROR_FLASH,
     URJ_ERROR_FLASH_DETECT,
     URJ_ERROR_FLASH_PROGRAM,
     URJ_ERROR_FLASH_ERASE,
     URJ_ERROR_FLASH_UNLOCK,
+
+    URJ_ERROR_UNIMPLEMENTED,
 }
 urj_error_t;
 

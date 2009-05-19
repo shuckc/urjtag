@@ -88,6 +88,7 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
     a = addr;
     end = a + len;
     urj_log (URJ_LOG_LEVEL_NORMAL, _("reading:\n"));
+    // @@@@ RFHH check status
     URJ_BUS_READ_START (bus, addr);
     for (a += step; a <= end; a += step)
     {

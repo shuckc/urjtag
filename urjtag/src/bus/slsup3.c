@@ -321,7 +321,7 @@ get_data (urj_bus_t *bus, uint32_t adr)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 slsup3_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -351,6 +351,7 @@ slsup3_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     urj_tap_chain_shift_data_registers (bus->chain, 0);
 
+    return URJ_STATUS_OK;
 }
 
 /**

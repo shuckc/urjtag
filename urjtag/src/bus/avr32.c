@@ -126,9 +126,6 @@ typedef struct
 #define TRACE_ENTER()   DBG(DBG_TRACE, ">>> %s", __FUNCTION__ )
 #define TRACE_EXIT()    DBG(DBG_TRACE, "<<< %s", __FUNCTION__ )
 
-#define ERR(f, ...)     \
-        printf( _("%s(%d): error, " f), __FILE__, __LINE__, ## __VA_ARGS__ )
-
 /* ------------------------------------------------------------------------- */
 
 static inline void
@@ -391,7 +388,8 @@ nexus_memacc_read (urj_bus_t *bus, uint32_t *data)
         nexus_reg_read (bus, OCD_REG_RWD, data);
         break;
     default:
-        ERR ("read failed, status=%lu\n", (long unsigned) status);
+        urj_error_set (URJ_ERROR_BUS, "read failed, status=%lu",
+                       (long unsigned) status);
         *data = 0xffffffff;
         ret = ACCESS_STATUS_ERR;
         break;
@@ -420,7 +418,8 @@ nexus_memacc_write (urj_bus_t *bus, uint32_t addr, uint32_t data,
     ret = ACCESS_STATUS_OK;
     if (status)
     {
-        ERR ("write failed, status=%lu\n", (long unsigned) status);
+        urj_error_set (URJ_ERROR_BUS, "write failed, status=%lu",
+                       (long unsigned) status);
         ret = ACCESS_STATUS_ERR;
     }
 
@@ -481,7 +480,7 @@ check_instruction (urj_part_t *part, const char *instr)
 
     ret = (urj_part_find_instruction (part, instr) == NULL);
     if (ret)
-        ERR ("instruction %s not found\n", instr);
+        urj_error_set (URJ_ERROR_NOTFOUND, "instruction %s not found", instr);
 
     return ret;
 }
@@ -504,7 +503,7 @@ avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     param = cmd_params[2];
     if (!param)
     {
-        ERR ("no bus mode specified\n");
+        urj_error_set (URJ_ERROR_SYNTAX, "no bus mode specified");
         return NULL;
     }
 
@@ -534,7 +533,7 @@ avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
     else
     {
-        ERR ("invalid bus mode: %s\n", param);
+        urj_error_set (URJ_ERROR_SYNTAX, "invalid bus mode: %s", param);
         return NULL;
     }
 
@@ -667,7 +666,7 @@ avr32_bus_area (urj_bus_t *bus, uint32_t addr, urj_bus_area_t *area)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 avr32_bus_read_start (urj_bus_t *bus, uint32_t addr)
 {
     addr &= ADDR_MASK;
@@ -692,6 +691,8 @@ avr32_bus_read_start (urj_bus_t *bus, uint32_t addr)
         nexus_memacc_set_addr (bus, addr, RWCS_RD);
         break;
     }
+
+    return URJ_STATUS_OK;
 }
 
 /**

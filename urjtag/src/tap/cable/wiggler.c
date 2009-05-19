@@ -177,8 +177,7 @@ set_mapping (char *bitmap, urj_cable_t *cable)
 
     if (map_pin (tdo, &(PRM_TDO_ACT (cable)), &(PRM_TDO_INACT (cable))) != 0)
         return -1;
-    if (map_pin (trst, &(PRM_TRST_ACT (cable)), &(PRM_TRST_INACT (cable))) !=
-        0)
+    if (map_pin (trst, &(PRM_TRST_ACT (cable)), &(PRM_TRST_INACT (cable))) != 0)
         return -1;
     if (map_pin (tdi, &(PRM_TDI_ACT (cable)), &(PRM_TDI_INACT (cable))) != 0)
         return -1;

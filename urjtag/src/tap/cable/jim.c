@@ -62,7 +62,6 @@ jim_cable_connect (char *params[], urj_cable_t *cable)
     if (!s)
     {
         // retain error state
-        // printf (_("Initialization failed.\n"));
         return URJ_STATUS_FAIL;
     }
 

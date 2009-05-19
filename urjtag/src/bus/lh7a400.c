@@ -240,7 +240,7 @@ setup_data (urj_bus_t *bus, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 lh7a400_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     /* see Figure 3-3 in [1] */
@@ -255,6 +255,8 @@ lh7a400_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus);
 
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**

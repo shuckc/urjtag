@@ -114,12 +114,14 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                 {
                     //              BUS_WIDTH = 64;  // Needs to fix, look at setup_data()
                     BUS_WIDTH = 32;
-                    printf (_("   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently\n"));
+                    urj_error_set (URJ_ERROR_UNSUPPORTED,
+                                   _("   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently"));
                     dfltWidth = 1;
                 }
                 else
                 {
-                    printf (_("   Only 8,32 and 64 bus width are supported for Banks 0 and 1\n"));
+                    urj_error_set (URJ_ERROR_UNSUPPORTED,
+                                   _("   Only 8,32 and 64 bus width are supported for Banks 0 and 1"));
                     return NULL;
                 }
             }
@@ -131,7 +133,8 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
             if (!strcmp ("help", cmd_params[i]))
             {
-                printf (_("Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n\n"
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         _("Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n\n"
                          "   WIDTH      data bus width - 8, 32, 64 (default 8)\n"
                          "   revbits    reverse bits in data bus (default - no)\n"
                          "   dbgAddr    display address bus state (default - no)\n"
@@ -151,7 +154,8 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     }
     if (dfltWidth)
-        printf (_("   Using default bus width %d\n"), BUS_WIDTH);
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("   Using default bus width %d\n"), BUS_WIDTH);
 
     //      REVBITS = 0;
 
@@ -339,7 +343,8 @@ setup_address (urj_bus_t *bus, uint32_t a)
             urj_part_set_signal (p, AR[i], 1, (a >> (i + 3)) & 1);
         break;
     default:
-        printf (_("Warning: unhandled bus width: %i\n"), BUS_WIDTH);
+        urj_error_set (URJ_ERROR_UNSUPPORTED,
+                       _("Warning: unhandled bus width: %i"), BUS_WIDTH);
         return;
     }
 
@@ -362,18 +367,18 @@ setup_address (urj_bus_t *bus, uint32_t a)
             return;
         }
 
-        printf (_("Addr    [%2d:0]: %06lX   "), k, (long unsigned) a);
+        urj_log (URJ_LOG_LEVEL_DEBUG, _("Addr    [%2d:0]: %06lX   "), k, (long unsigned) a);
         for (i = 0; i < 3; i++)
         {
             for (j = 0; j < 8; j++)
                 if ((i * 8 + j) >= (23 - k))
-                    printf ("%1lu",
+                    urj_log (URJ_LOG_LEVEL_DEBUG, "%1lu",
                             (long unsigned) ((a >> (23 - (i * 8 + j))) & 1));
                 else
-                    printf (" ");
-            printf (" ");
+                    urj_log (URJ_LOG_LEVEL_DEBUG, " ");
+            urj_log (URJ_LOG_LEVEL_DEBUG, " ");
         }
-        printf ("\n");
+        urj_log (URJ_LOG_LEVEL_DEBUG, "\n");
     }
 
 }
@@ -412,7 +417,7 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
     /* Just for debugging */
     if (dbgData)
     {
-        printf (_("Data WR [%d:0]: %08lX   "), area.width - 1,
+        urj_log (URJ_LOG_LEVEL_DEBUG, _("Data WR [%d:0]: %08lX   "), area.width - 1,
                 (long unsigned) d);
         int j;
         int bytes = 0;
@@ -427,14 +432,14 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
         {
             for (j = 0; j < 8; j++)
                 if (REVBITS)
-                    printf ("%1lu", (long unsigned)
+                    urj_log (URJ_LOG_LEVEL_DEBUG, "%1lu", (long unsigned)
                                     (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
                 else
-                    printf ("%1lu", (long unsigned)
+                    urj_log (URJ_LOG_LEVEL_DEBUG, "%1lu", (long unsigned)
                                     (d >> ((i * 8 + j))) & 1);
-            printf (" ");
+            urj_log (URJ_LOG_LEVEL_DEBUG, " ");
         }
-        printf ("\n");
+        urj_log (URJ_LOG_LEVEL_DEBUG, "\n");
     }
 
 }
@@ -458,7 +463,7 @@ get_data (urj_bus_t *bus, uint32_t adr)
     /* Just for debugging */
     if (dbgData)
     {
-        printf (_("Data RD [%d:0]: %08lX   "), area.width - 1,
+        urj_log (URJ_LOG_LEVEL_DEBUG, _("Data RD [%d:0]: %08lX   "), area.width - 1,
                 (long unsigned) d);
         int j;
         int bytes = 0;
@@ -473,13 +478,13 @@ get_data (urj_bus_t *bus, uint32_t adr)
         {
             for (j = 0; j < 8; j++)
                 if (REVBITS)
-                    printf ("%1lu", (long unsigned)
+                    urj_log (URJ_LOG_LEVEL_DEBUG, "%1lu", (long unsigned)
                                     (d >> (BUS_WIDTH - 1 - (i * 8 + j))) & 1);
                 else
-                    printf ("%1lu", (long unsigned) (d >> ((i * 8 + j))) & 1);
-            printf (" ");
+                    urj_log (URJ_LOG_LEVEL_DEBUG, "%1lu", (long unsigned) (d >> ((i * 8 + j))) & 1);
+            urj_log (URJ_LOG_LEVEL_DEBUG, " ");
         }
-        printf ("\n");
+        urj_log (URJ_LOG_LEVEL_DEBUG, "\n");
     }
 
     return d;
@@ -489,7 +494,7 @@ get_data (urj_bus_t *bus, uint32_t adr)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 mpc824x_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -505,6 +510,8 @@ mpc824x_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus, adr);
 
     urj_tap_chain_shift_data_registers (bus->chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**

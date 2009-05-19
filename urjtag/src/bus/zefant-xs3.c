@@ -709,7 +709,7 @@ zefant_xs3_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 zefant_xs3_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -721,9 +721,9 @@ zefant_xs3_bus_read_start (urj_bus_t *bus, uint32_t adr)
     comp_bus_area (bus, adr, &area, &comp);
     if (!comp)
     {
-        printf (_("Address out of range\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, _("Address out of range"));
         LAST_ADDR = adr;
-        return;
+        return URJ_STATUS_FAIL;
     }
 
     /* determine proper address setup strategy for component */
@@ -769,10 +769,12 @@ zefant_xs3_bus_read_start (urj_bus_t *bus, uint32_t adr)
         break;
 
     default:
-        printf (_("Component type not supported\n"));
-        break;
+        urj_error_set (URJ_ERROR_UNSUPPORTED,
+                       _("Component type not supported"));
+        return URJ_STATUS_FAIL;
     }
 
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -792,7 +794,7 @@ zefant_xs3_bus_read_next (urj_bus_t *bus, uint32_t adr)
     comp_bus_area (bus, adr, &area, &comp);
     if (!comp)
     {
-        printf (_("Address out of range\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, _("Address out of range"));
         LAST_ADDR = adr;
         return 0;
     }
@@ -817,7 +819,8 @@ zefant_xs3_bus_read_next (urj_bus_t *bus, uint32_t adr)
         break;
 
     default:
-        printf (_("Component type not supported\n"));
+        urj_error_set (URJ_ERROR_UNSUPPORTED,
+                       _("Component type not supported"));
         break;
     }
 
@@ -842,7 +845,7 @@ zefant_xs3_bus_read_end (urj_bus_t *bus)
     comp_bus_area (bus, LAST_ADDR, &area, &comp);
     if (!comp)
     {
-        printf (_("Address out of range\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, _("Address out of range"));
         return 0;
     }
 
@@ -874,7 +877,8 @@ zefant_xs3_bus_read_end (urj_bus_t *bus)
         break;
 
     default:
-        printf (_("Component type not supported\n"));
+        urj_error_set (URJ_ERROR_UNSUPPORTED,
+                       _("Component type not supported"));
         break;
     }
 
@@ -897,7 +901,7 @@ zefant_xs3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     comp_bus_area (bus, adr, &area, &comp);
     if (!comp)
     {
-        printf (_("Address out of range\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, _("Address out of range"));
         return;
     }
 
@@ -990,7 +994,8 @@ zefant_xs3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
         break;
 
     default:
-        printf (_("Component type not supported\n"));
+        urj_error_set (URJ_ERROR_UNSUPPORTED,
+                       _("Component type not supported"));
         break;
     }
 }

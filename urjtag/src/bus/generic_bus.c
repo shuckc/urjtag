@@ -26,6 +26,7 @@
 
 #include <stdlib.h>
 
+#include <urjtag/error.h>
 #include <urjtag/part.h>
 #include <urjtag/chain.h>
 
@@ -35,16 +36,14 @@ int
 urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig,
                             char *id)
 {
-    int failed = URJ_STATUS_OK;
-
     *sig = urj_part_find_signal (part, id);
     if (!*sig)
     {
-        printf (_("signal '%s' not found\n"), id);
-        failed = URJ_STATUS_FAIL;
+        urj_error_set (URJ_ERROR_NOTFOUND, "signal '%s'", id);
+        return URJ_STATUS_FAIL;
     }
 
-    return failed;
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -91,6 +90,7 @@ urj_bus_generic_prepare_extest (urj_bus_t *bus)
 uint32_t
 urj_bus_generic_read (urj_bus_t *bus, uint32_t adr)
 {
+    // @@@@ RFHH check status
     URJ_BUS_READ_START (bus, adr);
     return URJ_BUS_READ_END (bus);
 }

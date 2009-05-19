@@ -24,6 +24,8 @@
  *
  */
 
+/* @@@@ RFHH candidate for internal include file? */
+
 #ifndef URJ_USBCONN_LIBUSB_H
 #define URJ_USBCONN_LIBUSB_H 1
 

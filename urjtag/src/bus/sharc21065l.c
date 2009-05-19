@@ -205,7 +205,7 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 sharc_21065L_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_chain_t *chain = bus->chain;
@@ -213,8 +213,11 @@ sharc_21065L_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     LAST_ADR = adr;
     if (adr >= 0x080000)
-        return;
-
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, "adr 0x%08lx",
+                       (long unsigned) adr);
+        return URJ_STATUS_FAIL;
+    }
 
     urj_part_set_signal (p, BMS, 1, 0);
     urj_part_set_signal (p, nWE, 1, 1);
@@ -224,6 +227,8 @@ sharc_21065L_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus, adr);
 
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**

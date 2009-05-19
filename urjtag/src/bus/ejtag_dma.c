@@ -33,7 +33,6 @@
  *
  */
 
-//#define PRINT_DATA_DEBUG 1
 #include <sysdep.h>
 
 #include <stdlib.h>
@@ -130,7 +129,8 @@ ejtag_dma_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus)
     for (i = 0; i < bus->chain->parts->len; i++)
         if (bus->part == bus->chain->parts->parts[i])
             break;
-    urj_log (ll, _("EJTAG compatible bus driver via DMA (JTAG part No. %d)\n"), i);
+    urj_log (ll, _("EJTAG compatible bus driver via DMA (JTAG part No. %d)\n"),
+             i);
 }
 
 /**
@@ -151,7 +151,6 @@ reg_value (urj_tap_register_t *reg)
     return retval;
 }
 
-#ifdef PRINT_DATA_DEBUG
 /* Small debug helper */
 static char
 siz_ (int sz)
@@ -169,7 +168,6 @@ siz_ (int sz)
     }
     return 'E';
 }
-#endif
 
 /**
  * low-level dma write
@@ -210,19 +208,16 @@ ejtag_dma_write (urj_bus_t *bus, unsigned int addr, unsigned int data, int sz)
     for (i = 0; i < 32; i++)
         ejaddr->in->data[i] = (addr >> i) & 1;
     urj_tap_chain_shift_data_registers (bus->chain, 0); /* Push the address to write */
-#ifdef PRINT_DATA_DEBUG
-    printf ("Wrote to ejaddr->in      =%s %08X\n",
-            urj_tap_register_get_string (ejaddr->in), reg_value (ejaddr->in));
-#endif
+    urj_log (URJ_LOG_LEVEL_COMM, "Wrote to ejaddr->in      =%s %08X\n",
+             urj_tap_register_get_string (ejaddr->in), reg_value (ejaddr->in));
     urj_part_set_instruction (bus->part, "EJTAG_DATA");
     urj_tap_chain_shift_instructions (bus->chain);
     for (i = 0; i < 32; i++)
         ejdata->in->data[i] = (data >> i) & 1;
     urj_tap_chain_shift_data_registers (bus->chain, 0); /* Push the data to write */
-#ifdef PRINT_DATA_DEBUG
-    printf ("Wrote to edata->in(%c)    =%s %08X\n", siz_ (sz),
-            urj_tap_register_get_string (ejdata->in), reg_value (ejdata->in));
-#endif
+    urj_log (URJ_LOG_LEVEL_COMM, "Wrote to edata->in(%c)    =%s %08X\n",
+             siz_ (sz), urj_tap_register_get_string (ejdata->in),
+             reg_value (ejdata->in));
     urj_part_set_instruction (bus->part, "EJTAG_CONTROL");
     urj_tap_chain_shift_instructions (bus->chain);
     urj_tap_register_fill (ejctrl->in, 0);
@@ -233,7 +228,8 @@ ejtag_dma_write (urj_bus_t *bus, unsigned int addr, unsigned int data, int sz)
     if (sz)
         ejctrl->in->data[sz] = 1;       // Size : can be WORD/HALFWORD or nothing for byte
     urj_tap_chain_shift_data_registers (bus->chain, 0); /* Do the operation */
-    //printf("Wrote to ejctrl->in      =%s %08X\n",urj_tap_register_get_string( ejctrl->in),reg_value( ejctrl->in ) );
+    urj_log (URJ_LOG_LEVEL_ALL, "Wrote to ejctrl->in      =%s %08X\n",
+             urj_tap_register_get_string (ejctrl->in), reg_value (ejctrl->in));
 
     do
     {
@@ -258,8 +254,8 @@ ejtag_dma_write (urj_bus_t *bus, unsigned int addr, unsigned int data, int sz)
     urj_tap_chain_shift_data_registers (bus->chain, 1); // Disable DMA, reset state to previous one.
     if (ejctrl->out->data[Derr] == 1)
     {                           // Check for DMA error, i.e. incorrect address
-        printf (_("%s(%d) Error on dma write (dma transaction failed)\n"),
-                __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_BUS_DMA,
+                       _("dma write (dma transaction failed)"));
     }
     return;
 }
@@ -290,10 +286,8 @@ ejtag_dma_read (urj_bus_t *bus, unsigned int addr, int sz)
     for (i = 0; i < 32; i++)
         ejaddr->in->data[i] = (addr >> i) & 1;
     urj_tap_chain_shift_data_registers (bus->chain, 0); /* Push the address to read */
-#ifdef PRINT_DATA_DEBUG
-    printf ("Wrote to ejaddr->in      =%s %08X\n",
-            urj_tap_register_get_string (ejaddr->in), reg_value (ejaddr->in));
-#endif
+    urj_log (URJ_LOG_LEVEL_COMM, "Wrote to ejaddr->in      =%s %08X\n",
+             urj_tap_register_get_string (ejaddr->in), reg_value (ejaddr->in));
     urj_part_set_instruction (bus->part, "EJTAG_CONTROL");
     urj_tap_chain_shift_instructions (bus->chain);
     urj_tap_register_fill (ejctrl->in, 0);
@@ -305,7 +299,8 @@ ejtag_dma_read (urj_bus_t *bus, unsigned int addr, int sz)
         ejctrl->in->data[sz] = 1;       // Size : can be WORD/HALFWORD or nothing for byte
     ejctrl->in->data[DmaRwn] = 1;       // This is a read
     urj_tap_chain_shift_data_registers (bus->chain, 0); /* Do the operation */
-    //printf("Wrote to ejctrl->in      =%s %08X\n",urj_tap_register_get_string( ejctrl->in),reg_value( ejctrl->in ) );
+    urj_log (URJ_LOG_LEVEL_ALL, "Wrote to ejctrl->in      =%s %08X\n",
+             urj_tap_register_get_string (ejctrl->in), reg_value (ejctrl->in));
 
     do
     {
@@ -317,8 +312,12 @@ ejtag_dma_read (urj_bus_t *bus, unsigned int addr, int sz)
         ejctrl->in->data[DmaAcc] = 1;
         urj_tap_chain_shift_data_registers (bus->chain, 1);
 
-        //printf("Wrote to ejctrl->in   =%s %08X\n",urj_tap_register_get_string( ejctrl->in),reg_value( ejctrl->in ) );
-        //printf("Read from ejctrl->out =%s %08X\n",urj_tap_register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
+        urj_log (URJ_LOG_LEVEL_ALL, "Wrote to ejctrl->in   =%s %08X\n",
+                 urj_tap_register_get_string (ejctrl->in),
+                 reg_value (ejctrl->in));
+        urj_log (URJ_LOG_LEVEL_ALL, "Read from ejctrl->out =%s %08X\n",
+                 urj_tap_register_get_string (ejctrl->out),
+                 reg_value (ejctrl->out));
         timeout--;
         if (!timeout)
             break;
@@ -330,11 +329,9 @@ ejtag_dma_read (urj_bus_t *bus, unsigned int addr, int sz)
     urj_tap_register_fill (ejdata->in, 0);
     urj_tap_chain_shift_data_registers (bus->chain, 1);
     ret = reg_value (ejdata->out);
-#ifdef PRINT_DATA_DEBUG
-    printf ("Read from ejdata->out(%c) =%s %08X\n", siz_ (sz),
-            urj_tap_register_get_string (ejdata->out),
-            reg_value (ejdata->out));
-#endif
+    urj_log (URJ_LOG_LEVEL_COMM, "Read from ejdata->out(%c) =%s %08X\n",
+             siz_ (sz), urj_tap_register_get_string (ejdata->out),
+             reg_value (ejdata->out));
     urj_part_set_instruction (bus->part, "EJTAG_CONTROL");
     urj_tap_chain_shift_instructions (bus->chain);
     urj_tap_register_fill (ejctrl->in, 0);
@@ -342,13 +339,15 @@ ejtag_dma_read (urj_bus_t *bus, unsigned int addr, int sz)
     ejctrl->in->data[ProbEn] = 1;
     urj_tap_chain_shift_data_registers (bus->chain, 1); // Disable DMA, reset state to previous one.
 
-//      printf("Wrote to ejctrl->in   =%s %08X\n",urj_tap_register_get_string( ejctrl->in),reg_value( ejctrl->in ) );
-//      printf("Read from ejctrl->out =%s %08X\n",urj_tap_register_get_string( ejctrl->out),reg_value( ejctrl->out ) );
+    urj_log (URJ_LOG_LEVEL_ALL, "Wrote to ejctrl->in   =%s %08X\n",
+             urj_tap_register_get_string (ejctrl->in),reg_value (ejctrl->in));
+    urj_log (URJ_LOG_LEVEL_ALL, "Read from ejctrl->out =%s %08X\n",
+             urj_tap_register_get_string (ejctrl->out), reg_value(ejctrl->out));
 
     if (ejctrl->out->data[Derr] == 1)
     {                           // Check for DMA error, i.e. incorrect address
-        printf (_("%s(%d) Error on dma read (dma transaction failed)\n"),
-                __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_BUS_DMA,
+                       _("dma read (dma transaction failed)"));
     }
 
     switch (sz)
@@ -394,15 +393,14 @@ ejtag_dma_bus_init (urj_bus_t *bus)
 
     if (!(ejctrl && ejimpl))
     {
-        printf (_("%s(%d) EJCONTROL or EJIMPCODE register not found\n"),
-                __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_NOTFOUND,
+                       _("EJCONTROL or EJIMPCODE register"));
         return URJ_STATUS_FAIL;
     }
     if (!(ejaddr && ejdata))
     {
-        printf (_
-                ("%s(%d) EJADDRESS of EJDATA register not found, DMA impossible\n"),
-                __FILE__, __LINE__);
+        urj_error_set (URJ_ERROR_NOTFOUND,
+                       _("EJADDRESS of EJDATA register; DMA impossible"));
         return URJ_STATUS_FAIL;
     }
 
@@ -410,41 +408,43 @@ ejtag_dma_bus_init (urj_bus_t *bus)
     urj_tap_chain_shift_instructions (bus->chain);
     urj_tap_chain_shift_data_registers (bus->chain, 0);
     urj_tap_chain_shift_data_registers (bus->chain, 1);
-    printf ("ImpCode=%s\n", urj_tap_register_get_string (ejimpl->out));
+    urj_log (URJ_LOG_LEVEL_NORMAL, "ImpCode=%s\n",
+             urj_tap_register_get_string (ejimpl->out));
     BP->impcode = reg_value (ejimpl->out);
 
     switch (EJTAG_VER)
     {
     case EJTAG_20:
-        printf ("EJTAG version: <= 2.0\n");
+        urj_log (URJ_LOG_LEVEL_NORMAL, "EJTAG version: <= 2.0\n");
         break;
     case EJTAG_25:
-        printf ("EJTAG version: 2.5\n");
+        urj_log (URJ_LOG_LEVEL_NORMAL, "EJTAG version: 2.5\n");
         break;
     case EJTAG_26:
-        printf ("EJTAG version: 2.6\n");
+        urj_log (URJ_LOG_LEVEL_NORMAL, "EJTAG version: 2.6\n");
         break;
     default:
-        printf ("EJTAG version: unknown (%lu)\n", (long unsigned) EJTAG_VER);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "EJTAG version: unknown (%lu)\n",
+                 (long unsigned) EJTAG_VER);
     }
-    printf ("EJTAG Implementation flags:%s%s%s%s%s%s%s\n",
-            (BP->impcode & (1 << 28)) ? " R3k" : " R4k",
-            (BP->impcode & (1 << 24)) ? " DINTsup" : "",
-            (BP->impcode & (1 << 22)) ? " ASID_8" : "",
-            (BP->impcode & (1 << 21)) ? " ASID_6" : "",
-            (BP->impcode & (1 << 16)) ? " MIPS16" : "",
-            (BP->impcode & (1 << 14)) ? " NoDMA" : " DMA",
-            (BP->impcode & (1)) ? " MIPS64" : " MIPS32");
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             "EJTAG Implementation flags:%s%s%s%s%s%s%s\n",
+             (BP->impcode & (1 << 28)) ? " R3k" : " R4k",
+             (BP->impcode & (1 << 24)) ? " DINTsup" : "",
+             (BP->impcode & (1 << 22)) ? " ASID_8" : "",
+             (BP->impcode & (1 << 21)) ? " ASID_6" : "",
+             (BP->impcode & (1 << 16)) ? " MIPS16" : "",
+             (BP->impcode & (1 << 14)) ? " NoDMA" : " DMA",
+             (BP->impcode & (1)) ? " MIPS64" : " MIPS32");
 
     if (BP->impcode & (1 << 14))
     {
-        printf ("Warning, plateform claim there are no DMA support\n");
+        urj_warning ("plateform claim there are no DMA support\n");
     }
 
     if (EJTAG_VER != EJTAG_20)
     {
-        printf
-            ("Warning, plateform has a version which is not supposed to have DMA\n");
+        urj_warning ("plateform has a version which is not supposed to have DMA\n");
     }
 
     // The purpose of this is to make the processor break into debug mode on
@@ -487,9 +487,9 @@ ejtag_dma_bus_init (urj_bus_t *bus)
 
     if (timeout == 0)
     {
-        printf (_("%s(%d) Failed to enter debug mode, ctrl=%s\n"),
-                __FILE__, __LINE__,
-                urj_tap_register_get_string (ejctrl->out));
+        urj_error_set (URJ_ERROR_TIMEOUT,
+                       _("Failed to enter debug mode, ctrl=%s"),
+                       urj_tap_register_get_string (ejctrl->out));
         return URJ_STATUS_FAIL;
     }
 
@@ -504,19 +504,21 @@ ejtag_dma_bus_init (urj_bus_t *bus)
 
 
     // Clear Memory Protection Bit in DCR
-    printf (_("Clear memory protection bit in DCR\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Clear memory protection bit in DCR\n"));
     unsigned int val = ejtag_dma_read (bus, 0xff300000, DMA_WORD);
     ejtag_dma_write (bus, 0xff300000, val & ~(1 << 2), DMA_WORD);
 
     // Clear watchdog, if any
-    printf (_("Clear Watchdog\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Clear Watchdog\n"));
     ejtag_dma_write (bus, 0xb8000080, 0, DMA_WORD);
 
-    printf (_("Potential flash base address: [0x%x], [0x%x]\n"),
-            ejtag_dma_read (bus, 0xfffe2000, DMA_WORD),
-            ejtag_dma_read (bus, 0xfffe1000, DMA_WORD));
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Potential flash base address: [0x%x], [0x%x]\n"),
+             ejtag_dma_read (bus, 0xfffe2000, DMA_WORD),
+             ejtag_dma_read (bus, 0xfffe1000, DMA_WORD));
 
-    printf (_("Processor successfully switched in debug mode.\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Processor successfully switched in debug mode.\n"));
 
     bus->initialized = 1;
     return URJ_STATUS_OK;
@@ -624,7 +626,7 @@ get_sz (uint32_t adr)
 static void
 ejtag_dma_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
-    //printf("%s:adr=0x%x,data=0x%x\n",__FUNCTION__,adr,data);
+    urj_log (URJ_LOG_LEVEL_ALL, "%s:adr=0x%x,data=0x%x\n", __func__, adr, data);
     ejtag_dma_write (bus, adr, data, get_sz (adr));
 }
 
@@ -636,7 +638,7 @@ static uint32_t
 ejtag_dma_bus_read (urj_bus_t *bus, uint32_t adr)
 {
     int data = ejtag_dma_read (bus, adr, get_sz (adr));
-    //printf("%s:adr=0x%x,got=0x%x\n",__FUNCTION__,adr,data);
+    urj_log (URJ_LOG_LEVEL_ALL, "%s:adr=0x%x,got=0x%x\n", __func__, adr, data);
     return data;
 }
 
@@ -645,12 +647,14 @@ static uint32_t _data_read;
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 ejtag_dma_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     _data_read = ejtag_dma_read (bus, adr, get_sz (adr));
-    //printf("%s:adr=0x%x, got=0x%x\n",__FUNCTION__,adr,_data_read);
-    return;
+    urj_log (URJ_LOG_LEVEL_ALL, "%s:adr=0x%x, got=0x%x\n", __func__, adr,
+             _data_read);
+
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -662,7 +666,8 @@ ejtag_dma_bus_read_next (urj_bus_t *bus, uint32_t adr)
 {
     uint32_t tmp_value = _data_read;
     _data_read = ejtag_dma_read (bus, adr, get_sz (adr));
-    //printf("%s:adr=0x%x, got=0x%x\n",__FUNCTION__,adr,_data_read);
+    urj_log (URJ_LOG_LEVEL_ALL, "%s:adr=0x%x, got=0x%x\n", __func__, adr,
+             _data_read);
     return tmp_value;
 }
 

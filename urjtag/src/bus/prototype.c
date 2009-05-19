@@ -138,8 +138,9 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
             else if (!strcmp ("x32", value))
                 ashift = 2;
             else if (strcmp ("auto", value))
-                printf (_("value %s not defined for parameter %s\n"), value,
-                        param);
+                urj_error_set (URJ_ERROR_INVALID,
+                               _("value %s not defined for parameter %s"),
+                               value, param);
             continue;
         }
 
@@ -150,7 +151,8 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         sig = urj_part_find_signal (bus->part, value);
         if (!sig)
         {
-            printf (_("signal '%s' is not found\n"), value);
+            urj_error_set (URJ_ERROR_NOTFOUND, _("signal '%s' not found"),
+                           value);
             failed = 1;
         }
         else if (!strcmp ("alsb", param))
@@ -194,7 +196,8 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         }
         else
         {
-            printf (_("parameter %s is unknown\n"), param);
+            urj_error_set (URJ_ERROR_INVALID, _("parameter %s is unknown"),
+                           param);
             failed = 1;
         }
     }
@@ -232,7 +235,8 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
     else
     {
-        printf (_("parameters alsb=<signal> and/or amsb=<signal> are not defined\n"));
+        urj_error_set (URJ_ERROR_INVALID,
+            _("parameters alsb=<signal> and/or amsb=<signal> are not defined"));
         failed = 1;
     }
 
@@ -291,25 +295,29 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
     else
     {
-        printf (_("parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n"));
+        urj_error_set (URJ_ERROR_INVALID,
+                       _("parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n"));
         failed = 1;
     }
 
     if (!CS)
     {
-        printf (_("parameter cs=<signal> or ncs=<signal> is not defined\n"));
+        urj_error_set (URJ_ERROR_INVALID,
+                       _("parameter cs=<signal> or ncs=<signal> is not defined\n"));
         failed = 1;
     }
 
     if (!OE)
     {
-        printf (_("parameter oe=<signal> or noe=<signal> is not defined\n"));
+        urj_error_set (URJ_ERROR_INVALID,
+                       _("parameter oe=<signal> or noe=<signal> is not defined\n"));
         failed = 1;
     }
 
     if (!WE)
     {
-        printf (_("parameter we=<signal> or nwe=<signal> is not defined\n"));
+        urj_error_set (URJ_ERROR_INVALID,
+                       _("parameter we=<signal> or nwe=<signal> is not defined\n"));
         failed = 1;
     }
 
@@ -396,7 +404,7 @@ setup_data (urj_bus_t *bus, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 prototype_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -410,6 +418,8 @@ prototype_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus);
 
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**

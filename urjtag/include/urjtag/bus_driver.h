@@ -60,10 +60,15 @@ struct urj_bus_driver
     void (*prepare) (urj_bus_t *bus);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*area) (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area);
-    void (*read_start) (urj_bus_t *bus, uint32_t adr);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+    int (*read_start) (urj_bus_t *bus, uint32_t adr);
+    // @@@@ RFHH need to return status
     uint32_t (*read_next) (urj_bus_t *bus, uint32_t adr);
+    // @@@@ RFHH need to return status
     uint32_t (*read_end) (urj_bus_t *bus);
+    // @@@@ RFHH need to return status
     uint32_t (*read) (urj_bus_t *bus, uint32_t adr);
+    // @@@@ RFHH need to return status
     void (*write) (urj_bus_t *bus, uint32_t adr, uint32_t data);
     int (*init) (urj_bus_t *bus);
 };

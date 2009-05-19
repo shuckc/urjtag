@@ -61,7 +61,7 @@ stdout_vprintf(const char *fmt, va_list ap)
 }
 
 int
-urj_log (urj_log_level_t level, const char *fmt, ...)
+urj_do_log (urj_log_level_t level, const char *fmt, ...)
 {
     va_list ap;
     int r;
@@ -108,6 +108,7 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_BUFFER_EXHAUSTED:    return "buffer exhausted";
     case URJ_ERROR_ILLEGAL_STATE:       return "illegal state transition";
     case URJ_ERROR_OUT_OF_BOUNDS:       return "out of bounds";
+    case URJ_ERROR_TIMEOUT:             return "timeout";
     case URJ_ERROR_UNSUPPORTED:         return "unsupported";
     case URJ_ERROR_SYNTAX:              return "syntax";
 
@@ -116,12 +117,15 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_USB:                 return "libusb error";
 
     case URJ_ERROR_BUS:                 return "bus";
+    case URJ_ERROR_BUS_DMA:             return "bus DMA";
 
     case URJ_ERROR_FLASH:               return "flash";
     case URJ_ERROR_FLASH_DETECT:        return "flash detect";
     case URJ_ERROR_FLASH_PROGRAM:       return "flash program";
     case URJ_ERROR_FLASH_ERASE:         return "flash erase";
     case URJ_ERROR_FLASH_UNLOCK:        return "flash unlock";
+
+    case URJ_ERROR_UNIMPLEMENTED:       return "unimplemented";
     }
 
     return "UNDEFINED ERROR";

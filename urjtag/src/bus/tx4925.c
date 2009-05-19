@@ -235,7 +235,7 @@ setup_data (urj_bus_t *bus, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 tx4925_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -249,6 +249,8 @@ tx4925_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus);
 
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**

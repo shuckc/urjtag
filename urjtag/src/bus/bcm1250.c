@@ -190,7 +190,7 @@ setup_data (urj_bus_t *bus, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 bcm1250_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -212,6 +212,8 @@ bcm1250_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus);
 
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -308,7 +310,7 @@ static uint64_t base = 0x1fc00000;
 
 static int
 bcm1250_ejtag_do (urj_bus_t *bus, uint64_t ad, uint64_t da, int read,
-                  int type, unsigned char *buf, int verbose)
+                  int type, unsigned char *buf)
 {
 
     urj_part_t *p = bus->part;
@@ -320,9 +322,8 @@ bcm1250_ejtag_do (urj_bus_t *bus, uint64_t ad, uint64_t da, int read,
     int j, k, n, m;
     uint64_t a;
 
-    if (verbose)
-        printf ("BCM1250: ejtag_do(%08Lx, %08Lx, %i, %i)\n", ad, da, read,
-                type);
+    urj_log (URJ_LOG_LEVEL_DETAIL, "BCM1250: ejtag_do(%08Lx, %08Lx, %i, %i)\n",
+             ad, da, read, type);
 
     a = ad >> 5;
     for (j = 0; j < 35; j++)
@@ -431,10 +432,13 @@ bcm1250_ejtag_do (urj_bus_t *bus, uint64_t ad, uint64_t da, int read,
         p->active_instruction->data_register->in->data[j] = ctrl[k++] & 1;
     }
     urj_tap_chain_shift_data_registers (chain, 1);
-    if (verbose || read)
+    if (urj_log_state.level <= URJ_LOG_LEVEL_DETAIL || read)
     {
         volatile int q;
         int to;
+        const urj_tap_register_t *out;
+
+        out = p->active_instruction->data_register->out;
 
         to = 5;
         for (q = 0; q < 100; q++);
@@ -442,8 +446,7 @@ bcm1250_ejtag_do (urj_bus_t *bus, uint64_t ad, uint64_t da, int read,
         urj_tap_chain_shift_instructions (chain);
         urj_tap_chain_shift_data_registers (chain, 1);
 
-        while ((p->active_instruction->data_register->out->data[276 - 17] ==
-                0) && to--)
+        while ((out->data[276 - 17] == 0) && to--)
         {
             urj_tap_chain_shift_data_registers (chain, 1);
         }
@@ -453,30 +456,23 @@ bcm1250_ejtag_do (urj_bus_t *bus, uint64_t ad, uint64_t da, int read,
             for (m = 0; m < 8; m++)
             {
                 buf[j] <<= 1;
-                buf[j] +=
-                    p->active_instruction->data_register->out->data[255 -
-                                                                    (j * 8) -
-                                                                    m] & 1;
+                buf[j] += out->data[255 - (j * 8) - m] & 1;
             }
-            if (verbose)
-                printf ("%02x ", buf[j]);
+            urj_log (URJ_LOG_LEVEL_DETAIL, "%02x ", buf[j]);
         }
-        if (verbose)
+        if (urj_log_state.level <= URJ_LOG_LEVEL_DETAIL)
         {
-            printf ("\n");
+            urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
 
-            printf (" status:\n");
+            urj_log (URJ_LOG_LEVEL_DETAIL, " status:\n");
             for (j = 0; j < 21; j++)
             {
-                printf ("%c",
-                        '0' +
-                        p->active_instruction->data_register->out->data[276 -
-                                                                        j]);
+                urj_log (URJ_LOG_LEVEL_DETAIL, "%c", '0' + out->data[276 - j]);
                 if ((j == 5) || (j == 11) || (j == 12) || (j == 16)
                     || (j == 17))
-                    printf (" ");
+                    urj_log (URJ_LOG_LEVEL_DETAIL, " ");
             }
-            printf ("\n");
+            urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
         }
     }
     return URJ_STATUS_OK;

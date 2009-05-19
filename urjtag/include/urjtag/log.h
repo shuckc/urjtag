@@ -40,11 +40,17 @@ urj_log_state_t;
 
 extern urj_log_state_t urj_log_state;
 
-int urj_log (urj_log_level_t level, const char *fmt, ...)
+int urj_do_log (urj_log_level_t level, const char *fmt, ...)
 #ifdef __GNUC__
                         __attribute__ ((format (printf, 2, 3)))
 #endif
     ;
+
+#define urj_log(lvl, ...) \
+        do { \
+            if ((lvl) >= urj_log_state.level) \
+                urj_do_log (lvl, __VA_ARGS__); \
+        } while (0)
 
 /**
  * Print warning unless logging level is > URJ_LOG_LEVEL_WARNING

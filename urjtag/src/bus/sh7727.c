@@ -178,7 +178,7 @@ sh7727_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
         area->width = 32;
         return URJ_STATUS_OK;
     default:
-        printf (_("Error: Invalid bus width (MD3 = MD4 = 0)!\n"));
+        urj_error_set (URJ_ERROR_INVALID, "Invalid bus width (MD3 = MD4 = 0)");
         area->width = 0;
         return URJ_STATUS_FAIL;
     }
@@ -224,7 +224,7 @@ setup_data (urj_bus_t *bus, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 sh7727_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -252,6 +252,8 @@ sh7727_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus);
 
     urj_tap_chain_shift_data_registers (bus->chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**

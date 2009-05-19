@@ -37,7 +37,7 @@
 #include "generic.h"
 #include "generic_parport.h"
 
-#ifdef UNUSED
+#ifdef UNUSED   // @@@@ RFHH
 static void
 print_vector (urj_log_level_t ll, int len, char *vec)
 {
@@ -78,7 +78,6 @@ urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable)
     if (port == NULL)
     {
         // retain error state
-        // printf (_("Error: Cable connection failed!\n"));
         return URJ_STATUS_FAIL;
     }
 

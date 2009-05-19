@@ -95,10 +95,8 @@ fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode,
     /* build register FJMEM_REG with length of 1 bit */
     dr = urj_part_data_register_alloc (FJMEM_REG_NAME, 1);
     if (!dr)
-    {
-        printf (_("out of memory\n"));
+        // retain error state
         return 0;
-    }
 
     dr->next = part->data_registers;
     part->data_registers = dr;
@@ -107,16 +105,14 @@ fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode,
        that maps to FJMEM_REG */
     if (strlen (opcode) != part->instruction_length)
     {
-        printf (_("invalid instruction length\n"));
+        urj_error_set (URJ_ERROR_INVALID, _("invalid instruction length"));
         return 0;
     }
     i = urj_part_instruction_alloc (FJMEM_INST_NAME, part->instruction_length,
                                     opcode);
     if (!i)
-    {
-        printf (_("out of memory\n"));
+        // retain error state
         return 0;
-    }
     i->next = part->instructions;
     part->instructions = i;
     i->data_register = dr;
@@ -170,9 +166,8 @@ fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode,
     fjmem_reg_len -= chain->parts->len - 1;
     /* shift once more and return to idle state */
     urj_tap_shift_register (chain, dr->in, NULL, URJ_CHAIN_EXITMODE_IDLE);
-#ifdef DEBUG
-    printf ("FJMEM data register length: %d\n", fjmem_reg_len);
-#endif
+    urj_log (URJ_LOG_LEVEL_DEBUG, "FJMEM data register length: %d\n",
+             fjmem_reg_len);
 
     return fjmem_reg_len < FJMEM_MAX_REG_LEN ? fjmem_reg_len : -1;
 }
@@ -183,9 +178,6 @@ fjmem_detect_fields (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
     block_desc_t *bd = &(BLOCK_DESC);
     urj_data_register_t *dr = FJMEM_REG;
     int idx;
-#ifdef DEBUG
-    const char *reg_string;
-#endif
 
     /* set safe defaults */
     bd->block_len = 0;
@@ -198,17 +190,13 @@ fjmem_detect_fields (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
     if (dr->in)
         free (dr->in);
     if ((dr->in = urj_tap_register_alloc (bd->reg_len)) == NULL)
-    {
-        printf (_("out of memory\n"));
+        // retain error state
         return 0;
-    }
     if (dr->out)
         free (dr->out);
     if ((dr->out = urj_tap_register_alloc (bd->reg_len)) == NULL)
-    {
-        printf (_("out of memory\n"));
+        // retain error state
         return 0;
-    }
 
     /* Shift the detect instruction (all-1) into FJMEM_REG. */
     urj_tap_register_fill (dr->in, 1);
@@ -225,10 +213,8 @@ fjmem_detect_fields (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
     urj_tap_chain_shift_data_registers (chain, 1);
 
     /* and examine output from field detect */
-#ifdef DEBUG
-    reg_string = urj_tap_register_get_string (dr->out);
-    printf ("captured: %s\n", reg_string);
-#endif
+    urj_log (URJ_LOG_LEVEL_DEBUG, "captured: %s\n",
+             urj_tap_register_get_string (dr->out));
     /* scan block field */
     idx = bd->block_pos;
     while (dr->out->data[idx] && (idx < dr->out->len))
@@ -245,11 +231,12 @@ fjmem_detect_fields (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
         idx++;
     bd->data_len = idx - bd->data_pos;
 
-#ifdef DEBUG
-    printf ("block pos: %d, len: %d\n", bd->block_pos, bd->block_len);
-    printf ("addr  pos: %d, len: %d\n", bd->addr_pos, bd->addr_len);
-    printf ("data  pos: %d, len: %d\n", bd->data_pos, bd->data_len);
-#endif
+    urj_log (URJ_LOG_LEVEL_DEBUG, "block pos: %d, len: %d\n",
+             bd->block_pos, bd->block_len);
+    urj_log (URJ_LOG_LEVEL_DEBUG, "addr  pos: %d, len: %d\n",
+             bd->addr_pos, bd->addr_len);
+    urj_log (URJ_LOG_LEVEL_DEBUG, "data  pos: %d, len: %d\n",
+             bd->data_pos, bd->data_len);
 
     if ((bd->block_len > 0) && (bd->addr_len > 0) && (bd->data_len > 0))
         return 1;
@@ -264,9 +251,6 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
     urj_data_register_t *dr = FJMEM_REG;
     int max_block_num, block_num;
     int failed = 0;
-#ifdef DEBUG
-    const char *reg_string;
-#endif
 
     /* the current block number is 0, it has been requested by the previous
        shift during fjmem_detect_fields */
@@ -286,10 +270,8 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
         urj_tap_chain_shift_data_registers (chain, 1);
 
         /* and examine output from block query */
-#ifdef DEBUG
-        reg_string = urj_tap_register_get_string (dr->out);
-        printf ("captured: %s\n", reg_string);
-#endif
+        urj_log (URJ_LOG_LEVEL_DEBUG, "captured: %s\n",
+                 urj_tap_register_get_string (dr->out));
 
         /* extract address field length */
         for (addr_len = 0; addr_len < bd->addr_len; addr_len++)
@@ -312,7 +294,6 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
             {
                 urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
                                (size_t) 1, sizeof (urj_bus_t));
-                printf (_("out of memory\n"));
                 failed |= 1;
                 break;
             }
@@ -357,13 +338,11 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
             /* and fill in end address of this block */
             bl->end = bl->start + (1 << (bl->addr_width + bl->ashift)) - 1;
 
-#ifdef DEBUG
-            printf ("block # %d\n", block_num);
-            printf (" start 0x%08x\n", bl->start);
-            printf (" end   0x%08x\n", bl->end);
-            printf (" addr len %d\n", bl->addr_width);
-            printf (" data len %d\n", bl->data_width);
-#endif
+            urj_log (URJ_LOG_LEVEL_DEBUG, "block # %d\n", block_num);
+            urj_log (URJ_LOG_LEVEL_DEBUG, " start 0x%08x\n", bl->start);
+            urj_log (URJ_LOG_LEVEL_DEBUG, " end   0x%08x\n", bl->end);
+            urj_log (URJ_LOG_LEVEL_DEBUG, " addr len %d\n", bl->addr_width);
+            urj_log (URJ_LOG_LEVEL_DEBUG, " data len %d\n", bl->data_width);
         }
     }
 
@@ -395,7 +374,9 @@ fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         comma = strchr (params[idx], '=');
         if (comma == NULL)
         {
-            printf (_("Wrong parameter specification: %s\n"), params[idx]);
+            // @@@@ RFHH bail out?
+            urj_error_set (URJ_ERROR_SYNTAX,
+                           _("Wrong parameter specification: %s"), params[idx]);
             continue;
         }
 
@@ -468,7 +449,8 @@ fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         }
     }
     else
-        printf (_("Parameter for instruction opcode missing.\n"));
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       _("Parameter for instruction opcode missing"));
 
     return bus;
 }
@@ -641,7 +623,7 @@ setup_data (urj_bus_t *bus, uint32_t d, block_param_t *block)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 fjmem_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_chain_t *chain = bus->chain;
@@ -653,9 +635,9 @@ fjmem_bus_read_start (urj_bus_t *bus, uint32_t adr)
     block_bus_area (bus, adr, &area, &block);
     if (!block)
     {
-        printf (_("Address out of range\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, _("Address out of range"));
         LAST_ADDR = adr;
-        return;
+        return URJ_STATUS_FAIL;
     }
 
     setup_address (bus, adr, block);
@@ -666,6 +648,8 @@ fjmem_bus_read_start (urj_bus_t *bus, uint32_t adr)
     dr->in->data[bd->instr_pos + 2] = 0;
 
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**
@@ -686,7 +670,7 @@ fjmem_bus_read_next (urj_bus_t *bus, uint32_t adr)
     block_bus_area (bus, adr, &area, &block);
     if (!block)
     {
-        printf (_("Address out of range\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, _("Address out of range"));
         LAST_ADDR = adr;
         return 0;
     }
@@ -721,7 +705,7 @@ fjmem_bus_read_end (urj_bus_t *bus)
     block_bus_area (bus, LAST_ADDR, &area, &block);
     if (!block)
     {
-        printf (_("Address out of range\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, _("Address out of range"));
         return 0;
     }
 
@@ -757,7 +741,7 @@ fjmem_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     block_bus_area (bus, adr, &area, &block);
     if (!block)
     {
-        printf (_("Address out of range\n"));
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, _("Address out of range"));
         return;
     }
 

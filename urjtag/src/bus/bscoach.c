@@ -295,7 +295,7 @@ get_data_out (urj_bus_t *bus)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 flashbscoach_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
@@ -314,6 +314,7 @@ flashbscoach_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
+    return URJ_STATUS_OK;
 }
 
 /**

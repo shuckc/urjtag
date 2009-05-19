@@ -209,8 +209,7 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
     else
     {
-        printf ("BUG in the code, file %s, line %d: unknown PROC\n", __FILE__,
-                __LINE__);
+        urj_error_set (URJ_ERROR_INVALID, "processor type %d", PROC);
         ncs_map = pxa25x_ncs_map;       // be dumb by default
     }
     for (i = 0; i < nCS_TOTAL; i++)
@@ -308,7 +307,10 @@ pxa2xx_bus_init (urj_bus_t *bus)
             BOOT_DEF_BOOT_SEL (urj_part_get_signal (p, bs));
     }
     else
-        printf ("BUG in the code, file %s, line %d.\n", __FILE__, __LINE__);
+    {
+        urj_error_set (URJ_ERROR_INVALID, "processor type %d", PROC);
+        return URJ_STATUS_FAIL;
+    }
 
     urj_part_set_instruction (p, "BYPASS");
     urj_tap_chain_shift_instructions (chain);
@@ -358,12 +360,12 @@ pxa2xx_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
             case 5:
             case 6:
             case 7:
-                printf ("TODO - BOOT_SEL: %lu\n",
-                        (long unsigned) get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
+                urj_error_set (URJ_ERROR_UNIMPLEMENTED, "TODO - BOOT_SEL: %lu",
+                           (long unsigned) get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
                 return URJ_STATUS_FAIL;
             default:
-                printf ("BUG in the code, file %s, line %d.\n", __FILE__,
-                        __LINE__);
+                urj_error_set (URJ_ERROR_INVALID, "BOOT_DEF value %lu",
+                           (long unsigned) get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
                 return URJ_STATUS_FAIL;
             }
         }
@@ -457,12 +459,12 @@ pxa27x_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
             case 5:
             case 6:
             case 7:
-                printf ("TODO - BOOT_SEL: %lu\n",
+                urj_error_set (URJ_ERROR_UNIMPLEMENTED, "TODO - BOOT_SEL: %lu",
                         (long unsigned) get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
                 return URJ_STATUS_FAIL;
             default:
-                printf ("BUG in the code, file %s, line %d.\n", __FILE__,
-                        __LINE__);
+                urj_error_set (URJ_ERROR_INVALID, "BOOT_SEL: %lu",
+                        (long unsigned) get_BOOT_DEF_BOOT_SEL (BOOT_DEF));
                 return URJ_STATUS_FAIL;
             }
         }
@@ -473,10 +475,12 @@ pxa27x_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     for (ncs_index = 1, tmp_addr = 0x04000000; ncs_index <= 5;
          ncs_index++, tmp_addr += 0x04000000)
     {
-        //printf( "Checking area %08X - %08X... ", tmp_addr, tmp_addr + 0x04000000 - 1);
+        urj_log (URJ_LOG_LEVEL_DEBUG, "Checking area %08lX - %08lX... ",
+                 (unsigned long)tmp_addr,
+                 (unsigned long)tmp_addr + 0x04000000 - 1);
         if ((adr >= tmp_addr) && (adr < tmp_addr + 0x04000000))
         {                       // if the addr is within our window
-            //printf( "match\n");
+            urj_log (URJ_LOG_LEVEL_DEBUG, "match\n");
             sprintf (pxa27x_ncs_map[ncs_index].label_buf,
                      "Static Chip Select %d = %s %s", ncs_index,
                      pxa27x_ncs_map[ncs_index].sig_name,
@@ -488,7 +492,7 @@ pxa27x_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 
             return URJ_STATUS_OK;
         }
-        //else printf( "no match\n");
+        urj_log (URJ_LOG_LEVEL_DEBUG, "no match\n");
     }
 
     if (adr < UINT32_C (0x40000000))
@@ -579,7 +583,7 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
  * bus->driver->(*read_start)
  *
  */
-static void
+static int
 pxa2xx_bus_read_start (urj_bus_t *bus, uint32_t adr)
 {
     int cs_index = 0;
@@ -589,11 +593,18 @@ pxa2xx_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     LAST_ADR = adr;
     if (adr >= 0x18000000)
-        return;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, "adr 0x%lx",
+                       (long unsigned) adr);
+        return URJ_STATUS_FAIL;
+    }
 
     cs_index = adr >> 26;
     if (nCS[cs_index] == NULL)
-        return;
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS, "nCS[%d] null", cs_index);
+        return URJ_STATUS_FAIL;
+    }
 
     /* see Figure 6-13 in [1] */
     urj_part_set_signal (p, nCS[cs_index], 1, 0);
@@ -610,6 +621,8 @@ pxa2xx_bus_read_start (urj_bus_t *bus, uint32_t adr)
     set_data_in (bus, adr);
 
     urj_tap_chain_shift_data_registers (chain, 0);
+
+    return URJ_STATUS_OK;
 }
 
 /**
