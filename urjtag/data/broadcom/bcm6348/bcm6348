@@ -2,7 +2,7 @@
 # $Id$
 #
 # JTAG declarations for Atheros AR2312
-# Also valid for Broadcom BCM6358 (obconseil@gmail.com)
+# Also valid for Broadcom BCM6348 (obconseil@gmail.com)
 # 
 # Copyright (C) 2005 Marek Michalkiewicz
 #
@@ -25,7 +25,7 @@
 #
 
 register	BR		 1
-register	BSR		 1
+register	BSR		480
 register	DIR		32
 register	EJIMPCODE	32
 register	EJADDRESS	32
@@ -45,4 +45,3 @@ instruction	EJTAG_CONTROL	01010	EJCONTROL
 instruction	EJTAG_ALL	01011	EJALL
 instruction	EJTAGBOOT	01100	BR
 instruction	NORMALBOOT	01101	BR
-

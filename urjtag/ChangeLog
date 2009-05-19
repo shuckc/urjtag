@@ -1,3 +1,9 @@
+2009-05-19  Arnim Laeuger  <arniml>
+
+  * data/Makefile.am, data/broadcom/bcm6348/bcm6348,
+    data/broadcom/bcm6348/STEPPINGS, data/broadcom/bcm6358/bcm6358,
+    data/broadcom/PARTS: added bcm6348 (Julien Aube)
+
 2009-05-19  Rutger Hofman <rfhh>
 
   * include/urjtag/error.h: make urj_log into a macro. Principal reason: if

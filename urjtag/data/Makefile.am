@@ -89,6 +89,8 @@ nobase_dist_pkgdata_DATA = \
 	broadcom/bcm4712/bcm4712 \
 	broadcom/bcm5421s/STEPPINGS \
 	broadcom/bcm5421s/bcm5421s \
+	broadcom/bcm6348/STEPPINGS \
+	broadcom/bcm6348/bcm6348 \
 	broadcom/bcm6358/STEPPINGS \
 	broadcom/bcm6358/bcm6358 \
 	bsdl/STD_1149_1_1990 \
