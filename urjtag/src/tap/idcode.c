@@ -57,9 +57,12 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Read"));
     for (i = 0; i < ((bytes) ? bytes : 1000); i++)
     {
+        uint8_t val;
         urj_tap_shift_register (chain, rz, rout, 0);
-        urj_log (URJ_LOG_LEVEL_NORMAL, _(" %s"),
-                 urj_tap_register_get_string (rout));
+        val = urj_tap_register_get_value (rout);
+        urj_log (URJ_LOG_LEVEL_NORMAL, N_(" %s(0x%x%x)"),
+                 urj_tap_register_get_string (rout),
+                 (val >> 4) & 0xf, val & 0xf);
         if (!bytes)
         {
             /* Abort Reading when a null IDCODE has been read */
