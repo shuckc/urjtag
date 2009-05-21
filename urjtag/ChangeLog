@@ -1,3 +1,8 @@
+2009-05-21  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/PARTS: added xc3s1200e_fg320 and xc2vp30-ffg896 (Florian
+    Fainelli)
+
 2009-05-19  Arnim Laeuger  <arniml>
 
   * data/Makefile.am, data/broadcom/bcm6348/bcm6348,
