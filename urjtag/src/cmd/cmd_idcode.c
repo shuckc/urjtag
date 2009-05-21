@@ -61,9 +61,10 @@ cmd_idcode_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
              _("Usage: %s [BYTES]\n"
-               "Read [BYTES]|all IDCODEs of all parts in a JTAG chain.\n"
+               "Read [BYTES] IDCODEs of all parts in a JTAG chain.\n"
                "\n"
-               "BYTES must be an unsigned integer, Use 0 for BYTES to read all bytes\n"),
+               "BYTES must be an unsigned integer, and the default is 0.\n"
+               "If BYTES is 0, IDCODEs will be read until 32 consecutive zeros are found.\n"),
              "idcode");
 }
 

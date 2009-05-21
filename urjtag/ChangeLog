@@ -10,6 +10,8 @@
     actually worked but only returned zero's as this is confusing -- be clear
     in that we didn't even attempt to read the idcode
 
+  * src/cmd/cmd_idcode.c: update usage to reflect reality
+
 2009-05-19  Arnim Laeuger  <arniml>
 
   * data/Makefile.am, data/broadcom/bcm6348/bcm6348,
