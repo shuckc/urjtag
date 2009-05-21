@@ -280,8 +280,18 @@ AS_IF([test "x$with_inpout32" = xyes], [
 ])
 
 
-WARNINGCFLAGS="-Werror -Wall -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith"
+WARNINGCFLAGS="-Wall -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith"
+AC_ARG_ENABLE([werror],
+  [AS_HELP_STRING([--enable-werror], [build with -Werror])],
+  [], [enable_werror=maybe])
+AS_IF([test "x$enable_werror" = xmaybe -a -d .svn], [
+  enable_werror=yes
+])
+AS_IF([test "x$enable_werror" = xyes], [
+  WARNINGCFLAGS="$WARNINGCFLAGS -Werror"
+])
 AC_SUBST(WARNINGCFLAGS)
+
 CPPFLAGS="-I\$(top_srcdir) -I\$(top_srcdir)/include $CPPFLAGS"
 
 

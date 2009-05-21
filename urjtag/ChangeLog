@@ -3,6 +3,9 @@
   * data/xilinx/PARTS: added xc3s1200e_fg320 and xc2vp30-ffg896 (Florian
     Fainelli)
 
+  * configure.ac: enable -Werror by default only when building out of an scm,
+    and add an explicit --enable-werror option to control it
+
 2009-05-19  Arnim Laeuger  <arniml>
 
   * data/Makefile.am, data/broadcom/bcm6348/bcm6348,
