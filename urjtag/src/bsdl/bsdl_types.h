@@ -188,7 +188,7 @@ typedef struct bsdl_parser_priv urj_bsdl_parser_priv_t;
 /*
  Local Variables:
  mode:C
- c-default-style:gnu
+ c-default-style:java
  indent-tabs-mode:nil
  End:
 */

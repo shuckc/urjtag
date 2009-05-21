@@ -1566,7 +1566,7 @@ ci_append_cell_info (urj_bsdl_parser_priv_t *priv, int bit_num)
 /*
  Local Variables:
  mode:C
- c-default-style:gnu
+ c-default-style:java
  indent-tabs-mode:nil
  End:
 */

@@ -371,7 +371,7 @@ urj_bsdl_scan_files (urj_chain_t *chain, const char *idcode, int proc_mode)
 /*
  Local Variables:
  mode:C
- c-default-style:gnu
+ c-default-style:java
  indent-tabs-mode:nil
  End:
 */

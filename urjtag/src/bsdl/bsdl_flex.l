@@ -714,7 +714,7 @@ urj_bsdl_flex_set_decimal (yyscan_t scanner)
 /*
  Local Variables:
  mode:C
- c-default-style:gnu
+ c-default-style:java
  indent-tabs-mode:nil
  End:
 */

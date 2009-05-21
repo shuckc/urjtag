@@ -58,8 +58,7 @@
  *   jc : jtag control structure
  *
  * Returns
- *   1 -> all ok
- *   0 -> error occured
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  ****************************************************************************/
 static int
 urj_bsdl_set_instruction_length (urj_bsdl_jtag_ctrl_t *jc)
@@ -69,7 +68,7 @@ urj_bsdl_set_instruction_length (urj_bsdl_jtag_ctrl_t *jc)
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
         printf ("instruction %i\n", jc->instr_len);
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 
@@ -88,8 +87,7 @@ urj_bsdl_set_instruction_length (urj_bsdl_jtag_ctrl_t *jc)
  *   jc : jtag control structure
  *
  * Returns
- *   1 -> all ok
- *   0 -> error occured
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  ****************************************************************************/
 static int
 urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
@@ -99,7 +97,7 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
     size_t str_len, name_len;
     char *port_string;
     int idx;
-    int result = 0;
+    int result = URJ_STATUS_FAIL;
 
     while (pd)
     {
@@ -132,7 +130,7 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
                 }
 
                 free (port_string);
-                result = 1;
+                result = URJ_STATUS_OK;
             }
             else
                 urj_bsdl_msg (jc->proc_mode,
@@ -162,22 +160,22 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
  *   len      : number of bits (= length) of new register
  *
  * Returns
- *   1 -> all ok
- *   0 -> error occured
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  ****************************************************************************/
 static int
 create_register (urj_bsdl_jtag_ctrl_t *jc, char *reg_name, size_t len)
 {
+    int result = URJ_STATUS_OK;
 
-    if (urj_part_find_data_register (jc->part, reg_name))
-        return 1;
+    if (urj_part_find_data_register (jc->part, reg_name) != NULL)
+        return URJ_STATUS_OK;
 
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-        urj_part_data_register_define (jc->part, reg_name, len);
+        result = urj_part_data_register_define (jc->part, reg_name, len);
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
         printf ("register %s %zd\n", reg_name, len);
 
-    return 1;
+    return result;
 }
 
 
@@ -190,19 +188,20 @@ create_register (urj_bsdl_jtag_ctrl_t *jc, char *reg_name, size_t len)
  *   jc : jtag control structure
  *
  * Returns
- *   1 -> all ok
- *   0 -> error occured
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  ****************************************************************************/
 static int
 urj_bsdl_process_idcode (urj_bsdl_jtag_ctrl_t *jc)
 {
+    int result = URJ_STATUS_OK;
+
     if (jc->idcode)
-        create_register (jc, "DIR", strlen (jc->idcode));
+        result = create_register (jc, "DIR", strlen (jc->idcode));
     else
         urj_bsdl_msg (jc->proc_mode,
                       BSDL_MSG_WARN, _("No IDCODE specification found.\n"));
 
-    return 1;
+    return result;
 }
 
 
@@ -216,18 +215,19 @@ urj_bsdl_process_idcode (urj_bsdl_jtag_ctrl_t *jc)
  *   jc : jtag control structure
  *
  * Returns
- *   1 -> all ok
- *   0 -> error occured
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  ****************************************************************************/
 static int
 urj_bsdl_process_usercode (urj_bsdl_jtag_ctrl_t *jc)
 {
+    int result = URJ_STATUS_OK;
+
     if (jc->usercode)
-        create_register (jc, "USERCODE", strlen (jc->usercode));
+        result = create_register (jc, "USERCODE", strlen (jc->usercode));
 
     /* we're not interested in the usercode value at all */
 
-    return 1;
+    return result;
 }
 
 
@@ -240,15 +240,12 @@ urj_bsdl_process_usercode (urj_bsdl_jtag_ctrl_t *jc)
  *   jc : jtag control structure
  *
  * Returns
- *   1 -> all ok
- *   0 -> error occured
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  ****************************************************************************/
 static int
 urj_bsdl_set_bsr_length (urj_bsdl_jtag_ctrl_t *jc)
 {
-    create_register (jc, "BSR", jc->bsr_len);
-
-    return 1;
+    return create_register (jc, "BSR", jc->bsr_len);
 }
 
 
@@ -284,8 +281,7 @@ bsbit_type_char (int type)
  *   jc : jtag control structure
  *
  * Returns
- *   1 -> all ok
- *   0 -> error occured
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  ****************************************************************************/
 static int
 urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
@@ -333,12 +329,13 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
         if (ci->ctrl_bit_num >= 0)
         {
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-                // @@@@ RFHH check result
-                (void)urj_part_bsbit_alloc_control (jc->part, ci->bit_num,
-                                                    ci->port_name, type, safe,
-                                                    ci->ctrl_bit_num,
-                                                    ci->disable_safe_value,
-                                                    URJ_BSBIT_STATE_Z);
+                if (urj_part_bsbit_alloc_control (jc->part, ci->bit_num,
+                                                  ci->port_name, type, safe,
+                                                  ci->ctrl_bit_num,
+                                                  ci->disable_safe_value,
+                                                  URJ_BSBIT_STATE_Z) !=
+                    URJ_STATUS_OK)
+                    return URJ_STATUS_FAIL;
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                 printf ("bit %d %s %c %d %d %d %c\n", ci->bit_num,
                         ci->port_name, bsbit_type_char (type), safe,
@@ -348,9 +345,10 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
         else
         {
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-                // @@@@ RFHH check result
-                (void)urj_part_bsbit_alloc (jc->part, ci->bit_num,
-                                            ci->port_name, type, safe);
+                if (urj_part_bsbit_alloc (jc->part, ci->bit_num,
+                                          ci->port_name, type, safe) !=
+                    URJ_STATUS_OK)
+                    return URJ_STATUS_FAIL;
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                 printf ("bit %d %s %c %d\n", ci->bit_num, ci->port_name,
                         bsbit_type_char (type), safe);
@@ -359,7 +357,7 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
         ci = ci->next;
     }
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 
@@ -384,14 +382,14 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
  *   jc : jtag control structure
  *
  * Returns
- *   1 -> all ok
- *   0 -> error occured
+ *   URJ_STATUS_OK, URJ_STATUS_FAIL
  ****************************************************************************/
 static int
 urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
 {
     urj_bsdl_types_ainfo_elem_t *ai;
     urj_bsdl_instr_elem_t *cinst;
+    int result;
 
     /* ensure that all mandatory registers are created prior to
        handling the instruction/register associations
@@ -399,7 +397,9 @@ urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
        + DEVICE_ID/DIR has been generated during the parsing process
      */
     /* we need a BYPASS register */
-    create_register (jc, "BYPASS", 1);
+    result = create_register (jc, "BYPASS", 1);
+    if (result != URJ_STATUS_OK)
+        return result;
 
     /* next scan through all register_access definitions and create
        the non-standard registers */
@@ -418,10 +418,14 @@ urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
             is_std = 1;
 
         if (!is_std)
-            create_register (jc, ai->reg, ai->reg_len);
+            if (create_register (jc, ai->reg, ai->reg_len) != URJ_STATUS_OK)
+                result = URJ_STATUS_FAIL;
 
         ai = ai->next;
     }
+
+    if (result != URJ_STATUS_OK)
+        return result;
 
 
     /* next scan through all instruction/opcode definitions and resolve
@@ -492,10 +496,11 @@ urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
         if (reg_name)
         {
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
-                // @@@@ RFHH check result
                 // @@@@ RFHH check if jc->part equals chain_active_part
-                (void) urj_part_instruction_define (jc->part, instr_name,
-                                                    cinst->opcode, reg_name);
+                if (urj_part_instruction_define (jc->part, instr_name,
+                                                 cinst->opcode, reg_name) ==
+                    NULL)
+                    return URJ_STATUS_FAIL;
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                 printf ("instruction %s %s %s\n", instr_name, cinst->opcode,
                         reg_name);
@@ -504,7 +509,7 @@ urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
         cinst = cinst->next;
     }
 
-    return 1;
+    return URJ_STATUS_OK;
 }
 
 
@@ -585,19 +590,19 @@ build_commands (urj_bsdl_parser_priv_t *priv)
     urj_bsdl_jtag_ctrl_t *jc = priv->jtag_ctrl;
     int result = 1;
 
-    result &= urj_bsdl_emit_ports (jc);
+    result = urj_bsdl_emit_ports (jc)              == URJ_STATUS_OK ? result : 0;
 
-    result &= urj_bsdl_set_instruction_length (jc);
+    result = urj_bsdl_set_instruction_length (jc)  == URJ_STATUS_OK ? result : 0;
 
-    result &= urj_bsdl_process_idcode (jc);
+    result = urj_bsdl_process_idcode (jc)          == URJ_STATUS_OK ? result : 0;
 
-    result &= urj_bsdl_process_usercode (jc);
+    result = urj_bsdl_process_usercode (jc)        == URJ_STATUS_OK ? result : 0;
 
-    result &= urj_bsdl_set_bsr_length (jc);
+    result = urj_bsdl_set_bsr_length (jc)          == URJ_STATUS_OK ? result : 0;
 
-    result &= urj_bsdl_process_register_access (jc);
+    result = urj_bsdl_process_register_access (jc) == URJ_STATUS_OK ? result : 0;
 
-    result &= urj_bsdl_process_cell_info (jc);
+    result = urj_bsdl_process_cell_info (jc)       == URJ_STATUS_OK ? result : 0;
 
     return result ? URJ_BSDL_MODE_INSTR_EXEC | URJ_BSDL_MODE_INSTR_PRINT : 0;
 }
@@ -728,7 +733,7 @@ urj_bsdl_process_elements (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
 /*
  Local Variables:
  mode:C
- c-default-style:gnu
+ c-default-style:java
  indent-tabs-mode:nil
  End:
 */
