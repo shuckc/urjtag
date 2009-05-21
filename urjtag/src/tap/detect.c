@@ -171,23 +171,6 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
     return r;
 }
 
-static uint64_t
-bits_to_uint64 (urj_tap_register_t *t)
-{
-    int i;
-    uint64_t l, b;
-
-    l = 0;
-    b = 1;
-    for (i = 0; i < t->len; i++)
-    {
-        if (t->data[i] & 1)
-            l |= b;
-        b <<= 1;
-    }
-    return l;
-}
-
 int
 urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 {
@@ -279,7 +262,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             did = id;
 
             urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: %s (0x%016" PRIX64 ")\n"),
-                     urj_tap_register_get_string (did), bits_to_uint64 (did));
+                     urj_tap_register_get_string (did), urj_tap_register_get_value (did));
         } else
             urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: unknown as bit 0 was not a 1\n"));
 

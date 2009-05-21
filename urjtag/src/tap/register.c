@@ -122,6 +122,27 @@ urj_tap_register_get_string (const urj_tap_register_t *tr)
     return tr->string;
 }
 
+uint64_t
+urj_tap_register_get_value (const urj_tap_register_t *tr)
+{
+    int i;
+    uint64_t l, b;
+
+    if (!tr)
+        return 0;
+
+    l = 0;
+    b = 1;
+    for (i = 0; i < tr->len; ++i)
+    {
+        if (tr->data[i] & 1)
+            l |= b;
+        b <<= 1;
+    }
+
+    return l;
+}
+
 int
 urj_tap_register_all_bits_same_value (const urj_tap_register_t *tr)
 {

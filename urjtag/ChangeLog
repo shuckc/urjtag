@@ -12,6 +12,10 @@
 
   * src/cmd/cmd_idcode.c: update usage to reflect reality
 
+  * include/urjtag/tap_register.h, src/tap/detect.c, src/tap/register.c:
+    convert the local bits_to_uint64() to a proper urj_tap_register_get_value()
+    so everyone can use it
+
 2009-05-19  Arnim Laeuger  <arniml>
 
   * data/Makefile.am, data/broadcom/bcm6348/bcm6348,
