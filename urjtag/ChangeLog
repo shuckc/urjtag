@@ -6,6 +6,10 @@
   * configure.ac: enable -Werror by default only when building out of an scm,
     and add an explicit --enable-werror option to control it
 
+  * src/tap/detect.c: if the idcode failed to parse, don't print it out like it
+    actually worked but only returned zero's as this is confusing -- be clear
+    in that we didn't even attempt to read the idcode
+
 2009-05-19  Arnim Laeuger  <arniml>
 
   * data/Makefile.am, data/broadcom/bcm6348/bcm6348,

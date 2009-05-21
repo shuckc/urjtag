@@ -277,10 +277,11 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             urj_tap_register_shift_left (id, 1);
             id->data[0] = 1;
             did = id;
-        }
 
-        urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: %s (0x%016" PRIX64 ")\n"),
-                 urj_tap_register_get_string (did), bits_to_uint64 (did));
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: %s (0x%016" PRIX64 ")\n"),
+                     urj_tap_register_get_string (did), bits_to_uint64 (did));
+        } else
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: unknown as bit 0 was not a 1\n"));
 
         part = urj_part_alloc (did);
         if (part == NULL)
