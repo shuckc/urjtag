@@ -70,6 +70,7 @@
 
 /* ST - www.st.com */
 #define M29W800T        0x00D7
+#define M29W800B        0x005B
 #define M29W160DT       0x22C4
 #define M29W160DB       0x2249
 
@@ -83,11 +84,7 @@
 
 /* MX */
 #define MX29LV400T      0x22B9
-
-/* Autoselect methods */
-#define AUTOSELECT_M1   0
-#define AUTOSELECT_M2   1
-#define AUTOSELECT_NUM  2
+#define MX29LV400B      0x22BA
 
 struct mtd_erase_region_info
 {
@@ -103,7 +100,6 @@ struct amd_flash_info
     const char *name;
     const long size;
     const uint8_t interface_width;
-    const int as_method;
     const int numeraseregions;
     const struct mtd_erase_region_info regions[4];
 };
@@ -114,8 +110,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AM29LV160DT,
         .name = "AMD AM29LV160DT",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -128,8 +123,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AM29LV160DB,
         .name = "AMD AM29LV160DB",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
@@ -142,8 +136,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = TC58FVT160,
         .name = "Toshiba TC58FVT160",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -156,8 +149,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = MBM29LV160TE,
         .name = "Fujitsu MBM29LV160TE",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -170,8 +162,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = TC58FVB160,
         .name = "Toshiba TC58FVB160",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
@@ -184,8 +175,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = MBM29LV160BE,
         .name = "Fujitsu MBM29LV160BE",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
@@ -198,8 +188,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AM29LV800BB,
         .name = "AMD AM29LV800BB",
         .size = 0x00100000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
@@ -212,8 +201,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AM29F800BB,
         .name = "AMD AM29F800BB",
         .size = 0x00100000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
@@ -226,8 +214,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AM29LV800BT,
         .name = "AMD AM29LV800BT",
         .size = 0x00100000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 15 },
@@ -240,22 +227,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AM29F800BT,
         .name = "AMD AM29F800BT",
         .size = 0x00100000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
-        .numeraseregions = 4,
-        .regions = {
-            { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 15 },
-            { .offset = 0x0F0000, .erasesize = 0x08000, .numblocks = 1 },
-            { .offset = 0x0F8000, .erasesize = 0x02000, .numblocks = 2 },
-            { .offset = 0x0FC000, .erasesize = 0x04000, .numblocks = 1 }
-        }
-    }, {
-        .mfr_id = MANUFACTURER_AMD,
-        .dev_id = AM29LV800BB,
-        .name = "AMD AM29LV800BB",
-        .size = 0x00100000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 15 },
@@ -268,8 +240,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = MBM29LV800BB,
         .name = "Fujitsu MBM29LV800BB",
         .size = 0x00100000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
@@ -282,8 +253,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = M29W800T,
         .name = "ST M29W800T",
         .size = 0x00100000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 15 },
@@ -293,11 +263,23 @@ static const struct amd_flash_info table[] = {
         }
     }, {
         .mfr_id = MANUFACTURER_ST,
+        .dev_id = M29W800B,
+        .name = "ST M29W800B",
+        .size = 0x00100000,
+        .interface_width = CFI_INTERFACE_X8_X16,
+        .numeraseregions = 4,
+        .regions = {
+            { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
+            { .offset = 0x004000, .erasesize = 0x02000, .numblocks = 2 },
+            { .offset = 0x008000, .erasesize = 0x08000, .numblocks = 1 },
+            { .offset = 0x010000, .erasesize = 0x10000, .numblocks = 15 }
+        }
+    }, {
+        .mfr_id = MANUFACTURER_ST,
         .dev_id = M29W160DT,
         .name = "ST M29W160DT",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -310,8 +292,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = M29W160DB,
         .name = "ST M29W160DB",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
@@ -324,8 +305,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AM29BDS323D,
         .name = "AMD AM29BDS323D",
         .size = 0x00400000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X16,
         .numeraseregions = 3,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 48 },
@@ -337,8 +317,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AM29BDS643D,
         .name = "AMD AM29BDS643D",
         .size = 0x00800000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X16,
         .numeraseregions = 3,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 96 },
@@ -350,8 +329,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AT49xV16x,
         .name = "Atmel AT49xV16x",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 2,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x02000, .numblocks = 8 },
@@ -362,8 +340,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = AT49xV16xT,
         .name = "Atmel AT49xV16xT",
         .size = 0x00200000,
-        .interface_width = CFI_INTERFACE_X16,      /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 2,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 31 },
@@ -374,8 +351,7 @@ static const struct amd_flash_info table[] = {
         .dev_id = MX29LV400T,
         .name = "MX 29LV400T",
         .size = 0x0080000,
-        .interface_width = CFI_INTERFACE_X16,  /* correct default? */
-        .as_method = AUTOSELECT_M1,
+        .interface_width = CFI_INTERFACE_X8_X16,
         .numeraseregions = 4,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 7 },
@@ -384,12 +360,24 @@ static const struct amd_flash_info table[] = {
             { .offset = 0x07c000, .erasesize = 0x04000, .numblocks = 1 },
         }
     }, {
+        .mfr_id = MANUFACTURER_MX,
+        .dev_id = MX29LV400B,
+        .name = "MX 29LV400B",
+        .size = 0x0080000,
+        .interface_width = CFI_INTERFACE_X8_X16,
+        .numeraseregions = 4,
+        .regions = {
+            { .offset = 0x010000, .erasesize = 0x10000, .numblocks = 7 },
+            { .offset = 0x008000, .erasesize = 0x08000, .numblocks = 1 },
+            { .offset = 0x004000, .erasesize = 0x02000, .numblocks = 2 },
+            { .offset = 0x000000, .erasesize = 0x04000, .numblocks = 1 },
+        }
+    }, {
         .mfr_id = MANUFACTURER_AMD,
         .dev_id = AM29LV040B,
         .name = "AMD AM29LV040B",
         .size = 0x0080000,
-        .interface_width = CFI_INTERFACE_X8,       /* checked, ok */
-        .as_method = AUTOSELECT_M2,
+        .interface_width = CFI_INTERFACE_X8,
         .numeraseregions = 1,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 8 },
@@ -401,12 +389,9 @@ int
 urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
                         urj_flash_cfi_array_t **cfi_array)
 {
-    /* Temporary containers for manufacturer and device id while
-       probing with different Autoselect methods. */
-    int manid_as[AUTOSELECT_NUM], devid_as[AUTOSELECT_NUM];
     int manid = 0, devid = 0;
     int ba, bw;
-    int i, j;
+    int dev_idx, j;
     urj_flash_cfi_query_structure_t *cfi;
     urj_bus_area_t area;
 
@@ -447,38 +432,77 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
         return URJ_STATUS_FAIL;
     }
 
-    /* probe device with Autoselect method 1 */
-    URJ_BUS_WRITE (bus, adr, 0xf0);
-    URJ_BUS_WRITE (bus, adr + 0xaaa, 0xaa);
-    URJ_BUS_WRITE (bus, adr + 0x555, 0x55);
-    URJ_BUS_WRITE (bus, adr + 0xaaa, 0x90);
 
-    manid_as[AUTOSELECT_M1] = URJ_BUS_READ (bus, adr + 0);
-    devid_as[AUTOSELECT_M1] = URJ_BUS_READ (bus, adr + 2);
-    URJ_BUS_WRITE (bus, adr, 0xf0);
+    /* device index to table, -1 means no match found */
+    dev_idx = -1;
 
-    /* probe device with Autoselect method 2 */
-    URJ_BUS_WRITE (bus, adr, 0xf0);
-    URJ_BUS_WRITE (bus, adr + 0x555, 0xaa);
-    URJ_BUS_WRITE (bus, adr + 0x2aa, 0x55);
-    URJ_BUS_WRITE (bus, adr + 0x555, 0x90);
 
-    manid_as[AUTOSELECT_M2] = URJ_BUS_READ (bus, adr + 0);
-    devid_as[AUTOSELECT_M2] = URJ_BUS_READ (bus, adr + 1);
-    URJ_BUS_WRITE (bus, adr, 0xf0);
-
-    for (i = 0; i < sizeof (table) / sizeof (struct amd_flash_info); i++)
+    /* probe device with Autoselect applicable for
+       -    x16 devices             on 16 bit bus
+       - x8_x16 devices in  x8 mode on  8 bit bus
+       - x8_x16 devices in x16 mode on 16 bit bus
+       also refer to the discussion of amd_flash_address_shift() in amd.c */
+    if (dev_idx < 0 && (bw == 8 || bw == 16))
     {
-        /* compare manufacturer and device id based on the result
-           of the device's Autoselect method */
-        manid = manid_as[table[i].as_method];
-        devid = devid_as[table[i].as_method];
-        if (manid == table[i].mfr_id && devid == table[i].dev_id)
-            break;
+        /* compare mask for manufacturer and device id */
+        int id_mask = (1 << bw) - 1;
+
+        URJ_BUS_WRITE (bus, adr, 0xf0);
+        URJ_BUS_WRITE (bus, adr + 0xaaa, 0xaa);
+        URJ_BUS_WRITE (bus, adr + 0x555, 0x55);
+        URJ_BUS_WRITE (bus, adr + 0xaaa, 0x90);
+
+        manid = URJ_BUS_READ (bus, adr + 0);
+        devid = URJ_BUS_READ (bus, adr + (1 << 1));
+        URJ_BUS_WRITE (bus, adr, 0xf0);
+
+        for (dev_idx = sizeof (table) / sizeof (struct amd_flash_info) - 1;
+             dev_idx >= 0; dev_idx--)
+        {
+            if (table[dev_idx].interface_width == CFI_INTERFACE_X16 ||
+                table[dev_idx].interface_width == CFI_INTERFACE_X8_X16)
+            {
+                /* strip down ids to current bus width */
+                manid &= id_mask;
+                devid &= id_mask;
+                if (manid == (table[dev_idx].mfr_id & id_mask) &&
+                    devid == (table[dev_idx].dev_id & id_mask))
+                    /* manufacturer and device id matched */
+                    break;
+            }
+        }
     }
+
+
+    /* probe device with Autoselect applicable for
+       - x8 devices on 8 bit bus */
+    if (dev_idx < 0 && bw == 8)
+    {
+        URJ_BUS_WRITE (bus, adr, 0xf0);
+        URJ_BUS_WRITE (bus, adr + 0x555, 0xaa);
+        URJ_BUS_WRITE (bus, adr + 0x2aa, 0x55);
+        URJ_BUS_WRITE (bus, adr + 0x555, 0x90);
+
+        manid = URJ_BUS_READ (bus, adr + 0);
+        devid = URJ_BUS_READ (bus, adr + 1);
+        URJ_BUS_WRITE (bus, adr, 0xf0);
+
+        for (dev_idx = sizeof (table) / sizeof (struct amd_flash_info) - 1;
+             dev_idx >= 0; dev_idx--)
+        {
+            if (table[dev_idx].interface_width == CFI_INTERFACE_X8)
+            {
+                if (manid == table[dev_idx].mfr_id && devid == table[dev_idx].dev_id)
+                    /* manufacturer and device id matched */
+                    break;
+            }
+        }
+    }
+
+
     urj_log (URJ_LOG_LEVEL_NORMAL, "dev ID=%04x   man ID=%04x\n", devid, manid);
 
-    if (i == sizeof (table) / sizeof (struct amd_flash_info))
+    if (dev_idx < 0)
     {
         urj_error_set (URJ_ERROR_NOTFOUND, "amd_flash_info table");
         return URJ_STATUS_FAIL;
@@ -491,10 +515,10 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
     cfi->identification_string.alt_id_code = 0;
     cfi->identification_string.alt_vendor_tbl = NULL;
 
-    cfi->device_geometry.device_size = table[i].size;
+    cfi->device_geometry.device_size = table[dev_idx].size;
     /* annotate chip width */
-    cfi->device_geometry.device_interface = table[i].interface_width;
-    switch (table[i].interface_width)
+    cfi->device_geometry.device_interface = table[dev_idx].interface_width;
+    switch (table[dev_idx].interface_width)
     {
     case CFI_INTERFACE_X8:
         (*cfi_array)->cfi_chips[0]->width = 1;
@@ -503,30 +527,24 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
         (*cfi_array)->cfi_chips[0]->width = 2;
         break;
     case CFI_INTERFACE_X8_X16:
-        urj_warning ("Unsupported interface geometry %s, falling back to %s\n",
-                     "CFI_INTERFACE_X8_X16", "CFI_INTERFACE_X16");
-        (*cfi_array)->cfi_chips[0]->width = 2;
-        cfi->device_geometry.device_interface = CFI_INTERFACE_X16;
+        (*cfi_array)->cfi_chips[0]->width = ba;
         break;
     case CFI_INTERFACE_X32:
         (*cfi_array)->cfi_chips[0]->width = 4;
         break;
     case CFI_INTERFACE_X16_X32:
-        urj_warning ("Unsupported interface geometry %s, falling back to %s\n",
-                     "CFI_INTERFACE_X16_X32", "CFI_INTERFACE_X32");
-        (*cfi_array)->cfi_chips[0]->width = 4;
-        cfi->device_geometry.device_interface = CFI_INTERFACE_X32;
+        (*cfi_array)->cfi_chips[0]->width = ba;
         break;
     default:
         /* unsupported interface geometry */
         (*cfi_array)->cfi_chips[0]->width = 1;
         cfi->device_geometry.device_interface = CFI_INTERFACE_X8;
         urj_error_set (URJ_ERROR_UNSUPPORTED,
-                       "interface geometry %d", table[i].interface_width);
+                       "interface geometry %d", table[dev_idx].interface_width);
         return URJ_STATUS_FAIL;
     }
 
-    cfi->device_geometry.number_of_erase_regions = table[i].numeraseregions;
+    cfi->device_geometry.number_of_erase_regions = table[dev_idx].numeraseregions;
 
     cfi->device_geometry.erase_block_regions =
         malloc (cfi->device_geometry.number_of_erase_regions *
@@ -542,14 +560,14 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
     for (j = 0; j < cfi->device_geometry.number_of_erase_regions; j++)
     {
         cfi->device_geometry.erase_block_regions[j].erase_block_size =
-            table[i].regions[j].erasesize;
+            table[dev_idx].regions[j].erasesize;
         cfi->device_geometry.erase_block_regions[j].number_of_erase_blocks =
-            table[i].regions[j].numblocks;
+            table[dev_idx].regions[j].numblocks;
     }
 
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             "Found %s flash,  size = %li bytes.\n", table[i].name,
-             table[i].size);
+             "Found %s flash,  size = %li bytes.\n", table[dev_idx].name,
+             table[dev_idx].size);
 
     return URJ_STATUS_OK;
 }

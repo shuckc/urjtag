@@ -1,5 +1,8 @@
 2009-05-22  Arnim Laeuger  <arniml>
 
+  * src/flash/jedec.c: rework autoselect probing, better support of
+    x8/x16 capable flash chips
+
   * src/bsdl/bsdl.c, src/bsdl/bsdl_bison.y, src/bsdl/bsdl_sem.c,
     src/bsdl/bsdl_flex.l, src/bsdl/bsdl_types.h: use URJ_STATUS_ return
     codes except on toplevel interface, this needs to be revisited
