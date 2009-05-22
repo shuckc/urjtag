@@ -421,9 +421,14 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
         // @@@@ RFHH check error state?
         bn = fread (b, 1, btr, f);
 
+        /* start consecutive read */
+        URJ_BUS_READ_START (bus, adr);
+
         for (bc = 0; bc < bn; bc += flash_driver->bus_width)
         {
             int j;
+            uint32_t next_adr = adr + flash_driver->bus_width;
+
             if ((adr & 0xFF) == 0)
             {
                 urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
@@ -438,17 +443,25 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
                 else
                     data |= b[bc + j] << (j * 8);
 
-            readed = URJ_BUS_READ (bus, adr);
+            readed = URJ_BUS_READ_NEXT (bus, next_adr);
             if (data != readed)
             {
+                /* end consecutive read */
+                (void) URJ_BUS_READ_END (bus);
+
                 urj_error_set (URJ_ERROR_FLASH_PROGRAM,
                                _("addr: 0x%08lX\n verify error:\nread: 0x%08lX\nexpected: 0x%08lX\n"),
                                  (long unsigned) adr, (long unsigned) readed,
                                  (long unsigned) data);
                 return URJ_STATUS_FAIL;
             }
-            adr += flash_driver->bus_width;
+            adr = next_adr;
         }
+
+        /* end consecutive read
+           this wastes one read access but saves us from determining the for-loop
+           finish condition twice within the loop */
+        (void) URJ_BUS_READ_END (bus);
     }
     urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX\nDone.\n"),
              (long unsigned) adr - flash_driver->bus_width);
