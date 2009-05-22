@@ -34,6 +34,7 @@
 #include <urjtag/bsbit.h>
 #include <urjtag/data_register.h>
 #include <urjtag/bssignal.h>
+#include <urjtag/log.h>
 
 #include "bsdl_sysdep.h"
 
@@ -66,7 +67,7 @@ urj_bsdl_set_instruction_length (urj_bsdl_jtag_ctrl_t *jc)
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
         (void) urj_part_instruction_length_set (jc->part, jc->instr_len);
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-        printf ("instruction %i\n", jc->instr_len);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "instruction %i\n", jc->instr_len);
 
     return URJ_STATUS_OK;
 }
@@ -126,7 +127,7 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
                     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
                         (void) urj_part_signal_define (jc->chain, port_string);
                     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-                        printf ("signal %s\n", port_string);
+                        urj_log (URJ_LOG_LEVEL_NORMAL, "signal %s\n", port_string);
                 }
 
                 free (port_string);
@@ -173,7 +174,7 @@ create_register (urj_bsdl_jtag_ctrl_t *jc, char *reg_name, size_t len)
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
         result = urj_part_data_register_define (jc->part, reg_name, len);
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-        printf ("register %s %zd\n", reg_name, len);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "register %s %zd\n", reg_name, len);
 
     return result;
 }
@@ -337,10 +338,11 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
                     URJ_STATUS_OK)
                     return URJ_STATUS_FAIL;
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-                printf ("bit %d %s %c %d %d %d %c\n", ci->bit_num,
-                        ci->port_name, bsbit_type_char (type), safe,
-                        ci->ctrl_bit_num, ci->disable_safe_value,
-                        'Z');
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         "bit %d %s %c %d %d %d %c\n", ci->bit_num,
+                         ci->port_name, bsbit_type_char (type), safe,
+                         ci->ctrl_bit_num, ci->disable_safe_value,
+                         'Z');
         }
         else
         {
@@ -350,8 +352,9 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
                     URJ_STATUS_OK)
                     return URJ_STATUS_FAIL;
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-                printf ("bit %d %s %c %d\n", ci->bit_num, ci->port_name,
-                        bsbit_type_char (type), safe);
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         "bit %d %s %c %d\n", ci->bit_num, ci->port_name,
+                         bsbit_type_char (type), safe);
         }
 
         ci = ci->next;
@@ -502,8 +505,9 @@ urj_bsdl_process_register_access (urj_bsdl_jtag_ctrl_t *jc)
                     NULL)
                     return URJ_STATUS_FAIL;
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-                printf ("instruction %s %s %s\n", instr_name, cinst->opcode,
-                        reg_name);
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         "instruction %s %s %s\n", instr_name, cinst->opcode,
+                         reg_name);
         }
 
         cinst = cinst->next;

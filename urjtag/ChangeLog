@@ -1,5 +1,7 @@
 2009-05-22  Arnim Laeuger  <arniml>
 
+  * src/bsdl/bsdl_sem.c: replace remaining printf invocations with urj_log
+
   * src/flash/flash.c: verify speed-up: use URJ_BUS_READ_START, _NEXT,
     and _END instead of monolithic URJ_BUS_READ
 
