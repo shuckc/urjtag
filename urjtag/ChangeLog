@@ -1,3 +1,9 @@
+2009-05-23  Arnim Laeuger  <arniml>
+
+  * src/bsdl2jtag, configure.ac, Makefile.am,
+    src/apps/bsdl2jtag/Makefile.am, src/apps/bsdl2jtag/bsdl2jtag.c:
+    replace wrapper shell script with application that links to liburjtag
+
 2009-05-22  Arnim Laeuger  <arniml>
 
   * src/bsdl/bsdl_sem.c: replace remaining printf invocations with urj_log

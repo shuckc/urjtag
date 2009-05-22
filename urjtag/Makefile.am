@@ -29,6 +29,7 @@ SUBDIRS = \
 	data \
 	src \
 	src/apps/jtag \
+	src/apps/bsdl2jtag \
 	po
 
 DIST_SUBDIRS = \
@@ -40,4 +41,3 @@ EXTRA_DIST = \
 	tools/config.rpath
 
 ACLOCAL_AMFLAGS = -I m4
-

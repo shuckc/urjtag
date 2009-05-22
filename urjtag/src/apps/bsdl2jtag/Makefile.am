@@ -1,10 +1,7 @@
-#!/bin/bash
 #
 # $Id$
 #
-# Convert a BSDL file to a jtag part description
-#
-# Copyright (C) 2009, A. Laeuger
+# Copyright (C) 2002 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,27 +19,19 @@
 # 02111-1307, USA.
 #
 
-scriptname=`basename $0`
+include $(top_srcdir)/Makefile.rules
 
-function usage ()
-{
-    cat <<EOF
-Usage:	$scriptname <bsdl-file> <jtag-file>
-Converts a BSDL file to a jtag part description.
+bin_PROGRAMS = \
+	bsdl2jtag
 
-Parameters
-  bsdl-file :  Name of BSDL file
-  jtag-file :  Name of converted jtag description file
+bsdl2jtag_SOURCES = \
+	bsdl2jtag.c
 
-EOF
-}
+bsdl2jtag_LDADD = \
+	$(top_srcdir)/src/liburjtag.la \
+	@LIBINTL@
 
-if [[ -z $1 || -z $2 ]]; then
-    usage
-    exit 1
-fi
+localedir = $(datadir)/locale
+INCLUDES = -DLOCALEDIR=\"$(localedir)\"
 
-
-echo "bsdl dump $1" | jtag > $2
-
-exit 0
+AM_CFLAGS = $(WARNINGCFLAGS)
