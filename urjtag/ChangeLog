@@ -1,6 +1,6 @@
 2009-05-23  Arnim Laeuger  <arniml>
 
-  * src/bsdl2jtag, configure.ac, Makefile.am,
+  * src/bsdl2jtag, configure.ac, Makefile.am, src/Makefile.am,
     src/apps/bsdl2jtag/Makefile.am, src/apps/bsdl2jtag/bsdl2jtag.c:
     replace wrapper shell script with application that links to liburjtag
 

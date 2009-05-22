@@ -44,9 +44,6 @@ if ENABLE_JIM
 SUBDIRS += jim
 endif
 
-dist_bin_SCRIPTS = \
-	bsdl2jtag
-
 lib_LTLIBRARIES = liburjtag.la
 liburjtag_la_LDFLAGS = -version-info 0:0:0
 
