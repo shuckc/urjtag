@@ -434,7 +434,8 @@ s3c4510_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     s3c4510_bus_setup_ctrl (bus, 0x01ffff);     /* nOE=1, nRCS0 =1 */
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_log (URJ_LOG_LEVEL_DEBUG, "URJ_BUS_WRITE %08x @ %08x\n", data, adr);
+    urj_log (URJ_LOG_LEVEL_DEBUG, "URJ_BUS_WRITE %08lx @ %08lx\n",
+             (long unsigned) data, (long unsigned) adr);
 }
 
 const urj_bus_driver_t urj_bus_s3c4510_bus = {

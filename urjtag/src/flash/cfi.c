@@ -249,7 +249,8 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
             urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                           tmp * sizeof (urj_flash_cfi_erase_block_region_t));
+                           (size_t) tmp
+                           * sizeof (urj_flash_cfi_erase_block_region_t));
             return URJ_STATUS_FAIL;
         }
 

@@ -62,7 +62,7 @@ extend_cmd_buffer (urj_tap_cable_cx_cmd_t *cmd)
     if (cmd->buf == NULL)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "realloc(%s,%zd) fails",
-                       "cmd->buf", cmd->buf_len);
+                       "cmd->buf", (size_t) cmd->buf_len);
     }
 
     return cmd->buf ? 1 : 0;

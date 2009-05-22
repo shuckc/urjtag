@@ -339,8 +339,10 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
             bl->end = bl->start + (1 << (bl->addr_width + bl->ashift)) - 1;
 
             urj_log (URJ_LOG_LEVEL_DEBUG, "block # %d\n", block_num);
-            urj_log (URJ_LOG_LEVEL_DEBUG, " start 0x%08x\n", bl->start);
-            urj_log (URJ_LOG_LEVEL_DEBUG, " end   0x%08x\n", bl->end);
+            urj_log (URJ_LOG_LEVEL_DEBUG, " start 0x%08lx\n",
+                     (long unsigned) bl->start);
+            urj_log (URJ_LOG_LEVEL_DEBUG, " end   0x%08lx\n",
+                     (long unsigned) bl->end);
             urj_log (URJ_LOG_LEVEL_DEBUG, " addr len %d\n", bl->addr_width);
             urj_log (URJ_LOG_LEVEL_DEBUG, " data len %d\n", bl->data_width);
         }

@@ -320,7 +320,8 @@ bf533_stamp_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_log (URJ_LOG_LEVEL_COMM, "Writing %04X to %08X...\n", data, adr);
+    urj_log (URJ_LOG_LEVEL_COMM, "Writing %04lX to %08lX...\n",
+             (long unsigned) data, (long unsigned) adr);
 
     select_flash (bus);
     urj_part_set_signal (p, AOE, 1, 1);

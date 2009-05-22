@@ -128,7 +128,7 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
     urj_vhdl_parser_priv_t *vhdl_parser_priv;
     urj_bsdl_jtag_ctrl_t jtag_ctrl;
     int Compile_Errors = 1;
-    int result;
+    int result = 0;
 
     if (globs->debug)
         proc_mode |= URJ_BSDL_MODE_MSG_ALL;
