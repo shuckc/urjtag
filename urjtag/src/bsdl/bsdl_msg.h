@@ -59,4 +59,10 @@
             urj_error_set (err, __VA_ARGS__);  \
     } while (0)
 
+#define urj_bsdl_ftl_set(proc_mode, err, ...)    \
+    do {                                         \
+        if (proc_mode & URJ_BSDL_MODE_MSG_FATAL) \
+            urj_error_set (err, __VA_ARGS__);    \
+    } while (0)
+
 #endif /* URJ_BSDL_MSG_H */

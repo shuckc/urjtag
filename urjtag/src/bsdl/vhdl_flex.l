@@ -365,7 +365,7 @@ urj_vhdl_flex_init (FILE *f, int proc_mode)
     /* get our scanner structure */
     if (yylex_init (&scanner) != 0)
     {
-        urj_bsdl_err_set (proc_mode, URJ_ERROR_BSDL_VHDL,
+        urj_bsdl_ftl_set (proc_mode, URJ_ERROR_BSDL_VHDL,
                           "Scanner could not be initialized");
         return NULL;
     }
@@ -373,7 +373,7 @@ urj_vhdl_flex_init (FILE *f, int proc_mode)
 
     if (!(extra = malloc (sizeof (urj_bsdl_scan_extra_t))))
     {
-        urj_bsdl_err_set (proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
         yylex_destroy (scanner);
         return NULL;
@@ -463,7 +463,7 @@ new_string (urj_bsdl_scan_extra_t *extra, const char *str)
         n_str[n_str_size - 1] = '\0';   /* set very last element to EOS */
     }
     else
-        urj_bsdl_err_set (extra->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (extra->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 
     return n_str;
@@ -521,7 +521,7 @@ urj_vhdl_flex_switch_file (yyscan_t scanner, char *filename)
             f = fopen (db_file, "r");
 
             if (!f)
-                urj_bsdl_err_set (extra->proc_mode, URJ_ERROR_IO,
+                urj_bsdl_ftl_set (extra->proc_mode, URJ_ERROR_IO,
                                   "Cannot open file %s or %s", filename,
                                   db_file);
             free (db_file);

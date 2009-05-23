@@ -848,7 +848,7 @@ urj_vhdl_parser_init (FILE *f, urj_bsdl_jtag_ctrl_t *jtag_ctrl)
 
     if (!(new_priv = malloc (sizeof (urj_vhdl_parser_priv_t))))
     {
-        urj_bsdl_err_set (jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
         return NULL;
     }
@@ -953,7 +953,7 @@ urj_vhdl_port_add_name (urj_vhdl_parser_priv_t *priv, char *name)
         pd->names_list = new_string;
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 
@@ -1045,7 +1045,7 @@ urj_vhdl_port_apply_port (urj_vhdl_parser_priv_t *priv)
         tmp_pd->next = NULL;
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 
@@ -1080,7 +1080,7 @@ set_attr_bool (urj_vhdl_parser_priv_t *priv, char *name, int value)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 #endif
@@ -1101,7 +1101,7 @@ set_attr_decimal (urj_vhdl_parser_priv_t *priv, char *name, int value)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 
@@ -1132,7 +1132,7 @@ set_attr_string (urj_vhdl_parser_priv_t *priv, char *name, char *string)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 
@@ -1151,7 +1151,7 @@ set_attr_real (urj_vhdl_parser_priv_t *priv, char *name, char *string)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 #endif
@@ -1171,7 +1171,7 @@ set_attr_const (urj_vhdl_parser_priv_t *priv, char *name, char *string)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 #endif

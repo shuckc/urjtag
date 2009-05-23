@@ -1141,7 +1141,7 @@ urj_bsdl_parser_init (urj_bsdl_jtag_ctrl_t *jtag_ctrl)
 
     if (!(new_priv = malloc (sizeof (urj_bsdl_parser_priv_t))))
     {
-        urj_bsdl_err_set (jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
         return NULL;
     }
@@ -1212,7 +1212,7 @@ add_instruction (urj_bsdl_parser_priv_t *priv, char *instr, char *opcode)
         priv->jtag_ctrl->instr_list = new_instr;
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 
@@ -1273,7 +1273,7 @@ ac_add_instruction (urj_bsdl_parser_priv_t *priv, char *instr)
         tmp_ai->instr_list = new_instr;
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 
@@ -1309,7 +1309,7 @@ ac_apply_assoc (urj_bsdl_parser_priv_t *priv)
         jc->ainfo_list = new_ai;
     }
     else
-        urj_bsdl_err_set (jc->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (jc->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 
     /* clean up obsolete temporary entries */
@@ -1348,7 +1348,7 @@ prt_add_name (urj_bsdl_parser_priv_t *priv, char *name)
         pd->names_list = new_string;
     }
     else
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 
@@ -1504,7 +1504,7 @@ ci_set_cell_spec (urj_bsdl_parser_priv_t *priv,
     }
     else
     {
-        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
         ci->port_name = NULL;
     }
@@ -1555,7 +1555,7 @@ ci_append_cell_info (urj_bsdl_parser_priv_t *priv, int bit_num)
         tmp_ci->basic_safe_value = NULL;
     }
     else
-        urj_bsdl_err_set (jc->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (jc->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 }
 

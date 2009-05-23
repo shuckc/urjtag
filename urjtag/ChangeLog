@@ -1,5 +1,9 @@
 2009-05-23  Arnim Laeuger  <arniml>
 
+  * src/bsdl/bsdl_msg.h, src/bsdl/vhdl_flex.l, src/bsdl/vhdl_bison.y,
+    src/bsdl/bsdl_flex.l, src/bsdl/bsdl_bison.y:
+    change some errors to fatals
+
   * include/urjtag/error.h, src/global/urjtag.c,
     src/apps/bsdl2jtag/bsdl2jtag.c,
     src/bsdl/bsdl_msg.h, src/bsdl/bsdl.c, src/bsdl/bsdl_sem.c,

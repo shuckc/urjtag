@@ -434,14 +434,14 @@ urj_bsdl_flex_init (int proc_mode)
     /* get our scanner structure */
     if (yylex_init (&scanner) != 0)
     {
-        urj_bsdl_err_set (proc_mode, URJ_ERROR_BSDL_BSDL,
+        urj_bsdl_ftl_set (proc_mode, URJ_ERROR_BSDL_BSDL,
                           "Scanner could not be initialized");
         return NULL;
     }
 
     if (!(extra = malloc (sizeof (urj_bsdl_scan_extra_t))))
     {
-        urj_bsdl_err_set (proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
         yylex_destroy (scanner);
         return NULL;
@@ -531,7 +531,7 @@ new_string (urj_bsdl_scan_extra_t *extra, const char *str)
         n_str[n_str_size - 1] = '\0';   /* set very last element to EOS */
     }
     else
-        urj_bsdl_err_set (extra->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+        urj_bsdl_ftl_set (extra->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
                           "No memory");
 
     return (n_str);
