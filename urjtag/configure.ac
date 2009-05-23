@@ -478,7 +478,7 @@ CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf533_stamp],   [ENABLE_BUS_
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf533_ezkit],   [ENABLE_BUS_BF533_EZKIT])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf537_stamp],   [ENABLE_BUS_BF537_STAMP])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf537_ezkit],   [ENABLE_BUS_BF537_EZKIT])
-CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf538f_ezkit],   [ENABLE_BUS_BF538F_EZKIT])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf538f_ezkit],  [ENABLE_BUS_BF538F_EZKIT])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf548_ezkit],   [ENABLE_BUS_BF548_EZKIT])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bf561_ezkit],   [ENABLE_BUS_BF561_EZKIT])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bscoach],       [ENABLE_BUS_BSCOACH])
