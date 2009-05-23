@@ -100,6 +100,7 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_ALREADY:             return "already defined";
     case URJ_ERROR_OUT_OF_MEMORY:       return "out of memory";
     case URJ_ERROR_NO_CHAIN:            return "no chain";
+    case URJ_ERROR_NO_PART:             return "no part";
     case URJ_ERROR_NO_ACTIVE_INSTRUCTION: return "no active instruction";
     case URJ_ERROR_NO_DATA_REGISTER:    return "no data register";
     case URJ_ERROR_INVALID:             return "invalid parameter";
@@ -124,6 +125,9 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_FLASH_PROGRAM:       return "flash program";
     case URJ_ERROR_FLASH_ERASE:         return "flash erase";
     case URJ_ERROR_FLASH_UNLOCK:        return "flash unlock";
+
+    case URJ_ERROR_BSDL_VHDL:           return "vhdl subsystem";
+    case URJ_ERROR_BSDL_BSDL:           return "bsdl subsystem";
 
     case URJ_ERROR_UNIMPLEMENTED:       return "unimplemented";
     }

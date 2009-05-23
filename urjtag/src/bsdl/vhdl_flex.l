@@ -330,11 +330,10 @@ Std_1532_2002  STD_1532_2002
                          return (REAL_NUMBER);}
 {Concatenate}           {return (CONCATENATE);}
 {Semicolon}             {return (SEMICOLON);}
-{Illegal}               {urj_bsdl_msg (yyextra->proc_mode,
-                                   BSDL_MSG_ERR,
-                                   _("Illegal character %c (/%03o) at line %d:\n"),
-                                   (char)yytext[yyleng-1], (int)yytext[yyleng-1],
-                                   yylineno);
+{Illegal}               {urj_bsdl_err_set (yyextra->proc_mode, URJ_ERROR_BSDL_VHDL,
+                                           "Illegal character %c (/%03o) at line %d:",
+                                           (char)yytext[yyleng-1], (int)yytext[yyleng-1],
+                                           yylineno);
                          yyextra->Compile_Errors++;
                          return (ILLEGAL);  /* Will cause syntax error */}
 <<EOF>> {
@@ -366,17 +365,16 @@ urj_vhdl_flex_init (FILE *f, int proc_mode)
     /* get our scanner structure */
     if (yylex_init (&scanner) != 0)
     {
-        urj_bsdl_msg (proc_mode, BSDL_MSG_FATAL,
-                      _("Scanner could not be initialized\n"));
+        urj_bsdl_err_set (proc_mode, URJ_ERROR_BSDL_VHDL,
+                          "Scanner could not be initialized");
         return NULL;
     }
     yyset_in (f, scanner);
 
     if (!(extra = malloc (sizeof (urj_bsdl_scan_extra_t))))
     {
-        urj_bsdl_msg (proc_mode,
-                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
         yylex_destroy (scanner);
         return NULL;
     }
@@ -465,9 +463,8 @@ new_string (urj_bsdl_scan_extra_t *extra, const char *str)
         n_str[n_str_size - 1] = '\0';   /* set very last element to EOS */
     }
     else
-        urj_bsdl_msg (extra->proc_mode,
-                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (extra->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
 
     return n_str;
 }
@@ -524,10 +521,9 @@ urj_vhdl_flex_switch_file (yyscan_t scanner, char *filename)
             f = fopen (db_file, "r");
 
             if (!f)
-                urj_bsdl_msg (extra->proc_mode,
-                              BSDL_MSG_FATAL,
-                              _("Cannot open file %s or %s.\n"), filename,
-                              db_file);
+                urj_bsdl_err_set (extra->proc_mode, URJ_ERROR_IO,
+                                  "Cannot open file %s or %s", filename,
+                                  db_file);
             free (db_file);
             if (!f)
                 return;

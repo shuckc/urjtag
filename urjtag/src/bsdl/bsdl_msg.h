@@ -25,14 +25,38 @@
 #ifndef URJ_BSDL_MSG_H
 #define URJ_BSDL_MSG_H
 
+#include <urjtag/log.h>
+#include <urjtag/error.h>
+
+#include <urjtag/bsdl_mode.h>
+
 #include "bsdl_types.h"
 
-/* message types for urj_bsdl_msg() */
-#define BSDL_MSG_NOTE  0
-#define BSDL_MSG_WARN  1
-#define BSDL_MSG_ERR   2
-#define BSDL_MSG_FATAL 3
+#define urj_bsdl_msg(proc_mode, ...)                            \
+    do {                                                        \
+        if (proc_mode & URJ_BSDL_MODE_MSG_NOTE) {               \
+            urj_log (URJ_LOG_LEVEL_NORMAL, "-N- ");             \
+            urj_log (URJ_LOG_LEVEL_NORMAL, __VA_ARGS__);}       \
+    } while (0)
 
-void urj_bsdl_msg (int, int, const char *, ...);
+#define urj_bsdl_warn(proc_mode, ...)                      \
+    do {                                                   \
+        if (proc_mode & URJ_BSDL_MODE_MSG_WARN) {          \
+            urj_log (URJ_LOG_LEVEL_WARNING, "-W- ");       \
+            urj_log (URJ_LOG_LEVEL_WARNING, __VA_ARGS__);} \
+    } while (0)
+
+#define urj_bsdl_err(proc_mode, ...)                            \
+    do {                                                        \
+        if (proc_mode & URJ_BSDL_MODE_MSG_ERR) {                \
+            urj_log (URJ_LOG_LEVEL_ERROR, "-E- ");              \
+            urj_log (URJ_LOG_LEVEL_ERROR, __VA_ARGS__);}        \
+    } while (0)
+
+#define urj_bsdl_err_set(proc_mode, err, ...)  \
+    do {                                       \
+        if (proc_mode & URJ_BSDL_MODE_MSG_ERR) \
+            urj_error_set (err, __VA_ARGS__);  \
+    } while (0)
 
 #endif /* URJ_BSDL_MSG_H */

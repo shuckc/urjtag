@@ -50,59 +50,6 @@
 
 
 /*****************************************************************************
- * urj_bsdl_msg( proc_mode, type, format, ... )
- *
- * Main printing function for the BSDL subsystem.
- *
- * Parameters
- *   proc_mode : processing mode, consisting of BSDL_MODE_* bits
- *   type      : one of the BSDL_MSG_* defines, determines message tag
- *   format    : printf format
- *   ...       : additional parameters to fill the printf format string
- *
- * Returns
- *   void
- ****************************************************************************/
-void
-urj_bsdl_msg (int proc_mode, int type, const char *format, ...)
-{
-    va_list lst;
-
-    va_start (lst, format);
-    switch (type)
-    {
-    case BSDL_MSG_NOTE:
-        if (!(proc_mode & URJ_BSDL_MODE_MSG_NOTE))
-            return;
-        printf ("-N- ");
-        break;
-    case BSDL_MSG_WARN:
-        if (!(proc_mode & URJ_BSDL_MODE_MSG_WARN))
-            return;
-        printf ("-W- ");
-        break;
-    case BSDL_MSG_ERR:
-        // @@@@ RFHH set urj_error (but to what?)
-        if (!(proc_mode & URJ_BSDL_MODE_MSG_ERR))
-            return;
-        printf ("-E- ");
-        break;
-    case BSDL_MSG_FATAL:
-        // @@@@ RFHH set urj_error (but to what?)
-        if (!(proc_mode & URJ_BSDL_MODE_MSG_FATAL))
-            return;
-        printf ("-F- ");
-        break;
-    default:
-        printf ("-?- ");
-        break;
-    }
-    vprintf (format, lst);
-    va_end (lst);
-}
-
-
-/*****************************************************************************
  * urj_bsdl_read_file( chain, BSDL_File_Name, proc_mode, idcode )
  *
  * Read, parse and optionally apply contents of BSDL file.
@@ -130,6 +77,9 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
     int Compile_Errors = 1;
     int result = 0;
 
+    /* purge previous errors */
+    urj_error_reset ();
+
     if (globs->debug)
         proc_mode |= URJ_BSDL_MODE_MSG_ALL;
 
@@ -140,14 +90,14 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
     {
         if (chain == NULL)
         {
-            urj_bsdl_msg (proc_mode, BSDL_MSG_ERR,
-                          _("No JTAG chain available\n"));
+            urj_bsdl_err_set (proc_mode, URJ_ERROR_NO_CHAIN,
+                              "Can't execute commands without chain");
             return -1;
         }
         if (chain->parts == NULL)
         {
-            urj_bsdl_msg (proc_mode, BSDL_MSG_ERR,
-                          _("Chain without any parts\n"));
+            urj_bsdl_err_set (proc_mode, URJ_ERROR_NO_PART,
+                              "Can't execute commands without part");
             return -1;
         }
         if (!(chain && chain->parts))
@@ -164,14 +114,13 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
 
     BSDL_File = fopen (BSDL_File_Name, "r");
 
-    urj_bsdl_msg (proc_mode, BSDL_MSG_NOTE, _("Reading file '%s'\n"),
-                  BSDL_File_Name);
+    urj_bsdl_msg (proc_mode, _("Reading file '%s'\n"), BSDL_File_Name);
 
     if (BSDL_File == NULL)
     {
-        urj_bsdl_msg (proc_mode,
-                      BSDL_MSG_ERR, _("Unable to open BSDL file '%s'\n"),
-                      BSDL_File_Name);
+        urj_bsdl_err_set (proc_mode, URJ_ERROR_IO,
+                          "Unable to open BSDL file '%s'",
+                          BSDL_File_Name);
         return -1;
     }
 
@@ -186,7 +135,6 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
         if (Compile_Errors == 0)
         {
             urj_bsdl_msg (proc_mode,
-                          BSDL_MSG_NOTE,
                           _("BSDL file '%s' passed VHDL stage correctly\n"),
                           BSDL_File_Name);
 
@@ -194,18 +142,14 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
 
             if (result >= 0)
                 urj_bsdl_msg (proc_mode,
-                              BSDL_MSG_NOTE,
-                              _
-                              ("BSDL file '%s' passed BSDL stage correctly\n"),
+                              _("BSDL file '%s' passed BSDL stage correctly\n"),
                               BSDL_File_Name);
 
         }
         else
         {
-            urj_bsdl_msg (proc_mode,
-                          BSDL_MSG_ERR,
-                          _
-                          ("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
+            urj_bsdl_err (proc_mode,
+                          _("BSDL file '%s' contains errors in VHDL stage, stopping\n"),
                           BSDL_File_Name);
         }
 
@@ -280,7 +224,7 @@ urj_bsdl_set_path (urj_chain_t *chain, const char *pathlist)
     if (globs->debug)
         for (num = 0; globs->path_list[num] != NULL; num++)
             urj_bsdl_msg (URJ_BSDL_MODE_MSG_ALL,
-                          BSDL_MSG_NOTE, "%s\n", globs->path_list[num]);
+                          "%s\n", globs->path_list[num]);
 }
 
 
@@ -357,9 +301,9 @@ urj_bsdl_scan_files (urj_chain_t *chain, const char *idcode, int proc_mode)
             closedir (dir);
         }
         else
-            urj_bsdl_msg (proc_mode,
-                          BSDL_MSG_WARN, _("Cannot open directory %s\n"),
-                          globs->path_list[idx]);
+            urj_bsdl_warn (proc_mode,
+                           _("Cannot open directory %s\n"),
+                           globs->path_list[idx]);
 
         idx++;
     }

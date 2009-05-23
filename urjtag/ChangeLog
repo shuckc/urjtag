@@ -1,3 +1,12 @@
+2009-05-23  Arnim Laeuger  <arniml>
+
+  * include/urjtag/error.h, src/global/urjtag.c,
+    src/apps/bsdl2jtag/bsdl2jtag.c,
+    src/bsdl/bsdl_msg.h, src/bsdl/bsdl.c, src/bsdl/bsdl_sem.c,
+    src/bsdl/vhdl_flex.l, src/bsdl/vhdl_bison.y,
+    src/bsdl/bsdl_flex.l, src/bsdl/bsdl_bison.y: port BSDL message system to
+    urj_log/urj_err_set functionality
+
 2009-05-23  Rutger Hofman <rfhh>
 
   * configure.ac, Makefile.am: add an option (--disable-apps) to build only

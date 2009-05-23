@@ -665,14 +665,19 @@ Print_Error (urj_vhdl_parser_priv_t *priv_data, const char *Errmess)
     urj_bsdl_jtag_ctrl_t *jc = priv_data->jtag_ctrl;
 
     if (priv_data->Reading_Package)
-        urj_bsdl_msg (jc->proc_mode,
-                      BSDL_MSG_ERR, _("In Package %s, Line %d, %s.\n"),
+        urj_bsdl_err (jc->proc_mode,
+                      _("In Package %s, Line %d, %s.\n"),
                       priv_data->Package_File_Name,
                       urj_vhdl_flex_get_lineno (priv_data->scanner), Errmess);
     else
-        urj_bsdl_msg (jc->proc_mode,
-                      BSDL_MSG_ERR, _("Line %d, %s.\n"),
+        urj_bsdl_err (jc->proc_mode,
+                      _("Line %d, %s.\n"),
                       urj_vhdl_flex_get_lineno (priv_data->scanner), Errmess);
+
+    /* set an error if nothing else is pending */
+    if (urj_error_get () == URJ_ERROR_OK)
+        urj_bsdl_err_set (jc->proc_mode, URJ_ERROR_BSDL_VHDL,
+                          "Parser error, see log for details");
 }
 
 /*----------------------------------------------------------------------*/
@@ -843,9 +848,8 @@ urj_vhdl_parser_init (FILE *f, urj_bsdl_jtag_ctrl_t *jtag_ctrl)
 
     if (!(new_priv = malloc (sizeof (urj_vhdl_parser_priv_t))))
     {
-        urj_bsdl_msg (jtag_ctrl->proc_mode,
-                      BSDL_MSG_ERR, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
         return NULL;
     }
 
@@ -949,9 +953,8 @@ urj_vhdl_port_add_name (urj_vhdl_parser_priv_t *priv, char *name)
         pd->names_list = new_string;
     }
     else
-        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
-                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
 }
 
 
@@ -1042,9 +1045,8 @@ urj_vhdl_port_apply_port (urj_vhdl_parser_priv_t *priv)
         tmp_pd->next = NULL;
     }
     else
-        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
-                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
 }
 
 static void
@@ -1078,8 +1080,8 @@ set_attr_bool (urj_vhdl_parser_priv_t *priv, char *name, int value)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_msg (BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
 }
 #endif
 
@@ -1099,9 +1101,8 @@ set_attr_decimal (urj_vhdl_parser_priv_t *priv, char *name, int value)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
-                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
 }
 
 static void
@@ -1131,9 +1132,8 @@ set_attr_string (urj_vhdl_parser_priv_t *priv, char *name, char *string)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
-                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
 }
 
 #if 0
@@ -1151,8 +1151,8 @@ set_attr_real (urj_vhdl_parser_priv_t *priv, char *name, char *string)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_msg (BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
 }
 #endif
 
@@ -1171,8 +1171,8 @@ set_attr_const (urj_vhdl_parser_priv_t *priv, char *name, char *string)
         add_elem (priv, el);
     }
     else
-        urj_bsdl_msg (BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
 }
 #endif
 

@@ -91,6 +91,11 @@ main (int argc, char *const argv[])
     /* log all messages to the jtag_file */
     urj_log_state.out_vprintf = log_to_file;
     result = urj_bsdl_read_file (chain, argv[1], URJ_BSDL_MODE_DUMP, NULL);
+    if (result < 0)
+    {
+        urj_log (URJ_LOG_LEVEL_ERROR, "Error: %s\n", urj_error_describe());
+        urj_error_reset ();
+    }
 
     fclose (jtag_file);
     cleanup (chain);

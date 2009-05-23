@@ -134,10 +134,11 @@ urj_bsdl_emit_ports (urj_bsdl_jtag_ctrl_t *jc)
                 result = URJ_STATUS_OK;
             }
             else
-                urj_bsdl_msg (jc->proc_mode,
-                              BSDL_MSG_FATAL,
-                              _("Out of memory, %s line %i\n"), __FILE__,
-                              __LINE__);
+            {
+                urj_bsdl_err_set (jc->proc_mode, URJ_ERROR_OUT_OF_MEMORY,
+                                  "No memory");
+                return URJ_STATUS_FAIL;
+            }
 
             name = name->next;
         }
@@ -199,8 +200,8 @@ urj_bsdl_process_idcode (urj_bsdl_jtag_ctrl_t *jc)
     if (jc->idcode)
         result = create_register (jc, "DIR", strlen (jc->idcode));
     else
-        urj_bsdl_msg (jc->proc_mode,
-                      BSDL_MSG_WARN, _("No IDCODE specification found.\n"));
+        urj_bsdl_warn (jc->proc_mode,
+                       _("No IDCODE specification found.\n"));
 
     return result;
 }
@@ -546,9 +547,9 @@ parse_vhdl_elem (urj_bsdl_parser_priv_t *priv, urj_vhdl_elem_t *elem)
     buf = malloc (buf_len);
     if (!buf)
     {
-        urj_bsdl_msg (priv->jtag_ctrl->proc_mode,
-                      BSDL_MSG_FATAL, _("Out of memory, %s line %i\n"),
-                      __FILE__, __LINE__);
+        urj_bsdl_err_set (priv->jtag_ctrl->proc_mode,
+                          URJ_ERROR_OUT_OF_MEMORY,
+                          "No memory");
         return -1;
     }
     buf[0] = '\0';
@@ -645,11 +646,9 @@ compare_idcode (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
                         idcode_match = 0;
 
             if (idcode_match)
-                urj_bsdl_msg (jc->proc_mode,
-                              BSDL_MSG_NOTE, _("IDCODE matched\n"));
+                urj_bsdl_msg (jc->proc_mode, _("IDCODE matched\n"));
             else
-                urj_bsdl_msg (jc->proc_mode,
-                              BSDL_MSG_NOTE, _("IDCODE mismatch\n"));
+                urj_bsdl_msg (jc->proc_mode, _("IDCODE mismatch\n"));
         }
     }
 
@@ -696,8 +695,7 @@ urj_bsdl_process_elements (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
 
         if (!(result & URJ_BSDL_MODE_SYN_CHECK))
         {
-            urj_bsdl_msg (jc->proc_mode,
-                          BSDL_MSG_ERR,
+            urj_bsdl_err (jc->proc_mode,
                           _("BSDL stage reported errors, aborting.\n"));
             urj_bsdl_parser_deinit (priv);
             return -1;
@@ -705,8 +703,7 @@ urj_bsdl_process_elements (urj_bsdl_jtag_ctrl_t *jc, const char *idcode)
     }
 
     if (jc->idcode)
-        urj_bsdl_msg (jc->proc_mode,
-                      BSDL_MSG_NOTE, _("Got IDCODE: %s\n"), jc->idcode);
+        urj_bsdl_msg (jc->proc_mode, _("Got IDCODE: %s\n"), jc->idcode);
 
     if (jc->proc_mode & URJ_BSDL_MODE_IDCODE_CHECK)
         result |= compare_idcode (jc, idcode);
