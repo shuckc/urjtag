@@ -295,6 +295,18 @@ AC_SUBST(WARNINGCFLAGS)
 
 CPPFLAGS="-I\$(top_srcdir) -I\$(top_srcdir)/include $CPPFLAGS"
 
+AC_ARG_ENABLE([apps],
+  [AS_HELP_STRING([--disable-apps],
+    [disable building the jtag and bsdl2jtag main programs])],,
+    [enable_apps=yes])
+
+AS_IF([test "x$enable_apps" = xyes], [
+  AM_CONDITIONAL(ENABLE_APPS, true)
+  AC_DEFINE(ENABLE_APPS, 1, [define if you want to build the jtag and bsdl2jtag main programs])
+],[
+  AM_CONDITIONAL(ENABLE_APPS, false)
+])
+
 
 # check for lex/flex
 AC_PROG_LEX

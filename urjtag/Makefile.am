@@ -28,9 +28,13 @@ SUBDIRS = \
 	include/urjtag \
 	data \
 	src \
-	src/apps/jtag \
-	src/apps/bsdl2jtag \
 	po
+
+if ENABLE_APPS
+SUBDIRS += \
+	src/apps/jtag \
+	src/apps/bsdl2jtag
+endif
 
 DIST_SUBDIRS = \
 	$(SUBDIRS)
