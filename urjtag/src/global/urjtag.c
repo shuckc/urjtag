@@ -107,11 +107,13 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_NOTFOUND:            return "not found";
     case URJ_ERROR_NO_BUS_DRIVER:       return "no bus driver";
     case URJ_ERROR_BUFFER_EXHAUSTED:    return "buffer exhausted";
-    case URJ_ERROR_ILLEGAL_STATE:       return "illegal state transition";
+    case URJ_ERROR_ILLEGAL_STATE:       return "illegal state";
+    case URJ_ERROR_ILLEGAL_TRANSITION:  return "illegal state transition";
     case URJ_ERROR_OUT_OF_BOUNDS:       return "out of bounds";
     case URJ_ERROR_TIMEOUT:             return "timeout";
     case URJ_ERROR_UNSUPPORTED:         return "unsupported";
     case URJ_ERROR_SYNTAX:              return "syntax";
+    case URJ_ERROR_FILEIO:              return "file I/O";
 
     case URJ_ERROR_IO:                  return "I/O error from OS";
     case URJ_ERROR_FTD:                 return "ftdi/ftd2xx error";

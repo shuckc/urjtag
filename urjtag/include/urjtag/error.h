@@ -45,14 +45,16 @@ typedef enum urj_error
     URJ_ERROR_NO_BUS_DRIVER,
     URJ_ERROR_BUFFER_EXHAUSTED,
     URJ_ERROR_ILLEGAL_STATE,
+    URJ_ERROR_ILLEGAL_TRANSITION,
     URJ_ERROR_OUT_OF_BOUNDS,
     URJ_ERROR_TIMEOUT,
     URJ_ERROR_UNSUPPORTED,
     URJ_ERROR_SYNTAX,
+    URJ_ERROR_FILEIO,                   /**< I/O error from fread/fwrite */
 
-    URJ_ERROR_IO,                               /**< I/O error from OS */
-    URJ_ERROR_FTD,                              /**< error from ftdi/ftd2xx */
-    URJ_ERROR_USB,                              /**< error from libusb */
+    URJ_ERROR_IO,                       /**< I/O error from OS */
+    URJ_ERROR_FTD,                      /**< error from ftdi/ftd2xx */
+    URJ_ERROR_USB,                      /**< error from libusb */
 
     URJ_ERROR_BUS,
     URJ_ERROR_BUS_DMA,

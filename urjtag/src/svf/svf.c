@@ -1007,7 +1007,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
 
     if (priv->svf_trst_absent)
     {
-        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+        urj_error_set (URJ_ERROR_ILLEGAL_TRANSITION,
             _("Error %s: no further TRST command allowed after mode ABSENT"),
             "svf");
         return URJ_STATUS_FAIL;
@@ -1030,7 +1030,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
 
         if (priv->svf_state_executed)
         {
-            urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+            urj_error_set (URJ_ERROR_ILLEGAL_TRANSITION,
                 _("Error %s: TRST ABSENT must not be issued after a STATE command"),
                 "svf");
             return URJ_STATUS_FAIL;
@@ -1038,7 +1038,7 @@ urj_svf_trst (urj_chain_t *chain, urj_svf_parser_priv_t *priv, int trst_mode)
         if (priv->sir_params.params.number > 0.0 ||
             priv->sdr_params.params.number > 0.0)
         {
-            urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+            urj_error_set (URJ_ERROR_ILLEGAL_TRANSITION,
                 _("Error %s: TRST ABSENT must not be issued after an SIR or SDR command"),
                 "svf");
         }

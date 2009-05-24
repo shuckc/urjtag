@@ -27,17 +27,17 @@
 #include <string.h>
 
 #include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/bus.h>
 #include <urjtag/flash.h>
 #include <urjtag/jtag.h>
 
-// @@@@ RFHH return status
-void
+int
 urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
     uint32_t step;
-    uint32_t a;
-    int bc = 0;
+    uint64_t a;
+    size_t bc = 0;
     int bidx = 0;
 #define BSIZE 4096
     uint8_t b[BSIZE];
@@ -46,23 +46,27 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
     if (!bus)
     {
-        printf (_("Error: Missing bus driver!\n"));
-        return;
+        urj_error_set (URJ_ERROR_NO_BUS_DRIVER, _("Missing bus driver"));
+        return URJ_STATUS_FAIL;
     }
 
     URJ_BUS_PREPARE (bus);
 
     if (URJ_BUS_AREA (bus, addr, &area) != URJ_STATUS_OK)
-    {
-        printf (_("Error: Bus width detection failed\n"));
-        return;
-    }
+        return URJ_STATUS_FAIL;
+
     step = area.width / 8;
 
     if (step == 0)
     {
-        printf (_("Unknown bus width!\n"));
-        return;
+        urj_error_set (URJ_ERROR_INVALID, _("Unknown bus width"));
+        return URJ_STATUS_FAIL;
+    }
+    if (BSIZE % step != 0)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "step %lu must divide BSIZE %d",
+                       (long unsigned) step, BSIZE);
+        return URJ_STATUS_FAIL;
     }
 
     addr = addr & (~(step - 1));
@@ -75,8 +79,8 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
     if (len == 0)
     {
-        urj_log (URJ_LOG_LEVEL_NORMAL, _("length is 0.\n"));
-        return;
+        urj_error_set (URJ_ERROR_INVALID, _("length is 0"));
+        return URJ_STATUS_FAIL;
     }
 
     a = addr;
@@ -89,49 +93,55 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
         int j;
 
         /* Read one block of data */
-        if (bc < step)
+        if (bc == 0)
         {
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
-                     (long unsigned) a);
-            urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
-            fflush (stdout);
-            if (bc != 0)
-                printf (_("Data not on word boundary, NOT SUPPORTED!"));
-            if (feof (f))
-            {
-                printf (_("Unexpected end of file!\n"));
-                printf (_("Addr: 0x%08lX\n"), (long unsigned) a);
-                break;
-            }
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08llX\r"),
+                     (long long unsigned) a);
             bc = fread (b, 1, BSIZE, f);
-            if (!bc)
+            if (bc != BSIZE)
             {
-                printf (_("Short read: bc=0x%X\n"), bc);
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("Short read: bc=0x%zX\n"), bc);
+                if (bc < step)
+                {
+                    // Not even enough for one step. Something is wrong. Check
+                    // the file state and bail out.
+                    if (feof (f))
+                        urj_error_set (URJ_ERROR_FILEIO,
+                            _("Unexpected end of file; Addr: 0x%08llX\n"),
+                            (long long unsigned) a);
+                    else
+                    {
+                        urj_error_set (URJ_ERROR_FILEIO, "fread fails");
+                        urj_error_state.sys_errno = ferror(f);
+                        clearerr(f);
+                    }
+
+                    return URJ_STATUS_FAIL;
+                }
+                /* else, process what we have read, then return to fread() to
+                 * meet the error condition (again) */
             }
             bidx = 0;
-
         }
 
-        /* Write a word at  time */
+        /* Write a word at a time */
         data = 0;
-        for (j = step; j > 0; j--)
+        for (j = step; j > 0 && bc > 0; j--)
         {
             if (urj_big_endian)
             {
                 data |= b[bidx++];
                 data <<= 8;
-                bc--;
             }
             else
-            {
                 data |= (b[bidx++] << ((step - j) * 8));
-                bc--;
-            }
+            bc--;
         }
 
         URJ_BUS_WRITE (bus, a, data);
-
     }
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\nDone.\n"));
+
+    return URJ_STATUS_OK;
 }

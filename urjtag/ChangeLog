@@ -1,3 +1,10 @@
+2009-05-24  Rutger Hofman <rfhh>
+
+  * src/bus/readmem.c, src/bus/writemem.c, include/urjtag/bus.h,
+    src/cmd/cmd_readmem.c, src/cmd/cmd_writemem.c: readmem() and
+    writemem() now return an error condition. Patch up error handling
+    in readmem() and writemem().
+
 2009-05-23  Arnim Laeuger  <arniml>
 
   * src/bsdl/bsdl_msg.h, src/bsdl/vhdl_flex.l, src/bsdl/vhdl_bison.y,

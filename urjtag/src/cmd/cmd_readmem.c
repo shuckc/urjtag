@@ -41,6 +41,7 @@ cmd_readmem_run (urj_chain_t *chain, char *params[])
 {
     long unsigned adr;
     long unsigned len;
+    int r;
     FILE *f;
 
     if (urj_cmd_params (params) != 4)
@@ -67,10 +68,10 @@ cmd_readmem_run (urj_chain_t *chain, char *params[])
         urj_error_IO_set (_("Unable to create file `%s'"), params[3]);
         return URJ_STATUS_FAIL;
     }
-    urj_bus_readmem (urj_bus, f, adr, len);
+    r = urj_bus_readmem (urj_bus, f, adr, len);
     fclose (f);
 
-    return URJ_STATUS_OK;
+    return r;
 }
 
 static void

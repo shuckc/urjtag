@@ -40,6 +40,7 @@ cmd_writemem_run (urj_chain_t *chain, char *params[])
     long unsigned adr;
     long unsigned len;
     FILE *f;
+    int r;
 
     if (urj_cmd_params (params) != 4)
     {
@@ -65,10 +66,10 @@ cmd_writemem_run (urj_chain_t *chain, char *params[])
         urj_error_IO_set (_("Unable to open file `%s'"), params[3]);
         return URJ_STATUS_FAIL;
     }
-    urj_bus_writemem (urj_bus, f, adr, len);
+    r = urj_bus_writemem (urj_bus, f, adr, len);
     fclose (f);
 
-    return URJ_STATUS_OK;
+    return r;
 }
 
 static void

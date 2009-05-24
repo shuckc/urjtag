@@ -33,10 +33,10 @@
 
 extern urj_bus_t *urj_bus;
 
-/* @@@@ RFHH return status */
-void urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
-/* @@@@ RFHH return status */
-void urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len);
 
 typedef struct
 {
@@ -49,9 +49,9 @@ extern urj_buses_t urj_buses;
 extern const urj_bus_driver_t *urj_bus_drivers[];
 
 void urj_bus_buses_free (void);
-/* @@@@ RFHH return status */
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 void urj_bus_buses_add (urj_bus_t *abus);
-/* @@@@ RFHH return status? */
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 void urj_bus_buses_delete (urj_bus_t *abus);
 
 /** set active bus

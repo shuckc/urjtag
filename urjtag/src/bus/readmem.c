@@ -34,17 +34,17 @@
 #include <string.h>
 
 #include <urjtag/log.h>
+#include <urjtag/error.h>
 #include <urjtag/bus.h>
 #include <urjtag/flash.h>
 #include <urjtag/jtag.h>
 
-// @@@@ RFHH return status
-void
+int
 urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 {
     uint32_t step;
-    uint32_t a;
-    int bc = 0;
+    uint64_t a;
+    size_t bc = 0;
 #define BSIZE 4096
     uint8_t b[BSIZE];
     urj_bus_area_t area;
@@ -52,23 +52,27 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
     if (!bus)
     {
-        printf (_("Error: Missing bus driver!\n"));
-        return;
+        urj_error_set (URJ_ERROR_NO_BUS_DRIVER, _("Missing bus driver"));
+        return URJ_STATUS_FAIL;
     }
 
     URJ_BUS_PREPARE (bus);
 
     if (URJ_BUS_AREA (bus, addr, &area) != URJ_STATUS_OK)
-    {
-        printf (_("Error: Bus width detection failed\n"));
-        return;
-    }
+        return URJ_STATUS_FAIL;
+
     step = area.width / 8;
 
     if (step == 0)
     {
-        printf (_("Unknown bus width!\n"));
-        return;
+        urj_error_set (URJ_ERROR_INVALID,  _("Unknown bus width"));
+        return URJ_STATUS_FAIL;
+    }
+    if (BSIZE % step != 0)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "step %lu must divide BSIZE %d",
+                       (long unsigned) step, BSIZE);
+        return URJ_STATUS_FAIL;
     }
 
     addr = addr & (~(step - 1));
@@ -81,21 +85,23 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
     if (len == 0)
     {
-        printf (_("length is 0.\n"));
-        return;
+        urj_error_set (URJ_ERROR_INVALID, _("length is 0"));
+        return URJ_STATUS_FAIL;
     }
 
     a = addr;
     end = a + len;
     urj_log (URJ_LOG_LEVEL_NORMAL, _("reading:\n"));
-    // @@@@ RFHH check status
-    URJ_BUS_READ_START (bus, addr);
+
+    if (URJ_BUS_READ_START (bus, addr) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+
     for (a += step; a <= end; a += step)
     {
         uint32_t data;
         int j;
 
-        if (a < addr + len)
+        if (a < end)
             data = URJ_BUS_READ_NEXT (bus, a);
         else
             data = URJ_BUS_READ_END (bus);
@@ -111,13 +117,20 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
 
         if ((bc >= BSIZE) || (a >= end))
         {
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
-                     (long unsigned) a);
-            urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
-            fwrite (b, bc, 1, f);
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08llX\r"),
+                     (long long unsigned) a);
+            if (fwrite (b, bc, 1, f) != bc)
+            {
+                urj_error_set (URJ_ERROR_FILEIO, "fwrite fails");
+                urj_error_state.sys_errno = ferror(f);
+                clearerr(f);
+                return URJ_STATUS_FAIL;
+            }
             bc = 0;
         }
     }
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\nDone.\n"));
+
+    return URJ_STATUS_OK;
 }
