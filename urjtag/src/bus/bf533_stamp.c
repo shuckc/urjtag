@@ -43,6 +43,7 @@ typedef struct
     urj_part_signal_t *addr[19];
     urj_part_signal_t *data[16];
     urj_part_signal_t *pf[2];
+    urj_part_signal_t *are;
     urj_part_signal_t *awe;
     urj_part_signal_t *aoe;
     urj_part_signal_t *sras;
@@ -56,6 +57,7 @@ typedef struct
 #define DATA    ((bus_params_t *) bus->params)->data
 #define PF      ((bus_params_t *) bus->params)->pf
 #define AWE     ((bus_params_t *) bus->params)->awe
+#define ARE     ((bus_params_t *) bus->params)->are
 #define AOE     ((bus_params_t *) bus->params)->aoe
 #define SRAS    ((bus_params_t *) bus->params)->sras
 #define SCAS    ((bus_params_t *) bus->params)->scas
@@ -122,6 +124,8 @@ bf533_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
 
     failed |= urj_bus_generic_attach_sig (part, &(AWE), "AWE_B");
+
+    failed |= urj_bus_generic_attach_sig (part, &(AWE), "ARE_B");
 
     failed |= urj_bus_generic_attach_sig (part, &(AOE), "AOE_B");
 
@@ -255,6 +259,7 @@ bf533_stamp_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     select_flash (bus);
     urj_part_set_signal (p, AOE, 1, 0);
+    urj_part_set_signal (p, ARE, 1, 0);
     urj_part_set_signal (p, AWE, 1, 1);
 
     setup_address (bus, adr);
@@ -300,6 +305,7 @@ bf533_stamp_bus_read_end (urj_bus_t *bus)
 
     unselect_flash (bus);
     urj_part_set_signal (p, AOE, 1, 1);
+    urj_part_set_signal (p, ARE, 1, 1);
     urj_part_set_signal (p, AWE, 1, 1);
 
     urj_tap_chain_shift_data_registers (chain, 1);
@@ -324,7 +330,7 @@ bf533_stamp_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
              (long unsigned) data, (long unsigned) adr);
 
     select_flash (bus);
-    urj_part_set_signal (p, AOE, 1, 1);
+    urj_part_set_signal (p, ARE, 1, 1);
 
     setup_address (bus, adr);
     setup_data (bus, data);
