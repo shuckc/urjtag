@@ -1,5 +1,5 @@
 /*
- * $Id: bf533_ezkit.c,v 1.1.1.1 2005/03/18 15:03:05 klingler Exp $
+ * $Id$
  *
  * Copyright (C) 2002 ETC s.r.o.
  *

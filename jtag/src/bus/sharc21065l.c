@@ -1,5 +1,5 @@
 /*
- * $Id: sharc21065l.c,v 1.0 20/09/2006 12:38:01  $
+ * $Id$
  *
  * Analog Device's SHARC 21065L compatible bus driver via BSR
  * Copyright (C) 2006 Kila Medical Systems.

@@ -1,5 +1,9 @@
 2009-05-26  Arnim Laeuger  <arniml>
 
+  * src/bus/bf561_ezkit.c, src/bus/sharc21065l.c, src/bus/bf537_stamp.c,
+    src/bus/bf533_ezkit.c, src/bus/bf533_stamp.c, src/bus/ppc405ep.c,
+    src/bus/bf548_ezkit.c: keywords
+
   * src/bus/bf533_stamp.c: [ 2793104 ] hidden bug? in bf533-stamp.c
     (MURANAKA Masaki)
 
