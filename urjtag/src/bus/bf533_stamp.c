@@ -125,7 +125,7 @@ bf533_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     failed |= urj_bus_generic_attach_sig (part, &(AWE), "AWE_B");
 
-    failed |= urj_bus_generic_attach_sig (part, &(AWE), "ARE_B");
+    failed |= urj_bus_generic_attach_sig (part, &(ARE), "ARE_B");
 
     failed |= urj_bus_generic_attach_sig (part, &(AOE), "AOE_B");
 

@@ -43,6 +43,7 @@ typedef struct {
 	signal_t *data[16];
 	signal_t *pf[2];
 	signal_t *awe;
+	signal_t *are;
 	signal_t *aoe;
 	signal_t *sras;
 	signal_t *scas;
@@ -55,6 +56,7 @@ typedef struct {
 #define	DATA	((bus_params_t *) bus->params)->data
 #define	PF		((bus_params_t *) bus->params)->pf
 #define	AWE		((bus_params_t *) bus->params)->awe
+#define	ARE		((bus_params_t *) bus->params)->are
 #define	AOE		((bus_params_t *) bus->params)->aoe
 #define	SRAS	((bus_params_t *) bus->params)->sras
 #define	SCAS	((bus_params_t *) bus->params)->scas
@@ -109,6 +111,8 @@ bf533_stamp_bus_new( chain_t *chain, const bus_driver_t *driver, char *cmd_param
 	}
 
 	failed |= generic_bus_attach_sig( part, &(AWE),  "AWE_B"  );
+
+	failed |= generic_bus_attach_sig( part, &(ARE),  "ARE_B"  );
 
 	failed |= generic_bus_attach_sig( part, &(AOE),  "AOE_B"  );
 
@@ -240,6 +244,7 @@ bf533_stamp_bus_read_start( bus_t *bus, uint32_t adr )
 
 	select_flash( bus );
 	part_set_signal( p, AOE, 1, 0 );
+	part_set_signal( p, ARE, 1, 0 );
 	part_set_signal( p, AWE, 1, 1 );
 
 	setup_address( bus, adr );
@@ -283,6 +288,7 @@ bf533_stamp_bus_read_end( bus_t *bus )
 
 	unselect_flash( bus );
 	part_set_signal( p, AOE, 1, 1 );
+	part_set_signal( p, ARE, 1, 1 );
 	part_set_signal( p, AWE, 1, 1 );
 
 	chain_shift_data_registers( chain, 1 );
@@ -306,7 +312,7 @@ bf533_stamp_bus_write( bus_t *bus, uint32_t adr, uint32_t data )
 //	printf("Writing %04X to %08X...\n", data, adr);
 
 	select_flash( bus );
-	part_set_signal( p, AOE, 1, 1 );
+	part_set_signal( p, ARE, 1, 1 );
 
 	setup_address( bus, adr );
 	setup_data( bus, data );
