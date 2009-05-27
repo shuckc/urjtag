@@ -1,3 +1,8 @@
+2009-05-26  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable/xpc.c: fix crash when USB device is busy (Florian Fainelli)
+
+
 2009-05-26  Arnim Laeuger  <arniml>
 
   * src/bus/bf561_ezkit.c, src/bus/sharc21065l.c, src/bus/bf537_stamp.c,

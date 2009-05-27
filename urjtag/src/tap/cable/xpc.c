@@ -389,6 +389,8 @@ xpc_ext_init (urj_cable_t *cable)
     xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     if (r == URJ_STATUS_OK)
+        r = xpcu_output_enable (xpcu, 0);
+    if (r == URJ_STATUS_OK)
         r = xpcu_request_28 (xpcu, 0x11);
     if (r == URJ_STATUS_OK)
         r = xpcu_output_enable (xpcu, 1);
@@ -407,17 +409,6 @@ xpc_ext_init (urj_cable_t *cable)
     }
 
     return r;
-}
-
-/* ---------------------------------------------------------------------- */
-
-static void
-xpc_ext_done (urj_cable_t *cable)
-{
-    struct usb_dev_handle *xpcu;
-    xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
-    xpcu_output_enable (xpcu, 0);
-    urj_tap_cable_generic_usbconn_done (cable);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -722,7 +713,7 @@ urj_cable_driver_t urj_tap_cable_xpc_ext_driver = {
     urj_tap_cable_generic_disconnect,
     xpc_ext_free,
     xpc_ext_init,
-    xpc_ext_done,
+    urj_tap_cable_generic_usbconn_done,
     urj_tap_cable_generic_set_frequency,
     xpc_ext_clock,
     xpc_ext_get_tdo,
