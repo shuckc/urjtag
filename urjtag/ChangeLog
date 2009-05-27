@@ -1,7 +1,10 @@
+2009-05-24  Rutger Hofman <rfhh>
+
+  * src/bus/avr32.c: fix uninitialized warning (Florian Fainelli)
+
 2009-05-26  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/xpc.c: fix crash when USB device is busy (Florian Fainelli)
-
 
 2009-05-26  Arnim Laeuger  <arniml>
 

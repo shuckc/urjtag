@@ -702,7 +702,7 @@ avr32_bus_read_start (urj_bus_t *bus, uint32_t addr)
 static uint32_t
 avr32_bus_read_end (urj_bus_t *bus)
 {
-    uint32_t data;
+    uint32_t data = 0;
 
     switch (MODE)
     {
@@ -729,7 +729,7 @@ avr32_bus_read_end (urj_bus_t *bus)
 static uint32_t
 avr32_bus_read_next (urj_bus_t *bus, uint32_t addr)
 {
-    uint32_t data;
+    uint32_t data = 0;
 
     addr &= ADDR_MASK;
 
