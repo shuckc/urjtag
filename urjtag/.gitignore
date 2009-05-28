@@ -1,0 +1,78 @@
+#
+# general globs
+#
+*~
+*.o
+*.lo
+*.la
+
+#
+# debugging files
+#
+core
+.gdb_history
+.gbdinit
+
+#
+# patch related files
+#
+*.orig
+*.rej
+*.patch
+
+#
+# general autotool files
+#
+.deps
+.libs
+Makefile
+Makefile.in
+
+#
+# specific autotool files
+#
+/ABOUT-NLS
+/aclocal.m4
+/autom4te.cache
+/config.h
+/config.h.in
+/config.log
+/config.status
+/configure
+/INSTALL
+/libtool
+/m4
+/stamp-h1
+/tools
+/include/urjtag/stamp-h2
+
+#
+# gettext (po) files
+#
+/po/Makefile.in.in
+/po/Makevars.template
+/po/POTFILES
+/po/Rules-quot
+/po/stamp-po
+/po/*.gmo
+/po/*.header
+/po/*.pot
+/po/*.sed
+/po/*.sin
+
+#
+# urjtag generated files
+#
+/include/urjtag/urjtag.h
+/src/apps/bsdl2jtag/bsdl2jtag
+/src/apps/jtag/jtag
+/src/bsdl/bsdl_bison.c
+/src/bsdl/bsdl_bison.h
+/src/bsdl/bsdl_config.h
+/src/bsdl/bsdl_flex.c
+/src/bsdl/vhdl_bison.c
+/src/bsdl/vhdl_bison.h
+/src/bsdl/vhdl_flex.c
+/src/svf/svf_bison.c
+/src/svf/svf_bison.h
+/src/svf/svf_flex.c
