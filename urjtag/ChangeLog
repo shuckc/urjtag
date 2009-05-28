@@ -6,6 +6,8 @@
   * src/tap/detect.c: if the part could not be found because the data file
     could not be opened, then log an obvious error message
 
+  * src/cmd/cmd_debug.c: display current log level if no arguments specified
+
 2009-05-24  Rutger Hofman <rfhh>
 
   * src/bus/avr32.c: fix uninitialized warning (Florian Fainelli)

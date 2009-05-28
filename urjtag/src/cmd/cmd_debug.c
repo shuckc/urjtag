@@ -34,42 +34,80 @@
 
 #include "cmd.h"
 
+static urj_log_level_t
+string_to_log_level (const char *strlevel)
+{
+    if (0)
+        ;
+    else if (strcasecmp(strlevel, "all") == 0)
+        return URJ_LOG_LEVEL_ALL;
+    else if (strcasecmp(strlevel, "comm") == 0)
+        return URJ_LOG_LEVEL_COMM;
+    else if (strcasecmp(strlevel, "debug") == 0)
+        return URJ_LOG_LEVEL_DEBUG;
+    else if (strcasecmp(strlevel, "detail") == 0)
+        return URJ_LOG_LEVEL_DETAIL;
+    else if (strcasecmp(strlevel, "normal") == 0)
+        return URJ_LOG_LEVEL_NORMAL;
+    else if (strcasecmp(strlevel, "warning") == 0)
+        return URJ_LOG_LEVEL_WARNING;
+    else if (strcasecmp(strlevel, "error") == 0)
+        return URJ_LOG_LEVEL_ERROR;
+    else if (strcasecmp(strlevel, "silent") == 0)
+        return URJ_LOG_LEVEL_SILENT;
+    else
+        return -1;
+}
+
+static const char *
+log_level_to_string (urj_log_level_t level)
+{
+    switch (level) {
+    case URJ_LOG_LEVEL_ALL:     return "all";
+    case URJ_LOG_LEVEL_COMM:    return "comm";
+    case URJ_LOG_LEVEL_DEBUG:   return "debug";
+    case URJ_LOG_LEVEL_DETAIL:  return "detail";
+    case URJ_LOG_LEVEL_NORMAL:  return "normal";
+    case URJ_LOG_LEVEL_WARNING: return "warning";
+    case URJ_LOG_LEVEL_ERROR:   return "error";
+    case URJ_LOG_LEVEL_SILENT:  return "silent";
+    case -1: /* sanity for string_to_log_level() return */
+    default: return "unknown";
+    }
+}
+
 static int
 cmd_debug_run (urj_chain_t *chain, char *params[])
 {
-    if (urj_cmd_params (params) != 2)
+    switch (urj_cmd_params (params)) {
+
+    /* display current log level */
+    case 1:
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Current log level is '%s'\n"),
+                 log_level_to_string (urj_log_state.level));
+        return URJ_STATUS_OK;
+
+    /* set log level */
+    case 2:
     {
+        urj_log_level_t new_level = string_to_log_level (params[1]);
+        if (new_level == -1)
+        {
+            urj_error_set (URJ_ERROR_SYNTAX, "unknown log level '%s'", params[1]);
+            return URJ_STATUS_FAIL;
+        }
+        urj_log_state.level = new_level;
+
+        return URJ_STATUS_OK;
+    }
+
+    /* fail! */
+    default:
         urj_error_set (URJ_ERROR_SYNTAX,
                        "%s: #parameters should be %d, not %d",
                        params[0], 2, urj_cmd_params (params));
         return URJ_STATUS_FAIL;
     }
-
-    if (0)
-        ;
-    else if (strcasecmp(params[1], "all") == 0)
-        urj_log_state.level = URJ_LOG_LEVEL_ALL;
-    else if (strcasecmp(params[1], "comm") == 0)
-        urj_log_state.level = URJ_LOG_LEVEL_COMM;
-    else if (strcasecmp(params[1], "debug") == 0)
-        urj_log_state.level = URJ_LOG_LEVEL_DEBUG;
-    else if (strcasecmp(params[1], "detail") == 0)
-        urj_log_state.level = URJ_LOG_LEVEL_DETAIL;
-    else if (strcasecmp(params[1], "normal") == 0)
-        urj_log_state.level = URJ_LOG_LEVEL_NORMAL;
-    else if (strcasecmp(params[1], "warning") == 0)
-        urj_log_state.level = URJ_LOG_LEVEL_WARNING;
-    else if (strcasecmp(params[1], "error") == 0)
-        urj_log_state.level = URJ_LOG_LEVEL_ERROR;
-    else if (strcasecmp(params[1], "silent") == 0)
-        urj_log_state.level = URJ_LOG_LEVEL_SILENT;
-    else
-    {
-        urj_error_set (URJ_ERROR_SYNTAX, "unknown log level '%s'", params[1]);
-        return URJ_STATUS_FAIL;
-    }
-
-    return URJ_STATUS_OK;
 }
 
 static void
