@@ -120,30 +120,24 @@ ppdev_parport_free (urj_parport_t *port)
 }
 
 static urj_parport_t *
-ppdev_connect (const char **par, int parnum)
+ppdev_connect (const char *devname)
 {
     port_node_t *pn;
     urj_parport_t *parport;
 
-    if (parnum != 1)
-    {
-        urj_error_set (URJ_ERROR_SYNTAX, "#param != 1");
-        return NULL;
-    }
-
     for (pn = ports; pn; pn = pn->next)
-        if (strcmp (pn->port->params, par[0]) == 0)
+        if (strcmp (pn->port->params, devname) == 0)
         {
             urj_log (URJ_LOG_LEVEL_NORMAL,
                      _("Disconnecting %s from ppdev port %s\n"),
-                     _(pn->port->cable->driver->description), par[0]);
+                     _(pn->port->cable->driver->description), devname);
             pn->port->cable->driver->disconnect (pn->port->cable);
             break;
         }
 
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("Initializing ppdev port %s\n"), par[0]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Initializing ppdev port %s\n"), devname);
 
-    parport = ppdev_parport_alloc (par[0]);
+    parport = ppdev_parport_alloc (devname);
     if (!parport)
         return NULL;
 
@@ -257,7 +251,7 @@ ppdev_set_control (urj_parport_t *parport, unsigned char data)
 }
 
 urj_parport_driver_t urj_tap_parport_ppdev_parport_driver = {
-    "ppdev",
+    URJ_CABLE_PARPORT_DEV_PPDEV,
     ppdev_connect,
     ppdev_parport_free,
     ppdev_open,

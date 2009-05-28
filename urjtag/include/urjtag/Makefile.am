@@ -42,9 +42,10 @@ pkginclude_HEADERS = \
 	jim.h \
 	jtag.h \
 	log.h \
-	part_instruction.h \
+	params.h \
 	parport.h \
 	part.h \
+	part_instruction.h \
 	pod.h \
 	tap_register.h \
 	tap_state.h \

@@ -110,7 +110,7 @@ typedef struct
 
 
 
-static int map_pin (char *pin, int *act, int *inact)
+static int map_pin (const char *pin, int *act, int *inact)
 {
     int bitnum;
     int inverted = 0;
@@ -139,11 +139,11 @@ static int map_pin (char *pin, int *act, int *inact)
 
 
 static int
-set_mapping (char *bitmap, urj_cable_t *cable)
+set_mapping (const char *bitmap, urj_cable_t *cable)
 {
     const char delim = ',';
     int syntax = 0;
-    char *tdo, *trst, *tdi, *tck, *tms, *srst;
+    const char *tdo, *trst, *tdi, *tck, *tms, *srst;
 
     /* assign mappings for each pin */
     if ((tdo = bitmap))
@@ -193,24 +193,32 @@ set_mapping (char *bitmap, urj_cable_t *cable)
 
 
 static int
-wiggler_connect (char *params[], urj_cable_t *cable)
+wiggler_connect (urj_cable_t *cable, urj_cable_parport_devtype_t devtype,
+                 const char *devname, const urj_param_t *params[])
 {
-    char *param_bitmap = NULL;
+    const urj_param_t *param_bitmap = NULL;
+    const char *bitmap = NULL;
     wiggler_params_t *wiggler_params;
 
-    if (urj_cmd_params (params) == 4)
+    if (urj_param_num (params) > 0)
     {
         /* acquire optional parameter for bit<->pin mapping */
-        param_bitmap = params[3];
+        param_bitmap = params[0];
+        if (params[0]->type != URJ_PARAM_TYPE_STRING)
+        {
+            urj_error_set (URJ_ERROR_SYNTAX, "mapping name should be a string");
+            return URJ_STATUS_FAIL;
+        }
         /* urj_tap_cable_generic_parport_connect() shouldn't see this parameter */
-        params[3] = NULL;
+        params[0] = NULL;
     }
 
-    if (urj_tap_cable_generic_parport_connect (params, cable) != URJ_STATUS_OK)
+    if (urj_tap_cable_generic_parport_connect (cable, devtype, devname,
+                                               params) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     if (param_bitmap)
-        params[3] = param_bitmap;
+        params[0] = param_bitmap;
 
     wiggler_params = malloc (sizeof *wiggler_params);
     if (!wiggler_params)
@@ -231,9 +239,11 @@ wiggler_connect (char *params[], urj_cable_t *cable)
     cable->params = wiggler_params;
 
     if (!param_bitmap)
-        param_bitmap = (char *) std_wgl_map;
+        bitmap = (char *) std_wgl_map;
+    else
+        bitmap = param_bitmap->value.string;
 
-    if (set_mapping (param_bitmap, cable) != 0)
+    if (set_mapping (bitmap, cable) != 0)
     {
         urj_log (URJ_LOG_LEVEL_ERROR, _("Pin mapping failed\n"));
         /* NOTE:
@@ -403,7 +413,8 @@ wiggler_help (urj_log_level_t ll, const char *cablename)
 urj_cable_driver_t urj_tap_cable_wiggler_driver = {
     "WIGGLER",
     N_("Macraigor Wiggler JTAG Cable"),
-    wiggler_connect,
+    URJ_CABLE_DEVICE_PARPORT,
+    { .parport = wiggler_connect, },
     urj_tap_cable_generic_disconnect,
     urj_tap_cable_generic_parport_free,
     wiggler_init,
@@ -421,7 +432,8 @@ urj_cable_driver_t urj_tap_cable_wiggler_driver = {
 urj_cable_driver_t urj_tap_cable_igloo_driver = {
     "IGLOO",
     N_("Excelpoint IGLOO JTAG Cable"),
-    wiggler_connect,
+    URJ_CABLE_DEVICE_PARPORT,
+    { .parport = wiggler_connect, },
     urj_tap_cable_generic_disconnect,
     urj_tap_cable_generic_parport_free,
     wiggler_init,

@@ -29,12 +29,13 @@
 #include <stdint.h>
 
 #include "types.h"
+#include "params.h"
 
 typedef struct
 {
-    char *name;
-    char *desc;
-    char *driver;
+    const char *name;
+    const char *desc;
+    const char *driver;
     int32_t vid;
     int32_t pid;
 }
@@ -43,7 +44,8 @@ urj_usbconn_cable_t;
 typedef struct
 {
     const char *type;
-    urj_usbconn_t *(*connect) (const char **, int, urj_usbconn_cable_t *);
+    urj_usbconn_t *(*connect) (urj_usbconn_cable_t *cable,
+                               const urj_param_t *params[]);
     void (*free) (urj_usbconn_t *);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*open) (urj_usbconn_t *);
@@ -63,7 +65,8 @@ struct urj_usbconn
     urj_cable_t *cable;
 };
 
-urj_usbconn_t *usbconn_connect (const char **, int, urj_usbconn_cable_t *);
+urj_usbconn_t *usbconn_connect (urj_usbconn_cable_t *cable,
+                                const urj_param_t *params[]);
 int usbconn_free (urj_usbconn_t *conn);
 int urj_tap_usbconn_open (urj_usbconn_t *conn);
 int urj_tap_usbconn_close (urj_usbconn_t *conn);

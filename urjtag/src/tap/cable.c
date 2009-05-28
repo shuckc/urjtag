@@ -37,6 +37,10 @@
 
 #include <urjtag/log.h>
 #include <urjtag/error.h>
+#include <urjtag/bus.h>
+#include <urjtag/bus_driver.h>
+#include <urjtag/chain.h>
+#include <urjtag/tap.h>
 #include <urjtag/cable.h>
 
 #undef VERBOSE
@@ -630,3 +634,127 @@ urj_tap_cable_wait (urj_cable_t *cable)
         j = i;
     }
 }
+
+static urj_cable_t *
+urj_tap_cable_create (urj_chain_t *chain, urj_cable_driver_t *driver)
+{
+    urj_cable_t *cable;
+
+    if (urj_bus)
+    {
+        URJ_BUS_FREE (urj_bus);
+        urj_bus = NULL;
+    }
+
+    urj_tap_chain_disconnect (chain);
+
+    cable = calloc (1, sizeof (urj_cable_t));
+    if (!cable)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       (size_t) 1, sizeof (urj_cable_t));
+        return NULL;
+    }
+
+    cable->driver = driver;
+
+    return cable;
+}
+
+static int
+urj_tap_cable_start (urj_chain_t *chain, urj_cable_t *cable)
+{
+    chain->cable = cable;
+
+    if (urj_tap_cable_init (chain->cable) != URJ_STATUS_OK)
+    {
+        urj_tap_chain_disconnect (chain);
+        return URJ_STATUS_FAIL;
+    }
+
+    urj_tap_chain_set_trst (chain, 0);
+    urj_tap_chain_set_trst (chain, 1);
+    urj_tap_reset (chain);
+
+    return URJ_STATUS_OK;
+}
+
+urj_cable_t *
+urj_tap_cable_parport_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
+                               urj_cable_parport_devtype_t devtype,
+                               const char *devname, const urj_param_t *params[])
+{
+    urj_cable_t *cable = urj_tap_cable_create (chain, driver);
+
+    if (cable == NULL)
+        return NULL;
+
+    if (cable->driver->connect.parport (cable, devtype, devname,
+                                        params) != URJ_STATUS_OK)
+    {
+        free (cable);
+        return NULL;
+    }
+
+    if (urj_tap_cable_start (chain, cable) != URJ_STATUS_OK)
+        return NULL;
+
+    return cable;
+}
+
+urj_cable_t *
+urj_tap_cable_usb_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
+                           const urj_param_t *params[])
+{
+    urj_cable_t *cable = urj_tap_cable_create (chain, driver);
+
+    if (cable == NULL)
+        return NULL;
+
+    if (cable->driver->connect.usb (cable, params) != URJ_STATUS_OK)
+    {
+        free (cable);
+        return NULL;
+    }
+
+    if (urj_tap_cable_start (chain, cable) != URJ_STATUS_OK)
+        return NULL;
+
+    return cable;
+}
+
+urj_cable_t *
+urj_tap_cable_other_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
+                             const urj_param_t *params[])
+{
+    urj_cable_t *cable = urj_tap_cable_create (chain, driver);
+
+    if (cable == NULL)
+        return NULL;
+
+    if (cable->driver->connect.other (cable, params) != URJ_STATUS_OK)
+    {
+        free (cable);
+        return NULL;
+    }
+
+    if (urj_tap_cable_start (chain, cable) != URJ_STATUS_OK)
+        return NULL;
+
+    return cable;
+}
+
+static urj_param_descr_t cable_param[] =
+{
+    { URJ_CABLE_PARAM_KEY_PID,          URJ_PARAM_TYPE_LU,      "pid", },
+    { URJ_CABLE_PARAM_KEY_VID,          URJ_PARAM_TYPE_LU,      "vid", },
+    { URJ_CABLE_PARAM_KEY_DESC,         URJ_PARAM_TYPE_STRING,  "desc", },
+    { URJ_CABLE_PARAM_KEY_DRIVER,       URJ_PARAM_TYPE_STRING,  "driver", },
+    { URJ_CABLE_PARAM_KEY_BITMAP,       URJ_PARAM_TYPE_STRING,  "bitmap", },
+};
+
+const urj_param_list_t urj_cable_param_list =
+{
+    .list = cable_param,
+    .n    = sizeof cable_param / sizeof cable_param[0],
+};

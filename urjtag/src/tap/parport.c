@@ -84,3 +84,17 @@ urj_tap_parport_set_control (urj_parport_t *port, const unsigned char data)
 {
     return port->driver->set_control (port, data);
 }
+
+const char *
+urj_cable_parport_devtype_string(urj_cable_parport_devtype_t dt)
+{
+    switch (dt)
+    {
+    case URJ_CABLE_PARPORT_DEV_PARALLEL: return "parallel";
+    case URJ_CABLE_PARPORT_DEV_PPDEV:    return "ppdev";
+    case URJ_CABLE_PARPORT_DEV_PPI:      return "ppi";
+    case URJ_CABLE_PARPORT_N_DEVS:       return "#devs";
+    }
+    return "<unknown parport devtype>";
+}
+

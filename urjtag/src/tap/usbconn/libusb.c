@@ -58,7 +58,7 @@ urj_usbconn_driver_t urj_tap_usbconn_libusb_driver;
 /* ---------------------------------------------------------------------- */
 
 static int
-libusb_match_desc (struct usb_device *dev, char *desc)
+libusb_match_desc (struct usb_device *dev, const char *desc)
 {
     int r = 0;
     char buf[256];
@@ -112,8 +112,8 @@ libusb_match_desc (struct usb_device *dev, char *desc)
 /* ---------------------------------------------------------------------- */
 
 static urj_usbconn_t *
-usbconn_libusb_connect (const char **param, int paramc,
-                        urj_usbconn_cable_t *template)
+usbconn_libusb_connect (urj_usbconn_cable_t *template,
+                        const urj_param_t *params[])
 {
     struct usb_bus *bus;
     struct usb_device *found_dev = NULL;

@@ -203,20 +203,20 @@ direct_parport_free (urj_parport_t *port)
 }
 
 static urj_parport_t *
-direct_connect (const char **par, int parnum)
+direct_connect (const char *devname)
 {
     long int port_scan_val;
     unsigned int port;
     port_node_t *pn = ports;
     urj_parport_t *parport;
 
-    if (parnum != 1)
+    errno = 0;
+    port_scan_val = strtol (devname, NULL, 0);
+    if (errno != 0)
     {
-        urj_error_set (URJ_ERROR_SYNTAX, "#params != 1");
+        urj_error_IO_set ("strtol(%s) fails", devname);
         return NULL;
     }
-
-    port_scan_val = strtol (par[0], NULL, 0);
 
     if (port_scan_val < 0 || (port_scan_val + 3) > 0xffff)
     {
@@ -317,7 +317,7 @@ direct_set_control (urj_parport_t *parport, unsigned char data)
 }
 
 urj_parport_driver_t urj_tap_parport_direct_parport_driver = {
-    "parallel",
+    URJ_CABLE_PARPORT_DEV_PARALLEL,
     direct_connect,
     direct_parport_free,
     direct_open,

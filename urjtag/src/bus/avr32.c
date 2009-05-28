@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <limits.h>
 
 #include <urjtag/part.h>
 #include <urjtag/part_instruction.h>
@@ -60,6 +61,7 @@ typedef struct
 #define BUS_MODE_x8     3
 #define BUS_MODE_x16    4
 #define BUS_MODE_x32    5
+#define BUS_MODE_ERROR  UINT_MAX
 
 #define BP              ((bus_params_t *) bus->params)
 #define SLAVE           (BP->slave)
@@ -491,49 +493,76 @@ check_instruction (urj_part_t *part, const char *instr)
  */
 static urj_bus_t *
 avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-               char *cmd_params[])
+               const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
     urj_part_t *part;
-    char *param;
-    unsigned int mode;
+    unsigned int mode = BUS_MODE_ERROR;
 
-    part = chain->parts->parts[chain->active_part];
-
-    param = cmd_params[2];
-    if (!param)
+    if (cmd_params[0] == NULL)
     {
         urj_error_set (URJ_ERROR_SYNTAX, "no bus mode specified");
         return NULL;
     }
 
-    if (!strcasecmp ("OCD", param))
+    if (cmd_params[1] != NULL)
     {
+        urj_error_set (URJ_ERROR_SYNTAX, "invalid bus parameter: %s",
+                       urj_param_string(&urj_bus_param_list, cmd_params[1]));
+        return NULL;
+    }
+
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    if (bus == NULL)
+        return NULL;
+    part = bus->part;
+
+    switch (cmd_params[0]->key)
+    {
+    case URJ_BUS_PARAM_KEY_OCD:
         mode = BUS_MODE_OCD;
-    }
-    else if (!strcasecmp ("HSBC", param))
-    {
+        break;
+    case URJ_BUS_PARAM_KEY_HSBC:
         mode = BUS_MODE_HSBC;
-    }
-    else if (!strcasecmp ("HSBU", param))
-    {
+        break;
+    case URJ_BUS_PARAM_KEY_HSBU:
         mode = BUS_MODE_HSBU;
-    }
-    else if (!strcasecmp ("x8", param))
-    {
+        break;
+    case URJ_BUS_PARAM_KEY_X8:          // see also: width=8
         mode = BUS_MODE_x8;
-    }
-    else if (!strcasecmp ("x16", param))
-    {
+        break;
+    case URJ_BUS_PARAM_KEY_X16:         // see also: width=16
         mode = BUS_MODE_x16;
-    }
-    else if (!strcasecmp ("x32", param))
-    {
+        break;
+    case URJ_BUS_PARAM_KEY_X32:         // see also: width=32
         mode = BUS_MODE_x32;
-    }
-    else
-    {
-        urj_error_set (URJ_ERROR_SYNTAX, "invalid bus mode: %s", param);
+        break;
+
+    // RFHH introduced 'width=8|16|32' as an alias for x8, x16, x32
+    case URJ_BUS_PARAM_KEY_WIDTH:
+        switch (cmd_params[0]->value.lu)
+        {
+        case 8:
+            mode = BUS_MODE_x8;
+            break;
+        case 16:
+            mode = BUS_MODE_x16;
+            break;
+        case 32:
+            mode = BUS_MODE_x32;
+            break;
+        default:
+            urj_bus_generic_free (bus);
+            urj_error_set (URJ_ERROR_SYNTAX, "invalid bus width: %lu",
+                           cmd_params[0]->value.lu);
+            return NULL;
+        }
+        break;
+
+    default:
+        urj_bus_generic_free (bus);
+        urj_error_set (URJ_ERROR_SYNTAX, "invalid bus mode: %s",
+                       urj_param_string(&urj_bus_param_list, cmd_params[0]));
         return NULL;
     }
 
@@ -543,31 +572,23 @@ avr32_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     case BUS_MODE_HSBC:
     case BUS_MODE_HSBU:
         if (check_instruction (part, "MEMORY_WORD_ACCESS"))
+        {
+            urj_bus_generic_free (bus);
             return NULL;
+        }
         break;
     case BUS_MODE_x8:
     case BUS_MODE_x16:
     case BUS_MODE_x32:
         if (check_instruction (part, "NEXUS_ACCESS"))
+        {
+            urj_bus_generic_free (bus);
             return NULL;
+        }
         break;
-    }
-
-    bus = calloc (1, sizeof (urj_bus_t));
-    if (!bus)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
-        return NULL;
-    }
-
-    bus->driver = driver;
-    bus->params = calloc (1, sizeof (bus_params_t));
-    if (!bus->params)
-    {
-        free (bus);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (bus_params_t));
+    default:
+        urj_error_set (URJ_ERROR_INVALID, "need bus mode parameter");
+        urj_bus_generic_free (bus);
         return NULL;
     }
 

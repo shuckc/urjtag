@@ -26,9 +26,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <urjtag/error.h>
 #include <urjtag/bus.h>
+#include <urjtag/chain.h>
+#include <urjtag/part.h>
 
 #include "buses.h"
 
@@ -162,30 +165,34 @@ urj_bus_buses_free (void)
     urj_bus = NULL;
 }
 
-void
+int
 urj_bus_buses_add (urj_bus_t *abus)
 {
     urj_bus_t **b;
 
     if (abus == NULL)
-        /* @@@@ RFHH add status return */
-        return;
+    {
+        urj_error_set (URJ_ERROR_INVALID, "abus == NULL");
+        return URJ_STATUS_FAIL;
+    }
 
     b = realloc (urj_buses.buses, (urj_buses.len + 1) * sizeof (urj_bus_t *));
     if (b == NULL)
     {
-        /* @@@@ RFHH add status return */
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
-        return;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("realloc(%s,%zd) fails"),
+                       "urj_buses.buses",
+                       (urj_buses.len + 1) * sizeof (urj_bus_t *));
+        return URJ_STATUS_FAIL;
     }
     urj_buses.buses = b;
     urj_buses.buses[urj_buses.len++] = abus;
     if (urj_bus == NULL)
         urj_bus = abus;
+
+    return URJ_STATUS_OK;
 }
 
-void
+int
 urj_bus_buses_delete (urj_bus_t *abus)
 {
     int i;
@@ -195,8 +202,10 @@ urj_bus_buses_delete (urj_bus_t *abus)
         if (abus == urj_buses.buses[i])
             break;
     if (i >= urj_buses.len)
-        /* @@@@ RFHH add status return */
-        return;
+    {
+        urj_error_set (URJ_ERROR_NOTFOUND, "abus not in global bus list");
+        return URJ_STATUS_FAIL;
+    }
 
     while (i + 1 < urj_buses.len)
     {
@@ -205,15 +214,24 @@ urj_bus_buses_delete (urj_bus_t *abus)
     }
     urj_buses.len--;
     b = realloc (urj_buses.buses, urj_buses.len * sizeof (urj_bus_t *));
-    if ((b != NULL) || (urj_buses.len == 0))
-        urj_buses.buses = b;
+    if (b == NULL && urj_buses.len > 0)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("realloc(%s,%zd) fails"),
+                       "urj_buses.buses", urj_buses.len * sizeof (urj_bus_t *));
+        return URJ_STATUS_FAIL;
+    }
+    urj_buses.buses = b;
 
-    if (urj_bus != abus)
-        /* @@@@ RFHH add status return */
-        return;
+    if (urj_bus == abus)
+    {
+        if (urj_buses.len > 0)
+            urj_bus = urj_buses.buses[0];
+        // @@@@ RFHH else: urj_bus is a dangling pointer?
+        else
+            urj_bus = NULL;
+    }
 
-    if (urj_buses.len > 0)
-        urj_bus = urj_buses.buses[0];
+    return URJ_STATUS_OK;
 }
 
 int
@@ -229,3 +247,77 @@ urj_bus_buses_set (int n)
 
     return URJ_STATUS_OK;
 }
+
+urj_bus_t *
+urj_bus_init_bus (urj_chain_t *chain, const urj_bus_driver_t *bus_driver,
+                  const urj_param_t *param[])
+{
+    urj_bus_t *abus;
+    int i;
+
+    if (urj_tap_chain_active_part (chain) == NULL)
+        return NULL;
+
+    abus = bus_driver->new_bus (chain, bus_driver, param);
+    if (abus == NULL)
+        // retain error state
+        return NULL;
+
+    if (urj_bus_buses_add (abus) != URJ_STATUS_OK)
+    {
+        // @@@@ RFHH I added this FREE() + bail out. Is that correct?
+        URJ_BUS_FREE(abus);
+        return NULL;
+    }
+
+    if (URJ_BUS_INIT (abus) != URJ_STATUS_OK)
+    {
+        // @@@@ RFHH I added this FREE() + bail out. Is that correct?
+        URJ_BUS_FREE(abus);
+        return NULL;
+    }
+
+    for (i = 0; i < urj_buses.len; i++)
+        if (urj_buses.buses[i] == urj_bus)
+            break;
+    if (i != urj_buses.len - 1)
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Initialized bus %d, active bus %d\n"),
+                 urj_buses.len - 1, i);
+
+    return abus;
+}
+
+static urj_param_descr_t bus_param[] =
+{
+    { URJ_BUS_PARAM_KEY_MUX,        URJ_PARAM_TYPE_BOOL,    "MUX", },
+    { URJ_BUS_PARAM_KEY_OCD,        URJ_PARAM_TYPE_BOOL,    "OCD", },
+    { URJ_BUS_PARAM_KEY_HSBC,       URJ_PARAM_TYPE_BOOL,    "HSBC", },
+    { URJ_BUS_PARAM_KEY_HSBU,       URJ_PARAM_TYPE_BOOL,    "HSBU", },
+    { URJ_BUS_PARAM_KEY_X8,         URJ_PARAM_TYPE_BOOL,    "X8", },
+    { URJ_BUS_PARAM_KEY_X16,        URJ_PARAM_TYPE_BOOL,    "X16", },
+    { URJ_BUS_PARAM_KEY_X32,        URJ_PARAM_TYPE_BOOL,    "X32", },
+    { URJ_BUS_PARAM_KEY_WIDTH,      URJ_PARAM_TYPE_LU,      "WIDTH", },
+    { URJ_BUS_PARAM_KEY_AMODE,      URJ_PARAM_TYPE_LU,      "AMODE", },
+    { URJ_BUS_PARAM_KEY_OPCODE,     URJ_PARAM_TYPE_STRING,  "OPCODE", },
+    { URJ_BUS_PARAM_KEY_LEN,        URJ_PARAM_TYPE_LU,      "LEN", },
+    { URJ_BUS_PARAM_KEY_ALSB,       URJ_PARAM_TYPE_STRING,  "ALSB", },
+    { URJ_BUS_PARAM_KEY_AMSB,       URJ_PARAM_TYPE_STRING,  "AMSB", },
+    { URJ_BUS_PARAM_KEY_DLSB,       URJ_PARAM_TYPE_STRING,  "DLSB", },
+    { URJ_BUS_PARAM_KEY_DMSB,       URJ_PARAM_TYPE_STRING,  "DMSB", },
+    { URJ_BUS_PARAM_KEY_CS,         URJ_PARAM_TYPE_STRING,  "CS", },
+    { URJ_BUS_PARAM_KEY_NCS,        URJ_PARAM_TYPE_STRING,  "NCS", },
+    { URJ_BUS_PARAM_KEY_OE,         URJ_PARAM_TYPE_STRING,  "OE", },
+    { URJ_BUS_PARAM_KEY_NOE,        URJ_PARAM_TYPE_STRING,  "NOE", },
+    { URJ_BUS_PARAM_KEY_WE,         URJ_PARAM_TYPE_STRING,  "WE", },
+    { URJ_BUS_PARAM_KEY_NWE,        URJ_PARAM_TYPE_STRING,  "NWE", },
+    { URJ_BUS_PARAM_KEY_REVBITS,    URJ_PARAM_TYPE_BOOL,    "REVBITS", },
+    { URJ_BUS_PARAM_KEY_HELP,       URJ_PARAM_TYPE_BOOL,    "HELP", },
+    { URJ_BUS_PARAM_KEY_DBGaDDR,    URJ_PARAM_TYPE_BOOL,    "DBGaDDR", },
+    { URJ_BUS_PARAM_KEY_DBGdATA,    URJ_PARAM_TYPE_BOOL,    "DBGdATA", },
+};
+
+const urj_param_list_t urj_bus_param_list =
+{
+    .list = bus_param,
+    .n    = sizeof bus_param / sizeof bus_param[0],
+};

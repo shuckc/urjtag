@@ -48,32 +48,34 @@ print_vector (urj_log_level_t ll, int len, char *vec)
 #endif
 
 int
-urj_tap_cable_generic_parport_connect (char *params[], urj_cable_t *cable)
+urj_tap_cable_generic_parport_connect (urj_cable_t *cable,
+                                       urj_cable_parport_devtype_t devtype,
+                                       const char *devname,
+                                       const urj_param_t *params[])
 {
     urj_tap_cable_generic_params_t *cable_params;
     urj_parport_t *port;
     int i;
 
-    if (urj_cmd_params (params) < 3)
+    if (urj_param_num (params) > 0)
     {
-        urj_error_set (URJ_ERROR_SYNTAX, _("not enough arguments"));
+        urj_error_set (URJ_ERROR_SYNTAX, _("extra arguments"));
         return URJ_STATUS_FAIL;
     }
 
     /* search parport driver list */
     for (i = 0; urj_tap_parport_drivers[i]; i++)
-        if (strcasecmp (params[1], urj_tap_parport_drivers[i]->type) == 0)
+        if (devtype == urj_tap_parport_drivers[i]->type)
             break;
     if (!urj_tap_parport_drivers[i])
     {
-        urj_error_set (URJ_ERROR_NOTFOUND, _("Unknown port driver: %s"),
-                       params[1]);
+        urj_error_set (URJ_ERROR_NOTFOUND, _("Unknown port type: %s"),
+                       urj_cable_parport_devtype_string(devtype));
         return URJ_STATUS_FAIL;
     }
 
     /* set up parport driver */
-    port = urj_tap_parport_drivers[i]->connect ((const char **) &params[2],
-                                                urj_cmd_params (params) - 2);
+    port = urj_tap_parport_drivers[i]->connect (devname);
 
     if (port == NULL)
     {

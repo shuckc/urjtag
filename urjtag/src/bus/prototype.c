@@ -69,7 +69,7 @@ typedef struct
 #define ASHIFT ((bus_params_t *) bus->params)->ashift
 
 static void
-prototype_bus_signal_parse (char *str, char *fmt, int *inst)
+prototype_bus_signal_parse (const char *str, char *fmt, int *inst)
 {
     char pre[16], suf[16];
 
@@ -84,6 +84,7 @@ prototype_bus_signal_parse (char *str, char *fmt, int *inst)
     case 3:
         sprintf (fmt, "%s%s%s", pre, "%d", suf);
     }
+    // @@@@ RFHH what about failure?
 }
 
 /**
@@ -92,113 +93,126 @@ prototype_bus_signal_parse (char *str, char *fmt, int *inst)
  */
 static urj_bus_t *
 prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-                   char *cmd_params[])
+                   const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
     urj_part_signal_t *sig;
-    char buff[16], fmt[16], afmt[16], dfmt[16], param[16], value[16];
+    char buff[16], fmt[16], afmt[16], dfmt[16];
     int i, j, inst, max, min;
     int failed = 0;
     int ashift = -1;
+    const char *value;
 
-    bus = calloc (1, sizeof (urj_bus_t));
-    if (!bus)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    if (bus == NULL)
         return NULL;
-    }
-
-    bus->driver = driver;
-    bus->params = calloc (1, sizeof (bus_params_t));
-    if (!bus->params)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
-        return NULL;
-    }
-
-    bus->chain = chain;
-    bus->part = chain->parts->parts[chain->active_part];
 
     CS = OE = WE = NULL;
     ALSBI = AMSBI = DLSBI = DMSBI = -1;
-    for (i = 2; cmd_params[i]; i++)
+    for (i = 0; cmd_params[i] != NULL; i++)
     {
-        if (!strstr (cmd_params[i], "="))
-            continue;
-        sscanf (cmd_params[i], "%[^=]%*c%s", param, value);
-
-        if (!strcmp ("amode", param))
+        if (cmd_params[i]->key == URJ_BUS_PARAM_KEY_AMODE ||
+            cmd_params[i]->key == URJ_BUS_PARAM_KEY_WIDTH)
         {
-            if (!strcmp ("x8", value))
+            switch (cmd_params[i]->value.lu)
+            {
+            case 8:
                 ashift = 0;
-            else if (!strcmp ("x16", value))
+                break;
+            case 16:
                 ashift = 1;
-            else if (!strcmp ("x32", value))
+                break;
+            case 32:
                 ashift = 2;
-            else if (strcmp ("auto", value))
+                break;
+            case 0:     // "auto"
+                break;
+
+            default:
                 urj_error_set (URJ_ERROR_INVALID,
-                               _("value %s not defined for parameter %s"),
-                               value, param);
-            continue;
-        }
+                               _("value %lu not defined for parameter %s"),
+                               cmd_params[i]->value.lu,
+                               urj_param_string(&urj_bus_param_list,
+                                                cmd_params[i]));
+                failed = 1;     // @@@@ RFHH
+                break;
+            }
 
-        prototype_bus_signal_parse (value, fmt, &inst);
-        if (inst > 31)
-            continue;
-
-        sig = urj_part_find_signal (bus->part, value);
-        if (!sig)
-        {
-            urj_error_set (URJ_ERROR_NOTFOUND, _("signal '%s' not found"),
-                           value);
-            failed = 1;
-        }
-        else if (!strcmp ("alsb", param))
-        {
-            ALSBI = inst;
-            A[inst] = sig;
-            strcpy (afmt, fmt);
-        }
-        else if (!strcmp ("amsb", param))
-        {
-            AMSBI = inst;
-            A[inst] = sig;
-            strcpy (afmt, fmt);
-        }
-        else if (!strcmp ("dlsb", param))
-        {
-            DLSBI = inst;
-            D[inst] = sig;
-            strcpy (dfmt, fmt);
-        }
-        else if (!strcmp ("dmsb", param))
-        {
-            DMSBI = inst;
-            D[inst] = sig;
-            strcpy (dfmt, fmt);
-        }
-        else if (!(strcmp ("cs", param) && strcmp ("ncs", param)))
-        {
-            CS = sig;
-            CSA = (*param == 'n') ? 0 : 1;
-        }
-        else if (!(strcmp ("oe", param) && strcmp ("noe", param)))
-        {
-            OE = sig;
-            OEA = (*param == 'n') ? 0 : 1;
-        }
-        else if (!(strcmp ("we", param) && strcmp ("nwe", param)))
-        {
-            WE = sig;
-            WEA = (*param == 'n' ? 0 : 1);
         }
         else
         {
-            urj_error_set (URJ_ERROR_INVALID, _("parameter %s is unknown"),
-                           param);
-            failed = 1;
+            if (cmd_params[i]->type != URJ_PARAM_TYPE_STRING)
+            {
+                urj_error_set (URJ_ERROR_SYNTAX,
+                               "parameter must be of type string");
+                failed = 1;
+                continue;
+            }
+
+            value = cmd_params[i]->value.string;
+
+            inst = 32;
+            prototype_bus_signal_parse (value, fmt, &inst);
+            // @@@@ RFHH Flag error?
+            // @@@@ RFHH If it is mandatory for a signal to have an int inst
+            // number, why does prototype_bus_signal_parse() accept values
+            // without an int?
+            if (inst > 31 || inst < 0)
+                continue;
+
+            sig = urj_part_find_signal (bus->part, value);
+            if (!sig)
+            {
+                urj_error_set (URJ_ERROR_NOTFOUND, _("signal '%s' not found"),
+                               value);
+                failed = 1;
+                continue;
+            }
+
+            switch (cmd_params[i]->key)
+            {
+            case URJ_BUS_PARAM_KEY_ALSB:
+                ALSBI = inst;
+                A[inst] = sig;
+                strcpy (afmt, fmt);
+                break;
+            case URJ_BUS_PARAM_KEY_AMSB:
+                AMSBI = inst;
+                A[inst] = sig;
+                strcpy (afmt, fmt);
+                break;
+            case URJ_BUS_PARAM_KEY_DLSB:
+                DLSBI = inst;
+                D[inst] = sig;
+                strcpy (dfmt, fmt);
+                break;
+            case URJ_BUS_PARAM_KEY_DMSB:
+                DMSBI = inst;
+                D[inst] = sig;
+                strcpy (dfmt, fmt);
+                break;
+            case URJ_BUS_PARAM_KEY_CS:
+            case URJ_BUS_PARAM_KEY_NCS:
+                CS = sig;
+                CSA = (cmd_params[i]->key == URJ_BUS_PARAM_KEY_CS);
+                break;
+            case URJ_BUS_PARAM_KEY_OE:
+            case URJ_BUS_PARAM_KEY_NOE:
+                OE = sig;
+                OEA = (cmd_params[i]->key == URJ_BUS_PARAM_KEY_OE);
+                break;
+            case URJ_BUS_PARAM_KEY_WE:
+            case URJ_BUS_PARAM_KEY_NWE:
+                WE = sig;
+                WEA = (cmd_params[i]->key == URJ_BUS_PARAM_KEY_WE);
+                break;
+            default:
+                urj_error_set (URJ_ERROR_INVALID, _("parameter %s is unknown"),
+                               urj_param_string(&urj_bus_param_list,
+                                                cmd_params[i]));
+                failed = 1;
+                break;
+            }
         }
     }
 
@@ -230,6 +244,7 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         for (i = 0, j = ALSBI; i < AW; i++, j += AI)
         {
             sprintf (buff, afmt, j);
+            // @@@@ RFHH check result
             A[j] = urj_part_find_signal (bus->part, buff);
         }
     }
@@ -323,8 +338,7 @@ prototype_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     if (failed)
     {
-        free (bus->params);
-        free (bus);
+        urj_bus_generic_free (bus);
         return NULL;
     }
 
@@ -343,6 +357,7 @@ prototype_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus)
     for (i = 0; i < bus->chain->parts->len; i++)
         if (bus->part == bus->chain->parts->parts[i])
             break;
+    // @@@@ RFHH check for error
     urj_log (ll, _("Configurable prototype bus driver via BSR (JTAG part No. %d)\n"),
             i);
 }

@@ -45,7 +45,7 @@ typedef struct
 jim_cable_params_t;
 
 static int
-jim_cable_connect (char *params[], urj_cable_t *cable)
+jim_cable_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     jim_cable_params_t *cable_params;
     urj_jim_state_t *s;

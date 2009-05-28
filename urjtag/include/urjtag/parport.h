@@ -29,11 +29,21 @@
 #include <stdint.h>
 
 #include "types.h"
+#include "params.h"
+
+typedef enum URJ_CABLE_PARPORT_DEVTYPE
+{
+    URJ_CABLE_PARPORT_DEV_PARALLEL,
+    URJ_CABLE_PARPORT_DEV_PPDEV,
+    URJ_CABLE_PARPORT_DEV_PPI,
+    URJ_CABLE_PARPORT_N_DEVS,
+}
+urj_cable_parport_devtype_t;
 
 typedef struct
 {
-    const char *type;
-    urj_parport_t *(*connect) (const char **, int);
+    urj_cable_parport_devtype_t type;
+    urj_parport_t *(*connect) (const char *devname);
     void (*parport_free) (urj_parport_t *);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*open) (urj_parport_t *);
@@ -65,6 +75,8 @@ int urj_tap_parport_get_data (urj_parport_t *port);
 /** @return status on success; -1 on error */
 int urj_tap_parport_get_status (urj_parport_t *port);
 int urj_tap_parport_set_control (urj_parport_t *port, const unsigned char data);
+
+const char *urj_cable_parport_devtype_string(urj_cable_parport_devtype_t dt);
 
 extern urj_parport_driver_t *urj_tap_parport_drivers[];
 

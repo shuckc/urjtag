@@ -61,19 +61,17 @@ cmd_signal_run (urj_chain_t *chain, char *params[])
 
     if ((s = urj_part_find_signal (part, params[1])) != NULL)
     {
-        if (i == 3)
-        {
-            urj_log (URJ_LOG_LEVEL_NORMAL, "Defining pin for signal %s\n",
-                     s->name);
-
-            return urj_part_signal_redefine_pin(chain, s, params[2]);
-        }
-        else
+        if (i != 3)
         {
             urj_error_set (URJ_ERROR_ALREADY, _("Signal '%s' already defined"),
                            params[1]);
             return URJ_STATUS_FAIL;
         }
+
+        urj_log (URJ_LOG_LEVEL_NORMAL, "Defining pin for signal %s\n",
+                 s->name);
+
+        return urj_part_signal_redefine_pin(chain, s, params[2]);
     }
 
     if (i == 3)

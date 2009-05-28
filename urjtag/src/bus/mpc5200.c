@@ -74,7 +74,7 @@ typedef struct
  */
 static urj_bus_t *
 mpc5200_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-                 char *cmd_params[])
+                 const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
     bus_params_t *bp;
@@ -83,39 +83,34 @@ mpc5200_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     int i;
     int failed = 0;
 
-    bus = calloc (1, sizeof (urj_bus_t));
-    if (!bus)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    if (bus == NULL)
         return NULL;
-    }
-
-    bus->driver = driver;
-    bus->params = bp = calloc (1, sizeof (bus_params_t));
-    if (!bus->params)
-    {
-        free (bus);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (bus_params_t));
-        return NULL;
-    }
+    part = bus->part;
+    bp = bus->params;
 
     bp->lpc_num_ad = 24;
     bp->lpc_num_d = 8;
 
-    if (cmd_params[2] && !strncasecmp ("MUX", cmd_params[2], 3))
+    for (i = 0; cmd_params[i] != NULL; i++)
     {
-        bp->lpc_num_ad = 25;
-        bp->lpc_num_d = 16;
-        bp->muxed = 1;
+        switch (cmd_params[i]->key)
+        {
+        case URJ_BUS_PARAM_KEY_MUX:
+            bp->lpc_num_ad = 25;
+            bp->lpc_num_d = 16;
+            bp->muxed = 1;
+            break;
+        default:
+            urj_bus_generic_free (bus);
+            urj_error_set (URJ_ERROR_SYNTAX, "unrecognised bus parameter '%s'",
+                           urj_param_string(&urj_bus_param_list, cmd_params[i]));
+            return NULL;
+        }
     }
     urj_log (URJ_LOG_LEVEL_NORMAL,
              "%sMUXed %db address, %db data bus\n", (bp->muxed ? "" : "Non-"),
             bp->lpc_num_ad, bp->lpc_num_d);
-
-    bus->chain = chain;
-    bus->part = part = chain->parts->parts[chain->active_part];
 
     /* Get the signals */
     for (i = 0; i < LPC_NUM_AD; i++)
@@ -140,8 +135,7 @@ mpc5200_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     if (failed)
     {
-        free (bus->params);
-        free (bus);
+        urj_bus_generic_free (bus);
         return NULL;
     }
 

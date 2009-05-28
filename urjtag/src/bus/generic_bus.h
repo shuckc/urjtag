@@ -25,11 +25,16 @@
 #ifndef URJ_BUS_GENERIC_BUS_H
 #define URJ_BUS_GENERIC_BUS_H
 
+#include <stddef.h>
+
 #include <urjtag/bus.h>
 
 int urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig,
                                 char *id);
 
+urj_bus_t *urj_bus_generic_new (urj_chain_t *chain,
+                                const urj_bus_driver_t *driver,
+                                size_t param_size);
 void urj_bus_generic_free (urj_bus_t *bus);
 int urj_bus_generic_no_init (urj_bus_t *bus);
 void urj_bus_generic_prepare_extest (urj_bus_t *bus);

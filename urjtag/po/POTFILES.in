@@ -1,4 +1,5 @@
 # $Id$
+src/apps/bsdl2jtag/bsdl2jtag.c
 src/apps/jtag/jtag.c
 src/bsdl/bsdl_bison.c
 src/bsdl/bsdl.c
@@ -86,9 +87,10 @@ src/flash/flash.c
 src/flash/intel.c
 src/flash/jedec.c
 src/flash/jedec_exp.c
-src/global/urjtag.c
+src/global/log-error.c
 src/global/parse.c
 src/global/data_dir.c
+src/global/params.c
 src/jim/intel_28f800b3.c
 src/jim/some_cpu.c
 src/jim/jim_tap.c

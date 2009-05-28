@@ -29,7 +29,9 @@
 #include <stdint.h>
 
 #include "types.h"
+#include "params.h"
 
+#include "parport.h"
 #include "pod.h"
 
 typedef struct urj_cable_driver urj_cable_driver_t;
@@ -42,12 +44,37 @@ typedef enum urj_cable_flush_amount
 }
 urj_cable_flush_amount_t;
 
+typedef enum URJ_CABLE_DEVICE_TYPE
+{
+    URJ_CABLE_DEVICE_PARPORT,
+    URJ_CABLE_DEVICE_USB,
+    URJ_CABLE_DEVICE_OTHER,
+}
+urj_cable_device_type_t;
+
+typedef enum URJ_CABLE_PARAM_KEY
+{
+    URJ_CABLE_PARAM_KEY_PID,            // lu           generic_usbconn
+    URJ_CABLE_PARAM_KEY_VID,            // lu           generic_usbconn
+    URJ_CABLE_PARAM_KEY_DESC,           // string       generic_usbconn
+    URJ_CABLE_PARAM_KEY_DRIVER,         // string       generic_usbconn
+    URJ_CABLE_PARAM_KEY_BITMAP,         // string       wiggler
+}
+urj_cable_param_key_t;
+
 struct urj_cable_driver
 {
     const char *name;
     const char *description;
+    /** tag for the following union */
+    urj_cable_device_type_t device_type;
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
-    int (*connect) (char *params[], urj_cable_t *cable);
+    union {
+        int (*parport) (urj_cable_t *cable, urj_cable_parport_devtype_t devtype,
+                        const char *devname, const urj_param_t *params[]);
+        int (*usb) (urj_cable_t *cable, const urj_param_t *params[]);
+        int (*other) (urj_cable_t *cable, const urj_param_t *params[]);
+    } connect;
     void (*disconnect) (urj_cable_t *cable);
     void (*cable_free) (urj_cable_t *cable);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
@@ -127,6 +154,7 @@ struct urj_cable
     {
         urj_usbconn_t *usb;
         urj_parport_t *port;
+        void *other;
     } link;
     void *params;
     urj_chain_t *chain;
@@ -180,6 +208,36 @@ int urj_tap_cable_add_queue_item (urj_cable_t *cable,
 int urj_tap_cable_get_queue_item (urj_cable_t *cable,
                                   urj_cable_queue_info_t *q);
 
+/**
+ * API function to connect to a parport cable
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure
+ */
+urj_cable_t *urj_tap_cable_parport_connect (urj_chain_t *chain,
+                                            urj_cable_driver_t *driver,
+                                            urj_cable_parport_devtype_t devtype,
+                                            const char *devname,
+                                            const urj_param_t *params[]);
+/**
+ * API function to connect to a USB cable
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure
+ */
+urj_cable_t *urj_tap_cable_usb_connect (urj_chain_t *chain,
+                                        urj_cable_driver_t *driver,
+                                        const urj_param_t *params[]);
+/**
+ * API function to connect to a type-other cable
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure
+ */
+urj_cable_t *urj_tap_cable_other_connect (urj_chain_t *chain,
+                                          urj_cable_driver_t *driver,
+                                          const urj_param_t *params[]);
+
 extern urj_cable_driver_t *urj_tap_cable_drivers[];
+
+/** The list of recognized parameters */
+extern const urj_param_list_t urj_cable_param_list;
 
 #endif /* URJ_CABLE_H */

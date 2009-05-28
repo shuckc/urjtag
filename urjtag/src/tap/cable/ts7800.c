@@ -151,7 +151,7 @@ ts7800_gpio_read (urj_cable_t *cable)
 }
 
 static int
-ts7800_connect (char *params[], urj_cable_t *cable)
+ts7800_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     ts7800_params_t *cable_params;
 
@@ -301,7 +301,8 @@ ts7800_help (urj_log_level_t ll, const char *cablename)
 urj_cable_driver_t urj_tap_cable_ts7800_driver = {
     "ts7800",
     N_("TS-7800 Built-in JTAG Chain"),
-    ts7800_connect,
+    URJ_CABLE_DEVICE_OTHER,
+    { .other = ts7800_connect, },
     ts7800_disconnect,
     ts7800_cable_free,
     ts7800_init,

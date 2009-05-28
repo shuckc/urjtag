@@ -66,12 +66,12 @@ typedef struct
 } params_t;
 
 static int
-usbblaster_connect (char *params[], urj_cable_t *cable)
+usbblaster_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     params_t *cable_params;
 
     /* perform urj_tap_cable_generic_usbconn_connect */
-    if (urj_tap_cable_generic_usbconn_connect (params, cable) != URJ_STATUS_OK)
+    if (urj_tap_cable_generic_usbconn_connect (cable, params) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     cable_params = malloc (sizeof (params_t));
@@ -512,7 +512,8 @@ usbblaster_help (urj_log_level_t ll, const char *cablename)
 urj_cable_driver_t urj_tap_cable_usbblaster_driver = {
     "UsbBlaster",
     N_("Altera USB-Blaster Cable"),
-    usbblaster_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = usbblaster_connect, },
     urj_tap_cable_generic_disconnect,
     usbblaster_cable_free,
     usbblaster_init,

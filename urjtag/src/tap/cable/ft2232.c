@@ -1727,12 +1727,12 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 
 
 static int
-ft2232_connect (char *params[], urj_cable_t *cable)
+ft2232_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     params_t *cable_params;
 
     /* perform urj_tap_cable_generic_usbconn_connect */
-    if (urj_tap_cable_generic_usbconn_connect (params, cable) != URJ_STATUS_OK)
+    if (urj_tap_cable_generic_usbconn_connect (cable, params) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     cable_params = malloc (sizeof (params_t));
@@ -1834,7 +1834,8 @@ ft2232_usbcable_help (urj_log_level_t ll, const char *cablename)
 urj_cable_driver_t urj_tap_cable_ft2232_driver = {
     "FT2232",
     N_("Generic FTDI FT2232 Cable"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_generic_init,
@@ -1866,7 +1867,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver = {
     "ARM-USB-OCD",
     N_("Olimex ARM-USB-OCD[-TINY] (FT2232) Cable"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_armusbocd_init,
@@ -1912,7 +1914,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver = {
     "gnICE",
     N_("Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_gnice_init,
@@ -1944,7 +1947,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver = {
     "JTAGkey",
     N_("Amontec JTAGkey (FT2232) Cable"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_jtagkey_init,
@@ -1976,7 +1980,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_oocdlinks_driver = {
     "OOCDLink-s",
     N_("OOCDLink-s (FT2232) Cable (EXPERIMENTAL)"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_oocdlinks_init,
@@ -2008,7 +2013,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver = {
     "Turtelizer2",
     N_("Turtelizer 2 Rev. B (FT2232) Cable (EXPERIMENTAL)"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_turtelizer2_init,
@@ -2040,7 +2046,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver = {
     "USB-to-JTAG-IF",
     N_("USB to JTAG Interface (FT2232) Cable (EXPERIMENTAL)"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_usbtojtagif_init,
@@ -2072,7 +2079,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_usbtojtagif_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_signalyzer_driver = {
     "Signalyzer",
     N_("Xverve DT-USB-ST Signalyzer Tool (FT2232) Cable (EXPERIMENTAL)"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_signalyzer_init,
@@ -2104,7 +2112,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_flyswatter_driver = {
     "Flyswatter",
     N_("TinCanTools Flyswatter (FT2232) Cable"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_flyswatter_init,
@@ -2136,7 +2145,8 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_flyswatter_ftd2xx = {
 urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver = {
     "usbScarab2",
     N_("KrisTech usbScarabeus2 (FT2232) Cable"),
-    ft2232_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
     urj_tap_cable_generic_disconnect,
     ft2232_cable_free,
     ft2232_usbscarab2_init,

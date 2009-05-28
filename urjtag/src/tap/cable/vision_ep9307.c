@@ -194,7 +194,7 @@ ep9307_gpio_read (urj_cable_t *cable)
 }
 
 static int
-ep9307_connect (char *params[], urj_cable_t *cable)
+ep9307_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     ep9307_params_t *cable_params;
 
@@ -342,7 +342,8 @@ ep9307_help (urj_log_level_t ll, const char *cablename)
 urj_cable_driver_t urj_tap_cable_ep9307_driver = {
     "EP9307",
     N_("Vision EP9307 SoM GPIO JTAG Cable"),
-    ep9307_connect,
+    URJ_CABLE_DEVICE_OTHER,
+    { .other = ep9307_connect, },
     urj_tap_cable_generic_disconnect,
     ep9307_cable_free,
     ep9307_init,

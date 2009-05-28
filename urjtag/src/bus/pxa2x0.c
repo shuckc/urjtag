@@ -143,7 +143,7 @@ typedef struct
  */
 static urj_bus_t *
 pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-                char *cmd_params[])
+                const urj_param_t *cmd_params[])
 {
     urj_part_t *part;
     urj_bus_t *bus;
@@ -156,34 +156,21 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         || chain->active_part < 0)
         return NULL;
 
-    bus = calloc (1, sizeof (urj_bus_t));
-    if (!bus)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    if (bus == NULL)
         return NULL;
-    }
+    part = bus->part;
 
-    bus->driver = driver;
-    bus->params = calloc (1, sizeof (bus_params_t));
-    if (!bus->params)
-    {
-        free (bus);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (bus_params_t));
-        return NULL;
-    }
-
-    bus->chain = chain;
-    bus->part = part = chain->parts->parts[chain->active_part];
     if (strcmp (driver->name, "pxa2x0") == 0)
         PROC = PROC_PXA25x;
     else if (strcmp (driver->name, "pxa27x") == 0)
         PROC = PROC_PXA27x;
     else
     {
-        free (bus->params);
-        free (bus);
+        urj_bus_generic_free (bus);
+        urj_error_set (URJ_ERROR_SYNTAX,
+                       "driver must be 'pxa2x0' or 'pxa27x', not '%s'",
+                       driver->name);
         return NULL;
     }
 
@@ -242,8 +229,7 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     if (failed)
     {
-        free (bus->params);
-        free (bus);
+        urj_bus_generic_free (bus);
         return NULL;
     }
 

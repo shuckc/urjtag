@@ -148,7 +148,8 @@ triton_set_signal (urj_cable_t *cable, int mask, int val)
 urj_cable_driver_t urj_tap_cable_triton_driver = {
     "TRITON",
     N_("Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"),
-    urj_tap_cable_generic_parport_connect,
+    URJ_CABLE_DEVICE_PARPORT,
+    { .parport = urj_tap_cable_generic_parport_connect, },
     urj_tap_cable_generic_disconnect,
     urj_tap_cable_generic_parport_free,
     triton_init,

@@ -102,7 +102,7 @@ typedef struct
  */
 static urj_bus_t *
 s3c4510_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-                 char *cmd_params[])
+                 const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
     urj_part_t *part;
@@ -110,27 +110,12 @@ s3c4510_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     int i;
     int failed = 0;
 
-    bus = calloc (1, sizeof (urj_bus_t));
-    if (!bus)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    if (bus == NULL)
         return NULL;
-    }
-
-    bus->driver = driver;
-    bus->params = calloc (1, sizeof (bus_params_t));
-    if (!bus->params)
-    {
-        free (bus);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (bus_params_t));
-        return NULL;
-    }
+    part = bus->part;
 
     dbus_width = 16;
-    bus->chain = chain;
-    bus->part = part = chain->parts->parts[chain->active_part];
 
     for (i = 0; i < 22; i++)
     {
@@ -172,8 +157,7 @@ s3c4510_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     if (failed)
     {
-        free (bus->params);
-        free (bus);
+        urj_bus_generic_free (bus);
         return NULL;
     }
 

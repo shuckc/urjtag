@@ -46,6 +46,37 @@ urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig,
     return URJ_STATUS_OK;
 }
 
+urj_bus_t *
+urj_bus_generic_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
+                     size_t param_size)
+{
+    urj_bus_t *bus;
+
+    bus = calloc (1, sizeof (urj_bus_t));
+    if (bus == NULL)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       (size_t) 1, sizeof (urj_bus_t));
+        return NULL;
+    }
+
+    bus->driver = driver;
+    bus->params = calloc (1, param_size);
+    if (bus->params == NULL)
+    {
+        free (bus);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
+                       (size_t) 1, param_size);
+        return NULL;
+    }
+
+    bus->chain = chain;
+    // @@@@ RFHH shouldn't we verify chain->active_part etc?
+    bus->part = chain->parts->parts[chain->active_part];
+
+    return bus;
+}
+
 /**
  * bus->driver->(*free_bus)
  *

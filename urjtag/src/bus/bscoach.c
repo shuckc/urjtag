@@ -68,32 +68,17 @@ typedef struct
  */
 static urj_bus_t *
 flashbscoach_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-                      char *cmd_params[])
+                      const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
     urj_part_t *part;
     int failed = 0;
 
-    bus = calloc (1, sizeof (urj_bus_t));
-    if (!bus)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    if (bus == NULL)
         return NULL;
-    }
+    part = bus->part;
 
-    bus->driver = driver;
-    bus->params = calloc (1, sizeof (bus_params_t));
-    if (!bus->params)
-    {
-        free (bus);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (bus_params_t));
-        return NULL;
-    }
-
-    bus->chain = chain;
-    bus->part = part = chain->parts->parts[chain->active_part];
     //OE & WE
     failed |= urj_bus_generic_attach_sig (part, &(OE_F), "PB02_00");
     failed |= urj_bus_generic_attach_sig (part, &(WE_F), "PB02_08");
@@ -127,16 +112,11 @@ flashbscoach_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     failed |= urj_bus_generic_attach_sig (part, &(D[6]), "PB02_01");
     failed |= urj_bus_generic_attach_sig (part, &(D[7]), "PB00_11");
 
-
-
-
     if (failed)
     {
-        free (bus->params);
-        free (bus);
+        urj_bus_generic_free (bus);
         return NULL;
     }
-
 
     return bus;
 }

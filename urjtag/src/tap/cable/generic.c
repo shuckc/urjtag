@@ -311,6 +311,7 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
             urj_log (URJ_LOG_LEVEL_DETAIL, "in: ");
             print_vector (URJ_LOG_LEVEL_DETAIL, bits, in);
             urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
+            // @@@@ RFHH here always: out != NULL
             if (out)
             {
                 urj_log (URJ_LOG_LEVEL_DETAIL, "out: ");

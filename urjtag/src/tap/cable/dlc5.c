@@ -129,7 +129,8 @@ dlc5_set_signal (urj_cable_t *cable, int mask, int val)
 urj_cable_driver_t urj_tap_cable_dlc5_driver = {
     "DLC5",
     N_("Xilinx DLC5 JTAG Parallel Cable III"),
-    urj_tap_cable_generic_parport_connect,
+    URJ_CABLE_DEVICE_PARPORT,
+    { .parport = urj_tap_cable_generic_parport_connect, },
     urj_tap_cable_generic_disconnect,
     urj_tap_cable_generic_parport_free,
     dlc5_init,

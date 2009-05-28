@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include <urjtag/error.h>
+#include <urjtag/params.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
 #include <urjtag/bus.h>
@@ -40,6 +41,7 @@ static int
 cmd_initbus_run (urj_chain_t *chain, char *params[])
 {
     int i;
+    const urj_param_t **bus_params;
 
     if (urj_cmd_params (params) < 2)
     {
@@ -56,37 +58,33 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
         return URJ_STATUS_FAIL;
 
     for (i = 0; urj_bus_drivers[i] != NULL; i++)
-    {
         if (strcasecmp (urj_bus_drivers[i]->name, params[1]) == 0)
-        {
-            urj_bus_t *abus = urj_bus_drivers[i]->new_bus (chain,
-                                                           urj_bus_drivers[i],
-                                                           params);
-            if (abus == NULL)
-            {
-                // @@@@ RFHH need to sanitize the bus module
-                urj_error_set (URJ_ERROR_BUS, _("bus alloc/attach failed"));
-                return URJ_STATUS_FAIL;
-            }
-            urj_bus_buses_add (abus);
-            // @@@@ RFHH need to bail out on error ?
-            if (URJ_BUS_INIT (abus) != URJ_STATUS_OK)
-                printf (_("bus initialization failed!\n"));
+            break;
 
-            for (i = 0; i < urj_buses.len; i++)
-                if (urj_buses.buses[i] == urj_bus)
-                    break;
-            // @@@@ RFHH no need to handle the case of bus not found ?
-            if (i != urj_buses.len - 1)
-                printf (_("Initialized bus %d, active bus %d\n"),
-                        urj_buses.len - 1, i);
-
-            return URJ_STATUS_OK;
-        }
+    if (urj_bus_drivers[i] == NULL)
+    {
+        urj_error_set (URJ_ERROR_NOTFOUND, _("Unknown bus: %s"), params[1]);
+        return URJ_STATUS_FAIL;
     }
 
-    urj_error_set (URJ_ERROR_NOTFOUND, _("Unknown bus: %s"), params[1]);
-    return URJ_STATUS_FAIL;
+    urj_param_init (&bus_params);
+    for (i = 2; params[i] != NULL; i++)
+        if (urj_param_push (&urj_bus_param_list, &bus_params,
+                            params[i]) != URJ_STATUS_OK)
+        {
+            urj_param_clear (&bus_params);
+            return URJ_STATUS_FAIL;
+        }
+
+    if (urj_bus_init_bus(chain, urj_bus_drivers[i], bus_params) == NULL)
+    {
+        urj_param_clear (&bus_params);
+        return URJ_STATUS_FAIL;
+    }
+
+    urj_param_clear (&bus_params);
+
+    return URJ_STATUS_OK;
 }
 
 static void

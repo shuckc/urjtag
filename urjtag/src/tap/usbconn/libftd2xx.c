@@ -302,8 +302,8 @@ usbconn_ftd2xx_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
 /* ---------------------------------------------------------------------- */
 
 static urj_usbconn_t *
-usbconn_ftd2xx_connect (const char **param, int paramc,
-                        urj_usbconn_cable_t *template)
+usbconn_ftd2xx_connect (urj_usbconn_cable_t *template,
+                        const urj_param_t *params[])
 {
     urj_usbconn_t *c = malloc (sizeof (urj_usbconn_t));
     ftd2xx_param_t *p = malloc (sizeof (ftd2xx_param_t));
@@ -364,10 +364,10 @@ usbconn_ftd2xx_connect (const char **param, int paramc,
 
 
 static urj_usbconn_t *
-usbconn_ftd2xx_mpsse_connect (const char **param, int paramc,
-                              urj_usbconn_cable_t *template)
+usbconn_ftd2xx_mpsse_connect (urj_usbconn_cable_t *template,
+                              const urj_param_t *params[])
 {
-    urj_usbconn_t *conn = usbconn_ftd2xx_connect (param, paramc, template);
+    urj_usbconn_t *conn = usbconn_ftd2xx_connect (template, params);
 
     if (conn)
         conn->driver = &urj_tap_usbconn_ftd2xx_mpsse_driver;

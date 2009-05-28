@@ -28,11 +28,11 @@
 #include <urjtag/cable.h>
 #include <urjtag/usbconn.h>
 
-/** @return 0 on success, > 0 on error.
- * Make this: URJ_STATUS_OK on success, URJ_STATUS_FAIL and urj_error on
- * error */
-int urj_tap_cable_generic_usbconn_connect (char *params[],
-                                           urj_cable_t *cable);
+/**
+ * @return URJ_STATUS_OK on success, URJ_STATUS_FAIL and urj_error on error
+ */
+int urj_tap_cable_generic_usbconn_connect (urj_cable_t *cable,
+                                           const urj_param_t *params[]);
 void urj_tap_cable_generic_usbconn_done (urj_cable_t *cable);
 void urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *name);
 void urj_tap_cable_generic_usbconn_free (urj_cable_t *cable);

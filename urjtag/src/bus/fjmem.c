@@ -84,7 +84,7 @@ typedef struct
 #define BLOCK_DESC ((bus_params_t *) bus->params)->block_desc
 
 static int
-fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, char *opcode,
+fjmem_detect_reg_len (urj_chain_t *chain, urj_part_t *part, const char *opcode,
                       int len)
 {
     urj_data_register_t *dr;
@@ -357,102 +357,72 @@ fjmem_query_blocks (urj_chain_t *chain, urj_part_t *part, urj_bus_t *bus)
  */
 static urj_bus_t *
 fjmem_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-               char *params[])
+               const urj_param_t *params[])
 {
     urj_bus_t *bus = NULL;
     int failed = 0;
     urj_part_t *part;
-    char *opcode = NULL;
+    const char *opcode = NULL;
     int fjmem_reg_len = 0;
     int idx;
 
-    part = chain->parts->parts[chain->active_part];
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    if (bus == NULL)
+        return NULL;
+    part = bus->part;
 
     /* parse parameters */
-    for (idx = 2; idx < urj_cmd_params (params); idx++)
+    for (idx = 0; params[idx] != NULL; idx++)
     {
-        char *comma, *value;
-
-        comma = strchr (params[idx], '=');
-        if (comma == NULL)
+        switch (params[idx]->key)
         {
-            // @@@@ RFHH bail out?
-            urj_error_set (URJ_ERROR_SYNTAX,
-                           _("Wrong parameter specification: %s"), params[idx]);
-            continue;
-        }
-
-        /* set value and terminate parameter name string */
-        value = comma + 1;
-        *comma = '\0';
-
-        if (strcasecmp (params[idx], "opcode") == 0)
-            opcode = value;
-        if (strcasecmp (params[idx], "len") == 0)
-        {
-            long unsigned tmp;
-            urj_cmd_get_number (value, &tmp);
-            fjmem_reg_len = (int) tmp;
+        case URJ_BUS_PARAM_KEY_OPCODE:
+            opcode = params[idx]->value.string;
+            break;
+        case URJ_BUS_PARAM_KEY_LEN:
+            fjmem_reg_len = params[idx]->value.lu;
+            break;
+        default:
+            urj_bus_generic_free (bus);
+            urj_error_set (URJ_ERROR_SYNTAX, "unrecognized bus parameter '%s'",
+                           urj_param_string(&urj_bus_param_list, params[idx]));
+            return NULL;
         }
     }
 
-    if (opcode)
+    if (opcode == NULL)
     {
-        block_desc_t *bd;
-
-        fjmem_reg_len =
-            fjmem_detect_reg_len (chain, part, opcode, fjmem_reg_len);
-        if (fjmem_reg_len <= 0)
-            return NULL;
-
-        bus = calloc (1, sizeof (urj_bus_t));
-        if (!bus)
-        {
-            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                           (size_t) 1, sizeof (urj_bus_t));
-            return NULL;
-        }
-
-        bus->driver = driver;
-        bus->params = calloc (1, sizeof (bus_params_t));
-        if (!bus->params)
-        {
-            free (bus);
-            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                           (size_t) 1, sizeof (bus_params_t));
-            return NULL;
-        }
-
-        bus->chain = chain;
-        bus->part = chain->parts->parts[chain->active_part];
-        FJMEM_REG = urj_part_find_data_register (bus->part, FJMEM_REG_NAME);
-        bd = &(BLOCK_DESC);
-        bd->blocks = NULL;
-        bd->reg_len = fjmem_reg_len;
-        bd->instr_pos = 0;
-        bd->block_pos = bd->instr_pos + 4;      /* 3 bits for instruction field, 1 bit ack field */
-
-        if (fjmem_detect_fields (chain, part, bus) > 0)
-        {
-            if (fjmem_query_blocks (chain, part, bus) > 0)
-            {
-            }
-            else
-                failed |= 1;
-        }
-        else
-            failed |= 1;
-
-        if (failed)
-        {
-            free (bus->params);
-            free (bus);
-            return NULL;
-        }
-    }
-    else
+        urj_bus_generic_free (bus);
         urj_error_set (URJ_ERROR_SYNTAX,
                        _("Parameter for instruction opcode missing"));
+        return NULL;
+    }
+
+    block_desc_t *bd;
+
+    fjmem_reg_len = fjmem_detect_reg_len (chain, part, opcode, fjmem_reg_len);
+    if (fjmem_reg_len <= 0)
+        return NULL;
+
+    bus->chain = chain;
+    // @@@@ RFHH check result
+    FJMEM_REG = urj_part_find_data_register (part, FJMEM_REG_NAME);
+    bd = &(BLOCK_DESC);
+    bd->blocks = NULL;
+    bd->reg_len = fjmem_reg_len;
+    bd->instr_pos = 0;
+    bd->block_pos = bd->instr_pos + 4;      /* 3 bits for instruction field, 1 bit ack field */
+
+    if (fjmem_detect_fields (chain, part, bus) <= 0)
+        failed |= 1;
+    else if (fjmem_query_blocks (chain, part, bus) <= 0)
+        failed |= 1;
+
+    if (failed)
+    {
+        urj_bus_generic_free (bus);
+        return NULL;
+    }
 
     return bus;
 }

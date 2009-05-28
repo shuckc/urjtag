@@ -140,7 +140,8 @@ urj_usbconn_cable_t *urj_tap_cable_usbconn_cables[] = {
 };
 
 int
-urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
+urj_tap_cable_generic_usbconn_connect (urj_cable_t *cable,
+                                       const urj_param_t *params[])
 {
     urj_usbconn_cable_t user_specified = {
         NULL,                   /* no name */
@@ -150,36 +151,38 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
         -1,                     /* no PID */
     };
 
-    int paramc = urj_cmd_params (params);
     urj_tap_cable_generic_params_t *cable_params;
     urj_usbconn_t *conn = NULL;
     int i;
 
-    if (strcasecmp (params[0], "usb") != 0)
+    if (strcasecmp (cable->driver->name, "usb") != 0)
     {
-        user_specified.name = params[0];
+        user_specified.name = cable->driver->name;
     }
 
-    /* parse arguments beyond the cable name */
-    for (i = 1; i < paramc; i++)
-    {
-        if (strncasecmp ("pid=", params[i], 4) == 0)
+    if (params != NULL)
+        /* parse arguments beyond the cable name */
+        for (i = 0; params[i] != NULL; i++)
         {
-            user_specified.pid = strtol (params[i] + 4, NULL, 16);
+            switch (params[i]->key)
+            {
+            case URJ_CABLE_PARAM_KEY_PID:
+                user_specified.pid = params[i]->value.lu;
+                break;
+            case URJ_CABLE_PARAM_KEY_VID:
+                user_specified.vid = params[i]->value.lu;
+                break;
+            case URJ_CABLE_PARAM_KEY_DESC:
+                user_specified.desc = params[i]->value.string;
+                break;
+            case URJ_CABLE_PARAM_KEY_DRIVER:
+                user_specified.driver = params[i]->value.string;
+                break;
+            default:
+                // hand these to the driver connect()
+                break;
+            }
         }
-        else if (strncasecmp ("vid=", params[i], 4) == 0)
-        {
-            user_specified.vid = strtol (params[i] + 4, NULL, 16);
-        }
-        else if (strncasecmp ("desc=", params[i], 5) == 0)
-        {
-            user_specified.desc = params[i] + 5;
-        }
-        else if (strncasecmp ("driver=", params[i], 7) == 0)
-        {
-            user_specified.driver = params[i] + 7;
-        }
-    }
 
     /* search usbconn driver list */
     for (i = 0; urj_tap_usbconn_drivers[i] && !conn; i++)
@@ -210,11 +213,8 @@ urj_tap_cable_generic_usbconn_connect (char *params[], urj_cable_t *cable)
                         if (user_specified.desc != 0)
                             cable_try.desc = user_specified.desc;
 
-                        // @@@@ RFHH bail out on failure?
-                        conn =
-                            urj_tap_usbconn_drivers[i]->
-                            connect ((const char **) &params[1], paramc - 1,
-                                     &cable_try);
+                        conn = urj_tap_usbconn_drivers[i]->connect (&cable_try,
+                                                                    params);
                     }
                 }
             }

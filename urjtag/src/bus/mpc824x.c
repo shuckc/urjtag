@@ -74,7 +74,7 @@ static char dbgData = 0;
  */
 static urj_bus_t *
 mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-                 char *cmd_params[])
+                 const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
     urj_part_t *part;
@@ -84,72 +84,69 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     urj_part_signal_t *s_nfoe;
     urj_part_signal_t *s_sdma1;
 
-    char param[16], value[16];
-
     char dfltWidth = 1;
 
     dbgAddr = 0;
     dbgData = 0;
     REVBITS = 0;
 
-    for (i = 2; cmd_params[i]; i++)
+    for (i = 0; cmd_params[i] != NULL; i++)
     {
-        if (strstr (cmd_params[i], "="))
+        switch (cmd_params[i]->key)
         {
-            sscanf (cmd_params[i], "%[^=]%*c%s", param, value);
-
-            if (!strcmp ("width", param))
+        case URJ_BUS_PARAM_KEY_WIDTH:
+            switch (cmd_params[i]->value.lu)
             {
-                if (!strcmp ("8", value))
-                {
-                    BUS_WIDTH = 8;
-                    dfltWidth = 0;
-                }
-                else if (!strcmp ("32", value))
-                {
-                    BUS_WIDTH = 32;
-                    dfltWidth = 0;
-                }
-                else if (!strcmp ("64", value))
-                {
-                    //              BUS_WIDTH = 64;  // Needs to fix, look at setup_data()
-                    BUS_WIDTH = 32;
-                    urj_error_set (URJ_ERROR_UNSUPPORTED,
-                                   _("   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently"));
-                    dfltWidth = 1;
-                }
-                else
-                {
-                    urj_error_set (URJ_ERROR_UNSUPPORTED,
-                                   _("   Only 8,32 and 64 bus width are supported for Banks 0 and 1"));
-                    return NULL;
-                }
-            }
-        }
-        else
-        {
-            if (!strcmp ("revbits", cmd_params[i]))
-                REVBITS = 1;
-
-            if (!strcmp ("help", cmd_params[i]))
-            {
-                urj_log (URJ_LOG_LEVEL_NORMAL,
-                         _("Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n\n"
-                         "   WIDTH      data bus width - 8, 32, 64 (default 8)\n"
-                         "   revbits    reverse bits in data bus (default - no)\n"
-                         "   dbgAddr    display address bus state (default - no)\n"
-                         "   dbgData    display data bus state (default - no)\n"));
+            case 8:
+                BUS_WIDTH = 8;
+                dfltWidth = 0;
+                break;
+            case 32:
+                BUS_WIDTH = 32;
+                dfltWidth = 0;
+                break;
+            case 64:
+                //              BUS_WIDTH = 64;  // Needs to fix, look at setup_data()
+                BUS_WIDTH = 32;
+                urj_error_set (URJ_ERROR_UNSUPPORTED,
+                               _("   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently"));
+                dfltWidth = 1;
+                break;
+            default:
+                urj_error_set (URJ_ERROR_UNSUPPORTED,
+                               _("   Only 8,32 and 64 bus width are supported for Banks 0 and 1"));
                 return NULL;
             }
+            break;
 
-            if (!strcmp ("dbgAddr", cmd_params[i]))
-                dbgAddr = 1;
+        case URJ_BUS_PARAM_KEY_REVBITS:
+            REVBITS = 1;
+            break;
 
+        // @@@@ RFHH ToDo: lift this from init_bus
+        case URJ_BUS_PARAM_KEY_HELP:
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n\n"
+                     "   WIDTH      data bus width - 8, 32, 64 (default 8)\n"
+                     "   revbits    reverse bits in data bus (default - no)\n"
+                     "   dbgAddr    display address bus state (default - no)\n"
+                     "   dbgData    display data bus state (default - no)\n"));
+            return NULL;
 
-            if (!strcmp ("dbgData", cmd_params[i]))
-                dbgData = 1;
+        // @@@@ RFHH ToDo: lift this from init_bus
+        case URJ_BUS_PARAM_KEY_DBGaDDR:
+            dbgAddr = 1;
+            break;
 
+        // @@@@ RFHH ToDo: lift this from init_bus
+        case URJ_BUS_PARAM_KEY_DBGdATA:
+            dbgData = 1;
+            break;
 
+        default:
+            urj_error_set (URJ_ERROR_SYNTAX, "unrecognised bus parameter '%s'",
+                           urj_param_string(&urj_bus_param_list, cmd_params[i]));
+            return NULL;
         }
 
     }
@@ -159,26 +156,10 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     //      REVBITS = 0;
 
-    bus = calloc (1, sizeof (urj_bus_t));
-    if (!bus)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (urj_bus_t));
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    if (bus == NULL)
         return NULL;
-    }
-
-    bus->driver = driver;
-    bus->params = calloc (1, sizeof (bus_params_t));
-    if (!bus->params)
-    {
-        free (bus);
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
-                       (size_t) 1, sizeof (bus_params_t));
-        return NULL;
-    }
-
-    bus->chain = chain;
-    bus->part = part = chain->parts->parts[chain->active_part];
+    part = bus->part;
 
     s_nfoe = urj_part_find_signal (part, "nFOE");
     s_sdma1 = urj_part_find_signal (part, "SDMA1");
@@ -241,8 +222,7 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     if (failed)
     {
-        free (bus->params);
-        free (bus);
+        urj_bus_generic_free (bus);
         return NULL;
     }
 

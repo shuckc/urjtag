@@ -588,7 +588,8 @@ jlink_set_signal (urj_cable_t *cable, int mask, int val)
 urj_cable_driver_t urj_tap_cable_jlink_driver = {
     "jlink",
     N_("Segger/IAR J-Link, Atmel SAM-ICE and others."),
-    urj_tap_cable_generic_usbconn_connect,
+    URJ_CABLE_DEVICE_USB,
+    { .usb = urj_tap_cable_generic_usbconn_connect, },
     urj_tap_cable_generic_disconnect,
     jlink_free,
     jlink_init,

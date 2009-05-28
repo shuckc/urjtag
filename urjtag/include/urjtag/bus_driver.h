@@ -38,6 +38,7 @@
 #include <stdint.h>
 
 #include "types.h"
+#include "params.h"
 
 typedef struct
 {
@@ -48,13 +49,47 @@ typedef struct
 }
 urj_bus_area_t;
 
+typedef enum URJ_BUS_PARAM_KEY
+{
+    URJ_BUS_PARAM_KEY_MUX,      // bool                         mpc5200
+    // avr32: mode = OCD | HSBC | HSBU | x8 | x16 | x32         avr32
+    URJ_BUS_PARAM_KEY_OCD,      // bool                         avr32
+    URJ_BUS_PARAM_KEY_HSBC,     // bool                         avr32
+    URJ_BUS_PARAM_KEY_HSBU,     // bool                         avr32
+    URJ_BUS_PARAM_KEY_X8,       // bool                         avr32
+    URJ_BUS_PARAM_KEY_X16,      // bool                         avr32
+    URJ_BUS_PARAM_KEY_X32,      // bool                         avr32
+    URJ_BUS_PARAM_KEY_WIDTH,    // 0=auto 8 16 32 64
+                                // aliased as x8 x16 x32 bool   avr32
+                                // 8 32 64                      mpc824
+                                // aliased as AMODE             prototype
+    URJ_BUS_PARAM_KEY_OPCODE,   // string                       fjmem
+    URJ_BUS_PARAM_KEY_LEN,      // ulong                        fjmem
+    URJ_BUS_PARAM_KEY_AMODE,    // alias for WIDTH: 0=auto 8 16 32  prototype
+    URJ_BUS_PARAM_KEY_ALSB,     // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_AMSB,     // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_DLSB,     // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_DMSB,     // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_CS,       // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_NCS,      // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_OE,       // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_NOE,      // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_WE,       // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_NWE,      // string (= signal name)       prototype
+    URJ_BUS_PARAM_KEY_REVBITS,  // bool                         mpc824
+    URJ_BUS_PARAM_KEY_HELP,     // bool                         mpc824
+    URJ_BUS_PARAM_KEY_DBGaDDR,  // bool                         mpc824
+    URJ_BUS_PARAM_KEY_DBGdATA,  // bool                         mpc824
+}
+urj_bus_param_key_t;
+
 struct urj_bus_driver
 {
     const char *name;
     const char *description;
     urj_bus_t *(*new_bus) (urj_chain_t *chain,
                            const urj_bus_driver_t *driver,
-                           char *cmd_params[]);
+                           const urj_param_t *cmd_params[]);
     void (*free_bus) (urj_bus_t *bus);
     void (*printinfo) (urj_log_level_t ll, urj_bus_t *bus);
     void (*prepare) (urj_bus_t *bus);
@@ -82,6 +117,7 @@ struct urj_bus
     const urj_bus_driver_t *driver;
 };
 
+
 #define URJ_BUS_PRINTINFO(ll,bus)       (bus)->driver->printinfo(ll,bus)
 #define URJ_BUS_PREPARE(bus)            (bus)->driver->prepare(bus)
 #define URJ_BUS_AREA(bus,adr,a)         (bus)->driver->area(bus,adr,a)
@@ -92,5 +128,15 @@ struct urj_bus
 #define URJ_BUS_WRITE(bus,adr,data)     (bus)->driver->write(bus,adr,data)
 #define URJ_BUS_FREE(bus)               (bus)->driver->free_bus(bus)
 #define URJ_BUS_INIT(bus)               (bus)->driver->init(bus)
+
+/**
+ * API function to init a bus
+ */
+urj_bus_t *urj_bus_init_bus (urj_chain_t *chain,
+                             const urj_bus_driver_t *bus_driver,
+                             const urj_param_t *param[]);
+
+/** The list of recognized parameters */
+extern const urj_param_list_t urj_bus_param_list;
 
 #endif /* URJ_BUS_DRIVER_BRUX_BUS_H */

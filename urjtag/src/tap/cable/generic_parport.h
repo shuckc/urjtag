@@ -28,8 +28,10 @@
 #include <urjtag/cable.h>
 #include <urjtag/parport.h>
 
-int urj_tap_cable_generic_parport_connect (char *params[],
-                                           urj_cable_t *cable);
+int urj_tap_cable_generic_parport_connect (urj_cable_t *cable,
+                                           urj_cable_parport_devtype_t devtype,
+                                           const char *devname,
+                                           const urj_param_t *params[]);
 void urj_tap_cable_generic_parport_free (urj_cable_t *cable);
 void urj_tap_cable_generic_parport_done (urj_cable_t *cable);
 void urj_tap_cable_generic_parport_help (urj_log_level_t ll, const char *name);

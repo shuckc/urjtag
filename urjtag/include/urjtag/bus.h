@@ -49,10 +49,8 @@ extern urj_buses_t urj_buses;
 extern const urj_bus_driver_t *urj_bus_drivers[];
 
 void urj_bus_buses_free (void);
-/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-void urj_bus_buses_add (urj_bus_t *abus);
-/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-void urj_bus_buses_delete (urj_bus_t *abus);
+int urj_bus_buses_add (urj_bus_t *abus);
+int urj_bus_buses_delete (urj_bus_t *abus);
 
 /** set active bus
  * @param n choose n'th bus in #urj_buses as the active bus
