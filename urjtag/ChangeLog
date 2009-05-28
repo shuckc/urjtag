@@ -1,3 +1,8 @@
+2009-05-28  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: improve svn rev look up by ignoring errors, unifying
+    duplicated code, and support git-svn tree
+
 2009-05-24  Rutger Hofman <rfhh>
 
   * src/bus/avr32.c: fix uninitialized warning (Florian Fainelli)

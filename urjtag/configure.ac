@@ -35,19 +35,21 @@ AC_MSG_CHECKING([code revision])
 SVN=`which svn`
 SVN_REVISION=0
 if test -n "$SVN" -a -x "$SVN"; then
-    SVN_REVISION=`LC_ALL=C svn info -R "$srcdir" | awk 'BEGIN { x=0 } /^Revision: / { if($2>x) x=$2; } END { printf "%d\n",x }'`
-    if test "$SVN_REVISION" -ne "0" ; then
-        AC_MSG_RESULT([from svn info: $SVN_REVISION])
-    fi
+    SVN_REVISION=`LC_ALL=C svn info -R "$srcdir" 2>/dev/null | awk 'BEGIN { x=0 } /^Revision: / { if($2>x) x=$2; } END { printf "%d\n",x }'`
+    SVN_FROM="svn info"
 fi
 if test "$SVN_REVISION" -eq 0 -a -e "$srcdir/ChangeLog"; then
     SVN_REVISION=`awk 'BEGIN { x=0 } /Revision: / { if($2>x) x=$2; } END { printf "%d\n",x }' "$srcdir/ChangeLog"`
-    if test "$SVN_REVISION" -ne "0" ; then
-        AC_MSG_RESULT([from ChangeLog: $SVN_REVISION])
-    fi
+    SVN_FROM="ChangeLog"
+fi
+if test "$SVN_REVISION" -eq 0; then
+    SVN_REVISION=`git log -n1 --pretty=format:%b 2>/dev/null | sed -n '/^git-svn-id:/{s:.*@::;s: .*::;p}'`
+    SVN_FROM="git-svn log"
 fi
 if test "$SVN_REVISION" -eq "0" ; then
     AC_MSG_RESULT([unknown, using 0])
+else
+    AC_MSG_RESULT([from $SVN_FROM: $SVN_REVISION])
 fi
 AC_DEFINE_UNQUOTED([SVN_REVISION], "$SVN_REVISION", [subversion revision number])
 AC_SUBST([SVN_REVISION])
