@@ -35,7 +35,6 @@
 #include "generic_usbconn.h"
 
 #include <urjtag/usbconn.h>
-#include <urjtag/usbconn/libusb.h>
 
 /* ---------------------------------------------------------------------- */
 
@@ -43,6 +42,7 @@
 #include <urjtag/cable.h>
 #include <urjtag/chain.h>
 
+#include "usbconn/libusb.h"
 
 #include <usb.h>
 #include <string.h>

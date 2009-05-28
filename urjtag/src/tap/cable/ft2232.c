@@ -38,7 +38,7 @@
 #include "generic_usbconn.h"
 
 #include <urjtag/usbconn.h>
-#include <urjtag/usbconn/libftdx.h>
+#include "usbconn/libftdx.h"
 
 #include "cmd_xfer.h"
 

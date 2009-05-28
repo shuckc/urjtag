@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2009-04-08 22:49+0200\n"
+"POT-Creation-Date: 2009-05-28 14:35+0200\n"
 "PO-Revision-Date: 2004-05-10 08:00-0500\n"
 "Last-Translator: Michel Robitaille <robitail@IRO.UMontreal.CA>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -16,331 +16,425 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: bsdl_bison.y:257
+#: src/apps/jtag/jtag.c:372
+#, c-format
+msgid "'%s' must not be run suid root!\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:431
+#, fuzzy, c-format
+msgid "%s #%s\n"
+msgstr "%-13s %s\n"
+
+#: src/apps/jtag/jtag.c:434
+#, c-format
+msgid "Usage: %s [OPTIONS] [FILE [FILE ... ]] \n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:437
+#, c-format
+msgid "  -h, --help          display this help and exit\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:438
+#, c-format
+msgid "  -v, --version       display version information and exit\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:440
+#, c-format
+msgid "  -n, --norc          disable reading ~/.jtag/rc on startup\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:441
+#, c-format
+msgid "  -i, --interactive   enter interactive mode after reading files\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:442
+#, c-format
+msgid "  -q, --quiet         Do not print help on startup\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:444
+#, c-format
+msgid "  [FILE]              file containing commands to execute\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:447
+#, c-format
+msgid "  Please report bugs at http://www.urjtag.org\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:454
+#, c-format
+msgid ""
+"\n"
+"%s #%s\n"
+"\n"
+"Copyright (C) 2002, 2003 ETC s.r.o.\n"
+"Copyright (C) 2007, 2008, 2009 Kolja Waschk and the respective authors\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:459
+#, c-format
+msgid ""
+"\n"
+"This program is free software; you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation; either version 2 of the License, or\n"
+"(at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
+msgstr ""
+
+#: src/apps/jtag/jtag.c:485 src/apps/jtag/jtag.c:508 src/apps/jtag/jtag.c:531
+#, c-format
+msgid "Out of memory\n"
+msgstr "Mémoire épuisée\n"
+
+#: src/apps/jtag/jtag.c:493
+#, c-format
+msgid "Unable to open file `%s'!\n"
+msgstr "Incapable d'ouvrir le fichier `%s'!\n"
+
+#: src/apps/jtag/jtag.c:520
+#, fuzzy, c-format
+msgid ""
+"\n"
+"%s #%s\n"
+"Copyright (C) 2002, 2003 ETC s.r.o.\n"
+"Copyright (C) 2007, 2008, 2009 Kolja Waschk and the respective authors\n"
+"\n"
+"%s is free software, covered by the GNU General Public License, and you are\n"
+"welcome to change it and/or distribute copies of it under certain "
+"conditions.\n"
+"There is absolutely no warranty for %s.\n"
+"\n"
+msgstr ""
+"%s\n"
+"Copyright © 2002, 2003 ETC s.r.o.\n"
+"%s est un logiciel libre; vous pouvez le redistribuer ou le\n"
+"modifier selon les termes de la License Publique Générale de GNU, publiée\n"
+"par la Free Software Foundation (soit la version 2 ou selon votre choix, "
+"toute version ultérieure).\n"
+"\n"
+"Ce programme est distribué dans l'espoir qu'il soit utile,\n"
+"mais AUCUNE garantie n'est donnée pour %s\n"
+"tant pour des raisons COMMERCIALES que\n"
+"pour RÉPONDRE À UN BESOIN PARTICULIER.  Consulter la licence\n"
+"GNU General Public License pour plus de détails.\n"
+"\n"
+"Vous devriez avoir reçu copie de la Licence Publique Générale de GNU\n"
+"avec ce programme; sinon, écrire à la Free Software Foundation, Inc.,\n"
+"59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.\n"
+
+#: src/apps/jtag/jtag.c:537
+#, fuzzy, c-format
+msgid "%s may damage your hardware!\n"
+msgstr ""
+"AVERTISSEMENT: %s peut endommager votre matériel! Taper \"quit\" pour "
+"quitter!\n"
+"\n"
+
+#: src/apps/jtag/jtag.c:539
+#, fuzzy
+msgid ""
+"Type \"quit\" to exit, \"help\" for help.\n"
+"\n"
+msgstr ""
+"Taper \"help\" pour de l'aide.\n"
+"\n"
+
+#: bsdl_bison.y:268
 msgid "Unsupported BSDL construct found"
 msgstr ""
 
-#: bsdl_bison.y:320
+#: bsdl_bison.y:331
 msgid "Error in Instruction_Opcode attribute statement"
 msgstr ""
 
-#: bsdl_bison.y:333
+#: bsdl_bison.y:344
 msgid "Multiple opcode patterns are not supported, first pattern will be used"
 msgstr ""
 
-#: bsdl_bison.y:364
+#: bsdl_bison.y:375
 msgid "Error in Opcode List"
 msgstr ""
 
-#: bsdl_bison.y:450
+#: bsdl_bison.y:461
 msgid "Error in Boundary Cell description"
 msgstr ""
 
-#: bsdl_bison.y:574
+#: bsdl_bison.y:586
 #, fuzzy
 msgid "Error in ISC_Pin_Behavior Definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: bsdl_bison.y:586
+#: bsdl_bison.y:598
 #, fuzzy
 msgid "Error in ISC_Fixed_System_Pins Definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: bsdl_bison.y:613
+#: bsdl_bison.y:625
 #, fuzzy
 msgid "Error in ISC_Security Definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: bsdl_bison.y:647
+#: bsdl_bison.y:659
 #, fuzzy
 msgid "Error in ISC_Flow Definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: bsdl_bison.y:811
+#: bsdl_bison.y:823
 #, fuzzy
 msgid "Error in ISC_Procedure Definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: bsdl_bison.y:835
+#: bsdl_bison.y:847
 #, fuzzy
 msgid "Error in ISC_Action Definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: bsdl_bison.y:875 bsdl_bison.y:883 vhdl_bison.y:657
+#: bsdl_bison.y:890 bsdl_bison.y:904 vhdl_bison.y:674
 #, c-format
 msgid "Line %d, %s.\n"
 msgstr ""
 
-#: bsdl_bison.y:1114 bsdl_bison.y:1182 bsdl_bison.y:1241 bsdl_bison.y:1276
-#: bsdl_bison.y:1314 bsdl_bison.y:1464 bsdl_bison.y:1514 bsdl_flex.l:443
-#: bsdl_flex.l:529 src/bsdl/bsdl_sem.c:169 src/bsdl/bsdl_sem.c:545
-#: vhdl_bison.y:821 vhdl_bison.y:922 vhdl_bison.y:1010 vhdl_bison.y:1042
-#: vhdl_bison.y:1062 vhdl_bison.y:1092 vhdl_bison.y:1109 vhdl_bison.y:1127
-#: vhdl_flex.l:373 vhdl_flex.l:460 svf_flex.l:369
-#, fuzzy, c-format
-msgid "Out of memory, %s line %i\n"
-msgstr "Mémoire épuisée\n"
-
-#: src/bsdl/bsdl.c:138
-#, fuzzy
-msgid "No JTAG chain available\n"
-msgstr "(pas de description disponible)"
-
-#: src/bsdl/bsdl.c:143
-msgid "Chain without any parts\n"
-msgstr ""
-
-#: src/bsdl/bsdl.c:160
+#: src/bsdl/bsdl.c:117
 #, c-format
 msgid "Reading file '%s'\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:164
-#, fuzzy, c-format
-msgid "Unable to open BSDL file '%s'\n"
-msgstr "Incapable d'ouvrir le fichier `%s'!\n"
-
-#: src/bsdl/bsdl.c:178
+#: src/bsdl/bsdl.c:138
 #, c-format
 msgid "BSDL file '%s' passed VHDL stage correctly\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:185
+#: src/bsdl/bsdl.c:145
 #, c-format
 msgid "BSDL file '%s' passed BSDL stage correctly\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:192
+#: src/bsdl/bsdl.c:152
 #, c-format
 msgid "BSDL file '%s' contains errors in VHDL stage, stopping\n"
 msgstr ""
 
-#: src/bsdl/bsdl.c:326 src/tap/detect.c:364
+#: src/bsdl/bsdl.c:293 src/tap/detect.c:372
 #, c-format
 msgid "  Filename:     %s\n"
 msgstr "  nom de fichier:     %s\n"
 
-#: src/bsdl/bsdl.c:338
+#: src/bsdl/bsdl.c:305
 #, fuzzy, c-format
 msgid "Cannot open directory %s\n"
 msgstr "ne peut ouvrir %s\n"
 
-#: bsdl_flex.l:405 vhdl_flex.l:333
-#, c-format
-msgid "Illegal character %c (/%03o) at line %d:\n"
-msgstr ""
-
-#: bsdl_flex.l:437 vhdl_flex.l:365
-msgid "Scanner could not be initialized\n"
-msgstr ""
-
-#: src/bsdl/bsdl_sem.c:238
+#: src/bsdl/bsdl_sem.c:204
 msgid "No IDCODE specification found.\n"
 msgstr ""
 
-#: src/bsdl/bsdl_sem.c:640
+#: src/bsdl/bsdl_sem.c:649
 msgid "IDCODE matched\n"
 msgstr ""
 
-#: src/bsdl/bsdl_sem.c:643
+#: src/bsdl/bsdl_sem.c:651
 msgid "IDCODE mismatch\n"
 msgstr ""
 
-#: src/bsdl/bsdl_sem.c:690
+#: src/bsdl/bsdl_sem.c:699
 msgid "BSDL stage reported errors, aborting.\n"
 msgstr ""
 
-#: src/bsdl/bsdl_sem.c:698
+#: src/bsdl/bsdl_sem.c:706
 #, c-format
 msgid "Got IDCODE: %s\n"
 msgstr ""
 
-#: vhdl_bison.y:219
+#: vhdl_bison.y:231
 msgid "Improper Entity declaration"
 msgstr ""
 
-#: vhdl_bison.y:220
+#: vhdl_bison.y:232
 msgid "Check if source file is BSDL"
 msgstr ""
 
-#: vhdl_bison.y:230 vhdl_bison.y:238
+#: vhdl_bison.y:242 vhdl_bison.y:250
 #, fuzzy
 msgid "Syntax Error"
 msgstr "ERREUR de syntaxe!\n"
 
-#: vhdl_bison.y:248
+#: vhdl_bison.y:260
 msgid "Improper Port declaration"
 msgstr ""
 
-#: vhdl_bison.y:280
+#: vhdl_bison.y:292
 #, fuzzy
 msgid "Error in Package declaration(s)"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:305
+#: vhdl_bison.y:317
 #, fuzzy
 msgid "Error in Standard Package"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:323
+#: vhdl_bison.y:335
 #, fuzzy
 msgid "Error in Standard Declarations"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:334
+#: vhdl_bison.y:346
 #, fuzzy
 msgid "Error in Attribute type identification"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:350
+#: vhdl_bison.y:362
 #, fuzzy
 msgid "Error in Type definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:366
+#: vhdl_bison.y:378
 #, fuzzy
 msgid "Error in Bit definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:377
+#: vhdl_bison.y:389
 #, fuzzy
 msgid "Error in Record Definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:390
+#: vhdl_bison.y:402
 #, fuzzy
 msgid "Error in defered constant"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:402
+#: vhdl_bison.y:414
 #, fuzzy
 msgid "Error in Package Body definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:414
+#: vhdl_bison.y:426
 #, fuzzy
 msgid "Error in Cell Constant definition"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:425
+#: vhdl_bison.y:437
 #, fuzzy
 msgid "Error in Cell Data Record"
 msgstr "Error: échec de la connexion par cable!\n"
 
-#: vhdl_bison.y:434
+#: vhdl_bison.y:446
 #, fuzzy
 msgid "Error in Cell_Type Function field"
 msgstr "Error: échec de la connexion par cable!\n"
 
-#: vhdl_bison.y:441
+#: vhdl_bison.y:453
 #, fuzzy
 msgid "Error in BScan_Inst Instruction field"
 msgstr "Error: échec de la connexion par cable!\n"
 
-#: vhdl_bison.y:448
+#: vhdl_bison.y:460
 #, fuzzy
 msgid "Error in Constant CAP data source field"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:472
+#: vhdl_bison.y:484
 #, fuzzy
 msgid "Error in User-Defined Package declarations"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:479
+#: vhdl_bison.y:491
 msgid "Unknown VHDL statement"
 msgstr ""
 
-#: vhdl_bison.y:502
+#: vhdl_bison.y:514
 #, fuzzy
 msgid "Error in Attribute specification"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: vhdl_bison.y:651
+#: vhdl_bison.y:669
 #, c-format
 msgid "In Package %s, Line %d, %s.\n"
 msgstr ""
 
-#: vhdl_bison.y:664
+#: vhdl_bison.y:687
 msgid "Too many errors"
 msgstr ""
 
-#: vhdl_flex.l:518
-#, fuzzy, c-format
-msgid "Cannot open file %s or %s.\n"
-msgstr "ne peut ouvrir %s\n"
-
-#: src/bus/au1500.c:126
+#: src/bus/au1500.c:124
 #, fuzzy, c-format
 msgid "AU1500 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/au1500.c:297
+#: src/bus/au1500.c:301
 msgid "AU1500 BUS Driver via BSR"
 msgstr ""
 
-#: src/bus/avr32.c:127
-#, c-format
-msgid "%s(%d): error, "
-msgstr ""
-
-#: src/bus/avr32.c:150
+#: src/bus/avr32.c:153
 #, fuzzy, c-format
 msgid "%s: instr=%s\n"
 msgstr "%-13s %s\n"
 
-#: src/bus/avr32.c:153
+#: src/bus/avr32.c:158
 #, fuzzy, c-format
 msgid "%s: ret=%s\n"
 msgstr "%-13s %s\n"
 
-#: src/bus/avr32.c:166
+#: src/bus/avr32.c:172
 #, fuzzy, c-format
 msgid "%s: data=%s\n"
 msgstr "%-13s %s\n"
 
-#: src/bus/avr32.c:169
+#: src/bus/avr32.c:175
 #, c-format
 msgid "%s: data out=%s\n"
 msgstr ""
 
-#: src/bus/avr32.c:190
+#: src/bus/avr32.c:196
 #, c-format
-msgid "%s: slave=%01x, addr=%08x, %s\n"
+msgid "%s: slave=%01x, addr=%08lx, %s\n"
 msgstr ""
 
-#: src/bus/avr32.c:215 src/bus/avr32.c:240 src/bus/avr32.c:311
-#: src/bus/avr32.c:322
-#, c-format
-msgid "%s: data=%08x\n"
-msgstr ""
-
-#: src/bus/avr32.c:282
-#, c-format
-msgid "%s: addr=%08x, mode=%s\n"
-msgstr ""
-
-#: src/bus/avr32.c:370
+#: src/bus/avr32.c:222 src/bus/avr32.c:248 src/bus/avr32.c:322
+#: src/bus/avr32.c:334
 #, fuzzy, c-format
-msgid "%s: read status %08x\n"
+msgid "%s: data=%08lx\n"
+msgstr "%-13s %s\n"
+
+#: src/bus/avr32.c:292
+#, fuzzy, c-format
+msgid "%s: addr=%08lx, mode=%s\n"
+msgstr "adr: 0x%08X"
+
+#: src/bus/avr32.c:383
+#, fuzzy, c-format
+msgid "%s: read status %08lx\n"
 msgstr "%s: état invalide: %2X\n"
 
-#: src/bus/avr32.c:401
-#, c-format
-msgid "%s: status=%08x\n"
-msgstr ""
+#: src/bus/avr32.c:417
+#, fuzzy, c-format
+msgid "%s: status=%08lx\n"
+msgstr "%s: état invalide: %2X\n"
 
-#: src/bus/avr32.c:569
+#: src/bus/avr32.c:613
 #, fuzzy, c-format
 msgid "AVR32 multi-mode bus driver (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/avr32.c:651
+#: src/bus/avr32.c:695
 #, fuzzy, c-format
-msgid "%s:addr=%08x\n"
+msgid "%s:addr=%08lx\n"
 msgstr "adr: 0x%08X"
 
-#: src/bus/avr32.c:760
+#: src/bus/avr32.c:806
 msgid ""
 "Atmel AVR32 multi-mode bus driver, requires <mode> parameter\n"
 "           valid <mode> parameters:\n"
@@ -354,17 +448,17 @@ msgid ""
 "               HSBU: 32 bit bus for the uncached HSB area, via SAB"
 msgstr ""
 
-#: src/bus/bcm1250.c:120
+#: src/bus/bcm1250.c:115
 #, c-format
 msgid "Broadcom BCM1250 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bcm1250.c:488
+#: src/bus/bcm1250.c:525
 msgid "Broadcom BCM1250 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Broadcom BCM1250 via BSR"
 
-#: src/bus/bf533_ezkit.c:143
+#: src/bus/bf533_ezkit.c:139
 #, fuzzy, c-format
 msgid "Blackfin BF533 EZKit compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
@@ -374,74 +468,74 @@ msgstr ""
 msgid "Blackfin BF533 EZKit board bus driver"
 msgstr ""
 
-#: src/bus/bf533_stamp.c:144
+#: src/bus/bf533_stamp.c:145
 #, fuzzy, c-format
 msgid "Blackfin BF533 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf533_stamp.c:325
+#: src/bus/bf533_stamp.c:332
 msgid "Blackfin BF533 Stamp board bus driver"
 msgstr ""
 
-#: src/bus/bf537_stamp.c:317 src/bus/pxa2x0.c:242
+#: src/bus/bf537_stamp.c:315 src/bus/pxa2x0.c:251
 #, fuzzy, c-format
 msgid "%s (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/bf537_stamp.c:337
+#: src/bus/bf537_stamp.c:335
 #, fuzzy
 msgid "Blackfin BF537 Stamp board bus driver via BSR"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf537_stamp.c:347
+#: src/bus/bf537_stamp.c:345
 #, fuzzy
 msgid "Blackfin BF537 EZ-KIT board bus driver via BSR"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf537_stamp.c:357
+#: src/bus/bf537_stamp.c:355
 #, fuzzy
 msgid "Blackfin BF527 EZ-KIT board bus driver via BSR"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf537_stamp.c:367
+#: src/bus/bf537_stamp.c:365
 #, fuzzy
 msgid "Blackfin BF538F EZ-KIT board bus driver"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf537_stamp.c:377
+#: src/bus/bf537_stamp.c:375
 #, fuzzy
 msgid "Blackfin BF526 EZ-KIT board bus driver"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf548_ezkit.c:142
+#: src/bus/bf548_ezkit.c:140
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF548 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/bf548_ezkit.c:313
+#: src/bus/bf548_ezkit.c:314
 msgid "Blackfin BF548 EZ-KIT board bus driver"
 msgstr ""
 
-#: src/bus/bf561_ezkit.c:147
+#: src/bus/bf561_ezkit.c:145
 #, fuzzy, c-format
 msgid ""
 "Blackfin BF561 EZ-KIT compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "pilote de bus compatible Hitachi SH7751R via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/bf561_ezkit.c:336
+#: src/bus/bf561_ezkit.c:337
 msgid "Blackfin BF561 EZ-KIT board bus driver"
 msgstr ""
 
-#: src/bus/bscoach.c:146
+#: src/bus/bscoach.c:137
 #, fuzzy, c-format
 msgid ""
 "Goepel electronic Boundary Scan Coach compatible bus driver via BSR (JTAG "
@@ -449,180 +543,159 @@ msgid ""
 msgstr ""
 "pilote de bus compatible Hitachi SH7727 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/bscoach.c:382
+#: src/bus/bscoach.c:378
 msgid ""
 "Goepel Boundary Scan Coach compatible bus driver for flash programming via "
 "BSR"
 msgstr ""
 
-#: src/bus/buses.c:167 src/cmd/include.c:74 src/cmd/parse.c:59
-#: src/cmd/parse.c:93 src/cmd/scan.c:88 src/cmd/shell.c:62 src/jtag.c:407
-#: src/jtag.c:426 src/jtag.c:450 src/tap/detect.c:271
-#: src/tap/usbconn/libusb.c:150 src/tap/usbconn/libftd2xx.c:283
-#: src/tap/usbconn/libftdi.c:252
+#: src/bus/buses.c:182 src/bus/buses.c:219
 #, c-format
-msgid "Out of memory\n"
-msgstr "Mémoire épuisée\n"
+msgid "realloc(%s,%zd) fails"
+msgstr ""
 
-#: src/bus/ejtag.c:149
+#: src/bus/buses.c:242
+#, fuzzy
+msgid "invalid bus number"
+msgstr "%s: numéro de bus invalide\n"
+
+#: src/bus/buses.c:284
+#, fuzzy, c-format
+msgid "Initialized bus %d, active bus %d\n"
+msgstr "initialiser le pilote du bus pour la pièce active."
+
+#: src/bus/ejtag.c:137
 #, fuzzy, c-format
 msgid "EJTAG compatible bus driver via PrAcc (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/ejtag.c:176
-#, c-format
-msgid "%s(%d) EJADDRESS, EJDATA or EJCONTROL register not found\n"
+#: src/bus/ejtag.c:168
+msgid "EJADDRESS, EJDATA or EJCONTROL register not found"
 msgstr ""
 
-#: src/bus/ejtag.c:195
+#: src/bus/ejtag.c:189
 #, c-format
-msgid "%s(%d) Reset occurred, ctrl=%s\n"
+msgid "Reset occurred, ctrl=%s"
 msgstr ""
 
-#: src/bus/ejtag.c:202
+#: src/bus/ejtag.c:196
 #, c-format
-msgid "%s(%d) No processor access, ctrl=%s\n"
+msgid "No processor access, ctrl=%s"
 msgstr ""
 
-#: src/bus/ejtag.c:215
+#: src/bus/ejtag.c:210
 #, c-format
-msgid "%s(%d) PrAcc bad alignment: addr=0x%08x\n"
+msgid "PrAcc bad alignment: addr=0x%08lx"
 msgstr ""
 
-#: src/bus/ejtag.c:229
+#: src/bus/ejtag.c:225
 #, c-format
-msgid "%s(%d) PrAcc write: addr=0x%08x data=0x%08x\n"
+msgid "%s(%d) PrAcc write: addr=0x%08lx data=0x%08lx\n"
 msgstr ""
 
 #: src/bus/ejtag.c:236
 #, c-format
-msgid "%s(%d) Unknown write addr=0x%08x data=0x%08x\n"
+msgid "Unknown write addr=0x%08lx data=0x%08lx"
 msgstr ""
 
-#: src/bus/ejtag.c:291
+#: src/bus/ejtag.c:297
+msgid "EJCONTROL or EJIMPCODE register not found"
+msgstr ""
+
+#: src/bus/ejtag.c:546
 #, c-format
-msgid "%s(%d) EJCONTROL or EJIMPCODE register not found\n"
+msgid "Failed to enter debug mode, ctrl=%s"
 msgstr ""
 
-#: src/bus/ejtag.c:481
-#, c-format
-msgid "%s(%d) Failed to enter debug mode, ctrl=%s\n"
-msgstr ""
-
-#: src/bus/ejtag.c:677
+#: src/bus/ejtag.c:761
 #, fuzzy
 msgid "EJTAG compatible bus driver via PrAcc"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/fjmem.c:91 src/bus/fjmem.c:106 src/bus/fjmem.c:187
-#: src/bus/fjmem.c:193 src/bus/fjmem.c:295 src/cmd/instruction.c:95
-#: src/cmd/register.c:71 src/cmd/register.c:85 src/cmd/salias.c:72
-#: src/cmd/signal.c:88 src/tap/detect.c:212 src/tap/detect.c:235
-#: src/tap/tap.c:53
-#, c-format
-msgid "out of memory\n"
-msgstr "mémoire épuisée\n"
-
-#: src/bus/fjmem.c:101 src/cmd/instruction.c:84
-#, c-format
-msgid "invalid instruction length\n"
+#: src/bus/fjmem.c:108 src/part/part.c:348
+#, fuzzy
+msgid "invalid instruction length"
 msgstr "longueur d'instruction invalide\n"
 
-#: src/bus/fjmem.c:367
-#, c-format
-msgid "Wrong parameter specification: %s\n"
+#: src/bus/fjmem.c:397
+msgid "Parameter for instruction opcode missing"
 msgstr ""
 
-#: src/bus/fjmem.c:424
-#, c-format
-msgid "Parameter for instruction opcode missing.\n"
-msgstr ""
-
-#: src/bus/fjmem.c:473
+#: src/bus/fjmem.c:475
 #, fuzzy, c-format
 msgid "fjmem FPGA bus driver via USER register (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/fjmem.c:595 src/bus/fjmem.c:627 src/bus/fjmem.c:661
-#: src/bus/fjmem.c:696 src/bus/jopcyc.c:549 src/bus/jopcyc.c:584
-#: src/bus/jopcyc.c:615 src/bus/jopcyc.c:647 src/bus/zefant-xs3.c:692
-#: src/bus/zefant-xs3.c:759 src/bus/zefant-xs3.c:807 src/bus/zefant-xs3.c:859
-#, c-format
-msgid "Address out of range\n"
+#: src/bus/fjmem.c:610 src/bus/fjmem.c:645 src/bus/fjmem.c:680
+#: src/bus/fjmem.c:716 src/bus/jopcyc.c:557 src/bus/jopcyc.c:596
+#: src/bus/jopcyc.c:628 src/bus/jopcyc.c:662 src/bus/zefant-xs3.c:707
+#: src/bus/zefant-xs3.c:780 src/bus/zefant-xs3.c:831 src/bus/zefant-xs3.c:887
+msgid "Address out of range"
 msgstr ""
 
-#: src/bus/fjmem.c:713
+#: src/bus/fjmem.c:733
 msgid ""
 "FPGA JTAG memory bus driver via USER register, requires parameters:\n"
 "           opcode=<USERx OPCODE> [len=<FJMEM REG LEN>]"
 msgstr ""
 
-#: src/bus/generic_bus.c:40 src/cmd/get.c:63 src/cmd/set.c:77
-#: src/cmd/test.c:65
-#, c-format
-msgid "signal '%s' not found\n"
-msgstr "signal '%s' non repéré\n"
-
-#: src/bus/ixp425.c:121
+#: src/bus/ixp425.c:117
 #, c-format
 msgid "Intel IXP425 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/ixp425.c:291
+#: src/bus/ixp425.c:290
 msgid "Intel IXP425 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/jopcyc.c:349
+#: src/bus/jopcyc.c:344
 #, fuzzy, c-format
 msgid ""
 "JOP.design Cyclone Board compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Pilote de bus compatible Broadcom BCM1250 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/jopcyc.c:677
+#: src/bus/jopcyc.c:694
 #, fuzzy
 msgid "JOP.design Cyclone Board compatible bus driver via BSR"
 msgstr "pilote de bus compatible Broadcom BCM1250 via BSR"
 
-#: src/bus/lh7a400.c:142
+#: src/bus/lh7a400.c:139
 #, fuzzy, c-format
 msgid "Sharp LH7A400 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "pilote de bus compatible Hitachi SH7750R via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/lh7a400.c:320
+#: src/bus/lh7a400.c:327
 #, fuzzy
 msgid "Sharp LH7A400 compatible bus driver via BSR (flash access only!)"
 msgstr ""
 "pilote de bus compatible Hitachi SH7750R via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/mpc5200.c:147
+#: src/bus/mpc5200.c:157
 #, fuzzy, c-format
 msgid "Freescale MPC5200 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/mpc5200.c:161
+#: src/bus/mpc5200.c:172
 msgid "LocalPlus Bus"
 msgstr ""
 
-#: src/bus/mpc5200.c:376
+#: src/bus/mpc5200.c:401
 #, fuzzy
 msgid "Freescale MPC5200 compatible bus driver via BSR, parameter: [mux]"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/mpc824x.c:107
-#, c-format
+#: src/bus/mpc824x.c:112
 msgid ""
-"   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently\n"
+"   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently"
 msgstr ""
 
-#: src/bus/mpc824x.c:111
-#, c-format
-msgid "   Only 8,32 and 64 bus width are supported for Banks 0 and 1\n"
+#: src/bus/mpc824x.c:117
+msgid "   Only 8,32 and 64 bus width are supported for Banks 0 and 1"
 msgstr ""
 
-#: src/bus/mpc824x.c:120
-#, c-format
+#: src/bus/mpc824x.c:129
 msgid ""
 "Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n"
 "\n"
@@ -632,50 +705,50 @@ msgid ""
 "   dbgData    display data bus state (default - no)\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:140
+#: src/bus/mpc824x.c:155
 #, c-format
 msgid "   Using default bus width %d\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:235
+#: src/bus/mpc824x.c:244
 #, fuzzy, c-format
 msgid "Motorola MPC824x compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/mpc824x.c:256
+#: src/bus/mpc824x.c:268
 msgid "Base ROM Interface (Bank 1)"
 msgstr ""
 
-#: src/bus/mpc824x.c:265 src/bus/mpc824x.c:283
+#: src/bus/mpc824x.c:278 src/bus/mpc824x.c:297
 msgid "Base ROM Interface (Bank 0)"
 msgstr ""
 
-#: src/bus/mpc824x.c:311
+#: src/bus/mpc824x.c:327
 #, c-format
-msgid "Warning: unhandled bus width: %i\n"
+msgid "Warning: unhandled bus width: %i"
 msgstr ""
 
-#: src/bus/mpc824x.c:325
+#: src/bus/mpc824x.c:350
 #, c-format
-msgid "Addr    [%2d:0]: %06X   "
+msgid "Addr    [%2d:0]: %06lX   "
 msgstr ""
 
-#: src/bus/mpc824x.c:370
+#: src/bus/mpc824x.c:400
 #, c-format
-msgid "Data WR [%d:0]: %08X   "
+msgid "Data WR [%d:0]: %08lX   "
 msgstr ""
 
-#: src/bus/mpc824x.c:407
+#: src/bus/mpc824x.c:446
 #, c-format
-msgid "Data RD [%d:0]: %08X   "
+msgid "Data RD [%d:0]: %08lX   "
 msgstr ""
 
-#: src/bus/mpc824x.c:519
+#: src/bus/mpc824x.c:566
 #, fuzzy
 msgid "Motorola MPC824x compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/ppc405ep.c:116
+#: src/bus/ppc405ep.c:113
 #, fuzzy, c-format
 msgid "IBM PowerPC 405EP compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
@@ -685,63 +758,59 @@ msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 msgid "IBM PowerPC 405EP compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/ppc440gx_ebc8.c:118
+#: src/bus/ppc440gx_ebc8.c:113
 #, fuzzy, c-format
 msgid ""
 "IBM PowerPC 440GX 8-bit compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 
-#: src/bus/ppc440gx_ebc8.c:269
+#: src/bus/ppc440gx_ebc8.c:271
 #, fuzzy
 msgid "IBM PowerPC 440GX 8-bit EBC compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/prototype.c:129
+#: src/bus/prototype.c:133
 #, c-format
-msgid "value %s not defined for parameter %s\n"
+msgid "value %lu not defined for parameter %s"
 msgstr ""
 
-#: src/bus/prototype.c:138
+#: src/bus/prototype.c:166 src/cmd/cmd_get.c:71 src/cmd/cmd_set.c:98
+#: src/cmd/cmd_test.c:75
 #, fuzzy, c-format
-msgid "signal '%s' is not found\n"
+msgid "signal '%s' not found"
 msgstr "signal '%s' non repéré\n"
 
-#: src/bus/prototype.c:166
+#: src/bus/prototype.c:210
 #, c-format
-msgid "parameter %s is unknown\n"
+msgid "parameter %s is unknown"
 msgstr ""
 
-#: src/bus/prototype.c:195
-#, c-format
-msgid "parameters alsb=<signal> and/or amsb=<signal> are not defined\n"
+#: src/bus/prototype.c:254
+msgid "parameters alsb=<signal> and/or amsb=<signal> are not defined"
 msgstr ""
 
-#: src/bus/prototype.c:243
-#, c-format
+#: src/bus/prototype.c:314
 msgid "parameters dlsb=<signal> and/or dmsb=<signal> are not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:248
-#, c-format
+#: src/bus/prototype.c:321
 msgid "parameter cs=<signal> or ncs=<signal> is not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:253
-#, c-format
+#: src/bus/prototype.c:328
 msgid "parameter oe=<signal> or noe=<signal> is not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:258
-#, c-format
+#: src/bus/prototype.c:335
 msgid "parameter we=<signal> or nwe=<signal> is not defined\n"
 msgstr ""
 
-#: src/bus/prototype.c:283
+#: src/bus/prototype.c:361
 #, fuzzy, c-format
 msgid "Configurable prototype bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/prototype.c:436
+#: src/bus/prototype.c:517
 msgid ""
 "Configurable prototype bus driver via BSR, requires parameters:\n"
 "           amsb=<addr MSB> alsb=<addr LSB> dmsb=<data MSB> dlsb=<data LSB>\n"
@@ -749,74 +818,66 @@ msgid ""
 "x8|x16|x32]"
 msgstr ""
 
-#: src/bus/pxa2x0.c:302 src/bus/pxa2x0.c:392
+#: src/bus/pxa2x0.c:322 src/bus/pxa2x0.c:421
 msgid "Static Chip Select 0"
 msgstr "Sélection statique du module 0"
 
-#: src/bus/pxa2x0.c:364
+#: src/bus/pxa2x0.c:392
 msgid "Memory Mapped registers (Memory Ctl)"
 msgstr "Registres mémoire mappé (Ctl Mémoire)"
 
-#: src/bus/pxa2x0.c:457
+#: src/bus/pxa2x0.c:496
 msgid "PXA270 internal address space (cfg, SRAM)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:475
+#: src/bus/pxa2x0.c:516
 msgid "PXA270 SDRAM space (4x 64MB)"
 msgstr ""
 
-#: src/bus/pxa2x0.c:702
+#: src/bus/pxa2x0.c:756
 msgid "Intel PXA2x0 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/pxa2x0.c:718
+#: src/bus/pxa2x0.c:772
 #, fuzzy
 msgid "Intel PXA27x compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel PXA2x0 via BSR"
 
-#: src/bus/readmem.c:55 src/bus/writemem.c:49 src/flash/detectflash.c:56
-#, c-format
-msgid "Error: Missing bus driver!\n"
+#: src/bus/readmem.c:55 src/bus/writemem.c:49
+#, fuzzy
+msgid "Missing bus driver"
 msgstr "Erreur: pilote de bus manquant!\n"
 
-#: src/bus/readmem.c:62 src/bus/writemem.c:56
-#, c-format
-msgid "Error: Bus width detection failed\n"
-msgstr "ERREUR: détection de la largeur de bus a échoué\n"
-
 #: src/bus/readmem.c:68 src/bus/writemem.c:62
-#, c-format
-msgid "Unknown bus width!\n"
+#, fuzzy
+msgid "Unknown bus width"
 msgstr "Largeur de bus inconnu!\n"
 
-#: src/bus/readmem.c:75 src/bus/writemem.c:69
-#, c-format
-msgid "address: 0x%08X\n"
+#: src/bus/readmem.c:81 src/bus/writemem.c:75
+#, fuzzy, c-format
+msgid "address: 0x%08lX\n"
 msgstr "adresse: 0x%08X\n"
 
-#: src/bus/readmem.c:76 src/bus/writemem.c:70
-#, c-format
-msgid "length:  0x%08X\n"
+#: src/bus/readmem.c:83 src/bus/writemem.c:77
+#, fuzzy, c-format
+msgid "length:  0x%08lX\n"
 msgstr "longueur:  0x%08X\n"
 
-#: src/bus/readmem.c:79 src/bus/writemem.c:73
-#, c-format
-msgid "length is 0.\n"
+#: src/bus/readmem.c:88 src/bus/writemem.c:82
+#, fuzzy
+msgid "length is 0"
 msgstr "longeur est 0.\n"
 
-#: src/bus/readmem.c:85
-#, c-format
+#: src/bus/readmem.c:94
 msgid "reading:\n"
 msgstr "lecture en cours:\n"
 
-#: src/bus/readmem.c:105 src/bus/writemem.c:87 src/flash/flash.c:160
-#: src/flash/flash.c:205 src/flash/flash.c:308 src/flash/flash.c:358
-#, c-format
-msgid "addr: 0x%08X"
+#: src/bus/readmem.c:120 src/bus/writemem.c:98
+#, fuzzy, c-format
+msgid "addr: 0x%08llX\r"
 msgstr "adr: 0x%08X"
 
-#: src/bus/readmem.c:113 src/bus/writemem.c:122 src/flash/flash.c:220
-#, c-format
+#: src/bus/readmem.c:133 src/bus/writemem.c:144 src/flash/flash.c:258
 msgid ""
 "\n"
 "Done.\n"
@@ -824,7 +885,7 @@ msgstr ""
 "\n"
 "Complété.\n"
 
-#: src/bus/s3c4510x.c:182
+#: src/bus/s3c4510x.c:179
 #, fuzzy, c-format
 msgid ""
 "Samsung S3C4510B compatibile bus driver via BSR (JTAG part No. %d) RCS0=%"
@@ -832,35 +893,30 @@ msgid ""
 msgstr ""
 "pilote de bus compatible Samsung S3C4510B via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/s3c4510x.c:414
+#: src/bus/s3c4510x.c:427
 msgid "Samsung S3C4510B compatible bus driver via BSR"
 msgstr "pilote de bus compatible Samsung S3C4510B via BSR"
 
-#: src/bus/sa1110.c:128
+#: src/bus/sa1110.c:124
 #, c-format
 msgid "Intel SA-1110 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/sa1110.c:305
+#: src/bus/sa1110.c:307
 msgid "Intel SA-1110 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR"
 
-#: src/bus/sh7727.c:138
+#: src/bus/sh7727.c:135
 #, c-format
 msgid "Hitachi SH7727 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "pilote de bus compatible Hitachi SH7727 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/sh7727.c:165
-#, c-format
-msgid "Error: Invalid bus width (MD3 = MD4 = 0)!\n"
-msgstr "ERREUR: largeur de bus invalide (MD3 = MD4 = 0)!\n"
-
-#: src/bus/sh7727.c:346
+#: src/bus/sh7727.c:347
 msgid "Hitachi SH7727 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Hitachi SH7727 via BSR"
 
-#: src/bus/sh7750r.c:136
+#: src/bus/sh7750r.c:133
 #, c-format
 msgid "Hitachi SH7750R compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
@@ -870,7 +926,7 @@ msgstr ""
 msgid "Hitachi SH7750R compatible bus driver via BSR"
 msgstr "pilote de bus compatible Hitachi SH7750R via BSR"
 
-#: src/bus/sh7751r.c:130
+#: src/bus/sh7751r.c:127
 #, c-format
 msgid "Hitachi SH7751R compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
@@ -880,7 +936,7 @@ msgstr ""
 msgid "Hitachi SH7751R compatible bus driver via BSR"
 msgstr "pilote de bus compatible Hitachi SH7751R via BSR"
 
-#: src/bus/sharc21065l.c:123
+#: src/bus/sharc21065l.c:121
 #, fuzzy, c-format
 msgid ""
 "Analog Device's SHARC 21065L compatible bus driver via BSR (JTAG part No. %"
@@ -891,34 +947,34 @@ msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 msgid "Boot Memory Select"
 msgstr ""
 
-#: src/bus/sharc21065l.c:309
+#: src/bus/sharc21065l.c:316
 #, fuzzy
 msgid "SHARC_21065L compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR"
 
-#: src/bus/slsup3.c:167
+#: src/bus/slsup3.c:169
 #, fuzzy, c-format
 msgid "SLS UP3 bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel SA-1110 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/slsup3.c:178
+#: src/bus/slsup3.c:181
 msgid "Flash Memory (2 MByte) byte mode"
 msgstr ""
 
-#: src/bus/slsup3.c:187
+#: src/bus/slsup3.c:191
 msgid "SRAM 128KByte (64K x 16)"
 msgstr ""
 
-#: src/bus/slsup3.c:196
+#: src/bus/slsup3.c:201
 msgid "LCD Display (RS select by A0)"
 msgstr ""
 
-#: src/bus/slsup3.c:423
+#: src/bus/slsup3.c:440
 #, fuzzy
 msgid "SLS UP3 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/tx4925.c:140
+#: src/bus/tx4925.c:137
 #, fuzzy, c-format
 msgid "Toshiba TX4925 compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
@@ -928,32 +984,22 @@ msgstr "pilote de bus compatible Intel IXP425 via BSR (JTAG No de pièce %d)\n"
 msgid "Toshiba TX4925 compatible bus driver via BSR"
 msgstr "pilote de bus compatible Intel IXP425 via BSR"
 
-#: src/bus/writemem.c:79
-#, fuzzy, c-format
+#: src/bus/writemem.c:88
+#, fuzzy
 msgid "writing:\n"
 msgstr "lecture en cours:\n"
 
-#: src/bus/writemem.c:91
+#: src/bus/writemem.c:103
 #, c-format
-msgid "Data not on word boundary, NOT SUPPORTED!"
+msgid "Short read: bc=0x%zX\n"
 msgstr ""
 
-#: src/bus/writemem.c:93
+#: src/bus/writemem.c:110
 #, fuzzy, c-format
-msgid "Unexpected end of file!\n"
+msgid "Unexpected end of file; Addr: 0x%08llX\n"
 msgstr "ERREUR: fin prématurée du fichier\n"
 
-#: src/bus/writemem.c:94
-#, fuzzy, c-format
-msgid "Addr: 0x%08X\n"
-msgstr "adr: 0x%08X\n"
-
-#: src/bus/writemem.c:99
-#, c-format
-msgid "Short read: bc=0x%X\n"
-msgstr ""
-
-#: src/bus/zefant-xs3.c:423
+#: src/bus/zefant-xs3.c:419
 #, fuzzy, c-format
 msgid ""
 "Simple Solutions Zefant-XS3 Board compatible bus driver via BSR (JTAG part "
@@ -961,98 +1007,53 @@ msgid ""
 msgstr ""
 "pilote de bus compatible Hitachi SH7727 via BSR (JTAG no de pièce %d)\n"
 
-#: src/bus/zefant-xs3.c:737 src/bus/zefant-xs3.c:783 src/bus/zefant-xs3.c:837
-#: src/bus/zefant-xs3.c:946
-#, fuzzy, c-format
-msgid "Component type not supported\n"
+#: src/bus/zefant-xs3.c:756 src/bus/zefant-xs3.c:806 src/bus/zefant-xs3.c:864
+#: src/bus/zefant-xs3.c:981
+#, fuzzy
+msgid "Component type not supported"
 msgstr "Flash non supporté!\n"
 
-#: src/bus/zefant-xs3.c:953
+#: src/bus/zefant-xs3.c:988
 #, fuzzy
 msgid "Simple Solutions Zefant-XS3 Board compatible bus driver via BSR"
 msgstr "pilote de bus compatible Samsung S3C4510B via BSR"
 
-#: src/cmd/bit.c:61
-#, c-format
-msgid "%s: invalid number of parameters (%d) for command '%s'\n"
-msgstr ""
-
-#: src/cmd/bit.c:66
-#, c-format
-msgid "%s: cable test failed for command '%s'\n"
-msgstr ""
-
-#: src/cmd/bit.c:71 src/cmd/bus.c:46 src/cmd/dr.c:48 src/cmd/get.c:52
-#: src/cmd/initbus.c:46 src/cmd/instruction.c:44 src/cmd/part.c:59
-#: src/cmd/print.c:65 src/cmd/register.c:50 src/cmd/salias.c:49
-#: src/cmd/scan.c:50 src/cmd/set.c:53 src/cmd/signal.c:50 src/cmd/test.c:54
-#, c-format
-msgid "Run \"detect\" first.\n"
-msgstr "Eéxcuer \"détecter\" d'abord.\n"
-
-#: src/cmd/bit.c:76 src/cmd/dr.c:53 src/cmd/get.c:57 src/cmd/initbus.c:51
-#: src/cmd/instruction.c:49 src/cmd/register.c:55 src/cmd/salias.c:54
-#: src/cmd/scan.c:55 src/cmd/set.c:58 src/cmd/signal.c:55 src/cmd/test.c:59
-#, c-format
-msgid "%s: no active part\n"
-msgstr "%s: aucune pièce active\n"
-
-#: src/cmd/bit.c:83
+#: src/cmd/cmd_bit.c:88
 #, fuzzy, c-format
-msgid "%s: missing Boundary Scan Register (BSR) for command '%s'\n"
-msgstr "registre Boundary Scan Register (BSR) manquant\n"
-
-#: src/cmd/bit.c:89
-#, c-format
-msgid "%s: unable to get boundary bit number for command '%s'\n"
-msgstr ""
-
-#: src/cmd/bit.c:94
-#, fuzzy, c-format
-msgid "%s: invalid boundary bit number for command '%s'\n"
+msgid "%s: unable to get boundary bit number for command '%s'"
 msgstr "numéro de bit de limite invalide\n"
 
-#: src/cmd/bit.c:98
+#: src/cmd/cmd_bit.c:97
 #, fuzzy, c-format
-msgid "%s: duplicate bit declaration for command '%s'\n"
-msgstr "déclaration double de bit\n"
-
-#: src/cmd/bit.c:104
-#, c-format
-msgid "%s: invalid bit type length for command '%s'\n"
-msgstr ""
-
-#: src/cmd/bit.c:129
-#, fuzzy, c-format
-msgid "%s: invalid bit type for command '%s'\n"
+msgid "%s: invalid bit type length for command '%s'"
 msgstr "flash: séquence de commande invalide\n"
 
-#: src/cmd/bit.c:135
-#, c-format
-msgid "%s: invalid default value length for command '%s'\n"
-msgstr ""
-
-#: src/cmd/bit.c:145
-#, c-format
-msgid "%s: out of memory for command '%s'\n"
-msgstr ""
-
-#: src/cmd/bit.c:155
-#, c-format
-msgid "%s: unable to get control bit number for command '%s'\n"
-msgstr ""
-
-#: src/cmd/bit.c:159
+#: src/cmd/cmd_bit.c:125
 #, fuzzy, c-format
-msgid "%s: invalid control bit number for command '%s'\n"
+msgid "%s: invalid bit type for command '%s'"
+msgstr "flash: séquence de commande invalide\n"
+
+#: src/cmd/cmd_bit.c:134
+#, fuzzy, c-format
+msgid "%s: invalid default value length for command '%s'"
+msgstr "flash: séquence de commande invalide\n"
+
+#: src/cmd/cmd_bit.c:149
+#, fuzzy, c-format
+msgid "%s: invalid default value '%s' for command '%s'"
+msgstr "flash: séquence de commande invalide\n"
+
+#: src/cmd/cmd_bit.c:167
+#, fuzzy, c-format
+msgid "%s: unable to get control bit number for command '%s'"
 msgstr "numéro de bit de contrôle invalide\n"
 
-#: src/cmd/bit.c:166
-#, c-format
-msgid "%s: invalid control value length for command '%s'\n"
-msgstr ""
+#: src/cmd/cmd_bit.c:175
+#, fuzzy, c-format
+msgid "%s: invalid control value length for command '%s'"
+msgstr "numéro de bit de contrôle invalide\n"
 
-#: src/cmd/bit.c:184
+#: src/cmd/cmd_bit.c:200
 #, c-format
 msgid ""
 "Usage: %s NUMBER TYPE DEFAULT SIGNAL [CBIT CVAL CSTATE]\n"
@@ -1080,11 +1081,11 @@ msgstr ""
 "VALC          valeur de contrôle\n"
 "ÉTATC         état de contrôle, état permis est seulement Z\n"
 
-#: src/cmd/bit.c:200
+#: src/cmd/cmd_bit.c:216
 msgid "define new BSR bit"
 msgstr "définir un nouveau bit BSR"
 
-#: src/cmd/bsdl.c:93
+#: src/cmd/cmd_bsdl.c:124
 #, c-format
 msgid ""
 "Usage: %s path PATHLIST\n"
@@ -1098,16 +1099,11 @@ msgid ""
 "FILE file containing part description in BSDL format\n"
 msgstr ""
 
-#: src/cmd/bsdl.c:106
+#: src/cmd/cmd_bsdl.c:137
 msgid "manage BSDL files"
 msgstr ""
 
-#: src/cmd/bus.c:54
-#, c-format
-msgid "%s: invalid bus number\n"
-msgstr "%s: numéro de bus invalide\n"
-
-#: src/cmd/bus.c:67
+#: src/cmd/cmd_bus.c:71
 #, c-format
 msgid ""
 "Usage: %s BUS\n"
@@ -1120,39 +1116,16 @@ msgstr ""
 "\n"
 "BUS           numéro de bus\n"
 
-#: src/cmd/bus.c:76
+#: src/cmd/cmd_bus.c:79
 msgid "change active bus"
 msgstr "changer le bus actif"
 
-#: src/cmd/cable.c:58
-#, c-format
-msgid "Note: the 'cable' command syntax changed, please read the help text\n"
-msgstr ""
-
-#: src/cmd/cable.c:76
+#: src/cmd/cmd_cable.c:98
 #, fuzzy, c-format
-msgid "Unknown cable type: %s\n"
+msgid "Unknown cable type: '%s'"
 msgstr "Cable inconnue: %s\n"
 
-#: src/cmd/cable.c:98 src/tap/cable/ft2232.c:1580
-#: src/tap/cable/generic_parport.c:82 src/tap/cable/generic_usbconn.c:223
-#: src/tap/cable/jim.c:68 src/tap/cable/usbblaster.c:79
-#: src/tap/cable/vision_ep9307.c:201 src/tap/cable/wiggler.c:195
-#, c-format
-msgid "%s(%d) malloc failed!\n"
-msgstr ""
-
-#: src/cmd/cable.c:105 src/tap/cable/generic_parport.c:76
-#, c-format
-msgid "Error: Cable connection failed!\n"
-msgstr "Error: échec de la connexion par cable!\n"
-
-#: src/cmd/cable.c:113
-#, c-format
-msgid "Error: Cable initialization failed!\n"
-msgstr "Error: échec de l'initialisation par cable!\n"
-
-#: src/cmd/cable.c:130
+#: src/cmd/cmd_cable.c:167
 #, c-format
 msgid ""
 "Usage: %s DRIVER [DRIVER_OPTS]\n"
@@ -1166,49 +1139,52 @@ msgid ""
 "List of supported cables:\n"
 msgstr ""
 
-#: src/cmd/cable.c:142 src/cmd/help.c:41
+#: src/cmd/cmd_cable.c:179 src/cmd/cmd_help.c:53
 #, c-format
 msgid "%-13s %s\n"
 msgstr "%-13s %s\n"
 
-#: src/cmd/cable.c:147
+#: src/cmd/cmd_cable.c:185
 msgid "select JTAG cable"
 msgstr "sélectionner le cable JTAG"
 
-#: src/cmd/cmd.c:170
-#, c-format
-msgid "Error: Cable not configured. Please use '%s' command first!\n"
-msgstr "ERREUR: cable non configuré. SVP utiliser la commande '%s' d'abord!\n"
-
-#: src/cmd/cmd.c:194
-#, c-format
-msgid "%s: syntax error!\n"
-msgstr "%s: erreur de syntaxe!\n"
-
-#: src/cmd/cmd.c:205
+#: src/cmd/cmd_cmd.c:164
 #, fuzzy, c-format
 msgid "%s: Ambiguous command\n"
 msgstr "%s: commande inconnue\n"
 
-#: src/cmd/cmd.c:206 src/cmd/help.c:57
+#: src/cmd/cmd_cmd.c:167 src/cmd/cmd_help.c:70
 #, c-format
 msgid "%s: unknown command\n"
 msgstr "%s: commande inconnue\n"
 
-#: src/cmd/debug.c:56
+#: src/cmd/cmd_debug.c:86
+#, c-format
+msgid "Current log level is '%s'\n"
+msgstr ""
+
+#: src/cmd/cmd_debug.c:117
 #, c-format
 msgid ""
-"Usage: %s  n\n"
-"Enabled debugging.\n"
+"Usage: %s LEVEL\n"
+"Set logging/debugging level.\n"
 "\n"
-"n =1 fileio, 2=tap commands, 4 =?\n"
+"LEVEL:\n"
+"all       every single bit as it is transmitted\n"
+"comm      low level communication details\n"
+"debug     more details of interest for developers\n"
+"detail    verbose output\n"
+"normal    just noteworthy info\n"
+"warning   unmissable warnings\n"
+"error     only fatal errors\n"
+"silent    suppress logging output\n"
 msgstr ""
 
-#: src/cmd/debug.c:65
-msgid "debug jtag program"
+#: src/cmd/cmd_debug.c:133
+msgid "set logging/debugging level"
 msgstr ""
 
-#: src/cmd/detect.c:83
+#: src/cmd/cmd_detect.c:62
 #, c-format
 msgid ""
 "Usage: %s\n"
@@ -1224,18 +1200,17 @@ msgstr ""
 "Si aucune pièce n'est détectée, les autres commandes peuvent ne pas "
 "fonctionner correctement.\n"
 
-#: src/cmd/detect.c:93
+#: src/cmd/cmd_detect.c:72
 msgid "detect parts on the JTAG chain"
 msgstr "pièces détectés sur la caîne JTAG"
 
-#: src/cmd/detectflash.c:41 src/cmd/eraseflash.c:47 src/cmd/flashmem.c:49
-#: src/cmd/peekpoke.c:47 src/cmd/peekpoke.c:109 src/cmd/readmem.c:45
-#: src/cmd/writemem.c:43
-#, c-format
-msgid "Error: Bus driver missing.\n"
-msgstr "Erreur: pilote du bus manquant.\n"
+#: src/cmd/cmd_detectflash.c:52 src/cmd/cmd_peekpoke.c:57
+#: src/cmd/cmd_peekpoke.c:139 src/cmd/cmd_readmem.c:57
+#: src/cmd/cmd_writemem.c:55
+msgid "Bus missing"
+msgstr ""
 
-#: src/cmd/detectflash.c:57
+#: src/cmd/cmd_detectflash.c:66
 #, fuzzy, c-format
 msgid ""
 "Usage: %s ADDRESS\n"
@@ -1246,11 +1221,11 @@ msgstr ""
 "Usage: %s\n"
 "Détecter un type de mémoire flash connecté.\n"
 
-#: src/cmd/detectflash.c:66
+#: src/cmd/cmd_detectflash.c:75
 msgid "detect parameters of flash chips attached to a part"
 msgstr "paramètres de détection de modules flahs connectés"
 
-#: src/cmd/discovery.c:51
+#: src/cmd/cmd_discovery.c:57
 #, c-format
 msgid ""
 "Usage: %s\n"
@@ -1275,31 +1250,31 @@ msgstr ""
 "si celles-ci\n"
 "n'ont pas de signal TRST).\n"
 
-#: src/cmd/discovery.c:66
+#: src/cmd/cmd_discovery.c:72
 msgid "discovery of unknown parts in the JTAG chain"
 msgstr "découverte des pièces inconnues dans la chaîne JTAG"
 
-#: src/cmd/dr.c:58
-#, c-format
-msgid "%s: part without active instruction\n"
+#: src/cmd/cmd_dr.c:69
+#, fuzzy, c-format
+msgid "%s: part without active instruction"
 msgstr "%s: pièces sans instruction active\n"
 
-#: src/cmd/dr.c:62
-#, c-format
-msgid "%s: part without active data register\n"
+#: src/cmd/cmd_dr.c:76
+#, fuzzy, c-format
+msgid "%s: instruction without active data register"
 msgstr "%s: pièces sans registre actif de données\n"
 
-#: src/cmd/dr.c:79
+#: src/cmd/cmd_dr.c:101
 #, c-format
-msgid "%s: register length mismatch\n"
+msgid "%s: register length %d mismatch: %zd"
 msgstr ""
 
-#: src/cmd/dr.c:94
+#: src/cmd/cmd_dr.c:118
 #, c-format
 msgid "%s\n"
 msgstr "%s\n"
 
-#: src/cmd/dr.c:103
+#: src/cmd/cmd_dr.c:127
 #, fuzzy, c-format
 msgid ""
 "Usage: %s [DIR]\n"
@@ -1316,23 +1291,21 @@ msgstr ""
 "DIR           registre de données interrogé; valeurs possibles: 'in' pour\n"
 "                l'entrée et 'out' pour la sortie; par défaut 'out'\n"
 
-#: src/cmd/dr.c:115
+#: src/cmd/cmd_dr.c:139
 msgid "display active data register for a part"
 msgstr "afficher le registre actif de données pour une pièce"
 
-#: src/cmd/endian.c:42
-#, c-format
+#: src/cmd/cmd_endian.c:52
 msgid "Endianess for external files: big\n"
 msgstr ""
 "système de poids fort/faible des fichiers externes: gros (big endian)\n"
 
-#: src/cmd/endian.c:44
-#, c-format
+#: src/cmd/cmd_endian.c:55
 msgid "Endianess for external files: little\n"
 msgstr ""
 "système de poids fort/faible des fichiers externes: petit (little endian)\n"
 
-#: src/cmd/endian.c:65
+#: src/cmd/cmd_endian.c:79
 #, c-format
 msgid ""
 "Usage: %s\n"
@@ -1342,12 +1315,18 @@ msgstr ""
 "Initialiser ou afficher le système de poids fort/faible (big/little endian) "
 "des fichiers externes.\n"
 
-#: src/cmd/endian.c:72
+#: src/cmd/cmd_endian.c:86
 msgid "set/print endianess"
 msgstr ""
 "Initialiser ou afficher le système de poids fort/faible (big/little endian)."
 
-#: src/cmd/eraseflash.c:65
+#: src/cmd/cmd_eraseflash.c:57 src/cmd/cmd_flashmem.c:60
+#: src/cmd/cmd_peekpoke.c:62 src/cmd/cmd_peekpoke.c:144
+#, fuzzy
+msgid "Bus driver missing"
+msgstr "Erreur: pilote du bus manquant.\n"
+
+#: src/cmd/cmd_eraseflash.c:74
 #, c-format
 msgid ""
 "Usage: %s ADDR BLOCKS\n"
@@ -1371,7 +1350,7 @@ msgstr ""
 "\n"
 "Mémoires flash supportées:\n"
 
-#: src/cmd/eraseflash.c:77 src/cmd/flashmem.c:97
+#: src/cmd/cmd_eraseflash.c:86 src/cmd/cmd_flashmem.c:112
 #, c-format
 msgid ""
 "%s\n"
@@ -1380,16 +1359,16 @@ msgstr ""
 "%s\n"
 "     %s\n"
 
-#: src/cmd/eraseflash.c:82
+#: src/cmd/cmd_eraseflash.c:92
 msgid "erase flash memory by number of blocks"
 msgstr "effacer la mémoire flash par numéro de bloc"
 
-#: src/cmd/flashmem.c:64 src/cmd/writemem.c:52 src/jtag.c:414
-#, c-format
-msgid "Unable to open file `%s'!\n"
+#: src/cmd/cmd_flashmem.c:76 src/cmd/cmd_writemem.c:66
+#, fuzzy, c-format
+msgid "Unable to open file `%s'"
 msgstr "Incapable d'ouvrir le fichier `%s'!\n"
 
-#: src/cmd/flashmem.c:82
+#: src/cmd/cmd_flashmem.c:96
 #, fuzzy, c-format
 msgid ""
 "Usage: %s ADDR FILENAME [noverify]\n"
@@ -1418,21 +1397,21 @@ msgstr ""
 "\n"
 "Mémoires flahs supportées:\n"
 
-#: src/cmd/flashmem.c:102
+#: src/cmd/cmd_flashmem.c:118
 msgid "burn flash memory with data from a file"
 msgstr "brûler la mémoire flahs avec les données à partir d'un fichier"
 
-#: src/cmd/frequency.c:43
-#, c-format
-msgid "Current TCK frequency is %u Hz\n"
+#: src/cmd/cmd_frequency.c:55
+#, fuzzy, c-format
+msgid "Current TCK frequency is %lu Hz\n"
 msgstr "Fréquence courant TCK est %u Hz\n"
 
-#: src/cmd/frequency.c:53
-#, c-format
-msgid "Setting TCK frequency to %u Hz\n"
+#: src/cmd/cmd_frequency.c:63
+#, fuzzy, c-format
+msgid "Setting TCK frequency to %lu Hz\n"
 msgstr "Initialisation de la fréquence TCK à %u Hz\n"
 
-#: src/cmd/frequency.c:63
+#: src/cmd/cmd_frequency.c:74
 #, c-format
 msgid ""
 "Usage: %s [FREQ]\n"
@@ -1460,19 +1439,19 @@ msgstr ""
 "Hz.\n"
 "Utilise 0 comme valeur pour désactiver la limite de fréquence.\n"
 
-#: src/cmd/frequency.c:78
+#: src/cmd/cmd_frequency.c:89
 msgid "setup JTAG frequency"
 msgstr "initialisation de la fréquence JTAG"
 
-#: src/cmd/get.c:68
+#: src/cmd/cmd_get.c:79
 #, c-format
 msgid "%s = %d\n"
 msgstr "%s = %d\n"
 
-#: src/cmd/get.c:77
-#, c-format
+#: src/cmd/cmd_get.c:88
+#, fuzzy, c-format
 msgid ""
-"Usage: %s SIGNAL\n"
+"Usage: %s signal SIGNAL\n"
 "Get signal state from output BSR (Boundary Scan Register).\n"
 "\n"
 "SIGNAL        signal name (from JTAG declaration file)\n"
@@ -1482,12 +1461,11 @@ msgstr ""
 "\n"
 "SIGNAL        nom du signal (à partir du fichier de déclaration JTAG)\n"
 
-#: src/cmd/get.c:86
+#: src/cmd/cmd_get.c:97
 msgid "get external signal value"
 msgstr "obtenir la valeur externe du signal"
 
-#: src/cmd/help.c:39
-#, c-format
+#: src/cmd/cmd_help.c:51
 msgid ""
 "Command list:\n"
 "\n"
@@ -1495,12 +1473,11 @@ msgstr ""
 "Liste de commandes:\n"
 "\n"
 
-#: src/cmd/help.c:41
+#: src/cmd/cmd_help.c:55
 msgid "(no description available)"
 msgstr "(pas de description disponible)"
 
-#: src/cmd/help.c:42
-#, c-format
+#: src/cmd/cmd_help.c:57
 msgid ""
 "\n"
 "Type \"help COMMAND\" for details about a particular command.\n"
@@ -1509,7 +1486,7 @@ msgstr ""
 "Taper \"help COMMANDE\" pour des détails au sujet d'une commande "
 "particulière.\n"
 
-#: src/cmd/help.c:66
+#: src/cmd/cmd_help.c:79
 #, c-format
 msgid ""
 "Usage: %s [COMMAND]\n"
@@ -1519,40 +1496,35 @@ msgstr ""
 "Afficher une aide sommaire de la COMMANDE ou lister les commandes "
 "disponibles.\n"
 
-#: src/cmd/help.c:73
+#: src/cmd/cmd_help.c:86
 msgid "display this help"
 msgstr "afficher l'aide-mémoire"
 
-#: src/cmd/idcode.c:50
+#: src/cmd/cmd_idcode.c:55
 #, c-format
-msgid "Reading %d bytes if idcode\n"
+msgid "Reading %lu bytes of idcode\n"
 msgstr ""
 
-#: src/cmd/idcode.c:59
+#: src/cmd/cmd_idcode.c:63
 #, c-format
 msgid ""
 "Usage: %s [BYTES]\n"
-"Read [BYTES]|all IDCODEs of all parts in a JTAG chain.\n"
+"Read [BYTES] IDCODEs of all parts in a JTAG chain.\n"
 "\n"
-"BYTES must be an unsigned integer, Use 0 for BYTES to read all bytes\n"
+"BYTES must be an unsigned integer, and the default is 0.\n"
+"If BYTES is 0, IDCODEs will be read until 32 consecutive zeros are found.\n"
 msgstr ""
 
-#: src/cmd/idcode.c:68
+#: src/cmd/cmd_idcode.c:73
 #, fuzzy
 msgid "Read IDCODEs of all parts in a JTAG chain"
 msgstr "découverte des pièces inconnues dans la chaîne JTAG"
 
-#: src/cmd/include.c:49
-#, c-format
+#: src/cmd/cmd_include.c:58
 msgid "Please use the 'include' command instead of 'script'\n"
 msgstr ""
 
-#: src/cmd/include.c:99
-#, fuzzy, c-format
-msgid "Unable to open file `%s go=%d'!\n"
-msgstr "Incapable d'ouvrir le fichier `%s'!\n"
-
-#: src/cmd/include.c:113
+#: src/cmd/cmd_include.c:82
 #, fuzzy, c-format
 msgid ""
 "Usage: %s FILENAME [n] \n"
@@ -1565,35 +1537,20 @@ msgstr ""
 "\n"
 "FICHIER        nom du fichier contenant les commande\n"
 
-#: src/cmd/include.c:134
+#: src/cmd/cmd_include.c:102
 msgid "include command sequence from external repository"
 msgstr "inclure une séquence de commandes à partir du dépôt externe"
 
-#: src/cmd/include.c:153
+#: src/cmd/cmd_include.c:121
 msgid "run command sequence from external file"
 msgstr "exécuter une séquence de commandes à partir d'un FICHIER externe"
 
-#: src/cmd/initbus.c:59
+#: src/cmd/cmd_initbus.c:66
 #, fuzzy, c-format
-msgid "bus alloc/attach failed!\n"
-msgstr "initialisation du bus a échoué!\n"
-
-#: src/cmd/initbus.c:64
-#, c-format
-msgid "bus initialization failed!\n"
-msgstr "initialisation du bus a échoué!\n"
-
-#: src/cmd/initbus.c:70
-#, fuzzy, c-format
-msgid "Initialized bus %d, active bus %d\n"
-msgstr "initialiser le pilote du bus pour la pièce active."
-
-#: src/cmd/initbus.c:76
-#, c-format
-msgid "Unknown bus: %s\n"
+msgid "Unknown bus: %s"
 msgstr "bus inconnu: %s\n"
 
-#: src/cmd/initbus.c:87
+#: src/cmd/cmd_initbus.c:96
 #, c-format
 msgid ""
 "Usage: %s BUSNAME\n"
@@ -1610,36 +1567,21 @@ msgstr ""
 "\n"
 "Liste des bus disponibles:\n"
 
-#: src/cmd/initbus.c:96
+#: src/cmd/cmd_initbus.c:105
 #, c-format
 msgid "%-10s %s\n"
 msgstr "%-10s %s\n"
 
-#: src/cmd/initbus.c:101
+#: src/cmd/cmd_initbus.c:111
 msgid "initialize bus driver for active part"
 msgstr "initialiser le pilote du bus pour la pièce active."
 
-#: src/cmd/instruction.c:58
-#, c-format
-msgid "%s: unknown instruction '%s'\n"
+#: src/cmd/cmd_instruction.c:60
+#, fuzzy, c-format
+msgid "%s: unknown instruction '%s'"
 msgstr "%s: instruction inconnue '%s'\n"
 
-#: src/cmd/instruction.c:69
-#, c-format
-msgid "instruction length is already set and used\n"
-msgstr "la longueur d'instruction est déjà initialisée et utilisée\n"
-
-#: src/cmd/instruction.c:89
-#, c-format
-msgid "Instruction '%s' already defined\n"
-msgstr "Instruction '%s' est déjà définie\n"
-
-#: src/cmd/instruction.c:104
-#, c-format
-msgid "unknown data register '%s'\n"
-msgstr "registre de données inconnu '%s'\n"
-
-#: src/cmd/instruction.c:118
+#: src/cmd/cmd_instruction.c:101
 #, c-format
 msgid ""
 "Usage: %s INSTRUCTION\n"
@@ -1663,18 +1605,18 @@ msgstr ""
 "CODE          code d'instruction (i.e. 11111)\n"
 "REGISTRE      registre de données pour l'instruction (i.e. BR)\n"
 
-#: src/cmd/instruction.c:132
+#: src/cmd/cmd_instruction.c:115
 msgid "change active instruction for a part or declare new instruction"
 msgstr ""
 "changer l'instruction active pour une pièce ou déclarer une nouvelle "
 "instruction."
 
-#: src/cmd/part.c:81
-#, c-format
-msgid "%s: invalid part number\n"
+#: src/cmd/cmd_part.c:119
+#, fuzzy, c-format
+msgid "%s: invalid part number %lu, max %d"
 msgstr "%s: numéro de pièce invalide\n"
 
-#: src/cmd/part.c:94
+#: src/cmd/cmd_part.c:136
 #, fuzzy, c-format
 msgid ""
 "Usage: %s PART\n"
@@ -1687,26 +1629,26 @@ msgstr ""
 "\n"
 "PIÈCE         numéro de pièce\n"
 
-#: src/cmd/part.c:103
+#: src/cmd/cmd_part.c:144
 msgid "change active part for current JTAG chain"
 msgstr "changer la pièce active pour la chaîne courante JTAG"
 
-#: src/cmd/peekpoke.c:62
+#: src/cmd/cmd_peekpoke.c:80
 #, fuzzy, c-format
-msgid "bus_read(0x%08x) = 0x%02X (%i)\n"
+msgid "URJ_BUS_READ(0x%08lx) = 0x%02lX (%li)\n"
 msgstr "bus_read(0x%08x) = 0x%08X (%i)\n"
 
-#: src/cmd/peekpoke.c:66
+#: src/cmd/cmd_peekpoke.c:86
 #, fuzzy, c-format
-msgid "bus_read(0x%08x) = 0x%04X (%i)\n"
+msgid "URJ_BUS_READ(0x%08lx) = 0x%04lX (%li)\n"
 msgstr "bus_read(0x%08x) = 0x%08X (%i)\n"
 
-#: src/cmd/peekpoke.c:69
-#, c-format
-msgid "bus_read(0x%08x) = 0x%08X (%i)\n"
+#: src/cmd/cmd_peekpoke.c:91
+#, fuzzy, c-format
+msgid "URJ_BUS_READ(0x%08lx) = 0x%08lX (%li)\n"
 msgstr "bus_read(0x%08x) = 0x%08X (%i)\n"
 
-#: src/cmd/peekpoke.c:80
+#: src/cmd/cmd_peekpoke.c:104
 #, c-format
 msgid ""
 "Usage: %s ADDR\n"
@@ -1725,11 +1667,11 @@ msgstr ""
 "ADR peut être en décimal ou hexadécimal (préfixé par 0x).\n"
 "\n"
 
-#: src/cmd/peekpoke.c:92
+#: src/cmd/cmd_peekpoke.c:116
 msgid "read a single word"
 msgstr "lire un mot simple"
 
-#: src/cmd/peekpoke.c:131
+#: src/cmd/cmd_peekpoke.c:167
 #, fuzzy, c-format
 msgid ""
 "Usage: %s ADDR VAL [ADDR VAL] ... \n"
@@ -1750,78 +1692,78 @@ msgstr ""
 "ADR et VAL peuvent être en décimal ou en hexadécimal (préfixé par 0x).\n"
 "\n"
 
-#: src/cmd/peekpoke.c:144
+#: src/cmd/cmd_peekpoke.c:180
 msgid "write a single word"
 msgstr "écrire un mot simple"
 
-#: src/cmd/pod.c:78
+#: src/cmd/cmd_pod.c:105
 #, c-format
 msgid ""
 "Usage: %s SIGNAL=# [SIGNAL=# ...]\n"
 "Set state of POD signal(s) to 0 or 1.\n"
 "\n"
-"SIGNAL\t    TCK,TMS, TDI, TRST, or RESET\n"
+"SIGNAL       TCK,TMS, TDI, TRST, or RESET\n"
 "#          0 or 1\n"
 msgstr ""
 
-#: src/cmd/pod.c:88
+#: src/cmd/cmd_pod.c:115
 msgid "Set state of POD signal(s)"
 msgstr ""
 
-#: src/cmd/print.c:98
-#, c-format
-msgid " Active %%-%ds %%-%ds"
-msgstr ""
+#: src/cmd/cmd_print.c:124
+#, fuzzy, c-format
+msgid " Active %%-%ds %%-%ds\n"
+msgstr " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 
-#: src/cmd/print.c:102 src/cmd/print.c:105 src/cmd/print.c:109
-#: src/cmd/print.c:137 src/cmd/print.c:140 src/cmd/print.c:144
+#: src/cmd/cmd_print.c:130 src/cmd/cmd_print.c:134 src/cmd/cmd_print.c:139
+#: src/cmd/cmd_print.c:173 src/cmd/cmd_print.c:178 src/cmd/cmd_print.c:184
 #, c-format
 msgid "(%d) String conversion failed!\n"
 msgstr "(%d) la conversion de chaîne a échoué!\n"
 
-#: src/cmd/print.c:103 src/cmd/print.c:107 src/cmd/print.c:138
-#: src/cmd/print.c:142
+#: src/cmd/cmd_print.c:131 src/cmd/cmd_print.c:136 src/cmd/cmd_print.c:175
+#: src/cmd/cmd_print.c:181
 msgid "Instruction"
 msgstr "Instruction"
 
-#: src/cmd/print.c:103 src/cmd/print.c:107 src/cmd/print.c:138
-#: src/cmd/print.c:142
+#: src/cmd/cmd_print.c:131 src/cmd/cmd_print.c:136 src/cmd/cmd_print.c:175
+#: src/cmd/cmd_print.c:181
 msgid "Register"
 msgstr "Registre"
 
-#: src/cmd/print.c:117
+#: src/cmd/cmd_print.c:147
 #, fuzzy, c-format
 msgid "   %%c    %%-%ds %%-%ds\n"
 msgstr " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 
-#: src/cmd/print.c:133
+#: src/cmd/cmd_print.c:165
 #, fuzzy, c-format
-msgid " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds"
+msgid " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 msgstr " No. %%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 
-#: src/cmd/print.c:138 src/cmd/print.c:142
+#: src/cmd/cmd_print.c:174 src/cmd/cmd_print.c:180
 msgid "Manufacturer"
 msgstr "Manufacturier"
 
-#: src/cmd/print.c:138 src/cmd/print.c:142
+#: src/cmd/cmd_print.c:174 src/cmd/cmd_print.c:180
 msgid "Part"
 msgstr "Pièce"
 
-#: src/cmd/print.c:138 src/cmd/print.c:142
+#: src/cmd/cmd_print.c:175 src/cmd/cmd_print.c:181
 msgid "Stepping"
 msgstr "Pas"
 
-#: src/cmd/print.c:156
+#: src/cmd/cmd_print.c:200
 #, fuzzy, c-format
 msgid " %3d %s "
 msgstr " %3d "
 
-#: src/cmd/print.c:158 src/part/part.c:330
+#: src/cmd/cmd_print.c:204 src/part/part.c:472
 #, c-format
 msgid " %3d "
 msgstr " %3d "
 
-#: src/cmd/print.c:170
+#: src/cmd/cmd_print.c:218
 #, c-format
 msgid ""
 "\n"
@@ -1832,33 +1774,33 @@ msgstr ""
 "Bus actif:\n"
 "*%d: "
 
-#: src/cmd/print.c:175
+#: src/cmd/cmd_print.c:228
 #, c-format
 msgid "Error in bus area discovery at 0x%08llX\n"
 msgstr "ERREUR dans la zone de découverte du bus à 0x%08llX\n"
 
-#: src/cmd/print.c:180
-#, c-format
-msgid "\tstart: 0x%08X, length: 0x%08llX, data width: %d bit, (%s)\n"
+#: src/cmd/cmd_print.c:236
+#, fuzzy, c-format
+msgid "\tstart: 0x%08lX, length: 0x%08llX, data width: %d bit, (%s)\n"
 msgstr ""
 "\tdébut: 0x%08X, longueur: 0x%08llX, largeur des données: %d bits, (%s)\n"
 
-#: src/cmd/print.c:182
-#, c-format
-msgid "\tstart: 0x%08X, length: 0x%08llX, data width: %d bit\n"
+#: src/cmd/cmd_print.c:242
+#, fuzzy, c-format
+msgid "\tstart: 0x%08lX, length: 0x%08llX, data width: %d bit\n"
 msgstr "\tdébut: 0x%08X, longueur: 0x%08llX, largeur des données: %d bits\n"
 
-#: src/cmd/print.c:197
+#: src/cmd/cmd_print.c:262
 #, c-format
 msgid "*%d: "
 msgstr "*%d: "
 
-#: src/cmd/print.c:199
+#: src/cmd/cmd_print.c:264
 #, c-format
 msgid "%d: "
 msgstr "%d: "
 
-#: src/cmd/print.c:210
+#: src/cmd/cmd_print.c:275
 #, fuzzy, c-format
 msgid ""
 "Usage: %s [chain|bus|signals|instructions]\n"
@@ -1874,11 +1816,11 @@ msgstr ""
 "le numéro de pièce, l'instruiction courante (active) et le registre de "
 "données.\n"
 
-#: src/cmd/print.c:220
+#: src/cmd/cmd_print.c:285
 msgid "display JTAG chain list/status"
 msgstr "afficher la liste/état de la chaîne JTAG"
 
-#: src/cmd/quit.c:44
+#: src/cmd/cmd_quit.c:52
 #, c-format
 msgid ""
 "Usage: %s\n"
@@ -1887,16 +1829,16 @@ msgstr ""
 "Usage: %s\n"
 "Quitter à partir de %s.\n"
 
-#: src/cmd/quit.c:51
+#: src/cmd/cmd_quit.c:57
 msgid "exit and terminate this session"
 msgstr "quitter et terminer la session"
 
-#: src/cmd/readmem.c:54
-#, c-format
-msgid "Unable to create file `%s'!\n"
+#: src/cmd/cmd_readmem.c:68
+#, fuzzy, c-format
+msgid "Unable to create file `%s'"
 msgstr "Incapable de créer le fichier `%s'!\n"
 
-#: src/cmd/readmem.c:67
+#: src/cmd/cmd_readmem.c:81
 #, c-format
 msgid ""
 "Usage: %s ADDR LEN FILENAME\n"
@@ -1918,16 +1860,11 @@ msgstr ""
 "\n"
 "ADR et LONG peuvent être en décimal ou hexadécimal (préfixe par 0x).\n"
 
-#: src/cmd/readmem.c:80
+#: src/cmd/cmd_readmem.c:94
 msgid "read content of the memory and write it to file"
 msgstr "lire le contenu de la mémoire et l'écrire dans le fichier"
 
-#: src/cmd/register.c:65
-#, c-format
-msgid "Data register '%s' already defined\n"
-msgstr "registre de données '%s' est déjà défini\n"
-
-#: src/cmd/register.c:103
+#: src/cmd/cmd_register.c:72
 #, c-format
 msgid ""
 "Usage: %s NAME LENGTH\n"
@@ -1943,33 +1880,28 @@ msgstr ""
 "NOM           nom du registre de données\n"
 "LONGUEUR      longueur du registre de données\n"
 
-#: src/cmd/register.c:113
+#: src/cmd/cmd_register.c:82
 msgid "define new data register for a part"
 msgstr "définir un nouveau registre de données pour la pièce"
 
-#: src/cmd/reset.c:53
+#: src/cmd/cmd_reset.c:58
 #, fuzzy, c-format
 msgid ""
 "Usage: %s\n"
 "Reset current JTAG chain.\n"
 msgstr "changer la pièce active pour la chaîne courante JTAG"
 
-#: src/cmd/reset.c:60
+#: src/cmd/cmd_reset.c:63
 #, fuzzy
 msgid "reset JTAG chain"
 msgstr "sélectionner le cable JTAG"
 
-#: src/cmd/salias.c:60 src/cmd/signal.c:73
-#, c-format
-msgid "Signal '%s' already defined\n"
-msgstr "Signal '%s' déjà défini\n"
-
-#: src/cmd/salias.c:66
+#: src/cmd/cmd_salias.c:70
 #, fuzzy, c-format
-msgid "Signal '%s' not found\n"
+msgid "Signal '%s' not found"
 msgstr "signal '%s' non repéré\n"
 
-#: src/cmd/salias.c:86
+#: src/cmd/cmd_salias.c:89
 #, fuzzy, c-format
 msgid ""
 "Usage: %s ALIAS SIGNAL\n"
@@ -1984,38 +1916,37 @@ msgstr ""
 "SIGNAL        nouveau nom de signal\n"
 "BROCHES       liste debroches pour le signal (non utilisé)\n"
 
-#: src/cmd/salias.c:96
+#: src/cmd/cmd_salias.c:99
 #, fuzzy
 msgid "define an alias for a signal"
 msgstr "définir un nouveau signal pour une pièce"
 
-#: src/cmd/scan.c:64 src/part/part.c:186 src/part/part.c:223
-#, c-format
-msgid "%s(%s:%d) Boundary Scan Register (BSR) not found\n"
+#: src/cmd/cmd_scan.c:71 src/part/part.c:220 src/part/part.c:273
+#, fuzzy
+msgid "Boundary Scan Register (BSR) not found"
 msgstr "%s(%s:%d) Boundary Scan Register (BSR) non repéré\n"
 
-#: src/cmd/scan.c:78
-#, c-format
-msgid "%s(%s:%d) Part can't SAMPLE\n"
+#: src/cmd/cmd_scan.c:85
+msgid "Part can't SAMPLE"
 msgstr ""
 
-#: src/cmd/scan.c:113
+#: src/cmd/cmd_scan.c:115
 #, fuzzy, c-format
 msgid ": %d > %d\n"
 msgstr "%s = %d\n"
 
-#: src/cmd/scan.c:128
+#: src/cmd/cmd_scan.c:129
 #, c-format
 msgid ""
 "Usage: %s [SIGNAL]* \n"
 "Read BSR and show changes since last scan.\n"
 msgstr ""
 
-#: src/cmd/scan.c:135
+#: src/cmd/cmd_scan.c:136
 msgid "read BSR and show changes since last scan"
 msgstr ""
 
-#: src/cmd/set.c:89
+#: src/cmd/cmd_set.c:110
 #, c-format
 msgid ""
 "Usage: %s SIGNAL DIR [DATA]\n"
@@ -2035,11 +1966,11 @@ msgstr ""
 "DIR\n"
 "                est à 'out'\n"
 
-#: src/cmd/set.c:101
+#: src/cmd/cmd_set.c:122
 msgid "set external signal value"
 msgstr "initialiser la valeur d'un signal externe"
 
-#: src/cmd/shell.c:84
+#: src/cmd/cmd_shell.c:91
 #, c-format
 msgid ""
 "Usage: %s cmmd\n"
@@ -2048,11 +1979,11 @@ msgid ""
 "CMMD OS Shell Command\n"
 msgstr ""
 
-#: src/cmd/shell.c:93
+#: src/cmd/cmd_shell.c:99
 msgid "shell cmmd"
 msgstr ""
 
-#: src/cmd/shift.c:60
+#: src/cmd/cmd_shift.c:74
 #, c-format
 msgid ""
 "Usage: %s\n"
@@ -2063,18 +1994,23 @@ msgstr ""
 "Usage: %s\n"
 "Décaler le registre d'instruction ou de données à travers la chaîne JTAG.\n"
 
-#: src/cmd/shift.c:68
+#: src/cmd/cmd_shift.c:82
 msgid "shift data/instruction registers through JTAG chain"
 msgstr "décaler le registre instruction/données à travers la chaîne JTAG"
 
-#: src/cmd/signal.c:102
+#: src/cmd/cmd_signal.c:66 src/part/signal.c:114
+#, fuzzy, c-format
+msgid "Signal '%s' already defined"
+msgstr "Signal '%s' déjà défini\n"
+
+#: src/cmd/cmd_signal.c:96
 #, fuzzy, c-format
 msgid ""
 "Usage: %s SIGNAL [PIN#]\n"
 "Define new signal with name SIGNAL for a part.\n"
 "\n"
-"SIGNAL\t\tNew signal name\n"
-"PIN#   \tList of pin # for a signal\n"
+"SIGNAL           New signal name\n"
+"PIN#     List of pin # for a signal\n"
 msgstr ""
 "Usage: %s SIGNAL [BROCHES...]\n"
 "Définir un nouveau signal avec le nom SIGNAL pour la pièce.\n"
@@ -2082,16 +2018,11 @@ msgstr ""
 "SIGNAL        nouveau nom de signal\n"
 "BROCHES       liste debroches pour le signal (non utilisé)\n"
 
-#: src/cmd/signal.c:112
+#: src/cmd/cmd_signal.c:106
 msgid "define new signal for a part"
 msgstr "définir un nouveau signal pour une pièce"
 
-#: src/cmd/svf.c:63
-#, c-format
-msgid "%s: cannot open file '%s' for reading\n"
-msgstr ""
-
-#: src/cmd/svf.c:76
+#: src/cmd/cmd_svf.c:103
 #, c-format
 msgid ""
 "Usage: %s FILE [stop] [progress] [ref_freq=<frequency>]\n"
@@ -2103,16 +2034,16 @@ msgid ""
 "FILE file containing SVF commands\n"
 msgstr ""
 
-#: src/cmd/svf.c:88
+#: src/cmd/cmd_svf.c:114
 msgid "execute svf commands from file"
 msgstr ""
 
-#: src/cmd/test.c:78
+#: src/cmd/cmd_test.c:93
 #, fuzzy, c-format
-msgid "<FAIL>%s = %d\n"
+msgid "<FAIL>%s = %d"
 msgstr "%s = %d\n"
 
-#: src/cmd/test.c:89
+#: src/cmd/cmd_test.c:104
 #, fuzzy, c-format
 msgid ""
 "Usage: %s SIGNAL 0/1\n"
@@ -2125,23 +2056,23 @@ msgstr ""
 "\n"
 "SIGNAL        nom du signal (à partir du fichier de déclaration JTAG)\n"
 
-#: src/cmd/test.c:98
+#: src/cmd/cmd_test.c:113
 #, fuzzy
 msgid "test external signal value"
 msgstr "obtenir la valeur externe du signal"
 
-#: src/cmd/usleep.c:55
+#: src/cmd/cmd_usleep.c:63
 #, c-format
 msgid ""
 "Usage: %s USECS\n"
 "Sleep some number of microseconds.\n"
 msgstr ""
 
-#: src/cmd/usleep.c:62
+#: src/cmd/cmd_usleep.c:70
 msgid "Sleep some number of microseconds"
 msgstr ""
 
-#: src/cmd/writemem.c:65
+#: src/cmd/cmd_writemem.c:79
 #, fuzzy, c-format
 msgid ""
 "Usage: %s ADDR LEN FILENAME\n"
@@ -2164,12 +2095,11 @@ msgstr ""
 "\n"
 "ADR et LONG peuvent être en décimal ou hexadécimal (préfixe par 0x).\n"
 
-#: src/cmd/writemem.c:79
+#: src/cmd/cmd_writemem.c:93
 msgid "write content of file to the memory"
 msgstr ""
 
-#: src/flash/amd.c:279
-#, c-format
+#: src/flash/amd.c:311
 msgid ""
 "Chip: AMD Flash\n"
 "\tManufacturer: "
@@ -2177,9 +2107,8 @@ msgstr ""
 "Module: AMD Flash\n"
 "\tManufacturier: "
 
-#: src/flash/amd.c:283 src/flash/amd.c:311 src/flash/amd.c:326
-#: src/flash/amd.c:344 src/flash/amd_flash.c:236
-#, c-format
+#: src/flash/amd.c:316 src/flash/amd.c:345 src/flash/amd.c:361
+#: src/flash/amd.c:380 src/flash/amd.c:396 src/flash/amd_flash.c:266
 msgid ""
 "\n"
 "\tChip: "
@@ -2187,18 +2116,18 @@ msgstr ""
 "\n"
 "\tModule: "
 
-#: src/flash/amd.c:305 src/flash/amd.c:320 src/flash/amd.c:338
-#: src/flash/amd.c:353 src/flash/amd_flash.c:247
+#: src/flash/amd.c:339 src/flash/amd.c:355 src/flash/amd.c:374
+#: src/flash/amd.c:390 src/flash/amd.c:403 src/flash/amd_flash.c:278
 #, c-format
 msgid "Unknown (ID 0x%04x)"
 msgstr "Inconnu (ID 0x%04x)"
 
-#: src/flash/amd.c:358
+#: src/flash/amd.c:408
 #, fuzzy, c-format
 msgid "Unknown manufacturer (ID 0x%04x) Chip (ID 0x%04x)"
 msgstr "Manufacturier inconnu (ID 0x%04x)"
 
-#: src/flash/amd.c:361 src/flash/amd_flash.c:250
+#: src/flash/amd.c:412 src/flash/amd_flash.c:281
 #, c-format
 msgid ""
 "\n"
@@ -2207,27 +2136,29 @@ msgstr ""
 "\n"
 "\tProtégé: %04x\n"
 
-#: src/flash/amd.c:566 src/flash/amd.c:578 src/flash/amd.c:590
-#: src/flash/detectflash.c:106 src/flash/detectflash.c:136
+#: src/flash/amd.c:635 src/flash/amd.c:647 src/flash/amd.c:659
+#: src/flash/detectflash.c:117 src/flash/detectflash.c:149
 msgid "AMD/Fujitsu Standard Command Set"
 msgstr "AMD/Fujitsu Jeu standard de commandes"
 
-#: src/flash/amd.c:567
+#: src/flash/amd.c:636
 msgid "supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 msgstr "supportés: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 
-#: src/flash/amd.c:579
+#: src/flash/amd.c:648
 #, fuzzy
-msgid "supported: AMD 29LV800B, S92GLxxxN; MX29LV640B; 1x16 Bit"
+msgid "supported: AMD 29LV800B, S29GLxxxN; MX29LV640B, W19B320AT/B; 1x16 Bit"
 msgstr "supportés: AMD 29LV800B; 1x16 Bit"
 
-#: src/flash/amd.c:591
+#: src/flash/amd.c:660
 #, fuzzy
-msgid "supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S92GLxxxN; 1x8 Bit"
+msgid ""
+"supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S29GLxxxN, W19B320AT/B; "
+"1x8 Bit"
 msgstr "supportés: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 
-#: src/flash/amd_flash.c:230
-#, fuzzy, c-format
+#: src/flash/amd_flash.c:260
+#, fuzzy
 msgid ""
 "Chip: AMD Flash\n"
 "\tPartNumber: "
@@ -2235,76 +2166,77 @@ msgstr ""
 "Module: AMD Flash\n"
 "\tManufacturier: "
 
-#: src/flash/amd_flash.c:233
+#: src/flash/amd_flash.c:263
 #, c-format
 msgid "Unknown manufacturer (ID 0x%04x)"
 msgstr "Manufacturier inconnu (ID 0x%04x)"
 
-#: src/flash/amd_flash.c:240
-#, c-format
+#: src/flash/amd_flash.c:271
 msgid "5V Flash\n"
 msgstr ""
 
-#: src/flash/amd_flash.c:244
-#, c-format
+#: src/flash/amd_flash.c:275
 msgid "3V Flash\n"
 msgstr ""
 
-#: src/flash/amd_flash.c:362
+#: src/flash/amd_flash.c:414
 #, fuzzy
 msgid "AMD Standard Command Set"
 msgstr "AMD/Fujitsu Jeu standard de commandes"
 
-#: src/flash/amd_flash.c:363
+#: src/flash/amd_flash.c:415
 #, fuzzy
 msgid "supported: AMD 29LV040B, 29C040B, 1x8 Bit"
 msgstr "supportés: AMD 29LV800B; 1x16 Bit"
 
-#: src/flash/detectflash.c:87
-#, c-format
-msgid "Flash not found!\n"
+#: src/flash/detectflash.c:65
+msgid "bus driver"
+msgstr ""
+
+#: src/flash/detectflash.c:97
+#, fuzzy
+msgid "Flash not found"
 msgstr "Flash non détecté!\n"
 
-#: src/flash/detectflash.c:96
-#, c-format
+#: src/flash/detectflash.c:106
 msgid "Query identification string:\n"
 msgstr "Chaîne de requêtre d'identification:\n"
 
-#: src/flash/detectflash.c:100 src/flash/detectflash.c:130
+#: src/flash/detectflash.c:111 src/flash/detectflash.c:143
 msgid "null"
 msgstr "nul"
 
-#: src/flash/detectflash.c:103 src/flash/detectflash.c:133
+#: src/flash/detectflash.c:114 src/flash/detectflash.c:146
 msgid "Intel/Sharp Extended Command Set"
 msgstr "Jeu étendu de commandes Intel/Sharp"
 
-#: src/flash/detectflash.c:109 src/flash/detectflash.c:139
-#: src/flash/intel.c:468 src/flash/intel.c:480 src/flash/intel.c:492
+#: src/flash/detectflash.c:120 src/flash/detectflash.c:152
+#: src/flash/intel.c:530 src/flash/intel.c:542 src/flash/intel.c:554
 msgid "Intel Standard Command Set"
 msgstr "Jeu standard de commandes Intel"
 
-#: src/flash/detectflash.c:112 src/flash/detectflash.c:142
+#: src/flash/detectflash.c:123 src/flash/detectflash.c:155
 msgid "AMD/Fujitsu Extended Command Set"
 msgstr "Jeu étendu de commandes AMD/Fujitsu"
 
-#: src/flash/detectflash.c:115 src/flash/detectflash.c:145
+#: src/flash/detectflash.c:126 src/flash/detectflash.c:158
 msgid "Mitsubishi Standard Command Set"
 msgstr "Jeu standard de commandes Mitsubishi"
 
-#: src/flash/detectflash.c:118 src/flash/detectflash.c:148
+#: src/flash/detectflash.c:129 src/flash/detectflash.c:161
 msgid "Mitsubishi Extended Command Set"
 msgstr "Jeu étendu de commandes Mitsubishi"
 
-#: src/flash/detectflash.c:121 src/flash/detectflash.c:151
+#: src/flash/detectflash.c:132 src/flash/detectflash.c:164
 msgid "Page Write Command Set"
 msgstr "Jeu de commande d'écriture de page"
 
-#: src/flash/detectflash.c:124 src/flash/detectflash.c:154
-#: src/flash/detectflash.c:198
+#: src/flash/detectflash.c:135 src/flash/detectflash.c:167
+#: src/flash/detectflash.c:225
 msgid "unknown!!!"
 msgstr "inconnu!!!"
 
-#: src/flash/detectflash.c:127
+#: src/flash/detectflash.c:138
 #, c-format
 msgid ""
 "\tPrimary Algorithm Command Set and Control Interface ID Code: 0x%04X (%s)\n"
@@ -2312,7 +2244,7 @@ msgstr ""
 "\tJeu de commandes Primary Algorithm et Code ID de contrôle d'interface: 0x%"
 "04X (%s)\n"
 
-#: src/flash/detectflash.c:157
+#: src/flash/detectflash.c:170
 #, c-format
 msgid ""
 "\tAlternate Algorithm Command Set and Control Interface ID Code: 0x%04X (%"
@@ -2321,497 +2253,485 @@ msgstr ""
 "\tJeu alternatif de commandes Primary Algorithm et Code ID de contrôle "
 "d'interface: 0x%04X (%s)\n"
 
-#: src/flash/detectflash.c:160
-#, c-format
+#: src/flash/detectflash.c:174
 msgid "Query system interface information:\n"
 msgstr "Requête d'information d'interface système:\n"
 
-#: src/flash/detectflash.c:161
+#: src/flash/detectflash.c:175
 #, c-format
 msgid "\tVcc Logic Supply Minimum Write/Erase or Write voltage: %d mV\n"
 msgstr ""
 "\tVcc logique Puissance minimum Écri/Efface ou Voltage d'écriture: %d mV\n"
 
-#: src/flash/detectflash.c:162
+#: src/flash/detectflash.c:177
 #, c-format
 msgid "\tVcc Logic Supply Maximum Write/Erase or Write voltage: %d mV\n"
 msgstr ""
 "\tVcc logique Puissance maximum Écri/Efface ou Voltage d'écriture: %d mV\n"
 
-#: src/flash/detectflash.c:163
+#: src/flash/detectflash.c:179
 #, c-format
 msgid "\tVpp [Programming] Supply Minimum Write/Erase voltage: %d mV\n"
 msgstr ""
 "\tVpp [Programmation] puissance minimum Écriture/Efface voltage: %d mV\n"
 
-#: src/flash/detectflash.c:164
+#: src/flash/detectflash.c:181
 #, c-format
 msgid "\tVpp [Programming] Supply Maximum Write/Erase voltage: %d mV\n"
 msgstr ""
 "\tVpp [Programmation] puissance maximum Écriture/Efface voltage: %d mV\n"
 
-#: src/flash/detectflash.c:165
+#: src/flash/detectflash.c:183
 #, c-format
 msgid "\tTypical timeout per single byte/word program: %d us\n"
 msgstr "\tDélai d'expiration typique par programme simple octet/mot: %d us\n"
 
-#: src/flash/detectflash.c:166
+#: src/flash/detectflash.c:185
 #, c-format
 msgid "\tTypical timeout for maximum-size multi-byte program: %d us\n"
 msgstr ""
 "\tDélai d'expiration typique pour la taille maximale par programme multi-"
 "octets: %d us\n"
 
-#: src/flash/detectflash.c:167
+#: src/flash/detectflash.c:187
 #, c-format
 msgid "\tTypical timeout per individual block erase: %d ms\n"
 msgstr ""
 "\tDélai d'expiration typique par effacement individuel de blocs: %d ms\n"
 
-#: src/flash/detectflash.c:168
+#: src/flash/detectflash.c:189
 #, c-format
 msgid "\tTypical timeout for full chip erase: %d ms\n"
 msgstr ""
 "\tDélai d'expiration typique pour un effacement complet du module: %d ms\n"
 
-#: src/flash/detectflash.c:169
+#: src/flash/detectflash.c:191
 #, c-format
 msgid "\tMaximum timeout for byte/word program: %d us\n"
 msgstr "\tDélai d'expiration maximal pour un programme octer/mot: %d us\n"
 
-#: src/flash/detectflash.c:170
+#: src/flash/detectflash.c:193
 #, c-format
 msgid "\tMaximum timeout for multi-byte program: %d us\n"
 msgstr "\tDélai d'expiration maximum pour programme multi-octets: %d us\n"
 
-#: src/flash/detectflash.c:171
+#: src/flash/detectflash.c:195
 #, c-format
 msgid "\tMaximum timeout per individual block erase: %d ms\n"
 msgstr ""
 "\tDélai d'expiration maximum par effacement individuel de blocs: %d ms\n"
 
-#: src/flash/detectflash.c:172
+#: src/flash/detectflash.c:197
 #, c-format
 msgid "\tMaximum timeout for chip erase: %d ms\n"
 msgstr ""
 "\tDélai d'expiration maximum pour un effacement complet du module: %d ms\n"
 
-#: src/flash/detectflash.c:175
-#, c-format
+#: src/flash/detectflash.c:201
 msgid "Device geometry definition:\n"
 msgstr "Définition de la géométrie du périphérique:\n"
 
-#: src/flash/detectflash.c:176
+#: src/flash/detectflash.c:202
 #, c-format
 msgid "\tDevice Size: %d B (%d KiB, %d MiB)\n"
 msgstr "\tTaille du périphérique: %d O (%d KiB, %d MiB)\n"
 
-#: src/flash/detectflash.c:183
+#: src/flash/detectflash.c:210
 msgid "x8"
 msgstr "x8"
 
-#: src/flash/detectflash.c:186
+#: src/flash/detectflash.c:213
 msgid "x16"
 msgstr "x16"
 
-#: src/flash/detectflash.c:189
+#: src/flash/detectflash.c:216
 msgid "x8/x16"
 msgstr "x8/x16"
 
-#: src/flash/detectflash.c:192
+#: src/flash/detectflash.c:219
 msgid "x32"
 msgstr "x32"
 
-#: src/flash/detectflash.c:195
+#: src/flash/detectflash.c:222
 msgid "x16/x32"
 msgstr "x16/x32"
 
-#: src/flash/detectflash.c:201
+#: src/flash/detectflash.c:228
 #, c-format
 msgid "\tFlash Device Interface Code description: 0x%04X (%s)\n"
 msgstr "\tDescription du code de l'interface du module: 0x%04X (%s)\n"
 
-#: src/flash/detectflash.c:202
+#: src/flash/detectflash.c:230
 #, c-format
 msgid "\tMaximum number of bytes in multi-byte program: %d\n"
 msgstr "\tNombre maximum d'octets d'un programme multi-octest: %d\n"
 
-#: src/flash/detectflash.c:203
+#: src/flash/detectflash.c:232
 #, c-format
 msgid "\tNumber of Erase Block Regions within device: %d\n"
 msgstr ""
 "\tNumbre de régions de blocs d'effacement à l'intérieur du périphérique: %d\n"
 
-#: src/flash/detectflash.c:204
-#, c-format
+#: src/flash/detectflash.c:234
 msgid "\tErase Block Region Information:\n"
 msgstr "\tInformation sur la région du bloc d'effacement:\n"
 
-#: src/flash/detectflash.c:209
+#: src/flash/detectflash.c:240
 #, c-format
 msgid "\t\tRegion %d:\n"
 msgstr "\t\tRégion %d:\n"
 
-#: src/flash/detectflash.c:210
+#: src/flash/detectflash.c:241
 #, c-format
 msgid "\t\t\tErase Block Size: %d B (%d KiB)\n"
 msgstr "\t\t\tTaille du bloc d'effacement: %d B (%d KiB)\n"
 
-#: src/flash/detectflash.c:213
+#: src/flash/detectflash.c:246
 #, c-format
 msgid "\t\t\tNumber of Erase Blocks: %d\n"
 msgstr "\t\t\tNombre de blocs d'effacement: %d\n"
 
-#: src/flash/detectflash.c:225
+#: src/flash/detectflash.c:260
 msgid "Required"
 msgstr ""
 
-#: src/flash/detectflash.c:225
+#: src/flash/detectflash.c:260
 msgid "Not required"
 msgstr ""
 
-#: src/flash/detectflash.c:228
+#: src/flash/detectflash.c:263
 msgid "Supported"
 msgstr ""
 
-#: src/flash/detectflash.c:228 src/flash/detectflash.c:239
-#: src/flash/detectflash.c:249
+#: src/flash/detectflash.c:263 src/flash/detectflash.c:277
+#: src/flash/detectflash.c:288
 #, fuzzy
 msgid "Not supported"
 msgstr "Flash non supporté!\n"
 
-#: src/flash/detectflash.c:231
+#: src/flash/detectflash.c:266
 msgid "170-nm Floating Gate technology"
 msgstr ""
 
-#: src/flash/detectflash.c:231
+#: src/flash/detectflash.c:267
 msgid "230-nm MirrorBit(tm) technology"
 msgstr ""
 
-#: src/flash/detectflash.c:232
+#: src/flash/detectflash.c:268
 msgid "130-nm Floating Gate technology"
 msgstr ""
 
-#: src/flash/detectflash.c:232
+#: src/flash/detectflash.c:269
 msgid "110-nm MirrorBit(tm) technology"
 msgstr ""
 
-#: src/flash/detectflash.c:233
+#: src/flash/detectflash.c:270
 msgid "90-nm Floating Gate technology"
 msgstr ""
 
-#: src/flash/detectflash.c:233
+#: src/flash/detectflash.c:271
 msgid "90-nm MirrorBit(tm) technology"
 msgstr ""
 
-#: src/flash/detectflash.c:236
+#: src/flash/detectflash.c:274
 msgid "CS49"
 msgstr ""
 
-#: src/flash/detectflash.c:236
+#: src/flash/detectflash.c:274
 msgid "CS59"
 msgstr ""
 
-#: src/flash/detectflash.c:236
+#: src/flash/detectflash.c:274
 msgid "CS99"
 msgstr ""
 
-#: src/flash/detectflash.c:239
+#: src/flash/detectflash.c:277
 msgid "Read only"
 msgstr ""
 
-#: src/flash/detectflash.c:239
+#: src/flash/detectflash.c:277
 msgid "Read/write"
 msgstr ""
 
-#: src/flash/detectflash.c:242
+#: src/flash/detectflash.c:280
 msgid "29F040 mode"
 msgstr ""
 
-#: src/flash/detectflash.c:242
+#: src/flash/detectflash.c:280
 msgid "29F016 mode"
 msgstr ""
 
-#: src/flash/detectflash.c:242
+#: src/flash/detectflash.c:280
 msgid "29F400 mode"
 msgstr ""
 
-#: src/flash/detectflash.c:243
+#: src/flash/detectflash.c:281
 #, fuzzy
 msgid "29LV800 mode"
 msgstr "Am29LV800B"
 
-#: src/flash/detectflash.c:243
+#: src/flash/detectflash.c:282
 msgid "29BDS640 mode (Software Command Locking)"
 msgstr ""
 
-#: src/flash/detectflash.c:244
+#: src/flash/detectflash.c:283
 msgid "29BDD160 mode (New Sector Protect)"
 msgstr ""
 
-#: src/flash/detectflash.c:245
+#: src/flash/detectflash.c:284
 msgid "29PDL128 mode (New Sector Protect + 29LV800)"
 msgstr ""
 
-#: src/flash/detectflash.c:246
+#: src/flash/detectflash.c:285
 msgid "Advanced Sector Protect"
 msgstr ""
 
-#: src/flash/detectflash.c:249
+#: src/flash/detectflash.c:288
 msgid "4 word Page"
 msgstr ""
 
-#: src/flash/detectflash.c:249
+#: src/flash/detectflash.c:288
 msgid "8 word Page"
 msgstr ""
 
-#: src/flash/detectflash.c:249
+#: src/flash/detectflash.c:289
 msgid "16 word Page"
 msgstr ""
 
-#: src/flash/detectflash.c:253
+#: src/flash/detectflash.c:293
 msgid "No boot"
 msgstr ""
 
-#: src/flash/detectflash.c:253
+#: src/flash/detectflash.c:294
 msgid "8x8kb sectors at top and bottom with WP control"
 msgstr ""
 
-#: src/flash/detectflash.c:254
+#: src/flash/detectflash.c:295
 msgid "Bottom boot device"
 msgstr ""
 
-#: src/flash/detectflash.c:254
+#: src/flash/detectflash.c:295
 msgid "Top boot device"
 msgstr ""
 
-#: src/flash/detectflash.c:255
+#: src/flash/detectflash.c:296
 msgid "Uniform bottom boot device"
 msgstr ""
 
-#: src/flash/detectflash.c:255
+#: src/flash/detectflash.c:296
 msgid "Uniform top boot device"
 msgstr ""
 
-#: src/flash/detectflash.c:257
+#: src/flash/detectflash.c:298
 msgid "Bad value"
 msgstr ""
 
-#: src/flash/detectflash.c:265
-#, c-format
+#: src/flash/detectflash.c:306
 msgid "Primary Vendor-Specific Extended Query:\n"
 msgstr ""
 
-#: src/flash/detectflash.c:266
+#: src/flash/detectflash.c:307
 #, c-format
 msgid "\tMajor version number: %c\n"
 msgstr ""
 
-#: src/flash/detectflash.c:267
+#: src/flash/detectflash.c:309
 #, c-format
 msgid "\tMinor version number: %c\n"
 msgstr ""
 
-#: src/flash/detectflash.c:271 src/flash/detectflash.c:274
+#: src/flash/detectflash.c:316 src/flash/detectflash.c:320
 #, c-format
 msgid "\tAddress Sensitive Unlock: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:279 src/flash/detectflash.c:282
-#: src/flash/detectflash.c:287 src/flash/detectflash.c:290
+#: src/flash/detectflash.c:327 src/flash/detectflash.c:332
+#: src/flash/detectflash.c:338 src/flash/detectflash.c:343
 #, c-format
 msgid "\tProcess Technology: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:293
+#: src/flash/detectflash.c:346
 #, c-format
 msgid "\tErase Suspend: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:295
-#, fuzzy, c-format
+#: src/flash/detectflash.c:349
+#, fuzzy
 msgid "\tSector Protect: Not supported\n"
 msgstr "Flash non supporté!\n"
 
-#: src/flash/detectflash.c:297
+#: src/flash/detectflash.c:351
 #, c-format
 msgid "\tSector Protect: %d sectors per group\n"
 msgstr ""
 
-#: src/flash/detectflash.c:299 src/flash/detectflash.c:301
+#: src/flash/detectflash.c:355 src/flash/detectflash.c:359
 #, c-format
 msgid "\tSector Temporary Unprotect: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:303 src/flash/detectflash.c:306
+#: src/flash/detectflash.c:363 src/flash/detectflash.c:367
 #, c-format
 msgid "\tSector Protect/Unprotect Scheme: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:308
-#, fuzzy, c-format
+#: src/flash/detectflash.c:370
+#, fuzzy
 msgid "\tSimultaneous Operation: Not supported\n"
 msgstr "Flash non supporté!\n"
 
-#: src/flash/detectflash.c:310
+#: src/flash/detectflash.c:372
 #, c-format
 msgid "\tSimultaneous Operation: %d sectors\n"
 msgstr ""
 
-#: src/flash/detectflash.c:312 src/flash/detectflash.c:314
+#: src/flash/detectflash.c:376 src/flash/detectflash.c:379
 #, c-format
 msgid "\tBurst Mode Type: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:316 src/flash/detectflash.c:318
+#: src/flash/detectflash.c:382 src/flash/detectflash.c:385
 #, c-format
 msgid "\tPage Mode Type: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:322
+#: src/flash/detectflash.c:391
 #, c-format
 msgid "\tACC (Acceleration) Supply Minimum: %d mV\n"
 msgstr ""
 
-#: src/flash/detectflash.c:323
+#: src/flash/detectflash.c:393
 #, c-format
 msgid "\tACC (Acceleration) Supply Maximum: %d mV\n"
 msgstr ""
 
-#: src/flash/detectflash.c:325 src/flash/detectflash.c:327
+#: src/flash/detectflash.c:397 src/flash/detectflash.c:400
 #, c-format
 msgid "\tTop/Bottom Sector Flag: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:332 src/flash/detectflash.c:334
+#: src/flash/detectflash.c:407 src/flash/detectflash.c:410
 #, c-format
 msgid "\tProgram Suspend: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:339 src/flash/detectflash.c:341
+#: src/flash/detectflash.c:417 src/flash/detectflash.c:420
 #, c-format
 msgid "\tUnlock Bypass: %s\n"
 msgstr ""
 
-#: src/flash/detectflash.c:342
+#: src/flash/detectflash.c:421
 #, c-format
 msgid "\tSecSi Sector (Customer OTP Area) Size: %d bytes\n"
 msgstr ""
 
-#: src/flash/detectflash.c:343
+#: src/flash/detectflash.c:423
 #, c-format
 msgid "\tEmbedded Hardware Reset Timeout Maximum: %d ns\n"
 msgstr ""
 
-#: src/flash/detectflash.c:344
+#: src/flash/detectflash.c:425
 #, c-format
 msgid "\tNon-Embedded Hardware Reset Timeout Maximum: %d ns\n"
 msgstr ""
 
-#: src/flash/detectflash.c:345
+#: src/flash/detectflash.c:427
 #, c-format
 msgid "\tErase Suspend Timeout Maximum: %d us\n"
 msgstr ""
 
-#: src/flash/detectflash.c:346
+#: src/flash/detectflash.c:429
 #, c-format
 msgid "\tProgram Suspend Timeout Maximum: %d us\n"
 msgstr ""
 
-#: src/flash/detectflash.c:351
-#, c-format
+#: src/flash/detectflash.c:436
 msgid "\tBank Organization:\n"
 msgstr ""
 
-#: src/flash/detectflash.c:353
+#: src/flash/detectflash.c:438
 #, c-format
 msgid "\t\tBank%d: %d sectors\n"
 msgstr ""
 
-#: src/flash/flash.c:89
+#: src/flash/flash.c:92
 #, c-format
 msgid "unknown flash - vendor id: %d (0x%04x)\n"
 msgstr "flahs inconnu - identificateur du manufacturier: %d (0x%04x)\n"
 
-#: src/flash/flash.c:93
-#, c-format
-msgid "Flash not supported!\n"
+#: src/flash/flash.c:96
+#, fuzzy
+msgid "Flash not supported"
 msgstr "Flash non supporté!\n"
 
-#: src/flash/flash.c:104 src/flash/flash.c:265 src/flash/flash.c:391
-#, c-format
-msgid "no flash driver found\n"
+#: src/flash/flash.c:110 src/flash/flash.c:311 src/flash/flash.c:484
+#, fuzzy
+msgid "no flash driver found"
 msgstr "aucun pilote de flahs repéré\n"
 
-#: src/flash/flash.c:115
-#, c-format
-msgid "Invalid sync sequence!\n"
+#: src/flash/flash.c:124
+#, fuzzy
+msgid "Invalid sync sequence"
 msgstr "Séquence de synchro invalide!\n"
 
-#: src/flash/flash.c:133
+#: src/flash/flash.c:150
 #, c-format
 msgid "block %d unlocked\n"
 msgstr "bloc %d déverrouillé\n"
 
-#: src/flash/flash.c:134 src/flash/flash.c:301
+#: src/flash/flash.c:153 src/flash/flash.c:362
 #, c-format
 msgid "erasing block %d: %d\n"
 msgstr "effacement du bloc %d: %d\n"
 
-#: src/flash/flash.c:138 src/flash/flash.c:284
-#, c-format
+#: src/flash/flash.c:158 src/flash/flash.c:334
 msgid "program:\n"
 msgstr "programme:\n"
 
-#: src/flash/flash.c:146 src/flash/flash.c:191
-#, c-format
-msgid "Error: premature end of file\n"
+#: src/flash/flash.c:168 src/flash/flash.c:221
+#, fuzzy
+msgid "premature end of file"
 msgstr "ERREUR: fin prématurée du fichier\n"
 
-#: src/flash/flash.c:149 src/flash/flash.c:194
-#, c-format
-msgid "record: start = 0x%08X, len = 0x%08X, checksum = 0x%08X\n"
+#: src/flash/flash.c:172 src/flash/flash.c:225
+#, fuzzy, c-format
+msgid "record: start = 0x%08lX, len = 0x%08lX, checksum = 0x%08lX\n"
 msgstr "enregistrement: début = 0x%08X, longueur = 0x%08X, checksum = 0x%08X\n"
 
-#: src/flash/flash.c:153 src/flash/flash.c:198
-#, c-format
-msgid "Error: Invalid record length!\n"
+#: src/flash/flash.c:178 src/flash/flash.c:231
+#, fuzzy
+msgid "Invalid record length"
 msgstr "ERREUR: longueur de l'enregistrement invalide!\n"
 
-#: src/flash/flash.c:165 src/flash/flash.c:328
-#, c-format
-msgid ""
-"\n"
-"flash error\n"
-msgstr ""
-"\n"
-"erreur flash\n"
-
-#: src/flash/flash.c:177 src/flash/flash.c:340
+#: src/flash/flash.c:186 src/flash/flash.c:239 src/flash/flash.c:372
+#: src/flash/flash.c:434
 #, fuzzy, c-format
+msgid "addr: 0x%08lX"
+msgstr "adr: 0x%08X"
+
+#: src/flash/flash.c:205 src/flash/flash.c:408
+#, fuzzy
 msgid "verify skipped\n"
 msgstr "vérifier:\n"
 
-#: src/flash/flash.c:182 src/flash/flash.c:345
-#, c-format
+#: src/flash/flash.c:210 src/flash/flash.c:413
 msgid "verify:\n"
 msgstr "vérifier:\n"
 
-#: src/flash/flash.c:211
-#, c-format
-msgid ""
-"\n"
-"verify error: 0x%08X vs. 0x%08X at addr %08X\n"
+#: src/flash/flash.c:248
+#, fuzzy, c-format
+msgid "verify error: 0x%08lX vs. 0x%08lX at addr %08lX"
 msgstr ""
 "\n"
 "ERREUR de vérification: 0x%08X vs. 0x%08X à l'adresse %08X\n"
 
-#: src/flash/flash.c:278 src/tap/detect.c:451
+#: src/flash/flash.c:327
 #, c-format
-msgid "Out of memory!\n"
-msgstr "Mémoire épuisée!\n"
+msgid "malloc(%zd) failed"
+msgstr ""
 
-#: src/flash/flash.c:300
+#: src/flash/flash.c:358
 #, c-format
 msgid ""
 "\n"
@@ -2820,479 +2740,389 @@ msgstr ""
 "\n"
 "bloc %d déverrouillé\n"
 
-#: src/flash/flash.c:335 src/flash/flash.c:372
+#: src/flash/flash.c:401
 #, fuzzy, c-format
-msgid "addr: 0x%08X\n"
+msgid "addr: 0x%08lX\n"
 msgstr "adr: 0x%08X"
 
-#: src/flash/flash.c:373
+#: src/flash/flash.c:453
 #, fuzzy, c-format
 msgid ""
-"verify error:\n"
-"read: 0x%08X\n"
-"expected: 0x%08X\n"
+"addr: 0x%08lX\n"
+" verify error:\n"
+"read: 0x%08lX\n"
+"expected: 0x%08lX\n"
 msgstr ""
 "\n"
 "ERREUR de vérification:\n"
 "lu: 0x%08X\n"
 "attendu: 0x%08X\n"
 
-#: src/flash/flash.c:379
+#: src/flash/flash.c:466
 #, fuzzy, c-format
 msgid ""
-"addr: 0x%08X\n"
+"addr: 0x%08lX\n"
 "Done.\n"
 msgstr "adr: 0x%08X"
 
-#: src/flash/flash.c:396
+#: src/flash/flash.c:493
 #, c-format
 msgid ""
 "\n"
-"Erasing %d Flash block%s from address 0x%x\n"
+"Erasing %d Flash block%s from address 0x%lx\n"
 msgstr ""
 
-#: src/flash/flash.c:401
+#: src/flash/flash.c:511
 #, c-format
 msgid "(%d%% Completed) FLASH Block %d : Unlocking ... "
 msgstr ""
 
-#: src/flash/flash.c:404
-#, c-format
+#: src/flash/flash.c:514
 msgid "Erasing ... "
 msgstr ""
 
-#: src/flash/flash.c:410
+#: src/flash/flash.c:522
 #, c-format
 msgid "(100%% Completed) FLASH Block %d : Unlocking ... Erasing ... Ok.\n"
 msgstr ""
 
-#: src/flash/flash.c:412
-#, c-format
+#: src/flash/flash.c:527
 msgid "Ok."
 msgstr ""
 
-#: src/flash/flash.c:414
+#: src/flash/flash.c:529
 #, c-format
 msgid "%78s"
 msgstr ""
 
-#: src/flash/flash.c:419
-#, c-format
+#: src/flash/flash.c:535
 msgid "ERROR.\n"
 msgstr ""
 
-#: src/flash/flash.c:425
-#, c-format
+#: src/flash/flash.c:542
 msgid ""
 "\n"
 "Erasing Completed.\n"
 msgstr ""
 
-#: src/flash/flash.c:427
-#, c-format
+#: src/flash/flash.c:544
 msgid ""
 "\n"
-"Erasing Failed.\n"
+"Erasing (partially) Failed.\n"
 msgstr ""
 
-#: src/flash/intel.c:116 src/flash/intel.c:119 src/flash/intel.c:122
+#: src/flash/intel.c:127 src/flash/intel.c:130 src/flash/intel.c:133
 #, c-format
 msgid "Manufacturer: %s\n"
 msgstr "Manufacturier: %s\n"
 
-#: src/flash/intel.c:125
-#, c-format
-msgid "Unknown manufacturer (0x%04X)!\n"
+#: src/flash/intel.c:136
+#, fuzzy, c-format
+msgid "Unknown manufacturer (0x%04lX)!\n"
 msgstr "Manufacturier inconnu (0x%04X)!\n"
 
-#: src/flash/intel.c:129
-#, c-format
+#: src/flash/intel.c:141
 msgid "Chip: "
 msgstr "Module: "
 
-#: src/flash/intel.c:181
-#, c-format
-msgid "Unknown (0x%02X)!\n"
+#: src/flash/intel.c:194
+#, fuzzy, c-format
+msgid "Unknown (0x%02lX)!\n"
 msgstr "Inconnu (0x%02X)!\n"
 
-#: src/flash/intel.c:240
-#, c-format
-msgid "flash: invalid command seq\n"
+#: src/flash/intel.c:255
+#, fuzzy
+msgid "invalid command seq"
 msgstr "flash: séquence de commande invalide\n"
 
-#: src/flash/intel.c:243
-#, c-format
-msgid "flash: low vpen\n"
+#: src/flash/intel.c:258
+#, fuzzy
+msgid "low vpen"
 msgstr "flash: vpen bas\n"
 
-#: src/flash/intel.c:246
-#, c-format
-msgid "flash: block locked\n"
-msgstr "flash: bloc verrouillé\n"
+#: src/flash/intel.c:261
+#, fuzzy
+msgid "block locked"
+msgstr "bloc %d déverrouillé\n"
 
-#: src/flash/intel.c:268
-#, c-format
-msgid "flash: unknown error while unblocking\n"
+#: src/flash/intel.c:287
+#, fuzzy
+msgid "unknown error while unlocking block"
 msgstr "flash: erreur inconnue lors du déverrouillage\n"
 
-#: src/flash/intel.c:287 src/flash/intel.c:339
-#, c-format
-msgid "flash: unknown error while programming\n"
+#: src/flash/intel.c:311 src/flash/intel.c:370
+#, fuzzy
+msgid "unknown error while programming"
 msgstr "flash: erreur inconnue lors de la programmation\n"
 
-#: src/flash/intel.c:469
+#: src/flash/intel.c:531
 msgid "supported: 28Fxxxx, 2 x 16 bit"
 msgstr "supportés: 28Fxxxx, 2 x 16 bit"
 
-#: src/flash/intel.c:481
+#: src/flash/intel.c:543
 msgid "supported: 28Fxxxx, 1 x 16 bit"
 msgstr "supportés: 28Fxxxx, 1 x 16 bit"
 
-#: src/flash/intel.c:493
+#: src/flash/intel.c:555
 msgid "supported: 28Fxxxx, 1 x 8 bit"
 msgstr "supportés: 28Fxxxx, 1 x 8 bit"
 
-#: src/jtag.c:295
-#, c-format
-msgid "'%s' must not be run suid root!\n"
-msgstr ""
+#: src/part/bsbit.c:50
+#, fuzzy
+msgid "missing Boundary Scan Register (BSR)"
+msgstr "registre Boundary Scan Register (BSR) manquant\n"
 
-#: src/jtag.c:356
-#, fuzzy, c-format
-msgid "%s #%s\n"
-msgstr "%-13s %s\n"
+#: src/part/bsbit.c:56
+#, fuzzy
+msgid "invalid boundary bit number"
+msgstr "numéro de bit de limite invalide\n"
 
-#: src/jtag.c:359
-#, c-format
-msgid "Usage: %s [OPTIONS] [FILE [FILE ... ]] \n"
-msgstr ""
+#: src/part/bsbit.c:61
+#, fuzzy
+msgid "duplicate bit declaration"
+msgstr "déclaration double de bit\n"
 
-#: src/jtag.c:362
-#, c-format
-msgid "  -h, --help          display this help and exit\n"
-msgstr ""
+#: src/part/bsbit.c:66
+#, fuzzy
+msgid "invalid control bit number"
+msgstr "numéro de bit de contrôle invalide\n"
 
-#: src/jtag.c:363
-#, c-format
-msgid "  -v, --version       display version information and exit\n"
-msgstr ""
-
-#: src/jtag.c:365
-#, c-format
-msgid "  -n, --norc          disable reading ~/.jtag/rc on startup\n"
-msgstr ""
-
-#: src/jtag.c:366
-#, c-format
-msgid "  -i, --interactive   enter interactive mode after reading files\n"
-msgstr ""
-
-#: src/jtag.c:367
-#, c-format
-msgid "  -q, --quiet         Do not print help on startup\n"
-msgstr ""
-
-#: src/jtag.c:369
-#, c-format
-msgid "  [FILE]              file containing commands to execute\n"
-msgstr ""
-
-#: src/jtag.c:372
-#, c-format
-msgid "  Please report bugs at http://www.urjtag.org\n"
-msgstr ""
-
-#: src/jtag.c:379
-#, c-format
-msgid ""
-"\n"
-"%s #%s\n"
-"\n"
-"Copyright (C) 2002, 2003 ETC s.r.o.\n"
-"Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n"
-msgstr ""
-
-#: src/jtag.c:384
-#, c-format
-msgid ""
-"\n"
-"This program is free software; you can redistribute it and/or modify\n"
-"it under the terms of the GNU General Public License as published by\n"
-"the Free Software Foundation; either version 2 of the License, or\n"
-"(at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-"GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software\n"
-"Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
-msgstr ""
-
-#: src/jtag.c:439
-#, fuzzy, c-format
-msgid ""
-"\n"
-"%s #%s\n"
-"Copyright (C) 2002, 2003 ETC s.r.o.\n"
-"Copyright (C) 2007, 2008 Kolja Waschk and the respective authors\n"
-"\n"
-"%s is free software, covered by the GNU General Public License, and you are\n"
-"welcome to change it and/or distribute copies of it under certain "
-"conditions.\n"
-"There is absolutely no warranty for %s.\n"
-"\n"
-msgstr ""
-"%s\n"
-"Copyright © 2002, 2003 ETC s.r.o.\n"
-"%s est un logiciel libre; vous pouvez le redistribuer ou le\n"
-"modifier selon les termes de la License Publique Générale de GNU, publiée\n"
-"par la Free Software Foundation (soit la version 2 ou selon votre choix, "
-"toute version ultérieure).\n"
-"\n"
-"Ce programme est distribué dans l'espoir qu'il soit utile,\n"
-"mais AUCUNE garantie n'est donnée pour %s\n"
-"tant pour des raisons COMMERCIALES que\n"
-"pour RÉPONDRE À UN BESOIN PARTICULIER.  Consulter la licence\n"
-"GNU General Public License pour plus de détails.\n"
-"\n"
-"Vous devriez avoir reçu copie de la Licence Publique Générale de GNU\n"
-"avec ce programme; sinon, écrire à la Free Software Foundation, Inc.,\n"
-"59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.\n"
-
-#: src/jtag.c:455
-#, fuzzy, c-format
-msgid "WARNING: %s may damage your hardware!\n"
-msgstr ""
-"AVERTISSEMENT: %s peut endommager votre matériel! Taper \"quit\" pour "
-"quitter!\n"
-"\n"
-
-#: src/jtag.c:456
-#, fuzzy, c-format
-msgid ""
-"Type \"quit\" to exit, \"help\" for help.\n"
-"\n"
-msgstr ""
-"Taper \"help\" pour de l'aide.\n"
-"\n"
-
-#: src/part/data_register.c:46
-#, c-format
-msgid "Warning: Data register name too long\n"
+#: src/part/data_register.c:53
+#, fuzzy
+msgid "Data register name too long\n"
 msgstr "AVERTISSEMENT: nom du registre de données trop long\n"
 
-#: src/part/instruction.c:46
-#, c-format
-msgid "Warning: Instruction name too long\n"
+#: src/part/data_register.c:101
+#, fuzzy, c-format
+msgid "Data register '%s' already defined"
+msgstr "registre de données '%s' est déjà défini\n"
+
+#: src/part/instruction.c:51
+#, fuzzy
+msgid "Instruction name too long\n"
 msgstr "AVERTISSEMENT: nom de l'instruction trop long\n"
 
-#: src/part/part.c:194
-#, c-format
-msgid "signal '%s' cannot be set as output\n"
+#: src/part/part.c:231
+#, fuzzy, c-format
+msgid "signal '%s' cannot be set as output"
 msgstr "signal '%s' ne peut être initialisé comme sortie\n"
 
-#: src/part/part.c:204
-#, c-format
-msgid "signal '%s' cannot be set as input\n"
+#: src/part/part.c:246
+#, fuzzy, c-format
+msgid "signal '%s' cannot be set as input"
 msgstr "signal '%s' ne peut être initialisé comme entrée\n"
 
-#: src/part/part.c:228
-#, c-format
-msgid "signal '%s' is not input signal\n"
+#: src/part/part.c:280
+#, fuzzy, c-format
+msgid "signal '%s' is not input signal"
 msgstr "signal '%s' n'est pas un signal d'entrée\n"
 
-#: src/part/part.c:245
+#: src/part/part.c:300
 #, c-format
 msgid "%%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 msgstr "%%-%ds %%-%ds %%-%ds %%-%ds %%-%ds\n"
 
-#: src/part/part.c:254 src/part/part.c:256
+#: src/part/part.c:312 src/part/part.c:314
 msgid "(none)"
 msgstr "(aucun)"
 
-#: src/svf/svf.c:351 src/svf/svf.c:529 src/svf/svf.c:868 src/svf/svf.c:872
-#, fuzzy, c-format
-msgid "out of memory"
-msgstr "mémoire épuisée\n"
+#: src/part/part.c:328
+#, fuzzy
+msgid "instruction length is already set and used"
+msgstr "la longueur d'instruction est déjà initialisée et utilisée\n"
 
-#: src/svf/svf.c:449
+#: src/part/part.c:355
+#, fuzzy, c-format
+msgid "Instruction '%s' already defined"
+msgstr "Instruction '%s' est déjà définie\n"
+
+#: src/part/part.c:363
+#, fuzzy, c-format
+msgid "unknown data register '%s'"
+msgstr "registre de données inconnu '%s'\n"
+
+#: src/svf/svf.c:470
 #, c-format
 msgid "Error %s: mismatch at position %d for TDO\n"
 msgstr ""
 
-#: src/svf/svf.c:601 src/svf/svf.c:1011
+#: src/svf/svf.c:550
 #, c-format
-msgid "Warning %s: command %s not implemented\n"
+msgid "calloc(%zd,%zd) fails"
 msgstr ""
 
-#: src/svf/svf.c:634
+#: src/svf/svf.c:624 src/svf/svf.c:1081
 #, c-format
-msgid "Error %s: only TCK is supported for RUNTEST.\n"
+msgid "command %s not implemented\n"
 msgstr ""
 
-#: src/svf/svf.c:638
+#: src/svf/svf.c:661
 #, c-format
-msgid "Error %s: maximum time must be larger or equal to minimum time.\n"
+msgid "Error %s: only TCK is supported for RUNTEST"
 msgstr ""
 
-#: src/svf/svf.c:644
+#: src/svf/svf.c:668
 #, c-format
-msgid "Warning %s: maximum time for RUNTEST not guaranteed.\n"
+msgid "Error %s: maximum time must be larger or equal to minimum time"
 msgstr ""
 
-#: src/svf/svf.c:645
-#, c-format
+#: src/svf/svf.c:676
+msgid "maximum time for RUNTEST not guaranteed.\n"
+msgstr ""
+
+#: src/svf/svf.c:677
 msgid " This message is only displayed once.\n"
 msgstr ""
 
-#: src/svf/svf.c:669
+#: src/svf/svf.c:710
 #, c-format
-msgid "Error %s: Maximum cable clock frequency required for RUNTEST.\n"
+msgid "Error %s: Maximum cable clock frequency required for RUNTEST"
 msgstr ""
 
-#: src/svf/svf.c:670
-#, c-format
+#: src/svf/svf.c:713
 msgid "  Set the cable frequency with 'FREQUENCY <Hz>'.\n"
 msgstr ""
 
-#: src/svf/svf.c:820
+#: src/svf/svf.c:878
 #, c-format
 msgid "Error %s: first %s command after length change must have a TDI value.\n"
 msgstr ""
 
-#: src/svf/svf.c:845
+#: src/svf/svf.c:906
 #, c-format
 msgid "Error %s: SIR command length inconsistent.\n"
 msgstr ""
 
-#: src/svf/svf.c:946
+#: src/svf/svf.c:910
 #, c-format
-msgid "Error %s: no further TRST command allowed after mode ABSENT\n"
+msgid " in input file between line %d col %d and line %d col %d\n"
 msgstr ""
 
-#: src/svf/svf.c:966
+#: src/svf/svf.c:1011
 #, c-format
-msgid "Error %s: TRST ABSENT must not be issued after a STATE command\n"
+msgid "Error %s: no further TRST command allowed after mode ABSENT"
 msgstr ""
 
-#: src/svf/svf.c:972
+#: src/svf/svf.c:1034
 #, c-format
-msgid "Error %s: TRST ABSENT must not be issued after an SIR or SDR command\n"
+msgid "Error %s: TRST ABSENT must not be issued after a STATE command"
 msgstr ""
 
-#: src/svf/svf.c:982
+#: src/svf/svf.c:1042
 #, c-format
-msgid "Warning %s: unimplemented mode '%s' for TRST\n"
+msgid "Error %s: TRST ABSENT must not be issued after an SIR or SDR command"
 msgstr ""
 
-#: src/svf/svf.c:1070
+#: src/svf/svf.c:1052
+#, c-format
+msgid "unimplemented mode '%s' for TRST\n"
+msgstr ""
+
+#: src/svf/svf.c:1140
 #, fuzzy, c-format
-msgid "Error %s: no JTAG chain available\n"
+msgid "%s: no JTAG chain available"
 msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
 
-#: src/svf/svf.c:1074
+#: src/svf/svf.c:1147
 #, c-format
-msgid "Error %s: chain without any parts\n"
+msgid "%s: chain without any parts"
 msgstr ""
 
-#: src/svf/svf.c:1090
+#: src/svf/svf.c:1163
 #, c-format
-msgid "Error %s: could not establish SDR register\n"
+msgid "%s: could not establish SDR register"
 msgstr ""
 
-#: src/svf/svf.c:1122
+#: src/svf/svf.c:1203
 #, c-format
-msgid "Error %s: could not establish SIR instruction\n"
+msgid "%s: could not establish SIR instruction"
 msgstr ""
 
-#: src/svf/svf.c:1156
-#, c-format
+#: src/svf/svf.c:1240
 msgid ""
 "Mismatches occurred between scanned device output and expected TDO values.\n"
 msgstr ""
 
-#: src/svf/svf.c:1158
-#, c-format
+#: src/svf/svf.c:1243
 msgid "Scanned device output matched expected TDO values.\n"
 msgstr ""
 
-#: svf_flex.l:351
+#: svf_flex.l:367
 #, c-format
 msgid "Parsing %6d/%d (%3.0d%%)"
 msgstr ""
 
-#: src/tap/cable/arcom.c:129
+#: svf_flex.l:387 src/tap/cable/ft2232.c:1741
+#: src/tap/cable/generic_parport.c:89 src/tap/cable/generic_usbconn.c:236
+#: src/tap/cable/jim.c:71 src/tap/cable/ts7800.c:171
+#: src/tap/cable/usbblaster.c:80 src/tap/cable/vision_ep9307.c:214
+#: src/tap/cable/wiggler.c:226
+#, c-format
+msgid "malloc(%zd) fails"
+msgstr ""
+
+#: src/tap/cable/arcom.c:137
 msgid "Arcom JTAG Cable"
 msgstr "Cable JTAG Arcom"
 
-#: src/tap/cable/byteblaster.c:154
+#: src/tap/cable/byteblaster.c:159
 msgid ""
 "Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable"
 msgstr ""
 "Cable du port parallèle de chargement Altera ByteBlaster/ByteBlaster II/"
 "ByteBlasterMV"
 
-#: src/tap/cable.c:175
+#: src/tap/cable.c:185 src/tap/usbconn/libusb.c:169
 #, c-format
-msgid "Failed to allocate memory for cable activity queue.\n"
+msgid "malloc(%zd)/malloc(%zd) fails"
 msgstr ""
 
-#: src/tap/cable.c:220
-#, c-format
-msgid "Out of memory: couldn't resize activity queue to %d\n"
-msgstr ""
-
-#: src/tap/cable.c:225
+#: src/tap/cable.c:239
 #, c-format
 msgid "(Resized JTAG activity queue to hold max %d items)\n"
 msgstr ""
 
-#: src/tap/cable.c:405 src/tap/cable.c:463
+#: src/tap/cable.c:426 src/tap/cable.c:487
 #, c-format
 msgid "Internal error: Got wrong type of result from queue (%d? %p.%d)\n"
 msgstr ""
 
-#: src/tap/cable.c:469
+#: src/tap/cable.c:494
 #, c-format
 msgid "Internal error: Got wrong signal's value from queue (%d? %p.%d)\n"
 msgstr ""
 
-#: src/tap/cable.c:523
+#: src/tap/cable.c:551
 #, c-format
 msgid "Internal error: Got wrong type of result from queue (#%d %p.%d)\n"
 msgstr ""
 
-#: src/tap/cable.c:529
-#, c-format
+#: src/tap/cable.c:558
 msgid "Internal error: Wanted transfer result but none was queued\n"
 msgstr ""
 
-#: src/tap/cable/dlc5.c:125
+#: src/tap/cable/dlc5.c:131
 msgid "Xilinx DLC5 JTAG Parallel Cable III"
 msgstr "Cable parallèle JTAG Xilinx DLC5 III"
 
-#: src/tap/cable/ea253.c:129
+#: src/tap/cable/ea253.c:137
 msgid "ETC EA253 JTAG Cable"
 msgstr "Cable JATB ETC EA253"
 
-#: src/tap/cable/ei012.c:131
+#: src/tap/cable/ei012.c:139
 msgid "ETC EI012 JTAG Cable"
 msgstr "Cable JTAG ETC EI012"
 
-#: src/tap/cable/ft2232.c:248
+#: src/tap/cable/ft2232.c:251
 #, c-format
-msgid "Warning: Setting lowest supported frequency for FT2232: %d\n"
+msgid "Setting lowest supported frequency for FT2232: %d\n"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:680
-#, c-format
-msgid "Error: Please power on the TARGET board and connect VCC signal!\n"
+#: src/tap/cable/ft2232.c:739
+msgid "Please power on the TARGET board and connect VCC signal"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1662
+#: src/tap/cable/ft2232.c:1824
 #, c-format
 msgid ""
 "Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
@@ -3305,67 +3135,64 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1680
+#: src/tap/cable/ft2232.c:1836
 msgid "Generic FTDI FT2232 Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1712
+#: src/tap/cable/ft2232.c:1869
 msgid "Olimex ARM-USB-OCD[-TINY] (FT2232) Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1758
+#: src/tap/cable/ft2232.c:1916
 msgid "Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1790
+#: src/tap/cable/ft2232.c:1949
 msgid "Amontec JTAGkey (FT2232) Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1822
+#: src/tap/cable/ft2232.c:1982
 msgid "OOCDLink-s (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1854
+#: src/tap/cable/ft2232.c:2015
 msgid "Turtelizer 2 Rev. B (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1886
+#: src/tap/cable/ft2232.c:2048
 msgid "USB to JTAG Interface (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1918
+#: src/tap/cable/ft2232.c:2081
 msgid "Xverve DT-USB-ST Signalyzer Tool (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1950
-msgid "TinCanTools Flyswatter Cable"
+#: src/tap/cable/ft2232.c:2114
+msgid "TinCanTools Flyswatter (FT2232) Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1982
+#: src/tap/cable/ft2232.c:2147
 msgid "KrisTech usbScarabeus2 (FT2232) Cable"
 msgstr ""
 
 #: src/tap/cable/generic.c:110
-#, c-format
-msgid "No space in cable activity results queue.\n"
+msgid "No space in cable activity results queue"
 msgstr ""
 
-#: src/tap/cable/generic.c:389
-#, c-format
+#: src/tap/cable/generic.c:421
 msgid "calibration error, wall clock is not monotonically increasing\n"
 msgstr ""
 
-#: src/tap/cable/generic_parport.c:58 src/tap/cable/jim.c:54
-#, c-format
-msgid "not enough arguments!\n"
+#: src/tap/cable/generic_parport.c:62
+msgid "extra arguments"
 msgstr ""
 
-#: src/tap/cable/generic_parport.c:67
+#: src/tap/cable/generic_parport.c:72
 #, fuzzy, c-format
-msgid "Unknown port driver: %s\n"
+msgid "Unknown port type: %s"
 msgstr "registre de données inconnu '%s'\n"
 
-#: src/tap/cable/generic_parport.c:112
+#: src/tap/cable/generic_parport.c:120
 #, c-format
 msgid ""
 "Usage: cable %s parallel PORTADDR\n"
@@ -3378,12 +3205,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/generic_usbconn.c:217
-#, c-format
+#: src/tap/cable/generic_usbconn.c:229
 msgid "Couldn't connect to suitable USB device.\n"
 msgstr ""
 
-#: src/tap/cable/generic_usbconn.c:253
+#: src/tap/cable/generic_usbconn.c:267
 #, c-format
 msgid ""
 "Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [...]\n"
@@ -3394,17 +3220,15 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/jim.c:58
-#, c-format
+#: src/tap/cable/jim.c:55
+msgid "not enough arguments"
+msgstr ""
+
+#: src/tap/cable/jim.c:59
 msgid "JTAG target simulator JIM - work in progress!\n"
 msgstr ""
 
-#: src/tap/cable/jim.c:62
-#, fuzzy, c-format
-msgid "Initialization failed.\n"
-msgstr "initialisation du bus a échoué!\n"
-
-#: src/tap/cable/jim.c:151
+#: src/tap/cable/jim.c:154
 #, c-format
 msgid "Usage: cable %s\n"
 msgstr ""
@@ -3413,74 +3237,67 @@ msgstr ""
 msgid "JTAG target simulator JIM"
 msgstr ""
 
-#: src/tap/cable/jlink.c:572
+#: src/tap/cable/jlink.c:590
 msgid "Segger/IAR J-Link, Atmel SAM-ICE and others."
 msgstr ""
 
-#: src/tap/cable/keithkoep.c:141
+#: src/tap/cable/keithkoep.c:148
 msgid "Keith & Koep JTAG cable"
 msgstr "Cable JTAG Keith & Koep"
 
-#: src/tap/cable/lattice.c:131
+#: src/tap/cable/lattice.c:140
 #, fuzzy
 msgid "Lattice Parallel Port JTAG Cable"
 msgstr "Cable JTAG Macraigor Wiggler"
 
-#: src/tap/cable/mpcbdm.c:142
+#: src/tap/cable/mpcbdm.c:146
 msgid "Mpcbdm JTAG cable"
 msgstr "Cable JTAG Mpcbdm"
 
-#: src/tap/cable/triton.c:143
+#: src/tap/cable/triton.c:150
 msgid "Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"
 msgstr "Cable JTAG Ka-Ro TRITON Starterkit II (PXA255/250)"
 
-#: src/tap/cable/ts7800.c:87 src/tap/cable/vision_ep9307.c:93
-#, fuzzy, c-format
-msgid "Error: unable to open /dev/mem\n"
+#: src/tap/cable/ts7800.c:89 src/tap/cable/vision_ep9307.c:95
+#, fuzzy
+msgid "unable to open /dev/mem"
 msgstr "ERREUR: mémoire épuisée!\n"
 
-#: src/tap/cable/ts7800.c:97 src/tap/cable/vision_ep9307.c:130
-#, c-format
-msgid "Error: unable to mmap the GPIO registers\n"
+#: src/tap/cable/ts7800.c:102 src/tap/cable/vision_ep9307.c:138
+#, fuzzy
+msgid "unable to mmap the GPIO registers"
+msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
+
+#: src/tap/cable/ts7800.c:127 src/tap/cable/vision_ep9307.c:164
+#, fuzzy
+msgid "unable to munmap the GPIO registers"
+msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
+
+#: src/tap/cable/ts7800.c:161 src/tap/cable/vision_ep9307.c:204
+msgid "This cable type does not accept parameters"
 msgstr ""
 
-#: src/tap/cable/ts7800.c:120 src/tap/cable/vision_ep9307.c:155
-#, c-format
-msgid "Error: unable to munmap the GPIO registers\n"
-msgstr ""
-
-#: src/tap/cable/ts7800.c:152 src/tap/cable/vision_ep9307.c:193
-#, c-format
-msgid "Error: This cable type does not accept parameters!\n"
-msgstr ""
-
-#: src/tap/cable/ts7800.c:156
-#, c-format
+#: src/tap/cable/ts7800.c:166
 msgid "Initializing TS-7800 Built-in JTAG Chain\n"
 msgstr ""
 
-#: src/tap/cable/ts7800.c:160
-#, fuzzy, c-format
-msgid "%s(%d) Out of memory\n"
-msgstr "%s(%d) Mémoire épuisée.\n"
-
-#: src/tap/cable/ts7800.c:281 src/tap/cable/vision_ep9307.c:320
+#: src/tap/cable/ts7800.c:298 src/tap/cable/vision_ep9307.c:339
 #, c-format
 msgid ""
 "Usage: cable %s\n"
 "\n"
 msgstr ""
 
-#: src/tap/cable/ts7800.c:288
+#: src/tap/cable/ts7800.c:303
 msgid "TS-7800 Built-in JTAG Chain"
 msgstr ""
 
-#: src/tap/cable/usbblaster.c:102
+#: src/tap/cable/usbblaster.c:104
 #, c-format
-msgid "Warning: USB-Blaster frequency is fixed to %ld Hz\n"
+msgid "USB-Blaster frequency is fixed to %ld Hz\n"
 msgstr ""
 
-#: src/tap/cable/usbblaster.c:456
+#: src/tap/cable/usbblaster.c:503
 #, c-format
 msgid ""
 "Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
@@ -3493,39 +3310,35 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/usbblaster.c:472
+#: src/tap/cable/usbblaster.c:514
 msgid "Altera USB-Blaster Cable"
 msgstr ""
 
-#: src/tap/cable/vision_ep9307.c:103
-#, c-format
-msgid "Error: unable to mmap the System Control registers\n"
+#: src/tap/cable/vision_ep9307.c:107
+msgid "unable to mmap the System Control registers"
 msgstr ""
 
-#: src/tap/cable/vision_ep9307.c:122
-#, c-format
-msgid "Error: unable to munmap the System Controller registers\n"
+#: src/tap/cable/vision_ep9307.c:127
+msgid "unable to munmap the System Controller registers"
 msgstr ""
 
-#: src/tap/cable/vision_ep9307.c:197
-#, c-format
+#: src/tap/cable/vision_ep9307.c:209
 msgid "Initializing Vision EP9307 SoM GPIO JTAG Cable\n"
 msgstr ""
 
-#: src/tap/cable/vision_ep9307.c:327
+#: src/tap/cable/vision_ep9307.c:344
 msgid "Vision EP9307 SoM GPIO JTAG Cable"
 msgstr ""
 
-#: src/tap/cable/wiggler2.c:148
+#: src/tap/cable/wiggler2.c:159
 msgid "Modified (with CPU Reset) WIGGLER JTAG Cable"
 msgstr ""
 
-#: src/tap/cable/wiggler.c:213
-#, c-format
+#: src/tap/cable/wiggler.c:248
 msgid "Pin mapping failed\n"
 msgstr ""
 
-#: src/tap/cable/wiggler.c:327
+#: src/tap/cable/wiggler.c:388
 #, c-format
 msgid ""
 "Usage: cable %s parallel PORTADDR [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
@@ -3540,372 +3353,453 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/wiggler.c:359
+#: src/tap/cable/wiggler.c:415
 msgid "Macraigor Wiggler JTAG Cable"
 msgstr "Cable JTAG Macraigor Wiggler"
 
-#: src/tap/cable/wiggler.c:377
+#: src/tap/cable/wiggler.c:434
 #, fuzzy
 msgid "Excelpoint IGLOO JTAG Cable"
 msgstr "Cable JTAG Arcom"
 
-#: src/tap/cable/xpc.c:634
+#: src/tap/cable/xpc.c:685
 msgid "Xilinx Platform Cable USB internal chain"
 msgstr ""
 
-#: src/tap/cable/xpc.c:660
+#: src/tap/cable/xpc.c:712
 msgid "Xilinx Platform Cable USB external chain"
 msgstr ""
 
-#: src/tap/chain.c:149 src/tap/chain.c:200
-#, c-format
-msgid "%s(%d) Part %d without active instruction\n"
+#: src/tap/chain.c:182 src/tap/chain.c:250
+#, fuzzy, c-format
+msgid "Part %d without active instruction"
 msgstr "%s(%d) pièce %d sans instruction active\n"
 
-#: src/tap/chain.c:204
-#, c-format
-msgid "%s(%d) Part %d without data register\n"
+#: src/tap/chain.c:256
+#, fuzzy, c-format
+msgid "Part %d without data register"
 msgstr "%s(%d) pièce %d sans registre de données\n"
 
-#: src/tap/detect.c:59
-#, c-format
-msgid "Cannot open %s\n"
-msgstr "ne peut ouvrir %s\n"
+#: src/tap/chain.c:321
+#, fuzzy
+msgid "Run \"detect\" first"
+msgstr "Eéxcuer \"détecter\" d'abord.\n"
 
-#: src/tap/detect.c:206
+#: src/tap/chain.c:327
+#, c-format
+msgid "active part no %d exceeds chain length %d"
+msgstr ""
+
+#: src/tap/detect.c:65
+#, fuzzy, c-format
+msgid "Unable to open file '%s'\n"
+msgstr "Incapable d'ouvrir le fichier `%s'!\n"
+
+#: src/tap/detect.c:201
 #, c-format
 msgid "IR length: %d\n"
 msgstr "longueur IR: %d\n"
 
-#: src/tap/detect.c:223
-#, c-format
+#: src/tap/detect.c:219
 msgid "Unable to detect JTAG chain length\n"
 msgstr "Incapable de détecter la longueur de la chaîne JTAG\n"
 
-#: src/tap/detect.c:226
+#: src/tap/detect.c:222
 #, c-format
 msgid "Chain length: %d\n"
 msgstr "Longueur de la chaîne: %d\n"
 
-#: src/tap/detect.c:267
+#: src/tap/detect.c:265
 #, fuzzy, c-format
 msgid "Device Id: %s (0x%016<PRIX64>)\n"
 msgstr "Identificateur du périphérique: %s\n"
 
-#: src/tap/detect.c:296
-#, c-format
+#: src/tap/detect.c:268
+msgid "Device Id: unknown as bit 0 was not a 1\n"
+msgstr ""
+
+#: src/tap/detect.c:299
 msgid "  Unknown manufacturer!\n"
 msgstr "  Manufacturier inconnu!\n"
 
-#: src/tap/detect.c:302
+#: src/tap/detect.c:305
 #, c-format
 msgid "  Manufacturer: %s\n"
 msgstr "  Manufacturier: %s\n"
 
-#: src/tap/detect.c:304
-#, c-format
-msgid "Warning: Manufacturer too long\n"
+#: src/tap/detect.c:308
+#, fuzzy
+msgid "Manufacturer too long\n"
 msgstr "AVERTISSEMENT: nom du manufacturier trop long\n"
 
-#: src/tap/detect.c:320
-#, c-format
+#: src/tap/detect.c:325
 msgid "  Unknown part!\n"
 msgstr "  Pièce inconnue!\n"
 
-#: src/tap/detect.c:326
+#: src/tap/detect.c:331
 #, fuzzy, c-format
 msgid "  Part(%d):         %s\n"
 msgstr "  Pièce:         %s\n"
 
-#: src/tap/detect.c:328
-#, c-format
-msgid "Warning: Part too long\n"
+#: src/tap/detect.c:334
+#, fuzzy
+msgid "Part too long\n"
 msgstr "AVERTISSEMENT: nom de pièce trop long\n"
 
-#: src/tap/detect.c:344
-#, c-format
+#: src/tap/detect.c:351
 msgid "  Unknown stepping!\n"
 msgstr "  Pas inconnu!\n"
 
-#: src/tap/detect.c:350
+#: src/tap/detect.c:357
 #, c-format
 msgid "  Stepping:     %s\n"
 msgstr "  Pas     :     %s\n"
 
-#: src/tap/detect.c:352
-#, c-format
-msgid "Warning: Stepping too long\n"
+#: src/tap/detect.c:360
+#, fuzzy
+msgid "Stepping too long\n"
 msgstr "AVERTISSEMENT: pas trop long\n"
 
-#: src/tap/detect.c:382
-#, c-format
+#: src/tap/detect.c:400
 msgid "Error: Unable to detect JTAG chain end!\n"
 msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
 
-#: src/tap/detect.c:409
-#, fuzzy, c-format
-msgid "Error: Unable to allocate a register!\n"
-msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
-
-#: src/tap/detect.c:417
-#, fuzzy, c-format
-msgid "Error: Unable to allocate space for parts!\n"
-msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
-
-#: src/tap/detect.c:424
-#, fuzzy, c-format
-msgid "Error: Unable to allocate space for a part!\n"
-msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
-
-#: src/tap/detect.c:440
-#, c-format
+#: src/tap/detect.c:450
 msgid "Error: could not set BR register"
 msgstr ""
 
-#: src/tap/detect.c:462
-#, c-format
+#: src/tap/detect.c:471
 msgid "Error: could not set BYPASS instruction"
 msgstr ""
 
-#: src/tap/discovery.c:108
+#: src/tap/discovery.c:117
 #, c-format
-msgid "Warning: TDO seems to be stuck at %d\n"
+msgid "TDO seems to be stuck at %d\n"
 msgstr ""
 
-#: src/tap/discovery.c:133
-#, c-format
+#: src/tap/discovery.c:142
 msgid "Detecting IR length ... "
 msgstr "Détection de la longuer IR..."
 
-#: src/tap/discovery.c:139 src/tap/discovery.c:171
+#: src/tap/discovery.c:148 src/tap/discovery.c:184
 #, c-format
 msgid "%d\n"
 msgstr "%d\n"
 
-#: src/tap/discovery.c:142
-#, c-format
+#: src/tap/discovery.c:153
 msgid "Error: Invalid IR length!\n"
 msgstr "ERREUR: longueur IR invalide!\n"
 
-#: src/tap/discovery.c:153
-#, c-format
-msgid "Error: Out of memory!\n"
-msgstr "ERREUR: mémoire épuisée!\n"
-
-#: src/tap/discovery.c:165
+#: src/tap/discovery.c:177
 #, c-format
 msgid "Detecting DR length for IR %s ... "
 msgstr "Détection de la longeur DR de IR %s..."
 
-#: src/tap/parport/direct.c:139
-#, c-format
-msgid "Couldn't load InpOut32.dll; maybe not installed?\n"
+#: src/tap/parport/direct.c:157
+msgid "Couldn't load InpOut32.dll; maybe not installed?"
 msgstr ""
 
-#: src/tap/parport/direct.c:206 src/tap/parport/ppdev.c:119
-#: src/tap/parport/ppi.c:115
-#, c-format
-msgid "Syntax error!\n"
-msgstr "ERREUR de syntaxe!\n"
-
-#: src/tap/parport/direct.c:213
-#, c-format
-msgid "Invalid port address!\n"
+#: src/tap/parport/direct.c:223
+#, fuzzy
+msgid "Invalid port address"
 msgstr "Adresse de port invalide!\n"
 
-#: src/tap/parport/direct.c:225
+#: src/tap/parport/direct.c:238
 #, c-format
 msgid "Disconnecting %s from parallel port at 0x%x\n"
 msgstr "Déconnexion de %s du port parallèle à 0x%x\n"
 
-#: src/tap/parport/direct.c:231
+#: src/tap/parport/direct.c:245
 #, fuzzy, c-format
 msgid "Initializing parallel port at 0x%x\n"
 msgstr "Initialisation de %s sur le port parallèle à 0x%x\n"
 
-#: src/tap/parport/direct.c:235 src/tap/parport/ppdev.c:134
-#: src/tap/parport/ppi.c:130
-#, c-format
-msgid "%s(%d) Out of memory.\n"
-msgstr "%s(%d) Mémoire épuisée.\n"
-
-#: src/tap/parport/ppdev.c:125
+#: src/tap/parport/ppdev.c:132
 #, c-format
 msgid "Disconnecting %s from ppdev port %s\n"
 msgstr "Déconnexion de %s du port ppdev %s\n"
 
-#: src/tap/parport/ppdev.c:130
+#: src/tap/parport/ppdev.c:138
 #, fuzzy, c-format
 msgid "Initializing ppdev port %s\n"
 msgstr "Initialisation de %s sur le port ppdev %s\n"
 
-#: src/tap/parport/ppdev.c:148
+#: src/tap/parport/ppdev.c:155
 #, fuzzy, c-format
-msgid "Could not open port %s: %s\n"
+msgid "Could not open port %s"
 msgstr "ne peut ouvrir %s\n"
 
-#: src/tap/parport/ppdev.c:153
-#, c-format
-msgid "Could not claim ppdev device: %s\n"
+#: src/tap/parport/ppdev.c:162
+msgid "Could not claim ppdev device"
 msgstr ""
 
-#: src/tap/parport/ppi.c:121
+#: src/tap/parport/ppi.c:128
 #, fuzzy, c-format
 msgid "Disconnecting %s from ppi port %s\n"
 msgstr "Déconnexion de %s du port ppdev %s\n"
 
-#: src/tap/parport/ppi.c:126
+#: src/tap/parport/ppi.c:135
 #, fuzzy, c-format
 msgid "Initializing on ppi port %s\n"
 msgstr "Initialisation de %s sur le port ppdev %s\n"
 
-#: src/tap/tap.c:71 src/tap/tap.c:131 src/tap/tap.c:142
+#: src/tap/tap.c:78 src/tap/tap.c:150 src/tap/tap.c:163
 #, c-format
 msgid "%s: Invalid state: %2X\n"
 msgstr "%s: état invalide: %2X\n"
 
-#: src/tap/usbconn/libftd2xx.c:100
+#: src/tap/usbconn/libftd2xx.c:133
 #, c-format
-msgid "%s(): FT_Write() failed.\n"
+msgid "FT_Write() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:104 src/tap/usbconn/libftdi.c:89
-#, c-format
-msgid "%s(): Written fewer bytes than requested.\n"
+#: src/tap/usbconn/libftd2xx.c:141 src/tap/usbconn/libftdi.c:93
+msgid "Written fewer bytes than requested"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:123 src/tap/usbconn/libftdi.c:108
-#, c-format
-msgid "%s(): Receive buffer does not exist.\n"
+#: src/tap/usbconn/libftd2xx.c:161 src/tap/usbconn/libftdi.c:113
+msgid "Receive buffer does not exist"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:130 src/tap/usbconn/libftd2xx.c:190
+#: src/tap/usbconn/libftd2xx.c:168 src/tap/usbconn/libftd2xx.c:230
 #, c-format
-msgid "%s(): Error from FT_Read(): %d\n"
+msgid "Error from FT_Read(): %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:134 src/tap/usbconn/libftdi.c:119
+#: src/tap/usbconn/libftd2xx.c:173 src/tap/usbconn/libftdi.c:127
 #, c-format
-msgid "%s(): Received less bytes than requested.\n"
+msgid "%s(): Received fewer bytes than requested.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:256 src/tap/usbconn/libftdi.c:224
-#, c-format
-msgid "%s(): Send buffer does not exist.\n"
+#: src/tap/usbconn/libftd2xx.c:297 src/tap/usbconn/libftdi.c:237
+msgid "Send buffer does not exist"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:314
-#, c-format
+#: src/tap/usbconn/libftd2xx.c:360
 msgid "Connected to libftd2xx driver.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:389 src/tap/usbconn/libftd2xx.c:428
-#: src/tap/usbconn/libftd2xx.c:448 src/tap/usbconn/libftd2xx.c:471
+#: src/tap/usbconn/libftd2xx.c:437 src/tap/usbconn/libftd2xx.c:484
+#: src/tap/usbconn/libftd2xx.c:519 src/tap/usbconn/libftd2xx.c:546
 #, c-format
-msgid "%s(): Can't reset device.\n"
+msgid "Can't reset device: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:391 src/tap/usbconn/libftd2xx.c:430
-#: src/tap/usbconn/libftd2xx.c:450 src/tap/usbconn/libftd2xx.c:473
+#: src/tap/usbconn/libftd2xx.c:441 src/tap/usbconn/libftd2xx.c:523
+#: src/tap/usbconn/libftd2xx.c:550
 #, c-format
-msgid "%s(): Can't purge RX buffer.\n"
+msgid "Can't purge RX buffer: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:394
+#: src/tap/usbconn/libftd2xx.c:446
 #, c-format
-msgid "%s(): Can't set latency timer.\n"
+msgid "Can't set latency timer: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:397
+#: src/tap/usbconn/libftd2xx.c:451
 #, c-format
-msgid "%s(): Can't set baudrate.\n"
+msgid "Can't set baudrate: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:433
+#: src/tap/usbconn/libftd2xx.c:488
 #, c-format
-msgid "%s(): Can't set USB parameters.\n"
+msgid "s(): Can't purge RX buffer: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:436
+#: src/tap/usbconn/libftd2xx.c:495
 #, c-format
-msgid "%s(): Can't set special characters.\n"
+msgid "Can't set USB parameters: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:442
+#: src/tap/usbconn/libftd2xx.c:500
 #, c-format
-msgid "%s(): Can't set target latency timer.\n"
+msgid "Can't set special characters: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftd2xx.c:445
+#: src/tap/usbconn/libftd2xx.c:508
 #, c-format
-msgid "%s(): Can't set MPSSE bitmode.\n"
+msgid "Can't set target latency timer: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:84
+#: src/tap/usbconn/libftd2xx.c:514
 #, c-format
-msgid "%s(): ftdi_write_data() failed: %s\n"
+msgid "Can't set MPSSE bitmode: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:115 src/tap/usbconn/libftdi.c:168
+#: src/tap/usbconn/libftdi.c:87
 #, c-format
-msgid "%s(): Error from ftdi_read_data(): %s\n"
+msgid "ftdi_write_data() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:286
+#: src/tap/usbconn/libftdi.c:122 src/tap/usbconn/libftdi.c:178
 #, c-format
+msgid "Error from ftdi_read_data(): %s"
+msgstr ""
+
+#: src/tap/usbconn/libftdi.c:305
 msgid "Connected to libftdi driver.\n"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:324
+#: src/tap/usbconn/libftdi.c:344
 #, c-format
-msgid "%s() failed: %s\n"
+msgid "%s(): ftdi_usb_open_desc() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:349
+#: src/tap/usbconn/libftdi.c:346
 #, c-format
-msgid "%s(): ftdi_usb_purge_buffers() failed: %s\n"
+msgid "ftdi_usb_open_desc() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:352 src/tap/usbconn/libftdi.c:369
+#: src/tap/usbconn/libftdi.c:371
 #, c-format
-msgid "%s(): ftdi_read_data() failed: %s\n"
+msgid "ftdi_usb_purge_buffers() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:361
+#: src/tap/usbconn/libftdi.c:375 src/tap/usbconn/libftdi.c:396
 #, c-format
-msgid "%s(): ftdi_usb_purge_rx_buffer() failed: %s\n"
+msgid "ftdi_read_data() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:366
+#: src/tap/usbconn/libftdi.c:385
 #, c-format
-msgid "%s(): ftdi_usb_purge_tx_buffer() failed: %s\n"
+msgid "ftdi_usb_purge_rx_buffer() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:386
+#: src/tap/usbconn/libftdi.c:392
 #, c-format
-msgid "%s(): ftdi_poll_status() failed: %s\n"
+msgid "ftdi_usb_purge_tx_buffer() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:391 src/tap/usbconn/libftdi.c:485
-#: src/tap/usbconn/libftdi.c:504
+#: src/tap/usbconn/libftdi.c:413
 #, c-format
-msgid "%s(): ftdi_usb_reset() failed: %s\n"
+msgid "ftdi_poll_status() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:414 src/tap/usbconn/libftdi.c:477
+#: src/tap/usbconn/libftdi.c:418 src/tap/usbconn/libftdi.c:534
+#: src/tap/usbconn/libftdi.c:556
 #, c-format
-msgid "%s(): ftdi_set_latency_timer() failed: %s\n"
+msgid "ftdi_usb_reset() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:427
+#: src/tap/usbconn/libftdi.c:444 src/tap/usbconn/libftdi.c:524
 #, c-format
-msgid "%s(): ftdi_set_baudrate() failed: %s\n"
+msgid "ftdi_set_latency_timer() failed: %s"
 msgstr ""
 
-#: src/tap/usbconn/libftdi.c:481
+#: src/tap/usbconn/libftdi.c:461
 #, c-format
-msgid "%s(): ftdi_set_bitmode() failed: %s\n"
+msgid "ftdi_set_baudrate() failed: %s"
 msgstr ""
+
+#: src/tap/usbconn/libftdi.c:529
+#, c-format
+msgid "ftdi_set_bitmode() failed: %s"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Out of memory, %s line %i\n"
+#~ msgstr "Mémoire épuisée\n"
+
+#, fuzzy
+#~ msgid "No JTAG chain available\n"
+#~ msgstr "(pas de description disponible)"
+
+#, fuzzy
+#~ msgid "Unable to open BSDL file '%s'\n"
+#~ msgstr "Incapable d'ouvrir le fichier `%s'!\n"
+
+#, fuzzy
+#~ msgid "Cannot open file %s or %s.\n"
+#~ msgstr "ne peut ouvrir %s\n"
+
+#~ msgid "out of memory\n"
+#~ msgstr "mémoire épuisée\n"
+
+#, fuzzy
+#~ msgid "signal '%s' is not found\n"
+#~ msgstr "signal '%s' non repéré\n"
+
+#~ msgid "Error: Bus width detection failed\n"
+#~ msgstr "ERREUR: détection de la largeur de bus a échoué\n"
+
+#~ msgid "Error: Invalid bus width (MD3 = MD4 = 0)!\n"
+#~ msgstr "ERREUR: largeur de bus invalide (MD3 = MD4 = 0)!\n"
+
+#, fuzzy
+#~ msgid "Addr: 0x%08X\n"
+#~ msgstr "adr: 0x%08X\n"
+
+#~ msgid "%s: no active part\n"
+#~ msgstr "%s: aucune pièce active\n"
+
+#~ msgid "Error: Cable connection failed!\n"
+#~ msgstr "Error: échec de la connexion par cable!\n"
+
+#~ msgid "Error: Cable initialization failed!\n"
+#~ msgstr "Error: échec de l'initialisation par cable!\n"
+
+#~ msgid "Error: Cable not configured. Please use '%s' command first!\n"
+#~ msgstr ""
+#~ "ERREUR: cable non configuré. SVP utiliser la commande '%s' d'abord!\n"
+
+#~ msgid "%s: syntax error!\n"
+#~ msgstr "%s: erreur de syntaxe!\n"
+
+#, fuzzy
+#~ msgid "Unable to open file `%s go=%d'!\n"
+#~ msgstr "Incapable d'ouvrir le fichier `%s'!\n"
+
+#, fuzzy
+#~ msgid "bus alloc/attach failed!\n"
+#~ msgstr "initialisation du bus a échoué!\n"
+
+#~ msgid "bus initialization failed!\n"
+#~ msgstr "initialisation du bus a échoué!\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "flash error\n"
+#~ msgstr ""
+#~ "\n"
+#~ "erreur flash\n"
+
+#~ msgid "Out of memory!\n"
+#~ msgstr "Mémoire épuisée!\n"
+
+#~ msgid "flash: block locked\n"
+#~ msgstr "flash: bloc verrouillé\n"
+
+#, fuzzy
+#~ msgid "out of memory"
+#~ msgstr "mémoire épuisée\n"
+
+#, fuzzy
+#~ msgid "Initialization failed.\n"
+#~ msgstr "initialisation du bus a échoué!\n"
+
+#, fuzzy
+#~ msgid "%s(%d) Out of memory\n"
+#~ msgstr "%s(%d) Mémoire épuisée.\n"
+
+#~ msgid "Cannot open %s\n"
+#~ msgstr "ne peut ouvrir %s\n"
+
+#, fuzzy
+#~ msgid "Error: Unable to allocate space for parts!\n"
+#~ msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
+
+#, fuzzy
+#~ msgid "Error: Unable to allocate space for a part!\n"
+#~ msgstr "ERREUR: incapable de détecter la fin de la chaîne JTAG!\n"
+
+#~ msgid "Error: Out of memory!\n"
+#~ msgstr "ERREUR: mémoire épuisée!\n"
+
+#~ msgid "Syntax error!\n"
+#~ msgstr "ERREUR de syntaxe!\n"
+
+#~ msgid "%s(%d) Out of memory.\n"
+#~ msgstr "%s(%d) Mémoire épuisée.\n"
 
 #~ msgid "supported: AMD 29LV800B; 1x16 Bit"
 #~ msgstr "supportés: AMD 29LV800B; 1x16 Bit"
@@ -3969,10 +3863,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Am29LV040B\t-\t"
 #~ msgstr "Am29LV800B"
-
-#, fuzzy
-#~ msgid "addr: 0x%08X\r"
-#~ msgstr "adr: 0x%08X"
 
 #~ msgid "Error during file read.\n"
 #~ msgstr "ERREUR durant la lecture du fichier.\n"

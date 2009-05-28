@@ -35,7 +35,7 @@
 #include "generic_usbconn.h"
 
 #include <urjtag/usbconn.h>
-#include <urjtag/usbconn/libusb.h>
+#include "usbconn/libusb.h"
 
 #include <errno.h>
 #include <string.h>

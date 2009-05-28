@@ -54,6 +54,4 @@ pkginclude_HEADERS = \
 	types.h \
 	urjtag.h \
 	usbconn.h \
-	usbconn/libftdx.h \
-	usbconn/libusb.h \
 	xpcu.h

@@ -102,4 +102,14 @@ extern const urj_cmd_t *urj_cmds[];
  */
 int urj_cmd_test_cable (urj_chain_t *chain);
 
+/**
+ * Count the number of parameters in this NULL-terminated list
+ */
+int urj_cmd_params (char *params[]);
+/**
+ * Parse parameter as a long unsigned
+ * @return URJ_STATUS_OK on success, URJ_STATUS_FAIL on error
+ */
+int urj_cmd_get_number (const char *s, long unsigned *i);
+
 #endif /* URJ_CMD_H */

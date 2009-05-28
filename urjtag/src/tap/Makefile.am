@@ -125,6 +125,7 @@ endif
 if HAVE_LIBUSB
 libtap_la_SOURCES += \
 	usbconn/libusb.c
+	usbconn/libusb.h
 endif
 
 
@@ -135,7 +136,8 @@ endif
 
 if ENABLE_LOWLEVEL_FTDI
 libtap_la_SOURCES += \
-	usbconn/libftdi.c
+	usbconn/libftdi.c \
+	usbconn/libftdx.h
 endif
 
 if ENABLE_LOWLEVEL_FTD2XX

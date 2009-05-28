@@ -198,7 +198,7 @@ ep9307_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     ep9307_params_t *cable_params;
 
-    if (urj_cmd_params (params) != 1)
+    if (urj_param_num (params) != 1)
     {
         urj_error_set (URJ_ERROR_SYNTAX,
                        _("This cable type does not accept parameters"));

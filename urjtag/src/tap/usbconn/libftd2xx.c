@@ -42,7 +42,7 @@
 #include <urjtag/error.h>
 #include <urjtag/log.h>
 #include <urjtag/usbconn.h>
-#include <urjtag/usbconn/libftdx.h>
+#include "libftdx.h"
 
 
 /* enables debug output */

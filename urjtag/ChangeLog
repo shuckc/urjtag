@@ -1,17 +1,33 @@
+
+2009-05-28  Rutger Hofman <rfhh>
+
+  * include/urjtag/cmd.h, src/cmd/cmd.h: move defitions from public to private
+    include file because these parameter utilities are no longer used outside
+    cmd
+
+  * include/urjtag/usbconn/*.h: move to src/tap/usbconn/ because these are
+    actually internal include files
+
 2009-05-28  Rutger Hofman <rfhh>
 
   * src/global/urjtag.c, src/global/Makefile.am: rename urjtag.c to
     src/global/log-error.c
+
   * src/global/params.c, src/global/Makefile.am, include/urjtag/params.h,
     include/urjtag/Makefile.am: data structure for key/value pairs
+
   * src/bus/*, include/urjtag/bus_driver.h, include/urjtag/bus.h,
     src/cmd/cmd_initbus.c: have an API call initbus() that uses key/value
     pairs to pass in options
+
   * src/tap/cable.c, src/tap/parport.c, src/tap/usbconn.c, src/tap/cable/*,
     src/tap/parport/*, src/tap/usbconn/*, include/urjtag/cable.h: have API
     calls urj_tap_cable_parport_connect(), urj_tap_cable_usb_connect(),
     urj_tap_cable_other_connect(); have a tagged union in the cable driver
     that offers driver-specific connect() calls.
+
+  * src/cmd/cmd_cable.c, src/tap/cable/wiggler.c: the 4th wiggler argument,
+    the pin bitmap, is now a key/value parameter with key 'bitmap='.
 
 2009-05-28  Mike Frysinger  <vapier@gentoo.org>
 
