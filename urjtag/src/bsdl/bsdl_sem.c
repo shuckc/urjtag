@@ -67,7 +67,7 @@ urj_bsdl_set_instruction_length (urj_bsdl_jtag_ctrl_t *jc)
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_EXEC)
         (void) urj_part_instruction_length_set (jc->part, jc->instr_len);
     if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
-        urj_log (URJ_LOG_LEVEL_NORMAL, "instruction %i\n", jc->instr_len);
+        urj_log (URJ_LOG_LEVEL_NORMAL, "instruction length %i\n", jc->instr_len);
 
     return URJ_STATUS_OK;
 }
