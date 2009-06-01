@@ -271,6 +271,19 @@ bsbit_type_char (int type)
     }
 }
 
+static char
+bsbit_safe_char (int safe)
+{
+    switch (safe)
+    {
+    case 0:
+        return '0';
+    case 1:
+        return '1';
+    default:
+        return '?';
+    }
+}
 
 /*****************************************************************************
  * int urj_bsdl_process_cell_info( urj_bsdl_jtag_ctrl_t *jc )
@@ -340,8 +353,8 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
                     return URJ_STATUS_FAIL;
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                 urj_log (URJ_LOG_LEVEL_NORMAL,
-                         "bit %d %s %c %d %d %d %c\n", ci->bit_num,
-                         ci->port_name, bsbit_type_char (type), safe,
+                         "bit %d %c %c %s %d %d %c\n", ci->bit_num,
+                         bsbit_type_char (type), bsbit_safe_char(safe), ci->port_name,
                          ci->ctrl_bit_num, ci->disable_safe_value,
                          'Z');
         }
@@ -354,8 +367,8 @@ urj_bsdl_process_cell_info (urj_bsdl_jtag_ctrl_t *jc)
                     return URJ_STATUS_FAIL;
             if (jc->proc_mode & URJ_BSDL_MODE_INSTR_PRINT)
                 urj_log (URJ_LOG_LEVEL_NORMAL,
-                         "bit %d %s %c %d\n", ci->bit_num, ci->port_name,
-                         bsbit_type_char (type), safe);
+                         "bit %d %c %c %s\n", ci->bit_num,
+                         bsbit_type_char (type), bsbit_safe_char(safe), ci->port_name);
         }
 
         ci = ci->next;
