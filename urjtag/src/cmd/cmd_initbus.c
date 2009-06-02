@@ -40,7 +40,7 @@
 static int
 cmd_initbus_run (urj_chain_t *chain, char *params[])
 {
-    int i;
+    int drv, i;
     const urj_param_t **bus_params;
 
     if (urj_cmd_params (params) < 2)
@@ -57,11 +57,11 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
     if (urj_tap_chain_active_part (chain) == NULL)
         return URJ_STATUS_FAIL;
 
-    for (i = 0; urj_bus_drivers[i] != NULL; i++)
-        if (strcasecmp (urj_bus_drivers[i]->name, params[1]) == 0)
+    for (drv = 0; urj_bus_drivers[drv] != NULL; drv++)
+        if (strcasecmp (urj_bus_drivers[drv]->name, params[1]) == 0)
             break;
 
-    if (urj_bus_drivers[i] == NULL)
+    if (urj_bus_drivers[drv] == NULL)
     {
         urj_error_set (URJ_ERROR_NOTFOUND, _("Unknown bus: %s"), params[1]);
         return URJ_STATUS_FAIL;
@@ -76,7 +76,7 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
             return URJ_STATUS_FAIL;
         }
 
-    if (urj_bus_init_bus(chain, urj_bus_drivers[i], bus_params) == NULL)
+    if (urj_bus_init_bus(chain, urj_bus_drivers[drv], bus_params) == NULL)
     {
         urj_param_clear (&bus_params);
         return URJ_STATUS_FAIL;
