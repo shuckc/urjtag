@@ -291,7 +291,7 @@ ISC_Illegal_Exit      ISC_ILLEGAL_EXIT
 {Instruction_Private}   {return( INSTRUCTION_PRIVATE ); }
 {Register_Access}       {BEGIN(REG); yyextra->Base = DECIMAL;
                          return( REGISTER_ACCESS ); }
-{Boundary_Length}       {return( BOUNDARY_LENGTH ); }
+{Boundary_Length}       {yyextra->Base = DECIMAL; return( BOUNDARY_LENGTH ); }
 {Boundary_Register}     {BEGIN(BOU); yyextra->Base = DECIMAL;
                          return( BOUNDARY_REGISTER ); }
 {Idcode_Register}       {yyextra->Base = BIN_X; return( IDCODE_REGISTER ); }

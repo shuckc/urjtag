@@ -1,3 +1,7 @@
+2009-06-04  Arnim Laeuger  <arniml>
+
+  * src/bsdl/bsdl_flex.l: force Base = DECIMAL for BOUNDARY_LENGTH attribute
+
 2009-05-26  Arnim Laeuger  <arniml>
 
   * src/bus/bf561_ezkit.c, src/bus/sharc21065l.c, src/bus/bf537_stamp.c,
