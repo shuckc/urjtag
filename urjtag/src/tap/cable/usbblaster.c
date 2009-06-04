@@ -114,7 +114,7 @@ usbblaster_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);

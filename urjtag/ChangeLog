@@ -1,3 +1,8 @@
+2009-06-04  Rutger Hofman <rfhh>
+
+  * src/tap/cable/*.c, src/tap/parport/*.c, src/tap/usbconn/*.c: return/handle
+    URJ_STATUS_OK/FAIL more correctly
+
 2009-06-02  Arnim Laeuger  <arniml>
 
   * src/cmd/cmd_initbus.c: use separate index variable for driver selection

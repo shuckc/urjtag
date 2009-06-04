@@ -43,8 +43,6 @@
 #include <urjtag/tap.h>
 #include <urjtag/cable.h>
 
-#undef VERBOSE
-
 /* @@@@ RFHH stick these into a (or many) .h files */
 extern urj_cable_driver_t urj_tap_cable_arcom_driver;
 extern urj_cable_driver_t urj_tap_cable_byteblaster_driver;

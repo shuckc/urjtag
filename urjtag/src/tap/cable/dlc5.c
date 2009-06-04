@@ -59,12 +59,12 @@
 static int
 dlc5_init (urj_cable_t *cable)
 {
-    if (urj_tap_parport_open (cable->link.port))
-        return -1;
+    if (urj_tap_parport_open (cable->link.port) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     PARAM_SIGNALS (cable) = URJ_POD_CS_TRST;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -78,12 +78,12 @@ dlc5_clock (urj_cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         urj_tap_parport_set_data (cable->link.port,
-                                  (1 << PROG) | (0 << TCK) | (tms << TMS) |
-                                  (tdi << TDI));
+                                  (1 << PROG) | (0 << TCK) | (tms << TMS)
+                                  | (tdi << TDI));
         urj_tap_cable_wait (cable);
         urj_tap_parport_set_data (cable->link.port,
-                                  (1 << PROG) | (1 << TCK) | (tms << TMS) |
-                                  (tdi << TDI));
+                                  (1 << PROG) | (1 << TCK) | (tms << TMS)
+                                  | (tdi << TDI));
         urj_tap_cable_wait (cable);
     }
 
@@ -96,13 +96,19 @@ dlc5_clock (urj_cable_t *cable, int tms, int tdi, int n)
 static int
 dlc5_get_tdo (urj_cable_t *cable)
 {
+    int status;
+
     urj_tap_parport_set_data (cable->link.port, (1 << PROG) | (0 << TCK));
     PARAM_SIGNALS (cable) &=
         ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 
     urj_tap_cable_wait (cable);
 
-    return (urj_tap_parport_get_status (cable->link.port) >> TDO) & 1;
+    status = urj_tap_parport_get_status (cable->link.port);
+    if (status == -1)
+        return status;
+
+    return (status >> TDO) & 1;
 }
 
 static int

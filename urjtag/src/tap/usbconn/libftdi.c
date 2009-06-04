@@ -295,7 +295,7 @@ usbconn_ftdi_connect (urj_usbconn_cable_t *template,
     /* do a test open with the specified cable paramters,
        alternatively we could use libusb to detect the presence of the
        specified USB device */
-    if (usbconn_ftdi_common_open (c, URJ_LOG_LEVEL_DETAIL) != 0)
+    if (usbconn_ftdi_common_open (c, URJ_LOG_LEVEL_DETAIL) != URJ_STATUS_OK)
     {
         usbconn_ftdi_free (c);
         return NULL;
@@ -432,7 +432,7 @@ usbconn_ftdi_open (urj_usbconn_t *conn)
     struct ftdi_context *fc = p->fc;
     int r;
 
-    if (usbconn_ftdi_common_open (conn, URJ_LOG_LEVEL_NORMAL) < 0)
+    if (usbconn_ftdi_common_open (conn, URJ_LOG_LEVEL_NORMAL) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     r = seq_reset (fc);
@@ -482,7 +482,7 @@ usbconn_ftdi_mpsse_open (urj_usbconn_t *conn)
     struct ftdi_context *fc = p->fc;
     int r;
 
-    if (usbconn_ftdi_common_open (conn, URJ_LOG_LEVEL_NORMAL) < 0)
+    if (usbconn_ftdi_common_open (conn, URJ_LOG_LEVEL_NORMAL) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* This sequence might seem weird and containing superfluous stuff.

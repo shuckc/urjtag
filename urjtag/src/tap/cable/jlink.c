@@ -177,6 +177,7 @@ jlink_get_status (urj_usbconn_libusb_param_t *params)
     if (result == 8)
     {
         int vref = data->usb_in_buffer[0] + (data->usb_in_buffer[1] << 8);
+        // @@@@ RFHH how can we handle this gracefully in liburjtag?
         urj_log (URJ_LOG_LEVEL_NORMAL,
                  "Vref = %d.%d TCK=%d TDI=%d TDO=%d TMS=%d TRES=%d TRST=%d\n",
                  vref / 1000, vref % 1000,
@@ -187,15 +188,17 @@ jlink_get_status (urj_usbconn_libusb_param_t *params)
                  data->usb_in_buffer[6], data->usb_in_buffer[7]);
         if (vref < 1500)
         {
-            urj_log (URJ_LOG_LEVEL_ERROR,
-                     "Vref too low. Possibly the target isn't powered or disconnected?\n");
-            result = -15;
+            urj_error_set (URJ_ERROR_USB, 
+                           "Vref too low. Possibly the target isn't powered or disconnected?");
+            result = -1;
         }
     }
     else
     {
-        urj_log (URJ_LOG_LEVEL_ERROR,
-                 "J-Link command 0x07 (get status) failed (%d)\n", result);
+        urj_error_set (URJ_ERROR_USB,
+                       "J-Link command 0x07 (get status) failed (%d)\n",
+                       result);
+        result = -1;
     }
 
     return result;
@@ -425,7 +428,7 @@ jlink_init (urj_cable_t *cable)
     }
     data = params->data;
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     jlink_tap_init (data);
@@ -443,6 +446,7 @@ jlink_init (urj_cable_t *cable)
     result = jlink_get_status (params);
     if (result < 0)
     {
+        // retain error state
         urj_log (URJ_LOG_LEVEL_ERROR,
                  "Resetting J-Link. Please retry the cable command.\n");
         usb_reset (params->handle);

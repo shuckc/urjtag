@@ -247,9 +247,7 @@ direct_connect (const char *devname)
 
     parport = direct_parport_alloc (port);
     if (!parport)
-    {
         return NULL;
-    }
 
     return parport;
 }

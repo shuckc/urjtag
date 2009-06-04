@@ -56,19 +56,20 @@ ei012_init (urj_cable_t *cable)
 {
     int data;
 
-    if (urj_tap_parport_open (cable->link.port))
-        return -1;
+    if (urj_tap_parport_open (cable->link.port) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     if ((data = urj_tap_parport_get_data (cable->link.port)) < 0)
     {
-        if (urj_tap_parport_set_data (cable->link.port, 1 << TRST))
-            return -1;
+        if (urj_tap_parport_set_data (cable->link.port,
+                                      1 << TRST) != URJ_STATUS_OK)
+            return URJ_STATUS_FAIL;
         PARAM_SIGNALS (cable) = URJ_POD_CS_TRST;
     }
     else
         PARAM_SIGNALS (cable) = ((data >> TRST) && 1) ? URJ_POD_CS_TRST : 0;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -83,12 +84,12 @@ ei012_clock (urj_cable_t *cable, int tms, int tdi, int n)
     for (i = 0; i < n; i++)
     {
         urj_tap_parport_set_data (cable->link.port,
-                                  (trst << TRST) | (0 << TCK) | (tms << TMS) |
-                                  (tdi << TDI));
+                                  (trst << TRST) | (0 << TCK) | (tms << TMS)
+                                  | (tdi << TDI));
         urj_tap_cable_wait (cable);
         urj_tap_parport_set_data (cable->link.port,
-                                  (trst << TRST) | (1 << TCK) | (tms << TMS) |
-                                  (tdi << TDI));
+                                  (trst << TRST) | (1 << TCK) | (tms << TMS)
+                                  | (tdi << TDI));
         urj_tap_cable_wait (cable);
     }
 
@@ -102,6 +103,7 @@ static int
 ei012_get_tdo (urj_cable_t *cable)
 {
     int trst = (PARAM_SIGNALS (cable) & URJ_POD_CS_TRST) ? 1 : 0;
+    int status;
 
     urj_tap_parport_set_data (cable->link.port, (trst << TRST) | (0 << TCK));
     PARAM_SIGNALS (cable) &=
@@ -109,7 +111,11 @@ ei012_get_tdo (urj_cable_t *cable)
 
     urj_tap_cable_wait (cable);
 
-    return (urj_tap_parport_get_status (cable->link.port) >> TDO) & 1;
+    status = urj_tap_parport_get_status (cable->link.port);
+    if (status == -1)
+        return status;
+
+    return (status >> TDO) & 1;
 }
 
 static int

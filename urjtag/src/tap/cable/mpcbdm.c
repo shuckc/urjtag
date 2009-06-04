@@ -64,7 +64,7 @@
 static int
 mpcbdm_init (urj_cable_t *cable)
 {
-    if (urj_tap_parport_open (cable->link.port))
+    if (urj_tap_parport_open (cable->link.port) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     urj_tap_parport_set_control (cable->link.port, 0);
@@ -101,12 +101,18 @@ static int
 mpcbdm_get_tdo (urj_cable_t *cable)
 {
     urj_tap_parport_set_data (cable->link.port, 0 << TCK);
+    int status;
+
     PARAM_SIGNALS (cable) &=
         ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 
     urj_tap_cable_wait (cable);
 
-    return (urj_tap_parport_get_status (cable->link.port) >> TDO) & 1;
+    status = urj_tap_parport_get_status (cable->link.port);
+    if (status == -1)
+        return status;
+
+    return (status >> TDO) & 1;
 }
 
 static int

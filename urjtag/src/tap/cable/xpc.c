@@ -305,7 +305,7 @@ xpcu_common_init (urj_cable_t *cable)
     uint16_t buf;
     struct usb_dev_handle *xpcu;
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;

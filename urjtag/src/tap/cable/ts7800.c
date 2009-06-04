@@ -155,7 +155,7 @@ ts7800_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     ts7800_params_t *cable_params;
 
-    if (urj_param_num (params) != 1)
+    if (urj_param_num (params) > 0)
     {
         urj_error_set (URJ_ERROR_SYNTAX,
                        _("This cable type does not accept parameters"));
@@ -200,7 +200,7 @@ ts7800_init (urj_cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
 
-    if (ts7800_gpio_open (cable))
+    if (ts7800_gpio_open (cable) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     p->signals = URJ_POD_CS_TRST;

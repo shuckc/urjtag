@@ -274,7 +274,7 @@ ft2232_generic_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* safe default values */
@@ -288,9 +288,8 @@ ft2232_generic_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     params->high_byte_value = 0;
@@ -317,7 +316,7 @@ ft2232_jtagkey_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
@@ -332,9 +331,8 @@ ft2232_jtagkey_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -372,7 +370,7 @@ ft2232_armusbocd_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
@@ -387,9 +385,8 @@ ft2232_armusbocd_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -427,7 +424,7 @@ ft2232_gnice_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* safe default values */
@@ -441,9 +438,8 @@ ft2232_gnice_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     params->high_byte_value = BITMASK_GNICE_nTRST;
@@ -473,7 +469,7 @@ ft2232_oocdlinks_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* static low byte value and direction */
@@ -487,9 +483,8 @@ ft2232_oocdlinks_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -527,7 +522,7 @@ ft2232_turtelizer2_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
@@ -544,9 +539,8 @@ ft2232_turtelizer2_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -577,7 +571,7 @@ ft2232_usbtojtagif_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
@@ -595,9 +589,8 @@ ft2232_usbtojtagif_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte
        default:
@@ -631,7 +624,7 @@ ft2232_signalyzer_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
@@ -648,9 +641,8 @@ ft2232_signalyzer_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     params->high_byte_value = 0;
@@ -677,7 +669,7 @@ ft2232_flyswatter_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* static low byte value and direction:
@@ -694,9 +686,8 @@ ft2232_flyswatter_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     /* Turn LED2 on */
@@ -724,7 +715,7 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (urj_tap_usbconn_open (cable->link.usb))
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     /* Check if cable is connected to the target and the target is powered on */
@@ -751,9 +742,8 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root,
                                params->low_byte_value | BITMASK_TMS);
     urj_tap_cable_cx_cmd_push (cmd_root,
-                               params->
-                               low_byte_dir | BITMASK_TCK | BITMASK_TDI |
-                               BITMASK_TMS);
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
 
     /* Set Data Bits High Byte */
     /* nLED=0 */
@@ -1310,9 +1300,8 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
                                        (params->
                                         low_byte_value | low_or) ^ low_xor);
             urj_tap_cable_cx_cmd_push (cmd_root,
-                                       params->
-                                       low_byte_dir | BITMASK_TCK |
-                                       BITMASK_TDI | BITMASK_TMS);
+                                       params->low_byte_dir | BITMASK_TCK
+                                       | BITMASK_TDI | BITMASK_TMS);
         }
 
         if (set_high)

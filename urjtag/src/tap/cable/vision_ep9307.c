@@ -198,7 +198,7 @@ ep9307_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     ep9307_params_t *cable_params;
 
-    if (urj_param_num (params) != 1)
+    if (urj_param_num (params) != 0)
     {
         urj_error_set (URJ_ERROR_SYNTAX,
                        _("This cable type does not accept parameters"));
@@ -235,7 +235,7 @@ ep9307_init (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
 
-    if (ep9307_gpio_open (cable))
+    if (ep9307_gpio_open (cable) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     ep9307_gpio_write (cable, 1 << TRST);

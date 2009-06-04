@@ -50,9 +50,9 @@ jim_cable_connect (urj_cable_t *cable, const urj_param_t *params[])
     jim_cable_params_t *cable_params;
     urj_jim_state_t *s;
 
-    if (urj_param_num (params) < 1)
+    if (urj_param_num (params) > 0)
     {
-        urj_error_set (URJ_ERROR_SYNTAX, _("not enough arguments"));
+        urj_error_set (URJ_ERROR_SYNTAX, _("too many arguments"));
         return URJ_STATUS_FAIL;
     }
 

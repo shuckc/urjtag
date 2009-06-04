@@ -272,14 +272,14 @@ wiggler_init (urj_cable_t *cable)
 {
     int data;
 
-    if (urj_tap_parport_open (cable->link.port))
+    if (urj_tap_parport_open (cable->link.port) != URJ_STATUS_OK)
         return -1;
 
     if ((data = urj_tap_parport_get_data (cable->link.port)) < 0)
     {
         if (urj_tap_parport_set_data (cable->link.port,
-                                      (PRM_TRST_ACT (cable)
-                                       | PRM_TRST_INACT (cable))
+                                      PRM_TRST_ACT (cable)
+                                      | PRM_TRST_INACT (cable)
                                       | PRM_UNUSED_BITS (cable))
             != URJ_STATUS_OK)
             return URJ_STATUS_FAIL;
@@ -319,7 +319,7 @@ wiggler_clock (urj_cable_t *cable, int tms, int tdi, int n)
                                   | PRM_TCK_ACT (cable)
                                   | (tms ? PRM_TMS_ACT (cable)
                                          : PRM_TMS_INACT (cable))
-                                  | (tdi ?  PRM_TDI_ACT (cable)
+                                  | (tdi ? PRM_TDI_ACT (cable)
                                          : PRM_TDI_INACT (cable))
                                   | PRM_UNUSED_BITS (cable));
         urj_tap_cable_wait (cable);
@@ -335,14 +335,19 @@ wiggler_clock (urj_cable_t *cable, int tms, int tdi, int n)
 static int
 wiggler_get_tdo (urj_cable_t *cable)
 {
+    int status;
+
     urj_tap_parport_set_data (cable->link.port, PRM_TRST_LVL (cable) |
                               PRM_TCK_INACT (cable) |
                               PRM_UNUSED_BITS (cable));
     urj_tap_cable_wait (cable);
 
-    return (urj_tap_parport_get_status (cable->link.port) &
-            (PRM_TDO_ACT (cable) | PRM_TDO_INACT (cable))) ^
-        PRM_TDO_ACT (cable) ? 0 : 1;
+    status = urj_tap_parport_get_status (cable->link.port);
+    if (status == -1)
+        return -1;
+
+    return (status & (PRM_TDO_ACT (cable) | PRM_TDO_INACT (cable)))
+             ^ PRM_TDO_ACT (cable) ? 0 : 1;
 }
 
 static int

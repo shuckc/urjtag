@@ -71,30 +71,47 @@ static int
 byteblaster_init (urj_cable_t *cable)
 {
     int BB_II = 0;
+    int status;
 
-    if (urj_tap_parport_open (cable->link.port))
-        return -1;
+    if (urj_tap_parport_open (cable->link.port) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     PARAM_SIGNALS (cable) = URJ_POD_CS_TRST;
 
     /* check if a ByteBlaster or ByteBlasterMV is connected */
     urj_tap_parport_set_data (cable->link.port, 1 << BB_CHECK);
-    if (!((urj_tap_parport_get_status (cable->link.port) >> BB_PRESENT) & 1))
+    status = urj_tap_parport_get_status (cable->link.port);
+    if (status == -1)
+        return URJ_STATUS_FAIL;
+    if (!((status >> BB_PRESENT) & 1))
         BB_II = 1;
     urj_tap_parport_set_data (cable->link.port, 0);
-    if ((urj_tap_parport_get_status (cable->link.port) >> BB_PRESENT) & 1)
+    status = urj_tap_parport_get_status (cable->link.port);
+    if (status == -1)
+        return URJ_STATUS_FAIL;
+    if ((status >> BB_PRESENT) & 1)
         BB_II = 1;
 
     /* check if the power supply is ok (only for ByteBlaster II) */
     /* if no ByteBlaster at all is connected this check will fail, too */
-    if ((BB_II)
-        && ((urj_tap_parport_get_status (cable->link.port) >> VCC_OK_N) & 1))
-        return -1;
+    if (BB_II)
+    {
+        status = urj_tap_parport_get_status (cable->link.port);
+        if (status == -1)
+            return URJ_STATUS_FAIL;
+        if ((status >> VCC_OK_N) & 1)
+        {
+            urj_error_set (URJ_ERROR_ILLEGAL_STATE, "Power supply not OK");
+            return URJ_STATUS_FAIL;
+        }
+    }
 
     /* Enable ByteBlaster */
-    urj_tap_parport_set_control (cable->link.port, BB_ENABLE);
+    if (urj_tap_parport_set_control (cable->link.port,
+                                     BB_ENABLE) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
-    return 0;
+    return URJ_STATUS_OK;
 }
 
 static void
@@ -125,12 +142,18 @@ static int
 byteblaster_get_tdo (urj_cable_t *cable)
 {
     urj_tap_parport_set_data (cable->link.port, 0 << TCK);
+    int status;
+
     PARAM_SIGNALS (cable) &=
         ~(URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS);
 
     urj_tap_cable_wait (cable);
 
-    return (urj_tap_parport_get_status (cable->link.port) >> TDO) & 1;
+    status = urj_tap_parport_get_status (cable->link.port);
+    if (status == -1)
+        return status;
+
+    return (status >> TDO) & 1;
 }
 
 static int
