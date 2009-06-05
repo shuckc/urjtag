@@ -37,7 +37,7 @@
 #include <urjtag/cable.h>
 #include <urjtag/chain.h>
 
-#include <urjtag/generic.h>
+#include "generic.h"
 
 #include <urjtag/cmd.h>
 
@@ -110,8 +110,8 @@ ep9307_gpio_open (urj_cable_t *cable)
     }
 
     /* Create the pointers to access the DeviceCfg and SysSWLock registers */
-    syscon_devcfg = (uint32_t *) (p->map_base + SYSCON_DEVICE_CONFIG);
-    syscon_sysswlock = (uint32_t *) (p->map_base + SYSCON_SWLOCK);
+    syscon_devcfg = (uint32_t *) ((char *) p->map_base + SYSCON_DEVICE_CONFIG);
+    syscon_sysswlock = (uint32_t *) ((char *) p->map_base + SYSCON_SWLOCK);
 
     /* Set the HonIDE bit in the DeviceCfg register so we can use Port H as GPIO */
     tmp = *((uint32_t *) syscon_devcfg);
@@ -141,8 +141,8 @@ ep9307_gpio_open (urj_cable_t *cable)
     }
 
     /* Create the pointers to access the PHDR and PHDDR registers */
-    p->gpio_PHDR = (uint32_t *) (p->map_base + GPIO_PHDR);
-    gpio_PHDDR = (uint32_t *) (p->map_base + GPIO_PHDDR);
+    p->gpio_PHDR = (uint32_t *) ((char *) p->map_base + GPIO_PHDR);
+    gpio_PHDDR = (uint32_t *) ((char *) p->map_base + GPIO_PHDDR);
 
     /* Set the GPIO pins as inputs/outputs as needed for the JTAG interface */
     tmp = *((uint32_t *) gpio_PHDDR);
@@ -173,10 +173,10 @@ ep9307_gpio_write (urj_cable_t *cable, uint8_t data)
     ep9307_params_t *p = cable->params;
     uint32_t tmp;
 
-    tmp = *((uint32_t *) p->gpio_PHDR);
+    tmp = *p->gpio_PHDR;
     tmp &= ~GPIO_OUTPUT_MASK;
     tmp |= data;
-    *((uint32_t *) p->gpio_PHDR) = tmp;
+    *p->gpio_PHDR = tmp;
     p->lastout = tmp;
 
     return 0;
@@ -188,7 +188,7 @@ ep9307_gpio_read (urj_cable_t *cable)
     ep9307_params_t *p = cable->params;
     uint32_t tmp;
 
-    tmp = *((uint32_t *) p->gpio_PHDR);
+    tmp = *p->gpio_PHDR;
 
     return tmp;
 }
@@ -257,11 +257,13 @@ ep9307_clock (urj_cable_t *cable, int tms, int tdi, int n)
     ep9307_params_t *p = cable->params;
     int bit_mask;
     int i;
+    int trst;
 
     tms = tms ? 1 : 0;
     tdi = tdi ? 1 : 0;
+    trst = (p->signals & URJ_POD_CS_TRST) ? 1 : 0;
 
-    bit_mask = (tms << TMS) | (tdi << TDI) | (p->trst << TRST);
+    bit_mask = (tms << TMS) | (tdi << TDI) | (trst << TRST);
 
     for (i = 0; i < n; i++)
     {
@@ -279,8 +281,11 @@ static int
 ep9307_get_tdo (urj_cable_t *cable)
 {
     ep9307_params_t *p = cable->params;
+    int trst;
 
-    ep9307_gpio_write (cable, (0 << TCK) | (p->trst << TRST));
+    trst = (p->signals & URJ_POD_CS_TRST) ? 1 : 0;
+
+    ep9307_gpio_write (cable, (0 << TCK) | (trst << TRST));
     urj_tap_cable_wait (cable);
 
     return (ep9307_gpio_read (cable) >> TDO) & 1;
@@ -308,11 +313,9 @@ ep9307_current_signals (urj_cable_t *cable)
 static int
 ep9307_set_signal (urj_cable_t *cable, int mask, int val)
 {
-    ep9307_params_t *p = cable->params;
-
     int prev_sigs = ep9307_current_signals (cable);
 
-    int mask &= (URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TRST);   // only these can be modified
+    mask &= (URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TRST);   // only these can be modified
 
     if (mask != 0)
     {
@@ -352,8 +355,8 @@ urj_cable_driver_t urj_tap_cable_ep9307_driver = {
     ep9307_clock,
     ep9307_get_tdo,
     urj_tap_cable_generic_transfer,
-    ep9307_set_trst,
-    ep9307_get_trst,
+    ep9307_set_signal,
+    ep9307_get_signal,
     urj_tap_cable_generic_flush_one_by_one,
     ep9307_help
 };

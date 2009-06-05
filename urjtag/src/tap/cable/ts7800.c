@@ -39,7 +39,7 @@
 #include <urjtag/cable.h>
 #include <urjtag/chain.h>
 
-#include <urjtag/generic.h>
+#include "generic.h"
 
 #include <cmd.h>
 
@@ -105,7 +105,7 @@ ts7800_gpio_open (urj_cable_t *cable)
     }
 
     /* Create the pointers to access the GPIO registers */
-    p->gpio_base = (uint32_t *) p->map_base;
+    p->gpio_base = p->map_base;
 
     /* Set the GPIO pins as inputs/outputs as needed for the JTAG interface */
     p->gpio_base[GPIO_DIR] =
@@ -133,7 +133,6 @@ ts7800_gpio_close (urj_cable_t *cable)
 static int
 ts7800_gpio_write (urj_cable_t *cable, uint8_t data)
 {
-    int sigs;
     ts7800_params_t *p = cable->params;
 
     p->gpio_base[GPIO_OUT] = p->lastout = (p->lastout & GPIO_BITMASK) | data;
@@ -249,9 +248,8 @@ static int
 ts7800_current_signals (urj_cable_t *cable)
 {
     ts7800_params_t *p = cable->params;
+    int sigs = p->signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK);
 
-    int sigs =
-        p->signals & ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK);
     if (p->lastout & (1 << TCK))
         sigs |= URJ_POD_CS_TCK;
     if (p->lastout & (1 << TDI))
@@ -265,18 +263,16 @@ ts7800_current_signals (urj_cable_t *cable)
 static int
 ts7800_set_signal (urj_cable_t *cable, int mask, int val)
 {
-    ts7800_params_t *p = cable->params;
-
-    int prev_sigs = current_signals (cable);
+    int prev_sigs = ts7800_current_signals (cable);
 
     mask &= (URJ_POD_CS_TDI | URJ_POD_CS_TCK | URJ_POD_CS_TMS); // only these can be modified
 
     if (mask != 0)
     {
-        sigs = (prev_sigs & ~mask) | (val & mask);
-        tms = (sigs & URJ_POD_CS_TMS) ? (1 << TMS) : 0;
-        tdi = (sigs & URJ_POD_CS_TDI) ? (1 << TDI) : 0;
-        tck = (sigs & URJ_POD_CS_TCK) ? (1 << TCK) : 0;
+        int sigs = (prev_sigs & ~mask) | (val & mask);
+        int tms = (sigs & URJ_POD_CS_TMS) ? (1 << TMS) : 0;
+        int tdi = (sigs & URJ_POD_CS_TDI) ? (1 << TDI) : 0;
+        int tck = (sigs & URJ_POD_CS_TCK) ? (1 << TCK) : 0;
         ts7800_gpio_write (cable, tms | tdi | tck);
     }
 
@@ -286,9 +282,7 @@ ts7800_set_signal (urj_cable_t *cable, int mask, int val)
 static int
 ts7800_get_signal (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
-    ts7800_params_t *p = cable->params;
-
-    return (current_signals (cable) & sig) ? 1 : 0;
+    return (ts7800_current_signals (cable) & sig) ? 1 : 0;
 }
 
 static void

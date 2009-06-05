@@ -1,3 +1,8 @@
+2009-06-05  Rutger Hofman <rfhh>
+
+  * src/tap/cable/ts7800.c, src/tap/cable/vision_ep9307.c: make them compile
+    again
+
 2009-06-04  Arnim Laeuger  <arniml>
 
   * src/bsdl/bsdl_flex.l: force Base = DECIMAL for BOUNDARY_LENGTH attribute

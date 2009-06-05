@@ -62,7 +62,7 @@ cmd_pod_run (urj_chain_t *chain, char *params[])
         if (!eq)
         {
             urj_error_set (URJ_ERROR_SYNTAX,
-                           "parameter format should be 'SIGNAL=#', not '%s'",
+                           "parameter format should be 'SIGNAL=[0|1]', not '%s'",
                            params[j]);
             return URJ_STATUS_FAIL;
         }
