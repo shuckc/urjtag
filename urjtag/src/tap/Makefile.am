@@ -92,6 +92,7 @@ endif
 
 if ENABLE_CABLE_WIGGLER
 libtap_la_SOURCES += \
+	cable/minimal.c \
 	cable/wiggler.c \
 	cable/wiggler2.c
 endif

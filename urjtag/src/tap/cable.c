@@ -66,9 +66,9 @@ extern urj_cable_driver_t urj_tap_cable_lattice_driver;
 extern urj_cable_driver_t urj_tap_cable_mpcbdm_driver;
 extern urj_cable_driver_t urj_tap_cable_triton_driver;
 extern urj_cable_driver_t urj_tap_cable_jim_driver;
+extern urj_cable_driver_t urj_tap_cable_minimal_driver;
 extern urj_cable_driver_t urj_tap_cable_wiggler_driver;
 extern urj_cable_driver_t urj_tap_cable_wiggler2_driver;
-extern urj_cable_driver_t urj_tap_cable_wiggler_driver;
 extern urj_cable_driver_t urj_tap_cable_xpc_int_driver;
 extern urj_cable_driver_t urj_tap_cable_xpc_ext_driver;
 extern urj_cable_driver_t urj_tap_cable_jlink_driver;
@@ -128,6 +128,7 @@ urj_cable_driver_t *urj_tap_cable_drivers[] = {
     &urj_tap_cable_jim_driver,
 #endif
 #ifdef ENABLE_CABLE_WIGGLER
+    &urj_tap_cable_minimal_driver,
     &urj_tap_cable_wiggler_driver,
     &urj_tap_cable_wiggler2_driver,
 #endif
