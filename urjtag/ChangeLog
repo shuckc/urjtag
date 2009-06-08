@@ -1,3 +1,7 @@
+2009-06-08  Arnim Laeuger  <arniml>
+
+  * MAINTAINERS: new
+
 2009-06-05  Rutger Hofman <rfhh>
 
   * src/tap/cable/ts7800.c, src/tap/cable/vision_ep9307.c: make them compile
