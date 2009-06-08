@@ -48,4 +48,5 @@
 00101110000	brecis		Brecis (PMC-Sierra)
 00111101001	marvell		Marvell
 00110101011	marvell		Marvell
-11110000111	arm  		ARM
+# collides with other ARM-based chips
+#11110000111	arm  		ARM

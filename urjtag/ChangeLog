@@ -1,5 +1,8 @@
 2009-06-08  Arnim Laeuger  <arniml>
 
+  * data/MANUFACTURERS: commented manufacturer ARM
+    [ 2778313 ] Failed to detect ARM cores.
+
   * MAINTAINERS: new
 
 2009-06-05  Rutger Hofman <rfhh>
