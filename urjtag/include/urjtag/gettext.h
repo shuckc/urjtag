@@ -16,7 +16,7 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
    USA.  */
 
-// @@@@ RFHH this has better be an internal include file
+/* @@@@ RFHH this has better be an internal include file */
 
 #ifndef _LIBGETTEXT_H
 #define _LIBGETTEXT_H 1

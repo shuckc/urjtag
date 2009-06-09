@@ -42,7 +42,7 @@ urj_bsdl_globs_t;
         bsdl.debug = 0; \
     } while (0)
 
-// @@@@ RFHH ToDo: let urj_bsdl_read_file also return URJ_STATUS_...
+/* @@@@ RFHH ToDo: let urj_bsdl_read_file also return URJ_STATUS_... */
 /**
  * @return
  *   < 0 : Error occured, parse/syntax problems or out of memory
@@ -51,7 +51,7 @@ urj_bsdl_globs_t;
  */
 int urj_bsdl_read_file (urj_chain_t *, const char *, int, const char *);
 void urj_bsdl_set_path (urj_chain_t *, const char *);
-// @@@@ RFHH ToDo: let urj_bsdl_scan_files also return URJ_STATUS_...
+/* @@@@ RFHH ToDo: let urj_bsdl_scan_files also return URJ_STATUS_... */
 /**
  * @return
  *   < 0 : Error occured, parse/syntax problems or out of memory

@@ -51,35 +51,35 @@ urj_bus_area_t;
 
 typedef enum URJ_BUS_PARAM_KEY
 {
-    URJ_BUS_PARAM_KEY_MUX,      // bool                         mpc5200
-    // avr32: mode = OCD | HSBC | HSBU | x8 | x16 | x32         avr32
-    URJ_BUS_PARAM_KEY_OCD,      // bool                         avr32
-    URJ_BUS_PARAM_KEY_HSBC,     // bool                         avr32
-    URJ_BUS_PARAM_KEY_HSBU,     // bool                         avr32
-    URJ_BUS_PARAM_KEY_X8,       // bool                         avr32
-    URJ_BUS_PARAM_KEY_X16,      // bool                         avr32
-    URJ_BUS_PARAM_KEY_X32,      // bool                         avr32
-    URJ_BUS_PARAM_KEY_WIDTH,    // 0=auto 8 16 32 64
-                                // aliased as x8 x16 x32 bool   avr32
-                                // 8 32 64                      mpc824
-                                // aliased as AMODE             prototype
-    URJ_BUS_PARAM_KEY_OPCODE,   // string                       fjmem
-    URJ_BUS_PARAM_KEY_LEN,      // ulong                        fjmem
-    URJ_BUS_PARAM_KEY_AMODE,    // alias for WIDTH: 0=auto 8 16 32  prototype
-    URJ_BUS_PARAM_KEY_ALSB,     // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_AMSB,     // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_DLSB,     // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_DMSB,     // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_CS,       // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_NCS,      // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_OE,       // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_NOE,      // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_WE,       // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_NWE,      // string (= signal name)       prototype
-    URJ_BUS_PARAM_KEY_REVBITS,  // bool                         mpc824
-    URJ_BUS_PARAM_KEY_HELP,     // bool                         mpc824
-    URJ_BUS_PARAM_KEY_DBGaDDR,  // bool                         mpc824
-    URJ_BUS_PARAM_KEY_DBGdATA,  // bool                         mpc824
+    URJ_BUS_PARAM_KEY_MUX,      /* bool                         mpc5200 */
+    /* avr32: mode = OCD | HSBC | HSBU | x8 | x16 | x32         avr32 */
+    URJ_BUS_PARAM_KEY_OCD,      /* bool                         avr32 */
+    URJ_BUS_PARAM_KEY_HSBC,     /* bool                         avr32 */
+    URJ_BUS_PARAM_KEY_HSBU,     /* bool                         avr32 */
+    URJ_BUS_PARAM_KEY_X8,       /* bool                         avr32 */
+    URJ_BUS_PARAM_KEY_X16,      /* bool                         avr32 */
+    URJ_BUS_PARAM_KEY_X32,      /* bool                         avr32 */
+    URJ_BUS_PARAM_KEY_WIDTH,    /* 0=auto 8 16 32 64 */
+                                /* aliased as x8 x16 x32 bool   avr32 */
+                                /* 8 32 64                      mpc824 */
+                                /* aliased as AMODE             prototype */
+    URJ_BUS_PARAM_KEY_OPCODE,   /* string                       fjmem */
+    URJ_BUS_PARAM_KEY_LEN,      /* ulong                        fjmem */
+    URJ_BUS_PARAM_KEY_AMODE,    /* alias for WIDTH: 0=auto 8 16 32  prototype */
+    URJ_BUS_PARAM_KEY_ALSB,     /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_AMSB,     /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_DLSB,     /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_DMSB,     /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_CS,       /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_NCS,      /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_OE,       /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_NOE,      /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_WE,       /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_NWE,      /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_REVBITS,  /* bool                         mpc824 */
+    URJ_BUS_PARAM_KEY_HELP,     /* bool                         mpc824 */
+    URJ_BUS_PARAM_KEY_DBGaDDR,  /* bool                         mpc824 */
+    URJ_BUS_PARAM_KEY_DBGdATA,  /* bool                         mpc824 */
 }
 urj_bus_param_key_t;
 
@@ -97,13 +97,13 @@ struct urj_bus_driver
     int (*area) (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*read_start) (urj_bus_t *bus, uint32_t adr);
-    // @@@@ RFHH need to return status
+    /* @@@@ RFHH need to return status */
     uint32_t (*read_next) (urj_bus_t *bus, uint32_t adr);
-    // @@@@ RFHH need to return status
+    /* @@@@ RFHH need to return status */
     uint32_t (*read_end) (urj_bus_t *bus);
-    // @@@@ RFHH need to return status
+    /* @@@@ RFHH need to return status */
     uint32_t (*read) (urj_bus_t *bus, uint32_t adr);
-    // @@@@ RFHH need to return status
+    /* @@@@ RFHH need to return status */
     void (*write) (urj_bus_t *bus, uint32_t adr, uint32_t data);
     int (*init) (urj_bus_t *bus);
 };

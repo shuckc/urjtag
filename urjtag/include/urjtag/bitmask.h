@@ -32,8 +32,8 @@
  *
  */
 
-// @@@@ RFHH candidate to move to internal include file, and
-// @@@@ RFHH the definition of URJ_BIT(b) should go into types.h
+/* @@@@ RFHH candidate to move to internal include file, and */
+/* @@@@ RFHH the definition of URJ_BIT(b) should go into types.h */
 
 #ifndef URJ_BITMASK_H
 #define URJ_BITMASK_H

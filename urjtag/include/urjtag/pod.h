@@ -26,15 +26,15 @@
 
 typedef enum urj_pod_sigsel
 {
-    URJ_POD_CS_NONE = 0,        // no/invalid signal
-    URJ_POD_CS_TDI = (1 << 0),  // out: JTAG/SPI data in
-    URJ_POD_CS_TCK = (1 << 1),  // out: JTAG/SPI clock
-    URJ_POD_CS_TMS = (1 << 2),  // out: JTAG test mode select/SPI slave select
-    URJ_POD_CS_TRST = (1 << 3), // out: JTAG TAP reset
-    URJ_POD_CS_RESET = (1 << 4),        // out: system reset
-    URJ_POD_CS_SCK = (1 << 5),  // out: I2C clock (not yet used)
-    URJ_POD_CS_SDA = (1 << 6),  // inout: I2C data (not yet used)
-    URJ_POD_CS_SS = (1 << 7),   // out: SPI slave select (not yet used)
+    URJ_POD_CS_NONE = 0,        /* no/invalid signal */
+    URJ_POD_CS_TDI = (1 << 0),  /* out: JTAG/SPI data in */
+    URJ_POD_CS_TCK = (1 << 1),  /* out: JTAG/SPI clock */
+    URJ_POD_CS_TMS = (1 << 2),  /* out: JTAG test mode select/SPI slave select */
+    URJ_POD_CS_TRST = (1 << 3), /* out: JTAG TAP reset */
+    URJ_POD_CS_RESET = (1 << 4),        /* out: system reset */
+    URJ_POD_CS_SCK = (1 << 5),  /* out: I2C clock (not yet used) */
+    URJ_POD_CS_SDA = (1 << 6),  /* inout: I2C data (not yet used) */
+    URJ_POD_CS_SS = (1 << 7),   /* out: SPI slave select (not yet used) */
 }
 urj_pod_sigsel_t;
 
