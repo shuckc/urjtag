@@ -683,8 +683,16 @@ urj_tap_cable_parport_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
                                urj_cable_parport_devtype_t devtype,
                                const char *devname, const urj_param_t *params[])
 {
-    urj_cable_t *cable = urj_tap_cable_create (chain, driver);
+    urj_cable_t *cable;
 
+    if (driver->device_type != URJ_CABLE_DEVICE_PARPORT)
+    {
+        urj_error_set (URJ_ERROR_INVALID,
+                       "parport cable needs parport_connect");
+        return NULL;
+    }
+
+    cable = urj_tap_cable_create (chain, driver);
     if (cable == NULL)
         return NULL;
 
@@ -705,8 +713,15 @@ urj_cable_t *
 urj_tap_cable_usb_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
                            const urj_param_t *params[])
 {
-    urj_cable_t *cable = urj_tap_cable_create (chain, driver);
+    urj_cable_t *cable;
 
+    if (driver->device_type != URJ_CABLE_DEVICE_USB)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "USB cable needs usb_connect");
+        return NULL;
+    }
+
+    cable = urj_tap_cable_create (chain, driver);
     if (cable == NULL)
         return NULL;
 
@@ -726,8 +741,15 @@ urj_cable_t *
 urj_tap_cable_other_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
                              const urj_param_t *params[])
 {
-    urj_cable_t *cable = urj_tap_cable_create (chain, driver);
+    urj_cable_t *cable;
 
+    if (driver->device_type != URJ_CABLE_DEVICE_OTHER)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "'other' cable needs other_connect");
+        return NULL;
+    }
+
+    cable = urj_tap_cable_create (chain, driver);
     if (cable == NULL)
         return NULL;
 

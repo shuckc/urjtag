@@ -1,3 +1,9 @@
+2009-06-05  Rutger Hofman <rfhh>
+
+  * src/tap/cable.c: sanity check on driver device type at connect time
+  * have only /* style comments in the public includes, since that allows
+    a client app to compile with -ansi
+
 2009-06-08  Arnim Laeuger  <arniml>
 
   * src/tap/cable.c, src/tap/cable/minimal.c, src/tap/Makefile.am:
