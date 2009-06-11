@@ -162,17 +162,22 @@ bf533_stamp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 }
 
 static void
-select_flash (urj_bus_t *bus)
+select_flash (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
 
     urj_part_set_signal (p, PF[0], 1, 0);
     urj_part_set_signal (p, PF[1], 1, 0);
 
-    urj_part_set_signal (p, AMS[0], 1, 0);
+    urj_part_set_signal (p, AMS[0], 1, 1);
     urj_part_set_signal (p, AMS[1], 1, 1);
     urj_part_set_signal (p, AMS[2], 1, 1);
     urj_part_set_signal (p, AMS[3], 1, 1);
+    if (adr >= 0x20000000 && adr <= 0x203fffff) {
+        uint32_t ams_idx;
+        ams_idx = (adr >> 20) & 0x3;
+        urj_part_set_signal (p, AMS[ams_idx], 1, 0);
+    }
 
     urj_part_set_signal (p, SRAS, 1, 1);
     urj_part_set_signal (p, SCAS, 1, 1);
@@ -240,7 +245,7 @@ bf533_stamp_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    select_flash (bus);
+    select_flash (bus, adr);
     urj_part_set_signal (p, AOE, 1, 0);
     urj_part_set_signal (p, ARE, 1, 0);
     urj_part_set_signal (p, AWE, 1, 1);
@@ -312,8 +317,10 @@ bf533_stamp_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_log (URJ_LOG_LEVEL_COMM, "Writing %04lX to %08lX...\n",
              (long unsigned) data, (long unsigned) adr);
 
-    select_flash (bus);
+    select_flash (bus, adr);
     urj_part_set_signal (p, ARE, 1, 1);
+    urj_part_set_signal (p, AOE, 1, 1);
+    urj_part_set_signal (p, AWE, 1, 1);
 
     setup_address (bus, adr);
     setup_data (bus, data);
