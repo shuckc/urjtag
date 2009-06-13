@@ -60,7 +60,7 @@ typedef struct
 }
 urj_parport_driver_t;
 
-struct urj_parport
+struct URJ_PARPORT
 {
     urj_parport_driver_t *driver;
     void *params;

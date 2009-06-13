@@ -32,8 +32,8 @@
 /* description of a command
    the buffer can contain one or more commands if receive count
    is zero for all of them */
-typedef struct urj_tap_cable_cx_cmd urj_tap_cable_cx_cmd_t;
-struct urj_tap_cable_cx_cmd
+typedef struct URJ_TAP_CABLE_CX_CMD urj_tap_cable_cx_cmd_t;
+struct URJ_TAP_CABLE_CX_CMD
 {
     urj_tap_cable_cx_cmd_t *next;
     uint32_t buf_len;
@@ -42,12 +42,12 @@ struct urj_tap_cable_cx_cmd
     uint32_t to_recv;
 };
 
-struct urj_tap_cable_cx_cmd_root
+struct URJ_TAP_CABLE_CX_CMD_ROOT
 {
     urj_tap_cable_cx_cmd_t *first;
     urj_tap_cable_cx_cmd_t *last;
 };
-typedef struct urj_tap_cable_cx_cmd_root urj_tap_cable_cx_cmd_root_t;
+typedef struct URJ_TAP_CABLE_CX_CMD_ROOT urj_tap_cable_cx_cmd_root_t;
 
 int urj_tap_cable_cx_cmd_space (urj_tap_cable_cx_cmd_root_t *cmd_root,
                                 int max_len);

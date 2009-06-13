@@ -65,9 +65,9 @@ typedef struct
 }
 urj_jim_shift_reg_t;
 
-typedef struct urj_jim_device urj_jim_device_t;
+typedef struct URJ_JIM_DEVICE urj_jim_device_t;
 
-struct urj_jim_device
+struct URJ_JIM_DEVICE
 {
     urj_jim_device_t *prev;
 
@@ -85,7 +85,7 @@ struct urj_jim_device
     int tdo_buffer;
 };
 
-typedef struct urj_jim_state
+typedef struct URJ_JIM_STATE
 {
     int trst;
     uint8_t *shmem;
@@ -94,9 +94,9 @@ typedef struct urj_jim_state
 }
 urj_jim_state_t;
 
-typedef struct urj_jim_bus_device urj_jim_bus_device_t;
+typedef struct URJ_JIM_BUS_DEVICE urj_jim_bus_device_t;
 
-struct urj_jim_bus_device
+struct URJ_JIM_BUS_DEVICE
 {
     int width;                  /* bytes */
     int size;                   /* words (each <width> bytes) */

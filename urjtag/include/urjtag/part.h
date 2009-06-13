@@ -31,7 +31,7 @@
 #define URJ_PART_PART_MAXLEN            20
 #define URJ_PART_STEPPING_MAXLEN         8
 
-struct urj_part
+struct URJ_PART
 {
     urj_tap_register_t *id;
     char *alias;                /* djf refdes */
@@ -91,7 +91,7 @@ urj_part_instruction_t *urj_part_instruction_define (urj_part_t *part,
  * parts
  */
 
-struct urj_parts
+struct URJ_PARTS
 {
     int len;
     urj_part_t **parts;

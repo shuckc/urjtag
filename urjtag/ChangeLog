@@ -1,3 +1,12 @@
+2009-06-13  Rutger Hofman <rfhh>
+
+  * include/urjtag/*.h: change all struct/enum definitions from
+    typedef struct urj_bla urj_bla_t into typedef struct URJ_BLA urj_bla_t
+    because swig otherwise generates name collisions
+  * Makefile.am, urjtag.i: add the dumbest possible swig target that generates
+    swig for everything referenced include/urjtag/urjtag.h. This might even
+    turn out to be useful once the API has been cleaned up.
+
 2009-06-11  Arnim Laeuger  <arniml>
 
   * src/bus/bf533_stamp.c: [ 2804509 ] bf533_stamp bus driver enchancement

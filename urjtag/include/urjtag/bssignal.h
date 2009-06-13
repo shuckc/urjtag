@@ -28,7 +28,7 @@
 
 #include "types.h"
 
-struct urj_part_signal
+struct URJ_PART_SIGNAL
 {
     char *name;
     char *pin;                  /* djf hack pin number from bsdl */
@@ -37,7 +37,7 @@ struct urj_part_signal
     urj_bsbit_t *output;
 };
 
-struct urj_part_salias
+struct URJ_PART_SALIAS
 {
     char *name;
     urj_part_salias_t *next;

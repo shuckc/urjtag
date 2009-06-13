@@ -39,7 +39,7 @@
 
 #include "types.h"
 
-typedef struct urj_flash_cfi_array urj_flash_cfi_array_t;
+typedef struct URJ_FLASH_CFI_ARRAY urj_flash_cfi_array_t;
 
 typedef struct
 {

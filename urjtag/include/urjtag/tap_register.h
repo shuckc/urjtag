@@ -28,7 +28,7 @@
 #include "types.h"
 #include <stdint.h>
 
-struct urj_tap_register
+struct URJ_TAP_REGISTER
 {
     char *data;         /* (public, r/w) register data */
     int len;            /* (public, r/o) register length */

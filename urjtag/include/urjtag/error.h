@@ -31,7 +31,7 @@
 /**
  * Error types
  */
-typedef enum urj_error
+typedef enum URJ_ERROR
 {
     URJ_ERROR_OK        = 0,
     URJ_ERROR_ALREADY,
@@ -78,7 +78,7 @@ urj_error_t;
 /**
  * Error state.
  */
-typedef struct urj_error_state
+typedef struct URJ_ERROR_STATE
 {
     urj_error_t         errnum;                 /**< error number */
     int                 sys_errno;              /**< errno if URJ_ERROR_IO */

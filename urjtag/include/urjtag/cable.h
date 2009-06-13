@@ -34,9 +34,9 @@
 #include "parport.h"
 #include "pod.h"
 
-typedef struct urj_cable_driver urj_cable_driver_t;
+typedef struct URJ_CABLE_DRIVER urj_cable_driver_t;
 
-typedef enum urj_cable_flush_amount
+typedef enum URJ_CABLE_FLUSH_AMOUNT
 {
     URJ_TAP_CABLE_OPTIONALLY,
     URJ_TAP_CABLE_TO_OUTPUT,
@@ -62,7 +62,7 @@ typedef enum URJ_CABLE_PARAM_KEY
 }
 urj_cable_param_key_t;
 
-struct urj_cable_driver
+struct URJ_CABLE_DRIVER
 {
     const char *name;
     const char *description;
@@ -95,9 +95,9 @@ struct urj_cable_driver
     void (*help) (urj_log_level_t ll, const char *);
 };
 
-typedef struct urj_cable_queue urj_cable_queue_t;
+typedef struct URJ_CABLE_QUEUE urj_cable_queue_t;
 
-struct urj_cable_queue
+struct URJ_CABLE_QUEUE
 {
     enum
     {
@@ -136,9 +136,9 @@ struct urj_cable_queue
     } arg;
 };
 
-typedef struct urj_cable_queue_info urj_cable_queue_info_t;
+typedef struct URJ_CABLE_QUEUE_INFO urj_cable_queue_info_t;
 
-struct urj_cable_queue_info
+struct URJ_CABLE_QUEUE_INFO
 {
     urj_cable_queue_t *data;
     int max_items;
@@ -147,7 +147,7 @@ struct urj_cable_queue_info
     int next_free;
 };
 
-struct urj_cable
+struct URJ_CABLE
 {
     urj_cable_driver_t *driver;
     union

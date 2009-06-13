@@ -26,25 +26,25 @@
 #ifndef URJ_URJ_TYPES_H
 #define URJ_URJ_TYPES_H
 
-typedef struct urj_bus urj_bus_t;
-typedef struct urj_bus_driver urj_bus_driver_t;
-typedef struct urj_chain urj_chain_t;
-typedef struct urj_cable urj_cable_t;
-typedef struct urj_usbconn urj_usbconn_t;
-typedef struct urj_parport urj_parport_t;
-typedef struct urj_part urj_part_t;
-typedef struct urj_parts urj_parts_t;
-typedef struct urj_part_signal urj_part_signal_t;
-typedef struct urj_part_salias urj_part_salias_t;
-typedef struct urj_part_instruction urj_part_instruction_t;
-typedef struct urj_data_register urj_data_register_t;
-typedef struct urj_bsbit urj_bsbit_t;
-typedef struct urj_tap_register urj_tap_register_t;
+typedef struct URJ_BUS urj_bus_t;
+typedef struct URJ_BUS_DRIVER urj_bus_driver_t;
+typedef struct URJ_CHAIN urj_chain_t;
+typedef struct URJ_CABLE urj_cable_t;
+typedef struct URJ_USBCONN urj_usbconn_t;
+typedef struct URJ_PARPORT urj_parport_t;
+typedef struct URJ_PART urj_part_t;
+typedef struct URJ_PARTS urj_parts_t;
+typedef struct URJ_PART_SIGNAL urj_part_signal_t;
+typedef struct URJ_PART_SALIAS urj_part_salias_t;
+typedef struct URJ_PART_INSTRUCTION urj_part_instruction_t;
+typedef struct URJ_DATA_REGISTER urj_data_register_t;
+typedef struct URJ_BSBIT urj_bsbit_t;
+typedef struct URJ_TAP_REGISTER urj_tap_register_t;
 
 /**
  * Log levels
  */
-typedef enum urj_log_level
+typedef enum URJ_LOG_LEVEL
 {
     URJ_LOG_LEVEL_ALL,          /**< every single bit as it is transmitted */
     URJ_LOG_LEVEL_COMM,         /**< low level communication details */

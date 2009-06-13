@@ -166,7 +166,7 @@ typedef struct cfi_query_structure
     urj_flash_cfi_device_geometry_t device_geometry;
 } urj_flash_cfi_query_structure_t;
 
-struct urj_flash_cfi_chip
+struct URJ_FLASH_CFI_CHIP
 {
     int width;                  /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
     urj_flash_cfi_query_structure_t cfi;

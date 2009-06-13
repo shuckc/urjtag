@@ -29,7 +29,7 @@
 
 #define URJ_DATA_REGISTER_MAXLEN        32
 
-struct urj_data_register
+struct URJ_DATA_REGISTER
 {
     char name[URJ_DATA_REGISTER_MAXLEN + 1];    /* (public) register name */
     urj_tap_register_t *in;     /* (public) register value clocked in */

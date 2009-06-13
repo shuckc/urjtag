@@ -58,7 +58,7 @@ typedef struct
 }
 urj_usbconn_driver_t;
 
-struct urj_usbconn
+struct URJ_USBCONN
 {
     urj_usbconn_driver_t *driver;
     void *params;

@@ -45,3 +45,10 @@ EXTRA_DIST = \
 	tools/config.rpath
 
 ACLOCAL_AMFLAGS = -I m4
+
+swig:
+	swig \
+		-python \
+		-includeall -ignoremissing -Iinclude/urjtag \
+		-module urjtag \
+		urjtag.i

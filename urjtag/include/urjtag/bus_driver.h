@@ -83,7 +83,7 @@ typedef enum URJ_BUS_PARAM_KEY
 }
 urj_bus_param_key_t;
 
-struct urj_bus_driver
+struct URJ_BUS_DRIVER
 {
     const char *name;
     const char *description;
@@ -108,7 +108,7 @@ struct urj_bus_driver
     int (*init) (urj_bus_t *bus);
 };
 
-struct urj_bus
+struct URJ_BUS
 {
     urj_chain_t *chain;
     urj_part_t *part;

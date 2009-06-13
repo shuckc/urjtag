@@ -30,7 +30,7 @@
 /**
  * Log state.
  */
-typedef struct urj_log_state
+typedef struct URJ_LOG_STATE
 {
     urj_log_level_t     level;                  /**< logging level */
     int               (*out_vprintf) (const char *fmt, va_list ap);

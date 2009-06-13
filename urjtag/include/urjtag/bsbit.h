@@ -37,7 +37,7 @@
 
 #define URJ_BSBIT_DONTCARE      '?'
 
-struct urj_bsbit
+struct URJ_BSBIT
 {
     int bit;
     char *name;

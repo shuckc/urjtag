@@ -42,9 +42,9 @@
 #include <urjtag/types.h>
 #include <urjtag/log.h>
 
-typedef struct urj_flash_cfi_chip urj_flash_cfi_chip_t;
+typedef struct URJ_FLASH_CFI_CHIP urj_flash_cfi_chip_t;
 
-struct urj_flash_cfi_array
+struct URJ_FLASH_CFI_ARRAY
 {
     urj_bus_t *bus;
     uint32_t address;

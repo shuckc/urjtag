@@ -29,7 +29,7 @@
 
 #define URJ_INSTRUCTION_MAXLEN_INSTRUCTION      20
 
-struct urj_part_instruction
+struct URJ_PART_INSTRUCTION
 {
     char name[URJ_INSTRUCTION_MAXLEN_INSTRUCTION + 1];
     urj_tap_register_t *value;

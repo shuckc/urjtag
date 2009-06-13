@@ -36,7 +36,7 @@
 #define URJ_CHAIN_EXITMODE_EXIT1        2
 #define URJ_CHAIN_EXITMODE_UPDATE       3
 
-struct urj_chain
+struct URJ_CHAIN
 {
     int state;
     urj_parts_t *parts;
