@@ -131,7 +131,7 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
         case URJ_BUS_PARAM_KEY_HELP:
             urj_log (URJ_LOG_LEVEL_NORMAL,
                      _("Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n\n"
-                     "   WIDTH      data bus width - 8, 32, 64 (default 8)\n"
+                     "   WIDTH      data bus width - 8, 16, 32, 64 (default 8)\n"
                      "   revbits    reverse bits in data bus (default - no)\n"
                      "   dbgAddr    display address bus state (default - no)\n"
                      "   dbgData    display data bus state (default - no)\n"));

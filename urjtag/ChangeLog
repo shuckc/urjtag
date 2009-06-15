@@ -1,6 +1,6 @@
 2009-06-15  Arnim Laeuger  <arniml>
 
-  * src/bus/mpc824x.c: experimental support for x16 mode
+  * src/bus/mpc824x.c: experimental support for x16 mode, including help 
 
 2009-06-13  Rutger Hofman <rfhh>
 
