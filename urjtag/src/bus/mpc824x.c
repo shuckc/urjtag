@@ -101,6 +101,10 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                 BUS_WIDTH = 8;
                 dfltWidth = 0;
                 break;
+            case 16:
+                BUS_WIDTH = 16;
+                dfltWidth = 0;
+                break;
             case 32:
                 BUS_WIDTH = 32;
                 dfltWidth = 0;
@@ -114,7 +118,7 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                 break;
             default:
                 urj_error_set (URJ_ERROR_UNSUPPORTED,
-                               _("   Only 8,32 and 64 bus width are supported for Banks 0 and 1"));
+                               _("   Only 8, 16, 32 and 64 bus width are supported for Banks 0 and 1"));
                 return NULL;
             }
             break;
@@ -314,6 +318,10 @@ setup_address (urj_bus_t *bus, uint32_t a)
         for (i = 0; i < 23; i++)
             urj_part_set_signal (p, AR[i], 1, (a >> i) & 1);
         break;
+    case 16:                   /* 16-bit data bus */
+        for (i = 0; i < 22; i++)
+            urj_part_set_signal (p, AR[i], 1, (a >> (i + 1)) & 1);
+        break;
     case 32:                   /* 32-bit data bus */
         for (i = 0; i < 21; i++)
             urj_part_set_signal (p, AR[i], 1, (a >> (i + 2)) & 1);
@@ -336,6 +344,9 @@ setup_address (urj_bus_t *bus, uint32_t a)
         {
         case 8:
             k = 23;
+            break;
+        case 16:
+            k = 22;
             break;
         case 32:
             k = 21;
@@ -403,6 +414,8 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
         int bytes = 0;
         if (BUS_WIDTH == 8)
             bytes = 1;
+        else if (BUS_WIDTH == 16)
+            bytes = 2;
         else if (BUS_WIDTH == 32)
             bytes = 4;
         else if (BUS_WIDTH == 64)
@@ -449,6 +462,8 @@ get_data (urj_bus_t *bus, uint32_t adr)
         int bytes = 0;
         if (BUS_WIDTH == 8)
             bytes = 1;
+        else if (BUS_WIDTH == 16)
+            bytes = 2;
         else if (BUS_WIDTH == 32)
             bytes = 4;
         else if (BUS_WIDTH == 64)
