@@ -1344,10 +1344,12 @@ ft2232_transfer_schedule (urj_cable_t *cable, int len, const char *in,
     int bitwise_len;
     int chunkbytes;
 
+#if 0
     /* lower TMS for transfer
        also lower TCK to ensure correct clocking */
     ft2232_set_signal_schedule (params, URJ_POD_CS_TCK | URJ_POD_CS_TMS, 0, 1,
                                 0);
+#endif
 
     chunkbytes = len >> 3;
     while (chunkbytes > 0)
