@@ -119,7 +119,7 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
         {
             urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08llX\r"),
                      (long long unsigned) a);
-            if (fwrite (b, bc, 1, f) != bc)
+            if (fwrite (b, bc, 1, f) != 1)
             {
                 urj_error_set (URJ_ERROR_FILEIO, "fwrite fails");
                 urj_error_state.sys_errno = ferror(f);
