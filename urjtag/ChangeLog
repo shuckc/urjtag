@@ -1,5 +1,8 @@
 2009-07-15  Arnim Laeuger  <arniml>
 
+  * src/flash/amd_flash.c: [ 2821629 ] Can't find flash_info : amd_flash.c
+    (MURANAKA Masaki)
+
   * src/flash/flash.c, include/urjtag/flash.h:
     [ 2816643 ] Matching arguments of funcion flasherase()
 

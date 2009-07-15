@@ -1,5 +1,5 @@
 /*
- * $Id: amd_flash.c,v 1.0 20/09/2006 12:38:01  $
+ * $Id$
  *
  * AMD 8 bit flash driver for AM29F040B & AM29LV040B
  * Copyright (C) 2006 Kila Medical Systems.
@@ -130,8 +130,8 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
     }
 
     (*cfi_array)->bus = bus;
-    (*cfi_array)->address = 0;
-    if (URJ_BUS_AREA (bus, adr + 0, &area) != URJ_STATUS_OK)
+    (*cfi_array)->address = adr;
+    if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
         // retain error status
         return URJ_STATUS_FAIL;              /* bus width detection failed */
     unsigned int bw = area.width;
