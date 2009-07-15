@@ -1,0 +1,51 @@
+#
+# $Id$
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+
+# mandatory data registers
+register    BR    1 # Bypass Register
+
+# optional data registers
+register    DIR	 32 # Device Identification Register
+register    SCAN0  184
+register    SCAN1   67
+register    SCAN2   38
+register    SCANN    5
+
+instruction length 4
+
+# mandatory instructions
+instruction BYPASS         1111 BR
+# optional instructions
+instruction EXTEST         0000 BR
+instruction EXTEST0        0000 SCAN0
+instruction EXTEST1        0000 SCAN1
+instruction EXTEST2        0000 SCAN2
+instruction SCAN_N         0010 SCANN
+instruction SAMPLE/PRELOAD 0011 BR
+instruction RESTART        0100 BR
+instruction CLAMP          0101 BR
+instruction HIGHZ          0111 BR
+instruction CLAMPZ         1001 BR
+instruction INTEST         1100 BR
+instruction INTEST0        1100 SCAN0
+instruction INTEST1        1100 SCAN1
+instruction INTEST2        1100 SCAN2
+instruction IDCODE         1110 BR
+
+initbus arm9tdmi

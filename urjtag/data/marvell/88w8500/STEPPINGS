@@ -17,7 +17,6 @@
 # 02111-1307, USA.
 #
 
-# bits 27-12 of the Device Identification Register
-0000000000001010  88e1118        MV88E1118
-0101000110000010  88f5182        MV88F5182
-0101100101000110  88w8500        MV88W8500
+# bits 31-28 of the Device Identification Register
+
+0001	88w8500-ban	BAN

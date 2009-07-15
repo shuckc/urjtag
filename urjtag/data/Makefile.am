@@ -150,6 +150,8 @@ nobase_dist_pkgdata_DATA = \
 	marvell/88e1118/88e1118 \
 	marvell/88f5182/STEPPINGS \
 	marvell/88f5182/88f5182-a2 \
+	marvell/88w8500/STEPPINGS \
+	marvell/88w8500/88w8500-ban \
 	motorola/mpc8241/1.2 \
 	motorola/mpc8245/1.2 \
 	philips/PARTS \
