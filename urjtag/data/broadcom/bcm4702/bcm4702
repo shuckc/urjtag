@@ -1,7 +1,9 @@
 #
 # $Id$
 #
-# Copyright (C) 2003 ETC s.r.o.
+# JTAG declarations for Broadcom BCM4702
+# Copyright (C) 2009 Jochen Friedrich <jochen@scram.de>
+# Shamelessly copied from bcm6358
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,14 +20,28 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Matan Ziv-Av <matan@svgalib.org>, 2003.
-#
 
-# bits 27-12 of the Device Identification Register
-0001001001010000	bcm1250		BCM1250
-0011001100010000	bcm3310		BCM3310
-0101010000100001	bcm5421s	BCM5421S
-0100011100010000	bcm4702		BCM4702
-0100011100010010	bcm4712		BCM4712
-0110001101011000	bcm6358		BCM6358
-0110001101001000	bcm6348		BCM6348
+register	BSR		1
+register	BR		1
+register	DIR		32
+register	EJIMPCODE 	32
+register	EJADDRESS 	32
+register	EJDATA		32
+register	EJCONTROL 	32
+register	EJALL		96
+
+instruction length 5
+
+instruction EXTEST		00000	BSR
+instruction IDCODE		00001	DIR
+instruction SAMPLE/PRELOAD	00010	BSR
+instruction EJTAG_IMPCODE	00011	EJIMPCODE
+instruction EJTAG_ADDRESS	01000	EJADDRESS
+instruction EJTAG_DATA		01001	EJDATA
+instruction EJTAG_CONTROL	01010	EJCONTROL
+instruction EJTAG_ALL		01011	EJALL
+instruction EJTAGBOOT		01100	BR
+instruction NORMALBOOT		01101	BR
+instruction BYPASS		11111	BR
+
+initbus ejtag_dma

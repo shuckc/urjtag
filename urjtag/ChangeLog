@@ -1,5 +1,9 @@
 2009-07-15  Arnim Laeuger  <arniml>
 
+  * data/broadcom/bcm4702/STEPPINGS, data/broadcom/bcm4702/bcm4702,
+    data/broadcom/PARTS, data/Makefile.am:
+    [ 2815741 ] Add bcm4702 definitions (Jochen Friedrich)
+
   * src/bus/readmem.c: [ 2815739 ] Fix fwrite call (Jochen Friedrich)
 
   * src/bus/ejtag_dma.c: [ 2815726 ] Fix HALFWORD and BYTE DMA read access
