@@ -1,5 +1,7 @@
 2009-07-15  Arnim Laeuger  <arniml>
 
+  * autogen.sh: forward command line parameters
+
   * configure.ac, src/Makefile.am: first issue of
     [ 2807343 ] urjtag dependencies missing autoconf checks
     disabled SVF or disabled BSDL prevents potfile creation
