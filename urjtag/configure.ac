@@ -376,7 +376,7 @@ AS_IF([test "$LEX" = flex], [
 dnl If the transformed svf_flex.c is already existing, it doesn't matter
 dnl that flex is too old for building the lexer.
 AS_IF([test "x$svf_lexer" = xfalse], [
-   AS_IF([test -r src/svf/svf_flex.c], [
+   AS_IF([test -r src/svf/svf_bison.h], [
       svf_lexer=true
    ])
 ])
@@ -395,13 +395,22 @@ AS_IF([test "x$svf" = xtrue], [
   AC_DEFINE(ENABLE_SVF, 1, [define if SVF player is enabled])
 ],[
   AM_CONDITIONAL(ENABLE_SVF, false)
+
+  # SVF is disabled, but the generated files are still required for
+  # POTFILES. They simply have to exist as empty files.
+  AS_IF([test ! -r src/svf/svf_flex.c], [
+    touch src/svf/svf_flex.c
+  ])
+  AS_IF([test ! -r src/svf/svf_bison.c], [
+    touch src/svf/svf_bison.c
+  ])
 ])
 
 
 dnl If the transformed bsdl_flex.c is already existing, it doesn't matter
 dnl that flex is too old for building the lexer.
 AS_IF([test "x$bsdl_lexer" = xfalse], [
-   AS_IF([test -r src/bsdl/bsdl_flex.c], [
+   AS_IF([test -r src/bsdl/bsdl_bison.h], [
       bsdl_lexer=true
    ])
 ])
@@ -420,6 +429,21 @@ AS_IF([test "x$bsdl" = xtrue], [
   AC_DEFINE(ENABLE_BSDL, 1, [define if BSDL subsystem is enabled])
 ],[
   AM_CONDITIONAL(ENABLE_BSDL, false)
+
+  # BSDL is disabled, but the generated files are still required for
+  # POTFILES. They simply have to exist as empty files.
+  AS_IF([test ! -r src/bsdl/vhdl_flex.c], [
+    touch src/bsdl/vhdl_flex.c
+  ])
+  AS_IF([test ! -r src/bsdl/vhdl_bison.c], [
+    touch src/bsdl/vhdl_bison.c
+  ])
+  AS_IF([test ! -r src/bsdl/bsdl_flex.c], [
+    touch src/bsdl/bsdl_flex.c
+  ])
+  AS_IF([test ! -r src/bsdl/bsdl_bison.c], [
+    touch src/bsdl/bsdl_bison.c
+  ])
 ])
 
 dnl Enable experimental brute-force JEDEC flash autodetection?

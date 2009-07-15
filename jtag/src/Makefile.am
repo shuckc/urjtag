@@ -42,8 +42,10 @@ endif
 bin_PROGRAMS = \
 	jtag
 
+if ENABLE_BSDL
 dist_bin_SCRIPTS = \
 	bsdl2jtag
+endif
 
 jtag_SOURCES = \
 	jtag.c

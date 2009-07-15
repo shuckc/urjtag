@@ -32,8 +32,13 @@ SUBDIRS = \
 
 if ENABLE_APPS
 SUBDIRS += \
-	src/apps/jtag \
+	src/apps/jtag
+
+if ENABLE_BSDL
+SUBDIRS += \
 	src/apps/bsdl2jtag
+endif
+
 endif
 
 DIST_SUBDIRS = \

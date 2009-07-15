@@ -1,5 +1,10 @@
 2009-07-15  Arnim Laeuger  <arniml>
 
+  * configure.ac, src/Makefile.am: first issue of
+    [ 2807343 ] urjtag dependencies missing autoconf checks
+    disabled SVF or disabled BSDL prevents potfile creation
+    when generated flex/bison files are missing
+
   * src/flash/amd.c:  [ 2806917 ] Atmel AT49BV322D flash support (MURANAKA Masaki)
     Work around flash chips that support multi byte write mode with a
     different programming algorithm.
