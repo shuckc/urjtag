@@ -477,7 +477,7 @@ AC_DEFUN([CHECK_DRIVER], [
 
 # Enable bus drivers
 AC_DEFUN([DEF_ENABLE_BUSDRIVERS], [\
-au1500 avr32 bcm1250 bf526_ezkit bf527_ezkit bf533_stamp bf533_ezkit bf537_stamp bf537_ezkit bf538f_ezkit bf548_ezkit bf561_ezkit bscoach ejtag ejtag_dma\
+arm9tdmi au1500 avr32 bcm1250 bf526_ezkit bf527_ezkit bf533_stamp bf533_ezkit bf537_stamp bf537_ezkit bf538f_ezkit bf548_ezkit bf561_ezkit bscoach ejtag  ejtag_dma \
 fjmem ixp425 ixp435 jopcyc h7202 lh7a400  mpc5200 mpc824x ppc405ep ppc440gx_ebc8 prototype pxa2x0 pxa27x \
 s3c4510 sa1110 sh7727 sh7750r sh7751r sharc_21065L slsup3 tx4925 zefant_xs3])
 AC_ARG_ENABLE(bus,
@@ -495,6 +495,7 @@ AC_ARG_ENABLE(bus,
 busdrivers=`echo ${busdrivers} | $SED -e "s/default/DEF_ENABLE_BUSDRIVERS/"`
 #
 enabled_bus_drivers=''
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [arm9tdmi],      [ENABLE_BUS_ARM9TDMI])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [au1500],        [ENABLE_BUS_AU1500])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [avr32],         [ENABLE_BUS_AVR32])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [bcm1250],       [ENABLE_BUS_BCM1250])

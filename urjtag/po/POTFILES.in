@@ -7,6 +7,7 @@ src/bsdl/bsdl_flex.c
 src/bsdl/bsdl_sem.c
 src/bsdl/vhdl_bison.c
 src/bsdl/vhdl_flex.c
+src/bus/arm9tdmi.c
 src/bus/au1500.c
 src/bus/avr32.c
 src/bus/bcm1250.c

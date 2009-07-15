@@ -36,6 +36,9 @@
 #include "buses.h"
 
 const urj_bus_driver_t *urj_bus_drivers[] = {
+#ifdef ENABLE_BUS_ARM9TDMI
+    &urj_bus_arm9tdmi_bus,
+#endif
 #ifdef ENABLE_BUS_AU1500
     &urj_bus_au1500_bus,
 #endif

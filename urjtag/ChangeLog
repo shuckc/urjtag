@@ -1,5 +1,9 @@
 2009-07-15  Arnim Laeuger  <arniml>
 
+  * src/bus/arm9tdmi.c, src/bus/buses.c, src/bus/buses.h,
+    src/bus/Makefile.am, configure.ac, po/POTFILES.in:
+    [ 2820437 ] ARM9 bus support (Jochen Friedrich)
+
   * data/broadcom/bcm4702/STEPPINGS, data/broadcom/bcm4702/bcm4702,
     data/broadcom/PARTS, data/Makefile.am:
     [ 2815741 ] Add bcm4702 definitions (Jochen Friedrich)
