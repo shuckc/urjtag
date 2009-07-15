@@ -342,10 +342,20 @@ ejtag_dma_read (urj_bus_t *bus, unsigned int addr, int sz)
     switch (sz)
     {
     case DMA_HALFWORD:
-        ret &= ret & 0xffff;
+	if (addr & 2)
+            ret = (ret >> 16) & 0xffff;
+	else
+            ret = ret & 0xffff;
         break;
     case DMA_BYTE:
-        ret &= ret & 0xff;
+	if ((addr & 3) == 3)
+            ret = (ret >> 24) & 0xff;
+	else if ((addr & 3) == 2)
+            ret = (ret >> 16) & 0xff;
+	else if ((addr & 3) == 1)
+            ret = (ret >> 8) & 0xff;
+	else
+            ret = ret & 0xff;
         break;
     case DMA_WORD:
     default:

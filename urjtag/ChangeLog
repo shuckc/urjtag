@@ -1,5 +1,8 @@
 2009-07-15  Arnim Laeuger  <arniml>
 
+  * src/bus/ejtag_dma.c: [ 2815726 ] Fix HALFWORD and BYTE DMA read access
+    (Jochen Friedrich)
+
   * src/flash/amd_flash.c: [ 2821629 ] Can't find flash_info : amd_flash.c
     (MURANAKA Masaki)
   * src/flash/amd_flash.c: [ 2821646 ] Possible buffer overrun in amd_detect
