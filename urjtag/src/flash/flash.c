@@ -470,10 +470,10 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
 }
 
 int
-urj_flasherase (urj_bus_t *bus, uint32_t addr, int number)
+urj_flasherase (urj_bus_t *bus, uint32_t addr, uint32_t number)
 {
     urj_flash_cfi_query_structure_t *cfi;
-    int i;
+    uint32_t i;
     int status = URJ_STATUS_OK;
     int bus_width;
     int chip_width;

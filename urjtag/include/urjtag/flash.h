@@ -72,6 +72,6 @@ int urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int);
 int urj_flashmsbin (urj_bus_t *bus, FILE *f, int);
 
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-int urj_flasherase (urj_bus_t *bus, uint32_t addr, int number);
+int urj_flasherase (urj_bus_t *bus, uint32_t addr, uint32_t number);
 
 #endif /* URJ_FLASH_H */

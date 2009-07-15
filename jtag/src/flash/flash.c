@@ -380,10 +380,10 @@ flashmem( bus_t *bus, FILE *f, uint32_t addr, int noverify )
 }
 
 void
-flasherase( bus_t *bus, uint32_t addr, int number )
+flasherase( bus_t *bus, uint32_t addr, uint32_t number )
 {
 	cfi_query_structure_t *cfi;
-	int i;
+	uint32_t i;
 	int status = 0;
 	int bus_width;
 	int chip_width;

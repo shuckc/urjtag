@@ -58,6 +58,6 @@ void idcode( chain_t *chain , unsigned int bytes);
 void readmem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
 void writemem( bus_t *bus, FILE *f, uint32_t addr, uint32_t len );
 
-void flasherase( bus_t *bus, uint32_t addr, int number );
+void flasherase( bus_t *bus, uint32_t addr, uint32_t number );
 
 #endif /* JTAG_H */
