@@ -1,3 +1,9 @@
+2009-07-15  Arnim Laeuger  <arniml>
+
+  * src/flash/amd.c:  [ 2806917 ] Atmel AT49BV322D flash support (MURANAKA Masaki)
+    Work around flash chips that support multi byte write mode with a
+    different programming algorithm.
+
 2009-06-04  Arnim Laeuger  <arniml>
 
   * src/bsdl/bsdl_flex.l: force Base = DECIMAL for BOUNDARY_LENGTH attribute

@@ -310,6 +310,12 @@ amd_flash_print_info( cfi_array_t *cfi_array )
 			printf( "Atmel" );
 			printf( _("\n\tChip: ") );
 			switch (cid) {
+			case 0x01c8:
+			printf( "AT49BV322D" );
+			break;
+			case 0x01c9:
+			printf( "AT49BV322DT" );
+			break;
 			case 0x01d2:
 			printf( "AT49BW642DT" );
 			break;
@@ -515,19 +521,27 @@ amd_flash_program( cfi_array_t *cfi_array, uint32_t adr, uint32_t *buffer, int c
 #endif
 
 	/* multi-byte writes supported? */
-	if (max_bytes_write > 1)
-		return amd_flash_program_buffer( cfi_array, adr, buffer, count );
+	if (max_bytes_write > 1) {
+		int result;
+		result = amd_flash_program_buffer( cfi_array, adr, buffer, count );
+		if (result == 0)
+			 return 0;
 
-	else {
-		/* unroll buffer to single writes */
-		int idx;
+		/* Some flashes support max_bytes_write.
+		 * But some of them don't support S29 style write buffer.
+		 * See also the datasheet about AT49BV322D.
+		 */
+		cfi->device_geometry.max_bytes_write = 1;
+	}
 
-		for (idx = 0; idx < count; idx++) {
-			int status = amd_flash_program_single( cfi_array, adr, buffer[idx] );
-			if (status)
-				return status;
-			adr += cfi_array->bus_width;
-		}
+	/* unroll buffer to single writes */
+	int idx;
+
+	for (idx = 0; idx < count; idx++) {
+		int status = amd_flash_program_single( cfi_array, adr, buffer[idx] );
+		if (status)
+			return status;
+		adr += cfi_array->bus_width;
 	}
 
 	return 0;
