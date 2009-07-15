@@ -2,6 +2,8 @@
 
   * src/flash/amd_flash.c: [ 2821629 ] Can't find flash_info : amd_flash.c
     (MURANAKA Masaki)
+  * src/flash/amd_flash.c: [ 2821646 ] Possible buffer overrun in amd_detect
+    (MURANAKA Masaki)
 
   * src/flash/flash.c, include/urjtag/flash.h:
     [ 2816643 ] Matching arguments of funcion flasherase()

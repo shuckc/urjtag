@@ -181,9 +181,9 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
             return URJ_STATUS_FAIL;
         }
 
-        cfi->device_geometry.erase_block_regions[i].erase_block_size =
+        cfi->device_geometry.erase_block_regions[0].erase_block_size =
             64 * 1024;
-        cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks =
+        cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks =
             8;
         //Add other details for info
     }

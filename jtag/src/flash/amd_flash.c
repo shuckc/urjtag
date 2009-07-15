@@ -157,8 +157,8 @@ int amd_detect(bus_t *bus, uint32_t adr, cfi_array_t **cfi_array )
 		if (!cfi->device_geometry.erase_block_regions)
 			return -2;	/* out of memory */
 
-		cfi->device_geometry.erase_block_regions[i].erase_block_size = 64 * 1024;
-		cfi->device_geometry.erase_block_regions[i].number_of_erase_blocks = 8;
+		cfi->device_geometry.erase_block_regions[0].erase_block_size = 64 * 1024;
+		cfi->device_geometry.erase_block_regions[0].number_of_erase_blocks = 8;
 		//Add other details for info
 	}
 	return 0;
