@@ -77,6 +77,8 @@ nobase_dist_pkgdata_DATA = \
 	analog/PARTS \
 	analog/sharc21065l/STEPPINGS \
 	analog/sharc21065l/sharc21065l \
+	analog/sharc21369/STEPPINGS \
+	analog/sharc21369/sharc21369 \
 	brecis/PARTS \
 	brecis/msp2006/STEPPINGS \
 	brecis/msp2006/msp2006 \

@@ -1,3 +1,8 @@
+2009-08-10  Arnim Laeuger  <arniml>
+
+  * data/Makefile.am, sharc21369/STEPPINGS, sharc21369/sharc21369: 
+    [ 2816814 ] ADSP-21369 support. (MURANAKA Masaki)
+
 2009-07-15  Arnim Laeuger  <arniml>
 
   * data/marvell/88w8500/88w8500-ban, data/marvell/88w8500/STEPPINGS,

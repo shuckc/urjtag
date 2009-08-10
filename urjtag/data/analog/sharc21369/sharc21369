@@ -1,0 +1,717 @@
+#
+# $Id$
+#
+# JTAG declarations for ADSP SHARC 21369
+# Copyright (C) 2009 Monami Software Limited Partnership, JAPAN.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Masaki Muranaka <monaka at monami-software.com>, 2009
+#
+# Documentation:
+#       [1] Analog Devices Inc.,"ADSP-21065L SHARC Technical Reference", September 1998
+#       [2] Analog Devices Inc.,"BSDL for ADSP_21369 sBGA_PACKAGE: 256 sbga Package", BSDL rev 0.0
+#	     http://www.analog.com/UploadedFiles/BSDL_Files/435954194035486111591903bsdl_21065l_bga.txt
+#
+#
+
+
+signal NC(0)
+signal NC(1)
+signal NC(2)
+signal NC(3)
+signal NC(4)
+signal NC(5)
+signal NC(6)
+signal NC(7)
+signal NC(8)
+signal NC(9)
+signal GND(0)
+signal GND(1)
+signal GND(2)
+signal GND(3)
+signal GND(4)
+signal GND(5)
+signal GND(6)
+signal GND(7)
+signal GND(8)
+signal GND(9)
+signal GND(10)
+signal GND(11)
+signal GND(12)
+signal GND(13)
+signal GND(14)
+signal GND(15)
+signal GND(16)
+signal GND(17)
+signal GND(18)
+signal GND(19)
+signal GND(20)
+signal GND(21)
+signal GND(22)
+signal GND(23)
+signal GND(24)
+signal GND(25)
+signal GND(26)
+signal GND(27)
+signal GND(28)
+signal GND(29)
+signal GND(30)
+signal GND(31)
+signal GND(32)
+signal GND(33)
+signal GND(34)
+signal GND(35)
+signal GND(36)
+signal GND(37)
+signal GND(38)
+signal GND(39)
+signal GND(40)
+signal GND(41)
+signal GND(42)
+signal GND(43)
+signal GND(44)
+signal GND(45)
+signal GND(46)
+signal GND(47)
+signal GND(48)
+signal GND(49)
+signal GND(50)
+signal GND(51)
+signal GND(52)
+signal GND(53)
+signal GND(54)
+signal GND(55)
+signal GND(56)
+signal GND(57)
+signal IOVDD(0)
+signal IOVDD(1)
+signal IOVDD(2)
+signal IOVDD(3)
+signal IOVDD(4)
+signal IOVDD(5)
+signal IOVDD(6)
+signal IOVDD(7)
+signal IOVDD(8)
+signal IOVDD(9)
+signal IOVDD(10)
+signal IOVDD(11)
+signal IOVDD(12)
+signal IOVDD(13)
+signal IOVDD(14)
+signal IOVDD(15)
+signal IOVDD(16)
+signal IOVDD(17)
+signal IOVDD(18)
+signal IOVDD(19)
+signal IOVDD(20)
+signal IOVDD(21)
+signal IOVDD(22)
+signal VDD(0)
+signal VDD(1)
+signal VDD(2)
+signal VDD(3)
+signal VDD(4)
+signal VDD(5)
+signal VDD(6)
+signal VDD(7)
+signal VDD(8)
+signal VDD(9)
+signal VDD(10)
+signal VDD(11)
+signal VDD(12)
+signal VDD(13)
+signal VDD(14)
+signal VDD(15)
+signal VDD(16)
+signal VDD(17)
+signal VDD(18)
+signal VDD(19)
+signal VDD(20)
+signal VDD(21)
+signal VDD(22)
+signal VDD(23)
+signal VDD(24)
+signal VDD(25)
+signal VDD(26)
+signal VDD(27)
+signal VDD(28)
+signal VDD(29)
+signal VDD(30)
+signal VDD(31)
+signal VDD(32)
+signal VDD(33)
+signal VDD(34)
+signal AVSS
+signal AVDD
+signal XTAL
+signal WR_B
+signal TDO
+signal SDWE_B
+signal SDRAS_B
+signal SDCKE
+signal SDCAS_B
+signal SDA10
+signal RD_B
+signal MS1_B
+signal MS0_B
+signal EMU_B
+signal CLKOUT
+signal ADDR23
+signal ADDR22
+signal ADDR21
+signal ADDR20
+signal ADDR19
+signal ADDR18
+signal ADDR17
+signal ADDR16
+signal ADDR15
+signal ADDR14
+signal ADDR13
+signal ADDR12
+signal ADDR11
+signal ADDR10
+signal ADDR9
+signal ADDR8
+signal ADDR7
+signal ADDR6
+signal ADDR5
+signal ADDR4
+signal ADDR3
+signal ADDR2
+signal ADDR1
+signal ADDR0
+signal SDCLK0
+signal NC_5
+signal NC_4
+signal NC_3
+signal NC_2
+signal NC_1
+signal FLAG3
+signal FLAG2
+signal FLAG1
+signal FLAG0
+signal DPI14
+signal DPI13
+signal DPI12
+signal DPI11
+signal DPI10
+signal DPI9
+signal DPI8
+signal DPI7
+signal DPI6
+signal DPI5
+signal DPI4
+signal DPI3
+signal DPI2
+signal DPI1
+signal DATA31
+signal DATA30
+signal DATA29
+signal DATA28
+signal DATA27
+signal DATA26
+signal DATA25
+signal DATA24
+signal DATA23
+signal DATA22
+signal DATA21
+signal DATA20
+signal DATA19
+signal DATA18
+signal DATA17
+signal DATA16
+signal DATA15
+signal DATA14
+signal DATA13
+signal DATA12
+signal DATA11
+signal DATA10
+signal DATA9
+signal DATA8
+signal DATA7
+signal DATA6
+signal DATA5
+signal DATA4
+signal DATA3
+signal DATA2
+signal DATA1
+signal DATA0
+signal DAI20
+signal DAI19
+signal DAI18
+signal DAI17
+signal DAI16
+signal DAI15
+signal DAI14
+signal DAI13
+signal DAI12
+signal DAI11
+signal DAI10
+signal DAI9
+signal DAI8
+signal DAI7
+signal DAI6
+signal DAI5
+signal DAI4
+signal DAI3
+signal DAI2
+signal DAI1
+signal TRST
+signal TMS
+signal TDI
+signal TCK
+signal RESET_B
+signal NC_6
+signal GND_2
+signal GND_1
+signal GND_0
+signal CLK_CFG1
+signal CLK_CFG0
+signal CLKIN
+signal BOOTCFG1
+signal BOOTCFG0
+signal ACK
+
+instruction length 5
+#-W- No IDCODE specification found.
+
+register BSR 418
+register BYPASS 1
+
+instruction INTEST 11000 BSR
+instruction SAMPLE/PRELOAD 10000 BSR
+instruction EXTEST 00000 BSR
+instruction BYPASS 11111 BYPASS
+
+bit 0 O ? ADDR0 1 0 Z
+bit 1 C 0 *
+bit 2 O ? *
+bit 3 O ? ADDR1 4 0 Z
+bit 4 C 0 *
+bit 5 O ? *
+bit 6 O ? ADDR2 7 0 Z
+bit 7 C 0 *
+bit 8 O ? *
+bit 9 O ? ADDR3 10 0 Z
+bit 10 C 0 *
+bit 11 O ? *
+bit 12 O ? ADDR4 13 0 Z
+bit 13 C 0 *
+bit 14 O ? *
+bit 15 O ? ADDR5 16 0 Z
+bit 16 C 0 *
+bit 17 O ? *
+bit 18 O ? ADDR6 19 0 Z
+bit 19 C 0 *
+bit 20 O ? *
+bit 21 O ? ADDR7 22 0 Z
+bit 22 C 0 *
+bit 23 O ? *
+bit 24 O ? ADDR8 25 0 Z
+bit 25 C 0 *
+bit 26 O ? *
+bit 27 O ? ADDR9 28 0 Z
+bit 28 C 0 *
+bit 29 O ? *
+bit 30 O ? *
+bit 31 O ? *
+bit 32 O ? *
+bit 33 O ? ADDR10 34 0 Z
+bit 34 C 0 *
+bit 35 O ? *
+bit 36 O ? *
+bit 37 O ? *
+bit 38 O ? *
+bit 39 O ? ADDR11 40 0 Z
+bit 40 C 0 *
+bit 41 O ? *
+bit 42 O ? NC_1 43 0 Z
+bit 43 C 0 *
+bit 44 I ? NC_1
+bit 45 O ? ADDR12 46 0 Z
+bit 46 C 0 *
+bit 47 O ? *
+bit 48 O ? NC_2 49 0 Z
+bit 49 C 0 *
+bit 50 I ? NC_2
+bit 51 O ? ADDR13 52 0 Z
+bit 52 C 0 *
+bit 53 O ? *
+bit 54 O ? ADDR14 55 0 Z
+bit 55 C 0 *
+bit 56 O ? *
+bit 57 O ? NC_3 58 0 Z
+bit 58 C 0 *
+bit 59 I ? NC_3
+bit 60 O ? ADDR15 61 0 Z
+bit 61 C 0 *
+bit 62 O ? *
+bit 63 O ? NC_4 64 0 Z
+bit 64 C 0 *
+bit 65 I ? NC_4
+bit 66 O ? ADDR16 67 0 Z
+bit 67 C 0 *
+bit 68 O ? *
+bit 69 O ? ADDR17 70 0 Z
+bit 70 C 0 *
+bit 71 O ? *
+bit 72 O ? ADDR18 73 0 Z
+bit 73 C 0 *
+bit 74 O ? *
+bit 75 O ? *
+bit 76 O ? *
+bit 77 O ? *
+bit 78 O ? ADDR19 79 0 Z
+bit 79 C 0 *
+bit 80 O ? *
+bit 81 O ? ADDR20 82 0 Z
+bit 82 C 0 *
+bit 83 O ? *
+bit 84 O ? *
+bit 85 O ? *
+bit 86 O ? *
+bit 87 O ? ADDR21 88 0 Z
+bit 88 C 0 *
+bit 89 O ? *
+bit 90 O ? ADDR22 91 0 Z
+bit 91 C 0 *
+bit 92 O ? *
+bit 93 O ? ADDR23 94 0 Z
+bit 94 C 0 *
+bit 95 O ? *
+bit 96 O ? MS0_B 97 0 Z
+bit 97 C 0 *
+bit 98 O ? *
+bit 99 O ? MS1_B 100 0 Z
+bit 100 C 0 *
+bit 101 O ? *
+bit 102 O ? SDRAS_B 103 0 Z
+bit 103 C 0 *
+bit 104 O ? *
+bit 105 O ? SDCAS_B 106 0 Z
+bit 106 C 0 *
+bit 107 O ? *
+bit 108 O ? SDWE_B 109 0 Z
+bit 109 C 0 *
+bit 110 O ? *
+bit 111 O ? SDCKE 112 0 Z
+bit 112 C 0 *
+bit 113 O ? *
+bit 114 O ? SDA10 115 0 Z
+bit 115 C 0 *
+bit 116 O ? *
+bit 117 O ? WR_B 118 0 Z
+bit 118 C 0 *
+bit 119 O ? *
+bit 120 O ? SDCLK0 121 0 Z
+bit 121 C 0 *
+bit 122 I ? SDCLK0
+bit 123 O ? RD_B 124 0 Z
+bit 124 C 0 *
+bit 125 O ? *
+bit 126 O ? *
+bit 127 O ? *
+bit 128 I ? ACK
+bit 129 O ? FLAG3 130 0 Z
+bit 130 C 0 *
+bit 131 I ? FLAG3
+bit 132 O ? FLAG2 133 0 Z
+bit 133 C 0 *
+bit 134 I ? FLAG2
+bit 135 O ? FLAG1 136 0 Z
+bit 136 C 0 *
+bit 137 I ? FLAG1
+bit 138 O ? FLAG0 139 0 Z
+bit 139 C 0 *
+bit 140 I ? FLAG0
+bit 141 O ? DAI20 142 0 Z
+bit 142 C 0 *
+bit 143 I ? DAI20
+bit 144 O ? DAI19 145 0 Z
+bit 145 C 0 *
+bit 146 I ? DAI19
+bit 147 O ? DAI18 148 0 Z
+bit 148 C 0 *
+bit 149 I ? DAI18
+bit 150 O ? DAI17 151 0 Z
+bit 151 C 0 *
+bit 152 I ? DAI17
+bit 153 O ? DAI16 154 0 Z
+bit 154 C 0 *
+bit 155 I ? DAI16
+bit 156 O ? DAI15 157 0 Z
+bit 157 C 0 *
+bit 158 I ? DAI15
+bit 159 O ? DAI14 160 0 Z
+bit 160 C 0 *
+bit 161 I ? DAI14
+bit 162 O ? DAI13 163 0 Z
+bit 163 C 0 *
+bit 164 I ? DAI13
+bit 165 O ? DAI12 166 0 Z
+bit 166 C 0 *
+bit 167 I ? DAI12
+bit 168 O ? DAI11 169 0 Z
+bit 169 C 0 *
+bit 170 I ? DAI11
+bit 171 O ? DAI10 172 0 Z
+bit 172 C 0 *
+bit 173 I ? DAI10
+bit 174 O ? DAI9 175 0 Z
+bit 175 C 0 *
+bit 176 I ? DAI9
+bit 177 O ? DAI8 178 0 Z
+bit 178 C 0 *
+bit 179 I ? DAI8
+bit 180 O ? DAI7 181 0 Z
+bit 181 C 0 *
+bit 182 I ? DAI7
+bit 183 O ? DAI6 184 0 Z
+bit 184 C 0 *
+bit 185 I ? DAI6
+bit 186 O ? DAI5 187 0 Z
+bit 187 C 0 *
+bit 188 I ? DAI5
+bit 189 O ? NC_5 190 0 Z
+bit 190 C 0 *
+bit 191 I ? NC_5
+bit 192 O ? *
+bit 193 O ? *
+bit 194 O ? *
+bit 195 O ? *
+bit 196 O ? *
+bit 197 O ? *
+bit 198 O ? *
+bit 199 O ? *
+bit 200 O ? *
+bit 201 O ? *
+bit 202 O ? *
+bit 203 O ? *
+bit 204 O ? *
+bit 205 O ? *
+bit 206 O ? *
+bit 207 O ? *
+bit 208 O ? *
+bit 209 I ? CLK_CFG0
+bit 210 O ? *
+bit 211 O ? *
+bit 212 O ? *
+bit 213 O ? *
+bit 214 O ? *
+bit 215 I ? CLK_CFG1
+bit 216 O ? *
+bit 217 O ? *
+bit 218 I ? BOOTCFG0
+bit 219 O ? *
+bit 220 O ? *
+bit 221 I ? BOOTCFG1
+bit 222 O ? EMU_B 223 0 Z
+bit 223 C 0 *
+bit 224 O ? *
+bit 225 O ? DAI4 226 0 Z
+bit 226 C 0 *
+bit 227 I ? DAI4
+bit 228 O ? DAI3 229 0 Z
+bit 229 C 0 *
+bit 230 I ? DAI3
+bit 231 O ? DAI2 232 0 Z
+bit 232 C 0 *
+bit 233 I ? DAI2
+bit 234 O ? DAI1 235 0 Z
+bit 235 C 0 *
+bit 236 I ? DAI1
+bit 237 O ? DPI14 238 0 Z
+bit 238 C 0 *
+bit 239 I ? DPI14
+bit 240 O ? DPI13 241 0 Z
+bit 241 C 0 *
+bit 242 I ? DPI13
+bit 243 O ? DPI12 244 0 Z
+bit 244 C 0 *
+bit 245 I ? DPI12
+bit 246 O ? DPI11 247 0 Z
+bit 247 C 0 *
+bit 248 I ? DPI11
+bit 249 O ? DPI10 250 0 Z
+bit 250 C 0 *
+bit 251 I ? DPI10
+bit 252 O ? DPI9 253 0 Z
+bit 253 C 0 *
+bit 254 I ? DPI9
+bit 255 O ? DPI8 256 0 Z
+bit 256 C 0 *
+bit 257 I ? DPI8
+bit 258 O ? DPI7 259 0 Z
+bit 259 C 0 *
+bit 260 I ? DPI7
+bit 261 O ? DPI6 262 0 Z
+bit 262 C 0 *
+bit 263 I ? DPI6
+bit 264 O ? DPI5 265 0 Z
+bit 265 C 0 *
+bit 266 I ? DPI5
+bit 267 O ? DPI4 268 0 Z
+bit 268 C 0 *
+bit 269 I ? DPI4
+bit 270 O ? DPI3 271 0 Z
+bit 271 C 0 *
+bit 272 I ? DPI3
+bit 273 O ? DPI2 274 0 Z
+bit 274 C 0 *
+bit 275 I ? DPI2
+bit 276 O ? DPI1 277 0 Z
+bit 277 C 0 *
+bit 278 I ? DPI1
+bit 279 O ? *
+bit 280 O ? *
+bit 281 I ? RESET_B
+bit 282 O ? CLKOUT 283 0 Z
+bit 283 C 0 *
+bit 284 O ? *
+bit 285 O ? DATA31 286 0 Z
+bit 286 C 0 *
+bit 287 I ? DATA31
+bit 288 O ? DATA30 289 0 Z
+bit 289 C 0 *
+bit 290 I ? DATA30
+bit 291 O ? DATA29 292 0 Z
+bit 292 C 0 *
+bit 293 I ? DATA29
+bit 294 O ? DATA28 295 0 Z
+bit 295 C 0 *
+bit 296 I ? DATA28
+bit 297 O ? *
+bit 298 O ? *
+bit 299 O ? *
+bit 300 O ? DATA27 301 0 Z
+bit 301 C 0 *
+bit 302 I ? DATA27
+bit 303 O ? *
+bit 304 O ? *
+bit 305 O ? *
+bit 306 O ? DATA26 307 0 Z
+bit 307 C 0 *
+bit 308 I ? DATA26
+bit 309 O ? *
+bit 310 O ? *
+bit 311 O ? *
+bit 312 O ? DATA25 313 0 Z
+bit 313 C 0 *
+bit 314 I ? DATA25
+bit 315 O ? *
+bit 316 O ? *
+bit 317 I ? NC_6
+bit 318 O ? DATA24 319 0 Z
+bit 319 C 0 *
+bit 320 I ? DATA24
+bit 321 O ? *
+bit 322 O ? *
+bit 323 O ? *
+bit 324 O ? DATA23 325 0 Z
+bit 325 C 0 *
+bit 326 I ? DATA23
+bit 327 O ? *
+bit 328 O ? *
+bit 329 I ? GND_2
+bit 330 O ? DATA22 331 0 Z
+bit 331 C 0 *
+bit 332 I ? DATA22
+bit 333 O ? *
+bit 334 O ? *
+bit 335 O ? *
+bit 336 O ? DATA21 337 0 Z
+bit 337 C 0 *
+bit 338 I ? DATA21
+bit 339 O ? *
+bit 340 O ? *
+bit 341 O ? *
+bit 342 O ? DATA20 343 0 Z
+bit 343 C 0 *
+bit 344 I ? DATA20
+bit 345 O ? *
+bit 346 O ? *
+bit 347 O ? *
+bit 348 O ? DATA19 349 0 Z
+bit 349 C 0 *
+bit 350 I ? DATA19
+bit 351 O ? *
+bit 352 O ? *
+bit 353 O ? *
+bit 354 O ? DATA18 355 0 Z
+bit 355 C 0 *
+bit 356 I ? DATA18
+bit 357 O ? *
+bit 358 O ? *
+bit 359 I ? GND_1
+bit 360 O ? DATA17 361 0 Z
+bit 361 C 0 *
+bit 362 I ? DATA17
+bit 363 O ? *
+bit 364 O ? *
+bit 365 I ? GND_0
+bit 366 O ? DATA16 367 0 Z
+bit 367 C 0 *
+bit 368 I ? DATA16
+bit 369 O ? DATA15 370 0 Z
+bit 370 C 0 *
+bit 371 I ? DATA15
+bit 372 O ? DATA14 373 0 Z
+bit 373 C 0 *
+bit 374 I ? DATA14
+bit 375 O ? DATA13 376 0 Z
+bit 376 C 0 *
+bit 377 I ? DATA13
+bit 378 O ? DATA12 379 0 Z
+bit 379 C 0 *
+bit 380 I ? DATA12
+bit 381 O ? DATA11 382 0 Z
+bit 382 C 0 *
+bit 383 I ? DATA11
+bit 384 O ? DATA10 385 0 Z
+bit 385 C 0 *
+bit 386 I ? DATA10
+bit 387 O ? DATA9 388 0 Z
+bit 388 C 0 *
+bit 389 I ? DATA9
+bit 390 O ? DATA8 391 0 Z
+bit 391 C 0 *
+bit 392 I ? DATA8
+bit 393 O ? DATA7 394 0 Z
+bit 394 C 0 *
+bit 395 I ? DATA7
+bit 396 O ? DATA6 397 0 Z
+bit 397 C 0 *
+bit 398 I ? DATA6
+bit 399 O ? DATA5 400 0 Z
+bit 400 C 0 *
+bit 401 I ? DATA5
+bit 402 O ? DATA4 403 0 Z
+bit 403 C 0 *
+bit 404 I ? DATA4
+bit 405 O ? DATA3 406 0 Z
+bit 406 C 0 *
+bit 407 I ? DATA3
+bit 408 O ? DATA2 409 0 Z
+bit 409 C 0 *
+bit 410 I ? DATA2
+bit 411 O ? DATA1 412 0 Z
+bit 412 C 0 *
+bit 413 I ? DATA1
+bit 414 O ? DATA0 415 0 Z
+bit 415 C 0 *
+bit 416 I ? DATA0
+bit 417 O ? *
