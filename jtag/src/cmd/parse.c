@@ -35,7 +35,7 @@
 #include "cmd.h"
 #include "jtag.h"
 
-#define MAXINPUTLINE 100    /* Maximum input line length */
+#define MAXINPUTLINE 300    /* Maximum input line length */
 
 
 

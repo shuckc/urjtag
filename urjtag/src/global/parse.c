@@ -40,7 +40,7 @@
 #include <urjtag/jtag.h>
 #include <urjtag/bsdl.h>
 
-#define MAXINPUTLINE 100        /* Maximum input line length */
+#define MAXINPUTLINE 300        /* Maximum input line length */
 
 
 

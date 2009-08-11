@@ -1,3 +1,8 @@
+2009-08-11  Arnim Laeuger  <arniml>
+
+  * src/global/parse.c: [ 2822900 ] more characters in each lines.
+    (MURANAKA Masaki)
+
 2009-08-10  Mike Frysinger  <vapier@gentoo.org>
 
   * sysdep.h: Handle more versions of mingw.
