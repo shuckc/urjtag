@@ -1,3 +1,7 @@
+2009-08-10  Mike Frysinger  <vapier@gentoo.org>
+
+  * sysdep.h: Handle more versions of mingw.
+
 2009-08-10  Arnim Laeuger  <arniml>
 
   * data/Makefile.am, sharc21369/STEPPINGS, sharc21369/sharc21369: 
