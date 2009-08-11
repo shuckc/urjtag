@@ -131,6 +131,8 @@ nobase_dist_pkgdata_DATA = \
 	intel/sa1110/sa1110 \
 	intel/ixp425/STEPPINGS \
 	intel/ixp425/ixp425 \
+	intel/ixp465/STEPPINGS \
+	intel/ixp465/ixp465 \
 	lattice/PARTS \
 	lattice/lc4032v-tqfp48/STEPPINGS \
 	lattice/lc4032v-tqfp48/lc4032v-tqfp48 \

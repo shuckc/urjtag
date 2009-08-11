@@ -1,0 +1,1183 @@
+signal ethb_rxdata_2
+signal utp_ip_data_2
+signal ex_addr_11
+signal rts_n_1
+signal gpio_15
+signal rts_n_0
+signal utp_op_addr_1
+signal ethb_rxdata_3
+signal utp_ip_fco
+signal ethc_txen
+signal utp_op_data_0
+signal ethc_rxclk
+signal pll_lock
+signal ssp_sclk
+signal eth_mdio
+signal ethb_txdata_2
+signal ex_addr_12
+signal ethb_rxdata_0
+signal pci_serr_n
+signal ssp_extclk
+signal scantestmode_n
+signal rxdata1
+signal usb_dneg
+signal rcomp_ref
+signal ex_addr_0
+signal utp_op_fci
+signal utp_op_data_5
+signal ex_data_26
+signal ex_data_27
+signal gpio_2
+signal gpio_6
+signal ddr1_ck_2
+signal ex_parity_3
+signal ex_addr_13
+signal ex_addr_14
+signal utp_ip_addr_3
+signal ethb_txclk
+signal utp_ip_addr_1
+signal jtg_tdo
+signal ethb_rxclk
+signal ddr1_rcomp
+signal gpio_4
+signal ex_addr_1
+signal utp_op_clk
+signal utp_op_addr_3
+signal gpio_9
+signal ssp_sfrm
+signal i2c_scl
+signal ex_addr_16
+signal utp_op_fco
+signal ex_data_24
+signal ex_data_3
+signal utp_ip_data_4
+signal utp_ip_addr_0
+signal utp_ip_data_1
+signal pci_cbe_n_3
+signal ssp_txd
+signal utp_op_data_1
+signal utp_op_data_2
+signal ssp_rxd
+signal cts_n_0
+signal pci_ad_21
+signal eth_mdc
+signal ex_req_n_2
+signal pci_ad_31
+signal ex_gnt_n_1
+signal pci_gnt_n_3
+signal gpio_13
+signal utp_op_data_7
+signal ex_parity_0
+signal utp_ip_data_0
+signal gpio_1
+signal pci_ad_18
+signal txdata_0
+signal utp_ip_data_5
+signal utp_ip_clk
+signal osc_in
+signal utp_ip_fci
+signal utp_ip_addr_4
+signal ex_data_0
+signal jtg_tms
+signal ex_addr_9
+signal reset_in_n
+signal osc_out
+signal ddr1_dq_2
+signal ddr1_dq_3
+signal utp_ip_addr_2
+signal ddr1_dq_4
+signal utp_ip_data_7
+signal highz_n
+signal ethb_crs
+signal i2c_sda
+signal utp_op_addr_2
+signal gpio_8
+signal utp_op_addr_0
+signal pci_cbe_n_1
+signal pci_ad_11
+signal pci_par
+signal pci_perr_n
+signal pci_ad_16
+signal ex_be_n_3
+signal ex_be_n_2
+signal ex_cs_n_6
+signal pci_ad_27
+signal pci_ad_12
+signal pci_cbe_n_0
+signal ex_addr_24
+signal pci_ad_13
+signal pci_ad_14
+signal ex_parity_2
+signal ex_parity_1
+signal ex_data_9
+signal ex_data_31
+signal ethc_txdata_2
+signal ethc_rxdata_1
+signal ethc_txdata_0
+signal ethb_txdata_1
+signal ddr1_ba_1
+signal ddr1_ma_8
+signal ddr1_ma_0
+signal ddr1_ma_4
+signal ddr1_ma_12
+signal ddr1_ma_2
+signal ddr1_cb_6
+signal ddr1_cb_4
+signal pci_gnt_n_1
+signal pci_req_n_1
+signal ex_gnt_n_2
+signal pci_idsel
+signal ex_req_n_3
+signal ex_addr_4
+signal ddr1_dq_0
+signal ddr1_ma_1
+signal ddr1_dq_16
+signal ddr1_dm_2
+signal ddr1_dq_27
+signal ddr1_dq_28
+signal ddr1_dqs_4
+signal ddr1_cb_7
+signal ddr1_cb_5
+signal ddr1_cb_3
+signal usb_hpos
+signal spare1
+signal ddr1_ma_13
+signal ddr1_ma_10
+signal ddr1_ma_6
+signal ddr1_ma_3
+signal ddr1_dq_19
+signal ddr1_dqs_2
+signal jtg_tck
+signal jtg_trst_n
+signal utp_ip_data_6
+signal gpio_5
+signal ex_addr_15
+signal bypass_clk
+signal utp_op_data_3
+signal utp_op_data_4
+signal gpio_0
+signal ex_data_16
+signal ex_data_30
+signal ex_data_18
+signal ex_data_20
+signal ex_data_12
+signal hss_rxframe1
+signal hss_rxclk1
+signal hss_rxdata1
+signal ethc_rxdata_3
+signal ethc_txdata_1
+signal utp_op_data_6
+signal ex_cs_n_3
+signal ex_addr_5
+signal ex_addr_20
+signal pci_cbe_n_2
+signal pci_devsel_n
+signal pci_ad_15
+signal pci_ad_25
+signal pci_ad_22
+signal pci_ad_24
+signal ex_addr_8
+signal ex_req_n_1
+signal ex_gnt_req_n
+signal utp_op_soc
+signal pci_ad_20
+signal ddr1_dq_10
+signal ethb_rxdata_1
+signal gpio_11
+signal ddr1_dq_15
+signal pwron_reset_n
+signal ex_be_n_1
+signal ex_wr_n
+signal gpio_10
+signal gpio_3
+signal ex_rdy_n_0
+signal ex_iowait_n
+signal pci_ad_4
+signal pci_ad_6
+signal pci_ad_9
+signal pci_ad_10
+signal ex_data_28
+signal ex_addr_3
+signal ex_addr_2
+signal pci_gnt_n_2
+signal pci_req_n_0
+signal pci_ad_28
+signal pci_ad_26
+signal ddr1_rcvenout_n
+signal ddr1_ck_0
+signal ddr1_cke_0
+signal ddr1_ba_0
+signal rxdata_0
+signal gpio_12
+signal gpio_14
+signal gpio_7
+signal utp_ip_data_3
+signal jtg_tdi
+signal utp_op_addr_4
+signal txdata1
+signal pci_inta_n
+signal pci_req_n_3
+signal usb_hpen
+signal usb_dpos
+signal ex_req_gnt_n
+signal ex_slave_cs_n
+signal ex_addr_18
+signal ex_addr_22
+signal pci_ad_17
+signal ddr1_dq_11
+signal ddr1_dq_13
+signal ddr1_dm_1
+signal ddr1_cas_n
+signal ddr1_dq_29
+signal ddr1_dm_4
+signal ddr1_ck_n_1
+signal ddr1_cb_0
+signal ddr1_dqs_3
+signal ddr1_ck_1
+signal ddr1_cb_1
+signal ddr1_cb_2
+signal ddr1_dq_9
+signal ddr1_dq_12
+signal ddr1_ck_n_0
+signal ddr1_cke_1
+signal ddr1_cs_n_1
+signal pci_ad_3
+signal pci_ad_5
+signal pci_ad_1
+signal ex_wait_n
+signal ex_burst
+signal ex_addr_7
+signal ex_addr_10
+signal ex_rdy_n_2
+signal ex_rdy_n_1
+signal pci_irdy_n
+signal ex_cs_n_7
+signal usb_hneg
+signal ex_addr_23
+signal ex_gnt_n_3
+signal cts_n_1
+signal utp_ip_soc
+signal ethb_txdata_0
+signal ddr1_ck_n_2
+signal ddr1_dq_20
+signal hss_txframe0
+signal ex_data_1
+signal ex_rdy_n_3
+signal ex_data_22
+signal ddr1_ma_5
+signal ddr1_dq_17
+signal ddr1_dq_23
+signal ddr1_dq_21
+signal ddr1_dq_24
+signal ddr1_dq_31
+signal ddr1_dq_18
+signal ddr1_dq_22
+signal ddr1_dq_25
+signal ddr1_dq_26
+signal ddr1_dq_30
+signal ddr1_dm_3
+signal pci_ad_7
+signal pci_stop_n
+signal ddr1_dq_7
+signal ddr1_dq_5
+signal ddr1_dqs_0
+signal ddr1_dq_14
+signal ddr1_dqs_1
+signal ddr1_vref
+signal pci_gnt_n_0
+signal pci_ad_30
+signal ex_data_25
+signal ex_data_6
+signal ethb_txdata_3
+signal ex_data_10
+signal ex_data_8
+signal ex_data_19
+signal ethc_txdata_3
+signal ethc_rxdata_2
+signal ethc_crs
+signal ethb_rxdv
+signal spare2
+signal ex_data_23
+signal ex_addr_6
+signal ethb_col
+signal ex_data_2
+signal ex_data_29
+signal ex_cs_n_0
+signal usb_hpwr
+signal pci_req_n_2
+signal pci_ad_29
+signal ddr1_dq_1
+signal ddr1_dq_8
+signal ddr1_ras_n
+signal ddr1_cs_n_0
+signal ddr1_ma_11
+signal ddr1_ma_9
+signal ddr1_ma_7
+signal ex_data_14
+signal ex_data_13
+signal ethb_txen
+signal ethc_col
+signal ethc_rxdata_0
+signal ethc_txclk
+signal hss_txframe1
+signal hss_txdata1
+signal hss_txclk1
+signal ethc_rxdv
+signal ex_addr_17
+signal ex_addr_21
+signal pci_frame_n
+signal pci_clkin
+signal ex_be_n_0
+signal ex_ale
+signal pci_ad_23
+signal pci_ad_19
+signal ddr1_dq_6
+signal ddr1_dm_0
+signal ddr1_rcvenin_n
+signal ddr1_we_n
+signal ex_cs_n_5
+signal ex_cs_n_2
+signal ex_cs_n_4
+signal ex_cs_n_1
+signal ex_data_21
+signal ex_data_15
+signal ex_data_5
+signal ex_data_4
+signal pci_trdy_n
+signal hss_txdata0
+signal hss_rxframe0
+signal hss_txclk0
+signal hss_rxdata0
+signal pci_ad_8
+signal pci_ad_2
+signal hss_rxclk0
+signal ex_data_7
+signal pci_ad_0
+signal ex_data_17
+signal ex_data_11
+signal ex_addr_19
+signal ex_clk
+signal ex_rd_n
+signal VSS1
+signal VSS2
+signal VSS3
+signal VSS4
+signal VSS5
+signal VSS6
+signal VSS7
+signal VSS8
+signal VSS9
+signal VSS10
+signal VSS11
+signal VSS12
+signal VSS13
+signal VSS14
+signal VSS15
+signal VSS16
+signal VSS17
+signal VSS18
+signal VSS19
+signal VSS20
+signal VSS21
+signal VSS22
+signal VSS23
+signal VSS24
+signal VSS25
+signal VSS26
+signal VSS27
+signal VSS28
+signal VSS29
+signal VSS30
+signal VSS31
+signal VSS32
+signal VSS33
+signal VSS34
+signal VSS35
+signal VSS36
+signal VSS37
+signal VSS38
+signal VSS39
+signal VSS40
+signal VSS41
+signal VSS42
+signal VSS43
+signal VSS44
+signal VSS45
+signal VSS46
+signal VSS47
+signal VSS48
+signal VSS49
+signal VSS50
+signal VSS51
+signal VSS52
+signal VSS53
+signal VSS54
+signal VSS55
+signal VSS56
+signal VSS57
+signal VSS58
+signal VSS59
+signal VSS60
+signal VSS61
+signal VSS62
+signal VSS63
+signal VSS64
+signal VSS65
+signal VSS66
+signal VSS67
+signal VSS68
+signal VSS69
+signal VSS70
+signal VSS71
+signal VSS72
+signal VSS73
+signal VSS74
+signal VSS75
+signal VSS76
+signal VSS77
+signal VSS78
+signal VSS79
+signal VSS80
+signal VSS81
+signal VSS82
+signal VSS83
+signal VSS84
+signal VSS85
+signal VSS86
+signal VSS87
+signal VSS88
+signal VSS89
+signal VSS90
+signal VSS91
+signal VSS92
+signal VSS93
+signal VSS94
+signal VSS95
+signal VSS96
+signal VCC1
+signal VCC2
+signal VCC3
+signal VCC4
+signal VCC5
+signal VCC6
+signal VCC7
+signal VCC8
+signal VCC9
+signal VCC10
+signal VCC11
+signal VCC12
+signal VCC13
+signal VCC14
+signal VCC15
+signal VCC16
+signal VCC17
+signal VCC18
+signal VCC19
+signal VCC20
+signal VCC21
+signal VCC22
+signal VCC23
+signal VCC24
+signal VCC25
+signal VCC26
+signal VCC27
+signal VCC28
+signal VCC29
+signal VCC30
+signal VCC31
+signal VCC32
+signal VCC33
+signal VCC34
+signal VCC35
+signal VCC36
+signal VCC37
+signal VCC38
+signal VCC39
+signal VCC40
+signal VCC41
+signal VCC42
+signal VCC43
+signal VCC44
+signal VCCP1
+signal VCCP2
+signal VCCP3
+signal VCCP4
+signal VCCP5
+signal VCCP6
+signal VCCP7
+signal VCCP8
+signal VCCP9
+signal VCCP10
+signal VCCP11
+signal VCCP12
+signal VCCP13
+signal VCCP14
+signal VCCP15
+signal VCCP16
+signal VCCP17
+signal VCCP18
+signal VCCP19
+signal VCCP20
+signal VCCP21
+signal VCCP22
+signal VCCP23
+signal VCCP24
+signal VCCP25
+signal VCCM1
+signal VCCM2
+signal VCCM3
+signal VCCM4
+signal VCCM5
+signal VCCM6
+signal VCCM7
+signal VCCM8
+signal VCCM9
+signal VCCM10
+signal VCCM11
+signal VCCPLL1
+signal VCCPLL2
+signal VCCPLL3
+signal OSC_VCC
+signal OSC_VCCP
+signal OSC_VSS
+signal OSC_VSSP1
+
+register	BSR	628
+register	BR	1
+register	DIR	32
+
+instruction length 7
+
+instruction BYPASS 1111111 BR
+instruction EXTEST 0000000 BSR
+instruction SAMPLE/PRELOAD 0000001 BSR
+instruction IDCODE 1111110 DIR
+
+bit 627 I 1 bypass_clk
+bit 626 O 1 pll_lock 624 1 Z
+bit 625 I 1 reset_in_n
+bit 624 C 1 *
+bit 623 I 1 utp_op_clk
+bit 622 O 1 utp_op_fco 589 1 Z
+bit 621 I 1 utp_op_fci
+bit 620 O 1 utp_op_data_0 588 1 Z
+bit 619 O 1 utp_op_data_1 587 1 Z
+bit 618 O 1 utp_op_data_2 586 1 Z
+bit 617 O 1 utp_op_data_3 585 1 Z
+bit 616 O 1 utp_op_data_4 584 1 Z
+bit 615 O 1 utp_op_data_5 583 1 Z
+bit 614 O 1 utp_op_data_6 582 1 Z
+bit 613 O 1 utp_op_data_7 581 1 Z
+bit 612 O 1 utp_op_soc 580 1 Z
+bit 611 B 1 utp_op_addr_0 579 1 Z
+bit 610 B 1 utp_op_addr_1 578 1 Z
+bit 609 B 1 utp_op_addr_2 577 1 Z
+bit 608 B 1 utp_op_addr_3 576 1 Z
+bit 607 B 1 utp_op_addr_4 575 1 Z
+bit 606 I 1 utp_ip_clk
+bit 605 O 1 utp_ip_fco 574 1 Z
+bit 604 I 1 utp_ip_fci
+bit 603 I 1 utp_ip_soc
+bit 602 I 1 utp_ip_data_0
+bit 601 I 1 utp_ip_data_1
+bit 600 I 1 utp_ip_data_2
+bit 599 I 1 utp_ip_data_3
+bit 598 I 1 utp_ip_data_4
+bit 597 I 1 utp_ip_data_5
+bit 596 I 1 utp_ip_data_6
+bit 595 I 1 utp_ip_data_7
+bit 594 B 1 utp_ip_addr_0 573 1 Z
+bit 593 B 1 utp_ip_addr_1 572 1 Z
+bit 592 B 1 utp_ip_addr_2 571 1 Z
+bit 591 B 1 utp_ip_addr_3 570 1 Z
+bit 590 B 1 utp_ip_addr_4 569 1 Z
+bit 589 C 1 *
+bit 588 C 1 *
+bit 587 C 1 *
+bit 586 C 1 *
+bit 585 C 1 *
+bit 584 C 1 *
+bit 583 C 1 *
+bit 582 C 1 *
+bit 581 C 1 *
+bit 580 C 1 *
+bit 579 C 1 *
+bit 578 C 1 *
+bit 577 C 1 *
+bit 576 C 1 *
+bit 575 C 1 *
+bit 574 C 1 *
+bit 573 C 1 *
+bit 572 C 1 *
+bit 571 C 1 *
+bit 570 C 1 *
+bit 569 C 1 *
+bit 568 O 1 ethb_txen 552 1 Z
+bit 567 O 1 ethb_txdata_0 551 1 Z
+bit 566 O 1 ethb_txdata_1 550 1 Z
+bit 565 O 1 ethb_txdata_2 549 1 Z
+bit 564 O 1 ethb_txdata_3 548 1 Z
+bit 563 I 1 ethb_txclk
+bit 562 I 1 ethb_rxdv
+bit 561 I 1 ethb_rxdata_0
+bit 560 I 1 ethb_rxdata_1
+bit 559 I 1 ethb_rxdata_2
+bit 558 I 1 ethb_rxdata_3
+bit 557 I 1 ethb_rxclk
+bit 556 B 1 ethb_crs 547 1 Z
+bit 555 I 1 ethb_col
+bit 554 B 1 eth_mdio 546 1 Z
+bit 553 B 1 eth_mdc 545 1 Z
+bit 552 C 1 *
+bit 551 C 1 *
+bit 550 C 1 *
+bit 549 C 1 *
+bit 548 C 1 *
+bit 547 C 1 *
+bit 546 C 1 *
+bit 545 C 1 *
+bit 544 O 1 ethc_txen 530 1 Z
+bit 543 O 1 ethc_txdata_0 529 1 Z
+bit 542 O 1 ethc_txdata_1 528 1 Z
+bit 541 O 1 ethc_txdata_2 527 1 Z
+bit 540 O 1 ethc_txdata_3 526 1 Z
+bit 539 I 1 ethc_txclk
+bit 538 I 1 ethc_rxdv
+bit 537 I 1 ethc_rxdata_0
+bit 536 I 1 ethc_rxdata_1
+bit 535 I 1 ethc_rxdata_2
+bit 534 I 1 ethc_rxdata_3
+bit 533 I 1 ethc_rxclk
+bit 532 I 1 ethc_crs
+bit 531 I 1 ethc_col
+bit 530 C 1 *
+bit 529 C 1 *
+bit 528 C 1 *
+bit 527 C 1 *
+bit 526 C 1 *
+bit 525 B 1 hss_rxclk1 519 1 Z
+bit 524 I 1 hss_rxdata1
+bit 523 B 1 hss_rxframe1 518 1 Z
+bit 522 B 1 hss_txclk1 517 1 Z
+bit 521 O 1 hss_txdata1 516 1 Z
+bit 520 B 1 hss_txframe1 515 1 Z
+bit 519 C 1 *
+bit 518 C 1 *
+bit 517 C 1 *
+bit 516 C 1 *
+bit 515 C 1 *
+bit 514 B 1 hss_rxclk0 508 1 Z
+bit 513 I 1 hss_rxdata0
+bit 512 B 1 hss_rxframe0 507 1 Z
+bit 511 B 1 hss_txclk0 506 1 Z
+bit 510 O 1 hss_txdata0 505 1 Z
+bit 509 B 1 hss_txframe0 504 1 Z
+bit 508 C 1 *
+bit 507 C 1 *
+bit 506 C 1 *
+bit 505 C 1 *
+bit 504 C 1 *
+bit 503 B 1 pci_ad_0 448 1 Z
+bit 502 B 1 pci_ad_1 447 1 Z
+bit 501 B 1 pci_ad_2 446 1 Z
+bit 500 B 1 pci_ad_3 445 1 Z
+bit 499 B 1 pci_ad_4 444 1 Z
+bit 498 B 1 pci_ad_5 443 1 Z
+bit 497 B 1 pci_ad_6 442 1 Z
+bit 496 B 1 pci_ad_7 441 1 Z
+bit 495 B 1 pci_ad_8 440 1 Z
+bit 494 B 1 pci_ad_9 439 1 Z
+bit 493 B 1 pci_ad_10 438 1 Z
+bit 492 B 1 pci_ad_11 437 1 Z
+bit 491 B 1 pci_ad_12 436 1 Z
+bit 490 B 1 pci_ad_13 435 1 Z
+bit 489 B 1 pci_ad_14 434 1 Z
+bit 488 B 1 pci_ad_15 433 1 Z
+bit 487 B 1 pci_ad_16 432 1 Z
+bit 486 B 1 pci_ad_17 431 1 Z
+bit 485 B 1 pci_ad_18 430 1 Z
+bit 484 B 1 pci_ad_19 429 1 Z
+bit 483 B 1 pci_ad_20 428 1 Z
+bit 482 B 1 pci_ad_21 427 1 Z
+bit 481 B 1 pci_ad_22 426 1 Z
+bit 480 B 1 pci_ad_23 425 1 Z
+bit 479 B 1 pci_ad_24 424 1 Z
+bit 478 B 1 pci_ad_25 423 1 Z
+bit 477 B 1 pci_ad_26 422 1 Z
+bit 476 B 1 pci_ad_27 421 1 Z
+bit 475 B 1 pci_ad_28 420 1 Z
+bit 474 B 1 pci_ad_29 419 1 Z
+bit 473 B 1 pci_ad_30 418 1 Z
+bit 472 B 1 pci_ad_31 417 1 Z
+bit 471 B 1 pci_cbe_n_0 416 1 Z
+bit 470 B 1 pci_cbe_n_1 415 1 Z
+bit 469 B 1 pci_cbe_n_2 414 1 Z
+bit 468 B 1 pci_cbe_n_3 413 1 Z
+bit 467 B 1 pci_par 412 1 Z
+bit 466 B 1 pci_frame_n 411 1 Z
+bit 465 B 1 pci_irdy_n 410 1 Z
+bit 464 B 1 pci_trdy_n 409 1 Z
+bit 463 B 1 pci_stop_n 408 1 Z
+bit 462 B 1 pci_devsel_n 407 1 Z
+bit 461 I 1 pci_idsel
+bit 460 B 1 pci_perr_n 406 1 Z
+bit 459 B 1 pci_serr_n 405 1 Z
+bit 458 B 1 pci_req_n_0 404 1 Z
+bit 457 I 1 pci_req_n_1
+bit 456 I 1 pci_req_n_2
+bit 455 I 1 pci_req_n_3
+bit 454 B 1 pci_gnt_n_0 403 1 Z
+bit 453 O 1 pci_gnt_n_1 402 1 Z
+bit 452 O 1 pci_gnt_n_2 401 1 Z
+bit 451 O 1 pci_gnt_n_3 400 1 Z
+bit 450 O 1 pci_inta_n 399 1 Z
+bit 449 I 1 pci_clkin
+bit 448 C 1 *
+bit 447 C 1 *
+bit 446 C 1 *
+bit 445 C 1 *
+bit 444 C 1 *
+bit 443 C 1 *
+bit 442 C 1 *
+bit 441 C 1 *
+bit 440 C 1 *
+bit 439 C 1 *
+bit 438 C 1 *
+bit 437 C 1 *
+bit 436 C 1 *
+bit 435 C 1 *
+bit 434 C 1 *
+bit 433 C 1 *
+bit 432 C 1 *
+bit 431 C 1 *
+bit 430 C 1 *
+bit 429 C 1 *
+bit 428 C 1 *
+bit 427 C 1 *
+bit 426 C 1 *
+bit 425 C 1 *
+bit 424 C 1 *
+bit 423 C 1 *
+bit 422 C 1 *
+bit 421 C 1 *
+bit 420 C 1 *
+bit 419 C 1 *
+bit 418 C 1 *
+bit 417 C 1 *
+bit 416 C 1 *
+bit 415 C 1 *
+bit 414 C 1 *
+bit 413 C 1 *
+bit 412 C 1 *
+bit 411 C 1 *
+bit 410 C 1 *
+bit 409 C 1 *
+bit 408 C 1 *
+bit 407 C 1 *
+bit 406 C 1 *
+bit 405 C 1 *
+bit 404 C 1 *
+bit 403 C 1 *
+bit 402 C 1 *
+bit 401 C 1 *
+bit 400 C 1 *
+bit 399 C 1 *
+bit 398 O 1 ddr1_ma_0 317 1 Z
+bit 397 O 1 ddr1_ma_1 316 1 Z
+bit 396 O 1 ddr1_ma_2 315 1 Z
+bit 395 O 1 ddr1_ma_3 314 1 Z
+bit 394 O 1 ddr1_ma_4 313 1 Z
+bit 393 O 1 ddr1_ma_5 312 1 Z
+bit 392 O 1 ddr1_ma_6 311 1 Z
+bit 391 O 1 ddr1_ma_7 310 1 Z
+bit 390 O 1 ddr1_ma_8 309 1 Z
+bit 389 O 1 ddr1_ma_9 308 1 Z
+bit 388 O 1 ddr1_ma_10 307 1 Z
+bit 387 O 1 ddr1_ma_11 306 1 Z
+bit 386 O 1 ddr1_ma_12 305 1 Z
+bit 385 O 1 ddr1_ma_13 304 1 Z
+bit 384 B 1 ddr1_dq_0 303 1 Z
+bit 383 B 1 ddr1_dq_1 302 1 Z
+bit 382 B 1 ddr1_dq_2 301 1 Z
+bit 381 B 1 ddr1_dq_3 300 1 Z
+bit 380 B 1 ddr1_dq_4 299 1 Z
+bit 379 B 1 ddr1_dq_5 298 1 Z
+bit 378 B 1 ddr1_dq_6 297 1 Z
+bit 377 B 1 ddr1_dq_7 296 1 Z
+bit 376 B 1 ddr1_dq_8 295 1 Z
+bit 375 B 1 ddr1_dq_9 294 1 Z
+bit 374 B 1 ddr1_dq_10 293 1 Z
+bit 373 B 1 ddr1_dq_11 292 1 Z
+bit 372 B 1 ddr1_dq_12 291 1 Z
+bit 371 B 1 ddr1_dq_13 290 1 Z
+bit 370 B 1 ddr1_dq_14 289 1 Z
+bit 369 B 1 ddr1_dq_15 288 1 Z
+bit 368 B 1 ddr1_dq_16 287 1 Z
+bit 367 B 1 ddr1_dq_17 286 1 Z
+bit 366 B 1 ddr1_dq_18 285 1 Z
+bit 365 B 1 ddr1_dq_19 284 1 Z
+bit 364 B 1 ddr1_dq_20 283 1 Z
+bit 363 B 1 ddr1_dq_21 282 1 Z
+bit 362 B 1 ddr1_dq_22 281 1 Z
+bit 361 B 1 ddr1_dq_23 280 1 Z
+bit 360 B 1 ddr1_dq_24 279 1 Z
+bit 359 B 1 ddr1_dq_25 278 1 Z
+bit 358 B 1 ddr1_dq_26 277 1 Z
+bit 357 B 1 ddr1_dq_27 276 1 Z
+bit 356 B 1 ddr1_dq_28 275 1 Z
+bit 355 B 1 ddr1_dq_29 274 1 Z
+bit 354 B 1 ddr1_dq_30 273 1 Z
+bit 353 B 1 ddr1_dq_31 272 1 Z
+bit 352 B 1 ddr1_cb_0 271 1 Z
+bit 351 B 1 ddr1_cb_1 270 1 Z
+bit 350 B 1 ddr1_cb_2 269 1 Z
+bit 349 B 1 ddr1_cb_3 268 1 Z
+bit 348 B 1 ddr1_cb_4 267 1 Z
+bit 347 B 1 ddr1_cb_5 266 1 Z
+bit 346 B 1 ddr1_cb_6 265 1 Z
+bit 345 B 1 ddr1_cb_7 264 1 Z
+bit 344 O 1 ddr1_cs_n_0 263 1 Z
+bit 343 O 1 ddr1_cs_n_1 262 1 Z
+bit 342 O 1 ddr1_dm_0 261 1 Z
+bit 341 O 1 ddr1_dm_1 260 1 Z
+bit 340 O 1 ddr1_dm_2 259 1 Z
+bit 339 O 1 ddr1_dm_3 258 1 Z
+bit 338 O 1 ddr1_dm_4 257 1 Z
+bit 337 B 1 ddr1_dqs_0 256 1 Z
+bit 336 B 1 ddr1_dqs_1 255 1 Z
+bit 335 B 1 ddr1_dqs_2 254 1 Z
+bit 334 B 1 ddr1_dqs_3 253 1 Z
+bit 333 B 1 ddr1_dqs_4 252 1 Z
+bit 332 O 1 ddr1_ba_0 251 1 Z
+bit 331 O 1 ddr1_ba_1 250 1 Z
+bit 330 O 1 ddr1_cas_n 249 1 Z
+bit 329 O 1 ddr1_ras_n 248 1 Z
+bit 328 O 1 ddr1_we_n 247 1 Z
+bit 327 O 1 ddr1_cke_0 246 1 Z
+bit 326 O 1 ddr1_cke_1 245 1 Z
+bit 325 O 1 ddr1_ck_0 244 1 Z
+bit 324 O 1 ddr1_ck_1 243 1 Z
+bit 323 O 1 ddr1_ck_2 242 1 Z
+bit 322 O 1 ddr1_ck_n_0 241 1 Z
+bit 321 O 1 ddr1_ck_n_1 240 1 Z
+bit 320 O 1 ddr1_ck_n_2 239 1 Z
+bit 319 O 1 ddr1_rcvenout_n 238 1 Z
+bit 318 I 1 ddr1_rcvenin_n
+bit 317 C 1 *
+bit 316 C 1 *
+bit 315 C 1 *
+bit 314 C 1 *
+bit 313 C 1 *
+bit 312 C 1 *
+bit 311 C 1 *
+bit 310 C 1 *
+bit 309 C 1 *
+bit 308 C 1 *
+bit 307 C 1 *
+bit 306 C 1 *
+bit 305 C 1 *
+bit 304 C 1 *
+bit 303 C 1 *
+bit 302 C 1 *
+bit 301 C 1 *
+bit 300 C 1 *
+bit 299 C 1 *
+bit 298 C 1 *
+bit 297 C 1 *
+bit 296 C 1 *
+bit 295 C 1 *
+bit 294 C 1 *
+bit 293 C 1 *
+bit 292 C 1 *
+bit 291 C 1 *
+bit 290 C 1 *
+bit 289 C 1 *
+bit 288 C 1 *
+bit 287 C 1 *
+bit 286 C 1 *
+bit 285 C 1 *
+bit 284 C 1 *
+bit 283 C 1 *
+bit 282 C 1 *
+bit 281 C 1 *
+bit 280 C 1 *
+bit 279 C 1 *
+bit 278 C 1 *
+bit 277 C 1 *
+bit 276 C 1 *
+bit 275 C 1 *
+bit 274 C 1 *
+bit 273 C 1 *
+bit 272 C 1 *
+bit 271 C 1 *
+bit 270 C 1 *
+bit 269 C 1 *
+bit 268 C 1 *
+bit 267 C 1 *
+bit 266 C 1 *
+bit 265 C 1 *
+bit 264 C 1 *
+bit 263 C 1 *
+bit 262 C 1 *
+bit 261 C 1 *
+bit 260 C 1 *
+bit 259 C 1 *
+bit 258 C 1 *
+bit 257 C 1 *
+bit 256 C 1 *
+bit 255 C 1 *
+bit 254 C 1 *
+bit 253 C 1 *
+bit 252 C 1 *
+bit 251 C 1 *
+bit 250 C 1 *
+bit 249 C 1 *
+bit 248 C 1 *
+bit 247 C 1 *
+bit 246 C 1 *
+bit 245 C 1 *
+bit 244 C 1 *
+bit 243 C 1 *
+bit 242 C 1 *
+bit 241 C 1 *
+bit 240 C 1 *
+bit 239 C 1 *
+bit 238 C 1 *
+bit 237 B 1 usb_dpos 231 1 Z
+bit 236 B 1 usb_dneg 230 1 Z
+bit 235 B 1 usb_hpos 229 1 Z
+bit 234 B 1 usb_hneg 229 1 Z
+bit 233 O 1 usb_hpen 228 1 Z
+bit 232 I 1 usb_hpwr
+bit 231 C 1 *
+bit 230 C 1 *
+bit 229 C 1 *
+bit 228 C 1 *
+bit 227 I 1 ex_iowait_n
+bit 226 O 1 ex_ale 134 1 Z
+bit 225 B 1 ex_addr_0 133 1 Z
+bit 224 B 1 ex_addr_1 132 1 Z
+bit 223 B 1 ex_addr_2 131 1 Z
+bit 222 B 1 ex_addr_3 130 1 Z
+bit 221 B 1 ex_addr_4 129 1 Z
+bit 220 B 1 ex_addr_5 128 1 Z
+bit 219 B 1 ex_addr_6 127 1 Z
+bit 218 B 1 ex_addr_7 126 1 Z
+bit 217 B 1 ex_addr_8 125 1 Z
+bit 216 B 1 ex_addr_9 124 1 Z
+bit 215 B 1 ex_addr_10 123 1 Z
+bit 214 B 1 ex_addr_11 122 1 Z
+bit 213 B 1 ex_addr_12 121 1 Z
+bit 212 B 1 ex_addr_13 120 1 Z
+bit 211 B 1 ex_addr_14 119 1 Z
+bit 210 B 1 ex_addr_15 118 1 Z
+bit 209 B 1 ex_addr_16 117 1 Z
+bit 208 B 1 ex_addr_17 116 1 Z
+bit 207 B 1 ex_addr_18 115 1 Z
+bit 206 B 1 ex_addr_19 114 1 Z
+bit 205 B 1 ex_addr_20 113 1 Z
+bit 204 B 1 ex_addr_21 111 1 Z
+bit 203 B 1 ex_addr_22 111 1 Z
+bit 202 B 1 ex_addr_23 110 1 Z
+bit 201 B 1 ex_addr_24 109 1 Z
+bit 200 B 1 ex_wr_n 107 1 Z
+bit 199 B 1 ex_rd_n 106 1 Z
+bit 198 B 1 ex_cs_n_0 105 1 Z
+bit 197 B 1 ex_cs_n_1 104 1 Z
+bit 196 B 1 ex_cs_n_2 103 1 Z
+bit 195 B 1 ex_cs_n_3 102 1 Z
+bit 194 B 1 ex_cs_n_4 101 1 Z
+bit 193 B 1 ex_cs_n_5 100 1 Z
+bit 192 B 1 ex_cs_n_6 99 1 Z
+bit 191 B 1 ex_cs_n_7 98 1 Z
+bit 190 B 1 ex_data_0 97 1 Z
+bit 189 B 1 ex_data_1 96 1 Z
+bit 188 B 1 ex_data_2 95 1 Z
+bit 187 B 1 ex_data_3 94 1 Z
+bit 186 B 1 ex_data_4 93 1 Z
+bit 185 B 1 ex_data_5 92 1 Z
+bit 184 B 1 ex_data_6 91 1 Z
+bit 183 B 1 ex_data_7 90 1 Z
+bit 182 B 1 ex_data_8 89 1 Z
+bit 181 B 1 ex_data_9 88 1 Z
+bit 180 B 1 ex_data_10 87 1 Z
+bit 179 B 1 ex_data_11 86 1 Z
+bit 178 B 1 ex_data_12 85 1 Z
+bit 177 B 1 ex_data_13 84 1 Z
+bit 176 B 1 ex_data_14 83 1 Z
+bit 175 B 1 ex_data_15 82 1 Z
+bit 174 B 1 ex_data_16 81 1 Z
+bit 173 B 1 ex_data_17 80 1 Z
+bit 172 B 1 ex_data_18 79 1 Z
+bit 171 B 1 ex_data_19 78 1 Z
+bit 170 B 1 ex_data_20 77 1 Z
+bit 169 B 1 ex_data_21 76 1 Z
+bit 168 B 1 ex_data_22 75 1 Z
+bit 167 B 1 ex_data_23 74 1 Z
+bit 166 B 1 ex_data_24 73 1 Z
+bit 165 B 1 ex_data_25 72 1 Z
+bit 164 B 1 ex_data_26 71 1 Z
+bit 163 B 1 ex_data_27 70 1 Z
+bit 162 B 1 ex_data_28 69 1 Z
+bit 161 B 1 ex_data_29 68 1 Z
+bit 160 B 1 ex_data_30 67 1 Z
+bit 159 B 1 ex_data_31 66 1 Z
+bit 158 I 1 ex_rdy_n_0
+bit 157 I 1 ex_rdy_n_1
+bit 156 I 1 ex_rdy_n_2
+bit 155 I 1 ex_rdy_n_3
+bit 154 B 1 ex_parity_0 57 1 Z
+bit 153 B 1 ex_parity_1 56 1 Z
+bit 152 B 1 ex_parity_2 55 1 Z
+bit 151 B 1 ex_parity_3 54 1 Z
+bit 150 I 1 ex_req_gnt_n
+bit 149 I 1 ex_req_n_1
+bit 148 I 1 ex_req_n_2
+bit 147 I 1 ex_req_n_3
+bit 146 O 1 ex_gnt_req_n 61 1 Z
+bit 145 O 1 ex_gnt_n_1 60 1 Z
+bit 144 O 1 ex_gnt_n_2 59 1 Z
+bit 143 O 1 ex_gnt_n_3 58 1 Z
+bit 142 B 1 ex_be_n_0 65 1 Z
+bit 141 B 1 ex_be_n_1 64 1 Z
+bit 140 B 1 ex_be_n_2 63 1 Z
+bit 139 B 1 ex_be_n_3 62 1 Z
+bit 138 I 1 ex_slave_cs_n
+bit 137 O 1 ex_wait_n 108 1 Z
+bit 136 I 1 ex_burst
+bit 135 I 1 ex_clk
+bit 134 C 1 *
+bit 133 C 1 *
+bit 132 C 1 *
+bit 131 C 1 *
+bit 130 C 1 *
+bit 129 C 1 *
+bit 128 C 1 *
+bit 127 C 1 *
+bit 126 C 1 *
+bit 125 C 1 *
+bit 124 C 1 *
+bit 123 C 1 *
+bit 122 C 1 *
+bit 121 C 1 *
+bit 120 C 1 *
+bit 119 C 1 *
+bit 118 C 1 *
+bit 117 C 1 *
+bit 116 C 1 *
+bit 115 C 1 *
+bit 114 C 1 *
+bit 113 C 1 *
+bit 112 C 1 *
+bit 111 C 1 *
+bit 110 C 1 *
+bit 109 C 1 *
+bit 108 C 1 *
+bit 107 C 1 *
+bit 106 C 1 *
+bit 105 C 1 *
+bit 104 C 1 *
+bit 103 C 1 *
+bit 102 C 1 *
+bit 101 C 1 *
+bit 100 C 1 *
+bit 99 C 1 *
+bit 98 C 1 *
+bit 97 C 1 *
+bit 96 C 1 *
+bit 95 C 1 *
+bit 94 C 1 *
+bit 93 C 1 *
+bit 92 C 1 *
+bit 91 C 1 *
+bit 90 C 1 *
+bit 89 C 1 *
+bit 88 C 1 *
+bit 87 C 1 *
+bit 86 C 1 *
+bit 85 C 1 *
+bit 84 C 1 *
+bit 83 C 1 *
+bit 82 C 1 *
+bit 81 C 1 *
+bit 80 C 1 *
+bit 79 C 1 *
+bit 78 C 1 *
+bit 77 C 1 *
+bit 76 C 1 *
+bit 75 C 1 *
+bit 74 C 1 *
+bit 73 C 1 *
+bit 72 C 1 *
+bit 71 C 1 *
+bit 70 C 1 *
+bit 69 C 1 *
+bit 68 C 1 *
+bit 67 C 1 *
+bit 66 C 1 *
+bit 65 C 1 *
+bit 64 C 1 *
+bit 63 C 1 *
+bit 62 C 1 *
+bit 61 C 1 *
+bit 60 C 1 *
+bit 59 C 1 *
+bit 58 C 1 *
+bit 57 C 1 *
+bit 56 C 1 *
+bit 55 C 1 *
+bit 54 C 1 *
+bit 53 B 1 i2c_sda 51 1 Z
+bit 52 B 1 i2c_scl 50 1 Z
+bit 51 C 1 *
+bit 50 C 1 *
+bit 49 O 1 ssp_sfrm 44 1 Z
+bit 48 O 1 ssp_txd 43 1 Z
+bit 47 I 1 ssp_rxd
+bit 46 O 1 ssp_sclk 42 1 Z
+bit 45 I 1 ssp_extclk
+bit 44 C 1 *
+bit 43 C 1 *
+bit 42 C 1 *
+bit 41 B 1 gpio_1 26 1 Z
+bit 40 B 1 gpio_2 25 1 Z
+bit 39 B 1 gpio_3 24 1 Z
+bit 38 B 1 gpio_4 23 1 Z
+bit 37 B 1 gpio_5 22 1 Z
+bit 36 B 1 gpio_6 21 1 Z
+bit 35 B 1 gpio_7 20 1 Z
+bit 34 B 1 gpio_8 19 1 Z
+bit 33 B 1 gpio_9 18 1 Z
+bit 32 B 1 gpio_10 17 1 Z
+bit 31 B 1 gpio_11 16 1 Z
+bit 30 B 1 gpio_12 15 1 Z
+bit 29 B 1 gpio_13 14 1 Z
+bit 28 B 1 gpio_14 13 1 Z
+bit 27 B 1 gpio_15 12 1 Z
+bit 26 C 1 *
+bit 25 C 1 *
+bit 24 C 1 *
+bit 23 C 1 *
+bit 22 C 1 *
+bit 21 C 1 *
+bit 20 C 1 *
+bit 19 C 1 *
+bit 18 C 1 *
+bit 17 C 1 *
+bit 16 C 1 *
+bit 15 C 1 *
+bit 14 C 1 *
+bit 13 C 1 *
+bit 12 C 1 *
+bit 11 O 1 txdata_0 7 1 Z
+bit 10 O 1 rts_n_0 6 1 Z
+bit 9 I 1 rxdata_0
+bit 8 I 1 cts_n_0
+bit 7 C 1 *
+bit 6 C 1 *
+bit 5 O 1 txdata1 1 1 Z
+bit 4 O 1 rts_n_1 0 1 Z
+bit 3 I 1 rxdata1
+bit 2 I 1 cts_n_1
+bit 1 C 1 *
+bit 0 C 1 *

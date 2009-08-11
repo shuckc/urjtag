@@ -91,6 +91,9 @@ const urj_bus_driver_t *urj_bus_drivers[] = {
 #ifdef ENABLE_BUS_IXP435
     &urj_bus_ixp435_bus,
 #endif
+#ifdef ENABLE_BUS_IXP465
+    &urj_bus_ixp465_bus,
+#endif
 #ifdef ENABLE_BUS_JOPCYC
     &urj_bus_jopcyc_bus,
 #endif

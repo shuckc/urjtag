@@ -478,7 +478,7 @@ AC_DEFUN([CHECK_DRIVER], [
 # Enable bus drivers
 AC_DEFUN([DEF_ENABLE_BUSDRIVERS], [\
 arm9tdmi au1500 avr32 bcm1250 bf526_ezkit bf527_ezkit bf533_stamp bf533_ezkit bf537_stamp bf537_ezkit bf538f_ezkit bf548_ezkit bf561_ezkit bscoach ejtag  ejtag_dma \
-fjmem ixp425 ixp435 jopcyc h7202 lh7a400  mpc5200 mpc824x ppc405ep ppc440gx_ebc8 prototype pxa2x0 pxa27x \
+fjmem ixp425 ixp435 ixp465 jopcyc h7202 lh7a400  mpc5200 mpc824x ppc405ep ppc440gx_ebc8 prototype pxa2x0 pxa27x \
 s3c4510 sa1110 sh7727 sh7750r sh7751r sharc_21065L slsup3 tx4925 zefant_xs3])
 AC_ARG_ENABLE(bus,
 [AS_HELP_STRING([--enable-bus], [Enable default set or specific bus drivers:])]
@@ -514,6 +514,7 @@ CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [ejtag_dma],     [ENABLE_BUS_
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [fjmem],         [ENABLE_BUS_FJMEM])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [ixp425],        [ENABLE_BUS_IXP425])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [ixp435],        [ENABLE_BUS_IXP435])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [ixp465],        [ENABLE_BUS_IXP465])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [jopcyc],        [ENABLE_BUS_JOPCYC])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [h7202],         [ENABLE_BUS_H7202])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [lh7a400],       [ENABLE_BUS_LH7A400])

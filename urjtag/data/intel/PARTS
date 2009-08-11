@@ -35,5 +35,6 @@
 1001001001110100	ixp425		IXP425-533MHz	# see IXP425 bdsl file from the devel CD
 1001001001110101	ixp425		IXP425-400MHz	# see IXP425 bdsl file from the devel CD
 1001001001110111	ixp425		IXP425-266MHz	# see IXP425 bdsl file from the devel CD
+1001001001111010    ixp465      IXP465   # see IXP465 bdsl file 
 1001001001100101	pxa270		PXA270	# see bulbcx.dat from Intel Jflash source code
 
