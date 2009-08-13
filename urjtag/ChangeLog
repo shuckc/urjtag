@@ -1,3 +1,8 @@
+2009-08-13  Arnim Laeuger  <arniml>
+
+  * data/xilinx/xcf04s/STEPPINGS, data/xilinx/xc3s500e_fg320/STEPPINGS:
+    [ 2836180 ] Patch for new steppings of xcf04s and xc3s500e (Steven Walter)
+
 2009-08-11  Arnim Laeuger  <arniml>
 
   * src/bus/ixp465.c, src/bus/buses.c, src/bus/buses.h,
