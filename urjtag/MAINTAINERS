@@ -5,8 +5,7 @@ $Id$
 
 Note: This list is meant to remain in alphabetical order.
 
-P: Person
-M: Their e-mail address
+M: Mail to: Person <their e-mail address>
 W: Related website other than urjtag.org
 F: Files (in shell glob format)
 S: Status, one of the following:
@@ -27,21 +26,15 @@ ALTERA UP3 EDUCATION KIT BUS DRIVER
 F:      src/bus/slsup3.c
 S:      Orphan
 
-ANALOG DEVICES ADSP-BF537 STAMP/EZ-KIT LITE BUS DRIVER
-F:      src/bus/bf537_stamp.c
-S:      Orphan
-
-ANALOG DEVICES ADSP-BF548 EZ-KIT LITE BUS DRIVER
-F:      src/bus/bf548_ezkit.c
-S:      Orphan
-
-ANALOG DEVICES ADSP-BF561 EZ-KIT LITE BUS DRIVER
-F:      src/bus/bf561_ezkit.c
-S:      Orphan
-
-ANALOG DEVICES SHARC 21065L COMPATIBLE BUS DRIVER
+ANALOG DEVICES BLACKFIN/SHARC DRIVERS
+M:      Jie Zhang <jie.zhang@analog.com>
+M:      Mike Frysinger <vapier@gentoo.org>
+W:      http://blackfin.uclinux.org/
+F:      data/analog/*
+F:      src/bus/bf5*_stamp.c
+F:      src/bus/bf5*_ezkit.c
 F:      src/bus/sharc21065l.c
-S:      Orphan
+S:      Maintained
 
 ARCOM CABLE DRIVER
 F:      src/tap/cable/arcom.c
@@ -55,23 +48,17 @@ AVR32 MULTI-MODE BUS DRIVER
 F:      src/bus/avr32.c
 S:      Orphan
 
-BLACKFIN BF533 BOARD BUS DRIVERS
-F:      src/bus/bf533_*.c
-S:      Orphan
-
 BROADCOM BCM1250 BUS DRIVER
 F:      src/bus/bcm1250.c
 S:      Orphan
 
 BYTEBLASTER CABLE DRIVER
-P:      Arnim Läuger
-M:      arniml at users.sourceforge.net
+M:      Arnim Läuger <arniml at users.sourceforge.net>
 F:      src/tap/cable/byteblaster.c
 S:      Tested
 
 BSDL PARSER
-P:      Arnim Läuger
-M:      arniml at users.sourceforge.net
+M:      Arnim Läuger <arniml at users.sourceforge.net>
 F:      src/bsdl/*
 S:      Maintained
 
@@ -96,8 +83,7 @@ F:      src/tap/cable/ei012.c
 S:      Orphan
 
 FJMEM FPGA JTAG MEMORY BUS DRIVER
-P:      Arnim Läuger
-M:      arniml at users.sourceforge.net
+M:      Arnim Läuger <arniml at users.sourceforge.net>
 F:      src/bus/fjmem.c
 S:      Maintained
 
@@ -110,8 +96,7 @@ F:      src/bus/mpc5200.c
 S:      Orphan
 
 FT2232 CABLE DRIVER
-P:      Arnim Läuger
-M:      arniml at users.sourceforge.net
+M:      Arnim Läuger <arniml at users.sourceforge.net>
 F:      src/tap/cable/ft2232.c
 S:      Maintained
 
@@ -160,8 +145,7 @@ F:      src/tap/cable/jim.c
 S:      Orphan
 
 JOPCYC BUS DRIVER
-P:      Arnim Läuger
-M:      arniml at users.sourceforge.net
+M:      Arnim Läuger <arniml at users.sourceforge.net>
 F:      src/bus/jopcyc.c
 S:      Maintained
 
@@ -202,8 +186,7 @@ F:      src/bus/lh7a400.c
 S:      Orphan
 
 SVF PLAYER
-P:      Arnim Läuger
-M:      arniml at users.sourceforge.net
+M:      Arnim Läuger <arniml at users.sourceforge.net>
 F:      src/svf/*
 S:      Maintained
 
@@ -216,8 +199,7 @@ F:      src/tap/cable/ts7800.c
 S:      Orphan
 
 USB-BLASTER CABLE DRIVER
-P:      Arnim Läuger
-M:      arniml at users.sourceforge.net
+M:      Arnim Läuger <arniml at users.sourceforge.net>
 F:      src/tap/cable/usbblaster.c
 S:      Maintained
 
@@ -230,7 +212,6 @@ F:      src/tap/cable/xpc.c
 S:      Orphan
 
 ZEFANT-XS3 BUS DRIVER
-P:      Arnim Läuger
-M:      arniml at users.sourceforge.net
+M:      Arnim Läuger <arniml at users.sourceforge.net>
 F:      src/bus/zefant-xs3.c
 S:      Maintained

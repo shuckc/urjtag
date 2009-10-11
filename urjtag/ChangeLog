@@ -1,3 +1,8 @@
+2009-10-11  Mike Frysinger  <vapier@gentoo.org>
+
+  * MAINTAINERS: Add maintainer info for ADI parts.  Drop the old P:/M: format
+    (split name/e-mail lines) for the new combined M: format.
+
 2009-08-13  Arnim Laeuger  <arniml>
 
   * data/xilinx/xcf04s/STEPPINGS, data/xilinx/xc3s500e_fg320/STEPPINGS:
