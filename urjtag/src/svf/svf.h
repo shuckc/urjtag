@@ -37,6 +37,12 @@ enum generic_irdr_coding
 };
 
 
+struct hexa_frag
+{
+    char   *buf;
+    size_t  buflen;
+    size_t  strlen;
+};
 struct tdval
 {
     int token;

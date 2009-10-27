@@ -34,6 +34,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <string.h>
+
 #include <urjtag/log.h>
 
 #include "svf.h"
@@ -58,12 +60,13 @@ static void urj_svf_free_ths_params(struct ths_params *);
   double dvalue;
   char  *cvalue;
   int    ivalue;
+  struct hexa_frag hexa_frag;
   struct tdval tdval;
   struct tcval *tcval;
 }
 
 
-%token IDENTIFIER NUMBER HEXA_NUM VECTOR_STRING
+%token IDENTIFIER NUMBER HEXA_NUM_FRAGMENT VECTOR_STRING
 
 %token EMPTY
 %token ENDDR ENDIR 
@@ -79,9 +82,11 @@ static void urj_svf_free_ths_params(struct ths_params *);
 %token SVF_EOF 0    /* SVF_EOF must match bison's token YYEOF */
 
 %type <dvalue> NUMBER
+%type <cvalue> HEXA_NUM_FRAGMENT
 %type <tdval>  runtest_clk_count
 %type <token>  runtest_run_state_opt
 %type <token>  runtest_end_state_opt
+%type <hexa_frag> hexa_num_sequence
 
 %%
 
@@ -267,25 +272,51 @@ ths_param_list
 ; 
 
 ths_opt_param
-            : TDI   HEXA_NUM
+            : TDI   '(' hexa_num_sequence ')'
               {
-                priv_data->parser_params.ths_params.tdi = $<cvalue>2;
+                priv_data->parser_params.ths_params.tdi = $3.buf;
               }
 
-            | TDO   HEXA_NUM
+            | TDO   '(' hexa_num_sequence ')'
               {
-                priv_data->parser_params.ths_params.tdo = $<cvalue>2;
+                priv_data->parser_params.ths_params.tdo = $3.buf;
               }
 
-            | MASK  HEXA_NUM
+            | MASK  '(' hexa_num_sequence ')'
               {
-                priv_data->parser_params.ths_params.mask = $<cvalue>2;
+                priv_data->parser_params.ths_params.mask = $3.buf;
               }
 
-            | SMASK HEXA_NUM
+            | SMASK '(' hexa_num_sequence ')'
               {
-                priv_data->parser_params.ths_params.smask = $<cvalue>2;
+                priv_data->parser_params.ths_params.smask = $3.buf;
               }
+;
+
+hexa_num_sequence
+           : HEXA_NUM_FRAGMENT
+             {
+                 $$.buf    = $1;
+                 $$.strlen = strlen ($1);
+                 $$.buflen = $$.strlen + 1;
+             }
+           | hexa_num_sequence HEXA_NUM_FRAGMENT
+             {
+#define REALLOC_STEP (1 << 16)
+                 size_t req_len = $1.strlen + strlen ($2);
+                 if ($1.buflen <= req_len) {
+                     size_t newlen = req_len - $1.buflen < REALLOC_STEP ?
+                         $1.buflen + REALLOC_STEP : req_len + 1;
+                     $1.buf = (char *)realloc ($1.buf, newlen);
+                     $1.buflen = newlen;
+                 }
+                 if ($1.buf != NULL) {
+                     strcat ($1.buf, $2);
+                     $1.strlen += strlen ($2);
+                 }
+                 free ($2);
+                 $$ = $1;
+             }
 ;
 
 stable_state
@@ -413,8 +444,8 @@ direction
 yyerror (YYLTYPE *locp, urj_svf_parser_priv_t *priv_data, urj_chain_t *chain,
          const char *error_string)
 {
-    urj_log (URJ_LOG_LEVEL_ERROR, "Error occurred for SVF command %s.\n",
-             error_string);
+    urj_log (URJ_LOG_LEVEL_ERROR, "Error occurred for SVF command, line %d, column %d-%d:\n %s.\n",
+             locp->first_line, locp->first_column, locp->last_column, error_string);
 }
 
 

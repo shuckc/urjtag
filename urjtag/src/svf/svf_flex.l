@@ -63,7 +63,7 @@ int yywrap(yyscan_t scanner)
 
 #define YY_USER_INIT \
     do { \
-        yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 0; \
+        yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 1; \
     } while (0)
 
 %}
@@ -77,11 +77,13 @@ WSPACE          [ \t\r]
 COMMENT         (!.*)|("//".*)[^\n]
 
 %s expect_vector
+%s expect_hexa_num_paren
+%s expect_hexa_num
 
 %%
 
 
-{LETTER}+[0-9A-Za-z_]* {
+<INITIAL>{LETTER}+[0-9A-Za-z_]* {
   /* token is a keyword or identifier */
   int keyw;
 
@@ -89,15 +91,23 @@ COMMENT         (!.*)|("//".*)[^\n]
   keyw = map_keyw_ident(yylval, yytext);
 
   /* enable detection of VECTOR_STRING when this is a PIO command */
-  if (keyw == PIO) {
-    BEGIN(expect_vector);
+  switch (keyw) {
+  case PIO:
+      BEGIN(expect_vector);
+      break;
+  case TDI:
+  case TDO:
+  case MASK:
+  case SMASK:
+      BEGIN(expect_hexa_num_paren);
+      break;
   }
 
   return(keyw);
 } /* end of keyword or identifier */
 
 
-{DIGIT}+(\.{DIGIT}+)?([eE][-+]?{DIGIT}+)? {
+<INITIAL>{DIGIT}+(\.{DIGIT}+)?([eE][-+]?{DIGIT}+)? {
   /* token is a real number */
 
   char *real_string = strdup(yytext);
@@ -125,7 +135,7 @@ COMMENT         (!.*)|("//".*)[^\n]
 } /* end of real number */
 
 
-<expect_vector>"("{WSPACE}*[\n\rHhLlZzUuDdXx \t\r]+{WSPACE}*")" {
+<expect_vector>"("{WSPACE}*[\n\rHhLlZzUuDdXx \t]+{WSPACE}*")" {
   /* There is an overlap of VECTOR_STRING and HEXA_NUM when the string
      contains only 'd' or 'D'. To prevent complicated parsing rules,
      the lexer is instructed to detect VECTOR_STRING only when a PIO
@@ -137,24 +147,30 @@ COMMENT         (!.*)|("//".*)[^\n]
   fix_yylloc_nl(yylloc, yytext, yyget_extra(yyscanner));
   align_string(yytext);
 
-  cstring = calloc(strlen(yytext) + 1, sizeof(char));
+  cstring = malloc(strlen(yytext) + 1);
   strcpy(cstring, yytext);
   yylval->cvalue = cstring;
   return(VECTOR_STRING);
 } /* end of vector string */
 
 
-"("{WSPACE}*[\n\rA-Fa-f0-9 \t\r]+{WSPACE}*")" {
-  /* token is a hexadecimal value (2) */
+<expect_hexa_num>[A-Fa-f0-9 \n]{1,1024} {
+  /* HEXA_NUM_FRAGMENT is restricted in size to avoid excessive token length.
+     Utilizing the {n,m} regex operator is probably not the right way
+     to do this.
+     1024 is chosen arbitrarily, increasing to e.g. 4096 enhances scanner
+     performance, trading off against huge table sizes.
+     This whole strategy needs to be revisited with support of flex experts.
+  */
   char *cstring;
 
   fix_yylloc_nl(yylloc, yytext, yyget_extra(yyscanner));
   align_string(yytext);
 
-  cstring = calloc(strlen(yytext) + 1, sizeof(char));
+  cstring = (char *)malloc(strlen(yytext) + 1);
   strcpy(cstring, yytext);
   yylval->cvalue = cstring;
-  return(HEXA_NUM);
+  return(HEXA_NUM_FRAGMENT);
 } /* end of hexadecimal value */
 
 
@@ -170,9 +186,23 @@ COMMENT         (!.*)|("//".*)[^\n]
 } /* end of comment */
 
 
-[()] {
-  /* left or right parenthes */
+<INITIAL>"(" {
   fix_yylloc(yylloc, yytext);
+  return(yytext[0]);
+} /* end of left or right parenthesis */
+
+<expect_hexa_num_paren>"(" {
+  /* scanning until a left parenthesis under this start condition implicitly
+     skips whitespace that would have been attributed to HEXA_NUM_FRAGMENT
+     otherwise */
+  fix_yylloc(yylloc, yytext);
+  /* now hand over to HEXA_NUM_FRAGMENT */
+  BEGIN(expect_hexa_num);
+  return(yytext[0]);
+} /* end of left or right parenthesis */
+")" {
+  fix_yylloc(yylloc, yytext);
+  BEGIN(INITIAL);
   return(yytext[0]);
 } /* end of left or right parenthesis */
 
@@ -190,7 +220,7 @@ COMMENT         (!.*)|("//".*)[^\n]
 ; {
   /* token is end of statement character */
 
-  /* release expect_vector */
+  /* release start condition */
   BEGIN(INITIAL);
 
   fix_yylloc(yylloc, yytext);
