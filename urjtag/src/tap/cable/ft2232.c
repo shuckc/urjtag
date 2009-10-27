@@ -52,7 +52,6 @@
 #define DEFAULT_DRIVER "ftdi-mpsse"
 #endif
 
-
 /* repeat the definitions for MPSSE command processor here
    since we cannot rely on the existence of ftdi.h even though
    they're defined there */
@@ -2089,15 +2088,15 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftdi = {
     "Signalyzer",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftdi-mpsse",               /* default usbconn driver */
-    0x0000,                     /* VID */
-    0x0000                      /* PID */
+    0x0403,                     /* VID */
+    0xbca1                      /* PID */
 };
 urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftd2xx = {
     "Signalyzer",               /* cable name */
     NULL,                       /* string pattern, not used */
     "ftd2xx-mpsse",             /* default usbconn driver */
-    0x0000,                     /* VID */
-    0x0000                      /* PID */
+    0x0403,                     /* VID */
+    0xbca1                      /* PID */
 };
 
 urj_cable_driver_t urj_tap_cable_ft2232_flyswatter_driver = {
