@@ -665,36 +665,19 @@ AC_OUTPUT
 dnl
 dnl Configuration summary
 dnl
-AS_IF([test ${HAVELIBFTDI:-no} != no], [
-   FLAG_HAVELIBFTDI=yes
-], [
-   FLAG_HAVELIBFTDI=no
+AC_DEFUN([MAKE_YESNO_VAR],[dnl
+  AS_IF([test ${$1:-$2} != $2], [dnl
+     FLAG_$1=yes
+  ], [dnl
+     FLAG_$1=no
+  ])
 ])
-AS_IF([test ${HAVELIBUSB:-no} != no], [
-   FLAG_HAVELIBUSB=yes
-], [
-   FLAG_HAVELIBUSB=no
-])
-AS_IF([test ${HAVELIBFTD2XX:-no} != no], [
-   FLAG_HAVELIBFTD2XX=yes
-], [
-   FLAG_HAVELIBFTD2XX=no
-])
-AS_IF([test ${HAVEINPOUTXX:-no} != no], [
-   FLAG_HAVEINPOUTXX=yes
-], [
-   FLAG_HAVEINPOUTXX=no
-])
-AS_IF([test ${svf:-false} != false], [
-   FLAG_SVF=yes
-], [
-   FLAG_SVF=no
-])
-AS_IF([test ${bsdl:-false} != false], [
-   FLAG_BSDL=yes
-], [
-   FLAG_BSDL=no
-])
+MAKE_YESNO_VAR([HAVELIBFTDI], [no])
+MAKE_YESNO_VAR([HAVELIBUSB], [no])
+MAKE_YESNO_VAR([HAVELIBFTD2XX], [no])
+MAKE_YESNO_VAR([HAVEINPOUTXX], [no])
+MAKE_YESNO_VAR([svf], [false])
+MAKE_YESNO_VAR([bsdl], [false])
 AC_MSG_NOTICE([
 
 jtag is now configured for
@@ -703,8 +686,8 @@ jtag is now configured for
   Detected libftdi     : $FLAG_HAVELIBFTDI
   Detected libftd2xx   : $FLAG_HAVELIBFTD2XX
   Detected inpout32    : $FLAG_HAVEINPOUTXX
-  Build SVF player     : $FLAG_SVF
-  Build BSDL subsystem : $FLAG_BSDL
+  Build SVF player     : $FLAG_svf
+  Build BSDL subsystem : $FLAG_bsdl
   Bus drivers          : $enabled_bus_drivers
   Cable drivers        : $enabled_cable_drivers
   Lowlevel drivers     : $enabled_lowlevel_drivers
