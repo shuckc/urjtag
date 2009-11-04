@@ -273,11 +273,12 @@ case $host in
 esac
 
 AS_IF([test "x$with_inpout32" = xyes], [
-  AM_CONDITIONAL(HAVE_INPOUTXX, true)
+  HAVE_INPOUTXX=yes
   AC_DEFINE(HAVE_INPOUTXX, 1, [define if you have inpout32.dll])
 ],[
-  AM_CONDITIONAL(HAVE_INPOUTXX, false)
+  HAVE_INPOUTXX=no
 ])
+AM_CONDITIONAL(HAVE_INPOUTXX, [test "x$HAVE_INPOUTXX" = xyes])
 
 
 WARNINGCFLAGS="-Wall -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith"
@@ -675,7 +676,7 @@ AC_DEFUN([MAKE_YESNO_VAR],[dnl
 MAKE_YESNO_VAR([HAVELIBFTDI], [no])
 MAKE_YESNO_VAR([HAVELIBUSB], [no])
 MAKE_YESNO_VAR([HAVELIBFTD2XX], [no])
-MAKE_YESNO_VAR([HAVEINPOUTXX], [no])
+MAKE_YESNO_VAR([HAVE_INPOUTXX], [no])
 MAKE_YESNO_VAR([svf], [false])
 MAKE_YESNO_VAR([bsdl], [false])
 AC_MSG_NOTICE([
@@ -685,7 +686,7 @@ jtag is now configured for
   Detected libusb      : $FLAG_HAVELIBUSB
   Detected libftdi     : $FLAG_HAVELIBFTDI
   Detected libftd2xx   : $FLAG_HAVELIBFTD2XX
-  Detected inpout32    : $FLAG_HAVEINPOUTXX
+  Detected inpout32    : $FLAG_HAVE_INPOUTXX
   Build SVF player     : $FLAG_svf
   Build BSDL subsystem : $FLAG_bsdl
   Bus drivers          : $enabled_bus_drivers
