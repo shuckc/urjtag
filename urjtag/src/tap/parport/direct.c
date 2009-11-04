@@ -155,7 +155,7 @@ direct_parport_alloc (unsigned int port)
     {
         urj_error_set (URJ_ERROR_IO,
                        _("Couldn't load InpOut32.dll; maybe not installed?"));
-        urj_error.sys_errno = GetLastError();
+        urj_error_state.sys_errno = GetLastError();
         return NULL;
     }
 

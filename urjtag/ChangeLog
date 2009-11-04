@@ -6,6 +6,9 @@
 
   * configure.ac: Fix handling of inpout32 variables.
 
+  * src/tap/parport/direct.c: Fix build failure in inpout32 code due to
+    urjtag library overhaul.
+
 2009-10-28  Arnim Laeuger  <arniml>
 
   * src/svf/svf.h, src/svf/svf_bison.y, src/svf/svf_flex.l:
