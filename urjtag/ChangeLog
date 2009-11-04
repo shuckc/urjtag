@@ -4,6 +4,8 @@
 
   * configure.ac: Create a helper macro for user summary display.
 
+  * configure.ac: Fix handling of inpout32 variables.
+
 2009-10-28  Arnim Laeuger  <arniml>
 
   * src/svf/svf.h, src/svf/svf_bison.y, src/svf/svf_flex.l:
