@@ -62,6 +62,14 @@
 #endif
 
 
+/* CHAIN_CLOCK defines the clock function of the chain API that's
+   deployed for non-timing critical, deferable "chain clocking".
+   The safe default is urj_tap_chain_clock. Which is however
+   sub-optimal in terms of transaction buffering in the chain + cable
+   layers.
+   Better buffering is achieved with urj_tap_chain_defer_clock. */
+#define CHAIN_CLOCK urj_tap_chain_defer_clock
+
 /* define for debug messages */
 #undef DEBUG
 
@@ -112,11 +120,11 @@ urj_svf_goto_state (urj_chain_t *chain, int new_state)
     switch (current_state)
     {
     case URJ_TAP_STATE_TEST_LOGIC_RESET:
-        urj_tap_chain_clock (chain, 0, 0, 1);
+        CHAIN_CLOCK (chain, 0, 0, 1);
         break;
 
     case URJ_TAP_STATE_RUN_TEST_IDLE:
-        urj_tap_chain_clock (chain, 1, 0, 1);
+        CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_SELECT_DR_SCAN:
@@ -127,86 +135,86 @@ urj_svf_goto_state (urj_chain_t *chain, int new_state)
             || (current_state & URJ_TAP_STATE_IR
                 && new_state & URJ_TAP_STATE_DR))
             /* progress in select-idle/reset loop */
-            urj_tap_chain_clock (chain, 1, 0, 1);
+            CHAIN_CLOCK (chain, 1, 0, 1);
         else
             /* enter DR/IR branch */
-            urj_tap_chain_clock (chain, 0, 0, 1);
+            CHAIN_CLOCK (chain, 0, 0, 1);
         break;
 
     case URJ_TAP_STATE_CAPTURE_DR:
         if (new_state == URJ_TAP_STATE_SHIFT_DR)
             /* enter URJ_TAP_STATE_SHIFT_DR state */
-            urj_tap_chain_clock (chain, 0, 0, 1);
+            CHAIN_CLOCK (chain, 0, 0, 1);
         else
             /* bypass URJ_TAP_STATE_SHIFT_DR */
-            urj_tap_chain_clock (chain, 1, 0, 1);
+            CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_CAPTURE_IR:
         if (new_state == URJ_TAP_STATE_SHIFT_IR)
             /* enter URJ_TAP_STATE_SHIFT_IR state */
-            urj_tap_chain_clock (chain, 0, 0, 1);
+            CHAIN_CLOCK (chain, 0, 0, 1);
         else
             /* bypass URJ_TAP_STATE_SHIFT_IR */
-            urj_tap_chain_clock (chain, 1, 0, 1);
+            CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_SHIFT_DR:
     case URJ_TAP_STATE_SHIFT_IR:
         /* progress to URJ_TAP_STATE_EXIT1_DR/IR */
-        urj_tap_chain_clock (chain, 1, 0, 1);
+        CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_EXIT1_DR:
         if (new_state == URJ_TAP_STATE_PAUSE_DR)
             /* enter URJ_TAP_STATE_PAUSE_DR state */
-            urj_tap_chain_clock (chain, 0, 0, 1);
+            CHAIN_CLOCK (chain, 0, 0, 1);
         else
             /* bypass URJ_TAP_STATE_PAUSE_DR */
-            urj_tap_chain_clock (chain, 1, 0, 1);
+            CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_EXIT1_IR:
         if (new_state == URJ_TAP_STATE_PAUSE_IR)
             /* enter URJ_TAP_STATE_PAUSE_IR state */
-            urj_tap_chain_clock (chain, 0, 0, 1);
+            CHAIN_CLOCK (chain, 0, 0, 1);
         else
             /* bypass URJ_TAP_STATE_PAUSE_IR */
-            urj_tap_chain_clock (chain, 1, 0, 1);
+            CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_PAUSE_DR:
     case URJ_TAP_STATE_PAUSE_IR:
         /* progress to URJ_TAP_STATE_EXIT2_DR/IR */
-        urj_tap_chain_clock (chain, 1, 0, 1);
+        CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_EXIT2_DR:
         if (new_state == URJ_TAP_STATE_SHIFT_DR)
             /* enter URJ_TAP_STATE_SHIFT_DR state */
-            urj_tap_chain_clock (chain, 0, 0, 1);
+            CHAIN_CLOCK (chain, 0, 0, 1);
         else
             /* progress to URJ_TAP_STATE_UPDATE_DR */
-            urj_tap_chain_clock (chain, 1, 0, 1);
+            CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_EXIT2_IR:
         if (new_state == URJ_TAP_STATE_SHIFT_IR)
             /* enter URJ_TAP_STATE_SHIFT_IR state */
-            urj_tap_chain_clock (chain, 0, 0, 1);
+            CHAIN_CLOCK (chain, 0, 0, 1);
         else
             /* progress to URJ_TAP_STATE_UPDATE_IR */
-            urj_tap_chain_clock (chain, 1, 0, 1);
+            CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     case URJ_TAP_STATE_UPDATE_DR:
     case URJ_TAP_STATE_UPDATE_IR:
         if (new_state == URJ_TAP_STATE_RUN_TEST_IDLE)
             /* enter URJ_TAP_STATE_RUN_TEST_IDLE */
-            urj_tap_chain_clock (chain, 0, 0, 1);
+            CHAIN_CLOCK (chain, 0, 0, 1);
         else
             /* progress to Select_DR/IR */
-            urj_tap_chain_clock (chain, 1, 0, 1);
+            CHAIN_CLOCK (chain, 1, 0, 1);
         break;
 
     default:
@@ -728,7 +736,7 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
         }
     }
     else
-        urj_tap_chain_clock (chain, 0, 0, run_count);
+        CHAIN_CLOCK (chain, 0, 0, run_count);
 
     urj_svf_goto_state (chain, priv->runtest_end_state);
 
@@ -762,7 +770,7 @@ urj_svf_runtest (urj_chain_t *chain, urj_svf_parser_priv_t *priv,
             urj_tap_chain_clock (chain, 0, 0, 1);
         }
     else
-        urj_tap_chain_clock (chain, 0, 0, run_count);
+        CHAIN_CLOCK (chain, 0, 0, run_count);
 
     urj_svf_goto_state (chain, priv->runtest_end_state);
 

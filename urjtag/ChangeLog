@@ -1,3 +1,8 @@
+2009-11-10  Arnim Laeuger  <arniml>
+
+  * src/svf/svf.c: use urj_tap_chain_defer_clock() for state traversals
+    and RUNTEST. Improves buffering performance for heterogenous SVFs.
+
 2009-11-03  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Use pkg-config for libusb/libftdi by default.
