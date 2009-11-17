@@ -130,8 +130,8 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
         {
             if (urj_big_endian)
             {
+                data <<= 8;	/* first shift doesn't matter: data = 0 */
                 data |= b[bidx++];
-                data <<= 8;
             }
             else
                 data |= (b[bidx++] << ((step - j) * 8));
