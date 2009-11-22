@@ -382,7 +382,7 @@ intel_flash_program (urj_flash_cfi_array_t *cfi_array,
     int max_bytes_write = cfi->device_geometry.max_bytes_write;
 
 #ifndef FLASH_MULTI_BYTE
-    max_bytes_write = 0;
+    max_bytes_write = 1;
 #endif
 
     /* multi-byte writes supported? */
