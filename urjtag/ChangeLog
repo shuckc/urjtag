@@ -1,3 +1,8 @@
+2009-12-23  Arnim Laeuger <arniml>
+
+  * src/flash/cfi.c: also issue CFI_CMD_READ_ARRAY2, required to reset
+    some AMD/SCS compliant chips that don't honor CFI_CMD_READ_ARRAY1
+
 2009-11-22  Arnim Laeuger <arniml>
 
   * src/flash/intel.c, src/flash/amd.c: set max_bytes_write to std value 1

@@ -143,6 +143,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
             }
 
             write1 (0, CFI_CMD_READ_ARRAY1);
+            write1 (0, CFI_CMD_READ_ARRAY2);
         }
 
         if (ma > 4)
@@ -157,6 +158,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
         if (read1 (CFI_QUERY_ID_OFFSET + 2) != 'Y')
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
+            write1 (0, CFI_CMD_READ_ARRAY2);
             urj_error_set (URJ_ERROR_FLASH, "CFI not detected (Y)");
             return URJ_STATUS_FAIL;
         }
@@ -166,6 +168,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
         if (!(*cfi_array)->cfi_chips[d / 8])
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
+            write1 (0, CFI_CMD_READ_ARRAY2);
             urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
                            (size_t) 1, sizeof (urj_flash_cfi_chip_t));
             return URJ_STATUS_FAIL;
@@ -248,6 +251,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
         if (!cfi->device_geometry.erase_block_regions)
         {
             write1 (0, CFI_CMD_READ_ARRAY1);
+            write1 (0, CFI_CMD_READ_ARRAY2);
             urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
                            (size_t) tmp
                            * sizeof (urj_flash_cfi_erase_block_region_t));
@@ -288,6 +292,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
             if (read1 (0) != 'P' || read1 (1) != 'R' || read1 (2) != 'I')
             {
                 write1 (0, CFI_CMD_READ_ARRAY1);
+                write1 (0, CFI_CMD_READ_ARRAY2);
                 urj_error_set (URJ_ERROR_FLASH,
                                "CFI primary vendor table not detected");
                 return URJ_STATUS_FAIL;
@@ -306,6 +311,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
             if (!pri_vendor_tbl)
             {
                 write1 (0, CFI_CMD_READ_ARRAY1);
+                write1 (0, CFI_CMD_READ_ARRAY2);
                 urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "calloc(%zd,%zd) fails",
                                (size_t) 1,
                                sizeof (urj_flash_cfi_amd_pri_extened_query_structure_t)
@@ -421,6 +427,7 @@ urj_flash_cfi_detect (urj_bus_t *bus, uint32_t adr,
 
         /* Read Array */
         write1 (0, CFI_CMD_READ_ARRAY1);
+        write1 (0, CFI_CMD_READ_ARRAY2);
 
 #undef A
 #undef D
