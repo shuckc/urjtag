@@ -142,6 +142,9 @@ const urj_bus_driver_t *urj_bus_drivers[] = {
 #ifdef ENABLE_BUS_SHARC_21065L
     &urj_bus_sharc_21065L_bus,
 #endif
+#ifdef ENABLE_BUS_SHARC_21369_EZKIT
+    &urj_bus_sharc_21369_ezkit_bus,
+#endif
 #ifdef ENABLE_BUS_SLSUP3
     &urj_bus_slsup3_bus,
 #endif

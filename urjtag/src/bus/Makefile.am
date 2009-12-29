@@ -178,6 +178,10 @@ if ENABLE_BUS_SHARC_21065L
 libbus_la_SOURCES += sharc21065l.c
 endif
 
+if ENABLE_BUS_SHARC_21369_EZKIT
+libbus_la_SOURCES += sharc21369_ezkit.c
+endif
+
 if ENABLE_BUS_SLSUP3
 libbus_la_SOURCES += slsup3.c
 endif

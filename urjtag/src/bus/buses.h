@@ -60,6 +60,7 @@ extern const urj_bus_driver_t urj_bus_sh7727_bus;
 extern const urj_bus_driver_t urj_bus_sh7750r_bus;
 extern const urj_bus_driver_t urj_bus_sh7751r_bus;
 extern const urj_bus_driver_t urj_bus_sharc_21065L_bus;
+extern const urj_bus_driver_t urj_bus_sharc_21369_ezkit_bus;
 extern const urj_bus_driver_t urj_bus_slsup3_bus;
 extern const urj_bus_driver_t urj_bus_tx4925_bus;
 extern const urj_bus_driver_t urj_bus_zefant_xs3_bus;

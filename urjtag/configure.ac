@@ -477,7 +477,7 @@ AC_DEFUN([CHECK_DRIVER], [
 AC_DEFUN([DEF_ENABLE_BUSDRIVERS], [\
 arm9tdmi au1500 avr32 bcm1250 bf526_ezkit bf527_ezkit bf533_stamp bf533_ezkit bf537_stamp bf537_ezkit bf538f_ezkit bf548_ezkit bf561_ezkit bscoach ejtag  ejtag_dma \
 fjmem ixp425 ixp435 ixp465 jopcyc h7202 lh7a400  mpc5200 mpc824x ppc405ep ppc440gx_ebc8 prototype pxa2x0 pxa27x \
-s3c4510 sa1110 sh7727 sh7750r sh7751r sharc_21065L slsup3 tx4925 zefant_xs3])
+s3c4510 sa1110 sh7727 sh7750r sh7751r sharc_21065L sharc_21369_ezkit slsup3 tx4925 zefant_xs3])
 AC_ARG_ENABLE(bus,
 [AS_HELP_STRING([--enable-bus], [Enable default set or specific bus drivers:])]
 [AS_HELP_STRING([],             ['default' enables:])]
@@ -529,6 +529,7 @@ CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sh7727],        [ENABLE_BUS_
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sh7750r],       [ENABLE_BUS_SH7750R])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sh7751r],       [ENABLE_BUS_SH7751R])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sharc_21065L],  [ENABLE_BUS_SHARC_21065L])
+CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [sharc_21369_ezkit],  [ENABLE_BUS_SHARC_21369_EZKIT])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [slsup3],        [ENABLE_BUS_SLSUP3])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [tx4925],        [ENABLE_BUS_TX4925])
 CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [zefant_xs3],    [ENABLE_BUS_ZEFANT_XS3])
