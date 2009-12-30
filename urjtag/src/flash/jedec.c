@@ -53,10 +53,13 @@
 #define AM29F800BT      0x22D6
 #define AM29LV800BB     0x225B
 #define AM29LV800BT     0x22DA
+#define AM29LV400BT     0x22B9
+#define AM29LV400BB     0x22BA
 #define AM29LV160DT     0x22C4
 #define AM29LV160DB     0x2249
 #define AM29BDS323D     0x22D1
 #define AM29BDS643D     0x227E
+#define AM29LV081B      0x0038
 #define AM29LV040B      0x004F
 
 /* Atmel */
@@ -275,6 +278,32 @@ static const struct amd_flash_info table[] = {
             { .offset = 0x010000, .erasesize = 0x10000, .numblocks = 15 }
         }
     }, {
+        .mfr_id = MANUFACTURER_AMD,
+        .dev_id = AM29LV400BB,
+        .name = "AMD AM29LV400BB",
+        .size = 0x00080000,
+        .interface_width = CFI_INTERFACE_X8_X16,
+        .numeraseregions = 4,
+        .regions = {
+            { .offset = 0x000000, .erasesize = 0x02000, .numblocks = 1 },
+            { .offset = 0x002000, .erasesize = 0x01000, .numblocks = 2 },
+            { .offset = 0x003000, .erasesize = 0x04000, .numblocks = 1 },
+            { .offset = 0x008000, .erasesize = 0x08000, .numblocks = 7 }
+        }
+    }, {
+        .mfr_id = MANUFACTURER_AMD,
+        .dev_id = AM29LV400BT,
+        .name = "AMD AM29LV400BT",
+        .size = 0x00080000,
+        .interface_width = CFI_INTERFACE_X8_X16,
+        .numeraseregions = 4,
+        .regions = {
+            { .offset = 0x000000, .erasesize = 0x08000, .numblocks = 7 },
+            { .offset = 0x070000, .erasesize = 0x04000, .numblocks = 1 },
+            { .offset = 0x078000, .erasesize = 0x01000, .numblocks = 2 },
+            { .offset = 0x07C000, .erasesize = 0x02000, .numblocks = 1 }
+        }
+    }, {
         .mfr_id = MANUFACTURER_ST,
         .dev_id = M29W160DT,
         .name = "ST M29W160DT",
@@ -381,6 +410,16 @@ static const struct amd_flash_info table[] = {
         .numeraseregions = 1,
         .regions = {
             { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 8 },
+        }
+    }, {
+        .mfr_id = MANUFACTURER_AMD,
+        .dev_id = AM29LV081B,
+        .name = "AMD AM29LV081B",
+        .size = 0x0100000,
+        .interface_width = CFI_INTERFACE_X8,
+        .numeraseregions = 1,
+        .regions = {
+            { .offset = 0x000000, .erasesize = 0x10000, .numblocks = 16 },
         }
     }
 };

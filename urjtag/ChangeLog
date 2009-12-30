@@ -1,5 +1,9 @@
 2009-12-30  Arnim Laeuger  <arniml>
 
+  * src/flash/jedec.c: [ 2831030 ] added support for flashes AM29LV400BB,
+    AM29LV400BT, AM29LV081B (MURANAKA Masaki)
+    only flash support added, no redefinitions of macros so far
+
   * src/bus/sharc21369_ezkit.c, src/bus/buses.c, src/bus/buses.h,
     src/bus/Makefile.am, configure.ac:
     [ 2821604 ] Bus driver for SHARC21369-EZKIT (MURANAKA Masaki)
