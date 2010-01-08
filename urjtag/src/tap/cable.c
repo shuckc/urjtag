@@ -50,7 +50,9 @@ extern urj_cable_driver_t urj_tap_cable_usbblaster_driver;
 extern urj_cable_driver_t urj_tap_cable_ft2232_driver;
 extern urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver;
 extern urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_armusbtiny_h_driver;
 extern urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver;
+extern urj_cable_driver_t urj_tap_cable_ft2232_gniceplus_driver;
 extern urj_cable_driver_t urj_tap_cable_ft2232_oocdlinks_driver;
 extern urj_cable_driver_t urj_tap_cable_ft2232_signalyzer_driver;
 extern urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver;
@@ -91,7 +93,9 @@ urj_cable_driver_t *urj_tap_cable_drivers[] = {
     &urj_tap_cable_ft2232_driver,
     &urj_tap_cable_ft2232_jtagkey_driver,
     &urj_tap_cable_ft2232_armusbocd_driver,
+    &urj_tap_cable_ft2232_armusbtiny_h_driver,
     &urj_tap_cable_ft2232_gnice_driver,
+    &urj_tap_cable_ft2232_gniceplus_driver,
     &urj_tap_cable_ft2232_oocdlinks_driver,
     &urj_tap_cable_ft2232_signalyzer_driver,
     &urj_tap_cable_ft2232_turtelizer2_driver,

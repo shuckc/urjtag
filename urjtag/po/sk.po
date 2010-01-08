@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2009-05-28 14:35+0200\n"
+"POT-Creation-Date: 2010-01-08 18:03+0100\n"
 "PO-Revision-Date: 2003-10-08 21:25+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -230,19 +230,19 @@ msgstr "Nepodarilo sa otvoriť %s\n"
 msgid "No IDCODE specification found.\n"
 msgstr ""
 
-#: src/bsdl/bsdl_sem.c:649
+#: src/bsdl/bsdl_sem.c:662
 msgid "IDCODE matched\n"
 msgstr ""
 
-#: src/bsdl/bsdl_sem.c:651
+#: src/bsdl/bsdl_sem.c:664
 msgid "IDCODE mismatch\n"
 msgstr ""
 
-#: src/bsdl/bsdl_sem.c:699
+#: src/bsdl/bsdl_sem.c:712
 msgid "BSDL stage reported errors, aborting.\n"
 msgstr ""
 
-#: src/bsdl/bsdl_sem.c:706
+#: src/bsdl/bsdl_sem.c:719
 #, c-format
 msgid "Got IDCODE: %s\n"
 msgstr ""
@@ -357,6 +357,49 @@ msgstr ""
 msgid "Too many errors"
 msgstr ""
 
+#: src/bus/arm9tdmi.c:89
+#, fuzzy, c-format
+msgid "ARM9TDMI compatible bus driver (JTAG part No. %d)\n"
+msgstr ""
+"Intel SA-1110 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
+
+#: src/bus/arm9tdmi.c:371
+#, fuzzy
+msgid "SCANN register"
+msgstr "Register"
+
+#: src/bus/arm9tdmi.c:377
+#, fuzzy
+msgid "SCAN1 register"
+msgstr "Register"
+
+#: src/bus/arm9tdmi.c:383
+#, fuzzy
+msgid "SCAN2 register"
+msgstr "Register"
+
+#: src/bus/arm9tdmi.c:423 src/bus/ejtag.c:546
+#, c-format
+msgid "Failed to enter debug mode, ctrl=%s"
+msgstr ""
+
+#: src/bus/arm9tdmi.c:429
+msgid "The target is halted in "
+msgstr ""
+
+#: src/bus/arm9tdmi.c:431
+msgid "THUMB mode.\n"
+msgstr ""
+
+#: src/bus/arm9tdmi.c:433
+msgid "ARM mode.\n"
+msgstr ""
+
+#: src/bus/arm9tdmi.c:558
+#, fuzzy
+msgid "ARM9TDMI compatible bus driver"
+msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
+
 #: src/bus/au1500.c:124
 #, fuzzy, c-format
 msgid "AU1500 compatible bus driver via BSR (JTAG part No. %d)\n"
@@ -467,7 +510,7 @@ msgstr ""
 "Broadcom BCM1250 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %"
 "d)\n"
 
-#: src/bus/bf533_stamp.c:332
+#: src/bus/bf533_stamp.c:339
 msgid "Blackfin BF533 Stamp board bus driver"
 msgstr ""
 
@@ -550,17 +593,17 @@ msgid ""
 "BSR"
 msgstr ""
 
-#: src/bus/buses.c:182 src/bus/buses.c:219
+#: src/bus/buses.c:191 src/bus/buses.c:228
 #, c-format
 msgid "realloc(%s,%zd) fails"
 msgstr ""
 
-#: src/bus/buses.c:242
+#: src/bus/buses.c:251
 #, fuzzy
 msgid "invalid bus number"
 msgstr "%s: neplatné číslo zbernice\n"
 
-#: src/bus/buses.c:284
+#: src/bus/buses.c:293
 #, fuzzy, c-format
 msgid "Initialized bus %d, active bus %d\n"
 msgstr "inicializovať ovládač zbernice pre aktívnu súčiastku"
@@ -602,11 +645,6 @@ msgstr ""
 
 #: src/bus/ejtag.c:297
 msgid "EJCONTROL or EJIMPCODE register not found"
-msgstr ""
-
-#: src/bus/ejtag.c:546
-#, c-format
-msgid "Failed to enter debug mode, ctrl=%s"
 msgstr ""
 
 #: src/bus/ejtag.c:761
@@ -694,65 +732,65 @@ msgstr ""
 msgid "Freescale MPC5200 compatible bus driver via BSR, parameter: [mux]"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
 
-#: src/bus/mpc824x.c:112
+#: src/bus/mpc824x.c:116
 msgid ""
 "   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently"
 msgstr ""
 
-#: src/bus/mpc824x.c:117
-msgid "   Only 8,32 and 64 bus width are supported for Banks 0 and 1"
+#: src/bus/mpc824x.c:121
+msgid "   Only 8, 16, 32 and 64 bus width are supported for Banks 0 and 1"
 msgstr ""
 
-#: src/bus/mpc824x.c:129
+#: src/bus/mpc824x.c:133
 msgid ""
 "Usage: initbus mpc824x [width=WIDTH] [revbits] [dbgAddr] [dbgData]\n"
 "\n"
-"   WIDTH      data bus width - 8, 32, 64 (default 8)\n"
+"   WIDTH      data bus width - 8, 16, 32, 64 (default 8)\n"
 "   revbits    reverse bits in data bus (default - no)\n"
 "   dbgAddr    display address bus state (default - no)\n"
 "   dbgData    display data bus state (default - no)\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:155
+#: src/bus/mpc824x.c:159
 #, c-format
 msgid "   Using default bus width %d\n"
 msgstr ""
 
-#: src/bus/mpc824x.c:244
+#: src/bus/mpc824x.c:248
 #, fuzzy, c-format
 msgid "Motorola MPC824x compatible bus driver via BSR (JTAG part No. %d)\n"
 msgstr ""
 "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR (JTAG súčiastka č. %d)\n"
 
-#: src/bus/mpc824x.c:268
+#: src/bus/mpc824x.c:272
 msgid "Base ROM Interface (Bank 1)"
 msgstr ""
 
-#: src/bus/mpc824x.c:278 src/bus/mpc824x.c:297
+#: src/bus/mpc824x.c:282 src/bus/mpc824x.c:301
 msgid "Base ROM Interface (Bank 0)"
 msgstr ""
 
-#: src/bus/mpc824x.c:327
+#: src/bus/mpc824x.c:335
 #, c-format
 msgid "Warning: unhandled bus width: %i"
 msgstr ""
 
-#: src/bus/mpc824x.c:350
+#: src/bus/mpc824x.c:361
 #, c-format
 msgid "Addr    [%2d:0]: %06lX   "
 msgstr ""
 
-#: src/bus/mpc824x.c:400
+#: src/bus/mpc824x.c:411
 #, c-format
 msgid "Data WR [%d:0]: %08lX   "
 msgstr ""
 
-#: src/bus/mpc824x.c:446
+#: src/bus/mpc824x.c:459
 #, c-format
 msgid "Data RD [%d:0]: %08lX   "
 msgstr ""
 
-#: src/bus/mpc824x.c:566
+#: src/bus/mpc824x.c:581
 #, fuzzy
 msgid "Motorola MPC824x compatible bus driver via BSR"
 msgstr "Intel PXA2x0 kompatibilný ovládač zbernice cez BSR"
@@ -2112,8 +2150,8 @@ msgstr ""
 "Čip: AMD Flash\n"
 "\tVýrobca: "
 
-#: src/flash/amd.c:316 src/flash/amd.c:345 src/flash/amd.c:361
-#: src/flash/amd.c:380 src/flash/amd.c:396 src/flash/amd_flash.c:266
+#: src/flash/amd.c:316 src/flash/amd.c:345 src/flash/amd.c:367
+#: src/flash/amd.c:386 src/flash/amd.c:402 src/flash/amd_flash.c:266
 msgid ""
 "\n"
 "\tChip: "
@@ -2121,18 +2159,18 @@ msgstr ""
 "\n"
 "\tČip: "
 
-#: src/flash/amd.c:339 src/flash/amd.c:355 src/flash/amd.c:374
-#: src/flash/amd.c:390 src/flash/amd.c:403 src/flash/amd_flash.c:278
+#: src/flash/amd.c:339 src/flash/amd.c:361 src/flash/amd.c:380
+#: src/flash/amd.c:396 src/flash/amd.c:409 src/flash/amd_flash.c:278
 #, c-format
 msgid "Unknown (ID 0x%04x)"
 msgstr "Neznámy (ID 0x%04x)"
 
-#: src/flash/amd.c:408
+#: src/flash/amd.c:414
 #, fuzzy, c-format
 msgid "Unknown manufacturer (ID 0x%04x) Chip (ID 0x%04x)"
 msgstr "Neznámy výrobca (ID 0x%04x)"
 
-#: src/flash/amd.c:412 src/flash/amd_flash.c:281
+#: src/flash/amd.c:418 src/flash/amd_flash.c:281
 #, c-format
 msgid ""
 "\n"
@@ -2141,21 +2179,21 @@ msgstr ""
 "\n"
 "\tChránené: %04x\n"
 
-#: src/flash/amd.c:635 src/flash/amd.c:647 src/flash/amd.c:659
+#: src/flash/amd.c:647 src/flash/amd.c:659 src/flash/amd.c:671
 #: src/flash/detectflash.c:117 src/flash/detectflash.c:149
 msgid "AMD/Fujitsu Standard Command Set"
 msgstr "Štandardná množina príkazov AMD/Fujitsu"
 
-#: src/flash/amd.c:636
+#: src/flash/amd.c:648
 msgid "supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"
 msgstr "podporované: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 bitov"
 
-#: src/flash/amd.c:648
+#: src/flash/amd.c:660
 #, fuzzy
 msgid "supported: AMD 29LV800B, S29GLxxxN; MX29LV640B, W19B320AT/B; 1x16 Bit"
 msgstr "podporované: AMD 29LV800B; 1x16 bitov"
 
-#: src/flash/amd.c:660
+#: src/flash/amd.c:672
 #, fuzzy
 msgid ""
 "supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S29GLxxxN, W19B320AT/B; "
@@ -2945,187 +2983,187 @@ msgstr "Inštrukcia '%s' je už definovaná\n"
 msgid "unknown data register '%s'"
 msgstr "neznámy dátový register '%s'\n"
 
-#: src/svf/svf.c:470
+#: src/svf/svf.c:478
 #, c-format
 msgid "Error %s: mismatch at position %d for TDO\n"
 msgstr ""
 
-#: src/svf/svf.c:550
+#: src/svf/svf.c:558
 #, c-format
 msgid "calloc(%zd,%zd) fails"
 msgstr ""
 
-#: src/svf/svf.c:624 src/svf/svf.c:1081
+#: src/svf/svf.c:632 src/svf/svf.c:1089
 #, c-format
 msgid "command %s not implemented\n"
 msgstr ""
 
-#: src/svf/svf.c:661
+#: src/svf/svf.c:669
 #, c-format
 msgid "Error %s: only TCK is supported for RUNTEST"
 msgstr ""
 
-#: src/svf/svf.c:668
+#: src/svf/svf.c:676
 #, c-format
 msgid "Error %s: maximum time must be larger or equal to minimum time"
 msgstr ""
 
-#: src/svf/svf.c:676
+#: src/svf/svf.c:684
 msgid "maximum time for RUNTEST not guaranteed.\n"
 msgstr ""
 
-#: src/svf/svf.c:677
+#: src/svf/svf.c:685
 msgid " This message is only displayed once.\n"
 msgstr ""
 
-#: src/svf/svf.c:710
+#: src/svf/svf.c:718
 #, c-format
 msgid "Error %s: Maximum cable clock frequency required for RUNTEST"
 msgstr ""
 
-#: src/svf/svf.c:713
+#: src/svf/svf.c:721
 msgid "  Set the cable frequency with 'FREQUENCY <Hz>'.\n"
 msgstr ""
 
-#: src/svf/svf.c:878
+#: src/svf/svf.c:886
 #, c-format
 msgid "Error %s: first %s command after length change must have a TDI value.\n"
 msgstr ""
 
-#: src/svf/svf.c:906
+#: src/svf/svf.c:914
 #, c-format
 msgid "Error %s: SIR command length inconsistent.\n"
 msgstr ""
 
-#: src/svf/svf.c:910
+#: src/svf/svf.c:918
 #, c-format
 msgid " in input file between line %d col %d and line %d col %d\n"
 msgstr ""
 
-#: src/svf/svf.c:1011
+#: src/svf/svf.c:1019
 #, c-format
 msgid "Error %s: no further TRST command allowed after mode ABSENT"
 msgstr ""
 
-#: src/svf/svf.c:1034
+#: src/svf/svf.c:1042
 #, c-format
 msgid "Error %s: TRST ABSENT must not be issued after a STATE command"
 msgstr ""
 
-#: src/svf/svf.c:1042
+#: src/svf/svf.c:1050
 #, c-format
 msgid "Error %s: TRST ABSENT must not be issued after an SIR or SDR command"
 msgstr ""
 
-#: src/svf/svf.c:1052
+#: src/svf/svf.c:1060
 #, c-format
 msgid "unimplemented mode '%s' for TRST\n"
 msgstr ""
 
-#: src/svf/svf.c:1140
+#: src/svf/svf.c:1148
 #, fuzzy, c-format
 msgid "%s: no JTAG chain available"
 msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
 
-#: src/svf/svf.c:1147
+#: src/svf/svf.c:1155
 #, c-format
 msgid "%s: chain without any parts"
 msgstr ""
 
-#: src/svf/svf.c:1163
+#: src/svf/svf.c:1171
 #, c-format
 msgid "%s: could not establish SDR register"
 msgstr ""
 
-#: src/svf/svf.c:1203
+#: src/svf/svf.c:1211
 #, c-format
 msgid "%s: could not establish SIR instruction"
 msgstr ""
 
-#: src/svf/svf.c:1240
+#: src/svf/svf.c:1248
 msgid ""
 "Mismatches occurred between scanned device output and expected TDO values.\n"
 msgstr ""
 
-#: src/svf/svf.c:1243
+#: src/svf/svf.c:1251
 msgid "Scanned device output matched expected TDO values.\n"
 msgstr ""
 
-#: svf_flex.l:367
+#: svf_flex.l:397
 #, c-format
 msgid "Parsing %6d/%d (%3.0d%%)"
 msgstr ""
 
-#: svf_flex.l:387 src/tap/cable/ft2232.c:1741
-#: src/tap/cable/generic_parport.c:89 src/tap/cable/generic_usbconn.c:236
-#: src/tap/cable/jim.c:71 src/tap/cable/ts7800.c:171
+#: svf_flex.l:417 src/tap/cable/ft2232.c:1787
+#: src/tap/cable/generic_parport.c:89 src/tap/cable/generic_usbconn.c:244
+#: src/tap/cable/jim.c:71 src/tap/cable/ts7800.c:170
 #: src/tap/cable/usbblaster.c:80 src/tap/cable/vision_ep9307.c:214
 #: src/tap/cable/wiggler.c:226
 #, c-format
 msgid "malloc(%zd) fails"
 msgstr ""
 
-#: src/tap/cable/arcom.c:137
+#: src/tap/cable/arcom.c:143
 msgid "Arcom JTAG Cable"
 msgstr "JTAG kábel Arcom"
 
-#: src/tap/cable/byteblaster.c:159
+#: src/tap/cable/byteblaster.c:182
 msgid ""
 "Altera ByteBlaster/ByteBlaster II/ByteBlasterMV Parallel Port Download Cable"
 msgstr ""
 "JTAG kábel Altera ByteBlaster/ByteBlaster II/ByteBlasterMV pre paralelný port"
 
-#: src/tap/cable.c:185 src/tap/usbconn/libusb.c:169
+#: src/tap/cable.c:188 src/tap/usbconn/libusb.c:169
 #, c-format
 msgid "malloc(%zd)/malloc(%zd) fails"
 msgstr ""
 
-#: src/tap/cable.c:239
+#: src/tap/cable.c:242
 #, c-format
 msgid "(Resized JTAG activity queue to hold max %d items)\n"
 msgstr ""
 
-#: src/tap/cable.c:426 src/tap/cable.c:487
+#: src/tap/cable.c:429 src/tap/cable.c:490
 #, c-format
 msgid "Internal error: Got wrong type of result from queue (%d? %p.%d)\n"
 msgstr ""
 
-#: src/tap/cable.c:494
+#: src/tap/cable.c:497
 #, c-format
 msgid "Internal error: Got wrong signal's value from queue (%d? %p.%d)\n"
 msgstr ""
 
-#: src/tap/cable.c:551
+#: src/tap/cable.c:554
 #, c-format
 msgid "Internal error: Got wrong type of result from queue (#%d %p.%d)\n"
 msgstr ""
 
-#: src/tap/cable.c:558
+#: src/tap/cable.c:561
 msgid "Internal error: Wanted transfer result but none was queued\n"
 msgstr ""
 
-#: src/tap/cable/dlc5.c:131
+#: src/tap/cable/dlc5.c:137
 msgid "Xilinx DLC5 JTAG Parallel Cable III"
 msgstr "Xilinx DLC5 JTAG paralelný kábel III"
 
-#: src/tap/cable/ea253.c:137
+#: src/tap/cable/ea253.c:143
 msgid "ETC EA253 JTAG Cable"
 msgstr "JTAG kábel ETC EA253"
 
-#: src/tap/cable/ei012.c:139
+#: src/tap/cable/ei012.c:145
 msgid "ETC EI012 JTAG Cable"
 msgstr "JTAG kábel ETC EI012"
 
-#: src/tap/cable/ft2232.c:251
+#: src/tap/cable/ft2232.c:268
 #, c-format
-msgid "Setting lowest supported frequency for FT2232: %d\n"
+msgid "Warning: Setting lowest supported frequency for FT2232%s: %d\n"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:739
+#: src/tap/cable/ft2232.c:785
 msgid "Please power on the TARGET board and connect VCC signal"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1824
+#: src/tap/cable/ft2232.c:1874
 #, c-format
 msgid ""
 "Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
@@ -3138,43 +3176,51 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1836
+#: src/tap/cable/ft2232.c:1886
 msgid "Generic FTDI FT2232 Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1869
+#: src/tap/cable/ft2232.c:1919
 msgid "Olimex ARM-USB-OCD[-TINY] (FT2232) Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1916
+#: src/tap/cable/ft2232.c:1966
+msgid "Olimex ARM-USB-TINY-H (FT2232H) Cable"
+msgstr ""
+
+#: src/tap/cable/ft2232.c:1999
 msgid "Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1949
+#: src/tap/cable/ft2232.c:2033
+msgid "Analog Devices Blackfin gnICE+ (FT2232H) Cable (EXPERIMENTAL)"
+msgstr ""
+
+#: src/tap/cable/ft2232.c:2067
 msgid "Amontec JTAGkey (FT2232) Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:1982
+#: src/tap/cable/ft2232.c:2100
 msgid "OOCDLink-s (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:2015
+#: src/tap/cable/ft2232.c:2133
 msgid "Turtelizer 2 Rev. B (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:2048
+#: src/tap/cable/ft2232.c:2166
 msgid "USB to JTAG Interface (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:2081
+#: src/tap/cable/ft2232.c:2199
 msgid "Xverve DT-USB-ST Signalyzer Tool (FT2232) Cable (EXPERIMENTAL)"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:2114
+#: src/tap/cable/ft2232.c:2232
 msgid "TinCanTools Flyswatter (FT2232) Cable"
 msgstr ""
 
-#: src/tap/cable/ft2232.c:2147
+#: src/tap/cable/ft2232.c:2265
 msgid "KrisTech usbScarabeus2 (FT2232) Cable"
 msgstr ""
 
@@ -3208,11 +3254,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/generic_usbconn.c:229
+#: src/tap/cable/generic_usbconn.c:237
 msgid "Couldn't connect to suitable USB device.\n"
 msgstr ""
 
-#: src/tap/cable/generic_usbconn.c:267
+#: src/tap/cable/generic_usbconn.c:275
 #, c-format
 msgid ""
 "Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [...]\n"
@@ -3224,7 +3270,7 @@ msgid ""
 msgstr ""
 
 #: src/tap/cable/jim.c:55
-msgid "not enough arguments"
+msgid "too many arguments"
 msgstr ""
 
 #: src/tap/cable/jim.c:59
@@ -3240,24 +3286,24 @@ msgstr ""
 msgid "JTAG target simulator JIM"
 msgstr ""
 
-#: src/tap/cable/jlink.c:590
+#: src/tap/cable/jlink.c:594
 msgid "Segger/IAR J-Link, Atmel SAM-ICE and others."
 msgstr ""
 
-#: src/tap/cable/keithkoep.c:148
+#: src/tap/cable/keithkoep.c:153
 msgid "Keith & Koep JTAG cable"
 msgstr "JTAG kábel Keith & Koep"
 
-#: src/tap/cable/lattice.c:140
+#: src/tap/cable/lattice.c:145
 #, fuzzy
 msgid "Lattice Parallel Port JTAG Cable"
 msgstr "JTAG kábel Macraigor Wiggler"
 
-#: src/tap/cable/mpcbdm.c:146
+#: src/tap/cable/mpcbdm.c:152
 msgid "Mpcbdm JTAG cable"
 msgstr "JTAG kábel Mpcbdm"
 
-#: src/tap/cable/triton.c:150
+#: src/tap/cable/triton.c:155
 msgid "Ka-Ro TRITON Starterkit II (PXA255/250) JTAG Cable"
 msgstr "JTAG kábel pre Ka-Ro TRITON Starterkit II (PXA255/250)"
 
@@ -3276,22 +3322,22 @@ msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
 msgid "unable to munmap the GPIO registers"
 msgstr "Chyba: Nepodarilo sa zdetekovať koniec JTAG reťazca!\n"
 
-#: src/tap/cable/ts7800.c:161 src/tap/cable/vision_ep9307.c:204
+#: src/tap/cable/ts7800.c:160 src/tap/cable/vision_ep9307.c:204
 msgid "This cable type does not accept parameters"
 msgstr ""
 
-#: src/tap/cable/ts7800.c:166
+#: src/tap/cable/ts7800.c:165
 msgid "Initializing TS-7800 Built-in JTAG Chain\n"
 msgstr ""
 
-#: src/tap/cable/ts7800.c:298 src/tap/cable/vision_ep9307.c:339
+#: src/tap/cable/ts7800.c:292 src/tap/cable/vision_ep9307.c:342
 #, c-format
 msgid ""
 "Usage: cable %s\n"
 "\n"
 msgstr ""
 
-#: src/tap/cable/ts7800.c:303
+#: src/tap/cable/ts7800.c:297
 msgid "TS-7800 Built-in JTAG Chain"
 msgstr ""
 
@@ -3329,11 +3375,11 @@ msgstr ""
 msgid "Initializing Vision EP9307 SoM GPIO JTAG Cable\n"
 msgstr ""
 
-#: src/tap/cable/vision_ep9307.c:344
+#: src/tap/cable/vision_ep9307.c:347
 msgid "Vision EP9307 SoM GPIO JTAG Cable"
 msgstr ""
 
-#: src/tap/cable/wiggler2.c:159
+#: src/tap/cable/wiggler2.c:164
 msgid "Modified (with CPU Reset) WIGGLER JTAG Cable"
 msgstr ""
 
@@ -3341,7 +3387,7 @@ msgstr ""
 msgid "Pin mapping failed\n"
 msgstr ""
 
-#: src/tap/cable/wiggler.c:388
+#: src/tap/cable/wiggler.c:393
 #, c-format
 msgid ""
 "Usage: cable %s parallel PORTADDR [TDO,TRST,TDI,TCK,TMS,SRESET]\n"
@@ -3356,11 +3402,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/tap/cable/wiggler.c:415
+#: src/tap/cable/wiggler.c:420
 msgid "Macraigor Wiggler JTAG Cable"
 msgstr "JTAG kábel Macraigor Wiggler"
 
-#: src/tap/cable/wiggler.c:434
+#: src/tap/cable/wiggler.c:439
 #, fuzzy
 msgid "Excelpoint IGLOO JTAG Cable"
 msgstr "JTAG kábel Arcom"

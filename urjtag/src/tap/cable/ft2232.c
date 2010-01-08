@@ -21,6 +21,8 @@
  *
  * Written by Arnim Laeuger, 2007-2008.
  * Support for JTAGkey submitted by Laurent Gauch, 2008.
+ * Support for FT2232H written by Michael Hennerich, 2009; adapted
+ *      for urjtag codebase and submitted by Adam Megacz, 2010.
  *
  */
 
@@ -44,6 +46,9 @@
 
 /* Maximum TCK frequency of FT2232 */
 #define FT2232_MAX_TCK_FREQ 6000000
+
+/* Maximum TCK frequency of FT2232H / FT4232H  */
+#define FT2232H_MAX_TCK_FREQ 30000000
 
 /* The default driver if not specified otherwise during connect */
 #ifdef ENABLE_LOWLEVEL_FTD2XX
@@ -79,6 +84,9 @@
 #define TCK_DIVISOR     0x86
 #define SEND_IMMEDIATE  0x87
 
+/* FT2232H / FT4232H only commands */
+#define DISABLE_CLOCKDIV  0x8A /* Disables the clk divide by 5 to allow for a 60MHz master clock */
+#define ENABLE_CLOCKDIV   0x8B /* Enables the clk divide by 5 to allow for backward compatibility with FT2232D */
 
 /* bit and bitmask definitions for GPIO commands */
 #define BIT_TCK         0
@@ -227,29 +235,42 @@ static const urj_tap_cable_cx_cmd_t imm_cmd =
 
 
 static void
-ft2232_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
+ft2232h_disable_clockdiv_by5 (urj_cable_t *cable)
+{
+    params_t *params = (params_t *)cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+
+    urj_tap_cable_cx_cmd_queue( cmd_root, 0 );
+    urj_tap_cable_cx_cmd_push( cmd_root, DISABLE_CLOCKDIV );
+}
+
+static void
+ft2232_set_frequency_common (urj_cable_t *cable, uint32_t new_frequency, uint32_t max_frequency)
 {
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
 
-    if (!new_frequency || new_frequency > FT2232_MAX_TCK_FREQ)
-        new_frequency = FT2232_MAX_TCK_FREQ;
+    if (!new_frequency || new_frequency > max_frequency)
+        new_frequency = max_frequency;
 
     /* update ft2232 frequency if cable setting changed */
     if (new_frequency != params->mpsse_frequency)
     {
         uint32_t div;
 
-        div = FT2232_MAX_TCK_FREQ / new_frequency;
-        if (FT2232_MAX_TCK_FREQ % new_frequency)
+        div = max_frequency / new_frequency;
+        if (max_frequency % new_frequency)
             div++;
 
         if (div >= (1 << 16))
         {
             div = (1 << 16) - 1;
-            urj_warning (_("Setting lowest supported frequency for FT2232: %d\n"),
-                         FT2232_MAX_TCK_FREQ / div);
+            urj_warning( _("Warning: Setting lowest supported frequency for FT2232%s: %d\n"),
+                         max_frequency == FT2232H_MAX_TCK_FREQ ? "H" : "", max_frequency/div );
         }
+
+        if (max_frequency == FT2232H_MAX_TCK_FREQ)
+          ft2232h_disable_clockdiv_by5( cable );
 
         /* send new divisor to device */
         div -= 1;
@@ -261,12 +282,24 @@ ft2232_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
         urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
                                URJ_TAP_CABLE_COMPLETELY);
 
-        params->mpsse_frequency = FT2232_MAX_TCK_FREQ / (div + 1);
+        params->mpsse_frequency = max_frequency / (div + 1);
         cable->frequency = params->mpsse_frequency;
     }
 }
 
 
+static void
+ft2232_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
+{
+    ft2232_set_frequency_common( cable, new_frequency, FT2232_MAX_TCK_FREQ);
+}
+
+static void
+ft2232h_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
+{
+    ft2232_set_frequency_common( cable, new_frequency, FT2232H_MAX_TCK_FREQ);
+}
+ 
 static int
 ft2232_generic_init (urj_cable_t *cable)
 {
@@ -364,7 +397,7 @@ ft2232_jtagkey_init (urj_cable_t *cable)
 
 
 static int
-ft2232_armusbocd_init (urj_cable_t *cable)
+ft2232_armusbocd_init_common (urj_cable_t *cable, uint32_t frequency)
 {
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -405,7 +438,7 @@ ft2232_armusbocd_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
-    ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
+    ft2232_set_frequency (cable, frequency);
 
     params->bit_trst = BIT_ARMUSBOCD_nTRST + 8; /* member of HIGH byte */
     params->bit_reset = BIT_ARMUSBOCD_nTSRST + 8;       /* member of HIGH byte */
@@ -416,9 +449,21 @@ ft2232_armusbocd_init (urj_cable_t *cable)
     return URJ_STATUS_OK;
 }
 
+static int
+ft2232_armusbocd_init (urj_cable_t *cable)
+{
+    return ft2232_armusbocd_init_common (cable, FT2232_MAX_TCK_FREQ);
+}
 
 static int
-ft2232_gnice_init (urj_cable_t *cable)
+ft2232_armusbtiny_h_init (urj_cable_t *cable)
+{
+    return ft2232_armusbocd_init_common (cable, FT2232H_MAX_TCK_FREQ);
+}
+
+
+static int
+ft2232_gnice_init_common (urj_cable_t *cable, uint32_t frequency)
 {
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -450,7 +495,7 @@ ft2232_gnice_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
-    ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
+    ft2232_set_frequency (cable, frequency);
 
     params->bit_trst = BIT_GNICE_nTRST + 8;     /* member of HIGH byte */
     params->bit_reset = -1;     /* not used */
@@ -461,6 +506,17 @@ ft2232_gnice_init (urj_cable_t *cable)
     return URJ_STATUS_OK;
 }
 
+static int
+ft2232_gnice_init (urj_cable_t *cable)
+{
+    return ft2232_gnice_init_common (cable, FT2232_MAX_TCK_FREQ);
+}
+
+static int
+ft2232_gniceplus_init (urj_cable_t *cable)
+{
+    return ft2232_gnice_init_common (cable, FT2232H_MAX_TCK_FREQ);
+}
 
 static int
 ft2232_oocdlinks_init (urj_cable_t *cable)
@@ -1766,6 +1822,7 @@ ft2232_cable_free (urj_cable_t *cable)
 urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftdi;
 urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftdi;
 urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftdi;
+urj_usbconn_cable_t urj_tap_cable_usbconn_gniceplus_ftdi;
 urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftdi;
 urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftdi;
 urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftdi;
@@ -1786,6 +1843,9 @@ ft2232_usbcable_help (urj_log_level_t ll, const char *cablename)
     conn = &urj_tap_cable_usbconn_gnice_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
+    conn = &urj_tap_cable_usbconn_gniceplus_ftdi;
+    if (strcasecmp( conn->name, cablename ) == 0)
+      goto found;
     conn = &urj_tap_cable_usbconn_jtagkey_ftdi;
     if (strcasecmp (conn->name, cablename) == 0)
         goto found;
@@ -1901,6 +1961,39 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftd2xx = {
     0x0004                      /* PID */
 };
 
+urj_cable_driver_t urj_tap_cable_ft2232_armusbtiny_h_driver = {
+    "ARM-USB-OCD-H",
+    N_("Olimex ARM-USB-TINY-H (FT2232H) Cable"),
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
+    urj_tap_cable_generic_disconnect,
+    ft2232_cable_free,
+    ft2232_armusbtiny_h_init,
+    ft2232_armusbocd_done,
+    ft2232_set_frequency,
+    ft2232_clock,
+    ft2232_get_tdo,
+    ft2232_transfer,
+    ft2232_set_signal,
+    urj_tap_cable_generic_get_signal,
+    ft2232_flush,
+    ft2232_usbcable_help
+};
+urj_usbconn_cable_t urj_tap_cable_usbconn_armusbtiny_h_ftdi = {
+    "ARM-USB-TINY-H",           /* cable name */
+    NULL,                       /* string pattern, not used */
+    "ftdi-mpsse",               /* default usbconn driver */
+    0x15BA,                     /* VID */
+    0x002A                      /* PID */
+};
+urj_usbconn_cable_t urj_tap_cable_usbconn_armusbtiny_h_ftd2xx = {
+    "ARM-USB-TINY-H",           /* cable name */
+    NULL,                       /* string pattern, not used */
+    "ftd2xx-mpsse",             /* default usbconn driver */
+    0x15BA,                     /* VID */
+    0x002A                      /* PID */
+};
+
 urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver = {
     "gnICE",
     N_("Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"),
@@ -1919,6 +2012,7 @@ urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver = {
     ft2232_flush,
     ft2232_usbcable_help
 };
+
 urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftdi = {
     "gnICE",                    /* cable name */
     NULL,                       /* string pattern, not used */
@@ -1932,6 +2026,40 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftd2xx = {
     "ftd2xx-mpsse",             /* default usbconn driver */
     0x0456,                     /* VID */
     0xF000                      /* PID */
+};
+
+urj_cable_driver_t urj_tap_cable_ft2232_gniceplus_driver = {
+    "gnICE+",
+    N_("Analog Devices Blackfin gnICE+ (FT2232H) Cable (EXPERIMENTAL)"),
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
+    urj_tap_cable_generic_disconnect,
+    ft2232_cable_free,
+    ft2232_gniceplus_init,
+    ft2232_gnice_done,
+    ft2232h_set_frequency,
+    ft2232_clock,
+    ft2232_get_tdo,
+    ft2232_transfer,
+    ft2232_set_signal,
+    urj_tap_cable_generic_get_signal,
+    ft2232_flush,
+    ft2232_usbcable_help
+};
+
+urj_usbconn_cable_t urj_tap_cable_usbconn_gniceplus_ftdi = {
+    "gnICE+",            /* cable name */
+    NULL,               /* string pattern, not used */
+    "ftdi-mpsse",       /* default usbconn driver */
+    0x0456,             /* VID */
+    0xF001              /* PID */
+};
+urj_usbconn_cable_t urj_tap_cable_usbconn_gniceplus_ftd2xx = {
+    "gnICE+",                   /* cable name */
+    NULL,                       /* string pattern, not used */
+    "ftd2xx-mpsse",             /* default usbconn driver */
+    0x0456,                     /* VID */
+    0xF001                      /* PID */
 };
 
 urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver = {

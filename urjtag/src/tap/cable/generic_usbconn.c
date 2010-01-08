@@ -48,7 +48,9 @@ extern urj_usbconn_cable_t urj_tap_cable_usbconn_jlink;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftd2xx;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftd2xx;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbtiny_h_ftd2xx;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftd2xx;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_gniceplus_ftd2xx;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftd2xx;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftd2xx;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftd2xx;
@@ -61,7 +63,9 @@ extern urj_usbconn_cable_t urj_tap_cable_usbconn_usbscarab2_ftd2xx;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftdi;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftdi;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_armusbtiny_h_ftdi;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftdi;
+extern urj_usbconn_cable_t urj_tap_cable_usbconn_gniceplus_ftdi;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftdi;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftdi;
 extern urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftdi;
@@ -99,7 +103,9 @@ urj_usbconn_cable_t *urj_tap_cable_usbconn_cables[] = {
     &urj_tap_cable_usbconn_ft2232_ftd2xx,
     &urj_tap_cable_usbconn_armusbocd_ftd2xx,
     &urj_tap_cable_usbconn_armusbocdtiny_ftd2xx,
+    &urj_tap_cable_usbconn_armusbtiny_h_ftd2xx,
     &urj_tap_cable_usbconn_gnice_ftd2xx,
+    &urj_tap_cable_usbconn_gniceplus_ftd2xx,
     &urj_tap_cable_usbconn_jtagkey_ftd2xx,
     &urj_tap_cable_usbconn_oocdlinks_ftd2xx,
     &urj_tap_cable_usbconn_turtelizer2_ftd2xx,
@@ -112,7 +118,9 @@ urj_usbconn_cable_t *urj_tap_cable_usbconn_cables[] = {
     &urj_tap_cable_usbconn_ft2232_ftdi,
     &urj_tap_cable_usbconn_armusbocd_ftdi,
     &urj_tap_cable_usbconn_armusbocdtiny_ftdi,
+    &urj_tap_cable_usbconn_armusbtiny_h_ftdi,
     &urj_tap_cable_usbconn_gnice_ftdi,
+    &urj_tap_cable_usbconn_gniceplus_ftdi,
     &urj_tap_cable_usbconn_jtagkey_ftdi,
     &urj_tap_cable_usbconn_oocdlinks_ftdi,
     &urj_tap_cable_usbconn_turtelizer2_ftdi,

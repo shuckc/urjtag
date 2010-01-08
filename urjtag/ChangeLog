@@ -1,3 +1,11 @@
+2010-01-08  Kolja Waschk <kawk>
+
+  * src/tap/cable.c, src/tap/cable/generic_usbconn.c, src/tap/cable/ft2232.c:
+    Added support for FT2232H in gnICE+ and ARM-USB-TINY-H cable. Written by
+    Michael Hennerich, adapted and submitted by Adam Megacz.
+
+  * po/fr.po, po/rw.po, po/sk.po: updated
+
 2009-12-30  Arnim Laeuger  <arniml>
 
   * src/flash/jedec.c: [ 2831030 ] added support for flashes AM29LV400BB,
