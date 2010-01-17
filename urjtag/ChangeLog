@@ -1,3 +1,8 @@
+2010-01-16  Stephane Glondu  <steph@glondu.net>
+
+  * data/Makefile.am (nobase_dist_pkgdata_DATA): Remove duplicate analog/PARTS
+    entry to fix `make install` error with newer GNU coreutils.
+
 2010-01-08  Kolja Waschk <kawk>
 
   * src/tap/cable.c, src/tap/cable/generic_usbconn.c, src/tap/cable/ft2232.c:
