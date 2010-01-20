@@ -1,3 +1,19 @@
+2010-01-20  Jie Zhang  <jie.zhang@analog.com>
+
+  * po/POTFILES.in: Remove src/bsdl/bsdl_bison.c, src/bsdl/bsdl_flex.c,
+    src/bsdl/vhdl_bison.c and src/bsdl/vhdl_flex.c.
+    Add src/bsdl/bsdl_bison.y, src/bsdl/bsdl_flex.l, src/bsdl/vhdl_bison.y
+    and src/bsdl/vhdl_flex.l.
+  * po/fr.po: Regenerate.
+  * po/rw.po: Regenerate.
+  * po/sk.po: Regenerate.
+  * src/apps/bsdl2jtag/Makefile.am (bsdl2jtag_LDADD): Replace top_srcdir
+    with top_builddir.
+  * src/apps/jtag/Makefile.am (jtag_LDADD): Likewise.
+  * src/bus/ixp465.c: Include <urjtag/part.h>, <urjtag/bus.h>,
+    <urjtag/chain.h>, <urjtag/bssignal.h> and <urjtag/jtag.h>
+    instead of "part.h", "bus.h", "chain.h", "bssignal.h" and "jtag.h".
+
 2010-01-16  Stephane Glondu  <steph@glondu.net>
 
   * data/Makefile.am (nobase_dist_pkgdata_DATA): Remove duplicate analog/PARTS

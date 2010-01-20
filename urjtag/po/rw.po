@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jtag 0.5.1\n"
 "Report-Msgid-Bugs-To: marcel@telka.sk\n"
-"POT-Creation-Date: 2010-01-08 18:03+0100\n"
+"POT-Creation-Date: 2010-01-20 20:23+0800\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -143,57 +143,58 @@ msgid ""
 "\n"
 msgstr "Ifashayobora kugirango Ifashayobora"
 
-#: bsdl_bison.y:268
+#: src/bsdl/bsdl_bison.y:268
 msgid "Unsupported BSDL construct found"
 msgstr ""
 
-#: bsdl_bison.y:331
+#: src/bsdl/bsdl_bison.y:331
 msgid "Error in Instruction_Opcode attribute statement"
 msgstr ""
 
-#: bsdl_bison.y:344
+#: src/bsdl/bsdl_bison.y:344
 msgid "Multiple opcode patterns are not supported, first pattern will be used"
 msgstr ""
 
-#: bsdl_bison.y:375
+#: src/bsdl/bsdl_bison.y:375
 msgid "Error in Opcode List"
 msgstr ""
 
-#: bsdl_bison.y:461
+#: src/bsdl/bsdl_bison.y:461
 msgid "Error in Boundary Cell description"
 msgstr ""
 
-#: bsdl_bison.y:586
+#: src/bsdl/bsdl_bison.y:586
 #, fuzzy
 msgid "Error in ISC_Pin_Behavior Definition"
 msgstr "Icyabitswe Uburebure"
 
-#: bsdl_bison.y:598
+#: src/bsdl/bsdl_bison.y:598
 #, fuzzy
 msgid "Error in ISC_Fixed_System_Pins Definition"
 msgstr "Icyabitswe Uburebure"
 
-#: bsdl_bison.y:625
+#: src/bsdl/bsdl_bison.y:625
 #, fuzzy
 msgid "Error in ISC_Security Definition"
 msgstr "Icyabitswe Uburebure"
 
-#: bsdl_bison.y:659
+#: src/bsdl/bsdl_bison.y:659
 #, fuzzy
 msgid "Error in ISC_Flow Definition"
 msgstr "Icyabitswe Uburebure"
 
-#: bsdl_bison.y:823
+#: src/bsdl/bsdl_bison.y:823
 #, fuzzy
 msgid "Error in ISC_Procedure Definition"
 msgstr "Icyabitswe Uburebure"
 
-#: bsdl_bison.y:847
+#: src/bsdl/bsdl_bison.y:847
 #, fuzzy
 msgid "Error in ISC_Action Definition"
 msgstr "Icyabitswe Uburebure"
 
-#: bsdl_bison.y:890 bsdl_bison.y:904 vhdl_bison.y:674
+#: src/bsdl/bsdl_bison.y:890 src/bsdl/bsdl_bison.y:904
+#: src/bsdl/vhdl_bison.y:674
 #, c-format
 msgid "Line %d, %s.\n"
 msgstr ""
@@ -249,113 +250,113 @@ msgstr ""
 msgid "Got IDCODE: %s\n"
 msgstr ""
 
-#: vhdl_bison.y:231
+#: src/bsdl/vhdl_bison.y:231
 msgid "Improper Entity declaration"
 msgstr ""
 
-#: vhdl_bison.y:232
+#: src/bsdl/vhdl_bison.y:232
 msgid "Check if source file is BSDL"
 msgstr ""
 
-#: vhdl_bison.y:242 vhdl_bison.y:250
+#: src/bsdl/vhdl_bison.y:242 src/bsdl/vhdl_bison.y:250
 #, fuzzy
 msgid "Syntax Error"
 msgstr "Ikosa ry'imyandikire"
 
-#: vhdl_bison.y:260
+#: src/bsdl/vhdl_bison.y:260
 msgid "Improper Port declaration"
 msgstr ""
 
-#: vhdl_bison.y:292
+#: src/bsdl/vhdl_bison.y:292
 #, fuzzy
 msgid "Error in Package declaration(s)"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:317
+#: src/bsdl/vhdl_bison.y:317
 #, fuzzy
 msgid "Error in Standard Package"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:335
+#: src/bsdl/vhdl_bison.y:335
 #, fuzzy
 msgid "Error in Standard Declarations"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:346
+#: src/bsdl/vhdl_bison.y:346
 #, fuzzy
 msgid "Error in Attribute type identification"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:362
+#: src/bsdl/vhdl_bison.y:362
 #, fuzzy
 msgid "Error in Type definition"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:378
+#: src/bsdl/vhdl_bison.y:378
 #, fuzzy
 msgid "Error in Bit definition"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:389
+#: src/bsdl/vhdl_bison.y:389
 #, fuzzy
 msgid "Error in Record Definition"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:402
+#: src/bsdl/vhdl_bison.y:402
 #, fuzzy
 msgid "Error in defered constant"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:414
+#: src/bsdl/vhdl_bison.y:414
 #, fuzzy
 msgid "Error in Package Body definition"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:426
+#: src/bsdl/vhdl_bison.y:426
 #, fuzzy
 msgid "Error in Cell Constant definition"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:437
+#: src/bsdl/vhdl_bison.y:437
 #, fuzzy
 msgid "Error in Cell Data Record"
 msgstr "Ukwihuza Byanze"
 
-#: vhdl_bison.y:446
+#: src/bsdl/vhdl_bison.y:446
 #, fuzzy
 msgid "Error in Cell_Type Function field"
 msgstr "Ukwihuza Byanze"
 
-#: vhdl_bison.y:453
+#: src/bsdl/vhdl_bison.y:453
 #, fuzzy
 msgid "Error in BScan_Inst Instruction field"
 msgstr "Ukwihuza Byanze"
 
-#: vhdl_bison.y:460
+#: src/bsdl/vhdl_bison.y:460
 #, fuzzy
 msgid "Error in Constant CAP data source field"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:484
+#: src/bsdl/vhdl_bison.y:484
 #, fuzzy
 msgid "Error in User-Defined Package declarations"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:491
+#: src/bsdl/vhdl_bison.y:491
 msgid "Unknown VHDL statement"
 msgstr ""
 
-#: vhdl_bison.y:514
+#: src/bsdl/vhdl_bison.y:514
 #, fuzzy
 msgid "Error in Attribute specification"
 msgstr "Icyabitswe Uburebure"
 
-#: vhdl_bison.y:669
+#: src/bsdl/vhdl_bison.y:669
 #, c-format
 msgid "In Package %s, Line %d, %s.\n"
 msgstr ""
 
-#: vhdl_bison.y:687
+#: src/bsdl/vhdl_bison.y:687
 msgid "Too many errors"
 msgstr ""
 
@@ -2930,12 +2931,12 @@ msgstr ""
 msgid "Scanned device output matched expected TDO values.\n"
 msgstr ""
 
-#: svf_flex.l:397
+#: src/svf/svf_flex.l:396
 #, c-format
 msgid "Parsing %6d/%d (%3.0d%%)"
 msgstr ""
 
-#: svf_flex.l:417 src/tap/cable/ft2232.c:1787
+#: src/svf/svf_flex.l:416 src/tap/cable/ft2232.c:1787
 #: src/tap/cable/generic_parport.c:89 src/tap/cable/generic_usbconn.c:244
 #: src/tap/cable/jim.c:71 src/tap/cable/ts7800.c:170
 #: src/tap/cable/usbblaster.c:80 src/tap/cable/vision_ep9307.c:214

@@ -30,7 +30,7 @@ jtag_SOURCES = \
 	jtag.c
 
 jtag_LDADD = \
-	$(top_srcdir)/src/liburjtag.la \
+	$(top_builddir)/src/liburjtag.la \
 	@LIBINTL@
 
 localedir = $(datadir)/locale

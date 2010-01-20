@@ -1,12 +1,12 @@
 # $Id$
 src/apps/bsdl2jtag/bsdl2jtag.c
 src/apps/jtag/jtag.c
-src/bsdl/bsdl_bison.c
+src/bsdl/bsdl_bison.y
 src/bsdl/bsdl.c
-src/bsdl/bsdl_flex.c
+src/bsdl/bsdl_flex.l
 src/bsdl/bsdl_sem.c
-src/bsdl/vhdl_bison.c
-src/bsdl/vhdl_flex.c
+src/bsdl/vhdl_bison.y
+src/bsdl/vhdl_flex.l
 src/bus/arm9tdmi.c
 src/bus/au1500.c
 src/bus/avr32.c
@@ -101,9 +101,9 @@ src/part/data_register.c
 src/part/instruction.c
 src/part/part.c
 src/part/signal.c
-src/svf/svf_bison.c
+src/svf/svf_bison.y
 src/svf/svf.c
-src/svf/svf_flex.c
+src/svf/svf_flex.l
 src/tap/cable/arcom.c
 src/tap/cable/byteblaster.c
 src/tap/cable.c
