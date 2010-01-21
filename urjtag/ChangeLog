@@ -1,3 +1,8 @@
+2010-01-21  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/apps/jtag/jtag.c (main): Don't trigger open file error
+    if the last command is "quit".
+
 2010-01-20  Jie Zhang  <jie.zhang@analog.com>
 
   * po/POTFILES.in: Remove src/bsdl/bsdl_bison.c, src/bsdl/bsdl_flex.c,

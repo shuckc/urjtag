@@ -488,7 +488,7 @@ main (int argc, char *const argv[])
 
             go = urj_parse_file (URJ_LOG_LEVEL_NORMAL, chain, argv[i]);
             cleanup (chain);
-            if (go < 0)
+            if (go < 0 && go != URJ_STATUS_MUST_QUIT)
             {
                 printf (_("Unable to open file `%s'!\n"), argv[i]);
                 break;
