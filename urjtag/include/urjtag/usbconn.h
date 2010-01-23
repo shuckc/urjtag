@@ -65,9 +65,6 @@ struct URJ_USBCONN
     urj_cable_t *cable;
 };
 
-urj_usbconn_t *usbconn_connect (urj_usbconn_cable_t *cable,
-                                const urj_param_t *params[]);
-int usbconn_free (urj_usbconn_t *conn);
 int urj_tap_usbconn_open (urj_usbconn_t *conn);
 int urj_tap_usbconn_close (urj_usbconn_t *conn);
 int urj_tap_usbconn_read (urj_usbconn_t *conn, uint8_t *buf, int len);
