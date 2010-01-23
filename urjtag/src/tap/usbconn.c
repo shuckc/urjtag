@@ -29,31 +29,11 @@
 
 #include <urjtag/usbconn.h>
 
-/* @@@@ RFHH stick these into a .h file */
-#ifdef HAVE_LIBUSB
-extern urj_usbconn_driver_t urj_tap_usbconn_libusb_driver;
-#endif /* HAVE_LIBUSB */
-#ifdef ENABLE_LOWLEVEL_FTD2XX
-extern urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver;
-extern urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver;
-#endif /* ENABLE_LOWLEVEL_FTD2XX */
-#ifdef ENABLE_LOWLEVEL_FTDI
-extern urj_usbconn_driver_t urj_tap_usbconn_ftdi_driver;
-extern urj_usbconn_driver_t urj_tap_usbconn_ftdi_mpsse_driver;
-#endif /* ENABLE_LOWLEVEL_FTDI */
+#include "usbconn.h"
 
 urj_usbconn_driver_t *urj_tap_usbconn_drivers[] = {
-#ifdef HAVE_LIBUSB
-    &urj_tap_usbconn_libusb_driver,
-#endif /* HAVE_LIBUSB */
-#ifdef ENABLE_LOWLEVEL_FTD2XX
-    &urj_tap_usbconn_ftd2xx_driver,
-    &urj_tap_usbconn_ftd2xx_mpsse_driver,
-#endif /* ENABLE_LOWLEVEL_FTD2XX */
-#ifdef ENABLE_LOWLEVEL_FTDI
-    &urj_tap_usbconn_ftdi_driver,
-    &urj_tap_usbconn_ftdi_mpsse_driver,
-#endif /* ENABLE_LOWLEVEL_FTDI */
+#define _URJ_LIST(item) &urj_tap_usbconn_##item##_driver,
+#include "usbconn_list.h"
     NULL                        /* last must be NULL */
 };
 

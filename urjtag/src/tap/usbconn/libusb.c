@@ -46,14 +46,13 @@
 #include <urjtag/error.h>
 #include <urjtag/log.h>
 #include <urjtag/usbconn.h>
+#include "../usbconn.h"
 
 typedef struct
 {
     struct usb_device *dev;
     struct usb_dev_handle *handle;
 } urj_usbconn_libusb_param_t;
-
-urj_usbconn_driver_t urj_tap_usbconn_libusb_driver;
 
 /* ---------------------------------------------------------------------- */
 

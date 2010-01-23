@@ -43,7 +43,7 @@
 #include <urjtag/log.h>
 #include <urjtag/usbconn.h>
 #include "libftdx.h"
-
+#include "../usbconn.h"
 
 /* enables debug output */
 static const char *module = "usbconn_ftd2xx_";
@@ -66,9 +66,6 @@ typedef struct
     uint32_t recv_read_idx;
     uint8_t *recv_buf;
 } ftd2xx_param_t;
-
-urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver;
-urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver;
 
 static int usbconn_ftd2xx_common_open (urj_usbconn_t *conn, urj_log_level_t ll);
 static void usbconn_ftd2xx_free (urj_usbconn_t *conn);
