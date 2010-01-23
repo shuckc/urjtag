@@ -13,6 +13,8 @@
 
   * include/urjtag/Makefile.am (pkginclude_HEADERS): Add missing parse.h.
 
+  * src/flash/flash.c: Check return value of all fread() commands.
+
 2010-01-21  Jie Zhang  <jie.zhang@analog.com>
 
   * src/apps/jtag/jtag.c (main): Don't trigger open file error

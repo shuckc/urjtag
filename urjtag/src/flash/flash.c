@@ -98,6 +98,15 @@ set_flash_driver (void)
     return URJ_STATUS_FAIL;
 }
 
+#define fread_ret(ptr, size, nmemb, stream) \
+do { \
+    if (fread (ptr, size, nmemb, stream) != (nmemb)) \
+    { \
+        urj_error_IO_set (_("fread() was short")); \
+        return URJ_STATUS_FAIL; \
+    } \
+} while (0)
+
 int
 urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
 {
@@ -116,8 +125,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
     /* test sync bytes */
     {
         char sync[8];
-        // @@@@ RFHH check error state?
-        fread (&sync, sizeof (char), 7, f);
+        fread_ret (&sync, sizeof (char), 7, f);
         sync[7] = '\0';
         if (strcmp ("B000FF\n", sync) != 0)
         {
@@ -134,10 +142,8 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
         uint32_t block_size =
             cfi->device_geometry.erase_block_regions[0].erase_block_size;
 
-        // @@@@ RFHH check error state?
-        fread (&start, sizeof start, 1, f);
-        // @@@@ RFHH check error state?
-        fread (&len, sizeof len, 1, f);
+        fread_ret (&start, sizeof start, 1, f);
+        fread_ret (&len, sizeof len, 1, f);
         first = start / (block_size * 2);
         last = (start + len - 1) / (block_size * 2);
         for (; first <= last; first++)
@@ -160,9 +166,9 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
     {
         uint32_t a, l, c;
 
-        fread (&a, sizeof a, 1, f);
-        fread (&l, sizeof l, 1, f);
-        fread (&c, sizeof c, 1, f);
+        fread_ret (&a, sizeof a, 1, f);
+        fread_ret (&l, sizeof l, 1, f);
+        fread_ret (&c, sizeof c, 1, f);
         if (feof (f))
         {
             urj_error_IO_set (_("premature end of file"));
@@ -186,8 +192,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
             urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
                      (long unsigned) a);
             urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
-            // @@@@ RFHH check error state
-            fread (&data, sizeof data, 1, f);
+            fread_ret (&data, sizeof data, 1, f);
             if (flash_driver->program (urj_flash_cfi_array, a, &data, 1)
                 != URJ_STATUS_OK)
                 // retain error state
@@ -213,9 +218,9 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
     {
         uint32_t a, l, c;
 
-        fread (&a, sizeof a, 1, f);
-        fread (&l, sizeof l, 1, f);
-        fread (&c, sizeof c, 1, f);
+        fread_ret (&a, sizeof a, 1, f);
+        fread_ret (&l, sizeof l, 1, f);
+        fread_ret (&c, sizeof c, 1, f);
         if (feof (f))
         {
             urj_error_IO_set (_("premature end of file"));
@@ -239,8 +244,7 @@ urj_flashmsbin (urj_bus_t *bus, FILE *f, int noverify)
             urj_log (URJ_LOG_LEVEL_NORMAL, _("addr: 0x%08lX"),
                      (long unsigned) a);
             urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
-            // @@@@ RFHH check error state?
-            fread (&data, sizeof data, 1, f);
+            fread_ret (&data, sizeof data, 1, f);
             readed = URJ_BUS_READ (bus, a);
             if (data != readed)
             {
