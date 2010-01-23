@@ -563,7 +563,7 @@ AS_IF([test "x$HAVELIBUSB" != "xyes"], [
 ])
 #
 enabled_cable_drivers=''
-AC_DEFUN([CHECK_CABLE], [CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [$1], [ENABLE_BUS_]m4_toupper([$1]))])
+AC_DEFUN([CHECK_CABLE], [CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [$1], [ENABLE_JIM_]m4_toupper([$1]))])
 CHECK_CABLE([arcom])
 CHECK_CABLE([byteblaster])
 CHECK_CABLE([dlc5])
@@ -618,7 +618,7 @@ AS_IF([test "x$HAVE_IOPERM" != "xyes" -a "x$HAVE_I386_SET_IOPERM" != "xyes" -a "
 ])
 #
 enabled_lowlevel_drivers=''
-AC_DEFUN([CHECK_LOWLEVEL], [CHECK_DRIVER([$lowleveldrivers], [enabled_lowlevel_drivers], [$1], [ENABLE_BUS_]m4_toupper([$1]))])
+AC_DEFUN([CHECK_LOWLEVEL], [CHECK_DRIVER([$lowleveldrivers], [enabled_lowlevel_drivers], [$1], [ENABLE_LOWLEVEL_]m4_toupper([$1]))])
 CHECK_LOWLEVEL([direct])
 CHECK_LOWLEVEL([ftd2xx])
 CHECK_LOWLEVEL([ftdi])
