@@ -25,8 +25,6 @@
 
 #include <sysdep.h>
 
-#ifdef ENABLE_LOWLEVEL_PPDEV
-
 #include <stdio.h>
 #include <fcntl.h>
 #ifdef HAVE_STROPTS_H
@@ -252,5 +250,3 @@ const urj_parport_driver_t urj_tap_parport_ppdev_parport_driver = {
     ppdev_get_status,
     ppdev_set_control
 };
-
-#endif /* ENABLE_LOWLEVEL_PPDEV */

@@ -26,8 +26,6 @@
 
 #include <sysdep.h>
 
-#ifdef HAVE_LIBUSB
-
 #include <fcntl.h>
 #if __CYGWIN__ || __MINGW32__
 #include <windows.h>
@@ -264,5 +262,3 @@ const urj_usbconn_driver_t urj_tap_usbconn_libusb_driver = {
     NULL,
     NULL
 };
-
-#endif /* HAVE_LIBUSB */

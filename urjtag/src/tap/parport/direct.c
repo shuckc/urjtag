@@ -26,8 +26,6 @@
 
 #include <sysdep.h>
 
-#ifdef ENABLE_LOWLEVEL_DIRECT
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -316,5 +314,3 @@ const urj_parport_driver_t urj_tap_parport_direct_parport_driver = {
     direct_get_status,
     direct_set_control
 };
-
-#endif /* ENABLE_LOWLEVEL_DIRECT */

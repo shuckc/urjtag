@@ -25,8 +25,6 @@
 
 #include <sysdep.h>
 
-#ifdef HAVE_DEV_PPBUS_PPI_H
-
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -238,5 +236,3 @@ const urj_parport_driver_t urj_tap_parport_ppi_parport_driver = {
     ppi_get_status,
     ppi_set_control
 };
-
-#endif /* HAVE_DEV_PPBUS_PPI_H */
