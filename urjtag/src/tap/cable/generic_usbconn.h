@@ -40,4 +40,7 @@ void urj_tap_cable_generic_usbconn_done (urj_cable_t *cable);
 void urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *name);
 void urj_tap_cable_generic_usbconn_free (urj_cable_t *cable);
 
+#define URJ_DECLARE_USBCONN_CABLE(vid, pid, driver, name, cable) \
+const urj_usbconn_cable_t urj_tap_cable_usbconn_##cable = { name, NULL, driver, vid, pid };
+
 #endif /* URJ_TAP_CABLE_GENERIC_H */

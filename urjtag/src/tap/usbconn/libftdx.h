@@ -34,4 +34,22 @@
 #define URJ_USBCONN_FTD2XX_MAXRECV (63 * 64)
 #define URJ_USBCONN_FTDX_MAXRECV   (URJ_USBCONN_FTD2XX_MAXRECV < URJ_USBCONN_FTDI_MAXRECV ? URJ_USBCONN_FTD2XX_MAXRECV : URJ_USBCONN_FTDI_MAXRECV)
 
+/*
+ * Helpers to avoid having to copy & paste ifdef's everywhere
+ */
+#ifdef ENABLE_LOWLEVEL_FTDI
+#define _URJ_DECLARE_FTDI_CABLE(v, p, d, n, c) URJ_DECLARE_USBCONN_CABLE(v, p, d, n, c)
+#else
+#define _URJ_DECLARE_FTDI_CABLE(v, p, d, n, c)
+#endif
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+#define _URJ_DECLARE_FTD2XX_CABLE(v, p, d, n, c) URJ_DECLARE_USBCONN_CABLE(v, p, d, n, c)
+#else
+#define _URJ_DECLARE_FTD2XX_CABLE(v, p, d, n, c)
+#endif
+
+#define URJ_DECLARE_FTDX_CABLE(v, p, d, n, c) \
+	_URJ_DECLARE_FTDI_CABLE(v, p, "ftdi"d, n, c##_ftdi) \
+	_URJ_DECLARE_FTD2XX_CABLE(v, p, "ftd2xx"d, n, c##_ftd2xx)
+
 #endif

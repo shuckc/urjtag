@@ -606,11 +606,4 @@ const urj_cable_driver_t urj_tap_cable_jlink_driver = {
     urj_tap_cable_generic_flush_using_transfer,
     urj_tap_cable_generic_usbconn_help
 };
-
-const urj_usbconn_cable_t urj_tap_cable_usbconn_jlink = {
-    "jlink",                    /* cable name */
-    NULL,                       /* string pattern, not used */
-    "libusb",                   /* usbconn driver */
-    0x1366,                     /* VID */
-    0x0101                      /* PID */
-};
+URJ_DECLARE_USBCONN_CABLE(0x1366, 0x0101, "libusb", "jlink", jlink)

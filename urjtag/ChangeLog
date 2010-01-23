@@ -59,7 +59,13 @@
   * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c,
     src/tap/cable/generic_usbconn.h, src/tap/cable/jlink.c,
     src/tap/cable/usbblaster.c, src/tap/cable/xpc.c: Constify the usb cable
-    drivers
+    drivers.
+
+  * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.h,
+    src/tap/cable/jlink.c, src/tap/cable/usbblaster.c, src/tap/cable/xpc.c,
+    src/tap/usbconn/libftdx.h: Create some helper macros for declaring USB
+    cable drivers to unify duplicate code and to help with FTDI part decls.
+    Avoids defining USB cable drivers when support has been disabled.
 
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 

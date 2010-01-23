@@ -698,14 +698,7 @@ const urj_cable_driver_t urj_tap_cable_xpc_int_driver = {
     urj_tap_cable_generic_flush_using_transfer,
     urj_tap_cable_generic_usbconn_help
 };
-
-const urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_int = {
-    "xpc_int",                  /* cable name */
-    NULL,                       /* string pattern, not used */
-    "libusb",                   /* usbconn driver */
-    0x03FD,                     /* VID (Xilinx) */
-    0x0008                      /* PID (8) */
-};
+URJ_DECLARE_USBCONN_CABLE(0x03FD, 0x0008, "libusb", "xpc_int", xpc_int)
 
 const urj_cable_driver_t urj_tap_cable_xpc_ext_driver = {
     "xpc_ext",
@@ -725,11 +718,4 @@ const urj_cable_driver_t urj_tap_cable_xpc_ext_driver = {
     urj_tap_cable_generic_flush_using_transfer,
     urj_tap_cable_generic_usbconn_help
 };
-
-const urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_ext = {
-    "xpc_ext",                  /* cable name */
-    NULL,                       /* string pattern, not used */
-    "libusb",                   /* usbconn driver */
-    0x03FD,                     /* VID (Xilinx) */
-    0x0008                      /* PID (8) */
-};
+URJ_DECLARE_USBCONN_CABLE(0x03FD, 0x0008, "libusb", "xpc_ext", xpc_ext)
