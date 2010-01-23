@@ -71,6 +71,10 @@
     src/tap/usbconn/libftd2xx.c, src/tap/usbconn/libftdi.c,
     src/tap/usbconn/libusb.c: Unify the usb cable drivers.
 
+  * src/tap/parport.c, src/tap/parport.h, src/tap/parport_list.h,
+    src/tap/parport/direct.c, src/tap/parport/ppdev.c, src/tap/parport/ppi.c:
+    Unify the list of parallel port drivers.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

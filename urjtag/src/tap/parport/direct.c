@@ -37,6 +37,7 @@
 #include <urjtag/log.h>
 #include <urjtag/parport.h>
 #include <urjtag/cable.h>
+#include "../parport.h"
 
 #if defined(HAVE_INPOUTXX)
 
@@ -110,16 +111,6 @@ outb (unsigned char value, unsigned short int port)
     __asm__ __volatile__ ("outb %b0,%w1"::"a" (value), "Nd" (port));
 }
 #endif /* HAVE_I386_SET_IOPERM */
-
-urj_parport_driver_t urj_tap_parport_direct_parport_driver;
-
-typedef struct port_node_t port_node_t;
-
-struct port_node_t
-{
-    urj_parport_t *port;
-    port_node_t *next;
-};
 
 static port_node_t *ports = NULL;       /* direct parallel ports */
 

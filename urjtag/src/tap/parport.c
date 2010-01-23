@@ -28,23 +28,11 @@
 
 #include <urjtag/parport.h>
 
-/* @@@@ RFHH move these to some .h file */
-extern urj_parport_driver_t urj_tap_parport_direct_parport_driver;
-extern urj_parport_driver_t urj_tap_parport_ppdev_parport_driver;
-extern urj_parport_driver_t urj_tap_parport_ppi_parport_driver;
+#include "parport.h"
 
 urj_parport_driver_t *urj_tap_parport_drivers[] = {
-#ifdef ENABLE_LOWLEVEL_DIRECT
-    &urj_tap_parport_direct_parport_driver,
-#endif /* ENABLE_LOWLEVEL_DIRECT */
-
-#ifdef ENABLE_LOWLEVEL_PPDEV
-    &urj_tap_parport_ppdev_parport_driver,
-#endif /* ENABLE_LOWLEVEL_PPDEV */
-
-#ifdef ENABLE_LOWLEVEL_PPI
-    &urj_tap_parport_ppi_parport_driver,
-#endif /* ENABLE_LOWLEVEL_PPI */
+#define _URJ_LIST(item) &urj_tap_parport_##item##_driver,
+#include "parport_list.h"
     NULL                        /* last must be NULL */
 };
 

@@ -44,16 +44,7 @@
 #include <urjtag/log.h>
 #include <urjtag/parport.h>
 #include <urjtag/cable.h>
-
-urj_parport_driver_t urj_tap_parport_ppdev_parport_driver;
-
-typedef struct port_node_t port_node_t;
-
-struct port_node_t
-{
-    urj_parport_t *port;
-    port_node_t *next;
-};
+#include "../parport.h"
 
 static port_node_t *ports = NULL;       /* ppdev parallel ports */
 
