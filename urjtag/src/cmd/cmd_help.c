@@ -48,10 +48,12 @@ cmd_help_run (urj_chain_t *chain, char *params[])
     /* short description generation */
     if (urj_cmd_params (params) == 1)
     {
-        urj_cmd_sort (urj_cmds);
+        int pad;
+        urj_cmd_sort (urj_cmds, pad);
         urj_log (URJ_LOG_LEVEL_NORMAL, _("Command list:\n\n"));
         for (i = 0; urj_cmds[i]; i++)
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("%-13s %s\n"), urj_cmds[i]->name,
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%-*s %s\n", pad + 1,
+                     urj_cmds[i]->name,
                      urj_cmds[i]->desc ? _(urj_cmds[i]->desc) :
                      _("(no description available)"));
         urj_log (URJ_LOG_LEVEL_NORMAL,

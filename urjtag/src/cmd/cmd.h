@@ -72,14 +72,18 @@ int urj_cmd_params (char *params[]);
 int urj_cmd_get_number (const char *s, long unsigned *i);
 
 /**
- * Internal command to help with sorting structures
+ * Internal command to help with sorting structures for display
  */
 int _urj_cmd_alphasort (const void *a, const void *b);
-#define urj_cmd_sort(arr) \
+#define urj_cmd_sort(arr, max_len) \
 	do { \
 		size_t nmemb; \
-		for (nmemb = 0; (arr)[nmemb]; ++nmemb) \
-			continue; \
+		max_len = 0; \
+		for (nmemb = 0; (arr)[nmemb]; ++nmemb) { \
+			int this_len = strlen(*(char **)((arr)[nmemb])); \
+			if (max_len < this_len) \
+				max_len = this_len; \
+		} \
 		qsort (arr, nmemb, sizeof(*arr), _urj_cmd_alphasort); \
 	} while (0)
 

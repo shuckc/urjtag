@@ -17,6 +17,14 @@
     src/cmd/cmd_help.c (cmd_help_run), src/cmd/cmd_cable.c (cmd_cable_help):
     Automatically sort lists before displaying them.
 
+  * src/cmd/cmd.h (urj_cmd_sort): Automatically calculate the longest name in
+    the array of structures.
+  * src/cmd/cmd_eraseflash.c (cmd_eraseflash_help), src/cmd/cmd_flashmem.c
+    (cmd_flashmem_help), src/cmd/cmd_initbus.c (cmd_initbus_help),
+    src/cmd/cmd_help.c (cmd_help_run), src/cmd/cmd_cable.c (cmd_cable_help):
+    Use the length to automatically align output correctly.  Standardize
+    gettext handling of strings here too (only translate descriptions).
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.
