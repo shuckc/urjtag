@@ -11,6 +11,8 @@
   * src/cmd/cmd_pod.c (cmd_pod_run), src/cmd/cmd_shell.c (cmd_shell_run):
     Fix size_t handling with strlen.
 
+  * include/urjtag/Makefile.am (pkginclude_HEADERS): Add missing parse.h.
+
 2010-01-21  Jie Zhang  <jie.zhang@analog.com>
 
   * src/apps/jtag/jtag.c (main): Don't trigger open file error

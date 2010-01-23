@@ -44,6 +44,7 @@ pkginclude_HEADERS = \
 	log.h \
 	params.h \
 	parport.h \
+	parse.h \
 	part.h \
 	part_instruction.h \
 	pod.h \
