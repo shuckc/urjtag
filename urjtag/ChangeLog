@@ -34,7 +34,7 @@
     driver to match the common convention.
 
   * src/bus/buses.h, src/bus/buses_list.h, src/bus/buses.c: Unify the list of
-    commands in one place.
+    buses in one place.
 
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
