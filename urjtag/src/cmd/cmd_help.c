@@ -48,6 +48,7 @@ cmd_help_run (urj_chain_t *chain, char *params[])
     /* short description generation */
     if (urj_cmd_params (params) == 1)
     {
+        urj_cmd_sort (urj_cmds);
         urj_log (URJ_LOG_LEVEL_NORMAL, _("Command list:\n\n"));
         for (i = 0; urj_cmds[i]; i++)
             urj_log (URJ_LOG_LEVEL_NORMAL, _("%-13s %s\n"), urj_cmds[i]->name,

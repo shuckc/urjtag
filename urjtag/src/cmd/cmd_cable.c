@@ -174,6 +174,7 @@ cmd_cable_help (void)
                "\n" "List of supported cables:\n"),
              "cable");
 
+    urj_cmd_sort (urj_tap_cable_drivers);
     for (i = 0; urj_tap_cable_drivers[i]; i++)
         urj_log (URJ_LOG_LEVEL_NORMAL,
                  _("%-13s %s\n"), urj_tap_cable_drivers[i]->name,

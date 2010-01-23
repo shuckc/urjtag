@@ -100,6 +100,7 @@ cmd_initbus_help (void)
                "\n" "List of available buses:\n"),
              "initbus");
 
+    urj_cmd_sort (urj_bus_drivers);
     for (i = 0; urj_bus_drivers[i] != NULL; i++)
         urj_log (URJ_LOG_LEVEL_NORMAL,
                  _("%-10s %s\n"), urj_bus_drivers[i]->name,

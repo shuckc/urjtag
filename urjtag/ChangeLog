@@ -6,6 +6,17 @@
   * src/cmd/cmd_cmd.c (urj_cmd_run): Automatically show help for a command
     when it fails with a syntax error.
 
+  * include/urjtag/flash.h (urj_flash_driver_t): Move name member up to start
+    of the structure to match other structures and make assumptions.
+  * src/flash/amd.c, src/flash/amd_flash.c, src/flash/intel.c: Re-order struct
+    initialization after re-ordering of the definition.
+  * src/cmd/cmd.h (urj_cmd_sort), src/cmd/cmd_cmd.c (_urj_cmd_alphasort): New
+    helper functions for sorting structure lists alphabetically.
+  * src/cmd/cmd_eraseflash.c (cmd_eraseflash_help), src/cmd/cmd_flashmem.c
+    (cmd_flashmem_help), src/cmd/cmd_initbus.c (cmd_initbus_help),
+    src/cmd/cmd_help.c (cmd_help_run), src/cmd/cmd_cable.c (cmd_cable_help):
+    Automatically sort lists before displaying them.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

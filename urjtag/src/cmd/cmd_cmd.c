@@ -178,3 +178,13 @@ urj_cmd_get_number (const char *s, long unsigned *i)
 
     return URJ_STATUS_FAIL;
 }
+
+/*
+ * We could leverage offsetof() so that we don't assume the name is
+ * always the first member, but that requires passing state.
+ */
+#define qsort_ptr(p) (**(char ***)p)
+int _urj_cmd_alphasort(const void *a, const void *b)
+{
+	return strcasecmp (qsort_ptr(a), qsort_ptr(b));
+}

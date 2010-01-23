@@ -107,6 +107,7 @@ cmd_flashmem_help (void)
                "Supported Flash Memories:\n"),
              "flashmem", "flashmem msbin", "msbin", "noverify");
 
+    urj_cmd_sort (urj_flash_flash_drivers);
     for (i = 0; urj_flash_flash_drivers[i]; i++)
         urj_log (URJ_LOG_LEVEL_NORMAL,
                  _("%s\n     %s\n"), _(urj_flash_flash_drivers[i]->name),

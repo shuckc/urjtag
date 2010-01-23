@@ -43,9 +43,9 @@ typedef struct URJ_FLASH_CFI_ARRAY urj_flash_cfi_array_t;
 
 typedef struct
 {
-    unsigned int bus_width;     /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
     const char *name;
     const char *description;
+    unsigned int bus_width;     /* 1 for 8 bits, 2 for 16 bits, 4 for 32 bits, etc. */
     /** @return 1 if autodetected, 0 otherwise */
     int (*autodetect) (urj_flash_cfi_array_t *cfi_array);
     void (*print_info) (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array);

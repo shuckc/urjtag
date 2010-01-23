@@ -34,6 +34,7 @@
 #ifndef URJ_SRC_CMD_H
 #define URJ_SRC_CMD_H
 
+#include <stdlib.h> /* qsort */
 #include <sysdep.h>
 
 #include <urjtag/types.h>
@@ -69,5 +70,17 @@ int urj_cmd_params (char *params[]);
  * @return URJ_STATUS_OK on success, URJ_STATUS_FAIL on error
  */
 int urj_cmd_get_number (const char *s, long unsigned *i);
+
+/**
+ * Internal command to help with sorting structures
+ */
+int _urj_cmd_alphasort (const void *a, const void *b);
+#define urj_cmd_sort(arr) \
+	do { \
+		size_t nmemb; \
+		for (nmemb = 0; (arr)[nmemb]; ++nmemb) \
+			continue; \
+		qsort (arr, nmemb, sizeof(*arr), _urj_cmd_alphasort); \
+	} while (0)
 
 #endif /* URJ_CMD_H */
