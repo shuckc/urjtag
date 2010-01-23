@@ -39,6 +39,17 @@
   * src/tap/cable.h, src/tap/cable_list.h, src/tap/cable.c: Unify the list of
     cable drivers in one place.
 
+  * include/urjtag/cable.h, src/cmd/cmd_cable.c, src/tap/cable.c,
+    src/tap/cable.h, src/tap/cable/arcom.c, src/tap/cable/byteblaster.c,
+    src/tap/cable/dlc5.c, src/tap/cable/ea253.c, src/tap/cable/ei012.c,
+    src/tap/cable/ft2232.c, src/tap/cable/generic.h, src/tap/cable/jim.c,
+    src/tap/cable/jlink.c, src/tap/cable/keithkoep.c, src/tap/cable/lattice.c,
+    src/tap/cable/minimal.c, src/tap/cable/mpcbdm.c, src/tap/cable/triton.c,
+    src/tap/cable/ts7800.c, src/tap/cable/usbblaster.c,
+    src/tap/cable/vision_ep9307.c, src/tap/cable/wiggler2.c,
+    src/tap/cable/wiggler.c, src/tap/cable/xpc.c:
+    Constify the cable drivers.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

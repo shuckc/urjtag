@@ -45,7 +45,7 @@
 
 #include "cable.h"
 
-urj_cable_driver_t *urj_tap_cable_drivers[] = {
+const urj_cable_driver_t *urj_tap_cable_drivers[] = {
 #define _URJ_CABLE(cable) &urj_tap_cable_##cable##_driver,
 #include "cable_list.h"
     NULL                        /* last must be NULL */
@@ -534,7 +534,7 @@ urj_tap_cable_wait (urj_cable_t *cable)
 }
 
 static urj_cable_t *
-urj_tap_cable_create (urj_chain_t *chain, urj_cable_driver_t *driver)
+urj_tap_cable_create (urj_chain_t *chain, const urj_cable_driver_t *driver)
 {
     urj_cable_t *cable;
 
@@ -578,7 +578,7 @@ urj_tap_cable_start (urj_chain_t *chain, urj_cable_t *cable)
 }
 
 urj_cable_t *
-urj_tap_cable_parport_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
+urj_tap_cable_parport_connect (urj_chain_t *chain, const urj_cable_driver_t *driver,
                                urj_cable_parport_devtype_t devtype,
                                const char *devname, const urj_param_t *params[])
 {
@@ -609,7 +609,7 @@ urj_tap_cable_parport_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
 }
 
 urj_cable_t *
-urj_tap_cable_usb_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
+urj_tap_cable_usb_connect (urj_chain_t *chain, const urj_cable_driver_t *driver,
                            const urj_param_t *params[])
 {
     urj_cable_t *cable;
@@ -637,7 +637,7 @@ urj_tap_cable_usb_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
 }
 
 urj_cable_t *
-urj_tap_cable_other_connect (urj_chain_t *chain, urj_cable_driver_t *driver,
+urj_tap_cable_other_connect (urj_chain_t *chain, const urj_cable_driver_t *driver,
                              const urj_param_t *params[])
 {
     urj_cable_t *cable;

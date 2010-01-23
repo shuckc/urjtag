@@ -25,7 +25,7 @@
 #ifndef URJ_CABLE_CABLE_H
 #define URJ_CABLE_CABLE_H
 
-#define _URJ_CABLE(cable) extern urj_cable_driver_t urj_tap_cable_##cable##_driver;
+#define _URJ_CABLE(cable) extern const urj_cable_driver_t urj_tap_cable_##cable##_driver;
 #include "cable_list.h"
 
 #endif /* URJ_CABLE_CABLE_H */

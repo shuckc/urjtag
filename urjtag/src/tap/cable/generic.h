@@ -28,6 +28,8 @@
 #include <urjtag/cable.h>
 #include <urjtag/parport.h>
 
+#include "../cable.h"
+
 typedef struct
 {
     int signals;

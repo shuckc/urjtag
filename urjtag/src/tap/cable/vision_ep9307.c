@@ -342,7 +342,7 @@ ep9307_help (urj_log_level_t ll, const char *cablename)
     urj_log (ll, _("Usage: cable %s\n" "\n"), cablename);
 }
 
-urj_cable_driver_t urj_tap_cable_ep9307_driver = {
+const urj_cable_driver_t urj_tap_cable_ep9307_driver = {
     "EP9307",
     N_("Vision EP9307 SoM GPIO JTAG Cable"),
     URJ_CABLE_DEVICE_OTHER,

@@ -138,7 +138,7 @@ ea253_set_signal (urj_cable_t *cable, int mask, int val)
     return prev_sigs;
 }
 
-urj_cable_driver_t urj_tap_cable_ea253_driver = {
+const urj_cable_driver_t urj_tap_cable_ea253_driver = {
     "EA253",
     N_("ETC EA253 JTAG Cable"),
     URJ_CABLE_DEVICE_PARPORT,

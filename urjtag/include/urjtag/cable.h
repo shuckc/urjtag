@@ -149,7 +149,7 @@ struct URJ_CABLE_QUEUE_INFO
 
 struct URJ_CABLE
 {
-    urj_cable_driver_t *driver;
+    const urj_cable_driver_t *driver;
     union
     {
         urj_usbconn_t *usb;
@@ -214,7 +214,7 @@ int urj_tap_cable_get_queue_item (urj_cable_t *cable,
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure
  */
 urj_cable_t *urj_tap_cable_parport_connect (urj_chain_t *chain,
-                                            urj_cable_driver_t *driver,
+                                            const urj_cable_driver_t *driver,
                                             urj_cable_parport_devtype_t devtype,
                                             const char *devname,
                                             const urj_param_t *params[]);
@@ -224,7 +224,7 @@ urj_cable_t *urj_tap_cable_parport_connect (urj_chain_t *chain,
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure
  */
 urj_cable_t *urj_tap_cable_usb_connect (urj_chain_t *chain,
-                                        urj_cable_driver_t *driver,
+                                        const urj_cable_driver_t *driver,
                                         const urj_param_t *params[]);
 /**
  * API function to connect to a type-other cable
@@ -232,10 +232,10 @@ urj_cable_t *urj_tap_cable_usb_connect (urj_chain_t *chain,
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure
  */
 urj_cable_t *urj_tap_cable_other_connect (urj_chain_t *chain,
-                                          urj_cable_driver_t *driver,
+                                          const urj_cable_driver_t *driver,
                                           const urj_param_t *params[]);
 
-extern urj_cable_driver_t *urj_tap_cable_drivers[];
+extern const urj_cable_driver_t *urj_tap_cable_drivers[];
 
 /** The list of recognized parameters */
 extern const urj_param_list_t urj_cable_param_list;

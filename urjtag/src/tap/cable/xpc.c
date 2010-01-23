@@ -680,7 +680,7 @@ xpc_ext_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 /* ---------------------------------------------------------------------- */
 
 
-urj_cable_driver_t urj_tap_cable_xpc_int_driver = {
+const urj_cable_driver_t urj_tap_cable_xpc_int_driver = {
     "xpc_int",
     N_("Xilinx Platform Cable USB internal chain"),
     URJ_CABLE_DEVICE_USB,
@@ -707,7 +707,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_int = {
     0x0008                      /* PID (8) */
 };
 
-urj_cable_driver_t urj_tap_cable_xpc_ext_driver = {
+const urj_cable_driver_t urj_tap_cable_xpc_ext_driver = {
     "xpc_ext",
     N_("Xilinx Platform Cable USB external chain"),
     URJ_CABLE_DEVICE_USB,

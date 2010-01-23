@@ -1881,7 +1881,7 @@ ft2232_usbcable_help (urj_log_level_t ll, const char *cablename)
 }
 
 
-urj_cable_driver_t urj_tap_cable_ft2232_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_driver = {
     "FT2232",
     N_("Generic FTDI FT2232 Cable"),
     URJ_CABLE_DEVICE_USB,
@@ -1914,7 +1914,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftd2xx = {
     0x0000                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver = {
     "ARM-USB-OCD",
     N_("Olimex ARM-USB-OCD[-TINY] (FT2232) Cable"),
     URJ_CABLE_DEVICE_USB,
@@ -1961,7 +1961,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocdtiny_ftd2xx = {
     0x0004                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_armusbtiny_h_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_armusbtiny_h_driver = {
     "ARM-USB-OCD-H",
     N_("Olimex ARM-USB-TINY-H (FT2232H) Cable"),
     URJ_CABLE_DEVICE_USB,
@@ -1994,7 +1994,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_armusbtiny_h_ftd2xx = {
     0x002A                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver = {
     "gnICE",
     N_("Analog Devices Blackfin gnICE (FT2232) Cable (EXPERIMENTAL)"),
     URJ_CABLE_DEVICE_USB,
@@ -2028,7 +2028,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftd2xx = {
     0xF000                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_gniceplus_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_gniceplus_driver = {
     "gnICE+",
     N_("Analog Devices Blackfin gnICE+ (FT2232H) Cable (EXPERIMENTAL)"),
     URJ_CABLE_DEVICE_USB,
@@ -2062,7 +2062,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_gniceplus_ftd2xx = {
     0xF001                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver = {
     "JTAGkey",
     N_("Amontec JTAGkey (FT2232) Cable"),
     URJ_CABLE_DEVICE_USB,
@@ -2095,7 +2095,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftd2xx = {
     0xCFF8                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_oocdlinks_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_oocdlinks_driver = {
     "OOCDLink-s",
     N_("OOCDLink-s (FT2232) Cable (EXPERIMENTAL)"),
     URJ_CABLE_DEVICE_USB,
@@ -2128,7 +2128,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftd2xx = {
     0xbaf8                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver = {
     "Turtelizer2",
     N_("Turtelizer 2 Rev. B (FT2232) Cable (EXPERIMENTAL)"),
     URJ_CABLE_DEVICE_USB,
@@ -2161,7 +2161,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftd2xx = {
     0xBDC8                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver = {
     "USB-to-JTAG-IF",
     N_("USB to JTAG Interface (FT2232) Cable (EXPERIMENTAL)"),
     URJ_CABLE_DEVICE_USB,
@@ -2194,7 +2194,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_usbtojtagif_ftd2xx = {
     0x0000                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_signalyzer_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_signalyzer_driver = {
     "Signalyzer",
     N_("Xverve DT-USB-ST Signalyzer Tool (FT2232) Cable (EXPERIMENTAL)"),
     URJ_CABLE_DEVICE_USB,
@@ -2227,7 +2227,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftd2xx = {
     0xbca1                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_flyswatter_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_flyswatter_driver = {
     "Flyswatter",
     N_("TinCanTools Flyswatter (FT2232) Cable"),
     URJ_CABLE_DEVICE_USB,
@@ -2260,7 +2260,7 @@ urj_usbconn_cable_t urj_tap_cable_usbconn_flyswatter_ftd2xx = {
     0x6010                      /* PID */
 };
 
-urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver = {
+const urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver = {
     "usbScarab2",
     N_("KrisTech usbScarabeus2 (FT2232) Cable"),
     URJ_CABLE_DEVICE_USB,

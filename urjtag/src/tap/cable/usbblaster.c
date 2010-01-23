@@ -509,7 +509,7 @@ usbblaster_help (urj_log_level_t ll, const char *cablename)
               DEFAULT_DRIVER);
 }
 
-urj_cable_driver_t urj_tap_cable_usbblaster_driver = {
+const urj_cable_driver_t urj_tap_cable_usbblaster_driver = {
     "UsbBlaster",
     N_("Altera USB-Blaster Cable"),
     URJ_CABLE_DEVICE_USB,

@@ -50,7 +50,7 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
     urj_cable_parport_devtype_t devtype = -1;
     const char *devname = NULL;
     int param_start = 2;
-    urj_cable_driver_t *driver;
+    const urj_cable_driver_t *driver;
 
     /* we need at least one parameter for 'cable' command */
     if (paramc < 2)

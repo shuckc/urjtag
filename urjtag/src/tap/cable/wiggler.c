@@ -415,7 +415,7 @@ wiggler_help (urj_log_level_t ll, const char *cablename)
              cablename, std_wgl_map);
 }
 
-urj_cable_driver_t urj_tap_cable_wiggler_driver = {
+const urj_cable_driver_t urj_tap_cable_wiggler_driver = {
     "WIGGLER",
     N_("Macraigor Wiggler JTAG Cable"),
     URJ_CABLE_DEVICE_PARPORT,
@@ -434,7 +434,7 @@ urj_cable_driver_t urj_tap_cable_wiggler_driver = {
     wiggler_help
 };
 
-urj_cable_driver_t urj_tap_cable_igloo_driver = {
+const urj_cable_driver_t urj_tap_cable_igloo_driver = {
     "IGLOO",
     N_("Excelpoint IGLOO JTAG Cable"),
     URJ_CABLE_DEVICE_PARPORT,
