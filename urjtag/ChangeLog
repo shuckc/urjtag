@@ -3,6 +3,9 @@
   * src/cmd/cmd.h, src/cmd/cmd_list.h, src/cmd/cmd_cmd.c: Unify the list of
     commands in one place.
 
+  * src/cmd/cmd_cmd.c (urj_cmd_run): Automatically show help for a command
+    when it fails with a syntax error.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

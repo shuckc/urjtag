@@ -105,7 +105,13 @@ urj_cmd_run (urj_chain_t *chain, char *params[])
         if (strcasecmp (urj_cmds[i]->name, params[0]) == 0)
         {
           run_cmd:
-            return urj_cmds[i]->run (chain, params);
+            i = urj_cmds[i]->run (chain, params);
+            if (i != URJ_STATUS_OK && urj_error_get () == URJ_ERROR_SYNTAX)
+            {
+                char *help_params[3] = { "help", params[0], NULL };
+                urj_cmd_run( chain, help_params );
+            }
+            return i;
         }
         else if (strncasecmp (urj_cmds[i]->name, params[0], len) == 0)
         {
