@@ -43,116 +43,11 @@
 #include <urjtag/tap.h>
 #include <urjtag/cable.h>
 
-/* @@@@ RFHH stick these into a (or many) .h files */
-extern urj_cable_driver_t urj_tap_cable_arcom_driver;
-extern urj_cable_driver_t urj_tap_cable_byteblaster_driver;
-extern urj_cable_driver_t urj_tap_cable_usbblaster_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_armusbtiny_h_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_gniceplus_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_oocdlinks_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_signalyzer_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_flyswatter_driver;
-extern urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver;
-extern urj_cable_driver_t urj_tap_cable_dlc5_driver;
-extern urj_cable_driver_t urj_tap_cable_ea253_driver;
-extern urj_cable_driver_t urj_tap_cable_ei012_driver;
-extern urj_cable_driver_t urj_tap_cable_igloo_driver;
-extern urj_cable_driver_t urj_tap_cable_keithkoep_driver;
-extern urj_cable_driver_t urj_tap_cable_lattice_driver;
-extern urj_cable_driver_t urj_tap_cable_mpcbdm_driver;
-extern urj_cable_driver_t urj_tap_cable_triton_driver;
-extern urj_cable_driver_t urj_tap_cable_jim_driver;
-extern urj_cable_driver_t urj_tap_cable_minimal_driver;
-extern urj_cable_driver_t urj_tap_cable_wiggler_driver;
-extern urj_cable_driver_t urj_tap_cable_wiggler2_driver;
-extern urj_cable_driver_t urj_tap_cable_xpc_int_driver;
-extern urj_cable_driver_t urj_tap_cable_xpc_ext_driver;
-extern urj_cable_driver_t urj_tap_cable_jlink_driver;
-extern urj_cable_driver_t urj_tap_cable_ep9307_driver;
-extern urj_cable_driver_t urj_tap_cable_ts7800_driver;
+#include "cable.h"
 
 urj_cable_driver_t *urj_tap_cable_drivers[] = {
-#ifdef ENABLE_CABLE_ARCOM
-    &urj_tap_cable_arcom_driver,
-#endif
-#ifdef ENABLE_CABLE_BYTEBLASTER
-    &urj_tap_cable_byteblaster_driver,
-#endif
-
-#ifdef ENABLE_CABLE_USBBLASTER
-    &urj_tap_cable_usbblaster_driver,
-#endif
-
-#ifdef ENABLE_CABLE_FT2232
-    &urj_tap_cable_ft2232_driver,
-    &urj_tap_cable_ft2232_jtagkey_driver,
-    &urj_tap_cable_ft2232_armusbocd_driver,
-    &urj_tap_cable_ft2232_armusbtiny_h_driver,
-    &urj_tap_cable_ft2232_gnice_driver,
-    &urj_tap_cable_ft2232_gniceplus_driver,
-    &urj_tap_cable_ft2232_oocdlinks_driver,
-    &urj_tap_cable_ft2232_signalyzer_driver,
-    &urj_tap_cable_ft2232_turtelizer2_driver,
-    &urj_tap_cable_ft2232_usbtojtagif_driver,
-    &urj_tap_cable_ft2232_flyswatter_driver,
-    &urj_tap_cable_ft2232_usbscarab2_driver,
-#endif
-
-#ifdef ENABLE_CABLE_DLC5
-    &urj_tap_cable_dlc5_driver,
-#endif
-#ifdef ENABLE_CABLE_EA253
-    &urj_tap_cable_ea253_driver,
-#endif
-#ifdef ENABLE_CABLE_EI012
-    &urj_tap_cable_ei012_driver,
-#endif
-#ifdef ENABLE_CABLE_IGLOO
-    &urj_tap_cable_igloo_driver,
-#endif
-#ifdef ENABLE_CABLE_KEITHKOEP
-    &urj_tap_cable_keithkoep_driver,
-#endif
-#ifdef ENABLE_CABLE_LATTICE
-    &urj_tap_cable_lattice_driver,
-#endif
-#ifdef ENABLE_CABLE_MPCBDM
-    &urj_tap_cable_mpcbdm_driver,
-#endif
-#ifdef ENABLE_CABLE_TRITON
-    &urj_tap_cable_triton_driver,
-#endif
-#ifdef ENABLE_JIM
-    &urj_tap_cable_jim_driver,
-#endif
-#ifdef ENABLE_CABLE_WIGGLER
-    &urj_tap_cable_minimal_driver,
-    &urj_tap_cable_wiggler_driver,
-    &urj_tap_cable_wiggler2_driver,
-#endif
-
-#ifdef ENABLE_CABLE_XPC
-    &urj_tap_cable_xpc_int_driver,
-    &urj_tap_cable_xpc_ext_driver,
-#endif
-
-#ifdef ENABLE_CABLE_JLINK
-    &urj_tap_cable_jlink_driver,
-#endif
-
-#ifdef ENABLE_CABLE_EP9307
-    &urj_tap_cable_ep9307_driver,
-#endif
-
-#ifdef ENABLE_CABLE_TS7800
-    &urj_tap_cable_ts7800_driver,
-#endif
+#define _URJ_CABLE(cable) &urj_tap_cable_##cable##_driver,
+#include "cable_list.h"
     NULL                        /* last must be NULL */
 };
 

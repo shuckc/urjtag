@@ -36,6 +36,9 @@
   * src/bus/buses.h, src/bus/buses_list.h, src/bus/buses.c: Unify the list of
     buses in one place.
 
+  * src/tap/cable.h, src/tap/cable_list.h, src/tap/cable.c: Unify the list of
+    cable drivers in one place.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.
