@@ -45,11 +45,6 @@ extern "C"
 time*/
 long double urj_lib_frealtime (CVOID);
 
-#ifdef UNUSED   /* RFHH */
-/* return the CPU time used by this process (seconds) */
-long double fcputime (CVOID);
-#endif
-
 
 #ifdef __cplusplus
 }
