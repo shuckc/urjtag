@@ -6,6 +6,8 @@
   * src/tap/cable/jlink.c (jlink_debug_buffer): Unify log lines to avoid
     printf format security warnings.
 
+  * src/cmd/cmd_shell.c (cmd_shell_run): Log non-zero shell exit status.
+
 2010-01-21  Jie Zhang  <jie.zhang@analog.com>
 
   * src/apps/jtag/jtag.c (main): Don't trigger open file error

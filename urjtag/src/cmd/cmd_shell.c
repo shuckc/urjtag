@@ -78,8 +78,11 @@ cmd_shell_run (urj_chain_t *chain, char *params[])
     }
     urj_log (URJ_LOG_LEVEL_NORMAL, "Executing '%s'\n", shell_cmd);
 
-    system (shell_cmd);
+    i = system (shell_cmd);
     free (shell_cmd);
+
+    if (i)
+        urj_log (URJ_LOG_LEVEL_NORMAL, "shell returned %i\n", i);
 
     return URJ_STATUS_OK;
 }
