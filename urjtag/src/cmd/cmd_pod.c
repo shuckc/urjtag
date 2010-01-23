@@ -68,7 +68,7 @@ cmd_pod_run (urj_chain_t *chain, char *params[])
         }
 
         urj_pod_sigsel_t it = URJ_POD_CS_NONE;
-        int n = strlen (params[j]);
+        size_t n = strlen (params[j]);
 
         if (n > 4 && (strncasecmp (params[j], "tck", 3) == 0))
             it = URJ_POD_CS_TCK;

@@ -39,7 +39,8 @@
 static int
 cmd_shell_run (urj_chain_t *chain, char *params[])
 {
-    int i, len, n = urj_cmd_params (params);
+    int i, n = urj_cmd_params (params);
+    size_t len;
     char *shell_cmd;
 
     if ((n = urj_cmd_params (params)) == 1)
@@ -65,8 +66,8 @@ cmd_shell_run (urj_chain_t *chain, char *params[])
     shell_cmd = malloc (len);
     if (shell_cmd == NULL)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                       (size_t) len);
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zu) fails",
+                       len);
         return URJ_STATUS_FAIL;
     }
 
