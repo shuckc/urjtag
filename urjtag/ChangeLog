@@ -33,6 +33,9 @@
   * src/bus/avr32.c, src/bus/buses.c, src/bus/buses.h: Rename the avr32 bus
     driver to match the common convention.
 
+  * src/bus/buses.h, src/bus/buses_list.h, src/bus/buses.c: Unify the list of
+    commands in one place.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.
