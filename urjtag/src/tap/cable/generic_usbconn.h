@@ -28,6 +28,9 @@
 #include <urjtag/cable.h>
 #include <urjtag/usbconn.h>
 
+#define _URJ_USB(usb) extern urj_usbconn_cable_t urj_tap_cable_usbconn_##usb;
+#include "generic_usbconn_list.h"
+
 /**
  * @return URJ_STATUS_OK on success, URJ_STATUS_FAIL and urj_error on error
  */

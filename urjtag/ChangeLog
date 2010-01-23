@@ -50,6 +50,9 @@
     src/tap/cable/wiggler.c, src/tap/cable/xpc.c:
     Constify the cable drivers.
 
+  * src/tap/cable/generic_usbconn_list.h, src/tap/cable/generic_usbconn.c,
+    src/tap/cable/generic_usbconn.h: Unify the list of usb cable drivers.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.
