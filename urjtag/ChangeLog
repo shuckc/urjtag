@@ -25,6 +25,9 @@
     Use the length to automatically align output correctly.  Standardize
     gettext handling of strings here too (only translate descriptions).
 
+  * configure.ac: Unify duplicated coding statements with AC_DEFUN to simplify
+    adding new busses/cables/lowlevel drivers.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.
