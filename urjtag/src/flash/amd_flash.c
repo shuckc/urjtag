@@ -409,7 +409,7 @@ amd_29xx040_unlock_block (urj_flash_cfi_array_t *cfi_array,
 }
 
 
-urj_flash_driver_t urj_flash_amd_29xx040_flash_driver = {
+const urj_flash_driver_t urj_flash_amd_29xx040_flash_driver = {
     N_("AMD Standard Command Set"),
     N_("supported: AMD 29LV040B, 29C040B, 1x8 Bit"),
     1,                          /* buswidth */

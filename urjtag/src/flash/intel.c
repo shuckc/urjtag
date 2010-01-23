@@ -525,7 +525,7 @@ intel_flash_readarray (urj_flash_cfi_array_t *cfi_array)
     URJ_BUS_WRITE (cfi_array->bus, cfi_array->address, 0x00FF00FF);
 }
 
-urj_flash_driver_t urj_flash_intel_32_flash_driver = {
+const urj_flash_driver_t urj_flash_intel_32_flash_driver = {
     N_("Intel Standard Command Set"),
     N_("supported: 28Fxxxx, 2 x 16 bit"),
     4,                          /* buswidth */
@@ -537,7 +537,7 @@ urj_flash_driver_t urj_flash_intel_32_flash_driver = {
     intel_flash_readarray32,
 };
 
-urj_flash_driver_t urj_flash_intel_16_flash_driver = {
+const urj_flash_driver_t urj_flash_intel_16_flash_driver = {
     N_("Intel Standard Command Set"),
     N_("supported: 28Fxxxx, 1 x 16 bit"),
     2,                          /* buswidth */
@@ -549,7 +549,7 @@ urj_flash_driver_t urj_flash_intel_16_flash_driver = {
     intel_flash_readarray,
 };
 
-urj_flash_driver_t urj_flash_intel_8_flash_driver = {
+const urj_flash_driver_t urj_flash_intel_8_flash_driver = {
     N_("Intel Standard Command Set"),
     N_("supported: 28Fxxxx, 1 x 8 bit"),
     1,                          /* buswidth */

@@ -51,7 +51,7 @@
 #include "intel.h"
 #include "amd.h"
 
-urj_flash_driver_t *urj_flash_flash_drivers[] = {
+const urj_flash_driver_t *urj_flash_flash_drivers[] = {
     &urj_flash_amd_32_flash_driver,
     &urj_flash_amd_16_flash_driver,
     &urj_flash_amd_8_flash_driver,
@@ -62,7 +62,7 @@ urj_flash_driver_t *urj_flash_flash_drivers[] = {
     NULL
 };
 
-static urj_flash_driver_t *flash_driver = NULL;
+static const urj_flash_driver_t *flash_driver = NULL;
 
 static int
 set_flash_driver (void)

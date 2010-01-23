@@ -40,9 +40,9 @@
 int urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
                           urj_flash_cfi_array_t **urj_flash_cfi_array);
 
-extern urj_flash_driver_t urj_flash_amd_32_flash_driver;
-extern urj_flash_driver_t urj_flash_amd_16_flash_driver;
-extern urj_flash_driver_t urj_flash_amd_8_flash_driver;
-extern urj_flash_driver_t urj_flash_amd_29xx040_flash_driver;   //20/09/2006
+extern const urj_flash_driver_t urj_flash_amd_32_flash_driver;
+extern const urj_flash_driver_t urj_flash_amd_16_flash_driver;
+extern const urj_flash_driver_t urj_flash_amd_8_flash_driver;
+extern const urj_flash_driver_t urj_flash_amd_29xx040_flash_driver;
 
 #endif /* URJ_FLASH_H */

@@ -642,7 +642,7 @@ amd_flash_program32 (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
     return URJ_STATUS_OK;
 }
 
-urj_flash_driver_t urj_flash_amd_32_flash_driver = {
+const urj_flash_driver_t urj_flash_amd_32_flash_driver = {
     N_("AMD/Fujitsu Standard Command Set"),
     N_("supported: AMD 29LV640D, 29LV641D, 29LV642D; 2x16 Bit"),
     4,                          /* buswidth */
@@ -654,7 +654,7 @@ urj_flash_driver_t urj_flash_amd_32_flash_driver = {
     amd_flash_read_array,
 };
 
-urj_flash_driver_t urj_flash_amd_16_flash_driver = {
+const urj_flash_driver_t urj_flash_amd_16_flash_driver = {
     N_("AMD/Fujitsu Standard Command Set"),
     N_("supported: AMD 29LV800B, S29GLxxxN; MX29LV640B, W19B320AT/B; 1x16 Bit"),
     2,                          /* buswidth */
@@ -666,7 +666,7 @@ urj_flash_driver_t urj_flash_amd_16_flash_driver = {
     amd_flash_read_array,
 };
 
-urj_flash_driver_t urj_flash_amd_8_flash_driver = {
+const urj_flash_driver_t urj_flash_amd_8_flash_driver = {
     N_("AMD/Fujitsu Standard Command Set"),
     N_("supported: AMD 29LV160, AMD 29LV065D, AMD 29LV040B, S29GLxxxN, W19B320AT/B; 1x8 Bit"),
     1,                          /* buswidth */

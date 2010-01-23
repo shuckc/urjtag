@@ -83,6 +83,10 @@
     src/tap/usbconn/libftd2xx.c, src/tap/usbconn/libftdi.c,
     src/tap/usbconn/libusb.c: Constify the USB cable drivers.
 
+  * include/urjtag/flash.h, src/flash/amd.c, src/flash/amd.h,
+    src/flash/amd_flash.c, src/flash/flash.c, src/flash/intel.c,
+    src/flash/intel.h: Constify the flash drivers.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

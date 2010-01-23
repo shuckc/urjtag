@@ -98,8 +98,8 @@
 #define CFI_CHIP_INTEL_28F256K18                0x8807
 #define CFI_CHIPN_INTEL_28F256K18               "28F256K18"
 
-extern urj_flash_driver_t urj_flash_intel_32_flash_driver;
-extern urj_flash_driver_t urj_flash_intel_16_flash_driver;
-extern urj_flash_driver_t urj_flash_intel_8_flash_driver;
+extern const urj_flash_driver_t urj_flash_intel_32_flash_driver;
+extern const urj_flash_driver_t urj_flash_intel_16_flash_driver;
+extern const urj_flash_driver_t urj_flash_intel_8_flash_driver;
 
 #endif /* FLASH_INTEL_H */
