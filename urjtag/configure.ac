@@ -563,7 +563,7 @@ AS_IF([test "x$HAVELIBUSB" != "xyes"], [
 ])
 #
 enabled_cable_drivers=''
-AC_DEFUN([CHECK_CABLE], [CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [$1], [ENABLE_JIM_]m4_toupper([$1]))])
+AC_DEFUN([CHECK_CABLE], [CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [$1], [ENABLE_CABLE_]m4_toupper([$1]))])
 CHECK_CABLE([arcom])
 CHECK_CABLE([byteblaster])
 CHECK_CABLE([dlc5])
@@ -572,7 +572,7 @@ CHECK_CABLE([ei012])
 CHECK_CABLE([ep9307])
 CHECK_CABLE([ft2232])
 CHECK_CABLE([igloo])
-CHECK_CABLE([jim])
+CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [jim], [ENABLE_JIM])
 CHECK_CABLE([jlink])
 CHECK_CABLE([keithkoep])
 CHECK_CABLE([lattice])
