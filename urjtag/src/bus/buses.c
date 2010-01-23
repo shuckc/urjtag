@@ -43,7 +43,7 @@ const urj_bus_driver_t *urj_bus_drivers[] = {
     &urj_bus_au1500_bus,
 #endif
 #ifdef ENABLE_BUS_AVR32
-    &urj_bus_avr32_bus_driver,
+    &urj_bus_avr32_bus,
 #endif
 #ifdef ENABLE_BUS_BCM1250
     &urj_bus_bcm1250_bus,

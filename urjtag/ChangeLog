@@ -30,6 +30,9 @@
 
   * include/urjtag/bitmask.h, include/urjtag/fclock.h: Punt UNUSED cruft.
 
+  * src/bus/avr32.c, src/bus/buses.c, src/bus/buses.h: Rename the avr32 bus
+    driver to match the common convention.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

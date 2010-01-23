@@ -801,7 +801,7 @@ avr32_bus_write (urj_bus_t *bus, uint32_t addr, uint32_t data)
     }
 }
 
-const urj_bus_driver_t urj_bus_avr32_bus_driver = {
+const urj_bus_driver_t urj_bus_avr32_bus = {
     "avr32",
     N_("Atmel AVR32 multi-mode bus driver, requires <mode> parameter\n"
        "           valid <mode> parameters:\n"

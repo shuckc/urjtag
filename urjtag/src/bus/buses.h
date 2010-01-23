@@ -27,7 +27,7 @@
 
 extern const urj_bus_driver_t urj_bus_arm9tdmi_bus;
 extern const urj_bus_driver_t urj_bus_au1500_bus;
-extern const urj_bus_driver_t urj_bus_avr32_bus_driver;
+extern const urj_bus_driver_t urj_bus_avr32_bus;
 extern const urj_bus_driver_t urj_bus_bcm1250_bus;
 extern const urj_bus_driver_t urj_bus_bf526_ezkit_bus;
 extern const urj_bus_driver_t urj_bus_bf527_ezkit_bus;
