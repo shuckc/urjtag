@@ -404,8 +404,7 @@ jlink_debug_buffer (char *buffer, int length)
             snprintf (s, 4, " %02x", buffer[j]);
             strcat (line, s);
         }
-        urj_log (URJ_LOG_LEVEL_DETAIL, line);
-        urj_log (URJ_LOG_LEVEL_DETAIL, "\n");
+        urj_log (URJ_LOG_LEVEL_DETAIL, "%s\n", line);
     }
 }
 

@@ -3,6 +3,9 @@
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.
   * src/tap/detect.c (urj_tap_detect_parts): Likewise.
 
+  * src/tap/cable/jlink.c (jlink_debug_buffer): Unify log lines to avoid
+    printf format security warnings.
+
 2010-01-21  Jie Zhang  <jie.zhang@analog.com>
 
   * src/apps/jtag/jtag.c (main): Don't trigger open file error
