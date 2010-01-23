@@ -255,7 +255,7 @@ usbconn_libusb_free (urj_usbconn_t *conn)
 
 /* ---------------------------------------------------------------------- */
 
-urj_usbconn_driver_t urj_tap_usbconn_libusb_driver = {
+const urj_usbconn_driver_t urj_tap_usbconn_libusb_driver = {
     "libusb",
     usbconn_libusb_connect,
     usbconn_libusb_free,

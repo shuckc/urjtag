@@ -62,7 +62,7 @@ urj_parport_driver_t;
 
 struct URJ_PARPORT
 {
-    urj_parport_driver_t *driver;
+    const urj_parport_driver_t *driver;
     void *params;
     urj_cable_t *cable;
 };
@@ -78,6 +78,6 @@ int urj_tap_parport_set_control (urj_parport_t *port, const unsigned char data);
 
 const char *urj_cable_parport_devtype_string(urj_cable_parport_devtype_t dt);
 
-extern urj_parport_driver_t *urj_tap_parport_drivers[];
+extern const urj_parport_driver_t *urj_tap_parport_drivers[];
 
 #endif /* URJ_PARPORT_H */

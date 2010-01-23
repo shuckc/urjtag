@@ -606,7 +606,7 @@ usbconn_ftdi_free (urj_usbconn_t *conn)
 
 /* ---------------------------------------------------------------------- */
 
-urj_usbconn_driver_t urj_tap_usbconn_ftdi_driver = {
+const urj_usbconn_driver_t urj_tap_usbconn_ftdi_driver = {
     "ftdi",
     usbconn_ftdi_connect,
     usbconn_ftdi_free,
@@ -616,7 +616,7 @@ urj_usbconn_driver_t urj_tap_usbconn_ftdi_driver = {
     usbconn_ftdi_write
 };
 
-urj_usbconn_driver_t urj_tap_usbconn_ftdi_mpsse_driver = {
+const urj_usbconn_driver_t urj_tap_usbconn_ftdi_mpsse_driver = {
     "ftdi-mpsse",
     usbconn_ftdi_mpsse_connect,
     usbconn_ftdi_free,

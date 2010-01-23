@@ -59,7 +59,7 @@
   * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c,
     src/tap/cable/generic_usbconn.h, src/tap/cable/jlink.c,
     src/tap/cable/usbblaster.c, src/tap/cable/xpc.c: Constify the usb cable
-    drivers.
+    sub drivers.
 
   * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.h,
     src/tap/cable/jlink.c, src/tap/cable/usbblaster.c, src/tap/cable/xpc.c,
@@ -73,7 +73,15 @@
 
   * src/tap/parport.c, src/tap/parport.h, src/tap/parport_list.h,
     src/tap/parport/direct.c, src/tap/parport/ppdev.c, src/tap/parport/ppi.c:
-    Unify the list of parallel port drivers.
+    Unify the list of parallel port cable drivers.
+
+  * include/urjtag/parport.h, src/tap/parport.c, src/tap/parport/direct.c,
+    src/tap/parport.h, src/tap/parport/ppdev.c, src/tap/parport/ppi.c:
+    Constify the parallel port cable drivers.
+
+  * include/urjtag/usbconn.h, src/tap/usbconn.c, src/tap/usbconn.h,
+    src/tap/usbconn/libftd2xx.c, src/tap/usbconn/libftdi.c,
+    src/tap/usbconn/libusb.c: Constify the USB cable drivers.
 
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 

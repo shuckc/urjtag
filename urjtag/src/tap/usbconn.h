@@ -25,7 +25,7 @@
 #ifndef URJ_CABLE_USBCONN_H
 #define URJ_CABLE_USBCONN_H
 
-#define _URJ_LIST(item) extern urj_usbconn_driver_t urj_tap_usbconn_##item##_driver;
+#define _URJ_LIST(item) extern const urj_usbconn_driver_t urj_tap_usbconn_##item##_driver;
 #include "usbconn_list.h"
 
 #endif /* URJ_CABLE_USBCONN_H */

@@ -25,7 +25,7 @@
 #ifndef URJ_CABLE_CABLE_H
 #define URJ_CABLE_CABLE_H
 
-#define _URJ_LIST(item) extern urj_parport_driver_t urj_tap_parport_##item##_driver;
+#define _URJ_LIST(item) extern const urj_parport_driver_t urj_tap_parport_##item##_driver;
 #include "parport_list.h"
 
 typedef struct port_node_t port_node_t;

@@ -305,7 +305,7 @@ direct_set_control (urj_parport_t *parport, unsigned char data)
     return URJ_STATUS_OK;
 }
 
-urj_parport_driver_t urj_tap_parport_direct_parport_driver = {
+const urj_parport_driver_t urj_tap_parport_direct_parport_driver = {
     URJ_CABLE_PARPORT_DEV_PARALLEL,
     direct_connect,
     direct_parport_free,

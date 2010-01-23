@@ -60,7 +60,7 @@ urj_usbconn_driver_t;
 
 struct URJ_USBCONN
 {
-    urj_usbconn_driver_t *driver;
+    const urj_usbconn_driver_t *driver;
     void *params;
     urj_cable_t *cable;
 };
@@ -73,6 +73,6 @@ int urj_tap_usbconn_close (urj_usbconn_t *conn);
 int urj_tap_usbconn_read (urj_usbconn_t *conn, uint8_t *buf, int len);
 int urj_tap_usbconn_write (urj_usbconn_t *conn, uint8_t *buf, int len,
                            int recv);
-extern urj_usbconn_driver_t *urj_tap_usbconn_drivers[];
+extern const urj_usbconn_driver_t *urj_tap_usbconn_drivers[];
 
 #endif /* URJ_USBCONN_H */

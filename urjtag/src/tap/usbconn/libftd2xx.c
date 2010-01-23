@@ -603,7 +603,7 @@ urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver = {
     usbconn_ftd2xx_write
 };
 
-urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver = {
+const urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_mpsse_driver = {
     "ftd2xx-mpsse",
     usbconn_ftd2xx_mpsse_connect,
     usbconn_ftd2xx_free,
