@@ -172,6 +172,8 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
     return r;
 }
 
+#define strncat_const(dst, src) strncat(dst, src, sizeof(dst) - strlen(dst) - 1)
+
 int
 urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 {
@@ -287,10 +289,10 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             /* find JTAG declarations for a part with id */
 
             data_path[0] = '\0';
-            strncat (data_path, db_path, sizeof data_path);        /* FIXME: Buffer overrun */
+            strncat_const (data_path, db_path);
 
             /* manufacturers */
-            strncat (data_path, "/MANUFACTURERS", sizeof data_path);
+            strncat_const (data_path, "/MANUFACTURERS");
 
             key = urj_tap_register_alloc (11);
             memcpy (key->data, &id->data[1], key->len);
@@ -307,7 +309,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             if (strlen (idr.fullname) > URJ_PART_MANUFACTURER_MAXLEN)
                 urj_warning (_("Manufacturer too long\n"));
             manufacturer[0] = '\0';
-            strncat (manufacturer, idr.fullname, sizeof manufacturer);
+            strncat_const (manufacturer, idr.fullname);
 
             /* parts */
             p = strrchr (data_path, '/');
@@ -315,8 +317,8 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
                 p[1] = '\0';
             else
                 data_path[0] = '\0';
-            strncat (data_path, idr.name, sizeof data_path);
-            strncat (data_path, "/PARTS", sizeof data_path);
+            strncat_const (data_path, idr.name);
+            strncat_const (data_path, "/PARTS");
 
             key = urj_tap_register_alloc (16);
             memcpy (key->data, &id->data[12], key->len);
@@ -333,7 +335,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             if (strlen (idr.fullname) > URJ_PART_PART_MAXLEN)
                 urj_warning (_("Part too long\n"));
             partname[0] ='\0';
-            strncat (partname, idr.fullname, sizeof partname);
+            strncat_const (partname, idr.fullname);
 
             /* steppings */
             p = strrchr (data_path, '/');
@@ -341,8 +343,8 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
                 p[1] = '\0';
             else
                 data_path[0] = '\0';
-            strncat (data_path, idr.name, sizeof data_path);
-            strncat (data_path, "/STEPPINGS", sizeof data_path);
+            strncat_const (data_path, idr.name);
+            strncat_const (data_path, "/STEPPINGS");
 
             key = urj_tap_register_alloc (4);
             memcpy (key->data, &id->data[28], key->len);
@@ -359,7 +361,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             if (strlen (idr.fullname) > URJ_PART_STEPPING_MAXLEN)
                 urj_warning (_("Stepping too long\n"));
             stepping[0] = '\0';
-            strncat (stepping, idr.fullname, sizeof stepping);
+            strncat_const (stepping, idr.fullname);
 
             /* part definition file */
             p = strrchr (data_path, '/');
@@ -367,7 +369,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
                 p[1] = '\0';
             else
                 data_path[0] = '\0';
-            strncat (data_path, idr.name, sizeof data_path);
+            strncat_const (data_path, idr.name);
 
             urj_log (URJ_LOG_LEVEL_NORMAL, _("  Filename:     %s\n"),
                      data_path);

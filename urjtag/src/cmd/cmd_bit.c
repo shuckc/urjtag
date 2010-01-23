@@ -44,11 +44,15 @@ cmd_bit_print_params (char *params[], unsigned int parameters, char *command,
     unsigned int i;
 
     command[0] = '\0';
+    command_size -= 1;
     strncat (command, params[0], command_size);
+    command_size -= strlen (params[0]);
     for (i = 1; i < parameters; i++)
     {
         strncat (command, " ", command_size);
+        command_size -= 1;
         strncat (command, params[i], command_size);
+        command_size -= strlen (params[i]);
     }
 }
 
