@@ -56,6 +56,11 @@
   * src/tap/cable/ft2232.c, src/tap/cable/ft2232_list.h: Unify the list of
     ftdi usb cable drivers.
 
+  * src/tap/cable/ft2232.c, src/tap/cable/generic_usbconn.c,
+    src/tap/cable/generic_usbconn.h, src/tap/cable/jlink.c,
+    src/tap/cable/usbblaster.c, src/tap/cable/xpc.c: Constify the usb cable
+    drivers
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

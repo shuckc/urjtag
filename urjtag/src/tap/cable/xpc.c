@@ -699,7 +699,7 @@ const urj_cable_driver_t urj_tap_cable_xpc_int_driver = {
     urj_tap_cable_generic_usbconn_help
 };
 
-urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_int = {
+const urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_int = {
     "xpc_int",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */
@@ -726,7 +726,7 @@ const urj_cable_driver_t urj_tap_cable_xpc_ext_driver = {
     urj_tap_cable_generic_usbconn_help
 };
 
-urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_ext = {
+const urj_usbconn_cable_t urj_tap_cable_usbconn_xpc_ext = {
     "xpc_ext",                  /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */

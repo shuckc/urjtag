@@ -607,7 +607,7 @@ const urj_cable_driver_t urj_tap_cable_jlink_driver = {
     urj_tap_cable_generic_usbconn_help
 };
 
-urj_usbconn_cable_t urj_tap_cable_usbconn_jlink = {
+const urj_usbconn_cable_t urj_tap_cable_usbconn_jlink = {
     "jlink",                    /* cable name */
     NULL,                       /* string pattern, not used */
     "libusb",                   /* usbconn driver */
