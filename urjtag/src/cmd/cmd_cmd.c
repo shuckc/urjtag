@@ -35,50 +35,8 @@
 #include "cmd.h"
 
 const urj_cmd_t *urj_cmds[] = {
-    &urj_cmd_quit,
-    &urj_cmd_help,
-    &urj_cmd_frequency,
-    &urj_cmd_cable,
-    &urj_cmd_reset,
-    &urj_cmd_discovery,
-    &urj_cmd_idcode,
-    &urj_cmd_detect,
-    &urj_cmd_signal,
-    &urj_cmd_scan,
-    &urj_cmd_salias,
-    &urj_cmd_bit,
-    &urj_cmd_register,
-    &urj_cmd_initbus,
-    &urj_cmd_print,
-    &urj_cmd_part,
-    &urj_cmd_bus,
-    &urj_cmd_instruction,
-    &urj_cmd_shift,
-    &urj_cmd_dr,
-    &urj_cmd_get,
-    &urj_cmd_test,
-    &urj_cmd_shell,
-    &urj_cmd_set,
-    &urj_cmd_endian,
-    &urj_cmd_peek,
-    &urj_cmd_poke,
-    &urj_cmd_pod,
-    &urj_cmd_readmem,
-    &urj_cmd_writemem,
-    &urj_cmd_detectflash,
-    &urj_cmd_flashmem,
-    &urj_cmd_eraseflash,
-    &urj_cmd_script,
-    &urj_cmd_include,
-    &urj_cmd_addpart,
-    &urj_cmd_usleep,
-#ifdef ENABLE_SVF
-    &urj_cmd_svf,
-#endif
-#ifdef ENABLE_BSDL
-    &urj_cmd_bsdl,
-#endif
-    &urj_cmd_debug,
+#define _URJ_CMD(cmd) &urj_cmd_##cmd,
+#include "cmd_list.h"
     NULL                        /* last must be NULL */
 };
 

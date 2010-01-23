@@ -1,3 +1,8 @@
+2010-01-23  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/cmd.h, src/cmd/cmd_list.h, src/cmd/cmd_cmd.c: Unify the list of
+    commands in one place.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

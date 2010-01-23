@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: cmd.h 1637 2009-05-28 14:38:54Z rfhh $
  *
  * Copyright (C) 2003 ETC s.r.o.
  * All rights reserved.
@@ -31,43 +31,49 @@
  *
  */
 
-#ifndef URJ_SRC_CMD_H
-#define URJ_SRC_CMD_H
+_URJ_CMD(quit)
+_URJ_CMD(help)
+_URJ_CMD(frequency)
+_URJ_CMD(cable)
+_URJ_CMD(reset)
+_URJ_CMD(discovery)
+_URJ_CMD(idcode)
+_URJ_CMD(detect)
+_URJ_CMD(signal)
+_URJ_CMD(scan)
+_URJ_CMD(salias)
+_URJ_CMD(bit)
+_URJ_CMD(register)
+_URJ_CMD(initbus)
+_URJ_CMD(print)
+_URJ_CMD(part)
+_URJ_CMD(bus)
+_URJ_CMD(instruction)
+_URJ_CMD(shift)
+_URJ_CMD(dr)
+_URJ_CMD(get)
+_URJ_CMD(test)
+_URJ_CMD(shell)
+_URJ_CMD(set)
+_URJ_CMD(endian)
+_URJ_CMD(peek)
+_URJ_CMD(poke)
+_URJ_CMD(pod)
+_URJ_CMD(readmem)
+_URJ_CMD(writemem)
+_URJ_CMD(detectflash)
+_URJ_CMD(flashmem)
+_URJ_CMD(eraseflash)
+_URJ_CMD(script)
+_URJ_CMD(include)
+_URJ_CMD(addpart)
+_URJ_CMD(usleep)
+#ifdef ENABLE_SVF
+_URJ_CMD(svf)
+#endif
+#ifdef ENABLE_BSDL
+_URJ_CMD(bsdl)
+#endif
+_URJ_CMD(debug)
 
-#include <sysdep.h>
-
-#include <urjtag/types.h>
-
-typedef struct
-{
-    char *name;
-    char *desc;
-    void (*help) (void);
-    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error, both
-     * syntax and library errors */
-    int (*run) (urj_chain_t *chain, char *params[]);
-} urj_cmd_t;
-
-#define _URJ_CMD(cmd) extern const urj_cmd_t urj_cmd_##cmd;
-#include "cmd_list.h"
-
-extern const urj_cmd_t *urj_cmds[];
-
-/**
- * Tests if chain has a cable pointer
- *
- * @return URJ_STATUS_OK if success; URJ_STATUS_FAIL on error or failure
- */
-int urj_cmd_test_cable (urj_chain_t *chain);
-
-/**
- * Count the number of parameters in this NULL-terminated list
- */
-int urj_cmd_params (char *params[]);
-/**
- * Parse parameter as a long unsigned
- * @return URJ_STATUS_OK on success, URJ_STATUS_FAIL on error
- */
-int urj_cmd_get_number (const char *s, long unsigned *i);
-
-#endif /* URJ_CMD_H */
+#undef _URJ_CMD
