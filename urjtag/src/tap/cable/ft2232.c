@@ -1819,17 +1819,8 @@ ft2232_cable_free (urj_cable_t *cable)
 }
 
 
-urj_usbconn_cable_t urj_tap_cable_usbconn_ft2232_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_armusbocd_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_gnice_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_gniceplus_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_jtagkey_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_oocdlinks_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_turtelizer2_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_usbtojtagif_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_signalyzer_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_flyswatter_ftdi;
-urj_usbconn_cable_t urj_tap_cable_usbconn_usbscarab2_ftdi;
+#define _URJ_FTDI(usb) urj_usbconn_cable_t urj_tap_cable_usbconn_##usb##_ftdi;
+#include "ft2232_list.h"
 
 
 static void
@@ -1837,37 +1828,11 @@ ft2232_usbcable_help (urj_log_level_t ll, const char *cablename)
 {
     urj_usbconn_cable_t *conn;
 
-    conn = &urj_tap_cable_usbconn_armusbocd_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
+#define _URJ_FTDI(usb) \
+    conn = &urj_tap_cable_usbconn_##usb##_ftdi; \
+    if (strcasecmp (conn->name, cablename) == 0) \
         goto found;
-    conn = &urj_tap_cable_usbconn_gnice_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
-        goto found;
-    conn = &urj_tap_cable_usbconn_gniceplus_ftdi;
-    if (strcasecmp( conn->name, cablename ) == 0)
-      goto found;
-    conn = &urj_tap_cable_usbconn_jtagkey_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
-        goto found;
-    conn = &urj_tap_cable_usbconn_oocdlinks_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
-        goto found;
-    conn = &urj_tap_cable_usbconn_turtelizer2_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
-        goto found;
-    conn = &urj_tap_cable_usbconn_usbtojtagif_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
-        goto found;
-    conn = &urj_tap_cable_usbconn_signalyzer_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
-        goto found;
-    conn = &urj_tap_cable_usbconn_flyswatter_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
-        goto found;
-    conn = &urj_tap_cable_usbconn_usbscarab2_ftdi;
-    if (strcasecmp (conn->name, cablename) == 0)
-        goto found;
-    conn = &urj_tap_cable_usbconn_ft2232_ftdi;
+#include "ft2232_list.h"
   found:
 
     urj_log (ll,
