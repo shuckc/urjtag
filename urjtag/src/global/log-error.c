@@ -1,5 +1,5 @@
 /*
- * $Id: urjtag.c 1539 2009-05-01 12:02:08Z rfhh $
+ * $Id$
  *
  * Copyright (C) 2009 Rutger Hofman, VU Amsterdam
  *

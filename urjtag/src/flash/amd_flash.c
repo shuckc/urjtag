@@ -159,7 +159,7 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
                            (size_t) 1, sizeof (urj_flash_cfi_chip_t));
             return URJ_STATUS_FAIL;
         }
-        (*cfi_array)->cfi_chips[i]->width = 1;        //ba;           
+        (*cfi_array)->cfi_chips[i]->width = 1;        //ba;
         cfi = &(*cfi_array)->cfi_chips[i]->cfi;
 
         cfi->identification_string.pri_id_code = CFI_VENDOR_NULL;

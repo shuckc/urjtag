@@ -123,7 +123,7 @@ static void
 arm9tdmi_exec_instruction(urj_bus_t *bus, unsigned int c1_inst, unsigned int c1_data, unsigned int flags)
 {
     int i;
- 
+
     for (i = 0; i < 32; i++)
 	scan1->in->data[66-i] = (c1_inst >> i) & 1;
     scan1->in->data[34] = flags;

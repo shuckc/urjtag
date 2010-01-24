@@ -1,5 +1,5 @@
 /*
- * $Id: test.c,v 1.0 2005/10/10 00:00:0 DJF $
+ * $Id$
  *
  * Copyright (C) 2005 Protoparts
  *

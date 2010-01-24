@@ -1,5 +1,5 @@
 /*
- * $Id: shell.c,v 1.6 2003/08/19 08:42:20 telka Exp $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *

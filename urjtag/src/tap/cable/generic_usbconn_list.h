@@ -1,5 +1,5 @@
 /*
- * $Id: generic_usbconn.c 1689 2010-01-08 17:06:27Z kawk $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *

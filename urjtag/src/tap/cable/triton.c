@@ -29,7 +29,7 @@
  * TRITON Starterkit II (PXA255/250) JTAG Parallel Cable Driver
  * (boards probably produced by www.mite.cz)
  * Other vendors: www.strategic-test.com, www.fsforth.de (www.es-usa.com),
- *                www.directinsight.co.uk, www.quantum.com.pl, 
+ *                www.directinsight.co.uk, www.quantum.com.pl,
  *
  * This code has been verified to work with a Starterkit II,
  * but a Starterkit I might also work (however it has a differing JTAG cable

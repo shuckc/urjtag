@@ -1,5 +1,5 @@
 /*
- * $Id: jlink.c,v 1.8 2003/08/19 08:42:20 telka Exp $
+ * $Id$
  *
  * Segger J-Link cable driver
  *
@@ -188,7 +188,7 @@ jlink_get_status (urj_usbconn_libusb_param_t *params)
                  data->usb_in_buffer[6], data->usb_in_buffer[7]);
         if (vref < 1500)
         {
-            urj_error_set (URJ_ERROR_USB, 
+            urj_error_set (URJ_ERROR_USB,
                            "Vref too low. Possibly the target isn't powered or disconnected?");
             result = -1;
         }

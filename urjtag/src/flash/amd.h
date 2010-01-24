@@ -1,5 +1,5 @@
 /*
- * $Id: flash.h 1554 2009-05-03 16:06:22Z rfhh $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  * All rights reserved.

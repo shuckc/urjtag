@@ -1,5 +1,5 @@
 /*
- * $Id: generic.c 1003 2008-02-10 10:00:30Z kawk $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *

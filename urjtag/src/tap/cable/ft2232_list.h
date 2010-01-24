@@ -1,5 +1,5 @@
 /*
- * $Id: ft2232.c 1714 2010-01-23 20:07:41Z vapier $
+ * $Id$
  *
  * Generic cable driver for FTDI's FT2232C chip in MPSSE mode.
  * Copyright (C) 2007 A. Laeuger

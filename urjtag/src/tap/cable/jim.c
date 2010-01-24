@@ -1,5 +1,5 @@
 /*
- * $Id: $
+ * $Id$
  *
  * JTAG target simulator JIM "cable" driver
  *

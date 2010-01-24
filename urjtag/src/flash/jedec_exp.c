@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Kolja Waschk, 2008, 
+ * Written by Kolja Waschk, 2008,
  * partially based on snippets from jedec.c/amd_flash.c/cfi.c
  */
 

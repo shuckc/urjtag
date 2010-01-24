@@ -81,7 +81,7 @@ int urj_part_instruction_length_set (urj_part_t *part, int length);
  * @param code string that contains the bit pattern for the default instruction
  * @param data_register default data register for instruction (e.g. BR)
  */
-urj_part_instruction_t *urj_part_instruction_define (urj_part_t *part, 
+urj_part_instruction_t *urj_part_instruction_define (urj_part_t *part,
                                                      const char *instruction,
                                                      const char *code,
                                                      const char *data_register);

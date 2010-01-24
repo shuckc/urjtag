@@ -516,7 +516,7 @@ VHDL_Attribute_Types : VHDL_Attr_Boolean
                        }
 ;
 VHDL_Attr_Boolean  : IDENTIFIER OF IDENTIFIER COLON SIGNAL IS Boolean SEMICOLON
-                     { 
+                     {
                        //set_attr_bool (priv_data, $1, $7);
                        //free ($3);
                        /* skip boolean attributes for the time being */
@@ -831,7 +831,7 @@ urj_vhdl_sem_deinit (urj_vhdl_parser_priv_t *priv_data)
  *
  * Initializes storage elements in the private parser structure that are
  * used for parser maintenance purposes.
- * Subsequently calls initializer functions for the scanner and the semantic 
+ * Subsequently calls initializer functions for the scanner and the semantic
  * parts.
  *
  * Parameters

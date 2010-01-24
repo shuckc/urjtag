@@ -1,7 +1,7 @@
 /* Function declarations for libiberty.
 
    Copyright 2001, 2002, 2005 Free Software Foundation, Inc.
-   
+
    Note - certain prototypes declared in this header file are for
    functions whoes implementation copyright does not belong to the
    FSF.  Those prototypes are present in this file for reference
@@ -23,7 +23,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin Street - Fifth Floor,
    Boston, MA 02110-1301, USA.
-   
+
    Written by Cygnus Support, 1994.
 
    The libiberty library provides a number of functions which are
@@ -188,7 +188,7 @@ extern char * getpwd (void);
 #ifdef __MINGW32__
 /* Forward declaration to avoid #include <sys/time.h>.   */
 struct timeval;
-extern int gettimeofday (struct timeval *, void *); 
+extern int gettimeofday (struct timeval *, void *);
 #endif
 
 /* Get the amount of time the process has run, in microseconds.  */
@@ -407,7 +407,7 @@ extern struct pex_obj *pex_init (int flags, const char *pname,
 /* Capture stderr to a pipe.  The output can be read by
    calling pex_read_err and reading from the returned
    FILE object.  This flag may be specified only for
-   the last program in a pipeline.  
+   the last program in a pipeline.
 
    This flag is supported only on Unix and Windows.  */
 #define PEX_STDERR_TO_PIPE	0x40

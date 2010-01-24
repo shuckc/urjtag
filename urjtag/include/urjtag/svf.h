@@ -39,7 +39,7 @@
  * Checks the jtag-environment (availability of SIR instruction and SDR
  * register). Initializes all svf-global variables and performs clean-up
  * afterwards.
- * 
+ *
  * @param chain            pointer to global chain
  * @param SVF_FILE         file handle of SVF file
  * @param stop_on_mismatch 1 = stop upon tdo mismatch

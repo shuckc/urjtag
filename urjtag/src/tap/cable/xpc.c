@@ -1,5 +1,5 @@
 /*
- * $Id: xpc.c,v 1.8 2003/08/19 08:42:20 telka Exp $
+ * $Id$
  *
  * Xilinx Platform Cable USB Driver (slow GPIO only)
  * Copyright (C) 2008 Kolja Waschk
@@ -56,23 +56,23 @@ static int last_tdo;
  *
  *   IOA.0 => green LED (0=off)
  *   IOA.1 => red LED   (0=off)
- *   IOA.2 is tied to VCC via R25 on my board 
- *   IOA.3 isn't connected 
+ *   IOA.2 is tied to VCC via R25 on my board
+ *   IOA.3 isn't connected
  *   IOA.4 => CPLD pin 85 (reset?)
- *   IOA.5 => CPLD pin 86, eventually OE? 
+ *   IOA.5 => CPLD pin 86, eventually OE?
  *   IOA.6 => CPLD pin 83 (reset?)
  *   IOA.7 => CPLD pin 49 (reset?)
- *    
+ *
  * = FX2 Port C =
  *
- *   probably used as GPIFADR 0..7, to CPLD 
- *      
+ *   probably used as GPIFADR 0..7, to CPLD
+ *
  * = FX2 Port E =
  *
- *   IOE.3 => CPLD TCK 
- *   IOE.4 => CPLD TMS 
- *   IOE.5 => CPLD TDO 
- *   IOE.6 => CPLD TDI 
+ *   IOE.3 => CPLD TCK
+ *   IOE.4 => CPLD TMS
+ *   IOE.5 => CPLD TDO
+ *   IOE.6 => CPLD TDI
  */
 
 /* ---------------------------------------------------------------------- */
@@ -233,7 +233,7 @@ xpcu_select_gpio (struct usb_dev_handle *xpcu, int int_or_ext)
  *   Bit 14: Third bit.
  *   Bit 15: Fourth bit.
  *
- *   After the bulk write, if any of the bits 12..15 was set in any word, a 
+ *   After the bulk write, if any of the bits 12..15 was set in any word, a
  *   bulk_read shall follow to collect the TDO data.
  *
  *   TDO data is shifted in from MSB. In a "full" word with 16 TDO bits, the

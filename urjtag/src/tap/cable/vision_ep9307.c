@@ -1,5 +1,5 @@
 /*
- * $Id: vision_ep9307.c $
+ * $Id$
  *
  * Vision EP9307 SoM GPIO JTAG Cable Driver
  * Copyright (C) 2007, 2008 H Hartley Sweeten

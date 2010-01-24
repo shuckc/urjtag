@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.am 506 2003-08-13 10:05:15Z telka $
+# $Id$
 #
 # Copyright (C) 2002 ETC s.r.o.
 #

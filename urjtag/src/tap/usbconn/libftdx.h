@@ -1,5 +1,5 @@
 /*
- * $Id: libftdx.h 1594 2009-05-13 23:36:04Z rfhh $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -1,5 +1,5 @@
 /*
- * $Id: tap.c $
+ * $Id$
  *
  * Copyright (C) 2008 Kolja Waschk <kawk>
  *

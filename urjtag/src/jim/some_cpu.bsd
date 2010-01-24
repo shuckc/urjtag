@@ -1,5 +1,5 @@
 --
--- $Id: $
+-- $Id$
 --
 -- BSDL definitions for "some_cpu" of "JTAG target simulator"
 --
@@ -40,36 +40,36 @@
 -- sub io_pin($$$$$)
 -- {
 --   my ($inbitno, $outbitno, $ctrlbitno, $name,$dir) = @_;
--- 
---   if($dir eq 'inout' || $dir eq 'in') { 
+--
+--   if($dir eq 'inout' || $dir eq 'in') {
 --     printf '"%d (BC_1, %s, input, X), " &%s', $inbitno, $name, "\n";
 --   } else {
---     printf '"%d (BC_1, *, internal, X), " &%s', $inbitno, "\n"; 
+--     printf '"%d (BC_1, *, internal, X), " &%s', $inbitno, "\n";
 --   };
 --   if($dir ne 'in') {
 --     printf '"%d (BC_1, %s, output3, X, %d, 0, Z), " &%s', $outbitno, $name, $ctrlbitno, "\n";
 --     printf '"%d (BC_1, *, control, 0), " &%s', $ctrlbitno, "\n";
 --   }
 -- }
--- 
+--
 -- #######################################
--- 
+--
 -- io_pin(100, 96, 103, 'OE','out');
 -- io_pin(101, 97, 104, 'WE','out');
 -- io_pin(102, 98, 105, 'CS','out');
 -- io_pin(99,  0,  0, 'RESET','in');
 -- $bsi = 106;
--- 
+--
 -- for(my $i=0;$i<32; $i++) {
 --   # address output  in   0.. 31
---   # address buffer  in  
+--   # address buffer  in
 --   # address control in
 --   io_pin($i+$bsi,$i,$i+$bsi+32,sprintf('A(%d)',$i),'out');
 -- }
 -- for(my $i=0;$i<32; $i++) {
 --   # data output  in  32.. 63
 --   # data input   in  64.. 95
---   # data control in  
+--   # data control in
 --   io_pin($i+64, $i+32, $i+$bsi+64, sprintf('D(%d)',$i), 'inout');
 -- };
 
@@ -89,13 +89,13 @@ port  (
   WE    : out bit ;
   A     : out bit_vector(0 to 31);
   D     : inout bit_vector(0 to 31)
-);        
+);
 
 use STD_1149_1_1994.all;
 
 attribute COMPONENT_CONFORMANCE of  some_cpu : entity is " STD_1149_1_1993 ";
 attribute PIN_MAP of  some_cpu : entity is PHYSICAL_PIN_MAP  ;
-          
+
 constant JIM : PIN_MAP_STRING:=
 " CS    : 2, " &
 " OE    : 3, " &
@@ -118,20 +118,20 @@ attribute TAP_SCAN_MODE  of TMS : signal is true  ;
 attribute TAP_SCAN_CLOCK of TCK : signal is (8.0e6, BOTH) ;
 
 attribute INSTRUCTION_LENGTH  of some_cpu : entity is 2 ;
-            
+
 attribute INSTRUCTION_OPCODE  of some_cpu : entity is
-" EXTEST    ( 00  )," & 
-" IDCODE    ( 01  )," & 
-" SAMPLE    ( 10  )," & 
-" BYPASS    ( 11  )"  ; 
+" EXTEST    ( 00  )," &
+" IDCODE    ( 01  )," &
+" SAMPLE    ( 10  )," &
+" BYPASS    ( 11  )"  ;
 
 attribute INSTRUCTION_CAPTURE of some_cpu : entity is " 01 ";
-            
+
 attribute IDCODE_REGISTER of some_cpu : entity is "10000111011001010100001100100001" ;
 
 attribute BOUNDARY_LENGTH of some_cpu : entity is 202 ;
-                                  
-attribute BOUNDARY_REGISTER of some_cpu : entity is                         
+
+attribute BOUNDARY_REGISTER of some_cpu : entity is
 
 "100 (BC_1, *, internal, X), " &
 "96 (BC_1, OE, output3, X, 103, 0, Z), " &

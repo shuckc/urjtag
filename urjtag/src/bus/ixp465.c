@@ -57,8 +57,8 @@ typedef struct {
  *
  */
 static urj_bus_t *
-ixp465_bus_new (urj_chain_t *chain, 
-                const urj_bus_driver_t *driver, 
+ixp465_bus_new (urj_chain_t *chain,
+                const urj_bus_driver_t *driver,
                 const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
@@ -80,7 +80,7 @@ ixp465_bus_new (urj_chain_t *chain,
 
 //  CHAIN = chain;
 //  PART = part = chain->parts->parts[chain->active_part];
-        
+
     bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
          if (bus == NULL)
                  return NULL;

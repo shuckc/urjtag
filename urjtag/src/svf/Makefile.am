@@ -34,7 +34,7 @@ libsvf_la_SOURCES = \
 	svf.c
 
 libsvf_flex_la_SOURCES = \
-	svf_flex.l 
+	svf_flex.l
 
 svf_flex.$(OBJEXT) svf.$(OBJEXT): svf_bison.$(OBJEXT)
 

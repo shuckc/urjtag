@@ -1,5 +1,5 @@
 /*
- * $Id: cmd.h 1637 2009-05-28 14:38:54Z rfhh $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  * All rights reserved.

@@ -43,14 +43,14 @@
 #define TCK     0
 #define TMS     2
 
-/* 
- * control 
+/*
+ * control
  */
 #define HRESET  3               /* the signal is inverted by cable hardware */
 #define SRESET  1               /* the signal is inverted by cable hardware */
 #define TRST    0               /* the signal is inverted by cable hardware */
 
-/* 
+/*
  * status
  *
  * 7 - BUSY (pin 11)

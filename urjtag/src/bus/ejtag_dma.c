@@ -29,7 +29,7 @@
  * Documentation:
  * [1] MIPS Licensees, "MIPS EJTAG Debug Solution", 980818 Rev. 2.0.0
  * [2] MIPS Technologies, Inc. "EJTAG Specification", 2001-02-15, Rev. 2.60
- * 
+ *
  *
  */
 
@@ -205,7 +205,7 @@ ejtag_dma_write (urj_bus_t *bus, unsigned int addr, unsigned int data, int sz)
     urj_part_set_instruction (bus->part, "EJTAG_CONTROL");
     urj_tap_chain_shift_instructions (bus->chain);
     urj_tap_register_fill (ejctrl->in, 0);
-    ejctrl->in->data[PrAcc] = 1;        // Processor access 
+    ejctrl->in->data[PrAcc] = 1;        // Processor access
     ejctrl->in->data[ProbEn] = 1;
     ejctrl->in->data[DmaAcc] = 1;       // DMA operation request */
     ejctrl->in->data[DstRt] = 1;
@@ -277,7 +277,7 @@ ejtag_dma_read (urj_bus_t *bus, unsigned int addr, int sz)
     urj_part_set_instruction (bus->part, "EJTAG_CONTROL");
     urj_tap_chain_shift_instructions (bus->chain);
     urj_tap_register_fill (ejctrl->in, 0);
-    ejctrl->in->data[PrAcc] = 1;        // Processor access 
+    ejctrl->in->data[PrAcc] = 1;        // Processor access
     ejctrl->in->data[ProbEn] = 1;
     ejctrl->in->data[DmaAcc] = 1;       // DMA operation request */
     ejctrl->in->data[DstRt] = 1;

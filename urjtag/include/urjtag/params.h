@@ -1,5 +1,5 @@
 /*
- * $Id: params.h 1606 2009-05-19 15:06:20Z rfhh $
+ * $Id$
  *
  * Parameter list, in the vein of X parameter passing
  * Copyright (C) 2009 VU Amsterdam

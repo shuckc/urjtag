@@ -1,5 +1,5 @@
 /*
- * $Id: wiggler2.c,v 1.8 2003/09/11 16:45:15 telka Exp $
+ * $Id$
  *
  * Modified WIGGLER JTAG Cable Driver
  * Copyright (C) 2003 Ultra d.o.o.

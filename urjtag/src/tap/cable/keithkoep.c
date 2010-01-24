@@ -44,7 +44,7 @@
 
 /*
  * status
- * 
+ *
  * 7 - BUSY (pin 11)
  * 6 - ACK (pin 10)
  * 5 - PE (pin 12)
@@ -53,7 +53,7 @@
  */
 #define TDO     5
 
-/* 
+/*
  * control
  *
  * 0 - STROBE (pin 1)

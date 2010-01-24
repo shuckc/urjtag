@@ -1,5 +1,5 @@
 /*
- * $Id: log.h 1519 2009-04-22 23:12:44Z rfhh $
+ * $Id$
  *
  * Copyright (C) 2009, Rutger Hofman, VU Amsterdam
  *

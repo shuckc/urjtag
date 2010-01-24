@@ -1,5 +1,5 @@
 /*
- * $Id: buses.c 1606 2009-05-19 15:06:20Z rfhh $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *

@@ -717,7 +717,7 @@ Update_Field_List      : Update_Field
                        | Update_Field_List COMMA Update_Field
 ;
 Update_Field           : DECIMAL_NUMBER
-                       | DECIMAL_NUMBER COLON 
+                       | DECIMAL_NUMBER COLON
                          { urj_bsdl_flex_set_hex (priv_data->scanner); }
                          Data_Expression
                          { urj_bsdl_flex_set_decimal (priv_data->scanner); }
@@ -1125,7 +1125,7 @@ urj_bsdl_sem_deinit (urj_bsdl_parser_priv_t *priv)
  *
  * Initializes storage elements in the private parser structure that are
  * used for parser maintenance purposes.
- * Subsequently calls initializer functions for the scanner and the semantic 
+ * Subsequently calls initializer functions for the scanner and the semantic
  * parts.
  *
  * Parameters

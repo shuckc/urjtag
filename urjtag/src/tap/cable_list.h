@@ -1,5 +1,5 @@
 /*
- * $Id: buses.h 1687 2009-12-29 23:53:09Z arniml $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *

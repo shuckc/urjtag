@@ -1,5 +1,5 @@
 /*
- * $Id: scan.c 733 2007-11-07 22:21:33Z arniml $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *

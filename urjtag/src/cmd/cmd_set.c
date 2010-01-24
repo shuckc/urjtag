@@ -99,7 +99,7 @@ cmd_set_run (urj_chain_t *chain, char *params[])
                        params[2]);
         return URJ_STATUS_FAIL;
     }
-    
+
     return urj_part_set_signal (part, s, dir, data);
 }
 

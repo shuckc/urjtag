@@ -1,5 +1,5 @@
 /*
- * $Id: idcode.c 1120 2008-03-15 02:27:13Z jiez $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *

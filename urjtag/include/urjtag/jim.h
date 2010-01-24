@@ -1,5 +1,5 @@
 /*
- * $Id: jim.h $
+ * $Id$
  *
  * Copyright (C) 2008 Kolja Waschk <kawk>
  *

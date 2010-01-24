@@ -1,5 +1,5 @@
 /*
- * $Id: buses.h 1711 2010-01-23 19:12:01Z vapier $
+ * $Id$
  *
  * Copyright (C) 2003 ETC s.r.o.
  *

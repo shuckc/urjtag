@@ -183,7 +183,7 @@ urj_tap_cable_add_queue_item (urj_cable_t *cable, urj_cable_queue_info_t *q)
                 }
                 else
                 {
-                    /* Same as above, but for the case if new space 
+                    /* Same as above, but for the case if new space
                      * isn't large enough to hold all relocated items */
 
                     /* Step 1: 456123__ -> __612345 */

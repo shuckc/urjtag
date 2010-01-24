@@ -1,5 +1,5 @@
 /*
- * $Id: libusb.h 1606 2009-05-19 15:06:20Z rfhh $
+ * $Id$
  *
  * Link driver for accessing USB devices via libusb
  *

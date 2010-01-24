@@ -3,7 +3,7 @@
 # UrJTAG. The connection between UrJTAG and the code here currently is by means
 # of a special "cable" named "jim", which can access a virtual chain of
 # devices. The only device yet is "some_cpu", which is automatically put in
-# the chain when you type "cable jim". 
+# the chain when you type "cable jim".
 
 cable jim
 bsdl path .

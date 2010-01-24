@@ -103,7 +103,7 @@ cmd_print_run (urj_chain_t *chain, char *params[])
                     urj_log (URJ_LOG_LEVEL_NORMAL, "\tinput=%s",
                              s->input->name);
                 if (s->output)
-                    urj_log (URJ_LOG_LEVEL_NORMAL, "\toutput=%s", 
+                    urj_log (URJ_LOG_LEVEL_NORMAL, "\toutput=%s",
                              s->output->name);
 
                 for (sa = part->saliases; sa != NULL; sa = sa->next)

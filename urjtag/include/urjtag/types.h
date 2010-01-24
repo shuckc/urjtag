@@ -1,5 +1,5 @@
 /*
- * $Id: urjtag.h 1525 2009-04-23 15:56:49Z rfhh $
+ * $Id$
  *
  * Global opaque types that had better be predefined
  * Copyright (C) 2009, Rutger Hofman

@@ -299,7 +299,7 @@ ft2232h_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
     ft2232_set_frequency_common( cable, new_frequency, FT2232H_MAX_TCK_FREQ);
 }
- 
+
 static int
 ft2232_generic_init (urj_cable_t *cable)
 {

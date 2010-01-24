@@ -3,8 +3,8 @@
  *
  * Busdriver for flashaccess on the Goepel "Boundary Scan Coach" training board
  * www.goepel.com
- * The flash has 1Mbit but only 15 address lines are connected. 
- * So only 4Kbit can be accessed. 
+ * The flash has 1Mbit but only 15 address lines are connected.
+ * So only 4Kbit can be accessed.
  * Erfurt, Oct. 10th M. Schneider www.masla.de
  *
  * This program is free software; you can redistribute it and/or

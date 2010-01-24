@@ -69,14 +69,14 @@ static void urj_svf_free_ths_params(struct ths_params *);
 %token IDENTIFIER NUMBER HEXA_NUM_FRAGMENT VECTOR_STRING
 
 %token EMPTY
-%token ENDDR ENDIR 
+%token ENDDR ENDIR
 %token FREQUENCY HZ
-%token STATE RESET IDLE 
+%token STATE RESET IDLE
 %token TDI TDO MASK SMASK
 %token TRST ON OFF Z ABSENT
 %token HDR HIR SDR SIR TDR TIR
 %token PIO PIOMAP IN OUT INOUT H L U D X
-%token RUNTEST MAXIMUM SEC TCK SCK ENDSTATE 
+%token RUNTEST MAXIMUM SEC TCK SCK ENDSTATE
 %token IRPAUSE IRSHIFT IRUPDATE IRSELECT IREXIT1 IREXIT2 IRCAPTURE
 %token DRPAUSE DRSHIFT DRUPDATE DRSELECT DREXIT1 DREXIT2 DRCAPTURE
 %token SVF_EOF 0    /* SVF_EOF must match bison's token YYEOF */
@@ -269,7 +269,7 @@ svf_statement
 ths_param_list
             : /* empty element */
             | ths_param_list ths_opt_param
-; 
+;
 
 ths_opt_param
             : TDI   '(' hexa_num_sequence ')'
@@ -320,7 +320,7 @@ hexa_num_sequence
 ;
 
 stable_state
-            : RESET 
+            : RESET
             | IDLE
             | DRPAUSE
             | IRPAUSE
@@ -341,7 +341,7 @@ runtest_clk_count
                 $$.dvalue = $<dvalue>1;
               }
 
-            | NUMBER SCK 
+            | NUMBER SCK
               {
                 $$.token  = $<token>2;
                 $$.dvalue = $<dvalue>1;
@@ -366,7 +366,7 @@ runtest_time
 ;
 
 runtest_max_time_opt
-            : 
+            :
               {
                 priv_data->parser_params.runtest.max_time = 0.0;
               }
@@ -400,7 +400,7 @@ all_states
             | IRPAUSE
             | DRPAUSE
             | RESET
-            | IDLE 
+            | IDLE
 ;
 
 path_states
@@ -423,7 +423,7 @@ path_states
 ;
 
 piomap_rec
-            : 
+            :
             | piomap_rec direction IDENTIFIER
 ;
 

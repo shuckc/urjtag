@@ -1,5 +1,5 @@
 /*
- * $Id: jedec.h 1510 2009-04-21 17:29:52Z rfhh $
+ * $Id$
  *
  * Copyright (C) 2003 Matan Ziv-Av
  *
