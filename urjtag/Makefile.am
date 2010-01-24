@@ -46,6 +46,9 @@ DIST_SUBDIRS = \
 
 EXTRA_DIST = \
 	Makefile.rules \
+	MAINTAINERS \
+	sysdep.h \
+	urjtag.i \
 	UrJTAG.nsi \
 	tools/config.rpath
 

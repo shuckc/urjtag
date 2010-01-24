@@ -26,6 +26,8 @@ include $(top_srcdir)/Makefile.rules
 noinst_LTLIBRARIES = libcmd.la
 
 libcmd_la_SOURCES = \
+	cmd.h \
+	cmd_list.h \
 	cmd_frequency.c \
 	cmd_cable.c \
 	cmd_reset.c \

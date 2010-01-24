@@ -28,6 +28,7 @@ noinst_LTLIBRARIES = libbus.la
 libbus_la_SOURCES = \
 	buses.c \
 	buses.h \
+	buses_list.h \
 	generic_bus.c \
 	generic_bus.h \
 	pxa2x0_mc.h \

@@ -34,12 +34,19 @@ libtap_la_SOURCES = \
 	discovery.c \
 	idcode.c \
 	parport.c \
+	parport.h \
+	parport_list.h \
 	usbconn.c \
+	usbconn.h \
+	usbconn_list.h \
 	cable.c \
+	cable.h \
+	cable_list.h \
 	cable/generic.h \
 	cable/generic.c \
 	cable/generic_usbconn.h \
 	cable/generic_usbconn.c \
+	cable/generic_usbconn_list.h \
 	cable/generic_parport.h \
 	cable/generic_parport.c \
 	cable/cmd_xfer.h \
@@ -114,7 +121,8 @@ endif
 
 if ENABLE_CABLE_FT2232
 libtap_la_SOURCES += \
-	cable/ft2232.c
+	cable/ft2232.c \
+	cable/ft2232_list.h
 endif
 
 if ENABLE_CABLE_TS7800
@@ -125,7 +133,7 @@ endif
 
 if HAVE_LIBUSB
 libtap_la_SOURCES += \
-	usbconn/libusb.c
+	usbconn/libusb.c \
 	usbconn/libusb.h
 endif
 

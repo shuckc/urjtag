@@ -27,12 +27,18 @@ noinst_LTLIBRARIES = libflash.la
 
 libflash_la_SOURCES = \
 	amd.c \
+	amd.h \
 	amd_flash.c \
 	cfi.c \
+	cfi.h \
 	detectflash.c \
 	flash.c \
+	flash.h \
 	intel.c \
-	jedec.c
+	intel.h \
+	jedec.c \
+	jedec.h \
+	mic.h
 
 if JEDEC_EXP
 libflash_la_SOURCES += \
