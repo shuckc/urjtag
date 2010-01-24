@@ -293,7 +293,7 @@ usbconn_ftdi_connect (urj_usbconn_cable_t *template,
     /* do a test open with the specified cable paramters,
        alternatively we could use libusb to detect the presence of the
        specified USB device */
-    if (usbconn_ftdi_common_open (c, URJ_LOG_LEVEL_DETAIL) != URJ_STATUS_OK)
+    if (usbconn_ftdi_common_open (c, URJ_LOG_LEVEL_COMM) != URJ_STATUS_OK)
     {
         usbconn_ftdi_free (c);
         return NULL;

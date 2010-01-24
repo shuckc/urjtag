@@ -113,12 +113,12 @@ usbconn_ftd2xx_flush (ftd2xx_param_t *p)
     if (!p->fc)
         return -1;
 
-    urj_log (URJ_LOG_LEVEL_DETAIL, "%sflush begin:\n", module);
-    urj_log (URJ_LOG_LEVEL_DETAIL, "  send_buf_len %d, send_buffered %d\n",
+    urj_log (URJ_LOG_LEVEL_COMM, "%sflush begin:\n", module);
+    urj_log (URJ_LOG_LEVEL_COMM, "  send_buf_len %d, send_buffered %d\n",
              p->send_buf_len, p->send_buffered);
-    urj_log (URJ_LOG_LEVEL_DETAIL, "  recv_buf_len %d, to_recv %d\n",
+    urj_log (URJ_LOG_LEVEL_COMM, "  recv_buf_len %d, to_recv %d\n",
              p->recv_buf_len, p->to_recv);
-    urj_log (URJ_LOG_LEVEL_DETAIL, "  recv_write_idx %d, recv_read_idx %d\n",
+    urj_log (URJ_LOG_LEVEL_COMM, "  recv_write_idx %d, recv_read_idx %d\n",
              p->recv_write_idx, p->recv_read_idx);
 
     if (p->send_buffered == 0)
@@ -174,7 +174,7 @@ usbconn_ftd2xx_flush (ftd2xx_param_t *p)
         p->recv_write_idx += recvd;
     }
 
-    urj_log (URJ_LOG_LEVEL_DETAIL,
+    urj_log (URJ_LOG_LEVEL_COMM,
              "%sflush end: status %ld, xferred %ld, recvd %ld\n", module,
             status, xferred, recvd);
 
@@ -191,7 +191,7 @@ usbconn_ftd2xx_read (urj_usbconn_t *conn, uint8_t *buf, int len)
     FT_STATUS status = FT_OK;
     DWORD recvd = 0;
 
-    urj_log (URJ_LOG_LEVEL_DETAIL, "%sread begin: len %d\n", module, len);
+    urj_log (URJ_LOG_LEVEL_COMM, "%sread begin: len %d\n", module, len);
 
     if (!p->fc)
         return -1;
@@ -228,7 +228,7 @@ usbconn_ftd2xx_read (urj_usbconn_t *conn, uint8_t *buf, int len)
                                ftd2xx_status_string(status));
     }
 
-    urj_log (URJ_LOG_LEVEL_DETAIL, "%sread end  : status %ld, length %d\n",
+    urj_log (URJ_LOG_LEVEL_COMM, "%sread end  : status %ld, length %d\n",
              module, status, cpy_len + len);
 
     return status != FT_OK ? -1 : cpy_len + len;
@@ -245,7 +245,7 @@ usbconn_ftd2xx_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
     if (!p->fc)
         return -1;
 
-    urj_log (URJ_LOG_LEVEL_DETAIL, "%swrite begin: len %d, recv %d\n", module,
+    urj_log (URJ_LOG_LEVEL_COMM, "%swrite begin: len %d, recv %d\n", module,
              len, recv);
 
     /* this write function will try to buffer write data
@@ -283,7 +283,7 @@ usbconn_ftd2xx_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
             xferred = usbconn_ftd2xx_flush (p);
         }
 
-        urj_log (URJ_LOG_LEVEL_DETAIL, "%swrite end: xferred %d\n", module,
+        urj_log (URJ_LOG_LEVEL_COMM, "%swrite end: xferred %d\n", module,
                  xferred);
 
         return xferred < 0 ? -1 : len;
@@ -347,7 +347,7 @@ usbconn_ftd2xx_connect (urj_usbconn_cable_t *template,
     /* do a test open with the specified cable paramters,
        there's no other way to detect the presence of the specified
        USB device */
-    if (usbconn_ftd2xx_common_open (c, URJ_LOG_LEVEL_DETAIL) != URJ_STATUS_OK)
+    if (usbconn_ftd2xx_common_open (c, URJ_LOG_LEVEL_COMM) != URJ_STATUS_OK)
     {
         usbconn_ftd2xx_free (c);
         return NULL;
