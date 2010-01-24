@@ -94,6 +94,8 @@
     src/tap/usbconn/libusb.c: Drop redundant #ifdef protection as the Makefile
     already has conditional logic.
 
+  * src/flash/flash.h: Delete duplicate urj_flash_detectflash prototype.
+
 2010-01-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bit.c (cmd_bit_print_params): Fix strncat length handling.

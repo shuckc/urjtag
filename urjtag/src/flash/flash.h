@@ -52,9 +52,6 @@ struct URJ_FLASH_CFI_ARRAY
     urj_flash_cfi_chip_t **cfi_chips;
 };
 
-/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-int urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr);
-
 extern urj_flash_cfi_array_t *urj_flash_cfi_array;
 
 #endif /* URJ_FLASH_H */
