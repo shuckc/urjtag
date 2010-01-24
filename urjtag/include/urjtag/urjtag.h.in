@@ -61,7 +61,6 @@
 #include "tap_state.h"
 #if HAVE_LIBUSB
 #include "usbconn.h"
-#include "xpcu.h"
 #endif
 
 #endif /* URJ_URJTAG_H */

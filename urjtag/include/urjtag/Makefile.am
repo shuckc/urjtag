@@ -54,5 +54,4 @@ pkginclude_HEADERS = \
 	svf.h \
 	types.h \
 	urjtag.h \
-	usbconn.h \
-	xpcu.h
+	usbconn.h
