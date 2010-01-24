@@ -593,7 +593,7 @@ usbconn_ftd2xx_free (urj_usbconn_t *conn)
 
 /* ---------------------------------------------------------------------- */
 
-urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver = {
+const urj_usbconn_driver_t urj_tap_usbconn_ftd2xx_driver = {
     "ftd2xx",
     usbconn_ftd2xx_connect,
     usbconn_ftd2xx_free,

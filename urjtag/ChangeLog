@@ -1,3 +1,7 @@
+2010-01-24  Arnim Laeuger  <arniml>
+
+  * src/tap/usbconn/libftd2xx.c: const urj_tap_usbconn_ftd2xx_driver
+
 2010-01-23  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd.h, src/cmd/cmd_list.h, src/cmd/cmd_cmd.c: Unify the list of
