@@ -9,6 +9,9 @@
   * include/urjtag/xpcu.h: Remove unused header.
   * include/urjtag/urjtag.h.in, include/urjtag/Makefile.am: Remove xpcu.h.
 
+  * src/tap/detect.c (urj_tap_detect_parts): Only pad hex output to the actual
+    register size rather than always 64 bits.
+
 2010-01-24  Arnim Laeuger  <arniml>
 
   * src/tap/usbconn/libftd2xx.c: const urj_tap_usbconn_ftd2xx_driver
