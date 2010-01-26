@@ -48,6 +48,7 @@ int
 urj_parse_line (urj_chain_t *chain, char *line)
 {
     int l, i, r, tcnt;
+    int escape = 0, quote_single = 0, quote_double = 0;
     char **a;
     char *c, *d;
     char *sline;
@@ -84,10 +85,32 @@ urj_parse_line (urj_chain_t *chain, char *line)
         if (*c == '\0' || *c == '#')
             break;
 
-        /* copy the meat (non-space, non-NUL) */
-        while (!isspace (*c) && *c != '\0')
+        /* copy the meat (non-space, non-NUL), consider escape and quotes */
+        while ((!isspace (*c)
+                || escape
+                || quote_single
+                || quote_double) && *c != '\0')
         {
-            *d++ = *c++;
+            if (*c == '\'' && !escape && !quote_double)
+            {
+                quote_single ^= 1;
+                c++;
+            }
+            else if (*c == '"' && !escape && !quote_single)
+            {
+                quote_double ^= 1;
+                c++;
+            }
+            else if (*c == '\\' && !escape)
+            {
+                escape = 1;
+                c++;
+            }
+            else
+            {
+                escape = 0;
+                *d++ = *c++;
+            }
         }
         /* mark the end to the destination string */
         *d++ = '\0';

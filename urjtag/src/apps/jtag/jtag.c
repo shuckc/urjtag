@@ -563,6 +563,9 @@ main (int argc, char *const argv[])
 
 #ifdef HAVE_LIBREADLINE
 #ifdef HAVE_READLINE_COMPLETION
+    rl_completer_quote_characters = "\"";
+    rl_filename_completion_desired = 1;
+    rl_filename_quote_characters = " ";
     rl_attempted_completion_function = urj_cmd_completion;
 #endif
 #endif
