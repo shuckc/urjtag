@@ -35,6 +35,8 @@
   * src/tap/detect.c (urj_tap_detect_parts): Do part initialization.
     Initialize main_part.
 
+  * include/urjtag/bfin.h: Tweak header ifdef protection.
+
 2010-01-24  Arnim Laeuger  <arniml>
 
   * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c:

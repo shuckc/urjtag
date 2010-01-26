@@ -16,8 +16,8 @@
  * 02111-1307, USA.
  */
 
-#ifndef BFIN_H
-#define BFIN_H
+#ifndef URJ_BFIN_H
+#define URJ_BFIN_H
 
 #include <stdint.h>
 
@@ -364,4 +364,4 @@ uint32_t gen_prefetch (enum core_regnum addr);
 uint32_t gen_prefetch_pm (enum core_regnum addr);
 uint32_t gen_jump_reg (enum core_regnum addr);
 
-#endif /* BFIN_H */
+#endif /* URJ_BFIN_H */
