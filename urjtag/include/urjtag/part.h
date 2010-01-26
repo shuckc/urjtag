@@ -31,6 +31,12 @@
 #define URJ_PART_PART_MAXLEN            20
 #define URJ_PART_STEPPING_MAXLEN         8
 
+struct URJ_PART_PARAMS
+{
+    void (*free) (void *);
+    void *data;
+};
+
 struct URJ_PART
 {
     urj_tap_register_t *id;
@@ -46,6 +52,7 @@ struct URJ_PART
     urj_data_register_t *data_registers;
     int boundary_length;
     urj_bsbit_t **bsbits;
+    urj_part_params_t *params;
 };
 
 urj_part_t *urj_part_alloc (const urj_tap_register_t *id);
@@ -86,6 +93,20 @@ urj_part_instruction_t *urj_part_instruction_define (urj_part_t *part,
                                                      const char *code,
                                                      const char *data_register);
 
+typedef void (*urj_part_init_func_t) (urj_part_t *);
+
+struct URJ_PART_INIT
+{
+    char part[URJ_PART_PART_MAXLEN + 1];
+    urj_part_init_func_t init;
+    urj_part_init_t *next;
+};
+
+/* List of registered part initializers.  */
+extern urj_part_init_t *urj_part_inits;
+
+void urj_part_init_register (char *part, urj_part_init_func_t init);
+urj_part_init_func_t urj_part_find_init (char *part);
 
 /**
  * parts

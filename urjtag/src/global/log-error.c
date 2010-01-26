@@ -131,6 +131,8 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_BSDL_VHDL:           return "vhdl subsystem";
     case URJ_ERROR_BSDL_BSDL:           return "bsdl subsystem";
 
+    case URJ_ERROR_BFIN:                return "blackfin";
+
     case URJ_ERROR_UNIMPLEMENTED:       return "unimplemented";
     }
 

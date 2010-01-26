@@ -24,6 +24,7 @@
 include $(top_srcdir)/Makefile.rules
 
 pkginclude_HEADERS = \
+	bfin.h \
 	bitmask.h \
 	bsbit.h \
 	bsdl.h \

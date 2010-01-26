@@ -1,3 +1,40 @@
+2010-01-26  Jie Zhang  <jie.zhang@analog.com>
+            Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac (AC_CONFIG_FILES): Add src/bfin/Makefile.
+  * include/urjtag/Makefile.am (pkginclude_HEADERS): Add bfin.h.
+  * include/urjtag/bfin.h: New file.
+  * include/urjtag/chain.h (struct URJ_CHAIN): Add main_part.
+  * include/urjtag/error.h (enum URJ_ERROR): Add URJ_ERROR_BFIN.
+  * include/urjtag/part.h (struct URJ_PART_PARAMS): Define.
+    (struct URJ_PART): Add params.
+    (urj_part_init_func_t): Typedef.
+    (struct URJ_PART_INIT): Define.
+    (urj_part_inits): Declare.
+    (urj_part_init_register): Declare.
+    (urj_part_find_init): Declare.
+  * include/urjtag/types.h (urj_part_params_t): Typedef.
+    (urj_part_init_t): Typedef.
+  * src/Makefile.am (SUBDIRS): Add bfin.
+    (liburjtag_la_LIBADD): Add bfin/libbfin.la.
+  * src/bfin/Makefile.am: New file.
+  * src/bfin/bfin-part-bfin.c: New file.
+  * src/bfin/bfin-part.c: New file.
+  * src/bfin/bfin-part.h: New file.
+  * src/bfin/bfin.c: New file.
+  * src/bfin/insn-gen.c: New file.
+  * src/cmd/Makefile.am (libcmd_la_SOURCES): Add cmd_bfin.c.
+  * src/cmd/cmd_bfin.c: New file.
+  * src/cmd/cmd_list.h: Add _URJ_CMD(bfin).
+  * src/global/log-error.c (urj_error_string): Handle URJ_ERROR_BFIN.
+  * src/part/part.c (urj_part_inits): Define.
+    (urj_part_alloc): Initialize params.
+    (urj_part_free): Free params.
+    (urj_part_init_register): New.
+    (urj_part_find_init): New.
+  * src/tap/detect.c (urj_tap_detect_parts): Do part initialization.
+    Initialize main_part.
+
 2010-01-24  Arnim Laeuger  <arniml>
 
   * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c:

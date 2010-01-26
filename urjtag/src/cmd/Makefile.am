@@ -64,7 +64,8 @@ libcmd_la_SOURCES = \
 	cmd_include.c \
 	cmd_addpart.c \
 	cmd_cmd.c \
-	cmd_usleep.c
+	cmd_usleep.c \
+	cmd_bfin.c
 
 if ENABLE_SVF
 libcmd_la_SOURCES += cmd_svf.c

@@ -44,6 +44,7 @@ struct URJ_CHAIN
     int active_part;
     urj_cable_t *cable;
     urj_bsdl_globs_t bsdl;
+    int main_part;
 };
 
 urj_chain_t *urj_tap_chain_alloc (void);

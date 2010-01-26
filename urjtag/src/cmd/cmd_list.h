@@ -75,5 +75,6 @@ _URJ_CMD(svf)
 _URJ_CMD(bsdl)
 #endif
 _URJ_CMD(debug)
+_URJ_CMD(bfin)
 
 #undef _URJ_CMD

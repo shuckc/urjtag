@@ -37,6 +37,8 @@ typedef struct URJ_PARTS urj_parts_t;
 typedef struct URJ_PART_SIGNAL urj_part_signal_t;
 typedef struct URJ_PART_SALIAS urj_part_salias_t;
 typedef struct URJ_PART_INSTRUCTION urj_part_instruction_t;
+typedef struct URJ_PART_PARAMS urj_part_params_t;
+typedef struct URJ_PART_INIT urj_part_init_t;
 typedef struct URJ_DATA_REGISTER urj_data_register_t;
 typedef struct URJ_BSBIT urj_bsbit_t;
 typedef struct URJ_TAP_REGISTER urj_tap_register_t;

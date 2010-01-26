@@ -1,5 +1,5 @@
 #
-# $Id$
+# $Id: Makefile.am 506 2003-08-13 10:05:15Z telka $
 #
 # Copyright (C) 2002 ETC s.r.o.
 #
@@ -23,61 +23,12 @@
 
 include $(top_srcdir)/Makefile.rules
 
-SUBDIRS = \
-	flash \
-	lib \
-	tap \
-	part \
-	bfin \
-	bus \
-	cmd \
-	global
+noinst_LTLIBRARIES = libbfin.la
 
-if ENABLE_SVF
-SUBDIRS += svf
-endif
-
-if ENABLE_BSDL
-SUBDIRS += bsdl
-endif
-
-if ENABLE_JIM
-SUBDIRS += jim
-endif
-
-lib_LTLIBRARIES = liburjtag.la
-liburjtag_la_LDFLAGS = -version-info 0:0:0
-
-liburjtag_la_SOURCES =
-
-liburjtag_la_LIBADD = \
-	tap/libtap.la \
-	part/libpart.la \
-	lib/libjtaglib.la \
-	flash/libflash.la \
-	bfin/libbfin.la \
-	bus/libbus.la \
-	cmd/libcmd.la \
-	global/libglobal.la \
-	-lm \
-	@FTD2XXLIB@ \
-	@LIBINTL@
-
-if ENABLE_SVF
-liburjtag_la_LIBADD += svf/libsvf.la
-liburjtag_la_LIBADD += svf/libsvf_flex.la
-endif
-
-if ENABLE_BSDL
-liburjtag_la_LIBADD +=  bsdl/libbsdl.la
-liburjtag_la_LIBADD +=  bsdl/libbsdl_flex.la
-endif
-
-if ENABLE_JIM
-liburjtag_la_LIBADD += jim/libjim.la
-endif
-
-localedir = $(datadir)/locale
-INCLUDES = -DLOCALEDIR=\"$(localedir)\"
+libbfin_la_SOURCES = \
+	insn-gen.c \
+	bfin.c \
+	bfin-part.c \
+	bfin-part-bfin.c
 
 AM_CFLAGS = $(WARNINGCFLAGS)

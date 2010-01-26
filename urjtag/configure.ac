@@ -76,6 +76,7 @@ AC_CONFIG_FILES(
 	src/global/Makefile
 	src/apps/jtag/Makefile
 	src/apps/bsdl2jtag/Makefile
+	src/bfin/Makefile
 	po/Makefile.in
 )
 

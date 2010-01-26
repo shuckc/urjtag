@@ -68,6 +68,8 @@ typedef enum URJ_ERROR
     URJ_ERROR_BSDL_VHDL,
     URJ_ERROR_BSDL_BSDL,
 
+    URJ_ERROR_BFIN,
+
     URJ_ERROR_UNIMPLEMENTED,
 }
 urj_error_t;

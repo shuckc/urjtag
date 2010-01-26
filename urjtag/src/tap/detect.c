@@ -253,6 +253,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
         urj_tap_register_t *key;
         struct id_record idr;
         char *p;
+        urj_part_init_func_t part_init_func;
 
         urj_tap_shift_register (chain, one, br, URJ_CHAIN_EXITMODE_SHIFT);
         if (urj_tap_register_compare (one, br) == 0)
@@ -392,7 +393,19 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
         if (part->active_instruction == NULL)
             part->active_instruction = urj_part_find_instruction (part,
                                                                   "IDCODE");
+        
+        /* Do part specific initialization.  */
+        part_init_func = urj_part_find_init (part->part);
+        if (part_init_func)
+        {
+            part->params = (urj_part_params_t *) malloc (sizeof (urj_part_params_t));
+            (*part_init_func) (part);
+        }
+        else
+            part->params = NULL;
     }
+
+    chain->main_part = ps->len - 1;
 
     for (i = 0; i < 32; i++)
     {

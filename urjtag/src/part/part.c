@@ -35,6 +35,8 @@
 #include <urjtag/data_register.h>
 #include <urjtag/bsbit.h>
 
+urj_part_init_t *urj_part_inits = NULL;
+
 /* part */
 
 urj_part_t *
@@ -61,6 +63,7 @@ urj_part_alloc (const urj_tap_register_t *id)
     p->data_registers = NULL;
     p->boundary_length = 0;
     p->bsbits = NULL;
+    p->params = NULL;
 
     return p;
 }
@@ -115,6 +118,10 @@ urj_part_free (urj_part_t *p)
     for (i = 0; i < p->boundary_length; i++)
         urj_part_bsbit_free (p->bsbits[i]);
     free (p->bsbits);
+
+    if (p->params && p->params->free)
+        p->params->free (p->params->data);
+    free (p->params);
 
     free (p);
 }
@@ -474,4 +481,28 @@ urj_part_parts_print (urj_log_level_t ll, urj_parts_t *ps)
     }
 
     return URJ_STATUS_OK;
+}
+
+void
+urj_part_init_register (char *part, urj_part_init_func_t init)
+{
+  urj_part_init_t *pi;
+
+  pi = (urj_part_init_t *) malloc (sizeof (urj_part_init_t));
+  strncpy (pi->part, part, URJ_PART_PART_MAXLEN);
+  pi->init = init;
+  pi->next = urj_part_inits;
+  urj_part_inits = pi;
+}
+
+urj_part_init_func_t
+urj_part_find_init (char *part)
+{
+  urj_part_init_t *pi;
+
+  for (pi = urj_part_inits; pi; pi = pi->next)
+    if (strcmp (pi->part, part) == 0)
+      return pi->init;
+
+  return NULL;
 }
