@@ -387,11 +387,16 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                         int ret;
 
                         /* TODO  Pass -mcpu= to gas.  */
-                        asprintf (&tmp_buf,
-                                  "bfin-%3$s-as --version >/dev/null 2>&1 || exit $?;"
-                                  "echo '%1$s' | bfin-%3$s-as - -o \"%2$s\""
-                                  " && bfin-%3$s-objcopy -O binary \"%2$s\"",
-                                  insns_string, tmpfile, tuples[t]);
+                        ret = asprintf (&tmp_buf,
+                                        "bfin-%3$s-as --version >/dev/null 2>&1 || exit $?;"
+                                        "echo '%1$s' | bfin-%3$s-as - -o \"%2$s\""
+                                        " && bfin-%3$s-objcopy -O binary \"%2$s\"",
+                                        insns_string, tmpfile, tuples[t]);
+                        if (ret == -1)
+                        {
+                            urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("asprintf() failed"));
+                            goto execute_cleanup;
+                        }
                         ret = system (tmp_buf);
                         free (tmp_buf);
                         if (WIFEXITED(ret))

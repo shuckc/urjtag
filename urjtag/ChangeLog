@@ -37,6 +37,8 @@
 
   * include/urjtag/bfin.h: Tweak header ifdef protection.
 
+  * src/cmd/cmd_bfin.c: Fix gcc warnings about unused asprintf() return.
+
 2010-01-24  Arnim Laeuger  <arniml>
 
   * src/tap/usbconn/libftdi.c, src/tap/usbconn/libftd2xx.c:
