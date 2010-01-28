@@ -1,7 +1,5 @@
 #
-# $Id$
-#
-# Copyright (C) 2002 ETC s.r.o.
+# $Id: STEPPINGS
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,14 +16,10 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
+# Documentation:
+# [1] Freescale, "Freescale MPC837x Users Guide"
+#
 
-# bits 27-12 of the Device Identification Register
-0000000000010001 mpc5200	mpc5200
-0001100011100111 mpc8377	mpc8377
-0001100011100110 mpc8377	mpc8377e
-0001100011100101 mpc8378	mpc8378
-0001100011100100 mpc8378	mpc8378e
-0001100011100011 mpc8379	mpc8379
-0001100011100010 mpc8379	mpc8379e
-
-
+# bits 31-28 of the Device Identification Register
+0000	mpc8379		0
+0010	mpc8379		A

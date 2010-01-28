@@ -1,3 +1,12 @@
+2010-01-28  Arnim Laeuger  <arniml>
+
+  * src/bus/mpc837x.c, src/bus/buses_list.h, src/bus/Makefile.am,
+    configure.ac, data/freescale/mpc8377/mpc8377, data/freescale/mpc8377/STEPPINGS,
+    data/freescale/PARTS, data/freescale/mpc8378/mpc8378, data/freescale/mpc8378/STEPPINGS,
+    data/freescale/mpc8379/mpc8379, data/freescale/mpc8379/STEPPINGS, data/Makefile.am,
+    po/POTFILES.in, THANKS:
+    freescale mpc837x bus driver and related jtag descriptions (Andrzej Jalowiecki)
+
 2010-01-26  Arnim Laeuger  <arniml>
 
   * src/apps/jtag/jtag.c: quote whitespace in filenames with " in

@@ -27,6 +27,7 @@ src/bus/jopcyc.c
 src/bus/lh7a400.c
 src/bus/mpc5200.c
 src/bus/mpc824x.c
+src/bus/mpc837x.c
 src/bus/ppc405ep.c
 src/bus/ppc440gx_ebc8.c
 src/bus/prototype.c

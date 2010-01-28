@@ -477,7 +477,7 @@ AC_DEFUN([CHECK_DRIVER], [
 # Enable bus drivers
 AC_DEFUN([DEF_ENABLE_BUSDRIVERS], [\
 arm9tdmi au1500 avr32 bcm1250 bf526_ezkit bf527_ezkit bf533_stamp bf533_ezkit bf537_stamp bf537_ezkit bf538f_ezkit bf548_ezkit bf561_ezkit bscoach ejtag  ejtag_dma \
-fjmem ixp425 ixp435 ixp465 jopcyc h7202 lh7a400  mpc5200 mpc824x ppc405ep ppc440gx_ebc8 prototype pxa2x0 pxa27x \
+fjmem ixp425 ixp435 ixp465 jopcyc h7202 lh7a400  mpc5200 mpc824x mpc837x ppc405ep ppc440gx_ebc8 prototype pxa2x0 pxa27x \
 s3c4510 sa1110 sh7727 sh7750r sh7751r sharc_21065L sharc_21369_ezkit slsup3 tx4925 zefant_xs3])
 AC_ARG_ENABLE(bus,
 [AS_HELP_STRING([--enable-bus], [Enable default set or specific bus drivers:])]
@@ -520,6 +520,7 @@ CHECK_BUS([h7202])
 CHECK_BUS([lh7a400])
 CHECK_BUS([mpc5200])
 CHECK_BUS([mpc824x])
+CHECK_BUS([mpc837x])
 CHECK_BUS([ppc405ep])
 CHECK_BUS([ppc440gx_ebc8])
 CHECK_BUS([prototype])
