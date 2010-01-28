@@ -1,3 +1,8 @@
+2010-01-28  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/cmd_bfin.c: Replace one-insn-a-file option with dynamic instruction
+    counting so multi-instructions are properly parsed.
+
 2010-01-28  Arnim Laeuger  <arniml>
 
   * src/bus/mpc837x.c, src/bus/buses_list.h, src/bus/Makefile.am,

@@ -34,18 +34,6 @@
 
 #include "cmd.h"
 
-/* For "bfin execute", Blackfin assembler assembles instruction(s)
-   into a temporary object file. When this variable is non-zero, there
-   should be only one instruction in the object file. For example,
-   assembler assembles one instruction a time, which is how we do now.
-
-   Blackfin GAS rounds the section size to 4 bytes. Usually we don't
-   want the padding bytes to be executed as a NOP. With this variable
-   set, only the first instruction in the object file will be
-   executed.  */
-
-int bfin_one_insn_a_file = 1;
-
 #define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
 
 static int
@@ -61,72 +49,6 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                        "#parameters should be >= 2, not %d",
                        num_params);
         return URJ_STATUS_FAIL;
-    }
-
-    /* These commands don't need cable or parts.  */
-
-    if (strcmp (params[1], "set") == 0)
-    {
-        if (num_params != 4)
-        {
-            urj_error_set (URJ_ERROR_BFIN,
-                           "'bfin set' requires 2 parameters, not %d",
-                           num_params - 2);
-            return URJ_STATUS_FAIL;
-        }
-
-        if (strcmp (params[2], "one-insn-a-file") == 0)
-        {
-            if (strcmp (params[3], "0") == 0)
-                bfin_one_insn_a_file = 0;
-            else if (strcmp (params[3], "1") == 0)
-                bfin_one_insn_a_file = 1;
-            else
-            {
-                urj_error_set (URJ_ERROR_BFIN,
-                               "bad value for one-insn-a-file '%s'",
-                               params[3]);
-                return URJ_STATUS_FAIL;
-            }
-        }
-        else
-        {
-            urj_error_set (URJ_ERROR_BFIN,
-                           "unknown set variable '%s'",
-                           params[2]);
-            return URJ_STATUS_FAIL;
-        }
-
-        return URJ_STATUS_OK;
-    }
-    else if (strcmp (params[1], "show") == 0)
-    {
-        int found = 0;
-
-        if (num_params > 3)
-        {
-            urj_error_set (URJ_ERROR_BFIN,
-                           "'bfin show' requires 0 or 1 parameter, not %d",
-                           num_params - 2);
-            return URJ_STATUS_FAIL;
-        }
-
-        if (num_params == 2 || strcmp (params[2], "one-insn-a-file") == 0)
-        {
-            found = 1;
-            urj_log (URJ_LOG_LEVEL_NORMAL,
-                     "one-insn-a-file: %d\n", bfin_one_insn_a_file);
-        }
-
-        if (!found && num_params == 3)
-        {
-            urj_error_set (URJ_ERROR_BFIN,
-                           "unknown set variable '%s'",
-                           params[2]);
-            return URJ_STATUS_FAIL;
-        }
-
-        return URJ_STATUS_OK;
     }
 
     /* The remaining commands require cable or parts.  */
@@ -426,7 +348,16 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                     if (fp == NULL)
                         goto execute_cleanup;
 
-                    while (fread (raw_insn, 1, 2, fp) == 2)
+                    /* Figure out how many instructions there are */
+                    t = 0;
+                    p = insns_string;
+                    while ((p = strchr(p, ';')) != NULL)
+                    {
+                        ++t;
+                        ++p;
+                    }
+
+                    while (t-- && fread (raw_insn, 1, 2, fp) == 2)
                     {
                         uint16_t iw = raw_insn[0] | (raw_insn[1] << 8);
                         uint64_t n = iw;
@@ -460,9 +391,6 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                         (*last)->type = BFIN_INSN_NORMAL;
                         (*last)->next = NULL;
                         last = &((*last)->next);
-
-                        if (bfin_one_insn_a_file)
-                            break;
                     }
 
                     fclose (fp);
@@ -558,13 +486,11 @@ cmd_bfin_help (void)
              _("Usage: %s execute INSTRUCTIONs\n"
                "Usage: %s emulation enter|exit|singlestep|status\n"
                "Usage: %s reset [core|system]\n"
-               "Usage: %s set one-insn-a-file VALUE\n"
-               "Usage: %s show [one-insn-a-file]\n"
                "Blackfin specific commands\n"
                "\n"
                "INSTRUCTIONs are a sequence of Blackfin encoded instructions,\n"
                "double quoted assembly statements and [EMUDAT_IN]s\n"),
-             "bfin", "bfin", "bfin", "bfin", "bfin" );
+             "bfin", "bfin", "bfin" );
 }
 
 const urj_cmd_t urj_cmd_bfin = {
