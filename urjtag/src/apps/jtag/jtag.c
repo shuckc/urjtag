@@ -86,11 +86,7 @@ jtag_create_jtagdir (void)
     strcat (jdir, JTAGDIR);
 
     /* Create the directory if it doesn't exists. */
-#ifdef __MINGW32__
-    r = mkdir (jdir);
-#else
     r = mkdir (jdir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-#endif
     if (r == -1)
     {
         if (errno == EEXIST)

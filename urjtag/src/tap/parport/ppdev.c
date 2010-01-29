@@ -27,10 +27,8 @@
 
 #include <stdio.h>
 #include <fcntl.h>
-#ifdef HAVE_STROPTS_H
-#include <stropts.h>
-#endif
 #include <unistd.h>
+#include <sys/ioctl.h>
 #include <linux/ppdev.h>
 #include <linux/ioctl.h>
 

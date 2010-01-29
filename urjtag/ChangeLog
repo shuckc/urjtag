@@ -5,6 +5,11 @@
 
   * configure.ac: Unify calls to AC_CHECK_FUNCS.
 
+  * src/apps/jtag/jtag.c, src/bfin/bfin.c, src/svf/svf.c,
+    src/tap/parport/ppdev.c, src/tap/usbconn/libftd2xx.c,
+    src/tap/usbconn/libftdi.c, src/tap/usbconn/libusb.c, sysdep.h: Unify
+    system checks in the common sysdep.h header.
+
 2010-01-28  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bfin.c: Replace one-insn-a-file option with dynamic instruction

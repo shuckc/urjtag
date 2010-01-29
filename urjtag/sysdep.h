@@ -43,6 +43,10 @@
 #define	ngettext(s,p,n)	s
 #endif
 
+#if __CYGWIN__
+#include <windows.h>
+#endif
+
 #ifdef __MINGW32__
 /* Diff versions of mingw used slightly different names */
 #define NO_W32_PSEUDO_MODIFIERS
@@ -53,10 +57,19 @@
 /* Microsoft uses a different swprintf() than ISO C requires */
 #include <stdio.h>
 #define swprintf _snwprintf
+/* No perms to give to mkdir */
+#include <io.h>
+#define mkdir(path, mode) mkdir(path)
 #endif
 
 #ifndef HAVE_USLEEP
 int usleep (long unsigned usec);
+#endif
+
+#ifndef HAVE_NANOSLEEP
+#include <unistd.h>
+struct timespec { unsigned long tv_sec, tv_nsec; };
+#define nanosleep(req, rem) usleep((req)->tv_sec * 1000 * 1000 + (req)->tv_nsec / 1000)
 #endif
 
 #endif /* SYSDEP_H */
