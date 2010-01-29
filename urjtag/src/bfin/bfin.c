@@ -103,18 +103,6 @@ register_init_value (urj_tap_register_t *tr, uint64_t value)
     return tr;
 }
 
-uint64_t
-register_value (urj_tap_register_t *tr)
-{
-    uint64_t v = 0;
-    int i;
-
-    for (i = 0; i < tr->len; i++)
-        v = (v << 1) | tr->data[i];
-
-    return v;
-}
-
 static int
 bfin_set_scan (urj_part_t *part, int scan)
 {
@@ -466,7 +454,7 @@ chain_emupc_get (urj_chain_t *chain, int save)
             continue;
 
         r = part->active_instruction->data_register->out;
-        BFIN_PART_EMUPC (part) = register_value (r);
+        BFIN_PART_EMUPC (part) = urj_tap_register_get_value (r);
         if (save)
             BFIN_PART_EMUPC_ORIG (part) = BFIN_PART_EMUPC (part);
     }
@@ -486,7 +474,7 @@ part_emupc_get (urj_chain_t *chain, int n, int save)
 
     part = chain->parts->parts[n];
     r = part->active_instruction->data_register->out;
-    BFIN_PART_EMUPC (part) = register_value (r);
+    BFIN_PART_EMUPC (part) = urj_tap_register_get_value (r);
     if (save)
         BFIN_PART_EMUPC_ORIG (part) = BFIN_PART_EMUPC (part);
 
@@ -1043,7 +1031,7 @@ emudat_value (urj_tap_register_t *r)
 {
     uint64_t value;
 
-    value = register_value (r);
+    value = urj_tap_register_get_value (r);
     value >>= (r->len - 32);
 
     return value;

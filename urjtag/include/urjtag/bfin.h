@@ -219,7 +219,6 @@ int part_is_bfin (urj_chain_t *, int);
 void part_bypass (urj_chain_t *, int);
 
 urj_tap_register_t *register_init_value (urj_tap_register_t *, uint64_t);
-uint64_t register_value (urj_tap_register_t *);
 int part_scan_select (urj_chain_t *, int, int);
 int chain_scan_select (urj_chain_t *, int);
 

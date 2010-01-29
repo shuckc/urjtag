@@ -21,10 +21,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
- 
+
 #include <urjtag/part.h>
 #include <urjtag/data_register.h>
 #include <urjtag/part_instruction.h>
+#include <urjtag/tap_register.h>
 #include <urjtag/bfin.h>
 
 /* The helper functions for Blackfin DBGCTL and DBGSTAT operations.  */
@@ -38,7 +39,7 @@ bfin_dbgctl_init (urj_part_t *part, uint16_t v)
 static uint16_t
 bfin_dbgstat_value (urj_part_t *part)
 {
-    return register_value (part->active_instruction->data_register->out);
+    return urj_tap_register_get_value (part->active_instruction->data_register->out);
 }
 
 static uint32_t
