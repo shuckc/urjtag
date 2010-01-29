@@ -110,12 +110,14 @@ else
 	fi
 fi
 
-AC_CHECK_FUNCS(swprintf)
+AC_CHECK_FUNCS(m4_flatten([
+	nanosleep
+	swprintf
+	usleep
+]))
 
 AC_CHECK_FUNC(clock_gettime, [], [ AC_CHECK_LIB(rt, clock_gettime) ])
 
-AC_CHECK_FUNCS(usleep)
-AC_CHECK_FUNCS(nanosleep)
 
 dnl check for sigaction with SA_ONESHOT or SA_RESETHAND
 AC_TRY_COMPILE([#include <signal.h>], [
