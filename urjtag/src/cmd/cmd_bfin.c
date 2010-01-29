@@ -290,7 +290,6 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                         strcasestr(insns_string, "call") ||
                         strcasestr(insns_string, "lsetup"))
                         urj_warning (_("jump/call/lsetup insns may not work in emulation\n"));
-                    
 
                     /* get a temporary file to work with -- a little racy */
                     if (!tmpfile)
