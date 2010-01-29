@@ -3,6 +3,10 @@
   * src/cmd/cmd_bfin.c: Replace one-insn-a-file option with dynamic instruction
     counting so multi-instructions are properly parsed.
 
+  * include/urjtag/tap_register.h, src/tap/register.c: Add new helper functions
+    for setting tap registers based on hex/bit strings.
+  * src/cmd/cmd_dr.c: Drop parsing code in favor of new helper functions.
+
 2010-01-28  Arnim Laeuger  <arniml>
 
   * src/bus/mpc837x.c, src/bus/buses_list.h, src/bus/Makefile.am,

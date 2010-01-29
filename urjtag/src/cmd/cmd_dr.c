@@ -24,6 +24,7 @@
 
 #include <sysdep.h>
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -85,28 +86,9 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
             dir = 1;
         else
         {
-            unsigned int bit;
-            if (strspn (params[1], "01") != strlen (params[1]))
-            {
-                urj_error_set (URJ_ERROR_SYNTAX,
-                               "bit patterns should be 0s and 1s, not '%s'",
-                               params[1]);
-                return URJ_STATUS_FAIL;
-            }
-
-            r = dr->in;
-            if (r->len != strlen (params[1]))
-            {
-                urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-                               _("%s: register length %d mismatch: %zd"),
-                               "dr", r->len, strlen (params[1]));
-                return URJ_STATUS_FAIL;
-            }
-            for (bit = 0; params[1][bit]; bit++)
-            {
-                r->data[r->len - 1 - bit] = (params[1][bit] == '1');
-            }
-
+            int ret = urj_tap_register_set_string (dr->in, params[1]);
+            if (ret != URJ_STATUS_OK)
+                return ret;
             dir = 0;
         }
     }
@@ -115,7 +97,9 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
         r = dr->out;
     else
         r = dr->in;
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("%s\n"), urj_tap_register_get_string (r));
+    urj_log (URJ_LOG_LEVEL_NORMAL, "%s (0x%0*" PRIX64 ")\n",
+             urj_tap_register_get_string (r), r->len / 4,
+             urj_tap_register_get_value (r));
 
     return URJ_STATUS_OK;
 }
@@ -126,12 +110,14 @@ cmd_dr_help (void)
     urj_log (URJ_LOG_LEVEL_NORMAL,
              _("Usage: %s [DIR]\n"
                "Usage: %s BITSTRING\n"
+               "Usage: %s HEXSTRING\n"
                "Display input or output data register content or set current register.\n"
                "\n"
                "DIR           requested data register; possible values: 'in' for\n"
                "              input and 'out' for output; default is 'out'\n"
-               "BITSTRING     set current data register with BITSTRING (e.g. 01010)\n"),
-             "dr", "dr");
+               "BITSTRING     set current data register with BITSTRING (e.g. 01010)\n"
+               "HEXSTRING     set current data register with HEXSTRING (e.g. 0x123)\n"),
+             "dr", "dr", "dr");
 }
 
 const urj_cmd_t urj_cmd_dr = {

@@ -22,6 +22,9 @@
  *
  */
 
+#include <sysdep.h>
+
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -106,6 +109,69 @@ urj_tap_register_fill (urj_tap_register_t *tr, int val)
         memset (tr->data, val & 1, tr->len);
 
     return tr;
+}
+
+int
+urj_tap_register_set_string (urj_tap_register_t *tr, const char *str)
+{
+    if (strncmp (str, "0x", 2) == 0)
+    {
+        /* Hex values */
+        uint64_t val;
+
+        if (sscanf (str, "%"PRIX64, &val) != 1)
+        {
+            urj_error_set (URJ_ERROR_SYNTAX,
+                           _("invalid hex string '%s'"),
+                           str);
+            return URJ_STATUS_FAIL;
+        }
+        return urj_tap_register_set_value (tr, val);
+    }
+    else
+    {
+        /* Bit string */
+        unsigned int bit;
+
+        if (strspn (str, "01") != strlen (str))
+        {
+            urj_error_set (URJ_ERROR_SYNTAX,
+                           _("bit patterns should be 0s and 1s, not '%s'"),
+                           str);
+            return URJ_STATUS_FAIL;
+        }
+        else if (tr->len != strlen (str))
+        {
+            urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
+                           _("register length %d mismatch: %zd"),
+                           tr->len, strlen (str));
+            return URJ_STATUS_FAIL;
+        }
+
+        for (bit = 0; str[bit]; ++bit)
+            tr->data[tr->len - 1 - bit] = (str[bit] == '1');
+
+        return URJ_STATUS_OK;
+    }
+}
+
+int
+urj_tap_register_set_value (urj_tap_register_t *tr, uint64_t val)
+{
+    unsigned int bit;
+
+    if (val >> tr->len)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
+                       _("register value 0x%"PRIX64" will not fit in %d bits"),
+                       val, tr->len);
+        return URJ_STATUS_FAIL;
+    }
+
+    for (bit = 0; bit < tr->len; ++bit)
+        tr->data[tr->len - 1 - bit] = !!(val & (1 << (tr->len - 1 - bit)));
+
+    return URJ_STATUS_OK;
 }
 
 const char *
