@@ -161,8 +161,6 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
 static void
 cmd_cable_help (void)
 {
-    int i, pad;
-
     urj_log (URJ_LOG_LEVEL_NORMAL,
              _("Usage: %s DRIVER [DRIVER_OPTS]\n"
                "Select JTAG cable type.\n"
@@ -174,11 +172,7 @@ cmd_cable_help (void)
                "\n" "List of supported cables:\n"),
              "cable");
 
-    urj_cmd_sort (urj_tap_cable_drivers, pad);
-    for (i = 0; urj_tap_cable_drivers[i]; i++)
-        urj_log (URJ_LOG_LEVEL_NORMAL, "%-*s %s\n", pad + 1,
-                 urj_tap_cable_drivers[i]->name,
-                 _(urj_tap_cable_drivers[i]->description));
+    urj_cmd_show_list (urj_tap_cable_drivers);
 }
 
 const urj_cmd_t urj_cmd_cable = {

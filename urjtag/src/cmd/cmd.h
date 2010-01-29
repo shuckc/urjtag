@@ -42,7 +42,7 @@
 typedef struct
 {
     char *name;
-    char *desc;
+    char *description;
     void (*help) (void);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error, both
      * syntax and library errors */
@@ -52,7 +52,7 @@ typedef struct
 #define _URJ_CMD(cmd) extern const urj_cmd_t urj_cmd_##cmd;
 #include "cmd_list.h"
 
-extern const urj_cmd_t *urj_cmds[];
+extern const urj_cmd_t * const urj_cmds[];
 
 /**
  * Tests if chain has a cable pointer
@@ -72,19 +72,19 @@ int urj_cmd_params (char *params[]);
 int urj_cmd_get_number (const char *s, long unsigned *i);
 
 /**
- * Internal command to help with sorting structures for display
+ * Show a list of structures with name/desc
  */
-int _urj_cmd_alphasort (const void *a, const void *b);
-#define urj_cmd_sort(arr, max_len) \
-	do { \
-		size_t nmemb; \
-		max_len = 0; \
-		for (nmemb = 0; (arr)[nmemb]; ++nmemb) { \
-			int this_len = strlen(*(char **)((arr)[nmemb])); \
-			if (max_len < this_len) \
-				max_len = this_len; \
-		} \
-		qsort (arr, nmemb, sizeof(*arr), _urj_cmd_alphasort); \
-	} while (0)
+#define urj_cmd_show_list(arr) \
+do { \
+    int i, max_len = 0; \
+    for (i = 0; arr[i]; ++i) { \
+        int this_len = strlen(arr[i]->name); \
+        if (max_len < this_len) \
+            max_len = this_len; \
+    } \
+    for (i = 0; arr[i]; ++i) \
+        urj_log (URJ_LOG_LEVEL_NORMAL, "%-*s %s\n", max_len + 1, \
+                 arr[i]->name, _(arr[i]->description)); \
+} while (0)
 
 #endif /* URJ_CMD_H */

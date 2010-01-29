@@ -90,8 +90,6 @@ cmd_initbus_run (urj_chain_t *chain, char *params[])
 static void
 cmd_initbus_help (void)
 {
-    int i, pad;
-
     urj_log (URJ_LOG_LEVEL_NORMAL,
              _("Usage: %s BUSNAME\n"
                "Initialize new bus driver for active part.\n"
@@ -100,11 +98,7 @@ cmd_initbus_help (void)
                "\n" "List of available buses:\n"),
              "initbus");
 
-    urj_cmd_sort (urj_bus_drivers, pad);
-    for (i = 0; urj_bus_drivers[i] != NULL; i++)
-        urj_log (URJ_LOG_LEVEL_NORMAL, "%-*s %s\n", pad + 1,
-                 urj_bus_drivers[i]->name,
-                 _(urj_bus_drivers[i]->description));
+    urj_cmd_show_list (urj_bus_drivers);
 }
 
 const const urj_cmd_t urj_cmd_initbus = {

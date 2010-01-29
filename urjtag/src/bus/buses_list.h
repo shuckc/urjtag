@@ -22,6 +22,11 @@
  *
  */
 
+
+/*
+ * Please keep this list sorted alphabetically
+ */
+
 #ifdef ENABLE_BUS_ARM9TDMI
 _URJ_BUS(arm9tdmi)
 #endif
@@ -40,17 +45,17 @@ _URJ_BUS(bf526_ezkit)
 #ifdef ENABLE_BUS_BF527_EZKIT
 _URJ_BUS(bf527_ezkit)
 #endif
-#ifdef ENABLE_BUS_BF533_STAMP
-_URJ_BUS(bf533_stamp)
-#endif
 #ifdef ENABLE_BUS_BF533_EZKIT
 _URJ_BUS(bf533_ezkit)
 #endif
-#ifdef ENABLE_BUS_BF537_STAMP
-_URJ_BUS(bf537_stamp)
+#ifdef ENABLE_BUS_BF533_STAMP
+_URJ_BUS(bf533_stamp)
 #endif
 #ifdef ENABLE_BUS_BF537_EZKIT
 _URJ_BUS(bf537_ezkit)
+#endif
+#ifdef ENABLE_BUS_BF537_STAMP
+_URJ_BUS(bf537_stamp)
 #endif
 #ifdef ENABLE_BUS_BF538F_EZKIT
 _URJ_BUS(bf538f_ezkit)
@@ -71,6 +76,9 @@ _URJ_BUS(ejtag_dma)
 #ifdef ENABLE_BUS_FJMEM
 _URJ_BUS(fjmem)
 #endif
+#ifdef ENABLE_BUS_H7202
+_URJ_BUS(h7202)
+#endif
 #ifdef ENABLE_BUS_IXP425
 _URJ_BUS(ixp425)
 #endif
@@ -82,9 +90,6 @@ _URJ_BUS(ixp465)
 #endif
 #ifdef ENABLE_BUS_JOPCYC
 _URJ_BUS(jopcyc)
-#endif
-#ifdef ENABLE_BUS_H7202
-_URJ_BUS(h7202)
 #endif
 #ifdef ENABLE_BUS_LH7A400
 _URJ_BUS(lh7a400)
@@ -107,11 +112,11 @@ _URJ_BUS(ppc440gx_ebc8)
 #ifdef ENABLE_BUS_PROTOTYPE
 _URJ_BUS(prototype)
 #endif
-#ifdef ENABLE_BUS_PXA2X0
-_URJ_BUS(pxa2x0)
-#endif
 #ifdef ENABLE_BUS_PXA27X
 _URJ_BUS(pxa27x)
+#endif
+#ifdef ENABLE_BUS_PXA2X0
+_URJ_BUS(pxa2x0)
 #endif
 #ifdef ENABLE_BUS_S3C4510
 _URJ_BUS(s3c4510)

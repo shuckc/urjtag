@@ -22,9 +22,11 @@
  *
  */
 
-#ifdef HAVE_LIBUSB
-_URJ_LIST(libusb)
-#endif
+
+/*
+ * Please keep this list sorted alphabetically
+ */
+
 #ifdef ENABLE_LOWLEVEL_FTD2XX
 _URJ_LIST(ftd2xx)
 _URJ_LIST(ftd2xx_mpsse)
@@ -32,6 +34,9 @@ _URJ_LIST(ftd2xx_mpsse)
 #ifdef ENABLE_LOWLEVEL_FTDI
 _URJ_LIST(ftdi)
 _URJ_LIST(ftdi_mpsse)
+#endif
+#ifdef HAVE_LIBUSB
+_URJ_LIST(libusb)
 #endif
 
 #undef _URJ_LIST

@@ -68,8 +68,6 @@ cmd_eraseflash_run (urj_chain_t *chain, char *params[])
 static void
 cmd_eraseflash_help (void)
 {
-    int i, pad;
-
     urj_log (URJ_LOG_LEVEL_NORMAL,
              _("Usage: %s ADDR BLOCKS\n"
                "Erase flash memory from ADDR.\n"
@@ -81,11 +79,7 @@ cmd_eraseflash_help (void)
                "\n" "Supported Flash Memories:\n"),
              "eraseflash");
 
-    urj_cmd_sort (urj_flash_flash_drivers, pad);
-    for (i = 0; urj_flash_flash_drivers[i]; i++)
-        urj_log (URJ_LOG_LEVEL_NORMAL, "%-*s %s\n", pad + 1,
-                 urj_flash_flash_drivers[i]->name,
-                 _(urj_flash_flash_drivers[i]->description));
+    urj_cmd_show_list (urj_flash_flash_drivers);
 }
 
 const urj_cmd_t urj_cmd_eraseflash = {

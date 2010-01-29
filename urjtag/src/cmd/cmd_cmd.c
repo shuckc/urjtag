@@ -34,7 +34,7 @@
 
 #include "cmd.h"
 
-const urj_cmd_t *urj_cmds[] = {
+const urj_cmd_t * const urj_cmds[] = {
 #define _URJ_CMD(cmd) &urj_cmd_##cmd,
 #include "cmd_list.h"
     NULL                        /* last must be NULL */
@@ -177,14 +177,4 @@ urj_cmd_get_number (const char *s, long unsigned *i)
     urj_error_set (URJ_ERROR_SYNTAX, "not a number: '%s'", s);
 
     return URJ_STATUS_FAIL;
-}
-
-/*
- * We could leverage offsetof() so that we don't assume the name is
- * always the first member, but that requires passing state.
- */
-#define qsort_ptr(p) (**(char ***)p)
-int _urj_cmd_alphasort(const void *a, const void *b)
-{
-	return strcasecmp (qsort_ptr(a), qsort_ptr(b));
 }

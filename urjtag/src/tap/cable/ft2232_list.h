@@ -26,16 +26,16 @@
  *
  */
 
-_URJ_FTDI(ft2232)
 _URJ_FTDI(armusbocd)
+_URJ_FTDI(flyswatter)
+_URJ_FTDI(ft2232)
 _URJ_FTDI(gnice)
 _URJ_FTDI(gniceplus)
 _URJ_FTDI(jtagkey)
 _URJ_FTDI(oocdlinks)
-_URJ_FTDI(turtelizer2)
-_URJ_FTDI(usbtojtagif)
 _URJ_FTDI(signalyzer)
-_URJ_FTDI(flyswatter)
+_URJ_FTDI(turtelizer2)
 _URJ_FTDI(usbscarab2)
+_URJ_FTDI(usbtojtagif)
 
 #undef _URJ_FTDI
