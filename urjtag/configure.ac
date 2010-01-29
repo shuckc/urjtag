@@ -462,170 +462,169 @@ AS_IF([test "x$jedecexp" = xtrue], [
 ])
 
 
-# Macro for driver include check
-AC_DEFUN([CHECK_DRIVER], [
-    AS_IF([echo "$1" | $GREP -q $3], [
-       AC_DEFINE([$4], 1, [define if $3 is enabled])
-       AM_CONDITIONAL([$4], true)
-       $2="${$2}$3 "
-    ], [
-       AM_CONDITIONAL([$4], false)
-    ])
+dnl
+dnl URJ_DRIVER_SET([driver set name],
+dnl                [drivers to enable by default],
+dnl                [drivers to disable by default],
+dnl                [extra code to run before processing user list])
+dnl
+dnl Only the first two arguments are required.  The extra code is useful to
+dnl automatically strip out drivers if required external libraries were not
+dnl found.
+dnl
+AC_DEFUN([URJ_DRIVER_SET], [
+	AC_DEFUN([DEF_ENABLE_DRIVERS], m4_flatten([$2]))
+	AC_DEFUN([DEF_DISABLE_DRIVERS], m4_flatten([$3]))
+	AC_DEFUN([ALL_DRIVERS], DEF_ENABLE_DRIVERS DEF_DISABLE_DRIVERS)
+
+AC_ARG_ENABLE($1,
+[AS_HELP_STRING([--enable-]$1, [Enable default set or specific ]$1[ drivers:])]
+[AS_HELP_STRING([],            ['default' enables:])]
+[AS_HELP_STRING([],DEF_ENABLE_DRIVERS)]
+m4_ifnblank([$3], [
+[AS_HELP_STRING([],            [Disabled by default are:])]
+[AS_HELP_STRING([],DEF_DISABLE_DRIVERS)]
+])dnl
+,
+[AS_CASE([${enableval}],
+    [yes],  [drivers=default],
+    [no],   [drivers=none],
+    [none], [drivers=none],
+            [drivers=`echo ${enableval} | $SED -e 's/,/ /g'`])]
+,
+[drivers=default])
+	# expand 'default' to default enabled $1 drivers
+	drivers=`echo ${drivers} | $SED -e "s/default/DEF_ENABLE_DRIVERS/"`
+	m4_ifnblank([$4], $4)
+
+	enabled_drivers=''
+	m4_foreach_w([x], ALL_DRIVERS, [
+		AC_DEFUN([DRIVER_DEFINE], m4_toupper([ENABLE_]$1[_]x))
+		AS_IF([echo "$drivers" | $GREP -q "]x["], [
+			AC_DEFINE(DRIVER_DEFINE, 1, [define if ]x[ is enabled])
+			AM_CONDITIONAL(DRIVER_DEFINE, true)
+			AS_VAR_APPEND([enabled_drivers], "x ")
+		], [
+			AM_CONDITIONAL(DRIVER_DEFINE, false)
+		])
+	])
+	[enabled_]$1[_drivers]=$enabled_drivers
+	$1[drivers]=$drivers
 ])
+
 
 
 # Enable bus drivers
-AC_DEFUN([DEF_ENABLE_BUSDRIVERS], [\
-arm9tdmi au1500 avr32 bcm1250 bf526_ezkit bf527_ezkit bf533_stamp bf533_ezkit bf537_stamp bf537_ezkit bf538f_ezkit bf548_ezkit bf561_ezkit bscoach ejtag  ejtag_dma \
-fjmem ixp425 ixp435 ixp465 jopcyc h7202 lh7a400  mpc5200 mpc824x mpc837x ppc405ep ppc440gx_ebc8 prototype pxa2x0 pxa27x \
-s3c4510 sa1110 sh7727 sh7750r sh7751r sharc_21065L sharc_21369_ezkit slsup3 tx4925 zefant_xs3])
-AC_ARG_ENABLE(bus,
-[AS_HELP_STRING([--enable-bus], [Enable default set or specific bus drivers:])]
-[AS_HELP_STRING([],             ['default' enables:])]
-[AS_HELP_STRING([],DEF_ENABLE_BUSDRIVERS)]
-,
-[AS_CASE([${enableval}],
-    [yes],  [busdrivers=default],
-    [no],   [busdrivers=none],
-    [none], [busdrivers=none],
-            [busdrivers=`echo ${enableval} | $SED -e 's/,/ /g'`])],
-[busdrivers=default])
-# expand 'default' to default enabled busdrivers
-busdrivers=`echo ${busdrivers} | $SED -e "s/default/DEF_ENABLE_BUSDRIVERS/"`
-#
-enabled_bus_drivers=''
-AC_DEFUN([CHECK_BUS], [CHECK_DRIVER([$busdrivers], [enabled_bus_drivers], [$1], [ENABLE_BUS_]m4_toupper([$1]))])
-CHECK_BUS([arm9tdmi])
-CHECK_BUS([au1500])
-CHECK_BUS([avr32])
-CHECK_BUS([bcm1250])
-CHECK_BUS([bf526_ezkit])
-CHECK_BUS([bf527_ezkit])
-CHECK_BUS([bf533_stamp])
-CHECK_BUS([bf533_ezkit])
-CHECK_BUS([bf537_stamp])
-CHECK_BUS([bf537_ezkit])
-CHECK_BUS([bf538f_ezkit])
-CHECK_BUS([bf548_ezkit])
-CHECK_BUS([bf561_ezkit])
-CHECK_BUS([bscoach])
-CHECK_BUS([ejtag])
-CHECK_BUS([ejtag_dma])
-CHECK_BUS([fjmem])
-CHECK_BUS([ixp425])
-CHECK_BUS([ixp435])
-CHECK_BUS([ixp465])
-CHECK_BUS([jopcyc])
-CHECK_BUS([h7202])
-CHECK_BUS([lh7a400])
-CHECK_BUS([mpc5200])
-CHECK_BUS([mpc824x])
-CHECK_BUS([mpc837x])
-CHECK_BUS([ppc405ep])
-CHECK_BUS([ppc440gx_ebc8])
-CHECK_BUS([prototype])
-CHECK_BUS([pxa2x0])
-CHECK_BUS([pxa27x])
-CHECK_BUS([s3c4510])
-CHECK_BUS([sa1110])
-CHECK_BUS([sh7727])
-CHECK_BUS([sh7750r])
-CHECK_BUS([sh7751r])
-CHECK_BUS([sharc_21065L])
-CHECK_BUS([sharc_21369_ezkit])
-CHECK_BUS([slsup3])
-CHECK_BUS([tx4925])
-CHECK_BUS([zefant_xs3])
+URJ_DRIVER_SET([bus], [
+	arm9tdmi
+	au1500
+	avr32
+	bcm1250
+	bf526_ezkit
+	bf527_ezkit
+	bf533_stamp
+	bf533_ezkit
+	bf537_stamp
+	bf537_ezkit
+	bf538f_ezkit
+	bf548_ezkit
+	bf561_ezkit
+	bscoach
+	ejtag
+	ejtag_dma
+	fjmem
+	ixp425
+	ixp435
+	ixp465
+	jopcyc
+	h7202
+	lh7a400
+	mpc5200
+	mpc824x
+	mpc837x
+	ppc405ep
+	ppc440gx_ebc8
+	prototype
+	pxa2x0
+	pxa27x
+	s3c4510
+	sa1110
+	sh7727
+	sh7750r
+	sh7751r
+	sharc_21065L
+	sharc_21369_ezkit
+	slsup3
+	tx4925
+	zefant_xs3
+])
+
 
 # Enable cable drivers
-AC_DEFUN([DEF_ENABLE_CABLEDRIVERS], [\
-arcom byteblaster dlc5 ea253 ei012 ft2232 igloo jlink keithkoep lattice mpcbdm triton usbblaster wiggler xpc])
-AC_DEFUN([DEF_DISABLE_CABLEDRIVERS], [ep9307 jim ts7800])
-AC_ARG_ENABLE(cable,
-[AS_HELP_STRING([--enable-cable], [Enable default set or specific cable drivers.])]
-[AS_HELP_STRING([],               ['default' enables:])]
-[AS_HELP_STRING([],DEF_ENABLE_CABLEDRIVERS)]
-[AS_HELP_STRING([],               [Disabled by default are:])]
-[AS_HELP_STRING([],DEF_DISABLE_CABLEDRIVERS)]
-,
-[AS_CASE([${enableval}],
-    [yes],  [cabledrivers=default],
-    [no],   [cabledrivers=none],
-    [none], [cabledrivers=none],
-            [cabledrivers=`echo ${enableval} | $SED -e 's/,/ /g'`])],
-[cabledrivers=default])
-# expand 'default' to default enabled cabledrivers
-cabledrivers=`echo ${cabledrivers} | $SED -e "s/default/DEF_ENABLE_CABLEDRIVERS/"`
-# automatically disable cable drivers when a required feature is not available
-AS_IF([test "x$HAVELIBFTDI" != "xyes" -a "x$HAVELIBFTD2XX" != "xyes"], [
-    cabledrivers=`echo ${cabledrivers} | $SED -e "s/ft2232//" -e "s/usbblaster//"`
+URJ_DRIVER_SET([cable], [
+	arcom
+	byteblaster
+	dlc5
+	ea253
+	ei012
+	ft2232
+	igloo
+	jlink
+	keithkoep
+	lattice
+	mpcbdm
+	triton
+	usbblaster
+	wiggler
+	xpc
+],[
+	ep9307
+	jim
+	ts7800
+],[
+	# automatically disable cable drivers when a required feature is not available
+	AS_IF([test "x$HAVELIBFTDI" != "xyes" -a "x$HAVELIBFTD2XX" != "xyes"], [
+		drivers=`echo ${drivers} | $SED -e "s/ft2232//" -e "s/usbblaster//"`
+	])
+	AS_IF([test "x$HAVELIBUSB" != "xyes"], [
+		drivers=`echo ${drivers} | $SED -e "s/jlink//" -e "s/xpc//"`
+	])
 ])
-AS_IF([test "x$HAVELIBUSB" != "xyes"], [
-    cabledrivers=`echo ${cabledrivers} | $SED -e "s/jlink//" -e "s/xpc//"`
+dnl the "fake" jim cable driver is special
+AS_IF([echo "$enabled_cable_drivers" | $GREP -q jim], [
+	AC_DEFINE([ENABLE_JIM], 1, [define if jim is enabled])
+	AM_CONDITIONAL([ENABLE_JIM], true)
+],[
+	AM_CONDITIONAL([ENABLE_JIM], false)
 ])
-#
-enabled_cable_drivers=''
-AC_DEFUN([CHECK_CABLE], [CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [$1], [ENABLE_CABLE_]m4_toupper([$1]))])
-CHECK_CABLE([arcom])
-CHECK_CABLE([byteblaster])
-CHECK_CABLE([dlc5])
-CHECK_CABLE([ea253])
-CHECK_CABLE([ei012])
-CHECK_CABLE([ep9307])
-CHECK_CABLE([ft2232])
-CHECK_CABLE([igloo])
-CHECK_DRIVER([$cabledrivers], [enabled_cable_drivers], [jim], [ENABLE_JIM])
-CHECK_CABLE([jlink])
-CHECK_CABLE([keithkoep])
-CHECK_CABLE([lattice])
-CHECK_CABLE([mpcbdm])
-CHECK_CABLE([triton])
-CHECK_CABLE([usbblaster])
-CHECK_CABLE([wiggler])
-CHECK_CABLE([xpc])
-CHECK_CABLE([ts7800])
 
 
 # Enable lowlevel drivers
-AC_DEFUN([DEF_ENABLE_LOWLEVELDRIVERS], [\
-direct ftdi ftd2xx ppdev ppi])
-AC_ARG_ENABLE(lowlevel,
-[AS_HELP_STRING([--enable-lowlevel], [Enable default set or specific lowlevel drivers:])]
-[AS_HELP_STRING([],                  ['default' enables:])]
-[AS_HELP_STRING([],DEF_ENABLE_LOWLEVELDRIVERS)]
-,
-[AS_CASE([${enableval}],
-    [yes],  [lowleveldrivers=default],
-    [no],   [lowleveldrivers=none],
-    [none], [lowleveldrivers=none],
-            [lowleveldrivers=`echo ${enableval} | $SED -e 's/,/ /g'`])],
-[lowleveldrivers=default])
-# expand 'default' to default enabled lowlevel drivers
-lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/default/DEF_ENABLE_LOWLEVELDRIVERS/"`
-# automatically disable lowlevel drivers when a required feature is not available
-AS_IF([test "x$HAVELIBFTDI" != "xyes"], [
-    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ftdi//"`
+URJ_DRIVER_SET([lowlevel], [
+	direct
+	ftdi
+	ftd2xx
+	ppdev
+	ppi
+],[
+],[
+	# automatically disable lowlevel drivers when a required feature is not available
+	AS_IF([test "x$HAVELIBFTDI" != "xyes"], [
+		drivers=`echo ${drivers} | $SED -e "s/ftdi//"`
+	])
+	AS_IF([test "x$HAVELIBFTD2XX" != "xyes"], [
+		drivers=`echo ${drivers} | $SED -e "s/ftd2xx//"`
+	])
+	AS_IF([test "x$HAVE_LINUX_PPDEV_H" != "xyes"], [
+		drivers=`echo ${drivers} | $SED -e "s/ppdev//"`
+	])
+	AS_IF([test "x$HAVE_DEV_PPBUS_PPI_H" != "xyes"], [
+		drivers=`echo ${drivers} | $SED -e "s/ppi//"`
+	])
+	AS_IF([test "x$HAVE_IOPERM" != "xyes" -a "x$HAVE_I386_SET_IOPERM" != "xyes" -a "x$HAVE_INPOUTXX" != "xyes" ], [
+		drivers=`echo ${drivers} | $SED -e "s/direct//"`
+	])
 ])
-AS_IF([test "x$HAVELIBFTD2XX" != "xyes"], [
-    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ftd2xx//"`
-])
-AS_IF([test "x$HAVE_LINUX_PPDEV_H" != "xyes"], [
-    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ppdev//"`
-])
-AS_IF([test "x$HAVE_DEV_PPBUS_PPI_H" != "xyes"], [
-    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/ppi//"`
-])
-AS_IF([test "x$HAVE_IOPERM" != "xyes" -a "x$HAVE_I386_SET_IOPERM" != "xyes" -a "x$HAVE_INPOUTXX" != "xyes" ], [
-    lowleveldrivers=`echo ${lowleveldrivers} | $SED -e "s/direct//"`
-])
-#
-enabled_lowlevel_drivers=''
-AC_DEFUN([CHECK_LOWLEVEL], [CHECK_DRIVER([$lowleveldrivers], [enabled_lowlevel_drivers], [$1], [ENABLE_LOWLEVEL_]m4_toupper([$1]))])
-CHECK_LOWLEVEL([direct])
-CHECK_LOWLEVEL([ftd2xx])
-CHECK_LOWLEVEL([ftdi])
-CHECK_LOWLEVEL([ppdev])
-CHECK_LOWLEVEL([ppi])
 
 
 dnl Enable a relocatable jtag?
