@@ -297,8 +297,6 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
         };
         const char *bad_value = N_("Bad value");
 
-#define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
-
         pri_vendor_tbl = cfi->identification_string.pri_vendor_tbl;
         major_version = pri_vendor_tbl->major_version;
         minor_version = pri_vendor_tbl->minor_version;

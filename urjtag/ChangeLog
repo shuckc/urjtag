@@ -10,6 +10,9 @@
     src/tap/usbconn/libftdi.c, src/tap/usbconn/libusb.c, sysdep.h: Unify
     system checks in the common sysdep.h header.
 
+  * src/cmd/cmd_bfin.c, src/flash/detectflash.c, sysdep.h: Unify ARRAY_SIZE
+    helper macro here.
+
 2010-01-28  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bfin.c: Replace one-insn-a-file option with dynamic instruction

@@ -72,4 +72,6 @@ struct timespec { unsigned long tv_sec, tv_nsec; };
 #define nanosleep(req, rem) usleep((req)->tv_sec * 1000 * 1000 + (req)->tv_nsec / 1000)
 #endif
 
+#define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
+
 #endif /* SYSDEP_H */
