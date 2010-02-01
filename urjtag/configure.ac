@@ -524,11 +524,13 @@ URJ_DRIVER_SET([bus], [
 	bcm1250
 	bf526_ezkit
 	bf527_ezkit
+	bf52x
 	bf533_stamp
 	bf533_ezkit
 	bf537_stamp
 	bf537_ezkit
 	bf538f_ezkit
+	bf53x
 	bf548_ezkit
 	bf561_ezkit
 	bscoach

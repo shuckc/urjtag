@@ -45,6 +45,9 @@ _URJ_BUS(bf526_ezkit)
 #ifdef ENABLE_BUS_BF527_EZKIT
 _URJ_BUS(bf527_ezkit)
 #endif
+#ifdef ENABLE_BUS_BF52X
+_URJ_BUS(bf52x)
+#endif
 #ifdef ENABLE_BUS_BF533_EZKIT
 _URJ_BUS(bf533_ezkit)
 #endif
@@ -59,6 +62,9 @@ _URJ_BUS(bf537_stamp)
 #endif
 #ifdef ENABLE_BUS_BF538F_EZKIT
 _URJ_BUS(bf538f_ezkit)
+#endif
+#ifdef ENABLE_BUS_BF53X
+_URJ_BUS(bf53x)
 #endif
 #ifdef ENABLE_BUS_BF548_EZKIT
 _URJ_BUS(bf548_ezkit)

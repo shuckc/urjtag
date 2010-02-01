@@ -1,3 +1,18 @@
+2010-02-01  Michael Hennerich  <michael.hennerich@analog.com>
+  	    Jie Zhang  <jie.zhang@analog.com>
+
+  * src/bus/bf537_stamp.c (bus_params_t): Add aoe.
+    (AOE): Define.
+    (bf537_stamp_bus_new): Deal with ADDR[n], DATA[n] and AOE_B.
+    (bf537_stamp_bus_read_start): Assert AOE.
+    (bf537_stamp_bus_read_end): Deassert AOE.
+    (bf538f_ezkit_bus, bf526_ezkit_bus): Modify descriptions.
+    (urj_bus_bf52x_bus, urj_bus_bf53x_bus): Define.
+  * src/bus/buses.c (bus_drivers[]): Add urj_bus_bf52x_bus and
+    urj_bus_bf53x_bus.
+  * src/bus/buses_list.h: Add bf52x and bf53x.
+  * configure.ac: Add bf52x and bf53x bus drivers.
+
 2010-01-29  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Unify duplicate driver logic into one macro which also allows
