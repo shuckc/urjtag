@@ -74,7 +74,7 @@ bf537_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 {
     urj_bus_t *bus;
     urj_part_t *part;
-    char buff[15];
+    char buff[15], buff2[15];
     int i;
     int failed = 0;
 
@@ -92,20 +92,34 @@ bf537_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     for (i = 0; i < 19; i++)
     {
         sprintf (buff, "ADDR%d", i + 1);
-	if (urj_bus_generic_attach_sig (part, &(ADDR[i]), buff))
+        ADDR[i] = urj_part_find_signal (part, buff);
+        if (!ADDR[i])
         {
-            sprintf (buff, "ADDR[%d]", i + 1); /* BF533/2/1 uses ADDR[x] instead of ADDRx */
-            failed |= urj_bus_generic_attach_sig (part, &(ADDR[i]), buff);
+            sprintf (buff2, "ADDR[%d]", i + 1); /* BF533/2/1 uses ADDR[x] instead of ADDRx */
+            ADDR[i] = urj_part_find_signal (part, buff2);
+            if (!ADDR[i])
+            {
+                urj_error_set (URJ_ERROR_NOTFOUND, "signal '%s' or '%s'",
+                               buff, buff2);
+                failed |= URJ_STATUS_FAIL;
+            }
         }
     }
 
     for (i = 0; i < 16; i++)
     {
         sprintf (buff, "DATA%d", i);
-        if (urj_bus_generic_attach_sig (part, &(DATA[i]), buff))
+        DATA[i] = urj_part_find_signal (part, buff);
+        if (!DATA[i])
         {
-            sprintf (buff, "DATA[%d]", i); /* BF533/2/1 uses DATA[x] instead of DATAx */
-            failed |= urj_bus_generic_attach_sig (part, &(DATA[i]), buff);
+            sprintf (buff2, "DATA[%d]", i); /* BF533/2/1 uses DATA[x] instead of DATAx */
+            DATA[i] = urj_part_find_signal (part, buff2);
+            if (!DATA[i])
+            {
+                urj_error_set (URJ_ERROR_NOTFOUND, "signal '%s' or '%s'",
+                               buff, buff2);
+                failed |= URJ_STATUS_FAIL;
+            }
         }
     }
 
@@ -300,6 +314,7 @@ bf537_stamp_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_chain_t *chain = bus->chain;
 
     select_flash (bus);
+    urj_part_set_signal (p, AOE, 1, 1);
     urj_part_set_signal (p, ARE, 1, 1);
 
     setup_address (bus, adr);
@@ -391,6 +406,16 @@ const urj_bus_driver_t urj_bus_bf526_ezkit_bus = {
 };
 
 #endif /* #ifdef ENABLE_BUS_BF526_EZKIT */
+
+#ifdef ENABLE_BUS_BF533_EZKIT
+
+const urj_bus_driver_t urj_bus_bf533_ezkit_bus = {
+    "bf533_ezkit",
+    N_("Blackfin BF533 EZ-KIT board bus driver via BSR"),
+    BF537_STAMP_BUS_FUNCTIONS
+};
+
+#endif /* #ifdef ENABLE_BUS_BF533_EZKIT */
 
 #ifdef ENABLE_BUS_BF52X
 

@@ -57,6 +57,9 @@ else
 if ENABLE_BUS_BF527_EZKIT
 libbus_la_SOURCES += bf537_stamp.c
 else
+if ENABLE_BUS_BF533_EZKIT
+libbus_la_SOURCES += bf537_stamp.c
+else
 if ENABLE_BUS_BF537_STAMP
 libbus_la_SOURCES += bf537_stamp.c
 else
@@ -70,13 +73,10 @@ endif
 endif
 endif
 endif
+endif
 
 if ENABLE_BUS_BF533_STAMP
 libbus_la_SOURCES += bf533_stamp.c
-endif
-
-if ENABLE_BUS_BF533_EZKIT
-libbus_la_SOURCES += bf533_ezkit.c
 endif
 
 if ENABLE_BUS_BF548_EZKIT

@@ -1,3 +1,13 @@
+2010-02-01  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/bus/bf533_ezkit.c: Remove.
+  * src/bus/bf537_stamp.c (bf537_stamp_bus_new): Don't false alarm.
+    (bf537_stamp_bus_write): Deassert AOE when bus write.
+    (urj_bus_driver_t urj_bus_bf533_ezkit_bus): Define.
+  * src/bus/Makefile.am (libbus_la_SOURCES): Use bf537_stamp.c as
+    bf533_ezkit bus driver source file.
+  * po/POTFILES.in: Remove src/bus/bf533_ezkit.c.
+
 2010-02-01  Michael Hennerich  <michael.hennerich@analog.com>
   	    Jie Zhang  <jie.zhang@analog.com>
 
