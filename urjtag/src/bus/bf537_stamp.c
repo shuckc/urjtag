@@ -154,26 +154,51 @@ bf537_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
  * bus->driver->(*area)
  *
  */
+
+#define ASYNC_MEM_BASE 0x20000000
+#define ASYNC_MEM_SIZE (4 * 1024 * 1024)
+#define IS_ASYNC_ADDR(addr) ({ \
+       unsigned long __addr = (unsigned long) addr; \
+       __addr >= ASYNC_MEM_BASE && __addr < ASYNC_MEM_BASE + ASYNC_MEM_SIZE; \
+       })
+#define ASYNC_BANK(addr) (((addr) & (ASYNC_MEM_SIZE - 1)) >> 20)
+
 static int
 bf537_stamp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 {
-    area->description = NULL;
-    area->start = UINT32_C (0x00000000);
-    area->length = UINT64_C (0x100000000);
-    area->width = 16;
-
+    if (adr < ASYNC_MEM_BASE)
+    {
+        /* we can only wiggle SDRAM pins directly, so cannot drive it */
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
+		       _("reading external memory not supported"));
+        return URJ_STATUS_FAIL;
+    }
+    else if (IS_ASYNC_ADDR(adr))
+    {
+        area->description = "asynchronous memory";
+        area->start = ASYNC_MEM_BASE;
+        area->length = ASYNC_MEM_SIZE;
+        area->width = 16;
+    }
+    else
+    {
+        /* L1 needs core to access it */
+        urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
+		       _("reading on-chip memory not supported"));
+        return URJ_STATUS_FAIL;
+    }
     return URJ_STATUS_OK;
 }
 
 static void
-select_flash (urj_bus_t *bus)
+select_flash (urj_bus_t *bus, uint32_t adr)
 {
     urj_part_t *p = bus->part;
 
-    urj_part_set_signal (p, AMS[0], 1, 0);
-    urj_part_set_signal (p, AMS[1], 1, 1);
-    urj_part_set_signal (p, AMS[2], 1, 1);
-    urj_part_set_signal (p, AMS[3], 1, 1);
+    urj_part_set_signal (p, AMS[0], 1, !(ASYNC_BANK(adr) == 0));
+    urj_part_set_signal (p, AMS[1], 1, !(ASYNC_BANK(adr) == 1));
+    urj_part_set_signal (p, AMS[2], 1, !(ASYNC_BANK(adr) == 2));
+    urj_part_set_signal (p, AMS[3], 1, !(ASYNC_BANK(adr) == 3));
 
     urj_part_set_signal (p, ABE[0], 1, 0);
     urj_part_set_signal (p, ABE[1], 1, 0);
@@ -244,7 +269,7 @@ bf537_stamp_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    select_flash (bus);
+    select_flash (bus, adr);
     urj_part_set_signal (p, AOE, 1, 0);
     urj_part_set_signal (p, ARE, 1, 0);
     urj_part_set_signal (p, AWE, 1, 1);
@@ -313,7 +338,7 @@ bf537_stamp_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    select_flash (bus);
+    select_flash (bus, adr);
     urj_part_set_signal (p, AOE, 1, 1);
     urj_part_set_signal (p, ARE, 1, 1);
 
