@@ -959,7 +959,8 @@ ft2232_gnice_done (urj_cable_t *cable)
     /* Set Data Bits High Byte
        disable output drivers */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
-    urj_tap_cable_cx_cmd_push (cmd_root, BITMASK_GNICE_nTRST);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED);
     urj_tap_cable_cx_cmd_push (cmd_root,
                                BITMASK_GNICE_nTRST | BITMASK_GNICE_nLED);
 

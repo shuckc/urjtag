@@ -1,3 +1,7 @@
+2010-02-01  Jie Zhang  <jie.zhang@analog.com>
+
+  * tap/cable/ft2232.c (ft2232_gnice_done): Turn LED off when done.
+
 2010-02-01  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/bf537_stamp.c (ASYNC_MEM_BASE, ASYNC_MEM_SIZE, IS_ASYNC_ADDR,
