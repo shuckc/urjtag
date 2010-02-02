@@ -51,6 +51,10 @@ if ENABLE_BUS_BCM1250
 libbus_la_SOURCES += bcm1250.c
 endif
 
+if ENABLE_BUS_BF518F_EZBRD
+libbus_la_SOURCES += bf518f_ezbrd.c
+endif
+
 if ENABLE_BUS_BF526_EZKIT
 libbus_la_SOURCES += bf537_stamp.c
 else

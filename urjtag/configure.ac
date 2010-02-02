@@ -522,6 +522,8 @@ URJ_DRIVER_SET([bus], [
 	au1500
 	avr32
 	bcm1250
+	bf518f_ezbrd
+	bf51x
 	bf526_ezkit
 	bf527_ezkit
 	bf52x

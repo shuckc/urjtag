@@ -39,6 +39,12 @@ _URJ_BUS(avr32)
 #ifdef ENABLE_BUS_BCM1250
 _URJ_BUS(bcm1250)
 #endif
+#ifdef ENABLE_BUS_BF518F_EZBRD
+_URJ_BUS(bf518f_ezbrd)
+#endif
+#ifdef ENABLE_BUS_BF51X
+_URJ_BUS(bf51x)
+#endif
 #ifdef ENABLE_BUS_BF526_EZKIT
 _URJ_BUS(bf526_ezkit)
 #endif

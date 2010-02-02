@@ -1,5 +1,13 @@
 2010-02-02  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/bus/bf518f_ezbrd.c: New file.
+  * src/bus/buses_list.h (bus_drivers[]): Add bf518f_ezbrd and bf51x.
+  * src/bus/Makefile.am (libbus_a_SOURCES): Add bf518f_ezbrd.c.
+  * configure.ac (URJ_DRIVER_SET): Add bf518f_ezbrd and bf51x.
+  * data/analog/bf518/STEPPINGS: Add bf518 silicon revision 0.1.
+
+2010-02-02  Jie Zhang  <jie.zhang@analog.com>
+
   * data/analog/bf506/bf506: New.
   * data/analog/bf506/STEPPINGS: New.
   * data/analog/PARTS: Add bf506.
