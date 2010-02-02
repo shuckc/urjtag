@@ -1,0 +1,225 @@
+signal SCL
+signal SDA
+signal PG14
+signal PG15
+signal PG12
+signal PG13
+signal PG11
+signal PG10
+signal PG9
+signal PG8
+signal PG7
+signal PG6
+signal PG5
+signal PG4
+signal PG3
+signal PG2
+signal PG1
+signal PG0
+signal PF15
+signal PF14
+signal PF13
+signal PF12
+signal PF11
+signal PF10
+signal RESET
+signal NMI
+signal PF9
+signal PF8
+signal PF7
+signal PF6
+signal PF5
+signal PF4
+signal PF3
+signal PF2
+signal EXTCLK
+signal PF1
+signal PF0
+signal PH1
+signal PH2
+signal PH0
+signal BMODE0
+signal BMODE1
+signal BMODE2
+signal EMU
+signal TRST
+signal TMS
+signal TCK
+signal TDI
+signal PG
+signal EXT_WAKE
+signal VDDFLASH0
+signal VDDFLASH1
+signal VDDFLASH2
+signal CLKIN
+signal XTAL
+signal GND0
+signal GND1
+signal GND2
+signal VDDEXT0
+signal VDDEXT1
+signal VDDEXT2
+signal VDDEXT3
+signal VDDEXT4
+signal VDDEXT5
+signal VDDEXT6
+signal VDDEXT7
+signal VDDEXT8
+signal VDDEXT9
+signal VDDEXT10
+signal VDDEXT11
+signal VDDEXT12
+signal VDDEXT13
+signal VDDEXT14
+signal VDDEXT15
+signal VDDINT0
+signal VDDINT1
+signal VDDINT2
+signal VDDINT3
+signal VDDINT4
+signal VDDINT5
+
+register	BSR	119
+register	BR	1
+register	DIR	32
+register	DBGSTAT	16
+register	DBGCTL	16
+register	EMUIR	32
+register	EMUIR64	64
+register	EMUDAT	32
+register	EMUDAT40	40
+register	EMUPC	32
+
+instruction length 5
+
+instruction BYPASS 11111 BR
+instruction EXTEST 00000 BSR
+instruction SAMPLE/PRELOAD 10000 BSR
+instruction IDCODE 00010 DIR
+instruction DBGSTAT_SCAN 01100 DBGSTAT
+instruction DBGCTL_SCAN 00100 DBGCTL
+instruction EMUIR_SCAN 01000 EMUIR
+instruction EMUIR64_SCAN 01000 EMUIR64
+instruction EMUDAT_SCAN 10100 EMUDAT
+instruction EMUDAT40_SCAN 10100 EMUDAT40
+instruction EMUPC_SCAN 11110 EMUPC
+
+bit 118 O 1 *
+bit 117 O 1 SCL 117 1 Z
+bit 116 I 1 SCL
+bit 115 O 1 *
+bit 114 O 1 SDA 114 1 Z
+bit 113 I 1 SDA
+bit 112 C 0 *
+bit 111 O 1 PG14 112 0 Z
+bit 110 I 1 PG14
+bit 109 C 0 *
+bit 108 O 1 PG15 109 0 Z
+bit 107 I 1 PG15
+bit 106 C 0 *
+bit 105 O 1 PG12 106 0 Z
+bit 104 I 1 PG12
+bit 103 C 0 *
+bit 102 O 1 PG13 103 0 Z
+bit 101 I 1 PG13
+bit 100 C 0 *
+bit 99 O 1 PG11 100 0 Z
+bit 98 I 1 PG11
+bit 97 C 0 *
+bit 96 O 1 PG10 97 0 Z
+bit 95 I 1 PG10
+bit 94 C 0 *
+bit 93 O 1 PG9 94 0 Z
+bit 92 I 1 PG9
+bit 91 C 0 *
+bit 90 O 1 PG8 91 0 Z
+bit 89 I 1 PG8
+bit 88 C 0 *
+bit 87 O 1 PG7 88 0 Z
+bit 86 I 1 PG7
+bit 85 C 0 *
+bit 84 O 1 PG6 85 0 Z
+bit 83 I 1 PG6
+bit 82 C 0 *
+bit 81 O 1 PG5 82 0 Z
+bit 80 I 1 PG5
+bit 79 C 0 *
+bit 78 O 1 PG4 79 0 Z
+bit 77 I 1 PG4
+bit 76 C 0 *
+bit 75 O 1 PG3 76 0 Z
+bit 74 I 1 PG3
+bit 73 C 0 *
+bit 72 O 1 PG2 73 0 Z
+bit 71 I 1 PG2
+bit 70 C 0 *
+bit 69 O 1 PG1 70 0 Z
+bit 68 I 1 PG1
+bit 67 C 0 *
+bit 66 O 1 PG0 67 0 Z
+bit 65 I 1 PG0
+bit 64 C 0 *
+bit 63 O 1 PF15 64 0 Z
+bit 62 I 1 PF15
+bit 61 C 0 *
+bit 60 O 1 PF14 61 0 Z
+bit 59 I 1 PF14
+bit 58 C 0 *
+bit 57 O 1 PF13 58 0 Z
+bit 56 I 1 PF13
+bit 55 C 0 *
+bit 54 O 1 PF12 55 0 Z
+bit 53 I 1 PF12
+bit 52 C 0 *
+bit 51 O 1 PF11 52 0 Z
+bit 50 I 1 PF11
+bit 49 C 0 *
+bit 48 O 1 PF10 49 0 Z
+bit 47 I 1 PF10
+bit 46 O 0 *
+bit 45 I 1 RESET
+bit 44 I 1 NMI
+bit 43 C 0 *
+bit 42 O 1 PF9 43 0 Z
+bit 41 I 1 PF9
+bit 40 C 0 *
+bit 39 O 1 PF8 40 0 Z
+bit 38 I 1 PF8
+bit 37 C 0 *
+bit 36 O 1 PF7 37 0 Z
+bit 35 I 1 PF7
+bit 34 C 0 *
+bit 33 O 1 PF6 34 0 Z
+bit 32 I 1 PF6
+bit 31 C 0 *
+bit 30 O 1 PF5 31 0 Z
+bit 29 I 1 PF5
+bit 28 C 0 *
+bit 27 O 1 PF4 28 0 Z
+bit 26 I 1 PF4
+bit 25 C 0 *
+bit 24 O 1 PF3 25 0 Z
+bit 23 I 1 PF3
+bit 22 C 0 *
+bit 21 O 1 PF2 22 0 Z
+bit 20 I 1 PF2
+bit 19 C 0 *
+bit 18 O 1 EXTCLK 19 0 Z
+bit 17 C 0 *
+bit 16 O 1 PF1 17 0 Z
+bit 15 I 1 PF1
+bit 14 C 0 *
+bit 13 O 1 PF0 14 0 Z
+bit 12 I 1 PF0
+bit 11 C 0 *
+bit 10 O 1 PH1 11 0 Z
+bit 9 I 1 PH1
+bit 8 C 0 *
+bit 7 O 1 PH2 8 0 Z
+bit 6 I 1 PH2
+bit 5 C 0 *
+bit 4 O 1 PH0 5 0 Z
+bit 3 I 1 PH0
+bit 2 I 1 BMODE0
+bit 1 I 1 BMODE1
+bit 0 I 1 BMODE2

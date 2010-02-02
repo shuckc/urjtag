@@ -1,5 +1,13 @@
 2010-02-02  Jie Zhang  <jie.zhang@analog.com>
 
+  * data/analog/bf506/bf506: New.
+  * data/analog/bf506/STEPPINGS: New.
+  * data/analog/PARTS: Add bf506.
+  * data/Makefile.am (nobase_dist_pkgdata_DATA): Add
+    analog/bf506/STEPPINGS and analog/bf506/bf506.
+
+2010-02-02  Jie Zhang  <jie.zhang@analog.com>
+
   * src/tap/state.c (urj_tap_state_name): New.
     (urj_tap_state_dump): New.
     (urj_tap_state_dump_2): New.
