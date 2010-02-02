@@ -1,5 +1,16 @@
 2010-02-02  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/tap/state.c (urj_tap_state_name): New.
+    (urj_tap_state_dump): New.
+    (urj_tap_state_dump_2): New.
+    (urj_tap_state_init): Call urj_tap_state_dump.
+    (urj_tap_state_done): Likewise.
+    (urj_tap_state_reset): Likewise.
+    (urj_tap_state_set_trst): Likewise.
+    (urj_tap_state_clock): Call urj_tap_state_dump_2.
+
+2010-02-02  Jie Zhang  <jie.zhang@analog.com>
+
   * src/tap/usbconn/libftdi.c (usbconn_ftdi_write): Make sure
     scheduled send bytes be less than URJ_USBCONN_FTDX_MAXSEND.
   * src/tap/usbconn/libftd2xx.c (usbconn_ftd2xx_write): Likewise.
