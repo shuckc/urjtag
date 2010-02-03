@@ -1,3 +1,9 @@
+2010-02-02  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/detect.c (urj_tap_detect_parts): Include bit/hex output in the
+    different messages so people don't have to manually pick apart the idcode
+    to add support for new parts.
+
 2010-02-02  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bus/bf518f_ezbrd.c: New file.

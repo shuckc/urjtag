@@ -64,7 +64,7 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
     {
         urj_log (URJ_LOG_LEVEL_ERROR, _("Unable to open file '%s'\n"), filename);
         urj_error_IO_set ("Unable to open file '%s'", filename);
-        return 0;
+        return r;
     }
 
     tr = urj_tap_register_alloc (key->len);
@@ -300,14 +300,18 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[1], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                urj_log (URJ_LOG_LEVEL_NORMAL, _("  Unknown manufacturer!\n"));
+                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s)\n",
+                         _("Unknown manufacturer!"),
+                         urj_tap_register_get_string (key));
                 urj_tap_register_free (key);
                 continue;
             }
+
+            urj_log (URJ_LOG_LEVEL_NORMAL, "  %12s: %s (0x%03"PRIX64")\n",
+                     _("Manufacturer"), idr.fullname,
+                     (urj_tap_register_get_value (key) << 1) | 1);
             urj_tap_register_free (key);
 
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("  Manufacturer: %s\n"),
-                     idr.fullname);
             if (strlen (idr.fullname) > URJ_PART_MANUFACTURER_MAXLEN)
                 urj_warning (_("Manufacturer too long\n"));
             manufacturer[0] = '\0';
@@ -326,14 +330,18 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[12], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                urj_log (URJ_LOG_LEVEL_NORMAL, _("  Unknown part!\n"));
+                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s)\n",
+                         _("Unknown part!"),
+                         urj_tap_register_get_string (key));
                 urj_tap_register_free (key);
                 continue;
             }
+
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("  Part(%d):      %s (0x%03"PRIX64")\n"),
+                     chain->active_part, idr.fullname,
+                     urj_tap_register_get_value (key));
             urj_tap_register_free (key);
 
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("  Part(%d):         %s\n"),
-                     chain->active_part, idr.fullname);
             if (strlen (idr.fullname) > URJ_PART_PART_MAXLEN)
                 urj_warning (_("Part too long\n"));
             partname[0] ='\0';
@@ -352,7 +360,9 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[28], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                urj_log (URJ_LOG_LEVEL_NORMAL, _("  Unknown stepping!\n"));
+                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s)\n",
+                         _("Unknown stepping!"),
+                         urj_tap_register_get_string (key));
                 urj_tap_register_free (key);
                 continue;
             }
