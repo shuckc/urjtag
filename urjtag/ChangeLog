@@ -1,3 +1,8 @@
+2010-02-03  Mike Frysinger  <vapier@gentoo.org>
+
+  * acinclude.m4 (AS_VAR_APPEND, m4_ifnblank): Provide fallback implementations
+    if autoconf is too old (<2.64).
+
 2010-02-02  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/detect.c (urj_tap_detect_parts): Include bit/hex output in the

@@ -130,3 +130,21 @@ AC_DEFUN([AC_PROG_SED],
 ])dnl
 
 
+dnl AS_VAR_APPEND
+dnl -------------
+dnl
+dnl this was added in autoconf-2.64+
+dnl
+m4_ifndef([AS_VAR_APPEND],[dnl
+AC_DEFUN([AS_VAR_APPEND], [${$1}="${$1}${$2}"])
+])dnl
+
+
+dnl m4_ifnblank
+dnl -----------
+dnl
+dnl this was added in autoconf-2.64+
+dnl
+m4_ifndef([m4_ifnblank],[dnl
+m4_define([m4_ifnblank], [m4_ifval(m4_normalize([$1]), [$2], [$3])])
+])dnl
