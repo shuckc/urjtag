@@ -265,12 +265,12 @@ ft2232_set_frequency_common (urj_cable_t *cable, uint32_t new_frequency, uint32_
         if (div >= (1 << 16))
         {
             div = (1 << 16) - 1;
-            urj_warning( _("Warning: Setting lowest supported frequency for FT2232%s: %d\n"),
-                         max_frequency == FT2232H_MAX_TCK_FREQ ? "H" : "", max_frequency/div );
+            urj_warning (_("Warning: Setting lowest supported frequency for FT2232%s: %d\n"),
+                         max_frequency == FT2232H_MAX_TCK_FREQ ? "H" : "", max_frequency/div);
         }
 
         if (max_frequency == FT2232H_MAX_TCK_FREQ)
-          ft2232h_disable_clockdiv_by5( cable );
+            ft2232h_disable_clockdiv_by5 (cable);
 
         /* send new divisor to device */
         div -= 1;
@@ -291,13 +291,13 @@ ft2232_set_frequency_common (urj_cable_t *cable, uint32_t new_frequency, uint32_
 static void
 ft2232_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
-    ft2232_set_frequency_common( cable, new_frequency, FT2232_MAX_TCK_FREQ);
+    ft2232_set_frequency_common (cable, new_frequency, FT2232_MAX_TCK_FREQ);
 }
 
 static void
 ft2232h_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
-    ft2232_set_frequency_common( cable, new_frequency, FT2232H_MAX_TCK_FREQ);
+    ft2232_set_frequency_common (cable, new_frequency, FT2232H_MAX_TCK_FREQ);
 }
 
 static int
@@ -397,7 +397,7 @@ ft2232_jtagkey_init (urj_cable_t *cable)
 
 
 static int
-ft2232_armusbocd_init_common (urj_cable_t *cable, uint32_t frequency)
+ft2232_armusbocd_init_common (urj_cable_t *cable, int is_ft2232h)
 {
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -438,7 +438,10 @@ ft2232_armusbocd_init_common (urj_cable_t *cable, uint32_t frequency)
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
-    ft2232_set_frequency (cable, frequency);
+    if (is_ft2232h)
+        ft2232h_set_frequency (cable, FT2232H_MAX_TCK_FREQ);
+    else
+        ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
     params->bit_trst = BIT_ARMUSBOCD_nTRST + 8; /* member of HIGH byte */
     params->bit_reset = BIT_ARMUSBOCD_nTSRST + 8;       /* member of HIGH byte */
@@ -452,18 +455,18 @@ ft2232_armusbocd_init_common (urj_cable_t *cable, uint32_t frequency)
 static int
 ft2232_armusbocd_init (urj_cable_t *cable)
 {
-    return ft2232_armusbocd_init_common (cable, FT2232_MAX_TCK_FREQ);
+    return ft2232_armusbocd_init_common (cable, 0);
 }
 
 static int
 ft2232_armusbtiny_h_init (urj_cable_t *cable)
 {
-    return ft2232_armusbocd_init_common (cable, FT2232H_MAX_TCK_FREQ);
+    return ft2232_armusbocd_init_common (cable, 1);
 }
 
 
 static int
-ft2232_gnice_init_common (urj_cable_t *cable, uint32_t frequency)
+ft2232_gnice_init_common (urj_cable_t *cable, int is_ft2232h)
 {
     params_t *params = (params_t *) cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
@@ -495,7 +498,12 @@ ft2232_gnice_init_common (urj_cable_t *cable, uint32_t frequency)
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
-    ft2232_set_frequency (cable, frequency);
+    if (is_ft2232h)
+        /* On ADI boards with the onboard EZKIT Debug Agent, max TCK where things
+           work is 15MHz. */
+        ft2232h_set_frequency (cable, FT2232H_MAX_TCK_FREQ / 2);
+    else
+        ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
     params->bit_trst = BIT_GNICE_nTRST + 8;     /* member of HIGH byte */
     params->bit_reset = -1;     /* not used */
@@ -509,13 +517,13 @@ ft2232_gnice_init_common (urj_cable_t *cable, uint32_t frequency)
 static int
 ft2232_gnice_init (urj_cable_t *cable)
 {
-    return ft2232_gnice_init_common (cable, FT2232_MAX_TCK_FREQ);
+    return ft2232_gnice_init_common (cable, 0);
 }
 
 static int
 ft2232_gniceplus_init (urj_cable_t *cable)
 {
-    return ft2232_gnice_init_common (cable, FT2232H_MAX_TCK_FREQ);
+    return ft2232_gnice_init_common (cable, 1);
 }
 
 static int

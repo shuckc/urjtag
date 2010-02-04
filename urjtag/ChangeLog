@@ -1,3 +1,12 @@
+2010-02-04  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/tap/cable/ft2232.c (ft2232_gnice_init_common): Replace
+    argument frequency with is_ft2232h. Call ft2232_set_frequency
+    or ft2232h_set_frequency accordingly.
+    (ft2232_gnice_init, ft2232_gniceplus_init): Change accordingly.
+    (ft2232_armusbocd_init_common, ft2232_armusbocd_init,
+    ft2232_armusbtiny_h_init): Likewise.
+
 2010-02-03  Mike Frysinger  <vapier@gentoo.org>
 
   * acinclude.m4 (AS_VAR_APPEND, m4_ifnblank): Provide fallback implementations
