@@ -380,7 +380,7 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
 
             data = 0;
             for (j = 0; j < flash_driver->bus_width; j++)
-                if (urj_big_endian)
+                if (urj_get_file_endian () == URJ_ENDIAN_BIG)
                     data = (data << 8) | b[bc + j];
                 else
                     data |= b[bc + j] << (j * 8);
@@ -442,7 +442,7 @@ urj_flashmem (urj_bus_t *bus, FILE *f, uint32_t addr, int noverify)
 
             data = 0;
             for (j = 0; j < flash_driver->bus_width; j++)
-                if (urj_big_endian)
+                if (urj_get_file_endian () == URJ_ENDIAN_BIG)
                     data = (data << 8) | b[bc + j];
                 else
                     data |= b[bc + j] << (j * 8);

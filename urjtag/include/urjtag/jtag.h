@@ -27,7 +27,31 @@
 
 #include "types.h"
 
-extern int urj_big_endian;
+typedef enum URJ_ENDIAN {
+    URJ_ENDIAN_LITTLE,
+    URJ_ENDIAN_BIG,
+    URJ_ENDIAN_UNKNOWN,
+} urj_endian_t;
+
+/**
+ * Get the endian used in external files.  See cmd_endian.c.
+ */
+urj_endian_t urj_get_file_endian (void);
+
+/**
+ * Set the endian used in external files.  See cmd_endian.c.
+ */
+void urj_set_file_endian (urj_endian_t);
+
+/**
+ * Return the string representation of an endian type.
+ */
+const char *urj_endian_to_string (urj_endian_t);
+
+/**
+ * Convert an endian string representation into the normal type.
+ */
+urj_endian_t urj_endian_from_string (const char *);
 
 /**
  * Register the application name with global/data_dir.

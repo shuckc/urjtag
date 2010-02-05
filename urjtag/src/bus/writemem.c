@@ -128,7 +128,7 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
         data = 0;
         for (j = step; j > 0 && bc > 0; j--)
         {
-            if (urj_big_endian)
+            if (urj_get_file_endian () == URJ_ENDIAN_BIG)
             {
                 data <<= 8;	/* first shift doesn't matter: data = 0 */
                 data |= b[bidx++];

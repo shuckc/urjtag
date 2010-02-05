@@ -32,7 +32,6 @@
 #include <urjtag/jtag.h>
 
 urj_error_state_t urj_error_state;
-int urj_big_endian = 0;
 
 static int stderr_vprintf (const char *fmt, va_list ap);
 static int stdout_vprintf (const char *fmt, va_list ap);

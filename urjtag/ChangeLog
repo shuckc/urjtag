@@ -10,6 +10,15 @@
 
   * configure.ac: Enable quiet automake rules when available.
 
+  * include/urjtag/jtag.h (urj_big_endian, urj_endian_t, urj_get_file_endian,
+    urj_set_file_endian, urj_endian_to_string, urj_endian_from_string): Replace
+    exposed endian storage with dedicated functions for parsing endians.
+  * src/global/log-error.c (urj_big_endian): Drop local storage.
+  * src/cmd/cmd_endian.c: Centralize all endian functions here.
+  * src/bus/readmem.c (urj_bus_readmem): Switch to new endian file functions.
+  * src/bus/writemem.c (urj_bus_writemem): Likewise.
+  * src/flash/flash.c (urj_flashmem): Likewise.
+
 2010-02-04  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/cable/ft2232.c (ft2232_gnice_init_common): Replace

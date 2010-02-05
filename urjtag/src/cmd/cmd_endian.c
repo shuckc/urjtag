@@ -34,9 +34,56 @@
 
 #include "cmd.h"
 
+static urj_endian_t current_file_endian = URJ_ENDIAN_LITTLE;
+
+urj_endian_t urj_get_file_endian (void)
+{
+    return current_file_endian;
+}
+
+void urj_set_file_endian (urj_endian_t new_file_endian)
+{
+    current_file_endian = new_file_endian;
+}
+
+static const struct {
+    const urj_endian_t endian;
+    const char *name;
+} endians[] = {
+    { URJ_ENDIAN_LITTLE,  "little", },
+    { URJ_ENDIAN_BIG,     "big",    },
+    { URJ_ENDIAN_UNKNOWN, "unknown" },
+};
+
+const char *urj_endian_to_string (urj_endian_t endian)
+{
+    size_t idx;
+
+    for (idx = 0; idx < ARRAY_SIZE(endians); ++idx)
+        if (endian == endians[idx].endian)
+            return endians[idx].name;
+
+    /* last one is the "unknown" one */
+    return endians[idx - 1].name;
+}
+
+urj_endian_t urj_endian_from_string (const char *strendian)
+{
+    size_t idx;
+
+    for (idx = 0; idx < ARRAY_SIZE(endians); ++idx)
+        if (!strcasecmp (endians[idx].name, strendian))
+            return endians[idx].endian;
+
+    /* last one is the "unknown" one */
+    return endians[idx - 1].endian;
+}
+
 static int
 cmd_endian_run (urj_chain_t *chain, char *params[])
 {
+    urj_endian_t new_endian;
+
     if (urj_cmd_params (params) > 2)
     {
         urj_error_set (URJ_ERROR_SYNTAX,
@@ -47,28 +94,21 @@ cmd_endian_run (urj_chain_t *chain, char *params[])
 
     if (!params[1])
     {
-        if (urj_big_endian)
-            urj_log (URJ_LOG_LEVEL_NORMAL,
-                     _("Endianess for external files: big\n"));
-        else
-            urj_log (URJ_LOG_LEVEL_NORMAL,
-                     _("Endianess for external files: little\n"));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Endianess for external files: %s\n"),
+                 urj_endian_to_string (urj_get_file_endian ()));
         return URJ_STATUS_OK;
     }
 
-    if (strcasecmp (params[1], "little") == 0)
+    new_endian = urj_endian_from_string (params[1]);
+    if (new_endian != URJ_ENDIAN_UNKNOWN)
     {
-        urj_big_endian = 0;
-        return URJ_STATUS_OK;
-    }
-    if (strcasecmp (params[1], "big") == 0)
-    {
-        urj_big_endian = 1;
+        urj_set_file_endian (new_endian);
         return URJ_STATUS_OK;
     }
 
     urj_error_set (URJ_ERROR_SYNTAX,
-                   "endianness must be 'little' or 'big', not '%s'", params[1]);
+                   _("endianness must be 'little' or 'big', not '%s'"),
+                   params[1]);
     return URJ_STATUS_FAIL;
 }
 

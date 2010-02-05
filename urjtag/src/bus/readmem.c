@@ -107,7 +107,7 @@ urj_bus_readmem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
             data = URJ_BUS_READ_END (bus);
 
         for (j = step; j > 0; j--)
-            if (urj_big_endian)
+            if (urj_get_file_endian () == URJ_ENDIAN_BIG)
                 b[bc++] = (data >> ((j - 1) * 8)) & 0xFF;
             else
             {
