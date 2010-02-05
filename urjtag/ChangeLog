@@ -2,6 +2,12 @@
 
   * acinclude.m4 (AS_VAR_APPEND): Fix a few typos.
 
+  * data/analog/bf592/bf592: New.
+  * data/analog/bf592/STEPPINGS: New.
+  * data/analog/PARTS: Add bf592.
+  * data/Makefile.am (nobase_dist_pkgdata_DATA): Add
+    analog/bf592/STEPPINGS and analog/bf592/bf592.
+
 2010-02-04  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/cable/ft2232.c (ft2232_gnice_init_common): Replace

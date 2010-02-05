@@ -1,0 +1,198 @@
+signal GND
+signal PF1
+signal PF0
+signal XTAL
+signal CLKIN
+signal SCL
+signal SDA
+signal CLKBUF
+signal PPICLK
+signal NMIB
+signal RESETB
+signal PGB
+signal EXT_WAKE
+signal PG15
+signal PG14
+signal PG13
+signal PG12
+signal PG11
+signal PG10
+signal PG9
+signal PG8
+signal PG7
+signal PG6
+signal PG5
+signal PG4
+signal PG3
+signal PG2
+signal PG1
+signal PG0
+signal BMODE0
+signal BMODE1
+signal BMODE2
+signal TCK
+signal TDO
+signal TDI
+signal TMS
+signal TRST_B
+signal EMU
+signal PF15
+signal PF14
+signal PF13
+signal PF12
+signal PF11
+signal PF10
+signal PF9
+signal PF8
+signal VDD(0)
+signal VDD(1)
+signal VDD(2)
+signal VDD(3)
+signal VDD(4)
+signal VDD(5)
+signal PF7
+signal PF6
+signal PF5
+signal PF4
+signal EVDD(0)
+signal EVDD(1)
+signal EVDD(2)
+signal EVDD(3)
+signal EVDD(4)
+signal EVDD(5)
+signal PF3
+signal PF2
+instruction length 5
+register DIR 32
+register BSR 126
+register BYPASS 1
+instruction IDCODE 00010 DIR
+instruction SAMPLE/PRELOAD 10000 BSR
+instruction EXTEST 00000 BSR
+instruction BYPASS 11111 BYPASS
+bit 0 I ? BMODE2
+bit 1 O ? *
+bit 2 O ? *
+bit 3 I ? BMODE1
+bit 4 O ? *
+bit 5 O ? *
+bit 6 I ? BMODE0
+bit 7 O ? *
+bit 8 O ? *
+bit 9 O ? *
+bit 10 O ? *
+bit 11 O ? *
+bit 12 I ? PG0
+bit 13 O ? PG0 14 0 Z
+bit 14 C 0 *
+bit 15 I ? PG1
+bit 16 O ? PG1 17 0 Z
+bit 17 C 0 *
+bit 18 I ? PG2
+bit 19 O ? PG2 20 0 Z
+bit 20 C 0 *
+bit 21 I ? PG3
+bit 22 O ? PG3 23 0 Z
+bit 23 C 0 *
+bit 24 I ? PG4
+bit 25 O ? PG4 26 0 Z
+bit 26 C 0 *
+bit 27 I ? PG5
+bit 28 O ? PG5 29 0 Z
+bit 29 C 0 *
+bit 30 I ? PG6
+bit 31 O ? PG6 32 0 Z
+bit 32 C 0 *
+bit 33 I ? PG7
+bit 34 O ? PG7 35 0 Z
+bit 35 C 0 *
+bit 36 I ? PG8
+bit 37 O ? PG8 38 0 Z
+bit 38 C 0 *
+bit 39 I ? PG9
+bit 40 O ? PG9 41 0 Z
+bit 41 C 0 *
+bit 42 I ? PG10
+bit 43 O ? PG10 44 0 Z
+bit 44 C 0 *
+bit 45 I ? PG11
+bit 46 O ? PG11 47 0 Z
+bit 47 C 0 *
+bit 48 I ? PG12
+bit 49 O ? PG12 50 0 Z
+bit 50 C 0 *
+bit 51 I ? PG13
+bit 52 O ? PG13 53 0 Z
+bit 53 C 0 *
+bit 54 I ? PG14
+bit 55 O ? PG14 56 0 Z
+bit 56 C 0 *
+bit 57 I ? PG15
+bit 58 O ? PG15 59 0 Z
+bit 59 C 0 *
+bit 60 I ? RESETB
+bit 61 O ? *
+bit 62 O ? *
+bit 63 I ? NMIB
+bit 64 O ? *
+bit 65 O ? *
+bit 66 I ? PPICLK
+bit 67 O ? *
+bit 68 O ? *
+bit 69 O ? *
+bit 70 O ? CLKBUF 71 0 Z
+bit 71 C 0 *
+bit 72 I ? SDA
+bit 73 O ? SDA 74 0 Z
+bit 74 C 0 *
+bit 75 I ? SCL
+bit 76 O ? SCL 77 0 Z
+bit 77 C 0 *
+bit 78 I ? PF0
+bit 79 O ? PF0 80 0 Z
+bit 80 C 0 *
+bit 81 I ? PF1
+bit 82 O ? PF1 83 0 Z
+bit 83 C 0 *
+bit 84 I ? PF2
+bit 85 O ? PF2 86 0 Z
+bit 86 C 0 *
+bit 87 I ? PF3
+bit 88 O ? PF3 89 0 Z
+bit 89 C 0 *
+bit 90 I ? PF4
+bit 91 O ? PF4 92 0 Z
+bit 92 C 0 *
+bit 93 I ? PF5
+bit 94 O ? PF5 95 0 Z
+bit 95 C 0 *
+bit 96 I ? PF6
+bit 97 O ? PF6 98 0 Z
+bit 98 C 0 *
+bit 99 I ? PF7
+bit 100 O ? PF7 101 0 Z
+bit 101 C 0 *
+bit 102 I ? PF8
+bit 103 O ? PF8 104 0 Z
+bit 104 C 0 *
+bit 105 I ? PF9
+bit 106 O ? PF9 107 0 Z
+bit 107 C 0 *
+bit 108 I ? PF10
+bit 109 O ? PF10 110 0 Z
+bit 110 C 0 *
+bit 111 I ? PF11
+bit 112 O ? PF11 113 0 Z
+bit 113 C 0 *
+bit 114 I ? PF12
+bit 115 O ? PF12 116 0 Z
+bit 116 C 0 *
+bit 117 I ? PF13
+bit 118 O ? PF13 119 0 Z
+bit 119 C 0 *
+bit 120 I ? PF14
+bit 121 O ? PF14 122 0 Z
+bit 122 C 0 *
+bit 123 I ? PF15
+bit 124 O ? PF15 125 0 Z
+bit 125 C 0 *
