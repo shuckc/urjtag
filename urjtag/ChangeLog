@@ -8,6 +8,8 @@
   * data/Makefile.am (nobase_dist_pkgdata_DATA): Add
     analog/bf592/STEPPINGS and analog/bf592/bf592.
 
+  * configure.ac: Enable quiet automake rules when available.
+
 2010-02-04  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/cable/ft2232.c (ft2232_gnice_init_common): Replace

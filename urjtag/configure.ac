@@ -57,6 +57,10 @@ AC_SUBST([SVN_REVISION])
 AC_CONFIG_AUX_DIR(tools)
 
 AM_INIT_AUTOMAKE([check-news dist-bzip2])
+dnl silent rules requires automake-1.11+
+m4_ifdef([AM_SILENT_RULES],
+	[AM_SILENT_RULES([yes])],
+	[AC_SUBST([AM_DEFAULT_VERBOSITY], [1])])
 
 AC_CONFIG_FILES(
 	Makefile
