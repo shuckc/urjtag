@@ -136,7 +136,7 @@ dnl
 dnl this was added in autoconf-2.64+
 dnl
 m4_ifndef([AS_VAR_APPEND],[dnl
-AC_DEFUN([AS_VAR_APPEND], [${$1}="${$1}${$2}"])
+AC_DEFUN([AS_VAR_APPEND], [$1=${$1}$2])
 ])dnl
 
 
