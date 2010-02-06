@@ -34,6 +34,8 @@
   * configure.ac: Generate urjtag.pc from urjtag.pc.in.
   * .gitignore: Ignore generated urjtag.pc.
 
+  * src/urjtag.pc.in (Libs.private): Add @LTLIBINTL@ for weird systems (OS X).
+
 2010-02-04  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/cable/ft2232.c (ft2232_gnice_init_common): Replace

@@ -6,5 +6,5 @@ Description: Universal JTAG library, server and tools
 Version: @PACKAGE_VERSION@
 URL: @PACKAGE_BUGREPORT@
 Libs: -lurjtag
-Libs.private: @LIBS@
+Libs.private: @LIBS@ @LTLIBINTL@
 Cflags: -I${includedir}
