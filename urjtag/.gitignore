@@ -65,6 +65,7 @@ Makefile.in
 # urjtag generated files
 #
 /include/urjtag/urjtag.h
+/src/urjtag.pc
 /src/apps/bsdl2jtag/bsdl2jtag
 /src/apps/jtag/jtag
 /src/bsdl/bsdl_bison.c
