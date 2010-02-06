@@ -68,6 +68,7 @@ AC_CONFIG_FILES(
 	data/Makefile
 	include/urjtag/Makefile
 	src/Makefile
+	src/urjtag.pc
 	src/lib/Makefile
 	src/tap/Makefile
 	src/part/Makefile
