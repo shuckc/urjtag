@@ -177,6 +177,8 @@ do_one_queued_action (urj_cable_t *cable)
                 cable->driver->get_signal (cable,
                                            cable->todo.data[i].arg.value.sig);
             break;
+        case URJ_TAP_CABLE_CLOCK_COMPACT: /* Turn off GCC warning */
+            break;
         }
         urj_log (URJ_LOG_LEVEL_DETAIL, "do_one_queued done\n");
 

@@ -1,3 +1,11 @@
+2010-02-06  Jie Zhang  <jie.zhang@analog.com>
+
+  * include/urjtag/cable.h (enum action): Add URJ_TAP_CABLE_CLOCK_COMPACT.
+  * src/tap/cable/generic.c (do_one_queued_action): Handle
+    URJ_TAP_CABLE_CLOCK_COMPACT to turn off GCC warning.
+  * src/tap/cable/ft2232.c (ft2232_clock_compact_schedule): New.
+    (ft2232_flush): Compact consecutive clocks.
+
 2010-02-05  Mike Frysinger  <vapier@gentoo.org>
 
   * acinclude.m4 (AS_VAR_APPEND): Fix a few typos.
