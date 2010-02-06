@@ -19,6 +19,8 @@
   * src/bus/writemem.c (urj_bus_writemem): Likewise.
   * src/flash/flash.c (urj_flashmem): Likewise.
 
+  * doc/UrJTAG.txt: Add gnICE+ and list supported Blackfin processors.
+
 2010-02-04  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/cable/ft2232.c (ft2232_gnice_init_common): Replace

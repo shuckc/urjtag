@@ -229,7 +229,8 @@ FT2232-based USB cables:
  * Turtelizer 2 (experimental) http://www.ethernut.de/en/hardware/turtelizer/[]
  * USB to JTAG Interface (experimental)
  * http://www.hs-augsburg.de/~hhoegl/proj/usbjtag/usbjtag.html[]
- * Black gnICE http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice[]
+ * Blackfin gnICE http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice[]
+ * Blackfin gnICE+ http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice-plus[]
  * Xverve Signalyzer Tool (experimental)
 
 Other USB cables:
@@ -251,6 +252,16 @@ least the following are supported:
  * Altera MAX7000 (w/ BSDL)
  * Altera EPM7128AETC100
  * Altera Cyclone I & II (w/ BSDL)
+ * Analog Devices Blackfin (w/ BSDL)
+   - BF504/BF506
+   - BF512/BF514/BF516/BF518
+   - BF522/BF523/BF524/BF525/BF526/BF527
+   - BF531/BF532/BF533
+   - BF538/BF539
+   - BF534/BF536/BF537
+   - BF542/BF544/BF547/BF548/BF549
+   - BF561
+   - BF592
  * Analog Devices Sharc-21065L
  * Atmel ATmega128 (partial support)
  * Atmel AT32AP7000 (partial support)
