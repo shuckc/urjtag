@@ -227,6 +227,8 @@ urj_cable_t *urj_tap_cable_parport_connect (urj_chain_t *chain,
 urj_cable_t *urj_tap_cable_usb_connect (urj_chain_t *chain,
                                         const urj_cable_driver_t *driver,
                                         const urj_param_t *params[]);
+int urj_tap_cable_usb_probe (char *params[]);
+
 /**
  * API function to connect to a type-other cable
  *

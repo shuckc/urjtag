@@ -1,3 +1,11 @@
+2010-02-08  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/urjtag/cable.h (urj_tap_cable_usb_probe): New prototype.
+  * src/tap/cable/generic_usbconn.c (urj_tap_cable_usb_probe): New function
+    to autodetect USB cables.
+  * src/cmd/cmd_cable.c (cmd_cable_run): Add a new "probe" driver to call each
+    busses' autodetection routine.
+
 2010-02-08  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/part.h (struct URJ_PART_PARAMS): Add wait_ready.

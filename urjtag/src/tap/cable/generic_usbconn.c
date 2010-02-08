@@ -173,3 +173,33 @@ urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *cablename)
                "DESC       Some string to match in description or serial no.\n"
                "\n"), cablename);
 }
+
+int
+urj_tap_cable_usb_probe (char *params[])
+{
+    int i,j;
+    urj_usbconn_t *conn;
+
+    urj_log_level_t old_level = urj_log_state.level;
+    urj_log_state.level = URJ_LOG_LEVEL_SILENT;
+
+    for (i = 0; urj_tap_usbconn_drivers[i]; ++i)
+    {
+        for (j = 0; urj_tap_cable_usbconn_cables[j]; ++j)
+        {
+            urj_usbconn_cable_t cable_try = *(urj_tap_cable_usbconn_cables[j]);
+            conn = urj_tap_usbconn_drivers[i]->connect (&cable_try, NULL);
+            if (conn)
+            {
+                urj_log_state.level = old_level;
+                params[1] = (char *)urj_tap_cable_usbconn_cables[j]->name;
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         _("Found USB cable: %s\n"), params[1]);
+                return URJ_STATUS_OK;
+            }
+        }
+    }
+
+    urj_log_state.level = old_level;
+    return URJ_STATUS_FAIL;
+}

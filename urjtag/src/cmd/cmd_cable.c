@@ -40,6 +40,12 @@
 #include "cmd.h"
 
 static int
+cable_probe (char *params[])
+{
+    return urj_tap_cable_usb_probe (params);
+}
+
+static int
 cmd_cable_run (urj_chain_t *chain, char *params[])
 {
     urj_cable_t *cable = NULL;
@@ -58,6 +64,14 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
         urj_error_set (URJ_ERROR_SYNTAX,
                        "%s: #parameters should be >= %d, not %d",
                        params[0], 2, paramc);
+        return URJ_STATUS_FAIL;
+    }
+
+    if (strcasecmp (params[1], "probe") == 0 && cable_probe (params))
+    {
+        urj_error_set (URJ_ERROR_NOTFOUND,
+                       _("%s: automatic probe found nothing"),
+                       params[0]);
         return URJ_STATUS_FAIL;
     }
 
@@ -169,6 +183,7 @@ cmd_cable_help (void)
                "DRIVER_OPTS options for the selected cable\n"
                "\n"
                "Type \"cable DRIVER help\" for info about options for cable DRIVER.\n"
+               "You can also use the driver \"probe\" to attempt autodetection.\n"
                "\n" "List of supported cables:\n"),
              "cable");
 
