@@ -1,3 +1,19 @@
+2010-02-08  Jie Zhang  <jie.zhang@analog.com>
+
+  * include/urjtag/part.h (struct URJ_PART_PARAMS): Add wait_ready.
+  * include/urjtag/bfin.h (bfin_wait_clocks): Declare.
+  * include/urjtag/chain.h (urj_tap_chain_wait_ready): Declare.
+  * src/tap/chain.c (urj_tap_chain_wait_ready): New.
+  * src/tap/tap.c (urj_tap_defer_shift_register): Call
+    urj_tap_chain_wait_ready if Run-Test/Idle.
+  * src/bfin/bfin.c (bfin_wait_clocks): Define.
+    (part_emudat_defer_get): Call chain_wait_ready when Run-Test/Idle.
+    (part_emudat_get): Likewise.
+  * src/bfin/bfin-part-bfin.c: Include <sysdep.h>, <urjtag/chain.h>,
+    <urjtag/cable.h> and <urjtag/log.h>.
+    (bfin_wait_ready): New.
+    (bfin_part_init): Init wait_ready.
+
 2010-02-06  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/cable.h (enum action): Add URJ_TAP_CABLE_CLOCK_COMPACT.

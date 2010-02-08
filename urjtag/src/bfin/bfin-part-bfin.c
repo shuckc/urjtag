@@ -17,16 +17,20 @@
  */
 
 
+#include <sysdep.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
 #include <urjtag/part.h>
+#include <urjtag/chain.h>
+#include <urjtag/cable.h>
 #include <urjtag/data_register.h>
 #include <urjtag/part_instruction.h>
 #include <urjtag/tap_register.h>
 #include <urjtag/bfin.h>
+#include <urjtag/log.h>
 
 /* The helper functions for Blackfin DBGCTL and DBGSTAT operations.  */
 
@@ -114,6 +118,48 @@ struct emu_oab bfin_emu_oab =
 };
 
 static void
+bfin_wait_ready (void *data)
+{
+    urj_chain_t *chain = (urj_chain_t *) data;
+
+    /* When CCLK is 62MHz and SCLK is 31MHz, which is the lowest frequency I
+       can set in bf537 stamp linux kernel, set the gnICE+ cable frequency to
+       15MHz (current default), --wait-clocks >= 12 is required.
+
+       When CCLK is 62MHz and SCLK is 31MHz, set the gnICE+ cable frequency to
+       30MHz, --wait-clocks >= 21 is required.
+
+       When CCLK is 62MHz and SCLK is 31MHz, set the gnICE+ cable frequency to
+       6MHz (default), --wait-clocks >= 5 is required.
+
+       When CCLK is 62MHz and SCLK is 31MHz, set the gnICE cable frequency to
+       6MHz (default), --wait-clocks >= 2 is required.  */
+
+    if (bfin_wait_clocks == -1)
+    {
+        urj_cable_t *cable = chain->cable;
+        uint32_t frequency = cable->frequency;
+        const char *name = cable->driver->name;
+
+        if (strcmp (name, "gnICE+") == 0 && frequency == 15000000)
+            bfin_wait_clocks = 12;
+        else if (strcmp (name, "gnICE+") == 0 && frequency == 30000000)
+            bfin_wait_clocks = 21;
+        else if (strcmp (name, "gnICE+") == 0 && frequency == 6000000)
+            bfin_wait_clocks = 5;
+        else if (strcmp (name, "gnICE") == 0 && frequency == 6000000)
+            bfin_wait_clocks = 2;
+        else
+        {
+            bfin_wait_clocks = 21;
+            urj_warning (_("untested cable or frequency, set wait_clocks to %d\n"), bfin_wait_clocks);
+        }
+    }
+
+    urj_tap_chain_defer_clock (chain, 0, 0, bfin_wait_clocks);
+}
+
+static void
 bfin_part_init (urj_part_t *part)
 {
     int i;
@@ -121,6 +167,7 @@ bfin_part_init (urj_part_t *part)
     assert (part && part->params);
 
     part->params->free = free;
+    part->params->wait_ready = bfin_wait_ready;
     part->params->data = malloc (sizeof (struct bfin_part_data));
     EMU_OAB (part) = &bfin_emu_oab;
 

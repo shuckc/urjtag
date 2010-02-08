@@ -34,6 +34,7 @@
 struct URJ_PART_PARAMS
 {
     void (*free) (void *);
+    void (*wait_ready) (void *);
     void *data;
 };
 

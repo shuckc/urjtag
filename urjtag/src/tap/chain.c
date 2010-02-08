@@ -331,3 +331,17 @@ urj_tap_chain_active_part (urj_chain_t *chain)
 
     return chain->parts->parts[chain->active_part];
 }
+
+void
+urj_tap_chain_wait_ready (urj_chain_t *chain)
+{
+    urj_part_t *part;
+
+    if (!chain || !chain->parts)
+        return;
+
+    part = chain->parts->parts[chain->main_part];
+    if (part->params && part->params->wait_ready)
+        part->params->wait_ready (chain);
+}
+

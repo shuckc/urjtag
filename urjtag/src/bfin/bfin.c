@@ -47,6 +47,7 @@ const char *scans[] = {
 
 
 int bfin_check_emuready = 1;
+int bfin_wait_clocks = -1;
 
 static struct timespec bfin_emu_wait_ts = {0, 5000000};
 
@@ -1062,6 +1063,7 @@ part_emudat_defer_get (urj_chain_t *chain, int n, int exit)
     {
         assert (urj_tap_state (chain) & URJ_TAP_STATE_IDLE);
         urj_tap_chain_defer_clock (chain, 0, 0, 1);
+        urj_tap_chain_wait_ready (chain);
     }
 
     if (part_scan_select (chain, n, EMUDAT_SCAN) < 0)
@@ -1146,6 +1148,7 @@ part_emudat_get (urj_chain_t *chain, int n, int exit)
     {
         assert (urj_tap_state (chain) & URJ_TAP_STATE_IDLE);
         urj_tap_chain_defer_clock (chain, 0, 0, 1);
+        urj_tap_chain_wait_ready (chain);
     }
 
     if (part_scan_select (chain, n, EMUDAT_SCAN) < 0)

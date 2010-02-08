@@ -212,6 +212,7 @@ enum {
 };
 
 extern int bfin_check_emuready;
+extern int bfin_wait_clocks;
 
 /* From src/bfin/bfin.c */
 

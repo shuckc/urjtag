@@ -105,6 +105,7 @@ urj_tap_defer_shift_register (urj_chain_t *chain,
     {
         urj_tap_chain_defer_clock (chain, 1, 0, 1);     /* Update-DR or Update-IR */
         urj_tap_chain_defer_clock (chain, 0, 0, 1);     /* Run-Test/Idle */
+        urj_tap_chain_wait_ready (chain);
     }
     else if (tap_exit == URJ_CHAIN_EXITMODE_UPDATE)
         urj_tap_chain_defer_clock (chain, 1, 0, 1);     /* Update-DR or Update-IR */

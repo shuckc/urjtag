@@ -81,7 +81,8 @@ int urj_tap_chain_get_pod_signal (urj_chain_t *chain, urj_pod_sigsel_t sig);
  *
  * @return NULL on error, and sets urj_error.
  */
-urj_part_t *urj_tap_chain_active_part(urj_chain_t *chain);
+urj_part_t *urj_tap_chain_active_part (urj_chain_t *chain);
+void urj_tap_chain_wait_ready (urj_chain_t *chain);
 
 typedef struct
 {
