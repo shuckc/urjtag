@@ -6,6 +6,8 @@
   * src/cmd/cmd_cable.c (cmd_cable_run): Add a new "probe" driver to call each
     busses' autodetection routine.
 
+  * data/analog/bf592/bf592: Add missing common registers and instructions.
+
 2010-02-08  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/part.h (struct URJ_PART_PARAMS): Add wait_ready.
