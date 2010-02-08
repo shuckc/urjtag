@@ -8,6 +8,9 @@
 
   * data/analog/bf592/bf592: Add missing common registers and instructions.
 
+  * src/bfin/bfin-part-bfin.c (bfin_init): Add BF548M and BF592.
+  * data/analog/PARTS: Add note that bfin_init() needs to be in sync.
+
 2010-02-08  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/part.h (struct URJ_PART_PARAMS): Add wait_ready.
