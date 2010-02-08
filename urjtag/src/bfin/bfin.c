@@ -112,7 +112,13 @@ bfin_set_scan (urj_part_t *part, int scan)
         if (BFIN_PART_SCAN (part) != scan)
         {
             urj_part_set_instruction (part, scans[scan]);
-            assert (part->active_instruction != NULL);
+            if (part->active_instruction == NULL)
+            {
+                urj_log (URJ_LOG_LEVEL_ERROR,
+                         _("%s: unable to load instruction '%s'\n"),
+                         "bfin", scans[scan]);
+                return -1;
+            }
             BFIN_PART_SCAN (part) = scan;
             return 1;
         }
