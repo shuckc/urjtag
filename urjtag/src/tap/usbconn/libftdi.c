@@ -68,6 +68,9 @@ usbconn_ftdi_flush (ftdi_param_t *p)
 {
     int xferred;
     int recvd = 0;
+#ifdef HAVE_LIBFTDI_ASYNC_MODE
+    struct ftdi_transfer_control *tc = NULL;
+#endif
 
     if (!p->fc)
         return -1;
@@ -75,6 +78,7 @@ usbconn_ftdi_flush (ftdi_param_t *p)
     if (p->send_buffered == 0)
         return 0;
 
+#ifndef HAVE_LIBFTDI_ASYNC_MODE
     if ((xferred = ftdi_write_data (p->fc, p->send_buf, p->send_buffered)) < 0)
         urj_error_set (URJ_ERROR_FTD, _("ftdi_write_data() failed: %s"),
                        ftdi_get_error_string (p->fc));
@@ -87,6 +91,7 @@ usbconn_ftdi_flush (ftdi_param_t *p)
     }
 
     p->send_buffered = 0;
+#endif
 
     /* now read all scheduled receive bytes */
     if (p->to_recv)
@@ -106,6 +111,33 @@ usbconn_ftdi_flush (ftdi_param_t *p)
             return -1;
         }
 
+#ifdef HAVE_LIBFTDI_ASYNC_MODE
+        if ((tc = ftdi_read_data_submit (p->fc,
+                                         &(p->recv_buf[p->recv_write_idx]),
+                                         p->to_recv)) == NULL)
+            urj_error_set (URJ_ERROR_FTD,
+                           _("Error from ftdi_read_data_submit(): %s"),
+                           ftdi_get_error_string (p->fc));
+    }
+
+    if ((xferred = ftdi_write_data (p->fc, p->send_buf, p->send_buffered)) < 0)
+    {
+        urj_error_set (URJ_ERROR_FTD, ftdi_get_error_string (p->fc));
+        return -1;
+    }
+
+    if (xferred < p->send_buffered)
+    {
+        urj_error_set (URJ_ERROR_FTD, _("Written fewer bytes than requested."));
+        return -1;
+    }
+
+    p->send_buffered = 0;
+
+    if (p->to_recv)
+    {
+        recvd = ftdi_transfer_data_done (tc);
+#else
         while (recvd == 0)
             if ((recvd = ftdi_read_data (p->fc,
                                          &(p->recv_buf[p->recv_write_idx]),
@@ -113,6 +145,7 @@ usbconn_ftdi_flush (ftdi_param_t *p)
                 urj_error_set (URJ_ERROR_FTD,
                                _("Error from ftdi_read_data(): %s"),
                                ftdi_get_error_string (p->fc));
+#endif
 
         if (recvd < p->to_recv)
             urj_log (URJ_LOG_LEVEL_NORMAL,

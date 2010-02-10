@@ -1,3 +1,11 @@
+2010-02-10  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/tap/usbconn/libftdx.h (URJ_USBCONN_FTDI_MAXRECV): Define
+    to be (63 * 64) if HAVE_LIBFTDI_ASYNC_MODE defined.
+  * src/tap/usbconn/libftdi.c (usbconn_ftdi_flush): Use async
+    mode libftdi if HAVE_LIBFTDI_ASYNC_MODE defined.
+  * configure.ac: Check libusb-1.0 and libftdi async mode.
+
 2010-02-09  Mike Frysinger  <vapier@gentoo.org>
 
   * src/urjtag.pc.in: Include -Llibdir in default output and let pkg-config

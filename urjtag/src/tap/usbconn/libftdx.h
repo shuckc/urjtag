@@ -30,7 +30,11 @@
    Larger values might speed up comm, but there's an upper limit
    when too many bytes are sent and the underlying libftdi or libftd2xx
    don't fetch the returned data in time -> deadlock */
+#ifdef HAVE_LIBFTDI_ASYNC_MODE
+#define URJ_USBCONN_FTDI_MAXRECV   (63 * 64)
+#else
 #define URJ_USBCONN_FTDI_MAXRECV   ( 4 * 64)
+#endif
 #define URJ_USBCONN_FTD2XX_MAXRECV (63 * 64)
 #define URJ_USBCONN_FTDX_MAXRECV   (URJ_USBCONN_FTD2XX_MAXRECV < URJ_USBCONN_FTDI_MAXRECV ? URJ_USBCONN_FTD2XX_MAXRECV : URJ_USBCONN_FTDI_MAXRECV)
 
