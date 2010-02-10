@@ -1,3 +1,8 @@
+2010-02-09  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/urjtag.pc.in: Include -Llibdir in default output and let pkg-config
+    worry about filtering it properly.
+
 2010-02-08  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/cable.h (urj_tap_cable_usb_probe): New prototype.

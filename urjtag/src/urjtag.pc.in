@@ -1,10 +1,12 @@
 prefix=@prefix@
-includedir=${prefix}/include
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
 
 Name: @PACKAGE_NAME@
 Description: Universal JTAG library, server and tools
 Version: @PACKAGE_VERSION@
 URL: @PACKAGE_BUGREPORT@
-Libs: -lurjtag
+Libs: -L${libdir} -lurjtag
 Libs.private: @LIBS@ @LTLIBINTL@
 Cflags: -I${includedir}
