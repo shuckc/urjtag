@@ -56,12 +56,12 @@ libbsdl_flex_la_CFLAGS = \
 # - all files depend on bsdl_config.h which dynamically generated
 # - *_flex files must be processed after their *_bison counterparts
 #   to ensure that *_bison.h is present
-vhdl_flex.$(OBJEXT): vhdl_bison.$(OBJEXT) bsdl_config.h
+libbsdl_flex_la-vhdl_flex.$(OBJEXT): vhdl_bison.h bsdl_config.h
 vhdl_bison.$(OBJEXT): bsdl_config.h
-bsdl_flex.$(OBJEXT): bsdl_bison.$(OBJEXT) bsdl_config.h
+libbsdl_flex_la-bsdl_flex.$(OBJEXT): bsdl_bison.h bsdl_config.h
 bsdl_bison.$(OBJEXT): bsdl_config.h
 bsdl.$(OBJEXT) : bsdl_config.h
-bsdl_sem.$(OBJEXT): bsdl_config.h
+bsdl_sem.$(OBJEXT): bsdl_bison.h bsdl_config.h
 
 vhdl_bison.h: vhdl_bison.c
 bsdl_bison.h: bsdl_bison.c

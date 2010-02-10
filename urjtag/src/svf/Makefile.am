@@ -36,7 +36,7 @@ libsvf_la_SOURCES = \
 libsvf_flex_la_SOURCES = \
 	svf_flex.l
 
-svf_flex.$(OBJEXT) svf.$(OBJEXT): svf_bison.$(OBJEXT)
+libsvf_flex_la-svf_flex.$(OBJEXT) svf.$(OBJEXT): svf_bison.h
 
 AM_CFLAGS = $(WARNINGCFLAGS)
 

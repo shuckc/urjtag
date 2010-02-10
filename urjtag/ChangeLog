@@ -1,5 +1,16 @@
 2010-02-10  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/bsdl/Makefile.am (vhdl_flex.$(OBJEXT), bsdl_flex.$(OBJEXT)):
+    Add prefix libbsdl_flex_la-.  Depend on vhdl_bison.h and
+    bsdl_bison.h instead of vhdl_bison.$(OBJEXT) and
+    bsdl_bison.$(OBJEXT).
+    (bsdl_bison.$(OBJEXT)): Depend bsdl_bison.h.
+  * src/svf/Makefile.am (svf_flex.$(OBJEXT)): Add prefix
+    libsvf_flex_la-.  Depend on svf_bison.h instead of
+    svf_bison.$(OBJEXT).
+
+2010-02-10  Jie Zhang  <jie.zhang@analog.com>
+
   * src/tap/usbconn/libftdx.h (URJ_USBCONN_FTDI_MAXRECV): Define
     to be (63 * 64) if HAVE_LIBFTDI_ASYNC_MODE defined.
   * src/tap/usbconn/libftdi.c (usbconn_ftdi_flush): Use async
