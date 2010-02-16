@@ -1481,8 +1481,82 @@ signal name (without spaces in the name). Rest of the line should contain
 whitespace separated list of pins of the part. This list is currently not used
 for any purpose in JTAG Tools. It is intended for future use.  
 
+==== Manufacturers List ====
+
+The 'data/MANUFACTURERS' file is used to locate the manufacturer of a specific
+device found in the JTAG chain.  If you get the error *Unknown manufacturer*
+when attempting the 'detect' command, this is the file you need to update.
+
+See the JEDEC document for more information:
+JEDEC Solid State Technology Association, "Standard Manufacturer's
+Identification Code", September 2001, Order Number: JEP106-K
+
+===== Format =====
+
+The first token is a bit string that matches bits 11-1 of the device's IDCODE.
+We omit bit 0 because it should always be 1 (per the JEDEC standard).
+
+The second token is the name of the directory under 'data/' to search for
+specific part information.
+
+The rest of the line is the human readable form of the manufacturer's name.
+
+For example, we find this in 'data/MANUFACTURERS':
+
+  00001100101	analog		Analog Devices, Inc.
+
+The manufacturer's IDCODE is +000011001011+ (notice the last bit is stripped),
+more part information can be found under 'data/analog/', and the human friendly
+name is +Analog Devices, Inc.+.
+
+==== Parts List ====
+
+Every manufacturer subdirectory needs a 'PARTS' file.  This is used to look
+up further information about a part such as the stepping and signal list.  If
+you get the error *Unknown part* when attempting the 'detect' command, this is
+the file you need to update.
+
+===== Format =====
+
+The first token is a bit string that matches bits 27-12 of the device's IDCODE.
+
+The second token is the name of the directory under the manufacturer's 'data/'
+directory to search for specific part information.
+
+The rest of the line is the human readable form of the part's name.
+
+For example, we find this in 'data/analog/PARTS':
+
+  0010011111001000	bf537			BF537
+
+The part's IDCODE is +0010011111001000+, more part information can be found
+under 'data/analog/bf537/', and the human friendly name is +BF537+.
 
 //------------------------------------------------------------------------
+
+==== Stepping List ====
+
+Every part subdirectory needs a 'STEPPINGS' file.  This is used to find the
+file that contains information like the signals list.  If you get the error
+*Unknown stepping* when attempting the 'detect' command, this is the file you
+need to update.
+
+===== Format =====
+
+The first token is a bit string that matches bits 31-28 of the device's IDCODE.
+
+The second token is the name of the file to load that contains information like
+the signal list, extra instructions/registers, etc...  This file should be
+placed alongside the 'STEPPINGS' file in the part-specific subdirectory.
+
+The rest of the line is the human readable form of the part stepping's name.
+
+For example, we find this in 'data/analog/bf537/STEPPINGS':
+
+  0010	bf537		2
+
+The part's stepping is +0010+, signal information can be found in the file
+'data/analog/bf537/bf537', and the human friendly stepping name is +2+.
 
 === Development ===
 

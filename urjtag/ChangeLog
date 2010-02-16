@@ -2,6 +2,8 @@
 
   * data/MANUFACTURERS: Use the official ADI name.
 
+  * doc/UrJTAG.txt: Document the misc files under data/.
+
 2010-02-10  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bsdl/Makefile.am (vhdl_flex.$(OBJEXT), bsdl_flex.$(OBJEXT)):
