@@ -1,3 +1,7 @@
+2010-02-16  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/MANUFACTURERS: Use the official ADI name.
+
 2010-02-10  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bsdl/Makefile.am (vhdl_flex.$(OBJEXT), bsdl_flex.$(OBJEXT)):

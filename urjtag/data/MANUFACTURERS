@@ -40,7 +40,7 @@
 00000110100	cypress		Cypress
 00000110101	dec		DEC
 00001001001	xilinx		Xilinx
-00001100101	analog		Analog Devices
+00001100101	analog		Analog Devices, Inc.
 00001101110	altera		Altera
 00010101011	lattice		Lattice Semiconductors
 00010111111	broadcom	Broadcom
