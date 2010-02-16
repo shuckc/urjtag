@@ -4,6 +4,9 @@
 
   * doc/UrJTAG.txt: Document the misc files under data/.
 
+  * src/bfin/bfin-part-bfin.c (bfin_part_init): Add a few more checks to avoid
+    segfaults and change the asserts to log warnings.
+
 2010-02-10  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bsdl/Makefile.am (vhdl_flex.$(OBJEXT), bsdl_flex.$(OBJEXT)):

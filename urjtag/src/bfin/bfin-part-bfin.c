@@ -164,7 +164,8 @@ bfin_part_init (urj_part_t *part)
 {
     int i;
 
-    assert (part && part->params);
+    if (!part || !part->params)
+        goto error;
 
     part->params->free = free;
     part->params->wait_ready = bfin_wait_ready;
@@ -173,11 +174,14 @@ bfin_part_init (urj_part_t *part)
 
     BFIN_PART_BYPASS (part) = 0;
 
+    if (!part->active_instruction)
+        goto error;
     for (i = 0; i < NUM_SCANS; i++)
         if (strcmp (part->active_instruction->name, scans[i]) == 0)
             break;
 
-    assert (i < NUM_SCANS);
+    if (i == NUM_SCANS)
+        goto error;
 
     BFIN_PART_SCAN (part) = i;
     BFIN_PART_DBGCTL (part) = 0;
@@ -187,6 +191,10 @@ bfin_part_init (urj_part_t *part)
     BFIN_PART_EMUDAT_OUT (part) = 0;
     BFIN_PART_EMUDAT_IN (part) = 0;
     BFIN_PART_EMUPC (part) = -1;
+    return;
+
+ error:
+    urj_warning (_("Blackfin part is missing instructions\n"));
 }
 
 extern void bfin_init (void);
