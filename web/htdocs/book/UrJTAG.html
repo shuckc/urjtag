@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -176,46 +176,51 @@ HREF="#_compilation_and_installation"
 ><DL
 ><DT
 >2.4.1. <A
+HREF="#_installation_of_precompiled_urjtag_for_windows"
+>Installation of precompiled UrJTAG for Windows</A
+></DT
+><DT
+>2.4.2. <A
 HREF="#_required_software_for_compiling_urjtag"
 >Required software for compiling UrJTAG</A
 ></DT
 ><DT
->2.4.2. <A
+>2.4.3. <A
 HREF="#_required_libraries_for_usb_support"
 >Required libraries for USB support</A
 ></DT
 ><DT
->2.4.3. <A
+>2.4.4. <A
 HREF="#_installing_from_source_tar_gz"
 >Installing from source tar.gz</A
 ></DT
 ><DT
->2.4.4. <A
+>2.4.5. <A
 HREF="#_installing_from_subversion_repository"
 >Installing from Subversion repository</A
 ></DT
 ><DT
->2.4.5. <A
+>2.4.6. <A
 HREF="#_linking_to_ftd2xx_dll_in_cygwin_environment"
 >Linking to FTD2XX.DLL in Cygwin environment</A
 ></DT
 ><DT
->2.4.6. <A
+>2.4.7. <A
 HREF="#_using_libusb_win32_in_cygwin_environment"
 >Using LibUSB-Win32 in Cygwin environment</A
 ></DT
 ><DT
->2.4.7. <A
+>2.4.8. <A
 HREF="#_compiling_with_mingw"
 >Compiling with MinGW</A
 ></DT
 ><DT
->2.4.8. <A
+>2.4.9. <A
 HREF="#_driver_tailoring"
 >Driver tailoring</A
 ></DT
 ><DT
->2.4.9. <A
+>2.4.10. <A
 HREF="#_building_the_bsdl_subsystem"
 >Building the BSDL subsystem</A
 ></DT
@@ -266,6 +271,11 @@ HREF="#_sample_device_pin_status"
 >3.1.6. <A
 HREF="#_burn_flash_connected_to_the_part"
 >Burn flash connected to the part</A
+></DT
+><DT
+>3.1.7. <A
+HREF="#_non_standard_flash_commands"
+>Non-standard flash commands</A
 ></DT
 ></DL
 ></DD
@@ -382,6 +392,21 @@ HREF="#_general_rules"
 HREF="#_signal_definition"
 >Signal Definition</A
 ></DT
+><DT
+>4.3.3. <A
+HREF="#_manufacturers_list"
+>Manufacturers List</A
+></DT
+><DT
+>4.3.4. <A
+HREF="#_parts_list"
+>Parts List</A
+></DT
+><DT
+>4.3.5. <A
+HREF="#_stepping_list"
+>Stepping List</A
+></DT
 ></DL
 ></DD
 ><DT
@@ -467,7 +492,7 @@ NAME="_jtag"
 >2.1. JTAG</A
 ></H2
 ><P
->JTAG basics can be found all over the internet. This section should go into
+>JTAG basics can be found all over the Internet. This section should go into
 some more details about working with JTAG. What hardware do you need, what is
 the usage of JTAG, where do I get files. What file formats are available&#8230;</P
 ><DIV
@@ -515,7 +540,7 @@ control machine also allows to have two internal shift registers in each device
 (although we only have on in- and one output-pin). The registers are called
 instruction register (IR) and data register (DR).  The current UrJTAG tool
 allows you to set the IR and set and get the DR. It doesn't allow you to
-directly control the statemachine (yet).</P
+directly control the state machine (yet).</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -528,7 +553,7 @@ NAME="_interfaces"
 ><P
 >The simplest interface that you can build is like the Xilinx parallel cable
 (also called DLC5). If your device works with a 5V or 3.3V supply voltage then
-this device can even be build just with passive parts.  (picture missing here)
+this device can even be built just with passive parts.  (picture missing here)
 UrJTAG also supports a number of other interface adapters.</P
 ></DIV
 ><DIV
@@ -540,10 +565,10 @@ NAME="_additions"
 >2.1.3. Additions</A
 ></H3
 ><P
->In the meantime the jtag specification was used as a basis for programming
+>In the meantime the JTAG specification was used as a basis for programming
 flash files and debugging processors.  UrJTAG supports programming a couple of
 different flash devices. It also supports programming of non-flash devices via
-svf files.  UrJTAG does not support debugging yet. Other open source solutions
+SVF files.  UrJTAG does not support debugging yet. Other open source solutions
 such as OpenOCD allow you to debug ARM processors with gdb.</P
 ></DIV
 ><DIV
@@ -555,9 +580,9 @@ NAME="_bsdl_and_urjtag_data_files"
 >2.1.4. BSDL and UrJTAG data files</A
 ></H3
 ><P
->The BSDL file format describes the jtag interface for one IC.  It is a VHDL
+>The BSDL file format describes the JTAG interface for one IC.  It is a VHDL
 syntax with the needed information (like pin-names, register lengths and
-commands) that is usually done by the supplier. e.g. Xilinx BSDL files are
+commands) that is usually created by the supplier. e.g. Xilinx BSDL files are
 all included in their free web-pack (using file extension ".bsd").</P
 ><P
 >UrJTAG uses a different file format internally. So in order to add a new device
@@ -580,9 +605,9 @@ NAME="_svf_files"
 >2.1.5. SVF files</A
 ></H3
 ><P
->The SVF file format contains a number of high level commands to drive the jtag
+>The SVF file format contains a number of high level commands to drive the JTAG
 bus. For example you can shift the IR or DR and even check for the results.
-The Xilinxs impact and Altera QuartusII tools allow you to write this file to
+The Xilinx Impact and Altera QuartusII tools allow you to write this file to
 program devices.</P
 ><P
 >The player has been developed according to the "Serial Vector Format
@@ -592,7 +617,7 @@ full specification can be found at
 HREF="http://www.asset-intertech.com/support/svf.pdf"
 TARGET="_top"
 >http://www.asset-intertech.com/support/svf.pdf</A
-></P
+>.</P
 ><P
 >UrJTAG features an "SVF player" that can read SVF files and perform the
 described actions on the bus.</P
@@ -641,17 +666,17 @@ NAME="_introduction_2"
 >2.2.1. Introduction</A
 ></H3
 ><P
->UrJTAG Tools is a software package which enables working with JTAG-aware (IEEE
-1149.1) hardware devices (parts) and boards through JTAG adapter.</P
+>UrJTAG is a software package which enables working with JTAG-aware (IEEE
+1149.1) hardware devices (parts) and boards through a JTAG adapter.</P
 ><P
->This package has open and modular architecture with ability to write
+>This package has an open and modular architecture with the ability to write
 miscellaneous extensions (like board testers, flash memory programmers, and so
 on).</P
 ><P
->JTAG Tools package is free software, covered by the GNU General Public License,
+>UrJTAG is free software, covered by the GNU General Public License,
 and you are welcome to change it and/or distribute copies of it under certain
-conditions. There is absolutely no warranty for JTAG Tools.  Please read
-COPYING file for more info.</P
+conditions. There is absolutely no warranty for UrJTAG.  Please read
+the COPYING file for more info.</P
 ><DIV
 CLASS="warning"
 ><P
@@ -703,12 +728,12 @@ NAME="_urjtag_website"
 >2.2.3. UrJTAG Website</A
 ></H3
 ><P
->The most current version of this documentation and UrJTAG sourcecode
+>The most current version of this documentation and UrJTAG source code
 is always available from the project homepage at <A
 HREF="http://www.urjtag.org"
 TARGET="_top"
 >http://www.urjtag.org</A
-></P
+>.</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -776,7 +801,8 @@ NAME="_supported_host_operating_systems"
 ></H3
 ><P
 >JTAG Tools should run on all Unix like operating systems including MS Windows
-with Cygwin installed.</P
+with Cygwin installed. A precompiled version that runs on MS Windows without
+Cygwin is available as a Windows installer executable.</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -787,7 +813,7 @@ NAME="_required_software_for_running_urjtag"
 >2.3.2. Required software for running UrJTAG</A
 ></H3
 ><P
->Required only for MS Windows:</P
+>Required only for MS Windows, unless you use the precompiled version:</P
 ><P
 ></P
 ><UL
@@ -814,8 +840,8 @@ driver in the system.</P
 the system as well. It's probably a standard part of your distribution.</P
 ><P
 >More software is needed if you want to compile UrJTAG (which you probably want
-because currently no pre-compiled binaries are avaible&#8230;). See "Installation"
-below.</P
+because currently no pre-compiled binaries are available&#8230;).
+See "Installation" below.</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -967,10 +993,19 @@ TARGET="_top"
 ></LI
 ><LI
 ><P
->&#13;Black gnICE <A
+>&#13;Blackfin gnICE <A
 HREF="http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice"
 TARGET="_top"
 >http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice</A
+>
+</P
+></LI
+><LI
+><P
+>&#13;Blackfin gnICE+ <A
+HREF="http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice-plus"
+TARGET="_top"
+>http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice-plus</A
 >
 </P
 ></LI
@@ -1006,8 +1041,16 @@ TARGET="_top"
 ></LI
 ></UL
 ><P
->Other cables:
- * Technologic Systems TS-7800 SoC GPIO builtin JTAG interface</P
+>Other cables:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Technologic Systems TS-7800 SoC GPIO builtin JTAG interface
+</P
+></LI
+></UL
 ></DIV
 ><DIV
 CLASS="section"
@@ -1042,6 +1085,60 @@ least the following are supported:</P
 ><P
 >&#13;Altera Cyclone I &#38; II (w/ BSDL)
 </P
+></LI
+><LI
+><P
+>&#13;Analog Devices Blackfin (w/ BSDL)
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;BF504/BF506
+</P
+></LI
+><LI
+><P
+>&#13;BF512/BF514/BF516/BF518
+</P
+></LI
+><LI
+><P
+>&#13;BF522/BF523/BF524/BF525/BF526/BF527
+</P
+></LI
+><LI
+><P
+>&#13;BF531/BF532/BF533
+</P
+></LI
+><LI
+><P
+>&#13;BF538/BF539
+</P
+></LI
+><LI
+><P
+>&#13;BF534/BF536/BF537
+</P
+></LI
+><LI
+><P
+>&#13;BF542/BF544/BF547/BF548/BF549
+</P
+></LI
+><LI
+><P
+>&#13;BF561
+</P
+></LI
+><LI
+><P
+>&#13;BF592
+</P
+></LI
+></UL
 ></LI
 ><LI
 ><P
@@ -1298,8 +1395,43 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
+NAME="_installation_of_precompiled_urjtag_for_windows"
+>2.4.1. Installation of precompiled UrJTAG for Windows</A
+></H3
+><P
+>By simply running UrJTAG-xxx.exe, the executable and data files will
+be installed in your Windows program folder, usually some place like
+C:\Program Files\UrJTAG. It comes ready with support for JTAG cables that are
+directly attached to a parallel port. However, if you work with Windows Vista
+and want access to the parallel port, a driver for it has to be installed
+separately. It is available from</P
+><PRE
+CLASS="literallayout"
+>http://www.highrez.co.uk/Downloads/InpOut32/</PRE
+><P
+>If you want to use UrJTAG with a JTAG cable attached to the USB port,
+actual cable drivers have to be installed beside UrJTAG itself. Usually,
+the cable vendor will provide the drivers. For example, drivers for
+Altera USB-Blaster come with their Quartus software. For FTDI-based
+cables, you need an INF file describing the cable and FTDIBUS.SYS and
+FTD2XX.DLL from FTDI (CDM drivers). If your cable shows up in the device
+manager without any warning sign, UrJTAG probably is able to talk to it.</P
+><P
+>Finally, UrJTAG additionally needs libusb-win32 to talk to some USB cables that
+are not based on FTDI chips (Xilinx Platform Cable USB, Segger J-Link). The
+so-called libusb-win32 filter driver is available from the project's download
+page at Sourceforge:</P
+><PRE
+CLASS="literallayout"
+>http://libusb-win32.sourceforge.net/#downloads</PRE
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
 NAME="_required_software_for_compiling_urjtag"
->2.4.1. Required software for compiling UrJTAG</A
+>2.4.2. Required software for compiling UrJTAG</A
 ></H3
 ><P
 >To run autogen.sh, you need autoconf and automake, bison, and a recent flex.</P
@@ -1340,7 +1472,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_required_libraries_for_usb_support"
->2.4.2. Required libraries for USB support</A
+>2.4.3. Required libraries for USB support</A
 ></H3
 ><P
 >For USB adapter support (including support for parallel port adapters attached
@@ -1406,14 +1538,14 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_installing_from_source_tar_gz"
->2.4.3. Installing from source tar.gz</A
+>2.4.4. Installing from source tar.gz</A
 ></H3
 ><P
 >The installation follows the standard configure, make, make install scheme:</P
 ><PRE
 CLASS="literallayout"
->tar xzvf urjtag.tar.gz
-cd ../jtag
+>tar xzvf urjtag-x.y.tar.gz
+cd urjtag-x.y
 ./configure
 make
 make install</PRE
@@ -1424,7 +1556,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_installing_from_subversion_repository"
->2.4.4. Installing from Subversion repository</A
+>2.4.5. Installing from Subversion repository</A
 ></H3
 ><P
 >If you want to try the very newest version of UrJTAG&#8230;</P
@@ -1445,7 +1577,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_linking_to_ftd2xx_dll_in_cygwin_environment"
->2.4.5. Linking to FTD2XX.DLL in Cygwin environment</A
+>2.4.6. Linking to FTD2XX.DLL in Cygwin environment</A
 ></H3
 ><P
 >Before running configure, get the D2XX drivers from FTDI.</P
@@ -1464,7 +1596,7 @@ TARGET="_top"
 ></UL
 ><P
 >Unzip the archive into a directory of your choice (probably a choice
-without spaces in the name is better)  and afterwards run configure with the
+without spaces in the name is better) and afterwards run configure with the
 "&#8212;with-ftd2xx" pointing to that directory, e.g.</P
 ><PRE
 CLASS="literallayout"
@@ -1483,7 +1615,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_using_libusb_win32_in_cygwin_environment"
->2.4.6. Using LibUSB-Win32 in Cygwin environment</A
+>2.4.7. Using LibUSB-Win32 in Cygwin environment</A
 ></H3
 ><P
 >Before running configure, install the LibUSB-Win32 "filter" driver from SF.</P
@@ -1513,7 +1645,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_compiling_with_mingw"
->2.4.7. Compiling with MinGW</A
+>2.4.8. Compiling with MinGW</A
 ></H3
 ><P
 >UrJTAG may be compiled into a Windows executable using the MinGW compiler
@@ -1549,6 +1681,11 @@ library is available from logix4u.net:</P
 ><PRE
 CLASS="literallayout"
 >http://logix4u.net/Legacy_Ports/Parallel_Port/Inpout32.dll_for_Windows_98/2000/NT/XP.html</PRE
+><P
+>An version updated to work in Windows Vista and 64 bit Windows is available from highrez:</P
+><PRE
+CLASS="literallayout"
+>http://www.highrez.co.uk/Downloads/InpOut32/</PRE
 ></DIV
 ><DIV
 CLASS="section"
@@ -1556,7 +1693,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_driver_tailoring"
->2.4.8. Driver tailoring</A
+>2.4.9. Driver tailoring</A
 ></H3
 ><P
 >The configure script enables all default bus, cable and lowlevel drivers. You
@@ -1566,7 +1703,7 @@ run</P
 CLASS="literallayout"
 >./configure --help</PRE
 ><P
->to figure out the appropriate &#8212;enable-bus, &#8212;enable-cable and &#8212;enable-lowlevel
+>to figure out the appropriate &#8212;enable-bus, &#8212;enable-cable, and &#8212;enable-lowlevel
 options.</P
 ></DIV
 ><DIV
@@ -1575,7 +1712,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_building_the_bsdl_subsystem"
->2.4.9. Building the BSDL subsystem</A
+>2.4.10. Building the BSDL subsystem</A
 ></H3
 ><P
 >As mentioned above, building the BSDL lexer requires Flex 2.5.33 or newer. If
@@ -1623,12 +1760,12 @@ NAME="_run_the_software"
 >Connect your JTAG adapter between your PC and target device and turn
 on your device.</P
 ><P
->To run JTAG Tools type "jtag" and press Enter. jtag should start and
-display some initial informations. Output should end with line like this:</P
+>To run UrJTAG type "jtag" and press Enter; jtag should start and
+display some initial information. Output should end with a line like this:</P
 ><PRE
 CLASS="literallayout"
->This is "jtag command prompt". Type "help" and press Enter for initial help
-about available commands. To exit JTAG Tools type "quit" and press Enter.</PRE
+>WARNING: UrJTAG may damage your hardware!
+Type "quit" to exit, "help" for help.</PRE
 ></DIV
 ><DIV
 CLASS="section"
@@ -1639,9 +1776,9 @@ NAME="_configure_the_cable"
 >3.1.2. Configure the cable</A
 ></H3
 ><P
->Type "help cable" for list of supported JTAG cables.</P
+>Type "help cable" for a list of supported JTAG cables.</P
 ><P
->Type "cable" command followed by the cable name and possibly further
+>Type the "cable" command followed by the cable name and possibly further
 arguments for cable configuration. Example:</P
 ><PRE
 CLASS="literallayout"
@@ -1785,6 +1922,56 @@ CLASS="literallayout"
 >Done.
 jtag&#62;</PRE
 ></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="_non_standard_flash_commands"
+>3.1.7. Non-standard flash commands</A
+></H3
+><P
+>Erasing and programming flash devices is covered by standard procedures
+in UrJTAG. Apart from these, many flash chips implement a lot more
+functionality via dedicated commands that vary from between manufacturers
+and device families. UrJTAG can't cover them all natively.</P
+><P
+>It's however possible to send any command stream to the flash by using
+the poke and peek commands. You just need to clarify two things:</P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;base address of the flash (BA)
+    it's the same that's used for detectflash
+</P
+></LI
+><LI
+><P
+>&#13;data width, x8 or x16
+    defined by the width of the bus where the flash is attached
+</P
+></LI
+></OL
+><P
+>Next look up the address/data pairs for the command in question. The data
+sheet for your particular flash should document all commands in a table e.g.
+If your flash is attached in x16 mode, the address must be shifted by one
+position. Addresses in x8 mode are not affected.</P
+><P
+>The "Read Manufacturer ID" command in x16 mode would look like</P
+><PRE
+CLASS="literallayout"
+>poke BA+(0x555*2) 0xaa
+poke BA+(0x2aa*2) 0x55
+poke BA+(0x555*2) 0x90
+peek BA+(0x000*2)</PRE
+><P
+>Note that the calculations must be done beforehand. UrJTAG can't evaluate
+expressions on the command line.</P
+></DIV
 ></DIV
 ><DIV
 CLASS="section"
@@ -1810,7 +1997,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN393"
+NAME="AEN442"
 ></A
 ><TABLE
 BORDER="0"
@@ -2367,7 +2554,7 @@ CLASS="emphasis"
 ></TD
 ><TD
 >&#13;<P
->&#13;execute svf commands from file
+>&#13;execute SVF commands from file
 </P
 >
 </TD
@@ -2491,7 +2678,7 @@ NAME="_cable"
 >3.2.3.1. cable</A
 ></H4
 ><P
->Sets and initialized the cable driver. This is usually the first command that
+>Sets and initializes the cable driver. This is usually the first command that
 you are executing in a session. Example:</P
 ><PRE
 CLASS="literallayout"
@@ -2599,7 +2786,7 @@ command) to find a match for the manufacturer, revision and part number for the
 IDCODE read from the part. However, not all parts identify themselves in a way
 that is useful for "detect". For example, many chips with an ARM processor core
 inside present an IDCODE that may be specific to the the particular core inside
-the chip (e.g.  ARM7TDMI), but doesn't tell about the actual manufacturer of
+the chip (e.g. ARM7TDMI), but doesn't tell about the actual manufacturer of
 the chip. In such case, the data for the part has to be included manually. See
 also the documentation for the "include" command.</P
 ></DIV
@@ -2687,7 +2874,7 @@ CLASS="literallayout"
 >initbus prototype amsb=ADDR22 alsb=ADDR0 dmsb=D15 dlsb=D0
           ncs=nRCS0 nwe=nWE noe=nOE amode=x16</PRE
 ><P
->The "prototype" bus driver yet cannot deal with systems where address and data
+>The "prototype" bus driver cannot deal with systems where address and data
 bus are multiplexed on the same pins. If signals aren't numbered in the right
 order or with gaps, you may get along by defining proper names as aliases for
 the actual signals, with commands like "salias ADDR12 BSCGX44".</P
@@ -2696,7 +2883,7 @@ the actual signals, with commands like "salias ADDR12 BSCGX44".</P
 Because it isn't possible to efficiently address only particular pins but only
 all at once, and data for all pins has to be transferred through JTAG for every
 single change, this method isn't the fastest, but usually easiest to implement
-and, well, sometimes it counts whether it works at all..</P
+and, well, sometimes it counts whether it works at all.</P
 ><P
 >The "fjmem" (FPGA JTAG memory) bus driver attempts to address this issue by
 moving control and observation away from BSR to a device-internal
@@ -2741,7 +2928,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN653"
+NAME="AEN702"
 ></A
 ><TABLE
 BORDER="0"
@@ -2850,7 +3037,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN685"
+NAME="AEN734"
 ></A
 ><TABLE
 BORDER="0"
@@ -3017,7 +3204,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN735"
+NAME="AEN784"
 ></A
 ><TABLE
 BORDER="0"
@@ -3204,7 +3391,7 @@ NAME="_svf"
 ></H4
 ><P
 >The SVF player operates on a single part in the scan chain. Therefore, you
-have to bring up the jtag software, specify a cable and detect the scan
+have to bring up the JTAG software, specify a cable and detect the scan
 chain beforehand.</P
 ><P
 >The player will establish a new instruction called "SIR" and a new register
@@ -3270,7 +3457,7 @@ CELLPADDING="5"
 ><DIV
 CLASS="sidebar"
 ><A
-NAME="AEN801"
+NAME="AEN850"
 ></A
 ><P
 ><B
@@ -3279,63 +3466,6 @@ NAME="AEN801"
 ><P
 >Several limitations exist for the SVF player.</P
 ><P
->It has been tested so far with files generated by these tools:</P
-><P
-></P
-><UL
-><LI
-><P
->&#13;Xilinx ISE WebPack 6.3.02i - 9.1.02i
-</P
-></LI
-><LI
-><P
->&#13;Altera Quartus II 4.1sp1 - 7.0
-</P
-></LI
-></UL
-><P
->Configuration for these devices has been tested so far:</P
-><P
-></P
-><UL
-><LI
-><P
->&#13;Altera EPC1C12Q240
-</P
-></LI
-><LI
-><P
->&#13;Altera MAX3032, EPM3032ALC44
-</P
-></LI
-><LI
-><P
->&#13;Altera MAX3064, EPM3064ALC44
-</P
-></LI
-><LI
-><P
->&#13;Altera MAX7032, EPM7032SLC44
-</P
-></LI
-><LI
-><P
->&#13;Altera MAX7064, EPM7064SLC44, EPM7064STC44
-</P
-></LI
-><LI
-><P
->&#13;Xilinx Spartan-IIE, XC2S300E-PQ208
-</P
-></LI
-><LI
-><P
->&#13;Xilinx Spartan-3, XC3S1000-FG456, XC3S5000-FG900
-</P
-></LI
-></UL
-><P
 >The implementation of some SVF commands has deficiencies.</P
 ><P
 ></P
@@ -3343,7 +3473,7 @@ NAME="AEN801"
 ><LI
 ><P
 >&#13;HIR, HDR commands not supported.
-    Their functionality should be covered by the part concept of JTAG Tools.
+    Their functionality should be covered by the part concept of UrJTAG.
 </P
 ></LI
 ><LI
@@ -3371,7 +3501,7 @@ NAME="AEN801"
 ><LI
 ><P
 >&#13;TIR, TDR commands not supported.
-    Their functionality should be covered by the part concept of JTAG Tools.
+    Their functionality should be covered by the part concept of UrJTAG.
 </P
 ></LI
 ></UL
@@ -3424,7 +3554,7 @@ CLASS="emphasis"
 started. This involves matching the retrieved IDCODE against the part
 descriptions in /usr/share/urjtag as described above. However, before this
 database is searched for a suitable description, the BSDL subsystem is started
-and searches for BSDL file that matches this device. If it finds a matching
+and searches for a BSDL file that matches this device. If it finds a matching
 file, traversal of the /usr/share/urjtag database is skipped. If not, then
 this standard process follows.</P
 ><P
@@ -3455,7 +3585,7 @@ CLASS="emphasis"
 CLASS="emphasis"
 >bsdl path</I
 ></SPAN
-> and is used lateron when
+> and is used later on when
 <SPAN
 CLASS="emphasis"
 ><I
@@ -3638,7 +3768,7 @@ NAME="_internals"
 ></A
 >Chapter 4. Internals</H1
 ><P
->This section yet is only a placeholder for the information that will
+>This section is only a placeholder for the information that will
 be added soon&#8230;</P
 ><DIV
 CLASS="section"
@@ -3661,7 +3791,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN892"
+NAME="AEN919"
 ></A
 ><TABLE
 BORDER="0"
@@ -3693,7 +3823,7 @@ VALIGN="top"
 ></TD
 ><TD
 >&#13;<P
->&#13;Part descriptions (Data files)
+>&#13;Part descriptions (data files)
 </P
 >
 </TD
@@ -4769,6 +4899,252 @@ NAME="_signal_definition"
 signal name (without spaces in the name). Rest of the line should contain
 whitespace separated list of pins of the part. This list is currently not used
 for any purpose in JTAG Tools. It is intended for future use.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="_manufacturers_list"
+>4.3.3. Manufacturers List</A
+></H3
+><P
+>The <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/MANUFACTURERS</I
+></SPAN
+> file is used to locate the manufacturer of a specific
+device found in the JTAG chain.  If you get the error <SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>Unknown manufacturer</B
+></SPAN
+>
+when attempting the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+> command, this is the file you need to update.</P
+><P
+>See the JEDEC document for more information:
+JEDEC Solid State Technology Association, "Standard Manufacturer's
+Identification Code", September 2001, Order Number: JEP106-K</P
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_format"
+>4.3.3.1. Format</A
+></H4
+><P
+>The first token is a bit string that matches bits 11-1 of the device's IDCODE.
+We omit bit 0 because it should always be 1 (per the JEDEC standard).</P
+><P
+>The second token is the name of the directory under <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/</I
+></SPAN
+> to search for
+specific part information.</P
+><P
+>The rest of the line is the human readable form of the manufacturer's name.</P
+><P
+>For example, we find this in <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/MANUFACTURERS</I
+></SPAN
+>:</P
+><PRE
+CLASS="literallayout"
+>00001100101   analog          Analog Devices, Inc.</PRE
+><P
+>The manufacturer's IDCODE is <TT
+CLASS="literal"
+>000011001011</TT
+> (notice the last bit is stripped),
+more part information can be found under <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/</I
+></SPAN
+>, and the human friendly
+name is <TT
+CLASS="literal"
+>Analog Devices, Inc.</TT
+>.</P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="_parts_list"
+>4.3.4. Parts List</A
+></H3
+><P
+>Every manufacturer subdirectory needs a <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>PARTS</I
+></SPAN
+> file.  This is used to look
+up further information about a part such as the stepping and signal list.  If
+you get the error <SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>Unknown part</B
+></SPAN
+> when attempting the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+> command, this is
+the file you need to update.</P
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_format_2"
+>4.3.4.1. Format</A
+></H4
+><P
+>The first token is a bit string that matches bits 27-12 of the device's IDCODE.</P
+><P
+>The second token is the name of the directory under the manufacturer's <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/</I
+></SPAN
+>
+directory to search for specific part information.</P
+><P
+>The rest of the line is the human readable form of the part's name.</P
+><P
+>For example, we find this in <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/PARTS</I
+></SPAN
+>:</P
+><PRE
+CLASS="literallayout"
+>0010011111001000      bf537                   BF537</PRE
+><P
+>The part's IDCODE is <TT
+CLASS="literal"
+>0010011111001000</TT
+>, more part information can be found
+under <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/bf537/</I
+></SPAN
+>, and the human friendly name is <TT
+CLASS="literal"
+>BF537</TT
+>.</P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="_stepping_list"
+>4.3.5. Stepping List</A
+></H3
+><P
+>Every part subdirectory needs a <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>STEPPINGS</I
+></SPAN
+> file.  This is used to find the
+file that contains information like the signals list.  If you get the error
+<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>Unknown stepping</B
+></SPAN
+> when attempting the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+> command, this is the file you
+need to update.</P
+><DIV
+CLASS="section"
+><HR><H4
+CLASS="section"
+><A
+NAME="_format_3"
+>4.3.5.1. Format</A
+></H4
+><P
+>The first token is a bit string that matches bits 31-28 of the device's IDCODE.</P
+><P
+>The second token is the name of the file to load that contains information like
+the signal list, extra instructions/registers, etc&#8230;  This file should be
+placed alongside the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>STEPPINGS</I
+></SPAN
+> file in the part-specific subdirectory.</P
+><P
+>The rest of the line is the human readable form of the part stepping's name.</P
+><P
+>For example, we find this in <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/bf537/STEPPINGS</I
+></SPAN
+>:</P
+><PRE
+CLASS="literallayout"
+>0010  bf537           2</PRE
+><P
+>The part's stepping is <TT
+CLASS="literal"
+>0010</TT
+>, signal information can be found in the file
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/bf537/bf537</I
+></SPAN
+>, and the human friendly stepping name is <TT
+CLASS="literal"
+>2</TT
+>.</P
+></DIV
 ></DIV
 ></DIV
 ><DIV

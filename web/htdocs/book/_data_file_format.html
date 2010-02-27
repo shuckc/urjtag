@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -114,6 +114,252 @@ NAME="_signal_definition"
 signal name (without spaces in the name). Rest of the line should contain
 whitespace separated list of pins of the part. This list is currently not used
 for any purpose in JTAG Tools. It is intended for future use.</P
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_manufacturers_list"
+>4.3.3. Manufacturers List</A
+></H2
+><P
+>The <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/MANUFACTURERS</I
+></SPAN
+> file is used to locate the manufacturer of a specific
+device found in the JTAG chain.  If you get the error <SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>Unknown manufacturer</B
+></SPAN
+>
+when attempting the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+> command, this is the file you need to update.</P
+><P
+>See the JEDEC document for more information:
+JEDEC Solid State Technology Association, "Standard Manufacturer's
+Identification Code", September 2001, Order Number: JEP106-K</P
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_format"
+>4.3.3.1. Format</A
+></H3
+><P
+>The first token is a bit string that matches bits 11-1 of the device's IDCODE.
+We omit bit 0 because it should always be 1 (per the JEDEC standard).</P
+><P
+>The second token is the name of the directory under <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/</I
+></SPAN
+> to search for
+specific part information.</P
+><P
+>The rest of the line is the human readable form of the manufacturer's name.</P
+><P
+>For example, we find this in <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/MANUFACTURERS</I
+></SPAN
+>:</P
+><PRE
+CLASS="literallayout"
+>00001100101   analog          Analog Devices, Inc.</PRE
+><P
+>The manufacturer's IDCODE is <TT
+CLASS="literal"
+>000011001011</TT
+> (notice the last bit is stripped),
+more part information can be found under <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/</I
+></SPAN
+>, and the human friendly
+name is <TT
+CLASS="literal"
+>Analog Devices, Inc.</TT
+>.</P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_parts_list"
+>4.3.4. Parts List</A
+></H2
+><P
+>Every manufacturer subdirectory needs a <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>PARTS</I
+></SPAN
+> file.  This is used to look
+up further information about a part such as the stepping and signal list.  If
+you get the error <SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>Unknown part</B
+></SPAN
+> when attempting the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+> command, this is
+the file you need to update.</P
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_format_2"
+>4.3.4.1. Format</A
+></H3
+><P
+>The first token is a bit string that matches bits 27-12 of the device's IDCODE.</P
+><P
+>The second token is the name of the directory under the manufacturer's <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/</I
+></SPAN
+>
+directory to search for specific part information.</P
+><P
+>The rest of the line is the human readable form of the part's name.</P
+><P
+>For example, we find this in <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/PARTS</I
+></SPAN
+>:</P
+><PRE
+CLASS="literallayout"
+>0010011111001000      bf537                   BF537</PRE
+><P
+>The part's IDCODE is <TT
+CLASS="literal"
+>0010011111001000</TT
+>, more part information can be found
+under <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/bf537/</I
+></SPAN
+>, and the human friendly name is <TT
+CLASS="literal"
+>BF537</TT
+>.</P
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_stepping_list"
+>4.3.5. Stepping List</A
+></H2
+><P
+>Every part subdirectory needs a <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>STEPPINGS</I
+></SPAN
+> file.  This is used to find the
+file that contains information like the signals list.  If you get the error
+<SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>Unknown stepping</B
+></SPAN
+> when attempting the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>detect</I
+></SPAN
+> command, this is the file you
+need to update.</P
+><DIV
+CLASS="section"
+><H3
+CLASS="section"
+><A
+NAME="_format_3"
+>4.3.5.1. Format</A
+></H3
+><P
+>The first token is a bit string that matches bits 31-28 of the device's IDCODE.</P
+><P
+>The second token is the name of the file to load that contains information like
+the signal list, extra instructions/registers, etc&#8230;  This file should be
+placed alongside the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>STEPPINGS</I
+></SPAN
+> file in the part-specific subdirectory.</P
+><P
+>The rest of the line is the human readable form of the part stepping's name.</P
+><P
+>For example, we find this in <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/bf537/STEPPINGS</I
+></SPAN
+>:</P
+><PRE
+CLASS="literallayout"
+>0010  bf537           2</PRE
+><P
+>The part's stepping is <TT
+CLASS="literal"
+>0010</TT
+>, signal information can be found in the file
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>data/analog/bf537/bf537</I
+></SPAN
+>, and the human friendly stepping name is <TT
+CLASS="literal"
+>2</TT
+>.</P
+></DIV
 ></DIV
 ></DIV
 ><DIV

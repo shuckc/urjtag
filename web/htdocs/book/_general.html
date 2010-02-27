@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -84,7 +84,7 @@ NAME="_jtag"
 >2.1. JTAG</A
 ></H1
 ><P
->JTAG basics can be found all over the internet. This section should go into
+>JTAG basics can be found all over the Internet. This section should go into
 some more details about working with JTAG. What hardware do you need, what is
 the usage of JTAG, where do I get files. What file formats are available&#8230;</P
 ><DIV
@@ -132,7 +132,7 @@ control machine also allows to have two internal shift registers in each device
 (although we only have on in- and one output-pin). The registers are called
 instruction register (IR) and data register (DR).  The current UrJTAG tool
 allows you to set the IR and set and get the DR. It doesn't allow you to
-directly control the statemachine (yet).</P
+directly control the state machine (yet).</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -145,7 +145,7 @@ NAME="_interfaces"
 ><P
 >The simplest interface that you can build is like the Xilinx parallel cable
 (also called DLC5). If your device works with a 5V or 3.3V supply voltage then
-this device can even be build just with passive parts.  (picture missing here)
+this device can even be built just with passive parts.  (picture missing here)
 UrJTAG also supports a number of other interface adapters.</P
 ></DIV
 ><DIV
@@ -157,10 +157,10 @@ NAME="_additions"
 >2.1.3. Additions</A
 ></H2
 ><P
->In the meantime the jtag specification was used as a basis for programming
+>In the meantime the JTAG specification was used as a basis for programming
 flash files and debugging processors.  UrJTAG supports programming a couple of
 different flash devices. It also supports programming of non-flash devices via
-svf files.  UrJTAG does not support debugging yet. Other open source solutions
+SVF files.  UrJTAG does not support debugging yet. Other open source solutions
 such as OpenOCD allow you to debug ARM processors with gdb.</P
 ></DIV
 ><DIV
@@ -172,9 +172,9 @@ NAME="_bsdl_and_urjtag_data_files"
 >2.1.4. BSDL and UrJTAG data files</A
 ></H2
 ><P
->The BSDL file format describes the jtag interface for one IC.  It is a VHDL
+>The BSDL file format describes the JTAG interface for one IC.  It is a VHDL
 syntax with the needed information (like pin-names, register lengths and
-commands) that is usually done by the supplier. e.g. Xilinx BSDL files are
+commands) that is usually created by the supplier. e.g. Xilinx BSDL files are
 all included in their free web-pack (using file extension ".bsd").</P
 ><P
 >UrJTAG uses a different file format internally. So in order to add a new device
@@ -197,9 +197,9 @@ NAME="_svf_files"
 >2.1.5. SVF files</A
 ></H2
 ><P
->The SVF file format contains a number of high level commands to drive the jtag
+>The SVF file format contains a number of high level commands to drive the JTAG
 bus. For example you can shift the IR or DR and even check for the results.
-The Xilinxs impact and Altera QuartusII tools allow you to write this file to
+The Xilinx Impact and Altera QuartusII tools allow you to write this file to
 program devices.</P
 ><P
 >The player has been developed according to the "Serial Vector Format
@@ -209,7 +209,7 @@ full specification can be found at
 HREF="http://www.asset-intertech.com/support/svf.pdf"
 TARGET="_top"
 >http://www.asset-intertech.com/support/svf.pdf</A
-></P
+>.</P
 ><P
 >UrJTAG features an "SVF player" that can read SVF files and perform the
 described actions on the bus.</P

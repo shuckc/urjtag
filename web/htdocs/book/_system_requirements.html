@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -89,7 +89,8 @@ NAME="_supported_host_operating_systems"
 ></H2
 ><P
 >JTAG Tools should run on all Unix like operating systems including MS Windows
-with Cygwin installed.</P
+with Cygwin installed. A precompiled version that runs on MS Windows without
+Cygwin is available as a Windows installer executable.</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -100,7 +101,7 @@ NAME="_required_software_for_running_urjtag"
 >2.3.2. Required software for running UrJTAG</A
 ></H2
 ><P
->Required only for MS Windows:</P
+>Required only for MS Windows, unless you use the precompiled version:</P
 ><P
 ></P
 ><UL
@@ -127,8 +128,8 @@ driver in the system.</P
 the system as well. It's probably a standard part of your distribution.</P
 ><P
 >More software is needed if you want to compile UrJTAG (which you probably want
-because currently no pre-compiled binaries are avaible&#8230;). See "Installation"
-below.</P
+because currently no pre-compiled binaries are available&#8230;).
+See "Installation" below.</P
 ></DIV
 ><DIV
 CLASS="section"
@@ -280,10 +281,19 @@ TARGET="_top"
 ></LI
 ><LI
 ><P
->&#13;Black gnICE <A
+>&#13;Blackfin gnICE <A
 HREF="http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice"
 TARGET="_top"
 >http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice</A
+>
+</P
+></LI
+><LI
+><P
+>&#13;Blackfin gnICE+ <A
+HREF="http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice-plus"
+TARGET="_top"
+>http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:gnice-plus</A
 >
 </P
 ></LI
@@ -319,8 +329,16 @@ TARGET="_top"
 ></LI
 ></UL
 ><P
->Other cables:
- * Technologic Systems TS-7800 SoC GPIO builtin JTAG interface</P
+>Other cables:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Technologic Systems TS-7800 SoC GPIO builtin JTAG interface
+</P
+></LI
+></UL
 ></DIV
 ><DIV
 CLASS="section"
@@ -355,6 +373,60 @@ least the following are supported:</P
 ><P
 >&#13;Altera Cyclone I &#38; II (w/ BSDL)
 </P
+></LI
+><LI
+><P
+>&#13;Analog Devices Blackfin (w/ BSDL)
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;BF504/BF506
+</P
+></LI
+><LI
+><P
+>&#13;BF512/BF514/BF516/BF518
+</P
+></LI
+><LI
+><P
+>&#13;BF522/BF523/BF524/BF525/BF526/BF527
+</P
+></LI
+><LI
+><P
+>&#13;BF531/BF532/BF533
+</P
+></LI
+><LI
+><P
+>&#13;BF538/BF539
+</P
+></LI
+><LI
+><P
+>&#13;BF534/BF536/BF537
+</P
+></LI
+><LI
+><P
+>&#13;BF542/BF544/BF547/BF548/BF549
+</P
+></LI
+><LI
+><P
+>&#13;BF561
+</P
+></LI
+><LI
+><P
+>&#13;BF592
+</P
+></LI
+></UL
 ></LI
 ><LI
 ><P

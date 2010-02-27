@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -84,8 +84,43 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
+NAME="_installation_of_precompiled_urjtag_for_windows"
+>2.4.1. Installation of precompiled UrJTAG for Windows</A
+></H2
+><P
+>By simply running UrJTAG-xxx.exe, the executable and data files will
+be installed in your Windows program folder, usually some place like
+C:\Program Files\UrJTAG. It comes ready with support for JTAG cables that are
+directly attached to a parallel port. However, if you work with Windows Vista
+and want access to the parallel port, a driver for it has to be installed
+separately. It is available from</P
+><PRE
+CLASS="literallayout"
+>http://www.highrez.co.uk/Downloads/InpOut32/</PRE
+><P
+>If you want to use UrJTAG with a JTAG cable attached to the USB port,
+actual cable drivers have to be installed beside UrJTAG itself. Usually,
+the cable vendor will provide the drivers. For example, drivers for
+Altera USB-Blaster come with their Quartus software. For FTDI-based
+cables, you need an INF file describing the cable and FTDIBUS.SYS and
+FTD2XX.DLL from FTDI (CDM drivers). If your cable shows up in the device
+manager without any warning sign, UrJTAG probably is able to talk to it.</P
+><P
+>Finally, UrJTAG additionally needs libusb-win32 to talk to some USB cables that
+are not based on FTDI chips (Xilinx Platform Cable USB, Segger J-Link). The
+so-called libusb-win32 filter driver is available from the project's download
+page at Sourceforge:</P
+><PRE
+CLASS="literallayout"
+>http://libusb-win32.sourceforge.net/#downloads</PRE
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
 NAME="_required_software_for_compiling_urjtag"
->2.4.1. Required software for compiling UrJTAG</A
+>2.4.2. Required software for compiling UrJTAG</A
 ></H2
 ><P
 >To run autogen.sh, you need autoconf and automake, bison, and a recent flex.</P
@@ -126,7 +161,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_required_libraries_for_usb_support"
->2.4.2. Required libraries for USB support</A
+>2.4.3. Required libraries for USB support</A
 ></H2
 ><P
 >For USB adapter support (including support for parallel port adapters attached
@@ -192,14 +227,14 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_installing_from_source_tar_gz"
->2.4.3. Installing from source tar.gz</A
+>2.4.4. Installing from source tar.gz</A
 ></H2
 ><P
 >The installation follows the standard configure, make, make install scheme:</P
 ><PRE
 CLASS="literallayout"
->tar xzvf urjtag.tar.gz
-cd ../jtag
+>tar xzvf urjtag-x.y.tar.gz
+cd urjtag-x.y
 ./configure
 make
 make install</PRE
@@ -210,7 +245,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_installing_from_subversion_repository"
->2.4.4. Installing from Subversion repository</A
+>2.4.5. Installing from Subversion repository</A
 ></H2
 ><P
 >If you want to try the very newest version of UrJTAG&#8230;</P
@@ -231,7 +266,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_linking_to_ftd2xx_dll_in_cygwin_environment"
->2.4.5. Linking to FTD2XX.DLL in Cygwin environment</A
+>2.4.6. Linking to FTD2XX.DLL in Cygwin environment</A
 ></H2
 ><P
 >Before running configure, get the D2XX drivers from FTDI.</P
@@ -250,7 +285,7 @@ TARGET="_top"
 ></UL
 ><P
 >Unzip the archive into a directory of your choice (probably a choice
-without spaces in the name is better)  and afterwards run configure with the
+without spaces in the name is better) and afterwards run configure with the
 "&#8212;with-ftd2xx" pointing to that directory, e.g.</P
 ><PRE
 CLASS="literallayout"
@@ -269,7 +304,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_using_libusb_win32_in_cygwin_environment"
->2.4.6. Using LibUSB-Win32 in Cygwin environment</A
+>2.4.7. Using LibUSB-Win32 in Cygwin environment</A
 ></H2
 ><P
 >Before running configure, install the LibUSB-Win32 "filter" driver from SF.</P
@@ -299,7 +334,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_compiling_with_mingw"
->2.4.7. Compiling with MinGW</A
+>2.4.8. Compiling with MinGW</A
 ></H2
 ><P
 >UrJTAG may be compiled into a Windows executable using the MinGW compiler
@@ -335,6 +370,11 @@ library is available from logix4u.net:</P
 ><PRE
 CLASS="literallayout"
 >http://logix4u.net/Legacy_Ports/Parallel_Port/Inpout32.dll_for_Windows_98/2000/NT/XP.html</PRE
+><P
+>An version updated to work in Windows Vista and 64 bit Windows is available from highrez:</P
+><PRE
+CLASS="literallayout"
+>http://www.highrez.co.uk/Downloads/InpOut32/</PRE
 ></DIV
 ><DIV
 CLASS="section"
@@ -342,7 +382,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_driver_tailoring"
->2.4.8. Driver tailoring</A
+>2.4.9. Driver tailoring</A
 ></H2
 ><P
 >The configure script enables all default bus, cable and lowlevel drivers. You
@@ -352,7 +392,7 @@ run</P
 CLASS="literallayout"
 >./configure --help</PRE
 ><P
->to figure out the appropriate &#8212;enable-bus, &#8212;enable-cable and &#8212;enable-lowlevel
+>to figure out the appropriate &#8212;enable-bus, &#8212;enable-cable, and &#8212;enable-lowlevel
 options.</P
 ></DIV
 ><DIV
@@ -361,7 +401,7 @@ CLASS="section"
 CLASS="section"
 ><A
 NAME="_building_the_bsdl_subsystem"
->2.4.9. Building the BSDL subsystem</A
+>2.4.10. Building the BSDL subsystem</A
 ></H2
 ><P
 >As mentioned above, building the BSDL lexer requires Flex 2.5.33 or newer. If

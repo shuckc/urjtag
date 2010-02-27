@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -95,12 +95,12 @@ NAME="_run_the_software"
 >Connect your JTAG adapter between your PC and target device and turn
 on your device.</P
 ><P
->To run JTAG Tools type "jtag" and press Enter. jtag should start and
-display some initial informations. Output should end with line like this:</P
+>To run UrJTAG type "jtag" and press Enter; jtag should start and
+display some initial information. Output should end with a line like this:</P
 ><PRE
 CLASS="literallayout"
->This is "jtag command prompt". Type "help" and press Enter for initial help
-about available commands. To exit JTAG Tools type "quit" and press Enter.</PRE
+>WARNING: UrJTAG may damage your hardware!
+Type "quit" to exit, "help" for help.</PRE
 ></DIV
 ><DIV
 CLASS="section"
@@ -111,9 +111,9 @@ NAME="_configure_the_cable"
 >3.1.2. Configure the cable</A
 ></H2
 ><P
->Type "help cable" for list of supported JTAG cables.</P
+>Type "help cable" for a list of supported JTAG cables.</P
 ><P
->Type "cable" command followed by the cable name and possibly further
+>Type the "cable" command followed by the cable name and possibly further
 arguments for cable configuration. Example:</P
 ><PRE
 CLASS="literallayout"
@@ -256,6 +256,56 @@ record: start = 0x00000000, len = 0x00001000, checksum = 0x00000000</PRE
 CLASS="literallayout"
 >Done.
 jtag&#62;</PRE
+></DIV
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="_non_standard_flash_commands"
+>3.1.7. Non-standard flash commands</A
+></H2
+><P
+>Erasing and programming flash devices is covered by standard procedures
+in UrJTAG. Apart from these, many flash chips implement a lot more
+functionality via dedicated commands that vary from between manufacturers
+and device families. UrJTAG can't cover them all natively.</P
+><P
+>It's however possible to send any command stream to the flash by using
+the poke and peek commands. You just need to clarify two things:</P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;base address of the flash (BA)
+    it's the same that's used for detectflash
+</P
+></LI
+><LI
+><P
+>&#13;data width, x8 or x16
+    defined by the width of the bus where the flash is attached
+</P
+></LI
+></OL
+><P
+>Next look up the address/data pairs for the command in question. The data
+sheet for your particular flash should document all commands in a table e.g.
+If your flash is attached in x16 mode, the address must be shifted by one
+position. Addresses in x8 mode are not affected.</P
+><P
+>The "Read Manufacturer ID" command in x16 mode would look like</P
+><PRE
+CLASS="literallayout"
+>poke BA+(0x555*2) 0xaa
+poke BA+(0x2aa*2) 0x55
+poke BA+(0x555*2) 0x90
+peek BA+(0x000*2)</PRE
+><P
+>Note that the calculations must be done beforehand. UrJTAG can't evaluate
+expressions on the command line.</P
 ></DIV
 ></DIV
 ></DIV
