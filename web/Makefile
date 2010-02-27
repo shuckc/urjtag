@@ -1,5 +1,5 @@
 WEB=arniml,urjtag@web.sourceforge.net:/home/groups/u/ur/urjtag
-JTAG=../jtag
+JTAG=../urjtag
 BOOK=./htdocs/book
 
 RSYNC=rsync
