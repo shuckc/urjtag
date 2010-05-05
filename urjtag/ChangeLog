@@ -1,3 +1,8 @@
+2010-05-05  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/cmd_debug.c (string_to_log_level): Tweak the -1 sanity check to
+    avoid warnings from gcc about -1 not being an enum value.
+
 2010-02-16  Mike Frysinger  <vapier@gentoo.org>
 
   * data/MANUFACTURERS: Use the official ADI name.

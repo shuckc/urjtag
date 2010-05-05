@@ -62,6 +62,9 @@ string_to_log_level (const char *strlevel)
 static const char *
 log_level_to_string (urj_log_level_t level)
 {
+    /* sanity for string_to_log_level() return */
+    if (level == -1)
+        goto case_default;
     switch (level) {
     case URJ_LOG_LEVEL_ALL:     return "all";
     case URJ_LOG_LEVEL_COMM:    return "comm";
@@ -71,7 +74,7 @@ log_level_to_string (urj_log_level_t level)
     case URJ_LOG_LEVEL_WARNING: return "warning";
     case URJ_LOG_LEVEL_ERROR:   return "error";
     case URJ_LOG_LEVEL_SILENT:  return "silent";
-    case -1: /* sanity for string_to_log_level() return */
+    case_default:
     default: return "unknown";
     }
 }
