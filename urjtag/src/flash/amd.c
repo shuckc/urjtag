@@ -389,6 +389,12 @@ amd_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
         case 0x2249:
             urj_log (ll, "MX29LV160B");
             break;
+        case 0x22a7:
+            urj_log (ll, "MX29LV320CT");
+            break;
+        case 0x22a8:
+            urj_log (ll, "MX29LV320CB");
+            break;
         case 0x22CB:
             urj_log (ll, "MX29LV640B");
             break;

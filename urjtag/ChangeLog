@@ -1,3 +1,7 @@
+2010-05-19  Arnim Laeuger  <arniml>
+
+  * src/flash/amd.c, doc/UrJTAG.txt: [ 2996919 ] Support for MX29LV320C
+
 2010-05-05  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_debug.c (string_to_log_level): Tweak the -1 sanity check to

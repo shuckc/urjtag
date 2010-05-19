@@ -303,6 +303,7 @@ be untested combinations of chip type, bus width, ...
  * Intel 28FxxxK18 (28F640K18, 28F128K18, 28F256K18)
  * AMD Am29LV64xD (Am29LV640D, Am29LV641D, Am29LV642D)
  * AMD Am29xx040B (Am29F040B, Am29LV040B)
+ * Macronix MX29LV160, MX29LV320, MX29LV640
 
 UrJTAG uses the multi-byte write mode if supported by the particular flash
 device. The flash code will automatically switch to this algorithm if the
