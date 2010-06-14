@@ -2,6 +2,11 @@
 
   * configure.ac: Drop stropts.h check since parport code no longer uses it.
 
+  * configure.ac: Check for sys/wait.h usability.
+  * src/cmd/cmd_bfin.c: Include sys/wait.h when available since we use macros
+    from it, and change the mingw check to key off this header instead to make
+    things a bit more portable.
+
 2010-05-19  Arnim Laeuger  <arniml>
 
   * src/flash/amd.c, doc/UrJTAG.txt: [ 2996919 ] Support for MX29LV320C

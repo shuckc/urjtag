@@ -26,6 +26,9 @@
 #include <assert.h>
 #include <inttypes.h>
 #include <unistd.h>
+#ifdef HAVE_SYS_WAIT_H
+#include <sys/wait.h>
+#endif
 
 #include <urjtag/part.h>
 #include <urjtag/chain.h>
@@ -245,9 +248,9 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                 }
                 else
                 {
-#ifdef __MINGW32__
+#ifndef HAVE_SYS_WAIT_H
                     urj_error_set (URJ_ERROR_BFIN,
-                                   "Sorry, dynamic code not available in windows");
+                                   "Sorry, dynamic code not available for your platform");
                     goto execute_cleanup;
 #else
                     unsigned char raw_insn[4];
