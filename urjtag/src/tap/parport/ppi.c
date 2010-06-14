@@ -104,7 +104,7 @@ ppi_parport_free (urj_parport_t *port)
     free (port);
 }
 
-static urj_cable_t *
+static urj_parport_t *
 ppi_connect (const char *devname)
 {
     port_node_t *pn;
@@ -115,19 +115,16 @@ ppi_connect (const char *devname)
         {
             urj_log (URJ_LOG_LEVEL_NORMAL,
                      _("Disconnecting %s from ppi port %s\n"),
-                     _(pn->port->cable->driver->description),
-                     devname);
+                     _(pn->port->cable->driver->description), devname);
             pn->port->cable->driver->disconnect (pn->port->cable);
             break;
         }
 
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("Initializing on ppi port %s\n"), devname);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Initializing ppi port %s\n"), devname);
 
     parport = ppi_parport_alloc (devname);
     if (!parport)
-    {
         return NULL;
-    }
 
     return parport;
 }

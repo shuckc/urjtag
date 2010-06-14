@@ -7,6 +7,9 @@
     from it, and change the mingw check to key off this header instead to make
     things a bit more portable.
 
+  * src/tap/parport/ppi.c (ppi_connect): Fix return type to match expected,
+    and tweak style to match ppdev.c better.
+
 2010-05-19  Arnim Laeuger  <arniml>
 
   * src/flash/amd.c, doc/UrJTAG.txt: [ 2996919 ] Support for MX29LV320C
