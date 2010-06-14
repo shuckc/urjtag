@@ -34,11 +34,15 @@
 int
 urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
 {
-    int i;
-    int hit = 0;
+    int ret;
+    unsigned int i, hit, max_bytes;
     urj_tap_register_t *rz;
     urj_tap_register_t *rout;
     urj_tap_register_t *rnull;
+
+    ret = URJ_STATUS_FAIL;
+    max_bytes = bytes ? bytes : 1000;
+    hit = 0;
 
     urj_tap_chain_set_trst (chain, 0);
     urj_tap_chain_set_trst (chain, 1);
@@ -46,16 +50,16 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
     urj_tap_reset (chain);
     urj_tap_capture_dr (chain);
 
-    /* read in chunks of 8 bytes */
+    /* read in chunks of 8 bits */
     rz = urj_tap_register_fill (urj_tap_register_alloc (8), 0);
     rnull = urj_tap_register_fill (urj_tap_register_alloc (8), 0);
     rout = urj_tap_register_alloc (8);
 
     if (!rz || !rout || !rnull)
-        return URJ_STATUS_FAIL;
+        goto done;
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Read"));
-    for (i = 0; i < ((bytes) ? bytes : 1000); i++)
+    for (i = 0; i < max_bytes; ++i)
     {
         uint8_t val;
         urj_tap_shift_register (chain, rz, rout, 0);
@@ -74,10 +78,13 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
                 break;
         }
     }
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\n"));
+    ret = URJ_STATUS_OK;
+
+ done:
     urj_tap_register_free (rz);
     urj_tap_register_free (rnull);
     urj_tap_register_free (rout);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\n"));
 
-    return URJ_STATUS_OK;
+    return ret;
 }
