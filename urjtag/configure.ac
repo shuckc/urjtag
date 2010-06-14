@@ -136,7 +136,6 @@ int sa_flags = SA_ONESHOT;
 
 AC_CHECK_HEADERS([linux/ppdev.h], [HAVE_LINUX_PPDEV_H="yes"])
 AC_CHECK_HEADERS([dev/ppbus/ppi.h], [HAVE_DEV_PPBUS_PPI_H="yes"])
-AC_CHECK_HEADERS(stropts.h)
 AC_CHECK_HEADERS(wchar.h)
 
 VL_LIB_READLINE
