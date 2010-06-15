@@ -81,8 +81,8 @@ urj_param_descr_t;
  */
 typedef struct URJ_PARAM_LIST
 {
-    urj_param_descr_t  *list;
-    size_t              n;
+    const urj_param_descr_t *list;
+    size_t                   n;
 }
 urj_param_list_t;
 

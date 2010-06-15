@@ -35,7 +35,7 @@
 
 #include "buses.h"
 
-const urj_bus_driver_t *urj_bus_drivers[] = {
+const urj_bus_driver_t * const urj_bus_drivers[] = {
 #define _URJ_BUS(bus) &urj_bus_##bus##_bus,
 #include "buses_list.h"
     NULL                        /* last must be NULL */
@@ -180,7 +180,7 @@ urj_bus_init_bus (urj_chain_t *chain, const urj_bus_driver_t *bus_driver,
     return abus;
 }
 
-static urj_param_descr_t bus_param[] =
+static const urj_param_descr_t bus_param[] =
 {
     { URJ_BUS_PARAM_KEY_MUX,        URJ_PARAM_TYPE_BOOL,    "MUX", },
     { URJ_BUS_PARAM_KEY_OCD,        URJ_PARAM_TYPE_BOOL,    "OCD", },

@@ -32,7 +32,7 @@
 #include <urjtag/bfin.h>
 #include "bfin-part.h"
 
-const char *scans[] = {
+const char * const scans[] = {
     "IDCODE",
     "DBGSTAT_SCAN",
     "DBGCTL_SCAN",

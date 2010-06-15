@@ -45,7 +45,7 @@
 
 #include "cable.h"
 
-const urj_cable_driver_t *urj_tap_cable_drivers[] = {
+const urj_cable_driver_t * const urj_tap_cable_drivers[] = {
 #define _URJ_CABLE(cable) &urj_tap_cable_##cable##_driver,
 #include "cable_list.h"
     NULL                        /* last must be NULL */
@@ -664,7 +664,7 @@ urj_tap_cable_other_connect (urj_chain_t *chain, const urj_cable_driver_t *drive
     return cable;
 }
 
-static urj_param_descr_t cable_param[] =
+static const urj_param_descr_t cable_param[] =
 {
     { URJ_CABLE_PARAM_KEY_PID,          URJ_PARAM_TYPE_LU,      "pid", },
     { URJ_CABLE_PARAM_KEY_VID,          URJ_PARAM_TYPE_LU,      "vid", },

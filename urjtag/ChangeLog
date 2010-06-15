@@ -14,6 +14,18 @@
     fix local types so we don't mismatch signs, and avoid leaking register
     allocations with the error handling.
 
+  * include/urjtag/bfin.h (scans), include/urjtag/bus.h (urj_bus_drivers),
+    include/urjtag/cable.h (urj_tap_cable_drivers), include/urjtag/flash.h
+    (urj_flash_flash_drivers), include/urjtag/params.h (urj_param_list_t.list),
+    include/urjtag/parport.h (urj_tap_parport_drivers),
+    include/urjtag/usbconn.h (urj_tap_usbconn_drivers), src/bfin/bfin.c
+    (scans), src/bus/buses.c (urj_bus_drivers, bus_param), src/flash/flash.c
+    (urj_flash_flash_drivers), src/tap/cable.c (urj_tap_cable_drivers),
+    src/tap/cable/generic_usbconn.c (urj_tap_cable_usbconn_cables),
+    src/tap/parport.c (urj_tap_parport_drivers), src/tap/usbconn.c
+    (urj_tap_usbconn_drivers): Constify drivers lists and a few related
+    structures to share more unmutable data in .rodata.
+
 2010-05-19  Arnim Laeuger  <arniml>
 
   * src/flash/amd.c, doc/UrJTAG.txt: [ 2996919 ] Support for MX29LV320C

@@ -60,7 +60,7 @@ typedef struct
 }
 urj_flash_driver_t;
 
-extern const urj_flash_driver_t *urj_flash_flash_drivers[];
+extern const urj_flash_driver_t * const urj_flash_flash_drivers[];
 
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr);

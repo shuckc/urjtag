@@ -170,7 +170,7 @@ extern struct emu_oab bfin_emu_oab;
 #define EMUIR64_SCAN                    7
 #define NUM_SCANS                       8
 
-extern const char *scans[];
+extern const char * const scans[];
 
 #define INSN_NOP                        0x0000
 #define INSN_RTE                        0x0014

@@ -31,7 +31,7 @@
 
 #include "usbconn.h"
 
-const urj_usbconn_driver_t *urj_tap_usbconn_drivers[] = {
+const urj_usbconn_driver_t * const urj_tap_usbconn_drivers[] = {
 #define _URJ_LIST(item) &urj_tap_usbconn_##item##_driver,
 #include "usbconn_list.h"
     NULL                        /* last must be NULL */

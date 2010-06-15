@@ -30,7 +30,7 @@
 
 #include "parport.h"
 
-const urj_parport_driver_t *urj_tap_parport_drivers[] = {
+const urj_parport_driver_t *const urj_tap_parport_drivers[] = {
 #define _URJ_LIST(item) &urj_tap_parport_##item##_driver,
 #include "parport_list.h"
     NULL                        /* last must be NULL */

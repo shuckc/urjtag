@@ -35,7 +35,7 @@
 
 #include <urjtag/cmd.h>
 
-const urj_usbconn_cable_t *urj_tap_cable_usbconn_cables[] = {
+static const urj_usbconn_cable_t * const urj_tap_cable_usbconn_cables[] = {
 #define _URJ_USB(usb) &urj_tap_cable_usbconn_##usb,
 #include "generic_usbconn_list.h"
     NULL

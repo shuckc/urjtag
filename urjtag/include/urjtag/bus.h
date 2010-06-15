@@ -46,7 +46,7 @@ typedef struct
 urj_buses_t;
 
 extern urj_buses_t urj_buses;
-extern const urj_bus_driver_t *urj_bus_drivers[];
+extern const urj_bus_driver_t * const urj_bus_drivers[];
 
 void urj_bus_buses_free (void);
 int urj_bus_buses_add (urj_bus_t *abus);

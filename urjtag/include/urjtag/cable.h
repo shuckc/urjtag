@@ -238,7 +238,7 @@ urj_cable_t *urj_tap_cable_other_connect (urj_chain_t *chain,
                                           const urj_cable_driver_t *driver,
                                           const urj_param_t *params[]);
 
-extern const urj_cable_driver_t *urj_tap_cable_drivers[];
+extern const urj_cable_driver_t * const urj_tap_cable_drivers[];
 
 /** The list of recognized parameters */
 extern const urj_param_list_t urj_cable_param_list;
