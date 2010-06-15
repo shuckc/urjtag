@@ -1,3 +1,7 @@
+2010-06-15  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bus/s3c4510x.c: Punt dead/useless cvs log info.
+
 2010-06-14  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Drop stropts.h check since parport code no longer uses it.
