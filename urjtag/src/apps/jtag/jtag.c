@@ -339,12 +339,7 @@ static void
 cleanup (urj_chain_t *chain)
 {
     urj_flash_cleanup ();
-
-    if (urj_bus)
-    {
-        URJ_BUS_FREE (urj_bus);
-        urj_bus = NULL;
-    }
+    urj_bus_buses_free ();
     urj_tap_chain_free (chain);
     chain = NULL;
 }

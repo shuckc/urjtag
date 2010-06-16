@@ -539,10 +539,7 @@ urj_tap_cable_create (urj_chain_t *chain, const urj_cable_driver_t *driver)
     urj_cable_t *cable;
 
     if (urj_bus)
-    {
-        URJ_BUS_FREE (urj_bus);
-        urj_bus = NULL;
-    }
+        urj_bus_buses_delete (urj_bus);
 
     urj_tap_chain_disconnect (chain);
 

@@ -2,6 +2,14 @@
 
   * src/bus/s3c4510x.c: Punt dead/useless cvs log info.
 
+  * src/tap/cable.c (urj_tap_cable_create): Call urj_bus_buses_delete() rather
+    than manipulate urj_bus directly so the urj_buses structure doesn't get
+    corrupted.  Otherwise we segfault when changing cables after initializing a
+    bus: cable probe; detect; initbus ...; detectflash ...; cable probe; detect
+  * src/apps/jtag/jtag.c (cleanup): Call urj_bus_buses_free() to clean up all
+    buses and not just the active one.
+    http://blackfin.uclinux.org/gf/tracker/6028
+
 2010-06-14  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Drop stropts.h check since parport code no longer uses it.
