@@ -48,6 +48,13 @@ dnl @author Ville Laurikari <vl@iki.fi>
 dnl @author Ville Voipio <vv@iki.fi>; check for readline completion (not available in, e.g. Leopard)
 
 AC_DEFUN([VL_LIB_READLINE], [
+  AC_ARG_WITH([readline],
+    [AS_HELP_STRING([--without-readline],
+      [support command completion/history])])
+  AS_IF([test "x$with_readline" = "xno"], [
+    vl_cv_lib_readline=no
+  ])
+
   AC_CACHE_CHECK([for a readline compatible library],
                  vl_cv_lib_readline, [
     ORIG_LIBS="$LIBS"
@@ -94,6 +101,8 @@ AC_DEFUN([VL_LIB_READLINE], [
     if test "$vl_cv_lib_readline_completion" = "yes"; then
       AC_DEFINE(HAVE_READLINE_COMPLETION, 1, [Define if your readline library has \`rl_completion_matches'])
     fi
+  elif test "$with_readline$vl_cv_lib_readline" = "yesno" ; then
+    AC_ERROR([readline support requested, but none found])
   fi
 
 ])dnl

@@ -1,3 +1,8 @@
+2010-06-16  Mike Frysinger  <vapier@gentoo.org>
+
+  * acinclude.m4 (VL_LIB_READLINE): Add a --with[out]-readline configure
+    option so people can explicitly control support for the library.
+
 2010-06-15  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/s3c4510x.c: Punt dead/useless cvs log info.
