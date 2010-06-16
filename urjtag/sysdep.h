@@ -52,14 +52,20 @@
 #define NO_W32_PSEUDO_MODIFIERS
 #define _NO_W32_PSEUDO_MODIFIERS
 #include <windows.h>
-#define geteuid() 0
-#define getuid() 0
 /* Microsoft uses a different swprintf() than ISO C requires */
 #include <stdio.h>
 #define swprintf _snwprintf
 /* No perms to give to mkdir */
 #include <io.h>
 #define mkdir(path, mode) mkdir(path)
+#endif
+
+#ifndef HAVE_GETEUID
+#define geteuid() 0
+#endif
+
+#ifndef HAVE_GETUID
+#define getuid() 0
 #endif
 
 #ifndef HAVE_USLEEP
