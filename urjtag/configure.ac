@@ -140,8 +140,25 @@ AC_CHECK_HEADERS([linux/ppdev.h], [HAVE_LINUX_PPDEV_H="yes"])
 AC_CHECK_HEADERS([dev/ppbus/ppi.h], [HAVE_DEV_PPBUS_PPI_H="yes"])
 AC_CHECK_HEADERS(m4_flatten([
 	wchar.h
+	windows.h
 	sys/wait.h
 ]))
+
+dnl See if the windows target is polluting the namespace on us which
+dnl will break some of the lex/yacc (e.g. bsdl) builds.  We need both
+dnl defines as some versions of mingw have changed names over time.
+AS_IF([test "x$ac_cv_header_windows_h" = "xyes"],[
+	AC_MSG_CHECKING([for IN/OUT defines in windows.h])
+	AC_TRY_COMPILE([#include <windows.h>], [
+#if defined(IN) || defined(OUT)
+# error "IN/OUT defined"
+#endif
+],
+	[AC_MSG_RESULT([no])],[
+	AS_VAR_APPEND([CPPFLAGS], " -DNO_W32_PSEUDO_MODIFIERS -D_NO_W32_PSEUDO_MODIFIERS")
+	AC_MSG_RESULT([yes])
+	])
+])
 
 VL_LIB_READLINE
 

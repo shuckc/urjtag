@@ -43,15 +43,11 @@
 #define	ngettext(s,p,n)	s
 #endif
 
-#if __CYGWIN__
+#ifdef HAVE_WINDOWS_H
 #include <windows.h>
 #endif
 
 #ifdef __MINGW32__
-/* Diff versions of mingw used slightly different names */
-#define NO_W32_PSEUDO_MODIFIERS
-#define _NO_W32_PSEUDO_MODIFIERS
-#include <windows.h>
 /* Microsoft uses a different swprintf() than ISO C requires */
 #include <stdio.h>
 #define swprintf _snwprintf

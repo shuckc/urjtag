@@ -6,6 +6,11 @@
   * configure.ac (AC_CHECK_FUNCS): Check for geteuid and getuid functions.
   * sysdep.h: Key off of HAVE_xxx defines for geteuid/getuid stubs.
 
+  * configure.ac (AC_CHECK_HEADERS): Move windows.h check here, as well as
+    IN/OUT namespace pollution checks.
+  * sysdep.h: Key off of HAVE_WINDOWS_H for windows.h include.  Drop the
+    NO_W32_PSEUDO_MODIFIERS defines since they're in configure.ac now.
+
 2010-06-15  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/s3c4510x.c: Punt dead/useless cvs log info.
