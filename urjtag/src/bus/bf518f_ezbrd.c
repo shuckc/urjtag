@@ -362,7 +362,7 @@ const urj_bus_driver_t urj_bus_bf518f_ezbrd_bus =
 
 const urj_bus_driver_t urj_bus_bf51x_bus =
 {
-    "bf52x",
+    "bf51x",
     N_("Generic Blackfin BF51x bus driver via BSR"),
     BF518F_EZBRD_BUS_FUNCTIONS
 };
