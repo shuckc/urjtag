@@ -282,7 +282,8 @@ AS_IF([test "x$with_libftdi" != xno], [
     HAVELIBFTDI_ASYNCMODE=yes
   ], [
     AS_IF([test "x$HAVELIBUSB1" = "xyes"], [
-      AC_MSG_ERROR([this libftdi cannot be used with libusb-1.0, libusb-0.1 is needed])
+      AC_MSG_ERROR([this libftdi cannot be used with libusb-1.0, libusb-0.1 is needed.
+                    did you configure libftdi with --with-async-mode ?])
     ],)
   ])
 ],)

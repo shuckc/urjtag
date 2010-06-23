@@ -2,6 +2,9 @@
 
   * src/tap/usbconn/libftdi.c (usbconn_ftdi_flush): Fix gcc printf warning.
 
+  * configure.ac: Have the libftdi + libusb-1.0 error give a tip about using
+    --with-async-mode with the libftdi package when erroring out.
+
 2010-06-21  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/bf518f_ezbrd.c (urj_bus_bf51x_bus): Fix copy & paste typo in name.
