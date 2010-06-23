@@ -3,6 +3,10 @@
   * configure.ac (fmax): Drop fmax check as it is no longer used.
   * src/tap/cable/generic.c (fmax): Drop now unused fmax fallback.
 
+  * src/cmd/cmd_cable.c (cmd_cable_run): Fill out the cable->chain link.
+  * src/tap/cable/generic.c (urj_tap_cable_generic_disconnect): Clear the
+    cable->chain link once we're done with it.
+
 2010-06-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/usbconn/libftdi.c (usbconn_ftdi_flush): Fix gcc printf warning.

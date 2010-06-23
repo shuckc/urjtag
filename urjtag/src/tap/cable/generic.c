@@ -53,6 +53,7 @@ urj_tap_cable_generic_disconnect (urj_cable_t *cable)
 {
     urj_tap_cable_done (cable);
     urj_tap_chain_disconnect (cable->chain);
+    cable->chain = NULL;
 }
 
 int

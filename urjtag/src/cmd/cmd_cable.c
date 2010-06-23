@@ -169,7 +169,11 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
 
     urj_param_clear (&cable_params);
 
-    return cable == NULL ? URJ_STATUS_FAIL : URJ_STATUS_OK;
+    if (cable == NULL)
+        return URJ_STATUS_FAIL;
+
+    chain->cable->chain = chain;
+    return URJ_STATUS_OK;
 }
 
 static void
