@@ -182,8 +182,10 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
     int chlen;
     urj_tap_register_t *one;
     urj_tap_register_t *ones;
+    urj_tap_register_t *all_ones;
     urj_tap_register_t *br;
     urj_tap_register_t *id;
+    urj_tap_register_t *all_ids;
     urj_parts_t *ps;
     int i;
 
@@ -224,6 +226,21 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Chain length: %d\n"), chlen);
 
     /* Allocate registers and parts */
+    if (chain->cable->driver->quirks & URJ_CABLE_QUIRK_ONESHOT)
+    {
+        all_ones = urj_tap_register_fill (urj_tap_register_alloc (32 * chlen), 1);
+        all_ids = urj_tap_register_alloc (32 * chlen);
+        if (!all_ones || !all_ids)
+        {
+            urj_tap_register_free (all_ones);
+            urj_tap_register_free (all_ids);
+            // retain error state
+            return -1;
+        }
+    }
+    else
+        all_ones = all_ids = NULL;
+
     one = urj_tap_register_fill (urj_tap_register_alloc (1), 1);
     ones = urj_tap_register_fill (urj_tap_register_alloc (31), 1);
     br = urj_tap_register_alloc (1);
@@ -233,8 +250,10 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
     {
         urj_tap_register_free (one);
         urj_tap_register_free (ones);
+        urj_tap_register_free (all_ones);
         urj_tap_register_free (br);
         urj_tap_register_free (id);
+        urj_tap_register_free (all_ids);
         urj_part_parts_free (ps);
         // retain error state
         return -1;
@@ -246,6 +265,9 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
     urj_tap_reset (chain);
     urj_tap_capture_dr (chain);
 
+    if (all_ids)
+        urj_tap_shift_register (chain, all_ones, all_ids, URJ_CHAIN_EXITMODE_SHIFT);
+
     for (i = 0; i < chlen; i++)
     {
         urj_part_t *part;
@@ -255,12 +277,19 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
         char *p;
         urj_part_init_func_t part_init_func;
 
-        urj_tap_shift_register (chain, one, br, URJ_CHAIN_EXITMODE_SHIFT);
+        if (all_ids)
+            br->data[0] = all_ids->data[i * 32];
+        else
+            urj_tap_shift_register (chain, one, br, URJ_CHAIN_EXITMODE_SHIFT);
+
         if (urj_tap_register_compare (one, br) == 0)
         {
             /* part with id */
-            urj_tap_shift_register (chain, ones, id,
-                                    URJ_CHAIN_EXITMODE_SHIFT);
+            if (all_ids)
+                memcpy (id->data, &all_ids->data[i * 32 + 1], 31 * sizeof (id->data[0]));
+            else
+                urj_tap_shift_register (chain, ones, id,
+                                        URJ_CHAIN_EXITMODE_SHIFT);
             urj_tap_register_shift_left (id, 1);
             id->data[0] = 1;
             did = id;
@@ -417,22 +446,25 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 
     chain->main_part = ps->len - 1;
 
-    for (i = 0; i < 32; i++)
-    {
-        urj_tap_shift_register (chain, one, br, URJ_CHAIN_EXITMODE_SHIFT);
-        if (urj_tap_register_compare (one, br) != 0)
+    if (!(chain->cable->driver->quirks & URJ_CABLE_QUIRK_ONESHOT))
+        for (i = 0; i < 32; i++)
         {
-            urj_log (URJ_LOG_LEVEL_NORMAL,
-                     _("Error: Unable to detect JTAG chain end!\n"));
-            break;
+            urj_tap_shift_register (chain, one, br, URJ_CHAIN_EXITMODE_SHIFT);
+            if (urj_tap_register_compare (one, br) != 0)
+            {
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         _("Error: Unable to detect JTAG chain end!\n"));
+                break;
+            }
         }
-    }
     urj_tap_shift_register (chain, one, NULL, URJ_CHAIN_EXITMODE_IDLE);
 
     urj_tap_register_free (one);
     urj_tap_register_free (ones);
+    urj_tap_register_free (all_ones);
     urj_tap_register_free (br);
     urj_tap_register_free (id);
+    urj_tap_register_free (all_ids);
 
     return ps->len;
 }

@@ -7,6 +7,11 @@
   * src/tap/cable/generic.c (urj_tap_cable_generic_disconnect): Clear the
     cable->chain link once we're done with it.
 
+  * include/urjtag/cable.h (URJ_CABLE_DRIVER): Add a quirks field, and start
+    a set of quirks bitfields.
+  * src/tap/detect.c (urj_tap_detect_parts): Handle new oneshot quirk.
+  * src/tap/idcode.c (urj_tap_idcode): Likewise.
+
 2010-06-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/usbconn/libftdi.c (usbconn_ftdi_flush): Fix gcc printf warning.

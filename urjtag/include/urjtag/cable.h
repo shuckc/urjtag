@@ -62,6 +62,9 @@ typedef enum URJ_CABLE_PARAM_KEY
 }
 urj_cable_param_key_t;
 
+/* Random cable-specific quirks; a bitfield */
+#define URJ_CABLE_QUIRK_ONESHOT 0x1
+
 struct URJ_CABLE_DRIVER
 {
     const char *name;
@@ -93,6 +96,8 @@ struct URJ_CABLE_DRIVER
     int (*get_signal) (urj_cable_t *, urj_pod_sigsel_t);
     void (*flush) (urj_cable_t *, urj_cable_flush_amount_t);
     void (*help) (urj_log_level_t ll, const char *);
+    /* A bitfield of quirks */
+    uint32_t quirks;
 };
 
 typedef struct URJ_CABLE_QUEUE urj_cable_queue_t;

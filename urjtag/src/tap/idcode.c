@@ -25,10 +25,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <urjtag/tap.h>
 #include <urjtag/tap_register.h>
 #include <urjtag/chain.h>
+#include <urjtag/cable.h>
 
 
 int
@@ -38,11 +40,31 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
     unsigned int i, hit, max_bytes;
     urj_tap_register_t *rz;
     urj_tap_register_t *rout;
+    urj_tap_register_t *all_rout;
     urj_tap_register_t *rnull;
 
     ret = URJ_STATUS_FAIL;
     max_bytes = bytes ? bytes : 1000;
     hit = 0;
+
+    /* read in chunks of 8 bits */
+    if (chain->cable->driver->quirks & URJ_CABLE_QUIRK_ONESHOT)
+    {
+        all_rout = urj_tap_register_alloc (8 * max_bytes);
+        if (!all_rout)
+            return ret;
+        rz = urj_tap_register_fill (urj_tap_register_alloc (8 * max_bytes), 0);
+    }
+    else
+    {
+        all_rout = NULL;
+        rz = urj_tap_register_fill (urj_tap_register_alloc (8), 0);
+    }
+    rnull = urj_tap_register_fill (urj_tap_register_alloc (8), 0);
+    rout = urj_tap_register_alloc (8);
+
+    if (!rz || !rout || !rnull)
+        goto done;
 
     urj_tap_chain_set_trst (chain, 0);
     urj_tap_chain_set_trst (chain, 1);
@@ -50,19 +72,19 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
     urj_tap_reset (chain);
     urj_tap_capture_dr (chain);
 
-    /* read in chunks of 8 bits */
-    rz = urj_tap_register_fill (urj_tap_register_alloc (8), 0);
-    rnull = urj_tap_register_fill (urj_tap_register_alloc (8), 0);
-    rout = urj_tap_register_alloc (8);
-
-    if (!rz || !rout || !rnull)
-        goto done;
+    if (all_rout)
+        urj_tap_shift_register (chain, rz, all_rout, 0);
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Read"));
     for (i = 0; i < max_bytes; ++i)
     {
         uint8_t val;
-        urj_tap_shift_register (chain, rz, rout, 0);
+
+        if (all_rout)
+            memcpy (rout->data, &all_rout->data[i * 8], 8 * sizeof (rout->data[0]));
+        else
+            urj_tap_shift_register (chain, rz, rout, 0);
+
         val = urj_tap_register_get_value (rout);
         urj_log (URJ_LOG_LEVEL_NORMAL, N_(" %s(0x%x%x)"),
                  urj_tap_register_get_string (rout),
@@ -85,6 +107,7 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
     urj_tap_register_free (rz);
     urj_tap_register_free (rnull);
     urj_tap_register_free (rout);
+    urj_tap_register_free (all_rout);
 
     return ret;
 }
