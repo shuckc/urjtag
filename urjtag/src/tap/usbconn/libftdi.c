@@ -122,7 +122,7 @@ usbconn_ftdi_flush (ftdi_param_t *p)
 
     if ((xferred = ftdi_write_data (p->fc, p->send_buf, p->send_buffered)) < 0)
     {
-        urj_error_set (URJ_ERROR_FTD, ftdi_get_error_string (p->fc));
+        urj_error_set (URJ_ERROR_FTD, "%s", ftdi_get_error_string (p->fc));
         return -1;
     }
 
