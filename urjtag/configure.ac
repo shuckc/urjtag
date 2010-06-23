@@ -717,12 +717,6 @@ AS_IF([test "x$relocatable" = xyes], [
 ])
 
 
-dnl Is fmax() provided by libm?
-AC_CHECK_LIB([m], [fmax], [
-  AC_DEFINE(HAVE_FMAX, 1, [Define if -lm provides fmax()])
-])
-
-
 dnl Enable use of DMALLOC library?
 AC_ARG_ENABLE(dmalloc,
 [AS_HELP_STRING([--enable-dmalloc], [Enable heap debugging with dmalloc library])],

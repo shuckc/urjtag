@@ -39,13 +39,6 @@
 
 #include <urjtag/cmd.h>
 
-
-#ifndef HAVE_FMAX
-/* workaround for libm implementations that don't provide the fmax() function */
-#define fmax(_f1_,_f2_) ( (_f1_) > (_f2_) ? (_f1_) : (_f2_) )
-#endif
-
-
 static void
 print_vector (urj_log_level_t ll, int len, char *vec)
 {
