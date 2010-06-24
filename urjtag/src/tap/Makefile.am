@@ -130,6 +130,10 @@ libtap_la_SOURCES += \
 	cable/ts7800.c
 endif
 
+if ENABLE_CABLE_ICE100
+libtap_la_SOURCES += \
+	cable/ice100.c
+endif
 
 if HAVE_LIBUSB
 libtap_la_SOURCES += \

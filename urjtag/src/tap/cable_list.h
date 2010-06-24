@@ -59,6 +59,11 @@ _URJ_CABLE(ft2232_turtelizer2)
 _URJ_CABLE(ft2232_usbscarab2)
 _URJ_CABLE(ft2232_usbtojtagif)
 #endif
+#ifdef ENABLE_CABLE_ICE100
+_URJ_CABLE(ice100B)
+_URJ_CABLE(ezkit_10)
+_URJ_CABLE(ezkit_20)
+#endif
 #ifdef ENABLE_CABLE_IGLOO
 _URJ_CABLE(igloo)
 #endif

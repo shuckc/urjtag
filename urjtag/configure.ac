@@ -646,6 +646,7 @@ URJ_DRIVER_SET([cable], [
 	ea253
 	ei012
 	ft2232
+	ice100
 	igloo
 	jlink
 	keithkoep

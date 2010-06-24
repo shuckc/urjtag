@@ -75,5 +75,12 @@ _URJ_USB(nios_eval_ftdi)
 _URJ_USB(usb_jtag_ftdi)
 #endif
 #endif
+#ifdef ENABLE_CABLE_ICE100
+_URJ_USB(ice100B)
+_URJ_USB(ezkit_10_bf548)
+_URJ_USB(ezkit_10_bf537)
+_URJ_USB(ezkit_20_bf518)
+_URJ_USB(ezkit_20_bf526)
+#endif
 
 #undef _URJ_USB
