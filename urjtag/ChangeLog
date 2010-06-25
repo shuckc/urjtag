@@ -1,3 +1,14 @@
+2010-06-24  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Merge libusb-0.x and libusb-1.x variables so that "libusb"
+    in the rest of the source tree isn't tied to a specific version.
+  * src/tap/cable/ice100.c: Convert API to libusb-1.x.
+  * src/tap/cable/jlink.c: Likewise.
+  * src/tap/cable/xpc.c: Likewise.
+  * src/tap/usbconn/libusb.c: Likewise.
+  * src/tap/usbconn/libusb.h: Create a small layer to convert the libusb-1.x
+    API to the older libusb-0.x API if we're building against that version.
+
 2010-06-23  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac (fmax): Drop fmax check as it is no longer used.

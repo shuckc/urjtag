@@ -27,6 +27,9 @@
 #include <sysdep.h>
 
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include <urjtag/cable.h>
 #include <urjtag/chain.h>
@@ -36,9 +39,6 @@
 
 #include <urjtag/usbconn.h>
 #include "usbconn/libusb.h"
-
-#include <errno.h>
-#include <string.h>
 
 // #define VERBOSE 1
 #undef VERBOSE
@@ -78,12 +78,12 @@ static int last_tdo;
 /* ---------------------------------------------------------------------- */
 
 static int
-xpcu_output_enable (struct usb_dev_handle *xpcu, int enable)
+xpcu_output_enable (struct libusb_device_handle *xpcu, int enable)
 {
-    if (usb_control_msg
+    if (libusb_control_transfer
         (xpcu, 0x40, 0xB0, enable ? 0x18 : 0x10, 0, NULL, 0, 1000) < 0)
     {
-        urj_error_IO_set ("usb_control_msg(0x10/0x18)");
+        urj_error_IO_set ("libusb_control_transfer(0x10/0x18)");
         return URJ_STATUS_FAIL;
     }
 
@@ -94,13 +94,13 @@ xpcu_output_enable (struct usb_dev_handle *xpcu, int enable)
 
 #ifdef UNUSED                   /* RFHH */
 static int
-xpcu_bit_reverse (struct usb_dev_handle *xpcu, uint8_t bits_in,
+xpcu_bit_reverse (struct libusb_device_handle *xpcu, uint8_t bits_in,
                   uint8_t *bits_out)
 {
-    if (usb_control_msg
-        (xpcu, 0xC0, 0xB0, 0x0020, bits_in, (char *) bits_out, 1, 1000) < 0)
+    if (libusb_control_transfer
+        (xpcu, 0xC0, 0xB0, 0x0020, bits_in, bits_out, 1, 1000) < 0)
     {
-        urj_error_IO_set ("usb_control_msg(0x20.x) (bit reverse)");
+        urj_error_IO_set ("libusb_control_transfer(0x20.x) (bit reverse)");
         return URJ_STATUS_FAIL;
     }
 
@@ -111,13 +111,13 @@ xpcu_bit_reverse (struct usb_dev_handle *xpcu, uint8_t bits_in,
 /* ----------------------------------------------------------------- */
 
 static int
-xpcu_request_28 (struct usb_dev_handle *xpcu, int value)
+xpcu_request_28 (struct libusb_device_handle *xpcu, int value)
 {
     /* Typical values seen during autodetection of chain configuration: 0x11, 0x12 */
 
-    if (usb_control_msg (xpcu, 0x40, 0xB0, 0x0028, value, NULL, 0, 1000) < 0)
+    if (libusb_control_transfer (xpcu, 0x40, 0xB0, 0x0028, value, NULL, 0, 1000) < 0)
     {
-        urj_error_IO_set ("usb_control_msg(0x28.x)");
+        urj_error_IO_set ("libusb_control_transfer(0x28.x)");
         return URJ_STATUS_FAIL;
     }
 
@@ -127,11 +127,11 @@ xpcu_request_28 (struct usb_dev_handle *xpcu, int value)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpcu_write_gpio (struct usb_dev_handle *xpcu, uint8_t bits)
+xpcu_write_gpio (struct libusb_device_handle *xpcu, uint8_t bits)
 {
-    if (usb_control_msg (xpcu, 0x40, 0xB0, 0x0030, bits, NULL, 0, 1000) < 0)
+    if (libusb_control_transfer (xpcu, 0x40, 0xB0, 0x0030, bits, NULL, 0, 1000) < 0)
     {
-        urj_error_IO_set ("usb_control_msg(0x30.0x00) (write port E)");
+        urj_error_IO_set ("libusb_control_transfer(0x30.0x00) (write port E)");
         return URJ_STATUS_FAIL;
     }
 
@@ -141,12 +141,12 @@ xpcu_write_gpio (struct usb_dev_handle *xpcu, uint8_t bits)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpcu_read_gpio (struct usb_dev_handle *xpcu, uint8_t *bits)
+xpcu_read_gpio (struct libusb_device_handle *xpcu, uint8_t *bits)
 {
-    if (usb_control_msg (xpcu, 0xC0, 0xB0, 0x0038, 0, (char *) bits, 1, 1000)
+    if (libusb_control_transfer (xpcu, 0xC0, 0xB0, 0x0038, 0, bits, 1, 1000)
         < 0)
     {
-        urj_error_IO_set ("usb_control_msg(0x38.0x00) (read port E)");
+        urj_error_IO_set ("libusb_control_transfer(0x38.0x00) (read port E)");
         return URJ_STATUS_FAIL;
     }
 
@@ -157,12 +157,12 @@ xpcu_read_gpio (struct usb_dev_handle *xpcu, uint8_t *bits)
 
 
 static int
-xpcu_read_cpld_version (struct usb_dev_handle *xpcu, uint16_t *buf)
+xpcu_read_cpld_version (struct libusb_device_handle *xpcu, uint16_t *buf)
 {
-    if (usb_control_msg
-        (xpcu, 0xC0, 0xB0, 0x0050, 0x0001, (char *) buf, 2, 1000) < 0)
+    if (libusb_control_transfer
+        (xpcu, 0xC0, 0xB0, 0x0050, 0x0001, (unsigned char *) buf, 2, 1000) < 0)
     {
-        urj_error_IO_set ("usb_control_msg(0x50.1) (read_cpld_version)");
+        urj_error_IO_set ("libusb_control_transfer(0x50.1) (read_cpld_version)");
         return URJ_STATUS_FAIL;
     }
     return URJ_STATUS_OK;
@@ -171,12 +171,12 @@ xpcu_read_cpld_version (struct usb_dev_handle *xpcu, uint16_t *buf)
 /* ---------------------------------------------------------------------- */
 
 static int
-xpcu_read_firmware_version (struct usb_dev_handle *xpcu, uint16_t *buf)
+xpcu_read_firmware_version (struct libusb_device_handle *xpcu, uint16_t *buf)
 {
-    if (usb_control_msg
-        (xpcu, 0xC0, 0xB0, 0x0050, 0x0000, (char *) buf, 2, 1000) < 0)
+    if (libusb_control_transfer
+        (xpcu, 0xC0, 0xB0, 0x0050, 0x0000, (unsigned char *) buf, 2, 1000) < 0)
     {
-        urj_error_IO_set ("usb_control_msg(0x50.0) (read_firmware_version)");
+        urj_error_IO_set ("libusb_control_transfer(0x50.0) (read_firmware_version)");
         return URJ_STATUS_FAIL;
     }
 
@@ -186,12 +186,12 @@ xpcu_read_firmware_version (struct usb_dev_handle *xpcu, uint16_t *buf)
 /* ----------------------------------------------------------------- */
 
 static int
-xpcu_select_gpio (struct usb_dev_handle *xpcu, int int_or_ext)
+xpcu_select_gpio (struct libusb_device_handle *xpcu, int int_or_ext)
 {
-    if (usb_control_msg (xpcu, 0x40, 0xB0, 0x0052, int_or_ext, NULL, 0, 1000)
+    if (libusb_control_transfer (xpcu, 0x40, 0xB0, 0x0052, int_or_ext, NULL, 0, 1000)
         < 0)
     {
-        urj_error_IO_set ("usb_control_msg(0x52.x) (select gpio)");
+        urj_error_IO_set ("libusb_control_transfer(0x52.x) (select gpio)");
         return URJ_STATUS_FAIL;
     }
 
@@ -243,12 +243,14 @@ xpcu_select_gpio (struct usb_dev_handle *xpcu, int int_or_ext)
 
 /** @return 0 on success; -1 on error */
 static int
-xpcu_shift (struct usb_dev_handle *xpcu, int reqno, int bits, int in_len,
+xpcu_shift (struct libusb_device_handle *xpcu, int reqno, int bits, int in_len,
             uint8_t *in, int out_len, uint8_t *out)
 {
-    if (usb_control_msg (xpcu, 0x40, 0xB0, reqno, bits, NULL, 0, 1000) < 0)
+    int ret, actual;
+
+    if (libusb_control_transfer (xpcu, 0x40, 0xB0, reqno, bits, NULL, 0, 1000) < 0)
     {
-        urj_error_IO_set ("usb_control_msg(x.x) (shift)");
+        urj_error_IO_set ("libusb_control_transfer(x.x) (shift)");
         return -1;
     }
 
@@ -268,17 +270,21 @@ xpcu_shift (struct usb_dev_handle *xpcu, int reqno, int bits, int in_len,
     }
 #endif
 
-    if (usb_bulk_write (xpcu, 0x02, (char *) in, in_len, 1000) < 0)
+    ret = libusb_bulk_transfer (xpcu, 0x02, in, in_len, &actual, 1000);
+    if (ret)
     {
-        urj_error_IO_set ("usb_bulk_write error(shift)");
+        urj_error_IO_set ("usb_bulk_write error(shift): %i (transferred %i)",
+                          ret, actual);
         return -1;
     }
 
     if (out_len > 0 && out != NULL)
     {
-        if (usb_bulk_read (xpcu, 0x86, (char *) out, out_len, 1000) < 0)
+        ret = libusb_bulk_transfer (xpcu, 0x06 | LIBUSB_ENDPOINT_IN, out, out_len, &actual, 1000);
+        if (ret)
         {
-            urj_error_IO_set ("usb_bulk_read error(shift)");
+            urj_error_IO_set ("usb_bulk_read error(shift): %i (transferred %i)",
+                              ret, actual);
             return -1;
         }
     }
@@ -303,7 +309,7 @@ xpcu_common_init (urj_cable_t *cable)
 {
     int r;
     uint16_t buf;
-    struct usb_dev_handle *xpcu;
+    struct libusb_device_handle *xpcu;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -342,7 +348,7 @@ xpcu_common_init (urj_cable_t *cable)
 
     if (r != URJ_STATUS_OK)
     {
-        usb_close (xpcu);
+        libusb_close (xpcu);
     }
 
     return r;
@@ -351,7 +357,7 @@ xpcu_common_init (urj_cable_t *cable)
 static int
 xpc_int_init (urj_cable_t *cable)
 {
-    struct usb_dev_handle *xpcu;
+    struct libusb_device_handle *xpcu;
 
     if (xpcu_common_init (cable) == URJ_STATUS_FAIL)
         return URJ_STATUS_FAIL;
@@ -366,7 +372,7 @@ xpc_int_init (urj_cable_t *cable)
 static int
 xpc_ext_init (urj_cable_t *cable)
 {
-    struct usb_dev_handle *xpcu;
+    struct libusb_device_handle *xpcu;
     uint8_t zero[2] = { 0, 0 };
     int r;
 
@@ -402,7 +408,7 @@ xpc_ext_init (urj_cable_t *cable)
 
     if (r != URJ_STATUS_OK)
     {
-        usb_close (xpcu);
+        libusb_close (xpcu);
 
         free (cable->params);
         cable->params = NULL;
@@ -436,7 +442,7 @@ static void
 xpc_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i;
-    struct usb_dev_handle *xpcu;
+    struct libusb_device_handle *xpcu;
     xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     tms = tms ? (1 << TMS) : 0;
@@ -462,7 +468,7 @@ static int
 xpc_get_tdo (urj_cable_t *cable)
 {
     unsigned char d;
-    struct usb_dev_handle *xpcu;
+    struct libusb_device_handle *xpcu;
     xpcu = ((urj_usbconn_libusb_param_t *) (cable->link.usb->params))->handle;
 
     xpcu_read_gpio (xpcu, &d);
@@ -485,7 +491,7 @@ xpc_ext_clock (urj_cable_t *cable, int tms, int tdi, int n)
     int i;
     uint8_t tdo[2];
     uint8_t clock[2];
-    struct usb_dev_handle *xpcu;
+    struct libusb_device_handle *xpcu;
 
     clock[0] = (tms ? 0x10 : 0) | (tdi ? 0x01 : 0);
     clock[1] = 0x11;            /* clock'n read */
@@ -516,7 +522,7 @@ xpc_ext_get_tdo (urj_cable_t *cable)
 typedef struct
 {
     urj_cable_t *cable;
-    struct usb_dev_handle *xpcu;
+    struct libusb_device_handle *xpcu;
     int in_bits;
     int out_bits;
     int out_done;

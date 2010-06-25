@@ -163,7 +163,7 @@ AS_IF([test "x$ac_cv_header_windows_h" = "xyes"],[
 VL_LIB_READLINE
 
 
-dnl check for libusb
+dnl check for libusb-0.x
 
 AC_ARG_WITH([libusb],
   [AS_HELP_STRING([--with-libusb],
@@ -197,8 +197,7 @@ AS_IF([test "x$with_libusb" != xno -a "x$with_libusb" != x1.0], [
   LIBS="$LIBS $LIBUSB_LIBS"
   CPPFLAGS="$CPPFLAGS $LIBUSB_CFLAGS"
   AC_CHECK_FUNC([usb_find_devices], [
-    AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
-    HAVELIBUSB=yes
+    HAVELIBUSB=0.1
   ],[
     AS_IF([test "x$with_libusb" = x0.1], [
       AC_MSG_ERROR([*** libusb-0.1 not detected.])
@@ -209,25 +208,22 @@ AS_IF([test "x$with_libusb" != xno -a "x$with_libusb" != x1.0], [
     CPPFLAGS=$save_CPPFLAGS
   ])
 ],)
-AM_CONDITIONAL(HAVE_LIBUSB, [test "x$HAVELIBUSB" = "xyes"])
-
 
 dnl check for libusb-1.0
 
-HAVELIBUSB1=no
-AS_IF([test "x$with_libusb" != xno -a "x$with_libusb" != x0.1 -a "x$HAVELIBUSB" != "xyes"], [
+AS_IF([test "x$with_libusb" != xno -a "x$with_libusb" != x0.1 -a "x$HAVELIBUSB" = "xno"], [
   save_LIBS=$LIBS
   save_CPPFLAGS=$CPPFLAGS
-  PKG_CHECK_MODULES(LIBUSB1, libusb-1.0, have_libusb1=yes, have_libusb1=no)
-  AS_IF([test "$have_libusb1" = "yes"],[
-    LIBUSB_CFLAGS="$CFLAGS $LIBUSB1_CFLAGS"
-    LIBUSB_LIBS="$USB_LIBS $LIBUSB1_LIBS"
+  PKG_CHECK_MODULES(LIBUSB, libusb-1.0, have_libusb=yes, have_libusb=no)
+  AS_IF([test "$have_libusb" = "yes"],[
+    LIBUSB_CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
+    LIBUSB_LIBS="$USB_LIBS $LIBUSB_LIBS"
   ],)
-  LIBS="$LIBS $LIBUSB1_LIBS"
-  CPPFLAGS="$CPPFLAGS $LIBUSB1_CFLAGS"
+  LIBS="$LIBS $LIBUSB_LIBS"
+  CPPFLAGS="$CPPFLAGS $LIBUSB_CFLAGS"
   AC_CHECK_FUNC([libusb_get_device_list], [
     AC_DEFINE(HAVE_LIBUSB1, 1, [Define if you have libusb-1.0])
-    HAVELIBUSB1=yes
+    HAVELIBUSB=1.0
   ],[
     AS_IF([test "x$with_libusb" = x1.0], [
       AC_MSG_ERROR([*** libusb-1.0 not detected.])
@@ -238,7 +234,10 @@ AS_IF([test "x$with_libusb" != xno -a "x$with_libusb" != x0.1 -a "x$HAVELIBUSB" 
     CPPFLAGS=$save_CPPFLAGS
   ])
 ],)
-AM_CONDITIONAL(HAVE_LIBUSB1, [test "x$HAVELIBUSB1" = "xyes"])
+if test "x$HAVELIBUSB" != "xno"; then
+  AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
+fi
+AM_CONDITIONAL(HAVE_LIBUSB, [test "x$HAVELIBUSB" != "xno"])
 
 
 dnl Use FTDI library?
@@ -275,13 +274,13 @@ AS_IF([test "x$with_libftdi" != xno], [
     CPPFLAGS=$save_CPPFLAGS
   ])
   AC_CHECK_FUNC([ftdi_read_data_submit], [
-    AS_IF([test "x$HAVELIBUSB" = "xyes"], [
+    AS_IF([test "x$HAVELIBUSB" = "x0.1"], [
       AC_MSG_ERROR([this libftdi cannot be used with libusb-0.1, libusb-1.0 is needed])
     ],)
     AC_DEFINE(HAVE_LIBFTDI_ASYNC_MODE, 1, [Define if libftdi support async mode])
     HAVELIBFTDI_ASYNCMODE=yes
   ], [
-    AS_IF([test "x$HAVELIBUSB1" = "xyes"], [
+    AS_IF([test "x$HAVELIBUSB" = "x1.0"], [
       AC_MSG_ERROR([this libftdi cannot be used with libusb-1.0, libusb-0.1 is needed.
                     did you configure libftdi with --with-async-mode ?])
     ],)
@@ -665,7 +664,7 @@ URJ_DRIVER_SET([cable], [
 	AS_IF([test "x$HAVELIBFTDI" != "xyes" -a "x$HAVELIBFTD2XX" != "xyes"], [
 		drivers=`echo ${drivers} | $SED -e "s/ft2232//" -e "s/usbblaster//"`
 	])
-	AS_IF([test "x$HAVELIBUSB" != "xyes"], [
+	AS_IF([test "x$HAVELIBUSB" = "xno"], [
 		drivers=`echo ${drivers} | $SED -e "s/jlink//" -e "s/xpc//"`
 	])
 ])
@@ -744,15 +743,7 @@ AC_OUTPUT
 dnl
 dnl Configuration summary
 dnl
-AS_IF([test "x$HAVELIBUSB" = "xyes"], [
-  FLAG_HAVELIBUSB=0.1
-], [
-  AS_IF([test "x$HAVELIBUSB1" = "xyes"], [
-    FLAG_HAVELIBUSB=1.0
-  ],[
-    FLAG_HAVELIBUSB=no
-  ])
-])
+FLAG_HAVELIBUSB=$HAVELIBUSB
 AS_IF([test "x$HAVELIBFTDI_ASYNCMODE" = "xyes"], [
   FLAG_HAVELIBFTDI_ASYNCMODE="(have async mode)"
 ],[

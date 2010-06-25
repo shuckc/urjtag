@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #include <urjtag/tap_state.h>
 #include <urjtag/cable.h>
@@ -183,7 +184,7 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 
 /* Ice USB controls */
 #define ICE_100B_WRITE_ENDPOINT         0x06
-#define ICE_100B_READ_ENDPOINT          0x85
+#define ICE_100B_READ_ENDPOINT          0x05
 #define ICE_100B_USB_WRITE_TIMEOUT      10000
 #define ICE_100B_USB_READ_TIMEOUT       30000
 #define ICE_100B_WRITE_BUFFER_SIZE      0x9800
@@ -191,7 +192,7 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 
 /* Kit 1.0 USB controls */
 #define KIT_10_WRITE_ENDPOINT           0x02
-#define KIT_10_READ_ENDPOINT            0x86
+#define KIT_10_READ_ENDPOINT            0x06
 #define KIT_10_USB_WRITE_TIMEOUT        50000
 #define KIT_10_USB_READ_TIMEOUT         50000
 #define KIT_10_WRITE_BUFFER_SIZE        0x40/*0x1000*/
@@ -199,7 +200,7 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 
 /* Kit 2.0 USB controls */
 #define KIT_20_WRITE_ENDPOINT           0x01
-#define KIT_20_READ_ENDPOINT            0x82
+#define KIT_20_READ_ENDPOINT            0x02
 #define KIT_20_USB_WRITE_TIMEOUT        50000
 #define KIT_20_USB_READ_TIMEOUT         50000
 #define KIT_20_WRITE_BUFFER_SIZE        0x2000
@@ -228,32 +229,34 @@ static bool kitInFastMode = false;
 
 #define adi_usb_read_or_ret(p, buf, len) \
 do { \
-    int __ret, __size = (len); \
-    __ret = usb_bulk_read (((urj_usbconn_libusb_param_t *)p)->handle, \
-                           cable_params->r_ep, (char *)(buf), __size, \
-                           cable_params->r_timeout); \
-    if (__ret != __size) \
+    int __ret, __actual, __size = (len); \
+    __ret = libusb_bulk_transfer (((urj_usbconn_libusb_param_t *)p)->handle, \
+                                  cable_params->r_ep | LIBUSB_ENDPOINT_IN, \
+                                  (unsigned char *)(buf), __size, \
+                                  &__actual, cable_params->r_timeout); \
+    if (__ret || __actual != __size) \
     { \
         urj_log (URJ_LOG_LEVEL_ERROR, \
-                 _("%s: unable to read from usb to " #buf ";" \
+                 _("%s: unable to read from usb to " #buf ": %i;" \
                    "wanted %i bytes but only received %i bytes"), \
-                 __func__, __size, __ret); \
+                 __func__, __ret, __size, __actual); \
         return URJ_STATUS_FAIL; \
     } \
 } while (0)
 
 #define adi_usb_write_or_ret(p, buf, len) \
 do { \
-    int __ret, __size = (len); \
-    __ret = usb_bulk_write (((urj_usbconn_libusb_param_t *)p)->handle, \
-                            cable_params->wr_ep, (char *)(buf), __size, \
-                            cable_params->wr_timeout); \
-    if (__ret != __size) \
+    int __ret, __actual, __size = (len); \
+    __ret = libusb_bulk_transfer (((urj_usbconn_libusb_param_t *)p)->handle, \
+                                  cable_params->wr_ep, \
+                                  (unsigned char *)(buf), __size, \
+                                  &__actual, cable_params->wr_timeout); \
+    if (__ret || __actual != __size) \
     { \
         urj_log (URJ_LOG_LEVEL_ERROR, \
-                 _("%s: unable to write from " #buf " to usb;" \
+                 _("%s: unable to write from " #buf " to usb: %i;" \
                    "wanted %i bytes but only wrote %i bytes"), \
-                 __func__, __size, __ret); \
+                 __func__, __ret, __size, __actual); \
         return URJ_STATUS_FAIL; \
     } \
 } while (0)

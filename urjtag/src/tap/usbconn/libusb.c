@@ -33,69 +33,78 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <errno.h>
-#include <usb.h>
 
 #include <urjtag/error.h>
 #include <urjtag/log.h>
 #include <urjtag/usbconn.h>
+#include "libusb.h"
 #include "../usbconn.h"
-
-typedef struct
-{
-    struct usb_device *dev;
-    struct usb_dev_handle *handle;
-} urj_usbconn_libusb_param_t;
 
 /* ---------------------------------------------------------------------- */
 
+/* @return 1 when found, 0 when not */
 static int
-libusb_match_desc (struct usb_device *dev, const char *desc)
+libusb_match_desc (libusb_device_handle *handle, unsigned int id, const char *desc)
+{
+    int r;
+    char buf[256];
+
+    if (!id)
+        return 0;
+
+    r = libusb_get_string_descriptor_ascii (handle, id, (unsigned char *) buf,
+                                            sizeof (buf));
+    if (r <= 0)
+        return 0;
+
+    return strstr (buf, desc) ? 1 : 0;
+}
+
+/* @return 1 when found, 0 when not */
+static int
+libusb_match (struct libusb_device *dev, urj_usbconn_cable_t *template)
 {
     int r = 0;
-    char buf[256];
-    usb_dev_handle *handle;
+    struct libusb_device_descriptor *desc;
+    libusb_device_handle *handle;
 
-    if (desc == NULL)
+#ifdef HAVE_LIBUSB1
+    struct libusb_device_descriptor _desc;
+    desc = &_desc;
+
+    if (libusb_get_device_descriptor (dev, desc))
+        return 0;
+#else
+    desc = &dev->descriptor;
+#endif
+
+    /* If VID specified but no match, return fail */
+    if (template->vid >= 0 && desc->idVendor != template->vid)
+        return 0;
+
+    /* If PID specified but no match, return fail */
+    if (template->pid >= 0 && desc->idProduct != template->pid)
+        return 0;
+
+    /* If desc not specified, then return pass */
+    if (template->desc == NULL)
         return 1;
 
-    handle = usb_open (dev);
-    if (handle == NULL)
+    /* At this point, try to match the description */
+    r = libusb_open (dev, &handle);
+    if (r)
     {
-        urj_error_set (URJ_ERROR_USB, "usb_open() failed: %s", usb_strerror());
+        urj_error_set (URJ_ERROR_USB, "usb_open() failed: %i", r);
         errno = 0;
         return 0;
     }
-    if (dev->descriptor.iManufacturer)
-    {
-        r = usb_get_string_simple (handle, dev->descriptor.iManufacturer, buf,
-                                   sizeof (buf));
-        if (r > 0)
-        {
-            if (strstr (buf, desc) == NULL)
-                r = 0;
-        }
-    }
-    if (r <= 0 && dev->descriptor.iProduct)
-    {
-        r = usb_get_string_simple (handle, dev->descriptor.iProduct, buf,
-                                   sizeof (buf));
-        if (r > 0)
-        {
-            if (strstr (buf, desc) == NULL)
-                r = 0;
-        }
-    }
-    if (r <= 0 && dev->descriptor.iSerialNumber)
-    {
-        r = usb_get_string_simple (handle, dev->descriptor.iSerialNumber, buf,
-                                   sizeof (buf));
-        if (r > 0)
-        {
-            if (strstr (buf, desc) == NULL)
-                r = 0;
-        }
-    }
-    usb_close (handle);
+    r = libusb_match_desc (handle, desc->iManufacturer, template->desc);
+    if (r <= 0)
+        r = libusb_match_desc (handle, desc->iProduct, template->desc);
+    if (r <= 0)
+        r = libusb_match_desc (handle, desc->iSerialNumber, template->desc);
+    libusb_close (handle);
+
     return r > 0 ? 1 : 0;
 }
 
@@ -106,44 +115,61 @@ static urj_usbconn_t *
 usbconn_libusb_connect (urj_usbconn_cable_t *template,
                         const urj_param_t *params[])
 {
-    struct usb_bus *bus;
-    struct usb_device *found_dev = NULL;
+    int ret;
+    struct libusb_device *found_dev = NULL;
     urj_usbconn_t *libusb_conn;
     urj_usbconn_libusb_param_t *libusb_params;
 
-    usb_init ();
-    if (usb_find_busses () < 0)
+    { /* Scope to make sure variables don't bleed across #ifdefs */
+#ifdef HAVE_LIBUSB1
+    ssize_t num_devs, i;
+    libusb_device **list;
+    libusb_context *ctx;
+
+    /* XXX: missing libusb_exit() */
+    ret = libusb_init (&ctx);
+    if (ret)
     {
-        urj_error_set (URJ_ERROR_USB, "usb_find_busses() failed: %s",
-                       usb_strerror());
+        urj_error_set (URJ_ERROR_USB, "libusb_init() failed: %i", ret);
         errno = 0;
         return NULL;
     }
-    if (usb_find_devices () < 0)
+
+    num_devs = libusb_get_device_list (ctx, &list);
+    for (i = 0; i < num_devs; ++i)
     {
-        urj_error_set (URJ_ERROR_USB, "usb_find_devices() failed: %s",
-                       usb_strerror());
+        struct libusb_device *dev = list[i];
+
+        if (libusb_match (dev, template))
+            found_dev = libusb_ref_device (dev);
+    }
+    libusb_free_device_list (list, 0);
+#else
+    struct usb_bus *bus;
+
+    usb_init ();
+    if ((ret = usb_find_busses ()) < 0)
+    {
+        urj_error_set (URJ_ERROR_USB, "usb_find_busses() failed: %i", ret);
+        errno = 0;
+        return NULL;
+    }
+    if ((ret = usb_find_devices ()) < 0)
+    {
+        urj_error_set (URJ_ERROR_USB, "usb_find_devices() failed: %i", ret);
         errno = 0;
         return NULL;
     }
 
     for (bus = usb_get_busses (); bus && !found_dev; bus = bus->next)
     {
-        struct usb_device *dev;
+        struct libusb_device *dev;
 
         for (dev = bus->devices; dev && !found_dev; dev = dev->next)
-        {
-            if (((template->vid < 0)
-                 || (dev->descriptor.idVendor == template->vid))
-                && ((template->pid < 0)
-                    || (dev->descriptor.idProduct == template->pid)))
-            {
-                if (libusb_match_desc (dev, template->desc))
-                {
-                    found_dev = dev;
-                }
-            }
-        }
+            if (libusb_match (dev, template))
+                found_dev = dev;
+    }
+#endif
     }
 
     if (!found_dev)
@@ -182,32 +208,42 @@ usbconn_libusb_connect (urj_usbconn_cable_t *template,
 static int
 usbconn_libusb_open (urj_usbconn_t *conn)
 {
+    int ret;
     urj_usbconn_libusb_param_t *p = conn->params;
 
-    p->handle = usb_open (p->dev);
-    if (p->handle == NULL)
+    ret = libusb_open (p->dev, &p->handle);
+    if (ret)
     {
-        urj_error_set (URJ_ERROR_USB, "usb_open() failed: %s", usb_strerror());
+        urj_error_set (URJ_ERROR_USB, "libusb_open() failed: %i", ret);
         errno = 0;
     }
     else
     {
 #if 1
-        usb_set_configuration (p->handle,
-                               p->dev->config[0].bConfigurationValue);
+        uint8_t configuration;
+#ifdef HAVE_LIBUSB1
+        struct libusb_config_descriptor *config;
+        libusb_get_active_config_descriptor (p->dev, &config);
+        configuration = config->bConfigurationValue;
+        libusb_free_config_descriptor (config);
+#else
+        configuration = p->dev->config[0].bConfigurationValue;
 #endif
-        if (usb_claim_interface (p->handle, 0) != 0)
+        libusb_set_configuration (p->handle, configuration);
+#endif
+        ret = libusb_claim_interface (p->handle, 0);
+        if (ret)
         {
-            usb_close (p->handle);
-            urj_error_set (URJ_ERROR_USB, "usb_claim_interface failed: %s",
-                           usb_strerror());
+            libusb_close (p->handle);
+            urj_error_set (URJ_ERROR_USB, "libusb_claim_interface failed: %i",
+                           ret);
             errno = 0;
             p->handle = NULL;
         }
 #if 1
         else
         {
-            usb_set_altinterface (p->handle, 0);
+            libusb_set_interface_alt_setting (p->handle, 0, 0);
         }
 #endif
     }
@@ -229,8 +265,8 @@ usbconn_libusb_close (urj_usbconn_t *conn)
     urj_usbconn_libusb_param_t *p = conn->params;
     if (p->handle != NULL)
     {
-        usb_release_interface (p->handle, 0);
-        usb_close (p->handle);
+        libusb_release_interface (p->handle, 0);
+        libusb_close (p->handle);
     }
     p->handle = NULL;
     return URJ_STATUS_OK;

@@ -31,6 +31,9 @@
 
 #include <sysdep.h>
 
+#include <string.h>
+#include <stdlib.h>
+
 #include "generic.h"
 #include "generic_usbconn.h"
 
@@ -44,11 +47,8 @@
 
 #include "usbconn/libusb.h"
 
-#include <usb.h>
-#include <string.h>
-
 #define JLINK_WRITE_ENDPOINT 0x02
-#define JLINK_READ_ENDPOINT  0x81
+#define JLINK_READ_ENDPOINT  (0x01 | LIBUSB_ENDPOINT_IN)
 
 #define JLINK_USB_TIMEOUT 100
 
@@ -61,8 +61,8 @@
 typedef struct
 {
     /* Global USB buffers */
-    char usb_in_buffer[JLINK_IN_BUFFER_SIZE];
-    char usb_out_buffer[JLINK_OUT_BUFFER_SIZE];
+    unsigned char usb_in_buffer[JLINK_IN_BUFFER_SIZE];
+    unsigned char usb_out_buffer[JLINK_OUT_BUFFER_SIZE];
 
     int tap_length;
     uint8_t tms_buffer[JLINK_TAP_BUFFER_SIZE];
@@ -109,7 +109,7 @@ static int jlink_usb_write (urj_usbconn_libusb_param_t *params, unsigned int);
 /** @return number of bytes read; -1 on error */
 static int jlink_usb_read (urj_usbconn_libusb_param_t *params);
 
-static void jlink_debug_buffer (char *buffer, int length);
+static void jlink_debug_buffer (unsigned char *buffer, int length);
 
 /* API functions */
 
@@ -339,7 +339,7 @@ jlink_usb_message (urj_usbconn_libusb_param_t *params, int out_length,
 static int
 jlink_usb_write (urj_usbconn_libusb_param_t *params, unsigned int out_length)
 {
-    int result;
+    int result, actual;
     jlink_usbconn_data_t *data;
 
     data = params->data;
@@ -353,16 +353,18 @@ jlink_usb_write (urj_usbconn_libusb_param_t *params, unsigned int out_length)
         return -1;
     }
 
-    result = usb_bulk_write (params->handle,
-                             JLINK_WRITE_ENDPOINT,
-                             data->usb_out_buffer,
-                             out_length, JLINK_USB_TIMEOUT);
+    result = libusb_bulk_transfer (params->handle,
+                                   JLINK_WRITE_ENDPOINT,
+                                   data->usb_out_buffer,
+                                   out_length, &actual,
+                                   JLINK_USB_TIMEOUT);
 
     urj_log (URJ_LOG_LEVEL_DETAIL,
-             "jlink_usb_write, out_length = %d, result = %d\n", out_length,
-             result);
+             "jlink_usb_write, out_length = %d, result = %d, actual = %d\n",
+             out_length, result, actual);
     jlink_debug_buffer (data->usb_out_buffer, out_length);
-    return result;
+
+    return actual;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -373,15 +375,20 @@ jlink_usb_read (urj_usbconn_libusb_param_t *params)
 {
     jlink_usbconn_data_t *data = params->data;
 
-    int result = usb_bulk_read (params->handle,
-                                JLINK_READ_ENDPOINT,
-                                data->usb_in_buffer,
-                                JLINK_IN_BUFFER_SIZE,
-                                JLINK_USB_TIMEOUT);
+    int result, actual;
 
-    urj_log (URJ_LOG_LEVEL_DETAIL, "jlink_usb_read, result = %d\n", result);
-    jlink_debug_buffer (data->usb_in_buffer, result);
-    return result;
+    result = libusb_bulk_transfer (params->handle,
+                                   JLINK_READ_ENDPOINT,
+                                   data->usb_in_buffer,
+                                   JLINK_IN_BUFFER_SIZE,
+                                   &actual,
+                                   JLINK_USB_TIMEOUT);
+
+    urj_log (URJ_LOG_LEVEL_DETAIL, "jlink_usb_read, result = %d, actual = %d\n",
+             result, actual);
+    jlink_debug_buffer (data->usb_in_buffer, actual);
+
+    return actual;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -389,7 +396,7 @@ jlink_usb_read (urj_usbconn_libusb_param_t *params)
 #define BYTES_PER_LINE  16
 
 static void
-jlink_debug_buffer (char *buffer, int length)
+jlink_debug_buffer (unsigned char *buffer, int length)
 {
     char line[81];
     char s[4];
@@ -448,7 +455,7 @@ jlink_init (urj_cable_t *cable)
         // retain error state
         urj_log (URJ_LOG_LEVEL_ERROR,
                  "Resetting J-Link. Please retry the cable command.\n");
-        usb_reset (params->handle);
+        libusb_reset_device (params->handle);
         return URJ_STATUS_FAIL;
     }
 
