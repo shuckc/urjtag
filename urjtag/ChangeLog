@@ -9,6 +9,9 @@
   * src/tap/usbconn/libusb.h: Create a small layer to convert the libusb-1.x
     API to the older libusb-0.x API if we're building against that version.
 
+  * NEWS: Note new ice100/gnICE+ cable drivers.
+  * THANKS: Credit the ice100 authors.
+
 2010-06-23  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac (fmax): Drop fmax check as it is no longer used.

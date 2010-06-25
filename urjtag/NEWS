@@ -40,6 +40,8 @@ urjtag-0.10
       - Parport calibration loop is more tolerant (Arnim Laeuger)
       - Technology Systems TS-7800 support (Catalin Ionescu)
       - New FT2232 based cable TinCanTools Flyswatter (Mark Norman)
+      - New FT2232 based cable BFIN-UJTAG/gnICE+ (Michael Hennerich)
+      - New Analog Devices ICE100B cable (Paula R. Bertrand)
       - Added detection of InpOut32.dll and usage for I/O port access even
         under Vista (Kolja Waschk)
       - FT2232 MPSSE buffer increased to mitigate performance decrease (Arnim
