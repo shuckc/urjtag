@@ -1116,14 +1116,6 @@ static int ice_set_sig (urj_cable_t *cable, int mask, int val)
 }
 
 /*
- * Standard Help Message
- */
-static void adi_usb_cable_help (urj_log_level_t ll, const char *cablename)
-{
-    urj_log (ll, _("Usage: cable %s\n\n"), cablename);
-}
-
-/*
  * Takes Data received (rcv_dataptr) and puts it in
  * todo date out transfer
  */
@@ -1876,7 +1868,7 @@ const urj_cable_driver_t urj_tap_cable_ice100B_driver = {
     ice_set_sig,
     ice_get_sig,
     adi_flush,
-    adi_usb_cable_help,
+    urj_tap_cable_generic_usbconn_help,
     URJ_CABLE_QUIRK_ONESHOT
 };
 URJ_DECLARE_USBCONN_CABLE(0x064B, 0x0225, "libusb", "ICE-100B", ice100B)
@@ -1898,7 +1890,7 @@ const urj_cable_driver_t urj_tap_cable_ezkit_10_driver = {
     kit_set_sig,
     kit_get_sig,
     adi_flush,
-    adi_usb_cable_help,
+    urj_tap_cable_generic_usbconn_help,
     URJ_CABLE_QUIRK_ONESHOT
 };
 URJ_DECLARE_USBCONN_CABLE(0x064B, 0x1188, "libusb", "EZ-KIT-1.0", ezkit_10_bf537)
@@ -1921,7 +1913,7 @@ const urj_cable_driver_t urj_tap_cable_ezkit_20_driver = {
     kit_set_sig,
     kit_get_sig,
     adi_flush,
-    adi_usb_cable_help,
+    urj_tap_cable_generic_usbconn_help,
     URJ_CABLE_QUIRK_ONESHOT
 };
 URJ_DECLARE_USBCONN_CABLE(0x064B, 0x3217, "libusb", "EZ-KIT-2.0", ezkit_20_bf518)

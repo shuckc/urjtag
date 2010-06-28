@@ -5,6 +5,8 @@
     libusb usbblaser cables.
   * src/tap/cable/usbblaster.c: Convert from libftdx helpers to libusb helpers.
 
+  * src/tap/cable/ice100.c: Drop local help stub and use common libusb one.
+ 
 2010-06-24  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Merge libusb-0.x and libusb-1.x variables so that "libusb"
