@@ -662,10 +662,10 @@ URJ_DRIVER_SET([cable], [
 ],[
 	# automatically disable cable drivers when a required feature is not available
 	AS_IF([test "x$HAVELIBFTDI" != "xyes" -a "x$HAVELIBFTD2XX" != "xyes"], [
-		drivers=`echo ${drivers} | $SED -e "s/ft2232//" -e "s/usbblaster//"`
+		drivers=`echo ${drivers} | $SED -e "s/ft2232//"`
 	])
 	AS_IF([test "x$HAVELIBUSB" = "xno"], [
-		drivers=`echo ${drivers} | $SED -e "s/jlink//" -e "s/xpc//"`
+		drivers=`echo ${drivers} | $SED -e "s/jlink//" -e "s/xpc//" -e "s/usbblaster//"`
 	])
 ])
 dnl the "fake" jim cable driver is special
