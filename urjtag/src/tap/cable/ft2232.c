@@ -1944,12 +1944,14 @@ ft2232_usbcable_help (urj_log_level_t ll, const char *cablename)
   found:
 
     urj_log (ll,
-             _("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
-               "\n" "VID        vendor ID (hex), defaults to %04X\n"
-               "PID        product ID (hex), defaults to %04X\n"
-               "DESC       Some string to match in description or serial no.\n"
+             _("Usage: cable %s %s [driver=DRIVER]\n"
+               "\n" "%s"
                "DRIVER     usbconn driver, either ftdi-mpsse or ftd2xx-mpsse\n"
-               "           defaults to %s if not specified\n" "\n"), cablename,
+               "\n"
+               "Default:   vid=%x pid=%x driver=%s\n"
+               "\n"),
+             cablename, URJ_TAP_CABLE_GENERIC_USBCONN_HELP_SHORT,
+             URJ_TAP_CABLE_GENERIC_USBCONN_HELP_DESC,
              conn->vid, conn->pid, DEFAULT_DRIVER);
 }
 

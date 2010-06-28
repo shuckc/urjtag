@@ -166,12 +166,10 @@ void
 urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *cablename)
 {
     urj_log (ll,
-             _("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [...]\n"
-               "\n"
-               "VID        USB Device Vendor ID (hex, e.g. 0abc)\n"
-               "PID        USB Device Product ID (hex, e.g. 0abc)\n"
-               "DESC       Some string to match in description or serial no.\n"
-               "\n"), cablename);
+             _("Usage: cable %s %s\n" "\n%s\n"),
+             cablename,
+             URJ_TAP_CABLE_GENERIC_USBCONN_HELP_SHORT,
+             URJ_TAP_CABLE_GENERIC_USBCONN_HELP_DESC);
 }
 
 int

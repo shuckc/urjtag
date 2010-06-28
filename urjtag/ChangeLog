@@ -6,6 +6,11 @@
   * src/tap/cable/usbblaster.c: Convert from libftdx helpers to libusb helpers.
 
   * src/tap/cable/ice100.c: Drop local help stub and use common libusb one.
+
+  * src/tap/cable/generic_usbconn.h: Split help text out so sub-libusb drivers
+    can avoid manual string duplication.
+  * src/tap/cable/generic_usbconn.c: Use new libusb help string defines.
+  * src/tap/cable/ft2232.c: Likewise.
  
 2010-06-24  Mike Frysinger  <vapier@gentoo.org>
 

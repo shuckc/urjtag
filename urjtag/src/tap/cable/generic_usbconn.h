@@ -37,8 +37,15 @@
 int urj_tap_cable_generic_usbconn_connect (urj_cable_t *cable,
                                            const urj_param_t *params[]);
 void urj_tap_cable_generic_usbconn_done (urj_cable_t *cable);
-void urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *name);
 void urj_tap_cable_generic_usbconn_free (urj_cable_t *cable);
+
+void urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *name);
+#define URJ_TAP_CABLE_GENERIC_USBCONN_HELP_SHORT \
+    "[vid=VID] [pid=PID] [desc=DESC]"
+#define URJ_TAP_CABLE_GENERIC_USBCONN_HELP_DESC \
+    "VID        USB Device Vendor ID (hex, e.g. 0abc)\n" \
+    "PID        USB Device Product ID (hex, e.g. 0abc)\n" \
+    "DESC       Some string to match in description or serial no.\n"
 
 #define URJ_DECLARE_USBCONN_CABLE(vid, pid, driver, name, cable) \
 const urj_usbconn_cable_t urj_tap_cable_usbconn_##cable = { name, NULL, driver, vid, pid };
