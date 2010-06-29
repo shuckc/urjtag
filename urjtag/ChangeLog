@@ -1,10 +1,5 @@
 2010-06-28  Mike Frysinger  <vapier@gentoo.org>
 
-  * configure.ac (usbblaster): Move from libftdi to libusb requirement.
-  * src/tap/cable/generic_usbconn_list.h: Drop ftdx usbblaster cables and add
-    libusb usbblaser cables.
-  * src/tap/cable/usbblaster.c: Convert from libftdx helpers to libusb helpers.
-
   * src/tap/cable/ice100.c: Drop local help stub and use common libusb one.
 
   * src/tap/cable/generic_usbconn.h: Split help text out so sub-libusb drivers

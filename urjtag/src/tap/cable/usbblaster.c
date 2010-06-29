@@ -36,6 +36,9 @@
 #include "generic.h"
 #include "generic_usbconn.h"
 
+#include <urjtag/usbconn.h>
+#include "usbconn/libftdx.h"
+
 #include "cmd_xfer.h"
 
 
@@ -49,6 +52,13 @@
 #define TDO    0
 
 #define FIXED_FREQUENCY 12000000L
+
+/* The default driver if not specified otherwise during connect */
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+#define DEFAULT_DRIVER "ftd2xx"
+#else
+#define DEFAULT_DRIVER "ftdi"
+#endif
 
 typedef struct
 {
@@ -153,8 +163,9 @@ usbblaster_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
             if (chunkbytes > 63)
                 chunkbytes = 63;
 
-            /* 4096 == URJ_USBCONN_FTDX_MAXSEND ? */
-            if (urj_tap_cable_cx_cmd_space (cmd_root, 4096) < chunkbytes + 1)
+            if (urj_tap_cable_cx_cmd_space (cmd_root,
+                                            URJ_USBCONN_FTDX_MAXSEND)
+                < chunkbytes + 1)
             {
                 /* no space left for next clocking command
                    transfer queued commands to device and read receive data
@@ -485,6 +496,19 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
     }
 }
 
+static void
+usbblaster_help (urj_log_level_t ll, const char *cablename)
+{
+    urj_log (ll,
+             _("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
+               "\n" "VID        vendor ID (hex, e.g. 0abc)\n"
+               "PID        product ID (hex, e.g. 0abc)\n"
+               "DESC       Some string to match in description or serial no.\n"
+               "DRIVER     usbconn driver, either ftdi or ftd2xx\n"
+               "           defaults to %s if not specified\n" "\n"), cablename,
+              DEFAULT_DRIVER);
+}
+
 const urj_cable_driver_t urj_tap_cable_usbblaster_driver = {
     "UsbBlaster",
     N_("Altera USB-Blaster Cable"),
@@ -500,10 +524,12 @@ const urj_cable_driver_t urj_tap_cable_usbblaster_driver = {
     usbblaster_transfer,
     usbblaster_set_signal,
     urj_tap_cable_generic_get_signal,
+//      urj_tap_cable_generic_flush_one_by_one,
+//      urj_tap_cable_generic_flush_using_transfer,
     usbblaster_flush,
-    urj_tap_cable_generic_usbconn_help,
+    usbblaster_help,
 };
-URJ_DECLARE_USBCONN_CABLE(0x09FB, 0x6001, "libusb", "UsbBlaster", usbblaster)
-URJ_DECLARE_USBCONN_CABLE(0x09FB, 0x6002, "libusb", "UsbBlaster", cubic_cyclonium)
-URJ_DECLARE_USBCONN_CABLE(0x09FB, 0x6003, "libusb", "UsbBlaster", nios_eval)
-URJ_DECLARE_USBCONN_CABLE(0x16C0, 0x06AD, "libusb", "UsbBlaster", usb_jtag)
+URJ_DECLARE_FTDX_CABLE(0x09FB, 0x6001, "", "UsbBlaster", usbblaster)
+URJ_DECLARE_FTDX_CABLE(0x09FB, 0x6002, "", "UsbBlaster", cubic_cyclonium)
+URJ_DECLARE_FTDX_CABLE(0x09FB, 0x6003, "", "UsbBlaster", nios_eval)
+URJ_DECLARE_FTDX_CABLE(0x16C0, 0x06AD, "", "UsbBlaster", usb_jtag)

@@ -62,10 +62,18 @@ _URJ_USB(usbscarab2_ftdi)
 #endif
 #endif
 #ifdef ENABLE_CABLE_USBBLASTER
-_URJ_USB(usbblaster)
-_URJ_USB(cubic_cyclonium)
-_URJ_USB(nios_eval)
-_URJ_USB(usb_jtag)
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+_URJ_USB(usbblaster_ftd2xx)
+_URJ_USB(cubic_cyclonium_ftd2xx)
+_URJ_USB(nios_eval_ftd2xx)
+_URJ_USB(usb_jtag_ftd2xx)
+#endif
+#ifdef ENABLE_LOWLEVEL_FTDI
+_URJ_USB(usbblaster_ftdi)
+_URJ_USB(cubic_cyclonium_ftdi)
+_URJ_USB(nios_eval_ftdi)
+_URJ_USB(usb_jtag_ftdi)
+#endif
 #endif
 #ifdef ENABLE_CABLE_ICE100
 _URJ_USB(ice100B)
