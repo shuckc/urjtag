@@ -1,3 +1,7 @@
+2010-06-29  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable/generic_usbconn_list.h: Macro away duplicate ftdi lists.
+
 2010-06-28  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ice100.c: Drop local help stub and use common libusb one.

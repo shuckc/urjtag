@@ -22,6 +22,20 @@
  *
  */
 
+#ifdef ENABLE_LOWLEVEL_FTDI
+# define _URJ_USB_FTDI(x) _URJ_USB(x##_ftdi)
+#else
+# define _URJ_USB_FTDI(x)
+#endif
+#ifdef ENABLE_LOWLEVEL_FTD2XX
+# define _URJ_USB_FTD2XX(x) _URJ_USB(x##_ftd2xx)
+#else
+# define _URJ_USB_FTD2XX(x)
+#endif
+#define _URJ_USB_FTDX(x) \
+    _URJ_USB_FTDI(x) \
+    _URJ_USB_FTD2XX(x)
+
 #ifdef ENABLE_CABLE_XPC
 _URJ_USB(xpc_int)
 _URJ_USB(xpc_ext)
@@ -30,50 +44,25 @@ _URJ_USB(xpc_ext)
 _URJ_USB(jlink)
 #endif
 #ifdef ENABLE_CABLE_FT2232
-#ifdef ENABLE_LOWLEVEL_FTD2XX
-_URJ_USB(ft2232_ftd2xx)
-_URJ_USB(armusbocd_ftd2xx)
-_URJ_USB(armusbocdtiny_ftd2xx)
-_URJ_USB(armusbtiny_h_ftd2xx)
-_URJ_USB(gnice_ftd2xx)
-_URJ_USB(gniceplus_ftd2xx)
-_URJ_USB(jtagkey_ftd2xx)
-_URJ_USB(oocdlinks_ftd2xx)
-_URJ_USB(turtelizer2_ftd2xx)
-_URJ_USB(usbtojtagif_ftd2xx)
-_URJ_USB(signalyzer_ftd2xx)
-_URJ_USB(flyswatter_ftd2xx)
-_URJ_USB(usbscarab2_ftd2xx)
-#endif
-#ifdef ENABLE_LOWLEVEL_FTDI
-_URJ_USB(ft2232_ftdi)
-_URJ_USB(armusbocd_ftdi)
-_URJ_USB(armusbocdtiny_ftdi)
-_URJ_USB(armusbtiny_h_ftdi)
-_URJ_USB(gnice_ftdi)
-_URJ_USB(gniceplus_ftdi)
-_URJ_USB(jtagkey_ftdi)
-_URJ_USB(oocdlinks_ftdi)
-_URJ_USB(turtelizer2_ftdi)
-_URJ_USB(usbtojtagif_ftdi)
-_URJ_USB(signalyzer_ftdi)
-_URJ_USB(flyswatter_ftdi)
-_URJ_USB(usbscarab2_ftdi)
-#endif
+_URJ_USB_FTDX(ft2232)
+_URJ_USB_FTDX(armusbocd)
+_URJ_USB_FTDX(armusbocdtiny)
+_URJ_USB_FTDX(armusbtiny_h)
+_URJ_USB_FTDX(gnice)
+_URJ_USB_FTDX(gniceplus)
+_URJ_USB_FTDX(jtagkey)
+_URJ_USB_FTDX(oocdlinks)
+_URJ_USB_FTDX(turtelizer2)
+_URJ_USB_FTDX(usbtojtagif)
+_URJ_USB_FTDX(signalyzer)
+_URJ_USB_FTDX(flyswatter)
+_URJ_USB_FTDX(usbscarab2)
 #endif
 #ifdef ENABLE_CABLE_USBBLASTER
-#ifdef ENABLE_LOWLEVEL_FTD2XX
-_URJ_USB(usbblaster_ftd2xx)
-_URJ_USB(cubic_cyclonium_ftd2xx)
-_URJ_USB(nios_eval_ftd2xx)
-_URJ_USB(usb_jtag_ftd2xx)
-#endif
-#ifdef ENABLE_LOWLEVEL_FTDI
-_URJ_USB(usbblaster_ftdi)
-_URJ_USB(cubic_cyclonium_ftdi)
-_URJ_USB(nios_eval_ftdi)
-_URJ_USB(usb_jtag_ftdi)
-#endif
+_URJ_USB_FTDX(usbblaster)
+_URJ_USB_FTDX(cubic_cyclonium)
+_URJ_USB_FTDX(nios_eval)
+_URJ_USB_FTDX(usb_jtag)
 #endif
 #ifdef ENABLE_CABLE_ICE100
 _URJ_USB(ice100B)
@@ -83,4 +72,7 @@ _URJ_USB(ezkit_20_bf518)
 _URJ_USB(ezkit_20_bf526)
 #endif
 
+#undef _URJ_USB_FTDI
+#undef _URJ_USB_FTD2XX
+#undef _URJ_USB_FTDX
 #undef _URJ_USB
