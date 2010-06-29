@@ -121,8 +121,7 @@ endif
 
 if ENABLE_CABLE_FT2232
 libtap_la_SOURCES += \
-	cable/ft2232.c \
-	cable/ft2232_list.h
+	cable/ft2232.c
 endif
 
 if ENABLE_CABLE_TS7800

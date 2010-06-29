@@ -1927,32 +1927,12 @@ ft2232_cable_free (urj_cable_t *cable)
 }
 
 
-#define _URJ_FTDI(usb) const urj_usbconn_cable_t urj_tap_cable_usbconn_##usb##_ftdi;
-#include "ft2232_list.h"
-
-
-static void
-ft2232_usbcable_help (urj_log_level_t ll, const char *cablename)
+void
+ftdx_usbcable_help (urj_log_level_t ll, const char *cablename)
 {
-    const urj_usbconn_cable_t *conn;
-
-#define _URJ_FTDI(usb) \
-    conn = &urj_tap_cable_usbconn_##usb##_ftdi; \
-    if (strcasecmp (conn->name, cablename) == 0) \
-        goto found;
-#include "ft2232_list.h"
-  found:
-
-    urj_log (ll,
-             _("Usage: cable %s %s [driver=DRIVER]\n"
-               "\n" "%s"
-               "DRIVER     usbconn driver, either ftdi-mpsse or ftd2xx-mpsse\n"
-               "\n"
-               "Default:   vid=%x pid=%x driver=%s\n"
-               "\n"),
-             cablename, URJ_TAP_CABLE_GENERIC_USBCONN_HELP_SHORT,
-             URJ_TAP_CABLE_GENERIC_USBCONN_HELP_DESC,
-             conn->vid, conn->pid, DEFAULT_DRIVER);
+    const char *ex_short = "[driver=DRIVER]";
+    const char *ex_desc = "DRIVER     usbconn driver, either ftdi-mpsse or ftd2xx-mpsse\n";
+    urj_tap_cable_generic_usbconn_help_ex (ll, cablename, ex_short, ex_desc);
 }
 
 
@@ -1972,7 +1952,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0000, 0x0000, "-mpsse", "FT2232", ft2232)
 
@@ -1992,7 +1972,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x15BA, 0x0003, "-mpsse", "ARM-USB-OCD", armusbocd)
 URJ_DECLARE_FTDX_CABLE(0x15BA, 0x0004, "-mpsse", "ARM-USB-OCD", armusbocdtiny)
@@ -2013,7 +1993,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_armusbtiny_h_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x15BA, 0x002A, "-mpsse", "ARM-USB-TINY-H", armusbtiny_h)
 
@@ -2033,7 +2013,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0456, 0xF000, "-mpsse", "gnICE", gnice)
 
@@ -2053,7 +2033,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_gniceplus_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0456, 0xF001, "-mpsse", "gnICE+", gniceplus)
 
@@ -2073,7 +2053,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_jtagkey_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xCFF8, "-mpsse", "JTAGkey", jtagkey)
 
@@ -2093,7 +2073,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_oocdlinks_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xbaf8, "-mpsse", "OOCDLink-s", oocdlinks)
 
@@ -2113,7 +2093,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xBDC8, "-mpsse", "Turtelizer2", turtelizer2)
 
@@ -2133,7 +2113,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0000, 0x0000, "-mpsse", "USB-to-JTAG-IF", usbtojtagif)
 
@@ -2153,7 +2133,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_signalyzer_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xbca1, "-mpsse", "Signalyzer", signalyzer)
 
@@ -2173,7 +2153,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_flyswatter_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0x6010, "-mpsse", "Flyswatter", flyswatter)
 
@@ -2193,7 +2173,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver = {
     ft2232_set_signal,
     urj_tap_cable_generic_get_signal,
     ft2232_flush,
-    ft2232_usbcable_help
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xbbe0, "-mpsse", "usbScarab2", usbscarab2)
 

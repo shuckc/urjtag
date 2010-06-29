@@ -56,4 +56,6 @@
 	_URJ_DECLARE_FTDI_CABLE(v, p, "ftdi"d, n, c##_ftdi) \
 	_URJ_DECLARE_FTD2XX_CABLE(v, p, "ftd2xx"d, n, c##_ftd2xx)
 
+void ftdx_usbcable_help (urj_log_level_t ll, const char *cablename);
+
 #endif

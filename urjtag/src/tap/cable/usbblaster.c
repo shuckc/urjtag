@@ -23,6 +23,13 @@
  *
  */
 
+/*
+ * Note: this driver doesn't seem to utilize FTDI code directly because
+ *       it goes through the usbconn layers to access the driver.  the
+ *       required status bytes for te FT245 device are automatically added
+ *       to the stream so this driver can focus on the other parts.
+ */
+
 #include <sysdep.h>
 
 #include <stdio.h>
@@ -36,7 +43,6 @@
 #include "generic.h"
 #include "generic_usbconn.h"
 
-#include <urjtag/usbconn.h>
 #include "usbconn/libftdx.h"
 
 #include "cmd_xfer.h"
@@ -52,13 +58,6 @@
 #define TDO    0
 
 #define FIXED_FREQUENCY 12000000L
-
-/* The default driver if not specified otherwise during connect */
-#ifdef ENABLE_LOWLEVEL_FTD2XX
-#define DEFAULT_DRIVER "ftd2xx"
-#else
-#define DEFAULT_DRIVER "ftdi"
-#endif
 
 typedef struct
 {
@@ -496,19 +495,6 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
     }
 }
 
-static void
-usbblaster_help (urj_log_level_t ll, const char *cablename)
-{
-    urj_log (ll,
-             _("Usage: cable %s [vid=VID] [pid=PID] [desc=DESC] [driver=DRIVER]\n"
-               "\n" "VID        vendor ID (hex, e.g. 0abc)\n"
-               "PID        product ID (hex, e.g. 0abc)\n"
-               "DESC       Some string to match in description or serial no.\n"
-               "DRIVER     usbconn driver, either ftdi or ftd2xx\n"
-               "           defaults to %s if not specified\n" "\n"), cablename,
-              DEFAULT_DRIVER);
-}
-
 const urj_cable_driver_t urj_tap_cable_usbblaster_driver = {
     "UsbBlaster",
     N_("Altera USB-Blaster Cable"),
@@ -527,7 +513,7 @@ const urj_cable_driver_t urj_tap_cable_usbblaster_driver = {
 //      urj_tap_cable_generic_flush_one_by_one,
 //      urj_tap_cable_generic_flush_using_transfer,
     usbblaster_flush,
-    usbblaster_help,
+    ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x09FB, 0x6001, "", "UsbBlaster", usbblaster)
 URJ_DECLARE_FTDX_CABLE(0x09FB, 0x6002, "", "UsbBlaster", cubic_cyclonium)

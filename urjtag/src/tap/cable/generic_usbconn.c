@@ -163,13 +163,40 @@ urj_tap_cable_generic_usbconn_done (urj_cable_t *cable)
 }
 
 void
+urj_tap_cable_generic_usbconn_help_ex (urj_log_level_t ll, const char *cablename,
+                                       const char *ex_short, const char *ex_desc)
+{
+    int i;
+    const urj_usbconn_cable_t *conn;
+
+    for (i = 0; urj_tap_cable_usbconn_cables[i]; ++i)
+    {
+        conn = urj_tap_cable_usbconn_cables[i];
+        if (strcasecmp (conn->name, cablename) == 0)
+            break;
+    }
+    if (!urj_tap_cable_usbconn_cables[i])
+    {
+        urj_warning (_("Unable to locate cable %s"), cablename);
+        return;
+    }
+
+    urj_log (ll,
+             _("Usage: cable %s %s %s\n"
+               "\n" "%s%s"
+               "\n"
+               "Default:   vid=%x pid=%x driver=%s\n"
+               "\n"),
+             cablename,
+             URJ_TAP_CABLE_GENERIC_USBCONN_HELP_SHORT, ex_short,
+             URJ_TAP_CABLE_GENERIC_USBCONN_HELP_DESC, ex_desc,
+             conn->vid, conn->pid, conn->driver);
+}
+
+void
 urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *cablename)
 {
-    urj_log (ll,
-             _("Usage: cable %s %s\n" "\n%s\n"),
-             cablename,
-             URJ_TAP_CABLE_GENERIC_USBCONN_HELP_SHORT,
-             URJ_TAP_CABLE_GENERIC_USBCONN_HELP_DESC);
+    urj_tap_cable_generic_usbconn_help_ex (ll, cablename, "", "");
 }
 
 int

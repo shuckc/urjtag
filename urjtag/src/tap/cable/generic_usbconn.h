@@ -39,7 +39,9 @@ int urj_tap_cable_generic_usbconn_connect (urj_cable_t *cable,
 void urj_tap_cable_generic_usbconn_done (urj_cable_t *cable);
 void urj_tap_cable_generic_usbconn_free (urj_cable_t *cable);
 
-void urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *name);
+void urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *cablename);
+void urj_tap_cable_generic_usbconn_help_ex (urj_log_level_t ll, const char *cablename,
+                                            const char *ex_short, const char *ex_desc);
 #define URJ_TAP_CABLE_GENERIC_USBCONN_HELP_SHORT \
     "[vid=VID] [pid=PID] [desc=DESC]"
 #define URJ_TAP_CABLE_GENERIC_USBCONN_HELP_DESC \

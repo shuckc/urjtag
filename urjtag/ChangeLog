@@ -2,6 +2,20 @@
 
   * src/tap/cable/generic_usbconn_list.h: Macro away duplicate ftdi lists.
 
+  * src/tap/cable/generic_usbconn.c: Extend help function to include some
+    ideas used by the FTDI help (show default vid/pid/driver).  Also add an
+    extended help function to show additional help strings so sub-drivers
+    need not duplicate this function.
+  * src/tap/cable/generic_usbconn.h: Add prototype for new helper function.
+  * src/tap/cable/ft2232.c: Switch to new usbconn helper function and export
+    the FTDI-specific helper function so external FTDI drivers can use it.
+  * src/tap/usbconn/libftdx.h: Add prototype for new FTDI helper function.
+  * src/tap/cable/usbblaster.c: Switch to common FTDI helper function and
+    drop unused local ftdi code.
+  * src/tap/cable/ft2232_list.h: Drop now that ft2232 uses common code which
+    only needs the common list of drivers.
+  * src/tap/Makefile.am: Drop ft2232_list.h reference.
+
 2010-06-28  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ice100.c: Drop local help stub and use common libusb one.
