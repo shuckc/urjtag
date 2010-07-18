@@ -25,8 +25,7 @@
 #
 #
 # bits 31-28 of the Device Identification Register
-0000    sharc21065l		0
-0001    sharc21065l		1
+0000	sharc21065l		0
+0001	sharc21065l		1
 0010	sharc21065l		2
 0011	sharc21065l		3
-
