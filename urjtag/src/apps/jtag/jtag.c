@@ -60,30 +60,74 @@ static int urj_interactive = 0;
 #define HISTORYFILE     "history"
 #define RCFILE          "rc"
 
-static int
-jtag_create_jtagdir (void)
+static char *
+jtag_get_jtagdir (const char *subpath)
 {
     char *home = getenv ("HOME");
-    char *jdir;
-    int r;
+    size_t ret_len;
+    char *ret;
+
+#ifdef __MINGW32__
+    if (!home)
+    {
+        /* Windows plays some ugly tricks */
+        const char *drive = getenv ("HOMEDRIVE");
+        const char *path = getenv ("HOMEPATH");
+        if (!drive && !path)
+        {
+            urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME/HOMEDRIVE/HOMEPATH not set");
+            return NULL;
+        }
+
+        home = malloc (strlen ("HOME=") + strlen (drive) + strlen (path) + 1);
+        if (home)
+        {
+            strcpy (home, "HOME=");
+            strcat (home, drive);
+            strcat (home, path);
+            putenv (home);
+            home += 5;
+        }
+    }
+#endif
 
     if (!home)
     {
         urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME not set");
-        return URJ_STATUS_FAIL;
+        return NULL;
     }
 
-    jdir = malloc (strlen (home) + strlen (JTAGDIR) + 2);       /* "/" and trailing \0 */
-    if (!jdir)
+    ret_len = strlen (home) + strlen (JTAGDIR) + 2; /* "/" and trailing \0 */
+    if (subpath)
+        ret_len += strlen (subpath) + 1;
+    ret = malloc (ret_len);
+
+    if (!ret)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                       strlen (home) + strlen (JTAGDIR) + 2);
-        return URJ_STATUS_FAIL;
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", ret_len);
+        return NULL;
     }
 
-    strcpy (jdir, home);
-    strcat (jdir, "/");
-    strcat (jdir, JTAGDIR);
+    strcpy (ret, home);
+    strcat (ret, "/");
+    strcat (ret, JTAGDIR);
+    if (subpath)
+    {
+        strcat (ret, "/");
+        strcat (ret, subpath);
+    }
+
+    return ret;
+}
+
+static int
+jtag_create_jtagdir (void)
+{
+    char *jdir = jtag_get_jtagdir (NULL);
+    int r;
+
+    if (!jdir)
+        return URJ_STATUS_FAIL;
 
     /* Create the directory if it doesn't exists. */
     r = mkdir (jdir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
@@ -125,30 +169,12 @@ urj_cmd_completion (const char *text, int start, int end)
 static int
 jtag_load_history (void)
 {
-    char *home = getenv ("HOME");
-    char *file;
+    char *file = jtag_get_jtagdir (HISTORYFILE);
+
+    if (!file)
+        return URJ_STATUS_FAIL;
 
     using_history ();
-
-    if (!home)
-    {
-        urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME not set");
-        return URJ_STATUS_FAIL;
-    }
-
-    file = malloc (strlen (home) + strlen (JTAGDIR) + strlen (HISTORYFILE) + 3);        /* 2 x "/" and trailing \0 */
-    if (!file)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                   strlen (home) + strlen (JTAGDIR) + strlen (HISTORYFILE) + 3);
-        return URJ_STATUS_FAIL;
-    }
-
-    strcpy (file, home);
-    strcat (file, "/");
-    strcat (file, JTAGDIR);
-    strcat (file, "/");
-    strcat (file, HISTORYFILE);
 
     read_history (file);
 
@@ -160,28 +186,10 @@ jtag_load_history (void)
 static int
 jtag_save_history (void)
 {
-    char *home = getenv ("HOME");
-    char *file;
+    char *file = jtag_get_jtagdir (HISTORYFILE);
 
-    if (!home)
-    {
-        urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME not set");
-        return URJ_STATUS_FAIL;
-    }
-
-    file = malloc (strlen (home) + strlen (JTAGDIR) + strlen (HISTORYFILE) + 3);        /* 2 x "/" and trailing \0 */
     if (!file)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                   strlen (home) + strlen (JTAGDIR) + strlen (HISTORYFILE) + 3);
         return URJ_STATUS_FAIL;
-    }
-
-    strcpy (file, home);
-    strcat (file, "/");
-    strcat (file, JTAGDIR);
-    strcat (file, "/");
-    strcat (file, HISTORYFILE);
 
     write_history (file);
 
@@ -304,29 +312,11 @@ jtag_readline_loop (urj_chain_t *chain, const char *prompt)
 static int
 jtag_parse_rc (urj_chain_t *chain)
 {
-    char *home = getenv ("HOME");
-    char *file;
+    char *file = jtag_get_jtagdir (RCFILE);
     int go;
 
-    if (!home)
-    {
-        urj_error_set (URJ_ERROR_UNSUPPORTED, "env var HOME not set");
-        return URJ_STATUS_FAIL;
-    }
-
-    file = malloc (strlen (home) + strlen (JTAGDIR) + strlen (RCFILE) + 3);     /* 2 x "/" and trailing \0 */
     if (!file)
-    {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                       strlen (home) + strlen (JTAGDIR) + strlen (RCFILE) + 3);
         return URJ_STATUS_FAIL;
-    }
-
-    strcpy (file, home);
-    strcat (file, "/");
-    strcat (file, JTAGDIR);
-    strcat (file, "/");
-    strcat (file, RCFILE);
 
     go = urj_parse_file (URJ_LOG_LEVEL_DETAIL, chain, file);
 

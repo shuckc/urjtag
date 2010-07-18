@@ -3,6 +3,9 @@
   * src/apps/jtag/jtag.c (main): Do not abort running just because a user's
     rc file is unparseable (or inaccessible).
 
+  * src/apps/jtag/jtag.c: Unify jtag home dir parsing and add support for
+    the Windows home env var names.
+
 2010-06-29  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/generic_usbconn_list.h: Macro away duplicate ftdi lists.
