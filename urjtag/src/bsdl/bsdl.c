@@ -112,7 +112,7 @@ urj_bsdl_read_file (urj_chain_t *chain, const char *BSDL_File_Name,
         jtag_ctrl.part = NULL;
     }
 
-    BSDL_File = fopen (BSDL_File_Name, "r");
+    BSDL_File = fopen (BSDL_File_Name, "rb");
 
     urj_bsdl_msg (proc_mode, _("Reading file '%s'\n"), BSDL_File_Name);
 

@@ -6,6 +6,11 @@
   * src/apps/jtag/jtag.c: Unify jtag home dir parsing and add support for
     the Windows home env var names.
 
+  * src/apps/bsdl2jtag/bsdl2jtag.c, src/bsdl/bsdl.c, src/bsdl/vhdl_flex.l,
+    src/cmd/cmd_readmem.c, src/cmd/cmd_svf.c, src/cmd/cmd_writemem.c,
+    src/global/parse.c, src/tap/detect.c: Add "b" to the fopen() mode string
+    for Windows and such [2874517] by Daryl Tester.
+
 2010-06-29  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/generic_usbconn_list.h: Macro away duplicate ftdi lists.

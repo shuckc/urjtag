@@ -80,7 +80,7 @@ main (int argc, char *const argv[])
         return 1;
     }
 
-    jtag_file = fopen (argv[2], "w");
+    jtag_file = fopen (argv[2], "wb");
     if (jtag_file == NULL)
     {
         printf ("Error: Can't open '%s' in write mode.\n", argv[2]);

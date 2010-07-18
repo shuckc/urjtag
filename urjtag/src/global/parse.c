@@ -202,7 +202,7 @@ urj_parse_file (urj_log_level_t ll, urj_chain_t *chain, const char *filename)
     FILE *f;
     int go;
 
-    f = fopen (filename, "r");
+    f = fopen (filename, "rb");
     if (!f)
     {
         urj_error_IO_set ("Cannot open file '%s' to parse", filename);

@@ -501,7 +501,7 @@ urj_vhdl_flex_switch_file (yyscan_t scanner, char *filename)
     extra = yyget_extra (scanner);
 
     /* file in current directory has precedence */
-    f = fopen (filename, "r");
+    f = fopen (filename, "rb");
     if (!f)
     {
         const char *db_path = urj_get_data_dir ();
@@ -518,7 +518,7 @@ urj_vhdl_flex_switch_file (yyscan_t scanner, char *filename)
             strcat (db_file, "bsdl");
             strcat (db_file, "/");
             strcat (db_file, filename);
-            f = fopen (db_file, "r");
+            f = fopen (db_file, "rb");
 
             if (!f)
                 urj_bsdl_ftl_set (extra->proc_mode, URJ_ERROR_IO,
