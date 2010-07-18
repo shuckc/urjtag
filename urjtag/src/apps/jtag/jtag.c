@@ -544,9 +544,9 @@ main (int argc, char *const argv[])
         {
             if (urj_error_get() != URJ_ERROR_IO)
             {
+                /* Only warn about RC problems; don't prevent running */
                 urj_log (URJ_LOG_LEVEL_NORMAL, "Error: %s\n",
                          urj_error_describe());
-                go = 0;
             }
             urj_error_reset();
         }
