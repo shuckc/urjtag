@@ -341,9 +341,10 @@ intel_flash_program_buffer (urj_flash_cfi_array_t *cfi_array,
         /* issue command WRITE_TO_BUFFER */
         URJ_BUS_WRITE (bus, cfi_array->address,
                        CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
-        URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_WRITE_TO_BUFFER);
         /* poll XSR7 == 1 */
-        while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY)); /* TODO: add timeout */
+        do {
+            URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_WRITE_TO_BUFFER);
+        } while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY)); /* TODO: add timeout */
 
         /* write count value (number of upcoming writes - 1) */
         URJ_BUS_WRITE (bus, adr, wcount - 1);

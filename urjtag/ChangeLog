@@ -1,3 +1,8 @@
+2010-07-30  Arnim Laeuger  <arniml>
+
+  * src/flash/intel.c: issue CFI_INTEL_CMD_WRITE_TO_BUFFER when polling
+    SR_READY in buffered write (Michael Walle)
+
 2010-07-30  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/cable.h (URJ_CABLE_PARAM_KEY): Add new cable params for tdi,
