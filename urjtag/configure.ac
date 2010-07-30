@@ -645,6 +645,7 @@ URJ_DRIVER_SET([cable], [
 	ea253
 	ei012
 	ft2232
+	gpio
 	ice100
 	igloo
 	jlink

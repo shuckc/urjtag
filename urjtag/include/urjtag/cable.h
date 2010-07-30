@@ -59,6 +59,10 @@ typedef enum URJ_CABLE_PARAM_KEY
     URJ_CABLE_PARAM_KEY_DESC,           /* string       generic_usbconn */
     URJ_CABLE_PARAM_KEY_DRIVER,         /* string       generic_usbconn */
     URJ_CABLE_PARAM_KEY_BITMAP,         /* string       wiggler */
+    URJ_CABLE_PARAM_KEY_TDI,            /* lu           gpio used as TDI */
+    URJ_CABLE_PARAM_KEY_TDO,            /* lu           gpio used as TDO */
+    URJ_CABLE_PARAM_KEY_TMS,            /* lu           gpio used as TMS */
+    URJ_CABLE_PARAM_KEY_TCK,            /* lu           gpio used as TCK */
 }
 urj_cable_param_key_t;
 

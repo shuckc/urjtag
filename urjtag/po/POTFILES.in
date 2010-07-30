@@ -114,6 +114,7 @@ src/tap/cable/ft2232.c
 src/tap/cable/generic.c
 src/tap/cable/generic_parport.c
 src/tap/cable/generic_usbconn.c
+src/tap/cable/gpio.c
 src/tap/cable/jim.c
 src/tap/cable/jlink.c
 src/tap/cable/keithkoep.c

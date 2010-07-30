@@ -1,3 +1,12 @@
+2010-07-30  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/urjtag/cable.h (URJ_CABLE_PARAM_KEY): Add new cable params for tdi,
+    tdo, tms, and tck for new GPIO cable driver.
+  * src/tap/cable.c (cable_param): Likewise.
+  * src/tap/cable_list.h: Add new GPIO cable driver entry.
+  * configure.ac, src/tap/Makefile.am: Likewise.
+  * src/tap/cable/gpio.c: New GPIO cable driver by Stefano Babic.
+
 2010-07-18  Mike Frysinger  <vapier@gentoo.org>
 
   * src/apps/jtag/jtag.c (main): Do not abort running just because a user's
