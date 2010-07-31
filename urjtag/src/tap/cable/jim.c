@@ -157,7 +157,8 @@ jim_cable_help (urj_log_level_t ll, const char *cablename)
 const urj_cable_driver_t urj_tap_cable_jim_driver = {
     "JIM",
     N_("JTAG target simulator JIM"),
-    jim_cable_connect,
+    URJ_CABLE_DEVICE_OTHER,
+    { .other = jim_cable_connect, },
     jim_cable_disconnect,
     jim_cable_free,
     jim_cable_init,
