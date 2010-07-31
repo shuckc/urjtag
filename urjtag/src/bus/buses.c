@@ -212,5 +212,5 @@ static const urj_param_descr_t bus_param[] =
 const urj_param_list_t urj_bus_param_list =
 {
     .list = bus_param,
-    .n    = sizeof bus_param / sizeof bus_param[0],
+    .n    = ARRAY_SIZE (bus_param)
 };

@@ -1,3 +1,7 @@
+2010-07-31  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bus/buses.c, src/flash/jedec.c, src/tap/cable.c: Convert to ARRAY_SIZE.
+
 2010-07-30  Mike Frysinger  <vapier@gentoo.org>
 
   * data/analog/bf592/STEPPINGS: Add support for bf592-0.1.

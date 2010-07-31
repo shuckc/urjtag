@@ -677,5 +677,5 @@ static const urj_param_descr_t cable_param[] =
 const urj_param_list_t urj_cable_param_list =
 {
     .list = cable_param,
-    .n    = sizeof cable_param / sizeof cable_param[0],
+    .n    = ARRAY_SIZE (cable_param),
 };

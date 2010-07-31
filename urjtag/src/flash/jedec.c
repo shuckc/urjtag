@@ -495,8 +495,7 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
         devid = URJ_BUS_READ (bus, adr + (1 << 1));
         URJ_BUS_WRITE (bus, adr, 0xf0);
 
-        for (dev_idx = sizeof (table) / sizeof (struct amd_flash_info) - 1;
-             dev_idx >= 0; dev_idx--)
+        for (dev_idx = ARRAY_SIZE (table) - 1; dev_idx >= 0; dev_idx--)
         {
             if (table[dev_idx].interface_width == CFI_INTERFACE_X16 ||
                 table[dev_idx].interface_width == CFI_INTERFACE_X8_X16)
@@ -526,8 +525,7 @@ urj_flash_jedec_detect (urj_bus_t *bus, uint32_t adr,
         devid = URJ_BUS_READ (bus, adr + 1);
         URJ_BUS_WRITE (bus, adr, 0xf0);
 
-        for (dev_idx = sizeof (table) / sizeof (struct amd_flash_info) - 1;
-             dev_idx >= 0; dev_idx--)
+        for (dev_idx = ARRAY_SIZE (table) - 1; dev_idx >= 0; dev_idx--)
         {
             if (table[dev_idx].interface_width == CFI_INTERFACE_X8)
             {
