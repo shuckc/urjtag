@@ -208,7 +208,7 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
 
     do
     {
-        int r, bits = 0, tdo = 0;
+        int r, bits = 0, tdo = 0, savbits;
 
         urj_log (URJ_LOG_LEVEL_DETAIL, "flush(%d)\n", cable->todo.num_items);
 
@@ -254,6 +254,8 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
 
         urj_log (URJ_LOG_LEVEL_DETAIL, "%d combined into one (%d bits)\n",
                  n, bits);
+
+        savbits = bits;
 
         if (bits == 0 || n <= 1)
         {
@@ -333,6 +335,10 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
                              "add result from transfer to %p.%d\n",
                              &(cable->done), c);
                     cable->done.data[c].action = URJ_TAP_CABLE_GET_TDO;
+                    if (bits < savbits)
+                        tdo = out[bits];
+                    else
+                        tdo = cable->driver->get_tdo(cable);
                     cable->done.data[c].arg.value.val = tdo;
                 }
                 else if (cable->todo.data[i].action == URJ_TAP_CABLE_TRANSFER)

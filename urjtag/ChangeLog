@@ -1,3 +1,8 @@
+2010-08-08  Arnim Laeuger  <arniml>
+
+  * src/tap/cable/generic.c: fix TDO handling ingeneric_flush_using_transfer()
+    (Matthias Drochner)
+
 2010-08-07  Mike Frysinger  <vapier@gentoo.org>
 
   * src/global/params.c (parse_param_lu): Accept unsigned values in hex format.
