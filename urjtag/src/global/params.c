@@ -180,10 +180,25 @@ urj_param_push_bool (const urj_param_t ***bp, int key, int val)
 static int
 parse_param_lu(const char *eq, long unsigned *lu)
 {
-    if (sscanf(eq + 1, "%lu", lu) == 1)
-        return URJ_STATUS_OK;
+    eq += 1;
 
-    urj_error_set (URJ_ERROR_SYNTAX, "need unsigned int, not '%s'", eq + 1);
+    /* Handle hex values as well as decimal.  While the C library will take
+     * care of this for us if we used the 'i' conversion modifier, that takes
+     * us into the signed/unsigned world.  Unfortunately, the 'u' conversion
+     * modifier doesn't handle hex values transparently.  So do it ourselves.
+     */
+    if (strncmp(eq, "0x", 2))
+    {
+        if (sscanf(eq, "%lu", lu) == 1)
+            return URJ_STATUS_OK;
+    }
+    else
+    {
+        if (sscanf(eq, "%lx", lu) == 1)
+            return URJ_STATUS_OK;
+    }
+
+    urj_error_set (URJ_ERROR_SYNTAX, "need unsigned int, not '%s'", eq);
     return URJ_STATUS_FAIL;
 }
 

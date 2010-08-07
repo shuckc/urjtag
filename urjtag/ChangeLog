@@ -1,3 +1,7 @@
+2010-08-07  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/global/params.c (parse_param_lu): Accept unsigned values in hex format.
+
 2010-07-31  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/buses.c, src/flash/jedec.c, src/tap/cable.c: Convert to ARRAY_SIZE.
