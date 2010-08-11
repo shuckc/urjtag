@@ -1,6 +1,11 @@
+2010-08-11  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable/ice100.c: Add version check and firmware upgrade information
+    for ICE-100B cables (Chad Wentworth).
+
 2010-08-08  Arnim Laeuger  <arniml>
 
-  * src/tap/cable/generic.c: fix TDO handling ingeneric_flush_using_transfer()
+  * src/tap/cable/generic.c: fix TDO handling in generic_flush_using_transfer()
     (Matthias Drochner)
 
 2010-08-07  Mike Frysinger  <vapier@gentoo.org>

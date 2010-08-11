@@ -498,6 +498,15 @@ static int ice_init (urj_cable_t *cable)
              ((cable_params->version >> 4) & 0x0F),
              ((cable_params->version)      & 0x0F));
 
+    if (cable_params->version < 0x0107)
+    {
+        urj_log (URJ_LOG_LEVEL_ERROR,
+                 _("The firmware on the ICE-100b needs to be upgraded. Please go to:\n"
+                   "%sto learn how to update the firmware.\n"),
+                   "http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:ice100b\n");
+        return URJ_STATUS_FAIL;
+    }
+
     /* Set frequency to lowest value */
     ice100b_set_freq (cable, avail_freqs[0]);
     cable_params->sel_rawscan_enabled = (cable_params->version < 0x0107) ? 0 : 1;
