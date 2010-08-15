@@ -1,3 +1,7 @@
+2010-08-14  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Add autodetection of inpout32.
+
 2010-08-11  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ice100.c: Add version check and firmware upgrade information

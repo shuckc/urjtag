@@ -339,18 +339,25 @@ dnl http://www.highrez.co.uk/Downloads/InpOut32/default.htm
 AC_ARG_WITH([inpout32],
   [AS_HELP_STRING([--with-inpout32],
     [use InpOut32.dll for parallel port access on Windows])],
-    [], [with_inpout32=no])
+    [], [with_inpout32=auto])
 
 case $host in
   *cygwin*|*mingw*) ;;
   *) with_inpout32=no ;;
 esac
 
-AS_IF([test "x$with_inpout32" = xyes], [
-  HAVE_INPOUTXX=yes
-  AC_DEFINE(HAVE_INPOUTXX, 1, [define if you have inpout32.dll])
-],[
-  HAVE_INPOUTXX=no
+HAVE_INPOUTXX=no
+AS_IF([test "x$with_inpout32" != xno], [
+  AC_CHECK_HEADER([inpout32.h], [
+    HAVE_INPOUTXX=yes
+    AC_DEFINE(HAVE_INPOUTXX, 1, [define if you have inpout32.dll])
+  ],[:],[
+	#include <windows.h>
+	#include <stdbool.h>
+  ])
+  AS_IF([test "x$with_inpout32$HAVE_INPOUTXX" = "xyesno"], [
+    AC_MSG_ERROR([inpout32 support requested, but not found])
+  ])
 ])
 AM_CONDITIONAL(HAVE_INPOUTXX, [test "x$HAVE_INPOUTXX" = xyes])
 
