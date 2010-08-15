@@ -2,6 +2,8 @@
 
   * configure.ac: Add autodetection of inpout32.
 
+  * configure.ac: Disable ice100 cable driver when libusb is not found.
+
 2010-08-11  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ice100.c: Add version check and firmware upgrade information
