@@ -329,9 +329,9 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[1], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s)\n",
+                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s) (%s)\n",
                          _("Unknown manufacturer!"),
-                         urj_tap_register_get_string (key));
+                         urj_tap_register_get_string (key), data_path);
                 urj_tap_register_free (key);
                 continue;
             }
@@ -359,9 +359,9 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[12], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s)\n",
+                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s) (%s)\n",
                          _("Unknown part!"),
-                         urj_tap_register_get_string (key));
+                         urj_tap_register_get_string (key), data_path);
                 urj_tap_register_free (key);
                 continue;
             }
@@ -389,9 +389,9 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             memcpy (key->data, &id->data[28], key->len);
             if (!find_record (data_path, key, &idr))
             {
-                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s)\n",
+                urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s) (%s)\n",
                          _("Unknown stepping!"),
-                         urj_tap_register_get_string (key));
+                         urj_tap_register_get_string (key), data_path);
                 urj_tap_register_free (key);
                 continue;
             }
