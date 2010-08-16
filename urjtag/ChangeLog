@@ -3,6 +3,8 @@
   * src/tap/detect.c (urj_tap_detect_parts): Include paths to data files when
     issuing "unknown" messages.
 
+  * data/analog/bf518/STEPPINGS: Add bf51x-0.2 stepping.
+
 2010-08-14  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Add autodetection of inpout32.

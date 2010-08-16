@@ -21,3 +21,4 @@
 # bits 31-28 of the Device Identification Register
 0000	bf518		0
 0001	bf518		1
+0010	bf518		2
