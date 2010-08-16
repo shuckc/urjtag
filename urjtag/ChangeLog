@@ -5,6 +5,9 @@
 
   * data/analog/bf518/STEPPINGS: Add bf51x-0.2 stepping.
 
+  * data/MANUFACTURERS: Add another Analog Devices, Inc. entry.
+  * data/analog/bf561/STEPPINGS: Add bf561-0.{0,1,4} steppings.
+
 2010-08-14  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Add autodetection of inpout32.

@@ -20,6 +20,9 @@
 #
 
 # bits 31-28 of the Device Identification Register
+0000	bf561		0
+0001	bf561		1
 0010	bf561		2
 0011	bf561		3
+0100	bf561		4
 0101	bf561		5

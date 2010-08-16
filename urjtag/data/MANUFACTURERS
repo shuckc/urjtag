@@ -44,6 +44,7 @@
 00001101110	altera		Altera
 00010101011	lattice		Lattice Semiconductors
 00010111111	broadcom	Broadcom
+00011100101	analog		Analog Devices, Inc.
 00101010000	broadcom	Broadcom	# or "Sibyte, Incorporated" ?
 00101110000	brecis		Brecis (PMC-Sierra)
 00111101001	marvell		Marvell
