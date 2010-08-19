@@ -97,6 +97,9 @@ _URJ_CABLE(ts7800)
 #ifdef ENABLE_CABLE_USBBLASTER
 _URJ_CABLE(usbblaster)
 #endif
+#ifdef ENABLE_CABLE_VSLLINK
+_URJ_CABLE(vsllink)
+#endif
 #ifdef ENABLE_CABLE_WIGGLER
 _URJ_CABLE(wiggler)
 _URJ_CABLE(wiggler2)

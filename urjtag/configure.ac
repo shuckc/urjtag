@@ -662,6 +662,7 @@ URJ_DRIVER_SET([cable], [
 	mpcbdm
 	triton
 	usbblaster
+	vsllink
 	wiggler
 	xpc
 ],[
@@ -674,7 +675,11 @@ URJ_DRIVER_SET([cable], [
 		drivers=`echo ${drivers} | $SED -e "s/ft2232//" -e "s/usbblaster//"`
 	])
 	AS_IF([test "x$HAVELIBUSB" = "xno"], [
-		drivers=`echo ${drivers} | $SED -e s/jlink// -e s/xpc// -e s/ice100//`
+		drivers=`echo ${drivers} | $SED \
+			-e s/ice100// \
+			-e s/jlink// \
+			-e s/vsllink// \
+			-e s/xpc//`
 	])
 ])
 dnl the "fake" jim cable driver is special

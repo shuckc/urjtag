@@ -71,6 +71,9 @@ _URJ_USB(ezkit_10_bf537)
 _URJ_USB(ezkit_20_bf518)
 _URJ_USB(ezkit_20_bf526)
 #endif
+#ifdef ENABLE_CABLE_VSLLINK
+_URJ_USB(vsllink)
+#endif
 
 #undef _URJ_USB_FTDI
 #undef _URJ_USB_FTD2XX

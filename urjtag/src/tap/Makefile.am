@@ -139,6 +139,11 @@ libtap_la_SOURCES += \
 	cable/ice100.c
 endif
 
+if ENABLE_CABLE_VSLLINK
+libtap_la_SOURCES += \
+	cable/vsllink.c
+endif
+
 if HAVE_LIBUSB
 libtap_la_SOURCES += \
 	usbconn/libusb.c \

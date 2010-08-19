@@ -1,3 +1,9 @@
+2010-08-19  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac, src/tap/cable_list.h, src/tap/cable/generic_usbconn_list.h,
+    src/tap/Makefile.am: Add vsllink cable driver to cable lists.
+  * src/tap/cable/vsllink.c: New cable driver by Simon Qian.
+
 2010-08-18  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac (AC_CHECK_FUNCS): Check for _sleep.
