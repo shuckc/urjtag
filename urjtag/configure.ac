@@ -116,6 +116,7 @@ else
 fi
 
 AC_CHECK_FUNCS(m4_flatten([
+	_sleep
 	geteuid
 	getuid
 	nanosleep

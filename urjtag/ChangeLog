@@ -1,3 +1,9 @@
+2010-08-18  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac (AC_CHECK_FUNCS): Check for _sleep.
+  * src/lib/usleep.c: Support a fuzzy version of usleep based on old mingw
+    _sleep functions.
+
 2010-08-16  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/detect.c (urj_tap_detect_parts): Include paths to data files when

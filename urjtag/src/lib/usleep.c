@@ -23,9 +23,7 @@
 
 #ifndef HAVE_USLEEP
 
-#ifndef HAVE_NANOSLEEP
-#  error Need usleep or nanosleep
-#endif
+#ifdef HAVE_NANOSLEEP
 
 #include <time.h>
 
@@ -41,5 +39,18 @@ int usleep (long unsigned usec)
 
     return nanosleep (&req, NULL);
 }
+
+#elif defined(HAVE__SLEEP)
+
+/* Not exact, but close enough */
+int usleep (long unsigned usec)
+{
+    _sleep (usec / 1000);
+    return 0;
+}
+
+#else
+# error "Need sleep, usleep, or nanosleep"
+#endif
 
 #endif
