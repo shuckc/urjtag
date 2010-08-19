@@ -248,6 +248,7 @@ vsllink_init (urj_cable_t *cable)
         return URJ_STATUS_FAIL;
     }
     data = params->data;
+    memset (data, 0, sizeof (*data));
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
     {
@@ -281,10 +282,10 @@ vsllink_init (urj_cable_t *cable)
     }
 
     /* connect to versaloon */
+    in_length = 0;
     for (retry = 0; retry < 3; retry++)
     {
         data->usb_buffer[0] = VERSALOON_GET_INFO;
-        in_length = 0;
         result = vsllink_usb_message (params, 1, in_length, 100);
         if (result >= 3)
             break;
@@ -295,7 +296,7 @@ vsllink_init (urj_cable_t *cable)
         return URJ_STATUS_FAIL;
     }
 
-    data->usb_buffer[in_length] = '\0';
+    data->usb_buffer[result] = '\0';
     data->usb_buffer_size = data->usb_buffer[0] + (data->usb_buffer[1] << 8);
     if (data->usb_buffer_size < 64)
     {

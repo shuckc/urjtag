@@ -7,6 +7,9 @@
   * src/tap/cable/gpio.c (gpio_get_value): Use already cached fp rather than
     constantly re-opening things on the fly.
 
+  * src/tap/cable/vsllink.c (vsllink_init): Fix by Simon Qian for initialization
+    of internal state, and proper NUL termination of initial buffer.
+
 2010-08-18  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac (AC_CHECK_FUNCS): Check for _sleep.
