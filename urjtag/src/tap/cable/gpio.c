@@ -127,26 +127,12 @@ static int gpio_set_value (FILE *fp, int value)
     return URJ_STATUS_OK;
 }
 
-static int gpio_get_value (unsigned int gpio)
+static int gpio_get_value (FILE *fp, unsigned int gpio)
 {
     int ret;
     int value;
-    char fname[50];
-    FILE *fp;
-
-    snprintf (fname, sizeof (fname),
-        "%sgpio%u/value", GPIO_PATH, gpio);
-    fname[sizeof (fname) - 1] = '\0';
-
-    fp = fopen (fname, "r");
-    if (!fp)
-    {
-        urj_warning (_("%s: cannot open to read GPIO %u\n"), fname, gpio);
-        return URJ_STATUS_FAIL;
-    }
 
     ret = fscanf (fp, "%i", &value);
-    fclose (fp);
 
     if (ret != 1)
     {
@@ -355,7 +341,7 @@ gpio_get_tdo ( urj_cable_t *cable )
 
     urj_tap_cable_wait (cable);
 
-    return (gpio_get_value (p->jtag_gpios[GPIO_TDO]));
+    return gpio_get_value (p->fp_gpios[GPIO_TDO], p->jtag_gpios[GPIO_TDO]);
 }
 
 static int

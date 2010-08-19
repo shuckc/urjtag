@@ -4,6 +4,9 @@
     src/tap/Makefile.am: Add vsllink cable driver to cable lists.
   * src/tap/cable/vsllink.c: New cable driver by Simon Qian.
 
+  * src/tap/cable/gpio.c (gpio_get_value): Use already cached fp rather than
+    constantly re-opening things on the fly.
+
 2010-08-18  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac (AC_CHECK_FUNCS): Check for _sleep.
