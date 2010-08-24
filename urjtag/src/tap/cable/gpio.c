@@ -133,6 +133,7 @@ static int gpio_get_value (FILE *fp, unsigned int gpio)
     int value;
 
     ret = fscanf (fp, "%i", &value);
+    rewind (fp);
 
     if (ret != 1)
     {

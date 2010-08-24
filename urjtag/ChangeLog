@@ -1,3 +1,9 @@
+2010-08-24  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable/gpio.c (gpio_get_value): Need to seek back to the start of
+    the gpio file after reading the value so we keep getting up-to-date
+    results as reported by Frans Meulenbroeks.
+
 2010-08-19  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac, src/tap/cable_list.h, src/tap/cable/generic_usbconn_list.h,
