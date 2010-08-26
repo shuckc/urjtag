@@ -1,3 +1,9 @@
+2010-08-26  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable/gpio.c: Rewrite to use raw file descriptors when working with
+    the gpio value.  Also assume the gpio layer only has a value of '0' or '1'.
+    Work by Frans Meulenbroeks.
+
 2010-08-24  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/gpio.c (gpio_get_value): Need to seek back to the start of

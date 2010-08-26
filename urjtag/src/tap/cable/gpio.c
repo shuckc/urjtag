@@ -56,7 +56,7 @@ typedef struct {
     unsigned int jtag_gpios[4];
     int          signals;
     uint32_t     lastout;
-    FILE        *fp_gpios[4];
+    int          fd_gpios[4];
 } gpio_params_t;
 
 static int gpio_export (unsigned int gpio, int export)
@@ -113,11 +113,12 @@ static int gpio_direction (unsigned int gpio, int out)
     return URJ_STATUS_OK;
 }
 
-static int gpio_set_value (FILE *fp, int value)
+static int gpio_set_value (int fd, int value)
 {
-    int ret;
+    ssize_t ret;
+    char gpio_value = value + '0';
 
-    ret = fprintf (fp, "%u", value ? 1 : 0);
+    ret = write (fd, &gpio_value, 1);
     if (ret != 1)
     {
         urj_warning (_("Error setting value gpio\n"));
@@ -127,13 +128,13 @@ static int gpio_set_value (FILE *fp, int value)
     return URJ_STATUS_OK;
 }
 
-static int gpio_get_value (FILE *fp, unsigned int gpio)
+static int gpio_get_value (int fd, unsigned int gpio)
 {
-    int ret;
-    int value;
+    ssize_t ret;
+    char value;
 
-    ret = fscanf (fp, "%i", &value);
-    rewind (fp);
+    ret = read (fd, &value, 1);
+    lseek (fd, 0, SEEK_SET);
 
     if (ret != 1)
     {
@@ -141,7 +142,7 @@ static int gpio_get_value (FILE *fp, unsigned int gpio)
         return URJ_STATUS_FAIL;
     }
 
-    return value;
+    return value == '1';
 }
 
 static int
@@ -164,21 +165,12 @@ gpio_open (urj_cable_t *cable)
         }
         gpio_direction (gpio, (i == GPIO_TDO) ? 0 : 1);
 
-        p->fp_gpios[i] = NULL;
         snprintf (fname, sizeof (fname), "%sgpio%u/value", GPIO_PATH, gpio);
         fname[sizeof (fname) - 1] = '\0';
-        if (i != GPIO_TDO)
-            p->fp_gpios[i] = fopen (fname, "w");
-        else
-            p->fp_gpios[i] = fopen (fname, "r");
-        if (!p->fp_gpios[i])
+        p->fd_gpios[i] = open (fname, O_RDWR);
+        if (p->fd_gpios[i] < 0)
         {
             urj_warning (_("%s: cannot open gpio[%d] %u\n"), fname, i, gpio);
-            return URJ_STATUS_FAIL;
-        }
-        if (setvbuf(p->fp_gpios[i], (char *)NULL, _IONBF, 0))
-        {
-            urj_warning (_("gpio[%d] %u still in buffered mode\n"), i, gpio);
             return URJ_STATUS_FAIL;
         }
    }
@@ -194,8 +186,8 @@ gpio_close (urj_cable_t *cable)
 
     for (i = 0; i < GPIO_REQUIRED; i++)
     {
-        if (p->fp_gpios[i])
-            fclose (p->fp_gpios[i]);
+        if (p->fd_gpios[i])
+            close (p->fd_gpios[i]);
         gpio_export (p->jtag_gpios[i], 0);
     }
 
@@ -319,14 +311,14 @@ gpio_clock (urj_cable_t *cable, int tms, int tdi, int n)
     tms = tms ? 1 : 0;
     tdi = tdi ? 1 : 0;
 
-    gpio_set_value (p->fp_gpios[GPIO_TMS], tms);
-    gpio_set_value (p->fp_gpios[GPIO_TDI], tdi);
+    gpio_set_value (p->fd_gpios[GPIO_TMS], tms);
+    gpio_set_value (p->fd_gpios[GPIO_TDI], tdi);
 
     for (i = 0; i < n; i++)
     {
-        gpio_set_value (p->fp_gpios[GPIO_TCK], 0);
-        gpio_set_value (p->fp_gpios[GPIO_TCK], 1);
-        gpio_set_value (p->fp_gpios[GPIO_TCK], 0);
+        gpio_set_value (p->fd_gpios[GPIO_TCK], 0);
+        gpio_set_value (p->fd_gpios[GPIO_TCK], 1);
+        gpio_set_value (p->fd_gpios[GPIO_TCK], 0);
     }
 }
 
@@ -335,14 +327,14 @@ gpio_get_tdo ( urj_cable_t *cable )
 {
     gpio_params_t *p = cable->params;
 
-    gpio_set_value(p->fp_gpios[GPIO_TCK], 0);
-    gpio_set_value(p->fp_gpios[GPIO_TDI], 0);
-    gpio_set_value(p->fp_gpios[GPIO_TMS], 0);
+    gpio_set_value(p->fd_gpios[GPIO_TCK], 0);
+    gpio_set_value(p->fd_gpios[GPIO_TDI], 0);
+    gpio_set_value(p->fd_gpios[GPIO_TMS], 0);
     p->lastout &= ~(URJ_POD_CS_TMS | URJ_POD_CS_TDI | URJ_POD_CS_TCK);
 
     urj_tap_cable_wait (cable);
 
-    return gpio_get_value (p->fp_gpios[GPIO_TDO], p->jtag_gpios[GPIO_TDO]);
+    return gpio_get_value (p->fd_gpios[GPIO_TDO], p->jtag_gpios[GPIO_TDO]);
 }
 
 static int
@@ -370,11 +362,11 @@ gpio_set_signal (urj_cable_t *cable, int mask, int val)
     if (mask != 0)
     {
         if (mask & URJ_POD_CS_TMS)
-            gpio_set_value (p->fp_gpios[GPIO_TMS], val & URJ_POD_CS_TMS);
+            gpio_set_value (p->fd_gpios[GPIO_TMS], val & URJ_POD_CS_TMS);
         if (mask & URJ_POD_CS_TDI)
-            gpio_set_value (p->fp_gpios[GPIO_TDI], val & URJ_POD_CS_TDI);
+            gpio_set_value (p->fd_gpios[GPIO_TDI], val & URJ_POD_CS_TDI);
         if (mask & URJ_POD_CS_TCK)
-            gpio_set_value (p->fp_gpios[GPIO_TCK], val & URJ_POD_CS_TCK);
+            gpio_set_value (p->fd_gpios[GPIO_TCK], val & URJ_POD_CS_TCK);
     }
 
     p->lastout = val & mask;
