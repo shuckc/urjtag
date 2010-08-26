@@ -133,8 +133,7 @@ static int gpio_get_value (int fd, unsigned int gpio)
     ssize_t ret;
     char value;
 
-    ret = read (fd, &value, 1);
-    lseek (fd, 0, SEEK_SET);
+    ret = pread (fd, &value, 1, 0);
 
     if (ret != 1)
     {
