@@ -24,6 +24,12 @@
   * src/svf/svf_bison.y: Avoid further overhead by using memcpy() with all
     known lengths rather than strcpy().
 
+  * src/tap/cable/vsllink.c (vsllink_init): Convert libusb-0.x API to newer
+    libusb-1.x API.
+  * src/tap/usbconn/libusb.h: Glue a few more libusb-0.x API defines to newer
+    libusb-1.x API defines.  Add errors for some libusb-0.x API functions to
+    catch problems in the future.
+
 2010-08-26  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/gpio.c: Rewrite to use raw file descriptors when working with

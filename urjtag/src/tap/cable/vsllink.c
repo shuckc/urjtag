@@ -270,10 +270,9 @@ vsllink_init (urj_cable_t *cable)
     }
 
     /* disable cdc device */
-    result = usb_control_msg (params->handle,
-                              USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
-                              0, 0, 0, NULL, 0,
-                              VERSALOON_USB_TIMEOUT);
+    result = libusb_control_transfer (params->handle,
+                                      LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_INTERFACE,
+                                      0, 0, 0, NULL, 0, VERSALOON_USB_TIMEOUT);
     if (result < 0)
     {
         urj_log (URJ_LOG_LEVEL_ERROR, _("fail to disable cdc in Versaloon\n"));

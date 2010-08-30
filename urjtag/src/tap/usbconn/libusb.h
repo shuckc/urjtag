@@ -36,6 +36,16 @@
 
 # define LIBUSB_ENDPOINT_IN USB_ENDPOINT_IN
 
+# define LIBUSB_REQUEST_TYPE_STANDARD USB_TYPE_STANDARD
+# define LIBUSB_REQUEST_TYPE_CLASS    USB_TYPE_CLASS
+# define LIBUSB_REQUEST_TYPE_VENDOR   USB_TYPE_VENDOR
+# define LIBUSB_REQUEST_TYPE_RESERVED USB_TYPE_RESERVED
+
+# define LIBUSB_RECIPIENT_DEVICE    USB_RECIP_DEVICE
+# define LIBUSB_RECIPIENT_INTERFACE USB_RECIP_INTERFACE
+# define LIBUSB_RECIPIENT_ENDPOINT  USB_RECIP_ENDPOINT
+# define LIBUSB_RECIPIENT_OTHER     USB_RECIP_OTHER
+
 # define libusb_device usb_device
 # define libusb_device_handle usb_dev_handle
 # define libusb_device_descriptor usb_device_descriptor
@@ -71,6 +81,8 @@ libusb_bulk_transfer (libusb_device_handle *dev_handle, unsigned char endpoint,
         return 0;
     }
 }
+# define usb_bulk_read(...)  use_libusb_1_api
+# define usb_bulk_write(...) use_libusb_1_api
 
 static inline int
 libusb_control_transfer (libusb_device_handle *dev_handle, uint8_t request_type,
@@ -88,6 +100,7 @@ libusb_control_transfer (libusb_device_handle *dev_handle, uint8_t request_type,
     else
         return ret;
 }
+# define usb_control_msg(...) use_libusb_1_api
 
 static inline int
 libusb_open (struct libusb_device *dev, libusb_device_handle **handle)
@@ -95,6 +108,7 @@ libusb_open (struct libusb_device *dev, libusb_device_handle **handle)
     *handle = usb_open (dev);
     return *handle ? 0 : -99;
 }
+# define usb_open(...) use_libusb_1_api
 
 static inline int
 libusb_get_string_descriptor_ascii (libusb_device_handle *dev, uint8_t index,
@@ -102,6 +116,7 @@ libusb_get_string_descriptor_ascii (libusb_device_handle *dev, uint8_t index,
 {
     return usb_get_string_simple (dev, index, (char *) data, length);
 }
+# define usb_get_string_simple(...) use_libusb_1_api
 
 #endif
 
