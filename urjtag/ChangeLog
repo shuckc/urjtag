@@ -21,6 +21,9 @@
     strcat().  This avoids having to rescan for the end of the string.  Fix by
     Frans Meulenbroeks.
 
+  * src/svf/svf_bison.y: Avoid further overhead by using memcpy() with all
+    known lengths rather than strcpy().
+
 2010-08-26  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/gpio.c: Rewrite to use raw file descriptors when working with

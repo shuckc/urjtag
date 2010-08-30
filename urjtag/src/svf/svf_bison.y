@@ -312,7 +312,7 @@ hexa_num_sequence
                      $1.buflen = newlen;
                  }
                  if ($1.buf != NULL) {
-                     strcpy ($1.buf + $1.strlen, $2);
+                     memcpy ($1.buf + $1.strlen, $2, frag_len + 1);
                      $1.strlen += frag_len;
                  }
                  free ($2);
