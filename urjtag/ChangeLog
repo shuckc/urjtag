@@ -11,6 +11,9 @@
   * src/svf/svf_flex.l (fix_yylloc): Accept the string length from caller to
     avoid useless overhead of calling strlen().  Fix by Frans Meulenbroeks.
 
+  * src/svf/svf_flex.l: Use memcpy() rather than strcpy() when we already know
+    the length and we just want to dupe the string.
+
 2010-08-26  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/gpio.c: Rewrite to use raw file descriptors when working with

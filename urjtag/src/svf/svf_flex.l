@@ -149,7 +149,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   len = align_string(yytext);
 
   cstring = malloc(len + 1);
-  strcpy(cstring, yytext);
+  memcpy(cstring, yytext, len + 1);
   yylval->cvalue = cstring;
   return(VECTOR_STRING);
 } /* end of vector string */
@@ -172,7 +172,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   len = align_string(yytext);
 
   cstring = (char *)malloc(len + 1);
-  strcpy(cstring, yytext);
+  memcpy(cstring, yytext, len + 1);
   yylval->cvalue = cstring;
   return(HEXA_NUM_FRAGMENT);
 } /* end of hexadecimal value */
