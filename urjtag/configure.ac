@@ -164,80 +164,39 @@ AS_IF([test "x$ac_cv_header_windows_h" = "xyes"],[
 VL_LIB_READLINE
 
 
-dnl check for libusb-0.x
+dnl check for libusb
 
 AC_ARG_WITH([libusb],
-  [AS_HELP_STRING([--with-libusb],
-    [use libusb for some USB JTAG cables])],,
-    [with_libusb=check])
+  [AS_HELP_STRING([--with-libusb], [lib for USB JTAG cables @<:@default=detect 1.0 0.1@:>@])],,
+    [with_libusb=detect])
 
 HAVELIBUSB=no
-AS_IF([test "x$with_libusb" != xno -a "x$with_libusb" != x1.0], [
-  save_LIBS=$LIBS
-  save_CPPFLAGS=$CPPFLAGS
-  PKG_CHECK_MODULES(LIBUSB, libusb, [:;], [dnl
-    AS_IF([test "x$with_libusb" != xyes -a "x$with_libusb" != xcheck], [
-      case $host in
-      *cygwin*)
-        LIBUSB_LIBS="-L$with_libusb/lib/gcc -lusb"
-        LIBUSB_CFLAGS="-I$with_libusb/include"
-        ;;
-      *)
-        LIBUSB_LIBS="-L$with_libusb -lusb"
-        LIBUSB_CFLAGS="-I$with_libusb"
-        ;;
-      esac
+AS_IF([test "x$with_libusb" != xno], [
+  AS_IF([test "x$with_libusb" != x0.1 -a \
+              "x$with_libusb" != x1.0 -a \
+              "x$with_libusb" != xdetect -a \
+              "x$with_libusb" != xyes], [
+    HAVELIBUSB=manual
+    LIBUSB_LIBS="-L$with_libusb -L$with_libusb/lib -lusb"
+    LIBUSB_CFLAGS="-I$with_libusb -I$with_libusb/include"
+  ], [
+    AS_IF([test "x$with_libusb" != x0.1 -a "x$HAVELIBUSB" = xno], [
+      PKG_CHECK_MODULES(LIBUSB, libusb-1.0, [HAVELIBUSB=1.0], [:])
+    ])
+    AS_IF([test "x$with_libusb" != x1.0 -a "x$HAVELIBUSB" = xno], [
+      PKG_CHECK_MODULES(LIBUSB, libusb, [HAVELIBUSB=0.1], [:])
+    ])
+    AS_IF([test "x$HAVELIBUSB" = xno], [
+      AS_IF([test "x$with_libusb" != xdetect], [
+        AC_MSG_ERROR([*** libusb not detected])
+      ], [
+        AC_MSG_WARN([*** libusb not detected. No support for USB JTAG cables via libusb.])
+      ])
     ],[
-      AC_PATH_TOOL(LIBUSB_CONFIG, libusb-config, no)
-      AS_IF([test "$LIBUSB_CONFIG" != "no"],[
-        LIBUSB_LIBS=`$LIBUSB_CONFIG --libs`
-        LIBUSB_CFLAGS=`$LIBUSB_CONFIG --cflags`
-      ],)
+      AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
     ])
   ])
-  LIBS="$LIBS $LIBUSB_LIBS"
-  CPPFLAGS="$CPPFLAGS $LIBUSB_CFLAGS"
-  AC_CHECK_FUNC([usb_find_devices], [
-    HAVELIBUSB=0.1
-  ],[
-    AS_IF([test "x$with_libusb" = x0.1], [
-      AC_MSG_ERROR([*** libusb-0.1 not detected.])
-    ],[
-      AC_MSG_WARN([*** libusb not detected. No support for USB JTAG cables via libusb.])
-    ])
-    LIBS=$save_LIBS
-    CPPFLAGS=$save_CPPFLAGS
-  ])
-],)
-
-dnl check for libusb-1.0
-
-AS_IF([test "x$with_libusb" != xno -a "x$with_libusb" != x0.1 -a "x$HAVELIBUSB" = "xno"], [
-  save_LIBS=$LIBS
-  save_CPPFLAGS=$CPPFLAGS
-  PKG_CHECK_MODULES(LIBUSB, libusb-1.0, have_libusb=yes, have_libusb=no)
-  AS_IF([test "$have_libusb" = "yes"],[
-    LIBUSB_CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-    LIBUSB_LIBS="$USB_LIBS $LIBUSB_LIBS"
-  ],)
-  LIBS="$LIBS $LIBUSB_LIBS"
-  CPPFLAGS="$CPPFLAGS $LIBUSB_CFLAGS"
-  AC_CHECK_FUNC([libusb_get_device_list], [
-    AC_DEFINE(HAVE_LIBUSB1, 1, [Define if you have libusb-1.0])
-    HAVELIBUSB=1.0
-  ],[
-    AS_IF([test "x$with_libusb" = x1.0], [
-      AC_MSG_ERROR([*** libusb-1.0 not detected.])
-    ],[
-      AC_MSG_WARN([*** libusb-1.0 not detected. No support for async mode for FTDI cables.])
-    ])
-    LIBS=$save_LIBS
-    CPPFLAGS=$save_CPPFLAGS
-  ])
-],)
-if test "x$HAVELIBUSB" != "xno"; then
-  AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
-fi
+])
 AM_CONDITIONAL(HAVE_LIBUSB, [test "x$HAVELIBUSB" != "xno"])
 
 
@@ -261,7 +220,7 @@ AS_IF([test "x$with_libftdi" != xno], [
       AS_IF([test "$LIBFTDI_CONFIG" != "no"],[
         LIBFTDI_LIBS=`$LIBFTDI_CONFIG --libs`
         LIBFTDI_CFLAGS=`$LIBFTDI_CONFIG --cflags`
-      ],)
+      ])
     ])
   ])
   LIBS="$LIBFTDI_LIBS $LIBS"
@@ -277,16 +236,11 @@ AS_IF([test "x$with_libftdi" != xno], [
   AC_CHECK_FUNC([ftdi_read_data_submit], [
     AS_IF([test "x$HAVELIBUSB" = "x0.1"], [
       AC_MSG_ERROR([this libftdi cannot be used with libusb-0.1, libusb-1.0 is needed])
-    ],)
+    ])
     AC_DEFINE(HAVE_LIBFTDI_ASYNC_MODE, 1, [Define if libftdi support async mode])
     HAVELIBFTDI_ASYNCMODE=yes
-  ], [
-    AS_IF([test "x$HAVELIBUSB" = "x1.0"], [
-      AC_MSG_ERROR([this libftdi cannot be used with libusb-1.0, libusb-0.1 is needed.
-                    did you configure libftdi with --with-async-mode ?])
-    ],)
   ])
-],)
+])
 AM_CONDITIONAL(HAVE_LIBFTDI, [test "x$HAVELIBFTDI" = "xyes"])
 AM_CONDITIONAL(HAVE_LIBFTDI_ASYNC_MODE, [test "x$HAVELIBFTDI_ASYNCMODE" = "xyes"])
 

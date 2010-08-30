@@ -1,3 +1,9 @@
+2010-08-30  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept
+    whatever pkg-config tells us.  Also allow libusb-1.0 + ftdi w/out async
+    since it isn't required for things to work.
+
 2010-08-26  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/gpio.c: Rewrite to use raw file descriptors when working with
