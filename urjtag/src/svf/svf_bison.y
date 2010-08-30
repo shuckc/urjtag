@@ -303,7 +303,8 @@ hexa_num_sequence
            | hexa_num_sequence HEXA_NUM_FRAGMENT
              {
 #define REALLOC_STEP (1 << 16)
-                 size_t req_len = $1.strlen + strlen ($2);
+                 size_t frag_len = strlen ($2);
+                 size_t req_len = $1.strlen + frag_len;
                  if ($1.buflen <= req_len) {
                      size_t newlen = req_len - $1.buflen < REALLOC_STEP ?
                          $1.buflen + REALLOC_STEP : req_len + 1;
@@ -312,7 +313,7 @@ hexa_num_sequence
                  }
                  if ($1.buf != NULL) {
                      strcat ($1.buf, $2);
-                     $1.strlen += strlen ($2);
+                     $1.strlen += frag_len;
                  }
                  free ($2);
                  $$ = $1;

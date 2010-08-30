@@ -14,6 +14,9 @@
   * src/svf/svf_flex.l: Use memcpy() rather than strcpy() when we already know
     the length and we just want to dupe the string.
 
+  * src/svf/svf_bison.y: Avoid calling strlen() multiple times on the same
+    string.  Fix by Frans Meulenbroeks.
+
 2010-08-26  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/gpio.c: Rewrite to use raw file descriptors when working with
