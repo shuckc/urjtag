@@ -17,6 +17,10 @@
   * src/svf/svf_bison.y: Avoid calling strlen() multiple times on the same
     string.  Fix by Frans Meulenbroeks.
 
+  * src/svf/svf_bison.y: Use known string length to call strcpy() rather than
+    strcat().  This avoids having to rescan for the end of the string.  Fix by
+    Frans Meulenbroeks.
+
 2010-08-26  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/gpio.c: Rewrite to use raw file descriptors when working with
