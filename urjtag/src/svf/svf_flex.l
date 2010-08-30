@@ -51,7 +51,7 @@
 static int map_keyw_ident(YYSTYPE *, char *);
 static int align_string(char *);
 
-static void fix_yylloc(YYLTYPE *, char *);
+static void fix_yylloc(YYLTYPE *, char *, int);
 static void fix_yylloc_nl(YYLTYPE *, char *, YY_EXTRA_TYPE);
 static void progress_nl(YYLTYPE *, YY_EXTRA_TYPE);
 
@@ -87,7 +87,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* token is a keyword or identifier */
   int keyw;
 
-  fix_yylloc(yylloc, yytext);
+  fix_yylloc(yylloc, yytext, yyleng);
   keyw = map_keyw_ident(yylval, yytext);
 
   /* enable detection of VECTOR_STRING when this is a PIO command */
@@ -125,7 +125,7 @@ COMMENT         (!.*)|("//".*)[^\n]
       *point_pos = extra->decimal_point;
 
     yylval->dvalue = strtod(real_string, (char **) NULL);
-    fix_yylloc(yylloc, yytext);
+    fix_yylloc(yylloc, yytext, yyleng);
 
     free(real_string);
   } else
@@ -180,18 +180,18 @@ COMMENT         (!.*)|("//".*)[^\n]
 
 {WSPACE}+ {
   /* token is a white space character */
-  fix_yylloc(yylloc, yytext);
+  fix_yylloc(yylloc, yytext, yyleng);
 } /* end of white space */
 
 
 {COMMENT} {
   /* token is a comment */
-  fix_yylloc(yylloc, yytext);
+  fix_yylloc(yylloc, yytext, yyleng);
 } /* end of comment */
 
 
 <INITIAL>"(" {
-  fix_yylloc(yylloc, yytext);
+  fix_yylloc(yylloc, yytext, yyleng);
   return(yytext[0]);
 } /* end of left or right parenthesis */
 
@@ -199,13 +199,13 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* scanning until a left parenthesis under this start condition implicitly
      skips whitespace that would have been attributed to HEXA_NUM_FRAGMENT
      otherwise */
-  fix_yylloc(yylloc, yytext);
+  fix_yylloc(yylloc, yytext, yyleng);
   /* now hand over to HEXA_NUM_FRAGMENT */
   BEGIN(expect_hexa_num);
   return(yytext[0]);
 } /* end of left or right parenthesis */
 ")" {
-  fix_yylloc(yylloc, yytext);
+  fix_yylloc(yylloc, yytext, yyleng);
   BEGIN(INITIAL);
   return(yytext[0]);
 } /* end of left or right parenthesis */
@@ -227,7 +227,7 @@ COMMENT         (!.*)|("//".*)[^\n]
   /* release start condition */
   BEGIN(INITIAL);
 
-  fix_yylloc(yylloc, yytext);
+  fix_yylloc(yylloc, yytext, yyleng);
   return(yytext[0]);
 } /* end of statement character */
 
@@ -354,11 +354,11 @@ align_string (char *str)
 
 
 static void
-fix_yylloc (YYLTYPE *mylloc, char *str)
+fix_yylloc (YYLTYPE *mylloc, char *str, int len)
 {
     mylloc->first_line = mylloc->last_line;
     mylloc->first_column = mylloc->last_column;
-    mylloc->last_column += strlen (str);
+    mylloc->last_column += len;
 }
 
 
