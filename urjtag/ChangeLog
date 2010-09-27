@@ -12,6 +12,9 @@
   * configure.ac: Change to newer libtool macro (LT_INIT) to avoid warnings.
   * acinclude.m4: Redirect LT_INIT to AC_PROG_LIBTOOL for older libtools.
 
+  * include/urjtag/bitops.h: New generic bit operations by Michael Walle.
+  * include/urjtag/Makefile.am (pkginclude_HEADERS): Add bitops.h
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept
