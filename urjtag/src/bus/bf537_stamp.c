@@ -74,7 +74,7 @@ bf537_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 {
     urj_bus_t *bus;
     urj_part_t *part;
-    char buff[15], buff2[15];
+    char buff[15];
     int i;
     int failed = 0;
 
@@ -92,35 +92,13 @@ bf537_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     for (i = 0; i < 19; i++)
     {
         sprintf (buff, "ADDR%d", i + 1);
-        ADDR[i] = urj_part_find_signal (part, buff);
-        if (!ADDR[i])
-        {
-            sprintf (buff2, "ADDR[%d]", i + 1); /* BF533/2/1 uses ADDR[x] instead of ADDRx */
-            ADDR[i] = urj_part_find_signal (part, buff2);
-            if (!ADDR[i])
-            {
-                urj_error_set (URJ_ERROR_NOTFOUND, "signal '%s' or '%s'",
-                               buff, buff2);
-                failed |= URJ_STATUS_FAIL;
-            }
-        }
+        failed |= urj_bus_generic_attach_sig (part, &(ADDR[i]), buff);
     }
 
     for (i = 0; i < 16; i++)
     {
         sprintf (buff, "DATA%d", i);
-        DATA[i] = urj_part_find_signal (part, buff);
-        if (!DATA[i])
-        {
-            sprintf (buff2, "DATA[%d]", i); /* BF533/2/1 uses DATA[x] instead of DATAx */
-            DATA[i] = urj_part_find_signal (part, buff2);
-            if (!DATA[i])
-            {
-                urj_error_set (URJ_ERROR_NOTFOUND, "signal '%s' or '%s'",
-                               buff, buff2);
-                failed |= URJ_STATUS_FAIL;
-            }
-        }
+        failed |= urj_bus_generic_attach_sig (part, &(DATA[i]), buff);
     }
 
     failed |= urj_bus_generic_attach_sig (part, &(AWE), "AWE_B");

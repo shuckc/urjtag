@@ -3,6 +3,7 @@
   * data/analog/bf533/bf533: Drop brackets from ADDR and DATA signals to match
     the style of all other Blackfin parts.
   * src/bus/bf533_stamp.c (bf533_stamp_bus_new): Update signal names.
+  * src/bus/bf537_stamp.c (bf537_stamp_bus_new): Likewise.
 
   * data/analog/bf548/bf548: Change "PORTX_#" to "PX#" signals to match the
     style of all other Blackfin parts.
