@@ -41,6 +41,13 @@ urj_data_register_t *urj_part_data_register_alloc (const char *name, int len);
 void urj_part_data_register_free (urj_data_register_t *dr);
 
 /**
+ * change the length of a data_register while preserving its contents
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
+ */
+int urj_part_data_register_realloc (urj_data_register_t *dr, int len);
+
+/**
  * allocate a data register and initialize the relevant <code>part</code> parts
  *
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error

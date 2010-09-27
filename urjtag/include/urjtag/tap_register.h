@@ -36,6 +36,7 @@ struct URJ_TAP_REGISTER
 };
 
 urj_tap_register_t *urj_tap_register_alloc (int len);
+urj_tap_register_t *urj_tap_register_realloc (urj_tap_register_t *tr, int new_len);
 urj_tap_register_t *urj_tap_register_duplicate (const urj_tap_register_t *tr);
 void urj_tap_register_free (urj_tap_register_t *tr);
 urj_tap_register_t *urj_tap_register_fill (urj_tap_register_t *tr, int val);

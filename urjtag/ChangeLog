@@ -15,6 +15,12 @@
   * include/urjtag/bitops.h: New generic bit operations by Michael Walle.
   * include/urjtag/Makefile.am (pkginclude_HEADERS): Add bitops.h
 
+  * include/urjtag/data_register.h, src/part/data_register.c
+    (urj_part_data_register_realloc): New func by Michael Walle for resizing
+    registers on the fly.
+  * include/urjtag/tap_register.h, src/tap/register.c
+    (urj_tap_register_realloc): Likewise.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept

@@ -79,6 +79,35 @@ urj_tap_register_alloc (int len)
 }
 
 urj_tap_register_t *
+urj_tap_register_realloc (urj_tap_register_t *tr, int new_len)
+{
+    if (!tr)
+        return urj_tap_register_alloc (new_len);
+
+    if (new_len < 1)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "new_len < 1");
+        return NULL;
+    }
+
+    tr->data = realloc (tr->data, new_len);
+
+    if (!tr->data)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "realloc(%d) fails",
+                       new_len);
+        return NULL;
+    }
+
+    if (tr->len < new_len)
+        memset (tr->data + tr->len, 0, (new_len - tr->len));
+
+    tr->len = new_len;
+
+    return tr;
+}
+
+urj_tap_register_t *
 urj_tap_register_duplicate (const urj_tap_register_t *tr)
 {
     if (!tr)

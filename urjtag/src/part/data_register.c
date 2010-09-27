@@ -133,3 +133,14 @@ urj_part_data_register_define (urj_part_t *part, const char *name, int len)
 
     return URJ_STATUS_OK;
 }
+
+int
+urj_part_data_register_realloc (urj_data_register_t *dr, int new_len)
+{
+    if (urj_tap_register_realloc (dr->in, new_len) == NULL)
+        return URJ_STATUS_FAIL;
+    if (urj_tap_register_realloc (dr->out, new_len) == NULL)
+        return URJ_STATUS_FAIL;
+
+    return URJ_STATUS_OK;
+}
