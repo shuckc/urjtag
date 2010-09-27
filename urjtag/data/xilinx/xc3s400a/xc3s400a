@@ -1,0 +1,1175 @@
+signal VPP
+signal VFS
+signal VCCO_BANK3
+signal VCCO_BANK2
+signal VCCO_BANK1
+signal VCCO_BANK0
+signal VCCAUX
+signal TMS
+signal TDO
+signal TDI
+signal TCK
+signal SUSPEND
+signal PUDC_B
+signal PROG_B
+signal PAD_SELECT
+signal MOSO2
+signal MOSI2
+signal IPAD98
+signal IPAD97
+signal IPAD90
+signal IPAD89
+signal IPAD82
+signal IPAD81
+signal IPAD8
+signal IPAD78
+signal IPAD73
+signal IPAD68
+signal IPAD63
+signal IPAD58
+signal IPAD53
+signal IPAD48
+signal IPAD43
+signal IPAD38
+signal IPAD33
+signal IPAD314
+signal IPAD313
+signal IPAD306
+signal IPAD305
+signal IPAD3
+signal IPAD298
+signal IPAD297
+signal IPAD290
+signal IPAD289
+signal IPAD282
+signal IPAD281
+signal IPAD28
+signal IPAD274
+signal IPAD273
+signal IPAD266
+signal IPAD265
+signal IPAD258
+signal IPAD257
+signal IPAD250
+signal IPAD249
+signal IPAD242
+signal IPAD241
+signal IPAD238
+signal IPAD233
+signal IPAD23
+signal IPAD228
+signal IPAD223
+signal IPAD218
+signal IPAD213
+signal IPAD208
+signal IPAD203
+signal IPAD198
+signal IPAD193
+signal IPAD188
+signal IPAD183
+signal IPAD18
+signal IPAD178
+signal IPAD173
+signal IPAD168
+signal IPAD163
+signal IPAD154
+signal IPAD153
+signal IPAD146
+signal IPAD145
+signal IPAD138
+signal IPAD137
+signal IPAD130
+signal IPAD13
+signal IPAD129
+signal IPAD122
+signal IPAD121
+signal IPAD114
+signal IPAD113
+signal IPAD106
+signal IPAD105
+signal IO_PAD99
+signal IO_PAD96
+signal IO_PAD95
+signal IO_PAD94
+signal IO_PAD93
+signal IO_PAD92
+signal IO_PAD91
+signal IO_PAD9
+signal IO_PAD88
+signal IO_PAD87
+signal IO_PAD86
+signal IO_PAD85
+signal IO_PAD84
+signal IO_PAD83
+signal IO_PAD80
+signal IO_PAD79
+signal IO_PAD77
+signal IO_PAD76
+signal IO_PAD75
+signal IO_PAD74
+signal IO_PAD72
+signal IO_PAD71
+signal IO_PAD70
+signal IO_PAD7
+signal IO_PAD69
+signal IO_PAD67
+signal IO_PAD66
+signal IO_PAD65
+signal IO_PAD64
+signal IO_PAD62
+signal IO_PAD61
+signal IO_PAD60
+signal IO_PAD6
+signal IO_PAD59
+signal IO_PAD57
+signal IO_PAD56
+signal IO_PAD55
+signal IO_PAD54
+signal IO_PAD52
+signal IO_PAD51
+signal IO_PAD50
+signal IO_PAD5
+signal IO_PAD49
+signal IO_PAD47
+signal IO_PAD46
+signal IO_PAD45
+signal IO_PAD44
+signal IO_PAD42
+signal IO_PAD41
+signal IO_PAD40
+signal IO_PAD4
+signal IO_PAD39
+signal IO_PAD37
+signal IO_PAD36
+signal IO_PAD35
+signal IO_PAD34
+signal IO_PAD320
+signal IO_PAD32
+signal IO_PAD319
+signal IO_PAD318
+signal IO_PAD317
+signal IO_PAD316
+signal IO_PAD315
+signal IO_PAD312
+signal IO_PAD311
+signal IO_PAD310
+signal IO_PAD31
+signal IO_PAD309
+signal IO_PAD308
+signal IO_PAD307
+signal IO_PAD304
+signal IO_PAD303
+signal IO_PAD302
+signal IO_PAD301
+signal IO_PAD300
+signal IO_PAD30
+signal IO_PAD299
+signal IO_PAD296
+signal IO_PAD295
+signal IO_PAD294
+signal IO_PAD293
+signal IO_PAD292
+signal IO_PAD291
+signal IO_PAD29
+signal IO_PAD288
+signal IO_PAD287
+signal IO_PAD286
+signal IO_PAD285
+signal IO_PAD284
+signal IO_PAD283
+signal IO_PAD280
+signal IO_PAD279
+signal IO_PAD278
+signal IO_PAD277
+signal IO_PAD276
+signal IO_PAD275
+signal IO_PAD272
+signal IO_PAD271
+signal IO_PAD270
+signal IO_PAD27
+signal IO_PAD269
+signal IO_PAD268
+signal IO_PAD267
+signal IO_PAD264
+signal IO_PAD263
+signal IO_PAD262
+signal IO_PAD261
+signal IO_PAD260
+signal IO_PAD26
+signal IO_PAD259
+signal IO_PAD256
+signal IO_PAD255
+signal IO_PAD254
+signal IO_PAD253
+signal IO_PAD252
+signal IO_PAD251
+signal IO_PAD25
+signal IO_PAD248
+signal IO_PAD247
+signal IO_PAD246
+signal IO_PAD245
+signal IO_PAD244
+signal IO_PAD243
+signal IO_PAD240
+signal IO_PAD24
+signal IO_PAD239
+signal IO_PAD237
+signal IO_PAD236
+signal IO_PAD235
+signal IO_PAD234
+signal IO_PAD232
+signal IO_PAD231
+signal IO_PAD230
+signal IO_PAD229
+signal IO_PAD227
+signal IO_PAD226
+signal IO_PAD225
+signal IO_PAD224
+signal IO_PAD222
+signal IO_PAD221
+signal IO_PAD220
+signal IO_PAD22
+signal IO_PAD219
+signal IO_PAD217
+signal IO_PAD216
+signal IO_PAD215
+signal IO_PAD214
+signal IO_PAD212
+signal IO_PAD211
+signal IO_PAD210
+signal IO_PAD21
+signal IO_PAD209
+signal IO_PAD207
+signal IO_PAD206
+signal IO_PAD205
+signal IO_PAD204
+signal IO_PAD202
+signal IO_PAD201
+signal IO_PAD200
+signal IO_PAD20
+signal IO_PAD2
+signal IO_PAD199
+signal IO_PAD197
+signal IO_PAD196
+signal IO_PAD195
+signal IO_PAD194
+signal IO_PAD192
+signal IO_PAD191
+signal IO_PAD190
+signal IO_PAD19
+signal IO_PAD189
+signal IO_PAD187
+signal IO_PAD186
+signal IO_PAD185
+signal IO_PAD184
+signal IO_PAD182
+signal IO_PAD181
+signal IO_PAD180
+signal IO_PAD179
+signal IO_PAD177
+signal IO_PAD176
+signal IO_PAD175
+signal IO_PAD174
+signal IO_PAD172
+signal IO_PAD171
+signal IO_PAD170
+signal IO_PAD17
+signal IO_PAD169
+signal IO_PAD167
+signal IO_PAD166
+signal IO_PAD165
+signal IO_PAD164
+signal IO_PAD162
+signal IO_PAD161
+signal IO_PAD160
+signal IO_PAD16
+signal IO_PAD159
+signal IO_PAD158
+signal IO_PAD157
+signal IO_PAD156
+signal IO_PAD155
+signal IO_PAD152
+signal IO_PAD151
+signal IO_PAD150
+signal IO_PAD15
+signal IO_PAD149
+signal IO_PAD148
+signal IO_PAD147
+signal IO_PAD144
+signal IO_PAD143
+signal IO_PAD142
+signal IO_PAD141
+signal IO_PAD140
+signal IO_PAD14
+signal IO_PAD139
+signal IO_PAD136
+signal IO_PAD135
+signal IO_PAD134
+signal IO_PAD133
+signal IO_PAD132
+signal IO_PAD131
+signal IO_PAD128
+signal IO_PAD127
+signal IO_PAD126
+signal IO_PAD125
+signal IO_PAD124
+signal IO_PAD123
+signal IO_PAD120
+signal IO_PAD12
+signal IO_PAD119
+signal IO_PAD118
+signal IO_PAD117
+signal IO_PAD116
+signal IO_PAD115
+signal IO_PAD112
+signal IO_PAD111
+signal IO_PAD110
+signal IO_PAD11
+signal IO_PAD109
+signal IO_PAD108
+signal IO_PAD107
+signal IO_PAD104
+signal IO_PAD103
+signal IO_PAD102
+signal IO_PAD101
+signal IO_PAD100
+signal IO_PAD10
+signal DONE
+signal CSB2
+signal CCLK
+instruction length 6
+register DIR 32
+register USERCODE 32
+register BSR 821
+register BYPASS 1
+register DATAREG 57
+instruction ISC_DNA 110001 DATAREG
+instruction BYPASS 111111 BYPASS
+instruction HIGHZ 001010 BYPASS
+instruction IDCODE 001001 DIR
+instruction USERCODE 001000 DIR
+instruction INTEST 000111 BSR
+instruction PRELOAD 000001 BSR
+instruction SAMPLE/PRELOAD 000001 BSR
+instruction EXTEST 001111 BSR
+bit 0 C 1 *
+bit 1 O ? IO_PAD80 0 1 Z
+bit 2 I ? IO_PAD80
+bit 3 C 1 *
+bit 4 O ? IO_PAD79 3 1 Z
+bit 5 I ? IO_PAD79
+bit 6 I ? IPAD78
+bit 7 C 1 *
+bit 8 O ? IO_PAD77 7 1 Z
+bit 9 I ? IO_PAD77
+bit 10 C 1 *
+bit 11 O ? IO_PAD76 10 1 Z
+bit 12 I ? IO_PAD76
+bit 13 C 1 *
+bit 14 O ? IO_PAD75 13 1 Z
+bit 15 I ? IO_PAD75
+bit 16 C 1 *
+bit 17 O ? IO_PAD74 16 1 Z
+bit 18 I ? IO_PAD74
+bit 19 I ? IPAD73
+bit 20 C 1 *
+bit 21 O ? IO_PAD72 20 1 Z
+bit 22 I ? IO_PAD72
+bit 23 C 1 *
+bit 24 O ? IO_PAD71 23 1 Z
+bit 25 I ? IO_PAD71
+bit 26 C 1 *
+bit 27 O ? IO_PAD70 26 1 Z
+bit 28 I ? IO_PAD70
+bit 29 C 1 *
+bit 30 O ? IO_PAD69 29 1 Z
+bit 31 I ? IO_PAD69
+bit 32 I ? IPAD68
+bit 33 C 1 *
+bit 34 O ? IO_PAD67 33 1 Z
+bit 35 I ? IO_PAD67
+bit 36 C 1 *
+bit 37 O ? IO_PAD66 36 1 Z
+bit 38 I ? IO_PAD66
+bit 39 C 1 *
+bit 40 O ? IO_PAD65 39 1 Z
+bit 41 I ? IO_PAD65
+bit 42 C 1 *
+bit 43 O ? IO_PAD64 42 1 Z
+bit 44 I ? IO_PAD64
+bit 45 I ? IPAD63
+bit 46 C 1 *
+bit 47 O ? IO_PAD62 46 1 Z
+bit 48 I ? IO_PAD62
+bit 49 C 1 *
+bit 50 O ? IO_PAD61 49 1 Z
+bit 51 I ? IO_PAD61
+bit 52 C 1 *
+bit 53 O ? IO_PAD60 52 1 Z
+bit 54 I ? IO_PAD60
+bit 55 C 1 *
+bit 56 O ? IO_PAD59 55 1 Z
+bit 57 I ? IO_PAD59
+bit 58 I ? IPAD58
+bit 59 C 1 *
+bit 60 O ? IO_PAD57 59 1 Z
+bit 61 I ? IO_PAD57
+bit 62 C 1 *
+bit 63 O ? IO_PAD56 62 1 Z
+bit 64 I ? IO_PAD56
+bit 65 C 1 *
+bit 66 O ? IO_PAD55 65 1 Z
+bit 67 I ? IO_PAD55
+bit 68 C 1 *
+bit 69 O ? IO_PAD54 68 1 Z
+bit 70 I ? IO_PAD54
+bit 71 I ? IPAD53
+bit 72 C 1 *
+bit 73 O ? IO_PAD52 72 1 Z
+bit 74 I ? IO_PAD52
+bit 75 C 1 *
+bit 76 O ? IO_PAD51 75 1 Z
+bit 77 I ? IO_PAD51
+bit 78 C 1 *
+bit 79 O ? IO_PAD50 78 1 Z
+bit 80 I ? IO_PAD50
+bit 81 C 1 *
+bit 82 O ? IO_PAD49 81 1 Z
+bit 83 I ? IO_PAD49
+bit 84 I ? IPAD48
+bit 85 C 1 *
+bit 86 O ? IO_PAD47 85 1 Z
+bit 87 I ? IO_PAD47
+bit 88 C 1 *
+bit 89 O ? IO_PAD46 88 1 Z
+bit 90 I ? IO_PAD46
+bit 91 C 1 *
+bit 92 O ? IO_PAD45 91 1 Z
+bit 93 I ? IO_PAD45
+bit 94 C 1 *
+bit 95 O ? IO_PAD44 94 1 Z
+bit 96 I ? IO_PAD44
+bit 97 I ? IPAD43
+bit 98 C 1 *
+bit 99 O ? IO_PAD42 98 1 Z
+bit 100 I ? IO_PAD42
+bit 101 C 1 *
+bit 102 O ? IO_PAD41 101 1 Z
+bit 103 I ? IO_PAD41
+bit 104 C 1 *
+bit 105 O ? IO_PAD40 104 1 Z
+bit 106 I ? IO_PAD40
+bit 107 C 1 *
+bit 108 O ? IO_PAD39 107 1 Z
+bit 109 I ? IO_PAD39
+bit 110 I ? IPAD38
+bit 111 C 1 *
+bit 112 O ? IO_PAD37 111 1 Z
+bit 113 I ? IO_PAD37
+bit 114 C 1 *
+bit 115 O ? IO_PAD36 114 1 Z
+bit 116 I ? IO_PAD36
+bit 117 C 1 *
+bit 118 O ? IO_PAD35 117 1 Z
+bit 119 I ? IO_PAD35
+bit 120 C 1 *
+bit 121 O ? IO_PAD34 120 1 Z
+bit 122 I ? IO_PAD34
+bit 123 I ? IPAD33
+bit 124 C 1 *
+bit 125 O ? IO_PAD32 124 1 Z
+bit 126 I ? IO_PAD32
+bit 127 C 1 *
+bit 128 O ? IO_PAD31 127 1 Z
+bit 129 I ? IO_PAD31
+bit 130 C 1 *
+bit 131 O ? IO_PAD30 130 1 Z
+bit 132 I ? IO_PAD30
+bit 133 C 1 *
+bit 134 O ? IO_PAD29 133 1 Z
+bit 135 I ? IO_PAD29
+bit 136 I ? IPAD28
+bit 137 C 1 *
+bit 138 O ? IO_PAD27 137 1 Z
+bit 139 I ? IO_PAD27
+bit 140 C 1 *
+bit 141 O ? IO_PAD26 140 1 Z
+bit 142 I ? IO_PAD26
+bit 143 C 1 *
+bit 144 O ? IO_PAD25 143 1 Z
+bit 145 I ? IO_PAD25
+bit 146 C 1 *
+bit 147 O ? IO_PAD24 146 1 Z
+bit 148 I ? IO_PAD24
+bit 149 I ? IPAD23
+bit 150 C 1 *
+bit 151 O ? IO_PAD22 150 1 Z
+bit 152 I ? IO_PAD22
+bit 153 C 1 *
+bit 154 O ? IO_PAD21 153 1 Z
+bit 155 I ? IO_PAD21
+bit 156 C 1 *
+bit 157 O ? IO_PAD20 156 1 Z
+bit 158 I ? IO_PAD20
+bit 159 C 1 *
+bit 160 O ? IO_PAD19 159 1 Z
+bit 161 I ? IO_PAD19
+bit 162 I ? IPAD18
+bit 163 C 1 *
+bit 164 O ? IO_PAD17 163 1 Z
+bit 165 I ? IO_PAD17
+bit 166 C 1 *
+bit 167 O ? IO_PAD16 166 1 Z
+bit 168 I ? IO_PAD16
+bit 169 C 1 *
+bit 170 O ? IO_PAD15 169 1 Z
+bit 171 I ? IO_PAD15
+bit 172 C 1 *
+bit 173 O ? IO_PAD14 172 1 Z
+bit 174 I ? IO_PAD14
+bit 175 I ? IPAD13
+bit 176 C 1 *
+bit 177 O ? IO_PAD12 176 1 Z
+bit 178 I ? IO_PAD12
+bit 179 C 1 *
+bit 180 O ? IO_PAD11 179 1 Z
+bit 181 I ? IO_PAD11
+bit 182 C 1 *
+bit 183 O ? IO_PAD10 182 1 Z
+bit 184 I ? IO_PAD10
+bit 185 C 1 *
+bit 186 O ? IO_PAD9 185 1 Z
+bit 187 I ? IO_PAD9
+bit 188 I ? IPAD8
+bit 189 C 1 *
+bit 190 O ? IO_PAD7 189 1 Z
+bit 191 I ? IO_PAD7
+bit 192 C 1 *
+bit 193 O ? IO_PAD6 192 1 Z
+bit 194 I ? IO_PAD6
+bit 195 C 1 *
+bit 196 O ? IO_PAD5 195 1 Z
+bit 197 I ? IO_PAD5
+bit 198 C 1 *
+bit 199 O ? IO_PAD4 198 1 Z
+bit 200 I ? IO_PAD4
+bit 201 I ? IPAD3
+bit 202 C 1 *
+bit 203 O ? IO_PAD2 202 1 Z
+bit 204 I ? IO_PAD2
+bit 205 O 1 *
+bit 206 O 1 *
+bit 207 O 1 *
+bit 208 O 1 *
+bit 209 C 1 *
+bit 210 O ? IO_PAD320 209 1 Z
+bit 211 I ? IO_PAD320
+bit 212 C 1 *
+bit 213 O ? IO_PAD319 212 1 Z
+bit 214 I ? IO_PAD319
+bit 215 C 1 *
+bit 216 O ? IO_PAD318 215 1 Z
+bit 217 I ? IO_PAD318
+bit 218 C 1 *
+bit 219 O ? IO_PAD317 218 1 Z
+bit 220 I ? IO_PAD317
+bit 221 C 1 *
+bit 222 O ? IO_PAD316 221 1 Z
+bit 223 I ? IO_PAD316
+bit 224 C 1 *
+bit 225 O ? IO_PAD315 224 1 Z
+bit 226 I ? IO_PAD315
+bit 227 I ? IPAD314
+bit 228 I ? IPAD313
+bit 229 C 1 *
+bit 230 O ? IO_PAD312 229 1 Z
+bit 231 I ? IO_PAD312
+bit 232 C 1 *
+bit 233 O ? IO_PAD311 232 1 Z
+bit 234 I ? IO_PAD311
+bit 235 C 1 *
+bit 236 O ? IO_PAD310 235 1 Z
+bit 237 I ? IO_PAD310
+bit 238 C 1 *
+bit 239 O ? IO_PAD309 238 1 Z
+bit 240 I ? IO_PAD309
+bit 241 C 1 *
+bit 242 O ? IO_PAD308 241 1 Z
+bit 243 I ? IO_PAD308
+bit 244 C 1 *
+bit 245 O ? IO_PAD307 244 1 Z
+bit 246 I ? IO_PAD307
+bit 247 I ? IPAD306
+bit 248 I ? IPAD305
+bit 249 C 1 *
+bit 250 O ? IO_PAD304 249 1 Z
+bit 251 I ? IO_PAD304
+bit 252 C 1 *
+bit 253 O ? IO_PAD303 252 1 Z
+bit 254 I ? IO_PAD303
+bit 255 C 1 *
+bit 256 O ? IO_PAD302 255 1 Z
+bit 257 I ? IO_PAD302
+bit 258 C 1 *
+bit 259 O ? IO_PAD301 258 1 Z
+bit 260 I ? IO_PAD301
+bit 261 C 1 *
+bit 262 O ? IO_PAD300 261 1 Z
+bit 263 I ? IO_PAD300
+bit 264 C 1 *
+bit 265 O ? IO_PAD299 264 1 Z
+bit 266 I ? IO_PAD299
+bit 267 I ? IPAD298
+bit 268 I ? IPAD297
+bit 269 C 1 *
+bit 270 O ? IO_PAD296 269 1 Z
+bit 271 I ? IO_PAD296
+bit 272 C 1 *
+bit 273 O ? IO_PAD295 272 1 Z
+bit 274 I ? IO_PAD295
+bit 275 C 1 *
+bit 276 O ? IO_PAD294 275 1 Z
+bit 277 I ? IO_PAD294
+bit 278 C 1 *
+bit 279 O ? IO_PAD293 278 1 Z
+bit 280 I ? IO_PAD293
+bit 281 C 1 *
+bit 282 O ? IO_PAD292 281 1 Z
+bit 283 I ? IO_PAD292
+bit 284 C 1 *
+bit 285 O ? IO_PAD291 284 1 Z
+bit 286 I ? IO_PAD291
+bit 287 I ? IPAD290
+bit 288 I ? IPAD289
+bit 289 C 1 *
+bit 290 O ? IO_PAD288 289 1 Z
+bit 291 I ? IO_PAD288
+bit 292 C 1 *
+bit 293 O ? IO_PAD287 292 1 Z
+bit 294 I ? IO_PAD287
+bit 295 C 1 *
+bit 296 O ? IO_PAD286 295 1 Z
+bit 297 I ? IO_PAD286
+bit 298 C 1 *
+bit 299 O ? IO_PAD285 298 1 Z
+bit 300 I ? IO_PAD285
+bit 301 C 1 *
+bit 302 O ? IO_PAD284 301 1 Z
+bit 303 I ? IO_PAD284
+bit 304 C 1 *
+bit 305 O ? IO_PAD283 304 1 Z
+bit 306 I ? IO_PAD283
+bit 307 I ? IPAD282
+bit 308 I ? IPAD281
+bit 309 C 1 *
+bit 310 O ? IO_PAD280 309 1 Z
+bit 311 I ? IO_PAD280
+bit 312 C 1 *
+bit 313 O ? IO_PAD279 312 1 Z
+bit 314 I ? IO_PAD279
+bit 315 C 1 *
+bit 316 O ? IO_PAD278 315 1 Z
+bit 317 I ? IO_PAD278
+bit 318 C 1 *
+bit 319 O ? IO_PAD277 318 1 Z
+bit 320 I ? IO_PAD277
+bit 321 C 1 *
+bit 322 O ? IO_PAD276 321 1 Z
+bit 323 I ? IO_PAD276
+bit 324 C 1 *
+bit 325 O ? IO_PAD275 324 1 Z
+bit 326 I ? IO_PAD275
+bit 327 I ? IPAD274
+bit 328 I ? IPAD273
+bit 329 C 1 *
+bit 330 O ? IO_PAD272 329 1 Z
+bit 331 I ? IO_PAD272
+bit 332 C 1 *
+bit 333 O ? IO_PAD271 332 1 Z
+bit 334 I ? IO_PAD271
+bit 335 C 1 *
+bit 336 O ? IO_PAD270 335 1 Z
+bit 337 I ? IO_PAD270
+bit 338 C 1 *
+bit 339 O ? IO_PAD269 338 1 Z
+bit 340 I ? IO_PAD269
+bit 341 C 1 *
+bit 342 O ? IO_PAD268 341 1 Z
+bit 343 I ? IO_PAD268
+bit 344 C 1 *
+bit 345 O ? IO_PAD267 344 1 Z
+bit 346 I ? IO_PAD267
+bit 347 I ? IPAD266
+bit 348 I ? IPAD265
+bit 349 C 1 *
+bit 350 O ? IO_PAD264 349 1 Z
+bit 351 I ? IO_PAD264
+bit 352 C 1 *
+bit 353 O ? IO_PAD263 352 1 Z
+bit 354 I ? IO_PAD263
+bit 355 C 1 *
+bit 356 O ? IO_PAD262 355 1 Z
+bit 357 I ? IO_PAD262
+bit 358 C 1 *
+bit 359 O ? IO_PAD261 358 1 Z
+bit 360 I ? IO_PAD261
+bit 361 C 1 *
+bit 362 O ? IO_PAD260 361 1 Z
+bit 363 I ? IO_PAD260
+bit 364 C 1 *
+bit 365 O ? IO_PAD259 364 1 Z
+bit 366 I ? IO_PAD259
+bit 367 I ? IPAD258
+bit 368 I ? IPAD257
+bit 369 C 1 *
+bit 370 O ? IO_PAD256 369 1 Z
+bit 371 I ? IO_PAD256
+bit 372 C 1 *
+bit 373 O ? IO_PAD255 372 1 Z
+bit 374 I ? IO_PAD255
+bit 375 C 1 *
+bit 376 O ? IO_PAD254 375 1 Z
+bit 377 I ? IO_PAD254
+bit 378 C 1 *
+bit 379 O ? IO_PAD253 378 1 Z
+bit 380 I ? IO_PAD253
+bit 381 C 1 *
+bit 382 O ? IO_PAD252 381 1 Z
+bit 383 I ? IO_PAD252
+bit 384 C 1 *
+bit 385 O ? IO_PAD251 384 1 Z
+bit 386 I ? IO_PAD251
+bit 387 I ? IPAD250
+bit 388 I ? IPAD249
+bit 389 C 1 *
+bit 390 O ? IO_PAD248 389 1 Z
+bit 391 I ? IO_PAD248
+bit 392 C 1 *
+bit 393 O ? IO_PAD247 392 1 Z
+bit 394 I ? IO_PAD247
+bit 395 C 1 *
+bit 396 O ? IO_PAD246 395 1 Z
+bit 397 I ? IO_PAD246
+bit 398 C 1 *
+bit 399 O ? IO_PAD245 398 1 Z
+bit 400 I ? IO_PAD245
+bit 401 C 1 *
+bit 402 O ? IO_PAD244 401 1 Z
+bit 403 I ? IO_PAD244
+bit 404 C 1 *
+bit 405 O ? IO_PAD243 404 1 Z
+bit 406 I ? IO_PAD243
+bit 407 I ? IPAD242
+bit 408 I ? IPAD241
+bit 409 C 1 *
+bit 410 O ? IO_PAD240 409 1 Z
+bit 411 I ? IO_PAD240
+bit 412 C 1 *
+bit 413 O ? IO_PAD239 412 1 Z
+bit 414 I ? IO_PAD239
+bit 415 I ? IPAD238
+bit 416 C 1 *
+bit 417 O ? IO_PAD237 416 1 Z
+bit 418 I ? IO_PAD237
+bit 419 C 1 *
+bit 420 O ? IO_PAD236 419 1 Z
+bit 421 I ? IO_PAD236
+bit 422 C 1 *
+bit 423 O ? IO_PAD235 422 1 Z
+bit 424 I ? IO_PAD235
+bit 425 C 1 *
+bit 426 O ? IO_PAD234 425 1 Z
+bit 427 I ? IO_PAD234
+bit 428 I ? IPAD233
+bit 429 C 1 *
+bit 430 O ? IO_PAD232 429 1 Z
+bit 431 I ? IO_PAD232
+bit 432 C 1 *
+bit 433 O ? IO_PAD231 432 1 Z
+bit 434 I ? IO_PAD231
+bit 435 C 1 *
+bit 436 O ? IO_PAD230 435 1 Z
+bit 437 I ? IO_PAD230
+bit 438 C 1 *
+bit 439 O ? IO_PAD229 438 1 Z
+bit 440 I ? IO_PAD229
+bit 441 I ? IPAD228
+bit 442 C 1 *
+bit 443 O ? IO_PAD227 442 1 Z
+bit 444 I ? IO_PAD227
+bit 445 C 1 *
+bit 446 O ? IO_PAD226 445 1 Z
+bit 447 I ? IO_PAD226
+bit 448 C 1 *
+bit 449 O ? IO_PAD225 448 1 Z
+bit 450 I ? IO_PAD225
+bit 451 C 1 *
+bit 452 O ? IO_PAD224 451 1 Z
+bit 453 I ? IO_PAD224
+bit 454 I ? IPAD223
+bit 455 C 1 *
+bit 456 O ? IO_PAD222 455 1 Z
+bit 457 I ? IO_PAD222
+bit 458 C 1 *
+bit 459 O ? IO_PAD221 458 1 Z
+bit 460 I ? IO_PAD221
+bit 461 C 1 *
+bit 462 O ? IO_PAD220 461 1 Z
+bit 463 I ? IO_PAD220
+bit 464 C 1 *
+bit 465 O ? IO_PAD219 464 1 Z
+bit 466 I ? IO_PAD219
+bit 467 I ? IPAD218
+bit 468 C 1 *
+bit 469 O ? IO_PAD217 468 1 Z
+bit 470 I ? IO_PAD217
+bit 471 C 1 *
+bit 472 O ? IO_PAD216 471 1 Z
+bit 473 I ? IO_PAD216
+bit 474 C 1 *
+bit 475 O ? IO_PAD215 474 1 Z
+bit 476 I ? IO_PAD215
+bit 477 C 1 *
+bit 478 O ? IO_PAD214 477 1 Z
+bit 479 I ? IO_PAD214
+bit 480 I ? IPAD213
+bit 481 C 1 *
+bit 482 O ? IO_PAD212 481 1 Z
+bit 483 I ? IO_PAD212
+bit 484 C 1 *
+bit 485 O ? IO_PAD211 484 1 Z
+bit 486 I ? IO_PAD211
+bit 487 C 1 *
+bit 488 O ? IO_PAD210 487 1 Z
+bit 489 I ? IO_PAD210
+bit 490 C 1 *
+bit 491 O ? IO_PAD209 490 1 Z
+bit 492 I ? IO_PAD209
+bit 493 I ? IPAD208
+bit 494 C 1 *
+bit 495 O ? IO_PAD207 494 1 Z
+bit 496 I ? IO_PAD207
+bit 497 C 1 *
+bit 498 O ? IO_PAD206 497 1 Z
+bit 499 I ? IO_PAD206
+bit 500 C 1 *
+bit 501 O ? IO_PAD205 500 1 Z
+bit 502 I ? IO_PAD205
+bit 503 C 1 *
+bit 504 O ? IO_PAD204 503 1 Z
+bit 505 I ? IO_PAD204
+bit 506 I ? IPAD203
+bit 507 C 1 *
+bit 508 O ? IO_PAD202 507 1 Z
+bit 509 I ? IO_PAD202
+bit 510 C 1 *
+bit 511 O ? IO_PAD201 510 1 Z
+bit 512 I ? IO_PAD201
+bit 513 C 1 *
+bit 514 O ? IO_PAD200 513 1 Z
+bit 515 I ? IO_PAD200
+bit 516 C 1 *
+bit 517 O ? IO_PAD199 516 1 Z
+bit 518 I ? IO_PAD199
+bit 519 I ? IPAD198
+bit 520 C 1 *
+bit 521 O ? IO_PAD197 520 1 Z
+bit 522 I ? IO_PAD197
+bit 523 C 1 *
+bit 524 O ? IO_PAD196 523 1 Z
+bit 525 I ? IO_PAD196
+bit 526 C 1 *
+bit 527 O ? IO_PAD195 526 1 Z
+bit 528 I ? IO_PAD195
+bit 529 C 1 *
+bit 530 O ? IO_PAD194 529 1 Z
+bit 531 I ? IO_PAD194
+bit 532 I ? IPAD193
+bit 533 C 1 *
+bit 534 O ? IO_PAD192 533 1 Z
+bit 535 I ? IO_PAD192
+bit 536 C 1 *
+bit 537 O ? IO_PAD191 536 1 Z
+bit 538 I ? IO_PAD191
+bit 539 C 1 *
+bit 540 O ? IO_PAD190 539 1 Z
+bit 541 I ? IO_PAD190
+bit 542 C 1 *
+bit 543 O ? IO_PAD189 542 1 Z
+bit 544 I ? IO_PAD189
+bit 545 I ? IPAD188
+bit 546 C 1 *
+bit 547 O ? IO_PAD187 546 1 Z
+bit 548 I ? IO_PAD187
+bit 549 C 1 *
+bit 550 O ? IO_PAD186 549 1 Z
+bit 551 I ? IO_PAD186
+bit 552 C 1 *
+bit 553 O ? IO_PAD185 552 1 Z
+bit 554 I ? IO_PAD185
+bit 555 C 1 *
+bit 556 O ? IO_PAD184 555 1 Z
+bit 557 I ? IO_PAD184
+bit 558 I ? IPAD183
+bit 559 C 1 *
+bit 560 O ? IO_PAD182 559 1 Z
+bit 561 I ? IO_PAD182
+bit 562 C 1 *
+bit 563 O ? IO_PAD181 562 1 Z
+bit 564 I ? IO_PAD181
+bit 565 C 1 *
+bit 566 O ? IO_PAD180 565 1 Z
+bit 567 I ? IO_PAD180
+bit 568 C 1 *
+bit 569 O ? IO_PAD179 568 1 Z
+bit 570 I ? IO_PAD179
+bit 571 I ? IPAD178
+bit 572 C 1 *
+bit 573 O ? IO_PAD177 572 1 Z
+bit 574 I ? IO_PAD177
+bit 575 C 1 *
+bit 576 O ? IO_PAD176 575 1 Z
+bit 577 I ? IO_PAD176
+bit 578 C 1 *
+bit 579 O ? IO_PAD175 578 1 Z
+bit 580 I ? IO_PAD175
+bit 581 C 1 *
+bit 582 O ? IO_PAD174 581 1 Z
+bit 583 I ? IO_PAD174
+bit 584 I ? IPAD173
+bit 585 C 1 *
+bit 586 O ? IO_PAD172 585 1 Z
+bit 587 I ? IO_PAD172
+bit 588 C 1 *
+bit 589 O ? IO_PAD171 588 1 Z
+bit 590 I ? IO_PAD171
+bit 591 C 1 *
+bit 592 O ? IO_PAD170 591 1 Z
+bit 593 I ? IO_PAD170
+bit 594 C 1 *
+bit 595 O ? IO_PAD169 594 1 Z
+bit 596 I ? IO_PAD169
+bit 597 I ? IPAD168
+bit 598 C 1 *
+bit 599 O ? IO_PAD167 598 1 Z
+bit 600 I ? IO_PAD167
+bit 601 C 1 *
+bit 602 O ? IO_PAD166 601 1 Z
+bit 603 I ? IO_PAD166
+bit 604 C 1 *
+bit 605 O ? IO_PAD165 604 1 Z
+bit 606 I ? IO_PAD165
+bit 607 C 1 *
+bit 608 O ? IO_PAD164 607 1 Z
+bit 609 I ? IO_PAD164
+bit 610 I ? IPAD163
+bit 611 C 1 *
+bit 612 O ? IO_PAD162 611 1 Z
+bit 613 I ? IO_PAD162
+bit 614 C 1 *
+bit 615 O ? IO_PAD161 614 1 Z
+bit 616 I ? IO_PAD161
+bit 617 C 1 *
+bit 618 O ? DONE 617 1 Z
+bit 619 I ? DONE
+bit 620 I ? SUSPEND
+bit 621 C 1 *
+bit 622 O ? IO_PAD160 621 1 Z
+bit 623 I ? IO_PAD160
+bit 624 C 1 *
+bit 625 O ? IO_PAD159 624 1 Z
+bit 626 I ? IO_PAD159
+bit 627 C 1 *
+bit 628 O ? IO_PAD158 627 1 Z
+bit 629 I ? IO_PAD158
+bit 630 C 1 *
+bit 631 O ? IO_PAD157 630 1 Z
+bit 632 I ? IO_PAD157
+bit 633 C 1 *
+bit 634 O ? IO_PAD156 633 1 Z
+bit 635 I ? IO_PAD156
+bit 636 C 1 *
+bit 637 O ? IO_PAD155 636 1 Z
+bit 638 I ? IO_PAD155
+bit 639 I ? IPAD154
+bit 640 I ? IPAD153
+bit 641 C 1 *
+bit 642 O ? IO_PAD152 641 1 Z
+bit 643 I ? IO_PAD152
+bit 644 C 1 *
+bit 645 O ? IO_PAD151 644 1 Z
+bit 646 I ? IO_PAD151
+bit 647 C 1 *
+bit 648 O ? IO_PAD150 647 1 Z
+bit 649 I ? IO_PAD150
+bit 650 C 1 *
+bit 651 O ? IO_PAD149 650 1 Z
+bit 652 I ? IO_PAD149
+bit 653 C 1 *
+bit 654 O ? IO_PAD148 653 1 Z
+bit 655 I ? IO_PAD148
+bit 656 C 1 *
+bit 657 O ? IO_PAD147 656 1 Z
+bit 658 I ? IO_PAD147
+bit 659 I ? IPAD146
+bit 660 I ? IPAD145
+bit 661 C 1 *
+bit 662 O ? IO_PAD144 661 1 Z
+bit 663 I ? IO_PAD144
+bit 664 C 1 *
+bit 665 O ? IO_PAD143 664 1 Z
+bit 666 I ? IO_PAD143
+bit 667 C 1 *
+bit 668 O ? IO_PAD142 667 1 Z
+bit 669 I ? IO_PAD142
+bit 670 C 1 *
+bit 671 O ? IO_PAD141 670 1 Z
+bit 672 I ? IO_PAD141
+bit 673 C 1 *
+bit 674 O ? IO_PAD140 673 1 Z
+bit 675 I ? IO_PAD140
+bit 676 C 1 *
+bit 677 O ? IO_PAD139 676 1 Z
+bit 678 I ? IO_PAD139
+bit 679 I ? IPAD138
+bit 680 I ? IPAD137
+bit 681 C 1 *
+bit 682 O ? IO_PAD136 681 1 Z
+bit 683 I ? IO_PAD136
+bit 684 C 1 *
+bit 685 O ? IO_PAD135 684 1 Z
+bit 686 I ? IO_PAD135
+bit 687 C 1 *
+bit 688 O ? IO_PAD134 687 1 Z
+bit 689 I ? IO_PAD134
+bit 690 C 1 *
+bit 691 O ? IO_PAD133 690 1 Z
+bit 692 I ? IO_PAD133
+bit 693 C 1 *
+bit 694 O ? IO_PAD132 693 1 Z
+bit 695 I ? IO_PAD132
+bit 696 C 1 *
+bit 697 O ? IO_PAD131 696 1 Z
+bit 698 I ? IO_PAD131
+bit 699 I ? IPAD130
+bit 700 I ? IPAD129
+bit 701 C 1 *
+bit 702 O ? IO_PAD128 701 1 Z
+bit 703 I ? IO_PAD128
+bit 704 C 1 *
+bit 705 O ? IO_PAD127 704 1 Z
+bit 706 I ? IO_PAD127
+bit 707 C 1 *
+bit 708 O ? IO_PAD126 707 1 Z
+bit 709 I ? IO_PAD126
+bit 710 C 1 *
+bit 711 O ? IO_PAD125 710 1 Z
+bit 712 I ? IO_PAD125
+bit 713 C 1 *
+bit 714 O ? IO_PAD124 713 1 Z
+bit 715 I ? IO_PAD124
+bit 716 C 1 *
+bit 717 O ? IO_PAD123 716 1 Z
+bit 718 I ? IO_PAD123
+bit 719 I ? IPAD122
+bit 720 I ? IPAD121
+bit 721 C 1 *
+bit 722 O ? IO_PAD120 721 1 Z
+bit 723 I ? IO_PAD120
+bit 724 C 1 *
+bit 725 O ? IO_PAD119 724 1 Z
+bit 726 I ? IO_PAD119
+bit 727 C 1 *
+bit 728 O ? IO_PAD118 727 1 Z
+bit 729 I ? IO_PAD118
+bit 730 C 1 *
+bit 731 O ? IO_PAD117 730 1 Z
+bit 732 I ? IO_PAD117
+bit 733 C 1 *
+bit 734 O ? IO_PAD116 733 1 Z
+bit 735 I ? IO_PAD116
+bit 736 C 1 *
+bit 737 O ? IO_PAD115 736 1 Z
+bit 738 I ? IO_PAD115
+bit 739 I ? IPAD114
+bit 740 I ? IPAD113
+bit 741 C 1 *
+bit 742 O ? IO_PAD112 741 1 Z
+bit 743 I ? IO_PAD112
+bit 744 C 1 *
+bit 745 O ? IO_PAD111 744 1 Z
+bit 746 I ? IO_PAD111
+bit 747 C 1 *
+bit 748 O ? IO_PAD110 747 1 Z
+bit 749 I ? IO_PAD110
+bit 750 C 1 *
+bit 751 O ? IO_PAD109 750 1 Z
+bit 752 I ? IO_PAD109
+bit 753 C 1 *
+bit 754 O ? IO_PAD108 753 1 Z
+bit 755 I ? IO_PAD108
+bit 756 C 1 *
+bit 757 O ? IO_PAD107 756 1 Z
+bit 758 I ? IO_PAD107
+bit 759 I ? IPAD106
+bit 760 I ? IPAD105
+bit 761 C 1 *
+bit 762 O ? IO_PAD104 761 1 Z
+bit 763 I ? IO_PAD104
+bit 764 C 1 *
+bit 765 O ? IO_PAD103 764 1 Z
+bit 766 I ? IO_PAD103
+bit 767 C 1 *
+bit 768 O ? IO_PAD102 767 1 Z
+bit 769 I ? IO_PAD102
+bit 770 C 1 *
+bit 771 O ? IO_PAD101 770 1 Z
+bit 772 I ? IO_PAD101
+bit 773 C 1 *
+bit 774 O ? IO_PAD100 773 1 Z
+bit 775 I ? IO_PAD100
+bit 776 C 1 *
+bit 777 O ? IO_PAD99 776 1 Z
+bit 778 I ? IO_PAD99
+bit 779 I ? IPAD98
+bit 780 I ? IPAD97
+bit 781 C 1 *
+bit 782 O ? IO_PAD96 781 1 Z
+bit 783 I ? IO_PAD96
+bit 784 C 1 *
+bit 785 O ? IO_PAD95 784 1 Z
+bit 786 I ? IO_PAD95
+bit 787 C 1 *
+bit 788 O ? IO_PAD94 787 1 Z
+bit 789 I ? IO_PAD94
+bit 790 C 1 *
+bit 791 O ? IO_PAD93 790 1 Z
+bit 792 I ? IO_PAD93
+bit 793 C 1 *
+bit 794 O ? IO_PAD92 793 1 Z
+bit 795 I ? IO_PAD92
+bit 796 C 1 *
+bit 797 O ? IO_PAD91 796 1 Z
+bit 798 I ? IO_PAD91
+bit 799 I ? IPAD90
+bit 800 I ? IPAD89
+bit 801 C 1 *
+bit 802 O ? IO_PAD88 801 1 Z
+bit 803 I ? IO_PAD88
+bit 804 C 1 *
+bit 805 O ? IO_PAD87 804 1 Z
+bit 806 I ? IO_PAD87
+bit 807 C 1 *
+bit 808 O ? IO_PAD86 807 1 Z
+bit 809 I ? IO_PAD86
+bit 810 C 1 *
+bit 811 O ? IO_PAD85 810 1 Z
+bit 812 I ? IO_PAD85
+bit 813 C 1 *
+bit 814 O ? IO_PAD84 813 1 Z
+bit 815 I ? IO_PAD84
+bit 816 C 1 *
+bit 817 O ? IO_PAD83 816 1 Z
+bit 818 I ? IO_PAD83
+bit 819 I ? IPAD82
+bit 820 I ? IPAD81

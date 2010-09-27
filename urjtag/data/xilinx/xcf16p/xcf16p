@@ -1,0 +1,138 @@
+signal DNC(1)
+signal DNC(2)
+signal DNC(3)
+signal DNC(4)
+signal DNC(5)
+signal DNC(6)
+signal DNC(7)
+signal DNC(8)
+signal DNC(9)
+signal DNC(10)
+signal DNC(11)
+signal VCCO(1)
+signal VCCO(2)
+signal VCCO(3)
+signal VCCO(4)
+signal VCCJ
+signal VCCINT(1)
+signal VCCINT(2)
+signal VCCINT(3)
+signal TMS
+signal TDO
+signal TDI
+signal TCK
+signal REV_SEL1
+signal REV_SEL0
+signal OE_RESET
+signal GND(1)
+signal GND(2)
+signal GND(3)
+signal GND(4)
+signal GND(5)
+signal GND(6)
+signal GND(7)
+signal EN_EXT_SEL
+signal D7
+signal D6
+signal D5
+signal D4
+signal D3
+signal D2
+signal D1
+signal D0
+signal CLKOUT
+signal CLK
+signal CF
+signal CEO
+signal CE
+signal BUSY
+instruction length 16
+register DIR 32
+register USERCODE 32
+register BSR 32
+register BYPASS 1
+register ADDR_DUMP 16
+register DATA_SUCR 16
+register DATA_CCB 16
+register DONE 8
+register DATA_CC 256
+register DATA_RDPT 16
+register DATA_WRPT 16
+register DATA_BTC 32
+register BLANK 8
+register XSC_MFG 8
+register ISC_DEFAULT 8
+register DATA_UC 32
+register ISC_SECTOR 24
+register ADDRESS 24
+register DATA1 8388608
+register ISC_RDATA 256
+register DATA0 256
+register ISPENABLE 8
+instruction XSC_ADDRESS_DUMP 0000000011100110 ADDR_DUMP
+instruction XSC_DATA_SUCR 0000000000001110 DATA_SUCR
+instruction XSC_DATA_BLANK 0000000011110101 BLANK
+instruction XSC_DATA_CCB 0000000000001100 DATA_CCB
+instruction XSC_DATA_DONE 0000000000001001 DONE
+instruction XSC_DATA_CC 0000000000000111 DATA_CC
+instruction XSC_DATA_UC 0000000000000110 DATA_UC
+instruction XSC_DATA_RDPT 0000000000000100 DATA_RDPT
+instruction XSC_DATA_WRPT 0000000011110111 DATA_WRPT
+instruction XSC_DATA_BTC 0000000011110010 DATA_BTC
+instruction XSC_UNLOCK 1010101001010101 ISC_SECTOR
+instruction XSC_CONFIG_PLUS 0000000011110110 BYPASS
+instruction XSC_MFG_READ 0000000011110001 XSC_MFG
+instruction XSC_OP_STATUS 0000000011100011 ISC_DEFAULT
+instruction XSC_CLR_STATUS 0000000011110100 ISC_DEFAULT
+instruction XSC_CONFIG 0000000011101110 BYPASS
+instruction ISC_NOOP 0000000011100000 ISC_DEFAULT
+instruction ISC_DISABLE 0000000011110000 BYPASS
+instruction XSC_BLANK_CHECK 0000000000001101 BLANK
+instruction XSC_READ 0000000011101111 DATA1
+instruction ISC_DATA_SHIFT 0000000011101101 DATA0
+instruction ISC_ERASE 0000000011101100 ISC_SECTOR
+instruction ISC_READ 0000000011111000 ISC_RDATA
+instruction ISC_ADDRESS_SHIFT 0000000011101011 ADDRESS
+instruction ISC_PROGRAM 0000000011101010 ISC_DEFAULT
+instruction XSC_ENABLEC 0000000011101001 ISPENABLE
+instruction ISC_ENABLE 0000000011101000 ISPENABLE
+instruction CLAMP 0000000011111010 BYPASS
+instruction HIGHZ 0000000011111100 BYPASS
+instruction USERCODE 0000000011111101 DIR
+instruction IDCODE 0000000011111110 DIR
+instruction EXTEST 0000000000000000 BSR
+instruction PRELOAD 0000000000000001 BSR
+instruction SAMPLE/PRELOAD 0000000000000001 BSR
+instruction BYPASS 1111111111111111 BYPASS
+bit 0 I ? CE
+bit 1 I ? CLK
+bit 2 C 0 *
+bit 3 O ? OE_RESET 2 0 Z
+bit 4 I ? OE_RESET
+bit 5 C 0 *
+bit 6 O ? CEO 5 0 Z
+bit 7 C 0 *
+bit 8 O ? CLKOUT 7 0 Z
+bit 9 O 0 *
+bit 10 O ? *
+bit 11 I ? CF
+bit 12 I ? BUSY
+bit 13 C 0 *
+bit 14 O ? D7 13 0 Z
+bit 15 C 0 *
+bit 16 O ? D6 15 0 Z
+bit 17 C 0 *
+bit 18 O ? D5 17 0 Z
+bit 19 C 0 *
+bit 20 O ? D4 19 0 Z
+bit 21 C 0 *
+bit 22 O ? D3 21 0 Z
+bit 23 C 0 *
+bit 24 O ? D2 23 0 Z
+bit 25 C 0 *
+bit 26 O ? D1 25 0 Z
+bit 27 C 0 *
+bit 28 O ? D0 27 0 Z
+bit 29 I ? REV_SEL1
+bit 30 I ? REV_SEL0
+bit 31 I ? EN_EXT_SEL

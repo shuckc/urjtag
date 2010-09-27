@@ -31,6 +31,10 @@
   * extra/fjmem/fjmem_config_pack_spartan6-p.vhd, extra/fjmem/fjmem_spartan6.vhd:
     Add fjmem example for Spartan-6 devices.
 
+  * data/xilinx/<a lot of files>: Add jtag files for Xilinx devices by Michael
+    Walle.  This covers the Spartan-3, Spartan-6, Virtex-4, System ACE,
+    Platform flash, and XC9500XL families.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept

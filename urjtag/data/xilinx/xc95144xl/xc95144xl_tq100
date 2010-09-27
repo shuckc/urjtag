@@ -1,0 +1,559 @@
+signal Vssio_5
+signal Vssio_4
+signal Vssio_3
+signal Vssio_2
+signal Vssio_1
+signal Vssint_3
+signal Vssint_2
+signal Vssint_1
+signal Vccio_4
+signal Vccio_3
+signal Vccio_2
+signal Vccio_1
+signal VccInt_Vpp
+signal Vccint_2
+signal Vccint_1
+signal TMS
+signal TDO
+signal TDI
+signal TCK
+signal PB07_16
+signal PB07_14
+signal PB07_13
+signal PB07_11
+signal PB07_10
+signal PB07_08
+signal PB07_07
+signal PB07_05
+signal PB07_04
+signal PB07_01
+signal PB06_16
+signal PB06_14
+signal PB06_13
+signal PB06_11
+signal PB06_10
+signal PB06_08
+signal PB06_07
+signal PB06_05
+signal PB06_04
+signal PB06_01
+signal PB05_16
+signal PB05_14
+signal PB05_13
+signal PB05_11
+signal PB05_10
+signal PB05_08
+signal PB05_07
+signal PB05_05
+signal PB05_04
+signal PB05_01
+signal PB04_16
+signal PB04_14
+signal PB04_13
+signal PB04_11
+signal PB04_10
+signal PB04_08
+signal PB04_07
+signal PB04_05
+signal PB04_04
+signal PB04_01
+signal PB03_16
+signal PB03_14
+signal PB03_13
+signal PB03_11
+signal PB03_10
+signal PB03_08
+signal PB03_07
+signal PB03_05
+signal PB03_04
+signal PB03_01
+signal PB02_16
+signal PB02_14
+signal PB02_13
+signal PB02_11
+signal PB02_10
+signal PB02_08
+signal PB02_07
+signal PB02_05
+signal PB02_04
+signal PB02_01
+signal PB01_16
+signal PB01_14
+signal PB01_13
+signal PB01_11
+signal PB01_10
+signal PB01_08
+signal PB01_07
+signal PB01_05
+signal PB01_04
+signal PB01_01
+signal PB00_16
+signal PB00_14
+signal PB00_13
+signal PB00_11
+signal PB00_10
+signal PB00_08
+signal PB00_07
+signal PB00_05
+signal PB00_04
+signal PB00_02
+signal PB00_01
+instruction length 8
+register DIR 32
+register USERCODE 32
+register BSR 432
+register BYPASS 1
+register ISCONFIGURATION 82
+register ISADDRESS 18
+register ISDATA 66
+register ISCENABLE 6
+instruction USERCODE 11111101 USERCODE
+instruction SAMPLE/PRELOAD 00000001 BSR
+instruction ISPENC 11101001 ISCENABLE
+instruction ISPEN 11101000 ISCENABLE
+instruction INTEST 00000010 BSR
+instruction IDCODE 11111110 DIR
+instruction HIGHZ 11111100 BYPASS
+instruction FVFYI 11101111 ISDATA
+instruction FVFY 11101110 ISCONFIGURATION
+instruction FPGMI 11101011 ISDATA
+instruction FPGM 11101010 ISCONFIGURATION
+instruction FERASE 11101100 ISADDRESS
+instruction FBULK 11101101 ISADDRESS
+instruction FBLANK 11100101 ISADDRESS
+instruction EXTEST 00000000 BSR
+instruction ISPEX 11110000 BYPASS
+instruction CLAMP 11111010 BYPASS
+instruction BYPASS 11111111 BYPASS
+bit 431 O ? *
+bit 430 O ? *
+bit 429 O ? *
+bit 428 I ? PB00_01
+bit 427 O ? PB00_01 426 0 Z
+bit 426 C 0 *
+bit 425 I ? PB00_02
+bit 424 O ? PB00_02 423 0 Z
+bit 423 C 0 *
+bit 422 O ? *
+bit 421 O ? *
+bit 420 O ? *
+bit 419 I ? PB00_04
+bit 418 O ? PB00_04 417 0 Z
+bit 417 C 0 *
+bit 416 I ? PB00_05
+bit 415 O ? PB00_05 414 0 Z
+bit 414 C 0 *
+bit 413 O ? *
+bit 412 O ? *
+bit 411 O ? *
+bit 410 I ? PB00_07
+bit 409 O ? PB00_07 408 0 Z
+bit 408 C 0 *
+bit 407 I ? PB00_08
+bit 406 O ? PB00_08 405 0 Z
+bit 405 C 0 *
+bit 404 O ? *
+bit 403 O ? *
+bit 402 O ? *
+bit 401 I ? PB00_10
+bit 400 O ? PB00_10 399 0 Z
+bit 399 C 0 *
+bit 398 I ? PB00_11
+bit 397 O ? PB00_11 396 0 Z
+bit 396 C 0 *
+bit 395 O ? *
+bit 394 O ? *
+bit 393 O ? *
+bit 392 I ? PB00_13
+bit 391 O ? PB00_13 390 0 Z
+bit 390 C 0 *
+bit 389 I ? PB00_14
+bit 388 O ? PB00_14 387 0 Z
+bit 387 C 0 *
+bit 386 O ? *
+bit 385 O ? *
+bit 384 O ? *
+bit 383 I ? PB00_16
+bit 382 O ? PB00_16 381 0 Z
+bit 381 C 0 *
+bit 380 O ? *
+bit 379 O ? *
+bit 378 O ? *
+bit 377 O ? *
+bit 376 O ? *
+bit 375 O ? *
+bit 374 I ? PB01_01
+bit 373 O ? PB01_01 372 0 Z
+bit 372 C 0 *
+bit 371 O ? *
+bit 370 O ? *
+bit 369 O ? *
+bit 368 O ? *
+bit 367 O ? *
+bit 366 O ? *
+bit 365 I ? PB01_04
+bit 364 O ? PB01_04 363 0 Z
+bit 363 C 0 *
+bit 362 I ? PB01_05
+bit 361 O ? PB01_05 360 0 Z
+bit 360 C 0 *
+bit 359 O ? *
+bit 358 O ? *
+bit 357 O ? *
+bit 356 I ? PB01_07
+bit 355 O ? PB01_07 354 0 Z
+bit 354 C 0 *
+bit 353 I ? PB01_08
+bit 352 O ? PB01_08 351 0 Z
+bit 351 C 0 *
+bit 350 O ? *
+bit 349 O ? *
+bit 348 O ? *
+bit 347 I ? PB01_10
+bit 346 O ? PB01_10 345 0 Z
+bit 345 C 0 *
+bit 344 I ? PB01_11
+bit 343 O ? PB01_11 342 0 Z
+bit 342 C 0 *
+bit 341 O ? *
+bit 340 O ? *
+bit 339 O ? *
+bit 338 I ? PB01_13
+bit 337 O ? PB01_13 336 0 Z
+bit 336 C 0 *
+bit 335 I ? PB01_14
+bit 334 O ? PB01_14 333 0 Z
+bit 333 C 0 *
+bit 332 O ? *
+bit 331 O ? *
+bit 330 O ? *
+bit 329 I ? PB01_16
+bit 328 O ? PB01_16 327 0 Z
+bit 327 C 0 *
+bit 326 O ? *
+bit 325 O ? *
+bit 324 O ? *
+bit 323 O ? *
+bit 322 O ? *
+bit 321 O ? *
+bit 320 I ? PB02_01
+bit 319 O ? PB02_01 318 0 Z
+bit 318 C 0 *
+bit 317 O ? *
+bit 316 O ? *
+bit 315 O ? *
+bit 314 O ? *
+bit 313 O ? *
+bit 312 O ? *
+bit 311 I ? PB02_04
+bit 310 O ? PB02_04 309 0 Z
+bit 309 C 0 *
+bit 308 I ? PB02_05
+bit 307 O ? PB02_05 306 0 Z
+bit 306 C 0 *
+bit 305 O ? *
+bit 304 O ? *
+bit 303 O ? *
+bit 302 I ? PB02_07
+bit 301 O ? PB02_07 300 0 Z
+bit 300 C 0 *
+bit 299 I ? PB02_08
+bit 298 O ? PB02_08 297 0 Z
+bit 297 C 0 *
+bit 296 O ? *
+bit 295 O ? *
+bit 294 O ? *
+bit 293 I ? PB02_10
+bit 292 O ? PB02_10 291 0 Z
+bit 291 C 0 *
+bit 290 I ? PB02_11
+bit 289 O ? PB02_11 288 0 Z
+bit 288 C 0 *
+bit 287 O ? *
+bit 286 O ? *
+bit 285 O ? *
+bit 284 I ? PB02_13
+bit 283 O ? PB02_13 282 0 Z
+bit 282 C 0 *
+bit 281 I ? PB02_14
+bit 280 O ? PB02_14 279 0 Z
+bit 279 C 0 *
+bit 278 O ? *
+bit 277 O ? *
+bit 276 O ? *
+bit 275 I ? PB02_16
+bit 274 O ? PB02_16 273 0 Z
+bit 273 C 0 *
+bit 272 O ? *
+bit 271 O ? *
+bit 270 O ? *
+bit 269 O ? *
+bit 268 O ? *
+bit 267 O ? *
+bit 266 I ? PB03_01
+bit 265 O ? PB03_01 264 0 Z
+bit 264 C 0 *
+bit 263 O ? *
+bit 262 O ? *
+bit 261 O ? *
+bit 260 O ? *
+bit 259 O ? *
+bit 258 O ? *
+bit 257 I ? PB03_04
+bit 256 O ? PB03_04 255 0 Z
+bit 255 C 0 *
+bit 254 I ? PB03_05
+bit 253 O ? PB03_05 252 0 Z
+bit 252 C 0 *
+bit 251 O ? *
+bit 250 O ? *
+bit 249 O ? *
+bit 248 I ? PB03_07
+bit 247 O ? PB03_07 246 0 Z
+bit 246 C 0 *
+bit 245 I ? PB03_08
+bit 244 O ? PB03_08 243 0 Z
+bit 243 C 0 *
+bit 242 O ? *
+bit 241 O ? *
+bit 240 O ? *
+bit 239 I ? PB03_10
+bit 238 O ? PB03_10 237 0 Z
+bit 237 C 0 *
+bit 236 I ? PB03_11
+bit 235 O ? PB03_11 234 0 Z
+bit 234 C 0 *
+bit 233 O ? *
+bit 232 O ? *
+bit 231 O ? *
+bit 230 I ? PB03_13
+bit 229 O ? PB03_13 228 0 Z
+bit 228 C 0 *
+bit 227 I ? PB03_14
+bit 226 O ? PB03_14 225 0 Z
+bit 225 C 0 *
+bit 224 O ? *
+bit 223 O ? *
+bit 222 O ? *
+bit 221 I ? PB03_16
+bit 220 O ? PB03_16 219 0 Z
+bit 219 C 0 *
+bit 218 O ? *
+bit 217 O ? *
+bit 216 O ? *
+bit 215 O ? *
+bit 214 O ? *
+bit 213 O ? *
+bit 212 I ? PB04_01
+bit 211 O ? PB04_01 210 0 Z
+bit 210 C 0 *
+bit 209 O ? *
+bit 208 O ? *
+bit 207 O ? *
+bit 206 O ? *
+bit 205 O ? *
+bit 204 O ? *
+bit 203 I ? PB04_04
+bit 202 O ? PB04_04 201 0 Z
+bit 201 C 0 *
+bit 200 I ? PB04_05
+bit 199 O ? PB04_05 198 0 Z
+bit 198 C 0 *
+bit 197 O ? *
+bit 196 O ? *
+bit 195 O ? *
+bit 194 I ? PB04_07
+bit 193 O ? PB04_07 192 0 Z
+bit 192 C 0 *
+bit 191 I ? PB04_08
+bit 190 O ? PB04_08 189 0 Z
+bit 189 C 0 *
+bit 188 O ? *
+bit 187 O ? *
+bit 186 O ? *
+bit 185 I ? PB04_10
+bit 184 O ? PB04_10 183 0 Z
+bit 183 C 0 *
+bit 182 I ? PB04_11
+bit 181 O ? PB04_11 180 0 Z
+bit 180 C 0 *
+bit 179 O ? *
+bit 178 O ? *
+bit 177 O ? *
+bit 176 I ? PB04_13
+bit 175 O ? PB04_13 174 0 Z
+bit 174 C 0 *
+bit 173 I ? PB04_14
+bit 172 O ? PB04_14 171 0 Z
+bit 171 C 0 *
+bit 170 O ? *
+bit 169 O ? *
+bit 168 O ? *
+bit 167 I ? PB04_16
+bit 166 O ? PB04_16 165 0 Z
+bit 165 C 0 *
+bit 164 O ? *
+bit 163 O ? *
+bit 162 O ? *
+bit 161 O ? *
+bit 160 O ? *
+bit 159 O ? *
+bit 158 I ? PB05_01
+bit 157 O ? PB05_01 156 0 Z
+bit 156 C 0 *
+bit 155 O ? *
+bit 154 O ? *
+bit 153 O ? *
+bit 152 O ? *
+bit 151 O ? *
+bit 150 O ? *
+bit 149 I ? PB05_04
+bit 148 O ? PB05_04 147 0 Z
+bit 147 C 0 *
+bit 146 I ? PB05_05
+bit 145 O ? PB05_05 144 0 Z
+bit 144 C 0 *
+bit 143 O ? *
+bit 142 O ? *
+bit 141 O ? *
+bit 140 I ? PB05_07
+bit 139 O ? PB05_07 138 0 Z
+bit 138 C 0 *
+bit 137 I ? PB05_08
+bit 136 O ? PB05_08 135 0 Z
+bit 135 C 0 *
+bit 134 O ? *
+bit 133 O ? *
+bit 132 O ? *
+bit 131 I ? PB05_10
+bit 130 O ? PB05_10 129 0 Z
+bit 129 C 0 *
+bit 128 I ? PB05_11
+bit 127 O ? PB05_11 126 0 Z
+bit 126 C 0 *
+bit 125 O ? *
+bit 124 O ? *
+bit 123 O ? *
+bit 122 I ? PB05_13
+bit 121 O ? PB05_13 120 0 Z
+bit 120 C 0 *
+bit 119 I ? PB05_14
+bit 118 O ? PB05_14 117 0 Z
+bit 117 C 0 *
+bit 116 O ? *
+bit 115 O ? *
+bit 114 O ? *
+bit 113 I ? PB05_16
+bit 112 O ? PB05_16 111 0 Z
+bit 111 C 0 *
+bit 110 O ? *
+bit 109 O ? *
+bit 108 O ? *
+bit 107 O ? *
+bit 106 O ? *
+bit 105 O ? *
+bit 104 I ? PB06_01
+bit 103 O ? PB06_01 102 0 Z
+bit 102 C 0 *
+bit 101 O ? *
+bit 100 O ? *
+bit 99 O ? *
+bit 98 O ? *
+bit 97 O ? *
+bit 96 O ? *
+bit 95 I ? PB06_04
+bit 94 O ? PB06_04 93 0 Z
+bit 93 C 0 *
+bit 92 I ? PB06_05
+bit 91 O ? PB06_05 90 0 Z
+bit 90 C 0 *
+bit 89 O ? *
+bit 88 O ? *
+bit 87 O ? *
+bit 86 I ? PB06_07
+bit 85 O ? PB06_07 84 0 Z
+bit 84 C 0 *
+bit 83 I ? PB06_08
+bit 82 O ? PB06_08 81 0 Z
+bit 81 C 0 *
+bit 80 O ? *
+bit 79 O ? *
+bit 78 O ? *
+bit 77 I ? PB06_10
+bit 76 O ? PB06_10 75 0 Z
+bit 75 C 0 *
+bit 74 I ? PB06_11
+bit 73 O ? PB06_11 72 0 Z
+bit 72 C 0 *
+bit 71 O ? *
+bit 70 O ? *
+bit 69 O ? *
+bit 68 I ? PB06_13
+bit 67 O ? PB06_13 66 0 Z
+bit 66 C 0 *
+bit 65 I ? PB06_14
+bit 64 O ? PB06_14 63 0 Z
+bit 63 C 0 *
+bit 62 O ? *
+bit 61 O ? *
+bit 60 O ? *
+bit 59 I ? PB06_16
+bit 58 O ? PB06_16 57 0 Z
+bit 57 C 0 *
+bit 56 O ? *
+bit 55 O ? *
+bit 54 O ? *
+bit 53 O ? *
+bit 52 O ? *
+bit 51 O ? *
+bit 50 I ? PB07_01
+bit 49 O ? PB07_01 48 0 Z
+bit 48 C 0 *
+bit 47 O ? *
+bit 46 O ? *
+bit 45 O ? *
+bit 44 O ? *
+bit 43 O ? *
+bit 42 O ? *
+bit 41 I ? PB07_04
+bit 40 O ? PB07_04 39 0 Z
+bit 39 C 0 *
+bit 38 I ? PB07_05
+bit 37 O ? PB07_05 36 0 Z
+bit 36 C 0 *
+bit 35 O ? *
+bit 34 O ? *
+bit 33 O ? *
+bit 32 I ? PB07_07
+bit 31 O ? PB07_07 30 0 Z
+bit 30 C 0 *
+bit 29 I ? PB07_08
+bit 28 O ? PB07_08 27 0 Z
+bit 27 C 0 *
+bit 26 O ? *
+bit 25 O ? *
+bit 24 O ? *
+bit 23 I ? PB07_10
+bit 22 O ? PB07_10 21 0 Z
+bit 21 C 0 *
+bit 20 I ? PB07_11
+bit 19 O ? PB07_11 18 0 Z
+bit 18 C 0 *
+bit 17 O ? *
+bit 16 O ? *
+bit 15 O ? *
+bit 14 I ? PB07_13
+bit 13 O ? PB07_13 12 0 Z
+bit 12 C 0 *
+bit 11 I ? PB07_14
+bit 10 O ? PB07_14 9 0 Z
+bit 9 C 0 *
+bit 8 O ? *
+bit 7 O ? *
+bit 6 O ? *
+bit 5 I ? PB07_16
+bit 4 O ? PB07_16 3 0 Z
+bit 3 C 0 *
+bit 2 O ? *
+bit 1 O ? *
+bit 0 O ? *

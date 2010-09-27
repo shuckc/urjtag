@@ -1,0 +1,752 @@
+signal VCCO_3
+signal VCCO_2(1)
+signal VCCO_2(2)
+signal VCCO_1
+signal VCCO_0(1)
+signal VCCO_0(2)
+signal VCCINT(1)
+signal VCCINT(2)
+signal VCCINT(3)
+signal VCCINT(4)
+signal VCCAUX(1)
+signal VCCAUX(2)
+signal VCCAUX(3)
+signal TMS
+signal TDO
+signal TDI
+signal TCK
+signal PUDC_B
+signal PROG_B
+signal IPAD70
+signal IPAD33
+signal IPAD3
+signal IPAD241
+signal IPAD186
+signal IPAD157
+signal IO_P98
+signal IO_P94
+signal IO_P93
+signal IO_P90
+signal IO_P9
+signal IO_P89
+signal IO_P88
+signal IO_P86
+signal IO_P85
+signal IO_P84
+signal IO_P83
+signal IO_P78
+signal IO_P77
+signal IO_P73
+signal IO_P72
+signal IO_P71
+signal IO_P70
+signal IO_P65
+signal IO_P64
+signal IO_P62
+signal IO_P61
+signal IO_P60
+signal IO_P6
+signal IO_P59
+signal IO_P57
+signal IO_P56
+signal IO_P53
+signal IO_P52
+signal IO_P51
+signal IO_P50
+signal IO_P5
+signal IO_P49
+signal IO_P48
+signal IO_P46
+signal IO_P44
+signal IO_P43
+signal IO_P41
+signal IO_P40
+signal IO_P4
+signal IO_P37
+signal IO_P36
+signal IO_P35
+signal IO_P34
+signal IO_P33
+signal IO_P32
+signal IO_P31
+signal IO_P30
+signal IO_P3
+signal IO_P29
+signal IO_P28
+signal IO_P27
+signal IO_P25
+signal IO_P24
+signal IO_P23
+signal IO_P20
+signal IO_P19
+signal IO_P16
+signal IO_P15
+signal IO_P13
+signal IO_P12
+signal IO_P10
+signal GND(1)
+signal GND(2)
+signal GND(3)
+signal GND(4)
+signal GND(5)
+signal GND(6)
+signal GND(7)
+signal GND(8)
+signal GND(9)
+signal GND(10)
+signal GND(11)
+signal GND(12)
+signal GND(13)
+signal DONE
+instruction length 6
+register DIR 32
+register USERCODE 32
+register BSR 637
+register BYPASS 1
+register DATAREG 57
+instruction ISC_DNA 110001 DATAREG
+instruction BYPASS 111111 BYPASS
+instruction HIGHZ 001010 BYPASS
+instruction IDCODE 001001 DIR
+instruction USERCODE 001000 DIR
+instruction INTEST 000111 BSR
+instruction PRELOAD 000001 BSR
+instruction SAMPLE/PRELOAD 000001 BSR
+instruction EXTEST 001111 BSR
+bit 0 O 1 *
+bit 1 O ? *
+bit 2 O ? *
+bit 3 O 1 *
+bit 4 O ? *
+bit 5 O ? *
+bit 6 O ? *
+bit 7 C 1 *
+bit 8 O ? IO_P77 7 1 Z
+bit 9 I ? IO_P77
+bit 10 C 1 *
+bit 11 O ? IO_P78 10 1 Z
+bit 12 I ? IO_P78
+bit 13 O 1 *
+bit 14 O ? *
+bit 15 O ? *
+bit 16 O 1 *
+bit 17 O ? *
+bit 18 O ? *
+bit 19 O ? *
+bit 20 O 1 *
+bit 21 O ? *
+bit 22 O ? *
+bit 23 O 1 *
+bit 24 O ? *
+bit 25 O ? *
+bit 26 O 1 *
+bit 27 O ? *
+bit 28 O ? *
+bit 29 O 1 *
+bit 30 O ? *
+bit 31 O ? *
+bit 32 O ? *
+bit 33 O 1 *
+bit 34 O ? *
+bit 35 O ? *
+bit 36 O 1 *
+bit 37 O ? *
+bit 38 O ? *
+bit 39 O 1 *
+bit 40 O ? *
+bit 41 O ? *
+bit 42 O 1 *
+bit 43 O ? *
+bit 44 O ? *
+bit 45 O ? *
+bit 46 O 1 *
+bit 47 O ? *
+bit 48 O ? *
+bit 49 O 1 *
+bit 50 O ? *
+bit 51 O ? *
+bit 52 O 1 *
+bit 53 O ? *
+bit 54 O ? *
+bit 55 O 1 *
+bit 56 O ? *
+bit 57 O ? *
+bit 58 O ? *
+bit 59 O 1 *
+bit 60 O ? *
+bit 61 O ? *
+bit 62 O 1 *
+bit 63 O ? *
+bit 64 O ? *
+bit 65 C 1 *
+bit 66 O ? IO_P83 65 1 Z
+bit 67 I ? IO_P83
+bit 68 C 1 *
+bit 69 O ? IO_P84 68 1 Z
+bit 70 I ? IO_P84
+bit 71 I ? IPAD33
+bit 72 C 1 *
+bit 73 O ? IO_P85 72 1 Z
+bit 74 I ? IO_P85
+bit 75 C 1 *
+bit 76 O ? IO_P86 75 1 Z
+bit 77 I ? IO_P86
+bit 78 C 1 *
+bit 79 O ? IO_P88 78 1 Z
+bit 80 I ? IO_P88
+bit 81 C 1 *
+bit 82 O ? IO_P89 81 1 Z
+bit 83 I ? IO_P89
+bit 84 O ? *
+bit 85 O 1 *
+bit 86 O ? *
+bit 87 O ? *
+bit 88 C 1 *
+bit 89 O ? IO_P90 88 1 Z
+bit 90 I ? IO_P90
+bit 91 O 1 *
+bit 92 O ? *
+bit 93 O ? *
+bit 94 O 1 *
+bit 95 O ? *
+bit 96 O ? *
+bit 97 O ? *
+bit 98 O 1 *
+bit 99 O ? *
+bit 100 O ? *
+bit 101 O 1 *
+bit 102 O ? *
+bit 103 O ? *
+bit 104 O 1 *
+bit 105 O ? *
+bit 106 O ? *
+bit 107 O 1 *
+bit 108 O ? *
+bit 109 O ? *
+bit 110 O ? *
+bit 111 O 1 *
+bit 112 O ? *
+bit 113 O ? *
+bit 114 O 1 *
+bit 115 O ? *
+bit 116 O ? *
+bit 117 O 1 *
+bit 118 O ? *
+bit 119 O ? *
+bit 120 O 1 *
+bit 121 O ? *
+bit 122 O ? *
+bit 123 O ? *
+bit 124 C 1 *
+bit 125 O ? IO_P93 124 1 Z
+bit 126 I ? IO_P93
+bit 127 C 1 *
+bit 128 O ? IO_P94 127 1 Z
+bit 129 I ? IO_P94
+bit 130 O 1 *
+bit 131 O ? *
+bit 132 O ? *
+bit 133 O 1 *
+bit 134 O ? *
+bit 135 O ? *
+bit 136 O ? *
+bit 137 O 1 *
+bit 138 O ? *
+bit 139 O ? *
+bit 140 O 1 *
+bit 141 O ? *
+bit 142 O ? *
+bit 143 O 1 *
+bit 144 O ? *
+bit 145 O ? *
+bit 146 O 1 *
+bit 147 O ? *
+bit 148 O ? *
+bit 149 I ? IPAD3
+bit 150 C 1 *
+bit 151 O ? IO_P98 150 1 Z
+bit 152 I ? IO_P98
+bit 153 O 1 *
+bit 154 O 1 *
+bit 155 O 1 *
+bit 156 O 1 *
+bit 157 C 1 *
+bit 158 O ? IO_P3 157 1 Z
+bit 159 I ? IO_P3
+bit 160 C 1 *
+bit 161 O ? IO_P4 160 1 Z
+bit 162 I ? IO_P4
+bit 163 O 1 *
+bit 164 O ? *
+bit 165 O ? *
+bit 166 O 1 *
+bit 167 O ? *
+bit 168 O ? *
+bit 169 C 1 *
+bit 170 O ? IO_P5 169 1 Z
+bit 171 I ? IO_P5
+bit 172 C 1 *
+bit 173 O ? IO_P6 172 1 Z
+bit 174 I ? IO_P6
+bit 175 O ? *
+bit 176 I ? IPAD241
+bit 177 O 1 *
+bit 178 O ? *
+bit 179 O ? *
+bit 180 O 1 *
+bit 181 O ? *
+bit 182 O ? *
+bit 183 O 1 *
+bit 184 O ? *
+bit 185 O ? *
+bit 186 O 1 *
+bit 187 O ? *
+bit 188 O ? *
+bit 189 O 1 *
+bit 190 O ? *
+bit 191 O ? *
+bit 192 O 1 *
+bit 193 O ? *
+bit 194 O ? *
+bit 195 O ? *
+bit 196 O ? *
+bit 197 O 1 *
+bit 198 O ? *
+bit 199 O ? *
+bit 200 O 1 *
+bit 201 O ? *
+bit 202 O ? *
+bit 203 O 1 *
+bit 204 O ? *
+bit 205 O ? *
+bit 206 O 1 *
+bit 207 O ? *
+bit 208 O ? *
+bit 209 O 1 *
+bit 210 O ? *
+bit 211 O ? *
+bit 212 O 1 *
+bit 213 O ? *
+bit 214 O ? *
+bit 215 O ? *
+bit 216 O ? *
+bit 217 O 1 *
+bit 218 O ? *
+bit 219 O ? *
+bit 220 O 1 *
+bit 221 O ? *
+bit 222 O ? *
+bit 223 C 1 *
+bit 224 O ? IO_P9 223 1 Z
+bit 225 I ? IO_P9
+bit 226 C 1 *
+bit 227 O ? IO_P10 226 1 Z
+bit 228 I ? IO_P10
+bit 229 C 1 *
+bit 230 O ? IO_P12 229 1 Z
+bit 231 I ? IO_P12
+bit 232 C 1 *
+bit 233 O ? IO_P13 232 1 Z
+bit 234 I ? IO_P13
+bit 235 O ? *
+bit 236 O ? *
+bit 237 O 1 *
+bit 238 O ? *
+bit 239 O ? *
+bit 240 O 1 *
+bit 241 O ? *
+bit 242 O ? *
+bit 243 C 1 *
+bit 244 O ? IO_P15 243 1 Z
+bit 245 I ? IO_P15
+bit 246 C 1 *
+bit 247 O ? IO_P16 246 1 Z
+bit 248 I ? IO_P16
+bit 249 O 1 *
+bit 250 O ? *
+bit 251 O ? *
+bit 252 O 1 *
+bit 253 O ? *
+bit 254 O ? *
+bit 255 O ? *
+bit 256 O ? *
+bit 257 O 1 *
+bit 258 O ? *
+bit 259 O ? *
+bit 260 O 1 *
+bit 261 O ? *
+bit 262 O ? *
+bit 263 O 1 *
+bit 264 O ? *
+bit 265 O ? *
+bit 266 O 1 *
+bit 267 O ? *
+bit 268 O ? *
+bit 269 O 1 *
+bit 270 O ? *
+bit 271 O ? *
+bit 272 O 1 *
+bit 273 O ? *
+bit 274 O ? *
+bit 275 O ? *
+bit 276 O ? *
+bit 277 O 1 *
+bit 278 O ? *
+bit 279 O ? *
+bit 280 O 1 *
+bit 281 O ? *
+bit 282 O ? *
+bit 283 O 1 *
+bit 284 O ? *
+bit 285 O ? *
+bit 286 O 1 *
+bit 287 O ? *
+bit 288 O ? *
+bit 289 O 1 *
+bit 290 O ? *
+bit 291 O ? *
+bit 292 O 1 *
+bit 293 O ? *
+bit 294 O ? *
+bit 295 O ? *
+bit 296 O ? *
+bit 297 O 1 *
+bit 298 O ? *
+bit 299 O ? *
+bit 300 O 1 *
+bit 301 O ? *
+bit 302 O ? *
+bit 303 O 1 *
+bit 304 O ? *
+bit 305 O ? *
+bit 306 O 1 *
+bit 307 O ? *
+bit 308 O ? *
+bit 309 C 1 *
+bit 310 O ? IO_P19 309 1 Z
+bit 311 I ? IO_P19
+bit 312 C 1 *
+bit 313 O ? IO_P20 312 1 Z
+bit 314 I ? IO_P20
+bit 315 I ? IPAD186
+bit 316 O ? *
+bit 317 C 1 *
+bit 318 O ? IO_P23 317 1 Z
+bit 319 I ? IO_P23
+bit 320 C 1 *
+bit 321 O ? IO_P25 320 1 Z
+bit 322 I ? IO_P25
+bit 323 O ? *
+bit 324 C 1 *
+bit 325 O ? IO_P24 324 1 Z
+bit 326 I ? IO_P24
+bit 327 C 1 *
+bit 328 O ? IO_P27 327 1 Z
+bit 329 I ? IO_P27
+bit 330 C 1 *
+bit 331 O ? IO_P28 330 1 Z
+bit 332 I ? IO_P28
+bit 333 C 1 *
+bit 334 O ? IO_P29 333 1 Z
+bit 335 I ? IO_P29
+bit 336 O ? *
+bit 337 O 1 *
+bit 338 O ? *
+bit 339 O ? *
+bit 340 O 1 *
+bit 341 O ? *
+bit 342 O ? *
+bit 343 C 1 *
+bit 344 O ? IO_P30 343 1 Z
+bit 345 I ? IO_P30
+bit 346 C 1 *
+bit 347 O ? IO_P31 346 1 Z
+bit 348 I ? IO_P31
+bit 349 O ? *
+bit 350 C 1 *
+bit 351 O ? IO_P32 350 1 Z
+bit 352 I ? IO_P32
+bit 353 C 1 *
+bit 354 O ? IO_P33 353 1 Z
+bit 355 I ? IO_P33
+bit 356 O 1 *
+bit 357 O ? *
+bit 358 O ? *
+bit 359 O 1 *
+bit 360 O ? *
+bit 361 O ? *
+bit 362 O ? *
+bit 363 C 1 *
+bit 364 O ? IO_P34 363 1 Z
+bit 365 I ? IO_P34
+bit 366 C 1 *
+bit 367 O ? IO_P35 366 1 Z
+bit 368 I ? IO_P35
+bit 369 O 1 *
+bit 370 O ? *
+bit 371 O ? *
+bit 372 O 1 *
+bit 373 O ? *
+bit 374 O ? *
+bit 375 O ? *
+bit 376 C 1 *
+bit 377 O ? IO_P36 376 1 Z
+bit 378 I ? IO_P36
+bit 379 C 1 *
+bit 380 O ? IO_P37 379 1 Z
+bit 381 I ? IO_P37
+bit 382 O 1 *
+bit 383 O ? *
+bit 384 O ? *
+bit 385 O 1 *
+bit 386 O ? *
+bit 387 O ? *
+bit 388 I ? IPAD157
+bit 389 C 1 *
+bit 390 O ? IO_P40 389 1 Z
+bit 391 I ? IO_P40
+bit 392 C 1 *
+bit 393 O ? IO_P41 392 1 Z
+bit 394 I ? IO_P41
+bit 395 C 1 *
+bit 396 O ? IO_P43 395 1 Z
+bit 397 I ? IO_P43
+bit 398 C 1 *
+bit 399 O ? IO_P44 398 1 Z
+bit 400 I ? IO_P44
+bit 401 O ? *
+bit 402 O 1 *
+bit 403 O ? *
+bit 404 O ? *
+bit 405 O 1 *
+bit 406 O ? *
+bit 407 O ? *
+bit 408 O 1 *
+bit 409 O ? *
+bit 410 O ? *
+bit 411 O 1 *
+bit 412 O ? *
+bit 413 O ? *
+bit 414 O ? *
+bit 415 O 1 *
+bit 416 O ? *
+bit 417 O ? *
+bit 418 C 1 *
+bit 419 O ? IO_P46 418 1 Z
+bit 420 I ? IO_P46
+bit 421 O 1 *
+bit 422 O ? *
+bit 423 O ? *
+bit 424 O 1 *
+bit 425 O ? *
+bit 426 O ? *
+bit 427 O ? *
+bit 428 O 1 *
+bit 429 O ? *
+bit 430 O ? *
+bit 431 O 1 *
+bit 432 O ? *
+bit 433 O ? *
+bit 434 O 1 *
+bit 435 O ? *
+bit 436 O ? *
+bit 437 O 1 *
+bit 438 O ? *
+bit 439 O ? *
+bit 440 O ? *
+bit 441 C 1 *
+bit 442 O ? IO_P48 441 1 Z
+bit 443 I ? IO_P48
+bit 444 C 1 *
+bit 445 O ? IO_P49 444 1 Z
+bit 446 I ? IO_P49
+bit 447 O 1 *
+bit 448 O ? *
+bit 449 O ? *
+bit 450 O 1 *
+bit 451 O ? *
+bit 452 O ? *
+bit 453 O ? *
+bit 454 C 1 *
+bit 455 O ? IO_P50 454 1 Z
+bit 456 I ? IO_P50
+bit 457 C 1 *
+bit 458 O ? IO_P52 457 1 Z
+bit 459 I ? IO_P52
+bit 460 O 1 *
+bit 461 O ? *
+bit 462 O ? *
+bit 463 O 1 *
+bit 464 O ? *
+bit 465 O ? *
+bit 466 O ? *
+bit 467 C 1 *
+bit 468 O ? IO_P51 467 1 Z
+bit 469 I ? IO_P51
+bit 470 C 1 *
+bit 471 O ? IO_P53 470 1 Z
+bit 472 I ? IO_P53
+bit 473 C 1 *
+bit 474 O ? DONE 473 1 Z
+bit 475 I ? DONE
+bit 476 O ? *
+bit 477 O 1 *
+bit 478 O ? *
+bit 479 O ? *
+bit 480 O 1 *
+bit 481 O ? *
+bit 482 O ? *
+bit 483 O 1 *
+bit 484 O ? *
+bit 485 O ? *
+bit 486 O 1 *
+bit 487 O ? *
+bit 488 O ? *
+bit 489 C 1 *
+bit 490 O ? IO_P56 489 1 Z
+bit 491 I ? IO_P56
+bit 492 C 1 *
+bit 493 O ? IO_P57 492 1 Z
+bit 494 I ? IO_P57
+bit 495 O ? *
+bit 496 O ? *
+bit 497 O 1 *
+bit 498 O ? *
+bit 499 O ? *
+bit 500 O 1 *
+bit 501 O ? *
+bit 502 O ? *
+bit 503 O 1 *
+bit 504 O ? *
+bit 505 O ? *
+bit 506 O 1 *
+bit 507 O ? *
+bit 508 O ? *
+bit 509 O 1 *
+bit 510 O ? *
+bit 511 O ? *
+bit 512 O 1 *
+bit 513 O ? *
+bit 514 O ? *
+bit 515 O ? *
+bit 516 O ? *
+bit 517 O 1 *
+bit 518 O ? *
+bit 519 O ? *
+bit 520 O 1 *
+bit 521 O ? *
+bit 522 O ? *
+bit 523 O 1 *
+bit 524 O ? *
+bit 525 O ? *
+bit 526 O 1 *
+bit 527 O ? *
+bit 528 O ? *
+bit 529 O 1 *
+bit 530 O ? *
+bit 531 O ? *
+bit 532 O 1 *
+bit 533 O ? *
+bit 534 O ? *
+bit 535 O ? *
+bit 536 O ? *
+bit 537 O 1 *
+bit 538 O ? *
+bit 539 O ? *
+bit 540 O 1 *
+bit 541 O ? *
+bit 542 O ? *
+bit 543 C 1 *
+bit 544 O ? IO_P59 543 1 Z
+bit 545 I ? IO_P59
+bit 546 C 1 *
+bit 547 O ? IO_P60 546 1 Z
+bit 548 I ? IO_P60
+bit 549 C 1 *
+bit 550 O ? IO_P61 549 1 Z
+bit 551 I ? IO_P61
+bit 552 C 1 *
+bit 553 O ? IO_P62 552 1 Z
+bit 554 I ? IO_P62
+bit 555 O ? *
+bit 556 O ? *
+bit 557 O 1 *
+bit 558 O ? *
+bit 559 O ? *
+bit 560 O 1 *
+bit 561 O ? *
+bit 562 O ? *
+bit 563 C 1 *
+bit 564 O ? IO_P64 563 1 Z
+bit 565 I ? IO_P64
+bit 566 C 1 *
+bit 567 O ? IO_P65 566 1 Z
+bit 568 I ? IO_P65
+bit 569 O 1 *
+bit 570 O ? *
+bit 571 O ? *
+bit 572 O 1 *
+bit 573 O ? *
+bit 574 O ? *
+bit 575 O ? *
+bit 576 O ? *
+bit 577 O 1 *
+bit 578 O ? *
+bit 579 O ? *
+bit 580 O 1 *
+bit 581 O ? *
+bit 582 O ? *
+bit 583 O 1 *
+bit 584 O ? *
+bit 585 O ? *
+bit 586 O 1 *
+bit 587 O ? *
+bit 588 O ? *
+bit 589 O 1 *
+bit 590 O ? *
+bit 591 O ? *
+bit 592 O 1 *
+bit 593 O ? *
+bit 594 O ? *
+bit 595 O ? *
+bit 596 O ? *
+bit 597 O 1 *
+bit 598 O ? *
+bit 599 O ? *
+bit 600 O 1 *
+bit 601 O ? *
+bit 602 O ? *
+bit 603 O 1 *
+bit 604 O ? *
+bit 605 O ? *
+bit 606 O 1 *
+bit 607 O ? *
+bit 608 O ? *
+bit 609 O 1 *
+bit 610 O ? *
+bit 611 O ? *
+bit 612 O 1 *
+bit 613 O ? *
+bit 614 O ? *
+bit 615 I ? IPAD70
+bit 616 O ? *
+bit 617 C 1 *
+bit 618 O ? IO_P70 617 1 Z
+bit 619 I ? IO_P70
+bit 620 C 1 *
+bit 621 O ? IO_P71 620 1 Z
+bit 622 I ? IO_P71
+bit 623 O 1 *
+bit 624 O ? *
+bit 625 O ? *
+bit 626 O 1 *
+bit 627 O ? *
+bit 628 O ? *
+bit 629 C 1 *
+bit 630 O ? IO_P72 629 1 Z
+bit 631 I ? IO_P72
+bit 632 C 1 *
+bit 633 O ? IO_P73 632 1 Z
+bit 634 I ? IO_P73
+bit 635 O ? *
+bit 636 O ? *

@@ -1,0 +1,261 @@
+signal NC(1)
+signal NC(2)
+signal NC(3)
+signal NC(4)
+signal NC(5)
+signal NC(6)
+signal NC(7)
+signal NC(8)
+signal NC(9)
+signal NC(10)
+signal NC(11)
+signal NC(12)
+signal NC(13)
+signal NC(14)
+signal NC(15)
+signal NC(16)
+signal NC(17)
+signal NC(18)
+signal NC(19)
+signal NC(20)
+signal NC(21)
+signal NC(22)
+signal NC(23)
+signal NC(24)
+signal NC(25)
+signal NC(26)
+signal POR_TEST
+signal POR_RESET
+signal POR_BYPASS
+signal LVCC(1)
+signal LVCC(2)
+signal LVCC(3)
+signal LVCC(4)
+signal LVCC(5)
+signal LVCC(6)
+signal LVCC(7)
+signal LVCC(8)
+signal HVCC(1)
+signal HVCC(2)
+signal HVCC(3)
+signal HVCC(4)
+signal HVCC(5)
+signal HVCC(6)
+signal HVCC(7)
+signal HVCC(8)
+signal GND(1)
+signal GND(2)
+signal GND(3)
+signal GND(4)
+signal GND(5)
+signal GND(6)
+signal GND(7)
+signal GND(8)
+signal GND(9)
+signal GND(10)
+signal GND(11)
+signal GND(12)
+signal GND(13)
+signal GND(14)
+signal GND(15)
+signal GND(16)
+signal GND(17)
+signal GND(18)
+signal TSTTDO
+signal TSTTMS
+signal TSTTCK
+signal TSTTDI
+signal CFGINIT_n
+signal CFGTDO
+signal CFGTMS
+signal CFGTCK
+signal CFGTDI
+signal CFGMODE
+signal CFGADDR2
+signal CFGADDR1
+signal CFGADDR0
+signal CFCD2_n
+signal CFCD1_n
+signal CFRDYNBSY
+signal CFWAIT_n
+signal CFOE_n
+signal CFWE_n
+signal CFREG_n
+signal CFCE2_n
+signal CFCE1_n
+signal CFD15
+signal CFD14
+signal CFD13
+signal CFD12
+signal CFD11
+signal CFD10
+signal CFD9
+signal CFD8
+signal CFD7
+signal CFD6
+signal CFD5
+signal CFD4
+signal CFD3
+signal CFD2
+signal CFD1
+signal CFD0
+signal CFA10
+signal CFA9
+signal CFA8
+signal CFA7
+signal CFA6
+signal CFA5
+signal CFA4
+signal CFA3
+signal CFA2
+signal CFA1
+signal CFA0
+signal MPD15
+signal MPD14
+signal MPD13
+signal MPD12
+signal MPD11
+signal MPD10
+signal MPD9
+signal MPD8
+signal MPD7
+signal MPD6
+signal MPD5
+signal MPD4
+signal MPD3
+signal MPD2
+signal MPD1
+signal MPD0
+signal MPA6
+signal MPA5
+signal MPA4
+signal MPA3
+signal MPA2
+signal MPA1
+signal MPA0
+signal MPBRDY
+signal MPIRQ
+signal MPOE_n
+signal MPWE_n
+signal MPCE_n
+signal ERRLED_n
+signal STATLED_n
+signal RESET_n
+signal CLK
+instruction length 8
+register DIR 32
+register BSR 109
+register BYPASS 1
+instruction IDCODE 00001001 DIR
+instruction EXTEST 00000000 BSR
+instruction SAMPLE/PRELOAD 00000001 BSR
+instruction BYPASS 11111111 BYPASS
+bit 0 I ? CFGINIT_n
+bit 1 O 0 *
+bit 2 I ? CFGMODE
+bit 3 I ? CFGADDR2
+bit 4 I ? CFGADDR1
+bit 5 I ? CFGADDR0
+bit 6 I ? CFCD2_n
+bit 7 I ? CFCD1_n
+bit 8 I ? CFRDYNBSY
+bit 9 I ? CFWAIT_n
+bit 10 O ? CFOE_n
+bit 11 O ? CFWE_n
+bit 12 O ? CFREG_n
+bit 13 O ? CFCE2_n
+bit 14 O ? CFCE1_n
+bit 15 C 0 *
+bit 16 O ? CFD15 15 0 Z
+bit 17 O ? CFD14 15 0 Z
+bit 18 O ? CFD13 15 0 Z
+bit 19 O ? CFD12 15 0 Z
+bit 20 O ? CFD11 15 0 Z
+bit 21 O ? CFD10 15 0 Z
+bit 22 O ? CFD9 15 0 Z
+bit 23 O ? CFD8 15 0 Z
+bit 24 O ? CFD7 15 0 Z
+bit 25 O ? CFD6 15 0 Z
+bit 26 O ? CFD5 15 0 Z
+bit 27 O ? CFD4 15 0 Z
+bit 28 O ? CFD3 15 0 Z
+bit 29 O ? CFD2 15 0 Z
+bit 30 O ? CFD1 15 0 Z
+bit 31 O ? CFD0 15 0 Z
+bit 32 I ? CFD15
+bit 33 I ? CFD14
+bit 34 I ? CFD13
+bit 35 I ? CFD12
+bit 36 I ? CFD11
+bit 37 I ? CFD10
+bit 38 I ? CFD9
+bit 39 I ? CFD8
+bit 40 I ? CFD7
+bit 41 I ? CFD6
+bit 42 I ? CFD5
+bit 43 I ? CFD4
+bit 44 I ? CFD3
+bit 45 I ? CFD2
+bit 46 I ? CFD1
+bit 47 I ? CFD0
+bit 48 O ? CFA10
+bit 49 O ? CFA9
+bit 50 O ? CFA8
+bit 51 O ? CFA7
+bit 52 O ? CFA6
+bit 53 O ? CFA5
+bit 54 O ? CFA4
+bit 55 O ? CFA3
+bit 56 O ? CFA2
+bit 57 O ? CFA1
+bit 58 O ? CFA0
+bit 59 C 0 *
+bit 60 C 0 *
+bit 61 O ? MPD15 59 0 Z
+bit 62 O ? MPD14 59 0 Z
+bit 63 O ? MPD13 59 0 Z
+bit 64 O ? MPD12 59 0 Z
+bit 65 O ? MPD11 59 0 Z
+bit 66 O ? MPD10 59 0 Z
+bit 67 O ? MPD9 59 0 Z
+bit 68 O ? MPD8 59 0 Z
+bit 69 O ? MPD7 60 0 Z
+bit 70 O ? MPD6 60 0 Z
+bit 71 O ? MPD5 60 0 Z
+bit 72 O ? MPD4 60 0 Z
+bit 73 O ? MPD3 60 0 Z
+bit 74 O ? MPD2 60 0 Z
+bit 75 O ? MPD1 60 0 Z
+bit 76 O ? MPD0 60 0 Z
+bit 77 I ? MPD15
+bit 78 I ? MPD14
+bit 79 I ? MPD13
+bit 80 I ? MPD12
+bit 81 I ? MPD11
+bit 82 I ? MPD10
+bit 83 I ? MPD9
+bit 84 I ? MPD8
+bit 85 I ? MPD7
+bit 86 I ? MPD6
+bit 87 I ? MPD5
+bit 88 I ? MPD4
+bit 89 I ? MPD3
+bit 90 I ? MPD2
+bit 91 I ? MPD1
+bit 92 I ? MPD0
+bit 93 I ? MPA6
+bit 94 I ? MPA5
+bit 95 I ? MPA4
+bit 96 I ? MPA3
+bit 97 I ? MPA2
+bit 98 I ? MPA1
+bit 99 I ? MPA0
+bit 100 O ? MPBRDY
+bit 101 O ? MPIRQ
+bit 102 I ? MPOE_n
+bit 103 I ? MPWE_n
+bit 104 I ? MPCE_n
+bit 105 O 1 ERRLED_n 105 1 Z
+bit 106 O 1 STATLED_n 106 1 Z
+bit 107 I ? RESET_n
+bit 108 I ? CLK

@@ -1,0 +1,87 @@
+signal DNC(1)
+signal DNC(2)
+signal DNC(3)
+signal DNC(4)
+signal DNC(5)
+signal DNC(6)
+signal VCCO
+signal VCCJ
+signal VCCINT
+signal GND
+signal TMS
+signal TDO
+signal TDI
+signal TCK
+signal OE_RESET
+signal D0
+signal CLK
+signal CF
+signal CEO
+signal CE
+instruction length 8
+register DIR 32
+register USERCODE 32
+register BSR 25
+register BYPASS 1
+register XSC_STATUS 8
+register ISC_INFO 8
+register USERCODEV 32
+register DATA3 6
+register DATA1 1048576
+register DATA0 2048
+register ADDRESS 16
+register ISPENABLE 6
+register ISC_DEFAULT 1
+instruction ISCCLRSTATUS 11110100 XSC_STATUS
+instruction ISCTESTSTATUS 11100011 XSC_STATUS
+instruction ISC_READ_INFO 11110001 ISC_INFO
+instruction SERASE 00001010 ADDRESS
+instruction FBLANK6 11100100 USERCODEV
+instruction FBLANK3 11100001 DATA3
+instruction FBLANK0 11100101 DATA1
+instruction FVFY6 11100110 USERCODEV
+instruction FVFY3 11100010 DATA3
+instruction FVFY1 11111000 DATA1
+instruction FDATA3 11110011 DATA3
+instruction FVFY0 11101111 DATA0
+instruction FDATA0 11101101 DATA0
+instruction FADDR 11101011 ADDRESS
+instruction FERASE 11101100 ADDRESS
+instruction FPGM 11101010 ISC_DEFAULT
+instruction NORMRST 11110000 ISC_DEFAULT
+instruction ISPENC 11101001 ISPENABLE
+instruction ISPEN 11101000 ISPENABLE
+instruction CONFIG 11101110 BYPASS
+instruction CLAMP 11111010 BYPASS
+instruction HIGHZ 11111100 BYPASS
+instruction USERCODE 11111101 DIR
+instruction IDCODE 11111110 DIR
+instruction EXTEST 00000000 BSR
+instruction PRELOAD 00000001 BSR
+instruction SAMPLE/PRELOAD 00000001 BSR
+instruction BYPASS 11111111 BYPASS
+bit 0 I ? CLK
+bit 1 O 0 *
+bit 2 O ? *
+bit 3 C 0 *
+bit 4 O ? D0 3 0 Z
+bit 5 O 0 *
+bit 6 O ? *
+bit 7 O 0 *
+bit 8 O ? *
+bit 9 O 0 *
+bit 10 O ? *
+bit 11 C 0 *
+bit 12 O ? CEO 11 0 Z
+bit 13 O 0 *
+bit 14 O ? *
+bit 15 I ? CE
+bit 16 O 0 *
+bit 17 O ? *
+bit 18 C 0 *
+bit 19 O ? OE_RESET 18 0 Z
+bit 20 I ? OE_RESET
+bit 21 C 0 *
+bit 22 O ? CF 21 0 Z
+bit 23 O 0 *
+bit 24 O ? *
