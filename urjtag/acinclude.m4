@@ -157,3 +157,13 @@ dnl
 m4_ifndef([m4_ifnblank],[dnl
 m4_define([m4_ifnblank], [m4_ifval(m4_normalize([$1]), [$2], [$3])])
 ])dnl
+
+
+dnl LT_INIT
+dnl -------
+dnl
+dnl this was added in libtool-2
+dnl
+m4_ifndef([LT_INIT],[dnl
+m4_define([LT_INIT],[LT_AM_PROG_LIBTOOL])
+])dnl

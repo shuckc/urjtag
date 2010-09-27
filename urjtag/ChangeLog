@@ -9,6 +9,9 @@
     style of all other Blackfin parts.
   * src/bus/bf548_ezkit.c (bf548_ezkit_bus_new): Update signal names.
 
+  * configure.ac: Change to newer libtool macro (LT_INIT) to avoid warnings.
+  * acinclude.m4: Redirect LT_INIT to AC_PROG_LIBTOOL for older libtools.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept
