@@ -90,13 +90,13 @@ bf548_ezkit_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     for (i = 3; i < 9; i++)
     {
-        sprintf (buff, "PORTH_%d", i + 5);
+        sprintf (buff, "PH%d", i + 5);
         failed |= urj_bus_generic_attach_sig (part, &(ADDR[i]), buff);
     }
 
     for (i = 9; i < 24; i++)
     {
-        sprintf (buff, "PORTI_%d", i - 9);
+        sprintf (buff, "PI%d", i - 9);
         failed |= urj_bus_generic_attach_sig (part, &(ADDR[i]), buff);
     }
 
@@ -114,7 +114,7 @@ bf548_ezkit_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     failed |= urj_bus_generic_attach_sig (part, &(DCS0), "CS0_B");
 
-    failed |= urj_bus_generic_attach_sig (part, &(NCE), "PORTJ_1");
+    failed |= urj_bus_generic_attach_sig (part, &(NCE), "PJ1");
 
     if (failed)
     {

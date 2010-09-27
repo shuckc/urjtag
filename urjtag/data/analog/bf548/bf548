@@ -1,156 +1,156 @@
-signal PORTA_0
-signal PORTA_1
-signal PORTA_2
-signal PORTA_3
-signal PORTA_4
-signal PORTA_5
-signal PORTA_6
-signal PORTA_7
-signal PORTA_8
-signal PORTA_9
-signal PORTA_10
-signal PORTA_11
-signal PORTA_12
-signal PORTA_13
-signal PORTA_14
-signal PORTA_15
-signal PORTB_0
-signal PORTB_1
-signal PORTB_2
-signal PORTB_3
-signal PORTB_4
-signal PORTB_5
-signal PORTB_6
-signal PORTB_7
-signal PORTB_8
-signal PORTB_9
-signal PORTB_10
-signal PORTB_11
-signal PORTB_12
-signal PORTB_13
-signal PORTB_14
-signal PORTC_0
-signal PORTC_1
-signal PORTC_2
-signal PORTC_3
-signal PORTC_4
-signal PORTC_5
-signal PORTC_6
-signal PORTC_7
-signal PORTC_8
-signal PORTC_9
-signal PORTC_10
-signal PORTC_11
-signal PORTC_12
-signal PORTC_13
-signal PORTD_0
-signal PORTD_1
-signal PORTD_2
-signal PORTD_3
-signal PORTD_4
-signal PORTD_5
-signal PORTD_6
-signal PORTD_7
-signal PORTD_8
-signal PORTD_9
-signal PORTD_10
-signal PORTD_11
-signal PORTD_12
-signal PORTD_13
-signal PORTD_14
-signal PORTD_15
-signal PORTE_0
-signal PORTE_1
-signal PORTE_2
-signal PORTE_3
-signal PORTE_4
-signal PORTE_5
-signal PORTE_6
-signal PORTE_7
-signal PORTE_8
-signal PORTE_9
-signal PORTE_10
-signal PORTE_11
-signal PORTE_12
-signal PORTE_13
-signal PORTE_14
-signal PORTE_15
-signal PORTF_0
-signal PORTF_1
-signal PORTF_2
-signal PORTF_3
-signal PORTF_4
-signal PORTF_5
-signal PORTF_6
-signal PORTF_7
-signal PORTF_8
-signal PORTF_9
-signal PORTF_10
-signal PORTF_11
-signal PORTF_12
-signal PORTF_13
-signal PORTF_14
-signal PORTF_15
-signal PORTG_0
-signal PORTG_1
-signal PORTG_2
-signal PORTG_3
-signal PORTG_4
-signal PORTG_5
-signal PORTG_6
-signal PORTG_7
-signal PORTG_8
-signal PORTG_9
-signal PORTG_10
-signal PORTG_11
-signal PORTG_12
-signal PORTG_13
-signal PORTG_14
-signal PORTG_15
-signal PORTH_0
-signal PORTH_1
-signal PORTH_2
-signal PORTH_3
-signal PORTH_4
-signal PORTH_5
-signal PORTH_6
-signal PORTH_7
-signal PORTH_8
-signal PORTH_9
-signal PORTH_10
-signal PORTH_11
-signal PORTH_12
-signal PORTH_13
-signal PORTI_0
-signal PORTI_1
-signal PORTI_2
-signal PORTI_3
-signal PORTI_4
-signal PORTI_5
-signal PORTI_6
-signal PORTI_7
-signal PORTI_8
-signal PORTI_9
-signal PORTI_10
-signal PORTI_11
-signal PORTI_12
-signal PORTI_13
-signal PORTI_14
-signal PORTI_15
-signal PORTJ_0
-signal PORTJ_1
-signal PORTJ_2
-signal PORTJ_3
-signal PORTJ_4
-signal PORTJ_5
-signal PORTJ_6
-signal PORTJ_7
-signal PORTJ_8
-signal PORTJ_9
-signal PORTJ_10
-signal PORTJ_11
-signal PORTJ_12
-signal PORTJ_13
+signal PA0
+signal PA1
+signal PA2
+signal PA3
+signal PA4
+signal PA5
+signal PA6
+signal PA7
+signal PA8
+signal PA9
+signal PA10
+signal PA11
+signal PA12
+signal PA13
+signal PA14
+signal PA15
+signal PB0
+signal PB1
+signal PB2
+signal PB3
+signal PB4
+signal PB5
+signal PB6
+signal PB7
+signal PB8
+signal PB9
+signal PB10
+signal PB11
+signal PB12
+signal PB13
+signal PB14
+signal PC0
+signal PC1
+signal PC2
+signal PC3
+signal PC4
+signal PC5
+signal PC6
+signal PC7
+signal PC8
+signal PC9
+signal PC10
+signal PC11
+signal PC12
+signal PC13
+signal PD0
+signal PD1
+signal PD2
+signal PD3
+signal PD4
+signal PD5
+signal PD6
+signal PD7
+signal PD8
+signal PD9
+signal PD10
+signal PD11
+signal PD12
+signal PD13
+signal PD14
+signal PD15
+signal PE0
+signal PE1
+signal PE2
+signal PE3
+signal PE4
+signal PE5
+signal PE6
+signal PE7
+signal PE8
+signal PE9
+signal PE10
+signal PE11
+signal PE12
+signal PE13
+signal PE14
+signal PE15
+signal PF0
+signal PF1
+signal PF2
+signal PF3
+signal PF4
+signal PF5
+signal PF6
+signal PF7
+signal PF8
+signal PF9
+signal PF10
+signal PF11
+signal PF12
+signal PF13
+signal PF14
+signal PF15
+signal PG0
+signal PG1
+signal PG2
+signal PG3
+signal PG4
+signal PG5
+signal PG6
+signal PG7
+signal PG8
+signal PG9
+signal PG10
+signal PG11
+signal PG12
+signal PG13
+signal PG14
+signal PG15
+signal PH0
+signal PH1
+signal PH2
+signal PH3
+signal PH4
+signal PH5
+signal PH6
+signal PH7
+signal PH8
+signal PH9
+signal PH10
+signal PH11
+signal PH12
+signal PH13
+signal PI0
+signal PI1
+signal PI2
+signal PI3
+signal PI4
+signal PI5
+signal PI6
+signal PI7
+signal PI8
+signal PI9
+signal PI10
+signal PI11
+signal PI12
+signal PI13
+signal PI14
+signal PI15
+signal PJ0
+signal PJ1
+signal PJ2
+signal PJ3
+signal PJ4
+signal PJ5
+signal PJ6
+signal PJ7
+signal PJ8
+signal PJ9
+signal PJ10
+signal PJ11
+signal PJ12
+signal PJ13
 signal ATAPI_PDIAG
 signal ABE0B
 signal ABE1B
@@ -424,229 +424,229 @@ instruction EMUDAT40_SCAN 10100 EMUDAT40
 instruction EMUPC_SCAN 11110 EMUPC
 
 bit 635 C 0 *
-bit 634 O 1 PORTA_10 635 0 Z
-bit 633 I 1 PORTA_10
+bit 634 O 1 PA10 635 0 Z
+bit 633 I 1 PA10
 bit 632 C 0 *
-bit 631 O 1 PORTA_11 632 0 Z
-bit 630 I 1 PORTA_11
+bit 631 O 1 PA11 632 0 Z
+bit 630 I 1 PA11
 bit 629 C 0 *
-bit 628 O 1 PORTA_12 629 0 Z
-bit 627 I 1 PORTA_12
+bit 628 O 1 PA12 629 0 Z
+bit 627 I 1 PA12
 bit 626 C 0 *
-bit 625 O 1 PORTA_13 626 0 Z
-bit 624 I 1 PORTA_13
+bit 625 O 1 PA13 626 0 Z
+bit 624 I 1 PA13
 bit 623 C 0 *
-bit 622 O 1 PORTA_14 623 0 Z
-bit 621 I 1 PORTA_14
+bit 622 O 1 PA14 623 0 Z
+bit 621 I 1 PA14
 bit 620 C 0 *
-bit 619 O 1 PORTA_15 620 0 Z
-bit 618 I 1 PORTA_15
+bit 619 O 1 PA15 620 0 Z
+bit 618 I 1 PA15
 bit 617 C 0 *
-bit 616 O 1 PORTB_12 617 0 Z
-bit 615 I 1 PORTB_12
+bit 616 O 1 PB12 617 0 Z
+bit 615 I 1 PB12
 bit 614 C 0 *
-bit 613 O 1 PORTB_13 614 0 Z
-bit 612 I 1 PORTB_13
+bit 613 O 1 PB13 614 0 Z
+bit 612 I 1 PB13
 bit 611 C 0 *
-bit 610 O 1 PORTB_14 611 0 Z
-bit 609 I 1 PORTB_14
+bit 610 O 1 PB14 611 0 Z
+bit 609 I 1 PB14
 bit 608 C 0 *
-bit 607 O 1 PORTB_8 608 0 Z
-bit 606 I 1 PORTB_8
+bit 607 O 1 PB8 608 0 Z
+bit 606 I 1 PB8
 bit 605 C 0 *
-bit 604 O 1 PORTB_9 605 0 Z
-bit 603 I 1 PORTB_9
+bit 604 O 1 PB9 605 0 Z
+bit 603 I 1 PB9
 bit 602 C 0 *
-bit 601 O 1 PORTB_10 602 0 Z
-bit 600 I 1 PORTB_10
+bit 601 O 1 PB10 602 0 Z
+bit 600 I 1 PB10
 bit 599 C 0 *
-bit 598 O 1 PORTB_11 599 0 Z
-bit 597 I 1 PORTB_11
+bit 598 O 1 PB11 599 0 Z
+bit 597 I 1 PB11
 bit 596 C 0 *
-bit 595 O 1 PORTB_4 596 0 Z
-bit 594 I 1 PORTB_4
+bit 595 O 1 PB4 596 0 Z
+bit 594 I 1 PB4
 bit 593 C 0 *
-bit 592 O 1 PORTB_5 593 0 Z
-bit 591 I 1 PORTB_5
+bit 592 O 1 PB5 593 0 Z
+bit 591 I 1 PB5
 bit 590 C 0 *
-bit 589 O 1 PORTB_6 590 0 Z
-bit 588 I 1 PORTB_6
+bit 589 O 1 PB6 590 0 Z
+bit 588 I 1 PB6
 bit 587 C 0 *
-bit 586 O 1 PORTB_7 587 0 Z
-bit 585 I 1 PORTB_7
+bit 586 O 1 PB7 587 0 Z
+bit 585 I 1 PB7
 bit 584 O 1 *
-bit 583 O 1 PORTB_1 583 1 Z
-bit 582 I 1 PORTB_1
+bit 583 O 1 PB1 583 1 Z
+bit 582 I 1 PB1
 bit 581 O 1 *
-bit 580 O 1 PORTB_0 580 1 Z
-bit 579 I 1 PORTB_0
+bit 580 O 1 PB0 580 1 Z
+bit 579 I 1 PB0
 bit 578 C 0 *
-bit 577 O 1 PORTB_2 578 0 Z
-bit 576 I 1 PORTB_2
+bit 577 O 1 PB2 578 0 Z
+bit 576 I 1 PB2
 bit 575 C 0 *
-bit 574 O 1 PORTB_3 575 0 Z
-bit 573 I 1 PORTB_3
+bit 574 O 1 PB3 575 0 Z
+bit 573 I 1 PB3
 bit 572 O 0 *
 bit 571 I 1 BMODE3
 bit 570 I 1 BMODE2
 bit 569 I 1 BMODE1
 bit 568 I 1 BMODE0
 bit 567 C 0 *
-bit 566 O 1 PORTD_14 567 0 Z
-bit 565 I 1 PORTD_14
+bit 566 O 1 PD14 567 0 Z
+bit 565 I 1 PD14
 bit 564 C 0 *
-bit 563 O 1 PORTD_15 564 0 Z
-bit 562 I 1 PORTD_15
+bit 563 O 1 PD15 564 0 Z
+bit 562 I 1 PD15
 bit 561 C 0 *
-bit 560 O 1 PORTD_13 561 0 Z
-bit 559 I 1 PORTD_13
+bit 560 O 1 PD13 561 0 Z
+bit 559 I 1 PD13
 bit 558 C 0 *
-bit 557 O 1 PORTD_12 558 0 Z
-bit 556 I 1 PORTD_12
+bit 557 O 1 PD12 558 0 Z
+bit 556 I 1 PD12
 bit 555 C 0 *
-bit 554 O 1 PORTD_11 555 0 Z
-bit 553 I 1 PORTD_11
+bit 554 O 1 PD11 555 0 Z
+bit 553 I 1 PD11
 bit 552 C 0 *
-bit 551 O 1 PORTD_10 552 0 Z
-bit 550 I 1 PORTD_10
+bit 551 O 1 PD10 552 0 Z
+bit 550 I 1 PD10
 bit 549 C 0 *
-bit 548 O 1 PORTD_9 549 0 Z
-bit 547 I 1 PORTD_9
+bit 548 O 1 PD9 549 0 Z
+bit 547 I 1 PD9
 bit 546 C 0 *
-bit 545 O 1 PORTD_8 546 0 Z
-bit 544 I 1 PORTD_8
+bit 545 O 1 PD8 546 0 Z
+bit 544 I 1 PD8
 bit 543 C 0 *
-bit 542 O 1 PORTD_7 543 0 Z
-bit 541 I 1 PORTD_7
+bit 542 O 1 PD7 543 0 Z
+bit 541 I 1 PD7
 bit 540 C 0 *
-bit 539 O 1 PORTD_6 540 0 Z
-bit 538 I 1 PORTD_6
+bit 539 O 1 PD6 540 0 Z
+bit 538 I 1 PD6
 bit 537 C 0 *
-bit 536 O 1 PORTD_5 537 0 Z
-bit 535 I 1 PORTD_5
+bit 536 O 1 PD5 537 0 Z
+bit 535 I 1 PD5
 bit 534 C 0 *
-bit 533 O 1 PORTD_4 534 0 Z
-bit 532 I 1 PORTD_4
+bit 533 O 1 PD4 534 0 Z
+bit 532 I 1 PD4
 bit 531 C 0 *
-bit 530 O 1 PORTD_3 531 0 Z
-bit 529 I 1 PORTD_3
+bit 530 O 1 PD3 531 0 Z
+bit 529 I 1 PD3
 bit 528 C 0 *
-bit 527 O 1 PORTD_2 528 0 Z
-bit 526 I 1 PORTD_2
+bit 527 O 1 PD2 528 0 Z
+bit 526 I 1 PD2
 bit 525 C 0 *
-bit 524 O 1 PORTD_1 525 0 Z
-bit 523 I 1 PORTD_1
+bit 524 O 1 PD1 525 0 Z
+bit 523 I 1 PD1
 bit 522 C 0 *
-bit 521 O 1 PORTD_0 522 0 Z
-bit 520 I 1 PORTD_0
+bit 521 O 1 PD0 522 0 Z
+bit 520 I 1 PD0
 bit 519 C 0 *
-bit 518 O 1 PORTE_13 519 0 Z
-bit 517 I 1 PORTE_13
+bit 518 O 1 PE13 519 0 Z
+bit 517 I 1 PE13
 bit 516 C 0 *
-bit 515 O 1 PORTE_12 516 0 Z
-bit 514 I 1 PORTE_12
+bit 515 O 1 PE12 516 0 Z
+bit 514 I 1 PE12
 bit 513 C 0 *
-bit 512 O 1 PORTE_11 513 0 Z
-bit 511 I 1 PORTE_11
+bit 512 O 1 PE11 513 0 Z
+bit 511 I 1 PE11
 bit 510 C 0 *
-bit 509 O 1 PORTG_4 510 0 Z
-bit 508 I 1 PORTG_4
+bit 509 O 1 PG4 510 0 Z
+bit 508 I 1 PG4
 bit 507 C 0 *
-bit 506 O 1 PORTG_3 507 0 Z
-bit 505 I 1 PORTG_3
+bit 506 O 1 PG3 507 0 Z
+bit 505 I 1 PG3
 bit 504 C 0 *
-bit 503 O 1 PORTF_15 504 0 Z
-bit 502 I 1 PORTF_15
+bit 503 O 1 PF15 504 0 Z
+bit 502 I 1 PF15
 bit 501 C 0 *
-bit 500 O 1 PORTF_14 501 0 Z
-bit 499 I 1 PORTF_14
+bit 500 O 1 PF14 501 0 Z
+bit 499 I 1 PF14
 bit 498 C 0 *
-bit 497 O 1 PORTF_13 498 0 Z
-bit 496 I 1 PORTF_13
+bit 497 O 1 PF13 498 0 Z
+bit 496 I 1 PF13
 bit 495 C 0 *
-bit 494 O 1 PORTF_12 495 0 Z
-bit 493 I 1 PORTF_12
+bit 494 O 1 PF12 495 0 Z
+bit 493 I 1 PF12
 bit 492 C 0 *
-bit 491 O 1 PORTF_11 492 0 Z
-bit 490 I 1 PORTF_11
+bit 491 O 1 PF11 492 0 Z
+bit 490 I 1 PF11
 bit 489 C 0 *
-bit 488 O 1 PORTF_10 489 0 Z
-bit 487 I 1 PORTF_10
+bit 488 O 1 PF10 489 0 Z
+bit 487 I 1 PF10
 bit 486 C 0 *
-bit 485 O 1 PORTF_9 486 0 Z
-bit 484 I 1 PORTF_9
+bit 485 O 1 PF9 486 0 Z
+bit 484 I 1 PF9
 bit 483 C 0 *
-bit 482 O 1 PORTF_8 483 0 Z
-bit 481 I 1 PORTF_8
+bit 482 O 1 PF8 483 0 Z
+bit 481 I 1 PF8
 bit 480 C 0 *
-bit 479 O 1 PORTF_7 480 0 Z
-bit 478 I 1 PORTF_7
+bit 479 O 1 PF7 480 0 Z
+bit 478 I 1 PF7
 bit 477 C 0 *
-bit 476 O 1 PORTF_6 477 0 Z
-bit 475 I 1 PORTF_6
+bit 476 O 1 PF6 477 0 Z
+bit 475 I 1 PF6
 bit 474 C 0 *
-bit 473 O 1 PORTF_5 474 0 Z
-bit 472 I 1 PORTF_5
+bit 473 O 1 PF5 474 0 Z
+bit 472 I 1 PF5
 bit 471 C 0 *
-bit 470 O 1 PORTF_4 471 0 Z
-bit 469 I 1 PORTF_4
+bit 470 O 1 PF4 471 0 Z
+bit 469 I 1 PF4
 bit 468 C 0 *
-bit 467 O 1 PORTF_3 468 0 Z
-bit 466 I 1 PORTF_3
+bit 467 O 1 PF3 468 0 Z
+bit 466 I 1 PF3
 bit 465 C 0 *
-bit 464 O 1 PORTF_2 465 0 Z
-bit 463 I 1 PORTF_2
+bit 464 O 1 PF2 465 0 Z
+bit 463 I 1 PF2
 bit 462 C 0 *
-bit 461 O 1 PORTF_1 462 0 Z
-bit 460 I 1 PORTF_1
+bit 461 O 1 PF1 462 0 Z
+bit 460 I 1 PF1
 bit 459 C 0 *
-bit 458 O 1 PORTF_0 459 0 Z
-bit 457 I 1 PORTF_0
+bit 458 O 1 PF0 459 0 Z
+bit 457 I 1 PF0
 bit 456 C 0 *
-bit 455 O 1 PORTG_2 456 0 Z
-bit 454 I 1 PORTG_2
+bit 455 O 1 PG2 456 0 Z
+bit 454 I 1 PG2
 bit 453 C 0 *
-bit 452 O 1 PORTG_1 453 0 Z
-bit 451 I 1 PORTG_1
+bit 452 O 1 PG1 453 0 Z
+bit 451 I 1 PG1
 bit 450 C 0 *
-bit 449 O 1 PORTG_0 450 0 Z
-bit 448 I 1 PORTG_0
+bit 449 O 1 PG0 450 0 Z
+bit 448 I 1 PG0
 bit 447 C 0 *
-bit 446 O 1 PORTC_3 447 0 Z
-bit 445 I 1 PORTC_3
+bit 446 O 1 PC3 447 0 Z
+bit 445 I 1 PC3
 bit 444 C 0 *
-bit 443 O 1 PORTC_2 444 0 Z
-bit 442 I 1 PORTC_2
+bit 443 O 1 PC2 444 0 Z
+bit 442 I 1 PC2
 bit 441 C 0 *
-bit 440 O 1 PORTC_1 441 0 Z
-bit 439 I 1 PORTC_1
+bit 440 O 1 PC1 441 0 Z
+bit 439 I 1 PC1
 bit 438 C 0 *
-bit 437 O 1 PORTC_0 438 0 Z
-bit 436 I 1 PORTC_0
+bit 437 O 1 PC0 438 0 Z
+bit 436 I 1 PC0
 bit 435 C 0 *
-bit 434 O 1 PORTC_7 435 0 Z
-bit 433 I 1 PORTC_7
+bit 434 O 1 PC7 435 0 Z
+bit 433 I 1 PC7
 bit 432 C 0 *
-bit 431 O 1 PORTC_6 432 0 Z
-bit 430 I 1 PORTC_6
+bit 431 O 1 PC6 432 0 Z
+bit 430 I 1 PC6
 bit 429 C 0 *
-bit 428 O 1 PORTC_5 429 0 Z
-bit 427 I 1 PORTC_5
+bit 428 O 1 PC5 429 0 Z
+bit 427 I 1 PC5
 bit 426 C 0 *
-bit 425 O 1 PORTC_4 426 0 Z
-bit 424 I 1 PORTC_4
+bit 425 O 1 PC4 426 0 Z
+bit 424 I 1 PC4
 bit 423 C 0 *
-bit 422 O 1 PORTH_7 423 0 Z
-bit 421 I 1 PORTH_7
+bit 422 O 1 PH7 423 0 Z
+bit 421 I 1 PH7
 bit 420 C 0 *
-bit 419 O 1 PORTH_5 420 0 Z
-bit 418 I 1 PORTH_5
+bit 419 O 1 PH5 420 0 Z
+bit 418 I 1 PH5
 bit 417 C 0 *
 bit 416 O 1 MFS 417 0 Z
 bit 415 I 1 MFS
 bit 414 C 0 *
-bit 413 O 1 PORTH_6 414 0 Z
-bit 412 I 1 PORTH_6
+bit 413 O 1 PH6 414 0 Z
+bit 412 I 1 PH6
 bit 411 C 0 *
 bit 410 O 1 ADDR1 411 0 Z
 bit 409 I 1 ADDR1
@@ -657,71 +657,71 @@ bit 405 C 0 *
 bit 404 O 1 ADDR3 405 0 Z
 bit 403 I 1 ADDR3
 bit 402 C 0 *
-bit 401 O 1 PORTH_8 402 0 Z
-bit 400 I 1 PORTH_8
+bit 401 O 1 PH8 402 0 Z
+bit 400 I 1 PH8
 bit 399 C 0 *
-bit 398 O 1 PORTH_9 399 0 Z
-bit 397 I 1 PORTH_9
+bit 398 O 1 PH9 399 0 Z
+bit 397 I 1 PH9
 bit 396 C 0 *
-bit 395 O 1 PORTH_10 396 0 Z
-bit 394 I 1 PORTH_10
+bit 395 O 1 PH10 396 0 Z
+bit 394 I 1 PH10
 bit 393 C 0 *
-bit 392 O 1 PORTH_11 393 0 Z
-bit 391 I 1 PORTH_11
+bit 392 O 1 PH11 393 0 Z
+bit 391 I 1 PH11
 bit 390 C 0 *
-bit 389 O 1 PORTH_12 390 0 Z
-bit 388 I 1 PORTH_12
+bit 389 O 1 PH12 390 0 Z
+bit 388 I 1 PH12
 bit 387 C 0 *
-bit 386 O 1 PORTH_13 387 0 Z
-bit 385 I 1 PORTH_13
+bit 386 O 1 PH13 387 0 Z
+bit 385 I 1 PH13
 bit 384 C 0 *
-bit 383 O 1 PORTI_0 384 0 Z
-bit 382 I 1 PORTI_0
+bit 383 O 1 PI0 384 0 Z
+bit 382 I 1 PI0
 bit 381 C 0 *
-bit 380 O 1 PORTI_1 381 0 Z
-bit 379 I 1 PORTI_1
+bit 380 O 1 PI1 381 0 Z
+bit 379 I 1 PI1
 bit 378 C 0 *
-bit 377 O 1 PORTI_2 378 0 Z
-bit 376 I 1 PORTI_2
+bit 377 O 1 PI2 378 0 Z
+bit 376 I 1 PI2
 bit 375 C 0 *
-bit 374 O 1 PORTI_3 375 0 Z
-bit 373 I 1 PORTI_3
+bit 374 O 1 PI3 375 0 Z
+bit 373 I 1 PI3
 bit 372 C 0 *
-bit 371 O 1 PORTI_4 372 0 Z
-bit 370 I 1 PORTI_4
+bit 371 O 1 PI4 372 0 Z
+bit 370 I 1 PI4
 bit 369 C 0 *
-bit 368 O 1 PORTI_5 369 0 Z
-bit 367 I 1 PORTI_5
+bit 368 O 1 PI5 369 0 Z
+bit 367 I 1 PI5
 bit 366 C 0 *
-bit 365 O 1 PORTI_6 366 0 Z
-bit 364 I 1 PORTI_6
+bit 365 O 1 PI6 366 0 Z
+bit 364 I 1 PI6
 bit 363 C 0 *
-bit 362 O 1 PORTI_7 363 0 Z
-bit 361 I 1 PORTI_7
+bit 362 O 1 PI7 363 0 Z
+bit 361 I 1 PI7
 bit 360 C 0 *
-bit 359 O 1 PORTI_8 360 0 Z
-bit 358 I 1 PORTI_8
+bit 359 O 1 PI8 360 0 Z
+bit 358 I 1 PI8
 bit 357 C 0 *
-bit 356 O 1 PORTI_9 357 0 Z
-bit 355 I 1 PORTI_9
+bit 356 O 1 PI9 357 0 Z
+bit 355 I 1 PI9
 bit 354 C 0 *
-bit 353 O 1 PORTI_10 354 0 Z
-bit 352 I 1 PORTI_10
+bit 353 O 1 PI10 354 0 Z
+bit 352 I 1 PI10
 bit 351 C 0 *
-bit 350 O 1 PORTI_11 351 0 Z
-bit 349 I 1 PORTI_11
+bit 350 O 1 PI11 351 0 Z
+bit 349 I 1 PI11
 bit 348 C 0 *
-bit 347 O 1 PORTI_12 348 0 Z
-bit 346 I 1 PORTI_12
+bit 347 O 1 PI12 348 0 Z
+bit 346 I 1 PI12
 bit 345 C 0 *
-bit 344 O 1 PORTI_13 345 0 Z
-bit 343 I 1 PORTI_13
+bit 344 O 1 PI13 345 0 Z
+bit 343 I 1 PI13
 bit 342 C 0 *
-bit 341 O 1 PORTI_14 342 0 Z
-bit 340 I 1 PORTI_14
+bit 341 O 1 PI14 342 0 Z
+bit 340 I 1 PI14
 bit 339 C 0 *
-bit 338 O 1 PORTI_15 339 0 Z
-bit 337 I 1 PORTI_15
+bit 338 O 1 PI15 339 0 Z
+bit 337 I 1 PI15
 bit 336 C 0 *
 bit 335 O 1 AMS0B 336 0 Z
 bit 334 I 1 AMS0B
@@ -882,180 +882,180 @@ bit 180 O 1 DQ0 181 0 Z
 bit 179 I 1 DQ0
 bit 178 O 1 CLKOUT
 bit 177 C 0 *
-bit 176 O 1 PORTJ_11 177 0 Z
-bit 175 I 1 PORTJ_11
+bit 176 O 1 PJ11 177 0 Z
+bit 175 I 1 PJ11
 bit 174 C 0 *
-bit 173 O 1 PORTJ_12 174 0 Z
-bit 172 I 1 PORTJ_12
+bit 173 O 1 PJ12 174 0 Z
+bit 172 I 1 PJ12
 bit 171 C 0 *
-bit 170 O 1 PORTJ_13 171 0 Z
-bit 169 I 1 PORTJ_13
+bit 170 O 1 PJ13 171 0 Z
+bit 169 I 1 PJ13
 bit 168 C 0 *
-bit 167 O 1 PORTJ_0 168 0 Z
-bit 166 I 1 PORTJ_0
+bit 167 O 1 PJ0 168 0 Z
+bit 166 I 1 PJ0
 bit 165 C 0 *
-bit 164 O 1 PORTJ_1 165 0 Z
-bit 163 I 1 PORTJ_1
+bit 164 O 1 PJ1 165 0 Z
+bit 163 I 1 PJ1
 bit 162 C 0 *
-bit 161 O 1 PORTJ_2 162 0 Z
-bit 160 I 1 PORTJ_2
+bit 161 O 1 PJ2 162 0 Z
+bit 160 I 1 PJ2
 bit 159 C 0 *
-bit 158 O 1 PORTJ_3 159 0 Z
-bit 157 I 1 PORTJ_3
+bit 158 O 1 PJ3 159 0 Z
+bit 157 I 1 PJ3
 bit 156 C 0 *
-bit 155 O 1 PORTJ_4 156 0 Z
-bit 154 I 1 PORTJ_4
+bit 155 O 1 PJ4 156 0 Z
+bit 154 I 1 PJ4
 bit 153 I 1 ATAPI_PDIAG
 bit 152 C 0 *
-bit 151 O 1 PORTJ_5 152 0 Z
-bit 150 I 1 PORTJ_5
+bit 151 O 1 PJ5 152 0 Z
+bit 150 I 1 PJ5
 bit 149 C 0 *
-bit 148 O 1 PORTJ_6 149 0 Z
-bit 147 I 1 PORTJ_6
+bit 148 O 1 PJ6 149 0 Z
+bit 147 I 1 PJ6
 bit 146 C 0 *
-bit 145 O 1 PORTJ_7 146 0 Z
-bit 144 I 1 PORTJ_7
+bit 145 O 1 PJ7 146 0 Z
+bit 144 I 1 PJ7
 bit 143 C 0 *
-bit 142 O 1 PORTJ_8 143 0 Z
-bit 141 I 1 PORTJ_8
+bit 142 O 1 PJ8 143 0 Z
+bit 141 I 1 PJ8
 bit 140 C 0 *
-bit 139 O 1 PORTJ_9 140 0 Z
-bit 138 I 1 PORTJ_9
+bit 139 O 1 PJ9 140 0 Z
+bit 138 I 1 PJ9
 bit 137 C 0 *
-bit 136 O 1 PORTJ_10 137 0 Z
-bit 135 I 1 PORTJ_10
+bit 136 O 1 PJ10 137 0 Z
+bit 135 I 1 PJ10
 bit 134 C 0 *
-bit 133 O 1 PORTG_13 134 0 Z
-bit 132 I 1 PORTG_13
+bit 133 O 1 PG13 134 0 Z
+bit 132 I 1 PG13
 bit 131 C 0 *
-bit 130 O 1 PORTG_12 131 0 Z
-bit 129 I 1 PORTG_12
+bit 130 O 1 PG12 131 0 Z
+bit 129 I 1 PG12
 bit 128 C 0 *
-bit 127 O 1 PORTE_7 128 0 Z
-bit 126 I 1 PORTE_7
+bit 127 O 1 PE7 128 0 Z
+bit 126 I 1 PE7
 bit 125 C 0 *
-bit 124 O 1 PORTE_8 125 0 Z
-bit 123 I 1 PORTE_8
+bit 124 O 1 PE8 125 0 Z
+bit 123 I 1 PE8
 bit 122 C 0 *
-bit 121 O 1 PORTE_9 122 0 Z
-bit 120 I 1 PORTE_9
+bit 121 O 1 PE9 122 0 Z
+bit 120 I 1 PE9
 bit 119 C 0 *
-bit 118 O 1 PORTE_10 119 0 Z
-bit 117 I 1 PORTE_10
+bit 118 O 1 PE10 119 0 Z
+bit 117 I 1 PE10
 bit 116 C 0 *
-bit 115 O 1 PORTE_0 116 0 Z
-bit 114 I 1 PORTE_0
+bit 115 O 1 PE0 116 0 Z
+bit 114 I 1 PE0
 bit 113 C 0 *
-bit 112 O 1 PORTE_1 113 0 Z
-bit 111 I 1 PORTE_1
+bit 112 O 1 PE1 113 0 Z
+bit 111 I 1 PE1
 bit 110 C 0 *
-bit 109 O 1 PORTE_2 110 0 Z
-bit 108 I 1 PORTE_2
+bit 109 O 1 PE2 110 0 Z
+bit 108 I 1 PE2
 bit 107 C 0 *
-bit 106 O 1 PORTE_4 107 0 Z
-bit 105 I 1 PORTE_4
+bit 106 O 1 PE4 107 0 Z
+bit 105 I 1 PE4
 bit 104 C 0 *
-bit 103 O 1 PORTE_5 104 0 Z
-bit 102 I 1 PORTE_5
+bit 103 O 1 PE5 104 0 Z
+bit 102 I 1 PE5
 bit 101 C 0 *
-bit 100 O 1 PORTE_6 101 0 Z
-bit 99 I 1 PORTE_6
+bit 100 O 1 PE6 101 0 Z
+bit 99 I 1 PE6
 bit 98 C 0 *
-bit 97 O 1 PORTH_4 98 0 Z
-bit 96 I 1 PORTH_4
+bit 97 O 1 PH4 98 0 Z
+bit 96 I 1 PH4
 bit 95 C 0 *
-bit 94 O 1 PORTH_3 95 0 Z
-bit 93 I 1 PORTH_3
+bit 94 O 1 PH3 95 0 Z
+bit 93 I 1 PH3
 bit 92 C 0 *
-bit 91 O 1 PORTH_2 92 0 Z
-bit 90 I 1 PORTH_2
+bit 91 O 1 PH2 92 0 Z
+bit 90 I 1 PH2
 bit 89 C 0 *
-bit 88 O 1 PORTH_0 89 0 Z
-bit 87 I 1 PORTH_0
+bit 88 O 1 PH0 89 0 Z
+bit 87 I 1 PH0
 bit 86 O 1 *
-bit 85 O 1 PORTE_15 85 1 Z
-bit 84 I 1 PORTE_15
+bit 85 O 1 PE15 85 1 Z
+bit 84 I 1 PE15
 bit 83 O 1 *
-bit 82 O 1 PORTE_14 82 1 Z
-bit 81 I 1 PORTE_14
+bit 82 O 1 PE14 82 1 Z
+bit 81 I 1 PE14
 bit 80 C 0 *
-bit 79 O 1 PORTG_8 80 0 Z
-bit 78 I 1 PORTG_8
+bit 79 O 1 PG8 80 0 Z
+bit 78 I 1 PG8
 bit 77 C 0 *
-bit 76 O 1 PORTG_9 77 0 Z
-bit 75 I 1 PORTG_9
+bit 76 O 1 PG9 77 0 Z
+bit 75 I 1 PG9
 bit 74 C 0 *
-bit 73 O 1 PORTG_10 74 0 Z
-bit 72 I 1 PORTG_10
+bit 73 O 1 PG10 74 0 Z
+bit 72 I 1 PG10
 bit 71 C 0 *
-bit 70 O 1 PORTG_11 71 0 Z
-bit 69 I 1 PORTG_11
+bit 70 O 1 PG11 71 0 Z
+bit 69 I 1 PG11
 bit 68 C 0 *
-bit 67 O 1 PORTG_5 68 0 Z
-bit 66 I 1 PORTG_5
+bit 67 O 1 PG5 68 0 Z
+bit 66 I 1 PG5
 bit 65 C 0 *
-bit 64 O 1 PORTG_6 65 0 Z
-bit 63 I 1 PORTG_6
+bit 64 O 1 PG6 65 0 Z
+bit 63 I 1 PG6
 bit 62 C 0 *
-bit 61 O 1 PORTG_7 62 0 Z
-bit 60 I 1 PORTG_7
+bit 61 O 1 PG7 62 0 Z
+bit 60 I 1 PG7
 bit 59 C 0 *
-bit 58 O 1 PORTE_3 59 0 Z
-bit 57 I 1 PORTE_3
+bit 58 O 1 PE3 59 0 Z
+bit 57 I 1 PE3
 bit 56 C 0 *
-bit 55 O 1 PORTH_1 56 0 Z
-bit 54 I 1 PORTH_1
+bit 55 O 1 PH1 56 0 Z
+bit 54 I 1 PH1
 bit 53 C 0 *
-bit 52 O 1 PORTC_13 53 0 Z
-bit 51 I 1 PORTC_13
+bit 52 O 1 PC13 53 0 Z
+bit 51 I 1 PC13
 bit 50 C 0 *
-bit 49 O 1 PORTC_12 50 0 Z
-bit 48 I 1 PORTC_12
+bit 49 O 1 PC12 50 0 Z
+bit 48 I 1 PC12
 bit 47 C 0 *
-bit 46 O 1 PORTC_11 47 0 Z
-bit 45 I 1 PORTC_11
+bit 46 O 1 PC11 47 0 Z
+bit 45 I 1 PC11
 bit 44 C 0 *
-bit 43 O 1 PORTC_10 44 0 Z
-bit 42 I 1 PORTC_10
+bit 43 O 1 PC10 44 0 Z
+bit 42 I 1 PC10
 bit 41 C 0 *
-bit 40 O 1 PORTC_9 41 0 Z
-bit 39 I 1 PORTC_9
+bit 40 O 1 PC9 41 0 Z
+bit 39 I 1 PC9
 bit 38 C 0 *
-bit 37 O 1 PORTC_8 38 0 Z
-bit 36 I 1 PORTC_8
+bit 37 O 1 PC8 38 0 Z
+bit 36 I 1 PC8
 bit 35 C 0 *
-bit 34 O 1 PORTG_15 35 0 Z
-bit 33 I 1 PORTG_15
+bit 34 O 1 PG15 35 0 Z
+bit 33 I 1 PG15
 bit 32 C 0 *
-bit 31 O 1 PORTG_14 32 0 Z
-bit 30 I 1 PORTG_14
+bit 31 O 1 PG14 32 0 Z
+bit 30 I 1 PG14
 bit 29 C 0 *
-bit 28 O 1 PORTA_0 29 0 Z
-bit 27 I 1 PORTA_0
+bit 28 O 1 PA0 29 0 Z
+bit 27 I 1 PA0
 bit 26 C 0 *
-bit 25 O 1 PORTA_1 26 0 Z
-bit 24 I 1 PORTA_1
+bit 25 O 1 PA1 26 0 Z
+bit 24 I 1 PA1
 bit 23 C 0 *
-bit 22 O 1 PORTA_2 23 0 Z
-bit 21 I 1 PORTA_2
+bit 22 O 1 PA2 23 0 Z
+bit 21 I 1 PA2
 bit 20 C 0 *
-bit 19 O 1 PORTA_3 20 0 Z
-bit 18 I 1 PORTA_3
+bit 19 O 1 PA3 20 0 Z
+bit 18 I 1 PA3
 bit 17 C 0 *
-bit 16 O 1 PORTA_4 17 0 Z
-bit 15 I 1 PORTA_4
+bit 16 O 1 PA4 17 0 Z
+bit 15 I 1 PA4
 bit 14 C 0 *
-bit 13 O 1 PORTA_5 14 0 Z
-bit 12 I 1 PORTA_5
+bit 13 O 1 PA5 14 0 Z
+bit 12 I 1 PA5
 bit 11 C 0 *
-bit 10 O 1 PORTA_6 11 0 Z
-bit 9 I 1 PORTA_6
+bit 10 O 1 PA6 11 0 Z
+bit 9 I 1 PA6
 bit 8 C 0 *
-bit 7 O 1 PORTA_7 8 0 Z
-bit 6 I 1 PORTA_7
+bit 7 O 1 PA7 8 0 Z
+bit 6 I 1 PA7
 bit 5 C 0 *
-bit 4 O 1 PORTA_8 5 0 Z
-bit 3 I 1 PORTA_8
+bit 4 O 1 PA8 5 0 Z
+bit 3 I 1 PA8
 bit 2 C 0 *
-bit 1 O 1 PORTA_9 2 0 Z
-bit 0 I 1 PORTA_9
+bit 1 O 1 PA9 2 0 Z
+bit 0 I 1 PA9

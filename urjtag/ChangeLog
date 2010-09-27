@@ -4,6 +4,10 @@
     the style of all other Blackfin parts.
   * src/bus/bf533_stamp.c (bf533_stamp_bus_new): Update signal names.
 
+  * data/analog/bf548/bf548: Change "PORTX_#" to "PX#" signals to match the
+    style of all other Blackfin parts.
+  * src/bus/bf548_ezkit.c (bf548_ezkit_bus_new): Update signal names.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept
