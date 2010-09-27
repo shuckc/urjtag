@@ -70,6 +70,8 @@ typedef enum URJ_ERROR
 
     URJ_ERROR_BFIN,
 
+    URJ_ERROR_PLD,
+
     URJ_ERROR_UNIMPLEMENTED,
 }
 urj_error_t;

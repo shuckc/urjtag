@@ -21,6 +21,13 @@
   * include/urjtag/tap_register.h, src/tap/register.c
     (urj_tap_register_realloc): Likewise.
 
+  * include/urjtag/Makefile.am, include/urjtag/pld.h, include/urjtag/error.h,
+    src/Makefile.am, src/pld/Makefile.am, src/pld/pld.c, src/pld/xilinx.h,
+    src/pld/xilinx.c, src/pld/xilinx_bitstream.c,
+    src/cmd/Makefile.am, src/cmd/cmd_pld.c, src/cmd/cmd_list.h,
+    doc/Makefile.am, doc/README.pld, src/global/log-error.c, configure.ac:
+    New Programmable Logic Devices (PLD) subsystem by Michael Walle.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept

@@ -1,7 +1,7 @@
 #
 # $Id$
 #
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2010 Michael Walle
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,43 +18,16 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Michael Walle <michael@walle.cc>, 2010.
 #
 
 include $(top_srcdir)/Makefile.rules
 
-pkginclude_HEADERS = \
-	bfin.h \
-	bitmask.h \
-	bitops.h \
-	bsbit.h \
-	bsdl.h \
-	bsdl_mode.h \
-	bssignal.h \
-	bus.h \
-	bus_driver.h \
-	cable.h \
-	chain.h \
-	cmd.h \
-	data_register.h \
-	error.h \
-	fclock.h \
-	flash.h \
-	gettext.h \
-	jim.h \
-	jtag.h \
-	log.h \
-	params.h \
-	parport.h \
-	parse.h \
-	part.h \
-	part_instruction.h \
-	pld.h \
-	pod.h \
-	tap_register.h \
-	tap_state.h \
-	tap.h \
-	svf.h \
-	types.h \
-	urjtag.h \
-	usbconn.h
+noinst_LTLIBRARIES = libpld.la
+
+libpld_la_SOURCES = \
+	pld.c \
+	xilinx_bitstream.c \
+	xilinx.c
+
+AM_CFLAGS = $(WARNINGCFLAGS)

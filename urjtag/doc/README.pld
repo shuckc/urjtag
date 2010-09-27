@@ -1,0 +1,34 @@
+With the Programmable Logic Devices (PLD) subsystem you can load a bitstream
+into a FPGA via JTAG.  Besides benefits in development it supports production
+of boards with NOR flashes connected to the FPGA. You can load a fjmem core
+into the FPGA and program (fast!) the flash through it.
+
+The subsystem needs several instructions to be defined. These have to be
+manually added by the user (eg. through the ~/.jtag/rc):
+
+  Spartan-3/Spartan-6:
+    instruction CFG_OUT  000100 BYPASS
+    instruction CFG_IN   000101 BYPASS
+    instruction JSTART   001100 BYPASS
+    instruction JPROGRAM 001011 BYPASS
+
+  Virtex-4:
+    instruction CFG_OUT  1111000100 BYPASS
+    instruction CFG_IN   1111000101 BYPASS
+    instruction JPROGRAM 1111001011 BYPASS
+    instruction JSTART   1111001100 BYPASS
+
+
+The following example flashes a NOR flash connected to the FGPA:
+
+  cable Turtelizer2 vid=0x0403 pid=0x6010
+  detect
+  instruction CFG_OUT 000100 BYPASS
+  instruction CFG_IN 000101 BYPASS
+  instruction JSTART 001100 BYPASS
+  instruction JPROGRAM 001011 BYPASS
+  pld load /path/to/fjmem.bit
+  initbus fjmem opcode=000010
+  detectflash 0
+  flashmem 0 /path/to/data.bin
+  pld reconfigure

@@ -31,6 +31,7 @@ SUBDIRS = \
 	bfin \
 	bus \
 	cmd \
+	pld \
 	global
 
 if ENABLE_SVF
@@ -61,6 +62,7 @@ liburjtag_la_LIBADD = \
 	bfin/libbfin.la \
 	bus/libbus.la \
 	cmd/libcmd.la \
+	pld/libpld.la \
 	global/libglobal.la \
 	-lm \
 	@FTD2XXLIB@ \

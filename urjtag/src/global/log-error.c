@@ -132,6 +132,8 @@ urj_error_string (urj_error_t err)
 
     case URJ_ERROR_BFIN:                return "blackfin";
 
+    case URJ_ERROR_PLD:                 return "pld subsystem";
+
     case URJ_ERROR_UNIMPLEMENTED:       return "unimplemented";
     }
 

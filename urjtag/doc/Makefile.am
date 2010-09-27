@@ -30,6 +30,7 @@ EXTRA_DIST = \
 	fdl.txt \
 	UrJTAG.txt \
 	README.ejtag \
+	README.pld \
 	howto_add_support_for_more_flash.txt \
 	$(man_MANS)
 
