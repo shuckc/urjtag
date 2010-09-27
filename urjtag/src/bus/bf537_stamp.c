@@ -170,7 +170,7 @@ bf537_stamp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     {
         /* we can only wiggle SDRAM pins directly, so cannot drive it */
         urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-		       _("reading external memory not supported"));
+                       _("reading external memory not supported"));
         return URJ_STATUS_FAIL;
     }
     else if (IS_ASYNC_ADDR(adr))
@@ -184,7 +184,7 @@ bf537_stamp_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     {
         /* L1 needs core to access it */
         urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-		       _("reading on-chip memory not supported"));
+                       _("reading on-chip memory not supported"));
         return URJ_STATUS_FAIL;
     }
     return URJ_STATUS_OK;

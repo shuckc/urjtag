@@ -50,16 +50,16 @@ typedef struct
     urj_part_signal_t *swe;
 } bus_params_t;
 
-#define	AMS	((bus_params_t *) bus->params)->ams
-#define	ADDR	((bus_params_t *) bus->params)->addr
-#define	DATA	((bus_params_t *) bus->params)->data
-#define	AWE	((bus_params_t *) bus->params)->awe
-#define	ARE	((bus_params_t *) bus->params)->are
-#define	ABE	((bus_params_t *) bus->params)->abe
-#define	SRAS	((bus_params_t *) bus->params)->sras
-#define	SCAS	((bus_params_t *) bus->params)->scas
-#define	SMS	((bus_params_t *) bus->params)->sms
-#define	SWE	((bus_params_t *) bus->params)->swe
+#define AMS     ((bus_params_t *) bus->params)->ams
+#define ADDR    ((bus_params_t *) bus->params)->addr
+#define DATA    ((bus_params_t *) bus->params)->data
+#define AWE     ((bus_params_t *) bus->params)->awe
+#define ARE     ((bus_params_t *) bus->params)->are
+#define ABE     ((bus_params_t *) bus->params)->abe
+#define SRAS    ((bus_params_t *) bus->params)->sras
+#define SCAS    ((bus_params_t *) bus->params)->scas
+#define SMS     ((bus_params_t *) bus->params)->sms
+#define SWE     ((bus_params_t *) bus->params)->swe
 
 /*
  * bus->driver->(*new_bus)
@@ -130,10 +130,10 @@ bf518f_ezbrd_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
 #define ASYNC_MEM_BASE 0x20000000
 #define ASYNC_MEM_SIZE (2 * 1024 * 1024)
-#define IS_ASYNC_ADDR(addr) ({                                          \
-            unsigned long __addr = (unsigned long) addr;                \
-            __addr >= ASYNC_MEM_BASE && __addr < ASYNC_MEM_BASE + ASYNC_MEM_SIZE; \
-	})
+#define IS_ASYNC_ADDR(addr) ({ \
+       unsigned long __addr = (unsigned long) addr; \
+       __addr >= ASYNC_MEM_BASE && __addr < ASYNC_MEM_BASE + ASYNC_MEM_SIZE; \
+       })
 #define ASYNC_BANK(addr) (((addr) & (ASYNC_MEM_SIZE - 1)) >> 20)
 
 static int
@@ -143,7 +143,7 @@ bf518f_ezbrd_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     {
         /* we can only wiggle SDRAM pins directly, so cannot drive it */
         urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-		       _("reading external memory not supported"));
+                       _("reading external memory not supported"));
         return URJ_STATUS_FAIL;
     }
     else if (IS_ASYNC_ADDR(adr))
@@ -154,10 +154,10 @@ bf518f_ezbrd_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
         area->width = 16;
     }
     else
-     {
+    {
         /* L1 needs core to access it */
         urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-		       _("reading on-chip memory not supported"));
+                       _("reading on-chip memory not supported"));
         return URJ_STATUS_FAIL;
     }
     return URJ_STATUS_OK;
