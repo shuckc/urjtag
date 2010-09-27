@@ -1,22 +1,22 @@
-signal ADDR[1]
-signal ADDR[2]
-signal ADDR[3]
-signal ADDR[4]
-signal ADDR[5]
-signal ADDR[6]
-signal ADDR[7]
-signal ADDR[8]
-signal ADDR[9]
-signal ADDR[10]
-signal ADDR[11]
-signal ADDR[12]
-signal ADDR[13]
-signal ADDR[14]
-signal ADDR[15]
-signal ADDR[16]
-signal ADDR[17]
-signal ADDR[18]
-signal ADDR[19]
+signal ADDR1
+signal ADDR2
+signal ADDR3
+signal ADDR4
+signal ADDR5
+signal ADDR6
+signal ADDR7
+signal ADDR8
+signal ADDR9
+signal ADDR10
+signal ADDR11
+signal ADDR12
+signal ADDR13
+signal ADDR14
+signal ADDR15
+signal ADDR16
+signal ADDR17
+signal ADDR18
+signal ADDR19
 signal AMS_B0
 signal AMS_B1
 signal AMS_B2
@@ -32,22 +32,22 @@ signal BGH_B
 signal BMODE0
 signal BMODE1
 signal BR_B
-signal DATA[0]
-signal DATA[1]
-signal DATA[2]
-signal DATA[3]
-signal DATA[4]
-signal DATA[5]
-signal DATA[6]
-signal DATA[7]
-signal DATA[8]
-signal DATA[9]
-signal DATA[10]
-signal DATA[11]
-signal DATA[12]
-signal DATA[13]
-signal DATA[14]
-signal DATA[15]
+signal DATA0
+signal DATA1
+signal DATA2
+signal DATA3
+signal DATA4
+signal DATA5
+signal DATA6
+signal DATA7
+signal DATA8
+signal DATA9
+signal DATA10
+signal DATA11
+signal DATA12
+signal DATA13
+signal DATA14
+signal DATA15
 signal DR0PRI
 signal DR0SEC
 signal DR1PRI
@@ -184,38 +184,38 @@ instruction EMUDAT40_SCAN 10100 EMUDAT40
 instruction EMUPC_SCAN 11110 EMUPC
 
 bit 196 C 0 *
-bit 195 O 1 DATA[0] 196 0 Z
-bit 194 I 1 DATA[0]
-bit 193 O 1 DATA[1] 196 0 Z
-bit 192 I 1 DATA[1]
-bit 191 O 1 DATA[2] 196 0 Z
-bit 190 I 1 DATA[2]
-bit 189 O 1 DATA[3] 196 0 Z
-bit 188 I 1 DATA[3]
-bit 187 O 1 DATA[4] 196 0 Z
-bit 186 I 1 DATA[4]
-bit 185 O 1 DATA[5] 196 0 Z
-bit 184 I 1 DATA[5]
-bit 183 O 1 DATA[6] 196 0 Z
-bit 182 I 1 DATA[6]
-bit 181 O 1 DATA[7] 196 0 Z
-bit 180 I 1 DATA[7]
-bit 179 O 1 DATA[8] 196 0 Z
-bit 178 I 1 DATA[8]
-bit 177 O 1 DATA[9] 196 0 Z
-bit 176 I 1 DATA[9]
-bit 175 O 1 DATA[10] 196 0 Z
-bit 174 I 1 DATA[10]
-bit 173 O 1 DATA[11] 196 0 Z
-bit 172 I 1 DATA[11]
-bit 171 O 1 DATA[12] 196 0 Z
-bit 170 I 1 DATA[12]
-bit 169 O 1 DATA[13] 196 0 Z
-bit 168 I 1 DATA[13]
-bit 167 O 1 DATA[14] 196 0 Z
-bit 166 I 1 DATA[14]
-bit 165 O 1 DATA[15] 196 0 Z
-bit 164 I 1 DATA[15]
+bit 195 O 1 DATA0 196 0 Z
+bit 194 I 1 DATA0
+bit 193 O 1 DATA1 196 0 Z
+bit 192 I 1 DATA1
+bit 191 O 1 DATA2 196 0 Z
+bit 190 I 1 DATA2
+bit 189 O 1 DATA3 196 0 Z
+bit 188 I 1 DATA3
+bit 187 O 1 DATA4 196 0 Z
+bit 186 I 1 DATA4
+bit 185 O 1 DATA5 196 0 Z
+bit 184 I 1 DATA5
+bit 183 O 1 DATA6 196 0 Z
+bit 182 I 1 DATA6
+bit 181 O 1 DATA7 196 0 Z
+bit 180 I 1 DATA7
+bit 179 O 1 DATA8 196 0 Z
+bit 178 I 1 DATA8
+bit 177 O 1 DATA9 196 0 Z
+bit 176 I 1 DATA9
+bit 175 O 1 DATA10 196 0 Z
+bit 174 I 1 DATA10
+bit 173 O 1 DATA11 196 0 Z
+bit 172 I 1 DATA11
+bit 171 O 1 DATA12 196 0 Z
+bit 170 I 1 DATA12
+bit 169 O 1 DATA13 196 0 Z
+bit 168 I 1 DATA13
+bit 167 O 1 DATA14 196 0 Z
+bit 166 I 1 DATA14
+bit 165 O 1 DATA15 196 0 Z
+bit 164 I 1 DATA15
 bit 163 I 1 TEST
 bit 162 I 1 BMODE0
 bit 161 I 1 BMODE1
@@ -358,25 +358,25 @@ bit 25 O 1 ARE_B 27 0 Z
 bit 24 O 1 AWE_B 27 0 Z
 bit 23 O 1 ABE_B0 17 0 Z
 bit 22 O 1 ABE_B1 17 0 Z
-bit 21 O 1 ADDR[1] 17 0 Z
-bit 20 O 1 ADDR[2] 17 0 Z
-bit 19 O 1 ADDR[3] 17 0 Z
-bit 18 O 1 ADDR[4] 17 0 Z
+bit 21 O 1 ADDR1 17 0 Z
+bit 20 O 1 ADDR2 17 0 Z
+bit 19 O 1 ADDR3 17 0 Z
+bit 18 O 1 ADDR4 17 0 Z
 bit 17 C 0 *
-bit 16 O 1 ADDR[5] 17 0 Z
-bit 15 O 1 ADDR[6] 17 0 Z
-bit 14 O 1 ADDR[7] 17 0 Z
-bit 13 O 1 ADDR[8] 17 0 Z
-bit 12 O 1 ADDR[9] 17 0 Z
-bit 11 O 1 ADDR[10] 17 0 Z
-bit 10 O 1 ADDR[11] 17 0 Z
-bit 9 O 1 ADDR[12] 17 0 Z
-bit 8 O 1 ADDR[13] 17 0 Z
-bit 7 O 1 ADDR[14] 17 0 Z
-bit 6 O 1 ADDR[15] 17 0 Z
-bit 5 O 1 ADDR[16] 17 0 Z
-bit 4 O 1 ADDR[17] 17 0 Z
-bit 3 O 1 ADDR[18] 17 0 Z
-bit 2 O 1 ADDR[19] 17 0 Z
+bit 16 O 1 ADDR5 17 0 Z
+bit 15 O 1 ADDR6 17 0 Z
+bit 14 O 1 ADDR7 17 0 Z
+bit 13 O 1 ADDR8 17 0 Z
+bit 12 O 1 ADDR9 17 0 Z
+bit 11 O 1 ADDR10 17 0 Z
+bit 10 O 1 ADDR11 17 0 Z
+bit 9 O 1 ADDR12 17 0 Z
+bit 8 O 1 ADDR13 17 0 Z
+bit 7 O 1 ADDR14 17 0 Z
+bit 6 O 1 ADDR15 17 0 Z
+bit 5 O 1 ADDR16 17 0 Z
+bit 4 O 1 ADDR17 17 0 Z
+bit 3 O 1 ADDR18 17 0 Z
+bit 2 O 1 ADDR19 17 0 Z
 bit 1 O 1 BGH_B
 bit 0 O 1 BG_B

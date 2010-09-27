@@ -97,13 +97,13 @@ bf533_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     for (i = 0; i < 19; i++)
     {
-        sprintf (buff, "ADDR[%d]", i + 1);
+        sprintf (buff, "ADDR%d", i + 1);
         failed |= urj_bus_generic_attach_sig (part, &(ADDR[i]), buff);
     }
 
     for (i = 0; i < 16; i++)
     {
-        sprintf (buff, "DATA[%d]", i);
+        sprintf (buff, "DATA%d", i);
         failed |= urj_bus_generic_attach_sig (part, &(DATA[i]), buff);
     }
 
