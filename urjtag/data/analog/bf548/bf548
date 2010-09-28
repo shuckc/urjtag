@@ -225,6 +225,27 @@ signal AMS_B3
 signal AMS_B2
 signal AMS_B1
 signal AMS_B0
+salias ADDR24 PI14
+salias ADDR23 PI13
+salias ADDR22 PI12
+salias ADDR21 PI11
+salias ADDR20 PI10
+salias ADDR19 PI9
+salias ADDR18 PI8
+salias ADDR17 PI7
+salias ADDR16 PI6
+salias ADDR15 PI5
+salias ADDR14 PI4
+salias ADDR13 PI3
+salias ADDR12 PI2
+salias ADDR11 PI1
+salias ADDR10 PI0
+salias ADDR9 PH13
+salias ADDR8 PH12
+salias ADDR7 PH11
+salias ADDR6 PH10
+salias ADDR5 PH9
+salias ADDR4 PH8
 signal ADDR3
 signal ADDR2
 signal ADDR1

@@ -39,6 +39,11 @@
     data/analog/bf548/bf548: Change AMS signal names to match the style of all
     other Blackfin parts.
 
+  * data/analog/bf518/bf518: Add pin aliases for AMS_B2/AMS_B3 to match style
+    of all other Blackfin parts.
+  * data/analog/bf548/bf548: Add pin aliases for ADDR4..ADDR24 to match style
+    of all other Blackfin parts.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept

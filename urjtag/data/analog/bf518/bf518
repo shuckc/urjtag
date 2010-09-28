@@ -100,6 +100,8 @@ signal ADDR18
 signal ADDR19
 signal AMS_B0
 signal AMS_B1
+salias AMS_B2 PG11
+salias AMS_B3 PG15
 signal RTXO
 signal ADDR1
 signal ADDR2
