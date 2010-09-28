@@ -101,6 +101,12 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
         return URJ_STATUS_FAIL;
     }
 
+    (*cfi_array)->bus = bus;
+    (*cfi_array)->address = adr;
+    if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
+        // retain error state
+        return URJ_STATUS_FAIL;
+
     URJ_BUS_WRITE (bus, adr + 0x0, 0xf0);
     URJ_BUS_WRITE (bus, adr + 0x555, 0xaa);
     URJ_BUS_WRITE (bus, adr + 0x2AA, 0x55);
@@ -129,11 +135,6 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
         break;
     }
 
-    (*cfi_array)->bus = bus;
-    (*cfi_array)->address = adr;
-    if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
-        // retain error status
-        return URJ_STATUS_FAIL;              /* bus width detection failed */
     unsigned int bw = area.width;
     int ba, i;
     if (bw != 8 && bw != 16 && bw != 32)
