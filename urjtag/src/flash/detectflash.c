@@ -66,6 +66,8 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
         return URJ_STATUS_FAIL;
     }
 
+    urj_error_reset ();
+
     urj_flash_cleanup();
 
     URJ_BUS_PREPARE (bus);
@@ -94,7 +96,9 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
 
     if (urj_flash_cfi_array == NULL)
     {
-        urj_error_set (URJ_ERROR_NOTFOUND, _("Flash not found"));
+        /* Preserve error from lower layers if they set one */
+        if (urj_error_get () == URJ_ERROR_OK)
+            urj_error_set (URJ_ERROR_NOTFOUND, _("Flash not found"));
         return URJ_STATUS_FAIL;
     }
 
