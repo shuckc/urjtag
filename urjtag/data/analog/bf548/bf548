@@ -152,8 +152,8 @@ signal PJ11
 signal PJ12
 signal PJ13
 signal ATAPI_PDIAG
-signal ABE0B
-signal ABE1B
+signal ABE_B0
+signal ABE_B1
 signal CLKOUT
 signal DQ0
 signal DQ1
@@ -815,11 +815,11 @@ bit 268 C 0 *
 bit 267 O 1 DATA15 268 0 Z
 bit 266 I 1 DATA15
 bit 265 C 0 *
-bit 264 O 1 ABE1B 265 0 Z
-bit 263 I 1 ABE1B
+bit 264 O 1 ABE_B1 265 0 Z
+bit 263 I 1 ABE_B1
 bit 262 C 0 *
-bit 261 O 1 ABE0B 262 0 Z
-bit 260 I 1 ABE0B
+bit 261 O 1 ABE_B0 262 0 Z
+bit 260 I 1 ABE_B0
 bit 259 O 1 CK1
 bit 258 O 1 CK1_B
 bit 257 O 1 CK2

@@ -47,6 +47,10 @@
   * src/bus/generic_bus.c, src/bus/generic_bus.h (urj_bus_generic_attach_sig):
     Constify signal id name.
 
+  * data/analog/bf518/bf518, data/analog/bf548/bf548: Change ABE signal names
+    to match the style of all other Blackfin parts.
+  * src/bus/bf518f_ezbrd.c (bf518f_ezbrd_bus_new): Update signal names.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept

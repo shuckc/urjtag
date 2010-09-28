@@ -102,9 +102,9 @@ bf518f_ezbrd_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     failed |= urj_bus_generic_attach_sig (part, &(ARE), "ARE_n");
 
-    failed |= urj_bus_generic_attach_sig (part, &(ABE[0]), "ABE_n0");
+    failed |= urj_bus_generic_attach_sig (part, &(ABE[0]), "ABE_B0");
 
-    failed |= urj_bus_generic_attach_sig (part, &(ABE[1]), "ABE_n1");
+    failed |= urj_bus_generic_attach_sig (part, &(ABE[1]), "ABE_B1");
 
     failed |= urj_bus_generic_attach_sig (part, &(SRAS), "SRAS_n");
 
