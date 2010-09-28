@@ -44,6 +44,9 @@
   * data/analog/bf548/bf548: Add pin aliases for ADDR4..ADDR24 to match style
     of all other Blackfin parts.
 
+  * src/bus/generic_bus.c, src/bus/generic_bus.h (urj_bus_generic_attach_sig):
+    Constify signal id name.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept

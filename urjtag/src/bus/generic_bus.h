@@ -30,7 +30,7 @@
 #include <urjtag/bus.h>
 
 int urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig,
-                                char *id);
+                                const char *id);
 
 urj_bus_t *urj_bus_generic_new (urj_chain_t *chain,
                                 const urj_bus_driver_t *driver,

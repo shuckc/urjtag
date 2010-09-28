@@ -34,7 +34,7 @@
 
 int
 urj_bus_generic_attach_sig (urj_part_t *part, urj_part_signal_t **sig,
-                            char *id)
+                            const char *id)
 {
     *sig = urj_part_find_signal (part, id);
     if (!*sig)
