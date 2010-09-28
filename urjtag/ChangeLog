@@ -35,6 +35,10 @@
     Walle.  This covers the Spartan-3, Spartan-6, Virtex-4, System ACE,
     Platform flash, and XC9500XL families.
 
+  * src/bus/bf518f_ezbrd.c, src/bus/bf548_ezkit.c, data/analog/bf518/bf518,
+    data/analog/bf548/bf548: Change AMS signal names to match the style of all
+    other Blackfin parts.
+
 2010-08-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Clean up libusb detection to prefer 1.0 over 0.1, and accept

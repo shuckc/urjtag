@@ -82,7 +82,7 @@ bf518f_ezbrd_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     for (i = 0; i < 2; i++)
     {
-        sprintf (buff, "AMS_n%d", i);
+        sprintf (buff, "AMS_B%d", i);
         failed |= urj_bus_generic_attach_sig (part, &(AMS[i]), buff);
     }
 

@@ -98,8 +98,8 @@ signal ADDR16
 signal ADDR17
 signal ADDR18
 signal ADDR19
-signal AMS_n0
-signal AMS_n1
+signal AMS_B0
+signal AMS_B1
 signal RTXO
 signal ADDR1
 signal ADDR2
@@ -371,11 +371,11 @@ bit 30 I 1 NMI
 bit 29 I 1 RESET
 bit 28 C 0 *
 bit 27 O 1 CLKOUT 28 0 Z
-bit 26 O 1 AMS_n0 24 0 Z
+bit 26 O 1 AMS_B0 24 0 Z
 bit 25 O 1 AWE_n 24 0 Z
 bit 24 C 0 *
 bit 23 O 1 ARE_n 24 0 Z
-bit 22 O 1 AMS_n1 24 0 Z
+bit 22 O 1 AMS_B1 24 0 Z
 bit 21 O 1 SCKE 28 0 Z
 bit 20 O 1 SMS_n 28 0 Z
 bit 19 I 1 TEST

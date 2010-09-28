@@ -221,10 +221,10 @@ signal AREB
 signal RESETB
 signal NMIB
 signal AOEB
-signal AMS3B
-signal AMS2B
-signal AMS1B
-signal AMS0B
+signal AMS_B3
+signal AMS_B2
+signal AMS_B1
+signal AMS_B0
 signal ADDR3
 signal ADDR2
 signal ADDR1
@@ -723,17 +723,17 @@ bit 339 C 0 *
 bit 338 O 1 PI15 339 0 Z
 bit 337 I 1 PI15
 bit 336 C 0 *
-bit 335 O 1 AMS0B 336 0 Z
-bit 334 I 1 AMS0B
+bit 335 O 1 AMS_B0 336 0 Z
+bit 334 I 1 AMS_B0
 bit 333 C 0 *
-bit 332 O 1 AMS1B 333 0 Z
-bit 331 I 1 AMS1B
+bit 332 O 1 AMS_B1 333 0 Z
+bit 331 I 1 AMS_B1
 bit 330 C 0 *
-bit 329 O 1 AMS2B 330 0 Z
-bit 328 I 1 AMS2B
+bit 329 O 1 AMS_B2 330 0 Z
+bit 328 I 1 AMS_B2
 bit 327 C 0 *
-bit 326 O 1 AMS3B 327 0 Z
-bit 325 I 1 AMS3B
+bit 326 O 1 AMS_B3 327 0 Z
+bit 325 I 1 AMS_B3
 bit 324 C 0 *
 bit 323 O 1 AOEB 324 0 Z
 bit 322 I 1 AOEB
