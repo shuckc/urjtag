@@ -1,3 +1,8 @@
+2010-10-09  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Check for pread availability and disable gpio cable driver
+    when not found (for Windows systems).
+
 2010-09-28  Mike Frysinger  <vapier@gentoo.org>
 
   * src/flash/amd_flash.c (urj_flash_amd_detect): Move the bus address range

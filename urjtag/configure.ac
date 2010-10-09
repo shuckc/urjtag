@@ -121,6 +121,7 @@ AC_CHECK_FUNCS(m4_flatten([
 	geteuid
 	getuid
 	nanosleep
+	pread
 	swprintf
 	usleep
 ]))
@@ -638,6 +639,9 @@ URJ_DRIVER_SET([cable], [
 			-e s/jlink// \
 			-e s/vsllink// \
 			-e s/xpc//`
+	])
+	AS_IF([test "x$ac_cv_func_pread" != "xyes"], [
+		drivers=`echo ${drivers} | $SED -e s/gpio//`
 	])
 ])
 dnl the "fake" jim cable driver is special
