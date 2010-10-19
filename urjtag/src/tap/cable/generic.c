@@ -90,7 +90,7 @@ do_one_queued_action (urj_cable_t *cable)
 
     urj_log (URJ_LOG_LEVEL_DETAIL, "do_one_queued\n");
 
-    if ((i = urj_tap_cable_get_queue_item (cable, &(cable->todo))) >= 0)
+    if ((i = urj_tap_cable_get_queue_item (cable, &cable->todo)) >= 0)
     {
         int j;
 
@@ -102,7 +102,7 @@ do_one_queued_action (urj_cable_t *cable)
             {
                 urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
                                _("No space in cable activity results queue"));
-                urj_tap_cable_purge_queue (&(cable->done), 1);
+                urj_tap_cable_purge_queue (&cable->done, 1);
                 /* @@@@ RFHH shouldn't we bail out? */
             }
         }
@@ -135,10 +135,10 @@ do_one_queued_action (urj_cable_t *cable)
                 if (cable->todo.data[i].arg.transfer.out != NULL)
                 {
                     /* @@@@ RFHH check result */
-                    j = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    j = urj_tap_cable_add_queue_item (cable, &cable->done);
                     urj_log (URJ_LOG_LEVEL_DETAIL,
                              "add result from transfer to %p.%d (out=%p)\n",
-                             &(cable->done), j,
+                             &cable->done, j,
                              cable->todo.data[i].arg.transfer.out);
                     cable->done.data[j].action = URJ_TAP_CABLE_TRANSFER;
                     cable->done.data[j].arg.xferred.len =
@@ -151,18 +151,18 @@ do_one_queued_action (urj_cable_t *cable)
             }
         case URJ_TAP_CABLE_GET_TDO:
             /* @@@@ RFHH check result */
-            j = urj_tap_cable_add_queue_item (cable, &(cable->done));
+            j = urj_tap_cable_add_queue_item (cable, &cable->done);
             urj_log (URJ_LOG_LEVEL_DETAIL,
-                     "add result from get_tdo to %p.%d\n", &(cable->done), j);
+                     "add result from get_tdo to %p.%d\n", &cable->done, j);
             cable->done.data[j].action = URJ_TAP_CABLE_GET_TDO;
             cable->done.data[j].arg.value.val =
                 cable->driver->get_tdo (cable);
             break;
         case URJ_TAP_CABLE_GET_SIGNAL:
             /* @@@@ RFHH check result */
-            j = urj_tap_cable_add_queue_item (cable, &(cable->done));
+            j = urj_tap_cable_add_queue_item (cable, &cable->done);
             urj_log (URJ_LOG_LEVEL_DETAIL,
-                     "add result from get_signal to %p.%d\n", &(cable->done),
+                     "add result from get_signal to %p.%d\n", &cable->done,
                      j);
             cable->done.data[j].action = URJ_TAP_CABLE_GET_SIGNAL;
             cable->done.data[j].arg.value.sig =
@@ -330,10 +330,10 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
                 else if (cable->todo.data[i].action == URJ_TAP_CABLE_GET_TDO)
                 {
                     int c = urj_tap_cable_add_queue_item (cable,
-                                                          &(cable->done));
+                                                          &cable->done);
                     urj_log (URJ_LOG_LEVEL_DETAIL,
                              "add result from transfer to %p.%d\n",
-                             &(cable->done), c);
+                             &cable->done, c);
                     cable->done.data[c].action = URJ_TAP_CABLE_GET_TDO;
                     if (bits < savbits)
                         tdo = out[bits];
@@ -349,10 +349,10 @@ urj_tap_cable_generic_flush_using_transfer (urj_cable_t *cable,
                     if (p != NULL)
                     {
                         int c = urj_tap_cable_add_queue_item (cable,
-                                                              &(cable->done));
+                                                              &cable->done);
                         urj_log (URJ_LOG_LEVEL_DETAIL,
                                  "add result from transfer to %p.%d\n",
-                                 &(cable->done), c);
+                                 &cable->done, c);
                         cable->done.data[c].action = URJ_TAP_CABLE_TRANSFER;
                         cable->done.data[c].arg.xferred.len = len;
                         cable->done.data[c].arg.xferred.res = r;

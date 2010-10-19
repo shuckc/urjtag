@@ -1,3 +1,10 @@
+2010-10-19  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable.c, src/tap/detect.c, src/tap/cable/ft2232.c,
+    src/tap/cable/generic.c, src/tap/cable/jim.c, src/tap/cable/usbblaster.c,
+    src/tap/usbconn/libftd2xx.c: Drop useless params cast and useless
+    parenthesis around addresses.
+
 2010-10-09  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Check for pread availability and disable gpio cable driver

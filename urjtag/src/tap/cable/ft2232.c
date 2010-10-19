@@ -237,8 +237,8 @@ static const urj_tap_cable_cx_cmd_t imm_cmd =
 static void
 ft2232h_disable_clockdiv_by5 (urj_cable_t *cable)
 {
-    params_t *params = (params_t *)cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     urj_tap_cable_cx_cmd_queue( cmd_root, 0 );
     urj_tap_cable_cx_cmd_push( cmd_root, DISABLE_CLOCKDIV );
@@ -247,8 +247,8 @@ ft2232h_disable_clockdiv_by5 (urj_cable_t *cable)
 static void
 ft2232_set_frequency_common (urj_cable_t *cable, uint32_t new_frequency, uint32_t max_frequency)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (!new_frequency || new_frequency > max_frequency)
         new_frequency = max_frequency;
@@ -303,8 +303,8 @@ ft2232h_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 static int
 ft2232_generic_init (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -345,8 +345,8 @@ ft2232_generic_init (urj_cable_t *cable)
 static int
 ft2232_jtagkey_init (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -399,8 +399,8 @@ ft2232_jtagkey_init (urj_cable_t *cable)
 static int
 ft2232_armusbocd_init_common (urj_cable_t *cable, int is_ft2232h)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -468,8 +468,8 @@ ft2232_armusbtiny_h_init (urj_cable_t *cable)
 static int
 ft2232_gnice_init_common (urj_cable_t *cable, int is_ft2232h)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -529,8 +529,8 @@ ft2232_gniceplus_init (urj_cable_t *cable)
 static int
 ft2232_oocdlinks_init (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -582,8 +582,8 @@ ft2232_oocdlinks_init (urj_cable_t *cable)
 static int
 ft2232_turtelizer2_init (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -631,8 +631,8 @@ ft2232_turtelizer2_init (urj_cable_t *cable)
 static int
 ft2232_usbtojtagif_init (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -684,8 +684,8 @@ ft2232_usbtojtagif_init (urj_cable_t *cable)
 static int
 ft2232_signalyzer_init (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -729,8 +729,8 @@ ft2232_signalyzer_init (urj_cable_t *cable)
 static int
 ft2232_flyswatter_init (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -775,8 +775,8 @@ ft2232_flyswatter_init (urj_cable_t *cable)
 static int
 ft2232_usbscarab2_init (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -784,7 +784,7 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
     /* Check if cable is connected to the target and the target is powered on */
     urj_tap_cable_cx_cmd_queue (cmd_root, 1);
     urj_tap_cable_cx_cmd_push (cmd_root, GET_BITS_LOW);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+    urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
                            URJ_TAP_CABLE_COMPLETELY);
     if ((urj_tap_cable_cx_xfer_recv (cable) & BITMASK_USBSCARAB2_nCONNECTED)
         != 0)
@@ -834,8 +834,8 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
 static void
 ft2232_generic_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -859,8 +859,8 @@ ft2232_generic_done (urj_cable_t *cable)
 static void
 ft2232_jtagkey_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -908,8 +908,8 @@ ft2232_jtagkey_done (urj_cable_t *cable)
 static void
 ft2232_armusbocd_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -954,8 +954,8 @@ ft2232_armusbocd_done (urj_cable_t *cable)
 static void
 ft2232_gnice_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -986,8 +986,8 @@ ft2232_gnice_done (urj_cable_t *cable)
 static void
 ft2232_oocdlinks_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -1029,8 +1029,8 @@ ft2232_oocdlinks_done (urj_cable_t *cable)
 static void
 ft2232_turtelizer2_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -1070,8 +1070,8 @@ ft2232_turtelizer2_done (urj_cable_t *cable)
 static void
 ft2232_usbtojtagif_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -1109,8 +1109,8 @@ ft2232_usbtojtagif_done (urj_cable_t *cable)
 static void
 ft2232_signalyzer_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -1146,8 +1146,8 @@ ft2232_signalyzer_done (urj_cable_t *cable)
 static void
 ft2232_flyswatter_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        disable output drivers */
@@ -1182,8 +1182,8 @@ ft2232_flyswatter_done (urj_cable_t *cable)
 static void
 ft2232_usbscarab2_done (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Set Data Bits Low Byte
        set all to input */
@@ -1208,8 +1208,8 @@ ft2232_usbscarab2_done (urj_cable_t *cable)
 static void
 ft2232_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     tms = tms ? 0x7f : 0;
     tdi = tdi ? 1 << 7 : 0;
@@ -1257,8 +1257,8 @@ ft2232_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
 static void
 ft2232_clock_compact_schedule (urj_cable_t *cable, int length, uint8_t byte)
 {
-    params_t *params = (params_t *)cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     /* Clock Data to TMS/CS Pin (no Read) */
@@ -1280,10 +1280,10 @@ ft2232_clock_compact_schedule (urj_cable_t *cable, int length, uint8_t byte)
 static void
 ft2232_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     ft2232_clock_schedule (cable, tms, tdi, n);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+    urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
                            URJ_TAP_CABLE_COMPLETELY);
     params->last_tdo_valid = 0;
 }
@@ -1292,8 +1292,8 @@ ft2232_clock (urj_cable_t *cable, int tms, int tdi, int n)
 static void
 ft2232_get_tdo_schedule (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* Read Data Bits Low Byte */
     urj_tap_cable_cx_cmd_queue (cmd_root, 1);
@@ -1304,7 +1304,7 @@ ft2232_get_tdo_schedule (urj_cable_t *cable)
 static int
 ft2232_get_tdo_finish (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
     int value;
 
     value = (urj_tap_cable_cx_xfer_recv (cable) & BITMASK_TDO) ? 1 : 0;
@@ -1319,10 +1319,10 @@ ft2232_get_tdo_finish (urj_cable_t *cable)
 static int
 ft2232_get_tdo (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     ft2232_get_tdo_schedule (cable);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+    urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
                            URJ_TAP_CABLE_COMPLETELY);
     return ft2232_get_tdo_finish (cable);
 }
@@ -1332,7 +1332,7 @@ static void
 ft2232_set_signal_schedule (params_t *params, int mask, int val,
                             int set_low, int set_high)
 {
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     /* filter for supported signals */
     mask &=
@@ -1408,12 +1408,12 @@ ft2232_set_signal_schedule (params_t *params, int mask, int val,
 static int
 ft2232_set_signal (urj_cable_t *cable, int mask, int val)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     int prev_sigs = params->signals;
 
     ft2232_set_signal_schedule (params, mask, val, 1, 1);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+    urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
                            URJ_TAP_CABLE_COMPLETELY);
     params->last_tdo_valid = 0;
 
@@ -1425,8 +1425,8 @@ static void
 ft2232_transfer_schedule (urj_cable_t *cable, int len, const char *in,
                           char *out)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
     int in_offset = 0;
     int bitwise_len;
     int chunkbytes;
@@ -1561,7 +1561,7 @@ ft2232_transfer_schedule (urj_cable_t *cable, int len, const char *in,
 static int
 ft2232_transfer_finish (urj_cable_t *cable, int len, char *out)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
     int bitwise_len;
     int chunkbytes;
     int out_offset = 0;
@@ -1622,10 +1622,10 @@ ft2232_transfer_finish (urj_cable_t *cable, int len, char *out)
 static int
 ft2232_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     ft2232_transfer_schedule (cable, len, in, out);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+    urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
                            URJ_TAP_CABLE_COMPLETELY);
     return ft2232_transfer_finish (cable, len, out);
 }
@@ -1634,13 +1634,13 @@ ft2232_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 static void
 ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     if (how_much == URJ_TAP_CABLE_OPTIONALLY)
         return;
 
     if (cable->todo.num_items == 0)
-        urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+        urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
                                how_much);
 
     while (cable->todo.num_items > 0)
@@ -1762,7 +1762,7 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                 i = 0;
         }
 
-        urj_tap_cable_cx_xfer (&(params->cmd_root), &imm_cmd, cable,
+        urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
                                how_much);
 
         while (j != i)
@@ -1805,7 +1805,7 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                     else
                         tdo = ft2232_get_tdo_finish (cable);
                     last_tdo_valid_finish = params->last_tdo_valid;
-                    m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    m = urj_tap_cable_add_queue_item (cable, &cable->done);
                     cable->done.data[m].action = URJ_TAP_CABLE_GET_TDO;
                     cable->done.data[m].arg.value.val = tdo;
                     break;
@@ -1813,7 +1813,7 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
             case URJ_TAP_CABLE_SET_SIGNAL:
                 {
                     int m =
-                        urj_tap_cable_add_queue_item (cable, &(cable->done));
+                        urj_tap_cable_add_queue_item (cable, &cable->done);
                     cable->done.data[m].action = URJ_TAP_CABLE_SET_SIGNAL;
                     cable->done.data[m].arg.value.mask =
                         cable->todo.data[j].arg.value.mask;
@@ -1830,7 +1830,7 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
             case URJ_TAP_CABLE_GET_SIGNAL:
                 {
                     int m =
-                        urj_tap_cable_add_queue_item (cable, &(cable->done));
+                        urj_tap_cable_add_queue_item (cable, &cable->done);
                     cable->done.data[m].action = URJ_TAP_CABLE_GET_SIGNAL;
                     cable->done.data[m].arg.value.sig =
                         cable->todo.data[j].arg.value.sig;
@@ -1851,7 +1851,7 @@ ft2232_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                     if (cable->todo.data[j].arg.transfer.out)
                     {
                         int m = urj_tap_cable_add_queue_item (cable,
-                                                              &(cable->done));
+                                                              &cable->done);
                         if (m < 0)
                         {
                             // retain error state
@@ -1889,11 +1889,11 @@ ft2232_connect (urj_cable_t *cable, const urj_param_t *params[])
     if (urj_tap_cable_generic_usbconn_connect (cable, params) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    cable_params = malloc (sizeof (params_t));
+    cable_params = malloc (sizeof (*cable_params));
     if (!cable_params)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
-                       sizeof (params_t));
+                       sizeof (*cable_params));
         /* NOTE:
          * Call the underlying usbport driver (*free) routine directly
          * not urj_tap_cable_generic_usbconn_free() since it also free's cable->params
@@ -1906,7 +1906,7 @@ ft2232_connect (urj_cable_t *cable, const urj_param_t *params[])
     cable_params->mpsse_frequency = 0;
     cable_params->last_tdo_valid = 0;
 
-    urj_tap_cable_cx_cmd_init (&(cable_params->cmd_root));
+    urj_tap_cable_cx_cmd_init (&cable_params->cmd_root);
 
     /* exchange generic cable parameters with our private parameter set */
     free (cable->params);
@@ -1919,9 +1919,9 @@ ft2232_connect (urj_cable_t *cable, const urj_param_t *params[])
 static void
 ft2232_cable_free (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
-    urj_tap_cable_cx_cmd_deinit (&(params->cmd_root));
+    urj_tap_cable_cx_cmd_deinit (&params->cmd_root);
 
     urj_tap_cable_generic_usbconn_free (cable);
 }

@@ -73,11 +73,11 @@ usbblaster_connect (urj_cable_t *cable, const urj_param_t *params[])
     if (urj_tap_cable_generic_usbconn_connect (cable, params) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    cable_params = malloc (sizeof (params_t));
+    cable_params = malloc (sizeof (*cable_params));
     if (!cable_params)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zd) fails"),
-                       sizeof (params_t));
+                       sizeof (*cable_params));
         /* NOTE:
          * Call the underlying usbport driver (*free) routine directly
          * not urj_tap_cable_generic_usbconn_free() since it also free's cable->params
@@ -87,7 +87,7 @@ usbblaster_connect (urj_cable_t *cable, const urj_param_t *params[])
         return URJ_STATUS_FAIL;
     }
 
-    urj_tap_cable_cx_cmd_init (&(cable_params->cmd_root));
+    urj_tap_cable_cx_cmd_init (&cable_params->cmd_root);
 
     /* exchange generic cable parameters with our private parameter set */
     free (cable->params);
@@ -110,8 +110,8 @@ static int
 usbblaster_init (urj_cable_t *cable)
 {
     int i;
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -130,9 +130,9 @@ usbblaster_init (urj_cable_t *cable)
 static void
 usbblaster_cable_free (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
-    urj_tap_cable_cx_cmd_deinit (&(params->cmd_root));
+    urj_tap_cable_cx_cmd_deinit (&params->cmd_root);
 
     urj_tap_cable_generic_usbconn_free (cable);
 }
@@ -140,8 +140,8 @@ usbblaster_cable_free (urj_cable_t *cable)
 static void
 usbblaster_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
     int i, m;
 
     tms = tms ? (1 << TMS) : 0;
@@ -199,18 +199,18 @@ usbblaster_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
 static void
 usbblaster_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     usbblaster_clock_schedule (cable, tms, tdi, n);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable,
+    urj_tap_cable_cx_xfer (&params->cmd_root, NULL, cable,
                            URJ_TAP_CABLE_COMPLETELY);
 }
 
 static void
 usbblaster_get_tdo_schedule (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 1);
     urj_tap_cable_cx_cmd_push (cmd_root, OTHERS);       /* TCK low */
@@ -232,10 +232,10 @@ usbblaster_get_tdo_finish (urj_cable_t *cable)
 static int
 usbblaster_get_tdo (urj_cable_t *cable)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     usbblaster_get_tdo_schedule (cable);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable,
+    urj_tap_cable_cx_xfer (&params->cmd_root, NULL, cable,
                            URJ_TAP_CABLE_COMPLETELY);
     return usbblaster_get_tdo_finish (cable);
 }
@@ -250,8 +250,8 @@ static void
 usbblaster_transfer_schedule (urj_cable_t *cable, int len, const char *in,
                               char *out)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
     int in_offset = 0;
 
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
@@ -316,8 +316,8 @@ usbblaster_transfer_schedule (urj_cable_t *cable, int len, const char *in,
 static int
 usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
 {
-    params_t *params = (params_t *) cable->params;
-    urj_tap_cable_cx_cmd_root_t *cmd_root = &(params->cmd_root);
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
     int out_offset = 0;
 
     if (out == NULL)
@@ -369,10 +369,10 @@ usbblaster_transfer_finish (urj_cable_t *cable, int len, char *out)
 static int
 usbblaster_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     usbblaster_transfer_schedule (cable, len, in, out);
-    urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable,
+    urj_tap_cable_cx_xfer (&params->cmd_root, NULL, cable,
                            URJ_TAP_CABLE_COMPLETELY);
     return usbblaster_transfer_finish (cable, len, out);
 }
@@ -380,13 +380,13 @@ usbblaster_transfer (urj_cable_t *cable, int len, const char *in, char *out)
 static void
 usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 {
-    params_t *params = (params_t *) cable->params;
+    params_t *params = cable->params;
 
     if (how_much == URJ_TAP_CABLE_OPTIONALLY)
         return;
 
     if (cable->todo.num_items == 0)
-        urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, how_much);
+        urj_tap_cable_cx_xfer (&params->cmd_root, NULL, cable, how_much);
 
     while (cable->todo.num_items > 0)
     {
@@ -428,7 +428,7 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                 i = 0;
         }
 
-        urj_tap_cable_cx_xfer (&(params->cmd_root), NULL, cable, how_much);
+        urj_tap_cable_cx_xfer (&params->cmd_root, NULL, cable, how_much);
 
         while (j != i)
         {
@@ -437,7 +437,7 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
             case URJ_TAP_CABLE_GET_TDO:
                 {
                     int m;
-                    m = urj_tap_cable_add_queue_item (cable, &(cable->done));
+                    m = urj_tap_cable_add_queue_item (cable, &cable->done);
                     cable->done.data[m].action = URJ_TAP_CABLE_GET_TDO;
                     cable->done.data[m].arg.value.val =
                         usbblaster_get_tdo_finish (cable);
@@ -446,7 +446,7 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
             case URJ_TAP_CABLE_GET_SIGNAL:
                 {
                     int m =
-                        urj_tap_cable_add_queue_item (cable, &(cable->done));
+                        urj_tap_cable_add_queue_item (cable, &cable->done);
                     cable->done.data[m].action = URJ_TAP_CABLE_GET_SIGNAL;
                     cable->done.data[m].arg.value.sig =
                         cable->todo.data[j].arg.value.sig;
@@ -467,7 +467,7 @@ usbblaster_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                     if (cable->todo.data[j].arg.transfer.out)
                     {
                         int m = urj_tap_cable_add_queue_item (cable,
-                                                              &(cable->done));
+                                                              &cable->done);
                         if (m < 0)
                         {
                             // retain error state

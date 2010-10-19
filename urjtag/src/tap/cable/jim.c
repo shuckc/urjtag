@@ -114,7 +114,7 @@ static void
 jim_cable_clock (urj_cable_t *cable, int tms, int tdi, int n)
 {
     int i;
-    jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
+    jim_cable_params_t *jcp = cable->params;
 
     for (i = 0; i < n; i++)
     {
@@ -126,7 +126,7 @@ jim_cable_clock (urj_cable_t *cable, int tms, int tdi, int n)
 static int
 jim_cable_get_tdo (urj_cable_t *cable)
 {
-    jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
+    jim_cable_params_t *jcp = cable->params;
 
     return urj_jim_get_tdo (jcp->s);
 }
@@ -134,7 +134,7 @@ jim_cable_get_tdo (urj_cable_t *cable)
 static int
 jim_cable_get_trst (urj_cable_t *cable)
 {
-    jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
+    jim_cable_params_t *jcp = cable->params;
 
     return urj_jim_get_trst (jcp->s);
 }
@@ -142,7 +142,7 @@ jim_cable_get_trst (urj_cable_t *cable)
 static int
 jim_cable_set_trst (urj_cable_t *cable, int trst)
 {
-    jim_cable_params_t *jcp = (jim_cable_params_t *) (cable->params);
+    jim_cable_params_t *jcp = cable->params;
 
     urj_jim_set_trst (jcp->s, trst);
     return urj_jim_get_trst (jcp->s);

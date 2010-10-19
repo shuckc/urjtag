@@ -154,7 +154,7 @@ usbconn_ftd2xx_flush (ftd2xx_param_t *p)
         }
 
         while (recvd == 0)
-            if ((status = FT_Read (p->fc, &(p->recv_buf[p->recv_write_idx]),
+            if ((status = FT_Read (p->fc, &p->recv_buf[p->recv_write_idx],
                                    p->to_recv, &recvd)) != FT_OK)
                 urj_error_set (URJ_ERROR_FTD, _("Error from FT_Read(): %s"),
                                ftd2xx_status_string(status));
@@ -206,7 +206,7 @@ usbconn_ftd2xx_read (urj_usbconn_t *conn, uint8_t *buf, int len)
     if (cpy_len > 0)
     {
         /* get data from the receive buffer */
-        memcpy (buf, &(p->recv_buf[p->recv_read_idx]), cpy_len);
+        memcpy (buf, &p->recv_buf[p->recv_read_idx], cpy_len);
         p->recv_read_idx += cpy_len;
         if (p->recv_read_idx == p->recv_write_idx)
             p->recv_read_idx = p->recv_write_idx = 0;
@@ -217,7 +217,7 @@ usbconn_ftd2xx_read (urj_usbconn_t *conn, uint8_t *buf, int len)
         /* need to get more data directly from the device */
         while (recvd == 0)
             if ((status =
-                 FT_Read (p->fc, &(buf[cpy_len]), len, &recvd)) != FT_OK)
+                 FT_Read (p->fc, &buf[cpy_len], len, &recvd)) != FT_OK)
                 urj_error_set (URJ_ERROR_FTD, _("Error from FT_Read(): %s"),
                                ftd2xx_status_string(status));
     }
@@ -266,7 +266,7 @@ usbconn_ftd2xx_write (urj_usbconn_t *conn, uint8_t *buf, int len, int recv)
 
     if (p->send_buf)
     {
-        memcpy (&(p->send_buf[p->send_buffered]), buf, len);
+        memcpy (&p->send_buf[p->send_buffered], buf, len);
         p->send_buffered += len;
         if (recv > 0)
             p->to_recv += recv;
@@ -387,15 +387,15 @@ usbconn_ftd2xx_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
         /* serial number/description is specified */
 
         /* first try to match against the serial string */
-        status = FT_OpenEx (p->serial, FT_OPEN_BY_SERIAL_NUMBER, &(p->fc));
+        status = FT_OpenEx (p->serial, FT_OPEN_BY_SERIAL_NUMBER, &p->fc);
 
         if (status != FT_OK)
             /* then try to match against the description string */
-            status = FT_OpenEx (p->serial, FT_OPEN_BY_DESCRIPTION, &(p->fc));
+            status = FT_OpenEx (p->serial, FT_OPEN_BY_DESCRIPTION, &p->fc);
     }
     else
         /* give it a plain try */
-        status = FT_Open (0, &(p->fc));
+        status = FT_Open (0, &p->fc);
 
     if (status != FT_OK)
     {

@@ -437,7 +437,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
         part_init_func = urj_part_find_init (part->part);
         if (part_init_func)
         {
-            part->params = (urj_part_params_t *) malloc (sizeof (urj_part_params_t));
+            part->params = malloc (sizeof (urj_part_params_t));
             (*part_init_func) (part);
         }
         else
