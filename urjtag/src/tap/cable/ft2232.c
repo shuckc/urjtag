@@ -191,6 +191,9 @@
 #define BITMASK_USBSCARAB2_nSRST (1 << BIT_USBSCARAB2_nSRST)
 #define BITMASK_USBSCARAB2_nCONNECTED (1 << BIT_USBSCARAB2_nCONNECTED)
 
+/* bit and bitmask definitions for Milkymist JTAG/serial daughterboard */
+#define BIT_MILKYMIST_VREF 4
+#define BITMASK_MILKYMIST_VREF (1 << BIT_MILKYMIST_VREF)
 
 
 typedef struct
@@ -830,6 +833,56 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
     return URJ_STATUS_OK;
 }
 
+static int
+ft2232_milkymist_init (urj_cable_t *cable)
+{
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
+
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+
+    /* Check if cable is connected to the target and the target is powered on */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 1);
+    urj_tap_cable_cx_cmd_push (cmd_root, GET_BITS_LOW);
+    urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
+    if ((urj_tap_cable_cx_xfer_recv (cable) & BITMASK_MILKYMIST_VREF) == 0)
+    {
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE,
+                       _("Vref not detected. Please power on Milkymist One"));
+        return URJ_STATUS_FAIL;
+    }
+
+    params->low_byte_value = 0;
+    params->low_byte_dir = 0;
+
+    /* Set Data Bits Low Byte
+       TCK = 0, TMS = 1, TDI = 0 */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_dir | BITMASK_TCK |
+                               BITMASK_TDI | BITMASK_TMS);
+
+    /* Set Data Bits High Byte */
+    params->high_byte_value = 0;
+    params->high_byte_value = 0;
+    params->high_byte_dir = 0;
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
+
+    ft2232h_set_frequency (cable, FT2232H_MAX_TCK_FREQ);
+
+    params->bit_trst = -1;      /* not used */
+    params->bit_reset = -1;     /* not used */
+
+    params->last_tdo_valid = 0;
+    params->signals = 0;
+
+    return URJ_STATUS_OK;
+}
 
 static void
 ft2232_generic_done (urj_cable_t *cable)
@@ -1204,6 +1257,29 @@ ft2232_usbscarab2_done (urj_cable_t *cable)
     urj_tap_cable_generic_usbconn_done (cable);
 }
 
+static void
+ft2232_milkymist_done (urj_cable_t *cable)
+{
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
+
+    /* Set Data Bits Low Byte
+       set all to input */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+
+    /* Set Data Bits High Byte
+       set all to input */
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
+
+    urj_tap_cable_generic_usbconn_done (cable);
+}
 
 static void
 ft2232_clock_schedule (urj_cable_t *cable, int tms, int tdi, int n)
@@ -2177,6 +2253,25 @@ const urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver = {
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xbbe0, "-mpsse", "usbScarab2", usbscarab2)
 
+const urj_cable_driver_t urj_tap_cable_ft2232_milkymist_driver = {
+    "milkymist",
+    N_("Milkymist JTAG/serial (FT2232) Cable"),
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
+    urj_tap_cable_generic_disconnect,
+    ft2232_cable_free,
+    ft2232_milkymist_init,
+    ft2232_milkymist_done,
+    ft2232h_set_frequency,
+    ft2232_clock,
+    ft2232_get_tdo,
+    ft2232_transfer,
+    ft2232_set_signal,
+    urj_tap_cable_generic_get_signal,
+    ft2232_flush,
+    ftdx_usbcable_help
+};
+URJ_DECLARE_FTDX_CABLE(0x20b7, 0x0713, "-mpsse", "milkymist", milkymist)
 
 /*
  Local Variables:
