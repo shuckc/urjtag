@@ -183,8 +183,10 @@ AS_IF([test "x$with_libusb" != xno], [
     LIBUSB_CFLAGS="-I$with_libusb -I$with_libusb/include"
   ], [
     AS_IF([test "x$with_libusb" != x0.1 -a "x$HAVELIBUSB" = xno], [
-      PKG_CHECK_MODULES(LIBUSB, libusb-1.0, [HAVELIBUSB=1.0], [:])
-      AC_DEFINE(HAVE_LIBUSB1, 1, [Define if you have libusb-1.0])
+      PKG_CHECK_MODULES(LIBUSB, libusb-1.0, [
+          HAVELIBUSB=1.0
+          AC_DEFINE(HAVE_LIBUSB1, 1, [Define if you have libusb-1.0])
+        ], [:])
     ])
     AS_IF([test "x$with_libusb" != x1.0 -a "x$HAVELIBUSB" = xno], [
       PKG_CHECK_MODULES(LIBUSB, libusb, [HAVELIBUSB=0.1], [:])

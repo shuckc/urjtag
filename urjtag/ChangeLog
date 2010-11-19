@@ -12,6 +12,8 @@
   * data/analog/bf518/bf518, data/analog/bf548/bf548: Rename a few bus
     signals to use the same style as all other buses.
 
+  * configure.ac (HAVE_LIBUSB1): Only define when we detect libusb-1.0.pc.
+
 2010-10-26  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable_list.h, src/tap/cable/generic_usbconn_list.h,
