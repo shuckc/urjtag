@@ -18,6 +18,7 @@ signal PH2
 signal PH7
 signal PH3
 signal PH4
+salias AOE_B PH4
 signal PH5
 signal PF10
 signal PF11
@@ -77,22 +78,22 @@ signal ADDR6
 signal TDO
 signal ADDR7
 signal SA10
-signal SMS_n
-signal AWE_n
+signal SMS_B
+signal AWE_B
 signal ADDR8
 signal ADDR9
-signal ARE_n
-signal SCAS_n
+signal ARE_B
+signal SCAS_B
 signal ABE_B0
 signal ABE_B1
-signal SRAS_n
+signal SRAS_B
 signal SCKE
 signal ADDR10
 signal ADDR11
 signal ADDR12
 signal ADDR13
 signal ADDR14
-signal SWE_n
+signal SWE_B
 signal ADDR15
 signal ADDR16
 signal ADDR17
@@ -374,16 +375,16 @@ bit 29 I 1 RESET
 bit 28 C 0 *
 bit 27 O 1 CLKOUT 28 0 Z
 bit 26 O 1 AMS_B0 24 0 Z
-bit 25 O 1 AWE_n 24 0 Z
+bit 25 O 1 AWE_B 24 0 Z
 bit 24 C 0 *
-bit 23 O 1 ARE_n 24 0 Z
+bit 23 O 1 ARE_B 24 0 Z
 bit 22 O 1 AMS_B1 24 0 Z
 bit 21 O 1 SCKE 28 0 Z
-bit 20 O 1 SMS_n 28 0 Z
+bit 20 O 1 SMS_B 28 0 Z
 bit 19 I 1 TEST
-bit 18 O 1 SRAS_n 28 0 Z
-bit 17 O 1 SCAS_n 28 0 Z
-bit 16 O 1 SWE_n 28 0 Z
+bit 18 O 1 SRAS_B 28 0 Z
+bit 17 O 1 SCAS_B 28 0 Z
+bit 16 O 1 SWE_B 28 0 Z
 bit 15 O 1 SA10 28 0 Z
 bit 14 O 1 ABE_B0 7 0 Z
 bit 13 O 1 ABE_B1 7 0 Z

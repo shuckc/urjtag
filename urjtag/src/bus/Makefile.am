@@ -51,44 +51,14 @@ if ENABLE_BUS_BCM1250
 libbus_la_SOURCES += bcm1250.c
 endif
 
-if ENABLE_BUS_BF518F_EZBRD
-libbus_la_SOURCES += bf518f_ezbrd.c
-endif
-
-if ENABLE_BUS_BF526_EZKIT
-libbus_la_SOURCES += bf537_stamp.c
-else
-if ENABLE_BUS_BF527_EZKIT
-libbus_la_SOURCES += bf537_stamp.c
-else
-if ENABLE_BUS_BF533_EZKIT
-libbus_la_SOURCES += bf537_stamp.c
-else
-if ENABLE_BUS_BF537_STAMP
-libbus_la_SOURCES += bf537_stamp.c
-else
-if ENABLE_BUS_BF537_EZKIT
-libbus_la_SOURCES += bf537_stamp.c
-else
-if ENABLE_BUS_BF538F_EZKIT
-libbus_la_SOURCES += bf537_stamp.c
-endif
-endif
-endif
-endif
-endif
-endif
-
-if ENABLE_BUS_BF533_STAMP
-libbus_la_SOURCES += bf533_stamp.c
-endif
-
-if ENABLE_BUS_BF548_EZKIT
-libbus_la_SOURCES += bf548_ezkit.c
-endif
-
-if ENABLE_BUS_BF561_EZKIT
-libbus_la_SOURCES += bf561_ezkit.c
+if ENABLE_BUS_BLACKFIN
+libbus_la_SOURCES += \
+	blackfin.c \
+	bf518f_ezbrd.c \
+	bf533_stamp.c \
+	bf537_stamp.c \
+	bf548_ezkit.c \
+	bf561_ezkit.c
 endif
 
 if ENABLE_BUS_BSCOACH

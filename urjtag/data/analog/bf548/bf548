@@ -216,11 +216,11 @@ signal DATA3
 signal DATA2
 signal DATA1
 signal DATA0
-signal AWEB
-signal AREB
+signal AWE_B
+signal ARE_B
 signal RESETB
 signal NMIB
-signal AOEB
+signal AOE_B
 signal AMS_B3
 signal AMS_B2
 signal AMS_B1
@@ -756,16 +756,16 @@ bit 327 C 0 *
 bit 326 O 1 AMS_B3 327 0 Z
 bit 325 I 1 AMS_B3
 bit 324 C 0 *
-bit 323 O 1 AOEB 324 0 Z
-bit 322 I 1 AOEB
+bit 323 O 1 AOE_B 324 0 Z
+bit 322 I 1 AOE_B
 bit 321 I 1 NMIB
 bit 320 I 1 RESETB
 bit 319 C 0 *
-bit 318 O 1 AREB 319 0 Z
-bit 317 I 1 AREB
+bit 318 O 1 ARE_B 319 0 Z
+bit 317 I 1 ARE_B
 bit 316 C 0 *
-bit 315 O 1 AWEB 316 0 Z
-bit 314 I 1 AWEB
+bit 315 O 1 AWE_B 316 0 Z
+bit 314 I 1 AWE_B
 bit 313 C 0 *
 bit 312 O 1 DATA0 313 0 Z
 bit 311 I 1 DATA0

@@ -560,19 +560,7 @@ URJ_DRIVER_SET([bus], [
 	au1500
 	avr32
 	bcm1250
-	bf518f_ezbrd
-	bf51x
-	bf526_ezkit
-	bf527_ezkit
-	bf52x
-	bf533_stamp
-	bf533_ezkit
-	bf537_stamp
-	bf537_ezkit
-	bf538f_ezkit
-	bf53x
-	bf548_ezkit
-	bf561_ezkit
+	blackfin
 	bscoach
 	ejtag
 	ejtag_dma
