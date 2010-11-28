@@ -269,7 +269,7 @@ ejtag_run_pracc (urj_bus_t *bus, const uint32_t *code, unsigned int len)
 static int
 ejtag_bus_init (urj_bus_t *bus)
 {
-    urj_data_register_t *ejctrl, *ejimpl, *ejaddr, *ejdata, *ejall;
+    urj_data_register_t *ejctrl, *ejimpl, *ejaddr, *ejdata;
     uint32_t code[4] = {
         0x3c04ff20,             // lui $4,0xff20
         0x349f0200,             // ori $31,$4,0x0200
@@ -290,7 +290,6 @@ ejtag_bus_init (urj_bus_t *bus)
     ejimpl = urj_part_find_data_register (bus->part, "EJIMPCODE");
     ejaddr = urj_part_find_data_register (bus->part, "EJADDRESS");
     ejdata = urj_part_find_data_register (bus->part, "EJDATA");
-    ejall = urj_part_find_data_register (bus->part, "EJALL");
     if (!(ejctrl && ejimpl))
     {
         urj_error_set (URJ_ERROR_NOTFOUND,
@@ -353,6 +352,12 @@ ejtag_bus_init (urj_bus_t *bus)
 //
     if (EJTAG_VER == EJTAG_20)
     {
+        if (!(ejaddr && ejdata))
+        {
+            urj_error_set (URJ_ERROR_NOTFOUND,
+                           _("EJADDRESS or EJDATA register not found"));
+            return URJ_STATUS_FAIL;
+        }
         // Try enabling memory write on EJTAG_20 (BCM6348)
         // Badly Copied from HairyDairyMaid V4.8
         //ejtag_dma_write(0xff300000, (ejtag_dma_read(0xff300000) & ~(1<<2)) );
