@@ -1,3 +1,7 @@
+2010-12-19  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/xc6slx45/STEPPINGS: Add stepping 2 from Sébastien Bourdeauducq.
+
 2010-11-28  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/ejtag.c (ejtag_bus_init): Punt unused EJALL register lookup.
