@@ -349,7 +349,8 @@ page at Sourceforge:
 
 ==== Required software for compiling UrJTAG ====
 
-To run autogen.sh, you need autoconf and automake, bison, and a recent flex.
+To run autogen.sh, you need autoconf and automake, bison, pkg-config
+and a recent flex.
 
 The distributed source tarball contains source pregenerated with a current
 flex version; flex therefore is only needed if you want to compile code

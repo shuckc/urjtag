@@ -4,6 +4,8 @@
   * src/tap/cable/generic_usbconn_list.h: Add usbjtagrs232.
   * src/tap/cable/ft2232.c: Add usbjtagrs232 support by Orasanu Lucian.
 
+  * doc/UrJTAG.txt: Note by Bogdan Petrisor for pkg-config requirement.
+
 2010-12-19  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/xc6slx45/STEPPINGS: Add stepping 2 from Sébastien Bourdeauducq.
