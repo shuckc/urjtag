@@ -56,6 +56,7 @@ _URJ_USB_FTDX(milkymist)
 _URJ_USB_FTDX(oocdlinks)
 _URJ_USB_FTDX(signalyzer)
 _URJ_USB_FTDX(turtelizer2)
+_URJ_USB_FTDX(usbjtagrs232)
 _URJ_USB_FTDX(usbscarab2)
 _URJ_USB_FTDX(usbtojtagif)
 #endif

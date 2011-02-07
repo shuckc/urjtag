@@ -148,6 +148,16 @@
 #define BITMASK_TURTELIZER2_nTX1LED (1 << BIT_TURTELIZER2_nTX1LED)
 #define BITMASK_TURTELIZER2_nRX1LED (1 << BIT_TURTELIZER2_nRX1LED)
 
+/* bit and bitmask definitions for USB<=>JTAG&RS232 */
+#define BIT_USBJTAGRS232_nTRST_nOE 2
+#define BIT_USBJTAGRS232_nTRST     0
+#define BIT_USBJTAGRS232_nSRST_nOE 3
+#define BIT_USBJTAGRS232_nSRST     1
+#define BITMASK_USBJTAGRS232_nTRST_nOE (1 << BIT_USBJTAGRS232_nTRST_nOE)
+#define BITMASK_USBJTAGRS232_nTRST (1 << BIT_USBJTAGRS232_nTRST)
+#define BITMASK_USBJTAGRS232_nSRST_nOE (1 << BIT_USBJTAGRS232_nSRST_nOE)
+#define BITMASK_USBJTAGRS232_nSRST (1 << BIT_USBJTAGRS232_nSRST)
+
 /* bit and bitmask definitions for USB to JTAG Interface */
 #define BIT_USBTOJTAGIF_nTRST   4
 #define BIT_USBTOJTAGIF_RST     6
@@ -446,7 +456,7 @@ ft2232_armusbocd_init_common (urj_cable_t *cable, int is_ft2232h)
     else
         ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
 
-    params->bit_trst = BIT_ARMUSBOCD_nTRST + 8; /* member of HIGH byte */
+    params->bit_trst = BIT_ARMUSBOCD_nTRST + 8;         /* member of HIGH byte */
     params->bit_reset = BIT_ARMUSBOCD_nTSRST + 8;       /* member of HIGH byte */
 
     params->last_tdo_valid = 0;
@@ -626,6 +636,59 @@ ft2232_turtelizer2_init (urj_cable_t *cable)
 
     params->last_tdo_valid = 0;
     params->signals = URJ_POD_CS_RESET;
+
+    return URJ_STATUS_OK;
+}
+
+
+static int
+ft2232_usbjtagrs232_init (urj_cable_t *cable)
+{
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
+
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+
+    /* static low byte value and direction */
+    params->low_byte_value = 0;
+    params->low_byte_dir = 0;
+
+    /* Set Data Bits Low Byte
+       TCK = 0, TMS = 1, TDI = 0 */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
+
+    /* Set Data Bits High Byte
+       default:
+       TRST = 1
+       TRST buffer enable = 0
+       SRST = 1
+       SRST buffer enable = 0 */
+    params->high_byte_value = BITMASK_USBJTAGRS232_nTRST
+        | BITMASK_USBJTAGRS232_nSRST;
+    params->high_byte_dir = BITMASK_USBJTAGRS232_nTRST
+        | BITMASK_USBJTAGRS232_nTRST_nOE
+        | BITMASK_USBJTAGRS232_nSRST | BITMASK_USBJTAGRS232_nSRST_nOE;
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
+
+    ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
+
+    params->bit_trst = BIT_USBJTAGRS232_nTRST + 8; /* member of HIGH byte */
+    params->bit_reset = BIT_USBJTAGRS232_nSRST + 8;        /* member of HIGH byte */
+
+    params->last_tdo_valid = 0;
+    params->signals = URJ_POD_CS_TRST | URJ_POD_CS_RESET;
 
     return URJ_STATUS_OK;
 }
@@ -1112,6 +1175,49 @@ ft2232_turtelizer2_done (urj_cable_t *cable)
        set all to input */
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
+
+    urj_tap_cable_generic_usbconn_done (cable);
+}
+
+
+static void
+ft2232_usbjtagrs232_done (urj_cable_t *cable)
+{
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
+
+    /* Set Data Bits Low Byte
+       set all to input */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+
+    /* Set Data Bits High Byte
+       disable output drivers */
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               BITMASK_USBJTAGRS232_nTRST
+                               | BITMASK_USBJTAGRS232_nTRST_nOE
+                               | BITMASK_USBJTAGRS232_nSRST |
+                               BITMASK_USBJTAGRS232_nSRST_nOE);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               BITMASK_USBJTAGRS232_nTRST |
+                               BITMASK_USBJTAGRS232_nTRST_nOE |
+                               BITMASK_USBJTAGRS232_nSRST |
+                               BITMASK_USBJTAGRS232_nSRST_nOE);
+
+    /* Set Data Bits High Byte
+       set all to input */
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               BITMASK_USBJTAGRS232_nTRST
+                               | BITMASK_USBJTAGRS232_nTRST_nOE
+                               | BITMASK_USBJTAGRS232_nSRST |
+                               BITMASK_USBJTAGRS232_nSRST_nOE);
     urj_tap_cable_cx_cmd_push (cmd_root, 0);
     urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
                            URJ_TAP_CABLE_COMPLETELY);
@@ -2172,6 +2278,26 @@ const urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver = {
     ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xBDC8, "-mpsse", "Turtelizer2", turtelizer2)
+
+const urj_cable_driver_t urj_tap_cable_ft2232_usbjtagrs232_driver = {
+    "USB<=>JTAG&RS232",
+    N_("USB<=>JTAG&RS232 (FT2232) Cable (EXPERIMENTAL)"),
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
+    urj_tap_cable_generic_disconnect,
+    ft2232_cable_free,
+    ft2232_usbjtagrs232_init,
+    ft2232_usbjtagrs232_done,
+    ft2232_set_frequency,
+    ft2232_clock,
+    ft2232_get_tdo,
+    ft2232_transfer,
+    ft2232_set_signal,
+    urj_tap_cable_generic_get_signal,
+    ft2232_flush,
+    ftdx_usbcable_help
+};
+URJ_DECLARE_FTDX_CABLE(0x1457, 0x5118, "-mpsse", "USB<=>JTAG&RS232", usbjtagrs232)
 
 const urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver = {
     "USB-to-JTAG-IF",

@@ -57,6 +57,7 @@ _URJ_CABLE(ft2232_milkymist)
 _URJ_CABLE(ft2232_oocdlinks)
 _URJ_CABLE(ft2232_signalyzer)
 _URJ_CABLE(ft2232_turtelizer2)
+_URJ_CABLE(ft2232_usbjtagrs232)
 _URJ_CABLE(ft2232_usbscarab2)
 _URJ_CABLE(ft2232_usbtojtagif)
 #endif
