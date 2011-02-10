@@ -56,6 +56,11 @@
 #define mkdir(path, mode) mkdir(path)
 #endif
 
+/* Some Windows code likes to define this, so undo it here */
+#ifdef interface
+#undef interface
+#endif
+
 #ifndef HAVE_GETEUID
 #define geteuid() 0
 #endif

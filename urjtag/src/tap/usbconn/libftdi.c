@@ -36,6 +36,7 @@
 #include <urjtag/error.h>
 #include <urjtag/log.h>
 #include <urjtag/usbconn.h>
+#include <urjtag/cable.h>
 #include "libftdx.h"
 #include "../usbconn.h"
 
@@ -46,6 +47,8 @@ typedef struct
     unsigned int pid;
     struct ftdi_context *fc;
     char *serial;
+    /* ftdi interface selection */
+    unsigned int interface;
     /* send and receive buffer handling */
     uint32_t send_buf_len;
     uint32_t send_buffered;
@@ -310,6 +313,7 @@ usbconn_ftdi_connect (urj_usbconn_cable_t *template,
     p->fc = fc;
     p->pid = template->pid;
     p->vid = template->vid;
+    p->interface = template->interface;
     /* @@@@ RFHH check strdup result */
     p->serial = template->desc ? strdup (template->desc) : NULL;
 

@@ -36,6 +36,7 @@
 #include <urjtag/error.h>
 #include <urjtag/log.h>
 #include <urjtag/usbconn.h>
+#include <urjtag/cable.h>
 #include "libftdx.h"
 #include "../usbconn.h"
 
@@ -50,6 +51,7 @@ typedef struct
     unsigned int pid;
     FT_HANDLE fc;
     char *serial;
+    unsigned int interface;
     /* send and receive buffer handling */
     uint32_t send_buf_len;
     uint32_t send_buffered;
@@ -331,6 +333,7 @@ usbconn_ftd2xx_connect (urj_usbconn_cable_t *template,
     p->fc = NULL;
     p->pid = template->pid;
     p->vid = template->vid;
+    p->interface = template->interface;
     /* @@@@ RFHH check strdup result */
     p->serial = template->desc ? strdup (template->desc) : NULL;
 
@@ -395,7 +398,7 @@ usbconn_ftd2xx_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
     }
     else
         /* give it a plain try */
-        status = FT_Open (0, &p->fc);
+        status = FT_Open (p->interface, &p->fc);
 
     if (status != FT_OK)
     {

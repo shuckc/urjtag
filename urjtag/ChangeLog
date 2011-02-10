@@ -1,3 +1,14 @@
+2011-02-09  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/urjtag/usbconn.h (urj_usbconn_cable_t): Add an "interface" member.
+  * include/urjtag/cable.h (URJ_CABLE_PARAM_KEY_INTERFACE): New key for ftdi.
+  * src/tap/cable.c (cable_param): Handle new "interface" key.
+  * src/tap/cable/generic_usbconn.c (urj_tap_cable_generic_usbconn_connect):
+    Parse new "interface" cable parameter.
+  * src/tap/usbconn/libftd2xx.c: Use new "interface" selection.
+  * src/tap/usbconn/libftdi.c: Likewise.
+  * sysdep.h: Auto undefine "interface" for Windows.
+
 2011-02-06  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable_list.h: Add usbjtagrs232.

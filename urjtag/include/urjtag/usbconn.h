@@ -38,6 +38,7 @@ typedef struct
     const char *driver;
     int32_t vid;
     int32_t pid;
+    int32_t interface;
 }
 urj_usbconn_cable_t;
 
