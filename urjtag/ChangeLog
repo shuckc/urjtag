@@ -1,3 +1,7 @@
+2011-02-17  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/analog/bf548/STEPPINGS: Add bf54x-0.4 support.
+
 2011-02-09  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/usbconn.h (urj_usbconn_cable_t): Add an "interface" member.
