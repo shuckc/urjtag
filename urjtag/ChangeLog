@@ -11,6 +11,8 @@
   * src/global/parse.c (urj_parse_stream): Get rid of line length limitations
   by using getline when it is available.
 
+  * src/part/part.c: Fix indentation style.
+
 2011-02-17  Mike Frysinger  <vapier@gentoo.org>
 
   * data/analog/bf548/STEPPINGS: Add bf54x-0.4 support.

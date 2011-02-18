@@ -486,23 +486,23 @@ urj_part_parts_print (urj_log_level_t ll, urj_parts_t *ps)
 void
 urj_part_init_register (char *part, urj_part_init_func_t init)
 {
-  urj_part_init_t *pi;
+    urj_part_init_t *pi;
 
-  pi = (urj_part_init_t *) malloc (sizeof (urj_part_init_t));
-  strncpy (pi->part, part, URJ_PART_PART_MAXLEN);
-  pi->init = init;
-  pi->next = urj_part_inits;
-  urj_part_inits = pi;
+    pi = (urj_part_init_t *) malloc (sizeof (urj_part_init_t));
+    strncpy (pi->part, part, URJ_PART_PART_MAXLEN);
+    pi->init = init;
+    pi->next = urj_part_inits;
+    urj_part_inits = pi;
 }
 
 urj_part_init_func_t
 urj_part_find_init (char *part)
 {
-  urj_part_init_t *pi;
+    urj_part_init_t *pi;
 
-  for (pi = urj_part_inits; pi; pi = pi->next)
-    if (strcmp (pi->part, part) == 0)
-      return pi->init;
+    for (pi = urj_part_inits; pi; pi = pi->next)
+        if (strcmp (pi->part, part) == 0)
+            return pi->init;
 
-  return NULL;
+    return NULL;
 }
