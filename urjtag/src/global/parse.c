@@ -40,10 +40,6 @@
 #include <urjtag/jtag.h>
 #include <urjtag/bsdl.h>
 
-#define MAXINPUTLINE 300        /* Maximum input line length */
-
-
-
 int
 urj_parse_line (urj_chain_t *chain, const char *line)
 {
@@ -151,39 +147,78 @@ urj_parse_line (urj_chain_t *chain, const char *line)
     return r;
 }
 
+#ifndef HAVE_GETLINE
+#define MAXINPUTLINE 300        /* Maximum input line length */
+static ssize_t getline(char **line, size_t *len, FILE *f)
+{
+    static int lnr;
+    char *p;
+
+    ++lnr;
+    if (!*line)
+    {
+        *len = MAXINPUTLINE + 1;
+        *line = malloc (*len);
+    }
+
+    if (fgets (*line, *len, f) == NULL)
+        return -1;
+
+    /* Clip any comments */
+    p = strchr (*line, '#');
+    if (p)
+    {
+        p[0] = '\n';
+        p[1] = '\0';
+    }
+
+    /* Make sure the line wasn't clipped */
+    p = strchr (*line, '\n');
+    if (!p)
+    {
+        urj_warning ("line %d exceeds %zd characters, clipped\n", lnr, *len);
+        while (1) {
+            char c = fgetc (f);
+            if (c == '\n' || c == EOF)
+                break;
+        }
+    }
+
+    return p - *line + 1;
+}
+#endif
 
 int
 urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f)
 {
-    char inputline[MAXINPUTLINE + 1];
-    int go = 1, i, c, lnr, clip, found_comment;
+    char *inputline, *p;
+    size_t len;
+    int go;
 
     /* read the stream line-by-line until EOF or "quit" */
-    lnr = 0;
+    inputline = NULL;
     do
     {
-        i = 0;
-        clip = 0;
-        found_comment = 0;
-
-        /* read stream until '\n' or EOF, copy at most MAXINPUTLINE-1 chars */
-        while (1)
+        if (getline (&inputline, &len, f) == -1)
         {
-            c = fgetc (f);
-            if (c == EOF || c == '\n')
+            if (!feof (f))
+            {
+                go = URJ_STATUS_FAIL;
+                urj_warning ("getline() failed\n");
                 break;
-            if (c == '#')
-                found_comment = 1;
-            if (i < sizeof (inputline) - 1)
-                inputline[i++] = c;
-            else
-                clip = 1;
+            }
+
+            /* Make sure inputline is big enough ... don't rely on getline */
+            inputline = realloc (inputline, 5);
+            sprintf (inputline, "quit");
         }
-        inputline[i] = '\0';
-        lnr++;
-        if (clip && !found_comment)
-            urj_warning ("line %d exceeds %zd characters, clipped\n", lnr,
-                         sizeof (inputline) - 1);
+        else
+        {
+            p = strchr (inputline, '\n');
+            if (p)
+                *p = '\0';
+        }
+
         go = urj_parse_line (chain, inputline);
         if (go == URJ_STATUS_FAIL)
         {
@@ -192,7 +227,9 @@ urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f)
         }
         urj_tap_chain_flush (chain);
     }
-    while (go != URJ_STATUS_MUST_QUIT && c != EOF);
+    while (go != URJ_STATUS_MUST_QUIT);
+
+    free (inputline);
 
     return go;
 }

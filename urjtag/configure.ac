@@ -119,6 +119,7 @@ fi
 AC_CHECK_FUNCS(m4_flatten([
 	_sleep
 	geteuid
+	getline
 	getuid
 	nanosleep
 	pread
