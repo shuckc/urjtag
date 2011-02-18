@@ -16,6 +16,8 @@
   * src/cmd/cmd_get.c: Fix typo in help output.
   * src/cmd/cmd_set.c: Fix typo in help output.
 
+  * src/cmd/cmd_shell.c: Clean up help output.
+
 2011-02-17  Mike Frysinger  <vapier@gentoo.org>
 
   * data/analog/bf548/STEPPINGS: Add bf54x-0.4 support.

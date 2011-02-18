@@ -92,15 +92,15 @@ static void
 cmd_shell_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("Usage: %s cmmd\n"
-               "Shell out to os for a command.\n"
-               "\n" "CMMD OS Shell Command\n"),
-             "shell cmmd");
+             _("Usage: %s CMD\n"
+               "Shell out to the OS for a command.\n"
+               "\n" "CMD OS Shell Command\n"),
+             "shell");
 }
 
 const urj_cmd_t urj_cmd_shell = {
     "shell",
-    N_("shell cmmd"),
+    N_("run a shell command"),
     cmd_shell_help,
     cmd_shell_run
 };
