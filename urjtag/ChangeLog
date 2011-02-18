@@ -15,6 +15,7 @@
 
   * src/cmd/cmd_get.c: Fix typo in help output.
   * src/cmd/cmd_set.c: Fix typo in help output.
+  * src/cmd/cmd_test.c: Fix typo in help output.
 
   * src/cmd/cmd_shell.c: Clean up help output.
 
