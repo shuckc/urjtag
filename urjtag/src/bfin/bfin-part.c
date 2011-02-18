@@ -163,7 +163,7 @@ void _bfin_part_init (void) __attribute__((constructor));
 extern void bfin_init (void);
 
 void
-_bfin_part_init ()
+_bfin_part_init (void)
 {
     bfin_init ();
 }
