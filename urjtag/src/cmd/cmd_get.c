@@ -89,7 +89,7 @@ cmd_get_help (void)
                "Get signal state from output BSR (Boundary Scan Register).\n"
                "\n"
                "SIGNAL        signal name (from JTAG declaration file)\n"),
-             "get signal");
+             "get");
 }
 
 const urj_cmd_t urj_cmd_get = {
