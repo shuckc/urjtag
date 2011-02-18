@@ -30,20 +30,28 @@
 #include "types.h"
 
 /**
+ * Take care of tokenizing the line before sending to urj_cmd_run().
+ *
  * @return
  *      URJ_STATUS_OK on success
  *      URJ_STATUS_ERROR on error
  *      URJ_STATUS_QUIT on quit command
  */
 int urj_parse_line (urj_chain_t *chain, char *line);
+
 /**
+ * Run each line in the specified stream through urj_parse_line().
+ *
  * @return
  *      URJ_STATUS_OK on success
  *      URJ_STATUS_ERROR on error
  *      URJ_STATUS_QUIT on quit command
  */
 int urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f);
+
 /**
+ * Open the specified file and run through urj_parse_stream().
+ *
  * @return
  *      URJ_STATUS_OK on success
  *      URJ_STATUS_ERROR on error
