@@ -114,7 +114,7 @@ cmd_set_help (void)
                "DIR           requested signal direction; possible values: 'in' or 'out'\n"
                "DATA          desired output signal value ('0' or '1'); used only if DIR\n"
                "                is 'out'\n"),
-             "set signal");
+             "set");
 }
 
 const urj_cmd_t urj_cmd_set = {
