@@ -37,7 +37,7 @@
  *      URJ_STATUS_ERROR on error
  *      URJ_STATUS_QUIT on quit command
  */
-int urj_parse_line (urj_chain_t *chain, char *line);
+int urj_parse_line (urj_chain_t *chain, const char *line);
 
 /**
  * Run each line in the specified stream through urj_parse_line().

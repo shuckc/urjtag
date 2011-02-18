@@ -4,6 +4,9 @@
 
   * include/urjtag/parse.h: Document the various stream functions.
 
+  * include/urjtag/parse.h (urj_parse_line): Constify the "line" argument.
+  * src/global/parse.c (urj_parse_line): Likewise.
+
 2011-02-17  Mike Frysinger  <vapier@gentoo.org>
 
   * data/analog/bf548/STEPPINGS: Add bf54x-0.4 support.

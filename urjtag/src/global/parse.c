@@ -45,12 +45,13 @@
 
 
 int
-urj_parse_line (urj_chain_t *chain, char *line)
+urj_parse_line (urj_chain_t *chain, const char *line)
 {
     int l, i, r, tcnt;
     int escape = 0, quote_single = 0, quote_double = 0;
     char **a;
-    char *c, *d;
+    const char *c;
+    char *d;
     char *sline;
 
     if (line == NULL)
