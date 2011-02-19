@@ -108,9 +108,26 @@ cmd_test_help (void)
              "test");
 }
 
+static void
+cmd_test_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                   const char *text, size_t text_len, size_t token_point)
+{
+    switch (token_point)
+    {
+    case 1:  /* name */
+        cmd_signal_complete (chain, matches, match_cnt, text, text_len);
+        break;
+    case 2:  /* value */
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "0");
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "1");
+        break;
+    }
+}
+
 const urj_cmd_t urj_cmd_test = {
     "test",
     N_("test external signal value"),
     cmd_test_help,
-    cmd_test_run
+    cmd_test_run,
+    cmd_test_complete,
 };

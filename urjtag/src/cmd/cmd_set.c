@@ -117,9 +117,33 @@ cmd_set_help (void)
              "set");
 }
 
+static void
+cmd_set_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                  const char *text, size_t text_len, size_t token_point)
+{
+    switch (token_point)
+    {
+    case 1:  /* name */
+        cmd_signal_complete (chain, matches, match_cnt, text, text_len);
+        break;
+
+    case 2:  /* direction */
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "in");
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "out");
+        break;
+
+    case 3:  /* value */
+        /* XXX: Only applies if token[1] == "out" ... */
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "0");
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "1");
+        break;
+    }
+}
+
 const urj_cmd_t urj_cmd_set = {
     "set",
     N_("set external signal value"),
     cmd_set_help,
-    cmd_set_run
+    cmd_set_run,
+    cmd_set_complete,
 };

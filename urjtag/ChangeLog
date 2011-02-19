@@ -7,6 +7,16 @@
     of urj_parse_line and into its own function urj_tokenize_lines.  This lets
     us reuse this code elsewhere.
 
+  * include/urjtag/cmd.h, src/apps/jtag/jtag.c, src/cmd/cmd.h,
+    src/cmd/cmd_cmd.c: Rewrite command completion so that sub-options to
+    commands may be completed as well.  Those commands must implement their
+    own sub-completion handlers in order to support this.
+  * src/cmd/cmd_bfin.c, src/cmd/cmd_cable.c, src/cmd/cmd_get.c,
+    src/cmd/cmd_help.c, src/cmd/cmd_include.c, src/cmd/cmd_initbus.c,
+    src/cmd/cmd_instruction.c, src/cmd/cmd_salias.c, src/cmd/cmd_set.c,
+    src/cmd/cmd_shift.c, src/cmd/cmd_signal.c, src/cmd/cmd_test.c: Implement
+    sub-completion handlers for these commands.
+
 2011-02-18  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bfin/bfin-part.c (_bfin_part_init): Add missing "void" to param list.

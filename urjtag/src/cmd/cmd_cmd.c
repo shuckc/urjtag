@@ -26,10 +26,11 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include <urjtag/error.h>
 #include <urjtag/chain.h>
-
+#include <urjtag/parse.h>
 #include <urjtag/cmd.h>
 
 #include "cmd.h"
@@ -42,36 +43,130 @@ const urj_cmd_t * const urj_cmds[] = {
 
 /*
  * @param text match commands whose prefix equals <code>text</code>. Rotates
- *      through the registered commands. The prefix length is set when
- *      the rotating state is reset.
- * @@@@ RFHH that is weird behaviour. Why not do the prefix length as strlen(text)?
+ *      through the registered commands. The prefix length is set when the
+ *      rotating state is reset. This is the behavior as dictated by readline.
  */
-char *
-urj_cmd_find_next (const char *text, int state)
+static const urj_cmd_t *
+urj_cmd_find (const char *text, ssize_t last_idx)
 {
-    static size_t cmd_idx, len;
-    char *next = NULL;
+    static size_t len;
+    const urj_cmd_t *ret;
 
-    if (!state)
-    {
-        cmd_idx = 0;
+    if (last_idx == -1)
         len = strlen (text);
+
+    while (urj_cmds[++last_idx])
+    {
+        ret = urj_cmds[last_idx];
+        if (!strncmp (ret->name, text, len))
+            return ret;
     }
 
-    while (urj_cmds[cmd_idx])
+    return NULL;
+}
+
+/* These three funcs are meant to be used by sub-command completers */
+void
+urj_completion_add_match (char ***matches, size_t *cnt, char *match)
+{
+    *matches = realloc (*matches, sizeof (**matches) * (*cnt + 2));
+    (*matches)[(*cnt)++] = match;
+}
+
+void
+urj_completion_add_match_dupe (char ***matches, size_t *cnt, const char *match)
+{
+    urj_completion_add_match (matches, cnt, strdup (match));
+}
+
+void
+urj_completion_mayben_add_match (char ***matches, size_t *cnt, const char *text,
+                                 size_t text_len, const char *match)
+{
+    if (!strncmp (text, match, text_len))
+        urj_completion_add_match_dupe (matches, cnt, match);
+}
+
+void
+urj_completion_maybe_add_match (char ***matches, size_t *cnt, const char *text,
+                                const char *match)
+{
+    urj_completion_mayben_add_match (matches, cnt, text, strlen (text), match);
+}
+
+static size_t
+urt_completion_find_token_point (const char *line, int point)
+{
+    const char *cs = line;
+    size_t token_point = 0;
+
+    /* Skip all leading whitespace first to make 2nd loop easier */
+    while (isspace (*cs))
+        ++cs;
+
+    while (*cs)
     {
-        char *name = urj_cmds[cmd_idx++]->name;
-        if (!strncmp (name, text, len))
-        {
-            next = strdup (name);
-            if (next == NULL)
-                urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "strdup(%s) fails",
-                               name);
+        if (point <= (cs - line))
             break;
+
+        ++cs;
+
+        if (isspace (*cs))
+        {
+            ++token_point;
+            while (isspace (*cs))
+                ++cs;
         }
     }
 
-    return next;
+    return token_point;
+}
+
+char **
+urj_cmd_complete (urj_chain_t *chain, const char *line, int point)
+{
+    char **tokens, **ret;
+    size_t token_cnt, token_point, ret_cnt;
+    const urj_cmd_t *cmd;
+    const char *name;
+
+    /* Split up the current line to make completion easier */
+    if (urj_tokenize_line (line, &tokens, &token_cnt))
+        return NULL;
+    if (token_cnt == 0)
+        name = "";
+    else
+        name = tokens[0];
+
+    ret = NULL;
+    ret_cnt = 0;
+
+    /* Figure out which token we're pointing to */
+    token_point = urt_completion_find_token_point (line, point);
+
+    /* Are we completing the command itself ?  Re-use the 'help' ... */
+    if (token_point == 0)
+        name = "help";
+
+    /* Figure out options for which command we want to complete */
+    cmd = urj_cmd_find (name, -1);
+    if (cmd && cmd->complete)
+    {
+        if (token_cnt)
+            name = tokens[token_point] ? : "";
+        else
+            name = "";
+
+        cmd->complete (chain, &ret, &ret_cnt, name, strlen (name), token_point);
+
+        if (ret_cnt)
+            ret[ret_cnt] = NULL;
+    }
+
+    if (token_cnt)
+        urj_tokens_free (tokens);
+
+    return ret;
 }
 
 int

@@ -94,9 +94,20 @@ cmd_salias_help (void)
              "signal");
 }
 
+static void
+cmd_salias_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                     const char *text, size_t text_len, size_t token_point)
+{
+    if (token_point != 2)
+        return;
+
+    cmd_signal_complete (chain, matches, match_cnt, text, text_len);
+}
+
 const urj_cmd_t urj_cmd_salias = {
     "salias",
     N_("define an alias for a signal"),
     cmd_salias_help,
-    cmd_salias_run
+    cmd_salias_run,
+    cmd_salias_complete,
 };

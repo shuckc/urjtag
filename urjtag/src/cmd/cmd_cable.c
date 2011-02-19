@@ -194,9 +194,32 @@ cmd_cable_help (void)
     urj_cmd_show_list (urj_tap_cable_drivers);
 }
 
+static void
+cmd_cable_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                    const char *text, size_t text_len, size_t token_point)
+{
+    size_t i;
+
+    switch (token_point)
+    {
+    case 1:
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "probe");
+
+        for (i = 0; urj_tap_cable_drivers[i]; i++)
+            urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
+                                             urj_tap_cable_drivers[i]->name);
+        break;
+    case 2:
+        /* XXX: in the future, we want to complete cable options too */
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "help");
+        break;
+    }
+}
+
 const urj_cmd_t urj_cmd_cable = {
     "cable",
     N_("select JTAG cable"),
     cmd_cable_help,
-    cmd_cable_run
+    cmd_cable_run,
+    cmd_cable_complete,
 };

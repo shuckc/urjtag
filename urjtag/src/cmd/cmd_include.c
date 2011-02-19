@@ -29,6 +29,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef HAVE_LIBREADLINE
+#include <readline/readline.h>
+#endif
+
 #include <urjtag/error.h>
 #include <urjtag/parse.h>
 #include <urjtag/jtag.h>
@@ -97,11 +101,55 @@ cmd_include_help (void)
     cmd_include_or_script_help ("include");
 }
 
+static void
+cmd_include_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                      const char *text, size_t text_len, size_t token_point)
+{
+#ifdef HAVE_LIBREADLINE
+    int state;
+    size_t implicit_len;
+    char *match, *search_text;
+
+    /* Use the search path if path isn't explicitly relative/absolute */
+    if (text[0] != '/' && text[0] != '.')
+    {
+        const char *jtag_data_dir = urj_get_data_dir ();
+        implicit_len = strlen (jtag_data_dir) + 1;
+
+        search_text = malloc (implicit_len + text_len + 1);
+        if (!search_text)
+            return;
+
+        sprintf (search_text, "%s/%s", jtag_data_dir, text);
+        text = search_text;
+        text_len += implicit_len;
+    }
+    else
+    {
+        implicit_len = 0;
+        search_text = NULL;
+    }
+
+    state = 0;
+    while (1)
+    {
+        match = rl_filename_completion_function (text, state++);
+        if (!match)
+            break;
+        urj_completion_add_match_dupe (matches, match_cnt, match + implicit_len);
+        free (match);
+    }
+
+    free (search_text);
+#endif
+}
+
 const urj_cmd_t urj_cmd_include = {
     "include",
     N_("include command sequence from external repository"),
     cmd_include_help,
-    cmd_include_run
+    cmd_include_run,
+    cmd_include_complete,
 };
 
 static int

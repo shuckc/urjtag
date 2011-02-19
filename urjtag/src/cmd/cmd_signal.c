@@ -101,6 +101,27 @@ cmd_signal_help (void)
              "signal");
 }
 
+/* This is used indirectly by other signal commands */
+void
+cmd_signal_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                     const char *text, size_t text_len)
+{
+    urj_part_t *part;
+    urj_part_signal_t *s;
+
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
+        return;
+
+    s = part->signals;
+    while (s)
+    {
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
+                                         s->name);
+        s = s->next;
+    }
+}
+
 const urj_cmd_t urj_cmd_signal = {
     "signal",
     N_("define new signal for a part"),

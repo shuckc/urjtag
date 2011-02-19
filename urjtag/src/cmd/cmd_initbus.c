@@ -101,9 +101,24 @@ cmd_initbus_help (void)
     urj_cmd_show_list (urj_bus_drivers);
 }
 
+static void
+cmd_initbus_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                      const char *text, size_t text_len, size_t token_point)
+{
+    size_t i;
+
+    if (token_point != 1)
+        return;
+
+    for (i = 0; urj_bus_drivers[i]; i++)
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
+                                         urj_bus_drivers[i]->name);
+}
+
 const const urj_cmd_t urj_cmd_initbus = {
     "initbus",
     N_("initialize bus driver for active part"),
     cmd_initbus_help,
-    cmd_initbus_run
+    cmd_initbus_run,
+    cmd_initbus_complete,
 };

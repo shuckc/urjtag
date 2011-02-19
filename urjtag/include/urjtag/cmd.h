@@ -42,18 +42,18 @@
  *      handled in the same way, urj_error is set to #URJ_ERROR_SYNTAX.
  */
 int urj_cmd_run (urj_chain_t *chain, char *params[]);
+
 /**
- * Search through registered commands
+ * Attempt completion of part of a command string
  *
- * @param text match commands whose prefix equals <code>text</code>. Rotates
- *      through the registered commands. The prefix length is set when
- *      the rotating state is reset.
- * @@@@ RFHH that is weird behaviour. Why not do the prefix length as strlen(text)?
- * @param state if 0, reset the rotating state to start from the beginning
+ * @param chain chain to possibly use for some completions
+ * @param line  full (incomplete) command line
+ * @param point current cursor position in the line
  *
- * @return malloc'ed value. The caller is responsible for freeing it.
- *      NULL for malloc failure or end of command list.
+ * @return malloc'ed array of strings. The caller is responsible for freeing
+ *      all of them, and the array itself. NULL for malloc failure or end of
+ *      possible completions.
  */
-char *urj_cmd_find_next (const char *text, int state);
+char **urj_cmd_complete (urj_chain_t *chain, const char *line, int point);
 
 #endif /* URJ_CMD_H */

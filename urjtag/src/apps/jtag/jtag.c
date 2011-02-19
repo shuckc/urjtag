@@ -152,13 +152,31 @@ jtag_create_jtagdir (void)
 #ifdef HAVE_LIBREADLINE
 
 #ifdef HAVE_READLINE_COMPLETION
-static char **
-urj_cmd_completion (const char *text, int start, int end)
-{
-    char **ret = NULL;
+static urj_chain_t *active_chain;
 
-    if (start == 0)
-        ret = rl_completion_matches (text, urj_cmd_find_next);
+static char *
+urj_cmd_completion (const char *text, int matches)
+{
+    /* Cache the current set of matches */
+    static char **all_matches = NULL;
+    static int idx;
+    char *ret = NULL;
+
+    if (matches == 0)
+    {   /* Build new list of completions */
+        free (all_matches);
+        all_matches = NULL;
+        idx = 0;
+
+        all_matches = urj_cmd_complete (active_chain, rl_line_buffer, rl_point);
+    }
+
+    if (all_matches)
+    {
+        ret = all_matches[idx];
+        if (ret)
+            ++idx;
+    }
 
     return ret;
 }
@@ -544,10 +562,12 @@ main (int argc, char *const argv[])
 
 #ifdef HAVE_LIBREADLINE
 #ifdef HAVE_READLINE_COMPLETION
+    active_chain = chain;
+    rl_readline_name = "urjtag";
     rl_completer_quote_characters = "\"";
     rl_filename_completion_desired = 1;
     rl_filename_quote_characters = " ";
-    rl_attempted_completion_function = urj_cmd_completion;
+    rl_completion_entry_function = urj_cmd_completion;
 #endif
 #endif
 

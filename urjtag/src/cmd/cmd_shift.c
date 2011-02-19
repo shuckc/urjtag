@@ -77,9 +77,21 @@ cmd_shift_help (void)
             "shift ir", "shift dr");
 }
 
+static void
+cmd_shift_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                    const char *text, size_t text_len, size_t token_point)
+{
+    if (token_point != 1)
+        return;
+
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "dr");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "ir");
+}
+
 const urj_cmd_t urj_cmd_shift = {
     "shift",
     N_("shift data/instruction registers through JTAG chain"),
     cmd_shift_help,
-    cmd_shift_run
+    cmd_shift_run,
+    cmd_shift_complete,
 };

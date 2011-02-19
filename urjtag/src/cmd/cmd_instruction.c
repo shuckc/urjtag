@@ -30,6 +30,7 @@
 
 #include <urjtag/error.h>
 #include <urjtag/part.h>
+#include <urjtag/part_instruction.h>
 #include <urjtag/chain.h>
 
 #include <urjtag/cmd.h>
@@ -110,9 +111,33 @@ cmd_instruction_help (void)
              "instruction", "instruction", "instruction");
 }
 
+static void
+cmd_instruction_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                          const char *text, size_t text_len, size_t token_point)
+{
+    urj_part_t *part;
+    urj_part_instruction_t *i;
+
+    if (token_point != 1)
+        return;
+
+    part = urj_tap_chain_active_part (chain);
+    if (part == NULL)
+        return;
+
+    i = part->instructions;
+    while (i)
+    {
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
+                                         i->name);
+        i = i->next;
+    }
+}
+
 const urj_cmd_t urj_cmd_instruction = {
     "instruction",
     N_("change active instruction for a part or declare new instruction"),
     cmd_instruction_help,
-    cmd_instruction_run
+    cmd_instruction_run,
+    cmd_instruction_complete,
 };

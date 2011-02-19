@@ -499,9 +499,22 @@ cmd_bfin_help (void)
              "bfin", "bfin", "bfin" );
 }
 
+static void
+cmd_bfin_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                   const char *text, size_t text_len, size_t token_point)
+{
+    if (token_point != 1)
+        return;
+
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "execute");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "emulation");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "reset");
+}
+
 const urj_cmd_t urj_cmd_bfin = {
     "bfin",
     N_("Blackfin specific commands"),
     cmd_bfin_help,
-    cmd_bfin_run
+    cmd_bfin_run,
+    cmd_bfin_complete,
 };

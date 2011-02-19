@@ -92,9 +92,20 @@ cmd_get_help (void)
              "get");
 }
 
+static void
+cmd_get_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                  const char *text, size_t text_len, size_t token_point)
+{
+    if (token_point != 1)
+        return;
+
+    cmd_signal_complete (chain, matches, match_cnt, text, text_len);
+}
+
 const urj_cmd_t urj_cmd_get = {
     "get",
     N_("get external signal value"),
     cmd_get_help,
-    cmd_get_run
+    cmd_get_run,
+    cmd_get_complete,
 };

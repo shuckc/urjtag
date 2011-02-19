@@ -78,9 +78,25 @@ cmd_help_help (void)
              "help");
 }
 
+static void
+cmd_help_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                   const char *text, size_t text_len, size_t token_point)
+{
+    size_t i;
+
+    /* Completing the command itself will come here as token 0 */
+    if (token_point > 1)
+        return;
+
+    for (i = 0; urj_cmds[i]; ++i)
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
+                                         urj_cmds[i]->name);
+}
+
 const urj_cmd_t urj_cmd_help = {
     "help",
     N_("display this help"),
     cmd_help_help,
-    cmd_help_run
+    cmd_help_run,
+    cmd_help_complete,
 };
