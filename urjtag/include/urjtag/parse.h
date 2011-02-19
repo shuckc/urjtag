@@ -30,6 +30,22 @@
 #include "types.h"
 
 /**
+ * Turn a string into a bunch of tokens (space delimited).  Returns the
+ * number of tokens via token_cnt.  Memory is all allocated as needed, so
+ * tokens should be passed to urj_tokens_free() when finished.
+ *
+ * @return
+ *      URJ_STATUS_OK on success
+ *      URJ_STATUS_ERROR on error
+ */
+int urj_tokenize_line (const char *line, char ***tokens, size_t *token_cnt);
+
+/**
+ * Free memory allocated for the tokens by urj_tokenize_line().
+ */
+void urj_tokens_free (char **tokens);
+
+/**
  * Take care of tokenizing the line before sending to urj_cmd_run().
  *
  * @return

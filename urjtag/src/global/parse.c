@@ -41,20 +41,22 @@
 #include <urjtag/bsdl.h>
 
 int
-urj_parse_line (urj_chain_t *chain, const char *line)
+urj_tokenize_line (const char *line, char ***tokens, size_t *token_cnt)
 {
-    int l, i, r, tcnt;
-    int escape = 0, quote_single = 0, quote_double = 0;
+    size_t l, i;
+    int escape, quote_single, quote_double;
     char **a;
     const char *c;
-    char *d;
-    char *sline;
+    char *d, *sline;
 
-    if (line == NULL)
+    if (!line || !tokens || !token_cnt)
     {
-        urj_error_set (URJ_ERROR_INVALID, "NULL line");
+        urj_error_set (URJ_ERROR_INVALID, "NULL input(s)");
         return URJ_STATUS_FAIL;
     }
+
+    *token_cnt = 0;
+
     l = strlen (line);
     if (l == 0)
         return URJ_STATUS_OK;
@@ -69,9 +71,9 @@ urj_parse_line (urj_chain_t *chain, const char *line)
     }
 
     /* count and copy the tokens */
+    escape = quote_single = quote_double = 0;
     c = line;
     d = sline;
-    tcnt = 0;
     while (1)
     {
         /* eat up leading spaces */
@@ -111,38 +113,59 @@ urj_parse_line (urj_chain_t *chain, const char *line)
         }
         /* mark the end to the destination string */
         *d++ = '\0';
-        tcnt++;
+        ++*token_cnt;
     }
 
-    if (tcnt == 0)
+    if (*token_cnt == 0)
     {
         free (sline);
         return URJ_STATUS_OK;
     }
 
     /* allocate the token pointer table */
-    a = malloc ((tcnt + 1) * sizeof (char *));
+    l = (*token_cnt + 1) * sizeof (*a);
+    *tokens = a = malloc (l);
     if (a == NULL)
     {
-        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails",
-                       (size_t) ((tcnt + 1) * sizeof (char *)));
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, "malloc(%zd) fails", l);
         return URJ_STATUS_FAIL;
     }
 
     /* find the starting points for the tokens */
     d = sline;
-    for (i = 0; i < tcnt; i++)
+    for (i = 0; i < *token_cnt; i++)
     {
         a[i] = d;
         while (*d++ != '\0')
             ;
     }
-    a[tcnt] = NULL;
+    a[*token_cnt] = NULL;
+
+    return URJ_STATUS_OK;
+}
+
+void
+urj_tokens_free (char **tokens)
+{
+    free (tokens[0]);
+    free (tokens);
+}
+
+int
+urj_parse_line (urj_chain_t *chain, const char *line)
+{
+    int r;
+    size_t tcnt;
+    char **a;
+
+    r = urj_tokenize_line (line, &a, &tcnt);
+    if (r != URJ_STATUS_OK || tcnt == 0)
+        return r;
 
     r = urj_cmd_run (chain, a);
     urj_log (URJ_LOG_LEVEL_DEBUG, "Return in urj_parse_line r=%d\n", r);
-    free (a);
-    free (sline);
+
+    urj_tokens_free (a);
 
     return r;
 }
@@ -313,4 +336,3 @@ urj_parse_include (urj_chain_t *chain, const char *filename, int ignore_path)
 
     return r;
 }
-
