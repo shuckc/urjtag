@@ -9,7 +9,7 @@
 
   * configure.ac: Check for getline().
   * src/global/parse.c (urj_parse_stream): Get rid of line length limitations
-  by using getline when it is available.
+    by using getline when it is available.
 
   * src/part/part.c: Fix indentation style.
 
@@ -18,6 +18,12 @@
   * src/cmd/cmd_test.c: Fix typo in help output.
 
   * src/cmd/cmd_shell.c: Clean up help output.
+
+  * data/analog/bfin/bfin: Unify all common Blackfin registers/instructions.
+  * data/analog/bf506/bf506, data/analog/bf518/bf518, data/analog/bf527/bf527,
+    data/analog/bf533/bf533, data/analog/bf537/bf537, data/analog/bf538/bf538,
+    data/analog/bf548/bf548, data/analog/bf561/bf561, data/analog/bf592/bf592:
+    Drop duplicated Blackfin settings and include analog/bfin/bfin.
 
 2011-02-17  Mike Frysinger  <vapier@gentoo.org>
 

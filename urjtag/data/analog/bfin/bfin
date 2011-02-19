@@ -1,0 +1,25 @@
+# Common Blackfin registers/instructions
+
+register	BR	1
+register	DIR	32
+register	DBGSTAT	16
+register	DBGCTL	16
+register	EMUIR	32
+register	EMUIR64	64
+register	EMUDAT	32
+register	EMUDAT40	40
+register	EMUPC	32
+
+instruction length 5
+
+instruction BYPASS 11111 BR
+instruction EXTEST 00000 BSR
+instruction SAMPLE/PRELOAD 10000 BSR
+instruction IDCODE 00010 DIR
+instruction DBGSTAT_SCAN 01100 DBGSTAT
+instruction DBGCTL_SCAN 00100 DBGCTL
+instruction EMUIR_SCAN 01000 EMUIR
+instruction EMUIR64_SCAN 01000 EMUIR64
+instruction EMUDAT_SCAN 10100 EMUDAT
+instruction EMUDAT40_SCAN 10100 EMUDAT40
+instruction EMUPC_SCAN 11110 EMUPC
