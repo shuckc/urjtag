@@ -70,6 +70,12 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
         return URJ_STATUS_FAIL;
     }
 
+    if (!part_is_bfin (chain, chain->active_part))
+    {
+        urj_error_set (URJ_ERROR_ILLEGAL_STATE, "not a Blackfin part");
+        return URJ_STATUS_FAIL;
+    }
+
     assert (chain->active_part >= 0 && chain->active_part < chain->parts->len);
 
     if (strcmp (params[1], "emulation") == 0)

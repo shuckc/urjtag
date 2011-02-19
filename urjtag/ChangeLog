@@ -1,3 +1,8 @@
+2011-02-19  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/cmd_bfin.c (cmd_bfin_run): Make sure the part is a Blackfin before
+    we try calling functions that don't exist and segfault.
+
 2011-02-18  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bfin/bfin-part.c (_bfin_part_init): Add missing "void" to param list.
