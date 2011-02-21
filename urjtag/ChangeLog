@@ -1,3 +1,7 @@
+2011-02-21  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/Makefile.am (nobase_dist_pkgdata_DATA): Add missing analog/bfin/bfin.
+
 2011-02-19  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_bfin.c (cmd_bfin_run): Make sure the part is a Blackfin before

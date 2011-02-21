@@ -60,6 +60,7 @@ nobase_dist_pkgdata_DATA = \
 	atmel/atf15xx/STEPPINGS \
 	atmel/atf15xx/atf1504asv \
 	analog/PARTS \
+	analog/bfin/bfin \
 	analog/bf506/STEPPINGS \
 	analog/bf506/bf506 \
 	analog/bf518/STEPPINGS \
