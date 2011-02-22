@@ -2,6 +2,8 @@
 
   * src/cmd/cmd_print.c: Add a completion handler.
 
+  * src/cmd/cmd_debug.c: Add a completion handler.
+
 2011-02-21  Mike Frysinger  <vapier@gentoo.org>
 
   * data/Makefile.am (nobase_dist_pkgdata_DATA): Add missing analog/bfin/bfin.

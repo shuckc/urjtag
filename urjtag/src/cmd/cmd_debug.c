@@ -131,9 +131,27 @@ cmd_debug_help (void)
              "debug");
 }
 
+static void
+cmd_debug_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                    const char *text, size_t text_len, size_t token_point)
+{
+    if (token_point != 1)
+        return;
+
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "all");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "comm");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "debug");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "detail");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "normal");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "warning");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "error");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "silent");
+}
+
 const urj_cmd_t urj_cmd_debug = {
     "debug",
     N_("set logging/debugging level"),
     cmd_debug_help,
-    cmd_debug_run
+    cmd_debug_run,
+    cmd_debug_complete,
 };
