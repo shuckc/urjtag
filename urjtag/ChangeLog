@@ -13,6 +13,10 @@
     from an earlier commit -- make sure the literal "signal" is the 2nd arg in
     the help text and for completion handlers.
 
+  * src/cmd/cmd_flashmem.c: Add a completion handler.
+  * src/cmd/cmd_endian.c: Likewise.
+  * src/cmd/cmd_readmem.c: Likewise.
+
 2011-02-21  Mike Frysinger  <vapier@gentoo.org>
 
   * data/Makefile.am (nobase_dist_pkgdata_DATA): Add missing analog/bfin/bfin.

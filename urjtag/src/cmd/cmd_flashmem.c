@@ -29,6 +29,10 @@
 #include <string.h>
 #include <errno.h>
 
+#ifdef HAVE_LIBREADLINE
+#include <readline/readline.h>
+#endif
+
 #include <urjtag/error.h>
 #include <urjtag/bus.h>
 #include <urjtag/flash.h>
@@ -108,9 +112,44 @@ cmd_flashmem_help (void)
     urj_cmd_show_list (urj_flash_flash_drivers);
 }
 
+static void
+cmd_flashmem_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                       const char *text, size_t text_len, size_t token_point)
+{
+    switch (token_point)
+    {
+    case 1: /* [addr|msbin] */
+        break;
+
+    case 2: /* filename */
+    {
+#ifdef HAVE_LIBREADLINE
+        int state;
+        char *match;
+
+        state = 0;
+        while (1)
+        {
+            match = rl_filename_completion_function (text, state++);
+            if (!match)
+                break;
+            urj_completion_add_match_dupe (matches, match_cnt, match);
+            free (match);
+        }
+#endif
+        break;
+    }
+
+    case 3: /* [noverify] */
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "noverify");
+        break;
+    }
+}
+
 const urj_cmd_t urj_cmd_flashmem = {
     "flashmem",
     N_("burn flash memory with data from a file"),
     cmd_flashmem_help,
-    cmd_flashmem_run
+    cmd_flashmem_run,
+    cmd_flashmem_complete,
 };

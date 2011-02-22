@@ -121,9 +121,21 @@ cmd_endian_help (void)
              "endian [little|big]");
 }
 
+static void
+cmd_endian_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                     const char *text, size_t text_len, size_t token_point)
+{
+    if (token_point != 1)
+        return;
+
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "big");
+    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "little");
+}
+
 const urj_cmd_t urj_cmd_endian = {
     "endian",
     N_("set/print endianess"),
     cmd_endian_help,
-    cmd_endian_run
+    cmd_endian_run,
+    cmd_endian_complete,
 };

@@ -29,6 +29,10 @@
 #include <string.h>
 #include <errno.h>
 
+#ifdef HAVE_LIBREADLINE
+#include <readline/readline.h>
+#endif
+
 #include <urjtag/error.h>
 #include <urjtag/bus.h>
 
@@ -89,9 +93,43 @@ cmd_readmem_help (void)
              "readmem");
 }
 
+static void
+cmd_readmem_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                      const char *text, size_t text_len, size_t token_point)
+{
+    switch (token_point)
+    {
+    case 1: /* addr */
+        break;
+
+    case 2: /* len */
+        break;
+
+    case 3: /* filename */
+    {
+#ifdef HAVE_LIBREADLINE
+        int state;
+        char *match;
+
+        state = 0;
+        while (1)
+        {
+            match = rl_filename_completion_function (text, state++);
+            if (!match)
+                break;
+            urj_completion_add_match_dupe (matches, match_cnt, match);
+            free (match);
+        }
+#endif
+        break;
+    }
+    }
+}
+
 const urj_cmd_t urj_cmd_readmem = {
     "readmem",
     N_("read content of the memory and write it to file"),
     cmd_readmem_help,
-    cmd_readmem_run
+    cmd_readmem_run,
+    cmd_readmem_complete,
 };
