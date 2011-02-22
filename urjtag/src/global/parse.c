@@ -163,7 +163,8 @@ urj_parse_line (urj_chain_t *chain, const char *line)
         return r;
 
     r = urj_cmd_run (chain, a);
-    urj_log (URJ_LOG_LEVEL_DEBUG, "Return in urj_parse_line r=%d\n", r);
+    urj_log (URJ_LOG_LEVEL_DEBUG, "Return in urj_parse_line r=%d line={%s}\n",
+             r, line);
 
     urj_tokens_free (a);
 
