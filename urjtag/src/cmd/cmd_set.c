@@ -107,7 +107,7 @@ static void
 cmd_set_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("Usage: %s SIGNAL DIR [DATA]\n"
+             _("Usage: %s signal SIGNAL DIR [DATA]\n"
                "Set signal state in input BSR (Boundary Scan Register).\n"
                "\n"
                "SIGNAL        signal name (from JTAG declaration file)\n"
@@ -123,16 +123,20 @@ cmd_set_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
 {
     switch (token_point)
     {
-    case 1:  /* name */
+    case 1:
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "signal");
+        break;
+
+    case 2:  /* name */
         cmd_signal_complete (chain, matches, match_cnt, text, text_len);
         break;
 
-    case 2:  /* direction */
+    case 3:  /* direction */
         urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "in");
         urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "out");
         break;
 
-    case 3:  /* value */
+    case 4:  /* value */
         /* XXX: Only applies if token[1] == "out" ... */
         urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "0");
         urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "1");
