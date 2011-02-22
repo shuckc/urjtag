@@ -231,9 +231,11 @@ urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f)
                 break;
             }
 
-            /* Make sure inputline is big enough ... don't rely on getline */
-            inputline = realloc (inputline, 5);
-            sprintf (inputline, "quit");
+            /* If we hit the end of the file, just return.  Do not
+             * "quit" or fail as this will break things like nested
+             * file includes.  */
+            go = URJ_STATUS_OK;
+            break;
         }
         else
         {
