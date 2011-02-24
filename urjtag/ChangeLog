@@ -1,3 +1,8 @@
+2011-02-24  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable/ft2232.c: Rename user-facing cable string from
+    "USB<=>JTAG&RS232" to "USB-JTAG-RS232" by Orasanu Lucian.
+
 2011-02-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_print.c: Add a completion handler.

@@ -2280,7 +2280,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_turtelizer2_driver = {
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xBDC8, "-mpsse", "Turtelizer2", turtelizer2)
 
 const urj_cable_driver_t urj_tap_cable_ft2232_usbjtagrs232_driver = {
-    "USB<=>JTAG&RS232",
+    "USB-JTAG-RS232",
     N_("USB<=>JTAG&RS232 (FT2232) Cable (EXPERIMENTAL)"),
     URJ_CABLE_DEVICE_USB,
     { .usb = ft2232_connect, },
@@ -2297,7 +2297,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_usbjtagrs232_driver = {
     ft2232_flush,
     ftdx_usbcable_help
 };
-URJ_DECLARE_FTDX_CABLE(0x1457, 0x5118, "-mpsse", "USB<=>JTAG&RS232", usbjtagrs232)
+URJ_DECLARE_FTDX_CABLE(0x1457, 0x5118, "-mpsse", "USB-JTAG-RS232", usbjtagrs232)
 
 const urj_cable_driver_t urj_tap_cable_ft2232_usbtojtagif_driver = {
     "USB-to-JTAG-IF",
