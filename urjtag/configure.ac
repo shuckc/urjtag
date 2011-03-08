@@ -148,6 +148,10 @@ AC_CHECK_HEADERS(m4_flatten([
 	sys/wait.h
 ]))
 
+AC_CHECK_TYPE([wchar_t], [],
+	[AC_DEFINE([wchar_t], [char], [Make sure we have wchar_t])],
+	[#include <stddef.h>])
+
 dnl See if the windows target is polluting the namespace on us which
 dnl will break some of the lex/yacc (e.g. bsdl) builds.  We need both
 dnl defines as some versions of mingw have changed names over time.

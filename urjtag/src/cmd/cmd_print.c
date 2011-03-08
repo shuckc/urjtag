@@ -31,7 +31,6 @@
 #ifdef HAVE_WCHAR_H
 #include <wchar.h>
 #else
-typedef char wchar_t;
 # define mbstowcs(dst,src,n) 0
 # define wcslen(str) strlen(str)
 #endif
