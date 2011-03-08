@@ -11,6 +11,9 @@
 
   * src/cmd/cmd_dr.c, src/cmd/cmd_signal.c: Touch up help text a bit more.
 
+  * configure.ac: Test for wchar_t type explicitly.
+  * src/cmd/cmd_print.c: Drop wchar_t binding to wchar_t.
+
 2011-02-24  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ft2232.c: Rename user-facing cable string from
