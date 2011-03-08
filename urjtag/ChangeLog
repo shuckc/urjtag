@@ -9,6 +9,8 @@
     parts that default to IDCODE or BYPASS since both are acceptable to the
     JTAG IEEE standard.
 
+  * src/cmd/cmd_dr.c, src/cmd/cmd_signal.c: Touch up help text a bit more.
+
 2011-02-24  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ft2232.c: Rename user-facing cable string from

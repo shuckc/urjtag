@@ -108,16 +108,16 @@ static void
 cmd_dr_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("Usage: %s [DIR]\n"
-               "Usage: %s BITSTRING\n"
-               "Usage: %s HEXSTRING\n"
+             _("Usage: %1$s [DIR]\n"
+               "Usage: %1$s BITSTRING\n"
+               "Usage: %1$s HEXSTRING\n"
                "Display input or output data register content or set current register.\n"
                "\n"
-               "DIR           requested data register; possible values: 'in' for\n"
-               "              input and 'out' for output; default is 'out'\n"
-               "BITSTRING     set current data register with BITSTRING (e.g. 01010)\n"
-               "HEXSTRING     set current data register with HEXSTRING (e.g. 0x123)\n"),
-             "dr", "dr", "dr");
+               "DIR              requested data register; possible values: 'in' for\n"
+               "                 input and 'out' for output; default is 'out'\n"
+               "BITSTRING        set current data register with BITSTRING (e.g. 01010)\n"
+               "HEXSTRING        set current data register with HEXSTRING (e.g. 0x123)\n"),
+             "dr");
 }
 
 const urj_cmd_t urj_cmd_dr = {

@@ -97,7 +97,7 @@ cmd_signal_help (void)
                "Define new signal with name SIGNAL for a part.\n"
                "\n"
                "SIGNAL           New signal name\n"
-               "PIN#     List of pin # for a signal\n"),
+               "PIN#             List of pin # for a signal\n"),
              "signal");
 }
 
