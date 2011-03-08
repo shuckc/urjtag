@@ -132,19 +132,21 @@ jim_cable_get_tdo (urj_cable_t *cable)
 }
 
 static int
-jim_cable_get_trst (urj_cable_t *cable)
+jim_cable_get_trst (urj_cable_t *cable, urj_pod_sigsel_t sig)
 {
+    /* XXX: Doesn't handle sig ? */
     jim_cable_params_t *jcp = cable->params;
 
     return urj_jim_get_trst (jcp->s);
 }
 
 static int
-jim_cable_set_trst (urj_cable_t *cable, int trst)
+jim_cable_set_trst (urj_cable_t *cable, int mask, int val)
 {
+    /* XXX: Doesn't handle mask ? */
     jim_cable_params_t *jcp = cable->params;
 
-    urj_jim_set_trst (jcp->s, trst);
+    urj_jim_set_trst (jcp->s, val);
     return urj_jim_get_trst (jcp->s);
 }
 
