@@ -31,9 +31,12 @@ M:      Jie Zhang <jie.zhang@analog.com>
 M:      Mike Frysinger <vapier@gentoo.org>
 W:      http://blackfin.uclinux.org/
 F:      data/analog/*
+F:      src/bfin/*
 F:      src/bus/bf5*_stamp.c
+F:      src/bus/bf5*_ezbrd.c
 F:      src/bus/bf5*_ezkit.c
-F:      src/bus/sharc21065l.c
+F:      src/bus/blackfin.c
+F:      src/bus/sharc*.c
 S:      Maintained
 
 ARCOM CABLE DRIVER

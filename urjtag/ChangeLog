@@ -3,6 +3,8 @@
   * src/tap/cable/jim.c: Update get/set prototypes enough so that the code
     will at least compile again.
 
+  * MAINTAINERS: Update paths to Blackfin related files.
+
 2011-02-24  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ft2232.c: Rename user-facing cable string from
