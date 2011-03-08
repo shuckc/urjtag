@@ -284,7 +284,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 
         if (urj_tap_register_compare (one, br) == 0)
         {
-            /* part with id */
+            /* Part that supports IDCODE */
             if (all_ids)
                 memcpy (id->data, &all_ids->data[i * 32 + 1], 31 * sizeof (id->data[0]));
             else
@@ -297,8 +297,14 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: %s (0x%0*" PRIX64 ")\n"),
                      urj_tap_register_get_string (did), did->len / 4,
                      urj_tap_register_get_value (did));
-        } else
-            urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: unknown as bit 0 was not a 1\n"));
+        }
+        else
+        {
+            /* If the device does not provide IDCODE, then it'll be in BYPASS
+             * mode after we reset the state machine.  So we'll get a 0 here.
+             * Not a bug, just a sad part :(.  */
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Id: not supported (bit 0 was not a 1)\n"));
+        }
 
         part = urj_part_alloc (did);
         if (part == NULL)

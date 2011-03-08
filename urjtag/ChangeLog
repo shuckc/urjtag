@@ -5,6 +5,10 @@
 
   * MAINTAINERS: Update paths to Blackfin related files.
 
+  * src/tap/detect.c (urj_tap_detect_parts): Clarify detect behavior with
+    parts that default to IDCODE or BYPASS since both are acceptable to the
+    JTAG IEEE standard.
+
 2011-02-24  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ft2232.c: Rename user-facing cable string from
