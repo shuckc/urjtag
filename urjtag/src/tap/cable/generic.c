@@ -88,7 +88,7 @@ do_one_queued_action (urj_cable_t *cable)
 {
     int i;
 
-    urj_log (URJ_LOG_LEVEL_DETAIL, "do_one_queued\n");
+    urj_log (URJ_LOG_LEVEL_DEBUG, "do_one_queued\n");
 
     if ((i = urj_tap_cable_get_queue_item (cable, &cable->todo)) >= 0)
     {
@@ -136,7 +136,7 @@ do_one_queued_action (urj_cable_t *cable)
                 {
                     /* @@@@ RFHH check result */
                     j = urj_tap_cable_add_queue_item (cable, &cable->done);
-                    urj_log (URJ_LOG_LEVEL_DETAIL,
+                    urj_log (URJ_LOG_LEVEL_DEBUG,
                              "add result from transfer to %p.%d (out=%p)\n",
                              &cable->done, j,
                              cable->todo.data[i].arg.transfer.out);
@@ -152,7 +152,7 @@ do_one_queued_action (urj_cable_t *cable)
         case URJ_TAP_CABLE_GET_TDO:
             /* @@@@ RFHH check result */
             j = urj_tap_cable_add_queue_item (cable, &cable->done);
-            urj_log (URJ_LOG_LEVEL_DETAIL,
+            urj_log (URJ_LOG_LEVEL_DEBUG,
                      "add result from get_tdo to %p.%d\n", &cable->done, j);
             cable->done.data[j].action = URJ_TAP_CABLE_GET_TDO;
             cable->done.data[j].arg.value.val =
@@ -161,7 +161,7 @@ do_one_queued_action (urj_cable_t *cable)
         case URJ_TAP_CABLE_GET_SIGNAL:
             /* @@@@ RFHH check result */
             j = urj_tap_cable_add_queue_item (cable, &cable->done);
-            urj_log (URJ_LOG_LEVEL_DETAIL,
+            urj_log (URJ_LOG_LEVEL_DEBUG,
                      "add result from get_signal to %p.%d\n", &cable->done,
                      j);
             cable->done.data[j].action = URJ_TAP_CABLE_GET_SIGNAL;
@@ -174,11 +174,11 @@ do_one_queued_action (urj_cable_t *cable)
         case URJ_TAP_CABLE_CLOCK_COMPACT: /* Turn off GCC warning */
             break;
         }
-        urj_log (URJ_LOG_LEVEL_DETAIL, "do_one_queued done\n");
+        urj_log (URJ_LOG_LEVEL_DEBUG, "do_one_queued done\n");
 
         return 1;
     }
-    urj_log (URJ_LOG_LEVEL_DETAIL, "do_one_queued abort\n");
+    urj_log (URJ_LOG_LEVEL_DEBUG, "do_one_queued abort\n");
 
     return 0;
 }

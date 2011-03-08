@@ -1,5 +1,10 @@
 2011-03-07  Mike Frysinger  <vapier@gentoo.org>
 
+  * src/tap/cable/generic.c (do_one_queued_action): Move debug statements to
+    debug log level.  Patch by Øyvind Harboe.
+
+2011-03-07  Mike Frysinger  <vapier@gentoo.org>
+
   * src/tap/cable/jim.c: Update get/set prototypes enough so that the code
     will at least compile again.
 
