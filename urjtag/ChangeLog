@@ -1,3 +1,14 @@
+2011-03-08  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/PARTS: Add xc3s1600e part.
+  * data/xilinx/xc3s100e_die/STEPPINGS: Add stepping 1.
+  * data/xilinx/xc3s1200e_fg320/xc3s1200e_fg320: Add part info.
+  * data/xilinx/xc3s1200e_fg320/STEPPINGS: Add stepping info.
+  * data/xilinx/xc3s1600e/xc3s1600e: Add part info.
+  * data/xilinx/xc3s1600e/STEPPINGS: Add stepping info.
+  * data/xilinx/xcf04s/STEPPINGS: Add stepping 15.
+  * data/Makefile.am: Add new xilinx files.
+
 2011-03-07  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/generic.c (do_one_queued_action): Move debug statements to

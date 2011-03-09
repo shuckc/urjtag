@@ -223,6 +223,10 @@ nobase_dist_pkgdata_DATA = \
 	xilinx/xc3s100e_die/xc3s100e_die \
 	xilinx/xc3s100e_die/STEPPINGS \
 	xilinx/xc3s100e_die/xc3s100e_vq100 \
+	xilinx/xc3s1600e/STEPPINGS \
+	xilinx/xc3s1600e/xc3s1600e \
+	xilinx/xc3s1200e_fg320/STEPPINGS \
+	xilinx/xc3s1200e_fg320/xc3s1200e_fg320 \
 	xilinx/xc3s1500/xc3s1500_fg456 \
 	xilinx/xc3s1500/xc3s1500l_fg676 \
 	xilinx/xc3s1500/xc3s1500l \
