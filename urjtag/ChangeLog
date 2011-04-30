@@ -3,6 +3,10 @@
   * configure.ac: Force recent versions of autotools (at least ones released
     in the past 5 years.
 
+  * src/bsdl/Makefile.am (OBJEXT): Do not override OBJEXT that automake sets
+    up itself.
+  * src/svf/Makefile.am (OBJEXT): Likewise.
+
 2011-03-08  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/PARTS: Add xc3s1600e part.

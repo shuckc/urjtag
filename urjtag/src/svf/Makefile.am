@@ -23,7 +23,6 @@ include $(top_srcdir)/Makefile.rules
 
 AM_YFLAGS = -d
 
-OBJEXT = lo
 noinst_LTLIBRARIES = \
 	libsvf.la \
 	libsvf_flex.la

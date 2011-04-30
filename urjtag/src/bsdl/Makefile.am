@@ -21,7 +21,6 @@
 
 include $(top_srcdir)/Makefile.rules
 
-OBJEXT = lo
 noinst_LTLIBRARIES = \
 	libbsdl.la \
 	libbsdl_flex.la
