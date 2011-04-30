@@ -25,7 +25,8 @@
 
 AC_INIT(UrJTAG,0.10,http://urjtag.org,urjtag)
 
-AC_PREREQ(2.54)
+dnl autoconf-2.61 was released in 2006
+AC_PREREQ(2.61)
 AC_COPYRIGHT([Copyright (C) 2007/08 Kolja Waschk and other UrJTAG authors; 2002/03 ETC s.r.o.])
 AC_REVISION($Revision$)
 
@@ -56,7 +57,8 @@ AC_SUBST([SVN_REVISION])
 
 AC_CONFIG_AUX_DIR(tools)
 
-AM_INIT_AUTOMAKE([check-news dist-bzip2])
+dnl automake-1.10 was released in 2006
+AM_INIT_AUTOMAKE([1.10 check-news dist-bzip2])
 dnl silent rules requires automake-1.11+
 m4_ifdef([AM_SILENT_RULES],
 	[AM_SILENT_RULES([yes])],
@@ -93,8 +95,9 @@ AM_CONFIG_HEADER(include/urjtag/urjtag.h)
 
 AC_GNU_SOURCE
 
+dnl gettext-0.16.1 was released in 2006
 AM_GNU_GETTEXT(external)
-AM_GNU_GETTEXT_VERSION(0.14.1)
+AM_GNU_GETTEXT_VERSION(0.16.1)
 
 LT_INIT
 AC_PROG_CC
