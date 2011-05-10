@@ -6,6 +6,12 @@
   * src/tap/cable/generic_usbconn.h: Add new "interface" option to usage.
     Patch by Michael Walle.
 
+  * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc2c32a-cp56/STEPPINGS,
+    data/xilinx/xc2c32a-cp56/xc2c32a-cp56, data/xilinx/xc2c32a-cv64/STEPPINGS,
+    data/xilinx/xc2c32a-cv64/xc2c32a-cv64, data/xilinx/xc2c32a-vq44/STEPPINGS,
+    data/xilinx/xc2c32a-vq44/xc2c32a-vq44: Add Xilinx CoolRunner-II info from
+    Michael Walle.
+
 2011-04-30  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Force recent versions of autotools (at least ones released

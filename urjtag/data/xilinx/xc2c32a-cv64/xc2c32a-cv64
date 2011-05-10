@@ -1,0 +1,164 @@
+signal IN32
+signal IO_lb01_15
+signal IO_lb01_14
+signal IO_lb01_13
+signal IO_lb01_12
+signal IO_lb01_11
+signal IO_lb01_10
+signal IO_lb01_09
+signal IO_lb01_08
+signal IO_lb01_07
+signal IO_lb01_06
+signal IO_lb01_05
+signal IO_lb01_04
+signal IO_lb01_03
+signal IO_lb01_02
+signal IO_lb01_01
+signal IO_lb01_00
+signal IO_lb00_15
+signal IO_lb00_14
+signal IO_lb00_13
+signal IO_lb00_12
+signal IO_lb00_11
+signal IO_lb00_10
+signal IO_lb00_09
+signal IO_lb00_08
+signal IO_lb00_07
+signal IO_lb00_06
+signal IO_lb00_05
+signal IO_lb00_04
+signal IO_lb00_03
+signal IO_lb00_02
+signal IO_lb00_01
+signal IO_lb00_00
+signal TMS
+signal TCK
+signal TDO
+signal TDI
+instruction length 8
+register DIR 32
+register USERCODE 32
+register BSR 97
+register BYPASS 1
+register ISC_DEFAULT 1
+register DATAREG 266
+instruction ISC_NOOP 11100000 ISC_DEFAULT
+instruction TEST_DISABLE 00010101 DATAREG
+instruction MVERIFY 00010011 DATAREG
+instruction ERASE_ALL 00010100 DATAREG
+instruction BULKPROG 00010010 DATAREG
+instruction TEST_ENABLE 00010001 DATAREG
+instruction ISC_DISABLE 11000000 DATAREG
+instruction ISC_INIT 11110000 DATAREG
+instruction ISC_READ 11101110 DATAREG
+instruction ISC_PROGRAM 11101010 DATAREG
+instruction ISC_ERASE 11101101 DATAREG
+instruction ISC_SRAM_WRITE 11100110 DATAREG
+instruction ISC_SRAM_READ 11100111 DATAREG
+instruction ISC_ENABLE 11101000 DATAREG
+instruction ISC_ENABLEOTF 11100100 DATAREG
+instruction ISC_ENABLE_CLAMP 11101001 ISC_DEFAULT
+instruction HIGHZ 11111100 BYPASS
+instruction USERCODE 11111101 DIR
+instruction IDCODE 00000001 DIR
+instruction EXTEST 00000000 BSR
+instruction SAMPLE/PRELOAD 00000011 BSR
+instruction BYPASS 11111111 BYPASS
+instruction INTEST 00000010 BSR
+bit 96 I ? IO_lb00_00
+bit 95 O ? IO_lb00_00 94 0 Z
+bit 94 C ? *
+bit 93 I ? IO_lb00_01
+bit 92 O ? IO_lb00_01 91 0 Z
+bit 91 C ? *
+bit 90 I ? IO_lb00_02
+bit 89 O ? IO_lb00_02 88 0 Z
+bit 88 C ? *
+bit 87 I ? IO_lb00_03
+bit 86 O ? IO_lb00_03 85 0 Z
+bit 85 C ? *
+bit 84 I ? IO_lb00_04
+bit 83 O ? IO_lb00_04 82 0 Z
+bit 82 C ? *
+bit 81 I ? IO_lb00_05
+bit 80 O ? IO_lb00_05 79 0 Z
+bit 79 C ? *
+bit 78 I ? IO_lb00_06
+bit 77 O ? IO_lb00_06 76 0 Z
+bit 76 C ? *
+bit 75 I ? IO_lb00_07
+bit 74 O ? IO_lb00_07 73 0 Z
+bit 73 C ? *
+bit 72 I ? IO_lb00_08
+bit 71 O ? IO_lb00_08 70 0 Z
+bit 70 C ? *
+bit 69 I ? IO_lb00_09
+bit 68 O ? IO_lb00_09 67 0 Z
+bit 67 C ? *
+bit 66 I ? IO_lb00_10
+bit 65 O ? IO_lb00_10 64 0 Z
+bit 64 C ? *
+bit 63 I ? IO_lb00_11
+bit 62 O ? IO_lb00_11 61 0 Z
+bit 61 C ? *
+bit 60 I ? IO_lb00_12
+bit 59 O ? IO_lb00_12 58 0 Z
+bit 58 C ? *
+bit 57 I ? IO_lb00_13
+bit 56 O ? IO_lb00_13 55 0 Z
+bit 55 C ? *
+bit 54 I ? IO_lb00_14
+bit 53 O ? IO_lb00_14 52 0 Z
+bit 52 C ? *
+bit 51 I ? IO_lb00_15
+bit 50 O ? IO_lb00_15 49 0 Z
+bit 49 C ? *
+bit 48 I ? IO_lb01_00
+bit 47 O ? IO_lb01_00 46 0 Z
+bit 46 C ? *
+bit 45 I ? IO_lb01_01
+bit 44 O ? IO_lb01_01 43 0 Z
+bit 43 C ? *
+bit 42 I ? IO_lb01_02
+bit 41 O ? IO_lb01_02 40 0 Z
+bit 40 C ? *
+bit 39 I ? IO_lb01_03
+bit 38 O ? IO_lb01_03 37 0 Z
+bit 37 C ? *
+bit 36 I ? IO_lb01_04
+bit 35 O ? IO_lb01_04 34 0 Z
+bit 34 C ? *
+bit 33 I ? IO_lb01_05
+bit 32 O ? IO_lb01_05 31 0 Z
+bit 31 C ? *
+bit 30 I ? IO_lb01_06
+bit 29 O ? IO_lb01_06 28 0 Z
+bit 28 C ? *
+bit 27 I ? IO_lb01_07
+bit 26 O ? IO_lb01_07 25 0 Z
+bit 25 C ? *
+bit 24 I ? IO_lb01_08
+bit 23 O ? IO_lb01_08 22 0 Z
+bit 22 C ? *
+bit 21 I ? IO_lb01_09
+bit 20 O ? IO_lb01_09 19 0 Z
+bit 19 C ? *
+bit 18 I ? IO_lb01_10
+bit 17 O ? IO_lb01_10 16 0 Z
+bit 16 C ? *
+bit 15 I ? IO_lb01_11
+bit 14 O ? IO_lb01_11 13 0 Z
+bit 13 C ? *
+bit 12 I ? IO_lb01_12
+bit 11 O ? IO_lb01_12 10 0 Z
+bit 10 C ? *
+bit 9 I ? IO_lb01_13
+bit 8 O ? IO_lb01_13 7 0 Z
+bit 7 C ? *
+bit 6 I ? IO_lb01_14
+bit 5 O ? IO_lb01_14 4 0 Z
+bit 4 C ? *
+bit 3 I ? IO_lb01_15
+bit 2 O ? IO_lb01_15 1 0 Z
+bit 1 C ? *
+bit 0 I ? IN32

@@ -1,0 +1,170 @@
+signal VDD(0)
+signal VDD(1)
+signal VDD(2)
+signal GND(0)
+signal GND(1)
+signal GND(2)
+signal IN_32
+signal IO_31
+signal IO_30
+signal IO_29
+signal IO_28
+signal IO_27
+signal IO_26
+signal IO_25
+signal IO_24
+signal IO_23
+signal IO_22
+signal IO_21
+signal IO_20
+signal IO_19
+signal IO_18
+signal IO_17
+signal IO_16
+signal IO_15
+signal IO_14
+signal IO_13
+signal IO_12
+signal IO_11
+signal IO_10
+signal IO_9
+signal IO_8
+signal IO_7
+signal IO_6
+signal IO_5
+signal IO_4
+signal IO_3
+signal IO_2
+signal IO_1
+signal IO_0
+signal TMS
+signal TDO
+signal TDI
+signal TCK
+instruction length 8
+register DIR 32
+register USERCODE 32
+register BSR 97
+register BYPASS 1
+register ISC_DEFAULT 1
+register DATAREG 266
+instruction ISC_NOOP 11100000 ISC_DEFAULT
+instruction TEST_DISABLE 00010101 DATAREG
+instruction MVERIFY 00010011 DATAREG
+instruction ERASE_ALL 00010100 DATAREG
+instruction BULKPROG 00010010 DATAREG
+instruction TEST_ENABLE 00010001 DATAREG
+instruction ISC_DISABLE 11000000 DATAREG
+instruction ISC_INIT 11110000 DATAREG
+instruction ISC_READ 11101110 DATAREG
+instruction ISC_PROGRAM 11101010 DATAREG
+instruction ISC_ERASE 11101101 DATAREG
+instruction ISC_SRAM_WRITE 11100110 DATAREG
+instruction ISC_SRAM_READ 11100111 DATAREG
+instruction ISC_ENABLE 11101000 DATAREG
+instruction ISC_ENABLEOTF 11100100 DATAREG
+instruction ISC_ENABLE_CLAMP 11101001 ISC_DEFAULT
+instruction HIGHZ 11111100 BYPASS
+instruction USERCODE 11111101 DIR
+instruction IDCODE 00000001 DIR
+instruction EXTEST 00000000 BSR
+instruction SAMPLE/PRELOAD 00000011 BSR
+instruction BYPASS 11111111 BYPASS
+instruction INTEST 00000010 BSR
+bit 96 I ? IO_0
+bit 95 O ? IO_0 94 0 Z
+bit 94 C 0 *
+bit 93 I ? IO_1
+bit 92 O ? IO_1 91 0 Z
+bit 91 C 0 *
+bit 90 I ? IO_2
+bit 89 O ? IO_2 88 0 Z
+bit 88 C 0 *
+bit 87 I ? IO_3
+bit 86 O ? IO_3 85 0 Z
+bit 85 C 0 *
+bit 84 I ? IO_4
+bit 83 O ? IO_4 82 0 Z
+bit 82 C 0 *
+bit 81 I ? IO_5
+bit 80 O ? IO_5 79 0 Z
+bit 79 C 0 *
+bit 78 I ? IO_6
+bit 77 O ? IO_6 76 0 Z
+bit 76 C 0 *
+bit 75 I ? IO_7
+bit 74 O ? IO_7 73 0 Z
+bit 73 C 0 *
+bit 72 I ? IO_8
+bit 71 O ? IO_8 70 0 Z
+bit 70 C 0 *
+bit 69 I ? IO_9
+bit 68 O ? IO_9 67 0 Z
+bit 67 C 0 *
+bit 66 I ? IO_10
+bit 65 O ? IO_10 64 0 Z
+bit 64 C 0 *
+bit 63 I ? IO_11
+bit 62 O ? IO_11 61 0 Z
+bit 61 C 0 *
+bit 60 I ? IO_12
+bit 59 O ? IO_12 58 0 Z
+bit 58 C 0 *
+bit 57 I ? IO_13
+bit 56 O ? IO_13 55 0 Z
+bit 55 C 0 *
+bit 54 I ? IO_14
+bit 53 O ? IO_14 52 0 Z
+bit 52 C 0 *
+bit 51 I ? IO_15
+bit 50 O ? IO_15 49 0 Z
+bit 49 C 0 *
+bit 48 I ? IO_16
+bit 47 O ? IO_16 46 0 Z
+bit 46 C 0 *
+bit 45 I ? IO_17
+bit 44 O ? IO_17 43 0 Z
+bit 43 C 0 *
+bit 42 I ? IO_18
+bit 41 O ? IO_18 40 0 Z
+bit 40 C 0 *
+bit 39 I ? IO_19
+bit 38 O ? IO_19 37 0 Z
+bit 37 C 0 *
+bit 36 I ? IO_20
+bit 35 O ? IO_20 34 0 Z
+bit 34 C 0 *
+bit 33 I ? IO_21
+bit 32 O ? IO_21 31 0 Z
+bit 31 C 0 *
+bit 30 I ? IO_22
+bit 29 O ? IO_22 28 0 Z
+bit 28 C 0 *
+bit 27 I ? IO_23
+bit 26 O ? IO_23 25 0 Z
+bit 25 C 0 *
+bit 24 I ? IO_24
+bit 23 O ? IO_24 22 0 Z
+bit 22 C 0 *
+bit 21 I ? IO_25
+bit 20 O ? IO_25 19 0 Z
+bit 19 C 0 *
+bit 18 I ? IO_26
+bit 17 O ? IO_26 16 0 Z
+bit 16 C 0 *
+bit 15 I ? IO_27
+bit 14 O ? IO_27 13 0 Z
+bit 13 C 0 *
+bit 12 I ? IO_28
+bit 11 O ? IO_28 10 0 Z
+bit 10 C 0 *
+bit 9 I ? IO_29
+bit 8 O ? IO_29 7 0 Z
+bit 7 C 0 *
+bit 6 I ? IO_30
+bit 5 O ? IO_30 4 0 Z
+bit 4 C 0 *
+bit 3 I ? IO_31
+bit 2 O ? IO_31 1 0 Z
+bit 1 C 0 *
+bit 0 I ? IN_32
