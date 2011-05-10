@@ -359,6 +359,17 @@ usbconn_ftdi_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
     struct ftdi_context *fc = p->fc;
     int status;
 
+    /* Keep same interface numbers as in libftd2xx, where the index is zero
+       based.  In libfdti, 0 is a special 'ANY' interface. */
+    status = ftdi_set_interface (fc, p->interface + 1);
+    if (status < 0)
+    {
+        urj_error_set (URJ_ERROR_FTD,
+                       _("%s(): ftdi_set_interface() failed: %s"),
+                       __func__, ftdi_get_error_string (fc));
+        goto open_error;
+    }
+
     /* use command line string for desc= as serial number and try to
        open a matching device */
     status = ftdi_usb_open_desc (fc, p->vid, p->pid, NULL, p->serial);
@@ -374,15 +385,18 @@ usbconn_ftdi_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
                      __func__, ftdi_get_error_string (fc));
         urj_error_set (URJ_ERROR_FTD, _("ftdi_usb_open_desc() failed: %s"),
                        ftdi_get_error_string (fc));
-        ftdi_deinit (fc);
-        /* mark ftdi layer as not initialized */
-        p->fc = NULL;
-
-        /* TODO: disconnect? */
-        return URJ_STATUS_FAIL;
+        goto open_error;
     }
 
     return URJ_STATUS_OK;
+
+ open_error:
+    ftdi_deinit (fc);
+    /* mark ftdi layer as not initialized */
+    p->fc = NULL;
+
+    /* TODO: disconnect? */
+    return URJ_STATUS_FAIL;
 }
 
 /* ---------------------------------------------------------------------- */
