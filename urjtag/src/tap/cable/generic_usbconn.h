@@ -43,11 +43,12 @@ void urj_tap_cable_generic_usbconn_help (urj_log_level_t ll, const char *cablena
 void urj_tap_cable_generic_usbconn_help_ex (urj_log_level_t ll, const char *cablename,
                                             const char *ex_short, const char *ex_desc);
 #define URJ_TAP_CABLE_GENERIC_USBCONN_HELP_SHORT \
-    "[vid=VID] [pid=PID] [desc=DESC]"
+    "[vid=VID] [pid=PID] [desc=DESC] [interface=INTERFACE]"
 #define URJ_TAP_CABLE_GENERIC_USBCONN_HELP_DESC \
     "VID        USB Device Vendor ID (hex, e.g. 0abc)\n" \
     "PID        USB Device Product ID (hex, e.g. 0abc)\n" \
-    "DESC       Some string to match in description or serial no.\n"
+    "DESC       Some string to match in description or serial no.\n" \
+    "INTERFACE  Interface to use (0=first, 1=second, etc).\n"
 
 #define URJ_DECLARE_USBCONN_CABLE(vid, pid, driver, name, cable) \
 const urj_usbconn_cable_t urj_tap_cable_usbconn_##cable = { name, NULL, driver, vid, pid };
