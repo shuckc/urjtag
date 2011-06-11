@@ -786,9 +786,6 @@ static void adi_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
     int32_t tdo_idx = -1;
     int32_t i, j, k, n;
     uint8_t *tdo_ptr = NULL;
-    num_tap_pairs debug1, debug2;
-
-    debug1 = *tap_info;
 
     if (how_much == URJ_TAP_CABLE_OPTIONALLY)
     {
@@ -950,7 +947,6 @@ static void adi_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
         else
             DEBUG ("Skipping sending out scan, Idx = %d\n", tap_info->cur_idx);
 #endif
-        debug2 = *tap_info;
         /* Here we send out the scan/cmd
          * need to look at how_much */
         while (j != i)
@@ -1613,7 +1609,6 @@ static int perform_scan (urj_cable_t *cable, uint8_t **rdata)
     int32_t idx, collect_data = 0;
     int32_t cur_len = cable_params->tap_info.cur_idx;
     int32_t rem_len;
-    int32_t rd_scan_len;
 
     /* Data is scan as 32 bit words, so boundaries are adjusted here */
     if (tap_info->bit_pos != 0x80) /* meaning no dangling bits? */
@@ -1661,7 +1656,6 @@ static int perform_scan (urj_cable_t *cable, uint8_t **rdata)
                            len);
             return URJ_STATUS_FAIL;
         }
-        rd_scan_len = cur_len;
         *rdata = out;
         collect_data = 1;
     }
@@ -1674,7 +1668,6 @@ static int perform_scan (urj_cable_t *cable, uint8_t **rdata)
                            cable_params->tap_pair_start_idx + 16);
             return URJ_STATUS_FAIL;
         }
-        rd_scan_len = 0;
         collect_data = 0;
     }
 

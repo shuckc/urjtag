@@ -61,7 +61,6 @@ typedef struct {
 
 static int gpio_export (unsigned int gpio, int export)
 {
-    int ret;
     char *fname;
     FILE *fp;
 
@@ -77,7 +76,7 @@ static int gpio_export (unsigned int gpio, int export)
         return URJ_STATUS_FAIL;
     }
 
-    ret = fprintf (fp, "%u", gpio);
+    fprintf (fp, "%u", gpio);
     fclose (fp);
 
     return URJ_STATUS_OK;

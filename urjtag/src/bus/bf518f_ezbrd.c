@@ -34,14 +34,12 @@ bf518f_ezbrd_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                       const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
-    urj_part_t *part;
     bfin_bus_params_t *params;
     int failed = 0;
 
     bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
     if (bus == NULL)
         return NULL;
-    part = bus->part;
 
     params = bus->params;
     params->async_size = 4 * 1024 * 1024;

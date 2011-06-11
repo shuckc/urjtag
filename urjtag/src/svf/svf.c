@@ -539,9 +539,7 @@ static int
 urj_svf_all_care (char **string, double number)
 {
     char *ptr;
-    int num, result;
-
-    result = 1;
+    int num;
 
     num = (int) number;
     num = num % 4 == 0 ? num / 4 : num / 4 + 1;

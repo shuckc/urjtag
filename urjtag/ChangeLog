@@ -1,3 +1,9 @@
+2011-06-11  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bus/bf518f_ezbrd.c, src/bus/bf537_stamp.c, src/bus/bf561_ezkit.c,
+    src/svf/svf.c, src/tap/cable/gpio.c, src/tap/cable/ice100.c: Fix set
+    but not used warnings with gcc-4.6.
+
 2011-05-10  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/usbconn/libftdi.c (usbconn_ftdi_common_open): Use the new interface
