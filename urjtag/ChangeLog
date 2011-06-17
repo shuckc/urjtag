@@ -4,6 +4,10 @@
   * data/xilinx/xc18v02pc44/xc18v02pc44, data/xilinx/xc18v02pc44/STEPPINGS:
     Add data files for new xilinx parts.
 
+  * src/bsdl/bsdl_sysdep.h: Use config.h directly.
+  * src/bsdl/Makefile.am: Drop bsdl_config.h generation and dependencies.
+  * .gitignore: Drop bsdl_config.h from ignore list.
+
 2011-06-11  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/bf518f_ezbrd.c, src/bus/bf537_stamp.c, src/bus/bf561_ezkit.c,

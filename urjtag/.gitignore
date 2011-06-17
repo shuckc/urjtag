@@ -70,7 +70,6 @@ Makefile.in
 /src/apps/jtag/jtag
 /src/bsdl/bsdl_bison.c
 /src/bsdl/bsdl_bison.h
-/src/bsdl/bsdl_config.h
 /src/bsdl/bsdl_flex.c
 /src/bsdl/vhdl_bison.c
 /src/bsdl/vhdl_bison.h

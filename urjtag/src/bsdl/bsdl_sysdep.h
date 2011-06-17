@@ -26,7 +26,9 @@
 #define BSDL_SYSDEP_H
 
 
-#include "bsdl_config.h"
+#include "config.h"
+/* Some of the config.h defines conflict with yacc output */
+#undef PACKAGE
 
 #include <urjtag/gettext.h>
 #define _(s)            gettext(s)

@@ -37,7 +37,6 @@ libbsdl_flex_la_SOURCES = \
 
 noinst_HEADERS = \
 	bsdl_bison.h \
-	bsdl_config.h \
 	bsdl_msg.h \
 	bsdl_parser.h \
 	bsdl_sysdep.h \
@@ -52,21 +51,14 @@ libbsdl_flex_la_CFLAGS = \
 	-Wno-error
 
 # additional dependencies
-# - all files depend on bsdl_config.h which dynamically generated
 # - *_flex files must be processed after their *_bison counterparts
 #   to ensure that *_bison.h is present
-libbsdl_flex_la-vhdl_flex.$(OBJEXT): vhdl_bison.h bsdl_config.h
-vhdl_bison.$(OBJEXT): bsdl_config.h
-libbsdl_flex_la-bsdl_flex.$(OBJEXT): bsdl_bison.h bsdl_config.h
-bsdl_bison.$(OBJEXT): bsdl_config.h
-bsdl.$(OBJEXT) : bsdl_config.h
-bsdl_sem.$(OBJEXT): bsdl_bison.h bsdl_config.h
+libbsdl_flex_la-vhdl_flex.$(OBJEXT): vhdl_bison.h
+libbsdl_flex_la-bsdl_flex.$(OBJEXT): bsdl_bison.h
+bsdl_sem.$(OBJEXT): bsdl_bison.h
 
 vhdl_bison.h: vhdl_bison.c
 bsdl_bison.h: bsdl_bison.c
-
-bsdl_config.h: ../../config.h
-	grep 'DMALLOC' $< > $@
 
 AM_LFLAGS = -i
 
@@ -75,5 +67,4 @@ MAINTAINERCLEANFILES = \
 	vhdl_bison.h \
 	bsdl_bison.c \
 	bsdl_bison.h \
-	vhdl_flex.c \
-	bsdl_config.h
+	vhdl_flex.c
