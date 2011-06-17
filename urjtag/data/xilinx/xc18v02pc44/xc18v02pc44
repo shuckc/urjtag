@@ -1,0 +1,88 @@
+signal CLK
+signal D2
+signal Gnd_1
+signal D0
+signal Vcc_2
+signal Vcco_4
+signal Vpp
+signal TDO
+signal D1
+signal Gnd_4
+signal D3
+signal Vcco_3
+signal D5
+signal CEO
+signal D7
+signal Gnd_3
+signal Vcc_1
+signal Vcco_2
+signal CE
+signal D6
+signal Reset_OE
+signal CF
+signal D4
+signal Vcco_1
+signal TCK
+signal Gnd_2
+signal TMS
+signal TDI
+instruction length 8
+register DIR 32
+register USERCODE 32
+register BSR 25
+register BYPASS 1
+register USERCODEV 32
+register ADDRESS 16
+register DATA3 3
+register DATA1 2097152
+register DATA0 4096
+register ISPENABLE 6
+instruction CONFIG 11101110 BYPASS
+instruction NORMRST 11110000 BYPASS
+instruction FBLANK6 11100100 USERCODEV
+instruction FBLANK3 11100001 DATA3
+instruction FBLANK0 11100101 DATA1
+instruction FDATA3 11110011 DATA3
+instruction FDATA0 11101101 DATA0
+instruction SERASE 00001010 ADDRESS
+instruction FERASE 11101100 ADDRESS
+instruction FVFY6 11100110 USERCODEV
+instruction FVFY3 11100010 DATA3
+instruction FVFY1 11111000 DATA1
+instruction FVFY0 11101111 DATA0
+instruction FADDR 11101011 ADDRESS
+instruction FPGM 11101010 BYPASS
+instruction ISPENC 11101001 ISPENABLE
+instruction ISPEN 11101000 ISPENABLE
+instruction CLAMP 11111010 BYPASS
+instruction HIGHZ 11111100 BYPASS
+instruction USERCODE 11111101 DIR
+instruction IDCODE 11111110 DIR
+instruction EXTEST 00000000 BSR
+instruction SAMPLE/PRELOAD 00000001 BSR
+instruction BYPASS 11111111 BYPASS
+bit 0 I ? CLK
+bit 1 C 0 *
+bit 2 O ? D2 1 0 Z
+bit 3 C 0 *
+bit 4 O ? D0 3 0 Z
+bit 5 C 0 *
+bit 6 O ? D1 5 0 Z
+bit 7 C 0 *
+bit 8 O ? D3 7 0 Z
+bit 9 C 0 *
+bit 10 O ? D5 9 0 Z
+bit 11 C 0 *
+bit 12 O ? CEO 11 0 Z
+bit 13 C 0 *
+bit 14 O ? D7 13 0 Z
+bit 15 I ? CE
+bit 16 C 0 *
+bit 17 O ? D6 16 0 Z
+bit 18 C 0 *
+bit 19 O ? Reset_OE 18 0 Z
+bit 20 I ? Reset_OE
+bit 21 C 0 *
+bit 22 O ? CF 21 0 Z
+bit 23 C 0 *
+bit 24 O ? D4 23 0 Z

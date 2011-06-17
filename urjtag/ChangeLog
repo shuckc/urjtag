@@ -1,3 +1,9 @@
+2011-06-17  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/PARTS: Add xilinx xc18v02pc44 parts by Steve Tell.
+  * data/xilinx/xc18v02pc44/xc18v02pc44, data/xilinx/xc18v02pc44/STEPPINGS:
+    Add data files for new xilinx parts.
+
 2011-06-11  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/bf518f_ezbrd.c, src/bus/bf537_stamp.c, src/bus/bf561_ezkit.c,
