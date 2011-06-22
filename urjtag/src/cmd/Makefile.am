@@ -25,9 +25,7 @@ include $(top_srcdir)/Makefile.rules
 
 noinst_LTLIBRARIES = libcmd.la
 
-libcmd_la_SOURCES = \
-	cmd.h \
-	cmd_list.h \
+all_cmd_files = \
 	cmd_frequency.c \
 	cmd_cable.c \
 	cmd_reset.c \
@@ -69,11 +67,28 @@ libcmd_la_SOURCES = \
 	cmd_pld.c
 
 if ENABLE_SVF
-libcmd_la_SOURCES += cmd_svf.c
+all_cmd_files += cmd_svf.c
 endif
 
 if ENABLE_BSDL
-libcmd_la_SOURCES += cmd_bsdl.c
+all_cmd_files += cmd_bsdl.c
 endif
+
+libcmd_la_SOURCES = \
+	cmd.h \
+	cmd_list.h \
+	$(all_cmd_files)
+
+cmd_list.h: generated_cmd_list.h
+generated_cmd_list.h: $(all_cmd_files)
+	$(AM_V_GEN)set -e; \
+	cmds=`$(SED) -n '/^const urj_cmd_t urj_cmd_/{s:.*urj_cmd_::;s: =.*::;p}' $^`; \
+	for c in $$cmds ; do \
+		printf '#ifndef URJ_CMD_SKIP_%s\n_URJ_CMD(%s)\n#endif\n' $$c $$c; \
+	done > $@.tmp; \
+	cmp -s $@ $@.tmp && rm -f $@.tmp || mv $@.tmp $@
+
+EXTRA_DIST = generated_cmd_list.h
+MAINTAINERCLEANFILES = generated_cmd_list.h
 
 AM_CFLAGS = $(WARNINGCFLAGS)

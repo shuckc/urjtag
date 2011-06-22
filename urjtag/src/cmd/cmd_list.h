@@ -31,56 +31,13 @@
  *
  */
 
-
-/*
- * Please keep this list sorted alphabetically
- */
-
-_URJ_CMD(addpart)
-_URJ_CMD(bfin)
-_URJ_CMD(bit)
-#ifdef ENABLE_BSDL
-_URJ_CMD(bsdl)
+#ifndef ENABLE_BSDL
+#define URJ_CMD_SKIP_bsdl
 #endif
-_URJ_CMD(bus)
-_URJ_CMD(cable)
-_URJ_CMD(debug)
-_URJ_CMD(detect)
-_URJ_CMD(detectflash)
-_URJ_CMD(discovery)
-_URJ_CMD(dr)
-_URJ_CMD(endian)
-_URJ_CMD(eraseflash)
-_URJ_CMD(flashmem)
-_URJ_CMD(frequency)
-_URJ_CMD(get)
-_URJ_CMD(help)
-_URJ_CMD(idcode)
-_URJ_CMD(include)
-_URJ_CMD(initbus)
-_URJ_CMD(instruction)
-_URJ_CMD(part)
-_URJ_CMD(peek)
-_URJ_CMD(pld)
-_URJ_CMD(pod)
-_URJ_CMD(poke)
-_URJ_CMD(print)
-_URJ_CMD(quit)
-_URJ_CMD(readmem)
-_URJ_CMD(register)
-_URJ_CMD(reset)
-_URJ_CMD(salias)
-_URJ_CMD(scan)
-_URJ_CMD(script)
-_URJ_CMD(set)
-_URJ_CMD(shell)
-_URJ_CMD(shift)
-_URJ_CMD(signal)
-#ifdef ENABLE_SVF
-_URJ_CMD(svf)
+#ifndef ENABLE_SVF
+#define URJ_CMD_SKIP_svf
 #endif
-_URJ_CMD(test)
-_URJ_CMD(usleep)
-_URJ_CMD(writemem)
+
+#include "generated_cmd_list.h"
 
 #undef _URJ_CMD
