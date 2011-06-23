@@ -1,3 +1,8 @@
+2011-06-23  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/Makefile.am: Tweak dependencies so things work from a fresh
+    checkout/build and not just after multiple builds.
+
 2011-06-22  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/Makefile.am: Autogenerate command list based on the source

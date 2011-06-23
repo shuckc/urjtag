@@ -79,7 +79,7 @@ libcmd_la_SOURCES = \
 	cmd_list.h \
 	$(all_cmd_files)
 
-cmd_list.h: generated_cmd_list.h
+$(libcmd_la_OBJECTS): generated_cmd_list.h
 generated_cmd_list.h: $(all_cmd_files)
 	$(AM_V_GEN)set -e; \
 	cmds=`$(SED) -n '/^const urj_cmd_t urj_cmd_/{s:.*urj_cmd_::;s: =.*::;p}' $^`; \
