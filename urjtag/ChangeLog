@@ -3,6 +3,8 @@
   * acinclude.m4: Add a new AS_VAR_PREPEND helper.
   * configure.ac: Use AS_VAR_PREPEND rather than touching the var directly.
 
+  * configure.ac: Use AS_VAR_APPEND rather than touching the var directly.
+
 2011-06-23  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/Makefile.am: Tweak dependencies so things work from a fresh

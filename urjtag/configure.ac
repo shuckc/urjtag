@@ -238,8 +238,8 @@ AS_IF([test "x$with_libftdi" != xno], [
       ])
     ])
   ])
-  LIBS="$LIBFTDI_LIBS $LIBS"
-  CPPFLAGS="$CPPFLAGS $LIBFTDI_CFLAGS"
+  AS_VAR_APPEND([LIBS], " $LIBFTDI_LIBS")
+  AS_VAR_APPEND([CPPFLAGS], " $LIBFTDI_CFLAGS")
   AC_CHECK_FUNC([ftdi_usb_open], [
     AC_DEFINE(HAVE_LIBFTDI, 1, [Define if you have libftdi])
     HAVELIBFTDI=yes
