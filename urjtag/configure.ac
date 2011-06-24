@@ -181,6 +181,7 @@ AC_ARG_WITH([libusb],
     [with_libusb=detect])
 
 HAVELIBUSB=no
+LIBUSB_LIBS=
 AS_IF([test "x$with_libusb" != xno], [
   AS_IF([test "x$with_libusb" != x0.1 -a \
               "x$with_libusb" != x1.0 -a \
@@ -209,9 +210,9 @@ AS_IF([test "x$with_libusb" != xno], [
       AC_DEFINE(HAVE_LIBUSB, 1, [Define if you have libusb])
     ])
   ])
-  AS_VAR_APPEND([LIBS], " $LIBUSB_LIBS")
   AS_VAR_APPEND([CPPFLAGS], " $LIBUSB_CFLAGS")
 ])
+AC_SUBST(LIBUSB_LIBS)
 AM_CONDITIONAL(HAVE_LIBUSB, [test "x$HAVELIBUSB" != "xno"])
 
 
@@ -223,6 +224,7 @@ AC_ARG_WITH([libftdi],
     [], [with_libftdi=check])
 
 HAVELIBFTDI=no
+LIBFTDI_LIBS=
 AS_IF([test "x$with_libftdi" != xno], [
   save_LIBS=$LIBS
   save_CPPFLAGS=$CPPFLAGS
@@ -245,7 +247,6 @@ AS_IF([test "x$with_libftdi" != xno], [
     HAVELIBFTDI=yes
   ],[
     AC_MSG_WARN([*** libftdi not detected. No support for FTDI-based USB JTAG cables via libftdi.])
-    LIBS=$save_LIBS
     CPPFLAGS=$save_CPPFLAGS
   ])
   AC_CHECK_FUNC([ftdi_read_data_submit], [
@@ -255,7 +256,9 @@ AS_IF([test "x$with_libftdi" != xno], [
     AC_DEFINE(HAVE_LIBFTDI_ASYNC_MODE, 1, [Define if libftdi support async mode])
     HAVELIBFTDI_ASYNCMODE=yes
   ])
+  LIBS=$save_LIBS
 ])
+AC_SUBST(LIBFTDI_LIBS)
 AM_CONDITIONAL(HAVE_LIBFTDI, [test "x$HAVELIBFTDI" = "xyes"])
 AM_CONDITIONAL(HAVE_LIBFTDI_ASYNC_MODE, [test "x$HAVELIBFTDI_ASYNCMODE" = "xyes"])
 

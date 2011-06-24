@@ -5,6 +5,11 @@
 
   * configure.ac: Use AS_VAR_APPEND rather than touching the var directly.
 
+  * configure.ac: Do not add libusb/libftdi to LIBS directly as these are
+    used for all libs/apps in the tree, and we only want to use these with
+    specific ones.  Export LIBFTDI_LIBS/LIBUSB_LIBS to Makefile.am files.
+  * src/Makefile.am: Use new LIBFTDI_LIBS/LIBUSB_LIBS in liburjtag.la LIBADD.
+
 2011-06-23  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/Makefile.am: Tweak dependencies so things work from a fresh

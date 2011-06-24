@@ -65,7 +65,9 @@ liburjtag_la_LIBADD = \
 	pld/libpld.la \
 	global/libglobal.la \
 	-lm \
+	$(LIBFTDI_LIBS) \
 	@FTD2XXLIB@ \
+	$(LIBUSB_LIBS) \
 	@LIBINTL@
 
 if ENABLE_SVF
