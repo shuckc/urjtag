@@ -344,7 +344,7 @@ AS_IF([test "x$enable_werror" = xyes], [
 ])
 AC_SUBST(WARNINGCFLAGS)
 
-CPPFLAGS="-I\$(top_srcdir) -I\$(top_srcdir)/include $CPPFLAGS"
+AS_VAR_PREPEND([CPPFLAGS], '-I$(top_srcdir) -I$(top_srcdir)/include ')
 
 AC_ARG_ENABLE([apps],
   [AS_HELP_STRING([--disable-apps],

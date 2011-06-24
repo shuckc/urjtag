@@ -139,6 +139,16 @@ AC_DEFUN([AC_PROG_SED],
 ])dnl
 
 
+dnl AS_VAR_PREPEND
+dnl -------------
+dnl
+dnl this isn't in autoconf (yet?)
+dnl
+m4_ifndef([AS_VAR_PREPEND],[dnl
+AC_DEFUN([AS_VAR_PREPEND], [$1=$2${$1}])
+])dnl
+
+
 dnl AS_VAR_APPEND
 dnl -------------
 dnl
