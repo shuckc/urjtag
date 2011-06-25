@@ -68,6 +68,7 @@ Makefile.in
 /src/urjtag.pc
 /src/apps/bsdl2jtag/bsdl2jtag
 /src/apps/jtag/jtag
+/src/cmd/generated_cmd_list.h
 /src/bsdl/bsdl_bison.c
 /src/bsdl/bsdl_bison.h
 /src/bsdl/bsdl_flex.c
