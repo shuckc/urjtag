@@ -1,3 +1,7 @@
+2011-06-25  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/cmd_initbus.c: Drop useless double const keywords.
+
 2011-06-24  Mike Frysinger  <vapier@gentoo.org>
 
   * acinclude.m4: Add a new AS_VAR_PREPEND helper.

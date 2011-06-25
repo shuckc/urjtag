@@ -115,7 +115,7 @@ cmd_initbus_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
                                          urj_bus_drivers[i]->name);
 }
 
-const const urj_cmd_t urj_cmd_initbus = {
+const urj_cmd_t urj_cmd_initbus = {
     "initbus",
     N_("initialize bus driver for active part"),
     cmd_initbus_help,
