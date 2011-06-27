@@ -740,15 +740,20 @@ MAKE_YESNO_VAR([svf], [false])
 MAKE_YESNO_VAR([bsdl], [false])
 AC_MSG_NOTICE([
 
-jtag is now configured for
+urjtag is now configured for
 
-  Detected libusb      : $FLAG_HAVELIBUSB
-  Detected libftdi     : $FLAG_HAVELIBFTDI $FLAG_HAVELIBFTDI_ASYNCMODE
-  Detected libftd2xx   : $FLAG_HAVELIBFTD2XX
-  Detected inpout32    : $FLAG_HAVE_INPOUTXX
-  Build SVF player     : $FLAG_svf
-  Build BSDL subsystem : $FLAG_bsdl
-  Bus drivers          : $enabled_bus_drivers
-  Cable drivers        : $enabled_cable_drivers
-  Lowlevel drivers     : $enabled_lowlevel_drivers
+  Libraries:
+    libusb     : $FLAG_HAVELIBUSB
+    libftdi    : $FLAG_HAVELIBFTDI $FLAG_HAVELIBFTDI_ASYNCMODE
+    libftd2xx  : $FLAG_HAVELIBFTD2XX
+    inpout32   : $FLAG_HAVE_INPOUTXX
+
+  Subsystems:
+    SVF player : $FLAG_svf
+    BSDL       : $FLAG_bsdl
+
+  Drivers:
+    Bus        : $enabled_bus_drivers
+    Cable      : $enabled_cable_drivers
+    Lowlevel   : $enabled_lowlevel_drivers
 ])

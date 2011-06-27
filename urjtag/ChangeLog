@@ -11,6 +11,8 @@
     guts of cmd_cable_run() out into a new helper func named
     urj_tap_chain_connect().  Patch by Steve Tell.
 
+  * configure.ac: Split out summary info into related sections.
+
 2011-06-25  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_initbus.c: Drop useless double const keywords.
