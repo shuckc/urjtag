@@ -35,15 +35,19 @@ libsvf_la_SOURCES = \
 libsvf_flex_la_SOURCES = \
 	svf_flex.l
 
-libsvf_flex_la-svf_flex.$(OBJEXT) svf.$(OBJEXT): svf_bison.h
-
 AM_CFLAGS = $(WARNINGCFLAGS)
 
 libsvf_flex_la_CFLAGS = \
 	$(AM_CFLAGS) \
 	-Wno-error
 
-svf_bison.h: svf_bison.c
+# additional dependencies
+# - *_flex files must be processed after their *_bison counterparts
+#   to ensure that *_bison.h is present
+# - we use variables to workaround automake rule/dependency limitations
+SVF_BISON_OBJS = libsvf_flex_la-svf_flex.lo svf.lo
+$(SVF_BISON_OBJS): svf_bison.h
+svf_bison.h: svf_bison.c ; @true
 
 MAINTAINERCLEANFILES = \
 	svf_bison.c \

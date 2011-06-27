@@ -1,3 +1,8 @@
+2011-06-27  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bsdl/Makefile.am, src/svf/Makefile.am: Update dependency targets
+    to fix parallel build issues with bison/flex generated headers.
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (pkginclude_HEADERS): Remove urjtag.h.

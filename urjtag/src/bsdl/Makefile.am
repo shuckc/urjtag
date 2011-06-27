@@ -53,12 +53,13 @@ libbsdl_flex_la_CFLAGS = \
 # additional dependencies
 # - *_flex files must be processed after their *_bison counterparts
 #   to ensure that *_bison.h is present
-libbsdl_flex_la-vhdl_flex.$(OBJEXT): vhdl_bison.h
-libbsdl_flex_la-bsdl_flex.$(OBJEXT): bsdl_bison.h
-bsdl_sem.$(OBJEXT): bsdl_bison.h
-
-vhdl_bison.h: vhdl_bison.c
-bsdl_bison.h: bsdl_bison.c
+# - we use variables to workaround automake rule/dependency limitations
+VHDL_BISON_OBJS = libbsdl_flex_la-vhdl_flex.lo
+BSDL_BISON_OBJS = libbsdl_flex_la-bsdl_flex.lo bsdl_sem.lo
+$(VHDL_BISON_OBJS): vhdl_bison.h
+$(BSDL_BISON_OBJS): bsdl_bison.h
+vhdl_bison.h: vhdl_bison.c ; @true
+bsdl_bison.h: bsdl_bison.c ; @true
 
 AM_LFLAGS = -i
 
