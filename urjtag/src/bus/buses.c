@@ -32,6 +32,7 @@
 #include <urjtag/bus.h>
 #include <urjtag/chain.h>
 #include <urjtag/part.h>
+#include <urjtag/cmd.h>
 
 #include "buses.h"
 
@@ -138,6 +139,47 @@ urj_bus_buses_set (int n)
 
     urj_bus = urj_buses.buses[n];
 
+    return URJ_STATUS_OK;
+}
+
+int
+urj_bus_init (urj_chain_t *chain, const char *drivername, char *params[])
+{
+    int drv, i;
+    const urj_param_t **bus_params;
+
+    if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+
+    if (urj_tap_chain_active_part (chain) == NULL)
+        return URJ_STATUS_FAIL;
+
+    for (drv = 0; urj_bus_drivers[drv] != NULL; drv++)
+        if (strcasecmp (urj_bus_drivers[drv]->name, drivername) == 0)
+            break;
+
+    if (urj_bus_drivers[drv] == NULL)
+    {
+        urj_error_set (URJ_ERROR_NOTFOUND, "Unknown bus: %s", drivername);
+        return URJ_STATUS_FAIL;
+    }
+
+    urj_param_init (&bus_params);
+    for (i = 0; params[i] != NULL; i++)
+        if (urj_param_push (&urj_bus_param_list, &bus_params,
+                            params[i]) != URJ_STATUS_OK)
+        {
+            urj_param_clear (&bus_params);
+            return URJ_STATUS_FAIL;
+        }
+
+    if (urj_bus_init_bus (chain, urj_bus_drivers[drv], bus_params) == NULL)
+    {
+        urj_param_clear (&bus_params);
+        return URJ_STATUS_FAIL;
+    }
+
+    urj_param_clear (&bus_params);
     return URJ_STATUS_OK;
 }
 

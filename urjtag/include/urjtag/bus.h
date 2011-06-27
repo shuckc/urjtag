@@ -52,10 +52,24 @@ void urj_bus_buses_free (void);
 int urj_bus_buses_add (urj_bus_t *abus);
 int urj_bus_buses_delete (urj_bus_t *abus);
 
-/** set active bus
+/**
+ * set active bus
+ *
  * @param n choose n'th bus in #urj_buses as the active bus
+ *
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
  */
 int urj_bus_buses_set (int n);
+
+/**
+ * Initialize the specified bus.
+ *
+ * @param chain      jtag chain object
+ * @param drivername name of bus driver
+ * @param params     additional driver-specific parameters
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
+ */
+int urj_bus_init (urj_chain_t *chain, const char *drivername, char *params[]);
 
 #endif /* URJ_BUS_H */

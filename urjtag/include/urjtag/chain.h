@@ -49,6 +49,16 @@ struct URJ_CHAIN
 
 urj_chain_t *urj_tap_chain_alloc (void);
 void urj_tap_chain_free (urj_chain_t *chain);
+/**
+ * Connect the chain to the specified cable.
+ *
+ * @param chain      chain object to connect
+ * @param drivername name of cable driver
+ * @param params     additional driver-specific parameters
+ *
+ * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
+ */
+int urj_tap_chain_connect (urj_chain_t *chain, const char *drivername, char *params[]);
 void urj_tap_chain_disconnect (urj_chain_t *chain);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_tap_chain_clock (urj_chain_t *chain, int tms, int tdi, int n);

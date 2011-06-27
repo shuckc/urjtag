@@ -4,6 +4,13 @@
     for some useful command related functions to the public cmd.h header.
     In the process, constify the array passed into urj_cmd_params.
 
+  * include/urjtag/bus.h, src/bus/buses.c, src/cmd/cmd_initbus.c: Pull the
+    guts of cmd_initbus_run() out into a new helper func named
+    urj_bus_init().  Patch by Steve Tell.
+  * include/urjtag/chain.h, src/cmd/cmd_cable.c, src/tap/chain.c: Pull the
+    guts of cmd_cable_run() out into a new helper func named
+    urj_tap_chain_connect().  Patch by Steve Tell.
+
 2011-06-25  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_initbus.c: Drop useless double const keywords.

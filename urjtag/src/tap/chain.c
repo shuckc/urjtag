@@ -33,7 +33,7 @@
 #include <urjtag/tap_state.h>
 #include <urjtag/tap.h>
 #include <urjtag/data_register.h>
-
+#include <urjtag/cmd.h>
 #include <urjtag/bsdl.h>
 
 #include <urjtag/chain.h>
@@ -69,6 +69,100 @@ urj_tap_chain_free (urj_chain_t *chain)
 
     urj_part_parts_free (chain->parts);
     free (chain);
+}
+
+int
+urj_tap_chain_connect (urj_chain_t *chain, const char *drivername, char *params[])
+{
+    urj_cable_t *cable;
+    int i, j, paramc;
+    const urj_param_t **cable_params;
+    const urj_cable_driver_t *driver;
+
+    urj_cable_parport_devtype_t devtype;
+    const char *devname;
+    int param_start;
+
+    param_start = 0;
+    paramc = urj_cmd_params (params);
+
+    /* search cable driver list */
+    for (i = 0; urj_tap_cable_drivers[i]; i++)
+        if (strcasecmp (drivername, urj_tap_cable_drivers[i]->name) == 0)
+            break;
+
+    driver = urj_tap_cable_drivers[i];
+    if (!driver)
+    {
+        urj_error_set (URJ_ERROR_INVALID,
+                       "unknown cable driver '%s'", drivername);
+        return URJ_STATUS_FAIL;
+    }
+
+    if (driver->device_type == URJ_CABLE_DEVICE_PARPORT)
+    {
+        if (paramc < 3)
+        {
+            urj_error_set (URJ_ERROR_SYNTAX,
+                           "parallel cable requires >= 3 parameters");
+            return URJ_STATUS_FAIL;
+        }
+        for (j = 0; j < URJ_CABLE_PARPORT_N_DEVS; j++)
+            if (strcasecmp (params[0],
+                            urj_cable_parport_devtype_string (j)) == 0)
+                break;
+        if (j == URJ_CABLE_PARPORT_N_DEVS)
+        {
+            urj_error_set (URJ_ERROR_INVALID,
+                           "unknown parallel port device type '%s'",
+                           params[0]);
+            return URJ_STATUS_FAIL;
+        }
+
+        devtype = j;
+        devname = params[1];
+        param_start = 2;
+    }
+    else
+    {
+        /* Silence gcc uninitialized warnings */
+        devtype = -1;
+        devname = NULL;
+    }
+
+    urj_param_init (&cable_params);
+    for (j = param_start; params[j] != NULL; j++)
+        if (urj_param_push (&urj_cable_param_list, &cable_params,
+                            params[j]) != URJ_STATUS_OK)
+        {
+            urj_param_clear (&cable_params);
+            return URJ_STATUS_FAIL;
+        }
+
+    switch (driver->device_type)
+    {
+    case URJ_CABLE_DEVICE_PARPORT:
+        cable = urj_tap_cable_parport_connect (chain, driver, devtype, devname,
+                                               cable_params);
+        break;
+    case URJ_CABLE_DEVICE_USB:
+        cable = urj_tap_cable_usb_connect (chain, driver, cable_params);
+        break;
+    case URJ_CABLE_DEVICE_OTHER:
+        cable = urj_tap_cable_other_connect (chain, driver, cable_params);
+        break;
+    default:
+        cable = NULL;
+        break;
+    }
+
+    urj_param_clear (&cable_params);
+
+    if (cable == NULL)
+        return URJ_STATUS_FAIL;
+
+    chain->cable->chain = chain;
+    return URJ_STATUS_OK;
 }
 
 void
