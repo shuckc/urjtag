@@ -57,23 +57,6 @@ typedef struct
 extern const urj_cmd_t * const urj_cmds[];
 
 /**
- * Tests if chain has a cable pointer
- *
- * @return URJ_STATUS_OK if success; URJ_STATUS_FAIL on error or failure
- */
-int urj_cmd_test_cable (urj_chain_t *chain);
-
-/**
- * Count the number of parameters in this NULL-terminated list
- */
-int urj_cmd_params (char *params[]);
-/**
- * Parse parameter as a long unsigned
- * @return URJ_STATUS_OK on success, URJ_STATUS_FAIL on error
- */
-int urj_cmd_get_number (const char *s, long unsigned *i);
-
-/**
  * Show a list of structures with name/desc
  */
 #define urj_cmd_show_list(arr) \

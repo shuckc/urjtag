@@ -56,4 +56,30 @@ int urj_cmd_run (urj_chain_t *chain, char *params[]);
  */
 char **urj_cmd_complete (urj_chain_t *chain, const char *line, int point);
 
+/**
+ * Tests if chain has a cable pointer
+ *
+ * @return URJ_STATUS_OK if success; URJ_STATUS_FAIL on error or failure
+ */
+int urj_cmd_test_cable (urj_chain_t *chain);
+
+/**
+ * Count the number of parameters in this NULL-terminated list
+ *
+ * @param params pointer to array of null-terminated strings
+ *
+ * @return number of parameter strings; 0 for none.
+ */
+int urj_cmd_params (char * const params[]);
+
+/**
+ * Parse parameter as a long unsigned
+ *
+ * @param s string containing textual representation of a number
+ * @param i pointer to variable in which to store the resulting number
+ *
+ * @return URJ_STATUS_OK on success, URJ_STATUS_FAIL on error
+ */
+int urj_cmd_get_number (const char *s, long unsigned *i);
+
 #endif /* URJ_CMD_H */

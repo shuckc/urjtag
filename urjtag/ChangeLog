@@ -1,3 +1,9 @@
+2011-06-27  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/urjtag/cmd.h, src/cmd/cmd.h, src/cmd/cmd_cmd.c: Move prototypes
+    for some useful command related functions to the public cmd.h header.
+    In the process, constify the array passed into urj_cmd_params.
+
 2011-06-25  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_initbus.c: Drop useless double const keywords.

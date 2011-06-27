@@ -234,7 +234,7 @@ urj_cmd_run (urj_chain_t *chain, char *params[])
 }
 
 int
-urj_cmd_params (char *params[])
+urj_cmd_params (char * const params[])
 {
     int i = 0;
 
