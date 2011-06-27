@@ -57,3 +57,6 @@ pkginclude_HEADERS = \
 	svf.h \
 	types.h \
 	usbconn.h
+
+nodist_pkginclude_HEADERS = \
+	urjtag.h

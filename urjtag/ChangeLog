@@ -1,3 +1,8 @@
+2011-06-27  Jie Zhang  <jie.zhang@analog.com>
+
+  * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and
+    add urjtag.h.
+
 2011-06-27  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bsdl/Makefile.am, src/svf/Makefile.am: Update dependency targets
