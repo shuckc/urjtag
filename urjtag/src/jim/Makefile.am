@@ -30,4 +30,8 @@ libjim_la_SOURCES = \
 	some_cpu.c \
 	intel_28f800b3.c
 
+EXTRA_DIST = \
+	README.jim \
+	some_cpu.bsd
+
 AM_CFLAGS = $(WARNINGCFLAGS)

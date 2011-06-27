@@ -56,5 +56,4 @@ pkginclude_HEADERS = \
 	tap.h \
 	svf.h \
 	types.h \
-	urjtag.h \
 	usbconn.h

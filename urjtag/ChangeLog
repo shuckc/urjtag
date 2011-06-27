@@ -1,3 +1,16 @@
+2011-06-27  Jie Zhang  <jie.zhang@analog.com>
+
+  * include/urjtag/Makefile.am (pkginclude_HEADERS): Remove urjtag.h.
+  * extra/fjmem/Makefile.am: New file.
+  * src/jim/Makefile.am (EXTRA_DIST): New.
+  * src/pld/Makefile.am (libpld_la_SOURCES): Add xilinx.h.
+  * src/bus/Makefile.am (libbus_la_SOURCES): Add blackfin.h.
+  * src/bfin/Makefile.am (libbfin_la_SOURCES): Add bfin-part.h.
+  * configure.ac: Add extra/fjmem/Makefile to AC_CONFIG_FILES.
+  * data/Makefile.am (nobase_dist_pkgdata_DATA): Add
+    xilinx/xc18v02pc44/xc18v02pc44 and xilinx/xc18v02pc44/STEPPINGS.
+  * Makefile.am (SUBDIRS): Add extra/fjmem.
+
 2011-06-27  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/cmd.h, src/cmd/cmd.h, src/cmd/cmd_cmd.c: Move prototypes

@@ -29,6 +29,7 @@ libbfin_la_SOURCES = \
 	insn-gen.c \
 	bfin.c \
 	bfin-part.c \
+	bfin-part.h \
 	bfin-part-bfin.c
 
 AM_CFLAGS = $(WARNINGCFLAGS)

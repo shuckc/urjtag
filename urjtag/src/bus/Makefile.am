@@ -54,6 +54,7 @@ endif
 if ENABLE_BUS_BLACKFIN
 libbus_la_SOURCES += \
 	blackfin.c \
+	blackfin.h \
 	bf518f_ezbrd.c \
 	bf533_stamp.c \
 	bf537_stamp.c \

@@ -191,6 +191,8 @@ nobase_dist_pkgdata_DATA = \
 	toshiba/tx4926/STEPPINGS \
 	toshiba/tx4926/tx4926 \
 	xilinx/PARTS \
+	xilinx/xc18v02pc44/xc18v02pc44 \
+	xilinx/xc18v02pc44/STEPPINGS \
 	xilinx/xc18v04pc44/xc18v04pc44 \
 	xilinx/xc18v04pc44/STEPPINGS \
 	xilinx/xc2c256-tq144/STEPPINGS \
