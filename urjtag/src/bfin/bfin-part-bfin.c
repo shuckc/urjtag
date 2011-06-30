@@ -46,27 +46,110 @@ bfin_dbgstat_value (urj_part_t *part)
     return urj_tap_register_get_value (part->active_instruction->data_register->out);
 }
 
-static uint32_t
-bfin_test_command (uint32_t addr, int w)
+static void
+bfin_test_command_mmrs (urj_part_t *part, uint32_t addr, int icache,
+                        uint32_t *command_addr,
+                        uint32_t *data0_addr, uint32_t *data1_addr)
 {
-    uint32_t test_command;
+    if (icache) {
+        *command_addr = ITEST_COMMAND;
+        *data0_addr = ITEST_DATA0;
+        *data1_addr = ITEST_DATA1;
+    } else {
+        *command_addr = DTEST_COMMAND;
+        *data0_addr = DTEST_DATA0;
+        *data1_addr = DTEST_DATA1;
+    }
+}
 
-    /* We can only access [15:0] range.  */
-    if ((addr & 0xf0000) != 0)
-        return 0;
+static void
+bfin_test_command (urj_part_t *part, uint32_t addr, int w,
+                   uint32_t command_addr, uint32_t *command_value)
+{
+    /* The shifting here is a bit funky, but should be straight forward and
+       easier to maintain than hand coded masks.  So, start with the break
+       down of the [DI]TEST_COMMAND MMR in the HRM and follow along:
 
-    test_command =
-        (addr & 0x0800) << 15   /* Address bit 11 */
-        | (addr & 0x8000) << 8  /* Address bit 15 */
-        | (addr & 0x3000) << 4  /* Address bits [13:12] */
-        | (addr & 0x47f8)       /* Address bits 14 and [10:3] */
-        | 0x1000000             /* Access instruction */
-        | 0x4;                  /* Access data array */
+       We need to put bit 11 of the address into bit 26 of the MMR.  So first
+       we mask off ADDR[11] with:
+       (addr & (1 << 11))
 
-    if (w)
-        test_command |= 0x2;    /* Write */
+       Then we shift it from its current position (11) to its new one (26):
+       ((...) << (26 - 11))
+     */
 
-    return test_command;
+    /* Start with the bits ITEST/DTEST share.  */
+    *command_value =
+        ((addr & (0x03 << 12)) << (16 - 12)) | /* ADDR[13:12] -> MMR[17:16] */
+        ((addr & (0x01 << 14)) << (14 - 14)) | /* ADDR[14]    -> MMR[14]    */
+        ((addr & (0xff <<  3)) << ( 3 -  3)) | /* ADDR[10:3]  -> MMR[10:3]  */
+        (1 << 2)                             | /* 1 (data)    -> MMR[2]     */
+        (w << 1);                              /* read/write  -> MMR[1]     */
+
+    /* Now for the bits that aren't the same.  */
+    if (command_addr == ITEST_COMMAND)
+        *command_value |=
+            ((addr & (0x03 << 10)) << (26 - 10));  /* ADDR[11:10] -> MMR[27:26] */
+    else
+        *command_value |=
+            ((addr & (0x01 << 11)) << (26 - 11)) | /* ADDR[11] -> MMR[26] */
+            ((addr & (0x01 << 21)) << (24 - 21));  /* ADDR[21] -> MMR[24] */
+
+    /* Now, just for fun, some parts are slightly different.  */
+    if (command_addr == DTEST_COMMAND)
+    {
+        /* BF50x has no additional needs.  */
+        if (!strcmp (part->part, "BF518"))
+        {
+            /* MMR[23]:
+               0 - Data Bank A (0xff800000) / Inst Bank A (0xffa00000)
+               1 - Data Bank B (0xff900000) / Inst Bank B (0xffa04000)
+             */
+            if ((addr & 0xfff04000) == 0xffa04000 ||
+                (addr & 0xfff00000) == 0xff900000)
+                *command_value |= (1 << 23);
+        }
+        else if (!strcmp (part->part, "BF526") ||
+                 !strcmp (part->part, "BF527") ||
+                 !strcmp (part->part, "BF533") ||
+                 !strcmp (part->part, "BF534") ||
+                 !strcmp (part->part, "BF537") ||
+                 !strcmp (part->part, "BF538") ||
+                 !strcmp (part->part, "BF548") ||
+                 !strcmp (part->part, "BF548M"))
+        {
+            /* MMR[23]:
+               0 - Data Bank A (0xff800000) / Inst Bank A (0xffa00000)
+               1 - Data Bank B (0xff900000) / Inst Bank B (0xffa08000)
+             */
+            if ((addr & 0xfff08000) == 0xffa08000 ||
+                (addr & 0xfff00000) == 0xff900000)
+                *command_value |= (1 << 23);
+        }
+        else if (!strcmp (part->part, "BF561"))
+        {
+            /* MMR[23]:
+               0 - Data Bank A (Core A: 0xff800000 Core B: 0xff400000)
+                   Inst Bank A (Core A: 0xffa00000 Core B: 0xff600000)
+               1 - Data Bank B (Core A: 0xff900000 Core B: 0xff500000)
+                   N/A for Inst (no Bank B)
+             */
+            uint32_t hi = (addr >> 20);
+            if (hi == 0xff9 || hi == 0xff5)
+                *command_value |= (1 << 23);
+        }
+        else if (!strcmp (part->part, "BF592"))
+        {
+            /* ADDR[15] -> MMR[15]
+               MMR[22]:
+               0 - L1 Inst (0xffa00000)
+               1 - L1 ROM  (0xffa10000)
+             */
+            *command_value |= (addr & (1 << 15));
+            if ((addr >> 16) == 0xffa1)
+                *command_value |= (1 << 22);
+        }
+    }
 }
 
 struct emu_oab bfin_emu_oab =
@@ -74,11 +157,8 @@ struct emu_oab bfin_emu_oab =
     bfin_dbgctl_init,
     bfin_dbgstat_value,
 
+    bfin_test_command_mmrs,
     bfin_test_command,
-
-    DTEST_COMMAND,
-    DTEST_DATA0,
-    DTEST_DATA1,
 
     0, /* dbgctl_dbgstat_in_one_chain */
     0, /* sticky_in_reset */
@@ -200,7 +280,7 @@ bfin_part_init (urj_part_t *part)
 extern void bfin_init (void);
 
 void
-bfin_init ()
+bfin_init (void)
 {
     /* Keep in sync with data/analog/PARTS */
     urj_part_init_register ("BF506", bfin_part_init);

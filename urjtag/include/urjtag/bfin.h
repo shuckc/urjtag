@@ -75,17 +75,15 @@ struct emu_oab
     void (*dbgctl_init) (urj_part_t *part, uint16_t value);
     uint16_t (*dbgstat_value) (urj_part_t *part);
 
-    /* Generate TEST_COMMAND from ADDR and W(rite).  */
-    uint32_t (*test_command) (uint32_t addr, int w);
+    /* Get the MMRs needed to access this L1 address.  */
+    void (*test_command_mmrs) (urj_part_t *part, uint32_t addr, int icache,
+                               uint32_t *command_addr,
+                               uint32_t *data0_addr, uint32_t *data1_addr);
 
-    /* For existing Blackfin processors, it's actually DTEST_COMMAND
-       address.  */
-    uint32_t test_command_addr;
-
-    /* For existing Blackfin processors, they are actually DTEST_DATA
-       addresses.  */
-    uint32_t test_data0_addr;
-    uint32_t test_data1_addr;
+    /* Generate TEST_COMMAND from ADDR and W(rite), and return the MMRs
+       that need to be used for this access.  */
+    void (*test_command) (urj_part_t *part, uint32_t addr, int w,
+                          uint32_t command_addr, uint32_t *command_value);
 
     /* No existing Blackfin processors use this.  It should be 0.  */
     int dbgctl_dbgstat_in_one_chain;

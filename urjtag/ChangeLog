@@ -43,6 +43,11 @@
   * src/cmd/cmd_debug.c: Drop local log level converters and use new
     common helpers.
 
+  * include/urjtag/bfin.h, src/bfin/bfin-part-bfin.c: Rewrite test_command
+    support to dynamically look up the set of MMRs needed in order to access
+    the requested memory.  Some parts can only use ITEST, so hardcoding the
+    DTEST MMRs no longer works.
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and
