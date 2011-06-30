@@ -1,3 +1,8 @@
+2011-06-30  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/chain.c (urj_tap_chain_connect): Fix param count check with parallel
+    cables after the refactorizing into dedicated funcs.  Fix by Steve Tell.
+
 2011-06-29  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable.c (urj_tap_cable_wait): Tweak code style to silence warnings
