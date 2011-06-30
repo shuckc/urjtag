@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 #include <urjtag/chain.h>
 #include <urjtag/tap_state.h>
@@ -1537,13 +1538,33 @@ chain_system_reset (urj_chain_t *chain)
     p0 = part_get_p0 (chain, chain->main_part);
     r0 = part_get_r0 (chain, chain->main_part);
 
+    /*
+     * Flush all system events like cache line fills.  Otherwise,
+     * when we reset the system side, any events that the core was
+     * waiting on no longer exist, and the core hangs.
+     */
+    part_emuir_set (chain, chain->main_part, INSN_SSYNC, URJ_CHAIN_EXITMODE_IDLE);
+
+    /* Write 0x7 to SWRST to start system reset. */
     part_set_p0 (chain, chain->main_part, SWRST);
     part_set_r0 (chain, chain->main_part, 0x7);
     part_emuir_set (chain, chain->main_part, gen_store16_offset (REG_P0, 0, REG_R0), URJ_CHAIN_EXITMODE_IDLE);
-    part_emuir_set (chain, chain->main_part, INSN_SSYNC, URJ_CHAIN_EXITMODE_IDLE);
+
+    /*
+     * Delay at least 10 SCLKs instead of doing an SSYNC insn.
+     * Since the system is being reset, the sync signal might
+     * not be asserted, and so the core hangs waiting for it.
+     * The magic "10" number was given to us by ADI designers
+     * who looked at the schematic and ran some simulations.
+     */
+    usleep (100);
+
+    /* Write 0x0 to SWRST to stop system reset. */
     part_set_r0 (chain, chain->main_part, 0);
     part_emuir_set (chain, chain->main_part, gen_store16_offset (REG_P0, 0, REG_R0), URJ_CHAIN_EXITMODE_IDLE);
-    part_emuir_set (chain, chain->main_part, INSN_SSYNC, URJ_CHAIN_EXITMODE_IDLE);
+
+    /* Delay at least 1 SCLK; see comment above for more info. */
+    usleep (100);
 
     part_set_p0 (chain, chain->main_part, p0);
     part_set_r0 (chain, chain->main_part, r0);

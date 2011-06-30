@@ -6,6 +6,9 @@
   * src/urjtag.pc.in (Libs.private): Add ftdi/usb libs after they were removed
     from the global LIBS.
 
+  * src/bfin/bfin.c (chain_system_reset): Rewrite to work around known anomalies
+    with software reset and Blackfin cores.
+
 2011-06-29  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable.c (urj_tap_cable_wait): Tweak code style to silence warnings
