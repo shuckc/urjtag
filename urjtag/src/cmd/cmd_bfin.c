@@ -498,14 +498,16 @@ static void
 cmd_bfin_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("Usage: %s execute INSTRUCTIONs\n"
-               "Usage: %s emulation enter|exit|singlestep|status\n"
-               "Usage: %s reset [core|system]\n"
+             _("Usage: %s INSTRUCTIONs\n"
+               "Usage: %s\n"
+               "Usage: %s\n"
                "Blackfin specific commands\n"
                "\n"
                "INSTRUCTIONs are a sequence of Blackfin encoded instructions,\n"
                "double quoted assembly statements and [EMUDAT_IN]s\n"),
-             "bfin", "bfin", "bfin" );
+             "bfin execute",
+             "bfin emulation enable|trigger|enter|return|disable|exit|singlestep|status",
+             "bfin reset [core|system]");
 }
 
 static void

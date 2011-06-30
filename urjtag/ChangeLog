@@ -10,6 +10,10 @@
   * src/cmd/cmd_bfin.c (cmd_bfin_run): Make sure the part is in emulation mode
     first before attempting a reset (since we need to be).
 
+  * src/cmd/cmd_bfin.c (cmd_bfin_help): Update help description to include
+    all of the sub-commands actually supported.  Pull out the const strings
+    (things you actually type) out of the translated string.
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and
