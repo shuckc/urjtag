@@ -7,6 +7,9 @@
     avoid constant generation loops where other files are newer, but not
     a different list of commands.
 
+  * src/cmd/cmd_bfin.c (cmd_bfin_run): Make sure the part is in emulation mode
+    first before attempting a reset (since we need to be).
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and

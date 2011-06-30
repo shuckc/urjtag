@@ -439,6 +439,15 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
     {
         int reset_what = 0;
 
+        part_dbgstat_get (chain, chain->active_part);
+
+        if (!part_dbgstat_is_emuready (chain, chain->active_part))
+        {
+            urj_error_set (URJ_ERROR_BFIN, "Run '%s' first",
+                           "bfin emulation enter");
+            return URJ_STATUS_FAIL;
+        }
+
         if (num_params == 3)
         {
             if (!strcmp (params[2], "core"))
