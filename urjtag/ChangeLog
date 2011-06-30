@@ -9,6 +9,9 @@
   * src/bfin/bfin.c (chain_system_reset): Rewrite to work around known anomalies
     with software reset and Blackfin cores.
 
+  * src/tap/chain.c (urj_tap_cable_wait): Fix off-by-one error in previous wait
+    logic tweaking.
+
 2011-06-29  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable.c (urj_tap_cable_wait): Tweak code style to silence warnings

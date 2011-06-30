@@ -528,7 +528,7 @@ urj_tap_cable_wait (urj_cable_t *cable)
         j = i;
 
     /* Avoid gcc set-but-unused warnings */
-    cable->delay = j;
+    cable->delay = j + 1;
 }
 
 static urj_cable_t *
