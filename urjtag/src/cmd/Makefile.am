@@ -85,8 +85,7 @@ generated_cmd_list.h: $(all_cmd_files)
 	cmds=`$(SED) -n '/^const urj_cmd_t urj_cmd_/{s:.*urj_cmd_::;s: =.*::;p}' $^`; \
 	for c in $$cmds ; do \
 		printf '#ifndef URJ_CMD_SKIP_%s\n_URJ_CMD(%s)\n#endif\n' $$c $$c; \
-	done > $@.tmp; \
-	cmp -s $@ $@.tmp && rm -f $@.tmp || mv $@.tmp $@
+	done > $@
 
 EXTRA_DIST = generated_cmd_list.h
 MAINTAINERCLEANFILES = generated_cmd_list.h

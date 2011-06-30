@@ -3,6 +3,10 @@
   * src/tap/cable.c (urj_tap_cable_wait): Tweak code style to silence warnings
     thrown up by gcc-4.6 and cause build failures with -Werror.
 
+  * src/cmd/Makefile.am (generated_cmd_list.h): Always update the file to
+    avoid constant generation loops where other files are newer, but not
+    a different list of commands.
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and
