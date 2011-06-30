@@ -90,6 +90,46 @@ urj_error_reset (void)
     urj_error_state.errnum = URJ_ERROR_OK;
 }
 
+static const struct {
+    const urj_log_level_t level;
+    const char *name;
+} levels[] = {
+#define L(LVL, lvl) { URJ_LOG_LEVEL_##LVL, #lvl, }
+    L(ALL, all),
+    L(COMM, comm),
+    L(DEBUG, debug),
+    L(DETAIL, detail),
+    L(NORMAL, normal),
+    L(WARNING, warning),
+    L(ERROR, error),
+    L(SILENT, silent),
+#undef L
+};
+
+const char *
+urj_log_level_string (urj_log_level_t level)
+{
+    size_t i;
+
+    for (i = 0; i < ARRAY_SIZE (levels); ++i)
+        if (levels[i].level == level)
+            return levels[i].name;
+
+    return "unknown";
+}
+
+urj_log_level_t
+urj_string_log_level (const char *slevel)
+{
+    size_t i;
+
+    for (i = 0; i < ARRAY_SIZE (levels); ++i)
+        if (!strcmp (levels[i].name, slevel))
+            return levels[i].level;
+
+    return -1;
+}
+
 const char *
 urj_error_string (urj_error_t err)
 {

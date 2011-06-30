@@ -66,4 +66,22 @@ int urj_do_log (urj_log_level_t level, const char *fmt, ...)
         urj_log (URJ_LOG_LEVEL_WARNING, __VA_ARGS__); \
     } while (0)
 
+/**
+ * Convert the named level into the corresponding urj_log_level_t.
+ *
+ * @param slevel the string to translate
+ *
+ * @return log level on success; -1 on error
+ */
+urj_log_level_t urj_string_log_level (const char *slevel);
+
+/**
+ * Convert the urj_log_level_t into a string.
+ *
+ * @param level the level to translate
+ *
+ * @return the name of the log level on success; "unknown" on error
+ */
+const char *urj_log_level_string (urj_log_level_t level);
+
 #endif /* URJ_LOG_H */
