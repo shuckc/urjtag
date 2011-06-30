@@ -48,7 +48,8 @@ typedef struct
      * syntax and library errors */
     int (*run) (urj_chain_t *chain, char *params[]);
     void (*complete) (urj_chain_t *chain, char ***matches, size_t *match_cnt,
-                      const char *text, size_t text_len, size_t token_point);
+                      char * const *tokens, const char *text, size_t text_len,
+                      size_t token_point);
 } urj_cmd_t;
 
 #define _URJ_CMD(cmd) extern const urj_cmd_t urj_cmd_##cmd;

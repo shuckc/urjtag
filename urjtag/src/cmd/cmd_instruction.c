@@ -113,7 +113,8 @@ cmd_instruction_help (void)
 
 static void
 cmd_instruction_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
-                          const char *text, size_t text_len, size_t token_point)
+                          char * const *tokens, const char *text, size_t text_len,
+                          size_t token_point)
 {
     urj_part_t *part;
     urj_part_instruction_t *i;

@@ -157,7 +157,8 @@ urj_cmd_complete (urj_chain_t *chain, const char *line, int point)
         else
             name = "";
 
-        cmd->complete (chain, &ret, &ret_cnt, name, strlen (name), token_point);
+        cmd->complete (chain, &ret, &ret_cnt, tokens, name,
+                       strlen (name), token_point);
 
         if (ret_cnt)
             ret[ret_cnt] = NULL;

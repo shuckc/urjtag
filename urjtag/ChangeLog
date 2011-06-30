@@ -14,6 +14,17 @@
     all of the sub-commands actually supported.  Pull out the const strings
     (things you actually type) out of the translated string.
 
+  * src/cmd/cmd.h (urj_cmd_t.complete): Add a new arg for the token list.
+  * src/cmd/cmd_cmd.c (urj_cmd_complete): Pass down tokenized list for
+    handlers to work off of if they want info about previous tokens.
+  * src/cmd/cmd_bfin.c, src/cmd/cmd_cable.c, src/cmd/cmd_cmd.c,
+    src/cmd/cmd_debug.c, src/cmd/cmd_endian.c, src/cmd/cmd_flashmem.c,
+    src/cmd/cmd_get.c, src/cmd/cmd_help.c, src/cmd/cmd_include.c,
+    src/cmd/cmd_initbus.c, src/cmd/cmd_instruction.c, src/cmd/cmd_print.c,
+    src/cmd/cmd_readmem.c, src/cmd/cmd_salias.c, src/cmd/cmd_set.c,
+    src/cmd/cmd_shift.c, src/cmd/cmd_test.c: Add new tokens arg to completion
+    handlers.
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and

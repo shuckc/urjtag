@@ -114,7 +114,8 @@ cmd_flashmem_help (void)
 
 static void
 cmd_flashmem_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
-                       const char *text, size_t text_len, size_t token_point)
+                       char * const *tokens, const char *text, size_t text_len,
+                       size_t token_point)
 {
     switch (token_point)
     {
