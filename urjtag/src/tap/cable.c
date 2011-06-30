@@ -522,15 +522,13 @@ urj_tap_cable_wait (urj_cable_t *cable)
 {
     int i;
     volatile int j;
-    uint32_t delay = cable->delay;
 
-    if (delay == 0)
-        return;
-
-    for (i = 0; i < delay; ++i)
-    {
+    j = 0;
+    for (i = 0; i < cable->delay; ++i)
         j = i;
-    }
+
+    /* Avoid gcc set-but-unused warnings */
+    cable->delay = j;
 }
 
 static urj_cable_t *
