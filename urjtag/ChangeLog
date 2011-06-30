@@ -1,3 +1,11 @@
+2011-06-30  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/cmd/Makefile.am (generated_cmd_list.h): Depend on
+    generated_cmd_list.h.stamp.
+    (generated_cmd_list.h.stamp): New target.
+    (EXTRA_DIST): Add generated_cmd_list.h.stamp.
+    (MAINTAINERCLEANFILES): Likewise.
+
 2011-06-30  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/chain.c (urj_tap_chain_connect): Fix param count check with parallel
