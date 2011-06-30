@@ -520,12 +520,37 @@ cmd_bfin_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
         "emulation",
         "reset",
     };
+    static const char * const emu_cmds[] = {
+        "enable",
+        "trigger",
+        "enter",
+        "return",
+        "disable",
+        "exit",
+        "singlestep",
+        "status",
+    };
+    static const char * const reset_cmds[] = {
+        "core",
+        "system",
+    };
 
-    if (token_point != 1)
-        return;
+    switch (token_point)
+    {
+    case 1:
+        urj_completion_mayben_add_matches (matches, match_cnt, text, text_len,
+                                           main_cmds);
+        break;
 
-    urj_completion_mayben_add_matches (matches, match_cnt, text, text_len,
-                                       main_cmds);
+    case 2:
+        if (!strcmp (tokens[1], "reset"))
+            urj_completion_mayben_add_matches (matches, match_cnt, text,
+                                               text_len, reset_cmds);
+        else if (!strcmp (tokens[1], "emulation"))
+            urj_completion_mayben_add_matches (matches, match_cnt, text,
+                                               text_len, emu_cmds);
+        break;
+    }
 }
 
 const urj_cmd_t urj_cmd_bfin = {

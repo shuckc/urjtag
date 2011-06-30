@@ -122,6 +122,13 @@ cmd_set_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
                   char * const *tokens, const char *text, size_t text_len,
                   size_t token_point)
 {
+    static const char * const dir[] = {
+        "in", "out",
+    };
+    static const char * const data[] = {
+        "0", "1",
+    };
+
     switch (token_point)
     {
     case 1:
@@ -133,14 +140,14 @@ cmd_set_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
         break;
 
     case 3:  /* direction */
-        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "in");
-        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "out");
+        urj_completion_mayben_add_matches (matches, match_cnt, text, text_len,
+                                           dir);
         break;
 
     case 4:  /* value */
-        /* XXX: Only applies if token[1] == "out" ... */
-        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "0");
-        urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "1");
+        if (!strcmp (tokens[3], "out"))
+            urj_completion_mayben_add_matches (matches, match_cnt, text,
+                                               text_len, data);
         break;
     }
 }

@@ -34,6 +34,9 @@
   * src/cmd/cmd_bfin.c, src/cmd/cmd_cmd.c, src/cmd/cmd_debug.c,
     src/cmd/cmd_print.c: Convert to new array helpers.
 
+  * src/cmd/cmd_bfin.c, src/cmd/cmd_set.c: Use new tokens arg to selectively
+    add matches for specific sub-commands.
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and
