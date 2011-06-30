@@ -25,6 +25,9 @@
     src/cmd/cmd_shift.c, src/cmd/cmd_test.c: Add new tokens arg to completion
     handlers.
 
+  * src/cmd/cmd_endian.c (cmd_endian_complete): Add matches based on existing
+    local array of strings.
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and

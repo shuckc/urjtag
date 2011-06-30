@@ -126,11 +126,14 @@ cmd_endian_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
                      char * const *tokens, const char *text, size_t text_len,
                      size_t token_point)
 {
+    size_t i;
+
     if (token_point != 1)
         return;
 
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "big");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "little");
+    for (i = 0; i < ARRAY_SIZE(endians); ++i)
+        urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
+                                         endians[i].name);
 }
 
 const urj_cmd_t urj_cmd_endian = {
