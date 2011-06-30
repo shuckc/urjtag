@@ -284,13 +284,18 @@ cmd_print_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
                     char * const *tokens, const char *text, size_t text_len,
                     size_t token_point)
 {
+    static const char * const status[] = {
+        "chain",
+        "bus",
+        "signals",
+        "instructions",
+    };
+
     if (token_point != 1)
         return;
 
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "chain");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "bus");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "signals");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "instructions");
+    urj_completion_mayben_add_matches (matches, match_cnt, text, text_len,
+                                       status);
 }
 
 const urj_cmd_t urj_cmd_print = {

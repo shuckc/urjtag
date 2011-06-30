@@ -28,6 +28,12 @@
   * src/cmd/cmd_endian.c (cmd_endian_complete): Add matches based on existing
     local array of strings.
 
+  * src/cmd/cmd.h (urj_completion_mayben_add_matches_num,
+    urj_completion_mayben_add_matches): Helpers for adding arrays of matches.
+  * src/cmd/cmd_cmd.c (urj_completion_mayben_add_matches_num): New helper.
+  * src/cmd/cmd_bfin.c, src/cmd/cmd_cmd.c, src/cmd/cmd_debug.c,
+    src/cmd/cmd_print.c: Convert to new array helpers.
+
 2011-06-27  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/Makefile.am (nodist_pkginclude_HEADERS): New and

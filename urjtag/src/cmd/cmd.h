@@ -113,6 +113,28 @@ void urj_completion_mayben_add_match (char ***matches, size_t *cnt,
                                       const char *match);
 
 /**
+ * This is just like urj_completion_mayben_add_match, except you pass in
+ * an array of strings rather than just one single one.
+ *
+ * @param text     the string to compare to match (e.g. user input)
+ * @param text_len the length of text
+ * @param matchs   the array of strings to possibly add to the set of matches
+ * @param num      the number of elements in the @matchs array
+ */
+void urj_completion_mayben_add_matches_num (char ***matches, size_t *cnt,
+                                            const char *text, size_t text_len,
+                                            const char * const *matchs,
+                                            size_t num);
+
+/**
+ * This is just like urj_completion_mayben_add_matches_num, except the @num
+ * arg is automatically computed.
+ */
+#define urj_completion_mayben_add_matches(matches, cnt, text, text_len, matchs) \
+    urj_completion_mayben_add_matches_num (matches, cnt, text, text_len, \
+                                           matchs, ARRAY_SIZE (matchs))
+
+/**
  * Internal completion helper for matching against the signal list.
  * Since many functions involve signals as an option, unify the code
  * in one place.

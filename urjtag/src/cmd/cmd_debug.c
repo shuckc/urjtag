@@ -136,17 +136,22 @@ cmd_debug_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
                     char * const *tokens, const char *text, size_t text_len,
                     size_t token_point)
 {
+    static const char * const levels[] = {
+        "all",
+        "comm",
+        "debug",
+        "detail",
+        "normal",
+        "warning",
+        "error",
+        "silent",
+    };
+
     if (token_point != 1)
         return;
 
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "all");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "comm");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "debug");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "detail");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "normal");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "warning");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "error");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "silent");
+    urj_completion_mayben_add_matches (matches, match_cnt, text, text_len,
+                                       levels);
 }
 
 const urj_cmd_t urj_cmd_debug = {

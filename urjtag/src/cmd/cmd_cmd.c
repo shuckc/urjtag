@@ -88,6 +88,18 @@ urj_completion_mayben_add_match (char ***matches, size_t *cnt, const char *text,
 }
 
 void
+urj_completion_mayben_add_matches_num (char ***matches, size_t *cnt,
+                                       const char *text, size_t text_len,
+                                       const char * const *matchs, size_t num)
+{
+    size_t n;
+
+    for (n = 0; n < num; ++n)
+        urj_completion_mayben_add_match (matches, cnt, text, text_len,
+                                         matchs[n]);
+}
+
+void
 urj_completion_maybe_add_match (char ***matches, size_t *cnt, const char *text,
                                 const char *match)
 {

@@ -515,12 +515,17 @@ cmd_bfin_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
                    char * const *tokens, const char *text, size_t text_len,
                    size_t token_point)
 {
+    static const char * const main_cmds[] = {
+        "execute",
+        "emulation",
+        "reset",
+    };
+
     if (token_point != 1)
         return;
 
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "execute");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "emulation");
-    urj_completion_mayben_add_match (matches, match_cnt, text, text_len, "reset");
+    urj_completion_mayben_add_matches (matches, match_cnt, text, text_len,
+                                       main_cmds);
 }
 
 const urj_cmd_t urj_cmd_bfin = {
