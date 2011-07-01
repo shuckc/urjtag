@@ -80,14 +80,24 @@ libcmd_la_SOURCES = \
 	$(all_cmd_files)
 
 $(libcmd_la_OBJECTS): generated_cmd_list.h
-generated_cmd_list.h: $(all_cmd_files)
+generated_cmd_list.h: generated_cmd_list.h.stamp ; @true
+generated_cmd_list.h.stamp: $(all_cmd_files)
 	$(AM_V_GEN)set -e; \
 	cmds=`$(SED) -n '/^const urj_cmd_t urj_cmd_/{s:.*urj_cmd_::;s: =.*::;p}' $^`; \
 	for c in $$cmds ; do \
 		printf '#ifndef URJ_CMD_SKIP_%s\n_URJ_CMD(%s)\n#endif\n' $$c $$c; \
-	done > $@
+	done > generated_cmd_list.h.tmp; \
+	if cmp -s generated_cmd_list.h generated_cmd_list.h.tmp; then \
+		echo generated_cmd_list.h is unchanged; \
+		rm -f generated_cmd_list.h.tmp; \
+	else \
+		echo updating generated_cmd_list.h; \
+		mv generated_cmd_list.h.tmp generated_cmd_list.h; \
+	fi; \
+	touch $@
 
-EXTRA_DIST = generated_cmd_list.h
-MAINTAINERCLEANFILES = generated_cmd_list.h
+
+EXTRA_DIST = generated_cmd_list.h generated_cmd_list.h.stamp
+MAINTAINERCLEANFILES = generated_cmd_list.h generated_cmd_list.h.stamp
 
 AM_CFLAGS = $(WARNINGCFLAGS)
