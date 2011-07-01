@@ -145,8 +145,10 @@ urj_bus_buses_set (int n)
 int
 urj_bus_init (urj_chain_t *chain, const char *drivername, char *params[])
 {
-    int drv, i;
+    int ret;
+    size_t i;
     const urj_param_t **bus_params;
+    const urj_bus_driver_t *bus_driver;
 
     if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
@@ -154,33 +156,28 @@ urj_bus_init (urj_chain_t *chain, const char *drivername, char *params[])
     if (urj_tap_chain_active_part (chain) == NULL)
         return URJ_STATUS_FAIL;
 
-    for (drv = 0; urj_bus_drivers[drv] != NULL; drv++)
-        if (strcasecmp (urj_bus_drivers[drv]->name, drivername) == 0)
+    for (i = 0; urj_bus_drivers[i] != NULL; ++i)
+        if (strcasecmp (urj_bus_drivers[i]->name, drivername) == 0)
             break;
 
-    if (urj_bus_drivers[drv] == NULL)
+    bus_driver = urj_bus_drivers[i];
+    if (bus_driver == NULL)
     {
         urj_error_set (URJ_ERROR_NOTFOUND, "Unknown bus: %s", drivername);
         return URJ_STATUS_FAIL;
     }
 
-    urj_param_init (&bus_params);
-    for (i = 0; params[i] != NULL; i++)
-        if (urj_param_push (&urj_bus_param_list, &bus_params,
-                            params[i]) != URJ_STATUS_OK)
-        {
-            urj_param_clear (&bus_params);
-            return URJ_STATUS_FAIL;
-        }
+    ret = urj_param_init_list (&bus_params, params, &urj_bus_param_list);
+    if (ret != URJ_STATUS_OK)
+        return ret;
 
-    if (urj_bus_init_bus (chain, urj_bus_drivers[drv], bus_params) == NULL)
-    {
-        urj_param_clear (&bus_params);
-        return URJ_STATUS_FAIL;
-    }
+    if (urj_bus_init_bus (chain, bus_driver, bus_params) == NULL)
+        ret = URJ_STATUS_FAIL;
+    else
+        ret = URJ_STATUS_OK;
 
     urj_param_clear (&bus_params);
-    return URJ_STATUS_OK;
+    return ret;
 }
 
 urj_bus_t *

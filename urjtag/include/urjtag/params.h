@@ -88,6 +88,8 @@ urj_param_list_t;
 
 /** Initialise a parameter assembly line */
 int urj_param_init (const urj_param_t ***bp);
+int urj_param_init_list (const urj_param_t ***bp, char *params[],
+                         const urj_param_list_t *param_list);
 /** Clear the parameter assembly line */
 int urj_param_clear (const urj_param_t ***bp);
 

@@ -16,6 +16,12 @@
   * cmd/cmd_initbus.c (cmd_initbus_complete): Use new helper rather than
     adding parameters ourselves.
 
+  * include/urjtag/params.h, src/global/params.c (urj_param_init_list): Add
+    new helper for creating a parameter list based on a param_list.
+  * src/tap/chain.c (urj_tap_chain_connect): Drop handcoded paramater list
+    setup and use new helper func instead.
+  * src/bus/buses.c (urj_bus_buses_set): Likewise.
+
 2011-06-30  Jie Zhang  <jie.zhang@analog.com>
 
   * src/cmd/Makefile.am (generated_cmd_list.h): Depend on

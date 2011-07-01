@@ -125,14 +125,9 @@ urj_tap_chain_connect (urj_chain_t *chain, const char *drivername, char *params[
         devname = NULL;
     }
 
-    urj_param_init (&cable_params);
-    for (j = param_start; params[j] != NULL; j++)
-        if (urj_param_push (&urj_cable_param_list, &cable_params,
-                            params[j]) != URJ_STATUS_OK)
-        {
-            urj_param_clear (&cable_params);
-            return URJ_STATUS_FAIL;
-        }
+    if (urj_param_init_list (&cable_params, &params[param_start],
+                             &urj_cable_param_list) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
 
     switch (driver->device_type)
     {

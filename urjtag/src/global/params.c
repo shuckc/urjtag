@@ -323,6 +323,28 @@ urj_param_init (const urj_param_t ***bp)
 }
 
 int
+urj_param_init_list (const urj_param_t ***bp, char *params[],
+                     const urj_param_list_t *param_list)
+{
+    int ret;
+    size_t i;
+
+    ret = urj_param_init (bp);
+    if (ret != URJ_STATUS_OK)
+        return ret;
+
+    for (i = 0; params[i] != NULL; ++i)
+        ret = urj_param_push (param_list, bp, params[i]);
+        if (ret != URJ_STATUS_OK)
+        {
+            urj_param_clear (bp);
+            return ret;
+        }
+
+    return URJ_STATUS_OK;
+}
+
+int
 urj_param_clear (const urj_param_t ***bp)
 {
     const urj_param_t **scan;
