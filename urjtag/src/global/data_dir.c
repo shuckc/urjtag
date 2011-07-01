@@ -20,10 +20,7 @@ urj_set_argv0(const char *argv0)
 
 #include <stdlib.h>
 #include <string.h>
-
-extern char *make_relative_prefix (const char *progname,
-                                   const char *bin_prefix,
-                                   const char *prefix);
+#include <libiberty.h>
 
 static char *jtag_data_dir = NULL;
 

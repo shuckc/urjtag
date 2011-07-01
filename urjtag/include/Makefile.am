@@ -1,7 +1,5 @@
 #
-# $Id$
-#
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2011 Analog Devices, Inc.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,47 +16,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
-#
 
 include $(top_srcdir)/Makefile.rules
 
-SUBDIRS = \
-	doc \
-	extra/fjmem \
-	include \
-	include/urjtag \
-	data \
-	src \
-	po
-
-if ENABLE_APPS
-SUBDIRS += \
-	src/apps/jtag
-
-if ENABLE_BSDL
-SUBDIRS += \
-	src/apps/bsdl2jtag
-endif
-
-endif
-
-DIST_SUBDIRS = \
-	$(SUBDIRS)
-
-EXTRA_DIST = \
-	Makefile.rules \
-	MAINTAINERS \
-	sysdep.h \
-	urjtag.i \
-	UrJTAG.nsi \
-	tools/config.rpath
-
-ACLOCAL_AMFLAGS = -I m4
-
-swig:
-	swig \
-		-python \
-		-includeall -ignoremissing -Iinclude/urjtag \
-		-module urjtag \
-		urjtag.i
+noinst_HEADERS = \
+	ansidecl.h \
+	filenames.h \
+	libiberty.h \
+	safe-ctype.h

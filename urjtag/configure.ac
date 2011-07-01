@@ -69,6 +69,7 @@ AC_CONFIG_FILES(
 	doc/Makefile
 	data/Makefile
 	extra/fjmem/Makefile
+	include/Makefile
 	include/urjtag/Makefile
 	src/Makefile
 	src/urjtag.pc

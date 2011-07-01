@@ -27,20 +27,17 @@ noinst_LTLIBRARIES = libjtaglib.la
 
 if JTAG_RELOCATABLE
 libiberty_sources = \
-	ansidecl.h \
-	filenames.h \
 	lbasename.c \
-	libiberty.h \
 	lrealpath.c \
 	make-relative-prefix.c \
-	safe-ctype.c \
-	safe-ctype.h
+	safe-ctype.c
 else
 libiberty_sources =
 endif
 
 libjtaglib_la_SOURCES = \
 	fclock.c \
+	hex.c \
 	usleep.c \
 	$(libiberty_sources)
 
