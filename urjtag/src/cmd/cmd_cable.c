@@ -95,6 +95,22 @@ cmd_cable_run (urj_chain_t *chain, char *params[])
         }
     }
 
+    if (paramc >= 3 && strcasecmp (params[2], "help") == 0)
+    {
+        const urj_cable_driver_t *driver;
+
+        driver = urj_tap_cable_find (params[1]);
+        if (!driver)
+        {
+            urj_error_set (URJ_ERROR_INVALID,
+                           "unknown cable driver '%s'", params[1]);
+            return URJ_STATUS_FAIL;
+        }
+
+        driver->help (URJ_LOG_LEVEL_NORMAL, driver->name);
+        return URJ_STATUS_OK;
+    }
+
     return urj_tap_chain_connect (chain, params[1], &params[2]);
 }
 

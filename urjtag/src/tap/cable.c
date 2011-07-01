@@ -51,6 +51,18 @@ const urj_cable_driver_t * const urj_tap_cable_drivers[] = {
     NULL                        /* last must be NULL */
 };
 
+const urj_cable_driver_t *
+urj_tap_cable_find (const char *cname)
+{
+    size_t i;
+
+    for (i = 0; urj_tap_cable_drivers[i]; ++i)
+        if (strcasecmp (cname, urj_tap_cable_drivers[i]->name) == 0)
+            break;
+
+    return urj_tap_cable_drivers[i];
+}
+
 void
 urj_tap_cable_free (urj_cable_t *cable)
 {

@@ -75,7 +75,7 @@ int
 urj_tap_chain_connect (urj_chain_t *chain, const char *drivername, char *params[])
 {
     urj_cable_t *cable;
-    int i, j, paramc;
+    int j, paramc;
     const urj_param_t **cable_params;
     const urj_cable_driver_t *driver;
 
@@ -86,12 +86,7 @@ urj_tap_chain_connect (urj_chain_t *chain, const char *drivername, char *params[
     param_start = 0;
     paramc = urj_cmd_params (params);
 
-    /* search cable driver list */
-    for (i = 0; urj_tap_cable_drivers[i]; i++)
-        if (strcasecmp (drivername, urj_tap_cable_drivers[i]->name) == 0)
-            break;
-
-    driver = urj_tap_cable_drivers[i];
+    driver = urj_tap_cable_find (drivername);
     if (!driver)
     {
         urj_error_set (URJ_ERROR_INVALID,

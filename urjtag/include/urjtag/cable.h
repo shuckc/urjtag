@@ -178,6 +178,8 @@ struct URJ_CABLE
 void urj_tap_cable_free (urj_cable_t *cable);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on failure */
 int urj_tap_cable_init (urj_cable_t *cable);
+/** @return cable named by @cname; NULL on failure */
+const urj_cable_driver_t *urj_tap_cable_find (const char *cname);
 void urj_tap_cable_done (urj_cable_t *cable);
 void urj_tap_cable_flush (urj_cable_t *cable,
                           urj_cable_flush_amount_t);

@@ -2,6 +2,13 @@
 
   * cmd/cmd_initbus.c (cmd_initbus_complete): Complete bus parameters too.
 
+  * include/urjtag/cable.h, src/tap/cable.c (urj_tap_cable_find): Add new
+    helper for looking up cable drivers by name.
+  * src/cmd/cmd_cable.c (cmd_cable_run): Use new helper to restore cable
+    specific help output.
+  * src/tap/chain.c (urj_tap_chain_connect): Replace look up code with new
+    urj_tap_cable_find helper.
+
 2011-06-30  Jie Zhang  <jie.zhang@analog.com>
 
   * src/cmd/Makefile.am (generated_cmd_list.h): Depend on
