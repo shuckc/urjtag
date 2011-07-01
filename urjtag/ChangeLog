@@ -1,3 +1,7 @@
+2011-06-30  Mike Frysinger  <vapier@gentoo.org>
+
+  * cmd/cmd_initbus.c (cmd_initbus_complete): Complete bus parameters too.
+
 2011-06-30  Jie Zhang  <jie.zhang@analog.com>
 
   * src/cmd/Makefile.am (generated_cmd_list.h): Depend on

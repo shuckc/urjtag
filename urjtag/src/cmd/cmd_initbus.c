@@ -72,12 +72,19 @@ cmd_initbus_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
 {
     size_t i;
 
-    if (token_point != 1)
-        return;
-
-    for (i = 0; urj_bus_drivers[i]; i++)
-        urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
-                                         urj_bus_drivers[i]->name);
+    switch (token_point)
+    {
+    case 1:
+        for (i = 0; urj_bus_drivers[i]; ++i)
+            urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
+                                             urj_bus_drivers[i]->name);
+        break;
+    default:
+        for (i = 0; i < urj_bus_param_list.n; ++i)
+            urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
+                                             urj_bus_param_list.list[i].string);
+        break;
+    }
 }
 
 const urj_cmd_t urj_cmd_initbus = {
