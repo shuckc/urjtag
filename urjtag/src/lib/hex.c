@@ -159,7 +159,13 @@ void
 hex_init (void)
 {
 #ifndef HEX_TABLE_INITIALIZED
+  static bool inited;
   int i;
+
+  if (inited)
+    return;
+
+  inited = true;
 
   for (i=0; i<_hex_array_size; i++)
     {

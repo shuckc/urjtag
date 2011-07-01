@@ -13,6 +13,8 @@
   * src/global/data_dir.c (make_relative_prefix): Don't declare.
     Include libiberty.h.
 
+  * src/lib/hex.c (hex_init): Avoid redundant initialization.
+
 2011-06-30  Mike Frysinger  <vapier@gentoo.org>
 
   * cmd/cmd_initbus.c (cmd_initbus_complete): Complete bus parameters too.
