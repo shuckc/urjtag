@@ -2,7 +2,7 @@
  * $Id$
  *
  * Analog Devices ADSP-BF548 EZ-KIT Lite bus driver
- * Copyright (C) 2008 Analog Devices, Inc.
+ * Copyright (C) 2008-2011 Analog Devices, Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ bf548_ezkit_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     params->data_cnt = 16;
     params->select_flash = bf548_ezkit_select_flash;
     params->unselect_flash = bf548_ezkit_unselect_flash;
-    failed |= bfin_bus_new (bus);
+    failed |= bfin_bus_new (bus, cmd_params);
 
     failed |= urj_bus_generic_attach_sig (part, &DCS0, "CS0_B");
     failed |= urj_bus_generic_attach_sig (part, &NCE, "PJ1");

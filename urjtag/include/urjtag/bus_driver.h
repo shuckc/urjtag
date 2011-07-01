@@ -80,6 +80,7 @@ typedef enum URJ_BUS_PARAM_KEY
     URJ_BUS_PARAM_KEY_HELP,     /* bool                         mpc824 */
     URJ_BUS_PARAM_KEY_DBGaDDR,  /* bool                         mpc824 */
     URJ_BUS_PARAM_KEY_DBGdATA,  /* bool                         mpc824 */
+    URJ_BUS_PARAM_KEY_HWAIT,    /* string (= signal name)       blackfin */
 }
 urj_bus_param_key_t;
 

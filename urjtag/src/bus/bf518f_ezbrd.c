@@ -2,7 +2,7 @@
  * bf518_ezbrd.c
  *
  * Analog Devices ADSP-BF518F EZ-BRD bus driver
- * Copyright (C) 2009, 2010 Analog Devices, Inc.
+ * Copyright (C) 2009-2011 Analog Devices, Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ bf518f_ezbrd_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     params->addr_cnt = 19;
     params->data_cnt = 16;
     params->sdram = 1;
-    failed |= bfin_bus_new (bus);
+    failed |= bfin_bus_new (bus, cmd_params);
 
     if (failed)
     {

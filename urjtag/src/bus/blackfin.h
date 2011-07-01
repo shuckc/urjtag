@@ -3,7 +3,7 @@
  *
  * Analog Devices unified Blackfin bus functions
  *
- * Copyright (C) 2008-2010 Analog Devices, Inc.
+ * Copyright (C) 2008-2011 Analog Devices, Inc.
  * Licensed under the GPL-2 or later.
  */
 
@@ -34,11 +34,14 @@ typedef struct {
     int sdram, sms_cnt;
     urj_part_signal_t *scas, *sras, *swe, *sms[4];
 
+    urj_part_signal_t *hwait;
+    int hwait_level;
+
     void (*select_flash) (urj_bus_t *bus, uint32_t adr);
     void (*unselect_flash) (urj_bus_t *bus);
 } bfin_bus_params_t;
 
-int bfin_bus_new (urj_bus_t *bus);
+int bfin_bus_new (urj_bus_t *bus, const urj_param_t *cmd_params[]);
 
 int bfin_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area);
 
@@ -66,7 +69,8 @@ void bfin_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus);
 const urj_bus_driver_t urj_bus_##board##_bus = \
 { \
     #board, \
-    N_("Blackfin " desc " bus driver via BSR"), \
+    N_("Blackfin " desc " bus driver via BSR\n" \
+       "           hwait=[/]SIGNAL    Use specified SIGNAL as HWAIT"), \
     funcs##_bus_new, \
     urj_bus_generic_free, \
     bfin_bus_printinfo, \

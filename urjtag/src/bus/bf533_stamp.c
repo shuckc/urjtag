@@ -70,7 +70,7 @@ bf533_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     params->select_flash = bf533_stamp_select_flash;
     params->unselect_flash = bf533_stamp_unselect_flash;
     params->sdram = 1;
-    failed |= bfin_bus_new (bus);
+    failed |= bfin_bus_new (bus, cmd_params);
 
     failed |= urj_bus_generic_attach_sig (part, &PF[0], "PF0");
     failed |= urj_bus_generic_attach_sig (part, &PF[1], "PF1");

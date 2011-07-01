@@ -22,6 +22,21 @@
     setup and use new helper func instead.
   * src/bus/buses.c (urj_bus_buses_set): Likewise.
 
+  * include/urjtag/bus_driver.h (urj_bus_param_key_t): Add new hwait key
+    for Blackfin bus drivers.
+  * src/bus/buses.c (bus_param): Likewise.
+  * src/bus/blackfin.h (bfin_bus_params_t): Add hwait/hwait_level to keep
+    track of new optional hwait signal.
+    (bfin_bus_new): Accept cmd_params from caller.
+    (_BFIN_BUS_DECLARE): Document new hwait= option in bus.
+  * src/bus/blackfin.c (bfin_bus_new): Accept cmd_params from caller and
+    parse them for hwait signal.
+    (bfin_select_flash, bfin_unselect_flash): Set new hwait pin if it is
+    enabled by user.
+  * src/bus/bf518f_ezbrd.c, src/bus/bf533_stamp.c, src/bus/bf537_stamp.c,
+    src/bus/bf548_ezkit.c, src/bus/bf561_ezkit.c: Pass cmd_params down to
+    bfin_bus_new() helper.
+
 2011-06-30  Jie Zhang  <jie.zhang@analog.com>
 
   * src/cmd/Makefile.am (generated_cmd_list.h): Depend on

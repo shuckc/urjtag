@@ -246,6 +246,7 @@ static const urj_param_descr_t bus_param[] =
     { URJ_BUS_PARAM_KEY_HELP,       URJ_PARAM_TYPE_BOOL,    "HELP", },
     { URJ_BUS_PARAM_KEY_DBGaDDR,    URJ_PARAM_TYPE_BOOL,    "DBGaDDR", },
     { URJ_BUS_PARAM_KEY_DBGdATA,    URJ_PARAM_TYPE_BOOL,    "DBGdATA", },
+    { URJ_BUS_PARAM_KEY_HWAIT,      URJ_PARAM_TYPE_STRING,  "HWAIT", },
 };
 
 const urj_param_list_t urj_bus_param_list =

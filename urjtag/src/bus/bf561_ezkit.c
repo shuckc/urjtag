@@ -2,7 +2,7 @@
  * $Id$
  *
  * Analog Devices ADSP-BF561 EZ-KIT Lite bus driver
- * Copyright (C) 2008 Analog Devices, Inc.
+ * Copyright (C) 2008-2011 Analog Devices, Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ bf561_ezkit_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     params->data_cnt = 32;
     params->sdram = 1;
     params->sms_cnt = 4;
-    failed |= bfin_bus_new (bus);
+    failed |= bfin_bus_new (bus, cmd_params);
 
     if (failed)
     {

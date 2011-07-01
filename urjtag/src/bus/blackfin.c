@@ -3,7 +3,7 @@
  *
  * Analog Devices unified Blackfin bus functions
  *
- * Copyright (C) 2008-2010 Analog Devices, Inc.
+ * Copyright (C) 2008-2011 Analog Devices, Inc.
  * Licensed under the GPL-2 or later.
  *
  * Written by Mike Frysinger <vapier@gentoo.org> heavily leveraging
@@ -39,11 +39,31 @@ bfin_bus_attach_sigs (urj_part_t *part, urj_part_signal_t **pins, int pin_cnt,
 }
 
 int
-bfin_bus_new (urj_bus_t *bus)
+bfin_bus_new (urj_bus_t *bus, const urj_param_t *cmd_params[])
 {
     bfin_bus_params_t *params = bus->params;
     urj_part_t *part = bus->part;
     int ret = 0;
+    size_t i;
+
+    for (i = 0; cmd_params[i]; ++i)
+        switch (cmd_params[i]->key)
+        {
+        case URJ_BUS_PARAM_KEY_HWAIT:
+            {
+            const char *hwait = cmd_params[i]->value.string;
+
+            params->hwait_level = (hwait[0] == '/');
+            if (params->hwait_level)
+                ++hwait;
+
+            ret |= urj_bus_generic_attach_sig (part, &params->hwait, hwait);
+            break;
+            }
+        default:
+            urj_error_set (URJ_ERROR_SYNTAX, _("unknown bus parameter"));
+            return 1;
+        }
 
     if (!params->async_base)
         params->async_base = 0x20000000;
@@ -136,6 +156,9 @@ bfin_select_flash (urj_bus_t *bus, uint32_t adr)
     for (i = 0; i < params->abe_cnt; ++i)
         urj_part_set_signal (part, params->abe[i], 1, 0);
 
+    if (params->hwait)
+        urj_part_set_signal (part, params->hwait, 1, params->hwait_level);
+
     bfin_select_flash_sdram (bus);
 
     if (params->select_flash)
@@ -154,6 +177,9 @@ bfin_unselect_flash (urj_bus_t *bus)
 
     for (i = 0; i < params->abe_cnt; ++i)
         urj_part_set_signal (part, params->abe[i], 1, 1);
+
+    if (params->hwait)
+        urj_part_set_signal (part, params->hwait, 1, params->hwait_level);
 
     bfin_select_flash_sdram (bus);
 
