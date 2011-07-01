@@ -9,6 +9,13 @@
   * src/tap/chain.c (urj_tap_chain_connect): Replace look up code with new
     urj_tap_cable_find helper.
 
+  * src/cmd/cmd.h, src/cmd/cmd_cmd.c (urj_completion_mayben_add_param_list):
+    Add new helper which automatically adds urj_param_list_t for matches.
+  * src/cmd/cmd_cable.c (cmd_cable_complete): Use new helper to add cable
+    options to possible matches.
+  * cmd/cmd_initbus.c (cmd_initbus_complete): Use new helper rather than
+    adding parameters ourselves.
+
 2011-06-30  Jie Zhang  <jie.zhang@analog.com>
 
   * src/cmd/Makefile.am (generated_cmd_list.h): Depend on

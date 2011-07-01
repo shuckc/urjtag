@@ -37,6 +37,7 @@
 #include <stdlib.h> /* qsort */
 #include <sysdep.h>
 
+#include <urjtag/params.h>
 #include <urjtag/types.h>
 
 typedef struct
@@ -133,6 +134,18 @@ void urj_completion_mayben_add_matches_num (char ***matches, size_t *cnt,
 #define urj_completion_mayben_add_matches(matches, cnt, text, text_len, matchs) \
     urj_completion_mayben_add_matches_num (matches, cnt, text, text_len, \
                                            matchs, ARRAY_SIZE (matchs))
+
+/**
+ * This is just like urj_completion_mayben_add_matches_num, but the array
+ * info comes straight from the urj_param_list_t structure.
+ *
+ * @param text       the string to compare to match (e.g. user input)
+ * @param text_len   the length of text
+ * @param param_list the list of parameter strings to possibly add to the set of matches
+ */
+void urj_completion_mayben_add_param_list (char ***matches, size_t *cnt,
+                                           const char *text, size_t text_len,
+                                           urj_param_list_t param_list);
 
 /**
  * Internal completion helper for matching against the signal list.

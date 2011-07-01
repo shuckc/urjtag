@@ -80,9 +80,8 @@ cmd_initbus_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
                                              urj_bus_drivers[i]->name);
         break;
     default:
-        for (i = 0; i < urj_bus_param_list.n; ++i)
-            urj_completion_mayben_add_match (matches, match_cnt, text, text_len,
-                                             urj_bus_param_list.list[i].string);
+        urj_completion_mayben_add_param_list (matches, match_cnt, text,
+                                              text_len, urj_bus_param_list);
         break;
     }
 }

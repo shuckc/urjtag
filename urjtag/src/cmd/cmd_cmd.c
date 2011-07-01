@@ -100,6 +100,18 @@ urj_completion_mayben_add_matches_num (char ***matches, size_t *cnt,
 }
 
 void
+urj_completion_mayben_add_param_list (char ***matches, size_t *cnt,
+                                      const char *text, size_t text_len,
+                                      urj_param_list_t param_list)
+{
+    size_t i;
+
+    for (i = 0; i < param_list.n; ++i)
+        urj_completion_mayben_add_match (matches, cnt, text, text_len,
+                                         param_list.list[i].string);
+}
+
+void
 urj_completion_maybe_add_match (char ***matches, size_t *cnt, const char *text,
                                 const char *match)
 {
