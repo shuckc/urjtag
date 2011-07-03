@@ -129,7 +129,7 @@ struct emu_oab
 struct bfin_part_data
 {
     int bypass;
-    struct emu_oab *emu_oab;
+    const struct emu_oab *emu_oab;
     int scan;
     uint16_t dbgctl;
     uint16_t dbgstat;
@@ -154,9 +154,6 @@ struct bfin_part_data
 #define BFIN_PART_EMUDAT_IN(part)  (((struct bfin_part_data *)((part)->params->data))->emudat_in)
 #define BFIN_PART_EMUPC(part)      (((struct bfin_part_data *)((part)->params->data))->emupc)
 #define BFIN_PART_EMUPC_ORIG(part) (((struct bfin_part_data *)((part)->params->data))->emupc_orig)
-
-extern struct emu_oab bfin_emu_oab;
-
 
 #define IDCODE_SCAN                     0
 #define DBGSTAT_SCAN                    1

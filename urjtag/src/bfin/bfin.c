@@ -50,7 +50,7 @@ const char * const scans[] = {
 int bfin_check_emuready = 1;
 int bfin_wait_clocks = -1;
 
-static struct timespec bfin_emu_wait_ts = {0, 5000000};
+static const struct timespec bfin_emu_wait_ts = {0, 5000000};
 
 
 static int

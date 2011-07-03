@@ -152,7 +152,7 @@ bfin_test_command (urj_part_t *part, uint32_t addr, int w,
     }
 }
 
-struct emu_oab bfin_emu_oab =
+static const struct emu_oab bfin_emu_oab =
 {
     bfin_dbgctl_init,
     bfin_dbgstat_value,
