@@ -11,6 +11,8 @@
   * src/bus/pxa2x0.c: Constify default map info, and then push writable
     global map data into the bus-specific params data.
 
+  * include/urjtag/bfin.h: Unify bfin_part_data casts into a single macro.
+
 2011-07-01  Jie Zhang  <jie.zhang@analog.com>
 
   * src/lib/ansidecl.h: Move to include.

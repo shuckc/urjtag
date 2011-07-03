@@ -141,19 +141,20 @@ struct bfin_part_data
     uint32_t emupc_orig;
 };
 
-#define BFIN_PART_BYPASS(part)     (((struct bfin_part_data *)((part)->params->data))->bypass)
-#define EMU_OAB(part)              (((struct bfin_part_data *)((part)->params->data))->emu_oab)
+#define BFIN_PART_DATA(part)       ((struct bfin_part_data *)((part)->params->data))
+#define BFIN_PART_BYPASS(part)     (BFIN_PART_DATA (part)->bypass)
+#define EMU_OAB(part)              (BFIN_PART_DATA (part)->emu_oab)
 
-#define BFIN_PART_SCAN(part)       (((struct bfin_part_data *)((part)->params->data))->scan)
-#define BFIN_PART_WPSTAT(part)     (((struct bfin_part_data *)((part)->params->data))->wpstat)
-#define BFIN_PART_DBGCTL(part)     (((struct bfin_part_data *)((part)->params->data))->dbgctl)
-#define BFIN_PART_DBGSTAT(part)    (((struct bfin_part_data *)((part)->params->data))->dbgstat)
-#define BFIN_PART_EMUIR_A(part)    (((struct bfin_part_data *)((part)->params->data))->emuir_a)
-#define BFIN_PART_EMUIR_B(part)    (((struct bfin_part_data *)((part)->params->data))->emuir_b)
-#define BFIN_PART_EMUDAT_OUT(part) (((struct bfin_part_data *)((part)->params->data))->emudat_out)
-#define BFIN_PART_EMUDAT_IN(part)  (((struct bfin_part_data *)((part)->params->data))->emudat_in)
-#define BFIN_PART_EMUPC(part)      (((struct bfin_part_data *)((part)->params->data))->emupc)
-#define BFIN_PART_EMUPC_ORIG(part) (((struct bfin_part_data *)((part)->params->data))->emupc_orig)
+#define BFIN_PART_SCAN(part)       (BFIN_PART_DATA (part)->scan)
+#define BFIN_PART_WPSTAT(part)     (BFIN_PART_DATA (part)->wpstat)
+#define BFIN_PART_DBGCTL(part)     (BFIN_PART_DATA (part)->dbgctl)
+#define BFIN_PART_DBGSTAT(part)    (BFIN_PART_DATA (part)->dbgstat)
+#define BFIN_PART_EMUIR_A(part)    (BFIN_PART_DATA (part)->emuir_a)
+#define BFIN_PART_EMUIR_B(part)    (BFIN_PART_DATA (part)->emuir_b)
+#define BFIN_PART_EMUDAT_OUT(part) (BFIN_PART_DATA (part)->emudat_out)
+#define BFIN_PART_EMUDAT_IN(part)  (BFIN_PART_DATA (part)->emudat_in)
+#define BFIN_PART_EMUPC(part)      (BFIN_PART_DATA (part)->emupc)
+#define BFIN_PART_EMUPC_ORIG(part) (BFIN_PART_DATA (part)->emupc_orig)
 
 #define IDCODE_SCAN                     0
 #define DBGSTAT_SCAN                    1
