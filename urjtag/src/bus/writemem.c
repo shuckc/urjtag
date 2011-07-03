@@ -130,7 +130,8 @@ urj_bus_writemem (urj_bus_t *bus, FILE *f, uint32_t addr, uint32_t len)
         {
             if (urj_get_file_endian () == URJ_ENDIAN_BIG)
             {
-                data <<= 8;	/* first shift doesn't matter: data = 0 */
+                /* first shift doesn't matter: data = 0 */
+                data <<= 8;
                 data |= b[bidx++];
             }
             else
