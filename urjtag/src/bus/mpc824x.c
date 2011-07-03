@@ -51,6 +51,8 @@ typedef struct
     urj_part_signal_t *nwe;
     urj_part_signal_t *nfoe;
     urj_part_signal_t *d[32];
+    int bus_width;
+    char revbits, dbg_addr, dbg_data;
 } bus_params_t;
 
 #define boot_nFOE       ((bus_params_t *) bus->params)->boot_nfoe
@@ -61,12 +63,10 @@ typedef struct
 #define nWE             ((bus_params_t *) bus->params)->nwe
 #define nFOE            ((bus_params_t *) bus->params)->nfoe
 #define D               ((bus_params_t *) bus->params)->d
-
-static int BUS_WIDTH = 8;
-static char REVBITS = 0;
-static char dbgAddr = 0;
-static char dbgData = 0;
-
+#define BUS_WIDTH       ((bus_params_t *) bus->params)->bus_width
+#define REVBITS         ((bus_params_t *) bus->params)->revbits
+#define dbgAddr         ((bus_params_t *) bus->params)->dbg_addr
+#define dbgData         ((bus_params_t *) bus->params)->dbg_data
 
 /**
  * bus->driver->(*new_bus)
@@ -83,12 +83,9 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     int failed = 0;
     urj_part_signal_t *s_nfoe;
     urj_part_signal_t *s_sdma1;
-
+    int bus_width = 8;
     char dfltWidth = 1;
-
-    dbgAddr = 0;
-    dbgData = 0;
-    REVBITS = 0;
+    char revbits = 0, dbg_addr = 0, dbg_data = 0;
 
     for (i = 0; cmd_params[i] != NULL; i++)
     {
@@ -98,20 +95,20 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
             switch (cmd_params[i]->value.lu)
             {
             case 8:
-                BUS_WIDTH = 8;
+                bus_width = 8;
                 dfltWidth = 0;
                 break;
             case 16:
-                BUS_WIDTH = 16;
+                bus_width = 16;
                 dfltWidth = 0;
                 break;
             case 32:
-                BUS_WIDTH = 32;
+                bus_width = 32;
                 dfltWidth = 0;
                 break;
             case 64:
-                //              BUS_WIDTH = 64;  // Needs to fix, look at setup_data()
-                BUS_WIDTH = 32;
+                //              bus_width = 64;  // Needs to fix, look at setup_data()
+                bus_width = 32;
                 urj_error_set (URJ_ERROR_UNSUPPORTED,
                                _("   Bus width 64 exists in mpc824x, but not supported by UrJTAG currently"));
                 dfltWidth = 1;
@@ -124,7 +121,7 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
             break;
 
         case URJ_BUS_PARAM_KEY_REVBITS:
-            REVBITS = 1;
+            revbits = 1;
             break;
 
         // @@@@ RFHH ToDo: lift this from init_bus
@@ -139,12 +136,12 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
         // @@@@ RFHH ToDo: lift this from init_bus
         case URJ_BUS_PARAM_KEY_DBGaDDR:
-            dbgAddr = 1;
+            dbg_addr = 1;
             break;
 
         // @@@@ RFHH ToDo: lift this from init_bus
         case URJ_BUS_PARAM_KEY_DBGdATA:
-            dbgData = 1;
+            dbg_data = 1;
             break;
 
         default:
@@ -156,7 +153,7 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
     if (dfltWidth)
         urj_log (URJ_LOG_LEVEL_NORMAL,
-                 _("   Using default bus width %d\n"), BUS_WIDTH);
+                 _("   Using default bus width %d\n"), bus_width);
 
     //      REVBITS = 0;
 
@@ -164,6 +161,11 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     if (bus == NULL)
         return NULL;
     part = bus->part;
+
+    BUS_WIDTH = bus_width;
+    REVBITS = revbits;
+    dbgAddr = dbg_addr;
+    dbgData = dbg_data;
 
     s_nfoe = urj_part_find_signal (part, "nFOE");
     s_sdma1 = urj_part_find_signal (part, "SDMA1");

@@ -5,6 +5,9 @@
   * src/bfin/bfin-part-bfin.c (bfin_emu_oab): Constify & localize.
   * src/bfin/bfin.c (bfin_emu_wait_ts): Constify.
 
+  * src/bus/mpc824x.c (BUS_WIDTH, REVBITS, dbgAddr, dbgData): Push
+    global data down into bus-specific params data.
+
 2011-07-01  Jie Zhang  <jie.zhang@analog.com>
 
   * src/lib/ansidecl.h: Move to include.
