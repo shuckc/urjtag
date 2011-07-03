@@ -84,7 +84,7 @@ typedef struct
 
 // Fool-proof basic mapping with only nCS[0] wired.
 // nCS[0] doesn't collide with any other GPIO functions.
-static ncs_map_entry pxa25x_ncs_map[nCS_TOTAL] = {
+static const ncs_map_entry pxa25x_ncs_map[nCS_TOTAL] = {
     {"nCS[0]", 1, 0},
     {NULL, 0, 0},
     {NULL, 0, 0},
@@ -96,7 +96,7 @@ static ncs_map_entry pxa25x_ncs_map[nCS_TOTAL] = {
 // Default mapping with all nCS[*] GPIO pins used as nCS.
 // Note that the same GPIO pins might be used e.g. for PCCard
 // service space access or PWM outputs, or some other purpose.
-static ncs_map_entry pxa27x_ncs_map[nCS_TOTAL] = {
+static const ncs_map_entry pxa27x_ncs_map[nCS_TOTAL] = {
     {"nCS[0]", 1, 0},           // nCS[0]
     {"GPIO[15]", 1, 16},        // nCS[1]
     {"GPIO[78]", 1, 16},        // nCS[2]
@@ -120,6 +120,7 @@ typedef struct
     MC_registers_t MC_registers;
     int inited;
     int proc;
+    ncs_map_entry ncs_map[nCS_TOTAL];
 } bus_params_t;
 
 #define PROC            ((bus_params_t *) bus->params)->proc
@@ -137,6 +138,8 @@ typedef struct
 
 #define INITED          ((bus_params_t *) bus->params)->inited
 
+#define NCS_MAP         ((bus_params_t *) bus->params)->ncs_map
+
 /**
  * bus->driver->(*new_bus)
  *
@@ -147,7 +150,7 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 {
     urj_part_t *part;
     urj_bus_t *bus;
-    ncs_map_entry *ncs_map = NULL;
+    const ncs_map_entry *ncs_map;
     char buff[10];
     int i;
     int failed = 0;
@@ -201,11 +204,13 @@ pxa2xx_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     }
     for (i = 0; i < nCS_TOTAL; i++)
     {
+        NCS_MAP[i] = ncs_map[i];
+
         if (ncs_map[i].enabled > 0)
         {
             failed |=
                 urj_bus_generic_attach_sig (part, &(nCS[i]),
-                                            ncs_map[i].sig_name);
+                                            NCS_MAP[i].sig_name);
         }
         else                    // disabled - this GPIO pin is unused or used for some other function
         {
@@ -323,9 +328,9 @@ pxa2xx_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
         area->start = UINT32_C (0x00000000);
         area->length = UINT64_C (0x04000000);
 
-        if (pxa25x_ncs_map[0].bus_width > 0)
+        if (NCS_MAP[0].bus_width > 0)
         {
-            area->width = pxa25x_ncs_map[0].bus_width;
+            area->width = NCS_MAP[0].bus_width;
         }
         else
         {
@@ -364,14 +369,14 @@ pxa2xx_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
     {
         if ((adr >= tmp_addr) && (adr < tmp_addr + 0x04000000))
         {                       // if the addr is within our window
-            sprintf (pxa25x_ncs_map[ncs_index].label_buf,
+            sprintf (NCS_MAP[ncs_index].label_buf,
                      "Static Chip Select %d = %s %s", ncs_index,
-                     pxa25x_ncs_map[ncs_index].sig_name,
-                     pxa25x_ncs_map[ncs_index].enabled ? "" : "(disabled)");
-            area->description = pxa25x_ncs_map[ncs_index].label_buf;
+                     NCS_MAP[ncs_index].sig_name,
+                     NCS_MAP[ncs_index].enabled ? "" : "(disabled)");
+            area->description = NCS_MAP[ncs_index].label_buf;
             area->start = tmp_addr;
             area->length = UINT64_C (0x04000000);
-            area->width = pxa25x_ncs_map[ncs_index].bus_width;
+            area->width = NCS_MAP[ncs_index].bus_width;
 
             return URJ_STATUS_OK;
         }
@@ -422,9 +427,9 @@ pxa27x_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
         area->start = UINT32_C (0x00000000);
         area->length = UINT64_C (0x04000000);
 
-        if (pxa27x_ncs_map[0].bus_width > 0)
+        if (NCS_MAP[0].bus_width > 0)
         {
-            area->width = pxa27x_ncs_map[0].bus_width;
+            area->width = NCS_MAP[0].bus_width;
         }
         else
         {
@@ -467,14 +472,14 @@ pxa27x_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
         if ((adr >= tmp_addr) && (adr < tmp_addr + 0x04000000))
         {                       // if the addr is within our window
             urj_log (URJ_LOG_LEVEL_DEBUG, "match\n");
-            sprintf (pxa27x_ncs_map[ncs_index].label_buf,
+            sprintf (NCS_MAP[ncs_index].label_buf,
                      "Static Chip Select %d = %s %s", ncs_index,
-                     pxa27x_ncs_map[ncs_index].sig_name,
-                     pxa27x_ncs_map[ncs_index].enabled ? "" : "(disabled)");
-            area->description = pxa27x_ncs_map[ncs_index].label_buf;
+                     NCS_MAP[ncs_index].sig_name,
+                     NCS_MAP[ncs_index].enabled ? "" : "(disabled)");
+            area->description = NCS_MAP[ncs_index].label_buf;
             area->start = tmp_addr;
             area->length = UINT64_C (0x04000000);
-            area->width = pxa27x_ncs_map[ncs_index].bus_width;
+            area->width = NCS_MAP[ncs_index].bus_width;
 
             return URJ_STATUS_OK;
         }

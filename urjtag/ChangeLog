@@ -8,6 +8,9 @@
   * src/bus/mpc824x.c (BUS_WIDTH, REVBITS, dbgAddr, dbgData): Push
     global data down into bus-specific params data.
 
+  * src/bus/pxa2x0.c: Constify default map info, and then push writable
+    global map data into the bus-specific params data.
+
 2011-07-01  Jie Zhang  <jie.zhang@analog.com>
 
   * src/lib/ansidecl.h: Move to include.
