@@ -45,22 +45,22 @@
 //no SDRAM access
 
 typedef struct {
-	uint32_t last_adr;
-	urj_part_signal_t *addr[24];
-	urj_part_signal_t *data[32];
-	urj_part_signal_t *ms0;	//boot memory select
-	urj_part_signal_t *ms1;	//boot memory select
-	urj_part_signal_t *nwe;
-	urj_part_signal_t *nrd;
+    uint32_t last_adr;
+    urj_part_signal_t *addr[24];
+    urj_part_signal_t *data[32];
+    urj_part_signal_t *ms0;    //boot memory select
+    urj_part_signal_t *ms1;    //boot memory select
+    urj_part_signal_t *nwe;
+    urj_part_signal_t *nrd;
 } bus_params_t;
 
-#define	LAST_ADR	((bus_params_t *) bus->params)->last_adr
-#define	ADDR		((bus_params_t *) bus->params)->addr
-#define	DATA		((bus_params_t *) bus->params)->data
-#define	MS0		((bus_params_t *) bus->params)->ms0
-#define	MS1		((bus_params_t *) bus->params)->ms1
-#define	nWE		((bus_params_t *) bus->params)->nwe
-#define	nRD		((bus_params_t *) bus->params)->nrd
+#define LAST_ADR ((bus_params_t *) bus->params)->last_adr
+#define ADDR     ((bus_params_t *) bus->params)->addr
+#define DATA     ((bus_params_t *) bus->params)->data
+#define MS0      ((bus_params_t *) bus->params)->ms0
+#define MS1      ((bus_params_t *) bus->params)->ms1
+#define nWE      ((bus_params_t *) bus->params)->nwe
+#define nRD      ((bus_params_t *) bus->params)->nrd
 
 /**
  * bus->driver->(*new_bus)
@@ -68,7 +68,7 @@ typedef struct {
  */
 static urj_bus_t *
 sharc_21369_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-		     const urj_param_t *cmd_params[])
+                     const urj_param_t *cmd_params[])
 {
     urj_bus_t *bus;
     urj_part_t *part;
@@ -78,17 +78,17 @@ sharc_21369_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
     if (bus == NULL)
-	return NULL;
+        return NULL;
     part = bus->part;
 
     for (i = 0; i < 24; i++) {
-	sprintf( buff, "ADDR%d", i );
-	failed |= urj_bus_generic_attach_sig (part, &(ADDR[i]), buff);
+        sprintf( buff, "ADDR%d", i );
+        failed |= urj_bus_generic_attach_sig (part, &(ADDR[i]), buff);
     }
 
     for (i = 0; i < 32; i++) {
-	sprintf( buff, "DATA%d", i );
-	failed |= urj_bus_generic_attach_sig( part, &(DATA[i]), buff );
+        sprintf( buff, "DATA%d", i );
+        failed |= urj_bus_generic_attach_sig( part, &(DATA[i]), buff );
     }
 
     failed |= urj_bus_generic_attach_sig( part, &(MS0), "MS0_B" );
@@ -98,8 +98,8 @@ sharc_21369_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     if (failed)
     {
-	urj_bus_generic_free (bus);
-	return NULL;
+        urj_bus_generic_free (bus);
+        return NULL;
     }
 
     return bus;
@@ -115,10 +115,10 @@ sharc_21369_bus_printinfo (urj_log_level_t ll, urj_bus_t *bus )
     int i;
 
     for (i = 0; i < bus->chain->parts->len; i++)
-	if (bus->part == bus->chain->parts->parts[i])
-	    break;
+        if (bus->part == bus->chain->parts->parts[i])
+            break;
     urj_log(ll, _("Analog Device's SHARC 21369 compatible bus driver via BSR (JTAG part No. %d)\n"),
-	    i );
+            i );
 }
 
 /**
@@ -132,24 +132,24 @@ sharc_21369_ezkit_bus_area ( urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 
     if (UINT32_C(0x200000) <= adr && adr <= UINT32_C(0x027FFFF))
     {
-	area->description = N_("Boot Memory Select");
-	area->start = UINT32_C(0x200000);
-	area->length = UINT64_C(0x080000);
-	area->width = 8;
+        area->description = N_("Boot Memory Select");
+        area->start = UINT32_C(0x200000);
+        area->length = UINT64_C(0x080000);
+        area->width = 8;
 
-	urj_part_set_signal( p, MS0, 1, 1);
-	urj_part_set_signal( p, MS1, 1, 0);
+        urj_part_set_signal( p, MS0, 1, 1);
+        urj_part_set_signal( p, MS1, 1, 0);
 
     }
     else
     {
-	area->description = NULL;
-	area->start = UINT32_C(0xffffffff);
-	area->length = UINT64_C(0x080000);
-	area->width = 0;
+        area->description = NULL;
+        area->start = UINT32_C(0xffffffff);
+        area->length = UINT64_C(0x080000);
+        area->width = 0;
 
-	urj_part_set_signal(p, MS0, 1, 1);
-	urj_part_set_signal(p, MS1, 1, 1);
+        urj_part_set_signal(p, MS0, 1, 1);
+        urj_part_set_signal(p, MS1, 1, 1);
     }
 
     return URJ_STATUS_OK;
@@ -158,24 +158,24 @@ sharc_21369_ezkit_bus_area ( urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
 static void
 setup_address (urj_bus_t *bus, uint32_t a)
 {
-	int i;
-	urj_part_t *p = bus->part;
+    int i;
+    urj_part_t *p = bus->part;
 
-	for (i = 0; i < 24; i++)
-		urj_part_set_signal (p, ADDR[i], 1, (a >> i) & 1);
+    for (i = 0; i < 24; i++)
+        urj_part_set_signal (p, ADDR[i], 1, (a >> i) & 1);
 }
 
 static void
 set_data_in(urj_bus_t *bus, uint32_t adr)
 {
-	int i;
-	urj_part_t *p = bus->part;
-	urj_bus_area_t area;
+    int i;
+    urj_part_t *p = bus->part;
+    urj_bus_area_t area;
 
-	bus->driver->area (bus, adr, &area);
+    bus->driver->area (bus, adr, &area);
 
-	for (i = 0; i < area.width; i++)
-		urj_part_set_signal( p, DATA[i], 0, 0 );
+    for (i = 0; i < area.width; i++)
+        urj_part_set_signal( p, DATA[i], 0, 0 );
 }
 
 
@@ -189,7 +189,7 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
     bus->driver->area (bus, adr, &area);
 
     for (i = 0; i < area.width; i++)
-	urj_part_set_signal(p, DATA[i], 1, (d >> i) & 1);
+        urj_part_set_signal(p, DATA[i], 1, (d >> i) & 1);
 }
 
 /**
@@ -239,7 +239,7 @@ sharc_21369_bus_read_next (urj_bus_t *bus, uint32_t adr )
     urj_tap_chain_shift_data_registers( chain, 1 );
 
     for (i = 0; i < area.width; i++)
-	d |= (uint32_t) (urj_part_get_signal (p, DATA[i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, DATA[i]) << i);
 
     return d;
 }
@@ -265,7 +265,7 @@ sharc_21369_bus_read_end( urj_bus_t *bus )
     urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < area.width; i++)
-	d |= (uint32_t) (urj_part_get_signal (p, DATA[i]) << i);
+        d |= (uint32_t) (urj_part_get_signal (p, DATA[i]) << i);
 
     return d;
 }

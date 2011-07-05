@@ -46,11 +46,11 @@ typedef struct {
     urj_part_signal_t *ex_rd;
 } bus_params_t;
 
-#define	EX_CS	((bus_params_t *) bus->params)->ex_cs
-#define	EX_ADDR	((bus_params_t *) bus->params)->ex_addr
-#define	EX_DATA	((bus_params_t *) bus->params)->ex_data
-#define	EX_WR	((bus_params_t *) bus->params)->ex_wr
-#define	EX_RD	((bus_params_t *) bus->params)->ex_rd
+#define EX_CS   ((bus_params_t *) bus->params)->ex_cs
+#define EX_ADDR ((bus_params_t *) bus->params)->ex_addr
+#define EX_DATA ((bus_params_t *) bus->params)->ex_data
+#define EX_WR   ((bus_params_t *) bus->params)->ex_wr
+#define EX_RD   ((bus_params_t *) bus->params)->ex_rd
 
 /**
  * bus->driver->(*new_bus)

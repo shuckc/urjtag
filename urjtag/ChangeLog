@@ -1,3 +1,8 @@
+2011-07-04  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bus/arm9tdmi.c, src/bus/ejtag_dma.c, src/bus/ixp435.c,
+    src/bus/mpc837x.c, src/bus/sharc21369_ezkit.c: Fix coding style.
+
 2011-06-30  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/bfin.h (bfin_part_data.emu_oab): Constify.

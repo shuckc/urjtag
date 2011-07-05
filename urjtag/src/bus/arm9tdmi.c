@@ -49,13 +49,13 @@ typedef struct
 
 #define BP              ((bus_params_t *) bus->params)
 
-#define ARM9TDMI_ICE_DBGCTL	0x00
-#define ARM9TDMI_ICE_DBGSTAT	0x01
+#define ARM9TDMI_ICE_DBGCTL  0x00
+#define ARM9TDMI_ICE_DBGSTAT 0x01
 
-#define DEBUG_SPEED	0
-#define SYSTEM_SPEED	1
+#define DEBUG_SPEED          0
+#define SYSTEM_SPEED         1
 
-#define ARM_NOP	0xE1A00000
+#define ARM_NOP 0xE1A00000
 
 static urj_data_register_t *scann = NULL;
 static urj_data_register_t *scan1 = NULL;
@@ -69,7 +69,7 @@ static uint32_t _data_read;
  */
 static urj_bus_t *
 arm9tdmi_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
-		  const urj_param_t *cmd_params[])
+                  const urj_param_t *cmd_params[])
 {
     return urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
 }
@@ -103,7 +103,7 @@ arm9tdmi_debug_in_reg(urj_data_register_t *reg)
 
     urj_log(URJ_LOG_LEVEL_ALL, "in  :");
     for (i = 0; i < reg->in->len; i++)
- 	urj_log(URJ_LOG_LEVEL_ALL, reg->in->data[i]?"1":"0");
+        urj_log(URJ_LOG_LEVEL_ALL, reg->in->data[i]?"1":"0");
     urj_log(URJ_LOG_LEVEL_ALL, "\n");
 }
 
@@ -114,7 +114,7 @@ arm9tdmi_debug_out_reg(urj_data_register_t *reg)
 
     urj_log(URJ_LOG_LEVEL_ALL, "out :");
     for (i = 0; i < reg->out->len; i++)
- 	urj_log(URJ_LOG_LEVEL_ALL, reg->out->data[i]?"1":"0");
+        urj_log(URJ_LOG_LEVEL_ALL, reg->out->data[i]?"1":"0");
     urj_log(URJ_LOG_LEVEL_ALL, "\n");
 }
 #endif
@@ -125,12 +125,12 @@ arm9tdmi_exec_instruction(urj_bus_t *bus, unsigned int c1_inst, unsigned int c1_
     int i;
 
     for (i = 0; i < 32; i++)
-	scan1->in->data[66-i] = (c1_inst >> i) & 1;
+        scan1->in->data[66-i] = (c1_inst >> i) & 1;
     scan1->in->data[34] = flags;
     scan1->in->data[33] = 0;
     scan1->in->data[32] = 0;
     for (i = 0; i < 32; i++)
-	scan1->in->data[i] = (c1_data >> i) & 1;
+        scan1->in->data[i] = (c1_data >> i) & 1;
 #if (ARM9DEBUG)
     arm9tdmi_debug_in_reg(scan1);
 #endif
@@ -149,7 +149,7 @@ arm9tdmi_select_scanchain(urj_bus_t *bus, unsigned int chain)
     urj_tap_chain_shift_instructions (bus->chain);
 
     for (i = 0; i < scann->in->len; i++)
-	scann->in->data[i] = (chain >> i) & 1;
+        scann->in->data[i] = (chain >> i) & 1;
     urj_tap_chain_shift_data_registers (bus->chain, 0);
 }
 
@@ -159,17 +159,15 @@ arm9tdmi_ice_read(urj_bus_t *bus, unsigned int reg_addr, unsigned int *reg_val)
     int i;
 
     for (i = 0; i < 32; i++)
-	scan2->in->data[i] = 0;
+        scan2->in->data[i] = 0;
     for (i = 0; i < 5; i++)
-	scan2->in->data[i+32] = (reg_addr >> i) & 1;
+        scan2->in->data[i+32] = (reg_addr >> i) & 1;
     scan2->in->data[37] = 0;
     urj_tap_chain_shift_data_registers (bus->chain, 1);
 
     for (i = 0; i < 32; i++)
-    {
-	if (scan2->out->data[i])
-	    *reg_val |= (1 << i);
-    }
+        if (scan2->out->data[i])
+            *reg_val |= (1 << i);
 }
 
 static void
@@ -178,9 +176,9 @@ arm9tdmi_ice_write(urj_bus_t *bus, unsigned int reg_addr, unsigned int reg_val)
     int i;
 
     for (i = 0; i < 32; i++)
-	scan2->in->data[i] = (reg_val >> i) & 1;
+        scan2->in->data[i] = (reg_val >> i) & 1;
     for (i = 0; i < 5; i++)
-	scan2->in->data[i+32] = (reg_addr >> i) & 1;
+        scan2->in->data[i+32] = (reg_addr >> i) & 1;
     scan2->in->data[37] = 1;
     urj_tap_chain_shift_data_registers (bus->chain, 0);
 }
@@ -220,13 +218,13 @@ arm9tdmi_write(urj_bus_t *bus, unsigned int addr, unsigned int data, unsigned in
     arm9tdmi_exec_instruction(bus, c1_inst, c1_data, DEBUG_SPEED);
 
     if (sz == 32)
-	c1_inst = 0xE5801000; /* STR R1, [R0] */
+        c1_inst = 0xE5801000; /* STR R1, [R0] */
 
     else if (sz == 16)
-	c1_inst = 0xE1C010B0; /* STRH R1, [R0] */
+        c1_inst = 0xE1C010B0; /* STRH R1, [R0] */
 
     else if (sz == 8)
-	c1_inst = 0xE5C01000; /* STRB R1, [R0] */
+        c1_inst = 0xE5C01000; /* STRB R1, [R0] */
 
     c1_data = 0;
     arm9tdmi_exec_instruction(bus, c1_inst, c1_data, DEBUG_SPEED);
@@ -283,13 +281,13 @@ arm9tdmi_read (urj_bus_t *bus, unsigned int addr, unsigned int sz)
     arm9tdmi_exec_instruction(bus, c1_inst, c1_data, DEBUG_SPEED);
 
     if (sz == 32)
-	c1_inst = 0xE5901000; /* LDR R1, [R0] */
+        c1_inst = 0xE5901000; /* LDR R1, [R0] */
 
     else if (sz == 16)
-	c1_inst = 0xE1D010B0; /* LDRH R1, [R0] */
+        c1_inst = 0xE1D010B0; /* LDRH R1, [R0] */
 
     else if (sz == 8)
-	c1_inst = 0xE5D01000; /* LDRB R1, [R0] */
+        c1_inst = 0xE5D01000; /* LDRB R1, [R0] */
 
     c1_data = 0;
     arm9tdmi_exec_instruction(bus, c1_inst, c1_data, DEBUG_SPEED);
@@ -333,8 +331,8 @@ arm9tdmi_read (urj_bus_t *bus, unsigned int addr, unsigned int sz)
     result = 0;
     for (i = 0; i < 32; i++)
     {
-	if (scan1->out->data[i])
-	    result |= (1 << i);
+        if (scan1->out->data[i])
+            result |= (1 << i);
     }
     arm9tdmi_exec_instruction(bus, c1_inst, c1_data, DEBUG_SPEED);
     return result;
@@ -402,35 +400,34 @@ arm9tdmi_bus_init (urj_bus_t *bus)
     status = 0;
 
     while (i++ < 10) {
-
         urj_part_set_instruction (bus->part, "INTEST2");
         urj_tap_chain_shift_instructions (bus->chain);
 
-	arm9tdmi_ice_read(bus, ARM9TDMI_ICE_DBGSTAT, &status);
+        arm9tdmi_ice_read(bus, ARM9TDMI_ICE_DBGSTAT, &status);
 
-	if (status & 0x01) {
-	    success = 1;
-	    break;
-	}
-	urj_part_set_instruction (bus->part, "RESTART");
-	urj_tap_chain_shift_instructions (bus->chain);
-	usleep(100);
+        if (status & 0x01) {
+            success = 1;
+            break;
+        }
+        urj_part_set_instruction (bus->part, "RESTART");
+        urj_tap_chain_shift_instructions (bus->chain);
+        usleep(100);
     }
 
     if (!success)
     {
         urj_error_set (URJ_ERROR_TIMEOUT,
-	               _("Failed to enter debug mode, ctrl=%s"),
-	               urj_tap_register_get_string (scan2->out));
-	return URJ_STATUS_FAIL;
+                       _("Failed to enter debug mode, ctrl=%s"),
+                       urj_tap_register_get_string (scan2->out));
+        return URJ_STATUS_FAIL;
     }
 
     arm9tdmi_ice_write(bus, ARM9TDMI_ICE_DBGCTL, 0x00);
     urj_log (URJ_LOG_LEVEL_NORMAL, _("The target is halted in "));
     if (status & 0x10)
-	urj_log (URJ_LOG_LEVEL_NORMAL, _("THUMB mode.\n"));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("THUMB mode.\n"));
     else
-	urj_log (URJ_LOG_LEVEL_NORMAL, _("ARM mode.\n"));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("ARM mode.\n"));
 
     /* select scan chain 1, and use INTEST instruction */
     arm9tdmi_select_scanchain(bus, 1);
