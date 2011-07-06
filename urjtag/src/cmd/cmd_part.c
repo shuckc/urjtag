@@ -129,14 +129,12 @@ cmd_part_run (urj_chain_t *chain, char *params[])
 static void
 cmd_part_help (void)
 {
-    // @@@@ RFHH this doesn't reflect input syntax:
-    // jtag> part PART
-    // jtag> part alias ALIAS
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("Usage: %s PART\n"
-               "Change active part for current JTAG chain.\n"
-               "\n" "PART          part number | alias\n"),
-             "part");
+             _("Usage: %s [PART|ALIAS]\n"
+               "Change active part for current JTAG chain.\n\n"
+               "Usage: %s ALIAS\n"
+               "Assign an alias for the active part.\n"),
+             "part", "part alias");
 }
 
 const urj_cmd_t urj_cmd_part = {
