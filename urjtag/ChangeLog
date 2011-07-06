@@ -2,6 +2,10 @@
 
   * src/flash/intel.c: Add support for 28F256P33 flashes by Jonathan Stroud.
 
+  * src/cmd/cmd.h, src/cmd/cmd_cmd.c: Add new completion func for files.
+  * src/cmd/cmd_flashmem.c, src/cmd/cmd_include.c, src/cmd/cmd_readmem.c:
+    Use new completion helper rather than poking readline directly.
+
 2011-07-06  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/chain.c (urj_tap_chain_connect): Correct checking of the

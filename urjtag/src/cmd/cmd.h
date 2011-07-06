@@ -35,6 +35,7 @@
 #define URJ_SRC_CMD_H
 
 #include <stdlib.h> /* qsort */
+#include <stdbool.h>
 #include <sysdep.h>
 
 #include <urjtag/params.h>
@@ -146,6 +147,18 @@ void urj_completion_mayben_add_matches_num (char ***matches, size_t *cnt,
 void urj_completion_mayben_add_param_list (char ***matches, size_t *cnt,
                                            const char *text, size_t text_len,
                                            urj_param_list_t param_list);
+
+/**
+ * This is just like urj_completion_mayben_add_match, but the matching is
+ * done against file names (and optionally searches the UrJTAG data dir).
+ *
+ * @param text     the string to compare to match (e.g. user input)
+ * @param text_len the length of text
+ * @param search   should relative paths search the UrJTAG data dir
+ */
+void urj_completion_mayben_add_file (char ***matches, size_t *cnt,
+                                     const char *text, size_t text_len,
+                                     bool search);
 
 /**
  * Internal completion helper for matching against the signal list.

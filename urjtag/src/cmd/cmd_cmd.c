@@ -28,10 +28,15 @@
 #include <string.h>
 #include <ctype.h>
 
+#ifdef HAVE_LIBREADLINE
+#include <readline/readline.h>
+#endif
+
 #include <urjtag/error.h>
 #include <urjtag/chain.h>
 #include <urjtag/parse.h>
 #include <urjtag/cmd.h>
+#include <urjtag/jtag.h>
 
 #include "cmd.h"
 
@@ -109,6 +114,49 @@ urj_completion_mayben_add_param_list (char ***matches, size_t *cnt,
     for (i = 0; i < param_list.n; ++i)
         urj_completion_mayben_add_match (matches, cnt, text, text_len,
                                          param_list.list[i].string);
+}
+
+void urj_completion_mayben_add_file (char ***matches, size_t *cnt,
+                                     const char *text, size_t text_len,
+                                     bool search)
+{
+#ifdef HAVE_LIBREADLINE
+    int state;
+    size_t implicit_len;
+    char *match, *search_text;
+
+    /* Use the search path if path isn't explicitly relative/absolute */
+    if (search && text[0] != '/' && text[0] != '.')
+    {
+        const char *jtag_data_dir = urj_get_data_dir ();
+        implicit_len = strlen (jtag_data_dir) + 1;
+
+        search_text = malloc (implicit_len + text_len + 1);
+        if (!search_text)
+            return;
+
+        sprintf (search_text, "%s/%s", jtag_data_dir, text);
+        text = search_text;
+        text_len += implicit_len;
+    }
+    else
+    {
+        implicit_len = 0;
+        search_text = NULL;
+    }
+
+    state = 0;
+    while (1)
+    {
+        match = rl_filename_completion_function (text, state++);
+        if (!match)
+            break;
+        urj_completion_add_match_dupe (matches, cnt, match + implicit_len);
+        free (match);
+    }
+
+    free (search_text);
+#endif
 }
 
 void

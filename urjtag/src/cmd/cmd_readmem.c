@@ -29,10 +29,6 @@
 #include <string.h>
 #include <errno.h>
 
-#ifdef HAVE_LIBREADLINE
-#include <readline/readline.h>
-#endif
-
 #include <urjtag/error.h>
 #include <urjtag/bus.h>
 
@@ -107,23 +103,9 @@ cmd_readmem_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
         break;
 
     case 3: /* filename */
-    {
-#ifdef HAVE_LIBREADLINE
-        int state;
-        char *match;
-
-        state = 0;
-        while (1)
-        {
-            match = rl_filename_completion_function (text, state++);
-            if (!match)
-                break;
-            urj_completion_add_match_dupe (matches, match_cnt, match);
-            free (match);
-        }
-#endif
+        urj_completion_mayben_add_file (matches, match_cnt, text,
+                                        text_len, false);
         break;
-    }
     }
 }
 
