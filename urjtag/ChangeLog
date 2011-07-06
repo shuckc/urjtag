@@ -1,3 +1,7 @@
+2011-07-06  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/flash/intel.c: Add support for 28F256P33 flashes by Jonathan Stroud.
+
 2011-07-06  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/chain.c (urj_tap_chain_connect): Correct checking of the

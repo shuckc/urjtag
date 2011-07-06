@@ -190,6 +190,9 @@ _intel_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array,
     case 0x8810:
         urj_log (ll, "GE28F256L18B\n");
         break;
+    case 0x891F:
+        urj_log (ll, "28F256P33\n");
+        break;
     default:
         urj_log (ll, _("Unknown (0x%02lX)!\n"), (long unsigned) cid);
         break;
