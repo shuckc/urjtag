@@ -1,3 +1,8 @@
+2011-07-06  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/tap/chain.c (urj_tap_chain_connect): Correct checking of the
+    parameter number of parallel cable.
+
 2011-07-04  Mike Frysinger  <vapier@gentoo.org>
 
   * src/bus/arm9tdmi.c, src/bus/ejtag_dma.c, src/bus/ixp435.c,

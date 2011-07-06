@@ -96,10 +96,10 @@ urj_tap_chain_connect (urj_chain_t *chain, const char *drivername, char *params[
 
     if (driver->device_type == URJ_CABLE_DEVICE_PARPORT)
     {
-        if (paramc < 1)
+        if (paramc < 2)
         {
             urj_error_set (URJ_ERROR_SYNTAX,
-                           "parallel cable requires >= 2 parameters, got %d", paramc);
+                           "parallel cable requires >= 4 parameters, got %d", paramc);
             return URJ_STATUS_FAIL;
         }
         for (j = 0; j < URJ_CABLE_PARPORT_N_DEVS; j++)
