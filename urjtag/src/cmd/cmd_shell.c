@@ -89,6 +89,15 @@ cmd_shell_run (urj_chain_t *chain, char *params[])
 }
 
 static void
+cmd_shell_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                    char * const *tokens, const char *text, size_t text_len,
+                    size_t token_point)
+{
+    /* XXX: Should first token complete via $PATH ? */
+    urj_completion_mayben_add_file (matches, match_cnt, text, text_len, false);
+}
+
+static void
 cmd_shell_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
@@ -102,5 +111,6 @@ const urj_cmd_t urj_cmd_shell = {
     "shell",
     N_("run a shell command"),
     cmd_shell_help,
-    cmd_shell_run
+    cmd_shell_run,
+    cmd_shell_complete,
 };

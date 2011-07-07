@@ -105,6 +105,22 @@ cmd_dr_run (urj_chain_t *chain, char *params[])
 }
 
 static void
+cmd_dr_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                 char * const *tokens, const char *text, size_t text_len,
+                 size_t token_point)
+{
+    static const char * const dir[] = {
+        "in",
+        "out",
+    };
+
+    if (token_point != 1)
+        return;
+
+    urj_completion_mayben_add_matches (matches, match_cnt, text, text_len, dir);
+}
+
+static void
 cmd_dr_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
@@ -124,5 +140,6 @@ const urj_cmd_t urj_cmd_dr = {
     "dr",
     N_("display active data register for a part"),
     cmd_dr_help,
-    cmd_dr_run
+    cmd_dr_run,
+    cmd_dr_complete,
 };

@@ -99,6 +99,23 @@ cmd_pod_run (urj_chain_t *chain, char *params[])
 }
 
 static void
+cmd_pod_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                  char * const *tokens, const char *text, size_t text_len,
+                  size_t token_point)
+{
+    static const char * const signals[] = {
+        "TCK=",
+        "TMS=",
+        "TDI=",
+        "TRST=",
+        "RESET=",
+    };
+
+    urj_completion_mayben_add_matches (matches, match_cnt, text,
+                                       text_len, signals);
+}
+
+static void
 cmd_pod_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
@@ -114,5 +131,6 @@ const urj_cmd_t urj_cmd_pod = {
     "pod",
     N_("Set state of POD signal(s)"),
     cmd_pod_help,
-    cmd_pod_run
+    cmd_pod_run,
+    cmd_pod_complete,
 };

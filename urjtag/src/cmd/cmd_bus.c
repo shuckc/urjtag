@@ -65,6 +65,27 @@ cmd_bus_run (urj_chain_t *chain, char *params[])
 }
 
 static void
+cmd_bus_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                  char * const *tokens, const char *text, size_t text_len,
+                  size_t token_point)
+{
+    int i;
+
+    if (token_point != 1)
+        return;
+
+    for (i = 0; i < urj_buses.len; ++i)
+    {
+        /* We assume you'll never have more than 15*10 buses */
+        char num[16];
+
+        sprintf (num, "%i", i);
+        urj_completion_mayben_add_match (matches, match_cnt, text,
+                                         text_len, num);
+    }
+}
+
+static void
 cmd_bus_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
@@ -78,5 +99,6 @@ const urj_cmd_t urj_cmd_bus = {
     "bus",
     N_("change active bus"),
     cmd_bus_help,
-    cmd_bus_run
+    cmd_bus_run,
+    cmd_bus_complete,
 };

@@ -95,6 +95,30 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
     return result;
 }
 
+static void
+cmd_svf_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                  char * const *tokens, const char *text, size_t text_len,
+                  size_t token_point)
+{
+    static const char * const main_cmds[] = {
+        "stop",
+        "progress",
+        "ref_freq=",
+    };
+
+    switch (token_point)
+    {
+    case 1:
+        urj_completion_mayben_add_file (matches, match_cnt, text,
+                                        text_len, false);
+        break;
+
+    default:
+        urj_completion_mayben_add_matches (matches, match_cnt, text, text_len,
+                                           main_cmds);
+        break;
+    }
+}
 
 static void
 cmd_svf_help (void)
@@ -113,5 +137,6 @@ const urj_cmd_t urj_cmd_svf = {
     "svf",
     N_("execute svf commands from file"),
     cmd_svf_help,
-    cmd_svf_run
+    cmd_svf_run,
+    cmd_svf_complete,
 };

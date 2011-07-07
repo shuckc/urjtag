@@ -116,6 +116,40 @@ cmd_bsdl_run (urj_chain_t *chain, char *params[])
     return (result >= 0) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
 }
 
+static void
+cmd_bsdl_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                   char * const *tokens, const char *text, size_t text_len,
+                   size_t token_point)
+{
+    static const char * const main_cmds[] = {
+        "path",
+        "test",
+        "dump",
+        "debug",
+    };
+
+    static const char * const debug_cmds[] = {
+        "on", "off",
+    };
+
+    switch (token_point)
+    {
+    case 1:
+        urj_completion_mayben_add_matches (matches, match_cnt, text, text_len,
+                                           main_cmds);
+        break;
+
+    case 2:
+        /* XXX: For "test" and "dump", we'll want to search the bsdl paths */
+        if (!strcmp (tokens[1], "path"))
+            urj_completion_mayben_add_file (matches, match_cnt, text,
+                                            text_len, false);
+        else if (!strcmp (tokens[1], "debug"))
+            urj_completion_mayben_add_matches (matches, match_cnt, text,
+                                               text_len, debug_cmds);
+        break;
+    }
+}
 
 static void
 cmd_bsdl_help (void)
@@ -136,7 +170,8 @@ const urj_cmd_t urj_cmd_bsdl = {
     "bsdl",
     N_("manage BSDL files"),
     cmd_bsdl_help,
-    cmd_bsdl_run
+    cmd_bsdl_run,
+    cmd_bsdl_complete,
 };
 
 

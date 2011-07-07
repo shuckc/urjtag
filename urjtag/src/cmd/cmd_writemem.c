@@ -73,6 +73,24 @@ cmd_writemem_run (urj_chain_t *chain, char *params[])
 }
 
 static void
+cmd_writemem_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
+                       char * const *tokens, const char *text, size_t text_len,
+                       size_t token_point)
+{
+    switch (token_point)
+    {
+    case 1: /* addr */
+    case 2: /* len */
+        break;
+
+    case 3: /* filename */
+        urj_completion_mayben_add_file (matches, match_cnt, text,
+                                        text_len, false);
+        break;
+    }
+}
+
+static void
 cmd_writemem_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
@@ -92,5 +110,6 @@ const urj_cmd_t urj_cmd_writemem = {
     "writemem",
     N_("write content of file to the memory"),
     cmd_writemem_help,
-    cmd_writemem_run
+    cmd_writemem_run,
+    cmd_writemem_complete,
 };

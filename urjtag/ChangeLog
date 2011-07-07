@@ -8,6 +8,10 @@
 
   * src/cmd/cmd_part.c (cmd_part_help): Update output to reflect reality.
 
+  * src/cmd/cmd_bsdl.c, src/cmd/cmd_bus.c, src/cmd/cmd_dr.c,
+    src/cmd/cmd_part.c, src/cmd/cmd_pod.c, src/cmd/cmd_shell.c,
+    src/cmd/cmd_svf.c, src/cmd/cmd_writemem.c: Add completion handlers.
+
 2011-07-06  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/chain.c (urj_tap_chain_connect): Correct checking of the
