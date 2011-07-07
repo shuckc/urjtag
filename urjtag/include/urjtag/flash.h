@@ -41,6 +41,9 @@
 
 typedef struct URJ_FLASH_CFI_ARRAY urj_flash_cfi_array_t;
 
+typedef int (*urj_flash_detect_func_t) (urj_bus_t *bus, uint32_t adr,
+                                        urj_flash_cfi_array_t **cfi_array);
+
 typedef struct
 {
     const char *name;

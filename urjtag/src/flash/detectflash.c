@@ -47,6 +47,15 @@
 
 urj_flash_cfi_array_t *urj_flash_cfi_array = NULL;
 
+static const urj_flash_detect_func_t urj_flash_detect_funcs[] = {
+    &urj_flash_cfi_detect,
+    &urj_flash_jedec_detect,
+    &urj_flash_amd_detect,
+#ifdef JEDEC_EXP
+    &urj_flash_jedec_exp_detect,
+#endif
+};
+
 void
 urj_flash_cleanup (void)
 {
@@ -59,6 +68,7 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
 {
     urj_flash_cfi_query_structure_t *cfi;
     const char *s;
+    int i, ret;
 
     if (!bus)
     {
@@ -72,26 +82,12 @@ urj_flash_detectflash (urj_log_level_t ll, urj_bus_t *bus, uint32_t adr)
 
     URJ_BUS_PREPARE (bus);
 
-    if (urj_flash_cfi_detect (bus, adr, &urj_flash_cfi_array) != URJ_STATUS_OK)
+    for (i = 0; i < ARRAY_SIZE (urj_flash_detect_funcs); ++i)
     {
-        urj_flash_cleanup();
-        if (urj_flash_jedec_detect (bus, adr, &urj_flash_cfi_array)
-            != URJ_STATUS_OK)
-        {
-            urj_flash_cleanup();
-            if (urj_flash_amd_detect (bus, adr, &urj_flash_cfi_array)
-                != URJ_STATUS_OK)
-            {
-                urj_flash_cleanup();
-#ifdef JEDEC_EXP
-                if (urj_flash_jedec_exp_detect (bus, adr, &urj_flash_cfi_array)
-                    != URJ_STATUS_OK)
-                {
-                    urj_flash_cleanup();
-                }
-#endif
-            }
-        }
+        ret = urj_flash_detect_funcs[i] (bus, adr, &urj_flash_cfi_array);
+        if (ret == URJ_STATUS_OK)
+            break;
+        urj_flash_cleanup ();
     }
 
     if (urj_flash_cfi_array == NULL)
