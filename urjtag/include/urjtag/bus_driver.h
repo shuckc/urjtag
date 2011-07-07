@@ -84,6 +84,14 @@ typedef enum URJ_BUS_PARAM_KEY
 }
 urj_bus_param_key_t;
 
+typedef enum URJ_BUS_TYPE
+{
+    URJ_BUS_TYPE_PARALLEL,
+    URJ_BUS_TYPE_SPI,
+    URJ_BUS_TYPE_I2C,
+}
+urj_bus_type_t;
+
 struct URJ_BUS_DRIVER
 {
     const char *name;
@@ -105,8 +113,12 @@ struct URJ_BUS_DRIVER
     /* @@@@ RFHH need to return status */
     uint32_t (*read) (urj_bus_t *bus, uint32_t adr);
     /* @@@@ RFHH need to return status */
+    int (*write_start) (urj_bus_t *bus, uint32_t adr);
     void (*write) (urj_bus_t *bus, uint32_t adr, uint32_t data);
     int (*init) (urj_bus_t *bus);
+    int (*enable) (urj_bus_t *bus);
+    int (*disable) (urj_bus_t *bus);
+    urj_bus_type_t bus_type;
 };
 
 struct URJ_BUS
@@ -115,6 +127,7 @@ struct URJ_BUS
     urj_part_t *part;
     void *params;
     int initialized;
+    int enabled;
     const urj_bus_driver_t *driver;
 };
 
@@ -126,9 +139,13 @@ struct URJ_BUS
 #define URJ_BUS_READ_NEXT(bus,adr)      (bus)->driver->read_next(bus,adr)
 #define URJ_BUS_READ_END(bus)           (bus)->driver->read_end(bus)
 #define URJ_BUS_READ(bus,adr)           (bus)->driver->read(bus,adr)
+#define URJ_BUS_WRITE_START(bus,adr)    (bus)->driver->write_start(bus,adr)
 #define URJ_BUS_WRITE(bus,adr,data)     (bus)->driver->write(bus,adr,data)
 #define URJ_BUS_FREE(bus)               (bus)->driver->free_bus(bus)
 #define URJ_BUS_INIT(bus)               (bus)->driver->init(bus)
+#define URJ_BUS_ENABLE(bus)             (bus)->driver->enable(bus)
+#define URJ_BUS_DISABLE(bus)            (bus)->driver->disable(bus)
+#define URJ_BUS_TYPE(bus)               (bus)->driver->bus_type
 
 /**
  * API function to init a bus

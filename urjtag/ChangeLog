@@ -1,3 +1,21 @@
+2011-07-07  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/urjtag/bus_driver.h, src/bus/generic_bus.c, src/bus/generic_bus.h:
+    Add bus type classification and new enable/disable/write_start hooks (in
+    preparation for other bus types) by Jonathan Stroud.
+  * src/bus/fjmem.c, src/bus/ppc405ep.c, src/bus/sh7727.c, src/bus/bscoach.c,
+    src/bus/prototype.c, src/bus/sa1110.c, src/bus/mpc837x.c,
+    src/bus/ppc440gx_ebc8.c, src/bus/ejtag_dma.c, src/bus/sh7750r.c,
+    src/bus/tx4925.c, src/bus/pxa2x0.c, src/bus/arm9tdmi.c, src/bus/ixp425.c,
+    src/bus/avr32.c, src/bus/ixp465.c, src/bus/zefant-xs3.c, src/bus/h7202.c,
+    src/bus/mpc824x.c, src/bus/bcm1250.c, src/bus/sharc21065l.c,
+    src/bus/sharc21369_ezkit.c, src/bus/au1500.c, src/bus/blackfin.h,
+    src/bus/lh7a400.c, src/bus/sh7751r.c, src/bus/mpc5200.c, src/bus/jopcyc.c,
+    src/bus/slsup3.c, src/bus/ejtag.c, src/bus/s3c4510x.c, src/bus/ixp435.c:
+    Fill out new hook points and declare all as parallel bus drivers.
+  * src/flash/amd_flash.c, src/flash/cfi.c, src/flash/jedec.c,
+    src/flash/jedec_exp.c: Only work with parallel buses.
+
 2011-07-06  Mike Frysinger  <vapier@gentoo.org>
 
   * src/flash/intel.c: Add support for 28F256P33 flashes by Jonathan Stroud.

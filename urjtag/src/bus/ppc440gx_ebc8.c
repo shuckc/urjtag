@@ -278,6 +278,10 @@ const urj_bus_driver_t urj_bus_ppc440gx_ebc8_bus = {
     ppc440gx_ebc8_bus_read_next,
     ppc440gx_ebc8_bus_read_end,
     urj_bus_generic_read,
+    urj_bus_generic_write_start,
     ppc440gx_ebc8_bus_write,
-    urj_bus_generic_no_init
+    urj_bus_generic_no_init,
+    urj_bus_generic_no_enable,
+    urj_bus_generic_no_disable,
+    URJ_BUS_TYPE_PARALLEL,
 };

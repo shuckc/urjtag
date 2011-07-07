@@ -536,6 +536,10 @@ const urj_bus_driver_t urj_bus_bcm1250_bus = {
 #else
     bcm1250_bus_read,
 #endif
+    urj_bus_generic_write_start,
     bcm1250_bus_write,
-    urj_bus_generic_no_init
+    urj_bus_generic_no_init,
+    urj_bus_generic_no_enable,
+    urj_bus_generic_no_disable,
+    URJ_BUS_TYPE_PARALLEL,
 };

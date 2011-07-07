@@ -37,7 +37,10 @@ urj_bus_t *urj_bus_generic_new (urj_chain_t *chain,
                                 size_t param_size);
 void urj_bus_generic_free (urj_bus_t *bus);
 int urj_bus_generic_no_init (urj_bus_t *bus);
+int urj_bus_generic_no_enable (urj_bus_t *bus);
+int urj_bus_generic_no_disable (urj_bus_t *bus);
 void urj_bus_generic_prepare_extest (urj_bus_t *bus);
+int urj_bus_generic_write_start(urj_bus_t *bus, uint32_t adr);
 uint32_t urj_bus_generic_read (urj_bus_t *bus, uint32_t adr);
 
 #endif /* URJ_BUS_GENERIC_BUS_H */

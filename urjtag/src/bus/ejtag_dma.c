@@ -694,6 +694,10 @@ const urj_bus_driver_t urj_bus_ejtag_dma_bus = {
     ejtag_dma_bus_read_next,
     ejtag_dma_bus_read_end,
     ejtag_dma_bus_read,
+    urj_bus_generic_write_start,
     ejtag_dma_bus_write,
-    ejtag_dma_bus_init
+    ejtag_dma_bus_init,
+    urj_bus_generic_no_enable,
+    urj_bus_generic_no_disable,
+    URJ_BUS_TYPE_PARALLEL,
 };

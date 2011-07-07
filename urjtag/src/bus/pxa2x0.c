@@ -768,8 +768,12 @@ const urj_bus_driver_t urj_bus_pxa2x0_bus = {
     pxa2xx_bus_read_next,
     pxa2xx_bus_read_end,
     urj_bus_generic_read,
+    urj_bus_generic_write_start,
     pxa2xx_bus_write,
-    pxa2xx_bus_init
+    pxa2xx_bus_init,
+    urj_bus_generic_no_enable,
+    urj_bus_generic_no_disable,
+    URJ_BUS_TYPE_PARALLEL,
 };
 
 const urj_bus_driver_t urj_bus_pxa27x_bus = {
@@ -784,6 +788,10 @@ const urj_bus_driver_t urj_bus_pxa27x_bus = {
     pxa2xx_bus_read_next,
     pxa2xx_bus_read_end,
     urj_bus_generic_read,
+    urj_bus_generic_write_start,
     pxa2xx_bus_write,
-    pxa2xx_bus_init
+    pxa2xx_bus_init,
+    urj_bus_generic_no_enable,
+    urj_bus_generic_no_disable,
+    URJ_BUS_TYPE_PARALLEL,
 };

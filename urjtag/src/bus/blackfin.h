@@ -80,8 +80,12 @@ const urj_bus_driver_t urj_bus_##board##_bus = \
     bfin_bus_read_next, \
     bfin_bus_read_end, \
     urj_bus_generic_read, \
+    urj_bus_generic_write_start, \
     /*funcs##_bus_write,*/ bfin_bus_write, \
-    urj_bus_generic_no_init \
+    urj_bus_generic_no_init, \
+    urj_bus_generic_no_enable, \
+    urj_bus_generic_no_disable, \
+    URJ_BUS_TYPE_PARALLEL, \
 }
 #define BFIN_BUS_DECLARE(board, desc) _BFIN_BUS_DECLARE(board, board, desc)
 

@@ -107,6 +107,8 @@ urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,
         // retain error state
         return URJ_STATUS_FAIL;
 
+    if (URJ_BUS_TYPE (bus) != URJ_BUS_TYPE_PARALLEL)
+        return URJ_STATUS_FAIL;
     URJ_BUS_WRITE (bus, adr + 0x0, 0xf0);
     URJ_BUS_WRITE (bus, adr + 0x555, 0xaa);
     URJ_BUS_WRITE (bus, adr + 0x2AA, 0x55);

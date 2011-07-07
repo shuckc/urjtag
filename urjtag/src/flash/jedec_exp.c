@@ -88,6 +88,8 @@ urj_flash_jedec_exp_detect (urj_bus_t *bus, uint32_t adr,
     if (URJ_BUS_AREA (bus, adr, &area) != URJ_STATUS_OK)
         // retain error state
         return URJ_STATUS_FAIL;
+    if (URJ_BUS_TYPE (bus) != URJ_BUS_TYPE_PARALLEL)
+        return URJ_STATUS_FAIL;
     bw = area.width;
 
     if (bw == 0)

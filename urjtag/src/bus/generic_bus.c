@@ -101,6 +101,30 @@ urj_bus_generic_no_init (urj_bus_t *bus)
 }
 
 /**
+ * bus->driver->(*enable)
+ *
+ */
+int
+urj_bus_generic_no_enable (urj_bus_t *bus)
+{
+    bus->enabled = 1;
+
+    return URJ_STATUS_OK;
+}
+
+/**
+ * bus->driver->(*disable)
+ *
+ */
+int
+urj_bus_generic_no_disable (urj_bus_t *bus)
+{
+    bus->enabled = 0;
+
+    return URJ_STATUS_OK;
+}
+
+/**
  * bus->driver->(*prepare)
  *
  */
@@ -112,6 +136,16 @@ urj_bus_generic_prepare_extest (urj_bus_t *bus)
 
     urj_part_set_instruction (bus->part, "EXTEST");
     urj_tap_chain_shift_instructions (bus->chain);
+}
+
+/**
+ * bus->driver->(*write_start)
+ *
+ */
+int
+urj_bus_generic_write_start (urj_bus_t *bus, uint32_t adr)
+{
+    return 0;
 }
 
 /**
