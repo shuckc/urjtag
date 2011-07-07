@@ -6,6 +6,8 @@
   * src/cmd/cmd_flashmem.c, src/cmd/cmd_include.c, src/cmd/cmd_readmem.c:
     Use new completion helper rather than poking readline directly.
 
+  * src/cmd/cmd_part.c (cmd_part_help): Update output to reflect reality.
+
 2011-07-06  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/chain.c (urj_tap_chain_connect): Correct checking of the
