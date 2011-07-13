@@ -1,5 +1,37 @@
 2011-07-13  Jie Zhang  <jie.zhang@analog.com>
 
+  * include/urjtag/cable.h (urj_cable_param_key_t): Add
+    URJ_CABLE_PARAM_KEY_FIRMWARE.
+  * src/tap/cable.c (cable_param[]): Add URJ_CABLE_PARAM_KEY_FIRMWARE.
+  * src/tap/cable/ice100.c: Include "libiberty.h".
+    (params_t): Add firmware_filename.
+    (HOST_PROGRAM_FLASH): Define.
+    (ICE100B_DOC_URL): Define.
+    (adi_usb_read_or_ret): Use urj_error_IO_set.
+    (adi_usb_write_or_ret): Likewise.
+    (struct flash_block): Define.
+    (NIBBLE): Define.
+    (HEX2): Define.
+    (HEX4): Define.
+    (ISHEX): Define.
+    (ISHEX2): Define.
+    (ISHEX4): Define.
+    (ice_read_hex_file): New.
+    (ice_calculate_crc): New.
+    (ice_send_flash_data): New.
+    (ice_firmware_crc): New.
+    (ice_update_firmware): New.
+    (ice_connect): Handle firmware parameter.
+    (kit_10_connect): Initialize firmware_filename to NULL.
+    (kit_20_connect): Likewise.
+    (ice_init): Add firmware updater.
+    (ice_cable_free): Free firmware_filename.
+    (ice_cable_help): New.
+    (urj_tap_cable_ice100B_driver): Use ice_cable_help.
+    Add Emacs file local variables.
+
+2011-07-13  Jie Zhang  <jie.zhang@analog.com>
+
   * include/urjtag/parse.h (urj_parse_stream): Update declaration.
     (urj_parse_file): Likewise.
   * include/urjtag/log.h (urj_do_log): Add file, line, func parameters.

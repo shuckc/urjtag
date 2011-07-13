@@ -64,6 +64,7 @@ typedef enum URJ_CABLE_PARAM_KEY
     URJ_CABLE_PARAM_KEY_TMS,            /* lu           gpio used as TMS */
     URJ_CABLE_PARAM_KEY_TCK,            /* lu           gpio used as TCK */
     URJ_CABLE_PARAM_KEY_INTERFACE,      /* lu           ftdi */
+    URJ_CABLE_PARAM_KEY_FIRMWARE,       /* string       ice100 */
 }
 urj_cable_param_key_t;
 

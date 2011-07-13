@@ -33,6 +33,8 @@
 #include <urjtag/chain.h>
 #include <urjtag/cmd.h>
 
+#include "libiberty.h"
+
 #include "generic.h"
 #include "generic_usbconn.h"
 
@@ -93,6 +95,7 @@ typedef struct
     uint32_t wr_buf_addr;            /* USB: For Kits */
     uint32_t r_buf_addr;             /* USB: For Kits */
     num_tap_pairs tap_info;          /* For collecting and sending tap scans */
+    char *firmware_filename;         /* The update firmware file name */
 } params_t;
 
 /* Emulators's USB Data structure */
@@ -167,6 +170,7 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 #define HOST_GET_SINGLE_REG             0x08    /* set a JTAG register */
 #define HOST_SET_SINGLE_REG             0x09    /* set a JTAG register */
 #define HOST_DO_RAW_SCAN                0x0A    /* do a raw scan */
+#define HOST_PROGRAM_FLASH              0x0C    /* program flash */
 #define HOST_HARD_RESET_JTAG_CTRLR      0x0E    /* do a hard reset on JTAG controller */
 #define    HOST_FAST_MODE               0x10    /* Sets Kits in right mode */
 #define HOST_SC_AUTHENTICATE            0x17    /* Kit 20 */
@@ -214,6 +218,9 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 #define BLACKFIN_DATA_BUFFER_OUT_ADDRESS        0xF0006100
 #define BLACKFIN_DATA_BUFFER_IN_ADDRESS         0xF000A000
 
+#define ICE100B_DOC_URL \
+    "http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:ice100b"
+
 /* frequency settings for ice-100b */
 #define MAX_FREQ    4        /* size of freq_set */
 static const uint8_t freq_set[MAX_FREQ]     = { 9, 4, 2, 1 };
@@ -236,10 +243,9 @@ do { \
                                   &__actual, cable_params->r_timeout); \
     if (__ret || __actual != __size) \
     { \
-        urj_log (URJ_LOG_LEVEL_ERROR, \
-                 _("%s: unable to read from usb to " #buf ": %i;" \
-                   "wanted %i bytes but only received %i bytes"), \
-                 __func__, __ret, __size, __actual); \
+        urj_error_IO_set (_("%s: unable to read from usb to " #buf ": %i;" \
+                            "wanted %i bytes but only received %i bytes"), \
+                          __func__, __ret, __size, __actual); \
         return URJ_STATUS_FAIL; \
     } \
 } while (0)
@@ -253,10 +259,9 @@ do { \
                                   &__actual, cable_params->wr_timeout); \
     if (__ret || __actual != __size) \
     { \
-        urj_log (URJ_LOG_LEVEL_ERROR, \
-                 _("%s: unable to write from " #buf " to usb: %i;" \
-                   "wanted %i bytes but only wrote %i bytes"), \
-                 __func__, __ret, __size, __actual); \
+        urj_error_IO_set (_("%s: unable to write from " #buf " to usb: %i;" \
+                            "wanted %i bytes but only wrote %i bytes"), \
+                          __func__, __ret, __size, __actual); \
         return URJ_STATUS_FAIL; \
     } \
 } while (0)
@@ -395,13 +400,367 @@ static int adi_connect (urj_cable_t *cable, const urj_param_t *params[])
     return URJ_STATUS_OK;
 }
 
+struct flash_block
+{
+    uint32_t addr;
+    int bytes;
+    uint8_t *data;
+    struct flash_block *next;
+};
+
+/* Macros for converting between hex and binary.  */
+
+#define NIBBLE(x)      (hex_value (x))
+#define HEX2(buffer)   ((NIBBLE ((buffer)[0]) << 4) + NIBBLE ((buffer)[1]))
+#define HEX4(buffer)   ((HEX2 (buffer) << 8) + HEX2 ((buffer) + 2))
+#define ISHEX(x)       (hex_p (x))
+#define ISHEX2(buffer) (ISHEX ((buffer)[0]) && ISHEX ((buffer)[1]))
+#define ISHEX4(buffer) (ISHEX2 (buffer) && ISHEX2 ((buffer + 2)))
+
+
+static int
+ice_read_hex_file (const char *filename, struct flash_block **flash_list)
+{
+    FILE *hex_file;
+    char *input_line, *p;
+    size_t len;
+    int lineno, i;
+    bool done = false;
+    struct flash_block *last_flash_block = NULL, *q;
+    int base_address = 0;
+
+    hex_file = fopen (filename, "rbe");
+    if (!hex_file)
+    {
+        urj_error_IO_set (_("Unable to open file `%s'"), filename);
+        return URJ_STATUS_FAIL;
+    }
+
+    hex_init ();
+
+    input_line = NULL;
+    len = 0;
+    lineno = 0;
+    while (getline (&input_line, &len, hex_file) != -1 && !done)
+    {
+        int byte_count, address, record_type, checksum;
+        int sum;
+
+        lineno++;
+        p = input_line;
+        /* A line should contain
+           1. start code : 1 character ':'
+           2. byte count : 2 hex digits
+           3. address    : 4 hex digits
+           4. record type: 2 hex digits
+           5. data       : 2n hex digits
+           6. checksum   : 2 hex digits */
+        if (len < 11)
+        {
+            urj_error_set (URJ_ERROR_FIRMWARE,
+                           _("Line %d is too short in file %s"),
+                           lineno, filename);
+            return URJ_STATUS_FAIL;
+        }
+
+        if (*p++ != ':')
+        {
+            urj_error_set (URJ_ERROR_FIRMWARE,
+                           _("Invalid start code on line %d in file %s"),
+                           lineno, filename);
+            return URJ_STATUS_FAIL;
+        }
+
+        if (!ISHEX2 (p))
+        {
+            urj_error_set (URJ_ERROR_FIRMWARE,
+                           _("Bad byte count on line %d in file %s"),
+                           lineno, filename);
+            return URJ_STATUS_FAIL;
+        }
+        byte_count = HEX2 (p);
+        p += 2;
+        sum = byte_count;
+
+        if (!ISHEX4 (p))
+        {
+            urj_error_set (URJ_ERROR_FIRMWARE,
+                           _("Bad address on line %d in file %s"),
+                           lineno, filename);
+            return URJ_STATUS_FAIL;
+        }
+        address = HEX4 (p);
+        p += 4;
+        sum += (address >> 8) + (address & 0xff);
+        sum &= 0xff;
+
+        /* record type */
+        if (!ISHEX2 (p))
+            goto bad_record_type;
+        record_type = HEX2 (p);
+        p += 2;
+        sum += record_type;
+        sum &= 0xff;
+
+        switch (record_type)
+        {
+        case 0:
+            q = last_flash_block;
+
+            if (!q
+                || q->addr + q->bytes != base_address + address)
+            {
+                q = malloc (sizeof (*q));
+                if (!q)
+                {
+                    urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                                   _("malloc (%zd) failed"), sizeof (*q));
+                    return URJ_STATUS_FAIL;
+                }
+                q->addr = base_address + address;
+                q->data = NULL;
+                q->bytes = 0;
+                q->next = NULL;
+
+                if (last_flash_block)
+                    last_flash_block->next = q;
+                else
+                    *flash_list = q;
+                last_flash_block = q;
+            }
+
+            q->data = realloc (q->data, q->bytes + byte_count);
+            if (!q->data)
+            {
+                urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
+                               _("realloc (%d) failed"),
+                               q->bytes + byte_count);
+                return URJ_STATUS_FAIL;
+            }
+
+            for (i = 0; i < byte_count; i++)
+            {
+                int data;
+
+                if (!ISHEX2 (p))
+                {
+                    urj_error_set (URJ_ERROR_FIRMWARE,
+                                   _("Bad HEX data %c%c on line %d in file %s"),
+                                   p[0], p[1], lineno, filename);
+                    return URJ_STATUS_FAIL;
+                }
+                data = HEX2 (p);
+                q->data[q->bytes] = data;
+                q->bytes++;
+                p += 2;
+                sum += data;
+            }
+            break;
+
+        case 1:
+            done = true;
+            break;
+
+        case 2:
+            /* fall through */
+        case 4:
+            if (!ISHEX4 (p))
+            {
+                urj_error_set (URJ_ERROR_FIRMWARE,
+                               _("Bad extended segment address on line %d in file %s"),
+                               lineno, filename);
+                return URJ_STATUS_FAIL;
+            }
+            base_address = HEX4 (p);
+            sum += (base_address >> 8) + (base_address & 0xff);
+            sum &= 0xff;
+            base_address <<= (record_type == 2 ? 4 : 16);
+            p += 4;
+            break;
+
+        default:
+        bad_record_type:
+            urj_error_set (URJ_ERROR_FIRMWARE,
+                           _("Bad HEX record type on line %d in file %s"),
+                           lineno, filename);
+            return URJ_STATUS_FAIL;
+        }
+
+        if (!ISHEX2 (p))
+        {
+            urj_error_set (URJ_ERROR_FIRMWARE,
+                           _("Bad HEX checksum on line %d in file %s"),
+                           lineno, filename);
+            return URJ_STATUS_FAIL;
+        }
+        checksum = HEX2 (p);
+        if (((sum + checksum) & 0xff) != 0)
+        {
+            urj_error_set (URJ_ERROR_FIRMWARE,
+                           _("The checksum is not correct on line %d in file %s"),
+                           lineno, filename);
+            return URJ_STATUS_FAIL;
+        }
+    }
+    return URJ_STATUS_OK;
+}
+
+/* Calculate the CRC using forward CRC-16-CCITT algorithm.  */
+
+static uint16_t
+ice_calculate_crc (struct flash_block *p)
+{
+    uint16_t crc = 0xffff;
+
+    while (p)
+    {
+        int i;
+
+        for (i = 0; i < p->bytes; i++)
+        {
+            uint8_t byte = p->data[i];
+            int j;
+
+            for (j = 0; j < 8; j++)
+            {
+                bool add = ((crc >> 15) != (byte >> 7));
+                crc <<= 1;
+                byte <<= 1;
+                if (add)
+                    crc ^= 0x1021;
+            }
+        }
+        p = p->next;
+    }
+
+    return crc;
+}
+
+static int
+ice_send_flash_data (urj_cable_t *cable, struct flash_block *p, uint16_t crc)
+{
+    params_t *cable_params = cable->params;
+    /* ICE_100B_READ_BUFFER_SIZE / 4 (i.e. 0x2000) was chosen by experiments.
+       It might not be related to ICE_100B_READ_BUFFER_SIZE at all.  */
+    uint8_t buffer[ICE_100B_READ_BUFFER_SIZE / 4];
+    uint8_t first = 1, last = 0;
+
+    while (p)
+    {
+        int remaining = p->bytes;
+        uint32_t address = p->addr;
+
+        while (remaining)
+        {
+            usb_command_block usb_cmd_blk;
+            uint32_t count;
+
+            urj_log (URJ_LOG_LEVEL_NORMAL, "updating ...\n");
+
+            if (remaining < ICE_100B_READ_BUFFER_SIZE / 4 - 16)
+                count = remaining;
+            else
+                count = ICE_100B_READ_BUFFER_SIZE / 4 - 16;
+            remaining -= count;
+            if (remaining == 0)
+                last = 1;
+
+            buffer[0] = first;
+            buffer[1] = last;
+            buffer[2] = HOST_PROGRAM_FLASH;
+            buffer[3] = 0;
+            memcpy (buffer + 4, &address, 4);
+            memcpy (buffer + 8, &count, 4);
+            memcpy (buffer + 12, &crc, 2);
+            memcpy (buffer + 16, p->data + p->bytes - remaining - count, count);
+
+            usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
+            usb_cmd_blk.count = count + 16;
+            usb_cmd_blk.buffer = cable_params->wr_buf_addr;
+            adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
+
+            adi_usb_write_or_ret (cable->link.usb->params, buffer, usb_cmd_blk.count);
+
+            first = 0;
+
+            address += count;
+        }
+
+        p = p->next;
+    }
+
+    urj_log (URJ_LOG_LEVEL_NORMAL, "done\n");
+
+    return URJ_STATUS_OK;
+}
+
+/* The CRC is stored in the output buffer after programming the firmware
+   into the flash.  Read the buffer after programming get the CRC.  */
+
+static int
+ice_firmware_crc (urj_cable_t *cable, uint16_t *p)
+{
+    params_t *cable_params = cable->params;
+    usb_command_block usb_cmd_blk;
+
+    usb_cmd_blk.command = HOST_REQUEST_RX_DATA;
+    usb_cmd_blk.count = 2;
+    usb_cmd_blk.buffer = 0;
+
+    adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
+
+    adi_usb_read_or_ret (cable->link.usb->params, p, sizeof (*p));
+
+    return URJ_STATUS_OK;
+}
+
+static int
+ice_update_firmware (urj_cable_t *cable, const char *filename)
+{
+    struct flash_block *flash_list = NULL, *p;
+    unsigned short crc1, crc2;
+    int ret;
+
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Updating to firmware %s\n"), filename);
+
+    if ((ret = ice_read_hex_file (filename, &flash_list)) != URJ_STATUS_OK)
+        return ret;
+
+    crc1 = ice_calculate_crc (flash_list);
+
+    ret = ice_send_flash_data (cable, flash_list, crc1);
+    if (ret != URJ_STATUS_OK)
+        return ret;
+
+    if ((ret = ice_firmware_crc (cable, &crc2)) != URJ_STATUS_OK)
+        return ret;
+
+    while (flash_list)
+    {
+        p = flash_list->next;
+        free (flash_list->data);
+        free (flash_list);
+        flash_list = p;
+    }
+
+    if (crc1 == crc2)
+    {
+        return URJ_STATUS_OK;
+    }
+    else
+    {
+        urj_error_set (URJ_ERROR_FIRMWARE, _("CRCs do NOT match"));
+        return URJ_STATUS_FAIL;
+    }
+}
+
 /*
  * This function sets us up the cable and data
  */
 static int ice_connect (urj_cable_t *cable, const urj_param_t *params[])
 {
     params_t *cable_params;
-    int ret;
+    int ret, i;
 
     if ((ret = adi_connect (cable, params)) != URJ_STATUS_OK)
         return ret;
@@ -419,6 +778,26 @@ static int ice_connect (urj_cable_t *cable, const urj_param_t *params[])
     cable_params->wr_buf_addr     = 0;
     cable_params->r_buf_addr      = 0;
     cable_params->bytewize_scan   = 1;
+    cable_params->firmware_filename = NULL;
+
+    if (params != NULL)
+        for (i = 0; params[i] != NULL; i++)
+        {
+            switch (params[i]->key)
+            {
+            case URJ_CABLE_PARAM_KEY_FIRMWARE:
+                cable_params->firmware_filename = strdup (params[i]->value.string);
+                if (!cable_params->firmware_filename)
+                {
+                    urj_log (URJ_LOG_LEVEL_ERROR,
+                             _("strdup (%s) fails\n"), params[i]->value.string);
+                    return URJ_STATUS_FAIL;
+                }
+                break;
+            default:
+                break;
+            }
+        }
 
     return URJ_STATUS_OK;
 }
@@ -447,6 +826,7 @@ static int kit_10_connect (urj_cable_t *cable, const urj_param_t *params[])
     cable_params->wr_buf_addr     = BLACKFIN_OLD_DATA_BUFFER_OUT_ADDRESS;
     cable_params->r_buf_addr      = BLACKFIN_OLD_DATA_BUFFER_IN_ADDRESS;
     cable_params->bytewize_scan   = 0;
+    cable_params->firmware_filename = NULL;
 
     return URJ_STATUS_OK;
 }
@@ -475,6 +855,7 @@ static int kit_20_connect (urj_cable_t *cable, const urj_param_t *params[])
     cable_params->wr_buf_addr     = BLACKFIN_DATA_BUFFER_OUT_ADDRESS;
     cable_params->r_buf_addr      = BLACKFIN_DATA_BUFFER_IN_ADDRESS;
     cable_params->bytewize_scan   = 0;
+    cable_params->firmware_filename = NULL;
 
     return URJ_STATUS_OK;
 }
@@ -485,6 +866,7 @@ static int kit_20_connect (urj_cable_t *cable, const urj_param_t *params[])
 static int ice_init (urj_cable_t *cable)
 {
     params_t *cable_params = cable->params;
+    int ret;
 
     /* Open usb conn port */
     if (urj_tap_usbconn_open (cable->link.usb))
@@ -492,7 +874,7 @@ static int ice_init (urj_cable_t *cable)
 
     cable_params->version = do_host_cmd (cable, HOST_GET_FW_VERSION, 0, 1);
     do_host_cmd (cable, HOST_HARD_RESET_JTAG_CTRLR, 0, 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, "%s Firmware Version is %d.%d.%d\n",
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("%s firmware version is %d.%d.%d\n"),
              cable->driver->name,
              ((cable_params->version >> 8) & 0xFF),
              ((cable_params->version >> 4) & 0x0F),
@@ -501,9 +883,30 @@ static int ice_init (urj_cable_t *cable)
     if (cable_params->version < 0x0107)
     {
         urj_log (URJ_LOG_LEVEL_ERROR,
-                 _("The firmware on the ICE-100b needs to be upgraded. Please go to:\n"
-                   "%sto learn how to update the firmware.\n"),
-                   "http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:ice100b\n");
+                 _("The firmware on the ICE-100B needs to be updated. "
+                   "Please go to <%s> to learn how to update the firmware.\n"), ICE100B_DOC_URL);
+    }
+
+    if (cable_params->firmware_filename)
+    {
+        ret = ice_update_firmware (cable, cable_params->firmware_filename);
+
+        if (ret == URJ_STATUS_OK)
+        {
+            urj_log (URJ_LOG_LEVEL_NORMAL,
+                     _("The firmware has been updated successfully. "
+                       "Please unplug the ICE-100B cable and reconnect it to finish the update process.\n"));
+        }
+        else
+        {
+            urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
+            urj_log (URJ_LOG_LEVEL_ERROR,
+                     _("The firmware failed to update.\n"));
+        }
+    }
+
+    if (cable_params->version < 0x0107 || cable_params->firmware_filename)
+    {
         return URJ_STATUS_FAIL;
     }
 
@@ -626,6 +1029,7 @@ static void ice_cable_free (urj_cable_t *cable)
         tap_info->cur_dat = -1;
         tap_info->rcv_dat = -1;
     }
+    free (cable_params->firmware_filename);
     urj_tap_cable_generic_usbconn_free (cable);
 }
 
@@ -1849,6 +2253,15 @@ static int do_rawscan (urj_cable_t *cable, uint8_t firstpkt, uint8_t lastpkt,
     return URJ_STATUS_OK;
 }
 
+static void
+ice_cable_help (urj_log_level_t ll, const char *cablename)
+{
+    const char *ex_short = "[firmware=FILE]";
+    const char *ex_desc = "FILE       Upgrade the ICE firmware.  See this page:\n"
+        "           " ICE100B_DOC_URL "\n";
+    urj_tap_cable_generic_usbconn_help_ex (ll, cablename, ex_short, ex_desc);
+}
+
 /*
  * Cable Intefaces
  */
@@ -1870,7 +2283,7 @@ const urj_cable_driver_t urj_tap_cable_ice100B_driver = {
     ice_set_sig,
     ice_get_sig,
     adi_flush,
-    urj_tap_cable_generic_usbconn_help,
+    ice_cable_help,
     URJ_CABLE_QUIRK_ONESHOT
 };
 URJ_DECLARE_USBCONN_CABLE(0x064B, 0x0225, "libusb", "ICE-100B", ice100B)
@@ -1920,3 +2333,11 @@ const urj_cable_driver_t urj_tap_cable_ezkit_20_driver = {
 };
 URJ_DECLARE_USBCONN_CABLE(0x064B, 0x3217, "libusb", "EZ-KIT-2.0", ezkit_20_bf518)
 URJ_DECLARE_USBCONN_CABLE(0x064B, 0x3212, "libusb", "EZ-KIT-2.0", ezkit_20_bf526)
+
+/*
+ Local Variables:
+ mode:C
+ c-default-style:gnu
+ indent-tabs-mode:nil
+ End:
+*/

@@ -73,6 +73,8 @@ typedef enum URJ_ERROR
     URJ_ERROR_PLD,
 
     URJ_ERROR_UNIMPLEMENTED,
+
+    URJ_ERROR_FIRMWARE,
 }
 urj_error_t;
 

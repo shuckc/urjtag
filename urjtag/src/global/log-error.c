@@ -200,6 +200,8 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_PLD:                 return "pld subsystem";
 
     case URJ_ERROR_UNIMPLEMENTED:       return "unimplemented";
+
+    case URJ_ERROR_FIRMWARE:            return "firmware";
     }
 
     return "UNDEFINED ERROR";
