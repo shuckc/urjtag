@@ -1,3 +1,31 @@
+2011-07-13  Jie Zhang  <jie.zhang@analog.com>
+
+  * include/urjtag/parse.h (urj_parse_stream): Update declaration.
+    (urj_parse_file): Likewise.
+  * include/urjtag/log.h (urj_do_log): Add file, line, func parameters.
+    (urj_log): Pass __FILE__, __LINE__, __func__ to urj_do_log.
+    (urj_warning): Use urj_log.
+    (urj_log_error_describe): Declare.
+  * src/tap/detect.c (urj_tap_detect_parts): Use urj_log_error_describe.
+  * src/global/log-error.c: Include <stdbool.h>.
+    (log_printf): New.
+    (urj_do_log): Print log level prefix for error, warning, or when
+    log level is URJ_LOG_LEVEL_DETAIL or lower.
+    Print file, line, func when log level is URJ_LOG_LEVEL_DEBUG
+    or lower.
+    (urj_error_describe): Don't include file, line, or function.
+    (urj_log_error_describe): New.
+  * src/global/parse.c (urj_parse_stream): Remove log level argument.
+    Use urj_log_error_describe.
+    (urj_parse_file): Remove log level argument.
+    (urj_parse_include): Update use of urj_parse_file.
+  * src/apps/jtag/jtag.c (jtag_readline_multiple_commands_support):
+    Use urj_log_error_describe.
+    (jtag_parse_rc): Update use of urj_parse_file.
+    (main): Update use of urj_parse_file and urj_parse_stream.
+    Use urj_log_warning.
+  * src/apps/bsdl2jtag/bsdl2jtag.c (main): Use urj_log_error.
+
 2011-07-07  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/bus_driver.h, src/bus/generic_bus.c, src/bus/generic_bus.h:

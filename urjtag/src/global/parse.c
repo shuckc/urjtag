@@ -213,7 +213,7 @@ static ssize_t getline(char **line, size_t *len, FILE *f)
 #endif
 
 int
-urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f)
+urj_parse_stream (urj_chain_t *chain, FILE *f)
 {
     char *inputline, *p;
     size_t len;
@@ -248,8 +248,8 @@ urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f)
         go = urj_parse_line (chain, inputline);
         if (go == URJ_STATUS_FAIL)
         {
-            urj_log (ll, "Error: %s; command '%s'\n", urj_error_describe(), inputline);
-            urj_error_reset ();
+            urj_log (URJ_LOG_LEVEL_ERROR, "when parsing command '%s'\n", inputline);
+            urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
         }
         urj_tap_chain_flush (chain);
     }
@@ -261,7 +261,7 @@ urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f)
 }
 
 int
-urj_parse_file (urj_log_level_t ll, urj_chain_t *chain, const char *filename)
+urj_parse_file (urj_chain_t *chain, const char *filename)
 {
     FILE *f;
     int go;
@@ -273,7 +273,7 @@ urj_parse_file (urj_log_level_t ll, urj_chain_t *chain, const char *filename)
         return URJ_STATUS_FAIL;
     }
 
-    go = urj_parse_stream (ll, chain, f);
+    go = urj_parse_stream (chain, f);
 
     fclose (f);
     urj_log (URJ_LOG_LEVEL_DEBUG, "File Closed go=%d\n", go);
@@ -332,7 +332,7 @@ urj_parse_include (urj_chain_t *chain, const char *filename, int ignore_path)
     else
 #endif
     {
-        r = urj_parse_file (URJ_LOG_LEVEL_NORMAL, chain, filename);
+        r = urj_parse_file (chain, filename);
     }
 
     free (path);

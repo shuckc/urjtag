@@ -63,7 +63,7 @@ int urj_parse_line (urj_chain_t *chain, const char *line);
  *      URJ_STATUS_ERROR on error
  *      URJ_STATUS_QUIT on quit command
  */
-int urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f);
+int urj_parse_stream (urj_chain_t *chain, FILE *f);
 
 /**
  * Open the specified file and run through urj_parse_stream().
@@ -73,8 +73,7 @@ int urj_parse_stream (urj_log_level_t ll, urj_chain_t *chain, FILE *f);
  *      URJ_STATUS_ERROR on error
  *      URJ_STATUS_QUIT on quit command
  */
-int urj_parse_file (urj_log_level_t ll, urj_chain_t *chain,
-                    const char *filename);
+int urj_parse_file (urj_chain_t *chain, const char *filename);
 
 /**
  * Include a file. Autodetects whether it is a bsdl file or a UrJTAG command

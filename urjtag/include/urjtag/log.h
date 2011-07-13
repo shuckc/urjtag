@@ -40,16 +40,17 @@ urj_log_state_t;
 
 extern urj_log_state_t urj_log_state;
 
-int urj_do_log (urj_log_level_t level, const char *fmt, ...)
+int urj_do_log (urj_log_level_t level, const char *file, size_t line,
+                const char *func, const char *fmt, ...)
 #ifdef __GNUC__
-                        __attribute__ ((format (printf, 2, 3)))
+                        __attribute__ ((format (printf, 5, 6)))
 #endif
     ;
 
 #define urj_log(lvl, ...) \
         do { \
             if ((lvl) >= urj_log_state.level) \
-                urj_do_log (lvl, __VA_ARGS__); \
+                urj_do_log (lvl, __FILE__, __LINE__, __func__, __VA_ARGS__); \
         } while (0)
 
 /**
@@ -59,12 +60,12 @@ int urj_do_log (urj_log_level_t level, const char *fmt, ...)
  * @param ... consists of a printf argument set. It needs to start with a
  *      const char *fmt, followed by arguments used by fmt.
  */
-#define urj_warning(...) \
-    do { \
-        urj_log (URJ_LOG_LEVEL_WARNING, "%s:%d %s() Warning: ", \
-                 __FILE__, __LINE__, __func__); \
-        urj_log (URJ_LOG_LEVEL_WARNING, __VA_ARGS__); \
-    } while (0)
+#define urj_warning(...) urj_log (URJ_LOG_LEVEL_WARNING, __VA_ARGS__)
+
+/**
+ * Print the error set by urj_error_set and call urj_error_reset.
+ */
+void urj_log_error_describe (urj_log_level_t level);
 
 /**
  * Convert the named level into the corresponding urj_log_level_t.

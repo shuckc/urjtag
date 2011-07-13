@@ -247,10 +247,7 @@ jtag_readline_multiple_commands_support (urj_chain_t *chain, char *line)        
 
         r = urj_parse_line (chain, line);
         if (r == URJ_STATUS_FAIL)
-        {
-            urj_log (URJ_LOG_LEVEL_NORMAL, "Error: %s\n", urj_error_describe());
-            urj_error_reset ();
-        }
+            urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
 
         urj_tap_chain_flush (chain);
 
@@ -336,7 +333,7 @@ jtag_parse_rc (urj_chain_t *chain)
     if (!file)
         return URJ_STATUS_FAIL;
 
-    go = urj_parse_file (URJ_LOG_LEVEL_DETAIL, chain, file);
+    go = urj_parse_file (chain, file);
 
     free (file);
 
@@ -485,7 +482,7 @@ main (int argc, char *const argv[])
                 return -1;
             }
 
-            go = urj_parse_file (URJ_LOG_LEVEL_NORMAL, chain, argv[i]);
+            go = urj_parse_file (chain, argv[i]);
             cleanup (chain);
             if (go < 0 && go != URJ_STATUS_MUST_QUIT)
             {
@@ -507,7 +504,7 @@ main (int argc, char *const argv[])
             printf (_("Out of memory\n"));
             return -1;
         }
-        urj_parse_stream (URJ_LOG_LEVEL_NORMAL, chain, stdin);
+        urj_parse_stream (chain, stdin);
 
         cleanup (chain);
 
@@ -540,10 +537,7 @@ main (int argc, char *const argv[])
 
     /* Create ~/.jtag */
     if (jtag_create_jtagdir () != URJ_STATUS_OK)
-    {
-        urj_warning ("%s\n", urj_error_describe());
-        urj_error_reset();
-    }
+        urj_log_error_describe (URJ_LOG_LEVEL_WARNING);
 
     /* Parse and execute the RC file */
     if (!norc)
@@ -553,10 +547,10 @@ main (int argc, char *const argv[])
             if (urj_error_get() != URJ_ERROR_IO)
             {
                 /* Only warn about RC problems; don't prevent running */
-                urj_log (URJ_LOG_LEVEL_NORMAL, "Error: %s\n",
-                         urj_error_describe());
+                urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
             }
-            urj_error_reset();
+            else
+                urj_error_reset();
         }
     }
 

@@ -68,8 +68,7 @@ main (int argc, char *const argv[])
     chain = urj_tap_chain_alloc ();
     if (chain == NULL)
     {
-        urj_log (URJ_LOG_LEVEL_NORMAL, "Error: %s\n",
-                 urj_error_describe());
+        urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
         return 1;
     }
 
@@ -92,10 +91,7 @@ main (int argc, char *const argv[])
     urj_log_state.out_vprintf = log_to_file;
     result = urj_bsdl_read_file (chain, argv[1], URJ_BSDL_MODE_DUMP, NULL);
     if (result < 0)
-    {
-        urj_log (URJ_LOG_LEVEL_ERROR, "Error: %s\n", urj_error_describe());
-        urj_error_reset ();
-    }
+        urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
 
     fclose (jtag_file);
     cleanup (chain);

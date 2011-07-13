@@ -26,6 +26,7 @@
 #include <stdarg.h>
 #include <errno.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include <urjtag/log.h>
 #include <urjtag/error.h>
@@ -59,20 +60,44 @@ stdout_vprintf(const char *fmt, va_list ap)
     return r;
 }
 
-int
-urj_do_log (urj_log_level_t level, const char *fmt, ...)
+static int
+log_printf (int (*p) (const char *, va_list), const char *fmt, ...)
 {
     va_list ap;
     int r;
 
+    va_start (ap, fmt);
+    r = (*p) (fmt, ap);
+    va_end (ap);
+
+    return r;
+}
+
+int
+urj_do_log (urj_log_level_t level, const char *file, size_t line,
+            const char *func, const char *fmt, ...)
+{
+    int (*p) (const char *fmt, va_list ap);
+    va_list ap;
+    int r = 0;
+
     if (level < urj_log_state.level)
         return 0;
 
-    va_start (ap, fmt);
     if (level < URJ_LOG_LEVEL_WARNING)
-        r = urj_log_state.out_vprintf (fmt, ap);
+        p = urj_log_state.out_vprintf;
     else
-        r = urj_log_state.err_vprintf (fmt, ap);
+        p = urj_log_state.err_vprintf;
+
+    if (level == URJ_LOG_LEVEL_WARNING || level == URJ_LOG_LEVEL_ERROR
+        || level <= URJ_LOG_LEVEL_DETAIL)
+        r += log_printf (p, "%s: ", urj_log_level_string (level));
+
+    if (urj_log_state.level <= URJ_LOG_LEVEL_DEBUG)
+        r += log_printf (p, "%s:%i %s(): ", file, line, func);
+
+    va_start (ap, fmt);
+    r += (*p) (fmt, ap);
     va_end (ap);
 
     return r;
@@ -187,20 +212,30 @@ urj_error_describe (void)
 
     if (urj_error_state.errnum == URJ_ERROR_IO)
     {
-        snprintf (msg, sizeof msg, "%s:%d %s() %s: %s %s",
-                  urj_error_state.file, urj_error_state.line,
-                  urj_error_state.function,
-                  "System error", strerror(urj_error_state.sys_errno),
+        snprintf (msg, sizeof msg, "%s: %s %s",
+                  "system error", strerror(urj_error_state.sys_errno),
                   urj_error_state.msg);
     }
     else
     {
-        snprintf (msg, sizeof msg, "%s:%d %s() %s: %s",
-                  urj_error_state.file, urj_error_state.line,
-                  urj_error_state.function,
+        snprintf (msg, sizeof msg, "%s: %s",
                   urj_error_string (urj_error_state.errnum),
                   urj_error_state.msg);
     }
 
     return msg;
+}
+
+void
+urj_log_error_describe (urj_log_level_t level)
+{
+    if (urj_error_get () == URJ_ERROR_OK)
+        return;
+
+    urj_do_log (level,
+                urj_error_state.file, urj_error_state.line,
+                urj_error_state.function,
+                "%s\n", urj_error_describe ());
+
+    urj_error_reset ();
 }

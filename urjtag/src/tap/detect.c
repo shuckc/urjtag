@@ -426,11 +426,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             strcpy (part->part, partname);
             strcpy (part->stepping, stepping);
             if (urj_parse_include (chain, data_path, 0) == URJ_STATUS_FAIL)
-            {
-                urj_log (URJ_LOG_LEVEL_NORMAL, "Error: %s\n",
-                         urj_error_describe());
-                urj_error_reset();
-            }
+                urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
 #ifdef ENABLE_BSDL
         }
 #endif
