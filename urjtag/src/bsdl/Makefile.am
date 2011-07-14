@@ -46,10 +46,6 @@ noinst_HEADERS = \
 
 AM_CFLAGS = $(WARNINGCFLAGS)
 
-libbsdl_flex_la_CFLAGS = \
-	$(AM_CFLAGS) \
-	-Wno-error
-
 # additional dependencies
 # - *_flex files must be processed after their *_bison counterparts
 #   to ensure that *_bison.h is present

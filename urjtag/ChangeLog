@@ -1,3 +1,11 @@
+2011-07-13  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/lex.h: New file for lex workarounds.
+  * src/bsdl/vhdl_flex.l, src/bsdl/bsdl_flex.l, src/svf/svf_flex.l: Pull
+    in new lex.h header to workaround random gcc warnings.
+  * src/bsdl/Makefile.am, src/svf/Makefile.am: Drop -Wno-error now that
+    the lex files compile warning free.
+
 2011-07-13  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/cable.h (urj_cable_param_key_t): Add

@@ -66,6 +66,11 @@ int yywrap(yyscan_t scanner)
         yylloc->first_line = yylloc->last_line = yylloc->first_column = yylloc->last_column = 1; \
     } while (0)
 
+/* Fix up warnings from generated lex code */
+#define lex_get_column yyget_column
+#define lex_set_column yyset_column
+#include "lex.h"
+
 %}
 
 %pointer

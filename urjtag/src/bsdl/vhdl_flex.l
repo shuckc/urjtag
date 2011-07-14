@@ -148,6 +148,11 @@ static char *new_string (urj_bsdl_scan_extra_t *, const char *);
 #define DECIMAL 1
 #define BIN_X   2
 
+/* Fix up warnings from generated lex code */
+#define lex_get_column yyget_column
+#define lex_set_column yyset_column
+#include "lex.h"
+
 %}
 %a  2800
 %e  1200
