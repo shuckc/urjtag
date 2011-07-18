@@ -1,3 +1,9 @@
+2011-07-18  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/bsdl/Makefile.am (VHDL_BISON_OBJS): Correct object file name.
+    (BSDL_BISON_OBJS): Likewise.
+  * src/svf/Makefile.am (SVF_BISON_OBJS): Likewise.
+
 2011-07-13  Mike Frysinger  <vapier@gentoo.org>
 
   * include/lex.h: New file for lex workarounds.

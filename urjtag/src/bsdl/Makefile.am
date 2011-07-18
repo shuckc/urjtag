@@ -50,8 +50,8 @@ AM_CFLAGS = $(WARNINGCFLAGS)
 # - *_flex files must be processed after their *_bison counterparts
 #   to ensure that *_bison.h is present
 # - we use variables to workaround automake rule/dependency limitations
-VHDL_BISON_OBJS = libbsdl_flex_la-vhdl_flex.lo
-BSDL_BISON_OBJS = libbsdl_flex_la-bsdl_flex.lo bsdl_sem.lo
+VHDL_BISON_OBJS = vhdl_flex.lo
+BSDL_BISON_OBJS = bsdl_flex.lo bsdl_sem.lo
 $(VHDL_BISON_OBJS): vhdl_bison.h
 $(BSDL_BISON_OBJS): bsdl_bison.h
 vhdl_bison.h: vhdl_bison.c ; @true

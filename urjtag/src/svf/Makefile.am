@@ -41,7 +41,7 @@ AM_CFLAGS = $(WARNINGCFLAGS)
 # - *_flex files must be processed after their *_bison counterparts
 #   to ensure that *_bison.h is present
 # - we use variables to workaround automake rule/dependency limitations
-SVF_BISON_OBJS = libsvf_flex_la-svf_flex.lo svf.lo
+SVF_BISON_OBJS = svf_flex.lo svf.lo
 $(SVF_BISON_OBJS): svf_bison.h
 svf_bison.h: svf_bison.c ; @true
 
