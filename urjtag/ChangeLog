@@ -1,5 +1,17 @@
 2011-07-18  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/global/parse.c (getline): Remove.
+  * src/cmd/cmd_bfin.c (cmd_bfin_run): Update comment.
+  * src/lib/getline.c: New file.
+  * src/lib/getdelim.c: New file.
+  * src/lib/Makefile.am (libjtaglib_la_SOURCES): Add getdelim.c and
+    getline.c.
+  * sysdep.h (getline): Declare.
+  * configure.ac: Check getdelim.
+  * po/POTFILES.in: Add src/lib/getdelim.c and src/lib/getline.c.
+
+2011-07-18  Jie Zhang  <jie.zhang@analog.com>
+
   * src/bsdl/Makefile.am (VHDL_BISON_OBJS): Correct object file name.
     (BSDL_BISON_OBJS): Likewise.
   * src/svf/Makefile.am (SVF_BISON_OBJS): Likewise.

@@ -171,47 +171,6 @@ urj_parse_line (urj_chain_t *chain, const char *line)
     return r;
 }
 
-#ifndef HAVE_GETLINE
-#define MAXINPUTLINE 300        /* Maximum input line length */
-static ssize_t getline(char **line, size_t *len, FILE *f)
-{
-    static int lnr;
-    char *p;
-
-    ++lnr;
-    if (!*line)
-    {
-        *len = MAXINPUTLINE + 1;
-        *line = malloc (*len);
-    }
-
-    if (fgets (*line, *len, f) == NULL)
-        return -1;
-
-    /* Clip any comments */
-    p = strchr (*line, '#');
-    if (p)
-    {
-        p[0] = '\n';
-        p[1] = '\0';
-    }
-
-    /* Make sure the line wasn't clipped */
-    p = strchr (*line, '\n');
-    if (!p)
-    {
-        urj_warning ("line %d exceeds %zd characters, clipped\n", lnr, *len);
-        while (1) {
-            char c = fgetc (f);
-            if (c == '\n' || c == EOF)
-                break;
-        }
-    }
-
-    return p - *line + 1;
-}
-#endif
-
 int
 urj_parse_stream (urj_chain_t *chain, FILE *f)
 {

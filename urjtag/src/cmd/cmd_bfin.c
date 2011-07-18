@@ -265,7 +265,7 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                     size_t t;
                     FILE *fp;
 
-                    /* 1024 should be plenty; MAXINPUTLINE is 100 in parse.c */
+                    /* 1024 should be plenty.  */
                     char insns_string[1024];
                     char *p = insns_string;
 

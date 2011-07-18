@@ -96,6 +96,8 @@ src/jim/intel_28f800b3.c
 src/jim/some_cpu.c
 src/jim/jim_tap.c
 src/lib/fclock.c
+src/lib/getdelim.c
+src/lib/getline.c
 src/part/bsbit.c
 src/part/data_register.c
 src/part/instruction.c

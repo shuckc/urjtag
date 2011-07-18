@@ -123,6 +123,7 @@ fi
 
 AC_CHECK_FUNCS(m4_flatten([
 	_sleep
+	getdelim
 	geteuid
 	getline
 	getuid

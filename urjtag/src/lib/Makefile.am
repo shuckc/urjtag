@@ -38,6 +38,8 @@ endif
 libjtaglib_la_SOURCES = \
 	fclock.c \
 	hex.c \
+	getdelim.c \
+	getline.c \
 	usleep.c \
 	$(libiberty_sources)
 
