@@ -75,7 +75,9 @@ int usleep (long unsigned usec);
 
 #ifndef HAVE_NANOSLEEP
 #include <unistd.h>
+#ifndef HAVE_STRUCT_TIMESPEC
 struct timespec { unsigned long tv_sec, tv_nsec; };
+#endif
 #define nanosleep(req, rem) usleep((req)->tv_sec * 1000 * 1000 + (req)->tv_nsec / 1000)
 #endif
 

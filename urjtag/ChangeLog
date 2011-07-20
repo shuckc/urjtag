@@ -1,3 +1,8 @@
+2011-07-20  Jie Zhang  <jie.zhang@analog.com>
+
+  * sysdep.h (struct timespec): Only define when !HAVE_STRUCT_TIMESPEC.
+  * configure.ac: Check struct timespec.
+
 2011-07-18  Jie Zhang  <jie.zhang@analog.com>
 
   * src/global/parse.c (getline): Remove.
