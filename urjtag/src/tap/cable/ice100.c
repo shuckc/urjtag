@@ -429,7 +429,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
     struct flash_block *last_flash_block = NULL, *q;
     int base_address = 0;
 
-    hex_file = fopen (filename, "rbe");
+    hex_file = fopen (filename, FOPEN_R);
     if (!hex_file)
     {
         urj_error_IO_set (_("Unable to open file `%s'"), filename);

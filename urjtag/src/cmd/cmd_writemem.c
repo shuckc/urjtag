@@ -60,7 +60,7 @@ cmd_writemem_run (urj_chain_t *chain, char *params[])
         || urj_cmd_get_number (params[2], &len) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    f = fopen (params[3], "rb");
+    f = fopen (params[3], FOPEN_R);
     if (!f)
     {
         urj_error_IO_set (_("Unable to open file `%s'"), params[3]);

@@ -70,7 +70,7 @@ cmd_flashmem_run (urj_chain_t *chain, char *params[])
     else
         noverify = 0;
 
-    f = fopen (params[2], "rb");
+    f = fopen (params[2], FOPEN_R);
     if (!f)
     {
         urj_error_IO_set (_("Unable to open file `%s'"), params[2]);

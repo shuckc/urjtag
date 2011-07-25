@@ -123,6 +123,11 @@ LEGAL NOTICES:
 
 %{
 /* Begin lex input specifications */
+#include <sysdep.h>
+/* Undef TRUE and FALSE to avoid redefinition error
+   when compiling for Windows host.  */
+#undef TRUE
+#undef FALSE
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -506,7 +511,7 @@ urj_vhdl_flex_switch_file (yyscan_t scanner, char *filename)
     extra = yyget_extra (scanner);
 
     /* file in current directory has precedence */
-    f = fopen (filename, "rb");
+    f = fopen (filename, FOPEN_R);
     if (!f)
     {
         const char *db_path = urj_get_data_dir ();
@@ -523,7 +528,7 @@ urj_vhdl_flex_switch_file (yyscan_t scanner, char *filename)
             strcat (db_file, "bsdl");
             strcat (db_file, "/");
             strcat (db_file, filename);
-            f = fopen (db_file, "rb");
+            f = fopen (db_file, FOPEN_R);
 
             if (!f)
                 urj_bsdl_ftl_set (extra->proc_mode, URJ_ERROR_IO,

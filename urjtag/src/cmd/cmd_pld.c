@@ -66,7 +66,7 @@ cmd_pld_run (urj_chain_t *chain, char *params[])
             return URJ_STATUS_FAIL;
         }
 
-        if ((pld_file = fopen (params[2], "rb")) != NULL)
+        if ((pld_file = fopen (params[2], FOPEN_R)) != NULL)
         {
             result = urj_pld_configure (chain, pld_file);
             fclose (pld_file);

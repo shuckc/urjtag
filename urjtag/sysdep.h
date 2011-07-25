@@ -89,4 +89,16 @@ extern ssize_t getline(char **line, size_t *len, FILE *f);
 
 #define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
 
+/* "b" is needed for Windows host.  "e" is a GLIBC extension, but Windows
+   does not like it.  Most C libraries on UNIX-like systems hopefully
+   implement the same extension or just ignore it without causing any trouble.
+   So always appending "e" for them should be safe.  */
+#if defined(_WIN32)
+#define FOPEN_R  "rb"
+#define FOPEN_W  "wb"
+#else
+#define FOPEN_R  "re"
+#define FOPEN_W  "we"
+#endif
+
 #endif /* SYSDEP_H */

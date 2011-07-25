@@ -78,7 +78,7 @@ cmd_svf_run (urj_chain_t *chain, char *params[])
     if (print_progress)
         urj_log_state.level = URJ_LOG_LEVEL_DETAIL;
 
-    if ((SVF_FILE = fopen (params[1], "rb")) != NULL)
+    if ((SVF_FILE = fopen (params[1], FOPEN_R)) != NULL)
     {
         result = urj_svf_run (chain, SVF_FILE, stop, ref_freq);
 

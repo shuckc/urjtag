@@ -1,5 +1,23 @@
 2011-07-25  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/tap/detect.c (find_record): Use FOPEN_R or FOPEN_W for mode in fopen.
+  * src/tap/cable/gpio.c (gpio_export): Likewise.
+    (gpio_direction): Likewise.
+  * src/tap/cable/ice100.c (ice_read_hex_file): Likewise.
+  * src/bsdl/bsdl.c (urj_bsdl_read_file): Likewise.
+  * src/bsdl/vhdl_flex.l (urj_vhdl_flex_switch_file): Likewise.
+  * src/global/parse.c (urj_parse_file): Likewise.
+  * src/cmd/cmd_bfin.c (cmd_bfin_run): Likewise.
+  * src/cmd/cmd_flashmem.c (cmd_flashmem_run): Likewise.
+  * src/cmd/cmd_pld.c (cmd_pld_run): Likewise.
+  * src/cmd/cmd_writemem.c (cmd_writemem_run): Likewise.
+  * src/cmd/cmd_svf.c (cmd_svf_run): Likewise.
+  * src/cmd/cmd_readmem.c (cmd_readmem_run): Likewise.
+  * src/apps/bsdl2jtag/bsdl2jtag.c (main): Likewise.
+  * sysdep.h (FOPEN_R, FOPEN_W): Define.
+
+2011-07-25  Jie Zhang  <jie.zhang@analog.com>
+
   * src/tap/cable/generic_usbconn.c (urj_tap_cable_generic_usbconn_connect):
     Clear connection error if a suitable cable has been found.
 

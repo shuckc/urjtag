@@ -59,7 +59,7 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
     urj_tap_register_t *tr;
     int r = 0;
 
-    file = fopen (filename, "rb");
+    file = fopen (filename, FOPEN_R);
     if (!file)
     {
         urj_log (URJ_LOG_LEVEL_ERROR, _("Unable to open file '%s'\n"), filename);

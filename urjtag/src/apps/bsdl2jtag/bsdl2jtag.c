@@ -22,8 +22,9 @@
  *
  */
 
-#include <stdio.h>
+#include <sysdep.h>
 
+#include <stdio.h>
 #include <urjtag/chain.h>
 #include <urjtag/log.h>
 
@@ -79,7 +80,7 @@ main (int argc, char *const argv[])
         return 1;
     }
 
-    jtag_file = fopen (argv[2], "wb");
+    jtag_file = fopen (argv[2], FOPEN_W);
     if (jtag_file == NULL)
     {
         printf ("Error: Can't open '%s' in write mode.\n", argv[2]);

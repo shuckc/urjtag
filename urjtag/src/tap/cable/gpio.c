@@ -69,7 +69,7 @@ static int gpio_export (unsigned int gpio, int export)
     else
         fname = GPIO_UNEXPORT_PATH;
 
-    fp = fopen (fname, "w");
+    fp = fopen (fname, FOPEN_W);
     if (!fp)
     {
         urj_warning (_("%s: cannot open to (un)export GPIO %u\n"), fname, gpio);
@@ -92,7 +92,7 @@ static int gpio_direction (unsigned int gpio, int out)
         "%sgpio%u/direction", GPIO_PATH, gpio);
     fname[sizeof (fname) - 1] = '\0';
 
-    fp = fopen (fname, "w");
+    fp = fopen (fname, FOPEN_W);
     if (!fp)
     {
         urj_warning (_("%s: cannot open to set direction\n"), fname);

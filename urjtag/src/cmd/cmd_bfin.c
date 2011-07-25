@@ -350,7 +350,7 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                     }
 
                     /* Read the binary blob from the toolchain */
-                    fp = fopen (tmpfile, "rb");
+                    fp = fopen (tmpfile, FOPEN_R);
                     if (fp == NULL)
                         goto execute_cleanup;
 
