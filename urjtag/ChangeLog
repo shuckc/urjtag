@@ -1,5 +1,10 @@
 2011-07-25  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/tap/cable/generic_usbconn.c (urj_tap_cable_generic_usbconn_connect):
+    Clear connection error if a suitable cable has been found.
+
+2011-07-25  Jie Zhang  <jie.zhang@analog.com>
+
   * src/lib/getdelim.c (getdelim): Don't report error if *lineptr
     is NULL but *n is not zero.
 

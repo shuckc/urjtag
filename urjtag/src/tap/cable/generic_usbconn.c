@@ -137,6 +137,13 @@ urj_tap_cable_generic_usbconn_connect (urj_cable_t *cable,
                  _("Couldn't connect to suitable USB device.\n"));
         return URJ_STATUS_FAIL;
     }
+    else
+    {
+        /* If some cables have been tried before a suitable cable is found,
+           urj_error will still contain an error from the last fail trial.
+           Clear it to avoid confusing error reporting.  */
+        urj_error_reset ();
+    }
 
     cable_params = malloc (sizeof (urj_tap_cable_generic_params_t));
     if (!cable_params)
