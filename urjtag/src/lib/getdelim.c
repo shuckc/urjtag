@@ -39,7 +39,7 @@ getdelim (char **lineptr, size_t *n, int delimiter, FILE *stream)
     int c;
     size_t len = 0;
 
-    if (!lineptr || !n || (!*lineptr && *n))
+    if (!lineptr || !n)
         return -1;
 
     /* allocate initial buffer */
