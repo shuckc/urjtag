@@ -202,18 +202,19 @@ bfin_wait_ready (void *data)
 {
     urj_chain_t *chain = (urj_chain_t *) data;
 
-    /* When CCLK is 62MHz and SCLK is 31MHz, which is the lowest frequency I
-       can set in bf537 stamp linux kernel, set the gnICE+ cable frequency to
-       15MHz (current default), --wait-clocks >= 12 is required.
+    /* The following default numbers of wait clock for various cables are
+       tested on a BF537 stamp board, on which U-Boot is running.
+       CCLK is set to 62MHz and SCLK is set to 31MHz, which is the lowest
+       frequency I can set in BF537 stamp Linux kernel.
 
-       When CCLK is 62MHz and SCLK is 31MHz, set the gnICE+ cable frequency to
-       30MHz, --wait-clocks >= 21 is required.
+       The test is done by dumping memory from 0x20000000 to 0x20000010 using
+       GDB and gdbproxy:
 
-       When CCLK is 62MHz and SCLK is 31MHz, set the gnICE+ cable frequency to
-       6MHz (default), --wait-clocks >= 5 is required.
+       (gdb) dump memory u-boot.bin 0x20000000 0x20000010
+       (gdb) shell hexdump -C u-boot.bin
 
-       When CCLK is 62MHz and SCLK is 31MHz, set the gnICE cable frequency to
-       6MHz (default), --wait-clocks >= 2 is required.  */
+       With an incorrect number of wait clocks, the first 4 bytes will be
+       duplicated by the second 4 bytes.  */
 
     if (bfin_wait_clocks == -1)
     {
@@ -221,18 +222,34 @@ bfin_wait_ready (void *data)
         uint32_t frequency = cable->frequency;
         const char *name = cable->driver->name;
 
-        if (strcmp (name, "gnICE+") == 0 && frequency == 15000000)
-            bfin_wait_clocks = 12;
-        else if (strcmp (name, "gnICE+") == 0 && frequency == 30000000)
-            bfin_wait_clocks = 21;
-        else if (strcmp (name, "gnICE+") == 0 && frequency == 6000000)
-            bfin_wait_clocks = 5;
-        else if (strcmp (name, "gnICE") == 0 && frequency == 6000000)
-            bfin_wait_clocks = 2;
-        else
+        if (strcmp (name, "gnICE+") == 0)
         {
-            bfin_wait_clocks = 21;
-            urj_warning (_("untested cable or frequency, set wait_clocks to %d\n"), bfin_wait_clocks);
+            if (frequency <= 6000000)
+                bfin_wait_clocks = 5;
+            else if (frequency <= 15000000)
+                bfin_wait_clocks = 12;
+            else /* <= 30MHz */
+                bfin_wait_clocks = 21;
+        }
+        else if (strcmp (name, "gnICE") == 0)
+            bfin_wait_clocks = 2;
+        else if (strcmp (name, "ICE-100B") == 0)
+        {
+            if (frequency <= 5000000)
+                bfin_wait_clocks = 5;
+            else if (frequency <= 10000000)
+                bfin_wait_clocks = 11;
+            else if (frequency <= 17000000)
+                bfin_wait_clocks = 19;
+            else /* <= 25MHz */
+                bfin_wait_clocks = 30;
+        }
+
+        if (bfin_wait_clocks == -1)
+        {
+            bfin_wait_clocks = 30;
+            urj_warning (_("%s: untested cable, set wait_clocks to %d\n"),
+                         name, bfin_wait_clocks);
         }
     }
 

@@ -1,5 +1,11 @@
 2011-07-26  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/tap/cable/ice100.c (ice100b_set_freq): Set cable->frequency.
+  * src/bfin/bfin-part-bfin.c (bfin_wait_ready): Set default wait clocks
+    for ICE-100B cable.
+
+2011-07-26  Jie Zhang  <jie.zhang@analog.com>
+
   * src/tap/cable/ice100.c: Indent.
 
 2011-07-26  Jie Zhang  <jie.zhang@analog.com>

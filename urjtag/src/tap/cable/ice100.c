@@ -272,6 +272,7 @@ static void ice100b_set_freq (urj_cable_t *cable, uint32_t freq)
              * the defined settings, but ends up there */
             params->cur_freq = freq;
             do_single_reg_value (cable, REG_FREQ, 1, 1, freq_set[idx]);
+            cable->frequency = params->cur_freq;
         }
     }
 }
