@@ -66,8 +66,6 @@ _URJ_CABLE(gpio)
 #endif
 #ifdef ENABLE_CABLE_ICE100
 _URJ_CABLE(ice100B)
-_URJ_CABLE(ezkit_10)
-_URJ_CABLE(ezkit_20)
 #endif
 #ifdef ENABLE_CABLE_IGLOO
 _URJ_CABLE(igloo)

@@ -1,3 +1,62 @@
+2011-07-26  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/tap/cable_list.h: Remove ezkit_10 and ezkit_20.
+  * src/tap/cable/generic_usbconn_list.h: Remove ezkit_10_bf548,
+    ezkit_10_bf537, ezkit_20_bf518 and ezkit_20_bf526.
+  * src/tap/cable/ice100.c (struct params_t): Remove sel_rawscan_enabled,
+    bytewize_scan, combo_tx_mode, wr_buf_addr and r_buf_addr.
+    (swap_data_longs_to_bytes, swap_scan_bytes_to_longs): Remove.
+    (DSP_KIT_SCAN_DATA): Remove.
+    (KIT_10_DEFAULT_SCAN_LEN): Remove.
+    (KIT_10_TRIGGER_SCAN_LEN): Remove.
+    (KIT_20_DEFAULT_SCAN_LEN): Remove.
+    (KIT_20_TRIGGER_SCAN_LEN): Remove.
+    (RAW_SCAN_HDR_SZ): Remove.
+    (RAW_SCAN_COMBINED_HDR_SZ): Remove.
+    (HOST_DO_RAW_SCAN): Remove.
+    (HOST_FAST_MODE): Remove.
+    (HOST_SC_AUTHENTICATE): Remove.
+    (KIT_10_WRITE_ENDPOINT): Remove.
+    (KIT_10_READ_ENDPOINT): Remove.
+    (KIT_10_USB_WRITE_TIMEOUT): Remove.
+    (KIT_10_USB_READ_TIMEOUT): Remove.
+    (KIT_10_WRITE_BUFFER_SIZE): Remove.
+    (KIT_10_READ_BUFFER_SIZE): Remove.
+    (KIT_20_WRITE_ENDPOINT): Remove.
+    (KIT_20_READ_ENDPOINT): Remove.
+    (KIT_20_USB_WRITE_TIMEOUT): Remove.
+    (KIT_20_USB_READ_TIMEOUT): Remove.
+    (KIT_20_WRITE_BUFFER_SIZE): Remove.
+    (KIT_20_READ_BUFFER_SIZE): Remove.
+    (BLACKFIN_OLD_DATA_BUFFER_OUT_ADDRESS): Remove.
+    (BLACKFIN_OLD_DATA_BUFFER_IN_ADDRESS): Remove.
+    (BLACKFIN_DATA_BUFFER_OUT_ADDRESS): Remove.
+    (BLACKFIN_DATA_BUFFER_IN_ADDRESS): Remove.
+    (kitInFastMode): Remove.
+    (kit_set_freq): Remove.
+    (ice100b_set_freq): Adjust accordingly.
+    (ice_connect): No need to initialize removed params_t fields.
+    (kit_10_connect): Remove.
+    (kit_20_connect): Remove.
+    (ice_init): Adjust accordingly.
+    (kit_10_init): Remove.
+    (kit_20_init): Remove.
+    (adi_flush): Adjust accordingly.
+    (kit_get_sig): Remove.
+    (kit_set_sig): Remove.
+    (get_recv_data): Adjust accordingly.
+    (add_scan_data): Adjust accordingly.
+    (do_single_reg_value): Adjust accordingly.
+    (do_host_cmd): Adjust accordingly.
+    (perform_scan): Adjust accordingly.
+    (do_rawscan): Adjust accordingly.
+    (urj_tap_cable_ezkit_10_driver): Remove.
+    (ezkit_10_bf537): Remove.
+    (ezkit_10_bf548): Remove.
+    (urj_tap_cable_ezkit_20_driver): Remove.
+    (ezkit_20_bf518): Remove.
+    (ezkit_20_bf526): Remove.
+
 2011-07-25  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/detect.c (find_record): Use FOPEN_R or FOPEN_W for mode in fopen.

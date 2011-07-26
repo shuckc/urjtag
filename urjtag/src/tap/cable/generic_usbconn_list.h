@@ -68,10 +68,6 @@ _URJ_USB_FTDX(usb_jtag)
 #endif
 #ifdef ENABLE_CABLE_ICE100
 _URJ_USB(ice100B)
-_URJ_USB(ezkit_10_bf548)
-_URJ_USB(ezkit_10_bf537)
-_URJ_USB(ezkit_20_bf518)
-_URJ_USB(ezkit_20_bf526)
 #endif
 #ifdef ENABLE_CABLE_VSLLINK
 _URJ_USB(vsllink)

@@ -83,17 +83,12 @@ typedef struct
     int32_t tap_pair_start_idx;      /* depends on firmware version */
     int32_t num_rcv_hdr_bytes;       /* Number of data bytes in received raw scan data header */
     int32_t max_raw_data_tx_items;   /* depends on firmware version */
-    int32_t sel_rawscan_enabled;     /* Ice Emulator and Correct version? */
-    int32_t bytewize_scan;           /* Ice Emulator? */
-    int32_t combo_tx_mode;           /* Combined or separate USB commands? */
     int32_t wr_ep;                   /* USB End Write Point */
     int32_t wr_timeout;              /* USB Write Timeout */
     int32_t wr_buf_sz;               /* USB Write Buffer Size */
     int32_t r_ep;                    /* USB End Read Point */
     int32_t r_timeout;               /* USB Read Timeout */
     int32_t r_buf_sz;                /* USB Read Buffer Size */
-    uint32_t wr_buf_addr;            /* USB: For Kits */
-    uint32_t r_buf_addr;             /* USB: For Kits */
     num_tap_pairs tap_info;          /* For collecting and sending tap scans */
     char *firmware_filename;         /* The update firmware file name */
 } params_t;
@@ -102,7 +97,7 @@ typedef struct
 typedef struct
 {
     uint32_t command;       /* What to do */
-    uint32_t buffer;        /* used for Kit only */
+    uint32_t buffer;        /* used for Kit only, always initialized to 0 */
     uint32_t count;         /* Amount of data in bytes to send */
 } usb_command_block;
 
@@ -117,8 +112,6 @@ static int do_rawscan (urj_cable_t *cable, uint8_t firstpkt, uint8_t lastpkt,
                        uint8_t *out);
 static int build_clock_scan (urj_cable_t *cable, int32_t *start_idx, int32_t *num_todo_items);
 static int add_scan_data (urj_cable_t *cable, int32_t num_bits, char *in, char *out);
-static void swap_data_longs_to_bytes (uint8_t *data, uint32_t size);
-static void swap_scan_bytes_to_longs (tap_pairs *scan, uint32_t size);
 static void get_recv_data (urj_cable_t *cable, int32_t idx, int32_t dat_idx, uint8_t **rcv_dataptr);
 static uint16_t do_host_cmd (urj_cable_t *cable, uint8_t cmd, uint8_t param, int32_t r_data);
 static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_data,
@@ -132,7 +125,6 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 #if 0    /* set to 1 to output debug info about scans */
 
 //#define DSP_SCAN_DATA
-#define DSP_KIT_SCAN_DATA
 #define DUMP_EACH_RCV_DATA
 //#define DSP_SCAN_CAUSE
 #define DEBUG(...)    printf(__VA_ARGS__)
@@ -150,14 +142,6 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 #define ICE_DEFAULT_SCAN_LEN            0x7FF0    /* Max DIF is 0x2AAA8, but DMA is only 16 bits. */
 #define ICE_TRIGGER_SCAN_LEN            0x7FD8    /* Start checking for RTI/TLR for xmit */
 
-#define KIT_10_DEFAULT_SCAN_LEN         0x7FF0    /* Max DIF is 0x2AAA8, but DMA is only 16 bits. */
-#define KIT_10_TRIGGER_SCAN_LEN         0x7FD8    /* Start checking for RTI/TLR for xmit */
-
-#define KIT_20_DEFAULT_SCAN_LEN         0x7FF0    /* Max DIF is 0x2AAA8, but DMA is only 16 bits. */
-#define KIT_20_TRIGGER_SCAN_LEN         0x7FD8    /* Start checking for RTI/TLR for xmit */
-
-#define RAW_SCAN_HDR_SZ                 8
-#define RAW_SCAN_COMBINED_HDR_SZ        24
 #define SELECTIVE_RAW_SCAN_HDR_SZ       12
 
 #define DAT_SZ                          0x8000    /* size allocated for reading data */
@@ -169,11 +153,8 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 #define HOST_REQUEST_TX_DATA            0x04    /* host request to transmit data */
 #define HOST_GET_SINGLE_REG             0x08    /* set a JTAG register */
 #define HOST_SET_SINGLE_REG             0x09    /* set a JTAG register */
-#define HOST_DO_RAW_SCAN                0x0A    /* do a raw scan */
 #define HOST_PROGRAM_FLASH              0x0C    /* program flash */
 #define HOST_HARD_RESET_JTAG_CTRLR      0x0E    /* do a hard reset on JTAG controller */
-#define    HOST_FAST_MODE               0x10    /* Sets Kits in right mode */
-#define HOST_SC_AUTHENTICATE            0x17    /* Kit 20 */
 #define HOST_SET_TRST                   0x1F    /* changes TRST Line state */
 #define HOST_GET_TRST                   0x20    /* gets TRST Line state */
 #define HOST_DO_SELECTIVE_RAW_SCAN      0x21    /* Return only data needed */
@@ -194,30 +175,6 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 #define ICE_100B_WRITE_BUFFER_SIZE      0x9800
 #define ICE_100B_READ_BUFFER_SIZE       0x8000
 
-/* Kit 1.0 USB controls */
-#define KIT_10_WRITE_ENDPOINT           0x02
-#define KIT_10_READ_ENDPOINT            0x06
-#define KIT_10_USB_WRITE_TIMEOUT        50000
-#define KIT_10_USB_READ_TIMEOUT         50000
-#define KIT_10_WRITE_BUFFER_SIZE        0x40/*0x1000*/
-#define KIT_10_READ_BUFFER_SIZE         0x3000
-
-/* Kit 2.0 USB controls */
-#define KIT_20_WRITE_ENDPOINT           0x01
-#define KIT_20_READ_ENDPOINT            0x02
-#define KIT_20_USB_WRITE_TIMEOUT        50000
-#define KIT_20_USB_READ_TIMEOUT         50000
-#define KIT_20_WRITE_BUFFER_SIZE        0x2000
-#define KIT_20_READ_BUFFER_SIZE         0x8000
-
-/* Old style Blackfin address where data is written/read */
-#define BLACKFIN_OLD_DATA_BUFFER_OUT_ADDRESS    0xF0030000
-#define BLACKFIN_OLD_DATA_BUFFER_IN_ADDRESS     0xF0038000
-
-/* Blackfin address where data is written/read */
-#define BLACKFIN_DATA_BUFFER_OUT_ADDRESS        0xF0006100
-#define BLACKFIN_DATA_BUFFER_IN_ADDRESS         0xF000A000
-
 #define ICE100B_DOC_URL \
     "http://docs.blackfin.uclinux.org/doku.php?id=hw:jtag:ice100b"
 
@@ -225,9 +182,6 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
 #define MAX_FREQ    4        /* size of freq_set */
 static const uint8_t freq_set[MAX_FREQ]     = { 9, 4, 2, 1 };
 static const uint32_t avail_freqs[MAX_FREQ] = { 5000000, 10000000, 17000000, 25000000 };
-
-/* Global, needs to be here because of retries to connect to a kit */
-static bool kitInFastMode = false;
 
 
 /*
@@ -298,25 +252,6 @@ static int adi_get_freq (uint32_t freq, int arr_sz, const uint32_t *freq_arr)
     }
 
     return i;
-}
-
-/*
- * Sets kit frequency
- *    0x8000 is for 25000000
- *    0x0000 is for 50000000
- */
-static void kit_set_freq (urj_cable_t *cable, uint32_t freq)
-{
-    params_t *params = cable->params;
-
-    /* Verify Frequency is valid */
-    freq = (freq <= 25000000) ? 0x8000 : 0;
-
-    if (freq != params->cur_freq)
-    {   /* only change if different from current settings */
-        do_single_reg_value (cable, REG_FREQ, 0, 1, freq);
-        params->cur_freq = freq;
-    }
 }
 
 /*
@@ -676,7 +611,7 @@ ice_send_flash_data (urj_cable_t *cable, struct flash_block *p, uint16_t crc)
 
             usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
             usb_cmd_blk.count = count + 16;
-            usb_cmd_blk.buffer = cable_params->wr_buf_addr;
+            usb_cmd_blk.buffer = 0;
             adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
 
             adi_usb_write_or_ret (cable->link.usb->params, buffer, usb_cmd_blk.count);
@@ -774,10 +709,6 @@ static int ice_connect (urj_cable_t *cable, const urj_param_t *params[])
     cable_params->r_timeout       = ICE_100B_USB_READ_TIMEOUT;
     cable_params->wr_buf_sz       = ICE_100B_WRITE_BUFFER_SIZE;
     cable_params->r_buf_sz        = ICE_100B_READ_BUFFER_SIZE;
-    cable_params->combo_tx_mode   = 0;
-    cable_params->wr_buf_addr     = 0;
-    cable_params->r_buf_addr      = 0;
-    cable_params->bytewize_scan   = 1;
     cable_params->firmware_filename = NULL;
 
     if (params != NULL)
@@ -798,64 +729,6 @@ static int ice_connect (urj_cable_t *cable, const urj_param_t *params[])
                 break;
             }
         }
-
-    return URJ_STATUS_OK;
-}
-
-/*
- * This function sets us up the cable and data
- */
-static int kit_10_connect (urj_cable_t *cable, const urj_param_t *params[])
-{
-    params_t *cable_params;
-    int ret;
-
-    if ((ret = adi_connect (cable, params)) != URJ_STATUS_OK)
-        return ret;
-
-    cable_params = cable->params;
-    cable_params->default_scanlen = KIT_10_DEFAULT_SCAN_LEN;
-    cable_params->trigger_scanlen = KIT_10_TRIGGER_SCAN_LEN;
-    cable_params->wr_ep           = KIT_10_WRITE_ENDPOINT;
-    cable_params->r_ep            = KIT_10_READ_ENDPOINT;
-    cable_params->wr_timeout      = KIT_10_USB_WRITE_TIMEOUT;
-    cable_params->r_timeout       = KIT_10_USB_READ_TIMEOUT;
-    cable_params->wr_buf_sz       = KIT_10_WRITE_BUFFER_SIZE;
-    cable_params->r_buf_sz        = KIT_10_READ_BUFFER_SIZE;
-    cable_params->combo_tx_mode   = 0;
-    cable_params->wr_buf_addr     = BLACKFIN_OLD_DATA_BUFFER_OUT_ADDRESS;
-    cable_params->r_buf_addr      = BLACKFIN_OLD_DATA_BUFFER_IN_ADDRESS;
-    cable_params->bytewize_scan   = 0;
-    cable_params->firmware_filename = NULL;
-
-    return URJ_STATUS_OK;
-}
-
-/*
- * This function sets us up the cable and data
- */
-static int kit_20_connect (urj_cable_t *cable, const urj_param_t *params[])
-{
-    params_t *cable_params;
-    int ret;
-
-    if ((ret = adi_connect (cable, params)) != URJ_STATUS_OK)
-        return ret;
-
-    cable_params = cable->params;
-    cable_params->default_scanlen = KIT_20_DEFAULT_SCAN_LEN;
-    cable_params->trigger_scanlen = KIT_20_TRIGGER_SCAN_LEN;
-    cable_params->wr_ep           = KIT_20_WRITE_ENDPOINT;
-    cable_params->r_ep            = KIT_20_READ_ENDPOINT;
-    cable_params->wr_timeout      = KIT_20_USB_WRITE_TIMEOUT;
-    cable_params->r_timeout       = KIT_20_USB_READ_TIMEOUT;
-    cable_params->wr_buf_sz       = KIT_20_WRITE_BUFFER_SIZE;
-    cable_params->r_buf_sz        = KIT_20_READ_BUFFER_SIZE;
-    cable_params->combo_tx_mode   = 0;
-    cable_params->wr_buf_addr     = BLACKFIN_DATA_BUFFER_OUT_ADDRESS;
-    cable_params->r_buf_addr      = BLACKFIN_DATA_BUFFER_IN_ADDRESS;
-    cable_params->bytewize_scan   = 0;
-    cable_params->firmware_filename = NULL;
 
     return URJ_STATUS_OK;
 }
@@ -912,97 +785,9 @@ static int ice_init (urj_cable_t *cable)
 
     /* Set frequency to lowest value */
     ice100b_set_freq (cable, avail_freqs[0]);
-    cable_params->sel_rawscan_enabled = (cable_params->version < 0x0107) ? 0 : 1;
-    cable_params->tap_pair_start_idx = cable_params->sel_rawscan_enabled ? SELECTIVE_RAW_SCAN_HDR_SZ : RAW_SCAN_HDR_SZ;
+    cable_params->tap_pair_start_idx = SELECTIVE_RAW_SCAN_HDR_SZ;
     cable_params->max_raw_data_tx_items = cable_params->wr_buf_sz - cable_params->tap_pair_start_idx;
     cable_params->num_rcv_hdr_bytes = cable_params->tap_pair_start_idx;
-
-    return URJ_STATUS_OK;
-}
-
-/*
- * This function actually connects us to our ICE
- */
-static int kit_10_init (urj_cable_t *cable)
-{
-    params_t *cable_params = cable->params;
-
-    /* Open usb conn port */
-    if (urj_tap_usbconn_open (cable->link.usb))
-        return URJ_STATUS_FAIL;
-
-    if (!kitInFastMode)
-    {
-        cable_params->combo_tx_mode = 0;
-        do_host_cmd (cable, HOST_FAST_MODE, 0, 0);
-        kitInFastMode = true;
-    }
-
-    cable_params->wr_buf_addr = BLACKFIN_DATA_BUFFER_OUT_ADDRESS;
-    cable_params->r_buf_addr = BLACKFIN_DATA_BUFFER_IN_ADDRESS;
-    cable_params->combo_tx_mode = 1;
-    cable_params->version = do_host_cmd (cable, HOST_GET_FW_VERSION, 0, 1);
-    do_host_cmd (cable, HOST_HARD_RESET_JTAG_CTRLR, 0, 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, "%s Firmware Version is %d.%d.%d\n",
-             cable->driver->name,
-             ((cable_params->version >> 8) & 0xFF),
-             ((cable_params->version >> 4) & 0x0F),
-             ((cable_params->version)      & 0x0F));
-
-    do_single_reg_value (cable, REG_SCR, 0, 1, 0);
-    usleep (1000);    /* wait 1 ms for ICEPAC to reset */
-
-    do_single_reg_value (cable, REG_AUX, 0, 1, 1);
-    do_single_reg_value (cable, REG_AUX, 0, 1, 0);
-    do_single_reg_value (cable, REG_SCR, 0, 1, SCR_DEFAULT);
-
-    /* Start off at 25 MHz */
-    cable_params->cur_freq = -1;    /* force setting frequency */
-    kit_set_freq (cable, 25000000);
-    cable_params->sel_rawscan_enabled = 0;
-    cable_params->tap_pair_start_idx = RAW_SCAN_COMBINED_HDR_SZ;
-    cable_params->max_raw_data_tx_items = cable_params->wr_buf_sz - cable_params->tap_pair_start_idx;
-    cable_params->num_rcv_hdr_bytes = RAW_SCAN_HDR_SZ;
-
-    return URJ_STATUS_OK;
-}
-
-/*
- * This function actually connects us to our ICE
- */
-static int kit_20_init (urj_cable_t *cable)
-{
-    params_t *cable_params = cable->params;
-
-    /* Open usb conn port */
-    if (urj_tap_usbconn_open (cable->link.usb))
-        return URJ_STATUS_FAIL;
-
-    if (!do_host_cmd (cable, HOST_SC_AUTHENTICATE, 0, 1))
-        return URJ_STATUS_FAIL;
-
-    cable_params->version = do_host_cmd (cable, HOST_GET_FW_VERSION, 0, 1);
-    do_host_cmd (cable, HOST_HARD_RESET_JTAG_CTRLR, 0, 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, "%s Firmware Version is %d.%d.%d\n",
-             cable->driver->name,
-             ((cable_params->version >> 8) & 0xFF),
-             ((cable_params->version >> 4) & 0x0F),
-             ((cable_params->version)      & 0x0F));
-
-    do_single_reg_value (cable, REG_SCR, 0, 1, 0);
-    usleep (1000);    /* wait 1 ms for ICEPAC to reset */
-
-    do_single_reg_value (cable, REG_AUX, 0, 1, 1);
-    do_single_reg_value (cable, REG_AUX, 0, 1, 0);
-    do_single_reg_value (cable, REG_SCR, 0, 1, SCR_DEFAULT);
-
-    /* Start off at 25 MHz */
-    cable_params->cur_freq = -1;    /* force setting frequency */
-    kit_set_freq (cable, 25000000);
-    cable_params->sel_rawscan_enabled = 0;
-    cable_params->tap_pair_start_idx = RAW_SCAN_HDR_SZ;
-    cable_params->max_raw_data_tx_items = cable_params->wr_buf_sz - cable_params->tap_pair_start_idx;
-    cable_params->num_rcv_hdr_bytes = RAW_SCAN_HDR_SZ;
 
     return URJ_STATUS_OK;
 }
@@ -1296,7 +1081,7 @@ static void adi_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
             {
                 scan_out = 7;    /* Assigned a number for debug, !0 will do scan */
             }
-            else if (tap_info->cur_idx >= ICE_DEFAULT_SCAN_LEN)
+            else if (tap_info->cur_idx >= cable_params->default_scanlen)
             {
                 urj_log (URJ_LOG_LEVEL_ERROR,
                          _("FAULT! idx overflow!! idx = %d and max should be %#X\n"),
@@ -1462,21 +1247,6 @@ static void adi_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
 }
 
 /*
- * Get TRST state
- * TODO: Since when developing this product,
- *       Functionality has changed.  But at this point,
- *       we only get TRST
- */
-static int kit_get_sig (urj_cable_t *cable, urj_pod_sigsel_t sig)
-{
-    int32_t state;
-
-    state = do_single_reg_value (cable, REG_SCR, 1, 0, 0);
-
-    return (state & SCR_TRST_BIT) ? URJ_STATUS_FAIL : URJ_STATUS_OK;
-}
-
-/*
  * Get TRST state if Firmware version supports it
  * TODO: Since when developing this product,
  *       Functionality has changed.  But at this point,
@@ -1489,21 +1259,6 @@ static int ice_get_sig (urj_cable_t *cable, urj_pod_sigsel_t sig)
         return URJ_STATUS_FAIL;
     else
         return do_host_cmd (cable, HOST_GET_TRST, 0, 1);
-}
-
-/*
- * Set TRST state
- * TODO: Since when developing this product,
- *       Functionality has changed.  But at this point,
- *       we only set TRST
- */
-static int kit_set_sig (urj_cable_t *cable, int mask, int val)
-{
-    uint32_t state = val ? SCR_DEFAULT : (SCR_DEFAULT & ~SCR_TRST_BIT);
-
-    do_single_reg_value (cable, REG_SCR, 0, 1, state);
-
-    return kit_get_sig (cable, 0xFF);
 }
 
 /*
@@ -1547,12 +1302,6 @@ static void get_recv_data (urj_cable_t *cable, int32_t idx, int32_t idx_dat, uin
     {
         DEBUG("get_recv_data(): %s\n", (buf == NULL) ? "No output buffer" : "No Received Data");
         return;
-    }
-
-    if (!cable_params->bytewize_scan)
-    {   /* This is needed for BF535 FPGA based scans */
-        swap_data_longs_to_bytes ((rcvBuf - dat_idx),
-                ((len >> 3) + ((len & 0x07) ? 1 : 0) + dat_idx));
     }
 
     for (i = 0; i < len; i++)
@@ -1686,15 +1435,6 @@ static int add_scan_data (urj_cable_t *cable, int32_t num_bits, char *in, char *
             tap_info->num_dat = new_sz;
 
         }
-        if (!cable_params->bytewize_scan)
-        {   /* For the FPGA based scans, TDO Data starts 1 bit before */
-            bit_set <<= 1;
-            if (!bit_set)
-            {
-                bit_set = 0x10;
-                idx--;
-            }
-        }
         tap_info->dat[tap_info->cur_dat].idx = idx;
         tap_info->dat[tap_info->cur_dat].pos = bit_set;
     }
@@ -1822,72 +1562,6 @@ static int build_clock_scan (urj_cable_t *cable, int32_t *start_idx, int32_t *nu
 }
 
 /*
- * For BF535 FPGA based Scans, convert from 32 bits
- * XXX: probably needs converting from memory arrays to byte shifts
- *      so we work regardless of host endian
- */
-static void swap_data_longs_to_bytes (uint8_t *bdata, uint32_t size)
-{
-    uint32_t *ldata = (uint32_t *)bdata;
-    union {
-        uint8_t b[4];
-        uint32_t l;
-    } tdo;
-    uint32_t i, lSize = size / sizeof (uint32_t);
-
-    lSize += (size % sizeof (uint32_t)) ? 1 : 0;
-
-    for (i = 0; i < lSize; i++)
-    {
-        tdo.b[3] = *(bdata++);
-        tdo.b[2] = *(bdata++);
-        tdo.b[1] = *(bdata++);
-        tdo.b[0] = *(bdata++);
-
-        *(ldata++) = tdo.l;
-    }
-}
-
-/*
- * For BF535 FPGA based Scans, convert to 32 bits
- * XXX: probably needs converting from memory arrays to byte shifts
- *      so we work regardless of host endian
- */
-static void swap_scan_bytes_to_longs (tap_pairs *scan, uint32_t size)
-{
-    uint32_t *lscan = (uint32_t *)scan;
-    union {
-        uint8_t b[4];
-        uint32_t l;
-    } tms, tdi;
-    uint32_t i, lSize = size / sizeof (uint32_t);
-
-    for (i = 0; i < lSize; i++)
-    {
-        tms.b[3] = scan->tms;
-        tdi.b[3] = scan->tdi;
-        scan++;
-
-        tms.b[2] = scan->tms;
-        tdi.b[2] = scan->tdi;
-        scan++;
-
-        tms.b[1] = scan->tms;
-        tdi.b[1] = scan->tdi;
-        scan++;
-
-        tms.b[0] = scan->tms;
-        tdi.b[0] = scan->tdi;
-        scan++;
-
-        *lscan = tms.l;
-        lscan++;
-        *lscan = tdi.l;
-        lscan++;
-    }
-}
-
-/*
  * Read & Write Registers
  *
  * XXX: error handling doesn't quite work with this return
@@ -1905,23 +1579,12 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
     uint32_t count = 0;
     int32_t i, size = wr_data ? 8 : 4;
 
-    if (!cable_params->combo_tx_mode)
-    {
         usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
         usb_cmd_blk.count = size;
-        usb_cmd_blk.buffer = cable_params->wr_buf_addr;
+        usb_cmd_blk.buffer = 0;
 
         adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
         i = 0;
-    }
-    else
-    {
-        size += sizeof (usb_command_block) + sizeof (uint32_t);
-        cmd_buffer.l[0] = wr_data ? HOST_SET_SINGLE_REG : HOST_GET_SINGLE_REG;
-        cmd_buffer.l[1] = size;
-        cmd_buffer.l[2] = cable_params->wr_buf_addr;
-        i = 16;
-    }
 
     /* send HOST_SET_SINGLE_REG command */
     cmd_buffer.b[i++] = 1;
@@ -1959,23 +1622,12 @@ static uint16_t do_host_cmd (urj_cable_t *cable, uint8_t cmd, uint8_t param, int
     } cmd_buffer;
     int32_t i, size = 4;
 
-    if (!cable_params->combo_tx_mode)
-    {
         usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
         usb_cmd_blk.count = 4;
-        usb_cmd_blk.buffer = cable_params->wr_buf_addr;
+        usb_cmd_blk.buffer = 0;
 
         adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
         i = 0;
-    }
-    else
-    {
-        size += sizeof (usb_command_block) + sizeof (uint32_t);
-        cmd_buffer.l[0] = cmd;
-        cmd_buffer.l[1] = size;
-        cmd_buffer.l[2] = cable_params->wr_buf_addr;
-        i = 16;
-    }
 
     /* send command */
     cmd_buffer.b[i++] = param;
@@ -1989,9 +1641,8 @@ static uint16_t do_host_cmd (urj_cable_t *cable, uint8_t cmd, uint8_t param, int
     {
         usb_cmd_blk.command = HOST_REQUEST_RX_DATA;
         usb_cmd_blk.count = 2;
-        usb_cmd_blk.buffer = cable_params->r_buf_addr;
+        usb_cmd_blk.buffer = 0;
 
-        if (!cable_params->combo_tx_mode)
             adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
 
         adi_usb_read_or_ret (cable->link.usb->params, &results, sizeof (results));
@@ -2050,7 +1701,7 @@ static int perform_scan (urj_cable_t *cable, uint8_t **rdata)
         size_t len;
 
         len = cur_len + cable_params->tap_pair_start_idx + 16;
-        if (cable_params->sel_rawscan_enabled && (tap_info->dat[0].idx > 12))
+        if (tap_info->dat[0].idx > 12)
             len -= tap_info->dat[0].idx;
 
         out = malloc (len);
@@ -2075,45 +1726,13 @@ static int perform_scan (urj_cable_t *cable, uint8_t **rdata)
         collect_data = 0;
     }
 
-    if (!cable_params->bytewize_scan)
-    {   /* This is needed for BF535 FPGA based scans */
-        swap_scan_bytes_to_longs (tap_info->pairs, cur_len);
-#ifdef DSP_KIT_SCAN_DATA
-        {
-            char tms[128], tdi[128];
-            int32_t x = 0, z;
-            uint32_t *data = (uint32_t *)tap_info->pairs;
-
-            z = 0;
-            while (z <= tap_info->cur_idx / 4)
-            {
-                sprintf (&tms[x], " %8.8X", *(data++));
-                sprintf (&tdi[x], " %8.8X", *(data++));
-                x += 9;
-                z++;
-                if ((z & 0x07) == 0)
-                {
-                    DEBUG ("%s\n%s\n\n", tms, tdi);
-                    x = 0;
-                }
-            }
-            if (x > 0)
-                DEBUG ("%s\n%s\n\n", tms, tdi);
-        }
-#endif
-    }
-
     in = (uint8_t *)tap_info->pairs;
     idx = 0;
 
     /* Here if data is too large, we break it up into manageable chunks */
     do
     {
-        if (!cable_params->combo_tx_mode)
             cur_len = (rem_len >= cable_params->max_raw_data_tx_items) ? cable_params->max_raw_data_tx_items : rem_len;
-        else
-            cur_len = (rem_len >= (cable_params->max_raw_data_tx_items - cable_params->tap_pair_start_idx)) ?
-                        (cable_params->max_raw_data_tx_items - cable_params->tap_pair_start_idx) : rem_len;
 
         if (cur_len == rem_len)
             lastpkt = 1;
@@ -2169,35 +1788,17 @@ static int do_rawscan (urj_cable_t *cable, uint8_t firstpkt, uint8_t lastpkt,
     uint32_t data;
     uint32_t size = cable_params->tap_pair_start_idx + dif_cnt;
 
-    if (!cable_params->combo_tx_mode)
-    {
         usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
         usb_cmd_blk.count = size;
-        usb_cmd_blk.buffer = cable_params->wr_buf_addr;
+        usb_cmd_blk.buffer = 0;
 
         /* first send Xmit request with the count of what will be sent */
         adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
         i = 0;
-    }
-    else
-    {
-        size += sizeof (usb_command_block) + sizeof (uint32_t);
-        data = HOST_DO_RAW_SCAN;
-        memcpy (raw_buf + 0, &data, 4);
-        memcpy (raw_buf + 4, &size, 4);
-        memcpy (raw_buf + 8, &cable_params->wr_buf_addr, 4);
-        i = 16;
-    }
 
-    /* send HOST_DO_RAW_SCAN command */
+    /* send HOST_DO_SELECTIVE_RAW_SCAN command */
     raw_buf[i++] = firstpkt;
     raw_buf[i++] = lastpkt;
-    if (!cable_params->sel_rawscan_enabled)
-    {
-        raw_buf[i++] = HOST_DO_RAW_SCAN;
-    }
-    else
-    {
         raw_buf[i++] = HOST_DO_SELECTIVE_RAW_SCAN;
         if ((collect_dof && lastpkt) && (tap_info->dat[0].idx > 12))
         {
@@ -2213,7 +1814,6 @@ static int do_rawscan (urj_cable_t *cable, uint8_t firstpkt, uint8_t lastpkt,
                 tap_info->dat[j].idx -= dof_start;
             }
         }
-    }
 
     raw_buf[i++] = collect_dof ? 1 : 0;
     data = dif_cnt / 4;         /* dif count in longs */
@@ -2221,10 +1821,8 @@ static int do_rawscan (urj_cable_t *cable, uint8_t firstpkt, uint8_t lastpkt,
     data = tap_info->cur_idx / 4;  /* count in longs */
     memcpy (raw_buf + i + 2, &data, 4);
 
-    if (cable_params->sel_rawscan_enabled)
-    {   /* only Ice emulators use this */
+        /* only Ice emulators use this */
         memcpy (raw_buf + i + 4, &dof_start, 4);
-    }
 
     adi_usb_write_or_ret (cable->link.usb->params, raw_buf, size);
 
@@ -2287,52 +1885,6 @@ const urj_cable_driver_t urj_tap_cable_ice100B_driver = {
     URJ_CABLE_QUIRK_ONESHOT
 };
 URJ_DECLARE_USBCONN_CABLE(0x064B, 0x0225, "libusb", "ICE-100B", ice100B)
-
-/* This is for all BF535 Based On Board Debug Agents */
-const urj_cable_driver_t urj_tap_cable_ezkit_10_driver = {
-    "EZ-KIT-1.0",
-    N_("Analog Devices On Board EZ-KIT Cable (0x064B)"),
-    URJ_CABLE_DEVICE_USB,
-    { .usb = kit_10_connect, },
-    urj_tap_cable_generic_disconnect,
-    ice_cable_free,
-    kit_10_init,
-    urj_tap_cable_generic_usbconn_done,
-    kit_set_freq,
-    adi_clock,
-    adi_get_tdo,
-    adi_transfer,
-    kit_set_sig,
-    kit_get_sig,
-    adi_flush,
-    urj_tap_cable_generic_usbconn_help,
-    URJ_CABLE_QUIRK_ONESHOT
-};
-URJ_DECLARE_USBCONN_CABLE(0x064B, 0x1188, "libusb", "EZ-KIT-1.0", ezkit_10_bf537)
-URJ_DECLARE_USBCONN_CABLE(0x064B, 0x0206, "libusb", "EZ-KIT-1.0", ezkit_10_bf548)
-
-/* This is for all BF535 Based Stand Alone Debug Agent Boards */
-const urj_cable_driver_t urj_tap_cable_ezkit_20_driver = {
-    "EZ-KIT-2.0",
-    N_("Analog Devices EZ-KIT Cable (0x064B)"),
-    URJ_CABLE_DEVICE_USB,
-    { .usb = kit_20_connect, },
-    urj_tap_cable_generic_disconnect,
-    ice_cable_free,
-    kit_20_init,
-    urj_tap_cable_generic_usbconn_done,
-    kit_set_freq,
-    adi_clock,
-    adi_get_tdo,
-    adi_transfer,
-    kit_set_sig,
-    kit_get_sig,
-    adi_flush,
-    urj_tap_cable_generic_usbconn_help,
-    URJ_CABLE_QUIRK_ONESHOT
-};
-URJ_DECLARE_USBCONN_CABLE(0x064B, 0x3217, "libusb", "EZ-KIT-2.0", ezkit_20_bf518)
-URJ_DECLARE_USBCONN_CABLE(0x064B, 0x3212, "libusb", "EZ-KIT-2.0", ezkit_20_bf526)
 
 /*
  Local Variables:
