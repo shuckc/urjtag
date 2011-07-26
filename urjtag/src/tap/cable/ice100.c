@@ -1055,8 +1055,8 @@ static void adi_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
                 break;
             case URJ_TAP_CABLE_TRANSFER:
                 add_scan_data (cable, todo_data->arg.transfer.len,
-                                    todo_data->arg.transfer.in,
-                                    todo_data->arg.transfer.out);
+                               todo_data->arg.transfer.in,
+                               todo_data->arg.transfer.out);
                 if (!scan_out && todo_data->arg.transfer.out)
                     scan_out = 2;    /* Assigned a number for debug, !0 will do scan */
                 break;
@@ -1442,16 +1442,16 @@ static int add_scan_data (urj_cable_t *cable, int32_t num_bits, char *in, char *
     /* Build Scan.  TMS will always be zero! */
     for (i = 0; i < num_bits; i++, in++)
     {
-            tap_scan->tdi |= *in ? bit_set : 0;
-            bit_set >>= 1;
-            if (!bit_set)
-            {
-                bit_set = 0x80;
-                idx++;
-                tap_scan++;
-                tap_scan->tdi = 0;
-                tap_scan->tms = 0;
-            }
+        tap_scan->tdi |= *in ? bit_set : 0;
+        bit_set >>= 1;
+        if (!bit_set)
+        {
+            bit_set = 0x80;
+            idx++;
+            tap_scan++;
+            tap_scan->tdi = 0;
+            tap_scan->tms = 0;
+        }
     }
 
     tap_info->cur_idx = idx;
@@ -1490,9 +1490,10 @@ static int build_clock_scan (urj_cable_t *cable, int32_t *start_idx, int32_t *nu
         tap_info->bit_pos = 0x80;
         tap_info->cur_dat = -1;
         tap_info->rcv_dat = -1;
-        tap_scan = tap_info->pairs = (tap_pairs *)(cmd + cable_params->tap_pair_start_idx);    /* new pointer */
         tap_info->cmd = cmd;
-        tap_info->bit_pos = 0x80;
+        tap_info->pairs = (tap_pairs *)(cmd + cable_params->tap_pair_start_idx);    /* new pointer */
+
+        tap_scan = tap_info->pairs;
         tap_scan->tms = 0;
         tap_scan->tdi = 0;
         tap_scan++;
@@ -1514,8 +1515,10 @@ static int build_clock_scan (urj_cable_t *cable, int32_t *start_idx, int32_t *nu
                            (sizeof (tap_pairs) * new_sz) + 4);
             return URJ_STATUS_FAIL;
         }
-        tap_scan = tap_info->pairs = (tap_pairs *)(cmd + cable_params->tap_pair_start_idx);    /* new pointer */
         tap_info->cmd = cmd;
+        tap_info->pairs = (tap_pairs *)(cmd + cable_params->tap_pair_start_idx);    /* new pointer */
+
+        tap_scan = tap_info->pairs;
         idx = tap_info->cur_idx;
         tap_scan = &tap_scan[idx];
         tap_info->total = new_sz;
@@ -1579,12 +1582,12 @@ static uint32_t do_single_reg_value (urj_cable_t *cable, uint8_t reg, int32_t r_
     uint32_t count = 0;
     int32_t i, size = wr_data ? 8 : 4;
 
-        usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
-        usb_cmd_blk.count = size;
-        usb_cmd_blk.buffer = 0;
+    usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
+    usb_cmd_blk.count = size;
+    usb_cmd_blk.buffer = 0;
 
-        adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
-        i = 0;
+    adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
+    i = 0;
 
     /* send HOST_SET_SINGLE_REG command */
     cmd_buffer.b[i++] = 1;
@@ -1622,12 +1625,12 @@ static uint16_t do_host_cmd (urj_cable_t *cable, uint8_t cmd, uint8_t param, int
     } cmd_buffer;
     int32_t i, size = 4;
 
-        usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
-        usb_cmd_blk.count = 4;
-        usb_cmd_blk.buffer = 0;
+    usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
+    usb_cmd_blk.count = 4;
+    usb_cmd_blk.buffer = 0;
 
-        adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
-        i = 0;
+    adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
+    i = 0;
 
     /* send command */
     cmd_buffer.b[i++] = param;
@@ -1643,7 +1646,7 @@ static uint16_t do_host_cmd (urj_cable_t *cable, uint8_t cmd, uint8_t param, int
         usb_cmd_blk.count = 2;
         usb_cmd_blk.buffer = 0;
 
-            adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
+        adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
 
         adi_usb_read_or_ret (cable->link.usb->params, &results, sizeof (results));
     }
@@ -1732,7 +1735,7 @@ static int perform_scan (urj_cable_t *cable, uint8_t **rdata)
     /* Here if data is too large, we break it up into manageable chunks */
     do
     {
-            cur_len = (rem_len >= cable_params->max_raw_data_tx_items) ? cable_params->max_raw_data_tx_items : rem_len;
+        cur_len = (rem_len >= cable_params->max_raw_data_tx_items) ? cable_params->max_raw_data_tx_items : rem_len;
 
         if (cur_len == rem_len)
             lastpkt = 1;
@@ -1778,8 +1781,8 @@ static int perform_scan (urj_cable_t *cable, uint8_t **rdata)
  *      so we work regardless of host endian
  */
 static int do_rawscan (urj_cable_t *cable, uint8_t firstpkt, uint8_t lastpkt,
-                      int32_t collect_dof, int32_t dif_cnt, uint8_t *raw_buf,
-                      uint8_t *out)
+                       int32_t collect_dof, int32_t dif_cnt, uint8_t *raw_buf,
+                       uint8_t *out)
 {
     params_t *cable_params = cable->params;
     usb_command_block usb_cmd_blk;
@@ -1788,32 +1791,32 @@ static int do_rawscan (urj_cable_t *cable, uint8_t firstpkt, uint8_t lastpkt,
     uint32_t data;
     uint32_t size = cable_params->tap_pair_start_idx + dif_cnt;
 
-        usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
-        usb_cmd_blk.count = size;
-        usb_cmd_blk.buffer = 0;
+    usb_cmd_blk.command = HOST_REQUEST_TX_DATA;
+    usb_cmd_blk.count = size;
+    usb_cmd_blk.buffer = 0;
 
-        /* first send Xmit request with the count of what will be sent */
-        adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
-        i = 0;
+    /* first send Xmit request with the count of what will be sent */
+    adi_usb_write_or_ret (cable->link.usb->params, &usb_cmd_blk, sizeof (usb_cmd_blk));
+    i = 0;
 
     /* send HOST_DO_SELECTIVE_RAW_SCAN command */
     raw_buf[i++] = firstpkt;
     raw_buf[i++] = lastpkt;
-        raw_buf[i++] = HOST_DO_SELECTIVE_RAW_SCAN;
-        if ((collect_dof && lastpkt) && (tap_info->dat[0].idx > 12))
+    raw_buf[i++] = HOST_DO_SELECTIVE_RAW_SCAN;
+    if ((collect_dof && lastpkt) && (tap_info->dat[0].idx > 12))
+    {
+        int32_t j, offset;
+
+        dof_start = tap_info->dat[0].idx;
+        offset = dof_start & 7;
+        dof_start -= offset & 7;
+        tap_info->dat[0].idx = offset;
+
+        for (j = 1; j <= tap_info->cur_dat; j++)
         {
-            int32_t j, offset;
-
-            dof_start = tap_info->dat[0].idx;
-            offset = dof_start & 7;
-            dof_start -= offset & 7;
-            tap_info->dat[0].idx = offset;
-
-            for (j = 1; j <= tap_info->cur_dat; j++)
-            {
-                tap_info->dat[j].idx -= dof_start;
-            }
+            tap_info->dat[j].idx -= dof_start;
         }
+    }
 
     raw_buf[i++] = collect_dof ? 1 : 0;
     data = dif_cnt / 4;         /* dif count in longs */
@@ -1821,8 +1824,8 @@ static int do_rawscan (urj_cable_t *cable, uint8_t firstpkt, uint8_t lastpkt,
     data = tap_info->cur_idx / 4;  /* count in longs */
     memcpy (raw_buf + i + 2, &data, 4);
 
-        /* only Ice emulators use this */
-        memcpy (raw_buf + i + 4, &dof_start, 4);
+    /* only Ice emulators use this */
+    memcpy (raw_buf + i + 4, &dof_start, 4);
 
     adi_usb_write_or_ret (cable->link.usb->params, raw_buf, size);
 

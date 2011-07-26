@@ -1,5 +1,9 @@
 2011-07-26  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/tap/cable/ice100.c: Indent.
+
+2011-07-26  Jie Zhang  <jie.zhang@analog.com>
+
   * src/tap/cable_list.h: Remove ezkit_10 and ezkit_20.
   * src/tap/cable/generic_usbconn_list.h: Remove ezkit_10_bf548,
     ezkit_10_bf537, ezkit_20_bf518 and ezkit_20_bf526.
