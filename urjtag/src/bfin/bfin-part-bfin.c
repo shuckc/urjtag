@@ -232,7 +232,7 @@ bfin_wait_ready (void *data)
                 bfin_wait_clocks = 21;
         }
         else if (strcmp (name, "gnICE") == 0)
-            bfin_wait_clocks = 2;
+            bfin_wait_clocks = 3;
         else if (strcmp (name, "ICE-100B") == 0)
         {
             if (frequency <= 5000000)
