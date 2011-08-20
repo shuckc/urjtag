@@ -555,7 +555,7 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, uint32_t number)
 }
 
 int
-urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number)
+urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number, int unlock)
 {
     urj_flash_cfi_query_structure_t *cfi;
     uint32_t i;
@@ -575,7 +575,9 @@ urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number)
     chip_width = urj_flash_cfi_array->cfi_chips[0]->width;
 
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("\nLocking %d Flash block%s from address 0x%lx\n"), number,
+             _("\n%s %d Flash block%s from address 0x%lx\n"),
+             unlock == 1 ? "Unlocking" : "Locking",
+             number,
              number > 1 ? "s" : "", (long unsigned) addr);
 
     for (i = 1; i <= number; i++)
@@ -587,23 +589,33 @@ urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number)
 
         if (block_no < 0)
         {
-            urj_error_set (URJ_ERROR_FLASH_LOCK, "Cannot find block");
+            urj_error_set ((unlock == 1
+                            ? URJ_ERROR_FLASH_UNLOCK : URJ_ERROR_FLASH_LOCK),
+                           "Cannot find block");
             status = URJ_STATUS_FAIL;
             break;
         }
 
         urj_log (URJ_LOG_LEVEL_NORMAL,
-                 _("(%d%% Completed) FLASH Block %d : locking ... "),
-                 i * 100 / number, block_no);
-        r = flash_driver->lock_block (urj_flash_cfi_array, addr);
+                 _("(%d%% Completed) FLASH Block %d : %s ... "),
+                 i * 100 / number, block_no,
+                 unlock == 1 ? "unlocking" : "locking");
+
+        if (unlock)
+                r = flash_driver->unlock_block (urj_flash_cfi_array, addr);
+        else
+                r = flash_driver->lock_block (urj_flash_cfi_array, addr);
+
         if (r == URJ_STATUS_OK)
         {
             if (i == number)
             {
                 urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
                 urj_log (URJ_LOG_LEVEL_NORMAL,
-                         _("(100%% Completed) FLASH Block %d : locking ... Ok.\n"),
-                         block_no);
+                         _("(100%% Completed) FLASH Block %d : %s ... Ok.\n"),
+                         block_no,
+                         unlock == 1 ? "unlocking" : "locking");
+
             }
             else
             {
@@ -622,9 +634,11 @@ urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number)
     }
 
     if (status == URJ_STATUS_OK)
-        urj_log (URJ_LOG_LEVEL_NORMAL, _("\nLocking Completed.\n"));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("\n%s Completed.\n"),
+                 unlock == 1 ? "Unlocking" : "Locking");
     else
-        urj_log (URJ_LOG_LEVEL_NORMAL, _("\nLocking (partially) Failed.\n"));
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("\n%s (partially) Failed.\n"),
+                 unlock == 1 ? "Unlocking" : "Locking");
 
     return status;
 }

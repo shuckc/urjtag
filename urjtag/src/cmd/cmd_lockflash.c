@@ -39,6 +39,7 @@ cmd_lockflash_run (urj_chain_t *chain, char *params[])
 {
     long unsigned adr = 0;
     long unsigned number = 0;
+    int unlock = 0;
 
     if (urj_cmd_params (params) != 3)
     {
@@ -60,7 +61,10 @@ cmd_lockflash_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_get_number (params[2], &number) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    return urj_flashlock (urj_bus, adr, number);
+    if (!strcmp(params[0], "unlockflash"))
+        unlock = 1;
+
+    return urj_flashlock (urj_bus, adr, number, unlock);
 }
 
 static void
@@ -84,5 +88,29 @@ const urj_cmd_t urj_cmd_lockflash = {
     "lockflash",
     N_("lock flash memory by number of blocks"),
     cmd_lockflash_help,
+    cmd_lockflash_run,
+};
+
+static void
+cmd_unlockflash_help (void)
+{
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("Usage: %s ADDR BLOCKS\n"
+               "Unlock flash memory from ADDR.\n"
+               "\n"
+               "ADDR       target address for erasing block\n"
+               "BLOCKS     number of blocks to lock\n"
+               "\n"
+               "ADDR and BLOCKS could be in decimal or hexadecimal (prefixed with 0x) form.\n"
+               "\n" "Supported Flash Memories:\n"),
+             "unlockflash");
+
+    urj_cmd_show_list (urj_flash_flash_drivers);
+}
+
+const urj_cmd_t urj_cmd_unlockflash = {
+    "unlockflash",
+    N_("unlock flash memory by number of blocks"),
+    cmd_unlockflash_help,
     cmd_lockflash_run,
 };

@@ -17,6 +17,10 @@
   * src/cmd/cmd_lockflash.c, src/cmd/Makefile.am: Add "lockflash" command
     by Xiangfu Liu.
 
+  * include/urjtag/flash.h, src/flash/flash.c, src/cmd/cmd_lockflash.c:
+    Extend lock logic to support unlocking.  Add a new "unlockflash" command
+    by Xiangfu Liu on top of that.
+
 2011-07-27  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bfin/bfin-part-bfin.c (bfin_wait_ready): Set the default wait

@@ -80,6 +80,6 @@ int urj_flashmsbin (urj_bus_t *bus, FILE *f, int);
 int urj_flasherase (urj_bus_t *bus, uint32_t addr, uint32_t number);
 
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
-int urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number);
+int urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number, int unlock);
 
 #endif /* URJ_FLASH_H */
