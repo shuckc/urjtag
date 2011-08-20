@@ -1,3 +1,11 @@
+2011-07-13  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc95108/STEPPINGS,
+    data/xilinx/xc95108/xc95108, data/xilinx/xc95108/xc95108_pc84,
+    data/xilinx/xc95108/xc95108_pq100, data/xilinx/xc95108/xc95108_pq160,
+    data/xilinx/xc95108/xc95108_tq100: Add data files for Xilinx xc95108
+    FPGAs.  Patch by Steve Tell.
+
 2011-07-27  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bfin/bfin-part-bfin.c (bfin_wait_ready): Set the default wait

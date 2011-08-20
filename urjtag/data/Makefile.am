@@ -312,6 +312,12 @@ nobase_dist_pkgdata_DATA = \
 	xilinx/xc3s700a/STEPPINGS \
 	xilinx/xc3s700a/xc3s700a_ft256 \
 	xilinx/xc3s700a/xc3s700a_fg400 \
+	xilinx/xc95108/STEPPINGS \
+	xilinx/xc95108/xc95108 \
+	xilinx/xc95108/xc95108_pc84  \
+	xilinx/xc95108/xc95108_pq100  \
+	xilinx/xc95108/xc95108_pq160  \
+	xilinx/xc95108/xc95108_tq100  \
 	xilinx/xc9536xl/STEPPINGS \
 	xilinx/xc9536xl/xc9536xl_cs48 \
 	xilinx/xc9536xl/xc9536xl_pc44 \
