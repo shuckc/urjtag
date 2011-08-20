@@ -9,6 +9,11 @@
   * src/tap/detect.c: Change fgets() to getline() to remove arbitrary
     line length limits.
 
+  * include/urjtag/flash.h, include/urjtag/error.h, src/flash/amd.c,
+    src/flash/intel.c, src/flash/amd_flash.c, src/flash/flash.c,
+    src/global/log-error.c: Add support to the flash framework for
+    locking sectors.  Patch by Xiangfu Liu.
+
 2011-07-27  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bfin/bfin-part-bfin.c (bfin_wait_ready): Set the default wait

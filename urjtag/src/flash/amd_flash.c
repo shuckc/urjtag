@@ -411,6 +411,15 @@ amd_29xx040_unlock_block (urj_flash_cfi_array_t *cfi_array,
     return URJ_STATUS_OK;
 }
 
+static int
+amd_29xx040_lock_block (urj_flash_cfi_array_t *cfi_array,
+                        uint32_t adr)
+{
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_lock_block 0x%08lX IGNORE\n",
+             (long unsigned) adr);
+    return URJ_STATUS_OK;
+}
+
 
 const urj_flash_driver_t urj_flash_amd_29xx040_flash_driver = {
     N_("AMD Standard Command Set"),
@@ -419,6 +428,7 @@ const urj_flash_driver_t urj_flash_amd_29xx040_flash_driver = {
     amd_29xx040_autodetect,
     amd_29xx040_print_info,
     amd_29xx040_erase_block,
+    amd_29xx040_lock_block,
     amd_29xx040_unlock_block,
     amd_29xx040_program,
     amd_29xx040_read_array,

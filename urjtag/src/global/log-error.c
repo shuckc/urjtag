@@ -190,6 +190,7 @@ urj_error_string (urj_error_t err)
     case URJ_ERROR_FLASH_DETECT:        return "flash detect";
     case URJ_ERROR_FLASH_PROGRAM:       return "flash program";
     case URJ_ERROR_FLASH_ERASE:         return "flash erase";
+    case URJ_ERROR_FLASH_LOCK:          return "flash lock";
     case URJ_ERROR_FLASH_UNLOCK:        return "flash unlock";
 
     case URJ_ERROR_BSDL_VHDL:           return "vhdl subsystem";

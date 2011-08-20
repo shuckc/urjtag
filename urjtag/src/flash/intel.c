@@ -295,6 +295,39 @@ intel_flash_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 }
 
 static int
+intel_flash_lock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
+{
+    uint16_t sr;
+    urj_bus_t *bus = cfi_array->bus;
+
+    URJ_BUS_WRITE (bus, cfi_array->address,
+                   CFI_INTEL_CMD_CLEAR_STATUS_REGISTER);
+    URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_LOCK_SETUP);
+    URJ_BUS_WRITE (bus, adr, CFI_INTEL_CMD_LOCK_BLOCK);
+
+    while (!((sr = URJ_BUS_READ (bus, cfi_array->address) & 0xFE) & CFI_INTEL_SR_READY));     /* TODO: add timeout */
+
+    if (sr != CFI_INTEL_SR_READY)
+    {
+        urj_error_set (URJ_ERROR_FLASH_LOCK,
+                       _("unknown error while locking block"));
+        return URJ_STATUS_FAIL;
+    }
+
+    URJ_BUS_WRITE (bus, adr + 0x02, CFI_INTEL_CMD_READ_IDENTIFIER);
+
+    sr = URJ_BUS_READ (bus, cfi_array->address & 0x01);
+    if (!sr)
+    {
+        urj_error_set (URJ_ERROR_FLASH_LOCK,
+                       _("locking block failed"));
+        return URJ_STATUS_FAIL;
+    }
+
+    return URJ_STATUS_OK;
+}
+
+static int
 intel_flash_program_single (urj_flash_cfi_array_t *cfi_array,
                             uint32_t adr, uint32_t data)
 {
@@ -468,6 +501,15 @@ intel_flash_unlock_block32 (urj_flash_cfi_array_t *cfi_array,
 }
 
 static int
+intel_flash_lock_block32 (urj_flash_cfi_array_t *cfi_array,
+                          uint32_t adr)
+{
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_lock_block32 0x%08lX IGNORE\n",
+             (long unsigned) adr);
+    return URJ_STATUS_OK;
+}
+
+static int
 intel_flash_program32_single (urj_flash_cfi_array_t *cfi_array,
                               uint32_t adr, uint32_t data)
 {
@@ -536,6 +578,7 @@ const urj_flash_driver_t urj_flash_intel_32_flash_driver = {
     intel_flash_autodetect32,
     intel_flash_print_info32,
     intel_flash_erase_block32,
+    intel_flash_lock_block32,
     intel_flash_unlock_block32,
     intel_flash_program32,
     intel_flash_readarray32,
@@ -548,6 +591,7 @@ const urj_flash_driver_t urj_flash_intel_16_flash_driver = {
     intel_flash_autodetect,
     intel_flash_print_info,
     intel_flash_erase_block,
+    intel_flash_lock_block,
     intel_flash_unlock_block,
     intel_flash_program,
     intel_flash_readarray,
@@ -560,6 +604,7 @@ const urj_flash_driver_t urj_flash_intel_8_flash_driver = {
     intel_flash_autodetect8,
     intel_flash_print_info,
     intel_flash_erase_block,
+    intel_flash_lock_block,
     intel_flash_unlock_block,
     intel_flash_program,
     intel_flash_readarray,

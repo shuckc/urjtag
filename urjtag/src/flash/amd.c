@@ -470,6 +470,14 @@ amd_flash_unlock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
 }
 
 static int
+amd_flash_lock_block (urj_flash_cfi_array_t *cfi_array, uint32_t adr)
+{
+    urj_log (URJ_LOG_LEVEL_NORMAL, "flash_lock_block 0x%08lX IGNORE\n",
+             (long unsigned) adr);
+    return URJ_STATUS_OK;
+}
+
+static int
 amd_flash_program_single (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
                           uint32_t data)
 {
@@ -655,6 +663,7 @@ const urj_flash_driver_t urj_flash_amd_32_flash_driver = {
     amd_flash_autodetect32,
     amd_flash_print_info,
     amd_flash_erase_block,
+    amd_flash_lock_block,
     amd_flash_unlock_block,
     amd_flash_program32,
     amd_flash_read_array,
@@ -667,6 +676,7 @@ const urj_flash_driver_t urj_flash_amd_16_flash_driver = {
     amd_flash_autodetect16,
     amd_flash_print_info,
     amd_flash_erase_block,
+    amd_flash_lock_block,
     amd_flash_unlock_block,
     amd_flash_program,
     amd_flash_read_array,
@@ -679,6 +689,7 @@ const urj_flash_driver_t urj_flash_amd_8_flash_driver = {
     amd_flash_autodetect8,
     amd_flash_print_info,
     amd_flash_erase_block,
+    amd_flash_lock_block,
     amd_flash_unlock_block,
     amd_flash_program,
     amd_flash_read_array,

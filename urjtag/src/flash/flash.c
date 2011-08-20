@@ -553,3 +553,78 @@ urj_flasherase (urj_bus_t *bus, uint32_t addr, uint32_t number)
 
     return status;
 }
+
+int
+urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number)
+{
+    urj_flash_cfi_query_structure_t *cfi;
+    uint32_t i;
+    int status = URJ_STATUS_OK;
+    int bus_width;
+    int chip_width;
+
+    set_flash_driver ();
+    if (!urj_flash_cfi_array || !flash_driver)
+    {
+        urj_error_set (URJ_ERROR_NOTFOUND, _("no flash driver found"));
+        return URJ_STATUS_FAIL;
+    }
+    cfi = &urj_flash_cfi_array->cfi_chips[0]->cfi;
+
+    bus_width = urj_flash_cfi_array->bus_width;
+    chip_width = urj_flash_cfi_array->cfi_chips[0]->width;
+
+    urj_log (URJ_LOG_LEVEL_NORMAL,
+             _("\nLocking %d Flash block%s from address 0x%lx\n"), number,
+             number > 1 ? "s" : "", (long unsigned) addr);
+
+    for (i = 1; i <= number; i++)
+    {
+        int r;
+        int btr = 0;
+        int block_no = find_block (cfi, addr - urj_flash_cfi_array->address,
+                                   bus_width, chip_width, &btr);
+
+        if (block_no < 0)
+        {
+            urj_error_set (URJ_ERROR_FLASH_LOCK, "Cannot find block");
+            status = URJ_STATUS_FAIL;
+            break;
+        }
+
+        urj_log (URJ_LOG_LEVEL_NORMAL,
+                 _("(%d%% Completed) FLASH Block %d : locking ... "),
+                 i * 100 / number, block_no);
+        r = flash_driver->lock_block (urj_flash_cfi_array, addr);
+        if (r == URJ_STATUS_OK)
+        {
+            if (i == number)
+            {
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
+                urj_log (URJ_LOG_LEVEL_NORMAL,
+                         _("(100%% Completed) FLASH Block %d : locking ... Ok.\n"),
+                         block_no);
+            }
+            else
+            {
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("Ok."));
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
+                urj_log (URJ_LOG_LEVEL_NORMAL, _("%78s"), "");
+                urj_log (URJ_LOG_LEVEL_NORMAL, "\r");
+            }
+        }
+        else
+        {
+            urj_log (URJ_LOG_LEVEL_NORMAL, _("ERROR.\n"));
+            status = r;
+        }
+        addr += btr;
+    }
+
+    if (status == URJ_STATUS_OK)
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("\nLocking Completed.\n"));
+    else
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("\nLocking (partially) Failed.\n"));
+
+    return status;
+}

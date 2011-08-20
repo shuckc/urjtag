@@ -55,6 +55,8 @@ typedef struct
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*erase_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+    int (*lock_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
+    /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*unlock_block) (urj_flash_cfi_array_t *cfi_array, uint32_t adr);
     /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
     int (*program) (urj_flash_cfi_array_t *cfi_array, uint32_t adr,
@@ -76,5 +78,8 @@ int urj_flashmsbin (urj_bus_t *bus, FILE *f, int);
 
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_flasherase (urj_bus_t *bus, uint32_t addr, uint32_t number);
+
+/** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
+int urj_flashlock (urj_bus_t *bus, uint32_t addr, uint32_t number);
 
 #endif /* URJ_FLASH_H */
