@@ -75,6 +75,10 @@ if ENABLE_BSDL
 all_cmd_files += cmd_bsdl.c
 endif
 
+if ENABLE_STAPL
+all_cmd_files += cmd_stapl.c
+endif
+
 libcmd_la_SOURCES = \
 	cmd.h \
 	cmd_list.h \

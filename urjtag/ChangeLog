@@ -21,6 +21,18 @@
     Extend lock logic to support unlocking.  Add a new "unlockflash" command
     by Xiangfu Liu on top of that.
 
+  * configure.ac, doc/README.stapl, include/urjtag/stapl.h, src/cmd/cmd_list.h,
+    src/cmd/cmd_stapl.c, src/cmd/Makefile.am, src/Makefile.am, src/stapl,
+    src/stapl/jamarray.c, src/stapl/jamarray.h, src/stapl/jamcomp.c,
+    src/stapl/jamcomp.h, src/stapl/jamcrc.c, src/stapl/jamdefs.h,
+    src/stapl/jamexec.c, src/stapl/jamexec.h, src/stapl/jamexp.c,
+    src/stapl/jamexp.h, src/stapl/jamexprt.h, src/stapl/jamheap.c,
+    src/stapl/jamheap.h, src/stapl/jamjtag.c, src/stapl/jamjtag.h,
+    src/stapl/jamnote.c, src/stapl/jamstack.c, src/stapl/jamstack.h,
+    src/stapl/jamsym.c, src/stapl/jamsym.h, src/stapl/jamutil.h,
+    src/stapl/jamytab.h, src/stapl/Makefile.am, src/stapl/stapl.c,
+    src/stapl/TODO: Initial STAPL support by Michael Vacek.
+
 2011-07-27  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bfin/bfin-part-bfin.c (bfin_wait_ready): Set the default wait

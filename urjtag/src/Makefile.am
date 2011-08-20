@@ -46,6 +46,10 @@ if ENABLE_JIM
 SUBDIRS += jim
 endif
 
+if ENABLE_STAPL
+SUBDIRS += stapl
+endif
+
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = urjtag.pc
 
@@ -82,6 +86,10 @@ endif
 
 if ENABLE_JIM
 liburjtag_la_LIBADD += jim/libjim.la
+endif
+
+if ENABLE_STAPL
+liburjtag_la_LIBADD += stapl/libstapl.la
 endif
 
 localedir = $(datadir)/locale

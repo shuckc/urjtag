@@ -81,6 +81,7 @@ AC_CONFIG_FILES(
 	src/cmd/Makefile
 	src/svf/Makefile
 	src/bsdl/Makefile
+	src/stapl/Makefile
 	src/jim/Makefile
 	src/pld/Makefile
 	src/global/Makefile
@@ -474,6 +475,21 @@ AS_IF([test "x$bsdl_lexer" = xfalse], [
    ])
 ])
 
+dnl Enable STAPL player?
+AC_ARG_ENABLE(stapl,
+[AS_HELP_STRING([--disable-stapl], [Disable STAPL player])],
+[case "${enableval}" in
+   yes) stapl=true ;;
+   no)  stapl=false ;;
+   *)   AC_MSG_ERROR(bad value ${enableval} for --enable-stapl) ;;
+ esac])
+AS_IF([test "x$stapl" = xtrue], [
+  AM_CONDITIONAL(ENABLE_STAPL, true)
+  AC_DEFINE(ENABLE_STAPL, 1, [define if STAPL player is enabled])
+],[
+  AM_CONDITIONAL(ENABLE_STAPL, false)
+])
+
 dnl Enable BSDL subsystem?
 AC_ARG_ENABLE(bsdl,
 [AS_HELP_STRING([--disable-bsdl], [Disable BSDL subsystem])],
@@ -745,6 +761,7 @@ MAKE_YESNO_VAR([HAVELIBFTD2XX], [no])
 MAKE_YESNO_VAR([HAVE_INPOUTXX], [no])
 MAKE_YESNO_VAR([svf], [false])
 MAKE_YESNO_VAR([bsdl], [false])
+MAKE_YESNO_VAR([stapl], [false])
 AC_MSG_NOTICE([
 
 urjtag is now configured for
@@ -756,8 +773,9 @@ urjtag is now configured for
     inpout32   : $FLAG_HAVE_INPOUTXX
 
   Subsystems:
-    SVF player : $FLAG_svf
+    SVF        : $FLAG_svf
     BSDL       : $FLAG_bsdl
+    STAPL      : $FLAG_stapl
 
   Drivers:
     Bus        : $enabled_bus_drivers

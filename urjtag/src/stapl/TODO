@@ -1,0 +1,25 @@
+- Test software with devices from other manufacturers.
+
+- The software contains a support for a major subset of STAPL commands
+  defined in the JEDEC standard. Try to broaden the parser to become
+  fully compliant with the JEDEC standard some day.
+
+  To accomplish this task, the original yacc/bison source would be
+  more than desirable. We may try to ask Altera to release it, since
+  the parser development is cumbersome without .y file.
+
+- Make a support for 64-bit system. Program runs on 32-bit system
+  only. The original code presumed that both long and pointer size are
+  32 bits. Therefore, longs and unsigned longs were changed to int32_t
+  and uint32_t, respectively. To make the software run on 64-bit
+  architecture, int32_t must be set back to longs and fixed code
+  blocks with explicit (long) and (long*) casting. The suspicious
+  castings are on several places in jamarray.c, jamexec.c, and
+  jamheap.c. However, the correction is not trivial task.
+
+  Also there may be issues on big-endian architectures.
+
+- Kill off local heap management and replace with malloc()/free()
+
+- The code supposes that BOOL type is 4 bytes long instead of 1 byte as
+  in case of "bool". So, typedef int BOOL is valid for now.

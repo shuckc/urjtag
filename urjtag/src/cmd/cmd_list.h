@@ -34,6 +34,9 @@
 #ifndef ENABLE_BSDL
 #define URJ_CMD_SKIP_bsdl
 #endif
+#ifndef ENABLE_STAPL
+#define URJ_CMD_SKIP_stapl
+#endif
 #ifndef ENABLE_SVF
 #define URJ_CMD_SKIP_svf
 #endif
