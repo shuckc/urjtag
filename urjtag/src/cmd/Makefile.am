@@ -59,6 +59,7 @@ all_cmd_files = \
 	cmd_writemem.c \
 	cmd_flashmem.c \
 	cmd_eraseflash.c \
+	cmd_lockflash.c \
 	cmd_include.c \
 	cmd_addpart.c \
 	cmd_cmd.c \
