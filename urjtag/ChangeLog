@@ -6,6 +6,9 @@
     data/xilinx/xc95108/xc95108_tq100: Add data files for Xilinx xc95108
     FPGAs.  Patch by Steve Tell.
 
+  * src/tap/detect.c: Change fgets() to getline() to remove arbitrary
+    line length limits.
+
 2011-07-27  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bfin/bfin-part-bfin.c (bfin_wait_ready): Set the default wait

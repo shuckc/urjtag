@@ -58,6 +58,8 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
     FILE *file;
     urj_tap_register_t *tr;
     int r = 0;
+    char *line = NULL;
+    size_t len;
 
     file = fopen (filename, FOPEN_R);
     if (!file)
@@ -73,9 +75,8 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
     {
         char *p;
         char *s;
-        char line[1024];
 
-        if (fgets (line, 1024, file) == NULL)
+        if (getline (&line, &len, file) == -1)
             break;
 
         /* remove comment and nl from the line */
@@ -164,6 +165,7 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
         r = 1;
         break;
     }
+    free (line);
 
     fclose (file);
 
