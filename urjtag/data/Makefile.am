@@ -156,6 +156,8 @@ nobase_dist_pkgdata_DATA = \
 	lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256 \
 	lattice/m4a3-64.32-tqfp48/STEPPINGS \
 	lattice/m4a3-64.32-tqfp48/m4a3-64.32-tqfp48 \
+	lattice/lcmxo2-1200-csbga132/STEPPINGS \
+	lattice/lcmxo2-1200-csbga132/lcmxo2-1200-csbga132 \
 	lexra/PARTS \
 	lexra/lx5280/STEPPINGS \
 	lexra/lx5280/lx5280 \

@@ -7,6 +7,11 @@
 
   * src/tap/detect.c: Remove limitations on lengths of names in id records.
 
+  * data/Makefile.am, data/lattice/PARTS,
+    data/lattice/lcmxo2-1200-csbga132/STEPPINGS,
+    data/lattice/lcmxo2-1200-csbga132/lcmxo2-1200-csbga132: Add support for
+    LCMXO2-1200 CPLD's by Márton Miklós.
+
 2011-08-20  Mike Frysinger  <vapier@gentoo.org>
 
   * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc95108/STEPPINGS,
