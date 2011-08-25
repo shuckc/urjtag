@@ -242,6 +242,8 @@ static const urj_param_descr_t bus_param[] =
     { URJ_BUS_PARAM_KEY_NOE,        URJ_PARAM_TYPE_STRING,  "NOE", },
     { URJ_BUS_PARAM_KEY_WE,         URJ_PARAM_TYPE_STRING,  "WE", },
     { URJ_BUS_PARAM_KEY_NWE,        URJ_PARAM_TYPE_STRING,  "NWE", },
+    { URJ_BUS_PARAM_KEY_WP,         URJ_PARAM_TYPE_STRING,  "WP", },
+    { URJ_BUS_PARAM_KEY_NWP,        URJ_PARAM_TYPE_STRING,  "NWP", },
     { URJ_BUS_PARAM_KEY_REVBITS,    URJ_PARAM_TYPE_BOOL,    "REVBITS", },
     { URJ_BUS_PARAM_KEY_HELP,       URJ_PARAM_TYPE_BOOL,    "HELP", },
     { URJ_BUS_PARAM_KEY_DBGaDDR,    URJ_PARAM_TYPE_BOOL,    "DBGaDDR", },

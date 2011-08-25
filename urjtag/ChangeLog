@@ -1,3 +1,10 @@
+2011-08-24  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/urjtag/bus_driver.h, src/bus/buses.c: Add a new flag for write
+    protect signals.
+  * configure.in, src/bus/Makefile.am, src/bus/mpc8313.c: Add mpc8313 bus
+    support by Márton Miklós.
+
 2011-08-20  Mike Frysinger  <vapier@gentoo.org>
 
   * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc95108/STEPPINGS,

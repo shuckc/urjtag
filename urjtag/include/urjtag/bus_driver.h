@@ -76,6 +76,8 @@ typedef enum URJ_BUS_PARAM_KEY
     URJ_BUS_PARAM_KEY_NOE,      /* string (= signal name)       prototype */
     URJ_BUS_PARAM_KEY_WE,       /* string (= signal name)       prototype */
     URJ_BUS_PARAM_KEY_NWE,      /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_WP,       /* string (= signal name)       prototype */
+    URJ_BUS_PARAM_KEY_NWP,      /* string (= signal name)       prototype */
     URJ_BUS_PARAM_KEY_REVBITS,  /* bool                         mpc824 */
     URJ_BUS_PARAM_KEY_HELP,     /* bool                         mpc824 */
     URJ_BUS_PARAM_KEY_DBGaDDR,  /* bool                         mpc824 */
