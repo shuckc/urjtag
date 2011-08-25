@@ -1,4 +1,4 @@
-2011-08-13  Mike Frysinger  <vapier@gentoo.org>
+2011-08-20  Mike Frysinger  <vapier@gentoo.org>
 
   * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc95108/STEPPINGS,
     data/xilinx/xc95108/xc95108, data/xilinx/xc95108/xc95108_pc84,
