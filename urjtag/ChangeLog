@@ -5,6 +5,8 @@
   * configure.in, src/bus/Makefile.am, src/bus/mpc8313.c: Add mpc8313 bus
     support by Márton Miklós.
 
+  * src/tap/detect.c: Remove limitations on lengths of names in id records.
+
 2011-08-20  Mike Frysinger  <vapier@gentoo.org>
 
   * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc95108/STEPPINGS,

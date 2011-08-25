@@ -46,20 +46,19 @@
 #include <urjtag/parse.h>
 #include <urjtag/jtag.h>
 
-struct id_record
-{
-    char name[20];
-    char fullname[100];
-};
-
 static int
-find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
+find_record (char *filename, urj_tap_register_t *key,
+             char **id_name, char **id_fullname)
 {
     FILE *file;
     urj_tap_register_t *tr;
     int r = 0;
     char *line = NULL;
     size_t len;
+
+    free (*id_name);
+    free (*id_fullname);
+    *id_name = *id_fullname = NULL;
 
     file = fopen (filename, FOPEN_R);
     if (!file)
@@ -137,12 +136,8 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
         if (*s)
             *s++ = '\0';
 
-        /* test field length */
-        if (strlen (p) >= sizeof idr->name)
-            continue;
-
         /* copy name */
-        strcpy (idr->name, p);
+        *id_name = strdup (p);
 
         /* next field */
         p = s;
@@ -153,14 +148,14 @@ find_record (char *filename, urj_tap_register_t *key, struct id_record *idr)
 
         /* line is empty? */
         if (!*p)
+        {
+            free (*id_name);
+            *id_name = NULL;
             continue;
-
-        /* test field length */
-        if (strlen (p) >= sizeof idr->fullname)
-            continue;
+        }
 
         /* copy fullname */
-        strcpy (idr->fullname, p);
+        *id_fullname = strdup (p);
 
         r = 1;
         break;
@@ -275,7 +270,6 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
         urj_part_t *part;
         urj_tap_register_t *did = br;   /* detected id (length is 1 or 32) */
         urj_tap_register_t *key;
-        struct id_record idr;
         char *p;
         urj_part_init_func_t part_init_func;
 
@@ -322,8 +316,9 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 #ifdef ENABLE_BSDL
         if (urj_bsdl_scan_files (chain, urj_tap_register_get_string (did),
                                  URJ_BSDL_MODE_DETECT) <= 0)
-        {
 #endif
+        {
+            char *id_name = NULL, *id_fullname = NULL;
 
             /* find JTAG declarations for a part with id */
 
@@ -335,7 +330,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
 
             key = urj_tap_register_alloc (11);
             memcpy (key->data, &id->data[1], key->len);
-            if (!find_record (data_path, key, &idr))
+            if (!find_record (data_path, key, &id_name, &id_fullname))
             {
                 urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s) (%s)\n",
                          _("Unknown manufacturer!"),
@@ -345,14 +340,14 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             }
 
             urj_log (URJ_LOG_LEVEL_NORMAL, "  %12s: %s (0x%03"PRIX64")\n",
-                     _("Manufacturer"), idr.fullname,
+                     _("Manufacturer"), id_fullname,
                      (urj_tap_register_get_value (key) << 1) | 1);
             urj_tap_register_free (key);
 
-            if (strlen (idr.fullname) > URJ_PART_MANUFACTURER_MAXLEN)
+            if (strlen (id_fullname) > URJ_PART_MANUFACTURER_MAXLEN)
                 urj_warning (_("Manufacturer too long\n"));
             manufacturer[0] = '\0';
-            strncat_const (manufacturer, idr.fullname);
+            strncat_const (manufacturer, id_fullname);
 
             /* parts */
             p = strrchr (data_path, '/');
@@ -360,12 +355,12 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
                 p[1] = '\0';
             else
                 data_path[0] = '\0';
-            strncat_const (data_path, idr.name);
+            strncat_const (data_path, id_name);
             strncat_const (data_path, "/PARTS");
 
             key = urj_tap_register_alloc (16);
             memcpy (key->data, &id->data[12], key->len);
-            if (!find_record (data_path, key, &idr))
+            if (!find_record (data_path, key, &id_name, &id_fullname))
             {
                 urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s) (%s)\n",
                          _("Unknown part!"),
@@ -375,14 +370,14 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             }
 
             urj_log (URJ_LOG_LEVEL_NORMAL, _("  Part(%d):      %s (0x%03"PRIX64")\n"),
-                     chain->active_part, idr.fullname,
+                     chain->active_part, id_fullname,
                      urj_tap_register_get_value (key));
             urj_tap_register_free (key);
 
-            if (strlen (idr.fullname) > URJ_PART_PART_MAXLEN)
+            if (strlen (id_fullname) > URJ_PART_PART_MAXLEN)
                 urj_warning (_("Part too long\n"));
             partname[0] ='\0';
-            strncat_const (partname, idr.fullname);
+            strncat_const (partname, id_fullname);
 
             /* steppings */
             p = strrchr (data_path, '/');
@@ -390,12 +385,12 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
                 p[1] = '\0';
             else
                 data_path[0] = '\0';
-            strncat_const (data_path, idr.name);
+            strncat_const (data_path, id_name);
             strncat_const (data_path, "/STEPPINGS");
 
             key = urj_tap_register_alloc (4);
             memcpy (key->data, &id->data[28], key->len);
-            if (!find_record (data_path, key, &idr))
+            if (!find_record (data_path, key, &id_name, &id_fullname))
             {
                 urj_log (URJ_LOG_LEVEL_NORMAL, "  %s (%s) (%s)\n",
                          _("Unknown stepping!"),
@@ -406,11 +401,11 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             urj_tap_register_free (key);
 
             urj_log (URJ_LOG_LEVEL_NORMAL, _("  Stepping:     %s\n"),
-                     idr.fullname);
-            if (strlen (idr.fullname) > URJ_PART_STEPPING_MAXLEN)
+                     id_fullname);
+            if (strlen (id_fullname) > URJ_PART_STEPPING_MAXLEN)
                 urj_warning (_("Stepping too long\n"));
             stepping[0] = '\0';
-            strncat_const (stepping, idr.fullname);
+            strncat_const (stepping, id_fullname);
 
             /* part definition file */
             p = strrchr (data_path, '/');
@@ -418,7 +413,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
                 p[1] = '\0';
             else
                 data_path[0] = '\0';
-            strncat_const (data_path, idr.name);
+            strncat_const (data_path, id_name);
 
             urj_log (URJ_LOG_LEVEL_NORMAL, _("  Filename:     %s\n"),
                      data_path);
@@ -429,9 +424,10 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             strcpy (part->stepping, stepping);
             if (urj_parse_include (chain, data_path, 0) == URJ_STATUS_FAIL)
                 urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
-#ifdef ENABLE_BSDL
+
+            free (id_name);
+            free (id_fullname);
         }
-#endif
 
         if (part->active_instruction == NULL)
             part->active_instruction = urj_part_find_instruction (part,
