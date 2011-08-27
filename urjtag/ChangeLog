@@ -1,3 +1,7 @@
+2011-08-27  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/xc6slx45/STEPPINGS: Add stepping 3 by Xiangfu Liu.
+
 2011-08-24  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/bus_driver.h, src/bus/buses.c: Add a new flag for write
