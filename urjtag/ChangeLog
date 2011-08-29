@@ -1,3 +1,9 @@
+2011-08-29  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/bus/buses_list.h: Add bf527_sdp.
+  * src/bus/Makefile.am(libbus_la_SOURCES): Add bf527_sdp.c.
+  * src/bus/bf527_sdp.c: New file.
+
 2011-08-27  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/xc6slx45/STEPPINGS: Add stepping 3 by Xiangfu Liu.

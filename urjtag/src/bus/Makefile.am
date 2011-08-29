@@ -56,6 +56,7 @@ libbus_la_SOURCES += \
 	blackfin.c \
 	blackfin.h \
 	bf518f_ezbrd.c \
+	bf527_sdp.c \
 	bf533_stamp.c \
 	bf537_stamp.c \
 	bf548_ezkit.c \
