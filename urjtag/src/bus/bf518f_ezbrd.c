@@ -48,7 +48,7 @@ bf518f_ezbrd_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     params->addr_cnt = 19;
     params->data_cnt = 16;
     params->sdram = 1;
-    failed |= bfin_bus_new (bus, cmd_params);
+    failed |= bfin_bus_new (bus, cmd_params, NULL);
 
     if (failed)
     {

@@ -334,12 +334,14 @@ urj_param_init_list (const urj_param_t ***bp, char *params[],
         return ret;
 
     for (i = 0; params[i] != NULL; ++i)
+    {
         ret = urj_param_push (param_list, bp, params[i]);
         if (ret != URJ_STATUS_OK)
         {
             urj_param_clear (bp);
             return ret;
         }
+    }
 
     return URJ_STATUS_OK;
 }

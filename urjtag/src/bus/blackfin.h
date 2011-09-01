@@ -25,6 +25,11 @@
 #include "generic_bus.h"
 
 typedef struct {
+    const char *bus_name;
+    const char *param;
+} bfin_bus_default_t;
+
+typedef struct {
     uint32_t async_base, async_size;
 
     int ams_cnt, data_cnt, addr_cnt, abe_cnt;
@@ -41,7 +46,8 @@ typedef struct {
     void (*unselect_flash) (urj_bus_t *bus);
 } bfin_bus_params_t;
 
-int bfin_bus_new (urj_bus_t *bus, const urj_param_t *cmd_params[]);
+int bfin_bus_new (urj_bus_t *bus, const urj_param_t *cmd_params[],
+                  const bfin_bus_default_t *defaults);
 
 int bfin_bus_area (urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area);
 

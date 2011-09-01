@@ -39,12 +39,29 @@ bfin_bus_attach_sigs (urj_part_t *part, urj_part_signal_t **pins, int pin_cnt,
 }
 
 int
-bfin_bus_new (urj_bus_t *bus, const urj_param_t *cmd_params[])
+bfin_bus_new (urj_bus_t *bus, const urj_param_t *cmd_params[],
+              const bfin_bus_default_t *defaults)
 {
     bfin_bus_params_t *params = bus->params;
     urj_part_t *part = bus->part;
     int ret = 0;
     size_t i;
+
+    /* FIXME The default parameter value can't be overridden by user.  */
+    if (defaults != NULL)
+        for (i = 0; defaults[i].bus_name != NULL; ++i)
+        {
+            if (strcmp (defaults[i].bus_name, bus->driver->name))
+                continue;
+
+            ret = urj_param_push (&urj_bus_param_list, &cmd_params,
+                                  defaults[i].param);
+            if (ret != URJ_STATUS_OK)
+            {
+                urj_param_clear (&cmd_params);
+                return ret;
+            }
+        }
 
     for (i = 0; cmd_params[i]; ++i)
         switch (cmd_params[i]->key)

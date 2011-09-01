@@ -1,3 +1,16 @@
+2011-08-31  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/bus/blackfin.c (bfin_bus_new): Add new argument for default
+    parameter values.  Update all callers.
+  * src/bus/blackfin.h (bfin_bus_new): Update declaration.
+    (bfin_bus_default_t): Typedef.
+  * src/bus/bf537_stamp.c (bf537_stamp_defaults[]): New.
+    (bf537_stamp_bus_new): Pass bf537_stamp_defaults to bfin_bus_new.
+    (bf527_sdp): _BFIN_BUS_DECLARE.
+  * src/bus/Makefile.am (libbus_la_SOURCES): Remove bf527_sdp.c.
+  * src/bus/bf527_sdp.c: Remove.
+  * src/global/params.c (urj_param_init_list): Add missing {, }.
+
 2011-08-29  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/Makefile.am: Add a semicolon after the last sed command for

@@ -49,7 +49,7 @@ bf561_ezkit_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     params->data_cnt = 32;
     params->sdram = 1;
     params->sms_cnt = 4;
-    failed |= bfin_bus_new (bus, cmd_params);
+    failed |= bfin_bus_new (bus, cmd_params, NULL);
 
     if (failed)
     {

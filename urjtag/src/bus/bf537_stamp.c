@@ -29,6 +29,12 @@ typedef struct
     bfin_bus_params_t params; /* needs to be first */
 } bus_params_t;
 
+static const bfin_bus_default_t bf537_stamp_defaults[] = {
+    /* BF527 SDP board uses PG0 as ~FLASH_EN.  */
+    {"bf527_sdp", "hwait=PG0"},
+    {NULL},
+};
+
 static urj_bus_t *
 bf537_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
                      const urj_param_t *cmd_params[])
@@ -48,7 +54,7 @@ bf537_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     params->addr_cnt = 19;
     params->data_cnt = 16;
     params->sdram = 1;
-    failed |= bfin_bus_new (bus, cmd_params);
+    failed |= bfin_bus_new (bus, cmd_params, bf537_stamp_defaults);
 
     if (failed)
     {
@@ -62,6 +68,7 @@ bf537_stamp_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 BFIN_BUS_DECLARE(bf537_stamp, "BF537 Stamp board");
 _BFIN_BUS_DECLARE(bf537_ezkit, bf537_stamp, "BF537 EZ-Kit board");
 _BFIN_BUS_DECLARE(bf527_ezkit, bf537_stamp, "BF527 EZ-Kit board");
+_BFIN_BUS_DECLARE(bf527_sdp, bf537_stamp, "BF527 SDP board");
 _BFIN_BUS_DECLARE(bf538f_ezkit, bf537_stamp, "BF538F EZ-Kit board");
 _BFIN_BUS_DECLARE(bf526_ezkit, bf537_stamp, "BF526 EZ-Kit board");
 _BFIN_BUS_DECLARE(bf533_ezkit, bf537_stamp, "BF533 EZ-Kit board");
