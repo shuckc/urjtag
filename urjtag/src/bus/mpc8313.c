@@ -77,8 +77,10 @@ mpc8313_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     char buff[10];
     int i;
     int failed = 0;
-    char revbits = 0;
     const char *nwppin = NULL, *noepin = NULL, *ncspin = NULL, *nwepin = NULL;
+
+    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
+    REVBITS = 0;
 
     for (i = 0; cmd_params[i] != NULL; i++)
     {
@@ -107,7 +109,7 @@ mpc8313_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
             nwepin = cmd_params[i]->value.string;
             break;
         case URJ_BUS_PARAM_KEY_REVBITS:
-            revbits = 1;
+            REVBITS = 1;
             break;
         default:
             urj_error_set (URJ_ERROR_SYNTAX, "unrecognised bus parameter '%s'",
@@ -115,9 +117,6 @@ mpc8313_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
             return NULL;
         }
     }
-
-    bus = urj_bus_generic_new (chain, driver, sizeof (bus_params_t));
-    REVBITS = revbits;
 
     if (bus == NULL)
         return NULL;
@@ -133,7 +132,6 @@ mpc8313_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     urj_part_set_instruction (part, "EXTEST");
     urj_tap_chain_shift_instructions (chain);
     urj_tap_chain_shift_data_registers (chain, 1);
-
 
     for (i = 0; i < A_WIDTH; i++)
     {
@@ -243,7 +241,7 @@ setup_data (urj_bus_t *bus, uint32_t adr, uint32_t d)
     int i;
     urj_part_t *p = bus->part;
 
-    for (i = 0; i <= BUS_WIDTH; i++)
+    for (i = 0; i < BUS_WIDTH; i++)
         urj_part_set_signal (p, LAD[i], 1,
                              (d >> ((REVBITS == 1) ? BUS_WIDTH - 1 - i : i)) &
                              1);
