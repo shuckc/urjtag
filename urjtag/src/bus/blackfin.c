@@ -44,43 +44,55 @@ bfin_bus_new (urj_bus_t *bus, const urj_param_t *cmd_params[],
 {
     bfin_bus_params_t *params = bus->params;
     urj_part_t *part = bus->part;
+    const urj_param_t **p[2] = {NULL, cmd_params};
     int ret = 0;
-    size_t i;
+    size_t i, j;
 
-    /* FIXME The default parameter value can't be overridden by user.  */
     if (defaults != NULL)
+    {
+        ret = urj_param_init (p);
+        if (ret != URJ_STATUS_OK)
+            return ret;
+
         for (i = 0; defaults[i].bus_name != NULL; ++i)
         {
             if (strcmp (defaults[i].bus_name, bus->driver->name))
                 continue;
 
-            ret = urj_param_push (&urj_bus_param_list, &cmd_params,
+            ret = urj_param_push (&urj_bus_param_list, p,
                                   defaults[i].param);
             if (ret != URJ_STATUS_OK)
             {
-                urj_param_clear (&cmd_params);
+                urj_param_clear (p);
                 return ret;
             }
         }
+    }
 
-    for (i = 0; cmd_params[i]; ++i)
-        switch (cmd_params[i]->key)
-        {
-        case URJ_BUS_PARAM_KEY_HWAIT:
+    for (j = 0; j < 2; j++)
+    {
+        if (!p[j])
+            continue;
+
+        for (i = 0; p[j][i]; ++i)
+            switch (p[j][i]->key)
             {
-            const char *hwait = cmd_params[i]->value.string;
+            case URJ_BUS_PARAM_KEY_HWAIT:
+                {
+                const char *hwait = p[j][i]->value.string;
 
-            params->hwait_level = (hwait[0] == '/');
-            if (params->hwait_level)
-                ++hwait;
+                params->hwait_level = (hwait[0] == '/');
+                if (params->hwait_level)
+                    ++hwait;
 
-            ret |= urj_bus_generic_attach_sig (part, &params->hwait, hwait);
-            break;
+                ret |= urj_bus_generic_attach_sig (part, &params->hwait, hwait);
+                break;
+                }
+            default:
+                urj_error_set (URJ_ERROR_SYNTAX, _("unknown bus parameter"));
+                return 1;
             }
-        default:
-            urj_error_set (URJ_ERROR_SYNTAX, _("unknown bus parameter"));
-            return 1;
-        }
+    }
 
     if (!params->async_base)
         params->async_base = 0x20000000;
