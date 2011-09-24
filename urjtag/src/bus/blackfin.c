@@ -339,6 +339,7 @@ bfin_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 
     urj_part_set_signal (part, params->awe, 1, 0);
+    urj_part_set_signal (part, params->aoe, 1, 0);
     urj_tap_chain_shift_data_registers (chain, 0);
     urj_part_set_signal (part, params->awe, 1, 1);
     urj_part_set_signal (part, params->aoe, 1, 1);

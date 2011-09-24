@@ -1,5 +1,9 @@
 2011-09-24  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/bus/blackfin.c (bfin_bus_write): Pull AOE low for write.
+
+2011-09-24  Jie Zhang  <jie.zhang@analog.com>
+
   * src/bus/blackfin.c (bfin_bus_new): Parse default params into a
     separate param list.
 
