@@ -251,7 +251,7 @@ cmd_print_run (urj_chain_t *chain, char *params[])
 
     if (strcasecmp (params[1], "chain") == 0)
     {
-        urj_part_parts_print (URJ_LOG_LEVEL_NORMAL, chain->parts);
+        urj_part_parts_print (URJ_LOG_LEVEL_NORMAL, chain->parts, chain->active_part);
         return URJ_STATUS_OK;
     }
 

@@ -459,7 +459,7 @@ urj_part_parts_set_instruction (urj_parts_t *ps, const char *iname)
 }
 
 int
-urj_part_parts_print (urj_log_level_t ll, urj_parts_t *ps)
+urj_part_parts_print (urj_log_level_t ll, urj_parts_t *ps, int active_part)
 {
     int i;
 
@@ -476,7 +476,7 @@ urj_part_parts_print (urj_log_level_t ll, urj_parts_t *ps)
         if (!p)
             continue;
 
-        urj_log (ll, _(" %3d "), i);
+        urj_log (ll, "%s%3d ", i == active_part ? "*" : " ", i);
         urj_part_print (ll, p);
     }
 

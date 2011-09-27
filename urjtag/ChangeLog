@@ -1,3 +1,11 @@
+2011-09-27  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/cmd/cmd_print.c (cmd_print_run): Pass active part to
+    urj_part_parts_print.
+  * src/part/part.c (urj_part_parts_print): Add a new argument
+    for active part.
+  * include/urjtag/part.h (urj_part_parts_print): Update declaration.
+
 2011-09-24  Jie Zhang  <jie.zhang@analog.com>
 
   * src/bus/blackfin.c (bfin_bus_write): Pull AOE low for write.
