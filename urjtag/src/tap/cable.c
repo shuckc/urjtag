@@ -577,9 +577,7 @@ urj_tap_cable_start (urj_chain_t *chain, urj_cable_t *cable)
         return URJ_STATUS_FAIL;
     }
 
-    urj_tap_chain_set_trst (chain, 0);
-    urj_tap_chain_set_trst (chain, 1);
-    urj_tap_reset (chain);
+    urj_tap_trst_reset (chain);
 
     return URJ_STATUS_OK;
 }

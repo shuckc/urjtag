@@ -120,15 +120,6 @@ urj_tap_detect_register_size (urj_chain_t *chain)
     return -1;
 }
 
-static void
-jtag_reset (urj_chain_t *chain)
-{
-    urj_tap_chain_set_trst (chain, 0);
-    urj_tap_chain_set_trst (chain, 1);
-
-    urj_tap_reset (chain);
-}
-
 int
 urj_tap_discovery (urj_chain_t *chain)
 {
@@ -137,7 +128,7 @@ urj_tap_discovery (urj_chain_t *chain)
     urj_tap_register_t *irz;
 
     /* detecting IR size */
-    jtag_reset (chain);
+    urj_tap_trst_reset (chain);
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Detecting IR length ... "));
     fflush (stdout);
@@ -169,7 +160,7 @@ urj_tap_discovery (urj_chain_t *chain)
     {
         int rs;
 
-        jtag_reset (chain);
+        urj_tap_trst_reset (chain);
 
         urj_tap_capture_ir (chain);
         urj_tap_shift_register (chain, ir, NULL, 1);

@@ -1,5 +1,14 @@
 2011-09-27  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/tap/cable.c (urj_tap_cable_start): Use urj_tap_trst_reset.
+  * src/tap/discovery.c (jtag_reset): Remove.
+    (urj_tap_discovery): Replace jtag_reset with urj_tap_trst_reset.
+  * src/tap/tap.c (urj_tap_trst_reset): New function.
+  * src/tap/idcode.c (urj_tap_idcode): Use urj_tap_trst_reset.
+  * include/urjtag/tap.h (urj_tap_trst_reset): Declare.
+
+2011-09-27  Jie Zhang  <jie.zhang@analog.com>
+
   * src/cmd/cmd_print.c (cmd_print_run): Pass active part to
     urj_part_parts_print.
   * src/part/part.c (urj_part_parts_print): Add a new argument

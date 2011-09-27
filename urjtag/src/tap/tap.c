@@ -43,6 +43,15 @@ urj_tap_reset (urj_chain_t *chain)
     urj_tap_chain_clock (chain, 0, 0, 1);       /* Run-Test/Idle */
 }
 
+void
+urj_tap_trst_reset (urj_chain_t *chain)
+{
+    urj_tap_chain_set_trst (chain, 0);
+    urj_tap_chain_set_trst (chain, 1);
+
+    urj_tap_reset (chain);
+}
+
 int
 urj_tap_reset_bypass (urj_chain_t *chain)
 {

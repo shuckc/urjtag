@@ -28,6 +28,7 @@
 #include "types.h"
 
 void urj_tap_reset (urj_chain_t *chain);
+void urj_tap_trst_reset (urj_chain_t *chain);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_tap_reset_bypass (urj_chain_t *chain);
 void urj_tap_capture_dr (urj_chain_t *chain);

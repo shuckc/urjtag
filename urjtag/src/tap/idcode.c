@@ -66,10 +66,7 @@ urj_tap_idcode (urj_chain_t *chain, unsigned int bytes)
     if (!rz || !rout || !rnull)
         goto done;
 
-    urj_tap_chain_set_trst (chain, 0);
-    urj_tap_chain_set_trst (chain, 1);
-
-    urj_tap_reset (chain);
+    urj_tap_trst_reset (chain);
     urj_tap_capture_dr (chain);
 
     if (all_rout)
