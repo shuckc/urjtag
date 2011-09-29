@@ -1,3 +1,9 @@
+2011-09-29  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/tap/cable/generic_usbconn_list.h (ice100Bw): Add.
+  * src/tap/cable/ice100.c: Rename ice100B to ice100Bw and
+    add a new ice100B with PID 0x1225.
+
 2011-09-27  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/cable.c (urj_tap_cable_start): Use urj_tap_trst_reset.

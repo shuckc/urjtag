@@ -68,6 +68,7 @@ _URJ_USB_FTDX(usb_jtag)
 #endif
 #ifdef ENABLE_CABLE_ICE100
 _URJ_USB(ice100B)
+_URJ_USB(ice100Bw)
 #endif
 #ifdef ENABLE_CABLE_VSLLINK
 _URJ_USB(vsllink)

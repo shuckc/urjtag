@@ -1888,7 +1888,8 @@ const urj_cable_driver_t urj_tap_cable_ice100B_driver = {
     ice_cable_help,
     URJ_CABLE_QUIRK_ONESHOT
 };
-URJ_DECLARE_USBCONN_CABLE(0x064B, 0x0225, "libusb", "ICE-100B", ice100B)
+URJ_DECLARE_USBCONN_CABLE(0x064B, 0x1225, "libusb", "ICE-100B", ice100B)
+URJ_DECLARE_USBCONN_CABLE(0x064B, 0x0225, "libusb", "ICE-100B", ice100Bw)
 
 /*
  Local Variables:
