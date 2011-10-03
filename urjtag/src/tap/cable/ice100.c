@@ -396,6 +396,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
             urj_error_set (URJ_ERROR_FIRMWARE,
                            _("Line %d is too short in file %s"),
                            lineno, filename);
+            free (input_line);
             return URJ_STATUS_FAIL;
         }
 
@@ -404,6 +405,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
             urj_error_set (URJ_ERROR_FIRMWARE,
                            _("Invalid start code on line %d in file %s"),
                            lineno, filename);
+            free (input_line);
             return URJ_STATUS_FAIL;
         }
 
@@ -412,6 +414,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
             urj_error_set (URJ_ERROR_FIRMWARE,
                            _("Bad byte count on line %d in file %s"),
                            lineno, filename);
+            free (input_line);
             return URJ_STATUS_FAIL;
         }
         byte_count = HEX2 (p);
@@ -423,6 +426,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
             urj_error_set (URJ_ERROR_FIRMWARE,
                            _("Bad address on line %d in file %s"),
                            lineno, filename);
+            free (input_line);
             return URJ_STATUS_FAIL;
         }
         address = HEX4 (p);
@@ -451,6 +455,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
                 {
                     urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
                                    _("malloc (%zd) failed"), sizeof (*q));
+                    free (input_line);
                     return URJ_STATUS_FAIL;
                 }
                 q->addr = base_address + address;
@@ -471,6 +476,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
                 urj_error_set (URJ_ERROR_OUT_OF_MEMORY,
                                _("realloc (%d) failed"),
                                q->bytes + byte_count);
+                free (input_line);
                 return URJ_STATUS_FAIL;
             }
 
@@ -483,6 +489,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
                     urj_error_set (URJ_ERROR_FIRMWARE,
                                    _("Bad HEX data %c%c on line %d in file %s"),
                                    p[0], p[1], lineno, filename);
+                    free (input_line);
                     return URJ_STATUS_FAIL;
                 }
                 data = HEX2 (p);
@@ -505,6 +512,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
                 urj_error_set (URJ_ERROR_FIRMWARE,
                                _("Bad extended segment address on line %d in file %s"),
                                lineno, filename);
+                free (input_line);
                 return URJ_STATUS_FAIL;
             }
             base_address = HEX4 (p);
@@ -519,6 +527,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
             urj_error_set (URJ_ERROR_FIRMWARE,
                            _("Bad HEX record type on line %d in file %s"),
                            lineno, filename);
+            free (input_line);
             return URJ_STATUS_FAIL;
         }
 
@@ -527,6 +536,7 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
             urj_error_set (URJ_ERROR_FIRMWARE,
                            _("Bad HEX checksum on line %d in file %s"),
                            lineno, filename);
+            free (input_line);
             return URJ_STATUS_FAIL;
         }
         checksum = HEX2 (p);
@@ -535,9 +545,12 @@ ice_read_hex_file (const char *filename, struct flash_block **flash_list)
             urj_error_set (URJ_ERROR_FIRMWARE,
                            _("The checksum is not correct on line %d in file %s"),
                            lineno, filename);
+            free (input_line);
             return URJ_STATUS_FAIL;
         }
     }
+
+    free (input_line);
     return URJ_STATUS_OK;
 }
 
