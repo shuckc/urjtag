@@ -1,3 +1,8 @@
+2011-10-04  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/tap/detect.c (urj_tap_detect_parts): Ignore search path when
+    call urj_parse_include.
+
 2011-10-03  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/cable/ice100.c (ice_read_hex_file): Free input_line

@@ -422,7 +422,7 @@ urj_tap_detect_parts (urj_chain_t *chain, const char *db_path)
             strcpy (part->manufacturer, manufacturer);
             strcpy (part->part, partname);
             strcpy (part->stepping, stepping);
-            if (urj_parse_include (chain, data_path, 0) == URJ_STATUS_FAIL)
+            if (urj_parse_include (chain, data_path, 1) == URJ_STATUS_FAIL)
                 urj_log_error_describe (URJ_LOG_LEVEL_ERROR);
 
             free (id_name);
