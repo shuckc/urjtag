@@ -1,3 +1,7 @@
+2011-10-09  Uwe Hermann  <uwe@hermann-uwe.de>
+
+  * include/Makefile.am, src/stapl/Makefile.am: Fix 'make dist'.
+
 2011-10-04  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/detect.c (urj_tap_detect_parts): Ignore search path when

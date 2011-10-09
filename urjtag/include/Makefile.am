@@ -23,4 +23,5 @@ noinst_HEADERS = \
 	ansidecl.h \
 	filenames.h \
 	libiberty.h \
-	safe-ctype.h
+	safe-ctype.h \
+	lex.h

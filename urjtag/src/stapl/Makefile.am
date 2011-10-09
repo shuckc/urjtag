@@ -41,8 +41,6 @@ libstapl_la_SOURCES = \
     jamjtag.c \
     jamexp.c \
     jamexec.h \
-    jamnote.h \
-    jamcrc.h \
     jamsym.h \
     jamstack.h \
     jamheap.h \
@@ -51,7 +49,6 @@ libstapl_la_SOURCES = \
     jamjtag.h \
     jamutil.h \
     jamexp.h \
-    stapl.h \
     stapl.c
 
 AM_CFLAGS = $(WARNINGCFLAGS)
