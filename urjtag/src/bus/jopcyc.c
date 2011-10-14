@@ -49,7 +49,7 @@
  *   This is mainly due to the lack of byte-enable information in the
  *   bus-driver API.
  *
- *   Remember to clarify the endianess of your data when working with
+ *   Remember to clarify the endianness of your data when working with
  *   the RAMs.
  *
  */

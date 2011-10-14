@@ -127,7 +127,7 @@ cmd_pld_run (urj_chain_t *chain, char *params[])
     else
     {
         urj_error_set (URJ_ERROR_SYNTAX,
-                       _("%s: unkown command"), params[0]);
+                       _("%s: unknown command"), params[0]);
         return URJ_STATUS_FAIL;
     }
 

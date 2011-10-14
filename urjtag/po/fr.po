@@ -1334,12 +1334,12 @@ msgid "display active data register for a part"
 msgstr "afficher le registre actif de données pour une pièce"
 
 #: src/cmd/cmd_endian.c:52
-msgid "Endianess for external files: big\n"
+msgid "Endianness for external files: big\n"
 msgstr ""
 "système de poids fort/faible des fichiers externes: gros (big endian)\n"
 
 #: src/cmd/cmd_endian.c:55
-msgid "Endianess for external files: little\n"
+msgid "Endianness for external files: little\n"
 msgstr ""
 "système de poids fort/faible des fichiers externes: petit (little endian)\n"
 
@@ -1347,14 +1347,14 @@ msgstr ""
 #, c-format
 msgid ""
 "Usage: %s\n"
-"Set or print endianess for external files.\n"
+"Set or print endianness for external files.\n"
 msgstr ""
 "Usage: %s\n"
 "Initialiser ou afficher le système de poids fort/faible (big/little endian) "
 "des fichiers externes.\n"
 
 #: src/cmd/cmd_endian.c:86
-msgid "set/print endianess"
+msgid "set/print endianness"
 msgstr ""
 "Initialiser ou afficher le système de poids fort/faible (big/little endian)."
 

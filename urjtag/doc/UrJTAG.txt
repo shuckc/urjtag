@@ -684,7 +684,7 @@ example usage.
 *detectflash*:: detect parameters of flash chips attached to a part
 *discovery*::   discovery of unknown parts in the JTAG chain
 *dr*::          display or set active data register for a part
-*endian*::      set/print endianess for reading/writing binary files
+*endian*::      set/print endianness for reading/writing binary files
 *eraseflash*::  erase flash memory by number of blocks
 *flashmem*::    burn flash memory with data from a file
 *frequency*::   setup JTAG frequency
@@ -937,7 +937,7 @@ These commands can be used if a part in the chain has memory connected to it
 initialized (see initbus command).
 
 *detectflash*:: detect parameters of flash chips attached to a part
-*endian*::      set/print endianess for reading/writing binary files
+*endian*::      set/print endianness for reading/writing binary files
 *eraseflash*::  erase flash memory by number of blocks
 *flashmem*::    burn flash memory with data from a file
 *peek*::        read a single word

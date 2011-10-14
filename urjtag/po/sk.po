@@ -1355,24 +1355,24 @@ msgid "display active data register for a part"
 msgstr "zobraziť akívny dátový register pre súčiastku"
 
 #: src/cmd/cmd_endian.c:52
-msgid "Endianess for external files: big\n"
+msgid "Endianness for external files: big\n"
 msgstr "Poradie bajtov pre externé súbory: big endian\n"
 
 #: src/cmd/cmd_endian.c:55
-msgid "Endianess for external files: little\n"
+msgid "Endianness for external files: little\n"
 msgstr "Poradie bajtov pre externé súbory: little endian\n"
 
 #: src/cmd/cmd_endian.c:79
 #, c-format
 msgid ""
 "Usage: %s\n"
-"Set or print endianess for external files.\n"
+"Set or print endianness for external files.\n"
 msgstr ""
 "Použitie: %s\n"
 "Nastaviť alebo vypísať poradie bajtov pre externá súbory.\n"
 
 #: src/cmd/cmd_endian.c:86
-msgid "set/print endianess"
+msgid "set/print endianness"
 msgstr "nastaviť/vypísať poradie bajtov"
 
 #: src/cmd/cmd_eraseflash.c:57 src/cmd/cmd_flashmem.c:60

@@ -1305,24 +1305,24 @@ msgstr "Kugaragaza Gikora Ibyatanzwe Kwiyandikisha kugirango a"
 
 #: src/cmd/cmd_endian.c:52
 #, fuzzy
-msgid "Endianess for external files: big\n"
+msgid "Endianness for external files: big\n"
 msgstr "kugirango external Idosiye"
 
 #: src/cmd/cmd_endian.c:55
 #, fuzzy
-msgid "Endianess for external files: little\n"
+msgid "Endianness for external files: little\n"
 msgstr "kugirango external Idosiye"
 
 #: src/cmd/cmd_endian.c:79
 #, fuzzy, c-format
 msgid ""
 "Usage: %s\n"
-"Set or print endianess for external files.\n"
+"Set or print endianness for external files.\n"
 msgstr "Cyangwa Gucapa kugirango external Idosiye"
 
 #: src/cmd/cmd_endian.c:86
 #, fuzzy
-msgid "set/print endianess"
+msgid "set/print endianness"
 msgstr "Gushyiraho Gucapa"
 
 #: src/cmd/cmd_eraseflash.c:57 src/cmd/cmd_flashmem.c:60

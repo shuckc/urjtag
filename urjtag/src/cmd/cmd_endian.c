@@ -94,7 +94,7 @@ cmd_endian_run (urj_chain_t *chain, char *params[])
 
     if (!params[1])
     {
-        urj_log (URJ_LOG_LEVEL_NORMAL, _("Endianess for external files: %s\n"),
+        urj_log (URJ_LOG_LEVEL_NORMAL, _("Endianness for external files: %s\n"),
                  urj_endian_to_string (urj_get_file_endian ()));
         return URJ_STATUS_OK;
     }
@@ -117,7 +117,7 @@ cmd_endian_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
              _("Usage: %s\n"
-               "Set or print endianess for external files.\n"),
+               "Set or print endianness for external files.\n"),
              "endian [little|big]");
 }
 
@@ -138,7 +138,7 @@ cmd_endian_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
 
 const urj_cmd_t urj_cmd_endian = {
     "endian",
-    N_("set/print endianess"),
+    N_("set/print endianness"),
     cmd_endian_help,
     cmd_endian_run,
     cmd_endian_complete,

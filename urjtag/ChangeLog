@@ -3,6 +3,9 @@
   * doc/Makefile.am: Add README.stapl to EXTRA_DIST so that it ends up in
     the tarball.
 
+  * doc/UrJTAG.txt, po/fr.po, po/rw.po, po/sk.po, src/bus/jopcyc.c,
+    src/bus/zefant-xs3.c, src/cmd/cmd_endian.c, src/cmd/cmd_pld.c: Fix typos.
+
 2011-10-09  Uwe Hermann  <uwe@hermann-uwe.de>
 
   * include/Makefile.am, src/stapl/Makefile.am: Fix 'make dist'.
