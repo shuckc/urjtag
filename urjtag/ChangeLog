@@ -1,3 +1,8 @@
+2011-10-14  Uwe Hermann  <uwe@hermann-uwe.de>
+
+  * doc/Makefile.am: Add README.stapl to EXTRA_DIST so that it ends up in
+    the tarball.
+
 2011-10-09  Uwe Hermann  <uwe@hermann-uwe.de>
 
   * include/Makefile.am, src/stapl/Makefile.am: Fix 'make dist'.
