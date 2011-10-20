@@ -1,5 +1,57 @@
 2011-10-19  Jie Zhang  <jie.zhang@analog.com>
 
+  * include/urjtag/bfin.h (chain_scan_select): Remove declaration.
+    (DECLARE_CHAIN_DBGCTL_SET_BIT): Remove.
+    (DECLARE_CHAIN_DBGCTL_CLEAR_BIT): Remove.
+    (DECLARE_DBGCTL_BIT_OP): Don't use the above two.
+    (chain_dbgstat_get): Remove declaration.
+    (chain_emupc_get): Likewise.
+    (chain_dbgstat_clear_ovfs): Likewise.
+    (chain_check_emuready): Likewise.
+    (chain_wait_in_reset): Likewise.
+    (chain_wait_reset): Likewise.
+    (chain_register_get): Likewise.
+    (chain_register_set): Likewise.
+    (chain_register_set_same): Likewise.
+    (chain_emuir_set_same): Likewise.
+    (chain_emuir_set_same_2): Likewise.
+    (chain_emulation_enable): Likewise.
+    (chain_emulation_disable): Likewise.
+    (chain_emulation_trigger): Likewise.
+    (chain_emulation_return): Likewise.
+    (chain_emupc_reset): Likewise.
+    (bfin_core_reset): Add a new parameter.
+    (software_reset): Likewise.
+    (part_emupc_reset): Declare.
+  * src/cmd/cmd_bfin.c (cmd_bfin_run): Pass chain->active_part as
+    the second argument to software_reset and bfin_core_reset.
+  * src/bfin/bfin.c (part_is_bypassed): Remove.
+    (part_bypass): Remove.
+    (chain_scan_select_array): Remove.
+    (chain_scan_select): Remove.
+    (part_scan_select): Don't call part_is_bypassed.
+    (CHAIN_DBGCTL_CLEAR_OR_SET_BIT): Remove.
+    (CHAIN_DBGCTL_SET_BIT): Remove.
+    (CHAIN_DBGCTL_CLEAR_BIT): Remove.
+    (DBGCTL_BIT_OP): Don't use the above two.
+    (chain_dbgstat_get): Remove.
+    (chain_emupc_get): Remove.
+    (chain_dbgstat_clear_ovfs): Remove.
+    (chain_check_emuready): Remove.
+    (chain_wait_in_reset): Remove.
+    (chain_wait_reset): Remove.
+    (chain_emuir_set_same): Remove.
+    (part_emuir_set): Don't call part_is_bypassed.
+    (chain_emuir_set_same_2): Remove.
+    (part_emuir_set_2): Don't call part_is_bypassed.
+    (chain_register_get): Remove.
+    (chain_register_set_1): Remove.
+    (chain_register_set): Remove.
+    (chain_register_set_same): Remove.
+    (chain_emulation_enable): Remove.
+
+2011-10-19  Jie Zhang  <jie.zhang@analog.com>
+
   * include/urjtag/bfin.h (struct emu_oab): Remove.  Move its dbgctl_*
     and dbgstat_* to ...
     (struct bfin_part_data): ... here. Remove field emu_oab.

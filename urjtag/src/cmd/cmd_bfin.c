@@ -474,9 +474,9 @@ cmd_bfin_run (urj_chain_t *chain, char *params[])
                  _("%s: reseting processor ... "), "bfin");
         fflush (stdout);
         if (reset_what == 0x3)
-            software_reset (chain);
+            software_reset (chain, chain->active_part);
         else if (reset_what & 0x1)
-            bfin_core_reset (chain);
+            bfin_core_reset (chain, chain->active_part);
         else if (reset_what & 0x2)
             chain_system_reset (chain);
         urj_log (URJ_LOG_LEVEL_NORMAL, _("OK\n"));

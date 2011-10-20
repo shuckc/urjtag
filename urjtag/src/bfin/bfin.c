@@ -69,31 +69,6 @@ part_is_bfin (urj_chain_t *chain, int n)
     return is_bfin_part (chain->parts->parts[n]);
 }
 
-static int
-part_is_bypassed (urj_chain_t *chain, int n)
-{
-    urj_part_t *part;
-
-    part = chain->parts->parts[n];
-
-    if (part_is_bfin (chain, n))
-        return BFIN_PART_BYPASS (part);
-
-    /* Other parts are all bypassed.  */
-    else
-        return 1;
-}
-
-void
-part_bypass (urj_chain_t *chain, int n)
-{
-    urj_part_t *part;
-
-    part = chain->parts->parts[n];
-    if (is_bfin_part (part))
-        BFIN_PART_BYPASS (part) = 1;
-}
-
 urj_tap_register_t *
 register_init_value (urj_tap_register_t *tr, uint64_t value)
 {
@@ -135,52 +110,6 @@ bfin_set_scan (urj_part_t *part, int scan)
 
 static void emuir_init_value (urj_tap_register_t *r, uint64_t insn);
 
-#if 0
-static int
-chain_scan_select_array (urj_chain_t *chain, int *scan)
-{
-    int i;
-    int changed;
-
-    changed = 0;
-
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        urj_part_t *part = chain->parts->parts[i];
-
-        if (part_is_bypassed (chain, i))
-            changed += bfin_set_scan (part, BYPASS);
-        else
-            changed += bfin_set_scan (part, scan[i]);
-    }
-
-    if (changed)
-        urj_tap_chain_shift_instructions_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-    return 0;
-}
-#endif
-
-int
-chain_scan_select (urj_chain_t *chain, int scan)
-{
-    int i;
-    int changed;
-
-    changed = 0;
-
-    for (i = 0; i < chain->parts->len; i++)
-        if (part_is_bypassed (chain, i))
-            changed += bfin_set_scan (chain->parts->parts[i], BYPASS);
-        else
-            changed += bfin_set_scan (chain->parts->parts[i], scan);
-
-    if (changed)
-        urj_tap_chain_shift_instructions_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-    return 0;
-}
-
 int
 part_scan_select (urj_chain_t *chain, int n, int scan)
 {
@@ -203,9 +132,6 @@ part_scan_select (urj_chain_t *chain, int n, int scan)
 
     for (i = 0; i < chain->parts->len; i++)
     {
-        if (part_is_bypassed (chain, i))
-            continue;
-
         if (i != n)
         {
             part = chain->parts->parts[i];
@@ -248,21 +174,6 @@ bfin_dbgstat_value (urj_part_t *part)
         BFIN_PART_DBGCTL (part) = dbgctl;                               \
     }
 
-#define CHAIN_DBGCTL_CLEAR_OR_SET_BIT(name)                             \
-    static void                                                         \
-    chain_dbgctl_bit_clear_or_set_##name (urj_chain_t *chain, int set)  \
-    {                                                                   \
-        int i;                                                          \
-                                                                        \
-        for (i = 0; i < chain->parts->len; i++)                         \
-        {                                                               \
-            if (part_is_bypassed (chain, i))                            \
-                continue;                                               \
-                                                                        \
-            part_dbgctl_bit_clear_or_set_##name (chain, i, set);        \
-        }                                                               \
-    }
-
 #define PART_DBGCTL_SET_BIT(name)                                       \
     void                                                                \
     part_dbgctl_bit_set_##name (urj_chain_t *chain, int n)              \
@@ -289,29 +200,11 @@ bfin_dbgstat_value (urj_part_t *part)
         part_dbgctl_bit_clear_or_set_##name (chain, n, 0);              \
     }
 
-#define CHAIN_DBGCTL_SET_BIT(name)                                      \
-    void                                                                \
-    chain_dbgctl_bit_set_##name (urj_chain_t *chain)                    \
-    {                                                                   \
-        chain_dbgctl_bit_clear_or_set_##name (chain, 1);                \
-    }
-
-#define CHAIN_DBGCTL_CLEAR_BIT(name)                                    \
-    void                                                                \
-    chain_dbgctl_bit_clear_##name (urj_chain_t *chain)                  \
-    {                                                                   \
-        chain_dbgctl_bit_clear_or_set_##name (chain, 0);                \
-    }
-
 #define DBGCTL_BIT_OP(name)                                             \
     PART_DBGCTL_CLEAR_OR_SET_BIT(name)                                  \
     PART_DBGCTL_SET_BIT(name)                                           \
     PART_DBGCTL_CLEAR_BIT(name)                                         \
-    PART_DBGCTL_IS(name)                                                \
-    CHAIN_DBGCTL_CLEAR_OR_SET_BIT(name)                                 \
-    CHAIN_DBGCTL_SET_BIT(name)                                          \
-    CHAIN_DBGCTL_CLEAR_BIT(name)
-
+    PART_DBGCTL_IS(name)
 
 /* These functions check cached DBGSTAT. So before calling them,
    dbgstat_get or core_dbgstat_get has to be called to update cached
@@ -407,34 +300,6 @@ part_dbgstat_emucause (urj_chain_t *chain, int n)
 }
 
 void
-chain_dbgstat_get (urj_chain_t *chain)
-{
-    urj_part_t *part;
-    int i;
-
-    chain_scan_select (chain, DBGSTAT_SCAN);
-
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        part = chain->parts->parts[i];
-
-        if (part_is_bypassed (chain, i))
-            continue;
-    }
-
-    urj_tap_chain_shift_data_registers_mode (chain, 1, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        part = chain->parts->parts[i];
-        BFIN_PART_DBGSTAT (part) = bfin_dbgstat_value (part);
-    }
-}
-
-void
 part_dbgstat_get (urj_chain_t *chain, int n)
 {
     urj_part_t *part;
@@ -448,30 +313,6 @@ part_dbgstat_get (urj_chain_t *chain, int n)
     urj_tap_chain_shift_data_registers_mode (chain, 1, 1, URJ_CHAIN_EXITMODE_UPDATE);
 
     BFIN_PART_DBGSTAT (part) = bfin_dbgstat_value (part);
-}
-
-void
-chain_emupc_get (urj_chain_t *chain, int save)
-{
-    urj_part_t *part;
-    urj_tap_register_t *r;
-    int i;
-
-    chain_scan_select (chain, EMUPC_SCAN);
-
-    urj_tap_chain_shift_data_registers_mode (chain, 1, 1, URJ_CHAIN_EXITMODE_UPDATE);
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        part = chain->parts->parts[i];
-
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        r = part->active_instruction->data_register->out;
-        BFIN_PART_EMUPC (part) = urj_tap_register_get_value (r);
-        if (save)
-            BFIN_PART_EMUPC_ORIG (part) = BFIN_PART_EMUPC (part);
-    }
 }
 
 uint32_t
@@ -496,32 +337,6 @@ part_emupc_get (urj_chain_t *chain, int n, int save)
 }
 
 void
-chain_dbgstat_clear_ovfs (urj_chain_t *chain)
-{
-    int i;
-
-    chain_scan_select (chain, DBGSTAT_SCAN);
-
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-        part_dbgstat_bit_set_emudiovf (chain, i);
-        part_dbgstat_bit_set_emudoovf (chain, i);
-    }
-
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-        part_dbgstat_bit_clear_emudiovf (chain, i);
-        part_dbgstat_bit_clear_emudoovf (chain, i);
-    }
-}
-
-void
 part_dbgstat_clear_ovfs (urj_chain_t *chain, int n)
 {
     part_scan_select (chain, n, DBGSTAT_SCAN);
@@ -536,29 +351,6 @@ part_dbgstat_clear_ovfs (urj_chain_t *chain, int n)
 }
 
 void
-chain_check_emuready (urj_chain_t *chain)
-{
-    int emuready;
-    int i;
-
-    chain_dbgstat_get (chain);
-    emuready = 1;
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        if (!(part_dbgstat_is_emuready (chain, i)))
-        {
-            emuready = 0;
-            break;
-        }
-    }
-
-    assert (emuready);
-}
-
-void
 part_check_emuready (urj_chain_t *chain, int n)
 {
     int emuready;
@@ -570,40 +362,6 @@ part_check_emuready (urj_chain_t *chain, int n)
         emuready = 0;
 
     assert (emuready);
-}
-
-void
-chain_wait_in_reset (urj_chain_t *chain)
-{
-    int in_reset;
-    int i;
-    int waited = 0;
-
-  try_again:
-
-    chain_dbgstat_get (chain);
-    in_reset = 1;
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        if (!(part_dbgstat_is_in_reset (chain, i)))
-        {
-            in_reset = 0;
-            break;
-        }
-    }
-
-    if (waited)
-        assert (in_reset);
-
-    if (!in_reset)
-    {
-        nanosleep (&bfin_emu_wait_ts, NULL);
-        waited = 1;
-        goto try_again;
-    }
 }
 
 void
@@ -624,40 +382,6 @@ part_wait_in_reset (urj_chain_t *chain, int n)
         assert (in_reset);
 
     if (!in_reset)
-    {
-        nanosleep (&bfin_emu_wait_ts, NULL);
-        waited = 1;
-        goto try_again;
-    }
-}
-
-void
-chain_wait_reset (urj_chain_t *chain)
-{
-    int in_reset;
-    int i;
-    int waited = 0;
-
-  try_again:
-
-    chain_dbgstat_get (chain);
-    in_reset = 0;
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        if (part_dbgstat_is_in_reset (chain, i))
-        {
-            in_reset = 1;
-            break;
-        }
-    }
-
-    if (waited)
-        assert (!in_reset);
-
-    if (in_reset)
     {
         nanosleep (&bfin_emu_wait_ts, NULL);
         waited = 1;
@@ -737,52 +461,6 @@ emuir_init_value (urj_tap_register_t *r, uint64_t insn)
 }
 
 void
-chain_emuir_set_same (urj_chain_t *chain, uint64_t insn, int exit)
-{
-    int emuir_scan;
-    urj_part_t *part;
-    urj_tap_register_t *r;
-    int i;
-
-    assert (exit == URJ_CHAIN_EXITMODE_UPDATE || exit == URJ_CHAIN_EXITMODE_IDLE);
-
-    if ((insn & 0xffffffff00000000ULL) == 0)
-    {
-        emuir_scan = EMUIR_SCAN;
-
-        chain_scan_select (chain, DBGCTL_SCAN);
-        chain_dbgctl_bit_set_emuirsz_32 (chain);
-        urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-    }
-    else
-    {
-        emuir_scan = EMUIR64_SCAN;
-
-        chain_scan_select (chain, DBGCTL_SCAN);
-        chain_dbgctl_bit_set_emuirsz_64 (chain);
-        urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-    }
-
-    chain_scan_select (chain, emuir_scan);
-
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        part = chain->parts->parts[i];
-        r = part->active_instruction->data_register->in;
-        emuir_init_value (r, insn);
-        BFIN_PART_EMUIR_A (part) = insn;
-    }
-
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, exit);
-
-    if (exit == URJ_CHAIN_EXITMODE_IDLE && bfin_check_emuready)
-        chain_check_emuready (chain);
-}
-
-void
 part_emuir_set (urj_chain_t *chain, int n, uint64_t insn, int exit)
 {
     int emuir_scan;
@@ -817,7 +495,7 @@ part_emuir_set (urj_chain_t *chain, int n, uint64_t insn, int exit)
 
     for (i = 0; i < chain->parts->len; i++)
     {
-        if (part_is_bypassed (chain, i))
+        if (!part_is_bfin (chain, i))
             continue;
 
         if (i == n && BFIN_PART_EMUIR_A (chain->parts->parts[i]) != insn)
@@ -838,10 +516,7 @@ part_emuir_set (urj_chain_t *chain, int n, uint64_t insn, int exit)
 
     for (i = 0; i < chain->parts->len; i++)
     {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        if (changed[i])
+        if (part_is_bfin (chain, i) && changed[i])
             scan_changed += bfin_set_scan (chain->parts->parts[i], emuir_scan);
         else
             scan_changed += bfin_set_scan (chain->parts->parts[i], BYPASS);
@@ -852,7 +527,7 @@ part_emuir_set (urj_chain_t *chain, int n, uint64_t insn, int exit)
 
     for (i = 0; i < chain->parts->len; i++)
     {
-        if (part_is_bypassed (chain, i))
+        if (!part_is_bfin (chain, i))
             continue;
 
         if (changed[i])
@@ -869,65 +544,6 @@ part_emuir_set (urj_chain_t *chain, int n, uint64_t insn, int exit)
 
     if (exit == URJ_CHAIN_EXITMODE_IDLE && bfin_check_emuready)
         part_check_emuready (chain, n);
-}
-
-void
-chain_emuir_set_same_2 (urj_chain_t *chain, uint64_t insn1, uint64_t insn2, int exit)
-{
-    urj_part_t *part;
-    urj_tap_register_t *r;
-    int emuir_scan;
-    int i;
-
-    assert (exit == URJ_CHAIN_EXITMODE_UPDATE || exit == URJ_CHAIN_EXITMODE_IDLE);
-
-    if ((insn1 & 0xffffffff00000000ULL) == 0
-        && (insn2 & 0xffffffff00000000ULL) == 0)
-    {
-        emuir_scan = EMUIR_SCAN;
-
-        chain_scan_select (chain, DBGCTL_SCAN);
-        chain_dbgctl_bit_set_emuirsz_32 (chain);
-        urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-    }
-    else
-    {
-        emuir_scan = EMUIR64_SCAN;
-
-        chain_scan_select (chain, DBGCTL_SCAN);
-        chain_dbgctl_bit_set_emuirsz_64 (chain);
-        urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-    }
-
-    chain_scan_select (chain, emuir_scan);
-
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        part = chain->parts->parts[i];
-        r = part->active_instruction->data_register->in;
-        emuir_init_value (r, insn2);
-        BFIN_PART_EMUIR_B (part) = insn2;
-    }
-
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        part = chain->parts->parts[i];
-        r = part->active_instruction->data_register->in;
-        emuir_init_value (r, insn1);
-        BFIN_PART_EMUIR_A (part) = insn1;
-    }
-
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, exit);
-    if (exit ==  URJ_CHAIN_EXITMODE_IDLE && bfin_check_emuready)
-        chain_check_emuready (chain);
 }
 
 void
@@ -966,7 +582,7 @@ part_emuir_set_2 (urj_chain_t *chain, int n, uint64_t insn1, uint64_t insn2, int
 
     for (i = 0; i < chain->parts->len; i++)
     {
-        if (part_is_bypassed (chain, i))
+        if (!part_is_bfin (chain, i))
             continue;
 
         if (i == n
@@ -991,10 +607,7 @@ part_emuir_set_2 (urj_chain_t *chain, int n, uint64_t insn1, uint64_t insn2, int
 
     for (i = 0; i < chain->parts->len; i++)
     {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        if (changed[i])
+        if (part_is_bfin (chain, i) && changed[i])
             scan_changed += bfin_set_scan (chain->parts->parts[i], emuir_scan);
         else
             scan_changed += bfin_set_scan (chain->parts->parts[i], BYPASS);
@@ -1005,7 +618,7 @@ part_emuir_set_2 (urj_chain_t *chain, int n, uint64_t insn1, uint64_t insn2, int
 
     for (i = 0; i < chain->parts->len; i++)
     {
-        if (part_is_bypassed (chain, i))
+        if (!part_is_bfin (chain, i))
             continue;
 
         if (changed[i] && i == n)
@@ -1017,7 +630,7 @@ part_emuir_set_2 (urj_chain_t *chain, int n, uint64_t insn1, uint64_t insn2, int
 
             emuir_init_value (r, insn1);
         }
-        else if (changed[i] && i != chain->active_part)
+        else if (changed[i])
         {
             part = chain->parts->parts[i];
             r = part->active_instruction->data_register->in;
@@ -1191,58 +804,8 @@ part_emudat_set (urj_chain_t *chain, int n, uint32_t value, int exit)
 }
 
 /* Forward declarations */
-void chain_register_set (urj_chain_t *chain, enum core_regnum reg, uint32_t *value);
 void part_register_set (urj_chain_t *chain, int n, enum core_regnum reg,
                         uint32_t value);
-
-void
-chain_register_get (urj_chain_t *chain, enum core_regnum reg, uint32_t *value)
-{
-    urj_part_t *part;
-    urj_tap_register_t *r;
-    int i;
-    uint32_t *r0 = NULL;
-
-    if (DREG_P (reg) || PREG_P (reg))
-        chain_emuir_set_same (chain, gen_move (REG_EMUDAT, reg), URJ_CHAIN_EXITMODE_IDLE);
-    else
-    {
-        r0 = (uint32_t *)malloc (chain->parts->len * sizeof (uint32_t));
-        if (!r0)
-            abort ();
-
-        chain_register_get (chain, REG_R0, r0);
-
-        chain_scan_select (chain, DBGCTL_SCAN);
-        chain_dbgctl_bit_set_emuirlpsz_2 (chain);
-        urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-        chain_emuir_set_same_2 (chain, gen_move (REG_R0, reg),
-                                gen_move (REG_EMUDAT, REG_R0), URJ_CHAIN_EXITMODE_IDLE);
-
-        chain_scan_select (chain, DBGCTL_SCAN);
-        chain_dbgctl_bit_clear_emuirlpsz_2 (chain);
-        urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-    }
-
-    chain_scan_select (chain, EMUDAT_SCAN);
-    urj_tap_chain_shift_data_registers_mode (chain, 1, 1, URJ_CHAIN_EXITMODE_UPDATE);
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        part = chain->parts->parts[i];
-        r = part->active_instruction->data_register->out;
-        value[i] = emudat_value (r);
-    }
-
-    if (!DREG_P (reg) && !PREG_P (reg))
-    {
-        chain_register_set (chain, REG_R0, r0);
-        free (r0);
-    }
-}
 
 uint32_t
 part_register_get (urj_chain_t *chain, int n, enum core_regnum reg)
@@ -1278,67 +841,6 @@ part_register_get (urj_chain_t *chain, int n, enum core_regnum reg)
         part_register_set (chain, n, REG_R0, r0);
 
     return emudat_value (r);
-}
-
-static void
-chain_register_set_1 (urj_chain_t *chain, enum core_regnum reg, uint32_t *value, bool array)
-{
-    urj_part_t *part;
-    urj_tap_register_t *r;
-    int i;
-    uint32_t *r0 = NULL;
-
-    if (!DREG_P (reg) && !PREG_P (reg))
-    {
-        r0 = (uint32_t *)malloc (chain->parts->len * sizeof (uint32_t));
-        if (!r0)
-            abort ();
-
-        chain_register_get (chain, REG_R0, r0);
-    }
-
-    chain_scan_select (chain, EMUDAT_SCAN);
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        if (part_is_bypassed (chain, i))
-            continue;
-
-        part = chain->parts->parts[i];
-        r = part->active_instruction->data_register->in;
-        emudat_init_value (r, array ? value[i] : *value);
-    }
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-    if (DREG_P (reg) || PREG_P (reg))
-        chain_emuir_set_same (chain, gen_move (reg, REG_EMUDAT), URJ_CHAIN_EXITMODE_IDLE);
-    else
-    {
-        chain_scan_select (chain, DBGCTL_SCAN);
-        chain_dbgctl_bit_set_emuirlpsz_2 (chain);
-        urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-        chain_emuir_set_same_2 (chain, gen_move (REG_R0, REG_EMUDAT),
-                                gen_move (reg, REG_R0), URJ_CHAIN_EXITMODE_IDLE);
-
-        chain_scan_select (chain, DBGCTL_SCAN);
-        chain_dbgctl_bit_clear_emuirlpsz_2 (chain);
-        urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-        chain_register_set (chain, REG_R0, r0);
-        free (r0);
-    }
-}
-
-void
-chain_register_set (urj_chain_t *chain, enum core_regnum reg, uint32_t *value)
-{
-    chain_register_set_1 (chain, reg, value, true);
-}
-
-void
-chain_register_set_same (urj_chain_t *chain, enum core_regnum reg, uint32_t value)
-{
-    chain_register_set_1 (chain, reg, &value, false);
 }
 
 void
@@ -1404,22 +906,6 @@ part_set_p0 (urj_chain_t *chain, int n, uint32_t value)
 }
 
 void
-chain_emulation_enable (urj_chain_t *chain)
-{
-    chain_scan_select (chain, DBGCTL_SCAN);
-
-    chain_dbgctl_bit_set_empwr (chain);
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-    chain_dbgctl_bit_set_emfen (chain);
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-
-    chain_dbgctl_bit_set_emuirsz_32 (chain);
-    chain_dbgctl_bit_set_emudatsz_40 (chain);
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-}
-
-void
 part_emulation_enable (urj_chain_t *chain, int n)
 {
     part_scan_select (chain, n, DBGCTL_SCAN);
@@ -1436,38 +922,11 @@ part_emulation_enable (urj_chain_t *chain, int n)
 }
 
 void
-chain_emulation_disable (urj_chain_t *chain)
-{
-    chain_scan_select (chain, DBGCTL_SCAN);
-    chain_dbgctl_bit_clear_empwr (chain);
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-}
-
-void
 part_emulation_disable (urj_chain_t *chain, int n)
 {
     part_scan_select (chain, n, DBGCTL_SCAN);
     part_dbgctl_bit_clear_empwr (chain, n);
     urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
-}
-
-
-void
-chain_emulation_trigger (urj_chain_t *chain)
-{
-    chain_emuir_set_same (chain, INSN_NOP, URJ_CHAIN_EXITMODE_UPDATE);
-
-    chain_scan_select (chain, DBGCTL_SCAN);
-    chain_dbgctl_bit_set_wakeup (chain);
-    chain_dbgctl_bit_set_emeen (chain);
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_IDLE);
-
-    /* I don't know why, but the following code works.  */
-    /* Enter the emulation mode */
-    urj_tap_chain_defer_clock (chain, 1, 0, 1);
-    /* Bring the TAP state to Update-DR */
-    urj_tap_chain_defer_clock (chain, 0, 0, 1);
-    urj_tap_chain_defer_clock (chain, 1, 0, 2);
 }
 
 void
@@ -1486,17 +945,6 @@ part_emulation_trigger (urj_chain_t *chain, int n)
     /* Bring the TAP state to Update-DR */
     urj_tap_chain_defer_clock (chain, 0, 0, 1);
     urj_tap_chain_defer_clock (chain, 1, 0, 2);
-}
-
-void
-chain_emulation_return (urj_chain_t *chain)
-{
-    chain_emuir_set_same (chain, INSN_RTE, URJ_CHAIN_EXITMODE_UPDATE);
-
-    chain_scan_select (chain, DBGCTL_SCAN);
-    chain_dbgctl_bit_clear_emeen (chain);
-    chain_dbgctl_bit_clear_wakeup (chain);
-    urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_IDLE);
 }
 
 void
@@ -1570,62 +1018,54 @@ chain_system_reset (urj_chain_t *chain)
 }
 
 void
-bfin_core_reset (urj_chain_t *chain)
+bfin_core_reset (urj_chain_t *chain, int n)
 {
-    chain_emulation_disable (chain);
+    part_emulation_disable (chain, n);
 
-    part_emuir_set (chain, chain->main_part, INSN_NOP, URJ_CHAIN_EXITMODE_UPDATE);
+    part_emuir_set (chain, n, INSN_NOP, URJ_CHAIN_EXITMODE_UPDATE);
 
-    chain_scan_select (chain, DBGCTL_SCAN);
-    chain_dbgctl_bit_set_sram_init (chain);
-    part_dbgctl_bit_set_sysrst (chain, chain->main_part);
+    part_scan_select (chain, n, DBGCTL_SCAN);
+    part_dbgctl_bit_set_sram_init (chain, n);
+    part_dbgctl_bit_set_sysrst (chain, n);
     urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
 
-    chain_wait_in_reset (chain);
+    part_wait_in_reset (chain, n);
 
-    chain_scan_select (chain, DBGCTL_SCAN);
-    part_dbgctl_bit_clear_sysrst (chain, chain->main_part);
+    part_scan_select (chain, n, DBGCTL_SCAN);
+    part_dbgctl_bit_clear_sysrst (chain, n);
     urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
 
-    chain_wait_reset (chain);
+    part_wait_reset (chain, n);
 
-    chain_emulation_enable (chain);
-    chain_emulation_trigger (chain);
+    part_emulation_enable (chain, n);
+    part_emulation_trigger (chain, n);
 
-    chain_scan_select (chain, DBGCTL_SCAN);
-    chain_dbgctl_bit_clear_sram_init (chain);
+    part_scan_select (chain, n, DBGCTL_SCAN);
+    part_dbgctl_bit_clear_sram_init (chain, n);
     urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_UPDATE);
 }
 
 void
-software_reset (urj_chain_t *chain)
+software_reset (urj_chain_t *chain, int n)
 {
     chain_system_reset (chain);
-    bfin_core_reset (chain);
+    bfin_core_reset (chain, n);
 }
 
 void
-chain_emupc_reset (urj_chain_t *chain, uint32_t *new_pc)
+part_emupc_reset (urj_chain_t *chain, int n, uint32_t new_pc)
 {
-    uint32_t p0[chain->parts->len];
-    int i;
+    urj_part_t *part = chain->parts->parts[n];
+    uint32_t p0;
 
-    chain_register_get (chain, REG_P0, p0);
+    p0 = part_register_get (chain, n, REG_P0);
 
-    for (i = 0; i < chain->parts->len; i++)
-    {
-        urj_part_t *part = chain->parts->parts[i];
+    BFIN_PART_EMUPC (part) = new_pc;
 
-        if (part_is_bypassed (chain, i))
-            continue;
+    part_register_set (chain, n, REG_P0, new_pc);
+    part_emuir_set (chain, n, gen_jump_reg (REG_P0), URJ_CHAIN_EXITMODE_IDLE);
 
-        BFIN_PART_EMUPC (part) = new_pc[i];
-    }
-
-    chain_register_set (chain, REG_P0, new_pc);
-    chain_emuir_set_same (chain, gen_jump_reg (REG_P0), URJ_CHAIN_EXITMODE_IDLE);
-
-    chain_register_set (chain, REG_P0, p0);
+    part_register_set (chain, n, REG_P0, p0);
 }
 
 uint32_t

@@ -192,7 +192,6 @@ void part_bypass (urj_chain_t *, int);
 
 urj_tap_register_t *register_init_value (urj_tap_register_t *, uint64_t);
 int part_scan_select (urj_chain_t *, int, int);
-int chain_scan_select (urj_chain_t *, int);
 
 #define DECLARE_PART_DBGCTL_SET_BIT(name)                               \
     void part_dbgctl_bit_set_##name (urj_chain_t *chain, int n);
@@ -203,18 +202,10 @@ int chain_scan_select (urj_chain_t *, int);
 #define DECLARE_PART_DBGCTL_IS(name)                            \
     int part_dbgctl_is_##name (urj_chain_t *chain, int n);
 
-#define DECLARE_CHAIN_DBGCTL_SET_BIT(name)                      \
-    void chain_dbgctl_bit_set_##name (urj_chain_t *chain);
-
-#define DECLARE_CHAIN_DBGCTL_CLEAR_BIT(name)                    \
-    void chain_dbgctl_bit_clear_##name (urj_chain_t *chain);
-
 #define DECLARE_DBGCTL_BIT_OP(name)             \
     DECLARE_PART_DBGCTL_SET_BIT(name)           \
     DECLARE_PART_DBGCTL_CLEAR_BIT(name)         \
-    DECLARE_PART_DBGCTL_IS(name)                \
-    DECLARE_CHAIN_DBGCTL_SET_BIT(name)          \
-    DECLARE_CHAIN_DBGCTL_CLEAR_BIT(name)
+    DECLARE_PART_DBGCTL_IS(name)
 
 /* These functions check cached DBGSTAT. So before calling them,
    chain_dbgstat_get or part_dbgstat_get has to be called to update cached
@@ -254,16 +245,10 @@ DECLARE_PART_DBGSTAT_BIT_IS (emudif)
 DECLARE_PART_DBGSTAT_BIT_IS (emudof)
 
 uint16_t part_dbgstat_emucause (urj_chain_t *, int);
-void chain_dbgstat_get (urj_chain_t *);
 void part_dbgstat_get (urj_chain_t *, int);
-void chain_emupc_get (urj_chain_t *, int);
 uint32_t part_emupc_get (urj_chain_t *, int, int);
-void chain_dbgstat_clear_ovfs (urj_chain_t *);
 void part_dbgstat_clear_ovfs (urj_chain_t *, int);
-void chain_check_emuready (urj_chain_t *);
-void chain_wait_in_reset (urj_chain_t *);
 void part_wait_in_reset (urj_chain_t *, int);
-void chain_wait_reset (urj_chain_t *);
 void part_wait_reset (urj_chain_t *, int);
 void part_check_emuready (urj_chain_t *, int);
 void part_emudat_set (urj_chain_t *, int, uint32_t, int);
@@ -272,32 +257,23 @@ void part_emudat_defer_get (urj_chain_t *, int, int);
 uint32_t part_emudat_get_done (urj_chain_t *, int, int);
 uint64_t emudat_value (urj_tap_register_t *);
 void emudat_init_value (urj_tap_register_t *, uint32_t);
-void chain_register_get (urj_chain_t *, enum core_regnum, uint32_t *);
 uint32_t part_register_get (urj_chain_t *, int, enum core_regnum);
-void chain_register_set (urj_chain_t *, enum core_regnum, uint32_t *);
-void chain_register_set_same (urj_chain_t *, enum core_regnum, uint32_t);
 void part_register_set (urj_chain_t *, int, enum core_regnum, uint32_t);
-void chain_emuir_set_same (urj_chain_t *, uint64_t, int);
 void part_emuir_set (urj_chain_t *, int, uint64_t, int);
-void chain_emuir_set_same_2 (urj_chain_t *, uint64_t, uint64_t, int);
 void part_emuir_set_2 (urj_chain_t *, int, uint64_t, uint64_t, int);
 uint32_t part_get_r0 (urj_chain_t *, int);
 uint32_t part_get_p0 (urj_chain_t *, int);
 void part_set_r0 (urj_chain_t *, int, uint32_t);
 void part_set_p0 (urj_chain_t *, int, uint32_t);
-void chain_emulation_enable (urj_chain_t *);
 void part_emulation_enable (urj_chain_t *, int);
-void chain_emulation_disable (urj_chain_t *);
 void part_emulation_disable (urj_chain_t *, int);
-void chain_emulation_trigger (urj_chain_t *);
 void part_emulation_trigger (urj_chain_t *, int);
-void chain_emulation_return (urj_chain_t *);
 void part_emulation_return (urj_chain_t *, int);
 void part_execute_instructions (urj_chain_t *, int n, struct bfin_insn *);
 void chain_system_reset (urj_chain_t *);
-void bfin_core_reset (urj_chain_t *);
-void software_reset (urj_chain_t *);
-void chain_emupc_reset (urj_chain_t *, uint32_t *);
+void bfin_core_reset (urj_chain_t *, int);
+void software_reset (urj_chain_t *, int);
+void part_emupc_reset (urj_chain_t *, int, uint32_t);
 uint32_t part_mmr_read_clobber_r0 (urj_chain_t *, int, int32_t, int);
 void part_mmr_write_clobber_r0 (urj_chain_t *, int, int32_t, uint32_t, int);
 uint32_t part_mmr_read (urj_chain_t *, int, uint32_t, int);
