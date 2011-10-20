@@ -26,12 +26,12 @@
 #include <unistd.h>
 
 #include <urjtag/chain.h>
+#include <urjtag/cable.h>
 #include <urjtag/tap_state.h>
 #include <urjtag/tap_register.h>
 #include <urjtag/data_register.h>
 #include <urjtag/part_instruction.h>
 #include <urjtag/bfin.h>
-#include "bfin-part.h"
 
 const char * const scans[] = {
     "IDCODE",
@@ -219,6 +219,20 @@ part_scan_select (urj_chain_t *chain, int n, int scan)
     return 0;
 }
 
+/* The helper functions for Blackfin DBGCTL and DBGSTAT operations.  */
+
+static void
+bfin_dbgctl_init (urj_part_t *part, uint16_t v)
+{
+    register_init_value (part->active_instruction->data_register->in, v);
+}
+
+static uint16_t
+bfin_dbgstat_value (urj_part_t *part)
+{
+    return urj_tap_register_get_value (part->active_instruction->data_register->out);
+}
+
 #define PART_DBGCTL_CLEAR_OR_SET_BIT(name)                              \
     static void                                                         \
     part_dbgctl_bit_clear_or_set_##name (urj_chain_t *chain, int n, int set) \
@@ -226,8 +240,11 @@ part_scan_select (urj_chain_t *chain, int n, int scan)
         urj_part_t *part = chain->parts->parts[n];                      \
         uint16_t dbgctl = BFIN_PART_DBGCTL (part);                      \
                                                                         \
-        dbgctl = _part_dbgctl_bit_clear_or_set_##name (part, dbgctl, set); \
-        _part_dbgctl_init (part, dbgctl);                               \
+        if (set)                                                        \
+            dbgctl |= BFIN_PART_DATA (part)->dbgctl_##name;             \
+        else                                                            \
+            dbgctl &= ~BFIN_PART_DATA (part)->dbgctl_##name;            \
+        bfin_dbgctl_init (part, dbgctl);                                \
         BFIN_PART_DBGCTL (part) = dbgctl;                               \
     }
 
@@ -258,7 +275,11 @@ part_scan_select (urj_chain_t *chain, int n, int scan)
     part_dbgctl_is_##name (urj_chain_t *chain, int n)                   \
     {                                                                   \
         urj_part_t *part = chain->parts->parts[n];                      \
-        return _part_dbgctl_is_##name (part, BFIN_PART_DBGCTL (part));  \
+        uint16_t dbgctl = BFIN_PART_DBGCTL (part);                      \
+        if (dbgctl & BFIN_PART_DATA (part)->dbgctl_##name)              \
+            return 1;                                                   \
+        else                                                            \
+            return 0;                                                   \
     }
        
 #define PART_DBGCTL_CLEAR_BIT(name)                                     \
@@ -301,7 +322,11 @@ part_scan_select (urj_chain_t *chain, int n, int scan)
     part_dbgstat_is_##name (urj_chain_t *chain, int n)                  \
     {                                                                   \
         urj_part_t *part = chain->parts->parts[n];                      \
-        return _part_dbgstat_is_##name (part, BFIN_PART_DBGSTAT (part)); \
+        uint16_t dbgstat = BFIN_PART_DBGSTAT (part);                    \
+        if (dbgstat & BFIN_PART_DATA (part)->dbgstat_##name)            \
+            return 1;                                                   \
+        else                                                            \
+            return 0;                                                   \
     }
 
 #define PART_DBGSTAT_CLEAR_BIT(name)                                    \
@@ -310,8 +335,7 @@ part_scan_select (urj_chain_t *chain, int n, int scan)
     {                                                                   \
         urj_part_t *part = chain->parts->parts[n];                      \
         urj_tap_register_t *r = part->active_instruction->data_register->in; \
-        BFIN_PART_DBGSTAT (part)                                        \
-            = _part_dbgstat_bit_clear_##name (part, BFIN_PART_DBGSTAT (part)); \
+        BFIN_PART_DBGSTAT (part) &= ~BFIN_PART_DATA (part)->dbgstat_##name; \
         register_init_value (r, BFIN_PART_DBGSTAT (part));              \
     }
 
@@ -321,8 +345,7 @@ part_scan_select (urj_chain_t *chain, int n, int scan)
     {                                                                   \
         urj_part_t *part = chain->parts->parts[n];                      \
         urj_tap_register_t *r = part->active_instruction->data_register->in; \
-        BFIN_PART_DBGSTAT (part)                                        \
-            = _part_dbgstat_bit_set_##name (part, BFIN_PART_DBGSTAT (part)); \
+        BFIN_PART_DBGSTAT (part) |= BFIN_PART_DATA (part)->dbgstat_##name; \
         register_init_value (r, BFIN_PART_DBGSTAT (part));              \
     }
 
@@ -371,7 +394,7 @@ part_dbgstat_emucause (urj_chain_t *chain, int n)
     uint16_t emucause;
 
     part = chain->parts->parts[n];
-    mask = _part_dbgstat_emucause_mask (part);
+    mask = BFIN_PART_DATA (part)->dbgstat_emucause_mask;
     emucause = BFIN_PART_DBGSTAT (part) & mask;
 
     while (!(mask & 0x1))
@@ -391,24 +414,12 @@ chain_dbgstat_get (urj_chain_t *chain)
 
     chain_scan_select (chain, DBGSTAT_SCAN);
 
-    /* After doing a shiftDR you always must eventually do an
-       update-DR. The dbgstat and dbgctl registers are in the same scan
-       chain.  Therefore when you want to read dbgstat you have to be
-       careful not to corrupt the dbgctl register in the process. So you
-       have to shift out the value that is currently in the dbgctl and
-       dbgstat registers, then shift back the same value into the dbgctl
-       so that when you do an updateDR you will not change the dbgctl
-       register when all you wanted to do is read the dbgstat value.  */
-
     for (i = 0; i < chain->parts->len; i++)
     {
         part = chain->parts->parts[i];
 
         if (part_is_bypassed (chain, i))
             continue;
-
-        if (_part_dbgctl_dbgstat_in_one_chain (part))
-            _part_dbgctl_init (part, BFIN_PART_DBGCTL (part));
     }
 
     urj_tap_chain_shift_data_registers_mode (chain, 1, 1, URJ_CHAIN_EXITMODE_UPDATE);
@@ -419,7 +430,7 @@ chain_dbgstat_get (urj_chain_t *chain)
             continue;
 
         part = chain->parts->parts[i];
-        BFIN_PART_DBGSTAT (part) = _part_dbgstat_value (part);
+        BFIN_PART_DBGSTAT (part) = bfin_dbgstat_value (part);
     }
 }
 
@@ -432,16 +443,11 @@ part_dbgstat_get (urj_chain_t *chain, int n)
 
     part_scan_select (chain, n, DBGSTAT_SCAN);
 
-    /* See above comments.  */
-
     part = chain->parts->parts[n];
-
-    if (_part_dbgctl_dbgstat_in_one_chain (part))
-        _part_dbgctl_init (part, BFIN_PART_DBGCTL (part));
 
     urj_tap_chain_shift_data_registers_mode (chain, 1, 1, URJ_CHAIN_EXITMODE_UPDATE);
 
-    BFIN_PART_DBGSTAT (part) = _part_dbgstat_value (part);
+    BFIN_PART_DBGSTAT (part) = bfin_dbgstat_value (part);
 }
 
 void
@@ -566,13 +572,6 @@ part_check_emuready (urj_chain_t *chain, int n)
     assert (emuready);
 }
 
-int
-part_sticky_in_reset (urj_chain_t *chain, int n)
-{
-    urj_part_t *part = chain->parts->parts[n];
-    return _part_sticky_in_reset (part);
-}
-
 void
 chain_wait_in_reset (urj_chain_t *chain)
 {
@@ -648,7 +647,7 @@ chain_wait_reset (urj_chain_t *chain)
         if (part_is_bypassed (chain, i))
             continue;
 
-        if (part_dbgstat_is_in_reset (chain, i) && !part_sticky_in_reset (chain, i))
+        if (part_dbgstat_is_in_reset (chain, i))
         {
             in_reset = 1;
             break;
@@ -675,7 +674,7 @@ part_wait_reset (urj_chain_t *chain, int n)
   try_again:
 
     part_dbgstat_get (chain, n);
-    if (part_dbgstat_is_in_reset (chain, n) && !part_sticky_in_reset (chain, n))
+    if (part_dbgstat_is_in_reset (chain, n))
         in_reset = 1;
     else
         in_reset = 0;
@@ -1745,4 +1744,164 @@ part_mmr_write (urj_chain_t *chain, int n, uint32_t addr, uint32_t data, int siz
 
     part_register_set (chain, n, REG_P0, p0);
     part_register_set (chain, n, REG_R0, r0);
+}
+
+struct bfin_part_data bfin_part_data_initializer =
+{
+    0, /* bypass */
+    0, /* scan */
+
+    0, /* dbgctl */
+    0, /* dbgstat */
+
+    0x1000, /* DBGCTL_SRAM_INIT */
+    0x0800, /* DBGCTL_WAKEUP */
+    0x0400, /* DBGCTL_SYSRST */
+    0x0200, /* DBGCTL_ESSTEP */
+    0x0000, /* DBGCTL_EMUDATSZ_32 */
+    0x0080, /* DBGCTL_EMUDATSZ_40 */
+    0x0100, /* DBGCTL_EMUDATSZ_48 */
+    0x0180, /* DBGCTL_EMUDATSZ_MASK */
+    0x0040, /* DBGCTL_EMUIRLPSZ_2 */
+    0x0000, /* DBGCTL_EMUIRSZ_64 */
+    0x0010, /* DBGCTL_EMUIRSZ_48 */
+    0x0020, /* DBGCTL_EMUIRSZ_32 */
+    0x0030, /* DBGCTL_EMUIRSZ_MASK */
+    0x0008, /* DBGCTL_EMPEN */
+    0x0004, /* DBGCTL_EMEEN */
+    0x0002, /* DBGCTL_EMFEN */
+    0x0001, /* DBGCTL_EMPWR */
+
+    0x8000, /* DBGSTAT_LPDEC1 */
+    0x0000, /* No DBGSTAT_IN_POWRGATE for bfin */
+    0x4000, /* DBGSTAT_CORE_FAULT */
+    0x2000, /* DBGSTAT_IDLE */
+    0x1000, /* DBGSTAT_IN_RESET */
+    0x0800, /* DBGSTAT_LPDEC0 */
+    0x0400, /* DBGSTAT_BIST_DONE */
+    0x03c0, /* DBGSTAT_EMUCAUSE_MASK */
+    0x0020, /* DBGSTAT_EMUACK */
+    0x0010, /* DBGSTAT_EMUREADY */
+    0x0008, /* DBGSTAT_EMUDIOVF */
+    0x0004, /* DBGSTAT_EMUDOOVF */
+    0x0002, /* DBGSTAT_EMUDIF */
+    0x0001, /* DBGSTAT_EMUDOF */
+
+    INSN_ILLEGAL, /* emuir_a */
+    INSN_ILLEGAL, /* emuir_b */
+
+    0, /* emudat_out */
+    0, /* emudat_in */
+
+    -1, /* emupc */
+    -1, /* emupc_orig */
+};
+
+static void
+bfin_wait_ready (void *data)
+{
+    urj_chain_t *chain = (urj_chain_t *) data;
+
+    /* The following default numbers of wait clock for various cables are
+       tested on a BF537 stamp board, on which U-Boot is running.
+       CCLK is set to 62MHz and SCLK is set to 31MHz, which is the lowest
+       frequency I can set in BF537 stamp Linux kernel.
+
+       The test is done by dumping memory from 0x20000000 to 0x20000010 using
+       GDB and gdbproxy:
+
+       (gdb) dump memory u-boot.bin 0x20000000 0x20000010
+       (gdb) shell hexdump -C u-boot.bin
+
+       With an incorrect number of wait clocks, the first 4 bytes will be
+       duplicated by the second 4 bytes.  */
+
+    if (bfin_wait_clocks == -1)
+    {
+        urj_cable_t *cable = chain->cable;
+        uint32_t frequency = cable->frequency;
+        const char *name = cable->driver->name;
+
+        if (strcmp (name, "gnICE+") == 0)
+        {
+            if (frequency <= 6000000)
+                bfin_wait_clocks = 5;
+            else if (frequency <= 15000000)
+                bfin_wait_clocks = 12;
+            else /* <= 30MHz */
+                bfin_wait_clocks = 21;
+        }
+        else if (strcmp (name, "gnICE") == 0)
+            bfin_wait_clocks = 3;
+        else if (strcmp (name, "ICE-100B") == 0)
+        {
+            if (frequency <= 5000000)
+                bfin_wait_clocks = 5;
+            else if (frequency <= 10000000)
+                bfin_wait_clocks = 11;
+            else if (frequency <= 17000000)
+                bfin_wait_clocks = 19;
+            else /* <= 25MHz */
+                bfin_wait_clocks = 30;
+        }
+
+        if (bfin_wait_clocks == -1)
+        {
+            bfin_wait_clocks = 30;
+            urj_warning (_("%s: untested cable, set wait_clocks to %d\n"),
+                         name, bfin_wait_clocks);
+        }
+    }
+
+    urj_tap_chain_defer_clock (chain, 0, 0, bfin_wait_clocks);
+}
+
+static void
+bfin_part_init (urj_part_t *part)
+{
+    int i;
+
+    if (!part || !part->params)
+        goto error;
+
+    part->params->free = free;
+    part->params->wait_ready = bfin_wait_ready;
+    part->params->data = malloc (sizeof (struct bfin_part_data));
+
+    *BFIN_PART_DATA (part) = bfin_part_data_initializer;
+
+    if (!part->active_instruction)
+        goto error;
+    for (i = 0; i < NUM_SCANS; i++)
+        if (strcmp (part->active_instruction->name, scans[i]) == 0)
+            break;
+
+    if (i == NUM_SCANS)
+        goto error;
+
+    BFIN_PART_SCAN (part) = i;
+    return;
+
+ error:
+    urj_warning (_("Blackfin part is missing instructions\n"));
+}
+
+void _bfin_part_init (void) __attribute__((constructor));
+
+void
+_bfin_part_init (void)
+{
+    /* Keep in sync with data/analog/PARTS */
+    urj_part_init_register ("BF506", bfin_part_init);
+    urj_part_init_register ("BF518", bfin_part_init);
+    urj_part_init_register ("BF526", bfin_part_init);
+    urj_part_init_register ("BF527", bfin_part_init);
+    urj_part_init_register ("BF533", bfin_part_init);
+    urj_part_init_register ("BF534", bfin_part_init);
+    urj_part_init_register ("BF537", bfin_part_init);
+    urj_part_init_register ("BF538", bfin_part_init);
+    urj_part_init_register ("BF548", bfin_part_init);
+    urj_part_init_register ("BF548M", bfin_part_init);
+    urj_part_init_register ("BF561", bfin_part_init);
+    urj_part_init_register ("BF592", bfin_part_init);
 }

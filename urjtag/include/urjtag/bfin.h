@@ -66,32 +66,14 @@ enum core_regnum
 #define ITEST_DATA0                     0xffe01400
 #define ITEST_DATA1                     0xffe01404
 
-/* OAB stands for Operations and Bits.  */
-
-struct emu_oab
+struct bfin_part_data
 {
-    /* Operations */
+    int bypass;
+    int scan;
 
-    void (*dbgctl_init) (urj_part_t *part, uint16_t value);
-    uint16_t (*dbgstat_value) (urj_part_t *part);
+    uint16_t dbgctl;
+    uint16_t dbgstat;
 
-    /* Get the MMRs needed to access this L1 address.  */
-    void (*test_command_mmrs) (urj_part_t *part, uint32_t addr, int icache,
-                               uint32_t *command_addr,
-                               uint32_t *data0_addr, uint32_t *data1_addr);
-
-    /* Generate TEST_COMMAND from ADDR and W(rite), and return the MMRs
-       that need to be used for this access.  */
-    void (*test_command) (urj_part_t *part, uint32_t addr, int w,
-                          uint32_t command_addr, uint32_t *command_value);
-
-    /* No existing Blackfin processors use this.  It should be 0.  */
-    int dbgctl_dbgstat_in_one_chain;
-
-    /* No existing Blackfin processors use this.  It should be 0.  */
-    int sticky_in_reset;
-
-    /* Bits */
     uint16_t dbgctl_sram_init;
     uint16_t dbgctl_wakeup;
     uint16_t dbgctl_sysrst;
@@ -124,26 +106,19 @@ struct emu_oab
     uint16_t dbgstat_emudoovf;
     uint16_t dbgstat_emudif;
     uint16_t dbgstat_emudof;
-};
 
-struct bfin_part_data
-{
-    int bypass;
-    const struct emu_oab *emu_oab;
-    int scan;
-    uint16_t dbgctl;
-    uint16_t dbgstat;
     uint64_t emuir_a;
     uint64_t emuir_b;
+
     uint64_t emudat_out;
     uint64_t emudat_in;
+
     uint32_t emupc;
     uint32_t emupc_orig;
 };
 
 #define BFIN_PART_DATA(part)       ((struct bfin_part_data *)((part)->params->data))
 #define BFIN_PART_BYPASS(part)     (BFIN_PART_DATA (part)->bypass)
-#define EMU_OAB(part)              (BFIN_PART_DATA (part)->emu_oab)
 
 #define BFIN_PART_SCAN(part)       (BFIN_PART_DATA (part)->scan)
 #define BFIN_PART_WPSTAT(part)     (BFIN_PART_DATA (part)->wpstat)
@@ -286,7 +261,6 @@ uint32_t part_emupc_get (urj_chain_t *, int, int);
 void chain_dbgstat_clear_ovfs (urj_chain_t *);
 void part_dbgstat_clear_ovfs (urj_chain_t *, int);
 void chain_check_emuready (urj_chain_t *);
-int part_sticky_in_reset (urj_chain_t *, int);
 void chain_wait_in_reset (urj_chain_t *);
 void part_wait_in_reset (urj_chain_t *, int);
 void chain_wait_reset (urj_chain_t *);

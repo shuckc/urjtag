@@ -1,3 +1,35 @@
+2011-10-19  Jie Zhang  <jie.zhang@analog.com>
+
+  * include/urjtag/bfin.h (struct emu_oab): Remove.  Move its dbgctl_*
+    and dbgstat_* to ...
+    (struct bfin_part_data): ... here. Remove field emu_oab.
+    (EMU_OAB): Remove.
+    (part_sticky_in_reset): Remove.
+  * src/bfin/bfin.c (<urjtag/cable.h>): Include.
+    ("bfin-part.h"): Dont' include.
+    (bfin_dbgctl_init): New.
+    (bfin_dbgstat_value): New.
+    (PART_DBGCTL_CLEAR_OR_SET_BIT): Don't use _part_* functions.
+    (PART_DBGCTL_IS): Likewise.
+    (PART_DBGSTAT_BIT_IS): Likewise.
+    (PART_DBGSTAT_CLEAR_BIT): Likewise.
+    (PART_DBGSTAT_SET_BIT): Likewise.
+    (part_dbgstat_emucause): Likewise.
+    (chain_dbgstat_get): Likewise.
+    (part_dbgstat_get): Likewise.
+    (part_sticky_in_reset): Remove.
+    (chain_wait_reset): Don't call part_sticky_in_reset.
+    (part_wait_reset): Likewise.
+    (bfin_part_data_initializer): Define.
+    (bfin_wait_ready): New.
+    (bfin_part_init): New.
+    (_bfin_part_init): New.
+  * src/bfin/bfin-part-bfin.c: Remove.
+  * src/bfin/bfin-part.c: Remove.
+  * src/bfin/bfin-part.h: Remove.
+  * src/bfin/Makefile.am (libbfin_la_SOURCES): Remove bfin-part.c,
+    bfin-part.h and bfin-part-bfin.c.
+
 2011-10-14  Uwe Hermann  <uwe@hermann-uwe.de>
 
   * doc/Makefile.am: Add README.stapl to EXTRA_DIST so that it ends up in
