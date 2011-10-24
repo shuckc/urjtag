@@ -1,3 +1,7 @@
+2011-10-24  Jie Zhang  <jie.zhang@analog.com>
+
+  * data/analog/bf592/STEPPINGS: Add silicon revision 0.2.
+
 2011-10-19  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/bfin.h (chain_scan_select): Remove declaration.

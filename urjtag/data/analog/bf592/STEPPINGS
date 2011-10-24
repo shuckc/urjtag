@@ -21,3 +21,4 @@
 # bits 31-28 of the Device Identification Register
 0000	bf592		0
 0001	bf592		1
+0010	bf592		2
