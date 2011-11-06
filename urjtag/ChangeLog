@@ -1,3 +1,8 @@
+2011-11-06  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/xc6slx9/STEPPINGS: Add Xilinux Spartan 6 stepping 0 by
+    Ralph Loader.
+
 2011-10-24  Jie Zhang  <jie.zhang@analog.com>
 
   * data/analog/bf592/STEPPINGS: Add silicon revision 0.2.
