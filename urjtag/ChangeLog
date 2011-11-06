@@ -1,3 +1,11 @@
+2011-11-06  Uwe Hermann  <uwe@hermann-uwe.de>
+
+  * data/toshiba/tmpa9xx/tmpa9xx, data/toshiba/tmpa9xx/STEPPINGS: Add stepping
+    and basic JTAG register/instruction info for Toshiba TMPA9xx series
+    microcontrollers (ARM9 / ARM926EJ-S).
+  * data/toshiba/PARTS: Add entry for Toshiba TMPA9xx.
+  * data/Makefile.am: Add new STEPPINGS and tmpa9xx files.
+
 2011-11-06  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/xc6slx9/STEPPINGS: Add Xilinux Spartan 6 stepping 0 by

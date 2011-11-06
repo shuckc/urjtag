@@ -1,0 +1,59 @@
+#
+# Copyright (C) 2011 Uwe Hermann <uwe@hermann-uwe.de>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Documentation:
+# [1] TOSHIBA Original RISC 32-Bit Microprocessor, ARM Core Family,
+#     TMPA900CMXBG (2010-07-08)
+# [2] TOSHIBA Original RISC 32-Bit Microprocessor, ARM Core Family,
+#     TMPA901CMXBG (2010-07-29)
+# [3] TOSHIBA 32-Bit RISC Microcontroller, TX09 Series,
+#     TMPA910CRAXBG (2010-06-02)
+# [4] TOSHIBA 32-Bit RISC Microcontroller, TX09 Series,
+#     TMPA911CRXBG (2011-03-09)
+#
+
+# TODO: Add 'signal' lines.
+
+# See [1], chapter 3.2.6, page 39, "Boundary Scan Register".
+
+# mandatory data registers
+register	BSR	231		# Boundary Scan Register
+register	BR	1		# Bypass Register
+
+# optional data registers
+register	DIR	32		# Device Identification Register
+
+
+# See [1], chapter 3.2.5, page 37, "Instruction register", table 3.2.1.
+
+instruction length 4
+
+# mandatory instructions
+instruction EXTEST         0000 BSR
+instruction SAMPLE/PRELOAD 0001 BSR
+instruction BYPASS         1111 BR
+
+# optional instructions
+instruction HIGHZ          0010 BR
+instruction CLAMP          0011 BR
+
+# Toshiba TMPA9xx MCUs are always little endian as per datasheet.
+# See [1], chapter 3.1.1, page 31, "Reset Operation".
+endian little
+
+# TODO: Add 'bit' lines.

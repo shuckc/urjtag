@@ -1,7 +1,5 @@
 #
-# $Id$
-#
-# Copyright (C) 2003 RightHand Technologies, Inc.
+# Copyright (C) 2011 Uwe Hermann <uwe@hermann-uwe.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,13 +16,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Andrew Dyer <adyer@righthandtech.com>, 2003.
-#
 
-# bits 27-12 of the Device Identification Register
-0000000000011110	tx4925		TX4925
-0000000000011111	tx4926		TX4926
-
-# Same ID for TMPA900/901 and TMPA910/911/912/913, it seems.
-0111100100100110	tmpa9xx		TMPA9xx
-
+# bits 31-28 of the Device Identification Register
+0000	tmpa9xx		0
