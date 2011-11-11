@@ -1,3 +1,7 @@
+2011-11-11  Jie Zhang  <jie.zhang@analog.com>
+
+  * include/urjtag/bfin.h (part_bypass): Remove declaration.
+
 2011-11-06  Uwe Hermann  <uwe@hermann-uwe.de>
 
   * data/toshiba/tmpa9xx/tmpa9xx, data/toshiba/tmpa9xx/STEPPINGS: Add stepping
