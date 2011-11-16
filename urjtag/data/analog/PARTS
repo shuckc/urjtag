@@ -20,7 +20,7 @@
 #
 
 # bits 27-12 of the Device Identification Register
-# Blackfin list is also in src/bfin/bfin-part-bfin.c
+# Blackfin list is also in src/bfin/bfin.c
 0010011110100111	sharc21065l		SHARC
 0010100000000000	bf506			BF506
 0010011111101000	bf518			BF518
