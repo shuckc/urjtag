@@ -1,3 +1,8 @@
+2011-12-05  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/apps/jtag/jtag.c: Simplify readline ifdefs a little as suggested
+    by MÃ¡rton NÃ©meth.
+
 2011-11-16  Jie Zhang  <jie.zhang@analog.com>
 
   * data/analog/PARTS: Update comment.

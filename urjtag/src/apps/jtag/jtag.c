@@ -149,8 +149,6 @@ jtag_create_jtagdir (void)
     return URJ_STATUS_OK;
 }
 
-#ifdef HAVE_LIBREADLINE
-
 #ifdef HAVE_READLINE_COMPLETION
 static urj_chain_t *active_chain;
 
@@ -216,9 +214,12 @@ jtag_save_history (void)
     return URJ_STATUS_OK;
 }
 
-#endif /* HAVE_READLINE_HISTORY */
+#else
 
-#endif /* HAVE_READLINE */
+#define jtag_load_history() URJ_STATUS_OK
+#define jtag_save_history() URJ_STATUS_OK
+
+#endif /* HAVE_READLINE_HISTORY */
 
 /** @return URJ_STATUS_QUIT on quit command, URJ_STATUS_OK on success,
  * URJ_STATUS_ERROR on error */
@@ -554,7 +555,6 @@ main (int argc, char *const argv[])
         }
     }
 
-#ifdef HAVE_LIBREADLINE
 #ifdef HAVE_READLINE_COMPLETION
     active_chain = chain;
     rl_readline_name = "urjtag";
@@ -563,23 +563,17 @@ main (int argc, char *const argv[])
     rl_filename_quote_characters = " ";
     rl_completion_entry_function = urj_cmd_completion;
 #endif
-#endif
 
     if (go)
     {
-
-#ifdef HAVE_READLINE_HISTORY
         /* Load history */
         jtag_load_history ();
-#endif
 
         /* main loop */
         jtag_readline_loop (chain, getenv ("JTAG_PROMPT") ? : "jtag> ");
 
-#ifdef HAVE_READLINE_HISTORY
         /* Save history */
         jtag_save_history ();
-#endif
     }
 
     cleanup (chain);
