@@ -33,24 +33,27 @@
 
 
 #define DETECT_PATTERN_SIZE     8
-#define MAX_REGISTER_LENGTH     1024
+#define DEFAULT_MAX_REGISTER_LENGTH 1024
 #define TEST_COUNT              1
 #define TEST_THRESHOLD          100     /* in % */
 
 #undef VERY_LOW_LEVEL_DEBUG
 
 int
-urj_tap_detect_register_size (urj_chain_t *chain)
+urj_tap_detect_register_size (urj_chain_t *chain, int maxlen)
 {
     int len;
     urj_tap_register_t *rz;
     urj_tap_register_t *rout;
     urj_tap_register_t *rpat;
 
+    if (maxlen == 0)
+        maxlen = DEFAULT_MAX_REGISTER_LENGTH;
+
     /* This seems to be a good place to check if TDO changes at all */
     int tdo, tdo_stuck = -2;
 
-    for (len = 1; len <= MAX_REGISTER_LENGTH; len++)
+    for (len = 1; len <= maxlen; len++)
     {
         int p;
         int ok = 0;
@@ -134,7 +137,7 @@ urj_tap_discovery (urj_chain_t *chain)
     fflush (stdout);
 
     urj_tap_capture_ir (chain);
-    irlen = urj_tap_detect_register_size (chain);
+    irlen = urj_tap_detect_register_size (chain, 0);
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("%d\n"), irlen);
 
@@ -170,7 +173,7 @@ urj_tap_discovery (urj_chain_t *chain)
         fflush (stdout);
 
         urj_tap_capture_dr (chain);
-        rs = urj_tap_detect_register_size (chain);
+        rs = urj_tap_detect_register_size (chain, 0);
 
         urj_log (URJ_LOG_LEVEL_NORMAL, _("%d\n"), rs);
 

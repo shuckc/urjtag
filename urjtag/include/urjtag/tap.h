@@ -45,11 +45,11 @@ void urj_tap_shift_register (urj_chain_t *chain,
 
 /** API functions */
 /** @return number of detected parts on success; -1 on error */
-int urj_tap_detect_parts (urj_chain_t *chain, const char *db_path);
+int urj_tap_detect_parts (urj_chain_t *chain, const char *db_path, int maxirlen);
 /** @return chain length on success; -1 on error */
 int urj_tap_manual_add (urj_chain_t *chain, int instr_len);
 /** @return register size on success; -1 on error */
-int urj_tap_detect_register_size (urj_chain_t *chain);
+int urj_tap_detect_register_size (urj_chain_t *chain, int maxlen);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_tap_discovery (urj_chain_t *chain);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
@@ -57,9 +57,11 @@ int urj_tap_idcode (urj_chain_t *chain, unsigned int bytes);
 /**
  * Convenience function that detects the parts, initialises them to BYPASS,
  * and initialises the bus drivers.
+ * maxirlen is the maximum expected length of all concatenated instruction 
+ * registers on the chain.  If set to 0, a default is assumed.
  *
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error
  */
-int urj_tap_detect (urj_chain_t *chain);
+int urj_tap_detect (urj_chain_t *chain, int maxirlen);
 
 #endif /* URJ_TAP_H */

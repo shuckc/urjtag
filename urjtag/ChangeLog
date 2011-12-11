@@ -1,5 +1,11 @@
 2011-12-05  Mike Frysinger  <vapier@gentoo.org>
 
+  * include/urjtag/tap.h, src/cmd/cmd_detect.c, src/tap/detect.c,
+    src/tap/discovery.c: Extend urj_tap_detect API to allow callers to set
+    the number of IR bits to detect.  Patch by Steve Tell.
+
+2011-12-05  Mike Frysinger  <vapier@gentoo.org>
+
   * src/apps/jtag/jtag.c: Simplify readline ifdefs a little as suggested
     by MÃ¡rton NÃ©meth.
 

@@ -49,7 +49,7 @@ cmd_detect_run (urj_chain_t *chain, char *params[])
     if (urj_cmd_test_cable (chain) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    if (urj_tap_detect (chain) != URJ_STATUS_OK)
+    if (urj_tap_detect (chain, 0) != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
     return URJ_STATUS_OK;
