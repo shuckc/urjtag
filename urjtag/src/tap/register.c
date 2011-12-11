@@ -143,6 +143,12 @@ urj_tap_register_fill (urj_tap_register_t *tr, int val)
 int
 urj_tap_register_set_string (urj_tap_register_t *tr, const char *str)
 {
+    if (!tr)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "tr == NULL");
+        return URJ_STATUS_FAIL;
+    }
+
     if (strncmp (str, "0x", 2) == 0)
     {
         /* Hex values */
@@ -189,6 +195,12 @@ urj_tap_register_set_value (urj_tap_register_t *tr, uint64_t val)
 {
     unsigned int bit;
 
+    if (!tr)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "tr == NULL");
+        return URJ_STATUS_FAIL;
+    }
+
     if (val >> tr->len)
     {
         urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
@@ -209,7 +221,10 @@ urj_tap_register_get_string (const urj_tap_register_t *tr)
     int i;
 
     if (!tr)
+    {
+        urj_error_set (URJ_ERROR_INVALID, "tr == NULL");
         return NULL;
+    }
 
     for (i = 0; i < tr->len; i++)
         tr->string[tr->len - 1 - i] = (tr->data[i] & 1) ? '1' : '0';
