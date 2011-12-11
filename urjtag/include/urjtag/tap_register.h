@@ -42,8 +42,10 @@ void urj_tap_register_free (urj_tap_register_t *tr);
 urj_tap_register_t *urj_tap_register_fill (urj_tap_register_t *tr, int val);
 int urj_tap_register_set_string (urj_tap_register_t *tr, const char *str);
 int urj_tap_register_set_value (urj_tap_register_t *tr, uint64_t val);
+int urj_tap_register_set_value_bit_range (urj_tap_register_t *tr, uint64_t val, int msb, int lsb);
 const char *urj_tap_register_get_string (const urj_tap_register_t *tr);
 uint64_t urj_tap_register_get_value (const urj_tap_register_t *tr);
+uint64_t urj_tap_register_get_value_bit_range (const urj_tap_register_t *tr, int msb, int lsb);
 /** @return 0 or 1 on success; -1 on error */
 int urj_tap_register_all_bits_same_value (const urj_tap_register_t *tr);
 urj_tap_register_t *urj_tap_register_init (urj_tap_register_t *tr,

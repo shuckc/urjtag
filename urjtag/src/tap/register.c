@@ -191,28 +191,38 @@ urj_tap_register_set_string (urj_tap_register_t *tr, const char *str)
 }
 
 int
-urj_tap_register_set_value (urj_tap_register_t *tr, uint64_t val)
+urj_tap_register_set_value_bit_range (urj_tap_register_t *tr, uint64_t val, int msb, int lsb)
 {
     unsigned int bit;
+    unsigned int step = msb >= lsb ? 1 : -1;
 
     if (!tr)
     {
-        urj_error_set (URJ_ERROR_INVALID, "tr == NULL");
-        return URJ_STATUS_FAIL;
+         urj_error_set (URJ_ERROR_INVALID, "tr == NULL");
+         return URJ_STATUS_FAIL;
     }
 
-    if (val >> tr->len)
+    if (msb > tr->len - 1 || lsb > tr->len - 1 || msb < 0 || lsb < 0)
     {
         urj_error_set (URJ_ERROR_OUT_OF_BOUNDS,
-                       _("register value 0x%"PRIX64" will not fit in %d bits"),
-                       val, tr->len);
+                       _("register %d:%d will not fit in %d bits"),
+                       msb, lsb, tr->len);
         return URJ_STATUS_FAIL;
     }
 
-    for (bit = 0; bit < tr->len; ++bit)
-        tr->data[tr->len - 1 - bit] = !!(val & (1 << (tr->len - 1 - bit)));
+    for (bit = lsb; bit <= msb * step; bit += step)
+    {
+        tr->data[bit] = !!(val & 1);
+        val >>= 1;
+    }
 
     return URJ_STATUS_OK;
+}
+
+int
+urj_tap_register_set_value (urj_tap_register_t *tr, uint64_t val)
+{
+    return urj_tap_register_set_value_bit_range (tr, val, tr->len - 1, 0);
 }
 
 const char *
@@ -233,24 +243,34 @@ urj_tap_register_get_string (const urj_tap_register_t *tr)
 }
 
 uint64_t
-urj_tap_register_get_value (const urj_tap_register_t *tr)
+urj_tap_register_get_value_bit_range (const urj_tap_register_t *tr, int msb, int lsb)
 {
-    int i;
+    int bit;
     uint64_t l, b;
+    unsigned int step = msb >= lsb ? 1 : -1;
 
     if (!tr)
         return 0;
 
+    if (msb > tr->len - 1 || lsb > tr->len - 1 || msb < 0 || lsb < 0)
+        return 0;
+
     l = 0;
     b = 1;
-    for (i = 0; i < tr->len; ++i)
+    for (bit = lsb; bit <= msb * step; bit += step)
     {
-        if (tr->data[i] & 1)
+        if (tr->data[bit] & 1)
             l |= b;
         b <<= 1;
     }
 
     return l;
+}
+
+uint64_t
+urj_tap_register_get_value (const urj_tap_register_t *tr)
+{
+    return urj_tap_register_get_value_bit_range (tr, tr->len - 1, 0);
 }
 
 int

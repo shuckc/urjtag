@@ -7,6 +7,9 @@
   * src/tap/register.c: Check incoming register arg before we use it.  Patch
     by Steve Tell.
 
+  * include/urjtag/tap_register.h, src/tap/register.c: Add get/set register
+    value variants that allow you to get a slice of bits.  Patch by Steve Tell.
+
 2011-12-05  Mike Frysinger  <vapier@gentoo.org>
 
   * src/apps/jtag/jtag.c: Simplify readline ifdefs a little as suggested
