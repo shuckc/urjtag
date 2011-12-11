@@ -66,6 +66,9 @@ m4_ifdef([AM_SILENT_RULES],
 
 AC_CONFIG_FILES(
 	Makefile
+	bindings/Makefile
+	bindings/python/Makefile
+	bindings/python/setup.py
 	doc/Makefile
 	data/Makefile
 	extra/fjmem/Makefile
@@ -369,6 +372,15 @@ AS_IF([test "x$enable_apps" = xyes], [
   AM_CONDITIONAL(ENABLE_APPS, false)
 ])
 
+AC_ARG_ENABLE([python],
+  [AS_HELP_STRING([--enable-python], [build python language bindings [default=detect]])],
+  [], [enable_python="detect"])
+
+AS_IF([test "x$enable_python" != "xno"], [
+  AM_PATH_PYTHON([2.5], [enable_python=yes], [enable_python=no])
+])
+
+AM_CONDITIONAL([BIND_PYTHON], [test "x$enable_python" = "xyes"])
 
 # check for lex/flex
 AC_PROG_LEX
@@ -782,4 +794,7 @@ urjtag is now configured for
     Bus        : $enabled_bus_drivers
     Cable      : $enabled_cable_drivers
     Lowlevel   : $enabled_lowlevel_drivers
+
+  Language bindings:
+    python     : $enable_python
 ])

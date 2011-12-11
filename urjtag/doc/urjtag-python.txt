@@ -1,0 +1,211 @@
+
+Python bindings for liburjtag: a brief introduction.
+
+
+Python bindings will be built automaticly if urjtag's configure
+process detects python and its necessary development libraries.
+
+To require a urjtag build with python, and fail if the python
+prerequesites aren't found, explicitly mention python to configure:
+	      ./configure --enable-python
+
+Configure can also be told to ignore python entirely:
+	      ./configure --disable-python
+
+If the interpreter for your preferred python version is named somthing
+besides python, or is not in your path, you can set $PYTHON in the
+environment before calling configure.  For example, to build
+additional python version 3 bindings in an OS where "python" is
+version 2.7, run:
+
+  PYTHON=python3 ./configure --enable-python
+
+
+
+
+So much for building. In order to use urjtag from python, we must
+import its module into our program or interactive session.
+
+ import urjtag
+
+
+
+About all we can do directly in the urjtag module is change
+the urjag logging verbosity level:
+
+ urjtag.loglevel( urjtag.URJ_LOG_LEVEL_ALL )
+ urjtag.loglevel( urjtag.URJ_LOG_LEVEL_WARNING )
+ urjtag.loglevel( urjtag.URJ_LOG_LEVEL_SILENT )
+
+
+The must fundamental object in urjtag is the chain, and to do anything
+else we need to create one:
+
+ urc = urjtag.chain()
+
+An empty, disconnected chain isn't very useful.  In order to use a
+chain object, we must specify the interface and cable type used to
+connect to it.
+
+ urc.cable("JTAGKey")
+
+Some cables let you query and change the frequency at which they operate:
+
+ f = urc.get_frequency()
+ urc.set_frequency(1000000)  # TCK frequency in Hz
+
+
+To detect what chips are on the chain:
+
+ urc.tap_detect()
+
+After calling detect, we can query how many devices are on the chain,
+and what their IDCODE values are.  The idcode returned by partid() is
+an integer; you'll typicaly want to print it in hex.
+
+ length = urc.len()
+ for i in range(0,urc.len()):
+     idcode = urc.partid(0)
+     print "[%d] 0x%08x" % (i, idcode)
+
+Optionally, urc.tap_detect may be called with an integer argument that
+specifies the maximum combined length of all instruction registers expected to
+be on the jtag chain:
+   maxirlen = 90
+   urc.tap_detect(maxirlen)
+Specifying a smaller value than the default 1024 can make detect return faster
+if the cable is disconnected or the chain is broken.  Specifying a larger value
+may be necessary for very long jtag chains.
+
+
+Some devices implement the TRST signal:
+
+ urc.set_trst(0)    	   # assert TRST
+ urc.set_trst(1)	   # deassert TRST
+
+
+Other devices and chains use JTAG synchronous reset, using TCK and TMS:
+
+ urc.reset()
+
+Some cables impelment a non-JTAG system reset signal and allow
+directly manipulating other signals:
+ urc.set_pod_signal(urjtag.URJ_POD_CS_RESET, 0)
+ urc.set_pod_signal(urjtag.URJ_POD_CS_RESET, 1)
+ v = urc.get_pod_signal(urjtag.URJ_POD_CS_RESET)
+
+
+
+
+A jtag chain object keeps track of a current instruction and a current part.
+
+ urc.part(0)
+ urc.set_instruction("SAMPLE/PRELOAD")
+ urc.set_instruction("IDCODE")
+ urc.set_instruction("EXTEST")
+
+To shift the instruction stored in the chain object into the actual hardware,
+we must call shift_ir:
+
+ urc.shift_ir()
+
+
+For each data register, the chain object tracks two register values.
+The "input" register value is sent to the device(s) on the TDI pin,
+and changes the device's status in the DR_UPDATE state.  The "output"
+register value is built up of the values observed on the TDO pin.
+The shift_dr method performs a complete data register shift operation:
+
+ inval = urc.get_dr_in_string()
+ print "BSR dr_in", inval
+ urc.shift_dr()
+ outval = urc.get_dr_out_string()
+ printf "BSR dr_out", outval
+
+Both holding registers can be modified:
+
+ s = "1001001001"
+ urc.set_dr_in_string(s)
+ urc.set_dr_out_string(s)
+
+More commonly, you'll want to change only a few bits.  This can be
+done with strings and lists.  Note that the ascii strings of '1' and
+'0' representing binary values print with bit 0 last, the way you'd
+typicaly write a binary number.  But the indexes of entries in a list
+or string count from the left.
+
+ drval = urc.get_dr_in()
+ drlen=len(drval)
+ drl = list(drval);
+ drl[drlen-1-13] = '1';
+ drl[drlen-1-14] = '0';
+ ndrval = "".join(drl);
+ urc.set_dr_in(ndrval)
+
+But there is an easier way to set a single bit of a register:
+
+ urc.set_dr_out(1, 13);
+ urc.set_dr_out(0, 14);
+
+
+Retrieving and setting contiguous subfields of a register (up to 64
+bits) is also possible:
+
+ urc.set_dr_out(0x0d, 4, 7);
+ r = urc.get_dr_out(4,7);
+ drval = urc.get_dr_out_string();
+ printf("  set_dr_out result: %s %02x\n", drval, r)
+
+
+Remember to call shift_dr() before making use of values read with get_dr_in(),
+and after changing values written with set_dr_out().
+
+
+
+
+
+Sometimes your chip isn't known to urjtag's database.  You can
+create a .jtag file and add it to the database (usually in
+/usr/share/urjtag or /usr/local/share/urjtag).
+Or, you can access it by adding it specialy within your script.
+
+ urc = urjtag.chain()
+ urc.cable("JTAGKey")
+ urc.reset();
+
+ urc.addpart(8); # instruction length of the one chip on your chain.
+
+ urc.add_instruction("CLAMP", "11101110", BYPASS) # another instruction that selects the BYPASS register.  The bypass register always exists.
+
+ urc.add_register("IDREG", 32);  # another register, with its  length
+ urc.add_instruction("IDCODE", "11111110", "IDREG");  #
+
+Then you can set and scan the new registers:
+
+ urc.set_instruction("IDCODE")
+ urc.shift_ir()
+ urc.shift_dr()
+ print urc.get_dr_out_string()
+
+
+SVF files can be applied to a chain:
+
+ urc.run_svf(filename, stop=0, ref_freq=0)
+
+
+
+Bus support within the python bindings works somewhat like the jtag
+program's interactive mode.  It is not properly object oriented yet.
+
+ urc.initbus("foo", "bar");
+
+FUTURE: urc.initbus will return a urjtag.bus object.  Currently, there is one
+implicit global bus, and only one bus can be active at a time.
+
+ urc.detectflash(i)
+ val = urc.peek(addr)
+ urc.poke(addr,val)
+ urj.flashmem(options, filename, noverify=0)
+
+FUTURE: detectflash, peek, poke, and flashmem will be a methods in a new
+urjtag.bus class, not methods of urjtag.chain.

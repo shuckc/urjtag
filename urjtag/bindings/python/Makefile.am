@@ -1,7 +1,7 @@
 #
 # $Id$
 #
-# Copyright (C) 2002 ETC s.r.o.
+# Copyright (C) 2002,2011 ETC s.r.o.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,48 +18,19 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Marcel Telka <marcel@telka.sk>, 2002.
+# Written by Steve Tell <tell@telltronics.org> 2011
 #
 
-include $(top_srcdir)/Makefile.rules
+EXTRA_DIST = setup.py chain.c pycompat23.h t_urjtag_chain.py
 
-SUBDIRS = \
-	doc \
-	extra/fjmem \
-	include \
-	include/urjtag \
-	data \
-	src \
-	po \
-	bindings
+all-local: build
 
-if ENABLE_APPS
-SUBDIRS += \
-	src/apps/jtag
+build: chain.c
+	{ $(PYTHON) setup.py build && touch build; } || { $(RM) -r build; exit 1; }
 
-if ENABLE_BSDL
-SUBDIRS += \
-	src/apps/bsdl2jtag
-endif
+install-data-local:
+	$(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix)
 
-endif
+clean-local:
+	$(RM) -fr build
 
-DIST_SUBDIRS = \
-	$(SUBDIRS)
-
-EXTRA_DIST = \
-	Makefile.rules \
-	MAINTAINERS \
-	sysdep.h \
-	urjtag.i \
-	UrJTAG.nsi \
-	tools/config.rpath
-
-ACLOCAL_AMFLAGS = -I m4
-
-swig:
-	swig \
-		-python \
-		-includeall -ignoremissing -Iinclude/urjtag \
-		-module urjtag \
-		urjtag.i

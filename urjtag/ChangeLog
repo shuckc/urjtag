@@ -1,4 +1,4 @@
-2011-12-05  Mike Frysinger  <vapier@gentoo.org>
+2011-12-10  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/tap.h, src/cmd/cmd_detect.c, src/tap/detect.c,
     src/tap/discovery.c: Extend urj_tap_detect API to allow callers to set
@@ -9,6 +9,12 @@
 
   * include/urjtag/tap_register.h, src/tap/register.c: Add get/set register
     value variants that allow you to get a slice of bits.  Patch by Steve Tell.
+
+  * Makefile.am: Add bindings to SUBDIRS.
+  * configure.ac: Add --enable-python flag to control python support.
+  * doc/urjtag-python.txt: Document new python bindings.
+  * bindings/: New subdir to hold language bindings.
+  * bindings/python/: New python bindings by Steve Tell.
 
 2011-12-05  Mike Frysinger  <vapier@gentoo.org>
 
