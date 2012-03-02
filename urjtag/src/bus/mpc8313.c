@@ -148,7 +148,7 @@ mpc8313_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     if (nwppin != NULL)
     {
          failed |= urj_bus_generic_attach_sig (part, &(nWP), nwppin);
-         urj_part_set_signal (part, nWP, 1, 1);
+         urj_part_set_signal_high (part, nWP);
     }
 
     if (noepin == NULL)
@@ -231,7 +231,7 @@ set_data_in (urj_bus_t *bus, uint32_t adr)
         return;
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, LAD[i], 0, 0);
+        urj_part_set_signal_input (p, LAD[i]);
 
 }
 
@@ -277,9 +277,9 @@ mpc8313_bus_read_start (urj_bus_t *bus, uint32_t adr)
     LAST_ADR = adr;
 
     /* see Figure 6-45 in [1] */
-    urj_part_set_signal (p, nCS, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nFOE, 1, 0);
+    urj_part_set_signal_low (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, nFOE);
 
     setup_address (bus, adr);
     set_data_in (bus, adr);
@@ -315,8 +315,8 @@ mpc8313_bus_read_end (urj_bus_t *bus)
 {
     urj_part_t *p = bus->part;
 
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nFOE, 1, 1);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nFOE);
 
     urj_tap_chain_shift_data_registers (bus->chain, 1);
 
@@ -336,12 +336,12 @@ mpc8313_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
 
     /* see Figure 6-47 in [1] */
-    urj_part_set_signal (p, nCS, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nFOE, 1, 1);
+    urj_part_set_signal_low (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nFOE);
 
     if (nWP != NULL)
-        urj_part_set_signal (p, nWP, 1, 0);
+        urj_part_set_signal_low (p, nWP);
 
     setup_address (bus, adr);
 
@@ -349,10 +349,10 @@ mpc8313_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
     urj_tap_chain_shift_data_registers (bus->chain, 0);
 
-    urj_part_set_signal (p, nWE, 1, 0);
+    urj_part_set_signal_low (p, nWE);
     urj_tap_chain_shift_data_registers (bus->chain, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nCS);
     urj_tap_chain_shift_data_registers (bus->chain, 0);
 }
 

@@ -267,7 +267,7 @@ set_data_in (urj_bus_t *bus, uint32_t adr)
         return;
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, LAD[bp->lbc_num_d - i - 1], 0, 0);
+        urj_part_set_signal_input (p, LAD[bp->lbc_num_d - i - 1]);
 }
 
 static void
@@ -324,24 +324,24 @@ mpc837x_bus_read_start (urj_bus_t *bus, uint32_t adr)
         urj_part_set_signal (p, nCS[i], 1, !(cs == i));
 
     for (i = 0; i < LBC_NUM_LWE; i++)
-        urj_part_set_signal (p, nWE[i], 1, 1);
+        urj_part_set_signal_high (p, nWE[i]);
 
     setup_address (bus, adr);
 
     if (bp->lbc_muxed)
     {
-        urj_part_set_signal (p, BCTL,1, 1);    /* Address Out */
-        urj_part_set_signal (p, ALE, 1, 1);
-        urj_part_set_signal (p, nOE, 1, 1);
+        urj_part_set_signal_high (p, BCTL);    /* Address Out */
+        urj_part_set_signal_high (p, ALE);
+        urj_part_set_signal_high (p, nOE);
         urj_tap_chain_shift_data_registers (chain, 0);
-        urj_part_set_signal (p, BCTL,1, 0);    /* Data In */
-        urj_part_set_signal (p, ALE, 1, 0);
-        urj_part_set_signal (p, nOE, 1, 0);
+        urj_part_set_signal_low (p, BCTL);    /* Data In */
+        urj_part_set_signal_low (p, ALE);
+        urj_part_set_signal_low (p, nOE);
     }
     else
     {
-        urj_part_set_signal (p, BCTL,1, 0);    /* Data In */
-        urj_part_set_signal (p, nOE, 1, 0);
+        urj_part_set_signal_low (p, BCTL);    /* Data In */
+        urj_part_set_signal_low (p, nOE);
         set_data_in (bus, adr);
     }
 
@@ -373,14 +373,14 @@ mpc837x_bus_read_next (urj_bus_t *bus, uint32_t adr)
         setup_address (bus, adr);
         LAST_ADR = adr;
 
-        urj_part_set_signal (p, BCTL,1, 1);    /* Address Out */
-        urj_part_set_signal (p, ALE, 1, 1);
-        urj_part_set_signal (p, nOE, 1, 1);
+        urj_part_set_signal_high (p, BCTL);    /* Address Out */
+        urj_part_set_signal_high (p, ALE);
+        urj_part_set_signal_high (p, nOE);
         urj_tap_chain_shift_data_registers (chain, 0);
 
-        urj_part_set_signal (p, BCTL,1, 0);    /* Data In */
-        urj_part_set_signal (p, ALE, 1, 0);
-        urj_part_set_signal (p, nOE, 1, 0);
+        urj_part_set_signal_low (p, BCTL);    /* Data In */
+        urj_part_set_signal_low (p, ALE);
+        urj_part_set_signal_low (p, nOE);
         urj_tap_chain_shift_data_registers (chain, 0);
     }
     else
@@ -410,14 +410,14 @@ mpc837x_bus_read_end (urj_bus_t *bus)
     {
         set_data_in (bus, LAST_ADR);
         urj_tap_chain_shift_data_registers (chain, 0);
-        urj_part_set_signal (p, ALE, 1, 1);
+        urj_part_set_signal_high (p, ALE);
     }
 
     for (i = 0; i < LBC_NUM_LCS; i++)
-        urj_part_set_signal (p, nCS[i], 1, 1);
+        urj_part_set_signal_high (p, nCS[i]);
 
-    urj_part_set_signal (p, BCTL,1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, BCTL);
+    urj_part_set_signal_high (p, nOE);
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -443,18 +443,18 @@ mpc837x_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
         return;
 
     cs = 0;
-    urj_part_set_signal (p, BCTL,1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, BCTL);
+    urj_part_set_signal_high (p, nOE);
 
     for (i = 0; i < LBC_NUM_LWE; i++)
-        urj_part_set_signal (p, nWE[i], 1, 1);
+        urj_part_set_signal_high (p, nWE[i]);
 
     if (bp->lbc_muxed)
     {
         setup_address (bus, adr);
-        urj_part_set_signal (p, ALE, 1, 1);
+        urj_part_set_signal_high (p, ALE);
         urj_tap_chain_shift_data_registers (chain, 0);
-        urj_part_set_signal (p, ALE, 1, 0);
+        urj_part_set_signal_low (p, ALE);
         urj_tap_chain_shift_data_registers (chain, 0);
     }
     else
@@ -470,12 +470,12 @@ mpc837x_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     switch (area.width)
     {
     case 32:
-        urj_part_set_signal (p, nWE[3], 1, 0);
-        urj_part_set_signal (p, nWE[2], 1, 0);
+        urj_part_set_signal_low (p, nWE[3]);
+        urj_part_set_signal_low (p, nWE[2]);
     case 16:
-        urj_part_set_signal (p, nWE[1], 1, 0);
+        urj_part_set_signal_low (p, nWE[1]);
     case 8:
-        urj_part_set_signal (p, nWE[0], 1, 0);
+        urj_part_set_signal_low (p, nWE[0]);
     default:
         break;
     }
@@ -483,7 +483,7 @@ mpc837x_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_tap_chain_shift_data_registers (chain, 0);
 
     for (i = 0; i < LBC_NUM_LWE; i++)
-        urj_part_set_signal (p, nWE[i], 1, 1);
+        urj_part_set_signal_high (p, nWE[i]);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 }

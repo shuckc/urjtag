@@ -153,7 +153,7 @@ set_data_in (urj_bus_t *bus)
 
     for (i = 0; i < 8; i++)
     {
-        urj_part_set_signal (p, IO_AD[i + 24], 0, 0);
+        urj_part_set_signal_input (p, IO_AD[i + 24]);
     }
 }
 
@@ -179,17 +179,17 @@ bcm1250_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, IO_CS_L[0], 1, 0);
-    urj_part_set_signal (p, IO_CS_L[1], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[2], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[3], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[4], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[5], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[6], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[7], 1, 1);
-    urj_part_set_signal (p, IO_RW, 1, 1);
-    urj_part_set_signal (p, IO_WR_L, 1, 1);
-    urj_part_set_signal (p, IO_OE_L, 1, 0);
+    urj_part_set_signal_low (p, IO_CS_L[0]);
+    urj_part_set_signal_high (p, IO_CS_L[1]);
+    urj_part_set_signal_high (p, IO_CS_L[2]);
+    urj_part_set_signal_high (p, IO_CS_L[3]);
+    urj_part_set_signal_high (p, IO_CS_L[4]);
+    urj_part_set_signal_high (p, IO_CS_L[5]);
+    urj_part_set_signal_high (p, IO_CS_L[6]);
+    urj_part_set_signal_high (p, IO_CS_L[7]);
+    urj_part_set_signal_high (p, IO_RW);
+    urj_part_set_signal_high (p, IO_WR_L);
+    urj_part_set_signal_low (p, IO_OE_L);
 
     setup_address (bus, adr);
     set_data_in (bus);
@@ -235,8 +235,8 @@ bcm1250_bus_read_end (urj_bus_t *bus)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, IO_CS_L[0], 1, 1);
-    urj_part_set_signal (p, IO_OE_L, 1, 1);
+    urj_part_set_signal_high (p, IO_CS_L[0]);
+    urj_part_set_signal_high (p, IO_OE_L);
     urj_tap_chain_shift_data_registers (chain, 1);
 
     {
@@ -262,27 +262,27 @@ bcm1250_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, IO_CS_L[0], 1, 0);
-    urj_part_set_signal (p, IO_CS_L[1], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[2], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[3], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[4], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[5], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[6], 1, 1);
-    urj_part_set_signal (p, IO_CS_L[7], 1, 1);
-    urj_part_set_signal (p, IO_RW, 1, 0);
-    urj_part_set_signal (p, IO_WR_L, 1, 1);
-    urj_part_set_signal (p, IO_OE_L, 1, 1);
+    urj_part_set_signal_low (p, IO_CS_L[0]);
+    urj_part_set_signal_high (p, IO_CS_L[1]);
+    urj_part_set_signal_high (p, IO_CS_L[2]);
+    urj_part_set_signal_high (p, IO_CS_L[3]);
+    urj_part_set_signal_high (p, IO_CS_L[4]);
+    urj_part_set_signal_high (p, IO_CS_L[5]);
+    urj_part_set_signal_high (p, IO_CS_L[6]);
+    urj_part_set_signal_high (p, IO_CS_L[7]);
+    urj_part_set_signal_low (p, IO_RW);
+    urj_part_set_signal_high (p, IO_WR_L);
+    urj_part_set_signal_high (p, IO_OE_L);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, IO_WR_L, 1, 0);
+    urj_part_set_signal_low (p, IO_WR_L);
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, IO_WR_L, 1, 1);
+    urj_part_set_signal_high (p, IO_WR_L);
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 

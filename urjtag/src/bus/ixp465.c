@@ -151,14 +151,14 @@ select_flash (urj_bus_t *bus)
 {
     //urj_part_t *p = PART;
     urj_part_t *p = bus->part;
-    urj_part_set_signal (p, ex_cs_n[0], 1, 0);
-    urj_part_set_signal (p, ex_cs_n[1], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[2], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[3], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[4], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[5], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[6], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[7], 1, 1);
+    urj_part_set_signal_low (p, ex_cs_n[0]);
+    urj_part_set_signal_high (p, ex_cs_n[1]);
+    urj_part_set_signal_high (p, ex_cs_n[2]);
+    urj_part_set_signal_high (p, ex_cs_n[3]);
+    urj_part_set_signal_high (p, ex_cs_n[4]);
+    urj_part_set_signal_high (p, ex_cs_n[5]);
+    urj_part_set_signal_high (p, ex_cs_n[6]);
+    urj_part_set_signal_high (p, ex_cs_n[7]);
 }
 
 static void
@@ -166,14 +166,14 @@ unselect_flash (urj_bus_t *bus)
 {
     urj_part_t *p = bus->part;
 
-    urj_part_set_signal (p, ex_cs_n[0], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[1], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[2], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[3], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[4], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[5], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[6], 1, 1);
-    urj_part_set_signal (p, ex_cs_n[7], 1, 1);
+    urj_part_set_signal_high (p, ex_cs_n[0]);
+    urj_part_set_signal_high (p, ex_cs_n[1]);
+    urj_part_set_signal_high (p, ex_cs_n[2]);
+    urj_part_set_signal_high (p, ex_cs_n[3]);
+    urj_part_set_signal_high (p, ex_cs_n[4]);
+    urj_part_set_signal_high (p, ex_cs_n[5]);
+    urj_part_set_signal_high (p, ex_cs_n[6]);
+    urj_part_set_signal_high (p, ex_cs_n[7]);
 }
 
 static void
@@ -193,7 +193,7 @@ set_data_in (urj_bus_t *bus)
     urj_part_t *p = bus->part;
 
     for (i = 0; i < 16; i++)
-        urj_part_set_signal (p, ex_data[i], 0, 0);
+        urj_part_set_signal_input (p, ex_data[i]);
 }
 
 static void
@@ -217,8 +217,8 @@ ixp465_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_chain_t *chain = bus->chain;
 
     select_flash( bus );
-    urj_part_set_signal (p, ex_rd_n, 1, 0);
-    urj_part_set_signal (p, ex_wr_n, 1, 1);
+    urj_part_set_signal_low (p, ex_rd_n);
+    urj_part_set_signal_high (p, ex_wr_n);
 
     setup_address (bus, adr);
     set_data_in (bus);
@@ -261,8 +261,8 @@ ixp465_bus_read_end (urj_bus_t *bus)
     uint32_t d = 0;
 
     unselect_flash (bus);
-    urj_part_set_signal (p, ex_rd_n, 1, 1);
-    urj_part_set_signal (p, ex_wr_n, 1, 1);
+    urj_part_set_signal_high (p, ex_rd_n);
+    urj_part_set_signal_high (p, ex_wr_n);
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -283,16 +283,16 @@ ixp465_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_chain_t *chain = bus->chain;
 
     select_flash (bus);
-    urj_part_set_signal (p, ex_rd_n, 1, 1);
+    urj_part_set_signal_high (p, ex_rd_n);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, ex_wr_n, 1, 0);
+    urj_part_set_signal_low (p, ex_wr_n);
     urj_tap_chain_shift_data_registers (chain, 0);
-    urj_part_set_signal (p, ex_wr_n, 1, 1);
+    urj_part_set_signal_high (p, ex_wr_n);
     unselect_flash (bus);
     urj_tap_chain_shift_data_registers (chain, 0);
 }

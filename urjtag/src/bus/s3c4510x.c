@@ -256,10 +256,10 @@ s3c4510_bus_setup_ctrl (urj_bus_t *bus, int mode)
         urj_part_set_signal (p, nRCS[k], 1, (mode & (1 << k)) ? 1 : 0);
 
     for (k = 0; k < 4; k++)
-        urj_part_set_signal (p, nECS[k], 1, 1);
+        urj_part_set_signal_high (p, nECS[k]);
 
     for (k = 0; k < 4; k++)
-        urj_part_set_signal (p, nSDCS[k], 1, 1);
+        urj_part_set_signal_high (p, nSDCS[k]);
 
     for (k = 0; k < 4; k++)
         urj_part_set_signal (p, nWBE[k], 1, (mode & (1 << (k + 8))) ? 1 : 0);
@@ -297,7 +297,7 @@ set_data_in (urj_bus_t *bus)
     urj_part_t *p = bus->part;
 
     for (i = 0; i < dbus_width; i++)
-        urj_part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal_input (p, D[i]);
 }
 
 static void
@@ -310,7 +310,7 @@ setup_data (urj_bus_t *bus, uint32_t d)
         urj_part_set_signal (p, D[i], 1, (d >> i) & 1);
     /* Set other bits as 0 */
     for (i = dbus_width; i < 32; i++)
-        urj_part_set_signal (p, D[i], 1, 0);
+        urj_part_set_signal_low (p, D[i]);
 }
 
 /**

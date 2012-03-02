@@ -158,14 +158,14 @@ select_flash (urj_bus_t *bus)
 {
     urj_part_t *p = bus->part;
 
-    urj_part_set_signal (p, ROMCE[0], 1, 0);
-    urj_part_set_signal (p, ROMCE[1], 1, 1);
-    urj_part_set_signal (p, ROMCE[2], 1, 1);
-    urj_part_set_signal (p, ROMCE[3], 1, 1);
-    urj_part_set_signal (p, SDCS[0], 1, 1);
-    urj_part_set_signal (p, SDCS[1], 1, 1);
-    urj_part_set_signal (p, SDCS[2], 1, 1);
-    urj_part_set_signal (p, SDCS[3], 1, 1);
+    urj_part_set_signal_low (p, ROMCE[0]);
+    urj_part_set_signal_high (p, ROMCE[1]);
+    urj_part_set_signal_high (p, ROMCE[2]);
+    urj_part_set_signal_high (p, ROMCE[3]);
+    urj_part_set_signal_high (p, SDCS[0]);
+    urj_part_set_signal_high (p, SDCS[1]);
+    urj_part_set_signal_high (p, SDCS[2]);
+    urj_part_set_signal_high (p, SDCS[3]);
 }
 
 static void
@@ -173,14 +173,14 @@ unselect_flash (urj_bus_t *bus)
 {
     urj_part_t *p = bus->part;
 
-    urj_part_set_signal (p, ROMCE[0], 1, 1);
-    urj_part_set_signal (p, ROMCE[1], 1, 1);
-    urj_part_set_signal (p, ROMCE[2], 1, 1);
-    urj_part_set_signal (p, ROMCE[3], 1, 1);
-    urj_part_set_signal (p, SDCS[0], 1, 1);
-    urj_part_set_signal (p, SDCS[1], 1, 1);
-    urj_part_set_signal (p, SDCS[2], 1, 1);
-    urj_part_set_signal (p, SDCS[3], 1, 1);
+    urj_part_set_signal_high (p, ROMCE[0]);
+    urj_part_set_signal_high (p, ROMCE[1]);
+    urj_part_set_signal_high (p, ROMCE[2]);
+    urj_part_set_signal_high (p, ROMCE[3]);
+    urj_part_set_signal_high (p, SDCS[0]);
+    urj_part_set_signal_high (p, SDCS[1]);
+    urj_part_set_signal_high (p, SDCS[2]);
+    urj_part_set_signal_high (p, SDCS[3]);
 }
 
 static void
@@ -201,7 +201,7 @@ set_data_in (urj_bus_t *bus)
     urj_part_t *p = bus->part;
 
     for (i = 0; i < 16; i++)
-        urj_part_set_signal (p, DATA[i], 0, 0);
+        urj_part_set_signal_input (p, DATA[i]);
 }
 
 static void
@@ -226,8 +226,8 @@ tx4925_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     select_flash (bus);
     setup_address (bus, adr);
-    urj_part_set_signal (p, OE, 1, 0);
-    urj_part_set_signal (p, SWE, 1, 1);
+    urj_part_set_signal_low (p, OE);
+    urj_part_set_signal_high (p, SWE);
 
     set_data_in (bus);
 
@@ -270,8 +270,8 @@ tx4925_bus_read_end (urj_bus_t *bus)
     uint32_t d = 0;
 
     unselect_flash (bus);
-    urj_part_set_signal (p, OE, 1, 1);
-    urj_part_set_signal (p, SWE, 1, 1);
+    urj_part_set_signal_high (p, OE);
+    urj_part_set_signal_high (p, SWE);
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -292,16 +292,16 @@ tx4925_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_chain_t *chain = bus->chain;
 
     select_flash (bus);
-    urj_part_set_signal (p, OE, 1, 1);
+    urj_part_set_signal_high (p, OE);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, SWE, 1, 0);
+    urj_part_set_signal_low (p, SWE);
     urj_tap_chain_shift_data_registers (chain, 0);
-    urj_part_set_signal (p, SWE, 1, 1);
+    urj_part_set_signal_high (p, SWE);
     unselect_flash (bus);
     urj_tap_chain_shift_data_registers (chain, 0);
 }

@@ -232,22 +232,22 @@ setup_address (urj_bus_t *bus, uint32_t a)
     {
         for (i = 0; i < 20; i++)
             urj_part_set_signal (p, AD[i], 1, (a >> (i + 1)) & 1);
-        urj_part_set_signal (p, nFLce, 1, 0);
+        urj_part_set_signal_low (p, nFLce);
         urj_part_set_signal (p, DQ[15], 1, (a & 1));
     }
     else
-        urj_part_set_signal (p, nFLce, 1, 1);
+        urj_part_set_signal_high (p, nFLce);
 
     /* SRAM memory address setup */
     if ((a >= SRAMSTART) && (a < (SRAMSTART + SRAMSIZE)))
     {
-        urj_part_set_signal (p, nSRce, 1, 0);
+        urj_part_set_signal_low (p, nSRce);
         for (i = 0; i < 20; i++)
             urj_part_set_signal (p, AD[i], 1,
                                  (a >> (i + (area.width / 8) - 1)) & 1);
     }
     else
-        urj_part_set_signal (p, nSRce, 1, 1);
+        urj_part_set_signal_high (p, nSRce);
 
 
 }
@@ -264,7 +264,7 @@ set_data_in (urj_bus_t *bus, uint32_t adr)
         return;
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, DQ[i], 0, 0);
+        urj_part_set_signal_input (p, DQ[i]);
 }
 
 static void
@@ -311,23 +311,23 @@ slsup3_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     LAST_ADR = adr;
 
-    urj_part_set_signal (p, nSDce, 1, 1);       /* Inihibit SDRAM */
-    urj_part_set_signal (p, nOE, 1, 0);
-    urj_part_set_signal (p, nSRce, 1, 1);
-    urj_part_set_signal (p, nFLce, 1, 1);
-    urj_part_set_signal (p, nFLbyte, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, SDclk, 1, 0);
-    urj_part_set_signal (p, LCDe, 1, 0);
-    urj_part_set_signal (p, LCDrw, 1, 1);
+    urj_part_set_signal_high (p, nSDce);       /* Inihibit SDRAM */
+    urj_part_set_signal_low (p, nOE);
+    urj_part_set_signal_high (p, nSRce);
+    urj_part_set_signal_high (p, nFLce);
+    urj_part_set_signal_low (p, nFLbyte);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, SDclk);
+    urj_part_set_signal_low (p, LCDe);
+    urj_part_set_signal_high (p, LCDrw);
 
     setup_address (bus, adr);
 
     if ((adr >= LCDSTART) && (adr < (LCDSTART + LCDSIZE)))
     {
-        urj_part_set_signal (p, LCDe, 1, 1);
+        urj_part_set_signal_high (p, LCDe);
         urj_tap_chain_shift_data_registers (bus->chain, 0);
-        urj_part_set_signal (p, LCDe, 1, 0);
+        urj_part_set_signal_low (p, LCDe);
     }
 
     set_data_in (bus, adr);
@@ -352,9 +352,9 @@ slsup3_bus_read_next (urj_bus_t *bus, uint32_t adr)
 
     if ((adr >= LCDSTART) && (adr < (LCDSTART + LCDSIZE)))
     {
-        urj_part_set_signal (p, LCDe, 1, 1);
+        urj_part_set_signal_high (p, LCDe);
         urj_tap_chain_shift_data_registers (bus->chain, 0);
-        urj_part_set_signal (p, LCDe, 1, 0);
+        urj_part_set_signal_low (p, LCDe);
     }
 
     urj_tap_chain_shift_data_registers (bus->chain, 1);
@@ -378,12 +378,12 @@ slsup3_bus_read_end (urj_bus_t *bus)
 
     if ((LAST_ADR >= LCDSTART) && (LAST_ADR < (LCDSTART + LCDSIZE)))
     {
-        urj_part_set_signal (p, LCDe, 1, 1);
+        urj_part_set_signal_high (p, LCDe);
         urj_tap_chain_shift_data_registers (bus->chain, 0);
-        urj_part_set_signal (p, LCDe, 1, 0);
+        urj_part_set_signal_low (p, LCDe);
     }
 
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, nOE);
 
     urj_tap_chain_shift_data_registers (bus->chain, 1);
 
@@ -402,15 +402,15 @@ slsup3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, nSDce, 1, 1);       /* Inihibit SDRAM */
-    urj_part_set_signal (p, nOE, 1, 1);
-    urj_part_set_signal (p, nSRce, 1, 1);
-    urj_part_set_signal (p, nFLce, 1, 1);
-    urj_part_set_signal (p, nFLbyte, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, SDclk, 1, 0);
-    urj_part_set_signal (p, LCDe, 1, 0);
-    urj_part_set_signal (p, LCDrw, 1, 0);
+    urj_part_set_signal_high (p, nSDce);       /* Inihibit SDRAM */
+    urj_part_set_signal_high (p, nOE);
+    urj_part_set_signal_high (p, nSRce);
+    urj_part_set_signal_high (p, nFLce);
+    urj_part_set_signal_low (p, nFLbyte);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, SDclk);
+    urj_part_set_signal_low (p, LCDe);
+    urj_part_set_signal_low (p, LCDrw);
 
     setup_address (bus, adr);
     setup_data (bus, adr, data);
@@ -418,9 +418,9 @@ slsup3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     if ((adr >= LCDSTART) && (adr < (LCDSTART + LCDSIZE)))
     {
         urj_tap_chain_shift_data_registers (chain, 0);
-        urj_part_set_signal (p, LCDe, 1, 1);
+        urj_part_set_signal_high (p, LCDe);
         urj_tap_chain_shift_data_registers (bus->chain, 0);
-        urj_part_set_signal (p, LCDe, 1, 0);
+        urj_part_set_signal_low (p, LCDe);
         urj_tap_chain_shift_data_registers (bus->chain, 0);
     }
     else
@@ -428,9 +428,9 @@ slsup3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
         urj_tap_chain_shift_data_registers (chain, 0);
 
-        urj_part_set_signal (p, nWE, 1, 0);
+        urj_part_set_signal_low (p, nWE);
         urj_tap_chain_shift_data_registers (chain, 0);
-        urj_part_set_signal (p, nWE, 1, 1);
+        urj_part_set_signal_high (p, nWE);
         urj_tap_chain_shift_data_registers (chain, 0);
     }
 }

@@ -405,7 +405,7 @@ set_data_in (urj_bus_t *bus, component_t *comp)
     width = detect_data_width (comp);
 
     for (i = 0; i < width; i++)
-        urj_part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal_input (p, D[i]);
 }
 
 static void
@@ -450,35 +450,35 @@ jopcyc_bus_init (urj_bus_t *bus)
     /* RAMA */
     comp = COMP_RAMA;
     set_data_in (bus, comp);
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
-    urj_part_set_signal (p, nLB, 1, 1);
-    urj_part_set_signal (p, nUB, 1, 1);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
+    urj_part_set_signal_high (p, nLB);
+    urj_part_set_signal_high (p, nUB);
 
     /* RAMB */
     comp = COMP_RAMB;
     set_data_in (bus, comp);
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
-    urj_part_set_signal (p, nLB, 1, 1);
-    urj_part_set_signal (p, nUB, 1, 1);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
+    urj_part_set_signal_high (p, nLB);
+    urj_part_set_signal_high (p, nUB);
 
     /* FLASH */
     comp = COMP_FLASH;
     set_data_in (bus, comp);
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
-    urj_part_set_signal (p, nCS2, 1, 1);
-    urj_part_set_signal (p, nRDY, 0, 0);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
+    urj_part_set_signal_high (p, nCS2);
+    urj_part_set_signal_input (p, nRDY);
 
     /* Serial Port */
-    urj_part_set_signal (p, SER_RXD, 0, 0);
-    urj_part_set_signal (p, SER_NRTS, 1, 1);
-    urj_part_set_signal (p, SER_TXD, 1, 1);
-    urj_part_set_signal (p, SER_NCTS, 0, 0);
+    urj_part_set_signal_input (p, SER_RXD);
+    urj_part_set_signal_high (p, SER_NRTS);
+    urj_part_set_signal_high (p, SER_TXD);
+    urj_part_set_signal_input (p, SER_NCTS);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
@@ -559,13 +559,13 @@ jopcyc_bus_read_start (urj_bus_t *bus, uint32_t adr)
         return URJ_STATUS_FAIL;
     }
 
-    urj_part_set_signal (p, nCS, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 0);
+    urj_part_set_signal_low (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, nOE);
     if (comp->ctype == RAM)
     {
-        urj_part_set_signal (p, nLB, 1, 0);
-        urj_part_set_signal (p, nUB, 1, 0);
+        urj_part_set_signal_low (p, nLB);
+        urj_part_set_signal_low (p, nUB);
     }
 
     setup_address (bus, adr, comp);
@@ -629,12 +629,12 @@ jopcyc_bus_read_end (urj_bus_t *bus)
         return 0;
     }
 
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nOE);
     if (comp->ctype == RAM)
     {
-        urj_part_set_signal (p, nLB, 1, 1);
-        urj_part_set_signal (p, nUB, 1, 1);
+        urj_part_set_signal_high (p, nLB);
+        urj_part_set_signal_high (p, nUB);
     }
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -663,13 +663,13 @@ jopcyc_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
         return;
     }
 
-    urj_part_set_signal (p, nCS, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_low (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
     if (comp->ctype == RAM)
     {
-        urj_part_set_signal (p, nLB, 1, 0);
-        urj_part_set_signal (p, nUB, 1, 0);
+        urj_part_set_signal_low (p, nLB);
+        urj_part_set_signal_low (p, nUB);
     }
 
     setup_address (bus, adr, comp);
@@ -677,14 +677,14 @@ jopcyc_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, nWE, 1, 0);
+    urj_part_set_signal_low (p, nWE);
     urj_tap_chain_shift_data_registers (chain, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nCS);
     if (comp->ctype == RAM)
     {
-        urj_part_set_signal (p, nLB, 1, 1);
-        urj_part_set_signal (p, nUB, 1, 1);
+        urj_part_set_signal_high (p, nLB);
+        urj_part_set_signal_high (p, nUB);
     }
     urj_tap_chain_shift_data_registers (chain, 0);
 }

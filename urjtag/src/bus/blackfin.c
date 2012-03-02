@@ -163,11 +163,11 @@ bfin_select_flash_sdram (urj_bus_t *bus)
 
     if (params->sdram)
     {
-        urj_part_set_signal (part, params->sras, 1, 1);
-        urj_part_set_signal (part, params->scas, 1, 1);
-        urj_part_set_signal (part, params->swe, 1, 1);
+        urj_part_set_signal_high (part, params->sras);
+        urj_part_set_signal_high (part, params->scas);
+        urj_part_set_signal_high (part, params->swe);
         for (i = 0; i < params->sms_cnt; ++i)
-            urj_part_set_signal (part, params->sms[0], 1, 1);
+            urj_part_set_signal_high (part, params->sms[0]);
     }
 }
 
@@ -183,7 +183,7 @@ bfin_select_flash (urj_bus_t *bus, uint32_t adr)
                              !(ASYNC_BANK(params, adr) == i));
 
     for (i = 0; i < params->abe_cnt; ++i)
-        urj_part_set_signal (part, params->abe[i], 1, 0);
+        urj_part_set_signal_low (part, params->abe[i]);
 
     if (params->hwait)
         urj_part_set_signal (part, params->hwait, 1, params->hwait_level);
@@ -202,10 +202,10 @@ bfin_unselect_flash (urj_bus_t *bus)
     int i;
 
     for (i = 0; i < params->ams_cnt; ++i)
-        urj_part_set_signal (part, params->ams[i], 1, 1);
+        urj_part_set_signal_high (part, params->ams[i]);
 
     for (i = 0; i < params->abe_cnt; ++i)
-        urj_part_set_signal (part, params->abe[i], 1, 1);
+        urj_part_set_signal_high (part, params->abe[i]);
 
     if (params->hwait)
         urj_part_set_signal (part, params->hwait, 1, params->hwait_level);
@@ -235,7 +235,7 @@ bfin_set_data_in (urj_bus_t *bus)
     int i;
 
     for (i = 0; i < params->data_cnt; ++i)
-        urj_part_set_signal (part, params->data[i], 0, 0);
+        urj_part_set_signal_input (part, params->data[i]);
 }
 
 void
@@ -329,20 +329,20 @@ bfin_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_chain_t *chain = bus->chain;
 
     bfin_select_flash (bus, adr);
-    urj_part_set_signal (part, params->aoe, 1, 1);
-    urj_part_set_signal (part, params->are, 1, 1);
-    urj_part_set_signal (part, params->awe, 1, 1);
+    urj_part_set_signal_high (part, params->aoe);
+    urj_part_set_signal_high (part, params->are);
+    urj_part_set_signal_high (part, params->awe);
 
     bfin_setup_address (bus, adr);
     bfin_setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (part, params->awe, 1, 0);
-    urj_part_set_signal (part, params->aoe, 1, 0);
+    urj_part_set_signal_low (part, params->awe);
+    urj_part_set_signal_low (part, params->aoe);
     urj_tap_chain_shift_data_registers (chain, 0);
-    urj_part_set_signal (part, params->awe, 1, 1);
-    urj_part_set_signal (part, params->aoe, 1, 1);
+    urj_part_set_signal_high (part, params->awe);
+    urj_part_set_signal_high (part, params->aoe);
     bfin_unselect_flash (bus);
     urj_tap_chain_shift_data_registers (chain, 0);
 }

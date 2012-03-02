@@ -149,7 +149,7 @@ set_data_in (urj_bus_t *bus)
     ppc405ep_bus_area (bus, 0, &area);
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal_input (p, D[i]);
 }
 
 static void
@@ -175,9 +175,9 @@ ppc405ep_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, nCS, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 0);
+    urj_part_set_signal_low (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, nOE);
 
     setup_address (bus, adr);
     set_data_in (bus);
@@ -226,8 +226,8 @@ ppc405ep_bus_read_end (urj_bus_t *bus)
 
     ppc405ep_bus_area (bus, 0, &area);
 
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nOE);
     urj_tap_chain_shift_data_registers (chain, 1);
 
     for (i = 0; i < area.width; i++)
@@ -246,19 +246,19 @@ ppc405ep_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, nCS, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_low (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, nWE, 1, 0);
+    urj_part_set_signal_low (p, nWE);
     urj_tap_chain_shift_data_registers (chain, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nCS);
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 

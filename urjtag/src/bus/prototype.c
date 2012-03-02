@@ -399,7 +399,7 @@ set_data_in (urj_bus_t *bus)
     prototype_bus_area (bus, 0, &area);
 
     for (i = 0, j = DLSBI; i < DW; i++, j += DI)
-        urj_part_set_signal (p, D[j], 0, 0);
+        urj_part_set_signal_input (p, D[j]);
 }
 
 static void

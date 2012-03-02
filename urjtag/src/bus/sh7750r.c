@@ -166,7 +166,7 @@ set_data_in (urj_bus_t *bus)
     urj_part_t *p = bus->part;
 
     for (i = 0; i < 32; i++)
-        urj_part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal_input (p, D[i]);
 }
 
 static void
@@ -201,14 +201,14 @@ sh7750r_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_part_set_signal (p, CS[4], 1, cs[4]);
     urj_part_set_signal (p, CS[5], 1, cs[5]);
     urj_part_set_signal (p, CS[6], 1, cs[6]);
-    urj_part_set_signal (p, RDWR, 1, 1);
-    urj_part_set_signal (p, RDWR2, 1, 1);
-    urj_part_set_signal (p, WE[0], 1, 1);
-    urj_part_set_signal (p, WE[1], 1, 1);
-    urj_part_set_signal (p, WE[2], 1, 1);
-    urj_part_set_signal (p, WE[3], 1, 1);
-    urj_part_set_signal (p, RD, 1, 0);
-    urj_part_set_signal (p, RD2, 1, 0);
+    urj_part_set_signal_high (p, RDWR);
+    urj_part_set_signal_high (p, RDWR2);
+    urj_part_set_signal_high (p, WE[0]);
+    urj_part_set_signal_high (p, WE[1]);
+    urj_part_set_signal_high (p, WE[2]);
+    urj_part_set_signal_high (p, WE[3]);
+    urj_part_set_signal_low (p, RD);
+    urj_part_set_signal_low (p, RD2);
 
     setup_address (bus, adr);
     set_data_in (bus);
@@ -260,8 +260,8 @@ sh7750r_bus_read_end (urj_bus_t *bus)
     urj_part_set_signal (p, CS[5], 1, cs[5]);
     urj_part_set_signal (p, CS[6], 1, cs[6]);
 
-    urj_part_set_signal (p, RD, 1, 1);
-    urj_part_set_signal (p, RD2, 1, 1);
+    urj_part_set_signal_high (p, RD);
+    urj_part_set_signal_high (p, RD2);
     urj_tap_chain_shift_data_registers (bus->chain, 1);
 
     for (i = 0; i < 32; i++)
@@ -294,31 +294,31 @@ sh7750r_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_set_signal (p, CS[5], 1, cs[5]);
     urj_part_set_signal (p, CS[6], 1, cs[6]);
 
-    urj_part_set_signal (p, RDWR, 1, 0);
-    urj_part_set_signal (p, RDWR2, 1, 0);
-    urj_part_set_signal (p, WE[0], 1, 1);
-    urj_part_set_signal (p, WE[1], 1, 1);
-    urj_part_set_signal (p, WE[2], 1, 1);
-    urj_part_set_signal (p, WE[3], 1, 1);
-    urj_part_set_signal (p, RD, 1, 1);
-    urj_part_set_signal (p, RD2, 1, 1);
+    urj_part_set_signal_low (p, RDWR);
+    urj_part_set_signal_low (p, RDWR2);
+    urj_part_set_signal_high (p, WE[0]);
+    urj_part_set_signal_high (p, WE[1]);
+    urj_part_set_signal_high (p, WE[2]);
+    urj_part_set_signal_high (p, WE[3]);
+    urj_part_set_signal_high (p, RD);
+    urj_part_set_signal_high (p, RD2);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, WE[0], 1, 0);
-    urj_part_set_signal (p, WE[1], 1, 0);
-    urj_part_set_signal (p, WE[2], 1, 0);
-    urj_part_set_signal (p, WE[3], 1, 0);
+    urj_part_set_signal_low (p, WE[0]);
+    urj_part_set_signal_low (p, WE[1]);
+    urj_part_set_signal_low (p, WE[2]);
+    urj_part_set_signal_low (p, WE[3]);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, WE[0], 1, 1);
-    urj_part_set_signal (p, WE[1], 1, 1);
-    urj_part_set_signal (p, WE[2], 1, 1);
-    urj_part_set_signal (p, WE[3], 1, 1);
+    urj_part_set_signal_high (p, WE[0]);
+    urj_part_set_signal_high (p, WE[1]);
+    urj_part_set_signal_high (p, WE[2]);
+    urj_part_set_signal_high (p, WE[3]);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 }

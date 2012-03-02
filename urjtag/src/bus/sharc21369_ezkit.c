@@ -137,8 +137,8 @@ sharc_21369_ezkit_bus_area ( urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
         area->length = UINT64_C(0x080000);
         area->width = 8;
 
-        urj_part_set_signal( p, MS0, 1, 1);
-        urj_part_set_signal( p, MS1, 1, 0);
+        urj_part_set_signal_high( p, MS0);
+        urj_part_set_signal_low( p, MS1);
 
     }
     else
@@ -148,8 +148,8 @@ sharc_21369_ezkit_bus_area ( urj_bus_t *bus, uint32_t adr, urj_bus_area_t *area)
         area->length = UINT64_C(0x080000);
         area->width = 0;
 
-        urj_part_set_signal(p, MS0, 1, 1);
-        urj_part_set_signal(p, MS1, 1, 1);
+        urj_part_set_signal_high(p, MS0);
+        urj_part_set_signal_high(p, MS1);
     }
 
     return URJ_STATUS_OK;
@@ -207,8 +207,8 @@ sharc_21369_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     LAST_ADR = adr;
 
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nRD, 1, 0);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, nRD);
 
     setup_address (bus, adr);
     set_data_in (bus, adr);
@@ -259,8 +259,8 @@ sharc_21369_bus_read_end( urj_bus_t *bus )
 
     bus->driver->area (bus, LAST_ADR, &area);
 
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nRD, 1, 1);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nRD);
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -283,17 +283,17 @@ sharc_21369_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
     bus->driver->area (bus, adr, &area);
 
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nRD, 1, 1);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nRD);
 
     setup_address (bus, adr);
     setup_data (bus, adr, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, nWE, 1, 0);
+    urj_part_set_signal_low (p, nWE);
     urj_tap_chain_shift_data_registers (chain, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal_high (p, nWE);
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 

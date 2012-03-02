@@ -168,23 +168,23 @@ flashbscoach_bus_init (urj_bus_t *bus)
     urj_part_set_instruction (p, "SAMPLE/PRELOAD");
     urj_tap_chain_shift_instructions (chain);
 
-    urj_part_set_signal (p, DECA, 1, 1);
-    urj_part_set_signal (p, DECB, 1, 1);
-    urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 1);        //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
+    urj_part_set_signal_high (p, DECA);
+    urj_part_set_signal_high (p, DECB);
+    urj_part_set_signal_high (p, DECC);
+    urj_part_set_signal_high (p, OE_F);        //OE_F low aktiv
+    urj_part_set_signal_high (p, WE_F);        //WE_F low aktiv
 
     for (i = 0; i < 15; i++)
-        urj_part_set_signal (p, ADR[i], 1, 1);
+        urj_part_set_signal_high (p, ADR[i]);
 
-    urj_part_set_signal (p, D[0], 1, 0);
-    urj_part_set_signal (p, D[1], 1, 0);
-    urj_part_set_signal (p, D[2], 1, 0);
-    urj_part_set_signal (p, D[3], 1, 0);
-    urj_part_set_signal (p, D[4], 1, 0);
-    urj_part_set_signal (p, D[5], 1, 0);
-    urj_part_set_signal (p, D[6], 1, 0);
-    urj_part_set_signal (p, D[7], 1, 0);
+    urj_part_set_signal_low (p, D[0]);
+    urj_part_set_signal_low (p, D[1]);
+    urj_part_set_signal_low (p, D[2]);
+    urj_part_set_signal_low (p, D[3]);
+    urj_part_set_signal_low (p, D[4]);
+    urj_part_set_signal_low (p, D[5]);
+    urj_part_set_signal_low (p, D[6]);
+    urj_part_set_signal_low (p, D[7]);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
@@ -236,14 +236,14 @@ set_data_in (urj_bus_t *bus)
 
     flashbscoach_bus_area (bus, 0, &area);
 
-    urj_part_set_signal (p, D[0], 0, 0);
-    urj_part_set_signal (p, D[1], 0, 0);
-    urj_part_set_signal (p, D[2], 0, 0);
-    urj_part_set_signal (p, D[3], 0, 0);
-    urj_part_set_signal (p, D[4], 0, 0);
-    urj_part_set_signal (p, D[5], 0, 0);
-    urj_part_set_signal (p, D[6], 0, 0);
-    urj_part_set_signal (p, D[7], 0, 0);
+    urj_part_set_signal_input (p, D[0]);
+    urj_part_set_signal_input (p, D[1]);
+    urj_part_set_signal_input (p, D[2]);
+    urj_part_set_signal_input (p, D[3]);
+    urj_part_set_signal_input (p, D[4]);
+    urj_part_set_signal_input (p, D[5]);
+    urj_part_set_signal_input (p, D[6]);
+    urj_part_set_signal_input (p, D[7]);
 }
 static void
 setup_address (urj_bus_t *bus, uint32_t a)
@@ -283,11 +283,11 @@ flashbscoach_bus_read_start (urj_bus_t *bus, uint32_t adr)
 
     LAST_ADR = adr;
 
-    urj_part_set_signal (p, DECA, 1, 0);
-    urj_part_set_signal (p, DECB, 1, 1);
-    urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 0);        //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
+    urj_part_set_signal_low (p, DECA);
+    urj_part_set_signal_high (p, DECB);
+    urj_part_set_signal_high (p, DECC);
+    urj_part_set_signal_low (p, OE_F);        //OE_F low aktiv
+    urj_part_set_signal_high (p, WE_F);        //WE_F low aktiv
 
     setup_address (bus, adr);
     set_data_in (bus);
@@ -329,11 +329,11 @@ flashbscoach_bus_read_end (urj_bus_t *bus)
 
 
 
-    urj_part_set_signal (p, DECA, 1, 1);
-    urj_part_set_signal (p, DECB, 1, 1);
-    urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 1);        //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
+    urj_part_set_signal_high (p, DECA);
+    urj_part_set_signal_high (p, DECB);
+    urj_part_set_signal_high (p, DECC);
+    urj_part_set_signal_high (p, OE_F);        //OE_F low aktiv
+    urj_part_set_signal_high (p, WE_F);        //WE_F low aktiv
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -350,25 +350,25 @@ flashbscoach_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 {
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
-    urj_part_set_signal (p, DECA, 1, 0);
-    urj_part_set_signal (p, DECB, 1, 1);
-    urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 1);        //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
+    urj_part_set_signal_low (p, DECA);
+    urj_part_set_signal_high (p, DECB);
+    urj_part_set_signal_high (p, DECC);
+    urj_part_set_signal_high (p, OE_F);        //OE_F low aktiv
+    urj_part_set_signal_high (p, WE_F);        //WE_F low aktiv
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, WE_F, 1, 0);
+    urj_part_set_signal_low (p, WE_F);
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, DECA, 1, 1);
-    urj_part_set_signal (p, DECB, 1, 1);
-    urj_part_set_signal (p, DECC, 1, 1);
-    urj_part_set_signal (p, OE_F, 1, 1);        //OE_F low aktiv
-    urj_part_set_signal (p, WE_F, 1, 1);        //WE_F low aktiv
+    urj_part_set_signal_high (p, DECA);
+    urj_part_set_signal_high (p, DECB);
+    urj_part_set_signal_high (p, DECC);
+    urj_part_set_signal_high (p, OE_F);        //OE_F low aktiv
+    urj_part_set_signal_high (p, WE_F);        //WE_F low aktiv
 
     urj_tap_chain_shift_data_registers (chain, 0);
 }

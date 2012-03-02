@@ -202,7 +202,7 @@ set_data_in (urj_bus_t *bus)
     lh7a400_bus_area (bus, 0, &area);
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal_input (p, D[i]);
 
 }
 
@@ -231,8 +231,8 @@ lh7a400_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_chain_t *chain = bus->chain;
 
     urj_part_set_signal (p, nCS[0], 1, (adr >> 27) != 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 0);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, nOE);
 
     setup_address (bus, adr);
     set_data_in (bus);
@@ -283,8 +283,8 @@ lh7a400_bus_read_end (urj_bus_t *bus)
 
     lh7a400_bus_area (bus, 0, &area);
 
-    urj_part_set_signal (p, nCS[0], 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, nCS[0]);
+    urj_part_set_signal_high (p, nOE);
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -306,19 +306,19 @@ lh7a400_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_chain_t *chain = bus->chain;
 
     urj_part_set_signal (p, nCS[0], 1, (adr >> 27) != 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, nWE, 1, 0);
+    urj_part_set_signal_low (p, nWE);
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nCS[0], 1, 1);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nCS[0]);
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 

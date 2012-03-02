@@ -490,7 +490,7 @@ set_data_in (urj_bus_t *bus, component_t *comp)
     width = detect_data_width (comp);
 
     for (i = 0; i < width; i++)
-        urj_part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal_input (p, D[i]);
 }
 
 static void
@@ -516,14 +516,14 @@ eeprom_shift_byte (urj_chain_t *chain, urj_part_t *p, component_t *comp,
     for (pos = 7; pos >= 0; pos--)
     {
         /* set clock to 0 */
-        urj_part_set_signal (p, SCK, 1, 0);
+        urj_part_set_signal_low (p, SCK);
         /* apply data bit */
         urj_part_set_signal (p, SI, 1, (byte >> pos) & 0x01);
         /* commit signals */
         urj_tap_chain_shift_data_registers (chain, 1);
 
         /* set clock to 1 */
-        urj_part_set_signal (p, SCK, 1, 1);
+        urj_part_set_signal_high (p, SCK);
         /* commit signals */
         urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -538,11 +538,11 @@ static void
 eeprom_disable_device (urj_chain_t *chain, urj_part_t *p, component_t *comp)
 {
     /* ensure that SCK is low before disabling device */
-    urj_part_set_signal (p, SCK, 1, 0);
+    urj_part_set_signal_low (p, SCK);
     urj_tap_chain_shift_data_registers (chain, 0);
 
     /* finally disable device */
-    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal_high (p, nCS);
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 
@@ -574,44 +574,44 @@ zefant_xs3_bus_init (urj_bus_t *bus)
     /* FLASH */
     comp = COMP_FLASH;
     setup_data (bus, 0, comp);
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
-    urj_part_set_signal (p, nRP, 1, 1);
-    urj_part_set_signal (p, nBYTE, 1, 1);
-    urj_part_set_signal (p, STS, 0, 0);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
+    urj_part_set_signal_high (p, nRP);
+    urj_part_set_signal_high (p, nBYTE);
+    urj_part_set_signal_input (p, STS);
 
     /* RAM0 */
     comp = COMP_RAM0;
     setup_data (bus, 0, comp);
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
-    urj_part_set_signal (p, nLB, 1, 1);
-    urj_part_set_signal (p, nUB, 1, 1);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
+    urj_part_set_signal_high (p, nLB);
+    urj_part_set_signal_high (p, nUB);
 
     /* RAM1 */
     comp = COMP_RAM1;
     setup_data (bus, 0, comp);
-    urj_part_set_signal (p, nCS, 1, 1);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
-    urj_part_set_signal (p, nLB, 1, 1);
-    urj_part_set_signal (p, nUB, 1, 1);
+    urj_part_set_signal_high (p, nCS);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
+    urj_part_set_signal_high (p, nLB);
+    urj_part_set_signal_high (p, nUB);
 
     /* EEPROM */
     comp = COMP_EEPROM;
-    urj_part_set_signal (p, SI, 1, 0);
-    urj_part_set_signal (p, SO, 0, 0);
-    urj_part_set_signal (p, SCK, 1, 0);
-    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal_low (p, SI);
+    urj_part_set_signal_input (p, SO);
+    urj_part_set_signal_low (p, SCK);
+    urj_part_set_signal_high (p, nCS);
 
     /* EEPROM Status */
     comp = COMP_EEPROM_STATUS;
-    urj_part_set_signal (p, SI, 1, 0);
-    urj_part_set_signal (p, SO, 0, 0);
-    urj_part_set_signal (p, SCK, 1, 0);
-    urj_part_set_signal (p, nCS, 1, 1);
+    urj_part_set_signal_low (p, SI);
+    urj_part_set_signal_input (p, SO);
+    urj_part_set_signal_low (p, SCK);
+    urj_part_set_signal_high (p, nCS);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
@@ -714,13 +714,13 @@ zefant_xs3_bus_read_start (urj_bus_t *bus, uint32_t adr)
     {
     case FLASH:
     case RAM:
-        urj_part_set_signal (p, nCS, 1, 0);
-        urj_part_set_signal (p, nWE, 1, 1);
-        urj_part_set_signal (p, nOE, 1, 0);
+        urj_part_set_signal_low (p, nCS);
+        urj_part_set_signal_high (p, nWE);
+        urj_part_set_signal_low (p, nOE);
         if (comp->ctype == RAM)
         {
-            urj_part_set_signal (p, nLB, 1, 0);
-            urj_part_set_signal (p, nUB, 1, 0);
+            urj_part_set_signal_low (p, nLB);
+            urj_part_set_signal_low (p, nUB);
         }
 
         setup_address (bus, adr, comp);
@@ -735,7 +735,7 @@ zefant_xs3_bus_read_start (urj_bus_t *bus, uint32_t adr)
         /* fall through */
     case EEPROM:
         /* enable device */
-        urj_part_set_signal (p, nCS, 1, 0);
+        urj_part_set_signal_low (p, nCS);
 
         /* shift command */
         eeprom_shift_byte (chain, p, comp, cmd);
@@ -837,12 +837,12 @@ zefant_xs3_bus_read_end (urj_bus_t *bus)
     {
     case FLASH:
     case RAM:
-        urj_part_set_signal (p, nCS, 1, 1);
-        urj_part_set_signal (p, nOE, 1, 1);
+        urj_part_set_signal_high (p, nCS);
+        urj_part_set_signal_high (p, nOE);
         if (comp->ctype == RAM)
         {
-            urj_part_set_signal (p, nLB, 1, 1);
-            urj_part_set_signal (p, nUB, 1, 1);
+            urj_part_set_signal_high (p, nLB);
+            urj_part_set_signal_high (p, nUB);
         }
         urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -892,13 +892,13 @@ zefant_xs3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     {
     case FLASH:
     case RAM:
-        urj_part_set_signal (p, nCS, 1, 0);
-        urj_part_set_signal (p, nWE, 1, 1);
-        urj_part_set_signal (p, nOE, 1, 1);
+        urj_part_set_signal_low (p, nCS);
+        urj_part_set_signal_high (p, nWE);
+        urj_part_set_signal_high (p, nOE);
         if (comp->ctype == RAM)
         {
-            urj_part_set_signal (p, nLB, 1, 0);
-            urj_part_set_signal (p, nUB, 1, 0);
+            urj_part_set_signal_low (p, nLB);
+            urj_part_set_signal_low (p, nUB);
         }
 
         setup_address (bus, adr, comp);
@@ -906,14 +906,14 @@ zefant_xs3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
         urj_tap_chain_shift_data_registers (chain, 0);
 
-        urj_part_set_signal (p, nWE, 1, 0);
+        urj_part_set_signal_low (p, nWE);
         urj_tap_chain_shift_data_registers (chain, 0);
-        urj_part_set_signal (p, nWE, 1, 1);
-        urj_part_set_signal (p, nCS, 1, 1);
+        urj_part_set_signal_high (p, nWE);
+        urj_part_set_signal_high (p, nCS);
         if (comp->ctype == RAM)
         {
-            urj_part_set_signal (p, nLB, 1, 1);
-            urj_part_set_signal (p, nUB, 1, 1);
+            urj_part_set_signal_high (p, nLB);
+            urj_part_set_signal_high (p, nUB);
         }
         urj_tap_chain_shift_data_registers (chain, 0);
 
@@ -927,7 +927,7 @@ zefant_xs3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
          * Step 1:
          * Poll status register and ensure that device is ready.
          */
-        urj_part_set_signal (p, nCS, 1, 0);
+        urj_part_set_signal_low (p, nCS);
 
         /* poll status register for nRDY */
         do
@@ -943,7 +943,7 @@ zefant_xs3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
          * Step 2:
          * Enable writing.
          */
-        urj_part_set_signal (p, nCS, 1, 0);
+        urj_part_set_signal_low (p, nCS);
 
         /* enable writing */
         eeprom_shift_byte (chain, p, comp, EEPROM_CMD_WREN);
@@ -955,7 +955,7 @@ zefant_xs3_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
          * Step 3:
          * Write data to device.
          */
-        urj_part_set_signal (p, nCS, 1, 0);
+        urj_part_set_signal_low (p, nCS);
 
         /* send command
            command code has been determined by component type */

@@ -207,7 +207,7 @@ set_data_in (urj_bus_t *bus, uint32_t adr)
         return;
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, AD[i + (LPC_NUM_AD - bp->lpc_num_d)], 0, 0);
+        urj_part_set_signal_input (p, AD[i + (LPC_NUM_AD - bp->lpc_num_d)]);
 }
 
 static void
@@ -269,9 +269,9 @@ mpc5200_bus_read_start (urj_bus_t *bus, uint32_t adr)
         urj_part_set_signal (p, nCS[i], 1, !(cs == i));
     }
 
-    urj_part_set_signal (p, ATA_ISO, 1, 1);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 0);
+    urj_part_set_signal_high (p, ATA_ISO);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, nOE);
 
     setup_address (bus, adr);
 
@@ -279,9 +279,9 @@ mpc5200_bus_read_start (urj_bus_t *bus, uint32_t adr)
         set_data_in (bus, adr);
     else
     {
-        urj_part_set_signal (p, nALE, 1, 0);
+        urj_part_set_signal_low (p, nALE);
         urj_tap_chain_shift_data_registers (bus->chain, 0);
-        urj_part_set_signal (p, nALE, 1, 1);
+        urj_part_set_signal_high (p, nALE);
     }
     urj_tap_chain_shift_data_registers (bus->chain, 0);
 
@@ -316,9 +316,9 @@ mpc5200_bus_read_next (urj_bus_t *bus, uint32_t adr)
         setup_address (bus, adr);
         LAST_ADR = adr;
 
-        urj_part_set_signal (p, nALE, 1, 0);
+        urj_part_set_signal_low (p, nALE);
         urj_tap_chain_shift_data_registers (bus->chain, 0);
-        urj_part_set_signal (p, nALE, 1, 1);
+        urj_part_set_signal_high (p, nALE);
         urj_tap_chain_shift_data_registers (bus->chain, 0);
     }
 
@@ -344,9 +344,9 @@ mpc5200_bus_read_end (urj_bus_t *bus)
     }
     for (i = 0; i < LPC_NUM_CS; i++)
     {
-        urj_part_set_signal (p, nCS[i], 1, 1);
+        urj_part_set_signal_high (p, nCS[i]);
     }
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, nOE);
 
     urj_tap_chain_shift_data_registers (bus->chain, 1);
 
@@ -370,9 +370,9 @@ mpc5200_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     if (bp->muxed)
     {
         setup_address (bus, adr);
-        urj_part_set_signal (p, nALE, 1, 0);
+        urj_part_set_signal_low (p, nALE);
         urj_tap_chain_shift_data_registers (chain, 0);
-        urj_part_set_signal (p, nALE, 1, 1);
+        urj_part_set_signal_high (p, nALE);
         urj_tap_chain_shift_data_registers (chain, 0);
     }
 
@@ -380,9 +380,9 @@ mpc5200_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     {
         urj_part_set_signal (p, nCS[i], 1, !(cs == i));
     }
-    urj_part_set_signal (p, ATA_ISO, 1, 1);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nOE, 1, 1);
+    urj_part_set_signal_high (p, ATA_ISO);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nOE);
 
     if (!bp->muxed)
         setup_address (bus, adr);
@@ -390,9 +390,9 @@ mpc5200_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, nWE, 1, 0);
+    urj_part_set_signal_low (p, nWE);
     urj_tap_chain_shift_data_registers (chain, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
+    urj_part_set_signal_high (p, nWE);
     urj_tap_chain_shift_data_registers (chain, 0);
 }
 

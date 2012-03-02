@@ -6,6 +6,9 @@
   * include/urjtag/part.h (urj_part_set_signal_{high,low,input}): Add helpers
     for controlling levels to make code reading easier.  Work by Miklós Márton.
 
+  * src/bus/*.c: Convert to new urj_part_set_signal helpers.  Work partially
+    by Miklós Márton.
+
 2012-02-29  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/xc6slx16/STEPPINGS: Add stepping 2 by Christoffer Kjølbæk.

@@ -39,8 +39,8 @@ bf548_ezkit_unselect_flash (urj_bus_t *bus)
 {
     urj_part_t *part = bus->part;
 
-    urj_part_set_signal (part, DCS0, 1, 1);
-    urj_part_set_signal (part, NCE, 1, 1);
+    urj_part_set_signal_high (part, DCS0);
+    urj_part_set_signal_high (part, NCE);
 }
 
 static void

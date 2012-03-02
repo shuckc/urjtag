@@ -166,7 +166,7 @@ set_data_in (urj_bus_t *bus)
     au1500_bus_area (bus, 0, &area);
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, RD[i], 0, 0);
+        urj_part_set_signal_input (p, RD[i]);
 
 }
 
@@ -209,12 +209,12 @@ au1500_bus_read_start (urj_bus_t *bus, uint32_t adr)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, nRCS[0], 1, 0);
-    urj_part_set_signal (p, nRCS[1], 1, 1);
-    urj_part_set_signal (p, nRCS[2], 1, 1);
-    urj_part_set_signal (p, nRCS[3], 1, 1);
-    urj_part_set_signal (p, nRWE, 1, 1);
-    urj_part_set_signal (p, nROE, 1, 0);
+    urj_part_set_signal_low (p, nRCS[0]);
+    urj_part_set_signal_high (p, nRCS[1]);
+    urj_part_set_signal_high (p, nRCS[2]);
+    urj_part_set_signal_high (p, nRCS[3]);
+    urj_part_set_signal_high (p, nRWE);
+    urj_part_set_signal_low (p, nROE);
 
     setup_address (bus, adr);
     set_data_in (bus);
@@ -249,12 +249,12 @@ au1500_bus_read_end (urj_bus_t *bus)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, nRCS[0], 1, 1);
-    urj_part_set_signal (p, nRCS[1], 1, 1);
-    urj_part_set_signal (p, nRCS[2], 1, 1);
-    urj_part_set_signal (p, nRCS[3], 1, 1);
-    urj_part_set_signal (p, nRWE, 1, 1);
-    urj_part_set_signal (p, nROE, 1, 1);
+    urj_part_set_signal_high (p, nRCS[0]);
+    urj_part_set_signal_high (p, nRCS[1]);
+    urj_part_set_signal_high (p, nRCS[2]);
+    urj_part_set_signal_high (p, nRCS[3]);
+    urj_part_set_signal_high (p, nRWE);
+    urj_part_set_signal_high (p, nROE);
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
@@ -271,27 +271,27 @@ au1500_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
     urj_part_t *p = bus->part;
     urj_chain_t *chain = bus->chain;
 
-    urj_part_set_signal (p, nRCS[0], 1, 0);
-    urj_part_set_signal (p, nRCS[1], 1, 1);
-    urj_part_set_signal (p, nRCS[2], 1, 1);
-    urj_part_set_signal (p, nRCS[3], 1, 1);
-    urj_part_set_signal (p, nRWE, 1, 1);
-    urj_part_set_signal (p, nROE, 1, 1);
+    urj_part_set_signal_low (p, nRCS[0]);
+    urj_part_set_signal_high (p, nRCS[1]);
+    urj_part_set_signal_high (p, nRCS[2]);
+    urj_part_set_signal_high (p, nRCS[3]);
+    urj_part_set_signal_high (p, nRWE);
+    urj_part_set_signal_high (p, nROE);
 
     setup_address (bus, adr);
     setup_data (bus, data);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, nRWE, 1, 0);
+    urj_part_set_signal_low (p, nRWE);
     urj_tap_chain_shift_data_registers (chain, 0);
 
-    urj_part_set_signal (p, nRWE, 1, 1);
-    urj_part_set_signal (p, nROE, 1, 1);
-    urj_part_set_signal (p, nRCS[0], 1, 1);
-    urj_part_set_signal (p, nRCS[1], 1, 1);
-    urj_part_set_signal (p, nRCS[2], 1, 1);
-    urj_part_set_signal (p, nRCS[3], 1, 1);
+    urj_part_set_signal_high (p, nRWE);
+    urj_part_set_signal_high (p, nROE);
+    urj_part_set_signal_high (p, nRCS[0]);
+    urj_part_set_signal_high (p, nRCS[1]);
+    urj_part_set_signal_high (p, nRCS[2]);
+    urj_part_set_signal_high (p, nRCS[3]);
 
     urj_tap_chain_shift_data_registers (chain, 0);
 }

@@ -169,8 +169,8 @@ mpc824x_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
 
     s_nfoe = urj_part_find_signal (part, "nFOE");
     s_sdma1 = urj_part_find_signal (part, "SDMA1");
-    urj_part_set_signal (part, s_nfoe, 0, 0);
-    urj_part_set_signal (part, s_sdma1, 0, 0);
+    urj_part_set_signal_input (part, s_nfoe);
+    urj_part_set_signal_input (part, s_sdma1);
 
     urj_part_set_instruction (part, "SAMPLE/PRELOAD");
     urj_tap_chain_shift_instructions (chain);
@@ -388,7 +388,7 @@ set_data_in (urj_bus_t *bus, uint32_t adr)
         return;
 
     for (i = 0; i < area.width; i++)
-        urj_part_set_signal (p, D[i], 0, 0);
+        urj_part_set_signal_input (p, D[i]);
 }
 
 static void
@@ -499,9 +499,9 @@ mpc824x_bus_read_start (urj_bus_t *bus, uint32_t adr)
     LAST_ADR = adr;
 
     /* see Figure 6-45 in [1] */
-    urj_part_set_signal (p, nRCS0, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nFOE, 1, 0);
+    urj_part_set_signal_low (p, nRCS0);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_low (p, nFOE);
 
     setup_address (bus, adr);
     set_data_in (bus, adr);
@@ -537,8 +537,8 @@ mpc824x_bus_read_end (urj_bus_t *bus)
 {
     urj_part_t *p = bus->part;
 
-    urj_part_set_signal (p, nRCS0, 1, 1);
-    urj_part_set_signal (p, nFOE, 1, 1);
+    urj_part_set_signal_high (p, nRCS0);
+    urj_part_set_signal_high (p, nFOE);
 
     urj_tap_chain_shift_data_registers (bus->chain, 1);
 
@@ -558,9 +558,9 @@ mpc824x_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
 
     /* see Figure 6-47 in [1] */
-    urj_part_set_signal (p, nRCS0, 1, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nFOE, 1, 1);
+    urj_part_set_signal_low (p, nRCS0);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nFOE);
 
     setup_address (bus, adr);
 
@@ -568,10 +568,10 @@ mpc824x_bus_write (urj_bus_t *bus, uint32_t adr, uint32_t data)
 
     urj_tap_chain_shift_data_registers (bus->chain, 0);
 
-    urj_part_set_signal (p, nWE, 1, 0);
+    urj_part_set_signal_low (p, nWE);
     urj_tap_chain_shift_data_registers (bus->chain, 0);
-    urj_part_set_signal (p, nWE, 1, 1);
-    urj_part_set_signal (p, nRCS0, 1, 1);
+    urj_part_set_signal_high (p, nWE);
+    urj_part_set_signal_high (p, nRCS0);
     urj_tap_chain_shift_data_registers (bus->chain, 0);
 
 
