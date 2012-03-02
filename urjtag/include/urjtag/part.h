@@ -73,6 +73,10 @@ urj_part_signal_t *urj_part_find_signal (urj_part_t *p,
 void urj_part_set_instruction (urj_part_t *p, const char *iname);
 /** @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
 int urj_part_set_signal (urj_part_t *p, urj_part_signal_t *s, int out, int val);
+#define urj_part_set_signal_high(p, s)  urj_part_set_signal ((p), (s), 1, 1)
+#define urj_part_set_signal_low(p, s)   urj_part_set_signal ((p), (s), 1, 0)
+#define urj_part_set_signal_input(p, s) urj_part_set_signal ((p), (s), 0, 0)
+
 /** @return -1 on error; signal number >= 0 for success */
 int urj_part_get_signal (urj_part_t *p, const urj_part_signal_t *s);
 /* @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error */
