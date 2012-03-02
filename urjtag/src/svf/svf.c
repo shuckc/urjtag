@@ -1114,7 +1114,12 @@ urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
     urj_svf_parser_priv_t priv;
     int c = ~EOF;
     int num_lines;
-    uint32_t old_frequency = urj_tap_cable_get_frequency (chain->cable);
+    uint32_t old_frequency;
+
+    if (chain == NULL || chain->cable == NULL)
+        return  URJ_STATUS_FAIL;
+
+    old_frequency = urj_tap_cable_get_frequency (chain->cable);
 
     /* get number of lines in svf file so we can give user some feedback on long
        files or slow cables */

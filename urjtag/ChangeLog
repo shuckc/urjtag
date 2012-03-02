@@ -1,3 +1,8 @@
+2012-03-02  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/svf/svf.c (urj_svf_run): Detect unset cables to avoid crashes when
+    using the command line interface.  Patch by Scott Tsai.
+
 2012-02-29  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/xc6slx16/STEPPINGS: Add stepping 2 by Christoffer Kjølbæk.
