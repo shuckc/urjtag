@@ -1,3 +1,8 @@
+2012-03-06  Tomek Cedro  <cederom@tlen.pl>
+
+  * src/tap/cable_list.h, src/tap/cable/ft2232.c,
+    src/tap/cable/generic_usbconn_list.h: New ft2232 KT-LINK driver.
+
 2012-03-02  Mike Frysinger  <vapier@gentoo.org>
 
   * src/svf/svf.c (urj_svf_run): Detect unset cables to avoid crashes when

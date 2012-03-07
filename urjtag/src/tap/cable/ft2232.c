@@ -23,6 +23,7 @@
  * Support for JTAGkey submitted by Laurent Gauch, 2008.
  * Support for FT2232H written by Michael Hennerich, 2009; adapted
  *      for urjtag codebase and submitted by Adam Megacz, 2010.
+ *      for usbScarab2 and KT-LINK added by Tomasz CEDRO, 2010,2012.
  *
  */
 
@@ -200,6 +201,41 @@
 #define BITMASK_USBSCARAB2_TRST (1 << BIT_USBSCARAB2_TRST)
 #define BITMASK_USBSCARAB2_nSRST (1 << BIT_USBSCARAB2_nSRST)
 #define BITMASK_USBSCARAB2_nCONNECTED (1 << BIT_USBSCARAB2_nCONNECTED)
+
+/* Bit and mask definitions for KT-LINK (FT2232H based, SWJ-ready)    */
+/* KT-LINK is a design of Krzysztof Kajstura (http://www.kristech.eu) */
+/* UrJTAG support added by Tomek Cedro (http://www.tomek.cedro.info)  */
+/*  as part of work for TP R&D/Orange Labs Warsaw - Orange Labs Paris */
+#define BIT_KTLINK_TCK      0 // aDbus
+#define BIT_KTLINK_nTCKen   6 // aCbus
+#define BIT_KTLINK_TDI      1 // aDbus
+#define BIT_KTLINK_nTDIen   5 // aCbus
+#define BIT_KTLINK_TMS      3 // aDbus
+#define BIT_KTLINK_nTMSen   4 // aCbus
+#define BIT_KTLINK_TMSDOsel 5 // aDbus
+#define BIT_KTLINK_TDO      2 // aDbus
+#define BIT_KTLINK_RTCLK    7 // aDbus
+#define BIT_KTLINK_TRST     0 // aCbus
+#define BIT_KTLINK_nTRSTen  2 // aCbus
+#define BIT_KTLINK_SRST     1 // aCbus
+#define BIT_KTLINK_nSRSTen  3 // aCbus
+#define BIT_KTLINK_SRSTin   6 // aDbus
+#define BIT_KTLINK_nLED     7 // aCbus
+#define BIT_KTLINK_nSWIOsel 5 // aDbus
+/* Mask is 8bit, aDbus sent with SET_BITS_LOW, aCbus with SET_BITS_HIGH */
+#define BITMASK_KTLINK_nTCKen   (1 << BIT_KTLINK_nTCKen)
+#define BITMASK_KTLINK_nTDIen   (1 << BIT_KTLINK_nTDIen)
+#define BITMASK_KTLINK_nTMSen   (1 << BIT_KTLINK_nTMSen)
+#define BITMASK_KTLINK_TMSDOsel (1 << BIT_KTLINK_TMSDOsel)
+#define BITMASK_KTLINK_TRST     (1 << BIT_KTLINK_TRST)
+#define BITMASK_KTLINK_nTRSTen  (1 << BIT_KTLINK_nTRSTen)
+#define BITMASK_KTLINK_SRST     (1 << BIT_KTLINK_SRST)
+#define BITMASK_KTLINK_nSRSTen  (1 << BIT_KTLINK_nSRSTen)
+#define BITMASK_KTLINK_SRSTin   (1 << BIT_KTLINK_SRSTin)
+#define BITMASK_KTLINK_nLED     (1 << BIT_KTLINK_nLED)
+#define BITMASK_KTLINK_nSWIOsel (1 << BIT_KTLINK_nSWIOsel)
+#define BITMASK_KTLINK_RnW      0x1000 /* Port pins when 0 cable output active */
+#define BITMASK_KTLINK_nRnW     0      /* Port pins when 1 cable output active */
 
 /* bit and bitmask definitions for Milkymist JTAG/serial daughterboard */
 #define BIT_MILKYMIST_VREF 4
@@ -897,6 +933,80 @@ ft2232_usbscarab2_init (urj_cable_t *cable)
 }
 
 static int
+ft2232_ktlink_init (urj_cable_t *cable)
+{
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
+
+    params->bit_trst = -1;      /* not used */
+    params->bit_reset = -1;     /* not used */
+
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+
+    /* Check the SRST state (KT-LINK specific, direct input). */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 1);
+    urj_tap_cable_cx_cmd_push (cmd_root, GET_BITS_LOW);
+    urj_tap_cable_cx_xfer (&params->cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
+    if ((urj_tap_cable_cx_xfer_recv (cable) & BITMASK_KTLINK_SRSTin) == 0)
+        urj_log (URJ_LOG_LEVEL_NORMAL, "nSRST pin state is low. Active?\n");
+    else
+        urj_log (URJ_LOG_LEVEL_NORMAL, "nSRST pin state is high...\n");
+
+    /* Set some internal parameters such as speed, reset signals, etc. */
+    ft2232h_set_frequency (cable, FT2232H_MAX_TCK_FREQ);
+    ft2232h_disable_clockdiv_by5 (cable);
+
+    params->bit_reset = BIT_KTLINK_SRST + 8;  /* member of HIGH byte */
+    params->signals = URJ_POD_CS_RESET;
+    params->last_tdo_valid = 0;
+
+    /* Set Data Bits Low Byte (ADBUS)                                 */
+    /* TCK=0, TDI=0, TMS=1, TMSDOsel=1                                */
+    params->low_byte_value = 0;
+    params->low_byte_value |= BITMASK_TMS;
+    params->low_byte_value |= BITMASK_KTLINK_TMSDOsel;
+    /* Set ADBUS Port Direction Bits (1=Output) */
+    params->low_byte_dir = 0;
+    params->low_byte_dir |= BITMASK_TCK;
+    params->low_byte_dir |= BITMASK_TDI;
+    params->low_byte_dir |= BITMASK_TMS;
+    params->low_byte_dir |= BITMASK_KTLINK_TMSDOsel; 
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_dir);
+
+    /* Set Data Bits High Byte (ACBUS)                                */
+    /* nTCKen=0, nTDIen=0, nTMSen=0, nTRSTen=0, nSRSTen=0, nLED=0,    */
+    /*  .. , TRST=1, SRST=1                                           */
+    params->high_byte_value = 0;
+    params->high_byte_value |= BITMASK_KTLINK_TRST;
+    params->high_byte_value |= BITMASK_KTLINK_SRST;
+    /* Set ACBUS Port Direction Bits (1=Output) */
+    params->high_byte_dir = 0;
+    params->high_byte_dir |= BITMASK_KTLINK_nTCKen;
+    params->high_byte_dir |= BITMASK_KTLINK_nTDIen;
+    params->high_byte_dir |= BITMASK_KTLINK_nTMSen;
+    params->high_byte_dir |= BITMASK_KTLINK_TRST;
+    params->high_byte_dir |= BITMASK_KTLINK_SRST;
+    params->high_byte_dir |= BITMASK_KTLINK_nTRSTen;
+    params->high_byte_dir |= BITMASK_KTLINK_nSRSTen;
+    params->high_byte_dir |= BITMASK_KTLINK_nLED;
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
+
+    params->bit_trst = BIT_KTLINK_TRST + 8;  /* member of HIGH byte */
+    params->signals |= URJ_POD_CS_TRST;
+
+    urj_log (URJ_LOG_LEVEL_NORMAL, "KT-LINK JTAG Mode Initialization OK!\n");
+
+    return URJ_STATUS_OK;
+}
+
+static int
 ft2232_milkymist_init (urj_cable_t *cable)
 {
     params_t *params = cable->params;
@@ -1340,6 +1450,31 @@ ft2232_flyswatter_done (urj_cable_t *cable)
 
 static void
 ft2232_usbscarab2_done (urj_cable_t *cable)
+{
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
+
+    /* Set Data Bits Low Byte
+       set all to input */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+
+    /* Set Data Bits High Byte
+       deassert RST signals and blank LED */
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, 0);
+
+    urj_tap_cable_cx_xfer (cmd_root, &imm_cmd, cable,
+                           URJ_TAP_CABLE_COMPLETELY);
+
+    urj_tap_cable_generic_usbconn_done (cable);
+}
+
+static void
+ft2232_ktlink_done (urj_cable_t *cable)
 {
     params_t *params = cable->params;
     urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
@@ -2378,6 +2513,26 @@ const urj_cable_driver_t urj_tap_cable_ft2232_usbscarab2_driver = {
     ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0xbbe0, "-mpsse", "usbScarab2", usbscarab2)
+
+const urj_cable_driver_t urj_tap_cable_ft2232_ktlink_driver = {
+    "KT-LINK",
+    N_("KrisTech KT-LINK (FT2232H based) Cable"),
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
+    urj_tap_cable_generic_disconnect,
+    ft2232_cable_free,
+    ft2232_ktlink_init,
+    ft2232_ktlink_done,
+    ft2232_set_frequency,
+    ft2232_clock,
+    ft2232_get_tdo,
+    ft2232_transfer,
+    ft2232_set_signal,
+    urj_tap_cable_generic_get_signal,
+    ft2232_flush,
+    ftdx_usbcable_help
+};
+URJ_DECLARE_FTDX_CABLE(0x0403, 0xbbe2, "-mpsse", "KT-LINK", ktlink)
 
 const urj_cable_driver_t urj_tap_cable_ft2232_milkymist_driver = {
     "milkymist",
