@@ -1,3 +1,9 @@
+2012-03-02  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/usbconn/libusb.c, src/tap/usbconn/libusb.h: Glue the 0.1 API
+    for library init and device list lookup/freeing to 1.0 so other places
+    can use it too.
+
 2012-03-06  Tomek Cedro  <cederom@tlen.pl>
 
   * src/tap/cable_list.h, src/tap/cable/ft2232.c,

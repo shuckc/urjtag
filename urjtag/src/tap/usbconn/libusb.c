@@ -62,7 +62,7 @@ libusb_match_desc (libusb_device_handle *handle, unsigned int id, const char *de
 
 /* @return 1 when found, 0 when not */
 static int
-libusb_match (struct libusb_device *dev, urj_usbconn_cable_t *template)
+libusb_match (libusb_device *dev, urj_usbconn_cable_t *template)
 {
     int r = 0;
     struct libusb_device_descriptor *desc;
@@ -116,15 +116,12 @@ usbconn_libusb_connect (urj_usbconn_cable_t *template,
                         const urj_param_t *params[])
 {
     int ret;
-    struct libusb_device *found_dev = NULL;
+    libusb_device *found_dev = NULL;
     urj_usbconn_t *libusb_conn;
     urj_usbconn_libusb_param_t *libusb_params;
-
-    { /* Scope to make sure variables don't bleed across #ifdefs */
-#ifdef HAVE_LIBUSB1
-    ssize_t num_devs, i;
-    libusb_device **list;
     libusb_context *ctx;
+    libusb_device **list;
+    ssize_t num_devs, i;
 
     /* XXX: missing libusb_exit() */
     ret = libusb_init (&ctx);
@@ -138,39 +135,12 @@ usbconn_libusb_connect (urj_usbconn_cable_t *template,
     num_devs = libusb_get_device_list (ctx, &list);
     for (i = 0; i < num_devs; ++i)
     {
-        struct libusb_device *dev = list[i];
+        libusb_device *dev = list[i];
 
         if (libusb_match (dev, template))
             found_dev = libusb_ref_device (dev);
     }
     libusb_free_device_list (list, 0);
-#else
-    struct usb_bus *bus;
-
-    usb_init ();
-    if ((ret = usb_find_busses ()) < 0)
-    {
-        urj_error_set (URJ_ERROR_USB, "usb_find_busses() failed: %i", ret);
-        errno = 0;
-        return NULL;
-    }
-    if ((ret = usb_find_devices ()) < 0)
-    {
-        urj_error_set (URJ_ERROR_USB, "usb_find_devices() failed: %i", ret);
-        errno = 0;
-        return NULL;
-    }
-
-    for (bus = usb_get_busses (); bus && !found_dev; bus = bus->next)
-    {
-        struct libusb_device *dev;
-
-        for (dev = bus->devices; dev && !found_dev; dev = dev->next)
-            if (libusb_match (dev, template))
-                found_dev = dev;
-    }
-#endif
-    }
 
     if (!found_dev)
     {
