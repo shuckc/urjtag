@@ -1,3 +1,18 @@
+2012-03-10  Mike Frysinger  <vapier@gentoo.org>
+
+  * include/urjtag/cable.h (urj_cable_param_key_t): Add URJ_CABLE_PARAM_KEY_INDEX.
+  * include/urjtag/usbconn.h (urj_usbconn_cable_t): Add index.
+  * src/tap/cable.c (cable_param): Handle index and URJ_CABLE_PARAM_KEY_INDEX.
+  * src/tap/cable/generic_usbconn.c (urj_tap_cable_generic_usbconn_connect):
+    Handle URJ_CABLE_PARAM_KEY_INDEX and pass along index.
+  * src/tap/cable/generic_usbconn.h: Document new index= parameter.
+  * src/tap/usbconn/libftd2xx.c (ftd2xx_param_t): Add index.
+    (usbconn_ftd2xx_connect): Pass along index.
+  * src/tap/usbconn/libftdi.c (ftdi_param_t): Add index.
+    (usbconn_ftdi_connect): Pass along index.
+    (usbconn_ftdi_common_open): Call ftdi_usb_open_desc_index to utilize the
+    new index parameter.
+
 2012-03-02  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/usbconn/libusb.c, src/tap/usbconn/libusb.h: Glue the 0.1 API

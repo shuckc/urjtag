@@ -84,6 +84,9 @@ urj_tap_cable_generic_usbconn_connect (urj_cable_t *cable,
             case URJ_CABLE_PARAM_KEY_INTERFACE:
                 user_specified.interface = params[i]->value.lu;
                 break;
+            case URJ_CABLE_PARAM_KEY_INDEX:
+                user_specified.index = params[i]->value.lu;
+                break;
             default:
                 // hand these to the driver connect()
                 break;
@@ -120,6 +123,8 @@ urj_tap_cable_generic_usbconn_connect (urj_cable_t *cable,
                             cable_try.desc = user_specified.desc;
                         if (user_specified.interface != 0)
                             cable_try.interface = user_specified.interface;
+                        if (user_specified.index != 0)
+                            cable_try.index = user_specified.index;
 
                         conn = urj_tap_usbconn_drivers[i]->connect (&cable_try,
                                                                     params);

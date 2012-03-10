@@ -39,6 +39,7 @@ typedef struct
     int32_t vid;
     int32_t pid;
     int32_t interface;
+    int32_t index;
 }
 urj_usbconn_cable_t;
 

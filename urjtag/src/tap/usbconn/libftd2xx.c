@@ -52,6 +52,7 @@ typedef struct
     FT_HANDLE fc;
     char *serial;
     unsigned int interface;
+    unsigned int index;
     /* send and receive buffer handling */
     uint32_t send_buf_len;
     uint32_t send_buffered;
@@ -336,6 +337,7 @@ usbconn_ftd2xx_connect (urj_usbconn_cable_t *template,
     p->interface = template->interface;
     /* @@@@ RFHH check strdup result */
     p->serial = template->desc ? strdup (template->desc) : NULL;
+    p->index = template->index;
 
     c->params = p;
     c->driver = &urj_tap_usbconn_ftd2xx_driver;

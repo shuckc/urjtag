@@ -49,6 +49,7 @@ typedef struct
     char *serial;
     /* ftdi interface selection */
     unsigned int interface;
+    unsigned int index;
     /* send and receive buffer handling */
     uint32_t send_buf_len;
     uint32_t send_buffered;
@@ -316,6 +317,7 @@ usbconn_ftdi_connect (urj_usbconn_cable_t *template,
     p->interface = template->interface;
     /* @@@@ RFHH check strdup result */
     p->serial = template->desc ? strdup (template->desc) : NULL;
+    p->index = template->index;
 
     c->params = p;
     c->driver = &urj_tap_usbconn_ftdi_driver;
@@ -372,10 +374,12 @@ usbconn_ftdi_common_open (urj_usbconn_t *conn, urj_log_level_t ll)
 
     /* use command line string for desc= as serial number and try to
        open a matching device */
-    status = ftdi_usb_open_desc (fc, p->vid, p->pid, NULL, p->serial);
+    status = ftdi_usb_open_desc_index (fc, p->vid, p->pid, NULL, p->serial,
+                                       p->index);
     if (status < 0)
         /* try again with matching the string against the description */
-        status = ftdi_usb_open_desc (fc, p->vid, p->pid, p->serial, NULL);
+        status = ftdi_usb_open_desc_index (fc, p->vid, p->pid, p->serial, NULL,
+                                           p->index);
 
     if (status < 0)
     {
