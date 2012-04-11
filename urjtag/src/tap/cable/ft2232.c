@@ -2313,6 +2313,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_armusbtiny_h_driver = {
     ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x15BA, 0x002A, "-mpsse", "ARM-USB-TINY-H", armusbtiny_h)
+URJ_DECLARE_FTDX_CABLE(0x15BA, 0x002B, "-mpsse", "ARM-USB-OCD-H", armusbocd_h)
 
 const urj_cable_driver_t urj_tap_cable_ft2232_gnice_driver = {
     "gnICE",

@@ -1,3 +1,8 @@
+2012-04-10  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable/ft2232.c: Declare ARM-USB-OCD-H cable by Jérôme Carretero.
+  * src/tap/cable/generic_usbconn_list.h: Add new armusbocd_h cable.
+
 2012-03-10  Mike Frysinger  <vapier@gentoo.org>
 
   * include/urjtag/cable.h (urj_cable_param_key_t): Add URJ_CABLE_PARAM_KEY_INDEX.
