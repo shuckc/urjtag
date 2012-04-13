@@ -1,3 +1,9 @@
+2012-04-13  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/tap/cable/ft2232.c (urj_tap_cable_ft2232_ktlink_driver): Use the
+    ft2232h_set_frequency helper since this cable driver has a FT2232H part.
+    Fix by Tomek Cedro.
+
 2012-04-10  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ft2232.c: Declare ARM-USB-OCD-H cable by Jérôme Carretero.
