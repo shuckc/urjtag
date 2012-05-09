@@ -1,0 +1,1187 @@
+signal VTT7(1)
+signal VTT6(1)
+signal VTT3(1)
+signal VTT2(1)
+signal VCCPLL_R(1)
+signal VCCPLL_R(2)
+signal VCCPLL_L(1)
+signal VCCPLL_L(2)
+signal VCCIO8(1)
+signal VCCIO8(2)
+signal VCCIO7(1)
+signal VCCIO7(2)
+signal VCCIO6(1)
+signal VCCIO6(2)
+signal VCCIO3(1)
+signal VCCIO3(2)
+signal VCCIO2(1)
+signal VCCIO2(2)
+signal VCCIO1(1)
+signal VCCIO1(2)
+signal VCCIO0(1)
+signal VCCIO0(2)
+signal VCCAUX(1)
+signal VCCAUX(2)
+signal VCCAUX(3)
+signal VCCAUX(4)
+signal VCCAUX(5)
+signal VCCAUX(6)
+signal VCCAUX(7)
+signal VCCAUX(8)
+signal VCCA(1)
+signal VCCA(2)
+signal VCCA(3)
+signal VCCA(4)
+signal VCC(1)
+signal VCC(2)
+signal VCC(3)
+signal VCC(4)
+signal VCC(5)
+signal VCC(6)
+signal VCC(7)
+signal VCC(8)
+signal VCC(9)
+signal VCC(10)
+signal VCC(11)
+signal VCC(12)
+signal VCC(13)
+signal VCC(14)
+signal VCC(15)
+signal VCC(16)
+signal NC(1)
+signal NC(2)
+signal GND(1)
+signal GND(2)
+signal GND(3)
+signal GND(4)
+signal GND(5)
+signal GND(6)
+signal GND(7)
+signal GND(8)
+signal GND(9)
+signal GND(10)
+signal GND(11)
+signal GND(12)
+signal GND(13)
+signal GND(14)
+signal GND(15)
+signal GND(16)
+signal GND(17)
+signal GND(18)
+signal GND(19)
+signal GND(20)
+signal GND(21)
+signal GND(22)
+signal GND(23)
+signal GND(24)
+signal GND(25)
+signal GND(26)
+signal GND(27)
+signal GND(28)
+signal GND(29)
+signal GND(30)
+signal GND(31)
+signal GND(32)
+signal GND(33)
+signal GND(34)
+signal GND(35)
+signal GND(36)
+signal GND(37)
+signal GND(38)
+signal GND(39)
+signal GND(40)
+signal GND(41)
+signal GND(42)
+signal GND(43)
+signal GND(44)
+signal GND(45)
+signal GND(46)
+signal GND(47)
+signal GND(48)
+signal GND(49)
+signal GND(50)
+signal GND(51)
+signal GND(52)
+signal GND(53)
+signal GND(54)
+signal GND(55)
+signal GND(56)
+signal GND(57)
+signal GND(58)
+signal GND(59)
+signal GND(60)
+signal GND(61)
+signal GND(62)
+signal GND(63)
+signal GND(64)
+signal GND(65)
+signal GND(66)
+signal GND(67)
+signal GND(68)
+signal GND(69)
+signal GND(70)
+signal GND(71)
+signal GND(72)
+signal GND(73)
+signal GND(74)
+signal GND(75)
+signal GND(76)
+signal GND(77)
+signal GND(78)
+signal GND(79)
+signal GND(80)
+signal GND(81)
+signal GND(82)
+signal GND(83)
+signal GND(84)
+signal GND(85)
+signal GND(86)
+signal GND(87)
+signal GND(88)
+signal GND(89)
+signal GND(90)
+signal GND(91)
+signal GND(92)
+signal GND(93)
+signal GND(94)
+signal GND(95)
+signal GND(96)
+signal GND(97)
+signal GND(98)
+signal PT2A
+signal PT4A
+signal PT2B
+signal PT4B
+signal PT5A
+signal PT7A
+signal PT5B
+signal PT7B
+signal PT8A
+signal PT10A
+signal PT8B
+signal PT10B
+signal PT11A
+signal PT13A
+signal PT11B
+signal PT13B
+signal PT14A
+signal PT14B
+signal PT20A
+signal PT22A
+signal PT20B
+signal PT22B
+signal PT23A
+signal PT25A
+signal PT23B
+signal PT25B
+signal PT26A
+signal PT28A
+signal PT26B
+signal PT28B
+signal PT29A
+signal PT31A
+signal PT29B
+signal PT31B
+signal PT32A
+signal PT34A
+signal PT32B
+signal PT34B
+signal PT35A
+signal PT37A
+signal PT35B
+signal PT37B
+signal PT38A
+signal PT40A
+signal PT38B
+signal PT40B
+signal PT41A
+signal PT43A
+signal PT41B
+signal PT43B
+signal PT44A
+signal PT46A
+signal PT44B
+signal PT46B
+signal PT47A
+signal PT49A
+signal PT47B
+signal PT49B
+signal PT50A
+signal PT52A
+signal PT50B
+signal PT52B
+signal PT53A
+signal PT55A
+signal PT53B
+signal PT55B
+signal PT56A
+signal PT58A
+signal PT56B
+signal PT58B
+signal PT59A
+signal PT61A
+signal PT59B
+signal PT61B
+signal PT62A
+signal PT64A
+signal PT62B
+signal PT64B
+signal PT68A
+signal PT70A
+signal PT68B
+signal PT70B
+signal PT71A
+signal PT73A
+signal PT71B
+signal PT73B
+signal CFG2
+signal CFG1
+signal CFG0
+signal PROGRAMN
+signal INITN
+signal CCLK
+signal DONE
+signal PR6A
+signal PR8A
+signal PR6B
+signal PR8B
+signal PR9A
+signal PR11A
+signal PR9B
+signal PR11B
+signal PR12A
+signal PR14A
+signal PR12B
+signal PR14B
+signal PR15A
+signal PR17A
+signal PR15B
+signal PR17B
+signal PR18A
+signal PR20A
+signal PR18B
+signal PR20B
+signal PR21A
+signal PR23A
+signal PR21B
+signal PR23B
+signal PR24A
+signal PR26A
+signal PR24B
+signal PR26B
+signal PR27A
+signal PR29A
+signal PR27B
+signal PR29B
+signal PR30A
+signal PR32A
+signal PR30B
+signal PR32B
+signal PR33A
+signal PR35A
+signal PR33B
+signal PR35B
+signal PR35E_A
+signal PR35E_C
+signal PR35E_B
+signal PR35E_D
+signal PR36A
+signal PR38A
+signal PR36B
+signal PR38B
+signal PR39A
+signal PR41A
+signal PR39B
+signal PR41B
+signal PR42A
+signal PR44A
+signal PR42B
+signal PR44B
+signal PR45A
+signal PR47A
+signal PR45B
+signal PR47B
+signal PR48A
+signal PR50A
+signal PR48B
+signal PR50B
+signal PR51A
+signal PR53A
+signal PR51B
+signal PR53B
+signal PR53E_A
+signal PR53E_C
+signal PR53E_B
+signal PR53E_D
+signal PR63A
+signal PR65A
+signal PR63B
+signal PR65B
+signal PR66A
+signal PR68A
+signal PR66B
+signal PR68B
+signal PR69A
+signal PR71A
+signal PR69B
+signal PR71B
+signal XRES
+signal PB73B
+signal PB71B
+signal PB73A
+signal PB71A
+signal PB70B
+signal PB68B
+signal PB70A
+signal PB68A
+signal PB67B
+signal PB65B
+signal PB67A
+signal PB65A
+signal PB64B
+signal PB62B
+signal PB64A
+signal PB62A
+signal PB61B
+signal PB61A
+signal PCSA_HDINP0
+signal PCSA_VCCIB0
+signal PCSA_HDINN0
+signal PCSA_VCCOB0
+signal PCSA_HDOUTP0
+signal PCSA_HDOUTN0
+signal PCSA_HDOUTN1
+signal PCSA_VCCOB1
+signal PCSA_HDOUTP1
+signal PCSA_VCCIB1
+signal PCSA_HDINN1
+signal PCSA_HDINP1
+signal PCSA_REFCLKN
+signal PCSA_REFCLKP
+signal PCSA_HDINP2
+signal PCSA_HDINN2
+signal PCSA_VCCIB2
+signal PCSA_HDOUTP2
+signal PCSA_HDOUTN2
+signal PCSA_VCCOB2
+signal PCSA_HDOUTN3
+signal PCSA_HDOUTP3
+signal PCSA_VCCOB3
+signal PCSA_HDINN3
+signal PCSA_VCCIB3
+signal PCSA_HDINP3
+signal PB16B
+signal PB16A
+signal PB13B
+signal PB11B
+signal PB13A
+signal PB11A
+signal PB10B
+signal PB8B
+signal PB10A
+signal PB8A
+signal PB7B
+signal PB5B
+signal PB7A
+signal PB5A
+signal PB4B
+signal PB2B
+signal PB4A
+signal PB2A
+signal PL71B
+signal PL69B
+signal PL71A
+signal PL69A
+signal PL68B
+signal PL66B
+signal PL68A
+signal PL66A
+signal PL65B
+signal PL63B
+signal PL65A
+signal PL63A
+signal PL62B
+signal PL60B
+signal PL62A
+signal PL60A
+signal PL59B
+signal PL57B
+signal PL59A
+signal PL57A
+signal PL56B
+signal PL53E_D
+signal PL53E_B
+signal PL53E_C
+signal PL53E_A
+signal PL53B
+signal PL51B
+signal PL53A
+signal PL51A
+signal PL50B
+signal PL48B
+signal PL50A
+signal PL48A
+signal PL47B
+signal PL45B
+signal PL47A
+signal PL45A
+signal PL44B
+signal PL42B
+signal PL44A
+signal PL42A
+signal PL41B
+signal PL39B
+signal PL41A
+signal PL39A
+signal PL38B
+signal PL36B
+signal PL38A
+signal PL36A
+signal PL35E_D
+signal PL35E_B
+signal PL35E_C
+signal PL35E_A
+signal PL35B
+signal PL33B
+signal PL35A
+signal PL33A
+signal PL32B
+signal PL30B
+signal PL32A
+signal PL30A
+signal PL29B
+signal PL27B
+signal PL29A
+signal PL27A
+signal PL26B
+signal PL24B
+signal PL26A
+signal PL24A
+signal PL23B
+signal PL21B
+signal PL23A
+signal PL21A
+signal PL20B
+signal PL18B
+signal PL20A
+signal PL18A
+signal PL17B
+signal PL15B
+signal PL17A
+signal PL15A
+signal PL14B
+signal PL12B
+signal PL14A
+signal PL12A
+signal PL11B
+signal PL9B
+signal PL11A
+signal PL9A
+signal TDI
+signal TCK
+signal VCCJ
+signal TDO
+signal TMS
+instruction length 8
+register DIR 32
+register USERCODE 32
+register BSR 675
+register BYPASS 1
+register ISC_PDATA 3412
+register ISC_DEFAULT 1
+register ISC_ADDRESS 2067
+instruction CLAMP 00100000 BYPASS
+instruction EXTEST 11010101 BSR
+instruction ISC_ERASE_DONE 00100100 ISC_DEFAULT
+instruction USERCODE 00010111 DIR
+instruction LSC_REFRESH 00100011 BYPASS
+instruction BYPASS 11111111 BYPASS
+instruction HIGHZ 00011000 BYPASS
+instruction SAMPLE/PRELOAD 00011100 BSR
+instruction ISC_PROGRAM_SECURITY 00001001 ISC_DEFAULT
+instruction ISC_PROGRAM 01100111 ISC_PDATA
+instruction ISC_NOOP 00110000 ISC_DEFAULT
+instruction ISC_ERASE 00000011 ISC_DEFAULT
+instruction ISC_PROGRAM_USERCODE 00011010 DIR
+instruction ISC_DISABLE 00011110 ISC_DEFAULT
+instruction ISC_PROGRAM_DONE 00101111 ISC_DEFAULT
+instruction ISC_READ 01101010 ISC_PDATA
+instruction ISC_ENABLE 00010101 ISC_DEFAULT
+instruction PRELOAD 00011100 BSR
+instruction IDCODE 00011001 DIR
+instruction ISC_ADDRESS_SHIFT 00000001 ISC_ADDRESS
+bit 674 B ? PR18A 673 1 Z
+bit 673 C 1 *
+bit 672 B ? PR18B 671 1 Z
+bit 671 C 1 *
+bit 670 B ? PR20A 669 1 Z
+bit 669 C 1 *
+bit 668 B ? PR20B 667 1 Z
+bit 667 C 1 *
+bit 666 B ? PR21A 665 1 Z
+bit 665 C 1 *
+bit 664 B ? PR21B 663 1 Z
+bit 663 C 1 *
+bit 662 B ? PR23A 661 1 Z
+bit 661 C 1 *
+bit 660 B ? PR23B 659 1 Z
+bit 659 C 1 *
+bit 658 B ? PR24A 657 1 Z
+bit 657 C 1 *
+bit 656 B ? PR24B 655 1 Z
+bit 655 C 1 *
+bit 654 B ? PR26A 653 1 Z
+bit 653 C 1 *
+bit 652 B ? PR26B 651 1 Z
+bit 651 C 1 *
+bit 650 B ? PR27A 649 1 Z
+bit 649 C 1 *
+bit 648 B ? PR27B 647 1 Z
+bit 647 C 1 *
+bit 646 B ? PR29A 645 1 Z
+bit 645 C 1 *
+bit 644 B ? PR29B 643 1 Z
+bit 643 C 1 *
+bit 642 B ? PR30A 641 1 Z
+bit 641 C 1 *
+bit 640 B ? PR30B 639 1 Z
+bit 639 C 1 *
+bit 638 B ? PR32A 637 1 Z
+bit 637 C 1 *
+bit 636 B ? PR32B 635 1 Z
+bit 635 C 1 *
+bit 634 B ? PR33A 633 1 Z
+bit 633 C 1 *
+bit 632 B ? PR33B 631 1 Z
+bit 631 C 1 *
+bit 630 B ? PR35A 629 1 Z
+bit 629 C 1 *
+bit 628 B ? PR35B 627 1 Z
+bit 627 C 1 *
+bit 626 B ? PR35E_A 625 1 Z
+bit 625 C 1 *
+bit 624 B ? PR35E_B 623 1 Z
+bit 623 C 1 *
+bit 622 B ? PR35E_C 621 1 Z
+bit 621 C 1 *
+bit 620 B ? PR35E_D 619 1 Z
+bit 619 C 1 *
+bit 618 B ? PR36A 617 1 Z
+bit 617 C 1 *
+bit 616 B ? PR36B 615 1 Z
+bit 615 C 1 *
+bit 614 B ? PR38A 613 1 Z
+bit 613 C 1 *
+bit 612 B ? PR38B 611 1 Z
+bit 611 C 1 *
+bit 610 B ? PR39A 609 1 Z
+bit 609 C 1 *
+bit 608 B ? PR39B 607 1 Z
+bit 607 C 1 *
+bit 606 B ? PR41A 605 1 Z
+bit 605 C 1 *
+bit 604 B ? PR41B 603 1 Z
+bit 603 C 1 *
+bit 602 B ? PR42A 601 1 Z
+bit 601 C 1 *
+bit 600 B ? PR42B 599 1 Z
+bit 599 C 1 *
+bit 598 B ? PR44A 597 1 Z
+bit 597 C 1 *
+bit 596 B ? PR44B 595 1 Z
+bit 595 C 1 *
+bit 594 B ? PR45A 593 1 Z
+bit 593 C 1 *
+bit 592 B ? PR45B 591 1 Z
+bit 591 C 1 *
+bit 590 B ? PR47A 589 1 Z
+bit 589 C 1 *
+bit 588 B ? PR47B 587 1 Z
+bit 587 C 1 *
+bit 586 B ? PR48A 585 1 Z
+bit 585 C 1 *
+bit 584 B ? PR48B 583 1 Z
+bit 583 C 1 *
+bit 582 B ? PR50A 581 1 Z
+bit 581 C 1 *
+bit 580 B ? PR50B 579 1 Z
+bit 579 C 1 *
+bit 578 B ? PR51A 577 1 Z
+bit 577 C 1 *
+bit 576 B ? PR51B 575 1 Z
+bit 575 C 1 *
+bit 574 B ? PR53A 573 1 Z
+bit 573 C 1 *
+bit 572 B ? PR53B 571 1 Z
+bit 571 C 1 *
+bit 570 B ? PR53E_A 569 1 Z
+bit 569 C 1 *
+bit 568 B ? PR53E_B 567 1 Z
+bit 567 C 1 *
+bit 566 B ? PR53E_C 565 1 Z
+bit 565 C 1 *
+bit 564 B ? PR53E_D 563 1 Z
+bit 563 C 1 *
+bit 562 O ? *
+bit 561 O 1 *
+bit 560 O ? *
+bit 559 O 1 *
+bit 558 O ? *
+bit 557 O 1 *
+bit 556 O ? *
+bit 555 O 1 *
+bit 554 O ? *
+bit 553 O 1 *
+bit 552 O ? *
+bit 551 O 1 *
+bit 550 O ? *
+bit 549 O 1 *
+bit 548 O ? *
+bit 547 O 1 *
+bit 546 O ? *
+bit 545 O 1 *
+bit 544 O ? *
+bit 543 O 1 *
+bit 542 O ? *
+bit 541 O 1 *
+bit 540 O ? *
+bit 539 O 1 *
+bit 538 B ? PR63A 537 1 Z
+bit 537 C 1 *
+bit 536 B ? PR63B 535 1 Z
+bit 535 C 1 *
+bit 534 B ? PR65A 533 1 Z
+bit 533 C 1 *
+bit 532 B ? PR65B 531 1 Z
+bit 531 C 1 *
+bit 530 B ? PR66A 529 1 Z
+bit 529 C 1 *
+bit 528 B ? PR66B 527 1 Z
+bit 527 C 1 *
+bit 526 B ? PR68A 525 1 Z
+bit 525 C 1 *
+bit 524 B ? PR68B 523 1 Z
+bit 523 C 1 *
+bit 522 B ? PR69A 521 1 Z
+bit 521 C 1 *
+bit 520 B ? PR69B 519 1 Z
+bit 519 C 1 *
+bit 518 B ? PR71A 517 1 Z
+bit 517 C 1 *
+bit 516 B ? PR71B 515 1 Z
+bit 515 C 1 *
+bit 514 B ? PB73B 513 1 Z
+bit 513 C 1 *
+bit 512 B ? PB73A 511 1 Z
+bit 511 C 1 *
+bit 510 B ? PB71B 509 1 Z
+bit 509 C 1 *
+bit 508 B ? PB71A 507 1 Z
+bit 507 C 1 *
+bit 506 B ? PB70B 505 1 Z
+bit 505 C 1 *
+bit 504 B ? PB70A 503 1 Z
+bit 503 C 1 *
+bit 502 B ? PB68B 501 1 Z
+bit 501 C 1 *
+bit 500 B ? PB68A 499 1 Z
+bit 499 C 1 *
+bit 498 B ? PB67B 497 1 Z
+bit 497 C 1 *
+bit 496 B ? PB67A 495 1 Z
+bit 495 C 1 *
+bit 494 B ? PB65B 493 1 Z
+bit 493 C 1 *
+bit 492 B ? PB65A 491 1 Z
+bit 491 C 1 *
+bit 490 B ? PB64B 489 1 Z
+bit 489 C 1 *
+bit 488 B ? PB64A 487 1 Z
+bit 487 C 1 *
+bit 486 B ? PB62B 485 1 Z
+bit 485 C 1 *
+bit 484 B ? PB62A 483 1 Z
+bit 483 C 1 *
+bit 482 B ? PB61B 481 1 Z
+bit 481 C 1 *
+bit 480 B ? PB61A 479 1 Z
+bit 479 C 1 *
+bit 478 O ? *
+bit 477 O 1 *
+bit 476 O ? *
+bit 475 O 1 *
+bit 474 I ? PCSA_HDINP0
+bit 473 O ? PCSA_HDOUTP0
+bit 472 O ? PCSA_HDOUTP1
+bit 471 I ? PCSA_HDINP1
+bit 470 I ? PCSA_REFCLKP
+bit 469 I ? PCSA_HDINP2
+bit 468 O ? PCSA_HDOUTP2
+bit 467 O ? PCSA_HDOUTP3
+bit 466 I ? PCSA_HDINP3
+bit 465 B ? PB16B 464 1 Z
+bit 464 C 1 *
+bit 463 B ? PB16A 462 1 Z
+bit 462 C 1 *
+bit 461 O ? *
+bit 460 O 1 *
+bit 459 O ? *
+bit 458 O 1 *
+bit 457 B ? PB13B 456 1 Z
+bit 456 C 1 *
+bit 455 B ? PB13A 454 1 Z
+bit 454 C 1 *
+bit 453 B ? PB11B 452 1 Z
+bit 452 C 1 *
+bit 451 B ? PB11A 450 1 Z
+bit 450 C 1 *
+bit 449 B ? PB10B 448 1 Z
+bit 448 C 1 *
+bit 447 B ? PB10A 446 1 Z
+bit 446 C 1 *
+bit 445 B ? PB8B 444 1 Z
+bit 444 C 1 *
+bit 443 B ? PB8A 442 1 Z
+bit 442 C 1 *
+bit 441 B ? PB7B 440 1 Z
+bit 440 C 1 *
+bit 439 B ? PB7A 438 1 Z
+bit 438 C 1 *
+bit 437 B ? PB5B 436 1 Z
+bit 436 C 1 *
+bit 435 B ? PB5A 434 1 Z
+bit 434 C 1 *
+bit 433 B ? PB4B 432 1 Z
+bit 432 C 1 *
+bit 431 B ? PB4A 430 1 Z
+bit 430 C 1 *
+bit 429 B ? PB2B 428 1 Z
+bit 428 C 1 *
+bit 427 B ? PB2A 426 1 Z
+bit 426 C 1 *
+bit 425 B ? PL71B 424 1 Z
+bit 424 C 1 *
+bit 423 B ? PL71A 422 1 Z
+bit 422 C 1 *
+bit 421 B ? PL69B 420 1 Z
+bit 420 C 1 *
+bit 419 B ? PL69A 418 1 Z
+bit 418 C 1 *
+bit 417 B ? PL68B 416 1 Z
+bit 416 C 1 *
+bit 415 B ? PL68A 414 1 Z
+bit 414 C 1 *
+bit 413 B ? PL66B 412 1 Z
+bit 412 C 1 *
+bit 411 B ? PL66A 410 1 Z
+bit 410 C 1 *
+bit 409 B ? PL65B 408 1 Z
+bit 408 C 1 *
+bit 407 B ? PL65A 406 1 Z
+bit 406 C 1 *
+bit 405 B ? PL63B 404 1 Z
+bit 404 C 1 *
+bit 403 B ? PL63A 402 1 Z
+bit 402 C 1 *
+bit 401 B ? PL62B 400 1 Z
+bit 400 C 1 *
+bit 399 B ? PL62A 398 1 Z
+bit 398 C 1 *
+bit 397 B ? PL60B 396 1 Z
+bit 396 C 1 *
+bit 395 B ? PL60A 394 1 Z
+bit 394 C 1 *
+bit 393 B ? PL59B 392 1 Z
+bit 392 C 1 *
+bit 391 B ? PL59A 390 1 Z
+bit 390 C 1 *
+bit 389 B ? PL57B 388 1 Z
+bit 388 C 1 *
+bit 387 B ? PL57A 386 1 Z
+bit 386 C 1 *
+bit 385 B ? PL56B 384 1 Z
+bit 384 C 1 *
+bit 383 O ? *
+bit 382 O 1 *
+bit 381 O ? *
+bit 380 O 1 *
+bit 379 O ? *
+bit 378 O 1 *
+bit 377 B ? PL53E_D 376 1 Z
+bit 376 C 1 *
+bit 375 B ? PL53E_C 374 1 Z
+bit 374 C 1 *
+bit 373 B ? PL53E_B 372 1 Z
+bit 372 C 1 *
+bit 371 B ? PL53E_A 370 1 Z
+bit 370 C 1 *
+bit 369 B ? PL53B 368 1 Z
+bit 368 C 1 *
+bit 367 B ? PL53A 366 1 Z
+bit 366 C 1 *
+bit 365 B ? PL51B 364 1 Z
+bit 364 C 1 *
+bit 363 B ? PL51A 362 1 Z
+bit 362 C 1 *
+bit 361 B ? PL50B 360 1 Z
+bit 360 C 1 *
+bit 359 B ? PL50A 358 1 Z
+bit 358 C 1 *
+bit 357 B ? PL48B 356 1 Z
+bit 356 C 1 *
+bit 355 B ? PL48A 354 1 Z
+bit 354 C 1 *
+bit 353 B ? PL47B 352 1 Z
+bit 352 C 1 *
+bit 351 B ? PL47A 350 1 Z
+bit 350 C 1 *
+bit 349 B ? PL45B 348 1 Z
+bit 348 C 1 *
+bit 347 B ? PL45A 346 1 Z
+bit 346 C 1 *
+bit 345 B ? PL44B 344 1 Z
+bit 344 C 1 *
+bit 343 B ? PL44A 342 1 Z
+bit 342 C 1 *
+bit 341 B ? PL42B 340 1 Z
+bit 340 C 1 *
+bit 339 B ? PL42A 338 1 Z
+bit 338 C 1 *
+bit 337 B ? PL41B 336 1 Z
+bit 336 C 1 *
+bit 335 B ? PL41A 334 1 Z
+bit 334 C 1 *
+bit 333 B ? PL39B 332 1 Z
+bit 332 C 1 *
+bit 331 B ? PL39A 330 1 Z
+bit 330 C 1 *
+bit 329 B ? PL38B 328 1 Z
+bit 328 C 1 *
+bit 327 B ? PL38A 326 1 Z
+bit 326 C 1 *
+bit 325 B ? PL36B 324 1 Z
+bit 324 C 1 *
+bit 323 B ? PL36A 322 1 Z
+bit 322 C 1 *
+bit 321 B ? PL35E_D 320 1 Z
+bit 320 C 1 *
+bit 319 B ? PL35E_C 318 1 Z
+bit 318 C 1 *
+bit 317 B ? PL35E_B 316 1 Z
+bit 316 C 1 *
+bit 315 B ? PL35E_A 314 1 Z
+bit 314 C 1 *
+bit 313 B ? PL35B 312 1 Z
+bit 312 C 1 *
+bit 311 B ? PL35A 310 1 Z
+bit 310 C 1 *
+bit 309 B ? PL33B 308 1 Z
+bit 308 C 1 *
+bit 307 B ? PL33A 306 1 Z
+bit 306 C 1 *
+bit 305 B ? PL32B 304 1 Z
+bit 304 C 1 *
+bit 303 B ? PL32A 302 1 Z
+bit 302 C 1 *
+bit 301 B ? PL30B 300 1 Z
+bit 300 C 1 *
+bit 299 B ? PL30A 298 1 Z
+bit 298 C 1 *
+bit 297 B ? PL29B 296 1 Z
+bit 296 C 1 *
+bit 295 B ? PL29A 294 1 Z
+bit 294 C 1 *
+bit 293 B ? PL27B 292 1 Z
+bit 292 C 1 *
+bit 291 B ? PL27A 290 1 Z
+bit 290 C 1 *
+bit 289 B ? PL26B 288 1 Z
+bit 288 C 1 *
+bit 287 B ? PL26A 286 1 Z
+bit 286 C 1 *
+bit 285 B ? PL24B 284 1 Z
+bit 284 C 1 *
+bit 283 B ? PL24A 282 1 Z
+bit 282 C 1 *
+bit 281 B ? PL23B 280 1 Z
+bit 280 C 1 *
+bit 279 B ? PL23A 278 1 Z
+bit 278 C 1 *
+bit 277 B ? PL21B 276 1 Z
+bit 276 C 1 *
+bit 275 B ? PL21A 274 1 Z
+bit 274 C 1 *
+bit 273 B ? PL20B 272 1 Z
+bit 272 C 1 *
+bit 271 B ? PL20A 270 1 Z
+bit 270 C 1 *
+bit 269 B ? PL18B 268 1 Z
+bit 268 C 1 *
+bit 267 B ? PL18A 266 1 Z
+bit 266 C 1 *
+bit 265 B ? PL17B 264 1 Z
+bit 264 C 1 *
+bit 263 B ? PL17A 262 1 Z
+bit 262 C 1 *
+bit 261 B ? PL15B 260 1 Z
+bit 260 C 1 *
+bit 259 B ? PL15A 258 1 Z
+bit 258 C 1 *
+bit 257 B ? PL14B 256 1 Z
+bit 256 C 1 *
+bit 255 B ? PL14A 254 1 Z
+bit 254 C 1 *
+bit 253 B ? PL12B 252 1 Z
+bit 252 C 1 *
+bit 251 B ? PL12A 250 1 Z
+bit 250 C 1 *
+bit 249 B ? PL11B 248 1 Z
+bit 248 C 1 *
+bit 247 B ? PL11A 246 1 Z
+bit 246 C 1 *
+bit 245 B ? PL9B 244 1 Z
+bit 244 C 1 *
+bit 243 B ? PL9A 242 1 Z
+bit 242 C 1 *
+bit 241 O ? *
+bit 240 O 1 *
+bit 239 O ? *
+bit 238 O 1 *
+bit 237 O ? *
+bit 236 O 1 *
+bit 235 O ? *
+bit 234 O 1 *
+bit 233 O ? *
+bit 232 O 1 *
+bit 231 O ? *
+bit 230 O 1 *
+bit 229 O ? *
+bit 228 O 1 *
+bit 227 O ? *
+bit 226 O 1 *
+bit 225 B ? PT2A 224 1 Z
+bit 224 C 1 *
+bit 223 B ? PT2B 222 1 Z
+bit 222 C 1 *
+bit 221 B ? PT4A 220 1 Z
+bit 220 C 1 *
+bit 219 B ? PT4B 218 1 Z
+bit 218 C 1 *
+bit 217 B ? PT5A 216 1 Z
+bit 216 C 1 *
+bit 215 B ? PT5B 214 1 Z
+bit 214 C 1 *
+bit 213 B ? PT7A 212 1 Z
+bit 212 C 1 *
+bit 211 B ? PT7B 210 1 Z
+bit 210 C 1 *
+bit 209 B ? PT8A 208 1 Z
+bit 208 C 1 *
+bit 207 B ? PT8B 206 1 Z
+bit 206 C 1 *
+bit 205 B ? PT10A 204 1 Z
+bit 204 C 1 *
+bit 203 B ? PT10B 202 1 Z
+bit 202 C 1 *
+bit 201 B ? PT11A 200 1 Z
+bit 200 C 1 *
+bit 199 B ? PT11B 198 1 Z
+bit 198 C 1 *
+bit 197 B ? PT13A 196 1 Z
+bit 196 C 1 *
+bit 195 B ? PT13B 194 1 Z
+bit 194 C 1 *
+bit 193 B ? PT14A 192 1 Z
+bit 192 C 1 *
+bit 191 B ? PT14B 190 1 Z
+bit 190 C 1 *
+bit 189 O ? *
+bit 188 O 1 *
+bit 187 O ? *
+bit 186 O 1 *
+bit 185 O ? *
+bit 184 O 1 *
+bit 183 O ? *
+bit 182 O 1 *
+bit 181 O ? *
+bit 180 O 1 *
+bit 179 O ? *
+bit 178 O 1 *
+bit 177 B ? PT20A 176 1 Z
+bit 176 C 1 *
+bit 175 B ? PT20B 174 1 Z
+bit 174 C 1 *
+bit 173 B ? PT22A 172 1 Z
+bit 172 C 1 *
+bit 171 B ? PT22B 170 1 Z
+bit 170 C 1 *
+bit 169 B ? PT23A 168 1 Z
+bit 168 C 1 *
+bit 167 B ? PT23B 166 1 Z
+bit 166 C 1 *
+bit 165 B ? PT25A 164 1 Z
+bit 164 C 1 *
+bit 163 B ? PT25B 162 1 Z
+bit 162 C 1 *
+bit 161 B ? PT26A 160 1 Z
+bit 160 C 1 *
+bit 159 B ? PT26B 158 1 Z
+bit 158 C 1 *
+bit 157 B ? PT28A 156 1 Z
+bit 156 C 1 *
+bit 155 B ? PT28B 154 1 Z
+bit 154 C 1 *
+bit 153 B ? PT29A 152 1 Z
+bit 152 C 1 *
+bit 151 B ? PT29B 150 1 Z
+bit 150 C 1 *
+bit 149 B ? PT31A 148 1 Z
+bit 148 C 1 *
+bit 147 B ? PT31B 146 1 Z
+bit 146 C 1 *
+bit 145 B ? PT32A 144 1 Z
+bit 144 C 1 *
+bit 143 B ? PT32B 142 1 Z
+bit 142 C 1 *
+bit 141 B ? PT34A 140 1 Z
+bit 140 C 1 *
+bit 139 B ? PT34B 138 1 Z
+bit 138 C 1 *
+bit 137 B ? PT35A 136 1 Z
+bit 136 C 1 *
+bit 135 B ? PT35B 134 1 Z
+bit 134 C 1 *
+bit 133 B ? PT37A 132 1 Z
+bit 132 C 1 *
+bit 131 B ? PT37B 130 1 Z
+bit 130 C 1 *
+bit 129 B ? PT38A 128 1 Z
+bit 128 C 1 *
+bit 127 B ? PT38B 126 1 Z
+bit 126 C 1 *
+bit 125 B ? PT40A 124 1 Z
+bit 124 C 1 *
+bit 123 B ? PT40B 122 1 Z
+bit 122 C 1 *
+bit 121 B ? PT41A 120 1 Z
+bit 120 C 1 *
+bit 119 B ? PT41B 118 1 Z
+bit 118 C 1 *
+bit 117 B ? PT43A 116 1 Z
+bit 116 C 1 *
+bit 115 B ? PT43B 114 1 Z
+bit 114 C 1 *
+bit 113 B ? PT44A 112 1 Z
+bit 112 C 1 *
+bit 111 B ? PT44B 110 1 Z
+bit 110 C 1 *
+bit 109 B ? PT46A 108 1 Z
+bit 108 C 1 *
+bit 107 B ? PT46B 106 1 Z
+bit 106 C 1 *
+bit 105 B ? PT47A 104 1 Z
+bit 104 C 1 *
+bit 103 B ? PT47B 102 1 Z
+bit 102 C 1 *
+bit 101 B ? PT49A 100 1 Z
+bit 100 C 1 *
+bit 99 B ? PT49B 98 1 Z
+bit 98 C 1 *
+bit 97 B ? PT50A 96 1 Z
+bit 96 C 1 *
+bit 95 B ? PT50B 94 1 Z
+bit 94 C 1 *
+bit 93 B ? PT52A 92 1 Z
+bit 92 C 1 *
+bit 91 B ? PT52B 90 1 Z
+bit 90 C 1 *
+bit 89 B ? PT53A 88 1 Z
+bit 88 C 1 *
+bit 87 B ? PT53B 86 1 Z
+bit 86 C 1 *
+bit 85 B ? PT55A 84 1 Z
+bit 84 C 1 *
+bit 83 B ? PT55B 82 1 Z
+bit 82 C 1 *
+bit 81 B ? PT56A 80 1 Z
+bit 80 C 1 *
+bit 79 B ? PT56B 78 1 Z
+bit 78 C 1 *
+bit 77 B ? PT58A 76 1 Z
+bit 76 C 1 *
+bit 75 B ? PT58B 74 1 Z
+bit 74 C 1 *
+bit 73 B ? PT59A 72 1 Z
+bit 72 C 1 *
+bit 71 B ? PT59B 70 1 Z
+bit 70 C 1 *
+bit 69 B ? PT61A 68 1 Z
+bit 68 C 1 *
+bit 67 B ? PT61B 66 1 Z
+bit 66 C 1 *
+bit 65 B ? PT62A 64 1 Z
+bit 64 C 1 *
+bit 63 B ? PT62B 62 1 Z
+bit 62 C 1 *
+bit 61 B ? PT64A 60 1 Z
+bit 60 C 1 *
+bit 59 B ? PT64B 58 1 Z
+bit 58 C 1 *
+bit 57 B ? PT68A 56 1 Z
+bit 56 C 1 *
+bit 55 B ? PT68B 54 1 Z
+bit 54 C 1 *
+bit 53 B ? PT70A 52 1 Z
+bit 52 C 1 *
+bit 51 B ? PT70B 50 1 Z
+bit 50 C 1 *
+bit 49 B ? PT71A 48 1 Z
+bit 48 C 1 *
+bit 47 B ? PT71B 46 1 Z
+bit 46 C 1 *
+bit 45 B ? PT73A 44 1 Z
+bit 44 C 1 *
+bit 43 B ? PT73B 42 1 Z
+bit 42 C 1 *
+bit 41 B ? DONE 40 1 Z
+bit 40 C 1 *
+bit 39 B ? INITN 38 1 Z
+bit 38 C 1 *
+bit 37 B ? CCLK 36 1 Z
+bit 36 C 1 *
+bit 35 I 1 PROGRAMN
+bit 34 I ? CFG0
+bit 33 I ? CFG1
+bit 32 I ? CFG2
+bit 31 B ? PR6A 30 1 Z
+bit 30 C 1 *
+bit 29 B ? PR6B 28 1 Z
+bit 28 C 1 *
+bit 27 B ? PR8A 26 1 Z
+bit 26 C 1 *
+bit 25 B ? PR8B 24 1 Z
+bit 24 C 1 *
+bit 23 B ? PR9A 22 1 Z
+bit 22 C 1 *
+bit 21 B ? PR9B 20 1 Z
+bit 20 C 1 *
+bit 19 B ? PR11A 18 1 Z
+bit 18 C 1 *
+bit 17 B ? PR11B 16 1 Z
+bit 16 C 1 *
+bit 15 B ? PR12A 14 1 Z
+bit 14 C 1 *
+bit 13 B ? PR12B 12 1 Z
+bit 12 C 1 *
+bit 11 B ? PR14A 10 1 Z
+bit 10 C 1 *
+bit 9 B ? PR14B 8 1 Z
+bit 8 C 1 *
+bit 7 B ? PR15A 6 1 Z
+bit 6 C 1 *
+bit 5 B ? PR15B 4 1 Z
+bit 4 C 1 *
+bit 3 B ? PR17A 2 1 Z
+bit 2 C 1 *
+bit 1 B ? PR17B 0 1 Z
+bit 0 C 1 *
