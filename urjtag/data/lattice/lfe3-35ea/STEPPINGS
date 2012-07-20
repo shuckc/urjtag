@@ -19,5 +19,5 @@
 #
 
 # bits 31-28 of the Device Identification Register
-0000    lfe3-35ea       0
+0000    lfe3_35ea_fpbga484       0
 
