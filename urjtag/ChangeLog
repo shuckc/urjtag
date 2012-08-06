@@ -3,6 +3,9 @@
   * src/cmd/cmd_pod.c: Add the ability to read the TDO signal.  Based on work
     by Elden Tyrell.
 
+  * src/global/params.c (parse_param_lu): Reject partial decimal numbers, and
+    improve error message to indicate 0x prefix is required for hex values.
+
 2012-04-13  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ft2232.c (urj_tap_cable_ft2232_ktlink_driver): Use the
