@@ -1,3 +1,8 @@
+2012-08-06  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/cmd_pod.c: Add the ability to read the TDO signal.  Based on work
+    by Elden Tyrell.
+
 2012-04-13  Mike Frysinger  <vapier@gentoo.org>
 
   * src/tap/cable/ft2232.c (urj_tap_cable_ft2232_ktlink_driver): Use the
