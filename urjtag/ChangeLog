@@ -1,3 +1,7 @@
+2012-08-09  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/xc6slx9/STEPPINGS: Add xc6slx9 stepping 2 by Xiangfu.
+
 2012-08-06  Mike Frysinger  <vapier@gentoo.org>
 
   * src/cmd/cmd_pod.c: Add the ability to read the TDO signal.  Based on work
