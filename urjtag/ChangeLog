@@ -1,3 +1,9 @@
+2012-09-19  Jie Zhang  <jie.zhang@analog.com>
+
+  * include/urjtag/tap.h: Fix trailing space in comment of urj_tap_detect.
+  * src/tap/cable/ft2232.c (ft2232_ktlink_init): Fix trailing space.
+  * bindings/python/Makefile.am: Remove empty ending line.
+
 2012-08-09  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/xc6slx9/STEPPINGS: Add xc6slx9 stepping 2 by Xiangfu.

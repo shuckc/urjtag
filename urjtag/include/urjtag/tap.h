@@ -57,7 +57,7 @@ int urj_tap_idcode (urj_chain_t *chain, unsigned int bytes);
 /**
  * Convenience function that detects the parts, initialises them to BYPASS,
  * and initialises the bus drivers.
- * maxirlen is the maximum expected length of all concatenated instruction 
+ * maxirlen is the maximum expected length of all concatenated instruction
  * registers on the chain.  If set to 0, a default is assumed.
  *
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error

@@ -972,7 +972,7 @@ ft2232_ktlink_init (urj_cable_t *cable)
     params->low_byte_dir |= BITMASK_TCK;
     params->low_byte_dir |= BITMASK_TDI;
     params->low_byte_dir |= BITMASK_TMS;
-    params->low_byte_dir |= BITMASK_KTLINK_TMSDOsel; 
+    params->low_byte_dir |= BITMASK_KTLINK_TMSDOsel;
     urj_tap_cable_cx_cmd_queue (cmd_root, 0);
     urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
     urj_tap_cable_cx_cmd_push (cmd_root, params->low_byte_value);
