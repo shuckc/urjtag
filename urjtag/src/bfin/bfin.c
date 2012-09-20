@@ -957,8 +957,9 @@ part_emulation_return (urj_chain_t *chain, int n)
     part_dbgctl_bit_clear_wakeup (chain, n);
     urj_tap_chain_shift_data_registers_mode (chain, 0, 1, URJ_CHAIN_EXITMODE_IDLE);
 
-    /* get the RTE out of EMUIR so we don't execute it more than once */
-    part_emuir_set (chain, n, INSN_NOP, URJ_CHAIN_EXITMODE_IDLE);
+    /* Get the RTE out of EMUIR so we don't execute it more than once.
+       This is for working around an issue of ICE-100B.  */
+    part_emuir_set (chain, n, INSN_NOP, URJ_CHAIN_EXITMODE_UPDATE);
 }
 
 void

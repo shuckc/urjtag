@@ -1,3 +1,9 @@
+2012-09-20  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/bfin/bfin.c (part_emulation_return): Point out that setting
+    NOP in EMUIR is a workaround for ICE-100B.  Also move to state
+    UPDATE instead of IDLE when setting NOP in EMUIR.
+
 2012-09-19  Jie Zhang  <jie.zhang@analog.com>
 
   * include/urjtag/tap.h: Fix trailing space in comment of urj_tap_detect.
