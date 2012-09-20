@@ -1,5 +1,10 @@
 2012-09-20  Jie Zhang  <jie.zhang@analog.com>
 
+  * src/tap/cable/ice100.c (adi_flush): Scan out if trigger point
+    is reached.
+
+2012-09-20  Jie Zhang  <jie.zhang@analog.com>
+
   * src/bfin/bfin.c (part_emulation_return): Point out that setting
     NOP in EMUIR is a workaround for ICE-100B.  Also move to state
     UPDATE instead of IDLE when setting NOP in EMUIR.
