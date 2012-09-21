@@ -475,8 +475,11 @@ urj_pyc_set_dr (urj_pychain_t *self, int in, PyObject *args)
     int msb = -1;
 
     if (!PyArg_ParseTuple (args, "s|ii", &newstr, &msb, &lsb))
+    {
+        PyErr_Clear ();
         if (!PyArg_ParseTuple (args, "L|ii", &newval, &msb, &lsb))
             return NULL;
+    }
 
     if (!urj_pyc_precheck (urc, UPRC_CBL))
         return NULL;

@@ -1,3 +1,8 @@
+2012-09-21  Steve Tell  <tell@telltronics.org>
+
+  * bindings/python/chain.c (urj_pyc_set_dr): Call PyErr_Clear after
+    failed PyArg_ParseTuple to avoid spurious exception.
+
 2012-09-20  Jie Zhang  <jie.zhang@analog.com>
 
   * src/tap/cable/ice100.c (adi_flush): Scan out if trigger point
