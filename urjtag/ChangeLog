@@ -1,3 +1,9 @@
+2012-09-23  Jie Zhang  <jie.zhang@analog.com>
+
+  * src/tap/register.c (urj_tap_register_set_value_bit_range): Fix
+    for msb < lsb case.
+    (urj_tap_register_get_value_bit_range): Likewise.
+
 2012-09-21  Steve Tell  <tell@telltronics.org>
 
   * bindings/python/chain.c (urj_pyc_set_dr): Call PyErr_Clear after
