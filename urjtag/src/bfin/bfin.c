@@ -69,15 +69,20 @@ part_is_bfin (urj_chain_t *chain, int n)
     return is_bfin_part (chain->parts->parts[n]);
 }
 
-urj_tap_register_t *
-register_init_value (urj_tap_register_t *tr, uint64_t value)
+/* Except IDCODE register, Blackfin data registers and instruction registers
+   shift out MSB first, which does not conform to JTAG standard.  So it needs
+   its own register_set_value and register_get_value functions.  */
+
+static int
+bfin_register_set_value (urj_tap_register_t *tr, uint64_t value)
 {
-    int i;
+    return urj_tap_register_set_value_bit_range (tr, value, 0, tr->len - 1);
+}
 
-    for (i = 0; i < tr->len; i++)
-        tr->data[i] = (value >> (tr->len - i - 1)) & 1;
-
-    return tr;
+static uint64_t
+bfin_register_get_value (const urj_tap_register_t *tr)
+{
+    return urj_tap_register_get_value_bit_range (tr, 0, tr->len - 1);
 }
 
 static int
@@ -150,13 +155,13 @@ part_scan_select (urj_chain_t *chain, int n, int scan)
 static void
 bfin_dbgctl_init (urj_part_t *part, uint16_t v)
 {
-    register_init_value (part->active_instruction->data_register->in, v);
+    bfin_register_set_value (part->active_instruction->data_register->in, v);
 }
 
 static uint16_t
 bfin_dbgstat_value (urj_part_t *part)
 {
-    return urj_tap_register_get_value (part->active_instruction->data_register->out);
+    return bfin_register_get_value (part->active_instruction->data_register->out);
 }
 
 #define PART_DBGCTL_CLEAR_OR_SET_BIT(name)                              \
@@ -229,7 +234,7 @@ bfin_dbgstat_value (urj_part_t *part)
         urj_part_t *part = chain->parts->parts[n];                      \
         urj_tap_register_t *r = part->active_instruction->data_register->in; \
         BFIN_PART_DBGSTAT (part) &= ~BFIN_PART_DATA (part)->dbgstat_##name; \
-        register_init_value (r, BFIN_PART_DBGSTAT (part));              \
+        bfin_register_set_value (r, BFIN_PART_DBGSTAT (part));          \
     }
 
 #define PART_DBGSTAT_SET_BIT(name)                                      \
@@ -239,7 +244,7 @@ bfin_dbgstat_value (urj_part_t *part)
         urj_part_t *part = chain->parts->parts[n];                      \
         urj_tap_register_t *r = part->active_instruction->data_register->in; \
         BFIN_PART_DBGSTAT (part) |= BFIN_PART_DATA (part)->dbgstat_##name; \
-        register_init_value (r, BFIN_PART_DBGSTAT (part));              \
+        bfin_register_set_value (r, BFIN_PART_DBGSTAT (part));          \
     }
 
 DBGCTL_BIT_OP (sram_init)
@@ -329,7 +334,7 @@ part_emupc_get (urj_chain_t *chain, int n, int save)
 
     part = chain->parts->parts[n];
     r = part->active_instruction->data_register->out;
-    BFIN_PART_EMUPC (part) = urj_tap_register_get_value (r);
+    BFIN_PART_EMUPC (part) = bfin_register_get_value (r);
     if (save)
         BFIN_PART_EMUPC_ORIG (part) = BFIN_PART_EMUPC (part);
 
@@ -422,18 +427,18 @@ emuir_init_value (urj_tap_register_t *r, uint64_t insn)
         assert ((insn & 0xffffffff00000000ULL) == 0);
 
         if ((insn & 0xffffffffffff0000ULL) == 0)
-            register_init_value (r, insn << 16);
+            bfin_register_set_value (r, insn << 16);
         else
-            register_init_value (r, insn);
+            bfin_register_set_value (r, insn);
     }
     else
     {
         if ((insn & 0xffffffffffff0000ULL) == 0)
-            register_init_value (r, insn << 48);
+            bfin_register_set_value (r, insn << 48);
         else if ((insn & 0xffffffff00000000ULL) == 0)
-            register_init_value (r, insn << 32);
+            bfin_register_set_value (r, insn << 32);
         else
-            register_init_value (r, insn);
+            bfin_register_set_value (r, insn);
     }
 
     /* If EMUIR has two identify bits, set it properly.
@@ -651,7 +656,7 @@ emudat_value (urj_tap_register_t *r)
 {
     uint64_t value;
 
-    value = urj_tap_register_get_value (r);
+    value = bfin_register_get_value (r);
     value >>= (r->len - 32);
 
     return value;
@@ -667,7 +672,7 @@ emudat_init_value (urj_tap_register_t *r, uint32_t value)
     if (r->len == 34 || r->len == 40 || r->len == 48)
         v |= 0x1 << (r->len - 34);
 
-    register_init_value (r, v);
+    bfin_register_set_value (r, v);
 }
 
 void
