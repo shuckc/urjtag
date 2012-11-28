@@ -42,6 +42,7 @@ const urj_pld_driver_t * const urj_pld_drivers[] = {
     &urj_pld_xc3s_driver,
     &urj_pld_xc6s_driver,
     &urj_pld_xc4v_driver,
+    &urj_pld_alt_driver,
     NULL
 };
 

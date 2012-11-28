@@ -29,6 +29,8 @@ libpld_la_SOURCES = \
 	pld.c \
 	xilinx_bitstream.c \
 	xilinx.c \
-	xilinx.h
+	xilinx.h \
+	altera.c \
+	altera.h
 
 AM_CFLAGS = $(WARNINGCFLAGS)
