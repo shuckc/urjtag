@@ -188,8 +188,6 @@ extern int bfin_wait_clocks;
 /* From src/bfin/bfin.c */
 
 int part_is_bfin (urj_chain_t *, int);
-
-urj_tap_register_t *register_init_value (urj_tap_register_t *, uint64_t);
 int part_scan_select (urj_chain_t *, int, int);
 
 #define DECLARE_PART_DBGCTL_SET_BIT(name)                               \

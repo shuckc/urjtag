@@ -189,7 +189,9 @@ parse_param_lu(const char *eq, long unsigned *lu)
      */
     if (strncmp(eq, "0x", 2))
     {
-        if (sscanf(eq, "%lu", lu) == 1)
+        /* Detect non-numeric chars. */
+        char c;
+        if (sscanf(eq, "%lu%c", lu, &c) == 1)
             return URJ_STATUS_OK;
     }
     else
@@ -198,7 +200,9 @@ parse_param_lu(const char *eq, long unsigned *lu)
             return URJ_STATUS_OK;
     }
 
-    urj_error_set (URJ_ERROR_SYNTAX, "need unsigned int, not '%s'", eq);
+    urj_error_set (URJ_ERROR_SYNTAX,
+                   "%s: could not parse number (hex values start with 0x)",
+                   eq);
     return URJ_STATUS_FAIL;
 }
 

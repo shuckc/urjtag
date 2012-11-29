@@ -1095,16 +1095,16 @@ static void adi_flush (urj_cable_t *cable, urj_cable_flush_amount_t how_much)
             {
                 scan_out = 7;    /* Assigned a number for debug, !0 will do scan */
             }
+            else if (tap_info->cur_idx >= cable_params->trigger_scanlen)
+            {   /* Else scan out if we reached our trigger point */
+                scan_out = 6;    /* Assigned a number for debug, !0 will do scan */
+            }
             else if (tap_info->cur_idx >= cable_params->default_scanlen)
             {
                 urj_log (URJ_LOG_LEVEL_ERROR,
                          _("FAULT! idx overflow!! idx = %d and max should be %#X\n"),
                          tap_info->cur_idx, cable_params->default_scanlen);
             }
-        }
-        else if (tap_info->cur_idx >= cable_params->trigger_scanlen)
-        {   /* Else scan out if we reached our trigger point */
-            scan_out = 6;    /* Assigned a number for debug, !0 will do scan */
         }
 
         if (tap_info->pairs && scan_out)

@@ -32,6 +32,7 @@
 
 #include <urjtag/error.h>
 #include <urjtag/chain.h>
+#include <urjtag/cable.h>
 #include <urjtag/pod.h>
 
 #include <urjtag/cmd.h>
@@ -58,6 +59,14 @@ cmd_pod_run (urj_chain_t *chain, char *params[])
 
     for (j = 1; j < i; j++)
     {
+        if (strncasecmp (params[j], "tdo", 3) == 0)
+        {
+            /* We only read this, so move on to the next param. */
+            urj_log (URJ_LOG_LEVEL_NORMAL, "%d\n",
+                     urj_tap_cable_get_tdo (chain->cable));
+            continue;
+        }
+
         char *eq = strrchr (params[j], '=');
         if (!eq)
         {
@@ -92,8 +101,12 @@ cmd_pod_run (urj_chain_t *chain, char *params[])
             val |= it;
     }
 
-    if (urj_tap_chain_set_pod_signal (chain, mask, val) == -1)
-        return URJ_STATUS_FAIL;
+    if (mask)
+    {
+        /* If user just read TDO, then there's nothing to set. */
+        if (urj_tap_chain_set_pod_signal (chain, mask, val) == -1)
+            return URJ_STATUS_FAIL;
+    }
 
     return URJ_STATUS_OK;
 }
@@ -109,6 +122,7 @@ cmd_pod_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
         "TDI=",
         "TRST=",
         "RESET=",
+        "TDO",
     };
 
     urj_completion_mayben_add_matches (matches, match_cnt, text,
@@ -119,17 +133,19 @@ static void
 cmd_pod_help (void)
 {
     urj_log (URJ_LOG_LEVEL_NORMAL,
-             _("Usage: %s SIGNAL=# [SIGNAL=# ...]\n"
-               "Set state of POD signal(s) to 0 or 1.\n"
+             _("Usage: %s <TDO|SIGNAL=#> [<TDO|SIGNAL=#> ...]\n"
+               "Set or read state of POD signal(s).\n"
+               "TDO is the only signal which may be read.  All other signals,\n"
+               "if specified, must be set.\n"
                "\n"
-               "SIGNAL       TCK,TMS, TDI, TRST, or RESET\n"
-               "#          0 or 1\n"),
+               "SIGNAL           TCK, TMS, TDI, TRST, or RESET\n"
+               "#                0 or 1\n"),
              "pod");
 }
 
 const urj_cmd_t urj_cmd_pod = {
     "pod",
-    N_("Set state of POD signal(s)"),
+    N_("Set or read state of POD signal(s)"),
     cmd_pod_help,
     cmd_pod_run,
     cmd_pod_complete,

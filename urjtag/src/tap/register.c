@@ -193,13 +193,13 @@ urj_tap_register_set_string (urj_tap_register_t *tr, const char *str)
 int
 urj_tap_register_set_value_bit_range (urj_tap_register_t *tr, uint64_t val, int msb, int lsb)
 {
-    unsigned int bit;
-    unsigned int step = msb >= lsb ? 1 : -1;
+    int bit;
+    int step = msb >= lsb ? 1 : -1;
 
     if (!tr)
     {
-         urj_error_set (URJ_ERROR_INVALID, "tr == NULL");
-         return URJ_STATUS_FAIL;
+        urj_error_set (URJ_ERROR_INVALID, "tr == NULL");
+        return URJ_STATUS_FAIL;
     }
 
     if (msb > tr->len - 1 || lsb > tr->len - 1 || msb < 0 || lsb < 0)
@@ -210,7 +210,7 @@ urj_tap_register_set_value_bit_range (urj_tap_register_t *tr, uint64_t val, int 
         return URJ_STATUS_FAIL;
     }
 
-    for (bit = lsb; bit <= msb * step; bit += step)
+    for (bit = lsb; bit * step <= msb * step; bit += step)
     {
         tr->data[bit] = !!(val & 1);
         val >>= 1;
@@ -247,7 +247,7 @@ urj_tap_register_get_value_bit_range (const urj_tap_register_t *tr, int msb, int
 {
     int bit;
     uint64_t l, b;
-    unsigned int step = msb >= lsb ? 1 : -1;
+    int step = msb >= lsb ? 1 : -1;
 
     if (!tr)
         return 0;
@@ -257,7 +257,7 @@ urj_tap_register_get_value_bit_range (const urj_tap_register_t *tr, int msb, int
 
     l = 0;
     b = 1;
-    for (bit = lsb; bit <= msb * step; bit += step)
+    for (bit = lsb; bit * step <= msb * step; bit += step)
     {
         if (tr->data[bit] & 1)
             l |= b;
