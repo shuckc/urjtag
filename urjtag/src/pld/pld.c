@@ -37,6 +37,7 @@
 #include <urjtag/part.h>
 #include <urjtag/tap_register.h>
 #include "xilinx.h"
+#include "altera.h"
 
 const urj_pld_driver_t * const urj_pld_drivers[] = {
     &urj_pld_xc3s_driver,

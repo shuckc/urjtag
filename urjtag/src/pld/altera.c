@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Driver for Xilinx FPGAs
+ * Driver for Altera FPGAs
  *
  * Copyright (C) 2010, Michael Walle
  *
@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
  *
- * Written by Michael Walle <michael@walle.cc>, 2010
+ * Written by Chris Shucksmith <chris@shucksmith.co.uk>, 2012
  *
  */
 
@@ -28,6 +28,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <dirent.h>
 
 #include <urjtag/tap.h>
 #include <urjtag/part.h>
@@ -38,7 +39,13 @@
 #include <urjtag/part_instruction.h>
 #include <urjtag/pld.h>
 #include <urjtag/bitops.h>
-#include "xilinx.h"
+#include "altera.h"
+
+
+static alt_device_config_t* alt_lookup_device_parameters(urj_pld_t *pld, uint32_t idcode);
+static char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filename);
+static void alt_free_device_parameters( alt_device_config_t* dev);
+static int alt_instruction_resize_dr (urj_part_t *part, const char *ir_name, const char *dr_name, int dr_len);
 
 static int
 alt_set_ir_and_shift (urj_chain_t *chain, urj_part_t *part, char *iname)
@@ -55,22 +62,171 @@ alt_set_ir_and_shift (urj_chain_t *chain, urj_part_t *part, char *iname)
 }
 
 static int
-alt_set_dr_and_shift (urj_chain_t *chain, urj_part_t *part,
-        uint64_t value, int exitmode)
+alt_write_register (urj_pld_t *pld, uint32_t reg, uint32_t value)
 {
-    if (part->active_instruction == NULL)
+    urj_log (URJ_LOG_LEVEL_ERROR, _("altera: write register unsupported.\n"));
+    return URJ_STATUS_FAIL;
+}
+
+static int
+alt_read_register (urj_pld_t *pld, uint32_t reg, uint32_t *value)
+{
+    urj_log (URJ_LOG_LEVEL_ERROR, _("altera: read register unsupported.\n"));
+    return URJ_STATUS_FAIL;
+}
+
+static int
+alt_print_status (urj_pld_t *pld)
+{
+    urj_chain_t *chain = pld->chain;
+    urj_part_t *part = pld->part;
+    urj_tap_register_t *r;
+
+    /* set all devices in bypass mode */
+    urj_tap_reset_bypass (chain);
+
+    /* CHECK_STATUS instruction emulates a SAMPLE operation - status pins
+      are not part of the usual boundary scan register. The register has three bits of data for
+      each boundary scan element */
+
+    if (alt_set_ir_and_shift (chain, part, "CHECK_STATUS") != URJ_STATUS_OK)
+    {
+         urj_log (URJ_LOG_LEVEL_ERROR, _("altera: unable to shift CHECK_STATUS instruction\n"));
+         return URJ_STATUS_FAIL;
+    }
+
+    urj_tap_chain_shift_data_registers (chain, 1);
+
+    r = part->active_instruction->data_register->out;
+
+    uint32_t idcode = urj_tap_register_get_value (part->id);
+    alt_device_config_t* dev = alt_lookup_device_parameters(pld, idcode);
+    
+    /** scan chain register is 3 bits per position, reversed. We need position at jseq_conf_done 
+     * and it's the second bit of each three with the status
+     *
+     */
+    uint32_t pinIdx = (dev->jseq_max - dev->jseq_conf_done) * 3 + 1;
+    
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Device Configuration Bits\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tCONF_DONE: %d\n"), r->data[pinIdx]);
+    return URJ_STATUS_OK;
+}
+
+static int
+alt_configure (urj_pld_t *pld, FILE *bit_file)
+{
+    urj_chain_t *chain = pld->chain;
+    urj_part_t *part = pld->part;
+    urj_part_instruction_t *i;
+    alt_bitstream_t *bs;
+    uint32_t u;
+    int dr_len;
+    char *dr_data;
+    int status = URJ_STATUS_OK;
+
+    /* set all devices in bypass mode */
+    urj_tap_reset_bypass (chain);
+
+    //bs = alt_bitstreamoc ();
+    if (bs == NULL)
+    {
+        status = URJ_STATUS_FAIL;
+        goto fail;
+    }
+
+    /* parse bit file */
+    // if (alt_bitstream_load_bit (bit_file, bs) != URJ_STATUS_OK)
+    // {
+    //     urj_error_set (URJ_ERROR_PLD, _("Invalid bitfile"));
+    //
+    //    status = URJ_STATUS_FAIL;
+    //    goto fail_free;
+    // }
+
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Bitstream information:\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tLength: %d bytes\n"), bs->length);
+
+    dr_len = bs->length * 8;
+
+    if (alt_instruction_resize_dr (part, "PROGRAM", "BITST", dr_len)
+            != URJ_STATUS_OK)
+    {
+        urj_log (URJ_LOG_LEVEL_ERROR, _("Bitstream instruction resize failed:\n"));
+        return URJ_STATUS_FAIL;
+    }
+    i = urj_part_find_instruction (part, "PROGRAM");
+
+    /* copy data into shift register */
+    dr_data = i->data_register->in->data;
+    for (u = 0; u < bs->length; u++)
+    {
+        /* flip bits */
+        dr_data[8*u+0] = (bs->data[u] & 0x80) ? 1 : 0;
+        dr_data[8*u+1] = (bs->data[u] & 0x40) ? 1 : 0;
+        dr_data[8*u+2] = (bs->data[u] & 0x20) ? 1 : 0;
+        dr_data[8*u+3] = (bs->data[u] & 0x10) ? 1 : 0;
+        dr_data[8*u+4] = (bs->data[u] & 0x08) ? 1 : 0;
+        dr_data[8*u+5] = (bs->data[u] & 0x04) ? 1 : 0;
+        dr_data[8*u+6] = (bs->data[u] & 0x02) ? 1 : 0;
+        dr_data[8*u+7] = (bs->data[u] & 0x01) ? 1 : 0;
+    }
+
+    if (alt_set_ir_and_shift (chain, part, "PROGRAM") != URJ_STATUS_OK)
+    {
+        status = URJ_STATUS_FAIL;
+        goto fail_free;
+    }
+
+    /* wait until device is unconfigured */
+//    do {
+//        urj_tap_chain_shift_instructions_mode (chain, 1, 1,
+//                URJ_CHAIN_EXITMODE_IDLE);
+//    } while (!(urj_tap_register_get_value (part->active_instruction->out)
+//                & XILINX_SR_INIT));
+
+    /* push entire bitstream out through dr */    
+    urj_tap_chain_shift_data_registers (chain, 0);
+
+    alt_print_status(pld);
+
+    /* resume USER operation from program mode */
+    if (alt_set_ir_and_shift (chain, part, "STARTUP") != URJ_STATUS_OK)
+    {
+        status = URJ_STATUS_FAIL;
+        goto fail_free;
+    }
+
+    urj_tap_reset_bypass (chain);
+
+    urj_tap_chain_flush (chain);
+
+ fail_free:
+    // alt_bitstream_free (bs);
+ fail:
+    return status;
+}
+
+static int
+alt_reconfigure (urj_pld_t *pld)
+{
+    urj_chain_t *chain = pld->chain;
+    urj_part_t *part = pld->part;
+
+    urj_tap_reset_bypass (chain);
+
+    /* instruction acts the same as pulse to nCONFIG pin */
+    if (alt_set_ir_and_shift (chain, part, "PULSE_NCONFIG") != URJ_STATUS_OK)
         return URJ_STATUS_FAIL;
 
-    urj_tap_register_t *r = part->active_instruction->data_register->in;
-    urj_tap_register_set_value (r, value);
-    urj_tap_defer_shift_register (chain, r, NULL, exitmode);
+    urj_tap_reset (chain);
+    urj_tap_chain_flush (chain);
 
     return URJ_STATUS_OK;
 }
 
 static int
-alt_instruction_resize_dr (urj_part_t *part, const char *ir_name,
-        const char *dr_name, int dr_len)
+alt_instruction_resize_dr (urj_part_t *part, const char *ir_name, const char *dr_name, int dr_len)
 {
     urj_data_register_t *d;
     urj_part_instruction_t *i;
@@ -103,599 +259,17 @@ alt_instruction_resize_dr (urj_part_t *part, const char *ir_name,
 }
 
 static int
-alt_write_register_xc3s (urj_pld_t *pld, uint32_t reg, uint32_t value)
-{
-    urj_chain_t *chain = pld->chain;
-    urj_part_t *part = pld->part;
-
-    if (value & 0xffff0000)
-    {
-        urj_log (URJ_LOG_LEVEL_WARNING,
-                 _("Only 16 bit values supported. Truncating value."));
-
-        value &= 0xffff;
-    }
-
-    /* use the same data register as they have the same length */
-    if (alt_instruction_resize_dr (part, "CFG_IN", "CFG_DR", 16)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-    if (alt_instruction_resize_dr (part, "CFG_OUT", "CFG_DR", 16)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    /* set all devices in bypass mode */
-    urj_tap_reset_bypass (chain);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_IN") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_capture_dr (chain);
-    /* sync */
-    alt_set_dr_and_shift (chain, part, flip16 (0xffff),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0xaa99),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* type 2 packet (word count = 1) */
-    reg = 0x3001 | ((reg & 0x3f) << 5);
-    alt_set_dr_and_shift (chain, part, flip16 (reg),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (value),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_IDLE);
-
-    urj_tap_chain_flush (chain);
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_write_register_xc4v (urj_pld_t *pld, uint32_t reg, uint32_t value)
-{
-    urj_chain_t *chain = pld->chain;
-    urj_part_t *part = pld->part;
-
-    /* use the same data register as they have the same length */
-    if (alt_instruction_resize_dr (part, "CFG_IN", "CFG_DR", 32)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-    if (alt_instruction_resize_dr (part, "CFG_OUT", "CFG_DR", 32)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    /* set all devices in bypass mode */
-    urj_tap_reset_bypass (chain);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_IN") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_capture_dr (chain);
-    /* sync */
-    alt_set_dr_and_shift (chain, part, flip32 (0xffffffff),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip32 (0xaa995566),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip32 (0x20000000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* type 2 packet (word count = 1) */
-    reg = 0x30000001 | ((reg & 0x1f) << 13);
-    alt_set_dr_and_shift (chain, part, flip32 (reg),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip32 (value),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip32 (0x20000000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip32 (0x20000000),
-                          URJ_CHAIN_EXITMODE_IDLE);
-
-    urj_tap_chain_flush (chain);
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_write_register_xc6s (urj_pld_t *pld, uint32_t reg, uint32_t value)
-{
-    urj_chain_t *chain = pld->chain;
-    urj_part_t *part = pld->part;
-
-    if (value & 0xffff0000)
-    {
-        urj_log (URJ_LOG_LEVEL_WARNING,
-                _("Only 16 bit values supported. Truncating value."));
-
-        value &= 0xffff;
-    }
-
-    /* use the same data register as they have the same length */
-    if (alt_instruction_resize_dr (part, "CFG_IN", "CFG_DR", 16)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-    if (alt_instruction_resize_dr (part, "CFG_OUT", "CFG_DR", 16)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    /* set all devices in bypass mode */
-    urj_tap_reset_bypass (chain);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_IN") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_capture_dr (chain);
-    /* sync */
-    alt_set_dr_and_shift (chain, part, flip16 (0xaa99),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x5566),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* type 2 packet (word count = 1) */
-    reg = 0x3001 | ((reg & 0x3f) << 5);
-    alt_set_dr_and_shift (chain, part, flip16 (reg),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (value),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_IDLE);
-
-    urj_tap_chain_flush (chain);
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_read_register_xc3s (urj_pld_t *pld, uint32_t reg, uint32_t *value)
-{
-    urj_chain_t *chain = pld->chain;
-    urj_part_t *part = pld->part;
-    urj_tap_register_t *r;
-
-    /* use the same data register as they have the same length */
-    if (alt_instruction_resize_dr (part, "CFG_IN", "CFG_DR", 16)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-    if (alt_instruction_resize_dr (part, "CFG_OUT", "CFG_DR", 16)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    /* set all devices in bypass mode */
-    urj_tap_reset_bypass (chain);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_IN") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_capture_dr (chain);
-    /* sync */
-    alt_set_dr_and_shift (chain, part, flip16 (0xffff),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0xaa99),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* type 1 packet (word count = 1) */
-    reg = 0x2801 | ((reg & 0x3f) << 5);
-    alt_set_dr_and_shift (chain, part, flip16 (reg),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_IDLE);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_OUT") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_chain_shift_data_registers (chain, 1);
-
-    r = part->active_instruction->data_register->out;
-
-    *value = flip16 (urj_tap_register_get_value (r));
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_read_register_xc4v (urj_pld_t *pld, uint32_t reg, uint32_t *value)
-{
-    urj_chain_t *chain = pld->chain;
-    urj_part_t *part = pld->part;
-    urj_tap_register_t *r;
-
-    /* use the same data register as they have the same length */
-    if (alt_instruction_resize_dr (part, "CFG_IN", "CFG_DR", 32)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-    if (alt_instruction_resize_dr (part, "CFG_OUT", "CFG_DR", 32)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    /* set all devices in bypass mode */
-    urj_tap_reset_bypass (chain);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_IN") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_capture_dr (chain);
-    /* sync */
-    alt_set_dr_and_shift (chain, part, flip32 (0xffffffff),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip32 (0xaa995566),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip32 (0x20000000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* type 1 packet (word count = 1) */
-    reg = 0x28000001 | ((reg & 0x1f) << 13);
-    alt_set_dr_and_shift (chain, part, flip32 (reg),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip32 (0x20000000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip32 (0x20000000),
-                          URJ_CHAIN_EXITMODE_IDLE);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_OUT") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_chain_shift_data_registers (chain, 1);
-
-    r = part->active_instruction->data_register->out;
-
-    *value = flip32 (urj_tap_register_get_value (r));
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_read_register_xc6s (urj_pld_t *pld, uint32_t reg, uint32_t *value)
-{
-    urj_chain_t *chain = pld->chain;
-    urj_part_t *part = pld->part;
-    urj_tap_register_t *r;
-
-    /* use the same data register as they have the same length */
-    if (alt_instruction_resize_dr (part, "CFG_IN", "CFG_DR", 16)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-    if (alt_instruction_resize_dr (part, "CFG_OUT", "CFG_DR", 16)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    /* set all devices in bypass mode */
-    urj_tap_reset_bypass (chain);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_IN") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_capture_dr (chain);
-    /* sync */
-    alt_set_dr_and_shift (chain, part, flip16 (0xffff),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0xaa99),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x5566),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* type 1 packet (word count = 1) */
-    reg = 0x2801 | ((reg & 0x3f) << 5);
-    alt_set_dr_and_shift (chain, part, flip16 (reg),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    /* noop */
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_SHIFT);
-    alt_set_dr_and_shift (chain, part, flip16 (0x2000),
-                          URJ_CHAIN_EXITMODE_IDLE);
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_OUT") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_chain_shift_data_registers (chain, 1);
-
-    r = part->active_instruction->data_register->out;
-
-    *value = flip16 (urj_tap_register_get_value (r));
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_print_status_all (urj_pld_t *pld)
-{
-    uint32_t status;
-
-    if (alt_read_register_xc3s (pld, XILINX_XC3S_REG_STAT, &status)
-                != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("Status register (0x%04x)\n"), status);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSYNC_TIMEOUT %d\n"),
-        (status & XC3S_STATUS_SYNC_TIMEOUT) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSEUR_ERR     %d\n"),
-        (status & XC3S_STATUS_SEU_ERR) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDONE         %d\n"),
-        (status & XC3S_STATUS_DONE) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tINIT         %d\n"),
-        (status & XC3S_STATUS_INIT) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tMODE_M2      %d\n"),
-        (status & XC3S_STATUS_MODE_M2) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tMODE_M1      %d\n"),
-        (status & XC3S_STATUS_MODE_M1) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tMODE_M0      %d\n"),
-        (status & XC3S_STATUS_MODE_M0) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tVSEL_VS2     %d\n"),
-        (status & XC3S_STATUS_VSEL_VS2) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tVSEL_VS1     %d\n"),
-        (status & XC3S_STATUS_VSEL_VS1) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tVSEL_VS0     %d\n"),
-        (status & XC3S_STATUS_VSEL_VS0) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tGHIGH_B      %d\n"),
-        (status & XC3S_STATUS_GHIGH_B) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tGWE          %d\n"),
-        (status & XC3S_STATUS_GWE) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tGTS_CFG_B    %d\n"),
-        (status & XC3S_STATUS_GTS_CFG_B) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDCM_LOCK     %d\n"),
-        (status & XC3S_STATUS_DCM_LOCK) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tID_ERROR     %d\n"),
-        (status & XC3S_STATUS_ID_ERROR) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tCRC_ERROR    %d\n"),
-        (status & XC3S_STATUS_CRC_ERROR) ? 1 : 0);
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_print_status_xc4v (urj_pld_t *pld)
-{
-    uint32_t status;
-
-    if (alt_read_register_xc4v (pld, XILINX_XC4V_REG_STAT, &status)
-                != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("Status register (0x%08x)\n"), status);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_DEC_ERROR     %d\n"),
-        (status & XC4V_STATUS_DEC_ERROR) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_ID_ERROR      %d\n"),
-        (status & XC4V_STATUS_ID_ERROR) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_DONE          %d\n"),
-        (status & XC4V_STATUS_DONE) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_RELEASE_DONE  %d\n"),
-        (status & XC4V_STATUS_RELEASE_DONE) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_INIT          %d\n"),
-        (status & XC4V_STATUS_INIT) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_INIT_COMPLETE %d\n"),
-        (status & XC4V_STATUS_INIT_COMPLETE) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_MODE_M2       %d\n"),
-        (status & XC4V_STATUS_MODE_M2) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_MODE_M1       %d\n"),
-        (status & XC4V_STATUS_MODE_M1) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_MODE_M0       %d\n"),
-        (status & XC4V_STATUS_MODE_M0) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_GHIGH_B       %d\n"),
-        (status & XC4V_STATUS_GHIGH_B) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_GWE           %d\n"),
-        (status & XC4V_STATUS_GWE) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_GTS_CFG_B     %d\n"),
-        (status & XC4V_STATUS_GTS_CFG_B) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_EOS           %d\n"),
-        (status & XC4V_STATUS_EOS) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_DCI_MATCH     %d\n"),
-        (status & XC4V_STATUS_DCI_MATCH) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_DCM_LOCK      %d\n"),
-        (status & XC4V_STATUS_DCM_LOCK) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_PART_SECURED  %d\n"),
-        (status & XC4V_STATUS_PART_SECURED) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tXC4V_STATUS_CRC_ERROR     %d\n"),
-        (status & XC4V_STATUS_CRC_ERROR) ? 1 : 0);
-
-    return URJ_STATUS_OK;
-}
-
-
-static int
-alt_print_status_xc6s (urj_pld_t *pld)
-{
-    uint32_t status;
-
-    if (alt_read_register_xc6s (pld, XILINX_XC6S_REG_STAT, &status)
-                != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("Status register (0x%04x)\n"), status);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSWWD         %d\n"),
-        (status & XC6S_STATUS_SWWD) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tIN_PWRDN     %d\n"),
-        (status & XC6S_STATUS_IN_PWRDN) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDONE         %d\n"),
-        (status & XC6S_STATUS_DONE) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tINIT_B       %d\n"),
-        (status & XC6S_STATUS_INIT_B) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tMODE_M1      %d\n"),
-        (status & XC6S_STATUS_MODE_M1) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tMODE_M0      %d\n"),
-        (status & XC6S_STATUS_MODE_M0) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tHSWAPEN      %d\n"),
-        (status & XC6S_STATUS_HSWAPEN) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tPART_SECURED %d\n"),
-        (status & XC6S_STATUS_PART_SECURED) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDEC_ERROR    %d\n"),
-        (status & XC6S_STATUS_DEC_ERROR) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tGHIGH_B      %d\n"),
-        (status & XC6S_STATUS_GHIGH_B) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tGWE          %d\n"),
-        (status & XC6S_STATUS_GWE) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tGTS_CFG_B    %d\n"),
-        (status & XC6S_STATUS_GTS_CFG_B) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDCM_LOCK     %d\n"),
-        (status & XC6S_STATUS_DCM_LOCK) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tID_ERROR     %d\n"),
-        (status & XC6S_STATUS_ID_ERROR) ? 1 : 0);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tCRC_ERROR    %d\n"),
-        (status & XC6S_STATUS_CRC_ERROR) ? 1 : 0);
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_configure (urj_pld_t *pld, FILE *bit_file)
-{
-    urj_chain_t *chain = pld->chain;
-    urj_part_t *part = pld->part;
-    urj_part_instruction_t *i;
-    alt_bitstream_t *bs;
-    uint32_t u;
-    int dr_len;
-    char *dr_data;
-    int status = URJ_STATUS_OK;
-
-    /* set all devices in bypass mode */
-    urj_tap_reset_bypass (chain);
-
-    bs = alt_bitstream_alloc ();
-    if (bs == NULL)
-    {
-        status = URJ_STATUS_FAIL;
-        goto fail;
-    }
-
-    /* parse bit file */
-    if (alt_bitstream_load_bit (bit_file, bs) != URJ_STATUS_OK)
-    {
-        urj_error_set (URJ_ERROR_PLD, _("Invalid bitfile"));
-
-        status = URJ_STATUS_FAIL;
-        goto fail_free;
-    }
-
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("Bitstream information:\n"));
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDesign: %s\n"), bs->design);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tPart name: %s\n"), bs->part_name);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDate: %s\n"), bs->date);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tTime: %s\n"), bs->time);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tBitstream length: %d\n"), bs->length);
-
-    dr_len = bs->length * 8;
-
-    if (alt_instruction_resize_dr (part, "CFG_IN", "CFG_DR", dr_len)
-            != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    i = urj_part_find_instruction (part, "CFG_IN");
-
-    /* copy data into shift register */
-    dr_data = i->data_register->in->data;
-    for (u = 0; u < bs->length; u++)
-    {
-        /* flip bits */
-        dr_data[8*u+0] = (bs->data[u] & 0x80) ? 1 : 0;
-        dr_data[8*u+1] = (bs->data[u] & 0x40) ? 1 : 0;
-        dr_data[8*u+2] = (bs->data[u] & 0x20) ? 1 : 0;
-        dr_data[8*u+3] = (bs->data[u] & 0x10) ? 1 : 0;
-        dr_data[8*u+4] = (bs->data[u] & 0x08) ? 1 : 0;
-        dr_data[8*u+5] = (bs->data[u] & 0x04) ? 1 : 0;
-        dr_data[8*u+6] = (bs->data[u] & 0x02) ? 1 : 0;
-        dr_data[8*u+7] = (bs->data[u] & 0x01) ? 1 : 0;
-    }
-
-    if (alt_set_ir_and_shift (chain, part, "JPROGRAM") != URJ_STATUS_OK)
-    {
-        status = URJ_STATUS_FAIL;
-        goto fail_free;
-    }
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_IN") != URJ_STATUS_OK)
-    {
-        status = URJ_STATUS_FAIL;
-        goto fail_free;
-    }
-
-    /* wait until device is unconfigured */
-    do {
-        urj_tap_chain_shift_instructions_mode (chain, 1, 1,
-                URJ_CHAIN_EXITMODE_IDLE);
-    } while (!(urj_tap_register_get_value (part->active_instruction->out)
-                & XILINX_SR_INIT));
-
-    if (alt_set_ir_and_shift (chain, part, "CFG_IN") != URJ_STATUS_OK)
-    {
-        status = URJ_STATUS_FAIL;
-        goto fail_free;
-    }
-
-    urj_tap_chain_shift_data_registers (chain, 0);
-
-    if (alt_set_ir_and_shift (chain, part, "JSTART") != URJ_STATUS_OK)
-    {
-        status = URJ_STATUS_FAIL;
-        goto fail_free;
-    }
-
-    urj_tap_chain_defer_clock (chain, 0, 0, 32);
-
-    urj_tap_reset_bypass (chain);
-
-    urj_tap_chain_flush (chain);
-
- fail_free:
-    alt_bitstream_free (bs);
- fail:
-    return status;
-}
-
-static int
-alt_reconfigure (urj_pld_t *pld)
-{
-    urj_chain_t *chain = pld->chain;
-    urj_part_t *part = pld->part;
-
-    urj_tap_reset_bypass (chain);
-
-    if (alt_set_ir_and_shift (chain, part, "JPROGRAM") != URJ_STATUS_OK)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_reset (chain);
-    urj_tap_chain_flush (chain);
-
-    return URJ_STATUS_OK;
-}
-
-static int
-alt_detect_all (urj_pld_t *pld)
+alt_detect (urj_pld_t *pld)
 {
     urj_part_t *part = pld->part;
     uint32_t idcode;
-    uint32_t family;
     uint32_t manufacturer;
 
     /* there's no obvious grouping of family within part range. For now accept all Altera devices */
 
     idcode = urj_tap_register_get_value (part->id);
-    manufacturer = (idcode & 0x7F);
+    manufacturer = ((idcode >> 1) & 0x7FF);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Altera detect for manuf %08x\n"), manufacturer);
 
     switch (manufacturer)
     {
@@ -705,42 +279,69 @@ alt_detect_all (urj_pld_t *pld)
             return URJ_STATUS_FAIL;
     }
 
-    // consult the Altera device configuration data for specific device compatibility
-    dev = alt_lookup_device_parameters(pld, idcode);
+    /* consult the Altera device configuration data for specific device compatibility */
+    alt_device_config_t* dev = alt_lookup_device_parameters(pld, idcode);
     if (!dev) return URJ_STATUS_FAIL;
-
+    
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Detected part:\n"));
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tFamily: %s\n"), dev->family);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDevice: %s\n"), bs->device);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tIdcode: %08x\n"), bs->idcode);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tjseq_max: %d\n"), bs->jseq_max);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tjseq_conf_done: %d\n"), bs->jseq_conf_done);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDevice: %s\n"), dev->device);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tIdcode: %08x\n"), dev->idcode);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tjseq_max: %d (STATUS chain length %d)\n"), dev->jseq_max,  dev->jseq_max*3);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tjseq_conf_done: %d\n"), dev->jseq_conf_done);
     
-    alt_free_device_parameters(dev);
+    /* add instructions that Altera do not include in bsdl files. Test first if they exist
+     * to allow bsdl files to overwrite them.
+     *   STARTUP       - bring device of program mode into 'USER' design operating
+     *   CHECK_STATUS  - read back status pins including CONF_DONE
+     *   PULSE_NCONFIG -   
+     */
+    if (!urj_part_find_instruction(part, "STARTUP"))
+       urj_part_instruction_define (part, "STARTUP", "0000000011", "BYPASS");
 
+    if (!urj_part_find_instruction(part, "PROGRAM"))
+       urj_part_instruction_define (part, "PROGRAM", "0000000010", "BYPASS");
+
+     if (!urj_part_find_instruction(part, "PULSE_NCONFIG")) 
+       urj_part_instruction_define (part, "PULSE_NCONFIG", "0000000001", "BYPASS");
+
+     if (!urj_part_find_instruction(part, "CHECK_STATUS")) 
+     {
+        /* length of the status register is part specific. Three bits required for each item 
+         * in the register, much like a boundary scan
+         */
+	urj_part_data_register_define(part, "STATUS", dev->jseq_max*3 );
+        urj_part_instruction_define (part, "CHECK_STATUS", "0000001000", "STATUS");
+    }
+ 
+    alt_free_device_parameters(dev);
+ 
     return URJ_STATUS_OK;
 }
 
-static alt_device_config_t alt_lookup_device_parameters(urj_pld_t *pld, uint32_t idcode) {
+static alt_device_config_t* alt_lookup_device_parameters(urj_pld_t *pld, uint32_t idcode) {
 
     const char* datafile = "altera_pld_config.csv";
     char family [80];
     char device [80];
     uint32_t jidcode, jseq_max, jseq_conf_done, jirlen;
     char buffer[1024];
-    char *ptr;
+    uint32_t i;
     
-    char* filename[] = alt_bsdl_scan_for_filename(pld->chain, datafile);
+    char* filename = alt_bsdl_scan_for_filename(pld->chain, datafile);
     alt_device_config_t* retval = NULL;
 
     if (filename == NULL) 
     {
         // urj_bsdl_warn (proc_mode, _("Cannot open directory %s\n"), globs->path_list[idx]);
-        urj_error_set (URJ_ERROR_PLD, "Cannot locate '%s' in bsdl include directories", datafile);
+        urj_log (URJ_LOG_LEVEL_ERROR, _("Altera PLD part configuration empty; cannot locate file %s in bsdl search path\n"), datafile);
         return NULL;
     }
 
    FILE *file = fopen(filename, "r");
+
+   urj_log (URJ_LOG_LEVEL_NORMAL, _("Altera PLD part configuration loading from %s\n"), filename);
+
    free(filename);
 
    if ( file )
@@ -756,17 +357,19 @@ static alt_device_config_t alt_lookup_device_parameters(urj_pld_t *pld, uint32_t
           if (strncmp(buffer, "\n", 1) == 0) continue;
           if (strncmp(buffer, " \n", 1) == 0) continue;
 
-          sscanf(buffer, "%[^,\n]%*c%[^,\n]%*c%x%d%d%d", family, device, jidcode, jseq_max, jseq_conf_done, jirlen);
+          sscanf(buffer, "%[^,\n]%*c%[^,\n]%*c%x,%d,%d,%d", family, device, &jidcode, &jseq_max, &jseq_conf_done, &jirlen);
+          urj_log(URJ_LOG_LEVEL_DEBUG, _("   part %20s %20s %08x  %d %d %d \n"), family, device, jidcode, jseq_max, jseq_conf_done, jirlen);
 
           if (jidcode == idcode && !retval)
           {
-            // populate alt_device_config_t
-            char * sfamily = malloc(strlen(family)+1);
-            char * sdevice = malloc(strlen(device)+1);
-            alt_device_config_t* retval = (alt_device_config_t*)malloc(strlen(device)+1);
 
-            retval->family = sfamily;
-            retval->device = sdevice;
+            urj_log(URJ_LOG_LEVEL_NORMAL, _("   part %20s %20s %08x  %d %d %d \n"), family, device, jidcode, jseq_max, jseq_conf_done, jirlen);
+
+            // populate alt_device_config_t
+            retval = malloc(sizeof(alt_device_config_t));
+
+            retval->family = strdup(family);
+            retval->device = strdup(device);
             retval->idcode = idcode;
             retval->jseq_max = jseq_max;
             retval->jseq_conf_done = jseq_conf_done;
@@ -783,7 +386,7 @@ static alt_device_config_t alt_lookup_device_parameters(urj_pld_t *pld, uint32_t
    return retval;
 }
 
-void alt_free_device_parameters( alt_device_config_t* dev);
+static void alt_free_device_parameters( alt_device_config_t* dev)
 {
     if (dev)
     {
@@ -809,7 +412,7 @@ void alt_free_device_parameters( alt_device_config_t* dev);
  *  char*  : newly allocated memory containing the full file path, caller must free
  *
  ****************************************************************************/
-char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filename)
+static char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filename)
 {
     urj_bsdl_globs_t *globs = &(chain->bsdl);
     int idx = 0;
@@ -827,7 +430,7 @@ char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filename)
             struct dirent *elem;
 
             /* run through all elements in the current directory */
-            while (elem = readdir (dir))
+            while ((elem = readdir (dir)))
             {
                 char *name;
 
@@ -839,8 +442,6 @@ char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filename)
                                    + strlen (elem->d_name) + 1 + 1);
                     if (name)
                     {
-                        struct stat buf;
-
                         strcpy (name, globs->path_list[idx]);
                         strcat (name, "/");
                         strcat (name, elem->d_name);
@@ -854,7 +455,7 @@ char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filename)
             closedir (dir);
         }
         else
-            urj_bsdl_warn (proc_mode, _("Cannot open directory %s\n"), globs->path_list[idx]);
+	    urj_log (URJ_LOG_LEVEL_ERROR, _("Cannot open directory %s\n"), globs->path_list[idx]);
 
         idx++;
     }
@@ -863,13 +464,13 @@ char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filename)
 }
 
 const urj_pld_driver_t urj_pld_alt_driver = {
-    .name = N_("Altera Family"),
-    .detect = alt_detect_all,
-    .print_status = alt_print_status_all,
+    .name = N_("Altera Stratix/Cyclone/Arria"),
+    .detect = alt_detect,
+    .print_status = alt_print_status,
     .configure = alt_configure,
     .reconfigure = alt_reconfigure,
-    .read_register = alt_read_register_all,
-    .write_register = alt_write_register_all,
+    .read_register = alt_read_register,
+    .write_register = alt_write_register,
     .register_width = 2,
 };
 
