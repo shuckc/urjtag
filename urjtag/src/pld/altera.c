@@ -119,7 +119,6 @@ alt_configure (urj_pld_t *pld, FILE *bit_file)
     urj_chain_t *chain = pld->chain;
     urj_part_t *part = pld->part;
     urj_part_instruction_t *i;
-    alt_bitstream_t *bs;
     uint32_t u;
     int dr_len;
     char *dr_data;
@@ -128,48 +127,59 @@ alt_configure (urj_pld_t *pld, FILE *bit_file)
     /* set all devices in bypass mode */
     urj_tap_reset_bypass (chain);
 
-    //bs = alt_bitstreamoc ();
-    if (bs == NULL)
+    /* Get file size */
+    fseek(bit_file, 0L, SEEK_END);
+    uint32_t file_size = ftell(bit_file);
+    fseek(bit_file, 0L, SEEK_SET);
+
+    uint32_t idcode = urj_tap_register_get_value (part->id);
+ 
+    /* TODO: certain parts need some header bytes skipping
+     * Cyclone / Cyclone II   */
+    if ((idcode>0x2080000 && idcode<0x2086000) || (idcode>=0x20B10DD && idcode<=0x20B60DD))
     {
-        status = URJ_STATUS_FAIL;
-        goto fail;
+      fseek(bit_file, 44L, SEEK_SET);
+      file_size -= 44;
     }
 
-    /* parse bit file */
-    // if (alt_bitstream_load_bit (bit_file, bs) != URJ_STATUS_OK)
-    // {
-    //     urj_error_set (URJ_ERROR_PLD, _("Invalid bitfile"));
-    //
-    //    status = URJ_STATUS_FAIL;
-    //    goto fail_free;
-    // }
+    if(file_size == 0)
+    {
+       urj_log (URJ_LOG_LEVEL_ERROR, _("Bitstream length could not be determined or was empty.\n"));
+       return URJ_STATUS_FAIL;
+    }
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Bitstream information:\n"));
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tLength: %d bytes\n"), bs->length);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tLength: %d bytes\n"), file_size);
 
-    dr_len = bs->length * 8;
+    /* allocate memory for data */
+    char *data = malloc(file_size);
+
+    if (fread (data, 1, file_size, bit_file) != file_size)
+        goto fail_free;
+
+    dr_len = file_size * 8;
 
     if (alt_instruction_resize_dr (part, "PROGRAM", "BITST", dr_len)
             != URJ_STATUS_OK)
     {
         urj_log (URJ_LOG_LEVEL_ERROR, _("Bitstream instruction resize failed:\n"));
-        return URJ_STATUS_FAIL;
+        goto fail_free;
     }
     i = urj_part_find_instruction (part, "PROGRAM");
 
     /* copy data into shift register */
     dr_data = i->data_register->in->data;
-    for (u = 0; u < bs->length; u++)
+    for (u = 0; u < file_size; u++)
     {
         /* flip bits */
-        dr_data[8*u+0] = (bs->data[u] & 0x80) ? 1 : 0;
-        dr_data[8*u+1] = (bs->data[u] & 0x40) ? 1 : 0;
-        dr_data[8*u+2] = (bs->data[u] & 0x20) ? 1 : 0;
-        dr_data[8*u+3] = (bs->data[u] & 0x10) ? 1 : 0;
-        dr_data[8*u+4] = (bs->data[u] & 0x08) ? 1 : 0;
-        dr_data[8*u+5] = (bs->data[u] & 0x04) ? 1 : 0;
-        dr_data[8*u+6] = (bs->data[u] & 0x02) ? 1 : 0;
-        dr_data[8*u+7] = (bs->data[u] & 0x01) ? 1 : 0;
+        dr_data[8*u+7] = (data[u] & 0x80) ? 1 : 0;
+        dr_data[8*u+6] = (data[u] & 0x40) ? 1 : 0;
+        dr_data[8*u+5] = (data[u] & 0x20) ? 1 : 0;
+        dr_data[8*u+4] = (data[u] & 0x10) ? 1 : 0;
+        dr_data[8*u+3] = (data[u] & 0x08) ? 1 : 0;
+        dr_data[8*u+2] = (data[u] & 0x04) ? 1 : 0;
+        dr_data[8*u+1] = (data[u] & 0x02) ? 1 : 0;
+        dr_data[8*u+0] = (data[u] & 0x01) ? 1 : 0;
     }
 
     if (alt_set_ir_and_shift (chain, part, "PROGRAM") != URJ_STATUS_OK)
@@ -202,8 +212,7 @@ alt_configure (urj_pld_t *pld, FILE *bit_file)
     urj_tap_chain_flush (chain);
 
  fail_free:
-    // alt_bitstream_free (bs);
- fail:
+    free(data);
     return status;
 }
 
