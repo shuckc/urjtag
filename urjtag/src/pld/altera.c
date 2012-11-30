@@ -1,9 +1,7 @@
 /*
- * $Id$
- *
  * Driver for Altera FPGAs
  *
- * Copyright (C) 2010, Michael Walle
+ * Copyright (C) 2010, Chris Shucksmith
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +38,6 @@
 #include <urjtag/pld.h>
 #include <urjtag/bitops.h>
 #include "altera.h"
-
 
 static alt_device_config_t* alt_lookup_device_parameters(urj_pld_t *pld, uint32_t idcode);
 static char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filename);
@@ -188,13 +185,6 @@ alt_configure (urj_pld_t *pld, FILE *bit_file)
         goto fail_free;
     }
 
-    /* wait until device is unconfigured */
-//    do {
-//        urj_tap_chain_shift_instructions_mode (chain, 1, 1,
-//                URJ_CHAIN_EXITMODE_IDLE);
-//    } while (!(urj_tap_register_get_value (part->active_instruction->out)
-//                & XILINX_SR_INIT));
-
     /* push entire bitstream out through dr */    
     urj_tap_chain_shift_data_registers (chain, 0);
 
@@ -295,15 +285,15 @@ alt_detect (urj_pld_t *pld)
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Detected part:\n"));
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tFamily: %s\n"), dev->family);
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tDevice: %s\n"), dev->device);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tIdcode: %08x\n"), dev->idcode);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tjseq_max: %d (STATUS chain length %d)\n"), dev->jseq_max,  dev->jseq_max*3);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tjseq_conf_done: %d\n"), dev->jseq_conf_done);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tIDCODE: %08x\n"), dev->idcode);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS pins: %d (STATUS dr-length %d)\n"), dev->jseq_max,  dev->jseq_max*3);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tCONF_DONE pin: %d\n"), dev->jseq_conf_done);
     
     /* add instructions that Altera do not include in bsdl files. Test first if they exist
      * to allow bsdl files to overwrite them.
      *   STARTUP       - bring device of program mode into 'USER' design operating
      *   CHECK_STATUS  - read back status pins including CONF_DONE
-     *   PULSE_NCONFIG -   
+     *   PULSE_NCONFIG - start configuration cycle
      */
     if (!urj_part_find_instruction(part, "STARTUP"))
        urj_part_instruction_define (part, "STARTUP", "0000000011", "BYPASS");
@@ -342,7 +332,6 @@ static alt_device_config_t* alt_lookup_device_parameters(urj_pld_t *pld, uint32_
 
     if (filename == NULL) 
     {
-        // urj_bsdl_warn (proc_mode, _("Cannot open directory %s\n"), globs->path_list[idx]);
         urj_log (URJ_LOG_LEVEL_ERROR, _("Altera PLD part configuration empty; cannot locate file %s in bsdl search path\n"), datafile);
         return NULL;
     }
@@ -359,9 +348,9 @@ static alt_device_config_t* alt_lookup_device_parameters(urj_pld_t *pld, uint32_
       {
          /*
           * Parse the comma-separated values from each line into 'array'.
+	  * skip blank lines and those that begin with #
+	  * format:  Family,Part,IDCODE,STATUS_pins, CONF_DONE_pinpos
           */
-          // skip blank lines and those that begin with #
-          // Family,Part,Idcode,JtagSeq,Conf_Done Seq,InstructionLength
           if (strncmp(buffer, "#", 1) == 0) continue;
           if (strncmp(buffer, "\n", 1) == 0) continue;
           if (strncmp(buffer, " \n", 1) == 0) continue;
@@ -374,7 +363,7 @@ static alt_device_config_t* alt_lookup_device_parameters(urj_pld_t *pld, uint32_
 
             urj_log(URJ_LOG_LEVEL_NORMAL, _("   part %20s %20s %08x  %d %d\n"), family, device, jidcode, jseq_max, jseq_conf_done);
 
-            // populate alt_device_config_t
+            /* populate alt_device_config_t */
             retval = malloc(sizeof(alt_device_config_t));
 
             retval->family = strdup(family);
@@ -446,7 +435,7 @@ static char* alt_bsdl_scan_for_filename (urj_chain_t *chain, const char *filenam
                 if (strcmp(filename, elem->d_name) == 0)
                 {
 
-                    // if alloc fails, act like we didn't find the file
+                    /* if alloc fails, act like we didn't find the file */
                     name = malloc (strlen (globs->path_list[idx])
                                    + strlen (elem->d_name) + 1 + 1);
                     if (name)

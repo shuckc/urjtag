@@ -27,10 +27,10 @@ noinst_LTLIBRARIES = libpld.la
 
 libpld_la_SOURCES = \
 	pld.c \
+	altera.c \
+	altera.h \
 	xilinx_bitstream.c \
 	xilinx.c \
-	xilinx.h \
-	altera.c \
-	altera.h
+	xilinx.h
 
 AM_CFLAGS = $(WARNINGCFLAGS)
