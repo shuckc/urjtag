@@ -333,7 +333,7 @@ static alt_device_config_t* alt_lookup_device_parameters(urj_pld_t *pld, uint32_
     const char* datafile = "altera_pld_config.csv";
     char family [80];
     char device [80];
-    uint32_t jidcode, jseq_max, jseq_conf_done, jirlen;
+    uint32_t jidcode, jseq_max, jseq_conf_done;
     char buffer[1024];
     uint32_t i;
     
@@ -366,13 +366,13 @@ static alt_device_config_t* alt_lookup_device_parameters(urj_pld_t *pld, uint32_
           if (strncmp(buffer, "\n", 1) == 0) continue;
           if (strncmp(buffer, " \n", 1) == 0) continue;
 
-          sscanf(buffer, "%[^,\n]%*c%[^,\n]%*c%x,%d,%d,%d", family, device, &jidcode, &jseq_max, &jseq_conf_done, &jirlen);
-          urj_log(URJ_LOG_LEVEL_DEBUG, _("   part %20s %20s %08x  %d %d %d \n"), family, device, jidcode, jseq_max, jseq_conf_done, jirlen);
+          sscanf(buffer, "%[^,\n]%*c%[^,\n]%*c%x,%d,%d,%d", family, device, &jidcode, &jseq_max, &jseq_conf_done);
+          urj_log(URJ_LOG_LEVEL_DEBUG, _("   part %20s %20s %08x  %d %d\n"), family, device, jidcode, jseq_max, jseq_conf_done);
 
           if (jidcode == idcode && !retval)
           {
 
-            urj_log(URJ_LOG_LEVEL_NORMAL, _("   part %20s %20s %08x  %d %d %d \n"), family, device, jidcode, jseq_max, jseq_conf_done, jirlen);
+            urj_log(URJ_LOG_LEVEL_NORMAL, _("   part %20s %20s %08x  %d %d\n"), family, device, jidcode, jseq_max, jseq_conf_done);
 
             // populate alt_device_config_t
             retval = malloc(sizeof(alt_device_config_t));
