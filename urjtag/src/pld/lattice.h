@@ -42,7 +42,6 @@ typedef struct lat_header {
 } lat_header_t;
 
 typedef struct {
-    char *filename;
     lat_header_t *header;
     uint32_t   length;
     uint8_t    *data;

@@ -34,19 +34,6 @@
 int
 lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
 {
-
-    // typedef struct {
-    //     char *text;
-    //     lat_header_t *next;
-    // } lat_header_t;
-
-    // typedef struct {
-    //     char *filename;
-    //     lat_header_t *header;
-    //     uint32_t   length;
-    //     uint8_t    *data;
-    // } lat_bitstream_t;
-    
     int status = URJ_STATUS_FAIL;
 
     /* Get file size */
@@ -69,12 +56,14 @@ lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
     int nextchar = 0;
     while (r != 0xff)
     {
-        r = buf[nextchar++] = fgetc(bit_file);
+        r = fgetc(bit_file);
+        buf[nextchar++] = r;
         if (r == '\0')
         {
             nextchar = 0;
             lat_header_t *headerEntry = malloc(sizeof(lat_header_t));
             headerEntry->text = strdup(buf);
+            headerEntry->next = NULL;
 
             // preserve order, insert at tail
             if (prev != NULL) prev->next = headerEntry;
