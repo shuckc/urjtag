@@ -46,7 +46,7 @@ lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
     //     uint32_t   length;
     //     uint8_t    *data;
     // } lat_bitstream_t;
-
+    
     int status = URJ_STATUS_FAIL;
 
     /* Get file size */
@@ -55,26 +55,26 @@ lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
     fseek(bit_file, 0L, SEEK_SET);
 
     /* header: 0xff 0x00 */
-    if (fgetc(bitfile) != 0xff)
+    if (fgetc(bit_file) != 0xff)
         return URJ_STATUS_FAIL;
-    if (fgetc(bitfile) != 0x00)
+    if (fgetc(bit_file) != 0x00)
         return URJ_STATUS_FAIL;
     urj_log (URJ_LOG_LEVEL_DEBUG, _("Valid lattice header found.\n"));
 
     // read null-strings, until the value starting 0xff, which is the bitstream
-    // lat_bitstream_t *bs = malloc(sizeof(lat_bitstream_t));
     lat_header_t *prev = NULL;
 
     char buf[500];
+    char r = 0;
     int nextchar = 0;
     while (r != 0xff)
     {
-        buf[nextchar++] = fgetc(bit_file);
+        r = buf[nextchar++] = fgetc(bit_file);
         if (r == '\0')
         {
-            headerEntry->text = strdup(buf);
             nextchar = 0;
             lat_header_t *headerEntry = malloc(sizeof(lat_header_t));
+            headerEntry->text = strdup(buf);
 
             // preserve order, insert at tail
             if (prev != NULL) prev->next = headerEntry;
@@ -85,12 +85,12 @@ lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
 
     /* positioned at the start of the raw bitsream data, calculate size */
     uint32_t pos = ftell(bit_file);
-    bs->header = bitstreamsz - pos + 1;
+    bs->length = file_size - pos + 1;
 
     /* allocate memory for bitstream */
-    bs->data = malloc(bs->header);
+    bs->data = malloc(bs->length);
 
-    if (fread (bs->data, 1, bs->header, bit_file) != bs->header)
+    if (fread (bs->data, 1, bs->length, bit_file) != bs->length)
         goto fail_free;
 
 

@@ -36,7 +36,7 @@
 #include <urjtag/part_instruction.h>
 #include <urjtag/pld.h>
 #include <urjtag/bitops.h>
-#include "xilinx.h"
+#include "lattice.h"
 
 static int
 lat_set_ir_and_shift (urj_chain_t *chain, urj_part_t *part, char *iname)
@@ -48,20 +48,6 @@ lat_set_ir_and_shift (urj_chain_t *chain, urj_part_t *part, char *iname)
         return URJ_STATUS_FAIL;
     }
     urj_tap_chain_shift_instructions (chain);
-
-    return URJ_STATUS_OK;
-}
-
-static int
-lat_set_dr_and_shift (urj_chain_t *chain, urj_part_t *part,
-        uint64_t value, int exitmode)
-{
-    if (part->active_instruction == NULL)
-        return URJ_STATUS_FAIL;
-
-    urj_tap_register_t *r = part->active_instruction->data_register->in;
-    urj_tap_register_set_value (r, value);
-    urj_tap_defer_shift_register (chain, r, NULL, exitmode);
 
     return URJ_STATUS_OK;
 }
@@ -103,7 +89,10 @@ lat_instruction_resize_dr (urj_part_t *part, const char *ir_name,
 static int
 lat_print_status_ecp3 (urj_pld_t *pld)
 {
-    uint32_t status;
+    urj_chain_t *chain = pld->chain;
+    urj_part_t *part = pld->part;
+    urj_tap_register_t *r;
+
 
     /* set all devices in bypass mode */
     urj_tap_reset_bypass (chain);
@@ -123,11 +112,11 @@ lat_print_status_ecp3 (urj_pld_t *pld)
      * Function of these bits currently unknown.
      */        
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Status register\n"));
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 0 (=0)     %d\n", r->data[0]));
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 1 (=0)     %d\n", r->data[1]));
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 2 (=0)     %d\n", r->data[2]));
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 17 (=1)    %d\n", r->data[17]));
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 18 (=0)    %d\n", r->data[18]));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 0 (=0)     %d\n"), r->data[0]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 1 (=0)     %d\n"), r->data[1]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 2 (=0)     %d\n"), r->data[2]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 17 (=1)    %d\n"), r->data[17]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 18 (=0)    %d\n"), r->data[18]);
 
     return URJ_STATUS_OK;
 }
@@ -219,7 +208,7 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
         dr_data[8*p+7] = (bs->data[u] & 0x01) ? 1 : 0;
     }
     // append padding
-    for (u = 0, u < LSCC_PADDING_SZ; u++, p++)
+    for (p = bs->length; p < (bs->length + LSCC_PADDING_SZ); p++)
     {
         dr_data[8*p+0] = 1;
         dr_data[8*p+1] = 1;
@@ -257,7 +246,7 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
      * =  xxxx xxxx xxxx x01x xxxx xxxx xxxx x000 
      */
     urj_tap_chain_shift_data_registers (chain, 1);
-    status =  ( urj_tap_register_match (part->active_instruction->data_register, "?????????????01??????????????000") ) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
+    status = ( urj_tap_register_match (part->active_instruction->data_register->out, "?????????????01??????????????000") ) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
     
     
     urj_tap_reset_bypass (chain);
@@ -279,7 +268,7 @@ lat_reconfigure (urj_pld_t *pld)
     urj_tap_reset_bypass (chain);
 
     if (lat_set_ir_and_shift (chain, part, "LSCC_REFRESH") != URJ_STATUS_OK)
-        goto URJ_STATUS_FAIL;
+        return URJ_STATUS_FAIL;
     
     urj_tap_reset (chain);
     urj_tap_chain_flush (chain);

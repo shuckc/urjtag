@@ -36,9 +36,9 @@ extern const urj_pld_driver_t urj_pld_lat_ecp3_driver;
 
 // Lattice have an arbitary number of null-terminated strings in the header, 
 // convert this to a linked list of char*
-typedef struct {
+typedef struct lat_header {
     char *text;
-    lat_header_t *next;
+    struct lat_header *next;
 } lat_header_t;
 
 typedef struct {
