@@ -59,20 +59,6 @@ alt_set_ir_and_shift (urj_chain_t *chain, urj_part_t *part, char *iname)
 }
 
 static int
-alt_write_register (urj_pld_t *pld, uint32_t reg, uint32_t value)
-{
-    urj_log (URJ_LOG_LEVEL_ERROR, _("altera: write register unsupported.\n"));
-    return URJ_STATUS_FAIL;
-}
-
-static int
-alt_read_register (urj_pld_t *pld, uint32_t reg, uint32_t *value)
-{
-    urj_log (URJ_LOG_LEVEL_ERROR, _("altera: read register unsupported.\n"));
-    return URJ_STATUS_FAIL;
-}
-
-static int
 alt_print_status (urj_pld_t *pld)
 {
     urj_chain_t *chain = pld->chain;
@@ -476,8 +462,8 @@ const urj_pld_driver_t urj_pld_alt_driver = {
     .print_status = alt_print_status,
     .configure = alt_configure,
     .reconfigure = alt_reconfigure,
-    .read_register = alt_read_register,
-    .write_register = alt_write_register,
-    .register_width = 2,
+    .read_register = NULL,
+    .write_register = NULL,
+    .register_width = 1,
 };
 
