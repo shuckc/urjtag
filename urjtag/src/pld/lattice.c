@@ -178,6 +178,7 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     
     if (lat_set_ir_and_shift (chain, part, "LSCC_RESET_ADDRESS") != URJ_STATUS_OK)
     {
+       urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform RESET_ADDRESS instruction\n"));
         goto fail_free;
     }
     urj_tap_chain_defer_clock (chain, 0, 0, 5);
@@ -187,11 +188,12 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
      * and then bit-swapped msb/lsb.
      */
     dr_len = (bs->length + LSCC_PADDING_SZ) * 8 ;
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("bitstream burst dr-length %d \n"), dr_len);
 
-    if (lat_instruction_resize_dr (part, "LSCC_BITSREAM_BURST", "BITST", dr_len) != URJ_STATUS_OK)
+    if (lat_instruction_resize_dr (part, "LSCC_BITSTREAM_BURST", "BITST", dr_len) != URJ_STATUS_OK)
         goto fail_free;
 
-    i = urj_part_find_instruction (part, "LSCC_BITSREAM_BURST");
+    i = urj_part_find_instruction (part, "LSCC_BITSTREAM_BURST");
 
     dr_data = i->data_register->in->data;
     
@@ -220,16 +222,22 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
         dr_data[8*p+7] = 1;
     }
 
-    if (lat_set_ir_and_shift (chain, part, "LSCC_BITSREAM_BURST") != URJ_STATUS_OK)
+    if (lat_set_ir_and_shift (chain, part, "LSCC_BITSTREAM_BURST") != URJ_STATUS_OK)
     {
+        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform BITSTREAM_BURST instruction\n"));
         goto fail_free;
     }
+
+    /* push entire bitstream out through dr */    
+    urj_tap_chain_shift_data_registers (chain, 0);
+    
     urj_tap_chain_defer_clock (chain, 0, 0, 256);
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Resuming to user mode...\n"));
 
     if (lat_set_ir_and_shift (chain, part, "ISC_DISABLE") != URJ_STATUS_OK)
     {
+        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform ISC_DISABLE instruction\n"));
         goto fail_free;
     }
 
@@ -237,7 +245,7 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     
     if (lat_set_ir_and_shift (chain, part, "LSCC_READ_STATUS") != URJ_STATUS_OK)
     {
-        urj_log (URJ_LOG_LEVEL_ERROR, _("altera: unable to perform READ_STATUS instruction\n"));
+        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform READ_STATUS instruction\n"));
         goto fail_free;
     }
 
@@ -247,7 +255,10 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
      */
     urj_tap_chain_shift_data_registers (chain, 1);
     status = ( urj_tap_register_match (part->active_instruction->data_register->out, "?????????????01??????????????000") ) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
-    
+    if (status == URJ_STATUS_FAIL) 
+    {
+       urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: part did not read back OK on status pins\n"));
+    }
     
     urj_tap_reset_bypass (chain);
 
@@ -309,10 +320,10 @@ lat_detect_ecp3 (urj_pld_t *pld)
     if (!urj_part_find_instruction(part, "LSCC_RESET_ADDRESS"))
        urj_part_instruction_define (part, "LSCC_RESET_ADDRESS", "00100001", "BYPASS");
 
-    if (!urj_part_find_instruction(part, "LSCC_BITSREAM_BURST")) 
+    if (!urj_part_find_instruction(part, "LSCC_BITSTREAM_BURST")) 
     {
         urj_part_data_register_define(part, "BITST", 32 ); /* resize later */
-        urj_part_instruction_define (part, "LSCC_BITSREAM_BURST", "0000001000", "BITST");
+        urj_part_instruction_define (part, "LSCC_BITSTREAM_BURST", "00000010", "BITST");
     }
  
     /* exit programming mode */

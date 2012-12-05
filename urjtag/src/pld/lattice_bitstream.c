@@ -25,6 +25,7 @@
 #include <sysdep.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <urjtag/log.h>
 #include <urjtag/error.h>
@@ -35,6 +36,13 @@ int
 lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
 {
     int status = URJ_STATUS_FAIL;
+   
+    if (!bs)
+    {
+        urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _(" bs == null"));
+        return URJ_STATUS_FAIL;
+    }
+
 
     /* Get file size */
     fseek(bit_file, 0L, SEEK_END);
@@ -46,18 +54,20 @@ lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
         return URJ_STATUS_FAIL;
     if (fgetc(bit_file) != 0x00)
         return URJ_STATUS_FAIL;
-    urj_log (URJ_LOG_LEVEL_DEBUG, _("Valid lattice header found.\n"));
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("Valid lattice header found.\n"));
+     fflush (stdout);
 
     // read null-strings, until the value starting 0xff, which is the bitstream
     lat_header_t *prev = NULL;
 
     char buf[500];
-    char r = 0;
+    int r = 0;
     int nextchar = 0;
-    while (r != 0xff)
+    while (r != 0xff && nextchar < sizeof(buf))
     {
         r = fgetc(bit_file);
         buf[nextchar++] = r;
+
         if (r == '\0')
         {
             nextchar = 0;
@@ -74,7 +84,7 @@ lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
 
     /* positioned at the start of the raw bitsream data, calculate size */
     uint32_t pos = ftell(bit_file);
-    bs->length = file_size - pos + 1;
+    bs->length = file_size - pos;
 
     /* allocate memory for bitstream */
     bs->data = malloc(bs->length);
@@ -82,21 +92,18 @@ lat_bitstream_load_bit (FILE *bit_file, lat_bitstream_t *bs)
     if (fread (bs->data, 1, bs->length, bit_file) != bs->length)
         goto fail_free;
 
-
     return URJ_STATUS_OK;
 
   fail_free:
-    free(bs->data);
-    free(bs->header);
-    // TODO: free chain elements
     return status;
 }
 
 lat_bitstream_t *
 lat_bitstream_alloc (void)
 {
-    lat_bitstream_t *bs = calloc (1, sizeof (lat_bitstream_t));
-
+    lat_bitstream_t *bs = malloc(sizeof (lat_bitstream_t));
+    bs->header = NULL;
+    bs->data = NULL;
     if (!bs)
     {
         urj_error_set (URJ_ERROR_OUT_OF_MEMORY, _("malloc(%zu) fails"),
@@ -110,7 +117,7 @@ lat_bitstream_alloc (void)
 void
 lat_bitstream_free (lat_bitstream_t *bs)
 {
-    free(bs->data);
+    if (bs->data) free(bs->data);
 
     lat_header_t *prev = bs->header;
     lat_header_t *tmp;
