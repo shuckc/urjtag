@@ -26,10 +26,12 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include <urjtag/tap.h>
 #include <urjtag/part.h>
 #include <urjtag/chain.h>
+#include <urjtag/cable.h>
 #include <urjtag/tap_state.h>
 #include <urjtag/tap_register.h>
 #include <urjtag/data_register.h>
@@ -37,6 +39,29 @@
 #include <urjtag/pld.h>
 #include <urjtag/bitops.h>
 #include "lattice.h"
+
+
+static int 
+lat_defer(urj_chain_t *chain, urj_part_t *part, int run_count, int millis)
+{
+
+    uint32_t frequency = urj_tap_cable_get_frequency (chain->cable);
+    
+    double seconds = millis/1000.0;
+    uint32_t min_time_run_count = ceil (seconds * frequency);
+    if (min_time_run_count > run_count)
+    {
+         run_count = min_time_run_count;
+    }    
+
+    urj_log (URJ_LOG_LEVEL_DEBUG, _("  defering for %d cycles...\n"), run_count);
+   
+    urj_tap_chain_defer_clock (chain, 0, 0, run_count);
+    
+    return URJ_STATUS_OK;
+
+}
+
 
 static int
 lat_set_ir_and_shift (urj_chain_t *chain, urj_part_t *part, char *iname)
@@ -115,7 +140,7 @@ lat_print_status_ecp3 (urj_pld_t *pld)
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Status register\n"));
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 0 (=0)     %d\n"), r->data[0]);
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 1 (=0)     %d\n"), r->data[1]);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 2 (=0)     %d\n"), r->data[2]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 2 (=0)     %d CRCERR\n"), r->data[2]);
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 17 (=1)    %d DONE\n"), r->data[17]);
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 18 (=0)    %d\n"), r->data[18]);
 
@@ -166,13 +191,13 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     {
         goto fail_free;
     }
-    urj_tap_chain_defer_clock (chain, 0, 0, 5);
+    lat_defer(chain, part, 5, 1);
 
     if (lat_set_ir_and_shift (chain, part, "ISC_ENABLE") != URJ_STATUS_OK)
     {
         goto fail_free;
     }
-    urj_tap_chain_defer_clock (chain, 0, 0, 5);
+    lat_defer(chain, part, 5, 20);
 
     if (usercode != 0)
     {
@@ -190,6 +215,8 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
         /* push usercode value out through dr */
         urj_tap_chain_shift_data_registers (chain, 0);
 
+        lat_defer(chain, part, 5, 2);
+
         /* read USERCODE to verify */
         if (lat_set_ir_and_shift (chain, part, "ISC_READ_USERCODE") != URJ_STATUS_OK)
         {
@@ -201,7 +228,8 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
         status = ( urj_tap_register_match (part->active_instruction->data_register->out, "11111111111111111111111111111111") ) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
         if (status == URJ_STATUS_FAIL)
         {
-            urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: part USERCODE did not read back OK on status pins\n"));
+            urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: part USERCODE did not read back OK\n"));
+            goto fail_free;
         }
 
     }
@@ -210,15 +238,15 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     {
         goto fail_free;
     }
-    // wait 5 TCK (max 2ms)
-    urj_tap_chain_defer_clock (chain, 0, 0, 5);
+    // wait 2 seconds
+    lat_defer(chain, part, 5, 2000);
     
     if (lat_set_ir_and_shift (chain, part, "LSCC_RESET_ADDRESS") != URJ_STATUS_OK)
     {
        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform RESET_ADDRESS instruction\n"));
         goto fail_free;
     }
-    urj_tap_chain_defer_clock (chain, 0, 0, 5);
+    lat_defer(chain, part, 5, 2);
 
     /* SVF does another READ usercode here, so copy that (not sure if required sequence or not)
      * read USERCODE to verify
@@ -231,9 +259,16 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
 
     urj_tap_chain_shift_data_registers (chain, 1);
 
+    status = ( urj_tap_register_match (part->active_instruction->data_register->out, "00000000000000000000000000000000") ) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
+    if (status == URJ_STATUS_FAIL)
+    {
+        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: part USERCODE did not read back as zeros after erase \n"));
+        goto fail_free;
+    }
+
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Programming...\n"));
-    /* copy data into shift register. The data must be prefixed by LSCC_PADDING_SZ bytes of 0xff, reversed bytewise
-     * and then bit-swapped msb/lsb.
+    /* copy data into shift register. The data must be prefixed by LSCC_PADDING_SZ bytes of 0xff
+     * the so-called configuration pre-amble.
      */
     dr_len = (bs->length + LSCC_PADDING_SZ) * 8 ;
     urj_log (URJ_LOG_LEVEL_NORMAL, _("bitstream burst dr-length %d \n"), dr_len);
@@ -243,7 +278,7 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform RESET_ADDRESS instruction\n"));
         goto fail_free;
     }
-    urj_tap_chain_defer_clock (chain, 0, 0, 5);
+    lat_defer(chain, part, 5, 2);
 
     if (lat_instruction_resize_dr (part, "LSCC_BITSTREAM_BURST", "BITST", dr_len) != URJ_STATUS_OK)
         goto fail_free;
@@ -251,21 +286,8 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     i = urj_part_find_instruction (part, "LSCC_BITSTREAM_BURST");
 
     dr_data = i->data_register->in->data;
-    
-    for (u = bs->length, p=0; u > 0; u--, p++)
-    {
-        /* flip bits and reverse */
-        dr_data[8*p+0] = (bs->data[u] & 0x80) ? 1 : 0;
-        dr_data[8*p+1] = (bs->data[u] & 0x40) ? 1 : 0;
-        dr_data[8*p+2] = (bs->data[u] & 0x20) ? 1 : 0;
-        dr_data[8*p+3] = (bs->data[u] & 0x10) ? 1 : 0;
-        dr_data[8*p+4] = (bs->data[u] & 0x08) ? 1 : 0;
-        dr_data[8*p+5] = (bs->data[u] & 0x04) ? 1 : 0;
-        dr_data[8*p+6] = (bs->data[u] & 0x02) ? 1 : 0;
-        dr_data[8*p+7] = (bs->data[u] & 0x01) ? 1 : 0;
-    }
-    // append padding
-    for (p = bs->length; p < (bs->length + LSCC_PADDING_SZ); p++)
+
+    for (p = 0; p < LSCC_PADDING_SZ; p++)
     {
         dr_data[8*p+0] = 1;
         dr_data[8*p+1] = 1;
@@ -275,6 +297,17 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
         dr_data[8*p+5] = 1;
         dr_data[8*p+6] = 1;
         dr_data[8*p+7] = 1;
+    }
+    for (u = 0, p = LSCC_PADDING_SZ; p < LSCC_PADDING_SZ + bs->length; p++, u++)
+    {
+        dr_data[8*p+0] = (bs->data[u] & 0x80) ? 1 : 0;
+        dr_data[8*p+1] = (bs->data[u] & 0x40) ? 1 : 0;
+        dr_data[8*p+2] = (bs->data[u] & 0x20) ? 1 : 0;
+        dr_data[8*p+3] = (bs->data[u] & 0x10) ? 1 : 0;
+        dr_data[8*p+4] = (bs->data[u] & 0x08) ? 1 : 0;
+        dr_data[8*p+5] = (bs->data[u] & 0x04) ? 1 : 0;
+        dr_data[8*p+6] = (bs->data[u] & 0x02) ? 1 : 0;
+        dr_data[8*p+7] = (bs->data[u] & 0x01) ? 1 : 0;
     }
 
     if (lat_set_ir_and_shift (chain, part, "LSCC_BITSTREAM_BURST") != URJ_STATUS_OK)
@@ -287,6 +320,8 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     urj_tap_chain_shift_data_registers (chain, 0);
 
     urj_tap_chain_defer_clock (chain, 0, 0, 256);
+    lat_defer(chain, part, 256, 2);
+
 
     /* SVF does another READ usercode after programming, repeating
      */
@@ -307,12 +342,15 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
         urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform ISC_DISABLE instruction\n"));
         goto fail_free;
     }
+    lat_defer(chain, part, 5, 2);
 
     if (lat_set_ir_and_shift (chain, part, "BYPASS") != URJ_STATUS_OK)
     {
         urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform BYPASS instruction\n"));
         goto fail_free;
     }
+
+    lat_defer(chain, part, 100, 1);
 
     /* check status bits */   
 
@@ -381,37 +419,44 @@ lat_detect_ecp3 (urj_pld_t *pld)
     if (!urj_part_find_instruction(part, "LSCC_READ_STATUS"))
     {
        urj_part_data_register_define(part, "STATUS", 32 );
-       urj_part_instruction_define (part, "LSCC_READ_STATUS", "01010011", "STATUS");
+       urj_part_instruction_define (part, "LSCC_READ_STATUS", "01010011", "STATUS"); // 0x53
     }
 
     /* Cause recondfiguration - see "Configuration Modes" 
      * in LatticeECP3 sysCONFIG Usage Guide 
      */
     if (!urj_part_find_instruction(part, "LSCC_REFRESH"))
-       urj_part_instruction_define (part, "LSCC_REFRESH", "00100011", "BYPASS");
+       urj_part_instruction_define (part, "LSCC_REFRESH", "00100011", "BYPASS"); // 0x23
 
     if (!urj_part_find_instruction(part, "LSCC_RESET_ADDRESS"))
-       urj_part_instruction_define (part, "LSCC_RESET_ADDRESS", "00100001", "BYPASS");
+       urj_part_instruction_define (part, "LSCC_RESET_ADDRESS", "00100001", "BYPASS"); // 0x21
 
     if (!urj_part_find_instruction(part, "LSCC_BITSTREAM_BURST")) 
     {
         urj_part_data_register_define(part, "BITST", 32 ); /* resize later */
-        urj_part_instruction_define (part, "LSCC_BITSTREAM_BURST", "00000010", "BITST");
+        urj_part_instruction_define (part, "LSCC_BITSTREAM_BURST", "00000010", "BITST"); // 0x02
     }
  
     /* exit programming mode */
     if (!urj_part_find_instruction(part, "ISC_DISABLE"))
-       urj_part_instruction_define (part, "ISC_DISABLE", "00011110", "BYPASS");
+       urj_part_instruction_define (part, "ISC_DISABLE", "00011110", "BYPASS"); // 0x1E
     
     /* enable program mode */
     if (!urj_part_find_instruction(part, "ISC_ENABLE"))
-       urj_part_instruction_define (part, "ISC_ENABLE", "00010101", "BYPASS");
-    
+       urj_part_instruction_define (part, "ISC_ENABLE", "00010101", "BYPASS"); // 0x15
+   
+ 
     if (!urj_part_find_instruction(part, "ISC_PROGRAM_USERCODE")) 
-       urj_part_instruction_define (part, "ISC_PROGRAM_USERCODE", "00011010", "BYPASS");
-    
+    {
+       urj_part_data_register_define(part, "USERCODE", 32 );
+       urj_part_instruction_define (part, "ISC_PROGRAM_USERCODE", "00011010", "USERCODE"); // 0x1A
+    }
+
+    if (!urj_part_find_instruction(part, "ISC_READ_USERCODE"))
+       urj_part_instruction_define (part, "ISC_READ_USERCODE", "00010111", "USERCODE");  // 0x17
+ 
     if (!urj_part_find_instruction(part, "ISC_ERASE")) 
-       urj_part_instruction_define (part, "ISC_ERASE", "00000011", "BYPASS");
+       urj_part_instruction_define (part, "ISC_ERASE", "00000011", "BYPASS"); // 0x03
     
     return URJ_STATUS_OK;
 }
