@@ -110,12 +110,13 @@ lat_print_status_ecp3 (urj_pld_t *pld)
      * m  0000 0000 0000 0110 0000 0000 0000 0111                   
      * =  xxxx xxxx xxxx x01x xxxx xxxx xxxx x000 
      * Function of these bits currently unknown.
+     * Bit 17 is not set when programming fails, most likely DONE pin
      */        
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Status register\n"));
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 0 (=0)     %d\n"), r->data[0]);
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 1 (=0)     %d\n"), r->data[1]);
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 2 (=0)     %d\n"), r->data[2]);
-    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 17 (=1)    %d\n"), r->data[17]);
+    urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 17 (=1)    %d DONE\n"), r->data[17]);
     urj_log (URJ_LOG_LEVEL_NORMAL, _("\tSTATUS 18 (=0)    %d\n"), r->data[18]);
 
     return URJ_STATUS_OK;
@@ -129,6 +130,7 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     urj_part_instruction_t *i;
     lat_bitstream_t *bs;
     uint32_t u, p;
+    uint32_t usercode = 0xFFFFFFFF;
     int dr_len;
     char *dr_data;
     int status = URJ_STATUS_FAIL;
@@ -164,11 +166,46 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     {
         goto fail_free;
     }
+    urj_tap_chain_defer_clock (chain, 0, 0, 5);
+
     if (lat_set_ir_and_shift (chain, part, "ISC_ENABLE") != URJ_STATUS_OK)
     {
         goto fail_free;
     }
-    // TODO: write and read USERCODE ?
+    urj_tap_chain_defer_clock (chain, 0, 0, 5);
+
+    if (usercode != 0)
+    {
+
+        i = urj_part_find_instruction (part, "ISC_PROGRAM_USERCODE");
+        dr_data = i->data_register->in->data;
+        for (u = 0; u < 32; u++) dr_data[u] = 1;
+
+        if (lat_set_ir_and_shift (chain, part, "ISC_PROGRAM_USERCODE") != URJ_STATUS_OK)
+        {
+            urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to select ISC_PROGRAM_USERCODE instruction\n"));
+            goto fail_free;
+        }
+
+        /* push usercode value out through dr */
+        urj_tap_chain_shift_data_registers (chain, 0);
+
+        /* read USERCODE to verify */
+        if (lat_set_ir_and_shift (chain, part, "ISC_READ_USERCODE") != URJ_STATUS_OK)
+        {
+            urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to select ISC_READ_USERCODE instruction\n"));
+            goto fail_free;
+        }
+
+        urj_tap_chain_shift_data_registers (chain, 1);
+        status = ( urj_tap_register_match (part->active_instruction->data_register->out, "11111111111111111111111111111111") ) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
+        if (status == URJ_STATUS_FAIL)
+        {
+            urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: part USERCODE did not read back OK on status pins\n"));
+        }
+
+    }
+
     if (lat_set_ir_and_shift (chain, part, "ISC_ERASE") != URJ_STATUS_OK)
     {
         goto fail_free;
@@ -183,12 +220,30 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
     }
     urj_tap_chain_defer_clock (chain, 0, 0, 5);
 
+    /* SVF does another READ usercode here, so copy that (not sure if required sequence or not)
+     * read USERCODE to verify
+     */
+    if (lat_set_ir_and_shift (chain, part, "ISC_READ_USERCODE") != URJ_STATUS_OK)
+    {
+        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to select ISC_READ_USERCODE instruction (2)\n"));
+        goto fail_free;
+    }
+
+    urj_tap_chain_shift_data_registers (chain, 1);
+
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Programming...\n"));
     /* copy data into shift register. The data must be prefixed by LSCC_PADDING_SZ bytes of 0xff, reversed bytewise
      * and then bit-swapped msb/lsb.
      */
     dr_len = (bs->length + LSCC_PADDING_SZ) * 8 ;
     urj_log (URJ_LOG_LEVEL_NORMAL, _("bitstream burst dr-length %d \n"), dr_len);
+
+    if (lat_set_ir_and_shift (chain, part, "LSCC_RESET_ADDRESS") != URJ_STATUS_OK)
+    {
+       urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform RESET_ADDRESS instruction\n"));
+        goto fail_free;
+    }
+    urj_tap_chain_defer_clock (chain, 0, 0, 5);
 
     if (lat_instruction_resize_dr (part, "LSCC_BITSTREAM_BURST", "BITST", dr_len) != URJ_STATUS_OK)
         goto fail_free;
@@ -228,10 +283,22 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
         goto fail_free;
     }
 
-    /* push entire bitstream out through dr */    
+    /* push entire bitstream out through dr */
     urj_tap_chain_shift_data_registers (chain, 0);
-    
+
     urj_tap_chain_defer_clock (chain, 0, 0, 256);
+
+    /* SVF does another READ usercode after programming, repeating
+     */
+    if (lat_set_ir_and_shift (chain, part, "ISC_READ_USERCODE") != URJ_STATUS_OK)
+    {
+        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to select ISC_READ_USERCODE instruction (2)\n"));
+        goto fail_free;
+    }
+
+    urj_tap_chain_shift_data_registers (chain, 1);
+
+    urj_tap_chain_defer_clock (chain, 0, 0, 100);
 
     urj_log (URJ_LOG_LEVEL_NORMAL, _("Resuming to user mode...\n"));
 
@@ -241,8 +308,14 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
         goto fail_free;
     }
 
+    if (lat_set_ir_and_shift (chain, part, "BYPASS") != URJ_STATUS_OK)
+    {
+        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform BYPASS instruction\n"));
+        goto fail_free;
+    }
+
     /* check status bits */   
-    
+
     if (lat_set_ir_and_shift (chain, part, "LSCC_READ_STATUS") != URJ_STATUS_OK)
     {
         urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: unable to perform READ_STATUS instruction\n"));
@@ -255,11 +328,11 @@ lat_configure (urj_pld_t *pld, FILE *bit_file)
      */
     urj_tap_chain_shift_data_registers (chain, 1);
     status = ( urj_tap_register_match (part->active_instruction->data_register->out, "?????????????01??????????????000") ) ? URJ_STATUS_OK : URJ_STATUS_FAIL;
-    if (status == URJ_STATUS_FAIL) 
+    if (status == URJ_STATUS_FAIL)
     {
        urj_log (URJ_LOG_LEVEL_ERROR, _("lsc: part did not read back OK on status pins\n"));
     }
-    
+
     urj_tap_reset_bypass (chain);
 
     urj_tap_chain_flush (chain);
