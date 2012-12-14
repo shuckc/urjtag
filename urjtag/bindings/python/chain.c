@@ -757,6 +757,20 @@ urj_pyc_initbus (urj_pychain_t *self, PyObject *args)
 }
 
 static PyObject *
+urj_pyc_bsdladdpath (urj_pychain_t *self, PyObject *args)
+{
+    char *path;
+
+    if (!PyArg_ParseTuple (args, "s", &path))
+        return NULL;
+
+    urj_chain_t *urc = self->urchain;
+    
+   return urj_py_chkret (urj_bsdl_set_path (chain, path));
+
+}
+
+static PyObject *
 urj_pyc_detectflash (urj_pychain_t *self, PyObject *args)
 {
     urj_chain_t *urc = self->urchain;
