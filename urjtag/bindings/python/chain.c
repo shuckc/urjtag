@@ -766,7 +766,7 @@ urj_pyc_bsdladdpath (urj_pychain_t *self, PyObject *args)
 
     urj_chain_t *urc = self->urchain;
     
-   return urj_py_chkret (urj_bsdl_set_path (chain, path));
+   return urj_py_chkret (urj_bsdl_set_path (urc, path));
 
 }
 
