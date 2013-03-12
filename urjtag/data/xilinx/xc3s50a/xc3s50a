@@ -169,6 +169,8 @@ register BYPASS 1
 register DATAREG 57
 instruction ISC_DNA 110001 DATAREG
 instruction BYPASS 111111 BYPASS
+instruction CFG_OUT 000100 BYPASS
+instruction CFG_IN 000101 BYPASS
 instruction HIGHZ 001010 BYPASS
 instruction IDCODE 001001 DIR
 instruction USERCODE 001000 DIR
