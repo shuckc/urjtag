@@ -1,3 +1,7 @@
+2013-03-24  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Check for libftdi1 with newer releases.
+
 2013-03-12  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/*/*: Add CFG_IN and CFG_OUT insns by Sébastien Bourdeauducq.
