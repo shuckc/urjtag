@@ -96,8 +96,8 @@ AC_CONFIG_FILES(
 
 AM_MAINTAINER_MODE
 
-AM_CONFIG_HEADER(config.h)
-AM_CONFIG_HEADER(include/urjtag/urjtag.h)
+AC_CONFIG_HEADERS(config.h)
+AC_CONFIG_HEADERS(include/urjtag/urjtag.h)
 
 AC_GNU_SOURCE
 

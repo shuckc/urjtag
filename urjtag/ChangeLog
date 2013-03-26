@@ -1,3 +1,10 @@
+2013-03-26  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Change AM_CONFIG_HEADER to AC_CONFIG_HEADERS to fix
+    warnings from newer automake.
+  * src/Makefile.am, src/apps/bsdl2jtag/Makefile.am, src/apps/jtag/Makefile.am:
+    Change INCLUDES to AM_CPPFLAGS to fix warnings from newer automake.
+
 2013-03-24  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Check for libftdi1 with newer releases.
