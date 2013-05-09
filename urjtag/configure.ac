@@ -23,10 +23,10 @@
 #  and other UrJTAG authors, 2007, 2008, ...
 #
 
-AC_INIT(UrJTAG,0.10,http://urjtag.org,urjtag)
+AC_INIT([UrJTAG], [0.10], [http://urjtag.org], [urjtag])
 
-dnl autoconf-2.61 was released in 2006
-AC_PREREQ(2.61)
+dnl autoconf-2.64 was released in 2008
+AC_PREREQ(2.64)
 AC_COPYRIGHT([Copyright (C) 2007/08 Kolja Waschk and other UrJTAG authors; 2002/03 ETC s.r.o.])
 AC_REVISION($Revision$)
 
@@ -101,9 +101,9 @@ AC_CONFIG_HEADERS(include/urjtag/urjtag.h)
 
 AC_GNU_SOURCE
 
-dnl gettext-0.16.1 was released in 2006
+dnl gettext-0.17 was released in 2007
 AM_GNU_GETTEXT(external)
-AM_GNU_GETTEXT_VERSION(0.16.1)
+AM_GNU_GETTEXT_VERSION(0.17)
 
 LT_INIT
 AC_PROG_CC

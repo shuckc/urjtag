@@ -1,3 +1,7 @@
+2013-05-08  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Update to autoconf 2.64 and gettext 0.17.
+
 2013-03-26  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Change AM_CONFIG_HEADER to AC_CONFIG_HEADERS to fix
