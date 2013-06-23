@@ -1,3 +1,23 @@
+2013-05-08  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Update to autoconf 2.64 and gettext 0.17.
+
+2013-03-26  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Change AM_CONFIG_HEADER to AC_CONFIG_HEADERS to fix
+    warnings from newer automake.
+  * src/Makefile.am, src/apps/bsdl2jtag/Makefile.am, src/apps/jtag/Makefile.am:
+    Change INCLUDES to AM_CPPFLAGS to fix warnings from newer automake.
+
+2013-03-24  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Check for libftdi1 with newer releases.
+
+2013-03-12  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/*/*: Add CFG_IN and CFG_OUT insns by Sébastien Bourdeauducq.
+  * doc/README.pld: Remove mention of custom CFG_IN/CFG_OUT insns.
+
 2012-09-23  Jie Zhang  <jie.zhang@analog.com>
 
   Revert

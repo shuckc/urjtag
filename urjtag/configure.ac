@@ -23,10 +23,10 @@
 #  and other UrJTAG authors, 2007, 2008, ...
 #
 
-AC_INIT(UrJTAG,0.10,http://urjtag.org,urjtag)
+AC_INIT([UrJTAG], [0.10], [http://urjtag.org], [urjtag])
 
-dnl autoconf-2.61 was released in 2006
-AC_PREREQ(2.61)
+dnl autoconf-2.64 was released in 2008
+AC_PREREQ(2.64)
 AC_COPYRIGHT([Copyright (C) 2007/08 Kolja Waschk and other UrJTAG authors; 2002/03 ETC s.r.o.])
 AC_REVISION($Revision$)
 
@@ -96,14 +96,14 @@ AC_CONFIG_FILES(
 
 AM_MAINTAINER_MODE
 
-AM_CONFIG_HEADER(config.h)
-AM_CONFIG_HEADER(include/urjtag/urjtag.h)
+AC_CONFIG_HEADERS(config.h)
+AC_CONFIG_HEADERS(include/urjtag/urjtag.h)
 
 AC_GNU_SOURCE
 
-dnl gettext-0.16.1 was released in 2006
+dnl gettext-0.17 was released in 2007
 AM_GNU_GETTEXT(external)
-AM_GNU_GETTEXT_VERSION(0.16.1)
+AM_GNU_GETTEXT_VERSION(0.17)
 
 LT_INIT
 AC_PROG_CC
@@ -239,15 +239,17 @@ LIBFTDI_LIBS=
 AS_IF([test "x$with_libftdi" != xno], [
   save_LIBS=$LIBS
   save_CPPFLAGS=$CPPFLAGS
-  PKG_CHECK_MODULES(LIBFTDI, libftdi, [:;], [dnl
-    AS_IF([test "x$with_libftdi" != xyes -a "x$with_libftdi" != xcheck], [
-      LIBFTDI_LIBS="-L$with_libftdi -lftdi"
-      LIBFTDI_CFLAGS="-I$with_libftdi"
-    ],[
-      AC_PATH_TOOL(LIBFTDI_CONFIG, libftdi-config, no)
-      AS_IF([test "$LIBFTDI_CONFIG" != "no"],[
-        LIBFTDI_LIBS=`$LIBFTDI_CONFIG --libs`
-        LIBFTDI_CFLAGS=`$LIBFTDI_CONFIG --cflags`
+  PKG_CHECK_MODULES(LIBFTDI, libftdi1, [:;], [dnl
+    PKG_CHECK_MODULES(LIBFTDI, libftdi, [:;], [dnl
+      AS_IF([test "x$with_libftdi" != xyes -a "x$with_libftdi" != xcheck], [
+        LIBFTDI_LIBS="-L$with_libftdi -lftdi"
+        LIBFTDI_CFLAGS="-I$with_libftdi"
+      ],[
+        AC_PATH_TOOL(LIBFTDI_CONFIG, libftdi-config, no)
+        AS_IF([test "$LIBFTDI_CONFIG" != "no"],[
+          LIBFTDI_LIBS=`$LIBFTDI_CONFIG --libs`
+          LIBFTDI_CFLAGS=`$LIBFTDI_CONFIG --cflags`
+        ])
       ])
     ])
   ])
