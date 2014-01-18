@@ -27,7 +27,8 @@
 %pure-parser
 %parse-param {urj_svf_parser_priv_t *priv_data}
 %parse-param {urj_chain_t *chain}
-%name-prefix="urj_svf_"
+%lex-param {urj_chain_t *chain}
+%name-prefix "urj_svf_"
 %locations
 
 %{

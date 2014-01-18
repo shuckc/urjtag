@@ -119,8 +119,9 @@ LEGAL NOTICES:
 
 %pure-parser
 %parse-param {urj_bsdl_parser_priv_t *priv_data}
+%lex-param {urj_bsdl_parser_priv_t *priv_data}
 %defines
-%name-prefix="urj_bsdl_"
+%name-prefix "urj_bsdl_"
 
 %{
 #include <stdlib.h>

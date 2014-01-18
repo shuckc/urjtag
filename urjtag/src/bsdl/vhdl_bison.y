@@ -119,8 +119,9 @@ LEGAL NOTICES:
 
 %pure-parser
 %parse-param {urj_vhdl_parser_priv_t *priv_data}
+%lex-param {urj_vhdl_parser_priv_t *priv_data}
 %defines
-%name-prefix="urj_vhdl_"
+%name-prefix "urj_vhdl_"
 
 %{
 #include <stdlib.h>

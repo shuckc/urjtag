@@ -1,3 +1,10 @@
+2014-01-18  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bsdl/bsdl_bison.y, src/bsdl/vhdl_bison.y, src/svf/svf_bison.y: Define
+    %lex-param to fix building with bison-3+; fix by Daniel Burr.  Also update
+    %name-prefix to avoid build time warnings.  This breaks building w/older
+    bison versions like 1.875d, but bison-2.0 was released in 2005.
+
 2013-05-08  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Update to autoconf 2.64 and gettext 0.17.
