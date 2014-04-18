@@ -44,7 +44,7 @@ bf561_ezkit_bus_new (urj_chain_t *chain, const urj_bus_driver_t *driver,
     params = bus->params;
     params->async_size = 64 * 1024 * 1024;
     params->ams_cnt = 4;
-    params->abe_cnt = 4;
+    params->abe_cnt = 3;
     params->addr_cnt = 24;
     params->data_cnt = 32;
     params->sdram = 1;
