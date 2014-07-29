@@ -119,7 +119,8 @@ LEGAL NOTICES:
 
 %pure-parser
 %parse-param {urj_bsdl_parser_priv_t *priv_data}
-%lex-param {urj_bsdl_parser_priv_t *priv_data}
+/* See https://lists.gnu.org/archive/html/bug-bison/2014-02/msg00002.html */
+%lex-param {void *HACK}
 %defines
 %name-prefix "urj_bsdl_"
 
@@ -142,7 +143,7 @@ LEGAL NOTICES:
 #include "dmalloc.h"
 #endif
 
-#define YYLEX_PARAM priv_data->scanner
+#define HACK priv_data->scanner
 int yylex (YYSTYPE *, void *);
 
 #if 1

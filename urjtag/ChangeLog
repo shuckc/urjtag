@@ -1,5 +1,11 @@
 2014-07-29  Mike Frysinger  <vapier@gentoo.org>
 
+  * src/bsdl/bsdl_bison.y, src/bsdl/vhdl_bison.y, src/svf/svf_bison.y: Deploy
+    a hack to work around limitations in the new %lex-param interface.
+    Debugging by Paul Green & cioma in sourceforge bug 118.
+
+2014-07-29  Mike Frysinger  <vapier@gentoo.org>
+
   * src/bus/h7202.c: Fix max number of lines setup to match struct.
 
 2014-01-18  Mike Frysinger  <vapier@gentoo.org>
