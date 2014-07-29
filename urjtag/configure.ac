@@ -58,7 +58,7 @@ AC_SUBST([SVN_REVISION])
 AC_CONFIG_AUX_DIR(tools)
 
 dnl automake-1.10 was released in 2006
-AM_INIT_AUTOMAKE([1.10 check-news dist-bzip2])
+AM_INIT_AUTOMAKE([1.10 check-news dist-xz subdir-objects])
 dnl silent rules requires automake-1.11+
 m4_ifdef([AM_SILENT_RULES],
 	[AM_SILENT_RULES([yes])],
