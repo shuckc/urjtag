@@ -3,6 +3,8 @@
   * src/cmd/Makefile.am: Switch generated_cmd_list.h to BUILT_SOURCES rather
     than creating the dependency ourselves between the objects.
 
+  * src/bus/buses_list.h: Add mpc8313 as reported by Greg Foringer.
+
 2014-08-01  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/PARTS, data/xilinx/xc7a100t/STEPPINGS,
