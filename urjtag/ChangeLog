@@ -9,6 +9,8 @@
     data/xilinx/xc2vp4/xc2vp4: Add xc2vp4 (Virtex II Pro FPGA) details by
     Michael Davidsaver.
 
+  * data/xilinx/xcf08p/STEPPINGS: Add rev 14 by Michael Davidsaver.
+
 2014-08-01  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/PARTS, data/xilinx/xc7a100t/STEPPINGS,
