@@ -25,7 +25,7 @@ include $(top_srcdir)/Makefile.rules
 
 noinst_LTLIBRARIES = libcmd.la
 
-all_cmd_files = \
+always_enabled_cmd_files = \
 	cmd_frequency.c \
 	cmd_cable.c \
 	cmd_reset.c \
@@ -67,23 +67,32 @@ all_cmd_files = \
 	cmd_bfin.c \
 	cmd_pld.c
 
-if ENABLE_SVF
-all_cmd_files += cmd_svf.c
-endif
-
-if ENABLE_BSDL
-all_cmd_files += cmd_bsdl.c
-endif
-
-if ENABLE_STAPL
-all_cmd_files += cmd_stapl.c
-endif
-
 libcmd_la_SOURCES = \
 	cmd.h \
 	cmd_list.h \
 	generated_cmd_list.h \
-	$(all_cmd_files)
+	$(always_enabled_cmd_files)
+
+if ENABLE_SVF
+libcmd_la_SOURCES += cmd_svf.c
+endif
+
+if ENABLE_BSDL
+libcmd_la_SOURCES += cmd_bsdl.c
+endif
+
+if ENABLE_STAPL
+libcmd_la_SOURCES += cmd_stapl.c
+endif
+
+# This list has to be unconditional so the generated header always contains
+# all possible commands.  We control which ones actually get enabled via
+# defines from config.h.
+all_cmd_files = \
+	$(always_enabled_cmd_files) \
+	cmd_bsdl.c \
+	cmd_stapl.c \
+	cmd_svf.c
 
 generated_cmd_list.h: generated_cmd_list.h.stamp ; @true
 generated_cmd_list.h.stamp: $(all_cmd_files)

@@ -11,6 +11,10 @@
 
   * data/xilinx/xcf08p/STEPPINGS: Add rev 14 by Michael Davidsaver.
 
+  * src/cmd/Makefile.am: Fix generated_cmd_list.h generation so it always
+    includes all commands and not just ones enabled by configure.  Reported
+    by Nick B.
+
 2014-08-01  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/PARTS, data/xilinx/xc7a100t/STEPPINGS,
