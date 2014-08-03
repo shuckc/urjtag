@@ -568,6 +568,8 @@ nobase_dist_pkgdata_DATA = \
 	xilinx/xc6slx150/xc6slx150t_fgg484 \
 	xilinx/xc6slx150/xc6slx150t_fgg676 \
 	xilinx/xc6slx150/xc6slx150t_fgg900 \
+	xilinx/xc2vp4/STEPPINGS \
+	xilinx/xc2vp4/xc2vp4 \
 	xilinx/xc6slx150t/STEPPINGS \
 	xilinx/xc6slx150t/xc6slx150t
 

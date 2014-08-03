@@ -5,6 +5,10 @@
 
   * src/bus/buses_list.h: Add mpc8313 as reported by Greg Foringer.
 
+  * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc2vp4/STEPPINGS,
+    data/xilinx/xc2vp4/xc2vp4: Add xc2vp4 (Virtex II Pro FPGA) details by
+    Michael Davidsaver.
+
 2014-08-01  Mike Frysinger  <vapier@gentoo.org>
 
   * data/xilinx/PARTS, data/xilinx/xc7a100t/STEPPINGS,
