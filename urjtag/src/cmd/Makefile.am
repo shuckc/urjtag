@@ -82,9 +82,9 @@ endif
 libcmd_la_SOURCES = \
 	cmd.h \
 	cmd_list.h \
+	generated_cmd_list.h \
 	$(all_cmd_files)
 
-$(libcmd_la_OBJECTS): generated_cmd_list.h
 generated_cmd_list.h: generated_cmd_list.h.stamp ; @true
 generated_cmd_list.h.stamp: $(all_cmd_files)
 	$(AM_V_GEN)set -e; \
@@ -101,7 +101,7 @@ generated_cmd_list.h.stamp: $(all_cmd_files)
 	fi; \
 	touch $@
 
-
+BUILT_SOURCES = generated_cmd_list.h
 EXTRA_DIST = generated_cmd_list.h generated_cmd_list.h.stamp
 MAINTAINERCLEANFILES = generated_cmd_list.h generated_cmd_list.h.stamp
 
