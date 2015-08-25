@@ -1,3 +1,48 @@
+2014-08-03  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/cmd/Makefile.am: Switch generated_cmd_list.h to BUILT_SOURCES rather
+    than creating the dependency ourselves between the objects.
+
+  * src/bus/buses_list.h: Add mpc8313 as reported by Greg Foringer.
+
+  * data/Makefile.am, data/xilinx/PARTS, data/xilinx/xc2vp4/STEPPINGS,
+    data/xilinx/xc2vp4/xc2vp4: Add xc2vp4 (Virtex II Pro FPGA) details by
+    Michael Davidsaver.
+
+  * data/xilinx/xcf08p/STEPPINGS: Add rev 14 by Michael Davidsaver.
+
+  * src/cmd/Makefile.am: Fix generated_cmd_list.h generation so it always
+    includes all commands and not just ones enabled by configure.  Reported
+    by Nick B.
+
+2014-08-01  Mike Frysinger  <vapier@gentoo.org>
+
+  * data/xilinx/PARTS, data/xilinx/xc7a100t/STEPPINGS,
+    data/xilinx/xc7a100t/xc7a100t-csg324: Add xilinx Artix-7 part info by
+    Steve Tell.
+
+2014-07-29  Mike Frysinger  <vapier@gentoo.org>
+
+  * configure.ac: Enable subdir-objects as latest automake warns otherwise.
+    Switch the dist tarball to xz while we're here.
+
+2014-07-29  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bsdl/bsdl_bison.y, src/bsdl/vhdl_bison.y, src/svf/svf_bison.y: Deploy
+    a hack to work around limitations in the new %lex-param interface.
+    Debugging by Paul Green & cioma in sourceforge bug 118.
+
+2014-07-29  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bus/h7202.c: Fix max number of lines setup to match struct.
+
+2014-01-18  Mike Frysinger  <vapier@gentoo.org>
+
+  * src/bsdl/bsdl_bison.y, src/bsdl/vhdl_bison.y, src/svf/svf_bison.y: Define
+    %lex-param to fix building with bison-3+; fix by Daniel Burr.  Also update
+    %name-prefix to avoid build time warnings.  This breaks building w/older
+    bison versions like 1.875d, but bison-2.0 was released in 2005.
+
 2013-05-08  Mike Frysinger  <vapier@gentoo.org>
 
   * configure.ac: Update to autoconf 2.64 and gettext 0.17.

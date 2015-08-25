@@ -65,7 +65,7 @@ signal AWE_B
 signal ABE_B0
 signal ABE_B1
 signal ABE_B2
-signal ABE_B3
+signal ADDR1
 signal BG_B
 signal BGH_B
 signal BMODE0
@@ -377,7 +377,7 @@ bit 216 O 1 ADDR5 219 0 Z
 bit 215 O 1 ADDR6 219 0 Z
 bit 214 O 1 ADDR7 219 0 Z
 bit 213 O 1 ADDR8 219 0 Z
-bit 212 O 1 ABE_B3 219 0 Z
+bit 212 O 1 ADDR1 219 0 Z
 bit 211 O 1 ABE_B2 219 0 Z
 bit 210 O 1 ABE_B1 219 0 Z
 bit 209 O 1 ABE_B0 219 0 Z

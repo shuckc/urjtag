@@ -142,7 +142,7 @@ setup_address (urj_bus_t *bus, uint32_t a)
     int i;
     urj_part_t *p = bus->part;
 
-    for (i = 0; i < 26; i++)
+    for (i = 0; i < 25; i++)
         urj_part_set_signal (p, A[i], 1, (a >> i) & 1);
 }
 

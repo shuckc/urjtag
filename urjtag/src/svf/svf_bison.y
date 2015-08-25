@@ -27,7 +27,9 @@
 %pure-parser
 %parse-param {urj_svf_parser_priv_t *priv_data}
 %parse-param {urj_chain_t *chain}
-%name-prefix="urj_svf_"
+/* See https://lists.gnu.org/archive/html/bug-bison/2014-02/msg00002.html */
+%lex-param {void *HACK}
+%name-prefix "urj_svf_"
 %locations
 
 %{
@@ -42,7 +44,7 @@
 
 /* interface to flex */
 #include "svf_bison.h"
-#define YYLEX_PARAM priv_data->scanner
+#define HACK priv_data->scanner
 int yylex (YYSTYPE *, YYLTYPE *, void *);
 
 // @@@@ RFHH need to define YYPRINTF in terms of urj_log()

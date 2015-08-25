@@ -89,6 +89,9 @@ _URJ_BUS(mpc5200)
 #ifdef ENABLE_BUS_MPC824X
 _URJ_BUS(mpc824x)
 #endif
+#ifdef ENABLE_BUS_MPC8313
+_URJ_BUS(mpc8313)
+#endif
 #ifdef ENABLE_BUS_MPC837X
 _URJ_BUS(mpc837x)
 #endif
