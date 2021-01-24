@@ -9,5 +9,4 @@ Altera FPGAs (from .rbf file)
 * tested with StratixIV
 
 Lattice FPGAs (from .raw) 
-* tested with ECP3
-
+* tested with ECP3, ECP5, MachXO3
