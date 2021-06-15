@@ -1,6 +1,4 @@
 #
-# $Id$
-#
 # Copyright (C) 2010 Michael Walle
 #
 # This program is free software; you can redistribute it and/or
@@ -27,6 +25,9 @@ noinst_LTLIBRARIES = libpld.la
 
 libpld_la_SOURCES = \
 	pld.c \
+	lattice_bitstream.c \
+	lattice.c \
+	lattice.h \
 	xilinx_bitstream.c \
 	xilinx.c \
 	xilinx.h
