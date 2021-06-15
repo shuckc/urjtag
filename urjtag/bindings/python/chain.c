@@ -757,6 +757,22 @@ urj_pyc_initbus (urj_pychain_t *self, PyObject *args)
 }
 
 static PyObject *
+urj_pyc_bsdl_addpath (urj_pychain_t *self, PyObject *args)
+{
+    char *path;
+
+    if (!PyArg_ParseTuple (args, "s", &path))
+        return NULL;
+
+    urj_chain_t *urc = self->urchain;
+    
+    urj_bsdl_set_path (urc, path);
+
+    return Py_BuildValue("");
+
+}
+
+static PyObject *
 urj_pyc_detectflash (urj_pychain_t *self, PyObject *args)
 {
     urj_chain_t *urc = self->urchain;
@@ -923,6 +939,8 @@ static PyMethodDef urj_pyc_methods[] =
      "change active part for current JTAG chain"},
     {"initbus", (PyCFunction) urj_pyc_initbus, METH_VARARGS,
      "initialize bus driver for active part"},
+    {"bsdl_addpath", (PyCFunction) urj_pyc_bsdl_addpath, METH_VARARGS,
+     "add search path for locating bsdl files"},
     {"detectflash", (PyCFunction) urj_pyc_detectflash, METH_VARARGS,
      "Detect parameters of flash chips attached to a part"},
     {"peek", (PyCFunction) urj_pyc_peek, METH_VARARGS,

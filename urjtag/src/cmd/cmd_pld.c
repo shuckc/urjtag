@@ -74,7 +74,7 @@ cmd_pld_run (urj_chain_t *chain, char *params[])
         else
         {
             urj_error_IO_set (_("%s: cannot open file '%s'"),
-                              params[0], params[1]);
+                              params[0], params[2]);
             result = URJ_STATUS_FAIL;
         }
     }
