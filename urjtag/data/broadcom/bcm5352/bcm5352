@@ -1,0 +1,26 @@
+register BR 1
+register BSR 1
+register DIR 32
+register EJIMPCODE 32
+register EJADDRESS 32
+register EJDATA 32
+register EJCONTROL 32
+register EJALL 96
+register EJFASTDATA 33
+
+instruction length 8
+
+instruction BYPASS 00011111 BR
+instruction SAMPLE/PRELOAD 00000010 BSR
+instruction IDCODE 00000001 DIR
+instruction EJTAG_IMPCODE 00000011 EJIMPCODE
+instruction EJTAG_ADDRESS 00001000 EJADDRESS
+instruction EJTAG_DATA 00001001 EJDATA
+instruction EJTAG_CONTROL 00001010 EJCONTROL
+instruction EJTAG_ALL 00001011 EJALL
+instruction EJTAGBOOT 00001100 BR
+instruction NORMALBOOT 00001101 BR
+instruction EJTAG_FASTDATA 00001110 EJFASTDATA
+
+endian little
+initbus ejtag_dma 
